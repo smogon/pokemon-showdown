@@ -44,8 +44,8 @@ if (!process.send) {
 	var config = require('./config/config.js');
 	var crypto = require('crypto');
 
-	var keyalgo = config.loginserverkeyalgo;
-	var pkey = config.loginserverpublickey;
+	var keyalgo = config.loginServer.keyAlgorithm;
+	var pkey = config.loginServer.publicKey;
 
 	process.on('message', function(message) {
 		var verifier = crypto.createVerify(keyalgo);

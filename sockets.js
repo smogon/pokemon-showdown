@@ -122,12 +122,10 @@ if (cluster.isMaster) {
 
 	var Cidr = require('./cidr');
 
-	if (config.crashguard) {
-		// graceful crash
-		process.on('uncaughtException', function(err) {
-			require('./crashlogger.js')(err, 'Socket process '+cluster.worker.id+' ('+process.pid+')');
-		});
-	}
+	// graceful crash
+	process.on('uncaughtException', function(err) {
+		require('./crashlogger.js')(err, 'Socket process '+cluster.worker.id+' ('+process.pid+')');
+	});
 
 	var app = require('http').createServer();
 	var appssl;
@@ -143,10 +141,7 @@ if (cluster.isMaster) {
 			var staticRequestHandler = function(request, response) {
 				request.resume();
 				request.addListener('end', function() {
-					if (config.customhttpresponse &&
-							config.customhttpresponse(request, response)) {
-						return;
-					}
+					if (config.customHttpResponse && config.customHttpResponse(request, response)) return;
 					var server;
 					if (request.url === '/custom.css') {
 						server = cssserver;
@@ -188,7 +183,7 @@ if (cluster.isMaster) {
 			if (severity === 'error') console.log('ERROR: '+message);
 		},
 		prefix: '/showdown',
-		websocket: !config.disablewebsocket
+		websocket: !config.disableWebsocket
 	});
 
 	// Make `app`, `appssl`, and `server` available to the console.
@@ -218,7 +213,7 @@ if (cluster.isMaster) {
 			}
 		}
 	};
-	if (!config.herokuhack) {
+	if (!config.herokuHack) {
 		global.sweepClosedSocketsInterval = setInterval(
 			sweepClosedSockets,
 			1000 * 60 * 10
@@ -293,7 +288,7 @@ if (cluster.isMaster) {
 	});
 
 	// this is global so it can be hotpatched if necessary
-	var isTrustedProxyIp = Cidr.checker(config.proxyip);
+	var isTrustedProxyIp = Cidr.checker(config.proxyIps);
 	var socketCounter = 0;
 	server.on('connection', function(socket) {
 		if (!socket) {
@@ -327,7 +322,7 @@ if (cluster.isMaster) {
 
 		// console.log('CONNECT: '+socket.remoteAddress+' ['+socket.id+']');
 		var interval;
-		if (config.herokuhack) {
+		if (config.herokuHack) {
 			// see https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187
 			interval = setInterval(function() {
 				try {

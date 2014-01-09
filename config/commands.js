@@ -87,7 +87,7 @@
  *   Signifies that a message can be broadcast, as long as the user
  *   has permission to. This will check to see if the user used
  *   "!command" instead of "/command". If so, it will check to see
- *   if the user has permission to broadcast (by default, voice+ can),
+ *   if the user has permission to broadcast (by default, voice + can),
  *   and return false if not. Otherwise, it will set it up so that
  *   this.sendReply and this.sendReplyBox will broadcast to the room
  *   instead of just the user that used the command.
@@ -155,65 +155,57 @@ var commands = exports.commands = {
 	whois: function(target, room, user) {
 		var targetUser = this.targetUserOrSelf(target);
 		if (!targetUser) {
-			return this.sendReply('User '+this.targetUsername+' not found.');
+			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 
-		this.sendReply('User: '+targetUser.name);
+		this.sendReply("User: " + targetUser.name);
 		if (user.can('alts', targetUser.getHighestRankedAlt())) {
 			var alts = targetUser.getAlts();
-			var output = '';
-			for (var i in targetUser.prevNames) {
-				if (output) output += ", ";
-				output += targetUser.prevNames[i];
-			}
-			if (output) this.sendReply('Previous names: '+output);
+			var output = Object.keys(targetUser.prevNames).join(", ");
+			if (output) this.sendReply("Previous names: " + output);
 
 			for (var j=0; j<alts.length; j++) {
 				var targetAlt = Users.get(alts[j]);
 				if (!targetAlt.named && !targetAlt.connected) continue;
 
-				this.sendReply('Alt: '+targetAlt.name);
-				output = '';
-				for (var i in targetAlt.prevNames) {
-					if (output) output += ", ";
-					output += targetAlt.prevNames[i];
-				}
-				if (output) this.sendReply('Previous names: '+output);
+				this.sendReply("Alt: " + targetAlt.name);
+				output = Object.keys(targetAlt.prevNames).join(", ");
+				if (output) this.sendReply("Previous names: " + output);
 			}
 		}
-		if (config.groups[targetUser.group] && config.groups[targetUser.group].name) {
-			this.sendReply('Group: ' + config.groups[targetUser.group].name + ' (' + targetUser.group + ')');
+		if (config.groups.bySymbol[targetUser.group] && config.groups.bySymbol[targetUser.group].name) {
+			this.sendReply("Group: " + config.groups.bySymbol[targetUser.group].name + " (" + targetUser.group + ")");
 		}
 		if (targetUser.isSysop) {
-			this.sendReply('(Pok\xE9mon Showdown System Operator)');
+			this.sendReply("(Pok\xE9mon Showdown System Operator)");
 		}
 		if (!targetUser.authenticated) {
-			this.sendReply('(Unregistered)');
+			this.sendReply("(Unregistered)");
 		}
 		if (!this.broadcasting && (user.can('ip', targetUser) || user === targetUser)) {
 			var ips = Object.keys(targetUser.ips);
-			this.sendReply('IP' + ((ips.length > 1) ? 's' : '') + ': ' + ips.join(', '));
+			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", "));
 		}
-		var output = 'In rooms: ';
+		var output = "In rooms: ";
 		var first = true;
 		for (var i in targetUser.roomCount) {
 			if (i === 'global' || Rooms.get(i).isPrivate) continue;
-			if (!first) output += ' | ';
+			if (!first) output += " | ";
 			first = false;
 
-			output += '<a href="/'+i+'" room="'+i+'">'+i+'</a>';
+			output += '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
 		}
-		this.sendReply('|raw|'+output);
+		this.sendReply('|raw|' + output);
 	},
 
 	ipsearch: function(target, room, user) {
 		if (!this.can('rangeban')) return;
 		var atLeastOne = false;
-		this.sendReply("Users with IP "+target+":");
+		this.sendReply("Users with IP " + target + ":");
 		for (var userid in Users.users) {
 			var user = Users.users[userid];
 			if (user.latestIp === target) {
-				this.sendReply((user.connected?"+":"-")+" "+user.name);
+				this.sendReply((user.connected?" + ":"-") + " " + user.name);
 				atLeastOne = true;
 			}
 		}
@@ -227,13 +219,13 @@ var commands = exports.commands = {
 	invite: function(target, room, user) {
 		target = this.splitTarget(target);
 		if (!this.targetUser) {
-			return this.sendReply('User '+this.targetUsername+' not found.');
+			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 		var roomid = (target || room.id);
 		if (!Rooms.get(roomid)) {
-			return this.sendReply('Room '+roomid+' not found.');
+			return this.sendReply("Room " + roomid + " not found.");
 		}
-		return this.parse('/msg '+this.targetUsername+', /invite '+roomid);
+		return this.parse('/msg ' + this.targetUsername + ', /invite ' + roomid);
 	},
 
 	/*********************************************************
@@ -283,7 +275,7 @@ var commands = exports.commands = {
 					moves.count = 0;
 				}
 				if (moves.count === 4) {
-					return this.sendReply('Specify a maximum of 4 moves.');
+					return this.sendReply("Specify a maximum of 4 moves.");
 				}
 				moves[target] = 1;
 				moves.count++;
@@ -297,7 +289,7 @@ var commands = exports.commands = {
 					ability.count = 0;
 				}
 				if (ability.count === 1) {
-					return this.sendReply('Specify only one ability.');
+					return this.sendReply("Specify only one ability.");
 				}
 				ability[target] = 1;
 				ability.count++;
@@ -335,7 +327,7 @@ var commands = exports.commands = {
 			}
 			if (target === 'all') {
 				if (this.broadcasting) {
-					return this.sendReply('A search with the parameter "all" cannot be broadcast.')
+					return this.sendReply("A search with the parameter 'all' cannot be broadcast.")
 				}
 				showAll = true;
 				continue;
@@ -348,18 +340,18 @@ var commands = exports.commands = {
 						types.count = 0;
 					}
 					if (types.count === 2) {
-						return this.sendReply('Specify a maximum of two types.');
+						return this.sendReply("Specify a maximum of two types.");
 					}
 					types[target] = 1;
 					types.count++;
 					continue;
 				}
 			} else {
-				return this.sendReply('"' + targets[i].trim() + '" could not be found in any of the search categories.');
+				return this.sendReply("'" + targets[i].trim() + "' could not be found in any of the search categories.");
 			}
 		}
 
-		if (showAll && count === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
+		if (showAll && count === 0) return this.sendReply("No search parameters other than 'all' were found.\nTry '/help dexsearch' for more information on this command.");
 
 		while (count > 0) {
 			count--;
@@ -423,7 +415,7 @@ var commands = exports.commands = {
 					for (var i in moves) {
 						move = Tools.getMove(i);
 						if (move.id !== 'count') {
-							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
+							if (!move.exists) return this.sendReplyBox("'" + move + "' is not a known move.");
 							problem = Tools.checkLearnset(move, template, lsetData);
 							if (problem) break;
 						}
@@ -443,20 +435,20 @@ var commands = exports.commands = {
 			}
 		}
 
-		var resultsStr = '';
+		var resultsStr = "";
 		if (results && results.length > 0) {
 			for (var i = 0; i < results.length; ++i) results[i] = results[i].species;
 			if (showAll || results.length <= output) {
-				resultsStr = results.join(', ');
+				resultsStr = results.join(", ");
 			} else {
 				var hidden = string(results.length - output);
 				results.sort(function(a,b) {return Math.round(Math.random());});
 				var shown = results.slice(0, 10);
-				resultsStr = shown.join(', ');
-				resultsStr += ', and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.';
+				resultsStr = shown.join(", ");
+				resultsStr += ", and " + hidden + " more. Redo the search with 'all' as a search parameter to show all results.";
 			}
 		} else {
-			resultsStr = 'No Pokémon found.';
+			resultsStr = "No Pokémon found.";
 		}
 		return this.sendReplyBox(resultsStr);
 	},
@@ -480,22 +472,22 @@ var commands = exports.commands = {
 		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
 
 		if (!template.exists) {
-			return this.sendReply('Pokemon "'+template.id+'" not found.');
+			return this.sendReply("Pokemon '" + template.id + "' not found.");
 		}
 
 		if (targets.length < 2) {
-			return this.sendReply('You must specify at least one move.');
+			return this.sendReply("You must specify at least one move.");
 		}
 
 		for (var i=1, len=targets.length; i<len; i++) {
 			move = Tools.getMove(targets[i]);
 			if (!move.exists) {
-				return this.sendReply('Move "'+move.id+'" not found.');
+				return this.sendReply("Move '" + move.id + "' not found.");
 			}
 			problem = Tools.checkLearnset(move, template, lsetData);
 			if (problem) break;
 		}
-		var buffer = ''+template.name+(problem?" <span class=\"message-learn-cannotlearn\">can't</span> learn ":" <span class=\"message-learn-canlearn\">can</span> learn ")+(targets.length>2?"these moves":move.name);
+		var buffer = template.name + (problem?" <span class=\"message-learn-cannotlearn\">can't</span> learn ":" <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length>2?"these moves":move.name);
 		if (!problem) {
 			var sourceNames = {E:"egg",S:"event",D:"dream world"};
 			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul class=\"message-learn-list\">";
@@ -506,20 +498,20 @@ var commands = exports.commands = {
 				for (var i=0, len=sources.length; i<len; i++) {
 					var source = sources[i];
 					if (source.substr(0,2) === prevSourceType) {
-						if (prevSourceCount < 0) buffer += ": "+source.substr(2);
-						else if (all || prevSourceCount < 3) buffer += ', '+source.substr(2);
-						else if (prevSourceCount == 3) buffer += ', ...';
+						if (prevSourceCount < 0) buffer += ": " + source.substr(2);
+						else if (all || prevSourceCount < 3) buffer += ", " + source.substr(2);
+						else if (prevSourceCount == 3) buffer += ", ...";
 						prevSourceCount++;
 						continue;
 					}
 					prevSourceType = source.substr(0,2);
 					prevSourceCount = source.substr(2)?0:-1;
-					buffer += "<li>gen "+source.substr(0,1)+" "+sourceNames[source.substr(1,1)];
+					buffer += "<li>gen " + source.substr(0,1) + " " + sourceNames[source.substr(1,1)];
 					if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
-					if (source.substr(2)) buffer += ": "+source.substr(2);
+					if (source.substr(2)) buffer += ": " + source.substr(2);
 				}
 			}
-			if (lsetData.sourcesBefore) buffer += "<li>any generation before "+(lsetData.sourcesBefore+1);
+			if (lsetData.sourcesBefore) buffer += "<li>any generation before " + (lsetData.sourcesBefore + 1);
 			buffer += "</ul>";
 		}
 		this.sendReplyBox(buffer);
@@ -558,7 +550,7 @@ var commands = exports.commands = {
 		if (!weaknesses.length) {
 			this.sendReplyBox(target + " has no weaknesses.");
 		} else {
-			this.sendReplyBox(target + " is weak to: " + weaknesses.join(', ') + " (not counting abilities).");
+			this.sendReplyBox(target + " is weak to: " + weaknesses.join(", ") + " (not counting abilities).");
 		}
 	},
 
@@ -574,7 +566,7 @@ var commands = exports.commands = {
 			pokemon = Tools.getTemplate(targets[1]);
 			type = Tools.getType(targets[0]);
 		}
-		defender = pokemon.species+' (not counting abilities)';
+		defender = pokemon.species + " (not counting abilities)";
 
 		if (!pokemon.exists || !type.exists) {
 			// try two types
@@ -584,14 +576,14 @@ var commands = exports.commands = {
 				defender = Tools.getType(targets[1]).id;
 				pokemon = {types: [defender]};
 				if (Tools.getType(targets[2]).exists) {
-					defender = Tools.getType(targets[1]).id + '/' + Tools.getType(targets[2]).id;
+					defender = Tools.getType(targets[1]).id + "/" + Tools.getType(targets[2]).id;
 					pokemon = {types: [Tools.getType(targets[1]).id, Tools.getType(targets[2]).id]};
 				}
 			} else {
 				if (!targets[1]) {
 					return this.sendReply("Attacker and defender must be separated with a comma.");
 				}
-				return this.sendReply("'"+targets[0].trim()+"' and '"+targets[1].trim()+"' aren't a recognized combination.");
+				return this.sendReply("'" + targets[0].trim() + "' and '" + targets[1].trim() + "' aren't a recognized combination.");
 			}
 		}
 
@@ -604,7 +596,7 @@ var commands = exports.commands = {
 			factor = Math.pow(2, typeMod);
 		}
 
-		this.sendReplyBox(''+type.id+' attacks are '+factor+'x effective against '+defender+'.');
+		this.sendReplyBox(type.id + " attacks are " + factor + "x effective against " + defender + ".");
 	},
 
 	uptime: function(target, room, user) {
@@ -613,23 +605,22 @@ var commands = exports.commands = {
 		var uptimeText;
 		if (uptime > 24*60*60) {
 			var uptimeDays = Math.floor(uptime/(24*60*60));
-			uptimeText = ''+uptimeDays+' '+(uptimeDays == 1 ? 'day' : 'days');
+			uptimeText = uptimeDays + " " + (uptimeDays == 1 ? "day" : "days");
 			var uptimeHours = Math.floor(uptime/(60*60)) - uptimeDays*24;
-			if (uptimeHours) uptimeText += ', '+uptimeHours+' '+(uptimeHours == 1 ? 'hour' : 'hours');
+			if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours == 1 ? "hour" : "hours");
 		} else {
 			uptimeText = uptime.seconds().duration();
 		}
-		this.sendReplyBox('Uptime: <b>'+uptimeText+'</b>');
+		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
 	},
 
 	groups: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
-			'% <b>Driver</b> - The above, and they can also mute and lock users and check for alts<br />' +
-			'@ <b>Moderator</b> - The above, and they can ban users<br />' +
-			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />' +
-			'~ <b>Administrator</b> - They can do anything, like change what this message says<br />' +
-			'# <b>Room Owner</b> - They are administrators of the room and can almost totally control it');
+		this.sendReplyBox(config.groups.byRank.reduce(function (info, group) {
+			if (!config.groups.bySymbol[group].name || !config.groups.bySymbol[group].description)
+				return info;
+			return info + (info ? "<br />" : "") + sanitize(group) + " <strong>" + sanitize(config.groups.bySymbol[group].name) + "</strong> - " + sanitize(config.groups.bySymbol[group].description);
+		}, ""));
 	},
 
 	opensource: function(target, room, user) {
@@ -716,52 +707,52 @@ var commands = exports.commands = {
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3481155/">OM of the Month</a>';
 		}
 		if (!matched) {
-			return this.sendReply('The Other Metas entry "'+target+'" was not found. Try /othermetas or /om for general help.');
+			return this.sendReply('The Other Metas entry "' + target + '" was not found. Try /othermetas or /om for general help.');
 		}
 		this.sendReplyBox(buffer);
 	},
 
 	roomhelp: function(target, room, user) {
-		if (room.id === 'lobby') return this.sendReply('This command is too spammy for lobby.');
+		if (room.id === 'lobby') return this.sendReply("This command is too spammy for lobby.");
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Room drivers (%) can use:<br />' +
-			'- /mute <em>username</em>: 7 minute mute<br />' +
-			'- /hourmute <em>username</em>: 60 minute mute<br />' +
-			'- /unmute <em>username</em>: unmute<br />' +
-			'- /announce <em>message</em>: make an announcement<br />' +
-			'<br />' +
-			'Room moderators (@) can also use:<br />' +
-			'- /roomban <em>username</em>: bans user from the room<br />' +
-			'- /roomunban <em>username</em>: unbans user from the room<br />' +
-			'- /roomvoice <em>username</em>: appoint a room voice<br />' +
-			'- /roomdevoice <em>username</em>: remove a room voice<br />' +
-			'- /modchat <em>level</em>: set modchat (to turn off: /modchat off)<br />' +
-			'<br />' +
-			'Room owners (#) can also use:<br />' +
-			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
-			'- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />' +
-			'- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />' +
-			'- /declare <em>message</em>: make a global declaration<br />' +
-			'</div>');
+		this.sendReplyBox("Room drivers (%) can use:<br />" +
+			"- /mute <em>username</em>: 7 minute mute<br />" +
+			"- /hourmute <em>username</em>: 60 minute mute<br />" +
+			"- /unmute <em>username</em>: unmute<br />" +
+			"- /announce <em>message</em>: make an announcement<br />" +
+			"<br />" +
+			"Room moderators (@) can also use:<br />" +
+			"- /roomban <em>username</em>: bans user from the room<br />" +
+			"- /roomunban <em>username</em>: unbans user from the room<br />" +
+			"- /roomvoice <em>username</em>: appoint a room voice<br />" +
+			"- /roomdevoice <em>username</em>: remove a room voice<br />" +
+			"- /modchat <em>level</em>: set modchat (to turn off: /modchat off)<br />" +
+			"<br />" +
+			"Room owners (#) can also use:<br />" +
+			"- /roomdesc <em>description</em>: set the room description on the room join page<br />" +
+			"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />" +
+			"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />" +
+			"- /declare <em>message</em>: make a declaration<br />" +
+			"</div>");
 	},
 
 	restarthelp: function(target, room, user) {
 		if (room.id === 'lobby' && !this.can('lockdown')) return false;
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('The server is restarting. Things to know:<br />' +
-			'- We wait a few minutes before restarting so people can finish up their battles<br />' +
-			'- The restart itself will take around 0.6 seconds<br />' +
-			'- Your ladder ranking and teams will not change<br />' +
-			'- We are restarting to update Pokémon Showdown to a newer version' +
-			'</div>');
+		this.sendReplyBox("The server is restarting. Things to know:<br />" +
+			"- We wait a few minutes before restarting so people can finish up their battles<br />" +
+			"- The restart itself will take around 0.6 seconds<br />" +
+			"- Your ladder ranking and teams will not change<br />" +
+			"- We are restarting to update Pokémon Showdown to a newer version" +
+			"</div>");
 	},
 
 	rule: 'rules',
 	rules: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Please follow the rules:<br />' +
-			'- <a href="http://pokemonshowdown.com/rules">Rules</a><br />' +
-			'</div>');
+		this.sendReplyBox("Please follow the rules:<br />" +
+			"- <a href=\"http://pokemonshowdown.com/rules\">Rules</a><br />" +
+			"</div>");
 	},
 
 	faq: function(target, room, user) {
@@ -796,9 +787,9 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'autoconfirmed') {
 			matched = true;
 			buffer += 'A user is autoconfirmed when they have won at least one rated battle and has been registered for a week or longer.<br />';
-		}	
+		}
 		if (!matched) {
-			return this.sendReply('The FAQ entry "'+target+'" was not found. Try /faq for general help.');
+			return this.sendReply('The FAQ entry "' + target + '" was not found. Try /faq for general help.');
 		}
 		this.sendReplyBox(buffer);
 	},
@@ -844,7 +835,7 @@ var commands = exports.commands = {
 			buffer += '- <a href="http://www.smogon.com/bw/metagames/doubles">Doubles</a><br />';
 		}
 		if (!matched) {
-			return this.sendReply('The Tiers entry "'+target+'" was not found. Try /tiers for general help.');
+			return this.sendReply('The Tiers entry "' + target + '" was not found. Try /tiers for general help.');
 		}
 		this.sendReplyBox(buffer);
 	},
@@ -865,22 +856,22 @@ var commands = exports.commands = {
 		var doublesFormats = {'vgc2012':1,'vgc2013':1,'doubles':1};
 		var doublesFormat = (!targets[2] && generation in doublesFormats)? generation : (targets[2] || '').trim().toLowerCase();
 		var doublesText = '';
-		if (generation === "bw" || generation === "bw2" || generation === "5" || generation === "five") {
-			generation = "bw";
-		} else if (generation === "dp" || generation === "dpp" || generation === "4" || generation === "four") {
-			generation = "dp";
+		if (generation === 'bw' || generation === 'bw2' || generation === '5' || generation === 'five') {
+			generation = 'bw';
+		} else if (generation === 'dp' || generation === 'dpp' || generation === '4' || generation === 'four') {
+			generation = 'dp';
 			genNumber = 4;
-		} else if (generation === "adv" || generation === "rse" || generation === "rs" || generation === "3" || generation === "three") {
-			generation = "rs";
+		} else if (generation === 'adv' || generation === 'rse' || generation === 'rs' || generation === '3' || generation === 'three') {
+			generation = 'rs';
 			genNumber = 3;
-		} else if (generation === "gsc" || generation === "gs" || generation === "2" || generation === "two") {
-			generation = "gs";
+		} else if (generation === 'gsc' || generation === 'gs' || generation === '2' || generation === 'two') {
+			generation = 'gs';
 			genNumber = 2;
-		} else if(generation === "rby" || generation === "rb" || generation === "1" || generation === "one") {
-			generation = "rb";
+		} else if(generation === 'rby' || generation === 'rb' || generation === '1' || generation === 'one') {
+			generation = 'rb';
 			genNumber = 1;
 		} else {
-			generation = "bw";
+			generation = 'bw';
 		}
 		if (doublesFormat !== '') {
 			// Smogon only has doubles formats analysis from gen 5 onwards.
@@ -896,10 +887,10 @@ var commands = exports.commands = {
 		if (pokemon.exists) {
 			atLeastOne = true;
 			if (genNumber < pokemon.gen) {
-				return this.sendReplyBox(pokemon.name+' did not exist in '+generation.toUpperCase()+'!');
+				return this.sendReplyBox(pokemon.name + " did not exist in " + generation.toUpperCase() + "!");
 			}
 			if (pokemon.tier === 'G4CAP' || pokemon.tier === 'G5CAP') {
-				generation = "cap";
+				generation = 'cap';
 			}
 
 			var poke = pokemon.name.toLowerCase();
@@ -919,28 +910,28 @@ var commands = exports.commands = {
 			if (poke === 'arceus') poke = 'arceus-normal';
 			if (poke === 'thundurus-therian') poke = 'thundurus-t';
 
-			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/pokemon/'+poke+doublesFormat+'">'+generation.toUpperCase()+' '+doublesText+pokemon.name+' analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
+			this.sendReplyBox('<a href="http://www.smogon.com/' + generation + '/pokemon/' + poke + doublesFormat + '">' + generation.toUpperCase() + ' ' + doublesText + pokemon.name + ' analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
 
 		// Item
 		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
 			var itemName = item.name.toLowerCase().replace(' ', '_');
-			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/items/'+itemName+'">'+generation.toUpperCase()+' '+item.name+' item analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
+			this.sendReplyBox('<a href="http://www.smogon.com/' + generation + '/items/' + itemName + '">' + generation.toUpperCase() + ' ' + item.name + ' item analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
 
 		// Ability
 		if (ability.exists && genNumber > 2 && ability.gen <= genNumber) {
 			atLeastOne = true;
 			var abilityName = ability.name.toLowerCase().replace(' ', '_');
-			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/abilities/'+abilityName+'">'+generation.toUpperCase()+' '+ability.name+' ability analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
+			this.sendReplyBox('<a href="http://www.smogon.com/' + generation + '/abilities/' + abilityName + '">' + generation.toUpperCase() + ' ' + ability.name + ' ability analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
 
 		// Move
 		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
 			var moveName = move.name.toLowerCase().replace(' ', '_');
-			this.sendReplyBox('<a href="http://www.smogon.com/'+generation+'/moves/'+moveName+'">'+generation.toUpperCase()+' '+move.name+' move analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
+			this.sendReplyBox('<a href="http://www.smogon.com/' + generation + '/moves/' + moveName + '">' + generation.toUpperCase() + ' ' + move.name + ' move analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		}
 
 		if (!atLeastOne) {
@@ -960,16 +951,16 @@ var commands = exports.commands = {
 		if (!this.can('potd')) return false;
 
 		config.potd = target;
-		Simulator.SimulatorProcess.eval('config.potd = \''+toId(target)+'\'');
+		Simulator.SimulatorProcess.eval('config.potd = \'' + toId(target) + '\'');
 		if (target) {
-			if (Rooms.lobby) Rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day is now '+target+'!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>');
-			this.logModCommand('The Pokemon of the Day was changed to '+target+' by '+user.name+'.');
+			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pokemon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
+			this.logModCommand("The Pokemon of the Day was changed to " + target + " by " + user.name + ".");
 		} else {
-			if (Rooms.lobby) Rooms.lobby.addRaw('<div class="broadcast-blue"><b>The Pokemon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>');
-			this.logModCommand('The Pokemon of the Day was removed by '+user.name+'.');
+			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pokemon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
+			this.logModCommand("The Pokemon of the Day was removed by " + user.name + ".");
 		}
 	},
-	
+
 	roll: 'dice',
 	dice: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -988,22 +979,17 @@ var commands = exports.commands = {
 				rolls[i] = (Math.floor(faces * Math.random()) + 1);
 				total += rolls[i];
 			}
-			return this.sendReplyBox('Random number ' + num + 'x(1 - ' + faces + '): ' + rolls.join(', ') + '<br />Total: ' + total);
+			return this.sendReplyBox("Random number " + num + "x(1 - " + faces + "): " + rolls.join(", ") + "<br />Total: " + total);
 		}
-		if (target && isNaN(target) || target.length > 21) return this.sendReply('The max roll must be a number under 21 digits.');
+		if (target && isNaN(target) || target.length > 21) return this.sendReply("The max roll must be a number under 21 digits.");
 		var maxRoll = (target)? target : 6;
 		var rand = Math.floor(maxRoll * Math.random()) + 1;
-		return this.sendReplyBox('Random number (1 - ' + maxRoll + '): ' + rand);
+		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
 	},
 
 	register: function() {
 		if (!this.canBroadcast()) return;
 		this.sendReply("You must win a rated battle to register.");
-	},
-
-	br: 'banredirect',
-	banredirect: function(){ 
-		this.sendReply('/banredirect - This command is obsolete and has been removed.');
 	},
 
 	lobbychat: function(target, room, user, connection) {
@@ -1012,15 +998,15 @@ var commands = exports.commands = {
 		if (target === 'off') {
 			user.leaveRoom(Rooms.lobby, connection.socket);
 			connection.send('|users|');
-			this.sendReply('You are now blocking lobby chat.');
+			this.sendReply("You are now blocking lobby chat.");
 		} else {
 			user.joinRoom(Rooms.lobby, connection);
-			this.sendReply('You are now receiving lobby chat.');
+			this.sendReply("You are now receiving lobby chat.");
 		}
 	},
 
 	a: function(target, room, user) {
-		if (!this.can('battlemessage')) return false;
+		if (!this.can('rawpacket')) return false;
 		// secret sysop command
 		room.add(target);
 	},
@@ -1034,310 +1020,320 @@ var commands = exports.commands = {
 	'?': 'help',
 	help: function(target, room, user) {
 		target = target.toLowerCase();
+		var roomType = room.auth ? room.type + 'Room' : 'global';
 		var matched = false;
 		if (target === 'all' || target === 'msg' || target === 'pm' || target === 'whisper' || target === 'w') {
 			matched = true;
-			this.sendReply('/msg OR /whisper OR /w [username], [message] - Send a private message.');
+			this.sendReply("/msg OR /whisper OR /w [username], [message] - Send a private message.");
 		}
 		if (target === 'all' || target === 'r' || target === 'reply') {
 			matched = true;
-			this.sendReply('/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to.');
+			this.sendReply("/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to.");
 		}
 		if (target === 'all' || target === 'getip' || target === 'ip') {
 			matched = true;
-			this.sendReply('/ip - Get your own IP address.');
-			this.sendReply('/ip [username] - Get a user\'s IP address. Requires: @ & ~');
+			this.sendReply("/ip - Get your own IP address.");
+			this.sendReply("/ip [username] - Get a user's IP address. Requires: " + Users.getGroupsThatCan('ip', config.groups.default.global).join(" "));
+		}
+		if (target === 'all' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
+			matched = true;
+			this.sendReply("/alts OR /altcheck - Get your own alts.");
+			this.sendReply("/alts OR /altcheck [username] - Get a user's alts. Requires: " + Users.getGroupsThatCan('alts', config.groups.default.global).join(" "));
 		}
 		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder') {
 			matched = true;
-			this.sendReply('/rating - Get your own rating.');
-			this.sendReply('/rating [username] - Get user\'s rating.');
+			this.sendReply("/rating - Get your own rating.");
+			this.sendReply("/rating [username] - Get user's rating.");
 		}
 		if (target === 'all' || target === 'nick') {
 			matched = true;
-			this.sendReply('/nick [new username] - Change your username.');
+			this.sendReply("/nick [new username] - Change your username.");
 		}
 		if (target === 'all' || target === 'avatar') {
 			matched = true;
-			this.sendReply('/avatar [new avatar number] - Change your trainer sprite.');
+			this.sendReply("/avatar [new avatar number] - Change your trainer sprite.");
 		}
 		if (target === 'all' || target === 'rooms') {
 			matched = true;
-			this.sendReply('/rooms [username] - Show what rooms a user is in.');
+			this.sendReply("/rooms [username] - Show what rooms a user is in.");
 		}
 		if (target === 'all' || target === 'whois') {
 			matched = true;
-			this.sendReply('/whois [username] - Get details on a username: group, and rooms.');
+			this.sendReply("/whois [username] - Get details on a username: group, and rooms.");
 		}
 		if (target === 'all' || target === 'data') {
 			matched = true;
-			this.sendReply('/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability.');
-			this.sendReply('!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ & ~');
+			this.sendReply("/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability.");
+			this.sendReply("!data [pokemon/item/move/ability] - Show everyone these details. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
-		if (target === "all" || target === 'analysis') {
+		if (target === 'all' || target === 'analysis') {
 			matched = true;
-			this.sendReply('/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pokemon in the given generation.');
-			this.sendReply('!analysis [pokemon], [generation] - Shows everyone this link. Requires: + % @ & ~');
+			this.sendReply("/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pokemon in the given generation.");
+			this.sendReply("!analysis [pokemon], [generation] - Shows everyone this link. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
 		if (target === 'all' || target === 'groups') {
 			matched = true;
-			this.sendReply('/groups - Explains what the + % @ & next to people\'s names mean.');
-			this.sendReply('!groups - Show everyone that information. Requires: + % @ & ~');
+			this.sendReply("/groups - Explains what the " + config.groups[roomType + 'ByRank'].filter(function (g) { return g.trim(); }).join(" ") + " next to people's names mean.");
+			this.sendReply("!groups - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
 		if (target === 'all' || target === 'opensource') {
 			matched = true;
-			this.sendReply('/opensource - Links to PS\'s source code repository.');
-			this.sendReply('!opensource - Show everyone that information. Requires: + % @ & ~');
+			this.sendReply("/opensource - Links to PS's source code repository.");
+			this.sendReply("!opensource - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
 		if (target === 'all' || target === 'avatars') {
 			matched = true;
-			this.sendReply('/avatars - Explains how to change avatars.');
-			this.sendReply('!avatars - Show everyone that information. Requires: + % @ & ~');
+			this.sendReply("/avatars - Explains how to change avatars.");
+			this.sendReply("!avatars - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
 		if (target === 'all' || target === 'intro') {
 			matched = true;
-			this.sendReply('/intro - Provides an introduction to competitive pokemon.');
-			this.sendReply('!intro - Show everyone that information. Requires: + % @ & ~');
+			this.sendReply("/intro - Provides an introduction to competitive pokemon.");
+			this.sendReply("!intro - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
 		if (target === 'all' || target === 'cap') {
 			matched = true;
-			this.sendReply('/cap - Provides an introduction to the Create-A-Pokemon project.');
-			this.sendReply('!cap - Show everyone that information. Requires: + % @ & ~');
+			this.sendReply("/cap - Provides an introduction to the Create-A-Pokemon project.");
+			this.sendReply("!cap - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
 		if (target === 'all' || target === 'om') {
 			matched = true;
-			this.sendReply('/om - Provides links to information on the Other Metagames.');
-			this.sendReply('!om - Show everyone that information. Requires: + % @ & ~');
+			this.sendReply("/om - Provides links to information on the Other Metagames.");
+			this.sendReply("!om - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
 		if (target === 'all' || target === 'learn' || target === 'learnset' || target === 'learnall') {
 			matched = true;
-			this.sendReply('/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.')
-			this.sendReply('!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ & ~')
+			this.sendReply("/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.")
+			this.sendReply("!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "))
 		}
 		if (target === 'all' || target === 'calc' || target === 'caclulator') {
 			matched = true;
-			this.sendReply('/calc - Provides a link to a damage calculator');
-			this.sendReply('!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~');
+			this.sendReply("/calc - Provides a link to a damage calculator");
+			this.sendReply("!calc - Shows everyone a link to a damage calculator. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
 		if (target === 'all' || target === 'blockchallenges' || target === 'away' || target === 'idle') {
 			matched = true;
-			this.sendReply('/away - Blocks challenges so no one can challenge you. Deactivate it with /back.');
+			this.sendReply("/away - Blocks challenges so no one can challenge you. Deactivate it with /back.");
 		}
 		if (target === 'all' || target === 'allowchallenges' || target === 'back') {
 			matched = true;
-			this.sendReply('/back - Unlocks challenges so you can be challenged again. Deactivate it with /away.');
+			this.sendReply("/back - Unlocks challenges so you can be challenged again. Deactivate it with /away.");
 		}
 		if (target === 'all' || target === 'faq') {
 			matched = true;
-			this.sendReply('/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.');
-			this.sendReply('!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: + % @ & ~');
+			this.sendReply("/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.");
+			this.sendReply("!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
 		if (target === 'all' || target === 'highlight') {
 			matched = true;
-			this.sendReply('Set up highlights:');
-			this.sendReply('/highlight add, word - add a new word to the highlight list.');
-			this.sendReply('/highlight list - list all words that currently highlight you.');
-			this.sendReply('/highlight delete, word - delete a word from the highlight list.');
-			this.sendReply('/highlight delete - clear the highlight list');
+			this.sendReply("Set up highlights:");
+			this.sendReply("/highlight add, word - add a new word to the highlight list.");
+			this.sendReply("/highlight list - list all words that currently highlight you.");
+			this.sendReply("/highlight delete, word - delete a word from the highlight list.");
+			this.sendReply("/highlight delete - clear the highlight list");
 		}
 		if (target === 'all' || target === 'timestamps') {
 			matched = true;
-			this.sendReply('Set your timestamps preference:');
-			this.sendReply('/timestamps [all|lobby|pms], [minutes|seconds|off]');
-			this.sendReply('all - change all timestamps preferences, lobby - change only lobby chat preferences, pms - change only PM preferences');
-			this.sendReply('off - set timestamps off, minutes - show timestamps of the form [hh:mm], seconds - show timestamps of the form [hh:mm:ss]');
+			this.sendReply("Set your timestamps preference:");
+			this.sendReply("/timestamps [all|lobby|pms], [minutes|seconds|off]");
+			this.sendReply("all - change all timestamps preferences, lobby - change only lobby chat preferences, pms - change only PM preferences");
+			this.sendReply("off - set timestamps off, minutes - show timestamps of the form [hh:mm], seconds - show timestamps of the form [hh:mm:ss]");
 		}
 		if (target === 'all' || target === 'effectiveness') {
 			matched = true;
-			this.sendReply('/effectiveness [type1], [type2] - Provides the effectiveness of a [type1] attack to a [type2] Pokémon.');
-			this.sendReply('!effectiveness [type1], [type2] - Shows everyone the effectiveness of a [type1] attack to a [type2] Pokémon.');
+			this.sendReply("/effectiveness [type1], [type2] - Provides the effectiveness of a [type1] attack to a [type2] Pokémon.");
+			this.sendReply("!effectiveness [type1], [type2] - Shows everyone the effectiveness of a [type1] attack to a [type2] Pokémon.");
 		}
 		if (target === 'all' || target === 'dexsearch') {
 			matched = true;
-			this.sendReply('/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.');
-			this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
-			this.sendReply('Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.');
-			this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.');
-			this.sendReply('Types must be followed by " type", e.g., "dragon type".');
-			this.sendReply('The order of the parameters does not matter.');
+			this.sendReply("/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.");
+			this.sendReply("Search categories are: type, tier, color, moves, ability, gen.");
+			this.sendReply("Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.");
+			this.sendReply("Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.");
+			this.sendReply("Types must be followed by ' type', e.g., 'dragon type'.");
+			this.sendReply("The order of the parameters does not matter.");
 		}
 		if (target === 'all' || target === 'dice' || target === 'roll') {
 			matched = true;
-			this.sendReply('/dice [optional max number] - Randomly picks a number between 1 and 6, or between 1 and the number you choose.');
-			this.sendReply('/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.');
+			this.sendReply("/dice [optional max number] - Randomly picks a number between 1 and 6, or between 1 and the number you choose.");
+			this.sendReply("/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.");
 		}
 		if (target === 'all' || target === 'join') {
 			matched = true;
-			this.sendReply('/join [roomname] - Attempts to join the room [roomname].');
+			this.sendReply("/join [roomname] - Attempts to join the room [roomname].");
 		}
 		if (target === 'all' || target === 'ignore') {
 			matched = true;
-			this.sendReply('/ignore [user] - Ignores all messages from the user [user].');
-			this.sendReply('Note that staff messages cannot be ignored.');
+			this.sendReply("/ignore [user] - Ignores all messages from the user [user].");
+			this.sendReply("Note that staff messages cannot be ignored.");
 		}
-		if (target === '%' || target === 'invite') {
+		if (target === 'all' || target === 'invite') {
 			matched = true;
-			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
+			this.sendReply("/invite [username], [roomname] - Invites the player [username] to join the room [roomname].");
 		}
-		if (target === '%' || target === 'roomban') {
+		if (Users.can(target, 'ban') || target === 'roomban') {
 			matched = true;
-			this.sendReply('/roomban [username] - Bans the user from the room you are in. Requires: % @ & ~');
+			this.sendReply("/roomban [username] - Bans the user from the room you are in. Requires: " + Users.getGroupsThatCan('ban', room).join(" "));
 		}
-		if (target === '%' || target === 'roomunban') {
+		if (Users.can(target, 'ban') || target === 'roomunban') {
 			matched = true;
-			this.sendReply('/roomunban [username] - Unbans the user from the room you are in. Requires: % @ & ~');
+			this.sendReply("/roomunban [username] - Unbans the user from the room you are in. Requires: " + Users.getGroupsThatCan('ban', room).join(" "));
 		}
-		if (target === '%' || target === 'redirect' || target === 'redir') {
+		if (Users.can(target, 'redirect') || target === 'redirect' || target === 'redir') {
 			matched = true;
-			this.sendReply('/redirect or /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~');
+			this.sendReply("/redirect or /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: " + Users.getGroupsThatCan('redirect', room).join(" "));
 		}
-		if (target === '%' || target === 'modnote') {
+		if (Users.can(target, 'staff') || target === 'modnote') {
 			matched = true;
-			this.sendReply('/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ & ~');
+			this.sendReply("/modnote [note] - Adds a moderator note that can be read through modlog. Requires: " + Users.getGroupsThatCan('staff', room).join(" "));
 		}
-		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
+		if (Users.can(target, 'forcerename') || target === 'forcerename' || target === 'fr') {
 			matched = true;
-			this.sendReply('/alts OR /altcheck OR /alt OR /getalts [username] - Get a user\'s alts. Requires: % @ & ~');
+			this.sendReply("/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: " + Users.getGroupsThatCan('forcerename').join(" "));
 		}
-		if (target === '%' || target === 'forcerename' || target === 'fr') {
+		if (Users.can(target, 'ban') || target === 'ban' || target === 'b') {
 			matched = true;
-			this.sendReply('/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: % @ & ~');
+			this.sendReply("/ban OR /b [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: " + Users.getGroupsThatCan('ban').join(" "));
 		}
-		if (target === '@' || target === 'ban' || target === 'b') {
+		if (Users.can(target, 'rangeban') || target === 'banip') {
 			matched = true;
-			this.sendReply('/ban OR /b [username], [reason] - Kick user from all rooms and ban user\'s IP address with reason. Requires: @ & ~');
+			this.sendReply("/banip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: " + Users.getGroupsThatCan('rangeban').join(" "));
 		}
-		if (target === '&' || target === 'banip') {
+		if (Users.can(target, 'ban') || target === 'unban') {
 			matched = true;
-			this.sendReply('/banip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~');
+			this.sendReply("/unban [username] - Unban a user. Requires: " + Users.getGroupsThatCan('ban').join(" "));
 		}
-		if (target === '@' || target === 'unban') {
+		if (Users.can(target, 'ban') || target === 'unbanall') {
 			matched = true;
-			this.sendReply('/unban [username] - Unban a user. Requires: @ & ~');
+			this.sendReply("/unbanall - Unban all IP addresses. Requires: " + Users.getGroupsThatCan('ban').join(" "));
 		}
-		if (target === '@' || target === 'unbanall') {
+		if (Users.can(target, 'staff') || target === 'modlog') {
 			matched = true;
-			this.sendReply('/unbanall - Unban all IP addresses. Requires: @ & ~');
+			this.sendReply("/modlog [roomid|all], [n] - Roomid defaults to current room. If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for 'n' on room's log [roomid]. If you set [all] as [roomid], searches for 'n' on all rooms's logs. Requires: " + Users.getGroupsThatCan('staff', room).join(" "));
 		}
-		if (target === '%' || target === 'modlog') {
+		if (Users.can(target, 'kick') || target === 'kickbattle ') {
 			matched = true;
-			this.sendReply('/modlog [roomid|all], [n] - Roomid defaults to current room. If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15. If n is not a number, search the moderator log for "n" on room\'s log [roomid]. If you set [all] as [roomid], searches for "n" on all rooms\'s logs. Requires: % @ & ~');
+			this.sendReply("/kickbattle [username], [reason] - Kicks an user from a battle with reason. Requires: " + Users.getGroupsThatCan('kick').join(" "));
 		}
-		if (target === "%" || target === 'kickbattle ') {
+		if (Users.can(target, 'warn') || target === 'warn' || target === 'k') {
 			matched = true;
-			this.sendReply('/kickbattle [username], [reason] - Kicks an user from a battle with reason. Requires: % @ & ~');
+			this.sendReply("/warn OR /k [username], [reason] - Warns a user showing them the Pokemon Showdown Rules and [reason] in an overlay. Requires: " + Users.getGroupsThatCan('warn', room).join(" "));
 		}
-		if (target === "%" || target === 'warn' || target === 'k') {
+		if (Users.can(target, 'mute') || target === 'mute' || target === 'm') {
 			matched = true;
-			this.sendReply('/warn OR /k [username], [reason] - Warns a user showing them the Pokemon Showdown Rules and [reason] in an overlay. Requires: % @ & ~');
+			this.sendReply("/mute OR /m [username], [reason] - Mute user with reason for 7 minutes. Requires: " + Users.getGroupsThatCan('mute', room).join(" "));
 		}
-		if (target === '%' || target === 'mute' || target === 'm') {
+		if (Users.can(target, 'mute') || target === 'hourmute' || target === 'hm') {
 			matched = true;
-			this.sendReply('/mute OR /m [username], [reason] - Mute user with reason for 7 minutes. Requires: % @ & ~');
+			this.sendReply("/hourmute OR /hm [username], [reason] - Mute user with reason for an hour. Requires: " + Users.getGroupsThatCan('mute', room).join(" "));
 		}
-		if (target === '%' || target === 'hourmute' || target === 'hm') {
+		if (Users.can(target, 'mute') || target === 'unmute') {
 			matched = true;
-			this.sendReply('/hourmute OR /hm [username], [reason] - Mute user with reason for an hour. Requires: % @ & ~');
+			this.sendReply("/unmute [username] - Remove mute from user. Requires: " + Users.getGroupsThatCan('mute', room).join(" "));
 		}
-		if (target === '%' || target === 'unmute') {
+		if (Users.can(target, 'promote') || target === 'promote') {
 			matched = true;
-			this.sendReply('/unmute [username] - Remove mute from user. Requires: % @ & ~');
+			this.sendReply("/promote [username], [group] - Promotes the user to the specified group or next ranked group. Requires: " + Users.getGroupsThatCan('promote').join(" "));
 		}
-		if (target === '&' || target === 'promote') {
+		if (Users.can(target, 'promote') || target === 'demote') {
 			matched = true;
-			this.sendReply('/promote [username], [group] - Promotes the user to the specified group or next ranked group. Requires: & ~');
+			this.sendReply("/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: " + Users.getGroupsThatCan('promote').join(" "));
 		}
-		if (target === '&' || target === 'demote') {
+		if (Users.can(target, 'forcerenameto') || target === 'forcerenameto' || target === 'frt') {
 			matched = true;
-			this.sendReply('/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: & ~');
+			this.sendReply("/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: " + Users.getGroupsThatCan('forcerename').join(" "));
+			this.sendReply("/forcerenameto OR /frt [username], [new name] - Forcibly change a user's name to [new name]. Requires: " + Users.getGroupsThatCan('forcerenameto').join(" "));
 		}
-		if (target === '~' || target === 'forcerenameto' || target === 'frt') {
+		if (Users.can(target, 'forcewin') || target === 'forcetie') {
 			matched = true;
-			this.sendReply('/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: & ~');
-			this.sendReply('/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: & ~');
+			this.sendReply("/forcetie - Forces the current match to tie. Requires: " + Users.getGroupsThatCan('forcewin').join(" "));
 		}
-		if (target === '&' || target === 'forcetie') {
+		if (Users.can(target, 'declare') || target === 'declare') {
 			matched = true;
-			this.sendReply('/forcetie - Forces the current match to tie. Requires: & ~');
+			this.sendReply("/declare [message] - Anonymously announces a message. Requires: " + Users.getGroupsThatCan('declare', room).join(" "));
 		}
-		if (target === '&' || target === 'declare') {
+		if (Users.can(target, 'gdeclare') || target === 'chatdeclare' || target === 'cdeclare') {
 			matched = true;
-			this.sendReply('/declare [message] - Anonymously announces a message. Requires: & ~');
+			this.sendReply("/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: " + Users.getGroupsThatCan('gdeclare').join(" "));
 		}
-		if (target === '~' || target === 'chatdeclare' || target === 'cdeclare') {
+		if (Users.can(target, 'gdeclare') || target === 'globaldeclare' || target === 'gdeclare') {
 			matched = true;
-			this.sendReply('/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~');
+			this.sendReply("/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: " + Users.getGroupsThatCan('gdeclare').join(" "));
 		}
-		if (target === '~' || target === 'globaldeclare' || target === 'gdeclare') {
+		if (Users.can(target, 'announce') || target === 'announce' || target === 'wall') {
 			matched = true;
-			this.sendReply('/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~');
+			this.sendReply("/announce OR /wall [message] - Makes an announcement. Requires: " + Users.getGroupsThatCan('announce', room).join(" "));
 		}
-		if (target === '%' || target === 'announce' || target === 'wall') {
+		if (Users.can(target, 'modchat') || target === 'modchat') {
 			matched = true;
-			this.sendReply('/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~');
+			this.sendReply("/modchat [off/autoconfirmed/" +
+				config.groups[roomType + 'ByRank'].filter(function (g) { return g.trim(); }).join("/") +
+				"] - Set the level of moderated chat. Requires: " +
+				Users.getGroupsThatCan('modchat', room).join(" ") +
+				" for off/autoconfirmed/" +
+				config.groups[roomType + 'ByRank'].slice(0, 2).filter(function (g) { return g.trim(); }).join("/") +
+				" options, " +
+				Users.getGroupsThatCan('modchatall', room).join(" ") +
+				" for all the options");
 		}
-		if (target === '@' || target === 'modchat') {
+		if (Users.can(target, 'hotpatch') || target === 'hotpatch') {
 			matched = true;
-			this.sendReply('/modchat [off/autoconfirmed/+/%/@/&/~] - Set the level of moderated chat. Requires: @ for off/autoconfirmed/+ options, & ~ for all the options');
+			this.sendReply("Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: " + Users.getGroupsThatCan('hotpatch').join(" "));
+			this.sendReply("Hot-patching has greater memory requirements than restarting.");
+			this.sendReply("/hotpatch chat - reload chat-commands.js");
+			this.sendReply("/hotpatch battles - spawn new simulator processes");
+			this.sendReply("/hotpatch formats - reload the tools.js tree, rebuild and rebroad the formats list, and also spawn new simulator processes");
 		}
-		if (target === '~' || target === 'hotpatch') {
+		if (Users.can(target, 'lockdown') || target === 'lockdown') {
 			matched = true;
-			this.sendReply('Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~');
-			this.sendReply('Hot-patching has greater memory requirements than restarting.');
-			this.sendReply('/hotpatch chat - reload chat-commands.js');
-			this.sendReply('/hotpatch battles - spawn new simulator processes');
-			this.sendReply('/hotpatch formats - reload the tools.js tree, rebuild and rebroad the formats list, and also spawn new simulator processes');
+			this.sendReply("/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: " + Users.getGroupsThatCan('lockdown').join(" "));
 		}
-		if (target === '~' || target === 'lockdown') {
+		if (Users.can(target, 'lockdown') || target === 'kill') {
 			matched = true;
-			this.sendReply('/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~');
+			this.sendReply("/kill - kills the server. Can't be done unless the server is in lockdown state. Requires: " + Users.getGroupsThatCan('lockdown').join(" "));
 		}
-		if (target === '~' || target === 'kill') {
+		if (Users.can(target, 'hotpatch') || target === 'loadbanlist') {
 			matched = true;
-			this.sendReply('/kill - kills the server. Can\'t be done unless the server is in lockdown state. Requires: ~');
+			this.sendReply("/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: " + Users.getGroupsThatCan('hotpatch').join(" "));
 		}
-		if (target === '~' || target === 'loadbanlist') {
+		if (Users.can(target, 'makeroom') || target === 'makechatroom') {
 			matched = true;
-			this.sendReply('/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: ~');
+			this.sendReply("/makechatroom [roomname] - Creates a new room named [roomname]. Requires: " + Users.getGroupsThatCan('makeroom').join(" "));
 		}
-		if (target === '~' || target === 'makechatroom') {
+		if (Users.can(target, 'makeroom') || target === 'deregisterchatroom') {
 			matched = true;
-			this.sendReply('/makechatroom [roomname] - Creates a new room named [roomname]. Requires: ~');
+			this.sendReply("/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: " + Users.getGroupsThatCan('makeroom').join(" "));
 		}
-		if (target === '~' || target === 'deregisterchatroom') {
+		if (Users.can(target, 'roompromote', config.groups[roomType + 'ByRank'].slice(-1)[0]) || target === 'roomowner') {
 			matched = true;
-			this.sendReply('/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: ~');
+			this.sendReply("/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: " + Users.getGroupsThatCan('roompromote', config.groups[roomType + 'ByRank'].slice(-1)[0]).join(" "));
 		}
-		if (target === '~' || target === 'roomowner') {
+		if (Users.can(target, 'roompromote', config.groups[roomType + 'ByRank'].slice(-1)[0]) || target === 'roomdeowner') {
 			matched = true;
-			this.sendReply('/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: ~');
+			this.sendReply("/roomdeowner [username] - Removes [username]'s status as a room owner. Requires: " + Users.getGroupsThatCan('roompromote', config.groups[roomType + 'ByRank'].slice(-1)[0]).join(" "));
 		}
-		if (target === '~' || target === 'roomdeowner') {
+		if (Users.can(target, 'privateroom') || target === 'privateroom') {
 			matched = true;
-			this.sendReply('/roomdeowner [username] - Removes [username]\'s status as a room owner. Requires: ~');
-		}
-		if (target === '~' || target === 'privateroom') {
-			matched = true;
-			this.sendReply('/privateroom [on/off] - Makes or unmakes a room private. Requires: ~');
+			this.sendReply("/privateroom [on/off] - Makes or unmakes a room private. Requires: " + Users.getGroupsThatCan('privateroom', room).join(" "));
 		}
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands') {
 			matched = true;
-			this.sendReply('/help OR /h OR /? - Gives you help.');
+			this.sendReply("/help OR /h OR /? - Gives you help.");
 		}
 		if (!target) {
-			this.sendReply('COMMANDS: /msg, /reply, /ignore, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps, /highlight');
-			this.sendReply('INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))');
-			this.sendReply('For details on all room commands, use /roomhelp');
-			this.sendReply('For details on all commands, use /help all');
-			if (user.group !== config.groupsranking[0]) {
-				this.sendReply('DRIVER COMMANDS: /mute, /unmute, /announce, /modlog, /forcerename, /alts')
-				this.sendReply('MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /redirect, /kick');
-				this.sendReply('LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare');
-				this.sendReply('For details on all moderator commands, use /help @');
+			this.sendReply("COMMANDS: /msg, /reply, /ignore, /ip, /alts, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps, /highlight");
+			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: " + Users.getGroupsThatCan('broadcast', room).join(" ") + ")");
+			this.sendReply("For details on all room commands, use /roomhelp");
+			this.sendReply("For details on all commands, use /help all");
+			if (user.group !== config.groups.default[roomType]) {
+				this.sendReply("DRIVER COMMANDS: /mute, /unmute, /announce, /modlog, /forcerename")
+				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /redirect, /kick");
+				this.sendReply("LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare");
+				this.sendReply("For details on all moderator commands, use /help " + Users.getGroupsThatCan('staff', room)[0]);
 			}
-			this.sendReply('For details of a specific command, use something like: /help data');
+			this.sendReply("For details of a specific command, use something like: /help data");
 		} else if (!matched) {
-			this.sendReply('The command "/'+target+'" was not found. Try /help for general help');
+			this.sendReply("The command '" + target + "' was not found. Try /help for general help");
 		}
 	},
 
