@@ -511,7 +511,7 @@ exports.BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 		desc: "Holder's first successful Water-type attack will have 1.5x power. Single use."
-	}   
+	},  
 	watmelberry: {
 		inherit: true,
 		naturalGift: {
