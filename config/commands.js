@@ -1113,7 +1113,7 @@ var commands = exports.commands = {
 		];
 
 		return function(target, room, user) {
-			if (config.poofoff) return this.sendReply("Poof is currently disabled.");
+			if (config.poofOff) return this.sendReply("Poof is currently disabled.");
 			if (target && !this.can('broadcast')) return false;
 			if (room.id !== 'lobby') return false;
 			var message = target || messages[Math.floor(Math.random() * messages.length)];
@@ -1134,14 +1134,14 @@ var commands = exports.commands = {
 
 	poofoff: 'nopoof',
 	nopoof: function() {
-		if (!this.can('warn')) return false;
-		config.poofoff = true;
+		if (!this.can('poofoff')) return false;
+		config.poofOff = true;
 		return this.sendReply("Poof is now disabled.");
 	},
 
 	poofon: function() {
-		if (!this.can('warn')) return false;
-		config.poofoff = false;
+		if (!this.can('poofoff')) return false;
+		config.poofOff = false;
 		return this.sendReply("Poof is now enabled.");
 	},
 
@@ -1163,7 +1163,7 @@ var commands = exports.commands = {
 			return this.sendReplyBox(message);
 		}
 
-		if (!this.can('announce', null, room)) return false;
+		if (!this.can('reminder', room)) return false;
 		if (!room.reminders) room.reminders = room.chatRoomData.reminders = [];
 
 		var index = parseInt(parts[1], 10) - 1;
@@ -1203,7 +1203,7 @@ var commands = exports.commands = {
 	tell: function(target, room, user) {
 		if (!target) return false;
 		var message = this.splitTarget(target);
-		if (!message) return this.sendReply('You forgot the comma.');
+		if (!message) return this.sendReply("You forgot the comma.");
 		if (user.locked) return this.sendReply("You cannot use this command while locked.");
 
 		message = this.canTalk(message, null);
@@ -1219,12 +1219,12 @@ var commands = exports.commands = {
 
 	hide: 'hideauth',
 	hideauth: function(target, room, user) {
-		if (!this.can('hide')) return false;
-		target = (target || config.groupsranking[0])[0];
-		if (config.groupsranking.indexOf(target) < 0) {
-			target = config.groupsranking[0];
+		if (!this.can('hideauth')) return false;
+		target = target || config.groups.default.global;
+		if (!config.groups.global[target]) {
+			target = config.groups.default.global;
 			this.sendReply("You have picked an invalid group, defaulting to '" + target + "'.");
-		} else if (config.groupsranking.indexOf(target) >= config.groupsranking.indexOf(user.group))
+		} else if (config.groups.bySymbol[target].globalRank >= config.groups.bySymbol[target].globalRank)
 			return this.sendReply("The group you have chosen is either your current group OR one of higher rank. You cannot hide like that.");
 
 		user.getIdentity = function (roomid) {
@@ -1239,7 +1239,7 @@ var commands = exports.commands = {
 
 	show: 'showauth',
 	showauth: function(target, room, user) {
-		if (!this.can('hide')) return false;
+		if (!this.can('hideauth')) return false;
 		delete user.getIdentity;
 		user.updateIdentity();
 		return this.sendReply("You are now showing your authority!");
