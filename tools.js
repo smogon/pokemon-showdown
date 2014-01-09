@@ -127,7 +127,11 @@ module.exports = (function () {
 		}
 		return true;
 	};
-	Tools.prototype.getEffectiveness = function(type, target) {
+	Tools.prototype.getEffectiveness = function(source, target, pokemon) {
+		if (source.getEffectiveness) {
+			return source.getEffectiveness.call(this, source, target, pokemon);
+		}
+		var type = source.type || source;
 		var totalTypeMod = 0;
 		for (var i=0; i<target.types.length; i++) {
 			if (!this.data.TypeChart[target.types[i]]) continue;
@@ -478,7 +482,7 @@ module.exports = (function () {
 		do {
 			alreadyChecked[template.speciesid] = true;
 			// Stabmons hack to avoid copying all of validateSet to formats.
-			if (format.id === 'gen5stabmons' && template.types.indexOf(this.getMove(move).type) > -1) return false;
+			if (format.id === 'stabmons' && template.types.indexOf(this.getMove(move).type) > -1) return false;
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					sometimesPossible = true;
@@ -495,9 +499,11 @@ module.exports = (function () {
 						var learned = lset[i];
 						if (noPastGen && learned.charAt(0) !== '6') continue;
 						if (parseInt(learned.charAt(0),10) > this.gen) continue;
-						// HMs can't be transferred
-						if (this.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
-						if (this.gen >= 5 && learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+						if (!template.isNonstandard) {
+							// HMs can't be transferred
+							if (this.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
+							if (this.gen >= 5 && learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+						}
 						if (learned.substr(0,2) in {'4L':1,'5L':1,'6L':1}) {
 							// gen 4-6 level-up moves
 							if (level >= parseInt(learned.substr(2),10)) {
@@ -835,9 +841,21 @@ module.exports = (function () {
 		var setHas = {};
 
 		if (!template || !template.abilities) {
-			set.species = 'Bulbasaur';
-			template = this.getTemplate('Bulbasaur');
+			set.species = 'Unown';
+			template = this.getTemplate('Unown');
 		}
+
+		if (format.ruleset) {
+			for (var i=0; i<format.ruleset.length; i++) {
+				var subformat = this.getFormat(format.ruleset[i]);
+				if (subformat.validateSet) {
+					problems = problems.concat(subformat.validateSet.call(this, set, format)||[]);
+				}
+			}
+		}
+		template = this.getTemplate(set.species);
+		item = this.getItem(set.item);
+		ability = this.getAbility(set.ability);
 
 		var banlistTable = this.getBanlistTable(format);
 
@@ -973,7 +991,7 @@ module.exports = (function () {
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
 							problems.push(name+(isHidden?" can't have":" must have")+" its hidden ability because it comes from a specific event.");
 						}
-						if (eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
+						if (this.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
 							problems.push(name+" must have "+eventData.abilities.join(" or ")+" because it comes from a specific event.");
 						}
 						if (eventData.gender) {
@@ -1046,14 +1064,6 @@ module.exports = (function () {
 			}
 		}
 
-		if (format.ruleset) {
-			for (var i=0; i<format.ruleset.length; i++) {
-				var subformat = this.getFormat(format.ruleset[i]);
-				if (subformat.validateSet) {
-					problems = problems.concat(subformat.validateSet.call(this, set, format)||[]);
-				}
-			}
-		}
 		if (format.validateSet) {
 			problems = problems.concat(format.validateSet.call(this, set, format)||[]);
 		}

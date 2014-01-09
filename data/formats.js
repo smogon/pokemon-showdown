@@ -44,7 +44,7 @@ exports.BattleFormats = {
 			'Zekrom',
 			'Kyurem', 'Kyurem-Black', 'Kyurem-White',
 			'Keldeo', 'Keldeo-Resolute',
-			'Meloetta',
+			'Meloetta', 'Meloetta-Pirouette',
 			'Genesect',
 			'Xerneas',
 			'Yveltal',
@@ -173,6 +173,9 @@ exports.BattleFormats = {
 					problems.push('Meloetta-Pirouette transforms in-battle with Relic Song.');
 				}
 				set.species = 'Meloetta';
+			}
+			if (template.num == 681) { // Aegislash
+				set.species = 'Aegislash';
 			}
 			return problems;
 		}

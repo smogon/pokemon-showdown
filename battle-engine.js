@@ -228,6 +228,7 @@ var BattlePokemon = (function() {
 		this.baseAbility = toId(set.ability);
 		this.ability = this.baseAbility;
 		this.item = toId(set.item);
+		this.canMegaEvo = (this.battle.getItem(this.item).megaEvolves === this.species);
 		this.abilityData = {id: this.ability};
 		this.itemData = {id: this.item};
 		this.speciesData = {id: this.speciesid};
@@ -538,7 +539,7 @@ var BattlePokemon = (function() {
 			var moveName = move.move;
 			if (move.id === 'hiddenpower') {
 				moveName = 'Hidden Power '+this.hpType;
-				if (this.hpPower != 70) moveName += ' '+this.hpPower;
+				if (this.gen < 6) moveName += ' '+this.hpPower;
 			}
 			moves.push({
 				move: moveName,
@@ -1192,7 +1193,8 @@ var BattleSide = (function() {
 					return move;
 				}),
 				baseAbility: pokemon.baseAbility,
-				item: pokemon.item
+				item: pokemon.item,
+				canMegaEvo: pokemon.canMegaEvo
 			});
 		}
 		return data;
@@ -1908,7 +1910,6 @@ var Battle = (function() {
 		for (var i=0; i<statuses.length; i++) {
 			var status = statuses[i].status;
 			var thing = statuses[i].thing;
-			if (thing.fainted) continue;
 			//this.debug('match '+eventid+': '+status.id+' '+status.effectType);
 			if (status.effectType === 'Status' && thing.status !== status.id) {
 				// it's changed; call it off
@@ -2073,7 +2074,6 @@ var Battle = (function() {
 			return statuses;
 		}
 
-		if (thing.fainted) return statuses;
 		if (!thing.getStatus) {
 			this.debug(JSON.stringify(thing));
 			return statuses;
@@ -2123,14 +2123,17 @@ var Battle = (function() {
 			if (foeCallbackType.substr(0,5) === 'onFoe') {
 				eventName = foeCallbackType.substr(5);
 				for (var i=0; i<allyActive.length; i++) {
+					if (!allyActive[i] || allyActive[i].fainted) continue;
 					statuses = statuses.concat(this.getRelevantEffectsInner(allyActive[i], 'onAlly'+eventName,null,null,false,false, getAll));
 					statuses = statuses.concat(this.getRelevantEffectsInner(allyActive[i], 'onAny'+eventName,null,null,false,false, getAll));
 				}
 				for (var i=0; i<foeActive.length; i++) {
+					if (!foeActive[i] || foeActive[i].fainted) continue;
 					statuses = statuses.concat(this.getRelevantEffectsInner(foeActive[i], 'onAny'+eventName,null,null,false,false, getAll));
 				}
 			}
 			for (var i=0; i<foeActive.length; i++) {
+				if (!foeActive[i] || foeActive[i].fainted) continue;
 				statuses = statuses.concat(this.getRelevantEffectsInner(foeActive[i], foeCallbackType,null,null,false,false, getAll));
 			}
 		}
@@ -2438,6 +2441,7 @@ var Battle = (function() {
 		this.p1.foe = this.p2;
 
 		this.add('gametype', this.gameType);
+		this.add('gen', this.gen);
 
 		var format = this.getFormat();
 		Tools.mod(format.mod).getBanlistTable(format); // fill in format ruleset
@@ -2829,8 +2833,7 @@ var Battle = (function() {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		var totalTypeMod = this.getEffectiveness(type, target);
-		totalTypeMod = this.singleEvent('ModifyEffectiveness', move, null, target, pokemon, move, totalTypeMod);
+		var totalTypeMod = this.getEffectiveness(move, target, pokemon);
 
 		totalTypeMod = clampIntRange(totalTypeMod, -3, 3);
 		if (totalTypeMod > 0) {

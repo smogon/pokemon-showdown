@@ -139,7 +139,7 @@ exports.BattleAbilities = {
 				if (targets[i].fainted) continue;
 				for (var j=0; j<targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
-					if (move.category !== 'Status' && (this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
+					if (move.category !== 'Status' && (this.getEffectiveness(move, pokemon) > 0 || move.ohko)) {
 						this.add('-message', pokemon.name+' shuddered! (placeholder)');
 						return;
 					}
@@ -655,7 +655,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
 		onSourceModifyDamage: function(damage, source, target, move) {
-			if (this.getEffectiveness(move.type, target) > 0) {
+			if (this.getEffectiveness(move, target) > 0) {
 				this.debug('Filter neutralize');
 					return this.chainModify(0.75);
 			}
@@ -775,25 +775,16 @@ exports.BattleAbilities = {
 	"flowerveil": {
 		desc: "Prevents lowering of ally Grass-type Pokemon's stats.",
 		shortDesc: "Prevents lowering of ally Grass-type Pokemon's stats.",
-		onStart: function(pokemon) {
-			pokemon.side.addSideCondition('flowerveil');
-		},
-		onSwitchOut: function(pokemon) {
-			pokemon.side.removeSideCondition('flowerveil');
-		},
-		effect: {
-			onBoost: function(boost, target, source, effect) {
-				if (source && target === source) return;
-				if (!target.hasType('Grass')) return;
-				var showMsg = false;
-				for (var i in boost) {
-					if (boost[i] < 0) {
-						delete boost[i];
-						showMsg = true;
-					}
+		onAllyBoost: function(boost, target, source, effect) {
+			if ((source && target === source) || !target.hasType('Grass')) return;
+			var showMsg = false;
+			for (var i in boost) {
+				if (boost[i] < 0) {
+					delete boost[i];
+					showMsg = true;
 				}
-				if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: Flower Veil", "[of] "+target);
 			}
+			if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: Flower Veil", "[of] "+target);
 		},
 		id: "flowerveil",
 		name: "Flower Veil",
@@ -1724,8 +1715,8 @@ exports.BattleAbilities = {
 		num: 96
 	},
 	"oblivious": {
-		desc: "This Pokemon cannot be infatuated (by Attract or Cute Charm). Gaining this Ability while infatuated cures it.",
-		shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
+		desc: "This Pokemon cannot be infatuated (by Attract or Cute Charm) or taunted. Gaining this Ability while afflicted by either condition cures it.",
+		shortDesc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability cures it.",
 		onUpdate: function(pokemon) {
 			if (pokemon.volatiles['attract']) {
 				pokemon.removeVolatile('attract');
@@ -2486,7 +2477,7 @@ exports.BattleAbilities = {
 		desc: "Super-effective attacks only deal 3/4 their usual damage against this Pokemon.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
 		onSourceModifyDamage: function(damage, source, target, move) {
-			if (this.getEffectiveness(move.type, target) > 0) {
+			if (this.getEffectiveness(move, target) > 0) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -2864,7 +2855,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's attacks that are not very effective on a target do double damage.",
 		shortDesc: "This Pokemon's attacks that are not very effective on a target do double damage.",
 		onModifyDamage: function(damage, source, target, move) {
-			if (this.getEffectiveness(move.type, target) < 0) {
+			if (this.getEffectiveness(move, target) < 0) {
 				this.debug('Tinted Lens boost');
 				return this.chainModify(2);
 			}
@@ -3153,7 +3144,7 @@ exports.BattleAbilities = {
 		onTryHit: function(target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			this.debug('Wonder Guard immunity: '+move.id);
-			if (this.getEffectiveness(move.type, target) <= 0) {
+			if (this.getEffectiveness(move, target) <= 0) {
 				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;
 			}
