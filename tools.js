@@ -127,7 +127,11 @@ module.exports = (function () {
 		}
 		return true;
 	};
-	Tools.prototype.getEffectiveness = function(type, target) {
+	Tools.prototype.getEffectiveness = function(source, target, pokemon) {
+		if (source.getEffectiveness) {
+			return source.getEffectiveness.call(this, source, target, pokemon);
+		}
+		var type = source.type || source;
 		var totalTypeMod = 0;
 		for (var i=0; i<target.types.length; i++) {
 			if (!this.data.TypeChart[target.types[i]]) continue;
