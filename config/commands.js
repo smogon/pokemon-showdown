@@ -986,6 +986,11 @@ var commands = exports.commands = {
                 return this.sendReply('|raw|<center><img width="300" height="169" src="http://31.media.tumblr.com/d216a9b45ac33766ac621dd36dce891f/tumblr_mnqp5nUxSj1rj8nzio1_400.gif"></center>');
         },
         
+        lieren: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                return this.sendReply('|raw|<center><img width="300" height="169" src="http://24.media.tumblr.com/50061b7f7abd7013806e56090c4bb03e/tumblr_mryhff94TG1sbu5xto6_400.gif"></center>');
+        },
+        
         iceblast: function(target, room, user) {
                 if (!this.canBroadcast()) return;
                 return this.sendReply('|raw|<center><img width="300" height="169" src="http://images1.wikia.nocookie.net/rwby/images/5/59/Tumblr_mik0scCZe41rktwn6o1_500.gif"></center>');
@@ -1034,11 +1039,6 @@ var commands = exports.commands = {
         comeatme: function(target, room, user) {
                 if (!this.canBroadcast()) return;
                 return this.sendReply('|raw|<center><img width="300" height="169" src="http://31.media.tumblr.com/tumblr_lrzvrmMDMl1r1l46do1_500.gif"></center>');
-        },
-        		
-        lieren: function(target, room, user) {
-                if (!this.canBroadcast()) return;
-                return this.sendReply('|raw|<center><img width="300" height="169" src="http://24.media.tumblr.com/50061b7f7abd7013806e56090c4bb03e/tumblr_mryhff94TG1sbu5xto6_400.gif"></center>');
         },
 
 
