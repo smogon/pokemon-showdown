@@ -1137,7 +1137,7 @@ var User = (function () {
 			return false;
 		}
 		var team = this.team;
-		var problems = Tools.validateTeam(team, formatid);
+		var problems = TeamValidator(formatid).validateTeam(team);
 		if (problems) {
 			connection.popup("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
 			return false;
