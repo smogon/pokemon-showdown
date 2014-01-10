@@ -23,7 +23,7 @@ module.exports = (function () {
 		'Scripts': 'scripts.js',
 		'Items': 'items.js',
 		'Abilities': 'abilities.js',
-		'Formats': 'formats.js',
+		'Formats': 'rulesets.js',
 		'FormatsData': 'formats-data.js',
 		'Learnsets': 'learnsets.js',
 		'Aliases': 'aliases.js'

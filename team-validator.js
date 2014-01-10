@@ -223,7 +223,7 @@ var Validator = (function() {
 			// too much layout deformation - to be exact, this is the Debug
 			// Mode limitation.
 			// The usual limit of 4 moves is handled elsewhere - currently
-			// in the cartridge-compliant set validator: formats.js:pokemon
+			// in the cartridge-compliant set validator: rulesets.js:pokemon
 			set.moves = set.moves.slice(0,24);
 
 			for (var i=0; i<set.moves.length; i++) {
