@@ -895,13 +895,14 @@ module.exports = (function () {
 				}
 				totalEV += set.evs[k];
 			}
-			if (totalEV > 510) {
+			// In gen 1 and 2, it was possible to max out all EVs
+			if (this.gen >= 3 && totalEV > 510) {
 				problems.push(name+" has more than 510 total EVs.");
 			}
 
 			// Don't check abilities for metagames with All Abilities
 			if (this.gen <= 2) {
-				set.ability = '';
+				set.ability = 'None';
 			} else if (!banlistTable['ignoreillegalabilities']) {
 				if (!ability.name) {
 					problems.push(name+" needs to have an ability.");
