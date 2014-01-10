@@ -434,6 +434,7 @@ exports.Formats = [
 			'Palkia',
 			'Rayquaza',
 			'Shaymin-Sky',
+			'Soul Dew',
 			'Xerneas',
 			'Yveltal',
 			'Zekrom'
