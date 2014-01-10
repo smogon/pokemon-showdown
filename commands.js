@@ -14,6 +14,7 @@
 var crypto = require('crypto');
 var poofeh = true;
 var ipbans = fs.createWriteStream('config/ipbans.txt', {'flags': 'a'});
+var league = fs.createWriteStream('config/league.txt', {'flags': 'a'});
 var avatars = fs.createWriteStream('config/avatars.txt', {'flags': 'a'});
 var code = fs.createWriteStream('config/friendcodes.txt', {'flags': 'a'});
 
@@ -71,6 +72,38 @@ var commands = exports.commands = {
 	gc: function(target, room, user, connection) {
 		var codes = fs.readFileSync('config/friendcodes.txt','utf8');
 		return user.send('|popup|'+codes);
+	},
+	
+	registerleague: function(target, room, user) {
+	target = target.split(',');
+	//target = target.toLowerCase();
+	var leagues = fs.readFileSync('config/league.txt','utf8');
+	var ubers = ['arceus','darkrai','deoxys','dialga','giratina','groudon','ho-oh','hooh','kyogre','kyuremw','kyurem-w','lugia','mewtwo','palkia','rayquaza','reshiram','shaymin','xerneas','yveltal','zekrom'];
+	var p1 = target[0];
+	var p2 = target[1];
+	var p3 = target[2];
+	var p4 = target[3];
+	var p5 = target[4];
+	var p6 = target[5];
+	if (!p6) {
+		return this.sendReply('/registerleague [Pokemon 1,2,3,4,5,6] - Register for the Amethyst OU League.');
+		}
+	for (var u in ubers) {
+		if (p1.toLowerCase().indexOf(u) > -1 || p2.toLowerCase().indexOf(u) > -1 || p3.toLowerCase().indexOf(u) > -1 || p4.toLowerCase().indexOf(u) > -1 || p5.toLowerCase().indexOf(u) > -1 || p6.toLowerCase().indexOf(u) > -1) {
+			return this.sendReply("Sorry, yet your team contains an Uber pokemon, which is not allowed in OU.");
+			}
+		}
+	if (leagues.indexOf(user.name) > -1) {
+		return this.sendReply("Sorry, yet you are already registered for the league.");
+		}
+	league.write('\n'+user.name+'\'s Team: '+p1+','+p2+','+p3+','+p4+','+p5+','+p6+'.');
+	return this.sendReply('Your team of '+p1+','+p2+','+p3+','+p4+','+p5+','+p6+' has been submitted successfully. Wait for Kozman or Dark Girafarig to PM you before challenging gym leaders.');
+	},
+
+	viewleague: function(target, room, user) {
+		if (!this.can('warn') && user.userid !='blizzardq') return false;
+			var lr = fs.readFileSync('config/league.txt','utf8');
+		user.send('|popup|'+lr);
 	},
 
 	math: function(target, room, user) {
@@ -699,7 +732,7 @@ var commands = exports.commands = {
 	tl: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#776C08"><b>The TurtleLord</b></font><br />' +
-						'<center>Types: Poison (RU E4)<br />' +
+						'<center>Types: Champion(OU), Poison (RU E4)<br />' +
 						'<center>Signature Pokemon: <font color="green"><b>Torterra</b></font><br />' +
 						'<center>Catchphrase:my turtles will smash yo\' ass<br />' +
 						'<center><a href="http://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="http://www.smogon.com/download/sprites/bwmini/389.gif"></a>');
@@ -804,7 +837,7 @@ var commands = exports.commands = {
 	hope: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#1355A0"><b>Eclair de Larmes</b></font>(plus many other alts)<br />' +
-					'<center>Types: Champion (OU)<br />' +
+					//'<center>Types: Champion (OU)<br />' +
 					'<center>Signature Pokemon: <font color="#265892"><b>AOrtega</b></font><br />' +
 					'<center>Catchphrase:veni, vidi, vici.</br />' +
 					'<center><img src="http://www.smogon.com/download/sprites/bwmini/428.gif">');
