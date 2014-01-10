@@ -446,7 +446,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":50,"gender":"M","nature":"Calm","isHidden":true,"moves":["scald","icebeam","perishsong","protect"],"pokeball":"cherishball"}
 		],
-		tier: "Limbo A"
+		tier: "Limbo"
 	},
 	abra: {
 		viableMoves: {"calmmind":1,"psychic":1,"psyshock":1,"hiddenpowerfighting":1,"shadowball":1,"encore":1,"substitute":1},
@@ -3843,7 +3843,7 @@ exports.BattleFormatsData = {
 	},
 	galvantula: {
 		viableMoves: {"thunder":1,"hiddenpowerice":1,"gigadrain":1,"bugbuzz":1,"voltswitch":1,"stickyweb":1},
-		tier: "Limbo A"
+		tier: "OU"
 	},
 	ferroseed: {
 		viableMoves: {"spikes":1,"stealthrock":1,"leechseed":1,"seedbomb":1,"protect":1,"thunderwave":1,"gyroball":1},
