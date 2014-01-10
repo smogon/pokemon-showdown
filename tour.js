@@ -235,7 +235,7 @@ exports.tour = function(t) {
 					try {
 						frostcommands.addTourLoss(loser, tier); //for recording tour stats
 					} catch (e) {
-						console.log('Recording tournament loss failed.');
+						console.log('Error recording tournament loss: '+e.stack);
 					}
 				}
 				return r[key][winner];
@@ -353,7 +353,7 @@ exports.tour = function(t) {
 					try {
 						frostcommands.addTourWin(Users.users[w[0]].name, Tools.data.Formats[tour[rid].tier].name); //for recording tour stats
 						} catch (e) {
-						console.log('Recording tournament win failed.');
+						console.log('Error recording tournament win: '+e.stack);
 					}
 				}
 				//for now, this is the only way to get points/money
