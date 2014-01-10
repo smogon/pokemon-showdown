@@ -725,7 +725,7 @@ var commands = exports.commands = {
 		if (room.id === 'lobby') return this.sendReply('This command is too spammy for lobby.');
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Room drivers (%) can use:<br />' +
-			'- /warn OR /k <em>username</em>: warn a user and show them the rules<br />' +
+			'- /warn OR /k <em>username</em>: warn a user and show the Pokemon Showdown rules<br />' +
 			'- /mute OR /m <em>username</em>: 7 minute mute<br />' +
 			'- /hourmute OR /hm <em>username</em>: 60 minute mute<br />' +
 			'- /unmute <em>username</em>: unmute<br />' +
