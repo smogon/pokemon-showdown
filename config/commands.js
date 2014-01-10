@@ -1224,7 +1224,7 @@ var commands = exports.commands = {
 		if (!config.groups.global[target]) {
 			target = config.groups.default.global;
 			this.sendReply("You have picked an invalid group, defaulting to '" + target + "'.");
-		} else if (config.groups.bySymbol[target].globalRank >= config.groups.bySymbol[target].globalRank)
+		} else if (config.groups.bySymbol[target].globalRank >= config.groups.bySymbol[user.group].globalRank)
 			return this.sendReply("The group you have chosen is either your current group OR one of higher rank. You cannot hide like that.");
 
 		user.getIdentity = function (roomid) {
