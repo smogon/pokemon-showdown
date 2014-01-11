@@ -1236,6 +1236,7 @@ var commands = exports.commands = {
     
     darkjak : 'jak',
     jak: function(target, room, user) {
+    	if (target) return this.sendReply('It\'s not funny anymore.');
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img height="100" src="http://www.freewebs.com/jak-4/Dark%20Jak%202.jpg">' +
         	'<img height="100" src="http://i.imgur.com/eswH4MI.gif">' +
