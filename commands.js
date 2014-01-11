@@ -877,7 +877,7 @@ var commands = exports.commands = {
 	uugl: 'uuleaders',
 	uuleaders: function(target, room, user) {
 		if(!this.canBroadcast()) return;
-		this.sendReplyBox('A list of the active Amethyst UU leaders can be found <a href = "http://pastebin.com/2EwGFFEW" target = _blank>here</a> and <a href="http://amethystserver.freeforums.net/thread/2/league-leaders-elite">here</a>.');
+		this.sendReplyBox('A list of the active Amethyst UU leaders can be found <a href = "http://pastebin.com/2EwGFFEW" target = _blank>here</a>.');
 	},
 
 	nugymleaders: 'nuleaders',
@@ -1090,9 +1090,7 @@ var commands = exports.commands = {
 
 
 	afk: function(target, room, user) {
-		if (!this.can('warn') && user.userid != 'blizzardq') {
-			return this.sendReply("Nope.");
-		}
+		if (!this.can('warn') && user.userid != 'blizzardq') return false;
 		if (user.afk === true) {
 			return this.sendReply("You are already Away.");
 		}
@@ -1108,9 +1106,7 @@ var commands = exports.commands = {
 	},
 
 	unafk: function(target, room, user) {
-		if (!this.can('warn') && user.userid != 'blizzardqaway') {
-			return this.sendReply("Nope.");
-		}
+		if (!this.can('warn') && user.userid != 'blizzardqaway') return false;
 		if (user.afk != true) {
 			return this.sendReply("You need to be Away first.");
 		}
