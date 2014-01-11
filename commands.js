@@ -496,6 +496,22 @@ var commands = exports.commands = {
 			this.parse('/promote ' + user.name + ', ~');
 		}
 	},
+	
+	unurl: 'unlink',
+	unlink: function (target, room, user, connection, cmd) {
+		if (!this.can('lock')) return false;
+		if(!target) return this.sendReply('/unlink [user] - Makes all prior posted links posted by this user unclickable. Requires: %, @, &, ~');
+	target = this.splitTarget(target);
+	var targetUser = this.targetUser;
+		for (var u in targetUser.prevNames) room.add('|unlink|'+targetUser.prevNames[u]);
+		if (!targetUser) {
+		return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+	this.add('|unlink|' + targetUser.userid);
+		return this.privateModCommand('|html|(' + user.name + ' has made <font color="red">' +this.targetUsername+ '</font>\'s prior links unclickable.)');
+		for (var u in targetUser.prevNames) room.add('|unlink|'+targetUser.prevNames[u]);
+		}
+	},
 
 	colonialmustang: 'mustang',
 	mustang: function(target, room, user) {
