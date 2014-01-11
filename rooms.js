@@ -1273,7 +1273,7 @@ var ChatRoom = (function() {
 		var total = 0;
 		var guests = 0;
 		var groups = {};
-		config.groupsByRank.forEach(function(group) {
+		config.groups.byRank.forEach(function(group) {
 			groups[group] = 0;
 		});
 		for (var i in this.users) {
