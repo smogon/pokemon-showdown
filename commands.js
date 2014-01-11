@@ -75,34 +75,37 @@ var commands = exports.commands = {
 	},
 	
 	registerleague: function(target, room, user) {
-	target = target.split(',');
-	//target = target.toLowerCase();
-	var leagues = fs.readFileSync('config/league.txt','utf8');
-	var ubers = ['arceus','darkrai','deoxys','dialga','giratina','groudon','ho-oh','hooh','kyogre','kyuremw','kyurem-w','lugia','mewtwo','palkia','rayquaza','reshiram','shaymin','xerneas','yveltal','zekrom'];
-	var p1 = target[0];
-	var p2 = target[1];
-	var p3 = target[2];
-	var p4 = target[3];
-	var p5 = target[4];
-	var p6 = target[5];
-	if (!p6) {
-		return this.sendReply('/registerleague [Pokemon 1,2,3,4,5,6] - Register for the Amethyst OU League.');
+		var leagues = fs.readFileSync('config/league.txt','utf8');
+		if (leagues.indexOf(user.name) > -1) {
+			return this.sendReply("You are already registered for the league.");
 		}
-	for (var u in ubers) {
-		if (p1.toLowerCase().indexOf(u) > -1 || p2.toLowerCase().indexOf(u) > -1 || p3.toLowerCase().indexOf(u) > -1 || p4.toLowerCase().indexOf(u) > -1 || p5.toLowerCase().indexOf(u) > -1 || p6.toLowerCase().indexOf(u) > -1) {
-			return this.sendReply("Sorry, yet your team contains an Uber pokemon, which is not allowed in OU.");
+		if (!target) {
+			return this.sendReply('/registerleague [Pokemon 1,2,3,4,5,6] - Register for the Amethyst OU League.');
+		}
+		target = target.toLowerCase();
+		target = target.split(',');
+		if (target.length < 6) {
+			return this.sendReply('/registerleague [Pokemon 1,2,3,4,5,6] - Register for the Amethyst OU League.');
+		}
+		var pokemonNames = [];
+		for (var i = 0; i < target.length; i++) {
+			var pokemon = toId(target[i]);
+			pokemon = Tools.dataSearch(pokemon)[0];
+			if (!pokemon || pokemon.searchType != 'pokemon') {
+				return this.sendReply('At least one of these is not a Pokemon: '+target[i]);
 			}
+			var template = Tools.getTemplate(pokemon.species);
+			if (template.tier === 'Uber') {
+				return this.sendReply('Your team includes an Uber, which is banned in the Amethyst Leagues.');
+			}
+			pokemonNames.push(pokemon.species);
 		}
-	if (leagues.indexOf(user.name) > -1) {
-		return this.sendReply("Sorry, yet you are already registered for the league.");
-		}
-	league.write('\n'+user.name+'\'s Team: '+p1+','+p2+','+p3+','+p4+','+p5+','+p6+'.');
-	return this.sendReply('Your team of '+p1+','+p2+','+p3+','+p4+','+p5+','+p6+' has been submitted successfully. Wait for Kozman or Dark Girafarig to PM you before challenging gym leaders.');
+		league.write('\n'+user.name+'\'s team: '+pokemonNames.join(', '));
+		return this.sendReply('Your team of '+pokemonNames.join(', ')+' has been submitted successfully. Wait for Kozman or Dark Girafarig to PM you before challenging gym leaders.');
 	},
 
 	viewleague: function(target, room, user) {
-		if (!this.can('warn') && user.userid !='blizzardq') return false;
-			var lr = fs.readFileSync('config/league.txt','utf8');
+		var lr = fs.readFileSync('config/league.txt','utf8');
 		user.send('|popup|'+lr);
 	},
 
@@ -501,16 +504,14 @@ var commands = exports.commands = {
 	unlink: function (target, room, user, connection, cmd) {
 		if (!this.can('lock')) return false;
 		if(!target) return this.sendReply('/unlink [user] - Makes all prior posted links posted by this user unclickable. Requires: %, @, &, ~');
-	target = this.splitTarget(target);
-	var targetUser = this.targetUser;
-		for (var u in targetUser.prevNames) room.add('|unlink|'+targetUser.prevNames[u]);
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
 		if (!targetUser) {
-		return this.sendReply('User '+this.targetUsername+' not found.');
+			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-	this.add('|unlink|' + targetUser.userid);
-		return this.privateModCommand('|html|(' + user.name + ' has made <font color="red">' +this.targetUsername+ '</font>\'s prior links unclickable.)');
 		for (var u in targetUser.prevNames) room.add('|unlink|'+targetUser.prevNames[u]);
-		}
+		this.add('|unlink|' + targetUser.userid);
+		return this.privateModCommand('|html|(' + user.name + ' has made <font color="red">' +this.targetUsername+ '</font>\'s prior links unclickable.)');
 	},
 
 	colonialmustang: 'mustang',
