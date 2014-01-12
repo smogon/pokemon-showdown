@@ -7,8 +7,181 @@
  * @license MIT license
  */
 
-var Validator = (function() {
+if (!process.send) {
+	var validationCount = 0;
+	var pendingValidations = {};
 
+	var ValidatorProcess = (function() {
+		function ValidatorProcess() {
+			this.process = require('child_process').fork('team-validator.js');
+			this.process.on('message', function(message) {
+				var parts = JSON.parse(message);
+				if (pendingValidations[parts[0]]) pendingValidations[parts[0]].apply(null, parts.slice(1));
+			});
+		}
+		ValidatorProcess.prototype.load = 0;
+		ValidatorProcess.prototype.active = true;
+		ValidatorProcess.processes = [];
+		ValidatorProcess.spawn = function() {
+			var num = config.validatorprocesses || 1;
+			for (var i = 0; i < num; ++i) {
+				this.processes.push(new ValidatorProcess());
+			}
+		};
+		ValidatorProcess.respawn = function() {
+			this.processes.splice(0).forEach(function(process) {
+				process.active = false;
+				if (!process.load) process.process.disconnect();
+			});
+			this.spawn();
+		};
+		ValidatorProcess.acquire = function() {
+			var process = this.processes[0];
+			for (var i = 1; i < this.processes.length; ++i) {
+				if (this.processes[i].load < process.load) {
+					process = this.processes[i];
+				}
+			}
+			++process.load;
+			return process;
+		};
+		ValidatorProcess.release = function(process) {
+			--process.load;
+			if (!process.load && !process.active) {
+				process.process.disconnect();
+			}
+		};
+		ValidatorProcess.send = function() {
+			var callback = arguments[arguments.length - 1];
+			var process = this.acquire();
+			pendingValidations[validationCount] = (function() {
+				this.release(process);
+				callback.apply(null, Array.prototype.slice.call(arguments, 0));
+			}).bind(this);
+			process.process.send(JSON.stringify([validationCount].concat(Array.prototype.slice.call(arguments, 0, arguments.length - 1))));
+			++validationCount;
+		};
+		return ValidatorProcess;
+	})();
+
+	// Create the initial set of validator processes.
+	ValidatorProcess.spawn();
+
+	exports.ValidatorProcess = ValidatorProcess;
+	exports.pendingValidations = pendingValidations;
+
+	exports.validateTeam = function(format, team, callback) {
+		ValidatorProcess.send('validateTeam', format, team, callback);
+	};
+	exports.validateSet = function(format, set, teamHas, callback) {
+		ValidatorProcess.send('validateSet', format, set, teamHas, callback);
+	};
+	exports.checkLearnset = function(format, move, template, lsetData, callback) {
+		ValidatorProcess.send('checkLearnset', format, move, template, lsetData, callback);
+	};
+
+	var synchronousValidators = {};
+	exports.validateTeamSync = function(format, team) {
+		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
+		return synchronousValidators[format].validateTeam(team);
+	};
+	exports.validateSetSync = function(format, set, teamHas) {
+		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
+		return synchronousValidators[format].validateSet(set, teamHas);
+	};
+	exports.checkLearnsetSync = function(format, move, template, lsetData) {
+		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
+		return synchronousValidators[format].checkLearnset(move, template, lsetData);
+	};
+} else {
+	require('sugar');
+	global.fs = require('fs');
+	global.config = require('./config/config.js');
+
+	if (config.crashguard) {
+		process.on('uncaughtException', function (err) {
+			require('./crashlogger.js')(err, 'A simulator process');
+		});
+	}
+
+	/**
+	 * Converts anything to an ID. An ID must have only lowercase alphanumeric
+	 * characters.
+	 * If a string is passed, it will be converted to lowercase and
+	 * non-alphanumeric characters will be stripped.
+	 * If an object with an ID is passed, its ID will be returned.
+	 * Otherwise, an empty string will be returned.
+	 */
+	global.toId = function(text) {
+		if (text && text.id) text = text.id;
+		else if (text && text.userid) text = text.userid;
+
+		return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
+	};
+	global.toUserid = toId;
+
+	/**
+	 * Validates a username or Pokemon nickname
+	 */
+	var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
+	global.toName = function(name) {
+		name = string(name);
+		name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
+		while (bannedNameStartChars[name.charAt(0)]) {
+			name = name.substr(1);
+		}
+		if (name.length > 18) name = name.substr(0,18);
+		if (config.namefilter) {
+			name = config.namefilter(name);
+		}
+		return name;
+	};
+
+	/**
+	 * Safely ensures the passed variable is a string
+	 * Simply doing ''+str can crash if str.toString crashes or isn't a function
+	 * If we're expecting a string and being given anything that isn't a string
+	 * or a number, it's safe to assume it's an error, and return ''
+	 */
+	global.string = function(str) {
+		if (typeof str === 'string' || typeof str === 'number') return ''+str;
+		return '';
+	}
+
+	global.Tools = require('./tools.js');
+
+	var validators = {};
+	var handlers = {
+		validateTeam: function (format, team) {
+			if (!validators[format]) validators[format] = new Validator(format);
+			var problems = validators[format].validateTeam(team);
+			this.send(problems, problems ? null : team);
+		},
+		validateSet: function (format, set, teamHas) {
+			if (!validators[format]) validators[format] = new Validator(format);
+			var problems = validators[format].validateSet(set, teamHas);
+			this.send(problems, problems ? null : set, teamHas);
+		},
+		checkLearnset: function (format, move, template, lsetData) {
+			if (!validators[format]) validators[format] = new Validator(format);
+			var result = validators[format].checkLearnset(move, template, lsetData);
+			this.send(result, lsetData);
+		}
+	};
+
+	function send() {
+		process.send(JSON.stringify(Array.prototype.slice.call(arguments, 0)));
+	}
+
+	process.on('message', function(message) {
+		var parts = JSON.parse(message);
+		if (handlers[parts[1]]) handlers[parts[1]].apply({
+			send: send.bind(null, parts[0])
+		}, parts.slice(2));
+	});
+}
+
+var Validator = (function() {
 	function Validator(format) {
 		this.format = Tools.getFormat(format);
 		this.tools = Tools.mod(this.format);
@@ -590,9 +763,3 @@ var Validator = (function() {
 
 	return Validator;
 })();
-
-function TeamValidator(mod) {
-	return new Validator(mod);
-}
-
-module.exports = TeamValidator;
