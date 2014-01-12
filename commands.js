@@ -749,7 +749,7 @@ var commands = exports.commands = {
 	tl: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#776C08"><b>The TurtleLord</b></font><br />' +
-						'<center>Types: Champion(OU), Poison (RU E4)<br />' +
+						'<center>Types: Champion(OU), Water(UU), Poison(RU E4)<br />' +
 						'<center>Signature Pokemon: <font color="green"><b>Torterra</b></font><br />' +
 						'<center>Catchphrase:my turtles will smash yo\' ass<br />' +
 						'<center><a href="https://www.youtube.com/watch?v=bojx9BDpJks"><img src="http://www.smogon.com/download/sprites/bwmini/389.gif"></a>');
@@ -796,7 +796,7 @@ var commands = exports.commands = {
 	solor: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#15A20B"><b>Solor</b></font><br />' +
-						'<center>Types: Flying(OU E4), Grass(UU)<br />' +
+						'<center>Types: Flying(OU E4), Ice(UU)<br />' +
 						'<center>Signature Pokemon: <font color="blue"><b>Gyarados</b></font><br />' +
 						'<center>Catchphrase: haters gonna hate and twerkers gonna twerk<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/130.gif">');
