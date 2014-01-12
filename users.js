@@ -1113,7 +1113,7 @@ var User = (function () {
 			delete this.roomCount[room.id];
 		}
 	};
-	User.prototype.prepBattle = function(formatid, type, connection, callback) {
+	User.prototype.prepBattle = function(formatid, type, connection) {
 		// all validation for a battle goes through here
 		if (!connection) connection = this;
 		if (!type) type = 'challenge';
@@ -1124,32 +1124,25 @@ var User = (function () {
 				message = "The server is under attack. Battles cannot be started at this time.";
 			}
 			connection.popup(message);
-			setImmediate(callback.bind(null, false));
-			return;
+			return false;
 		}
 		if (ResourceMonitor.countPrepBattle(connection.ip || connection.latestIp, this.name)) {
 			connection.popup("Due to high load, you are limited to 6 battles every 3 minutes.");
-			setImmediate(callback.bind(null, false));
-			return;
+			return false;
 		}
 
 		var format = Tools.getFormat(formatid);
 		if (!format[''+type+'Show']) {
 			connection.popup("That format is not available.");
-			setImmediate(callback.bind(null, false));
-			return;
+			return false;
 		}
 		var team = this.team;
-		TeamValidator.validateTeam(formatid, team, this.finishPrepBattle.bind(this, connection, callback));
-	};
-	User.prototype.finishPrepBattle = function(connection, callback, problems, team) {
+		var problems = TeamValidator(formatid).validateTeam(team);
 		if (problems) {
 			connection.popup("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-			callback(false);
-		} else {
-			this.team = team;
-			callback(true);
+			return false;
 		}
+		return true;
 	};
 	User.prototype.updateChallenges = function() {
 		this.send('|updatechallenges|'+JSON.stringify({
