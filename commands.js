@@ -1054,8 +1054,6 @@ var commands = exports.commands = {
 				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				Rooms.global.formatListText = Rooms.global.getFormatListText();
-				// respawn validator processes
-				TeamValidator.ValidatorProcess.respawn();
 				// respawn simulator processes
 				Simulator.SimulatorProcess.respawn();
 				// broadcast the new formats list to clients
