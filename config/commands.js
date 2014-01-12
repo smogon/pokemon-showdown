@@ -418,14 +418,12 @@ var commands = exports.commands = {
 				var problem;
 				var move = {};
 				for (var mon in tempResults) {
-					var lsetData = {set:{}};
 					var template = Tools.getTemplate(tempResults[mon].id);
 					for (var i in moves) {
 						move = Tools.getMove(i);
 						if (move.id !== 'count') {
 							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
-							problem = TeamValidator.checkLearnsetSync(null, move, template, lsetData);
-							if (problem) break;
+							if (!template.learnset.sketch && !template.learnset[move.id]) break;
 						}
 					}
 					if (!problem) results.add(tempResults[mon]);
