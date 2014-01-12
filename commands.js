@@ -230,7 +230,7 @@ var commands = exports.commands = {
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
-	
+
 	roomdeowner: 'deroomowner',
 	deroomowner: function(target, room, user) {
 		if (!room.auth) {
@@ -1598,8 +1598,9 @@ var commands = exports.commands = {
 				return false;
 			}
 		}
-		if (!user.prepBattle(target, 'challenge', connection)) return;
-		user.makeChallenge(targetUser, target);
+		user.prepBattle(target, 'challenge', connection, function (result) {
+			if (result) user.makeChallenge(targetUser, target);
+		});
 	},
 
 	away: 'blockchallenges',
@@ -1628,8 +1629,9 @@ var commands = exports.commands = {
 			this.popupReply(target+" cancelled their challenge before you could accept it.");
 			return false;
 		}
-		if (!user.prepBattle(format, 'challenge', connection)) return;
-		user.acceptChallengeFrom(userid);
+		user.prepBattle(format, 'challenge', connection, function (result) {
+			if (result) user.acceptChallengeFrom(userid);
+		});
 	},
 
 	reject: function(target, room, user) {

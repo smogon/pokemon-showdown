@@ -424,7 +424,7 @@ var commands = exports.commands = {
 						move = Tools.getMove(i);
 						if (move.id !== 'count') {
 							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
-							problem = TeamValidator().checkLearnset(move, template, lsetData);
+							problem = TeamValidator.checkLearnsetSync(null, move, template, lsetData);
 							if (problem) break;
 						}
 					}
@@ -492,7 +492,7 @@ var commands = exports.commands = {
 			if (!move.exists) {
 				return this.sendReply('Move "'+move.id+'" not found.');
 			}
-			problem = TeamValidator().checkLearnset(move, template, lsetData);
+			problem = TeamValidator.checkLearnsetSync(null, move, template, lsetData);
 			if (problem) break;
 		}
 		var buffer = ''+template.name+(problem?" <span class=\"message-learn-cannotlearn\">can't</span> learn ":" <span class=\"message-learn-canlearn\">can</span> learn ")+(targets.length>2?"these moves":move.name);
@@ -798,7 +798,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'autoconfirmed') {
 			matched = true;
 			buffer += 'A user is autoconfirmed when they have won at least one rated battle and has been registered for a week or longer.<br />';
-		}	
+		}
 		if (!matched) {
 			return this.sendReply('The FAQ entry "'+target+'" was not found. Try /faq for general help.');
 		}
@@ -971,7 +971,7 @@ var commands = exports.commands = {
 			this.logModCommand('The Pokemon of the Day was removed by '+user.name+'.');
 		}
 	},
-	
+
 	roll: 'dice',
 	dice: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1004,7 +1004,7 @@ var commands = exports.commands = {
 	},
 
 	br: 'banredirect',
-	banredirect: function(){ 
+	banredirect: function(){
 		this.sendReply('/banredirect - This command is obsolete and has been removed.');
 	},
 
