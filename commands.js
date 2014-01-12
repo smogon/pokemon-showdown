@@ -68,8 +68,8 @@ var commands = exports.commands = {
 		return this.sendReply("The friend code "+fc+" was submitted.");
 	},
 
-	getcode: 'gc',
-	gc: function(target, room, user, connection) {
+	viewcode: 'vc',
+	vc: function(target, room, user, connection) {
 		var codes = fs.readFileSync('config/friendcodes.txt','utf8');
 		return user.send('|popup|'+codes);
 	},
@@ -249,7 +249,7 @@ var commands = exports.commands = {
 
 	startmail: function(target, room, user) {
 		if (!room.auth) {
-			return this.sendReply("Nope. Too spammy.");
+			return this.sendReply("Nope.");
 		}
 		if (mailgame === true) {
 			return this.sendReply("A game of Mailman has already started.");
@@ -263,7 +263,7 @@ var commands = exports.commands = {
 	guessmail: 'gm',
 	gm: function(target, room, user) {
 		if (!room.auth) {
-			return this.sendReply("Nope, too spammy.");
+			return this.sendReply("Nope.");
 		}
 		if (mailgame === false) {
 			return this.sendReply("Start a game of Mailman first.");
@@ -338,14 +338,14 @@ var commands = exports.commands = {
 				}
 				if(target === 'paper') {
 					player1response.push('paper');
-									if(player2response[0]) {
+					if(player2response[0]) {
 						return this.parse('/compare');
 					}
 					return this.sendReply('You responded with paper.');
 				}
 				if(target === 'scissors') {
 					player1response.push('scissors');
-									if(player2response[0]) {
+					if(player2response[0]) {
 						return this.parse('/compare');
 					}
 					return this.sendReply('You responded with scissors.');
@@ -366,14 +366,14 @@ var commands = exports.commands = {
 				}
 				if(target === 'paper') {
 					player2response.push('paper');
-									if(player1response[0]) {
+					if(player1response[0]) {
 						return this.parse('/compare');
 					}
 					return this.sendReply('You responded with paper.');
 				}
 				if(target === 'scissors') {
 					player2response.push('scissors');
-									if(player1response[0]) {
+					if(player1response[0]) {
 						return this.parse('/compare');
 					}
 					return this.sendReply('You responded with scissors.');
@@ -749,10 +749,10 @@ var commands = exports.commands = {
 	tl: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#776C08"><b>The TurtleLord</b></font><br />' +
-						'<center>Types: Champion(OU), Poison (RU E4)<br />' +
+						'<center>Types: Champion(OU), Water(UU), Poison(RU E4)<br />' +
 						'<center>Signature Pokemon: <font color="green"><b>Torterra</b></font><br />' +
 						'<center>Catchphrase:my turtles will smash yo\' ass<br />' +
-						'<center><a href="http://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="http://www.smogon.com/download/sprites/bwmini/389.gif"></a>');
+						'<center><a href="https://www.youtube.com/watch?v=bojx9BDpJks"><img src="http://www.smogon.com/download/sprites/bwmini/389.gif"></a>');
 	},
 
 	dach: function(target, room, user) {
@@ -783,6 +783,7 @@ var commands = exports.commands = {
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/213.gif">');
 	},
 
+	nubdove: 'pidove',
 	pidove: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#051694"><b>Pidove</b></font><br />' +
@@ -795,7 +796,7 @@ var commands = exports.commands = {
 	solor: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#15A20B"><b>Solor</b></font><br />' +
-						'<center>Types: Flying(OU E4), Grass(UU)<br />' +
+						'<center>Types: Flying(OU E4), Ice(UU)<br />' +
 						'<center>Signature Pokemon: <font color="blue"><b>Gyarados</b></font><br />' +
 						'<center>Catchphrase: haters gonna hate and twerkers gonna twerk<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/130.gif">');
@@ -805,7 +806,7 @@ var commands = exports.commands = {
 	seasons: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Leader qSeasons!<br>' +
-						'Type: Everything o3o<br>' +
+				'Type: Everything o3o<br>' +
                 		'He even gets his own shiny badge: <img src = "http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/153_zpsa3af73f7.png"><br>' +
                 		':D');
 	},
@@ -823,6 +824,7 @@ var commands = exports.commands = {
 	},
 
 	energ: 'energ218',
+	lexielover:'energ218',
 	energ218: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#06367F"><b>EnerG218</b></font><br />' +
@@ -845,6 +847,7 @@ var commands = exports.commands = {
 
 	batman: 'aortega',
 	ao: 'aortega',
+	pidovelover: 'aortega',
 	aortega: function(target, room, user) {
 			if(!this.canBroadcast()) return;
 			this.sendReplyBox('AOrtega: OU, E4, Fairy type, etc etc.');
@@ -854,7 +857,6 @@ var commands = exports.commands = {
 	hope: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#1355A0"><b>Eclair de Larmes</b></font>(plus many other alts)<br />' +
-					//'<center>Types: Champion (OU)<br />' +
 					'<center>Signature Pokemon: <font color="#265892"><b>AOrtega</b></font><br />' +
 					'<center>Catchphrase:veni, vidi, vici.</br />' +
 					'<center><img src="http://www.smogon.com/download/sprites/bwmini/428.gif">');
@@ -870,14 +872,14 @@ var commands = exports.commands = {
 	ougl: 'ouleaders',
 	ouleaders: function(target, room, user) {
 		if(!this.canBroadcast()) return;
-		this.sendReplyBox('A list of the active Amethyst OU leaders can be found <a href = "http://pastebin.com/4Vq73sst" target = _blank>here</a>.');
+		this.sendReplyBox('A list of the active Amethyst OU leaders can be found <a href = "http://pastebin.com/4Vq73sst" target = _blank>here</a>.'); 
 	},
 
 	uugymleaders: 'uuleaders',
 	uugl: 'uuleaders',
 	uuleaders: function(target, room, user) {
 		if(!this.canBroadcast()) return;
-		this.sendReplyBox('A list of the active Amethyst UU leaders can be found <a href = "http://pastebin.com/2EwGFFEW" target = _blank>here</a> and <a href="http://amethystserver.freeforums.net/thread/2/league-leaders-elite">here</a>.');
+		this.sendReplyBox('A list of the active Amethyst UU leaders can be found <a href = "http://pastebin.com/2EwGFFEW" target = _blank>here</a>.');
 	},
 
 	nugymleaders: 'nuleaders',
@@ -1090,9 +1092,7 @@ var commands = exports.commands = {
 
 
 	afk: function(target, room, user) {
-		if (!this.can('warn') && user.userid != 'blizzardq') {
-			return this.sendReply("Nope.");
-		}
+		if (!this.can('warn') && user.userid != 'blizzardq') return false;
 		if (user.afk === true) {
 			return this.sendReply("You are already Away.");
 		}
@@ -1108,9 +1108,7 @@ var commands = exports.commands = {
 	},
 
 	unafk: function(target, room, user) {
-		if (!this.can('warn') && user.userid != 'blizzardqaway') {
-			return this.sendReply("Nope.");
-		}
+		if (!this.can('warn') && user.userid != 'blizzardqaway') return false;
 		if (user.afk != true) {
 			return this.sendReply("You need to be Away first.");
 		}
@@ -1316,7 +1314,6 @@ var commands = exports.commands = {
 
 	pm: 'msg',
 	whisper: 'msg',
-	w: 'msg',
 	msg: function(target, room, user) {
 		if (!target) return this.parse('/help msg');
 		target = this.splitTarget(target);
