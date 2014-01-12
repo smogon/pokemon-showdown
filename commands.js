@@ -1631,6 +1631,10 @@ var commands = exports.commands = {
 			user.nobland = true;
 			return connection.sendTo(target,'|noinit|joinfailed|WARNING: Adult content may be found in this room, join at your own risk.');
 		}
+		if (target.toLowerCase() == "pidovetrainingcenter" && !user.pidove) {
+			user.pidove = true;
+			return connection.sendTo(target,'|noinit|joinfailed|WARNING: Adult content may be found in this room, join at your own risk.');
+		}
 		if (targetRoom.id === "spamroom" && !user.can('declare')) {
 			return connection.sendTo(target, "|noinit|joinfailed|You cannot join this room.");
 		}
