@@ -959,7 +959,7 @@ exports.BattleAbilities = {
 		num: 62
 	},
 	"harvest": {
-		desc: "When the user uses a held Berry, it is restored at the end of the turn.",
+		desc: "When the user uses a held Berry, it has a 50% chance of having it restored at the end of the turn. This chance becomes 100% during Sunny Day.",
 		shortDesc: "50% chance this Pokemon's Berry is restored at the end of each turn. 100% in Sun.",
 		id: "harvest",
 		name: "Harvest",
