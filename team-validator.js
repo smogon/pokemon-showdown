@@ -7,26 +7,6 @@
  * @license MIT license
  */
 
-var ValidatorInterface = (function() {
-
-	function ValidatorInterface() {
-		this.validators = {};
-	}
-
-	ValidatorInterface.prototype.validateTeam = function(format, team, callback) {
-		if (!this.validators[format]) this.validators[format] = new Validator(format);
-		setImmediate(callback.bind(null, this.validators[format].validateTeam(team), team));
-	};
-
-	ValidatorInterface.prototype.checkLearnsetSync = function(format, move, template, lsetData) {
-		if (!this.validators[format]) this.validators[format] = new Validator(format);
-		return this.validators[format].checkLearnset(move, template, lsetData);
-	};
-
-	return ValidatorInterface;
-
-})();
-
 var Validator = (function() {
 
 	function Validator(format) {
@@ -611,4 +591,8 @@ var Validator = (function() {
 	return Validator;
 })();
 
-module.exports = ValidatorInterface;
+function TeamValidator(mod) {
+	return new Validator(mod);
+}
+
+module.exports = TeamValidator;
