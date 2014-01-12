@@ -419,6 +419,8 @@ var commands = exports.commands = {
 				var move = {};
 				for (var mon in tempResults) {
 					var template = Tools.getTemplate(tempResults[mon].id);
+					if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+					if (!template.learnset) continue;
 					for (var i in moves) {
 						move = Tools.getMove(i);
 						if (move.id !== 'count') {
