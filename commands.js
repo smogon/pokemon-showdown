@@ -783,6 +783,7 @@ var commands = exports.commands = {
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/213.gif">');
 	},
 
+	nubdove: 'pidove',
 	pidove: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#051694"><b>Pidove</b></font><br />' +
@@ -823,7 +824,7 @@ var commands = exports.commands = {
 	},
 
 	energ: 'energ218',
-	lexielover:'energ218'
+	lexielover:'energ218',
 	energ218: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#06367F"><b>EnerG218</b></font><br />' +
