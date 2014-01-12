@@ -428,7 +428,7 @@ var commands = exports.commands = {
 							if (!template.learnset.sketch && !template.learnset[move.id]) break;
 						}
 					}
-					if (!problem) results.add(tempResults[mon]);
+					if (template.learnset[move.id] || template.learnset.sketch) results.add(tempResults[mon]);
 				}
 				moves.count = 0;
 				continue;
