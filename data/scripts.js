@@ -502,6 +502,7 @@ exports.BattleScripts = {
 		pokemon.baseAbility = pokemon.ability;
 
 		side.megaEvo = 1;
+		for (var i = 0; i < side.pokemon.length; i++) side.pokemon[i].canMegaEvo = false;
 		return true;
 	},
 
@@ -526,6 +527,16 @@ exports.BattleScripts = {
 		}
 		if (!isValid) selectedAbilities.push(selectedAbility);
 		return isValid;
+	},
+	canMegaEvo: function(template) {
+		if (template.otherFormes) {
+			var forme = this.getTemplate(template.otherFormes[0]);
+			if (forme.requiredItem) {
+				var item = this.getItem(forme.requiredItem);
+				if (item.megaStone) return true;
+			}
+		}
+		return false;
 	},
 	getTeam: function(side, team) {
 		var format = side.battle.getFormat();
@@ -807,9 +818,9 @@ exports.BattleScripts = {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
-						// Power Gem, Bounce, Aeroblast aren't considered STABs.
+						// Bounce, Aeroblast aren't considered STABs.
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
-						if (moveid === 'aeroblast' || moveid === 'powergem' || moveid === 'bounce') hasStab[move.type] = false;
+						if (moveid === 'aeroblast' || moveid === 'bounce') hasStab[move.type] = false;
 					}
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
@@ -964,8 +975,8 @@ exports.BattleScripts = {
 				case 'airslash':
 					if (hasMove['hurricane']) rejected = true;
 					break;
-				case 'bravebird': case 'pluck': case 'drillpeck':
-					if (hasMove['acrobatics']) rejected = true;
+				case 'acrobatics': case 'pluck': case 'drillpeck':
+					if (hasMove['bravebird']) rejected = true;
 					break;
 				case 'solarbeam':
 					if ((!hasMove['sunnyday'] && template.species !== 'Ninetales') || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
@@ -1288,12 +1299,17 @@ exports.BattleScripts = {
 
 			if (hasMove['gyroball']) {
 				ivs.spe = 0;
-				//evs.atk += evs.spe;
+				evs.atk += evs.spe;
 				evs.spe = 0;
 			} else if (hasMove['trickroom']) {
 				ivs.spe = 0;
-				//evs.hp += evs.spe;
+				evs.hp += evs.spe;
 				evs.spe = 0;
+			}
+
+			var shouldMegaEvo = this.canMegaEvo(template);
+			if (template.species === 'Alakazam' || template.species === 'Scizor' || template.species === 'Garchomp') {
+				shouldMegaEvo = 'maybe';
 			}
 
 			item = 'Leftovers';
@@ -1301,6 +1317,7 @@ exports.BattleScripts = {
 				item = template.requiredItem;
 			} else if (template.species === 'Rotom-Fan') {
 				// this is just to amuse myself
+				// do we really have to keep this
 				item = 'Air Balloon';
 			} else if (template.species === 'Delibird') {
 				// to go along with the Christmas Delibird set
@@ -1316,8 +1333,6 @@ exports.BattleScripts = {
 				item = 'Focus Sash';
 			} else if (template.species === 'Unown') {
 				item = 'Choice Specs';
-			} else if ((template.species === 'Wynaut' || template.species === 'Wobbuffet') && hasMove['destinybond'] && Math.random()*2 > 1) {
-				item = 'Custap Berry';
 			} else if (hasMove['trick'] && hasMove['gyroball'] && (ability === 'Levitate' || hasType['Flying'])) {
 				item = 'Macho Brace';
 			} else if (hasMove['trick'] && hasMove['gyroball']) {
@@ -1335,6 +1350,8 @@ exports.BattleScripts = {
 				item = 'Chesto Berry';
 			} else if (hasMove['naturalgift']) {
 				item = 'Liechi Berry';
+			} else if (hasMove['geomancy']) {
+				item = 'Power Herb';
 			} else if (ability === 'Harvest') {
 				item = 'Sitrus Berry';
 			} else if (template.species === 'Cubone' || template.species === 'Marowak') {
@@ -1343,10 +1360,14 @@ exports.BattleScripts = {
 				item = 'Light Ball';
 			} else if (template.species === 'Clamperl') {
 				item = 'DeepSeaTooth';
+			} else if (template.species === 'Spiritomb') {
+				item = 'Leftovers';
+			} else if (template.species === 'Dusclops') {
+				item = 'Eviolite';
+			} else if (shouldMegaEvo === true) {
+				item = this.getTemplate(template.otherFormes[0]).requiredItem;
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 				item = 'Light Clay';
-			} else if (hasMove['acrobatics']) {
-				item = 'Flying Gem';
 			} else if (hasMove['shellsmash']) {
 				item = 'White Herb';
 			} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost') {
@@ -1363,16 +1384,21 @@ exports.BattleScripts = {
 				item = 'Flame Orb';
 			} else if (ability === 'Sheer Force' || ability === 'Magic Guard') {
 				item = 'Life Orb';
-			} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
-				// Give Unburden mons a random Gem of the type of one of their damaging moves
-				var shuffledMoves = moves.randomize();
-				for (var m in shuffledMoves) {
-					var move = this.getMove(shuffledMoves[m]);
-					if (move.basePower || move.basePowerCallback) {
-						item = move.type + ' Gem';
+			} else if (ability === 'Unburden') {
+				item = 'Red Card';
+				// Give Unburden mons a Normal Gem if they have a Normal-type attacking move
+				for (var m in moves) {
+					var move = this.getMove(moves[m]);
+					if (move.type === 'Normal' && (move.basePower || move.basePowerCallback)) {
+						item = 'Normal Gem';
 						break;
 					}
 				}
+
+			// medium priority
+
+			} else if (shouldMegaEvo) {
+				item = this.getTemplate(template.otherFormes[0]).requiredItem;
 			} else if (ability === 'Guts') {
 				if (hasMove['drainpunch']) {
 					item = 'Flame Orb';
@@ -1409,21 +1435,11 @@ exports.BattleScripts = {
 				item = 'Air Balloon';
 			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 				item = 'Choice Scarf';
-			} else if (hasMove['substitute'] && hasMove['reversal']) {
-				var shuffledMoves = moves.randomize();
-				for (var m in shuffledMoves) {
-					var move = this.getMove(shuffledMoves[m]);
-					if (move.basePower || move.basePowerCallback) {
-						item = move.type + ' Gem';
-						break;
-					}
-				}
 			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
 				item = 'Leftovers';
 			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
 				item = 'Focus Sash';
-			} else if (ability === 'Iron Barbs') {
-				// only Iron Barbs for now
+			} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 				item = 'Rocky Helmet';
 			} else if ((template.baseStats.hp+75)*(template.baseStats.def+template.baseStats.spd+175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
 				// skarmory and forretress get exceptions for their typing
@@ -1432,6 +1448,8 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else if (counter.Special >= 3 && setupType) {
 				item = 'Life Orb';
+			} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179) {
+				item = 'Assault Vest';
 			} else if (counter.Physical + counter.Special >= 4) {
 				item = 'Expert Belt';
 			} else if (i===0 && ability !== 'Sturdy' && !counter['recoil']) {
@@ -1442,6 +1460,8 @@ exports.BattleScripts = {
 			// this is the "REALLY can't think of a good item" cutoff
 			// why not always Leftovers? Because it's boring. :P
 
+			} else if (counter.Physical + counter.Special >= 2 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd > 315) {
+				item = 'Weakness Policy';
 			} else if (hasType['Flying'] || ability === 'Levitate') {
 				item = 'Leftovers';
 			} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
@@ -1454,6 +1474,7 @@ exports.BattleScripts = {
 				item = 'Leftovers';
 			}
 
+			// For Trick / Switcheroo
 			if (item === 'Leftovers' && hasType['Poison']) {
 				item = 'Black Sludge';
 			}
@@ -1470,6 +1491,12 @@ exports.BattleScripts = {
 			BL2: 80,
 			UU: 78,
 			BL: 76,
+
+			'Limbo': 86,
+			'Limbo C': 83,
+			'Limbo B': 80,
+			'Limbo A': 77,
+
 			OU: 74,
 			CAP: 74,
 			Unreleased: 74,
@@ -1489,10 +1516,13 @@ exports.BattleScripts = {
 			Dusclops: 84, Porygon2: 82, Chansey: 78,
 
 			// Weather or teammate dependent
-			Snover: 95, Vulpix: 95, Excadrill: 78, Ninetales: 78, Tentacruel: 78, Toxicroak: 78, Venusaur: 78, "Tornadus-Therian": 74,
+			Snover: 95, Vulpix: 95, Ninetales: 78, Tentacruel: 78, Toxicroak: 78,
+
+			// Banned mega
+			Kangaskhan: 72, Gengar: 72, Blaziken: 72,
 
 			// Holistic judgment
-			Carvanha: 90, Blaziken: 74, "Deoxys-Defense": 74, "Deoxys-Speed": 74, Garchomp: 74, Thundurus: 74
+			Carvanha: 90, Lucario: 72, Genesect: 72, Kyurem: 78
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
@@ -1518,7 +1548,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && this.getTemplate(i).gen < 6) {
+			if (this.data.FormatsData[i].viableMoves && !this.getTemplate(i).evos.length) {
 				keys.push(i);
 			}
 		}
@@ -1534,6 +1564,7 @@ exports.BattleScripts = {
 		var typeComboCount = {};
 		var uberCount = 0;
 		var nuCount = 0;
+		var megaCount = 0;
 
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(keys[i]);
@@ -1552,7 +1583,7 @@ exports.BattleScripts = {
 			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
 			if (keys[i].substr(0,8) === 'basculin' && Math.random()*2>1) continue;
-			// Not available on BW
+			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
 			// Limit 2 of any type
@@ -1590,6 +1621,9 @@ exports.BattleScripts = {
 			}
 			if (typeCombo in typeComboCount) continue;
 
+			// Limit the number of Megas to one, just like in-game
+			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
@@ -1603,12 +1637,15 @@ exports.BattleScripts = {
 				}
 			}
 			typeComboCount[typeCombo] = 1;
-			// Increment Uber/NU counter
+
+			// Increment Uber/NU and mega counter
 			if (tier === 'Uber') {
 				uberCount++;
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
+			if (this.getItem(set.item).megaStone) megaCount++;
+
 		}
 		return pokemon;
 	},

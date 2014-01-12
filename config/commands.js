@@ -471,7 +471,7 @@ var commands = exports.commands = {
 						move = Tools.getMove(i);
 						if (move.id !== 'count') {
 							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
-							problem = Tools.checkLearnset(move, template, lsetData);
+							problem = TeamValidator().checkLearnset(move, template, lsetData);
 							if (problem) break;
 						}
 					}
@@ -539,7 +539,7 @@ var commands = exports.commands = {
 			if (!move.exists) {
 				return this.sendReply('Move "'+move.id+'" not found.');
 			}
-			problem = Tools.checkLearnset(move, template, lsetData);
+			problem = TeamValidator().checkLearnset(move, template, lsetData);
 			if (problem) break;
 		}
 		var buffer = ''+template.name+(problem?" <span class=\"message-learn-cannotlearn\">can't</span> learn ":" <span class=\"message-learn-canlearn\">can</span> learn ")+(targets.length>2?"these moves":move.name);
@@ -772,22 +772,24 @@ var commands = exports.commands = {
 		if (room.id === 'lobby') return this.sendReply('This command is too spammy for lobby.');
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Room drivers (%) can use:<br />' +
-			'- /mute <em>username</em>: 7 minute mute<br />' +
-			'- /hourmute <em>username</em>: 60 minute mute<br />' +
+			'- /warn OR /k <em>username</em>: warn a user and show the Pokemon Showdown rules<br />' +
+			'- /mute OR /m <em>username</em>: 7 minute mute<br />' +
+			'- /hourmute OR /hm <em>username</em>: 60 minute mute<br />' +
 			'- /unmute <em>username</em>: unmute<br />' +
-			'- /announce <em>message</em>: make an announcement<br />' +
+			'- /announce OR /wall <em>message</em>: make an announcement<br />' +
 			'<br />' +
 			'Room moderators (@) can also use:<br />' +
-			'- /roomban <em>username</em>: bans user from the room<br />' +
+			'- /roomban OR /rb <em>username</em>: bans user from the room<br />' +
 			'- /roomunban <em>username</em>: unbans user from the room<br />' +
 			'- /roomvoice <em>username</em>: appoint a room voice<br />' +
 			'- /roomdevoice <em>username</em>: remove a room voice<br />' +
-			'- /modchat <em>level</em>: set modchat (to turn off: /modchat off)<br />' +
+			'- /modchat <em>[off/autoconfirmed/+]</em>: set modchat level<br />' +
 			'<br />' +
 			'Room owners (#) can also use:<br />' +
 			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
 			'- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />' +
 			'- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />' +
+			'- /modchat <em>[%/@/#]</em>: set modchat level<br />' +
 			'- /declare <em>message</em>: make a global declaration<br />' +
 			'</div>');
 	},

@@ -80,6 +80,22 @@ exports.Formats = [
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
 	{
+		name: "Random Battle",
+		section: "XY Singles",
+
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "Unrated Random Battle",
+		section: "XY Singles",
+
+		team: 'random',
+		challengeShow: false,
+		rated: false,
+		ruleset: ['Random Battle']
+	},
+	{
 		name: "OU",
 		section: "XY Singles",
 
@@ -98,60 +114,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite',
-			'Aegislash',
-			'Alakazam', 'Alakazam-Mega',
-			'Azumarill',
-			'Blissey',
-			'Breloom',
-			'Charizard', 'Charizard-Mega-X', 'Charizard-Mega-Y',
-			'Clefable',
-			'Cloyster',
-			'Conkeldurr',
-			'Donphan',
-			'Dragonite',
-			'Espeon',
-			'Excadrill',
-			'Ferrothorn',
-			'Forretress',
-			'Galvantula',
-			'Garchomp', 'Garchomp-Mega',
-			'Genesect',
-			'Gengar', 'Gengar-Mega',
-			'Gliscor',
-			'Goodra',
-			'Greninja',
-			'Gyarados', 'Gyarados-Mega',
-			'Heatran',
-			'Infernape',
-			'Jirachi',
-			'Kangaskhan', 'Kangaskhan-Mega',
-			'Klefki',
-			'Landorus',
-			'Landorus-Therian',
-			'Latios',
-			'Lucario', 'Lucario-Mega',
-			'Mamoswine',
-			'Mandibuzz',
-			'Mawile', 'Mawile-Mega',
-			'Pinsir', 'Pinsir-Mega',
-			'Rotom-Wash',
-			'Sableye',
-			'Salamence',
-			'Scizor', 'Scizor-Mega',
-			'Skarmory',
-			'Smeargle',
-			'Starmie',
-			'Sylveon',
-			'Talonflame',
-			'Tentacruel',
-			'Terrakion',
-			'Thundurus',
-			'Togekiss',
-			'Trevenant',
-			'Tyranitar', 'Tyranitar-Mega',
-			'Venusaur', 'Venusaur-Mega',
-			'Volcarona']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'OU', 'BL', 'Drizzle']
 	},
 	{
 		name: "LC",
@@ -530,9 +493,24 @@ exports.Formats = [
 
 		mod: 'inverse',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Kangaskhanite',
+		banlist: [
 			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Ho-Oh', 'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Xerneas', 'Yveltal', 'Gengarite', 'Gengar-Mega', 'Kyogre', 'Shaymin-Sky'
+			'Darkrai',
+			'Deoxys-Attack',
+			'Gengarite',
+			'Giratina', 'Giratina-Origin',
+			'Ho-Oh',
+			'Kangaskhanite',
+			'Kyogre',
+			'Kyurem-Black',
+			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
+			'Palkia',
+			'Rayquaza',
+			'Shaymin-Sky',
+			'Soul Dew',
+			'Xerneas',
+			'Yveltal',
+			'Zekrom'
 		]
 	},
 	{
@@ -548,8 +526,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Unreleased', 'Illegal', 'Focus Sash', 'Soul Dew',
 			'Destiny Bond', 'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Memento', 'Perish Song', 'Selfdestruct',
-			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Blaziken', 'Blaziken-Mega', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom'
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Blaziken', 'Blaziken-Mega', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom'
 		]
 	},
 	{
@@ -624,25 +601,6 @@ exports.Formats = [
 	// 	ruleset: ['CAP Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 	// 	banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', "Tomohawk", "Necturna", "Mollux", "Aurumoth", "Malaconda", "Syclant", "Revenankh", "Pyroak", "Fidgit", "Stratagem", "Arghonaut", "Kitsunoh", "Cyclohm", "Colossoil", "Krilowatt", "Voodoom"]
 	// },
-	{
-		name: "[Gen 5] Random Battle",
-		section: "BW2 Singles",
-		column: 2,
-
-		mod: 'gen5',
-		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
-	},
-	{
-		name: "[Gen 5] Unrated Random Battle",
-		section: "BW2 Singles",
-
-		mod: 'gen5',
-		team: 'random',
-		challengeShow: false,
-		rated: false,
-		ruleset: ['Random Battle']
-	},
 	{
 		name: "[Gen 5] OU",
 		section: "BW2 Singles",

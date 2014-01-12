@@ -228,6 +228,7 @@ var BattlePokemon = (function() {
 		this.baseAbility = toId(set.ability);
 		this.ability = this.baseAbility;
 		this.item = toId(set.item);
+		this.canMegaEvo = (this.battle.getItem(this.item).megaEvolves === this.species);
 		this.abilityData = {id: this.ability};
 		this.itemData = {id: this.item};
 		this.speciesData = {id: this.speciesid};
@@ -538,7 +539,7 @@ var BattlePokemon = (function() {
 			var moveName = move.move;
 			if (move.id === 'hiddenpower') {
 				moveName = 'Hidden Power '+this.hpType;
-				if (this.hpPower != 70) moveName += ' '+this.hpPower;
+				if (this.gen < 6) moveName += ' '+this.hpPower;
 			}
 			moves.push({
 				move: moveName,
@@ -1192,7 +1193,8 @@ var BattleSide = (function() {
 					return move;
 				}),
 				baseAbility: pokemon.baseAbility,
-				item: pokemon.item
+				item: pokemon.item,
+				canMegaEvo: pokemon.canMegaEvo
 			});
 		}
 		return data;
@@ -2439,6 +2441,7 @@ var Battle = (function() {
 		this.p1.foe = this.p2;
 
 		this.add('gametype', this.gameType);
+		this.add('gen', this.gen);
 
 		var format = this.getFormat();
 		Tools.mod(format.mod).getBanlistTable(format); // fill in format ruleset
@@ -2830,8 +2833,7 @@ var Battle = (function() {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		var totalTypeMod = this.getEffectiveness(type, target);
-		totalTypeMod = this.singleEvent('ModifyEffectiveness', move, null, target, pokemon, move, totalTypeMod);
+		var totalTypeMod = this.getEffectiveness(move, target, pokemon);
 
 		totalTypeMod = clampIntRange(totalTypeMod, -3, 3);
 		if (totalTypeMod > 0) {

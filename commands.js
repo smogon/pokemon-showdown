@@ -1440,7 +1440,7 @@ var commands = exports.commands = {
 	},
 
 	privateroom: function(target, room, user) {
-		if (!this.can('makeroom')) return;
+		if (!this.can('privateroom')) return;
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand(user.name+' made this room public.');
@@ -1523,7 +1523,9 @@ var commands = exports.commands = {
 	roomdesc: function(target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
-			this.sendReply('The room description is: '+room.desc);
+			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			if (!room.desc) return this.sendReply("This room does not have a description set.");
+			this.sendReplyBox('The room description is: '+room.desc.replace(re, "<a href=\"$1\">$1</a>"));
 			return;
 		}
 		if (!this.can('roommod', null, room)) return false;
@@ -2604,6 +2606,7 @@ var commands = exports.commands = {
 		fs.readFile('config/ipbans.txt', function (err, data) {
 			if (err) return;
 			data = (''+data).split("\n");
+			var rangebans = [];
 			for (var i=0; i<data.length; i++) {
 				var line = data[i].split('#')[0].trim();
 				if (!line) continue;
