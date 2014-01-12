@@ -822,6 +822,15 @@ var commands = exports.commands = {
 						'Badge: Phantom Badge<br />' +
 						'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/114_zps7313774a.png">');
 	},
+	
+	cc: function(target, room, user) {
+	if (!this.canBroadcast()) return;
+	return this.sendReplyBox('<center>Trainer:<font color="#985B06"><b>CrazyClown94</b></font><br />' +
+							 '<center>Types: Psychic(UU)<br />' +
+							 '<center>Signature Pokemon:<font color="red"><b>Medicham</b></font><br />' +
+							 '<center>Catchphrase: Puppies eat waffles for breakfast<br />' +
+							 '<center><a href="http://www.youtube.com/watch?v=Iyv905Q2omU"><img src="http://www.smogon.com/download/sprites/bwmini/308.gif"></a>');
+	},
 
 	energ: 'energ218',
 	lexielover:'energ218',
