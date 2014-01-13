@@ -1643,11 +1643,7 @@ var commands = exports.commands = {
 	saveteam: 'useteam',
 	utm: 'useteam',
 	useteam: function(target, room, user) {
-		try {
-			user.team = JSON.parse(target);
-		} catch (e) {
-			this.popupReply('Not a valid team.');
-		}
+		user.team = target;
 	},
 
 	/*********************************************************

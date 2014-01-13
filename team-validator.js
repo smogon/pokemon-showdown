@@ -157,8 +157,15 @@ if (!process.send) {
 	var handlers = {
 		validateTeam: function(format, team) {
 			if (!validators[format]) validators[format] = new Validator(format);
-			var problems = validators[format].validateTeam(team);
-			this.send(problems, problems ? null : team);
+			var parsedTeam = {};
+			try {
+				var parsedTeam = JSON.parse(team);
+			} catch (e) {
+				this.send(["Your team was invalid and could not be parsed."]);
+				return;
+			}
+			var problems = validators[format].validateTeam(parsedTeam);
+			this.send(problems, problems ? null : parsedTeam);
 		},
 		validateSet: function(format, set, teamHas) {
 			if (!validators[format]) validators[format] = new Validator(format);

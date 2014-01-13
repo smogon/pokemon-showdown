@@ -1139,8 +1139,7 @@ var User = (function () {
 			setImmediate(callback.bind(null, false));
 			return;
 		}
-		var team = this.team;
-		TeamValidator.validateTeam(formatid, team, this.finishPrepBattle.bind(this, connection, callback));
+		TeamValidator.validateTeam(formatid, this.team, this.finishPrepBattle.bind(this, connection, callback));
 	};
 	User.prototype.finishPrepBattle = function(connection, callback, problems, team) {
 		if (problems) {
