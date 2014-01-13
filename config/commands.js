@@ -418,17 +418,17 @@ var commands = exports.commands = {
 				var problem;
 				var move = {};
 				for (var mon in tempResults) {
-					var lsetData = {set:{}};
 					var template = Tools.getTemplate(tempResults[mon].id);
+					if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+					if (!template.learnset) continue;
 					for (var i in moves) {
 						move = Tools.getMove(i);
 						if (move.id !== 'count') {
 							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
-							problem = TeamValidator.checkLearnsetSync(null, move, template, lsetData);
-							if (problem) break;
+							if (!template.learnset.sketch && !template.learnset[move.id]) break;
 						}
 					}
-					if (!problem) results.add(tempResults[mon]);
+					if (template.learnset[move.id] || template.learnset.sketch) results.add(tempResults[mon]);
 				}
 				moves.count = 0;
 				continue;
