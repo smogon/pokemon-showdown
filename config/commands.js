@@ -1244,6 +1244,24 @@ var commands = exports.commands = {
 		user.updateIdentity();
 		return this.sendReply("You are now showing your authority!");
 	},
+	
+	sk: 'superkick',
+	superkick: function(target, room, user){
+		if (!target) return;
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser || !targetUser.connected) {
+			return this.sendReply("User " + this.targetUsername + " not found.");
+		}
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+		}
+		if (!this.can('warn', targetUser, room)) return false;
+		var msg = " kicked by " + user.name + (!target?"":" (" + target + ")") + ".";
+		room.add(targetUser.name + " was " + msg); 
+		targetUser.popup("You have been " + msg); 
+		taregetUser.disconnectAll();
+	}
 
 	/*********************************************************
 	 * Help commands
