@@ -1543,8 +1543,8 @@ exports.BattleMovedex = {
 		category: "Status",
 		desc: "No in-game effect.",
 		shortDesc: "No in-game effect.",
-		id: "Celebrate",
-		name: "celebrate",
+		id: "celebrate",
+		name: "Celebrate",
 		pp: 40,
 		priority: 0,
 		onTryHit: function(target, source) {
