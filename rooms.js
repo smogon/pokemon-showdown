@@ -244,7 +244,10 @@ var GlobalRoom = (function() {
 
 		formatid = toId(formatid);
 
-		if (!user.prepBattle(formatid, 'search')) return;
+		user.prepBattle(formatid, 'search', null, this.finishSearchBattle.bind(this, user, formatid));
+	};
+	GlobalRoom.prototype.finishSearchBattle = function(user, formatid, result) {
+		if (!result) return;
 
 		// tell the user they've started searching
 		var newSearchData = {

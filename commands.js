@@ -230,7 +230,7 @@ var commands = exports.commands = {
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
-	
+
 	roomdeowner: 'deroomowner',
 	deroomowner: function(target, room, user) {
 		if (!room.auth) {
@@ -1054,6 +1054,8 @@ var commands = exports.commands = {
 				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				Rooms.global.formatListText = Rooms.global.getFormatListText();
+				// respawn validator processes
+				TeamValidator.ValidatorProcess.respawn();
 				// respawn simulator processes
 				Simulator.SimulatorProcess.respawn();
 				// broadcast the new formats list to clients
@@ -1598,8 +1600,9 @@ var commands = exports.commands = {
 				return false;
 			}
 		}
-		if (!user.prepBattle(target, 'challenge', connection)) return;
-		user.makeChallenge(targetUser, target);
+		user.prepBattle(target, 'challenge', connection, function (result) {
+			if (result) user.makeChallenge(targetUser, target);
+		});
 	},
 
 	away: 'blockchallenges',
@@ -1628,8 +1631,9 @@ var commands = exports.commands = {
 			this.popupReply(target+" cancelled their challenge before you could accept it.");
 			return false;
 		}
-		if (!user.prepBattle(format, 'challenge', connection)) return;
-		user.acceptChallengeFrom(userid);
+		user.prepBattle(format, 'challenge', connection, function (result) {
+			if (result) user.acceptChallengeFrom(userid);
+		});
 	},
 
 	reject: function(target, room, user) {
@@ -1639,11 +1643,7 @@ var commands = exports.commands = {
 	saveteam: 'useteam',
 	utm: 'useteam',
 	useteam: function(target, room, user) {
-		try {
-			user.team = JSON.parse(target);
-		} catch (e) {
-			this.popupReply('Not a valid team.');
-		}
+		user.team = target;
 	},
 
 	/*********************************************************
