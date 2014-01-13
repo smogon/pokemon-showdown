@@ -16,7 +16,10 @@ if (!process.send) {
 			this.process = require('child_process').fork('team-validator.js');
 			this.process.on('message', function(message) {
 				var parts = JSON.parse(message);
-				if (pendingValidations[parts[0]]) pendingValidations[parts[0]].apply(null, parts.slice(1));
+				if (pendingValidations[parts[0]]) {
+					pendingValidations[parts[0]].apply(null, parts.slice(1));
+					delete pendingValidations[parts[0]];
+				}
 			});
 		}
 		ValidatorProcess.prototype.load = 0;
