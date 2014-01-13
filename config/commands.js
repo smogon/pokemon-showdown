@@ -1260,8 +1260,8 @@ var commands = exports.commands = {
 		var msg = " kicked by " + user.name + (!target?"":" (" + target + ")") + ".";
 		room.add(targetUser.name + " was " + msg); 
 		targetUser.popup("You have been " + msg); 
-		taregetUser.disconnectAll();
-	}
+		targetUser.disconnectAll();
+	},
 
 	/*********************************************************
 	 * Help commands
