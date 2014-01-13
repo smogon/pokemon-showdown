@@ -155,17 +155,17 @@ if (!process.send) {
 
 	var validators = {};
 	var handlers = {
-		validateTeam: function (format, team) {
+		validateTeam: function(format, team) {
 			if (!validators[format]) validators[format] = new Validator(format);
 			var problems = validators[format].validateTeam(team);
 			this.send(problems, problems ? null : team);
 		},
-		validateSet: function (format, set, teamHas) {
+		validateSet: function(format, set, teamHas) {
 			if (!validators[format]) validators[format] = new Validator(format);
 			var problems = validators[format].validateSet(set, teamHas);
 			this.send(problems, problems ? null : set, teamHas);
 		},
-		checkLearnset: function (format, move, template, lsetData) {
+		checkLearnset: function(format, move, template, lsetData) {
 			if (!validators[format]) validators[format] = new Validator(format);
 			var result = validators[format].checkLearnset(move, template, lsetData);
 			this.send(result, lsetData);
