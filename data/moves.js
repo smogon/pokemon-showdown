@@ -2009,8 +2009,8 @@ exports.BattleMovedex = {
 		boosts: {
 			spe: -2
 		},
-		onTryHit: function(target, source) {
-			if (target.hasType('Grass')) return false;
+		onTryHit: function(pokemon) {
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		secondary: false,
 		target: "normal",
@@ -9342,7 +9342,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			if (pokemon.hasType('Grass')) return false;
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		status: 'psn',
 		secondary: false,
@@ -9416,7 +9416,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			if (pokemon.hasType('Grass')) return false;
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		isBounceable: true,
 		volatileStatus: 'powder',
@@ -10091,7 +10091,7 @@ exports.BattleMovedex = {
 				this.add('-start', pokemon, 'move: Rage Powder');
 			},
 			onFoeRedirectTarget: function(target, source, source2, move) {
-				if (!source.hasType('Grass') && this.validTarget(this.effectData.target, source, move.target)) {
+				if (source.runImmunity('powder') && this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Rage Powder redirected target of move");
 					return this.effectData.target;
 				}
@@ -11860,7 +11860,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			if (pokemon.hasType('Grass')) return false;
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		status: 'slp',
 		secondary: false,
@@ -12472,8 +12472,8 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isPowder: true,
-		onTryHit: function(target, source) {
-			if (target.hasType('Grass')) return false;
+		onTryHit: function(pokemon) {
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		status: 'slp',
 		secondary: false,
@@ -12791,8 +12791,8 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		isPowder: true,
-		onTryHit: function(target, source) {
-			if (target.hasType('Grass')) return false;
+		onTryHit: function(pokemon) {
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		status: 'par',
 		secondary: false,
