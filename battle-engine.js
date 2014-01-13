@@ -1186,6 +1186,13 @@ var BattleSide = (function() {
 				details: pokemon.details,
 				condition: pokemon.getHealth(pokemon.side),
 				active: (pokemon.position < pokemon.side.active.length),
+				stats: {
+					atk: pokemon.stats['atk'],
+					def: pokemon.stats['def'],
+					spa: pokemon.stats['spa'],
+					spd: pokemon.stats['spd'],
+					spe: pokemon.stats['spe']
+				},
 				moves: pokemon.moves.map(function(move) {
 					if (move === 'hiddenpower') {
 						return move + toId(pokemon.hpType) + (pokemon.hpPower == 70?'':pokemon.hpPower);
