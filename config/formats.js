@@ -315,7 +315,7 @@ exports.Formats = [
 		debug: true,
 		ruleset: ['Team Preview']
 	},
-	
+
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 
@@ -662,7 +662,7 @@ exports.Formats = [
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber'],
-		
+
 		column: 2
 	},
 	{
