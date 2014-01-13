@@ -41,7 +41,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'OU']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'OU', 'BL', 'Drizzle']
 	},
 	{
 		name: "LC",
@@ -441,6 +441,7 @@ exports.Formats = [
 			'Palkia',
 			'Rayquaza',
 			'Shaymin-Sky',
+			'Soul Dew',
 			'Xerneas',
 			'Yveltal',
 			'Zekrom'

@@ -174,6 +174,9 @@ exports.BattleFormats = {
 				}
 				set.species = 'Meloetta';
 			}
+			if (template.num == 681) { // Aegislash
+				set.species = 'Aegislash';
+			}
 			return problems;
 		}
 	},

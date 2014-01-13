@@ -818,9 +818,9 @@ exports.BattleScripts = {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
-						// Power Gem, Bounce, Aeroblast aren't considered STABs.
+						// Bounce, Aeroblast aren't considered STABs.
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
-						if (moveid === 'aeroblast' || moveid === 'powergem' || moveid === 'bounce') hasStab[move.type] = false;
+						if (moveid === 'aeroblast' || moveid === 'bounce') hasStab[move.type] = false;
 					}
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
@@ -1384,7 +1384,8 @@ exports.BattleScripts = {
 				item = 'Flame Orb';
 			} else if (ability === 'Sheer Force' || ability === 'Magic Guard') {
 				item = 'Life Orb';
-			} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
+			} else if (ability === 'Unburden') {
+				item = 'Red Card';
 				// Give Unburden mons a Normal Gem if they have a Normal-type attacking move
 				for (var m in moves) {
 					var move = this.getMove(moves[m]);
@@ -1547,7 +1548,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && !this.getTemplate(i).evos.length) {
+			if (this.data.FormatsData[i].viableMoves && !this.data.FormatsData[i].isNonstandard && !this.getTemplate(i).evos.length) {
 				keys.push(i);
 			}
 		}
