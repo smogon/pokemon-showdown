@@ -114,8 +114,8 @@ var commands = exports.commands = {
 		target = target.trim();
 		target = target.split(' ');
 		var a = target[0];
-		var b = target[2];
 		var operator = target[1];
+		var b = target[2];
 		if (!operator) {
 			return this.sendReply('/math [number] [operator] [number] OR [number] [operator] - Calculates two numbers using the operator.');
 		}
@@ -1322,6 +1322,7 @@ var commands = exports.commands = {
 	},
 
 	pm: 'msg',
+	w: 'msg',
 	whisper: 'msg',
 	msg: function(target, room, user) {
 		if (!target) return this.parse('/help msg');
