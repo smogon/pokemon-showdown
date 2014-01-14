@@ -1091,7 +1091,7 @@ exports.BattleScripts = {
 					if (hasMove['willowisp']) rejected = true;
 					break;
 				case 'trickroom':
-					if (hasMove['rockpolish']) rejected = true;
+					if (hasMove['rockpolish'] || hasMove['agility']) rejected = true;
 					break;
 				}
 
