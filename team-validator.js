@@ -360,7 +360,7 @@ var Validator = (function() {
 		if (banlistTable['illegal']) {
 			var totalEV = 0;
 			for (var k in set.evs) {
-				if (typeof set.evs[k] !== 'number') {
+				if (typeof set.evs[k] !== 'number' || set.evs[k] < 0) {
 					set.evs[k] = 0;
 				}
 				totalEV += set.evs[k];
