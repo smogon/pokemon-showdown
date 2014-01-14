@@ -656,7 +656,7 @@ var commands = exports.commands = {
 	smogintro: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Welcome to Smogon\'s Official Pokémon Showdown server!<br /><br />' + 
-			'Here are some useful links to Smogon\'s Mentorship Program to help integrate you into Smogon\'s community:<br />' +
+			'Here are some useful links to Smogon\'s Mentorship Program to help you get integrated into the community:<br />' +
 			'- <a href="http://www.smogon.com/mentorship/primer">Smogon Primer: A brief introduction to Smogon\'s subcommunities</a><br />' +
 			'- <a href="http://www.smogon.com/mentorship/introductions">Introduce yourself to Smogon!</a><br />' +
 			'- <a href="http://www.smogon.com/mentorship/profiles">Profiles of current Smogon Mentors</a><br />' +
