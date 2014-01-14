@@ -2960,8 +2960,9 @@ var Battle = (function() {
 		var p2fainted = this.p2.active.map(isFainted);
 	};
 	Battle.prototype.faintMessages = function() {
+		var faintData;
 		while (this.faintQueue.length) {
-			var faintData = this.faintQueue.shift();
+			faintData = this.faintQueue.shift();
 			if (!faintData.target.fainted) {
 				this.add('faint', faintData.target);
 				this.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
@@ -2973,7 +2974,8 @@ var Battle = (function() {
 			}
 		}
 		if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
-			this.win();
+			// If both players have no Pokemon left, the player whose Pokemon fainted last wins.
+			this.win(faintData.target.side);
 			return true;
 		}
 		if (!this.p1.pokemonLeft) {
