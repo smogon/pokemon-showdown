@@ -308,6 +308,15 @@ var BattlePokemon = (function() {
 			accuracy: 0, evasion: 0
 		};
 		this.stats = {atk:0, def:0, spa:0, spd:0, spe:0};
+		this.baseStats = {atk:10, def:10, spa:10, spd:10, spe:10};
+		for (var statName in this.baseStats) {
+			var stat = this.template.baseStats[statName];
+			stat = Math.floor(Math.floor(2*stat+this.set.ivs[statName]+Math.floor(this.set.evs[statName]/4))*this.level / 100 + 5);
+			var nature = this.battle.getNature(this.set.nature);
+			if (statName === nature.plus) stat *= 1.1;
+			if (statName === nature.minus) stat *= 0.9;
+			this.baseStats[statName] = Math.floor(stat);
+		};
 
 		this.maxhp = Math.floor(Math.floor(2*this.template.baseStats['hp']+this.set.ivs['hp']+Math.floor(this.set.evs['hp']/4)+100)*this.level / 100 + 10);
 		if (this.template.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
@@ -1187,11 +1196,11 @@ var BattleSide = (function() {
 				condition: pokemon.getHealth(pokemon.side),
 				active: (pokemon.position < pokemon.side.active.length),
 				stats: {
-					atk: pokemon.stats['atk'],
-					def: pokemon.stats['def'],
-					spa: pokemon.stats['spa'],
-					spd: pokemon.stats['spd'],
-					spe: pokemon.stats['spe']
+					atk: pokemon.baseStats['atk'],
+					def: pokemon.baseStats['def'],
+					spa: pokemon.baseStats['spa'],
+					spd: pokemon.baseStats['spd'],
+					spe: pokemon.baseStats['spe']
 				},
 				moves: pokemon.moves.map(function(move) {
 					if (move === 'hiddenpower') {
