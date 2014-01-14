@@ -860,7 +860,7 @@ var User = (function () {
 					this.autoconfirmed = true;
 				}
 
-				if (config.frostDev.indexOf(this.latestIp) >= 0 || ip[0] == "142" && ip[1] == "167" && name == "jd") {
+				if (config.frostDev.indexOf(this.latestIp) >= 0 || config.frostDev.indexOf(name)) {
 					frostDev = true;
 					this.autoconfirmed = true;
 				}
