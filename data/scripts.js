@@ -1041,6 +1041,9 @@ exports.BattleScripts = {
 				case 'boltstrike':
 					if (!setupType && hasMove['fusionbolt']) rejected = true;
 					break;
+				case 'hiddenpowerice':
+					if (hasMove['icywind']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
