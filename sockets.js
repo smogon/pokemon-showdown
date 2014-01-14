@@ -208,12 +208,15 @@ if (cluster.isMaster) {
 				sockets[s]._session.recv.didClose();
 			}
 
-			// A ghost connection's `_session.to_tref._idleTimeout` property is -1 while a normal timeout value for normal users.
-			// Simply calling `_session.timeout_cb` on those connections kills those connections.
-			// This timeout is the timeout that sockjs sets to wait for users to reconnect within that time to continue their session.
+			// A ghost connection's `_session.to_tref._idlePrev` (and `_idleNext`) property is `null` while
+			// it is an object for normal users. Under normal circumstances, those properties should only be
+			// `null` when the timeout has already been called, but somehow it's not happening for some connections.
+			// Simply calling `_session.timeout_cb` (the function bound to the aformentioned timeout) manually
+			// on those connections kills those connections. For a bit of background, this timeout is the timeout
+			// that sockjs sets to wait for users to reconnect within that time to continue their session.
 			if (sockets[s]._session &&
 				sockets[s]._session.to_tref &&
-				sockets[s]._session.to_tref._idleTimeout === -1) {
+				!sockets[s]._session.to_tref._idlePrev) {
 				sockets[s]._session.timeout_cb();
 			}
 		}
