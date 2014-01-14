@@ -811,18 +811,7 @@ var commands = exports.commands = {
                 		':D');
 	},
 
-	cuddly: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<b>Information on Gym Le@der Cuddly:</b><br />'+
-						'Type: Ghost<br />' +
-						'Tier: Over Used (OU)<br />' +
-						'<a href="gymleadermustang.wix.com%2F-amethystleague%23!gym-leaders%2FaboutPage" target="_blank">Thread</a><br />' +
-						'Signature Pokemon: Golurk<br />' +
-						'<img src="http://www.poke-amph.com/black-white/sprites/small/623.png"><br />' +
-						'Badge: Phantom Badge<br />' +
-						'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/114_zps7313774a.png">');
-	},
-	
+
 	cc: function(target, room, user) {
 	if (!this.canBroadcast()) return;
 	return this.sendReplyBox('<center>Trainer:<font color="#985B06"><b>CrazyClown94</b></font><br />' +
@@ -830,6 +819,15 @@ var commands = exports.commands = {
 							 '<center>Signature Pokemon:<font color="red"><b>Medicham</b></font><br />' +
 							 '<center>Catchphrase: Puppies eat waffles for breakfast<br />' +
 							 '<center><a href="http://www.youtube.com/watch?v=Iyv905Q2omU"><img src="http://www.smogon.com/download/sprites/bwmini/308.gif"></a>');
+	},
+	
+	cuddly: function(target, room, user) {
+	if (!this.canBroadcast()) return;
+	this.sendReplyBox('<center>Trainer:<font color="#0639BC"><b>Cuddly</b></font><br />' +
+					  '<center>Types: Ghost(OU)<br />' +
+					  '<center>Signature Pokemon:<font color="green"><b>Golurk</b></font><br />' +
+					  '<center>Catchphrase: I....I am the monument to all your sins<br />' +
+					  '<center><img src="http://www.smogon.com/download/sprites/bwmini/623.gif">');
 	},
 
 	energ: 'energ218',
