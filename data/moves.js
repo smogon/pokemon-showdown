@@ -3927,10 +3927,10 @@ exports.BattleMovedex = {
 		},
 		onHit: function(target, source, move) {
 			if (move.sourceEffect === 'grasspledge') {
-				target.side.addSideCondition('grasspledge');
+				target.side.addSideCondition('firepledge');
 			}
 			if (move.sourceEffect === 'waterpledge') {
-				source.side.addSideCondition('firepledge');
+				source.side.addSideCondition('waterpledge');
 			}
 		},
 		effect: {
@@ -3941,11 +3941,11 @@ exports.BattleMovedex = {
 			onEnd: function(targetSide) {
 				this.add('-sideend', targetSide, 'Fire Pledge');
 			},
-			onModifyMove: function(move) {
-				if (move.secondaries) {
-					this.debug('doubling secondary chance');
-					for (var i=0; i<move.secondaries.length; i++) {
-						move.secondaries[i].chance *= 2;
+			onResidual: function(side) {
+				for (var i=0; i<side.active.length; i++) {
+					var pokemon = side.active[i];
+					if (pokemon && !pokemon.hasType('Fire')) {
+						this.damage(pokemon.maxhp/8, pokemon);
 					}
 				}
 			}
@@ -5078,10 +5078,10 @@ exports.BattleMovedex = {
 		},
 		onHit: function(target, source, move) {
 			if (move.sourceEffect === 'waterpledge') {
-				target.side.addSideCondition('waterpledge');
+				target.side.addSideCondition('grasspledge');
 			}
 			if (move.sourceEffect === 'firepledge') {
-				target.side.addSideCondition('grasspledge');
+				target.side.addSideCondition('firepledge');
 			}
 		},
 		effect: {
@@ -5092,13 +5092,8 @@ exports.BattleMovedex = {
 			onEnd: function(targetSide) {
 				this.add('-sideend', targetSide, 'Grass Pledge');
 			},
-			onResidual: function(side) {
-				for (var i=0; i<side.active.length; i++) {
-					var pokemon = side.active[i];
-					if (pokemon && !pokemon.hasType('Fire')) {
-						this.damage(pokemon.maxhp/8, pokemon);
-					}
-				}
+			onModifySpe: function(speMod, pokemon) {
+				return this.chain(speMod, 0.25);
 			}
 		},
 		secondary: false,
@@ -14340,10 +14335,10 @@ exports.BattleMovedex = {
 		},
 		onHit: function(target, source, move) {
 			if (move.sourceEffect === 'firepledge') {
-				source.side.addSideCondition('firepledge');
+				source.side.addSideCondition('waterpledge');
 			}
 			if (move.sourceEffect === 'grasspledge') {
-				target.side.addSideCondition('waterpledge');
+				target.side.addSideCondition('grasspledge');
 			}
 		},
 		effect: {
@@ -14354,8 +14349,13 @@ exports.BattleMovedex = {
 			onEnd: function(targetSide) {
 				this.add('-sideend', targetSide, 'Water Pledge');
 			},
-			onModifySpe: function(speMod, pokemon) {
-				return this.chain(speMod, 0.25);
+			onModifyMove: function(move) {
+				if (move.secondaries) {
+					this.debug('doubling secondary chance');
+					for (var i=0; i<move.secondaries.length; i++) {
+						move.secondaries[i].chance *= 2;
+					}
+				}
 			}
 		},
 		secondary: false,
