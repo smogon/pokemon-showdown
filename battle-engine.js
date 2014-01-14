@@ -2841,7 +2841,7 @@ var Battle = (function() {
 		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
 		// STAB
-		if (type !== '???' && pokemon.hasType(type)) {
+		if (move.hasSTAB || type !== '???' && pokemon.hasType(type)) {
 			// The "???" type never gets STAB
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
