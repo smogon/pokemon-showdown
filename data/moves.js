@@ -3925,6 +3925,16 @@ exports.BattleMovedex = {
 				}
 			}
 		},
+		onModifyMove: function(move) {
+			if (move.sourceEffect === 'waterpledge') {
+				move.type = 'Water';
+				move.hasSTAB = true;
+			}
+			if (move.sourceEffect === 'grasspledge') {
+				move.type = 'Fire';
+				move.hasSTAB = true;
+			}
+		},
 		onHit: function(target, source, move) {
 			if (move.sourceEffect === 'grasspledge') {
 				target.side.addSideCondition('firepledge');
@@ -5074,6 +5084,16 @@ exports.BattleMovedex = {
 					this.add('-waiting', source, decision.pokemon);
 					return null;
 				}
+			}
+		},
+		onModifyMove: function(move) {
+			if (move.sourceEffect === 'waterpledge') {
+				move.type = 'Grass';
+				move.hasSTAB = true;
+			}
+			if (move.sourceEffect === 'firepledge') {
+				move.type = 'Fire';
+				move.hasSTAB = true;
 			}
 		},
 		onHit: function(target, source, move) {
@@ -14331,6 +14351,16 @@ exports.BattleMovedex = {
 					this.add('-waiting', source, decision.pokemon);
 					return null;
 				}
+			}
+		},
+		onModifyMove: function(move) {
+			if (move.sourceEffect === 'grasspledge') {
+				move.type = 'Grass';
+				move.hasSTAB = true;
+			}
+			if (move.sourceEffect === 'firepledge') {
+				move.type = 'Water';
+				move.hasSTAB = true;
 			}
 		},
 		onHit: function(target, source, move) {
