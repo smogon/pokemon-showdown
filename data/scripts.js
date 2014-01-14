@@ -1090,6 +1090,9 @@ exports.BattleScripts = {
 				case 'lavaplume':
 					if (hasMove['willowisp']) rejected = true;
 					break;
+				case 'trickroom':
+					if (hasMove['rockpolish']) rejected = true;
+					break;
 				}
 
 				// These moves can be used even if we aren't setting up to use them:
