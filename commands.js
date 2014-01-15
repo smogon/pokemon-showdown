@@ -823,6 +823,10 @@ var commands = exports.commands = {
 		case 'autoconfirmed':
 			room.modchat = 'autoconfirmed';
 			break;
+		case '*':
+		case 'player':
+			target = '\u2605';
+			// fallthrough
 		default:
 			if (!config.groups[target]) {
 				return this.parse('/help modchat');
