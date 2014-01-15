@@ -665,6 +665,18 @@
 			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a>');
 	},
 
+	smogonintro: 'smogintro',
+	smogintro: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('Welcome to Smogon\'s Official Pokémon Showdown server!<br /><br />' + 
+			'Here are some useful links to Smogon\'s Mentorship Program to help you get integrated into the community:<br />' +
+			'- <a href="http://www.smogon.com/mentorship/primer">Smogon Primer: A brief introduction to Smogon\'s subcommunities</a><br />' +
+			'- <a href="http://www.smogon.com/mentorship/introductions">Introduce yourself to Smogon!</a><br />' +
+			'- <a href="http://www.smogon.com/mentorship/profiles">Profiles of current Smogon Mentors</a><br />' +
+			'- <a href="http://mibbit.com/#mentor@irc.synirc.net">#mentor: the Smogon Mentorship IRC channel</a><br />' +
+			'All of these links and more can be found at the <a href="http://www.smogon.com/mentorship/">Smogon Mentorship Program\'s hub</a>.');
+	},
+
 	calculator: 'calc',
 	calc: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -738,22 +750,24 @@
 		if (room.id === 'lobby') return this.sendReply('This command is too spammy for lobby.');
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Room drivers (%) can use:<br />' +
-			'- /mute <em>username</em>: 7 minute mute<br />' +
-			'- /hourmute <em>username</em>: 60 minute mute<br />' +
+			'- /warn OR /k <em>username</em>: warn a user and show the Pokemon Showdown rules<br />' +
+			'- /mute OR /m <em>username</em>: 7 minute mute<br />' +
+			'- /hourmute OR /hm <em>username</em>: 60 minute mute<br />' +
 			'- /unmute <em>username</em>: unmute<br />' +
-			'- /announce <em>message</em>: make an announcement<br />' +
+			'- /announce OR /wall <em>message</em>: make an announcement<br />' +
 			'<br />' +
 			'Room moderators (@) can also use:<br />' +
-			'- /roomban <em>username</em>: bans user from the room<br />' +
+			'- /roomban OR /rb <em>username</em>: bans user from the room<br />' +
 			'- /roomunban <em>username</em>: unbans user from the room<br />' +
 			'- /roomvoice <em>username</em>: appoint a room voice<br />' +
 			'- /roomdevoice <em>username</em>: remove a room voice<br />' +
-			'- /modchat <em>level</em>: set modchat (to turn off: /modchat off)<br />' +
+			'- /modchat <em>[off/autoconfirmed/+]</em>: set modchat level<br />' +
 			'<br />' +
 			'Room owners (#) can also use:<br />' +
 			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
 			'- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />' +
 			'- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />' +
+			'- /modchat <em>[%/@/#]</em>: set modchat level<br />' +
 			'- /declare <em>message</em>: make a global declaration<br />' +
 			'</div>');
 	},
@@ -809,7 +823,7 @@
 		if (target === 'all' || target === 'autoconfirmed') {
 			matched = true;
 			buffer += 'A user is autoconfirmed when they have won at least one rated battle and has been registered for a week or longer.<br />';
-		}	
+		}
 		if (!matched) {
 			return this.sendReply('The FAQ entry "'+target+'" was not found. Try /faq for general help.');
 		}
@@ -868,6 +882,7 @@
 		if (!this.canBroadcast()) return;
 
 		var targets = target.split(',');
+		if (toId(targets[0]) === 'previews') return this.sendReplyBox('<a href="http://www.smogon.com/forums/threads/sixth-generation-pokemon-analyses-index.3494918/">Generation 6 Analyses Index</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		var pokemon = Tools.getTemplate(targets[0]);
 		var item = Tools.getItem(targets[0]);
 		var move = Tools.getMove(targets[0]);

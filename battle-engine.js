@@ -228,6 +228,7 @@ var BattlePokemon = (function() {
 		this.baseAbility = toId(set.ability);
 		this.ability = this.baseAbility;
 		this.item = toId(set.item);
+		this.canMegaEvo = (this.battle.getItem(this.item).megaEvolves === this.species);
 		this.abilityData = {id: this.ability};
 		this.itemData = {id: this.item};
 		this.speciesData = {id: this.speciesid};
@@ -307,6 +308,15 @@ var BattlePokemon = (function() {
 			accuracy: 0, evasion: 0
 		};
 		this.stats = {atk:0, def:0, spa:0, spd:0, spe:0};
+		this.baseStats = {atk:10, def:10, spa:10, spd:10, spe:10};
+		for (var statName in this.baseStats) {
+			var stat = this.template.baseStats[statName];
+			stat = Math.floor(Math.floor(2*stat+this.set.ivs[statName]+Math.floor(this.set.evs[statName]/4))*this.level / 100 + 5);
+			var nature = this.battle.getNature(this.set.nature);
+			if (statName === nature.plus) stat *= 1.1;
+			if (statName === nature.minus) stat *= 0.9;
+			this.baseStats[statName] = Math.floor(stat);
+		};
 
 		this.maxhp = Math.floor(Math.floor(2*this.template.baseStats['hp']+this.set.ivs['hp']+Math.floor(this.set.evs['hp']/4)+100)*this.level / 100 + 10);
 		if (this.template.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
@@ -538,7 +548,7 @@ var BattlePokemon = (function() {
 			var moveName = move.move;
 			if (move.id === 'hiddenpower') {
 				moveName = 'Hidden Power '+this.hpType;
-				if (this.hpPower != 70) moveName += ' '+this.hpPower;
+				if (this.gen < 6) moveName += ' '+this.hpPower;
 			}
 			moves.push({
 				move: moveName,
@@ -1185,6 +1195,13 @@ var BattleSide = (function() {
 				details: pokemon.details,
 				condition: pokemon.getHealth(pokemon.side),
 				active: (pokemon.position < pokemon.side.active.length),
+				stats: {
+					atk: pokemon.baseStats['atk'],
+					def: pokemon.baseStats['def'],
+					spa: pokemon.baseStats['spa'],
+					spd: pokemon.baseStats['spd'],
+					spe: pokemon.baseStats['spe']
+				},
 				moves: pokemon.moves.map(function(move) {
 					if (move === 'hiddenpower') {
 						return move + toId(pokemon.hpType) + (pokemon.hpPower == 70?'':pokemon.hpPower);
@@ -1192,7 +1209,8 @@ var BattleSide = (function() {
 					return move;
 				}),
 				baseAbility: pokemon.baseAbility,
-				item: pokemon.item
+				item: pokemon.item,
+				canMegaEvo: pokemon.canMegaEvo
 			});
 		}
 		return data;
@@ -2439,6 +2457,7 @@ var Battle = (function() {
 		this.p1.foe = this.p2;
 
 		this.add('gametype', this.gameType);
+		this.add('gen', this.gen);
 
 		var format = this.getFormat();
 		Tools.mod(format.mod).getBanlistTable(format); // fill in format ruleset
@@ -2822,7 +2841,7 @@ var Battle = (function() {
 		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
 		// STAB
-		if (type !== '???' && pokemon.hasType(type)) {
+		if (move.hasSTAB || type !== '???' && pokemon.hasType(type)) {
 			// The "???" type never gets STAB
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
@@ -2830,8 +2849,7 @@ var Battle = (function() {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		var totalTypeMod = this.getEffectiveness(type, target);
-		totalTypeMod = this.singleEvent('ModifyEffectiveness', move, null, target, pokemon, move, totalTypeMod);
+		var totalTypeMod = this.getEffectiveness(move, target, pokemon);
 
 		totalTypeMod = clampIntRange(totalTypeMod, -3, 3);
 		if (totalTypeMod > 0) {

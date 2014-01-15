@@ -139,7 +139,7 @@ exports.BattleAbilities = {
 				if (targets[i].fainted) continue;
 				for (var j=0; j<targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
-					if (move.category !== 'Status' && (this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
+					if (move.category !== 'Status' && (this.getEffectiveness(move, pokemon) > 0 || move.ohko)) {
 						this.add('-message', pokemon.name+' shuddered! (placeholder)');
 						return;
 					}
@@ -655,7 +655,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
 		onSourceModifyDamage: function(damage, source, target, move) {
-			if (this.getEffectiveness(move.type, target) > 0) {
+			if (this.getEffectiveness(move, target) > 0) {
 				this.debug('Filter neutralize');
 					return this.chainModify(0.75);
 			}
@@ -959,7 +959,7 @@ exports.BattleAbilities = {
 		num: 62
 	},
 	"harvest": {
-		desc: "When the user uses a held Berry, it is restored at the end of the turn.",
+		desc: "When the user uses a held Berry, it has a 50% chance of having it restored at the end of the turn. This chance becomes 100% during Sunny Day.",
 		shortDesc: "50% chance this Pokemon's Berry is restored at the end of each turn. 100% in Sun.",
 		id: "harvest",
 		name: "Harvest",
@@ -1749,13 +1749,7 @@ exports.BattleAbilities = {
 		desc: "In battle, the Pokemon does not take damage from weather conditions like Sandstorm or Hail. It is also immune to powder moves.",
 		shortDesc: "This Pokemon is immune to residual weather damage, and powder moves.",
 		onImmunity: function(type, pokemon) {
-			if (type === 'sandstorm' || type === 'hail') return false;
-		},
-		onTryHit: function(pokemon, target, move) {
-			if (move.isPowder) {
-				this.add('-immune', pokemon, '[msg]', '[from] Overcoat');
-				return null;
-			}
+			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
 		id: "overcoat",
 		name: "Overcoat",
@@ -2245,10 +2239,18 @@ exports.BattleAbilities = {
 	"scrappy": {
 		desc: "This Pokemon has the ability to hit Ghost-type Pokemon with Normal-type and Fighting-type moves. Effectiveness of these moves takes into account the Ghost-type Pokemon's other weaknesses and resistances.",
 		shortDesc: "This Pokemon can hit Ghost-types with Normal- and Fighting-type moves.",
-		onFoeModifyPokemon: function(pokemon) {
-			if (pokemon.hasType('Ghost')) {
-				pokemon.negateImmunity['Normal'] = true;
-				pokemon.negateImmunity['Fighting'] = true;
+		onBeforeMove: function(pokemon, target, move) {
+			pokemon.addVolatile('scrappy');
+		},
+		effect: {
+			onAnyModifyPokemon: function(pokemon) {
+				if (pokemon.hasType('Ghost')) {
+					pokemon.negateImmunity['Normal'] = true;
+					pokemon.negateImmunity['Fighting'] = true;
+				}
+			},
+			onAfterMoveSecondarySelf: function(pokemon) {
+				pokemon.removeVolatile('scrappy');
 			}
 		},
 		id: "scrappy",
@@ -2477,7 +2479,7 @@ exports.BattleAbilities = {
 		desc: "Super-effective attacks only deal 3/4 their usual damage against this Pokemon.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
 		onSourceModifyDamage: function(damage, source, target, move) {
-			if (this.getEffectiveness(move.type, target) > 0) {
+			if (this.getEffectiveness(move, target) > 0) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -2855,7 +2857,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's attacks that are not very effective on a target do double damage.",
 		shortDesc: "This Pokemon's attacks that are not very effective on a target do double damage.",
 		onModifyDamage: function(damage, source, target, move) {
-			if (this.getEffectiveness(move.type, target) < 0) {
+			if (this.getEffectiveness(move, target) < 0) {
 				this.debug('Tinted Lens boost');
 				return this.chainModify(2);
 			}
@@ -3144,7 +3146,7 @@ exports.BattleAbilities = {
 		onTryHit: function(target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			this.debug('Wonder Guard immunity: '+move.id);
-			if (this.getEffectiveness(move.type, target) <= 0) {
+			if (this.getEffectiveness(move, target) <= 0) {
 				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;
 			}
