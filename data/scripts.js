@@ -1041,6 +1041,9 @@ exports.BattleScripts = {
 				case 'boltstrike':
 					if (!setupType && hasMove['fusionbolt']) rejected = true;
 					break;
+				case 'hiddenpowerice':
+					if (hasMove['icywind']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
@@ -1086,6 +1089,9 @@ exports.BattleScripts = {
 					break;
 				case 'lavaplume':
 					if (hasMove['willowisp']) rejected = true;
+					break;
+				case 'trickroom':
+					if (hasMove['rockpolish'] || hasMove['agility']) rejected = true;
 					break;
 				}
 

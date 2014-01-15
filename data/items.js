@@ -3490,13 +3490,7 @@ exports.BattleItems = {
 		name: "Safety Goggles",
 		spritenum: 0,
 		onImmunity: function(type, pokemon) {
-			if (type === 'sandstorm' || type === 'hail') return false;
-		},
-		onTryHit: function(pokemon, target, move) {
-			if (move.isPowder) {
-				this.add('-immune', pokemon, '[msg]', '[from] Safety Goggles');
-				return null;
-			}
+			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
 		num: -8,
 		gen: 6,

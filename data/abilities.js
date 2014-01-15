@@ -959,7 +959,7 @@ exports.BattleAbilities = {
 		num: 62
 	},
 	"harvest": {
-		desc: "When the user uses a held Berry, it is restored at the end of the turn.",
+		desc: "When the user uses a held Berry, it has a 50% chance of having it restored at the end of the turn. This chance becomes 100% during Sunny Day.",
 		shortDesc: "50% chance this Pokemon's Berry is restored at the end of each turn. 100% in Sun.",
 		id: "harvest",
 		name: "Harvest",
@@ -1749,13 +1749,7 @@ exports.BattleAbilities = {
 		desc: "In battle, the Pokemon does not take damage from weather conditions like Sandstorm or Hail. It is also immune to powder moves.",
 		shortDesc: "This Pokemon is immune to residual weather damage, and powder moves.",
 		onImmunity: function(type, pokemon) {
-			if (type === 'sandstorm' || type === 'hail') return false;
-		},
-		onTryHit: function(pokemon, target, move) {
-			if (move.isPowder) {
-				this.add('-immune', pokemon, '[msg]', '[from] Overcoat');
-				return null;
-			}
+			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
 		id: "overcoat",
 		name: "Overcoat",
