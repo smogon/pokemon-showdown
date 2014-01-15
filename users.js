@@ -960,7 +960,7 @@ var User = (function () {
 		formatid = toId(formatid);
 
 		// this should relieve login server strain
-		// this.mmrCache[formatid] = 1500;
+		// this.mmrCache[formatid] = 1000;
 
 		if (this.mmrCache[formatid]) {
 			callback.call(that, this.mmrCache[formatid]);
@@ -970,10 +970,10 @@ var User = (function () {
 			format: formatid,
 			user: this.userid
 		}, function(data) {
-			var mmr = 1500;
+			var mmr = 1000;
 			if (data) {
 				mmr = parseInt(data,10);
-				if (isNaN(mmr)) mmr = 1500;
+				if (isNaN(mmr)) mmr = 1000;
 			}
 			self.mmrCache[formatid] = mmr;
 			callback.call(that, mmr);
@@ -983,7 +983,7 @@ var User = (function () {
 		if (typeof mmr === 'number') {
 			this.mmrCache[formatid] = mmr;
 		} else {
-			this.mmrCache[formatid] = Math.floor((Number(mmr.rpr)*2+Number(mmr.r))/3);
+			this.mmrCache[formatid] = Number(mmr.acre);
 		}
 	};
 	User.prototype.mute = function(roomid, time, force, noRecurse) {
