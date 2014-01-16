@@ -2018,11 +2018,11 @@ var commands = exports.commands = {
 		this.addModCommand('All bans and locks have been lifted by '+user.name+'.');
 	},
 
-	permaban: function(target, room, user, connection) {
-		if (!target) return this.parse('/help permaban');
-		if (!user.hasConsoleAccess(connection)) {
-			return this.sendReply("/eval - Access denied.");
-		}
+	pban: 'permaban',
+	permban: 'permaban',
+	permaban: function(target, room, user) {
+		if (!target) return this.sendReply('/permaban [username] - Permanently bans the user from the server. Bans placed by this command do not reset when the server restarts.');
+		if (!this.can('permaban', targetUser)) return this.sendReply('Access denied.');              
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser) {
@@ -2032,11 +2032,32 @@ var commands = exports.commands = {
 			var problem = ' but was already banned';
 			return this.privateModCommand('('+targetUser.name+' would be banned by '+user.name+problem+'.)');
 		}
+		var self = this;
+		fs.appendFile('config/ipbans.txt','\n'+targetUser.latestIp, function(err) {
+			if (err) { 
+				self.sendReply('Uh oh! An error has occurred!');
+				console.log('/permaban crashed: '+err.stack);
+				return false;
+			}
+			targetUser.popup(user.name+" has permanently banned you. " + (target ? " (" + target + ")" : ""));
+			self.addModCommand(targetUser.name+" was permanently banned by "+user.name+"."+ (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
+			targetUser.ban();
+		});
+	},
 
-		targetUser.popup(user.name+" has permanently banned you.");
-		this.addModCommand(targetUser.name+" was permanently banned by "+user.name+".");
-		targetUser.ban();
-		ipbans.write('\n'+targetUser.latestIp);
+	unpermaban: function(target, room, user) {
+		if (!target) return this.sendReply('/unpermaban [IP] - Removes a permanent ban.');
+		if (!this.can('permaban')) return this.sendReply('Access denied.');
+		var self = this;
+		removeIpBan(target, function (found) {
+			if (found) {
+				self.privateModCommand('('+target+' was removed from the permanent ban list by '+user.name+'.)');
+				return;
+			} else {
+				self.sendReply(target+' was not found on the permanent ban list.');
+				return;
+			}
+		});
 	},
 
 	banip: function(target, room, user) {
@@ -3299,4 +3320,38 @@ function HueToRgb(m1, m2, hue) {
 		v = m1;
 
 	return (255 * v).toString(16);
+}
+
+function removeIpBan(target, callback) {
+	var data = fs.readFileSync('config/ipbans.txt','utf8');
+	var match = false;
+	var row = (''+data).split("\n");
+	var line = '';
+	if (!target) return false;
+	for (var i = row.length; i > -1; i--) {
+		if (!row[i]) continue;
+		var parts = row[i].split(",");
+		if (target == parts[0]) {
+			match = true;
+			line = line + row[i];
+			break;
+		}
+	}
+	if (match === true) {
+		var re = new RegExp(line,"g");
+		fs.readFile('config/ipbans.txt', 'utf8', function (err,data) {
+			if (err) {
+				return console.log(err);
+			}
+			var result = data.replace(re, '');
+			fs.writeFile('config/ipbans.txt', result, 'utf8', function (err) {
+				if (err) return console.log(err);
+			});
+			callback(true);
+			return;
+		});
+	} else {
+		callback(false);
+		return;
+	}
 }
