@@ -1184,6 +1184,16 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	adam: 'adamkillszombies',
+	adamkillszombies: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=100 src="http://pldh.net/media/pokemon/conquest/sprite/212.png">' +
+		'<img height=100 src="http://frostserver.net:8000/images/adamkillszombies.png">' +
+		'<img height=100 src="http://pldh.net/media/pokemon/gen2/crystal/212.gif"><br />' +
+		'<b>Ace:</b> Scizor <br />' +
+		'My destination is close, but it\'s very far...');
+	},
+
 	wiggly: 'wigglytuff',
 	wigglytuff: function(target, room, user) {
 		if (!this.canBroadcast()) return;
