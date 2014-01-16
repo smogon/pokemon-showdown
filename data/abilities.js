@@ -1801,7 +1801,7 @@ exports.BattleAbilities = {
 		desc: "Allows the Pokemon to hit twice with the same move in one turn. Second hit has 0.5x base power. Does not affect Status, multihit, or spread moves (in doubles).",
 		shortDesc: "Hits twice in one turn. Second hit has 0.5x base power.",
 		onModifyMove: function(move, pokemon, target) {
-			if (move.category !== 'Status' && !move.multihit && (target.side.active.length < 2 || move.target in {any:1, normal:1, randomNormal:1})) {
+			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && (target.side.active.length < 2 || move.target in {any:1, normal:1, randomNormal:1})) {
 				move.multihit = 2;
 				pokemon.addVolatile('parentalbond');
 			}
