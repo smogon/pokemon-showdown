@@ -1060,6 +1060,12 @@
 	 	if (!this.canBroadcast()) return;
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://i145.photobucket.com/albums/r239/FM_Nocturna/bth_rwby-sun_zps1b425c62.gif"></center>');
 	 },
+	 
+	 adam: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://i.minus.com/iUTbYOS2OZ56y.gif"></center>');
+	 },
+
 
 	 birkal: function(target, room, user) {
 	 	this.sendReply("It's not funny anymore.");
