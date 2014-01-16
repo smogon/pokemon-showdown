@@ -463,6 +463,7 @@ var GlobalRoom = (function() {
 			i++;
 		}
 		this.lastBattle = i;
+		rooms.global.writeNumRooms();
 		newRoom = this.addRoom('battle-'+formaturlid+'-'+i, format, p1, p2, this.id, rated);
 		p1.joinRoom(newRoom);
 		p2.joinRoom(newRoom);
@@ -732,7 +733,6 @@ var BattleRoom = (function() {
 			});
 		}); // asychronicity
 		//console.log(JSON.stringify(logData));
-		rooms.global.writeNumRooms();
 	};
 	BattleRoom.prototype.send = function(message, user) {
 		if (user) {
