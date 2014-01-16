@@ -1056,6 +1056,10 @@
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://31.media.tumblr.com/tumblr_lrzvrmMDMl1r1l46do1_500.gif"></center>');
 	 },
 
+	 wukong: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://i145.photobucket.com/albums/r239/FM_Nocturna/bth_rwby-sun_zps1b425c62.gif"></center>');
+	 },
 
 	 birkal: function(target, room, user) {
 	 	this.sendReply("It's not funny anymore.");
