@@ -1070,6 +1070,11 @@
 	 	if (!this.canBroadcast()) return;
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://images4.fanpop.com/image/photos/16900000/Okami-Animated-Gif-s-okami-amaterasu-16966304-320-225.gif"></center>');
 	 },
+	 	 	 
+	 kissandmakeup: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://static.tumblr.com/163f6e361ace5ed3ab961a6700abbd15/auelhnj/nf4mrcg1x/tumblr_static_kiss.gif"></center>');
+	 },
 
 
 	 birkal: function(target, room, user) {
