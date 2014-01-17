@@ -3518,6 +3518,7 @@ var Battle = (function() {
 
 				decisions.push({
 					choice: 'switch',
+					priority: (side.currentRequest === 'switch' ? 101 : undefined),
 					pokemon: side.pokemon[i],
 					target: side.pokemon[data]
 				});
