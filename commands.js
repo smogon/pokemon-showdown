@@ -550,7 +550,7 @@ var commands = exports.commands = {
 	zuku: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox ('<center>Trainer:<font color="#9A9C26"><b>Zukushiku</b></font><br />' +
-                   '<center>Types: Dark (OU), Dark (UU E4), Rock (RU E4), Grass(NU)<br />' +
+                   '<center>Types:Fairy(OU E4), Dark (UU E4), Rock (RU E4), Grass(NU)<br />' +
                    '<center>Signature Pokemon: <font color="red"><b>Victini</b></font><br />' +
                    '<center>Catchphrase: I\'ll swallow swords spit up my pride, I follow through again this time. I\'ll be just fine...<br />' +
                    '<center><img src="http://www.smogon.com/download/sprites/bwmini/494.gif">');
@@ -627,10 +627,11 @@ var commands = exports.commands = {
 						'<center><a href="http://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="http://www.smogon.com/download/sprites/bwmini/492-s.gif"></a>');
 	},
 
-	cheese: function(target, room, user) {
+	cheese:'platty',
+	platty: function(target, room, user) {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color=" #0772CF"><b>platinumCheesecake</b></font><br />' +
-						'<center>Types:Poison(NU, RU)<br />' +
+						'<center>Types:Ghost(OU), Poison(NU, RU)<br />' +
 						'<center>Signature Pokemon:<font color="purple"><b>Golbat</b></font><br />' +
 						'<center>Catchphrase: wait so i can put anything i want here?<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/42.gif">');
@@ -642,7 +643,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#2610B7"><b>blizzardq</b></font><br />' +
 						'<center>Signature Pokemon: <font color="blue"><b>Keldeo</b></font><br />' +
-						'<center>Catchphrase:雪.<br />' +
+						'<center>Catchphrase: こんにちは.<br />' +
 						'<center>PM me command ideas. I am a coder for Amethyst. <br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/647.gif">');
 	},
@@ -670,7 +671,6 @@ var commands = exports.commands = {
 	wise: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#AC6116"><b>wisecarver</b></font><br />' +
-						'<center>Types: Fairy(OU)<br />' +
 						'<center>Signature Pokemon: <b>Mawile</b><br />' +
 						'<center>Catchphrase: "Every strike brings me closer to my next homerun" ~Babe Ruth<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/303.gif">');
@@ -695,9 +695,9 @@ var commands = exports.commands = {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color="#C51BC0"><b>GymLe@derTouchMe</b></font><br />' +
                          			 '<center>Types: Water(OU)<br />' +
-						 '<center>Signature Pokemon:<font color="orange"><b>Magikarp</b></font><br />' +
+						 '<center>Signature Pokemon:<font color="#E8E23A"><b>Magikarp</b></font><br />' +
 						 '<center>Catchphrase: YOU AINT GOT NO PANCAKE MIX!<br />' +
-						 '<center><img src="http://www.smogon.com/download/sprites/bwmini/186.gif">');
+						 '<center><img src="http://www.smogon.com/download/sprites/bwmini/129.gif">');
 	},
 
 	umbreon: function(target, room, user) {
@@ -768,7 +768,7 @@ var commands = exports.commands = {
 	hc: function(target, room, user) {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#1B7E15"><b>hostageclam</b></font><br />' +
-						'<center>Types: Bug(UU, RU, NU)<br />' +
+						'<center>Types: Bug(OU, UU, RU, NU)<br />' +
 						'<center>Signature Pokemon: <font color="black"><b>Pangoro</b></font><br />' +
 						'<center>Catchphrase:Get rekt Skrubb<br />' +
 						'<center><img src="http://www.serebii.net/pokedex-xy/icon/675.png">');
@@ -812,7 +812,9 @@ var commands = exports.commands = {
 	},
 
 
-	cc: function(target, room, user) {
+	cc: 'crazyclown',
+	crazyclown94: 'crazyclown94',
+	crazyclown94: function(target, room, user) {
 	if (!this.canBroadcast()) return;
 	return this.sendReplyBox('<center>Trainer:<font color="#985B06"><b>CrazyClown94</b></font><br />' +
 							 '<center>Types: Psychic(UU)<br />' +
@@ -824,7 +826,6 @@ var commands = exports.commands = {
 	cuddly: function(target, room, user) {
 	if (!this.canBroadcast()) return;
 	this.sendReplyBox('<center>Trainer:<font color="#0639BC"><b>Cuddly</b></font><br />' +
-					  '<center>Types: Ghost(OU)<br />' +
 					  '<center>Signature Pokemon:<font color="green"><b>Golurk</b></font><br />' +
 					  '<center>Catchphrase: I....I am the monument to all your sins<br />' +
 					  '<center><img src="http://www.smogon.com/download/sprites/bwmini/623.gif">');
@@ -854,16 +855,22 @@ var commands = exports.commands = {
 
 	batman: 'aortega',
 	ao: 'aortega',
+	piiiikalover: 'aortega',
 	pidovelover: 'aortega',
 	aortega: function(target, room, user) {
 			if(!this.canBroadcast()) return;
-			this.sendReplyBox('AOrtega: OU, E4, Fairy type, etc etc.');
+			this.sendReplyBox('<center>Trainer:<font color="#3B2692"><b>AOrtega</b></font><br />' +
+					  '<center>Types: Fighting(OU)<br />' +
+					  '<center>Signature Pokemon:<font color="#9C029C"><b>piiiikachuuu</b></font><br />' +
+					  '<center>252+ SpA Machamp Focus Blast vs. 4 HP / 0 SpD Piiiikachuuu: 238-282 (112.2 - 133%) -- guaranteed OHKO<br />' +
+					  '<center><img src="http://www.smogon.com/download/sprites/bwmini/25.gif">');
 	},
 
 	silver: 'hope',
 	hope: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Trainer: <font color="#1355A0"><b>Eclair de Larmes</b></font>(plus many other alts)<br />' +
+		this.sendReplyBox('<center>Trainer: <font color="#92C51B"><b>Vanitаѕ</b></font>(plus many other alts)<br />' +
+					'<center>Types: Flying(OU)<br />' +
 					'<center>Signature Pokemon: <font color="#265892"><b>AOrtega</b></font><br />' +
 					'<center>Catchphrase:veni, vidi, vici.</br />' +
 					'<center><img src="http://www.smogon.com/download/sprites/bwmini/428.gif">');
@@ -888,19 +895,19 @@ var commands = exports.commands = {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('A list of the active Amethyst UU leaders can be found <a href = "http://pastebin.com/2EwGFFEW" target = _blank>here</a>.');
 	},
+	
+	rugymleaders: 'ruleaders',
+	rugl: 'ruleaders',
+	ruleaders: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('A list of the active Amethyst RU leaders can be found <a href = "http://pastebin.com/VM3bJLL6" target = _blank>here</a> and <a href="http://amethystserver.freeforums.net/thread/65/ru-gls-e4s">here</a>.');
+	},
 
 	nugymleaders: 'nuleaders',
 	nugl: 'nuleaders',
 	nuleaders: function(target, room, user) {
    		if (!this.canBroadcast()) return;
 		this.sendReplyBox('A list of the active Amethyst NU leaders can be found <a href = "http://pastebin.com/WwAmXACt" target = _blank>here</a>. RIP NU League.');
-	},
-
-	rugymleaders: 'ruleaders',
-	rugl: 'ruleaders',
-	ruleaders: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('A list of the active Amethyst RU leaders can be found <a href = "http://pastebin.com/VM3bJLL6" target = _blank>here</a> and <a href="http://amethystserver.freeforums.net/thread/65/ru-gls-e4s">here</a>.');
 	},
 
 	cry: 'complain',
