@@ -1254,7 +1254,7 @@ var commands = exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 		if (!this.can('warn', targetUser, room)) return false;
-		var msg = " kicked by " + user.name + (!target?"":" (" + target + ")") + ".";
+		var msg = "kicked by " + user.name + (!target?"":" (" + target + ")") + ".";
 		room.add(targetUser.name + " was " + msg); 
 		targetUser.popup("You have been " + msg); 
 		targetUser.disconnectAll();
