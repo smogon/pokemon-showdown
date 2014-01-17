@@ -1065,6 +1065,11 @@
 	 	if (!this.canBroadcast()) return;
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://i.minus.com/iUTbYOS2OZ56y.gif"></center>');
 	 },
+	 	 
+	 ama: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://images4.fanpop.com/image/photos/16900000/Okami-Animated-Gif-s-okami-amaterasu-16966304-320-225.gif"></center>');
+	 },
 
 
 	 birkal: function(target, room, user) {
