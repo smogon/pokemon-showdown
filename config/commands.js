@@ -1078,7 +1078,7 @@
 	 	 	 
 	 demon: function(target, room, user) {
 	 	if (!this.canBroadcast()) return;
-	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://img837.imageshack.us/img837/3570/blaze.gif></center>');
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://img837.imageshack.us/img837/3570/blaze.gif"></center>');
 	 },
 
 	 birkal: function(target, room, user) {
