@@ -812,8 +812,8 @@ var commands = exports.commands = {
 	},
 
 
-	cc: 'crazyclown',
-	crazyclown94: 'crazyclown94',
+	cc: 'crazyclown94',
+	crazyclown: 'crazyclown94',
 	crazyclown94: function(target, room, user) {
 	if (!this.canBroadcast()) return;
 	return this.sendReplyBox('<center>Trainer:<font color="#985B06"><b>CrazyClown94</b></font><br />' +
