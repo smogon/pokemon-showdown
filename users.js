@@ -941,19 +941,6 @@ var User = (function () {
 		}
 		return alts;
 	};
-	User.prototype.getHighestRankedAlt = function() {
-		var result = this;
-		var groupRank = config.groupsranking.indexOf(this.group);
-		for (var i in users) {
-			if (users[i] === this) continue;
-			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			if (config.groupsranking.indexOf(users[i].group) <= groupRank) continue;
-
-			result = users[i];
-			groupRank = config.groupsranking.indexOf(users[i].group);
-		}
-		return result;
-	};
 	User.prototype.doWithMMR = function(formatid, callback, that) {
 		var self = this;
 		if (that === undefined) that = this;
