@@ -1075,7 +1075,11 @@
 	 	if (!this.canBroadcast()) return;
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://static.tumblr.com/163f6e361ace5ed3ab961a6700abbd15/auelhnj/nf4mrcg1x/tumblr_static_kiss.gif"></center>');
 	 },
-
+	 	 	 
+	 demon: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://img837.imageshack.us/img837/3570/blaze.gif></center>');
+	 },
 
 	 birkal: function(target, room, user) {
 	 	this.sendReply("It's not funny anymore.");
