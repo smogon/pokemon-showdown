@@ -159,7 +159,7 @@ var commands = exports.commands = {
 		}
 
 		this.sendReply('User: '+targetUser.name);
-		if (user.can('alts', targetUser.getHighestRankedAlt())) {
+		if (user.can('alts', targetUser)) {
 			var alts = targetUser.getAlts();
 			var output = '';
 			for (var i in targetUser.prevNames) {
@@ -171,6 +171,7 @@ var commands = exports.commands = {
 			for (var j=0; j<alts.length; j++) {
 				var targetAlt = Users.get(alts[j]);
 				if (!targetAlt.named && !targetAlt.connected) continue;
+				if (targetAlt.group === '~' && user.group !== '~') continue;
 
 				this.sendReply('Alt: '+targetAlt.name);
 				output = '';
