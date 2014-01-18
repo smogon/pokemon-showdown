@@ -119,6 +119,7 @@ Owner
 Staff
 
 - Bill Meltsner [bmelts] - Development
+- Hugh Gordon [V4] - Research (game mechanics), Development
 - Juanma Serrano [Joim] - Development
 
 Retired Staff
@@ -130,7 +131,6 @@ Contributors
 
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
 - Cody Thompson [Rising_Dusk] - Development
-- Hugh Gordon [V4] - Research (game mechanics), Development
 - Kyle Dove [Kyle_Dove] - Art (battle backdrops)
 - Robin Vandenbrande [Quinella] - Development
 - Samuel Teo [Yilx] - Art (main background)
