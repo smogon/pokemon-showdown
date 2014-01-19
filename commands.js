@@ -1368,8 +1368,7 @@ var commands = exports.commands = {
 		
 		if (cmd === 'banana') {
 			this.addModCommand(""+targetUser.name+" was hit by "+user.name+"'s banana." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
-		} else {
-		if (cmd === 'bh') {
+		} else if (cmd === 'bh') {
 			this.addModCommand(""+targetUser.name+" was hit by "+user.name+"'s banhammer." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
 		} else {
 			this.addModCommand(""+targetUser.name+" was banned by "+user.name+"." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
