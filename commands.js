@@ -15,6 +15,7 @@ var crypto = require('crypto');
 var poofeh = true;
 var ipbans = fs.createWriteStream('config/ipbans.txt', {'flags': 'a'});
 var league = fs.createWriteStream('config/league.txt', {'flags': 'a'});
+var leagueuu = fs.createWriteStream('config/uuleague.txt', {'flags': 'a'});
 var avatars = fs.createWriteStream('config/avatars.txt', {'flags': 'a'});
 var code = fs.createWriteStream('config/friendcodes.txt', {'flags': 'a'});
 
@@ -74,18 +75,18 @@ var commands = exports.commands = {
 		return user.send('|popup|'+codes);
 	},
 	
-	registerleague: function(target, room, user) {
+	registerleagueou: function(target, room, user) {
 		var leagues = fs.readFileSync('config/league.txt','utf8');
 		if (leagues.indexOf(user.name) > -1) {
 			return this.sendReply("You are already registered for the league.");
 		}
 		if (!target) {
-			return this.sendReply('/registerleague [Pokemon 1,2,3,4,5,6] - Register for the Amethyst OU League.');
+			return this.sendReply('/registerleagueou [Pokemon 1,2,3,4,5,6] - Register for the Amethyst OU League.');
 		}
 		target = target.toLowerCase();
 		target = target.split(',');
 		if (target.length < 6) {
-			return this.sendReply('/registerleague [Pokemon 1,2,3,4,5,6] - Register for the Amethyst OU League.');
+			return this.sendReply('/registerleagueou [Pokemon 1,2,3,4,5,6] - Register for the Amethyst OU League.');
 		}
 		var pokemonNames = [];
 		for (var i = 0; i < target.length; i++) {
@@ -96,17 +97,55 @@ var commands = exports.commands = {
 			}
 			var template = Tools.getTemplate(pokemon.species);
 			if (template.tier === 'Uber') {
-				return this.sendReply('Your team includes an Uber, which is banned in the Amethyst Leagues.');
+				return this.sendReply('Your team includes an Uber, which is banned in the Amethyst OU League. ');
 			}
 			pokemonNames.push(pokemon.species);
 		}
 		league.write('\n'+user.name+'\'s team: '+pokemonNames.join(', '));
-		return this.sendReply('Your team of '+pokemonNames.join(', ')+' has been submitted successfully. Wait for Kozman or Dark Girafarig to PM you before challenging gym leaders.');
+		return this.sendReply('Your team of '+pokemonNames.join(', ')+' has been submitted successfully.');
+	},
+
+	registerleagueuu: function(target, room, user) {
+		var leaguesuu = fs.readFileSync('config/uuleague.txt','utf8');
+		if (leagues.indexOf(user.name) > -1) {
+			return this.sendReply("You are already registered for the league.");
+		}
+		if (!target) {
+			return this.sendReply('/registerleagueuu [Pokemon 1,2,3,4,5,6] - Register for the Amethyst UU League.');
+		}
+		target = target.toLowerCase();
+		target = target.split(',');
+		if (target.length < 6) {
+			return this.sendReply('/registerleagueuu [Pokemon 1,2,3,4,5,6] - Register for the Amethyst UU League.');
+		}
+		var pokemonNames = [];
+		for (var i = 0; i < target.length; i++) {
+			var pokemon = toId(target[i]);
+			pokemon = Tools.dataSearch(pokemon)[0];
+			if (!pokemon || pokemon.searchType != 'pokemon') {
+				return this.sendReply('At least one of these is not a Pokemon: '+target[i]);
+			}
+			var template = Tools.getTemplate(pokemon.species);
+			if (template.tier === 'Uber' || template.tier === 'OU') {
+				return this.sendReply('Your team includes an Uber or OU, which is banned in the Amethyst UU League.');
+			}
+			pokemonNames.push(pokemon.species);
+		}
+		leagueuu.write('\n'+user.name+'\'s team: '+pokemonNames.join(', '));
+		return this.sendReply('Your team of '+pokemonNames.join(', ')+' has been submitted successfully.');
 	},
 
 	viewleague: function(target, room, user) {
 		var lr = fs.readFileSync('config/league.txt','utf8');
-		user.send('|popup|'+lr);
+		var uulr = fs.readFileSync('config/uuleague.txt','utf8');
+		if (!target) {
+			return this.sendReply('/viewleague [ou / uu] - View the registered people for the Amethyst Leagues.')
+		}
+		if (target.toLowerCase() === 'ou'){
+			user.send('|popup|'+lr);
+		}else if(target.toLowerCase() === 'uu') {
+			user.send('|popup|' +uulr);
+		}
 	},
 
 	math: function(target, room, user) {
