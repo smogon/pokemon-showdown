@@ -267,6 +267,7 @@ exports.groups = {
 		id: "Trainer",
 		name: "Trainer",
 		inherit: '+u',
+		away: true,
 		broadcast: true,
 		rank: 2
 	},
