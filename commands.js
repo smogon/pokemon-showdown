@@ -78,7 +78,7 @@ var commands = exports.commands = {
 	registerleagueou: function(target, room, user) {
 		var leagues = fs.readFileSync('config/league.txt','utf8');
 		if (leagues.indexOf(user.name) > -1) {
-			return this.sendReply("You are already registered for the league.");
+			return this.sendReply("You are already registered for the Amethyst OU League.");
 		}
 		if (!target) {
 			return this.sendReply('/registerleagueou [Pokemon 1,2,3,4,5,6] - Register for the Amethyst OU League.');
@@ -108,7 +108,7 @@ var commands = exports.commands = {
 	registerleagueuu: function(target, room, user) {
 		var leaguesuu = fs.readFileSync('config/uuleague.txt','utf8');
 		if (leaguesuu.indexOf(user.name) > -1) {
-			return this.sendReply("You are already registered for the league.");
+			return this.sendReply("You are already registered for the Amethyst UU League.");
 		}
 		if (!target) {
 			return this.sendReply('/registerleagueuu [Pokemon 1,2,3,4,5,6] - Register for the Amethyst UU League.');
@@ -139,7 +139,7 @@ var commands = exports.commands = {
 		var lr = fs.readFileSync('config/league.txt','utf8');
 		var uulr = fs.readFileSync('config/uuleague.txt','utf8');
 		if (!target) {
-			return this.sendReply('/viewleague [ou / uu] - View the registered people for the Amethyst Leagues.')
+			return this.sendReply('/viewleague [ou / uu] - View the registered people and their team for the Amethyst Leagues.')
 		}
 		if (target.toLowerCase() === 'ou'){
 			user.send('|popup|'+lr);
@@ -2003,7 +2003,7 @@ var commands = exports.commands = {
 
 	b: 'ban',
 	barn: 'ban',
-	ban: function(target, room, user, cmd) {
+	ban: function(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ban');
 
 		target = this.splitTarget(target);
