@@ -1343,6 +1343,7 @@ var commands = exports.commands = {
 		}
 	},
 
+	banana: 'ban',
 	bh: 'ban',
 	b: 'ban',
 	ban: function(target, room, user, connection, cmd) {
@@ -1365,6 +1366,9 @@ var commands = exports.commands = {
 		targetUser.popup(user.name+" has banned you." + (config.appealurl ? ("  If you feel that your banning was unjustified you can appeal the ban:\n" + config.appealurl) : "") + "\n\n"+target);
 		if (Rooms.rooms.logroom) Rooms.rooms.logroom.addRaw('BAN LOG: ' + user.name + ' has banned ' + targetUser.name + ' from ' + room.id + '.');
 		
+		if (cmd === 'banana') {
+			this.addModCommand(""+targetUser.name+" was hit by "+user.name+"'s banana." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
+		} else {
 		if (cmd === 'bh') {
 			this.addModCommand(""+targetUser.name+" was hit by "+user.name+"'s banhammer." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
 		} else {
