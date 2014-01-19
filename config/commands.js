@@ -1404,6 +1404,11 @@ var commands = exports.commands = {
         	'<b>Ace:</b> Shiftry<br /><b>Catchphrase: </b> Kicking your ass will be my pleasure!</center>');
     },
     
+    pikabluswag: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src=http://i.imgur.com/hwiX34o.gif><img src=http://i.imgur.com/6v22j6r.gif height=60 width=310><img src=http://i.imgur.com/QXiZE1a.gif><br><br><b>Ace:</b> Azumarill<br>The important thing is not how long you live. It\'s what you accomplish with your life. </center>');
+    },
+    
     scizorknight: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img height="100" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/212.gif">' +
@@ -1411,6 +1416,11 @@ var commands = exports.commands = {
         	'<img height="100" src="http://img.pokemondb.net/sprites/black-white/anim/shiny/breloom.gif"><br />' +
         	'<b>Ace:</b> Scizor<br />' +
         	'<b>Catchphrase:</b> I Love The Way You lose ♥</center>');
+    },
+    
+    jitlittle: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://24.media.tumblr.com/8183478ad03360a7c1d02650c53b4b35/tumblr_msfcxcMyuV1qdk3r4o1_500.gif" height="100" width="140"><img src="http://i.imgur.com/Vxjzq2x.gif" height="85" width="250"><img src="http://25.media.tumblr.com/b2af3f147263f1ef10252a31f0796184/tumblr_mkvyqqnhh51snwqgwo1_500.gif" height="100" width="140"></center></br><center><b>Ace:</b> Jirachi</center></br><center><b>"</b>Cuteness will always prevail over darkness<b>"</b></center>');
     },
 
     bibliaskael: 'kael',
