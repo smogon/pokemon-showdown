@@ -718,7 +718,7 @@ var commands = exports.commands = {
 	pony: function(target, room, user, connection) {
 		if(!this.canBroadcast()) return connection.sendTo(room,'You cannot broadcast this.');
 		if (this.broadcasting && !user.can('warn') && user.userid != 'blizzardq') return connection.sendTo(room,'Due to spam, this command is restricted when being broadcasted.');
-		this.add('|raw|<center><img src="http://31.media.tumblr.com/c75cf0dbf3b7b14afd62ac4d228fb57a/tumblr_mj59oo9OS71rb26uco1_400.gif">');
+		this.sendReplyBox('<center><img src="http://31.media.tumblr.com/c75cf0dbf3b7b14afd62ac4d228fb57a/tumblr_mj59oo9OS71rb26uco1_400.gif">');
 	},
 
 	absol: function(target, room, user) {
@@ -857,6 +857,7 @@ var commands = exports.commands = {
 	if (!this.canBroadcast()) return;
 	return this.sendReplyBox('<center>Trainer:<font color="#985B06"><b>CrazyClown94</b></font><br />' +
 							 '<center>Types: Psychic(UU)<br />' +
+							 '<center>Badge: The Crazy Badge.<br />' +
 							 '<center>Signature Pokemon:<font color="red"><b>Medicham</b></font><br />' +
 							 '<center>Catchphrase: Puppies eat waffles for breakfast<br />' +
 							 '<center><a href="http://www.youtube.com/watch?v=Iyv905Q2omU"><img src="http://www.smogon.com/download/sprites/bwmini/308.gif"></a>');
@@ -1189,6 +1190,9 @@ var commands = exports.commands = {
 		var btags = '<strong><font color='+hashColor(Math.random().toString())+'" >';
 		var etags = '</font></strong>'
 		var targetid = toUserid(user);
+		if (user.name.indexOf('<') > -1 || user.name.indexOf('>') > -1) {
+			return this.sendReply('No HTML.');
+		}
 		if(!user.muted && target){
 			var tar = toUserid(target);
 			var targetUser = Users.get(tar);
@@ -1235,8 +1239,11 @@ var commands = exports.commands = {
 	},
 
 	cpoof: function(target, room, user){
-		if(!user.can('broadcast'))
-			return this.sendReply('/cpoof - Access Denied');
+		if(!user.can('broadcast')) return this.sendReply('/cpoof - Access Denied');
+		if (user.name.indexOf('<') > -1 || user.name.indexOf('>') > -1) {
+			return this.sendReply('No HTML.');
+		}
+	
 		if(poofeh) {
 			var btags = '<strong><font color="'+hashColor(Math.random().toString())+'" >';
 			var etags = '</font></strong>'
