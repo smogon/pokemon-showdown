@@ -1076,26 +1076,13 @@ var User = (function () {
 		}
 		return alts;
 	};
-	User.prototype.getHighestRankedAlt = function() {
-		var result = this;
-		var groupRank = config.groupsranking.indexOf(this.group);
-		for (var i in users) {
-			if (users[i] === this) continue;
-			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			if (config.groupsranking.indexOf(users[i].group) <= groupRank) continue;
-
-			result = users[i];
-			groupRank = config.groupsranking.indexOf(users[i].group);
-		}
-		return result;
-	};
 	User.prototype.doWithMMR = function(formatid, callback, that) {
 		var self = this;
 		if (that === undefined) that = this;
 		formatid = toId(formatid);
 
 		// this should relieve login server strain
-		// this.mmrCache[formatid] = 1500;
+		// this.mmrCache[formatid] = 1000;
 
 		if (this.mmrCache[formatid]) {
 			callback.call(that, this.mmrCache[formatid]);
@@ -1105,22 +1092,22 @@ var User = (function () {
 			format: formatid,
 			user: this.userid
 		}, function(data) {
-			var mmr = 1500;
+			var mmr = 1000;
 			if (data) {
 				mmr = parseInt(data,10);
-				if (isNaN(mmr)) mmr = 1500;
+				if (isNaN(mmr)) mmr = 1000;
 			}
 			self.mmrCache[formatid] = mmr;
 			callback.call(that, mmr);
 		});
 	};
 	User.prototype.cacheMMR = function(formatid, mmr) {
-		if (typeof mmr === 'number') {
-			this.mmrCache[formatid] = mmr;
-		} else {
-			this.mmrCache[formatid] = parseInt(mmr.rpr,10);
-		}
-	};
+        if (typeof mmr === 'number') {
+            this.mmrCache[formatid] = mmr;
+        } else {
+            this.mmrCache[formatid] = Number(mmr.acre);
+        }
+    };
 	User.prototype.mute = function(roomid, time, force, noRecurse) {
 		if (!roomid) roomid = 'lobby';
 		if (this.mutedRooms[roomid] && !force) return;
