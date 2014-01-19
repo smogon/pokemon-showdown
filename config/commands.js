@@ -1873,14 +1873,13 @@ var commands = exports.commands = {
 		'<h3><font color="purple"><b>Purple</b></font color>/<font color="pink"><b>Pink</b></font color>: Fail<img src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/385.gif"></h3>')
 	},
 
-	biblialeague: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		if (room.id === 'lobby' && this.broadcasting) return this.sendReply('This command is too spammy for lobby.');
-		this.sendReplyBox('<font color="green"><b>The Biblia League</b></font color><br \>' +
-		'Champions of the Biblia League: †Champion Lights† and †Champion Maxerus†<br \>' + 
-		'Quote: Get \'Tinid<br \>' +
-		'Make sure to check out our website by clicking <a href="http://biblialeague.webs.com/">here</a>!<br \>' +
-		'<img src="http://i.imgur.com/94mtyFk.png">')
+	'lights': 'scarftini', 
+	scarftini: function(target, room, user) {
+		if (!this.canBroadcast()) return; 
+		this.sendReplyBox('<center><img src="http://i.imgur.com/HbuF0aR.png"><br />' + 
+		'<b>Ace:</b> Victini <br />' + 
+		'Owner of Trinity and former head of Biblia. Aggression is an art form. I am simply an artist.<br />' +
+		'<img src="http://img-cache.cdn.gaiaonline.com/1a962e841da3af2acaced68853cd194d/http://i1070.photobucket.com/albums/u485/nitehawkXD/victini.gif"></center>');
 	},
 	
 	/*Masters of the Colors commands*/
