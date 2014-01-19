@@ -905,7 +905,7 @@ var commands = exports.commands = {
 					  '<center><img src="http://www.smogon.com/download/sprites/bwmini/25.gif">');
 	},
 
-	silver: 'hope',
+	/* silver: 'hope',
 	hope: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer: <font color="#92C51B"><b>Vanitаѕ</b></font>(plus many other alts)<br />' +
@@ -913,7 +913,7 @@ var commands = exports.commands = {
 					'<center>Signature Pokemon: <font color="#265892"><b>AOrtega</b></font><br />' +
 					'<center>Catchphrase:veni, vidi, vici.</br />' +
 					'<center><img src="http://www.smogon.com/download/sprites/bwmini/428.gif">');
-	},
+	}, */
 
 	league: 'leagueintro',
 	leagueintro: function(target, room, user) {
