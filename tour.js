@@ -348,7 +348,7 @@ exports.tour = function(t) {
 					tooSmall += '(this is not an official chatroom)';
 				}
 				//end tour
-				Rooms.rooms[rid].addRaw('<h2><font color="green">Congratulations <font color="black">' + Users.users[w[0]].name + '</font>!  You have won the ' + Tools.data.Formats[tour[rid].tier].name + ' Tournament!<br>You have also won ' + tourMoney + ' Frost ' + p + '! ' + tooSmall + '</font></h2>' + '<br><font color="blue"><b>SECOND PLACE:</b></font> ' + Users.users[l[0]].name + '<hr />');
+				Rooms.rooms[rid].addRaw('<h2><font color="green">Congratulations <font color="black">' + Users.users[w[0]].name + '</font>!  You have won the ' + Tools.data.Formats[tour[rid].tier].name + ' Tournament!<br>You have also won ' + tourMoney + ' Frost ' + p + '! ' + tooSmall + '</font></h2>' + '<br><font color="blue"><b>SECOND PLACE:</b></font> ' + Users.users[l[0]].name + '<hr />');			
 				if (tour[rid].size >= 8) {
 					try {
 						frostcommands.addTourWin(Users.users[w[0]].name, Tools.data.Formats[tour[rid].tier].name); //for recording tour stats
@@ -394,6 +394,7 @@ exports.tour = function(t) {
 					log.write("\n"+Users.users[w[0]].userid+','+Users.users[w[0]].money);
 				}
 				tour[rid].status = 0;
+				if (tourMoney > 0) fs.appendFile('logs/transactions.log','\n'+Date()+': '+Users.users[w[0]].name+' has won '+tourMoney+' '+p+' from a tournament in '+Rooms.rooms[rid].title+'. They now have '+Users.users[w[0]].money);	
 			} else {
 				var html = '<hr /><h3><font color="green">Round '+ tour[rid].roundNum +'!</font></h3><font color="blue"><b>TIER:</b></font> ' + Tools.data.Formats[tour[rid].tier].name + "<hr /><center>";
 				var pBye = new Array();
