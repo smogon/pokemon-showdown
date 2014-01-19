@@ -1184,6 +1184,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	piscean: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=150 width=150 src="http://i0.kym-cdn.com/photos/images/newsfeed/000/535/926/ff5.gif">' +
+			'<img src="http://i.imgur.com/h7D9eju.gif">' +
+			'<img height=150 width=150 src="http://fc09.deviantart.net/fs24/f/2008/004/1/2/Pisces_by_Angel_Blaze.jpg"><br />' +
+			'<b>Ace:</b> Fish<br />' +
+			'<b>Catchphrase:</b> Tempting Piscean will bring about the wrath of the sea. </center>');
+	},
+
 	adam: 'adamkillszombies',
 	adamkillszombies: function(target, room, user) {
 		if (!this.canBroadcast()) return;
