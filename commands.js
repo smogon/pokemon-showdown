@@ -717,7 +717,7 @@ var commands = exports.commands = {
 
 	pony: function(target, room, user, connection) {
 		if(!this.canBroadcast()) return connection.sendTo(room,'You cannot broadcast this.');
-		if (this.broadcasting && !user.can('warn') && user.userid != 'blizzardq') return connection.sendTo(room,'Due to spam, this command is restricted when being broadcasted.');
+		if (this.broadcasting && !user.can('warn')) return connection.sendTo(room,'Due to spam, this command is restricted when being broadcasted.');
 		this.sendReplyBox('<center><img src="http://31.media.tumblr.com/c75cf0dbf3b7b14afd62ac4d228fb57a/tumblr_mj59oo9OS71rb26uco1_400.gif">');
 	},
 
