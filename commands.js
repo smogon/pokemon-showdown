@@ -107,7 +107,7 @@ var commands = exports.commands = {
 
 	registerleagueuu: function(target, room, user) {
 		var leaguesuu = fs.readFileSync('config/uuleague.txt','utf8');
-		if (leagues.indexOf(user.name) > -1) {
+		if (leaguesuu.indexOf(user.name) > -1) {
 			return this.sendReply("You are already registered for the league.");
 		}
 		if (!target) {
