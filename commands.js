@@ -717,8 +717,8 @@ var commands = exports.commands = {
 
 	pony: function(target, room, user, connection) {
 		if(!this.canBroadcast()) return connection.sendTo(room,'You cannot broadcast this.');
-		if (this.broadcasting && !user.can('warn')) return connection.sendTo(room,'Due to spam, this command is restricted when being broadcasted.');
-		this.sendReplyBox('<center><img src="http://31.media.tumblr.com/c75cf0dbf3b7b14afd62ac4d228fb57a/tumblr_mj59oo9OS71rb26uco1_400.gif">');
+		if (this.broadcasting && !user.can('warn') && user.userid != 'blizzardq') return connection.sendTo(room,'Due to spam, this command is restricted when being broadcasted.');
+		this.add('|raw|<center><img src="http://31.media.tumblr.com/c75cf0dbf3b7b14afd62ac4d228fb57a/tumblr_mj59oo9OS71rb26uco1_400.gif">');
 	},
 
 	absol: function(target, room, user) {
@@ -2002,7 +2002,8 @@ var commands = exports.commands = {
 	},
 
 	b: 'ban',
-	ban: function(target, room, user) {
+	barn: 'ban',
+	ban: function(target, room, user, cmd) {
 		if (!target) return this.parse('/help ban');
 
 		target = this.splitTarget(target);
@@ -2021,8 +2022,11 @@ var commands = exports.commands = {
 		}
 
 		targetUser.popup(user.name+" has banned you." + (config.appealurl ? ("  If you feel that your banning was unjustified you can appeal the ban:\n" + config.appealurl) : "") + "\n\n"+target);
-
-		this.addModCommand(""+targetUser.name+" was banned by "+user.name+"." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
+		if (cmd === 'barn') {
+			this.addModCommand(""+targetUser.name+" was barned by the nub "+user.name+" for so and so reason." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
+		}else{
+			this.addModCommand(""+targetUser.name+" was banned by "+user.name+"." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
+		}
 		var alts = targetUser.getAlts();
 		if (alts.length) {
 			this.addModCommand(""+targetUser.name+"'s alts were also banned: "+alts.join(", "));
