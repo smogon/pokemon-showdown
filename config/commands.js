@@ -1467,21 +1467,9 @@ var commands = exports.commands = {
         	'<img src="http://pokecharms.com/data/trainercardmaker/characters/custom/Cosplayers/p491.png"><br />' +
         	'<b>Ace:</b> Darkrai<br />' +
         	'<b>Catchphrase:</b> I got so many ghost hoes I lost count</center>');
-    },	
+    },		
     
-    jitlittle : 'elitistregion',
-    elitist: 'elitistregion',
-    theelitistregion : 'elitistregion',
-    elitistregion: function(target, room, user) {
-        if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img height="100" src="http://i.neoseeker.com/m/467283_photo.gif">' +
-        	'<img height="100" src="http://i.imgur.com/fZwex8l.png">' +
-        	'<img height="100" src="http://fc05.deviantart.net/fs71/f/2010/218/2/2/Sunkern_avatar_by_SilverSail.gif"><br />' +
-        	'<b>Ace:</b> The Kern; I will duck you up<br />' +
-        	'<b>"Reach For the Elite"</b></center>');
-    },	
-
-	priest: function(target, room, user) {
+    priest: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img width="140" height="100" src="http://images.wikia.com/es.pokemon/images/archive/3/35/20090105180143!Heatran_en_Pok%C3%A9mon_Ranger_2.png"><img src="http://i.imgur.com/BkVihDY.png"><img src="http://192.184.93.156:8000/avatars/priest4.png"><br /><font color="red"><blink>Ace: Heatran</blink></font><br />Are you ready to face holyness itself? Will you open the door to my temple? Let your chakras make the decision for you.</center>');
     },
