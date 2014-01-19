@@ -839,7 +839,7 @@ var commands = exports.commands = {
 						'<center>Types: /eval (OU, UU, RU, NU)<br />' +
 						'<center>Signature Pokemon: <font color="brown"><b>Buizel</b></font><br />' +
 						'<center>Catchphrase: kk<br />' +
-						'<center><img src="http://www.smogon.com/download/sprites/bwmini/418.gif">');
+						'<center><a href="https://www.youtube.com/watch?v=AqPpqALiMMQ"><img src="http://www.smogon.com/download/sprites/bwmini/418.gif"></a>');
 	},
 
 
