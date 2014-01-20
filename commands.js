@@ -649,7 +649,7 @@ var commands = exports.commands = {
 		this.sendReplyBox ('<center>Trainer: <font color="#199461"><b>Skymin</b></font><br />' +
 						'<center>Signature Pokemon: <font color="#3CC977"><b>Shaymin-Sky</b></font><br />' +
 						'<center> Ha. Get ready, get set, let\'s roll, <br> In steady increase of control, <br> One limit, that\'s time to let go, <br> The end is slow.<br />' +
-					'<center><a href="https://www.listenonrepeat.com/watch/?v=e9ZEd5pI-Vk">Battle Theme</a><br />' +
+					 	'<center><a href="https://www.listenonrepeat.com/watch/?v=e9ZEd5pI-Vk">Battle Theme</a><br />' +
 						'<center><a href="http://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="http://www.smogon.com/download/sprites/bwmini/492-s.gif"></a>');
 	},
 
@@ -658,9 +658,9 @@ var commands = exports.commands = {
 		if(!this.canBroadcast()) return;
 		this.sendReplyBox('<center>Trainer:<font color=" #0772CF"><b>platinumCheesecake</b></font><br />' +
 						'<center>Types:Ghost(OU), Poison(NU, RU)<br />' +
-						'<center>Signature Pokemon:<font color="purple"><b>Golbat</b></font><br />' +
+						'<center>Signature Pokemon:<font color="green"><b>Lotad</b></font><br />' +
 						'<center>Catchphrase: wait so i can put anything i want here?<br />' +
-						'<center><img src="http://www.smogon.com/download/sprites/bwmini/42.gif">');
+						'<center><img src="http://www.smogon.com/download/sprites/bwmini/270.gif">');
 	},
 
 	blizzard: 'blizzy',
@@ -1221,7 +1221,7 @@ var commands = exports.commands = {
 
 	cpoof: function(target, room, user){
 		if(!user.can('broadcast')) return this.sendReply('/cpoof - Access Denied');
-		if (user.name.indexOf('<') > -1 || user.name.indexOf('>') > -1) {
+		if (user.name.indexOf('<') > -1 || user.name.indexOf('>') > -1 || target.indexOf('<') > -1 || target.indexOf('>') >-1) {
 			return this.sendReply('No HTML.');
 		}
 	
@@ -2011,7 +2011,7 @@ var commands = exports.commands = {
 
 		targetUser.popup(user.name+" has banned you." + (config.appealurl ? ("  If you feel that your banning was unjustified you can appeal the ban:\n" + config.appealurl) : "") + "\n\n"+target);
 		if (cmd === 'barn') {
-			this.addModCommand(""+targetUser.name+" was barned by the nub "+user.name+" for so and so reason." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
+			this.addModCommand(""+targetUser.name+" was barned by "+user.name+" for so and so reason." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
 		}else{
 			this.addModCommand(""+targetUser.name+" was banned by "+user.name+"." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
 		}
@@ -3215,7 +3215,7 @@ var commands = exports.commands = {
 };
 
 function getRandMessage(user){
-	var numMessages = 39;
+	var numMessages = 40;
 	var message = '~~ ';
 	switch(Math.floor(Math.random()*numMessages)){
 		case 0: message = message + user.name + ' has vanished into nothingness!';
@@ -3293,6 +3293,8 @@ function getRandMessage(user){
 		case 36: message = message + user.name + ' used Run Away!';
 		break;
 		case 37: message = message + user.name + ' was splashed by a Magikarp!';
+		break;
+		case 38: message = message + user.name + ' said kupo x EnerG218!';
 		break;
 		default: message = message + user.name + ' fled from colonial mustang!';
 	};
