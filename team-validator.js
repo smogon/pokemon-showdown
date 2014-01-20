@@ -103,7 +103,7 @@ if (!process.send) {
 
 	if (config.crashguard) {
 		process.on('uncaughtException', function (err) {
-			require('./crashlogger.js')(err, 'A simulator process');
+			require('./crashlogger.js')(err, 'A team validator process');
 		});
 	}
 
