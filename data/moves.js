@@ -7042,7 +7042,7 @@ exports.BattleMovedex = {
 				return this.chainModify(1.5);
 			}
 		},
-		onHit: function(target, source) {
+		onAfterHit: function(target, source) {
 			if (source.hp) {
 				var item = target.getItem();
 				if (item.id === 'mail') {
