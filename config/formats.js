@@ -3,9 +3,82 @@
 
 exports.Formats = [
 
+	// Amethyst Metas
+	///////////////////////////////////////////////////////////////////
+	{
+		name: "Clash of Tiers",
+		section: "Amethyst Metas",
+
+		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers', 'Tier Clash Clause'],
+		banlist: []
+	},
+	{
+		name: "Mixed Tier",
+		section: "Amethyst Metas",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Mixed Tier Clause'],
+		banlist: ['Gengarite', 'Soul Dew']
+	},
+	{
+		name: "Monotype Tier Shift",
+		section: "Amethyst Metas",
+
+		mod: "tiershift",
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview', 'Same Type Clause'],
+		banlist: ['Uber', 'Gengarite', 'Soul Dew']
+	},
+	{
+		name: "Kill The Mailman",
+		section: "Amethyst Metas",
+
+		mod: 'mailman',
+		onFaint: function(pokemon) {
+			if (pokemon.side.pokemon[0].item === 'mail') {
+				var name = pokemon.side.name;
+				var winner = '';
+				var message = 'the mailman of '+name+' fainted.';
+				if (pokemon.side.id === 'p1') {
+					if (this.p2.pokemon[0].item === 'mail') {
+						winner = 'p2';
+						message = 'The mailman of '+this.p1.name+' was KOed by the mailman of '+this.p2.name+'.';
+					} else {
+						winner = 'p1';
+					}
+				} else {
+					if (this.p1.pokemon[0].item === 'mail') {
+						winner = 'p1';
+						message = 'The mailman of '+this.p2.name+' was KOed by the mailman of '+this.p1.name+'.';
+					} else {
+						winner = 'p2';
+					}
+				}
+				this.add('message', message);
+				pokemon.battle.win(winner);
+			}
+			if (pokemon.side.pokemonLeft === 1) {
+				var loser = '';
+				this.debug('1 poke left');
+				for (var i = 0; i < pokemon.side.team.length; i ++) {
+					if (pokemon.side.pokemon[i].fainted === true) continue;
+					if (pokemon.side.pokemon[i].item === 'Mail') {
+						loser = pokemon.side.id;
+						this.debug('checking for item');
+					}
+				}
+				if (loser === 'p1') {
+					this.add('message', 'Since '+this.p2.name+' managed to KO all of '+this.p1.name+'\'s Pokemon except for their mailman, '+this.p2.name+' has won the battle!');
+					pokemon.battle.win('p2');
+				} else {
+					this.add('message', 'Since '+this.p1.name+' managed to KO all of '+this.p2.name+'\'s Pokemon except for their mailman, '+this.p1.name+' has won the battle!');
+					pokemon.battle.win('p1');
+				}
+			}
+		},
+		ruleset: ['Pokemon', 'Standard Pokebank', 'Evasion Abilities Clause', 'Team Preview', 'Mailman Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Frisk', 'Explosion', 'Self-Destruct', 'Final Gambit', 'Arena Trap', 'Shedinja', 'Perish Song']
+	},
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
-
 	{
 		name: "Random Battle",
 		section: "XY Singles",
@@ -50,6 +123,12 @@ exports.Formats = [
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela']
+	},
+	{
+		name: "OU Monotype",
+		section: "XY Singles",
+
+		ruleset: ['OU', 'Same Type Clause']
 	},
 	{
 		name: "LC UU",
@@ -458,12 +537,6 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "OU Monotype",
-		section: "Other Metagames",
-
-		ruleset: ['OU', 'Same Type Clause']
-	},
-	{
 		name: "STABmons",
 		section: "Other Metagames",
 
@@ -480,15 +553,6 @@ exports.Formats = [
 		banlist: ['Unreleased', 'Illegal', 'Ignore Illegal Abilities', 'Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Slaking', 'Regigigas']
 	},
 	{
-		name: "Gen-NEXT OU",
-		section: "Other Metagames",
-
-		mod: 'gennext',
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
-		banlist: ['Uber']
-	},
-	{
 		name: "[Gen 5] Glitchmons",
 		section: "Other Metagames",
 
@@ -497,6 +561,34 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Unreleased'],
 		mimicGlitch: true
+	},
+	{
+		name: "[Gen 5] PU",
+		section: "Other Metagames",
+
+		mod: 'gen5',
+		searchShow: false,
+		ruleset: ['NU'],
+		banlist: ["Charizard", "Wartortle", "Kadabra", "Golem", "Haunter", "Exeggutor", "Weezing", "Kangaskhan", "Pinsir", "Lapras", "Ampharos", "Misdreavus", "Piloswine", "Miltank", "Ludicolo", "Swellow", "Gardevoir", "Ninjask", "Torkoal", "Cacturne", "Altaria", "Armaldo", "Gorebyss", "Regirock", "Regice", "Bastiodon", "Floatzel", "Drifblim", "Skuntank", "Lickilicky", "Probopass", "Rotom-Fan", "Samurott", "Musharna", "Gurdurr", "Sawk", "Carracosta", "Garbodor", "Sawsbuck", "Alomomola", "Golurk", "Braviary", "Electabuzz", "Electrode", "Liepard", "Tangela", "Eelektross", "Ditto", "Seismitoad", "Zangoose", "Roselia", "Serperior", "Metang", "Tauros", "Cradily", "Primeape", "Scolipede", "Jynx", "Basculin", "Gigalith", "Camerupt", "Golbat"]
+	},
+	{
+		name: "[Gen 5] Budgetmons",
+		section: "Other Metagames",
+
+		mod: 'gen5',
+		searchShow: false,
+		ruleset: ['OU'],
+		banlist: [],
+		validateTeam: function(team, format) {
+			var bst = 0;
+			for (var i=0; i<team.length; i++) {
+				var template = this.getTemplate(team[i].species);
+				Object.values(template.baseStats, function(value) {
+					bst += value;
+				});
+			}
+			if (bst > 2300) return ['The combined BST of your team is greater than 2300.'];
+		}
 	},
 
 	// BW2 Singles
@@ -650,100 +742,6 @@ exports.Formats = [
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
-	},
-
-	// Past Generations
-	///////////////////////////////////////////////////////////////////
-
-	{
-		name: "[Gen 4] OU (beta)",
-		section: "Past Generations",
-
-		mod: 'gen4',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber'],
-
-		column: 2
-	},
-	{
-		name: "[Gen 4] UU (beta)",
-		section: "Past Generations",
-
-		mod: 'gen4',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'OU', 'BL']
-	},
-	{
-		name: "[Gen 4] Hackmons",
-		section: "Past Generations",
-
-		mod: 'gen4',
-		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod'],
-		banlist: []
-	},
-	{
-		name: "[Gen 4] Custom Game",
-		section: "Past Generations",
-
-		mod: 'gen4',
-		searchShow: false,
-		debug: true,
-		ruleset: []
-	},
-	{
-		name: "[Gen 3] Hackmons",
-		section: "Past Generations",
-
-		mod: 'gen3',
-		searchShow: false,
-		debug: true,
-		ruleset: ['Pokemon', 'HP Percentage Mod'],
-		banlist: []
-	},
-	{
-		name: "[Gen 3] Custom Game",
-		section: "Past Generations",
-
-		mod: 'gen3',
-		searchShow: false,
-		debug: true,
-		ruleset: []
-	},
-	{
-		name: "[Gen 2] OU (beta)",
-		section: "Past Generations",
-
-		mod: 'gen2',
-		debug: true,
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Mean Look + Hypnosis + Perish Song']
-	},
-	{
-		name: "[Gen 2] Custom Game",
-		section: "Past Generations",
-
-		mod: 'gen2',
-		searchShow: false,
-		debug: true,
-		ruleset: ['Pokemon']
-	},
-	{
-		name: "[Gen 1] OU (beta)",
-		section: "Past Generations",
-
-		mod: 'gen1',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
-	},
-	{
-		name: "[Gen 1] Custom Game",
-		section: "Past Generations",
-
-		mod: 'gen1',
-		searchShow: false,
-		debug: true,
-		ruleset: ['Pokemon']
 	}
-
+	
 ];

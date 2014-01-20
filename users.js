@@ -32,6 +32,7 @@ var numUsers = 0;
 var bannedIps = {};
 var lockedIps = {};
 
+var ipbans = fs.createWriteStream('config/ipbans.txt', {'flags': 'a'});
 /**
  * Get a user.
  *

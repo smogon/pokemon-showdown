@@ -463,5 +463,137 @@ exports.BattleFormats = {
 			}
 			return ["Your team must share a type."];
 		}
+	},
+	//Amethyst Metas
+	///////////////////////////////////////////////////////////////
+	tierclashclause: {
+		effectType: 'Rule',
+		onStart: function() {
+			this.add('rule', 'Tier Clash Clause: Limit the number of each tier');
+		},
+		validateTeam: function(team, format) {
+		var points = 0
+		for(var i = 0; i < team.length; i++) {
+			var template = this.getTemplate(team[i].species);
+			var tier = template.tier;
+			if(tier === 'OU' || tier === 'Limbo' || tier === 'BL') {
+				points = points + 5;
+			}
+			if(tier === 'Uber') {
+				points = points + 6;
+			}
+			if(tier === 'UU' || tier === 'BL2') {
+				points = points + 4;
+			}
+			if(tier === 'RU' || tier === 'BL3') {
+				points = points + 3;
+			}
+			if(tier === 'NU' || tier === 'NFE') {
+				points = points + 2;
+			}
+			if(tier === 'LC') {
+				points = points + 1;
+			}
+		}
+		if(points > 6) {
+		return ["You have gone over your total allowed points, which is 6. Ubers are worth 6, OU is worth 5, UU is worth 4, RU is worth 3, NU is worth 2, and LC is worth 1. You currently have used " + points + " points."];
+			}
+			}
+	},
+	mixedtierclause: {
+		effectType: 'Rule',
+		onStart: function() {
+			this.add('rule', 'Mixed Tier Clause: One Pokemon from each tier');
+		},
+		validateTeam: function(team, format) {
+			var uber = false;
+			var ou = false;
+			var uu = false;
+			var ru = false;
+			var nu = false;
+			var lc = false;
+			var missingtiers = [];
+			for (var i = 0; i < team.length; i++) {
+				var template = this.getTemplate(team[i].species);
+				var tier = template.tier;
+				if (tier === 'Uber') {
+					uber = true;
+				}
+				if (tier === 'OU' || tier === 'BL') {
+					ou = true;
+				}
+				if (tier === 'UU' || tier === 'BL2') {
+					uu = true;
+				}
+				if (tier === 'RU' || tier === 'BL3') {
+					ru = true;
+				}
+				if (tier === 'NU' || tier === 'NFE') {
+					nu = true;
+				}
+				if (tier === 'LC') {
+					lc = true;
+				}
+			}
+			if (uber === false || ou === false || uu === false || ru === false || nu === false || lc === false) {
+				if (uber === false) {
+					missingtiers.push('Uber');
+				}
+				if (ou === false) {
+					missingtiers.push('OU');
+				}
+				if (uu === false) {
+					missingtiers.push('UU');
+				}
+				if (ru === false) {
+					missingtiers.push('RU');
+				}
+				if (nu === false) {
+					missingtiers.push('NU');
+				}
+				if (lc === false) {
+					missingtiers.push('LC');
+				}
+				return ['You must have one Pokemon from each of the following tiers: Uber, OU, UU, RU, NU, and LC. You are missing Pokemon from the following tiers: ' + missingtiers.join(', ') + '.'];
+			}
+		}
+	},
+	mailmanclause: {
+		effectType: 'Rule',
+		validateTeam: function(team, format) {
+			var problems = [];
+			var mailman = [];
+			for (var i = 0; i < team.length; i++) {
+				var template = this.getTemplate(team[i].species);
+				if (!team[i]) {
+					problems.push('You do not have enough Pokemon.\n');
+				}
+				if (team[i].level < 100) {
+					problems.push('Your Pokemon must all be at level 100.\n');
+				}
+				if (team[i].item === 'Mail') {
+					mailman.push(i);
+				}
+			}
+			if (mailman.length > 1) {
+				problems.push('You can only have one mailman.');
+			}
+			if (mailman.length < 1) {
+				problems.push('One of your Pokemon must be holding Mail.');
+			}
+			if (mailman.length === 1) {
+				var i = mailman[0];
+				for (var c = 0; c < team[i].moves.length; c++) {
+					var move = this.getMove(team[i].moves[c]);
+					if (move.category === 'Status') {	
+						problems.push('Your mailman cannot have status moves.');
+					}
+				}
+			}
+			if (problems[0] != undefined) {
+				return problems;
+			}
+		}
 	}
+	
 };
