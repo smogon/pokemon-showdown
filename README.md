@@ -121,6 +121,7 @@ Staff
 - Bill Meltsner [bmelts] - Development
 - Hugh Gordon [V4] - Research (game mechanics), Development
 - Juanma Serrano [Joim] - Development
+- [The Immortal] - Development
 
 Retired Staff
 
@@ -134,5 +135,4 @@ Contributors
 - Kyle Dove [Kyle_Dove] - Art (battle backdrops)
 - Robin Vandenbrande [Quinella] - Development
 - Samuel Teo [Yilx] - Art (main background)
-- [The Immortal] - Development
 - Vivian Zou [Vtas] - Art (alternate main background)
