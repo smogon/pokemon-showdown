@@ -7335,8 +7335,10 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onFoeModifyMove: function(move) {
-				move.accuracy = true;
-				move.alwaysHit = true;
+				if (source === this.effectData.source) {
+					move.accuracy = true;
+					move.alwaysHit = true;
+				}
 			}
 		},
 		secondary: false,
