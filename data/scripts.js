@@ -448,6 +448,7 @@ exports.BattleScripts = {
 				if (!isSelf && !isSecondary) {
 					this.runEvent('Hit', target, pokemon, move);
 				}
+				if (moveData.onAfterHit) hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
 			}
 
 			if (!hitResult && !didSomething && !moveData.self) {
