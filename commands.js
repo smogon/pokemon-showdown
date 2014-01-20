@@ -75,7 +75,8 @@ var commands = exports.commands = {
 		return user.send('|popup|'+codes);
 	},
 	
-	registerleagueou: function(target, room, user) {
+	registerleagueou: 'rlou',
+	rlou: function(target, room, user) {
 		var leagues = fs.readFileSync('config/league.txt','utf8');
 		if (leagues.indexOf(user.name) > -1) {
 			return this.sendReply("You are already registered for the Amethyst OU League.");
@@ -105,7 +106,8 @@ var commands = exports.commands = {
 		return this.sendReply('Your team of '+pokemonNames.join(', ')+' has been submitted successfully.');
 	},
 
-	registerleagueuu: function(target, room, user) {
+	registerleagueuu:'rluu',
+	rluu: function(target, room, user) {
 		var leaguesuu = fs.readFileSync('config/uuleague.txt','utf8');
 		if (leaguesuu.indexOf(user.name) > -1) {
 			return this.sendReply("You are already registered for the Amethyst UU League.");
@@ -844,14 +846,6 @@ var commands = exports.commands = {
 							 '<center><a href="http://www.youtube.com/watch?v=Iyv905Q2omU"><img src="http://www.smogon.com/download/sprites/bwmini/308.gif"></a>');
 	},
 	
-	cuddly: function(target, room, user) {
-	if (!this.canBroadcast()) return;
-	this.sendReplyBox('<center>Trainer:<font color="#0639BC"><b>Cuddly</b></font><br />' +
-					  '<center>Signature Pokemon:<font color="green"><b>Golurk</b></font><br />' +
-					  '<center>Catchphrase: I....I am the monument to all your sins<br />' +
-					  '<center><img src="http://www.smogon.com/download/sprites/bwmini/623.gif">');
-	},
-
 	energ: 'energ218',
 	lexielover:'energ218',
 	energ218: function(target, room, user) {
@@ -886,16 +880,6 @@ var commands = exports.commands = {
 					  '<center>252+ SpA Machamp Focus Blast vs. 4 HP / 0 SpD Piiiikachuuu: 238-282 (112.2 - 133%) -- guaranteed OHKO<br />' +
 					  '<center><img src="http://www.smogon.com/download/sprites/bwmini/25.gif">');
 	},
-
-	/* silver: 'hope',
-	hope: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Trainer: <font color="#92C51B"><b>Vanitаѕ</b></font>(plus many other alts)<br />' +
-					'<center>Types: Flying(OU)<br />' +
-					'<center>Signature Pokemon: <font color="#265892"><b>AOrtega</b></font><br />' +
-					'<center>Catchphrase:veni, vidi, vici.</br />' +
-					'<center><img src="http://www.smogon.com/download/sprites/bwmini/428.gif">');
-	}, */
 
 	league: 'leagueintro',
 	leagueintro: function(target, room, user) {
