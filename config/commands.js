@@ -1821,6 +1821,11 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://i.imgur.com/OXSg9bK.gif"><br><img src="http://i.imgur.com/4JGoVHH.gif"><font size="7" color="#B40404"><i>Sir Cookie</i><img src="http://i.imgur.com/KWcACrr.gif"></font></color><br><center>Bandi is mine. MINEMINEMINE');
 	},
 	
+	swedishmafia: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://www.uagna.it/wp-content/uploads/2012/10/Swedish-House-Mafia-Dont-You-Worry-Child-80x80.jpg"><img height="80" width="390" src="http://i.imgur.com/D01llqs.png"><img src="http://blowingupfast.com/wp-content/uploads/2011/05/Machine-Gun-Kelly.jpg"><br>Ace: The Power of Music<br>They say that love is forever... Your forever is all that I need~ Please staaay as long as you need~</center>');
+	},
+	
 	piled: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/fnRdooU.png"><img src="http://i.imgur.com/hbo7FGZ.gif"><img src="http://i.imgur.com/KV9HmIk.png"><br><center>Ace: Ditto<br>PILED&PURPTIMUS PRIME!!! MHM..YEAH!!!');
