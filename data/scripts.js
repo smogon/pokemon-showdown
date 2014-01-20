@@ -448,6 +448,7 @@ exports.BattleScripts = {
 				if (!isSelf && !isSecondary) {
 					this.runEvent('Hit', target, pokemon, move);
 				}
+				if (moveData.onAfterHit) hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
 			}
 
 			if (!hitResult && !didSomething && !moveData.self) {
@@ -1041,6 +1042,9 @@ exports.BattleScripts = {
 				case 'boltstrike':
 					if (!setupType && hasMove['fusionbolt']) rejected = true;
 					break;
+				case 'hiddenpowerice':
+					if (hasMove['icywind']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
@@ -1086,6 +1090,9 @@ exports.BattleScripts = {
 					break;
 				case 'lavaplume':
 					if (hasMove['willowisp']) rejected = true;
+					break;
+				case 'trickroom':
+					if (hasMove['rockpolish'] || hasMove['agility']) rejected = true;
 					break;
 				}
 
@@ -1548,7 +1555,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && !this.getTemplate(i).evos.length) {
+			if (this.data.FormatsData[i].viableMoves && !this.data.FormatsData[i].isNonstandard && !this.getTemplate(i).evos.length) {
 				keys.push(i);
 			}
 		}

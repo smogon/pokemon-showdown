@@ -959,7 +959,7 @@ exports.BattleAbilities = {
 		num: 62
 	},
 	"harvest": {
-		desc: "When the user uses a held Berry, it is restored at the end of the turn.",
+		desc: "When the user uses a held Berry, it has a 50% chance of having it restored at the end of the turn. This chance becomes 100% during Sunny Day.",
 		shortDesc: "50% chance this Pokemon's Berry is restored at the end of each turn. 100% in Sun.",
 		id: "harvest",
 		name: "Harvest",
@@ -1749,13 +1749,7 @@ exports.BattleAbilities = {
 		desc: "In battle, the Pokemon does not take damage from weather conditions like Sandstorm or Hail. It is also immune to powder moves.",
 		shortDesc: "This Pokemon is immune to residual weather damage, and powder moves.",
 		onImmunity: function(type, pokemon) {
-			if (type === 'sandstorm' || type === 'hail') return false;
-		},
-		onTryHit: function(pokemon, target, move) {
-			if (move.isPowder) {
-				this.add('-immune', pokemon, '[msg]', '[from] Overcoat');
-				return null;
-			}
+			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
 		id: "overcoat",
 		name: "Overcoat",
@@ -1807,7 +1801,7 @@ exports.BattleAbilities = {
 		desc: "Allows the Pokemon to hit twice with the same move in one turn. Second hit has 0.5x base power. Does not affect Status, multihit, or spread moves (in doubles).",
 		shortDesc: "Hits twice in one turn. Second hit has 0.5x base power.",
 		onModifyMove: function(move, pokemon, target) {
-			if (move.category !== 'Status' && !move.multihit && (target.side.active.length < 2 || move.target in {any:1, normal:1, randomNormal:1})) {
+			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && (target.side.active.length < 2 || move.target in {any:1, normal:1, randomNormal:1})) {
 				move.multihit = 2;
 				pokemon.addVolatile('parentalbond');
 			}
@@ -2245,10 +2239,18 @@ exports.BattleAbilities = {
 	"scrappy": {
 		desc: "This Pokemon has the ability to hit Ghost-type Pokemon with Normal-type and Fighting-type moves. Effectiveness of these moves takes into account the Ghost-type Pokemon's other weaknesses and resistances.",
 		shortDesc: "This Pokemon can hit Ghost-types with Normal- and Fighting-type moves.",
-		onFoeModifyPokemon: function(pokemon) {
-			if (pokemon.hasType('Ghost')) {
-				pokemon.negateImmunity['Normal'] = true;
-				pokemon.negateImmunity['Fighting'] = true;
+		onBeforeMove: function(pokemon, target, move) {
+			pokemon.addVolatile('scrappy');
+		},
+		effect: {
+			onAnyModifyPokemon: function(pokemon) {
+				if (pokemon.hasType('Ghost')) {
+					pokemon.negateImmunity['Normal'] = true;
+					pokemon.negateImmunity['Fighting'] = true;
+				}
+			},
+			onAfterMoveSecondarySelf: function(pokemon) {
+				pokemon.removeVolatile('scrappy');
 			}
 		},
 		id: "scrappy",
