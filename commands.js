@@ -1221,13 +1221,12 @@ var commands = exports.commands = {
 
 	cpoof: function(target, room, user){
 		if(!user.can('broadcast')) return this.sendReply('/cpoof - Access Denied');
-		if (user.name.indexOf('<') > -1 || user.name.indexOf('>') > -1 || target.indexOf('<') > -1 || target.indexOf('>') >-1) {
-			return this.sendReply('No HTML.');
-		}
+		if (!target) return this.sendReply('Usage: /cpoof [message]');
 	
 		if(poofeh) {
 			var btags = '<strong><font color="'+hashColor(Math.random().toString())+'" >';
 			var etags = '</font></strong>'
+			target = escapeHTML(target);
 			Rooms.rooms.lobby.addRaw(btags + '~~ '+user.name+' '+target+'! ~~' + etags);
 			this.logModCommand(user.name + ' used a custom poof message: \n "'+target+'"');
 			user.disconnectAll();
@@ -3394,4 +3393,13 @@ function removeIpBan(target, callback) {
 		callback(false);
 		return;
 	}
+}
+
+function escapeHTML(target) {
+	if (!target) return false;
+	target = target.replace(/&(?!\w+;)/g, '&amp;')
+  	target = target.replace(/</g, '&lt;')
+    target = target.replace(/>/g, '&gt;')
+   	target = target.replace(/"/g, '&quot;');
+   	return target;
 }
