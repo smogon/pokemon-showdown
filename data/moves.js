@@ -7334,7 +7334,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'lockon',
 		effect: {
 			duration: 2,
-			onFoeModifyMove: function(move) {
+			onFoeModifyMove: function(move, source, target) {
 				if (source === this.effectData.source) {
 					move.accuracy = true;
 					move.alwaysHit = true;
