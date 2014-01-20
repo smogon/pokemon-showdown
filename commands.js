@@ -553,19 +553,6 @@ var commands = exports.commands = {
 		return this.privateModCommand('|html|(' + user.name + ' has made <font color="red">' +this.targetUsername+ '</font>\'s prior links unclickable.)');
 	},
 
-	colonialmustang: 'mustang',
-	mustang: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<b>Information on Gym Le@der Mustang:</b><br />'+
-						'Type: Ground<br />' +
-						'Tier: Over Used (OU)<br />' +
-						'<a href="gymleadermustang.wix.com%2F-amethystleague%23!gym-leaders%2FaboutPage" target="_blank">Thread</a><br />' +
-						'Signature Pokemon: Nidoking<br />' +
-						'<img src="http://www.poke-amph.com/black-white/sprites/small/034.png"><br />' +
-						'Badge: Flame Alchemy Badge<br />' +
-						'<img src="http://i1305.photobucket.com/albums/s542/TheBattleTowerPS/132_zpsb8a73a6e.png">');
-	},
-
 	kozman: 'koz',
 	koz: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -713,12 +700,6 @@ var commands = exports.commands = {
 						'<center>Signature Pokemon: <b>Mawile</b><br />' +
 						'<center>Catchphrase: "Every strike brings me closer to my next homerun" ~Babe Ruth<br />' +
 						'<center><img src="http://www.smogon.com/download/sprites/bwmini/303.gif">');
-	},
-
-	pony: function(target, room, user, connection) {
-		if(!this.canBroadcast()) return connection.sendTo(room,'You cannot broadcast this.');
-		if (this.broadcasting && !user.can('warn')) return connection.sendTo(room,'Due to spam, this command is restricted when being broadcasted.');
-		this.sendReplyBox('<center><img src="http://31.media.tumblr.com/c75cf0dbf3b7b14afd62ac4d228fb57a/tumblr_mj59oo9OS71rb26uco1_400.gif">');
 	},
 
 	absol: function(target, room, user) {
