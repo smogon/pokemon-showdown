@@ -1207,11 +1207,7 @@ var commands = exports.commands = {
 	wiggly: 'wigglytuff',
 	wigglytuff: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/D30ksbl.gif" height="100 width=100">' +
-			'<marquee behavior="alternate" scrollamount="2" width="40%"><img src="http://i.imgur.com/Iqexc1A.gif"></marquee>' +
-			'<img src="http://i.imgur.com/8oUvNAt.gif" height="100" width="100"><br />' +
-			'<b>Ace:</b> Chatot<br />'+
-			'Don\'t shirk work! Run away and pay! Smiles go for miles!<br></center>');
+		this.sendReplyBox('<center><img src="http://i.imgur.com/D30ksbl.gif" height="80 width=80"><img width="340" height="80" src="http://i.imgur.com/Iqexc1A.gif"><img src="http://i.imgur.com/8oUvNAt.gif" height="80" width="80"><br /><b>Ace:</b> Chatot<br />Don\'t shirk work! Run away and pay! Smiles go for miles!<br></center>');
 	},
 
 	aerys: function(target, room, user) {
