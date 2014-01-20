@@ -1825,8 +1825,8 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (room.isPrivate && room.auth) {
-			return this.sendReply('You can\'t warn here: This is a privately-owned room not subject to global rules.');
+		if ( room.auth) {
+			return this.sendReply('You can\'t warn here: This is a unofficial room not subject to global rules.');
 		}
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
