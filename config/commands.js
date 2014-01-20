@@ -1470,9 +1470,10 @@ var commands = exports.commands = {
         this.sendReplyBox('<center><img width="140" height="100" src="http://images.wikia.com/es.pokemon/images/archive/3/35/20090105180143!Heatran_en_Pok%C3%A9mon_Ranger_2.png"><img src="http://i.imgur.com/BkVihDY.png"><img src="http://192.184.93.156:8000/avatars/priest4.png"><br /><font color="red"><blink>Ace: Heatran</blink></font><br />Are you ready to face holyness itself? Will you open the door to my temple? Let your chakras make the decision for you.</center>');
     },
     
+    smooth: 'smoothmoves',
    smoothmoves: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<img src="http://www.sherv.net/cm/emo/funny/2/banana-smiley-emoticon.gif"><img src="http://i.imgur.com/7RTLz6V.gif"><img src="http://www.sherv.net/cm/emo/funny/2/dance.gif" height="60"><br /><center><font size="2"><b>Ace:</b> <font color="red">F</font><font color="orange">l</font><font color="green">u</font><font color="blue">f</font><font color="indigo">f</font><font color="violet">y</font> <font color="red">M</font><font color="orange">a</font><font color="green">r</font><font color="blue">e</font><font color="indigo">e</font><font color="violet">p</font><font color="red">s</font></center><br /><center><font size="2"><b>Catchphrase:</b> My potassium level is over 9000000000!!!!!!!!</center><br />')
+        this.sendReplyBox('<center><img src="http://i.imgur.com/E019Jgg.png"><img src="http://i.imgur.com/6vNVvk3.png"><img src="http://i.imgur.com/aOzSZr8.jpg"><br><center><b>Ace: <font color="#FE2E2E"><blink>My Banana Hammer</blink><br></font><b><center><font color="#D7DF01">My potassium level is over 9000000000!!!!!!!!');
     },
 
 	trainerbofish: function(target, room, user) {
