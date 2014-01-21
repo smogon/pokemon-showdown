@@ -1500,9 +1500,10 @@ var commands = exports.commands = {
         this.sendReplyBox('<img src="http://fc07.deviantart.net/fs23/f/2007/350/e/c/Kyubi_Naruto__Ransengan_by_madrox123.gif"><img src="http://i.imgur.com/QkBsIz5.gif"><img src="http://static4.wikia.nocookie.net/__cb20120628005905/pokemon/images/4/40/Kangaskhan_BW.gif"><br /><center><b>Ace</b>: Kangaskhan</b></center><br /><center><b>Catchphrase:</b> Got milk?</center>')
     },	
     
+    gamercat: 'rivalgamercat',
     rivalgamercat: function(target, room, user) {
-    	if (!this.caBroadcast()) return;
-    	this.sendReplyBox('<img src="http://pkparaiso.com/imagenes/xy/sprites/animados/lickilicky.gif"><img src="http://i.imgur.com/K8qyXPj.gif" width="350" height="70"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/chandelure.gif"><br /><center><b>Ace: </b>Lickilicky</center><br /><center><b>Catchphrase: </b>Come in we\'ll do this fast ;)</center>');
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://pkparaiso.com/imagenes/xy/sprites/animados/lickilicky.gif"><img src="http://i.imgur.com/K8qyXPj.gif" width="350" height="70"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/chandelure.gif"><br /><b>Ace: </b>Lickilicky</center><br /><b>Catchphrase: </b>Come in we\'ll do this fast ;)</center>');
     },
 
 	elite4synth: function(target, room, user) {
