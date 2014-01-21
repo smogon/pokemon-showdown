@@ -1080,6 +1080,11 @@
 	 	if (!this.canBroadcast()) return;
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://img837.imageshack.us/img837/3570/blaze.gif"></center>');
 	 },
+	 	 	 	 
+	 lyn: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://lparchive.org/Fire-Emblem-Blazing-Sword/Update%2041/72-solkatti.gif"></center>');
+	 },
 
 	 birkal: function(target, room, user) {
 	 	this.sendReply("It's not funny anymore.");
