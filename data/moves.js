@@ -10015,7 +10015,7 @@ exports.BattleMovedex = {
 			onTryHit: function(target, source, effect) {
 				// Quick Guard blocks moves with positive priority, even those given increased priority by Prankster or Gale Wings.
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings)
-				if (effect && (effect.id === 'feint' || effect.priority <= 0 || source.side === this.effectData.source.side || source.side === target.side)) {
+				if (effect && (effect.id === 'feint' || effect.priority <= 0 || effect.target === 'self')) {
 					return;
 				}
 				this.add('-activate', target, 'Quick Guard');
