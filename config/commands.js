@@ -1085,6 +1085,11 @@
 	 	if (!this.canBroadcast()) return;
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://lparchive.org/Fire-Emblem-Blazing-Sword/Update%2041/72-solkatti.gif"></center>');
 	 },
+	 	 	 	 	 
+	 lucina: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://24.media.tumblr.com/e96224e07e1d1c28a9c6d2f1846e2153/tumblr_mqtaxjird31r1fq7do2_400.gif"></center>');
+	 },
 
 	 birkal: function(target, room, user) {
 	 	this.sendReply("It's not funny anymore.");
