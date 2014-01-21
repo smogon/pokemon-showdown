@@ -1503,7 +1503,7 @@ var commands = exports.commands = {
     gamercat: 'rivalgamercat',
     rivalgamercat: function(target, room, user) {
     	if (!this.canBroadcast()) return;
-    	this.sendReplyBox('<center><img src="http://pkparaiso.com/imagenes/xy/sprites/animados/lickilicky.gif"><img src="http://i.imgur.com/K8qyXPj.gif" width="350" height="70"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/chandelure.gif"><br /><b>Ace: </b>Lickilicky</center><br /><b>Catchphrase: </b>Come in we\'ll do this fast ;)</center>');
+    	this.sendReplyBox('<center><img src="http://pkparaiso.com/imagenes/xy/sprites/animados/lickilicky.gif"><img src="http://i.imgur.com/K8qyXPj.gif" width="350" height="70"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/chandelure.gif"><br /><b>Ace: </b>Lickilicky<br /><b>Catchphrase: </b>Come in we\'ll do this fast ;)</center>');
     },
 
 	elite4synth: function(target, room, user) {
