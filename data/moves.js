@@ -7042,7 +7042,7 @@ exports.BattleMovedex = {
 				return this.chainModify(1.5);
 			}
 		},
-		onHit: function(target, source) {
+		onAfterHit: function(target, source) {
 			if (source.hp) {
 				var item = target.getItem();
 				if (item.id === 'mail') {
@@ -7334,9 +7334,11 @@ exports.BattleMovedex = {
 		volatileStatus: 'lockon',
 		effect: {
 			duration: 2,
-			onFoeModifyMove: function(move) {
-				move.accuracy = true;
-				move.alwaysHit = true;
+			onFoeModifyMove: function(move, source, target) {
+				if (source === this.effectData.source) {
+					move.accuracy = true;
+					move.alwaysHit = true;
+				}
 			}
 		},
 		secondary: false,
@@ -10013,7 +10015,7 @@ exports.BattleMovedex = {
 			onTryHit: function(target, source, effect) {
 				// Quick Guard blocks moves with positive priority, even those given increased priority by Prankster or Gale Wings.
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings)
-				if (effect && (effect.id === 'feint' || effect.priority <= 0)) {
+				if (effect && (effect.id === 'feint' || effect.priority <= 0 || source.side === this.effectData.source.side || source.side === target.side)) {
 					return;
 				}
 				this.add('-activate', target, 'Quick Guard');

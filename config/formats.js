@@ -41,7 +41,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'OU', 'BL', 'Drizzle']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'OU', 'BL', 'Drizzle', 'Drought']
 	},
 	{
 		name: "LC",
@@ -380,14 +380,14 @@ exports.Formats = [
 		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'OHKO Clause'],
+		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod'],
 		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power', 'Parental Bond']
 	},
 	{
 		name: "Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon'],
+		ruleset: ['Pokemon', 'HP Percentage Mod'],
 		banlist: []
 	},
 	{
