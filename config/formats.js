@@ -373,14 +373,14 @@ exports.Formats = [
 		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'OHKO Clause'],
+		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod'],
 		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power', 'Parental Bond']
 	},
 	{
 		name: "Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon'],
+		ruleset: ['Pokemon', 'HP Percentage Mod'],
 		banlist: []
 	},
 	{
