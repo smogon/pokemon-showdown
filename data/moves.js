@@ -10015,7 +10015,7 @@ exports.BattleMovedex = {
 			onTryHit: function(target, source, effect) {
 				// Quick Guard blocks moves with positive priority, even those given increased priority by Prankster or Gale Wings.
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings)
-				if (effect && (effect.id === 'feint' || effect.priority <= 0)) {
+				if (effect && (effect.id === 'feint' || effect.priority <= 0 || source.side === this.effectData.source.side || source.side === target.side)) {
 					return;
 				}
 				this.add('-activate', target, 'Quick Guard');
@@ -14592,7 +14592,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 4,
 			onTryHit: function(target, source, effect) {
 				// Wide Guard blocks damaging spread moves
-				if (effect && (effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes'))) {
+				if (effect && (effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes') || this.effectData.source.side === source.side)) {
 					return;
 				}
 				this.add('-activate', target, 'Wide Guard');
