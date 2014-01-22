@@ -1004,6 +1004,41 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
+	frostfaq: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		target = target.toLowerCase();
+		var buffer = '';
+		var matched = false;
+		if (!target || target === 'all') {
+			matched = true;
+			buffer += '<a href="http://www.frostserver.net/faq.html">Frequently Asked Questions</a><br />';
+		}
+		if (target === 'all' || target === 'staff' || target === 'voice') {
+			matched = true;
+			buffer += '<a href="http://www.frostserver.net/faq.html#staff">How do I get Voice or become staff?</a><br />';
+		}
+		if (target === 'all' || target === 'room' || target === 'league' || target === 'leagueroom') {
+			matched = true;
+			buffer += '<a href="http://www.frostserver.net/faq.html#chat">How do I get a chat room on here?</a><br />';
+		}
+		if (target === 'all' || target === 'donate') {
+			matched = true;
+			buffer += '<a href="http://www.frostserver.net/faq.html#donate">Can I donate to Frost?</a><br />';
+		}
+		if (target === 'all' || target === 'events') {
+			matched = true;
+			buffer += '<a href="http://www.frostserver.net/faq.html#events">What events are held on the server?</a><br />';
+		}
+		if (target === 'all' || target === 'bucks' || target === 'frostbucks')) {
+			matched = true;
+			buffer += '<a href="http://www.frostserver.net/faq.html#bucks">What are Frost bucks?</a><br />';
+		}
+		if (!matched) {
+			return this.sendReply('The Frost FAQ entry "'+target+'" was not found. Try /faq for general help.');
+		}
+		this.sendReplyBox(buffer);
+	},
+
 	banlists: 'tiers',
 	tier: 'tiers',
 	tiers: function(target, room, user) {
