@@ -611,10 +611,12 @@ var commands = exports.commands = {
 			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a>');
 	},
 
+	mentoring: 'smogintro',
 	smogonintro: 'smogintro',
 	smogintro: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Welcome to Smogon\'s Official Pokémon Showdown server!<br /><br />' +
+		this.sendReplyBox('Welcome to Smogon\'s Official Pokémon Showdown server! The Mentoring room can be found ' + 
+			'<a href="http://play.pokemonshowdown.com/mentoring">here</a> or by using /join mentoring.<br /><br />' +
 			'Here are some useful links to Smogon\'s Mentorship Program to help you get integrated into the community:<br />' +
 			'- <a href="http://www.smogon.com/mentorship/primer">Smogon Primer: A brief introduction to Smogon\'s subcommunities</a><br />' +
 			'- <a href="http://www.smogon.com/mentorship/introductions">Introduce yourself to Smogon!</a><br />' +
