@@ -172,8 +172,8 @@ exports.BattleTypeChart = {
       "Psychic": 0,
       "Rock": 0,
       "Steel": 0,
-      "Water": 0
-      trapped: null,
+      "Water": 0,
+      trapped: null
     },
     "HPivs": {"def":30,"spd":30}
   },
