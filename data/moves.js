@@ -8089,7 +8089,7 @@ exports.BattleMovedex = {
 		onHit: function(target) {
 			var moves = [];
 			for (var i in exports.BattleMovedex) {
-				var move = exports.BattleMovedex[i];
+				var move = this.getMove(i);
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
 				var noMetronome = {

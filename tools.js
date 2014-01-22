@@ -239,6 +239,7 @@ module.exports = (function () {
 				else move.gen = 0;
 			}
 			if (!move.priority) move.priority = 0;
+			if (this.gen && this.gen < move.gen) move.isNonstandard = true;
 		}
 		return move;
 	};
