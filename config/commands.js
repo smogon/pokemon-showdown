@@ -439,71 +439,41 @@ var commands = exports.commands = {
 
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
-		var moves = {}, tiers = {}, colours = {}, ability = {}, gens = {}, types = {};
-		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1, 'limbo':1};
+		var searches = {};
+		var allTiers = {'uber':1,'ou':1,'lc':1,'cap':1,'bl':1};
 		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
-		var count = 0;
 		var showAll = false;
+		var megasOnly = false;
 		var output = 10;
 
 		for (var i in targets) {
-			target = Tools.getMove(targets[i]);
-			if (target.exists) {
-				if (!moves.count) {
-					count++;
-					moves.count = 0;
-				}
-				if (moves.count === 4) {
-					return this.sendReply('Specify a maximum of 4 moves.');
-				}
-				moves[target] = 1;
-				moves.count++;
-				continue;
-			}
-
 			target = Tools.getAbility(targets[i]);
 			if (target.exists) {
-				if (!ability.count) {
-					count++;
-					ability.count = 0;
-				}
-				if (ability.count === 1) {
-					return this.sendReply('Specify only one ability.');
-				}
-				ability[target] = 1;
-				ability.count++;
+				if (searches['ability']) return this.sendReply('Specify only one ability.');
+				searches['ability'] = target.name;
 				continue;
 			}
 
 			target = targets[i].trim().toLowerCase();
 			if (target in allTiers) {
-				if (!tiers.count) {
-					count++;
-					tiers.count = 0;
-				}
-				tiers[target] = 1;
-				tiers.count++;
+				if (!searches['tier']) searches['tier'] = {};
+				searches['tier'][target] = 1;
 				continue;
 			}
+
 			if (target in allColours) {
-				if (!colours.count) {
-					count++;
-					colours.count = 0;
-				}
-				colours[target] = 1;
-				colours.count++;
+				if (!searches['color']) searches['color'] = {};
+				searches['color'][target] = 1;
 				continue;
 			}
+
 			var targetInt = parseInt(target);
-			if (0 < targetInt && targetInt < 6) {
-				if (!gens.count) {
-					count++;
-					gens.count = 0;
-				}
-				gens[targetInt] = 1;
-				gens.count++;
+			if (0 < targetInt && targetInt < 7) {
+				if (!searches['gen']) searches['gen'] = {};
+				searches['gen'][target] = 1;
 				continue;
 			}
+
 			if (target === 'all') {
 				if (this.broadcasting) {
 					return this.sendReply('A search with the parameter "all" cannot be broadcast.')
@@ -511,112 +481,100 @@ var commands = exports.commands = {
 				showAll = true;
 				continue;
 			}
+
+			if (target === 'megas' || target === 'mega') {
+				megasOnly = true;
+				continue;
+			}
+
 			if (target.indexOf(' type') > -1) {
 				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
 				if (target in Tools.data.TypeChart) {
-					if (!types.count) {
-						count++;
-						types.count = 0;
-					}
-					if (types.count === 2) {
-						return this.sendReply('Specify a maximum of two types.');
-					}
-					types[target] = 1;
-					types.count++;
+					if (!searches['types']) searches['types'] = {};
+					if (Object.size(searches['types']) === 2) return this.sendReply('Specify a maximum of two types.');
+					searches['types'][target] = 1;
 					continue;
 				}
+			}
+
+			targetMove = Tools.getMove(target);
+			if (targetMove.exists) {
+				if (!searches['moves']) searches['moves'] = [];
+				if (searches['moves'].length === 4) return this.sendReply('Specify a maximum of 4 moves.');
+				searches['moves'].push(targetMove.name);
+				continue;
 			} else {
 				return this.sendReply('"' + targets[i].trim() + '" could not be found in any of the search categories.');
 			}
 		}
 
-		if (showAll && count === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
+		if (showAll && Object.size(searches) === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
 
-		while (count > 0) {
-			count--;
-			var tempResults = [];
-			if (!results) {
-				for (var pokemon in Tools.data.Pokedex) {
-					pokemon = Tools.getTemplate(pokemon);
-					if (pokemon.tier !== 'Illegal' && (pokemon.tier !== 'CAP' || 'cap' in tiers)) {
-						tempResults.add(pokemon);
-					}
-				}
-			} else {
-				for (var mon in results) tempResults.add(results[mon]);
-			}
-			var results = [];
-
-			if (types.count > 0) {
-				for (var mon in tempResults) {
-					if (types.count === 1) {
-						if (tempResults[mon].types[0] in types || tempResults[mon].types[1] in types) results.add(tempResults[mon]);
-					} else {
-						if (tempResults[mon].types[0] in types && tempResults[mon].types[1] in types) results.add(tempResults[mon]);
-					}
-				}
-				types.count = 0;
-				continue;
-			}
-
-			if (tiers.count > 0) {
-				for (var mon in tempResults) {
-					if (tempResults[mon].tier.toLowerCase() in tiers) results.add(tempResults[mon]);
-				}
-				tiers.count = 0;
-				continue;
-			}
-
-			if (ability.count > 0) {
-				for (var mon in tempResults) {
-					for (var monAbility in tempResults[mon].abilities) {
-						if (Tools.getAbility(tempResults[mon].abilities[monAbility]) in ability) results.add(tempResults[mon]);
-					}
-				}
-				ability.count = 0;
-				continue;
-			}
-
-			if (colours.count > 0) {
-				for (var mon in tempResults) {
-					if (tempResults[mon].color.toLowerCase() in colours) results.add(tempResults[mon]);
-				}
-				colours.count = 0;
-				continue;
-			}
-
-			if (moves.count > 0) {
-				var problem;
-				var move = {};
-				for (var mon in tempResults) {
-					var template = Tools.getTemplate(tempResults[mon].id);
-					if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-					if (!template.learnset) continue;
-					for (var i in moves) {
-						move = Tools.getMove(i);
-						if (move.id !== 'count') {
-							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
-							if (!template.learnset.sketch && !template.learnset[move.id]) break;
-						}
-					}
-					if (template.learnset[move.id] || template.learnset.sketch) results.add(tempResults[mon]);
-				}
-				moves.count = 0;
-				continue;
-			}
-
-			if (gens.count > 0) {
-				for (var mon in tempResults) {
-					if (tempResults[mon].gen in gens) results.add(tempResults[mon]);
-				}
-				gens.count = 0;
-				continue;
+		var dex = {};
+		for (var pokemon in Tools.data.Pokedex) {
+			template = Tools.getTemplate(pokemon);
+			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && 'cap' in searches['tier'])) && (!megasOnly || template.forme in {'Mega':1,'Mega-X':1,'Mega-Y':1})) {
+				dex[pokemon] = template;
 			}
 		}
 
+		for (var search in searches) {
+			switch (search) {
+				case 'types':
+					for (var mon in dex) {
+						if (Object.size(searches['types']) === 2) {
+							if (!(dex[mon].types[0] in searches['types']) || !(dex[mon].types[1] in searches['types'])) delete dex[mon];
+						} else {
+							if (!(dex[mon].types[0] in searches['types']) && !(dex[mon].types[1] in searches['types'])) delete dex[mon];
+						}
+					}
+					break;
+
+				case 'tier':
+				case 'gen':
+				case 'color':
+					for (var mon in dex) {
+						if (!(String(dex[mon][search]).toLowerCase() in searches[search])) delete dex[mon];
+					}
+					break;
+
+				case 'ability':
+					for (var mon in dex) {
+						var hasAbility = false;
+						for (var monAbility in dex[mon].abilities) {
+							if (dex[mon].abilities[monAbility] === searches['ability']) hasAbility = true;
+						}
+						if (!hasAbility) delete dex[mon];
+					}
+					break;
+
+				case 'moves':
+					for (var mon in dex) {
+						var template = Tools.getTemplate(dex[mon].id);
+						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+						if (!template.learnset) continue;
+						for (var i in searches['moves']) {
+							var move = Tools.getMove(searches['moves'][i]);
+							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
+							if (!template.learnset.sketch && !template.learnset[move.id]) delete dex[mon];
+						}
+					}
+					for (var mon in dex) {
+						if (dex[mon].evos) {
+							for (var evo in dex[mon].evos) dex[dex[mon].evos[evo]] = Tools.getTemplate(dex[mon].evos[evo]);
+						}
+					}
+					break;
+
+				default:
+					return this.sendReply("Something broke! PM TalkTakesTime here or on the Smogon forums with the command you tried.");
+			}
+		}
+
+		var results = [];
+		for (var mon in Tools.data.Pokedex) if (mon in dex) results.push(dex[mon].species);
 		var resultsStr = '';
 		if (results && results.length > 0) {
-			for (var i = 0; i < results.length; ++i) results[i] = results[i].species;
 			if (showAll || results.length <= output) {
 				resultsStr = results.join(', ');
 			} else {
@@ -823,10 +781,12 @@ var commands = exports.commands = {
 			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a>');
 	},
 
+	mentoring: 'smogintro',
 	smogonintro: 'smogintro',
 	smogintro: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Welcome to Smogon\'s Official Pokémon Showdown server!<br /><br />' + 
+		this.sendReplyBox('Welcome to Smogon\'s Official Pokémon Showdown server! The Mentoring room can be found ' + 
+			'<a href="http://play.pokemonshowdown.com/mentoring">here</a> or by using /join mentoring.<br /><br />' +
 			'Here are some useful links to Smogon\'s Mentorship Program to help you get integrated into the community:<br />' +
 			'- <a href="http://www.smogon.com/mentorship/primer">Smogon Primer: A brief introduction to Smogon\'s subcommunities</a><br />' +
 			'- <a href="http://www.smogon.com/mentorship/introductions">Introduce yourself to Smogon!</a><br />' +
