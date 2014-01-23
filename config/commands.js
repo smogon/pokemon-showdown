@@ -989,7 +989,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '<a href="http://www.frostserver.net/faq.html#events">What events are held on the server?</a><br />';
 		}
-		if (target === 'all' || target === 'bucks' || target === 'frostbucks')) {
+		if (target === 'all' || target === 'bucks' || target === 'frostbucks') {
 			matched = true;
 			buffer += '<a href="http://www.frostserver.net/faq.html#bucks">What are Frost bucks?</a><br />';
 		}
