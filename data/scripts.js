@@ -1632,7 +1632,7 @@ exports.BattleScripts = {
 
 			// Limit the number of Megas to one, just like in-game
 			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
-			
+
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
 			baseFormes[template.baseSpecies] = 1;
