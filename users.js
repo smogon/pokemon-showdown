@@ -641,8 +641,6 @@ var User = (function () {
 	User.prototype.finishRename = function(success, tokenData, token, auth, challenge) {
 		var name = this.renamePending;
 		var userid = toUserid(name);
-		// Check if the user id is banned
-		
 		var expired = false;
 		var invalidHost = false;
 
