@@ -66,6 +66,7 @@ function runNpm(command) {
 
 try {
 	require('sugar');
+	require('http-get');
 } catch (e) {
 	return runNpm('install');
 }
@@ -76,7 +77,7 @@ if (!Object.select) {
 // Make sure config.js exists, and copy it over from config-example.js
 // if it doesn't
 
-global.fs = require('fs');
+global.fs = require('graceful-fs');
 if (!('existsSync' in fs)) {
 	fs.existsSync = require('path').existsSync;
 }
@@ -375,22 +376,27 @@ try {
 global.Cidr = require('./cidr.js');
 
 if (config.crashguard) {
-	// graceful crash - allow current battles to finish before restarting
-	var lastCrash = 0;
-	process.on('uncaughtException', function(err) {
-		var dateNow = Date.now();
-		var quietCrash = require('./crashlogger.js')(err, 'The main process');
-		quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5)
-		lastCrash = Date.now();
-		if (quietCrash) return;
-		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
-		if (Rooms.lobby) {
-			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
-			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
-		}
-		config.modchat = 'crash';
-		Rooms.global.lockdown = true;
-	});
+        // graceful crash - allow current battles to finish before restarting
+        process.on('uncaughtException', (function() {
+                var lastCrash = 0;
+                return function(err) {
+                        var dateNow = Date.now();
+                        var quietCrash = require('./crashlogger.js')(err, 'The main process');
+                        quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5)
+                        lastCrash = Date.now();
+                        if (quietCrash) return;
+                        var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
+                        if (Rooms.rooms.staff) {
+                                Rooms.rooms.staff.addRaw('<div class="broadcast-red"><b>The server has experienced a crash:</b> '+stack+'<br /></div>');
+                                Rooms.rooms.staff.addRaw('<div class="broadcast-green">The crash has been maintained, and the server will run fine. A restart is advised to prevent any issues.</div>');
+                                for (var u in Users.users) {
+									if (Users.users[u].group == "~" || Users.users[u].group == "&") {
+										Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|The server has experienced a crash, please check the staff room for the error stack.');
+									}
+								}
+                        }
+                };
+        })());
 }
 
 /*********************************************************
@@ -430,3 +436,24 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 	}
 	Users.checkRangeBanned = Cidr.checker(rangebans);
 });
+
+try {
+	global.tour = require('./tour.js').tour();
+} catch (e) {
+	console.log('Error loading tour.js');
+}
+try {
+	global.hangman = require('./hangman.js').hangman();
+} catch (e) {
+	console.log('Error loading hangman.js');
+}
+try {
+	global.frostcommands = require('./frost-commands.js');
+} catch (e) {
+	console.log('Error loading frost-commands.js');
+}
+try {
+	global.economy = require('./economy.js');
+} catch (e) {
+	console.log('Error loading economy.js');
+}

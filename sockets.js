@@ -104,6 +104,11 @@ if (cluster.isMaster) {
 		worker.send('-'+channelid+'\n'+socketid);
 	};
 
+	cluster.on('death', function(worker) {
+		console.log('Worker ' + worker.pid + ' died. Restarting again...');
+		spawnWorker();
+	});
+
 } else {
 	// is worker
 
@@ -196,7 +201,7 @@ if (cluster.isMaster) {
 	global.AppSSL = appssl;
 	global.Server = server;
 
-	var sockets = {};
+	global.sockets = {};
 	var channels = {};
 
 	// Deal with phantom connections.
@@ -214,6 +219,7 @@ if (cluster.isMaster) {
 			// Simply calling `_session.timeout_cb` (the function bound to the aformentioned timeout) manually
 			// on those connections kills those connections. For a bit of background, this timeout is the timeout
 			// that sockjs sets to wait for users to reconnect within that time to continue their session.
+
 			if (sockets[s]._session &&
 				sockets[s]._session.to_tref &&
 				!sockets[s]._session.to_tref._idlePrev) {

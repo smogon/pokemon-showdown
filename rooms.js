@@ -14,6 +14,7 @@ const TIMEOUT_INACTIVE_DEALLOCATE = 40*60*1000;
 const REPORT_USER_STATS_INTERVAL = 1000*60*10;
 
 var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
+var complaint = complaint || fs.createWriteStream('logs/complaint.txt', {flags:'a+'}); 
 
 var GlobalRoom = (function() {
 	function GlobalRoom(roomid) {
@@ -1186,6 +1187,10 @@ var ChatRoom = (function() {
 		this.destroyingLog = false;
 		this.bannedUsers = {};
 		this.bannedIps = {};
+		this.lockedRoom = false;
+		this.messageCount = 0;
+		this.active = true;
+		this.inactiveCount = 0;
 		this.modchat = (config.chatmodchat || false);
 
 		// `config.loglobby` is a legacy name
@@ -1485,6 +1490,7 @@ var ChatRoom = (function() {
 
 		if (message) {
 			this.add('|c|'+user.getIdentity(this.id)+'|'+message, true);
+			this.messageCount++;
 		}
 		this.update();
 	};
