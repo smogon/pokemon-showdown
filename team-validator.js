@@ -325,6 +325,9 @@ var Validator = (function() {
 		}
 		template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
+		if (!item.exists) {
+			return ["The item '"+set.item+"' does not exist."];
+		}
 		ability = tools.getAbility(set.ability);
 
 		var banlistTable = tools.getBanlistTable(format);
