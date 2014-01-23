@@ -733,9 +733,9 @@ var User = (function () {
 
 				if (body === '3') {
 					isSysop = true;
-					this.autoconfirmed = true;
+					this.autoconfirmed = userid;
 				} else if (body === '4') {
-					this.autoconfirmed = true;
+					this.autoconfirmed = userid;
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
