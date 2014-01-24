@@ -1128,12 +1128,12 @@ var User = (function () {
 		}
 		TeamValidator.validateTeam(formatid, this.team, this.finishPrepBattle.bind(this, connection, callback));
 	};
-	User.prototype.finishPrepBattle = function(connection, callback, problems, team) {
-		if (problems) {
-			connection.popup("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+	User.prototype.finishPrepBattle = function(connection, callback, success, details) {
+		if (!success) {
+			connection.popup("Your team was rejected for the following reasons:\n\n- "+details.replace(/\n/g, '\n- '));
 			callback(false);
 		} else {
-			this.team = team;
+			this.team = details;
 			callback(true);
 		}
 	};
