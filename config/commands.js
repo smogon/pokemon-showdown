@@ -1803,6 +1803,16 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://i.imgur.com/7DKOZLx.png"><br><img src="http://i.imgur.com/YznYjmS.gif"><br>Ace: Mega Charizard X<br>Finn, being an enormous crotch-kicking foot is a gift. Don\'t scorn a gift.');
 	},
 	
+	receptionist147: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src=http://i.imgur.com/4xzLvzV.gif><img src=http://i.imgur.com/48CvnKv.gif height="80" width="310"><img src=http://i.imgur.com/4xzLvzV.gif><br><b>Ace:</b> Patrick<br><b>Catchphrase:</b> I may be stupid, but I\'m also dumb.<center>');
+	},
+	
+	tacosaur: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src=http://i.imgur.com/kLizkSj.png height="100" width="100"><img src=http://i.imgur.com/AZMkadt.gif><img src=http://i.imgur.com/csLKG5O.png height="100" width="100"><br><b>Ace:</b> Swampert<br><b>Catchphrase:</b> So I herd u liek Swampertz</center>');
+	},
+	
 	prez: 'cosy',
 	cosy: function(target, room, user) {
 		if (!this.canBroadcast()) return;
