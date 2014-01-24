@@ -27,35 +27,25 @@ exports.BattleStatuses = {
 		inherit: true,
 		noCopy: false,
 		onCopy: function(pokemon) {
-			if (!this.effectData.source || !this.effectData.source.isActive || !this.effectData.source.volatiles['trapping']) {
-				delete pokemon.volatiles['trapped'].source.volatiles['trapping'];
-				delete pokemon.volatiles['trapped'];
-				return;
-			}
 			this.effectData.source.volatiles['trapping'].source = pokemon;
 			this.effectData.source.volatiles['trapping'].sourcePosition = pokemon.position;
-			pokemon.tryTrap();
-		}
-	},
-	trapping: {
-		inherit: true,
-		noCopy: false,
-		onSwitchOut: function(pokemon) {
+		},
+		onAnySwitchOut: function(pokemon) {
+			if (!pokemon.volatiles['trapping'] || pokemon.volatiles['trapping'].source !== this.effectData.target) return;
 			var lastMove = this.getMove(pokemon.lastMove);
 			if (lastMove.selfSwitch !== 'copyvolatile') {
 				delete pokemon.volatiles['trapping'].source.volatiles['trapped'];
 				delete pokemon.volatiles['trapping'];
 			}
 		},
-		onCopy: function(pokemon) {
-			if (!this.effectData.source || !this.effectData.source.isActive || !this.effectData.source.volatiles['trapped']) {
-				delete pokemon.volatiles['trapping'].source.volatiles['trapped'];
-				delete pokemon.volatiles['trapping'];
-				return;
-			}
-			this.effectData.source.volatiles['trapped'].source = pokemon;
-			this.effectData.source.volatiles['trapped'].sourcePosition = pokemon.position;
+		onAnySwitchIn: function(pokemon) {
+			if (!pokemon.volatiles['trapping'] || pokemon.volatiles['trapping'].source !== this.effectData.target) return;
+			this.effectData.source = pokemon;
+			this.effectData.sourcePosition = pokemon.position;
 		}
+	},
+	trapping: {
+		noCopy: false
 	},
 	partiallytrapped: {
 		inherit: true,

@@ -153,18 +153,30 @@ exports.BattleStatuses = {
 		},
 		onStart: function(target) {
 			this.add('-activate', target, 'trapped')
-		}
-	},
-	trapping: {
-		noCopy: true,
-		onSwitchOut: function(pokemon) {
+		},
+		onAnySwitchOut: function(pokemon) {
+			if (this.effectData.target === pokemon) {
+				delete pokemon.volatiles['trapped'].source.volatiles['trapping'];
+				delete pokemon.volatiles['trapped'];
+				return;
+			}
+			if (!pokemon.volatiles['trapping'] || pokemon.volatiles['trapping'].source !== this.effectData.target) return;
 			delete pokemon.volatiles['trapping'].source.volatiles['trapped'];
 			delete pokemon.volatiles['trapping'];
 		},
-		onFaint: function(pokemon) {
+		onAnyFaint: function(pokemon) {
+			if (this.effectData.target === pokemon) {
+				delete pokemon.volatiles['trapped'].source.volatiles['trapping'];
+				delete pokemon.volatiles['trapped'];
+				return;
+			}
+			if (!pokemon.volatiles['trapping'] || pokemon.volatiles['trapping'].source !== this.effectData.target) return;
 			delete pokemon.volatiles['trapping'].source.volatiles['trapped'];
 			delete pokemon.volatiles['trapping'];
 		}
+	},
+	trapping: {
+		noCopy: true
 	},
 	partiallytrapped: {
 		duration: 5,
