@@ -1929,7 +1929,7 @@ exports.BattleItems = {
 		name: "Kee Berry",
 		spritenum: 0,
 		isBerry: true,
-      naturalGift: {
+		naturalGift: {
 			basePower: 100,
 			type: "Fairy"
 		},
@@ -2400,7 +2400,7 @@ exports.BattleItems = {
 		name: "Maranga Berry",
 		spritenum: 0,
 		isBerry: true,
-      naturalGift: {
+		naturalGift: {
 			basePower: 100,
 			type: "Dark"
 		},
