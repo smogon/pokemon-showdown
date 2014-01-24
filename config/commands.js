@@ -1628,11 +1628,6 @@ var commands = exports.commands = {
 		'<img src="http://www.apeconmyth.com/wp-content/uploads/2011/09/moo-cow.gif">')
 	},
 	
-	frostfaq: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('For any questions please check <a href="http://frostserver.weebly.com/faq.html">this</a> out before asking mods.')
-	},
-	
 	frostclient: 'client',
 	customclient: 'client',
 	client: function(target, room, user) {
