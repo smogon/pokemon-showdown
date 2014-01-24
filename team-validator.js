@@ -136,7 +136,7 @@ if (!process.send) {
 		if (config.namefilter) {
 			name = config.namefilter(name);
 		}
-		return name;
+		return name.trim();
 	};
 
 	/**
