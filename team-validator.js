@@ -316,7 +316,7 @@ var Validator = (function() {
 		}
 		template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
-		if (!item.exists) {
+		if (item.id && !item.exists) {
 			return ['"'+set.item+"' is an invalid item."];
 		}
 		ability = tools.getAbility(set.ability);
