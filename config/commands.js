@@ -327,7 +327,7 @@ var commands = exports.commands = {
 				}
 			}
 
-			targetMove = Tools.getMove(target);
+			var targetMove = Tools.getMove(target);
 			if (targetMove.exists) {
 				if (!searches['moves']) searches['moves'] = [];
 				if (searches['moves'].length === 4) return this.sendReply('Specify a maximum of 4 moves.');
@@ -342,7 +342,7 @@ var commands = exports.commands = {
 
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
-			template = Tools.getTemplate(pokemon);
+			var template = Tools.getTemplate(pokemon);
 			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && 'cap' in searches['tier'])) && (!megasOnly || template.forme in {'Mega':1,'Mega-X':1,'Mega-Y':1})) {
 				dex[pokemon] = template;
 			}
@@ -401,10 +401,9 @@ var commands = exports.commands = {
 			}
 		}
 
-		var results = [];
-		for (var mon in Tools.data.Pokedex) if (mon in dex) results.push(dex[mon].species);
+		var results = Object.keys(dex).map(function(speciesid) {return dex[speciesid].species});
 		var resultsStr = '';
-		if (results && results.length > 0) {
+		if (results.length > 0) {
 			if (showAll || results.length <= output) {
 				resultsStr = results.join(', ');
 			} else {
