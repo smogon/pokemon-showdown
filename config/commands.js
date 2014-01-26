@@ -1180,6 +1180,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	gryph: function(target, room, user) {
+		if (!this.canBroadcast()) return; 
+		this.sendReplyBox('<center><img height=150 src="http://pokebot.everyboty.net/pix/822.gif">' + 
+        '<b><font color=#c2701e><font size=100><i>Gryph</i></font></font></b>' +
+        '<img height=150 src="http://pokebot.everyboty.net/pix/822.gif"><br/>' +
+        '<b>Ace:</b> High or Low?<br/>' +  
+        'We all move to the beat of just one Blastoise</center>');
+	},
+
 	piscean: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img height=150 width=150 src="http://i0.kym-cdn.com/photos/images/newsfeed/000/535/926/ff5.gif">' +
