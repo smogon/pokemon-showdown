@@ -1570,6 +1570,7 @@ exports.BattleScripts = {
 
 		var typeCount = {};
 		var typeComboCount = {};
+		var baseFormes = {};
 		var uberCount = 0;
 		var nuCount = 0;
 		var megaCount = 0;
@@ -1631,6 +1632,10 @@ exports.BattleScripts = {
 
 			// Limit the number of Megas to one, just like in-game
 			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
+			baseFormes[template.baseSpecies] = 1;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
