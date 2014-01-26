@@ -12182,7 +12182,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(target) {
-				this.add('-singleturn', target, 'Spiky Shield');
+				this.add('-singleturn', target, 'move: Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit: function(target, source, move) {
@@ -12191,7 +12191,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move && move.target === 'self') return;
-				this.add('-activate', target, 'Spiky Shield');
+				this.add('-activate', target, 'move: Protect');
 				if (move.isContact) {
 					this.damage(source.maxhp/8, source, target);
 				}
