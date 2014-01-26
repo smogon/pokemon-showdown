@@ -343,7 +343,7 @@ var commands = exports.commands = {
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
 			var template = Tools.getTemplate(pokemon);
-			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && 'cap' in searches['tier'])) && (!megasOnly || template.forme in {'Mega':1,'Mega-X':1,'Mega-Y':1})) {
+			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && 'cap' in searches['tier'])) && (!megasOnly || template.isMega)) {
 				dex[pokemon] = template;
 			}
 		}
@@ -401,17 +401,16 @@ var commands = exports.commands = {
 			}
 		}
 
-		var results = Object.keys(dex).map(function(speciesid) {return dex[speciesid].species});
+		var results = [];
+		// While a direct map would be faster, this ensures the results are printed in Pokedex order
+		for (var mon in Tools.data.Pokedex) if (mon in dex) results.push(dex[mon].species);
 		var resultsStr = '';
 		if (results.length > 0) {
 			if (showAll || results.length <= output) {
 				resultsStr = results.join(', ');
 			} else {
-				var hidden = string(results.length - output);
 				results.sort(function(a,b) {return Math.round(Math.random());});
-				var shown = results.slice(0, 10);
-				resultsStr = shown.join(', ');
-				resultsStr += ', and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.';
+				resultsStr = results.slice(0, 10).join(', ') + ', and ' + string(results.length - output) + ' more. Redo the search with "all" as a search parameter to show all results.';
 			}
 		} else {
 			resultsStr = 'No Pokémon found.';
