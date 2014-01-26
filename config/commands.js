@@ -401,12 +401,11 @@ var commands = exports.commands = {
 			}
 		}
 
-		var results = [];
-		// While a direct map would be faster, this ensures the results are printed in Pokedex order
-		for (var mon in Tools.data.Pokedex) if (mon in dex) results.push(dex[mon].species);
+		var results = Object.keys(dex).map(function(speciesid) {return dex[speciesid].species});
 		var resultsStr = '';
 		if (results.length > 0) {
 			if (showAll || results.length <= output) {
+				results.sort();
 				resultsStr = results.join(', ');
 			} else {
 				results.sort(function(a,b) {return Math.round(Math.random());});
