@@ -1184,7 +1184,7 @@ var commands = exports.commands = {
 	oshy: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img height=60 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/oshawott.gif">' +
-			'<img width=660 src="http://frostserver.net:8000/images/oshy.png">' +
+			'<img width=580 src="http://frostserver.net:8000/images/oshy.png">' +
 			'<img height=60 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/oshawott.gif"><br />' + 
 			'<b>Ace:</b> Fluffy Oshawotts<br />' +
 			'As long as your pokemon spirit keeps burning, your pokemon will keep fighting</center>');
