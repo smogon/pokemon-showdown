@@ -274,12 +274,12 @@ var Simulator = (function(){
 
 		this.setPlayer(user, slot);
 
-		var teamMessage = '';
+		var message = ''+user.avatar;
 		if (!this.started) {
-			teamMessage = "\n"+JSON.stringify(team);
+			message += "\n"+team;
 		}
 		if (this.p1 && this.p2) this.started = true;
-		this.sendFor(user, 'join', user.name, user.avatar+teamMessage);
+		this.sendFor(user, 'join', user.name, message);
 		return true;
 	};
 
