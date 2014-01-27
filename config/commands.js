@@ -1187,7 +1187,7 @@ var commands = exports.commands = {
 			'<img width=660 src="http://frostserver.net:8000/images/oshy.png">' +
 			'<img height=60 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/oshawott.gif"><br />' + 
 			'<b>Ace:</b> Fluffy Oshawotts<br />' +
-			'The fluff is real</center>');
+			'As long as your pokemon spirit keeps burning, your pokemon will keep fighting</center>');
 	},
 
 	gryph: function(target, room, user) {
