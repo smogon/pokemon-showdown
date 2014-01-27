@@ -327,7 +327,7 @@ var commands = exports.commands = {
 				}
 			}
 
-			targetMove = Tools.getMove(target);
+			var targetMove = Tools.getMove(target);
 			if (targetMove.exists) {
 				if (!searches['moves']) searches['moves'] = [];
 				if (searches['moves'].length === 4) return this.sendReply('Specify a maximum of 4 moves.');
@@ -342,8 +342,8 @@ var commands = exports.commands = {
 
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
-			template = Tools.getTemplate(pokemon);
-			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && 'cap' in searches['tier'])) && (!megasOnly || template.forme in {'Mega':1,'Mega-X':1,'Mega-Y':1})) {
+			var template = Tools.getTemplate(pokemon);
+			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && 'cap' in searches['tier'])) && (!megasOnly || template.isMega)) {
 				dex[pokemon] = template;
 			}
 		}
@@ -401,18 +401,15 @@ var commands = exports.commands = {
 			}
 		}
 
-		var results = [];
-		for (var mon in Tools.data.Pokedex) if (mon in dex) results.push(dex[mon].species);
+		var results = Object.keys(dex).map(function(speciesid) {return dex[speciesid].species});
 		var resultsStr = '';
-		if (results && results.length > 0) {
+		if (results.length > 0) {
 			if (showAll || results.length <= output) {
+				results.sort();
 				resultsStr = results.join(', ');
 			} else {
-				var hidden = string(results.length - output);
 				results.sort(function(a,b) {return Math.round(Math.random());});
-				var shown = results.slice(0, 10);
-				resultsStr = shown.join(', ');
-				resultsStr += ', and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.';
+				resultsStr = results.slice(0, 10).join(', ') + ', and ' + string(results.length - output) + ' more. Redo the search with "all" as a search parameter to show all results.';
 			}
 		} else {
 			resultsStr = 'No Pokémon found.';
@@ -608,7 +605,8 @@ var commands = exports.commands = {
 			'- <a href="http://www.smogon.com/forums/threads/3496279/">Beginner\'s Guide to Pokémon Showdown</a><br />' +
 			'- <a href="http://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pokémon</a><br />' +
 			'- <a href="http://www.smogon.com/bw/articles/bw_tiers">What do "OU", "UU", etc mean?</a><br />' +
-			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a>');
+			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a><br />' +
+			'- <a href="http://www.smogon.com/forums/threads/tiering-faq.3498332/">Tiering FAQ - an introduction to the tiering process</a>');
 	},
 
 	mentoring: 'smogintro',
