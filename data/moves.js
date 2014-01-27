@@ -7045,12 +7045,9 @@ exports.BattleMovedex = {
 		},
 		onAfterHit: function(target, source) {
 			if (source.hp) {
-				var item = target.getItem();
-				if (item.id === 'mail') {
-					target.setItem('');
-				} else {
-					item = target.takeItem(source);
-				}
+				target.addVolatile('knockoff');
+				var item = target.takeItem(source);
+				target.removeVolatile('knockoff');
 				if (item) {
 					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] '+source);
 				}
