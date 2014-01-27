@@ -1180,6 +1180,16 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	elitefouroshy: 'oshy',
+	oshy: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=60 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/oshawott.gif">' +
+			'<img width=660 src="http://frostserver.net:8000/images/oshy.png">' +
+			'<img height=60 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/oshawott.gif"><br />' + 
+			'<b>Ace:</b> Fluffy Oshawotts<br />' +
+			'The fluff is real</center>');
+	},
+
 	gryph: function(target, room, user) {
 		if (!this.canBroadcast()) return; 
 		this.sendReplyBox('<center><img height=150 src="http://pokebot.everyboty.net/pix/822.gif">' + 
