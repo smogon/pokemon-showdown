@@ -2241,7 +2241,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon can hit Ghost-types with Normal- and Fighting-type moves.",
 		onModifyMove: function(move) {
 			if (move.type in {'Fighting':1,'Normal':1}) {
-				move.affectedByImmunities = true;
+				move.affectedByImmunities = false;
 			}
 		},
 		id: "scrappy",
