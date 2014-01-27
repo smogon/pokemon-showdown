@@ -139,7 +139,7 @@ exports.BattleAbilities = {
 				if (targets[i].fainted) continue;
 				for (var j=0; j<targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
-					if (move.category !== 'Status' && (this.getEffectiveness(move, pokemon) > 0 || move.ohko)) {
+					if (move.category !== 'Status' && (this.getImmunity(move.type, pokemon) && this.getEffectiveness(move, pokemon) > 0 || move.ohko)) {
 						this.add('-message', pokemon.name+' shuddered! (placeholder)');
 						return;
 					}
