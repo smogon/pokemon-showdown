@@ -5716,8 +5716,9 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isBounceable: true,
-		onHit: function(pokemon) {
-			this.heal(Math.ceil(pokemon.maxhp * 0.5));
+		onHit: function(target, source) {
+			if (source.ability === 'megalauncher') this.heal(this.modify(target.maxhp, 0.75));
+			else this.heal(Math.ceil(target.maxhp * 0.5));
 		},
 		secondary: false,
 		target: "normal",
