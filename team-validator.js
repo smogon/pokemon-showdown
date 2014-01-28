@@ -323,13 +323,20 @@ var Validator = (function() {
 
 		var banlistTable = tools.getBanlistTable(format);
 
-		var check = toId(set.species);
+		var check = template.id;
 		var clause = '';
 		setHas[check] = true;
 		if (banlistTable[check]) {
 			clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
 			problems.push(set.species+' is banned'+clause+'.');
+		} else if (!tools.data.FormatsData[check] || !tools.data.FormatsData[check].tier) {
+			check = toId(template.baseSpecies);
+			if (banlistTable[check]) {
+				clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
+				problems.push(template.baseSpecies+' is banned'+clause+'.');
+			}
 		}
+
 		check = toId(set.ability);
 		setHas[check] = true;
 		if (banlistTable[check]) {
