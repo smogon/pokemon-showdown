@@ -4135,14 +4135,6 @@ exports.BattleFormatsData = {
 		dreamWorldPokeball: 'cherishball',
 		tier: "Limbo A"
 	},
-	keldeoresolute: {
-		eventPokemon: [
-			{"generation":5,"level":15,"moves":["aquajet","leer","doublekick","bubblebeam"],"pokeball":"cherishball"},
-			{"generation":5,"level":50,"moves":["sacredsword","hydropump","aquajet","swordsdance"],"pokeball":"cherishball"}
-		],
-		dreamWorldPokeball: 'cherishball',
-		tier: "Limbo A"
-	},
 	meloetta: {
 		viableMoves: {"relicsong":1,"closecombat":1,"calmmind":1,"psychic":1,"thunderbolt":1,"hypervoice":1,"uturn":1},
 		eventPokemon: [
@@ -4164,47 +4156,23 @@ exports.BattleFormatsData = {
 	},
 	genesectburn: {
 		viableMoves: {"uturn":1,"bugbuzz":1,"icebeam":1,"technoblast":1,"thunderbolt":1,"ironhead":1,"shiftgear":1,"extremespeed":1,"blazekick":1},
-		eventPokemon: [
-			{"generation":5,"level":50,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"],"pokeball":"cherishball"},
-			{"generation":5,"level":15,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"shiny":true,"nature":"Hasty","moves":["extremespeed","technoblast","blazekick","shiftgear"],"pokeball":"cherishball"}
-		],
 		dreamWorldPokeball: 'cherishball',
-		requiredItem: "Burn Drive",
-		tier: "OU"
+		requiredItem: "Burn Drive"
 	},
 	genesectchill: {
 		viableMoves: {"uturn":1,"bugbuzz":1,"technoblast":1,"flamethrower":1,"thunderbolt":1,"ironhead":1,"shiftgear":1,"extremespeed":1,"blazekick":1},
-		eventPokemon: [
-			{"generation":5,"level":50,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"],"pokeball":"cherishball"},
-			{"generation":5,"level":15,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"shiny":true,"nature":"Hasty","moves":["extremespeed","technoblast","blazekick","shiftgear"],"pokeball":"cherishball"}
-		],
 		dreamWorldPokeball: 'cherishball',
-		requiredItem: "Chill Drive",
-		tier: "OU"
+		requiredItem: "Chill Drive"
 	},
 	genesectdouse: {
 		viableMoves: {"uturn":1,"bugbuzz":1,"icebeam":1,"flamethrower":1,"thunderbolt":1,"technoblast":1,"ironhead":1,"shiftgear":1,"extremespeed":1,"blazekick":1},
-		eventPokemon: [
-			{"generation":5,"level":50,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"],"pokeball":"cherishball"},
-			{"generation":5,"level":15,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"shiny":true,"nature":"Hasty","moves":["extremespeed","technoblast","blazekick","shiftgear"],"pokeball":"cherishball"}
-		],
 		dreamWorldPokeball: 'cherishball',
-		requiredItem: "Douse Drive",
-		tier: "OU"
+		requiredItem: "Douse Drive"
 	},
 	genesectshock: {
 		viableMoves: {"uturn":1,"bugbuzz":1,"icebeam":1,"flamethrower":1,"technoblast":1,"ironhead":1,"shiftgear":1,"extremespeed":1,"blazekick":1},
-		eventPokemon: [
-			{"generation":5,"level":50,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"],"pokeball":"cherishball"},
-			{"generation":5,"level":15,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"shiny":true,"nature":"Hasty","moves":["extremespeed","technoblast","blazekick","shiftgear"],"pokeball":"cherishball"}
-		],
 		dreamWorldPokeball: 'cherishball',
-		requiredItem: "Shock Drive",
-		tier: "OU"
+		requiredItem: "Shock Drive"
 	},
 	chespin: {
 		viableMoves: {"curse":1,"gyroball":1,"seedbomb":1,"stoneedge":1,"spikes":1,"synthesis":1},
