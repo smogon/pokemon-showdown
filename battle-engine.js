@@ -991,6 +991,20 @@ var BattlePokemon = (function() {
 		if (this.lastItem) this.usedItemThisTurn = true;
 		return true;
 	};
+	BattlePokemon.prototype.tossItem = function(source) {
+		if (!this.hp || !this.isActive) return false;
+		if (!this.item) return false;
+		if (!source) source = this;
+		var item = this.getItem();
+		if (this.battle.runEvent('TossItem', this, source, null, item)) {
+			this.lastItem = item.id;
+			this.item = '';
+			this.itemData = {id: '', target: this};
+			this.usedItemThisTurn = true;
+			return item;
+		}
+		return false;
+	};
 	BattlePokemon.prototype.getItem = function() {
 		return this.battle.getItem(this.item);
 	};

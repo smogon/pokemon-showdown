@@ -4238,7 +4238,7 @@ exports.BattleMovedex = {
 			var item = pokemon.getItem();
 			if (item.fling) {
 				pokemon.addVolatile('fling');
-				pokemon.setItem('');
+				pokemon.tossItem();
 			}
 		},
 		onTryHit: function(target, source, move) {
@@ -8653,7 +8653,7 @@ exports.BattleMovedex = {
 				pokemon.addVolatile('naturalgift');
 				pokemon.volatiles['naturalgift'].basePower = item.naturalGift.basePower;
 				pokemon.volatiles['naturalgift'].type = item.naturalGift.type;
-				pokemon.setItem('');
+				pokemon.tossItem();
 			}
 		},
 		onTryHit: function(target, source) {
