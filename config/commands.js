@@ -348,7 +348,8 @@ var commands = exports.commands = {
 			}
 		}
 
-		for (var search in searches) {
+		for (var search in {'moves':1,'types':1,'ability':1,'tier':1,'gen':1,'color':1}) {
+			if (!searches[search]) continue;
 			switch (search) {
 				case 'types':
 					for (var mon in dex) {
@@ -361,6 +362,15 @@ var commands = exports.commands = {
 					break;
 
 				case 'tier':
+					for (var mon in dex) {
+						// some LC legal Pokemon are stored in other tiers (Ferroseed/Murkrow etc)
+						// this checks for LC legality using the going criteria, instead of dex[mon].tier
+						if ('lc' in searches[search]) {
+							if ((dex[mon].evos && dex[mon].evos.length === 0) || dex[mon].prevo || Tools.data.Formats['lc'].banlist.indexOf(dex[mon].species) > -1) delete dex[mon];
+						} else if (!(String(dex[mon][search]).toLowerCase() in searches[search])) delete dex[mon];
+					}
+					break;
+
 				case 'gen':
 				case 'color':
 					for (var mon in dex) {
