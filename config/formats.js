@@ -34,7 +34,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Genesect', 'Deoxys-Speed']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Genesect-Burn', 'Genesect-Chill', 'Genesect-Douse', 'Genesect-Shock', 'Genesect', 'Deoxys-Speed']
 	},
 	{
 		name: "Ubers",
@@ -222,7 +222,7 @@ exports.Formats = [
 			'Garchomp',
 			'Gardevoir',
 			'Gastrodon',
-			'Genesect',
+			'Genesect-Burn', 'Genesect-Chill', 'Genesect-Douse', 'Genesect-Shock', 'Genesect',
 			'Gengar',
 			'Gliscor',
 			'Goodra',
