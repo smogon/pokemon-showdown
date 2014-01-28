@@ -352,7 +352,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.transformed = false;
 	BattlePokemon.prototype.duringMove = false;
 	BattlePokemon.prototype.hpType = 'Dark';
-	BattlePokemon.prototype.hpPower = 70;
+	BattlePokemon.prototype.hpPower = 60;
 	BattlePokemon.prototype.speed = 0;
 
 	BattlePokemon.prototype.toString = function() {
