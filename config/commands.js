@@ -348,7 +348,8 @@ var commands = exports.commands = {
 			}
 		}
 
-		for (var search in searches) {
+		for (var search in {'moves':1,'types':1,'ability':1,'tier':1,'gen':1,'color':1}) {
+			if (!searches[search]) continue;
 			switch (search) {
 				case 'types':
 					for (var mon in dex) {
