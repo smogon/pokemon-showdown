@@ -336,6 +336,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.illusion = null;
 	BattlePokemon.prototype.fainted = false;
 	BattlePokemon.prototype.lastItem = '';
+	BattlePokemon.prototype.lastItemTurnData = {};
 	BattlePokemon.prototype.status = '';
 	BattlePokemon.prototype.position = 0;
 
@@ -344,7 +345,6 @@ var BattlePokemon = (function() {
 
 	BattlePokemon.prototype.lastDamage = 0;
 	BattlePokemon.prototype.lastAttackedBy = null;
-	BattlePokemon.prototype.usedItemThisTurn = false;
 	BattlePokemon.prototype.newlySwitched = false;
 	BattlePokemon.prototype.beingCalledBack = false;
 	BattlePokemon.prototype.isActive = false;
@@ -927,9 +927,9 @@ var BattlePokemon = (function() {
 			this.battle.singleEvent('Eat', item, this.itemData, this, source, sourceEffect);
 
 			this.lastItem = this.item;
+			this.lastItemTurnData = {id: this.item, effect: 'eatItem'};
 			this.item = '';
 			this.itemData = {id: '', target: this};
-			this.usedItemThisTurn = true;
 			return true;
 		}
 		return false;
@@ -959,9 +959,9 @@ var BattlePokemon = (function() {
 			this.battle.singleEvent('Use', item, this.itemData, this, source, sourceEffect);
 
 			this.lastItem = this.item;
+			this.lastItemTurnData = {id: this.item, effect: 'useItem'};
 			this.item = '';
 			this.itemData = {id: '', target: this};
-			this.usedItemThisTurn = true;
 			return true;
 		}
 		return false;
@@ -988,7 +988,8 @@ var BattlePokemon = (function() {
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemData, this, source, effect);
 		}
-		if (this.lastItem) this.usedItemThisTurn = true;
+		this.lastItemTurnData = {};
+		if (this.lastItem) this.lastItemTurnData = {id: this.lastItem, effect: 'setItem'};
 		return true;
 	};
 	BattlePokemon.prototype.tossItem = function(source) {
@@ -1000,7 +1001,7 @@ var BattlePokemon = (function() {
 			this.lastItem = item.id;
 			this.item = '';
 			this.itemData = {id: '', target: this};
-			this.usedItemThisTurn = true;
+			this.lastItemTurnData = {id: item.id, effect: 'tossItem'};
 			return item;
 		}
 		return false;
@@ -2434,7 +2435,7 @@ var Battle = (function() {
 				var pokemon = this.sides[i].active[j];
 				if (!pokemon) continue;
 				pokemon.moveThisTurn = '';
-				pokemon.usedItemThisTurn = false;
+				pokemon.lastItemTurnData = {};
 				pokemon.newlySwitched = false;
 				if (pokemon.lastAttackedBy) {
 					pokemon.lastAttackedBy.thisTurn = false;

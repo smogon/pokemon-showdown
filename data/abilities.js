@@ -1831,9 +1831,10 @@ exports.BattleAbilities = {
 		onResidual: function(pokemon) {
 			var foe = pokemon.side.foe.randomActive();
 			if (!foe) return;
-			if (!pokemon.item && foe.lastItem && foe.usedItemThisTurn && foe.lastItem !== 'airballoon' && foe.lastItem !== 'ejectbutton') {
+			if (!pokemon.item && foe.lastItemTurnData.id && (foe.lastItemTurnData.effect === 'tossItem' || foe.lastItem !== 'airballoon' && foe.lastItem !== 'ejectbutton')) {
 				pokemon.setItem(foe.lastItem);
 				foe.lastItem = '';
+				foe.lastItemTurnData = {};
 				var item = pokemon.getItem();
 				this.add('-item', pokemon, item, '[from] Pickup');
 				if (item.isBerry) pokemon.update();
