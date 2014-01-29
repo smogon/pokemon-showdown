@@ -1353,6 +1353,11 @@ var commands = exports.commands = {
         	'<b>Catchphrase: </b><a href="http://creatureleague.weebly.com">http://creatureleague.weebly.com</a></center>');
     },
     
+    esepeonage: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://img-cache.cdn.gaiaonline.com/442e3b40f5df1955620f588ccabe0b57/http://i70.photobucket.com/albums/i120/selena60007000/A%20Pokemon%20rp/Espeon.jpg" width="70" height="95"><img src="http://i.imgur.com/Ltp92WB.gif"><img src="http://th09.deviantart.net/fs71/PRE/f/2010/240/f/4/umbreon_espeon_gijinka_girls_by_peachykit-d2xh34e.jpg" width="120" height="95"><br /><center><b>Ace:Espeon </b></center><center><b>Catchphrase: Take a gander at me and youll like what you see. </b></center>');
+    },
+    
     themapples : 'mapples',
     mapples: function(target, room, user) {
         if (!this.canBroadcast()) return;
