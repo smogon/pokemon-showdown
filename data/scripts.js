@@ -49,9 +49,8 @@ exports.BattleScripts = {
 	},
 	useMove: function(move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
-		move = this.getMove(move);
-		baseMove = move;
 		move = this.getMoveCopy(move);
+		var baseTarget = move.target;
 		if (!target) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
@@ -61,13 +60,15 @@ exports.BattleScripts = {
 		this.setActiveMove(move, pokemon, target);
 
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-		if (baseMove.target !== move.target) {
-			//Target changed in ModifyMove, so we must adjust it here
+		if (baseTarget !== move.target) {
+			// Target changed in ModifyMove, so we must adjust it here
+			// Adjust before the next event so the correct target is passed to the
+			// event
 			target = this.resolveTarget(pokemon, move);
 		}
-		move = this.runEvent('ModifyMove',pokemon,target,move,move);
-		if (baseMove.target !== move.target) {
-			//check again
+		move = this.runEvent('ModifyMove', pokemon, target, move, move);
+		if (baseTarget !== move.target) {
+			// Adjust again
 			target = this.resolveTarget(pokemon, move);
 		}
 		if (!move) return false;
