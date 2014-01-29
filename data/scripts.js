@@ -9,7 +9,7 @@ exports.BattleScripts = {
 			}
 		}
 		move = this.getMove(move);
-		if (!target) target = this.resolveTarget(pokemon, move);
+		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -48,16 +48,10 @@ exports.BattleScripts = {
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	useMove: function(move, pokemon, target, sourceEffect) {
-		if (target === false) {
-			this.attrLastMove('[notarget]');
-			this.add('-notarget');
-			return true;
-		}
-
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMoveCopy(move);
 		var baseTarget = move.target;
-		if (!target) target = this.resolveTarget(pokemon, move);
+		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
 		}
@@ -93,6 +87,12 @@ exports.BattleScripts = {
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]'+this.getEffect(sourceEffect);
 		this.addMove('move', pokemon, movename, target+attrs);
+
+		if (target === false) {
+			this.attrLastMove('[notarget]');
+			this.add('-notarget');
+			return true;
+		}
 
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return true;
