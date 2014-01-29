@@ -48,6 +48,12 @@ exports.BattleScripts = {
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	useMove: function(move, pokemon, target, sourceEffect) {
+		if (target === false) {
+			this.attrLastMove('[notarget]');
+			this.add('-notarget');
+			return true;
+		}
+
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMoveCopy(move);
 		var baseTarget = move.target;
