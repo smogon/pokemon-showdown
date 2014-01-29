@@ -136,7 +136,7 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			var targets = pokemon.side.foe.active;
 			for (var i=0; i<targets.length; i++) {
-				if (targets[i].fainted) continue;
+				if (!targets[i] || targets[i].fainted) continue;
 				for (var j=0; j<targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
 					if (move.category !== 'Status' && (this.getImmunity(move.type, pokemon) && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
