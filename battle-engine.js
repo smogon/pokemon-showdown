@@ -341,6 +341,7 @@ var BattlePokemon = (function() {
 
 	BattlePokemon.prototype.lastMove = '';
 	BattlePokemon.prototype.moveThisTurn = '';
+	BattlePokemon.prototype.lastTargetedSide = '';
 
 	BattlePokemon.prototype.lastDamage = 0;
 	BattlePokemon.prototype.lastAttackedBy = null;
@@ -737,6 +738,7 @@ var BattlePokemon = (function() {
 
 		this.lastMove = '';
 		this.moveThisTurn = '';
+		this.lastTargetedSide = '';
 
 		this.lastDamage = 0;
 		this.lastAttackedBy = null;
@@ -2919,8 +2921,10 @@ var Battle = (function() {
 				this.validTargetLoc(decision.targetLoc, decision.pokemon, move.target)) {
 			if (decision.targetLoc > 0) {
 				target = decision.pokemon.side.foe.active[decision.targetLoc-1];
+				decision.pokemon.lastTargetedSide = decision.pokemon.side.foe;
 			} else {
 				target = decision.pokemon.side.active[(-decision.targetLoc)-1];
+				decision.pokemon.lastTargetedSide = decision.pokemon.side;
 			}
 			if (target) {
 				if (!target.fainted) {
@@ -2962,6 +2966,14 @@ var Battle = (function() {
 		}
 		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' || move.target === 'allyTeam' || move.target === 'adjacentAlly' || move.target === 'adjacentAllyOrSelf') {
 			return pokemon;
+		}
+		if (pokemon.lastTargetedSide === pokemon.side) {
+			if (pokemon.side.active[pokemon.position-1]) {
+				return pokemon.side.active[pokemon.position-1];
+			}
+			else if (pokemon.side.active[pokemon.position+1]) {
+				return pokemon.side.active[pokemon.position+1];
+			}
 		}
 		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
 	};
