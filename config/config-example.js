@@ -321,7 +321,12 @@ exports.groups = {
 exports.groups.globalByRank = exports.groups.byRank.filter(function (a) { return exports.groups.global[a]; });
 exports.groups.chatRoomByRank = exports.groups.byRank.filter(function (a) { return exports.groups.chatRoom[a]; });
 exports.groups.battleRoomByRank = exports.groups.byRank.filter(function (a) { return exports.groups.battleRoom[a]; });
-exports.groups.byRank.forEach(function (group, rank) { exports.groups.bySymbol[group].rank = rank; });
+exports.groups.byId = {};
+exports.groups.byRank.forEach(function (group, rank) {
+	var groupData = exports.groups.bySymbol[group];
+	if (groupData.id) exports.groups.byId[groupData.id] = group;
+	groupData.rank = rank;
+});
 exports.groups.globalByRank.forEach(function (group, rank) { exports.groups.bySymbol[group].globalRank = rank; });
 exports.groups.chatRoomByRank.forEach(function (group, rank) { exports.groups.bySymbol[group].chatRoomRank = rank; });
 exports.groups.battleRoomByRank.forEach(function (group, rank) { exports.groups.bySymbol[group].battleRoomRank = rank; });

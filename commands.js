@@ -761,11 +761,8 @@ var commands = exports.commands = {
 		case 'autoconfirmed':
 			room.modchat = 'autoconfirmed';
 			break;
-		case '*':
-		case 'player':
-			target = '\u2605';
-			// fallthrough
 		default:
+			if (config.groups.byId[target]) target = config.groups.byId[target];
 			if (!config.groups[roomType][target]) return this.parse('/help modchat');
 			if (config.groups.bySymbol[target][roomType + 'Rank'] > 1 && !user.can('modchatall', room)) {
 				return this.sendReply("/modchat - Access denied for setting higher than " + config.groups[roomType + 'ByRank'][1] + ".");
