@@ -43,8 +43,8 @@ exports.BattleFormats = {
 			'Reshiram',
 			'Zekrom',
 			'Kyurem', 'Kyurem-Black', 'Kyurem-White',
-			'Keldeo', 'Keldeo-Resolute',
-			'Meloetta', 'Meloetta-Pirouette',
+			'Keldeo',
+			'Meloetta',
 			'Genesect',
 			'Xerneas',
 			'Yveltal',
@@ -174,6 +174,24 @@ exports.BattleFormats = {
 				}
 				set.species = 'Meloetta';
 			}
+			if (template.num === 649) { // Genesect
+				switch (item.id) {
+					case 'burndrive':
+						set.species = 'Genesect-Burn';
+						break;
+					case 'chilldrive':
+						set.species = 'Genesect-Chill';
+						break;
+					case 'dousedrive':
+						set.species = 'Genesect-Douse';
+						break;
+					case 'shockdrive':
+						set.species = 'Genesect-Shock';
+						break;
+					default:
+						set.species = 'Genesect';
+				}
+			}
 			if (template.num == 681) { // Aegislash
 				set.species = 'Aegislash';
 			}
@@ -193,7 +211,7 @@ exports.BattleFormats = {
 				"Abomasnow":1,"Abomasnow-Mega":1,"Abra":1,"Absol":1,"Absol-Mega":1,"Accelgor":1,"Aegislash":1,"Aegislash-Blade":1,"Aerodactyl":1,"Aerodactyl-Mega":1,"Aggron":1,"Aggron-Mega":1,"Alakazam":1,"Alakazam-Mega":1,"Alomomola":1,"Altaria":1,"Amaura":1,"Amoonguss":1,"Ampharos":1,"Ampharos-Mega":1,"Arbok":1,"Ariados":1,"Aromatisse":1,"Aron":1,"Articuno":1,"Audino":1,"Aurorus":1,"Avalugg":1,"Axew":1,"Azumarill":1,"Azurill":1,"Bagon":1,"Banette":1,"Banette-Mega":1,"Barbaracle":1,"Barboach":1,"Basculin":1,"Basculin-Blue-Striped":1,"Beartic":1,"Beedrill":1,"Bellossom":1,"Bellsprout":1,"Bergmite":1,"Bibarel":1,"Bidoof":1,"Binacle":1,"Bisharp":1,"Blastoise":1,"Blastoise-Mega":1,"Boldore":1,"Bonsly":1,"Braixen":1,"Budew":1,"Buizel":1,"Bulbasaur":1,"Bunnelby":1,"Burmy":1,"Butterfree":1,"Carbink":1,"Carnivine":1,"Carvanha":1,"Caterpie":1,"Chandelure":1,"Charizard":1,"Charizard-Mega-X":1,"Charizard-Mega-Y":1,"Charmander":1,"Charmeleon":1,"Chatot":1,"Chesnaught":1,"Chespin":1,"Chimecho":1,"Chinchou":1,"Chingling":1,"Clamperl":1,"Clauncher":1,"Clawitzer":1,"Cloyster":1,"Combee":1,"Conkeldurr":1,"Corphish":1,"Corsola":1,"Crawdaunt":1,"Croagunk":1,"Crobat":1,"Crustle":1,"Cryogonal":1,"Cubchoo":1,"Cubone":1,"Dedenne":1,"Deino":1,"Delcatty":1,"Delibird":1,"Delphox":1,"Diggersby":1,"Diglett":1,"Ditto":1,"Dodrio":1,"Doduo":1,"Doublade":1,"Dragalge":1,"Dragonair":1,"Dragonite":1,"Drapion":1,"Dratini":1,"Drifblim":1,"Drifloon":1,"Druddigon":1,"Ducklett":1,"Dugtrio":1,"Dunsparce":1,"Duosion":1,"Durant":1,"Dwebble":1,"Eevee":1,"Ekans":1,"Electrike":1,"Electrode":1,"Emolga":1,"Escavalier":1,"Espeon":1,"Espurr":1,"Exeggcute":1,"Exeggutor":1,"Exploud":1,"Farfetch'd":1,"Fearow":1,"Fennekin":1,"Ferroseed":1,"Ferrothorn":1,"Flaaffy":1,"Flabebe":1,"Flareon":1,"Fletchinder":1,"Fletchling":1,"Floatzel":1,"Floette":1,"Florges":1,"Flygon":1,"Foongus":1,"Fraxure":1,"Froakie":1,"Frogadier":1,"Furfrou":1,"Furret":1,"Gabite":1,"Gallade":1,"Garbodor":1,"Garchomp":1,"Garchomp-Mega":1,"Gardevoir":1,"Gardevoir-Mega":1,"Gastly":1,"Gengar":1,"Gengar-Mega":1,"Geodude":1,"Gible":1,"Gigalith":1,"Glaceon":1,"Gligar":1,"Gliscor":1,"Gloom":1,"Gogoat":1,"Golbat":1,"Goldeen":1,"Golduck":1,"Golem":1,"Golett":1,"Golurk":1,"Goodra":1,"Goomy":1,"Gorebyss":1,"Gothita":1,"Gothitelle":1,"Gothorita":1,"Gourgeist-Small":1,"Gourgeist":1,"Gourgeist-Large":1,"Gourgeist-Super":1,"Granbull":1,"Graveler":1,"Greninja":1,"Grumpig":1,"Gulpin":1,"Gurdurr":1,"Gyarados":1,"Gyarados-Mega":1,"Hariyama":1,"Haunter":1,"Hawlucha":1,"Haxorus":1,"Heatmor":1,"Heliolisk":1,"Helioptile":1,"Heracross":1,"Heracross-Mega":1,"Hippopotas":1,"Hippowdon":1,"Honchkrow":1,"Honedge":1,"Hoothoot":1,"Hoppip":1,"Horsea":1,"Houndoom":1,"Houndoom-Mega":1,"Houndour":1,"Huntail":1,"Hydreigon":1,"Igglybuff":1,"Illumise":1,"Inkay":1,"Ivysaur":1,"Jigglypuff":1,"Jolteon":1,"Jumpluff":1,"Jynx":1,"Kadabra":1,"Kakuna":1,"Kangaskhan":1,"Kangaskhan-Mega":1,"Karrablast":1,"Kecleon":1,"Kingdra":1,"Kirlia":1,"Klefki":1,"Krokorok":1,"Krookodile":1,"Lairon":1,"Lampent":1,"Lanturn":1,"Lapras":1,"Larvitar":1,"Leafeon":1,"Ledian":1,"Ledyba":1,"Lickilicky":1,"Lickitung":1,"Liepard":1,"Linoone":1,"Litleo":1,"Litwick":1,"Lombre":1,"Lotad":1,"Loudred":1,"Lucario":1,"Lucario-Mega":1,"Ludicolo":1,"Lunatone":1,"Luvdisc":1,"Machamp":1,"Machoke":1,"Machop":1,"Magcargo":1,"Magikarp":1,"Magnemite":1,"Magneton":1,"Magnezone":1,"Makuhita":1,"Malamar":1,"Mamoswine":1,"Manectric":1,"Manectric-Mega":1,"Mantine":1,"Mantyke":1,"Mareep":1,"Marill":1,"Marowak":1,"Masquerain":1,"Mawile":1,"Mawile-Mega":1,"Medicham":1,"Medicham-Mega":1,"Meditite":1,"Meowstic":1,"Meowstic-F":1,"Metapod":1,"Mewtwo":1,"Mewtwo-Mega-X":1,"Mewtwo-Mega-Y":1,"Mienfoo":1,"Mienshao":1,"Mightyena":1,"Miltank":1,"Mime Jr.":1,"Minun":1,"Moltres":1,"Mothim":1,"Mr. Mime":1,"Munchlax":1,"Murkrow":1,"Nidoking":1,"Nidoqueen":1,"Nidoran-M":1,"Nidoran-F":1,"Nidorina":1,"Nidorino":1,"Nincada":1,"Ninjask":1,"Noctowl":1,"Noibat":1,"Noivern":1,"Nosepass":1,"Octillery":1,"Oddish":1,"Onix":1,"Pachirisu":1,"Pancham":1,"Pangoro":1,"Panpour":1,"Pansage":1,"Pansear":1,"Patrat":1,"Pawniard":1,"Pelipper":1,"Phantump":1,"Pichu":1,"Pidgeot":1,"Pidgeotto":1,"Pidgey":1,"Pikachu":1,"Piloswine":1,"Pinsir":1,"Pinsir-Mega":1,"Plusle":1,"Politoed":1,"Poliwag":1,"Poliwhirl":1,"Poliwrath":1,"Poochyena":1,"Probopass":1,"Psyduck":1,"Pumpkaboo-Small":1,"Pumpkaboo":1,"Pumpkaboo-Large":1,"Pumpkaboo-Super":1,"Pupitar":1,"Purrloin":1,"Pyroar":1,"Quagsire":1,"Quilladin":1,"Qwilfish":1,"Raichu":1,"Ralts":1,"Relicanth":1,"Remoraid":1,"Reuniclus":1,"Rhydon":1,"Rhyhorn":1,"Rhyperior":1,"Riolu":1,"Roggenrola":1,"Roselia":1,"Roserade":1,"Rotom":1,"Rotom-Heat":1,"Rotom-Wash":1,"Rotom-Frost":1,"Rotom-Fan":1,"Rotom-Mow":1,"Sableye":1,"Salamence":1,"Sandile":1,"Sandshrew":1,"Sandslash":1,"Sawk":1,"Scatterbug":1,"Scizor":1,"Scizor-Mega":1,"Scolipede":1,"Scrafty":1,"Scraggy":1,"Scyther":1,"Seadra":1,"Seaking":1,"Sentret":1,"Seviper":1,"Sharpedo":1,"Shedinja":1,"Shelgon":1,"Shellder":1,"Shelmet":1,"Shuckle":1,"Shuppet":1,"Sigilyph":1,"Simipour":1,"Simisage":1,"Simisear":1,"Skarmory":1,"Skiddo":1,"Skiploom":1,"Skitty":1,"Skorupi":1,"Skrelp":1,"Skuntank":1,"Sliggoo":1,"Slowbro":1,"Slowking":1,"Slowpoke":1,"Slugma":1,"Slurpuff":1,"Smeargle":1,"Smoochum":1,"Sneasel":1,"Snorlax":1,"Snover":1,"Snubbull":1,"Solosis":1,"Solrock":1,"Spearow":1,"Spewpa":1,"Spinarak":1,"Spinda":1,"Spoink":1,"Spritzee":1,"Squirtle":1,"Staraptor":1,"Staravia":1,"Starly":1,"Starmie":1,"Staryu":1,"Steelix":1,"Stunfisk":1,"Stunky":1,"Sudowoodo":1,"Surskit":1,"Swablu":1,"Swalot":1,"Swanna":1,"Swellow":1,"Swinub":1,"Swirlix":1,"Swoobat":1,"Sylveon":1,"Taillow":1,"Talonflame":1,"Tauros":1,"Teddiursa":1,"Tentacool":1,"Tentacruel":1,"Throh":1,"Timburr":1,"Torkoal":1,"Toxicroak":1,"Trapinch":1,"Trevenant":1,"Trubbish":1,"Tyranitar":1,"Tyranitar-Mega":1,"Tyrantrum":1,"Tyrunt":1,"Umbreon":1,"Ursaring":1,"Vanillish":1,"Vanillite":1,"Vanilluxe":1,"Vaporeon":1,"Venipede":1,"Venusaur":1,"Venusaur-Mega":1,"Vespiquen":1,"Vibrava":1,"Victreebel":1,"Vileplume":1,"Vivillon":1,"Volbeat":1,"Voltorb":1,"Wailmer":1,"Wailord":1,"Wartortle":1,"Watchog":1,"Weavile":1,"Weedle":1,"Weepinbell":1,"Whirlipede":1,"Whiscash":1,"Whismur":1,"Wigglytuff":1,"Wingull":1,"Wobbuffet":1,"Woobat":1,"Wooper":1,"Wormadam":1,"Wormadam-Sandy":1,"Wormadam-Trash":1,"Wynaut":1,"Xerneas":1,"Yanma":1,"Yanmega":1,"Yveltal":1,"Zangoose":1,"Zapdos":1,"Zigzagoon":1,"Zoroark":1,"Zorua":1,"Zubat":1,"Zweilous":1,"Zygarde":1
 			};
 			if (!(set.species in validKalosDex)) {
-				return [set.species+" is not in the Kalos Pokedex."]
+				return [set.species+" is not in the Kalos Pokedex."];
 			}
 		}
 	},
@@ -238,10 +256,10 @@ exports.BattleFormats = {
 		onStart: function() {
 			this.add('clearpoke');
 			for (var i=0; i<this.sides[0].pokemon.length; i++) {
-				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)-[a-zA-Z?]+/g, '$1-*'));
 			}
 			for (var i=0; i<this.sides[1].pokemon.length; i++) {
-				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)-[a-zA-Z?]+/g, '$1-*'));
 			}
 		},
 		onTeamPreview: function() {
@@ -253,10 +271,10 @@ exports.BattleFormats = {
 		onStart: function() {
 			this.add('clearpoke');
 			for (var i=0; i<this.sides[0].pokemon.length; i++) {
-				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)-[a-zA-Z?]+/g, '$1-*'));
 			}
 			for (var i=0; i<this.sides[1].pokemon.length; i++) {
-				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)-[a-zA-Z?]+/g, '$1-*'));
 			}
 		},
 		onTeamPreview: function() {
@@ -268,10 +286,10 @@ exports.BattleFormats = {
 		onStart: function() {
 			this.add('clearpoke');
 			for (var i=0; i<this.sides[0].pokemon.length; i++) {
-				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)-[a-zA-Z?]+/g, '$1-*'));
 			}
 			for (var i=0; i<this.sides[1].pokemon.length; i++) {
-				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)-[a-zA-Z?]+/g, '$1-*'));
 			}
 		},
 		onTeamPreview: function() {
@@ -283,10 +301,10 @@ exports.BattleFormats = {
 		onStart: function() {
 			this.add('clearpoke');
 			for (var i=0; i<this.sides[0].pokemon.length; i++) {
-				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)-[a-zA-Z?]+/g, '$1-*'));
 			}
 			for (var i=0; i<this.sides[1].pokemon.length; i++) {
-				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/Arceus(\-[a-zA-Z\?]+)?/, 'Arceus-*'));
+				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)-[a-zA-Z?]+/g, '$1-*'));
 			}
 		},
 		onTeamPreview: function() {
@@ -373,9 +391,12 @@ exports.BattleFormats = {
 	endlessbattleclause: {
 		effectType: 'Banlist',
 		name: 'Endless Battle Clause',
-		banlist: ['Heal Pulse + Leppa Berry + Recycle', 'Pain Split + Leppa Berry + Recycle', 'Fling + Leppa Berry + Recycle'],
+		banlist: ['Leppa Berry + Recycle'],
 		onStart: function() {
 			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned.');
+		},
+		validateSet: function(set) {
+			if (set.ability === 'harvest' && set.item === 'leppaberry') return ['The combination of Harvest and Leppa Berry is banned by Endless Battle Clause.'];
 		}
 	},
 	moodyclause: {

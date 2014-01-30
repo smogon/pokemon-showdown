@@ -9,7 +9,7 @@ exports.BattleScripts = {
 			}
 		}
 		move = this.getMove(move);
-		if (!target) target = this.resolveTarget(pokemon, move);
+		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -49,10 +49,9 @@ exports.BattleScripts = {
 	},
 	useMove: function(move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
-		move = this.getMove(move);
-		baseMove = move;
 		move = this.getMoveCopy(move);
-		if (!target) target = this.resolveTarget(pokemon, move);
+		var baseTarget = move.target;
+		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
 		}
@@ -61,13 +60,15 @@ exports.BattleScripts = {
 		this.setActiveMove(move, pokemon, target);
 
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-		if (baseMove.target !== move.target) {
-			//Target changed in ModifyMove, so we must adjust it here
+		if (baseTarget !== move.target) {
+			// Target changed in ModifyMove, so we must adjust it here
+			// Adjust before the next event so the correct target is passed to the
+			// event
 			target = this.resolveTarget(pokemon, move);
 		}
-		move = this.runEvent('ModifyMove',pokemon,target,move,move);
-		if (baseMove.target !== move.target) {
-			//check again
+		move = this.runEvent('ModifyMove', pokemon, target, move, move);
+		if (baseTarget !== move.target) {
+			// Adjust again
 			target = this.resolveTarget(pokemon, move);
 		}
 		if (!move) return false;
@@ -86,6 +87,12 @@ exports.BattleScripts = {
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]'+this.getEffect(sourceEffect);
 		this.addMove('move', pokemon, movename, target+attrs);
+
+		if (target === false) {
+			this.attrLastMove('[notarget]');
+			this.add('-notarget');
+			return true;
+		}
 
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return true;
@@ -448,6 +455,7 @@ exports.BattleScripts = {
 				if (!isSelf && !isSecondary) {
 					this.runEvent('Hit', target, pokemon, move);
 				}
+				if (moveData.onAfterHit) hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
 			}
 
 			if (!hitResult && !didSomething && !moveData.self) {
@@ -492,6 +500,7 @@ exports.BattleScripts = {
 		var template = this.getTemplate(item.megaStone);
 		if (!template.isMega) return false;
 		if (pokemon.baseTemplate.species !== template.baseSpecies) return false;
+		if (pokemon.volatiles.mustrecharge) return false;
 
 		// okay, mega evolution is possible
 		this.add('-formechange', pokemon, template.species);
@@ -818,9 +827,9 @@ exports.BattleScripts = {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
-						// Power Gem, Bounce, Aeroblast aren't considered STABs.
+						// Bounce, Aeroblast aren't considered STABs.
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
-						if (moveid === 'aeroblast' || moveid === 'powergem' || moveid === 'bounce') hasStab[move.type] = false;
+						if (moveid === 'aeroblast' || moveid === 'bounce') hasStab[move.type] = false;
 					}
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
@@ -1041,6 +1050,9 @@ exports.BattleScripts = {
 				case 'boltstrike':
 					if (!setupType && hasMove['fusionbolt']) rejected = true;
 					break;
+				case 'hiddenpowerice':
+					if (hasMove['icywind']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
@@ -1086,6 +1098,9 @@ exports.BattleScripts = {
 					break;
 				case 'lavaplume':
 					if (hasMove['willowisp']) rejected = true;
+					break;
+				case 'trickroom':
+					if (hasMove['rockpolish'] || hasMove['agility']) rejected = true;
 					break;
 				}
 
@@ -1548,7 +1563,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && !this.getTemplate(i).evos.length) {
+			if (this.data.FormatsData[i].viableMoves && !this.data.FormatsData[i].isNonstandard && !this.getTemplate(i).evos.length) {
 				keys.push(i);
 			}
 		}
@@ -1562,6 +1577,7 @@ exports.BattleScripts = {
 
 		var typeCount = {};
 		var typeComboCount = {};
+		var baseFormes = {};
 		var uberCount = 0;
 		var nuCount = 0;
 		var megaCount = 0;
@@ -1579,10 +1595,12 @@ exports.BattleScripts = {
 
 			// CAPs have 20% the normal rate
 			if (tier === 'CAP' && Math.random()*5>1) continue;
-			// Arceus formes have 1/17 the normal rate each (so Arceus as a whole has a normal rate)
-			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
+			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
+			if (keys[i].substr(0,6) === 'arceus' && Math.random()*18>1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
 			if (keys[i].substr(0,8) === 'basculin' && Math.random()*2>1) continue;
+			// Genesect formes have 1/5 the normal rate each (so Genesect as a whole has a normal rate)
+			if (keys[i].substr(0,8) === 'genesect' && Math.random()*5>1) continue;
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
@@ -1623,6 +1641,10 @@ exports.BattleScripts = {
 
 			// Limit the number of Megas to one, just like in-game
 			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
+			baseFormes[template.baseSpecies] = 1;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);

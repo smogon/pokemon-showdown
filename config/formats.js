@@ -1,5 +1,5 @@
 // Note: This is the list of formats
-// The rules that formats use are stored in data/formats.js
+// The rules that formats use are stored in data/rulesets.js
 
 exports.Formats = [
 
@@ -30,6 +30,13 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
 	},
 	{
+		name: "OU (suspect test)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Genesect', 'Deoxys-Speed']
+	},
+	{
 		name: "Ubers",
 		section: "XY Singles",
 
@@ -41,7 +48,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'OU', 'Kyurem-Black', 'Manaphy', 'Drizzle']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'OU', 'BL', 'Drizzle', 'Drought']
 	},
 	{
 		name: "LC",
@@ -315,7 +322,7 @@ exports.Formats = [
 		debug: true,
 		ruleset: ['Team Preview']
 	},
-	
+
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 
@@ -340,6 +347,22 @@ exports.Formats = [
 		mod: 'averagemons',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Soul Dew', 'Thick Club', 'Deepseatooth', 'Deepseascale', 'Light Ball', 'Mawilite', 'Medichamite', 'Eviolite', 'Shedinja', 'Smeargle', 'Huge Power', 'Pure Power']
+	},
+	{
+		name: "Middle Cup",
+		section: "OM of the Month",
+		
+		searchShow: false,
+		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
+		banlist: ['Illegal', 'Eviolite'],
+		maxLevel: 50,
+		defaultLevel: 50,
+		validateSet: function(set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0 || !template.prevo) {
+				return [set.species + " is not the middle Pokémon in an evolution chain."];
+			}
+		}
 	},
 	{
 		name: "CAP",
@@ -373,14 +396,14 @@ exports.Formats = [
 		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'OHKO Clause'],
+		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod'],
 		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power', 'Parental Bond']
 	},
 	{
 		name: "Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon'],
+		ruleset: ['Pokemon', 'HP Percentage Mod'],
 		banlist: []
 	},
 	{
@@ -434,6 +457,7 @@ exports.Formats = [
 			'Palkia',
 			'Rayquaza',
 			'Shaymin-Sky',
+			'Soul Dew',
 			'Xerneas',
 			'Yveltal',
 			'Zekrom'
@@ -450,10 +474,10 @@ exports.Formats = [
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Unreleased', 'Illegal', 'Focus Sash', 'Soul Dew',
+		banlist: ['Unreleased', 'Illegal', 'Focus Sash', 'Kangaskhanite', 'Soul Dew',
 			'Destiny Bond', 'Explosion', 'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Memento', 'Perish Song', 'Selfdestruct',
 			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
-			'Blaziken', 'Blaziken-Mega', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom'
+			'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom'
 		]
 	},
 	{
@@ -661,7 +685,7 @@ exports.Formats = [
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber'],
-		
+
 		column: 2
 	},
 	{

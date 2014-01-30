@@ -159,7 +159,7 @@ var commands = exports.commands = {
 		}
 
 		this.sendReply("User: " + targetUser.name);
-		if (user.can('alts', targetUser.getHighestRankedAlt())) {
+		if (user.can('alts', targetUser)) {
 			var alts = targetUser.getAlts();
 			var output = Object.keys(targetUser.prevNames).join(", ");
 			if (output) this.sendReply("Previous names: " + output);
@@ -167,6 +167,7 @@ var commands = exports.commands = {
 			for (var j=0; j<alts.length; j++) {
 				var targetAlt = Users.get(alts[j]);
 				if (!targetAlt.named && !targetAlt.connected) continue;
+				if (targetAlt.group === '~' && user.group !== '~') continue;
 
 				this.sendReply("Alt: " + targetAlt.name);
 				output = Object.keys(targetAlt.prevNames).join(", ");
@@ -260,71 +261,41 @@ var commands = exports.commands = {
 
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
-		var moves = {}, tiers = {}, colours = {}, ability = {}, gens = {}, types = {};
-		var allTiers = {'uber':1,'ou':1,'uu':1,'ru':1,'nu':1,'lc':1,'cap':1,'bl':1,'bl2':1,'nfe':1, 'limbo':1};
+		var searches = {};
+		var allTiers = {'uber':1,'ou':1,'lc':1,'cap':1,'bl':1};
 		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
-		var count = 0;
 		var showAll = false;
+		var megasOnly = false;
 		var output = 10;
 
 		for (var i in targets) {
-			target = Tools.getMove(targets[i]);
-			if (target.exists) {
-				if (!moves.count) {
-					count++;
-					moves.count = 0;
-				}
-				if (moves.count === 4) {
-					return this.sendReply("Specify a maximum of 4 moves.");
-				}
-				moves[target] = 1;
-				moves.count++;
-				continue;
-			}
-
 			target = Tools.getAbility(targets[i]);
 			if (target.exists) {
-				if (!ability.count) {
-					count++;
-					ability.count = 0;
-				}
-				if (ability.count === 1) {
-					return this.sendReply("Specify only one ability.");
-				}
-				ability[target] = 1;
-				ability.count++;
+				if (searches['ability']) return this.sendReply("Specify only one ability.");
+				searches['ability'] = target.name;
 				continue;
 			}
 
 			target = targets[i].trim().toLowerCase();
 			if (target in allTiers) {
-				if (!tiers.count) {
-					count++;
-					tiers.count = 0;
-				}
-				tiers[target] = 1;
-				tiers.count++;
+				if (!searches['tier']) searches['tier'] = {};
+				searches['tier'][target] = 1;
 				continue;
 			}
+
 			if (target in allColours) {
-				if (!colours.count) {
-					count++;
-					colours.count = 0;
-				}
-				colours[target] = 1;
-				colours.count++;
+				if (!searches['color']) searches['color'] = {};
+				searches['color'][target] = 1;
 				continue;
 			}
+
 			var targetInt = parseInt(target);
-			if (0 < targetInt && targetInt < 6) {
-				if (!gens.count) {
-					count++;
-					gens.count = 0;
-				}
-				gens[targetInt] = 1;
-				gens.count++;
+			if (0 < targetInt && targetInt < 7) {
+				if (!searches['gen']) searches['gen'] = {};
+				searches['gen'][target] = 1;
 				continue;
 			}
+
 			if (target === 'all') {
 				if (this.broadcasting) {
 					return this.sendReply("A search with the parameter 'all' cannot be broadcast.")
@@ -332,120 +303,115 @@ var commands = exports.commands = {
 				showAll = true;
 				continue;
 			}
+
+			if (target === 'megas' || target === 'mega') {
+				megasOnly = true;
+				continue;
+			}
+
 			if (target.indexOf(' type') > -1) {
 				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
 				if (target in Tools.data.TypeChart) {
-					if (!types.count) {
-						count++;
-						types.count = 0;
-					}
-					if (types.count === 2) {
-						return this.sendReply("Specify a maximum of two types.");
-					}
-					types[target] = 1;
-					types.count++;
+					if (!searches['types']) searches['types'] = {};
+					if (Object.size(searches['types']) === 2) return this.sendReply("Specify a maximum of two types.");
+					searches['types'][target] = 1;
 					continue;
 				}
+			}
+
+			var targetMove = Tools.getMove(target);
+			if (targetMove.exists) {
+				if (!searches['moves']) searches['moves'] = [];
+				if (searches['moves'].length === 4) return this.sendReply("Specify a maximum of 4 moves.");
+				searches['moves'].push(targetMove.name);
+				continue;
 			} else {
 				return this.sendReply("'" + targets[i].trim() + "' could not be found in any of the search categories.");
 			}
 		}
 
-		if (showAll && count === 0) return this.sendReply("No search parameters other than 'all' were found.\nTry '/help dexsearch' for more information on this command.");
+		if (showAll && Object.size(searches) === 0) return this.sendReply("No search parameters other than 'all' were found.\nTry '/help dexsearch' for more information on this command.");
 
-		while (count > 0) {
-			count--;
-			var tempResults = [];
-			if (!results) {
-				for (var pokemon in Tools.data.Pokedex) {
-					pokemon = Tools.getTemplate(pokemon);
-					if (pokemon.tier !== 'Illegal' && (pokemon.tier !== 'CAP' || 'cap' in tiers)) {
-						tempResults.add(pokemon);
-					}
-				}
-			} else {
-				for (var mon in results) tempResults.add(results[mon]);
-			}
-			var results = [];
-
-			if (types.count > 0) {
-				for (var mon in tempResults) {
-					if (types.count === 1) {
-						if (tempResults[mon].types[0] in types || tempResults[mon].types[1] in types) results.add(tempResults[mon]);
-					} else {
-						if (tempResults[mon].types[0] in types && tempResults[mon].types[1] in types) results.add(tempResults[mon]);
-					}
-				}
-				types.count = 0;
-				continue;
-			}
-
-			if (tiers.count > 0) {
-				for (var mon in tempResults) {
-					if (tempResults[mon].tier.toLowerCase() in tiers) results.add(tempResults[mon]);
-				}
-				tiers.count = 0;
-				continue;
-			}
-
-			if (ability.count > 0) {
-				for (var mon in tempResults) {
-					for (var monAbility in tempResults[mon].abilities) {
-						if (Tools.getAbility(tempResults[mon].abilities[monAbility]) in ability) results.add(tempResults[mon]);
-					}
-				}
-				ability.count = 0;
-				continue;
-			}
-
-			if (colours.count > 0) {
-				for (var mon in tempResults) {
-					if (tempResults[mon].color.toLowerCase() in colours) results.add(tempResults[mon]);
-				}
-				colours.count = 0;
-				continue;
-			}
-
-			if (moves.count > 0) {
-				var problem;
-				var move = {};
-				for (var mon in tempResults) {
-					var lsetData = {set:{}};
-					var template = Tools.getTemplate(tempResults[mon].id);
-					for (var i in moves) {
-						move = Tools.getMove(i);
-						if (move.id !== 'count') {
-							if (!move.exists) return this.sendReplyBox("'" + move + "' is not a known move.");
-							problem = Tools.checkLearnset(move, template, lsetData);
-							if (problem) break;
-						}
-					}
-					if (!problem) results.add(tempResults[mon]);
-				}
-				moves.count = 0;
-				continue;
-			}
-
-			if (gens.count > 0) {
-				for (var mon in tempResults) {
-					if (tempResults[mon].gen in gens) results.add(tempResults[mon]);
-				}
-				gens.count = 0;
-				continue;
+		var dex = {};
+		for (var pokemon in Tools.data.Pokedex) {
+			var template = Tools.getTemplate(pokemon);
+			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && 'cap' in searches['tier'])) && (!megasOnly || template.isMega)) {
+				dex[pokemon] = template;
 			}
 		}
 
+		for (var search in {'moves':1,'types':1,'ability':1,'tier':1,'gen':1,'color':1}) {
+			if (!searches[search]) continue;
+			switch (search) {
+				case 'types':
+					for (var mon in dex) {
+						if (Object.size(searches['types']) === 2) {
+							if (!(dex[mon].types[0] in searches['types']) || !(dex[mon].types[1] in searches['types'])) delete dex[mon];
+						} else {
+							if (!(dex[mon].types[0] in searches['types']) && !(dex[mon].types[1] in searches['types'])) delete dex[mon];
+						}
+					}
+					break;
+
+				case 'tier':
+					for (var mon in dex) {
+						// some LC legal Pokemon are stored in other tiers (Ferroseed/Murkrow etc)
+						// this checks for LC legality using the going criteria, instead of dex[mon].tier
+						if ('lc' in searches[search]) {
+							if ((dex[mon].evos && dex[mon].evos.length === 0) || dex[mon].prevo || Tools.data.Formats['lc'].banlist.indexOf(dex[mon].species) > -1) delete dex[mon];
+						} else if (!(String(dex[mon][search]).toLowerCase() in searches[search])) delete dex[mon];
+					}
+					break;
+
+				case 'gen':
+				case 'color':
+					for (var mon in dex) {
+						if (!(String(dex[mon][search]).toLowerCase() in searches[search])) delete dex[mon];
+					}
+					break;
+
+				case 'ability':
+					for (var mon in dex) {
+						var hasAbility = false;
+						for (var monAbility in dex[mon].abilities) {
+							if (dex[mon].abilities[monAbility] === searches['ability']) hasAbility = true;
+						}
+						if (!hasAbility) delete dex[mon];
+					}
+					break;
+
+				case 'moves':
+					for (var mon in dex) {
+						var template = Tools.getTemplate(dex[mon].id);
+						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+						if (!template.learnset) continue;
+						for (var i in searches['moves']) {
+							var move = Tools.getMove(searches['moves'][i]);
+							if (!move.exists) return this.sendReplyBox("'" + move + "' is not a known move.");
+							if (!template.learnset.sketch && !template.learnset[move.id]) delete dex[mon];
+						}
+					}
+					for (var mon in dex) {
+						if (dex[mon].evos) {
+							for (var evo in dex[mon].evos) dex[dex[mon].evos[evo]] = Tools.getTemplate(dex[mon].evos[evo]);
+						}
+					}
+					break;
+
+				default:
+					return this.sendReply("Something broke! PM TalkTakesTime here or on the Smogon forums with the command you tried.");
+			}
+		}
+
+		var results = Object.keys(dex).map(function(speciesid) {return dex[speciesid].species});
 		var resultsStr = "";
-		if (results && results.length > 0) {
-			for (var i = 0; i < results.length; ++i) results[i] = results[i].species;
+		if (results.length > 0) {
 			if (showAll || results.length <= output) {
+				results.sort();
 				resultsStr = results.join(", ");
 			} else {
-				var hidden = string(results.length - output);
 				results.sort(function(a,b) {return Math.round(Math.random());});
-				var shown = results.slice(0, 10);
-				resultsStr = shown.join(", ");
-				resultsStr += ", and " + hidden + " more. Redo the search with 'all' as a search parameter to show all results.";
+				resultsStr = results.slice(0, 10).join(", ") + ", and " + string(results.length - output) + " more. Redo the search with 'all' as a search parameter to show all results.";
 			}
 		} else {
 			resultsStr = "No Pokémon found.";
@@ -484,7 +450,7 @@ var commands = exports.commands = {
 			if (!move.exists) {
 				return this.sendReply("Move '" + move.id + "' not found.");
 			}
-			problem = Tools.checkLearnset(move, template, lsetData);
+			problem = TeamValidator.checkLearnsetSync(null, move, template, lsetData);
 			if (problem) break;
 		}
 		var buffer = template.name + (problem?" <span class=\"message-learn-cannotlearn\">can't</span> learn ":" <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length>2?"these moves":move.name);
@@ -640,7 +606,22 @@ var commands = exports.commands = {
 			'- <a href="http://www.smogon.com/forums/threads/3496279/">Beginner\'s Guide to Pokémon Showdown</a><br />' +
 			'- <a href="http://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pokémon</a><br />' +
 			'- <a href="http://www.smogon.com/bw/articles/bw_tiers">What do "OU", "UU", etc mean?</a><br />' +
-			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a>');
+			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a><br />' +
+			'- <a href="http://www.smogon.com/forums/threads/tiering-faq.3498332/">Tiering FAQ - an introduction to the tiering process</a>');
+	},
+
+	mentoring: 'smogintro',
+	smogonintro: 'smogintro',
+	smogintro: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('Welcome to Smogon\'s Official Pokémon Showdown server! The Mentoring room can be found ' +
+			'<a href="http://play.pokemonshowdown.com/mentoring">here</a> or by using /join mentoring.<br /><br />' +
+			'Here are some useful links to Smogon\'s Mentorship Program to help you get integrated into the community:<br />' +
+			'- <a href="http://www.smogon.com/mentorship/primer">Smogon Primer: A brief introduction to Smogon\'s subcommunities</a><br />' +
+			'- <a href="http://www.smogon.com/mentorship/introductions">Introduce yourself to Smogon!</a><br />' +
+			'- <a href="http://www.smogon.com/mentorship/profiles">Profiles of current Smogon Mentors</a><br />' +
+			'- <a href="http://mibbit.com/#mentor@irc.synirc.net">#mentor: the Smogon Mentorship IRC channel</a><br />' +
+			'All of these links and more can be found at the <a href="http://www.smogon.com/mentorship/">Smogon Mentorship Program\'s hub</a>.');
 	},
 
 	calculator: 'calc',
@@ -716,6 +697,7 @@ var commands = exports.commands = {
 		if (room.id === 'lobby') return this.sendReply("This command is too spammy for lobby.");
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox("Room drivers (%) can use:<br />" +
+			"- /warn OR /k <em>username</em>: warn a user and show the Pokemon Showdown rules<br />" +
 			"- /mute <em>username</em>: 7 minute mute<br />" +
 			"- /hourmute <em>username</em>: 60 minute mute<br />" +
 			"- /unmute <em>username</em>: unmute<br />" +
@@ -726,12 +708,13 @@ var commands = exports.commands = {
 			"- /roomunban <em>username</em>: unbans user from the room<br />" +
 			"- /roomvoice <em>username</em>: appoint a room voice<br />" +
 			"- /roomdevoice <em>username</em>: remove a room voice<br />" +
-			"- /modchat <em>level</em>: set modchat (to turn off: /modchat off)<br />" +
+			"- /modchat <em>[off/autoconfirmed/+]</em>: set modchat<br />" +
 			"<br />" +
 			"Room owners (#) can also use:<br />" +
 			"- /roomdesc <em>description</em>: set the room description on the room join page<br />" +
 			"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />" +
 			"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />" +
+			"- /modchat <em>[%/@/#]</em>: set modchat level<br />" +
 			"- /declare <em>message</em>: make a declaration<br />" +
 			"</div>");
 	},
@@ -846,6 +829,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 
 		var targets = target.split(',');
+		if (toId(targets[0]) === 'previews') return this.sendReplyBox('<a href="http://www.smogon.com/forums/threads/sixth-generation-pokemon-analyses-index.3494918/">Generation 6 Analyses Index</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>');
 		var pokemon = Tools.getTemplate(targets[0]);
 		var item = Tools.getItem(targets[0]);
 		var move = Tools.getMove(targets[0]);
