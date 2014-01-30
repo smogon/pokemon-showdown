@@ -1587,7 +1587,7 @@
 	},
 		
 
-        name: 'Xathoz',
+        Xathoz: 'Xathoz',
         Xathoz: function(target, room, user) {
                  if (!this.canBroadcast()) return;
                  this.sendReplyBox('Title: King of Gliscors<br \>' +
