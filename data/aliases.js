@@ -50,7 +50,7 @@ exports.BattleAliases = {
 	"deoa": "Deoxys-Attack",
 	"deoxysd": "Deoxys-Defense",
 	"deoxysdefence": "Deoxys-Defense",
-	"deoa": "Deoxys-Defense",
+	"deod": "Deoxys-Defense",
 	"deoxyss": "Deoxys-Speed",
 	"deos": "Deoxys-Speed",
 	"giratinao": "Giratina-Origin",
