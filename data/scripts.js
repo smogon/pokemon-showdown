@@ -1671,19 +1671,19 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomSeasonalWinterTeam: function(side) {
+	randomSeasonalFFTeam: function(side) {
 		var seasonalPokemonList = [
-			'raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster', 'exeggutor', 'starmie', 'jynx',
-			'lapras', 'snorlax', 'articuno', 'azumarill', 'granbull', 'delibird', 'stantler', 'miltank', 'blissey', 'swalot', 'lunatone',
-			'castform', 'chimecho', 'glalie', 'walrein', 'regice', 'jirachi', 'bronzong', 'chatot', 'abomasnow', 'weavile', 'togekiss',
-			'glaceon', 'probopass', 'froslass', 'rotom-frost', 'uxie', 'mesprit', 'azelf', 'victini', 'vanilluxe', 'sawsbuck', 'beartic',
-			'cryogonal', 'chandelure', 'gardevoir', 'amaura', 'aurorus', 'bergmite', 'avalugg', 'xerneas', 'kyogre', 'rotom-wash'
+			'charizard', 'ninetales', 'houndoom', 'arceusfire', 'arcanine', 'moltres', 'rapidash', 'magmar', 'quilava', 'typhlosion',
+			'entei', 'hooh', 'blaziken', 'rotomheat', 'chandelure', 'magcargo', 'reshiram', 'zekrom', 'heatran', 'arceusdragon',
+			'arceusfighting', 'seadra', 'kingdra', 'gyarados', 'dunsparce', 'milotic', 'drapion', 'growlithe', 'paras', 'parasect',
+			'magikarp', 'suicune', 'raikou', 'absol', 'spiritomb', 'horsea', 'ponyta', 'blitzle', 'zebstrika'
 		];
 		seasonalPokemonList = seasonalPokemonList.randomize();
 		var team = [];
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(seasonalPokemonList[i], i);
-			set.level *= 50;
+			if (seasonalPokemonList[i] === 'gyarados') set.shiny = true;
+			set.moves[3] = 'Explosion';
 			team.push(set);
 		}
 		return team;
