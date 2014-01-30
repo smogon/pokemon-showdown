@@ -1929,6 +1929,10 @@ exports.BattleItems = {
 		name: "Kee Berry",
 		spritenum: 0,
 		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Fairy"
+		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (move.category === 'Physical') {
 				target.eatItem();
@@ -2396,6 +2400,10 @@ exports.BattleItems = {
 		name: "Maranga Berry",
 		spritenum: 0,
 		isBerry: true,
+		naturalGift: {
+			basePower: 100,
+			type: "Dark"
+		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (move.category === 'Special') {
 				target.eatItem()
@@ -3490,13 +3498,7 @@ exports.BattleItems = {
 		name: "Safety Goggles",
 		spritenum: 0,
 		onImmunity: function(type, pokemon) {
-			if (type === 'sandstorm' || type === 'hail') return false;
-		},
-		onTryHit: function(pokemon, target, move) {
-			if (move.isPowder) {
-				this.add('-immune', pokemon, '[msg]', '[from] Safety Goggles');
-				return null;
-			}
+			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
 		num: -8,
 		gen: 6,
@@ -4211,7 +4213,7 @@ exports.BattleItems = {
 		name: "Weakness Policy",
 		spritenum: 0,
 		onHit: function(target, source, move) {
-			if (target.hp && move.category !== 'Status' && this.getEffectiveness(move, target) > 0 && target.useItem()) {
+			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && this.getEffectiveness(move, target) > 0 && target.useItem()) {
 				this.boost({atk: 2, spa: 2});
 			}
 		},

@@ -1543,8 +1543,8 @@ exports.BattleMovedex = {
 		category: "Status",
 		desc: "No in-game effect.",
 		shortDesc: "No in-game effect.",
-		id: "Celebrate",
-		name: "celebrate",
+		id: "celebrate",
+		name: "Celebrate",
 		pp: 40,
 		priority: 0,
 		onTryHit: function(target, source) {
@@ -2009,8 +2009,8 @@ exports.BattleMovedex = {
 		boosts: {
 			spe: -2
 		},
-		onTryHit: function(target, source) {
-			if (target.hasType('Grass')) return false;
+		onTryHit: function(pokemon) {
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		secondary: false,
 		target: "normal",
@@ -3925,12 +3925,22 @@ exports.BattleMovedex = {
 				}
 			}
 		},
+		onModifyMove: function(move) {
+			if (move.sourceEffect === 'waterpledge') {
+				move.type = 'Water';
+				move.hasSTAB = true;
+			}
+			if (move.sourceEffect === 'grasspledge') {
+				move.type = 'Fire';
+				move.hasSTAB = true;
+			}
+		},
 		onHit: function(target, source, move) {
 			if (move.sourceEffect === 'grasspledge') {
-				target.side.addSideCondition('grasspledge');
+				target.side.addSideCondition('firepledge');
 			}
 			if (move.sourceEffect === 'waterpledge') {
-				source.side.addSideCondition('firepledge');
+				source.side.addSideCondition('waterpledge');
 			}
 		},
 		effect: {
@@ -3941,11 +3951,11 @@ exports.BattleMovedex = {
 			onEnd: function(targetSide) {
 				this.add('-sideend', targetSide, 'Fire Pledge');
 			},
-			onModifyMove: function(move) {
-				if (move.secondaries) {
-					this.debug('doubling secondary chance');
-					for (var i=0; i<move.secondaries.length; i++) {
-						move.secondaries[i].chance *= 2;
+			onResidual: function(side) {
+				for (var i=0; i<side.active.length; i++) {
+					var pokemon = side.active[i];
+					if (pokemon && !pokemon.hasType('Fire')) {
+						this.damage(pokemon.maxhp/8, pokemon);
 					}
 				}
 			}
@@ -5076,12 +5086,22 @@ exports.BattleMovedex = {
 				}
 			}
 		},
-		onHit: function(target, source, move) {
+		onModifyMove: function(move) {
 			if (move.sourceEffect === 'waterpledge') {
-				target.side.addSideCondition('waterpledge');
+				move.type = 'Grass';
+				move.hasSTAB = true;
 			}
 			if (move.sourceEffect === 'firepledge') {
+				move.type = 'Fire';
+				move.hasSTAB = true;
+			}
+		},
+		onHit: function(target, source, move) {
+			if (move.sourceEffect === 'waterpledge') {
 				target.side.addSideCondition('grasspledge');
+			}
+			if (move.sourceEffect === 'firepledge') {
+				target.side.addSideCondition('firepledge');
 			}
 		},
 		effect: {
@@ -5092,13 +5112,8 @@ exports.BattleMovedex = {
 			onEnd: function(targetSide) {
 				this.add('-sideend', targetSide, 'Grass Pledge');
 			},
-			onResidual: function(side) {
-				for (var i=0; i<side.active.length; i++) {
-					var pokemon = side.active[i];
-					if (pokemon && !pokemon.hasType('Fire')) {
-						this.damage(pokemon.maxhp/8, pokemon);
-					}
-				}
+			onModifySpe: function(speMod, pokemon) {
+				return this.chain(speMod, 0.25);
 			}
 		},
 		secondary: false,
@@ -5701,8 +5716,9 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isBounceable: true,
-		onHit: function(pokemon) {
-			this.heal(Math.ceil(pokemon.maxhp * 0.5));
+		onHit: function(target, source) {
+			if (source.ability === 'megalauncher') this.heal(this.modify(target.maxhp, 0.75));
+			else this.heal(Math.ceil(target.maxhp * 0.5));
 		},
 		secondary: false,
 		target: "normal",
@@ -7027,7 +7043,7 @@ exports.BattleMovedex = {
 				return this.chainModify(1.5);
 			}
 		},
-		onHit: function(target, source) {
+		onAfterHit: function(target, source) {
 			if (source.hp) {
 				var item = target.getItem();
 				if (item.id === 'mail') {
@@ -7319,9 +7335,11 @@ exports.BattleMovedex = {
 		volatileStatus: 'lockon',
 		effect: {
 			duration: 2,
-			onFoeModifyMove: function(move) {
-				move.accuracy = true;
-				move.alwaysHit = true;
+			onFoeModifyMove: function(move, source, target) {
+				if (source === this.effectData.source) {
+					move.accuracy = true;
+					move.alwaysHit = true;
+				}
 			}
 		},
 		secondary: false,
@@ -9342,7 +9360,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			if (pokemon.hasType('Grass')) return false;
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		status: 'psn',
 		secondary: false,
@@ -9416,7 +9434,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			if (pokemon.hasType('Grass')) return false;
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		isBounceable: true,
 		volatileStatus: 'powder',
@@ -9998,7 +10016,7 @@ exports.BattleMovedex = {
 			onTryHit: function(target, source, effect) {
 				// Quick Guard blocks moves with positive priority, even those given increased priority by Prankster or Gale Wings.
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings)
-				if (effect && (effect.id === 'Feint' || effect.priority <= 0)) {
+				if (effect && (effect.id === 'feint' || effect.priority <= 0 || effect.target === 'self')) {
 					return;
 				}
 				this.add('-activate', target, 'Quick Guard');
@@ -10091,7 +10109,7 @@ exports.BattleMovedex = {
 				this.add('-start', pokemon, 'move: Rage Powder');
 			},
 			onFoeRedirectTarget: function(target, source, source2, move) {
-				if (!source.hasType('Grass') && this.validTarget(this.effectData.target, source, move.target)) {
+				if (source.runImmunity('powder') && this.validTarget(this.effectData.target, source, move.target)) {
 					this.debug("Rage Powder redirected target of move");
 					return this.effectData.target;
 				}
@@ -11860,7 +11878,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isPowder: true,
 		onTryHit: function(pokemon) {
-			if (pokemon.hasType('Grass')) return false;
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		status: 'slp',
 		secondary: false,
@@ -12165,7 +12183,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(target) {
-				this.add('-singleturn', target, 'Spiky Shield');
+				this.add('-singleturn', target, 'move: Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit: function(target, source, move) {
@@ -12174,7 +12192,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move && move.target === 'self') return;
-				this.add('-activate', target, 'Spiky Shield');
+				this.add('-activate', target, 'move: Protect');
 				if (move.isContact) {
 					this.damage(source.maxhp/8, source, target);
 				}
@@ -12472,8 +12490,8 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		isPowder: true,
-		onTryHit: function(target, source) {
-			if (target.hasType('Grass')) return false;
+		onTryHit: function(pokemon) {
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		status: 'slp',
 		secondary: false,
@@ -12791,8 +12809,8 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		isPowder: true,
-		onTryHit: function(target, source) {
-			if (target.hasType('Grass')) return false;
+		onTryHit: function(pokemon) {
+			if (!pokemon.runImmunity('powder')) return false;
 		},
 		status: 'par',
 		secondary: false,
@@ -14338,12 +14356,22 @@ exports.BattleMovedex = {
 				}
 			}
 		},
+		onModifyMove: function(move) {
+			if (move.sourceEffect === 'grasspledge') {
+				move.type = 'Grass';
+				move.hasSTAB = true;
+			}
+			if (move.sourceEffect === 'firepledge') {
+				move.type = 'Water';
+				move.hasSTAB = true;
+			}
+		},
 		onHit: function(target, source, move) {
 			if (move.sourceEffect === 'firepledge') {
-				source.side.addSideCondition('firepledge');
+				source.side.addSideCondition('waterpledge');
 			}
 			if (move.sourceEffect === 'grasspledge') {
-				target.side.addSideCondition('waterpledge');
+				target.side.addSideCondition('grasspledge');
 			}
 		},
 		effect: {
@@ -14354,8 +14382,13 @@ exports.BattleMovedex = {
 			onEnd: function(targetSide) {
 				this.add('-sideend', targetSide, 'Water Pledge');
 			},
-			onModifySpe: function(speMod, pokemon) {
-				return this.chain(speMod, 0.25);
+			onModifyMove: function(move) {
+				if (move.secondaries) {
+					this.debug('doubling secondary chance');
+					for (var i=0; i<move.secondaries.length; i++) {
+						move.secondaries[i].chance *= 2;
+					}
+				}
 			}
 		},
 		secondary: false,

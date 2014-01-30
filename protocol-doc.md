@@ -7,9 +7,9 @@ Pokemon Showdown is implemented in SockJS. SockJS is a compatibility
 layer over raw WebSocket, so you can actually connect to Pokemon
 Showdown directly using WebSocket:
 
-    ws://sim.psim.us:8000/showdown/websocket
+    ws://sim.smogon.com:8000/showdown/websocket
       or
-    wss://sim.psim.us/showdown/websocket
+    wss://sim.smogon.com/showdown/websocket
 
 
 Client-to-server messages

@@ -115,9 +115,11 @@ exports.logChat = false;
 // lobby log. This has no effect if `logchat` is disabled.
 exports.logUserStats = 1000*60*10; // 10 minutes
 
+// validatorProcesses - the number of processes to use for validating teams
 // simulatorProcesses - the number of processes to use for handling battles
-// You should leave this at 1 unless your server has a very large amount of
-// traffic (i.e. hundreds of concurrent battles).
+// You should leave both of these at 1 unless your server has a very large
+// amount of traffic (i.e. hundreds of concurrent battles).
+exports.validatorProcesses = 1;
 exports.simulatorProcesses = 1;
 
 // inactiveUserThreshold - how long a user must be inactive before being pruned
@@ -226,7 +228,7 @@ exports.groups = {
 		battleRoom: ' '
 	},
 
-	byRank: [' ', '+', '\u2605', '%', '@', '#', '&', '~'],
+	byRank: [' ', '+', '%', '@', '\u2605', '#', '&', '~'],
 	bySymbol: {
 		'~': {
 			id: 'admin',
@@ -258,6 +260,15 @@ exports.groups = {
 			declare: true,
 			modchatall: true,
 			roomdesc: true,
+			roompromote: 'u'
+		},
+		'\u2605': {
+			id: 'player',
+			name: "Player",
+			description: "Only in battles, they are the players that are battling",
+			inherit: '+',
+			modchat: true,
+			privateroom: true,
 			roompromote: 'u'
 		},
 		'@': {
@@ -292,15 +303,6 @@ exports.groups = {
 			timer: true,
 			warn: true
 		},
-		'\u2605': {
-			id: 'player',
-			name: "Player",
-			description: "Only in battles, they are the players that are battling",
-			inherit: '+',
-			modchat: true,
-			privateroom: true,
-			roompromote: 'u'
-		},
 		'+': {
 			id: 'voice',
 			name: "Voice",
@@ -319,7 +321,12 @@ exports.groups = {
 exports.groups.globalByRank = exports.groups.byRank.filter(function (a) { return exports.groups.global[a]; });
 exports.groups.chatRoomByRank = exports.groups.byRank.filter(function (a) { return exports.groups.chatRoom[a]; });
 exports.groups.battleRoomByRank = exports.groups.byRank.filter(function (a) { return exports.groups.battleRoom[a]; });
-exports.groups.byRank.forEach(function (group, rank) { exports.groups.bySymbol[group].rank = rank; });
+exports.groups.byId = {};
+exports.groups.byRank.forEach(function (group, rank) {
+	var groupData = exports.groups.bySymbol[group];
+	if (groupData.id) exports.groups.byId[groupData.id] = group;
+	groupData.rank = rank;
+});
 exports.groups.globalByRank.forEach(function (group, rank) { exports.groups.bySymbol[group].globalRank = rank; });
 exports.groups.chatRoomByRank.forEach(function (group, rank) { exports.groups.bySymbol[group].chatRoomRank = rank; });
 exports.groups.battleRoomByRank.forEach(function (group, rank) { exports.groups.bySymbol[group].battleRoomRank = rank; });
