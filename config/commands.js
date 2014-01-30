@@ -1585,16 +1585,6 @@
 			'Quote: Rock Solid Through The Core.<br \>' +
 			'<img src="http://i305.photobucket.com/albums/nn232/XandZero2/MEGAGGRON_zpsa46c3722.png">')
 	},
-		
-
-        xathoz: 'Xathoz',
-        xathoz: function(target, room, user) {
-                 if (!this.canBroadcast()) return;
-                 this.sendReplyBox('Title: King of Gliscors<br \>' +
-                         'Ace:Gliscor<br \>' +
-                         'Quote:"Pride is not the opposite of shame, but its source. The only antidote to shame is true humility." -Iroh .<br \>' +
-                         '<img src="http://static2.wikia.nocookie.net/__cb20110817211941/pokemon/images/7/7f/Gliscor.gif>')
-        },
 
 
 
