@@ -9,7 +9,7 @@ exports.BattleScripts = {
 			}
 		}
 		move = this.getMove(move);
-		if (!target) target = this.resolveTarget(pokemon, move);
+		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -49,10 +49,9 @@ exports.BattleScripts = {
 	},
 	useMove: function(move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
-		move = this.getMove(move);
-		baseMove = move;
 		move = this.getMoveCopy(move);
-		if (!target) target = this.resolveTarget(pokemon, move);
+		var baseTarget = move.target;
+		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
 		}
@@ -61,13 +60,15 @@ exports.BattleScripts = {
 		this.setActiveMove(move, pokemon, target);
 
 		this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-		if (baseMove.target !== move.target) {
-			//Target changed in ModifyMove, so we must adjust it here
+		if (baseTarget !== move.target) {
+			// Target changed in ModifyMove, so we must adjust it here
+			// Adjust before the next event so the correct target is passed to the
+			// event
 			target = this.resolveTarget(pokemon, move);
 		}
-		move = this.runEvent('ModifyMove',pokemon,target,move,move);
-		if (baseMove.target !== move.target) {
-			//check again
+		move = this.runEvent('ModifyMove', pokemon, target, move, move);
+		if (baseTarget !== move.target) {
+			// Adjust again
 			target = this.resolveTarget(pokemon, move);
 		}
 		if (!move) return false;
@@ -86,6 +87,12 @@ exports.BattleScripts = {
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]'+this.getEffect(sourceEffect);
 		this.addMove('move', pokemon, movename, target+attrs);
+
+		if (target === false) {
+			this.attrLastMove('[notarget]');
+			this.add('-notarget');
+			return true;
+		}
 
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return true;
@@ -1570,6 +1577,7 @@ exports.BattleScripts = {
 
 		var typeCount = {};
 		var typeComboCount = {};
+		var baseFormes = {};
 		var uberCount = 0;
 		var nuCount = 0;
 		var megaCount = 0;
@@ -1587,10 +1595,12 @@ exports.BattleScripts = {
 
 			// CAPs have 20% the normal rate
 			if (tier === 'CAP' && Math.random()*5>1) continue;
-			// Arceus formes have 1/17 the normal rate each (so Arceus as a whole has a normal rate)
-			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
+			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
+			if (keys[i].substr(0,6) === 'arceus' && Math.random()*18>1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
 			if (keys[i].substr(0,8) === 'basculin' && Math.random()*2>1) continue;
+			// Genesect formes have 1/5 the normal rate each (so Genesect as a whole has a normal rate)
+			if (keys[i].substr(0,8) === 'genesect' && Math.random()*5>1) continue;
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
@@ -1632,6 +1642,10 @@ exports.BattleScripts = {
 			// Limit the number of Megas to one, just like in-game
 			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
 
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
+			baseFormes[template.baseSpecies] = 1;
+
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
@@ -1657,19 +1671,19 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomSeasonalWinterTeam: function(side) {
+	randomSeasonalFFTeam: function(side) {
 		var seasonalPokemonList = [
-			'raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster', 'exeggutor', 'starmie', 'jynx',
-			'lapras', 'snorlax', 'articuno', 'azumarill', 'granbull', 'delibird', 'stantler', 'miltank', 'blissey', 'swalot', 'lunatone',
-			'castform', 'chimecho', 'glalie', 'walrein', 'regice', 'jirachi', 'bronzong', 'chatot', 'abomasnow', 'weavile', 'togekiss',
-			'glaceon', 'probopass', 'froslass', 'rotom-frost', 'uxie', 'mesprit', 'azelf', 'victini', 'vanilluxe', 'sawsbuck', 'beartic',
-			'cryogonal', 'chandelure', 'gardevoir', 'amaura', 'aurorus', 'bergmite', 'avalugg', 'xerneas', 'kyogre', 'rotom-wash'
+			'charizard', 'ninetales', 'houndoom', 'arceusfire', 'arcanine', 'moltres', 'rapidash', 'magmar', 'quilava', 'typhlosion',
+			'entei', 'hooh', 'blaziken', 'rotomheat', 'chandelure', 'magcargo', 'reshiram', 'zekrom', 'heatran', 'arceusdragon',
+			'arceusfighting', 'seadra', 'kingdra', 'gyarados', 'dunsparce', 'milotic', 'drapion', 'growlithe', 'paras', 'parasect',
+			'magikarp', 'suicune', 'raikou', 'absol', 'spiritomb', 'horsea', 'ponyta', 'blitzle', 'zebstrika'
 		];
 		seasonalPokemonList = seasonalPokemonList.randomize();
 		var team = [];
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(seasonalPokemonList[i], i);
-			set.level *= 50;
+			if (seasonalPokemonList[i] === 'gyarados') set.shiny = true;
+			set.moves[3] = 'Explosion';
 			team.push(set);
 		}
 		return team;

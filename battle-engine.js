@@ -352,7 +352,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.transformed = false;
 	BattlePokemon.prototype.duringMove = false;
 	BattlePokemon.prototype.hpType = 'Dark';
-	BattlePokemon.prototype.hpPower = 70;
+	BattlePokemon.prototype.hpPower = 60;
 	BattlePokemon.prototype.speed = 0;
 
 	BattlePokemon.prototype.toString = function() {
@@ -2922,7 +2922,16 @@ var Battle = (function() {
 			} else {
 				target = decision.pokemon.side.active[(-decision.targetLoc)-1];
 			}
-			if (target && !target.fainted) return target;
+			if (target) {
+				if (!target.fainted) {
+					// target exists and is not fainted
+					return target;
+				} else if (target.side === decision.pokemon.side) {
+					// fainted allied targets don't retarget
+					return false;
+				}
+			}
+			// chosen target not valid, retarget randomly with resolveTarget
 		}
 		if (!decision.targetPosition || !decision.targetSide) {
 			target = this.resolveTarget(decision.pokemon, decision.move);
@@ -2932,6 +2941,16 @@ var Battle = (function() {
 		return decision.targetSide.active[decision.targetPosition];
 	};
 	Battle.prototype.resolveTarget = function(pokemon, move) {
+		// A move was used without a chosen target
+
+		// For instance: Metronome chooses Ice Beam. Since the user didn't
+		// choose a target when choosing Metronome, Ice Beam's target must
+		// be chosen randomly.
+
+		// The target is chosen randomly from possible targets, EXCEPT that
+		// moves that can target either allies or foes will only target foes
+		// when used without an explicit target.
+
 		move = this.getMove(move);
 		if (move.target === 'adjacentAlly' && pokemon.side.active.length > 1) {
 			if (pokemon.side.active[pokemon.position-1]) {

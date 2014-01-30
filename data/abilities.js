@@ -131,15 +131,15 @@ exports.BattleAbilities = {
 		num: 83
 	},
 	"anticipation": {
-		desc: "A warning is displayed if an opposing Pokemon has the moves Fissure, Guillotine, Horn Drill, Sheer Cold, or any attacking move from a type that is considered super effective against this Pokemon (including Counter, Mirror Coat, and Metal Burst). Hidden Power, Judgment, Natural Gift and Weather Ball are considered Normal-type moves.",
+		desc: "A warning is displayed if an opposing Pokemon has the moves Fissure, Guillotine, Horn Drill, Sheer Cold, or any attacking move from a type that is considered super effective against this Pokemon (including Counter, Mirror Coat, and Metal Burst). Hidden Power, Judgment, Natural Gift and Weather Ball are considered Normal-type moves. Flying Press is considered a Fighting-type move.",
 		shortDesc: "On switch-in, this Pokemon shudders if any foe has a super effective or OHKO move.",
 		onStart: function(pokemon) {
 			var targets = pokemon.side.foe.active;
 			for (var i=0; i<targets.length; i++) {
-				if (targets[i].fainted) continue;
+				if (!targets[i] || targets[i].fainted) continue;
 				for (var j=0; j<targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
-					if (move.category !== 'Status' && (this.getEffectiveness(move, pokemon) > 0 || move.ohko)) {
+					if (move.category !== 'Status' && (this.getImmunity(move.type, pokemon) && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
 						this.add('-message', pokemon.name+' shuddered! (placeholder)');
 						return;
 					}
@@ -2239,18 +2239,9 @@ exports.BattleAbilities = {
 	"scrappy": {
 		desc: "This Pokemon has the ability to hit Ghost-type Pokemon with Normal-type and Fighting-type moves. Effectiveness of these moves takes into account the Ghost-type Pokemon's other weaknesses and resistances.",
 		shortDesc: "This Pokemon can hit Ghost-types with Normal- and Fighting-type moves.",
-		onBeforeMove: function(pokemon, target, move) {
-			pokemon.addVolatile('scrappy');
-		},
-		effect: {
-			onAnyModifyPokemon: function(pokemon) {
-				if (pokemon.hasType('Ghost')) {
-					pokemon.negateImmunity['Normal'] = true;
-					pokemon.negateImmunity['Fighting'] = true;
-				}
-			},
-			onAfterMoveSecondarySelf: function(pokemon) {
-				pokemon.removeVolatile('scrappy');
+		onModifyMove: function(move) {
+			if (move.type in {'Fighting':1,'Normal':1}) {
+				move.affectedByImmunities = false;
 			}
 		},
 		id: "scrappy",

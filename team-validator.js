@@ -14,11 +14,19 @@ if (!process.send) {
 	var ValidatorProcess = (function() {
 		function ValidatorProcess() {
 			this.process = require('child_process').fork('team-validator.js');
+			var self = this;
 			this.process.on('message', function(message) {
-				var parts = JSON.parse(message);
-				if (pendingValidations[parts[0]]) {
-					pendingValidations[parts[0]].apply(null, parts.slice(1));
-					delete pendingValidations[parts[0]];
+				// Protocol:
+				// success: "[id]|1[details]"
+				// failure: "[id]|0[details]"
+				var pipeIndex = message.indexOf('|');
+				var id = message.substr(0,pipeIndex);
+				var success = (message.charAt(pipeIndex+1) === '1');
+
+				if (pendingValidations[id]) {
+					ValidatorProcess.release(self);
+					pendingValidations[id](success, message.substr(pipeIndex+2));
+					delete pendingValidations[id];
 				}
 			});
 		}
@@ -54,14 +62,10 @@ if (!process.send) {
 				process.process.disconnect();
 			}
 		};
-		ValidatorProcess.send = function() {
-			var callback = arguments[arguments.length - 1];
+		ValidatorProcess.send = function(format, team, callback) {
 			var process = this.acquire();
-			pendingValidations[validationCount] = (function() {
-				this.release(process);
-				callback.apply(null, Array.prototype.slice.call(arguments, 0));
-			}).bind(this);
-			process.process.send(JSON.stringify([validationCount].concat(Array.prototype.slice.call(arguments, 0, arguments.length - 1))));
+			pendingValidations[validationCount] = callback;
+			process.process.send(''+validationCount+'|'+format+'|'+team);
 			++validationCount;
 		};
 		return ValidatorProcess;
@@ -74,13 +78,7 @@ if (!process.send) {
 	exports.pendingValidations = pendingValidations;
 
 	exports.validateTeam = function(format, team, callback) {
-		ValidatorProcess.send('validateTeam', format, team, callback);
-	};
-	exports.validateSet = function(format, set, teamHas, callback) {
-		ValidatorProcess.send('validateSet', format, set, teamHas, callback);
-	};
-	exports.checkLearnset = function(format, move, template, lsetData, callback) {
-		ValidatorProcess.send('checkLearnset', format, move, template, lsetData, callback);
+		ValidatorProcess.send(format, team, callback);
 	};
 
 	var synchronousValidators = {};
@@ -137,7 +135,7 @@ if (!process.send) {
 		if (config.namefilter) {
 			name = config.namefilter(name);
 		}
-		return name;
+		return name.trim();
 	};
 
 	/**
@@ -154,40 +152,33 @@ if (!process.send) {
 	global.Tools = require('./tools.js');
 
 	var validators = {};
-	var handlers = {
-		validateTeam: function(format, team) {
-			if (!validators[format]) validators[format] = new Validator(format);
-			var parsedTeam = {};
-			try {
-				var parsedTeam = JSON.parse(team);
-			} catch (e) {
-				this.send(["Your team was invalid and could not be parsed."]);
-				return;
-			}
-			var problems = validators[format].validateTeam(parsedTeam);
-			this.send(problems, problems ? null : parsedTeam);
-		},
-		validateSet: function(format, set, teamHas) {
-			if (!validators[format]) validators[format] = new Validator(format);
-			var problems = validators[format].validateSet(set, teamHas);
-			this.send(problems, problems ? null : set, teamHas);
-		},
-		checkLearnset: function(format, move, template, lsetData) {
-			if (!validators[format]) validators[format] = new Validator(format);
-			var result = validators[format].checkLearnset(move, template, lsetData);
-			this.send(result, lsetData);
-		}
-	};
 
-	function send() {
-		process.send(JSON.stringify(Array.prototype.slice.call(arguments, 0)));
+	function respond(id, success, details) {
+		process.send(id+(success?'|1':'|0')+details);
 	}
 
 	process.on('message', function(message) {
-		var parts = JSON.parse(message);
-		if (handlers[parts[1]]) handlers[parts[1]].apply({
-			send: send.bind(null, parts[0])
-		}, parts.slice(2));
+		// protocol:
+		// "[id]|[format]|[team]"
+		var pipeIndex = message.indexOf('|');
+		var pipeIndex2 = message.indexOf('|', pipeIndex + 1);
+		var id = message.substr(0, pipeIndex);
+		var format = message.substr(pipeIndex + 1, pipeIndex2 - pipeIndex - 1);
+
+		if (!validators[format]) validators[format] = new Validator(format);
+		var parsedTeam = {};
+		try {
+			var parsedTeam = JSON.parse(message.substr(pipeIndex2 + 1));
+		} catch (e) {
+			respond(id, false, "Your team was invalid and could not be parsed.");
+			return;
+		}
+		var problems = validators[format].validateTeam(parsedTeam);
+		if (problems && problems.length) {
+			respond(id, false, problems.join('\n'));
+		} else {
+			respond(id, true, JSON.stringify(parsedTeam));
+		}
 	});
 }
 
@@ -325,17 +316,27 @@ var Validator = (function() {
 		}
 		template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
+		if (item.id && !item.exists) {
+			return ['"'+set.item+"' is an invalid item."];
+		}
 		ability = tools.getAbility(set.ability);
 
 		var banlistTable = tools.getBanlistTable(format);
 
-		var check = toId(set.species);
+		var check = template.id;
 		var clause = '';
 		setHas[check] = true;
 		if (banlistTable[check]) {
 			clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
 			problems.push(set.species+' is banned'+clause+'.');
+		} else if (!tools.data.FormatsData[check] || !tools.data.FormatsData[check].tier) {
+			check = toId(template.baseSpecies);
+			if (banlistTable[check]) {
+				clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
+				problems.push(template.baseSpecies+' is banned'+clause+'.');
+			}
 		}
+
 		check = toId(set.ability);
 		setHas[check] = true;
 		if (banlistTable[check]) {

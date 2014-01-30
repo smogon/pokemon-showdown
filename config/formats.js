@@ -30,6 +30,13 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
 	},
 	{
+		name: "OU (suspect test)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Genesect', 'Deoxys-Speed']
+	},
+	{
 		name: "Ubers",
 		section: "XY Singles",
 
@@ -327,17 +334,19 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Seasonal] Winter's Wont",
+		name: "[Seasonal] Fabulous February",
 		section: "OM of the Month",
 
 		mod: 'inverse',
 		gameType: 'doubles',
-		team: 'randomSeasonalWinter',
+		team: 'randomSeasonalFF',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
-		maxLevel: 1000,
 		onBegin: function() {
-			this.setWeather('Hail');
-			delete this.weatherData.duration;
+			this.add('-message', "新年快乐");
+		},
+		onModifyMove: function(move) {
+			if (move.id === 'explosion') move.name = 'Firecrackers';
+			else if (move.type === 'Fire') move.name = 'Fireworks';
 		}
 	},
 	{
@@ -347,6 +356,22 @@ exports.Formats = [
 		mod: 'averagemons',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Soul Dew', 'Thick Club', 'Deepseatooth', 'Deepseascale', 'Light Ball', 'Mawilite', 'Medichamite', 'Eviolite', 'Shedinja', 'Smeargle', 'Huge Power', 'Pure Power']
+	},
+	{
+		name: "Middle Cup",
+		section: "OM of the Month",
+		
+		searchShow: false,
+		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
+		banlist: ['Illegal', 'Eviolite'],
+		maxLevel: 50,
+		defaultLevel: 50,
+		validateSet: function(set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0 || !template.prevo) {
+				return [set.species + " is not the middle Pokémon in an evolution chain."];
+			}
+		}
 	},
 	{
 		name: "CAP",
