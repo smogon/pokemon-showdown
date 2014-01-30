@@ -4213,7 +4213,7 @@ exports.BattleItems = {
 		name: "Weakness Policy",
 		spritenum: 0,
 		onHit: function(target, source, move) {
-			if (target.hp && move.category !== 'Status' && this.getEffectiveness(move, target) > 0 && target.useItem()) {
+			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && this.getEffectiveness(move, target) > 0 && target.useItem()) {
 				this.boost({atk: 2, spa: 2});
 			}
 		},
