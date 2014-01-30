@@ -982,5 +982,20 @@
 				}
 			}
 		}
+	},
+	// Winter's Wont, January 2014
+	{
+		name: "[Seasonal] Winter's Wont",
+		section: "OM of the Month",
+
+		mod: 'inverse',
+		gameType: 'doubles',
+		team: 'randomSeasonalWinter',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		maxLevel: 1000,
+		onBegin: function() {
+			this.setWeather('Hail');
+			delete this.weatherData.duration;
+		}
 	}
 }
