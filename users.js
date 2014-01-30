@@ -37,6 +37,39 @@ var bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
 var userTypes = fs.readFileSync('config/types.csv','utf8'); 
 bannedMessages = bannedMessages.split('\n');
 
+
+exports.readVips = function() {
+	exports.vips = fs.readFile('config/vips.txt', 'utf8', function(err, data) {
+		exports.vips = [];
+		if (err) return exports.vips;
+		data = data.split('\n');
+		count = 0;
+		for (var u in data) {
+			count++;
+			if (data[u].length > 0) exports.vips.push(data[u]);
+			if (count == data.length) return exports.vips;
+		}
+	});
+}
+
+exports.readVips();
+
+exports.addVip = function(user) {
+	user = toUserid(user);
+	exports.vips.push(user);
+	count = 0;
+	data = '';
+	for (var u in exports.vips) {
+		if (exports.vips[u].length > 0) data = data + exports.vips[u] + '\n';
+		count++;
+		if (count == exports.vips.length) {
+			fs.writeFileSync('config/vips.txt',data);
+			exports.readVips();
+			return true;
+		}
+	}
+}
+
 /**
  * Get a user.
  *
@@ -380,6 +413,7 @@ var User = (function () {
 	User.prototype.frostDev = false;
 	User.prototype.isSysop = false;
 	User.prototype.forceRenamed = false;
+	User.prototype.vip = false;
 
 	// for the anti-spamming mechanism
 	User.prototype.lastMessage = '';
@@ -614,6 +648,7 @@ var User = (function () {
 		this.staffAccess = false;
 		this.frostDev = false;
 		this.isSysop = false;
+		this.vip = false;
 
 		for (var i=0; i<this.connections.length; i++) {
 			// console.log(''+name+' renaming: connection '+i+' of '+this.connections.length);
@@ -792,6 +827,7 @@ var User = (function () {
 			var staffAccess = false;
 			var frostDev = false;
 			var isSysop = false;
+			var vip = false;
 			var avatar = 0;
 			var authenticated = false;
 			var ip = this.latestIp.split('.');
@@ -864,6 +900,10 @@ var User = (function () {
 					frostDev = true;
 					this.autoconfirmed = true;
 				}
+
+				if (exports.vips.indexOf(toUserid(name)) >= 0) {
+					vip = true;
+				}
 			}
 			if (users[userid] && users[userid] !== this) {
 				// This user already exists; let's merge
@@ -905,12 +945,14 @@ var User = (function () {
 				this.staffAccess = false;
 				this.isSysop = false;
 				this.frostDev = false;
+				this.vip = false;
 
 				user.group = group;
 				user.isStaff = (user.group in {'%':1, '@':1, '&':1, '~':1});
 				user.staffAccess = staffAccess;
 				user.isSysop = isSysop;
 				user.frostDev = frostDev;
+				user.vip = vip;
 
 				user.forceRenamed = false;
 				if (avatar) user.avatar = avatar;
@@ -939,6 +981,7 @@ var User = (function () {
 			this.staffAccess = staffAccess;
 			this.frostDev = frostDev;
 			this.isSysop = isSysop;
+			this.vip = vip;
 			if (avatar) this.avatar = avatar;
 			if (this.forceRename(name, authenticated)) {
 				Rooms.global.checkAutojoin(this);
@@ -1170,6 +1213,7 @@ var User = (function () {
 		room = Rooms.get(room);
 		if (!room) return false;
 		if (room.staffRoom && !this.isStaff) return false;
+		if (room.vip && !this.vip && !this.isStaff) return false;
 		if (this.userid && room.bannedUsers && this.userid in room.bannedUsers) return false;
 		if (this.ips && room.bannedIps) {
 			for (var ip in this.ips) {
