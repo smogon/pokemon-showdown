@@ -3768,9 +3768,9 @@ exports.BattleMovedex = {
 		name: "Feint",
 		pp: 10,
 		priority: 2,
-		isNotProtectable: true,
+		breaksProtect: true,
 		onHit: function(target, source) {
-			if (target.removeVolatile('protect')) {
+			if (target.removeVolatile('protect') || target.removeVolatile('kingsshield') || target.removeVolatile('spikyshield')) {
 				this.add("-activate", target, "move: Feint");
 			}
 			if (target.side !== source.side) {
@@ -7001,7 +7001,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function(target, source, move) {
 				if (move.breaksProtect) {
-					target.removeVolatile("King's Shield");
+					target.removeVolatile('kingsshield');
 					return;
 				}
 				if (move && (move.category === 'Status' || move.isNotProtectable || move.id === 'suckerpunch')) return;
@@ -12188,7 +12188,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function(target, source, move) {
 				if (move.breaksProtect) {
-					target.removeVolatile('Spiky Shield');
+					target.removeVolatile('spikyshield');
 					return;
 				}
 				if (move && move.target === 'self') return;
