@@ -1587,8 +1587,8 @@
 	},
 		
 
-        Xathoz: 'Xathoz',
-        Xathoz: function(target, room, user) {
+        xathoz: 'Xathoz',
+        xathoz: function(target, room, user) {
                  if (!this.canBroadcast()) return;
                  this.sendReplyBox('Title: King of Gliscors<br \>' +
                          'Ace:Gliscor<br \>' +
