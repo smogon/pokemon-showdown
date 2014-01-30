@@ -1593,7 +1593,8 @@
                  this.sendReplyBox('Title: King of Gliscors<br \>' +
                          'Ace:Gliscor<br \>' +
                          'Quote:"Pride is not the opposite of shame, but its source. The only antidote to shame is true humility." -Iroh .<br \>' +
-                         '<img src="http://static2.wikia.nocookie.net/__cb20110817211941/pokemon/images/7/7f/Gliscor.gif>')},
+                         '<img src="http://static2.wikia.nocookie.net/__cb20110817211941/pokemon/images/7/7f/Gliscor.gif>')
+        },
 
 
 
