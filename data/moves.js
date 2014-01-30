@@ -1498,14 +1498,14 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isSnatchable: true,
-		onHit: function(target) {
+		onHit: function(target, source, move) {
 			var newType = 'Normal';
 			if (this.isTerrain('electricterrain')) newType = 'Electric';
 			else if (this.isTerrain('grassyterrain')) newType = 'Grass';
 			else if (this.isTerrain('mistyterrain')) newType = 'Fairy';
 
 			this.add('-start', target, 'typechange', newType);
-			target.types = [newType];
+			target.setTypes([newType], move);
 		},
 		secondary: false,
 		target: "self",
@@ -1876,7 +1876,7 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		isSnatchable: true,
-		onHit: function(target) {
+		onHit: function(target, source, move) {
 			var possibleTypes = target.moveset.map(function(val){
 				var move = this.getMove(val.id);
 				if (move.id !== 'conversion' && !target.hasType(move.type)) {
@@ -1888,7 +1888,7 @@ exports.BattleMovedex = {
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
 			this.add('-start', target, 'typechange', type);
-			target.types = [type];
+			target.setTypes([type], move);
 		},
 		secondary: false,
 		target: "self",
@@ -1906,7 +1906,7 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		isNotProtectable: true,
-		onHit: function(target, source) {
+		onHit: function(target, source, move) {
 			if (!target.lastMove) {
 				return false;
 			}
@@ -1924,7 +1924,7 @@ exports.BattleMovedex = {
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
 			this.add('-start', source, 'typechange', type);
-			source.types = [type];
+			source.setTypes([type], move);
 		},
 		secondary: false,
 		target: "normal",
@@ -4539,9 +4539,9 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isBounceable: true,
-		onHit: function(target) {
+		onHit: function(target, source, move) {
 			if (target.hasType("Grass")) return false;
-			target.types = target.types.slice(0,2).concat(["Grass"]);
+			target.setTypes(target.types.slice(0,2).concat(["Grass"]), move);
 			this.add("-start", target, "typechange", target.types.join("/"), "[from] move: Forest's Curse");
 		},
 		secondary: false,
@@ -10335,9 +10335,9 @@ exports.BattleMovedex = {
 		name: "Reflect Type",
 		pp: 15,
 		priority: 0,
-		onHit: function(target, source) {
+		onHit: function(target, source, move) {
 			this.add('-start', source, 'typechange', target.types.join('/'), '[from] move: Reflect Type', '[of] '+target);
-			source.types = target.types;
+			source.setTypes(target.types, move);
 		},
 		secondary: false,
 		target: "normal",
@@ -10828,33 +10828,34 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(pokemon) {
-				// This is not how Roost "should" be implemented, but is rather
-				// a simplification.
-
-				// This implementation has the advantage of not requiring a separate
-				// event just for Roost, and the only difference would come up in
-				// Doubles Hackmons. If we ever introduce Doubles Hackmons and
-				// Color Change Roost becomes popular; I might need to revisit this
-				// implementation. :P
-
-				if (pokemon.hasType('Flying')) {
-					// don't just delete the type; since
-					// the types array may be a pointer to the
-					// types array in the Pokedex.
-					this.effectData.oldTypes = pokemon.types;
-					if (pokemon.types[0] === 'Flying') {
-						pokemon.types = [pokemon.types[1] || 'Normal'];
-					} else {
-						pokemon.types = [pokemon.types[0]];
-					}
-					this.effectData.roostTypeString = pokemon.types.join(',');
+				this.effectData.oldTypes = new Array();
+				for (var i=0, l=pokemon.types.length; i<l; i++)  {
+					this.effectData.oldTypes.push(pokemon.types[i]);
 				}
-				//pokemon.negateImmunity['Ground'] = 1;
+				var indexFlying = pokemon.types.indexOf('Flying');
+				if (indexFlying !== -1) {
+					pokemon.types = pokemon.types.slice(0, indexFlying).concat(pokemon.types.slice(indexFlying+1));
+					if (!pokemon.types.length) pokemon.types = ['Normal'];
+					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] move: Roost');
+				}
+			},
+			onModifyType: function(types, pokemon, effect) {
+				this.effectData.oldTypes = new Array();
+				for (var i=0, l=types.length; i<l; i++)  {
+					this.effectData.oldTypes.push(types[i]);
+				}
+				var newTypes = new Array();
+				var indexFlying = types.indexOf('Flying');
+				if (indexFlying !== -1) {
+					newTypes = types.slice(0, indexFlying).concat(types.slice(indexFlying+1));
+					if (!newTypes.length) newTypes = ['Normal'];
+					this.add('-start', pokemon, 'typechange', newTypes.join('/'), '[from] move: Roost');
+					return newTypes;
+				}
 			},
 			onEnd: function(pokemon) {
-				if (this.effectData.roostTypeString === pokemon.types.join(',')) {
-					pokemon.types = this.effectData.oldTypes;
-				}
+				pokemon.types = this.effectData.oldTypes;
+				this.add('-start', pokemon, 'typechange', this.effectData.oldTypes.join('/'), '[from] move: Roost');
 			}
 		},
 		secondary: false,
@@ -12215,9 +12216,9 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isBounceable: true,
-		onHit: function(target) {
+		onHit: function(target, source, move) {
 			this.add('-start', target, 'typechange', 'Water');
-			target.types = ['Water'];
+			target.setTypes(['Water'], move);
 		},
 		secondary: false,
 		target: "normal",
@@ -13889,9 +13890,9 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isBounceable: true,
-		onHit: function(target) {
+		onHit: function(target, source, move) {
 			if (target.hasType('Ghost')) return false;
-			target.types = target.types.slice(0,2).concat(['Ghost']);
+			target.setTypes(target.types.slice(0,2).concat(['Ghost']), move);
 			this.add('-start', target, 'typechange', target.types.join('/'), '[from] move: Trick-or-Treat');
 		},
 		secondary: false,
