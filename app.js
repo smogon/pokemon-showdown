@@ -457,3 +457,13 @@ try {
 } catch (e) {
 	console.log('Error loading economy.js');
 }
+
+fs.readFile('./logs/uptime.txt', function (err, uptime) {
+	if (!err) global.uptimeRecord = parseInt(uptime, 10);
+	global.uptimeRecordInterval = setInterval(function () {
+		if (global.uptimeRecord && process.uptime() <= global.uptimeRecord) return;
+		global.uptimeRecord = process.uptime();
+		fs.writeFile('./logs/uptime.txt', global.uptimeRecord.toFixed(0));
+	}, (1).hour());
+});
+
