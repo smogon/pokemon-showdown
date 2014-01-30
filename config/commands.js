@@ -1507,13 +1507,13 @@
 			'<img src="http://media.pldh.net/pokemon/gen5/blackwhite_animated_front/031.gif">')
 	},
 
-	quincy: 'quincy',
-	quincy: function(target, room, user) {
+	xathoz: 'xathoz',
+	xathoz: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Professor: Quincy<br \>' +
-			'Ace: Togekiss<br \>' +
-			'Quote: If you do not battle with your life on the line, dont battle all .<br \>' +
-			'<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/togekiss.gif">')
+		this.sendReplyBox('Frontier: Xathoz<br \>' +
+			'Ace: Gliscor<br \>' +
+			'Quote: "Pride is not the opposite of shame, but its source. The only antidote to shame is true humility." -Iroh .<br \>' +
+			'<img src="http://static2.wikia.nocookie.net/__cb20110817211941/pokemon/images/7/7f/Gliscor.gif">')
 	},
 
 	red: 'red',
