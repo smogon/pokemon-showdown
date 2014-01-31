@@ -1839,9 +1839,19 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://i.imgur.com/7DKOZLx.png"><br><img src="http://i.imgur.com/YznYjmS.gif"><br>Ace: Mega Charizard X<br>Finn, being an enormous crotch-kicking foot is a gift. Don\'t scorn a gift.');
 	},
 	
-	receptionist147: function(target, room, user) {
+	recep: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src=http://i.imgur.com/4xzLvzV.gif><img src=http://i.imgur.com/48CvnKv.gif height="80" width="310"><img src=http://i.imgur.com/4xzLvzV.gif><br><b>Ace:</b> Patrick<br><b>Catchphrase:</b> I may be stupid, but I\'m also dumb.<center>');
+	},
+	
+	tesla: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/lanturn.gif>         <img src=http://i.imgur.com/7HIXTxC.gif><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/zapdos.gif><br>Ace: <font color="green">The Green Lanturn</font><br><font color="gold">Edison failed 10,000 times before he made the electric light. Do not be discouraged if you fail a few times.</font></center>');
+	},
+	
+	nocilol: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height="100" width="80" src="http://i.imgur.com/e3Y9KTl.gif"><img src="http://i.imgur.com/8aJpTwD.gif"><img  height="120" width="100" src="http://i.imgur.com/WUtGk1c.jpg"><br /><font face="arial" color="red"><b>Ace: </b>Gallade<br /><b>Catchphrase: </b>I hope you enjoy fan service – I can provide you some. ;)</center></font>');
 	},
 	
 	tacosaur: function(target, room, user) {
