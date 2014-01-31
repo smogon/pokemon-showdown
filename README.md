@@ -131,6 +131,7 @@ Retired Staff
 Contributors
 
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
+- Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
 - Kyle Dove [Kyle_Dove] - Art (battle backdrops)
 - Leonardo Julca [Slayer95] - Development
