@@ -343,18 +343,9 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Averagemons",
-		section: "OM of the Month",
-
-		mod: 'averagemons',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Soul Dew', 'Thick Club', 'Deepseatooth', 'Deepseascale', 'Light Ball', 'Mawilite', 'Medichamite', 'Eviolite', 'Shedinja', 'Smeargle', 'Huge Power', 'Pure Power']
-	},
-	{
 		name: "Middle Cup",
 		section: "OM of the Month",
-		
-		searchShow: false,
+
 		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
 		banlist: ['Illegal', 'Eviolite'],
 		maxLevel: 50,
@@ -503,6 +494,15 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Ability Exchange Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Ignore Illegal Abilities', 'Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Slaking', 'Regigigas']
+	},
+	{
+		name: "Averagemons",
+		section: "Other Metagames",
+
+		searchShow: false,
+		mod: 'averagemons',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Soul Dew', 'Thick Club', 'Deepseatooth', 'Deepseascale', 'Light Ball', 'Mawilite', 'Medichamite', 'Eviolite', 'Shedinja', 'Smeargle', 'Huge Power', 'Pure Power']
 	},
 	{
 		name: "Gen-NEXT OU",
