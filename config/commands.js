@@ -1521,6 +1521,11 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br><b>Ace: <font color="#58ACFA"><blink>Ace: Farfetch\'d</blink><br></font><b><font color="#00BFFF">Where can I find a leek in Pokemon Y?');
     },
     
+    naten: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/uxie.gif><img src=http://i254.photobucket.com/albums/hh108/naten2006/cooltext1400784365_zps7b67e8c9.png><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/mew.gif><br>Ace: <font color="" align=center>Uxie, Our Lord and Saviour</font><br><font color="purple" align=center>The moment you\'ve stopped planning ahead is the moment you\'ve given up.</font></center>');
+    },
+    
     bossbitch: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img width="100" height="100" src="http://i.imgur.com/kUSfLgd.jpg"><img width="350" height="80" src="http://i.imgur.com/UCxedBg.gif"><img width="100" height="100" src="http://i.imgur.com/I7eayeo.jpg"><br><b>Ace: Cinccino<br>Quote: Don\'t bet me or you will weep later</b></center>');
