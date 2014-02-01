@@ -135,8 +135,19 @@ var GlobalRoom = (function() {
 		// init users
 		this.users = {};
 		this.userCount = 0; // cache of `Object.size(this.users)`
-		this.maxUsers = 0;
-		this.maxUsersDate = 0;
+		self = this;
+		data = fs.readFile('logs/maxUsers.txt','utf8',function(err, data){
+			if (err) {
+				self.maxUsers = 0;
+				self.maxUsersDate = Date();
+				return;
+			}
+			data = data.split(',');
+			self.maxUsers = data[0];
+			self.maxUsersDate = data[1];
+		});
+		//this.maxUsers = data[0];
+		//this.maxUsersDate = data[1];
 
 		this.reportUserStatsInterval = setInterval(
 			this.reportUserStats.bind(this),
@@ -412,6 +423,7 @@ var GlobalRoom = (function() {
 		if (++this.userCount > this.maxUsers) {
 			this.maxUsers = this.userCount;
 			this.maxUsersDate = Date.now();
+			fs.writeFile('logs/maxUsers.txt',this.maxUsers+','+Date(),'utf8');
 		}
 
 		if (!merging) {
