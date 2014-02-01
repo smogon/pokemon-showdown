@@ -1188,6 +1188,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	handrelief: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=120 src="http://i.imgur.com/jniR0EF.jpg">' +
+			'<img src="http://i.imgur.com/fWqMdpZ.png">' +
+			'<img height=120 src="http://i.imgur.com/KCCaxo2.jpg"><br />' +
+			'<b>Ace: </b>Scizor<br />' +
+			'<b>Catchphrase: </b>The inner machinations of my mind are an enigma</center>');
+	},
+
 	elitefouroshy: 'oshy',
 	oshy: function(target, room, user) {
 		if (!this.canBroadcast()) return;
