@@ -1193,7 +1193,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img height=120 width=180 src="http://25.media.tumblr.com/5899b0681d32d509995e6d1d9ae5299a/tumblr_mskxhqL9Yc1s035gko1_500.gif">' +
 			'<img src="http://i.imgur.com/ZGyaxDn.png">' +
-			'<img height=120 src="http://25.media.tumblr.com/f5b00112af5170652d3fba22c7b25ccf/tumblr_mmn9i29iVi1qlc7c9o1_500.jpg"><br />' +
+			'<img height=120 width=180 src="https://31.media.tumblr.com/45e356815fc9fbe44d71998555dc36e4/tumblr_mzr89tROK41srpic3o1_500.gif"><br />' +
 			'<b>Ace: </b>Tsunami<br />' +
 			'Life\'s hard.');
 	},
