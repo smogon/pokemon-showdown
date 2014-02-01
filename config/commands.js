@@ -1187,6 +1187,17 @@ var commands = exports.commands = {
 	/***************************************
 	* Trainer Cards                        *
 	***************************************/
+
+	derp: 'derpjr',
+	derpjr: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=150 src="http://i.imgur.com/BTmcOiH.gif">' +
+			'<img src="http://i.imgur.com/K6t01Ra.png">' +
+			'<img height=150 src="http://i.imgur.com/k3YCEr0.png"><br />' +
+			'<b>Ace: </b>Crobat<br />' +
+			'i liek cookies');
+	},
+
 	eclipse: 'kilmeclipse', 
 	kilmeclipse: function(target, room, user) {
 		if (!this.canBroadcast()) return;
