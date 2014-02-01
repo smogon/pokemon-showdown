@@ -1209,11 +1209,11 @@ var commands = exports.commands = {
 
 	piscean: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img height=150 width=150 src="http://i0.kym-cdn.com/photos/images/newsfeed/000/535/926/ff5.gif">' +
-			'<img src="http://i.imgur.com/h7D9eju.gif">' +
-			'<img height=150 width=150 src="http://fc09.deviantart.net/fs24/f/2008/004/1/2/Pisces_by_Angel_Blaze.jpg"><br />' +
+		this.sendReplyBox('<center><img height=100 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/suicune.gif">' +
+			'<img src="http://i.imgur.com/pejdyTz.gif">' +
+			'<img height=100 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/huntail.gif"><br />' +
 			'<b>Ace:</b> Fish<br />' +
-			'<b>Catchphrase:</b> Tempting Piscean will bring about the wrath of the sea. </center>');
+			'<b>Catchphrase:</b> The mind of a Pisces is like an ocean - it\'s deep and vast. <br />Should you venture into its depths, you may find yourself lost beneath the waves.  </center>');
 	},
 
 	adam: 'adamkillszombies',
