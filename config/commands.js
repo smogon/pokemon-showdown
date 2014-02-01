@@ -1861,7 +1861,11 @@ var commands = exports.commands = {
 	
 	tesla: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/lanturn.gif>         <img src=http://i.imgur.com/7HIXTxC.gif><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/zapdos.gif><br>Ace: <font color="green">The Green Lanturn</font><br><font color="gold">Edison failed 10,000 times before he made the electric light. Do not be discouraged if you fail a few times.</font></center>');
+		this.sendReplyBox('<center><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/lanturn.gif>' +
+			'<img src=http://i.imgur.com/7HIXTxC.gif>' +
+			'<img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/zapdos.gif><br />' +
+			'Ace: <font color="green">The Green Lanturn</font><br />' +
+			'<font color=#CC9900>Edison failed 10,000 times before he made the electric light. <br />Do not be discouraged if you fail a few times.</font></center>');
 	},
 	
 	nocilol: function(target, room, user) {
