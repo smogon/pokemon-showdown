@@ -1187,6 +1187,15 @@ var commands = exports.commands = {
 	/***************************************
 	* Trainer Cards                        *
 	***************************************/
+	eclipse: 'kilmeclipse', 
+	kilmeclipse: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=150 width=220 src="http://i.imgur.com/vbaS74V.gif">' +
+			'<img src="http://i.imgur.com/gVciXNV.gif">' +
+			'<img height=150 src="http://i.imgur.com/xQdxMSp.png"><br />' +
+			'<b>Ace: </b>Garchomp<br />' +
+			'Don\'t Gible Up when the odds are on you.');
+	},
 
 	handrelief: function(target, room, user) {
 		if (!this.canBroadcast()) return;
