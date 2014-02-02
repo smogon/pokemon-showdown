@@ -228,6 +228,7 @@ var BattlePokemon = (function() {
 		this.baseAbility = toId(set.ability);
 		this.ability = this.baseAbility;
 		this.item = toId(set.item);
+		this.canMegaEvo = (this.battle.getItem(this.item).megaEvolves === this.species);
 		this.abilityData = {id: this.ability};
 		this.itemData = {id: this.item};
 		this.speciesData = {id: this.speciesid};
@@ -307,6 +308,15 @@ var BattlePokemon = (function() {
 			accuracy: 0, evasion: 0
 		};
 		this.stats = {atk:0, def:0, spa:0, spd:0, spe:0};
+		this.baseStats = {atk:10, def:10, spa:10, spd:10, spe:10};
+		for (var statName in this.baseStats) {
+			var stat = this.template.baseStats[statName];
+			stat = Math.floor(Math.floor(2*stat+this.set.ivs[statName]+Math.floor(this.set.evs[statName]/4))*this.level / 100 + 5);
+			var nature = this.battle.getNature(this.set.nature);
+			if (statName === nature.plus) stat *= 1.1;
+			if (statName === nature.minus) stat *= 0.9;
+			this.baseStats[statName] = Math.floor(stat);
+		};
 
 		this.maxhp = Math.floor(Math.floor(2*this.template.baseStats['hp']+this.set.ivs['hp']+Math.floor(this.set.evs['hp']/4)+100)*this.level / 100 + 10);
 		if (this.template.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
@@ -342,7 +352,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.transformed = false;
 	BattlePokemon.prototype.duringMove = false;
 	BattlePokemon.prototype.hpType = 'Dark';
-	BattlePokemon.prototype.hpPower = 70;
+	BattlePokemon.prototype.hpPower = 60;
 	BattlePokemon.prototype.speed = 0;
 
 	BattlePokemon.prototype.toString = function() {
@@ -538,7 +548,7 @@ var BattlePokemon = (function() {
 			var moveName = move.move;
 			if (move.id === 'hiddenpower') {
 				moveName = 'Hidden Power '+this.hpType;
-				if (this.hpPower != 70) moveName += ' '+this.hpPower;
+				if (this.gen < 6) moveName += ' '+this.hpPower;
 			}
 			moves.push({
 				move: moveName,
@@ -1185,6 +1195,13 @@ var BattleSide = (function() {
 				details: pokemon.details,
 				condition: pokemon.getHealth(pokemon.side),
 				active: (pokemon.position < pokemon.side.active.length),
+				stats: {
+					atk: pokemon.baseStats['atk'],
+					def: pokemon.baseStats['def'],
+					spa: pokemon.baseStats['spa'],
+					spd: pokemon.baseStats['spd'],
+					spe: pokemon.baseStats['spe']
+				},
 				moves: pokemon.moves.map(function(move) {
 					if (move === 'hiddenpower') {
 						return move + toId(pokemon.hpType) + (pokemon.hpPower == 70?'':pokemon.hpPower);
@@ -1192,7 +1209,8 @@ var BattleSide = (function() {
 					return move;
 				}),
 				baseAbility: pokemon.baseAbility,
-				item: pokemon.item
+				item: pokemon.item,
+				canMegaEvo: pokemon.canMegaEvo
 			});
 		}
 		return data;
@@ -1908,7 +1926,6 @@ var Battle = (function() {
 		for (var i=0; i<statuses.length; i++) {
 			var status = statuses[i].status;
 			var thing = statuses[i].thing;
-			if (thing.fainted) continue;
 			//this.debug('match '+eventid+': '+status.id+' '+status.effectType);
 			if (status.effectType === 'Status' && thing.status !== status.id) {
 				// it's changed; call it off
@@ -2073,7 +2090,6 @@ var Battle = (function() {
 			return statuses;
 		}
 
-		if (thing.fainted) return statuses;
 		if (!thing.getStatus) {
 			this.debug(JSON.stringify(thing));
 			return statuses;
@@ -2123,14 +2139,17 @@ var Battle = (function() {
 			if (foeCallbackType.substr(0,5) === 'onFoe') {
 				eventName = foeCallbackType.substr(5);
 				for (var i=0; i<allyActive.length; i++) {
+					if (!allyActive[i] || allyActive[i].fainted) continue;
 					statuses = statuses.concat(this.getRelevantEffectsInner(allyActive[i], 'onAlly'+eventName,null,null,false,false, getAll));
 					statuses = statuses.concat(this.getRelevantEffectsInner(allyActive[i], 'onAny'+eventName,null,null,false,false, getAll));
 				}
 				for (var i=0; i<foeActive.length; i++) {
+					if (!foeActive[i] || foeActive[i].fainted) continue;
 					statuses = statuses.concat(this.getRelevantEffectsInner(foeActive[i], 'onAny'+eventName,null,null,false,false, getAll));
 				}
 			}
 			for (var i=0; i<foeActive.length; i++) {
+				if (!foeActive[i] || foeActive[i].fainted) continue;
 				statuses = statuses.concat(this.getRelevantEffectsInner(foeActive[i], foeCallbackType,null,null,false,false, getAll));
 			}
 		}
@@ -2438,6 +2457,7 @@ var Battle = (function() {
 		this.p1.foe = this.p2;
 
 		this.add('gametype', this.gameType);
+		this.add('gen', this.gen);
 
 		var format = this.getFormat();
 		Tools.mod(format.mod).getBanlistTable(format); // fill in format ruleset
@@ -2821,7 +2841,7 @@ var Battle = (function() {
 		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
 		// STAB
-		if (type !== '???' && pokemon.hasType(type)) {
+		if (move.hasSTAB || type !== '???' && pokemon.hasType(type)) {
 			// The "???" type never gets STAB
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
@@ -2829,19 +2849,20 @@ var Battle = (function() {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		var totalTypeMod = this.getEffectiveness(type, target);
-		totalTypeMod = this.singleEvent('ModifyEffectiveness', move, null, target, pokemon, move, totalTypeMod);
+		var totalTypeMod = this.getEffectiveness(move, target, pokemon);
+
+		totalTypeMod = clampIntRange(totalTypeMod, -3, 3);
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
-			baseDamage *= 2;
-			if (totalTypeMod >= 2) {
+
+			for (var i=0; i<totalTypeMod; i++) {
 				baseDamage *= 2;
 			}
 		}
 		if (totalTypeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
-			baseDamage = Math.floor(baseDamage/2);
-			if (totalTypeMod <= -2) {
+
+			for (var i=0; i>totalTypeMod; i--) {
 				baseDamage = Math.floor(baseDamage/2);
 			}
 		}
@@ -2901,7 +2922,16 @@ var Battle = (function() {
 			} else {
 				target = decision.pokemon.side.active[(-decision.targetLoc)-1];
 			}
-			if (target && !target.fainted) return target;
+			if (target) {
+				if (!target.fainted) {
+					// target exists and is not fainted
+					return target;
+				} else if (target.side === decision.pokemon.side) {
+					// fainted allied targets don't retarget
+					return false;
+				}
+			}
+			// chosen target not valid, retarget randomly with resolveTarget
 		}
 		if (!decision.targetPosition || !decision.targetSide) {
 			target = this.resolveTarget(decision.pokemon, decision.move);
@@ -2911,6 +2941,16 @@ var Battle = (function() {
 		return decision.targetSide.active[decision.targetPosition];
 	};
 	Battle.prototype.resolveTarget = function(pokemon, move) {
+		// A move was used without a chosen target
+
+		// For instance: Metronome chooses Ice Beam. Since the user didn't
+		// choose a target when choosing Metronome, Ice Beam's target must
+		// be chosen randomly.
+
+		// The target is chosen randomly from possible targets, EXCEPT that
+		// moves that can target either allies or foes will only target foes
+		// when used without an explicit target.
+
 		move = this.getMove(move);
 		if (move.target === 'adjacentAlly' && pokemon.side.active.length > 1) {
 			if (pokemon.side.active[pokemon.position-1]) {
@@ -3497,6 +3537,7 @@ var Battle = (function() {
 
 				decisions.push({
 					choice: 'switch',
+					priority: (side.currentRequest === 'switch' ? 101 : undefined),
 					pokemon: side.pokemon[i],
 					target: side.pokemon[data]
 				});

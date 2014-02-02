@@ -133,6 +133,33 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	metronome: {
+		inherit: true,
+		onHit: function(target) {
+			var moves = [];
+			for (var i in exports.BattleMovedex) {
+				var move = exports.BattleMovedex[i];
+				if (i !== move.id) continue;
+				if (move.isNonstandard) continue;
+				var noMetronome = {
+					counter:1, destinybond:1, detect:1, endure:1, metronome:1, mimic:1, mirrorcoat:1, protect:1, sketch:1, sleeptalk:1, struggle:1, thief:1
+				};
+				if (!noMetronome[move.id] && move.num < 252) {
+					moves.push(move.id);
+				}
+			}
+			var move = '';
+			if (moves.length) move = moves[this.random(moves.length)];
+			if (!move) return false;
+			this.useMove(move, target);
+		}
+	},
+	rage: {
+		// todo
+		// Rage boosts in Gens 2-4 is for the duration of Rage only
+		// Disable does not build
+		inherit: true
+	},
 	reflect: {
 		inherit: true,
 		effect: {
@@ -160,6 +187,10 @@ exports.BattleMovedex = {
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
 		secondary: false
+	},
+	roar: {
+		inherit: true,
+		priority: -1
 	},
 	selfdestruct: {
 		inherit: true,
@@ -272,19 +303,13 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	rage: {
-		// todo
-		// Rage boosts in Gens 2-4 is for the duration of Rage only
-		// Disable does not build
-		inherit: true
-	},
-	roar: {
+	waterfall: {
 		inherit: true,
-		priority: -1
+		secondary: false
 	},
-	magikarpsrevenge: null,
 	whirlwind: {
 		inherit: true,
 		priority: -1
 	},
+	magikarpsrevenge: null
 };
