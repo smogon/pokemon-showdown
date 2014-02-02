@@ -408,10 +408,6 @@ var Tournament = (function () {
 			return;
 		}
 
-		if (this.generator.getUserBusy(from) || this.generator.getUserBusy(to)) {
-			this.room.add("Tournament backend breaks specifications. Please report this to an admin.");
-			return;
-		}
 		this.pendingChallenges.set(from, {to: to, team: from.team});
 		this.pendingChallenges.set(to, {from: from, team: from.team});
 		from.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenging: to.name}));
