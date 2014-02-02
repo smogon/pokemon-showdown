@@ -396,6 +396,11 @@ var Tournament = (function () {
 			return;
 		}
 
+		if (this.generator.getUserBusy(from) || this.generator.getUserBusy(to)) {
+			this.room.add("Tournament backend breaks specifications. Please report this to an admin.");
+			return;
+		}
+
 		this.generator.setUserBusy(from, true);
 		this.generator.setUserBusy(to, true);
 
