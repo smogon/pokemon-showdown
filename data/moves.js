@@ -4438,7 +4438,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.damage && pokemon.lastAttackedBy.thisTurn) {
-				this.add('cant', pokemon, 'flinch', 'Focus Punch');
+				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
 				return true;
 			}
 		},
