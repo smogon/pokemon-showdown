@@ -396,8 +396,17 @@ var Tournament = (function () {
 			return;
 		}
 
+		if (this.generator.getUserBusy(from) || this.generator.getUserBusy(to)) {
+			this.room.add("Tournament backend breaks specifications. Please report this to an admin.");
+			return;
+		}
+
 		this.generator.setUserBusy(from, true);
 		this.generator.setUserBusy(to, true);
+
+		this.isAvailableMatchesInvalidated = true;
+		this.purgeGhostUsers();
+		this.update();
 
 		from.prepBattle(this.format, 'challenge', from, this.finishChallenge.bind(this, from, to, output));
 	};
@@ -405,6 +414,9 @@ var Tournament = (function () {
 		if (!result) {
 			this.generator.setUserBusy(from, false);
 			this.generator.setUserBusy(to, false);
+
+			this.isAvailableMatchesInvalidated = true;
+			this.update();
 			return;
 		}
 
@@ -414,8 +426,6 @@ var Tournament = (function () {
 		to.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenged: from.name}));
 
 		this.isBracketInvalidated = true;
-		this.isAvailableMatchesInvalidated = true;
-		this.purgeGhostUsers();
 		this.update();
 	};
 	Tournament.prototype.cancelChallenge = function (user) {
@@ -439,9 +449,15 @@ var Tournament = (function () {
 		if (!challenge || !challenge.from)
 			return;
 
-		user.prepBattle(this.format, 'challenge', user, this.finishAcceptChallenge.bind(this, user));
+		user.prepBattle(this.format, 'challenge', user, this.finishAcceptChallenge.bind(this, user, challenge));
 	};
-	Tournament.prototype.finishAcceptChallenge = function (user, result) {
+	Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
+		if (!result)
+			return;
+		if (!this.pendingChallenges.get(user))
+			// Prevent double accepts
+			return;
+
 		this.pendingChallenges.set(challenge.from, null);
 		this.pendingChallenges.set(user, null);
 		challenge.from.sendTo(this.room, '|tournament|update|{"challenging":null}');
@@ -452,7 +468,6 @@ var Tournament = (function () {
 		this.room.add('|tournament|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id);
 
 		this.isBracketInvalidated = true;
-		this.isAvailableMatchesInvalidated = true;
 		this.update();
 
 		var self = this;
