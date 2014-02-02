@@ -1318,7 +1318,7 @@ var commands = exports.commands = {
         	'<img height="100" width="450" src="http://i.imgur.com/v4h0TvD.png">' +
         	'<img height="100" src="http://i.imgur.com/21NYnjz.gif"><br />' +
         	'<b>Ace: </b>Mega Lucario<br />' +
-        	'<b>Catchphrase: </b>Their is always Light within the darkness</center>');
+        	'<b>Catchphrase: </b>Choose your battles wisely. After all, life isn\'t measured by how many times you stood up to fight.</center>');
     },
     
     zezetel: function(target, room, user) {
