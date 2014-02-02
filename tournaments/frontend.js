@@ -404,12 +404,19 @@ var Tournament = (function () {
 		this.generator.setUserBusy(from, true);
 		this.generator.setUserBusy(to, true);
 
+		this.isAvailableMatchesInvalidated = true;
+		this.purgeGhostUsers();
+		this.update();
+
 		from.prepBattle(this.format, 'challenge', from, this.finishChallenge.bind(this, from, to, output));
 	};
 	Tournament.prototype.finishChallenge = function (from, to, output, result) {
 		if (!result) {
 			this.generator.setUserBusy(from, false);
 			this.generator.setUserBusy(to, false);
+
+			this.isAvailableMatchesInvalidated = true;
+			this.update();
 			return;
 		}
 
@@ -419,8 +426,6 @@ var Tournament = (function () {
 		to.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenged: from.name}));
 
 		this.isBracketInvalidated = true;
-		this.isAvailableMatchesInvalidated = true;
-		this.purgeGhostUsers();
 		this.update();
 	};
 	Tournament.prototype.cancelChallenge = function (user) {
@@ -449,6 +454,9 @@ var Tournament = (function () {
 	Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
 		if (!result)
 			return;
+		if (!this.pendingChallenges.get(user))
+			// Prevent double accepts
+			return;
 
 		this.pendingChallenges.set(challenge.from, null);
 		this.pendingChallenges.set(user, null);
@@ -460,7 +468,6 @@ var Tournament = (function () {
 		this.room.add('|tournament|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id);
 
 		this.isBracketInvalidated = true;
-		this.isAvailableMatchesInvalidated = true;
 		this.update();
 
 		var self = this;
