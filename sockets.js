@@ -4,6 +4,10 @@
  *
  * Abstraction layer for multi-process SockJS connections.
  *
+ * This file handles all the communications between the users'
+ * browsers, the networking processes, and users.js in the
+ * main process.
+ *
  * @license MIT license
  */
 
@@ -60,7 +64,9 @@ if (cluster.isMaster) {
 				count++;
 			}
 		}
-		worker.kill();
+		try {
+			worker.kill();
+		} catch (e) {}
 		delete workers[worker.id];
 		return count;
 	};
@@ -100,6 +106,12 @@ if (cluster.isMaster) {
 
 } else {
 	// is worker
+
+	// ofe is optional
+	// if installed, it will heap dump if the process runs out of memory
+	try {
+		require('ofe').call();
+	} catch (e) {}
 
 	// Static HTTP server
 
@@ -187,6 +199,35 @@ if (cluster.isMaster) {
 	var sockets = {};
 	var channels = {};
 
+	// Deal with phantom connections.
+	global.sweepClosedSockets = function() {
+		for (var s in sockets) {
+			if (sockets[s].protocol === 'xhr-streaming' &&
+				sockets[s]._session &&
+				sockets[s]._session.recv) {
+				sockets[s]._session.recv.didClose();
+			}
+
+			// A ghost connection's `_session.to_tref._idlePrev` (and `_idleNext`) property is `null` while
+			// it is an object for normal users. Under normal circumstances, those properties should only be
+			// `null` when the timeout has already been called, but somehow it's not happening for some connections.
+			// Simply calling `_session.timeout_cb` (the function bound to the aformentioned timeout) manually
+			// on those connections kills those connections. For a bit of background, this timeout is the timeout
+			// that sockjs sets to wait for users to reconnect within that time to continue their session.
+			if (sockets[s]._session &&
+				sockets[s]._session.to_tref &&
+				!sockets[s]._session.to_tref._idlePrev) {
+				sockets[s]._session.timeout_cb();
+			}
+		}
+	};
+	if (!config.herokuhack) {
+		global.sweepClosedSocketsInterval = setInterval(
+			sweepClosedSockets,
+			1000 * 60 * 10
+		);
+	}
+
 	process.on('message', function(data) {
 		// console.log('worker received: '+data);
 		var socket = null;
@@ -208,7 +249,7 @@ if (cluster.isMaster) {
 			break;
 
 		case '>': // >socketid, message
-			// message 
+			// message
 			var nlLoc = data.indexOf('\n');
 			socket = sockets[data.substr(1, nlLoc-1)];
 			if (!socket) return;
@@ -240,9 +281,16 @@ if (cluster.isMaster) {
 		case '-': // -channelid, socketid
 			// remove from channel
 			var nlLoc = data.indexOf('\n');
-			var channel = channels[data.substr(1, nlLoc-1)];
+			var channelid = data.substr(1, nlLoc-1);
+			var channel = channels[channelid];
 			if (!channel) return;
 			delete channel[data.substr(nlLoc+1)];
+			var isEmpty = true;
+			for (var socketid in channel) {
+				isEmpty = false;
+				break;
+			}
+			if (isEmpty) delete channels[channelid];
 			break;
 		}
 	});

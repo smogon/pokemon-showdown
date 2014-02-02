@@ -274,8 +274,8 @@ function canTalk(user, room, connection, message) {
 			if (room.auth) {
 				if (room.auth[user.userid]) {
 					userGroup = room.auth[user.userid];
-				} else if (userGroup !== ' ') {
-					userGroup = '+';
+				} else if (room.isPrivate) {
+					userGroup = ' ';
 				}
 			}
 			if (!user.autoconfirmed && (room.auth && room.auth[user.userid] || user.group) === ' ' && room.modchat === 'autoconfirmed') {

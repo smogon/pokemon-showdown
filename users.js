@@ -111,7 +111,7 @@ function socketConnect(worker, workerid, socketid, ip) {
 	}
 	// Emergency mode connections logging
 	if (config.emergency) {
-		fs.appendFile('logs/cons.emergency.log', '#'+socketCounter+' [' + ip + ']\n', function(err){
+		fs.appendFile('logs/cons.emergency.log', '[' + ip + ']\n', function(err){
 			if (err) {
 				console.log('!! Error in emergency conns log !!');
 				throw err;
@@ -667,11 +667,25 @@ var User = (function () {
 						invalidHost = true;
 					}
 				}
+			} else if (tokenDataSplit[1] !== userid) {
+				// outdated token
+				// (a user changed their name again since this token was created)
+				// return without clearing renamePending; the more recent rename is still pending
+				return;
 			} else {
-				console.log('verify userid mismatch: '+tokenData);
+				// a user sent an invalid token
+				if (tokenDataSplit[0] !== challenge) {
+					console.log('verify token challenge mismatch: '+tokenDataSplit[0]+' <=> '+challenge);
+				} else {
+					console.log('verify token mismatch: '+tokenData);
+				}
 			}
 		} else {
-			console.log('verify failed: '+tokenData);
+			if (!challenge) {
+				console.log('verification failed; no challenge');
+			} else {
+				console.log('verify failed: '+token);
+			}
 		}
 
 		if (invalidHost) {
@@ -719,9 +733,9 @@ var User = (function () {
 
 				if (body === '3') {
 					isSysop = true;
-					this.autoconfirmed = true;
+					this.autoconfirmed = userid;
 				} else if (body === '4') {
-					this.autoconfirmed = true;
+					this.autoconfirmed = userid;
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
@@ -927,26 +941,13 @@ var User = (function () {
 		}
 		return alts;
 	};
-	User.prototype.getHighestRankedAlt = function() {
-		var result = this;
-		var groupRank = config.groupsranking.indexOf(this.group);
-		for (var i in users) {
-			if (users[i] === this) continue;
-			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			if (config.groupsranking.indexOf(users[i].group) <= groupRank) continue;
-
-			result = users[i];
-			groupRank = config.groupsranking.indexOf(users[i].group);
-		}
-		return result;
-	};
 	User.prototype.doWithMMR = function(formatid, callback, that) {
 		var self = this;
 		if (that === undefined) that = this;
 		formatid = toId(formatid);
 
 		// this should relieve login server strain
-		// this.mmrCache[formatid] = 1500;
+		// this.mmrCache[formatid] = 1000;
 
 		if (this.mmrCache[formatid]) {
 			callback.call(that, this.mmrCache[formatid]);
@@ -956,10 +957,10 @@ var User = (function () {
 			format: formatid,
 			user: this.userid
 		}, function(data) {
-			var mmr = 1500;
+			var mmr = 1000;
 			if (data) {
 				mmr = parseInt(data,10);
-				if (isNaN(mmr)) mmr = 1500;
+				if (isNaN(mmr)) mmr = 1000;
 			}
 			self.mmrCache[formatid] = mmr;
 			callback.call(that, mmr);
@@ -969,7 +970,7 @@ var User = (function () {
 		if (typeof mmr === 'number') {
 			this.mmrCache[formatid] = mmr;
 		} else {
-			this.mmrCache[formatid] = Math.floor((Number(mmr.rpr)*2+Number(mmr.r))/3);
+			this.mmrCache[formatid] = Number(mmr.acre);
 		}
 	};
 	User.prototype.mute = function(roomid, time, force, noRecurse) {
@@ -1099,7 +1100,7 @@ var User = (function () {
 			delete this.roomCount[room.id];
 		}
 	};
-	User.prototype.prepBattle = function(formatid, type, connection) {
+	User.prototype.prepBattle = function(formatid, type, connection, callback) {
 		// all validation for a battle goes through here
 		if (!connection) connection = this;
 		if (!type) type = 'challenge';
@@ -1110,25 +1111,31 @@ var User = (function () {
 				message = "The server is under attack. Battles cannot be started at this time.";
 			}
 			connection.popup(message);
-			return false;
+			setImmediate(callback.bind(null, false));
+			return;
 		}
 		if (ResourceMonitor.countPrepBattle(connection.ip || connection.latestIp, this.name)) {
 			connection.popup("Due to high load, you are limited to 6 battles every 3 minutes.");
-			return false;
+			setImmediate(callback.bind(null, false));
+			return;
 		}
 
 		var format = Tools.getFormat(formatid);
 		if (!format[''+type+'Show']) {
 			connection.popup("That format is not available.");
-			return false;
+			setImmediate(callback.bind(null, false));
+			return;
 		}
-		var team = this.team;
-		var problems = Tools.validateTeam(team, formatid);
-		if (problems) {
-			connection.popup("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-			return false;
+		TeamValidator.validateTeam(formatid, this.team, this.finishPrepBattle.bind(this, connection, callback));
+	};
+	User.prototype.finishPrepBattle = function(connection, callback, success, details) {
+		if (!success) {
+			connection.popup("Your team was rejected for the following reasons:\n\n- "+details.replace(/\n/g, '\n- '));
+			callback(false);
+		} else {
+			this.team = details;
+			callback(true);
 		}
-		return true;
 	};
 	User.prototype.updateChallenges = function() {
 		this.send('|updatechallenges|'+JSON.stringify({
