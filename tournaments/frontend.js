@@ -396,16 +396,22 @@ var Tournament = (function () {
 			return;
 		}
 
-		if (!from.prepBattle(this.format, 'challenge', from))
+		this.generator.setUserBusy(from, true);
+		this.generator.setUserBusy(to, true);
+
+		from.prepBattle(this.format, 'challenge', from, this.finishChallenge.bind(this, from, to, output));
+	};
+	Tournament.prototype.finishChallenge = function (from, to, output, result) {
+		if (!result) {
+			this.generator.setUserBusy(from, false);
+			this.generator.setUserBusy(to, false);
 			return;
+		}
 
 		if (this.generator.getUserBusy(from) || this.generator.getUserBusy(to)) {
 			this.room.add("Tournament backend breaks specifications. Please report this to an admin.");
 			return;
 		}
-
-		this.generator.setUserBusy(from, true);
-		this.generator.setUserBusy(to, true);
 		this.pendingChallenges.set(from, {to: to, team: from.team});
 		this.pendingChallenges.set(to, {from: from, team: from.team});
 		from.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenging: to.name}));
@@ -437,9 +443,9 @@ var Tournament = (function () {
 		if (!challenge || !challenge.from)
 			return;
 
-		if (!user.prepBattle(this.format, 'challenge', user))
-			return;
-
+		user.prepBattle(this.format, 'challenge', user, this.finishAcceptChallenge.bind(this, user));
+	};
+	Tournament.prototype.finishAcceptChallenge = function (user, result) {
 		this.pendingChallenges.set(challenge.from, null);
 		this.pendingChallenges.set(user, null);
 		challenge.from.sendTo(this.room, '|tournament|update|{"challenging":null}');
