@@ -1078,6 +1078,10 @@ var BattlePokemon = (function() {
 		this.update();
 		return true;
 	};
+	BattlePokemon.prototype.setTypes = function(types, sourceEffect) {
+		var newTypes = this.battle.runEvent('ModifyType', this, null, sourceEffect, types, types);
+		this.types = newTypes;
+	};
 	// "static" function
 	BattlePokemon.getHealth = function(side) {
 		if (!this.hp) return '0 fnt';
