@@ -3768,9 +3768,9 @@ exports.BattleMovedex = {
 		name: "Feint",
 		pp: 10,
 		priority: 2,
-		isNotProtectable: true,
+		breaksProtect: true,
 		onHit: function(target, source) {
-			if (target.removeVolatile('protect')) {
+			if (target.removeVolatile('protect') || target.removeVolatile('kingsshield') || target.removeVolatile('spikyshield')) {
 				this.add("-activate", target, "move: Feint");
 			}
 			if (target.side !== source.side) {
@@ -4438,7 +4438,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.damage && pokemon.lastAttackedBy.thisTurn) {
-				this.add('cant', pokemon, 'flinch', 'Focus Punch');
+				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
 				return true;
 			}
 		},
@@ -6819,13 +6819,13 @@ exports.BattleMovedex = {
 		name: "Ion Deluge",
 		pp: 25,
 		priority: 1,
-		volatileStatus: 'iondeluge',
+		pseudoWeather: 'iondeluge',
 		effect: {
 			duration: 1,
 			onStart: function(target) {
-				this.add('-fieldactivate', target, 'move: Ion Deluge');
+				this.add('-fieldactivate', 'move: Ion Deluge');
 			},
-			onModifyMove: function(move, pokemon) {
+			onModifyMove: function(move) {
 				if (move.type === 'Normal') {
 					move.type = 'Electric';
 					this.debug(move.name + "'s type changed to Electric");
@@ -7001,7 +7001,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function(target, source, move) {
 				if (move.breaksProtect) {
-					target.removeVolatile("King's Shield");
+					target.removeVolatile('kingsshield');
 					return;
 				}
 				if (move && (move.category === 'Status' || move.isNotProtectable || move.id === 'suckerpunch')) return;
@@ -9996,7 +9996,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user and its party members are protected from attacks with priority greater than 0 made by other Pokemon, including allies, during this turn. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
+		desc: "The user and its party members are protected from attacks with priority greater than 0 made by other Pokemon, including allies, during this turn. Fails if this move is already in effect for the user's side. Priority +3.",
 		shortDesc: "Protects allies from priority attacks this turn.",
 		id: "quickguard",
 		name: "Quick Guard",
@@ -12188,7 +12188,7 @@ exports.BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit: function(target, source, move) {
 				if (move.breaksProtect) {
-					target.removeVolatile('Spiky Shield');
+					target.removeVolatile('spikyshield');
 					return;
 				}
 				if (move && move.target === 'self') return;
@@ -14574,7 +14574,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
+		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. Fails if this move is already in effect for the user's side. Priority +3.",
 		shortDesc: "Protects allies from multi-target hits this turn.",
 		id: "wideguard",
 		name: "Wide Guard",
