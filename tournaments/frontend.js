@@ -439,9 +439,12 @@ var Tournament = (function () {
 		if (!challenge || !challenge.from)
 			return;
 
-		user.prepBattle(this.format, 'challenge', user, this.finishAcceptChallenge.bind(this, user));
+		user.prepBattle(this.format, 'challenge', user, this.finishAcceptChallenge.bind(this, user, challenge));
 	};
-	Tournament.prototype.finishAcceptChallenge = function (user, result) {
+	Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
+		if (!result)
+			return;
+
 		this.pendingChallenges.set(challenge.from, null);
 		this.pendingChallenges.set(user, null);
 		challenge.from.sendTo(this.room, '|tournament|update|{"challenging":null}');
