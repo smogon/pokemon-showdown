@@ -260,11 +260,15 @@ var GlobalRoom = (function() {
 			userid: user.userid,
 			formatid: formatid,
 			team: user.team,
-			rating: 1500,
+			rating: 1000,
 			time: new Date().getTime()
 		};
 		var self = this;
-		user.doWithMMR(formatid, function(mmr) {
+		user.doWithMMR(formatid, function(mmr, error) {
+			if (error) {
+				user.popup("Connection to ladder server failed; please try again later");
+				return;
+			}
 			newSearch.rating = mmr;
 			self.addSearch(newSearch, user);
 		});
