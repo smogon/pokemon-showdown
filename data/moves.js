@@ -4438,7 +4438,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.damage && pokemon.lastAttackedBy.thisTurn) {
-				this.add('cant', pokemon, 'flinch', 'Focus Punch');
+				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
 				return true;
 			}
 		},
@@ -6819,13 +6819,13 @@ exports.BattleMovedex = {
 		name: "Ion Deluge",
 		pp: 25,
 		priority: 1,
-		volatileStatus: 'iondeluge',
+		pseudoWeather: 'iondeluge',
 		effect: {
 			duration: 1,
 			onStart: function(target) {
-				this.add('-fieldactivate', target, 'move: Ion Deluge');
+				this.add('-fieldactivate', 'move: Ion Deluge');
 			},
-			onModifyMove: function(move, pokemon) {
+			onModifyMove: function(move) {
 				if (move.type === 'Normal') {
 					move.type = 'Electric';
 					this.debug(move.name + "'s type changed to Electric");
