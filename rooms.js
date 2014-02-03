@@ -426,7 +426,7 @@ var GlobalRoom = (function() {
 		this.users[user.userid] = user;
 		if (++this.userCount > this.maxUsers) {
 			this.maxUsers = this.userCount;
-			this.maxUsersDate = Date.now();
+			this.maxUsersDate = Date();
 			fs.writeFile('logs/maxUsers.txt',this.maxUsers+','+Date(),'utf8');
 		}
 
