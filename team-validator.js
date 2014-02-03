@@ -219,22 +219,16 @@ var Validator = (function() {
 		}
 
 		for (var i=0; i<format.teamBanTable.length; i++) {
-			var bannedCombo = '';
+			var bannedCombo = true;
 			for (var j=0; j<format.teamBanTable[i].length; j++) {
 				if (!teamHas[format.teamBanTable[i][j]]) {
 					bannedCombo = false;
 					break;
 				}
-
-				if (j == 0) {
-					bannedCombo += format.teamBanTable[i][j];
-				} else {
-					bannedCombo += ' and '+format.teamBanTable[i][j];
-				}
 			}
 			if (bannedCombo) {
 				var clause = format.name ? " by "+format.name : '';
-				problems.push("Your team has the combination of "+bannedCombo+", which is banned"+clause+".");
+				problems.push("Your team has the combination of "+format.teamBanTable[i].join('+')+", which is banned"+clause+".");
 			}
 		}
 
@@ -517,22 +511,16 @@ var Validator = (function() {
 			}
 		}
 		for (var i=0; i<format.setBanTable.length; i++) {
-			var bannedCombo = '';
+			var bannedCombo = true;
 			for (var j=0; j<format.setBanTable[i].length; j++) {
 				if (!setHas[format.setBanTable[i][j]]) {
 					bannedCombo = false;
 					break;
 				}
-
-				if (j == 0) {
-					bannedCombo += format.setBanTable[i][j];
-				} else {
-					bannedCombo += ' and '+format.setBanTable[i][j];
-				}
 			}
 			if (bannedCombo) {
 				clause = format.name ? " by "+format.name : '';
-				problems.push(name+" has the combination of "+bannedCombo+", which is banned"+clause+".");
+				problems.push(name+" has the combination of "+format.setBanTable[i].join('+')+", which is banned"+clause+".");
 			}
 		}
 
