@@ -941,29 +941,32 @@ var User = (function () {
 		}
 		return alts;
 	};
-	User.prototype.doWithMMR = function(formatid, callback, that) {
+	User.prototype.doWithMMR = function(formatid, callback) {
 		var self = this;
-		if (that === undefined) that = this;
 		formatid = toId(formatid);
 
 		// this should relieve login server strain
 		// this.mmrCache[formatid] = 1000;
 
 		if (this.mmrCache[formatid]) {
-			callback.call(that, this.mmrCache[formatid]);
+			callback(this.mmrCache[formatid]);
 			return;
 		}
 		LoginServer.request('mmr', {
 			format: formatid,
 			user: this.userid
 		}, function(data) {
-			var mmr = 1000;
+			var mmr = 1000, error = true;
 			if (data) {
 				mmr = parseInt(data,10);
-				if (isNaN(mmr)) mmr = 1000;
+				if (!isNaN(mmr)) {
+					error = false;
+					self.mmrCache[formatid] = mmr;
+				} else {
+					mmr = 1000;
+				}
 			}
-			self.mmrCache[formatid] = mmr;
-			callback.call(that, mmr);
+			callback(mmr, error);
 		});
 	};
 	User.prototype.cacheMMR = function(formatid, mmr) {
