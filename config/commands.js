@@ -615,8 +615,7 @@ var commands = exports.commands = {
 			'- <a href="http://www.smogon.com/forums/threads/3496279/">Beginner\'s Guide to Pokémon Showdown</a><br />' +
 			'- <a href="http://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pokémon</a><br />' +
 			'- <a href="http://www.smogon.com/bw/articles/bw_tiers">What do "OU", "UU", etc mean?</a><br />' +
-			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a><br />' +
-			'- <a href="http://www.smogon.com/forums/threads/tiering-faq.3498332/">Tiering FAQ - an introduction to the tiering process</a>');
+			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a>');
 	},
 
 	mentoring: 'smogintro',
@@ -796,6 +795,7 @@ var commands = exports.commands = {
 		if (!target || target === 'all') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/tiers/">Smogon Tiers</a><br />';
+			buffer += '- <a href="http://www.smogon.com/forums/threads/tiering-faq.3498332/">Tiering FAQ</a><br />';
 			buffer += '- <a href="http://www.smogon.com/bw/banlist/">The banlists for each tier</a><br />';
 		}
 		if (target === 'all' || target === 'ubers' || target === 'uber') {
