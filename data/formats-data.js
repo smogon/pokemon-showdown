@@ -807,7 +807,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":10,"gender":"F","abilities":["earlybird"],"moves":["cometpunch","leer","bite"]},
 			{"generation":3,"level":36,"gender":"F","abilities":["earlybird"],"moves":["sing","earthquake","tailwhip","dizzypunch"]}
 		],
-		tier: "UU"
+		tier: "Limbo A"
 	},
 	kangaskhanmega: {
 		requiredItem: "Kangaskhanite"
