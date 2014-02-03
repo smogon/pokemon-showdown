@@ -1651,6 +1651,43 @@ var commands = exports.commands = {
 	},
 
 	/*********************************************************
+	 * Friend list commands
+	 *********************************************************/
+
+	setfriends: function(target, room, user) {
+		if (!user.named || !user.authenticated) return;
+		if (!target) target = '';
+
+		user.resetFriends();
+		var spl = target.split('|');
+		for (var i in spl) {
+			if (!spl[i]) continue;
+			user.addFriend(spl[i], true);
+		}
+
+		user.notifyFriends();
+	},
+	addfriend: 'appendfriend',
+	appendfriend: function(target, room, user) {
+		if (!user.named || !user.authenticated) return;
+		if (!target) return;
+
+		user.addFriend(target);
+	},
+	removefriend: function(target, room, user) {
+		if (!user.named || !user.authenticated) return;
+		if (!target) return;
+
+		user.removeFriend(target);
+	},
+	sendfriendrequest: function(target, room, user, connection) {
+		if (!user.named || !user.authenticated) return;
+		if (!target) return;
+
+		user.addFriend('#' + target);
+	},
+
+	/*********************************************************
 	 * Low-level
 	 *********************************************************/
 

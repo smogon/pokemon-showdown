@@ -146,6 +146,9 @@ exports.customavatars = {
 // which case users won't be given any information on how to appeal.
 exports.appealurl = '';
 
+// set this to true if you do not want to enable friend list for your server
+exports.nofriendlist = false;
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"

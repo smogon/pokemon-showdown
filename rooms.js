@@ -9,8 +9,7 @@
  * @license MIT license
  */
 
-const TIMEOUT_EMPTY_DEALLOCATE = 10*60*1000;
-const TIMEOUT_INACTIVE_DEALLOCATE = 40*60*1000;
+const TIMEOUT_DEALLOCATE = 15*60*1000;
 const REPORT_USER_STATS_INTERVAL = 1000*60*10;
 
 var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
@@ -208,7 +207,7 @@ var GlobalRoom = (function() {
 			var room = this.chatRooms[i];
 			if (!room) continue;
 			if (room.isPrivate) continue;
-			(room.isOfficial ? rooms.official : rooms.chat).push({
+			(!room.auth ? rooms.official : rooms.chat).push({
 				title: room.title,
 				desc: room.desc,
 				userCount: Object.size(room.users)
@@ -401,6 +400,9 @@ var GlobalRoom = (function() {
 	};
 	GlobalRoom.prototype.onJoinConnection = function(user, connection) {
 		var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
+		if (!config.nofriendlist) {
+			initdata += '|friendlist|\n';
+		}
 		connection.send(initdata+this.formatListText);
 		if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 	};
@@ -416,6 +418,9 @@ var GlobalRoom = (function() {
 
 		if (!merging) {
 			var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
+			if (!config.nofriendlist) {
+				initdata += '|friendlist|\n';
+			}
 			connection.send(initdata+this.formatListText);
 			if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 		}
@@ -551,7 +556,7 @@ var BattleRoom = (function() {
 
 	BattleRoom.prototype.resetTimer = null;
 	BattleRoom.prototype.resetUser = '';
-	BattleRoom.prototype.expireTimer = null;
+	BattleRoom.prototype.destroyTimer = null;
 	BattleRoom.prototype.active = false;
 	BattleRoom.prototype.lastUpdate = 0;
 
@@ -706,12 +711,12 @@ var BattleRoom = (function() {
 
 		// empty rooms time out after ten minutes
 		if (!hasUsers) {
-			if (!this.expireTimer) {
-				this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_EMPTY_DEALLOCATE);
+			if (!this.destroyTimer) {
+				this.destroyTimer = setTimeout(this.tryDestroy.bind(this), TIMEOUT_DEALLOCATE);
 			}
-		} else {
-			if (this.expireTimer) clearTimeout(this.expireTimer);
-			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_INACTIVE_DEALLOCATE);
+		} else if (this.destroyTimer) {
+			clearTimeout(this.destroyTimer);
+			this.destroyTimer = null;
 		}
 	};
 	BattleRoom.prototype.logBattle = function(p1score, p1rating, p2rating) {
@@ -745,8 +750,14 @@ var BattleRoom = (function() {
 			Sockets.channelBroadcast(this.id, '>'+this.id+'\n'+message);
 		}
 	};
-	BattleRoom.prototype.tryExpire = function() {
-		this.expire();
+	BattleRoom.prototype.tryDestroy = function() {
+		for (var i in this.users) {
+			// don't destroy ourselves if there are users in this room
+			// theoretically, Room.update should've stopped tryDestroy's timer
+			// well before we get here
+			return;
+		}
+		this.destroy();
 	};
 	BattleRoom.prototype.reset = function(reload) {
 		clearTimeout(this.resetTimer);
@@ -1137,10 +1148,6 @@ var BattleRoom = (function() {
 		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 	};
 	BattleRoom.prototype.logEntry = function() {};
-	BattleRoom.prototype.expire = function() {
-		this.send('|expire|');
-		this.destroy();
-	};
 	BattleRoom.prototype.destroy = function() {
 		// deallocate ourself
 
