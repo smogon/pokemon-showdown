@@ -37,7 +37,6 @@ var bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
 var userTypes = fs.readFileSync('config/types.csv','utf8'); 
 bannedMessages = bannedMessages.split('\n');
 
-
 exports.readVips = function() {
 	exports.vips = fs.readFile('config/vips.txt', 'utf8', function(err, data) {
 		exports.vips = [];
@@ -847,7 +846,7 @@ var User = (function () {
 							break;
 						}
 					}
-				}
+				}				
 
 				avatar = fs.readFile('config/avatars.csv', 'utf8', function read(err, data) {
 					if (err) {
@@ -856,6 +855,43 @@ var User = (function () {
 						setAvatar(data);
 					}
 				});
+
+				now = new Date();
+				day = now.getUTCDate();
+				month = now.getUTCMonth() + 1;
+				year = now.getUTCFullYear();
+				hours = now.getUTCHours();
+				if (now.getUTCMinutes() < 10) { 
+					minutes = '0'+now.getUTCMinutes();
+				} else {
+					minutes = now.getUTCMinutes();
+				}
+				time = day+'/'+month+'/'+year+' '+hours+':'+minutes
+				var data = fs.readFileSync('logs/lastonline.txt','utf8');
+
+				var row = (''+data).split("\n");
+				var line = '';
+				for (var i = row.length; i > -1; i--) {
+					if (!row[i]) continue;
+					var parts = row[i].split(",");
+					if (toUserid(name) == parts[0]) {
+						match = true;
+						line = line + row[i];
+						break;
+					} 
+				}
+				if (parts[1] != time) {
+					if (match === true) {
+						var re = new RegExp(line,"g");
+						var result = data.replace(re, toUserid(name)+','+time);
+						fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
+							if (err) return console.log(err);
+						});
+					} else {
+						fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
+					}
+				}
+				
 
 				if (this.monoType === '') {
 					var rows = userTypes.split('\n');
@@ -1213,6 +1249,7 @@ var User = (function () {
 		this.updateIdentity();
 	};
 	User.prototype.joinRoom = function(room, connection) {
+		match = true;
 		room = Rooms.get(room);
 		if (!room) return false;
 		if (room.staffRoom && !this.isStaff) return false;
@@ -1254,6 +1291,46 @@ var User = (function () {
 			// you can't leave the global room except while disconnecting
 			return false;
 		}
+		if (room.id == 'global') {
+
+			now = new Date();
+			day = now.getUTCDate();
+			month = now.getUTCMonth() + 1;
+			year = now.getUTCFullYear();
+			hours = now.getUTCHours();
+			if (now.getUTCMinutes() < 10) { 
+				minutes = '0'+now.getUTCMinutes();
+			} else {
+				minutes = now.getUTCMinutes();
+			}
+			time = day+'/'+month+'/'+year+' '+hours+':'+minutes
+			var data = fs.readFileSync('logs/lastonline.txt','utf8');
+
+			var row = (''+data).split("\n");
+			var line = '';
+			for (var i = row.length; i > -1; i--) {
+				if (!row[i]) continue;
+				var parts = row[i].split(",");
+				if (this.userid == parts[0]) {
+					match = true;
+					line = line + row[i];
+					break;
+				} 
+			}
+			if (parts[1] != time) {
+				if (match === true) {
+					var re = new RegExp(line,"g");
+					var result = data.replace(re, this.userid+','+time);
+					fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
+						if (err) return console.log(err);
+						console.log('Writing2: '+time);
+					});
+				} else {
+					fs.appendFile('logs/lastonline.txt',"\n"+this.userid+','+time);
+				}
+			}
+		}
+
 		for (var i=0; i<this.connections.length; i++) {
 			if (this.connections[i] === connection || !connection) {
 				if (this.connections[i].rooms[room.id]) {
