@@ -2430,7 +2430,7 @@ exports.BattleMovedex = {
 			},
 			onFaint: function(target, source, effect) {
 				if (!source || !effect) return;
-				if (effect.effectType === 'Move' && target.lastMove === 'destinybond') {
+				if (effect.effectType === 'Move' && !effect.isFutureMove && target.lastMove === 'destinybond') {
 					this.add('-activate', target, 'Destiny Bond');
 					source.faint();
 				}
@@ -2693,6 +2693,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isNotProtectable: true,
+		isFutureMove: true,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
@@ -4832,6 +4833,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isNotProtectable: true,
 		affectedByImmunities: false,
+		isFutureMove: true,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
