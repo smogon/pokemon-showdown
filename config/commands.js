@@ -1576,6 +1576,11 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br><b>Ace: <font color="#58ACFA"><blink>Ace: Farfetch\'d</blink><br></font><b><font color="#00BFFF">Where can I find a leek in Pokemon Y?');
     },
     
+    darknessreigns: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height="90" width="500" src=http://i.imgur.com/GCIT4Cv.gif><center><img height="80" width="120" src=http://th05.deviantart.net/fs70/PRE/i/2013/220/5/a/pokemon___megalucario_by_sa_dui-d6h8tdh.jpg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="80" width="120" src=http://th08.deviantart.net/fs70/PRE/f/2010/169/c/5/Gengar_Wallpaper_by_Phase_One.jpg><br /><center><b>Ace: </b>The Darkness</center><center><b>Catchphrase: </b>When the night falls, The Darkness Reigns</center>');
+    },
+    
     naten: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/uxie.gif><img src=http://i254.photobucket.com/albums/hh108/naten2006/cooltext1400784365_zps7b67e8c9.png><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/mew.gif><br>Ace: <font color="" align=center>Uxie, Our Lord and Saviour</font><br><font color="purple" align=center>The moment you\'ve stopped planning ahead is the moment you\'ve given up.</font></center>');
