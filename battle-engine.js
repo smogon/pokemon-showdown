@@ -974,7 +974,7 @@ var BattlePokemon = (function() {
 				this.battle.add('-enditem', this, item, '[of] '+source);
 				break;
 			default:
-				if (!item.isGem) {
+				if (!item.isGem && !this.volatiles['fling'] && !this.volatiles['naturalgift']) {
 					this.battle.add('-enditem', this, item);
 				}
 				break;

@@ -4255,13 +4255,16 @@ exports.BattleMovedex = {
 			var item = pokemon.getItem();
 			if (item.fling) {
 				pokemon.addVolatile('fling');
-				pokemon.setItem('');
+				pokemon.useItem();
 			}
 		},
 		onTryHit: function(target, source, move) {
 			if (!source.volatiles['fling']) return false;
 			var item = this.getItem(source.volatiles['fling'].item);
 			this.add("-enditem", source, item.name, '[from] move: Fling');
+		},
+		onAfterMove: function(pokemon) {
+			pokemon.removeVolatile('fling');
 		},
 		effect: {
 			duration: 1,
@@ -7069,12 +7072,9 @@ exports.BattleMovedex = {
 		},
 		onAfterHit: function(target, source) {
 			if (source.hp) {
-				var item = target.getItem();
-				if (item.id === 'mail') {
-					target.setItem('');
-				} else {
-					item = target.takeItem(source);
-				}
+				target.addVolatile('knockoff');
+				var item = target.takeItem(source);
+				target.removeVolatile('knockoff');
 				if (item) {
 					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] '+source);
 				}
@@ -8680,7 +8680,7 @@ exports.BattleMovedex = {
 				pokemon.addVolatile('naturalgift');
 				pokemon.volatiles['naturalgift'].basePower = item.naturalGift.basePower;
 				pokemon.volatiles['naturalgift'].type = item.naturalGift.type;
-				pokemon.setItem('');
+				pokemon.useItem();
 			}
 		},
 		onTryHit: function(target, source) {
@@ -8691,6 +8691,9 @@ exports.BattleMovedex = {
 		},
 		onHit: function(target, source) {
 			return !!source.volatiles['naturalgift'];
+		},
+		onAfterMove: function(pokemon) {
+			pokemon.removeVolatile('naturalgift');
 		},
 		effect: {
 			duration: 1

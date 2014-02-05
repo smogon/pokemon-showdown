@@ -278,7 +278,7 @@ exports.BattleAbilities = {
 		desc: "Increases HP when this Pokemon consumes a berry.",
 		shortDesc: "Increases HP when this Pokemon consumes a berry.",
 		onUseItem: function(item, pokemon) {
-			if (item.isBerry) {
+			if (item.isBerry && !pokemon.volatiles['fling'] && !pokemon.volatiles['naturalgift']) {
 				pokemon.heal(10);
 			}
 		},

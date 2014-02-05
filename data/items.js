@@ -2376,7 +2376,9 @@ exports.BattleItems = {
 		id: "mail",
 		name: "Mail",
 		spritenum: 403,
-		onTakeItem: false,
+		onTakeItem: function(item, source) {
+			if (!source.volatiles['knockoff']) return false;
+		},
 		isUnreleased: true,
 		gen: 2,
 		desc: "This item cannot be given to or taken from a Pokemon, except by Knock Off."
