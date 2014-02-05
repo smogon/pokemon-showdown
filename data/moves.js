@@ -2402,6 +2402,7 @@ exports.BattleMovedex = {
 				}
 			}
 			for (var i in sideConditions) {
+				if (i === 'reflect' || i === 'lightscreen') continue;
 				if (source.side.removeSideCondition(i)) {
 					this.add('-sideend', source.side, this.getEffect(i).name, '[from] move: Defog', '[of] '+source);
 				}
