@@ -860,7 +860,11 @@ var User = (function () {
 				day = now.getUTCDate();
 				month = now.getUTCMonth() + 1;
 				year = now.getUTCFullYear();
-				hours = now.getUTCHours();
+				if (now.getUTCHours() < 10) {
+					hours = '0'+now.getUTCHours();
+				} else {
+					hours = now.getUTCHours();
+				}
 				if (now.getUTCMinutes() < 10) { 
 					minutes = '0'+now.getUTCMinutes();
 				} else {
@@ -1297,7 +1301,11 @@ var User = (function () {
 			day = now.getUTCDate();
 			month = now.getUTCMonth() + 1;
 			year = now.getUTCFullYear();
-			hours = now.getUTCHours();
+			if (now.getUTCHours() < 10) {
+				hours = '0'+now.getUTCHours();
+			} else {
+				hours = now.getUTCHours();
+			}
 			if (now.getUTCMinutes() < 10) { 
 				minutes = '0'+now.getUTCMinutes();
 			} else {
