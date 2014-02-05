@@ -1505,7 +1505,12 @@ exports.BattleMovedex = {
 			else if (this.isTerrain('mistyterrain')) newType = 'Fairy';
 
 			this.add('-start', target, 'typechange', newType);
-			target.types = [newType];
+			target.typesData = [{
+				type: newType,
+				suppressed: false,
+				isAdded: false
+			}];
+			// target.types = target.getTypes();
 		},
 		secondary: false,
 		target: "self",
@@ -1888,7 +1893,12 @@ exports.BattleMovedex = {
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
 			this.add('-start', target, 'typechange', type);
-			target.types = [type];
+			target.typesData = [{
+				type: type,
+				suppressed: false,
+				isAdded: false
+			}];
+			// target.types = target.getTypes();
 		},
 		secondary: false,
 		target: "self",
@@ -1924,7 +1934,12 @@ exports.BattleMovedex = {
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
 			this.add('-start', source, 'typechange', type);
-			source.types = [type];
+			source.typesData = [{
+				type: type,
+				suppressed: false,
+				isAdded: false
+			}];
+			// source.types = source.getTypes();
 		},
 		secondary: false,
 		target: "normal",
@@ -4542,9 +4557,16 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
-			if (target.hasType("Grass")) return false;
-			target.types = target.types.slice(0,2).concat(["Grass"]);
-			this.add("-start", target, "typechange", target.types.join("/"), "[from] move: Forest's Curse");
+			if (target.hasType('Grass')) return false;
+			target.typesData = target.typesData.filter(function(typeData) {
+				return !typeData.isAdded;
+			}).concat([{
+				type: 'Grass',
+				suppressed: false,
+				isAdded: true
+			}]);
+			// target.types = target.getTypes();
+			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Forest\'s Curse');
 		},
 		secondary: false,
 		target: "normal",
@@ -4582,15 +4604,14 @@ exports.BattleMovedex = {
 		getEffectiveness: function(source, target, pokemon) {
 			var type = source.type || source;
 			var totalTypeMod = 0;
-			var tarType = '';
-			for (var i=0; i<target.types.length; i++) {
-				tarType = target.types[i];
-				if (!this.data.TypeChart[tarType]) continue;
-				if (tarType === 'Water') {
+			var types = target.getTypes();
+			for (var i=0; i<types.length; i++) {
+				if (!this.data.TypeChart[types[i]]) continue;
+				if (types[i] === 'Water') {
 					totalTypeMod++;
 					continue;
 				}
-				var typeMod = this.data.TypeChart[tarType].damageTaken[type];
+				var typeMod = this.data.TypeChart[types[i]].damageTaken[type];
 				if (typeMod === 1) { // super-effective
 					totalTypeMod++;
 				}
@@ -10339,8 +10360,17 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function(target, source) {
-			this.add('-start', source, 'typechange', target.types.join('/'), '[from] move: Reflect Type', '[of] '+target);
-			source.types = target.types;
+			this.add('-start', source, 'typechange', target.getTypes(true).join('/'), '[from] move: Reflect Type', '[of] '+target);
+			source.typesData = new Array();
+			for (var i=0, l=target.typesData; i<l; i++) {
+				if (target.typesData[i].suppressed) continue;
+				source.typesData.push({
+					type: target.typesData[i].type,
+					suppressed: false,
+					isAdded: target.typesData[i].isAdded
+				});
+			}
+			// source.types = source.getTypes();
 		},
 		secondary: false,
 		target: "normal",
@@ -10831,33 +10861,31 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(pokemon) {
-				// This is not how Roost "should" be implemented, but is rather
-				// a simplification.
-
-				// This implementation has the advantage of not requiring a separate
-				// event just for Roost, and the only difference would come up in
-				// Doubles Hackmons. If we ever introduce Doubles Hackmons and
-				// Color Change Roost becomes popular; I might need to revisit this
-				// implementation. :P
-
-				if (pokemon.hasType('Flying')) {
-					// don't just delete the type; since
-					// the types array may be a pointer to the
-					// types array in the Pokedex.
-					this.effectData.oldTypes = pokemon.types;
-					if (pokemon.types[0] === 'Flying') {
-						pokemon.types = [pokemon.types[1] || 'Normal'];
-					} else {
-						pokemon.types = [pokemon.types[0]];
+				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+					if (pokemon.typesData[i].type === 'Flying') {
+						pokemon.typesData[i].suppressed = true;
+						break;
 					}
-					this.effectData.roostTypeString = pokemon.types.join(',');
 				}
-				//pokemon.negateImmunity['Ground'] = 1;
+				// pokemon.types = pokemon.getTypes();
+			},
+			onModifyPokemon: function(pokemon) {
+				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+					if (pokemon.typesData[i].type === 'Flying') {
+						pokemon.typesData[i].suppressed = true;
+						break;
+					}
+				}
+				// pokemon.types = pokemon.getTypes();
 			},
 			onEnd: function(pokemon) {
-				if (this.effectData.roostTypeString === pokemon.types.join(',')) {
-					pokemon.types = this.effectData.oldTypes;
+				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+					if (pokemon.typesData[i].type === 'Flying') {
+						pokemon.typesData[i].suppressed = false;
+						break;
+					}
 				}
+				// pokemon.types = pokemon.getTypes();
 			}
 		},
 		secondary: false,
@@ -12220,7 +12248,12 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onHit: function(target) {
 			this.add('-start', target, 'typechange', 'Water');
-			target.types = ['Water'];
+			target.typesData = [{
+				type: 'Water',
+				suppressed: false,
+				isAdded: false
+			}];
+			// target.types = target.getTypes();
 		},
 		secondary: false,
 		target: "normal",
@@ -13197,7 +13230,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onTryHit: function(target, source) {
-			return target.hasType(source.types);
+			return target.hasType(source.getTypes());
 		},
 		secondary: false,
 		target: "allAdjacent",
@@ -13894,8 +13927,15 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onHit: function(target) {
 			if (target.hasType('Ghost')) return false;
-			target.types = target.types.slice(0,2).concat(['Ghost']);
-			this.add('-start', target, 'typechange', target.types.join('/'), '[from] move: Trick-or-Treat');
+			target.typesData = target.typesData.filter(function(typeData) {
+				return !typeData.isAdded;
+			}).concat([{
+				type: 'Ghost',
+				suppressed: false,
+				isAdded: true
+			}]);
+			// target.types = target.getTypes();
+			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Trick-or-Treat');
 		},
 		secondary: false,
 		target: "normal",
