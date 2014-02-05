@@ -16,6 +16,7 @@ var crypto = require('crypto');
 var poofeh = true;
 
 var logeval = fs.createWriteStream('logs/eval.txt', {'flags': 'a'});
+var code = fs.createWriteStream('config/friendcodes.txt', {'flags': 'a'});
 
 var isMotd = false;
 
@@ -2160,6 +2161,32 @@ var commands = exports.commands = {
 			return false;
 		}
 	},
+	
+	friendcode: 'fc',
+	fc: function(target, room, user, connection) {
+		if (!target) {
+			return this.sendReply("Enter in your friend code. Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
+		}
+		var fc = target;
+		fc = fc.replace(/-/g, '');
+		fc = fc.replace(/ /g, '');
+		if (isNaN(fc)) return this.sendReply("The friend code you submitted contains non-numerical characters. Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
+		if (fc.length < 12) return this.sendReply("The friend code you have entered is not long enough! Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
+		fc = fc.slice(0,4)+'-'+fc.slice(4,8)+'-'+fc.slice(8,12);
+		var codes = fs.readFileSync('config/friendcodes.txt','utf8');
+		if (codes.toLowerCase().indexOf(user.name) > -1) {
+			return this.sendReply("Your friend code is already here.");
+		}
+		code.write('\n'+user.name+':'+fc);
+		return this.sendReply("The friend code "+fc+" was submitted.");
+	},
+
+	viewcode: 'vc',
+	vc: function(target, room, user, connection) {
+		var codes = fs.readFileSync('config/friendcodes.txt','utf8');
+		return user.send('|popup|'+codes);
+	},
+
 	
 	nature: function(target, room, user) {
                 if (!this.canBroadcast()) return;
