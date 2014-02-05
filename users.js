@@ -31,6 +31,8 @@ var numUsers = 0;
 
 var bannedIps = {};
 var lockedIps = {};
+var bannedUsers = {};
+var lockedUsers = {};
 
 /**
  * Get a user.
@@ -738,6 +740,11 @@ var User = (function () {
 					this.autoconfirmed = userid;
 				}
 			}
+			// Before merging and checking data, test if the user is banned (this happens after IP ban check)
+			if (checkBanned(this.userid)) {
+				this.ban();
+				return false;
+			}
 			if (users[userid] && users[userid] !== this) {
 				// This user already exists; let's merge
 				var user = users[userid];
@@ -805,6 +812,8 @@ var User = (function () {
 			this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 			this.isSysop = isSysop;
 			if (avatar) this.avatar = avatar;
+			// Check here whether the new name is locked or not
+			if (!this.locked && checkIdLocked(this.userid)) this.locked = true;
 			if (this.forceRename(name, authenticated)) {
 				Rooms.global.checkAutojoin(this);
 				return true;
@@ -1017,6 +1026,7 @@ var User = (function () {
 		for (var ip in this.ips) {
 			bannedIps[ip] = this.userid;
 		}
+		bannedUsers[this.userid] = this.userid;
 		this.locked = true; // in case of merging into a recently banned account
 		this.disconnectAll();
 	};
@@ -1031,6 +1041,7 @@ var User = (function () {
 		for (var ip in this.ips) {
 			lockedIps[ip] = this.userid;
 		}
+		lockedUsers[this.userid] = this.userid;
 		this.locked = true;
 		this.updateIdentity();
 	};
@@ -1367,14 +1378,27 @@ function ipSearch(ip, table) {
 	}
 	return false;
 }
+
 function checkBanned(ip) {
 	return ipSearch(ip, bannedIps);
 }
+
+function checkIdBanned(userid) {
+	return userid in bannedUsers;
+}
+
 function checkLocked(ip) {
 	return ipSearch(ip, lockedIps);
 }
+
+function checkIdLocked(userid) {
+	return userid in lockedUsers;
+}
+
 exports.checkBanned = checkBanned;
 exports.checkLocked = checkLocked;
+exports.checkIdBanned = checkIdBanned;
+exports.checkIdLocked = checkIdLocked;
 exports.checkRangeBanned = function() {};
 
 function unban(name) {
@@ -1386,9 +1410,14 @@ function unban(name) {
 			success = true;
 		}
 	}
+	if (bannedUsers[userid]) {
+		delete bannedUsers[userid];
+		success = true;
+	}
 	if (success) return name;
 	return false;
 }
+
 function unlock(name, unlocked, noRecurse) {
 	var userid = toId(name);
 	var user = getUser(userid);
@@ -1413,8 +1442,14 @@ function unlock(name, unlocked, noRecurse) {
 			unlocked[name] = 1;
 		}
 	}
+	if (lockedUsers[userid]) {
+		delete lockedUsers[userid];
+		unlocked = unlocked || {};
+		unlocked[name] = 1;
+	}
 	return unlocked;
 }
+
 exports.unban = unban;
 exports.unlock = unlock;
 
