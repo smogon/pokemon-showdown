@@ -1047,8 +1047,13 @@ var commands = exports.commands = {
 		}
 		spamroom[targetUser] = true;
 		Rooms.rooms['spamroom'].add('|raw|<b>' + this.targetUsername + ' was added to the spamroom list.</b>');
-		this.logModCommand(targetUser + ' was added to spamroom by ' + user.name);
-		return this.sendReply(this.targetUsername + ' was successfully added to the spamroom list.');
+		this.privateModCommand('('+targetUser + ' was added to spamroom by ' + user.name+')');
+		this.sendReply(this.targetUsername + ' was successfully added to the spamroom list.');
+		try {
+			frostcommands.addSpamroomCount(user.userid);
+		} catch (e) {
+			return;
+		}
 	},
 
 	unspam: 'unspamroom',
@@ -1115,6 +1120,11 @@ var commands = exports.commands = {
 
 		this.addModCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn '+target);
+		try {
+			frostcommands.addWarnCount(user.userid);
+		} catch (e) {
+			return;
+		}
 	},
 
 	kickto: 'redir',
@@ -1178,6 +1188,11 @@ var commands = exports.commands = {
 			if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 			targetUser.mute(room.id, 7*60*1000);
 			this.add('|unlink|' + targetUser.userid);
+			try {
+				frostcommands.addMuteCount(user.userid);
+			} catch (e) {
+				return;
+			}
 		}
 		if (room.auth) {
 			targetUser.popup(user.name+' has muted you for 7 minutes in ' + room.id + '. '+target);
@@ -1220,6 +1235,11 @@ var commands = exports.commands = {
 			if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 			targetUser.mute(room.id, 60*60*1000);
 			this.add('|unlink|' + targetUser.userid);
+			try {
+				frostcommands.addMuteCount(user.userid);
+			} catch (e) {
+				return;
+			}
 		}
 		if (room.auth) {
 			targetUser.popup(user.name+' has muted you for 60 minutes in ' + room.id + '. '+target);
@@ -1263,6 +1283,11 @@ var commands = exports.commands = {
 			if (alts.length) this.addModCommand(""+targetUser.name+"'s alts were also muted: "+alts.join(", "));
 			targetUser.mute(room.id, 7*60*1000);
 			this.add('|unlink|' + targetUser.userid);
+			try {
+				frostcommands.addMuteCount(user.userid);
+			} catch (e) {
+				return;
+			}
 		}
 		if (room.auth) {
 			targetUser.popup(user.name+' has muted you for 24 hours in ' + room.id + '. '+target);
@@ -1324,6 +1349,11 @@ var commands = exports.commands = {
 		this.add('|unlink|' + targetUser.userid);
 
 		targetUser.lock();
+		try {
+			frostcommands.addLockCount(user.userid);
+		} catch (e) {
+			return;
+		}
 	},
 
 	unlock: function(target, room, user) {
@@ -1384,6 +1414,11 @@ var commands = exports.commands = {
 
 		this.add('|unlink|' + targetUser.userid);
 		targetUser.ban();
+		try {
+			frostcommands.addBanCount(user.userid);
+		} catch (e) {
+			return;
+		}
 	},
 
 	unban: function(target, room, user) {
