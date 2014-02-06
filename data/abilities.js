@@ -342,13 +342,7 @@ exports.BattleAbilities = {
 			if (target.isActive && move && move.effectType === 'Move' && move.category !== 'Status') {
 				if (!target.hasType(move.type)) {
 					this.add('-start', target, 'typechange', move.type, '[from] Color Change');
-					target.typesData = [{
-						type: move.type,
-						suppressed: false,
-						isAdded: false
-					}];					
-					// target.types = target.getTypes();
-
+					target.setType(move.type);
 					target.update();
 				}
 			}
@@ -2001,12 +1995,7 @@ exports.BattleAbilities = {
 			var moveType = (move.id === 'hiddenpower' ? pokemon.hpType : move.type);
 			if (pokemon.getTypes().join() !== moveType) {
 				this.add('-start', pokemon, 'typechange', moveType, '[from] Protean');
-				pokemon.typesData = [{
-					type: moveType,
-					suppressed: false,
-					isAdded: false
-				}];
-				// pokemon.types = pokemon.getTypes();
+				pokemon.setType(moveType);
 			}
 		},
 		id: "protean",
