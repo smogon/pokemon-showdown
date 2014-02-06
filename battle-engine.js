@@ -233,13 +233,12 @@ var BattlePokemon = (function() {
 		this.itemData = {id: this.item};
 		this.speciesData = {id: this.speciesid};
 
-		this.types = [];
+		this.types = this.baseTemplate.types;
 		this.typesData = [];
 
-		for (var i=0, l=this.baseTemplate.types.length; i<l; i++) {
-			this.types.push(this.baseTemplate.types[i]);
+		for (var i=0, l=this.types.length; i<l; i++) {
 			this.typesData.push({
-				type: this.baseTemplate.types[i],
+				type: this.types[i],
 				suppressed: false,
 				isAdded: false
 			});
@@ -656,7 +655,7 @@ var BattlePokemon = (function() {
 			return false;
 		}
 		this.transformed = true;
-		this.typesData = new Array();
+		this.typesData = [];
 		for (var i=0, l=pokemon.typesData.length; i<l; i++) {
 			this.typesData.push({
 				type: pokemon.typesData[i].type,
@@ -664,7 +663,6 @@ var BattlePokemon = (function() {
 				isAdded: pokemon.typesData[i].isAdded
 			});
 		}
-		this.types = this.getTypes();
 		for (var statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
 		}
@@ -703,8 +701,7 @@ var BattlePokemon = (function() {
 
 		if (!template.abilities) return false;
 		this.template = template;
-		this.types = this.template.types;
-		this.typesData = new Array();
+		this.typesData = [];
 		for (var i=0, l=this.types.length; i<l; i++) {
 			this.typesData.push({
 				type: this.types[i],
@@ -1131,8 +1128,27 @@ var BattlePokemon = (function() {
 		if (this.status) hpstring += ' ' + this.status;
 		return hpstring;
 	};
+	BattlePokemon.prototype.setType = function() {
+		this.typesData = Array.prototype.map.call(arguments, function(type) {
+			return {
+				type: type,
+				suppressed: false,
+				isAdded: false
+			}
+		});
+	};
+	BattlePokemon.prototype.addType = function(newType) {
+		// removes any types added previously and adds another one
+		this.typesData = this.typesData.filter(function(typeData) {
+			return !typeData.isAdded;
+		}).concat([{
+			type: newType,
+			suppressed: false,
+			isAdded: true
+		}]);
+	};
 	BattlePokemon.prototype.getTypes = function(getAll) {
-		var types = new Array();
+		var types = [];
 		for (var i=0, l=this.typesData.length; i<l; i++) {
 			if (getAll || !this.typesData[i].suppressed) {
 				types.push(this.typesData[i].type);
@@ -1140,7 +1156,7 @@ var BattlePokemon = (function() {
 		}
 		if (types.length) return types;
 		if (this.battle.gen >= 5) return ['Normal'];
-		return [undefined];
+		return ['???'];
 	};
 	BattlePokemon.prototype.runImmunity = function(type, message) {
 		if (this.fainted) {
