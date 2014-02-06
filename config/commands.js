@@ -1870,10 +1870,7 @@ var commands = exports.commands = {
 	pix: 'pack',
 	pack: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/YOdiDlB.gif">' +
-			'<font size="7" color="#28b009"><i>Gym Leade✘ Pix</i>' +
-			'<img src="http://i.imgur.com/yydwZav.gif"></font></color><br />' +
-			'<center>Ace: Espeon<br>Make it PAUSE');
+		this.sendReplyBox('<center><img height="80" width="140" src="http://24.media.tumblr.com/tumblr_m12llhWvxE1qgzv18o1_500.gif"><img src="http://static1.glowtxt.com/data1/8/c/b/8cb227a9eb9f61b46c04cabc754d04c24799626bda39a3ee5e6b4b0d3255bfef95601890afd80709da39a3ee5e6b4b0d3255bfef95601890afd80709a6974a221a3be5592c28654d8542a153.png"><img height="80" width="140" src="http://stream1.gifsoup.com/view/162044/snorlax-waking-o.gif"><br><b>Ace: </b>Munchies<br><b>Quote: </b>Barida < Tael</center>');
 	},
 	
 	salemance: 'elite4salemance',
