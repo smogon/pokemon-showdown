@@ -192,7 +192,7 @@ var commands = exports.commands = {
 			this.sendReply('(Frost Development Staff)');
 		}
 		if (targetUser.vip) {
-			this.sendReply('|raw|(<font color="yellow"><b>VIP</font> User</b>)');
+			this.sendReply('|raw|(<font color="#6390F0"><b>VIP</font> User</b>)');
 		}
 		if (targetUser.monoType != '') {
 			var type = targetUser.monoType.toLowerCase();
