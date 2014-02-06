@@ -247,14 +247,14 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true,
 			onStart: function(target, source) {
-				this.effectData.typesData = new Array();
+				this.effectData.typesData = [];
 				for (var i=0, l=target.typesData.length; i<l; i++) {
 					this.effectData.typesData.push(Object.clone(target.typesData[i]));
 				}
 				this.add('-start', source, 'typechange', target.getTypes(true).join(', '), '[from] move: Conversion', '[of] '+target);
 			},
 			onRestart: function(target, source) {
-				this.effectData.typesData = new Array();
+				this.effectData.typesData = [];
 				for (var i=0, l=target.typesData.length; i<l; i++) {
 					this.effectData.typesData.push(Object.clone(target.typesData[i]));
 				}
@@ -262,7 +262,6 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemon: function(pokemon) {
 				pokemon.typesData = this.effectData.typesData;
-				// pokemon.types = pokemon.getTypes();
 			}
 		}
 	},
