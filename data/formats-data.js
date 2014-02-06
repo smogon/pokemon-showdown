@@ -1460,7 +1460,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":10,"gender":"M","moves":["counter","mirrorcoat","safeguard","destinybond"]},
 			{"generation":6,"level":10,"gender":"M","isHidden":false,"moves":["counter"],"pokeball":"cherishball"}
 		],
-		tier: "Limbo C"
+		tier: "BL"
 	},
 	girafarig: {
 		viableMoves: {"psychic":1,"thunderbolt":1,"calmmind":1,"batonpass":1,"agility":1,"hypervoice":1,"thunderwave":1,"dazzlinggleam":1},
@@ -2774,7 +2774,7 @@ exports.BattleFormatsData = {
 	},
 	staraptor: {
 		viableMoves: {"bravebird":1,"closecombat":1,"uturn":1,"quickattack":1,"substitute":1,"roost":1,"doubleedge":1},
-		tier: "Limbo B"
+		tier: "BL"
 	},
 	bidoof: {
 		viableMoves: {"return":1,"aquatail":1,"curse":1,"quickattack":1,"stealthrock":1,"superfang":1},
@@ -3987,7 +3987,7 @@ exports.BattleFormatsData = {
 	},
 	terrakion: {
 		viableMoves: {"stoneedge":1,"closecombat":1,"swordsdance":1,"rockpolish":1,"substitute":1,"stealthrock":1,"earthquake":1},
-		tier: "Limbo A"
+		tier: "BL"
 	},
 	virizion: {
 		viableMoves: {"swordsdance":1,"calmmind":1,"closecombat":1,"focusblast":1,"hiddenpowerice":1,"stoneedge":1,"leafblade":1,"gigadrain":1,"substitute":1,"synthesis":1},
