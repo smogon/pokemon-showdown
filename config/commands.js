@@ -1863,9 +1863,14 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://i.imgur.com/UHptfOM.gif"><font size="6" color="#FF0080"><i>Family Man TPSN</i><img src="http://i.imgur.com/XVhKJ77.gif"></font></color><br><center>Ace: Audino<br>Luck.');
 	},
 	
+	gymleaderpix: 'pack',
+	pix: 'pack',
 	pack: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/YOdiDlB.gif"><font size="7" color="#DF0174"><i>Pack</i><img src="http://i.imgur.com/yydwZav.gif"></font></color><br><center>Ace: Espeon<br>Make it PAUSE');
+		this.sendReplyBox('<center><img src="http://i.imgur.com/YOdiDlB.gif">' +
+			'<font size="7" color="#28b009"><i>Gym Leade✘ Pix</i>' +
+			'<img src="http://i.imgur.com/yydwZav.gif"></font></color><br />' +
+			'<center>Ace: Espeon<br>Make it PAUSE');
 	},
 	
 	salemance: 'elite4salemance',
