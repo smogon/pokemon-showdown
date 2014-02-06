@@ -2174,7 +2174,7 @@ var commands = exports.commands = {
 		if (fc.length < 12) return this.sendReply("The friend code you have entered is not long enough! Make sure it's in the format: xxxx-xxxx-xxxx or xxxx xxxx xxxx or xxxxxxxxxxxx.");
 		fc = fc.slice(0,4)+'-'+fc.slice(4,8)+'-'+fc.slice(8,12);
 		var codes = fs.readFileSync('config/friendcodes.txt','utf8');
-		if (codes.toLowerCase().indexOf(user.name) > -1) {
+		if (codes.toLowerCase().indexOf(user.userid) > -1) {
 			return this.sendReply("Your friend code is already here.");
 		}
 		code.write('\n'+user.name+':'+fc);
