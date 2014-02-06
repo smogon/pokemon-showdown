@@ -1505,12 +1505,7 @@ exports.BattleMovedex = {
 			else if (this.isTerrain('mistyterrain')) newType = 'Fairy';
 
 			this.add('-start', target, 'typechange', newType);
-			target.typesData = [{
-				type: newType,
-				suppressed: false,
-				isAdded: false
-			}];
-			// target.types = target.getTypes();
+			target.setType(newType);
 		},
 		secondary: false,
 		target: "self",
@@ -1893,12 +1888,7 @@ exports.BattleMovedex = {
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
 			this.add('-start', target, 'typechange', type);
-			target.typesData = [{
-				type: type,
-				suppressed: false,
-				isAdded: false
-			}];
-			// target.types = target.getTypes();
+			target.setType(type);
 		},
 		secondary: false,
 		target: "self",
@@ -1934,12 +1924,7 @@ exports.BattleMovedex = {
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
 			this.add('-start', source, 'typechange', type);
-			source.typesData = [{
-				type: type,
-				suppressed: false,
-				isAdded: false
-			}];
-			// source.types = source.getTypes();
+			source.setType(type);
 		},
 		secondary: false,
 		target: "normal",
@@ -4558,14 +4543,7 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onHit: function(target) {
 			if (target.hasType('Grass')) return false;
-			target.typesData = target.typesData.filter(function(typeData) {
-				return !typeData.isAdded;
-			}).concat([{
-				type: 'Grass',
-				suppressed: false,
-				isAdded: true
-			}]);
-			// target.types = target.getTypes();
+			target.addType('Grass');
 			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Forest\'s Curse');
 		},
 		secondary: false,
@@ -10361,7 +10339,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function(target, source) {
 			this.add('-start', source, 'typechange', target.getTypes(true).join('/'), '[from] move: Reflect Type', '[of] '+target);
-			source.typesData = new Array();
+			source.typesData = [];
 			for (var i=0, l=target.typesData; i<l; i++) {
 				if (target.typesData[i].suppressed) continue;
 				source.typesData.push({
@@ -10370,7 +10348,6 @@ exports.BattleMovedex = {
 					isAdded: target.typesData[i].isAdded
 				});
 			}
-			// source.types = source.getTypes();
 		},
 		secondary: false,
 		target: "normal",
@@ -10867,7 +10844,6 @@ exports.BattleMovedex = {
 						break;
 					}
 				}
-				// pokemon.types = pokemon.getTypes();
 			},
 			onModifyPokemon: function(pokemon) {
 				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
@@ -10876,7 +10852,6 @@ exports.BattleMovedex = {
 						break;
 					}
 				}
-				// pokemon.types = pokemon.getTypes();
 			},
 			onEnd: function(pokemon) {
 				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
@@ -10885,7 +10860,6 @@ exports.BattleMovedex = {
 						break;
 					}
 				}
-				// pokemon.types = pokemon.getTypes();
 			}
 		},
 		secondary: false,
@@ -12248,12 +12222,7 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onHit: function(target) {
 			this.add('-start', target, 'typechange', 'Water');
-			target.typesData = [{
-				type: 'Water',
-				suppressed: false,
-				isAdded: false
-			}];
-			// target.types = target.getTypes();
+			target.setType('Water');
 		},
 		secondary: false,
 		target: "normal",
@@ -13927,14 +13896,7 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onHit: function(target) {
 			if (target.hasType('Ghost')) return false;
-			target.typesData = target.typesData.filter(function(typeData) {
-				return !typeData.isAdded;
-			}).concat([{
-				type: 'Ghost',
-				suppressed: false,
-				isAdded: true
-			}]);
-			// target.types = target.getTypes();
+			target.addType('Ghost');
 			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Trick-or-Treat');
 		},
 		secondary: false,
