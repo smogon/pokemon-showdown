@@ -2117,12 +2117,7 @@ var commands = exports.commands = {
 	events: 'currentevents',
 	currentevents: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<font size = 2>Here is a list of events that will be happening today (Pacific Time):</font><br />' +
-						'<ul><li><b>12:30</b>-<i>Regular users Tournament</i>-This Gen 6 Pokebank OU format tournament is held in lobby and has no size limit (there is a 3 minute registration period).First place gets <b>30 Points</b> and second place gets <b>20 Points</b>.</li>' +
-						'<li><b>1:30</b>-<i>Masters of the Color</i>-In this tournament, your team must share a color that is based on your name. All names fit under these four categories: red, blue, green, yellow/brown, pink/purple. To see a list of pokemon for your name, type /[color].(ex- /green). Winning for your color will earn you <b>15 Points</b>.(Type /motc for more help) /</li>' +
-						'<li><b>2:30</b>-<i>Battle of the Leagues</i>-This tournament is in Gen 6 OU Monotype format and involves the different leagues on Frost. Each league has <b>ONE</b> representitive that will fight against other league\'s representitives. The winning representitive will recieve <b>30 Points</b> and everyone else in the league will recieve <b>15 Points</b>.</li>' +
-						'<li><b>3:30</b>-<i>Regular users Tournament</i>-The format for this tournament is voted on in lobby, is held in the lobby, and has no size limit (there is a 3 minute registration period).First place gets <b>30 Points</b> and second place gets <b>20 Points</b>.</li></ul>' +
-						'As always, make sure to have a fun time on Frost!');
+		this.sendReplyBox('Check out information on the weekly events <a href="http://frostserver.net/events.html">here</a>!');
 	},
 					
 	/*********************************************************
