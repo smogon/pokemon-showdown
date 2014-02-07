@@ -884,7 +884,7 @@ var User = (function () {
 						break;
 					} 
 				}
-				if (match === true) {
+				/*if (match === true) {
 					var re = new RegExp(line,"g");
 					var result = data.replace(re, toUserid(name)+','+time);
 					fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
@@ -892,7 +892,7 @@ var User = (function () {
 					});
 				} else {
 					fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
-				}
+				}*/
 
 				if (this.monoType === '') {
 					var rows = userTypes.split('\n');
