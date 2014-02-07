@@ -23,6 +23,30 @@ exports.BattleStatuses = {
 			return false;
 		}
 	},
+	trapped: {
+		inherit: true,
+		noCopy: false,
+		onCopy: function(pokemon) {
+			this.effectData.source.volatiles['trapping'].source = pokemon;
+			this.effectData.source.volatiles['trapping'].sourcePosition = pokemon.position;
+		},
+		onAnySwitchOut: function(pokemon) {
+			if (!pokemon.volatiles['trapping'] || pokemon.volatiles['trapping'].source !== this.effectData.target) return;
+			var lastMove = this.getMove(pokemon.lastMove);
+			if (lastMove.selfSwitch !== 'copyvolatile') {
+				delete pokemon.volatiles['trapping'].source.volatiles['trapped'];
+				delete pokemon.volatiles['trapping'];
+			}
+		},
+		onAnySwitchIn: function(pokemon) {
+			if (!pokemon.volatiles['trapping'] || pokemon.volatiles['trapping'].source !== this.effectData.target) return;
+			this.effectData.source = pokemon;
+			this.effectData.sourcePosition = pokemon.position;
+		}
+	},
+	trapping: {
+		noCopy: false
+	},
 	partiallytrapped: {
 		inherit: true,
 		durationCallback: function(target, source) {
