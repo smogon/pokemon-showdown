@@ -484,7 +484,7 @@ exports.BattleStatuses = {
 					type = 'Normal';
 				}
 			}
-			pokemon.types = [type];
+			pokemon.setType(type);
 		}
 	}
 };
