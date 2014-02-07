@@ -1579,6 +1579,11 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br><b>Ace: <font color="#58ACFA"><blink>Ace: Farfetch\'d</blink><br></font><b><font color="#00BFFF">Where can I find a leek in Pokemon Y?');
     },
     
+    egyptian: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height="100" width="100" src="http://fc09.deviantart.net/fs70/f/2011/358/e/5/cobalion_the_just_musketeer_by_xous54-d4k42lh.png"><img src="http://fc01.deviantart.net/fs71/f/2014/038/7/4/6vnvvk3_by_yousefnafiseh-d75gny6.png"><img height="100" width="100" src="http://i.imgur.com/aRmqB2R.png"><br><center><b>Ace: <font color="#FE2E2E"><blink>Yanmega</blink><br></font><b><center><font color="#D7DF01">Never give up , There\'s still Hope');
+    },
+    
     amgldolph: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/bidoof.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://i.imgur.com/zUj8TpH.gif" width="350"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/magikarp-2.gif" width="175"><br /><center><b>Ace: </b>Bidoofs and Magikarps</center><br /><center><b>Catchphrase: </b>Shit My Biscuits Are Burning!</center>');
