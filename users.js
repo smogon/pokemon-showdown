@@ -1292,6 +1292,7 @@ var User = (function () {
 			// you can't leave the global room except while disconnecting
 			return false;
 		}
+		/*
 		if (room.id == 'global') {
 
 			now = new Date();
@@ -1336,7 +1337,7 @@ var User = (function () {
 				}
 			}
 		}
-
+		*/*/
 		for (var i=0; i<this.connections.length; i++) {
 			if (this.connections[i] === connection || !connection) {
 				if (this.connections[i].rooms[room.id]) {
