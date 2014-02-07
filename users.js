@@ -1313,9 +1313,10 @@ var User = (function () {
 
 			var row = (''+data).split("\n");
 			var line = '';
+			var parts = '';
 			for (var i = row.length; i > -1; i--) {
 				if (!row[i]) continue;
-				var parts = row[i].split(",");
+				parts = row[i].split(",");
 				if (this.userid == parts[0]) {
 					match = true;
 					line = line + row[i];
