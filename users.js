@@ -1337,7 +1337,7 @@ var User = (function () {
 				}
 			}
 		}
-		*/*/
+		*/
 		for (var i=0; i<this.connections.length; i++) {
 			if (this.connections[i] === connection || !connection) {
 				if (this.connections[i].rooms[room.id]) {
