@@ -345,6 +345,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.illusion = null;
 	BattlePokemon.prototype.fainted = false;
 	BattlePokemon.prototype.lastItem = '';
+	BattlePokemon.prototype.ateBerry = false;
 	BattlePokemon.prototype.status = '';
 	BattlePokemon.prototype.position = 0;
 
@@ -951,6 +952,7 @@ var BattlePokemon = (function() {
 			this.item = '';
 			this.itemData = {id: '', target: this};
 			this.usedItemThisTurn = true;
+			this.ateBerry = true;
 			return true;
 		}
 		return false;
