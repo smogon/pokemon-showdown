@@ -1331,7 +1331,6 @@ var User = (function () {
 					var result = data.replace(re, this.userid+','+time);
 					fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
 						if (err) return console.log(err);
-						console.log('Writing2: '+time);
 					});
 				} else {
 					fs.appendFile('logs/lastonline.txt',"\n"+this.userid+','+time);
