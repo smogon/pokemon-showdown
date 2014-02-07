@@ -884,18 +884,15 @@ var User = (function () {
 						break;
 					} 
 				}
-				if (parts[1] != time) {
-					if (match === true) {
-						var re = new RegExp(line,"g");
-						var result = data.replace(re, toUserid(name)+','+time);
-						fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
-							if (err) return console.log(err);
-						});
-					} else {
-						fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
-					}
+				if (match === true) {
+					var re = new RegExp(line,"g");
+					var result = data.replace(re, toUserid(name)+','+time);
+					fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
+						if (err) return console.log(err);
+					});
+				} else {
+					fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
 				}
-				
 
 				if (this.monoType === '') {
 					var rows = userTypes.split('\n');
