@@ -1579,6 +1579,16 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br><b>Ace: <font color="#58ACFA"><blink>Ace: Farfetch\'d</blink><br></font><b><font color="#00BFFF">Where can I find a leek in Pokemon Y?');
     },
     
+    amgldolph: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/bidoof.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://i.imgur.com/zUj8TpH.gif" width="350"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/magikarp-2.gif" width="175"><br /><center><b>Ace: </b>Bidoofs and Magikarps</center><br /><center><b>Catchphrase: </b>Shit My Biscuits Are Burning!</center>');
+    },
+    
+    failatbattling: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/jirachi.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img width="300" src="http://i.imgur.com/ynkJkpH.gif"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/sigilyph.gif"><br /><center><b>Ace: Anything that gets haxed</b></center><br /><center><b>Catchphrase: The name says it all.</b></center>');
+    },
+    
     darknessreigns: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img height="90" width="500" src=http://i.imgur.com/GCIT4Cv.gif><center><img height="80" width="120" src=http://th05.deviantart.net/fs70/PRE/i/2013/220/5/a/pokemon___megalucario_by_sa_dui-d6h8tdh.jpg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="80" width="120" src=http://th08.deviantart.net/fs70/PRE/f/2010/169/c/5/Gengar_Wallpaper_by_Phase_One.jpg><br /><center><b>Ace: </b>The Darkness</center><center><b>Catchphrase: </b>When the night falls, The Darkness Reigns</center>');
