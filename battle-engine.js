@@ -701,10 +701,11 @@ var BattlePokemon = (function() {
 
 		if (!template.abilities) return false;
 		this.template = template;
+		this.types = template.types;
 		this.typesData = [];
-		for (var i=0, l=template.types.length; i<l; i++) {
+		for (var i=0, l=this.types.length; i<l; i++) {
 			this.typesData.push({
-				type: template.types[i],
+				type: this.types[i],
 				suppressed: false,
 				isAdded: false
 			});
