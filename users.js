@@ -871,28 +871,31 @@ var User = (function () {
 					minutes = now.getUTCMinutes();
 				}
 				time = day+'/'+month+'/'+year+' '+hours+':'+minutes
-				var data = fs.readFileSync('logs/lastonline.txt','utf8');
 
-				var row = (''+data).split("\n");
-				var line = '';
-				for (var i = row.length; i > -1; i--) {
-					if (!row[i]) continue;
-					var parts = row[i].split(",");
-					if (toUserid(name) == parts[0]) {
-						match = true;
-						line = line + row[i];
-						break;
-					} 
-				}
-				/*if (match === true) {
-					var re = new RegExp(line,"g");
-					var result = data.replace(re, toUserid(name)+','+time);
-					fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
-						if (err) return console.log(err);
-					});
-				} else {
-					fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
-				}*/
+				match = false;
+				fs.readFile('logs/lastonline.txt','utf8',function(err, data){
+					if (err) data = '';
+					row = (''+data).split("\n");
+					line = '';
+					for (var i in row) {
+						parts = row[i].split(",");
+						if (toUserid(name) == parts[0]) {
+							match = true;
+							line = line + row[i];
+							break;
+						} 
+					}
+					if (match === true) {
+						re = new RegExp(line,"g");
+						result = data.replace(re, toUserid(name)+','+time);
+						fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
+							if (err) return console.log(err);
+							match = false;
+						});
+					} else {
+						fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
+					}
+				});
 
 				if (this.monoType === '') {
 					var rows = userTypes.split('\n');
