@@ -884,18 +884,15 @@ var User = (function () {
 						break;
 					} 
 				}
-				if (parts[1] != time) {
-					if (match === true) {
-						var re = new RegExp(line,"g");
-						var result = data.replace(re, toUserid(name)+','+time);
-						fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
-							if (err) return console.log(err);
-						});
-					} else {
-						fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
-					}
-				}
-				
+				/*if (match === true) {
+					var re = new RegExp(line,"g");
+					var result = data.replace(re, toUserid(name)+','+time);
+					fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
+						if (err) return console.log(err);
+					});
+				} else {
+					fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
+				}*/
 
 				if (this.monoType === '') {
 					var rows = userTypes.split('\n');
@@ -1295,6 +1292,7 @@ var User = (function () {
 			// you can't leave the global room except while disconnecting
 			return false;
 		}
+		/*
 		if (room.id == 'global') {
 
 			now = new Date();
@@ -1316,9 +1314,10 @@ var User = (function () {
 
 			var row = (''+data).split("\n");
 			var line = '';
+			var parts = '';
 			for (var i = row.length; i > -1; i--) {
 				if (!row[i]) continue;
-				var parts = row[i].split(",");
+				parts = row[i].split(",");
 				if (this.userid == parts[0]) {
 					match = true;
 					line = line + row[i];
@@ -1337,7 +1336,7 @@ var User = (function () {
 				}
 			}
 		}
-
+		*/
 		for (var i=0; i<this.connections.length; i++) {
 			if (this.connections[i] === connection || !connection) {
 				if (this.connections[i].rooms[room.id]) {
