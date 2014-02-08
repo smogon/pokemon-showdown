@@ -702,9 +702,9 @@ var BattlePokemon = (function() {
 		if (!template.abilities) return false;
 		this.template = template;
 		this.typesData = [];
-		for (var i=0, l=this.types.length; i<l; i++) {
+		for (var i=0, l=template.types.length; i<l; i++) {
 			this.typesData.push({
-				type: this.types[i],
+				type: template.types[i],
 				suppressed: false,
 				isAdded: false
 			});
@@ -1128,17 +1128,21 @@ var BattlePokemon = (function() {
 		if (this.status) hpstring += ' ' + this.status;
 		return hpstring;
 	};
-	BattlePokemon.prototype.setType = function() {
-		this.typesData = Array.prototype.map.call(arguments, function(type) {
-			return {
-				type: type,
-				suppressed: false,
-				isAdded: false
-			}
-		});
+	BattlePokemon.prototype.setType = function(newType, enforce) {
+		// Arceus first type cannot be normally changed
+		if (!enforce && this.num === 493) return false;
+
+		this.typesData = [{
+			type: newType,
+			suppressed: false,
+			isAdded: false
+		}];
+
+		return true;
 	};
 	BattlePokemon.prototype.addType = function(newType) {
 		// removes any types added previously and adds another one
+
 		this.typesData = this.typesData.filter(function(typeData) {
 			return !typeData.isAdded;
 		}).concat([{
@@ -1146,6 +1150,8 @@ var BattlePokemon = (function() {
 			suppressed: false,
 			isAdded: true
 		}]);
+
+		return true;
 	};
 	BattlePokemon.prototype.getTypes = function(getAll) {
 		var types = [];
