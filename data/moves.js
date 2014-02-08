@@ -1504,8 +1504,8 @@ exports.BattleMovedex = {
 			else if (this.isTerrain('grassyterrain')) newType = 'Grass';
 			else if (this.isTerrain('mistyterrain')) newType = 'Fairy';
 
+			if (!target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
-			target.setType(newType);
 		},
 		secondary: false,
 		target: "self",
@@ -1887,8 +1887,9 @@ exports.BattleMovedex = {
 				return false;
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
+
+			if (!target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
-			target.setType(type);
 		},
 		secondary: false,
 		target: "self",
@@ -1923,8 +1924,9 @@ exports.BattleMovedex = {
 				return false;
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
+
+			if (!source.setType(type)) return false;
 			this.add('-start', source, 'typechange', type);
-			source.setType(type);
 		},
 		secondary: false,
 		target: "normal",
@@ -4543,7 +4545,7 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onHit: function(target) {
 			if (target.hasType('Grass')) return false;
-			target.addType('Grass');
+			if (!target.addType('Grass')) return false;
 			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Forest\'s Curse');
 		},
 		secondary: false,
@@ -10338,6 +10340,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function(target, source) {
+			if (source.ability === 'multitype') return false;
 			this.add('-start', source, 'typechange', target.getTypes(true).join('/'), '[from] move: Reflect Type', '[of] '+target);
 			source.typesData = [];
 			for (var i=0, l=target.typesData; i<l; i++) {
@@ -12221,8 +12224,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
+			if (!target.setType('Water')) return false;
 			this.add('-start', target, 'typechange', 'Water');
-			target.setType('Water');
 		},
 		secondary: false,
 		target: "normal",
@@ -13896,7 +13899,7 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onHit: function(target) {
 			if (target.hasType('Ghost')) return false;
-			target.addType('Ghost');
+			if (!target.addType('Ghost')) return false;
 			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Trick-or-Treat');
 		},
 		secondary: false,
