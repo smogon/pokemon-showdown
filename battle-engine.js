@@ -703,6 +703,7 @@ var BattlePokemon = (function() {
 		this.template = template;
 		this.types = template.types;
 		this.typesData = [];
+		this.types = template.types;
 		for (var i=0, l=this.types.length; i<l; i++) {
 			this.typesData.push({
 				type: this.types[i],
@@ -2345,8 +2346,6 @@ var Battle = (function() {
 			}
 			return;
 		}
-
-		this.add('callback', 'decision');
 	};
 	Battle.prototype.tie = function() {
 		this.win();
@@ -2466,6 +2465,19 @@ var Battle = (function() {
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
+		return true;
+	};
+	Battle.prototype.swapPosition = function(source, newPos) {
+		var target = source.side.active[newPos];
+		if (target.fainted) return false;
+		var side = source.side;
+		side.pokemon[source.position] = target;
+		side.pokemon[newPos] = source;
+		side.active[source.position] = side.pokemon[source.position];
+		side.active[newPos] = side.pokemon[newPos];
+		target.position = source.position;
+		source.position = newPos;
+		this.add('swap', source, target);
 		return true;
 	};
 	Battle.prototype.faint = function(pokemon, source, effect) {
