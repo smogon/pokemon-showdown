@@ -703,6 +703,7 @@ var BattlePokemon = (function() {
 		this.template = template;
 		this.types = template.types;
 		this.typesData = [];
+		this.types = template.types;
 		for (var i=0, l=this.types.length; i<l; i++) {
 			this.typesData.push({
 				type: this.types[i],
@@ -2345,8 +2346,6 @@ var Battle = (function() {
 			}
 			return;
 		}
-
-		this.add('callback', 'decision');
 	};
 	Battle.prototype.tie = function() {
 		this.win();
