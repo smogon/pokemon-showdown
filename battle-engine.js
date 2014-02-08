@@ -234,6 +234,15 @@ var BattlePokemon = (function() {
 		this.speciesData = {id: this.speciesid};
 
 		this.types = this.baseTemplate.types;
+		this.typesData = [];
+
+		for (var i=0, l=this.types.length; i<l; i++) {
+			this.typesData.push({
+				type: this.types[i],
+				suppressed: false,
+				isAdded: false
+			});
+		}
 
 		if (this.set.moves) {
 			for (var i=0; i<this.set.moves.length; i++) {
@@ -646,7 +655,14 @@ var BattlePokemon = (function() {
 			return false;
 		}
 		this.transformed = true;
-		this.types = pokemon.types;
+		this.typesData = [];
+		for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+			this.typesData.push({
+				type: pokemon.typesData[i].type,
+				suppressed: false,
+				isAdded: pokemon.typesData[i].isAdded
+			});
+		}
 		for (var statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
 		}
@@ -685,7 +701,15 @@ var BattlePokemon = (function() {
 
 		if (!template.abilities) return false;
 		this.template = template;
-		this.types = this.template.types;
+		this.types = template.types;
+		this.typesData = [];
+		for (var i=0, l=this.types.length; i<l; i++) {
+			this.typesData.push({
+				type: this.types[i],
+				suppressed: false,
+				isAdded: false
+			});
+		}
 		if (!dontRecalculateStats) {
 			for (var statName in this.stats) {
 				var stat = this.template.baseStats[statName];
@@ -754,9 +778,7 @@ var BattlePokemon = (function() {
 				if (this.hasType(type[i])) return true;
 			}
 		} else {
-			for (var i=0; i<this.types.length; i++) {
-				if (this.types[i] === type) return true;
-			}
+			if (this.getTypes().indexOf(type) > -1) return true;
 		}
 		return false;
 	};
@@ -1106,6 +1128,42 @@ var BattlePokemon = (function() {
 		}
 		if (this.status) hpstring += ' ' + this.status;
 		return hpstring;
+	};
+	BattlePokemon.prototype.setType = function(newType, enforce) {
+		// Arceus first type cannot be normally changed
+		if (!enforce && this.num === 493) return false;
+
+		this.typesData = [{
+			type: newType,
+			suppressed: false,
+			isAdded: false
+		}];
+
+		return true;
+	};
+	BattlePokemon.prototype.addType = function(newType) {
+		// removes any types added previously and adds another one
+
+		this.typesData = this.typesData.filter(function(typeData) {
+			return !typeData.isAdded;
+		}).concat([{
+			type: newType,
+			suppressed: false,
+			isAdded: true
+		}]);
+
+		return true;
+	};
+	BattlePokemon.prototype.getTypes = function(getAll) {
+		var types = [];
+		for (var i=0, l=this.typesData.length; i<l; i++) {
+			if (getAll || !this.typesData[i].suppressed) {
+				types.push(this.typesData[i].type);
+			}
+		}
+		if (types.length) return types;
+		if (this.battle.gen >= 5) return ['Normal'];
+		return ['???'];
 	};
 	BattlePokemon.prototype.runImmunity = function(type, message) {
 		if (this.fainted) {

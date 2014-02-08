@@ -1504,8 +1504,8 @@ exports.BattleMovedex = {
 			else if (this.isTerrain('grassyterrain')) newType = 'Grass';
 			else if (this.isTerrain('mistyterrain')) newType = 'Fairy';
 
+			if (!target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
-			target.types = [newType];
 		},
 		secondary: false,
 		target: "self",
@@ -1887,8 +1887,9 @@ exports.BattleMovedex = {
 				return false;
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
+
+			if (!target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
-			target.types = [type];
 		},
 		secondary: false,
 		target: "self",
@@ -1923,8 +1924,9 @@ exports.BattleMovedex = {
 				return false;
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
+
+			if (!source.setType(type)) return false;
 			this.add('-start', source, 'typechange', type);
-			source.types = [type];
 		},
 		secondary: false,
 		target: "normal",
@@ -2402,6 +2404,7 @@ exports.BattleMovedex = {
 				}
 			}
 			for (var i in sideConditions) {
+				if (i === 'reflect' || i === 'lightscreen') continue;
 				if (source.side.removeSideCondition(i)) {
 					this.add('-sideend', source.side, this.getEffect(i).name, '[from] move: Defog', '[of] '+source);
 				}
@@ -2430,7 +2433,7 @@ exports.BattleMovedex = {
 			},
 			onFaint: function(target, source, effect) {
 				if (!source || !effect) return;
-				if (effect.effectType === 'Move' && target.lastMove === 'destinybond') {
+				if (effect.effectType === 'Move' && !effect.isFutureMove && target.lastMove === 'destinybond') {
 					this.add('-activate', target, 'Destiny Bond');
 					source.faint();
 				}
@@ -2693,6 +2696,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isNotProtectable: true,
+		isFutureMove: true,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
@@ -4540,9 +4544,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
-			if (target.hasType("Grass")) return false;
-			target.types = target.types.slice(0,2).concat(["Grass"]);
-			this.add("-start", target, "typechange", target.types.join("/"), "[from] move: Forest's Curse");
+			if (target.hasType('Grass')) return false;
+			if (!target.addType('Grass')) return false;
+			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Forest\'s Curse');
 		},
 		secondary: false,
 		target: "normal",
@@ -4580,15 +4584,14 @@ exports.BattleMovedex = {
 		getEffectiveness: function(source, target, pokemon) {
 			var type = source.type || source;
 			var totalTypeMod = 0;
-			var tarType = '';
-			for (var i=0; i<target.types.length; i++) {
-				tarType = target.types[i];
-				if (!this.data.TypeChart[tarType]) continue;
-				if (tarType === 'Water') {
+			var types = target.getTypes();
+			for (var i=0; i<types.length; i++) {
+				if (!this.data.TypeChart[types[i]]) continue;
+				if (types[i] === 'Water') {
 					totalTypeMod++;
 					continue;
 				}
-				var typeMod = this.data.TypeChart[tarType].damageTaken[type];
+				var typeMod = this.data.TypeChart[types[i]].damageTaken[type];
 				if (typeMod === 1) { // super-effective
 					totalTypeMod++;
 				}
@@ -4832,6 +4835,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isNotProtectable: true,
 		affectedByImmunities: false,
+		isFutureMove: true,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
@@ -10336,8 +10340,17 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function(target, source) {
-			this.add('-start', source, 'typechange', target.types.join('/'), '[from] move: Reflect Type', '[of] '+target);
-			source.types = target.types;
+			if (source.ability === 'multitype') return false;
+			this.add('-start', source, 'typechange', target.getTypes(true).join('/'), '[from] move: Reflect Type', '[of] '+target);
+			source.typesData = [];
+			for (var i=0, l=target.typesData; i<l; i++) {
+				if (target.typesData[i].suppressed) continue;
+				source.typesData.push({
+					type: target.typesData[i].type,
+					suppressed: false,
+					isAdded: target.typesData[i].isAdded
+				});
+			}
 		},
 		secondary: false,
 		target: "normal",
@@ -10828,32 +10841,27 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(pokemon) {
-				// This is not how Roost "should" be implemented, but is rather
-				// a simplification.
-
-				// This implementation has the advantage of not requiring a separate
-				// event just for Roost, and the only difference would come up in
-				// Doubles Hackmons. If we ever introduce Doubles Hackmons and
-				// Color Change Roost becomes popular; I might need to revisit this
-				// implementation. :P
-
-				if (pokemon.hasType('Flying')) {
-					// don't just delete the type; since
-					// the types array may be a pointer to the
-					// types array in the Pokedex.
-					this.effectData.oldTypes = pokemon.types;
-					if (pokemon.types[0] === 'Flying') {
-						pokemon.types = [pokemon.types[1] || 'Normal'];
-					} else {
-						pokemon.types = [pokemon.types[0]];
+				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+					if (pokemon.typesData[i].type === 'Flying') {
+						pokemon.typesData[i].suppressed = true;
+						break;
 					}
-					this.effectData.roostTypeString = pokemon.types.join(',');
 				}
-				//pokemon.negateImmunity['Ground'] = 1;
+			},
+			onModifyPokemon: function(pokemon) {
+				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+					if (pokemon.typesData[i].type === 'Flying') {
+						pokemon.typesData[i].suppressed = true;
+						break;
+					}
+				}
 			},
 			onEnd: function(pokemon) {
-				if (this.effectData.roostTypeString === pokemon.types.join(',')) {
-					pokemon.types = this.effectData.oldTypes;
+				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+					if (pokemon.typesData[i].type === 'Flying') {
+						pokemon.typesData[i].suppressed = false;
+						break;
+					}
 				}
 			}
 		},
@@ -12216,8 +12224,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
+			if (!target.setType('Water')) return false;
 			this.add('-start', target, 'typechange', 'Water');
-			target.types = ['Water'];
 		},
 		secondary: false,
 		target: "normal",
@@ -13194,7 +13202,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onTryHit: function(target, source) {
-			return target.hasType(source.types);
+			return target.hasType(source.getTypes());
 		},
 		secondary: false,
 		target: "allAdjacent",
@@ -13891,8 +13899,8 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onHit: function(target) {
 			if (target.hasType('Ghost')) return false;
-			target.types = target.types.slice(0,2).concat(['Ghost']);
-			this.add('-start', target, 'typechange', target.types.join('/'), '[from] move: Trick-or-Treat');
+			if (!target.addType('Ghost')) return false;
+			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Trick-or-Treat');
 		},
 		secondary: false,
 		target: "normal",
