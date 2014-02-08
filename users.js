@@ -871,7 +871,7 @@ var User = (function () {
 					minutes = now.getUTCMinutes();
 				}
 				time = day+'/'+month+'/'+year+' '+hours+':'+minutes
-
+/*
 				match = false;
 				fs.readFile('logs/lastonline.txt','utf8',function(err, data){
 					if (err) data = '';
@@ -895,7 +895,7 @@ var User = (function () {
 					} else {
 						fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
 					}
-				});
+				});*/
 
 				if (this.monoType === '') {
 					var rows = userTypes.split('\n');
