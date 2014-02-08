@@ -69,8 +69,8 @@ exports.BattleMovedex = {
 		desc: "The user's type changes based on the battle terrain. Ground-type in Wi-Fi battles. (In-game: Ground-type in puddles, rocky ground, and sand, Water-type on water, Rock-type in caves, Ice-type on snow and ice, and Normal-type everywhere else.) Fails if the user's type cannot be changed or if the user is already purely that type.",
 		shortDesc: "Changes user's type based on terrain. (Ground)",
 		onHit: function(target) {
+			if (!target.setType('Ground')) return false;
 			this.add('-start', target, 'typechange', 'Ground');
-			target.setType('Ground');
 		}
 	},
 	charm: {
