@@ -10349,10 +10349,10 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function(target, source) {
-			if (source.ability === 'multitype') return false;
+			if (source.num === 493) return false;
 			this.add('-start', source, 'typechange', target.getTypes(true).join('/'), '[from] move: Reflect Type', '[of] '+target);
 			source.typesData = [];
-			for (var i=0, l=target.typesData; i<l; i++) {
+			for (var i=0, l=target.typesData.length; i<l; i++) {
 				if (target.typesData[i].suppressed) continue;
 				source.typesData.push({
 					type: target.typesData[i].type,
