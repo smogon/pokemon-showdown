@@ -1579,6 +1579,16 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br><b>Ace: <font color="#58ACFA"><blink>Ace: Farfetch\'d</blink><br></font><b><font color="#00BFFF">Where can I find a leek in Pokemon Y?');
     },
     
+    kishz: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height="100" width="125" src="http://25.media.tumblr.com/bda3fbc303632e64b6c2aa720e8cf87e/tumblr_mw09v90S3R1rb53jco1_500.png"><img height="100" width="250" src="http://i.imgur.com/QTUuGUI.gif"><img height="100" width="125" src="http://24.media.tumblr.com/8aaf6a29a200fa3ce48e44c8fad078c9/tumblr_mpu21087ST1sogo8so1_250.jpg"><center><br><b>Ace: </b>Keldeo/Manectric<br><b>Catchphrase: </b>I\'m a Champ, come at me bro.</center>');
+    },
+    
+    vlahdimirlenin: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src=http://www.pokemonreborn.com/dexsprites/animated/242.gif><img src=http://i.imgur.com/TAU7XiN.gif><img src=http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/080.gif><br><b>Ace:</b> Meloetta<br><b>Catchphrase:</b><font color=pink> IDFK YET OK</center>');
+    },
+    
     egyptian: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img height="100" width="100" src="http://fc09.deviantart.net/fs70/f/2011/358/e/5/cobalion_the_just_musketeer_by_xous54-d4k42lh.png"><img src="http://fc01.deviantart.net/fs71/f/2014/038/7/4/6vnvvk3_by_yousefnafiseh-d75gny6.png"><img height="100" width="100" src="http://i.imgur.com/aRmqB2R.png"><br><center><b>Ace: <font color="#FE2E2E"><blink>Yanmega</blink><br></font><b><center><font color="#D7DF01">Never give up , There\'s still Hope');
