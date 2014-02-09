@@ -1235,11 +1235,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: & ~');
 		}
-		if (target === '~' || target === 'forcerenameto' || target === 'frt') {
-			matched = true;
-			this.sendReply('/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: & ~');
-			this.sendReply('/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: & ~');
-		}
 		if (target === '&' || target === 'forcetie') {
 			matched = true;
 			this.sendReply('/forcetie - Forces the current match to tie. Requires: & ~');
