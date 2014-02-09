@@ -905,6 +905,7 @@ var commands = exports.commands = {
 		if (targetUser.userid === toUserid(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forced to choose a new name by '+user.name+'' + (target ? ": " + target + "" : "");
 			this.privateModCommand('(' + entry + ')');
+			Rooms.global.cancelSearch(targetUser);
 			targetUser.resetName();
 			targetUser.send('|nametaken||'+user.name+" has forced you to change your name. "+target);
 		} else {
