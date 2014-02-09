@@ -396,7 +396,7 @@ var commands = exports.commands = {
 						for (var i in searches['moves']) {
 							var move = Tools.getMove(searches['moves'][i]);
 							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
-							if (!template.learnset.sketch && !template.learnset[move.id]) delete dex[mon];
+							if ((!template.learnset.sketch || move.id in {'chatter':1,'struggle':1,'magikarpsrevenge':1}) && !template.learnset[move.id]) delete dex[mon];
 						}
 					}
 					for (var mon in dex) {
