@@ -3677,10 +3677,6 @@ exports.BattleMovedex = {
 			onStart: function(target) {
 				this.add('-activate', target, 'move: Fairy Lock');
 			},
-			onRestart: function() {
-				this.add('-activate', target, 'move: Fairy Lock');
-				this.effectData.duration = 2;
-			},
 			onModifyPokemon: function(pokemon) {
 				pokemon.tryTrap();
 			}
