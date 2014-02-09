@@ -1503,6 +1503,11 @@ var commands = exports.commands = {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://24.media.tumblr.com/8183478ad03360a7c1d02650c53b4b35/tumblr_msfcxcMyuV1qdk3r4o1_500.gif" height="100" width="140"><img src="http://i.imgur.com/Vxjzq2x.gif" height="85" width="250"><img src="http://25.media.tumblr.com/b2af3f147263f1ef10252a31f0796184/tumblr_mkvyqqnhh51snwqgwo1_500.gif" height="100" width="140"></center></br><center><b>Ace:</b> Jirachi</center></br><center><b>"</b>Cuteness will always prevail over darkness<b>"</b></center>');
     },
+    
+    professoralice: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/absol-2.gif"><img src="http://i.imgur.com/9I7FGYi.gif"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/victini.gif"><br><b>Ace: </b>Absol<br><b>Quote: </b>"If the egg is broken by outside force, life ends. If the egg is broken from inside force, life begins. Great things always begin on the inside."</center>');
+    },
 
     bibliaskael: 'kael',
     kael: function(target, room, user) {
