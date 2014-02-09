@@ -3671,7 +3671,20 @@ exports.BattleMovedex = {
 		name: "Fairy Lock",
 		pp: 10,
 		priority: 0,
-		//todo
+		pseudoWeather: 'fairylock',
+		effect: {
+			duration: 2,
+			onStart: function(target) {
+				this.add('-activate', target, 'move: Fairy Lock');
+			},
+			onRestart: function() {
+				this.add('-activate', target, 'move: Fairy Lock');
+				this.effectData.duration = 2;
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.tryTrap();
+			}
+		},
 		secondary: false,
 		target: "all",
 		type: "Fairy"
