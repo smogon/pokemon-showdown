@@ -156,7 +156,7 @@ exports.BattleStatuses = {
 			pokemon.tryTrap();
 		},
 		onStart: function(target) {
-			this.add('-activate', target, 'trapped')
+			this.add('-activate', target, 'trapped');
 		}
 	},
 	partiallytrapped: {
