@@ -2406,7 +2406,7 @@ exports.BattleItems = {
 		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (move.category === 'Special') {
-				target.eatItem()
+				target.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
