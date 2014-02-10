@@ -131,7 +131,7 @@ exports.BattleItems = {
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.maxhp/(pokemon.types.length===1 ? 8 : 16));
+				this.heal(pokemon.maxhp/(pokemon.getTypes().length===1 ? 8 : 16));
 			} else {
 				this.damage(pokemon.maxhp/8);
 			}
@@ -145,7 +145,8 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onDamage: function(damage, target, source, effect) {
-			if (target.types.length === 1 && target.types[0] === 'Fighting' &&
+			var types = target.getTypes();
+			if (types.length === 1 && types[0] === 'Fighting' &&
 					effect && effect.effectType === 'Move' &&
 					target.useItem()) {
 				if (damage >= target.hp) {
@@ -164,7 +165,8 @@ exports.BattleItems = {
 		inherit: true,
 		onBasePower: function(basePower, user, target, move) {
 			if (move.category === 'Special') {
-				if (user.types.length === 1 && user.types[0] === 'Psychic') {
+				var types = user.getTypes();
+				if (types.length === 1 && types[0] === 'Psychic') {
 					return basePower * 1.2;
 				}
 				return basePower * 1.1;
@@ -175,7 +177,8 @@ exports.BattleItems = {
 		inherit: true,
 		onBasePower: function(basePower, user, target, move) {
 			if (move.category === 'Physical') {
-				if (user.types.length === 1 && user.types[0] === 'Fighting') {
+				var types = user.getTypes();
+				if (types.length === 1 && types[0] === 'Fighting') {
 					return basePower * 1.2;
 				}
 				return basePower * 1.1;

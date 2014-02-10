@@ -416,7 +416,7 @@ var commands = exports.commands = {
 						for (var i in searches[search]) {
 							var move = Tools.getMove(i);
 							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
-							var canLearn = template.learnset.sketch || template.learnset[move.id];
+							var canLearn = (template.learnset.sketch && !(move.id in {'chatter':1,'struggle':1,'magikarpsrevenge':1})) || template.learnset[move.id];
 							if (!canLearn && searches[search][i]) delete dex[mon];
 							else if (searches[search][i] === false && canLearn) dex[mon] = false;
 						}
@@ -1259,11 +1259,6 @@ var commands = exports.commands = {
 		if (target === '&' || target === 'demote') {
 			matched = true;
 			this.sendReply('/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: & ~');
-		}
-		if (target === '~' || target === 'forcerenameto' || target === 'frt') {
-			matched = true;
-			this.sendReply('/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: & ~');
-			this.sendReply('/forcerenameto OR /frt [username], [new name] - Forcibly change a user\'s name to [new name]. Requires: & ~');
 		}
 		if (target === '&' || target === 'forcetie') {
 			matched = true;
