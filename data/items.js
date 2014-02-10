@@ -1835,7 +1835,7 @@ exports.BattleItems = {
 			pokemon.negateImmunity['Ground'] = true;
 		},
 		onModifySpe: function(speMod) {
-			return this.chain(speMod, .5);
+			return this.chain(speMod, 0.5);
 		},
 		num: 278,
 		gen: 4,
