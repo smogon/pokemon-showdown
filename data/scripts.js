@@ -2355,11 +2355,11 @@ exports.BattleScripts = {
 			// Quite simple right now, 252 attack, 252 hp if slow 252 speed if fast, 4 evs for the strong defense.
 			// TO-DO: Make this more complex
 			if (counter.Special >= 2) {
-				evs.atk = 252;
-				evs.spa = 0;
-			} else if (counter.Physical >= 2) {
 				evs.atk = 0;
 				evs.spa = 252;
+			} else if (counter.Physical >= 2) {
+				evs.atk = 252;
+				evs.spa = 0;
 			}
 			if (template.baseStats.spe > 80) {
 				evs.spe = 252;
