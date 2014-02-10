@@ -2,9 +2,17 @@ var gulp = require('gulp'),
 	jshintStylish = require('jshint-stylish'),
 	gutil = require('gulp-util'),// Currently unused, but gulp strongly suggested I install...
 	jshint = require('gulp-jshint'),
-	jsHintIgnore = {
+	jsHintOptions = {
+		"trailing": true,
+		"nonbsp": true,
+		"noarg": true,
+		"latedef": true,
+
 		"sub": true,
 		"smarttabs": true,
+		"evil": true,
+		"esnext": true,
+		"node": true,
 		"eqeqeq": false
 	};
 
@@ -14,7 +22,7 @@ gulp.task('lint', function() {
 
 	for(var dir in directories) {
 		gulp.src(directories[dir])
-			.pipe(jshint(jsHintIgnore))
+			.pipe(jshint(jsHintOptions))
 			.pipe(jshint.reporter(jshintStylish));
 	}
 });
