@@ -2360,6 +2360,15 @@ exports.BattleScripts = {
 			} else if (counter.Physical >= 2) {
 				evs.atk = 252;
 				evs.spa = 0;
+			} else {
+				// Fallback in case a Pokémon lacks attacks... go by stats
+				if (template.baseStats.spa >= template.baseStats.atk) {
+					evs.atk = 0;
+					evs.spa = 252;
+				} else {
+					evs.atk = 252;
+					evs.spa = 0;
+				}
 			}
 			if (template.baseStats.spe > 80) {
 				evs.spe = 252;
