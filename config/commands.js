@@ -345,7 +345,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		if (showAll && Object.size(searches) === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
+		if (showAll && Object.size(searches) === 0 && megaSearch === null) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
 
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
