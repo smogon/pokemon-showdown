@@ -341,8 +341,9 @@ exports.BattleAbilities = {
 		onAfterMoveSecondary: function(target, source, move) {
 			if (target.isActive && move && move.effectType === 'Move' && move.category !== 'Status') {
 				if (!target.hasType(move.type)) {
+					if (!target.setType(move.type)) return false;
 					this.add('-start', target, 'typechange', move.type, '[from] Color Change');
-					target.types = [move.type];
+					target.update();
 				}
 			}
 		},
@@ -1801,7 +1802,7 @@ exports.BattleAbilities = {
 		desc: "Allows the Pokemon to hit twice with the same move in one turn. Second hit has 0.5x base power. Does not affect Status, multihit, or spread moves (in doubles).",
 		shortDesc: "Hits twice in one turn. Second hit has 0.5x base power.",
 		onModifyMove: function(move, pokemon, target) {
-			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && (target.side.active.length < 2 || move.target in {any:1, normal:1, randomNormal:1})) {
+			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && ((target.side && target.side.active.length < 2) || move.target in {any:1, normal:1, randomNormal:1})) {
 				move.multihit = 2;
 				pokemon.addVolatile('parentalbond');
 			}
@@ -1992,9 +1993,9 @@ exports.BattleAbilities = {
 		onBeforeMove: function(pokemon, target, move) {
 			if (!move) return;
 			var moveType = (move.id === 'hiddenpower' ? pokemon.hpType : move.type);
-			if (pokemon.types.join() !== moveType) {
+			if (pokemon.getTypes().join() !== moveType) {
+				if (!pokemon.setType(moveType)) return false;
 				this.add('-start', pokemon, 'typechange', moveType, '[from] Protean');
-				pokemon.types = [moveType];
 			}
 		},
 		id: "protean",
