@@ -147,6 +147,15 @@ exports.Formats = [
 	// XY Doubles
 	///////////////////////////////////////////////////////////////////
 
+	
+	{
+		name: "Random Doubles Battle",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		team: 'randomDoubles',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
 	{
 		name: "Smogon Doubles",
 		section: "XY Doubles",
