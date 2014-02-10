@@ -86,7 +86,7 @@ global.sanitize = function(str, strEscape) {
 global.string = function(str) {
 	if (typeof str === 'string' || typeof str === 'number') return ''+str;
 	return '';
-}
+};
 
 /**
  * Converts any variable to an integer (numbers get floored, non-numbers
@@ -325,7 +325,7 @@ var BattlePokemon = (function() {
 			if (statName === nature.plus) stat *= 1.1;
 			if (statName === nature.minus) stat *= 0.9;
 			this.baseStats[statName] = Math.floor(stat);
-		};
+		}
 
 		this.maxhp = Math.floor(Math.floor(2*this.template.baseStats['hp']+this.set.ivs['hp']+Math.floor(this.set.evs['hp']/4)+100)*this.level / 100 + 10);
 		if (this.template.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
@@ -817,7 +817,7 @@ var BattlePokemon = (function() {
 			return true;
 		}
 		return false;
-	}
+	};
 	BattlePokemon.prototype.hasMove = function(moveid) {
 		moveid = toId(moveid);
 		if (moveid.substr(0,11) === 'hiddenpower') moveid = 'hiddenpower';
@@ -1370,7 +1370,7 @@ var Battle = (function() {
 				var proto = Object.create(tools);
 				for (var i in Battle.prototype) {
 					proto[i] = Battle.prototype[i];
-				};
+				}
 				var battle = Object.create(proto);
 				var ret = Object.create(battle);
 				tools.install(ret);
@@ -1413,7 +1413,7 @@ var Battle = (function() {
 			Math.floor(Math.random() * 0x10000),
 			Math.floor(Math.random() * 0x10000),
 			Math.floor(Math.random() * 0x10000)];
-	}
+	};
 
 	Battle.prototype.turn = 0;
 	Battle.prototype.p1 = null;
@@ -3854,7 +3854,7 @@ var Battle = (function() {
 						p1team: this.p1.team,
 						p2team: this.p2.team,
 						log: this.log
-					}
+					};
 					this.send('log', JSON.stringify(log));
 				}
 				this.send('winupdate', [this.winner].concat(this.log.slice(logPos)));

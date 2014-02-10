@@ -334,7 +334,7 @@ global.sanitize = function(str, strEscape) {
 global.string = function(str) {
 	if (typeof str === 'string' || typeof str === 'number') return ''+str;
 	return '';
-}
+};
 
 /**
  * Converts any variable to an integer (numbers get floored, non-numbers
@@ -380,7 +380,7 @@ if (config.crashguard) {
 	process.on('uncaughtException', function(err) {
 		var dateNow = Date.now();
 		var quietCrash = require('./crashlogger.js')(err, 'The main process');
-		quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5)
+		quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5);
 		lastCrash = Date.now();
 		if (quietCrash) return;
 		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");

@@ -147,7 +147,7 @@ if (!process.send) {
 	global.string = function(str) {
 		if (typeof str === 'string' || typeof str === 'number') return ''+str;
 		return '';
-	}
+	};
 
 	global.Tools = require('./tools.js');
 
@@ -168,7 +168,7 @@ if (!process.send) {
 		if (!validators[format]) validators[format] = new Validator(format);
 		var parsedTeam = {};
 		try {
-			var parsedTeam = JSON.parse(message.substr(pipeIndex2 + 1));
+			parsedTeam = JSON.parse(message.substr(pipeIndex2 + 1));
 		} catch (e) {
 			respond(id, false, "Your team was invalid and could not be parsed.");
 			return;
