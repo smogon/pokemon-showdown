@@ -273,34 +273,41 @@ var commands = exports.commands = {
 		var allTiers = {'uber':1,'ou':1,'lc':1,'cap':1,'bl':1};
 		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
 		var showAll = false;
-		var megasOnly = false;
+		var megaSearch = null;
 		var output = 10;
 
 		for (var i in targets) {
-			target = Tools.getAbility(targets[i]);
-			if (target.exists) {
-				if (searches['ability']) return this.sendReply('Specify only one ability.');
-				searches['ability'] = target.name;
+			var isNotSearch = false;
+			target = targets[i].trim().toLowerCase();
+			if (target.slice(0,1) === '!') {
+				isNotSearch = true;
+				target = target.slice(1);
+			}
+
+			targetAbility = Tools.getAbility(targets[i]);
+			if (targetAbility.exists) {
+				if (!searches['ability']) searches['ability'] = {};
+				if (Object.count(searches['ability'], true) === 1 && !isNotSearch) return this.sendReply('Specify only one ability.');
+				searches['ability'][targetAbility.name] = !isNotSearch;
 				continue;
 			}
 
-			target = targets[i].trim().toLowerCase();
 			if (target in allTiers) {
 				if (!searches['tier']) searches['tier'] = {};
-				searches['tier'][target] = 1;
+				searches['tier'][target] = !isNotSearch;
 				continue;
 			}
 
 			if (target in allColours) {
 				if (!searches['color']) searches['color'] = {};
-				searches['color'][target] = 1;
+				searches['color'][target] = !isNotSearch;
 				continue;
 			}
 
 			var targetInt = parseInt(target);
 			if (0 < targetInt && targetInt < 7) {
 				if (!searches['gen']) searches['gen'] = {};
-				searches['gen'][target] = 1;
+				searches['gen'][target] = !isNotSearch;
 				continue;
 			}
 
@@ -313,7 +320,7 @@ var commands = exports.commands = {
 			}
 
 			if (target === 'megas' || target === 'mega') {
-				megasOnly = true;
+				megaSearch = !isNotSearch;
 				continue;
 			}
 
@@ -321,20 +328,20 @@ var commands = exports.commands = {
 				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
 				if (target in Tools.data.TypeChart) {
 					if (!searches['types']) searches['types'] = {};
-					if (Object.size(searches['types']) === 2) return this.sendReply('Specify a maximum of two types.');
-					searches['types'][target] = 1;
+					if (Object.count(searches['types'], true) === 2 && !isNotSearch) return this.sendReply('Specify a maximum of two types.');
+					searches['types'][target] = !isNotSearch;
 					continue;
 				}
 			}
 
 			var targetMove = Tools.getMove(target);
 			if (targetMove.exists) {
-				if (!searches['moves']) searches['moves'] = [];
-				if (searches['moves'].length === 4) return this.sendReply('Specify a maximum of 4 moves.');
-				searches['moves'].push(targetMove.name);
+				if (!searches['moves']) searches['moves'] = {};
+				if (Object.count(searches['moves'], true) === 4 && !isNotSearch) return this.sendReply('Specify a maximum of 4 moves.');
+				searches['moves'][targetMove.name] = !isNotSearch;
 				continue;
 			} else {
-				return this.sendReply('"' + targets[i].trim() + '" could not be found in any of the search categories.');
+				return this.sendReply('"' + target + '" could not be found in any of the search categories.');
 			}
 		}
 
@@ -343,7 +350,8 @@ var commands = exports.commands = {
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
 			var template = Tools.getTemplate(pokemon);
-			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && 'cap' in searches['tier'])) && (!megasOnly || template.isMega)) {
+			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) && 
+				(megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega))) {
 				dex[pokemon] = template;
 			}
 		}
@@ -353,38 +361,50 @@ var commands = exports.commands = {
 			switch (search) {
 				case 'types':
 					for (var mon in dex) {
-						if (Object.size(searches['types']) === 2) {
-							if (!(dex[mon].types[0] in searches['types']) || !(dex[mon].types[1] in searches['types'])) delete dex[mon];
+						if (Object.count(searches[search], true) === 2) {
+							if (!(searches[search][dex[mon].types[0]]) || !(searches[search][dex[mon].types[1]])) delete dex[mon];
 						} else {
-							if (!(dex[mon].types[0] in searches['types']) && !(dex[mon].types[1] in searches['types'])) delete dex[mon];
+							if (searches[search][dex[mon].types[0]] === false || searches[search][dex[mon].types[1]] === false || (Object.count(searches[search], true) > 0 &&
+								(!(searches[search][dex[mon].types[0]]) && !(searches[search][dex[mon].types[1]])))) delete dex[mon];
 						}
 					}
 					break;
 
 				case 'tier':
 					for (var mon in dex) {
-						// some LC legal Pokemon are stored in other tiers (Ferroseed/Murkrow etc)
-						// this checks for LC legality using the going criteria, instead of dex[mon].tier
 						if ('lc' in searches[search]) {
-							if ((dex[mon].evos && dex[mon].evos.length === 0) || dex[mon].prevo || Tools.data.Formats['lc'].banlist.indexOf(dex[mon].species) > -1) delete dex[mon];
-						} else if (!(String(dex[mon][search]).toLowerCase() in searches[search])) delete dex[mon];
+							// some LC legal Pokemon are stored in other tiers (Ferroseed/Murkrow etc)
+							// this checks for LC legality using the going criteria, instead of dex[mon].tier
+							var isLC = (dex[mon].evos && dex[mon].evos.length > 0) && !dex[mon].prevo && Tools.data.Formats['lc'].banlist.indexOf(dex[mon].species) === -1;
+							if ((searches[search]['lc'] && !isLC) || (!searches[search]['lc'] && isLC)) {
+								delete dex[mon];
+								continue;
+							}
+						}
+						if (searches[search][String(dex[mon][search]).toLowerCase()] === false) {
+							delete dex[mon];
+						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) delete dex[mon];
 					}
 					break;
 
 				case 'gen':
 				case 'color':
 					for (var mon in dex) {
-						if (!(String(dex[mon][search]).toLowerCase() in searches[search])) delete dex[mon];
-					}
+						if (searches[search][String(dex[mon][search]).toLowerCase()] === false) {
+							delete dex[mon];
+						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) delete dex[mon];					}
 					break;
 
 				case 'ability':
 					for (var mon in dex) {
-						var hasAbility = false;
-						for (var monAbility in dex[mon].abilities) {
-							if (dex[mon].abilities[monAbility] === searches['ability']) hasAbility = true;
+						for (var ability in searches[search]) {
+							var needsAbility = searches[search][ability];
+							var hasAbility = Object.count(dex[mon].abilities, ability) > 0;
+							if (hasAbility !== needsAbility) {
+								delete dex[mon];
+								break;
+							}
 						}
-						if (!hasAbility) delete dex[mon];
 					}
 					break;
 
@@ -393,16 +413,19 @@ var commands = exports.commands = {
 						var template = Tools.getTemplate(dex[mon].id);
 						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
 						if (!template.learnset) continue;
-						for (var i in searches['moves']) {
-							var move = Tools.getMove(searches['moves'][i]);
+						for (var i in searches[search]) {
+							var move = Tools.getMove(i);
 							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
-							if ((!template.learnset.sketch || move.id in {'chatter':1,'struggle':1,'magikarpsrevenge':1}) && !template.learnset[move.id]) delete dex[mon];
+							var canLearn = (template.learnset.sketch && !(move.id in {'chatter':1,'struggle':1,'magikarpsrevenge':1})) || template.learnset[move.id];
+							if (!canLearn && searches[search][i]) delete dex[mon];
+							else if (searches[search][i] === false && canLearn) dex[mon] = false;
 						}
 					}
 					for (var mon in dex) {
-						if (dex[mon].evos) {
-							for (var evo in dex[mon].evos) dex[dex[mon].evos[evo]] = Tools.getTemplate(dex[mon].evos[evo]);
+						if (dex[mon] && dex[mon].evos.length) {
+							for (var evo in dex[mon].evos) if (dex[dex[mon].evos[evo]] !== false) dex[dex[mon].evos[evo]] = Tools.getTemplate(dex[mon].evos[evo]);
 						}
+						if (!dex[mon]) delete dex[mon];
 					}
 					break;
 
@@ -1141,8 +1164,10 @@ var commands = exports.commands = {
 			this.sendReply('/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.');
 			this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
 			this.sendReply('Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.');
-			this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.');
+			this.sendReply('Valid tiers are: Uber/OU/BL/LC/CAP.');
 			this.sendReply('Types must be followed by " type", e.g., "dragon type".');
+			this.sendReply('Parameters can be excluded through the use of "!", e.g., "!water type" excludes all water types.');
+			this.sendReply('The parameter "mega" can be added to search for Mega Evolutions only.');
 			this.sendReply('The order of the parameters does not matter.');
 		}
 		if (target === 'all' || target === 'dice' || target === 'roll') {
