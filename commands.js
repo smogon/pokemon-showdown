@@ -808,13 +808,13 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
+		if (!userid || !targetUser) return this.sendReply('User '+name+' not found.');
 		if (targetUser.group === '~') {
 			return this.sendReply('Administrators can\'t be room banned.');
 		}
 		if (targetUser.frostDev) {
 			return this.sendReply('Frost Developers can\'t be room banned.');
 		}
-		if (!userid || !targetUser) return this.sendReply('User '+name+' not found.');
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!Rooms.rooms[room.id].users[userid] && room.isPrivate) {
 			return this.sendReply('User ' + this.targetUsername + ' is not in the room ' + room.id + '.');
