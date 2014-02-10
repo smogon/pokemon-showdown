@@ -736,7 +736,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo C"
 	},
 	lickitung: {
-		viableMoves: {"wish":1,"protect":1,"dragontail":1,"curse":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1,"earthquake":1},
+		viableMoves: {"wish":1,"protect":1,"dragontail":1,"curse":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["healbell","wish"]},
 			{"generation":3,"level":38,"moves":["helpinghand","doubleedge","defensecurl","rollout"]}
@@ -1319,7 +1319,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	natu: {
-		viableMoves: {"thunderwave":1,"roost":1,"toxic":1,"reflect":1,"lightscreen":1,"uturn":1,"wish":1,"psychic":1,"nightshade":1,"uturn":1},
+		viableMoves: {"thunderwave":1,"roost":1,"toxic":1,"reflect":1,"lightscreen":1,"uturn":1,"wish":1,"psychic":1,"nightshade":1},
 		eventPokemon: [
 			{"generation":3,"level":22,"moves":["batonpass","futuresight","nightshade","aerialace"]}
 		],
@@ -3591,7 +3591,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	dwebble: {
-		viableMoves: {"stealthrock":1,"spikes":1,"shellsmash":1,"earthquake":1,"rockblast":1,"xscissor":1,"stoneedge":1.},
+		viableMoves: {"stealthrock":1,"spikes":1,"shellsmash":1,"earthquake":1,"rockblast":1,"xscissor":1,"stoneedge":1},
 		tier: "LC"
 	},
 	crustle: {

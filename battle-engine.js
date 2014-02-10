@@ -1046,6 +1046,7 @@ var BattlePokemon = (function() {
 		return this.battle.getNature(this.set.nature);
 	};
 	BattlePokemon.prototype.addVolatile = function(status, source, sourceEffect) {
+		var result;
 		if (!this.hp) return false;
 		status = this.battle.getEffect(status);
 		if (this.battle.event) {
@@ -1058,7 +1059,7 @@ var BattlePokemon = (function() {
 			return this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
 		}
 		if (!this.runImmunity(status.id)) return false;
-		var result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
+		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
 		if (!result) {
 			this.battle.debug('add volatile ['+status.id+'] interrupted');
 			return result;
@@ -1078,7 +1079,7 @@ var BattlePokemon = (function() {
 		if (status.durationCallback) {
 			this.volatiles[status.id].duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 		}
-		var result = this.battle.singleEvent('Start', status, this.volatiles[status.id], this, source, sourceEffect);
+		result = this.battle.singleEvent('Start', status, this.volatiles[status.id], this, source, sourceEffect);
 		if (!result) {
 			// cancel
 			delete this.volatiles[status.id];
@@ -3205,6 +3206,8 @@ var Battle = (function() {
 		return false;
 	};
 	Battle.prototype.runDecision = function(decision) {
+		var pokemon;
+
 		// returns whether or not we ended in a callback
 		switch (decision.choice) {
 		case 'start':
@@ -3220,11 +3223,11 @@ var Battle = (function() {
 				this.switchIn(this.p2.pokemon[pos], pos);
 			}
 			for (var pos=0; pos<this.p1.pokemon.length; pos++) {
-				var pokemon = this.p1.pokemon[pos];
+				pokemon = this.p1.pokemon[pos];
 				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
 			}
 			for (var pos=0; pos<this.p2.pokemon.length; pos++) {
-				var pokemon = this.p2.pokemon[pos];
+				pokemon = this.p2.pokemon[pos];
 				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
@@ -3272,7 +3275,7 @@ var Battle = (function() {
 			}
 
 			if (i == 0) return;
-			var pokemon = decision.side.pokemon[i];
+			pokemon = decision.side.pokemon[i];
 			if (!pokemon) return;
 			decision.side.pokemon[i] = decision.side.pokemon[0];
 			decision.side.pokemon[0] = pokemon;
