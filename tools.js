@@ -467,8 +467,8 @@ module.exports = (function () {
 					banlistTable[subformat.banlist[i]] = subformat.name || true;
 					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
 
-					var plusPos = subformat.banlist[i].indexOf('+'),
-						complexList;
+					var plusPos = subformat.banlist[i].indexOf('+');
+					var complexList;
 					if (plusPos && plusPos > 0) {
 						var plusPlusPos = subformat.banlist[i].indexOf('++');
 						if (plusPlusPos && plusPlusPos > 0) {
