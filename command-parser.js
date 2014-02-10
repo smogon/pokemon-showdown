@@ -169,7 +169,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 					var normalized = toId(message);
 					if (room.lastBroadcast === normalized &&
 							room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
-						connection.sendTo(room, "You can't broadcast this because it was just broadcast.")
+						connection.sendTo(room, "You can't broadcast this because it was just broadcast.");
 						return false;
 					}
 					this.add('|c|'+user.getIdentity(room.id)+'|'+message);
@@ -232,7 +232,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 function splitTarget(target, exactName) {
 	var commaIndex = target.indexOf(',');
 	if (commaIndex < 0) {
-		targetUser = Users.get(target, exactName)
+		targetUser = Users.get(target, exactName);
 		this.targetUser = targetUser;
 		this.targetUsername = (targetUser?targetUser.name:target);
 		return '';

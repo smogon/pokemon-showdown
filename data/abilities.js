@@ -863,7 +863,7 @@ exports.BattleAbilities = {
 		name: "Friend Guard",
 		onAnyModifyDamage: function(damage, source, target, move) {
 			if (target !== this.effectData.target && target.side === this.effectData.target.side) {
-				this.debug('Friend Guard weaken')
+				this.debug('Friend Guard weaken');
 				return this.chainModify(0.75);
 			}
 		},
