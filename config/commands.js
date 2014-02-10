@@ -313,7 +313,7 @@ var commands = exports.commands = {
 
 			if (target === 'all') {
 				if (this.broadcasting) {
-					return this.sendReply('A search with the parameter "all" cannot be broadcast.')
+					return this.sendReply('A search with the parameter "all" cannot be broadcast.');
 				}
 				showAll = true;
 				continue;
