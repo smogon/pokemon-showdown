@@ -1057,7 +1057,7 @@ var BattleRoom = (function() {
 		this.kickInactiveUpdate();
 	};
 	BattleRoom.prototype.joinBattle = function(user, team) {
-		var slot;
+		var slot = undefined;
 		if (this.rated) {
 			if (this.rated.p1 === user.userid) {
 				slot = 0;
