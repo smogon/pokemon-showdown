@@ -1,9 +1,11 @@
 var gulp = require('gulp'),
+	jshintStylish = require('jshint-stylish'),
 	gutil = require('gulp-util'),// Currently unused, but gulp strongly suggested I install...
 	jshint = require('gulp-jshint'),
 	jsHintIgnore = {
 		"sub": true,
-		"smarttabs": true
+		"smarttabs": true,
+		"eqeqeq": false
 	};
 
 gulp.task('lint', function() {
@@ -13,7 +15,7 @@ gulp.task('lint', function() {
 	for(var dir in directories) {
 		gulp.src(directories[dir])
 			.pipe(jshint(jsHintIgnore))
-			.pipe(jshint.reporter('default'));
+			.pipe(jshint.reporter(jshintStylish));
 	}
 });
 
