@@ -353,7 +353,7 @@ var commands = exports.commands = {
 	
 	tierpoll: 'tiervote',
 	tiervote: function(target, room, user){
-		return this.parse('/poll Tournament Tier?, OU, UU, Ubers, LC, LC UU, Doubles, Christmas Charade, Sky Battles, CAP, cc, cc1v1, hackmons, inverse battle, OU Monotype, Gen51v1, Gen5OU, Gen5UU, Gen5RU, Gen5NU, Gen5Ubers, Gen5Perseverance, Gen5LC, Gen5RandomBattle');
+		return this.parse('/poll Tournament Tier?, OU, UU, Fabolous February, Ubers, LC, LC UU, 1v1, Doubles, Middle Cup, Sky Battles, CAP, cc, cc1v1, hackmons, inverse battle, OU Monotype, Gen51v1, Gen5OU, Gen5UU, Gen5RU, Gen5NU, Gen5Ubers, Gen5Perseverance, Gen5LC, Gen5RandomBattle');
 	},
 	
 	gurl: function(target, room, user){
