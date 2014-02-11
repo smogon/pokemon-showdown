@@ -1511,10 +1511,9 @@ var User = (function () {
 		}*/
 		if (!room.isPrivate) {
 			for (var x in bannedMessages) {
-				if (message.indexOf(bannedMessages[x]) > -1 && bannedMessages[x] != '') {
+				if (message.indexOf(bannedMessages[x]) > -1 && bannedMessages[x] != '' && bannedMessages[x].substr(0,1) != '/') {
 					connection.user.lock();
 					connection.user.popup('You have been automatically locked for sending a message containing a banned word. If you feel this was a mistake please contact a staff member.');
-					//Rooms.rooms.staff.logModCommand(connection.user.name + ' was locked for sending a message containing a banned word. Message: ' + message);
 					for (var u in Users.users) {
 						if (Users.users[u].isStaff) {
 							Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+connection.user.name+' has been automatically locked for sending a message containing a banned word. Message: ' + message);
