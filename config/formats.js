@@ -721,6 +721,16 @@ exports.Formats = [
 		ruleset: []
 	},
 	{
+		name: "[Gen 3] OU (beta)",
+		section: "Past Generations",
+
+		mod: 'gen3',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber'],
+
+		column: 2
+	},
+	{
 		name: "[Gen 3] Hackmons",
 		section: "Past Generations",
 
