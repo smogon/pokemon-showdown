@@ -4602,7 +4602,7 @@ exports.BattleMovedex = {
 		getEffectiveness: function(source, target, pokemon) {
 			var type = source.type || source;
 			var totalTypeMod = 0;
-			var types = target.getTypes();
+			var types = target.getTypes && target.getTypes() || target.types;
 			for (var i=0; i<types.length; i++) {
 				if (!this.data.TypeChart[types[i]]) continue;
 				if (types[i] === 'Water') {
