@@ -1221,6 +1221,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	mattz: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img width="100" height="100" src="http://i.imgur.com/8Wq1oDL.gif">' +
+    		'<img width="350" height="80" src="http://i.imgur.com/Tu1kJ2C.gif">' +
+    		'<img width="100" height="100" src="http://i.imgur.com/sYoY67U.gif"><br />' +
+    		'<b>Ace:</b> The Whole Swarm...Run!<br />' +
+    		'Fight me? Go to sleep and dont let the bedbugs bite, kid...or burn you to a crisp.</center>');
+    },
+
 	zarif: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(' <center><img src=http://i.imgur.com/lC0aRUH.gif>' +
