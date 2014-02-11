@@ -375,6 +375,7 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon) {
 			return pokemon.hpPower || 70;
 		},
+		category: "Physical",
 		id: "hiddenpower",
 		isViable: true,
 		name: "Hidden Power",
