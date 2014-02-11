@@ -7061,7 +7061,7 @@ exports.BattleMovedex = {
 		onBasePowerPriority: 4,
 		onBasePower: function(basePower, pokemon, target) {
 			var item = target.getItem();
-			if (item.id && !item.megaStone) {
+			if (item.id && (item.id === 'mail' || (!item.megaStone && !item.onPlate && !item.onDrive && !(item.onTakeItem && item.onTakeItem(item, target))))) {
 				return this.chainModify(1.5);
 			}
 		},

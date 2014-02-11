@@ -1578,6 +1578,7 @@ exports.BattleItems = {
 			if ((source && source.baseTemplate.num === 487) || pokemon.baseTemplate.num === 487) {
 				return false;
 			}
+			return true;
 		},
 		num: 112,
 		gen: 4,
