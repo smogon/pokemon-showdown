@@ -1047,7 +1047,7 @@ var BattlePokemon = (function() {
 	};
 	BattlePokemon.prototype.addVolatile = function(status, source, sourceEffect) {
 		var result;
-		if (!this.hp) return false;
+		if (this.fainted) return false;
 		status = this.battle.getEffect(status);
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
