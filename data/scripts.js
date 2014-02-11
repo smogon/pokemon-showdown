@@ -1381,6 +1381,8 @@ exports.BattleScripts = {
 				item = 'Eviolite';
 			} else if (shouldMegaEvo === true) {
 				item = this.getTemplate(template.otherFormes[0]).requiredItem;
+				// Mega Mawile should never start with Sheer Force
+				if (template.species === 'Mawile') ability = 'Intimidate';
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 				item = 'Light Clay';
 			} else if (hasMove['shellsmash']) {
