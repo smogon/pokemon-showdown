@@ -227,7 +227,7 @@ global.ResourceMonitor = {
 			else if (typeof value === 'number') bytes += 8;
 			else if (typeof value === 'object' && objectList.indexOf( value ) === -1) {
 				objectList.push( value );
-				for (i in value) stack.push( value[ i ] );
+				for (var i in value) stack.push( value[ i ] );
 			}
 		}
 
@@ -335,7 +335,7 @@ global.sanitize = function(str, strEscape) {
 global.string = function(str) {
 	if (typeof str === 'string' || typeof str === 'number') return ''+str;
 	return '';
-}
+};
 
 /**
  * Converts any variable to an integer (numbers get floored, non-numbers

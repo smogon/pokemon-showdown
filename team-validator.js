@@ -147,7 +147,7 @@ if (!process.send) {
 	global.string = function(str) {
 		if (typeof str === 'string' || typeof str === 'number') return ''+str;
 		return '';
-	}
+	};
 
 	global.Tools = require('./tools.js');
 
@@ -168,7 +168,7 @@ if (!process.send) {
 		if (!validators[format]) validators[format] = new Validator(format);
 		var parsedTeam = {};
 		try {
-			var parsedTeam = JSON.parse(message.substr(pipeIndex2 + 1));
+			parsedTeam = JSON.parse(message.substr(pipeIndex2 + 1));
 		} catch (e) {
 			respond(id, false, "Your team was invalid and could not be parsed.");
 			return;
@@ -720,10 +720,11 @@ var Validator = (function() {
 		if (sourcesBefore || lsetData.sourcesBefore) {
 			// having sourcesBefore is the equivalent of having everything before that gen
 			// in sources, so we fill the other array in preparation for intersection
+			var learned;
 			if (sourcesBefore && lsetData.sources) {
 				if (!sources) sources = [];
 				for (var i=0, len=lsetData.sources.length; i<len; i++) {
-					var learned = lsetData.sources[i];
+					learned = lsetData.sources[i];
 					if (parseInt(learned.substr(0,1),10) <= sourcesBefore) {
 						sources.push(learned);
 					}
@@ -733,7 +734,7 @@ var Validator = (function() {
 			if (lsetData.sourcesBefore && sources) {
 				if (!lsetData.sources) lsetData.sources = [];
 				for (var i=0, len=sources.length; i<len; i++) {
-					var learned = sources[i];
+					learned = sources[i];
 					if (parseInt(learned.substr(0,1),10) <= lsetData.sourcesBefore) {
 						lsetData.sources.push(learned);
 					}

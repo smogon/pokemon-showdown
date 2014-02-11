@@ -11,6 +11,7 @@ npm-debug.log
 
 # editor temp files
 *~
+.idea/
 
 tmp/**/*
 *.lock

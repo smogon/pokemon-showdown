@@ -730,13 +730,14 @@ exports.BattleFormatsData = {
 	},
 	hitmontop: {
 		viableMoves: {"suckerpunch":1,"machpunch":1,"rapidspin":1,"closecombat":1,"stoneedge":1,"toxic":1,"earthquake":1},
+		viableDoublesMoves: {"fakeout":1,"feint":1,"suckerpunch":1,"closecombat":1,"helpinghand":1,"machpunch":1},
 		eventPokemon: [
 			{"generation":5,"level":55,"gender":"M","nature":"Adamant","isHidden":false,"abilities":["intimidate"],"moves":["fakeout","closecombat","suckerpunch","helpinghand"]}
 		],
 		tier: "Limbo C"
 	},
 	lickitung: {
-		viableMoves: {"wish":1,"protect":1,"dragontail":1,"curse":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1,"earthquake":1},
+		viableMoves: {"wish":1,"protect":1,"dragontail":1,"curse":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["healbell","wish"]},
 			{"generation":3,"level":38,"moves":["helpinghand","doubleedge","defensecurl","rollout"]}
@@ -803,6 +804,7 @@ exports.BattleFormatsData = {
 	},
 	kangaskhan: {
 		viableMoves: {"fakeout":1,"return":1,"suckerpunch":1,"earthquake":1,"wish":1,"poweruppunch":1,"crunch":1},
+		viableDoublesMoves: {"fakeout":1,"return":1,"suckerpunch":1,"earthquake":1,"facade":1,"poweruppunch":1,"crunch":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"gender":"F","abilities":["earlybird"],"moves":["yawn","wish"]},
 			{"generation":3,"level":10,"gender":"F","abilities":["earlybird"],"moves":["cometpunch","leer","bite"]},
@@ -1319,7 +1321,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	natu: {
-		viableMoves: {"thunderwave":1,"roost":1,"toxic":1,"reflect":1,"lightscreen":1,"uturn":1,"wish":1,"psychic":1,"nightshade":1,"uturn":1},
+		viableMoves: {"thunderwave":1,"roost":1,"toxic":1,"reflect":1,"lightscreen":1,"uturn":1,"wish":1,"psychic":1,"nightshade":1},
 		eventPokemon: [
 			{"generation":3,"level":22,"moves":["batonpass","futuresight","nightshade","aerialace"]}
 		],
@@ -3105,6 +3107,7 @@ exports.BattleFormatsData = {
 	},
 	heatran: {
 		viableMoves: {"substitute":1,"fireblast":1,"lavaplume":1,"willowisp":1,"stealthrock":1,"earthpower":1,"hiddenpowergrass":1,"hiddenpowerice":1,"protect":1,"toxic":1,"roar":1},
+		viableDoublesMoves: {"heatwave":1,"substitute":1,"earthpower":1,"protect":1,"eruption":1,"willowisp":1},
 		eventPokemon: [
 			{"generation":4,"level":50,"nature":"Quiet","moves":["eruption","magmastorm","earthpower","ancientpower"]}
 		],
@@ -3133,6 +3136,7 @@ exports.BattleFormatsData = {
 	},
 	cresselia: {
 		viableMoves: {"moonlight":1,"psychic":1,"icebeam":1,"thunderwave":1,"toxic":1,"lunardance":1,"rest":1,"sleeptalk":1,"calmmind":1,"reflect":1,"lightscreen":1},
+		viableDoublesMoves: {"psyshock":1,"icywind":1,"thunderwave":1,"trickroom":1,"moonblast":1,"moonlight":1,"skillswap":1,"reflect":1,"lightscreen":1,"icebeam":1,"protect":1,"helpinghand":1},
 		eventPokemon: [
 			{"generation":5,"level":68,"gender":"F","nature":"Modest","moves":["icebeam","psyshock","energyball","hiddenpower"]}
 		],
@@ -3159,6 +3163,7 @@ exports.BattleFormatsData = {
 	},
 	darkrai: {
 		viableMoves: {"darkvoid":1,"darkpulse":1,"focusblast":1,"nastyplot":1,"substitute":1,"trick":1},
+		viableDoublesMoves: {"darkpulse":1,"focusblast":1,"nastyplot":1,"substitute":1,"snarl":1,"protect":1},
 		eventPokemon: [
 			{"generation":4,"level":50,"moves":["roaroftime","spacialrend","nightmare","hypnosis"],"pokeball":"cherishball"},
 			{"generation":4,"level":50,"moves":["darkvoid","darkpulse","shadowball","doubleteam"]},
@@ -3591,7 +3596,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo"
 	},
 	dwebble: {
-		viableMoves: {"stealthrock":1,"spikes":1,"shellsmash":1,"earthquake":1,"rockblast":1,"xscissor":1,"stoneedge":1.},
+		viableMoves: {"stealthrock":1,"spikes":1,"shellsmash":1,"earthquake":1,"rockblast":1,"xscissor":1,"stoneedge":1},
 		tier: "LC"
 	},
 	crustle: {
@@ -3607,6 +3612,7 @@ exports.BattleFormatsData = {
 	},
 	scrafty: {
 		viableMoves: {"dragondance":1,"icepunch":1,"highjumpkick":1,"drainpunch":1,"rest":1,"bulkup":1,"crunch":1,"knockoff":1},
+		viableDoublesMoves: {"fakeout":1,"drainpunch":1,"knockoff":1,"icepunch":1,"stoneedge":1},
 		eventPokemon: [
 			{"generation":5,"level":50,"gender":"M","nature":"Brave","isHidden":false,"abilities":["moxie"],"moves":["firepunch","payback","drainpunch","substitute"],"pokeball":"cherishball"}
 		],

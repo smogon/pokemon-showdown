@@ -468,16 +468,17 @@ module.exports = (function () {
 					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
 
 					var plusPos = subformat.banlist[i].indexOf('+');
+					var complexList;
 					if (plusPos && plusPos > 0) {
 						var plusPlusPos = subformat.banlist[i].indexOf('++');
 						if (plusPlusPos && plusPlusPos > 0) {
-							var complexList = subformat.banlist[i].split('++');
+							complexList = subformat.banlist[i].split('++');
 							for (var j=0; j<complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
 							}
 							format.teamBanTable.push(complexList);
 						} else {
-							var complexList = subformat.banlist[i].split('+');
+							complexList = subformat.banlist[i].split('+');
 							for (var j=0; j<complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
 							}

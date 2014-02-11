@@ -1578,6 +1578,7 @@ exports.BattleItems = {
 			if ((source && source.baseTemplate.num === 487) || pokemon.baseTemplate.num === 487) {
 				return false;
 			}
+			return true;
 		},
 		num: 112,
 		gen: 4,
@@ -1835,7 +1836,7 @@ exports.BattleItems = {
 			pokemon.negateImmunity['Ground'] = true;
 		},
 		onModifySpe: function(speMod) {
-			return this.chain(speMod, .5);
+			return this.chain(speMod, 0.5);
 		},
 		num: 278,
 		gen: 4,
@@ -2406,7 +2407,7 @@ exports.BattleItems = {
 		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (move.category === 'Special') {
-				target.eatItem()
+				target.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
