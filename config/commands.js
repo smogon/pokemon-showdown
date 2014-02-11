@@ -1584,12 +1584,6 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br><b>Ace: <font color="#58ACFA"><blink>Ace: Farfetch\'d</blink><br></font><b><font color="#00BFFF">Where can I find a leek in Pokemon Y?');
     },
     
-    epin: 'epinicion',
-    epinicion: function(target, room, user) {
-    	if (!this.canBroadcast()) return;
-    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/crustle.gif"><img src="http://i.imgur.com/5aLcrWN.png"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/mew.gif"><br><b>Ace: </b>Crustle<br><b>Quote: </b>Si Vis Pacem, Para Bellum</center>');
-    },
-    
     belle: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img height="140" width="200" src="http://i.imgur.com/7Ar6RAd.pngg"><img src="http://i.imgur.com/VTxy0rU.gif"><br><b>Ace: </b>Garchomp<br><b>Quote: </b>Believing that you can do it means you\'re already halfway there!</center>');
@@ -1647,7 +1641,11 @@ var commands = exports.commands = {
     
     thatonebadass: function(target, room, user) {
     	if (!this.canBroadcast()) return;
-    	this.sendReplyBox('<center><img src=http://i.imgur.com/m8rrrMm.gif height="95" width="95"><img src=http://i.imgur.com/Z0dsNXK.gif><img src=http://i.imgur.com/66s3Y7w.png height="95" width="95"><br><b>Ace:</b> Charizard<br><b>Catchphrase: </b>Badass Pokémon master since 1996</center>');
+    	this.sendReplyBox('<center><img height=150 src=http://i.imgur.com/SsxwslQ.gif>' +
+    		'<img src=http://i.imgur.com/rvUDGg2.gif>' +
+    		'<img height=150 src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/greninja-4.gif><br />' +
+    		'<b>Ace:</b> My Hands<br />' +
+    		'<b>Catchphrase: </b>I\'m bout to get #WristDeep</center>');
     },
     
     kanghirule : 'kanghiman',
