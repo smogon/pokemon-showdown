@@ -495,7 +495,7 @@ var Validator = (function() {
 			}
 			if (!lsetData.sources && lsetData.sourcesBefore >= 3 && (isHidden || tools.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
 				var oldAbilities = tools.mod('gen'+lsetData.sourcesBefore).getTemplate(set.species).abilities;
-				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && ability.name !== oldAbilities['H']) {
+				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
 					problems.push(name+" has moves incompatible with its ability.");
 				}
 			}
