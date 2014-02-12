@@ -1667,7 +1667,7 @@ var commands = exports.commands = {
     },
     
     barida: function(target, room, user) {
-    	if (!this,canBroadcast()) return;
+    	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img height="140" width="120" src=" http://i.imgur.com/pqdTMAM.gif"><img src="http://i.imgur.com/UD8pfs8.gif"><img  height="100" width="120" src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/zapdos.gif"><br /><center><b>Ace: </b>Dragonite</center><br /><center><b>Catchphrase: </b>Success will never come to you if you don\’t reach flight and soar to your goal</center>');
     },
     
