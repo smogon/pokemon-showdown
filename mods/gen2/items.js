@@ -22,7 +22,11 @@ exports.BattleItems = {
 	},
 	dragonfang: {
 		inherit: true,
-		onBasePower: null
+		onBasePower: function(basePower, user, target, move) {
+			if (move && move.type === 'Dragon') {
+				return this.chainModify(1.1);
+			}
+		}
 	},
 	dragonscale: {
 		id: "dragonscale",
@@ -33,7 +37,7 @@ exports.BattleItems = {
 	},
 	lightball: {
 		inherit: true,
-		onModifyAtk: null
+		onModifyAtk: function() { }
 	},
 	metalpowder: {
 		inherit: true,

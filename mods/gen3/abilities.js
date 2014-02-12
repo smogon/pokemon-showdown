@@ -63,7 +63,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onResidualOrder: null,
 		onResidualSubOrder: null,
-		onResidual: null
+		onResidual: function() {}
 	},
 	"poisonpoint": {
 		inherit: true,
@@ -77,7 +77,7 @@ exports.BattleAbilities = {
 	},
 	"pressure": {
 		inherit: true,
-		onStart: null
+		onStart: function() { }
 	},
 	"rockhead": {
 		inherit: true,
