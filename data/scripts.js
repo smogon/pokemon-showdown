@@ -1795,7 +1795,7 @@ exports.BattleScripts = {
 		var moveKeys = Object.keys(template.viableDoublesMoves || template.viableMoves || template.learnset).randomize();
 		// Make protect viable for everyone
 		// Delete this once all Pokémon have viable doubles sets
-		if ('protect' in template.learnset) moveKeys.push('protect');
+		if (template.learnset && 'protect' in template.learnset) moveKeys.push('protect');
 		var moves = [];
 		var ability = '';
 		var item = '';
