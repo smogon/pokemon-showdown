@@ -52,6 +52,12 @@ exports.BattleItems = {
 		},
 		desc: "Activates at 25% HP. Next move used goes first. One-time use."
 	},
+	"ironball": {
+		inherit: true,
+		onModifyPokemon: function(pokemon) {
+			pokemon.negateImmunity['Ground'] = true;
+		}
+	},
 	"lifeorb": {
 		id: "lifeorb",
 		name: "Life Orb",
