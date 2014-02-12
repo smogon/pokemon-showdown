@@ -61,7 +61,7 @@ exports.BattleMovedex = {
 	beatup: {
 		inherit: true,
 		basePower: 10,
-		basePowerCallback: null
+		basePowerCallback: function() { }
 	},
 	bide: {
 		inherit: true,
@@ -74,7 +74,7 @@ exports.BattleMovedex = {
 	},
 	blizzard: {
 		inherit: true,
-		onModifyMove: null
+		onModifyMove: function() { }
 	},
 	bonerush: {
 		inherit: true,
@@ -362,7 +362,7 @@ exports.BattleMovedex = {
 	},
 	growth: {
 		inherit: true,
-		onModifyMove: null,
+		onModifyMove: function() { },
 		boosts: {
 			spa: 1
 		}

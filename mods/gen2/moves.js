@@ -78,7 +78,7 @@ exports.BattleMovedex = {
 	},
 	growth: {
 		inherit: true,
-		onModifyMove: null,
+		onModifyMove: function() { },
 		boosts: {
 			spa: 1
 		}
