@@ -551,10 +551,12 @@ var commands = exports.commands = {
 		}
 	},
 
+	eff: 'effectiveness',
+	type: 'effectiveness',
 	matchup: 'effectiveness',
 	effectiveness: function(target, room, user) {
 		var targets = target.split(/[,/]/).slice(0, 2);
-		if (targets.length !== 2) return this.parse('/help effectiveness');
+		if (targets.length !== 2) return this.sendReply("Attacker and defender must be separated with a comma.");
 
 		var searchMethods = {'getType':1, 'getMove':1, 'getTemplate':1};
 		var sourceMethods = {'getType':1, 'getMove':1};
@@ -569,7 +571,7 @@ var commands = exports.commands = {
 				foundData = Tools[method](targets[i]);
 				if (foundData.exists) break;
 			}
-			if (!foundData.exists) return this.sendReply("Attacker and defender must be separated with a comma.");
+			if (!foundData.exists) return this.parse('/help effectiveness');
 			if (!source && method in sourceMethods) {
 				if (foundData.type) {
 					source = foundData;
@@ -1163,10 +1165,10 @@ var commands = exports.commands = {
 			this.sendReply('all - change all timestamps preferences, lobby - change only lobby chat preferences, pms - change only PM preferences');
 			this.sendReply('off - set timestamps off, minutes - show timestamps of the form [hh:mm], seconds - show timestamps of the form [hh:mm:ss]');
 		}
-		if (target === 'all' || target === 'effectiveness') {
+		if (target === 'all' || target === 'effectiveness' || target === 'matchup' || target === 'eff' || target === 'type') {
 			matched = true;
-			this.sendReply('/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.');
-			this.sendReply('!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.');
+			this.sendReply('/effectiveness OR /matchup OR /eff OR /type [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.');
+			this.sendReply('!effectiveness OR /matchup OR !eff OR !type [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.');
 		}
 		if (target === 'all' || target === 'dexsearch') {
 			matched = true;
