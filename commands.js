@@ -696,7 +696,7 @@ var commands = exports.commands = {
                         }
                 } else {
                         if (groupName == "Owner") this.addModCommand(''+name+' was appointed to Room ' + groupName + ' by '+user.name+'.');
-                        if (!groupName == "Owner") this.addRoomCommand(''+name+' was appointed to Room ' + groupName + ' by '+user.name+'.',room.id);
+                        if (!groupName != "Owner") this.addRoomCommand(''+name+' was appointed to Room ' + groupName + ' by '+user.name+'.',room.id);
                 }
                 if (targetUser) {
                         targetUser.updateIdentity();
