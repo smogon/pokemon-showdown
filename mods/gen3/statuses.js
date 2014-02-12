@@ -32,9 +32,7 @@ exports.BattleStatuses = {
 	},
 	sandstorm: {
 		inherit: true,
-		onModifySpD: onModifySpD: function(spd, pokemon) {
-			return this.spd;
-		},
+		onModifySpD: function() {}
 	},
 	stall: {
 		// In gen 3, the chance of protect succeeding does not fall below 1/8.
