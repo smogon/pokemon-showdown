@@ -41,7 +41,7 @@ exports.BattleItems = {
 	},
 	"lightball": {
 		inherit: true,
-		onModifyAtk: null
+		onModifyAtk: function() { }
 	},
 	"magnet": {
 		inherit: true,
