@@ -110,7 +110,6 @@ exports.BattleMovedex = {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower')) {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
-			this.add('-fail', pokemon);
 			return false;
 		}
 	},
