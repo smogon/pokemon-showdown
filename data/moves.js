@@ -267,7 +267,7 @@ exports.BattleMovedex = {
 		onHit: function(pokemon) {
 			var newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
 			if (pokemon.side.active[newPosition].fainted) return false;
-			this.swapPosition(pokemon, newPosition);
+			this.swapPosition(pokemon, newPosition, 'move: Ally Switch');
 		},
 		secondary: false,
 		target: "self",

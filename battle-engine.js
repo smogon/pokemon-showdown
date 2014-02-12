@@ -2470,7 +2470,7 @@ var Battle = (function() {
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
 	};
-	Battle.prototype.swapPosition = function(source, newPos) {
+	Battle.prototype.swapPosition = function(source, newPos, from) {
 		var target = source.side.active[newPos];
 		if (target.fainted) return false;
 		var side = source.side;
@@ -2480,7 +2480,7 @@ var Battle = (function() {
 		side.active[newPos] = side.pokemon[newPos];
 		target.position = source.position;
 		source.position = newPos;
-		this.add('swap', source, target);
+		this.add('swap', source, target, (from ? '[from] ' + from : ''));
 		return true;
 	};
 	Battle.prototype.faint = function(pokemon, source, effect) {
