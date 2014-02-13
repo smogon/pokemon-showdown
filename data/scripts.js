@@ -1795,7 +1795,13 @@ exports.BattleScripts = {
 		var moveKeys = Object.keys(template.viableDoublesMoves || template.viableMoves || template.learnset).randomize();
 		// Make protect viable for everyone
 		// Delete this once all Pokémon have viable doubles sets
-		if (template.learnset && 'protect' in template.learnset) moveKeys.push('protect');
+		var hasProtectingMove = false;
+		for (var i in moveKeys; i < moveKeys.length && !hasProtectingMove; i++) {
+			if (moveKeys[i] in {'protect':1,'detect':1,'kingsshield':1,'spikyshield':1}) hasProtectingMove = true;
+		}
+		if (!hasProtectingMove) {
+			if (template.learnset && 'protect' in template.learnset) moveKeys.push('protect');
+		}
 		var moves = [];
 		var ability = '';
 		var item = '';
