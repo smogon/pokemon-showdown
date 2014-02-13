@@ -497,7 +497,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' is not in the room ' + room.id + '.');
 		}
 		if (targetUser.joinRoom(target) === false) return this.sendReply('User "' + targetUser.name + '" could not be joined to room ' + target + '. They could be banned from the room.');
-		var roomName = (targetRoom.isPrivate)? 'a private room' : 'room ' + target;
+		var roomName = (targetRoom.isPrivate)? 'a private room' : 'room ' + targetRoom.title;
 		this.addModCommand(targetUser.name + ' was redirected to ' + roomName + ' by ' + user.name + '.');
 		targetUser.leaveRoom(room);
 	},
