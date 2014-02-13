@@ -61,7 +61,7 @@ exports.BattleMovedex = {
 	beatup: {
 		inherit: true,
 		basePower: 10,
-		basePowerCallback: function() { }
+		basePowerCallback: undefined
 	},
 	bide: {
 		inherit: true,
