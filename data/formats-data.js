@@ -39,7 +39,7 @@ exports.BattleFormatsData = {
 	},
 	charmeleon: {
 		viableMoves: {"flamethrower":1,"overheat":1,"dragonpulse":1,"hiddenpowergrass":1,"fireblast":1,"dragondance":1,"flareblitz":1,"shadowclaw":1,"dragonclaw":1},
-		{"heatwave":1,"dragonpulse":1,"hiddenpowergrass":1,"fireblast":1,"protect":1},
+		viableDoublesMoves: {"heatwave":1,"dragonpulse":1,"hiddenpowergrass":1,"fireblast":1,"protect":1},
 		tier: "NFE"
 	},
 	charizard: {
@@ -92,7 +92,7 @@ exports.BattleFormatsData = {
 	},
 	butterfree: {
 		viableMoves: {"quiverdance":1,"roost":1,"bugbuzz":1,"substitute":1,"sleeppowder":1,"gigadrain":1,"psychic":1,"shadowball":1},
-		viableMoves: {"quiverdance":1,"bugbuzz":1,"substitute":1,"sleeppowder":1,"gigadrain":1,"psychic":1,"shadowball":1,"protect":1,},
+		viableDoublesMoves: {"quiverdance":1,"bugbuzz":1,"substitute":1,"sleeppowder":1,"gigadrain":1,"psychic":1,"shadowball":1,"protect":1,},
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["morningsun","psychic","sleeppowder","aerialace"]}
 		],
@@ -108,7 +108,7 @@ exports.BattleFormatsData = {
 	},
 	beedrill: {
 		viableMoves: {"toxicspikes":1,"xscissor":1,"swordsdance":1,"uturn":1,"endeavor":1,"poisonjab":1,"drillrun":1,"brickbreak":1,"knockoff":1},
-		viableMoves: {"xscissor":1,"uturn":1,"endeavor":1,"poisonjab":1,"drillrun":1,"brickbreak":1,"knockoff":1,"protect":1,"stringshot":1},
+		viableDoublesMoves: {"xscissor":1,"uturn":1,"endeavor":1,"poisonjab":1,"drillrun":1,"brickbreak":1,"knockoff":1,"protect":1,"stringshot":1},
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["batonpass","sludgebomb","twineedle","swordsdance"]}
 		],
