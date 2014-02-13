@@ -639,7 +639,7 @@ var commands = exports.commands = {
 
 	avatars: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown.');
+		this.sendReplyBox('Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown. Custom avatars are only obtainable by staff.');
 	},
 
 	introduction: 'intro',
@@ -1199,17 +1199,17 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
 		}
-		if (target === '%' || target === 'roomban') {
+		if (target === '%' || target === 'lock') {
 			matched = true;
-			this.sendReply('/roomban [username] - Bans the user from the room you are in. Requires: % @ & ~');
+			this.sendReply('/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'roomunban') {
+		if (target === '%' || target === 'unlock') {
 			matched = true;
-			this.sendReply('/roomunban [username] - Unbans the user from the room you are in. Requires: % @ & ~');
+			this.sendReply('/unlock [username] - Unlocks the user. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'redirect' || target === 'redir') {
 			matched = true;
-			this.sendReply('/redirect or /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~');
+			this.sendReply('/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'modnote') {
 			matched = true;
@@ -1222,6 +1222,14 @@ var commands = exports.commands = {
 		if (target === '%' || target === 'forcerename' || target === 'fr') {
 			matched = true;
 			this.sendReply('/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: % @ & ~');
+		}
+		if (target === '@' || target === 'roomban') {
+			matched = true;
+			this.sendReply('/roomban [username] - Bans the user from the room you are in. Requires: @ & ~');
+		}
+		if (target === '@' || target === 'roomunban') {
+			matched = true;
+			this.sendReply('/roomunban [username] - Unbans the user from the room you are in. Requires: @ & ~');
 		}
 		if (target === '@' || target === 'ban' || target === 'b') {
 			matched = true;
@@ -1253,15 +1261,15 @@ var commands = exports.commands = {
 		}
 		if (target === '%' || target === 'mute' || target === 'm') {
 			matched = true;
-			this.sendReply('/mute OR /m [username], [reason] - Mute user with reason for 7 minutes. Requires: % @ & ~');
+			this.sendReply('/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'hourmute' || target === 'hm') {
 			matched = true;
-			this.sendReply('/hourmute OR /hm [username], [reason] - Mute user with reason for an hour. Requires: % @ & ~');
+			this.sendReply('/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'unmute') {
 			matched = true;
-			this.sendReply('/unmute [username] - Remove mute from user. Requires: % @ & ~');
+			this.sendReply('/unmute [username] - Removes mute from user. Requires: % @ & ~');
 		}
 		if (target === '&' || target === 'promote') {
 			matched = true;
