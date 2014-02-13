@@ -1,3 +1,3 @@
 exports.BattleScripts = {
-	inherit: 'gen5'
+	inheritFrom: 'gen5'
 };
