@@ -656,7 +656,7 @@ module.exports = (function () {
 
 		mods.forEach(function(mod) {
 			if (fs.existsSync('./mods/'+mod+'/scripts.js')) {
-				parentMods[mod] = require('./mods/'+mod+'/scripts.js').BattleScripts.inherit || 'base';
+				parentMods[mod] = require('./mods/'+mod+'/scripts.js').BattleScripts.inheritFrom || 'base';
 			} else {
 				parentMods[mod] = 'base';
 			}
