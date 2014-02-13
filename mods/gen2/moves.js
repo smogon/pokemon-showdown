@@ -231,6 +231,5 @@ exports.BattleMovedex = {
 	whirlwind: {
 		inherit: true,
 		priority: -1
-	},
-	magikarpsrevenge: null
+	}
 };
