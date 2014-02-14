@@ -4,7 +4,6 @@
 exports.BattleScripts = {
 	inherit: 'gen3',
 	gen: 2,
-	init: function() { },
 	getStatCallback: function (stat, statName, pokemon) {
 		// Gen 2 caps stats at 999 and min is 1. Stats over 1023 with items roll over (Marowak, Pikachu)
 		if (pokemon.species === 'Marowak' && pokemon.item === 'thickclub' && statName === 'atk' && stat > 1023) {
