@@ -288,6 +288,7 @@ var commands = exports.commands = {
 	cpoof: function(target, room, user){
 		if(!user.can('broadcast')) return this.sendReply('/cpoof - Access Denied');
 		if (!target) return this.sendReply('/cpoof - Please specify a custom poof message to use.');
+		if (target.length > 100) return this.sendReply('/cpoof - Poof messages can\'t be longer than 100 characters.');
 		if(poofeh) {
 			var btags = '<strong><font color="'+hashColor(Math.random().toString())+'" >';
 			var etags = '</font></strong>'
