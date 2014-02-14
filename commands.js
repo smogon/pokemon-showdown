@@ -15,7 +15,6 @@ var crypto = require('crypto');
 
 var poofeh = true;
 
-var logeval = fs.createWriteStream('logs/eval.txt', {'flags': 'a'});
 var code = fs.createWriteStream('config/friendcodes.txt', {'flags': 'a'});
 
 var isMotd = false;
@@ -2804,19 +2803,18 @@ var commands = exports.commands = {
 			return this.sendReply("/eval - Access denied.");
 		}
 		if (!this.canBroadcast()) return;
+		this.logModCommand(user.name + ' used eval');
+		fs.appendFile('logs/eval.txt',user.name+' used eval: '+target+'\n');
 
 		if (!this.broadcasting) this.sendReply('||>> '+target);
 		try {
 			var battle = room.battle;
 			var me = user;
 			this.sendReply('||<< '+eval(target));
-			this.logModCommand(user.name + ' used eval');
 		} catch (e) {
 			this.sendReply('||<< error: '+e.message);
 			var stack = '||'+(''+e.stack).replace(/\n/g,'\n||');
 			connection.sendTo(room, stack);
-			this.logModCommand(user.name + ' used eval');
-			logeval.write('\n'+user.name+ ' used eval.  \"' + target + '\"');
 		}
 	},
 
