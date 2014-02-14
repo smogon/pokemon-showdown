@@ -3238,6 +3238,8 @@ function getRandMessage(user){
 		break;
 		case 34: message = message + user + ' was swallowed whole by a giant wigglytuff!';// Bought by Lyrical WigglyTuff 
 		break;
+		case 35: message = message + user + ' was fused with Zarif!'; //bought by Infernape/Zarif
+		break;
 		default: message = message + user + ' bought a poisoned Coke!';
 	};
 	message = message + ' ~~';
