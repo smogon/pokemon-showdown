@@ -32,7 +32,7 @@ exports.BattleStatuses = {
 	},
 	brnattackdrop: {
 		onBasePower: function(basePower, attacker, defender, move) {
-			if (move && attacker && this.getCategory(move) === 'Physical') {
+			if (move && move.category === 'Physical' && attacker) {
 				return basePower / 2;
 			}
 		}
