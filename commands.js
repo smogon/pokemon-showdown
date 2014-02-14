@@ -1099,8 +1099,13 @@ var commands = exports.commands = {
 			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
 		if (!this.can('warn', targetUser, room)) return false;
+		if (targetUser.punished) return this.sendReply(targetUser.name+' has recently been warned, muted, or locked. Please wait a few seconds before warning them.');
 		
 		targetUser.warnTimes += 1;
+		targetUser.punished = true;
+		targetUser.punishTimer = setTimeout(function(){
+			targetUser.punished = false;
+		},7000);
 
 		if (targetUser.warnTimes >= warnMax && !room.auth) {
 			if (targetUser.warnTimes === 4) {
@@ -1172,6 +1177,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 		if (!this.can('mute', targetUser, room)) return false;
+		if (targetUser.punished) return this.sendReply(targetUser.name+' has recently been warned, muted, or locked. Please wait a few seconds before muting them.');
 		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {
 			var problem = ' but was already '+(!targetUser.connected ? 'offline' : targetUser.locked ? 'locked' : 'muted');
 			if (!target && !room.auth) {
@@ -1185,6 +1191,10 @@ var commands = exports.commands = {
 			}
 		}
 		if (!room.auth) {
+			targetUser.punished = true;
+			targetUser.punishTimer = setTimeout(function(){
+				targetUser.punished = false;
+			},7000);
 			targetUser.popup(user.name+' has muted you for 7 minutes. '+target);
 			this.addModCommand(''+targetUser.name+' was muted by '+user.name+' for 7 minutes.' + (target ? " (" + target + ")" : ""));
 			var alts = targetUser.getAlts();
@@ -1219,6 +1229,7 @@ var commands = exports.commands = {
 			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
 		if (!this.can('mute', targetUser, room)) return false;
+		if (targetUser.punished) return this.sendReply(targetUser.name+' has recently been warned, muted, or locked. Please wait a few seconds before muting them.');
 		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {
 			var problem = ' but was already '+(!targetUser.connected ? 'offline' : targetUser.locked ? 'locked' : 'muted');
 			if (!target && !room.auth) {
@@ -1232,6 +1243,10 @@ var commands = exports.commands = {
 			}
 		}
 		if (!room.auth) {
+			targetUser.punished = true;
+			targetUser.punishTimer = setTimeout(function(){
+				targetUser.punished = false;
+			},7000);
 			targetUser.popup(user.name+' has muted you for 60 minutes. '+target);
 			this.addModCommand(''+targetUser.name+' was muted by '+user.name+' for 60 minutes.' + (target ? " (" + target + ")" : ""));
 			var alts = targetUser.getAlts();
@@ -1267,6 +1282,7 @@ var commands = exports.commands = {
 			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
 		}
 		if (!this.can('mute', targetUser, room)) return false;
+		if (targetUser.punished) return this.sendReply(targetUser.name+' has recently been warned, muted, or locked. Please wait a few seconds before muting them.');
 		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {
 			var problem = ' but was already '+(!targetUser.connected ? 'offline' : targetUser.locked ? 'locked' : 'muted');
 			if (!target && !room.auth) {
@@ -1280,6 +1296,10 @@ var commands = exports.commands = {
 			}
 		}
 		if (!room.auth) {
+			targetUser.punished = true;
+			targetUser.punishTimer = setTimeout(function(){
+				targetUser.punished = false;
+			},7000);
 			targetUser.popup(user.name+' has muted you for 24 hours. '+target);
 			this.addModCommand(''+targetUser.name+' was muted by '+user.name+' for 24 hours.' + (target ? " (" + target + ")" : ""));
 			var alts = targetUser.getAlts();
@@ -1339,10 +1359,16 @@ var commands = exports.commands = {
 		if (!user.can('lock', targetUser)) {
 			return this.sendReply('/lock - Access denied.');
 		}
+		if (targetUser.punished) return this.sendReply(targetUser.name+' has recently been warned, muted, or locked. Please wait a few seconds before locking them.');
 		if ((targetUser.locked || Users.checkBanned(targetUser.latestIp)) && !target) {
 			var problem = ' but was already '+(targetUser.locked ? 'locked' : 'banned');
 			return this.privateModCommand('('+targetUser.name+' would be locked by '+user.name+problem+'.)');
 		}
+
+		targetUser.punished = true;
+		targetUser.punishTimer = setTimeout(function(){
+			targetUser.punished = false;
+		},7000);
 
 		targetUser.popup(user.name+' has locked you from talking in chats, battles, and PMing regular users.\n\n'+target+'\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it.');
 		if (Rooms.rooms.logroom) Rooms.rooms.logroom.addRaw('LOCK LOG: ' + user.name + ' has locked ' + targetUser.name + ' from ' + room.id + '.');
