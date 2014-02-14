@@ -641,7 +641,12 @@ module.exports = (function () {
 		var ret = Object.create(tools);
 		tools.install(ret);
 		if (ret.init) {
-			ret.init();
+			if (parentMod && ret.init === moddedTools[parentMod].data.Scripts.init) {
+				// don't inherit init
+				delete ret.init;
+			} else {
+				ret.init();
+			}
 		}
 		return ret;
 	};
