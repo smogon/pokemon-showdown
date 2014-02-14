@@ -871,31 +871,34 @@ var User = (function () {
 					minutes = now.getUTCMinutes();
 				}
 				time = day+'/'+month+'/'+year+' '+hours+':'+minutes
-/*
+
 				match = false;
-				fs.readFile('logs/lastonline.txt','utf8',function(err, data){
-					if (err) data = '';
-					row = (''+data).split("\n");
-					line = '';
-					for (var i in row) {
-						parts = row[i].split(",");
-						if (toUserid(name) == parts[0]) {
-							match = true;
-							line = line + row[i];
-							break;
-						} 
-					}
+				try  { 
+					data = fs.readFileSync('logs/lastonline.txt','utf8');
+				} catch (e) {
+					data = '';
+				}
+				row = (''+data).split("\n");
+				line = '';
+				for (var i in row) {
+					parts = row[i].split(",");
+					if (!parts[1]) continue;
+					if (toUserid(name) == parts[0]) {
+						match = true;
+						line = line + row[i];
+						break;
+					} 
+				}
+				if (parts[1] != time) {
 					if (match === true) {
 						re = new RegExp(line,"g");
 						result = data.replace(re, toUserid(name)+','+time);
-						fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
-							if (err) return console.log(err);
-							match = false;
-						});
+						fs.writeFileSync('logs/lastonline.txt', result, 'utf8');
+						match = false;
 					} else {
 						fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
 					}
-				});*/
+				}
 
 				if (this.monoType === '') {
 					var rows = userTypes.split('\n');
@@ -1295,7 +1298,7 @@ var User = (function () {
 			// you can't leave the global room except while disconnecting
 			return false;
 		}
-		/*
+		
 		if (room.id == 'global') {
 
 			now = new Date();
@@ -1313,14 +1316,18 @@ var User = (function () {
 				minutes = now.getUTCMinutes();
 			}
 			time = day+'/'+month+'/'+year+' '+hours+':'+minutes
-			var data = fs.readFileSync('logs/lastonline.txt','utf8');
 
-			var row = (''+data).split("\n");
-			var line = '';
-			var parts = '';
-			for (var i = row.length; i > -1; i--) {
-				if (!row[i]) continue;
+			match = false;
+			try  { 
+				data = fs.readFileSync('logs/lastonline.txt','utf8');
+			} catch (e) {
+				data = '';
+			}
+			row = (''+data).split("\n");
+			line = '';
+			for (var i in row) {
 				parts = row[i].split(",");
+				if (!parts[1]) continue;
 				if (this.userid == parts[0]) {
 					match = true;
 					line = line + row[i];
@@ -1329,17 +1336,16 @@ var User = (function () {
 			}
 			if (parts[1] != time) {
 				if (match === true) {
-					var re = new RegExp(line,"g");
-					var result = data.replace(re, this.userid+','+time);
-					fs.writeFile('logs/lastonline.txt', result, 'utf8', function (err) {
-						if (err) return console.log(err);
-					});
+					re = new RegExp(line,"g");
+					result = data.replace(re, this.userid+','+time);
+					fs.writeFileSync('logs/lastonline.txt', result, 'utf8');
+					match = false;
 				} else {
 					fs.appendFile('logs/lastonline.txt',"\n"+this.userid+','+time);
 				}
 			}
 		}
-		*/
+		
 		for (var i=0; i<this.connections.length; i++) {
 			if (this.connections[i] === connection || !connection) {
 				if (this.connections[i].rooms[room.id]) {
