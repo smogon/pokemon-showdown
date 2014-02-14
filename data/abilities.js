@@ -968,9 +968,9 @@ exports.BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
 			if (this.isWeather('sunnyday') || this.random(2) === 0) {
-				if (!pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
-						pokemon.setItem(pokemon.lastItem);
-						this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Harvest');
+				if (pokemon.hp && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
+					pokemon.setItem(pokemon.lastItem);
+					this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Harvest');
 				}
 			}
 		},
