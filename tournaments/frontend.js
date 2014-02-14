@@ -109,6 +109,11 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.forceEnd = function () {
+		if (this.isTournamentStarted)
+			this.inProgressMatches.forEach(function (match) {
+				if (match)
+					delete match.room.win;
+			});
 		this.room.add('|tournament|forceend');
 	};
 
@@ -362,7 +367,7 @@ var Tournament = (function () {
 		if (matchFrom) {
 			this.generator.setUserBusy(matchFrom.to, false);
 			this.inProgressMatches.set(user, null);
-			matchFrom.room.win = matchFrom.room._win;
+			delete matchFrom.room.win;
 			matchFrom.room.forfeit(user);
 		}
 
@@ -374,7 +379,7 @@ var Tournament = (function () {
 		if (matchTo) {
 			this.generator.setUserBusy(matchTo, false);
 			var matchRoom = this.inProgressMatches.get(matchTo).room;
-			matchRoom.win = matchRoom._win;
+			delete matchRoom.win;
 			matchRoom.forfeit(user);
 			this.inProgressMatches.set(matchTo, null);
 		}
@@ -471,10 +476,9 @@ var Tournament = (function () {
 		this.update();
 
 		var self = this;
-		room._win = room.win;
 		room.win = function (winner) {
 			self.onBattleWin(this, Users.get(winner));
-			this._win(winner);
+			return Object.getPrototypeOf(this).win.call(this, winner);
 		};
 	};
 	Tournament.prototype.onBattleWin = function (room, winner) {
