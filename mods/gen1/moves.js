@@ -11,7 +11,6 @@ function clampIntRange(num, min, max) {
 exports.BattleMovedex = {
 	acid: {
 		inherit: true,
-		category: "Physical",
 		target: "normal"
 	},
 	amnesia: {
@@ -155,7 +154,6 @@ exports.BattleMovedex = {
 	clamp: {
 		inherit: true,
 		accuracy: 75,
-		category: "Special",
 		pp: 10,
 		volatileStatus: 'partiallytrapped',
 		self: {
@@ -218,10 +216,6 @@ exports.BattleMovedex = {
 			this.add('-fail', pokemon);
 			return false;
 		}
-	},
-	crabhammer: {
-		inherit: true,
-		category: "Special"
 	},
 	dig: {
 		inherit: true,
@@ -323,10 +317,6 @@ exports.BattleMovedex = {
 			status: 'brn'
 		}
 	},
-	firepunch: {
-		inherit: true,
-		category: "Special"
-	},
 	firespin: {
 		inherit: true,
 		accuracy: 70,
@@ -412,7 +402,6 @@ exports.BattleMovedex = {
 	},
 	gust: {
 		inherit: true,
-		category: "Physical",
 		type: "Normal"
 	},
 	haze: {
@@ -455,13 +444,8 @@ exports.BattleMovedex = {
 	},
 	hyperbeam: {
 		inherit: true,
-		category: "Physical",
 		desc: "Deals damage to a target. If this move is successful, the user must recharge on the following turn and cannot make a move, unless the opponent faints or a Substitute is destroyed.",
 		shortDesc: "User cannot move next turn unless target or substitute faints."
-	},
-	icepunch: {
-		inherit: true,
-		category: "Special"
 	},
 	jumpkick: {
 		inherit: true,
@@ -664,7 +648,6 @@ exports.BattleMovedex = {
 	},
 	razorleaf: {
 		inherit: true,
-		category: "Special",
 		target: "normal"
 	},
 	razorwind: {
@@ -786,10 +769,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		critRatio: 1
 	},
-	sludge: {
-		inherit: true,
-		category: "Physical"
-	},
 	softboiled: {
 		inherit: true,
 		heal: null,
@@ -800,10 +779,6 @@ exports.BattleMovedex = {
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
 		}
-	},
-	sonicboom: {
-		inherit: true,
-		category: "Physical"
 	},
 	struggle: {
 		num: 165,
@@ -918,20 +893,12 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	swift: {
-		inherit: true,
-		category: "Physical"
-	},
 	thunder: {
 		inherit: true,
 		secondary: {
 			chance: 10,
 			status: 'par'
 		}
-	},
-	thunderpunch: {
-		inherit: true,
-		category: "Special"
 	},
 	thunderwave: {
 		inherit: true,
@@ -945,16 +912,7 @@ exports.BattleMovedex = {
 	},
 	triattack: {
 		inherit: true,
-		category: "Physical",
 		secondary: false
-	},
-	vinewhip: {
-		inherit: true,
-		category: "Special"
-	},
-	waterfall: {
-		inherit: true,
-		category: "Special"
 	},
 	whirlwind: {
 		inherit: true,
