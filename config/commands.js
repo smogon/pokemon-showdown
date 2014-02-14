@@ -284,7 +284,7 @@ var commands = exports.commands = {
 				target = target.slice(1);
 			}
 
-			targetAbility = Tools.getAbility(targets[i]);
+			var targetAbility = Tools.getAbility(targets[i]);
 			if (targetAbility.exists) {
 				if (!searches['ability']) searches['ability'] = {};
 				if (Object.count(searches['ability'], true) === 1 && !isNotSearch) return this.sendReply('Specify only one ability.');
