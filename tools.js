@@ -112,7 +112,9 @@ module.exports = (function () {
 	};
 	Tools.prototype.modData = function(dataType, id) {
 		if (this.isBase) return this.data[dataType][id];
-		if (this.data[dataType][id] !== moddedTools.base.data[dataType][id]) return this.data[dataType][id];
+		var parentMod = this.data.Scripts.inherit;
+		if (!parentMod) parentMod = 'base';
+		if (this.data[dataType][id] !== moddedTools[parentMod].data[dataType][id]) return this.data[dataType][id];
 		return this.data[dataType][id] = Object.clone(this.data[dataType][id], true);
 	};
 
