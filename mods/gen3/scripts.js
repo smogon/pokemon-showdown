@@ -5,12 +5,14 @@ exports.BattleScripts = {
 		for (var i in this.data.Pokedex) {
 			delete this.data.Pokedex[i].abilities['H'];
 		}
-	},
-	getCategory: function(move) {
-		move = this.getMove(move);
-		if (!(move.category in {'Special':1,'Physical':1})) return move.category;
-		// overwrite categories
 		var specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
-		return specialTypes[move.type]? 'Special' : 'Physical';
+		var newCategory = '';
+		for (var i in this.data.Movedex) {
+			if (this.data.Movedex[i].category === 'Status') continue;
+			newCategory = specialTypes[this.data.Movedex[i].type]? 'Special' : 'Physical';
+			if (newCategory !== this.data.Movedex[i].category) {
+				this.modData('Movedex', i).category = newCategory;
+			}
+		}
 	}
 };
