@@ -588,6 +588,7 @@ exports.BattleScripts = {
 		}
 
 		// We check the category and typing to calculate later on the damage
+		move.category = this.getCategory(move);
 		if (!move.category) move.category = 'Physical';
 		if (!move.defensiveCategory) move.defensiveCategory = move.category;
 		// '???' is typeless damage: used for Struggle and Confusion etc
@@ -994,7 +995,7 @@ exports.BattleScripts = {
 				if (move.damage || move.damageCallback) {
 					counter['damage']++;
 				} else {
-					counter[move.category]++;
+					counter[this.getCategory(move)]++;
 				}
 				if (move.recoil) {
 					counter['recoil']++;
@@ -1065,10 +1066,11 @@ exports.BattleScripts = {
 					if (hasMove['recover']) rejected = true;
 					break;
 				} // End of switch for moveid
-				if (setupType === 'Physical' && move.category !== 'Physical' && counter['Physical'] < 2) {
+				var moveCategory = this.getCategory(move);
+				if (setupType === 'Physical' && moveCategory !== 'Physical' && counter['Physical'] < 2) {
 					rejected = true;
 				}
-				if (setupType === 'Special' && move.category !== 'Special' && counter['Special'] < 2) {
+				if (setupType === 'Special' && moveCategory !== 'Special' && counter['Special'] < 2) {
 					rejected = true;
 				}
 
