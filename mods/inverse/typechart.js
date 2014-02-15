@@ -1,5 +1,6 @@
 exports.BattleTypeChart = {
   "Bug": {
+    "inherit": true,
     "damageTaken": {
       "Bug": 0,
       "Dark": 0,
@@ -19,10 +20,10 @@ exports.BattleTypeChart = {
       "Rock": 2,
       "Steel": 0,
       "Water": 0
-    },
-    "HPivs": {"atk":30,"def":30,"spd":30}
+    }
   },
   "Dark": {
+    "inherit": true,
     "damageTaken": {
       "Bug": 2,
       "Dark": 1,
@@ -42,10 +43,10 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Steel": 0,
       "Water": 0
-    },
-    "HPivs": {}
+    }
   },
   "Dragon": {
+    "inherit": true,
     "damageTaken": {
       "Bug": 0,
       "Dark": 0,
@@ -65,10 +66,10 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Steel": 0,
       "Water": 1
-    },
-    "HPivs": {"atk":30}
+    }
   },
   "Electric": {
+    "inherit": true,
     "damageTaken": {
       par: 3,
       "Bug": 0,
@@ -89,10 +90,10 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Steel": 1,
       "Water": 0
-    },
-    "HPivs": {"spa":30}
+    }
   },
   "Fairy": {
+    "inherit": true,
     "damageTaken": {
       "Bug": 1,
       "Dark": 1,
@@ -115,7 +116,8 @@ exports.BattleTypeChart = {
     }
   },
   "Fighting": {
-    "damageTaken": {
+    "inherit": true,
+    ""damageTaken"": {
       "Bug": 1,
       "Dark": 1,
       "Dragon": 0,
@@ -134,10 +136,10 @@ exports.BattleTypeChart = {
       "Rock": 1,
       "Steel": 0,
       "Water": 0
-    },
-    "HPivs": {"def":30,"spa":30,"spd":30,"spe":30}
+    }
   },
   "Fire": {
+    "inherit": true,
     "damageTaken": {
       brn: 3,
       "Bug": 1,
@@ -158,10 +160,10 @@ exports.BattleTypeChart = {
       "Rock": 2,
       "Steel": 1,
       "Water": 2
-    },
-    "HPivs": {"atk":30,"spa":30,"spe":30}
+    }
   },
   "Flying": {
+    "inherit": true,
     "damageTaken": {
       "Bug": 1,
       "Dark": 0,
@@ -181,10 +183,10 @@ exports.BattleTypeChart = {
       "Rock": 2,
       "Steel": 0,
       "Water": 0
-    },
-    "HPivs": {"hp":30,"atk":30,"def":30,"spa":30,"spd":30}
+    }
   },
   "Ghost": {
+    "inherit": true,
     "damageTaken": {
       trapping: 3,
       "Bug": 1,
@@ -205,10 +207,10 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Steel": 0,
       "Water": 0
-    },
-    "HPivs": {"def":30,"spd":30}
+    }
   },
   "Grass": {
+    "inherit": true,
     "damageTaken": {
       powder: 3,
       "Bug": 2,
@@ -229,10 +231,10 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Steel": 0,
       "Water": 1
-    },
-    "HPivs": {"atk":30,"spa":30}
+    }
   },
   "Ground": {
+    "inherit": true,
     "damageTaken": {
       sandstorm: 3,
       "Bug": 0,
@@ -253,10 +255,10 @@ exports.BattleTypeChart = {
       "Rock": 1,
       "Steel": 0,
       "Water": 2
-    },
-    "HPivs": {"spa":30,"spd":30}
+    }
   },
   "Ice": {
+    "inherit": true,
     "damageTaken": {
       hail: 3,
       frz: 3,
@@ -278,10 +280,10 @@ exports.BattleTypeChart = {
       "Rock": 2,
       "Steel": 2,
       "Water": 0
-    },
-    "HPivs": {"atk":30,"def":30}
+    }
   },
   "Normal": {
+    "inherit": true,
     "damageTaken": {
       "Bug": 0,
       "Dark": 0,
@@ -304,6 +306,7 @@ exports.BattleTypeChart = {
     }
   },
   "Poison": {
+    "inherit": true,
     "damageTaken": {
       psn: 3,
       tox: 3,
@@ -325,10 +328,10 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Steel": 0,
       "Water": 0
-    },
-    "HPivs": {"def":30,"spa":30,"spd":30}
+    }
   },
   "Psychic": {
+    "inherit": true,
     "damageTaken": {
       "Bug": 2,
       "Dark": 2,
@@ -348,10 +351,10 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Steel": 0,
       "Water": 0
-    },
-    "HPivs": {"atk":30,"spe":30}
+    }
   },
   "Rock": {
+    "inherit": true,
     "damageTaken": {
       sandstorm: 3,
       "Bug": 0,
@@ -372,10 +375,10 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Steel": 2,
       "Water": 2
-    },
-    "HPivs": {"def":30,"spd":30,"spe":30}
+    }
   },
   "Steel": {
+    "inherit": true,
     "damageTaken": {
       psn: 3,
       tox: 3,
@@ -398,10 +401,10 @@ exports.BattleTypeChart = {
       "Rock": 1,
       "Steel": 1,
       "Water": 0
-    },
-    "HPivs": {"spd":30}
+    }
   },
   "Water": {
+    "inherit": true,
     "damageTaken": {
       "Bug": 0,
       "Dark": 0,
@@ -421,7 +424,6 @@ exports.BattleTypeChart = {
       "Rock": 0,
       "Steel": 1,
       "Water": 1
-    },
-    "HPivs": {"atk":30,"def":30,"spa":30}
+    }
   }
 };
