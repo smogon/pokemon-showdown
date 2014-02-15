@@ -754,6 +754,7 @@ var User = (function () {
 						user.muteDuration = Object.merge(user.muteDuration, this.muteDuration);
 						this.mutedRooms = {};
 						this.muteDuration = {};
+						this.locked = false;
 					}
 				}
 				for (var i=0; i<this.connections.length; i++) {
