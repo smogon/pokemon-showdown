@@ -1208,10 +1208,6 @@ exports.BattleScripts = {
 
 		// any moveset modification goes here
 		//moves[0] = 'Safeguard';
-		if (template.requiredMove && moves.indexOf(template.requiredMove) < 0) {
-			moves[0] = template.requiredMove;
-		}
-		
 		{
 			var abilities = [template.abilities['0']];
 			if (template.abilities['1']) {

@@ -3049,7 +3049,6 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":10,"nature":"Naughty","moves":["uproar","astonish","trick","thundershock"],"pokeball":"cherishball"}
 		],
-		requiredMove: "Overheat",
 		tier: "Limbo B"
 	},
 	rotomwash: {
@@ -3057,7 +3056,6 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":10,"nature":"Naughty","moves":["uproar","astonish","trick","thundershock"],"pokeball":"cherishball"}
 		],
-		requiredMove: "Hydro Pump",
 		tier: "OU"
 	},
 	rotomfrost: {
@@ -3065,7 +3063,6 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":10,"nature":"Naughty","moves":["uproar","astonish","trick","thundershock"],"pokeball":"cherishball"}
 		],
-		requiredMove: "Blizzard",
 		tier: "Limbo"
 	},
 	rotomfan: {
@@ -3073,7 +3070,6 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":10,"nature":"Naughty","moves":["uproar","astonish","trick","thundershock"],"pokeball":"cherishball"}
 		],
-		requiredMove: "Air Slash",
 		tier: "Limbo"
 	},
 	rotommow: {
@@ -3081,7 +3077,6 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":10,"nature":"Naughty","moves":["uproar","astonish","trick","thundershock"],"pokeball":"cherishball"}
 		],
-		requiredMove: "Leaf Storm",
 		tier: "Limbo"
 	},
 	uxie: {
