@@ -135,6 +135,10 @@ exports.BattleFormats = {
 					problems.push((set.name||set.species) + ' needs to hold '+template.requiredItem+'.');
 				}
 			}
+			if (template.requiredMove && set.moves.indexOf(template.requiredMove) < 0) {
+				// Rotom formes require their special move
+				problems.push(set.species + ' requires the move ' + template.requiredMove + '.');
+			}
 			if (template.num == 351) { // Castform
 				set.species = 'Castform';
 			}

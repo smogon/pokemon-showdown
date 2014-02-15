@@ -1208,6 +1208,10 @@ exports.BattleScripts = {
 
 		// any moveset modification goes here
 		//moves[0] = 'Safeguard';
+		if (template.requiredMove && moves.indexOf(template.requiredMove) < 0) {
+			moves[0] = template.requiredMove;
+		}
+		
 		{
 			var abilities = [template.abilities['0']];
 			if (template.abilities['1']) {
@@ -1551,7 +1555,6 @@ exports.BattleScripts = {
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
-		if (template.name === 'Chandelure' && ability === 'Shadow Tag') level = 70;
 		if (template.name === 'Serperior' && ability === 'Contrary') level = 74;
 		if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 85;
 		if (template.name === 'Spinda' && ability !== 'Contrary') level = 95;
