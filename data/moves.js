@@ -7028,7 +7028,8 @@ exports.BattleMovedex = {
 					target.removeVolatile('kingsshield');
 					return;
 				}
-				if (move && (move.category === 'Status' || move.isNotProtectable || move.id === 'suckerpunch')) return;
+				// TODO: Find a better way to implement the following hardcoded exceptions
+				if (move && (move.category === 'Status' || move.isNotProtectable || move.id === 'suckerpunch' || move.id === 'fakeout')) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -12222,7 +12223,8 @@ exports.BattleMovedex = {
 					target.removeVolatile('spikyshield');
 					return;
 				}
-				if (move && move.target === 'self') return;
+				// TODO: Find a better way to implement the following hardcoded exceptions
+				if (move && (move.target === 'self' || move.id === 'suckerpunch' || move.id === 'fakeout')) return;
 				this.add('-activate', target, 'move: Protect');
 				if (move.isContact) {
 					this.damage(source.maxhp/8, source, target);
