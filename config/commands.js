@@ -810,7 +810,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '<a href="http://www.smogon.com/sim/staff_faq">Staff FAQ</a><br />';
 		}
-		if (target === 'all' || target === 'autoconfirmed') {
+		if (target === 'all' || target === 'autoconfirmed' || target === 'ac') {
 			matched = true;
 			buffer += 'A user is autoconfirmed when they have won at least one rated battle and has been registered for a week or longer.<br />';
 		}
