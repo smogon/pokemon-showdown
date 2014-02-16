@@ -628,7 +628,7 @@ var commands = exports.commands = {
 		this.sendReplyBox('+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
 			'% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />' +
 			'@ <b>Moderator</b> - The above, and they can ban users<br />' +
-			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />' +
+			'&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />' +
 			'~ <b>Administrator</b> - They can do anything, like change what this message says<br />' +
 			'# <b>Room Owner</b> - They are administrators of the room and can almost totally control it');
 	},
@@ -729,6 +729,10 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'omotm' || target === 'omofthemonth' || target === 'month') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3481155/">OM of the Month</a>';
+		}
+		if (target === 'all' || target === 'index') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/other-metagames-index.3472405/">OM Index</a><br />';
 		}
 		if (!matched) {
 			return this.sendReply('The Other Metas entry "'+target+'" was not found. Try /othermetas or /om for general help.');
@@ -1188,7 +1192,7 @@ var commands = exports.commands = {
 			this.sendReply('/effectiveness OR /matchup OR /eff OR /type [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.');
 			this.sendReply('!effectiveness OR /matchup OR !eff OR !type [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.');
 		}
-		if (target === 'all' || target === 'dexsearch') {
+		if (target === 'all' || target === 'dexsearch' || target === 'dsearch') {
 			matched = true;
 			this.sendReply('/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.');
 			this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
@@ -1217,7 +1221,7 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
 		}
-		if (target === '%' || target === 'lock') {
+		if (target === '%' || target === 'lock' || target === 'l') {
 			matched = true;
 			this.sendReply('/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~');
 		}
@@ -1241,7 +1245,7 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/forcerename OR /fr [username], [reason] - Forcibly change a user\'s name and shows them the [reason]. Requires: % @ & ~');
 		}
-		if (target === '@' || target === 'roomban') {
+		if (target === '@' || target === 'roomban' || target === 'rb') {
 			matched = true;
 			this.sendReply('/roomban [username] - Bans the user from the room you are in. Requires: @ & ~');
 		}
@@ -1285,7 +1289,7 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'unmute') {
+		if (target === '%' || target === 'unmute' || target === 'um') {
 			matched = true;
 			this.sendReply('/unmute [username] - Removes mute from user. Requires: % @ & ~');
 		}
