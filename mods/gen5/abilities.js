@@ -34,18 +34,5 @@ exports.BattleAbilities = {
 	"overcoat": {
 		inherit: true,
 		onTryHit: function() {}
-	},
-	"poisontouch": {
-		inherit: true,
-		onModifyMove: function(move) {
-			if (!move || !move.isContact) return;
-			if (!move.secondaries) {
-				move.secondaries = [];
-			}
-			move.secondaries.push({
-				chance: 30,
-				status: 'psn'
-			});
-		}
 	}
 };
