@@ -3165,7 +3165,7 @@ var commands = exports.commands = {
 //poof functions, still not neat
 function getRandMessage(user){
 	user = escapeHTML(user.name);
-	var numMessages = 35; // numMessages will always be the highest case # + 1 //increasing this will make the default appear more often
+	var numMessages = 37; // numMessages will always be the highest case # + 1 //increasing this will make the default appear more often
 	var message = '~~ ';
 	switch(Math.floor(Math.random()*numMessages)){
 		case 0: message = message + user + ' got spanked too hard by BrittleWind!';
@@ -3208,7 +3208,7 @@ function getRandMessage(user){
 		break;
 		case 19: message = message + user + ' woke up an angry Snorlax!';
 		break;
-		case 20: message = message + user + ' was forced to give jd an oil massage (boiling oil)!'; //huehue
+		case 20: message = message + user + ' was forced to give jd an oil massage (boiling oil)!'; 
 		break;
 		case 21: message = message + user + ' was used as shark bait!';
 		break;
@@ -3232,7 +3232,7 @@ function getRandMessage(user){
 		break;
 		case 31: message = message + user + ' left for a timeout!';
 		break;
-		case 32: message = message + user + ' fell into a snake pit!'; //huehuehue how long until someone notices
+		case 32: message = message + user + ' fell into a snake pit!'; 
 		break;
 		case 33: message = message + user + ' got eaten by sharks!';
 		break;
@@ -3240,6 +3240,7 @@ function getRandMessage(user){
 		break;
 		case 35: message = message + user + ' was fused with Zarif!'; //bought by Infernape/Zarif
 		break;
+		case 36: message = message + user + ' fades into nothingness!'; // bought by Unknown's Remnant
 		default: message = message + user + ' bought a poisoned Coke!';
 	};
 	message = message + ' ~~';
