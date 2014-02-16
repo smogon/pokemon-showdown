@@ -620,7 +620,8 @@ var commands = exports.commands = {
 		} else {
 			uptimeText = uptime.seconds().duration();
 		}
-		this.sendReplyBox('Uptime: <b>'+uptimeText+'</b>');
+		this.sendReplyBox('Uptime: <b>'+uptimeText+'</b><br />' +
+		'<em>Uptime is how long the server has been up for since the last restart.</em>');
 	},
 
 	groups: function(target, room, user) {
@@ -640,7 +641,7 @@ var commands = exports.commands = {
 
 	avatars: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown. Custom avatars are only obtainable by staff.');
+	this.sendReplyBox('Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown. Alternatively, you can type /avatar [new avatar number] into the chat. Custom avatars (and colors) are only obtainable by global staff .');
 	},
 
 	introduction: 'intro',
@@ -1038,7 +1039,7 @@ var commands = exports.commands = {
 
 	register: function() {
 		if (!this.canBroadcast()) return;
-		this.sendReply("You must win a rated battle to register.");
+		this.sendReplyBox("You can register using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown. You may also register by winning a rated battle (using the 'Look for a Battle' button. Once you win a rated battle and are registered for one week, you become autoconfirmed!")
 	},
 
 	br: 'banredirect',
