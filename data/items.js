@@ -3408,7 +3408,7 @@ exports.BattleItems = {
 		onAfterDamageOrder: 2,
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				this.damage(source.maxhp/6, source, target);
+				this.damage(source.maxhp/8, source, target);
 			}
 		},
 		num: 540,
