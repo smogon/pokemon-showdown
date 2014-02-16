@@ -544,6 +544,10 @@ var Validator = (function() {
 		var alreadyChecked = {};
 		var level = set.level || 100;
 
+		var isHidden = false;
+		if (set.ability && tools.getAbility(set.ability).name === template.abilities['H']) isHidden = true;
+		var incompatibleHidden = false;
+
 		var limit1 = true;
 		var sketch = false;
 
@@ -589,6 +593,11 @@ var Validator = (function() {
 						var learned = lset[i];
 						if (noPastGen && learned.charAt(0) !== '6') continue;
 						if (parseInt(learned.charAt(0),10) > tools.gen) continue;
+						if (isHidden && !tools.mod('gen'+learned.charAt(0)).getTemplate(template.species).abilities['H']) {
+							// check if the Pokemon's hidden ability was available
+							incompatibleHidden = true;
+							continue;
+						}
 						if (!template.isNonstandard) {
 							// HMs can't be transferred
 							if (tools.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
@@ -714,6 +723,7 @@ var Validator = (function() {
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
 			if (noPastGen && sometimesPossible) return {type:'pokebank'};
+			if (incompatibleHidden) return {type:'incompatible'};
 			return true;
 		}
 		if (!sources.length) sources = null;
