@@ -1945,7 +1945,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's contact moves have a 30% chance of poisoning.",
 		// upokecenter says this is implemented as an added secondary effect
 		onModifyMove: function(move) {
-			if (!move) return;
+			if (!move || !move.isContact) return;
 			if (!move.secondaries) {
 				move.secondaries = [];
 			}
