@@ -1218,6 +1218,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	unknownsremnant: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=150 src="http://i701.photobucket.com/albums/ww16/jacoby746/Kingdom%20Hearts%20Sprites/roxas2.gif">' +
+			'<img width=450 src="http://i926.photobucket.com/albums/ad103/reddas97/previewphp_zps559297e6.jpg">' +
+			'<img height=150 src="http://i701.photobucket.com/albums/ww16/jacoby746/Kingdom%20Hearts%20Sprites/Demyx2.gif"><br />' +
+			'<b>Ace: </b>The Darkness <br />' +
+			'A person is very strong when he seeks to protect something. I\'ll expect a good fight.');
+	},
+
 	mattz: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img width="100" height="100" src="http://i.imgur.com/8Wq1oDL.gif">' +
