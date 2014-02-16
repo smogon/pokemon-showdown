@@ -3222,13 +3222,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onSetStatus: function(status, target, source, effect) {
-				if (status.id === 'slp' && !target.runImmunity('Ground')) {
+				if (status.id === 'slp' && target.runImmunity('Ground')) {
 					this.debug('Interrupting sleep from Electric Terrain');
 					return false;
 				}
 			},
 			onBasePower: function(basePower, attacker, defender, move) {
-				if (move.type === 'Electric' && !attacker.runImmunity('Ground')) {
+				if (move.type === 'Electric' && attacker.runImmunity('Ground')) {
 					this.debug('electric terrain boost');
 					return this.chainModify(1.5);
 				}
@@ -5170,7 +5170,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onBasePower: function(basePower, attacker, defender, move) {
-				if (move.type === 'Grass' && !attacker.runImmunity('Ground')) {
+				if (move.type === 'Grass' && attacker.runImmunity('Ground')) {
 					this.debug('grassy terrain boost');
 					return this.chainModify(1.5);
 				}
@@ -8414,7 +8414,7 @@ exports.BattleMovedex = {
 				}
 			},
 			onBasePower: function(basePower, attacker, defender, move) {
-				if (move.type === 'Dragon' && !defender.runImmunity('Ground')) {
+				if (move.type === 'Dragon' && defender.runImmunity('Ground')) {
 					this.debug('misty terrain weaken');
 					return this.chainModify(0.5);
 				}
