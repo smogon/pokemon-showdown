@@ -230,6 +230,9 @@ exports.BattleItems = {
 		id: "assaultvest",
 		name: "Assault Vest",
 		spritenum: 0,
+		fling: {
+			basePower: 80
+		},
 		onModifySpDPriority: 1,
 		onModifySpD: function(spd) {
 			return this.chainModify(1.5);
@@ -4213,6 +4216,9 @@ exports.BattleItems = {
 		id: "weaknesspolicy",
 		name: "Weakness Policy",
 		spritenum: 0,
+		fling: {
+			basePower: 80
+		},
 		onHit: function(target, source, move) {
 			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && this.getEffectiveness(move, target) > 0 && target.useItem()) {
 				this.boost({atk: 2, spa: 2});
