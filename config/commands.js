@@ -778,26 +778,22 @@ var commands = exports.commands = {
 	rules: function(target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
-			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
-			if (!room.rules) return this.sendReplyBox('Please follow the rules:<br />' +
-			'- <a href="http://pokemonshowdown.com/rules">Rules</a><br />' +
-			'</div>');
 			this.sendReplyBox('Please follow the rules:<br />' +
 			'- <a href="http://pokemonshowdown.com/rules">Rules</a><br />' +
-			'- ' + room.rules.replace(re, "<a href=\"$1\">$1</a>") + ' ' + room.title + ' room rules</a><br />' +
+			(room.rulesLink ? '- <a href="' + sanitize(room.rulesLink) + '">' + sanitize(room.title) + ' room rules</a><br />' : '') +
 			'</div>');
 			return;
 		}
-		if (!this.can('roommod', null, room)) return false;
-		if (target.length > 40) {
-			return this.sendReply('Error: Room rules link is too long (must be under 40 characters). You can use a URL shortener to shorten the link.');
+		if (!this.can('roommod', null, room)) return;
+		if (target.length > 80) {
+			return this.sendReply('Error: Room rules link is too long (must be under 80 characters). You can use a URL shortener to shorten the link.');
 		}
 
-		room.rules = target;
+		room.rulesLink = target.trim();
 		this.sendReply('(The room rules link is now: '+target+')');
 
 		if (room.chatRoomData) {
-			room.chatRoomData.rules = room.rules;
+			room.chatRoomData.rulesLink = room.rulesLink;
 			Rooms.global.writeChatRoomData();
 		}
 	},
