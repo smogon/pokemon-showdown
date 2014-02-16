@@ -441,7 +441,8 @@ exports.BattleItems = {
 			if (source && source !== target && move && move.isContact) {
 				this.damage(source.maxhp/6, source, target);
 			}
-		}
+		},
+		desc: "If holder is hit by a contact move, the attacker loses 1/6 of its max HP."
 	},
 	rowapberry: {
 		inherit: true,
