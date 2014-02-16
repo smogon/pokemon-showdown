@@ -3227,12 +3227,6 @@ exports.BattleMovedex = {
 					return false;
 				}
 			},
-			onUpdate: function(pokemon) {
-				if (pokemon.status === 'slp') {
-					this.debug('Waking up from Electric Terrain');
-					pokemon.cureStatus();
-				}
-			},
 			onBasePower: function(basePower, attacker, defender, move) {
 				if (move.type === 'Electric' && !attacker.runImmunity('Ground')) {
 					this.debug('electric terrain boost');
