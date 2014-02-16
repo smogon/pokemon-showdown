@@ -59,7 +59,7 @@ exports.BattleMovedex = {
 	bide: {
 		inherit: true,
 		affectedByImmunities: false
-	}
+	},
 	blizzard: {
 		inherit: true,
 		basePower: 120
