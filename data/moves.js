@@ -907,7 +907,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		isContact: true,
 		volatileStatus: 'bide',
-		affectedByImmunities: false,
+		affectedByImmunities: true,
 		effect: {
 			duration: 3,
 			onLockMove: 'bide',
