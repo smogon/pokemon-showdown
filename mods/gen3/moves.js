@@ -380,8 +380,8 @@ exports.BattleMovedex = {
 		name: "Hidden Power",
 		pp: 15,
 		priority: 0,
-		onBeforeMove: function(attacker, defender, move) {
-			move.type = attacker.hpType || 'Dark';
+		onModifyMove: function(move, pokemon) {
+			move.type = pokemon.hpType || 'Dark';
 			var specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
 			move.category = specialTypes[move.type]? 'Special' : 'Physical';
 		},
