@@ -27,14 +27,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
-	},
-	{
-		name: "OU (suspect test)",
-		section: "XY Singles",
-
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Genesect', 'Deoxys-Speed']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
 	},
 	{
 		name: "Ubers",
@@ -56,7 +49,7 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela']
+		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Swirlix', 'Gligar']
 	},
 	{
 		name: "LC UU",
@@ -147,13 +140,22 @@ exports.Formats = [
 	// XY Doubles
 	///////////////////////////////////////////////////////////////////
 
+	
 	{
-		name: "Smogon Doubles",
+		name: "Random Doubles Battle",
 		section: "XY Doubles",
 
 		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Dark Void', 'Soul Dew',
+		team: 'randomDoubles',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "Smogon Doubles (suspect test)",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
 			'Lugia',
 			'Ho-Oh',
@@ -203,12 +205,10 @@ exports.Formats = [
 			'Kyurem-White',
 			'Xerneas',
 			'Yveltal',
-			'Abomasnow',
 			'Aegislash',
 			'Alakazam',
 			'Amoonguss',
 			'Azumarill',
-			'Blaziken',
 			'Breloom',
 			'Chandelure',
 			'Charizard',
@@ -235,33 +235,30 @@ exports.Formats = [
 			'Kangaskhan',
 			'Klefki',
 			'Landorus-Therian',
-			'Latios',
 			'Lucario',
-			'Malamar',
 			'Mamoswine',
 			'Manectric',
 			'Mawile',
+			'Meowstic',
 			'Metagross',
 			'Ninetales',
 			'Politoed',
 			'Reuniclus',
 			'Rotom-Wash',
+			'Rhyperior',
 			'Sableye',
-			'Salamence',
 			'Scizor',
 			'Scrafty',
 			'Sylveon',
 			'Talonflame',
 			'Terrakion',
 			'Thundurus',
-			'Thundurus-Therian',
 			'Togekiss',
 			'Trevenant',
 			'Tyranitar',
 			'Venusaur',
 			'Volcarona',
-			'Whimsicott',
-			'Zapdos']
+			'Whimsicott']
 	},
 	{
 		name: "XY Battle Spot Doubles",
@@ -327,32 +324,25 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Seasonal] Winter's Wont",
+		name: "[Seasonal] Fabulous February",
 		section: "OM of the Month",
 
 		mod: 'inverse',
 		gameType: 'doubles',
-		team: 'randomSeasonalWinter',
+		team: 'randomSeasonalFF',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
-		maxLevel: 1000,
 		onBegin: function() {
-			this.setWeather('Hail');
-			delete this.weatherData.duration;
+			this.add('-message', "新年快乐");
+		},
+		onModifyMove: function(move) {
+			if (move.id === 'explosion') move.name = 'Firecrackers';
+			else if (move.type === 'Fire') move.name = 'Fireworks';
 		}
-	},
-	{
-		name: "Averagemons",
-		section: "OM of the Month",
-
-		mod: 'averagemons',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Soul Dew', 'Thick Club', 'Deepseatooth', 'Deepseascale', 'Light Ball', 'Mawilite', 'Medichamite', 'Eviolite', 'Shedinja', 'Smeargle', 'Huge Power', 'Pure Power']
 	},
 	{
 		name: "Middle Cup",
 		section: "OM of the Month",
-		
-		searchShow: false,
+
 		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
 		banlist: ['Illegal', 'Eviolite'],
 		maxLevel: 50,
@@ -501,6 +491,15 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Ability Exchange Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Ignore Illegal Abilities', 'Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Slaking', 'Regigigas']
+	},
+	{
+		name: "Averagemons",
+		section: "Other Metagames",
+
+		searchShow: false,
+		mod: 'averagemons',
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Soul Dew', 'Thick Club', 'Deepseatooth', 'Deepseascale', 'Light Ball', 'Mawilite', 'Medichamite', 'Eviolite', 'Shedinja', 'Smeargle', 'Huge Power', 'Pure Power']
 	},
 	{
 		name: "Gen-NEXT OU",
@@ -713,6 +712,16 @@ exports.Formats = [
 		searchShow: false,
 		debug: true,
 		ruleset: []
+	},
+	{
+		name: "[Gen 3] OU (beta)",
+		section: "Past Generations",
+
+		mod: 'gen3',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber'],
+
+		column: 2
 	},
 	{
 		name: "[Gen 3] Hackmons",

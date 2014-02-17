@@ -189,7 +189,6 @@ exports.appealUri = '';
 //     - disableladder: /disableladder and /enable ladder commands.
 //     - forcepromote: Ability to promote a user even if they're offline and unauthed.
 //     - forcerename: /forcerename command.
-//     - forcerenameto: /forcerenameto command.
 //     - forcewin: /forcewin command.
 //     - gdeclare: /gdeclare and /cdeclare commands.
 //     - hotpatch: /hotpatch, /updateserver and /crashfixed commands. Also used to identify an admin.
@@ -239,7 +238,7 @@ exports.groups = {
 		'&': {
 			id: 'leader',
 			name: "Leader",
-			description: "They can promote moderators and force ties",
+			description: "They can promote to moderator and force ties",
 			inherit: '@',
 			jurisdiction: '@u',
 			banword: true,
@@ -288,7 +287,7 @@ exports.groups = {
 		'%': {
 			id: 'driver',
 			name: "Driver",
-			description: "They can mute, lock and check users for alts",
+			description: "They can mute. Global % can also lock and check users for alts",
 			inherit: '+',
 			jurisdiction: 'u',
 			alts: '%u',

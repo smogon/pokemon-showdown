@@ -28,7 +28,7 @@ if (!process.send) {
 		callbacks[localGuid] = callback;
 		callbackData[localGuid] = data;
 		child.send({data: data, sig: signature, guid: localGuid});
-	}
+	};
 	child.on('message', function(response) {
 		if (callbacks[response.guid]) {
 			callbacks[response.guid](response.success, callbackData[response.guid]);
