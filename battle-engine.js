@@ -345,6 +345,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.illusion = null;
 	BattlePokemon.prototype.fainted = false;
 	BattlePokemon.prototype.lastItem = '';
+	BattlePokemon.prototype.ateBerry = false;
 	BattlePokemon.prototype.status = '';
 	BattlePokemon.prototype.position = 0;
 
@@ -953,6 +954,7 @@ var BattlePokemon = (function() {
 			this.item = '';
 			this.itemData = {id: '', target: this};
 			this.usedItemThisTurn = true;
+			this.ateBerry = true;
 			return true;
 		}
 		return false;
@@ -2468,7 +2470,7 @@ var Battle = (function() {
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
 	};
-	Battle.prototype.swapPosition = function(source, newPos) {
+	Battle.prototype.swapPosition = function(source, newPos, from) {
 		var target = source.side.active[newPos];
 		if (target.fainted) return false;
 		var side = source.side;
@@ -2478,7 +2480,7 @@ var Battle = (function() {
 		side.active[newPos] = side.pokemon[newPos];
 		target.position = source.position;
 		source.position = newPos;
-		this.add('swap', source, target);
+		this.add('swap', source, target, (from ? '[from] ' + from : ''));
 		return true;
 	};
 	Battle.prototype.faint = function(pokemon, source, effect) {

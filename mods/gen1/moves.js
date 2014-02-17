@@ -9,19 +9,8 @@ function clampIntRange(num, min, max) {
 	return num;
 }
 exports.BattleMovedex = {
-	absorb: {
-		inherit: true,
-		pp: 20
-	},
 	acid: {
 		inherit: true,
-		category: "Physical",
-		secondary: {
-			chance: 10,
-			boosts: {
-				def: -1
-			}
-		},
 		target: "normal"
 	},
 	amnesia: {
@@ -122,7 +111,6 @@ exports.BattleMovedex = {
 	},
 	bind: {
 		inherit: true,
-		accuracy: 75,
 		affectedByImmunities: false,
 		volatileStatus: 'partiallytrapped',
 		self: {
@@ -157,49 +145,15 @@ exports.BattleMovedex = {
 	blizzard: {
 		inherit: true,
 		accuracy: 90,
-		secondary: {
-			chance: 10,
-			status: 'frz'
-		},
 		target: "normal"
-	},
-	bodyslam: {
-		inherit: true,
-		secondary: {
-			chance: 30,
-			status: 'par'
-		}
-	},
-	boneclub: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			volatileStatus: 'flinch'
-		}
 	},
 	bubble: {
 		inherit: true,
-		secondary: {
-			chance: 10,
-			boosts: {
-				spe: -1
-			}
-		},
 		target: "normal"
-	},
-	bubblebeam: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			boosts: {
-				spe: -1
-			}
-		}
 	},
 	clamp: {
 		inherit: true,
 		accuracy: 75,
-		category: "Special",
 		pp: 10,
 		volatileStatus: 'partiallytrapped',
 		self: {
@@ -220,22 +174,6 @@ exports.BattleMovedex = {
 				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration > 1) {
 					target.volatiles['partiallytrapped'].duration = 2;
 				}
-			}
-		}
-	},
-	confusion: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			volatileStatus: 'confusion'
-		}
-	},
-	constrict: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			boosts: {
-				spe: -1
 			}
 		}
 	},
@@ -279,11 +217,6 @@ exports.BattleMovedex = {
 			return false;
 		}
 	},
-	crabhammer: {
-		inherit: true,
-		accuracy: 85,
-		category: "Special"
-	},
 	dig: {
 		inherit: true,
 		basePower: 100,
@@ -319,7 +252,6 @@ exports.BattleMovedex = {
 	},
 	disable: {
 		inherit: true,
-		accuracy: 55,
 		desc: "The target cannot choose a random move for 0-6 turns. Disable only works on one move at a time and fails if the target has not yet used a move or if its move has run out of PP. The target does nothing if it is about to use a move that becomes disabled.",
 		effect: {
 			duration: 4,
@@ -371,23 +303,6 @@ exports.BattleMovedex = {
 		shortDesc: "Has 25% recoil.",
 		recoil: [25,100]
 	},
-	dreameater: {
-		inherit: true,
-		desc: "Deals damage to one adjacent target, if it is asleep and does not have a Substitute. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
-		onTryHit: function(target) {
-			if (target.status !== 'slp' || target.volatiles['substitute']) {
-				this.add('-immune', target, '[msg]');
-				return null;
-			}
-		}
-	},
-	ember: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			status: 'brn'
-		}
-	},
 	explosion: {
 		inherit: true,
 		basePower: 340,
@@ -401,10 +316,6 @@ exports.BattleMovedex = {
 			chance: 30,
 			status: 'brn'
 		}
-	},
-	firepunch: {
-		inherit: true,
-		category: "Special"
 	},
 	firespin: {
 		inherit: true,
@@ -432,20 +343,8 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	flamethrower: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			status: 'brn'
-		}
-	},
-	flash: {
-		inherit: true,
-		accuracy: 70
-	},
 	fly: {
 		inherit: true,
-		basePower: 70,
 		desc: "Deals damage to target. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns. (Field: Can be used to fly to a previously visited area.)",
 		shortDesc: "Flies up on first turn, then strikes the next turn.",
 		effect: {
@@ -490,13 +389,12 @@ exports.BattleMovedex = {
 	},
 	glare: {
 		inherit: true,
-		accuracy: 75
+		affectedByImmunities: false
 	},
 	growth: {
 		inherit: true,
 		desc: "Raises the user's Special by 1 stage.",
 		shortDesc: "Boosts the user's Special by 1.",
-		onModifyMove: undefined,
 		boosts: {
 			spa: 1,
 			spd: 1
@@ -504,7 +402,6 @@ exports.BattleMovedex = {
 	},
 	gust: {
 		inherit: true,
-		category: "Physical",
 		type: "Normal"
 	},
 	haze: {
@@ -535,19 +432,10 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	headbutt: {
-		inherit: true,
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch'
-		}
-	},
 	highjumpkick: {
 		inherit: true,
-		basePower: 85,
 		desc: "If this attack misses the target, the user takes 1 HP of damage.",
 		shortDesc: "User takes 1 HP damage it would have dealt if miss.",
-		pp: 20,
 		onMoveFail: function(target, source, move) {
 			if (target.type !== 'ghost') {
 				this.damage(1, source);
@@ -556,38 +444,13 @@ exports.BattleMovedex = {
 	},
 	hyperbeam: {
 		inherit: true,
-		category: "Physical",
 		desc: "Deals damage to a target. If this move is successful, the user must recharge on the following turn and cannot make a move, unless the opponent faints or a Substitute is destroyed.",
-		shortDesc: "User cannot move next turn unless target or substitute faints.",
-	},
-	hyperfang: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			volatileStatus: 'flinch'
-		}
-	},
-	icebeam: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			status: 'frz'
-		}
-	},
-	icepunch: {
-		inherit: true,
-		category: "Special",
-		secondary: {
-			chance: 10,
-			status: 'frz'
-		}
+		shortDesc: "User cannot move next turn unless target or substitute faints."
 	},
 	jumpkick: {
 		inherit: true,
-		basePower: 70,
 		desc: "If this attack misses the target, the user 1HP of damage.",
 		shortDesc: "User takes 1 HP damage if miss.",
-		pp: 25,
 		onMoveFail: function(target, source, move) {
 			this.damage(1, source);
 		}
@@ -641,13 +504,6 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	lick: {
-		inherit: true,
-		secondary: {
-			chance: 30,
-			status: 'par'
-		}
-	},
 	lightscreen: {
 		num: 113,
 		accuracy: true,
@@ -680,10 +536,6 @@ exports.BattleMovedex = {
 			chance: 30,
 			volatileStatus: 'flinch'
 		}
-	},
-	megadrain: {
-		inherit: true,
-		pp: 10
 	},
 	metronome: {
 		inherit: true,
@@ -740,12 +592,6 @@ exports.BattleMovedex = {
 			this.add('-start', source, 'Mimic', move.name);
 		}
 	},
-	minimize: {
-		inherit: true,
-		boosts: {
-			evasion: 1
-		}
-	},
 	mirrormove: {
 		num: 119,
 		accuracy: true,
@@ -775,28 +621,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		affectedByImmunities: false
 	},
-	petaldance: {
-		inherit: true,
-		basePower: 70,
-		pp: 20
-	},
-	poisongas: {
-		inherit: true,
-		accuracy: 55,
-		target: "normal"
-	},
 	poisonsting: {
 		inherit: true,
 		secondary: {
 			chance: 20,
 			status: 'psn'
-		}
-	},
-	psybeam: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			volatileStatus: 'confusion'
 		}
 	},
 	psychic: {
@@ -819,7 +648,6 @@ exports.BattleMovedex = {
 	},
 	razorleaf: {
 		inherit: true,
-		category: "Special",
 		target: "normal"
 	},
 	razorwind: {
@@ -855,7 +683,6 @@ exports.BattleMovedex = {
 	},
 	recover: {
 		inherit: true,
-		pp: 20,
 		heal: null,
 		onHit: function(target) {
 			// Fail when health is 255 or 511 less than max
@@ -921,13 +748,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 65
 	},
-	rollingkick: {
-		inherit: true,
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch'
-		}
-	},
 	seismictoss: {
 		inherit: true,
 		affectedByImmunities: false
@@ -949,21 +769,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		critRatio: 1
 	},
-	sludge: {
-		inherit: true,
-		category: "Physical",
-		secondary: {
-			chance: 30,
-			status: 'psn'
-		}
-	},
-	smog: {
-		inherit: true,
-		secondary: {
-			chance: 40,
-			status: 'psn'
-		}
-	},
 	softboiled: {
 		inherit: true,
 		heal: null,
@@ -973,20 +778,6 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
-		}
-	},
-	sonicboom: {
-		inherit: true,
-		category: "Physical"
-	},
-	stomp: {
-		inherit: true,
-		basePowerCallback: null,
-		desc: "Deals damage to one adjacent target with a 30% chance to flinch it.",
-		shortDesc: "30% chance to flinch the target.",
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch'
 		}
 	},
 	struggle: {
@@ -1102,44 +893,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
-	swift: {
-		inherit: true,
-		category: "Physical"
-	},
-	tackle: {
-		inherit: true,
-		accuracy: 95,
-		basePower: 35
-	},
-	thrash: {
-		inherit: true,
-		accuracy: 100,
-		basePower: 90,
-		pp: 20
-	},
 	thunder: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			status: 'par'
-		}
-	},
-	thunderbolt: {
-		inherit: true,
-		secondary: {
-			chance: 10,
-			status: 'par'
-		}
-	},
-	thunderpunch: {
-		inherit: true,
-		category: "Special",
-				secondary: {
-			chance: 10,
-			status: 'par'
-		}
-	},
-	thundershock: {
 		inherit: true,
 		secondary: {
 			chance: 10,
@@ -1156,31 +910,9 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	toxic: {
-		inherit: true,
-		accuracy: 85
-	},
 	triattack: {
 		inherit: true,
-		category: "Physical",
 		secondary: false
-	},
-	twineedle: {
-		inherit: true,
-		secondary: {
-			chance: 20,
-			status: 'psn'
-		}
-	},
-	vinewhip: {
-		inherit: true,
-		category: "Special",
-		pp: 10
-	},
-	waterfall: {
-		inherit: true,
-		category: "Special",
-		secondary: false,
 	},
 	whirlwind: {
 		inherit: true,
@@ -1219,6 +951,5 @@ exports.BattleMovedex = {
 				}
 			}
 		}
-	},
-	magikarpsrevenge: null
+	}
 };

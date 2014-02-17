@@ -827,8 +827,8 @@ var commands = exports.commands = {
 		for (var ip in targetUser.ips) {
 			room.bannedIps[ip] = true;
 		}
-		targetUser.popup(user.name+" has banned you from the room " + room.id + "." + (target ? " (" + target + ")" : ""));
-		this.addRoomCommand(""+targetUser.name+" was banned from room " + room.id + " by "+user.name+"." + (target ? " (" + target + ")" : ""), room.id);
+		targetUser.popup(user.name+" has banned you from the room " + room.id + ". To appeal the ban, PM the moderator that banned you or a room owner." + (target ? " (" + target + ")" : ""));
+		this.addModCommand(""+targetUser.name+" was banned from room " + room.id + " by "+user.name+"." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) {
 			this.addRoomCommand(""+targetUser.name+"'s alts were also banned from room " + room.id + ": "+alts.join(", "), room.id);
@@ -1132,6 +1132,7 @@ var commands = exports.commands = {
 		} catch (e) {
 			return;
 		}
+		this.add('|unlink|' + targetUser.userid);
 	},
 
 	kickto: 'redir',

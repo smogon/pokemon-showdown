@@ -437,6 +437,7 @@ var commands = exports.commands = {
 		this.sendReply(data);
 	},
 
+	dsearch: 'dexsearch',
 	dexsearch: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 
@@ -457,7 +458,7 @@ var commands = exports.commands = {
 				target = target.slice(1);
 			}
 
-			targetAbility = Tools.getAbility(targets[i]);
+			var targetAbility = Tools.getAbility(targets[i]);
 			if (targetAbility.exists) {
 				if (!searches['ability']) searches['ability'] = {};
 				if (Object.count(searches['ability'], true) === 1 && !isNotSearch) return this.sendReply('Specify only one ability.');
@@ -724,49 +725,60 @@ var commands = exports.commands = {
 		}
 	},
 
+	eff: 'effectiveness',
+	type: 'effectiveness',
 	matchup: 'effectiveness',
 	effectiveness: function(target, room, user) {
-		var targets = target.split(/[,/]/);
-		var type = Tools.getType(targets[1]);
-		var pokemon = Tools.getTemplate(targets[0]);
+		var targets = target.split(/[,/]/).slice(0, 2);
+		if (targets.length !== 2) return this.sendReply("Attacker and defender must be separated with a comma.");
+
+		var searchMethods = {'getType':1, 'getMove':1, 'getTemplate':1};
+		var sourceMethods = {'getType':1, 'getMove':1};
+		var targetMethods = {'getType':1, 'getTemplate':1};
+		var source;
 		var defender;
-
-		if (!pokemon.exists || !type.exists) {
-			// try the other way around
-			pokemon = Tools.getTemplate(targets[1]);
-			type = Tools.getType(targets[0]);
-		}
-		defender = pokemon.species+' (not counting abilities)';
-
-		if (!pokemon.exists || !type.exists) {
-			// try two types
-			if (Tools.getType(targets[0]).exists && Tools.getType(targets[1]).exists) {
-				// two types
-				type = Tools.getType(targets[0]);
-				defender = Tools.getType(targets[1]).id;
-				pokemon = {types: [defender]};
-				if (Tools.getType(targets[2]).exists) {
-					defender = Tools.getType(targets[1]).id + '/' + Tools.getType(targets[2]).id;
-					pokemon = {types: [Tools.getType(targets[1]).id, Tools.getType(targets[2]).id]};
+		var foundData;
+		var atkName;
+		var defName;
+		for (var i=0; i<2; i++) {
+			for (var method in searchMethods) {
+				foundData = Tools[method](targets[i]);
+				if (foundData.exists) break;
+			}
+			if (!foundData.exists) return this.parse('/help effectiveness');
+			if (!source && method in sourceMethods) {
+				if (foundData.type) {
+					source = foundData;
+					atkName = foundData.name;
+				} else {
+					source = foundData.id;
+					atkName = foundData.id;
 				}
-			} else {
-				if (!targets[1]) {
-					return this.sendReply("Attacker and defender must be separated with a comma.");
+				searchMethods = targetMethods;
+			} else if (!defender && method in targetMethods) {
+				if (foundData.types) {
+					defender = foundData;
+					defName = foundData.species+" (not counting abilities)";
+				} else {
+					defender = {types: [foundData.id]};
+					defName = foundData.id;
 				}
-				return this.sendReply("'"+targets[0].trim()+"' and '"+targets[1].trim()+"' aren't a recognized combination.");
+				searchMethods = sourceMethods;
 			}
 		}
 
 		if (!this.canBroadcast()) return;
 
-		var typeMod = Tools.getEffectiveness(type.id, pokemon);
-		var notImmune = Tools.getImmunity(type.id, pokemon);
 		var factor = 0;
-		if (notImmune) {
-			factor = Math.pow(2, typeMod);
+		if (Tools.getImmunity(source.type || source, defender)) {
+			if (source.effectType !== 'Move' || source.basePower || source.basePowerCallback) {
+				factor = Math.pow(2, Tools.getEffectiveness(source, defender));
+			} else {
+				factor = 1;
+			}
 		}
 
-		this.sendReplyBox(''+type.id+' attacks are '+factor+'x effective against '+defender+'.');
+		this.sendReplyBox(atkName+" is "+factor+"x effective against "+defName+".");
 	},
 
 	uptime: (function(){
@@ -794,9 +806,9 @@ var commands = exports.commands = {
 	groups: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
-			'% <b>Driver</b> - The above, and they can also mute and lock users and check for alts<br />' +
+			'% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />' +
 			'@ <b>Moderator</b> - The above, and they can ban users<br />' +
-			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />' +
+			'&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />' +
 			'~ <b>Administrator</b> - They can do anything, like change what this message says<br />' +
 			'# <b>Room Owner</b> - They are administrators of the room and can almost totally control it');
 	},
@@ -808,7 +820,7 @@ var commands = exports.commands = {
 
 	avatars: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown.');
+		this.sendReplyBox('Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown. Custom avatars are only obtainable by staff.');
 	},
 
 	introduction: 'intro',
@@ -818,7 +830,7 @@ var commands = exports.commands = {
 			'- <a href="http://www.smogon.com/forums/threads/3496279/">Beginner\'s Guide to Pokémon Showdown</a><br />' +
 			'- <a href="http://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pokémon</a><br />' +
 			'- <a href="http://www.smogon.com/bw/articles/bw_tiers">What do "OU", "UU", etc mean?</a><br />' +
-			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a>');
+			'- <a href="http://www.smogon.com/xyhub/tiers">What are the rules for each format? What is "Sleep Clause"?</a>');
 	},
 
 	mentoring: 'smogintro',
@@ -898,6 +910,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3481155/">OM of the Month</a>';
 		}
+		if (target === 'all' || target === 'index') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/other-metagames-index.3472405/">OM Index</a><br />';
+		}
 		if (!matched) {
 			return this.sendReply('The Other Metas entry "'+target+'" was not found. Try /othermetas or /om for general help.');
 		}
@@ -929,6 +945,7 @@ var commands = exports.commands = {
 			'<br />' +
 			'Room owners (#) can also use:<br />' +
 			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
+			'- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />' +
 			'- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />' +
 			'- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />' +
 			'- /declare <em>message</em>: make a declaration in the room<br />' +
@@ -956,10 +973,26 @@ var commands = exports.commands = {
 
 	rule: 'rules',
 	rules: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Please follow the rules:<br />' +
-			'- <a href="http://frostserver.net/rules.html">Rules</a><br />' +
+		if (!target) {
+			if (!this.canBroadcast()) return;
+			this.sendReplyBox('Please follow the rules:<br />' +
+			(room.rulesLink ? '- <a href="' + sanitize(room.rulesLink) + '">' + sanitize(room.title) + ' room rules</a><br />' : '') +
+			'- <a href="http://frostserver.net/rules.html">'+(room.rulesLink?'Global rules':'Rules')+'</a><br />' +
 			'</div>');
+			return;
+		}
+		if (!this.can('roommod', null, room)) return;
+		if (target.length > 80) {
+			return this.sendReply('Error: Room rules link is too long (must be under 80 characters). You can use a URL shortener to shorten the link.');
+		}
+
+		room.rulesLink = target.trim();
+		this.sendReply('(The room rules link is now: '+target+')');
+
+		if (room.chatRoomData) {
+			room.chatRoomData.rulesLink = room.rulesLink;
+			Rooms.global.writeChatRoomData();
+		}
 	},
 
 	faq: function(target, room, user) {
@@ -991,7 +1024,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '<a href="http://www.smogon.com/sim/staff_faq">Staff FAQ</a><br />';
 		}
-		if (target === 'all' || target === 'autoconfirmed') {
+		if (target === 'all' || target === 'autoconfirmed' || target === 'ac') {
 			matched = true;
 			buffer += 'A user is autoconfirmed when they have won at least one rated battle and has been registered for a week or longer.<br />';
 		}
@@ -2427,12 +2460,12 @@ var commands = exports.commands = {
 			this.sendReply('all - change all timestamps preferences, lobby - change only lobby chat preferences, pms - change only PM preferences');
 			this.sendReply('off - set timestamps off, minutes - show timestamps of the form [hh:mm], seconds - show timestamps of the form [hh:mm:ss]');
 		}
-		if (target === 'all' || target === 'effectiveness') {
+		if (target === 'all' || target === 'effectiveness' || target === 'matchup' || target === 'eff' || target === 'type') {
 			matched = true;
-			this.sendReply('/effectiveness [type1], [type2] - Provides the effectiveness of a [type1] attack to a [type2] Pokémon.');
-			this.sendReply('!effectiveness [type1], [type2] - Shows everyone the effectiveness of a [type1] attack to a [type2] Pokémon.');
+			this.sendReply('/effectiveness OR /matchup OR /eff OR /type [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.');
+			this.sendReply('!effectiveness OR /matchup OR !eff OR !type [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.');
 		}
-		if (target === 'all' || target === 'dexsearch') {
+		if (target === 'all' || target === 'dexsearch' || target === 'dsearch') {
 			matched = true;
 			this.sendReply('/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.');
 			this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
@@ -2519,17 +2552,17 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
 		}
-		if (target === '%' || target === 'roomban') {
+		if (target === '%' || target === 'lock' || target === 'l') {
 			matched = true;
-			this.sendReply('/roomban [username] - Bans the user from the room you are in. Requires: % @ & ~');
+			this.sendReply('/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'roomunban') {
+		if (target === '%' || target === 'unlock') {
 			matched = true;
-			this.sendReply('/roomunban [username] - Unbans the user from the room you are in. Requires: % @ & ~');
+			this.sendReply('/unlock [username] - Unlocks the user. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'redirect' || target === 'redir') {
 			matched = true;
-			this.sendReply('/redirect or /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~');
+			this.sendReply('/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'modnote') {
 			matched = true;
@@ -2561,11 +2594,11 @@ var commands = exports.commands = {
 		}
 		if (target === '%' || target === 'mute' || target === 'm') {
 			matched = true;
-			this.sendReply('/mute OR /m [username], [reason] - Mute user with reason for 7 minutes. Requires: % @ & ~');
+			this.sendReply('/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'hourmute' || target === 'hm') {
 			matched = true;
-			this.sendReply('/hourmute OR /hm [username], [reason] - Mute user with reason for an hour. Requires: % @ & ~');
+			this.sendReply('/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'daymute') {
 			matched = true;
@@ -2575,9 +2608,9 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/cmute [username], [time in hours] - Mute a user for the amount of hours. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'unmute') {
+		if (target === '%' || target === 'unmute' || target === 'um') {
 			matched = true;
-			this.sendReply('/unmute [username] - Remove mute from user. Requires: % @ & ~');
+			this.sendReply('/unmute [username] - Removes mute from user. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'showuserid' || target === 'getid') {
 			matched = true;

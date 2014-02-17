@@ -230,6 +230,9 @@ exports.BattleItems = {
 		id: "assaultvest",
 		name: "Assault Vest",
 		spritenum: 0,
+		fling: {
+			basePower: 80
+		},
 		onModifySpDPriority: 1,
 		onModifySpD: function(spd) {
 			return this.chainModify(1.5);
@@ -3413,7 +3416,7 @@ exports.BattleItems = {
 		},
 		num: 540,
 		gen: 5,
-		desc: "If holder is hit by a contact move, the attacker loses 1/6 of its max HP."
+		desc: "If holder is hit by a contact move, the attacker loses 1/8 of its max HP."
 	},
 	"rootfossil": {
 		id: "rootfossil",
@@ -4213,6 +4216,9 @@ exports.BattleItems = {
 		id: "weaknesspolicy",
 		name: "Weakness Policy",
 		spritenum: 0,
+		fling: {
+			basePower: 80
+		},
 		onHit: function(target, source, move) {
 			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && this.getEffectiveness(move, target) > 0 && target.useItem()) {
 				this.boost({atk: 2, spa: 2});
