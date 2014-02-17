@@ -3241,6 +3241,9 @@ function getRandMessage(user){
 		case 35: message = message + user + ' was fused with Zarif!'; //bought by Infernape/Zarif
 		break;
 		case 36: message = message + user + ' fades into nothingness!'; // bought by Unknown's Remnant
+		break;
+		case 37: message = message + user + ' was swept to sleep by frost janitor'; // bought by frost janitor
+		break;
 		default: message = message + user + ' bought a poisoned Coke!';
 	};
 	message = message + ' ~~';
