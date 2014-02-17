@@ -33,9 +33,9 @@
  var lockedIps = {};
 
 var ipbans = fs.createWriteStream("config/ipbans.txt", {flags: "a"}); // do not remove this line
-var bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
+exports.bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
 var userTypes = fs.readFileSync('config/types.csv','utf8'); 
-bannedMessages = bannedMessages.split('\n');
+exports.bannedMessages = exports.bannedMessages.split('\n');
 
 exports.readVips = function() {
 	exports.vips = fs.readFile('config/vips.txt', 'utf8', function(err, data) {
@@ -1516,13 +1516,13 @@ var User = (function () {
 			}
 		}*/
 		if (!room.isPrivate) {
-			for (var x in bannedMessages) {
-				if (message.indexOf(bannedMessages[x]) > -1 && bannedMessages[x] != '' && bannedMessages[x].substr(0,1) != '/') {
+			for (var x in Users.bannedMessages) {
+				if (message.indexOf(Users.bannedMessages[x]) > -1 && Users.bannedMessages[x] != '' && message.substr(0,1) != '/') {
 					connection.user.lock();
 					connection.user.popup('You have been automatically locked for sending a message containing a banned word. If you feel this was a mistake please contact a staff member.');
 					for (var u in Users.users) {
-						if (Users.users[u].isStaff) {
-							Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+connection.user.name+' has been automatically locked for sending a message containing a banned word. Message: ' + message);
+						if (Users.users[u].group == '~' || Users.users[u].group == '&') {
+							Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+connection.user.name+' has been automatically locked for sending a message containing a banned word. Room: '+room.title+' Message: ' + message);
 						}
 					}
 					return false;
