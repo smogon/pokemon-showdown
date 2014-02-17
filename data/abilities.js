@@ -275,12 +275,10 @@ exports.BattleAbilities = {
 		gen: 6
 	},
 	"cheekpouch": {
-		desc: "Increases HP when this Pokemon consumes a berry.",
-		shortDesc: "Increases HP when this Pokemon consumes a berry.",
-		onUseItem: function(item, pokemon) {
-			if (item.isBerry) {
-				pokemon.heal(10);
-			}
+		desc: "Restores HP when this Pokemon consumes a berry.",
+		shortDesc: "Restores HP when this Pokemon consumes a berry.",
+		onEat: function(item, pokemon) {
+			pokemon.heal(Math.floor(pokemon.maxhp/4));
 		},
 		id: "cheekpouch",
 		name: "Cheek Pouch",
