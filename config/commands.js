@@ -1546,6 +1546,11 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/demote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: " + Users.getGroupsThatCan('promote').join(" "));
 		}
+		if (Users.can(target, 'forcerenameto') || target === 'forcerenameto' || target === 'frt') {
+			matched = true;
+			this.sendReply("/forcerenameto OR /frt [username] - Force a user to choose a new name. Requires: " + Users.getGroupsThatCan('forcerenameto').join(" "));
+			this.sendReply("/forcerenameto OR /frt [username], [new name] - Forcibly change a user's name to [new name]. Requires: " + Users.getGroupsThatCan('forcerenameto').join(" "));
+		}
 		if (Users.can(target, 'forcewin') || target === 'forcetie') {
 			matched = true;
 			this.sendReply("/forcetie - Forces the current match to tie. Requires: " + Users.getGroupsThatCan('forcewin').join(" "));
