@@ -27,14 +27,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
-	},
-	{
-		name: "OU (suspect test)",
-		section: "XY Singles",
-
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Genesect', 'Deoxys-Speed']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
 	},
 	{
 		name: "Ubers",
@@ -56,7 +49,7 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela']
+		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Swirlix', 'Gligar']
 	},
 	{
 		name: "LC UU",
@@ -147,13 +140,22 @@ exports.Formats = [
 	// XY Doubles
 	///////////////////////////////////////////////////////////////////
 
+	
 	{
-		name: "Smogon Doubles",
+		name: "Random Doubles Battle",
 		section: "XY Doubles",
 
 		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Dark Void', 'Soul Dew',
+		team: 'randomDoubles',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "Smogon Doubles (suspect test)",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
 			'Lugia',
 			'Ho-Oh',
@@ -203,12 +205,10 @@ exports.Formats = [
 			'Kyurem-White',
 			'Xerneas',
 			'Yveltal',
-			'Abomasnow',
 			'Aegislash',
 			'Alakazam',
 			'Amoonguss',
 			'Azumarill',
-			'Blaziken',
 			'Breloom',
 			'Chandelure',
 			'Charizard',
@@ -235,33 +235,30 @@ exports.Formats = [
 			'Kangaskhan',
 			'Klefki',
 			'Landorus-Therian',
-			'Latios',
 			'Lucario',
-			'Malamar',
 			'Mamoswine',
 			'Manectric',
 			'Mawile',
+			'Meowstic',
 			'Metagross',
 			'Ninetales',
 			'Politoed',
 			'Reuniclus',
 			'Rotom-Wash',
+			'Rhyperior',
 			'Sableye',
-			'Salamence',
 			'Scizor',
 			'Scrafty',
 			'Sylveon',
 			'Talonflame',
 			'Terrakion',
 			'Thundurus',
-			'Thundurus-Therian',
 			'Togekiss',
 			'Trevenant',
 			'Tyranitar',
 			'Venusaur',
 			'Volcarona',
-			'Whimsicott',
-			'Zapdos']
+			'Whimsicott']
 	},
 	{
 		name: "XY Battle Spot Doubles",
@@ -715,6 +712,16 @@ exports.Formats = [
 		searchShow: false,
 		debug: true,
 		ruleset: []
+	},
+	{
+		name: "[Gen 3] OU (beta)",
+		section: "Past Generations",
+
+		mod: 'gen3',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber'],
+
+		column: 2
 	},
 	{
 		name: "[Gen 3] Hackmons",

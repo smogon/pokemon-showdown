@@ -29,7 +29,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		callbacks[localGuid] = callback;
 		callbackData[localGuid] = data;
 		fakeProcess.server.send({data: data, sig: signature, guid: localGuid});
-	}
+	};
 	fakeProcess.server.on('message', function(response) {
 		if (callbacks[response.guid]) {
 			callbacks[response.guid](response.success, callbackData[response.guid]);

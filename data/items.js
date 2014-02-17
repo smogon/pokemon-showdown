@@ -230,6 +230,9 @@ exports.BattleItems = {
 		id: "assaultvest",
 		name: "Assault Vest",
 		spritenum: 0,
+		fling: {
+			basePower: 80
+		},
 		onModifySpDPriority: 1,
 		onModifySpD: function(spd) {
 			return this.chainModify(1.5);
@@ -1578,6 +1581,7 @@ exports.BattleItems = {
 			if ((source && source.baseTemplate.num === 487) || pokemon.baseTemplate.num === 487) {
 				return false;
 			}
+			return true;
 		},
 		num: 112,
 		gen: 4,
@@ -1835,7 +1839,7 @@ exports.BattleItems = {
 			pokemon.negateImmunity['Ground'] = true;
 		},
 		onModifySpe: function(speMod) {
-			return this.chain(speMod, .5);
+			return this.chain(speMod, 0.5);
 		},
 		num: 278,
 		gen: 4,
@@ -2406,7 +2410,7 @@ exports.BattleItems = {
 		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (move.category === 'Special') {
-				target.eatItem()
+				target.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
@@ -3412,7 +3416,7 @@ exports.BattleItems = {
 		},
 		num: 540,
 		gen: 5,
-		desc: "If holder is hit by a contact move, the attacker loses 1/6 of its max HP."
+		desc: "If holder is hit by a contact move, the attacker loses 1/8 of its max HP."
 	},
 	"rootfossil": {
 		id: "rootfossil",
@@ -4212,6 +4216,9 @@ exports.BattleItems = {
 		id: "weaknesspolicy",
 		name: "Weakness Policy",
 		spritenum: 0,
+		fling: {
+			basePower: 80
+		},
 		onHit: function(target, source, move) {
 			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && this.getEffectiveness(move, target) > 0 && target.useItem()) {
 				this.boost({atk: 2, spa: 2});
