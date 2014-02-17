@@ -1218,6 +1218,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	klutzymanaphy: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/manaphy.gif">' +
+    		'<img src="http://i.imgur.com/m2PAZco.gif">' +
+    		'<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/mew.gif"><br />' +
+    		'<b>Ace:</b> Mew and Manaphy<br />' +
+    		'It\'s more important to master the cards you\'re holding than complaining about the ones your opponent was dealt. pls.</center>');
+    },
+
 	unknownsremnant: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img height=150 src="http://i701.photobucket.com/albums/ww16/jacoby746/Kingdom%20Hearts%20Sprites/roxas2.gif">' +
