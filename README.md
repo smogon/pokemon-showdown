@@ -14,6 +14,10 @@ Installing
 ------------------------------------------------------------------------
 
 Pokémon Showdown requires [node.js][2], v0.10.2 and up. Install `node.js` if you don't have it yet; the latest stable version is a good choice to install.
+If on linux(Ubuntu/Mint) run the following to install node:
+
+    sudo apt-get install nodejs
+    sudo apt-get install npm
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone" button in the bottom of the right sidebar, or if you're really lazy, there's a "ZIP" download button. I recommend the Clone method - it's more time-consuming to set up, but much easier to update.
 
@@ -40,7 +44,15 @@ Now, to start Pokémon Showdown, run the command:
 You can also specify a port:
 
     node app.js 8000
+    
+On linux(Ubuntu/Mint) however you have to run the following in terminal:
 
+    nodejs app.js
+
+You can also specify a port:
+
+    nodejs app.js 8000
+    
 Visit your server at `http://SERVER:8000`
 
 Replace `SERVER` with your server domain or IP. Replace `8000` with your port if it's not `8000` (the default port).
