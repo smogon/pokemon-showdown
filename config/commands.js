@@ -1251,6 +1251,16 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	archer: 'archerclw',
+	archerclw: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+			this.sendReplyBox('<center><img height=200 width=200 src="http://i.imgur.com/bZ8p27u.jpg">' +
+				'<img src="http://i.imgur.com/cs23RdB.gif">' +
+				'<img src="http://i.imgur.com/wM24Mya.gif"><br />' +
+				'<b>Ace: </b>Hippowdon (Big Momma)<br />' +
+				'The South Shall Rise Again!</center>');
+	},
+
 	flare: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/gyarados-mega.gif">' +
