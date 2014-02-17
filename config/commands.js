@@ -1251,6 +1251,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	flare: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/gyarados-mega.gif">' +
+    		'<img src="http://i.imgur.com/Wqcrfk0.gif">' +
+    		'<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/blaziken-mega.gif"><br />' +
+    		'<b>Ace:</b> Mega Gyarados/Gallade<br />' +
+    		'With every set back. There\'s always a chance to comeback.</center>');
+    },
+
 	klutzymanaphy: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/manaphy.gif">' +
