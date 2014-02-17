@@ -213,6 +213,29 @@ var commands = exports.commands = {
 		if (!target) return;
 
 		var message = '/me ' + target;
+		
+		if (user.isAway) {
+			if (user.name.slice(-7) !== ' - Away') {
+				user.isAway = false; 
+				return this.sendReply('Your name has been left unaltered and no longer marked as away.');
+			}
+
+			var newName = user.originalName;
+			
+			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+			delete Users.get(newName);
+
+			user.forceRename(newName, undefined, true);
+			
+			//user will be authenticated
+			user.authenticated = true;
+			
+			if (user.isStaff) this.add('|raw|-- <b><font color="#4F86F7">' + newName + '</font color></b> is no longer away');
+
+			user.originalName = '';
+			user.isAway = false;
+		}
+
 		// if user is not in spamroom
 		if (spamroom[user.userid] === undefined) {
 			// check to see if an alt exists in list
