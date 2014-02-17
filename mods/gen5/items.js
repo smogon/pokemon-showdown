@@ -435,15 +435,6 @@ exports.BattleItems = {
 		isUnreleased: false,
 		desc: "Holder's first successful Rock-type attack will have 1.5x power. Single use."
 	}, 
-	rockyhelmet: {
-		inherit: true,
-		onAfterDamage: function(damage, target, source, move) {
-			if (source && source !== target && move && move.isContact) {
-				this.damage(source.maxhp/6, source, target);
-			}
-		},
-		desc: "If holder is hit by a contact move, the attacker loses 1/6 of its max HP."
-	},
 	rowapberry: {
 		inherit: true,
 		naturalGift: {
