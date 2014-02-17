@@ -140,7 +140,7 @@ exports.Formats = [
 	// XY Doubles
 	///////////////////////////////////////////////////////////////////
 
-	
+
 	{
 		name: "Random Doubles Battle",
 		section: "XY Doubles",
@@ -353,6 +353,13 @@ exports.Formats = [
 				return [set.species + " is not the middle Pokémon in an evolution chain."];
 			}
 		}
+	},
+	{
+		name: "Stat Reversal",
+		section: "Other Metagames",
+
+		mod: 'statreversal',
+		ruleset: ['OU'],
 	},
 	{
 		name: "CAP",
