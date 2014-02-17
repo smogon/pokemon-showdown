@@ -1336,8 +1336,8 @@ var commands = exports.commands = {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' could not be joined.");
 		}
 		if (target.toLowerCase() == "lobby") {
-			return connection.sendTo('lobby','|html|<div class="infobox" style="border-color:blue"><center><b><u>Welcome to the Kill The Noise Server!</u></b></center><br /> ' +
-			'This Server <a href ="https://gist.github.com/E4Arsh/8577715">Is Hosted By BlakJack</a><br /><br />' +
+			return connection.sendTo('lobby','|html|<div class="infobox""><center><b><u>Welcome to the Leaf League!</u></b></center><br /> ' +
+			'This Server Is Hosted By Cosy</a><br /><br />' +
 			'Battle users in the ladder or in tournaments, learn how to play Pokemon or just chat in lobby!<br /><br />' +
 			'Make sure to type <b>/help</b> to get a list of commands that you can use and <b>/faq</b> to check out frequently asked questions.<br /><br />' +
 			'If you have any questions, issues or concerns should be directed at someone with a rank such as Voice (+), Driver (%), Moderator (@) and Leader (&). <br /><br />' +
