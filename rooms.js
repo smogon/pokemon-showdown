@@ -411,7 +411,8 @@ var GlobalRoom = (function() {
 			}
 		}
 		if (user.vip) {
-			user.joinRoom('vip', connection);
+			//user.joinRoom('vip', connection);
+			user.send('|pm|~Server|'+user.group+user.name+'|/invite VIP');
 		}
 	};
 	GlobalRoom.prototype.onJoinConnection = function(user, connection) {
