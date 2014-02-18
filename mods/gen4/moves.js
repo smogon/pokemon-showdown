@@ -549,7 +549,17 @@ exports.BattleMovedex = {
 	},
 	imprison: {
 		inherit: true,
-		isSnatchable: false
+		isSnatchable: false,
+		onTryHit: function(pokemon) {
+			var targets = pokemon.side.foe.active;
+			for (var i=0; i<targets.length; i++) {
+				if (!targets[i] || targets[i].fainted) continue;
+				for (var j=0; j<pokemon.moves.length; j++) {
+					if (targets[i].moves.indexOf(pokemon.moves[j]) >= 0) return;
+				}
+			}
+			return false;
+		}
 	},
 	jumpkick: {
 		inherit: true,
