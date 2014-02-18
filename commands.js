@@ -453,7 +453,7 @@ var commands = exports.commands = {
 			price = 20;
 			if (price <= user.money) {
 				user.money = user.money - price;
-				this.sendReply('You have purchased a custom avatar. You need to message an Admin capable of adding (Ask Ruby or Liz.).');
+				this.sendReply('You have purchased a custom avatar. You need to message an Admin Ask Ruby or Liz..');
 				user.canCustomAvatar = true;
 				this.add(user.name + ' has purchased a custom avatar!');
 			} else {
