@@ -382,6 +382,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		onModifyMove: function(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
+			var specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
+			move.category = specialTypes[move.type]? 'Special' : 'Physical';
 		},
 		secondary: false,
 		target: "normal",

@@ -987,6 +987,7 @@ var BattlePokemon = (function() {
 			this.item = '';
 			this.itemData = {id: '', target: this};
 			this.usedItemThisTurn = true;
+			this.battle.runEvent('AfterUseItem', this, null, null, item);
 			return true;
 		}
 		return false;
