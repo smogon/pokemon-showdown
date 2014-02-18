@@ -179,7 +179,7 @@ exports.BattleAbilities = {
 		},
 		id: "aromaveil",
 		name: "Aroma Veil",
-		rating: 0,
+		rating: 3,
 		num: -6,
 		gen: 6
 	},
