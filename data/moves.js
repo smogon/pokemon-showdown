@@ -907,7 +907,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		isContact: true,
 		volatileStatus: 'bide',
-		affectedByImmunities: true,
+		affectedByImmunities: false,
 		effect: {
 			duration: 3,
 			onLockMove: 'bide',
@@ -928,7 +928,7 @@ exports.BattleMovedex = {
 					pokemon.removeVolatile('bide');
 				}
 			},
-			onBeforeMove: function(pokemon, target, move) {
+			onBeforeMove: function(pokemon) {
 				if (this.effectData.duration === 1) {
 					if (!this.effectData.totalDamage) {
 						this.add('-end', pokemon, 'Bide');
@@ -937,7 +937,7 @@ exports.BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					if (move.affectedByImmunities !== false && !target.runImmunity('Normal')) {
+					if (!target.runImmunity('Normal')) {
 						this.add('-immune', target, '[msg]');
 						return false;
 					}

@@ -65,6 +65,45 @@ exports.BattleMovedex = {
 		basePowerCallback: undefined,
 		desc: "Does one hit for the user and each other unfainted non-egg active and non-active Pokemon on the user's side without a status problem."
 	},
+	bide: {
+		inherit: true,
+		effect: {
+			duration: 3,
+			onLockMove: 'bide',
+			onStart: function(pokemon) {
+				this.effectData.totalDamage = 0;
+				this.add('-start', pokemon, 'Bide');
+			},
+			onDamagePriority: -101,
+			onDamage: function(damage, target, source, move) {
+				if (!move || move.effectType !== 'Move') return;
+				if (!source || source.side === target.side) return;
+				this.effectData.totalDamage += damage;
+				this.effectData.sourcePosition = source.position;
+				this.effectData.sourceSide = source.side;
+			},
+			onAfterSetStatus: function(status, pokemon) {
+				if (status.id === 'slp') {
+					pokemon.removeVolatile('bide');
+				}
+			},
+			onBeforeMove: function(pokemon) {
+				if (this.effectData.duration === 1) {
+					if (!this.effectData.totalDamage) {
+						this.add('-end', pokemon, 'Bide');
+						this.add('-fail', pokemon);
+						return false;
+					}
+					this.add('-end', pokemon, 'Bide');
+					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage*2});
+					return false;
+				}
+				this.add('-activate', pokemon, 'Bide');
+				return false;
+			}
+		}
+	},
 	bind: {
 		inherit: true,
 		accuracy: 75
