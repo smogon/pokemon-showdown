@@ -137,7 +137,7 @@ exports.BattleScripts = {
 			if (!targets.length) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
-				if (move.selfdestruct && this.gen == 5) {
+				if (move.selfdestruct && this.gen >= 5) {
 					this.faint(pokemon, pokemon, move);
 				}
 				return true;
