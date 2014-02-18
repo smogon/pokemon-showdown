@@ -66,8 +66,7 @@ exports.BattleMovedex = {
 	bide: {
 		inherit: true,
 		accuracy: 100,
-		priority: 0,
-		affectedByImmunities: true
+		priority: 0
 	},
 	bind: {
 		inherit: true,
