@@ -441,10 +441,10 @@ var commands = exports.commands = {
 			price = 5;
 			if (price <= user.money) {
 				user.money = user.money - price;
-				this.sendReply('You have bought a day with auburn prebear for this.');
+				this.sendReply('you have bought a day with auburn prebear for this.');
 				this.sendReply('Use /auburn to get a day with auburn if you want!');
 				user.canCustomSymbol = true;
-				this.add(user.name + ' has purchased a custom symbol!');
+				this.add(user.name + ' has purchased a day with auburn!');
 			} else {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
