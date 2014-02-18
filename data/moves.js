@@ -928,7 +928,7 @@ exports.BattleMovedex = {
 					pokemon.removeVolatile('bide');
 				}
 			},
-			onBeforeMove: function(pokemon) {
+			onBeforeMove: function(pokemon, target, move) {
 				if (this.effectData.duration === 1) {
 					if (!this.effectData.totalDamage) {
 						this.add('-end', pokemon, 'Bide');
@@ -937,7 +937,7 @@ exports.BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					if (this.getMove('bide').affectedByImmunities !== false && !target.runImmunity('Normal')) {
+					if (move.affectedByImmunities !== false && !target.runImmunity('Normal')) {
 						this.add('-immune', target, '[msg]');
 						return false;
 					}
