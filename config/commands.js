@@ -1251,6 +1251,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	ssjoku: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/M9wnVcP.gif">' +
+			'<img src="http://i.imgur.com/2jkjcvx.png">' +
+			'<img height=150 src="http://i.imgur.com/zCuD2IQ.gif"><br />' +
+			'<b>Ace: </b>Mega-Venusaur-Power Whip Yo Gurl<br />' +
+			'<b>Quote: </b>I am Super Swaggy Coolio!!!</center>');
+	},
+
 	caster: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img height=180 width=200 src="http://31.media.tumblr.com/717db8c2843b1b007c25c5fc6e1f3537/tumblr_mreje8lECf1s3kgaso5_500.gif">' +
