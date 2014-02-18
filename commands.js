@@ -437,14 +437,14 @@ var commands = exports.commands = {
 		}
 		user.money = money;
 		var price = 0;
-		if (target === 'auburn') {
+		if (target === 'symbol') {
 			price = 5;
 			if (price <= user.money) {
 				user.money = user.money - price;
-				this.sendReply('you have bought a day with auburn prebear for this.');
-				this.sendReply('Use /auburn to get a day with auburn if you want!');
+				this.sendReply('you have bought a custom avatar.');
+				this.sendReply('Send a custom symbol now!');
 				user.canCustomSymbol = true;
-				this.add(user.name + ' has purchased a day with auburn!');
+				this.add(user.name + ' has purchased a custom symbol!');
 			} else {
 				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
 			}
@@ -609,7 +609,7 @@ var commands = exports.commands = {
 	shop: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><h4><b><u>Leaf Shop</u></b></h4><table border="1" cellspacing ="0" cellpadding="3"><tr><th>Command</th><th>Description</th><th>Cost</th></tr>' +
-			'<tr><td>Auburn</td><td>You get a day with the mighty master of monotype himself AUBURN!</td><td>7</td></tr>' +
+			'<tr><td>Symbol</td><td>You get a day with the mighty master of monotype himself AUBURN!</td><td>7</td></tr>' +
 			'<tr><td>Custom</td><td>Buys a custom avatar to be applied to your name (you supply)</td><td>20</td></tr>' +
 			'<tr><td>Animated</td><td>Buys an animated avatar to be applied to your name (you supply)</td><td>35</td></tr>' +
 			'<tr><td>Room</td><td>Buys a chatroom for you to own (within reason, can be refused)</td><td>100</td></tr>' +
