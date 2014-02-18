@@ -915,6 +915,7 @@ exports.BattleMovedex = {
 				this.effectData.totalDamage = 0;
 				this.add('-start', pokemon, 'Bide');
 			},
+			onDamagePriority: -101,
 			onDamage: function(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
 				if (!source || source.side === target.side) return;
@@ -936,7 +937,7 @@ exports.BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					if (!target.runImmunity('Normal')) {
+					if (this.getMove('bide').affectedByImmunities !== false && !target.runImmunity('Normal')) {
 						this.add('-immune', target, '[msg]');
 						return false;
 					}
