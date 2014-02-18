@@ -398,7 +398,27 @@ exports.BattleMovedex = {
 	},
 	healingwish: {
 		inherit: true,
-		isSnatchable: false
+		isSnatchable: false,
+		effect: {
+			duration: 2,
+			onStart: function(side) {
+				this.debug('Healing Wish started on '+side.name);
+			},
+			onSwitchInPriority: -6,
+			// Accounting for the offchance that 5 remaining pokemon are KO'd by entry hazards
+			onSwitchIn: function(target) {
+				if (target.position != this.effectData.sourcePosition) {
+					return;
+				}
+				if (!target.hp <= 0) {
+					var source = this.effectData.source;
+					var damage = target.heal(target.maxhp);
+					target.setStatus('');
+					this.add('-heal',target,target.getHealth,'[from] move: Healing Wish');
+					target.side.removeSideCondition('healingwish');
+				}
+			}
+		}
 	},
 	hiddenpower: {
 		inherit: true,
