@@ -464,7 +464,7 @@ var commands = exports.commands = {
 			price = 35;
 			if (price <= user.money) {
 				user.money = user.money - price;
-				this.sendReply('You have purchased a custom animated avatar. You need to message an Admin capable of adding (Ruby or Liz).');
+				this.sendReply('You have purchased a custom animated avatar. You need to message an Admin capable of adding Ruby or Liz.');
 				user.canAnimatedAvatar = true;
 				this.add(user.name + ' has purchased a custom animated avatar!');
 			} else {
@@ -486,7 +486,7 @@ var commands = exports.commands = {
 			price = 30;
 			if (price <= user.money) {
 				user.money = user.money - price;
-				this.sendReply('You have purchased a trainer card. You need to message an Admin capable of adding this (Ruby or Liz).');
+				this.sendReply('You have purchased a trainer card. You need to message an Admin capable of adding this Ruby or Liz.');
 				user.canTrainerCard = true;
 				this.add(user.name + ' has purchased a trainer card!');
 			} else {
@@ -497,7 +497,7 @@ var commands = exports.commands = {
 			price = 10;
 			if (price <= user.money) {
 				user.money = user.money - price;
-				this.sendReply('You have purchased the ability to alter your avatar or trainer card. You need to message an Admin capable of adding this (Ruby or Liz).');
+				this.sendReply('You have purchased the ability to alter your avatar or trainer card. You need to message an Admin capable of adding this Ruby or Liz.');
 				user.canFixItem = true;
 				this.add(user.name + ' has purchased the ability to set alter their card or avatar!');
 			} else {
