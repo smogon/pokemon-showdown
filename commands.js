@@ -988,11 +988,6 @@ var commands = exports.commands = {
 			return this.parse('/help takecoins');
 		}
 	},
-var crypto = require('crypto');
-
-const MAX_REASON_LENGTH = 300;
-
-var commands = exports.commands = {
 
 	version: function(target, room, user) {
 		if (!this.canBroadcast()) return;
