@@ -433,5 +433,7 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 
 global.tour = require('./tour.js').tour();
 try { 
-	global.frostcommands = require('./frostcommands.js');
-} catch (e) { console.log('Frost-commands.js could not be loaded.'); }
+	global.frostcommands = require('./frost-commands.js');
+} catch (e) { 
+	console.log('frost-commands.js failed to load: '+e.stack); 
+}
