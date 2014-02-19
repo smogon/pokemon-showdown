@@ -1034,17 +1034,50 @@ var cmds = {
 
 	toursettings: function(target, room, user) {
 		if (!tour.maxauth(user)) return this.sendReply('You do not have enough authority to use this command.');
-		if (target === 'replace on') return config.tourunlimitreplace = true;
-		if (target === 'replace off') return config.tourunlimitreplace = false;
-		if (target === 'alts on') return config.tourallowalts = true;
-		if (target === 'alts off') return config.tourallowalts = false;
-		if (target === 'dq on') return config.tourdqguard = false;
-		if (target === 'dq off') return config.tourdqguard = true;
-		if ((target.substr(0,6) === 'margin') && !isNaN(parseInt(target.substr(7))) && parseInt(target.substr(7)) >= 0) return config.tourtimemargin = parseInt(target.substr(7));
-		if ((target.substr(0,6) === 'period') && !isNaN(parseInt(target.substr(7))) && parseInt(target.substr(7)) > 0) return config.tourtimeperiod = parseInt(target.substr(7));
-		if (target.substr(0,7) === 'lowauth' && config.groupsranking.indexOf(target.substr(8,1)) != -1) return config.tourlowauth = target.substr(8,1);
-		if (target.substr(0,7) === 'midauth' && config.groupsranking.indexOf(target.substr(8,1)) != -1) return config.tourmidauth = target.substr(8,1);
-		if (target.substr(0,8) === 'highauth' && config.groupsranking.indexOf(target.substr(9,1)) != -1) return config.tourhighauth = target.substr(9,1);
+		if (target === 'replace on') {
+			config.tourunlimitreplace = true;
+			return this.sendReply('Replacing past round one has been enabled.');
+		}
+		if (target === 'replace off') {
+			config.tourunlimitreplace = false;
+			return this.sendReply('Replacing past round oen has been disabled.');
+		}
+		if (target === 'alts on') { 
+			config.tourallowalts = true;
+			return this.sendReply('Alts are now allowed to join tournaments.');
+		}
+		if (target === 'alts off') { 
+			config.tourallowalts = false;
+			return this.sendReply('Alts are no longer allowed to join tournaments.');
+		}
+		if (target === 'dq on') {
+			config.tourdqguard = false;
+			return;
+		}
+		if (target === 'dq off') {
+			config.tourdqguard = true;
+			return;
+		}
+		if ((target.substr(0,6) === 'margin') && !isNaN(parseInt(target.substr(7))) && parseInt(target.substr(7)) >= 0) {
+			config.tourtimemargin = parseInt(target.substr(7));
+			return this.sendReply('In tournaments with timed register phase, the players joined are now logged individually until '+config.tourtimemargin+'players have joined.');
+		}
+		if ((target.substr(0,6) === 'period') && !isNaN(parseInt(target.substr(7))) && parseInt(target.substr(7)) > 0) {
+			config.tourtimeperiod = parseInt(target.substr(7));
+			return this.sendReply('In tournaments with timed register phase, the players joined are now logged in groups of '+config.tourtimeperiod+' players.');
+		}
+		if (target.substr(0,7) === 'lowauth' && config.groupsranking.indexOf(target.substr(8,1)) != -1) {
+			config.tourlowauth = target.substr(8,1);
+			return this.sendReply('Tournament low auth has been set to '+config.tourlowauth);
+		}
+		if (target.substr(0,7) === 'midauth' && config.groupsranking.indexOf(target.substr(8,1)) != -1) {
+			config.tourmidauth = target.substr(8,1);
+			return this.sendReply('Tournament mid auth has been set to '+config.tourmidauth);
+		}
+		if (target.substr(0,8) === 'highauth' && config.groupsranking.indexOf(target.substr(9,1)) != -1) {
+			config.tourhighauth = target.substr(9,1);
+			return this.sendReply('Tournament high auth has been set to '+config.tourhighauth);
+		}
 		if (target === 'view' || target === 'show' || target === 'display') {
 			var msg = '';
 			msg = msg + 'Can players be replaced after the first round? ' + new Boolean(config.tourunlimitreplace) + '.<br>';
