@@ -2605,9 +2605,9 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'modnote') {
+		if (target === '%' || target === 'modnote' || target === 'note' || target === 'mn') {
 			matched = true;
-			this.sendReply('/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ & ~');
+			this.sendReply('/note OR /mn OR /modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
