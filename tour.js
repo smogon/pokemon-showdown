@@ -714,6 +714,11 @@ var cmds = {
 			tour.reportdue(room, connection);
 			room.addRaw('<hr /><h2><font color="green">Please sign up for the ' + Tools.data.Formats[tour[room.id].tier].name + ' Tournament.</font> <font color="red">/j</font> <font color="green">to join!</font></h2><b><font color="blueviolet">PLAYERS:</font></b> ' + (isFinite(tour[room.id].size) ? tour[room.id].size : 'UNLIMITED') + '<br /><font color="blue"><b>TIER:</b></font> ' + Tools.data.Formats[tour[room.id].tier].name + '<br /><font color="gray"><i>Tour remind by '+user.name+'</i></font><br /><hr />');
 		} else {
+			if (tour[room.id].remindCooldown) return this.sendReply('/remind is currently on cooldown. You can only use /remind once per minute.');
+			tour[room.id].remindCooldown = true;
+			tour[room.id].remindCooldownTimer = setTimeout(function(){
+				tour[room.id].remindCooldown = false;
+			}, 1 * 60 * 1000);
 			var c = tour[room.id];
 			var unfound = [];
 			if (!target) {
