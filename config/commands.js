@@ -2022,6 +2022,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/msg OR /whisper OR /w [username], [message] - Send a private message.");
 		}
+		if (target === 'tell') {
+			matched = true;
+			this.sendReply("/tell [username], [message] - Send a message to an offline user that will be received when they log in.");
+		}
 		if (target === 'r' || target === 'reply') {
 			matched = true;
 			this.sendReply("/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to.");
