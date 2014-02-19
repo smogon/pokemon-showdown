@@ -101,6 +101,7 @@ var commands = exports.commands = {
 					(!config.tellrank ? 'disabled':'available to users of rank ' + config.tellrank + ' and above') + '.');
 			}
 			var userid = toUserid(this.targetUsername);
+			if (userid.length > 18) return this.sendReply('The name ' + this.targetUsername + ' is not a legal username, as it is too long.');
 			if (!Tells.addTell(user.name, userid, target)) return this.sendReply('User ' + this.targetUsername + ' has too many offline messages queued.');
 			return this.sendReply('User ' + this.targetUsername + ' is currently offline. Your message will be delivered when they are next online.');
 		}
