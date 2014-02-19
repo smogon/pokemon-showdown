@@ -119,7 +119,9 @@ Owner
 Staff
 
 - Bill Meltsner [bmelts] - Development
+- Hugh Gordon [V4] - Research (game mechanics), Development
 - Juanma Serrano [Joim] - Development
+- [The Immortal] - Development
 
 Retired Staff
 
@@ -129,10 +131,10 @@ Retired Staff
 Contributors
 
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
+- Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
-- Hugh Gordon [V4] - Research (game mechanics), Development
 - Kyle Dove [Kyle_Dove] - Art (battle backdrops)
+- Leonardo Julca [Slayer95] - Development
 - Robin Vandenbrande [Quinella] - Development
 - Samuel Teo [Yilx] - Art (main background)
-- [The Immortal] - Development
 - Vivian Zou [Vtas] - Art (alternate main background)

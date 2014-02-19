@@ -1,40 +1,50 @@
 {
-	"name": "Pokemon-Showdown",
-	"version": "0.9.1",
-	"dependencies": {
-		"sugar": "1.3.8",
-		"node-static": "0.6.9",
-		"sockjs": "0.3.8"
-	},
-	"optionalDependencies": {
-		"nodemailer": "0.4.1",
-		"http-proxy": "0.10.0"
-	},
-	"engines": {
-		"node": "> 0.10.1"
-	},
-	"engineStrict": true,
-	"scripts": {"start": "node app.js"},
-	"bin": "./app.js",
-	"homepage": "http://play.pokemonshowdown.com",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Zarel/Pokemon-Showdown.git"
-	},
-	"author": {
-		"name": "Guangcong Luo",
-		"email": "guangcongluo@gmail.com",
-		"url": "http://guangcongluo.com"
-	},
-	"contributors": [ {
-			"name": "Cathy J. Fitzpatrick",
-			"email": "cathy@cathyjf.com",
-			"url": "https://cathyjf.com"
-		}, {
-			"name": "Bill Meltsner",
-			"email": "bill@meltsner.com",
-			"url": "http://www.meltsner.com"
-		}
-	],
-	"private": true
+  "name": "Pokemon-Showdown",
+  "version": "0.9.1",
+  "dependencies": {
+    "sugar": "1.3.8",
+    "node-static": "0.6.9",
+    "sockjs": "0.3.8"
+  },
+  "optionalDependencies": {
+    "nodemailer": "0.4.1",
+    "http-proxy": "0.10.0"
+  },
+  "engines": {
+    "node": "> 0.10.1"
+  },
+  "engineStrict": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "bin": "./app.js",
+  "homepage": "http://play.pokemonshowdown.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zarel/Pokemon-Showdown.git"
+  },
+  "author": {
+    "name": "Guangcong Luo",
+    "email": "guangcongluo@gmail.com",
+    "url": "http://guangcongluo.com"
+  },
+  "contributors": [
+    {
+      "name": "Cathy J. Fitzpatrick",
+      "email": "cathy@cathyjf.com",
+      "url": "https://cathyjf.com"
+    },
+    {
+      "name": "Bill Meltsner",
+      "email": "bill@meltsner.com",
+      "url": "http://www.meltsner.com"
+    }
+  ],
+  "private": true,
+  "devDependencies": {
+    "gulp-util": "~2.2.14",
+    "gulp": "~3.5.2",
+    "gulp-jshint": "~1.4.0",
+    "jshint-stylish": "~0.1.5"
+  }
 }
