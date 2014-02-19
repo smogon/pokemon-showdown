@@ -2171,30 +2171,7 @@ var commands = exports.commands = {
 		}
 		this.sendReply('Your hot-patch command was unrecognized.');
 	},
-	
-	hide: function(target, room, user) {
-		if (this.can('hide')) {
-			user.getIdentity = function(){
-				if(this.muted)	return '!' + this.name;
-				if(this.locked) return '‽' + this.name;
-				return ' ' + this.name;
-			};
-			user.updateIdentity();
-			this.sendReply('You have hidden your staff symbol.');
-			return false;
-		}
 
-	},
-
-	show: function(target, room, user) {
-		if (this.can('hide')) {
-			delete user.getIdentity
-			user.updateIdentity();
-			this.sendReply('You have revealed your staff symbol');
-			return false;
-		}
-	},
-	
 	friendcode: 'fc',
 	fc: function(target, room, user, connection) {
 		if (!target) {
