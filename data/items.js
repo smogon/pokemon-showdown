@@ -2037,6 +2037,36 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Holder gains the Focus Energy effect when at 1/4 max HP or less. Single use."
 	},
+	"latiasite": {
+		id: "latiasite",
+		name: "Latiasite",
+		spritenum: -6,
+		megaStone: "Latias-Mega",
+		megaEvolves: "Latias",
+		isUnreleased: true,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Latias."
+	},
+	"latiosite": {
+		id: "latiosite",
+		name: "Latiosite",
+		spritenum: -6,
+		megaStone: "Latios-Mega",
+		megaEvolves: "Latios",
+		isUnreleased: true,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Latios."
+	},
 	"laxincense": {
 		id: "laxincense",
 		name: "Lax Incense",

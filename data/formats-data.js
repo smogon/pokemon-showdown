@@ -2631,6 +2631,10 @@ exports.BattleFormatsData = {
 		],
 		tier: "Limbo A"
 	},
+	latiasmega: {
+		requiredItem: "Latiasite",
+		tier: "Unreleased"
+	},
 	latios: {
 		viableMoves: {"dracometeor":1,"dragonpulse":1,"surf":1,"thunderbolt":1,"psyshock":1,"roost":1,"trick":1},
 		eventPokemon: [
@@ -2639,6 +2643,10 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":40,"gender":"M","moves":["protect","refresh","lusterpurge","zenheadbutt"]}
 		],
 		tier: "OU"
+	},
+	latiosmega: {
+		requiredItem: "Latiosite",
+		tier: "Unreleased"
 	},
 	kyogre: {
 		viableMoves: {"waterspout":1,"surf":1,"thunder":1,"icebeam":1,"calmmind":1,"rest":1,"sleeptalk":1},
