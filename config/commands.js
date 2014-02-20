@@ -1251,6 +1251,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	giegue: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/IKVXSTv.png"> '+
+			'<img src="http://i.imgur.com/YjVNB4q.png">' +
+			'<img height=150 src="http://i.imgur.com/ppZSj34.png"><br />' +
+			'<b>Ace: </b>Malamar<br />' +
+			'Zubats, Zubats everywhere!!!</center>')
+	},
+
 	ssjoku: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/M9wnVcP.gif">' +
