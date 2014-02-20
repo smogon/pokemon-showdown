@@ -249,6 +249,9 @@ var GlobalRoom = (function() {
 	GlobalRoom.prototype.finishSearchBattle = function(user, formatid, result) {
 		if (!result) return;
 
+		// cache the validation
+		user.validTeam = formatid;
+
 		// tell the user they've started searching
 		var newSearchData = {
 			format: formatid

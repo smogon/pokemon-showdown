@@ -1044,6 +1044,10 @@ var commands = exports.commands = {
 				Simulator.SimulatorProcess.respawn();
 				// broadcast the new formats list to clients
 				Rooms.global.send(Rooms.global.formatListText);
+				// users must have their teams validated
+				for (var uid in Users.users) {
+					Users.users[uid].validTeam = false;
+				}
 
 				return this.sendReply('Formats have been hotpatched.');
 			} catch (e) {
@@ -1585,7 +1589,10 @@ var commands = exports.commands = {
 			}
 		}
 		user.prepBattle(target, 'challenge', connection, function (result) {
-			if (result) user.makeChallenge(targetUser, target);
+			if (result) {
+				user.validTeam = target;
+				user.makeChallenge(targetUser, target);
+			}
 		});
 	},
 
@@ -1616,7 +1623,10 @@ var commands = exports.commands = {
 			return false;
 		}
 		user.prepBattle(format, 'challenge', connection, function (result) {
-			if (result) user.acceptChallengeFrom(userid);
+			if (result) {
+				user.validTeam = format;
+				user.acceptChallengeFrom(userid);
+			}
 		});
 	},
 
@@ -1627,7 +1637,10 @@ var commands = exports.commands = {
 	saveteam: 'useteam',
 	utm: 'useteam',
 	useteam: function(target, room, user) {
-		user.team = target;
+		if (user.team !== target) {
+			user.validTeam = false;
+			user.team = target;
+		}
 	},
 
 	/*********************************************************

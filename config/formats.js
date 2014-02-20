@@ -613,7 +613,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		validateSet: function(set) {
-			if (!set.level || set.level >= 50) set.forcedLevel = 50;
+			if (!set.level || set.level > 50) set.forcedLevel = 50;
 			return [];
 		},
 		onBegin: function() {
