@@ -1347,11 +1347,7 @@ var commands = exports.commands = {
 	eclipse: 'kilmeclipse', 
 	kilmeclipse: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img height=150 width=220 src="http://i.imgur.com/vbaS74V.gif">' +
-			'<img src="http://i.imgur.com/gVciXNV.gif">' +
-			'<img height=150 src="http://i.imgur.com/xQdxMSp.png"><br />' +
-			'<b>Ace: </b>Garchomp<br />' +
-			'Don\'t Gible Up when the odds are on you.');
+		this.sendReplyBox('<center><img src= http://i.imgur.com/BSFJ1nS.png weigh= 190 height= 92><img src= http://i.imgur.com/d4tZGGO.gif><img src= http://i.imgur.com/v593Ee8.png weigh= 190 height= 92><center>Ace: Garchomp & Bisharp<center>"When you get hax\'d, just know that a person\'s skill doesn\'t matter whether or not you get hax\'d. Take as a example, you getting frozen when its only 10% chance, a person\'s skill doesn\'t decide whether or not you get frozen; so next time, just pray not to get hax\'d."</center>');
 	},
 
 	handrelief: function(target, room, user) {
