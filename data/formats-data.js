@@ -4470,6 +4470,18 @@ exports.BattleFormatsData = {
 		viableMoves: {"dragondance":1,"earthquake":1,"extremespeed":1,"outrage":1,"coil":1,"stoneedge":1},
 		tier: "Limbo C"
 	},
+	diancie: {
+		viableMoves: {},
+		tier: "Unreleased"
+	},
+	hoopa: {
+		viableMoves: {},
+		tier: "Unreleased"
+	},
+	volcanion: {
+		viableMoves: {},
+		tier: "Unreleased"
+	},
 	missingno: {
 		isNonstandard: true,
 		tier: ""
