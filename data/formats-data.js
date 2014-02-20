@@ -4479,15 +4479,12 @@ exports.BattleFormatsData = {
 		tier: "Limbo C"
 	},
 	diancie: {
-		viableMoves: {},
 		tier: "Unreleased"
 	},
 	hoopa: {
-		viableMoves: {},
 		tier: "Unreleased"
 	},
 	volcanion: {
-		viableMoves: {},
 		tier: "Unreleased"
 	},
 	missingno: {
