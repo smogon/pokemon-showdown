@@ -517,6 +517,7 @@ var commands = exports.commands = {
 
 	weak: 'weakness',
 	weakness: function(target, room, user){
+		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
 
 		var pokemon = Tools.getTemplate(target);
