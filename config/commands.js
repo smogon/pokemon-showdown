@@ -1356,11 +1356,7 @@ var commands = exports.commands = {
 	eclipse: 'kilmeclipse', 
 	kilmeclipse: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img height=150 width=220 src="http://i.imgur.com/vbaS74V.gif">' +
-			'<img src="http://i.imgur.com/gVciXNV.gif">' +
-			'<img height=150 src="http://i.imgur.com/xQdxMSp.png"><br />' +
-			'<b>Ace: </b>Garchomp<br />' +
-			'Don\'t Gible Up when the odds are on you.');
+		this.sendReplyBox('<center><img src= http://i.imgur.com/BSFJ1nS.png weigh= 190 height= 92><img src= http://i.imgur.com/d4tZGGO.gif><img src= http://i.imgur.com/v593Ee8.png weigh= 190 height= 92><center>Ace: Garchomp & Bisharp<center>"When you get hax\'d, just know that a person\'s skill doesn\'t matter whether or not you get hax\'d. Take as a example, you getting frozen when its only 10% chance, a person\'s skill doesn\'t decide whether or not you get frozen; so next time, just pray not to get hax\'d."</center>');
 	},
 
 	handrelief: function(target, room, user) {
@@ -1710,6 +1706,11 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br><b>Ace: <font color="#58ACFA"><blink>Ace: Farfetch\'d</blink><br></font><b><font color="#00BFFF">Where can I find a leek in Pokemon Y?');
     },
     
+    notorangejuice: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://i.imgur.com/2WNeV9p.gif" /><img src="http://i.imgur.com/ghwiaaV.gif" /><img src="http://i.imgur.com/Vi2j2OG.gif" /><br /><br /><b>"Banana Bread."</b><br /><b>www.youtube.com/notorangejuice</b></center>');
+    },
+    
     soggey: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://i.imgur.com/w9po1tP.gif?1"><img src="http://i.imgur.com/N48X8Vf.png"><img src="http://i.imgur.com/YTl10Yi.png"><br><b>Ace: </b>Sandslash<br><b>Quote: </b>It was all fun and games... but then you had to hax me >:(</center>')
@@ -1728,11 +1729,6 @@ var commands = exports.commands = {
     kishz: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<left><img height="100" width="125" src="http://25.media.tumblr.com/bda3fbc303632e64b6c2aa720e8cf87e/tumblr_mw09v90S3R1rb53jco1_500.png"><img height="110" width="240" src="http://i.imgur.com/QTUuGUI.gif"><right><img height="100" width="125" src="http://24.media.tumblr.com/8aaf6a29a200fa3ce48e44c8fad078c9/tumblr_mpu21087ST1sogo8so1_250.jpg"><center><br><b>Ace: </b>Keldeo/Manectric<br><b>Catchphrase: </b>I\'m a Champ, come at me bro.</center>');
-    },
-    
-    eclipse: function(target, room, user) {
-    	if (!this.canBroadcast()) return;
-    	this.sendReplyBox('<center><img src= http://i.imgur.com/wFYWK4q.png weigh= 175 height = 82><img src= http://i.imgur.com/f34tdI6.gif><img src= http://i.imgur.com/IfxzbVI.png weigh= 220 height= 98><center>Ace: Garchomp & Jirachi<center>The sets aren\'t natural, so get use to it or get swept.');
     },
     
     vlahdimirlenin: function(target, room, user) {
