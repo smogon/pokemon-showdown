@@ -1130,7 +1130,12 @@ var User = (function () {
 			setImmediate(callback.bind(null, false));
 			return;
 		}
-		TeamValidator.validateTeam(formatid, this.team, this.finishPrepBattle.bind(this, connection, callback));
+		if (this.validTeam === formatid) {
+			// add exception for custom games when they become "really custom"
+			this.finishPrepBattle(connection, callback, true, this.team);
+		} else {
+			TeamValidator.validateTeam(formatid, this.team, this.finishPrepBattle.bind(this, connection, callback));
+		}
 	};
 	User.prototype.finishPrepBattle = function(connection, callback, success, details) {
 		if (!success) {

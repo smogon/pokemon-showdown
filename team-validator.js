@@ -277,10 +277,10 @@ var Validator = (function() {
 		}
 		if (format.forcedLevel) {
 			set.forcedLevel = format.forcedLevel;
-		} else if (set.level >= maxForcedLevel) {
+		} else if (set.level > maxForcedLevel) {
 			set.forcedLevel = maxForcedLevel;
 		}
-		if (set.level > maxLevel || set.level == set.forcedLevel || set.level == set.maxForcedLevel) {
+		if (set.level > maxLevel || set.level == set.forcedLevel || set.level == maxForcedLevel) {
 			set.level = maxLevel;
 		}
 
