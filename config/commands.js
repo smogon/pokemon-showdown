@@ -1697,6 +1697,11 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br><b>Ace: <font color="#58ACFA"><blink>Ace: Farfetch\'d</blink><br></font><b><font color="#00BFFF">Where can I find a leek in Pokemon Y?');
     },
     
+    notorangejuice: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://i.imgur.com/2WNeV9p.gif" /><img src="http://i.imgur.com/ghwiaaV.gif" /><img src="http://i.imgur.com/Vi2j2OG.gif" /><br /><br /><b>"Banana Bread."</b><br /><b>www.youtube.com/notorangejuice</b></center>');
+    },
+    
     soggey: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://i.imgur.com/w9po1tP.gif?1"><img src="http://i.imgur.com/N48X8Vf.png"><img src="http://i.imgur.com/YTl10Yi.png"><br><b>Ace: </b>Sandslash<br><b>Quote: </b>It was all fun and games... but then you had to hax me >:(</center>')
