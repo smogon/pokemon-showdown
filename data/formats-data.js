@@ -180,7 +180,7 @@ exports.BattleFormatsData = {
 	},
 	pichu: {
 		viableMoves: {"fakeout":1,"volttackle":1,"encore":1,"irontail":1,"toxic":1,"thunderbolt":1},
-		viableDoublesMoves: {"fakeout":1,"volttackle":1,"encore":1,"irontail":1,"protect":1,"thunderbolt":1},
+		viableDoublesMoves: {"fakeout":1,"volttackle":1,"encore":1,"irontail":1,"protect":1,"thunderbolt":1,"discharge":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["thundershock","charm","surf"]},
 			{"generation":3,"level":5,"moves":["thundershock","charm","wish"]},
@@ -200,7 +200,7 @@ exports.BattleFormatsData = {
 	},
 	pikachu: {
 		viableMoves: {"thunderbolt":1,"volttackle":1,"voltswitch":1,"grassknot":1,"hiddenpowerice":1,"brickbreak":1,"extremespeed":1,"encore":1,"substitute":1,"knockoff":1,"signalbeam":1},
-		viableDoublesMoves: {"fakeout":1,"thunderbolt":1,"volttackle":1,"voltswitch":1,"feint":1,"grassknot":1,"hiddenpowerice":1,"brickbreak":1,"extremespeed":1,"encore":1,"substitute":1,"knockoff":1,"protect":1},
+		viableDoublesMoves: {"fakeout":1,"thunderbolt":1,"volttackle":1,"voltswitch":1,"feint":1,"grassknot":1,"hiddenpowerice":1,"brickbreak":1,"extremespeed":1,"encore":1,"substitute":1,"knockoff":1,"protect":1,"discharge":1},
 		eventPokemon: [
 			{"generation":3,"level":50,"moves":["thunderbolt","agility","thunder","lightscreen"]},
 			{"generation":3,"level":10,"moves":["thundershock","growl","tailwhip","thunderwave"]},
@@ -382,7 +382,7 @@ exports.BattleFormatsData = {
 	},
 	paras: {
 		viableMoves: {"spore":1,"stunspore":1,"xscissor":1,"seedbomb":1,"synthesis":1,"leechseed":1,"aromatherapy":1,"knockoff":1},
-		viableDoublesMoves: {"spore":1,"stunspore":1,"xscissor":1,"seedbomb":1,"ragepowder":1,"leechseed":1,"protect":1,"knockoff":1},
+		viableDoublesMoves: {"spore":1,"stunspore":1,"xscissor":1,"seedbomb":1,"ragepowder":1,"leechseed":1,"protect":1,"knockoff":1,"wideguard":1},
 		eventPokemon: [
 			{"generation":3,"level":28,"abilities":["effectspore"],"moves":["refresh","spore","slash","falseswipe"]}
 		],
@@ -390,7 +390,7 @@ exports.BattleFormatsData = {
 	},
 	parasect: {
 		viableMoves: {"spore":1,"stunspore":1,"xscissor":1,"seedbomb":1,"synthesis":1,"leechseed":1,"aromatherapy":1,"knockoff":1},
-		viableDoublesMoves: {"spore":1,"stunspore":1,"xscissor":1,"seedbomb":1,"ragepowder":1,"leechseed":1,"protect":1,"knockoff":1},
+		viableDoublesMoves: {"spore":1,"stunspore":1,"xscissor":1,"seedbomb":1,"ragepowder":1,"leechseed":1,"protect":1,"knockoff":1,"wideguard":1},
 		tier: "Limbo"
 	},
 	venonat: {
@@ -665,7 +665,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	dodrio: {
-		viableMoves: {"bravebird":1,"return":1,"doubleedge":1,"quickattack":1,"protect":1},
+		viableMoves: {"bravebird":1,"return":1,"doubleedge":1,"roost":1,"quickattack":1,"pursuit":1,"toxic":1},
+		viableDoublesMoves: {"bravebird":1,"return":1,"doubleedge":1,"quickattack":1,"protect":1},
 		eventPokemon: [
 			{"generation":3,"level":34,"moves":["batonpass","drillpeck","agility","triattack"]}
 		],
@@ -673,6 +674,7 @@ exports.BattleFormatsData = {
 	},
 	seel: {
 		viableMoves: {"surf":1,"icebeam":1,"aquajet":1,"protect":1,"rest":1,"toxic":1,"drillrun":1},
+		viableDoublesMoves: {"surf":1,"icebeam":1,"aquajet":1,"protect":1,"rest":1,"fakeout":1,"drillrun":1,"icywind":1},
 		eventPokemon: [
 			{"generation":3,"level":23,"abilities":["thickfat"],"moves":["helpinghand","surf","safeguard","icebeam"]}
 		],
@@ -680,10 +682,12 @@ exports.BattleFormatsData = {
 	},
 	dewgong: {
 		viableMoves: {"surf":1,"icebeam":1,"aquajet":1,"iceshard":1,"protect":1,"rest":1,"toxic":1,"drillrun":1},
+		viableDoublesMoves: {"surf":1,"icebeam":1,"aquajet":1,"protect":1,"rest":1,"fakeout":1,"drillrun":1,"icywind":1},
 		tier: "Limbo"
 	},
 	grimer: {
 		viableMoves: {"curse":1,"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"rest":1,"icepunch":1,"firepunch":1,"sleeptalk":1,"memento":1},
+		viableDoublesMoves: {"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"protect":1,"icepunch":1,"firepunch":1},
 		eventPokemon: [
 			{"generation":3,"level":23,"moves":["helpinghand","sludgebomb","shadowpunch","minimize"]}
 		],
@@ -691,10 +695,12 @@ exports.BattleFormatsData = {
 	},
 	muk: {
 		viableMoves: {"curse":1,"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"brickbreak":1,"rest":1,"icepunch":1,"firepunch":1,"sleeptalk":1,"memento":1},
+		viableDoublesMoves: {"gunkshot":1,"poisonjab":1,"shadowsneak":1,"payback":1,"protect":1,"icepunch":1,"firepunch":1,"brickbreak":1},
 		tier: "Limbo"
 	},
 	shellder: {
 		viableMoves: {"shellsmash":1,"hydropump":1,"razorshell":1,"rockblast":1,"iciclespear":1,"rapidspin":1},
+		viableDoublesMoves: {"shellsmash":1,"hydropump":1,"razorshell":1,"rockblast":1,"iciclespear":1,"protect":1},
 		eventPokemon: [
 			{"generation":3,"level":24,"abilities":["shellarmor"],"moves":["withdraw","iciclespear","supersonic","aurorabeam"]},
 			{"generation":3,"level":10,"gender":"M","abilities":["shellarmor"],"moves":["tackle","withdraw","iciclespear"]},
@@ -704,6 +710,7 @@ exports.BattleFormatsData = {
 	},
 	cloyster: {
 		viableMoves: {"shellsmash":1,"hydropump":1,"razorshell":1,"rockblast":1,"iciclespear":1,"iceshard":1,"rapidspin":1,"spikes":1,"toxicspikes":1},
+		viableDoublesMoves: {"shellsmash":1,"hydropump":1,"razorshell":1,"rockblast":1,"iciclespear":1,"protect":1},
 		eventPokemon: [
 			{"generation":5,"level":30,"gender":"M","nature":"Naughty","isHidden":false,"abilities":["skilllink"],"moves":["iciclespear","rockblast","hiddenpower","razorshell"]}
 		],
