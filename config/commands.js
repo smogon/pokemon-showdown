@@ -1251,6 +1251,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	kammi: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/fJvcdib.png" height="125" width="76" />' +
+			'<img src="http://frostserver.net:8000/images/kammi.gif" height="61" width="325" />' +
+			'<img src="http://i.imgur.com/NUyIu76.png?1" height="125" width="76" /><br /><br />' +
+			'<b>Ace: </b>Stupidity.<br />' +
+			'<b>Quote: </b>What.</center></div>');
+	},
+
 	giegue: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/IKVXSTv.png"> '+
