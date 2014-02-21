@@ -1251,14 +1251,23 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
-	orihime: 'tailz',
-	tailz: function(target, room, user) {
+        tailz: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/zKKoyFJ.gif" width="150">' +
+                '<img src="http://i.imgur.com/oV29Ffb.png">' +
+                '<img src="http://i.imgur.com/PLhgZxL.gif" width="125" height="125"><br />' +
+                '<b>Ace:</b> My &<br />' +
+                'becuz im shit</center>');
+    },
+	
+
+	orihime: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://i.imgur.com/zKKoyFJ.gif" width="150">' +
     		'<img src="http://i.imgur.com/oV29Ffb.png">' +
     		'<img src="http://i.imgur.com/PLhgZxL.gif" width="125" height="125"><br />' +
-    		'<b>Ace:</b>My &<br />' +
-    		'"Sadistic? I don\'t mind you calling me that."</center>');
+    		'<b>Ace:</b> My &<br />' +
+    		'Sadistic? I don\'t mind you calling me that.</center>');
     },
 
 	kammi: function(target, room, user) {
