@@ -1053,6 +1053,9 @@ exports.BattleScripts = {
 				case 'hiddenpowerice':
 					if (hasMove['icywind']) rejected = true;
 					break;
+				case 'drainingkiss':
+					if (hasMove['dazzlinggleam']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
@@ -1458,7 +1461,7 @@ exports.BattleScripts = {
 				} else {
 					item = 'Expert Belt';
 				}
-			} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
 			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 				item = 'Choice Scarf';
@@ -1491,7 +1494,7 @@ exports.BattleScripts = {
 				item = 'Weakness Policy';
 			} else if (hasType['Flying'] || ability === 'Levitate') {
 				item = 'Leftovers';
-			} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			} else if (this.getEffectiveness('Ground', template) >= 1 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
 			} else if (hasType['Poison']) {
 				item = 'Black Sludge';
