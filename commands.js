@@ -1552,7 +1552,7 @@ var commands = exports.commands = {
 	inactiverooms: function(target, room, user, connection) {
 		if (!user.can('makeroom')) return false;
 		for (var u in Rooms.rooms) {
-			if (!Rooms.rooms[u].active) {
+			if (!Rooms.rooms[u].active && Rooms.rooms[u].type == 'chat') {
 				connection.sendTo(room.id, '|raw|INACTIVE: <font color=red><b>'+u+'</b></font>');
 			}
 		}
