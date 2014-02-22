@@ -255,17 +255,20 @@ exports.BattleScripts = {
 				}
 			}
 			hits = Math.floor(hits);
+			var nullDamage = true;
 			for (var i=0; i<hits && target.hp && pokemon.hp; i++) {
 				if (!move.sourceEffect && !move.sleepUsable && pokemon.status === 'slp') break;
 
 				var moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) break;
+				if (nullDamage && (moveDamage || moveDamage === 0)) nullDamage = false;
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
 				damage = (moveDamage || 0);
 				this.eachEvent('Update');
 			}
 			if (i === 0) return true;
+			if (nullDamage) damage = false;
 			this.add('-hitcount', target, i);
 		} else {
 			damage = this.moveHit(target, pokemon, move);
@@ -283,7 +286,7 @@ exports.BattleScripts = {
 		return damage;
 	},
 	moveHit: function(target, pokemon, move, moveData, isSecondary, isSelf) {
-		var damage = 0;
+		var damage;
 		move = this.getMoveCopy(move);
 
 		if (!moveData) moveData = move;
