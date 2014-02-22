@@ -1251,7 +1251,16 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
-        tailz: function(target, room, user) {
+	scorрion: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://i.imgur.com/plIiPCv.jpg?1" width="160" height="130">' +
+    		'<img src="http://i.imgur.com/TS0fQ70.png" width="230">' +
+    		'<img src="http://i.imgur.com/NxEA6yl.jpg?1" height="130" width="150"><br />' +
+    		'<b>Ace:</b> Moltres<br />' +
+    		'If you can\'t handle the heat gtfo.</center>');
+    },
+
+    tailz: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://i.imgur.com/zKKoyFJ.gif" width="150">' +
                 '<img src="http://i.imgur.com/oV29Ffb.png">' +
