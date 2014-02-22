@@ -1774,7 +1774,7 @@ var commands = exports.commands = {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/victini.gif">' +
     		'<img src="http://i.imgur.com/JL7MokA.png">' +
-    		'<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/malamar-3.gif" height="160" width="160"><br />' +
+    		'<img src="http://i.imgur.com/Q9XU12a.gif"><br />' +
     		'<b>Ace:</b> Victini<br />' +
     		'The only way you can learn is from failure to achieve success.</center>');
     },
