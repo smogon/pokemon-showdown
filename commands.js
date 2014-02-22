@@ -1553,7 +1553,11 @@ var commands = exports.commands = {
 		if (!user.can('makeroom')) return false;
 		for (var u in Rooms.rooms) {
 			if (!Rooms.rooms[u].active && Rooms.rooms[u].type == 'chat') {
-				connection.sendTo(room.id, '|raw|INACTIVE: <font color=red><b>'+u+'</b></font>');
+				if (Rooms.rooms[u].isPrivate) {
+					connection.sendTo(room.id, '|raw|INACTIVE and PRIVATE: <font color=red><b>'+u+'</b></font>');
+				} else {
+					connection.sendTo(room.id, '|raw|INACTIVE: <font color=red><b>'+u+'</b></font>');
+				}
 			}
 		}
 	},
