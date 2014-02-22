@@ -2923,7 +2923,11 @@ var Battle = (function() {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		var totalTypeMod = this.getEffectiveness(move, target, pokemon);
+		var totalTypeMod = 0;
+
+		if (target.negateImmunity[move.type] !== 'IgnoreEffectiveness' || this.getImmunity(move.type, target)) {
+			totalTypeMod = this.getEffectiveness(move, target, pokemon);
+		}
 
 		totalTypeMod = clampIntRange(totalTypeMod, -3, 3);
 		if (totalTypeMod > 0) {
