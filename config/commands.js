@@ -1266,7 +1266,7 @@ var commands = exports.commands = {
                 '<img src="http://i.imgur.com/oV29Ffb.png">' +
                 '<img src="http://i.imgur.com/PLhgZxL.gif" width="125" height="125"><br />' +
                 '<b>Ace:</b> My &<br />' +
-                'becuz im shit</center>');
+                'I\'m Pretty shit</center>');
     },
 	
 
@@ -1746,7 +1746,7 @@ var commands = exports.commands = {
     theyellowace: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://i.imgur.com/dXbBAaO.gif">' +
-                '<img src="http://i.imgur.com/3J1SrXZ.png" width="320">' +
+                '<img src="http://i.imgur.com/6V1u4y3.gif" width="320">' +
                 '<img src="http://i.imgur.com/usX9EN2.gif" height="120" width="160"><br />' +
                 '<b>Ace:</b> Pikachu<br />' +
                 'Haters never bothered me anyway. So stfu or else I will electrocute you with my Pikachu.</center>');
@@ -1774,8 +1774,8 @@ var commands = exports.commands = {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/victini.gif">' +
     		'<img src="http://i.imgur.com/JL7MokA.png">' +
-    		'<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/malamar-3.gif" height="160" width="160"><br />' +
-    		'<b>Ace:</b>Ace: Victini<br />' +
+    		'<img src="http://i.imgur.com/Q9XU12a.gif"><br />' +
+    		'<b>Ace:</b> Victini<br />' +
     		'The only way you can learn is from failure to achieve success.</center>');
     },
     
