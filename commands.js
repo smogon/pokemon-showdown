@@ -1486,7 +1486,7 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
-		if (!this.can('kick', targetUser)) return false;
+		if (!this.can('roomvoice', targetUser)) return false;
 
 		if (room.leaveBattle(targetUser)) {
 			this.addModCommand(''+targetUser.name+' was kicked from a battle by '+user.name+'' + (target ? " (" + target + ")" : ""));
