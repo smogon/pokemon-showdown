@@ -5230,7 +5230,7 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemonPriority: 100,
 			onModifyPokemon: function(pokemon) {
-				pokemon.negateImmunity['Ground'] = true;
+				pokemon.negateImmunity['Ground'] = 'IgnoreEffectiveness';
 				var disabledMoves = {bounce:1, fly:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
 				for (var m in disabledMoves) {
 					pokemon.disabledMoves[m] = true;
