@@ -351,7 +351,7 @@ var commands = exports.commands = {
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
 			var template = Tools.getTemplate(pokemon);
-			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) && 
+			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) && 
 				(megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega))) {
 				dex[pokemon] = template;
 			}
@@ -418,8 +418,7 @@ var commands = exports.commands = {
 							var move = Tools.getMove(i);
 							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
 							var canLearn = (template.learnset.sketch && !(move.id in {'chatter':1,'struggle':1,'magikarpsrevenge':1})) || template.learnset[move.id];
-							if (!canLearn && searches[search][i]) delete dex[mon];
-							else if (searches[search][i] === false && canLearn) dex[mon] = false;
+							if ((!canLearn && searches[search][i]) || (searches[search][i] === false && canLearn)) dex[mon] = false;
 						}
 					}
 					for (var mon in dex) {
