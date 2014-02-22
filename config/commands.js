@@ -1767,7 +1767,7 @@ var commands = exports.commands = {
     		'<img src="http://i.imgur.com/aYamsDZ.png?1">' +
     		'<img src="http://www.dailyfork.com/Donut.gif" width="120" height="120"><br />' +
     		'<b>Ace:</b> Excadrill<br />' +
-    		'A true champion is someone who gets up, even when he can't.</center>');
+    		'A true champion is someone who gets up, even when he can\'t.</center>');
     },
     
     video: function(target, room, user) {
