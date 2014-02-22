@@ -1743,6 +1743,15 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br><b>Ace: <font color="#58ACFA"><blink>Ace: Farfetch\'d</blink><br></font><b><font color="#00BFFF">Where can I find a leek in Pokemon Y?');
     },
     
+    theyellowace: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/dXbBAaO.gif">' +
+                '<img src="http://i.imgur.com/3J1SrXZ.png" width="320">' +
+                '<img src="http://i.imgur.com/usX9EN2.gif" height="120" width="160"><br />' +
+                '<b>Ace:</b> Pikachu<br />' +
+                'Haters never bothered me anyway. So stfu or else I will electrocute you with my Pikachu.</center>');
+    },
+    
     brittany: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/castform-sunny.gif">' +
@@ -1750,6 +1759,24 @@ var commands = exports.commands = {
                 '<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/cherrim-sunshine.gif"><br />' +
                 '<b>Ace:</b> Cherrim&lt;3<br />' +
                 'l-lewd.</center>');
+    },
+    
+    donut: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/excadrill.gif">' +
+    		'<img src="http://i.imgur.com/aYamsDZ.png?1">' +
+    		'<img src="http://www.dailyfork.com/Donut.gif" width="120" height="120"><br />' +
+    		'<b>Ace:</b> Excadrill<br />' +
+    		'A true champion is someone who gets up, even when he can't.</center>');
+    },
+    
+    video: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/victini.gif">' +
+    		'<img src="http://i.imgur.com/JL7MokA.png">' +
+    		'<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/malamar-3.gif" height="160" width="160"><br />' +
+    		'<b>Ace:</b>Ace: Victini<br />' +
+    		'The only way you can learn is from failure to achieve success.</center>');
     },
     
     notorangejuice: function(target, room, user) {
