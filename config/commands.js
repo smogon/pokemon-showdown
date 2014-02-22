@@ -1748,7 +1748,7 @@ var commands = exports.commands = {
         this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/castform-sunny.gif">' +
                 '<img src="http://i.imgur.com/natglfA.png">' +
                 '<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/cherrim-sunshine.gif"><br />' +
-                '<b>Ace:</b> Cherrim<3<br />' +
+                '<b>Ace:</b> Cherrim&lt;3<br />' +
                 'l-lewd.</center>');
     },
     
