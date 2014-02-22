@@ -1102,6 +1102,7 @@ exports.BattleItems = {
 		},
 		onAfterMoveSecondary: function(target, source, move) {
 			if (source && source !== target && target.hp && move && move.category !== 'Status') {
+				if (target.subFainted || (target.volatiles['substitute'] && !(move.notSubBlocked || (source.ability === 'infiltrator' || move.isSoundBased) && this.gen >= 6))) return;
 				if (target.useItem()) {
 					target.switchFlag = true;
 				}
