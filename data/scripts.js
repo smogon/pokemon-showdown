@@ -262,6 +262,7 @@ exports.BattleScripts = {
 				if (moveDamage === false) break;
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
+				if (i < hits - 1 && target.subFainted) delete target.subFainted; // only deletes target.subFainted if more hits are to come
 				damage = (moveDamage || 0);
 				this.eachEvent('Update');
 			}
