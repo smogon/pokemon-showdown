@@ -1251,7 +1251,7 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
-	scorрion: function(target, room, user) {
+	scorpion: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://i.imgur.com/plIiPCv.jpg?1" width="160" height="130">' +
     		'<img src="http://i.imgur.com/TS0fQ70.png" width="230">' +
