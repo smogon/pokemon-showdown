@@ -211,58 +211,6 @@ exports.BattleMovedex = {
 			return 50;
 		}
 	},
-	gravity: {
-		inherit: true,
-		effect: {
-			duration: 5,
-			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
-					return 7;
-				}
-				return 5;
-			},
-			onStart: function() {
-				this.add('-fieldstart', 'move: Gravity');
-			},
-			onAccuracy: function(accuracy) {
-				if (typeof accuracy !== 'number') return;
-				return accuracy * 5/3;
-			},
-			onModifyPokemonPriority: 100,
-			onModifyPokemon: function(pokemon) {
-				pokemon.negateImmunity['Ground'] = true;
-				var disabledMoves = {bounce:1, fly:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
-				for (var m in disabledMoves) {
-					pokemon.disabledMoves[m] = true;
-				}
-				var applies = false;
-				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly') || pokemon.removeVolatile('skydrop')) {
-					applies = true;
-					this.cancelMove(pokemon);
-				}
-				if (pokemon.volatiles['magnetrise']) {
-					applies = true;
-					delete pokemon.volatiles['magnetrise'];
-				}
-				if (pokemon.volatiles['telekinesis']) {
-					applies = true;
-					delete pokemon.volatiles['telekinesis'];
-				}
-				if (applies) this.add('-activate', pokemon, 'Gravity');
-			},
-			onBeforeMove: function(pokemon, target, move) {
-				var disabledMoves = {bounce:1, fly:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
-				if (disabledMoves[move.id]) {
-					this.add('cant', pokemon, 'move: Gravity', move);
-					return false;
-				}
-			},
-			onResidualOrder: 22,
-			onEnd: function() {
-				this.add('-fieldend', 'move: Gravity');
-			}
-		}
-	},
 	growth: {
 		inherit: true,
 		pp: 40
