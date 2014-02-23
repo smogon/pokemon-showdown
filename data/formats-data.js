@@ -413,7 +413,7 @@ exports.BattleFormatsData = {
 	},
 	dugtrio: {
 		viableMoves: {"earthquake":1,"stoneedge":1,"stealthrock":1,"suckerpunch":1,"reversal":1,"substitute":1,"shadowclaw":1},
-		viableDoublesMoves: {"earthquake":1,"rockslide":1,"protect":1,"suckerpunch":1,"shadowclaw":1,"stoneegde":1},
+		viableDoublesMoves: {"earthquake":1,"rockslide":1,"protect":1,"suckerpunch":1,"shadowclaw":1,"stoneedge":1},
 		eventPokemon: [
 			{"generation":3,"level":40,"moves":["charm","earthquake","sandstorm","triattack"]}
 		],
