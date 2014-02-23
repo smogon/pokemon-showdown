@@ -1040,7 +1040,7 @@ var cmds = {
 		}
 		if (target === 'replace off') {
 			config.tourunlimitreplace = false;
-			return this.sendReply('Replacing past round oen has been disabled.');
+			return this.sendReply('Replacing past round one has been disabled.');
 		}
 		if (target === 'alts on') { 
 			config.tourallowalts = true;
