@@ -1705,8 +1705,6 @@ exports.BattleScripts = {
 		var typeCount = {};
 		var typeComboCount = {};
 		var baseFormes = {};
-		var uberCount = 0;
-		var nuCount = 0;
 		var megaCount = 0;
 
 		for (var i=0; i<keys.length && pokemonLeft < 6; i++) {
@@ -1912,7 +1910,7 @@ exports.BattleScripts = {
 					if (move.type === 'Grass') counter['overgrow']++;
 					if (move.type === 'Bug') counter['swarm']++;
 					if (move.type === 'Water') counter['torrent']++;
-					// Make sure not to count Knock Off, Rapid Spin, etc.
+					// Make sure not to count Rapid Spin, etc.
 					if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
 						damagingMoves.push(move);
 						damagingMoveIndex[moveid] = k;
@@ -2462,7 +2460,7 @@ exports.BattleScripts = {
 				item = 'Leftovers';
 			} else if (template.species === 'Dusclops') {
 				item = 'Eviolite';
-			} else if (template.species === 'Scrafty') {
+			} else if (template.species === 'Scrafty' && counter['Status'] === 0) {
 				item = 'Assault Vest';
 			} else if (template.species === 'Amoonguss') {
 				item = 'Black Sludge';
@@ -2575,8 +2573,15 @@ exports.BattleScripts = {
 		}
 
 		// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
-		// Every 10.35 BST adds a level from 70 up to 99. Results are floored.
-		var bst = template.baseStats.hp + template.baseStats.atk + template.baseStats.def + template.baseStats.spa + template.baseStats.spd + template.baseStats.spe;
+		// Every 10.35 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
+		// To-do: adjust levels of mons with boosting items (Light Ball, Thick Club etc)
+		var itemObj = this.getItem(item);
+		if (shouldMegaEvo && itemObj.megaEvolves && itemObj.megaEvolves === template.species) {
+			var megaTemplate = this.getTemplate(itemObj.megaStone);
+			var bst = megaTemplate.baseStats.hp + megaTemplate.baseStats.atk + megaTemplate.baseStats.def + megaTemplate.baseStats.spa + megaTemplate.baseStats.spd + megaTemplate.baseStats.spe;
+		} else {
+			var bst = template.baseStats.hp + template.baseStats.atk + template.baseStats.def + template.baseStats.spa + template.baseStats.spd + template.baseStats.spe;
+		}
 		var level = 70 + Math.floor(((600 - clampIntRange(bst, 300, 600)) / 10.35));
 
 		return {
