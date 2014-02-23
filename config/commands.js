@@ -1253,7 +1253,7 @@ var commands = exports.commands = {
 
         akkie: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img src="http://i.imgur.com/17XVxNt.png" height="180" width="200">' +
+        this.sendReplyBox('<center><img src="http://i.imgur.com/17XVxNt.png" height="160" width="180">' +
                 '<img src="http://i.imgur.com/5AKQ0L3.gif">' +
                 '<img src="http://i.imgur.com/PgXqSU1.png" height="190" width="170""><br />' +
                 '<b>Ace:</b> Umbreon<br />' +
