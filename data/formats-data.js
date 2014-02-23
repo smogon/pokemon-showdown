@@ -470,7 +470,7 @@ exports.BattleFormatsData = {
 	},
 	growlithe: {
 		viableMoves: {"flareblitz":1,"wildcharge":1,"hiddenpowergrass":1,"closecombat":1,"morningsun":1,"willowisp":1,"toxic":1,"flamethrower":1},
-		viableDoublesMoves: {"flareblitz":1,"wildcharge":1,"hiddenpowergrass":1,"closecombat":1,\"willowisp":1,"snarl":1,"heatwave":1,"helpinghand":1,"protect":1},
+		viableDoublesMoves: {"flareblitz":1,"wildcharge":1,"hiddenpowergrass":1,"closecombat":1,"willowisp":1,"snarl":1,"heatwave":1,"helpinghand":1,"protect":1},
 		eventPokemon: [
 			{"generation":3,"level":32,"abilities":["intimidate"],"moves":["leer","odorsleuth","takedown","flamewheel"]},
 			{"generation":3,"level":10,"gender":"M","moves":["bite","roar","ember"]},
