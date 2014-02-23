@@ -1251,6 +1251,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+        akkie: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/17XVxNt.png" height="180" width="200">' +
+                '<img src="http://i.imgur.com/5AKQ0L3.gif">' +
+                '<img src="http://i.imgur.com/PgXqSU1.png" height="190" width="170""><br />' +
+                '<b>Ace:</b> Umbreon<br />' +
+                'You want to fight me? Go ahead. But to beat me it will take more than just raw power.</center>');
+    },
+
 	scorpion: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://i.imgur.com/plIiPCv.jpg?1" width="160" height="130">' +
