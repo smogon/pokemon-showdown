@@ -201,6 +201,7 @@ exports.BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
+			if (!pokemon.hp) return;
 			for (var i=0; i<pokemon.side.foe.active.length; i++) {
 				var target = pokemon.side.foe.active[i];
 				if (!target || !target.hp) continue;
