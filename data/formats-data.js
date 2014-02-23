@@ -1580,7 +1580,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	dunsparce: {
-		viableMoves: {"coil":1,"rockslide":1,"bite":1,"headbutt":1,"glare":1,"thunderwave":1,"bodyslam":1,"roost":1},
+		viableMoves: {"coil":1,"rockslide":1,"bite":1,"headbutt":1,"glare":1,"bodyslam":1,"roost":1},
 		tier: "Limbo"
 	},
 	gligar: {
