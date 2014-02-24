@@ -40,7 +40,13 @@ try {
 	fs.writeFileSync('config/bannedmessages.txt','','utf8');
 }
 
-var userTypes = fs.readFileSync('config/types.csv','utf8'); 
+try {
+	userTypes = fs.readFileSync('config/types.csv','utf8'); 
+} catch(e) {
+	userTypes = '';
+	fs.writeFileSync('config/types.csv','','utf8');
+}
+
 exports.bannedMessages = exports.bannedMessages.split('\n');
 
 exports.readVips = function() {
