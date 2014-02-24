@@ -1413,7 +1413,7 @@ var Battle = (function() {
 		this.messageLog = [];
 
 		// use a random initial seed (64-bit, [high -> low])
-		this.seed = [Math.floor(Math.random() * 0x10000),
+		this.startingSeed = this.seed = [Math.floor(Math.random() * 0x10000),
 			Math.floor(Math.random() * 0x10000),
 			Math.floor(Math.random() * 0x10000),
 			Math.floor(Math.random() * 0x10000)];
@@ -2923,7 +2923,11 @@ var Battle = (function() {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		var totalTypeMod = this.getEffectiveness(move, target, pokemon);
+		var totalTypeMod = 0;
+
+		if (target.negateImmunity[move.type] !== 'IgnoreEffectiveness' || this.getImmunity(move.type, target)) {
+			totalTypeMod = this.getEffectiveness(move, target, pokemon);
+		}
 
 		totalTypeMod = clampIntRange(totalTypeMod, -3, 3);
 		if (totalTypeMod > 0) {

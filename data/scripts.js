@@ -137,7 +137,7 @@ exports.BattleScripts = {
 			if (!targets.length) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
-				if (move.selfdestruct && this.gen == 5) {
+				if (move.selfdestruct && this.gen >= 5) {
 					this.faint(pokemon, pokemon, move);
 				}
 				return true;
@@ -255,17 +255,20 @@ exports.BattleScripts = {
 				}
 			}
 			hits = Math.floor(hits);
+			var nullDamage = true;
 			for (var i=0; i<hits && target.hp && pokemon.hp; i++) {
 				if (!move.sourceEffect && !move.sleepUsable && pokemon.status === 'slp') break;
 
 				var moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) break;
+				if (nullDamage && (moveDamage || moveDamage === 0)) nullDamage = false;
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
 				damage = (moveDamage || 0);
 				this.eachEvent('Update');
 			}
 			if (i === 0) return true;
+			if (nullDamage) damage = false;
 			this.add('-hitcount', target, i);
 		} else {
 			damage = this.moveHit(target, pokemon, move);
@@ -283,7 +286,7 @@ exports.BattleScripts = {
 		return damage;
 	},
 	moveHit: function(target, pokemon, move, moveData, isSecondary, isSelf) {
-		var damage = 0;
+		var damage;
 		move = this.getMoveCopy(move);
 
 		if (!moveData) moveData = move;
@@ -1053,6 +1056,9 @@ exports.BattleScripts = {
 				case 'hiddenpowerice':
 					if (hasMove['icywind']) rejected = true;
 					break;
+				case 'drainingkiss':
+					if (hasMove['dazzlinggleam']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
@@ -1336,6 +1342,10 @@ exports.BattleScripts = {
 			if (template.species === 'Alakazam' || template.species === 'Scizor' || template.species === 'Garchomp') {
 				shouldMegaEvo = 'maybe';
 			}
+			
+			if (template.species === 'Latios' || template.species === 'Latias') {
+				shouldMegaEvo = false;
+			}
 
 			item = 'Leftovers';
 			if (template.requiredItem) {
@@ -1458,7 +1468,7 @@ exports.BattleScripts = {
 				} else {
 					item = 'Expert Belt';
 				}
-			} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
 			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 				item = 'Choice Scarf';
@@ -1491,7 +1501,7 @@ exports.BattleScripts = {
 				item = 'Weakness Policy';
 			} else if (hasType['Flying'] || ability === 'Levitate') {
 				item = 'Leftovers';
-			} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			} else if (this.getEffectiveness('Ground', template) >= 1 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
 			} else if (hasType['Poison']) {
 				item = 'Black Sludge';

@@ -529,7 +529,7 @@ var commands = exports.commands = {
     	makeprivate: 'privateroom',
     	toggleprivate: 'privateroom',      
 	privateroom: function(target, room, user) {
-		if (!this.can('privateroom')) return;
+		if (!this.can('privateroom', null, room)) return;
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand(user.name+' made this room public.');
