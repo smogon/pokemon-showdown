@@ -33,7 +33,13 @@
  var lockedIps = {};
 
 var ipbans = fs.createWriteStream("config/ipbans.txt", {flags: "a"}); // do not remove this line
-exports.bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
+try {
+	exports.bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
+} catch(e) {
+	exports.bannedMessages = '';
+	fs.writeFileSync('config/bannedmessages.txt','','utf8');
+}
+
 var userTypes = fs.readFileSync('config/types.csv','utf8'); 
 exports.bannedMessages = exports.bannedMessages.split('\n');
 
