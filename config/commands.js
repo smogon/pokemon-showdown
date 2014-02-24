@@ -1118,6 +1118,11 @@ var commands = exports.commands = {
 	 birkal: function(target, room, user) {
 	 	this.sendReply("It's not funny anymore.");
 	 },
+	 
+         yay: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://24.media.tumblr.com/e708d6be1d15168d49780aae0b92cf78/tumblr_mkr1fa1hrP1r4huhoo1_500.gif"></center>');
+	 },
 
 	 potd: function(target, room, user) {
 	 	if (!this.can('potd')) return false;
