@@ -1342,6 +1342,10 @@ exports.BattleScripts = {
 			if (template.species === 'Alakazam' || template.species === 'Scizor' || template.species === 'Garchomp') {
 				shouldMegaEvo = 'maybe';
 			}
+			
+			if (template.species === 'Latios' || template.species === 'Latias') {
+				shouldMegaEvo = false;
+			}
 
 			item = 'Leftovers';
 			if (template.requiredItem) {
