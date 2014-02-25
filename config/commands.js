@@ -1635,14 +1635,13 @@ var commands = exports.commands = {
         	'<b>Catchphrase: </b>It may be risky, but it may be teh only way to win.</center>');
     },
     
-    shira : 'e4shirayuri', 
-    e4shirayuri: function(target, room, user) {
+    isawa: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img height="100" src="http://www.okamiworld.com/wiki/images/b/bd/Amaterasu_5_-_Solar_Flare.jpg">' +
-        	'<img src="http://i.imgur.com/THEJxYZ.gif">' +
-        	'<img height="100" src="http://1-media-cdn.foolz.us/ffuuka/board/vp/image/1366/82/1366827374253.jpg" height="91"><br />' +
-        	'<b>Ace: </b>Gliscor<br />' +
-        	'<b>Catcphrase: </b>Rub-a-dub-dub, Shira be in your tub.</center>');
+        this.sendReplyBox('<center><img src="http://www.imgbase.info/images/safe-wallpapers/anime/neon_genesis_evangelion/9743_neon_genesis_evangelion_mari.jpg"width="160" height="140">' +
+                '<img src="http://i.imgur.com/qZvvpNG.png?1" width="220">' +
+                '<img src="http://farm3.static.flickr.com/2755/4122651974_353e4287e8.jpg" width="160" height="130"><br />' +
+                '<b>Ace:</b> Galvantula<br />' +
+                'Happiness doesn\'t walk to me, because I\'m walking to it. One day, one step. Three steps in three days. Three steps forward, two steps back. Life\'s a one-two punch...</center>');
     },
     
     pikadagreat : 'pika', 
