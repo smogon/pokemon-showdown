@@ -2105,13 +2105,13 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Protects the user and allies from status moves. Priority +4.",
-		shortDesc: "Prevents status moves from affecting the user.",
+		desc: "Protects the user and allies from status moves. Priority +3.",
+		shortDesc: "Protects allies from status moves this turn.",
 		id: "craftyshield",
 		isViable: true,
 		name: "Crafty Shield",
 		pp: 10,
-		priority: 4,
+		priority: 3,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'craftyshield',
 		onTryHit: function(target, source, move) {
