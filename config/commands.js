@@ -710,6 +710,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3463764/">Balanced Hackmons</a><br />';
 		}
+		if (target === 'balancedhackmons' || target === 'bh') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3499973/">Balanced Hackmons Mentoring Program</a><br />';
+		}
 		if (target === 'all' || target === 'glitchmons') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3467120/">Glitchmons</a><br />';
