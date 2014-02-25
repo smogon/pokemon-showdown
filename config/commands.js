@@ -1251,6 +1251,16 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+   demon: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/pinsir.gif">' +
+                '<img src="http://i.imgur.com/66NKKkD.png">' +
+                '<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/pinsir-mega.gif"><br />' +
+                '<b>Ace:</b> Pinsir<br />' +
+                'In order to succeed, your desire to succeed must be greater than your fear of failure.</center>');
+    },
+   
+   
     rors: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://i979.photobucket.com/albums/ae277/bjoyea/T-cardButchery_zps8f48bc75.gif" width="140" height="120">' +
