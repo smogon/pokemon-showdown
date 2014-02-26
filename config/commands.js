@@ -1251,6 +1251,16 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+   donald: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQpaW7cxyFCEUxPkYHxnkZWXqE-AEHvZfMhxU-QdPfcghuAF69Gg" width="144" height="146">' +
+                '<img src="http://i.imgur.com/EBq4NMP.png">' +
+                '<img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR7aKN8bYWVMCGRNZQJNr5gMqG71aXzzfdPcJONfwFVvcjKyxYzRA" width="147" height="140"><br />' +
+                '<b>Ace:</b> Bulk<br />' +
+                'If it moves, I kill it.</center>');
+    },
+   
+   
    messiah: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://i.imgur.com/y08yCwd.png" width="120" height="136">' +
