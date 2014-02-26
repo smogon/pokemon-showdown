@@ -1026,7 +1026,7 @@ exports.BattleScripts = {
 				case 'stoneedge':
 					if (hasMove['headsmash']) rejected = true;
 					break;
-				case 'bonemerang': case 'earthpower':
+				case 'bonemerang': case 'earthpower': case: 'bulldoze':
 					if (hasMove['earthquake']) rejected = true;
 					break;
 				case 'dragonclaw':
