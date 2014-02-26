@@ -1666,7 +1666,7 @@ var commands = exports.commands = {
     
     isawa: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img src="http://i.imgur.com/hwqR2b8.jpg"width="160" height="140">' +
+        this.sendReplyBox('<center><img src="http://i.imgur.com/hwqR2b8.jpg" width="160" height="140">' +
                 '<img src="http://i.imgur.com/qZvvpNG.png?1" width="220">' +
                 '<img src="http://farm3.static.flickr.com/2755/4122651974_353e4287e8.jpg" width="160" height="130"><br />' +
                 '<b>Ace:</b> Galvantula<br />' +
