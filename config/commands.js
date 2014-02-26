@@ -1465,11 +1465,11 @@ var commands = exports.commands = {
 
 	piscean: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img height=100 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/suicune.gif">' +
-			'<img src="http://i.imgur.com/pejdyTz.gif">' +
-			'<img height=100 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/huntail.gif"><br />' +
-			'<b>Ace:</b> Fish<br />' +
-			'<b>Catchphrase:</b> The mind of a Pisces is like an ocean - it\'s deep and vast. <br />Should you venture into its depths, you may find yourself lost beneath the waves.  </center>');
+		this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/spheal.gif">' +
+			'<img src="http://i.imgur.com/iR3xhAH.gif">' +
+			'<img width="130" height="100" src="http://th01.deviantart.net/fs70/200H/f/2011/010/a/b/derp_spheal_by_keijimatsu-d36um8a.png"><br />' +
+			'<b>Ace:</b> Derp<br />' +
+			'<b>Catchphrase:</b> What am I supposed to do with this shit?</center>');
 	},
 
 	adam: 'adamkillszombies',
