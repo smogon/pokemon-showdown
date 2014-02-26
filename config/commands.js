@@ -1040,6 +1040,11 @@ var commands = exports.commands = {
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://25.media.tumblr.com/b74eb164763dce0487564c3ce21b9318/tumblr_mvk84l1WWN1rq5fzso1_500.gif"></center>');
 	 },
 
+ 	 dexholders: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://i.imgur.com/tR9r9.gif"></center>');
+	 },
+
 	 nora: function(target, room, user) {
 	 	if (!this.canBroadcast()) return;
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://25.media.tumblr.com/92f2a57740bc0ad121e0cb87d9836b87/tumblr_msonfrBlq11sgww3vo1_500.gif"></center>');
@@ -1121,7 +1126,7 @@ var commands = exports.commands = {
 	 
          yay: function(target, room, user) {
 	 	if (!this.canBroadcast()) return;
-	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://24.media.tumblr.com/e708d6be1d15168d49780aae0b92cf78/tumblr_mkr1fa1hrP1r4huhoo1_500.gif"></center>');
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://stream1.gifsoup.com/view8/4716472/pokespe-boys-o.gif"></center>');
 	 },
 
 	 potd: function(target, room, user) {
