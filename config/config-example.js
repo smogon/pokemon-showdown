@@ -1,4 +1,7 @@
-// The server port - the port to run Pokemon Showdown under
+/* The server port - the port to run Pokemon Showdown under.
+ * Note: you must replace this line by "exports.port = process.env.PORT || 8000;"
+ * if you use a heroku hosting.
+ */
 exports.port = 8000;
 
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
