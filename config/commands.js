@@ -1557,14 +1557,13 @@ var commands = exports.commands = {
         	'Gurl please. I can beat you with mah eyes closed.');
     },
     
-    elitefourkaiser : 'kaiser',
     kaiser: function(target, room, user) {
-        if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img height="80" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/534.gif">' +
-        	'<img height="80" width="450" src="http://i.imgur.com/TZgQzzZ.png">' +
-        	'<img height="80" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/475.gif"><br />' +
-        	'<b>Ace: </b>Gallade<br />' +
-        	'<b>Catchphrase: </b>Fight to the Death, When you give up thats when you really lose</center>');
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/aegislash-blade.gif">' +
+    		'<img src="http://i.imgur.com/7P2ifdc.png?1" width="340">' +
+    		'<img src="http://i.imgur.com/zWfqzKL.gif" width="125"><br />' +
+    		'<b>Ace:</b> Gallade<br />' +
+    		'Challenges are what make life interesting and overcoming them is what makes life meaningful.</center>');
     },
     
     gemini : 'prfessorgemini',
