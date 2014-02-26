@@ -75,7 +75,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 		// multiline eval
 		message = '/evalbattle '+message.substr(4);
 	}
-	if (message.substr(0,1) === '?') {
+	if (message.substr(0,1) === '?' && message.substr(1) !== '') {
 		message = '/help '+message.substr(1);
 	}
 	if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
