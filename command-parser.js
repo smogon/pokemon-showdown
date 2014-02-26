@@ -75,7 +75,9 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 		// multiline eval
 		message = '/evalbattle '+message.substr(4);
 	}
-
+	if (message.substr(0,1) === '?') {
+		message = '/help '+message.substr(1);
+	}
 	if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
@@ -95,6 +97,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			target = '';
 		}
 	}
+	
 	cmd = cmd.toLowerCase();
 	var broadcast = false;
 	if (cmd.charAt(0) === '!') {
