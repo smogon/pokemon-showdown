@@ -1251,6 +1251,16 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+   messiah: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://i.imgur.com/1dswTfj.png" width="120" height="136">' +
+    		'<img src="http://i.imgur.com/kd6Wemy.png">' +
+    		'<img src="http://i.imgur.com/2ohnOln.png" width="120" height="136"><br />' +
+    		'<b>Ace:</b> Kabutops<br />' +
+    		'Sit back, relax, and let the undertow drown out your worries forever...</center>');
+    },
+  
+  
    demon: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/pinsir.gif">' +
