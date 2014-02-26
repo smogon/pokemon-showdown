@@ -1071,7 +1071,6 @@ var commands = exports.commands = {
 
 	commands: 'help',
 	h: 'help',
-	'?': 'help',
 	help: function(target, room, user) {
 		target = target.toLowerCase();
 		var matched = false;
@@ -1367,7 +1366,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands') {
 			matched = true;
-			this.sendReply('/help OR /h OR /? - Gives you help.');
+			this.sendReply('/help OR /h OR ? - Gives you help.');
 		}
 		if (!target) {
 			this.sendReply('COMMANDS: /msg, /reply, /ignore, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps, /highlight');
