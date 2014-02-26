@@ -2297,11 +2297,14 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://fc09.deviantart.net/fs4/i/2004/196/9/b/Ludidolo.gif"><img src="http://i.imgur.com/CSfl1OU.gif"><img src="http://z5.ifrm.com/30155/88/0/a3555782/avatar-3555782.jpg"></center><br /><center>Ace: Ludicolo<br />TRAINS AND COLOS');
 	},
 	
-	darrelde: 'elite4darrelde',
-	championkeldeo: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src ="http://i.imgur.com/UYMcWfo.png">');
-	},
+	nightmare: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://www.smogon.com/media/forums/avatars/gengar.gif.v.RgUmg2XMx1gWsiUcJc9b0w">' +
+                '<img src="http://i.imgur.com/3Shcj1m.png" width="347">' +
+                '<img src="http://www.smogon.com/media/forums/avatars/darkrai.gif.v.74wEympImux6JCL0v_MbPA"><br />' +
+                '<b>Ace:</b> Darkrai<br />' +
+                'Prepare for your nightmare.</center>');
+        },
 	
 	killertiger: function(target, room, user) {
 		if (!this.canBroadcast()) return;
