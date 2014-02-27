@@ -439,22 +439,22 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 try {
 	global.tour = require('./tour.js').tour();
 } catch (e) {
-	console.log('Error loading tour.js');
+	console.log('Error loading tour.js: '+e.stack);
 }
 try {
 	global.hangman = require('./hangman.js').hangman();
 } catch (e) {
-	console.log('Error loading hangman.js');
+	console.log('Error loading hangman.js: '+e.stack);
 }
 try {
 	global.frostcommands = require('./frost-commands.js');
 } catch (e) {
-	console.log('Error loading frost-commands.js');
+	console.log('Error loading frost-commands.js: '+e.stack);
 }
 try {
 	global.economy = require('./economy.js');
 } catch (e) {
-	console.log('Error loading economy.js');
+	console.log('Error loading economy.js: '+e.stack);
 }
 
 fs.readFile('./logs/uptime.txt', function (err, uptime) {
