@@ -1129,6 +1129,11 @@ var commands = exports.commands = {
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://stream1.gifsoup.com/view8/4716472/pokespe-boys-o.gif"></center>');
 	 },
 
+         Pleiades: function(target, room, user) {
+	 	if (!this.canBroadcast()) return;
+	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://24.media.tumblr.com/d4bfc0ce9509a2c2a2695cefdfe7816d/tumblr_mg828id4kQ1s1sk4do1_500.gif"></center>');
+	 },
+	 
 	 potd: function(target, room, user) {
 	 	if (!this.can('potd')) return false;
 
