@@ -935,7 +935,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.getStatus = function() {
 		return this.battle.getEffect(this.status);
 	};
-	BattlePokemon.prototype.eatItem = function(item, source, sourceEffect) {
+	BattlePokemon.prototype.useItem = function(item, source, sourceEffect) {
 		if (!this.hp || !this.isActive) return false;
 		if (!this.item) return false;
 
@@ -945,44 +945,8 @@ var BattlePokemon = (function() {
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		item = this.getItem();
-		if (this.battle.runEvent('UseItem', this, null, null, item) && this.battle.runEvent('EatItem', this, null, null, item)) {
-			this.battle.add('-enditem', this, item, '[eat]');
-
-			this.battle.singleEvent('Eat', item, this.itemData, this, source, sourceEffect);
-
-			this.lastItem = this.item;
-			this.item = '';
-			this.itemData = {id: '', target: this};
-			this.usedItemThisTurn = true;
-			this.ateBerry = true;
-			return true;
-		}
-		return false;
-	};
-	BattlePokemon.prototype.useItem = function(item, source, sourceEffect) {
-		if (!this.isActive) return false;
-		if (!this.item) return false;
-
-		var id = toId(item);
-		if (id && this.item !== id) return false;
-
-		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-		item = this.getItem();
-		if (this.battle.runEvent('UseItem', this, null, null, item)) {
-			switch (item.id) {
-			case 'redcard':
-				this.battle.add('-enditem', this, item, '[of] '+source);
-				break;
-			default:
-				if (!item.isGem) {
-					this.battle.add('-enditem', this, item);
-				}
-				break;
-			}
-
-			this.battle.singleEvent('Use', item, this.itemData, this, source, sourceEffect);
-
+		if (this.battle.runEvent('TryUseItem', this, null, null, item)) {
+			this.useItemSuccess(item, source, sourceEffect);
 			this.lastItem = this.item;
 			this.item = '';
 			this.itemData = {id: '', target: this};
@@ -991,6 +955,26 @@ var BattlePokemon = (function() {
 			return true;
 		}
 		return false;
+	};
+	BattlePokemon.prototype.useItemSuccess = function(item, source, sourceEffect) {
+		if (!this.hp || !this.isActive) return false;
+		if (!item) item = this.getItem();
+
+		switch (item.id) {
+			case 'redcard':
+				this.battle.add('-enditem', this, item, '[of] '+source);
+				break;
+			default:
+				if (item.isBerry) {
+					this.battle.add('-enditem', this, item, '[eat]');
+					this.ateBerry = true;
+				} else if (!item.isGem) {
+					this.battle.add('-enditem', this, item);
+				}
+				break;
+		}
+
+		this.battle.runEvent('UseItem', this, null, null, item);
 	};
 	BattlePokemon.prototype.takeItem = function(source) {
 		if (!this.hp || !this.isActive) return false;
@@ -2006,7 +1990,6 @@ var Battle = (function() {
 					Heal: 1,
 					TakeItem: 1,
 					UseItem: 1,
-					EatItem: 1,
 					SetStatus: 1,
 					CriticalHit: 1,
 					ModifyPokemon: 1,

@@ -38,10 +38,10 @@ exports.BattleItems = {
 			var decision = this.willMove(pokemon);
 			this.debug('custap decision: '+decision);
 			if (decision) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			var decision = this.willMove(pokemon);
 			this.debug('custap eaten: '+decision);
 			if (decision) {
