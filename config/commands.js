@@ -2256,7 +2256,7 @@ var commands = exports.commands = {
 	prez: 'cosy',
 	cosy: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReply('|raw|<center><img src="http://i.imgur.com/yMNJ2xK.png"></center>');
+		this.sendReply('|raw|<marquee direction="right"><img src="http://i.imgur.com/Cy88GTo.gif"><img src="http://i.imgur.com/Cy88GTo.gif"><img src="http://i.imgur.com/Cy88GTo.gif"><img src="http://i.imgur.com/Cy88GTo.gif"><img src="http://i.imgur.com/Cy88GTo.gif"></marquee><img width="100%" src="http://i.imgur.com/NyBEx2S.png"><marquee direction="left"><img src="http://i.imgur.com/gnG81Af.gif"><img src="http://i.imgur.com/gnG81Af.gif"><img src="http://i.imgur.com/gnG81Af.gif"><img src="http://i.imgur.com/gnG81Af.gif"><img src="http://i.imgur.com/gnG81Af.gif"></marquee>');
 	},
 	
 	hulasaur: function(target, room, user) {
