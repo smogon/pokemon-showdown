@@ -1754,6 +1754,21 @@ var commands = exports.commands = {
 		this.logModCommand(user.name+' send a popup message to '+targetUser.name);
 	},
 
+	image: function(target, room, user) {
+		if (!user.can('declare')) return false;
+		if (!target) return this.sendReply('/image [url], [width percentile]');
+		var targets = target.split(',');
+		var url = targets[0];
+		var width = targets[1];
+		if (!url || !width) return this.sendReply('/image [url], [width percentile]');
+		if (url.indexOf('.png') === -1 && url.indexOf('.jpg') === -1 && url.indexOf('.gif') === -1) {
+			return this.sendReply('The url you supply must end in .png, .jpg or .gif.');
+		}
+		if (isNaN(width)) return this.sendReply('The width must be a number.');
+		if (width < 1 || width > 100) return this.sendReply('The width must be greater than 0 but less than or equal to 100.');
+		this.add('|raw|<center><img width="'+width+'%" src="'+url+'"></center>');
+	},
+
 	declaregreen: 'declare',
 	declarered: 'declare',
 	declare: function(target, room, user, connection, cmd) {
