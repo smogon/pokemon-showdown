@@ -1029,9 +1029,8 @@ var BattlePokemon = (function() {
 		if (noForce && this.ability === ability.id) {
 			return false;
 		}
-		if (ability.id === 'multitype' || ability.id === 'illusion' || ability.id === 'stancechange' || this.ability === 'multitype') {
-			return false;
-		}
+		if (ability.id in {illusion:1, multitype:1, stancechange:1}) return false;
+		if (this.ability in {multitype:1, stancechange:1}) return false;
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
 		if (ability.id) {

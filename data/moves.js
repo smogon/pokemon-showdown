@@ -266,6 +266,7 @@ exports.BattleMovedex = {
 		},
 		onHit: function(pokemon) {
 			var newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
+			if (!pokemon.side.active[newPosition]) return false;
 			if (pokemon.side.active[newPosition].fainted) return false;
 			this.swapPosition(pokemon, newPosition, 'move: Ally Switch');
 		},
@@ -2105,13 +2106,13 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Protects the user and allies from status moves. Priority +4.",
-		shortDesc: "Prevents status moves from affecting the user.",
+		desc: "Protects the user and allies from status moves. Priority +3.",
+		shortDesc: "Protects allies from status moves this turn.",
 		id: "craftyshield",
 		isViable: true,
 		name: "Crafty Shield",
 		pp: 10,
-		priority: 4,
+		priority: 3,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'craftyshield',
 		onTryHit: function(target, source, move) {
@@ -11700,6 +11701,7 @@ exports.BattleMovedex = {
 		name: "Sky Attack",
 		pp: 5,
 		priority: 0,
+		critRatio: 2,
 		isTwoTurnMove: true,
 		onTry: function(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {

@@ -13,7 +13,6 @@ const TIMEOUT_EMPTY_DEALLOCATE = 10*60*1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40*60*1000;
 const REPORT_USER_STATS_INTERVAL = 1000*60*10;
 
-var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
 var complaint = complaint || fs.createWriteStream('logs/complaint.txt', {flags:'a+'}); 
 
 var GlobalRoom = (function() {
@@ -1146,13 +1145,6 @@ var BattleRoom = (function() {
 		}
 		this.update();
 	};
-	BattleRoom.prototype.addModCommand = function(result) {
-		this.add(result);
-		this.logModCommand(result);
-	};
-	BattleRoom.prototype.logModCommand = function(result) {
-		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
-	};
 	BattleRoom.prototype.logEntry = function() {};
 	BattleRoom.prototype.expire = function() {
 		this.send('|expire|');
@@ -1513,13 +1505,6 @@ var ChatRoom = (function() {
 			this.messageCount++;
 		}
 		this.update();
-	};
-	ChatRoom.prototype.addModCommand = function(result) {
-		this.add(result);
-		this.logModCommand(result);
-	};
-	ChatRoom.prototype.logModCommand = function(result) {
-		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 	};
 	ChatRoom.prototype.logEntry = function() {};
 	ChatRoom.prototype.destroy = function() {
