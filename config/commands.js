@@ -191,6 +191,9 @@ var commands = exports.commands = {
 		if (targetUser.frostDev) {
 			this.sendReply('(Frost Development Staff)');
 		}
+		if (targetUser.vip) {
+			this.sendReply('|raw|(<font color="#6390F0"><b>VIP</font> User</b>)');
+		}
 		if (targetUser.monoType != '') {
 			var type = targetUser.monoType.toLowerCase();
 			var hex = '';
@@ -350,7 +353,7 @@ var commands = exports.commands = {
 	
 	tierpoll: 'tiervote',
 	tiervote: function(target, room, user){
-		return this.parse('/poll Tournament Tier?, OU, UU, Ubers, LC, LC UU, Doubles, Christmas Charade, Sky Battles, CAP, cc, cc1v1, hackmons, inverse battle, OU Monotype, Gen51v1, Gen5OU, Gen5UU, Gen5RU, Gen5NU, Gen5Ubers, Gen5Perseverance, Gen5LC, Gen5RandomBattle');
+		return this.parse('/poll Tournament Tier?, randombattle, cc1v1, 1v1, gen51v1, uu, gen5uu, nu, ru, lc, gen5lc, cap, ou, gen5ou, ou monotype, gen5mono, balanced hackmons, hackmons, ubers, doubles, gen5doubles, challenge cup, perseverance, seasonal, inverse');
 	},
 	
 	gurl: function(target, room, user){
@@ -434,6 +437,7 @@ var commands = exports.commands = {
 		this.sendReply(data);
 	},
 
+	dsearch: 'dexsearch',
 	dexsearch: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 
@@ -443,47 +447,54 @@ var commands = exports.commands = {
 		var allTiers = {'uber':1,'ou':1,'lc':1,'cap':1,'bl':1};
 		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
 		var showAll = false;
-		var megasOnly = false;
+		var megaSearch = null;
 		var output = 10;
 
 		for (var i in targets) {
-			target = Tools.getAbility(targets[i]);
-			if (target.exists) {
-				if (searches['ability']) return this.sendReply('Specify only one ability.');
-				searches['ability'] = target.name;
+			var isNotSearch = false;
+			target = targets[i].trim().toLowerCase();
+			if (target.slice(0,1) === '!') {
+				isNotSearch = true;
+				target = target.slice(1);
+			}
+
+			var targetAbility = Tools.getAbility(targets[i]);
+			if (targetAbility.exists) {
+				if (!searches['ability']) searches['ability'] = {};
+				if (Object.count(searches['ability'], true) === 1 && !isNotSearch) return this.sendReply('Specify only one ability.');
+				searches['ability'][targetAbility.name] = !isNotSearch;
 				continue;
 			}
 
-			target = targets[i].trim().toLowerCase();
 			if (target in allTiers) {
 				if (!searches['tier']) searches['tier'] = {};
-				searches['tier'][target] = 1;
+				searches['tier'][target] = !isNotSearch;
 				continue;
 			}
 
 			if (target in allColours) {
 				if (!searches['color']) searches['color'] = {};
-				searches['color'][target] = 1;
+				searches['color'][target] = !isNotSearch;
 				continue;
 			}
 
 			var targetInt = parseInt(target);
 			if (0 < targetInt && targetInt < 7) {
 				if (!searches['gen']) searches['gen'] = {};
-				searches['gen'][target] = 1;
+				searches['gen'][target] = !isNotSearch;
 				continue;
 			}
 
 			if (target === 'all') {
 				if (this.broadcasting) {
-					return this.sendReply('A search with the parameter "all" cannot be broadcast.')
+					return this.sendReply('A search with the parameter "all" cannot be broadcast.');
 				}
 				showAll = true;
 				continue;
 			}
 
 			if (target === 'megas' || target === 'mega') {
-				megasOnly = true;
+				megaSearch = !isNotSearch;
 				continue;
 			}
 
@@ -491,60 +502,83 @@ var commands = exports.commands = {
 				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
 				if (target in Tools.data.TypeChart) {
 					if (!searches['types']) searches['types'] = {};
-					if (Object.size(searches['types']) === 2) return this.sendReply('Specify a maximum of two types.');
-					searches['types'][target] = 1;
+					if (Object.count(searches['types'], true) === 2 && !isNotSearch) return this.sendReply('Specify a maximum of two types.');
+					searches['types'][target] = !isNotSearch;
 					continue;
 				}
 			}
 
-			targetMove = Tools.getMove(target);
+			var targetMove = Tools.getMove(target);
 			if (targetMove.exists) {
-				if (!searches['moves']) searches['moves'] = [];
-				if (searches['moves'].length === 4) return this.sendReply('Specify a maximum of 4 moves.');
-				searches['moves'].push(targetMove.name);
+				if (!searches['moves']) searches['moves'] = {};
+				if (Object.count(searches['moves'], true) === 4 && !isNotSearch) return this.sendReply('Specify a maximum of 4 moves.');
+				searches['moves'][targetMove.name] = !isNotSearch;
 				continue;
 			} else {
-				return this.sendReply('"' + targets[i].trim() + '" could not be found in any of the search categories.');
+				return this.sendReply('"' + target + '" could not be found in any of the search categories.');
 			}
 		}
 
-		if (showAll && Object.size(searches) === 0) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
+		if (showAll && Object.size(searches) === 0 && megaSearch === null) return this.sendReply('No search parameters other than "all" were found.\nTry "/help dexsearch" for more information on this command.');
 
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
-			template = Tools.getTemplate(pokemon);
-			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && 'cap' in searches['tier'])) && (!megasOnly || template.forme in {'Mega':1,'Mega-X':1,'Mega-Y':1})) {
+			var template = Tools.getTemplate(pokemon);
+			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) && 
+				(megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega))) {
 				dex[pokemon] = template;
 			}
 		}
 
-		for (var search in searches) {
+		for (var search in {'moves':1,'types':1,'ability':1,'tier':1,'gen':1,'color':1}) {
+			if (!searches[search]) continue;
 			switch (search) {
 				case 'types':
 					for (var mon in dex) {
-						if (Object.size(searches['types']) === 2) {
-							if (!(dex[mon].types[0] in searches['types']) || !(dex[mon].types[1] in searches['types'])) delete dex[mon];
+						if (Object.count(searches[search], true) === 2) {
+							if (!(searches[search][dex[mon].types[0]]) || !(searches[search][dex[mon].types[1]])) delete dex[mon];
 						} else {
-							if (!(dex[mon].types[0] in searches['types']) && !(dex[mon].types[1] in searches['types'])) delete dex[mon];
+							if (searches[search][dex[mon].types[0]] === false || searches[search][dex[mon].types[1]] === false || (Object.count(searches[search], true) > 0 &&
+								(!(searches[search][dex[mon].types[0]]) && !(searches[search][dex[mon].types[1]])))) delete dex[mon];
 						}
 					}
 					break;
 
 				case 'tier':
+					for (var mon in dex) {
+						if ('lc' in searches[search]) {
+							// some LC legal Pokemon are stored in other tiers (Ferroseed/Murkrow etc)
+							// this checks for LC legality using the going criteria, instead of dex[mon].tier
+							var isLC = (dex[mon].evos && dex[mon].evos.length > 0) && !dex[mon].prevo && Tools.data.Formats['lc'].banlist.indexOf(dex[mon].species) === -1;
+							if ((searches[search]['lc'] && !isLC) || (!searches[search]['lc'] && isLC)) {
+								delete dex[mon];
+								continue;
+							}
+						}
+						if (searches[search][String(dex[mon][search]).toLowerCase()] === false) {
+							delete dex[mon];
+						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) delete dex[mon];
+					}
+					break;
+
 				case 'gen':
 				case 'color':
 					for (var mon in dex) {
-						if (!(String(dex[mon][search]).toLowerCase() in searches[search])) delete dex[mon];
-					}
+						if (searches[search][String(dex[mon][search]).toLowerCase()] === false) {
+							delete dex[mon];
+						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) delete dex[mon];					}
 					break;
 
 				case 'ability':
 					for (var mon in dex) {
-						var hasAbility = false;
-						for (var monAbility in dex[mon].abilities) {
-							if (dex[mon].abilities[monAbility] === searches['ability']) hasAbility = true;
+						for (var ability in searches[search]) {
+							var needsAbility = searches[search][ability];
+							var hasAbility = Object.count(dex[mon].abilities, ability) > 0;
+							if (hasAbility !== needsAbility) {
+								delete dex[mon];
+								break;
+							}
 						}
-						if (!hasAbility) delete dex[mon];
 					}
 					break;
 
@@ -553,16 +587,18 @@ var commands = exports.commands = {
 						var template = Tools.getTemplate(dex[mon].id);
 						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
 						if (!template.learnset) continue;
-						for (var i in searches['moves']) {
-							var move = Tools.getMove(searches['moves'][i]);
+						for (var i in searches[search]) {
+							var move = Tools.getMove(i);
 							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
-							if (!template.learnset.sketch && !template.learnset[move.id]) delete dex[mon];
+							var canLearn = (template.learnset.sketch && !(move.id in {'chatter':1,'struggle':1,'magikarpsrevenge':1})) || template.learnset[move.id];
+							if ((!canLearn && searches[search][i]) || (searches[search][i] === false && canLearn)) dex[mon] = false;
 						}
 					}
 					for (var mon in dex) {
-						if (dex[mon].evos) {
-							for (var evo in dex[mon].evos) dex[dex[mon].evos[evo]] = Tools.getTemplate(dex[mon].evos[evo]);
+						if (dex[mon] && dex[mon].evos.length) {
+							for (var evo in dex[mon].evos) if (dex[dex[mon].evos[evo]] !== false) dex[dex[mon].evos[evo]] = Tools.getTemplate(dex[mon].evos[evo]);
 						}
+						if (!dex[mon]) delete dex[mon];
 					}
 					break;
 
@@ -571,18 +607,15 @@ var commands = exports.commands = {
 			}
 		}
 
-		var results = [];
-		for (var mon in Tools.data.Pokedex) if (mon in dex) results.push(dex[mon].species);
+		var results = Object.keys(dex).map(function(speciesid) {return dex[speciesid].species;});
 		var resultsStr = '';
-		if (results && results.length > 0) {
+		if (results.length > 0) {
 			if (showAll || results.length <= output) {
+				results.sort();
 				resultsStr = results.join(', ');
 			} else {
-				var hidden = string(results.length - output);
 				results.sort(function(a,b) {return Math.round(Math.random());});
-				var shown = results.slice(0, 10);
-				resultsStr = shown.join(', ');
-				resultsStr += ', and ' + hidden + ' more. Redo the search with "all" as a search parameter to show all results.';
+				resultsStr = results.slice(0, 10).join(', ') + ', and ' + string(results.length - output) + ' more. Redo the search with "all" as a search parameter to show all results.';
 			}
 		} else {
 			resultsStr = 'No Pokémon found.';
@@ -656,6 +689,7 @@ var commands = exports.commands = {
 
 	weak: 'weakness',
 	weakness: function(target, room, user){
+		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
 
 		var pokemon = Tools.getTemplate(target);
@@ -691,72 +725,90 @@ var commands = exports.commands = {
 		}
 	},
 
+	eff: 'effectiveness',
+	type: 'effectiveness',
 	matchup: 'effectiveness',
 	effectiveness: function(target, room, user) {
-		var targets = target.split(/[,/]/);
-		var type = Tools.getType(targets[1]);
-		var pokemon = Tools.getTemplate(targets[0]);
+		var targets = target.split(/[,/]/).slice(0, 2);
+		if (targets.length !== 2) return this.sendReply("Attacker and defender must be separated with a comma.");
+
+		var searchMethods = {'getType':1, 'getMove':1, 'getTemplate':1};
+		var sourceMethods = {'getType':1, 'getMove':1};
+		var targetMethods = {'getType':1, 'getTemplate':1};
+		var source;
 		var defender;
-
-		if (!pokemon.exists || !type.exists) {
-			// try the other way around
-			pokemon = Tools.getTemplate(targets[1]);
-			type = Tools.getType(targets[0]);
-		}
-		defender = pokemon.species+' (not counting abilities)';
-
-		if (!pokemon.exists || !type.exists) {
-			// try two types
-			if (Tools.getType(targets[0]).exists && Tools.getType(targets[1]).exists) {
-				// two types
-				type = Tools.getType(targets[0]);
-				defender = Tools.getType(targets[1]).id;
-				pokemon = {types: [defender]};
-				if (Tools.getType(targets[2]).exists) {
-					defender = Tools.getType(targets[1]).id + '/' + Tools.getType(targets[2]).id;
-					pokemon = {types: [Tools.getType(targets[1]).id, Tools.getType(targets[2]).id]};
+		var foundData;
+		var atkName;
+		var defName;
+		for (var i=0; i<2; i++) {
+			for (var method in searchMethods) {
+				foundData = Tools[method](targets[i]);
+				if (foundData.exists) break;
+			}
+			if (!foundData.exists) return this.parse('/help effectiveness');
+			if (!source && method in sourceMethods) {
+				if (foundData.type) {
+					source = foundData;
+					atkName = foundData.name;
+				} else {
+					source = foundData.id;
+					atkName = foundData.id;
 				}
-			} else {
-				if (!targets[1]) {
-					return this.sendReply("Attacker and defender must be separated with a comma.");
+				searchMethods = targetMethods;
+			} else if (!defender && method in targetMethods) {
+				if (foundData.types) {
+					defender = foundData;
+					defName = foundData.species+" (not counting abilities)";
+				} else {
+					defender = {types: [foundData.id]};
+					defName = foundData.id;
 				}
-				return this.sendReply("'"+targets[0].trim()+"' and '"+targets[1].trim()+"' aren't a recognized combination.");
+				searchMethods = sourceMethods;
 			}
 		}
 
 		if (!this.canBroadcast()) return;
 
-		var typeMod = Tools.getEffectiveness(type.id, pokemon);
-		var notImmune = Tools.getImmunity(type.id, pokemon);
 		var factor = 0;
-		if (notImmune) {
-			factor = Math.pow(2, typeMod);
+		if (Tools.getImmunity(source.type || source, defender)) {
+			if (source.effectType !== 'Move' || source.basePower || source.basePowerCallback) {
+				factor = Math.pow(2, Tools.getEffectiveness(source, defender));
+			} else {
+				factor = 1;
+			}
 		}
 
-		this.sendReplyBox(''+type.id+' attacks are '+factor+'x effective against '+defender+'.');
+		this.sendReplyBox(atkName+" is "+factor+"x effective against "+defName+".");
 	},
 
-	uptime: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		var uptime = process.uptime();
-		var uptimeText;
-		if (uptime > 24*60*60) {
-			var uptimeDays = Math.floor(uptime/(24*60*60));
-			uptimeText = ''+uptimeDays+' '+(uptimeDays == 1 ? 'day' : 'days');
-			var uptimeHours = Math.floor(uptime/(60*60)) - uptimeDays*24;
-			if (uptimeHours) uptimeText += ', '+uptimeHours+' '+(uptimeHours == 1 ? 'hour' : 'hours');
-		} else {
-			uptimeText = uptime.seconds().duration();
+	uptime: (function(){
+		function formatUptime(uptime) {
+			if (uptime > 24*60*60) {
+				var uptimeText = "";
+				var uptimeDays = Math.floor(uptime/(24*60*60));
+				uptimeText = uptimeDays + " " + (uptimeDays == 1 ? "day" : "days");
+				var uptimeHours = Math.floor(uptime/(60*60)) - uptimeDays*24;
+				if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours == 1 ? "hour" : "hours");
+				return uptimeText;
+			} else {
+				return uptime.seconds().duration();
+			}
 		}
-		this.sendReplyBox('Uptime: <b>'+uptimeText+'</b>');
-	},
+
+		return function(target, room, user) {
+			if (!this.canBroadcast()) return;
+			var uptime = process.uptime();
+			this.sendReplyBox("Uptime: <b>" + formatUptime(uptime) + "</b>" +
+				(global.uptimeRecord ? "<br /><font color=\"green\">Record: <b>" + formatUptime(global.uptimeRecord) + "</b></font>" : ""));
+		};
+	})(),
 
 	groups: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />' +
-			'% <b>Driver</b> - The above, and they can also mute and lock users and check for alts<br />' +
+			'% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />' +
 			'@ <b>Moderator</b> - The above, and they can ban users<br />' +
-			'&amp; <b>Leader</b> - The above, and they can promote moderators and force ties<br />' +
+			'&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />' +
 			'~ <b>Administrator</b> - They can do anything, like change what this message says<br />' +
 			'# <b>Room Owner</b> - They are administrators of the room and can almost totally control it');
 	},
@@ -768,7 +820,7 @@ var commands = exports.commands = {
 
 	avatars: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown.');
+		this.sendReplyBox('Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown. Custom avatars are only obtainable by staff.');
 	},
 
 	introduction: 'intro',
@@ -778,7 +830,7 @@ var commands = exports.commands = {
 			'- <a href="http://www.smogon.com/forums/threads/3496279/">Beginner\'s Guide to Pokémon Showdown</a><br />' +
 			'- <a href="http://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pokémon</a><br />' +
 			'- <a href="http://www.smogon.com/bw/articles/bw_tiers">What do "OU", "UU", etc mean?</a><br />' +
-			'- <a href="http://www.smogon.com/bw/banlist/">What are the rules for each format? What is "Sleep Clause"?</a>');
+			'- <a href="http://www.smogon.com/xyhub/tiers">What are the rules for each format? What is "Sleep Clause"?</a>');
 	},
 
 	mentoring: 'smogintro',
@@ -858,6 +910,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3481155/">OM of the Month</a>';
 		}
+		if (target === 'all' || target === 'index') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/other-metagames-index.3472405/">OM Index</a><br />';
+		}
 		if (!matched) {
 			return this.sendReply('The Other Metas entry "'+target+'" was not found. Try /othermetas or /om for general help.');
 		}
@@ -881,9 +937,6 @@ var commands = exports.commands = {
 			'<br />' +
 			'Room moderators (@) can also use:<br />' +
 			'- /rkick <em>username</em>: kicks the user from the room<br />' +
-			'- /roomban <em>username</em>: bans user from the room<br />' +
-			'<br />' +
-			'Room moderators (@) can also use:<br />' +
 			'- /roomban OR /rb <em>username</em>: bans user from the room<br />' +
 			'- /roomunban <em>username</em>: unbans user from the room<br />' +
 			'- /roomvoice <em>username</em>: appoint a room voice<br />' +
@@ -892,6 +945,7 @@ var commands = exports.commands = {
 			'<br />' +
 			'Room owners (#) can also use:<br />' +
 			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
+			'- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />' +
 			'- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />' +
 			'- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />' +
 			'- /declare <em>message</em>: make a declaration in the room<br />' +
@@ -919,10 +973,26 @@ var commands = exports.commands = {
 
 	rule: 'rules',
 	rules: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Please follow the rules:<br />' +
-			'- <a href="http://pokemonshowdown.com/rules">Rules</a><br />' +
+		if (!target) {
+			if (!this.canBroadcast()) return;
+			this.sendReplyBox('Please follow the rules:<br />' +
+			(room.rulesLink ? '- <a href="' + sanitize(room.rulesLink) + '">' + sanitize(room.title) + ' room rules</a><br />' : '') +
+			'- <a href="http://frostserver.net/rules.html">'+(room.rulesLink?'Global rules':'Rules')+'</a><br />' +
 			'</div>');
+			return;
+		}
+		if (!this.can('roommod', null, room)) return;
+		if (target.length > 80) {
+			return this.sendReply('Error: Room rules link is too long (must be under 80 characters). You can use a URL shortener to shorten the link.');
+		}
+
+		room.rulesLink = target.trim();
+		this.sendReply('(The room rules link is now: '+target+')');
+
+		if (room.chatRoomData) {
+			room.chatRoomData.rulesLink = room.rulesLink;
+			Rooms.global.writeChatRoomData();
+		}
 	},
 
 	faq: function(target, room, user) {
@@ -954,7 +1024,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '<a href="http://www.smogon.com/sim/staff_faq">Staff FAQ</a><br />';
 		}
-		if (target === 'all' || target === 'autoconfirmed') {
+		if (target === 'all' || target === 'autoconfirmed' || target === 'ac') {
 			matched = true;
 			buffer += 'A user is autoconfirmed when they have won at least one rated battle and has been registered for a week or longer.<br />';
 		}
@@ -1009,6 +1079,7 @@ var commands = exports.commands = {
 		if (!target || target === 'all') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/tiers/">Smogon Tiers</a><br />';
+			buffer += '- <a href="http://www.smogon.com/forums/threads/tiering-faq.3498332/">Tiering FAQ</a><br />';
 			buffer += '- <a href="http://www.smogon.com/bw/banlist/">The banlists for each tier</a><br />';
 		}
 		if (target === 'all' || target === 'ubers' || target === 'uber') {
@@ -1180,13 +1251,235 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+   donald: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQpaW7cxyFCEUxPkYHxnkZWXqE-AEHvZfMhxU-QdPfcghuAF69Gg" width="144" height="146">' +
+                '<img src="http://i.imgur.com/EBq4NMP.png">' +
+                '<img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcR7aKN8bYWVMCGRNZQJNr5gMqG71aXzzfdPcJONfwFVvcjKyxYzRA" width="147" height="140"><br />' +
+                '<b>Ace:</b> Bulk<br />' +
+                'If it moves, I kill it.</center>');
+    },
+   
+   
+   messiah: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://i.imgur.com/y08yCwd.png" width="120" height="136">' +
+    		'<img src="http://i.imgur.com/xA1Dqgw.png">' +
+    		'<img src="http://i.imgur.com/ha756pn.png" width="120" height="136"><br />' +
+    		'<b>Ace:</b> Kabutops<br />' +
+    		'Sit back, relax, and let the undertow drown out your worries forever...</center>');
+    },
+  
+  
+   demon: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/pinsir.gif">' +
+                '<img src="http://i.imgur.com/66NKKkD.png">' +
+                '<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/pinsir-mega.gif"><br />' +
+                '<b>Ace:</b> Pinsir<br />' +
+                'In order to succeed, your desire to succeed must be greater than your fear of failure.</center>');
+    },
+   
+   
+    rors: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i979.photobucket.com/albums/ae277/bjoyea/T-cardButchery_zps8f48bc75.gif" width="140" height="120">' +
+                '<img src="http://static1.textcraft.net/data1/5/e/5ed14fd561daebee562becbc615de6b671ce77f8da39a3ee5e6b4b0d3255bfef95601890afd80709da39a3ee5e6b4b0d3255bfef95601890afd8070997c4ee7e494f4c179f8692768fe619e4.png" width="260">' +
+                '<img src="http://stream1.gifsoup.com/view4/1069409/rorschach-o.gif" width="160" hiehgt="120"><br />' +
+                '<b>Ace:</b> Your Mom<br />' +
+                'Sorry But Losing Isn\'t Really My Thing.</center>');
+    },
+       
+       
+    akkie: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/17XVxNt.png" height="160" width="180">' +
+                '<img src="http://i.imgur.com/5AKQ0L3.gif">' +
+                '<img src="http://i.imgur.com/PgXqSU1.png" height="190" width="170""><br />' +
+                '<b>Ace:</b> Umbreon<br />' +
+                'You want to fight me? Go ahead. But to beat me it will take more than just raw power.</center>');
+    },
+
+	scorpion: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://i.imgur.com/plIiPCv.jpg?1" width="160" height="130">' +
+    		'<img src="http://i.imgur.com/TS0fQ70.png" width="230">' +
+    		'<img src="http://i.imgur.com/NxEA6yl.jpg?1" height="130" width="150"><br />' +
+    		'<b>Ace:</b> Moltres<br />' +
+    		'If you can\'t handle the heat gtfo.</center>');
+    },
+
+    tailz: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/zKKoyFJ.gif" width="150">' +
+                '<img src="http://i.imgur.com/oV29Ffb.png">' +
+                '<img src="http://i.imgur.com/PLhgZxL.gif" width="125" height="125"><br />' +
+                '<b>Ace:</b> My &<br />' +
+                'I\'m Pretty shit</center>');
+    },
+	
+
+	orihime: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://i.imgur.com/zKKoyFJ.gif" width="150">' +
+    		'<img src="http://i.imgur.com/oV29Ffb.png">' +
+    		'<img src="http://i.imgur.com/PLhgZxL.gif" width="125" height="125"><br />' +
+    		'<b>Ace:</b> My &<br />' +
+    		'Sadistic? I don\'t mind you calling me that.</center>');
+    },
+
+	kammi: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/fJvcdib.png" height="125" width="76" />' +
+			'<img src="http://frostserver.net:8000/images/kammi.gif" height="61" width="325" />' +
+			'<img src="http://i.imgur.com/NUyIu76.png?1" height="125" width="76" /><br /><br />' +
+			'<b>Ace: </b>Stupidity.<br />' +
+			'<b>Quote: </b>What.</center></div>');
+	},
+
+	giegue: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/IKVXSTv.png"> '+
+			'<img src="http://i.imgur.com/YjVNB4q.png">' +
+			'<img height=150 src="http://i.imgur.com/ppZSj34.png"><br />' +
+			'<b>Ace: </b>Malamar<br />' +
+			'Zubats, Zubats everywhere!!!</center>')
+	},
+
+	ssjoku: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/M9wnVcP.gif">' +
+			'<img src="http://i.imgur.com/2jkjcvx.png">' +
+			'<img height=150 src="http://i.imgur.com/zCuD2IQ.gif"><br />' +
+			'<b>Ace: </b>Mega-Venusaur-Power Whip Yo Gurl<br />' +
+			'<b>Quote: </b>I am Super Swaggy Coolio!!!</center>');
+	},
+
+	caster: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height=180 width=200 src="http://31.media.tumblr.com/717db8c2843b1b007c25c5fc6e1f3537/tumblr_mreje8lECf1s3kgaso5_500.gif">' +
+    		'<img src="http://i.imgur.com/S6BRoI7.png">' +
+    		'<img height=180 width=200 src="http://1.bp.blogspot.com/-Huv46xIgEH4/UWwP8pGG3cI/AAAAAAAANUU/XqZhML6bvLk/s1600/tumblr_m3pxpkBCSP1rv6iido2_500.gif"><br />' +
+    		'<b>Ace:</b> Terrakion<br />' +
+    		'It doesn\'t matter how far away a leader is from his group, a leader will always be a leader.</center>');
+    },
+
+	archer: 'archerclw',
+	archerclw: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+			this.sendReplyBox('<center><img height=200 width=200 src="http://i.imgur.com/bZ8p27u.jpg">' +
+				'<img src="http://i.imgur.com/cs23RdB.gif">' +
+				'<img src="http://i.imgur.com/wM24Mya.gif"><br />' +
+				'<b>Ace: </b>Hippowdon (Big Momma)<br />' +
+				'The South Shall Rise Again!</center>');
+	},
+
+	flare: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/gyarados-mega.gif">' +
+    		'<img src="http://i.imgur.com/Wqcrfk0.gif">' +
+    		'<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/blaziken-mega.gif"><br />' +
+    		'<b>Ace:</b> Mega Gyarados/Gallade<br />' +
+    		'With every set back. There\'s always a chance to comeback.</center>');
+    },
+
+	klutzymanaphy: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/manaphy.gif">' +
+    		'<img src="http://i.imgur.com/m2PAZco.gif">' +
+    		'<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/mew.gif"><br />' +
+    		'<b>Ace:</b> Mew and Manaphy<br />' +
+    		'It\'s more important to master the cards you\'re holding than complaining about the ones your opponent was dealt. pls.</center>');
+    },
+
+	unknownsremnant: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=150 src="http://i701.photobucket.com/albums/ww16/jacoby746/Kingdom%20Hearts%20Sprites/roxas2.gif">' +
+			'<img width=450 src="http://i926.photobucket.com/albums/ad103/reddas97/previewphp_zps559297e6.jpg">' +
+			'<img height=150 src="http://i701.photobucket.com/albums/ww16/jacoby746/Kingdom%20Hearts%20Sprites/Demyx2.gif"><br />' +
+			'<b>Ace: </b>The Darkness <br />' +
+			'A person is very strong when he seeks to protect something. I\'ll expect a good fight.');
+	},
+
+	mattz: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img width="100" height="100" src="http://i.imgur.com/8Wq1oDL.gif">' +
+    		'<img width="350" height="80" src="http://i.imgur.com/Tu1kJ2C.gif">' +
+    		'<img width="100" height="100" src="http://i.imgur.com/sYoY67U.gif"><br />' +
+    		'<b>Ace:</b> The Whole Swarm...Run!<br />' +
+    		'Fight me? Go to sleep and dont let the bedbugs bite, kid...or burn you to a crisp.</center>');
+    },
+
+	zarif: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox(' <center><img src=http://i.imgur.com/lC0aRUH.gif>' +
+			'<img src=http://i.imgur.com/BPCyts3.png>' +
+			'<img src=http://i.imgur.com/3EIY2d9.png><br />' +
+			'<b> <blink> Ace: </b>Infernape</blink><br />' +
+			'Three things are infinite: magikarp\'s power, human stupidity and the fucking amount of zubats in a cave; and I\'m not sure about the universe.');
+	},
+
+	cark: 'amglcark',
+	amglcark: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=120 width=180 src="http://25.media.tumblr.com/5899b0681d32d509995e6d1d9ae5299a/tumblr_mskxhqL9Yc1s035gko1_500.gif">' +
+			'<img src="http://i.imgur.com/ZGyaxDn.png">' +
+			'<img height=120 width=180 src="https://31.media.tumblr.com/45e356815fc9fbe44d71998555dc36e4/tumblr_mzr89tROK41srpic3o1_500.gif"><br />' +
+			'<b>Ace: </b>Tsunami<br />' +
+			'Life\'s hard.');
+	},
+
+	derp: 'derpjr',
+	derpjr: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=150 src="http://i.imgur.com/BTmcOiH.gif">' +
+			'<img src="http://i.imgur.com/K6t01Ra.png">' +
+			'<img height=150 src="http://i.imgur.com/k3YCEr0.png"><br />' +
+			'<b>Ace: </b>Crobat<br />' +
+			'i liek cookies');
+	},
+
+	eclipse: 'kilmeclipse', 
+	kilmeclipse: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src= http://i.imgur.com/BSFJ1nS.png weigh= 190 height= 92><img src= http://i.imgur.com/d4tZGGO.gif><img src= http://i.imgur.com/v593Ee8.png weigh= 190 height= 92><center>Ace: Garchomp & Bisharp<center>"When you get hax\'d, just know that a person\'s skill doesn\'t matter whether or not you get hax\'d. Take as a example, you getting frozen when its only 10% chance, a person\'s skill doesn\'t decide whether or not you get frozen; so next time, just pray not to get hax\'d."</center>');
+	},
+
+	handrelief: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=120 src="http://i.imgur.com/jniR0EF.jpg">' +
+			'<img src="http://i.imgur.com/fWqMdpZ.png">' +
+			'<img height=120 src="http://i.imgur.com/KCCaxo2.jpg"><br />' +
+			'<b>Ace: </b>Scizor<br />' +
+			'<b>Catchphrase: </b>The inner machinations of my mind are an enigma</center>');
+	},
+
+	elitefouroshy: 'oshy',
+	oshy: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=60 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/oshawott.gif">' +
+			'<img width=580 src="http://frostserver.net:8000/images/oshy.png">' +
+			'<img height=60 src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/oshawott.gif"><br />' + 
+			'<b>Ace:</b> Fluffy Oshawotts<br />' +
+			'As long as your pokemon spirit keeps burning, your pokemon will keep fighting</center>');
+	},
+
+	gryph: function(target, room, user) {
+		if (!this.canBroadcast()) return; 
+		this.sendReplyBox('<center><img height=150 src="http://pokebot.everyboty.net/pix/822.gif">' + 
+        '<b><font color=#c2701e><font size=100><i>Gryph</i></font></font></b>' +
+        '<img height=150 src="http://pokebot.everyboty.net/pix/822.gif"><br/>' +
+        '<b>Ace:</b> High or Low?<br/>' +  
+        'We all move to the beat of just one Blastoise</center>');
+	},
+
 	piscean: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img height=150 width=150 src="http://i0.kym-cdn.com/photos/images/newsfeed/000/535/926/ff5.gif">' +
-			'<img src="http://i.imgur.com/h7D9eju.gif">' +
-			'<img height=150 width=150 src="http://fc09.deviantart.net/fs24/f/2008/004/1/2/Pisces_by_Angel_Blaze.jpg"><br />' +
-			'<b>Ace:</b> Fish<br />' +
-			'<b>Catchphrase:</b> Tempting Piscean will bring about the wrath of the sea. </center>');
+		this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/spheal.gif">' +
+			'<img src="http://i.imgur.com/iR3xhAH.gif">' +
+			'<img width="130" height="100" src="http://th01.deviantart.net/fs70/200H/f/2011/010/a/b/derp_spheal_by_keijimatsu-d36um8a.png"><br />' +
+			'<b>Ace:</b> Derp<br />' +
+			'<b>Catchphrase:</b> What am I supposed to do with this shit?</center>');
 	},
 
 	adam: 'adamkillszombies',
@@ -1252,7 +1545,7 @@ var commands = exports.commands = {
         	'<img height="100" width="450" src="http://i.imgur.com/v4h0TvD.png">' +
         	'<img height="100" src="http://i.imgur.com/21NYnjz.gif"><br />' +
         	'<b>Ace: </b>Mega Lucario<br />' +
-        	'<b>Catchphrase: </b>Their is always Light within the darkness</center>');
+        	'<b>Catchphrase: </b>Choose your battles wisely. After all, life isn\'t measured by how many times you stood up to fight.</center>');
     },
     
     zezetel: function(target, room, user) {
@@ -1284,14 +1577,13 @@ var commands = exports.commands = {
         	'Gurl please. I can beat you with mah eyes closed.');
     },
     
-    elitefourkaiser : 'kaiser',
     kaiser: function(target, room, user) {
-        if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img height="80" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/534.gif">' +
-        	'<img height="80" width="450" src="http://i.imgur.com/TZgQzzZ.png">' +
-        	'<img height="80" src="http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/475.gif"><br />' +
-        	'<b>Ace: </b>Gallade<br />' +
-        	'<b>Catchphrase: </b>Fight to the Death, When you give up thats when you really lose</center>');
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/aegislash-blade.gif">' +
+    		'<img src="http://i.imgur.com/7P2ifdc.png?1" width="340">' +
+    		'<img src="http://i.imgur.com/zWfqzKL.gif" width="125"><br />' +
+    		'<b>Ace:</b> Gallade<br />' +
+    		'Challenges are what make life interesting and overcoming them is what makes life meaningful.</center>');
     },
     
     gemini : 'prfessorgemini',
@@ -1334,6 +1626,11 @@ var commands = exports.commands = {
         	'<b>Catchphrase: </b><a href="http://creatureleague.weebly.com">http://creatureleague.weebly.com</a></center>');
     },
     
+    esepeonage: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://img-cache.cdn.gaiaonline.com/442e3b40f5df1955620f588ccabe0b57/http://i70.photobucket.com/albums/i120/selena60007000/A%20Pokemon%20rp/Espeon.jpg" width="70" height="95"><img src="http://i.imgur.com/Ltp92WB.gif"><img src="http://th09.deviantart.net/fs71/PRE/f/2010/240/f/4/umbreon_espeon_gijinka_girls_by_peachykit-d2xh34e.jpg" width="120" height="95"><br /><center><b>Ace:Espeon </b></center><center><b>Catchphrase: Take a gander at me and youll like what you see. </b></center>');
+    },
+    
     themapples : 'mapples',
     mapples: function(target, room, user) {
         if (!this.canBroadcast()) return;
@@ -1367,14 +1664,13 @@ var commands = exports.commands = {
         	'<b>Catchphrase: </b>It may be risky, but it may be teh only way to win.</center>');
     },
     
-    shira : 'e4shirayuri', 
-    e4shirayuri: function(target, room, user) {
+    isawa: function(target, room, user) {
         if (!this.canBroadcast()) return;
-        this.sendReplyBox('<center><img height="100" src="http://www.okamiworld.com/wiki/images/b/bd/Amaterasu_5_-_Solar_Flare.jpg">' +
-        	'<img src="http://i.imgur.com/THEJxYZ.gif">' +
-        	'<img height="100" src="http://1-media-cdn.foolz.us/ffuuka/board/vp/image/1366/82/1366827374253.jpg" height="91"><br />' +
-        	'<b>Ace: </b>Gliscor<br />' +
-        	'<b>Catcphrase: </b>Rub-a-dub-dub, Shira be in your tub.</center>');
+        this.sendReplyBox('<center><img src="http://i.imgur.com/hwqR2b8.jpg" width="160" height="140">' +
+                '<img src="http://i.imgur.com/qZvvpNG.png?1" width="220">' +
+                '<img src="http://farm3.static.flickr.com/2755/4122651974_353e4287e8.jpg" width="160" height="130"><br />' +
+                '<b>Ace:</b> Galvantula<br />' +
+                'Happiness doesn\'t walk to me, because I\'m walking to it. One day, one step. Three steps in three days. Three steps forward, two steps back. Life\'s a one-two punch...</center>');
     },
     
     pikadagreat : 'pika', 
@@ -1412,6 +1708,11 @@ var commands = exports.commands = {
     jitlittle: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img src="http://24.media.tumblr.com/8183478ad03360a7c1d02650c53b4b35/tumblr_msfcxcMyuV1qdk3r4o1_500.gif" height="100" width="140"><img src="http://i.imgur.com/Vxjzq2x.gif" height="85" width="250"><img src="http://25.media.tumblr.com/b2af3f147263f1ef10252a31f0796184/tumblr_mkvyqqnhh51snwqgwo1_500.gif" height="100" width="140"></center></br><center><b>Ace:</b> Jirachi</center></br><center><b>"</b>Cuteness will always prevail over darkness<b>"</b></center>');
+    },
+    
+    professoralice: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/absol-2.gif"><img src="http://i.imgur.com/9I7FGYi.gif"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/victini.gif"><br><b>Ace: </b>Absol<br><b>Quote: </b>"If the egg is broken by outside force, life ends. If the egg is broken from inside force, life begins. Great things always begin on the inside."</center>');
     },
 
     bibliaskael: 'kael',
@@ -1489,9 +1790,124 @@ var commands = exports.commands = {
     	this.sendReplyBox('<center><img src="http://i.imgur.com/lwL5Pce.png"><img src="http://i.imgur.com/D9M6VGi.gif"><img src="http://i.imgur.com/hZ0mB0U.png"><br><b>Ace: <font color="#58ACFA"><blink>Ace: Farfetch\'d</blink><br></font><b><font color="#00BFFF">Where can I find a leek in Pokemon Y?');
     },
     
+    theyellowace: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/dXbBAaO.gif">' +
+                '<img src="http://i.imgur.com/6V1u4y3.gif" width="320">' +
+                '<img src="http://i.imgur.com/usX9EN2.gif" height="120" width="160"><br />' +
+                '<b>Ace:</b> Pikachu<br />' +
+                'Haters never bothered me anyway. So stfu or else I will electrocute you with my Pikachu.</center>');
+    },
+    
+    brittany: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/castform-sunny.gif">' +
+                '<img src="http://i.imgur.com/natglfA.png">' +
+                '<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/cherrim-sunshine.gif"><br />' +
+                '<b>Ace:</b> Cherrim&lt;3<br />' +
+                'l-lewd.</center>');
+    },
+    
+    donut: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/excadrill.gif">' +
+    		'<img src="http://i.imgur.com/aYamsDZ.png?1">' +
+    		'<img src="http://www.dailyfork.com/Donut.gif" width="120" height="120"><br />' +
+    		'<b>Ace:</b> Excadrill<br />' +
+    		'A true champion is someone who gets up, even when he can\'t.</center>');
+    },
+    
+    video: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/victini.gif">' +
+    		'<img src="http://i.imgur.com/JL7MokA.png">' +
+    		'<img src="http://i.imgur.com/Q9XU12a.gif"><br />' +
+    		'<b>Ace:</b> Victini<br />' +
+    		'The only way you can learn is from failure to achieve success.</center>');
+    },
+    
+    notorangejuice: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://i.imgur.com/2WNeV9p.gif" /><img src="http://i.imgur.com/ghwiaaV.gif" /><img src="http://i.imgur.com/Vi2j2OG.gif" /><br /><br /><b>"Banana Bread."</b><br /><b>www.youtube.com/notorangejuice</b></center>');
+    },
+    
+    soggey: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src="http://i.imgur.com/w9po1tP.gif?1"><img src="http://i.imgur.com/N48X8Vf.png"><img src="http://i.imgur.com/YTl10Yi.png"><br><b>Ace: </b>Sandslash<br><b>Quote: </b>It was all fun and games... but then you had to hax me >:(</center>')
+    },
+    
+    miller: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height="110" width="260" src="http://i.imgur.com/cc5BTsj.gif"><center><img height="150" width="220" src="http://25.media.tumblr.com/tumblr_m456ambdnz1qd87hlo1_500.gif"><center><br><b>Ace: </b>Wobbuffet<br><b>Catchphrase: </b>I\'ll get the job done.</center>');
+    },
+    
+    belle: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height="140" width="200" src="http://i.imgur.com/7Ar6RAd.pngg"><img src="http://i.imgur.com/VTxy0rU.gif"><br><b>Ace: </b>Garchomp<br><b>Quote: </b>Believing that you can do it means you\'re already halfway there!</center>');
+    },
+    
+    kishz: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<left><img height="100" width="125" src="http://25.media.tumblr.com/bda3fbc303632e64b6c2aa720e8cf87e/tumblr_mw09v90S3R1rb53jco1_500.png"><img height="110" width="240" src="http://i.imgur.com/QTUuGUI.gif"><right><img height="100" width="125" src="http://24.media.tumblr.com/8aaf6a29a200fa3ce48e44c8fad078c9/tumblr_mpu21087ST1sogo8so1_250.jpg"><center><br><b>Ace: </b>Keldeo/Manectric<br><b>Catchphrase: </b>I\'m a Champ, come at me bro.</center>');
+    },
+    
+    vlahdimirlenin: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src=http://www.pokemonreborn.com/dexsprites/animated/242.gif><img src=http://i.imgur.com/TAU7XiN.gif><img src=http://pldh.net/media/pokemon/gen5/blackwhite_animated_front/080.gif><br><b>Ace:</b> Meloetta<br><b>Catchphrase:</b><font color=pink> IDFK YET OK</center>');
+    },
+    
+    egyptian: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height="100" width="100" src="http://fc09.deviantart.net/fs70/f/2011/358/e/5/cobalion_the_just_musketeer_by_xous54-d4k42lh.png"><img src="http://fc01.deviantart.net/fs71/f/2014/038/7/4/6vnvvk3_by_yousefnafiseh-d75gny6.png"><img height="100" width="100" src="http://i.imgur.com/aRmqB2R.png"><br><center><b>Ace: <font color="#FE2E2E"><blink>Yanmega</blink><br></font><b><center><font color="#D7DF01">Never give up , There\'s still Hope');
+    },
+    
+    amgldolph: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/bidoof.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="http://i.imgur.com/zUj8TpH.gif" width="350"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/magikarp-2.gif" width="175"><br /><center><b>Ace: </b>Bidoofs and Magikarps</center><br /><center><b>Catchphrase: </b>Shit My Biscuits Are Burning!</center>');
+    },
+    
+    failatbattling: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/jirachi.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img width="300" src="http://i.imgur.com/ynkJkpH.gif"><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/sigilyph.gif"><br /><center><b>Ace: Anything that gets haxed</b></center><br /><center><b>Catchphrase: The name says it all.</b></center>');
+    },
+    
+    darknessreigns: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height="90" width="500" src=http://i.imgur.com/GCIT4Cv.gif><center><img height="80" width="120" src=http://th05.deviantart.net/fs70/PRE/i/2013/220/5/a/pokemon___megalucario_by_sa_dui-d6h8tdh.jpg>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img height="80" width="120" src=http://th08.deviantart.net/fs70/PRE/f/2010/169/c/5/Gengar_Wallpaper_by_Phase_One.jpg><br /><center><b>Ace: </b>The Darkness</center><center><b>Catchphrase: </b>When the night falls, The Darkness Reigns</center>');
+    },
+    
+    naten: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/uxie.gif><img src=http://i254.photobucket.com/albums/hh108/naten2006/cooltext1400784365_zps7b67e8c9.png><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/mew.gif><br>Ace: <font color="" align=center>Uxie, Our Lord and Saviour</font><br><font color="purple" align=center>The moment you\'ve stopped planning ahead is the moment you\'ve given up.</font></center>');
+    },
+    
+    bossbitch: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img width="100" height="100" src="http://i.imgur.com/kUSfLgd.jpg"><img width="350" height="80" src="http://i.imgur.com/UCxedBg.gif"><img width="100" height="100" src="http://i.imgur.com/I7eayeo.jpg"><br><b>Ace: Cinccino<br>Quote: Don\'t bet me or you will weep later</b></center>');
+    },
+    
+    barida: function(target, room, user) {
+    	if (!this.canBroadcast()) return;
+    	this.sendReplyBox('<center><img height="140" width="120" src=" http://i.imgur.com/pqdTMAM.gif"><img src="http://i.imgur.com/UD8pfs8.gif"><img  height="100" width="120" src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/zapdos.gif"><br /><center><b>Ace: </b>Dragonite</center><br /><center><b>Catchphrase: </b>Success will never come to you if you don\’t reach flight and soar to your goal</center>');
+    },
+    
+	epin: 'epinicion',
+    epinicion: function(target, room, user) {
+     	if (!this.canBroadcast()) return;
+     	this.sendReplyBox('<center><img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/crustle.gif">' +
+     		'<img src="http://i.imgur.com/5aLcrWN.png">' +
+     		'<img src="http://www.pkparaiso.com/imagenes/xy/sprites/animados/mew.gif"><br />' +
+     		'<b>Ace: </b>Crustle<br />' +
+     		'<b>Quote: </b>Si Vis Pacem, Para Bellum</center>');
+     },
+
     thatonebadass: function(target, room, user) {
     	if (!this.canBroadcast()) return;
-    	this.sendReplyBox('<center><img src=http://i.imgur.com/m8rrrMm.gif height="95" width="95"><img src=http://i.imgur.com/Z0dsNXK.gif><img src=http://i.imgur.com/66s3Y7w.png height="95" width="95"><br><b>Ace:</b> Charizard<br><b>Catchphrase: </b>Badass Pokémon master since 1996</center>');
+    	this.sendReplyBox('<center><img height=150 src=http://i.imgur.com/SsxwslQ.gif>' +
+    		'<img src=http://i.imgur.com/rvUDGg2.gif>' +
+    		'<img height=150 src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/greninja-4.gif><br />' +
+    		'<b>Ace:</b> My Hands<br />' +
+    		'<b>Catchphrase: </b>I\'m bout to get #WristDeep</center>');
     },
     
     kanghirule : 'kanghiman',
@@ -1628,11 +2044,6 @@ var commands = exports.commands = {
 		'<img src="http://www.apeconmyth.com/wp-content/uploads/2011/09/moo-cow.gif">')
 	},
 	
-	frostfaq: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('For any questions please check <a href="http://frostserver.weebly.com/faq.html">this</a> out before asking mods.')
-	},
-	
 	frostclient: 'client',
 	customclient: 'client',
 	client: function(target, room, user) {
@@ -1710,6 +2121,11 @@ var commands = exports.commands = {
         	if (!this.canBroadcast()) return;
         	this.sendReply('|raw|<center><a href="http://imgur.com/9BjQ1Vc"><img src="http://i.imgur.com/9BjQ1Vc.gif"></a><br><a href="http://imgur.com/fTcILVT"><img src="http://i.imgur.com/fTcILVT.gif"></a><a href="http://imgur.com/D58V1My"><img src="http://i.imgur.com/D58V1My.gif"></a><a href="http://imgur.com/dqJ08as"><img src="http://i.imgur.com/dqJ08as.gif"></a><br>Ace: Fairies!<br><br><a href="http://imgur.com/hNB4ib0"><img src="http://i.imgur.com/hNB4ib0.png"></a><br><a href="http://imgur.com/38evGGC"><img src="http://i.imgur.com/38evGGC.png"></a><br><b>-Grimsley</b>')
     	},
+    	
+    	wyvern: function(target, room, user) {
+    		if (!this.canBroadcast()) return;
+    		this.sendReplyBox('<img src="http://media.giphy.com/media/tifCTtoW05XwY/giphy.gif" height="80" width="125"><img src="http://i.imgur.com/C7x8Fxe.gif" height="90" width="300"><img src = "http://brony.cscdn.us/pic/photo/2013/07/e00cb1f5fa33b5be7ad9127e7f7c390d_1024.gif" height="80" width="125"></br><center><b>Ace:</b> Noivern</center></br><center><b>"My armour is like tenfold shields, my teeth are swords, my claws spears, the shock of my tail a thunderbolt, my wings a hurricane, and my breath death!"</b></center>');
+    	},
 	
 	princesshigh: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1744,7 +2160,11 @@ var commands = exports.commands = {
 	
 	jd: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/9e7GXOD.png"><img src="http://i.imgur.com/mKgt7in.png"><br><center>Ace: Admin<br>I don\'t need a Trainer Card.');
+		this.sendReplyBox('<center><img height=150 src="http://feetfirstbook.files.wordpress.com/2012/06/pinkbutterfly2.jpg">' +
+			'<img src="http://i.imgur.com/9e7GXOD.png"><img src="http://i.imgur.com/mKgt7in.png">' +
+			'<img height=150 src="http://images2.fanpop.com/images/photos/7900000/But-butterflies-7911918-300-300.jpg"><br />' +
+			'<b>Ace:</b> <font color=red><blink>Admin</font></blink><br />' +
+			'<b>Theme Song: </b><a href="http://www.youtube.com/watch?v=xat1GVnl8-k">Bloodhound Gang - The Bad Touch</a></center>');
 	},
 	
 	familymantpsn: function(target, room, user) {
@@ -1752,9 +2172,15 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://i.imgur.com/UHptfOM.gif"><font size="6" color="#FF0080"><i>Family Man TPSN</i><img src="http://i.imgur.com/XVhKJ77.gif"></font></color><br><center>Ace: Audino<br>Luck.');
 	},
 	
+	gymleaderpix: 'pack',
+	pix: 'pack',
 	pack: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/YOdiDlB.gif"><font size="7" color="#DF0174"><i>Pack</i><img src="http://i.imgur.com/yydwZav.gif"></font></color><br><center>Ace: Espeon<br>Make it PAUSE');
+		this.sendReplyBox('<center><img height="80" width="140" src="http://24.media.tumblr.com/tumblr_m12llhWvxE1qgzv18o1_500.gif">' +
+			'<img src="http://i.imgur.com/gYuwRDI.png">' +
+			'<img height="80" width="140" src="http://stream1.gifsoup.com/view/162044/snorlax-waking-o.gif"><br />' +
+			'<b>Ace: </b>Munchies<br />' +
+			'<b>Quote: </b>Barida < Tael</center>');
 	},
 	
 	salemance: 'elite4salemance',
@@ -1803,6 +2229,30 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://i.imgur.com/7DKOZLx.png"><br><img src="http://i.imgur.com/YznYjmS.gif"><br>Ace: Mega Charizard X<br>Finn, being an enormous crotch-kicking foot is a gift. Don\'t scorn a gift.');
 	},
 	
+	recep: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src=http://i.imgur.com/4xzLvzV.gif><img src=http://i.imgur.com/48CvnKv.gif height="80" width="310"><img src=http://i.imgur.com/4xzLvzV.gif><br><b>Ace:</b> Patrick<br><b>Catchphrase:</b> I may be stupid, but I\'m also dumb.<center>');
+	},
+	
+	tesla: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/lanturn.gif>' +
+			'<img src=http://i.imgur.com/7HIXTxC.gif>' +
+			'<img src=http://www.pkparaiso.com/imagenes/xy/sprites/animados/zapdos.gif><br />' +
+			'Ace: <font color="green">The Green Lanturn</font><br />' +
+			'<font color=#CC9900>Edison failed 10,000 times before he made the electric light. <br />Do not be discouraged if you fail a few times.</font></center>');
+	},
+	
+	nocilol: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height="100" width="80" src="http://i.imgur.com/e3Y9KTl.gif"><img src="http://i.imgur.com/8aJpTwD.gif"><img  height="120" width="100" src="http://i.imgur.com/WUtGk1c.jpg"><br /><font face="arial" color="red"><b>Ace: </b>Gallade<br /><b>Catchphrase: </b>I hope you enjoy fan service – I can provide you some. ;)</center></font>');
+	},
+	
+	tacosaur: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src=http://i.imgur.com/kLizkSj.png height="100" width="100"><img src=http://i.imgur.com/AZMkadt.gif><img src=http://i.imgur.com/csLKG5O.png height="100" width="100"><br><b>Ace:</b> Swampert<br><b>Catchphrase:</b> So I herd u liek Swampertz</center>');
+	},
+	
 	prez: 'cosy',
 	cosy: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1847,11 +2297,14 @@ var commands = exports.commands = {
 		this.sendReplyBox('<center><img src="http://fc09.deviantart.net/fs4/i/2004/196/9/b/Ludidolo.gif"><img src="http://i.imgur.com/CSfl1OU.gif"><img src="http://z5.ifrm.com/30155/88/0/a3555782/avatar-3555782.jpg"></center><br /><center>Ace: Ludicolo<br />TRAINS AND COLOS');
 	},
 	
-	darrelde: 'elite4darrelde',
-	championkeldeo: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src ="http://i.imgur.com/UYMcWfo.png">');
-	},
+	nightmare: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://www.smogon.com/media/forums/avatars/gengar.gif.v.RgUmg2XMx1gWsiUcJc9b0w">' +
+                '<img src="http://i.imgur.com/3Shcj1m.png" width="347">' +
+                '<img src="http://www.smogon.com/media/forums/avatars/darkrai.gif.v.74wEympImux6JCL0v_MbPA"><br />' +
+                '<b>Ace:</b> Darkrai<br />' +
+                'Prepare for your nightmare.</center>');
+        },
 	
 	killertiger: function(target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1982,12 +2435,7 @@ var commands = exports.commands = {
 	events: 'currentevents',
 	currentevents: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<font size = 2>Here is a list of events that will be happening today (Pacific Time):</font><br />' +
-						'<ul><li><b>12:30</b>-<i>Regular users Tournament</i>-This Gen 6 Pokebank OU format tournament is held in lobby and has no size limit (there is a 3 minute registration period).First place gets <b>30 Points</b> and second place gets <b>20 Points</b>.</li>' +
-						'<li><b>1:30</b>-<i>Masters of the Color</i>-In this tournament, your team must share a color that is based on your name. All names fit under these four categories: red, blue, green, yellow/brown, pink/purple. To see a list of pokemon for your name, type /[color].(ex- /green). Winning for your color will earn you <b>15 Points</b>.(Type /motc for more help) /</li>' +
-						'<li><b>2:30</b>-<i>Battle of the Leagues</i>-This tournament is in Gen 6 OU Monotype format and involves the different leagues on Frost. Each league has <b>ONE</b> representitive that will fight against other league\'s representitives. The winning representitive will recieve <b>30 Points</b> and everyone else in the league will recieve <b>15 Points</b>.</li>' +
-						'<li><b>3:30</b>-<i>Regular users Tournament</i>-The format for this tournament is voted on in lobby, is held in the lobby, and has no size limit (there is a 3 minute registration period).First place gets <b>30 Points</b> and second place gets <b>20 Points</b>.</li></ul>' +
-						'As always, make sure to have a fun time on Frost!');
+		this.sendReplyBox('Check out information on the weekly events <a href="http://frostserver.net/events.html">here</a>!');
 	},
 					
 	/*********************************************************
@@ -2142,8 +2590,8 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'learn' || target === 'learnset' || target === 'learnall') {
 			matched = true;
-			this.sendReply('/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.')
-			this.sendReply('!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ & ~')
+			this.sendReply('/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.');
+			this.sendReply('!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ & ~');
 		}
 		if (target === 'all' || target === 'calc' || target === 'caclulator') {
 			matched = true;
@@ -2186,18 +2634,20 @@ var commands = exports.commands = {
 			this.sendReply('all - change all timestamps preferences, lobby - change only lobby chat preferences, pms - change only PM preferences');
 			this.sendReply('off - set timestamps off, minutes - show timestamps of the form [hh:mm], seconds - show timestamps of the form [hh:mm:ss]');
 		}
-		if (target === 'all' || target === 'effectiveness') {
+		if (target === 'all' || target === 'effectiveness' || target === 'matchup' || target === 'eff' || target === 'type') {
 			matched = true;
-			this.sendReply('/effectiveness [type1], [type2] - Provides the effectiveness of a [type1] attack to a [type2] Pokémon.');
-			this.sendReply('!effectiveness [type1], [type2] - Shows everyone the effectiveness of a [type1] attack to a [type2] Pokémon.');
+			this.sendReply('/effectiveness OR /matchup OR /eff OR /type [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.');
+			this.sendReply('!effectiveness OR /matchup OR !eff OR !type [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.');
 		}
-		if (target === 'all' || target === 'dexsearch') {
+		if (target === 'all' || target === 'dexsearch' || target === 'dsearch') {
 			matched = true;
 			this.sendReply('/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.');
 			this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
 			this.sendReply('Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.');
-			this.sendReply('Valid tiers are: Uber/OU/BL/UU/BL2/RU/NU/NFE/LC/CAP.');
+			this.sendReply('Valid tiers are: Uber/OU/BL/LC/CAP.');
 			this.sendReply('Types must be followed by " type", e.g., "dragon type".');
+			this.sendReply('Parameters can be excluded through the use of "!", e.g., "!water type" excludes all water types.');
+			this.sendReply('The parameter "mega" can be added to search for Mega Evolutions only.');
 			this.sendReply('The order of the parameters does not matter.');
 		}
 		if (target === 'all' || target === 'settype') {
@@ -2276,21 +2726,21 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/invite [username], [roomname] - Invites the player [username] to join the room [roomname].');
 		}
-		if (target === '%' || target === 'roomban') {
+		if (target === '%' || target === 'lock' || target === 'l') {
 			matched = true;
-			this.sendReply('/roomban [username] - Bans the user from the room you are in. Requires: % @ & ~');
+			this.sendReply('/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'roomunban') {
+		if (target === '%' || target === 'unlock') {
 			matched = true;
-			this.sendReply('/roomunban [username] - Unbans the user from the room you are in. Requires: % @ & ~');
+			this.sendReply('/unlock [username] - Unlocks the user. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'redirect' || target === 'redir') {
 			matched = true;
-			this.sendReply('/redirect or /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~');
+			this.sendReply('/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'modnote') {
+		if (target === '%' || target === 'modnote' || target === 'note' || target === 'mn') {
 			matched = true;
-			this.sendReply('/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ & ~');
+			this.sendReply('/note OR /mn OR /modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
@@ -2318,11 +2768,11 @@ var commands = exports.commands = {
 		}
 		if (target === '%' || target === 'mute' || target === 'm') {
 			matched = true;
-			this.sendReply('/mute OR /m [username], [reason] - Mute user with reason for 7 minutes. Requires: % @ & ~');
+			this.sendReply('/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'hourmute' || target === 'hm') {
 			matched = true;
-			this.sendReply('/hourmute OR /hm [username], [reason] - Mute user with reason for an hour. Requires: % @ & ~');
+			this.sendReply('/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'daymute') {
 			matched = true;
@@ -2332,9 +2782,9 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/cmute [username], [time in hours] - Mute a user for the amount of hours. Requires: % @ & ~');
 		}
-		if (target === '%' || target === 'unmute') {
+		if (target === '%' || target === 'unmute' || target === 'um') {
 			matched = true;
-			this.sendReply('/unmute [username] - Remove mute from user. Requires: % @ & ~');
+			this.sendReply('/unmute [username] - Removes mute from user. Requires: % @ & ~');
 		}
 		if (target === '%' || target === 'showuserid' || target === 'getid') {
 			matched = true;
@@ -2498,7 +2948,7 @@ var commands = exports.commands = {
 			this.sendReply('For details on all commands, use /help all');
 			if (user.group !== config.groupsranking[0]) {
 				this.sendReply('DRIVER COMMANDS: /mute, /unmute, /announce, /modlog, /forcerename, /alts')
-				this.sendReply('MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /modlog, /redirect, /kick');
+				this.sendReply('MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /redirect, /kick');
 				this.sendReply('LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare, /permaban');
 				this.sendReply('For details on all moderator commands, use /help @');
 			}

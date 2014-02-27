@@ -66,7 +66,6 @@ function runNpm(command) {
 
 try {
 	require('sugar');
-	require('http-get');
 } catch (e) {
 	return runNpm('install');
 }
@@ -227,7 +226,7 @@ global.ResourceMonitor = {
 			else if (typeof value === 'number') bytes += 8;
 			else if (typeof value === 'object' && objectList.indexOf( value ) === -1) {
 				objectList.push( value );
-				for (i in value) stack.push( value[ i ] );
+				for (var i in value) stack.push( value[ i ] );
 			}
 		}
 
@@ -335,7 +334,7 @@ global.sanitize = function(str, strEscape) {
 global.string = function(str) {
 	if (typeof str === 'string' || typeof str === 'number') return ''+str;
 	return '';
-}
+};
 
 /**
  * Converts any variable to an integer (numbers get floored, non-numbers
@@ -440,20 +439,30 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 try {
 	global.tour = require('./tour.js').tour();
 } catch (e) {
-	console.log('Error loading tour.js');
+	console.log('Error loading tour.js: '+e.stack);
 }
 try {
 	global.hangman = require('./hangman.js').hangman();
 } catch (e) {
-	console.log('Error loading hangman.js');
+	console.log('Error loading hangman.js: '+e.stack);
 }
 try {
 	global.frostcommands = require('./frost-commands.js');
 } catch (e) {
-	console.log('Error loading frost-commands.js');
+	console.log('Error loading frost-commands.js: '+e.stack);
 }
 try {
 	global.economy = require('./economy.js');
 } catch (e) {
-	console.log('Error loading economy.js');
+	console.log('Error loading economy.js: '+e.stack);
 }
+
+fs.readFile('./logs/uptime.txt', function (err, uptime) {
+	if (!err) global.uptimeRecord = parseInt(uptime, 10);
+	global.uptimeRecordInterval = setInterval(function () {
+		if (global.uptimeRecord && process.uptime() <= global.uptimeRecord) return;
+		global.uptimeRecord = process.uptime();
+		fs.writeFile('./logs/uptime.txt', global.uptimeRecord.toFixed(0));
+	}, (1).hour());
+});
+

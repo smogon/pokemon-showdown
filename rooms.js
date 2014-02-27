@@ -13,7 +13,6 @@ const TIMEOUT_EMPTY_DEALLOCATE = 10*60*1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40*60*1000;
 const REPORT_USER_STATS_INTERVAL = 1000*60*10;
 
-var modlog = modlog || fs.createWriteStream('logs/modlog.txt', {flags:'a+'});
 var complaint = complaint || fs.createWriteStream('logs/complaint.txt', {flags:'a+'}); 
 
 var GlobalRoom = (function() {
@@ -135,8 +134,19 @@ var GlobalRoom = (function() {
 		// init users
 		this.users = {};
 		this.userCount = 0; // cache of `Object.size(this.users)`
-		this.maxUsers = 0;
-		this.maxUsersDate = 0;
+		self = this;
+		data = fs.readFile('logs/maxUsers.txt','utf8',function(err, data){
+			if (err) {
+				self.maxUsers = 0;
+				self.maxUsersDate = Date();
+				return;
+			}
+			data = data.split(',');
+			self.maxUsers = data[0];
+			self.maxUsersDate = data[1];
+		});
+		//this.maxUsers = data[0];
+		//this.maxUsersDate = data[1];
 
 		this.reportUserStatsInterval = setInterval(
 			this.reportUserStats.bind(this),
@@ -261,11 +271,15 @@ var GlobalRoom = (function() {
 			userid: user.userid,
 			formatid: formatid,
 			team: user.team,
-			rating: 1500,
+			rating: 1000,
 			time: new Date().getTime()
 		};
 		var self = this;
-		user.doWithMMR(formatid, function(mmr) {
+		user.doWithMMR(formatid, function(mmr, error) {
+			if (error) {
+				user.popup("Connection to ladder server failed; please try again later");
+				return;
+			}
 			newSearch.rating = mmr;
 			self.addSearch(newSearch, user);
 		});
@@ -347,7 +361,7 @@ var GlobalRoom = (function() {
 		return true;
 	};
 	GlobalRoom.prototype.deregisterChatRoom = function(id) {
-		var id = toId(id);
+		id = toId(id);
 		var room = rooms[id];
 		if (!room) return false; // room doesn't exist
 		if (!room.chatRoomData) return false; // room isn't registered
@@ -366,7 +380,7 @@ var GlobalRoom = (function() {
 		return true;
 	};
 	GlobalRoom.prototype.delistChatRoom = function(id) {
-		var id = toId(id);
+		id = toId(id);
 		if (!rooms[id]) return false; // room doesn't exist
 		for (var i=this.chatRooms.length-1; i>=0; i--) {
 			if (id === this.chatRooms[i].id) {
@@ -376,7 +390,7 @@ var GlobalRoom = (function() {
 		}
 	};
 	GlobalRoom.prototype.removeChatRoom = function(id) {
-		var id = toId(id);
+		id = toId(id);
 		var room = rooms[id];
 		if (!room) return false; // room doesn't exist
 		room.destroy();
@@ -395,6 +409,10 @@ var GlobalRoom = (function() {
 				user.joinRoom(this.staffAutojoin[i], connection);
 			}
 		}
+		if (user.vip) {
+			//user.joinRoom('vip', connection);
+			user.send('|pm|~Server|'+user.group+user.name+'|/invite VIP');
+		}
 	};
 	GlobalRoom.prototype.onJoinConnection = function(user, connection) {
 		var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
@@ -408,7 +426,8 @@ var GlobalRoom = (function() {
 		this.users[user.userid] = user;
 		if (++this.userCount > this.maxUsers) {
 			this.maxUsers = this.userCount;
-			this.maxUsersDate = Date.now();
+			this.maxUsersDate = Date();
+			fs.writeFile('logs/maxUsers.txt',this.maxUsers+','+Date(),'utf8');
 		}
 
 		if (!merging) {
@@ -617,13 +636,13 @@ var BattleRoom = (function() {
 
 							var oldacre = Math.round(data.p1rating.oldacre);
 							var acre = Math.round(data.p1rating.acre);
-							var reasons = ''+(acre-oldacre)+' for '+(p1score>.99?'winning':(p1score<.01?'losing':'tying'));
+							var reasons = ''+(acre-oldacre)+' for '+(p1score>0.99?'winning':(p1score<0.01?'losing':'tying'));
 							if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
 							self.addRaw(sanitize(p1)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
 
-							var oldacre = Math.round(data.p2rating.oldacre);
-							var acre = Math.round(data.p2rating.acre);
-							var reasons = ''+(acre-oldacre)+' for '+(p1score>.99?'losing':(p1score<.01?'winning':'tying'));
+							oldacre = Math.round(data.p2rating.oldacre);
+							acre = Math.round(data.p2rating.acre);
+							reasons = ''+(acre-oldacre)+' for '+(p1score>0.99?'losing':(p1score<0.01?'winning':'tying'));
 							if (reasons.substr(0,1) !== '-') reasons = '+'+reasons;
 							self.addRaw(sanitize(p2)+'\'s rating: '+oldacre+' &rarr; <strong>'+acre+'</strong><br />('+reasons+')');
 
@@ -1126,13 +1145,6 @@ var BattleRoom = (function() {
 		}
 		this.update();
 	};
-	BattleRoom.prototype.addModCommand = function(result) {
-		this.add(result);
-		this.logModCommand(result);
-	};
-	BattleRoom.prototype.logModCommand = function(result) {
-		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
-	};
 	BattleRoom.prototype.logEntry = function() {};
 	BattleRoom.prototype.expire = function() {
 		this.send('|expire|');
@@ -1493,13 +1505,6 @@ var ChatRoom = (function() {
 			this.messageCount++;
 		}
 		this.update();
-	};
-	ChatRoom.prototype.addModCommand = function(result) {
-		this.add(result);
-		this.logModCommand(result);
-	};
-	ChatRoom.prototype.logModCommand = function(result) {
-		modlog.write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 	};
 	ChatRoom.prototype.logEntry = function() {};
 	ChatRoom.prototype.destroy = function() {

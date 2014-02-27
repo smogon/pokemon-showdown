@@ -1,15 +1,15 @@
 exports.BattleItems = {
 	"choiceband": {
 		inherit: true,
-		onStart: null
+		onStart: function() { }
 	},
 	"choicescarf": {
 		inherit: true,
-		onStart: null
+		onStart: function() { }
 	},
 	"choicespecs": {
 		inherit: true,
-		onStart: null
+		onStart: function() { }
 	},
 	"custapberry": {
 		id: "custapberry",
@@ -51,6 +51,12 @@ exports.BattleItems = {
 			}
 		},
 		desc: "Activates at 25% HP. Next move used goes first. One-time use."
+	},
+	"ironball": {
+		inherit: true,
+		onModifyPokemon: function(pokemon) {
+			pokemon.negateImmunity['Ground'] = true;
+		}
 	},
 	"lifeorb": {
 		id: "lifeorb",

@@ -33,9 +33,53 @@
  var lockedIps = {};
 
 var ipbans = fs.createWriteStream("config/ipbans.txt", {flags: "a"}); // do not remove this line
-var bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
-var userTypes = fs.readFileSync('config/types.csv','utf8'); 
-bannedMessages = bannedMessages.split('\n');
+try {
+	exports.bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
+} catch(e) {
+	exports.bannedMessages = '';
+	fs.writeFileSync('config/bannedmessages.txt','','utf8');
+}
+
+try {
+	userTypes = fs.readFileSync('config/types.csv','utf8'); 
+} catch(e) {
+	userTypes = '';
+	fs.writeFileSync('config/types.csv','','utf8');
+}
+
+exports.bannedMessages = exports.bannedMessages.split('\n');
+
+exports.readVips = function() {
+	exports.vips = fs.readFile('config/vips.txt', 'utf8', function(err, data) {
+		exports.vips = [];
+		if (err) return exports.vips;
+		data = data.split('\n');
+		count = 0;
+		for (var u in data) {
+			count++;
+			if (data[u].length > 0) exports.vips.push(data[u]);
+			if (count == data.length) return exports.vips;
+		}
+	});
+}
+
+exports.readVips();
+
+exports.addVip = function(user) {
+	user = toUserid(user);
+	exports.vips.push(user);
+	count = 0;
+	data = '';
+	for (var u in exports.vips) {
+		if (exports.vips[u].length > 0) data = data + exports.vips[u] + '\n';
+		count++;
+		if (count == exports.vips.length) {
+			fs.writeFileSync('config/vips.txt',data);
+			exports.readVips();
+			return true;
+		}
+	}
+}
 
 /**
  * Get a user.
@@ -353,7 +397,7 @@ var User = (function () {
 
 		if (connection.user) connection.user = this;
 		this.connections = [connection];
-		this.ips = {}
+		this.ips = {};
 		this.ips[connection.ip] = 1;
 		// Note: Using the user's latest IP for anything will usually be
 		//       wrong. Most code should use all of the IPs contained in
@@ -380,6 +424,7 @@ var User = (function () {
 	User.prototype.frostDev = false;
 	User.prototype.isSysop = false;
 	User.prototype.forceRenamed = false;
+	User.prototype.vip = false;
 
 	// for the anti-spamming mechanism
 	User.prototype.lastMessage = '';
@@ -614,6 +659,7 @@ var User = (function () {
 		this.staffAccess = false;
 		this.frostDev = false;
 		this.isSysop = false;
+		this.vip = false;
 
 		for (var i=0; i<this.connections.length; i++) {
 			// console.log(''+name+' renaming: connection '+i+' of '+this.connections.length);
@@ -792,6 +838,7 @@ var User = (function () {
 			var staffAccess = false;
 			var frostDev = false;
 			var isSysop = false;
+			var vip = false;
 			var avatar = 0;
 			var authenticated = false;
 			var ip = this.latestIp.split('.');
@@ -811,7 +858,7 @@ var User = (function () {
 							break;
 						}
 					}
-				}
+				}				
 
 				avatar = fs.readFile('config/avatars.csv', 'utf8', function read(err, data) {
 					if (err) {
@@ -820,6 +867,50 @@ var User = (function () {
 						setAvatar(data);
 					}
 				});
+
+				now = new Date();
+				day = now.getUTCDate();
+				month = now.getUTCMonth() + 1;
+				year = now.getUTCFullYear();
+				if (now.getUTCHours() < 10) {
+					hours = '0'+now.getUTCHours();
+				} else {
+					hours = now.getUTCHours();
+				}
+				if (now.getUTCMinutes() < 10) { 
+					minutes = '0'+now.getUTCMinutes();
+				} else {
+					minutes = now.getUTCMinutes();
+				}
+				time = day+'/'+month+'/'+year+' '+hours+':'+minutes
+
+				match = false;
+				try  { 
+					data = fs.readFileSync('logs/lastonline.txt','utf8');
+				} catch (e) {
+					data = '';
+				}
+				row = (''+data).split("\n");
+				line = '';
+				for (var i in row) {
+					parts = row[i].split(",");
+					if (!parts[1]) continue;
+					if (toUserid(name) == parts[0]) {
+						match = true;
+						line = line + row[i];
+						break;
+					} 
+				}
+				if (parts[1] != time) {
+					if (match === true) {
+						re = new RegExp(line,"g");
+						result = data.replace(re, toUserid(name)+','+time);
+						fs.writeFileSync('logs/lastonline.txt', result, 'utf8');
+						match = false;
+					} else {
+						fs.appendFile('logs/lastonline.txt',"\n"+toUserid(name)+','+time);
+					}
+				}
 
 				if (this.monoType === '') {
 					var rows = userTypes.split('\n');
@@ -855,14 +946,18 @@ var User = (function () {
 
 				if (body === '3') {
 					isSysop = true;
-					this.autoconfirmed = true;
+					this.autoconfirmed = userid;
 				} else if (body === '4') {
-					this.autoconfirmed = true;
+					this.autoconfirmed = userid;
 				}
 
 				if (config.frostDev.indexOf(this.latestIp) >= 0 || config.frostDev.indexOf(name) >= 0) {
 					frostDev = true;
 					this.autoconfirmed = true;
+				}
+
+				if (exports.vips.indexOf(toUserid(name)) >= 0) {
+					vip = true;
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
@@ -881,6 +976,7 @@ var User = (function () {
 						user.muteDuration = Object.merge(user.muteDuration, this.muteDuration);
 						this.mutedRooms = {};
 						this.muteDuration = {};
+						this.locked = false;
 					}
 				}
 				for (var i=0; i<this.connections.length; i++) {
@@ -905,12 +1001,14 @@ var User = (function () {
 				this.staffAccess = false;
 				this.isSysop = false;
 				this.frostDev = false;
+				this.vip = false;
 
 				user.group = group;
 				user.isStaff = (user.group in {'%':1, '@':1, '&':1, '~':1});
 				user.staffAccess = staffAccess;
 				user.isSysop = isSysop;
 				user.frostDev = frostDev;
+				user.vip = vip;
 
 				user.forceRenamed = false;
 				if (avatar) user.avatar = avatar;
@@ -939,6 +1037,7 @@ var User = (function () {
 			this.staffAccess = staffAccess;
 			this.frostDev = frostDev;
 			this.isSysop = isSysop;
+			this.vip = vip;
 			if (avatar) this.avatar = avatar;
 			if (this.forceRename(name, authenticated)) {
 				Rooms.global.checkAutojoin(this);
@@ -1076,29 +1175,32 @@ var User = (function () {
 		}
 		return alts;
 	};
-	User.prototype.doWithMMR = function(formatid, callback, that) {
+	User.prototype.doWithMMR = function(formatid, callback) {
 		var self = this;
-		if (that === undefined) that = this;
 		formatid = toId(formatid);
 
 		// this should relieve login server strain
 		// this.mmrCache[formatid] = 1000;
 
 		if (this.mmrCache[formatid]) {
-			callback.call(that, this.mmrCache[formatid]);
+			callback(this.mmrCache[formatid]);
 			return;
 		}
 		LoginServer.request('mmr', {
 			format: formatid,
 			user: this.userid
 		}, function(data) {
-			var mmr = 1000;
+			var mmr = 1000, error = true;
 			if (data) {
 				mmr = parseInt(data,10);
-				if (isNaN(mmr)) mmr = 1000;
+				if (!isNaN(mmr)) {
+					error = false;
+					self.mmrCache[formatid] = mmr;
+				} else {
+					mmr = 1000;
+				}
 			}
-			self.mmrCache[formatid] = mmr;
-			callback.call(that, mmr);
+			callback(mmr, error);
 		});
 	};
 	User.prototype.cacheMMR = function(formatid, mmr) {
@@ -1167,9 +1269,11 @@ var User = (function () {
 		this.updateIdentity();
 	};
 	User.prototype.joinRoom = function(room, connection) {
+		match = true;
 		room = Rooms.get(room);
 		if (!room) return false;
 		if (room.staffRoom && !this.isStaff) return false;
+		if (room.vip && !this.vip && !this.isStaff) return false;
 		if (this.userid && room.bannedUsers && this.userid in room.bannedUsers) return false;
 		if (this.ips && room.bannedIps) {
 			for (var ip in this.ips) {
@@ -1207,6 +1311,54 @@ var User = (function () {
 			// you can't leave the global room except while disconnecting
 			return false;
 		}
+		
+		if (room.id == 'global') {
+
+			now = new Date();
+			day = now.getUTCDate();
+			month = now.getUTCMonth() + 1;
+			year = now.getUTCFullYear();
+			if (now.getUTCHours() < 10) {
+				hours = '0'+now.getUTCHours();
+			} else {
+				hours = now.getUTCHours();
+			}
+			if (now.getUTCMinutes() < 10) { 
+				minutes = '0'+now.getUTCMinutes();
+			} else {
+				minutes = now.getUTCMinutes();
+			}
+			time = day+'/'+month+'/'+year+' '+hours+':'+minutes
+
+			match = false;
+			try  { 
+				data = fs.readFileSync('logs/lastonline.txt','utf8');
+			} catch (e) {
+				data = '';
+			}
+			row = (''+data).split("\n");
+			line = '';
+			for (var i in row) {
+				parts = row[i].split(",");
+				if (!parts[1]) continue;
+				if (this.userid == parts[0]) {
+					match = true;
+					line = line + row[i];
+					break;
+				} 
+			}
+			if (parts[1] != time) {
+				if (match === true) {
+					re = new RegExp(line,"g");
+					result = data.replace(re, this.userid+','+time);
+					fs.writeFileSync('logs/lastonline.txt', result, 'utf8');
+					match = false;
+				} else {
+					fs.appendFile('logs/lastonline.txt',"\n"+this.userid+','+time);
+				}
+			}
+		}
+		
 		for (var i=0; i<this.connections.length; i++) {
 			if (this.connections[i] === connection || !connection) {
 				if (this.connections[i].rooms[room.id]) {
@@ -1266,12 +1418,12 @@ var User = (function () {
 		}
 		TeamValidator.validateTeam(formatid, this.team, this.finishPrepBattle.bind(this, connection, callback));
 	};
-	User.prototype.finishPrepBattle = function(connection, callback, problems, team) {
-		if (problems) {
-			connection.popup("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
+	User.prototype.finishPrepBattle = function(connection, callback, success, details) {
+		if (!success) {
+			connection.popup("Your team was rejected for the following reasons:\n\n- "+details.replace(/\n/g, '\n- '));
 			callback(false);
 		} else {
-			this.team = team;
+			this.team = details;
 			callback(true);
 		}
 	};
@@ -1377,14 +1529,14 @@ var User = (function () {
 			}
 		}*/
 		if (!room.isPrivate) {
-			for (var x in bannedMessages) {
-				if (message.indexOf(bannedMessages[x]) > -1 && bannedMessages[x] != '') {
+			for (var x in Users.bannedMessages) {
+				if (message.indexOf(Users.bannedMessages[x]) > -1 && Users.bannedMessages[x] != '' && message.substr(0,1) != '/') {
 					connection.user.lock();
 					connection.user.popup('You have been automatically locked for sending a message containing a banned word. If you feel this was a mistake please contact a staff member.');
-					//Rooms.rooms.staff.logModCommand(connection.user.name + ' was locked for sending a message containing a banned word. Message: ' + message);
+					//room.logModCommand(connection.user.name+' was automatically locked by the server for saying "'+Users.bannedMessages[x]+'"');
 					for (var u in Users.users) {
-						if (Users.users[u].isStaff) {
-							Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+connection.user.name+' has been automatically locked for sending a message containing a banned word. Message: ' + message);
+						if (Users.users[u].group == '~' || Users.users[u].group == '&') {
+							Users.users[u].send('|pm|~Server|'+Users.users[u].group+Users.users[u].name+'|'+connection.user.name+' has been automatically locked for sending a message containing a banned word. Room: '+room.id+' Message: ' + message);
 						}
 					}
 					return false;

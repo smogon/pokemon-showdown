@@ -156,7 +156,7 @@ exports.BattleStatuses = {
 			pokemon.tryTrap();
 		},
 		onStart: function(target) {
-			this.add('-activate', target, 'trapped')
+			this.add('-activate', target, 'trapped');
 		}
 	},
 	partiallytrapped: {
@@ -475,16 +475,16 @@ exports.BattleStatuses = {
 		// be their corresponding type in the Pokedex, so that needs to be
 		// overridden. This is mainly relevant for Hackmons and Balanced
 		// Hackmons.
-		onModifyPokemon: function(pokemon) {
-			if (pokemon.transformed) return;
+		onSwitchInPriority: 101,
+		onSwitchIn: function(pokemon) {
 			var type = 'Normal';
 			if (pokemon.ability === 'multitype') {
-				var type = this.runEvent('Plate', pokemon);
+				type = this.runEvent('Plate', pokemon);
 				if (!type || type === true) {
 					type = 'Normal';
 				}
 			}
-			pokemon.types = [type];
+			pokemon.setType(type, true);
 		}
 	}
 };

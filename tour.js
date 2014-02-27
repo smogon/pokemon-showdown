@@ -15,6 +15,8 @@ new cronJob('0 0 0 * * *', function(){
     }
 }, null, true);
 
+if (!config.tourjoinspersecond) config.tourjoinspersecond = 1;
+
 exports.tour = function(t) {
   if (typeof t != "undefined") var tour = t; else var tour = new Object();
 	var tourStuff = {
@@ -104,7 +106,7 @@ exports.tour = function(t) {
 			}
 		},
 		maxauth: function(user) {
-			if (user.can('forcewin') || user.userid === 'cosy' || user.userid === 'brittlewind') return true;
+			if (user.can('forcewin')) return true;
 			return false;
 		},
 		highauth: function(user) {
@@ -593,6 +595,13 @@ var cmds = {
 		if (tour[room.id] == undefined || tour[room.id].status == 0) return this.sendReply('There is no active tournament to join.');
 		if (tour[room.id].status == 2) return this.sendReply('Signups for the current tournament are over.');
 		if (tour.joinable(user.userid, room.id)) {
+			if (tour[room.id].joinCooldown) {
+				return this.sendReply('To prevent lag during the joining phase of tournaments, joining is restricted to one join per '+config.tourjoinspersecond+' seconds.');
+			}
+			tour[room.id].joinCooldown = true;
+			tour[room.id].joinCooldownTimer = setTimeout(function(){ 
+				tour[room.id].joinCooldown = false;
+			}, config.tourjoinspersecond * 1000);
 			tour[room.id].players.push(user.userid);
 			var remslots = tour[room.id].size - tour[room.id].players.length;
 			// these three assignments (natural, natural, boolean) are done as wished
@@ -714,6 +723,11 @@ var cmds = {
 			tour.reportdue(room, connection);
 			room.addRaw('<hr /><h2><font color="green">Please sign up for the ' + Tools.data.Formats[tour[room.id].tier].name + ' Tournament.</font> <font color="red">/j</font> <font color="green">to join!</font></h2><b><font color="blueviolet">PLAYERS:</font></b> ' + (isFinite(tour[room.id].size) ? tour[room.id].size : 'UNLIMITED') + '<br /><font color="blue"><b>TIER:</b></font> ' + Tools.data.Formats[tour[room.id].tier].name + '<br /><font color="gray"><i>Tour remind by '+user.name+'</i></font><br /><hr />');
 		} else {
+			if (tour[room.id].remindCooldown) return this.sendReply('/remind is currently on cooldown. You can only use /remind once per minute.');
+			tour[room.id].remindCooldown = true;
+			tour[room.id].remindCooldownTimer = setTimeout(function(){
+				tour[room.id].remindCooldown = false;
+			}, 1 * 60 * 1000);
 			var c = tour[room.id];
 			var unfound = [];
 			if (!target) {
@@ -1029,21 +1043,59 @@ var cmds = {
 
 	toursettings: function(target, room, user) {
 		if (!tour.maxauth(user)) return this.sendReply('You do not have enough authority to use this command.');
-		if (target === 'replace on') return config.tourunlimitreplace = true;
-		if (target === 'replace off') return config.tourunlimitreplace = false;
-		if (target === 'alts on') return config.tourallowalts = true;
-		if (target === 'alts off') return config.tourallowalts = false;
-		if (target === 'dq on') return config.tourdqguard = false;
-		if (target === 'dq off') return config.tourdqguard = true;
-		if ((target.substr(0,6) === 'margin') && !isNaN(parseInt(target.substr(7))) && parseInt(target.substr(7)) >= 0) return config.tourtimemargin = parseInt(target.substr(7));
-		if ((target.substr(0,6) === 'period') && !isNaN(parseInt(target.substr(7))) && parseInt(target.substr(7)) > 0) return config.tourtimeperiod = parseInt(target.substr(7));
-		if (target.substr(0,7) === 'lowauth' && config.groupsranking.indexOf(target.substr(8,1)) != -1) return config.tourlowauth = target.substr(8,1);
-		if (target.substr(0,7) === 'midauth' && config.groupsranking.indexOf(target.substr(8,1)) != -1) return config.tourmidauth = target.substr(8,1);
-		if (target.substr(0,8) === 'highauth' && config.groupsranking.indexOf(target.substr(9,1)) != -1) return config.tourhighauth = target.substr(9,1);
+		if (target === 'replace on') {
+			config.tourunlimitreplace = true;
+			return this.sendReply('Replacing past round one has been enabled.');
+		}
+		if (target === 'replace off') {
+			config.tourunlimitreplace = false;
+			return this.sendReply('Replacing past round one has been disabled.');
+		}
+		if (target === 'alts on') { 
+			config.tourallowalts = true;
+			return this.sendReply('Alts are now allowed to join tournaments.');
+		}
+		if (target === 'alts off') { 
+			config.tourallowalts = false;
+			return this.sendReply('Alts are no longer allowed to join tournaments.');
+		}
+		if (target === 'dq on') {
+			config.tourdqguard = false;
+			return;
+		}
+		if (target === 'dq off') {
+			config.tourdqguard = true;
+			return;
+		}
+		if ((target.substr(0,6) === 'margin') && !isNaN(parseInt(target.substr(7))) && parseInt(target.substr(7)) >= 0) {
+			config.tourtimemargin = parseInt(target.substr(7));
+			return this.sendReply('In tournaments with timed register phase, the players joined are now logged individually until '+config.tourtimemargin+'players have joined.');
+		}
+		if ((target.substr(0,6) === 'period') && !isNaN(parseInt(target.substr(7))) && parseInt(target.substr(7)) > 0) {
+			config.tourtimeperiod = parseInt(target.substr(7));
+			return this.sendReply('In tournaments with timed register phase, the players joined are now logged in groups of '+config.tourtimeperiod+' players.');
+		}
+		if (target.substr(0,7) === 'lowauth' && config.groupsranking.indexOf(target.substr(8,1)) != -1) {
+			config.tourlowauth = target.substr(8,1);
+			return this.sendReply('Tournament low auth has been set to '+config.tourlowauth);
+		}
+		if (target.substr(0,7) === 'midauth' && config.groupsranking.indexOf(target.substr(8,1)) != -1) {
+			config.tourmidauth = target.substr(8,1);
+			return this.sendReply('Tournament mid auth has been set to '+config.tourmidauth);
+		}
+		if (target.substr(0,8) === 'highauth' && config.groupsranking.indexOf(target.substr(9,1)) != -1) {
+			config.tourhighauth = target.substr(9,1);
+			return this.sendReply('Tournament high auth has been set to '+config.tourhighauth);
+		}
+		if (target.substr(0,14) === 'joinspersecond') {
+			config.tourjoinspersecond = target.substr(14,target.length);
+			return this.sendReply('Tournament joins per second has been set to '+config.tourjoinspersecond);
+		}
 		if (target === 'view' || target === 'show' || target === 'display') {
 			var msg = '';
 			msg = msg + 'Can players be replaced after the first round? ' + new Boolean(config.tourunlimitreplace) + '.<br>';
 			msg = msg + 'Are alts allowed to join to the same tournament? ' + new Boolean(config.tourallowalts) + '.<br>';
+			msg = msg + 'What is the maximum number of joins per second allowed in a tournament signup phase? ' + config.tourjoinspersecond + '.<br />';
 			msg = msg + 'Which minimal rank is required in order to use basic level tournament commands? ' + (!config.tourlowauth ? '+' : (config.tourlowauth === ' ' ? 'None' : config.tourlowauth)) + '.<br>';
 			msg = msg + 'Which minimal rank is required in order to use middle level tournament commands? ' + (!config.tourmidauth ? '+' : (config.tourmidauth === ' ' ? 'None, which is not recommended' : config.tourmidauth)) + '.<br>';
 			msg = msg + 'Which minimal rank is required in order to use high level tournament commands? ' + (!config.tourhighauth ? '@' : (config.tourhighauth === ' ' ? 'None, which is highly not recommended' : config.tourhighauth)) + '.<br>';
@@ -1051,7 +1103,7 @@ var cmds = {
 			msg = msg + 'In tournaments with timed register phase, the players joined are logged in groups of ' + (isNaN(config.tourtimemargin) ? 4 : config.tourtimeperiod) + ' players.';
 			return this.sendReplyBox(msg);
 		}
-		return this.sendReply('Valid targets are: view, replace on/off, alts on/off, invalidate on/off, dq on/off, highauth/midauth/lowauth SYMBOL, margin NUMBER, period NUMBER');
+		return this.sendReply('Valid targets are: view, replace on/off, alts on/off, joinspersecond NUMBER, invalidate on/off, dq on/off, highauth/midauth/lowauth SYMBOL, margin NUMBER, period NUMBER');
 	},
 
 	tourdoc: function() {
