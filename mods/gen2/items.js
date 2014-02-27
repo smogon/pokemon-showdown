@@ -24,19 +24,6 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Evolves Seadra into Kingdra. Raises power of Dragon-type moves by 10%."
 	},
-	goldberry: {
-		id: "goldberry",
-		name: "Gold Berry",
-		isBerry: true,
-		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) pokemon.eatItem();
-		},
-		onEat: function(pokemon) {
-			this.heal(30);
-		},
-		gen: 2,
-		desc: "Restores 30 HP when the holder of this item is at 50% HP or less. One-time use."
-	},
 	metalpowder: {
 		inherit: true,
 		onModifyDef: function(def, pokemon) {
