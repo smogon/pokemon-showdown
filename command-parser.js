@@ -306,7 +306,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 
             user.forceRename(newName, undefined, true);
             user.authenticated = true;
-            connection.sendTo(room, '|raw|~~ <b><font color="#4F86F7">' + newName + '</font color></b> is no longer away');
+            connection.sendTo(room, '|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away');
             user.originalName = '';
         }
     }

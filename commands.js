@@ -2279,24 +2279,49 @@ var commands = exports.commands = {
                 }
         },
 
-
+    sleep: 'away',
+    work: 'away',
+    working: 'away',
+    sleeping: 'away',
+    busy: 'away',    
 	afk: 'away',
-	away: function(target, room, user, connection) {
+	away: function(target, room, user, connection, cmd) {
 		if (!this.can('away')) return false;
+		var t = 'Away';
+		switch (cmd) {
+			case 'busy':
+			t = 'Busy';
+			break;
+			case 'sleeping':
+			t = 'Sleeping';
+			break;
+			case 'sleep':
+			t = 'Sleeping';
+			break;
+			case 'working':
+			t = 'Working';
+			break;
+			case 'work':
+			t = 'Working';
+			break;
+			default:
+			t = 'Away'
+			break;
+		}
 
 		if (!user.isAway) {
 			user.originalName = user.name;
-			var awayName = user.name + ' - Away';
+			var awayName = user.name + ' - '+t;
 			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
 			delete Users.get(awayName);
 			user.forceRename(awayName, undefined, true);
 			
-			if (user.isStaff) this.add('|raw|-- <b><font color="#4F86F7">' + user.originalName +'</font color></b> is now away. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
+			if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now '+t.toLowerCase()+'. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
 
 			user.isAway = true;
 		}
 		else {
-			return this.sendReply('You are already set as away, type /back if you are now back');
+			return this.sendReply('You are already set as a form of away, type /back if you are now back.');
 		}
 
 		user.updateIdentity();
@@ -2306,7 +2331,7 @@ var commands = exports.commands = {
 		if (!this.can('away')) return false;
 
 		if (user.isAway) {
-			if (user.name.slice(-7) !== ' - Away') {
+			if (user.name === user.originalName) {
 				user.isAway = false; 
 				return this.sendReply('Your name has been left unaltered and no longer marked as away.');
 			}
@@ -2321,13 +2346,13 @@ var commands = exports.commands = {
 			//user will be authenticated
 			user.authenticated = true;
 			
-			if (user.isStaff) this.add('|raw|-- <b><font color="#4F86F7">' + newName + '</font color></b> is no longer away');
+			if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away.');
 
 			user.originalName = '';
 			user.isAway = false;
 		}
 		else {
-			return this.sendReply('You are not set as away');
+			return this.sendReply('You are not set as away.');
 		}
 
 		user.updateIdentity();
