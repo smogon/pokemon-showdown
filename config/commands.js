@@ -1251,6 +1251,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	ncrypt: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=110 src="http://i.imgur.com/rdSrtBA.png">' +
+			'<img src="http://i.imgur.com/74K5o1L.gif">' +
+			'<img src="http://i.imgur.com/VFeaIXd.gif"><br />' +
+			'<blink><b><font color=red>Ace: </font>Terrakion</b></blink><br />' +
+			'<b>Fighting is my passion and the only thing I trust is strength!</b></center>');
+	},
+
    donald: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQpaW7cxyFCEUxPkYHxnkZWXqE-AEHvZfMhxU-QdPfcghuAF69Gg" width="144" height="146">' +
