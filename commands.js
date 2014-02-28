@@ -1168,6 +1168,7 @@ var commands = exports.commands = {
 		if (!targetRoom) {
 			return this.sendReply("/help redir - You need to add a room to redirect the user to");
 		}
+		if (targetRoom.id == 'spamroom') return this.sendReply("/help redir - You need to add a room to redirect the user to");
 		if (!this.can('warn', targetUser, room) || !this.can('warn', targetUser, targetRoom)) return false;
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
