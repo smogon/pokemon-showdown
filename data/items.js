@@ -1319,9 +1319,7 @@ exports.BattleItems = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			if (pokemon.trySetStatus('brn')) {
-				this.add('-status', pokemon, 'brn', '[from] item: Flame Orb');
-			}
+			pokemon.trySetStatus('brn');
 		},
 		num: 273,
 		gen: 4,
@@ -4091,9 +4089,7 @@ exports.BattleItems = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			if (pokemon.trySetStatus('tox')) {
-				this.add('-status', pokemon, 'tox', '[from] item: Toxic Orb');
-			}
+			pokemon.trySetStatus('tox');
 		},
 		num: 272,
 		gen: 4,
