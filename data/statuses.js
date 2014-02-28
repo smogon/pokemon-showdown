@@ -8,7 +8,10 @@ exports.BattleStatuses = {
 	brn: {
 		effectType: 'Status',
 		onStart: function(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.id === 'flameorb') return; // custom message
+			if (sourceEffect && sourceEffect.id === 'flameorb') {
+				this.add('-status', pokemon, 'brn', '[from] item: Flame Orb');
+				return;
+			}
 			this.add('-status', target, 'brn');
 		},
 		onBasePower: function(basePower, attacker, defender, move) {
@@ -98,7 +101,10 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function(target, source, sourceEffect) {
 			this.effectData.stage = 0;
-			if (sourceEffect && sourceEffect.id === 'toxicorb') return; // custom message
+			if (sourceEffect && sourceEffect.id === 'toxicorb') {
+				this.add('-status', pokemon, 'tox', '[from] item: Toxic Orb');
+				return;
+			}
 			this.add('-status', target, 'tox');
 		},
 		onSwitchIn: function() {
