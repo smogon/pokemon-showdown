@@ -1071,7 +1071,7 @@ var commands = exports.commands = {
 			return this.sendReply('That user\'s messages are already being redirected to the spamroom.');
 		}
 		spamroom[targetUser] = true;
-		Rooms.rooms['spamroom'].add('|raw|<b>' + this.targetUsername + ' was added to the spamroom list.</b>');
+		Rooms.rooms['spamroom'].add('|raw|<b>' + this.targetUsername + ' was added to the spamroom list by '+user.name+'.</b>');
 		this.privateModCommand('('+targetUser + ' was added to spamroom by ' + user.name+')');
 		this.sendReply(this.targetUsername + ' was successfully added to the spamroom list.');
 		try {
@@ -1098,8 +1098,8 @@ var commands = exports.commands = {
 		for(var u in spamroom)
 			if(targetUser == Users.get(u))
 				delete spamroom[u];
-		Rooms.rooms['spamroom'].add('|raw|<b>' + this.targetUsername + ' was removed from the spamroom list.</b>');
-		this.logModCommand(targetUser + ' was removed from spamroom by ' + user.name);
+		Rooms.rooms['spamroom'].add('|raw|<b>' + this.targetUsername + ' was removed from the spamroom list by '+user.name+'.</b>');
+		this.privateModCommand('('+targetUser + ' was removed from spamroom by ' + user.name+')');
 		return this.sendReply(this.targetUsername + ' and their alts were successfully removed from the spamroom list.');
 	},
 	
