@@ -9,7 +9,7 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'flameorb') {
-				this.add('-status', pokemon, 'brn', '[from] item: Flame Orb');
+				this.add('-status', target, 'brn', '[from] item: Flame Orb');
 				return;
 			}
 			this.add('-status', target, 'brn');
@@ -102,7 +102,7 @@ exports.BattleStatuses = {
 		onStart: function(target, source, sourceEffect) {
 			this.effectData.stage = 0;
 			if (sourceEffect && sourceEffect.id === 'toxicorb') {
-				this.add('-status', pokemon, 'tox', '[from] item: Toxic Orb');
+				this.add('-status', target, 'tox', '[from] item: Toxic Orb');
 				return;
 			}
 			this.add('-status', target, 'tox');
