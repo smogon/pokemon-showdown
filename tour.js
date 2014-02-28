@@ -15,8 +15,6 @@ new cronJob('0 0 0 * * *', function(){
     }
 }, null, true);
 
-if (!config.tourjoinspersecond) config.tourjoinspersecond = 1;
-
 exports.tour = function(t) {
   if (typeof t != "undefined") var tour = t; else var tour = new Object();
 	var tourStuff = {
@@ -595,13 +593,6 @@ var cmds = {
 		if (tour[room.id] == undefined || tour[room.id].status == 0) return this.sendReply('There is no active tournament to join.');
 		if (tour[room.id].status == 2) return this.sendReply('Signups for the current tournament are over.');
 		if (tour.joinable(user.userid, room.id)) {
-			if (tour[room.id].joinCooldown) {
-				return this.sendReply('To prevent lag during the joining phase of tournaments, joining is restricted to one join per '+config.tourjoinspersecond+' seconds.');
-			}
-			tour[room.id].joinCooldown = true;
-			tour[room.id].joinCooldownTimer = setTimeout(function(){ 
-				tour[room.id].joinCooldown = false;
-			}, config.tourjoinspersecond * 1000);
 			tour[room.id].players.push(user.userid);
 			var remslots = tour[room.id].size - tour[room.id].players.length;
 			// these three assignments (natural, natural, boolean) are done as wished
@@ -1087,15 +1078,10 @@ var cmds = {
 			config.tourhighauth = target.substr(9,1);
 			return this.sendReply('Tournament high auth has been set to '+config.tourhighauth);
 		}
-		if (target.substr(0,14) === 'joinspersecond') {
-			config.tourjoinspersecond = target.substr(14,target.length);
-			return this.sendReply('Tournament joins per second has been set to '+config.tourjoinspersecond);
-		}
 		if (target === 'view' || target === 'show' || target === 'display') {
 			var msg = '';
 			msg = msg + 'Can players be replaced after the first round? ' + new Boolean(config.tourunlimitreplace) + '.<br>';
 			msg = msg + 'Are alts allowed to join to the same tournament? ' + new Boolean(config.tourallowalts) + '.<br>';
-			msg = msg + 'What is the maximum number of joins per second allowed in a tournament signup phase? ' + config.tourjoinspersecond + '.<br />';
 			msg = msg + 'Which minimal rank is required in order to use basic level tournament commands? ' + (!config.tourlowauth ? '+' : (config.tourlowauth === ' ' ? 'None' : config.tourlowauth)) + '.<br>';
 			msg = msg + 'Which minimal rank is required in order to use middle level tournament commands? ' + (!config.tourmidauth ? '+' : (config.tourmidauth === ' ' ? 'None, which is not recommended' : config.tourmidauth)) + '.<br>';
 			msg = msg + 'Which minimal rank is required in order to use high level tournament commands? ' + (!config.tourhighauth ? '@' : (config.tourhighauth === ' ' ? 'None, which is highly not recommended' : config.tourhighauth)) + '.<br>';
@@ -1103,7 +1089,7 @@ var cmds = {
 			msg = msg + 'In tournaments with timed register phase, the players joined are logged in groups of ' + (isNaN(config.tourtimemargin) ? 4 : config.tourtimeperiod) + ' players.';
 			return this.sendReplyBox(msg);
 		}
-		return this.sendReply('Valid targets are: view, replace on/off, alts on/off, joinspersecond NUMBER, invalidate on/off, dq on/off, highauth/midauth/lowauth SYMBOL, margin NUMBER, period NUMBER');
+		return this.sendReply('Valid targets are: view, replace on/off, alts on/off, invalidate on/off, dq on/off, highauth/midauth/lowauth SYMBOL, margin NUMBER, period NUMBER');
 	},
 
 	tourdoc: function() {
