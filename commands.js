@@ -2371,11 +2371,12 @@ var commands = exports.commands = {
                 }
         },
 
-    sleep: 'away',
-    work: 'away',
-    working: 'away',
-    sleeping: 'away',
-    busy: 'away',    
+	gaming: 'away',
+    	sleep: 'away',
+    	work: 'away',
+    	working: 'away',
+    	sleeping: 'away',
+    	busy: 'away',    
 	afk: 'away',
 	away: function(target, room, user, connection, cmd) {
 		if (!this.can('away')) return false;
@@ -2389,6 +2390,9 @@ var commands = exports.commands = {
 			break;
 			case 'sleep':
 			t = 'Sleeping';
+			break;
+			case 'gaming':
+			t = 'Gaming';
 			break;
 			case 'working':
 			t = 'Working';
