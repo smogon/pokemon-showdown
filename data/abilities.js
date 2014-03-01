@@ -455,6 +455,9 @@ exports.BattleAbilities = {
 	"darkaura": {
 		desc: "Increases the power of all Dark-type moves in battle to 1.3x.",
 		shortDesc: "Increases the power of all Dark-type moves in battle to 1.3x.",
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Dark Aura');
+		},
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
@@ -627,6 +630,9 @@ exports.BattleAbilities = {
 	"fairyaura": {
 		desc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
 		shortDesc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Fairy Aura');
+		},
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
