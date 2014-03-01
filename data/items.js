@@ -1319,10 +1319,7 @@ exports.BattleItems = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			if (!pokemon.status && !pokemon.hasType('Fire') && pokemon.ability !== 'waterveil') {
-				this.add('-activate', pokemon, 'item: Flame Orb');
-				pokemon.trySetStatus('brn');
-			}
+			pokemon.trySetStatus('brn');
 		},
 		num: 273,
 		gen: 4,
@@ -4092,10 +4089,7 @@ exports.BattleItems = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			if (!pokemon.status && !pokemon.hasType('Poison') && !pokemon.hasType('Steel') && pokemon.ability !== 'immunity') {
-				this.add('-activate', pokemon, 'item: Toxic Orb');
-				pokemon.trySetStatus('tox');
-			}
+			pokemon.trySetStatus('tox');
 		},
 		num: 272,
 		gen: 4,

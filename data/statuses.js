@@ -7,7 +7,11 @@ function clampIntRange(num, min, max) {
 exports.BattleStatuses = {
 	brn: {
 		effectType: 'Status',
-		onStart: function(target) {
+		onStart: function(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.id === 'flameorb') {
+				this.add('-status', target, 'brn', '[from] item: Flame Orb');
+				return;
+			}
 			this.add('-status', target, 'brn');
 		},
 		onBasePower: function(basePower, attacker, defender, move) {
@@ -95,9 +99,13 @@ exports.BattleStatuses = {
 	},
 	tox: {
 		effectType: 'Status',
-		onStart: function(target) {
-			this.add('-status', target, 'tox');
+		onStart: function(target, source, sourceEffect) {
 			this.effectData.stage = 0;
+			if (sourceEffect && sourceEffect.id === 'toxicorb') {
+				this.add('-status', target, 'tox', '[from] item: Toxic Orb');
+				return;
+			}
+			this.add('-status', target, 'tox');
 		},
 		onSwitchIn: function() {
 			this.effectData.stage = 0;
