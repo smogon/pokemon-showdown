@@ -325,7 +325,7 @@ exports.tour = function(t) {
 				var tourMoney = 0;
 				var tooSmall = '';
 				var p = 'bucks';
-				if (Rooms.rooms[rid].isOfficial) {
+				if (Rooms.rooms[rid].isOfficial || Rooms.rooms[rid].id == 'infinite') {
 					if (tour[rid].size >= 32) {
 						tourMoney = 3;
 					}
