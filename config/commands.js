@@ -1251,6 +1251,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	autumn: function(target, room, user) {
+        	if (!this.canBroadcast()) return;
+        	this.sendReplyBox('<center><img src="http://i.imgur.com/qeUBqDy.jpg">' +
+                	'<img src="http://i.imgur.com/0Pjp4AP.gif width="380">' +
+        		'<img src="http://i.imgur.com/NC2Mspy.jpg"><br />' +
+                	'<b>Ace:</b> Smeargle<br />' +
+                	'Painting you up and making you fall get it cause Autumn...</center>');
+    	},
+	
 	ncrypt: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img height=110 src="http://i.imgur.com/rdSrtBA.png">' +
