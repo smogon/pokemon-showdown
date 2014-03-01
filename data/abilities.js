@@ -586,6 +586,7 @@ exports.BattleAbilities = {
 		},
 		onBasePowerPriority: 7,
 		onFoeBasePower: function(basePower, attacker, defender, move) {
+			if (this.effectData.target !== defender) return;
 			if (move.type === 'Fire') {
 				return this.chainModify(1.25);
 			}
