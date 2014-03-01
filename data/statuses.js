@@ -120,8 +120,8 @@ exports.BattleStatuses = {
 	},
 	confusion: {
 		// this is a volatile status
-		onStart: function(target, source) {
-			var result = this.runEvent('TryConfusion', target, source);
+		onStart: function(target, source, sourceEffect) {
+			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
 			if (!result) return result;
 			this.add('-start', target, 'confusion');
 			this.effectData.time = this.random(2,6);

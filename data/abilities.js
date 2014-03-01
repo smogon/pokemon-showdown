@@ -586,6 +586,7 @@ exports.BattleAbilities = {
 		},
 		onBasePowerPriority: 7,
 		onFoeBasePower: function(basePower, attacker, defender, move) {
+			if (this.effectData.target !== defender) return;
 			if (move.type === 'Fire') {
 				return this.chainModify(1.25);
 			}
@@ -1179,7 +1180,10 @@ exports.BattleAbilities = {
 	"infiltrator": {
 		desc: "Ignores Substitute, Reflect, Light Screen, and Safeguard on the target.",
 		shortDesc: "This Pokemon's moves ignore the foe's Substitute, Reflect, Light Screen, Safeguard, and Mist.",
-		// Implemented in the corresponding effects.
+		onModifyMove: function(move) {
+			move.notSubBlocked = true;
+			move.ignoreScreens = true;
+		},
 		id: "infiltrator",
 		name: "Infiltrator",
 		rating: 2.5,
