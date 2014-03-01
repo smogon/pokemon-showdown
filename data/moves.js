@@ -4899,6 +4899,7 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add('-endability', pokemon, pokemon.ability);
 			},
+			onModifyPokemonPriority: 2,
 			onModifyPokemon: function(pokemon) {
 				pokemon.ignore['Ability'] = true;
 			}
