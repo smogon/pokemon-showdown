@@ -1820,7 +1820,7 @@ var Battle = (function() {
 			return relayVar;
 		}
 		if (target.ignore && target.ignore[effect.effectType]) {
-			this.debug(eventid+' handler suppressed by Klutz or Magic Room');
+			this.debug(eventid+' handler suppressed by Gastro Acid, Klutz or Magic Room');
 			return relayVar;
 		}
 		if (target.ignore && target.ignore[effect.effectType+'Target']) {
@@ -2027,7 +2027,7 @@ var Battle = (function() {
 				}
 			} else if (thing.ignore && thing.ignore[status.effectType]) {
 				if (eventid !== 'ModifyPokemon' && eventid !== 'Update') {
-					this.debug(eventid+' handler suppressed by Klutz or Magic Room');
+					this.debug(eventid+' handler suppressed by Gastro Acid, Klutz or Magic Room');
 				}
 				continue;
 			}
