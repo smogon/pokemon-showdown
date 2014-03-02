@@ -4303,6 +4303,9 @@ exports.BattleFormatsData = {
 		viableMoves: {"moonblast":1,"toxic":1,"wish":1,"psychic":1,"aromatherapy":1,"protect":1,"calmmind":1},
 		tier: "NFE"
 	},
+	floetteeternalflower: {
+		tier: "Unreleased"
+	},
 	florges: {
 		viableMoves: {"moonblast":1,"toxic":1,"wish":1,"psychic":1,"aromatherapy":1,"protect":1,"calmmind":1},
 		tier: "Limbo A"
