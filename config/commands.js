@@ -1931,6 +1931,7 @@ var commands = exports.commands = {
      		'<b>Quote: </b>Si Vis Pacem, Para Bellum</center>');
      },
 
+    badass: 'thatonebadass',
     thatonebadass: function(target, room, user) {
     	if (!this.canBroadcast()) return;
     	this.sendReplyBox('<center><img height=150 src=http://i.imgur.com/SsxwslQ.gif>' +
