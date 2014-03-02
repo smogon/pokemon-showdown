@@ -855,7 +855,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/tiers/">Smogon Tiers</a><br />';
 			buffer += '- <a href="http://www.smogon.com/forums/threads/tiering-faq.3498332/">Tiering FAQ</a><br />';
-			buffer += '- <a href="http://www.smogon.com/bw/banlist/">The banlists for each tier</a><br />';
+			buffer += '- <a href="http://www.smogon.com/xyhub/tiers">The banlists for each tier</a><br />';
 		}
 		if (target === 'all' || target === 'ubers' || target === 'uber') {
 			matched = true;
