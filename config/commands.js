@@ -1001,7 +1001,7 @@ var commands = exports.commands = {
 	forum: 'forums',
 	forums: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('TBT\'s forums are located <a href="http://thebattletower.xiaotai.org/index.php">here</a>.');
+		this.sendReplyBox('TBT\'s forums are located <a href="http://thebattletower.xiaotai.org/">here</a>.');
 	},
 
 	league: function(target, room, user) {
