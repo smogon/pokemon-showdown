@@ -1254,6 +1254,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	silverkill: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img height=150 src="http://fc00.deviantart.net/fs70/f/2013/320/9/3/mega_scizor_by_silentgpanda-d6ujsmg.jpg">' +
+			'<img src="http://frostserver.net:8000/images/silverkill-tc.png">' +
+			'<img height=150 src="https://1-media-cdn.foolz.us/ffuuka/board/vp/image/1367/35/1367354021540.jpg"><br />' +
+			'<b>Ace: </b>Mo\' Fuckin\' Common Sense!<br />' +
+			'Would you like some fresh cut nanis? No? Well your mom bought some. She LOVED it ;D</center>');
+	}.
+
 	autumn: function(target, room, user) {
         	if (!this.canBroadcast()) return;
         	this.sendReplyBox('<center><img src="http://i.imgur.com/qeUBqDy.jpg">' +
