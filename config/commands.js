@@ -2193,9 +2193,10 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img height=150 src="http://feetfirstbook.files.wordpress.com/2012/06/pinkbutterfly2.jpg">' +
 			'<img src="http://i.imgur.com/9e7GXOD.png"><img src="http://i.imgur.com/mKgt7in.png">' +
-			'<img height=150 src="http://images2.fanpop.com/images/photos/7900000/But-butterflies-7911918-300-300.jpg"><br />' +
+			'<img height=150 src="http://feetfirstbook.files.wordpress.com/2012/06/pinkbutterfly2.jpg"><br />' +
 			'<b>Ace:</b> <font color=red><blink>Admin</font></blink><br />' +
-			'<b>Theme Song: </b><a href="http://www.youtube.com/watch?v=xat1GVnl8-k">Bloodhound Gang - The Bad Touch</a></center>');
+			'<b>Theme Song: </b><a href="http://www.youtube.com/watch?v=xat1GVnl8-k">Bloodhound Gang - The Bad Touch</a><br />' +
+			'<font color=#ff00e1><b><blink>2fab5u</blink></b></font></center>');
 	},
 	
 	familymantpsn: function(target, room, user) {
