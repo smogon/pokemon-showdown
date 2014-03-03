@@ -1260,7 +1260,7 @@ var commands = exports.commands = {
 			'<img src="http://frostserver.net:8000/images/silverkill-tc.png">' +
 			'<img height=150 src="https://1-media-cdn.foolz.us/ffuuka/board/vp/image/1367/35/1367354021540.jpg"><br />' +
 			'<b>Ace: </b>Mo\' Fuckin\' Common Sense!<br />' +
-			'Would you like some fresh cut nanis? No? Well your mom bought some. She LOVED it ;D</center>');
+			'<b>Quote: </b>Would you like some fresh cut nanis? No? Well your mom bought some. She LOVED it ;D</center>');
 	},
 
 	autumn: function(target, room, user) {
