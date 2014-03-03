@@ -1254,6 +1254,25 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	princesshigh: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="http://i.imgur.com/d82SdyS.png?1" width="90" height="110">' +
+                '<img src="http://i.imgur.com/0xsg2uK.gif" width="370">' +
+                '<img src="http://i.imgur.com/z07qpv4.gif?1" width="90" height="110"><br />' +
+                '<b>Ace:</b> <font color=#d63265><blink>Clefable</blink></font><br />' +
+                '<b><font color=#ff0000">L</font><font color=#ff2300">i</font><font color=#ff4700">v</font><font color=#ff6a00">e</font>' +
+                '<font color=#ff8e00"> </font><font color=#ffb100">f</font><font color=#ffb100">a</font><font color=#ffd500">s</font>' +
+                '<font color=#ffd500">t</font><font color=#bdff00">,</font><font color=#9aff00"> </font><font color=#76ff00">D</font>' +
+                '<font color=#53ff00">i</font><font color=#2fff00">e</font><font color=#0bff00"> </font><font color=#00ff17">y</font>' +
+                '<font color=#00ff3b">o</font><font color=#00ff5e">u</font><font color=#00ff82">n</font><font color=#00ffa6">g</font>' +
+                '<font color=#00ffc9">,</font><font color=#00ffed"> </font><font color=#00edff">b</font><font color=#00c9ff">a</font>' +
+                '<font color=#00a6ff">d</font><font color=#0082ff"> </font><font color=#005eff">g</font><font color=#003bff">i</font>' +
+                '<font color=#0017ff">r</font><font color=#0b00ff">l</font><font color=#2f00ff">s</font><font color=#5300ff"> </font>' +
+                '<font color=#7600ff">d</font><font color=#9a00ff">o</font><font color=#bd00ff"> </font><font color=#e100ff">i</font>' +
+                '<font color=#ff00f9">t</font><font color=#ff00d5"> </font><font color=#ff00b1">w</font><font color=#ff008e">e</font>' +
+                '<font color=#ff006a">l</font><font color=#ff0047">l</font><font color=#ff0023">.</font></b></center>');
+	},
+
 	silverkill: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img height=150 src="http://fc00.deviantart.net/fs70/f/2013/320/9/3/mega_scizor_by_silentgpanda-d6ujsmg.jpg">' +
@@ -2166,11 +2185,6 @@ var commands = exports.commands = {
     		if (!this.canBroadcast()) return;
     		this.sendReplyBox('<img src="http://media.giphy.com/media/tifCTtoW05XwY/giphy.gif" height="80" width="125"><img src="http://i.imgur.com/C7x8Fxe.gif" height="90" width="300"><img src = "http://brony.cscdn.us/pic/photo/2013/07/e00cb1f5fa33b5be7ad9127e7f7c390d_1024.gif" height="80" width="125"></br><center><b>Ace:</b> Noivern</center></br><center><b>"My armour is like tenfold shields, my teeth are swords, my claws spears, the shock of my tail a thunderbolt, my wings a hurricane, and my breath death!"</b></center>');
     	},
-	
-	princesshigh: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img height="125" width="78" src="http://th06.deviantart.net/fs45/PRE/i/2009/066/d/6/Gardevoir_by_Onpu_chan.jpg"><img width="400" height="80" src="http://i.imgur.com/6wcoVZk.gif"><img height="125" width="78" src="http://fc01.deviantart.net/fs71/i/2012/267/9/c/50_pokemon__16_gardevoir_by_megbeth-d5fsg1a.png"><br><b>Ace: <font color="green"><blink>Gardevoir</blink><br></font><b><font color="red">Never</font><font color="#FF7E00"> make</font><font color="orange"> war</font><font color="green"> with</font><font color="blue"> someone</font><font color="#8F00FF">, always</font><font color="red"> make</font><font color="#FF7E00"> peace</font><font color="orange"> and</font><font color="green"> love</font>');
-	},
 	
 	jordanmooo: function(target, room, user) {
 		if (!this.canBroadcast()) return;
