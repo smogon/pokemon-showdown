@@ -201,9 +201,11 @@ exports.BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
+			if (!pokemon.hp) return;
 			for (var i=0; i<pokemon.side.foe.active.length; i++) {
 				var target = pokemon.side.foe.active[i];
-				if (pokemon.hp && target.status === 'slp') {
+				if (!target || !target.hp) continue;
+				if (target.status === 'slp') {
 					this.damage(target.maxhp/8, target);
 				}
 			}
@@ -277,8 +279,8 @@ exports.BattleAbilities = {
 	"cheekpouch": {
 		desc: "Restores HP when this Pokemon consumes a berry.",
 		shortDesc: "Restores HP when this Pokemon consumes a berry.",
-		onEat: function(item, pokemon) {
-			pokemon.heal(Math.floor(pokemon.maxhp/4));
+		onEatItem: function(item, pokemon) {
+			this.heal(pokemon.maxhp/4);
 		},
 		id: "cheekpouch",
 		name: "Cheek Pouch",
@@ -453,6 +455,9 @@ exports.BattleAbilities = {
 	"darkaura": {
 		desc: "Increases the power of all Dark-type moves in battle to 1.3x.",
 		shortDesc: "Increases the power of all Dark-type moves in battle to 1.3x.",
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Dark Aura');
+		},
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
@@ -581,6 +586,7 @@ exports.BattleAbilities = {
 		},
 		onBasePowerPriority: 7,
 		onFoeBasePower: function(basePower, attacker, defender, move) {
+			if (this.effectData.target !== defender) return;
 			if (move.type === 'Fire') {
 				return this.chainModify(1.25);
 			}
@@ -625,6 +631,9 @@ exports.BattleAbilities = {
 	"fairyaura": {
 		desc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
 		shortDesc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Fairy Aura');
+		},
 		onBasePowerPriority: 8,
 		onBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
@@ -1171,7 +1180,10 @@ exports.BattleAbilities = {
 	"infiltrator": {
 		desc: "Ignores Substitute, Reflect, Light Screen, and Safeguard on the target.",
 		shortDesc: "This Pokemon's moves ignore the foe's Substitute, Reflect, Light Screen, Safeguard, and Mist.",
-		// Implemented in the corresponding effects.
+		onModifyMove: function(move) {
+			move.notSubBlocked = true;
+			move.ignoreScreens = true;
+		},
 		id: "infiltrator",
 		name: "Infiltrator",
 		rating: 2.5,

@@ -63,7 +63,7 @@ exports.BattleItems = {
 	"aerodactylite": {
 		id: "aerodactylite",
 		name: "Aerodactylite",
-		spritenum: 567,
+		spritenum: 577,
 		megaStone: "Aerodactyl-Mega",
 		megaEvolves: "Aerodactyl",
 		onTakeItem: function(item, source) {
@@ -77,7 +77,7 @@ exports.BattleItems = {
 	"aggronite": {
 		id: "aggronite",
 		name: "Aggronite",
-		spritenum: 568,
+		spritenum: 578,
 		megaStone: "Aggron-Mega",
 		megaEvolves: "Aggron",
 		onTakeItem: function(item, source) {
@@ -146,7 +146,7 @@ exports.BattleItems = {
 	"alakazite": {
 		id: "alakazite",
 		name: "Alakazite",
-		spritenum: 569,
+		spritenum: 579,
 		megaStone: "Alakazam-Mega",
 		megaEvolves: "Alakazam",
 		onTakeItem: function(item, source) {
@@ -160,7 +160,7 @@ exports.BattleItems = {
 	"ampharosite": {
 		id: "ampharosite",
 		name: "Ampharosite",
-		spritenum: 670,
+		spritenum: 580,
 		megaStone: "Ampharos-Mega",
 		megaEvolves: "Ampharos",
 		onTakeItem: function(item, source) {
@@ -229,7 +229,7 @@ exports.BattleItems = {
 	"assaultvest": {
 		id: "assaultvest",
 		name: "Assault Vest",
-		spritenum: 571,
+		spritenum: 581,
 		fling: {
 			basePower: 80
 		},
@@ -274,7 +274,7 @@ exports.BattleItems = {
 	"banettite": {
 		id: "banettite",
 		name: "Banettite",
-		spritenum: 572,
+		spritenum: 582,
 		megaStone: "Banette-Mega",
 		megaEvolves: "Banette",
 		onTakeItem: function(item, source) {
@@ -403,7 +403,7 @@ exports.BattleItems = {
 	"blastoisinite": {
 		id: "blastoisinite",
 		name: "Blastoisinite",
-		spritenum: 573,
+		spritenum: 583,
 		megaStone: "Blastoise-Mega",
 		megaEvolves: "Blastoise",
 		onTakeItem: function(item, source) {
@@ -417,7 +417,7 @@ exports.BattleItems = {
 	"blazikenite": {
 		id: "blazikenite",
 		name: "Blazikenite",
-		spritenum: 574,
+		spritenum: 584,
 		megaStone: "Blaziken-Mega",
 		megaEvolves: "Blaziken",
 		onTakeItem: function(item, source) {
@@ -524,7 +524,7 @@ exports.BattleItems = {
 	"charizarditex": {
 		id: "charizarditex",
 		name: "Charizardite X",
-		spritenum: 575,
+		spritenum: 585,
 		megaStone: "Charizard-Mega-X",
 		megaEvolves: "Charizard",
 		onTakeItem: function(item, source) {
@@ -538,7 +538,7 @@ exports.BattleItems = {
 	"charizarditey": {
 		id: "charizarditey",
 		name: "Charizardite Y",
-		spritenum: 576,
+		spritenum: 586,
 		megaStone: "Charizard-Mega-Y",
 		megaEvolves: "Charizard",
 		onTakeItem: function(item, source) {
@@ -1319,10 +1319,7 @@ exports.BattleItems = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			if (!pokemon.status && !pokemon.hasType('Fire') && pokemon.ability !== 'waterveil') {
-				this.add('-activate', pokemon, 'item: Flame Orb');
-				pokemon.trySetStatus('brn');
-			}
+			pokemon.trySetStatus('brn');
 		},
 		num: 273,
 		gen: 4,
@@ -1454,7 +1451,7 @@ exports.BattleItems = {
 	"garchompite": {
 		id: "garchompite",
 		name: "Garchompite",
-		spritenum: 0,
+		spritenum: 589,
 		megaStone: "Garchomp-Mega",
 		megaEvolves: "Garchomp",
 		onTakeItem: function(item, source) {
@@ -1468,7 +1465,7 @@ exports.BattleItems = {
 	"gardevoirite": {
 		id: "gardevoirite",
 		name: "Gardevoirite",
-		spritenum: 577,
+		spritenum: 587,
 		megaStone: "Gardevoir-Mega",
 		megaEvolves: "Gardevoir",
 		onTakeItem: function(item, source) {
@@ -1482,7 +1479,7 @@ exports.BattleItems = {
 	"gengarite": {
 		id: "gengarite",
 		name: "Gengarite",
-		spritenum: 578,
+		spritenum: 588,
 		megaStone: "Gengar-Mega",
 		megaEvolves: "Gengar",
 		onTakeItem: function(item, source) {
@@ -1609,7 +1606,7 @@ exports.BattleItems = {
 	"gyaradosite": {
 		id: "gyaradosite",
 		name: "Gyaradosite",
-		spritenum: 579,
+		spritenum: 589,
 		megaStone: "Gyarados-Mega",
 		megaEvolves: "Gyarados",
 		onTakeItem: function(item, source) {
@@ -1700,7 +1697,7 @@ exports.BattleItems = {
 	"heracronite": {
 		id: "heracronite",
 		name: "Heracronite",
-		spritenum: 580,
+		spritenum: 590,
 		megaStone: "Heracross-Mega",
 		megaEvolves: "Heracross",
 		onTakeItem: function(item, source) {
@@ -1727,7 +1724,7 @@ exports.BattleItems = {
 	"houndoominite": {
 		id: "houndoominite",
 		name: "Houndoominite",
-		spritenum: 581,
+		spritenum: 591,
 		megaStone: "Houndoom-Mega",
 		megaEvolves: "Houndoom",
 		onTakeItem: function(item, source) {
@@ -1836,7 +1833,8 @@ exports.BattleItems = {
 			basePower: 130
 		},
 		onModifyPokemon: function(pokemon) {
-			pokemon.negateImmunity['Ground'] = true;
+			if (pokemon.negateImmunity['Ground']) return;
+			pokemon.negateImmunity['Ground'] = 'IgnoreEffectiveness';
 		},
 		onModifySpe: function(speMod) {
 			return this.chain(speMod, 0.5);
@@ -1931,7 +1929,7 @@ exports.BattleItems = {
 	"keeberry": {
 		id: "keeberry",
 		name: "Kee Berry",
-		spritenum: 583,
+		spritenum: 593,
 		isBerry: true,
 		naturalGift: {
 			basePower: 100,
@@ -1965,7 +1963,7 @@ exports.BattleItems = {
 	"kangaskhanite": {
 		id: "kangaskhanite",
 		name: "Kangaskhanite",
-		spritenum: 582,
+		spritenum: 592,
 		megaStone: "Kangaskhan-Mega",
 		megaEvolves: "Kangaskhan",
 		onTakeItem: function(item, source) {
@@ -2036,6 +2034,36 @@ exports.BattleItems = {
 		num: 206,
 		gen: 3,
 		desc: "Holder gains the Focus Energy effect when at 1/4 max HP or less. Single use."
+	},
+	"latiasite": {
+		id: "latiasite",
+		name: "Latiasite",
+		spritenum: -6,
+		megaStone: "Latias-Mega",
+		megaEvolves: "Latias",
+		isUnreleased: true,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Latias."
+	},
+	"latiosite": {
+		id: "latiosite",
+		name: "Latiosite",
+		spritenum: -6,
+		megaStone: "Latios-Mega",
+		megaEvolves: "Latios",
+		isUnreleased: true,
+		onTakeItem: function(item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Latios."
 	},
 	"laxincense": {
 		id: "laxincense",
@@ -2210,7 +2238,7 @@ exports.BattleItems = {
 	"lucarionite": {
 		id: "lucarionite",
 		name: "Lucarionite",
-		spritenum: 584,
+		spritenum: 594,
 		megaStone: "Lucario-Mega",
 		megaEvolves: "Lucario",
 		onTakeItem: function(item, source) {
@@ -2262,7 +2290,7 @@ exports.BattleItems = {
 	"luminousmoss": {
 		id: "luminousmoss",
 		name: "Luminous Moss",
-		spritenum: 585,
+		spritenum: 595,
 		fling: {
 			basePower: 30
 		},
@@ -2388,7 +2416,7 @@ exports.BattleItems = {
 	"manectite": {
 		id: "manectite",
 		name: "Manectite",
-		spritenum: 586,
+		spritenum: 596,
 		megaStone: "Manectric-Mega",
 		megaEvolves: "Manectric",
 		onTakeItem: function(item, source) {
@@ -2402,7 +2430,7 @@ exports.BattleItems = {
 	"marangaberry": {
 		id: "marangaberry",
 		name: "Maranga Berry",
-		spritenum: 587,
+		spritenum: 597,
 		isBerry: true,
 		naturalGift: {
 			basePower: 100,
@@ -2431,7 +2459,7 @@ exports.BattleItems = {
 	"mawilite": {
 		id: "mawilite",
 		name: "Mawilite",
-		spritenum: 588,
+		spritenum: 598,
 		megaStone: "Mawile-Mega",
 		megaEvolves: "Mawile",
 		onTakeItem: function(item, source) {
@@ -2463,7 +2491,7 @@ exports.BattleItems = {
 	"medichamite": {
 		id: "medichamite",
 		name: "Medichamite",
-		spritenum: 589,
+		spritenum: 599,
 		megaStone: "Medicham-Mega",
 		megaEvolves: "Medicham",
 		onTakeItem: function(item, source) {
@@ -2579,7 +2607,7 @@ exports.BattleItems = {
 	"mewtwonitex": {
 		id: "mewtwonitex",
 		name: "Mewtwonite X",
-		spritenum: 589,
+		spritenum: 600,
 		megaStone: "Mewtwo-Mega-X",
 		megaEvolves: "Mewtwo",
 		onTakeItem: function(item, source) {
@@ -2593,7 +2621,7 @@ exports.BattleItems = {
 	"mewtwonitey": {
 		id: "mewtwonitey",
 		name: "Mewtwonite Y",
-		spritenum: 590,
+		spritenum: 601,
 		megaStone: "Mewtwo-Mega-Y",
 		megaEvolves: "Mewtwo",
 		onTakeItem: function(item, source) {
@@ -3006,7 +3034,7 @@ exports.BattleItems = {
 	"pinsirite": {
 		id: "pinsirite",
 		name: "Pinsirite",
-		spritenum: 591,
+		spritenum: 602,
 		megaStone: "Pinsir-Mega",
 		megaEvolves: "Pinsir",
 		onTakeItem: function(item, source) {
@@ -3020,7 +3048,7 @@ exports.BattleItems = {
 	"pixieplate": {
 		id: "pixieplate",
 		name: "Pixie Plate",
-		spritenum: 599,
+		spritenum: 610,
 		fling: {
 			basePower: 90
 		},
@@ -3449,7 +3477,7 @@ exports.BattleItems = {
 	"roseliberry": {
 		id: "roseliberry",
 		name: "Roseli Berry",
-		spritenum: 592,
+		spritenum: 603,
 		isBerry: true,
 		naturalGift: {
 			basePower: 80,
@@ -3500,7 +3528,7 @@ exports.BattleItems = {
 	"safetygoggles": {
 		id: "safetygoggles",
 		name: "Safety Goggles",
-		spritenum: 593,
+		spritenum: 604,
 		onImmunity: function(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
@@ -3532,7 +3560,7 @@ exports.BattleItems = {
 	"scizorite": {
 		id: "scizorite",
 		name: "Scizorite",
-		spritenum: 594,
+		spritenum: 605,
 		megaStone: "Scizor-Mega",
 		megaEvolves: "Scizor",
 		onTakeItem: function(item, source) {
@@ -3754,7 +3782,7 @@ exports.BattleItems = {
 	"snowball": {
 		id: "snowball",
 		name: "Snowball",
-		spritenum: 595,
+		spritenum: 606,
 		fling: {
 			basePower: 30
 		},
@@ -4061,10 +4089,7 @@ exports.BattleItems = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			if (!pokemon.status && !pokemon.hasType('Poison') && !pokemon.hasType('Steel') && pokemon.ability !== 'immunity') {
-				this.add('-activate', pokemon, 'item: Toxic Orb');
-				pokemon.trySetStatus('tox');
-			}
+			pokemon.trySetStatus('tox');
 		},
 		num: 272,
 		gen: 4,
@@ -4108,7 +4133,7 @@ exports.BattleItems = {
 	"tyranitarite": {
 		id: "tyranitarite",
 		name: "Tyranitarite",
-		spritenum: 596,
+		spritenum: 607,
 		megaStone: "Tyranitar-Mega",
 		megaEvolves: "Tyranitar",
 		onTakeItem: function(item, source) {
@@ -4130,7 +4155,7 @@ exports.BattleItems = {
 	"venusaurite": {
 		id: "venusaurite",
 		name: "Venusaurite",
-		spritenum: 597,
+		spritenum: 608,
 		megaStone: "Venusaur-Mega",
 		megaEvolves: "Venusaur",
 		onTakeItem: function(item, source) {
@@ -4215,7 +4240,7 @@ exports.BattleItems = {
 	"weaknesspolicy": {
 		id: "weaknesspolicy",
 		name: "Weakness Policy",
-		spritenum: 598,
+		spritenum: 609,
 		fling: {
 			basePower: 80
 		},

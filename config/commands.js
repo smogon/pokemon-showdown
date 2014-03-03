@@ -351,7 +351,7 @@ var commands = exports.commands = {
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
 			var template = Tools.getTemplate(pokemon);
-			if (template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) && 
+			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) && 
 				(megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega))) {
 				dex[pokemon] = template;
 			}
@@ -418,8 +418,7 @@ var commands = exports.commands = {
 							var move = Tools.getMove(i);
 							if (!move.exists) return this.sendReplyBox('"' + move + '" is not a known move.');
 							var canLearn = (template.learnset.sketch && !(move.id in {'chatter':1,'struggle':1,'magikarpsrevenge':1})) || template.learnset[move.id];
-							if (!canLearn && searches[search][i]) delete dex[mon];
-							else if (searches[search][i] === false && canLearn) dex[mon] = false;
+							if ((!canLearn && searches[search][i]) || (searches[search][i] === false && canLearn)) dex[mon] = false;
 						}
 					}
 					for (var mon in dex) {
@@ -517,6 +516,7 @@ var commands = exports.commands = {
 
 	weak: 'weakness',
 	weakness: function(target, room, user){
+		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
 
 		var pokemon = Tools.getTemplate(target);
@@ -647,7 +647,7 @@ var commands = exports.commands = {
 
 	opensource: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Pokemon Showdown is open source:<br />- Language: JavaScript<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown">Server source code</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown-Client">Client source code</a>');
+		this.sendReplyBox('Pokemon Showdown is open source:<br />- Language: JavaScript (Node.js)<br />- <a href="https://github.com/Zarel/Pokemon-Showdown/commits/master">What\'s new?</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown">Server source code</a><br />- <a href="https://github.com/Zarel/Pokemon-Showdown-Client">Client source code</a>');
 	},
 
 	avatars: function(target, room, user) {
@@ -721,6 +721,9 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'balancedhackmons' || target === 'bh') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3463764/">Balanced Hackmons</a><br />';
+			if (target !== 'all') {
+				buffer += '- <a href="http://www.smogon.com/forums/threads/3499973/">Balanced Hackmons Mentoring Program</a><br />';
+			}
 		}
 		if (target === 'all' || target === 'glitchmons') {
 			matched = true;
@@ -864,7 +867,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/tiers/">Smogon Tiers</a><br />';
 			buffer += '- <a href="http://www.smogon.com/forums/threads/tiering-faq.3498332/">Tiering FAQ</a><br />';
-			buffer += '- <a href="http://www.smogon.com/bw/banlist/">The banlists for each tier</a><br />';
+			buffer += '- <a href="http://www.smogon.com/xyhub/tiers">The banlists for each tier</a><br />';
 		}
 		if (target === 'all' || target === 'ubers' || target === 'uber') {
 			matched = true;
