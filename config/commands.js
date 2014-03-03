@@ -1142,7 +1142,7 @@ var commands = exports.commands = {
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://img.gawkerassets.com/img/19gp7ykf66cajpng/original.png"></center>');
 	 },
 	 
-	 Helix: function(target, room, user) {
+	 helix: function(target, room, user) {
 	 	if (!this.canBroadcast()) return;
 	 	return this.sendReply('|raw|<center><img width="300" height="169" src="http://img.gawkerassets.com/img/19gp7ykf7cnhrgif/ku-xlarge.gif"></center>');
 	 },
