@@ -351,7 +351,7 @@ exports.Formats = [
 	{
 		name: "Alphabet Cup",
 		section: "OM of the Month",
-		
+
 		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Swoobat'],
 		validateTeam: function(team, format) {
