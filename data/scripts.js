@@ -2601,22 +2601,5 @@ exports.BattleScripts = {
 			level: level,
 			shiny: (Math.random()*1024<=1)
 		};
-	},
-	randomSeasonalFFTeam: function(side) {
-		var seasonalPokemonList = [
-			'charizard', 'ninetales', 'houndoom', 'arceusfire', 'arcanine', 'moltres', 'rapidash', 'magmar', 'quilava', 'typhlosion',
-			'entei', 'hooh', 'blaziken', 'rotomheat', 'chandelure', 'magcargo', 'reshiram', 'zekrom', 'heatran', 'arceusdragon',
-			'arceusfighting', 'seadra', 'kingdra', 'gyarados', 'dunsparce', 'milotic', 'drapion', 'growlithe', 'paras', 'parasect',
-			'magikarp', 'suicune', 'raikou', 'absol', 'spiritomb', 'horsea', 'ponyta', 'blitzle', 'zebstrika'
-		];
-		seasonalPokemonList = seasonalPokemonList.randomize();
-		var team = [];
-		for (var i=0; i<6; i++) {
-			var set = this.randomSet(seasonalPokemonList[i], i);
-			if (seasonalPokemonList[i] === 'gyarados') set.shiny = true;
-			set.moves[3] = 'Explosion';
-			team.push(set);
-		}
-		return team;
 	}
 };
