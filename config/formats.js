@@ -365,6 +365,14 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "OU Theorymon",
+		section: "OM of the Month",
+
+		mod: 'theorymon',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
+	},
+	{
 		name: "CAP",
 		section: "Other Metagames",
 
