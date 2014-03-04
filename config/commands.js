@@ -1254,6 +1254,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	mac: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/1xVO2RG.png" height="156" width="124">' +
+                '<img src="http://i.imgur.com/XsGOXpC.png" height="107" width="208">' +
+                '<img src="http://i.imgur.com/PLKSRCq.png"><br />' +
+                '<b>Ace:</b> Leon S. Kec<br />' +
+                'Having a passion for what you do is what makes you good at it.</center>');
+    	},
+	
 	princesshigh: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/d82SdyS.png?1" width="90" height="110">' +
