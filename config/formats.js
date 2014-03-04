@@ -365,17 +365,18 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Middle Cup",
+		name: "Alphabet Cup",
 		section: "OM of the Month",
-
+		
 		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
-		banlist: ['Illegal', 'Eviolite'],
-		maxLevel: 50,
-		defaultLevel: 50,
-		validateSet: function(set) {
-			var template = this.getTemplate(set.species || set.name);
-			if (!template.evos || template.evos.length === 0 || !template.prevo) {
-				return [set.species + " is not the middle Pokémon in an evolution chain."];
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Swoobat'],
+		validateTeam: function(team, format) {
+			var letters = {};
+			var letter = '';
+			for (var i = 0; i < team.length; i++) {
+				letter = Tools.getTemplate(team[i]).species.slice(0,1).toUpperCase();
+				if (letter in letters) return ['Your team cannot have more that one Pokémon starting with the letter "' + letter + '".'];
+				letters[letter] = 1;
 			}
 		}
 	},
@@ -500,6 +501,21 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['OU', 'Same Type Clause']
+	},
+	{
+		name: "Middle Cup",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
+		banlist: ['Illegal', 'Eviolite'],
+		maxLevel: 50,
+		defaultLevel: 50,
+		validateSet: function(set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0 || !template.prevo) {
+				return [set.species + " is not the middle Pokémon in an evolution chain."];
+			}
+		}
 	},
 	{
 		name: "STABmons",
