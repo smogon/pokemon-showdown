@@ -459,7 +459,7 @@ exports.BattleAbilities = {
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
 		onBasePowerPriority: 8,
-		onBasePower: function(basePower, attacker, defender, move) {
+		onAnyBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
 			for (var p in attacker.side.active) {
 				if (attacker.side.active[p] && attacker.side.active[p].ability === 'aurabreak') {
@@ -635,7 +635,7 @@ exports.BattleAbilities = {
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
 		onBasePowerPriority: 8,
-		onBasePower: function(basePower, attacker, defender, move) {
+		onAnyBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
 			for (var p in attacker.side.active) {
 				if (attacker.side.active[p] && attacker.side.active[p].ability === 'aurabreak') {
