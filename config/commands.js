@@ -1254,6 +1254,13 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	slim: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/Y8u3RAN.png"><br />' +
+                '<b>Ace:</b> Scolipede<br />' +
+                'Why be a King When you can be a God.</center>');
+    	},
+	
 	mac: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://i.imgur.com/1xVO2RG.png" height="156" width="124">' +
