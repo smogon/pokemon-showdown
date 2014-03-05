@@ -38,8 +38,6 @@ body {
 
 .mainmenuwrapper {
 	background-image:url("http://frostserver.net:8000/images/background1.jpg");
-	background-repeat:no-repeat;
-	background-size:cover;
 }
 
 .chat-log{
@@ -61,9 +59,9 @@ body {
 	background:#4876FF
 }
 
-.userlist{
+.userlist {
 	border-left:1px solid #D5DDE4;
-	background:#e5f5ff
+	background:#b2d9f0;
 }
 
 
