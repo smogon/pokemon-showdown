@@ -3217,7 +3217,7 @@ var commands = exports.commands = {
 //poof functions, still not neat
 function getRandMessage(user){
 	user = escapeHTML(user.name);
-	var numMessages = 37; // numMessages will always be the highest case # + 1 //increasing this will make the default appear more often
+	var numMessages = 39; // numMessages will always be the highest case # + 1 //increasing this will make the default appear more often
 	var message = '~~ ';
 	switch(Math.floor(Math.random()*numMessages)){
 		case 0: message = message + user + ' got spanked too hard by BrittleWind!';
@@ -3295,6 +3295,7 @@ function getRandMessage(user){
 		case 36: message = message + user + ' fades into nothingness!'; // bought by Unknown's Remnant
 		break;
 		case 37: message = message + user + ' was swept to sleep by frost janitor'; // bought by frost janitor
+		case 38: message = message + user + ' flies into the air and does three backward somersaults in quick succession then belts out in a rhythmic tune UP UP AND AWAY'; // bought by EricSaysHi
 		break;
 		default: message = message + user + ' bought a poisoned Coke!';
 	};
