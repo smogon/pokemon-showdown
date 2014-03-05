@@ -1,3 +1,76 @@
+
+#header{
+	background-color:#4594c9;
+}
+
+.pm-window.focused h3:hover {
+	background-color:#58bbf6; 
+	border-color:#58bbf6;
+}
+
+.pm-window.focused h3 {
+	background-color:#58bbf6;
+	border-color:#58bbf6;
+}
+
+.pm-window h3 {
+	background-color:#8dcbf0;
+	border-color:#8dcbf0;
+}
+
+.pm-log-add {
+	background-color:#4594c9;
+	border-color:#4594c9;
+}
+
+.pm-log-add.focused {
+	background-color:#8dcbf0;
+	border-color:#8dcbf0;
+}
+
+.chat-log-add {
+	background-color:#4594c9
+}
+
+body {
+	background:#8dcbf0;
+}
+
+.mainmenuwrapper {
+	background-image:url("http://frostserver.net:8000/images/background1.jpg");
+	background-repeat:no-repeat;
+	background-size:cover;
+}
+
+.chat-log{
+	background: url("http://frostserver.net:8000/images/background2.png") right top no-repeat;
+	background-color:#ffffff;
+	font-size:10pt;
+	overflow:auto
+}
+
+.menugroup .button{
+	background:#3A5FCD
+}
+
+.menugroup .menugroup{
+	text-align:center
+}
+
+.button:hover{
+	background:#4876FF
+}
+
+.userlist{
+	border-left:1px solid #D5DDE4;
+	background:#e5f5ff
+}
+
+
+
+
+
+
 /************************
 * Happy Holidays!    	*
 ************************/
@@ -105,7 +178,7 @@ body {
 	color: black;
 }*/
 
-
+/*
 #header{
 	background:url("http://upload.wikimedia.org/wikipedia/commons/d/da/Shades_of_blue.jpg")
 }
@@ -138,7 +211,7 @@ body{
 .userlist{
 	border-left:1px solid #D5DDE4;
 	background:#e5f5ff
-}
+}*/
 
 /****************************
 *Thanksgiving Theme (deer)  *
