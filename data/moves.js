@@ -7300,6 +7300,24 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
+	"lightofruin": {
+		num: -6,
+		gen: 6,
+		accuracy: 90,
+		basePower: 140,
+		category: "Special",
+		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 1/2 that HP, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 1/2 recoil.",
+		id: "lightofruin",
+		isViable: true,
+		name: "Light of Ruin",
+		pp: 5,
+		priority: 0,
+		recoil: [1,2],
+		secondary: false,
+		target: "normal",
+		type: "Fairy"
+	},
 	"lightscreen": {
 		num: 113,
 		accuracy: true,
