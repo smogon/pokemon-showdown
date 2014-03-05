@@ -52,17 +52,10 @@ global.toUserid = toId;
 /**
  * Validates a username or Pokemon nickname
  */
-var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
 global.toName = function(name) {
 	name = string(name);
 	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
-	while (bannedNameStartChars[name.charAt(0)]) {
-		name = name.substr(1);
-	}
-	if (name.length > 18) name = name.substr(0,18);
-	if (config.namefilter) {
-		name = config.namefilter(name);
-	}
+	if (name.length > 18) name = name.substr(0,18).trim();
 	return name;
 };
 
