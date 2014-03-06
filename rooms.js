@@ -13,6 +13,8 @@ const TIMEOUT_EMPTY_DEALLOCATE = 10*60*1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40*60*1000;
 const REPORT_USER_STATS_INTERVAL = 1000*60*10;
 
+var complaint = complaint || fs.createWriteStream('logs/complaint.txt', {flags:'a+'}); 
+
 var GlobalRoom = (function() {
 	function GlobalRoom(roomid) {
 		this.id = roomid;
@@ -132,8 +134,19 @@ var GlobalRoom = (function() {
 		// init users
 		this.users = {};
 		this.userCount = 0; // cache of `Object.size(this.users)`
-		this.maxUsers = 0;
-		this.maxUsersDate = 0;
+		self = this;
+		data = fs.readFile('logs/maxUsers.txt','utf8',function(err, data){
+			if (err) {
+				self.maxUsers = 0;
+				self.maxUsersDate = Date();
+				return;
+			}
+			data = data.split(',');
+			self.maxUsers = data[0];
+			self.maxUsersDate = data[1];
+		});
+		//this.maxUsers = data[0];
+		//this.maxUsersDate = data[1];
 
 		this.reportUserStatsInterval = setInterval(
 			this.reportUserStats.bind(this),
@@ -396,6 +409,10 @@ var GlobalRoom = (function() {
 				user.joinRoom(this.staffAutojoin[i], connection);
 			}
 		}
+		if (user.vip) {
+			//user.joinRoom('vip', connection);
+			user.send('|pm|~Server|'+user.group+user.name+'|/invite VIP');
+		}
 	};
 	GlobalRoom.prototype.onJoinConnection = function(user, connection) {
 		var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
@@ -409,7 +426,8 @@ var GlobalRoom = (function() {
 		this.users[user.userid] = user;
 		if (++this.userCount > this.maxUsers) {
 			this.maxUsers = this.userCount;
-			this.maxUsersDate = Date.now();
+			this.maxUsersDate = Date();
+			fs.writeFile('logs/maxUsers.txt',this.maxUsers+','+Date(),'utf8');
 		}
 
 		if (!merging) {
@@ -1181,6 +1199,10 @@ var ChatRoom = (function() {
 		this.destroyingLog = false;
 		this.bannedUsers = {};
 		this.bannedIps = {};
+		this.lockedRoom = false;
+		this.messageCount = 0;
+		this.active = true;
+		this.inactiveCount = 0;
 		this.modchat = (config.chatmodchat || false);
 
 		// `config.loglobby` is a legacy name
@@ -1480,6 +1502,7 @@ var ChatRoom = (function() {
 
 		if (message) {
 			this.add('|c|'+user.getIdentity(this.id)+'|'+message, true);
+			this.messageCount++;
 		}
 		this.update();
 	};

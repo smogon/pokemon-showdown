@@ -825,3 +825,4 @@ colossoil:{num:-59,species:"Colossoil",types:["Dark","Ground"],baseStats:{hp:133
 krilowatt:{num:-60,species:"Krilowatt",types:["Electric","Water"],baseStats:{hp:151,atk:84,def:73,spa:83,spd:74,spe:105},abilities:{0:"Trace",1:"Magic Guard"},heightm:0.7,weightkg:10.6,color:"",eggGroups:["Water 1","Fairy"]},
 voodoom:{num:-61,species:"Voodoom",types:["Fighting","Dark"],baseStats:{hp:90,atk:85,def:80,spa:105,spd:80,spe:110},abilities:{0:"Volt Absorb",1:"Lightningrod"},heightm:2,weightkg:75.5,color:"",eggGroups:["Human-Like","Ground"]}
 };
+

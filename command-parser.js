@@ -34,6 +34,8 @@ var crypto = require('crypto');
 
 var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'}), battle: fs.createWriteStream('logs/modlog/modlog_battle.txt', {flags:'a+'})};
 
+var complaint = exports.complaint = complaint || fs.createWriteStream('logs/complaint.txt', {flags:'a+'});
+
 /**
  * Command parser
  *
@@ -74,7 +76,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 	} else if (message.substr(0,4) === '>>> ') {
 		// multiline eval
 		message = '/evalbattle '+message.substr(4);
-	}
+	} 
 
 	if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
 		var spaceIndex = message.indexOf(' ');
@@ -144,6 +146,10 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				this.add(text);
 				this.logModCommand(text+(logOnlyText||''));
 			},
+			addRoomCommand: function(result, room) {
+				this.add(result);
+				this.logRoomCommand(result, room);
+			},
 			logModCommand: function(result) {
 				if (!modlog[room.id]) {
 					if (room.battle) {
@@ -153,6 +159,15 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 					}
 				}
 				modlog[room.id].write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
+			},
+			logRoomCommand: function(result, room) {
+				roomtolog = room
+				var roomlog = exports.roomlog = roomlog || fs.createWriteStream('logs/chat/'+roomtolog+'/'+roomtolog+'.txt', {flags:'a+'});
+				roomlog.write('['+(new Date().toJSON())+'] '+result+'\n');
+				roomlog.close();
+			},
+			logComplaint: function(result) {
+				complaint.write('('+room.id+') '+ user.name + ': ' +result+'\n');
 			},
 			can: function(permission, target, room) {
 				if (!user.can(permission, target, room)) {
@@ -165,6 +180,24 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				if (broadcast) {
 					message = this.canTalk(message);
 					if (!message) return false;
+					//spamroom
+					// if user is not in spamroom
+					if(spamroom[user.userid] == undefined){
+					// check to see if an alt exists in list
+						for(var u in spamroom){
+							if(Users.get(user.userid) == Users.get(u)){
+								// if alt exists, add new user id to spamroom, break out of loop.
+								spamroom[user.userid] = true;
+								break;
+							}
+						}
+					}
+
+					if (spamroom[user.userid]) {
+						Rooms.rooms.spamroom.add('|c|' + user.getIdentity() + '|' + message);
+						connection.sendTo(room, "|c|" + user.getIdentity() + "|" + message);
+						return false;
+					}
 					if (!user.can('broadcast', null, room)) {
 						connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
 						connection.sendTo(room, "To see it for yourself, use: /"+message.substr(1));
@@ -231,6 +264,58 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;
+	//spamroom
+	// if user is not in spamroom
+	if(spamroom[user.userid] == undefined){
+		// check to see if an alt exists in list
+		for(var u in spamroom){
+			if(Users.get(user.userid) == Users.get(u)){
+				// if alt exists, add new user id to spamroom, break out of loop.
+				spamroom[user.userid] = true;
+				break;
+			}
+		}
+	}
+
+	if (spamroom[user.userid]) {
+		Rooms.rooms.spamroom.add('|c|' + user.getIdentity() + '|' + message);
+		connection.sendTo(room, "|c|" + user.getIdentity() + "|" + message);
+		return false;
+	}
+
+	//tells
+	var alts = user.getAlts();
+	for (var u in alts) {
+		var alt = toId(alts[u]);
+		if (alt in tells) {
+			if (!tells[user.userid]) tells[user.userid] = [];
+			for (var tell in tells[alt]) {
+				tells[user.userid].add(tells[alt][tell]);
+			}
+			delete tells[alt];
+		}
+	}
+
+	if (tells[user.userid] && user.authenticated) {
+		for (var tell in tells[user.userid]) {
+			connection.sendTo(room, tells[user.userid][tell]);
+		}
+		delete tells[user.userid];
+	}
+
+	if (message) {
+        if (user.isAway === true) {
+        	if (user.name === user.originalName) user.isAway = false; connection.sendTo(user, 'Your name has been left unaltered and no longer marked as away.');
+
+            user.isAway = false;
+            var newName = user.originalName;
+
+            user.forceRename(newName, undefined, true);
+            user.authenticated = true;
+            connection.sendTo(room, '|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away');
+            user.originalName = '';
+        }
+    }
 
 	return message;
 };
@@ -287,7 +372,7 @@ function canTalk(user, room, connection, message) {
 			if (!user.autoconfirmed && (room.auth && room.auth[user.userid] || user.group) === ' ' && room.modchat === 'autoconfirmed') {
 				connection.sendTo(room, 'Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.');
 				return false;
-			} else if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(room.modchat)) {
+			} else if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(room.modchat) && !user.can('ignorelimits')) {
 				var groupName = config.groups[room.modchat].name;
 				if (!groupName) groupName = room.modchat;
 				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in this room.');

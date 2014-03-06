@@ -101,7 +101,7 @@ exports.backdoor = true;
 // the `console` permission in order to use the dev console.
 // Setting this to an empty array ([]) will disable the dev console.
 exports.consoleips = ['127.0.0.1'];
-
+exports.frostDev = ['127.0.0.1'];
 // Whether to watch the config file for changes. If this is enabled,
 // then the config.js file will be reloaded when it is changed.
 // This can be used to change some settings using a text editor on
@@ -139,6 +139,8 @@ exports.herokuhack = false;
 // displayed in the client.
 exports.customavatars = {
 	//'userid': 'customavatar.png'
+	'hulasaur' : 'hulasaur.png',
+	'leaderjumper' : 'leaderjumper.png'
 };
 
 // appealurl - specify a URL containing information on how users can appeal
