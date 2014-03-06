@@ -3777,7 +3777,7 @@ var Battle = (function() {
 		case 'join':
 			var team = null;
 			try {
-				if (more) team = JSON.parse(more);
+				if (more) team = Tools.fastUnpackTeam(more);
 			} catch (e) {
 				console.log('TEAM PARSE ERROR: '+more);
 				team = null;
