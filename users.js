@@ -1137,7 +1137,12 @@ var User = (function () {
 			connection.popup("Your team was rejected for the following reasons:\n\n- "+details.replace(/\n/g, '\n- '));
 			callback(false);
 		} else {
-			this.team = details;
+			if (details) {
+				this.team = details;
+				ResourceMonitor.teamValidatorChanged++;
+			} else {
+				ResourceMonitor.teamValidatorUnchanged++;
+			}
 			callback(true);
 		}
 	};
