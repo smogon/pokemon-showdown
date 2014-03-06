@@ -24,7 +24,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	var workers = exports.workers = {};
 
 	var spawnWorker = exports.spawnWorker = function() {
-		var worker = fakeProcess.server; //cluster.fork();
+		var worker = fakeProcess.server; //cluster.fork({PSPORT: config.port});
 		var id = worker.id;
 		workers[id] = worker;
 		worker.on('message', function(data) {
@@ -108,6 +108,8 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 //} else {
 	// is worker
+
+	if (process.env.PSPORT) config.port = +process.env.PSPORT;
 
 	// ofe is optional
 	// if installed, it will heap dump if the process runs out of memory
