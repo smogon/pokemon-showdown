@@ -1510,15 +1510,30 @@ var commands = exports.commands = {
 	timer: function(target, room, user) {
 		target = toId(target);
 		if (room.requestKickInactive) {
-			if (target === 'off' || target === 'stop') {
+			if (target === 'off' || target === 'false' || target === 'stop') {
 				room.stopKickInactive(user, user.can('timer'));
-			} else if (target === 'on' || !target) {
+			} else if (target === 'on' || target === 'true' || !target) {
 				room.requestKickInactive(user, user.can('timer'));
 			} else {
 				this.sendReply("'"+target+"' is not a recognized timer state.");
 			}
 		} else {
 			this.sendReply('You can only set the timer from inside a room.');
+		}
+	},
+
+	autotimer: 'forcetimer',
+	forcetimer: function(target, room, user) {
+		target = toId(target);
+		if (!this.can('autotimer')) return;
+		if (target === 'off' || target === 'false' || target === 'stop') {
+			config.forcetimer = false;
+			this.addModCommand("Forcetimer is now OFF: The timer is now opt-in. (set by "+user.name+")");
+		} else if (target === 'on' || target === 'true' || !target) {
+			config.forcetimer = true;
+			this.addModCommand("Forcetimer is now ON: All battles will be timed. (set by "+user.name+")");
+		} else {
+			this.sendReply("'"+target+"' is not a recognized forcetimer setting.");
 		}
 	},
 
