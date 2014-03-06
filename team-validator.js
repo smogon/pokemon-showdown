@@ -166,9 +166,9 @@ if (!process.send) {
 		var format = message.substr(pipeIndex + 1, pipeIndex2 - pipeIndex - 1);
 
 		if (!validators[format]) validators[format] = new Validator(format);
-		var parsedTeam = {};
+		var parsedTeam = [];
 		try {
-			parsedTeam = JSON.parse(message.substr(pipeIndex2 + 1));
+			parsedTeam = Tools.fastUnpackTeam(message.substr(pipeIndex2 + 1));
 		} catch (e) {
 			respond(id, false, "Your team was invalid and could not be parsed.");
 			return;
@@ -177,7 +177,11 @@ if (!process.send) {
 		if (problems && problems.length) {
 			respond(id, false, problems.join('\n'));
 		} else {
-			respond(id, true, JSON.stringify(parsedTeam));
+			var packedTeam = Tools.packTeam(parsedTeam);
+			if (packedTeam === message.substr(pipeIndex2 + 1)) packedTeam = '';
+			console.log('FROM: '+message.substr(pipeIndex2 + 1));
+			console.log('TO: '+packedTeam);
+			respond(id, true, packedTeam);
 		}
 	});
 }

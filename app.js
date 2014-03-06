@@ -130,6 +130,8 @@ global.ResourceMonitor = {
 	cmds: {},
 	cmdsTimes: {},
 	cmdsTotal: {lastCleanup: Date.now(), count: 0},
+	teamValidatorChanged: 0,
+	teamValidatorUnchanged: 0,
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
 	 */
