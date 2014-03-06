@@ -78,12 +78,16 @@
 	exports.pendingValidations = pendingValidations;*/
 
 	exports.validateTeam = function(format, team, callback) {
-		var parsedTeam = JSON.parse(team);
+		var parsedTeam = Tools.fastUnpackTeam(team);
 		var problems = this.validateTeamSync(format, parsedTeam);
 		if (problems && problems.length)
 			setImmediate(callback.bind(null, false, problems.join('\n')));
-		else
-			setImmediate(callback.bind(null, true, JSON.stringify(parsedTeam)));
+		else {
+			var packedTeam = Tools.packTeam(parsedTeam);
+			if (packedTeam === team)
+				packedTeam = '';
+			setImmediate(callback.bind(null, true, packedTeam));
+		}
 	};
 
 	var synchronousValidators = {};
