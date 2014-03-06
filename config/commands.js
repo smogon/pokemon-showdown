@@ -1254,6 +1254,31 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	primm: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/SLsamNo.png?1">' +
+                '<img src="http://i.imgur.com/ziTxZ58.gif">' +
+                '<img src="http://i.imgur.com/356yMIq.gif" width="150" height="150"><br />' +
+                '<b>Ace:</b> Volcarona<br />' +
+                'Food, Sleep, Pokemon, and Sports.</center>');
+    	},
+	
+	slim: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/Y8u3RAN.png"><br />' +
+                '<b>Ace:</b> Scolipede<br />' +
+                'Why be a King When you can be a God.</center>');
+    	},
+	
+	mac: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/1xVO2RG.png" height="156" width="124">' +
+                '<img src="http://i.imgur.com/XsGOXpC.png" height="107" width="208">' +
+                '<img src="http://i.imgur.com/PLKSRCq.png"><br />' +
+                '<b>Ace:</b> Leon S. Kec<br />' +
+                'Having a passion for what you do is what makes you good at it.</center>');
+    	},
+	
 	princesshigh: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/d82SdyS.png?1" width="90" height="110">' +
@@ -1358,7 +1383,7 @@ var commands = exports.commands = {
     		'If you can\'t handle the heat gtfo.</center>');
     },
 
-    tailz: function(target, room, user) {
+    	tailz: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://i.imgur.com/zKKoyFJ.gif" width="150">' +
                 '<img src="http://i.imgur.com/oV29Ffb.png">' +
@@ -1380,7 +1405,7 @@ var commands = exports.commands = {
 	kammi: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/fJvcdib.png" height="125" width="76" />' +
-			'<img src="http://frostserver.net:8000/images/kammi.gif" height="61" width="325" />' +
+			'<img src="http://i.imgur.com/WhZ1aKc.gif" />' +
 			'<img src="http://i.imgur.com/NUyIu76.png?1" height="125" width="76" /><br /><br />' +
 			'<b>Ace: </b>Stupidity.<br />' +
 			'<b>Quote: </b>What.</center></div>');
