@@ -1655,4 +1655,15 @@ var commands = exports.commands = {
 			'Quote: Feel the thunder! .<br \>' +
 			'<img src="http://img.pokemondb.net/sprites/black-white/anim/normal/electivire.gif">')
 	},
+	
+    
+   	elitefourbalto : 'balto', 
+   	balto: function(target, room, user) {
+        	if (!this.canBroadcast()) return;
+        	this.sendReplyBox('<center><img height="90" src="http://img3.wikia.nocookie.net/__cb20130816174802/rwby/images/0/00/RubyGIF1.gif">' +
+        		'<img src="http://i.imgur.com/QpvpXsn.gif">' +
+        		'<img src="http://25.media.tumblr.com/bc0429687fd3a892f4ea7b923c838800/tumblr_mqmdvrQECS1qfphyto2_250.gif" height="100"><br />' +
+        		'<b>Ace: </b>Charizard<br />' +
+        		'<b>Catchphrase: </b>I dont need someone to help me grow up I drink milk.</center>');
+    },
 };
