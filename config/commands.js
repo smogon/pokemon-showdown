@@ -1254,6 +1254,15 @@ var commands = exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	primm: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        this.sendReplyBox('<center><img src="http://i.imgur.com/SLsamNo.png?1">' +
+                '<img src="http://i.imgur.com/ziTxZ58.gif">' +
+                '<img src="http://i.imgur.com/356yMIq.gif" width="150" height="150"><br />' +
+                '<b>Ace:</b> Volcarona<br />' +
+                'Food, Sleep, Pokemon, and Sports.</center>');
+    	},
+	
 	slim: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://i.imgur.com/Y8u3RAN.png"><br />' +
@@ -1374,7 +1383,7 @@ var commands = exports.commands = {
     		'If you can\'t handle the heat gtfo.</center>');
     },
 
-    tailz: function(target, room, user) {
+    	tailz: function(target, room, user) {
         if (!this.canBroadcast()) return;
         this.sendReplyBox('<center><img src="http://i.imgur.com/zKKoyFJ.gif" width="150">' +
                 '<img src="http://i.imgur.com/oV29Ffb.png">' +
@@ -1396,7 +1405,7 @@ var commands = exports.commands = {
 	kammi: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/fJvcdib.png" height="125" width="76" />' +
-			'<img src="http://frostserver.net:8000/images/kammi.gif" height="61" width="325" />' +
+			'<img src="http://i.imgur.com/WhZ1aKc.gif" />' +
 			'<img src="http://i.imgur.com/NUyIu76.png?1" height="125" width="76" /><br /><br />' +
 			'<b>Ace: </b>Stupidity.<br />' +
 			'<b>Quote: </b>What.</center></div>');
