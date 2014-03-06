@@ -56,7 +56,7 @@ var Tells = {
 		var tellsToSend = Tells.tells[userid];
 		for (var i = 1; i <= Object.size(tellsToSend); i++){
 			var timeStr = Tells.getTellTime(tellsToSend[i].time);
-			buffer += '|' + tellsToSend[i].sender + ' said ' + timeStr + ' ago: ' + tellsToSend[i].message.replace('|', '&#124;');
+			buffer += '|' + tellsToSend[i].sender + '| said ' + timeStr + ' ago: ' + tellsToSend[i].message.replace('|', '&#124;');
 		}
 		user.send(buffer);
 		delete Tells.tells[userid];
