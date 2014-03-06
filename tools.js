@@ -702,6 +702,13 @@ module.exports = (function () {
 				buf += '|'
 			}
 
+			// level
+			if (set.level && set.level != 100) {
+				buf += '|'+set.level;
+			} else {
+				buf += '|'
+			}
+
 			// happiness
 			if (set.happiness !== undefined && set.happiness !== 255) {
 				buf += '|'+set.happiness;
@@ -793,6 +800,11 @@ module.exports = (function () {
 			// shiny
 			j = buf.indexOf('|', i);
 			if (i !== j) set.shiny = true;
+			i = j+1;
+
+			// level
+			j = buf.indexOf('|', i);
+			if (i !== j) set.level = parseInt(buf.substring(i, j), 10);
 			i = j+1;
 
 			// happiness
