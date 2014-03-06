@@ -36,11 +36,11 @@ body {
 }
 
 .mainmenuwrapper {
-	background-image:url("192.184.93.156:8005/images/background1.jpg");
+	background-image:url("http://192.184.93.156:8005/images/background1.jpg");
 }
 
 .chat-log{
-	background: url("192.184.93.156:8005/images/background2.png") right top no-repeat;
+	background: url("http://192.184.93.156:8005/images/background2.png") right top no-repeat;
 	background-color:#ffffff;
 	font-size:10pt;
 	overflow:auto
