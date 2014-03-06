@@ -628,6 +628,8 @@ module.exports = (function () {
 	};
 
 	Tools.prototype.packTeam = function(team) {
+		if (!team) return '';
+
 		var buf = '';
 
 		for (var i=0; i<team.length; i++) {
@@ -638,8 +640,8 @@ module.exports = (function () {
 			buf += (set.name || set.species);
 
 			// species
-			var id = toId(set.species);
-			buf += '|' + (toId(set.name) === id ? '' : id);
+			var id = toId(set.species || set.name);
+			buf += '|' + (toId(set.name || set.species) === id ? '' : id);
 
 			// item
 			buf += '|' + toId(set.item);
@@ -712,6 +714,8 @@ module.exports = (function () {
 	};
 
 	Tools.prototype.fastUnpackTeam = function(buf) {
+		if (!buf) return null;
+
 		var team = [];
 		var i = 0, j = 0;
 
