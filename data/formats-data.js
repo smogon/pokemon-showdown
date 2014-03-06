@@ -4304,6 +4304,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	floetteeternalflower: {
+		isUnreleased: true,
 		tier: "Unreleased"
 	},
 	florges: {
@@ -4541,12 +4542,15 @@ exports.BattleFormatsData = {
 		tier: "Limbo C"
 	},
 	diancie: {
+		isUnreleased: true,
 		tier: "Unreleased"
 	},
 	hoopa: {
+		isUnreleased: true,
 		tier: "Unreleased"
 	},
 	volcanion: {
+		isUnreleased: true,
 		tier: "Unreleased"
 	},
 	missingno: {
