@@ -1163,6 +1163,10 @@ var commands = exports.commands = {
 			Sockets.workers[i].kill();
 		}
 
+		if (!room.destroyLog) {
+			process.exit();
+			return;
+		}
 		room.destroyLog(function() {
 			room.logEntry(user.name + ' used /kill');
 		}, function() {
