@@ -650,12 +650,16 @@ module.exports = (function () {
 			var template = moddedTools.base.getTemplate(set.species || set.name);
 			var abilities = template.abilities;
 			id = toId(set.ability);
-			if (id == toId(abilities['0'])) {
-				buf += '|';
-			} else if (id === toId(abilities['1'])) {
-				buf += '|1';
-			} else if (id === toId(abilities['H'])) {
-				buf += '|H';
+			if (abilities) {
+				if (id == toId(abilities['0'])) {
+					buf += '|';
+				} else if (id === toId(abilities['1'])) {
+					buf += '|1';
+				} else if (id === toId(abilities['H'])) {
+					buf += '|H';
+				} else {
+					buf += '|' + id;
+				}
 			} else {
 				buf += '|' + id;
 			}
