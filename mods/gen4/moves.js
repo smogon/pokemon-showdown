@@ -74,6 +74,7 @@ exports.BattleMovedex = {
 				this.effectData.totalDamage = 0;
 				this.add('-start', pokemon, 'Bide');
 			},
+			onDamagePriority: -101,
 			onDamage: function(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
 				if (!source || source.side === target.side) return;
@@ -436,7 +437,27 @@ exports.BattleMovedex = {
 	},
 	healingwish: {
 		inherit: true,
-		isSnatchable: false
+		isSnatchable: false,
+		effect: {
+			duration: 2,
+			onStart: function(side) {
+				this.debug('Healing Wish started on '+side.name);
+			},
+			onSwitchInPriority: -6,
+			// Accounting for the offchance that 5 remaining pokemon are KO'd by entry hazards
+			onSwitchIn: function(target) {
+				if (target.position != this.effectData.sourcePosition) {
+					return;
+				}
+				if (!target.hp <= 0) {
+					var source = this.effectData.source;
+					var damage = target.heal(target.maxhp);
+					target.setStatus('');
+					this.add('-heal',target,target.getHealth,'[from] move: Healing Wish');
+					target.side.removeSideCondition('healingwish');
+				}
+			}
+		}
 	},
 	hiddenpower: {
 		inherit: true,
@@ -528,7 +549,17 @@ exports.BattleMovedex = {
 	},
 	imprison: {
 		inherit: true,
-		isSnatchable: false
+		isSnatchable: false,
+		onTryHit: function(pokemon) {
+			var targets = pokemon.side.foe.active;
+			for (var i=0; i<targets.length; i++) {
+				if (!targets[i] || targets[i].fainted) continue;
+				for (var j=0; j<pokemon.moves.length; j++) {
+					if (targets[i].moves.indexOf(pokemon.moves[j]) >= 0) return;
+				}
+			}
+			return false;
+		}
 	},
 	jumpkick: {
 		inherit: true,

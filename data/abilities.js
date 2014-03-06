@@ -179,7 +179,7 @@ exports.BattleAbilities = {
 		},
 		id: "aromaveil",
 		name: "Aroma Veil",
-		rating: 0,
+		rating: 3,
 		num: -6,
 		gen: 6
 	},
@@ -201,9 +201,11 @@ exports.BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual: function(pokemon) {
+			if (!pokemon.hp) return;
 			for (var i=0; i<pokemon.side.foe.active.length; i++) {
 				var target = pokemon.side.foe.active[i];
-				if (pokemon.hp && target.status === 'slp') {
+				if (!target || !target.hp) continue;
+				if (target.status === 'slp') {
 					this.damage(target.maxhp/8, target);
 				}
 			}
@@ -275,12 +277,10 @@ exports.BattleAbilities = {
 		gen: 6
 	},
 	"cheekpouch": {
-		desc: "Increases HP when this Pokemon consumes a berry.",
-		shortDesc: "Increases HP when this Pokemon consumes a berry.",
-		onUseItem: function(item, pokemon) {
-			if (item.isBerry) {
-				pokemon.heal(10);
-			}
+		desc: "Restores HP when this Pokemon consumes a berry.",
+		shortDesc: "Restores HP when this Pokemon consumes a berry.",
+		onEatItem: function(item, pokemon) {
+			this.heal(pokemon.maxhp/4);
 		},
 		id: "cheekpouch",
 		name: "Cheek Pouch",
@@ -455,8 +455,11 @@ exports.BattleAbilities = {
 	"darkaura": {
 		desc: "Increases the power of all Dark-type moves in battle to 1.3x.",
 		shortDesc: "Increases the power of all Dark-type moves in battle to 1.3x.",
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Dark Aura');
+		},
 		onBasePowerPriority: 8,
-		onBasePower: function(basePower, attacker, defender, move) {
+		onAnyBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
 			for (var p in attacker.side.active) {
 				if (attacker.side.active[p] && attacker.side.active[p].ability === 'aurabreak') {
@@ -583,6 +586,7 @@ exports.BattleAbilities = {
 		},
 		onBasePowerPriority: 7,
 		onFoeBasePower: function(basePower, attacker, defender, move) {
+			if (this.effectData.target !== defender) return;
 			if (move.type === 'Fire') {
 				return this.chainModify(1.25);
 			}
@@ -627,8 +631,11 @@ exports.BattleAbilities = {
 	"fairyaura": {
 		desc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
 		shortDesc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
+		onStart: function(pokemon) {
+			this.add('-ability', pokemon, 'Fairy Aura');
+		},
 		onBasePowerPriority: 8,
-		onBasePower: function(basePower, attacker, defender, move) {
+		onAnyBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
 			for (var p in attacker.side.active) {
 				if (attacker.side.active[p] && attacker.side.active[p].ability === 'aurabreak') {
@@ -1173,7 +1180,10 @@ exports.BattleAbilities = {
 	"infiltrator": {
 		desc: "Ignores Substitute, Reflect, Light Screen, and Safeguard on the target.",
 		shortDesc: "This Pokemon's moves ignore the foe's Substitute, Reflect, Light Screen, Safeguard, and Mist.",
-		// Implemented in the corresponding effects.
+		onModifyMove: function(move) {
+			move.notSubBlocked = true;
+			move.ignoreScreens = true;
+		},
 		id: "infiltrator",
 		name: "Infiltrator",
 		rating: 2.5,
@@ -2738,7 +2748,15 @@ exports.BattleAbilities = {
 	"symbiosis": {
 		desc: "This Pokemon immediately passes its item to an ally after their item is consumed.",
 		shortDesc: "This Pokemon passes its item to an ally after their item is consumed.",
-		//todo
+		onAllyAfterUseItem: function(item, pokemon) {
+			var sourceItem = this.effectData.target.takeItem();
+			if (!sourceItem) {
+				return;
+			}
+			if (pokemon.setItem(sourceItem)) {
+				this.add('-activate', pokemon, 'ability: Symbiosis', sourceItem, '[of] '+this.effectData.target);
+			}
+		},
 		id: "symbiosis",
 		name: "Symbiosis",
 		rating: 0,
