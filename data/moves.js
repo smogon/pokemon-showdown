@@ -2484,6 +2484,29 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Fighting"
 	},
+	"diamondstorm": {
+		num: -1,
+		gen: 6,
+		accuracy: 95,
+		basePower: 100,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target with a 50% chance to raise the user's Defense by 1 stage.",
+		shortDesc: "50% chance to boost the user's Def by 1.",
+		id: "diamondstorm",
+		name: "Diamond Storm",
+		pp: 5,
+		priority: 0,
+		secondary: {
+			chance: 50,
+			self: {
+				boosts: {
+					def: 1
+				}
+			}
+		},
+		target: "normal",
+		type: "Rock"
+	},
 	"dig": {
 		num: 91,
 		accuracy: 100,
