@@ -749,7 +749,7 @@ module.exports = (function () {
 			j = buf.indexOf('|', i);
 			var ability = buf.substring(i, j);
 			var template = moddedTools.base.getTemplate(set.species);
-			set.ability = (ability in {'':1, 0:1, 1:1, H:1} ? template.abilities[ability||'0'] : ability);
+			set.ability = (template.abilities && ability in {'':1, 0:1, 1:1, H:1} ? template.abilities[ability||'0'] : ability);
 			i = j+1;
 
 			// moves
