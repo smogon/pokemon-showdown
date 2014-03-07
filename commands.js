@@ -410,7 +410,9 @@ var commands = exports.commands = {
 		if (!room.bannedUsers || !room.bannedIps) {
 			return this.sendReply('Room bans are not meant to be used in room ' + room.id + '.');
 		}
-		if (!room.bannedUsers[userid]) return this.sendReply('User "'+name+'" is not banned in this room.');
+		for (var ip in targetUser.ips) {
+		if (!room.bannedUsers[userid] || !room.bannedIps[ip]) return this.sendReply('User "'+name+'" is not banned in this room.');
+		}
 		if (room.bannedUsers[userid]) delete room.bannedUsers[userid];
 		for (var ip in targetUser.ips) {
 			if (room.bannedIps[ip]) delete room.bannedIps[ip];
