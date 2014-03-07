@@ -1690,7 +1690,7 @@ var commands = exports.commands = {
     },
         
    	vale : 'vale',
-   	slyph : 'vale'
+   	slyph : 'vale',
    	vale: function(target, room, user) {
         	if (!this.canBroadcast()) return;
         	this.sendReplyBox('<center><img height="120" src="http://fc07.deviantart.net/fs70/f/2010/071/a/8/Scyther_by_Xous54.png">' +
