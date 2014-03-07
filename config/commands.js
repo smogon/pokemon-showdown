@@ -1666,4 +1666,15 @@ var commands = exports.commands = {
         		'<b>Ace: </b>Charizard<br />' +
         		'<b>Catchphrase: </b>I dont need someone to help me grow up I drink milk.</center>');
     },
+    	
+    
+   	shizuka : 'shizuka', 
+   	shizuka: function(target, room, user) {
+        	if (!this.canBroadcast()) return;
+        	this.sendReplyBox('<center><img height="90" src="http://i1365.photobucket.com/albums/r752/LynnHikaru/Shizukaname_zpsff03f985.png">' +
+        		'<img src="http://i.imgur.com/VUG3GC0.jpg">' +
+        		'<img src="http://i1365.photobucket.com/albums/r752/LynnHikaru/Gardevoir58_zps3aa0eea2.jpg" height="100"><br />' +
+        		'<b>Ace: </b>Gardevoir and Gallade<br />' +
+        		'<b>Catchphrase: </b>Mind, Skill, Tranquilit.</center>');
+    },
 };
