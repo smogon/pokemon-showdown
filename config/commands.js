@@ -1675,6 +1675,6 @@ var commands = exports.commands = {
         		'<img src="http://i1365.photobucket.com/albums/r752/LynnHikaru/Shizukaname_zpsff03f985.png" height="100">' +
         		'<img src="http://i1365.photobucket.com/albums/r752/LynnHikaru/Gardevoir58_zps3aa0eea2.jpg" height="100"><br />' +
         		'<b>Ace: </b>Gardevoir and Gallade<br />' +
-        		'<b>Catchphrase: </b>Mind, Skill, Tranquilit.</center>');
+        		'<b>Catchphrase: </b>Mind, Skill, tranquility.</center>');
     },
 };
