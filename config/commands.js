@@ -1696,7 +1696,7 @@ var commands = exports.commands = {
         	this.sendReplyBox('<center><img height="120" src="http://fc07.deviantart.net/fs70/f/2010/071/a/8/Scyther_by_Xous54.png">' +
         		'<img src="http://static1.glowtxt.com/data1/c/e/0/ce0a4c2b5bd3ad25c6579826f89d240e5f7b9fc7da39a3ee5e6b4b0d3255bfef95601890afd80709da39a3ee5e6b4b0d3255bfef95601890afd80709a33320cb7fd87eef40a9e6023a7a26bc.png" height="100">' +
         		'<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFvp4U2ImcI4VEcpJqpPq5PWwMKGLET8RkYkLL_eETMhQ9Sh7UQQ" height="100"><br />' +
-        		'<b>Ace: </b>Volcarona and Sableye<br />' +
-        		'<b>Catchphrase: </b>As Long As You Have a Fire In Your Heart To Do Something, Do it, Because That Fire Wont Be Burning Forever and Shall Soon Diminish.</center>');
+        		'<b>Ace: </b>Togekiss and Scyther<br />' +
+        		'<b>Catchphrase: </b>The Cracks cant support you forever, theyll crack and when they do the consequences can be unforseen.</center>');
     },
 };
