@@ -144,7 +144,7 @@ exports.customavatars = {
 	'gymleaderaven': 'raven.png',
 	'xdeaththekidx': 'falkner.png',
 	'championlyn': 'lynn.png',
-	'championshizuka': 'http://i1365.photobucket.com/albums/r752/LynnHikaru/Shizukaavi_zpsc5e65b2c.png'
+	'acetrainerizzy': 'http://i.imgur.com/AhvlaWT.png'
 };
 
 // appealurl - specify a URL containing information on how users can appeal
