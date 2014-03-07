@@ -1657,8 +1657,8 @@ var commands = exports.commands = {
 	},
 	
     
-   	elitefourbalto : 'balto', 
-   	balto: function(target, room, user) {
+   	rubyr : 'ruby rose', 
+   	rubyr: function(target, room, user) {
         	if (!this.canBroadcast()) return;
         	this.sendReplyBox('<center><img height="90" src="http://img3.wikia.nocookie.net/__cb20130816174802/rwby/images/0/00/RubyGIF1.gif">' +
         		'<img src="http://i.imgur.com/QpvpXsn.gif">' +
