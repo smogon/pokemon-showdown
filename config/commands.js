@@ -1677,4 +1677,15 @@ var commands = exports.commands = {
         		'<b>Ace: </b>Gardevoir and Gallade<br />' +
         		'<b>Catchphrase: </b>Mind, Skill, tranquility.</center>');
     },
+        	
+    
+   	auburn : 'auburn', 
+   	auburn: function(target, room, user) {
+        	if (!this.canBroadcast()) return;
+        	this.sendReplyBox('<center><img height="120" src="http://fc03.deviantart.net/fs23/f/2007/324/4/d/Stitch_as_a_Sableye_by_Alondra_chui.jpg">' +
+        		'<img src="http://i.imgur.com/nCiO1HM.png" height="100">' +
+        		'<img src="http://0-media-cdn.foolz.us/ffuuka/board/vp/image/1366/15/1366155142332.png" height="100"><br />' +
+        		'<b>Ace: </b>Gardevoir and Gallade<br />' +
+        		'<b>Catchphrase: </b>Mind, Skill, tranquility.</center>');
+    },
 };
