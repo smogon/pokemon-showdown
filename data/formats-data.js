@@ -4487,14 +4487,17 @@ exports.BattleFormatsData = {
 	},
 	pumpkaboosmall: {
 		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1},
+		unreleasedHidden: true,
 		tier: "LC"
 	},
 	pumpkaboolarge: {
 		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1},
+		unreleasedHidden: true,
 		tier: "LC"
 	},
 	pumpkaboosuper: {
 		viableMoves: {"willowisp":1,"shadowsneak":1,"fireblast":1,"painsplit":1,"seedbomb":1},
+		unreleasedHidden: true,
 		tier: "LC"
 	},
 	gourgeist: {
@@ -4503,14 +4506,17 @@ exports.BattleFormatsData = {
 	},
 	gourgeistsmall: {
 		viableMoves: {"willowisp":1,"shadowsneak":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
+		unreleasedHidden: true,
 		tier: "Limbo"
 	},
 	gourgeistlarge: {
 		viableMoves: {"willowisp":1,"shadowsneak":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
+		unreleasedHidden: true,
 		tier: "Limbo"
 	},
 	gourgeistsuper: {
 		viableMoves: {"willowisp":1,"shadowsneak":1,"painsplit":1,"seedbomb":1,"leechseed":1,"phantomforce":1,"explosion":1},
+		unreleasedHidden: true,
 		tier: "Limbo B"
 	},
 	bergmite: {
