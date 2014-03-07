@@ -809,10 +809,12 @@ exports.BattleFormatsData = {
 	},
 	cubone: {
 		viableMoves: {"substitute":1,"bonemerang":1,"doubleedge":1,"rockslide":1,"firepunch":1,"earthquake":1},
+		viableDoublesMoves: {"substitute":1,"bonemerang":1,"doubleedge":1,"rockslide":1,"firepunch":1,"earthquake":1,"protect":1},
 		tier: "LC"
 	},
 	marowak: {
 		viableMoves: {"substitute":1,"doubleedge":1,"stoneedge":1,"swordsdance":1,"firepunch":1,"earthquake":1,"poweruppunch":1,"thunderpunch":1},
+		viableDoublesMoves: {"substitute":1,"bonemerang":1,"doubleedge":1,"rockslide":1,"firepunch":1,"earthquake":1,"protect":1,"swordsdance":1},
 		eventPokemon: [
 			{"generation":3,"level":44,"moves":["sing","earthquake","swordsdance","rockslide"]}
 		],
@@ -820,10 +822,12 @@ exports.BattleFormatsData = {
 	},
 	tyrogue: {
 		viableMoves: {"highjumpkick":1,"rapidspin":1,"fakeout":1,"bulletpunch":1,"machpunch":1,"toxic":1,"counter":1},
+		viableDoublesMoves: {"highjumpkick":1,"feint":1,"fakeout":1,"bulletpunch":1,"machpunch":1,"helpinghand":1,"protect":1},
 		tier: "LC"
 	},
 	hitmonlee: {
 		viableMoves: {"highjumpkick":1,"suckerpunch":1,"stoneedge":1,"machpunch":1,"substitute":1,"fakeout":1,"closecombat":1,"earthquake":1,"blazekick":1},
+		viableDoublesMoves: {"helpinghand":1,"suckerpunch":1,"stoneedge":1,"machpunch":1,"substitute":1,"fakeout":1,"closecombat":1,"earthquake":1,"blazekick":1,"feint":1,"wideguard":1,"protect":1},
 		eventPokemon: [
 			{"generation":3,"level":38,"abilities":["limber"],"moves":["refresh","highjumpkick","mindreader","megakick"]}
 		],
@@ -831,6 +835,7 @@ exports.BattleFormatsData = {
 	},
 	hitmonchan: {
 		viableMoves: {"bulkup":1,"drainpunch":1,"icepunch":1,"machpunch":1,"substitute":1,"earthquake":1,"stoneedge":1,"rapidspin":1},
+		viableDoublesMoves: {"fakeout":1,"drainpunch":1,"icepunch":1,"machpunch":1,"substitute":1,"earthquake":1,"stoneedge":1,"feint":1,"detect":1,"helpinghand":1,"quickguard":1},
 		eventPokemon: [
 			{"generation":3,"level":38,"abilities":["keeneye"],"moves":["helpinghand","skyuppercut","mindreader","megapunch"]}
 		],
@@ -846,6 +851,7 @@ exports.BattleFormatsData = {
 	},
 	lickitung: {
 		viableMoves: {"wish":1,"protect":1,"dragontail":1,"curse":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1},
+		viableDoublesMoves: {"wish":1,"protect":1,"dragontail":1,"knockoff":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["healbell","wish"]},
 			{"generation":3,"level":38,"moves":["helpinghand","doubleedge","defensecurl","rollout"]}
@@ -854,22 +860,27 @@ exports.BattleFormatsData = {
 	},
 	lickilicky: {
 		viableMoves: {"wish":1,"protect":1,"dragontail":1,"curse":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1,"explosion":1,"knockoff":1},
+		viableDoublesMoves: {"wish":1,"protect":1,"dragontail":1,"knockoff":1,"bodyslam":1,"return":1,"powerwhip":1,"swordsdance":1,"earthquake":1,"toxic":1,"healbell":1,"explosion":1},
 		tier: "Limbo"
 	},
 	koffing: {
 		viableMoves: {"painsplit":1,"sludgebomb":1,"willowisp":1,"fireblast":1,"toxic":1,"clearsmog":1,"rest":1,"sleeptalk":1,"thunderbolt":1},
+		viableDoublesMoves: {"protect":1,"sludgebomb":1,"willowisp":1,"fireblast":1,"toxic":1,"rest":1,"sleeptalk":1,"thunderbolt":1},
 		tier: "LC"
 	},
 	weezing: {
 		viableMoves: {"painsplit":1,"sludgebomb":1,"willowisp":1,"fireblast":1,"toxic":1,"clearsmog":1,"rest":1,"sleeptalk":1,"thunderbolt":1,"explosion":1},
+		viableDoublesMoves: {"protect":1,"sludgebomb":1,"willowisp":1,"fireblast":1,"toxic":1,"rest":1,"sleeptalk":1,"thunderbolt":1,"explosion":1},
 		tier: "Limbo"
 	},
 	rhyhorn: {
 		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockblast":1,"rockpolish":1},
+		viableDoublesMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockslide":1,"protect":1},
 		tier: "LC"
 	},
 	rhydon: {
 		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockblast":1,"rockpolish":1},
+		viableDoublesMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockslide":1,"protect":1}
 		eventPokemon: [
 			{"generation":3,"level":46,"moves":["helpinghand","megahorn","scaryface","earthquake"]}
 		],
@@ -877,6 +888,7 @@ exports.BattleFormatsData = {
 	},
 	rhyperior: {
 		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockblast":1,"rockpolish":1,"dragontail":1},
+		viableDoublesMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockslide":1,"protect":1}
 		tier: "Limbo C"
 	},
 	happiny: {
