@@ -492,7 +492,7 @@ function canTalk(user, room, connection, message) {
 	        user.numMessages = 0;
 	        return false;
 	    }
-	    if (bot.spammers.indexOf(user.userid)) {
+	    if (bot.spammers.indexOf(user.userid)>-1) {
 	    	spamroom[user.userid] = true; 
 	    	return false;
 	    }
