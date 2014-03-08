@@ -58,6 +58,137 @@ var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_l
  *     return false.
  */
 var parse = exports.parse = function(message, room, user, connection, levelsDeep) {
+	var comd = '';
+    var otarget = '';
+    if (message.substr(0, 2) !== (bot.commandchar + bot.commandchar) && message.substr(0, 1) === bot.commandchar) {
+        var e3espaceIndex = message.indexOf(' ');
+        if (e3espaceIndex > 0) {
+            comd = message.substr(1, e3espaceIndex - 1);
+            otarget = message.substr(e3espaceIndex + 1);
+        } else {
+            comd = message.substr(1);
+            otarget = '';
+        }
+    } else if (message.substr(0, 1) === bot.broadcastchar) {
+        var e3espaceIndex = message.indexOf(' ');
+        if (e3espaceIndex > 0) {
+            comd = message.substr(0, e3espaceIndex);
+            otarget = message.substr(e3espaceIndex + 1);
+        } else {
+            comd = message;
+            otarget = '';
+        }
+    }
+    comd = comd.toLowerCase();
+    var o3obroadcast = false;
+    if (comd.charAt(0) === bot.broadcastchar) {
+        o3obroadcast = true;
+        comd = comd.substr(1);
+    }
+    var otherhandler = bot.cmds[comd];
+    if (typeof commandHandler === 'string') {
+        // in case someone messed up, don't loop
+        otherhandler = bot.cmds[otherhandler];
+    }
+    if (otherhandler) {
+        var othercontext = {
+            sendReply: function (data) {
+                if (this.broadcasting) {
+                    room.add(data, true);
+                } else {
+                    connection.sendTo(room, data);
+                }
+            },
+            sendReplyBox: function (html) {
+                this.sendReply('|raw|<div class="infobox">' + html + '</div>');
+            },
+            popupReply: function (message) {
+                connection.popup(message);
+            },
+            add: function (data) {
+                room.add(data, true);
+            },
+            send: function (data) {
+                room.send(data);
+            },
+            privateModCommand: function (data) {
+                for (var i in room.users) {
+                    if (room.users[i].isStaff) {
+                        room.users[i].sendTo(room, data);
+                    }
+                }
+                this.logEntry(data);
+                this.logModCommand(data);
+            },
+            logEntry: function (data) {
+                room.logEntry(data);
+            },
+            addModCommand: function (text, logOnlyText) {
+                this.add(text);
+                this.logModCommand(text + (logOnlyText || ''));
+            },
+            logModCommand: function (result) {
+                if (!modlog[room.id]) modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {
+                    flags: 'a+'
+                });
+                modlog[room.id].write('[' + (new Date().toJSON()) + '] (' + room.id + ') ' + result + '\n');
+            },
+            can: function (permission, otarget, room) {
+                if (!user.can(permission, otarget, room)) {
+                    this.sendReply(bot.commandchar + comd + ' - Access denied.');
+                    return false;
+                }
+                return true;
+            },
+            canBroadcast: function () {
+                if (o3obroadcast) {
+                    message = this.canTalk(message);
+                    if (!message) return false;
+                    if (!user.can('broadcast', null, room)) {
+                        connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
+                        connection.sendTo(room, "To see it for yourself, use: " + bot.commandchar + message.substr(1));
+                        return false;
+                    }
+
+                    // broadcast cooldown
+                    var normalized = toId(message);
+                    if (room.lastBroadcast === normalized && room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
+                        connection.sendTo(room, "You can't broadcast this because it was just broadcast.");
+                        return false;
+                    }
+                    this.add('|c|' + user.getIdentity(room.id) + '|' + message);
+                    room.lastBroadcast = normalized;
+                    room.lastBroadcastTime = Date.now();
+
+                    this.broadcasting = true;
+                }
+                return true;
+            },
+            parse: function (message) {
+                if (levelsDeep > MAX_PARSE_RECURSION) {
+                    return this.sendReply("Error: Too much recursion");
+                }
+                return parse(message, room, user, connection, levelsDeep + 1);
+            },
+            canTalk: function (message, relevantRoom) {
+                var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
+                return canTalk(user, innerRoom, connection, message);
+            },
+            targetUserOrSelf: function (target) {
+                if (!target) return user;
+                this.splitTarget(target);
+                return this.targetUser;
+            },
+            splitTarget: splitTarget
+        };
+        var otherresult = otherhandler.call(othercontext, otarget, room, user, connection, comd, message);
+        if (otherresult === undefined) otherresult = false;
+        return otherresult;
+    } else {
+        if (message.substr(0, 1) === bot.commandchar && comd) {
+            return connection.sendTo(room.id, 'The bot command "' + bot.commandchar + comd + '" was unrecognized. To send a message starting with "' + bot.commandchar + comd + '", type "' + bot.commandcha + comd + '".');
+        }
+    }
 	var cmd = '', target = '';
 	if (!message || !message.trim().length) return;
 	if (!levelsDeep) {
