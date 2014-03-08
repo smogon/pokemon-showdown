@@ -45,7 +45,7 @@ exports.stuff = function (s) {
                 user.joinRoom(this.staffAutojoin[i], connection);
             }
         }
-        if (user.group = '~' || user.hasSysopAccess()) {
+        if (user.group === '~' || user.hasSysopAccess()) {
             user.joinRoom('adminslounge', connection);
         }
     };
