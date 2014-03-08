@@ -505,9 +505,15 @@ function canTalk(user, room, connection, message) {
 	    var alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 	    for (var i = 0; i < alpha.length; i++) {
 	        if (message.toUpperCase().indexOf(alpha[i]) >= 0 && !user.can('broadcast')) {
-	            if (message === message.toUpperCase() && message.length >= 6) {
+	        	
+	            if(user.warnCounters > 4) {
+	                room.add('|html|<font color="#FF00BF">' + user.name + ' was muted by ' + '<i><b>' + bot.name + '</b>(more than 4 warnings)</i></font>');
+	               	user.mute(room.id, 60 * 60 * 1000, true);
+	               	return false;
+	            } 
+	            if (message === message.toUpperCase() && message.length >= 11) {
 	                room.add('|c|' + user.name + '|' + message);
-	                user.warnCounter += 1;
+	                user.warnCounters += 1;
 	                room.add('|html|<font color="#FF00BF">' + user.name + ' was warned by ' + '<i><b>' + bot.name + '</b>(caps)</i></font>');
 	                user.send('|c|~|/warn caps');
 	                return false;
