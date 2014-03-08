@@ -13,7 +13,6 @@
  *
  * @license MIT license
  */
-
 /*
 
 To reload chat commands:
@@ -21,18 +20,24 @@ To reload chat commands:
 /hotpatch chat
 
 */
-
 const MAX_MESSAGE_LENGTH = 300;
 
-const BROADCAST_COOLDOWN = 20*1000;
+const BROADCAST_COOLDOWN = 20 * 1000;
 
-const MESSAGE_COOLDOWN = 5*60*1000;
+const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 
 const MAX_PARSE_RECURSION = 10;
 
 var crypto = require('crypto');
 
-var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'}), battle: fs.createWriteStream('logs/modlog/modlog_battle.txt', {flags:'a+'})};
+var modlog = exports.modlog = {
+    lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {
+        flags: 'a+'
+    }),
+    battle: fs.createWriteStream('logs/modlog/modlog_battle.txt', {
+        flags: 'a+'
+    })
+};
 
 /**
  * Command parser
@@ -57,8 +62,8 @@ var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_l
  *     if he's muted, will warn him that he's muted, and
  *     return false.
  */
-var parse = exports.parse = function(message, room, user, connection, levelsDeep) {
-	var comd = '';
+var parse = exports.parse = function (message, room, user, connection, levelsDeep) {
+    var comd = '';
     var otarget = '';
     if (message.substr(0, 2) !== (bot.commandchar + bot.commandchar) && message.substr(0, 1) === bot.commandchar) {
         var e3espaceIndex = message.indexOf(' ');
@@ -189,198 +194,201 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
             return connection.sendTo(room.id, 'The bot command "' + bot.commandchar + comd + '" was unrecognized. To send a message starting with "' + bot.commandchar + comd + '", type "' + bot.commandcha + comd + '".');
         }
     }
-	var cmd = '', target = '';
-	if (!message || !message.trim().length) return;
-	if (!levelsDeep) {
-		levelsDeep = 0;
-		// if (config.emergencylog && (connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221' || message.length > 2048 || message.length > 256 && message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ')) {
-		if (config.emergencylog && (user.userid === 'pindapinda' || connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221')) {
-			config.emergencylog.write('<'+user.name+'@'+connection.ip+'> '+message+'\n');
-		}
-	}
+    var cmd = '',
+        target = '';
+    if (!message || !message.trim().length) return;
+    if (!levelsDeep) {
+        levelsDeep = 0;
+        // if (config.emergencylog && (connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221' || message.length > 2048 || message.length > 256 && message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ')) {
+        if (config.emergencylog && (user.userid === 'pindapinda' || connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221')) {
+            config.emergencylog.write('<' + user.name + '@' + connection.ip + '> ' + message + '\n');
+        }
+    }
 
-	if (message.substr(0,3) === '>> ') {
-		// multiline eval
-		message = '/eval '+message.substr(3);
-	} else if (message.substr(0,4) === '>>> ') {
-		// multiline eval
-		message = '/evalbattle '+message.substr(4);
-	}
+    if (message.substr(0, 3) === '>> ') {
+        // multiline eval
+        message = '/eval ' + message.substr(3);
+    } else if (message.substr(0, 4) === '>>> ') {
+        // multiline eval
+        message = '/evalbattle ' + message.substr(4);
+    }
 
-	if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
-		var spaceIndex = message.indexOf(' ');
-		if (spaceIndex > 0) {
-			cmd = message.substr(1, spaceIndex-1);
-			target = message.substr(spaceIndex+1);
-		} else {
-			cmd = message.substr(1);
-			target = '';
-		}
-	} else if (message.substr(0,1) === '!') {
-		var spaceIndex = message.indexOf(' ');
-		if (spaceIndex > 0) {
-			cmd = message.substr(0, spaceIndex);
-			target = message.substr(spaceIndex+1);
-		} else {
-			cmd = message;
-			target = '';
-		}
-	}
-	cmd = cmd.toLowerCase();
-	var broadcast = false;
-	if (cmd.charAt(0) === '!') {
-		broadcast = true;
-		cmd = cmd.substr(1);
-	}
+    if (message.substr(0, 2) !== '//' && message.substr(0, 1) === '/') {
+        var spaceIndex = message.indexOf(' ');
+        if (spaceIndex > 0) {
+            cmd = message.substr(1, spaceIndex - 1);
+            target = message.substr(spaceIndex + 1);
+        } else {
+            cmd = message.substr(1);
+            target = '';
+        }
+    } else if (message.substr(0, 1) === '!') {
+        var spaceIndex = message.indexOf(' ');
+        if (spaceIndex > 0) {
+            cmd = message.substr(0, spaceIndex);
+            target = message.substr(spaceIndex + 1);
+        } else {
+            cmd = message;
+            target = '';
+        }
+    }
+    cmd = cmd.toLowerCase();
+    var broadcast = false;
+    if (cmd.charAt(0) === '!') {
+        broadcast = true;
+        cmd = cmd.substr(1);
+    }
 
-	var commandHandler = commands[cmd];
-	if (typeof commandHandler === 'string') {
-		// in case someone messed up, don't loop
-		commandHandler = commands[commandHandler];
-	}
-	if (commandHandler) {
-		var context = {
-			sendReply: function(data) {
-				if (this.broadcasting) {
-					room.add(data, true);
-				} else {
-					connection.sendTo(room, data);
-				}
-			},
-			sendReplyBox: function(html) {
-				this.sendReply('|raw|<div class="infobox">'+html+'</div>');
-			},
-			popupReply: function(message) {
-				connection.popup(message);
-			},
-			add: function(data) {
-				room.add(data, true);
-			},
-			send: function(data) {
-				room.send(data);
-			},
-			privateModCommand: function(data) {
-				for (var i in room.users) {
-					if (room.users[i].isStaff) {
-						room.users[i].sendTo(room, data);
-					}
-				}
-				this.logEntry(data);
-				this.logModCommand(data);
-			},
-			logEntry: function(data) {
-				room.logEntry(data);
-			},
-			addModCommand: function(text, logOnlyText) {
-				this.add(text);
-				this.logModCommand(text+(logOnlyText||''));
-			},
-			logModCommand: function(result) {
-				if (!modlog[room.id]) {
-					if (room.battle) {
-						modlog[room.id] = modlog['battle'];
-					} else {
-						modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {flags:'a+'});
-					}
-				}
-				modlog[room.id].write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
-			},
-			can: function(permission, target, room) {
-				if (!user.can(permission, target, room)) {
-					this.sendReply('/'+cmd+' - Access denied.');
-					return false;
-				}
-				return true;
-			},
-			canBroadcast: function() {
-				if (broadcast) {
-					message = this.canTalk(message);
-					if (!message) return false;
-					if (!user.can('broadcast', null, room)) {
-						connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
-						connection.sendTo(room, "To see it for yourself, use: /"+message.substr(1));
-						return false;
-					}
+    var commandHandler = commands[cmd];
+    if (typeof commandHandler === 'string') {
+        // in case someone messed up, don't loop
+        commandHandler = commands[commandHandler];
+    }
+    if (commandHandler) {
+        var context = {
+            sendReply: function (data) {
+                if (this.broadcasting) {
+                    room.add(data, true);
+                } else {
+                    connection.sendTo(room, data);
+                }
+            },
+            sendReplyBox: function (html) {
+                this.sendReply('|raw|<div class="infobox">' + html + '</div>');
+            },
+            popupReply: function (message) {
+                connection.popup(message);
+            },
+            add: function (data) {
+                room.add(data, true);
+            },
+            send: function (data) {
+                room.send(data);
+            },
+            privateModCommand: function (data) {
+                for (var i in room.users) {
+                    if (room.users[i].isStaff) {
+                        room.users[i].sendTo(room, data);
+                    }
+                }
+                this.logEntry(data);
+                this.logModCommand(data);
+            },
+            logEntry: function (data) {
+                room.logEntry(data);
+            },
+            addModCommand: function (text, logOnlyText) {
+                this.add(text);
+                this.logModCommand(text + (logOnlyText || ''));
+            },
+            logModCommand: function (result) {
+                if (!modlog[room.id]) {
+                    if (room.battle) {
+                        modlog[room.id] = modlog['battle'];
+                    } else {
+                        modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {
+                            flags: 'a+'
+                        });
+                    }
+                }
+                modlog[room.id].write('[' + (new Date().toJSON()) + '] (' + room.id + ') ' + result + '\n');
+            },
+            can: function (permission, target, room) {
+                if (!user.can(permission, target, room)) {
+                    this.sendReply('/' + cmd + ' - Access denied.');
+                    return false;
+                }
+                return true;
+            },
+            canBroadcast: function () {
+                if (broadcast) {
+                    message = this.canTalk(message);
+                    if (!message) return false;
+                    if (!user.can('broadcast', null, room)) {
+                        connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
+                        connection.sendTo(room, "To see it for yourself, use: /" + message.substr(1));
+                        return false;
+                    }
 
-					// broadcast cooldown
-					var normalized = toId(message);
-					if (room.lastBroadcast === normalized &&
-							room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
-						connection.sendTo(room, "You can't broadcast this because it was just broadcast.");
-						return false;
-					}
-					this.add('|c|'+user.getIdentity(room.id)+'|'+message);
-					room.lastBroadcast = normalized;
-					room.lastBroadcastTime = Date.now();
+                    // broadcast cooldown
+                    var normalized = toId(message);
+                    if (room.lastBroadcast === normalized &&
+                        room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
+                        connection.sendTo(room, "You can't broadcast this because it was just broadcast.");
+                        return false;
+                    }
+                    this.add('|c|' + user.getIdentity(room.id) + '|' + message);
+                    room.lastBroadcast = normalized;
+                    room.lastBroadcastTime = Date.now();
 
-					this.broadcasting = true;
-				}
-				return true;
-			},
-			parse: function(message) {
-				if (levelsDeep > MAX_PARSE_RECURSION) {
-					return this.sendReply("Error: Too much recursion");
-				}
-				return parse(message, room, user, connection, levelsDeep+1);
-			},
-			canTalk: function(message, relevantRoom) {
-				var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
-				return canTalk(user, innerRoom, connection, message);
-			},
-			targetUserOrSelf: function(target) {
-				if (!target) return user;
-				this.splitTarget(target);
-				return this.targetUser;
-			},
-			splitTarget: splitTarget
-		};
+                    this.broadcasting = true;
+                }
+                return true;
+            },
+            parse: function (message) {
+                if (levelsDeep > MAX_PARSE_RECURSION) {
+                    return this.sendReply("Error: Too much recursion");
+                }
+                return parse(message, room, user, connection, levelsDeep + 1);
+            },
+            canTalk: function (message, relevantRoom) {
+                var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
+                return canTalk(user, innerRoom, connection, message);
+            },
+            targetUserOrSelf: function (target) {
+                if (!target) return user;
+                this.splitTarget(target);
+                return this.targetUser;
+            },
+            splitTarget: splitTarget
+        };
 
-		var result = commandHandler.call(context, target, room, user, connection, cmd, message);
-		if (result === undefined) result = false;
+        var result = commandHandler.call(context, target, room, user, connection, cmd, message);
+        if (result === undefined) result = false;
 
-		return result;
-	} else {
-		// Check for mod/demod/admin/deadmin/etc depending on the group ids
-		for (var g in config.groups) {
-			var groupid = config.groups[g].id;
-			if (cmd === groupid) {
-				return parse('/promote ' + toUserid(target) + ',' + g, room, user, connection);
-			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid) {
-				return parse('/demote ' + toUserid(target), room, user, connection);
-			} else if (cmd === 'room' + groupid) {
-				return parse('/roompromote ' + toUserid(target) + ',' + g, room, user, connection);
-			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
-				return parse('/roomdemote ' + toUserid(target), room, user, connection);
-			}
-		}
+        return result;
+    } else {
+        // Check for mod/demod/admin/deadmin/etc depending on the group ids
+        for (var g in config.groups) {
+            var groupid = config.groups[g].id;
+            if (cmd === groupid) {
+                return parse('/promote ' + toUserid(target) + ',' + g, room, user, connection);
+            } else if (cmd === 'de' + groupid || cmd === 'un' + groupid) {
+                return parse('/demote ' + toUserid(target), room, user, connection);
+            } else if (cmd === 'room' + groupid) {
+                return parse('/roompromote ' + toUserid(target) + ',' + g, room, user, connection);
+            } else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
+                return parse('/roomdemote ' + toUserid(target), room, user, connection);
+            }
+        }
 
-		if (message.substr(0,1) === '/' && cmd) {
-			// To guard against command typos, we now emit an error message
-			return connection.sendTo(room.id, 'The command "/'+cmd+'" was unrecognized. To send a message starting with "/'+cmd+'", type "//'+cmd+'".');
-		}
-	}
+        if (message.substr(0, 1) === '/' && cmd) {
+            // To guard against command typos, we now emit an error message
+            return connection.sendTo(room.id, 'The command "/' + cmd + '" was unrecognized. To send a message starting with "/' + cmd + '", type "//' + cmd + '".');
+        }
+    }
 
-	message = canTalk(user, room, connection, message);
-	if (!message) return false;
+    message = canTalk(user, room, connection, message);
+    if (!message) return false;
 
-	return message;
+    return message;
 };
 
 function splitTarget(target, exactName) {
-	var commaIndex = target.indexOf(',');
-	if (commaIndex < 0) {
-		targetUser = Users.get(target, exactName);
-		this.targetUser = targetUser;
-		this.targetUsername = (targetUser?targetUser.name:target);
-		return '';
-	}
-	var targetUser = Users.get(target.substr(0, commaIndex), exactName);
-	if (!targetUser) {
-		targetUser = null;
-	}
-	this.targetUser = targetUser;
-	this.targetUsername = (targetUser?targetUser.name:target.substr(0, commaIndex));
-	return target.substr(commaIndex+1).trim();
+    var commaIndex = target.indexOf(',');
+    if (commaIndex < 0) {
+        targetUser = Users.get(target, exactName);
+        this.targetUser = targetUser;
+        this.targetUsername = (targetUser ? targetUser.name : target);
+        return '';
+    }
+    var targetUser = Users.get(target.substr(0, commaIndex), exactName);
+    if (!targetUser) {
+        targetUser = null;
+    }
+    this.targetUser = targetUser;
+    this.targetUsername = (targetUser ? targetUser.name : target.substr(0, commaIndex));
+    return target.substr(commaIndex + 1).trim();
 }
 
 /**
@@ -388,144 +396,146 @@ function splitTarget(target, exactName) {
  * Shows an error message if not.
  */
 function canTalk(user, room, connection, message) {
-	if (!user.named) {
-		connection.popup("You must choose a name before you can talk.");
-		return false;
-	}
-	if (room && user.locked) {
-		connection.sendTo(room, 'You are locked from talking in chat.');
-		return false;
-	}
-	if (room && user.mutedRooms[room.id]) {
-		connection.sendTo(room, 'You are muted and cannot talk in this room.');
-		return false;
-	}
-	if (room && room.modchat) {
-		if (room.modchat === 'crash') {
-			if (!user.can('ignorelimits')) {
-				connection.sendTo(room, 'Because the server has crashed, you cannot speak in lobby chat.');
-				return false;
-			}
-		} else {
-			var userGroup = user.group;
-			if (room.auth) {
-				if (room.auth[user.userid]) {
-					userGroup = room.auth[user.userid];
-				} else if (room.isPrivate) {
-					userGroup = ' ';
-				}
-			}
-			if (!user.autoconfirmed && (room.auth && room.auth[user.userid] || user.group) === ' ' && room.modchat === 'autoconfirmed') {
-				connection.sendTo(room, 'Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.');
-				return false;
-			} else if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(room.modchat)) {
-				var groupName = config.groups[room.modchat].name;
-				if (!groupName) groupName = room.modchat;
-				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in this room.');
-				return false;
-			}
-		}
-	}
-	if (room && !(user.userid in room.users)) {
-		connection.popup("You can't send a message to this room without being in it.");
-		return false;
-	}
+    if (!user.named) {
+        connection.popup("You must choose a name before you can talk.");
+        return false;
+    }
+    if (room && user.locked) {
+        connection.sendTo(room, 'You are locked from talking in chat.');
+        return false;
+    }
+    if (room && user.mutedRooms[room.id]) {
+        connection.sendTo(room, 'You are muted and cannot talk in this room.');
+        return false;
+    }
+    if (room && room.modchat) {
+        if (room.modchat === 'crash') {
+            if (!user.can('ignorelimits')) {
+                connection.sendTo(room, 'Because the server has crashed, you cannot speak in lobby chat.');
+                return false;
+            }
+        } else {
+            var userGroup = user.group;
+            if (room.auth) {
+                if (room.auth[user.userid]) {
+                    userGroup = room.auth[user.userid];
+                } else if (room.isPrivate) {
+                    userGroup = ' ';
+                }
+            }
+            if (!user.autoconfirmed && (room.auth && room.auth[user.userid] || user.group) === ' ' && room.modchat === 'autoconfirmed') {
+                connection.sendTo(room, 'Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.');
+                return false;
+            } else if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(room.modchat)) {
+                var groupName = config.groups[room.modchat].name;
+                if (!groupName) groupName = room.modchat;
+                connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName + ' or higher to speak in this room.');
+                return false;
+            }
+        }
+    }
+    if (room && !(user.userid in room.users)) {
+        connection.popup("You can't send a message to this room without being in it.");
+        return false;
+    }
 
-	if (typeof message === 'string') {
-		if (!message) {
-			connection.popup("Your message can't be blank.");
-			return false;
-		}
-		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-			connection.popup("Your message is too long:\n\n"+message);
-			return false;
-		}
+    if (typeof message === 'string') {
+        if (!message) {
+            connection.popup("Your message can't be blank.");
+            return false;
+        }
+        if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
+            connection.popup("Your message is too long:\n\n" + message);
+            return false;
+        }
 
-		// hardcoded low quality website
-		if (/\bnimp\.org\b/i.test(message)) return false;
+        // hardcoded low quality website
+        if (/\bnimp\.org\b/i.test(message)) return false;
 
-		// remove zalgo
-		message = message.replace(/[\u0300-\u036f\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,'');
+        // remove zalgo
+        message = message.replace(/[\u0300-\u036f\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 
-		if (room && room.id === 'lobby') {
-			var normalized = message.trim();
-			if ((normalized === user.lastMessage) &&
-					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
-				connection.popup("You can't send the same message again so soon.");
-				return false;
-			}
-			user.lastMessage = message;
-			user.lastMessageTime = Date.now();
+        if (room && room.id === 'lobby') {
+            var normalized = message.trim();
+            if ((normalized === user.lastMessage) &&
+                ((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
+                connection.popup("You can't send the same message again so soon.");
+                return false;
+            }
+            user.lastMessage = message;
+            user.lastMessageTime = Date.now();
 
-			if (user.group === ' ') {
-				if (message.toLowerCase().indexOf('spoiler:') >= 0 || message.toLowerCase().indexOf('spoilers:') >= 0) {
-					connection.sendTo(room, "Due to spam, spoilers can't be sent to the lobby.");
-					return false;
-				}
-			}
-		}
+            if (user.group === ' ') {
+                if (message.toLowerCase().indexOf('spoiler:') >= 0 || message.toLowerCase().indexOf('spoilers:') >= 0) {
+                    connection.sendTo(room, "Due to spam, spoilers can't be sent to the lobby.");
+                    return false;
+                }
+            }
+        }
 
-		if (config.chatfilter) {
-			return config.chatfilter(user, room, connection, message);
-		}
-		return message;
-	}
+        if (config.chatfilter) {
+            return config.chatfilter(user, room, connection, message);
+        }
+        return message;
+    }
 
-	return true;
+    return true;
 }
 
 exports.package = {};
-fs.readFile('package.json', function(err, data) {
-	if (err) return;
-	exports.package = JSON.parse(data);
+fs.readFile('package.json', function (err, data) {
+    if (err) return;
+    exports.package = JSON.parse(data);
 });
 
-exports.uncacheTree = function(root) {
-	var uncache = [require.resolve(root)];
-	do {
-		var newuncache = [];
-		for (var i = 0; i < uncache.length; ++i) {
-			if (require.cache[uncache[i]]) {
-				newuncache.push.apply(newuncache,
-					require.cache[uncache[i]].children.map(function(module) {
-						return module.filename;
-					})
-				);
-				delete require.cache[uncache[i]];
-			}
-		}
-		uncache = newuncache;
-	} while (uncache.length > 0);
+exports.uncacheTree = function (root) {
+    var uncache = [require.resolve(root)];
+    do {
+        var newuncache = [];
+        for (var i = 0; i < uncache.length; ++i) {
+            if (require.cache[uncache[i]]) {
+                newuncache.push.apply(newuncache,
+                    require.cache[uncache[i]].children.map(function (module) {
+                        return module.filename;
+                    })
+                );
+                delete require.cache[uncache[i]];
+            }
+        }
+        uncache = newuncache;
+    } while (uncache.length > 0);
 };
 
 // This function uses synchronous IO in order to keep it relatively simple.
 // The function takes about 0.023 seconds to run on one tested computer,
 // which is acceptable considering how long the server takes to start up
 // anyway (several seconds).
-exports.computeServerVersion = function() {
-	/**
-	 * `filelist.txt` is a list of all the files in this project. It is used
-	 * for computing a checksum of the project for the /version command. This
-	 * information cannot be determined at runtime because the user may not be
-	 * using a git repository (for example, the user may have downloaded an
-	 * archive of the files).
-	 *
-	 * `filelist.txt` is generated by running `git ls-files > filelist.txt`.
-	 */
-	var filenames;
-	try {
-		var data = fs.readFileSync('filelist.txt', {encoding: 'utf8'});
-		filenames = data.split('\n');
-	} catch (e) {
-		return 0;
-	}
-	var hash = crypto.createHash('md5');
-	for (var i = 0; i < filenames.length; ++i) {
-		try {
-			hash.update(fs.readFileSync(filenames[i]));
-		} catch (e) {}
-	}
-	return hash.digest('hex');
+exports.computeServerVersion = function () {
+    /**
+     * `filelist.txt` is a list of all the files in this project. It is used
+     * for computing a checksum of the project for the /version command. This
+     * information cannot be determined at runtime because the user may not be
+     * using a git repository (for example, the user may have downloaded an
+     * archive of the files).
+     *
+     * `filelist.txt` is generated by running `git ls-files > filelist.txt`.
+     */
+    var filenames;
+    try {
+        var data = fs.readFileSync('filelist.txt', {
+            encoding: 'utf8'
+        });
+        filenames = data.split('\n');
+    } catch (e) {
+        return 0;
+    }
+    var hash = crypto.createHash('md5');
+    for (var i = 0; i < filenames.length; ++i) {
+        try {
+            hash.update(fs.readFileSync(filenames[i]));
+        } catch (e) {}
+    }
+    return hash.digest('hex');
 };
 
 exports.serverVersion = exports.computeServerVersion();
@@ -538,7 +548,7 @@ var commands = exports.commands = require('./commands.js').commands;
 
 var customCommands = require('./config/commands.js');
 if (customCommands && customCommands.commands) {
-	Object.merge(commands, customCommands.commands);
+    Object.merge(commands, customCommands.commands);
 }
 
 /*********************************************************
@@ -546,5 +556,5 @@ if (customCommands && customCommands.commands) {
  *********************************************************/
 var plugins = require('./chat-plugins.js').plugins;
 for (var p in plugins) {
-	if (plugins[p].commands) Object.merge(commands, plugins[p].commands);
+    if (plugins[p].commands) Object.merge(commands, plugins[p].commands);
 }
