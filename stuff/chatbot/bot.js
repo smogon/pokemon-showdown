@@ -179,13 +179,10 @@ ask: function(target, user, room) {
 
 
 say: function(target, room, user){
-  if(!this.can('broadcast')){ 
+  if(!this.canBroadcast) return; 
   if(!target) return this.sendReply('Please specify a message.');  
     this.logModCommand(user.name + ' used /say to say ' + target + '.');
-    return bot.say(bot.name, target, room);
-  } else { 
-  	return false;
-  }
+    return bot.say(bot.name, target, room,this.sendReply);
 },  
 
 
