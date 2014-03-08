@@ -11,8 +11,8 @@ name: '~KazeBot',
 getRandjoke: function(){
 var fs = require('fs');
 var data = fs.readFileSync('./stuff/chatbot/jokes.txt','utf8'); 
-var line = (''+data).split('/n');
-var joke = line[Math.floor(Math.random()*line.length)]
+var line = data.split('/n');
+var joke = String(line[Math.floor(Math.random()*line.length)]);
 return joke;
 },
 say: function(name,message,r,reply){
