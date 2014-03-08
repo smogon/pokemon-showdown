@@ -39,16 +39,6 @@ exports.stuff = function (s) {
         return this.group + this.name;
     }
     //global.money = require('./money/money.js').money();
-    Rooms.GlobalRoom.prototype.checkAutojoin = function (user, connection) {
-        if (user.isStaff || user.hasSysopAccess()) {
-            for (var i = 0; i < this.staffAutojoin.length; i++) {
-                user.joinRoom(this.staffAutojoin[i], connection);
-            }
-        }
-        if (user.group === '~' || user.hasSysopAccess()) {
-            user.joinRoom('adminslounge', connection);
-        }
-    };
 
 
     Object.merge(stuff, stuffystuff);
