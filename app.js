@@ -432,5 +432,6 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 	}
 	Users.checkRangeBanned = Cidr.checker(rangebans);
 });
+global.spamroom = {};
 global.bot = require('./stuff/chatbot/bot.js').bot();
 global.stuff = require('./stuff/stuff.js').stuff();
