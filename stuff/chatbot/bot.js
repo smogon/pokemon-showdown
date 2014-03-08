@@ -33,6 +33,9 @@ commandchar: '?',
 brodcastchar: '$',
 //The rest is of this is blahblah stuff edit if you know what you are doing.
 Int: undefined,
+spammers: spammers: new Array('gavigator','professorgavin','suk','ilikewangs','nharmoniag','gavgar','gym leader dukeeee','soles','soles shadow'),
+//rated mature
+spamwords: new Array('nigger','fag','feg','snen','wank','cunt','queef','fgt','kike','anal','cock','ann coulter','howard stern','cum','spamspamspam',"t1ts", "c0ck", "p0rn", "n1gger",'faggot','cumshot'),
 cmds: {
   update: function(target, room, user){
   	try {
@@ -40,7 +43,7 @@ cmds: {
 				bot = require('./stuff/chatbot/bot.js').bot(bot);
 				return this.sendReply('Chatbot has been updaated.');
   	} catch (e) {
-				return this.sendReply('Something failed while trying to update: \n' + e.stack);
+				return this.sendReply('Something failed while trying to update the bot: \n' + e.stack);
 			}
 
 
