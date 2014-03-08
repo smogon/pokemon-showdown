@@ -1,0 +1,35 @@
+body{
+        background-image:url("http://i.imgur.com/Sli8Z8O.jpg");
+        background-repeat:no-repeat;
+        background-position:right top
+}
+
+.chat-log{
+        background: #f0ffe0 url("http://i.imgur.com/5Mvmu3p.png") right top no-repeat;
+}
+.chat-log-add, .battle-log-add {
+    border-left:1px solid #fff7e0;
+    background: #ffffff
+}
+.menugroup .button{
+        background:#33ae1e
+}
+
+.menugroup .menugroup{
+        text-align:center
+}
+
+.menugroup .button:hover {
+        background:#fd9e05
+}
+
+.message-announce {
+        background:#a3d600
+}
+.userlist{
+        border-left:1px solid #fff7e0;
+        background:#fff7e0 
+}
+.userlist li button:hover {
+        background:#9eff4c
+}
