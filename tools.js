@@ -730,27 +730,32 @@ module.exports = (function () {
 		var team = [];
 		var i = 0, j = 0;
 
-		while (true) {
+		// limit to 24
+		for (var count=0; count<24; count++) {
 			var set = {};
 			team.push(set);
 
 			// name
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			set.name = buf.substring(i, j);
 			i = j+1;
 
 			// species
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			set.species = buf.substring(i, j) || set.name;
 			i = j+1;
 
 			// item
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			set.item = buf.substring(i, j);
 			i = j+1;
 
 			// ability
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			var ability = buf.substring(i, j);
 			var template = moddedTools.base.getTemplate(set.species);
 			set.ability = (template.abilities && ability in {'':1, 0:1, 1:1, H:1} ? template.abilities[ability||'0'] : ability);
@@ -758,16 +763,19 @@ module.exports = (function () {
 
 			// moves
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			set.moves = buf.substring(i, j).split(',');
 			i = j+1;
 
 			// nature
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			set.nature = buf.substring(i, j);
 			i = j+1;
 
 			// evs
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			if (j !== i) {
 				var evs = buf.substring(i, j).split(',');
 				set.evs = {
@@ -783,31 +791,35 @@ module.exports = (function () {
 
 			// gender
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			if (i !== j) set.gender = buf.substring(i, j);
 			i = j+1;
 
 			// ivs
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			if (j !== i) {
 				var ivs = buf.substring(i, j).split(',');
 				set.ivs = {
-					hp: ivs[0]==='' ? 31 : Number(ivs[0]),
-					atk: ivs[1]==='' ? 31 : Number(ivs[1]),
-					def: ivs[2]==='' ? 31 : Number(ivs[2]),
-					spa: ivs[3]==='' ? 31 : Number(ivs[3]),
-					spd: ivs[4]==='' ? 31 : Number(ivs[4]),
-					spe: ivs[5]==='' ? 31 : Number(ivs[5])
+					hp: ivs[0]==='' ? 31 : Number(ivs[0]) || 0,
+					atk: ivs[1]==='' ? 31 : Number(ivs[1]) || 0,
+					def: ivs[2]==='' ? 31 : Number(ivs[2]) || 0,
+					spa: ivs[3]==='' ? 31 : Number(ivs[3]) || 0,
+					spd: ivs[4]==='' ? 31 : Number(ivs[4]) || 0,
+					spe: ivs[5]==='' ? 31 : Number(ivs[5]) || 0
 				};
 			}
 			i = j+1;
 
 			// shiny
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			if (i !== j) set.shiny = true;
 			i = j+1;
 
 			// level
 			j = buf.indexOf('|', i);
+			if (j < 0) return;
 			if (i !== j) set.level = parseInt(buf.substring(i, j), 10);
 			i = j+1;
 
