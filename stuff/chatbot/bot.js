@@ -169,7 +169,7 @@ ask: function(target, user, room) {
 	  clearInterval(bot.Int)
 	  }
 	  else {
-	  return this.sendReply('There is no MOTD on.')
+	  return this.sendReply('There is no MOTD on.');
 	  }
   }
   else {
@@ -179,16 +179,20 @@ ask: function(target, user, room) {
 
 
 say: function(target, room, user){
-  if(!this.can('broadcast') 
+  if(!this.can('broadcast') {
   if(!target) return this.sendReply('Please specify a message.');  
     this.logModCommand(user.name + ' used /say to say ' + target + '.');
     return bot.say(bot.name, target, room)
 
-
-joke: function(target, room, user){
-  if(!this.canBroadcast()) return;
-    return bot.say(bot.name,bot.getRandjoke(),room,this.sendReply);
+  } else {
+    return false;
   }
+},
+joke: function(target, room, user){
+  if(this.can('broadcast') {
+    return bot.say(bot.name,bot.getRandjoke(),room,);
+  } else {
+  	return false;
 }
 }
 
