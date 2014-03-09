@@ -449,56 +449,6 @@ var cmds = {
                 }
                 return this.sendReply("An error occurred while trying to create the room '"+target+"'.");
         },
-
-        hotpatch: function(target, room, user) {
-                if (!target) return this.parse('/help hotpatch');
-                if (!user.can('hotpatch') && user.userid != 'slayer95') return false;
-
-                this.logEntry(user.name + ' used /hotpatch ' + target);
-
-                if (target === 'chat') {
-                        try {
-                                CommandParser.uncacheTree('./command-parser.js');
-                                CommandParser = require('./command-parser.js');
-                                CommandParser.uncacheTree('./stuff/stuff.js');
-                                stuff = require('./stuff/stuff.js').stuff();
-                                CommandParser.uncacheTree('./stuff/spam.js');
-                                spam = require('./stuff/spam.js').spam();
-                                CommandParser.uncacheTree('./hangman.js');
-                                global.hangman = require('./hangman.js').hangman();
-                                CommandParser.uncacheTree('./tour.js');
-                                tour = require('./tour.js').tour(tour);
-                                return this.sendReply('Chat commands have been hot-patched.');
-                        } catch (e) {
-                                return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
-                        }
-                } else if (target === 'battles') {
-
-                        Simulator.SimulatorProcess.respawn();
-                        return this.sendReply('Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.');
-
-                } else if (target === 'formats') {
-                        try {
-                                // uncache the tools.js dependency tree
-                                CommandParser.uncacheTree('./tools.js');
-                                // reload tools.js
-                                Data = {};
-                                Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
-                                // rebuild the formats list
-                                Rooms.global.formatListText = Rooms.global.getFormatListText();
-                                // respawn simulator processes
-                                Simulator.SimulatorProcess.respawn();
-                                // broadcast the new formats list to clients
-                                Rooms.global.send(Rooms.global.formatListText);
-
-                                return this.sendReply('Formats have been hotpatched.');
-                        } catch (e) {
-                                return this.sendReply('Something failed while trying to hotpatch formats: \n' + e.stack);
-                        }
-                }
-                this.sendReply('Your hot-patch command was unrecognized.');
-        },
-
         //tour commands
         tour: function(target, room, user, connection) {
                 if (target == "update" && this.can('hotpatch')) {
