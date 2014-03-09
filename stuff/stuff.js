@@ -45,8 +45,11 @@ exports.stuff = function (s) {
     return stuff;
 };
 var cmds = {
+    
+	
+
     tourpoll: function (target, room, user) {
-        return this.parse('/poll Which tournament should we do?,gen 5 ou, ou,gen 5 ubers,ubers,gen 5 uu,gen 5 ru,gen 5 nu,gen 5 random battle,seasonal,ou monotype, CC 1v1, 1v1');
+        return this.parse('/poll Which tournament should we do?,' + tour.tiers);
     },
 
 
