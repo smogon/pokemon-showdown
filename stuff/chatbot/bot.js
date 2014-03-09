@@ -63,7 +63,7 @@ ask: function(target, user, room) {
  if(!target){
  return this.sendReply('What would you like to know?')	
  } 
- if((bot.spamwords.indexOf(target) && (unanswerable.indexOf(target)) > -1){
+ if((bot.spamwords.indexOf(target)) && (unanswerable.indexOf(target)) > -1){
  return this.sendReply('That question is unanswerable.');	
  } 
  else if(target === 'whois bandi') {
