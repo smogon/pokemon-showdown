@@ -274,7 +274,7 @@ var cmds = {
         var height = 80;
         var br = '<br/>';
         var avatar = '<img src="http://play.pokemonshowdown.com/sprites/trainers/' + targetUser.avatar + '.png' + '" align="left" height="' + height + '">';
-        var customAvatar = '<img src="http://67.230.43.52:8000/avatars/' + targetUser.avatar + '" align="left" height="' + height + '">';
+        var customAvatar = '<img src="http://107.161.19.149:7000/avatars/' + targetUser.avatar + '" align="left" height="' + height + '">';
         var name = '<b><font size="3">' + targetUser.name + '</font></b>';
         var unregisteredName = '<b><font size="3">' + targetUser.name + '</b>(Unregistered)</font>';
         if (config.groups[targetUser.group] && config.groups[targetUser.group].name) {
