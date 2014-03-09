@@ -435,3 +435,4 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 global.spamroom = {};
 global.bot = require('./stuff/chatbot/bot.js').bot();
 global.stuff = require('./stuff/stuff.js').stuff();
+global.tour = require('./tour.js').tour();
