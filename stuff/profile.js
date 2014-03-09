@@ -231,22 +231,28 @@ var profile = exports.profile = {
 	                if (targetUser.userid == userid) {
 	                	key = String(parts[1]);
 	                	if (key.indexOf('1') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/5Dy544w.png" title="is a Super Moderator">';
+	                		badges += '<img src="http://i.imgur.com/5Dy544w.png" title="is a Staff Member">';
 	                	}
 	                	if (key.indexOf('2') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/oyv3aga.png" title="is a Developer">';
+	                		badges += '<img src="http://i.imgur.com/oyv3aga.png" title="is a League Member">';
 	                	}
 	                	if (key.indexOf('3') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/lfPYzFG.png" title="is a Server Host">'; 
+	                		badges += '<img src="http://i.imgur.com/lfPYzFG.png" title="is a Forum Contributor">'; 
 	                	}
 	                	if (key.indexOf('4') >= 0) {
 	                		badges += '<img src="http://i.imgur.com/oeKdHgW.png" title="is a Recruiter">';
 	                	}
 	                	if (key.indexOf('5') >= 0) {
-	                		badges += '<img src="http://i.imgur.com/yPAXWE9.png" title="is a Tournament Director">';
+	                		badges += '<img src="http://i.imgur.com/yPAXWE9.png" title="is a League Owner">';
 	                	}
 	                	if (key.indexOf('6') >= 0) {
 	                		badges += '<img src="http://i.imgur.com/EghmFiY.png" title="is a Frequenter">';
+	                	}
+	                	if (key.indexOf('7') >= 0) {
+	                		badges += '<img src="http://www.smogon.com/media/forums/images/badges/cap.png.v.gc2i1VScALP9s1O_NiGEMA" title="is a Developer">';
+	                	}
+	                	if (key.indexOf('8') >= 0) {
+	                		badges += '<img src="http://www.smogon.com/media/forums/images/badges/forummod.png.v.nRgelI1-z5_ec5gr9zV0-w" title="is the User of the Month">';
 	                	}
 	                	match = true;
 						if (match === true) {
