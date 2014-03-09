@@ -65,7 +65,9 @@ if (!process.send) {
 		ValidatorProcess.send = function(format, team, callback) {
 			var process = this.acquire();
 			pendingValidations[validationCount] = callback;
-			process.process.send(''+validationCount+'|'+format+'|'+team);
+			try {
+				process.process.send(''+validationCount+'|'+format+'|'+team);
+			} catch (e) {}
 			++validationCount;
 		};
 		return ValidatorProcess;
