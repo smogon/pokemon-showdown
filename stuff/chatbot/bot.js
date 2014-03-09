@@ -11,7 +11,7 @@ name: '~KazeBot',
 getRandjoke: function(){
 var fs = require('fs');
 var data = fs.readFileSync('./stuff/chatbot/jokes.txt','utf8'); 
-var line = data.split('/n');
+var line = data.split('\n');
 var joke = String(line[Math.floor(Math.random()*line.length)]);
 return joke;
 },
@@ -20,7 +20,7 @@ say: function(name,message,r,reply){
   return r.add('|c|' + name + '|' + message);
 	}
 	else {
-		r.add('|c|' + name + '|' + message)
+		reply('|c|' + name + '|' + message)
 	}
 },
 //By default u have to set the message of the day, but if you want to have one when your server first starts then edit it as you please.
@@ -179,11 +179,10 @@ ask: function(target, user, room) {
 
 
 say: function(target, room, user){
-  if(!this.canBroadcast) return; 
+  if(!this.can('broadcast') 
   if(!target) return this.sendReply('Please specify a message.');  
     this.logModCommand(user.name + ' used /say to say ' + target + '.');
-    return bot.say(bot.name, target, room,this.sendReply);
-},  
+    return bot.say(bot.name, target, room)
 
 
 joke: function(target, room, user){
