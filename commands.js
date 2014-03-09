@@ -31,6 +31,8 @@ hotpatch: function(target, room, user) {
 				profile = require('./stuff/profile.js');
 				CommandParser.uncacheTree('./stuff/trainer-cards.js');
 				tcs = require('./stuff/trainer-cards.js');
+				CommandParser.uncacheTree('./tour.js');
+                                tour = require('./tour.js').tour(tour);
 				CommandParser.uncacheTree('./stuff/stuff.js');
 				stuff = require('./stuff/stuff.js');
 				return this.sendReply('Chat commands have been hot-patched.');
