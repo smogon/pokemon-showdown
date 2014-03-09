@@ -11,9 +11,9 @@ exports.BattleItems = {
 		name: "Berry",
 		isBerry: true,
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) pokemon.eatItem();
+			if (pokemon.hp <= pokemon.maxhp/2) pokemon.useItem();
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.heal(10);
 		},
 		num: -2,

@@ -279,8 +279,10 @@ exports.BattleAbilities = {
 	"cheekpouch": {
 		desc: "Restores HP when this Pokemon consumes a berry.",
 		shortDesc: "Restores HP when this Pokemon consumes a berry.",
-		onEatItem: function(item, pokemon) {
-			this.heal(pokemon.maxhp/4);
+		onUseItem: function(item, pokemon) {
+			if (item.isBerry) {
+				this.heal(pokemon.maxhp/4, pokemon);
+			}
 		},
 		id: "cheekpouch",
 		name: "Cheek Pouch",
@@ -3035,7 +3037,9 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			this.add('-ability',pokemon,'Unnerve',pokemon.side.foe);
 		},
-		onFoeEatItem: false,
+		onFoeTryUseItem: function(item, pokemon) {
+			if (item.isBerry) return false;
+		},
 		id: "unnerve",
 		name: "Unnerve",
 		rating: 1,

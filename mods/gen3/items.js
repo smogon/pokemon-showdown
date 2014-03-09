@@ -148,7 +148,7 @@ exports.BattleItems = {
 	},
 	"sitrusberry": {
 		inherit: true,
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.heal(30);
 		}
 	},

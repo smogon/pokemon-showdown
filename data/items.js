@@ -99,10 +99,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/2) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.heal(pokemon.maxhp/8);
 			if (pokemon.getNature().minus === 'spd') {
 				pokemon.addVolatile('confusion');
@@ -182,10 +182,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4|| (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.boost({spd:1});
 		},
 		num: 205,
@@ -214,10 +214,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.status === 'frz') {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			if (pokemon.status === 'frz') {
 				pokemon.cureStatus();
 			}
@@ -260,13 +260,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Steel' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 199,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Steel-type attack. Single use."
@@ -560,13 +560,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Rock' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 195,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Rock-type attack. Single use."
@@ -582,10 +582,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.status === 'par') {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			if (pokemon.status === 'par') {
 				pokemon.cureStatus();
 			}
@@ -613,10 +613,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.status === 'slp') {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			if (pokemon.status === 'slp') {
 				pokemon.cureStatus();
 			}
@@ -636,13 +636,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Normal' && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 200,
 		gen: 4,
 		desc: "Halves damage taken from a Normal-type attack. Single use."
@@ -744,13 +744,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Fighting' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 189,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Fighting-type attack. Single use."
@@ -777,13 +777,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Flying' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 192,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Flying-type attack. Single use."
@@ -799,13 +799,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Dark' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 198,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Dark-type attack. Single use."
@@ -846,7 +846,7 @@ exports.BattleItems = {
 		},
 		onModifyPriority: function(priority, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
-				if (pokemon.eatItem()) {
+				if (pokemon.useItem()) {
 					this.add('-activate', pokemon, 'Custap Berry');
 					pokemon.removeVolatile('custapberry');
 					return priority + 0.1;
@@ -1169,12 +1169,12 @@ exports.BattleItems = {
 		effect: {
 			duration: 1,
 			onUpdate: function(target) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					target.removeVolatile('enigmaberry');
 				}
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.heal(pokemon.maxhp/4);
 		},
 		num: 208,
@@ -1258,10 +1258,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/2) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.heal(pokemon.maxhp/8);
 			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
@@ -1438,10 +1438,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.boost({def:1});
 		},
 		num: 202,
@@ -1628,13 +1628,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Dragon' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 197,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Dragon-type attack. Single use."
@@ -1746,10 +1746,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/2) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.heal(pokemon.maxhp/8);
 			if (pokemon.getNature().minus === 'def') {
 				pokemon.addVolatile('confusion');
@@ -1872,12 +1872,12 @@ exports.BattleItems = {
 		},
 		onAfterMoveSecondary: function(target, source, move) {
 			if (source && source !== target && move && move.category === 'Physical') {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.damage(source.maxhp/8, source, target);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 211,
 		gen: 4,
 		desc: "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use."
@@ -1893,13 +1893,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Ghost' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 196,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Ghost-type attack. Single use."
@@ -1915,13 +1915,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Poison' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 190,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Poison-type attack. Single use."
@@ -1937,10 +1937,10 @@ exports.BattleItems = {
 		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (move.category === 'Physical') {
-				target.eatItem();
+				target.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.boost({def: 1});
 		},
 		num: -6,
@@ -2025,10 +2025,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			pokemon.addVolatile('focusenergy');
 		},
 		num: 206,
@@ -2111,10 +2111,10 @@ exports.BattleItems = {
 			if (move && move.pp === 0) {
 				pokemon.addVolatile('leppaberry');
 				pokemon.volatiles['leppaberry'].move = move;
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			var move;
 			if (pokemon.volatiles['leppaberry']) {
 				move = pokemon.volatiles['leppaberry'].move;
@@ -2155,10 +2155,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.boost({atk:1});
 		},
 		num: 201,
@@ -2276,10 +2276,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.status || pokemon.volatiles['confusion']) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			pokemon.cureStatus();
 			pokemon.removeVolatile('confusion');
 		},
@@ -2378,10 +2378,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/2) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.heal(pokemon.maxhp/8);
 			if (pokemon.getNature().minus === 'spe') {
 				pokemon.addVolatile('confusion');
@@ -2438,10 +2438,10 @@ exports.BattleItems = {
 		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (move.category === 'Special') {
-				target.eatItem();
+				target.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.boost({spd: 1});
 		},
 		num: -6,
@@ -2643,10 +2643,10 @@ exports.BattleItems = {
 		},
 		onResidual: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			pokemon.addVolatile('micleberry');
 		},
 		effect: {
@@ -2828,13 +2828,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Fire' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 184,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Fire-type attack. Single use."
@@ -2878,10 +2878,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/2) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.heal(10);
 		},
 		num: 155,
@@ -2920,13 +2920,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Water' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 185,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Water-type attack. Single use."
@@ -2942,13 +2942,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Psychic' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 193,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Psychic-type attack. Single use."
@@ -2964,10 +2964,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
 				pokemon.cureStatus();
 			}
@@ -2987,10 +2987,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.volatiles['confusion']) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			pokemon.removeVolatile('confusion');
 		},
 		num: 156,
@@ -3008,10 +3008,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.boost({spa:1});
 		},
 		num: 204,
@@ -3265,10 +3265,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.status === 'brn') {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			if (pokemon.status === 'brn') {
 				pokemon.cureStatus();
 			}
@@ -3368,13 +3368,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Grass' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 187,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Grass-type attack. Single use."
@@ -3485,13 +3485,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Fairy' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: -6,
 		gen: 6,
 		desc: "Halves damage taken from a super effective Fairy-type attack. Single use."
@@ -3507,12 +3507,12 @@ exports.BattleItems = {
 		},
 		onAfterMoveSecondary: function(target, source, move) {
 			if (source && source !== target && move && move.category === 'Special') {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.damage(source.maxhp/8, source, target);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 212,
 		gen: 4,
 		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use."
@@ -3547,10 +3547,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.boost({spe:1});
 		},
 		num: 203,
@@ -3673,13 +3673,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Ground' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 191,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Ground-type attack. Single use."
@@ -3729,10 +3729,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/2) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.heal(pokemon.maxhp/4);
 		},
 		num: 158,
@@ -3921,10 +3921,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			var stats = [];
 			for (var i in pokemon.boosts) {
 				if (i !== 'accuracy' && i !== 'evasion' && pokemon.boosts[i] < 6) {
@@ -4042,13 +4042,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Bug' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 194,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Bug-type attack. Single use."
@@ -4177,13 +4177,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Electric' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 186,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Electric-type attack. Single use."
@@ -4331,10 +4331,10 @@ exports.BattleItems = {
 		},
 		onUpdate: function(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp/2) {
-				pokemon.eatItem();
+				pokemon.useItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onUseItem: function(item, pokemon) {
 			this.heal(pokemon.maxhp/8);
 			if (pokemon.getNature().minus === 'spa') {
 				pokemon.addVolatile('confusion');
@@ -4372,13 +4372,13 @@ exports.BattleItems = {
 		},
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (move.type === 'Ice' && this.getEffectiveness(move, target) > 0 && !target.volatiles['substitute']) {
-				if (target.eatItem()) {
+				if (target.useItem()) {
 					this.debug('-50% reduction');
 					return this.chainModify(0.5);
 				}
 			}
 		},
-		onEat: function() { },
+		onUseItem: function() { },
 		num: 188,
 		gen: 4,
 		desc: "Halves damage taken from a super effective Ice-type attack. Single use."
