@@ -496,7 +496,7 @@ function canTalk(user, room, connection, message) {
 	    	spamroom[user.userid] = true; 
 	    	return false;
 	    }
-	    if (bot.spamwords.indexOf(message.toLowerCase) > -1) {
+	    if (bot.spamwords.indexOf(message.toLowerCase()) > -1) {
 	        user.mute(room.id, 60 * 60 * 1000, true);
 	        room.add('|html|<font color="#FF00BF"><i><b>' + bot.name + '</b> has muted ' + user.name + ' for an hour(spamword).</i></font>');
 	        return false;
