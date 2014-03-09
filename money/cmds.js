@@ -159,7 +159,7 @@ givemoney: function (target, room, user) {
 		if (!user.can('hotpatch')) return false;
 		if(isNaN(target))
 		if (!target) return this.sendReply('You need to enter in a value to search.');
-        else
+                else
 		var x = '';
 		for (var i in Users.users) {
 			if (Users.users[i].bp.dollars == target || Users.users[i].bp.dollars > target) {
@@ -200,49 +200,8 @@ givemoney: function (target, room, user) {
 		this.sendReply(x);
 		}
 	},
-
-	//DO NOT USE UNLESS NEEDED OTHERWISE IT WILL WIPE EVERYONE'S MONEY AND TICKETS
-	clearallbags: function (target, room, user) {
-		if(money.started == false){ 
-		this.sendReply('Money isn\'t on yet, we are fixing bugs'); 
-		return false
-		}
-	    else {
-		if (!user.can('hotpatch')) return false;
-		if (!target) return this.sendReply('What you are about to do will clear EVERYONE\'S BAG of money and tickets. Do /clearallbags yes if you want to.');
-		var target = target.toLowerCase();
-		if (target !== 'yes') return this.sendReply('What you are about to do will clear EVERYONE\'S BAG of money and tickets. Do /clearallbags yes if you want to.');
-		else
-		money.reset(user)
-		this.sendReply('All users bags have been emptied.');
-		if (Rooms.rooms.staff) Rooms.rooms.staff.addRaw(user.name + ' has removed all tickets and Battle Points from everyones bags.');
-	    }
-	},
-	wallet: 'backpack',
-	bag: 'backpack',
-	bp: 'backpack',
-	backpack: function (target, room, user) {
-		if(money.started == false){ 
-		this.sendReply('Money isn\'t on yet, we are fixing bugs'); 
-		return false
-		}
-		else {
-		if(!this.canBroadcast()) return;
-		var targetuser = Users.get(target);
-		if (targetuser) {
-		money.read(user);
-			this.sendReply(targetuser.name + ' backpack contains:');
-			this.sendReply('- Dollars: ' + targetuser.bp.dollars);
-			this.sendReply('- Tickets: ' + targetuser.bp.tkts);
-		} else {
-		money.read(user);
-			this.sendReply('Your backpack contains:');
-			this.sendReply('- Dollars: ' + user.bp.dollars);
-			this.sendReply('- Tickets: ' + user.bp.tkts);
-		}
-		}
-	},
-
+	
+        //to update
 	moneyintro: function (target, room, user) {
 		this.sendReplyBox('<h2>Money Commands</h2><br /><hr />' +
 			'<h3>Every User Commands</h3><br /><hr />' +
