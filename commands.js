@@ -1295,7 +1295,7 @@ var commands = exports.commands = {
 			this.sendReply('Loading memory usage, this might take a while.');
 		}
 		if (target === 'all' || target === 'rooms' || target === 'room') {
-			this.sendReply('Calcualting Room size...');
+			this.sendReply('Calculating Room size...');
 			var roomSize = ResourceMonitor.sizeOfObject(Rooms);
 			this.sendReply("Rooms are using " + roomSize + " bytes of memory.");
 		}
