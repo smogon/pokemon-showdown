@@ -189,7 +189,7 @@ say: function(target, room, user){
   }
 },
 joke: function(target, room, user){
-  if(this.can('broadcast') {
+  if(this.can('broadcast')} {
     return bot.say(bot.name,bot.getRandjoke(),room,);
   } else {
   	return false;
