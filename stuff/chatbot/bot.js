@@ -195,7 +195,7 @@ joke: function(target, room, user){
   	return false;
 }
 }
-
+}
 
 Object.merge(bot, botStuff);
 return bot;
