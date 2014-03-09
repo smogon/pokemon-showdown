@@ -35,7 +35,7 @@ brodcastchar: '$',
 Int: undefined,
 spammers: new Array('gavigator','professorgavin','suk','ilikewangs','nharmoniag','gavgar','gym leader dukeeee','soles','soles shadow'),
 //rated mature
-spamwords: new Array('nigger','fag','feg','snen','wank','cunt','queef','fgt','kike','anal','cock','ann coulter','howard stern','cum','spamspamspam',"t1ts", "c0ck", "p0rn", "n1gger",'faggot','cumshot'),
+spamwords: new Array('nigger','fag','feg','fagg','snen','wank','cunt','queef','fgt','kike','anal','cock','ann coulter','howard stern','cum','spamspamspam',"t1ts", "c0ck", "p0rn", "n1gger",'faggot','cumshot'),
 cmds: {
   update: function(target, room, user){
   	try {
@@ -51,7 +51,7 @@ cmds: {
   //faze spruce this up with ur html skeelz
   credits: function(target, room, user) {
  	if(this.can('broadcast')) {
- 		return this.add('|html|The creator of this bot is bandi, if you would like to use this for your server, please pm him. He is always on the <a href="http://rain.psim.us">Rain Server<a>. Some of these ideas were used from Quinella\'s chat bot. If you have any suggestions please tell him. Enjoy!');
+ 		return this.add('|html|The creator of this bot is bandi, if you would like to use this for your server, please pm him. He is always on the <a href="http://kaze.psim.us">Kaze Server<a>. Some of these ideas were used from Quinella\'s chat bot. If you have any suggestions please tell him. Enjoy!');
  	}
  	else {
  	return false;	
@@ -75,22 +75,22 @@ ask: function(target, user, room) {
  if(target.indexOf('how')||target.indexOf('why')){
  r = 'magik';
  }
- else if(target.indexOf('where')) {
+ if(target.indexOf('where')) {
  r = 'places';	
  }
- else if(target.indexOf('what')) {
+ if(target.indexOf('what')) {
  r = 'stuff';
  }
- else if(target.indexOf('who')) {
+ if(target.indexOf('who')) {
  r = 'a person';	
  }
- else if(target.indexOf('when')) {
+ if(target.indexOf('when')) {
  r = 'who knows';
  }
- else if(target.indexOf('why')) {
+ if(target.indexOf('why')) {
  r = 'reasons';
  }
- else if(target.indexOf('do')) {
+ if(target.indexOf('do')) {
  r = yn[Math.floor(Math.random()*2)];
  }
  bot.say(bot.name,r,room,this.sendReply)
@@ -190,6 +190,7 @@ say: function(target, room, user){
 },
 joke: function(target, room, user){
   if(this.can('broadcast')) {
+  bot.say(user.name,message,room)
     return bot.say(bot.name,bot.getRandjoke(),room);
   } else {
   	return false;
