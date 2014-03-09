@@ -6,7 +6,7 @@ else  bot = {};
 
 var botStuff = {
 //This is the name of your bot. Edit as you please.
-name: '~KazeBot',
+name: '~Kourtney',
 //blahblahblah stuff for the bot
 getRandjoke: function(){
 var fs = require('fs');
