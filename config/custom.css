@@ -5,35 +5,35 @@
  * in the `config` directory and populate it with CSS rules to override the
  * normal client styles, when the client is connected to your server. In
  * other words, you can use this facility to introduce a custom theme for
- * your server.CSS
+ * your server.
  */
  
- #header {background:url("http://images2.layoutsparks.com/1/71269/jordan-red-black-white.gif");background-repeat}
+ #header {background:url("http://www.dustinhetrick.com/rain.gif");background-repeat}
 
-body{background-image:url("http://cdn.bulbagarden.net/upload/d/dc/Yveltal_artwork.png");background-repeat:background-position:center;font-family: "Cambria (Headings)",Verdana,Helvetica,Arial,sans-serif;}
+body{background-image:url("http://wallpoper.com/images/00/40/52/84/pokemon-lugia_00405284.jpg");background-repeat:background-position:center;font-family: "Cambria (Headings)",Verdana,Helvetica,Arial,sans-serif;}
 
-.chat-log{font-size:16pt;background: url("http://th00.deviantart.net/fs71/PRE/i/2013/354/f/b/yveltal_wallpaper_by_primalbidoof-d6yncnl.jpg") no-repeat center;background:#2EFEF7;color:white;overflow:auto;}
+.chat-log{font-size:16pt;background: url("http://pokewalls.files.wordpress.com/2011/05/249lugia1600x1200.jpg") no-repeat center;background:#2EFEF7;color:#0000FF;overflow:auto;}
 
 
 
 .menugroup {
 background:#000000);
 text-align: center;
-border-color: #FFFFFF;
+border-color: #00FF40;
 }
 
-.button:hover{background:#FFFFFF;}
+.button:hover{background:#40FF00;}
 
 .userlist {
-border-left: 1px solid #000000;
-background: url("http://fc05.deviantart.net/fs71/f/2012/147/3/3/yin_yang_by_deiby_ybied-d3jabad.gif") no-repeat center;
-color:black;
+border-left: 1px solid #CEF6F5;
+background: url("http://images2.layoutsparks.com/1/199343/heart-of-ice-rain.jpg");
+color:#00FFFF;
 }
 
 .userlist li em.group {
         font-style: normal;
         font-size: 8pt;
-        color: red;
+        color: #00FFFF;
         display: block;
         float: left;
         text-align: center;
@@ -49,27 +49,27 @@ white-space: nowrap;
 }
 
 .menugroup {
-background:#000000;
+background:#CEF6F5;
 text-align: center;
-border-color: #FFFFFF;
+border-color: #40FF00;
 }
 
 .pm-window.focused h3, .pm-window.focused h3:hover {
-background:#000000;
-border-color: #FFFFFF;
+background:#CEF6F5;
+border-color: #40FF00;
 }
 
 
 .tabbar a.button: {
-background:#000000;
-color: white;
-border-color: #FFFFFF;
+background:#CEF6F5;
+color: blue;
+border-color: #40FF00;
 }
 
 .tabbar a.button.cur, .tabbar a.button.cur:hover {
-background: url("http://www.wallsave.com/wallpapers/2560x1600/black-pattern/149455/black-pattern-diagonal-stripes-hd-high-definition-149455.jpg");
-color: white;
-border-color: #FFFFFF;
+background:#CEF6F5;
+color: blue;
+border-color: #40FF00;
 border-bottom: 0;
 cursor: default;
 padding-top: 3px;
@@ -78,23 +78,23 @@ top: 0px;
 }
 
 .maintabbarbottom {
-background: url("http://www.wallsave.com/wallpapers/2560x1600/black-pattern/149455/black-pattern-diagonal-stripes-hd-high-definition-149455.jpg");
-border-color: #FFFFFF;
+background:#CEF6F5;
+border-color: #40FF00;
 }
 
         .pm-window h3 {
     background: url("http://www.hdwallcloud.com/wp-content/uploads/2013/09/Ios-7-Wallpapers.jpg");        
-border-color: #FFFFFF;
+border-color: #40FF00;
 }
 
 .pm-log-add {
         background: url("http://www.hdwallcloud.com/wp-content/uploads/2013/09/Ios-7-Wallpapers.jpg");        
-border-color: #FFFFFF;
+border-color: #40FF00;
 }
 
 .challenge {
 background: url("http://www.hdwallcloud.com/wp-content/uploads/2013/09/Ios-7-Wallpapers.jpg");
-color: white;
+color: blue;
 }
 
 .pad, .ps-popup, .pm-log, .ps-room.ps-room-opaque {
@@ -103,13 +103,14 @@ overflow: auto;
 }
 
 .message-announce {
-background:#000000;
-outline: 1px solid white;
+background:#FE2EF7;
+outline: 1px solid red;
+border-color: #40FF00;
 }
 
 .pm-window h3 small  {
 color: #5e5e5e;        
-border-color: #FFFFFF;
+border-color: #40FF00;
 }
 
 element {
@@ -121,8 +122,8 @@ element {
 .battle-log {
 position: absolute;
 text-align: left;
-background: url(http://media.pldh.net/gallery/unovacollection/tornadus_sbforme.png) repeat-y center scroll;
-color:#000000;
+background: url(http://pokewalls.files.wordpress.com/2012/04/581swanna1600x1200.jpg) repeat-y center scroll;
+color:#0000FF;
 top: 9px;
 left: 640px;
 right: -1px;
@@ -132,32 +133,32 @@ font-size: 10pt;
 }
 
 .chat-log-add {
-background: url("http://www.wallsave.com/wallpapers/2560x1600/black-pattern/149455/black-pattern-diagonal-stripes-hd-high-definition-149455.jpg");
-color:#000000;
-border-color: #FFFFFF;
+background:#CEF6F5;
+color:#CEF6F5;
+border-color: #40FF00;
 }
 
          
 .battle-log-add {
 position: absolute;
-background: url("http://www.colourbox.com/preview/4407442-356742-black-and-white-stripes.jpg") repeat-x left top;
+background: url(http://www.hdwallcloud.com/wp-content/uploads/2013/09/Ios-7-Wallpapers.jpg) repeat-x left top;
 bottom: 0px;
-color:#000000;
+color:#0000FF;
 }        
  
 .battle-log .chat strong
 {
-        color:#000000;
+        color:#0000FF;
 }
 .battle-log .chat em
 {
         padding: 1px 4px 1px 3px;
-        color:#000000;
+        color:#0000FF;
         font-style: normal;
 }
 .battle-log .chat em.mine
 {
-        color:#000000; 
+        color:#0000FF; 
 }
 
 .sunweather,
@@ -209,7 +210,7 @@ color:#000000;
 }
 .menugroup .button {
     font-family: "Cambria (Headings)",Verdana,Helvetica,Arial,sans-serif;
-        background:#DF0101;}
+        background:#CEF6F5;}
 }
 .chatbox textarea {
     font-family: "Cambria (Headings)",Verdana,Helvetica,Arial,sans-serif;
@@ -550,5 +551,3 @@ background-image: url(http://i.imgur.com/rFSFXGg.png);
 .mainmenufooter small:after {
 	  content: "Rain Server";
 }
-
-
