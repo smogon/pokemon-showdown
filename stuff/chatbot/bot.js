@@ -57,7 +57,7 @@ cmds: {
  	return false;	
  	}
  },
-ask: function(target, user, room) {
+/*ask: function(target, user, room) {
  if(!this.canBroadcast()) return;
  var unanswerable = ['god']; //if anymore unanswered questions just add them
  if(!target){
@@ -96,7 +96,7 @@ ask: function(target, user, room) {
  bot.say(bot.name,r,room,this.sendReply)
  }
  },
- 
+ */
  merp: function(target, room, user) {
  	if(!target){ 
  	this.sendReply('What user would you like to say this.'); return false;
