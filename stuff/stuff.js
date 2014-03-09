@@ -580,6 +580,42 @@ masspm: 'pmall',
 		'<img src="http://i.imgur.com/yPAXWE9.png" title="is a Tournament Director">Tournament Director - Invite people and host tournaments consecutively and consistently in the server.<br/>' +
 		'<img src="http://i.imgur.com/EghmFiY.png" title="is a Frequenter">Frequenter - Consistently and frequently comes to the server. Time estimate for earning this badge is around two to three weeks.');
 	},
+	
+	kick: function(target, room, user){
+		if (!this.can('declare')) return this.sendReply('/kick - Access Denied');
+		if (!target) return this.sendReply('|raw|/kick <em>username</em> - kicks the user from the room.');
+		var targetUser = Users.get(target);
+		if (!targetUser) return this.sendReply('User '+target+' not found.');
+		if (targetUser.group === '~') {
+			return this.sendReply('Administrators can\'t be room kicked.');
+		}
+		if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target+' is not in this room.');
+		targetUser.popup('You have been kicked from room '+ room.title +' by '+user.name+'.');
+		targetUser.leaveRoom(room);
+		room.add('|raw|'+ targetUser.name + ' has been kicked from room by '+ user.name + '.');
+	},
+
+	frt: 'forcerenameto',
+	forcerenameto: function(target, room, user) {
+		if (!target) return this.parse('/help forcerenameto');
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (!target) {
+			return this.sendReply('No new name was specified.');
+		}
+		if (!this.can('forcerenameto', targetUser)) return false;
+
+		if (targetUser.userid === toUserid(this.targetUser)) {
+			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
+			this.privateModCommand('(' + entry + ')');
+			targetUser.forceRename(target, undefined, true);
+		} else {
+			this.sendReply("User "+targetUser.name+" is no longer using that name.");
+		}
+	},
 
 regdate: function(target, room, user, connection) { 
 		if (!this.canBroadcast()) return;
