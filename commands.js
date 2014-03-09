@@ -16,68 +16,7 @@ var poofeh = true;
 const MAX_REASON_LENGTH = 300;
 
 var commands = exports.commands = {
-hotpatch: function(target, room, user) {
-		if (!target) return this.parse('/help hotpatch');
-		if (!this.can('hotpatch')) return false;
 
-		this.logEntry(user.name + ' used /hotpatch ' + target);
-
-		if (target === 'chat' || target === 'commands') {
-
-			try {
-				CommandParser.uncacheTree('./command-parser.js');
-				CommandParser = require('./command-parser.js');
-				CommandParser.uncacheTree('./stuff/profile.js');
-				profile = require('./stuff/profile.js');
-				CommandParser.uncacheTree('./tour.js');
-                                tour = require('./tour.js').tour(tour);
-				CommandParser.uncacheTree('./stuff/stuff.js');
-				stuff = require('./stuff/stuff.js');
-				return this.sendReply('Chat commands have been hot-patched.');
-			} catch (e) {
-				return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
-			}
-
-		} else if (target === 'battles') {
-
-			Simulator.SimulatorProcess.respawn();
-			return this.sendReply('Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.');
-
-		} else if (target === 'formats') {
-			try {
-				// uncache the tools.js dependency tree
-				CommandParser.uncacheTree('./tools.js');
-				// reload tools.js
-				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
-				// rebuild the formats list
-				Rooms.global.formatListText = Rooms.global.getFormatListText();
-				// respawn validator processes
-				TeamValidator.ValidatorProcess.respawn();
-				// respawn simulator processes
-				Simulator.SimulatorProcess.respawn();
-				// broadcast the new formats list to clients
-				Rooms.global.send(Rooms.global.formatListText);
-
-				return this.sendReply('Formats have been hotpatched.');
-			} catch (e) {
-				return this.sendReply('Something failed while trying to hotpatch formats: \n' + e.stack);
-			}
-
-		} else if (target === 'learnsets') {
-			try {
-				// uncache the tools.js dependency tree
-				CommandParser.uncacheTree('./tools.js');
-				// reload tools.js
-				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
-
-				return this.sendReply('Learnsets have been hotpatched.');
-			} catch (e) {
-				return this.sendReply('Something failed while trying to hotpatch learnsets: \n' + e.stack);
-			}
-
-		}
-		this.sendReply('Your hot-patch command was unrecognized.');
-	},
 	version: function(target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('Server version: <b>'+CommandParser.package.version+'</b> <small>(<a href="http://pokemonshowdown.com/versions#' + CommandParser.serverVersion + '">' + CommandParser.serverVersion.substr(0,10) + '</a>)</small>');
