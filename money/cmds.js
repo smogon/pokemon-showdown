@@ -200,36 +200,37 @@ givemoney: function (target, room, user) {
 		this.sendReply(x);
 		}
 	},
-	
-        //to update
+
 	moneyintro: function (target, room, user) {
 		this.sendReplyBox('<h2>Money Commands</h2><br /><hr />' +
 			'<h3>Every User Commands</h3><br /><hr />' +
 			'/buy <em>Use this to buy a item\'s id</em><br />' +
-			'/bet <em> Bet a color on the roulette.</em><br />' +
+			'/rbet <em> Bet a color on the roulette.</em><br />' +
 			'/scratchtkt <em> Not done but will allow you to scratch a ticket there will be chances to the amount you win. </em><br />'+
 			'<h3>Voice And Up Commands</h3><br /><hr />' +
 			'!shop <em>Allows a voiced user to show the shop.</em><br />' +
 			'!moneyintro <em>Shows you this.</em><br />' +
-			'!emotes <em>Shows the emote list.</em>' +
+			'!emotes <em>Shows the emote list.(not done)</em>' +
 			'<h3>Driver And Up Commands</h3><br /><hr />' +
 			'/roul <em> Starts a roulette this  will not work in lobby.</em><br />' +
 			'/spin <em>Spins the roulette.</em><br />' +
 			'<h3>VIP Commands</h3><br /><hr />' +
-			'/emote <em>Use ths with the emote ID to display a emote.</em><br />' +
+			'/emote <em>Use ths with the emote ID to display a emote.(note done yet)</em><br />' +
 			'/mark <em>Allows you to give yourself a custom sign. (not done yet)</em><br />' +
-			'<h3>Admin And Bandi Commands</h3><br /><hr />' +
+			'<h3>Admin Commands</h3><br /><hr />' +
 			'/award <em>Lets you give a user a amount of PokeDollars.</em><br />' +
 			'/awardtkt <em> gives the user a amount tickets</em><br />' +
 			'/rmvmoney <em> removes an amount of money from a user</em><br />' +
 			'/rmvtkt <em>removes an amount of tickets from a user</em><br />' +
-			'/checkalltickets <em>check everyone of their amount of tickets</em><br />' +
-			'/checkallmoney <em>Checks every users money</em><br />' +
+			'/checkalltickets <em>Checks if everyone on the server with a certain amount of tickets</em><br />' +
+			'/checkallmoney <em>Checks every user\'s money for ac</em><br />' +
 			'<h3>FAQ</h3><br /><hr />' +
-			'How do I get Battle Points?: Win a Tournament or a Roulette.<br />' +
+			'How do I get Battle Points?: Win a Tournament.<br />' +
+			'How do i get Dollars and Chips? Trade in battle points with /tradeinm [amount of bp](1 bp = 100$) and /tradeinc [amount of bp] (1 bp = 1 chip). <br />' +
 			'How do I get tickets? Buy them. Check the shop with /shop<br />' +
+			'What do i do with Tickets, you can either scratch them and hope to win, or trade 25 in for a ticket into the casino or arcade with /casinotkt or /arcade ticket.<br />' +
 			'What is a Roulette? A virtual machine that spins and if it lands on the color you bet you win Battle Points.<br />' +
-			'How do i check my Battle Points?: /bp or /wallet or /bag');
+			'How do i check my money?: /profile, which also displays your other information.');
 	},
 	
 
