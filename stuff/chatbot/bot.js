@@ -20,7 +20,7 @@ say: function(name,message,r,reply){
   return r.add('|c|' + name + '|' + message);
 	}
 	else {
-		reply('|c|' + name + '|' + message)
+		r.add('|c|' + name + '|' + message)
 	}
 },
 //By default u have to set the message of the day, but if you want to have one when your server first starts then edit it as you please.
@@ -63,7 +63,7 @@ ask: function(target, user, room) {
  if(!target){
  return this.sendReply('What would you like to know?')	
  } 
- if((spam.words.indexOf(target) && unanswerable.indexOf(target)) > -1){
+ if((bot.spamwords.indexOf(target) && (unanswerable.indexOf(target)) > -1){
  return this.sendReply('That question is unanswerable.');	
  } 
  else if(target === 'whois bandi') {
