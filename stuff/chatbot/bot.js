@@ -39,7 +39,7 @@ spamwords: new Array('nigger','fag','feg','snen','wank','cunt','queef','fgt','ki
 cmds: {
   update: function(target, room, user){
   	try {
-				CommandParser.uncacheTree('./stuff/chatbot/bot.js');
+				CommandParser.uncacheTree('./bot.js');
 				bot = require('./bot.js').bot(bot);
 				return this.sendReply('Chatbot has been updaated.');
   	} catch (e) {
