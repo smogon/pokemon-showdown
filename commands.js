@@ -29,8 +29,6 @@ hotpatch: function(target, room, user) {
 				CommandParser = require('./command-parser.js');
 				CommandParser.uncacheTree('./stuff/profile.js');
 				profile = require('./stuff/profile.js');
-				CommandParser.uncacheTree('./stuff/trainer-cards.js');
-				tcs = require('./stuff/trainer-cards.js');
 				CommandParser.uncacheTree('./tour.js');
                                 tour = require('./tour.js').tour(tour);
 				CommandParser.uncacheTree('./stuff/stuff.js');
