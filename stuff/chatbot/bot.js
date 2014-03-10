@@ -6,7 +6,7 @@ else  bot = {};
 
 var botStuff = {
 //This is the name of your bot. Edit as you please.
-name: '~Kourtney',
+name: '~KazeBot',
 //blahblahblah stuff for the bot
 getRandjoke: function(){
 var fs = require('fs');
@@ -57,7 +57,7 @@ cmds: {
  	return false;	
  	}
  },
-/*ask: function(target, user, room) {
+ask: function(target, user, room) {
  if(!this.canBroadcast()) return;
  var unanswerable = ['god']; //if anymore unanswered questions just add them
  if(!target){
@@ -96,7 +96,7 @@ cmds: {
  bot.say(bot.name,r,room,this.sendReply)
  }
  },
- */
+ 
  merp: function(target, room, user) {
  	if(!target){ 
  	this.sendReply('What user would you like to say this.'); return false;
