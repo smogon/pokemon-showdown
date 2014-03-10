@@ -252,36 +252,42 @@ givemoney: function (target, room, user) {
 			'</tr>' +
 			'<tr>' +
 			'<td>Ticket Reel</td>' +
-			'<td>500 Dollars</td>' +
+			'<td>1000 Dollars</td>' +
 			'<td>A reel of Tickets [10 tkts]</td>' +
 			'<td>reel</td>' +
 			'</tr>' +
-			'<td>Ticket Box</td>' +
+			'<td>Random Message</td>' +
 			'<td>2500 Dollars</td>' +
 			'<td>A box of Tickets [50 tkts]</td>' +
-			'<td>box</td>' +
+			'<td>msg</td>' +
 			'</tr>' +
 			'<tr>' +
 			'<td>Ticket Chest</td>' +
-			'<td>5000 Dollars</td>' +
+			'<td>10000 Dollars</td>' +
 			'<td>A chest of Tickets [100 tkts]</td>' +
 			'<td>chest</td>' +
 			'</tr>' +
 			'<tr>' +
-			'<td>Ticket Truck</td>' +
+			'<td>Trainer Card</td>' +
 			'<td>50,000 Dollars</td>' +
-			'<td>A TRUCKLOAD OF TICKETS!  [1000 tkts]</td>' +
-			'<td>truck</td>' +
+			'<td>A custom color that will appear on our client</td>' +
+			'<td>color</td>' +
+			'</tr>' +'
+			'<tr>' +
+			'<td>Custom Color</td>' +
+			'<td>50,000 Dollars</td>' +
+			'<td>A custom color that will appear on our client</td>' +
+			'<td>color</td>' +
 			'</tr>' +
 			'<tr>' +
 			'<td>Avatar</td>' +
-			'<td>5 Coins</td>' +
+			'<td>500 Coins</td>' +
 			'<td>A custom avatar sized 80px x 80px</td>' +
 			'<td>ava</td>' +
 			'</tr>' +
 			'<tr>' +
 			'<td>Voice</td>' +
-			'<td>50 Coins</td>' +
+			'<td>5000 Coins</td>' +
 			'<td>A promotion to Voice. For more details, use /groups.(this can be taken away)</td>' +
 			'<td>voice</td>' +
 			'</tr>'
