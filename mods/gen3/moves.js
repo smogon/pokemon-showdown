@@ -61,7 +61,7 @@ exports.BattleMovedex = {
 	beatup: {
 		inherit: true,
 		basePower: 10,
-		basePowerCallback: null
+		basePowerCallback: undefined
 	},
 	bide: {
 		inherit: true,
@@ -74,7 +74,7 @@ exports.BattleMovedex = {
 	},
 	blizzard: {
 		inherit: true,
-		onModifyMove: null
+		onModifyMove: function() { }
 	},
 	bonerush: {
 		inherit: true,
@@ -110,7 +110,6 @@ exports.BattleMovedex = {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower')) {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
-			this.add('-fail', pokemon);
 			return false;
 		}
 	},
@@ -363,7 +362,7 @@ exports.BattleMovedex = {
 	},
 	growth: {
 		inherit: true,
-		onModifyMove: null,
+		onModifyMove: function() { },
 		boosts: {
 			spa: 1
 		}
@@ -375,6 +374,7 @@ exports.BattleMovedex = {
 		basePowerCallback: function(pokemon) {
 			return pokemon.hpPower || 70;
 		},
+		category: "Physical",
 		id: "hiddenpower",
 		isViable: true,
 		name: "Hidden Power",
@@ -382,6 +382,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		onModifyMove: function(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
+			var specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
+			move.category = specialTypes[move.type]? 'Special' : 'Physical';
 		},
 		secondary: false,
 		target: "normal",

@@ -260,6 +260,16 @@ exports.BattleMovedex = {
 		name: "Ally Switch",
 		pp: 15,
 		priority: 1,
+		onTryHit: function(source) {
+			if (source.side.active.length === 1) return false;
+			if (source.side.active.length === 3 && source.position === 1) return false;
+		},
+		onHit: function(pokemon) {
+			var newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
+			if (!pokemon.side.active[newPosition]) return false;
+			if (pokemon.side.active[newPosition].fainted) return false;
+			this.swapPosition(pokemon, newPosition, 'move: Ally Switch');
+		},
 		secondary: false,
 		target: "self",
 		type: "Psychic"
@@ -804,7 +814,7 @@ exports.BattleMovedex = {
 					if (this.effectData.index >= 6) break;
 				} while (!pokemon.side.pokemon[this.effectData.index] ||
 						pokemon.side.pokemon[this.effectData.index].fainted ||
-						pokemon.side.pokemon[this.effectData.index].status)
+						pokemon.side.pokemon[this.effectData.index].status);
 			}
 		},
 		secondary: false,
@@ -823,7 +833,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onTryHit: function(target, pokemon) {
-			if (!pokemon.lastItem || !this.getItem(pokemon.lastItem).isBerry) {
+			if (!pokemon.ateBerry) {
 				return false;
 			}
 		},
@@ -906,6 +916,7 @@ exports.BattleMovedex = {
 				this.effectData.totalDamage = 0;
 				this.add('-start', pokemon, 'Bide');
 			},
+			onDamagePriority: -101,
 			onDamage: function(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move') return;
 				if (!source || source.side === target.side) return;
@@ -1360,6 +1371,7 @@ exports.BattleMovedex = {
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', '[of] '+source);
 				this.singleEvent('Eat', item, null, source, null, null);
+				source.ateBerry = true;
 			}
 		},
 		secondary: false,
@@ -1504,8 +1516,8 @@ exports.BattleMovedex = {
 			else if (this.isTerrain('grassyterrain')) newType = 'Grass';
 			else if (this.isTerrain('mistyterrain')) newType = 'Fairy';
 
+			if (!target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
-			target.types = [newType];
 		},
 		secondary: false,
 		target: "self",
@@ -1887,8 +1899,9 @@ exports.BattleMovedex = {
 				return false;
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
+
+			if (!target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
-			target.types = [type];
 		},
 		secondary: false,
 		target: "self",
@@ -1923,8 +1936,9 @@ exports.BattleMovedex = {
 				return false;
 			}
 			var type = possibleTypes[this.random(possibleTypes.length)];
+
+			if (!source.setType(type)) return false;
 			this.add('-start', source, 'typechange', type);
-			source.types = [type];
 		},
 		secondary: false,
 		target: "normal",
@@ -2092,13 +2106,13 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Protects the user and allies from status moves. Priority +4.",
-		shortDesc: "Prevents status moves from affecting the user.",
+		desc: "Protects the user and allies from status moves. Priority +3.",
+		shortDesc: "Protects allies from status moves this turn.",
 		id: "craftyshield",
 		isViable: true,
 		name: "Crafty Shield",
 		pp: 10,
-		priority: 4,
+		priority: 3,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'craftyshield',
 		onTryHit: function(target, source, move) {
@@ -2402,6 +2416,7 @@ exports.BattleMovedex = {
 				}
 			}
 			for (var i in sideConditions) {
+				if (i === 'reflect' || i === 'lightscreen') continue;
 				if (source.side.removeSideCondition(i)) {
 					this.add('-sideend', source.side, this.getEffect(i).name, '[from] move: Defog', '[of] '+source);
 				}
@@ -2430,7 +2445,7 @@ exports.BattleMovedex = {
 			},
 			onFaint: function(target, source, effect) {
 				if (!source || !effect) return;
-				if (effect.effectType === 'Move' && target.lastMove === 'destinybond') {
+				if (effect.effectType === 'Move' && !effect.isFutureMove && target.lastMove === 'destinybond') {
 					this.add('-activate', target, 'Destiny Bond');
 					source.faint();
 				}
@@ -2468,6 +2483,29 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "self",
 		type: "Fighting"
+	},
+	"diamondstorm": {
+		num: -1,
+		gen: 6,
+		accuracy: 95,
+		basePower: 100,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target with a 50% chance to raise the user's Defense by 1 stage.",
+		shortDesc: "50% chance to boost the user's Def by 1.",
+		id: "diamondstorm",
+		name: "Diamond Storm",
+		pp: 5,
+		priority: 0,
+		secondary: {
+			chance: 50,
+			self: {
+				boosts: {
+					def: 1
+				}
+			}
+		},
+		target: "normal",
+		type: "Rock"
 	},
 	"dig": {
 		num: 91,
@@ -2693,6 +2731,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isNotProtectable: true,
+		isFutureMove: true,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
@@ -3198,7 +3237,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For five turns, Pokemon on the ground cannot fall asleep, and will be woken up if already sleeping. Their Electric-type moves are powered up by 50%.",
+		desc: "For five turns, Pokemon on the ground cannot fall asleep. Their Electric-type moves are powered up by 50%.",
 		shortDesc: "If on ground, can't sleep + Electric moves stronger.",
 		id: "electricterrain",
 		name: "Electric Terrain",
@@ -3208,19 +3247,13 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onSetStatus: function(status, target, source, effect) {
-				if (status.id === 'slp' && !target.runImmunity('Ground')) {
+				if (status.id === 'slp' && target.runImmunity('Ground')) {
 					this.debug('Interrupting sleep from Electric Terrain');
 					return false;
 				}
 			},
-			onUpdate: function(pokemon) {
-				if (pokemon.status === 'slp') {
-					this.debug('Waking up from Electric Terrain');
-					pokemon.cureStatus();
-				}
-			},
 			onBasePower: function(basePower, attacker, defender, move) {
-				if (move.type === 'Electric' && !attacker.runImmunity('Ground')) {
+				if (move.type === 'Electric' && attacker.runImmunity('Ground')) {
 					this.debug('electric terrain boost');
 					return this.chainModify(1.5);
 				}
@@ -3658,7 +3691,16 @@ exports.BattleMovedex = {
 		name: "Fairy Lock",
 		pp: 10,
 		priority: 0,
-		//todo
+		pseudoWeather: 'fairylock',
+		effect: {
+			duration: 2,
+			onStart: function(target) {
+				this.add('-activate', target, 'move: Fairy Lock');
+			},
+			onModifyPokemon: function(pokemon) {
+				pokemon.tryTrap();
+			}
+		},
 		secondary: false,
 		target: "all",
 		type: "Fairy"
@@ -4258,6 +4300,7 @@ exports.BattleMovedex = {
 				if (item.isBerry && item.id !== 'enigmaberry') {
 					move.onHit = function(foe) {
 						this.singleEvent('Eat', item, null, foe, null, null);
+						foe.ateBerry = true;
 					};
 				} else if (item.fling.effect) {
 					move.onHit = item.fling.effect;
@@ -4540,9 +4583,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
-			if (target.hasType("Grass")) return false;
-			target.types = target.types.slice(0,2).concat(["Grass"]);
-			this.add("-start", target, "typechange", target.types.join("/"), "[from] move: Forest's Curse");
+			if (target.hasType('Grass')) return false;
+			if (!target.addType('Grass')) return false;
+			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Forest\'s Curse');
 		},
 		secondary: false,
 		target: "normal",
@@ -4580,15 +4623,14 @@ exports.BattleMovedex = {
 		getEffectiveness: function(source, target, pokemon) {
 			var type = source.type || source;
 			var totalTypeMod = 0;
-			var tarType = '';
-			for (var i=0; i<target.types.length; i++) {
-				tarType = target.types[i];
-				if (!this.data.TypeChart[tarType]) continue;
-				if (tarType === 'Water') {
+			var types = target.getTypes && target.getTypes() || target.types;
+			for (var i=0; i<types.length; i++) {
+				if (!this.data.TypeChart[types[i]]) continue;
+				if (types[i] === 'Water') {
 					totalTypeMod++;
 					continue;
 				}
-				var typeMod = this.data.TypeChart[tarType].damageTaken[type];
+				var typeMod = this.data.TypeChart[types[i]].damageTaken[type];
 				if (typeMod === 1) { // super-effective
 					totalTypeMod++;
 				}
@@ -4832,6 +4874,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isNotProtectable: true,
 		affectedByImmunities: false,
+		isFutureMove: true,
 		onTryHit: function(target, source) {
 			source.side.addSideCondition('futuremove');
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
@@ -4879,6 +4922,7 @@ exports.BattleMovedex = {
 			onStart: function(pokemon) {
 				this.add('-endability', pokemon, pokemon.ability);
 			},
+			onModifyPokemonPriority: 2,
 			onModifyPokemon: function(pokemon) {
 				pokemon.ignore['Ability'] = true;
 			}
@@ -5152,7 +5196,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onBasePower: function(basePower, attacker, defender, move) {
-				if (move.type === 'Grass' && !attacker.runImmunity('Ground')) {
+				if (move.type === 'Grass' && attacker.runImmunity('Ground')) {
 					this.debug('grassy terrain boost');
 					return this.chainModify(1.5);
 				}
@@ -7004,7 +7048,7 @@ exports.BattleMovedex = {
 					target.removeVolatile('kingsshield');
 					return;
 				}
-				if (move && (move.category === 'Status' || move.isNotProtectable || move.id === 'suckerpunch')) return;
+				if (move && (move.category === 'Status' || move.isNotProtectable)) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -7039,7 +7083,9 @@ exports.BattleMovedex = {
 		onBasePowerPriority: 4,
 		onBasePower: function(basePower, pokemon, target) {
 			var item = target.getItem();
-			if (item.id && !item.megaStone) {
+			var noKnockOff = ((item.onPlate && target.baseTemplate.baseSpecies === 'Arceus') || 
+				(item.onDrive && target.baseTemplate.baseSpecies === 'Genesect') || (item.onTakeItem && item.onTakeItem(item, target) === false));
+			if (item.id && !noKnockOff) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -7277,6 +7323,24 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
+	"lightofruin": {
+		num: -6,
+		gen: 6,
+		accuracy: 90,
+		basePower: 140,
+		category: "Special",
+		desc: "Deals damage to one adjacent target. If the target lost HP, the user takes recoil damage equal to 1/2 that HP, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 1/2 recoil.",
+		id: "lightofruin",
+		isViable: true,
+		name: "Light of Ruin",
+		pp: 5,
+		priority: 0,
+		recoil: [1,2],
+		secondary: false,
+		target: "normal",
+		type: "Fairy"
+	},
 	"lightscreen": {
 		num: 113,
 		accuracy: true,
@@ -7301,8 +7365,8 @@ exports.BattleMovedex = {
 			},
 			onFoeModifyDamage: function(damage, source, target, move) {
 				if (this.getCategory(move) === 'Special' && target.side === this.effectData.target) {
-					if (!move.crit && source.ability !== 'infiltrator') {
-						this.debug('Light Screen weaken')
+					if (!move.crit && !move.ignoreScreens) {
+						this.debug('Light Screen weaken');
 						if (source.side.active.length > 1) return this.chainModify(0.66);
 						return this.chainModify(0.5);
 					}
@@ -8370,7 +8434,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For five turns, Grounded Pokemon cannot have major status problems or confusion inflicted on them by other Pokemon. Their Dragon-type moves are weakened by 50%.",
+		desc: "For five turns, Grounded Pokemon cannot have major status problem inflicted on them by other Pokemon. Dragon-type moves used against them are weakened by 50%.",
 		shortDesc: "Prevents status and weakens Dragon if grounded.",
 		id: "mistyterrain",
 		name: "Misty Terrain",
@@ -8386,13 +8450,6 @@ exports.BattleMovedex = {
 					return false;
 				}
 			},
-			onTryConfusion: function(target, source, effect) {
-				if (!target.runImmunity('Ground')) return;
-				if (source && source !== target) {
-					this.debug('misty terrain preventing confusion');
-					return false;
-				}
-			},
 			onTryHit: function(target, source, move) {
 				if (!target.runImmunity('Ground')) return;
 				if (move && move.id === 'yawn') {
@@ -8401,7 +8458,7 @@ exports.BattleMovedex = {
 				}
 			},
 			onBasePower: function(basePower, attacker, defender, move) {
-				if (move.type === 'Dragon' && !attacker.runImmunity('Ground')) {
+				if (move.type === 'Dragon' && defender.runImmunity('Ground')) {
 					this.debug('misty terrain weaken');
 					return this.chainModify(0.5);
 				}
@@ -9285,6 +9342,7 @@ exports.BattleMovedex = {
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Pluck', '[of] '+source);
 				this.singleEvent('Eat', item, null, source, null, null);
+				source.ateBerry = true;
 			}
 		},
 		secondary: false,
@@ -9961,7 +10019,7 @@ exports.BattleMovedex = {
 				this.cancelMove(target);
 				for (var i=this.queue.length-1; i>=0; i--) {
 					if (this.queue[i].choice === 'residual') {
-						this.queue.splice(i,0,decision)
+						this.queue.splice(i,0,decision);
 						break;
 					}
 				}
@@ -10305,7 +10363,7 @@ exports.BattleMovedex = {
 			},
 			onFoeModifyDamage: function(damage, source, target, move) {
 				if (this.getCategory(move) === 'Physical' && target.side === this.effectData.target) {
-					if (!move.crit && source.ability !== 'infiltrator') {
+					if (!move.crit && !move.ignoreScreens) {
 						this.debug('Reflect weaken');
 						if (source.side.active.length > 1) return this.chainModify(0.66);
 						return this.chainModify(0.5);
@@ -10336,8 +10394,17 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function(target, source) {
-			this.add('-start', source, 'typechange', target.types.join('/'), '[from] move: Reflect Type', '[of] '+target);
-			source.types = target.types;
+			if (source.num === 493) return false;
+			this.add('-start', source, 'typechange', target.getTypes(true).join('/'), '[from] move: Reflect Type', '[of] '+target);
+			source.typesData = [];
+			for (var i=0, l=target.typesData.length; i<l; i++) {
+				if (target.typesData[i].suppressed) continue;
+				source.typesData.push({
+					type: target.typesData[i].type,
+					suppressed: false,
+					isAdded: target.typesData[i].isAdded
+				});
+			}
 		},
 		secondary: false,
 		target: "normal",
@@ -10417,7 +10484,7 @@ exports.BattleMovedex = {
 			if (!target.setStatus('slp')) return false;
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
-			this.heal(target.maxhp) //Aeshetic only as the healing happens after you fall asleep in-game
+			this.heal(target.maxhp); //Aeshetic only as the healing happens after you fall asleep in-game
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
 		secondary: false,
@@ -10828,32 +10895,27 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function(pokemon) {
-				// This is not how Roost "should" be implemented, but is rather
-				// a simplification.
-
-				// This implementation has the advantage of not requiring a separate
-				// event just for Roost, and the only difference would come up in
-				// Doubles Hackmons. If we ever introduce Doubles Hackmons and
-				// Color Change Roost becomes popular; I might need to revisit this
-				// implementation. :P
-
-				if (pokemon.hasType('Flying')) {
-					// don't just delete the type; since
-					// the types array may be a pointer to the
-					// types array in the Pokedex.
-					this.effectData.oldTypes = pokemon.types;
-					if (pokemon.types[0] === 'Flying') {
-						pokemon.types = [pokemon.types[1] || 'Normal'];
-					} else {
-						pokemon.types = [pokemon.types[0]];
+				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+					if (pokemon.typesData[i].type === 'Flying') {
+						pokemon.typesData[i].suppressed = true;
+						break;
 					}
-					this.effectData.roostTypeString = pokemon.types.join(',');
 				}
-				//pokemon.negateImmunity['Ground'] = 1;
+			},
+			onModifyPokemon: function(pokemon) {
+				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+					if (pokemon.typesData[i].type === 'Flying') {
+						pokemon.typesData[i].suppressed = true;
+						break;
+					}
+				}
 			},
 			onEnd: function(pokemon) {
-				if (this.effectData.roostTypeString === pokemon.types.join(',')) {
-					pokemon.types = this.effectData.oldTypes;
+				for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+					if (pokemon.typesData[i].type === 'Flying') {
+						pokemon.typesData[i].suppressed = false;
+						break;
+					}
 				}
 			}
 		},
@@ -10982,13 +11044,13 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onSetStatus: function(status, target, source, effect) {
-				if (source && source !== target && source.ability !== 'infiltrator' || (effect && effect.id === 'toxicspikes')) {
+				if (effect && (effect.id === 'toxicspikes' || source && source !== target && !effect.ignoreScreens)) {
 					this.debug('interrupting setStatus');
 					return false;
 				}
 			},
 			onTryConfusion: function(target, source, effect) {
-				if (source && source !== target && source.ability !== 'infiltrator') {
+				if (source && source !== target && effect && !effect.ignoreScreens) {
 					this.debug('interrupting addVolatile');
 					return false;
 				}
@@ -11681,6 +11743,7 @@ exports.BattleMovedex = {
 		name: "Sky Attack",
 		pp: 5,
 		priority: 0,
+		critRatio: 2,
 		isTwoTurnMove: true,
 		onTry: function(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
@@ -12191,7 +12254,7 @@ exports.BattleMovedex = {
 					target.removeVolatile('spikyshield');
 					return;
 				}
-				if (move && move.target === 'self') return;
+				if (move && (move.target === 'self' || move.id === 'suckerpunch')) return;
 				this.add('-activate', target, 'move: Protect');
 				if (move.isContact) {
 					this.damage(source.maxhp/8, source, target);
@@ -12216,8 +12279,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target) {
+			if (!target.setType('Water')) return false;
 			this.add('-start', target, 'typechange', 'Water');
-			target.types = ['Water'];
 		},
 		secondary: false,
 		target: "normal",
@@ -12873,7 +12936,7 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.notSubBlocked || (source.ability === 'infiltrator' || move.isSoundBased) && this.gen >= 6) {
+				if (move.notSubBlocked || move.isSoundBased && this.gen >= 6) {
 					return;
 				}
 				if (move.category === 'Status') {
@@ -12932,6 +12995,7 @@ exports.BattleMovedex = {
 		name: "Sucker Punch",
 		pp: 5,
 		priority: 1,
+		isNotProtectable: true,
 		isContact: true,
 		onTryHit: function(target) {
 			var decision = this.willMove(target);
@@ -13194,7 +13258,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onTryHit: function(target, source) {
-			return target.hasType(source.types);
+			return target.hasType(source.getTypes());
 		},
 		secondary: false,
 		target: "allAdjacent",
@@ -13891,8 +13955,8 @@ exports.BattleMovedex = {
 		isBounceable: true,
 		onHit: function(target) {
 			if (target.hasType('Ghost')) return false;
-			target.types = target.types.slice(0,2).concat(['Ghost']);
-			this.add('-start', target, 'typechange', target.types.join('/'), '[from] move: Trick-or-Treat');
+			if (!target.addType('Ghost')) return false;
+			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Trick-or-Treat');
 		},
 		secondary: false,
 		target: "normal",
@@ -13931,7 +13995,7 @@ exports.BattleMovedex = {
 					// If stat is speed and does not overflow (Trick Room Glitch) return negative speed.
 					if (statName === 'spe' && stat <= 1809) return -stat;
 					return stat;
-				}
+				};
 			},
 			onResidualOrder: 23,
 			onEnd: function() {

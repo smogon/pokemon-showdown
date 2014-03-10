@@ -85,7 +85,7 @@ module.exports = (function() {
 			res.on('end', function() {
 				var data = null;
 				try {
-					var data = parseJSON(buffer);
+					data = parseJSON(buffer);
 				} catch (e) {}
 				callback(data, res.statusCode);
 				this.openRequests--;
@@ -184,7 +184,7 @@ module.exports = (function() {
 				//console.log('RESPONSE: '+buffer);
 				var data = null;
 				try {
-					var data = parseJSON(buffer);
+					data = parseJSON(buffer);
 				} catch (e) {}
 				for (var i=0,len=requestCallbacks.length; i<len; i++) {
 					if (data) {

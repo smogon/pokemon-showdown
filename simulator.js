@@ -120,14 +120,14 @@ var Simulator = (function(){
 	Simulator.prototype.sendFor = function(user, action) {
 		var player = this.playerTable[toUserid(user)];
 		if (!player) {
-			console.log('SENDFOR FAILED: Player doesn\'t exist: '+user.name)
+			console.log('SENDFOR FAILED: Player doesn\'t exist: '+user.name);
 			return;
 		}
 
 		this.send.apply(this, [action, player].concat(slice.call(arguments, 2)));
 	};
 	Simulator.prototype.sendForOther = function(user, action) {
-		var opposite = {'p1':'p2', 'p2':'p1'}
+		var opposite = {'p1':'p2', 'p2':'p1'};
 		var player = this.playerTable[toUserid(user)];
 		if (!player) return;
 
@@ -137,6 +137,7 @@ var Simulator = (function(){
 	Simulator.prototype.rqid = '';
 	Simulator.prototype.inactiveQueued = false;
 	Simulator.prototype.receive = function(lines) {
+		var player;
 		ResourceMonitor.activeIp = this.activeIp;
 		switch (lines[1]) {
 		case 'update':
@@ -159,14 +160,14 @@ var Simulator = (function(){
 			break;
 
 		case 'callback':
-			var player = this.getPlayer(lines[2]);
+			player = this.getPlayer(lines[2]);
 			if (player) {
 				player.sendTo(this.id, '|callback|' + lines[3]);
 			}
 			break;
 
 		case 'request':
-			var player = this.getPlayer(lines[2]);
+			player = this.getPlayer(lines[2]);
 			var rqid = lines[3];
 			if (player) {
 				this.requests[player.userid] = lines[4];

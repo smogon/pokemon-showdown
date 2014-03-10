@@ -65,7 +65,9 @@ if (!process.send) {
 		ValidatorProcess.send = function(format, team, callback) {
 			var process = this.acquire();
 			pendingValidations[validationCount] = callback;
-			process.process.send(''+validationCount+'|'+format+'|'+team);
+			try {
+				process.process.send(''+validationCount+'|'+format+'|'+team);
+			} catch (e) {}
 			++validationCount;
 		};
 		return ValidatorProcess;
@@ -147,7 +149,7 @@ if (!process.send) {
 	global.string = function(str) {
 		if (typeof str === 'string' || typeof str === 'number') return ''+str;
 		return '';
-	}
+	};
 
 	global.Tools = require('./tools.js');
 
@@ -166,9 +168,9 @@ if (!process.send) {
 		var format = message.substr(pipeIndex + 1, pipeIndex2 - pipeIndex - 1);
 
 		if (!validators[format]) validators[format] = new Validator(format);
-		var parsedTeam = {};
+		var parsedTeam = [];
 		try {
-			var parsedTeam = JSON.parse(message.substr(pipeIndex2 + 1));
+			parsedTeam = Tools.fastUnpackTeam(message.substr(pipeIndex2 + 1));
 		} catch (e) {
 			respond(id, false, "Your team was invalid and could not be parsed.");
 			return;
@@ -177,7 +179,11 @@ if (!process.send) {
 		if (problems && problems.length) {
 			respond(id, false, problems.join('\n'));
 		} else {
-			respond(id, true, JSON.stringify(parsedTeam));
+			var packedTeam = Tools.packTeam(parsedTeam);
+			if (packedTeam === message.substr(pipeIndex2 + 1)) packedTeam = '';
+			// console.log('FROM: '+message.substr(pipeIndex2 + 1));
+			// console.log('TO: '+packedTeam);
+			respond(id, true, packedTeam);
 		}
 	});
 }
@@ -219,22 +225,16 @@ var Validator = (function() {
 		}
 
 		for (var i=0; i<format.teamBanTable.length; i++) {
-			var bannedCombo = '';
+			var bannedCombo = true;
 			for (var j=0; j<format.teamBanTable[i].length; j++) {
 				if (!teamHas[format.teamBanTable[i][j]]) {
 					bannedCombo = false;
 					break;
 				}
-
-				if (j == 0) {
-					bannedCombo += format.teamBanTable[i][j];
-				} else {
-					bannedCombo += ' and '+format.teamBanTable[i][j];
-				}
 			}
 			if (bannedCombo) {
 				var clause = format.name ? " by "+format.name : '';
-				problems.push("Your team has the combination of "+bannedCombo+", which is banned"+clause+".");
+				problems.push("Your team has the combination of "+format.teamBanTable[i].join('+')+", which is banned"+clause+".");
 			}
 		}
 
@@ -501,7 +501,7 @@ var Validator = (function() {
 			}
 			if (!lsetData.sources && lsetData.sourcesBefore >= 3 && (isHidden || tools.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
 				var oldAbilities = tools.mod('gen'+lsetData.sourcesBefore).getTemplate(set.species).abilities;
-				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && ability.name !== oldAbilities['H']) {
+				if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
 					problems.push(name+" has moves incompatible with its ability.");
 				}
 			}
@@ -517,22 +517,16 @@ var Validator = (function() {
 			}
 		}
 		for (var i=0; i<format.setBanTable.length; i++) {
-			var bannedCombo = '';
+			var bannedCombo = true;
 			for (var j=0; j<format.setBanTable[i].length; j++) {
 				if (!setHas[format.setBanTable[i][j]]) {
 					bannedCombo = false;
 					break;
 				}
-
-				if (j == 0) {
-					bannedCombo += format.setBanTable[i][j];
-				} else {
-					bannedCombo += ' and '+format.setBanTable[i][j];
-				}
 			}
 			if (bannedCombo) {
 				clause = format.name ? " by "+format.name : '';
-				problems.push(name+" has the combination of "+bannedCombo+", which is banned"+clause+".");
+				problems.push(name+" has the combination of "+format.setBanTable[i].join('+')+", which is banned"+clause+".");
 			}
 		}
 
@@ -555,6 +549,11 @@ var Validator = (function() {
 		var format = (lsetData.format || (lsetData.format={}));
 		var alreadyChecked = {};
 		var level = set.level || 100;
+		if (format.id === 'alphabetcup') var alphabetCupLetter = template.speciesid.charAt(0);
+
+		var isHidden = false;
+		if (set.ability && tools.getAbility(set.ability).name === template.abilities['H']) isHidden = true;
+		var incompatibleHidden = false;
 
 		var limit1 = true;
 		var sketch = false;
@@ -585,6 +584,8 @@ var Validator = (function() {
 			alreadyChecked[template.speciesid] = true;
 			// Stabmons hack to avoid copying all of validateSet to formats.
 			if (format.id === 'stabmons' && template.types.indexOf(tools.getMove(move).type) > -1) return false;
+			// Alphabet Cup hack to do the same
+			if (alphabetCupLetter && alphabetCupLetter === Tools.getMove(move).id.slice(0,1) && Tools.getMove(move).id !== 'sketch') return false;
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					sometimesPossible = true;
@@ -601,6 +602,11 @@ var Validator = (function() {
 						var learned = lset[i];
 						if (noPastGen && learned.charAt(0) !== '6') continue;
 						if (parseInt(learned.charAt(0),10) > tools.gen) continue;
+						if (isHidden && !tools.mod('gen'+learned.charAt(0)).getTemplate(template.species).abilities['H']) {
+							// check if the Pokemon's hidden ability was available
+							incompatibleHidden = true;
+							continue;
+						}
 						if (!template.isNonstandard) {
 							// HMs can't be transferred
 							if (tools.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
@@ -726,16 +732,18 @@ var Validator = (function() {
 		// Now that we have our list of possible sources, intersect it with the current list
 		if (!sourcesBefore && !sources.length) {
 			if (noPastGen && sometimesPossible) return {type:'pokebank'};
+			if (incompatibleHidden) return {type:'incompatible'};
 			return true;
 		}
 		if (!sources.length) sources = null;
 		if (sourcesBefore || lsetData.sourcesBefore) {
 			// having sourcesBefore is the equivalent of having everything before that gen
 			// in sources, so we fill the other array in preparation for intersection
+			var learned;
 			if (sourcesBefore && lsetData.sources) {
 				if (!sources) sources = [];
 				for (var i=0, len=lsetData.sources.length; i<len; i++) {
-					var learned = lsetData.sources[i];
+					learned = lsetData.sources[i];
 					if (parseInt(learned.substr(0,1),10) <= sourcesBefore) {
 						sources.push(learned);
 					}
@@ -745,7 +753,7 @@ var Validator = (function() {
 			if (lsetData.sourcesBefore && sources) {
 				if (!lsetData.sources) lsetData.sources = [];
 				for (var i=0, len=sources.length; i<len; i++) {
-					var learned = sources[i];
+					learned = sources[i];
 					if (parseInt(learned.substr(0,1),10) <= lsetData.sourcesBefore) {
 						lsetData.sources.push(learned);
 					}

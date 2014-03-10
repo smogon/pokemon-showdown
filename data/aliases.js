@@ -19,6 +19,8 @@ exports.BattleAliases = {
 	"megaheracross": "Heracross-Mega",
 	"megahoundoom": "Houndoom-Mega",
 	"megakangaskhan": "Kangaskhan-Mega",
+	"megalatias": "Latias-Mega",
+	"megalatios": "Latios-Mega",
 	"megalucario": "Lucario-Mega",
 	"megaluke": "Lucario-Mega",
 	"megamanectric": "Manectric-Mega",
@@ -76,6 +78,7 @@ exports.BattleAliases = {
 	"wormadamground": "Wormadam-Sandy",
 	"wormadams": "Wormadam-Trash",
 	"wormadamsteel": "Wormadam-Trash",
+	"floettee": "Floette-Eternal-Flower",
 
 	// base formes
 	"nidoranfemale": "Nidoran-F",

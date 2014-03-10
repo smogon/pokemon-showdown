@@ -27,14 +27,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
-	},
-	{
-		name: "OU (suspect test)",
-		section: "XY Singles",
-
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Genesect', 'Deoxys-Speed']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
 	},
 	{
 		name: "Ubers",
@@ -48,7 +41,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'OU', 'BL', 'Drizzle', 'Drought']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'Medichamite', 'Gardevoirite', 'OU', 'BL', 'Drizzle', 'Drought']
 	},
 	{
 		name: "LC",
@@ -56,7 +49,7 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela']
+		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Swirlix', 'Gligar']
 	},
 	{
 		name: "LC UU",
@@ -147,11 +140,45 @@ exports.Formats = [
 	// XY Doubles
 	///////////////////////////////////////////////////////////////////
 
+	
+	{
+		name: "Random Doubles Battle",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		team: 'randomDoubles',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "Smogon Doubles (suspect test)",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew',
+			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
+			'Lugia',
+			'Ho-Oh',
+			'Kyogre',
+			'Groudon',
+			'Rayquaza',
+			'Dialga',
+			'Palkia',
+			'Giratina', 'Giratina-Origin',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Reshiram',
+			'Zekrom',
+			'Kyurem-White',
+			'Xerneas',
+			'Yveltal'
+		]
+	},
 	{
 		name: "Smogon Doubles",
 		section: "XY Doubles",
 
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Dark Void', 'Soul Dew',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
@@ -203,12 +230,10 @@ exports.Formats = [
 			'Kyurem-White',
 			'Xerneas',
 			'Yveltal',
-			'Abomasnow',
 			'Aegislash',
 			'Alakazam',
 			'Amoonguss',
 			'Azumarill',
-			'Blaziken',
 			'Breloom',
 			'Chandelure',
 			'Charizard',
@@ -235,33 +260,30 @@ exports.Formats = [
 			'Kangaskhan',
 			'Klefki',
 			'Landorus-Therian',
-			'Latios',
 			'Lucario',
-			'Malamar',
 			'Mamoswine',
 			'Manectric',
 			'Mawile',
+			'Meowstic',
 			'Metagross',
 			'Ninetales',
 			'Politoed',
 			'Reuniclus',
 			'Rotom-Wash',
+			'Rhyperior',
 			'Sableye',
-			'Salamence',
 			'Scizor',
 			'Scrafty',
 			'Sylveon',
 			'Talonflame',
 			'Terrakion',
 			'Thundurus',
-			'Thundurus-Therian',
 			'Togekiss',
 			'Trevenant',
 			'Tyranitar',
 			'Venusaur',
 			'Volcarona',
-			'Whimsicott',
-			'Zapdos']
+			'Whimsicott']
 	},
 	{
 		name: "XY Battle Spot Doubles",
@@ -327,42 +349,40 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Seasonal] Fabulous February",
-		section: "OM of the Month",
-
-		mod: 'inverse',
-		gameType: 'doubles',
-		team: 'randomSeasonalFF',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
-		onBegin: function() {
-			this.add('-message', "新年快乐");
-		},
-		onModifyMove: function(move) {
-			if (move.id === 'explosion') move.name = 'Firecrackers';
-			else if (move.type === 'Fire') move.name = 'Fireworks';
-		}
-	},
-	{
-		name: "Middle Cup",
+		name: "Alphabet Cup",
 		section: "OM of the Month",
 
 		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
-		banlist: ['Illegal', 'Eviolite'],
-		maxLevel: 50,
-		defaultLevel: 50,
-		validateSet: function(set) {
-			var template = this.getTemplate(set.species || set.name);
-			if (!template.evos || template.evos.length === 0 || !template.prevo) {
-				return [set.species + " is not the middle Pokémon in an evolution chain."];
+		banlist: ['Soul Dew', 'Gengarite', 'Kangaskhanite', 'Mewtwonite X', 'Mewtwonite Y', 'Swoobat',
+			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying',
+			'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Blaziken', 'Blaziken-Mega', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre',
+			'Kyurem-White', 'Lugia', 'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom'
+		],
+		validateTeam: function(team, format) {
+			var letters = {};
+			var letter = '';
+			for (var i = 0; i < team.length; i++) {
+				letter = Tools.getTemplate(team[i]).species.slice(0,1).toUpperCase();
+				if (letter in letters) return ['Your team cannot have more that one Pokémon starting with the letter "' + letter + '".'];
+				letters[letter] = 1;
 			}
 		}
+	},
+	{
+		name: "OU Theorymon",
+		section: "OM of the Month",
+
+		mod: 'theorymon',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
 	},
 	{
 		name: "CAP",
 		section: "Other Metagames",
 
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
 	},
 	{
 		name: "Challenge Cup",
@@ -440,17 +460,22 @@ exports.Formats = [
 			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
 			'Darkrai',
 			'Deoxys-Attack',
+			'Deoxys',
 			'Gengarite',
 			'Giratina', 'Giratina-Origin',
+			'Groudon',
 			'Ho-Oh',
 			'Kangaskhanite',
 			'Kyogre',
 			'Kyurem-Black',
+			'Lugia',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
 			'Palkia',
 			'Rayquaza',
+			'Reshiram',
 			'Shaymin-Sky',
 			'Soul Dew',
+			'Kyurem-White',
 			'Xerneas',
 			'Yveltal',
 			'Zekrom'
@@ -478,6 +503,21 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['OU', 'Same Type Clause']
+	},
+	{
+		name: "Middle Cup",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
+		banlist: ['Illegal', 'Eviolite'],
+		maxLevel: 50,
+		defaultLevel: 50,
+		validateSet: function(set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0 || !template.prevo) {
+				return [set.species + " is not the middle Pokémon in an evolution chain."];
+			}
+		}
 	},
 	{
 		name: "STABmons",
@@ -717,6 +757,16 @@ exports.Formats = [
 		ruleset: []
 	},
 	{
+		name: "[Gen 3] OU (beta)",
+		section: "Past Generations",
+
+		mod: 'gen3',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber'],
+
+		column: 2
+	},
+	{
 		name: "[Gen 3] Hackmons",
 		section: "Past Generations",
 
@@ -751,7 +801,7 @@ exports.Formats = [
 		mod: 'gen2',
 		searchShow: false,
 		debug: true,
-		ruleset: ['Pokemon']
+		ruleset: []
 	},
 	{
 		name: "[Gen 1] OU (beta)",
@@ -768,7 +818,7 @@ exports.Formats = [
 		mod: 'gen1',
 		searchShow: false,
 		debug: true,
-		ruleset: ['Pokemon']
+		ruleset: []
 	}
 
 ];
