@@ -445,6 +445,7 @@ var cmds = {
                 }
                 if (Rooms.global.addChatRoom(target)) {
                         tour.reset(id);
+                        hangman.reset(id);
                         return this.sendReply("The room '"+target+"' was created.");
                 }
                 return this.sendReply("An error occurred while trying to create the room '"+target+"'.");
