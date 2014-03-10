@@ -23,7 +23,7 @@ if (cluster.isMaster) {
 	var workers = exports.workers = {};
 
 	var spawnWorker = exports.spawnWorker = function() {
-		var worker = cluster.fork();
+		var worker = cluster.fork({PSPORT: config.port});
 		var id = worker.id;
 		workers[id] = worker;
 		worker.on('message', function(data) {
@@ -106,6 +106,8 @@ if (cluster.isMaster) {
 
 } else {
 	// is worker
+
+	if (process.env.PSPORT) config.port = +process.env.PSPORT;
 
 	// ofe is optional
 	// if installed, it will heap dump if the process runs out of memory

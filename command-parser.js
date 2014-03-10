@@ -32,7 +32,7 @@ const MAX_PARSE_RECURSION = 10;
 
 var crypto = require('crypto');
 
-var modlog = exports.modlog = modlog || {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'})};
+var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'}), battle: fs.createWriteStream('logs/modlog/modlog_battle.txt', {flags:'a+'})};
 
 /**
  * Command parser
@@ -145,7 +145,13 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				this.logModCommand(text+(logOnlyText||''));
 			},
 			logModCommand: function(result) {
-				if (!modlog[room.id]) modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {flags:'a+'});
+				if (!modlog[room.id]) {
+					if (room.battle) {
+						modlog[room.id] = modlog['battle'];
+					} else {
+						modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {flags:'a+'});
+					}
+				}
 				modlog[room.id].write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
 			},
 			can: function(permission, target, room) {
@@ -169,7 +175,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 					var normalized = toId(message);
 					if (room.lastBroadcast === normalized &&
 							room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
-						connection.sendTo(room, "You can't broadcast this because it was just broadcast.")
+						connection.sendTo(room, "You can't broadcast this because it was just broadcast.");
 						return false;
 					}
 					this.add('|c|'+user.getIdentity(room.id)+'|'+message);
@@ -232,7 +238,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 function splitTarget(target, exactName) {
 	var commaIndex = target.indexOf(',');
 	if (commaIndex < 0) {
-		targetUser = Users.get(target, exactName)
+		targetUser = Users.get(target, exactName);
 		this.targetUser = targetUser;
 		this.targetUsername = (targetUser?targetUser.name:target);
 		return '';

@@ -34,7 +34,7 @@ exports.query = function queryDnsbl(ip, callback) {
 	}
 	var reversedIpDot = ip.split('.').reverse().join('.')+'.';
 	queryDnsblLoop(ip, callback, reversedIpDot, 0);
-}
+};
 
 function queryDnsblLoop(ip, callback, reversedIpDot, index) {
 	if (index >= BLOCKLISTS.length) {
