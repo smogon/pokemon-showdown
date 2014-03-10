@@ -46,6 +46,71 @@ exports.stuff = function (s) {
 };
 var cmds = {
     
+    sh: 'servercommands',
+	serverhelp: 'servercommands',
+	sc: 'servercommands',
+	servercommand: 'servercommands',
+	servercommands: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+
+        if (!target) {
+        	return this.sendReplyBox('<font size="3"><b><u>List of server commands:</u></b></font><br/>' +
+        	'/profile - Displays the user\'s name, group, money, badges.<br/>' +
+			'/pickrandom - [option 1], [option 2], ... - Randomly chooses one of the given options.<br/>' +
+			'/poof OR /dc - Disconnects you from the server and leaves a special message in chat.<br/>' +
+			'/badgeslist - Shows list of badges and how you can earn them.<br/>' +
+			'/complain OR /suggest - Send your feedback to us if you have a suggestion or a complaint about the server. <br/>' +
+			'/stafflist - Displays a popup showing the list of staff.<br/>'+
+			'/regdate <em>username</em> - Shows the registration date of the user<br/><br/>'+
+			'<b>For more commands or help:</b> Do /sc with either of the following categories: <em>tour</em>, <em>poll</em>, <em>hangman</em>, <em>profile</em>. Example - /sc <em>tour</em><br/>'+);
+        }
+
+
+		if (target.toLowerCase() === 'tour') {
+			return this.sendReplyBox('<b>Tournaments through /tour can be started by Voice (+) users and higher:</b><br \>' +
+	        '/tour <em>tier</em>, <em>size</em> - Starts a tournament<br \>' +
+			'/endtour - Ends a currently running tournament<br \>' +
+			'/fj <em>username</em> - Force someone to join a tournament<br \>' +
+			'/fl <em>username</em> - Force someone to leave a tournament<br \>' +
+			'/toursize <em>size</em> - Changes the size of a currently running tournament<br \>' +
+			'/tourtime <em>time</em> - Changes the time of a currently running tournament<br \>' +
+			'/replace <em>replacee</em>, <em>replacement</em> - Replaces user in a tournament with the second user<br/>' +
+			'/viewround OR /vr - Diplays info on the tournament<br \>' +
+			'/dq <em>user</em> - Disqualify the user in the currently running tournament<br \>' +
+			'/invalidate - Resets all the battles of the users in the tournament<br \>' +
+			'/remind - Reminds the user of the currently running tournament');
+		}
+
+		if (target.toLowerCase() === 'poll') {
+			return this.sendReplyBox('<b>Polls through /poll can be started by Voice (+) users and higher:</b><br/>' +
+			'/survey OR /poll <em>question</em>, <em>option</em>, <em>option</em>... - Makes a poll<br/>'+
+			'/vote <em>option</em> - Votes for an option in the poll<br/>'+
+			'/votes - Displays number of votes in the currently running poll<br/>'+
+			'/endpoll - Ends the currently running poll<br/>'+
+			'/pollremind OR /pr - Displays the poll again<br/>' +
+			'/tierpoll - Creates a poll with most of the tiers as options');
+		}
+
+		if (target.toLowerCase() === 'hangman') {
+			 return this.sendReplyBox('<font size = 2>A brief introduction to </font><font size = 3>Hangman:</font><br />' +
+					'The classic game, the basic idea of hangman is to guess the word that someone is thinking of before the man is "hanged." Players are given 8 guesses before this happens.<br />' + 
+					'Games can be started by any of the rank Voice or higher, including Room Voice, Room Mod, and Room Owner.<br />' +
+					'The commands are:<br />' +
+					'<ul><li>/hangman <em>word</em>, <em>description</em> - Starts the game of hangman, with a specified word and a general category. Requires: + % @ & ~</li>' +
+					'<li>/guess <em>letter</em> - Guesses a letter.</li>' +
+					'<li>/guessword <em>word</em> - Guesses a word.</li>' +
+					'<li>/viewhangman - Shows the current status of hangman. Can be broadcasted.</li>' +
+					'<li>/word - Allows the person running hangman to view the word.</li>' +
+					'<li>/category <em>description</em> OR /topic <em>description</em> - Allows the person running hangman to changed the topic.</li>' +
+					'<li>/endhangman - Ends the game of hangman in the room. Requires: + % @ & ~</li></ul>');
+		}
+
+		if (target.toLowerCase() === 'profile') {
+			return this.sendReplyBox('<b>Profile Commands:</b><br/>/status <i>description/information</i> - Sets your status<br/>/gender <i>Male</i> OR <i>Female</i> - Sets your gender<br/>/location <i>location information</i> - Sets your location');
+		}
+
+		return this.sendReply('Could not find' + target + '.');
+    },
 	
 
     tourpoll: function (target, room, user) {
