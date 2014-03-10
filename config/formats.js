@@ -762,7 +762,7 @@ exports.Formats = [
 
 		mod: 'gen3',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber'],
+		banlist: ['Uber', 'Smeargle + Ingrain'],
 
 		column: 2
 	},
