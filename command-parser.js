@@ -529,6 +529,11 @@ function canTalk(user, room, connection, message) {
 	            connection.sendTo(room, '|raw|<strong class=\"message-throttle-notice\">Advertising is not allowed please do not.</strong>');
 	            return false;
 	        }
+	        
+	        if (message.toLowerCase().indexOf("play.pokemonshowdown.com") > -1) {
+	            connection.sendTo(room, '|raw|<strong class=\"message-throttle-notice\">Advertising is not allowed please do not.</strong>');
+	            return false;
+	        }
 
 	        if (message.toLowerCase().indexOf("psim") > -1) {
 	            connection.sendTo(room, '|raw|<strong class=\"message-throttle-notice\">Advertising is not allowed please do not.</strong>');
