@@ -62,7 +62,7 @@ var cmds = {
 			'/complain OR /suggest - Send your feedback to us if you have a suggestion or a complaint about the server. <br/>' +
 			'/stafflist - Displays a popup showing the list of staff.<br/>'+
 			'/regdate <em>username</em> - Shows the registration date of the user<br/><br/>'+
-			'<b>For more commands or help:</b> Do /sc with either of the following categories: <em>tour</em>, <em>poll</em>, <em>hangman</em>, <em>profile</em>. Example - /sc <em>tour</em><br/>'+);
+			'<b>For more commands or help:</b> Do /sc with either of the following categories: <em>tour</em>, <em>poll</em>, <em>hangman</em>, <em>profile</em>. Example - /sc <em>tour</em>'+);
         }
 
 
