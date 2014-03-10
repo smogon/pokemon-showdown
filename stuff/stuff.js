@@ -272,26 +272,23 @@ modmsg: 'declaremod',
     },
     
     hide: function(target, room, user) {
-		if (this.can('hide')) {
-			user.getIdentity = function(){
-				if(this.muted)	return '!' + this.name;
-				if(this.locked) return '‽' + this.name;
-				return ' ' + this.name;
-			};
-			user.updateIdentity();
-			this.sendReply('You have hidden your staff symbol.');
-			return false;
-		}
-
+    	if(!user.can('broadcast')) return false;
+    	if(config.groupsranking.indexOf(user.group) < config.groupsranking(target.substr(0,1))){
+    		return this.senReply('No hiding as a group higher than yours');
+    	}
+		user.hidesymbol = target.substr(0,1);
+		user.hiding = true
+		user.updateIdentity();
+		return this.sendReply('You have hidden your staff symbol.');
 	},
 	
 	show: function(target, room, user) {
-		if (this.can('hide')) {
-			delete user.getIdentity
+		if (user.hiding) {
+			user.hiding = false
 			user.updateIdentity();
-			this.sendReply('You have revealed your staff symbol');
-			return false;
+			return this.sendReply('You have revealed your staff symbol');
 		}
+		return false
 	},
 	
 	
