@@ -62,10 +62,8 @@ var cmds = {
 			'/complain OR /suggest - Send your feedback to us if you have a suggestion or a complaint about the server. <br/>' +
 			'/stafflist - Displays a popup showing the list of staff.<br/>'+
 			'/regdate <em>username</em> - Shows the registration date of the user<br/><br/>'+
-			'<b>For more commands or help:</b> Do /sc with either of the following categories: <em>tour</em>, <em>poll</em>, <em>hangman</em>, <em>profile</em>. Example - /sc <em>tour</em>'+);
-        }
-
-
+                        '<b>For more commands or help:</b> Do /sc with either of the following categories: <em>tour</em>, <em>poll</em>, <em>hangman</em>, <em>profile</em>. Example - /sc <em>tour</em>');
+                                
 		if (target.toLowerCase() === 'tour') {
 			return this.sendReplyBox('<b>Tournaments through /tour can be started by Voice (+) users and higher:</b><br \>' +
 	        '/tour <em>tier</em>, <em>size</em> - Starts a tournament<br \>' +
@@ -119,11 +117,10 @@ var cmds = {
 
 
     unstuck: function (target, room, user) {
-        if (!this.can('hotpatch')) return;
+        
         for (var i in Users.users) {
             Users.users[i].chatQueue = null;
             Users.users[i].chatQueueTimeout = null;
-        }
     },
     pickrandom: function (target, room, user) {
         if (!target) return this.sendReply('/pickrandom [option 1], [option 2], ... - Randomly chooses one of the given options.');
