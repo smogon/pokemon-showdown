@@ -1,48 +1,15 @@
-/config/*
-/logs/*
-/node_modules
-npm-debug.log
-/config/bannedwords.txt
-
-# boilerplate #
-###############
-
-.DS_Store
-
-# editor temp files
-*~
-.idea/
-
-tmp/**/*
-*.lock
-*.DS_Store
-*.swp
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
 *.out
-*.pyc
-*.pyo
-.installed.cfg
+*.pid
+*.gz
 
-downloads
-build
-dist
+pids
+logs
+results
 
-# egg related
-develop-eggs
-*.egg-info
-*.egg
-*.EGG
-*.EGG-INFO
-src/*.egg-info
-eggs
-fake-eggs
-
-# django
-local_settings.py
-
-# SCM
-.hg
-.bzr
-.svn
-
-pip-log.txt
-
+npm-debug.log
+node_modules
