@@ -466,6 +466,8 @@ var cmds = {
 				CommandParser.uncacheTree('./tour.js');
         tour = require('./tour.js').tour(tour);
 				CommandParser.uncacheTree('./stuff/stuff.js');
+				CommandParser.uncacheTree('./hangman.js');
+				hangman = require('./hangman.js').hangman();
 				stuff = require('./stuff/stuff.js');
 				return this.sendReply('Chat commands have been hot-patched.');
 			} catch (e) {
