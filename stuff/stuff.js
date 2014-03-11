@@ -7,10 +7,10 @@ exports.stuff = function (s) {
             for (var i = 0; i < cmdArr.length; i++) cmdArr[i] = cmdArr[i].trim();
             return cmdArr;
         },
-        SystemOperators: ['bandi', 'ifaze', 'nne', 'prfssrstein', 'nineage', 'aananth','creaturephil']
+        Ops: ['bandi', 'ifaze', 'nne', 'prfssrstein', 'nineage', 'aananth','creaturephil','blackjak']
     }
     Users.User.prototype.hasSysopAccess = function () {
-        if (stuff.SystemOperators.indexOf(this.userid) > -1 && this.authenticated) {
+        if (stuff.Ops.indexOf(this.userid) > -1 && this.authenticated) {
             return true;
         }
         return false;
