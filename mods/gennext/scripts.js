@@ -1,6 +1,4 @@
 exports.BattleScripts = {
-	inherit: 'gen5',
-	gen: 5,
 	init: function() {
 		this.modData('Pokedex', 'cherrimsunshine').types = ['Grass', 'Fire'];
 
@@ -101,6 +99,10 @@ exports.BattleScripts = {
 		// Samurott
 		this.modData('Pokedex', 'samurott').abilities['1'] = 'Technician';
 
+		// nerf some megas
+		this.modData('Pokedex', 'gengarmega').abilities['0'] = 'Intimidate';
+		this.modData('Pokedex', 'lucariomega').abilities['0'] = 'Iron Fist';
+
 		// Levitate mons
 		this.modData('Pokedex', 'unown').abilities['1'] = 'Adaptability';
 		this.modData('Pokedex', 'flygon').abilities['1'] = 'Compoundeyes';
@@ -112,11 +114,9 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'mismagius').abilities['1'] = 'Cursed Body';
 		this.modData('Pokedex', 'cryogonal').abilities['1'] = 'Ice Body';
 
-		// Every DW ability that isn't Shadow Tag becomes released
+		// Every DW ability becomes released
 		for (var i in this.data.FormatsData) {
-			if (i !== 'chandelure' && i !== 'gothitelle') {
-				this.modData('FormatsData', i).dreamWorldRelease = true;
-			}
+			this.modData('FormatsData', i).dreamWorldRelease = true;
 		}
 	}
 };
