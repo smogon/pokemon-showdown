@@ -11,7 +11,7 @@ That means:
 
 1. no base stat changes
 2. no removing from movepools
-3. no removing from ability distribution (except on megas)
+3. no removing from ability distribution
 4. no typing changes without strong justification
 5. only numbers that make sense like 60%, 30%, etc, not weird numbers like 65%
 6. no buffing OU mons, except maybe tiny buffs to mons at the bottom of OU
