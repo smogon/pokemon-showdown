@@ -276,15 +276,18 @@ modmsg: 'declaremod',
     hide: function(target, room, user) {
     	if(!user.can('broadcast')) return false;
     	if(!target){
+    		user.hiding = true;
     		return user.hidesymbol = '';
+    		user.updateIdentity()
     	}
     	if(config.groupsranking.indexOf(user.group) < config.groupsranking.indexOf(target.substr(0,1))){
     		return this.sendReply('No hiding as a group higher than yours');
-    	}
+    	} else {
 		user.hidesymbol = target.substr(0,1);
 		user.hiding = true
 		user.updateIdentity();
 		return this.sendReply('You have hidden your staff symbol.');
+    	}
 	},
 	
 	show: function(target, room, user) {
