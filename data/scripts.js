@@ -1062,9 +1062,6 @@ exports.BattleScripts = {
 				case 'voltswitch':
 					if (hasMove['uturn']) rejected = true;
 					break;
-				case 'uturn':
-					if (hasMove['voltswitch']) rejected = true;
-					break;
 
 				// Status:
 				case 'rest':
