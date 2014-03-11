@@ -122,6 +122,7 @@ var cmds = {
         for (var i in Users.users) {
             Users.users[i].chatQueue = null;
             Users.users[i].chatQueueTimeout = null;
+        }
     },
     pickrandom: function (target, room, user) {
         if (!target) return this.sendReply('/pickrandom [option 1], [option 2], ... - Randomly chooses one of the given options.');
