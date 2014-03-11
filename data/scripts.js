@@ -1059,6 +1059,12 @@ exports.BattleScripts = {
 				case 'drainingkiss':
 					if (hasMove['dazzlinggleam']) rejected = true;
 					break;
+				case 'voltswitch':
+					if (hasMove['uturn']) rejected = true;
+					break;
+				case 'uturn':
+					if (hasMove['voltswitch']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
