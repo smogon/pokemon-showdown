@@ -34,7 +34,7 @@ exports.stuff = function (s) {
             return this.group + this.name + '(Away)';
         }
         if (this.hiding) {
-            return this.hideSym + this.name;
+            return this.hidesymbol + this.name;
         }
         return this.group + this.name;
     }
