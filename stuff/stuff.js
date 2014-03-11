@@ -275,7 +275,7 @@ modmsg: 'declaremod',
     
     hide: function(target, room, user) {
     	if(!user.can('broadcast')) return false;
-    	if(config.groupsranking.indexOf(user.group) < config.groupsranking(target.substr(0,1))){
+    	if(config.groupsranking.indexOf(user.group) < config.groupsranking.indexOf(target.substr(0,1))){
     		return this.senReply('No hiding as a group higher than yours');
     	}
 		user.hidesymbol = target.substr(0,1);
