@@ -65,7 +65,9 @@ if (!process.send) {
 		ValidatorProcess.send = function(format, team, callback) {
 			var process = this.acquire();
 			pendingValidations[validationCount] = callback;
-			process.process.send(''+validationCount+'|'+format+'|'+team);
+			try {
+				process.process.send(''+validationCount+'|'+format+'|'+team);
+			} catch (e) {}
 			++validationCount;
 		};
 		return ValidatorProcess;
@@ -547,6 +549,7 @@ var Validator = (function() {
 		var format = (lsetData.format || (lsetData.format={}));
 		var alreadyChecked = {};
 		var level = set.level || 100;
+		if (format.id === 'alphabetcup') var alphabetCupLetter = template.speciesid.charAt(0);
 
 		var isHidden = false;
 		if (set.ability && tools.getAbility(set.ability).name === template.abilities['H']) isHidden = true;
@@ -582,7 +585,7 @@ var Validator = (function() {
 			// Stabmons hack to avoid copying all of validateSet to formats.
 			if (format.id === 'stabmons' && template.types.indexOf(tools.getMove(move).type) > -1) return false;
 			// Alphabet Cup hack to do the same
-			if (format.id === 'alphabetcup' && template.speciesid.slice(0,1) === Tools.getMove(move).id.slice(0,1) && Tools.getMove(move).id !== 'sketch') return false;
+			if (alphabetCupLetter && alphabetCupLetter === Tools.getMove(move).id.slice(0,1) && Tools.getMove(move).id !== 'sketch') return false;
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					sometimesPossible = true;
