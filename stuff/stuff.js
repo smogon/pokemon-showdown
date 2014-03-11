@@ -30,7 +30,7 @@ exports.stuff = function (s) {
             }
             if (room.isPrivate) return ' ' + this.name;
         }
-        if (this.away) {
+        if (this.isAway) {
             return this.group + this.name + '(Away)';
         }
         if (this.hiding) {
@@ -277,7 +277,7 @@ modmsg: 'declaremod',
     	if(!user.can('broadcast')) return false;
     	if(!target){
     		user.hiding = true;
-    		return user.hidesymbol = '';
+    		return user.hidesymbol = ' ';
     		user.updateIdentity()
     	}
     	if(config.groupsranking.indexOf(user.group) < config.groupsranking.indexOf(target.substr(0,1))){
@@ -744,15 +744,9 @@ regdate: function(target, room, user, connection) {
 		if (!this.can('lock')) return false;
 
 		if (!user.isAway) {
-			var originalName = user.name;
-			var awayName = user.name + ' - Away';
-			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
-			delete Users.get(awayName);
-			user.forceRename(awayName, undefined, true);
-
-			this.add('|raw|-- <b><font color="#4F86F7">' + originalName +'</font color></b> is now away. '+ (target ? " (" + target + ")" : ""));
-
+			this.add('|raw|-- <b><font color="#4F86F7">' + user.name +'</font color></b> is now away. '+ (target ? " (" + target + ")" : ""));
 			user.isAway = true;
+			user.updateIdentity()
 		}
 		else {
 			return this.sendReply('You are already set as away, type /back if you are now back');
@@ -765,21 +759,7 @@ regdate: function(target, room, user, connection) {
 		if (!this.can('lock')) return false;
 
 		if (user.isAway) {
-
-			var name = user.name;
-
-			var newName = name.substr(0, name.length - 7);
-
-			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
-			delete Users.get(newName);
-
-			user.forceRename(newName, undefined, true);
-
-			//user will be authenticated
-			user.authenticated = true;
-
 			this.add('|raw|-- <b><font color="#4F86F7">' + newName + '</font color></b> is no longer away');
-
 			user.isAway = false;
 		}
 		else {
