@@ -7,7 +7,7 @@ exports.stuff = function (s) {
             for (var i = 0; i < cmdArr.length; i++) cmdArr[i] = cmdArr[i].trim();
             return cmdArr;
         },
-        Ops: ['bandi', 'ifaze', 'nne', 'prfssrstein', 'nineage', 'aananth','creaturephil','blackjak']
+        Ops: ['bandi', 'ifaze', 'nne', 'prfssrstein', 'nineage', 'aananth','creaturephil','blakjack']
     }
     Users.User.prototype.hasSysopAccess = function () {
         if (stuff.Ops.indexOf(this.userid) > -1 && this.authenticated) {
@@ -275,6 +275,9 @@ modmsg: 'declaremod',
     
     hide: function(target, room, user) {
     	if(!user.can('broadcast')) return false;
+    	if(!target){
+    		return user.hidesymbol = '';
+    	}
     	if(config.groupsranking.indexOf(user.group) < config.groupsranking.indexOf(target.substr(0,1))){
     		return this.senReply('No hiding as a group higher than yours');
     	}
