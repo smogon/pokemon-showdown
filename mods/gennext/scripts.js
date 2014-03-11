@@ -12,9 +12,6 @@ exports.BattleScripts = {
 		// Masquerain also gets Surf because we want it to be viable
 		this.modData('Learnsets', 'masquerain').learnset.surf = ['5M'];
 
-		// Shuckle gets Leech Seed
-		this.modData('Learnsets', 'shuckle').learnset.leechseed = ['5L100'];
-
 		// Roserade gets Sludge
 		this.modData('Learnsets', 'roserade').learnset.sludge = ['5L100'];
 
@@ -62,9 +59,6 @@ exports.BattleScripts = {
 		// Aipom: eggSketch! :D
 		this.modData('Learnsets', 'aipom').learnset.sketch = ['5E'];
 
-		// Azumarill: free Belly Drum
-		this.modData('Learnsets', 'azumarill').learnset.bellydrum = ['5L100'];
-
 		// Spinda: free Superpower
 		this.modData('Learnsets', 'spinda').learnset.superpower = ['5L100'];
 
@@ -98,10 +92,6 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'emboar').abilities['1'] = 'Sheer Force';
 		// Samurott
 		this.modData('Pokedex', 'samurott').abilities['1'] = 'Technician';
-
-		// nerf some megas
-		this.modData('Pokedex', 'gengarmega').abilities['0'] = 'Intimidate';
-		this.modData('Pokedex', 'lucariomega').abilities['0'] = 'Iron Fist';
 
 		// Levitate mons
 		this.modData('Pokedex', 'unown').abilities['1'] = 'Adaptability';

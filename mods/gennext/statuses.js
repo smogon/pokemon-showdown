@@ -52,7 +52,7 @@ exports.BattleStatuses = {
 			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
 			if (!result) return result;
 			this.add('-start', target, 'confusion');
-			this.effectData.time = this.random(3,5);
+			this.effectData.time = this.random(3,4);
 		},
 		onEnd: function(target) {
 			this.add('-end', target, 'confusion');
@@ -63,7 +63,7 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
-			this.directDamage(this.getDamage(pokemon,pokemon,40));
+			this.directDamage(this.getDamage(pokemon,pokemon,30));
 		}
 	},
 

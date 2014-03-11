@@ -123,8 +123,8 @@ Major changes:
   hits again for 80 base power. It's like Doom Desire, except it still hits
   that first time.
 
-- Confusion now deals damage every attack, but does not stop the attack. It
-  now lasts 3-5 turns.
+- Confusion now deals 30 base power damage every attack, but does not stop
+  the attack. It now lasts 3-5 turns.
 
 - Parental Bond now deals half damage on both hits, but confers perfect
   accuracy like all multi-hit moves.
@@ -134,8 +134,6 @@ Major changes:
   Orb recoil.
 
 - Twister is now a 80 base power Flying move with a 30% confusion chance
-
-- Mega Gengar now has Intimidate, and Mega Lucario now has Iron Fist
 
 - Diancie is released
 
@@ -353,8 +351,6 @@ Minor learnset changes:
 
 - Butterfree, Beautifly, Masquerain, and Mothim get Hurricane
 
-- Shuckle gets Leech Seed
-
 - Roserade gets Sludge
 
 - Meloetta gets Fiery Dance
@@ -410,6 +406,10 @@ Minor ability changes:
 - Magma Armor reduces incoming move damage by 1/8 of the user's max HP,
   provides immunity to Hail and freeze, and provides a one-time immunity
   to Water and Ice, after which it turns into Shell Armor
+
+- Adaptability is now 1.33x to non-STAB moves instead of to STAB moves
+
+- Shadow Tag now lasts only one turn
 
 - Static and Poison Point have a 100% chance of activating
 

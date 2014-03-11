@@ -535,6 +535,33 @@ exports.BattleAbilities = {
 		num: -6,
 		gen: 6
 	},
+	"adaptability": {
+		inherit: true,
+		onModifyMove: function(move) {},
+		onBasePower: function(power, attacker, defender, move) {
+			if (!attacker.hasType(move.type)) {
+				return this.chainModify(1.33);
+			}
+		}
+	},
+	"shadowtag": {
+		onStart: function(pokemon) {
+			pokemon.addVolatile('shadowtag');
+		},
+		effect: {
+			duration: 1,
+			onFoeModifyPokemon: function(pokemon) {
+				if (pokemon.ability !== 'shadowtag') {
+					pokemon.tryTrap();
+				}
+			}
+		},
+		onFoeMaybeTrapPokemon: function(pokemon) {
+			if (pokemon.ability !== 'shadowtag') {
+				pokemon.maybeTrapped = true;
+			}
+		}
+	},
 	"justified": {
 		inherit: true,
 		onBasePowerPriority: 100,
