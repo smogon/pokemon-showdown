@@ -219,6 +219,7 @@ exports.groups = {
 		roomdriver: true,
 		declare: true,
 		modchatall: true,
+		modlog: true,
 		roomonly: true,
 		rank: 5
 	},
