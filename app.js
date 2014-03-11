@@ -436,6 +436,7 @@ global.spamroom = {};
 global.bot = require('./stuff/chatbot/bot.js').bot();
 global.stuff = require('./stuff/stuff.js').stuff();
 global.tour = require('./tour.js').tour();
+global.roul = require('./money/casino/roul.js')
 try {
 	global.hangman = require('./hangman.js').hangman();
 } catch (e) {
