@@ -125,4 +125,3 @@ exports.cmds = {
     room.rouletteon = false;
 },
 };
-for (var i in cmds) CommandParser.commands[i] = cmds[i];
