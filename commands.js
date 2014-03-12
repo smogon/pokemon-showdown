@@ -12,7 +12,7 @@
  */
 
 var crypto = require('crypto');
-
+var poofeh = true;
 const MAX_REASON_LENGTH = 300;
 
 var commands = exports.commands = {
@@ -362,6 +362,72 @@ var commands = exports.commands = {
 		}
 		if (!user.joinRoom(targetRoom || room, connection)) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' could not be joined.");
+		}
+	},
+	
+	poof: 'd',
+	d: function(target, room, user){
+		if(room.id !== 'lobby') return false;
+		muted = Object.keys(user.mutedRooms);
+		for (var u in muted) if (muted[u] == 'lobby') return this.sendReply('You can\'t poof while muted');
+		var btags = '<strong><font color='+hashColor(Math.random().toString())+'" >';
+		var etags = '</font></strong>'
+		var targetid = toUserid(user);
+		if(target){
+			var tar = toUserid(target);
+			var targetUser = Users.get(tar);
+			if(user.can('poof', targetUser)){
+				if(!targetUser){
+					user.emit('console', 'Cannot find user ' + target + '.', socket);	
+				}else{
+					var escapedName = escapeHTML(targetUser.name);
+					var escapedUser = escapeHTML(user.name);
+					if(poofeh)
+						Rooms.rooms.lobby.addRaw(btags + '~~ '+escapedName+' was vanished into nothingness by ' + escapedUser +'! ~~' + etags);
+						targetUser.disconnectAll();
+						return	this.logModCommand(targetUser.name+ ' was poofed by ' + user.name);
+					}
+				} else {
+					return this.sendReply('/poof target - Access denied.');
+				}
+			}
+		if(poofeh && !user.locked){
+			Rooms.rooms.lobby.addRaw(btags + getRandMessage(user)+ etags);
+			user.disconnectAll();	
+		}else{
+			return this.sendReply('poof is currently disabled.');
+		}
+	},
+
+	poofoff: 'nopoof',
+	nopoof: function(target, room, user){
+		if(!user.can('warn')) return this.sendReply('/nopoof - Access denied.');
+		if(!poofeh) return this.sendReply('poof is currently disabled.');
+		poofeh = false;
+		this.logModCommand(user.name + ' disabled poof.');
+		return this.sendReply('poof is now disabled.');
+	},
+
+	poofon: function(target, room, user){
+		if(!user.can('warn')) return this.sendReply('/poofon - Access denied.');
+		if(poofeh) return this.sendReply('poof is currently enabled.');
+		poofeh = true;
+		this.logModCommand(user.name + ' enabled poof');
+		return this.sendReply('poof is now enabled.');
+	},
+
+	cpoof: function(target, room, user){
+		if(!user.can('broadcast')) return this.sendReply('/cpoof - Access Denied');
+		if (!target) return this.sendReply('/cpoof - Please specify a custom poof message to use.');
+		if(poofeh) {
+			var btags = '<strong><font color="'+hashColor(Math.random().toString())+'" >';
+			var etags = '</font></strong>'
+			escapedTarget = escapeHTML(target);
+			Rooms.rooms.lobby.addRaw(btags + '~~ '+user.name+' '+escapedTarget+'! ~~' + etags);
+			this.logModCommand(user.name + ' used a custom poof message: \n "'+target+'"');
+			user.disconnectAll();	
+		}else{
+			return this.sendReply('Poof is currently disabled.');
 		}
 	},
 
@@ -1009,63 +1075,7 @@ var commands = exports.commands = {
 	 * Server management commands
 	 *********************************************************/
 
-	hotpatch: function(target, room, user) {
-		if (!target) return this.parse('/help hotpatch');
-		if (!this.can('hotpatch')) return false;
-
-		this.logEntry(user.name + ' used /hotpatch ' + target);
-
-		if (target === 'chat' || target === 'commands') {
-
-			try {
-				CommandParser.uncacheTree('./command-parser.js');
-				CommandParser = require('./command-parser.js');
-				return this.sendReply('Chat commands have been hot-patched.');
-			} catch (e) {
-				return this.sendReply('Something failed while trying to hotpatch chat: \n' + e.stack);
-			}
-
-		} else if (target === 'battles') {
-
-			Simulator.SimulatorProcess.respawn();
-			return this.sendReply('Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.');
-
-		} else if (target === 'formats') {
-			try {
-				// uncache the tools.js dependency tree
-				CommandParser.uncacheTree('./tools.js');
-				// reload tools.js
-				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
-				// rebuild the formats list
-				Rooms.global.formatListText = Rooms.global.getFormatListText();
-				// respawn validator processes
-				TeamValidator.ValidatorProcess.respawn();
-				// respawn simulator processes
-				Simulator.SimulatorProcess.respawn();
-				// broadcast the new formats list to clients
-				Rooms.global.send(Rooms.global.formatListText);
-
-				return this.sendReply('Formats have been hotpatched.');
-			} catch (e) {
-				return this.sendReply('Something failed while trying to hotpatch formats: \n' + e.stack);
-			}
-
-		} else if (target === 'learnsets') {
-			try {
-				// uncache the tools.js dependency tree
-				CommandParser.uncacheTree('./tools.js');
-				// reload tools.js
-				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
-
-				return this.sendReply('Learnsets have been hotpatched.');
-			} catch (e) {
-				return this.sendReply('Something failed while trying to hotpatch learnsets: \n' + e.stack);
-			}
-
-		}
-		this.sendReply('Your hot-patch command was unrecognized.');
-	},
-
+	
 	savelearnsets: function(target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = '+JSON.stringify(BattleLearnsets)+";\n");
@@ -1608,19 +1618,6 @@ var commands = exports.commands = {
 		});
 	},
 
-	away: 'blockchallenges',
-	idle: 'blockchallenges',
-	blockchallenges: function(target, room, user) {
-		user.blockChallenges = true;
-		this.sendReply('You are now blocking all incoming challenge requests.');
-	},
-
-	back: 'allowchallenges',
-	allowchallenges: function(target, room, user) {
-		user.blockChallenges = false;
-		this.sendReply('You are available for challenges from now on.');
-	},
-
 	cchall: 'cancelChallenge',
 	cancelchallenge: function(target, room, user) {
 		user.cancelChallengeTo(target);
@@ -1739,3 +1736,168 @@ var commands = exports.commands = {
 	},
 
 };
+//poof functions, still not neat
+function getRandMessage(user){
+	user = escapeHTML(user.name);
+	var numMessages = 35; // numMessages will always be the highest case # + 1 //increasing this will make the default appear more often
+	var message = '~~ ';
+	switch(Math.floor(Math.random()*numMessages)){
+		case 0: message = message + user + ' got spanked too hard by iFaZe';
+		break;
+		case 1: message = message + user + ' looked at iFaZe\'s face!';
+		break;
+		case 2: message = message + user + ' used Explosion!';
+		break;
+		case 3: message = message + user + ' was swallowed up by the Earth!';
+		break;
+		case 4: message = message + user + ' was sold in a slave trade to a Chinese man!';
+		break;	
+		case 5: message = message + user + ' was eaten by Lex!';
+		break;
+		case 6: message = message + user + ' was sucker punched by Absol!';
+		break;
+		case 7: message = message + user + ' has left the building.';
+		break;
+		case 8: message = message + user + ' got lost in the woods!';
+		break;
+		case 9: message = message + user + ' left for their lover!';
+		break;
+		case 10: message = message + user + ' couldn\'t handle the wetness of Rain!';
+		break;
+		case 11: message = message + user + ' was hit by Magikarp\'s Revenge!';
+		break;
+		case 12: message = message + user + ' was sucked into a whirlpool!';
+		break;
+		case 13: message = message + user + ' got scared and left the server!';
+		break;
+		case 14: message = message + user + ' went into a cave without a repel!';
+		break;
+		case 15: message = message + user + ' got eaten by a bunch of piranhas!';
+		break;
+		case 16: message = message + user + ' ventured too deep into the forest without an escape rope';
+		break;
+		case 17: message = message + 'A large spider descended from the sky and picked up ' + user + '.';
+		break;
+		case 18: message = message + user + ' was tricked by Fizz!';
+		break;
+		case 19: message = message + user + ' woke up an angry Snorlax!';
+		break;
+		case 20: message = message + user + ' was forced to give jd an oil massage (boiling oil)!'; //huehue
+		break;
+		case 21: message = message + user + ' was used as shark bait!';
+		break;
+		case 22: message = message + user + ' peered through the hole on Shedinja\'s back';
+		break;
+		case 23: message = message + user + ' received judgment from the almighty Arceus!';
+		break;
+		case 24: message = message + user + ' used Final Gambit and missed!';
+		break;
+		case 25: message = message + user + ' went into grass without any pokemon!';
+		break;
+		case 26: message = message + user + ' made a Slowbro angry!';
+		break;
+		case 27: message = message + user + ' took a focus punch from Breloom!';
+		break;
+		case 28: message = message + user + ' got lost in the illusion of reality.';
+		break;
+		case 29: message = message + user + ' ate a bomb!';
+		break;
+		case 30: message = message + 'iFaZe accidentally spanked ' + user + ' too hard!';
+		break;
+		case 31: message = message + user + ' left for a timeout!';
+		break;
+		case 32: message = message + user + ' fell into a snake pit!'; //huehuehue how long until someone notices
+		break;
+		case 33: message = message + user + ' got eaten by sharks!';
+		break;
+		case 34: message = message + user + ' was swallowed whole by a giant wigglytuff!';// Bought by Lyrical WigglyTuff 
+		break;
+		default: message = message + user + ' bought a poisoned Coke!';
+	};
+	message = message + ' ~~';
+	return message;
+}
+
+//i was going to format this, but wtf
+function MD5(f){function i(b,c){var d,e,f,g,h;f=b&2147483648;g=c&2147483648;d=b&1073741824;e=c&1073741824;h=(b&1073741823)+(c&1073741823);return d&e?h^2147483648^f^g:d|e?h&1073741824?h^3221225472^f^g:h^1073741824^f^g:h^f^g}function j(b,c,d,e,f,g,h){b=i(b,i(i(c&d|~c&e,f),h));return i(b<<g|b>>>32-g,c)}function k(b,c,d,e,f,g,h){b=i(b,i(i(c&e|d&~e,f),h));return i(b<<g|b>>>32-g,c)}function l(b,c,e,d,f,g,h){b=i(b,i(i(c^e^d,f),h));return i(b<<g|b>>>32-g,c)}function m(b,c,e,d,f,g,h){b=i(b,i(i(e^(c|~d),
+f),h));return i(b<<g|b>>>32-g,c)}function n(b){var c="",e="",d;for(d=0;d<=3;d++)e=b>>>d*8&255,e="0"+e.toString(16),c+=e.substr(e.length-2,2);return c}var g=[],o,p,q,r,b,c,d,e,f=function(b){for(var b=b.replace(/\r\n/g,"\n"),c="",e=0;e<b.length;e++){var d=b.charCodeAt(e);d<128?c+=String.fromCharCode(d):(d>127&&d<2048?c+=String.fromCharCode(d>>6|192):(c+=String.fromCharCode(d>>12|224),c+=String.fromCharCode(d>>6&63|128)),c+=String.fromCharCode(d&63|128))}return c}(f),g=function(b){var c,d=b.length;c=
+d+8;for(var e=((c-c%64)/64+1)*16,f=Array(e-1),g=0,h=0;h<d;)c=(h-h%4)/4,g=h%4*8,f[c]|=b.charCodeAt(h)<<g,h++;f[(h-h%4)/4]|=128<<h%4*8;f[e-2]=d<<3;f[e-1]=d>>>29;return f}(f);b=1732584193;c=4023233417;d=2562383102;e=271733878;for(f=0;f<g.length;f+=16)o=b,p=c,q=d,r=e,b=j(b,c,d,e,g[f+0],7,3614090360),e=j(e,b,c,d,g[f+1],12,3905402710),d=j(d,e,b,c,g[f+2],17,606105819),c=j(c,d,e,b,g[f+3],22,3250441966),b=j(b,c,d,e,g[f+4],7,4118548399),e=j(e,b,c,d,g[f+5],12,1200080426),d=j(d,e,b,c,g[f+6],17,2821735955),c=
+j(c,d,e,b,g[f+7],22,4249261313),b=j(b,c,d,e,g[f+8],7,1770035416),e=j(e,b,c,d,g[f+9],12,2336552879),d=j(d,e,b,c,g[f+10],17,4294925233),c=j(c,d,e,b,g[f+11],22,2304563134),b=j(b,c,d,e,g[f+12],7,1804603682),e=j(e,b,c,d,g[f+13],12,4254626195),d=j(d,e,b,c,g[f+14],17,2792965006),c=j(c,d,e,b,g[f+15],22,1236535329),b=k(b,c,d,e,g[f+1],5,4129170786),e=k(e,b,c,d,g[f+6],9,3225465664),d=k(d,e,b,c,g[f+11],14,643717713),c=k(c,d,e,b,g[f+0],20,3921069994),b=k(b,c,d,e,g[f+5],5,3593408605),e=k(e,b,c,d,g[f+10],9,38016083),
+d=k(d,e,b,c,g[f+15],14,3634488961),c=k(c,d,e,b,g[f+4],20,3889429448),b=k(b,c,d,e,g[f+9],5,568446438),e=k(e,b,c,d,g[f+14],9,3275163606),d=k(d,e,b,c,g[f+3],14,4107603335),c=k(c,d,e,b,g[f+8],20,1163531501),b=k(b,c,d,e,g[f+13],5,2850285829),e=k(e,b,c,d,g[f+2],9,4243563512),d=k(d,e,b,c,g[f+7],14,1735328473),c=k(c,d,e,b,g[f+12],20,2368359562),b=l(b,c,d,e,g[f+5],4,4294588738),e=l(e,b,c,d,g[f+8],11,2272392833),d=l(d,e,b,c,g[f+11],16,1839030562),c=l(c,d,e,b,g[f+14],23,4259657740),b=l(b,c,d,e,g[f+1],4,2763975236),
+e=l(e,b,c,d,g[f+4],11,1272893353),d=l(d,e,b,c,g[f+7],16,4139469664),c=l(c,d,e,b,g[f+10],23,3200236656),b=l(b,c,d,e,g[f+13],4,681279174),e=l(e,b,c,d,g[f+0],11,3936430074),d=l(d,e,b,c,g[f+3],16,3572445317),c=l(c,d,e,b,g[f+6],23,76029189),b=l(b,c,d,e,g[f+9],4,3654602809),e=l(e,b,c,d,g[f+12],11,3873151461),d=l(d,e,b,c,g[f+15],16,530742520),c=l(c,d,e,b,g[f+2],23,3299628645),b=m(b,c,d,e,g[f+0],6,4096336452),e=m(e,b,c,d,g[f+7],10,1126891415),d=m(d,e,b,c,g[f+14],15,2878612391),c=m(c,d,e,b,g[f+5],21,4237533241),
+b=m(b,c,d,e,g[f+12],6,1700485571),e=m(e,b,c,d,g[f+3],10,2399980690),d=m(d,e,b,c,g[f+10],15,4293915773),c=m(c,d,e,b,g[f+1],21,2240044497),b=m(b,c,d,e,g[f+8],6,1873313359),e=m(e,b,c,d,g[f+15],10,4264355552),d=m(d,e,b,c,g[f+6],15,2734768916),c=m(c,d,e,b,g[f+13],21,1309151649),b=m(b,c,d,e,g[f+4],6,4149444226),e=m(e,b,c,d,g[f+11],10,3174756917),d=m(d,e,b,c,g[f+2],15,718787259),c=m(c,d,e,b,g[f+9],21,3951481745),b=i(b,o),c=i(c,p),d=i(d,q),e=i(e,r);return(n(b)+n(c)+n(d)+n(e)).toLowerCase()};
+
+
+
+var colorCache = {};
+
+function hashColor(name) {
+	if (colorCache[name]) return colorCache[name];
+
+	var hash = MD5(name);
+	var H = parseInt(hash.substr(4, 4), 16) % 360;
+	var S = parseInt(hash.substr(0, 4), 16) % 50 + 50;
+	var L = parseInt(hash.substr(8, 4), 16) % 20 + 25;
+
+	var m1, m2, hue;
+	var r, g, b
+	S /=100;
+	L /= 100;
+	if (S == 0)
+	r = g = b = (L * 255).toString(16);
+	else {
+	if (L <= 0.5)
+	m2 = L * (S + 1);
+	else
+	m2 = L + S - L * S;
+	m1 = L * 2 - m2;
+	hue = H / 360;
+	r = HueToRgb(m1, m2, hue + 1/3);
+	g = HueToRgb(m1, m2, hue);
+	b = HueToRgb(m1, m2, hue - 1/3);
+}
+
+
+colorCache[name] = '#' + r + g + b;
+return colorCache[name];
+}
+
+function HueToRgb(m1, m2, hue) {
+	var v;
+	if (hue < 0)
+		hue += 1;
+	else if (hue > 1)
+		hue -= 1;
+
+	if (6 * hue < 1)
+		v = m1 + (m2 - m1) * hue * 6;
+	else if (2 * hue < 1)
+		v = m2;
+	else if (3 * hue < 2)
+		v = m1 + (m2 - m1) * (2/3 - hue) * 6;
+	else
+		v = m1;
+
+	return (255 * v).toString(16);
+}
+
+function escapeHTML(target) {
+	if (!target) return false;
+	target = target.replace(/&(?!\w+;)/g, '&amp;')
+  	target = target.replace(/</g, '&lt;')
+    target = target.replace(/>/g, '&gt;')
+   	target = target.replace(/"/g, '&quot;');
+   	return target;
+}
+
+function splint(target) {
+	//splittyDiddles
+	var cmdArr =  target.split(",");
+	for (var i = 0; i < cmdArr.length; i++) cmdArr[i] = cmdArr[i].trim();
+	return cmdArr;
+}
+
+
+
+
+

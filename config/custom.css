@@ -1,0 +1,553 @@
+/**
+ * Custom CSS declarations
+ *
+ * If your server is registered, you can create a file named `custom.css`
+ * in the `config` directory and populate it with CSS rules to override the
+ * normal client styles, when the client is connected to your server. In
+ * other words, you can use this facility to introduce a custom theme for
+ * your server.
+ */
+ 
+ #header {background:url("http://www.dustinhetrick.com/rain.gif");background-repeat}
+
+body{background-image:url("http://wallpoper.com/images/00/40/52/84/pokemon-lugia_00405284.jpg");background-repeat:background-position:center;font-family: "Cambria (Headings)",Verdana,Helvetica,Arial,sans-serif;}
+
+.chat-log{font-size:16pt;background: url("http://pokewalls.files.wordpress.com/2011/05/249lugia1600x1200.jpg") no-repeat center;background:#2EFEF7;color:#0000FF;overflow:auto;}
+
+
+
+.menugroup {
+background:#000000);
+text-align: center;
+border-color: #00FF40;
+}
+
+.button:hover{background:#40FF00;}
+
+.userlist {
+border-left: 1px solid #CEF6F5;
+background: url("http://images2.layoutsparks.com/1/199343/heart-of-ice-rain.jpg");
+color:#00FFFF;
+}
+
+.userlist li em.group {
+        font-style: normal;
+        font-size: 8pt;
+        color: #00FFFF;
+        display: block;
+        float: left;
+        text-align: center;
+        padding: 1px 0 0 1px;
+        width: 14px;
+}
+
+.userlist li {
+border-bottom: 1px solid #00FFFF;
+height: 19px;
+font: 10pt Verdana, sans-serif;
+white-space: nowrap;
+}
+
+.menugroup {
+background:#CEF6F5;
+text-align: center;
+border-color: #40FF00;
+}
+
+.pm-window.focused h3, .pm-window.focused h3:hover {
+background:#CEF6F5;
+border-color: #40FF00;
+}
+
+
+.tabbar a.button: {
+background:#CEF6F5;
+color: blue;
+border-color: #40FF00;
+}
+
+.tabbar a.button.cur, .tabbar a.button.cur:hover {
+background:#CEF6F5;
+color: blue;
+border-color: #40FF00;
+border-bottom: 0;
+cursor: default;
+padding-top: 3px;
+padding-bottom: 5px;
+top: 0px;
+}
+
+.maintabbarbottom {
+background:#CEF6F5;
+border-color: #40FF00;
+}
+
+        .pm-window h3 {
+    background: url("http://www.hdwallcloud.com/wp-content/uploads/2013/09/Ios-7-Wallpapers.jpg");        
+border-color: #40FF00;
+}
+
+.pm-log-add {
+        background: url("http://www.hdwallcloud.com/wp-content/uploads/2013/09/Ios-7-Wallpapers.jpg");        
+border-color: #40FF00;
+}
+
+.challenge {
+background: url("http://www.hdwallcloud.com/wp-content/uploads/2013/09/Ios-7-Wallpapers.jpg");
+color: blue;
+}
+
+.pad, .ps-popup, .pm-log, .ps-room.ps-room-opaque {
+background: url("http://i.imgur.com/Q8vHT0Y.png");
+overflow: auto;
+}
+
+.message-announce {
+background:#FE2EF7;
+outline: 1px solid red;
+border-color: #40FF00;
+}
+
+.pm-window h3 small  {
+color: #5e5e5e;        
+border-color: #40FF00;
+}
+
+element {
+}
+.chat-log.hasuserlist, .chat-log-add.hasuserlist, .tournament-wrapper.hasuserlist {
+    left: 146px;
+}
+
+.battle-log {
+position: absolute;
+text-align: left;
+background: url(http://pokewalls.files.wordpress.com/2012/04/581swanna1600x1200.jpg) repeat-y center scroll;
+color:#0000FF;
+top: 9px;
+left: 640px;
+right: -1px;
+height: 360px;
+font-family: Cambria (Headings);
+font-size: 10pt;
+}
+
+.chat-log-add {
+background:#CEF6F5;
+color:#CEF6F5;
+border-color: #40FF00;
+}
+
+         
+.battle-log-add {
+position: absolute;
+background: url(http://www.hdwallcloud.com/wp-content/uploads/2013/09/Ios-7-Wallpapers.jpg) repeat-x left top;
+bottom: 0px;
+color:#0000FF;
+}        
+ 
+.battle-log .chat strong
+{
+        color:#0000FF;
+}
+.battle-log .chat em
+{
+        padding: 1px 4px 1px 3px;
+        color:#0000FF;
+        font-style: normal;
+}
+.battle-log .chat em.mine
+{
+        color:#0000FF; 
+}
+
+.sunweather,
+.sunnydayweather
+{
+        background: #FFEEBB url(http://files.myopera.com/cgunay/albums/9786222/sun.gif) no-repeat scroll left top;
+        color: #664411;
+        text-shadow: #000000 1px 1px 0, #000000 1px -1px 0, #000000 -1px 1px 0, #000000 -1px -1px 0;
+}
+.rainweather,
+.raindanceweather
+{
+        background: #99BBFF url(http://www.dustinhetrick.com/rain.gif) no-repeat scroll left top;
+        color: #0044BB;
+        text-shadow: #000000 1px 1px 0, #000000 1px -1px 0, #000000 -1px 1px 0, #000000 -1px -1px 0;
+}
+.sandstormweather
+{
+        background: #E6E0AC url(http://pokebot.everyboty.net/pix/999.jpeg) no-repeat scroll left top;
+        color: #554433;
+        text-shadow: #000000 1px 1px 0, #000000 1px -1px 0, #000000 -1px 1px 0, #000000 -1px -1px 0;
+}
+.hailweather
+{
+        background: #AADDEE url(http://24.media.tumblr.com/fd5267ff1121b0d3eb331a2bf831f0de/tumblr_mujst5GqFn1rlaox0o1_500.gif) no-repeat scroll left top;
+        color: #114455;
+        text-shadow: #000000 1px 1px 0, #000000 1px -1px 0, #000000 -1px 1px 0, #000000 -1px -1px 0;
+}
+.pseudoweather
+{
+        background: #DDAAEE url(//play.pokemonshowdown.com/fx/weather-trickroom.png) no-repeat scroll left top;
+        color: #661155;
+        text-shadow: #000000 1px 1px 0, #000000 1px -1px 0, #000000 -1px 1px 0, #000000 -1px -1px 0;
+}
+
+.menugroup {
+  background: url("");
+}
+
+
+.textbox {
+    font-family: "Cambria (Headings)",Verdana,Helvetica,Arial,sans-serif;
+}
+.popupmenu button {
+    font-family: "Cambria (Headings)",Verdana,Helvetica,Arial,sans-serif;
+}
+.select {
+    font-family: "Cambria (Headings)",Verdana,Helvetica,Arial,sans-serif;
+}
+.menugroup .button {
+    font-family: "Cambria (Headings)",Verdana,Helvetica,Arial,sans-serif;
+        background:#CEF6F5;}
+}
+.chatbox textarea {
+    font-family: "Cambria (Headings)",Verdana,Helvetica,Arial,sans-serif;
+}
+.teambar button {
+    font-family: "Cambria (Headings)",Verdana,Arial,sans-serif;
+}
+.setchart input, .setchart-nickname input, .statform input.inputform {
+    font-family: "Cambria (Headings)",Verdana,sans-serif;
+}
+.teambuilder-results h3, .teambuilder-results .utilichart h3 {
+    font-family: "Cambria (Headings)",Verdana,sans-serif;
+}
+
+.movemenu button.type-Normal{
+    background: #8a8a59 url(http://ih0.redbubble.net/image.11095063.6127/sticker,375x360.png);
+}
+.movemenu button.type-Normal:hover{
+    background: #79794e url(http://ih0.redbubble.net/image.11095063.6127/sticker,375x360.png);
+}
+
+.movemenu button.type-Fire{
+    background: #dd6610 url(http://images1.wikia.nocookie.net/__cb20111215174030/pokemontowerdefense/images/9/93/Pokemon_TCG-fireEnergy.gif);
+}
+.movemenu button.type-Fire:hover{
+    background: #b4530d url(http://images1.wikia.nocookie.net/__cb20111215174030/pokemontowerdefense/images/9/93/Pokemon_TCG-fireEnergy.gif);
+}
+
+.movemenu button.type-Water{
+    background: #386ceb url(http://s93053262.onlinehome.us/icons/DeoxysPrime/pokemon_TCG-waterEnergy.gif);
+}
+.movemenu button.type-Water:hover{
+    background: #1753e3 url(http://s93053262.onlinehome.us/icons/DeoxysPrime/pokemon_TCG-waterEnergy.gif);
+}
+
+.movemenu button.type-Electric{
+    background: #f0c108 url(https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRkEoQHu_ekLWMPHSRDjz95-g-iZVraCF47lGyBwh5o7icMsL2AZSJncQ);
+}
+.movemenu button.type-Electric:hover{
+    background: #c19b07 url(https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRkEoQHu_ekLWMPHSRDjz95-g-iZVraCF47lGyBwh5o7icMsL2AZSJncQ);
+}
+
+.movemenu button.type-Grass{
+    background: #5ca935 url(http://guaranteedoutdoorsolutions.com/images/staugustine.jpg);
+}
+.movemenu button.type-Grass:hover{
+    background: #4a892b url(http://guaranteedoutdoorsolutions.com/images/staugustine.jpg);
+}
+
+.movemenu button.type-Ice{
+    background: #69c6c6 url(http://bizmology.wpengine.netdna-cdn.com/wp-content/uploads/2012/04/Ice.jpg);
+}
+.movemenu button.type-Ice:hover{
+    background: #45b6b6 url(http://bizmology.wpengine.netdna-cdn.com/wp-content/uploads/2012/04/Ice.jpg);
+}
+
+.movemenu button.type-Fighting{
+    background: #9d2721 url(http://img1.etsystatic.com/018/0/6574851/il_170x135.486597891_d2gh.jpg);
+}
+.movemenu button.type-Fighting:hover{
+    background: #82211b url(http://img1.etsystatic.com/018/0/6574851/il_170x135.486597891_d2gh.jpg);
+}
+
+.movemenu button.type-Poison{
+    background: #803380 url(http://www.umnet.com/pic/diy/screensaver/2/purple-goo--29675.jpg);
+}
+.movemenu button.type-Poison:hover{
+    background: #662966 url(http://www.umnet.com/pic/diy/screensaver/2/purple-goo--29675.jpg);
+}
+
+.movemenu button.type-Ground{
+    background: #d4a82f url(http://fc05.deviantart.net/fs70/i/2010/292/9/8/seamless_ground_texture_by_hhh316-d312eb5.jpg);
+}
+.movemenu button.type-Ground:hover{
+    background: #aa8623 url(http://fc05.deviantart.net/fs70/i/2010/292/9/8/seamless_ground_texture_by_hhh316-d312eb5.jpg);
+}
+
+.movemenu button.type-Flying{
+    background: #9180c4 url(http://images2.layoutsparks.com/1/238605/moon-over-mistral-sky.jpg);
+}
+.movemenu button.type-Flying:hover{
+    background: #7762b6 url(http://images2.layoutsparks.com/1/238605/moon-over-mistral-sky.jpg);
+}
+
+.movemenu button.type-Psychic{
+    background: #f61c5d url(http://s93053262.onlinehome.us/icons/DeoxysPrime/pokemon_TCG-psychicEnergy.gif);
+}
+.movemenu button.type-Psychic:hover{
+    background: #d60945 url(http://s93053262.onlinehome.us/icons/DeoxysPrime/pokemon_TCG-psychicEnergy.gif);
+}
+
+.movemenu button.type-Bug{
+    background: #8d9a1b url(https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ6z6F0jMX7vZXe3YNv9Von918LbFBy_frxs1Iep4-_Rjhq2eXZ);
+}
+.movemenu button.type-Bug:hover{
+    background: #616b13 url(https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQ6z6F0jMX7vZXe3YNv9Von918LbFBy_frxs1Iep4-_Rjhq2eXZ);
+}
+
+.movemenu button.type-Rock{
+    background: #93802d url(http://thejealousyfiles.files.wordpress.com/2012/04/rocks.jpg);
+}
+.movemenu button.type-Rock:hover{
+    background: #746523 url(http://thejealousyfiles.files.wordpress.com/2012/04/rocks.jpg);
+}
+
+.movemenu button.type-Ghost{
+    background: #554374 url(http://images2.layoutsparks.com/1/33033/purple-dark-green-light.jpg);
+}
+.movemenu button.type-Ghost:hover{
+    background: #413359 url(http://images2.layoutsparks.com/1/33033/purple-dark-green-light.jpg);
+}
+
+.movemenu button.type-Dragon{
+    background: #4c08ef url(http://images2.wikia.nocookie.net/__cb20111228155021/lucerne/images/8/84/7qmd5a0v.jpg);
+}
+.movemenu button.type-Dragon:hover{
+    background: #3d07c0 url(http://images2.wikia.nocookie.net/__cb20111228155021/lucerne/images/8/84/7qmd5a0v.jpg);
+}
+
+.movemenu button.type-Dark{
+    background: #513f34 url(http://www.freefever.com/stock/black-background-wood.jpg);
+}
+.movemenu button.type-Dark:hover{
+    background: #362a23 url(http://www.freefever.com/stock/black-background-wood.jpg);
+}
+
+.movemenu button.type-Steel{
+    background: #9797ba url(http://www.damajority.com/wp-content/uploads/2012/09/Wallpapers-room_com___industrial_steel_hd_wallpack_by_miatari_1600x12001.jpeg);
+}
+.movemenu button.type-Steel:hover{
+    background: #7a7aa7 url(http://www.damajority.com/wp-content/uploads/2012/09/Wallpapers-room_com___industrial_steel_hd_wallpack_by_miatari_1600x12001.jpeg);
+}
+
+.movemenu button.type-undefined, .movemenu button.type-undefined:hover{
+    background: url(http://i.imgur.com/ee2HfDF.png);
+}
+
+.userlist li button:hover {
+background:#CEF6F5;
+}
+
+.movemenu button {
+color:#000000
+}
+
+
+
+.statbar
+{
+        position: absolute;
+        display: none;
+        width: 186px;
+        background: url(http://i.imgur.com/IKIMzZJ.png);
+        background-repeat: no-repeat;
+        background-position: 0px 1px;
+        min-height: 40px;
+        padding: 2px 4px 2px 26px;
+}
+.statbar strong
+{
+        position: absolute;
+        left: 30px;
+        top: 6px;
+        font-size: 16px;
+        font-weight: normal;
+        display: block;
+        text-align: center;
+        color: #FFFFF;
+        text-shadow: #000 1px 1px 0, #000 1px -1px 0, #000 -1px 1px 0, #000 -1px -1px 0;
+}
+.statbar strong small
+{
+          font-size: 16px;
+        font-weight: normal;
+}
+.statbar .hpbar
+{
+        position: relative;
+        border: 1px solid #131313;
+        background: #FCFEFF;
+        height: 6px;
+        margin: 0 0 0 0;
+        width: 151px;
+        border-radius: 0px;
+          padding: 0;
+          top: -2px;
+}
+.hptextborder{
+        display:none !important;
+}
+
+
+
+.statbar .hpbar .hp
+{
+        height: 3px;
+        border-top: 1px solid #007734;
+        background: #00bb51;
+        border-bottom: 2px solid #007734;
+        border-radius: 0px;
+}
+.statbar .hpbar .hp-yellow
+{
+        background-color: #f5d538;
+        border-color: #be9f0a;
+}
+.statbar .hpbar .hp-red
+{
+        background-color: #ee4928;
+        border-color: #a3260d;
+}
+
+
+
+.statbar .hpbar .prevhp
+{
+        background: #BBEECC;
+        height: 6px;
+        border-radius: 0px;
+}
+.statbar .hpbar .prevhp-yellow
+{
+        background-color: #fcf4ca;
+}
+.statbar .hpbar .prevhp-red
+{
+        background-color: #facec5;
+}
+
+
+
+.hptext{
+        margin-top: 2px;  
+}
+  
+.statbar .hpbar .hptext
+{
+        position: absolute;
+        color: #FFFFFF;
+        text-shadow: 1px 0 black, -1px 0 black, 0 1px black, 0 -1px black;
+        font-size: 9px;
+        width: 32px;
+        height: 12px;
+        top: -1px;
+        text-align: center;
+}
+.rstatbar .hpbar .hptext
+{
+        width: 40px;
+        height: 15px;
+        background:url(http://i.imgur.com/ZZ6x4Xp.png);
+        right: -42px;
+        border-radius: 0 4px 4px 0;
+}
+.lstatbar .hpbar .hptext
+{
+        width: 35px;
+        height: 15px;
+        background:url(http://i.imgur.com/G56gNPf.png);
+        left: -55px;
+        border-radius: 4px 0 0 4px;
+        padding-left: 2px;
+}
+
+
+.statbar .status
+{
+          margin-top:15px;
+        min-height: 10px;
+        font-size: 7pt;
+}
+
+.statbar span.brn,
+.statbar span.psn,
+.statbar span.slp,
+.statbar span.par,
+.statbar span.frz
+{
+          position: absolute;
+          left: -21px;
+          top: 10px;
+          font-size: 8px;
+        padding: 1px 2px;
+        border: 0;
+        border-radius: 3px;
+}
+.statbar span.bad
+{
+        background: #e74c3c;
+        color: #ecf0f1;
+        border-color: #c0392b;
+}
+.statbar span.good
+{
+        background: #27ae60;
+        color: #ecf0f1;
+        border-color: #067A37;
+}
+.statbar span.neutral
+{
+        background: #7f8c8d;
+        color: #ecf0f1;
+        border: 1 solid #2c3e50;
+}
+.broadcast-blue{
+    background-color: #0000FF;
+        padding: 2px 4px;
+}        
+
+.broadcast-red{
+    background-color: #FF0000;
+    padding: 2px 4px;  
+}      
+  .switchmenu button, .switchmenu button:disabled{
+	background: url(http://i.imgur.com/qYAMtSx.png) !important;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+  	font-size: 8pt;
+}
+
+.switchmenu button{
+	color: white;            
+    text-shadow: 1px 1px black;
+}
+
+.switchmenu button:disabled{
+}
+.leftbar {
+background-image: url(http://i.imgur.com/rFSFXGg.png);
+}
+.rightbar {
+background-image: url(http://i.imgur.com/rFSFXGg.png);
+}
+.userbar:before{
+        background: url(http://i.imgur.com/3tRYvEC.png);
+}
+.mainmenufooter small:after {
+	  content: "Rain Server";
+}
