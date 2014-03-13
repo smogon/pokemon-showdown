@@ -110,14 +110,14 @@ exports.BattleStatuses = {
 	},
 
 	unown: {
-		// Unown: Adaptability
+		// Unown: Shadow Tag
 		onImmunity: function(type) {
 			if (type === 'Ground') return false;
 		},
 		onStart: function(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'adaptability';
-				pokemon.baseAbility = 'adaptability';
+				pokemon.ability = 'shadowtag';
+				pokemon.baseAbility = 'shadowtag';
 			}
 		},
 		onModifyPokemon: function(pokemon) {
