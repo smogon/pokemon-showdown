@@ -8,6 +8,10 @@ exports.BattleFormatsData = {
 		isUnreleased: false,
 		tier: 'OU'
 	},
+	genesect: {
+		inherit: true,
+		tier: 'OU'
+	},
 	deoxysdefense: {
 		inherit: true,
 		tier: 'Uber'
