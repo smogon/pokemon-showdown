@@ -1305,6 +1305,9 @@ exports.BattleScripts = {
 				if (ability === 'Limber' && template.id === 'stunfisk') {
 					rejectAbility = true;
 				}
+				if ((ability === 'Tinted Lens' || ability === 'Wonder Skin') && template.id === 'sigilyph') {
+					rejectAbility = true;
+				}
 				if (ability === 'Lightningrod' && template.types.indexOf('Ground') >= 0) {
 					rejectAbility = true;
 				}
