@@ -752,6 +752,7 @@ var commands = exports.commands = {
 			'- /hourmute OR /hm <em>username</em>: 60 minute mute<br />' +
 			'- /unmute <em>username</em>: unmute<br />' +
 			'- /announce OR /wall <em>message</em>: make an announcement<br />' +
+			'- /modlog <em>username</em>: search the moderator log of the room<br />' +
 			'<br />' +
 			'Room moderators (@) can also use:<br />' +
 			'- /roomban OR /rb <em>username</em>: bans user from the room<br />' +
