@@ -572,16 +572,16 @@ exports.BattleMovedex = {
 	/******************************************************************
 	Snore:
 	- base power increased to 100
-	- deals Special damage off physical Attack (reverse Psyshock)
 
 	Justification:
 	- Sleep Talk needs some competition
 	******************************************************************/
 	snore: {
 		inherit: true,
-		category: "Physical",
-		defensiveCategory: "Special",
 		basePower: 100,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'snorlax') return power * 1.5;
+		},
 		affectedByImmunities: false
 	},
 	/******************************************************************

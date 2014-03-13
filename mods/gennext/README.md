@@ -7,15 +7,17 @@ Manifesto
 The goal of NEXT is to improve the diversity of the OU metagame by only doing
 things that could plausibly be done between gens.
 
-That means:
+Specifically, the core rules of NEXT are:
 
 1. no base stat changes
 2. no removing from movepools
 3. no removing from ability distribution
-4. no typing changes without strong justification
-5. only numbers that make sense like 60%, 30%, etc, not weird numbers like 65%
-6. no buffing OU mons, except maybe tiny buffs to mons at the bottom of OU
-7. no doing things that make zero sense flavor-wise
+4. no typing changes (except on formes)
+5. no buffing OU mons, except maybe tiny buffs to mons at the bottom of OU
+6. no doing things that make zero sense flavor-wise
+
+What's left is mainly changes to how abilities and moves work, which is
+most of what NEXT is about.
 
 A good example is what Game Freak did by giving Ditto the Imposter ability.
 This gave a Ditto a role in OU, while still making sense flavor-wise, and
@@ -30,7 +32,7 @@ a new generation: existing OU threats stay mostly the same, but many new
 threats and strategies are introduced.
 
 And yes, we know that "no base stat changes" has been broken in Gen 6. We're
-still not doing it, because our approach has been working quite well so far.
+still not doing it, because it's hard to constrain and hard to keep track of.
 
 Recent changes
 ------------------------------------------------------------------------
@@ -192,6 +194,8 @@ New mechanic: Signature Pokemon:
 
   - Masquerain: Surf (10% -1 Spe)
 
+  - Snorlax: Snore (100 base power)
+
 - Again, note that while the Signature Pokemon will get the 1.5x damage boost,
   all Pokemon will get the other changes to the move listed above.
 
@@ -200,7 +204,7 @@ New mechanic: Intrinsics:
 - Pokemon that previously get Levitate are now immune to Ground intrinsically.
   Instead, they get new abilities in addition to their Ground immunity:
 
-  - Unown: Adaptability
+  - Unown: Shadow Tag
 
   - Bronzong: Heatproof
 
@@ -284,9 +288,6 @@ Minor move changes:
 
 - Cut and Rock Smash are 50 base power and now have a 100% chance of
   lowering foe's Def
-
-- Snore's Base Power is now 100, and it's now a Physical attack dealing
-  Special damage (like a reverse Psyshock)
 
 - Drill Peck, Needle Arm, Attack Order, Leaf Blade, and Crabhammers's Base
   Powers are now 100
