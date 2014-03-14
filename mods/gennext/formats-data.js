@@ -1,23 +1,24 @@
 exports.BattleFormatsData = {
+	blaziken: {
+		inherit: true,
+		tier: 'OU'
+	},
+	diancie: {
+		inherit: true,
+		isUnreleased: false,
+		tier: 'OU'
+	},
 	genesect: {
 		inherit: true,
 		tier: 'OU'
 	},
-	tornadustherian: {
+	deoxysdefense: {
 		inherit: true,
-		tier: 'OU'
+		tier: 'Uber'
 	},
-	thundurus: {
+	deoxysspeed: {
 		inherit: true,
-		tier: 'OU'
-	},
-	excadrill: {
-		inherit: true,
-		tier: 'OU'
-	},
-	blaziken: {
-		inherit: true,
-		tier: 'OU'
+		tier: 'Uber'
 	},
 	kyurem: {
 		inherit: true,
