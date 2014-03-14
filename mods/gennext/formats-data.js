@@ -28,8 +28,4 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: 'Uber'
 	},
-	deoxysdefense: {
-		inherit: true,
-		tier: 'Uber'
-	}
 };
