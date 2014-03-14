@@ -366,10 +366,10 @@ exports.BattleAbilities = {
 	},
 	"multiscale": {
 		inherit: true,
-		onSourceBasePower: function(basePower, attacker, defender, move) {
-			if (defender.hp >= defender.maxhp) {
+		onSourceModifyDamage: function(damage, source, target, move) {
+			if (target.hp >= target.maxhp) {
 				this.add('-message', "The attack was slightly weakened by Multiscale!");
-				return basePower*2/3;
+				return this.chainModify(2/3);
 			}
 		}
 	},
@@ -377,7 +377,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (move.isPunchAttack) {
-				return basePower * 13/10;
+				return basePower * 1.33;
 			}
 		}
 	},
@@ -505,6 +505,60 @@ exports.BattleAbilities = {
 		onResidual: function(pokemon) {
 			if (pokemon.activeTurns && !pokemon.volatiles.stall) {
 				this.boost({spe:1});
+			}
+		}
+	},
+	"parentalbond": {
+		inherit: true,
+		onModifyMove: function(move, pokemon, target) {
+			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && ((target.side && target.side.active.length < 2) || move.target in {any:1, normal:1, randomNormal:1})) {
+				move.multihit = 2;
+				move.accuracy = true;
+				pokemon.addVolatile('parentalbond');
+			}
+		},
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 8,
+			onBasePower: function(basePower) {
+				if (this.effectData.hit) {
+					return this.chainModify(0.5);
+				} else {
+					return this.chainModify(0.5);
+					this.effectData.hit = true;
+				}
+			}
+		},
+		id: "parentalbond",
+		name: "Parental Bond",
+		rating: 4.5,
+		num: -6,
+		gen: 6
+	},
+	"adaptability": {
+		inherit: true,
+		onModifyMove: function(move) {},
+		onBasePower: function(power, attacker, defender, move) {
+			if (!attacker.hasType(move.type)) {
+				return this.chainModify(1.33);
+			}
+		}
+	},
+	"shadowtag": {
+		onStart: function(pokemon) {
+			pokemon.addVolatile('shadowtag');
+		},
+		effect: {
+			duration: 1,
+			onFoeModifyPokemon: function(pokemon) {
+				if (pokemon.ability !== 'shadowtag') {
+					pokemon.tryTrap();
+				}
+			}
+		},
+		onFoeMaybeTrapPokemon: function(pokemon) {
+			if (pokemon.ability !== 'shadowtag') {
+				pokemon.maybeTrapped = true;
 			}
 		}
 	},

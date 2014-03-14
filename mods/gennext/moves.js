@@ -1,12 +1,12 @@
 exports.BattleMovedex = {
 	/******************************************************************
 	Perfect accuracy moves:
-	- base power increased 60 to 90
+	- base power increased to 90
 
 	Justification:
 	- perfect accuracy is too underpowered to have such low base power
 	- it's not even an adequate counter to accuracy boosting, which
-	  is why the latter is banned
+	  is why the latter is banned in OU
 
 	Precedent:
 	- Giga Drain and Drain Punch, similar 60 base power moves, have
@@ -37,6 +37,14 @@ exports.BattleMovedex = {
 		basePower: 90
 	},
 	swift: {
+		inherit: true,
+		basePower: 90
+	},
+	disarmingvoice: {
+		inherit: true,
+		basePower: 90
+	},
+	aurasphere: {
 		inherit: true,
 		basePower: 90
 	},
@@ -238,9 +246,9 @@ exports.BattleMovedex = {
 	******************************************************************/
 	solarbeam: {
 		inherit: true,
-		basePower: 60,
+		basePower: 80,
 		basePowerCallback: function(pokemon, target) {
-			return 60;
+			return 80;
 		},
 		willCrit: true,
 		accuracy: true,
@@ -259,7 +267,7 @@ exports.BattleMovedex = {
 	},
 	razorwind: {
 		inherit: true,
-		basePower: 40,
+		basePower: 60,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -274,7 +282,7 @@ exports.BattleMovedex = {
 	},
 	skullbash: {
 		inherit: true,
-		basePower: 50,
+		basePower: 70,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -292,7 +300,7 @@ exports.BattleMovedex = {
 	},
 	skyattack: {
 		inherit: true,
-		basePower: 70,
+		basePower: 95,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -309,7 +317,7 @@ exports.BattleMovedex = {
 	},
 	freezeshock: {
 		inherit: true,
-		basePower: 70,
+		basePower: 95,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -324,7 +332,7 @@ exports.BattleMovedex = {
 	},
 	iceburn: {
 		inherit: true,
-		basePower: 70,
+		basePower: 95,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -339,7 +347,7 @@ exports.BattleMovedex = {
 	},
 	bounce: {
 		inherit: true,
-		basePower: 45,
+		basePower: 60,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -354,7 +362,7 @@ exports.BattleMovedex = {
 	},
 	fly: {
 		inherit: true,
-		basePower: 45,
+		basePower: 60,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -371,7 +379,7 @@ exports.BattleMovedex = {
 	},
 	dig: {
 		inherit: true,
-		basePower: 45,
+		basePower: 60,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -388,7 +396,7 @@ exports.BattleMovedex = {
 	},
 	dive: {
 		inherit: true,
-		basePower: 45,
+		basePower: 60,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -405,7 +413,7 @@ exports.BattleMovedex = {
 	},
 	shadowforce: {
 		inherit: true,
-		basePower: 30,
+		basePower: 40,
 		willCrit: true,
 		accuracy: true,
 		onTryHitPriority: 10,
@@ -420,7 +428,7 @@ exports.BattleMovedex = {
 	},
 	skydrop: {
 		inherit: true,
-		basePower: 40,
+		basePower: 60,
 		willCrit: true,
 		accuracy: true,
 		secondary: {
@@ -434,7 +442,7 @@ exports.BattleMovedex = {
 	hyperbeam: {
 		inherit: true,
 		accuracy: true,
-		basePower: 75,
+		basePower: 100,
 		willCrit: true,
 		self: null,
 		onHit: function(target, source) {
@@ -446,7 +454,7 @@ exports.BattleMovedex = {
 	gigaimpact: {
 		inherit: true,
 		accuracy: true,
-		basePower: 75,
+		basePower: 100,
 		willCrit: true,
 		self: null,
 		onHit: function(target, source) {
@@ -458,7 +466,7 @@ exports.BattleMovedex = {
 	blastburn: {
 		inherit: true,
 		accuracy: true,
-		basePower: 75,
+		basePower: 100,
 		willCrit: true,
 		self: null,
 		onHit: function(target, source) {
@@ -470,7 +478,7 @@ exports.BattleMovedex = {
 	frenzyplant: {
 		inherit: true,
 		accuracy: true,
-		basePower: 75,
+		basePower: 100,
 		willCrit: true,
 		self: null,
 		onHit: function(target, source) {
@@ -482,7 +490,7 @@ exports.BattleMovedex = {
 	hydrocannon: {
 		inherit: true,
 		accuracy: true,
-		basePower: 75,
+		basePower: 100,
 		willCrit: true,
 		self: null,
 		onHit: function(target, source) {
@@ -494,7 +502,7 @@ exports.BattleMovedex = {
 	rockwrecker: {
 		inherit: true,
 		accuracy: true,
-		basePower: 75,
+		basePower: 100,
 		willCrit: true,
 		self: null,
 		onHit: function(target, source) {
@@ -506,7 +514,7 @@ exports.BattleMovedex = {
 	roaroftime: {
 		inherit: true,
 		accuracy: true,
-		basePower: 75,
+		basePower: 100,
 		willCrit: true,
 		self: null,
 		onHit: function(target, source) {
@@ -564,16 +572,16 @@ exports.BattleMovedex = {
 	/******************************************************************
 	Snore:
 	- base power increased to 100
-	- deals Special damage off physical Attack (reverse Psyshock)
 
 	Justification:
 	- Sleep Talk needs some competition
 	******************************************************************/
 	snore: {
 		inherit: true,
-		category: "Physical",
-		defensiveCategory: "Special",
 		basePower: 100,
+		onBasePower: function(power, user) {
+			if (user.template.id === 'snorlax') return power * 1.5;
+		},
 		affectedByImmunities: false
 	},
 	/******************************************************************
@@ -1013,7 +1021,7 @@ exports.BattleMovedex = {
 	******************************************************************/
 	focusblast: {
 		inherit: true,
-		accuracy: 50
+		accuracy: 30
 	},
 	shadowball: {
 		inherit: true,
@@ -1027,7 +1035,7 @@ exports.BattleMovedex = {
 	},
 	/******************************************************************
 	Selfdestruct and Explosion:
-	- 120 and 180 base power autocrit
+	- 200 and 250 base power autocrit
 
 	Justification:
 	- these were nerfed unreasonably in gen 5, they're now somewhat
@@ -1035,13 +1043,13 @@ exports.BattleMovedex = {
 	******************************************************************/
 	selfdestruct: {
 		inherit: true,
-		basePower: 140,
+		basePower: 200,
 		accuracy: true,
 		willCrit: true
 	},
 	explosion: {
 		inherit: true,
-		basePower: 180,
+		basePower: 250,
 		accuracy: true,
 		willCrit: true
 	},
@@ -1470,6 +1478,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 100
 	},
+	diamondstorm: {
+		inherit: true,
+		accuracy: 100
+	},
 	snarl: {
 		inherit: true,
 		accuracy: 100
@@ -1479,6 +1491,10 @@ exports.BattleMovedex = {
 		accuracy: 90
 	},
 	seedflare: {
+		inherit: true,
+		accuracy: 90
+	},
+	willowisp: {
 		inherit: true,
 		accuracy: 90
 	},
@@ -1584,6 +1600,23 @@ exports.BattleMovedex = {
 			spd: 1
 		}
 	},
+	paraboliccharge: {
+		inherit: true,
+		basePower: 40,
+		secondary: {
+			chance: 100,
+			boosts: {
+				spa: -1,
+				spd: -1
+			},
+			self: {
+				boosts: {
+					spa: 1,
+					spd: 1
+				}
+			}
+		}
+	},
 	stomp: {
 		inherit: true,
 		basePower: 100,
@@ -1656,7 +1689,7 @@ exports.BattleMovedex = {
 	eggbomb: {
 		inherit: true,
 		accuracy: 80,
-		basePower: 40,
+		basePower: 60,
 		willCrit: true
 	},
 	sacredsword: {

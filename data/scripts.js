@@ -1059,6 +1059,9 @@ exports.BattleScripts = {
 				case 'drainingkiss':
 					if (hasMove['dazzlinggleam']) rejected = true;
 					break;
+				case 'voltswitch':
+					if (hasMove['uturn']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
@@ -1322,6 +1325,9 @@ exports.BattleScripts = {
 				if ((abilities[0] === 'Chlorophyll' || abilities[1] === 'Chlorophyll' || abilities[2] === 'Chlorophyll') && ability !== 'Solar Power' && hasMove['sunnyday']) {
 					ability = 'Chlorophyll';
 				}
+				if (template.id === 'sigilyph') {
+					ability = 'Magic Guard';
+				}
 				if (template.id === 'combee') {
 					// it always gets Hustle but its only physical move is Endeavor, which loses accuracy
 					ability = 'Honey Gather';
@@ -1481,9 +1487,7 @@ exports.BattleScripts = {
 			} else if ((template.baseStats.hp+75)*(template.baseStats.def+template.baseStats.spd+175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
 				// skarmory and forretress get exceptions for their typing
 				item = 'Leftovers';
-			} else if (counter.Physical + counter.Special >= 3 && setupType) {
-				item = 'Life Orb';
-			} else if (counter.Special >= 3 && setupType) {
+			} else if ((counter.Physical + counter.Special >= 3 || counter.Special >= 3) && setupType && ability !== 'Sturdy') {
 				item = 'Life Orb';
 			} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179) {
 				item = 'Assault Vest';
