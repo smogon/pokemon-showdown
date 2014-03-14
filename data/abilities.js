@@ -618,9 +618,9 @@ exports.BattleAbilities = {
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact && !source.status) {
 				var r = this.random(100);
-				if (r < 11) source.setStatus('slp');
-				else if (r < 21) source.setStatus('par');
-				else if (r < 30) source.setStatus('psn');
+				if (r < 11) source.setStatus('slp', target);
+				else if (r < 21) source.setStatus('par', target);
+				else if (r < 30) source.setStatus('psn', target);
 			}
 		},
 		id: "effectspore",
@@ -2769,7 +2769,7 @@ exports.BattleAbilities = {
 		onAfterSetStatus: function(status, target, source) {
 			if (!source || source === target) return;
 			if (status.id === 'slp' || status.id === 'frz') return;
-			source.trySetStatus(status);
+			source.trySetStatus(status, target);
 		},
 		id: "synchronize",
 		name: "Synchronize",
