@@ -1045,7 +1045,7 @@ exports.BattleScripts = {
 					if (hasMove['gunkshot']) rejected = true;
 					break;
 				case 'psychic':
-					if (hasMove['psyshock']) rejected = true;
+					if (hasMove['psyshock'] || hasMove['storedpower']) rejected = true;
 					break;
 				case 'fusionbolt':
 					if (setupType && hasMove['boltstrike']) rejected = true;
