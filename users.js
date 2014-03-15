@@ -23,7 +23,7 @@
  * @license MIT license
  */
 
-var THROTTLE_DELAY = 500;
+var THROTTLE_DELAY = 600;
 
 var users = {};
 var prevUsers = {};
