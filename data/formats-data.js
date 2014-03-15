@@ -4536,7 +4536,7 @@ exports.BattleFormatsData = {
 		tier: "Limbo A"
 	},
 	xerneas: {
-		viableMoves: {"geomancy":1,"moonblast":1,"thunder":1,"focusblast":1,"flashcannon":1},
+		viableMoves: {"geomancy":1,"moonblast":1,"thunder":1,"focusblast":1},
 		tier: "Uber"
 	},
 	yveltal: {
