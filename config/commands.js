@@ -422,14 +422,8 @@ var commands = exports.commands = {
 								prevoTemp = Tools.getTemplate(prevoTemp.prevo);
 							}
 							var canLearn = (prevoTemp.learnset.sketch && !(move.id in {'chatter':1,'struggle':1,'magikarpsrevenge':1})) || prevoTemp.learnset[move.id];
-							if ((!canLearn && searches[search][i]) || (searches[search][i] === false && canLearn)) dex[mon] = false;
+							if ((!canLearn && searches[search][i]) || (searches[search][i] === false && canLearn)) delete dex[mon];
 						}
-					}
-					for (var mon in dex) {
-						if (dex[mon] && dex[mon].evos.length) {
-							for (var evo in dex[mon].evos) if (dex[dex[mon].evos[evo]] !== false) dex[dex[mon].evos[evo]] = Tools.getTemplate(dex[mon].evos[evo]);
-						}
-						if (!dex[mon]) delete dex[mon];
 					}
 					break;
 
