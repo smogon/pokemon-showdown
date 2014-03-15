@@ -1468,7 +1468,7 @@ var ChatRoom = (function() {
 	ChatRoom.prototype.onLeave = function(user) {
 		if (!user) return; // ...
 		delete this.users[user.userid];
-		if (config.reportjoins) {
+		if (user.named && config.reportjoins) {
 			this.add('|l|'+user.getIdentity(this.id));
 		} else if (user.named) {
 			var entry = '|L|' + user.getIdentity(this.id);
