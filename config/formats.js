@@ -30,6 +30,14 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
 	},
 	{
+		name: "OU (suspect test)",
+		section: "XY Singles",
+
+		challengeShow: false,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
+	},
+	{
 		name: "Ubers",
 		section: "XY Singles",
 
@@ -45,6 +53,16 @@ exports.Formats = [
 	},
 	{
 		name: "LC",
+		section: "XY Singles",
+
+		maxLevel: 5,
+		challengeShow: false,
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Swirlix', 'Gligar']
+	},
+	{
+		name: "LC (suspect test)",
 		section: "XY Singles",
 
 		maxLevel: 5,
