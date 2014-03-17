@@ -1141,6 +1141,14 @@ exports.BattleAbilities = {
 			if (pokemon === pokemon.side.pokemon[i]) return;
 			pokemon.illusion = pokemon.side.pokemon[i];
 		},
+		onStart: function(pokemon) {
+			for (var i=pokemon.side.pokemon.length-1; i>pokemon.position; i--) {
+				if (!pokemon.side.pokemon[i]) continue;
+				if (!pokemon.side.pokemon[i].fainted) break;
+			}
+			if (pokemon.illusion !== pokemon.side.pokemon[i]) return false;
+			if (pokemon.side.pokemon[i].template.isMega) this.add('-formechange', pokemon.side.pokemon[i], pokemon.side.pokemon[i].template.species);
+		},
 		// illusion clearing is hardcoded in the damage function
 		id: "illusion",
 		name: "Illusion",
