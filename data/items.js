@@ -673,7 +673,7 @@ exports.BattleItems = {
 			pokemon.removeVolatile('choicelock');
 		},
 		onModifyMove: function(move, pokemon) {
-			pokemon.addVolatile('choicelock');
+			if (!move.hasBounced) pokemon.addVolatile('choicelock');
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk: function(atk) {
@@ -698,7 +698,7 @@ exports.BattleItems = {
 			pokemon.removeVolatile('choicelock');
 		},
 		onModifyMove: function(move, pokemon) {
-			pokemon.addVolatile('choicelock');
+			if (!move.hasBounced) pokemon.addVolatile('choicelock');
 		},
 		onModifySpe: function(speMod) {
 			return this.chain(speMod, 1.5);
@@ -722,7 +722,7 @@ exports.BattleItems = {
 			pokemon.removeVolatile('choicelock');
 		},
 		onModifyMove: function(move, pokemon) {
-			pokemon.addVolatile('choicelock');
+			if (!move.hasBounced) pokemon.addVolatile('choicelock');
 		},
 		onModifySpAPriority: 1,
 		onModifySpA: function(spa) {
