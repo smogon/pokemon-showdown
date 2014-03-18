@@ -45,11 +45,18 @@ exports.Formats = [
 		banlist: []
 	},
 	{
-		name: "UU (beta)",
+		name: "UU",
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'Medichamite', 'Gardevoirite', 'OU', 'BL', 'Drizzle', 'Drought']
+		banlist: ['Uber', 'OU', 'BL',
+			// Banned items
+			'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'Medichamite', 'Gardevoirite', 'Houndoominite',
+			// Banned moves
+			'Swagger',
+			// Banned abilities
+			'Drizzle', 'Drought'
+		]
 	},
 	{
 		name: "LC",
