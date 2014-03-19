@@ -2131,6 +2131,9 @@ exports.BattleScripts = {
 				case 'hiddenpowerice':
 					if (hasMove['icywind']) rejected = true;
 					break;
+				case 'stone edge':
+					if (hasMove['rockblast']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
