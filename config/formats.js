@@ -45,11 +45,18 @@ exports.Formats = [
 		banlist: []
 	},
 	{
-		name: "UU (beta)",
+		name: "UU",
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'Medichamite', 'Gardevoirite', 'OU', 'BL', 'Drizzle', 'Drought']
+		banlist: ['Uber', 'OU', 'BL',
+			// Banned items
+			'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'Medichamite', 'Gardevoirite', 'Houndoominite',
+			// Banned moves
+			'Swagger',
+			// Banned abilities
+			'Drizzle', 'Drought'
+		]
 	},
 	{
 		name: "LC",
@@ -178,6 +185,7 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
 		banlist: ['Dark Void', 'Soul Dew',
+			// Uber Pokémon
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
 			'Lugia',
 			'Ho-Oh',
@@ -193,60 +201,13 @@ exports.Formats = [
 			'Kyurem-White',
 			'Xerneas',
 			'Yveltal',
-			'Aegislash',
-			'Alakazam',
-			'Amoonguss',
-			'Azumarill',
-			'Breloom',
-			'Chandelure',
-			'Charizard',
-			'Clefable',
-			'Cloyster',
-			'Conkeldurr',
-			'Cresselia',
-			'Dragonite',
-			'Excadrill',
-			'Ferrothorn',
-			'Garchomp',
-			'Gardevoir',
-			'Gastrodon',
-			'Genesect',
-			'Gengar',
-			'Gliscor',
-			'Goodra',
-			'Greninja',
-			'Gyarados',
-			'Heatran',
-			'Hitmontop',
-			'Infernape',
-			'Jolteon',
-			'Kangaskhan',
-			'Klefki',
-			'Landorus-Therian',
-			'Lucario',
-			'Mamoswine',
-			'Manectric',
-			'Mawile',
-			'Meowstic',
-			'Metagross',
-			'Ninetales',
-			'Politoed',
-			'Reuniclus',
-			'Rotom-Wash',
-			'Rhyperior',
-			'Sableye',
-			'Scizor',
-			'Scrafty',
-			'Sylveon',
-			'Talonflame',
-			'Terrakion',
-			'Thundurus',
-			'Togekiss',
-			'Trevenant',
-			'Tyranitar',
-			'Venusaur',
-			'Volcarona',
-			'Whimsicott']
+			// OU Pokémon
+			'Abomasnow', 'Aegislash', 'Amoonguss', 'Ampharos', 'Azumarill', 'Bisharp', 'Breloom', 'Chandelure', 'Charizard', 'Conkeldurr', 'Cresselia',
+			'Dragonite', 'Dusclops', 'Excadrill', 'Garchomp', 'Gardevoir', 'Genesect', 'Gengar', 'Greninja', 'Gyarados', 'Heatran', 'Hitmontop',
+			'Jellicent', 'Jirachi', 'Kangaskhan', 'Klefki', 'Landorus-T', 'Latios', 'Lucario', 'Ludicolo', 'Mamoswine', 'Manectric', 'Mawile',
+			'Politoed', 'Reuniclus', 'Rhyperior', 'Rotom-W', 'Sableye', 'Salamence', 'Scrafty', 'Scizor', 'Shaymin-S', 'Sylveon', 'Talonflame',
+			'Terrakion', 'Thundurus', 'Togekiss', 'Trevenant', 'Tyranitar', 'Venusaur', 'Volcarona'
+		]
 	},
 	{
 		name: "XY Battle Spot Doubles",

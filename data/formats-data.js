@@ -648,7 +648,7 @@ exports.BattleFormatsData = {
 	magnezone: {
 		viableMoves: {"thunderbolt":1,"thunderwave":1,"magnetrise":1,"substitute":1,"flashcannon":1,"hiddenpowerice":1,"voltswitch":1,"chargebeam":1,"hiddenpowerfire":1},
 		viableDoublesMoves: {"thunderbolt":1,"thunderwave":1,"magnetrise":1,"substitute":1,"flashcannon":1,"hiddenpowerice":1,"voltswitch":1,"protect":1,"electroweb":1,"discharge":1,"hiddenpowerfire":1},
-		tier: "Limbo A"
+		tier: "BL"
 	},
 	farfetchd: {
 		viableMoves: {"bravebird":1,"swordsdance":1,"return":1,"leafblade":1,"roost":1},
@@ -2434,7 +2434,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":100,"moves":["taunt","crabhammer","swordsdance","guillotine"]},
 			{"generation":3,"level":50,"moves":["knockoff","taunt","crabhammer","swordsdance"]}
 		],
-		tier: "Limbo B"
+		tier: "BL"
 	},
 	baltoy: {
 		viableMoves: {"stealthrock":1,"earthquake":1,"toxic":1,"psychic":1,"reflect":1,"lightscreen":1,"icebeam":1,"rapidspin":1},
@@ -2631,7 +2631,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"gender":"M","nature":"Naughty","moves":["hydropump","stoneedge","fireblast","dragonclaw"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"isHidden":false,"moves":["dragondance","dragonclaw","outrage","aerialace"],"pokeball":"cherishball"}
 		],
-		tier: "Limbo A"
+		tier: "BL"
 	},
 	beldum: {
 		viableMoves: {"ironhead":1,"zenheadbutt":1,"headbutt":1,"irondefense":1},
@@ -3963,7 +3963,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":59,"gender":"F","nature":"Naive","isHidden":false,"abilities":["moldbreaker"],"moves":["earthquake","dualchop","xscissor","dragondance"],"pokeball":"cherishball"}
 		],
-		tier: "Limbo A"
+		tier: "BL"
 	},
 	cubchoo: {
 		viableMoves: {"icebeam":1,"surf":1,"hiddenpowergrass":1,"superpower":1},
@@ -4080,7 +4080,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":70,"shiny":true,"gender":"M","moves":["hypervoice","dragonbreath","flamethrower","focusblast"],"pokeball":"cherishball"}
 		],
-		tier: "Limbo A"
+		tier: "BL"
 	},
 	larvesta: {
 		viableMoves: {"flareblitz":1,"uturn":1,"wildcharge":1,"zenheadbutt":1,"morningsun":1,"willowisp":1},
@@ -4134,7 +4134,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":70,"gender":"M","isHidden":false,"moves":["thunder","hammerarm","focusblast","wildcharge"],"pokeball":"cherishball"}
 		],
-		tier: "BL"
+		tier: "Limbo"
 	},
 	reshiram: {
 		viableMoves: {"blueflare":1,"dracometeor":1,"dragonpulse":1,"flamethrower":1,"flamecharge":1,"roost":1},
@@ -4447,7 +4447,7 @@ exports.BattleFormatsData = {
 	},
 	hawlucha: {
 		viableMoves: {"swordsdance":1,"highjumpkick":1,"uturn":1,"stoneedge":1,"roost":1,"batonpass":1},
-		tier: "Limbo B"
+		tier: "BL"
 	},
 	dedenne: {
 		viableMoves: {"voltswitch":1,"thunderbolt":1,"nuzzle":1,"grassknot":1,"hiddenpowerice":1,"uturn":1,"toxic":1},
@@ -4471,7 +4471,7 @@ exports.BattleFormatsData = {
 	},
 	klefki: {
 		viableMoves: {"reflect":1,"lightscreen":1,"spikes":1,"torment":1,"substitute":1,"thunderwave":1,"drainingkiss":1,"swagger":1,"foulplay":1,"flashcannon":1,"dazzlinggleam":1},
-		tier: "Limbo A"
+		tier: "BL"
 	},
 	phantump: {
 		viableMoves: {"hornleech":1,"leechseed":1,"phantomforce":1,"substitute":1,"willowisp":1,"curse":1,"bulldoze":1,"rockslide":1,"poisonjab":1},
