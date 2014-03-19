@@ -4134,7 +4134,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":70,"gender":"M","isHidden":false,"moves":["thunder","hammerarm","focusblast","wildcharge"],"pokeball":"cherishball"}
 		],
-		tier: "Limbo"
+		tier: "Limbo A"
 	},
 	reshiram: {
 		viableMoves: {"blueflare":1,"dracometeor":1,"dragonpulse":1,"flamethrower":1,"flamecharge":1,"roost":1},
