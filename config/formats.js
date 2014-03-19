@@ -202,11 +202,12 @@ exports.Formats = [
 			'Xerneas',
 			'Yveltal',
 			// OU Pokémon
-			'Abomasnow', 'Aegislash', 'Amoonguss', 'Ampharos', 'Azumarill', 'Bisharp', 'Breloom', 'Chandelure', 'Charizard', 'Conkeldurr', 'Cresselia',
-			'Dragonite', 'Dusclops', 'Excadrill', 'Garchomp', 'Gardevoir', 'Genesect', 'Gengar', 'Greninja', 'Gyarados', 'Heatran', 'Hitmontop',
-			'Jellicent', 'Jirachi', 'Kangaskhan', 'Klefki', 'Landorus-T', 'Latios', 'Lucario', 'Ludicolo', 'Mamoswine', 'Manectric', 'Mawile',
-			'Politoed', 'Reuniclus', 'Rhyperior', 'Rotom-W', 'Sableye', 'Salamence', 'Scrafty', 'Scizor', 'Shaymin-S', 'Sylveon', 'Talonflame',
-			'Terrakion', 'Thundurus', 'Togekiss', 'Trevenant', 'Tyranitar', 'Venusaur', 'Volcarona'
+			'Abomasnow', 'Aegislash', 'Amoonguss', 'Ampharos', 'Azumarill', 'Bisharp', 'Breloom', 'Chandelure', 'Charizard', 'Conkeldurr',
+			'Cresselia', 'Dragonite', 'Dusclops', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Gardevoir', 'Gastrodon', 'Genesect', 'Gengar',
+			'Gliscor', 'Greninja', 'Gyarados', 'Heatran', 'Hitmontop', 'Jirachi', 'Kangaskhan', 'Klefki', 'Landorus-T', 'Latios', 'Lucario',
+			'Mamoswine', 'Manectric', 'Mawile', 'Metagross', 'Ninetales', 'Politoed', 'Reuniclus', 'Rhyperior', 'Rotom-W', 'Sableye',
+			'Salamence', 'Scizor', 'Shaymin-S', 'Sylveon', 'Talonflame', 'Terrakion', 'Thundurus', 'Togekiss', 'Trevenant', 'Tyranitar',
+			'Venusaur', 'Volcarona', 'Whimsicott', 'Zapdos'
 		]
 	},
 	{
