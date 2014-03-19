@@ -1509,7 +1509,7 @@ exports.BattleScripts = {
 				item = 'Air Balloon';
 			} else if (hasType['Poison']) {
 				item = 'Black Sludge';
-			} else if (counter.Status <= 1) {
+			} else if (counter.Status <= 1 && ability !== 'Sturdy') {
 				item = 'Life Orb';
 			} else {
 				item = 'Leftovers';
