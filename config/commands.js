@@ -264,6 +264,7 @@ var commands = exports.commands = {
 		this.sendReply(data);
 	},
 
+	ds: 'dexsearch',
 	dsearch: 'dexsearch',
 	dexsearch: function (target, room, user) {
 		if (!this.canBroadcast()) return;
