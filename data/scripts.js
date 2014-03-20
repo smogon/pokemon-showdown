@@ -1429,10 +1429,10 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else if (ability === 'Unburden') {
 				item = 'Red Card';
-				// Give Unburden mons a Normal Gem if they have a Normal-type attacking move
+				// Give Unburden mons a Normal Gem if they have a Normal-type attacking move (except Explosion)
 				for (var m in moves) {
 					var move = this.getMove(moves[m]);
-					if (move.type === 'Normal' && (move.basePower || move.basePowerCallback)) {
+					if (move.type === 'Normal' && (move.basePower || move.basePowerCallback) && move.id !== 'explosion') {
 						item = 'Normal Gem';
 						break;
 					}
