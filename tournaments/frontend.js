@@ -538,10 +538,12 @@ var Tournament = (function () {
 var commands = {
 	basic: {
 		j: 'join',
+		in: 'join',
 		join: function (tournament, user) {
 			tournament.addUser(user, this);
 		},
 		l: 'leave',
+		out: 'leave',
 		leave: function (tournament, user) {
 			tournament.removeUser(user, this);
 		},
@@ -587,6 +589,7 @@ var commands = {
 			tournament.disqualifyUser(targetUser, this);
 		},
 		end: 'delete',
+		stop: 'delete',
 		delete: function (tournament) {
 			deleteTournament(tournament.room.title, this);
 		}
