@@ -534,6 +534,64 @@ var Tournament = (function () {
 	return Tournament;
 })();
 
+var commands = {
+	basic: {
+		j: 'join',
+		join: function (tournament, user) {
+			tournament.addUser(user, this);
+		},
+		l: 'leave',
+		leave: function (tournament, user) {
+			tournament.removeUser(user, this);
+		},
+		getupdate: function (tournament, user) {
+			tournament.update(user);
+		},
+		challenge: function (tournament, user, params, cmd) {
+			if (params.length < 1)
+				return this.sendReply("Usage: " + cmd + " <user>");
+			var targetUser = Users.get(params[0]);
+			if (!targetUser)
+				return this.sendReply("User " + params[0] + " not found.");
+			tournament.challenge(user, targetUser, this);
+		},
+		cancelchallenge: function (tournament, user) {
+			tournament.cancelChallenge(user);
+		},
+		acceptchallenge: function (tournament, user) {
+			tournament.acceptChallenge(user);
+		}
+	},
+	creation: {
+		settype: function (tournament, user, params, cmd) {
+			if (params.length < 1)
+				return this.sendReply("Usage: " + cmd + " <type> [, <comma-separated arguments>]");
+			var generator = createTournamentGenerator(params.shift(), params, this);
+			if (generator)
+				tournament.setGenerator(generator, this);
+		},
+		begin: 'start',
+		start: function (tournament) {
+			tournament.startTournament(this);
+		}
+	},
+	moderation: {
+		dq: 'disqualify',
+		disqualify: function (tournament, user, params, cmd) {
+			if (params.length < 1)
+				return this.sendReply("Usage: " + cmd + " <user>");
+			var targetUser = Users.get(params[0]);
+			if (!targetUser)
+				return this.sendReply("User " + params[0] + " not found.");
+			tournament.disqualifyUser(targetUser, this);
+		},
+		end: 'delete',
+		delete: function (tournament) {
+			deleteTournament(tournament.room.title, this);
+		}
+	}
+};
+
 CommandParser.commands.tour = 'tournament';
 CommandParser.commands.tours = 'tournament';
 CommandParser.commands.tournaments = 'tournament';
@@ -542,92 +600,43 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 	var cmd = cmdParts.shift().trim().toLowerCase();
 	var params = cmdParts.join(' ').split(',').map(function (param) { return param.trim(); });
 
-	if (cmd === 'create' || cmd === 'new') {
+	if (cmd === '') {
+		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).map(function (tournament) {
+			tournament = exports.tournaments[tournament];
+			return {room: tournament.room.id, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
+		})));
+	} else if (cmd === 'create' || cmd === 'new') {
 		if (!user.can('tournaments', null, room))
 			return this.sendReply(cmd + " -  Access denied.");
 		if (params.length < 2)
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 
 		createTournament(room, params.shift(), params.shift(), params, this);
-	} else if (cmd === '') {
-		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).map(function (tournament) {
-			tournament = exports.tournaments[tournament];
-			return {room: tournament.room.id, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
-		})));
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament)
 			return this.sendReply("There is currently no tournament running in this room.");
 
-		switch (cmd) {
-			case 'join':
-			case 'j':
-				tournament.addUser(user, this);
-				break;
+		var commandHandler = null;
+		if (commands.basic[cmd])
+			commandHandler = typeof commands.basic[cmd] === 'string' ? commands.basic[commands.basic[cmd]] : commands.basic[cmd];
 
-			case 'leave':
-			case 'l':
-				tournament.removeUser(user, this);
-				break;
-
-			case 'getupdate':
-				tournament.update(user);
-				break;
-
-			case 'challenge':
-				if (params.length < 1)
-					return this.sendReply("Usage: " + cmd + " <user>");
-				var targetUser = Users.get(params[0]);
-				if (!targetUser)
-					return this.sendReply("User " + params[0] + " not found.");
-				tournament.challenge(user, targetUser, this);
-				break;
-
-			case 'cancelchallenge':
-				tournament.cancelChallenge(user);
-				break;
-
-			case 'acceptchallenge':
-				tournament.acceptChallenge(user);
-				break;
-
-			default:
-				if (!user.can('tournaments', null, room))
-					return this.sendReply(cmd + " -  Access denied.");
-
-				switch (cmd) {
-					case 'settype':
-						if (params.length < 1)
-							return this.sendReply("Usage: " + cmd + " <type> [, <comma-separated arguments>]");
-						var generator = createTournamentGenerator(params.shift(), params, this);
-						if (generator)
-							tournament.setGenerator(generator, this);
-						break;
-
-					case 'end':
-					case 'delete':
-						deleteTournament(room.title, this);
-						break;
-
-					case 'begin':
-					case 'start':
-						tournament.startTournament(this)
-						break;
-
-					case 'disqualify':
-					case 'dq':
-						if (params.length < 1)
-							return this.sendReply("Usage: " + cmd + " <user>");
-						var targetUser = Users.get(params[0]);
-						if (!targetUser)
-							return this.sendReply("User " + params[0] + " not found.");
-						tournament.disqualifyUser(targetUser, this);
-						break;
-
-					default:
-						return this.sendReply(cmd + " is not a tournament command.");
-				}
+		if (commands.creation[cmd]) {
+			if (!user.can('tournaments', null, room))
+				return this.sendReply(cmd + " -  Access denied.");
+			commandHandler = typeof commands.creation[cmd] === 'string' ? commands.creation[commands.basic[cmd]] : commands.creation[cmd];
 		}
+
+		if (commands.moderation[cmd]) {
+			if (!user.can('tournamentsmoderation', null, room))
+				return this.sendReply(cmd + " -  Access denied.");
+			commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.basic[cmd]] : commands.moderation[cmd];
+		}
+
+		if (!commandHandler)
+			this.sendReply(cmd + " is not a tournament command.");
+		else
+			commandHandler.call(this, tournament, user, params, cmd);
 	}
 };
 
@@ -637,3 +646,5 @@ exports.TournamentGenerators = TournamentGenerators;
 exports.createTournament = createTournament;
 exports.deleteTournament = deleteTournament;
 exports.get = getTournament;
+
+exports.commands = commands;
