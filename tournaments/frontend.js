@@ -21,7 +21,7 @@ function createTournamentGenerator(generator, args, output) {
 	args.unshift(null);
 	return new (Generator.bind.apply(Generator, args));
 }
-function createTournament(room, format, generator, args, output) {
+function createTournament(room, format, generator, isRated, args, output) {
 	if (room.type !== 'chat') {
 		output.sendReply("Tournaments can only be created in chat rooms.");
 		return;
@@ -40,7 +40,7 @@ function createTournament(room, format, generator, args, output) {
 		output.sendReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
 		return;
 	}
-	return exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output));
+	return exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), isRated);
 }
 function deleteTournament(name, output) {
 	var id = toId(name);
@@ -57,10 +57,11 @@ function getTournament(name, output) {
 }
 
 var Tournament = (function () {
-	function Tournament(room, format, generator) {
+	function Tournament(room, format, generator, isRated) {
 		this.room = room;
 		this.format = toId(format);
 		this.generator = generator;
+		this.isRated = isRated;
 
 		this.isBracketInvalidated = true;
 		this.bracketCache = null;
@@ -468,7 +469,7 @@ var Tournament = (function () {
 		challenge.from.sendTo(this.room, '|tournament|update|{"challenging":null}');
 		user.sendTo(this.room, '|tournament|update|{"challenged":null}');
 
-		var room = Rooms.global.startBattle(challenge.from, user, this.format, true, challenge.team, user.team);
+		var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
 		this.inProgressMatches.set(challenge.from, {to: user, room: room});
 		this.room.add('|tournament|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id);
 
@@ -611,7 +612,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		if (params.length < 2)
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 
-		createTournament(room, params.shift(), params.shift(), params, this);
+		createTournament(room, params.shift(), params.shift(), config.istournamentsrated, params, this);
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament)
