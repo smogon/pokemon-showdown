@@ -408,6 +408,11 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.challenge = function (from, to, output) {
+		if (!this.isTournamentStarted) {
+			output.sendReply('|tournament|error|NotStarted');
+			return;
+		}
+
 		if (!this.availableMatches.get(from) || !this.availableMatches.get(from).get(to)) {
 			output.sendReply('|tournament|error|InvalidMatch')
 			return;
@@ -446,6 +451,11 @@ var Tournament = (function () {
 		this.update();
 	};
 	Tournament.prototype.cancelChallenge = function (user) {
+		if (!this.isTournamentStarted) {
+			output.sendReply('|tournament|error|NotStarted');
+			return;
+		}
+
 		var challenge = this.pendingChallenges.get(user);
 		if (!challenge || challenge.from)
 			return;
@@ -462,6 +472,11 @@ var Tournament = (function () {
 		this.update();
 	};
 	Tournament.prototype.acceptChallenge = function (user) {
+		if (!this.isTournamentStarted) {
+			output.sendReply('|tournament|error|NotStarted');
+			return;
+		}
+
 		var challenge = this.pendingChallenges.get(user);
 		if (!challenge || !challenge.from)
 			return;
