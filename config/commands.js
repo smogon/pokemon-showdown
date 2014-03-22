@@ -998,6 +998,18 @@ var commands = exports.commands = {
 	birkal: function(target, room, user) {
 		this.sendReply("It's not funny anymore.");
 	},
+	
+	thankdiatom: 'thanksdiatom',
+	thanksiatom: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		var thxReason = Math.floor(Math.random()*(7));
+		else if (thxReason <== 1) return this.sendReply(+user.name+" has thanked Diatom for his outstanding dedication to the community!");
+		else if (thxReason <== 2) return this.sendReply(+user.name+" has thanked Diatom for ensuring Pokémon Showdown delivers an exceptional Pokémon battling experience!");
+		else if (thxReason <== 3) return this.sendReply(+user.name+" has thanked Diatom for modestly accepting the eternal gratitude of the users of Pokémon Showdown!");
+		else if (thxReason <== 4) return this.sendReply(+user.name+" has thanked Diatom for being the paragon of moderation!");
+		else if (thxReason <== 5) return this.sendReply(+user.name+" has thanked Diatom for consistently maintaining his calm, rational demeanor while in control!!");
+		else return this.sendReply(+user.name+" has thanked Diatom for having mercy, this time...");
+	},
 
 	potd: function(target, room, user) {
 		if (!this.can('potd')) return false;
