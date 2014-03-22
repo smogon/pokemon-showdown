@@ -1,8 +1,3 @@
-// NOTE: The usage of user objects instead of userids is to deal with situations
-//       such as where users change names and/or attempt to register multiple times.
-//       This causes some operations to be O(N) instead of O(log N) or O(N*N) instead
-//       of O(N*log N), until node.js implements the Map and Set objects.
-
 var RoundRobin = (function () {
 	function RoundRobin(isDoubles) {
 		this.isDoubles = !!isDoubles;
