@@ -182,7 +182,18 @@ var Tournament = (function () {
 		}, this);
 	};
 
-	Tournament.prototype.addUser = function (user, output) {
+	Tournament.prototype.addUser = function (user, isAllowAlts, output) {
+		if (!isAllowAlts) {
+			var users = {};
+			this.generator.getUsers().forEach(function (user) { users[user.name] = 1; });
+			var alts = user.getAlts();
+			for (var a = 0; a < alts.length; ++a)
+				if (users[alts[a]]) {
+					output.sendReply('|tournament|error|AltUserAlreadyAdded');
+					return;
+				}
+		}
+
 		var error = this.generator.addUser(user);
 		if (typeof error === 'string') {
 			output.sendReply('|tournament|error|' + error);
@@ -540,7 +551,7 @@ var commands = {
 		j: 'join',
 		in: 'join',
 		join: function (tournament, user) {
-			tournament.addUser(user, this);
+			tournament.addUser(user, false, this);
 		},
 		l: 'leave',
 		out: 'leave',
