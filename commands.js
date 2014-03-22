@@ -19,7 +19,7 @@ var commands = exports.commands = {
 
 	version: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("Server version: <b>" + CommandParser.package.version + "</b> <small>(<a href=\"http://pokemonshowdown.com/versions#" + CommandParser.serverVersion + "\">" + CommandParser.serverVersion.substr(0,10) + "</a>)</small>");
+		this.sendReplyBox("Server version: <strong>" + CommandParser.package.version + "</strong> <small>(<a href=\"http://pokemonshowdown.com/versions#" + CommandParser.serverVersion + "\">" + CommandParser.serverVersion.substr(0,10) + "</a>)</small>");
 	},
 
 	me: function(target, room, user, connection) {
@@ -566,8 +566,8 @@ var commands = exports.commands = {
 		if (unlocked) {
 			var names = Object.keys(unlocked);
 			this.addModCommand(names.join(", ") + " " +
-					((names.length > 1) ? "were" : "was") +
-					" unlocked by " + user.name + ".");
+				((names.length > 1) ? "were" : "was") +
+				" unlocked by " + user.name + ".");
 		} else {
 			this.sendReply("User " + target + " is not locked.");
 		}
@@ -852,14 +852,12 @@ var commands = exports.commands = {
 		// Otherwise, the text is defaulted to text search in current room's modlog.
 		var roomId = room.id;
 		var roomLogs = {};
-		var fs = require('fs');
+
 		if (target.indexOf(',') > -1) {
 			var targets = target.split(',');
 			target = targets[1].trim();
 			roomId = toId(targets[0]) || room.id;
 		}
-
-		if (!this.can('staff', Rooms.get(roomId))) return false;
 
 		// Let's check the number of lines to retrieve or if it's a word instead
 		if (!target.match('[^0-9]')) {
@@ -873,15 +871,16 @@ var commands = exports.commands = {
 		var filename = '';
 		var command = '';
 		if (roomId === 'all' && wordSearch) {
-			roomNames = "all rooms";
+			if (!this.can('modlog')) return;
+			roomNames = 'all rooms';
 			// Get a list of all the rooms
 			var fileList = fs.readdirSync('logs/modlog');
 			for (var i=0; i<fileList.length; ++i) {
 				filename += 'logs/modlog/' + fileList[i] + ' ';
 			}
 		} else {
-			roomId = room.id;
-			roomNames = "the room " + roomId;
+			if (!this.can('modlog', Rooms.get(roomId))) return;
+			roomNames = 'the room ' + roomId;
 			filename = 'logs/modlog/modlog_' + roomId + '.txt';
 		}
 
@@ -1096,6 +1095,10 @@ var commands = exports.commands = {
 			Sockets.workers[i].kill();
 		}
 
+		if (!room.destroyLog) {
+			process.exit();
+			return;
+		}
 		room.destroyLog(function() {
 			room.logEntry(user.name + " used /kill");
 		}, function() {
@@ -1208,7 +1211,7 @@ var commands = exports.commands = {
 			this.sendReply("Loading memory usage, this might take a while.");
 		}
 		if (target === 'all' || target === 'rooms' || target === 'room') {
-			this.sendReply("Calcualting Room size...");
+			this.sendReply("Calculating Room size...");
 			var roomSize = ResourceMonitor.sizeOfObject(Rooms);
 			this.sendReply("Rooms are using " + roomSize + " bytes of memory.");
 		}
@@ -1426,15 +1429,30 @@ var commands = exports.commands = {
 	timer: function(target, room, user) {
 		target = toId(target);
 		if (room.requestKickInactive) {
-			if (target === 'off' || target === 'stop') {
+			if (target === 'off' || target === 'false' || target === 'stop') {
 				room.stopKickInactive(user, user.can('timer'));
-			} else if (target === 'on' || !target) {
+			} else if (target === 'on' || target === 'true' || !target) {
 				room.requestKickInactive(user, user.can('timer'));
 			} else {
 				this.sendReply("'" + target + "' is not a recognized timer state.");
 			}
 		} else {
 			this.sendReply("You can only set the timer from inside a room.");
+		}
+	},
+
+	autotimer: 'forcetimer',
+	forcetimer: function(target, room, user) {
+		target = toId(target);
+		if (!this.can('autotimer')) return;
+		if (target === 'off' || target === 'false' || target === 'stop') {
+			config.forceTimer = false;
+			this.addModCommand("Forcetimer is now OFF: The timer is now opt-in. (set by "+user.name+")");
+		} else if (target === 'on' || target === 'true' || !target) {
+			config.forceTimer = true;
+			this.addModCommand("Forcetimer is now ON: All battles will be timed. (set by "+user.name+")");
+		} else {
+			this.sendReply("'" + target + "' is not a recognized forcetimer setting.");
 		}
 	},
 
