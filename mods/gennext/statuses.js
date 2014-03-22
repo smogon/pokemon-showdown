@@ -46,6 +46,26 @@ exports.BattleStatuses = {
 			return pokemon.lastMove;
 		}
 	},
+	confusion: {
+		// this is a volatile status
+		onStart: function(target, source, sourceEffect) {
+			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
+			if (!result) return result;
+			this.add('-start', target, 'confusion');
+			this.effectData.time = this.random(3,4);
+		},
+		onEnd: function(target) {
+			this.add('-end', target, 'confusion');
+		},
+		onBeforeMove: function(pokemon) {
+			pokemon.volatiles.confusion.time--;
+			if (!pokemon.volatiles.confusion.time) {
+				pokemon.removeVolatile('confusion');
+				return;
+			}
+			this.directDamage(this.getDamage(pokemon,pokemon,30));
+		}
+	},
 
 
 	// weather!
@@ -90,14 +110,14 @@ exports.BattleStatuses = {
 	},
 
 	unown: {
-		// Unown: Adaptability
+		// Unown: Shadow Tag
 		onImmunity: function(type) {
 			if (type === 'Ground') return false;
 		},
 		onStart: function(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'adaptability';
-				pokemon.baseAbility = 'adaptability';
+				pokemon.ability = 'shadowtag';
+				pokemon.baseAbility = 'shadowtag';
 			}
 		},
 		onModifyPokemon: function(pokemon) {

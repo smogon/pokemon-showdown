@@ -23,14 +23,16 @@
  * @license MIT license
  */
 
-var THROTTLE_DELAY = 500;
+var THROTTLE_DELAY = 600;
 
 var users = {};
 var prevUsers = {};
 var numUsers = 0;
 
 var bannedIps = {};
+var bannedUsers = {};
 var lockedIps = {};
+var lockedUsers = {};
 
 /**
  * Get a user.
@@ -111,7 +113,7 @@ function socketConnect(worker, workerid, socketid, ip) {
 	}
 	// Emergency mode connections logging
 	if (config.emergency) {
-		fs.appendFile('logs/cons.emergency.log', '#'+socketCounter+' [' + ip + ']\n', function(err){
+		fs.appendFile('logs/cons.emergency.log', '[' + ip + ']\n', function(err){
 			if (err) {
 				console.log('!! Error in emergency conns log !!');
 				throw err;
@@ -288,7 +290,7 @@ var User = (function () {
 
 		if (connection.user) connection.user = this;
 		this.connections = [connection];
-		this.ips = {}
+		this.ips = {};
 		this.ips[connection.ip] = 1;
 		// Note: Using the user's latest IP for anything will usually be
 		//       wrong. Most code should use all of the IPs contained in
@@ -499,9 +501,22 @@ var User = (function () {
 		var oldid = this.userid;
 		delete users[oldid];
 		this.userid = userid;
-		users[this.userid] = this;
+		users[userid] = this;
 		this.authenticated = !!authenticated;
 		this.forceRenamed = !!forcible;
+
+		if (authenticated && userid in bannedUsers) {
+			var bannedUnder = '';
+			if (bannedUsers[userid] !== userid) bannedUnder = ' under the username '+bannedUsers[userid];
+			this.send("|popup|Your username ("+name+") is banned"+bannedUnder+"'. Your ban will expire in a few days."+(config.appealurl ? " Or you can appeal at:\n" + config.appealurl:""));
+			this.ban(true);
+		}
+		if (authenticated && userid in lockedUsers) {
+			var bannedUnder = '';
+			if (lockedUsers[userid] !== userid) bannedUnder = ' under the username '+lockedUsers[userid];
+			this.send("|popup|Your username ("+name+") is locked"+bannedUnder+"'. Your lock will expire in a few days."+(config.appealurl ? " Or you can appeal at:\n" + config.appealurl:""));
+			this.lock(true);
+		}
 
 		for (var i=0; i<this.connections.length; i++) {
 			//console.log(''+name+' renaming: socket '+i+' of '+this.connections.length);
@@ -667,11 +682,25 @@ var User = (function () {
 						invalidHost = true;
 					}
 				}
+			} else if (tokenDataSplit[1] !== userid) {
+				// outdated token
+				// (a user changed their name again since this token was created)
+				// return without clearing renamePending; the more recent rename is still pending
+				return;
 			} else {
-				console.log('verify userid mismatch: '+tokenData);
+				// a user sent an invalid token
+				if (tokenDataSplit[0] !== challenge) {
+					console.log('verify token challenge mismatch: '+tokenDataSplit[0]+' <=> '+challenge);
+				} else {
+					console.log('verify token mismatch: '+tokenData);
+				}
 			}
 		} else {
-			console.log('verify failed: '+tokenData);
+			if (!challenge) {
+				console.log('verification failed; no challenge');
+			} else {
+				console.log('verify failed: '+token);
+			}
 		}
 
 		if (invalidHost) {
@@ -719,9 +748,9 @@ var User = (function () {
 
 				if (body === '3') {
 					isSysop = true;
-					this.autoconfirmed = true;
+					this.autoconfirmed = userid;
 				} else if (body === '4') {
-					this.autoconfirmed = true;
+					this.autoconfirmed = userid;
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
@@ -740,6 +769,7 @@ var User = (function () {
 						user.muteDuration = Object.merge(user.muteDuration, this.muteDuration);
 						this.mutedRooms = {};
 						this.muteDuration = {};
+						this.locked = false;
 					}
 				}
 				for (var i=0; i<this.connections.length; i++) {
@@ -927,49 +957,39 @@ var User = (function () {
 		}
 		return alts;
 	};
-	User.prototype.getHighestRankedAlt = function() {
-		var result = this;
-		var groupRank = config.groupsranking.indexOf(this.group);
-		for (var i in users) {
-			if (users[i] === this) continue;
-			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			if (config.groupsranking.indexOf(users[i].group) <= groupRank) continue;
-
-			result = users[i];
-			groupRank = config.groupsranking.indexOf(users[i].group);
-		}
-		return result;
-	};
-	User.prototype.doWithMMR = function(formatid, callback, that) {
+	User.prototype.doWithMMR = function(formatid, callback) {
 		var self = this;
-		if (that === undefined) that = this;
 		formatid = toId(formatid);
 
 		// this should relieve login server strain
-		// this.mmrCache[formatid] = 1500;
+		// this.mmrCache[formatid] = 1000;
 
 		if (this.mmrCache[formatid]) {
-			callback.call(that, this.mmrCache[formatid]);
+			callback(this.mmrCache[formatid]);
 			return;
 		}
 		LoginServer.request('mmr', {
 			format: formatid,
 			user: this.userid
 		}, function(data) {
-			var mmr = 1500;
+			var mmr = 1000, error = true;
 			if (data) {
 				mmr = parseInt(data,10);
-				if (isNaN(mmr)) mmr = 1500;
+				if (!isNaN(mmr)) {
+					error = false;
+					self.mmrCache[formatid] = mmr;
+				} else {
+					mmr = 1000;
+				}
 			}
-			self.mmrCache[formatid] = mmr;
-			callback.call(that, mmr);
+			callback(mmr, error);
 		});
 	};
 	User.prototype.cacheMMR = function(formatid, mmr) {
 		if (typeof mmr === 'number') {
 			this.mmrCache[formatid] = mmr;
 		} else {
-			this.mmrCache[formatid] = Math.floor((Number(mmr.rpr)*2+Number(mmr.r))/3);
+			this.mmrCache[formatid] = Number(mmr.acre);
 		}
 	};
 	User.prototype.mute = function(roomid, time, force, noRecurse) {
@@ -1002,18 +1022,24 @@ var User = (function () {
 			this.updateIdentity(roomid);
 		}
 	};
-	User.prototype.ban = function(noRecurse) {
+	User.prototype.ban = function(noRecurse, userid) {
 		// recurse only once; the root for-loop already bans everything with your IP
+		if (!userid) userid = this.userid;
 		if (!noRecurse) for (var i in users) {
 			if (users[i] === this) continue;
 			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			users[i].ban(true);
+			users[i].ban(true, userid);
 		}
 
 		for (var ip in this.ips) {
-			bannedIps[ip] = this.userid;
+			bannedIps[ip] = userid;
 		}
-		this.locked = true; // in case of merging into a recently banned account
+		if (this.autoconfirmed) bannedUsers[this.autoconfirmed] = userid;
+		if (this.authenticated) {
+			bannedUsers[this.userid] = userid;
+			this.locked = true; // in case of merging into a recently banned account
+			this.autoconfirmed = '';
+		}
 		this.disconnectAll();
 	};
 	User.prototype.lock = function(noRecurse) {
@@ -1027,14 +1053,19 @@ var User = (function () {
 		for (var ip in this.ips) {
 			lockedIps[ip] = this.userid;
 		}
+		if (this.autoconfirmed) lockedUsers[this.autoconfirmed] = this.userid;
+		if (this.authenticated) lockedUsers[this.userid] = this.userid;
 		this.locked = true;
+		this.autoconfirmed = '';
 		this.updateIdentity();
 	};
 	User.prototype.joinRoom = function(room, connection) {
 		room = Rooms.get(room);
 		if (!room) return false;
 		if (room.staffRoom && !this.isStaff) return false;
-		if (this.userid && room.bannedUsers && this.userid in room.bannedUsers) return false;
+		if (room.bannedUsers) {
+			if (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers) return false;
+		}
 		if (this.ips && room.bannedIps) {
 			for (var ip in this.ips) {
 				if (ip in room.bannedIps) return false;
@@ -1099,7 +1130,7 @@ var User = (function () {
 			delete this.roomCount[room.id];
 		}
 	};
-	User.prototype.prepBattle = function(formatid, type, connection) {
+	User.prototype.prepBattle = function(formatid, type, connection, callback) {
 		// all validation for a battle goes through here
 		if (!connection) connection = this;
 		if (!type) type = 'challenge';
@@ -1110,30 +1141,48 @@ var User = (function () {
 				message = "The server is under attack. Battles cannot be started at this time.";
 			}
 			connection.popup(message);
-			return false;
+			setImmediate(callback.bind(null, false));
+			return;
 		}
 		if (ResourceMonitor.countPrepBattle(connection.ip || connection.latestIp, this.name)) {
 			connection.popup("Due to high load, you are limited to 6 battles every 3 minutes.");
-			return false;
+			setImmediate(callback.bind(null, false));
+			return;
 		}
 
 		var format = Tools.getFormat(formatid);
 		if (!format[''+type+'Show']) {
 			connection.popup("That format is not available.");
-			return false;
+			setImmediate(callback.bind(null, false));
+			return;
 		}
-		var team = this.team;
-		var problems = Tools.validateTeam(team, formatid);
-		if (problems) {
-			connection.popup("Your team was rejected for the following reasons:\n\n- "+problems.join("\n- "));
-			return false;
+		TeamValidator.validateTeam(formatid, this.team, this.finishPrepBattle.bind(this, connection, callback));
+	};
+	User.prototype.finishPrepBattle = function(connection, callback, success, details) {
+		if (!success) {
+			connection.popup("Your team was rejected for the following reasons:\n\n- "+details.replace(/\n/g, '\n- '));
+			callback(false);
+		} else {
+			if (details) {
+				this.team = details;
+				ResourceMonitor.teamValidatorChanged++;
+			} else {
+				ResourceMonitor.teamValidatorUnchanged++;
+			}
+			callback(true);
 		}
-		return true;
 	};
 	User.prototype.updateChallenges = function() {
+		var challengeTo = this.challengeTo;
+		if (challengeTo) {
+			challengeTo = {
+				to: challengeTo.to,
+				format: challengeTo.format
+			}
+		}
 		this.send('|updatechallenges|'+JSON.stringify({
-			challengesFrom: this.challengesFrom,
-			challengeTo: this.challengeTo
+			challengesFrom: Object.map(this.challengesFrom, 'format'),
+			challengeTo: challengeTo
 		}));
 	};
 	User.prototype.makeChallenge = function(user, format/*, isPrivate*/) {
@@ -1376,6 +1425,12 @@ function unban(name) {
 			success = true;
 		}
 	}
+	for (var id in bannedUsers) {
+		if (bannedUsers[id] === userid || id === userid) {
+			delete bannedUsers[id];
+			success = true;
+		}
+	}
 	if (success) return name;
 	return false;
 }
@@ -1400,6 +1455,12 @@ function unlock(name, unlocked, noRecurse) {
 		if (Users.lockedIps[ip] === userid) {
 			delete Users.lockedIps[ip];
 			unlocked = unlocked || {};
+			unlocked[name] = 1;
+		}
+	}
+	for (var id in lockedUsers) {
+		if (lockedUsers[id] === userid || id === userid) {
+			delete lockedUsers[id];
 			unlocked[name] = 1;
 		}
 	}

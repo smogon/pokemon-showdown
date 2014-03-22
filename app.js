@@ -12,7 +12,7 @@
  * Users - from users.js
  *
  *   Most of the communication with users happens in users.js, we just
- *   forward messages between the client and users.js.
+ *   forward messages between the sockets.js and users.js.
  *
  * Rooms - from rooms.js
  *
@@ -31,6 +31,11 @@
  * CommandParser - from command-parser.js
  *
  *   Parses text commands like /me
+ *
+ * Sockets - from sockets.js
+ *
+ *   Used to abstract out network connections. sockets.js handles
+ *   the actual server and connection set-up.
  *
  * @license MIT license
  */
@@ -125,6 +130,8 @@ global.ResourceMonitor = {
 	cmds: {},
 	cmdsTimes: {},
 	cmdsTotal: {lastCleanup: Date.now(), count: 0},
+	teamValidatorChanged: 0,
+	teamValidatorUnchanged: 0,
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
 	 */
@@ -221,7 +228,7 @@ global.ResourceMonitor = {
 			else if (typeof value === 'number') bytes += 8;
 			else if (typeof value === 'object' && objectList.indexOf( value ) === -1) {
 				objectList.push( value );
-				for (i in value) stack.push( value[ i ] );
+				for (var i in value) stack.push( value[ i ] );
 			}
 		}
 
@@ -262,10 +269,6 @@ global.ResourceMonitor = {
 		}
 	}
 };
-
-/*********************************************************
- * Start our servers
- *********************************************************/
 
 /*********************************************************
  * Set up most of our globals
@@ -333,7 +336,7 @@ global.sanitize = function(str, strEscape) {
 global.string = function(str) {
 	if (typeof str === 'string' || typeof str === 'number') return ''+str;
 	return '';
-}
+};
 
 /**
  * Converts any variable to an integer (numbers get floored, non-numbers
@@ -379,7 +382,7 @@ if (config.crashguard) {
 	process.on('uncaughtException', function(err) {
 		var dateNow = Date.now();
 		var quietCrash = require('./crashlogger.js')(err, 'The main process');
-		quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5)
+		quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5);
 		lastCrash = Date.now();
 		if (quietCrash) return;
 		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
@@ -393,7 +396,7 @@ if (config.crashguard) {
 }
 
 /*********************************************************
- * Set up the server to be connected to
+ * Start networking processes to be connected to
  *********************************************************/
 
 global.Sockets = require('./sockets.js');
@@ -410,6 +413,8 @@ global.Tools = require('./tools.js');
 
 // After loading tools, generate and cache the format list.
 Rooms.global.formatListText = Rooms.global.getFormatListText();
+
+global.TeamValidator = require('./team-validator.js');
 
 // load ipbans at our leisure
 fs.readFile('./config/ipbans.txt', function (err, data) {

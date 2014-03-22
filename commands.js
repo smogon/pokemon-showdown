@@ -91,6 +91,16 @@ var commands = exports.commands = {
 			return this.parse('/help msg');
 		}
 
+		if (config.pmmodchat) {
+			var userGroup = user.group;
+			if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
+				var groupName = config.groups[config.pmmodchat].name;
+				if (!groupName) groupName = config.pmmodchat;
+				this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to PM users.');
+				return false;
+			}
+		}
+
 		if (user.locked && !targetUser.can('lock', user)) {
 			return this.popupReply('You can only private message members of the moderation team (users marked by %, @, &, or ~) when locked.');
 		}
@@ -163,7 +173,7 @@ var commands = exports.commands = {
 	},
 
 	privateroom: function(target, room, user) {
-		if (!this.can('makeroom')) return;
+		if (!this.can('privateroom', null, room)) return;
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand(user.name+' made this room public.');
@@ -220,7 +230,7 @@ var commands = exports.commands = {
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
-	
+
 	roomdeowner: 'deroomowner',
 	deroomowner: function(target, room, user) {
 		if (!room.auth) {
@@ -246,7 +256,9 @@ var commands = exports.commands = {
 	roomdesc: function(target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
-			this.sendReply('The room description is: '+room.desc);
+			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			if (!room.desc) return this.sendReply("This room does not have a description set.");
+			this.sendReplyBox('The room description is: '+room.desc.replace(re, "<a href=\"$1\">$1</a>"));
 			return;
 		}
 		if (!this.can('roommod', null, room)) return false;
@@ -276,6 +288,13 @@ var commands = exports.commands = {
 		var userid = toUserid(this.targetUsername);
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
+		if (!userid) {
+			if (target && config.groups[target]) {
+				var groupid = config.groups[target].id;
+				return this.sendReply("/room"+groupid+" [username] - Promote a user to "+groupid+" in this room only");
+			}
+			return this.parse("/help roompromote");
+		}
 		var currentGroup = (room.auth[userid] || ' ');
 		if (!targetUser && !room.auth[userid]) {
 			return this.sendReply("User '"+this.targetUsername+"' is offline and unauthed, and so can't be promoted.");
@@ -285,6 +304,9 @@ var commands = exports.commands = {
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
 		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
+		}
+		if (config.groups[nextGroup].globalonly) {
+			return this.sendReply('Group \'room' + config.groups[nextGroup].id + '\' does not exist as a room rank.');
 		}
 		if (currentGroup !== ' ' && !user.can('room'+config.groups[currentGroup].id, null, room)) {
 			return this.sendReply('/' + cmd + ' - Access denied for promoting from '+config.groups[currentGroup].name+'.');
@@ -325,7 +347,7 @@ var commands = exports.commands = {
 	},
 
 	autojoin: function(target, room, user, connection) {
-		Rooms.global.autojoinRooms(user, connection)
+		Rooms.global.autojoinRooms(user, connection);
 	},
 
 	join: function(target, room, user, connection) {
@@ -362,7 +384,7 @@ var commands = exports.commands = {
 		for (var ip in targetUser.ips) {
 			room.bannedIps[ip] = true;
 		}
-		targetUser.popup(user.name+" has banned you from the room " + room.id + "." + (target ? " (" + target + ")" : ""));
+		targetUser.popup(user.name+" has banned you from the room " + room.id + ". To appeal the ban, PM the moderator that banned you or a room owner." + (target ? " (" + target + ")" : ""));
 		this.addModCommand(""+targetUser.name+" was banned from room " + room.id + " by "+user.name+"." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) {
@@ -452,6 +474,7 @@ var commands = exports.commands = {
 
 		this.addModCommand(''+targetUser.name+' was warned by '+user.name+'.' + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn '+target);
+		this.add('|unlink|' + targetUser.userid);
 	},
 
 	redirect: 'redir',
@@ -474,7 +497,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' is not in the room ' + room.id + '.');
 		}
 		if (targetUser.joinRoom(target) === false) return this.sendReply('User "' + targetUser.name + '" could not be joined to room ' + target + '. They could be banned from the room.');
-		var roomName = (targetRoom.isPrivate)? 'a private room' : 'room ' + target;
+		var roomName = (targetRoom.isPrivate)? 'a private room' : 'room ' + targetRoom.title;
 		this.addModCommand(targetUser.name + ' was redirected to ' + roomName + ' by ' + user.name + '.');
 		targetUser.leaveRoom(room);
 	},
@@ -711,6 +734,14 @@ var commands = exports.commands = {
 		var userid = toUserid(this.targetUsername);
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
+		if (!userid) {
+			if (target && config.groups[target]) {
+				var groupid = config.groups[target].id;
+				return this.sendReply("/"+groupid+" [username] - Promote a user to "+groupid+" globally");
+			}
+			return this.parse("/help promote");
+		}
+
 		var currentGroup = ' ';
 		if (targetUser) {
 			currentGroup = targetUser.group;
@@ -722,6 +753,9 @@ var commands = exports.commands = {
 		if (target === 'deauth') nextGroup = config.groupsranking[0];
 		if (!config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
+		}
+		if (config.groups[nextGroup].roomonly) {
+			return this.sendReply('Group \'' + config.groups[nextGroup].id + '\' does not exist as a global rank.');
 		}
 		if (!user.canPromote(currentGroup, nextGroup)) {
 			return this.sendReply('/' + cmd + ' - Access denied.');
@@ -790,6 +824,10 @@ var commands = exports.commands = {
 		case 'autoconfirmed':
 			room.modchat = 'autoconfirmed';
 			break;
+		case '*':
+		case 'player':
+			target = '\u2605';
+			// fallthrough
 		default:
 			if (!config.groups[target]) {
 				return this.parse('/help modchat');
@@ -868,6 +906,7 @@ var commands = exports.commands = {
 		if (targetUser.userid === toUserid(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forced to choose a new name by '+user.name+'' + (target ? ": " + target + "" : "");
 			this.privateModCommand('(' + entry + ')');
+			Rooms.global.cancelSearch(targetUser);
 			targetUser.resetName();
 			targetUser.send('|nametaken||'+user.name+" has forced you to change your name. "+target);
 		} else {
@@ -875,36 +914,13 @@ var commands = exports.commands = {
 		}
 	},
 
-	frt: 'forcerenameto',
-	forcerenameto: function(target, room, user) {
-		if (!target) return this.parse('/help forcerenameto');
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-		if (!targetUser) {
-			return this.sendReply('User '+this.targetUsername+' not found.');
-		}
-		if (!target) {
-			return this.sendReply('No new name was specified.');
-		}
-		if (!this.can('forcerenameto', targetUser)) return false;
-
-		if (targetUser.userid === toUserid(this.targetUser)) {
-			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
-			this.privateModCommand('(' + entry + ')');
-			targetUser.forceRename(target, undefined, true);
-		} else {
-			this.sendReply("User "+targetUser.name+" is no longer using that name.");
-		}
-	},
-
 	modlog: function(target, room, user, connection) {
-		if (!this.can('modlog')) return false;
 		var lines = 0;
 		// Specific case for modlog command. Room can be indicated with a comma, lines go after the comma.
 		// Otherwise, the text is defaulted to text search in current room's modlog.
 		var roomId = room.id;
 		var roomLogs = {};
-		var fs = require('fs');
+
 		if (target.indexOf(',') > -1) {
 			var targets = target.split(',');
 			target = targets[1].trim();
@@ -923,6 +939,7 @@ var commands = exports.commands = {
 		var filename = '';
 		var command = '';
 		if (roomId === 'all' && wordSearch) {
+			if (!this.can('modlog')) return;
 			roomNames = 'all rooms';
 			// Get a list of all the rooms
 			var fileList = fs.readdirSync('logs/modlog');
@@ -930,7 +947,7 @@ var commands = exports.commands = {
 				filename += 'logs/modlog/' + fileList[i] + ' ';
 			}
 		} else {
-			roomid = room.id;
+			if (!this.can('modlog', null, Rooms.get(roomId))) return;
 			roomNames = 'the room ' + roomId;
 			filename = 'logs/modlog/modlog_' + roomId + '.txt';
 		}
@@ -1021,6 +1038,8 @@ var commands = exports.commands = {
 				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				Rooms.global.formatListText = Rooms.global.getFormatListText();
+				// respawn validator processes
+				TeamValidator.ValidatorProcess.respawn();
 				// respawn simulator processes
 				Simulator.SimulatorProcess.respawn();
 				// broadcast the new formats list to clients
@@ -1140,6 +1159,14 @@ var commands = exports.commands = {
 			return this.sendReply('Wait for /updateserver to finish before using /kill.');
 		}
 
+		for (var i in Sockets.workers) {
+			Sockets.workers[i].kill();
+		}
+
+		if (!room.destroyLog) {
+			process.exit();
+			return;
+		}
 		room.destroyLog(function() {
 			room.logEntry(user.name + ' used /kill');
 		}, function() {
@@ -1160,6 +1187,7 @@ var commands = exports.commands = {
 		fs.readFile('config/ipbans.txt', function (err, data) {
 			if (err) return;
 			data = (''+data).split("\n");
+			var rangebans = [];
 			for (var i=0; i<data.length; i++) {
 				var line = data[i].split('#')[0].trim();
 				if (!line) continue;
@@ -1267,7 +1295,7 @@ var commands = exports.commands = {
 			this.sendReply('Loading memory usage, this might take a while.');
 		}
 		if (target === 'all' || target === 'rooms' || target === 'room') {
-			this.sendReply('Calcualting Room size...');
+			this.sendReply('Calculating Room size...');
 			var roomSize = ResourceMonitor.sizeOfObject(Rooms);
 			this.sendReply("Rooms are using " + roomSize + " bytes of memory.");
 		}
@@ -1280,11 +1308,6 @@ var commands = exports.commands = {
 			this.sendReply('Calculating Resource Monitor size...');
 			var rmSize = ResourceMonitor.sizeOfObject(ResourceMonitor);
 			this.sendReply("The Resource Monitor is using " + rmSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'apps' || target === 'app' || target === 'serverapps') {
-			this.sendReply('Calculating Server Apps size...');
-			var appSize = ResourceMonitor.sizeOfObject(App) + ResourceMonitor.sizeOfObject(AppSSL) + ResourceMonitor.sizeOfObject(Server);
-			this.sendReply("Server Apps are using " + appSize + " bytes of memory.");
 		}
 		if (target === 'all' || target === 'cmdp' || target === 'cp' || target === 'commandparser') {
 			this.sendReply('Calculating Command Parser size...');
@@ -1305,6 +1328,15 @@ var commands = exports.commands = {
 			this.sendReply('Calculating Tools size...');
 			var toolsSize = ResourceMonitor.sizeOfObject(Tools);
 			this.sendReply("Tools are using " + toolsSize + " bytes of memory.");
+		}
+		if (target === 'all' || target === 'v8') {
+			this.sendReply('Retrieving V8 memory usage...');
+			var o = process.memoryUsage();
+			this.sendReply(
+				'Resident set size: ' + o.rss + ', ' + o.heapUsed +' heap used of ' + o.heapTotal  + ' total heap. '
+				+ (o.heapTotal - o.heapUsed) + ' heap left.'
+			);
+			delete o;
 		}
 		if (target === 'all') {
 			this.sendReply('Calculating Total size...');
@@ -1438,6 +1470,7 @@ var commands = exports.commands = {
 
 	joinbattle: function(target, room, user) {
 		if (!room.joinBattle) return this.sendReply('You can only do this in battle rooms.');
+		if (!user.can('joinbattle', null, room)) return this.popupReply("You must be a roomvoice to join a battle you didn't start. Ask a player to use /roomvoice on you to join this battle.");
 
 		room.joinBattle(user);
 	},
@@ -1477,15 +1510,30 @@ var commands = exports.commands = {
 	timer: function(target, room, user) {
 		target = toId(target);
 		if (room.requestKickInactive) {
-			if (target === 'off' || target === 'stop') {
+			if (target === 'off' || target === 'false' || target === 'stop') {
 				room.stopKickInactive(user, user.can('timer'));
-			} else if (target === 'on' || !target) {
+			} else if (target === 'on' || target === 'true' || !target) {
 				room.requestKickInactive(user, user.can('timer'));
 			} else {
 				this.sendReply("'"+target+"' is not a recognized timer state.");
 			}
 		} else {
 			this.sendReply('You can only set the timer from inside a room.');
+		}
+	},
+
+	autotimer: 'forcetimer',
+	forcetimer: function(target, room, user) {
+		target = toId(target);
+		if (!this.can('autotimer')) return;
+		if (target === 'off' || target === 'false' || target === 'stop') {
+			config.forcetimer = false;
+			this.addModCommand("Forcetimer is now OFF: The timer is now opt-in. (set by "+user.name+")");
+		} else if (target === 'on' || target === 'true' || !target) {
+			config.forcetimer = true;
+			this.addModCommand("Forcetimer is now ON: All battles will be timed. (set by "+user.name+")");
+		} else {
+			this.sendReply("'"+target+"' is not a recognized forcetimer setting.");
 		}
 	},
 
@@ -1521,6 +1569,15 @@ var commands = exports.commands = {
 	cancelsearch: 'search',
 	search: function(target, room, user) {
 		if (target) {
+			if (config.pmmodchat) {
+				var userGroup = user.group;
+				if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
+					var groupName = config.groups[config.pmmodchat].name;
+					if (!groupName) groupName = config.pmmodchat;
+					this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to search for a battle.');
+					return false;
+				}
+			}
 			Rooms.global.searchBattle(user, target);
 		} else {
 			Rooms.global.cancelSearch(user);
@@ -1537,8 +1594,18 @@ var commands = exports.commands = {
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			return this.popupReply("The user '"+this.targetUsername+"' is not accepting challenges right now.");
 		}
-		if (!user.prepBattle(target, 'challenge', connection)) return;
-		user.makeChallenge(targetUser, target);
+		if (config.pmmodchat) {
+			var userGroup = user.group;
+			if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
+				var groupName = config.groups[config.pmmodchat].name;
+				if (!groupName) groupName = config.pmmodchat;
+				this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to challenge users.');
+				return false;
+			}
+		}
+		user.prepBattle(target, 'challenge', connection, function (result) {
+			if (result) user.makeChallenge(targetUser, target);
+		});
 	},
 
 	away: 'blockchallenges',
@@ -1567,8 +1634,9 @@ var commands = exports.commands = {
 			this.popupReply(target+" cancelled their challenge before you could accept it.");
 			return false;
 		}
-		if (!user.prepBattle(format, 'challenge', connection)) return;
-		user.acceptChallengeFrom(userid);
+		user.prepBattle(format, 'challenge', connection, function (result) {
+			if (result) user.acceptChallengeFrom(userid);
+		});
 	},
 
 	reject: function(target, room, user) {
@@ -1578,11 +1646,7 @@ var commands = exports.commands = {
 	saveteam: 'useteam',
 	utm: 'useteam',
 	useteam: function(target, room, user) {
-		try {
-			user.team = JSON.parse(target);
-		} catch (e) {
-			this.popupReply('Not a valid team.');
-		}
+		user.team = target;
 	},
 
 	/*********************************************************

@@ -7,7 +7,11 @@ function clampIntRange(num, min, max) {
 exports.BattleStatuses = {
 	brn: {
 		effectType: 'Status',
-		onStart: function(target) {
+		onStart: function(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.id === 'flameorb') {
+				this.add('-status', target, 'brn', '[from] item: Flame Orb');
+				return;
+			}
 			this.add('-status', target, 'brn');
 		},
 		onBasePower: function(basePower, attacker, defender, move) {
@@ -95,9 +99,13 @@ exports.BattleStatuses = {
 	},
 	tox: {
 		effectType: 'Status',
-		onStart: function(target) {
-			this.add('-status', target, 'tox');
+		onStart: function(target, source, sourceEffect) {
 			this.effectData.stage = 0;
+			if (sourceEffect && sourceEffect.id === 'toxicorb') {
+				this.add('-status', target, 'tox', '[from] item: Toxic Orb');
+				return;
+			}
+			this.add('-status', target, 'tox');
 		},
 		onSwitchIn: function() {
 			this.effectData.stage = 0;
@@ -112,8 +120,8 @@ exports.BattleStatuses = {
 	},
 	confusion: {
 		// this is a volatile status
-		onStart: function(target, source) {
-			var result = this.runEvent('TryConfusion', target, source);
+		onStart: function(target, source, sourceEffect) {
+			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
 			if (!result) return result;
 			this.add('-start', target, 'confusion');
 			this.effectData.time = this.random(2,6);
@@ -156,7 +164,7 @@ exports.BattleStatuses = {
 			pokemon.tryTrap();
 		},
 		onStart: function(target) {
-			this.add('-activate', target, 'trapped')
+			this.add('-activate', target, 'trapped');
 		}
 	},
 	partiallytrapped: {
@@ -202,7 +210,9 @@ exports.BattleStatuses = {
 			this.effectData.move = effect.id;
 		},
 		onRestart: function() {
-			if (this.effectData.trueDuration >= 2) this.duration = 2;
+			if (this.effectData.trueDuration >= 2) {
+				this.effectData.duration = 2;
+			}
 		},
 		onEnd: function(target) {
 			if (this.effectData.trueDuration > 1) return;
@@ -296,22 +306,18 @@ exports.BattleStatuses = {
 		duration: 2,
 		counterMax: 256,
 		onStart: function() {
-			this.effectData.counter = 2;
+			this.effectData.counter = 3;
 		},
 		onStallMove: function() {
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			var counter = this.effectData.counter || 1;
-			if (counter >= 256) {
-				// 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
-				return (this.random()*4294967296 < 1);
-			}
 			this.debug("Success chance: "+Math.round(100/counter)+"%");
 			return (this.random(counter) === 0);
 		},
 		onRestart: function() {
 			if (this.effectData.counter < this.effect.counterMax) {
-				this.effectData.counter *= 2;
+				this.effectData.counter *= 3;
 			}
 			this.effectData.duration = 2;
 		}
@@ -477,16 +483,16 @@ exports.BattleStatuses = {
 		// be their corresponding type in the Pokedex, so that needs to be
 		// overridden. This is mainly relevant for Hackmons and Balanced
 		// Hackmons.
-		onModifyPokemon: function(pokemon) {
-			if (pokemon.transformed) return;
+		onSwitchInPriority: 101,
+		onSwitchIn: function(pokemon) {
 			var type = 'Normal';
 			if (pokemon.ability === 'multitype') {
-				var type = this.runEvent('Plate', pokemon);
+				type = this.runEvent('Plate', pokemon);
 				if (!type || type === true) {
 					type = 'Normal';
 				}
 			}
-			pokemon.types = [type];
+			pokemon.setType(type, true);
 		}
 	}
 };

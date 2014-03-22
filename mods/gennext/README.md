@@ -7,15 +7,17 @@ Manifesto
 The goal of NEXT is to improve the diversity of the OU metagame by only doing
 things that could plausibly be done between gens.
 
-That means:
+Specifically, the core rules of NEXT are:
 
 1. no base stat changes
 2. no removing from movepools
 3. no removing from ability distribution
-4. no typing changes without strong justification
-5. only numbers that make sense like 60%, 30%, etc, not weird numbers like 65%
-6. no buffing OU mons, except maybe tiny buffs to mons at the bottom of OU
-7. no doing things that make zero sense flavor-wise
+4. no typing changes (except on formes)
+5. no buffing OU mons, except maybe tiny buffs to mons at the bottom of OU
+6. no doing things that make zero sense flavor-wise
+
+What's left is mainly changes to how abilities and moves work, which is
+most of what NEXT is about.
 
 A good example is what Game Freak did by giving Ditto the Imposter ability.
 This gave a Ditto a role in OU, while still making sense flavor-wise, and
@@ -28,6 +30,9 @@ This approach is in sharp contrast to many mods that do change many things on
 NEXT's "don't change" list. The result is a metagame that feels a lot like
 a new generation: existing OU threats stay mostly the same, but many new
 threats and strategies are introduced.
+
+And yes, we know that "no base stat changes" has been broken in Gen 6. We're
+still not doing it, because it's hard to constrain and hard to keep track of.
 
 Recent changes
 ------------------------------------------------------------------------
@@ -75,26 +80,26 @@ Major changes:
   of the second turn. Because this new freeze effect is a nerf, Blizzard now
   has a 30% chance of inflicting freeze.
 
-- Every DW ability other than on Chandelure is released.
+- Every Hidden Ability is released.
 
 - Moves with a charge turn are now a lot more powerful. They remove Protect and
   Substitute before hitting, they always crit (although their base power has
   been adjusted accordingly), they have perfect accuracy, and one other change
   depending on the move:
-  - SolarBeam: heal 50% on the charge turn, 60 bp
-  - Razor Wind: 100% confusion, 40 bp
-  - Skull Bash: +1 Def, +1 SpD, +1 accuracy on the charge turn, 50 bp
-  - Sky Attack: 100% -1 Def, 70 bp
-  - Freeze Shock: 100% paralysis, 70 bp
-  - Ice Burn: 100% burn, 70 bp
-  - Bounce: 30% paralysis, 45 bp
-  - Fly: 100% -1 Def, 45 bp
-  - Dig: 100% -1 Def, 45 bp
-  - Dive: 100% -1 Def, 45 bp
-  - Shadow Force: 100% Ghost-Curse, 30 bp
-  - Sky Drop: 100% -1 Def, 40 bp
+  - SolarBeam: heal 50% on the charge turn, 80 bp
+  - Razor Wind: 100% confusion, 60 bp
+  - Skull Bash: +1 Def, +1 SpD, +1 accuracy on the charge turn, 70 bp
+  - Sky Attack: 100% -1 Def, 95 bp
+  - Freeze Shock: 100% paralysis, 95 bp
+  - Ice Burn: 100% burn, 95 bp
+  - Bounce: 30% paralysis, 60 bp
+  - Fly: 100% -1 Def, 60 bp
+  - Dig: 100% -1 Def, 60 bp
+  - Dive: 100% -1 Def, 60 bp
+  - Shadow Force: 100% Ghost-Curse, 40 bp
+  - Sky Drop: 100% -1 Def, 60 bp
 
-- Recharge moves are similarly buffed. They have 75 base power, always crit,
+- Recharge moves are similarly buffed. They have 100 base power, always crit,
   and they only recharge if they KO. Be careful - in return for a KO, they
   still give the foe a free switch-in _and_ a turn to set up.
 
@@ -113,18 +118,26 @@ Major changes:
 - Shuckle gets Berry Shell (select "Stick" in the teambuilder), which gives a
   50% boost to Defense and Sp. Def. It also learns Leech Seed.
 
-- Ambipom gets Sketch as an egg move, allowing it to use exactly one move not
-  normally in its learnset.
+- Ambipom gets Sketch as an event move, allowing it to use exactly one move
+  not normally in its learnset.
 
 - Echoed Voice now has 80 base power, hits once, and then, 2 turns later,
   hits again for 80 base power. It's like Doom Desire, except it still hits
   that first time.
+
+- Confusion now deals 30 base power damage every attack, but does not stop
+  the attack. It now lasts 3-5 turns.
+
+- Parental Bond now deals half damage on both hits, but confers perfect
+  accuracy like all multi-hit moves.
 
 - Life Orb now behaves much more consistently as normal recoil. Reckless
   will boost every move if Life Orb is held, and Rock Head will negate Life
   Orb recoil.
 
 - Twister is now a 80 base power Flying move with a 30% confusion chance
+
+- Diancie is released
 
 New mechanic: Signature Pokemon:
 
@@ -181,6 +194,8 @@ New mechanic: Signature Pokemon:
 
   - Masquerain: Surf (10% -1 Spe)
 
+  - Snorlax: Snore (100 base power)
+
 - Again, note that while the Signature Pokemon will get the 1.5x damage boost,
   all Pokemon will get the other changes to the move listed above.
 
@@ -189,7 +204,7 @@ New mechanic: Intrinsics:
 - Pokemon that previously get Levitate are now immune to Ground intrinsically.
   Instead, they get new abilities in addition to their Ground immunity:
 
-  - Unown: Adaptability
+  - Unown: Shadow Tag
 
   - Bronzong: Heatproof
 
@@ -223,6 +238,9 @@ New: Type-specific items:
 
 Minor move changes:
 
+- Parabolic Charge now has 40 base power, but gives -1 SpA, -1 SpD to the
+  target and +1 SpA, +1 SpD to the user
+
 - Rock Throw now removes Stealth Rock from the user's side of the field,
   and has 100% accuracy
 
@@ -239,12 +257,13 @@ Minor move changes:
 - Blue Flare has 30% burn chance, Fire Blast has 20% burn chance and is
   80% accurate
 
-- Focus Blast has 50% accuracy (use HP Fighting unless you have No Guard)
+- Focus Blast has 30% accuracy (use HP Fighting unless you have No Guard)
 
 - Close Combat has been nerfed: it now gives -2 Def, -2 SpD
 
-- Perfect accuracy moves with a base power of 60 have their base power
-  increased to 90
+- Moves that were originally perfect accuracy have their base power increased
+  to 90 (this includes Aerial Ace, Disarming Voice, and Aura Sphere, among
+  others)
 
 - Scald's damage is no longer affected by weather: instead, it gets 60% burn
   chance in sun
@@ -252,8 +271,6 @@ Minor move changes:
 - High Jump Kick now has 100 base power
 
 - Shadow Ball now has 90 base power and 30% -SpD
-
-- Drives grant a 1.1x damage bonus to Techno Blast
 
 - Multi-hit moves are now all perfect-accuracy
 
@@ -271,9 +288,6 @@ Minor move changes:
 
 - Cut and Rock Smash are 50 base power and now have a 100% chance of
   lowering foe's Def
-
-- Snore's Base Power is now 100, and it's now a Physical attack dealing
-  Special damage (like a reverse Psyshock)
 
 - Drill Peck, Needle Arm, Attack Order, Leaf Blade, and Crabhammers's Base
   Powers are now 100
@@ -338,8 +352,6 @@ Minor learnset changes:
 
 - Butterfree, Beautifly, Masquerain, and Mothim get Hurricane
 
-- Shuckle gets Leech Seed
-
 - Roserade gets Sludge
 
 - Meloetta gets Fiery Dance
@@ -395,6 +407,10 @@ Minor ability changes:
 - Magma Armor reduces incoming move damage by 1/8 of the user's max HP,
   provides immunity to Hail and freeze, and provides a one-time immunity
   to Water and Ice, after which it turns into Shell Armor
+
+- Adaptability is now 1.33x to non-STAB moves instead of to STAB moves
+
+- Shadow Tag now lasts only one turn
 
 - Static and Poison Point have a 100% chance of activating
 
@@ -461,7 +477,6 @@ Bans:
   - Deoxys (all formes)
   - Darkrai
   - Shaymin-Sky
-  - Manaphy
 
 - The following clauses are in effect:
   - OHKO Clause
@@ -470,10 +485,8 @@ Bans:
 
 Specifically, differences from regular OU:
 
-- unbanned: Genesect, Thundurus, Tornadus-Therian, Excadrill, Blaziken
+- unbanned: Gengarite, Kangaskhanite, Lucarionite, Blaziken
 
-- banned: Kyurem, Kyurem-Black
-
-- DrizzleSwim is no longer banned
+- banned: Kyurem, Kyurem-Black, Deoxys-Speed, Deoxys-Defense
 
 - There is no Moody Clause or Evasion Clause

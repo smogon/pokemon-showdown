@@ -14,8 +14,16 @@ exports.BattleAbilities = {
 		inherit: true,
 		onModifyMove: function() {}
 	},
+	"infiltrator": {
+		inherit: true,
+		onModifyMove: function(move) {
+			move.ignoreScreens = true;
+		}
+	},
 	"oblivious": {
 		inherit: true,
+		desc: "This Pokemon cannot be infatuated (by Attract or Cute Charm). Gaining this Ability while infatuated cures it.",
+		shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 		onUpdate: function(pokemon) {
 			if (pokemon.volatiles['attract']) {
 				pokemon.removeVolatile('attract');

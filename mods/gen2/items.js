@@ -20,20 +20,12 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Restores 10 HP when the holder of this item is at 50% HP or less. One-time use."
 	},
-	dragonfang: {
-		inherit: true,
-		onBasePower: null
-	},
 	dragonscale: {
 		id: "dragonscale",
 		name: "Dragon Scale",
 		num: -3,
 		gen: 2,
 		desc: "Evolves Seadra into Kingdra. Raises power of Dragon-type moves by 10%."
-	},
-	lightball: {
-		inherit: true,
-		onModifyAtk: null
 	},
 	metalpowder: {
 		inherit: true,

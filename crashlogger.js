@@ -23,7 +23,7 @@ module.exports = (function() {
 			lastCrashLog = datenow;
 			var transport;
 			try {
-				var transport = require('nodemailer').createTransport(
+				transport = require('nodemailer').createTransport(
 					config.crashguardemail.transport,
 					config.crashguardemail.options
 				);
