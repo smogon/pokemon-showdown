@@ -23,66 +23,6 @@ exports.BattleMovedex = {
 			this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
 		}
 	},
-	encore: {
-		inherit: true,
-		isBounceable: false,
-		volatileStatus: 'encore',
-		effect: {
-			durationCallback: function() {
-				return this.random(2,6);
-			},
-			onStart: function(target) {
-				var noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, transform:1};
-				var moveIndex = target.moves.indexOf(target.lastMove);
-				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
-					// it failed
-					this.add('-fail',target);
-					delete target.volatiles['encore'];
-					return;
-				}
-				this.effectData.move = target.lastMove;
-				this.add('-start', target, 'Encore');
-				if (!this.willMove(target)) {
-					this.effectData.duration++;
-				}
-			},
-			onOverrideDecision: function(pokemon) {
-				return this.effectData.move;
-			},
-			onResidualOrder: 13,
-			onResidual: function(target) {
-				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) {
-					// early termination if you run out of PP
-					delete target.volatiles.encore;
-					this.add('-end', target, 'Encore');
-				}
-			},
-			onEnd: function(target) {
-				this.add('-end', target, 'Encore');
-			},
-			onModifyPokemon: function(pokemon) {
-				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
-					return;
-				}
-				for (var i=0; i<pokemon.moveset.length; i++) {
-					if (pokemon.moveset[i].id !== this.effectData.move) {
-						pokemon.moveset[i].disabled = true;
-					}
-				}
-			}
-		}
-	},
-	explosion: {
-		inherit: true,
-		basePower: 500
-	},
-	growth: {
-		inherit: true,
-		onModifyMove: null,
-		boosts: {
-			spa: 1
-		}
-	},
 	leechseed: {
 		inherit: true,
 		onHit: function (target, source, move) {
@@ -133,6 +73,33 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	metronome: {
+		inherit: true,
+		onHit: function(target) {
+			var moves = [];
+			for (var i in exports.BattleMovedex) {
+				var move = exports.BattleMovedex[i];
+				if (i !== move.id) continue;
+				if (move.isNonstandard) continue;
+				var noMetronome = {
+					counter:1, destinybond:1, detect:1, endure:1, metronome:1, mimic:1, mirrorcoat:1, protect:1, sketch:1, sleeptalk:1, struggle:1, thief:1
+				};
+				if (!noMetronome[move.id] && move.num < 252) {
+					moves.push(move.id);
+				}
+			}
+			var move = '';
+			if (moves.length) move = moves[this.random(moves.length)];
+			if (!move) return false;
+			this.useMove(move, target);
+		}
+	},
+	rage: {
+		// todo
+		// Rage boosts in Gens 2-4 is for the duration of Rage only
+		// Disable does not build
+		inherit: true
+	},
 	reflect: {
 		inherit: true,
 		effect: {
@@ -161,9 +128,9 @@ exports.BattleMovedex = {
 		},
 		secondary: false
 	},
-	selfdestruct: {
+	roar: {
 		inherit: true,
-		basePower: 400
+		priority: -1
 	},
 	sleeptalk: {
 		inherit: true,
@@ -205,17 +172,6 @@ exports.BattleMovedex = {
 				var damage = this.damage(damageAmounts[this.effectData.layers]*pokemon.maxhp/24);
 			}
 		}
-	},
-	spite: {
-		inherit: true,
-		onHit: function(target) {
-			var reduction = this.random(2, 6);
-			if (target.deductPP(target.lastMove, reduction)) {
-				this.add("-activate", target, 'move: Spite', target.lastMove, reduction);
-				return;
-			}
-			return false;
-		},
 	},
 	substitute: {
 		inherit: true,
@@ -272,19 +228,8 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	rage: {
-		// todo
-		// Rage boosts in Gens 2-4 is for the duration of Rage only
-		// Disable does not build
-		inherit: true
-	},
-	roar: {
-		inherit: true,
-		priority: -1
-	},
-	magikarpsrevenge: null,
 	whirlwind: {
 		inherit: true,
 		priority: -1
-	},
+	}
 };

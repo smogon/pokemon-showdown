@@ -3,7 +3,7 @@
  * using this.
  */
 exports.BattleScripts = {
-	inherit: 'gen5',
+	inherit: 'gen2',
 	gen: 1,
 	init: function () {
 		for (var i in this.data.Learnsets) {
