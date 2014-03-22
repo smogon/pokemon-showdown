@@ -53,9 +53,8 @@ Major changes:
   now grants +1 SpD +1 Spe +1 accuracy.
 
 - Drives will change Genesect's typing immediately after switch-in, to Bug/Ice,
-  Bug/Fire, Bug/Electric, or Bug/Water (basically, it will change Genesect's
-  type, except Genesect will still take neutral damage from SR). However,
-  Download will not activate unless Genesect holds a Drive.
+  Bug/Fire, Bug/Electric, or Bug/Water. However, Download will not activate
+  unless Genesect holds a Drive.
 
 - Unown gets an item named Strange Orb (select "Stick" in the teambuilder)
   It doubles its SpA, SpD, and Spe, and changes its type to the type of its
