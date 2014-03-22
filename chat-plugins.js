@@ -13,7 +13,7 @@
 
 var plugins = exports.plugins = {
 	/**
-	 * Scanvenger hunts plugin.
+	 * Scavenger hunts plugin.
 	 * This game is meant to show a first hint. Players will find the name of a room with that hint.
 	 * When you find a room, it gives you a hint for the next room.
 	 * You finish upon reaching the third room.

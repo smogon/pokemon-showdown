@@ -124,6 +124,17 @@ exports.BattleAliases = {
 	"scarf": "Choice Scarf",
 	"specs": "Choice Specs",
 	"yache": "Yache Berry",
+	
+	// gen 1-2 berries
+	"berry": "Oran Berry",
+	"bitterberry": "Persim Berry",
+	"burntberry": "Rawst Berry",
+	"goldberry": "Sitrus Berry",
+	"iceberry": "Aspear Berry",
+	"mintberry": "Chesto Berry",
+	"mysteryberry": "Leppa Berry",
+	"przcureberry": "Cheri Berry",
+	"psncureberry": "Pecha Berry",
 
 	// pokemon
 	"aboma": "Abomasnow",
@@ -137,8 +148,8 @@ exports.BattleAliases = {
 	"kyub": "Kyurem-Black",
 	"kyuw": "Kyurem-White",
 	"lando": "Landorus",
-	"lando-i": "Landorus",
-	"lando-t": "Landorus-Therian",
+	"landoi": "Landorus",
+	"landot": "Landorus-Therian",
 	"luke":  "Lucario",
 	"mence": "Salamence",
 	"p2": "Porygon2",

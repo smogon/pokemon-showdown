@@ -15,9 +15,6 @@ exports.BattleItems = {
 			}
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (move.id === 'technoblast') {
-				return basePower * 1.1;
-			}
 		},
 		onDrive: 'Fire',
 		desc: "Changes Genesect to Genesect-Burn."
@@ -38,9 +35,6 @@ exports.BattleItems = {
 			}
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (move.id === 'technoblast') {
-				return basePower * 1.1;
-			}
 		},
 		onDrive: 'Ice',
 		desc: "Changes Genesect to Genesect-Chill."
@@ -61,9 +55,6 @@ exports.BattleItems = {
 			}
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (move.id === 'technoblast') {
-				return basePower * 1.1;
-			}
 		},
 		onDrive: 'Water',
 		desc: "Changes Genesect to Genesect-Douse."
@@ -84,9 +75,6 @@ exports.BattleItems = {
 			}
 		},
 		onBasePower: function(basePower, user, target, move) {
-			if (move.id === 'technoblast') {
-				return basePower * 1.1;
-			}
 		},
 		onDrive: 'Electric',
 		desc: "Changes Genesect to Genesect-Shock."
