@@ -636,11 +636,13 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 	var params = cmdParts.join(' ').split(',').map(function (param) { return param.trim(); });
 
 	if (cmd === '') {
+		if (!this.canBroadcast()) return;
 		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).map(function (tournament) {
 			tournament = exports.tournaments[tournament];
-			return {room: tournament.room.id, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
+			return {room: tournament.room.title, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
 		})));
 	} else if (cmd === 'help') {
+		if (!this.canBroadcast()) return;
 		return this.sendReplyBox(
 			"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
 			"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
