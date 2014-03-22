@@ -620,6 +620,15 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			tournament = exports.tournaments[tournament];
 			return {room: tournament.room.id, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
 		})));
+	} else if (cmd === 'help') {
+		return this.sendReplyBox(
+			"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
+			"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
+			"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
+			"- begin/start: Starts the tournament in the current room.<br />" +
+			"- dq/disqualify &lt;user>: Disqualifies an user.<br />" +
+			"More detailed help can be found <a href=\"https://gist.github.com/kotarou3/7872574\">here</a>"
+		);
 	} else if (cmd === 'create' || cmd === 'new') {
 		if (!user.can('tournaments', null, room))
 			return this.sendReply(cmd + " -  Access denied.");
