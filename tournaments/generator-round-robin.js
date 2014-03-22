@@ -9,7 +9,7 @@ var RoundRobin = (function () {
 		this.pendingMatches = 0;
 
 		if (isDoubles)
-			this.name = "Doubles " + this.name;
+			this.name = "Double " + this.name;
 	};
 
 	RoundRobin.prototype.name = "Round Robin";
