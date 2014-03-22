@@ -23,7 +23,8 @@
  * @license MIT license
  */
 
-var THROTTLE_DELAY = 600;
+const THROTTLE_DELAY = 600;
+const THROTTLE_BUFFER_LIMIT = 6;
 
 var users = {};
 var prevUsers = {};
@@ -1274,7 +1275,7 @@ var User = (function () {
 
 		if (this.chatQueueTimeout) {
 			if (!this.chatQueue) this.chatQueue = []; // this should never happen
-			if (this.chatQueue.length > 6) {
+			if (this.chatQueue.length >= THROTTLE_BUFFER_LIMIT-1) {
 				connection.sendTo(room, '|raw|' +
 					"<strong class=\"message-throttle-notice\">Your message was not sent because you've been typing too quickly.</strong>"
 				);
