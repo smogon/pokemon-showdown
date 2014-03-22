@@ -289,6 +289,11 @@ var Tournament = (function () {
 		}
 
 		this.purgeGhostUsers();
+		if (this.generator.getUsers().length < 2) {
+			output.sendReply('|tournament|error|NotEnoughUsers');
+			return;
+		}
+
 		this.generator.freezeBracket();
 
 		this.availableMatches = new Map();
