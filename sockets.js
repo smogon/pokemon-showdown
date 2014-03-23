@@ -342,6 +342,13 @@ if (cluster.isMaster) {
 		}
 
 		socket.on('data', function(message) {
+			// drop empty messages (DDoS?)
+			if (!message) return;
+			// drop blank messages (DDoS?)
+			var pipeIndex = message.indexOf('|');
+			if (pipeIndex < 0 || pipeIndex === message.length-1) return;
+			// drop legacy JSON messages
+			if (message.charAt(0) === '{') return;
 			process.send('<'+socketid+'\n'+message);
 		});
 
