@@ -25,6 +25,7 @@
 
 const THROTTLE_DELAY = 600;
 const THROTTLE_BUFFER_LIMIT = 6;
+const THROTTLE_MULTILINE_WARN = 4;
 
 var users = {};
 var prevUsers = {};
@@ -187,6 +188,10 @@ function socketReceive(worker, workerid, socketid, message) {
 			return;
 		}
 		lines = lines.split('\n');
+		if (lines.length >= THROTTLE_MULTILINE_WARN) {
+			connection.popup("You're sending too many lines at once. Try using a paste service like [[Pastebin]].");
+			return;
+		}
 		// Emergency logging
 		if (config.emergency) {
 			fs.appendFile('logs/emergency.log', '['+ user + ' (' + connection.ip + ')] ' + message + '\n', function(err){
