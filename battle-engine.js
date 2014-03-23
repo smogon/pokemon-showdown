@@ -3865,6 +3865,7 @@ var Battle = (function() {
 					};
 					this.send('log', JSON.stringify(log));
 				}
+				this.send('score', [this.p1.pokemonLeft, this.p2.pokemonLeft]);
 				this.send('winupdate', [this.winner].concat(this.log.slice(logPos)));
 			} else {
 				this.send('update', this.log.slice(logPos));

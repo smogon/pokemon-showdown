@@ -476,6 +476,7 @@ var GlobalRoom = (function() {
 		if (config.reportbattles && rooms.lobby) {
 			rooms.lobby.add('|b|'+newRoom.id+'|'+p1.getIdentity()+'|'+p2.getIdentity());
 		}
+		return newRoom;
 	};
 	GlobalRoom.prototype.addRoom = function(room, format, p1, p2, parent, rated) {
 		room = newRoom(room, format, p1, p2, parent, rated);
@@ -1398,6 +1399,8 @@ var ChatRoom = (function() {
 		var userList = this.userList ? this.userList : this.getUserList();
 		var modchat = this.getModchatNote();
 		this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(25).join('\n')+modchat, connection);
+		if (global.Tournaments && Tournaments.get(this.id))
+			Tournaments.get(this.id).update(user);
 	};
 	ChatRoom.prototype.onJoin = function(user, connection, merging) {
 		if (!user) return false; // ???
@@ -1422,6 +1425,8 @@ var ChatRoom = (function() {
 			var modchat = this.getModchatNote();
 			this.send('|init|chat\n|title|'+this.title+'\n'+userList+'\n'+this.logGetLast(100).join('\n')+modchat, connection);
 		}
+		if (global.Tournaments && Tournaments.get(this.id))
+			Tournaments.get(this.id).update(user);
 
 		return user;
 	};
@@ -1450,6 +1455,8 @@ var ChatRoom = (function() {
 			}
 			this.logEntry(entry);
 		}
+		if (global.Tournaments && Tournaments.get(this.id))
+			Tournaments.get(this.id).update(user);
 		return user;
 	};
 	/**

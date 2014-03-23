@@ -186,6 +186,10 @@ var Simulator = (function(){
 		case 'inactiveside':
 			this.inactiveSide = parseInt(lines[2], 10);
 			break;
+
+		case 'score':
+			this.score = [parseInt(lines[2], 10), parseInt(lines[3], 10)];
+			break;
 		}
 		ResourceMonitor.activeIp = null;
 	};
