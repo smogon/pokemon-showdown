@@ -948,6 +948,7 @@ var BattlePokemon = (function() {
 			this.itemData = {id: '', target: this};
 			this.usedItemThisTurn = true;
 			this.ateBerry = true;
+			this.battle.runEvent('AfterUseItem', this, null, null, item);
 			return true;
 		}
 		return false;
