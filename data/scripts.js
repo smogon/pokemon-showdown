@@ -1290,7 +1290,7 @@ exports.BattleScripts = {
 				if (ability === 'Prankster' && !counter['Status']) {
 					rejectAbility = true;
 				}
-				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
+				if ((ability === 'Defiant' || ability === 'Moxie') && !counter['Physical'] && !hasMove['batonpass']) {
 					rejectAbility = true;
 				}
 				// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
