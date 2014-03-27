@@ -1068,7 +1068,7 @@ exports.BattleScripts = {
 				case 'rest':
 					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis']) rejected = true;
 					break;
-				case 'softboiled': case 'roost':
+				case 'softboiled': case 'roost': case 'moonlight': case 'synthesis':
 					if (hasMove['wish'] || hasMove['recover']) rejected = true;
 					break;
 				case 'perishsong':
