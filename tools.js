@@ -309,6 +309,10 @@ module.exports = (function () {
 		if (!effect || typeof effect === 'string') {
 			var name = (effect||'').trim();
 			var id = toId(name);
+			if (this.data.Aliases[id]) {
+				name = this.data.Aliases[id];
+				id = toId(name);
+			}
 			effect = {};
 			if (id && this.data.Formats[id]) {
 				effect = this.data.Formats[id];
