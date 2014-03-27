@@ -758,7 +758,7 @@ var commands = exports.commands = {
 			'- /roomunban <em>username</em>: unbans user from the room<br />' +
 			'- /roomvoice <em>username</em>: appoint a room voice<br />' +
 			'- /roomdevoice <em>username</em>: remove a room voice<br />' +
-			'- /modchat <em>[off/autoconfirmed/+]</em>: set modchat level<br />' +
+			'- /modchat <em>[off/autoconfirmed OR ac/+]</em>: set modchat level<br />' +
 			'<br />' +
 			'Room owners (#) can also use:<br />' +
 			'- /roomdesc <em>description</em>: set the room description on the room join page<br />' +
@@ -1197,7 +1197,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'dexsearch' || target === 'dsearch') {
 			matched = true;
-			this.sendReply('/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.');
+			this.sendReply('/dexsearch OR /ds [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.');
 			this.sendReply('Search categories are: type, tier, color, moves, ability, gen.');
 			this.sendReply('Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.');
 			this.sendReply('Valid tiers are: Uber/OU/BL/LC/CAP.');
