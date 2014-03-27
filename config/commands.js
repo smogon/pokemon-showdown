@@ -413,7 +413,14 @@ var commands = exports.commands = {
 				case 'moves':
 					for (var mon in dex) {
 						var template = Tools.getTemplate(dex[mon].id);
-						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+						if (!template.learnset) {
+							if (megaSearch && template.isMega) {
+								template = Tools.getTemplate(template.baseSpecies);
+							} else {
+								delete dex[mon];
+								continue;
+							}
+						}
 						if (!template.learnset) continue;
 						for (var i in searches[search]) {
 							var move = Tools.getMove(i);
