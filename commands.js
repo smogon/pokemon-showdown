@@ -345,6 +345,12 @@ var commands = exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+	
+	roomid: 'room',
+	room: function(target, room, user) {
+        	if (!this.canBroadcast()) return;
+        	this.sendReplyBox('You are currently in the room "'+room.id+'".');
+	},
 
 	autojoin: function(target, room, user, connection) {
 		Rooms.global.autojoinRooms(user, connection);
