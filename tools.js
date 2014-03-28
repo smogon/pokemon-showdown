@@ -836,7 +836,13 @@ module.exports = (function () {
 
 			// Pokeball
 			j = buf.indexOf('|', i);
-			if (j < 0) return;
+			if (j < 0) {
+				// backwards compatibility
+				if (buf.substring(i)) {
+					set.happiness = Number(buf.substring(i));
+				}
+				break;
+			}
 			if (i !== j) set.pokeball = buf.substring(i, j);
 			i = j+1;
 
