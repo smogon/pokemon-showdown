@@ -122,8 +122,7 @@ exports.Formats = [
 					this.useMove('earthquake', target);
 				};
 			} else if (move.id === 'secretpower') {
-				delete move.secondaries;
-				move.secondaries.push({
+				move.secondaries.splice(0, 1, {
 					chance: 30,
 					boosts: {
 						accuracy: -1
