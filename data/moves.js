@@ -2490,8 +2490,8 @@ exports.BattleMovedex = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
-		desc: "Deals damage to one adjacent target with a 50% chance to raise the user's Defense by 1 stage.",
-		shortDesc: "50% chance to boost the user's Def by 1.",
+		desc: "Deals damage to all adjacent Pokemon with a 50% chance to raise the user's Defense by 1 stage.",
+		shortDesc: "Hits all adjacent Pokemon. 50% chance to boost Def by 1.",
 		id: "diamondstorm",
 		name: "Diamond Storm",
 		pp: 5,
@@ -2504,7 +2504,7 @@ exports.BattleMovedex = {
 				}
 			}
 		},
-		target: "normal",
+		target: "allAdjacent",
 		type: "Rock"
 	},
 	"dig": {
