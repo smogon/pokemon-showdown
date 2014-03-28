@@ -9993,6 +9993,13 @@ exports.BattleMovedex = {
 				var sources = this.effectData.sources;
 				for (var i=0; i<sources.length; i++) {
 					this.cancelMove(sources[i]);
+					// Run through each decision in queue to check if the Pursuit user is supposed to mega evolve this turn.
+					// If it is, then mega evolve before moving.
+					var willMegaEvo = false;
+					for (var j=0; j<this.queue.length; j++) {
+						if (this.queue[j].pokemon === sources[i] && this.queue[j].choice === 'megaEvo') willMegaEvo = true;
+					}
+					if (willMegaEvo) this.runMegaEvo(sources[i])
 					this.runMove('pursuit', sources[i], pokemon);
 				}
 			}
