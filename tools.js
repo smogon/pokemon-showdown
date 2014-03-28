@@ -717,13 +717,6 @@ module.exports = (function () {
 				buf += '|'
 			}
 
-			// Pokeball
-			if (set.pokeball !== undefined && set.pokeball !== 'pokeball') {
-				buf += '|'+set.pokeball;
-			} else {
-				buf += '|';
-			}
-			
 			// happiness
 			if (set.happiness !== undefined && set.happiness !== 255) {
 				buf += '|'+set.happiness;
@@ -832,12 +825,6 @@ module.exports = (function () {
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
 			if (i !== j) set.level = parseInt(buf.substring(i, j), 10);
-			i = j+1;
-
-			// Pokeball
-			j = buf.indexOf('|', i);
-			if (j < 0) return;
-			if (i !== j) set.pokeball = buf.substring(i, j);
 			i = j+1;
 
 			// happiness
