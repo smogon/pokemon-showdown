@@ -571,6 +571,7 @@ var commands = {
 		j: 'join',
 		in: 'join',
 		join: function (tournament, user) {
+			if(!user.named) return false;
 			tournament.addUser(user, false, this);
 		},
 		l: 'leave',
