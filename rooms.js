@@ -613,7 +613,7 @@ var BattleRoom = (function() {
 						}
 						return;
 					} else if (data.errorip) {
-						connection.popup("This server's request IP "+data.errorip+" is not a registered server.");
+						self.addRaw("This server's request IP "+data.errorip+" is not a registered server.");
 						return;
 					} else {
 						try {
