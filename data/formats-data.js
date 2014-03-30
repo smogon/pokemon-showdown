@@ -880,7 +880,7 @@ exports.BattleFormatsData = {
 	},
 	rhydon: {
 		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockblast":1,"rockpolish":1},
-		viableDoublesMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockslide":1,"protect":1}
+		viableDoublesMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockslide":1,"protect":1},
 		eventPokemon: [
 			{"generation":3,"level":46,"moves":["helpinghand","megahorn","scaryface","earthquake"]}
 		],
@@ -888,7 +888,7 @@ exports.BattleFormatsData = {
 	},
 	rhyperior: {
 		viableMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockblast":1,"rockpolish":1,"dragontail":1},
-		viableDoublesMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockslide":1,"protect":1}
+		viableDoublesMoves: {"stoneedge":1,"earthquake":1,"aquatail":1,"megahorn":1,"stealthrock":1,"rockslide":1,"protect":1},
 		tier: "Limbo C"
 	},
 	happiny: {
@@ -898,7 +898,7 @@ exports.BattleFormatsData = {
 	},
 	chansey: {
 		viableMoves: {"wish":1,"softboiled":1,"protect":1,"toxic":1,"aromatherapy":1,"seismictoss":1,"counter":1,"thunderwave":1,"stealthrock":1,"fireblast":1,"icebeam":1},
-		viableDoublesMoves: {"aromatherapy":1,"toxic":1,"thunderwave":1,"helpinghand":1,"softboiled":1,"lightscreen":1,"seismictoss":1,"protect":1,"wish":!},
+		viableDoublesMoves: {"aromatherapy":1,"toxic":1,"thunderwave":1,"helpinghand":1,"softboiled":1,"lightscreen":1,"seismictoss":1,"protect":1,"wish":1},
 		eventPokemon: [
 			{"generation":3,"level":5,"gender":"F","moves":["sweetscent","wish"]},
 			{"generation":3,"level":10,"gender":"F","moves":["pound","growl","tailwhip","refresh"]},
