@@ -1446,6 +1446,10 @@ var commands = exports.commands = {
 			p2: room.p2.name,
 			format: room.format
 		}, function(success) {
+			if (success && success.errorip) {
+				connection.popup("This server's request IP "+success.errorip+" is not a registered server.");
+				return;
+			}
 			connection.send('|queryresponse|savereplay|'+JSON.stringify({
 				log: data,
 				id: room.id.substr(7)
