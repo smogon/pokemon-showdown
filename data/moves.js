@@ -440,7 +440,7 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Fairy"
 	},
-	"assist": {
+	"assist": { 
 		num: 274,
 		accuracy: true,
 		basePower: 0,
