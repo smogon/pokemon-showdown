@@ -612,6 +612,9 @@ var BattleRoom = (function() {
 							self.logBattle(p1score);
 						}
 						return;
+					} else if (data.errorip) {
+						connection.popup("This server's request IP "+data.errorip+" is not a registered server.");
+						return;
 					} else {
 						try {
 							p1rating = data.p1rating;
