@@ -3013,6 +3013,9 @@ exports.BattleAbilities = {
 		onTakeItem: function(item, pokemon) {
 			pokemon.addVolatile('unburden');
 		},
+		onRemoveItem: function(item, pokemon) {
+			pokemon.addVolatile('unburden');
+		},
 		effect: {
 			onModifySpe: function(speMod, pokemon) {
 				if (pokemon.ability !== 'unburden') {

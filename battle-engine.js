@@ -1008,6 +1008,8 @@ var BattlePokemon = (function() {
 		this.itemData = {id: item.id, target: this};
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemData, this, source, effect);
+		} else {
+			this.battle.runEvent('RemoveItem', this, source, null, item);
 		}
 		if (this.lastItem) this.usedItemThisTurn = true;
 		return true;
