@@ -1841,7 +1841,7 @@ exports.BattleItems = {
 		},
 		num: 278,
 		gen: 4,
-		desc: "Holder's Speed is halved and it becomes grounded."
+		desc: "Holder's Speed halved, becomes grounded, and takes 1x from Ground."
 	},
 	"ironplate": {
 		id: "ironplate",
