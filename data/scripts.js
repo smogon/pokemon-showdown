@@ -1013,7 +1013,7 @@ exports.BattleScripts = {
 					if (hasMove['closecombat']) rejected = true;
 					break;
 				case 'drainpunch':
-					if (hasMove['closecombat'] || hasMove['highjumpkick'] || hasMove['crosschop']) rejected = true;
+					if (hasMove['closecombat'] || hasMove['highjumpkick'] || hasMove['crosschop'] || hasMove['focuspunch']) rejected = true;
 					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
@@ -1069,9 +1069,9 @@ exports.BattleScripts = {
 
 				// Status:
 				case 'rest':
-					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis']) rejected = true;
+					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis'] || hasMove['morningsun']) rejected = true;
 					break;
-				case 'softboiled': case 'roost': case 'moonlight': case 'synthesis':
+				case 'softboiled': case 'roost': case 'moonlight': case 'synthesis': case 'morningsun':
 					if (hasMove['wish'] || hasMove['recover']) rejected = true;
 					break;
 				case 'perishsong':
