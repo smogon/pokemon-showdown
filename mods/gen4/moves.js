@@ -88,6 +88,7 @@ exports.BattleMovedex = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk: function(atk, pokemon) {
+				this.add("-message", pokemon.side.pokemon[this.effectData.index].name + "'s attack!");
 				return pokemon.side.pokemon[this.effectData.index].template.baseStats.atk;
 			},
 			onFoeModifyDefPriority: 5,
