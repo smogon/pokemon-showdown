@@ -5,7 +5,6 @@ exports.BattleAliases = {
 	"underused": "UU",
 	"rarelyused": "RU",
 	"neverused": "NU",
-	"littlecup": "LC",
 	"vgc": "VGC 2014",
 	"bh": "Balanced Hackmons",
 	"monotype": "OU Monotype",
