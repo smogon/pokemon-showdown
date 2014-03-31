@@ -977,9 +977,13 @@ var User = (function () {
 		LoginServer.request('mmr', {
 			format: formatid,
 			user: this.userid
-		}, function(data) {
-			var mmr = 1000, error = true;
+		}, function(data, statusCode, error) {
+			var mmr = 1000, error = (error || true);
 			if (data) {
+				if (data.errorip) {
+					self.popup("This server's request IP "+data.errorip+" is not a registered server.");
+					return;
+				}
 				mmr = parseInt(data,10);
 				if (!isNaN(mmr)) {
 					error = false;

@@ -264,7 +264,7 @@ var GlobalRoom = (function() {
 		var self = this;
 		user.doWithMMR(formatid, function(mmr, error) {
 			if (error) {
-				user.popup("Connection to ladder server failed; please try again later");
+				user.popup("Connection to ladder server failed with error: "+error+"; please try again later");
 				return;
 			}
 			newSearch.rating = mmr;
