@@ -63,16 +63,6 @@ exports.Formats = [
 		section: "XY Singles",
 
 		maxLevel: 5,
-		challengeShow: false,
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Swirlix', 'Gligar']
-	},
-	{
-		name: "LC (suspect test)",
-		section: "XY Singles",
-
-		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Swirlix', 'Gligar']
 	},
