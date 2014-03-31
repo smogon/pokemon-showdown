@@ -7680,6 +7680,7 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemonPriority: 1,
 			onModifyPokemon: function(pokemon) {
+				if (pokemon.getItem(this.item).megaEvolves) return false;
 				pokemon.ignore['Item'] = true;
 			},
 			onResidualOrder: 25,
