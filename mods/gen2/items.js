@@ -72,6 +72,10 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Restores 5PP to the first of the holder's moves to reach 0PP. Single use."
 	},
+	lumberry: {
+		inherit: true,
+		gen: 2
+	},
 	oranberry: {
 		inherit: true,
 		gen: 2
