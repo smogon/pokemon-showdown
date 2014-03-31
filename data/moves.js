@@ -3375,6 +3375,7 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemonPriority: 1,
 			onModifyPokemon: function(pokemon) {
+				if (pokemon.getItem().megaEvolves) return;
 				pokemon.ignore['Item'] = true;
 			}
 		},
@@ -7680,7 +7681,7 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemonPriority: 1,
 			onModifyPokemon: function(pokemon) {
-				if (pokemon.getItem(this.item).megaEvolves) return false;
+				if (pokemon.getItem().megaEvolves) return;
 				pokemon.ignore['Item'] = true;
 			},
 			onResidualOrder: 25,
