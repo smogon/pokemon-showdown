@@ -6,6 +6,10 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Doubles the amount of money received in trainer battles."
 	},
+	aspearberry: {
+		inherit: true,
+		gen: 2
+	},
 	berserkgene: {
 		id: "berserkgene",
 		name: "Berserk Gene",
@@ -16,6 +20,14 @@ exports.BattleItems = {
 		},
 		gen: 2,
 		desc: "Raises attack by 2 when holder is switched in.  Confuses holder.  Single use."
+	},
+	cheriberry: {
+		inherit: true,
+		gen: 2
+	},
+	chestoberry: {
+		inherit: true,
+		gen: 2
 	},
 	dragonscale: {
 		id: "dragonscale",
@@ -59,5 +71,25 @@ exports.BattleItems = {
 		},
 		gen: 2,
 		desc: "Restores 5PP to the first of the holder's moves to reach 0PP. Single use."
+	},
+	oranberry: {
+		inherit: true,
+		gen: 2
+	},
+	pechaberry: {
+		inherit: true,
+		gen: 2
+	},
+	persimberry: {
+		inherit: true,
+		gen: 2
+	},
+	rawstberry: {
+		inherit: true,
+		gen: 2
+	},
+	sitrustberry: {
+		inherit: true,
+		gen: 2
 	}
 };
