@@ -3413,7 +3413,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	arceuspoison: {
-		viableMoves: {"calmmind":1,"judgment":1,"focusblast":1,"fireblast":1,"recover":1,"willowisp":1,"icebeam":1,"stealthrock":1},
+		viableMoves: {"calmmind":1,"judgment":1,"sludgebomb":1,"focusblast":1,"fireblast":1,"recover":1,"willowisp":1,"icebeam":1,"stealthrock":1},
 		requiredItem: "Toxic Plate",
 		tier: "Uber"
 	},
