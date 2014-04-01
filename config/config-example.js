@@ -126,6 +126,15 @@ exports.simulatorprocesses = 1;
 // from the `users` array. The default is 1 hour.
 exports.inactiveuserthreshold = 1000*60*60;
 
+// tellsexpiryage - how long a tell remains in existence before being removed. By default,
+// 7 days
+exports.tellsexpiryage = 1000*60*60*24*7;
+
+// tellrank - the rank that offline messaging is available to. By default, available to voices
+// and above. Set to ' ' to allow all users to use offline messaging and `false` to disable
+// offline messaging completely.
+exports.tellrank = '+';
+
 // Set this to true if you are using Pokemon Showdown on Heroku.
 exports.herokuhack = false;
 
