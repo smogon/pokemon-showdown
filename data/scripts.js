@@ -504,6 +504,7 @@ exports.BattleScripts = {
 		if (!template.isMega) return false;
 		if (pokemon.baseTemplate.species !== template.baseSpecies) return false;
 		if (pokemon.volatiles.mustrecharge) return false;
+		if (pokemon.getLockedMove()) return false;
 
 		// okay, mega evolution is possible
 		this.add('-formechange', pokemon, template.species);
@@ -944,7 +945,7 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
-				case 'knockoff': case 'perishsong': case 'magiccoat': case 'spikes':
+				case 'perishsong': case 'magiccoat': case 'spikes':
 					if (setupType) rejected = true;
 					break;
 				case 'uturn': case 'voltswitch':
@@ -1012,7 +1013,7 @@ exports.BattleScripts = {
 					if (hasMove['closecombat']) rejected = true;
 					break;
 				case 'drainpunch':
-					if (hasMove['closecombat'] || hasMove['highjumpkick'] || hasMove['crosschop']) rejected = true;
+					if (hasMove['closecombat'] || hasMove['highjumpkick'] || hasMove['crosschop'] || hasMove['focuspunch']) rejected = true;
 					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || hasMove['voltswitch'] || hasMove['thunder']) rejected = true;
@@ -1062,12 +1063,15 @@ exports.BattleScripts = {
 				case 'voltswitch':
 					if (hasMove['uturn']) rejected = true;
 					break;
+				case 'u-turn':
+					if (hasMove['voltswitch']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
-					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis']) rejected = true;
+					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis'] || hasMove['morningsun']) rejected = true;
 					break;
-				case 'softboiled': case 'roost':
+				case 'softboiled': case 'roost': case 'moonlight': case 'synthesis': case 'morningsun':
 					if (hasMove['wish'] || hasMove['recover']) rejected = true;
 					break;
 				case 'perishsong':
@@ -1289,7 +1293,7 @@ exports.BattleScripts = {
 				if (ability === 'Prankster' && !counter['Status']) {
 					rejectAbility = true;
 				}
-				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
+				if ((ability === 'Defiant' || ability === 'Moxie') && !counter['Physical'] && !hasMove['batonpass']) {
 					rejectAbility = true;
 				}
 				// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
@@ -1493,7 +1497,7 @@ exports.BattleScripts = {
 				item = 'Assault Vest';
 			} else if (counter.Physical + counter.Special >= 4) {
 				item = 'Expert Belt';
-			} else if (i===0 && ability !== 'Sturdy' && !counter['recoil']) {
+			} else if (i===0 && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
 				item = 'Focus Sash';
 			} else if (hasMove['outrage']) {
 				item = 'Lum Berry';
@@ -1626,6 +1630,8 @@ exports.BattleScripts = {
 			if (keys[i].substr(0,8) === 'basculin' && Math.random()*2>1) continue;
 			// Genesect formes have 1/5 the normal rate each (so Genesect as a whole has a normal rate)
 			if (keys[i].substr(0,8) === 'genesect' && Math.random()*5>1) continue;
+			// Gourgeist formes have 1/4 the normal rate each (so Gourgeist as a whole has a normal rate)
+			if (keys[i].substr(0,9) === 'gourgeist' && Math.random()*4>1) continue;
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 

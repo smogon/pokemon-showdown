@@ -1,4 +1,16 @@
 exports.BattleAliases = {
+	// formats
+	"randbats": "Random Battle",
+	"overused": "OU",
+	"underused": "UU",
+	"rarelyused": "RU",
+	"neverused": "NU",
+	"vgc": "VGC 2014",
+	"bh": "Balanced Hackmons",
+	"monotype": "OU Monotype",
+	"createapokemon": "CAP",
+	"cc1v1": "Challenge Cup 1vs1",
+	
 	// mega evos
 	"megaabomasnow": "Abomasnow-Mega",
 	"megaabsol": "Absol-Mega",
@@ -48,6 +60,7 @@ exports.BattleAliases = {
 	"cherrimsunny": "Cherrim-Sunshine",
 	"darmanitanz": "Darmanitan-Zen",
 	"darmanitanzenmode": "Darmanitan-Zen",
+	"deoxysnormal": "Deoxys",
 	"deoxysa": "Deoxys-Attack",
 	"deoa": "Deoxys-Attack",
 	"deoxysd": "Deoxys-Defense",
