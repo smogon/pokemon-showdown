@@ -51,7 +51,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'OU', 'BL',
 			// Banned items
-			'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'Medichamite', 'Gardevoirite', 'Houndoominite',
+			'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'Medichamite', 'Gardevoirite', // 'Houndoominite',
 			// Banned moves
 			'Swagger',
 			// Banned abilities
@@ -60,16 +60,6 @@ exports.Formats = [
 	},
 	{
 		name: "LC",
-		section: "XY Singles",
-
-		maxLevel: 5,
-		challengeShow: false,
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Swirlix', 'Gligar']
-	},
-	{
-		name: "LC (suspect test)",
 		section: "XY Singles",
 
 		maxLevel: 5,
@@ -92,6 +82,43 @@ exports.Formats = [
 		banlist: [], // The neccessary bans are in Standard GBU
 		validateTeam: function(team, format) {
 			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
+		}
+	},
+	{
+		name: "2014 April Friendly",
+		section: "XY Singles",
+
+		onBegin: function() {
+			this.debug('cutting down to 3');
+			this.p1.pokemon = this.p1.pokemon.slice(0,3);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0,3);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		maxForcedLevel: 50,
+		requirePentagon: true,
+		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview GBU', 'Kalos Pokedex'],
+		banlist: ['Unreleased', 'Illegal'],
+		validateTeam: function(team, format) {
+			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
+		},
+		onModifyMove: function(move) {
+			if (move.id === 'camouflage') {
+				move.onHit = function(target) {
+					if (target.setType('Ground')) this.add('-start', target, 'typechange', 'Ground');
+				};
+			} else if (move.id === 'naturepower') {
+				move.onHit = function(target) {
+					this.useMove('earthquake', target);
+				};
+			} else if (move.id === 'secretpower') {
+				move.secondaries.splice(0, 1, {
+					chance: 30,
+					boosts: {
+						accuracy: -1
+					}
+				});
+			}
 		}
 	},
 	{
