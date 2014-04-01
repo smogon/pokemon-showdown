@@ -3383,7 +3383,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	arceusfire: {
-		viableMoves: {"calmmind":1,"flamethrower":1,"fireblast":1,"thunderbolt":1,"recover":1},
+		viableMoves: {"calmmind":1,"judgment":1,"thunderbolt":1,"recover":1},
 		requiredItem: "Flame Plate",
 		tier: "Uber"
 	},
@@ -3408,7 +3408,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	arceusice: {
-		viableMoves: {"calmmind":1,"judgment":1,"icebeam":1,"thunderbolt":1,"focusblast":1,"recover":1},
+		viableMoves: {"calmmind":1,"judgment":1,"thunderbolt":1,"focusblast":1,"recover":1},
 		requiredItem: "Icicle Plate",
 		tier: "Uber"
 	},
