@@ -534,7 +534,10 @@ var Validator = (function() {
 			problems = problems.concat(format.validateSet.call(tools, set, format)||[]);
 		}
 
-		if (!problems.length) return false;
+		if (!problems.length) {
+			if (set.forcedLevel) set.level = set.forcedLevel;
+			return false;
+		}
 		return problems;
 	};
 
