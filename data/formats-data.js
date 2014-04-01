@@ -4606,6 +4606,7 @@ exports.BattleFormatsData = {
 		tier: "Unreleased"
 	},
 	missingno: {
+		viableMoves: {"watergun":1,"skyattack":1,"doubleedge":1,"metronome":1},
 		isNonstandard: true,
 		tier: ""
 	},
