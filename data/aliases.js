@@ -147,6 +147,7 @@ exports.BattleAliases = {
 	"goldberry": "Sitrus Berry",
 	"iceberry": "Aspear Berry",
 	"mintberry": "Chesto Berry",
+	"miracleberry": "Lum Berry",
 	"mysteryberry": "Leppa Berry",
 	"przcureberry": "Cheri Berry",
 	"psncureberry": "Pecha Berry",
