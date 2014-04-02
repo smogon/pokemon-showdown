@@ -7,19 +7,12 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Random Battle (beta)",
+		name: "Random Battle",
 		section: "XY Singles",
 
-		team: 'randomBeta',
+		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
-	// {
-	// 	name: "Random Battle",
-	// 	section: "XY Singles",
-
-	// 	team: 'random',
-	// 	ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
-	// },
 	{
 		name: "Unrated Random Battle",
 		section: "XY Singles",

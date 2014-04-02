@@ -1707,7 +1707,7 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && i !== 'missingno' && !this.getTemplate(i).evos.length) {
+			if (this.data.FormatsData[i].viableMoves && i !== 'missingno') {
 				keys.push(i);
 			}
 		}
@@ -1738,8 +1738,6 @@ exports.BattleScripts = {
 			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random()*5>1) continue;
 			if (tier === 'Uber' && uberCount > 1 && Math.random()*5>1) continue;
 
-			// CAPs have 20% the normal rate
-			if (tier === 'CAP' && Math.random()*5>1) continue;
 			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
 			if (keys[i].substr(0,6) === 'arceus' && Math.random()*18>1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
