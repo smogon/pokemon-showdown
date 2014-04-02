@@ -970,6 +970,9 @@ exports.BattleScripts = {
 				case 'flamethrower': case 'fierydance':
 					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast'] || hasMove['blueflare']) rejected = true;
 					break;
+				case 'fireblast':
+					if (hasMove['lavaplume']) rejected = true;
+					break;
 				case 'overheat':
 					if (setupType === 'Special' || hasMove['fireblast']) rejected = true;
 					break;
