@@ -340,6 +340,7 @@ var commands = exports.commands = {
 			if (targetMove.exists) {
 				if (!searches['moves']) searches['moves'] = {};
 				if (Object.count(searches['moves'], true) === 4 && !isNotSearch) return this.sendReply('Specify a maximum of 4 moves.');
+				if (searches['moves'][targetMove.name] && isNotSearch) return this.sendReplyBox('No Pokémon found.');
 				searches['moves'][targetMove.name] = !isNotSearch;
 				continue;
 			} else {
