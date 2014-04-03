@@ -352,7 +352,7 @@ var commands = exports.commands = {
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
 			var template = Tools.getTemplate(pokemon);
-			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) && 
+			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) &&
 				(megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega))) {
 				dex[pokemon] = template;
 			}
@@ -531,7 +531,7 @@ var commands = exports.commands = {
 			pokemon = {types: [type1.id]};
 			target = type1.id;
 		} else {
-			return this.sendReplyBox(target + " isn't a recognized type or pokemon.");
+			return this.sendReplyBox(sanitize(target) + " isn't a recognized type or pokemon.");
 		}
 
 		var weaknesses = [];
@@ -656,7 +656,7 @@ var commands = exports.commands = {
 	smogonintro: 'smogintro',
 	smogintro: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('Welcome to Smogon\'s Official Pokémon Showdown server! The Mentoring room can be found ' + 
+		this.sendReplyBox('Welcome to Smogon\'s Official Pokémon Showdown server! The Mentoring room can be found ' +
 			'<a href="http://play.pokemonshowdown.com/communitymentoring">here</a> or by using /join communitymentoring.<br /><br />' +
 			'Here are some useful links to Smogon\'s Mentorship Program to help you get integrated into the community:<br />' +
 			'- <a href="http://www.smogon.com/mentorship/primer">Smogon Primer: A brief introduction to Smogon\'s subcommunities</a><br />' +
