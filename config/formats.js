@@ -59,6 +59,13 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "RU (beta)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'UU'],
+		banlist: ['Uber', 'OU', 'BL', 'UU', 'BL2']
+	},
+	{
 		name: "LC",
 		section: "XY Singles",
 
