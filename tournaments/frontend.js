@@ -455,7 +455,7 @@ var Tournament = (function () {
 		this.isBracketInvalidated = true;
 		this.update();
 	};
-	Tournament.prototype.cancelChallenge = function (user) {
+	Tournament.prototype.cancelChallenge = function (user, output) {
 		if (!this.isTournamentStarted) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -476,7 +476,7 @@ var Tournament = (function () {
 		this.isAvailableMatchesInvalidated = true;
 		this.update();
 	};
-	Tournament.prototype.acceptChallenge = function (user) {
+	Tournament.prototype.acceptChallenge = function (user, output) {
 		if (!this.isTournamentStarted) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
@@ -590,10 +590,10 @@ var commands = {
 			tournament.challenge(user, targetUser, this);
 		},
 		cancelchallenge: function (tournament, user) {
-			tournament.cancelChallenge(user);
+			tournament.cancelChallenge(user, this);
 		},
 		acceptchallenge: function (tournament, user) {
-			tournament.acceptChallenge(user);
+			tournament.acceptChallenge(user, this);
 		}
 	},
 	creation: {
