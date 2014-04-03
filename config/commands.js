@@ -290,18 +290,21 @@ var commands = exports.commands = {
 			if (targetAbility.exists) {
 				if (!searches['ability']) searches['ability'] = {};
 				if (Object.count(searches['ability'], true) === 1 && !isNotSearch) return this.sendReply('Specify only one ability.');
+				if (searches['ability'][targetAbility.name] && isNotSearch) return this.sendReplyBox('No Pokémon found.');
 				searches['ability'][targetAbility.name] = !isNotSearch;
 				continue;
 			}
 
 			if (target in allTiers) {
 				if (!searches['tier']) searches['tier'] = {};
+				if (searches['tier'][target] && isNotSearch) return this.sendReplyBox('No Pokémon found.');
 				searches['tier'][target] = !isNotSearch;
 				continue;
 			}
 
 			if (target in allColours) {
 				if (!searches['color']) searches['color'] = {};
+				if (searches['color'][target] && isNotSearch) return this.sendReplyBox('No Pokémon found.');
 				searches['color'][target] = !isNotSearch;
 				continue;
 			}
@@ -309,6 +312,7 @@ var commands = exports.commands = {
 			var targetInt = parseInt(target);
 			if (0 < targetInt && targetInt < 7) {
 				if (!searches['gen']) searches['gen'] = {};
+				if (searches['gen'][target] && isNotSearch) return this.sendReplyBox('No Pokémon found.');
 				searches['gen'][target] = !isNotSearch;
 				continue;
 			}
@@ -322,6 +326,7 @@ var commands = exports.commands = {
 			}
 
 			if (target === 'megas' || target === 'mega') {
+				if (megaSearch && isNotSearch) return this.sendReplyBox('No Pokémon found.');
 				megaSearch = !isNotSearch;
 				continue;
 			}
@@ -331,6 +336,7 @@ var commands = exports.commands = {
 				if (target in Tools.data.TypeChart) {
 					if (!searches['types']) searches['types'] = {};
 					if (Object.count(searches['types'], true) === 2 && !isNotSearch) return this.sendReply('Specify a maximum of two types.');
+					if (searches['types'][target] && isNotSearch) return this.sendReplyBox('No Pokémon found.');
 					searches['types'][target] = !isNotSearch;
 					continue;
 				}
@@ -340,6 +346,7 @@ var commands = exports.commands = {
 			if (targetMove.exists) {
 				if (!searches['moves']) searches['moves'] = {};
 				if (Object.count(searches['moves'], true) === 4 && !isNotSearch) return this.sendReply('Specify a maximum of 4 moves.');
+				if (searches['moves'][targetMove.name] && isNotSearch) return this.sendReplyBox('No Pokémon found.');
 				searches['moves'][targetMove.name] = !isNotSearch;
 				continue;
 			} else {
