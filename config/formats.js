@@ -51,7 +51,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'OU', 'BL',
 			// Banned items
-			'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'Medichamite', 'Gardevoirite', // 'Houndoominite',
+			'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'Medichamite', 'Gardevoirite',
 			// Banned moves
 			'Swagger',
 			// Banned abilities
