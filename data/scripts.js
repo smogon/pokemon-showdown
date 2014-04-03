@@ -1299,6 +1299,9 @@ exports.BattleScripts = {
 				if ((ability === 'Defiant' || ability === 'Moxie') && !counter['Physical'] && !hasMove['batonpass']) {
 					rejectAbility = true;
 				}
+				if (ability === 'Snow Warning' && hasMove['naturepower']) {
+					rejectAbility = true;
+				}
 				// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
 				if (ability === 'Swift Swim' && !hasMove['raindance']) {
 					rejectAbility = true;
