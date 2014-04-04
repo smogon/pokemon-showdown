@@ -62,8 +62,40 @@ exports.BattleMovedex = {
 	beatup: {
 		inherit: true,
 		basePower: 10,
-		basePowerCallback: undefined,
-		desc: "Does one hit for the user and each other unfainted non-egg active and non-active Pokemon on the user's side without a status problem."
+		basePowerCallback: null,
+		desc: "Does one hit for the user and each other unfainted non-egg active and non-active Pokemon on the user's side without a status problem.",
+		onBasePower: function(basePower, pokemon, target) {
+			pokemon.addVolatile('beatup');
+		},
+		effect: {
+			duration: 1,
+			onStart: function(pokemon) {
+				this.effectData.index = 0;
+				while (pokemon.side.pokemon[this.effectData.index] !== pokemon &&
+					(!pokemon.side.pokemon[this.effectData.index] ||
+					pokemon.side.pokemon[this.effectData.index].fainted ||
+					pokemon.side.pokemon[this.effectData.index].status)) {
+					this.effectData.index++;
+				}
+			},
+			onRestart: function(pokemon) {
+				do {
+					this.effectData.index++;
+					if (this.effectData.index >= 6) break;
+				} while (!pokemon.side.pokemon[this.effectData.index] ||
+						pokemon.side.pokemon[this.effectData.index].fainted ||
+						pokemon.side.pokemon[this.effectData.index].status);
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk: function(atk, pokemon) {
+				this.add("-message", pokemon.side.pokemon[this.effectData.index].name + "'s attack!");
+				return pokemon.side.pokemon[this.effectData.index].template.baseStats.atk;
+			},
+			onFoeModifyDefPriority: 5,
+			onFoeModifyDef: function(def, pokemon) {
+				return pokemon.template.baseStats.def;
+			}
+		}
 	},
 	bide: {
 		inherit: true,

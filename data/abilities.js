@@ -453,8 +453,8 @@ exports.BattleAbilities = {
 		num: 6
 	},
 	"darkaura": {
-		desc: "Increases the power of all Dark-type moves in battle to 1.3x.",
-		shortDesc: "Increases the power of all Dark-type moves in battle to 1.3x.",
+		desc: "Increases the power of all Dark-type moves in battle to 1.33x.",
+		shortDesc: "Increases the power of all Dark-type moves in battle to 1.33x.",
 		onStart: function(pokemon) {
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
@@ -474,7 +474,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (move.type === 'Dark') {
-				return this.chainModify(reverseAura? 0.75 : 1.3);
+				return this.chainModify(reverseAura? 0.75 : 4/3);
 			}
 		},
 		id: "darkaura",
@@ -629,8 +629,8 @@ exports.BattleAbilities = {
 		num: 27
 	},
 	"fairyaura": {
-		desc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
-		shortDesc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
+		desc: "Increases the power of all Fairy-type moves in battle to 1.33x.",
+		shortDesc: "Increases the power of all Fairy-type moves in battle to 1.33x.",
 		onStart: function(pokemon) {
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
@@ -650,7 +650,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (move.type === 'Fairy') {
-				return this.chainModify(reverseAura? 0.75 : 1.3);
+				return this.chainModify(reverseAura? 0.75 : 4/3);
 			}
 		},
 		id: "fairyaura",
