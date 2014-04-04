@@ -158,8 +158,8 @@ exports.Formats = [
 		section: "XY Doubles",
 
 		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal', 'Dark Void', 'Soul Dew',
+		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
+		banlist: ['Dark Void', 'Soul Dew',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
 			'Lugia',
 			'Ho-Oh',
@@ -183,8 +183,8 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
-		banlist: ['Dark Void']
+		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal', 'Dark Void']
 	},
 	{
 		name: "Smogon Doubles UU",
@@ -192,7 +192,7 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
 		banlist: ['Dark Void', 'Soul Dew',
 			// Uber Pokémon
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',

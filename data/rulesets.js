@@ -55,6 +55,11 @@ exports.BattleFormats = {
 			'Zygarde'
 		]
 	},
+	standarddoubles: {
+		effectType: 'Banlist',
+		ruleset: ['Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
+		banlist: ['Unreleased', 'Illegal']
+	},
 	pokemon: {
 		effectType: 'Banlist',
 		validateSet: function(set, format, isNonstandard) {
