@@ -528,7 +528,7 @@ exports.Formats = [
 	},
 	{
 		name: "Alphabet Cup",
-		section: "OM of the Month",
+		section: "Other Metagames",
 
 		searchShow: false,
 		ruleset: ['Pokemon', 'Team Preview', 'Standard'],
