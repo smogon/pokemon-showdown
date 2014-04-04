@@ -1224,6 +1224,8 @@ exports.BattleScripts = {
 
 		// any moveset modification goes here
 		//moves[0] = 'Safeguard';
+		if (template.requiredItem && template.requiredItem.slice(-5) === 'Drive' && !hasMove['technoblast']) moves[3] = 'Techno Blast';
+
 		{
 			var abilities = [template.abilities['0']];
 			if (template.abilities['1']) {
