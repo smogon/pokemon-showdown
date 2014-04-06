@@ -3045,7 +3045,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	drifblim: {
-		viableMoves: {"shadowball":1,"substitute":1,"calmmind":1,"hypnosis":1,"hiddenpowerfighting":1,"thunderbolt":1,"destinybond":1,"willowisp":1,"stockpile":1,"batonpass":1,"disable":1,"explosion":1},
+		viableMoves: {"shadowball":1,"substitute":1,"calmmind":1,"hypnosis":1,"hiddenpowerfighting":1,"thunderbolt":1,"destinybond":1,"willowisp":1,"stockpile":1,"batonpass":1,"explosion":1},
 		tier: "Limbo"
 	},
 	buneary: {
