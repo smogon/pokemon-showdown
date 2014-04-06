@@ -27,15 +27,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
-	},
-	{
-		name: "OU (suspect test)",
-		section: "XY Singles",
-
-		challengeShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger']
 	},
 	{
 		name: "Ubers",
@@ -48,22 +40,15 @@ exports.Formats = [
 		name: "UU",
 		section: "XY Singles",
 
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'OU', 'BL',
-			// Banned items
-			'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Heracronite', 'Medichamite', 'Gardevoirite',
-			// Banned moves
-			'Swagger',
-			// Banned abilities
-			'Drizzle', 'Drought'
-		]
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'Heracronite', 'Medichamite', 'Gardevoirite', 'Drizzle', 'Drought']
 	},
 	{
 		name: "RU (beta)",
 		section: "XY Singles",
 
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'UU'],
-		banlist: ['Uber', 'OU', 'BL', 'UU', 'BL2']
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2']
 	},
 	{
 		name: "LC",
