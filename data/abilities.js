@@ -2005,6 +2005,7 @@ exports.BattleAbilities = {
 			var moveType = (move.id === 'hiddenpower' ? pokemon.hpType : move.type);
 			if (pokemon.getTypes().join() !== moveType) {
 				if (!pokemon.setType(moveType)) return false;
+				if (move.volatileStatus === 'mustrecharge') return false;
 				this.add('-start', pokemon, 'typechange', moveType, '[from] Protean');
 			}
 		},
