@@ -1632,6 +1632,8 @@ exports.BattleScripts = {
 
 			// CAPs have 20% the normal rate
 			if (tier === 'CAP' && Math.random()*5>1) continue;
+			// Deoxys formes have 1/4 the normal rate each (so Deoxys as a whole has a normal rate)
+			if (keys[i].substr(0,6) === 'deoxys' && Math.random()*4>1) continue;
 			// Wormadam formes have 1/3 the normal rate each (so Wormadam as a whole has a normal rate)
 			if (keys[i].substr(0,8) === 'wormadam' && Math.random()*3>1) continue;
 			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
