@@ -55,6 +55,11 @@ exports.BattleFormats = {
 			'Zygarde'
 		]
 	},
+	standarddoubles: {
+		effectType: 'Banlist',
+		ruleset: ['Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
+		banlist: ['Unreleased', 'Illegal']
+	},
 	pokemon: {
 		effectType: 'Banlist',
 		validateSet: function(set, format, isNonstandard) {
@@ -353,6 +358,27 @@ exports.BattleFormats = {
 					return ["You are limited to one of each item by Item Clause.","(You have more than one "+this.getItem(item).name+")"];
 				}
 				itemTable[item] = true;
+			}
+		}
+	},
+	abilityclause: {
+		effectType: 'Rule',
+		onStart: function() {
+			this.add('rule', 'Ability Clause: Limit two of each ability');
+		},
+		validateTeam: function(team, format) {
+			var abilityTable = {};
+			for (var i = 0; i < team.length; i++) {
+				var ability = toId(team[i].ability);
+				if (!ability) continue;
+				if (ability in abilityTable) {
+					if (abilityTable[ability] >= 2) {
+						return ["You are limited to two of each ability by the Ability Clause.","(You have more than two " + this.getAbility(ability).name + ")"];
+					}
+					abilityTable[ability]++;
+				} else {
+					abilityTable[ability] = 1;
+				}
 			}
 		}
 	},
