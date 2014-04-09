@@ -727,10 +727,6 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3479358/">Tier Shift</a><br />';
 		}
-		if (target === 'all' || target === 'seasonal') {
-			matched = true;
-			buffer += '- <a href="http://www.smogon.com/sim/seasonal">Seasonal Ladder</a><br />';
-		}
 		if (target === 'all' || target === 'stabmons') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3484106/">STABmons</a>';
@@ -738,6 +734,22 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'omotm' || target === 'omofthemonth' || target === 'month') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3481155/">OM of the Month</a>';
+		}
+		if (target === 'all' || target === 'skybattles') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3493601/">Sky Battles</a>';
+		}
+		if (target === 'all' || target === 'inversebattle' || target === 'inverse') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3492433/">Inverse Battle</a>';
+		}
+		if (target === 'all' || target === 'middlecup' || target === 'mc') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3494887/">Middle Cup</a>';
+		}
+		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3499219/">OU Theorymon</a>';
 		}
 		if (target === 'all' || target === 'index') {
 			matched = true;
