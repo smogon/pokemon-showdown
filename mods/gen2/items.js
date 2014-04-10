@@ -27,6 +27,28 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Evolves Seadra into Kingdra. Raises power of Dragon-type moves by 10%."
 	},
+	leppaberry: {
+		inherit: true,
+		onEat: function(pokemon) {
+			var move;
+			if (pokemon.volatiles['leppaberry']) {
+				move = pokemon.volatiles['leppaberry'].move;
+				pokemon.removeVolatile('leppaberry');
+			} else {
+				var pp = 99;
+				for (var i in pokemon.moveset) {
+					if (pokemon.moveset[i].pp < pp) {
+						move = pokemon.moveset[i];
+						pp = move.pp;
+					}
+				}
+			}
+			move.pp += 5;
+			if (move.pp > move.maxpp) move.pp = move.maxpp;
+			this.add("-message",pokemon.name+" restored "+move.move+"'s PP using its Leppa Berry! (placeholder)");
+		},
+		gen: 2
+	},
 	metalpowder: {
 		inherit: true,
 		onModifyDef: function(def, pokemon) {
