@@ -1685,7 +1685,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":30,"gender":"M","nature":"Jolly","moves":["fakeout","iceshard","nightslash","brickbreak"],"pokeball":"cherishball"}
 		],
-		tier: "UU"
+		tier: "BL"
 	},
 	teddiursa: {
 		viableMoves: {"swordsdance":1,"protect":1,"facade":1,"closecombat":1,"firepunch":1,"crunch":1,"playrough":1,"gunkshot":1},
@@ -4517,7 +4517,7 @@ exports.BattleFormatsData = {
 	},
 	klefki: {
 		viableMoves: {"reflect":1,"lightscreen":1,"spikes":1,"torment":1,"substitute":1,"thunderwave":1,"drainingkiss":1,"swagger":1,"foulplay":1,"flashcannon":1,"dazzlinggleam":1},
-		tier: "BL"
+		tier: "UU"
 	},
 	phantump: {
 		viableMoves: {"hornleech":1,"leechseed":1,"phantomforce":1,"substitute":1,"willowisp":1,"curse":1,"bulldoze":1,"rockslide":1,"poisonjab":1},
