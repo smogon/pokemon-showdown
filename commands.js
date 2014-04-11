@@ -847,6 +847,11 @@ var commands = exports.commands = {
 			this.add('|raw|<div class="broadcast-red"><b>Moderated chat was set to '+modchat+'!</b><br />Only users of rank '+modchat+' and higher can talk.</div>');
 		}
 		this.logModCommand(user.name+' set modchat to '+room.modchat);
+
+		if (room.chatRoomData) {
+			room.chatRoomData.modchat = room.modchat;
+			Rooms.global.writeChatRoomData();
+		}
 	},
 
 	declare: function(target, room, user) {
