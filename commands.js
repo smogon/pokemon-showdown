@@ -191,6 +191,25 @@ var commands = exports.commands = {
 		}
 	},
 
+	modjoin: function(target, room, user) {
+		if (!this.can('privateroom', null, room)) return;
+		if (target === 'off') {
+			delete room.modjoin;
+			this.addModCommand(user.name+' turned off modjoin.');
+			if (room.chatRoomData) {
+				delete room.chatRoomData.modjoin;
+				Rooms.global.writeChatRoomData();
+			}
+		} else {
+			room.modjoin = true;
+			this.addModCommand(user.name+' turned on modjoin.');
+			if (room.chatRoomData) {
+				room.chatRoomData.modjoin = true;
+				Rooms.global.writeChatRoomData();
+			}
+		}
+	},
+
 	officialchatroom: 'officialroom',
 	officialroom: function(target, room, user) {
 		if (!this.can('makeroom')) return;
@@ -357,8 +376,23 @@ var commands = exports.commands = {
 			if (target === 'lobby') return connection.sendTo(target, "|noinit|nonexistent|");
 			return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
 		}
-		if (targetRoom.isPrivate && !user.named) {
-			return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '"+target+"'.");
+		if (targetRoom.isPrivate) {
+			if (room.modjoin) {
+				var userGroup = user.group;
+				if (targetRoom.auth) {
+					if (targetRoom.auth[user.userid]) {
+						userGroup = targetRoom.auth[user.userid];
+					} else if (targetRoom.isPrivate) {
+						userGroup = ' ';
+					}
+				}
+				if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(targetRoom.modchat)) {
+					return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
+				}
+			}
+			if (!user.named) {
+				return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '"+target+"'.");
+			}
 		}
 		if (!user.joinRoom(targetRoom || room, connection)) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' could not be joined.");
