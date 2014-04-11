@@ -213,53 +213,40 @@ function socketReceive(worker, workerid, socketid, message) {
 	// the `data` event handler, the user will be disconnected on the next
 	// `data` event. To prevent this, we log exceptions and prevent them
 	// from propagating out of this function.
-	try {
-		// drop legacy JSON messages
-		if (message.substr(0,1) === '{') return;
 
-		// drop invalid messages without a pipe character
-		var pipeIndex = message.indexOf('|');
-		if (pipeIndex < 0) return;
+	// drop legacy JSON messages
+	if (message.substr(0,1) === '{') return;
 
-		var roomid = message.substr(0, pipeIndex);
-		var lines = message.substr(pipeIndex + 1);
-		var room = Rooms.get(roomid);
-		if (!room) room = Rooms.lobby || Rooms.global;
-		var user = connection.user;
-		if (!user) return;
-		if (lines.substr(0,3) === '>> ' || lines.substr(0,4) === '>>> ') {
-			user.chat(lines, room, connection);
-			return;
-		}
-		lines = lines.split('\n');
-		if (lines.length >= THROTTLE_MULTILINE_WARN) {
-			connection.popup("You're sending too many lines at once. Try using a paste service like [[Pastebin]].");
-			return;
-		}
-		// Emergency logging
-		if (config.emergency) {
-			fs.appendFile('logs/emergency.log', '['+ user + ' (' + connection.ip + ')] ' + message + '\n', function(err){
-				if (err) {
-					console.log('!! Error in emergency log !!');
-					throw err;
-				}
-			});
-		}
-		for (var i=0; i<lines.length; i++) {
-			if (user.chat(lines[i], room, connection) === false) break;
-		}
-	} catch (e) {
-		var stack = e.stack + '\n\n';
-		stack += 'Additional information:\n';
-		stack += 'user = ' + user + '\n';
-		stack += 'ip = ' + connection.ip + '\n';
-		stack += 'roomid = ' + roomid + '\n';
-		stack += 'message = ' + message;
-		var err = {stack: stack};
-		try {
-			connection.sendTo(roomid||'lobby', '|html|<div class="broadcast-red"><b>Something crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
-		} catch (e) {} // don't crash again...
-		process.emit('uncaughtException', err);
+	// drop invalid messages without a pipe character
+	var pipeIndex = message.indexOf('|');
+	if (pipeIndex < 0) return;
+
+	var roomid = message.substr(0, pipeIndex);
+	var lines = message.substr(pipeIndex + 1);
+	var room = Rooms.get(roomid);
+	if (!room) room = Rooms.lobby || Rooms.global;
+	var user = connection.user;
+	if (!user) return;
+	if (lines.substr(0,3) === '>> ' || lines.substr(0,4) === '>>> ') {
+		user.chat(lines, room, connection);
+		return;
+	}
+	lines = lines.split('\n');
+	if (lines.length >= THROTTLE_MULTILINE_WARN) {
+		connection.popup("You're sending too many lines at once. Try using a paste service like [[Pastebin]].");
+		return;
+	}
+	// Emergency logging
+	if (config.emergency) {
+		fs.appendFile('logs/emergency.log', '['+ user + ' (' + connection.ip + ')] ' + message + '\n', function(err){
+			if (err) {
+				console.log('!! Error in emergency log !!');
+				throw err;
+			}
+		});
+	}
+	for (var i=0; i<lines.length; i++) {
+		if (user.chat(lines[i], room, connection) === false) break;
 	}
 }
 

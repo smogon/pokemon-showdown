@@ -1206,11 +1206,11 @@ var ChatRoom = (function() {
 
 		if (config.reportJoinsPeriod) {
 			this.userList = this.getUserList();
+			this.reportJoinsQueue = [];
+			this.reportJoinsInterval = setInterval(
+				this.reportRecentJoins.bind(this), config.reportJoinsPeriod
+			);
 		}
-		this.reportJoinsQueue = [];
-		this.reportJoinsInterval = setInterval(
-			this.reportRecentJoins.bind(this), config.reportJoinsPeriod
-		);
 	}
 	ChatRoom.prototype.type = 'chat';
 

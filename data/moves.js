@@ -8609,24 +8609,34 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Until the user is no longer active, all Electric-type attacks used by any active Pokemon have their power reduced to 0.33x. Fails if this move is already in effect; not stackable.",
-		shortDesc: "Weakens Electric-type attacks to 1/3 their power.",
+		desc: "For 5 turns, all Electric-type attacks used by any active Pokemon have their power reduced to 0.33x. Fails if this move is already in effect; not stackable.",
+		shortDesc: "For 5 turns, Electric-type attacks have 1/3 power.",
 		id: "mudsport",
 		name: "Mud Sport",
 		pp: 15,
 		priority: 0,
-		volatileStatus: 'mudsport',
-		onTryHitField: function(target, source) {
-			if (source.volatiles['mudsport']) return false;
+		onHitField: function(target, source, effect) {
+			if (this.pseudoWeather['mudsport']) {
+				return false;
+			} else {
+				this.addPseudoWeather('mudsport', source, effect, '[of] '+source);
+			}
 		},
 		effect: {
-			noCopy: true,
-			onStart: function(pokemon) {
-				this.add("-start", pokemon, 'Mud Sport');
+			duration: 5,
+			onStart: function(side, source) {
+				this.add('-fieldstart', 'move: Mud Sport', '[of] '+source);
 			},
 			onBasePowerPriority: 1,
-			onAnyBasePower: function(basePower, user, target, move) {
-				if (move.type === 'Electric') return this.chainModify([0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
+			onBasePower: function(basePower, attacker, defender, move) {
+				if (move.type === 'Electric') {
+					this.debug('mud sport weaken');
+					return this.chainModify([0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
+				}
+			},
+			onResidualOrder: 21,
+			onEnd: function() {
+				this.add('-fieldend', 'move: Mud Sport');
 			}
 		},
 		secondary: false,
@@ -14492,24 +14502,34 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Until the user is no longer active, all Fire-type attacks used by any active Pokemon have their power reduced to 0.33x. Fails if this move is already in effect; not stackable.",
-		shortDesc: "Weakens Fire-type attacks to 1/3 their power.",
+		desc: "For 5 turns, all Fire-type attacks used by any active Pokemon have their power reduced to 0.33x. Fails if this move is already in effect; not stackable.",
+		shortDesc: "For 5 turns, Fire-type attacks have 1/3 power.",
 		id: "watersport",
 		name: "Water Sport",
 		pp: 15,
 		priority: 0,
-		volatileStatus: 'watersport',
-		onTryHitField: function(target, source) {
-			if (source.volatiles['watersport']) return false;
+		onHitField: function(target, source, effect) {
+			if (this.pseudoWeather['watersport']) {
+				return false;
+			} else {
+				this.addPseudoWeather('watersport', source, effect, '[of] '+source);
+			}
 		},
 		effect: {
-			noCopy: true,
-			onStart: function(pokemon) {
-				this.add("-start", pokemon, 'move: Water Sport');
+			duration: 5,
+			onStart: function(side, source) {
+				this.add('-fieldstart', 'move: Water Sport', '[of] '+source);
 			},
 			onBasePowerPriority: 1,
-			onAnyBasePower: function(basePower, user, target, move) {
-				if (move.type === 'Fire') return this.chainModify([0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
+			onBasePower: function(basePower, attacker, defender, move) {
+				if (move.type === 'Fire') {
+					this.debug('water sport weaken');
+					return this.chainModify([0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
+				}
+			},
+			onResidualOrder: 21,
+			onEnd: function() {
+				this.add('-fieldend', 'move: Water Sport');
 			}
 		},
 		secondary: false,
