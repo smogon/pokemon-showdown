@@ -453,8 +453,8 @@ exports.BattleAbilities = {
 		num: 6
 	},
 	"darkaura": {
-		desc: "Increases the power of all Dark-type moves in battle to 1.3x.",
-		shortDesc: "Increases the power of all Dark-type moves in battle to 1.3x.",
+		desc: "Increases the power of all Dark-type moves in battle to 1.33x.",
+		shortDesc: "Increases the power of all Dark-type moves in battle to 1.33x.",
 		onStart: function(pokemon) {
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
@@ -474,7 +474,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (move.type === 'Dark') {
-				return this.chainModify(reverseAura? 0.75 : 1.3);
+				return this.chainModify(reverseAura? 0.75 : 4/3);
 			}
 		},
 		id: "darkaura",
@@ -629,8 +629,8 @@ exports.BattleAbilities = {
 		num: 27
 	},
 	"fairyaura": {
-		desc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
-		shortDesc: "Increases the power of all Fairy-type moves in battle to 1.3x.",
+		desc: "Increases the power of all Fairy-type moves in battle to 1.33x.",
+		shortDesc: "Increases the power of all Fairy-type moves in battle to 1.33x.",
 		onStart: function(pokemon) {
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
@@ -650,7 +650,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (move.type === 'Fairy') {
-				return this.chainModify(reverseAura? 0.75 : 1.3);
+				return this.chainModify(reverseAura? 0.75 : 4/3);
 			}
 		},
 		id: "fairyaura",
@@ -1677,7 +1677,7 @@ exports.BattleAbilities = {
 		name: "Mummy",
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				if (source.setAbility('mummy')) {
+				if (source.setAbility('mummy', source, 'mummy', true)) {
 					this.add('-ability', source, 'Mummy', '[from] Mummy');
 				}
 			}
@@ -2001,7 +2001,7 @@ exports.BattleAbilities = {
 		desc: "Right before this Pokemon uses a move, it changes its type to match that move. Hidden Power is interpreted as its Hidden Power type, rather than Normal.",
 		shortDesc: "Right before this Pokemon uses a move, it changes its type to match that move.",
 		onBeforeMove: function(pokemon, target, move) {
-			if (!move) return;
+			if (!move || pokemon.volatiles.mustrecharge) return;
 			var moveType = (move.id === 'hiddenpower' ? pokemon.hpType : move.type);
 			if (pokemon.getTypes().join() !== moveType) {
 				if (!pokemon.setType(moveType)) return false;

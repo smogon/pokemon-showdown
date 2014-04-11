@@ -19,7 +19,7 @@ var commands = exports.commands = {
 
 	version: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("Server version: <strong>" + CommandParser.package.version + "</strong> <small>(<a href=\"http://pokemonshowdown.com/versions#" + CommandParser.serverVersion + "\">" + CommandParser.serverVersion.substr(0,10) + "</a>)</small>");
+		this.sendReplyBox("Server version: <b>" + CommandParser.package.version + "</b>");
 	},
 
 	me: function(target, room, user, connection) {

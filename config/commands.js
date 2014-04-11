@@ -265,7 +265,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
 		var searches = {};
-		var allTiers = {'uber':1,'ou':1,'lc':1,'cap':1,'bl':1};
+		var allTiers = {'uber':1,'ou':1,'uu':1,'lc':1,'cap':1,'bl':1};
 		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
 		var showAll = false;
 		var megaSearch = null;
@@ -282,19 +282,22 @@ var commands = exports.commands = {
 			var targetAbility = Tools.getAbility(targets[i]);
 			if (targetAbility.exists) {
 				if (!searches['ability']) searches['ability'] = {};
-				if (Object.count(searches['ability'], true) === 1 && !isNotSearch) return this.sendReply("Specify only one ability.");
+				if (Object.count(searches['ability'], true) === 1 && !isNotSearch) return this.sendReplyBox("Specify only one ability.");
+				if ((searches['ability'][targetAbility.name] && isNotSearch) || (searches['ability'][targetAbility.name] === false && !isNotSearch)) return this.sendReplyBox("A search cannot both exclude and include an ability.");
 				searches['ability'][targetAbility.name] = !isNotSearch;
 				continue;
 			}
 
 			if (target in allTiers) {
 				if (!searches['tier']) searches['tier'] = {};
+				if ((searches['tier'][target] && isNotSearch) || (searches['tier'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a tier.');
 				searches['tier'][target] = !isNotSearch;
 				continue;
 			}
 
 			if (target in allColours) {
 				if (!searches['color']) searches['color'] = {};
+				if ((searches['color'][target] && isNotSearch) || (searches['color'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a color.');
 				searches['color'][target] = !isNotSearch;
 				continue;
 			}
@@ -302,19 +305,21 @@ var commands = exports.commands = {
 			var targetInt = parseInt(target);
 			if (0 < targetInt && targetInt < 7) {
 				if (!searches['gen']) searches['gen'] = {};
+				if ((searches['gen'][target] && isNotSearch) || (searches['gen'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a generation.');
 				searches['gen'][target] = !isNotSearch;
 				continue;
 			}
 
 			if (target === 'all') {
 				if (this.broadcasting) {
-					return this.sendReply("A search with the parameter 'all' cannot be broadcast.");
+					return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
 				}
 				showAll = true;
 				continue;
 			}
 
 			if (target === 'megas' || target === 'mega') {
+				if ((megaSearch && isNotSearch) || (megaSearch === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include Mega Evolutions.');
 				megaSearch = !isNotSearch;
 				continue;
 			}
@@ -323,7 +328,8 @@ var commands = exports.commands = {
 				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
 				if (target in Tools.data.TypeChart) {
 					if (!searches['types']) searches['types'] = {};
-					if (Object.count(searches['types'], true) === 2 && !isNotSearch) return this.sendReply("Specify a maximum of two types.");
+					if (Object.count(searches['types'], true) === 2 && !isNotSearch) return this.sendReplyBox("Specify a maximum of two types.");
+					if ((searches['types'][target] && isNotSearch) || (searches['types'][target] === false && !isNotSearch)) return this.sendReplyBox("A search cannot both exclude and include a type.");
 					searches['types'][target] = !isNotSearch;
 					continue;
 				}
@@ -332,15 +338,16 @@ var commands = exports.commands = {
 			var targetMove = Tools.getMove(target);
 			if (targetMove.exists) {
 				if (!searches['moves']) searches['moves'] = {};
-				if (Object.count(searches['moves'], true) === 4 && !isNotSearch) return this.sendReply("Specify a maximum of 4 moves.");
+				if (Object.count(searches['moves'], true) === 4 && !isNotSearch) return this.sendReplyBox("Specify a maximum of 4 moves.");
+				if ((searches['moves'][targetMove.name] && isNotSearch) || (searches['moves'][targetMove.name] === false && !isNotSearch)) return this.sendReplyBox("A search cannot both exclude and include a move.");
 				searches['moves'][targetMove.name] = !isNotSearch;
 				continue;
 			} else {
-				return this.sendReply("'" + target + "' could not be found in any of the search categories.");
+				return this.sendReplyBox("'" + sanitize(target, true) + "' could not be found in any of the search categories.");
 			}
 		}
 
-		if (showAll && Object.size(searches) === 0 && megaSearch === null) return this.sendReply("No search parameters other than 'all' were found.\nTry '/help dexsearch' for more information on this command.");
+		if (showAll && Object.size(searches) === 0 && megaSearch === null) return this.sendReplyBox("No search parameters other than 'all' were found.\nTry '/help dexsearch' for more information on this command.");
 
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
@@ -422,7 +429,7 @@ var commands = exports.commands = {
 					break;
 
 				default:
-					return this.sendReply("Something broke! PM TalkTakesTime here or on the Smogon forums with the command you tried.");
+					return this.sendReplyBox("Something broke! PM TalkTakesTime here or on the Smogon forums with the command you tried.");
 			}
 		}
 
@@ -524,7 +531,7 @@ var commands = exports.commands = {
 			pokemon = {types: [type1.id]};
 			target = type1.id;
 		} else {
-			return this.sendReplyBox(target + " isn't a recognized type or pokemon.");
+			return this.sendReplyBox(sanitize(target) + " isn't a recognized type or pokemon.");
 		}
 
 		var weaknesses = [];
@@ -726,10 +733,6 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3479358/">Tier Shift</a><br />';
 		}
-		if (target === 'all' || target === 'seasonal') {
-			matched = true;
-			buffer += '- <a href="http://www.smogon.com/sim/seasonal">Seasonal Ladder</a><br />';
-		}
 		if (target === 'all' || target === 'stabmons') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3484106/">STABmons</a>';
@@ -737,6 +740,22 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'omotm' || target === 'omofthemonth' || target === 'month') {
 			matched = true;
 			buffer += '- <a href="http://www.smogon.com/forums/threads/3481155/">OM of the Month</a>';
+		}
+		if (target === 'all' || target === 'skybattles') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3493601/">Sky Battles</a>';
+		}
+		if (target === 'all' || target === 'inversebattle' || target === 'inverse') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3492433/">Inverse Battle</a>';
+		}
+		if (target === 'all' || target === 'middlecup' || target === 'mc') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3494887/">Middle Cup</a>';
+		}
+		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
+			matched = true;
+			buffer += '- <a href="http://www.smogon.com/forums/threads/3499219/">OU Theorymon</a>';
 		}
 		if (target === 'all' || target === 'index') {
 			matched = true;
