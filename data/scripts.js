@@ -1669,6 +1669,9 @@ exports.BattleScripts = {
 			}
 
 			var set = this.randomSet(template, i);
+			
+			// Illusion shouldn't be on the last pokemon of the team
+			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
 
 			// Limit 1 of any type combination
 			var typeCombo = types.join();
