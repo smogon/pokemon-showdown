@@ -1207,11 +1207,11 @@ var ChatRoom = (function() {
 
 		if (config.reportjoinsperiod) {
 			this.userList = this.getUserList();
+			this.reportJoinsQueue = [];
+			this.reportJoinsInterval = setInterval(
+				this.reportRecentJoins.bind(this), config.reportjoinsperiod
+			);
 		}
-		this.reportJoinsQueue = [];
-		this.reportJoinsInterval = setInterval(
-			this.reportRecentJoins.bind(this), config.reportjoinsperiod
-		);
 	}
 	ChatRoom.prototype.type = 'chat';
 
