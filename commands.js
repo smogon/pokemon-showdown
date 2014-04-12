@@ -377,7 +377,7 @@ var commands = exports.commands = {
 			return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
 		}
 		if (targetRoom.isPrivate) {
-			if (room.modjoin) {
+			if (targetRoom.modjoin) {
 				var userGroup = user.group;
 				if (targetRoom.auth) {
 					if (targetRoom.auth[user.userid]) {
