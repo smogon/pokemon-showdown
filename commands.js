@@ -380,11 +380,7 @@ var commands = exports.commands = {
 			if (targetRoom.modjoin) {
 				var userGroup = user.group;
 				if (targetRoom.auth) {
-					if (targetRoom.auth[user.userid]) {
-						userGroup = targetRoom.auth[user.userid];
-					} else if (targetRoom.isPrivate) {
-						userGroup = ' ';
-					}
+					userGroup = targetRoom.auth[user.userid] || ' ';
 				}
 				if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(targetRoom.modchat)) {
 					return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
