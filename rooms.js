@@ -1195,7 +1195,7 @@ var ChatRoom = (function() {
 		this.destroyingLog = false;
 		this.bannedUsers = {};
 		this.bannedIps = {};
-		this.modchat = (config.modchat.chat || false);
+		this.modchat = (config.modchat.chat || this.modchat || false);
 
 		if (config.logChat) {
 			this.rollLogFile(true);

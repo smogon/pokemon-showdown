@@ -88,6 +88,7 @@ function searchUser(name) {
 }
 
 function can(group, permission, targetGroup, room, isSelf) {
+	var originalGroup = group;
 	var groupData = config.groups.bySymbol[group];
 	if (!groupData) return false;
 
@@ -109,7 +110,7 @@ function can(group, permission, targetGroup, room, isSelf) {
 				return !!jurisdiction;
 			}
 			if (jurisdiction === true && permission !== 'jurisdiction') {
-				return can(group, 'jurisdiction', targetGroup, isSelf);
+				return can(originalGroup, 'jurisdiction', targetGroup, isSelf);
 			}
 			if (typeof jurisdiction !== 'string') {
 				return !!jurisdiction;
