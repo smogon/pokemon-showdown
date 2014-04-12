@@ -399,6 +399,9 @@ var GlobalRoom = (function() {
 	};
 	GlobalRoom.prototype.onJoinConnection = function(user, connection) {
 		var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
+		if (!config.nofriendlist) {
+			initdata += '|friendlist|\n';
+		}
 		connection.send(initdata+this.formatListText);
 		if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 	};
@@ -414,6 +417,9 @@ var GlobalRoom = (function() {
 
 		if (!merging) {
 			var initdata = '|updateuser|'+user.name+'|'+(user.named?'1':'0')+'|'+user.avatar+'\n';
+			if (!config.nofriendlist) {
+				initdata += '|friendlist|\n';
+			}
 			connection.send(initdata+this.formatListText);
 			if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 		}

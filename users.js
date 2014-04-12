@@ -259,6 +259,8 @@ function removeBannedWord(word) {
 }
 importBannedWords();
 
+var friendlistUsers = {};
+
 // User
 var User = (function () {
 	function User(connection) {
@@ -517,6 +519,7 @@ var User = (function () {
 		for (var i in this.roomCount) {
 			Rooms.get(i,'lobby').onRename(this, oldid, joining);
 		}
+		this.notifyFriends();
 		return true;
 	};
 	User.prototype.resetName = function() {
@@ -555,6 +558,7 @@ var User = (function () {
 		for (var i in this.roomCount) {
 			Rooms.get(i,'lobby').onRename(this, oldid, false);
 		}
+		this.notifyFriends();
 		return true;
 	};
 	User.prototype.updateIdentity = function(roomid) {
@@ -802,6 +806,11 @@ var User = (function () {
 				if (this.named) user.prevNames[this.userid] = this.name;
 				this.destroy();
 				Rooms.global.checkAutojoin(user);
+
+				// reset friends
+				user.friends = [];
+				user.friendreqsrecv = [];
+				user.friendreqssent = [];
 				return true;
 			}
 
@@ -906,6 +915,7 @@ var User = (function () {
 				}
 			}
 			this.roomCount = {};
+			this.notifyFriendsGoingOffline();
 			if (!this.named && !Object.size(this.prevNames)) {
 				// user never chose a name (and therefore never talked/battled)
 				// there's no need to keep track of this user, so we can
@@ -934,6 +944,7 @@ var User = (function () {
 			--this.ips[connection.ip];
 		}
 		this.connections = [];
+		this.notifyFriendsGoingOffline();
 	};
 	User.prototype.getAlts = function() {
 		var alts = [];
@@ -1244,6 +1255,165 @@ var User = (function () {
 		this.updateChallenges();
 		user.updateChallenges();
 		return true;
+	};
+	User.prototype.resetFriends = function(fullClean) {
+		this.friends = [];
+		this.friendreqsrecv = [];
+		this.friendreqssent = [];
+		if (fullClean) {
+			friendlistUsers[this.userid] = [];
+		}
+	};
+	User.prototype.addFriend = function(name, init, req) {
+		if (config.nofriendlist) return;
+		if (!name) return;
+		if (!this.friends) this.friends = [];
+		if (!this.friendreqsrecv) this.friendreqsrecv = [];
+		if (!this.friendreqssent) this.friendreqssent = [];
+		var nameid = toUserid(name);
+
+		switch (name.charAt(0)) {
+			case ',':
+				name = name.substr(1);
+				this.friendreqsrecv[nameid] = name;
+
+				if (!init) {
+					this.send('|fl|requestreceived|' + name);
+				}
+				break;
+			case '#':
+				name = name.substr(1);
+				this.friendreqssent[nameid] = name;
+
+				if (!init) {
+					var fr = getExactUser(name);
+					if (!fr || !fr.connections.length) break;
+					fr.addFriend(',' + this.name);
+					this.send('|fl|requestsent|' + name);
+				}
+				break;
+			default:
+				var rf = false;
+				if (!init) {
+					rf = this.doRemoveFriend(name);
+					if (rf) {
+						// check for invalid calls
+						if ((req && rf !== 'friendreqssent') || (!req && rf !== 'friendreqsrecv')) {
+							console.log('Invalid addFriend call: req =', req, '- rf =', rf);
+							return;
+						}
+					}
+				}
+
+				this.friends[nameid] = name;
+				if (!friendlistUsers[nameid]) friendlistUsers[nameid] = [];
+				if (friendlistUsers[nameid].indexOf(this.userid) === -1) {
+					friendlistUsers[nameid].push(this.userid);
+				}
+
+				if (!init) {
+					this.send('|fl|added|' + name);
+				}
+
+				if (!rf) break;
+				var fr = getExactUser(name);
+				if (!fr || !fr.connections.length) break;
+				if (fr.friends && !fr.friends[this.userid]) {
+					fr.addFriend(this.name, false, true);
+					return;
+				}
+				if (fr.friends && fr.friends[this.userid]) {
+					fr.friendOnlineStateChange(this.name, true);
+					this.friendOnlineStateChange(fr.name, true);
+				}
+		}
+	};
+	User.prototype.removeFriend = function(name) {
+		if (config.nofriendlist) return;
+		if (!name) return;
+		if (!this.friends || !this.friendreqsrecv || !this.friendreqssent) return;
+		var nameid = toUserid(name);
+
+		if (this.doRemoveFriend(name)) {
+			var fr = getExactUser(name);
+			if (fr && fr.connections.length) {
+				fr.send('|fl|removed|' + this.name);
+			}
+		}
+	};
+	User.prototype.doRemoveFriend = function(name, noRecurse) {
+		if (config.nofriendlist) return;
+		if (!name) return;
+		if (!this.friends || !this.friendreqsrecv || !this.friendreqssent) return;
+		var nameid = toUserid(name);
+
+		for (var i in { friends: 1, friendreqsrecv: 1, friendreqssent: 1 }) {
+			var index = !!this[i][nameid];
+			if (!index) continue;
+
+			delete this[i][nameid];
+			if (!noRecurse) {
+				var fr = getExactUser(nameid);
+				if (fr) {
+					fr.doRemoveFriend(this.name, true);
+				}
+			}
+			index = (friendlistUsers[nameid] || []).indexOf(this.userid);
+			if (index !== -1) friendlistUsers[nameid].splice(index, 1);
+			index = (friendlistUsers[this.userid] || []).indexOf(nameid);
+			if (index !== -1) friendlistUsers[this.userid].splice(index, 1);
+
+			return i;
+		}
+
+		return false;
+	};
+	User.prototype.friendOnlineStateChange = function(user, online, init, queue) {
+		if (config.nofriendlist) return;
+		if (!this.friends) return;
+
+		if (!(user instanceof Array)) {
+			user = [user];
+		}
+
+		var list = [];
+		for (var i = 0, len = user.length; i < len; i++) {
+			var u = user[i];
+			var userid = toUserid(u);
+			var fr = getExactUser(userid);
+			if (!this.friends[userid] || !fr || !fr.friends || !fr.friends[this.userid]) continue;
+			list.push(user + '|' + (online ? '1' : '0'));
+		}
+		this.send('|fl|status|' + (init ? '#init|' : '') + list.join('|'));
+	};
+	User.prototype.notifyFriends = function() {
+		if (config.nofriendlist) return;
+		if (!this.friends) return;
+
+		var fu = friendlistUsers[this.userid];
+		if (fu) {
+			var friends = [];
+			for (var i = 0, len = fu.length; i < len; i++) {
+				var friend = getExactUser(fu[i]);
+				if (friend && friend.connections.length && friend.userid !== this.userid) {
+					friend.friendOnlineStateChange(this.name, true);
+					friends.push(friend.name);
+				}
+			}
+			this.friendOnlineStateChange(friends, true, true);
+		}
+	};
+	User.prototype.notifyFriendsGoingOffline = function() {
+		var fu = friendlistUsers[this.userid];
+		if (fu) {
+			for (var i = 0, len = fu.length; i < len; i++) {
+				var friend = getExactUser(fu[i]);
+				if (friend && friend.connections.length && friend.userid !== this.userid) {
+					friend.friendOnlineStateChange(this.name, false);
+				}
+			}
+		}
+		this.resetFriends();
 	};
 	// chatQueue should be an array, but you know about mutables in prototypes...
 	// P.S. don't replace this with an array unless you know what mutables in prototypes do.
