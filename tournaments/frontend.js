@@ -171,7 +171,8 @@ var Tournament = (function () {
 		// "Ghost" users sometimes end up in the tournament because they've merged with another user.
 		// This function is to remove those ghost users from the tournament.
 		this.generator.getUsers().forEach(function (user) {
-			if (!Users.getExact(user.userid))
+			var realUser = Users.getExact(user.userid);
+			if (!realUser || realUser !== user)
 				// The two following functions are called without their second argument,
 				// but the second argument will not be used in this situation
 				if (this.isTournamentStarted) {
