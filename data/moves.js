@@ -1548,8 +1548,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"celebrate": {
-		num: -6,
-		gen: 6,
+		num: 606,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -2485,8 +2484,7 @@ exports.BattleMovedex = {
 		type: "Fighting"
 	},
 	"diamondstorm": {
-		num: -1,
-		gen: 6,
+		num: 591,
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
@@ -6268,7 +6266,7 @@ exports.BattleMovedex = {
 		type: "Fighting"
 	},
 	"holdback": {
-		gen: 6,
+		num: 610,
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
@@ -6470,6 +6468,23 @@ exports.BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal"
+	},
+	"hyperspacehole": {
+		num: 593,
+		accuracy: true,
+		basePower: 80,
+		category: "Special",
+		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. Makes contact.",
+		shortDesc: "Deals damage to one adjacent target. Breaks protection.",
+		id: "hyperspacehole",
+		name: "Hyperspace Hole",
+		pp: 5,
+		priority: 0,
+		isContact: true,
+		breaksProtect: true,
+		secondary: false,
+		target: "normal",
+		type: "Psychic"
 	},
 	"hypervoice": {
 		num: 304,
@@ -7325,8 +7340,7 @@ exports.BattleMovedex = {
 		type: "Ghost"
 	},
 	"lightofruin": {
-		num: -6,
-		gen: 6,
+		num: 617,
 		accuracy: 90,
 		basePower: 140,
 		category: "Special",
@@ -12612,6 +12626,25 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "foeSide",
 		type: "Rock"
+	},
+	"steameruption": {
+		num: 592,
+		accuracy: 95,
+		basePower: 110,
+		category: "Special",
+		desc: "Deals damage to all adjacent Pokemon with a 50% chance to burn.",
+		shortDesc: "Hits all adjacent Pokemon. 50% chance to burn.",
+		id: "steameruption",
+		isViable: true,
+		name: "Steam Eruption",
+		pp: 5,
+		priority: 0,
+		secondary: {
+			chance: 50,
+			status: 'brn'
+		},
+		target: "allAdjacent",
+		type: "Water"
 	},
 	"steelwing": {
 		num: 211,
