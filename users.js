@@ -110,7 +110,7 @@ function can(group, permission, targetGroup, room, isSelf) {
 				return !!jurisdiction;
 			}
 			if (jurisdiction === true && permission !== 'jurisdiction') {
-				return can(originalGroup, 'jurisdiction', targetGroup, isSelf);
+				return can(originalGroup, 'jurisdiction', targetGroup, room, isSelf);
 			}
 			if (typeof jurisdiction !== 'string') {
 				return !!jurisdiction;
