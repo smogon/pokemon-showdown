@@ -483,6 +483,12 @@ exports.BattleItems = {
 		fling: {
 			basePower: 70
 		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+				return false;
+			}
+			return true;
+		},
 		onDrive: 'Fire',
 		num: 118,
 		gen: 5,
@@ -653,6 +659,12 @@ exports.BattleItems = {
 		spritenum: 67,
 		fling: {
 			basePower: 70
+		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+				return false;
+			}
+			return true;
 		},
 		onDrive: 'Ice',
 		num: 119,
@@ -963,6 +975,12 @@ exports.BattleItems = {
 		spritenum: 103,
 		fling: {
 			basePower: 70
+		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+				return false;
+			}
+			return true;
 		},
 		onDrive: 'Water',
 		num: 116,
@@ -3656,6 +3674,12 @@ exports.BattleItems = {
 		spritenum: 442,
 		fling: {
 			basePower: 70
+		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+				return false;
+			}
+			return true;
 		},
 		onDrive: 'Electric',
 		num: 117,
