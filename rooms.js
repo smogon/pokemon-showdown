@@ -1190,7 +1190,7 @@ var ChatRoom = (function() {
 		this.destroyingLog = false;
 		this.bannedUsers = {};
 		this.bannedIps = {};
-		this.modchat = (config.chatmodchat || this.modchat || false);
+		if (!this.modchat) this.modchat = (config.chatmodchat || false);
 
 		// `config.loglobby` is a legacy name
 		if (config.logchat || config.loglobby) {
