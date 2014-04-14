@@ -12632,18 +12632,18 @@ exports.BattleMovedex = {
 		accuracy: 95,
 		basePower: 110,
 		category: "Special",
-		desc: "Deals damage to all adjacent Pokemon with a 50% chance to burn.",
-		shortDesc: "Hits all adjacent Pokemon. 50% chance to burn.",
+		desc: "Deals damage to one adjacent target with a 30% chance to burn it.",
+		shortDesc: "30% chance to burn to burn the target.",
 		id: "steameruption",
 		isViable: true,
 		name: "Steam Eruption",
 		pp: 5,
 		priority: 0,
 		secondary: {
-			chance: 50,
+			chance: 30,
 			status: 'brn'
 		},
-		target: "allAdjacent",
+		target: "normal",
 		type: "Water"
 	},
 	"steelwing": {
@@ -13625,6 +13625,40 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Dark"
+	},
+	"thousandarrows": {
+		num: 614,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target. This move can hit a target using Bounce, Fly, or Sky Drop. If this move hits a target under the effect of Bounce, Fly, Magnet Rise, or Telekinesis, the effect ends. If the target is a Flying-type that has not used Roost this turn or a Pokemon with the Ability Levitate, it loses its immunity to Ground-type attacks and the Ability Arena Trap as long as it remains active. During the effect, Magnet Rise fails for the target and Telekinesis fails against the target.",
+		shortDesc: "Removes the target's Ground immunity.",
+		id: "thousandarrows",
+		name: "Thousand Arrows",
+		pp: 10,
+		priority: 0,
+		volatileStatus: 'smackdown',
+		secondary: false,
+		target: "normal",
+		type: "Ground"
+	},
+	"thousandwaves": {
+		num: 615,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target. Prevents the target from switching out.",
+		shortDesc: "Prevents the target from switching out.",
+		id: "thousandwaves",
+		name: "Thousand Waves",
+		pp: 10,
+		priority: 0,
+		onHit: function(target) {
+			target.addVolatile('trapped');
+		},
+		secondary: false,
+		target: "normal",
+		type: "Ground"
 	},
 	"thrash": {
 		num: 37,
