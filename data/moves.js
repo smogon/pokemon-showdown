@@ -4761,7 +4761,7 @@ exports.BattleMovedex = {
 			if (!pokemon.volatiles.furycutter) {
 				pokemon.addVolatile('furycutter');
 			}
-			return 20 * pokemon.volatiles.furycutter.multiplier;
+			return 40 * pokemon.volatiles.furycutter.multiplier;
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles with each successful hit, up to a maximum of 160 power; resets to 20 power if the move misses or another move is used. Makes contact.",
@@ -4780,7 +4780,7 @@ exports.BattleMovedex = {
 				this.effectData.multiplier = 1;
 			},
 			onRestart: function() {
-				if (this.effectData.multiplier < 8) {
+				if (this.effectData.multiplier < 4) {
 					this.effectData.multiplier <<= 1;
 				}
 				this.effectData.duration = 2;
