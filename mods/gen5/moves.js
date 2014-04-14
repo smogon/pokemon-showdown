@@ -182,7 +182,25 @@ exports.BattleMovedex = {
 	},
 	furycutter: {
 		inherit: true,
-		basePower: 20
+		basePower: 20,
+		basePowerCallback: function(pokemon) {
+			if (!pokemon.volatiles.furycutter) {
+				pokemon.addVolatile('furycutter');
+			}
+			return 20 * pokemon.volatiles.furycutter.multiplier;
+		},
+		effect: {
+			duration: 2,
+			onStart: function() {
+				this.effectData.multiplier = 1;
+			},
+			onRestart: function() {
+				if (this.effectData.multiplier < 8) {
+					this.effectData.multiplier <<= 1;
+				}
+				this.effectData.duration = 2;
+			}
+		}
 	},
 	futuresight: {
 		inherit: true,
