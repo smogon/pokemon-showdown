@@ -12633,7 +12633,7 @@ exports.BattleMovedex = {
 		basePower: 110,
 		category: "Special",
 		desc: "Deals damage to one adjacent target with a 30% chance to burn it.",
-		shortDesc: "30% chance to burn to burn the target.",
+		shortDesc: "30% chance to burn the target.",
 		id: "steameruption",
 		isViable: true,
 		name: "Steam Eruption",
