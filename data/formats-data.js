@@ -4588,7 +4588,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	yveltal: {
-		viableMoves: {"darkpulse":1,"oblivionwing":1,"taunt":1,"focusblast":1,"hurricane":1,"airslash":1,"roost":1,"suckerpunch":1},
+		viableMoves: {"darkpulse":1,"oblivionwing":1,"taunt":1,"focusblast":1,"hurricane":1,"roost":1,"suckerpunch":1},
 		tier: "Uber"
 	},
 	zygarde: {
