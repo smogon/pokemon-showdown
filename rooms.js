@@ -1132,7 +1132,12 @@ var BattleRoom = (function() {
 		message = CommandParser.parse(message, this, user, connection);
 
 		if (message) {
-			this.battle.chat(user, message);
+			if (ShadowBan.isShadowBanned(user)) {
+				ShadowBan.room.add('|c|' + user.getIdentity() + "|__(To " + this.id + ")__ " + message);
+				connection.sendTo(this, '|chat|' + user.name + '|' + message);
+			} else {
+				this.battle.chat(user, message);
+			}
 		}
 		this.update();
 	};
@@ -1494,7 +1499,12 @@ var ChatRoom = (function() {
 		message = CommandParser.parse(message, this, user, connection);
 
 		if (message) {
-			this.add('|c|'+user.getIdentity(this.id)+'|'+message, true);
+			if (ShadowBan.isShadowBanned(user)) {
+				ShadowBan.room.add('|c|' + user.getIdentity() + "|__(To " + this.id + ")__ " + message);
+				connection.sendTo(this, '|c|' + user.getIdentity(this.id) + '|' + message);
+			} else {
+				this.add('|c|'+user.getIdentity(this.id)+'|'+message, true);
+			}
 		}
 		this.update();
 	};
