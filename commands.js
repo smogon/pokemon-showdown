@@ -664,7 +664,7 @@ var commands = exports.commands = {
 
 	sban: 'shadowban',
 	shadowban: function (target, room, user) {
-		if (!target) return this.sendReply("Please specify a user.");
+		if (!target) return this.parse('/help shadowban');
 
 		var params = this.splitTarget(target).split(',');
 		var action = params[0].trim().toLowerCase();
@@ -690,7 +690,7 @@ var commands = exports.commands = {
 
 	unsban: 'unshadowban',
 	unshadowban: function (target, room, user) {
-		if (!target) return this.sendReply("Please specify a user.");
+		if (!target) return this.parse('/help unshadowban');
 		this.splitTarget(target);
 
 		if (!this.can('shadowban')) return false;
