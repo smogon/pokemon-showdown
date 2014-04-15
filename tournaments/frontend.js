@@ -497,8 +497,7 @@ var Tournament = (function () {
 			return;
 
 		var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
-		if (!room)
-			return;
+		if (!room) return;
 
 		this.pendingChallenges.set(challenge.from, null);
 		this.pendingChallenges.set(user, null);
