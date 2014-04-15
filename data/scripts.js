@@ -1077,6 +1077,9 @@ exports.BattleScripts = {
 				case 'softboiled': case 'roost': case 'moonlight': case 'synthesis': case 'morningsun':
 					if (hasMove['wish'] || hasMove['recover']) rejected = true;
 					break;
+				case 'memento':
+					if (hasMove['rest'] || hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis'] || hasMove['morningsun']) rejected = true;
+					break;
 				case 'perishsong':
 					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 					break;
