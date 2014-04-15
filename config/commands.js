@@ -153,15 +153,9 @@ var commands = exports.commands = {
 	alts: 'whois',
 	getalts: 'whois',
 	whois: function(target, room, user) {
-		var targetUser = this.targetUserOrSelf(target);
+		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
 			return this.sendReply('User '+this.targetUsername+' not found.');
-		}
-
-		var commaIndex = target.indexOf(',');
-		var targetId = (commaIndex > 0) ? toId(target.substr(0, commaIndex)) : toId(target);
-		if (this.targetUser.userid !== targetId && Users.usergroups[targetId] && Users.usergroups[targetId].substr(0,1) === '~' && user.group !== '~') {
-			return this.sendReply('/whois - Access denied.');
 		}
 
 		this.sendReply('User: '+targetUser.name);

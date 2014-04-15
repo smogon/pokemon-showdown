@@ -196,9 +196,12 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
 				return canTalk(user, innerRoom, connection, message);
 			},
-			targetUserOrSelf: function(target) {
-				if (!target) return user;
-				this.splitTarget(target);
+			targetUserOrSelf: function(target, exactName) {
+				if (!target) {
+					this.targetUsername = user.name;
+					return user;
+				}
+				this.splitTarget(target, exactName);
 				return this.targetUser;
 			},
 			splitTarget: splitTarget
