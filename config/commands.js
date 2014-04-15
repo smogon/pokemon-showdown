@@ -158,6 +158,12 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 
+		var commaIndex = target.indexOf(',');
+		var targetId = (commaIndex > 0) ? toId(target.substr(0, commaIndex)) : toId(target);
+		if (this.targetUser.userid !== targetId && Users.usergroups[targetId] && Users.usergroups[targetId].substr(0,1) === '~' && user.group !== '~') {
+			return this.sendReply('/whois - Access denied.');
+		}
+
 		this.sendReply('User: '+targetUser.name);
 		if (user.can('alts', targetUser)) {
 			var alts = targetUser.getAlts();
@@ -171,7 +177,6 @@ var commands = exports.commands = {
 			for (var j=0; j<alts.length; j++) {
 				var targetAlt = Users.get(alts[j]);
 				if (!targetAlt.named && !targetAlt.connected) continue;
-				if (targetAlt.group === '~' && user.group !== '~') continue;
 
 				this.sendReply('Alt: '+targetAlt.name);
 				output = '';
