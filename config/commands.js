@@ -177,6 +177,7 @@ var commands = exports.commands = {
 			for (var j=0; j<alts.length; j++) {
 				var targetAlt = Users.get(alts[j]);
 				if (!targetAlt.named && !targetAlt.connected) continue;
+				if (targetAlt.group === '~' && user.group !== '~') continue;
 
 				this.sendReply('Alt: '+targetAlt.name);
 				output = '';
