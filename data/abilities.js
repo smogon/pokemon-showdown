@@ -1699,13 +1699,11 @@ exports.BattleAbilities = {
 	"noguard": {
 		desc: "Every attack used by or against this Pokemon will always hit, even during evasive two-turn moves such as Fly and Dig.",
 		shortDesc: "Every move used by or against this Pokemon will always hit.",
-		onModifyMove: function(move) {
-			move.accuracy = true;
-			move.alwaysHit = true;
-		},
-		onSourceModifyMove: function(move) {
-			move.accuracy = true;
-			move.alwaysHit = true;
+		onAnyAccuracy: function(accuracy, target, source, move) {
+			if (move && (source === this.effectData.target || target === this.effectData.target)) {
+				return true;
+			}
+			return accuracy;
 		},
 		id: "noguard",
 		name: "No Guard",
