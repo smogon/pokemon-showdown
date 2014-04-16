@@ -92,7 +92,7 @@ exports.BattleItems = {
 		inherit: true,
 		gen: 2
 	},
-	sitrustberry: {
+	sitrusberry: {
 		inherit: true,
 		gen: 2
 	}
