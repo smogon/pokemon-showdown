@@ -20,11 +20,10 @@ gulp.task('lint', function() {
 	var directories = ['./*.js', './data/*.js', './mods/*.js', './config/*.js'];
 	console.log("\n\n*** Linting JavaScript Files ***\n\n");
 
-	for(var dir in directories) {
-		gulp.src(directories[dir])
-			.pipe(jshint(jsHintOptions))
-			.pipe(jshint.reporter(jshintStylish));
-	}
+	gulp.src(directories)
+		.pipe(jshint(jsHintOptions))
+		.pipe(jshint.reporter(jshintStylish));
+
 });
 
 gulp.task('default', ['lint']);
