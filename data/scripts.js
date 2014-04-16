@@ -1421,7 +1421,7 @@ exports.BattleScripts = {
 			} else if (template.species === 'Dusclops') {
 				item = 'Eviolite';
 			} else if (shouldMegaEvo === true) {
-				item = this.getTemplate(template.otherFormes[0]).requiredItem;
+				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 				// Mega Mawile should never start with Sheer Force
 				if (template.species === 'Mawile') ability = 'Intimidate';
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
@@ -1456,7 +1456,7 @@ exports.BattleScripts = {
 			// medium priority
 
 			} else if (shouldMegaEvo) {
-				item = this.getTemplate(template.otherFormes[0]).requiredItem;
+				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 			} else if (ability === 'Guts') {
 				if (hasMove['drainpunch']) {
 					item = 'Flame Orb';
@@ -2613,7 +2613,7 @@ exports.BattleScripts = {
 			} else if (template.species === 'Amoonguss') {
 				item = 'Black Sludge';
 			} else if (shouldMegaEvo === true) {
-				item = this.getTemplate(template.otherFormes[0]).requiredItem;
+				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 				item = 'Light Clay';
 			} else if (hasMove['shellsmash']) {
@@ -2650,7 +2650,7 @@ exports.BattleScripts = {
 
 			// medium priority
 			} else if (shouldMegaEvo) {
-				item = this.getTemplate(template.otherFormes[0]).requiredItem;
+				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 			} else if (ability === 'Guts') {
 				if (hasMove['drainpunch']) {
 					item = 'Flame Orb';
