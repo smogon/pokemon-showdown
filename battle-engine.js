@@ -1015,6 +1015,9 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.getItem = function() {
 		return this.battle.getItem(this.item);
 	};
+	BattlePokemon.prototype.effectiveItem = function() {
+		return this.battle.getItem(this.ignore['Item'] ? '' : this.item);
+	};
 	BattlePokemon.prototype.clearItem = function() {
 		return this.setItem('');
 	};
@@ -1035,6 +1038,9 @@ var BattlePokemon = (function() {
 	};
 	BattlePokemon.prototype.getAbility = function() {
 		return this.battle.getAbility(this.ability);
+	};
+	BattlePokemon.prototype.effectiveAbility = function() {
+		return this.battle.getAbility(this.ignore['Ability'] ? '' : this.ability);
 	};
 	BattlePokemon.prototype.clearAbility = function() {
 		return this.setAbility('');
