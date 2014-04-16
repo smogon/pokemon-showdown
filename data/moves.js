@@ -1236,6 +1236,9 @@ exports.BattleMovedex = {
 				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
 					return;
 				}
+				if (source.effectiveAbility().id === 'noguard' || target.effectiveAbility().id === 'noguard') {
+					return;
+				}
 				return 0;
 			},
 			onSourceBasePower: function(basePower, target, source, move) {
@@ -2540,6 +2543,9 @@ exports.BattleMovedex = {
 				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'helpinghand') {
 					return;
 				}
+				if (source.effectiveAbility().id === 'noguard' || target.effectiveAbility().id === 'noguard') {
+					return;
+				}
 				return 0;
 			},
 			onSourceModifyDamage: function(damage, source, target, move) {
@@ -2682,6 +2688,9 @@ exports.BattleMovedex = {
 			},
 			onAccuracy: function(accuracy, target, source, move) {
 				if (move.id === 'surf' || move.id === 'whirlpool' || move.id === 'helpinghand') {
+					return;
+				}
+				if (source.effectiveAbility().id === 'noguard' || target.effectiveAbility().id === 'noguard') {
 					return;
 				}
 				return 0;
@@ -4378,6 +4387,9 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
+					return;
+				}
+				if (source.effectiveAbility().id === 'noguard' || target.effectiveAbility().id === 'noguard') {
 					return;
 				}
 				return 0;
@@ -9288,6 +9300,9 @@ exports.BattleMovedex = {
 				if (move.id === 'helpinghand') {
 					return;
 				}
+				if (source.effectiveAbility().id === 'noguard' || target.effectiveAbility().id === 'noguard') {
+					return;
+				}
 				return 0;
 			}
 		},
@@ -11431,6 +11446,9 @@ exports.BattleMovedex = {
 				if (move.id === 'helpinghand') {
 					return;
 				}
+				if (source.effectiveAbility().id === 'noguard' || target.effectiveAbility().id === 'noguard') {
+					return;
+				}
 				return 0;
 			}
 		},
@@ -11871,6 +11889,9 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
+					return;
+				}
+				if (source.effectiveAbility().id === 'noguard' || target.effectiveAbility().id === 'noguard') {
 					return;
 				}
 				return 0;
