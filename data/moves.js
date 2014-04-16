@@ -651,7 +651,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		onTryHit: function(pokemon) {
-			if ((pokemon.ability !== 'contrary' && pokemon.boosts.spe === 6) || (pokemon.ability === 'contrary' && pokemon.boosts.spe === -6)) {
+			var hasContrary = pokemon.hasAbility('contrary');
+			if ((!hasContrary && pokemon.boosts.spe === 6) || (hasContrary && pokemon.boosts.spe === -6)) {
 				return false;
 			}
 		},
@@ -5240,7 +5241,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
 				return 5;
@@ -5695,7 +5696,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
 				return 5;
@@ -5760,7 +5761,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target, source) {
-			if (source.ability === 'megalauncher') this.heal(this.modify(target.maxhp, 0.75));
+			if (source.hasAbility('megalauncher')) this.heal(this.modify(target.maxhp, 0.75));
 			else this.heal(Math.ceil(target.maxhp * 0.5));
 		},
 		secondary: false,
@@ -7373,7 +7374,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
-				if (source && source.item === 'lightclay') {
+				if (source && source.hasItem('lightclay')) {
 					return 8;
 				}
 				return 5;
@@ -7685,7 +7686,7 @@ exports.BattleMovedex = {
 			duration: 5,
 			/*durationCallback: function(target, source, effect) {
 				// Persistent isn't updated for BW moves
-				if (source && source.ability === 'Persistent') {
+				if (source && source.hasAbility('Persistent')) {
 					return 7;
 				}
 				return 5;
@@ -7769,7 +7770,7 @@ exports.BattleMovedex = {
 		onHitSide: function(side, source) {
 			var targets = [];
 			for (var p in side.active) {
-				if (side.active[p].ability === 'plus' || side.active[p].ability === 'minus') {
+				if (side.active[p].hasAbility(['plus', 'minus'])) {
 					targets.push(side.active[p]);
 				}
 			}
@@ -9193,7 +9194,7 @@ exports.BattleMovedex = {
 						if (!this.sides[i].active[j].volatiles['perishsong']) {
 							result = false;
 						}
-						if (this.sides[i].active[j].ability !== 'soundproof') {
+						if (!this.sides[i].active[j].hasAbility('soundproof')) {
 							this.sides[i].active[j].addVolatile('perishsong');
 						} else {
 							this.add('-immune', this.sides[i].active[j], '[msg]');
@@ -10389,7 +10390,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
-				if (source && source.item === 'lightclay') {
+				if (source && source.hasItem('lightclay')) {
 					return 8;
 				}
 				return 5;
@@ -11071,7 +11072,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
 				return 5;
@@ -12091,7 +12092,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(pokemon) {
 				var applies = false;
-				if ((pokemon.hasType('Flying') && !pokemon.volatiles['roost']) || pokemon.ability === 'levitate') applies = true;
+				if ((pokemon.hasType('Flying') && !pokemon.volatiles['roost']) || pokemon.hasAbility('levitate')) applies = true;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					applies = true;
 					this.cancelMove(pokemon);
@@ -13427,7 +13428,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 4,
 			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+				if (source && source.hasAbility('persistent')) {
 					return 6;
 				}
 				return 4;
@@ -14070,7 +14071,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
 				return 5;
