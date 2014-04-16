@@ -115,7 +115,7 @@ Major changes:
   untouched. It's now 60 base power +1 priority, with no secondary.
 
 - Shuckle gets Berry Shell (select "Stick" in the teambuilder), which gives a
-  50% boost to Defense and Sp. Def. It also learns Leech Seed.
+  50% boost to Defense and Sp. Def.
 
 - Ambipom gets Sketch as an event move, allowing it to use exactly one move
   not normally in its learnset.
@@ -321,7 +321,7 @@ Minor move changes:
 - if Illusion is active, Night Daze now displays as a random non-Status move
   in the copied pokemon's moveset
 
-- Selfdestruct and Explosion are now 140 and 180 base power autocrit moves,
+- Selfdestruct and Explosion are now 200 and 250 base power autocrit moves,
   respectively, and they are both perfect-accuracy
 
 - Acid and Acid Spray aren't affected by immunities
