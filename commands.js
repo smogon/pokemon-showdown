@@ -670,7 +670,7 @@ var commands = exports.commands = {
 		var action = params[0].trim().toLowerCase();
 		var reason = params.slice(1).join(',').trim();
 		if (!(action in CommandParser.commands)) {
-			action = null;
+			action = 'mute';
 			reason = params.join(',').trim();
 		}
 
@@ -685,7 +685,7 @@ var commands = exports.commands = {
 		}
 		this.privateModCommand("(" + user.name + " has added to the shadow ban user list: " + targets.join(", ") + (reason ? " (" + reason + ")" : "") + ")");
 
-		if (action) return this.parse('/' + action + ' ' + user.userid + ',' + reason);
+		return this.parse('/' + action + ' ' + user.userid + ',' + reason);
 	},
 
 	unsban: 'unshadowban',
