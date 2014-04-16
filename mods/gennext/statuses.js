@@ -187,8 +187,8 @@ exports.BattleStatuses = {
 	},
 	gengar: {
 		// Gengar: Cursed Body
-		onImmunity: function(type) {
-			if (type === 'Ground') return false;
+		onImmunity: function(type, pokemon) {
+			if (pokemon.template.id !== 'gengarmega' && type === 'Ground') return false;
 		},
 		onStart: function(pokemon) {
 			if (pokemon.ability === 'levitate') {
