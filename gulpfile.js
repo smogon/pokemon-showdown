@@ -13,7 +13,31 @@ var gulp = require('gulp'),
 		"evil": true,
 		"esnext": true,
 		"node": true,
-		"eqeqeq": false
+		"eqeqeq": false,
+
+		"globals": {
+			"fs": false,
+			"Config": false,
+			"ResourceMonitor": false,
+			"toId": false,
+			"toUserid": false,
+			"toName": false,
+			"sanitize": false,
+			"string": false,
+			"clampIntRange": false,
+			"LoginServer": false,
+			"Users": false,
+			"Rooms": false,
+			"Verifier": false,
+			"CommandParser": false,
+			"Simulator": false,
+			"Tournaments": false,
+			"Dnsbl": false,
+			"Cidr": false,
+			"Sockets": false,
+			"Tools": false,
+			"TeamValidator": false
+		}
 	};
 
 gulp.task('lint', function() {
