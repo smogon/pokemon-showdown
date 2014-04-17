@@ -580,7 +580,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.getRequestData = function() {
 		var lockedMove = this.getLockedMove();
 		var data = {moves: this.getMoves(lockedMove)};
-		if (lockedMove && this.trapped) {
+		if (this.trapped) {
 			data.trapped = true;
 		} else if (this.maybeTrapped) {
 			data.maybeTrapped = true;
@@ -823,8 +823,8 @@ var BattlePokemon = (function() {
 		}
 		return false;
 	};
-	BattlePokemon.prototype.getValidMoves = function() {
-		var pMoves = this.getMoves(this.getLockedMove());
+	BattlePokemon.prototype.getValidMoves = function(lockedMove) {
+		var pMoves = this.getMoves(lockedMove);
 		var moves = [];
 		for (var i=0; i<pMoves.length; i++) {
 			if (!pMoves[i].disabled) {
@@ -2998,14 +2998,15 @@ var Battle = (function() {
 		}
 		return false;
 	};
-	Battle.prototype.validTarget = function(target, source, targetType) {
-		var targetLoc;
+	Battle.prototype.getTargetLoc = function(target, source) {
 		if (target.side == source.side) {
-			targetLoc = -(target.position+1);
+			return -(target.position+1);
 		} else {
-			targetLoc = target.position+1;
+			return target.position+1;
 		}
-		return this.validTargetLoc(targetLoc, source, targetType);
+	};
+	Battle.prototype.validTarget = function(target, source, targetType) {
+		return this.validTargetLoc(this.getTargetLoc(target, source), source, targetType);
 	};
 	Battle.prototype.getTarget = function(decision) {
 		var move = this.getMove(decision.move);
@@ -3643,7 +3644,8 @@ var Battle = (function() {
 			case 'move':
 				var targetLoc = 0;
 				var pokemon = side.pokemon[i];
-				var validMoves = pokemon.getValidMoves();
+				var lockedMove = pokemon.getLockedMove();
+				var validMoves = pokemon.getValidMoves(lockedMove);
 				var moveid = '';
 
 				if (data.substr(data.length-2) === ' 1') targetLoc = 1;
@@ -3655,11 +3657,15 @@ var Battle = (function() {
 
 				if (targetLoc) data = data.substr(0, data.lastIndexOf(' '));
 
+				if (lockedMove) targetLoc = (this.runEvent('LockMoveTarget', pokemon) || 0);
+
 				if (data.substr(data.length-5) === ' mega') {
-					decisions.push({
-						choice: 'megaEvo',
-						pokemon: pokemon
-					});
+					if (!lockedMove) {
+						decisions.push({
+							choice: 'megaEvo',
+							pokemon: pokemon
+						});
+					}
 					data = data.substr(0, data.length-5);
 				}
 

@@ -1224,12 +1224,11 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'bounce',
 			onAccuracy: function(accuracy, target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return;
@@ -2531,12 +2530,11 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'dig',
 			onImmunity: function(type, pokemon) {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
@@ -2678,12 +2676,11 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'dive',
 			onImmunity: function(type, pokemon) {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
@@ -4377,12 +4374,11 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'fly',
 			onAccuracy: function(accuracy, target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return;
@@ -4680,12 +4676,8 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
-		},
-		effect: {
-			duration: 2,
-			onLockMove: 'freezeshock'
 		},
 		secondary: {
 			chance: 30,
@@ -4978,17 +4970,13 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			attacker.addVolatile(move.id, defender);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				this.add('-anim', attacker, move.name, defender);
 				attacker.removeVolatile(move.id);
 				return;
 			}
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
-		},
-		effect: {
-			duration: 2,
-			onLockMove: 'geomancy'
 		},
 		boosts: {
 			spa: 2,
@@ -6622,12 +6610,8 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
-		},
-		effect: {
-			duration: 2,
-			onLockMove: 'iceburn'
 		},
 		secondary: {
 			chance: 30,
@@ -9291,12 +9275,11 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'phantomforce',
 			onAccuracy: function(accuracy, target, source, move) {
 				if (move.id === 'helpinghand') {
 					return;
@@ -10336,12 +10319,8 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
-		},
-		effect: {
-			duration: 2,
-			onLockMove: 'razorwind'
 		},
 		critRatio: 2,
 		secondary: false,
@@ -11437,12 +11416,11 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'shadowforce',
 			onAccuracy: function(accuracy, target, source, move) {
 				if (move.id === 'helpinghand') {
 					return;
@@ -11765,20 +11743,14 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			attacker.addVolatile(move.id, defender);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				this.add('-anim', attacker, move.name, defender);
 				attacker.removeVolatile(move.id);
 				return;
 			}
+			attacker.addVolatile('twoturnmove', defender);
+			this.boost({def:1}, pokemon, pokemon, this.getMove('skullbash'));
 			return null;
-		},
-		effect: {
-			duration: 2,
-			onLockMove: 'skullbash',
-			onStart: function(pokemon) {
-				this.boost({def:1}, pokemon, pokemon, this.getMove('skullbash'));
-			}
 		},
 		secondary: false,
 		target: "normal",
@@ -11806,12 +11778,8 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
-		},
-		effect: {
-			duration: 2,
-			onLockMove: 'skyattack'
 		},
 		secondary: {
 			chance: 30,
@@ -12381,7 +12349,7 @@ exports.BattleMovedex = {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
 		onBasePowerPriority: 4,
@@ -12390,10 +12358,6 @@ exports.BattleMovedex = {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
 			}
-		},
-		effect: {
-			duration: 2,
-			onLockMove: 'solarbeam'
 		},
 		secondary: false,
 		target: "normal",

@@ -223,6 +223,26 @@ exports.BattleStatuses = {
 			return this.effectData.move;
 		}
 	},
+	twoturnmove: {
+		// Skull Bash, SolarBeam, Sky Drop...
+		duration: 2,
+		onStart: function(target, source, effect) {
+			this.effectData.move = effect.id;
+			// source and target are reversed since the event target is the
+			// pokemon using the two-turn move
+			this.effectData.targetLoc = this.getTargetLoc(source, target);
+			this.addVolatile(effect.id);
+		},
+		onEnd: function() {
+			this.removeVolatile(this.effectData.move);
+		},
+		onLockMove: function() {
+			return this.effectData.move
+		},
+		onLockMoveTarget: function() {
+			return this.effectData.targetLoc
+		}
+	},
 	choicelock: {
 		onStart: function(pokemon) {
 			this.effectData.move = this.activeMove.id;

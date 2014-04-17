@@ -503,8 +503,6 @@ exports.BattleScripts = {
 		var template = this.getTemplate(item.megaStone);
 		if (!template.isMega) return false;
 		if (pokemon.baseTemplate.species !== template.baseSpecies) return false;
-		if (pokemon.volatiles.mustrecharge) return false;
-		if (pokemon.getLockedMove()) return false;
 
 		// okay, mega evolution is possible
 		this.add('-formechange', pokemon, template.species);
