@@ -62,9 +62,9 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 	if (!message || !message.trim().length) return;
 	if (!levelsDeep) {
 		levelsDeep = 0;
-		// if (config.emergencyLog && (connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221' || message.length > 2048 || message.length > 256 && message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ')) {
-		if (config.emergencyLog && (user.userid === 'pindapinda' || connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221')) {
-			config.emergencyLog.write('<' + user.name + '@' + connection.ip + '> ' + message + '\n');
+		// if (Config.emergencyLog && (connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221' || message.length > 2048 || message.length > 256 && message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ')) {
+		if (Config.emergencyLog && (user.userid === 'pindapinda' || connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221')) {
+			Config.emergencyLog.write('<' + user.name + '@' + connection.ip + '> ' + message + '\n');
 		}
 	}
 
@@ -219,8 +219,8 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			isRoom = true;
 			promoteCmd = promoteCmd.slice(4);
 		}
-		for (var g in config.groups[isRoom ? room.type + 'Room' : 'global']) {
-			var groupId = config.groups.bySymbol[g].id;
+		for (var g in Config.groups[isRoom ? room.type + 'Room' : 'global']) {
+			var groupId = Config.groups.bySymbol[g].id;
 			var isDemote = promoteCmd === 'de' + groupId || promoteCmd === 'un' + groupId;
 			if (promoteCmd === groupId || isDemote) {
 				return parse('/' + (isRoom ? 'room' : '') + (isDemote ? 'demote' : 'promote') + ' ' + toUserid(target) + (isDemote ? '' : ',' + g), room, user, connection)
@@ -286,16 +286,16 @@ function canTalk(user, room, connection, message) {
 				if (room.auth[user.userid]) {
 					userGroup = room.auth[user.userid];
 				} else if (room.isPrivate) {
-					userGroup = config.groups.default[roomType];
+					userGroup = Config.groups.default[roomType];
 				}
 			}
 			if (room.modchat === 'autoconfirmed') {
-				if (!user.autoconfirmed && userGroup === config.groups.default[roomType]) {
+				if (!user.autoconfirmed && userGroup === Config.groups.default[roomType]) {
 					connection.sendTo(room, 'Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.');
 					return false;
 				}
-			} else if (config.groups.bySymbol[userGroup].rank < config.groups.bySymbol[room.modchat].rank) {
-				var groupName = config.groups.bySymbol[room.modchat].name || room.modchat;
+			} else if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[room.modchat].rank) {
+				var groupName = Config.groups.bySymbol[room.modchat].name || room.modchat;
 				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName + ' or higher to speak in this room.');
 				return false;
 			}
@@ -332,7 +332,7 @@ function canTalk(user, room, connection, message) {
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
 
-			if (user.group === config.groups.default[roomType]) {
+			if (user.group === Config.groups.default[roomType]) {
 				if (message.toLowerCase().indexOf('spoiler:') >= 0 || message.toLowerCase().indexOf('spoilers:') >= 0) {
 					connection.sendTo(room, "Due to spam, spoilers can't be sent to the lobby.");
 					return false;
@@ -340,8 +340,8 @@ function canTalk(user, room, connection, message) {
 			}
 		}
 
-		if (config.chatFilter) {
-			return config.chatFilter(user, room, connection, message);
+		if (Config.chatFilter) {
+			return Config.chatFilter(user, room, connection, message);
 		}
 		return message;
 	}

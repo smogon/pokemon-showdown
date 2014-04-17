@@ -34,7 +34,7 @@ if (!process.send) {
 		ValidatorProcess.prototype.active = true;
 		ValidatorProcess.processes = [];
 		ValidatorProcess.spawn = function() {
-			var num = config.validatorProcesses || 1;
+			var num = Config.validatorProcesses || 1;
 			for (var i = 0; i < num; ++i) {
 				this.processes.push(new ValidatorProcess());
 			}
@@ -99,7 +99,7 @@ if (!process.send) {
 } else {
 	require('sugar');
 	global.fs = require('fs');
-	global.config = require('./config/config.js');
+	global.Config = require('./config/config.js');
 
 	process.on('uncaughtException', function (err) {
 		require('./crashlogger.js')(err, 'A team validator process');
@@ -132,8 +132,8 @@ if (!process.send) {
 			name = name.substr(1);
 		}
 		if (name.length > 18) name = name.substr(0,18);
-		if (config.nameFilter) {
-			name = config.nameFilter(name);
+		if (Config.nameFilter) {
+			name = Config.nameFilter(name);
 		}
 		return name.trim();
 	};

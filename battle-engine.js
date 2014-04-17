@@ -17,7 +17,7 @@ if (!('existsSync' in fs)) {
 	// for compatibility with ancient versions of node
 	fs.existsSync = require('path').existsSync;
 }
-global.config = require('./config/config.js');
+global.Config = require('./config/config.js');
 
 // graceful crash - allow current battles to finish before restarting
 process.on('uncaughtException', function (err) {

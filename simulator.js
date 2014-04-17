@@ -29,7 +29,7 @@ var SimulatorProcess = (function() {
 	SimulatorProcess.prototype.active = true;
 	SimulatorProcess.processes = [];
 	SimulatorProcess.spawn = function(num) {
-		if (!num) num = config.simulatorProcesses || 1;
+		if (!num) num = Config.simulatorProcesses || 1;
 		for (var i = this.processes.length; i < num; ++i) {
 			this.processes.push(new SimulatorProcess());
 		}
