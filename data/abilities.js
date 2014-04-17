@@ -462,13 +462,13 @@ exports.BattleAbilities = {
 		onAnyBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
 			for (var p in attacker.side.active) {
-				if (attacker.side.active[p] && attacker.side.active[p].ability === 'aurabreak') {
+				if (attacker.side.active[p] && attacker.side.active[p].hasAbility('aurabreak')) {
 					reverseAura = true;
 					this.debug('Reversing Dark Aura due to Aura Break');
 				}
 			}
 			for (var p in defender.side.active) {
-				if (defender.side.active[p] && defender.side.active[p].ability === 'aurabreak') {
+				if (defender.side.active[p] && defender.side.active[p].hasAbility('aurabreak')) {
 					reverseAura = true;
 					this.debug('Reversing Dark Aura due to Aura Break');
 				}
@@ -638,13 +638,13 @@ exports.BattleAbilities = {
 		onAnyBasePower: function(basePower, attacker, defender, move) {
 			var reverseAura = false;
 			for (var p in attacker.side.active) {
-				if (attacker.side.active[p] && attacker.side.active[p].ability === 'aurabreak') {
+				if (attacker.side.active[p] && attacker.side.active[p].hasAbility('aurabreak')) {
 					reverseAura = true;
 					this.debug('Reversing Fairy Aura due to Aura Break');
 				}
 			}
 			for (var p in defender.side.active) {
-				if (defender.side.active[p] && defender.side.active[p].ability === 'aurabreak') {
+				if (defender.side.active[p] && defender.side.active[p].hasAbility('aurabreak')) {
 					reverseAura = true;
 					this.debug('Reversing Fairy Aura due to Aura Break');
 				}
@@ -1548,7 +1548,7 @@ exports.BattleAbilities = {
 				return;
 			}
 			for (var i=0; i<allyActive.length; i++) {
-				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && (allyActive[i].ability === 'minus' || allyActive[i].ability === 'plus')) {
+				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].hasAbility(['minus', 'plus'])) {
 					return this.chainModify(1.5);
 				}
 			}
@@ -1909,7 +1909,7 @@ exports.BattleAbilities = {
 				return;
 			}
 			for (var i=0; i<allyActive.length; i++) {
-				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && (allyActive[i].ability === 'minus' || allyActive[i].ability === 'plus')) {
+				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].hasAbility(['minus', 'plus'])) {
 					return this.chainModify(1.5);
 				}
 			}
@@ -2278,12 +2278,12 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, its non-Ghost-type opponents cannot switch or flee the battle unless they have the same ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn.",
 		shortDesc: "Prevents foes from switching out normally unless they also have this Ability.",
 		onFoeModifyPokemon: function(pokemon) {
-			if (pokemon.ability !== 'shadowtag') {
+			if (!pokemon.hasAbility('shadowtag')) {
 				pokemon.tryTrap();
 			}
 		},
 		onFoeMaybeTrapPokemon: function(pokemon) {
-			if (pokemon.ability !== 'shadowtag') {
+			if (!pokemon.hasAbility('shadowtag')) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -2391,14 +2391,14 @@ exports.BattleAbilities = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk: function(atk, pokemon) {
-				if (pokemon.ability !== 'slowstart') {
+				if (!pokemon.hasAbility('slowstart')) {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
 				return this.chainModify(0.5);
 			},
 			onModifySpe: function(speMod, pokemon) {
-				if (pokemon.ability !== 'slowstart') {
+				if (!pokemon.hasAbility('slowstart')) {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
@@ -2995,7 +2995,7 @@ exports.BattleAbilities = {
 			move.ignoreDefensive = true;
 		},
 		onSourceModifyMove: function(move, user, target) {
-			if (user.ability === 'moldbreaker' || user.ability === 'turboblaze' || user.ability === 'teravolt') return;
+			if (user.hasAbility(['moldbreaker', 'turboblaze', 'teravolt'])) return;
 			move.ignoreAccuracy = true;
 			move.ignoreOffensive = true;
 		},
@@ -3013,7 +3013,7 @@ exports.BattleAbilities = {
 		},
 		effect: {
 			onModifySpe: function(speMod, pokemon) {
-				if (pokemon.ability !== 'unburden') {
+				if (!pokemon.hasAbility('unburden')) {
 					pokemon.removeVolatile('unburden');
 					return;
 				}
@@ -3211,7 +3211,7 @@ exports.BattleAbilities = {
 				}
 			},
 			onUpdate: function(pokemon) {
-				if (pokemon.ability !== 'zenmode') {
+				if (!pokemon.hasAbility('zenmode')) {
 					pokemon.transformed = false;
 					pokemon.removeVolatile('zenmode');
 				}
