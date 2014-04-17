@@ -890,6 +890,15 @@ var commands = exports.commands = {
 
 		if (!this.canTalk()) return;
 
+		this.add('|raw|<div class="broadcast-blue"><b>'+sanitize(target)+'</b></div>');
+		this.logModCommand(user.name+' declared '+target);
+	},
+	htmldeclare: function(target, room, user) {
+		if (!target) return this.parse('/help htmldeclare');
+		if (!this.can('gdeclare', null, room)) return false;
+
+		if (!this.canTalk()) return;
+
 		this.add('|raw|<div class="broadcast-blue"><b>'+target+'</b></div>');
 		this.logModCommand(user.name+' declared '+target);
 	},
