@@ -831,7 +831,7 @@ exports.BattleScripts = {
 		// PotD stuff
 		var potd = {};
 		if ('Rule:potd' in this.getFormat().banlistTable) {
-			potd = this.getTemplate(config.potd);
+			potd = this.getTemplate(Config.potd);
 		}
 
 		var typeCount = {};

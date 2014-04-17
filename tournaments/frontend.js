@@ -663,7 +663,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		if (params.length < 2)
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 
-		createTournament(room, params.shift(), params.shift(), config.istournamentsrated, params, this);
+		createTournament(room, params.shift(), params.shift(), Config.istournamentsrated, params, this);
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament)
