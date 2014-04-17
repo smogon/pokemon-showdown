@@ -93,7 +93,7 @@ if (!fs.existsSync('./config/config.js')) {
  * Load configuration
  *********************************************************/
 
-global.config = require('./config/config.js');
+global.Config = require('./config/config.js');
 
 var watchFile = function() {
 	try {
@@ -103,7 +103,7 @@ var watchFile = function() {
 	}
 };
 
-if (config.watchconfig) {
+if (Config.watchconfig) {
 	watchFile('./config/config.js', function(curr, prev) {
 		if (curr.mtime <= prev.mtime) return;
 		try {
@@ -115,7 +115,7 @@ if (config.watchconfig) {
 }
 
 if (process.argv[2] && parseInt(process.argv[2])) {
-	config.port = parseInt(process.argv[2]);
+	Config.port = parseInt(process.argv[2]);
 }
 
 global.ResourceMonitor = {
@@ -378,7 +378,7 @@ try {
 
 global.Cidr = require('./cidr.js');
 
-if (config.crashguard) {
+if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	var lastCrash = 0;
 	process.on('uncaughtException', function(err) {
@@ -392,7 +392,7 @@ if (config.crashguard) {
 			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
 			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		}
-		config.modchat = 'crash';
+		Config.modchat = 'crash';
 		Rooms.global.lockdown = true;
 	});
 }

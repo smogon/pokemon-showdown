@@ -91,11 +91,11 @@ var commands = exports.commands = {
 			return this.parse('/help msg');
 		}
 
-		if (config.pmmodchat) {
+		if (Config.pmmodchat) {
 			var userGroup = user.group;
-			if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
-				var groupName = config.groups[config.pmmodchat].name;
-				if (!groupName) groupName = config.pmmodchat;
+			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
+				var groupName = Config.groups[Config.pmmodchat].name;
+				if (!groupName) groupName = Config.pmmodchat;
 				this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to PM users.');
 				return false;
 			}
@@ -308,8 +308,8 @@ var commands = exports.commands = {
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) {
-			if (target && config.groups[target]) {
-				var groupid = config.groups[target].id;
+			if (target && Config.groups[target]) {
+				var groupid = Config.groups[target].id;
 				return this.sendReply("/room"+groupid+" [username] - Promote a user to "+groupid+" in this room only");
 			}
 			return this.parse("/help roompromote");
@@ -320,28 +320,28 @@ var commands = exports.commands = {
 		}
 
 		var nextGroup = target || Users.getNextGroupSymbol(currentGroup, cmd === 'roomdemote', true);
-		if (target === 'deauth') nextGroup = config.groupsranking[0];
-		if (!config.groups[nextGroup]) {
+		if (target === 'deauth') nextGroup = Config.groupsranking[0];
+		if (!Config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
 		}
-		if (config.groups[nextGroup].globalonly) {
-			return this.sendReply('Group \'room' + config.groups[nextGroup].id + '\' does not exist as a room rank.');
+		if (Config.groups[nextGroup].globalonly) {
+			return this.sendReply('Group \'room' + Config.groups[nextGroup].id + '\' does not exist as a room rank.');
 		}
-		if (currentGroup !== ' ' && !user.can('room'+config.groups[currentGroup].id, null, room)) {
-			return this.sendReply('/' + cmd + ' - Access denied for promoting from '+config.groups[currentGroup].name+'.');
+		if (currentGroup !== ' ' && !user.can('room'+Config.groups[currentGroup].id, null, room)) {
+			return this.sendReply('/' + cmd + ' - Access denied for promoting from '+Config.groups[currentGroup].name+'.');
 		}
-		if (nextGroup !== ' ' && !user.can('room'+config.groups[nextGroup].id, null, room)) {
-			return this.sendReply('/' + cmd + ' - Access denied for promoting to '+config.groups[nextGroup].name+'.');
+		if (nextGroup !== ' ' && !user.can('room'+Config.groups[nextGroup].id, null, room)) {
+			return this.sendReply('/' + cmd + ' - Access denied for promoting to '+Config.groups[nextGroup].name+'.');
 		}
 		if (currentGroup === nextGroup) {
-			return this.sendReply("User '"+this.targetUsername+"' is already a "+(config.groups[nextGroup].name || 'regular user')+" in this room.");
+			return this.sendReply("User '"+this.targetUsername+"' is already a "+(Config.groups[nextGroup].name || 'regular user')+" in this room.");
 		}
-		if (config.groups[nextGroup].globalonly) {
-			return this.sendReply("The rank of "+config.groups[nextGroup].name+" is global-only and can't be room-promoted to.");
+		if (Config.groups[nextGroup].globalonly) {
+			return this.sendReply("The rank of "+Config.groups[nextGroup].name+" is global-only and can't be room-promoted to.");
 		}
 
-		var isDemotion = (config.groups[nextGroup].rank < config.groups[currentGroup].rank);
-		var groupName = (config.groups[nextGroup].name || nextGroup || '').trim() || 'a regular user';
+		var isDemotion = (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank);
+		var groupName = (Config.groups[nextGroup].name || nextGroup || '').trim() || 'a regular user';
 
 		if (nextGroup === ' ') {
 			delete room.auth[userid];
@@ -382,7 +382,7 @@ var commands = exports.commands = {
 				if (targetRoom.auth) {
 					userGroup = targetRoom.auth[user.userid] || ' ';
 				}
-				if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(targetRoom.modchat)) {
+				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(targetRoom.modchat)) {
 					return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
 				}
 			}
@@ -675,7 +675,7 @@ var commands = exports.commands = {
 			return this.privateModCommand('('+targetUser.name+' would be banned by '+user.name+problem+'.)');
 		}
 
-		targetUser.popup(user.name+" has banned you." + (config.appealurl ? ("  If you feel that your banning was unjustified you can appeal the ban:\n" + config.appealurl) : "") + "\n\n"+target);
+		targetUser.popup(user.name+" has banned you." + (Config.appealurl ? ("  If you feel that your banning was unjustified you can appeal the ban:\n" + Config.appealurl) : "") + "\n\n"+target);
 
 		this.addModCommand(""+targetUser.name+" was banned by "+user.name+"." + (target ? " (" + target + ")" : ""), ' ('+targetUser.latestIp+')');
 		var alts = targetUser.getAlts();
@@ -765,8 +765,8 @@ var commands = exports.commands = {
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) {
-			if (target && config.groups[target]) {
-				var groupid = config.groups[target].id;
+			if (target && Config.groups[target]) {
+				var groupid = Config.groups[target].id;
 				return this.sendReply("/"+groupid+" [username] - Promote a user to "+groupid+" globally");
 			}
 			return this.parse("/help promote");
@@ -780,22 +780,22 @@ var commands = exports.commands = {
 		}
 
 		var nextGroup = target ? target : Users.getNextGroupSymbol(currentGroup, cmd === 'demote', true);
-		if (target === 'deauth') nextGroup = config.groupsranking[0];
-		if (!config.groups[nextGroup]) {
+		if (target === 'deauth') nextGroup = Config.groupsranking[0];
+		if (!Config.groups[nextGroup]) {
 			return this.sendReply('Group \'' + nextGroup + '\' does not exist.');
 		}
-		if (config.groups[nextGroup].roomonly) {
-			return this.sendReply('Group \'' + config.groups[nextGroup].id + '\' does not exist as a global rank.');
+		if (Config.groups[nextGroup].roomonly) {
+			return this.sendReply('Group \'' + Config.groups[nextGroup].id + '\' does not exist as a global rank.');
 		}
 		if (!user.canPromote(currentGroup, nextGroup)) {
 			return this.sendReply('/' + cmd + ' - Access denied.');
 		}
 
-		var isDemotion = (config.groups[nextGroup].rank < config.groups[currentGroup].rank);
+		var isDemotion = (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank);
 		if (!Users.setOfflineGroup(name, nextGroup)) {
 			return this.sendReply('/promote - WARNING: This user is offline and could be unregistered. Use /forcepromote if you\'re sure you want to risk it.');
 		}
-		var groupName = (config.groups[nextGroup].name || nextGroup || '').trim() || 'a regular user';
+		var groupName = (Config.groups[nextGroup].name || nextGroup || '').trim() || 'a regular user';
 		if (isDemotion) {
 			this.privateModCommand('('+name+' was demoted to ' + groupName + ' by '+user.name+'.)');
 			if (targetUser) {
@@ -819,7 +819,7 @@ var commands = exports.commands = {
 		if (!Users.setOfflineGroup(name, nextGroup, true)) {
 			return this.sendReply('/forcepromote - Don\'t forcepromote unless you have to.');
 		}
-		var groupName = config.groups[nextGroup].name || nextGroup || '';
+		var groupName = Config.groups[nextGroup].name || nextGroup || '';
 		this.addModCommand(''+name+' was promoted to ' + (groupName.trim()) + ' by '+user.name+'.');
 	},
 
@@ -832,8 +832,8 @@ var commands = exports.commands = {
 			return this.sendReply('Moderated chat is currently set to: '+room.modchat);
 		}
 		if (!this.can('modchat', null, room)) return false;
-		if (room.modchat && room.modchat.length <= 1 && config.groupsranking.indexOf(room.modchat) > 1 && !user.can('modchatall', null, room)) {
-			return this.sendReply('/modchat - Access denied for removing a setting higher than ' + config.groupsranking[1] + '.');
+		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > 1 && !user.can('modchatall', null, room)) {
+			return this.sendReply('/modchat - Access denied for removing a setting higher than ' + Config.groupsranking[1] + '.');
 		}
 
 		target = target.toLowerCase();
@@ -859,11 +859,11 @@ var commands = exports.commands = {
 			target = '\u2605';
 			// fallthrough
 		default:
-			if (!config.groups[target]) {
+			if (!Config.groups[target]) {
 				return this.parse('/help modchat');
 			}
-			if (config.groupsranking.indexOf(target) > 1 && !user.can('modchatall', null, room)) {
-				return this.sendReply('/modchat - Access denied for setting higher than ' + config.groupsranking[1] + '.');
+			if (Config.groupsranking.indexOf(target) > 1 && !user.can('modchatall', null, room)) {
+				return this.sendReply('/modchat - Access denied for setting higher than ' + Config.groupsranking[1] + '.');
 			}
 			room.modchat = target;
 			break;
@@ -1176,10 +1176,10 @@ var commands = exports.commands = {
 	emergency: function(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
-		if (config.emergency) {
+		if (Config.emergency) {
 			return this.sendReply("We're already in emergency mode.");
 		}
-		config.emergency = true;
+		Config.emergency = true;
 		for (var id in Rooms.rooms) {
 			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>');
 		}
@@ -1190,10 +1190,10 @@ var commands = exports.commands = {
 	endemergency: function(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
-		if (!config.emergency) {
+		if (!Config.emergency) {
 			return this.sendReply("We're not in emergency mode.");
 		}
-		config.emergency = false;
+		Config.emergency = false;
 		for (var id in Rooms.rooms) {
 			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>');
 		}
@@ -1354,7 +1354,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'config') {
 			this.sendReply('Calculating config size...');
-			var configSize = ResourceMonitor.sizeOfObject(config);
+			var configSize = ResourceMonitor.sizeOfObject(Config);
 			this.sendReply("Config is using " + configSize + " bytes of memory.");
 		}
 		if (target === 'all' || target === 'resourcemonitor' || target === 'rm') {
@@ -1584,10 +1584,10 @@ var commands = exports.commands = {
 		target = toId(target);
 		if (!this.can('autotimer')) return;
 		if (target === 'off' || target === 'false' || target === 'stop') {
-			config.forcetimer = false;
+			Config.forcetimer = false;
 			this.addModCommand("Forcetimer is now OFF: The timer is now opt-in. (set by "+user.name+")");
 		} else if (target === 'on' || target === 'true' || !target) {
-			config.forcetimer = true;
+			Config.forcetimer = true;
 			this.addModCommand("Forcetimer is now ON: All battles will be timed. (set by "+user.name+")");
 		} else {
 			this.sendReply("'"+target+"' is not a recognized forcetimer setting.");
@@ -1626,11 +1626,11 @@ var commands = exports.commands = {
 	cancelsearch: 'search',
 	search: function(target, room, user) {
 		if (target) {
-			if (config.pmmodchat) {
+			if (Config.pmmodchat) {
 				var userGroup = user.group;
-				if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
-					var groupName = config.groups[config.pmmodchat].name;
-					if (!groupName) groupName = config.pmmodchat;
+				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
+					var groupName = Config.groups[Config.pmmodchat].name;
+					if (!groupName) groupName = Config.pmmodchat;
 					this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to search for a battle.');
 					return false;
 				}
@@ -1651,11 +1651,11 @@ var commands = exports.commands = {
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			return this.popupReply("The user '"+this.targetUsername+"' is not accepting challenges right now.");
 		}
-		if (config.pmmodchat) {
+		if (Config.pmmodchat) {
 			var userGroup = user.group;
-			if (config.groupsranking.indexOf(userGroup) < config.groupsranking.indexOf(config.pmmodchat)) {
-				var groupName = config.groups[config.pmmodchat].name;
-				if (!groupName) groupName = config.pmmodchat;
+			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(Config.pmmodchat)) {
+				var groupName = Config.groups[Config.pmmodchat].name;
+				if (!groupName) groupName = Config.pmmodchat;
 				this.popupReply('Because moderated chat is set, you must be of rank ' + groupName +' or higher to challenge users.');
 				return false;
 			}
@@ -1713,8 +1713,8 @@ var commands = exports.commands = {
 	cmd: 'query',
 	query: function(target, room, user, connection) {
 		// Avoid guest users to use the cmd errors to ease the app-layer attacks in emergency mode
-		var trustable = (!config.emergency || (user.named && user.authenticated));
-		if (config.emergency && ResourceMonitor.countCmd(connection.ip, user.name)) return false;
+		var trustable = (!Config.emergency || (user.named && user.authenticated));
+		if (Config.emergency && ResourceMonitor.countCmd(connection.ip, user.name)) return false;
 		var spaceIndex = target.indexOf(' ');
 		var cmd = target;
 		if (spaceIndex > 0) {

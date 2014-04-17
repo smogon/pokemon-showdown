@@ -41,11 +41,11 @@ if (!process.send) {
 
 	// This is the child
 
-	var config = require('./config/config.js');
+	var Config = require('./config/config.js');
 	var crypto = require('crypto');
 
-	var keyalgo = config.loginserverkeyalgo;
-	var pkey = config.loginserverpublickey;
+	var keyalgo = Config.loginserverkeyalgo;
+	var pkey = Config.loginserverpublickey;
 
 	process.on('message', function(message) {
 		var verifier = crypto.createVerify(keyalgo);
