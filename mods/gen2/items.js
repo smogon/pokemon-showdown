@@ -6,19 +6,28 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Doubles the amount of money received in trainer battles."
 	},
-	berry: {
-		id: "berry",
-		name: "Berry",
-		isBerry: true,
+	aspearberry: {
+		inherit: true,
+		gen: 2
+	},
+	berserkgene: {
+		id: "berserkgene",
+		name: "Berserk Gene",
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) pokemon.eatItem();
+			this.boost({atk: 2});
+			pokemon.addVolatile('confuse');
+			pokemon.setItem('');
 		},
-		onEat: function(pokemon) {
-			this.heal(10);
-		},
-		num: -2,
 		gen: 2,
-		desc: "Restores 10 HP when the holder of this item is at 50% HP or less. One-time use."
+		desc: "Raises attack by 2 when holder is switched in.  Confuses holder.  Single use."
+	},
+	cheriberry: {
+		inherit: true,
+		gen: 2
+	},
+	chestoberry: {
+		inherit: true,
+		gen: 2
 	},
 	dragonscale: {
 		id: "dragonscale",
@@ -39,5 +48,52 @@ exports.BattleItems = {
 				return def * 1.5;
 			}
 		}
+	},
+	leppaberry: {
+		inherit: true,
+		onEat: function(pokemon) {
+			var move;
+			if (pokemon.volatiles['leppaberry']) {
+				move = pokemon.volatiles['leppaberry'].move;
+				pokemon.removeVolatile('leppaberry');
+			} else {
+				var pp = 99;
+				for (var i in pokemon.moveset) {
+					if (pokemon.moveset[i].pp < pp) {
+						move = pokemon.moveset[i];
+						pp = move.pp;
+					}
+				}
+			}
+			move.pp += 5;
+			if (move.pp > move.maxpp) move.pp = move.maxpp;
+			this.add("-message",pokemon.name+" restored "+move.move+"'s PP using its Leppa Berry! (placeholder)");
+		},
+		gen: 2,
+		desc: "Restores 5PP to the first of the holder's moves to reach 0PP. Single use."
+	},
+	lumberry: {
+		inherit: true,
+		gen: 2
+	},
+	oranberry: {
+		inherit: true,
+		gen: 2
+	},
+	pechaberry: {
+		inherit: true,
+		gen: 2
+	},
+	persimberry: {
+		inherit: true,
+		gen: 2
+	},
+	rawstberry: {
+		inherit: true,
+		gen: 2
+	},
+	sitrusberry: {
+		inherit: true,
+		gen: 2
 	}
 };

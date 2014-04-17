@@ -592,6 +592,10 @@ exports.BattleMovedex = {
 	- they're already affected by Soundproof, also, ghosts can hear
 	  sounds
 	******************************************************************/
+	boomburst: {
+		inherit: true,
+		affectedByImmunities: false
+	},
 	hypervoice: {
 		inherit: true,
 		affectedByImmunities: false
