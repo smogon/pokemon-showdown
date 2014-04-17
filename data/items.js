@@ -181,7 +181,7 @@ exports.BattleItems = {
 			type: "Ground"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4|| (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4|| (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -483,6 +483,12 @@ exports.BattleItems = {
 		fling: {
 			basePower: 70
 		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+				return false;
+			}
+			return true;
+		},
 		onDrive: 'Fire',
 		num: 118,
 		gen: 5,
@@ -653,6 +659,12 @@ exports.BattleItems = {
 		spritenum: 67,
 		fling: {
 			basePower: 70
+		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+				return false;
+			}
+			return true;
 		},
 		onDrive: 'Ice',
 		num: 119,
@@ -845,7 +857,7 @@ exports.BattleItems = {
 			type: "Ghost"
 		},
 		onModifyPriority: function(priority, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
 				if (pokemon.eatItem()) {
 					this.add('-activate', pokemon, 'Custap Berry');
 					pokemon.removeVolatile('custapberry');
@@ -963,6 +975,12 @@ exports.BattleItems = {
 		spritenum: 103,
 		fling: {
 			basePower: 70
+		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+				return false;
+			}
+			return true;
 		},
 		onDrive: 'Water',
 		num: 116,
@@ -1419,7 +1437,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onModifyPriority: function(priority, pokemon) {
-			if (pokemon.ability !== 'stall') {
+			if (!pokemon.hasAbility('stall')) {
 				return priority - 0.1;
 			}
 		},
@@ -1437,7 +1455,7 @@ exports.BattleItems = {
 			type: "Ice"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2006,7 +2024,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onModifyPriority: function(priority, pokemon) {
-			if (pokemon.ability !== 'stall') {
+			if (!pokemon.hasAbility('stall')) {
 				return priority - 0.1;
 			}
 		},
@@ -2024,7 +2042,7 @@ exports.BattleItems = {
 			type: "Flying"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2154,7 +2172,7 @@ exports.BattleItems = {
 			type: "Grass"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2586,7 +2604,7 @@ exports.BattleItems = {
 				this.effectData.lastMove = '';
 			},
 			onBeforeMove: function(pokemon, target, move) {
-				if (pokemon.item !== 'metronome') {
+				if (!pokemon.hasItem('metronome')) {
 					pokemon.removeVolatile('metronome');
 					return;
 				}
@@ -2642,7 +2660,7 @@ exports.BattleItems = {
 			type: "Rock"
 		},
 		onResidual: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3007,7 +3025,7 @@ exports.BattleItems = {
 			type: "Poison"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3546,7 +3564,7 @@ exports.BattleItems = {
 			type: "Fighting"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3656,6 +3674,12 @@ exports.BattleItems = {
 		spritenum: 442,
 		fling: {
 			basePower: 70
+		},
+		onTakeItem: function(item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
+				return false;
+			}
+			return true;
 		},
 		onDrive: 'Electric',
 		num: 117,
@@ -3920,7 +3944,7 @@ exports.BattleItems = {
 			type: "Psychic"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},

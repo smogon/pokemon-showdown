@@ -42,11 +42,11 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 	// This is the child
 
-	var config = require('./config/config.js');
+	var Config = require('./config/config.js');
 	var crypto = require('crypto');
 
-	var keyalgo = config.loginServer.keyAlgorithm;
-	var pkey = config.loginServer.publicKey;
+	var keyalgo = Config.loginServer.keyAlgorithm;
+	var pkey = Config.loginServer.publicKey;
 
 	fakeProcess.client.on('message', function(message) {
 		var verifier = crypto.createVerify(keyalgo);

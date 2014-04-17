@@ -153,7 +153,7 @@ var commands = exports.commands = {
 	alts: 'whois',
 	getalts: 'whois',
 	whois: function(target, room, user) {
-		var targetUser = this.targetUserOrSelf(target);
+		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
@@ -167,16 +167,16 @@ var commands = exports.commands = {
 			for (var j=0; j<alts.length; j++) {
 				var targetAlt = Users.get(alts[j]);
 				if (!targetAlt.named && !targetAlt.connected) continue;
-				if (config.groups.bySymbol[targetAlt.group] && config.groups.bySymbol[user.group] &&
-					config.groups.bySymbol[targetAlt.group].rank > config.groups.bySymbol[user.group].rank) continue;
+				if (Config.groups.bySymbol[targetAlt.group] && Config.groups.bySymbol[user.group] &&
+					Config.groups.bySymbol[targetAlt.group].rank > Config.groups.bySymbol[user.group].rank) continue;
 
 				this.sendReply("Alt: " + targetAlt.name);
 				output = Object.keys(targetAlt.prevNames).join(", ");
 				if (output) this.sendReply("Previous names: " + output);
 			}
 		}
-		if (config.groups.bySymbol[targetUser.group] && config.groups.bySymbol[targetUser.group].name) {
-			this.sendReply("Group: " + config.groups.bySymbol[targetUser.group].name + " (" + targetUser.group + ")");
+		if (Config.groups.bySymbol[targetUser.group] && Config.groups.bySymbol[targetUser.group].name) {
+			this.sendReply("Group: " + Config.groups.bySymbol[targetUser.group].name + " (" + targetUser.group + ")");
 		}
 		if (targetUser.isSysop) {
 			this.sendReply("(Pok\xE9mon Showdown System Operator)");
@@ -631,10 +631,10 @@ var commands = exports.commands = {
 
 	groups: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox(config.groups.byRank.reduce(function (info, group) {
-			if (!config.groups.bySymbol[group].name || !config.groups.bySymbol[group].description)
+		this.sendReplyBox(Config.groups.byRank.reduce(function (info, group) {
+			if (!Config.groups.bySymbol[group].name || !Config.groups.bySymbol[group].description)
 				return info;
-			return info + (info ? "<br />" : "") + sanitize(group) + " <strong>" + sanitize(config.groups.bySymbol[group].name) + "</strong> - " + sanitize(config.groups.bySymbol[group].description);
+			return info + (info ? "<br />" : "") + sanitize(group) + " <strong>" + sanitize(Config.groups.bySymbol[group].name) + "</strong> - " + sanitize(Config.groups.bySymbol[group].description);
 		}, ""));
 	},
 
@@ -1044,8 +1044,8 @@ var commands = exports.commands = {
 	potd: function(target, room, user) {
 		if (!this.can('potd')) return false;
 
-		config.potd = target;
-		Simulator.SimulatorProcess.eval('config.potd = \'' + toId(target) + '\'');
+		Config.potd = target;
+		Simulator.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
 		if (target) {
 			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pokemon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
 			this.logModCommand("The Pokemon of the Day was changed to " + target + " by " + user.name + ".");
@@ -1391,12 +1391,12 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'getip' || target === 'ip') {
 			matched = true;
 			this.sendReply("/ip - Get your own IP address.");
-			this.sendReply("/ip [username] - Get a user's IP address. Requires: " + Users.getGroupsThatCan('ip', config.groups.default.global).join(" "));
+			this.sendReply("/ip [username] - Get a user's IP address. Requires: " + Users.getGroupsThatCan('ip', Config.groups.default.global).join(" "));
 		}
 		if (target === 'all' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
 			matched = true;
 			this.sendReply("/alts OR /altcheck - Get your own alts.");
-			this.sendReply("/alts OR /altcheck [username] - Get a user's alts. Requires: " + Users.getGroupsThatCan('alts', config.groups.default.global).join(" "));
+			this.sendReply("/alts OR /altcheck [username] - Get a user's alts. Requires: " + Users.getGroupsThatCan('alts', Config.groups.default.global).join(" "));
 		}
 		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder') {
 			matched = true;
@@ -1431,7 +1431,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'groups') {
 			matched = true;
-			this.sendReply("/groups - Explains what the " + config.groups[roomType + 'ByRank'].filter(function (g) { return g.trim(); }).join(" ") + " next to people's names mean.");
+			this.sendReply("/groups - Explains what the " + Config.groups[roomType + 'ByRank'].filter(function (g) { return g.trim(); }).join(" ") + " next to people's names mean.");
 			this.sendReply("!groups - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
 		if (target === 'all' || target === 'opensource') {
@@ -1630,11 +1630,11 @@ var commands = exports.commands = {
 		if (Users.can(target, 'modchat') || target === 'modchat') {
 			matched = true;
 			this.sendReply("/modchat [off/autoconfirmed/" +
-				config.groups[roomType + 'ByRank'].filter(function (g) { return g.trim(); }).join("/") +
+				Config.groups[roomType + 'ByRank'].filter(function (g) { return g.trim(); }).join("/") +
 				"] - Set the level of moderated chat. Requires: " +
 				Users.getGroupsThatCan('modchat', room).join(" ") +
 				" for off/autoconfirmed/" +
-				config.groups[roomType + 'ByRank'].slice(0, 2).filter(function (g) { return g.trim(); }).join("/") +
+				Config.groups[roomType + 'ByRank'].slice(0, 2).filter(function (g) { return g.trim(); }).join("/") +
 				" options, " +
 				Users.getGroupsThatCan('modchatall', room).join(" ") +
 				" for all the options");
@@ -1667,13 +1667,13 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/deregisterchatroom [roomname] - Deletes room [roomname] after the next server restart. Requires: " + Users.getGroupsThatCan('makeroom').join(" "));
 		}
-		if (Users.can(target, 'roompromote', config.groups[roomType + 'ByRank'].slice(-1)[0]) || target === 'roomowner') {
+		if (Users.can(target, 'roompromote', Config.groups[roomType + 'ByRank'].slice(-1)[0]) || target === 'roomowner') {
 			matched = true;
-			this.sendReply("/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: " + Users.getGroupsThatCan('roompromote', config.groups[roomType + 'ByRank'].slice(-1)[0]).join(" "));
+			this.sendReply("/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: " + Users.getGroupsThatCan('roompromote', Config.groups[roomType + 'ByRank'].slice(-1)[0]).join(" "));
 		}
-		if (Users.can(target, 'roompromote', config.groups[roomType + 'ByRank'].slice(-1)[0]) || target === 'roomdeowner') {
+		if (Users.can(target, 'roompromote', Config.groups[roomType + 'ByRank'].slice(-1)[0]) || target === 'roomdeowner') {
 			matched = true;
-			this.sendReply("/roomdeowner [username] - Removes [username]'s status as a room owner. Requires: " + Users.getGroupsThatCan('roompromote', config.groups[roomType + 'ByRank'].slice(-1)[0]).join(" "));
+			this.sendReply("/roomdeowner [username] - Removes [username]'s status as a room owner. Requires: " + Users.getGroupsThatCan('roompromote', Config.groups[roomType + 'ByRank'].slice(-1)[0]).join(" "));
 		}
 		if (Users.can(target, 'privateroom') || target === 'privateroom') {
 			matched = true;
@@ -1688,7 +1688,7 @@ var commands = exports.commands = {
 			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: " + Users.getGroupsThatCan('broadcast', room).join(" ") + ")");
 			this.sendReply("For details on all room commands, use /roomhelp");
 			this.sendReply("For details on all commands, use /help all");
-			if (user.group !== config.groups.default[roomType]) {
+			if (user.group !== Config.groups.default[roomType]) {
 				this.sendReply("DRIVER COMMANDS: /mute, /unmute, /announce, /modlog, /forcerename, /alts")
 				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /redirect, /kick");
 				this.sendReply("LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare");

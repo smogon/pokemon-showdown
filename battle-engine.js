@@ -17,7 +17,7 @@ if (!('existsSync' in fs)) {
 	// for compatibility with ancient versions of node
 	fs.existsSync = require('path').existsSync;
 }
-global.config = require('./config/config.js');
+global.Config = require('./config/config.js');
 
 // graceful crash - allow current battles to finish before restarting
 /*process.on('uncaughtException', function (err) {
@@ -1006,6 +1006,14 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.getItem = function() {
 		return this.battle.getItem(this.item);
 	};
+	BattlePokemon.prototype.hasItem = function(item) {
+		if (this.ignore['Item']) return false;
+		var ownItem = this.item;
+		if (!Array.isArray(item)) {
+			return ownItem === toId(item);
+		}
+		return (item.map(toId).indexOf(ownItem) >= 0);
+	};
 	BattlePokemon.prototype.clearItem = function() {
 		return this.setItem('');
 	};
@@ -1026,6 +1034,14 @@ var BattlePokemon = (function() {
 	};
 	BattlePokemon.prototype.getAbility = function() {
 		return this.battle.getAbility(this.ability);
+	};
+	BattlePokemon.prototype.hasAbility = function(ability) {
+		if (this.ignore['Ability']) return false;
+		var ownAbility = this.ability;
+		if (!Array.isArray(ability)) {
+			return ownAbility === toId(ability);
+		}
+		return (ability.map(toId).indexOf(ownAbility) >= 0);
 	};
 	BattlePokemon.prototype.clearAbility = function() {
 		return this.setAbility('');

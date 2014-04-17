@@ -425,8 +425,8 @@ exports.BattleScripts = {
 				} else if (damagingMoves.length===1) {
 					// Night Shade, Seismic Toss, etc. don't count:
 					if (!damagingMoves[0].damage) {
-						damagingid = damagingMoves[0].id;
-						damagingType = damagingMoves[0].type;
+						var damagingid = damagingMoves[0].id;
+						var damagingType = damagingMoves[0].type;
 						var replace = false;
 						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
 							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
@@ -831,7 +831,7 @@ exports.BattleScripts = {
 		// PotD stuff
 		var potd = {};
 		if ('Rule:potd' in this.getFormat().banlistTable) {
-			potd = this.getTemplate(config.potd);
+			potd = this.getTemplate(Config.potd);
 		}
 
 		var typeCount = {};

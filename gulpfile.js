@@ -13,18 +13,41 @@ var gulp = require('gulp'),
 		"evil": true,
 		"esnext": true,
 		"node": true,
-		"eqeqeq": false
+		"eqeqeq": false,
+
+		"globals": {
+			"fs": false,
+			"Config": false,
+			"ResourceMonitor": false,
+			"toId": false,
+			"toUserid": false,
+			"toName": false,
+			"sanitize": false,
+			"string": false,
+			"clampIntRange": false,
+			"LoginServer": false,
+			"Users": false,
+			"Rooms": false,
+			"Verifier": false,
+			"CommandParser": false,
+			"Simulator": false,
+			"Tournaments": false,
+			"Dnsbl": false,
+			"Cidr": false,
+			"Sockets": false,
+			"Tools": false,
+			"TeamValidator": false
+		}
 	};
 
 gulp.task('lint', function() {
 	var directories = ['./*.js', './data/*.js', './mods/*.js', './config/*.js'];
 	console.log("\n\n*** Linting JavaScript Files ***\n\n");
 
-	for(var dir in directories) {
-		gulp.src(directories[dir])
-			.pipe(jshint(jsHintOptions))
-			.pipe(jshint.reporter(jshintStylish));
-	}
+	gulp.src(directories)
+		.pipe(jshint(jsHintOptions))
+		.pipe(jshint.reporter(jshintStylish));
+
 });
 
 gulp.task('default', ['lint']);

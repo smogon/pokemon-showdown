@@ -1077,6 +1077,9 @@ exports.BattleScripts = {
 				case 'softboiled': case 'roost': case 'moonlight': case 'synthesis': case 'morningsun':
 					if (hasMove['wish'] || hasMove['recover']) rejected = true;
 					break;
+				case 'memento':
+					if (hasMove['rest'] || hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis'] || hasMove['morningsun']) rejected = true;
+					break;
 				case 'perishsong':
 					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 					break;
@@ -1170,8 +1173,8 @@ exports.BattleScripts = {
 				} else if (damagingMoves.length===1) {
 					// Night Shade, Seismic Toss, etc. don't count:
 					if (!damagingMoves[0].damage) {
-						damagingid = damagingMoves[0].id;
-						damagingType = damagingMoves[0].type;
+						var damagingid = damagingMoves[0].id;
+						var damagingType = damagingMoves[0].type;
 						var replace = false;
 						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
 							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
@@ -1418,7 +1421,7 @@ exports.BattleScripts = {
 			} else if (template.species === 'Dusclops') {
 				item = 'Eviolite';
 			} else if (shouldMegaEvo === true) {
-				item = this.getTemplate(template.otherFormes[0]).requiredItem;
+				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 				// Mega Mawile should never start with Sheer Force
 				if (template.species === 'Mawile') ability = 'Intimidate';
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
@@ -1453,7 +1456,7 @@ exports.BattleScripts = {
 			// medium priority
 
 			} else if (shouldMegaEvo) {
-				item = this.getTemplate(template.otherFormes[0]).requiredItem;
+				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 			} else if (ability === 'Guts') {
 				if (hasMove['drainpunch']) {
 					item = 'Flame Orb';
@@ -1609,7 +1612,7 @@ exports.BattleScripts = {
 		// PotD stuff
 		var potd = {};
 		if ('Rule:potd' in this.getFormat().banlistTable) {
-			potd = this.getTemplate(config.potd);
+			potd = this.getTemplate(Config.potd);
 		}
 
 		var typeCount = {};
@@ -1728,7 +1731,7 @@ exports.BattleScripts = {
 		// PotD stuff
 		var potd = {};
 		if ('Rule:potd' in this.getFormat().banlistTable) {
-			potd = this.getTemplate(config.potd);
+			potd = this.getTemplate(Config.potd);
 		}
 
 		var typeCount = {};
@@ -1841,7 +1844,7 @@ exports.BattleScripts = {
 		// PotD stuff
 		var potd = {};
 		if ('Rule:potd' in this.getFormat().banlistTable) {
-			potd = this.getTemplate(config.potd);
+			potd = this.getTemplate(Config.potd);
 		}
 
 		var typeCount = {};
@@ -2366,8 +2369,8 @@ exports.BattleScripts = {
 				} else if (damagingMoves.length===1) {
 					// Night Shade, Seismic Toss, etc. don't count:
 					if (!damagingMoves[0].damage) {
-						damagingid = damagingMoves[0].id;
-						damagingType = damagingMoves[0].type;
+						var damagingid = damagingMoves[0].id;
+						var damagingType = damagingMoves[0].type;
 						var replace = false;
 						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
 							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
@@ -2610,7 +2613,7 @@ exports.BattleScripts = {
 			} else if (template.species === 'Amoonguss') {
 				item = 'Black Sludge';
 			} else if (shouldMegaEvo === true) {
-				item = this.getTemplate(template.otherFormes[0]).requiredItem;
+				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 				item = 'Light Clay';
 			} else if (hasMove['shellsmash']) {
@@ -2647,7 +2650,7 @@ exports.BattleScripts = {
 
 			// medium priority
 			} else if (shouldMegaEvo) {
-				item = this.getTemplate(template.otherFormes[0]).requiredItem;
+				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 			} else if (ability === 'Guts') {
 				if (hasMove['drainpunch']) {
 					item = 'Flame Orb';

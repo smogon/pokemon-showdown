@@ -30,9 +30,9 @@ var SimulatorProcess = (function() {
 	SimulatorProcess.prototype.load = 0;
 	SimulatorProcess.prototype.active = true;
 	SimulatorProcess.processes = [];
-	SimulatorProcess.spawn = function() {
-		/*var num = config.simulatorProcesses || 1;
-		for (var i = 0; i < num; ++i) {
+	SimulatorProcess.spawn = function(num) {
+		/*if (!num) num = Config.simulatorProcesses || 1;
+		for (var i = this.processes.length; i < num; ++i) {
 			this.processes.push(new SimulatorProcess());
 		}*/
 	};

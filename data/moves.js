@@ -651,7 +651,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		onTryHit: function(pokemon) {
-			if ((pokemon.ability !== 'contrary' && pokemon.boosts.spe === 6) || (pokemon.ability === 'contrary' && pokemon.boosts.spe === -6)) {
+			var hasContrary = pokemon.hasAbility('contrary');
+			if ((!hasContrary && pokemon.boosts.spe === 6) || (hasContrary && pokemon.boosts.spe === -6)) {
 				return false;
 			}
 		},
@@ -1236,6 +1237,9 @@ exports.BattleMovedex = {
 				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
 					return;
 				}
+				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
+					return;
+				}
 				return 0;
 			},
 			onSourceBasePower: function(basePower, target, source, move) {
@@ -1548,8 +1552,7 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	"celebrate": {
-		num: -6,
-		gen: 6,
+		num: 606,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -2485,8 +2488,7 @@ exports.BattleMovedex = {
 		type: "Fighting"
 	},
 	"diamondstorm": {
-		num: -1,
-		gen: 6,
+		num: 591,
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
@@ -2540,6 +2542,9 @@ exports.BattleMovedex = {
 			},
 			onAccuracy: function(accuracy, target, source, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'helpinghand') {
+					return;
+				}
+				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
 				return 0;
@@ -2684,6 +2689,9 @@ exports.BattleMovedex = {
 			},
 			onAccuracy: function(accuracy, target, source, move) {
 				if (move.id === 'surf' || move.id === 'whirlpool' || move.id === 'helpinghand') {
+					return;
+				}
+				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
 				return 0;
@@ -4382,6 +4390,9 @@ exports.BattleMovedex = {
 				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
 					return;
 				}
+				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
+					return;
+				}
 				return 0;
 			},
 			onSourceBasePower: function(basePower, target, source, move) {
@@ -4763,7 +4774,7 @@ exports.BattleMovedex = {
 			if (!pokemon.volatiles.furycutter) {
 				pokemon.addVolatile('furycutter');
 			}
-			return 20 * pokemon.volatiles.furycutter.multiplier;
+			return 40 * pokemon.volatiles.furycutter.multiplier;
 		},
 		category: "Physical",
 		desc: "Deals damage to one adjacent target. Power doubles with each successful hit, up to a maximum of 160 power; resets to 20 power if the move misses or another move is used. Makes contact.",
@@ -4782,7 +4793,7 @@ exports.BattleMovedex = {
 				this.effectData.multiplier = 1;
 			},
 			onRestart: function() {
-				if (this.effectData.multiplier < 8) {
+				if (this.effectData.multiplier < 4) {
 					this.effectData.multiplier <<= 1;
 				}
 				this.effectData.duration = 2;
@@ -5241,8 +5252,8 @@ exports.BattleMovedex = {
 		pseudoWeather: 'gravity',
 		effect: {
 			duration: 5,
-			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+			durationCallback: function(source, effect) {
+				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
 				return 5;
@@ -5697,7 +5708,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
 				return 5;
@@ -5762,7 +5773,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isBounceable: true,
 		onHit: function(target, source) {
-			if (source.ability === 'megalauncher') this.heal(this.modify(target.maxhp, 0.75));
+			if (source.hasAbility('megalauncher')) this.heal(this.modify(target.maxhp, 0.75));
 			else this.heal(Math.ceil(target.maxhp * 0.5));
 		},
 		secondary: false,
@@ -6268,7 +6279,7 @@ exports.BattleMovedex = {
 		type: "Fighting"
 	},
 	"holdback": {
-		gen: 6,
+		num: 610,
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
@@ -6470,6 +6481,23 @@ exports.BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal"
+	},
+	"hyperspacehole": {
+		num: 593,
+		accuracy: true,
+		basePower: 80,
+		category: "Special",
+		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. Makes contact.",
+		shortDesc: "Deals damage to one adjacent target. Breaks protection.",
+		id: "hyperspacehole",
+		name: "Hyperspace Hole",
+		pp: 5,
+		priority: 0,
+		isContact: true,
+		breaksProtect: true,
+		secondary: false,
+		target: "normal",
+		type: "Psychic"
 	},
 	"hypervoice": {
 		num: 304,
@@ -7325,8 +7353,7 @@ exports.BattleMovedex = {
 		type: "Ghost"
 	},
 	"lightofruin": {
-		num: -6,
-		gen: 6,
+		num: 617,
 		accuracy: 90,
 		basePower: 140,
 		category: "Special",
@@ -7359,7 +7386,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
-				if (source && source.item === 'lightclay') {
+				if (source && source.hasItem('lightclay')) {
 					return 8;
 				}
 				return 5;
@@ -7669,9 +7696,9 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 5,
-			/*durationCallback: function(target, source, effect) {
+			/*durationCallback: function(source, effect) {
 				// Persistent isn't updated for BW moves
-				if (source && source.ability === 'Persistent') {
+				if (source && source.hasAbility('Persistent')) {
 					return 7;
 				}
 				return 5;
@@ -7755,7 +7782,7 @@ exports.BattleMovedex = {
 		onHitSide: function(side, source) {
 			var targets = [];
 			for (var p in side.active) {
-				if (side.active[p].ability === 'plus' || side.active[p].ability === 'minus') {
+				if (side.active[p].hasAbility(['plus', 'minus'])) {
 					targets.push(side.active[p]);
 				}
 			}
@@ -8160,7 +8187,7 @@ exports.BattleMovedex = {
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
 				var noMetronome = {
-					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snatch:1, snarl:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, vcreate:1, wideguard:1, diamondstorm:1, steameruption:1, hyperspacehole:1
+					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snatch:1, snarl:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, vcreate:1, wideguard:1, diamondstorm:1, steameruption:1, hyperspacehole:1, thousandarrows:1, thousandwaves:1
 				};
 				if (!noMetronome[move.id]) {
 					moves.push(move.id);
@@ -9179,7 +9206,7 @@ exports.BattleMovedex = {
 						if (!this.sides[i].active[j].volatiles['perishsong']) {
 							result = false;
 						}
-						if (this.sides[i].active[j].ability !== 'soundproof') {
+						if (!this.sides[i].active[j].hasAbility('soundproof')) {
 							this.sides[i].active[j].addVolatile('perishsong');
 						} else {
 							this.add('-immune', this.sides[i].active[j], '[msg]');
@@ -9272,6 +9299,9 @@ exports.BattleMovedex = {
 			onLockMove: 'phantomforce',
 			onAccuracy: function(accuracy, target, source, move) {
 				if (move.id === 'helpinghand') {
+					return;
+				}
+				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
 				return 0;
@@ -10375,7 +10405,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
-				if (source && source.item === 'lightclay') {
+				if (source && source.hasItem('lightclay')) {
 					return 8;
 				}
 				return 5;
@@ -11057,7 +11087,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
 				return 5;
@@ -11415,6 +11445,9 @@ exports.BattleMovedex = {
 			onLockMove: 'shadowforce',
 			onAccuracy: function(accuracy, target, source, move) {
 				if (move.id === 'helpinghand') {
+					return;
+				}
+				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
 				return 0;
@@ -11859,6 +11892,9 @@ exports.BattleMovedex = {
 				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
 					return;
 				}
+				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
+					return;
+				}
 				return 0;
 			},
 			onAnyBasePower: function(basePower, target, source, move) {
@@ -12077,7 +12113,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(pokemon) {
 				var applies = false;
-				if ((pokemon.hasType('Flying') && !pokemon.volatiles['roost']) || pokemon.ability === 'levitate') applies = true;
+				if ((pokemon.hasType('Flying') && !pokemon.volatiles['roost']) || pokemon.hasAbility('levitate')) applies = true;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					applies = true;
 					this.cancelMove(pokemon);
@@ -12612,6 +12648,25 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "foeSide",
 		type: "Rock"
+	},
+	"steameruption": {
+		num: 592,
+		accuracy: 95,
+		basePower: 110,
+		category: "Special",
+		desc: "Deals damage to one adjacent target with a 30% chance to burn it.",
+		shortDesc: "30% chance to burn the target.",
+		id: "steameruption",
+		isViable: true,
+		name: "Steam Eruption",
+		pp: 5,
+		priority: 0,
+		secondary: {
+			chance: 30,
+			status: 'brn'
+		},
+		target: "normal",
+		type: "Water"
 	},
 	"steelwing": {
 		num: 211,
@@ -13394,7 +13449,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 4,
 			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+				if (source && source.hasAbility('persistent')) {
 					return 6;
 				}
 				return 4;
@@ -13592,6 +13647,40 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Dark"
+	},
+	"thousandarrows": {
+		num: 614,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target. This move can hit a target using Bounce, Fly, or Sky Drop. If this move hits a target under the effect of Bounce, Fly, Magnet Rise, or Telekinesis, the effect ends. If the target is a Flying-type that has not used Roost this turn or a Pokemon with the Ability Levitate, it loses its immunity to Ground-type attacks and the Ability Arena Trap as long as it remains active. During the effect, Magnet Rise fails for the target and Telekinesis fails against the target.",
+		shortDesc: "Removes the target's Ground immunity.",
+		id: "thousandarrows",
+		name: "Thousand Arrows",
+		pp: 10,
+		priority: 0,
+		volatileStatus: 'smackdown',
+		secondary: false,
+		target: "normal",
+		type: "Ground"
+	},
+	"thousandwaves": {
+		num: 615,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target. Prevents the target from switching out.",
+		shortDesc: "Prevents the target from switching out.",
+		id: "thousandwaves",
+		name: "Thousand Waves",
+		pp: 10,
+		priority: 0,
+		onHit: function(target) {
+			target.addVolatile('trapped');
+		},
+		secondary: false,
+		target: "normal",
+		type: "Ground"
 	},
 	"thrash": {
 		num: 37,
@@ -14002,8 +14091,8 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 5,
-			durationCallback: function(target, source, effect) {
-				if (source && source.ability === 'persistent') {
+			durationCallback: function(source, effect) {
+				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
 				return 5;
