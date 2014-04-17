@@ -12,11 +12,6 @@
 
 require('sugar');
 
-global.fs = require('fs');
-if (!('existsSync' in fs)) {
-	// for compatibility with ancient versions of node
-	fs.existsSync = require('path').existsSync;
-}
 global.Config = require('./config/config.js');
 
 if (Config.crashguard) {

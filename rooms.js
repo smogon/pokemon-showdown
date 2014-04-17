@@ -13,6 +13,8 @@ const TIMEOUT_EMPTY_DEALLOCATE = 10*60*1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40*60*1000;
 const REPORT_USER_STATS_INTERVAL = 1000*60*10;
 
+var fs = require('fs');
+
 var GlobalRoom = (function() {
 	function GlobalRoom(roomid) {
 		this.id = roomid;

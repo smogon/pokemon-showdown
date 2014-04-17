@@ -31,6 +31,7 @@ const MESSAGE_COOLDOWN = 5*60*1000;
 const MAX_PARSE_RECURSION = 10;
 
 var crypto = require('crypto');
+var fs = require('fs');
 
 var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'}), battle: fs.createWriteStream('logs/modlog/modlog_battle.txt', {flags:'a+'})};
 

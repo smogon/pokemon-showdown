@@ -12,7 +12,7 @@ module.exports = (function() {
 	var lastCrashLog = 0;
 	return function(err, description) {
 		console.log("\nCRASH: "+err.stack+"\n");
-		fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
+		require('fs').createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
 			this.write("\n"+err.stack+"\n");
 			this.end();
 		}).on("error", function (err) {
