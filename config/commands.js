@@ -1081,6 +1081,20 @@ var commands = exports.commands = {
 		}
 	},
 
+	showimage: function(target, room, user) {
+		if (!target) return this.parse('/help showimage');
+		if (!this.can('declare', null, room)) return false;
+
+		if (!this.canTalk()) return;
+
+		targets = target.split(', ');
+		if (targets.length != 3) {
+			return this.parse('/help showimage');
+		}
+
+		this.add('|raw|'+sanitize(user.name)+' shows:<br /><img src="'+sanitize(targets[0])+'" alt="" width="'+toId(targets[1])+'" height="'+toId(targets[2])+'" />');
+	},
+
 	a: function(target, room, user) {
 		if (!this.can('battlemessage')) return false;
 		// secret sysop command
@@ -1326,6 +1340,10 @@ var commands = exports.commands = {
 		if (target === '&' || target === 'forcetie') {
 			matched = true;
 			this.sendReply('/forcetie - Forces the current match to tie. Requires: & ~');
+		}
+		if (target === '&' || target === 'showimage') {
+			matched = true;
+			this.sendReply('/showimage [url], [width], [height] - Show an image. Requires: & ~');
 		}
 		if (target === '&' || target === 'declare') {
 			matched = true;
