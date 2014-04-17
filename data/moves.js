@@ -5252,7 +5252,7 @@ exports.BattleMovedex = {
 		pseudoWeather: 'gravity',
 		effect: {
 			duration: 5,
-			durationCallback: function(target, source, effect) {
+			durationCallback: function(source, effect) {
 				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
@@ -7696,7 +7696,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 5,
-			/*durationCallback: function(target, source, effect) {
+			/*durationCallback: function(source, effect) {
 				// Persistent isn't updated for BW moves
 				if (source && source.hasAbility('Persistent')) {
 					return 7;
@@ -14091,7 +14091,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 5,
-			durationCallback: function(target, source, effect) {
+			durationCallback: function(source, effect) {
 				if (source && source.hasAbility('persistent')) {
 					return 7;
 				}
