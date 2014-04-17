@@ -487,7 +487,7 @@ var Validator = (function() {
 					}
 				}
 			}
-			if (set.level < template.evoLevel) {
+			if (banlistTable['illegal'] && set.level < template.evoLevel) {
 				// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 				problems.push(name+" must be at least level "+template.evoLevel+".");
 			}
