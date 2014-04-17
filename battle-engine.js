@@ -17,9 +17,9 @@ if (!('existsSync' in fs)) {
 	// for compatibility with ancient versions of node
 	fs.existsSync = require('path').existsSync;
 }
-global.config = require('./config/config.js');
+global.Config = require('./config/config.js');
 
-if (config.crashguard) {
+if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', function (err) {
 		require('./crashlogger.js')(err, 'A simulator process');
@@ -28,7 +28,7 @@ if (config.crashguard) {
 			Rooms.lobby.addRaw('<div><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
 			Rooms.lobby.addRaw('<div>You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		}
-		config.modchat = 'crash';
+		Config.modchat = 'crash';
 		Rooms.global.lockdown = true; */
 	});
 }

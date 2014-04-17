@@ -17,7 +17,7 @@ var gulp = require('gulp'),
 
 		"globals": {
 			"fs": false,
-			"config": false,
+			"Config": false,
 			"ResourceMonitor": false,
 			"toId": false,
 			"toUserid": false,
