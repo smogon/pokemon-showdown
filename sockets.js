@@ -193,16 +193,11 @@ if (cluster.isMaster) {
 		websocket: !config.disablewebsocket
 	});
 
-	// Make `app`, `appssl`, and `server` available to the console.
-	global.App = app;
-	global.AppSSL = appssl;
-	global.Server = server;
-
 	var sockets = {};
 	var channels = {};
 
 	// Deal with phantom connections.
-	global.sweepClosedSockets = function() {
+	var sweepClosedSockets = function() {
 		for (var s in sockets) {
 			if (sockets[s].protocol === 'xhr-streaming' &&
 				sockets[s]._session &&
@@ -223,11 +218,9 @@ if (cluster.isMaster) {
 			}
 		}
 	};
+	var interval;
 	if (!config.herokuhack) {
-		global.sweepClosedSocketsInterval = setInterval(
-			sweepClosedSockets,
-			1000 * 60 * 10
-		);
+		interval = setInterval(sweepClosedSockets, 1000*60*10);
 	}
 
 	process.on('message', function(data) {
