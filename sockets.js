@@ -352,7 +352,7 @@ if (cluster.isMaster) {
 			process.send('!'+socketid);
 
 			delete sockets[socketid];
-			for (channelid in channels) {
+			for (var channelid in channels) {
 				delete channels[channelid][socketid];
 			}
 		});
