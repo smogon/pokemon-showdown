@@ -16,7 +16,6 @@ var gulp = require('gulp'),
 		"eqeqeq": false,
 
 		"globals": {
-			"fs": false,
 			"Config": false,
 			"ResourceMonitor": false,
 			"toId": false,

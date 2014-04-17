@@ -11,6 +11,8 @@
  * @license MIT license
  */
 
+var fs = require('fs');
+
 module.exports = (function () {
 	var moddedTools = {};
 
