@@ -1,12 +1,6 @@
 /**
  * Gen 3 moves
  */
-function clampIntRange(num, min, max) {
-	num = Math.floor(num);
-	if (num < min) num = min;
-	if (typeof max !== 'undefined' && num > max) num = max;
-	return num;
-}
 exports.BattleMovedex = {
 	absorb: {
 		inherit: true,
@@ -396,7 +390,7 @@ exports.BattleMovedex = {
 		onMoveFail: function(target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				var damage = this.getDamage(source, target, move, true);
-				this.damage(clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
+				this.damage(this.clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
 			}
 		}
 	},
@@ -415,7 +409,7 @@ exports.BattleMovedex = {
 		onMoveFail: function(target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				var damage = this.getDamage(source, target, move, true);
-				this.damage(clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
+				this.damage(this.clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
 			}
 		}
 	},

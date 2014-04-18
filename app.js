@@ -335,18 +335,6 @@ global.string = function(str) {
 	return '';
 };
 
-/**
- * Converts any variable to an integer (numbers get floored, non-numbers
- * become 0). Then clamps it between min and (optionally) max.
- */
-global.clampIntRange = function(num, min, max) {
-	if (typeof num !== 'number') num = 0;
-	num = Math.floor(num);
-	if (num < min) num = min;
-	if (max !== undefined && num > max) num = max;
-	return num;
-};
-
 global.LoginServer = require('./loginserver.js');
 
 watchFile('./config/custom.css', function(curr, prev) {
