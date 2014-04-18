@@ -13623,7 +13623,38 @@ exports.BattleMovedex = {
 		name: "Thousand Arrows",
 		pp: 10,
 		priority: 0,
-		volatileStatus: 'smackdown',
+		affectedByImmunities: false,
+		volatileStatus: 'thousandarrows',
+		effect: {
+			onStart: function(pokemon) {
+				var applies = false;
+				if ((pokemon.hasType('Flying') && !pokemon.volatiles['roost']) || pokemon.hasAbility('levitate')) applies = true;
+				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
+					applies = true;
+					this.cancelMove(pokemon);
+				}
+				if (pokemon.volatiles['magnetrise']) {
+					applies = true;
+					delete pokemon.volatiles['magnetrise'];
+				}
+				if (pokemon.volatiles['telekinesis']) {
+					applies = true;
+					delete pokemon.volatiles['telekinesis'];
+				}
+				if (!applies) return false;
+				this.add('-start', pokemon, 'Thousand Arrows');
+			},
+			onRestart: function(pokemon) {
+				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
+					this.cancelMove(pokemon);
+					this.add('-start', pokemon, 'Thousand Arrows');
+				}
+			},
+			onModifyPokemonPriority: 100,
+			onModifyPokemon: function(pokemon) {
+				pokemon.negateImmunity['Ground'] = true;
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Ground"
