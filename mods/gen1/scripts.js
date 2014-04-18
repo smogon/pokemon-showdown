@@ -605,11 +605,11 @@ exports.BattleScripts = {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
 			return basePower;
 		}
-		basePower = clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit ratio
 		// First, we check if it's a 100% crit move
-		move.critRatio = clampIntRange(move.critRatio, 0, 5);
+		move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
 		move.crit = move.willCrit || false;
 		var critRatio = 0;
 		// Otherwise, we calculate the critical hit chance
@@ -662,7 +662,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (!basePower) return 0;
-		basePower = clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// We now check for attacker and defender
 		var level = pokemon.level;
@@ -791,7 +791,7 @@ exports.BattleScripts = {
 		if (!target || !target.hp) return 0;
 		effect = this.getEffect(effect);
 		if (!(damage || damage === 0)) return damage;
-		if (damage !== 0) damage = clampIntRange(damage, 1);
+		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 
 		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
 			damage = this.runEvent('Damage', target, source, effect, damage);
@@ -800,7 +800,7 @@ exports.BattleScripts = {
 				return damage;
 			}
 		}
-		if (damage !== 0) damage = clampIntRange(damage, 1);
+		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;
 		var name = effect.fullname;

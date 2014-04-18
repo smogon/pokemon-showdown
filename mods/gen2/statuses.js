@@ -74,7 +74,7 @@ exports.BattleStatuses = {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
-			this.damage(clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+			this.damage(this.clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
 		},
 		onSwitchIn: function (pokemon) {
 			this.effectData.stage = 0;

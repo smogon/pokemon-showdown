@@ -83,10 +83,10 @@ exports.BattleScripts = {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
 			return basePower;
 		}
-		basePower = clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit ratio
-		move.critRatio = clampIntRange(move.critRatio, 0, 5);
+		move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
 		var critMult = [0, 16, 8, 4, 3, 2];
 		move.crit = move.willCrit || false;
 		if (typeof move.willCrit === 'undefined') {
@@ -106,7 +106,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (!basePower) return 0;
-		basePower = clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// We now check for attacker and defender
 		var level = pokemon.level;

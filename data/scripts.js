@@ -2730,7 +2730,7 @@ exports.BattleScripts = {
 		} else {
 			var bst = template.baseStats.hp + template.baseStats.atk + template.baseStats.def + template.baseStats.spa + template.baseStats.spd + template.baseStats.spe;
 		}
-		var level = 70 + Math.floor(((600 - clampIntRange(bst, 300, 600)) / 10.35));
+		var level = 70 + Math.floor(((600 - this.clampIntRange(bst, 300, 600)) / 10.35));
 
 		return {
 			name: name,
