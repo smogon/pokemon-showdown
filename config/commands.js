@@ -1087,12 +1087,16 @@ var commands = exports.commands = {
 
 		if (!this.canTalk()) return;
 
-		targets = target.split(', ');
-		if (targets.length != 3) {
+		var targets = target.split(', ');
+		if (targets.length != 1 && targets.length != 3) {
 			return this.parse('/help showimage');
 		}
-
-		this.add('|raw|'+sanitize(user.name)+' shows:<br /><img src="'+sanitize(targets[0])+'" alt="" width="'+toId(targets[1])+'" height="'+toId(targets[2])+'" />');
+		
+		if (typeof targets[1] === "undefined") targets[1] = '';
+		if (typeof targets[2] === "undefined") targets[2] = '';
+		
+		var image = '<img src="'+sanitize(targets[0])+'" alt="" width="'+toId(targets[1])+'" height="'+toId(targets[2])+'" max-width="400px" />'
+		this.add('|raw|'+sanitize(user.name)+' shows:<br />' + image);
 	},
 
 	a: function(target, room, user) {
