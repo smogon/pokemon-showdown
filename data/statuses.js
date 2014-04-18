@@ -231,10 +231,10 @@ exports.BattleStatuses = {
 			// source and target are reversed since the event target is the
 			// pokemon using the two-turn move
 			this.effectData.targetLoc = this.getTargetLoc(source, target);
-			this.addVolatile(effect.id);
+			target.addVolatile(effect.id, source);
 		},
-		onEnd: function() {
-			this.removeVolatile(this.effectData.move);
+		onEnd: function(target) {
+			target.removeVolatile(this.effectData.move);
 		},
 		onLockMove: function() {
 			return this.effectData.move
