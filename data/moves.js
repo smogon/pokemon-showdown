@@ -13623,6 +13623,7 @@ exports.BattleMovedex = {
 		name: "Thousand Arrows",
 		pp: 10,
 		priority: 0,
+		affectedByImmunities: false,
 		volatileStatus: 'smackdown',
 		secondary: false,
 		target: "normal",
