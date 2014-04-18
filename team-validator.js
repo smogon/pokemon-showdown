@@ -120,7 +120,6 @@ if (!process.send) {
 
 		return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	};
-	global.toUserid = toId;
 
 	/**
 	 * Validates a username or Pokemon nickname

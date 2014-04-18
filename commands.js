@@ -305,7 +305,7 @@ var commands = exports.commands = {
 
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
-		var userid = toUserid(this.targetUsername);
+		var userid = toId(this.targetUsername);
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) {
@@ -762,7 +762,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help promote');
 		var target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
-		var userid = toUserid(this.targetUsername);
+		var userid = toId(this.targetUsername);
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) {
@@ -939,7 +939,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 
-		if (targetUser.userid === toUserid(this.targetUser)) {
+		if (targetUser.userid === toId(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forced to choose a new name by '+user.name+'' + (target ? ": " + target + "" : "");
 			this.privateModCommand('(' + entry + ')');
 			Rooms.global.cancelSearch(targetUser);
@@ -1685,7 +1685,7 @@ var commands = exports.commands = {
 	},
 
 	accept: function(target, room, user, connection) {
-		var userid = toUserid(target);
+		var userid = toId(target);
 		var format = '';
 		if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
 		if (!format) {
@@ -1698,7 +1698,7 @@ var commands = exports.commands = {
 	},
 
 	reject: function(target, room, user) {
-		user.rejectChallengeFrom(toUserid(target));
+		user.rejectChallengeFrom(toId(target));
 	},
 
 	saveteam: 'useteam',

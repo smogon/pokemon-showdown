@@ -217,13 +217,13 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 		for (var g in Config.groups) {
 			var groupid = Config.groups[g].id;
 			if (cmd === groupid) {
-				return parse('/promote ' + toUserid(target) + ',' + g, room, user, connection);
+				return parse('/promote ' + toId(target) + ',' + g, room, user, connection);
 			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid) {
-				return parse('/demote ' + toUserid(target), room, user, connection);
+				return parse('/demote ' + toId(target), room, user, connection);
 			} else if (cmd === 'room' + groupid) {
-				return parse('/roompromote ' + toUserid(target) + ',' + g, room, user, connection);
+				return parse('/roompromote ' + toId(target) + ',' + g, room, user, connection);
 			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
-				return parse('/roomdemote ' + toUserid(target), room, user, connection);
+				return parse('/roomdemote ' + toId(target), room, user, connection);
 			}
 		}
 
