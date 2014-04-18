@@ -4061,6 +4061,9 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		ohko: true,
+		onTryHit: function(target, source, move) {
+			if (source.level<target.level) return false;
+		},
 		secondary: false,
 		target: "normal",
 		type: "Ground"
@@ -5438,6 +5441,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		ohko: true,
+		onTryHit: function(target, source, move) {
+			if (source.level<target.level) return false;
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -6333,6 +6339,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		ohko: true,
+		onTryHit: function(target, source, move) {
+			if (source.level<target.level) return false;
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -11501,8 +11510,11 @@ exports.BattleMovedex = {
 		name: "Sheer Cold",
 		pp: 5,
 		priority: 0,
-		secondary: false,
 		ohko: true,
+		onTryHit: function(target, source, move) {
+			if (source.level<target.level) return false;
+		},
+		secondary: false,
 		target: "normal",
 		type: "Ice"
 	},
