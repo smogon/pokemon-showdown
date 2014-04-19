@@ -231,10 +231,10 @@ exports.BattleStatuses = {
 			target.removeVolatile(this.effectData.move);
 		},
 		onLockMove: function() {
-			return this.effectData.move
+			return this.effectData.move;
 		},
 		onLockMoveTarget: function() {
-			return this.effectData.targetLoc
+			return this.effectData.targetLoc;
 		}
 	},
 	choicelock: {
@@ -434,7 +434,7 @@ exports.BattleStatuses = {
 		},
 		// This should be applied directly to the stat before any of the other modifiers are chained
 		// So we give it increased priority.
-		onModifySpDPriority: 10, 
+		onModifySpDPriority: 10,
 		onModifySpD: function(spd, pokemon) {
 			if (pokemon.hasType('Rock') && this.isWeather('sandstorm')) {
 				return this.modify(spd, 1.5);

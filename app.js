@@ -235,7 +235,7 @@ global.ResourceMonitor = {
 	 * Controls the amount of times a cmd command is used
 	 */
 	countCmd: function(ip, name) {
-	 	var now = Date.now();
+		var now = Date.now();
 		var duration = now - this.cmdsTimes[ip];
 		name = (name ? ': '+name : '');
 		if (!this.cmdsTotal) this.cmdsTotal = {lastCleanup: 0, count: 0};
