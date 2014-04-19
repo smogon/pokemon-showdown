@@ -729,6 +729,15 @@ exports.Formats = [
 		banlist: ['Uber', 'OU', 'BL']
 	},
 	{
+		name: "[Gen 4] LC (beta)",
+		section: "Past Generations",
+
+		mod: 'gen4',
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Little Cup'],
+		banlist: ['Sonic Boom', 'Dragon Rage', 'DeepSeaTooth', 'Berry Juice', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Misdreavus', 'Meditite', 'Murkrow']
+	},
+	{
 		name: "[Gen 4] Hackmons",
 		section: "Past Generations",
 
