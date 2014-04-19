@@ -11749,7 +11749,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
-			this.boost({def:1}, pokemon, pokemon, this.getMove('skullbash'));
+			this.boost({def:1}, attacker, attacker, this.getMove('skullbash'));
 			return null;
 		},
 		secondary: false,
