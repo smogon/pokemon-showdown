@@ -1173,7 +1173,7 @@ var User = (function () {
 			challengeTo = {
 				to: challengeTo.to,
 				format: challengeTo.format
-			}
+			};
 		}
 		this.send('|updatechallenges|'+JSON.stringify({
 			challengesFrom: Object.map(this.challengesFrom, 'format'),

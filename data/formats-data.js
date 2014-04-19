@@ -1497,7 +1497,7 @@ exports.BattleFormatsData = {
 	},
 	ampharosmega: {
 		requiredItem: "Ampharosite"
-	},	
+	},
 	azurill: {
 		viableMoves: {"scald":1,"return":1,"bodyslam":1,"encore":1,"toxic":1,"protect":1,"knockoff":1},
 		tier: "LC"

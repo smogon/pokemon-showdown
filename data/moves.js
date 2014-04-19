@@ -7096,7 +7096,7 @@ exports.BattleMovedex = {
 		onBasePowerPriority: 4,
 		onBasePower: function(basePower, pokemon, target) {
 			var item = target.getItem();
-			var noKnockOff = ((item.onPlate && target.baseTemplate.baseSpecies === 'Arceus') || 
+			var noKnockOff = ((item.onPlate && target.baseTemplate.baseSpecies === 'Arceus') ||
 				(item.onDrive && target.baseTemplate.baseSpecies === 'Genesect') || (item.onTakeItem && item.onTakeItem(item, target) === false));
 			if (item.id && !noKnockOff) {
 				return this.chainModify(1.5);
@@ -10024,7 +10024,7 @@ exports.BattleMovedex = {
 					for (var j=0; j<this.queue.length; j++) {
 						if (this.queue[j].pokemon === sources[i] && this.queue[j].choice === 'megaEvo') willMegaEvo = true;
 					}
-					if (willMegaEvo) this.runMegaEvo(sources[i])
+					if (willMegaEvo) this.runMegaEvo(sources[i]);
 					this.runMove('pursuit', sources[i], pokemon);
 				}
 			}
