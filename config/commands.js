@@ -1088,11 +1088,11 @@ var commands = exports.commands = {
 		if (!this.canTalk()) return;
 
 		targets = target.split(', ');
-		if (targets.length != 3) {
+		if (targets.length != 2) {
 			return this.parse('/help showimage');
 		}
 
-		this.add('|raw|'+sanitize(user.name)+' shows:<br /><img src="'+sanitize(targets[0])+'" alt="" width="'+toId(targets[1])+'" height="'+toId(targets[2])+'" />');
+		this.add('|raw|'+sanitize(user.name)+' shows:<br /><img src="'+sanitize(targets[0])+'" alt="" height="'+toId(targets[1])+'" />');
 	},
 
 	a: function(target, room, user) {
@@ -1343,7 +1343,7 @@ var commands = exports.commands = {
 		}
 		if (target === '&' || target === 'showimage') {
 			matched = true;
-			this.sendReply('/showimage [url], [width], [height] - Show an image. Requires: & ~');
+			this.sendReply('/showimage [url], [height] - Show an image. Requires: & ~');
 		}
 		if (target === '&' || target === 'declare') {
 			matched = true;
