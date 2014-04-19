@@ -7124,7 +7124,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "Deals damage to one adjacent target.",
+		desc: "Deals damage to all adjacent foes.",
 		shortDesc: "No additional effect.",
 		id: "landswrath",
 		isViable: true,
