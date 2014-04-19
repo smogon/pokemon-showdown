@@ -6476,7 +6476,7 @@ exports.BattleMovedex = {
 		basePower: 80,
 		category: "Special",
 		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. Makes contact.",
-		shortDesc: "Deals damage to one adjacent target. Breaks protection.",
+		shortDesc: "Breaks protection for this turn.",
 		id: "hyperspacehole",
 		name: "Hyperspace Hole",
 		pp: 5,
