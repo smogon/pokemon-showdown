@@ -485,8 +485,29 @@ var commands = exports.commands = {
 	 * Moderating: Punishments
 	 *********************************************************/
 
-	kick: 'warn',
-	k: 'warn',
+	kick: 'k',
+	k: function(target,room,user) {
+		if (!target) return this.parse('/help kick');
+		
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser || !targetUser.connected) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (room.isPrivate && room.auth) {
+			return this.sendReply('You can\'t warn here: This is a privately-owned room not subject to global rules.');
+		}
+		if (target.length > MAX_REASON_LENGTH) {
+			return this.sendReply('The reason is too long. It cannot exceed ' + MAX_REASON_LENGTH + ' characters.');
+		}
+		if (!this.can('warn', targetUser, room)) return false;
+		
+		targetUser.send('|noinit|');
+		targetUser.popup('You were kicked from the room '+ room.id +' by '+ user.name +'.' + (target ? " (" + target + ")" : ""));
+		this.add('|unlink|' + targetUser.userid);
+		
+	},
+	
 	warn: function(target, room, user) {
 		if (!target) return this.parse('/help warn');
 
