@@ -76,10 +76,7 @@ if (!Object.select) {
 // Make sure config.js exists, and copy it over from config-example.js
 // if it doesn't
 
-global.fs = require('fs');
-if (!('existsSync' in fs)) {
-	fs.existsSync = require('path').existsSync;
-}
+var fs = require('fs');
 
 // Synchronously, since it's needed before we can start the server
 if (!fs.existsSync('./config/config.js')) {
@@ -288,7 +285,6 @@ global.toId = function(text) {
 
 	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
-global.toUserid = toId;
 
 /**
  * Sanitizes a username or Pokemon nickname
@@ -336,18 +332,6 @@ global.sanitize = function(str, strEscape) {
 global.string = function(str) {
 	if (typeof str === 'string' || typeof str === 'number') return ''+str;
 	return '';
-};
-
-/**
- * Converts any variable to an integer (numbers get floored, non-numbers
- * become 0). Then clamps it between min and (optionally) max.
- */
-global.clampIntRange = function(num, min, max) {
-	if (typeof num !== 'number') num = 0;
-	num = Math.floor(num);
-	if (num < min) num = min;
-	if (max !== undefined && num > max) num = max;
-	return num;
 };
 
 global.LoginServer = require('./loginserver.js');

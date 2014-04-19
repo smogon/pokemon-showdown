@@ -1,12 +1,6 @@
 /**
  * Gen 2 moves
  */
-function clampIntRange(num, min, max) {
-	num = Math.floor(num);
-	if (num < min) num = min;
-	if (typeof max !== 'undefined' && num > max) num = max;
-	return num;
-}
 exports.BattleMovedex = {
 	bellydrum: {
 		inherit: true,
@@ -32,7 +26,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			if (target.newlySwitched && target.speed <= source.speed) {
-				var toLeech = clampIntRange(target.maxhp/8, 1);
+				var toLeech = this.clampIntRange(target.maxhp/8, 1);
 				var damage = this.damage(toLeech, target, source, 'move: Leech Seed');
 				if (damage) {
 					this.heal(damage, source, target);
@@ -49,7 +43,7 @@ exports.BattleMovedex = {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				var toLeech = clampIntRange(pokemon.maxhp/8, 1);
+				var toLeech = this.clampIntRange(pokemon.maxhp/8, 1);
 				var damage = this.damage(toLeech, pokemon, target);
 				if (damage) {
 					this.heal(damage, target, pokemon);
