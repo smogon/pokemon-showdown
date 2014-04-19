@@ -121,8 +121,16 @@ function can(group, permission, targetGroup, room, isSelf) {
 			if (jurisdiction.indexOf('s') >= 0 && isSelf) {
 				return true;
 			}
-			if (jurisdiction.indexOf('u') >= 0 && groupData[roomType + 'Rank'] > Config.groups.bySymbol[targetGroup][roomType + 'Rank']) {
-				return true;
+			if (jurisdiction.indexOf('u') >= 0) {
+				var rankType = 'rank';
+				if (Config.groups[roomType][group] && Config.groups[roomType][targetGroup]) {
+					rankType = roomType + 'Rank';
+				} else if (Config.groups.global[group] && Config.groups.global[targetGroup]) {
+					rankType = 'globalRank';
+				}
+				if (groupData[rankType] > Config.groups.bySymbol[targetGroup][rankType]) {
+					return true;
+				}
 			}
 			return false;
 		}
