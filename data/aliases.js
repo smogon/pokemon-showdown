@@ -122,6 +122,7 @@ exports.BattleAliases = {
 	"gastrodonwest": "Gastrodon",
 
 	// items
+	"av": "Assault Vest"
 	"band": "Choice Band",
 	"cb": "Choice Band",
 	"chesto": "Chesto Berry",
