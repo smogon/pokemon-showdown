@@ -2,12 +2,6 @@
  * A lot of Gen 1 moves have to be updated due to different mechanics.
  * Some moves have had major changes, such as Bite's typing.
  */
-function clampIntRange(num, min, max) {
-	num = Math.floor(num);
-	if (num < min) num = min;
-	if (typeof max !== 'undefined' && num > max) num = max;
-	return num;
-}
 exports.BattleMovedex = {
 	acid: {
 		inherit: true,
@@ -470,9 +464,9 @@ exports.BattleMovedex = {
 			if (target.newlySwitched && target.speed <= source.speed) {
 				if (target.status === 'tox') {
 					// Stage plus one since leech seed runs before Toxic
-					var toLeech = clampIntRange(target.maxhp/16, 1) * (target.statusData.stage + 1);
+					var toLeech = this.clampIntRange(target.maxhp/16, 1) * (target.statusData.stage + 1);
 				} else {
-					var toLeech = clampIntRange(target.maxhp/16, 1);
+					var toLeech = this.clampIntRange(target.maxhp/16, 1);
 				}
 				var damage = this.damage(toLeech, target, source, 'move: Leech Seed');
 				if (damage) {
@@ -493,9 +487,9 @@ exports.BattleMovedex = {
 				// We check if target has Toxic to increase leeched damage
 				if (pokemon.status === 'tox') {
 					// Stage plus one since leech seed runs before Toxic
-					var toLeech = clampIntRange(pokemon.maxhp/16, 1) * (pokemon.statusData.stage + 1);
+					var toLeech = this.clampIntRange(pokemon.maxhp/16, 1) * (pokemon.statusData.stage + 1);
 				} else {
-					var toLeech = clampIntRange(pokemon.maxhp/16, 1);
+					var toLeech = this.clampIntRange(pokemon.maxhp/16, 1);
 				}
 				var damage = this.damage(toLeech, pokemon, target);
 				if (damage) {

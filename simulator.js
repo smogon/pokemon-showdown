@@ -118,7 +118,7 @@ var Simulator = (function(){
 		this.process.send(''+this.id+'|'+slice.call(arguments).join('|'));
 	};
 	Simulator.prototype.sendFor = function(user, action) {
-		var player = this.playerTable[toUserid(user)];
+		var player = this.playerTable[toId(user)];
 		if (!player) {
 			console.log('SENDFOR FAILED: Player doesn\'t exist: '+user.name);
 			return;
@@ -128,7 +128,7 @@ var Simulator = (function(){
 	};
 	Simulator.prototype.sendForOther = function(user, action) {
 		var opposite = {'p1':'p2', 'p2':'p1'};
-		var player = this.playerTable[toUserid(user)];
+		var player = this.playerTable[toId(user)];
 		if (!player) return;
 
 		this.send.apply(this, [action, opposite[player]].concat(slice.call(arguments, 2)));

@@ -98,7 +98,6 @@ if (!process.send) {
 	};
 } else {
 	require('sugar');
-	global.fs = require('fs');
 	global.Config = require('./config/config.js');
 
 	if (Config.crashguard) {
@@ -121,7 +120,6 @@ if (!process.send) {
 
 		return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	};
-	global.toUserid = toId;
 
 	/**
 	 * Validates a username or Pokemon nickname
