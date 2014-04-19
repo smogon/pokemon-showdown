@@ -1313,7 +1313,11 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply('/kickbattle [username], [reason] - Kicks an user from a battle with reason. Requires: % @ & ~');
 		}
-		if (target === "%" || target === 'warn' || target === 'k') {
+		if (target === "%" || target === 'kick' || 'k') {
+			matched = true;
+			this.sendReply('/kick or /k [username], [reason] - Kicks a user from a room showing them [reason] in an overlay. Requires: % @ & ~');
+		}1
+		if (target === "%" || target === 'warn') {
 			matched = true;
 			this.sendReply('/warn OR /k [username], [reason] - Warns a user showing them the Pokemon Showdown Rules and [reason] in an overlay. Requires: % @ & ~');
 		}
