@@ -1014,10 +1014,6 @@ var commands = exports.commands = {
 	 * Miscellaneous commands
 	 *********************************************************/
 
-	birkal: function(target, room, user) {
-		this.sendReply("It's not funny anymore.");
-	},
-
 	potd: function(target, room, user) {
 		if (!this.can('potd')) return false;
 
