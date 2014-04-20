@@ -48,7 +48,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['UU'],
-		banlist: ['UU', 'BL2']
+		banlist: ['UU', 'BL2', 'Azelf', 'Kyurem', 'Sableye']
 	},
 	{
 		name: "LC",
