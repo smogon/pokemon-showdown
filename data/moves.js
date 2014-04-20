@@ -9388,7 +9388,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		isBiteAttack: true,
 		secondary: {
-			chance: 30,
+			chance: 50,
 			status: 'tox'
 		},
 		target: "normal",
