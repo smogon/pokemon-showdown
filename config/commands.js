@@ -1080,15 +1080,14 @@ var commands = exports.commands = {
 	showimage: function(target, room, user) {
 		if (!target) return this.parse('/help showimage');
 		if (!this.can('declare', null, room)) return false;
-
-		if (!this.canTalk()) return;
+		if (!this.canBroadcast()) return;
 
 		targets = target.split(', ');
 		if (targets.length != 3) {
 			return this.parse('/help showimage');
 		}
 
-		this.add('|raw|'+sanitize(user.name)+' shows:<br /><img src="'+sanitize(targets[0])+'" alt="" width="'+toId(targets[1])+'" height="'+toId(targets[2])+'" />');
+		this.sendReply('|raw|<img src="'+sanitize(targets[0])+'" alt="" width="'+toId(targets[1])+'" height="'+toId(targets[2])+'" />');
 	},
 
 	a: function(target, room, user) {
