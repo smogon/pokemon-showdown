@@ -162,7 +162,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				}
 				return true;
 			},
-			canBroadcast: function() {
+			canBroadcast: function(suppressMessage) {
 				if (broadcast) {
 					message = this.canTalk(message);
 					if (!message) return false;
@@ -179,7 +179,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 						connection.sendTo(room, "You can't broadcast this because it was just broadcast.");
 						return false;
 					}
-					this.add('|c|'+user.getIdentity(room.id)+'|'+message);
+					this.add('|c|'+user.getIdentity(room.id)+'|'+(suppressMessage||message));
 					room.lastBroadcast = normalized;
 					room.lastBroadcastTime = Date.now();
 

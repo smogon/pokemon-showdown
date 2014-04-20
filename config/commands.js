@@ -1090,6 +1090,16 @@ var commands = exports.commands = {
 		this.sendReply('|raw|<img src="'+sanitize(targets[0])+'" alt="" width="'+toId(targets[1])+'" height="'+toId(targets[2])+'" />');
 	},
 
+	htmlbox: function(target, room, user) {
+		if (!target) return this.parse('/help htmlbox');
+		if (!user.can('gdeclare', null, room) && (!user.can('declare', null, room) || !user.can('announce'))) {
+			return this.sendReply('/htmlbox - Access denied.');
+		}
+		if (!this.canBroadcast('!htmlbox')) return;
+
+		this.sendReplyBox(target);
+	},
+
 	a: function(target, room, user) {
 		if (!this.can('battlemessage')) return false;
 		// secret sysop command
