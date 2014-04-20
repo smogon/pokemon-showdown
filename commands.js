@@ -838,6 +838,7 @@ var commands = exports.commands = {
 		}
 
 		target = target.toLowerCase();
+		var currentModchat = room.modchat;
 		switch (target) {
 		case 'on':
 		case 'true':
@@ -869,8 +870,8 @@ var commands = exports.commands = {
 			room.modchat = target;
 			break;
 		}
-		if (room.modchat === true) {
-			this.add('|raw|<div class="broadcast-red"><b>Moderated chat was enabled!</b><br />Only registered users can talk.</div>');
+		if (currentModchat == room.modchat) {
+			return this.sendReply('Modchat is already set to ' + currentModchat + '.');
 		} else if (!room.modchat) {
 			this.add('|raw|<div class="broadcast-blue"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>');
 		} else {
