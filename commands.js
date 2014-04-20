@@ -838,6 +838,7 @@ var commands = exports.commands = {
 		}
 
 		target = target.toLowerCase();
+		var currentModchat = room.modchat;
 		switch (target) {
 		case 'on':
 		case 'true':
@@ -849,19 +850,11 @@ var commands = exports.commands = {
 		case 'off':
 		case 'false':
 		case 'no':
-			if (!room.modchat) {
-				return this.sendReply('Modchat is already set to false.');
-			} else {
-				room.modchat = false;
-			}
+			room.modchat = false;
 			break;
 		case 'ac':
 		case 'autoconfirmed':
-			if (room.modchat != 'autoconfirmed') {
-				room.modchat = 'autoconfirmed';
-			} else {
-				return this.sendReply('Modchat is already set to autoconfirmed.');
-			}
+			room.modchat = 'autoconfirmed';
 			break;
 		case '*':
 		case 'player':
@@ -874,14 +867,12 @@ var commands = exports.commands = {
 			if (Config.groupsranking.indexOf(target) > 1 && !user.can('modchatall', null, room)) {
 				return this.sendReply('/modchat - Access denied for setting higher than ' + Config.groupsranking[1] + '.');
 			}
-			if (room.modchat != target) {
-				room.modchat = target;
-			} else {
-				return this.sendReply('Modchat is already set to ' + room.modchat + '.');
-			}
+			room.modchat = target;
 			break;
 		}
-		if (!room.modchat) {
+		if (currentModchat == room.modchat) {
+			return this.sendReply('Modchat is already set to ' + currentModchat + '.');
+		} else if (!room.modchat) {
 			this.add('|raw|<div class="broadcast-blue"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>');
 		} else {
 			var modchat = sanitize(room.modchat);
