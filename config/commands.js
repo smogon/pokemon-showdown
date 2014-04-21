@@ -530,7 +530,7 @@ var commands = exports.commands = {
 			pokemon = {types: [type1.id]};
 			target = type1.id;
 		} else {
-			return this.sendReplyBox(sanitize(target) + " isn't a recognized type or pokemon.");
+			return this.sendReplyBox("" + sanitize(target) + " isn't a recognized type or pokemon.");
 		}
 
 		var weaknesses = [];
@@ -544,9 +544,9 @@ var commands = exports.commands = {
 		});
 
 		if (!weaknesses.length) {
-			this.sendReplyBox(target + " has no weaknesses.");
+			this.sendReplyBox("" + target + " has no weaknesses.");
 		} else {
-			this.sendReplyBox(target + " is weak to: " + weaknesses.join(", ") + " (not counting abilities).");
+			this.sendReplyBox("" + target + " is weak to: " + weaknesses.join(", ") + " (not counting abilities).");
 		}
 	},
 
@@ -603,7 +603,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		this.sendReplyBox(atkName + " is " + factor + "x effective against " + defName + ".");
+		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
 	},
 
 	uptime: function(target, room, user) {
@@ -969,7 +969,7 @@ var commands = exports.commands = {
 		if (pokemon.exists) {
 			atLeastOne = true;
 			if (genNumber < pokemon.gen) {
-				return this.sendReplyBox(pokemon.name + " did not exist in " + generation.toUpperCase() + "!");
+				return this.sendReplyBox("" + pokemon.name + " did not exist in " + generation.toUpperCase() + "!");
 			}
 			if (pokemon.tier === 'G4CAP' || pokemon.tier === 'G5CAP') {
 				generation = 'cap';

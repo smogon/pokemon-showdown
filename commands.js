@@ -174,14 +174,14 @@ var commands = exports.commands = {
 		if (!this.can('privateroom', null, room)) return;
 		if (target === 'off') {
 			delete room.isPrivate;
-			this.addModCommand(user.name + " made this room public.");
+			this.addModCommand("" + user.name + " made this room public.");
 			if (room.chatRoomData) {
 				delete room.chatRoomData.isPrivate;
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
 			room.isPrivate = true;
-			this.addModCommand(user.name + " made this room private.");
+			this.addModCommand("" + user.name + " made this room private.");
 			if (room.chatRoomData) {
 				room.chatRoomData.isPrivate = true;
 				Rooms.global.writeChatRoomData();
@@ -193,14 +193,14 @@ var commands = exports.commands = {
 		if (!this.can('privateroom', null, room)) return;
 		if (target === 'off') {
 			delete room.modjoin;
-			this.addModCommand(user.name + " turned off modjoin.");
+			this.addModCommand("" + user.name + " turned off modjoin.");
 			if (room.chatRoomData) {
 				delete room.chatRoomData.modjoin;
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
 			room.modjoin = true;
-			this.addModCommand(user.name + " turned on modjoin.");
+			this.addModCommand("" + user.name + " turned on modjoin.");
 			if (room.chatRoomData) {
 				room.chatRoomData.modjoin = true;
 				Rooms.global.writeChatRoomData();
@@ -216,12 +216,12 @@ var commands = exports.commands = {
 		}
 		if (target === 'off') {
 			delete room.isOfficial;
-			this.addModCommand(user.name + " made this chat room unofficial.");
+			this.addModCommand("" + user.name + " made this chat room unofficial.");
 			delete room.chatRoomData.isOfficial;
 			Rooms.global.writeChatRoomData();
 		} else {
 			room.isOfficial = true;
-			this.addModCommand(user.name + " made this chat room official.");
+			this.addModCommand("" + user.name + " made this chat room official.");
 			room.chatRoomData.isOfficial = true;
 			Rooms.global.writeChatRoomData();
 		}
@@ -243,7 +243,7 @@ var commands = exports.commands = {
 		var name = targetUser.name;
 
 		room.auth[targetUser.userid] = '#';
-		this.addModCommand(name + " was appointed Room Owner by " + user.name + ".");
+		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
@@ -343,7 +343,7 @@ var commands = exports.commands = {
 			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
 			if (targetUser) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
 		} else {
-			this.addModCommand(name + " was promoted to Room " + groupName + " by " + user.name + ".");
+			this.addModCommand("" + name + " was promoted to Room " + groupName + " by " + user.name + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity();
@@ -397,11 +397,11 @@ var commands = exports.commands = {
 		for (var ip in targetUser.ips) {
 			room.bannedIps[ip] = true;
 		}
-		targetUser.popup(user.name + " has banned you from the room " + room.id + ". To appeal the ban, PM the moderator that banned you or a room owner." + (target ? " (" + target + ")" : ""));
-		this.addModCommand(targetUser.name + " was banned from room " + room.id + " by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		targetUser.popup("" + user.name + " has banned you from the room " + room.id + ". To appeal the ban, PM the moderator that banned you or a room owner." + (target ? " (" + target + ")" : ""));
+		this.addModCommand("" + targetUser.name + " was banned from room " + room.id + " by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) {
-			this.addModCommand(targetUser.name + "'s alts were also banned from room " + room.id + ": " + alts.join(", "));
+			this.addModCommand("" + targetUser.name + "'s alts were also banned from room " + room.id + ": " + alts.join(", "));
 			for (var i = 0; i < alts.length; ++i) {
 				var altId = toId(alts[i]);
 				this.add('|unlink|' + altId);
@@ -429,11 +429,11 @@ var commands = exports.commands = {
 		for (var ip in targetUser.ips) {
 			if (room.bannedIps[ip]) delete room.bannedIps[ip];
 		}
-		targetUser.popup(user.name + " has unbanned you from the room " + room.id + ".");
-		this.addModCommand(targetUser.name + " was unbanned from room " + room.id + " by " + user.name + ".");
+		targetUser.popup("" + user.name + " has unbanned you from the room " + room.id + ".");
+		this.addModCommand("" + targetUser.name + " was unbanned from room " + room.id + " by " + user.name + ".");
 		var alts = targetUser.getAlts();
 		if (alts.length) {
-			this.addModCommand(targetUser.name + "'s alts were also unbanned from room " + room.id + ": " + alts.join(", "));
+			this.addModCommand("" + targetUser.name + "'s alts were also unbanned from room " + room.id + ": " + alts.join(", "));
 			for (var i = 0; i < alts.length; ++i) {
 				var altId = toId(alts[i]);
 				if (room.bannedUsers[altId]) delete room.bannedUsers[altId];
@@ -487,7 +487,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('warn', targetUser, room)) return false;
 
-		this.addModCommand(targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		this.addModCommand("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn ' + target);
 		this.add('|unlink|' + targetUser.userid);
 	},
@@ -513,7 +513,7 @@ var commands = exports.commands = {
 		}
 		if (targetUser.joinRoom(target) === false) return this.sendReply("User " + targetUser.name + " could not be joined to room " + target + ". They could be banned from the room.");
 		var roomName = (targetRoom.isPrivate)? "a private room" : "room " + targetRoom.title;
-		this.addModCommand(targetUser.name + " was redirected to " + roomName + " by " + user.name + ".");
+		this.addModCommand("" + targetUser.name + " was redirected to " + roomName + " by " + user.name + ".");
 		targetUser.leaveRoom(room);
 	},
 
@@ -535,13 +535,13 @@ var commands = exports.commands = {
 			if (!target) {
 				return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
 			}
-			return this.addModCommand(targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
+			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		targetUser.popup(user.name + " has muted you for 7 minutes. " + target);
-		this.addModCommand(targetUser.name + " was muted by " + user.name + " for 7 minutes." + (target ? " (" + target + ")" : ""));
+		targetUser.popup("" + user.name + " has muted you for 7 minutes. " + target);
+		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 7 minutes." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
-		if (alts.length) this.addModCommand(targetUser.name + "'s alts were also muted: " + alts.join(", "));
+		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also muted: " + alts.join(", "));
 		this.add('|unlink|' + targetUser.userid);
 
 		targetUser.mute(room.id, 7 * 60 * 1000);
@@ -566,10 +566,10 @@ var commands = exports.commands = {
 			return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
 		}
 
-		targetUser.popup(user.name + " has muted you for 60 minutes. " + target);
-		this.addModCommand(targetUser.name + " was muted by " + user.name + " for 60 minutes." + (target ? " (" + target + ")" : ""));
+		targetUser.popup("" + user.name + " has muted you for 60 minutes. " + target);
+		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 60 minutes." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
-		if (alts.length) this.addModCommand(targetUser.name + "'s alts were also muted: " + alts.join(", "));
+		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also muted: " + alts.join(", "));
 		this.add('|unlink|' + targetUser.userid);
 
 		targetUser.mute(room.id, 60 * 60 * 1000, true);
@@ -585,10 +585,10 @@ var commands = exports.commands = {
 		if (!this.can('mute', targetUser, room)) return false;
 
 		if (!targetUser.mutedRooms[room.id]) {
-			return this.sendReply(targetUser.name + " isn't muted.");
+			return this.sendReply("" + targetUser.name + " isn't muted.");
 		}
 
-		this.addModCommand(targetUser.name + " was unmuted by " + user.name + ".");
+		this.addModCommand("" + targetUser.name + " was unmuted by " + user.name + ".");
 
 		targetUser.unmute(room.id);
 	},
@@ -613,11 +613,11 @@ var commands = exports.commands = {
 			return this.privateModCommand("(" + targetUser.name + " would be locked by " + user.name + problem + ".)");
 		}
 
-		targetUser.popup(user.name + " has locked you from talking in chats, battles, and PMing regular users.\n\n" + target + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it.");
+		targetUser.popup("" + user.name + " has locked you from talking in chats, battles, and PMing regular users.\n\n" + target + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it.");
 
-		this.addModCommand(targetUser.name + " was locked from talking by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		this.addModCommand("" + targetUser.name + " was locked from talking by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
-		if (alts.length) this.addModCommand(targetUser.name + "'s alts were also locked: " + alts.join(", "));
+		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also locked: " + alts.join(", "));
 		this.add('|unlink|' + targetUser.userid);
 
 		targetUser.lock();
@@ -658,12 +658,12 @@ var commands = exports.commands = {
 			return this.privateModCommand("(" + targetUser.name + " would be banned by " + user.name + problem + ".)");
 		}
 
-		targetUser.popup(user.name + " has banned you." + (Config.appealurl ? ("  If you feel that your banning was unjustified you can appeal the ban:\n" + Config.appealurl) : "") + "\n\n" + target);
+		targetUser.popup("" + user.name + " has banned you." + (Config.appealurl ? ("  If you feel that your banning was unjustified you can appeal the ban:\n" + Config.appealurl) : "") + "\n\n" + target);
 
-		this.addModCommand(targetUser.name + " was banned by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
+		this.addModCommand("" + targetUser.name + " was banned by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
 		var alts = targetUser.getAlts();
 		if (alts.length) {
-			this.addModCommand(targetUser.name + "'s alts were also banned: " + alts.join(", "));
+			this.addModCommand("" + targetUser.name + "'s alts were also banned: " + alts.join(", "));
 			for (var i = 0; i < alts.length; ++i) {
 				this.add('|unlink|' + toId(alts[i]));
 			}
@@ -680,7 +680,7 @@ var commands = exports.commands = {
 		var name = Users.unban(target);
 
 		if (name) {
-			this.addModCommand(name + " was unbanned by " + user.name + ".");
+			this.addModCommand("" + name + " was unbanned by " + user.name + ".");
 		} else {
 			this.sendReply("User " + target + " is not banned.");
 		}
@@ -706,7 +706,7 @@ var commands = exports.commands = {
 		if (!this.can('rangeban')) return false;
 
 		Users.bannedIps[target] = '#ipban';
-		this.addModCommand(user.name + " temporarily banned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
+		this.addModCommand("" + user.name + " temporarily banned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
 
 	unbanip: function(target, room, user) {
@@ -716,10 +716,10 @@ var commands = exports.commands = {
 		}
 		if (!this.can('rangeban')) return false;
 		if (!Users.bannedIps[target]) {
-			return this.sendReply(target + " is not a banned IP or IP range.");
+			return this.sendReply("" + target + " is not a banned IP or IP range.");
 		}
 		delete Users.bannedIps[target];
-		this.addModCommand(user.name + " unbanned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
+		this.addModCommand("" + user.name + " unbanned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
 
 	/*********************************************************
@@ -771,7 +771,7 @@ var commands = exports.commands = {
 			this.privateModCommand("(" + name + " was demoted to " + groupName + " by " + user.name + ".)");
 			if (targetUser) targetUser.popup("You were demoted to " + groupName + " by " + user.name + ".");
 		} else {
-			this.addModCommand(name + " was promoted to " + groupName + " by " + user.name + ".");
+			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity();
@@ -788,7 +788,7 @@ var commands = exports.commands = {
 			return this.sendReply("/forcepromote - Don't forcepromote unless you have to.");
 		}
 
-		this.addModCommand(name + " was promoted to " + (Config.groups[nextGroup].name || "regular user") + " by " + user.name + ".");
+		this.addModCommand("" + name + " was promoted to " + (Config.groups[nextGroup].name || "regular user") + " by " + user.name + ".");
 	},
 
 	deauth: function(target, room, user) {
@@ -1508,7 +1508,7 @@ var commands = exports.commands = {
 		if (!this.can('kick', targetUser)) return false;
 
 		if (room.leaveBattle(targetUser)) {
-			this.addModCommand(targetUser.name + " was kicked from a battle by " + user.name + (target ? " (" + target + ")" : ""));
+			this.addModCommand("" + targetUser.name + " was kicked from a battle by " + user.name + (target ? " (" + target + ")" : ""));
 		} else {
 			this.sendReply("/kickbattle - User isn't in battle.");
 		}
