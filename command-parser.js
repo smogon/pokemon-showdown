@@ -292,9 +292,8 @@ function canTalk(user, room, connection, message) {
 				connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
 				return false;
 			} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat)) {
-				var groupName = Config.groups[room.modchat].name;
-				if (!groupName) groupName = room.modchat;
-				connection.sendTo(room, "Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in this room.");
+				var groupName = Config.groups[room.modchat].name || groupName = room.modchat;
+				connection.sendTo(room, "Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
 				return false;
 			}
 		}
