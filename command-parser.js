@@ -31,6 +31,7 @@ const MESSAGE_COOLDOWN = 5*60*1000;
 const MAX_PARSE_RECURSION = 10;
 
 var crypto = require('crypto');
+var fs = require('fs');
 
 var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'}), battle: fs.createWriteStream('logs/modlog/modlog_battle.txt', {flags:'a+'})};
 
@@ -161,7 +162,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				}
 				return true;
 			},
-			canBroadcast: function() {
+			canBroadcast: function(suppressMessage) {
 				if (broadcast) {
 					message = this.canTalk(message);
 					if (!message) return false;
@@ -178,7 +179,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 						connection.sendTo(room, "You can't broadcast this because it was just broadcast.");
 						return false;
 					}
-					this.add('|c|' + user.getIdentity(room.id) + '|' + message);
+					this.add('|c|' + user.getIdentity(room.id) + '|' + (suppressMessage || message));
 					room.lastBroadcast = normalized;
 					room.lastBroadcastTime = Date.now();
 
@@ -223,7 +224,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			var groupId = Config.groups.bySymbol[g].id;
 			var isDemote = promoteCmd === 'de' + groupId || promoteCmd === 'un' + groupId;
 			if (promoteCmd === groupId || isDemote) {
-				return parse('/' + (isRoom ? 'room' : '') + (isDemote ? 'demote' : 'promote') + ' ' + toUserid(target) + (isDemote ? '' : ',' + g), room, user, connection)
+				return parse('/' + (isRoom ? 'room' : '') + (isDemote ? 'demote' : 'promote') + ' ' + toId(target) + (isDemote ? '' : ',' + g), room, user, connection)
 			}
 		}
 

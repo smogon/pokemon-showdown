@@ -12,6 +12,7 @@
  */
 
 var crypto = require('crypto');
+var fs = require('fs');
 
 const MAX_REASON_LENGTH = 300;
 
@@ -252,7 +253,7 @@ var commands = exports.commands = {
 
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
-		var userid = toUserid(this.targetUsername);
+		var userid = toId(this.targetUsername);
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) return this.parse('/help roompromote');
@@ -701,7 +702,7 @@ var commands = exports.commands = {
 
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
-		var userid = toUserid(this.targetUsername);
+		var userid = toId(this.targetUsername);
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) return this.parse('/help promote');
@@ -775,6 +776,7 @@ var commands = exports.commands = {
 		}
 
 		target = target.toLowerCase();
+		var currentModchat = room.modchat;
 		switch (target) {
 		case 'off':
 		case 'false':
@@ -794,6 +796,9 @@ var commands = exports.commands = {
 			room.modchat = target;
 			break;
 		}
+		if (currentModchat == room.modchat) {
+			return this.sendReply("Modchat is already set to " + currentModchat + ".");
+		}
 		if (!room.modchat) {
 			this.add("|raw|<div class=\"broadcast-blue\"><b>Moderated chat was disabled!</b><br />Anyone may talk now.</div>");
 		} else {
@@ -811,6 +816,16 @@ var commands = exports.commands = {
 	declare: function(target, room, user) {
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', room)) return false;
+
+		if (!this.canTalk()) return;
+
+		this.add('|raw|<div class="broadcast-blue"><b>' + sanitize(target) + '</b></div>');
+		this.logModCommand(user.name + " declared " + target);
+	},
+
+	htmldeclare: function(target, room, user) {
+		if (!target) return this.parse('/help htmldeclare');
+		if (!this.can('gdeclare', room)) return false;
 
 		if (!this.canTalk()) return;
 
@@ -862,7 +877,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 
-		if (targetUser.userid === toUserid(this.targetUser)) {
+		if (targetUser.userid === toId(this.targetUser)) {
 			var entry = targetUser.name + " was forced to choose a new name by " + user.name + (target ? ": " + target: "");
 			this.privateModCommand("(" + entry + ")");
 			Rooms.global.cancelSearch(targetUser);
@@ -1593,7 +1608,7 @@ var commands = exports.commands = {
 	},
 
 	accept: function(target, room, user, connection) {
-		var userid = toUserid(target);
+		var userid = toId(target);
 		var format = '';
 		if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
 		if (!format) {
@@ -1606,7 +1621,7 @@ var commands = exports.commands = {
 	},
 
 	reject: function(target, room, user) {
-		user.rejectChallengeFrom(toUserid(target));
+		user.rejectChallengeFrom(toId(target));
 	},
 
 	saveteam: 'useteam',

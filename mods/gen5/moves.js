@@ -489,6 +489,13 @@ exports.BattleMovedex = {
 		accuracy: 85,
 		basePower: 14
 	},
+	poisonfang: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			status: 'tox'
+		},
+	},
 	poisongas: {
 		inherit: true,
 		accuracy: 80

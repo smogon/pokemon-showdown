@@ -503,8 +503,6 @@ exports.BattleScripts = {
 		var template = this.getTemplate(item.megaStone);
 		if (!template.isMega) return false;
 		if (pokemon.baseTemplate.species !== template.baseSpecies) return false;
-		if (pokemon.volatiles.mustrecharge) return false;
-		if (pokemon.getLockedMove()) return false;
 
 		// okay, mega evolution is possible
 		this.add('-formechange', pokemon, template.species);
@@ -2730,7 +2728,7 @@ exports.BattleScripts = {
 		} else {
 			var bst = template.baseStats.hp + template.baseStats.atk + template.baseStats.def + template.baseStats.spa + template.baseStats.spd + template.baseStats.spe;
 		}
-		var level = 70 + Math.floor(((600 - clampIntRange(bst, 300, 600)) / 10.35));
+		var level = 70 + Math.floor(((600 - this.clampIntRange(bst, 300, 600)) / 10.35));
 
 		return {
 			name: name,

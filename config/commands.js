@@ -1005,10 +1005,6 @@ var commands = exports.commands = {
 	 * Miscellaneous commands
 	 *********************************************************/
 
-	birkal: function(target, room, user) {
-		this.sendReply("It's not funny anymore.");
-	},
-
 	potd: function(target, room, user) {
 		if (!this.can('potd')) return false;
 
@@ -1029,13 +1025,13 @@ var commands = exports.commands = {
 		var d = target.indexOf("d");
 		if (d != -1) {
 			var num = parseInt(target.substring(0,d));
-			faces = NaN;
-			if (target.length > d) var faces = parseInt(target.substring(d + 1));
+			var faces;
+			if (target.length > d) faces = parseInt(target.substring(d + 1));
 			if (isNaN(num)) num = 1;
 			if (isNaN(faces)) return this.sendReply("The number of faces must be a valid integer.");
 			if (faces < 1 || faces > 1000) return this.sendReply("The number of faces must be between 1 and 1000");
 			if (num < 1 || num > 20) return this.sendReply("The number of dice must be between 1 and 20");
-			var rolls = new Array();
+			var rolls = [];
 			var total = 0;
 			for (var i=0; i < num; i++) {
 				rolls[i] = (Math.floor(faces * Math.random()) + 1);
@@ -1065,6 +1061,29 @@ var commands = exports.commands = {
 			user.joinRoom(Rooms.lobby, connection);
 			this.sendReply("You are now receiving lobby chat.");
 		}
+	},
+
+	showimage: function(target, room, user) {
+		if (!target) return this.parse('/help showimage');
+		if (!this.can('declare', null, room)) return false;
+		if (!this.canBroadcast()) return;
+
+		targets = target.split(', ');
+		if (targets.length != 3) {
+			return this.parse('/help showimage');
+		}
+
+		this.sendReply('|raw|<img src="' + sanitize(targets[0]) + '" alt="" width="' + toId(targets[1]) + '" height="' + toId(targets[2]) + '" />');
+	},
+
+	htmlbox: function(target, room, user) {
+		if (!target) return this.parse('/help htmlbox');
+		if (!user.can('gdeclare', room) && (!user.can('declare', room) || !user.can('announce'))) {
+			return this.sendReply("/htmlbox - Access denied.");
+		}
+		if (!this.canBroadcast('!htmlbox')) return;
+
+		this.sendReplyBox(target);
 	},
 
 	a: function(target, room, user) {
@@ -1314,6 +1333,10 @@ var commands = exports.commands = {
 		if (Users.can(target, 'forcewin') || target === 'forcetie') {
 			matched = true;
 			this.sendReply("/forcetie - Forces the current match to tie. Requires: " + Users.getGroupsThatCan('forcewin').join(" "));
+		}
+		if (Users.can(target, 'declare') || target === 'showimage') {
+			matched = true;
+			this.sendReply("/showimage [url], [width], [height] - Show an image. Requires: " + Users.getGroupsThatCan('declare', room).join(" "));
 		}
 		if (Users.can(target, 'declare') || target === 'declare') {
 			matched = true;

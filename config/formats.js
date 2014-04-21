@@ -56,7 +56,7 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Swirlix', 'Gligar']
+		banlist: ['Sonicboom', 'Dragon Rage', 'LC Uber', 'Swagger']
 	},
 	{
 		name: "XY Battle Spot Singles",
@@ -294,7 +294,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger']
 	},
 	{
 		name: "Challenge Cup",
@@ -727,6 +727,15 @@ exports.Formats = [
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber', 'OU', 'BL']
+	},
+	{
+		name: "[Gen 4] LC (beta)",
+		section: "Past Generations",
+
+		mod: 'gen4',
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Little Cup'],
+		banlist: ['Sonic Boom', 'Dragon Rage', 'DeepSeaTooth', 'Berry Juice', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Misdreavus', 'Meditite', 'Murkrow']
 	},
 	{
 		name: "[Gen 4] Hackmons",

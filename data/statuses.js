@@ -1,9 +1,3 @@
-function clampIntRange(num, min, max) {
-	num = Math.floor(num);
-	if (num < min) num = min;
-	if (typeof max !== 'undefined' && num > max) num = max;
-	return num;
-}
 exports.BattleStatuses = {
 	brn: {
 		effectType: 'Status',
@@ -115,7 +109,7 @@ exports.BattleStatuses = {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
-			this.damage(clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+			this.damage(this.clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
 		}
 	},
 	confusion: {
@@ -221,6 +215,26 @@ exports.BattleStatuses = {
 		},
 		onLockMove: function(pokemon) {
 			return this.effectData.move;
+		}
+	},
+	twoturnmove: {
+		// Skull Bash, SolarBeam, Sky Drop...
+		duration: 2,
+		onStart: function(target, source, effect) {
+			this.effectData.move = effect.id;
+			// source and target are reversed since the event target is the
+			// pokemon using the two-turn move
+			this.effectData.targetLoc = this.getTargetLoc(source, target);
+			target.addVolatile(effect.id, source);
+		},
+		onEnd: function(target) {
+			target.removeVolatile(this.effectData.move);
+		},
+		onLockMove: function() {
+			return this.effectData.move;
+		},
+		onLockMoveTarget: function() {
+			return this.effectData.targetLoc;
 		}
 	},
 	choicelock: {
@@ -420,7 +434,7 @@ exports.BattleStatuses = {
 		},
 		// This should be applied directly to the stat before any of the other modifiers are chained
 		// So we give it increased priority.
-		onModifySpDPriority: 10, 
+		onModifySpDPriority: 10,
 		onModifySpD: function(spd, pokemon) {
 			if (pokemon.hasType('Rock') && this.isWeather('sandstorm')) {
 				return this.modify(spd, 1.5);

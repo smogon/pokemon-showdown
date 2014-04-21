@@ -27,6 +27,8 @@ const THROTTLE_DELAY = 600;
 const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 4;
 
+var fs = require('fs');
+
 var users = {};
 var prevUsers = {};
 var numUsers = 0;
@@ -54,7 +56,7 @@ var lockedUsers = {};
 function getUser(name, exactName) {
 	if (!name || name === '!') return null;
 	if (name && name.userid) return name;
-	var userid = toUserid(name);
+	var userid = toId(name);
 	var i = 0;
 	while (!exactName && userid && !users[userid] && i < 1000) {
 		userid = prevUsers[userid];
@@ -80,7 +82,7 @@ function getExactUser(name) {
 }
 
 function searchUser(name) {
-	var userid = toUserid(name);
+	var userid = toId(name);
 	while (userid && !users[userid]) {
 		userid = prevUsers[userid];
 	}
@@ -274,7 +276,7 @@ function importUsergroups() {
 		for (var i = 0; i < data.length; i++) {
 			if (!data[i]) continue;
 			var row = data[i].split(",");
-			usergroups[toUserid(row[0])] = (row[1]||Config.groups.default.global)+row[0];
+			usergroups[toId(row[0])] = (row[1]||Config.groups.default.global)+row[0];
 		}
 	});
 }
@@ -322,7 +324,7 @@ var User = (function () {
 		this.named = false;
 		this.renamePending = false;
 		this.authenticated = false;
-		this.userid = toUserid(this.name);
+		this.userid = toId(this.name);
 		this.group = Config.groups.default.global;
 
 		var trainersprites = [1, 2, 101, 102, 169, 170, 265, 266];
@@ -485,7 +487,7 @@ var User = (function () {
 	};
 	User.prototype.forceRename = function(name, authenticated, forcible) {
 		// skip the login server
-		var userid = toUserid(name);
+		var userid = toId(name);
 
 		if (users[userid] && users[userid] !== this) {
 			return false;
@@ -541,14 +543,14 @@ var User = (function () {
 	};
 	User.prototype.resetName = function() {
 		var name = 'Guest '+this.guestNum;
-		var userid = toUserid(name);
+		var userid = toId(name);
 		if (this.userid === userid) return;
 
 		var i = 0;
 		while (users[userid] && users[userid] !== this) {
 			this.guestNum++;
 			name = 'Guest '+this.guestNum;
-			userid = toUserid(name);
+			userid = toId(name);
 			if (i > 1000) return false;
 		}
 
@@ -617,7 +619,7 @@ var User = (function () {
 
 		if (!name) name = '';
 		name = this.filterName(name);
-		var userid = toUserid(name);
+		var userid = toId(name);
 		if (this.authenticated) auth = false;
 
 		if (!userid) {
@@ -660,7 +662,7 @@ var User = (function () {
 	};
 	User.prototype.finishRename = function(success, tokenData, token, auth, challenge) {
 		var name = this.renamePending;
-		var userid = toUserid(name);
+		var userid = toId(name);
 		var expired = false;
 		var invalidHost = false;
 
@@ -1184,7 +1186,7 @@ var User = (function () {
 			challengeTo = {
 				to: challengeTo.to,
 				format: challengeTo.format
-			}
+			};
 		}
 		this.send('|updatechallenges|'+JSON.stringify({
 			challengesFrom: Object.map(this.challengesFrom, 'format'),
@@ -1227,7 +1229,7 @@ var User = (function () {
 		if (user) user.updateChallenges();
 	};
 	User.prototype.rejectChallengeFrom = function(user) {
-		var userid = toUserid(user);
+		var userid = toId(user);
 		user = getUser(user);
 		if (this.challengesFrom[userid]) {
 			delete this.challengesFrom[userid];
@@ -1242,7 +1244,7 @@ var User = (function () {
 		this.updateChallenges();
 	};
 	User.prototype.acceptChallengeFrom = function(user) {
-		var userid = toUserid(user);
+		var userid = toId(user);
 		user = getUser(user);
 		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid) {
 			if (this.challengesFrom[userid]) {
@@ -1506,7 +1508,7 @@ exports.pruneInactiveTimer = setInterval(
 );
 
 exports.setOfflineGroup = function(name, group, force) {
-	var userid = toUserid(name);
+	var userid = toId(name);
 	var user = getExactUser(userid);
 	if (force && (user || usergroups[userid])) return false;
 	if (user) {
