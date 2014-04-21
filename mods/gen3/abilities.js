@@ -89,7 +89,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				this.damage(source.maxhp/16, source, target);
+				this.damage(source.maxhp / 16, source, target);
 			}
 		}
 	},
@@ -117,7 +117,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.ohko) {
-				this.add('-activate',target,'Sturdy');
+				this.add('-activate', target, 'Sturdy');
 				return 0;
 			}
 		}
@@ -145,11 +145,11 @@ exports.BattleAbilities = {
 			if (ability === 'Intimidate')
 			{
 				if (pokemon.setAbility('Illuminate')) {  // Temporary fix so Intimidate doesn't activate in third gen when traced
-					this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
+					this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 				}
 			}
 			else if (pokemon.setAbility(ability)) {
-				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		}
 	},
@@ -157,7 +157,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onTryHit: function(target, source, move) {
 			if (target !== source && move.type === 'Electric' && move.id !== 'thunderwave') {
-				if (!this.heal(target.maxhp/4)) {
+				if (!this.heal(target.maxhp / 4)) {
 					this.add('-immune', target, '[msg]');
 				}
 				return null;

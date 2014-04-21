@@ -21,7 +21,7 @@ exports.BattleItems = {
 			type: "Ghost"
 		},
 		onBeforeTurn: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
 				var decision = this.willMove(pokemon);
 				if (!decision) return;
 				this.addQueue({
@@ -36,14 +36,14 @@ exports.BattleItems = {
 		},
 		onCustap: function(pokemon) {
 			var decision = this.willMove(pokemon);
-			this.debug('custap decision: '+decision);
+			this.debug('custap decision: ' + decision);
 			if (decision) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
 			var decision = this.willMove(pokemon);
-			this.debug('custap eaten: '+decision);
+			this.debug('custap eaten: ' + decision);
 			if (decision) {
 				this.cancelDecision(pokemon);
 				this.add('-message', "Custap Berry activated.");
@@ -76,7 +76,7 @@ exports.BattleItems = {
 			duration: 1,
 			onAfterMoveSecondarySelf: function(source, target, move) {
 				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb']) {
-					this.damage(source.maxhp/10, source, source, this.getItem('lifeorb'));
+					this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}
 			}
@@ -116,7 +116,7 @@ exports.BattleItems = {
 				} else if (this.effectData.numConsecutive < 10) {
 					this.effectData.numConsecutive++;
 				}
-				return basePower * (1+(this.effectData.numConsecutive/10));
+				return basePower * (1 + (this.effectData.numConsecutive / 10));
 			}
 		}
 	}

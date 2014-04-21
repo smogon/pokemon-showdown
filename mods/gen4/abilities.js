@@ -5,7 +5,7 @@ exports.BattleAbilities = {
 		shortDesc: "If this Pokemon is hit by a critical hit, its Attack is boosted by 12.",
 		onCriticalHit: function(target) {
 			target.setBoost({atk: 6});
-			this.add('-setboost',target,'atk',12,'[from] ability: Anger Point');
+			this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 		}
 	},
 	"lightningrod": {
@@ -43,7 +43,7 @@ exports.BattleAbilities = {
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (var i=0; i<allyActive.length; i++) {
+			for (var i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].ability === 'plus') {
 					return spa * 1.5
 				}
@@ -70,7 +70,7 @@ exports.BattleAbilities = {
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (var i=0; i<allyActive.length; i++) {
+			for (var i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].ability === 'minus') {
 					return spa * 1.5
 				}
@@ -104,7 +104,7 @@ exports.BattleAbilities = {
 		onDamagePriority: -100,
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.ohko) {
-				this.add('-activate',target,'Sturdy');
+				this.add('-activate', target, 'Sturdy');
 				return 0;
 			}
 		},
@@ -134,7 +134,7 @@ exports.BattleAbilities = {
 				return;
 			}
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		}
 	},
@@ -142,7 +142,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onTryHit: function(target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.id === 'firefang') return;
-			this.debug('Wonder Guard immunity: '+move.id);
+			this.debug('Wonder Guard immunity: ' + move.id);
 			if (this.getEffectiveness(move.type, target) <= 0) {
 				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;

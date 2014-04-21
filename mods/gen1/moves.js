@@ -83,10 +83,10 @@ exports.BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage*2});
+					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage * 2});
 					return false;
 				}
-				this.add('-message', pokemon.name+' is storing energy! (placeholder)');
+				this.add('-message', pokemon.name + ' is storing energy! (placeholder)');
 				return false;
 			},
 			onModifyPokemon: function(pokemon) {
@@ -94,7 +94,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				var moves = pokemon.moveset;
-				for (var i=0; i<moves.length; i++) {
+				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id !== 'bide') {
 						moves[i].disabled = true;
 					}
@@ -180,17 +180,17 @@ exports.BattleMovedex = {
 			noCopy: true,
 			onStart: function(target, source) {
 				this.effectData.typesData = [];
-				for (var i=0, l=target.typesData.length; i<l; i++) {
+				for (var i = 0, l = target.typesData.length; i < l; i++) {
 					this.effectData.typesData.push(Object.clone(target.typesData[i]));
 				}
-				this.add('-start', source, 'typechange', target.getTypes(true).join(', '), '[from] move: Conversion', '[of] '+target);
+				this.add('-start', source, 'typechange', target.getTypes(true).join(', '), '[from] move: Conversion', '[of] ' + target);
 			},
 			onRestart: function(target, source) {
 				this.effectData.typesData = [];
-				for (var i=0, l=target.typesData.length; i<l; i++) {
+				for (var i = 0, l = target.typesData.length; i < l; i++) {
 					this.effectData.typesData.push(Object.clone(target.typesData[i]));
 				}
-				this.add('-start', source, 'typechange', target.getTypes(true).join(', '), '[from] move: Conversion', '[of] '+target);
+				this.add('-start', source, 'typechange', target.getTypes(true).join(', '), '[from] move: Conversion', '[of] ' + target);
 			},
 			onModifyPokemon: function(pokemon) {
 				pokemon.typesData = this.effectData.typesData;
@@ -276,7 +276,7 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemon: function(pokemon) {
 				var moves = pokemon.moveset;
-				for (var i=0; i<moves.length; i++) {
+				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
 						moves[i].disabled = true;
 					}
@@ -295,7 +295,7 @@ exports.BattleMovedex = {
 		basePower: 100,
 		desc: "Deals damage to the target. If the target lost HP, the user takes recoil damage equal to 25% that HP, rounded half up, but not less than 1HP.",
 		shortDesc: "Has 25% recoil.",
-		recoil: [25,100]
+		recoil: [25, 100]
 	},
 	explosion: {
 		inherit: true,
@@ -371,7 +371,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'focusenergy',
 		effect: {
 			onStart: function(pokemon) {
-				this.add('-start',pokemon,'move: Focus Energy');
+				this.add('-start', pokemon, 'move: Focus Energy');
 			},
 			onModifyMove: function(move) {
 				move.critRatio = -3;
@@ -404,9 +404,9 @@ exports.BattleMovedex = {
 		shortDesc: "Eliminates all stat changes and status.",
 		onHitField: function(target, source) {
 			this.add('-clearallboost');
-			for (var i=0; i<this.sides.length; i++) {
-				for (var j=0; j<this.sides[i].active.length; j++) {
-					var hasTox = (this.sides[i].active[j].status == 'tox');
+			for (var i = 0; i < this.sides.length; i++) {
+				for (var j = 0; j < this.sides[i].active.length; j++) {
+					var hasTox = (this.sides[i].active[j].status === 'tox');
 					this.sides[i].active[j].clearBoosts();
 					if (this.sides[i].active[j].id !== source.id) {
 						// Clears the status from the opponent
@@ -464,9 +464,9 @@ exports.BattleMovedex = {
 			if (target.newlySwitched && target.speed <= source.speed) {
 				if (target.status === 'tox') {
 					// Stage plus one since leech seed runs before Toxic
-					var toLeech = this.clampIntRange(target.maxhp/16, 1) * (target.statusData.stage + 1);
+					var toLeech = this.clampIntRange(target.maxhp / 16, 1) * (target.statusData.stage + 1);
 				} else {
-					var toLeech = this.clampIntRange(target.maxhp/16, 1);
+					var toLeech = this.clampIntRange(target.maxhp / 16, 1);
 				}
 				var damage = this.damage(toLeech, target, source, 'move: Leech Seed');
 				if (damage) {
@@ -487,9 +487,9 @@ exports.BattleMovedex = {
 				// We check if target has Toxic to increase leeched damage
 				if (pokemon.status === 'tox') {
 					// Stage plus one since leech seed runs before Toxic
-					var toLeech = this.clampIntRange(pokemon.maxhp/16, 1) * (pokemon.statusData.stage + 1);
+					var toLeech = this.clampIntRange(pokemon.maxhp / 16, 1) * (pokemon.statusData.stage + 1);
 				} else {
-					var toLeech = this.clampIntRange(pokemon.maxhp/16, 1);
+					var toLeech = this.clampIntRange(pokemon.maxhp / 16, 1);
 				}
 				var damage = this.damage(toLeech, pokemon, target);
 				if (damage) {
@@ -566,7 +566,7 @@ exports.BattleMovedex = {
 			if (moveslot === -1) return false;
 			var moves = target.moves;
 			moves = moves.randomize();
-			for (var i=0; i<moves.length; i++) {
+			for (var i = 0; i < moves.length; i++) {
 				if (!(moves[i] in disallowedMoves)) {
 					var move = moves[i];
 					break;
@@ -788,12 +788,12 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		beforeMoveCallback: function(pokemon) {
-			this.add('-message', pokemon.name+' has no moves left! (placeholder)');
+			this.add('-message', pokemon.name + ' has no moves left! (placeholder)');
 		},
 		onModifyMove: function(move) {
 			move.type = '???';
 		},
-		recoil: [1,2],
+		recoil: [1, 2],
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -819,8 +819,8 @@ exports.BattleMovedex = {
 			}
 			// We only prevent when hp is less than one quarter.
 			// If you use substitute at exactly one quarter, you faint.
-			if (target.hp === target.maxhp/4) target.faint();
-			if (target.hp < target.maxhp/4) {
+			if (target.hp === target.maxhp / 4) target.faint();
+			if (target.hp < target.maxhp / 4) {
 				this.add('-fail', target, 'move: Substitute', '[weak]');
 				return null;
 			}
@@ -834,7 +834,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(target) {
 				this.add('-start', target, 'Substitute');
-				this.effectData.hp = Math.floor(target.maxhp/4);
+				this.effectData.hp = Math.floor(target.maxhp / 4);
 				delete target.volatiles['partiallytrapped'];
 			},
 			onTryHitPriority: -1,

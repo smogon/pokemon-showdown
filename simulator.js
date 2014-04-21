@@ -89,7 +89,7 @@ var Simulator = (function(){
 
 		simulators[id] = this;
 
-		this.send('init', this.format, rated?'1':'');
+		this.send('init', this.format, rated ? '1' : '');
 	}
 
 	Simulator.prototype.id = '';
@@ -115,12 +115,12 @@ var Simulator = (function(){
 	Simulator.prototype.lastIp = null;
 	Simulator.prototype.send = function() {
 		this.activeIp = ResourceMonitor.activeIp;
-		this.process.send(''+this.id+'|'+slice.call(arguments).join('|'));
+		this.process.send('' + this.id + '|' + slice.call(arguments).join('|'));
 	};
 	Simulator.prototype.sendFor = function(user, action) {
 		var player = this.playerTable[toId(user)];
 		if (!player) {
-			console.log('SENDFOR FAILED: Player doesn\'t exist: '+user.name);
+			console.log('SENDFOR FAILED: Player doesn\'t exist: ' + user.name);
 			return;
 		}
 
@@ -171,7 +171,7 @@ var Simulator = (function(){
 			var rqid = lines[3];
 			if (player) {
 				this.requests[player.userid] = lines[4];
-				player.sendTo(this.id, '|request|'+lines[4]);
+				player.sendTo(this.id, '|request|' + lines[4]);
 			}
 			if (rqid !== this.rqid) {
 				this.rqid = rqid;
@@ -196,7 +196,7 @@ var Simulator = (function(){
 
 	Simulator.prototype.resendRequest = function(user) {
 		if (this.requests[user.userid]) {
-			user.sendTo(this.id, '|request|'+this.requests[user.userid]);
+			user.sendTo(this.id, '|request|' + this.requests[user.userid]);
 		}
 	};
 	Simulator.prototype.win = function(user) {
@@ -213,7 +213,7 @@ var Simulator = (function(){
 		this.send('tie');
 	};
 	Simulator.prototype.chat = function(user, message) {
-		this.send('chat', user.name+"\n"+message);
+		this.send('chat', user.name + "\n" + message);
 	};
 
 	Simulator.prototype.isEmpty = function() {
@@ -245,20 +245,20 @@ var Simulator = (function(){
 		this.playerids[slot] = (user ? user.userid : null);
 		this.playerTable = {};
 		this.active = !this.ended;
-		for (var i=0, len=this.players.length; i<len; i++) {
+		for (var i = 0, len = this.players.length; i < len; i++) {
 			var player = this.players[i];
-			this['p'+(i+1)] = player?player.name:'';
+			this['p' + (i + 1)] = player ? player.name :    '';
 			if (!player) {
 				this.active = false;
 				continue;
 			}
-			this.playerTable[player.userid] = 'p'+(i+1);
+			this.playerTable[player.userid] = 'p' + (i + 1);
 		}
 	};
 	Simulator.prototype.getPlayer = function(slot) {
 		if (typeof slot === 'string') {
-			if (slot.substr(0,1) === 'p') {
-				slot = parseInt(slot.substr(1),10)-1;
+			if (slot.substr(0, 1) === 'p') {
+				slot = parseInt(slot.substr(1), 10) - 1;
 			} else {
 				slot = parseInt(slot, 10);
 			}
@@ -274,14 +274,14 @@ var Simulator = (function(){
 			slot = 0;
 			while (this.players[slot]) slot++;
 		}
-		// console.log('joining: '+user.name+' '+slot);
+		// console.log('joining: ' + user.name + ' ' + slot);
 		if (this.players[slot] || slot >= this.players.length) return false;
 
 		this.setPlayer(user, slot);
 
-		var message = ''+user.avatar;
+		var message = '' + user.avatar;
 		if (!this.started) {
-			message += "\n"+team;
+			message += "\n" + team;
 		}
 		if (this.p1 && this.p2) this.started = true;
 		this.sendFor(user, 'join', user.name, message);
@@ -289,7 +289,7 @@ var Simulator = (function(){
 	};
 
 	Simulator.prototype.rename = function() {
-		for (var i=0, len=this.players.length; i<len; i++) {
+		for (var i = 0, len = this.players.length; i < len; i++) {
 			var player = this.players[i];
 			var playerid = this.playerids[i];
 			if (!player) continue;
@@ -301,7 +301,7 @@ var Simulator = (function(){
 	};
 
 	Simulator.prototype.leave = function(user) {
-		for (var i=0, len=this.players.length; i<len; i++) {
+		for (var i = 0, len = this.players.length; i < len; i++) {
 			var player = this.players[i];
 			if (player === user) {
 				this.sendFor(user, 'leave');

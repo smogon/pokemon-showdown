@@ -24,9 +24,9 @@ To reload chat commands:
 
 const MAX_MESSAGE_LENGTH = 300;
 
-const BROADCAST_COOLDOWN = 20*1000;
+const BROADCAST_COOLDOWN = 20 * 1000;
 
-const MESSAGE_COOLDOWN = 5*60*1000;
+const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 
 const MAX_PARSE_RECURSION = 10;
 
@@ -63,21 +63,21 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 	if (!message || !message.trim().length) return;
 	if (!levelsDeep) {
 		levelsDeep = 0;
-		// if (Config.emergencylog && (connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221' || message.length > 2048 || message.length > 256 && message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ')) {
+		// if (Config.emergencylog && (connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221' || message.length > 2048 || message.length > 256 && message.substr(0, 5) !== '/utm ' && message.substr(0, 5) !== '/trn ')) {
 		if (Config.emergencylog && (user.userid === 'pindapinda' || connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221')) {
 			Config.emergencylog.write('<' + user.name + '@' + connection.ip + '> ' + message + '\n');
 		}
 	}
 
-	if (message.substr(0,3) === '>> ') {
+	if (message.substr(0, 3) === '>> ') {
 		// multiline eval
 		message = '/eval ' + message.substr(3);
-	} else if (message.substr(0,4) === '>>> ') {
+	} else if (message.substr(0, 4) === '>>> ') {
 		// multiline eval
 		message = '/evalbattle ' + message.substr(4);
 	}
 
-	if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
+	if (message.substr(0, 2) !== '//' && message.substr(0, 1) === '/') {
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
 			cmd = message.substr(1, spaceIndex - 1);
@@ -86,7 +86,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			cmd = message.substr(1);
 			target = '';
 		}
-	} else if (message.substr(0,1) === '!') {
+	} else if (message.substr(0, 1) === '!') {
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
 			cmd = message.substr(0, spaceIndex);
@@ -217,17 +217,17 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 		for (var g in Config.groups) {
 			var groupid = Config.groups[g].id;
 			if (cmd === groupid) {
-				return parse('/promote ' + toId(target) + ',' + g, room, user, connection);
+				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection);
 			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid) {
 				return parse('/demote ' + toId(target), room, user, connection);
 			} else if (cmd === 'room' + groupid) {
-				return parse('/roompromote ' + toId(target) + ',' + g, room, user, connection);
+				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection);
 			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
 				return parse('/roomdemote ' + toId(target), room, user, connection);
 			}
 		}
 
-		if (message.substr(0,1) === '/' && cmd) {
+		if (message.substr(0, 1) === '/' && cmd) {
 			// To guard against command typos, we now emit an error message
 			return connection.sendTo(room.id, "The command '/" + cmd + "' was unrecognized. To send a message starting with '" + cmd + "', type '//" + cmd + "'.");
 		}
@@ -244,7 +244,7 @@ function splitTarget(target, exactName) {
 	if (commaIndex < 0) {
 		targetUser = Users.get(target, exactName);
 		this.targetUser = targetUser;
-		this.targetUsername = (targetUser?targetUser.name:target);
+		this.targetUsername = targetUser ? targetUser.name : target;
 		return '';
 	}
 	var targetUser = Users.get(target.substr(0, commaIndex), exactName);
@@ -252,7 +252,7 @@ function splitTarget(target, exactName) {
 		targetUser = null;
 	}
 	this.targetUser = targetUser;
-	this.targetUsername = (targetUser?targetUser.name:target.substr(0, commaIndex));
+	this.targetUsername = targetUser ? targetUser.name : target.substr(0, commaIndex);
 	return target.substr(commaIndex + 1).trim();
 }
 
@@ -318,7 +318,7 @@ function canTalk(user, room, connection, message) {
 		if (/\bnimp\.org\b/i.test(message)) return false;
 
 		// remove zalgo
-		message = message.replace(/[\u0300-\u036f\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,'');
+		message = message.replace(/[\u0300-\u036f\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 
 		if (room && room.id === 'lobby') {
 			var normalized = message.trim();

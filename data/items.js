@@ -98,12 +98,12 @@ exports.BattleItems = {
 			type: "Dragon"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
-			this.heal(pokemon.maxhp/8);
+			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'spd') {
 				pokemon.addVolatile('confusion');
 			}
@@ -126,14 +126,14 @@ exports.BattleItems = {
 			if (type === 'Ground') return false;
 		},
 		onAfterDamage: function(damage, target, source, effect) {
-			this.debug('effect: '+effect.id);
+			this.debug('effect: ' + effect.id);
 			if (effect.effectType === 'Move') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.setItem('');
 			}
 		},
 		onAfterSubDamage: function(damage, target, source, effect) {
-			this.debug('effect: '+effect.id);
+			this.debug('effect: ' + effect.id);
 			if (effect.effectType === 'Move') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.setItem('');
@@ -181,7 +181,7 @@ exports.BattleItems = {
 			type: "Ground"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4|| (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
+			if (pokemon.hp <= pokemon.maxhp / 4|| (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -239,7 +239,7 @@ exports.BattleItems = {
 		},
 		onModifyPokemon: function(pokemon) {
 			var moves = pokemon.moveset;
-			for (var i=0; i<moves.length; i++) {
+			for (var i = 0; i < moves.length; i++) {
 				if (this.getMove(moves[i].move).category === 'Status') {
 					moves[i].disabled = true;
 				}
@@ -306,7 +306,7 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
 				if (pokemon.useItem()) {
 					this.heal(20);
 				}
@@ -374,9 +374,9 @@ exports.BattleItems = {
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.maxhp/16);
+				this.heal(pokemon.maxhp / 16);
 			} else {
-				this.damage(pokemon.maxhp/8);
+				this.damage(pokemon.maxhp / 8);
 			}
 		},
 		num: 281,
@@ -467,7 +467,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Bug') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Bug Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Bug Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -680,7 +680,7 @@ exports.BattleItems = {
 		},
 		onStart: function(pokemon) {
 			if (pokemon.volatiles['choicelock']) {
-				this.debug('removing choicelock: '+pokemon.volatiles.choicelock);
+				this.debug('removing choicelock: ' + pokemon.volatiles.choicelock);
 			}
 			pokemon.removeVolatile('choicelock');
 		},
@@ -705,7 +705,7 @@ exports.BattleItems = {
 		},
 		onStart: function(pokemon) {
 			if (pokemon.volatiles['choicelock']) {
-				this.debug('removing choicelock: '+pokemon.volatiles.choicelock);
+				this.debug('removing choicelock: ' + pokemon.volatiles.choicelock);
 			}
 			pokemon.removeVolatile('choicelock');
 		},
@@ -729,7 +729,7 @@ exports.BattleItems = {
 		},
 		onStart: function(pokemon) {
 			if (pokemon.volatiles['choicelock']) {
-				this.debug('removing choicelock: '+pokemon.volatiles.choicelock);
+				this.debug('removing choicelock: ' + pokemon.volatiles.choicelock);
 			}
 			pokemon.removeVolatile('choicelock');
 		},
@@ -857,7 +857,7 @@ exports.BattleItems = {
 			type: "Ghost"
 		},
 		onModifyPriority: function(priority, pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				if (pokemon.eatItem()) {
 					this.add('-activate', pokemon, 'Custap Berry');
 					pokemon.removeVolatile('custapberry');
@@ -890,7 +890,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Dark') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Dark Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Dark Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -942,7 +942,7 @@ exports.BattleItems = {
 		},
 		onAttractPriority: -100,
 		onAttract: function(target, source) {
-			this.debug('attract intercepted: '+target+' from '+source);
+			this.debug('attract intercepted: ' + target + ' from ' + source);
 			if (!source || source === target) return;
 			if (!source.volatiles.attract) source.addVolatile('attract', target);
 		},
@@ -1032,7 +1032,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Dragon') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Dragon Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Dragon Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -1150,7 +1150,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Electric') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Electric Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Electric Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -1193,7 +1193,7 @@ exports.BattleItems = {
 			}
 		},
 		onEat: function(pokemon) {
-			this.heal(pokemon.maxhp/4);
+			this.heal(pokemon.maxhp / 4);
 		},
 		num: 208,
 		gen: 3,
@@ -1256,7 +1256,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Fighting') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Fighting Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Fighting Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -1275,12 +1275,12 @@ exports.BattleItems = {
 			type: "Bug"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
-			this.heal(pokemon.maxhp/8);
+			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'atk') {
 				pokemon.addVolatile('confusion');
 			}
@@ -1299,7 +1299,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Fire') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Fire Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Fire Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -1385,7 +1385,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Flying') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Flying Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Flying Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -1403,7 +1403,7 @@ exports.BattleItems = {
 		},
 		onDamage: function(damage, target, source, effect) {
 			if (this.random(10) === 0 && damage >= target.hp && effect && effect.effectType === 'Move') {
-				this.add("-message",target.name+" held on using its Focus Band! (placeholder)");
+				this.add("-message", target.name + " held on using its Focus Band! (placeholder)");
 				return target.hp - 1;
 			}
 		},
@@ -1455,7 +1455,7 @@ exports.BattleItems = {
 			type: "Ice"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -1518,7 +1518,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Ghost') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Ghost Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Ghost Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -1537,7 +1537,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Grass') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Grass Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Grass Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -1612,7 +1612,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Ground') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Ground Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Ground Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -1763,12 +1763,12 @@ exports.BattleItems = {
 			type: "Dark"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
-			this.heal(pokemon.maxhp/8);
+			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'def') {
 				pokemon.addVolatile('confusion');
 			}
@@ -1787,7 +1787,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Ice') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Ice Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Ice Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -1891,7 +1891,7 @@ exports.BattleItems = {
 		onAfterMoveSecondary: function(target, source, move) {
 			if (source && source !== target && move && move.category === 'Physical') {
 				if (target.eatItem()) {
-					this.damage(source.maxhp/8, source, target);
+					this.damage(source.maxhp / 8, source, target);
 				}
 			}
 		},
@@ -2003,7 +2003,7 @@ exports.BattleItems = {
 		onModifyMove: function(move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
-				for (var i=0; i<move.secondaries.length; i++) {
+				for (var i = 0; i < move.secondaries.length; i++) {
 					if (move.secondaries[i].volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
@@ -2042,7 +2042,7 @@ exports.BattleItems = {
 			type: "Flying"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2109,7 +2109,7 @@ exports.BattleItems = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			this.heal(pokemon.maxhp/16);
+			this.heal(pokemon.maxhp / 16);
 		},
 		num: 234,
 		gen: 2,
@@ -2148,7 +2148,7 @@ exports.BattleItems = {
 			}
 			move.pp += 10;
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
-			this.add("-message",pokemon.name+" restored "+move.move+"'s PP using its Leppa Berry! (placeholder)");
+			this.add("-message", pokemon.name + " restored " + move.move + "'s PP using its Leppa Berry! (placeholder)");
 		},
 		num: 154,
 		gen: 3,
@@ -2172,7 +2172,7 @@ exports.BattleItems = {
 			type: "Grass"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2200,7 +2200,7 @@ exports.BattleItems = {
 			duration: 1,
 			onAfterMoveSecondarySelf: function(source, target, move) {
 				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb']) {
-					this.damage(source.maxhp/10, source, source, this.getItem('lifeorb'));
+					this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}
 			}
@@ -2395,12 +2395,12 @@ exports.BattleItems = {
 			type: "Ghost"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
-			this.heal(pokemon.maxhp/8);
+			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'spe') {
 				pokemon.addVolatile('confusion');
 			}
@@ -2527,10 +2527,10 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10,
 			effect: function(pokemon) {
-				var conditions = ['attract','taunt','encore','torment','disable'];
-				for (var i=0; i<conditions.length; i++) {
+				var conditions = ['attract', 'taunt', 'encore', 'torment', 'disable'];
+				for (var i = 0; i < conditions.length; i++) {
 					if (pokemon.volatiles[conditions[i]]) {
-						for (var j=0; j<conditions.length; j++) {
+						for (var j = 0; j < conditions.length; j++) {
 							pokemon.removeVolatile(conditions[j]);
 						}
 						return;
@@ -2539,11 +2539,11 @@ exports.BattleItems = {
 			}
 		},
 		onUpdate: function(pokemon) {
-			var conditions = ['attract','taunt','encore','torment','disable'];
-			for (var i=0; i<conditions.length; i++) {
+			var conditions = ['attract', 'taunt', 'encore', 'torment', 'disable'];
+			for (var i = 0; i < conditions.length; i++) {
 				if (pokemon.volatiles[conditions[i]]) {
 					if (!pokemon.useItem()) return;
-					for (var j=0; j<conditions.length; j++) {
+					for (var j = 0; j < conditions.length; j++) {
 						pokemon.removeVolatile(conditions[j]);
 					}
 					return;
@@ -2660,7 +2660,7 @@ exports.BattleItems = {
 			type: "Rock"
 		},
 		onResidual: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -2826,7 +2826,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Normal') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Normal Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Normal Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -2895,7 +2895,7 @@ exports.BattleItems = {
 			type: "Poison"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
@@ -3025,7 +3025,7 @@ exports.BattleItems = {
 			type: "Poison"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3120,7 +3120,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Poison') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Poison Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Poison Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -3154,7 +3154,7 @@ exports.BattleItems = {
 		id: "powerherb",
 		onChargeMove: function(pokemon, target, move) {
 			if (pokemon.useItem()) {
-				this.debug('power herb - remove charge turn for '+move.id);
+				this.debug('power herb - remove charge turn for ' + move.id);
 				return false; // skip charge turn
 			}
 		},
@@ -3185,7 +3185,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Psychic') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Psychic Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Psychic Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -3320,7 +3320,7 @@ exports.BattleItems = {
 		onModifyMove: function(move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
-				for (var i=0; i<move.secondaries.length; i++) {
+				for (var i = 0; i < move.secondaries.length; i++) {
 					if (move.secondaries[i].volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
@@ -3421,7 +3421,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Rock') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Rock Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Rock Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -3457,7 +3457,7 @@ exports.BattleItems = {
 		onAfterDamageOrder: 2,
 		onAfterDamage: function(damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				this.damage(source.maxhp/6, source, target);
+				this.damage(source.maxhp / 6, source, target);
 			}
 		},
 		num: 540,
@@ -3526,7 +3526,7 @@ exports.BattleItems = {
 		onAfterMoveSecondary: function(target, source, move) {
 			if (source && source !== target && move && move.category === 'Special') {
 				if (target.eatItem()) {
-					this.damage(source.maxhp/8, source, target);
+					this.damage(source.maxhp / 8, source, target);
 				}
 			}
 		},
@@ -3564,7 +3564,7 @@ exports.BattleItems = {
 			type: "Fighting"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3661,7 +3661,7 @@ exports.BattleItems = {
 		},
 		onAfterMoveSelf: function(source, target) {
 			if (source.lastDamage > 0) {
-				this.heal(source.lastDamage/8, source);
+				this.heal(source.lastDamage / 8, source);
 			}
 		},
 		num: 253,
@@ -3752,12 +3752,12 @@ exports.BattleItems = {
 			type: "Psychic"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
-			this.heal(pokemon.maxhp/4);
+			this.heal(pokemon.maxhp / 4);
 		},
 		num: 158,
 		gen: 3,
@@ -3944,7 +3944,7 @@ exports.BattleItems = {
 			type: "Psychic"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.hasAbility('gluttony'))) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
@@ -3976,7 +3976,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Steel') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Steel Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Steel Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -4011,7 +4011,7 @@ exports.BattleItems = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
-			this.damage(pokemon.maxhp/8);
+			this.damage(pokemon.maxhp / 8);
 		},
 		onHit: function(target, source, move) {
 			if (source && source !== target && !source.item && move && move.isContact) {
@@ -4222,7 +4222,7 @@ exports.BattleItems = {
 			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Water') {
 				if (source.useItem()) {
-					this.add('-enditem', source, 'Water Gem', '[from] gem', '[move] '+move.name);
+					this.add('-enditem', source, 'Water Gem', '[from] gem', '[move] ' + move.name);
 					source.addVolatile('gem');
 				}
 			}
@@ -4354,12 +4354,12 @@ exports.BattleItems = {
 			type: "Rock"
 		},
 		onUpdate: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/2) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function(pokemon) {
-			this.heal(pokemon.maxhp/8);
+			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'spa') {
 				pokemon.addVolatile('confusion');
 			}

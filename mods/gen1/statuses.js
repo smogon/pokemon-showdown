@@ -15,12 +15,12 @@ exports.BattleStatuses = {
 			target.addVolatile('brnattackdrop');
 		},
 		onAfterMoveSelf: function(pokemon) {
-			this.damage(pokemon.maxhp/16);
+			this.damage(pokemon.maxhp / 16);
 		},
 		onSwitchIn: function (pokemon){
 			pokemon.addVolatile('brnattackdrop');
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp/16);
+				this.damage(pokemon.maxhp / 16);
 			}
 		}
 	},
@@ -58,7 +58,7 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target, 'slp');
 			// 1-7 turns. Put 1-7 since they awake at end of turn.
-			this.effectData.startTime = this.random(1,7);
+			this.effectData.startTime = this.random(1, 7);
 			this.effectData.time = this.effectData.startTime;
 		},
 		onBeforeMovePriority: 2,
@@ -93,11 +93,11 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'psn');
 		},
 		onAfterMoveSelf: function(pokemon) {
-			this.damage(pokemon.maxhp/16);
+			this.damage(pokemon.maxhp / 16);
 		},
 		onSwitchIn: function (pokemon) {
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp/16);
+				this.damage(pokemon.maxhp / 16);
 			}
 		}
 	},
@@ -111,14 +111,14 @@ exports.BattleStatuses = {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
-			this.damage(this.clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
 		},
 		onSwitchIn: function (pokemon) {
 			this.effectData.stage = 0; // probably unnecessary...
 			pokemon.setStatus('psn');
 			// normal poison damage...
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp/16);
+				this.damage(pokemon.maxhp / 16);
 			}
 		}
 	},
@@ -128,7 +128,7 @@ exports.BattleStatuses = {
 			var result = this.runEvent('TryConfusion');
 			if (!result) return result;
 			this.add('-start', target, 'confusion');
-			this.effectData.time = this.random(2,6);
+			this.effectData.time = this.random(2, 6);
 		},
 		onEnd: function(target) {
 			this.add('-end', target, 'confusion');
@@ -143,7 +143,7 @@ exports.BattleStatuses = {
 			if (this.random(2) === 0) {
 				return;
 			}
-			this.directDamage(this.getDamage(pokemon,pokemon,40));
+			this.directDamage(this.getDamage(pokemon, pokemon, 40));
 			return false;
 		}
 	},
@@ -185,7 +185,7 @@ exports.BattleStatuses = {
 	partialtrappinglock: {
 		durationCallback: function() {
 			var roll = this.random(6);
-			duration = [2,2,3,3,4,5][roll];
+			duration = [2, 2, 3, 3, 4, 5][roll];
 			return duration;
 		},
 		onResidual: function(target) {
@@ -201,7 +201,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			var moves = pokemon.moveset;
-			for (var i=0; i<moves.length; i++) {
+			for (var i = 0; i < moves.length; i++) {
 				if (moves[i].id !== this.effectData.move) {
 					moves[i].disabled = true;
 				}
@@ -229,7 +229,7 @@ exports.BattleStatuses = {
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		durationCallback: function() {
-			return this.random(2,4);
+			return this.random(2, 4);
 		},
 		onResidual: function(target) {
 			if (target.lastMove === 'struggle' || target.status === 'slp') {
@@ -250,7 +250,7 @@ exports.BattleStatuses = {
 		onBeforeTurn: function(pokemon) {
 			var move = this.getMove(this.effectData.move);
 			if (move.id) {
-				this.debug('Forcing into '+move.id);
+				this.debug('Forcing into ' + move.id);
 				this.changeDecision(pokemon, {move: move.id});
 			}
 		}
@@ -268,14 +268,14 @@ exports.BattleStatuses = {
 		// this is a side condition
 		onStart: function(side) {
 			this.effectData.positions = [];
-			for (var i=0; i<side.active.length; i++) {
+			for (var i = 0; i < side.active.length; i++) {
 				this.effectData.positions[i] = null;
 			}
 		},
 		onResidualOrder: 3,
 		onResidual: function(side) {
 			var finished = true;
-			for (var i=0; i<side.active.length; i++) {
+			for (var i = 0; i < side.active.length; i++) {
 				var posData = this.effectData.positions[i];
 				if (!posData) continue;
 
@@ -290,12 +290,12 @@ exports.BattleStatuses = {
 				var target = side.foe.active[posData.targetPosition];
 				var move = this.getMove(posData.move);
 				if (target.fainted) {
-					this.add('-hint', ''+move.name+' did not hit because the target is fainted.');
+					this.add('-hint', '' + move.name + ' did not hit because the target is fainted.');
 					this.effectData.positions[i] = null;
 					continue;
 				}
 
-				this.add('-message', ''+move.name+' hit! (placeholder)');
+				this.add('-message', '' + move.name + ' hit! (placeholder)');
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
 
@@ -325,9 +325,9 @@ exports.BattleStatuses = {
 			var counter = this.effectData.counter || 1;
 			if (counter >= 256) {
 				// 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
-				return (this.random()*4294967296 < 1);
+				return (this.random() * 4294967296 < 1);
 			}
-			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			this.debug("Success chance: " + Math.round(100 / counter) + "%");
 			return (this.random(counter) === 0);
 		},
 		onRestart: function() {

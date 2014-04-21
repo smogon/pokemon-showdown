@@ -8,11 +8,11 @@ exports.BattleMovedex = {
 			if (target.boosts.atk >= 6) {
 				return false;
 			}
-			if (target.hp <= target.maxhp/2) {
+			if (target.hp <= target.maxhp / 2) {
 				this.boost({atk: 2});
 				return false;
 			}
-			this.directDamage(target.maxhp/2);
+			this.directDamage(target.maxhp / 2);
 			target.setBoost({atk: 6});
 			this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
 		}
@@ -26,7 +26,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			if (target.newlySwitched && target.speed <= source.speed) {
-				var toLeech = this.clampIntRange(target.maxhp/8, 1);
+				var toLeech = this.clampIntRange(target.maxhp / 8, 1);
 				var damage = this.damage(toLeech, target, source, 'move: Leech Seed');
 				if (damage) {
 					this.heal(damage, source, target);
@@ -43,7 +43,7 @@ exports.BattleMovedex = {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				var toLeech = this.clampIntRange(pokemon.maxhp/8, 1);
+				var toLeech = this.clampIntRange(pokemon.maxhp / 8, 1);
 				var damage = this.damage(toLeech, pokemon, target);
 				if (damage) {
 					this.heal(damage, target, pokemon);
@@ -59,11 +59,11 @@ exports.BattleMovedex = {
 				return spd * 2;
 			},
 			onStart: function(side) {
-				this.add('-sidestart',side,'move: Light Screen');
+				this.add('-sidestart', side, 'move: Light Screen');
 			},
 			onResidualOrder: 21,
 			onEnd: function(side) {
-				this.add('-sideend',side,'move: Light Screen');
+				this.add('-sideend', side, 'move: Light Screen');
 			}
 		}
 	},
@@ -102,11 +102,11 @@ exports.BattleMovedex = {
 				return def * 2;
 			},
 			onStart: function(side) {
-				this.add('-sidestart',side,'Reflect');
+				this.add('-sidestart', side, 'Reflect');
 			},
 			onResidualOrder: 21,
 			onEnd: function(side) {
-				this.add('-sideend',side,'Reflect');
+				this.add('-sideend', side, 'Reflect');
 			}
 		}
 	},
@@ -130,7 +130,7 @@ exports.BattleMovedex = {
 		inherit: true,
 			onHit: function(pokemon) {
 				var moves = [];
-				for (var i=0; i<pokemon.moveset.length; i++) {
+				for (var i = 0; i < pokemon.moveset.length; i++) {
 					var move = pokemon.moveset[i].id;
 					var NoSleepTalk = {
 						bide:1, dig:1, fly:1, metronome:1, mirrormove:1,
@@ -162,8 +162,8 @@ exports.BattleMovedex = {
 			onSwitchIn: function(pokemon) {
 				var side = pokemon.side;
 				if (!pokemon.runImmunity('Ground')) return;
-				var damageAmounts = [0,3];
-				var damage = this.damage(damageAmounts[this.effectData.layers]*pokemon.maxhp/24);
+				var damageAmounts = [0, 3];
+				var damage = this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			}
 		}
 	},
@@ -172,7 +172,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function(target) {
 				this.add('-start', target, 'Substitute');
-				this.effectData.hp = Math.floor(target.maxhp/4);
+				this.effectData.hp = Math.floor(target.maxhp / 4);
 				delete target.volatiles['partiallytrapped'];
 			},
 			onTryPrimaryHitPriority: -1,

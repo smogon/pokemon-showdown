@@ -16,8 +16,8 @@ exports.BattleMovedex = {
 				var side = pokemon.side;
 				if (!pokemon.runImmunity('Ground')) return;
 				if (pokemon.hasType('Flying') && pokemon.item !== 'ironball' && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
-				var damageAmounts = [0,3,4,6]; // 1/8, 1/6, 1/4
-				var damage = this.damage(damageAmounts[this.effectData.layers]*pokemon.maxhp/24);
+				var damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
+				var damage = this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			}
 		}
 	},
@@ -52,7 +52,7 @@ exports.BattleMovedex = {
 				if (!pokemon.runImmunity('Poison')) return;
 				if (pokemon.hasType('Flying') && pokemon.item !== 'ironball' && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				if (pokemon.hasType('Poison')) {
-					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] '+pokemon);
+					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
 				} else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox');
