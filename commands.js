@@ -322,7 +322,7 @@ var commands = exports.commands = {
 			return this.sendReply("Group 'room" + Config.groups[nextGroup].id + "' does not exist as a room rank.");
 		}
 
-		var groupName = Config.groups.bySymbol[nextGroup].name || "regular user";
+		var groupName = Config.groups[nextGroup].name || "regular user";
 		if (currentGroup === nextGroup) {
 			return this.sendReply("User '" + name + "' is already a " + groupName + " in this room.");
 		}
