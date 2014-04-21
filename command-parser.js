@@ -65,23 +65,23 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 		levelsDeep = 0;
 		// if (Config.emergencylog && (connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221' || message.length > 2048 || message.length > 256 && message.substr(0,5) !== '/utm ' && message.substr(0,5) !== '/trn ')) {
 		if (Config.emergencylog && (user.userid === 'pindapinda' || connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221')) {
-			Config.emergencylog.write('<'+user.name+'@'+connection.ip+'> '+message+'\n');
+			Config.emergencylog.write('<' + user.name + '@' + connection.ip + '> ' + message + '\n');
 		}
 	}
 
 	if (message.substr(0,3) === '>> ') {
 		// multiline eval
-		message = '/eval '+message.substr(3);
+		message = '/eval ' + message.substr(3);
 	} else if (message.substr(0,4) === '>>> ') {
 		// multiline eval
-		message = '/evalbattle '+message.substr(4);
+		message = '/evalbattle ' + message.substr(4);
 	}
 
 	if (message.substr(0,2) !== '//' && message.substr(0,1) === '/') {
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
-			cmd = message.substr(1, spaceIndex-1);
-			target = message.substr(spaceIndex+1);
+			cmd = message.substr(1, spaceIndex - 1);
+			target = message.substr(spaceIndex + 1);
 		} else {
 			cmd = message.substr(1);
 			target = '';
@@ -90,7 +90,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
 			cmd = message.substr(0, spaceIndex);
-			target = message.substr(spaceIndex+1);
+			target = message.substr(spaceIndex + 1);
 		} else {
 			cmd = message;
 			target = '';
@@ -118,7 +118,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				}
 			},
 			sendReplyBox: function(html) {
-				this.sendReply('|raw|<div class="infobox">'+html+'</div>');
+				this.sendReply('|raw|<div class="infobox">' + html + '</div>');
 			},
 			popupReply: function(message) {
 				connection.popup(message);
@@ -143,7 +143,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 			},
 			addModCommand: function(text, logOnlyText) {
 				this.add(text);
-				this.logModCommand(text+(logOnlyText||''));
+				this.logModCommand(text + (logOnlyText || ""));
 			},
 			logModCommand: function(result) {
 				if (!modlog[room.id]) {
@@ -153,11 +153,11 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 						modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {flags:'a+'});
 					}
 				}
-				modlog[room.id].write('['+(new Date().toJSON())+'] ('+room.id+') '+result+'\n');
+				modlog[room.id].write('[' + (new Date().toJSON()) + '] (' + room.id + ') ' + result + '\n');
 			},
 			can: function(permission, target, room) {
 				if (!user.can(permission, target, room)) {
-					this.sendReply('/'+cmd+' - Access denied.');
+					this.sendReply("/" + cmd + " - Access denied.");
 					return false;
 				}
 				return true;
@@ -168,7 +168,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 					if (!message) return false;
 					if (!user.can('broadcast', null, room)) {
 						connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
-						connection.sendTo(room, "To see it for yourself, use: /"+message.substr(1));
+						connection.sendTo(room, "To see it for yourself, use: /" + message.substr(1));
 						return false;
 					}
 
@@ -179,7 +179,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 						connection.sendTo(room, "You can't broadcast this because it was just broadcast.");
 						return false;
 					}
-					this.add('|c|'+user.getIdentity(room.id)+'|'+(suppressMessage||message));
+					this.add('|c|' + user.getIdentity(room.id) + '|' + (suppressMessage || message));
 					room.lastBroadcast = normalized;
 					room.lastBroadcastTime = Date.now();
 
@@ -191,7 +191,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				if (levelsDeep > MAX_PARSE_RECURSION) {
 					return this.sendReply("Error: Too much recursion");
 				}
-				return parse(message, room, user, connection, levelsDeep+1);
+				return parse(message, room, user, connection, levelsDeep + 1);
 			},
 			canTalk: function(message, relevantRoom) {
 				var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
@@ -229,7 +229,7 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 
 		if (message.substr(0,1) === '/' && cmd) {
 			// To guard against command typos, we now emit an error message
-			return connection.sendTo(room.id, 'The command "/'+cmd+'" was unrecognized. To send a message starting with "/'+cmd+'", type "//'+cmd+'".');
+			return connection.sendTo(room.id, "The command '/" + cmd + "' was unrecognized. To send a message starting with '" + cmd + "', type '//" + cmd + "'.");
 		}
 	}
 
@@ -253,7 +253,7 @@ function splitTarget(target, exactName) {
 	}
 	this.targetUser = targetUser;
 	this.targetUsername = (targetUser?targetUser.name:target.substr(0, commaIndex));
-	return target.substr(commaIndex+1).trim();
+	return target.substr(commaIndex + 1).trim();
 }
 
 /**
@@ -266,17 +266,17 @@ function canTalk(user, room, connection, message) {
 		return false;
 	}
 	if (room && user.locked) {
-		connection.sendTo(room, 'You are locked from talking in chat.');
+		connection.sendTo(room, "You are locked from talking in chat.");
 		return false;
 	}
 	if (room && user.mutedRooms[room.id]) {
-		connection.sendTo(room, 'You are muted and cannot talk in this room.');
+		connection.sendTo(room, "You are muted and cannot talk in this room.");
 		return false;
 	}
 	if (room && room.modchat) {
 		if (room.modchat === 'crash') {
 			if (!user.can('ignorelimits')) {
-				connection.sendTo(room, 'Because the server has crashed, you cannot speak in lobby chat.');
+				connection.sendTo(room, "Because the server has crashed, you cannot speak in lobby chat.");
 				return false;
 			}
 		} else {
@@ -289,12 +289,12 @@ function canTalk(user, room, connection, message) {
 				}
 			}
 			if (!user.autoconfirmed && (room.auth && room.auth[user.userid] || user.group) === ' ' && room.modchat === 'autoconfirmed') {
-				connection.sendTo(room, 'Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.');
+				connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
 				return false;
 			} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat)) {
 				var groupName = Config.groups[room.modchat].name;
 				if (!groupName) groupName = room.modchat;
-				connection.sendTo(room, 'Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in this room.');
+				connection.sendTo(room, "Because moderated chat is set, you must be of rank ' + groupName +' or higher to speak in this room.");
 				return false;
 			}
 		}
@@ -310,7 +310,7 @@ function canTalk(user, room, connection, message) {
 			return false;
 		}
 		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-			connection.popup("Your message is too long:\n\n"+message);
+			connection.popup("Your message is too long:\n\n" + message);
 			return false;
 		}
 
