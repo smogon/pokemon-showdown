@@ -706,7 +706,7 @@ var commands = exports.commands = {
 		if (!this.can('rangeban')) return false;
 
 		Users.bannedIps[target] = '#ipban';
-		this.addModCommand(user.name + " temporarily banned the " + (target.charAt(target.length-1)==="*"?"IP range":"IP") + ": " + target);
+		this.addModCommand(user.name + " temporarily banned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
 
 	unbanip: function(target, room, user) {
@@ -719,7 +719,7 @@ var commands = exports.commands = {
 			return this.sendReply(target + " is not a banned IP or IP range.");
 		}
 		delete Users.bannedIps[target];
-		this.addModCommand(user.name + " unbanned the " + (target.charAt(target.length-1)==="*"?"IP range":"IP") + ": " + target);
+		this.addModCommand(user.name + " unbanned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
 
 	/*********************************************************
