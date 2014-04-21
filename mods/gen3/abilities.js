@@ -142,7 +142,7 @@ exports.BattleAbilities = {
 			if (bannedAbilities[target.ability]) {
 				return;
 			}
-			if (ability.name !== 'Intimidate' && pokemon.setAbility(ability)) {
+			else if (ability.name === 'Intimidate' || pokemon.setAbility(ability)) {
 				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
 			}
 		}
