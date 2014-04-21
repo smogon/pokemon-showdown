@@ -1,7 +1,7 @@
 exports.BattleItems = {
 	"blackbelt": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
 				return basePower * 1.1;
 			}
@@ -10,7 +10,7 @@ exports.BattleItems = {
 	},
 	"blackglasses": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
 				return basePower * 1.1;
 			}
@@ -19,7 +19,7 @@ exports.BattleItems = {
 	},
 	"charcoal": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Fire') {
 				return basePower * 1.1;
 			}
@@ -28,7 +28,7 @@ exports.BattleItems = {
 	},
 	"dragonfang": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
 				return basePower * 1.1;
 			}
@@ -37,7 +37,7 @@ exports.BattleItems = {
 	},
 	"hardstone": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Rock') {
 				return basePower * 1.1;
 			}
@@ -46,11 +46,11 @@ exports.BattleItems = {
 	},
 	"lightball": {
 		inherit: true,
-		onModifyAtk: function() { }
+		onModifyAtk: function () { }
 	},
 	"magnet": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Electric') {
 				return basePower * 1.1;
 			}
@@ -59,7 +59,7 @@ exports.BattleItems = {
 	},
 	"mentalherb": {
 		inherit: true,
-		onUpdate: function(pokemon) {
+		onUpdate: function (pokemon) {
 			if (pokemon.volatiles.attract && pokemon.useItem()) {
 				pokemon.removeVolatile('attract');
 			}
@@ -67,7 +67,7 @@ exports.BattleItems = {
 	},
 	"metalcoat": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Steel') {
 				return basePower * 1.1;
 			}
@@ -76,7 +76,7 @@ exports.BattleItems = {
 	},
 	"miracleseed": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Grass') {
 				return basePower * 1.1;
 			}
@@ -85,7 +85,7 @@ exports.BattleItems = {
 	},
 	"mysticwater": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Water') {
 				return basePower * 1.1;
 			}
@@ -94,7 +94,7 @@ exports.BattleItems = {
 	},
 	"nevermeltice": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Ice') {
 				return basePower * 1.1;
 			}
@@ -103,7 +103,7 @@ exports.BattleItems = {
 	},
 	"poisonbarb": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Poison') {
 				return basePower * 1.1;
 			}
@@ -112,7 +112,7 @@ exports.BattleItems = {
 	},
 	"seaincense": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Water') {
 				return basePower * 1.1;
 			}
@@ -121,7 +121,7 @@ exports.BattleItems = {
 	},
 	"sharpbeak": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Flying') {
 				return basePower * 1.1;
 			}
@@ -130,7 +130,7 @@ exports.BattleItems = {
 	},
 	"silkscarf": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Normal') {
 				return basePower * 1.1;
 			}
@@ -139,7 +139,7 @@ exports.BattleItems = {
 	},
 	"silverpowder": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Bug') {
 				return basePower * 1.1;
 			}
@@ -148,13 +148,13 @@ exports.BattleItems = {
 	},
 	"sitrusberry": {
 		inherit: true,
-		onEat: function(pokemon) {
+		onEat: function (pokemon) {
 			this.heal(30);
 		}
 	},
 	"softsand": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Ground') {
 				return basePower * 1.1;
 			}
@@ -163,7 +163,7 @@ exports.BattleItems = {
 	},
 	"spelltag": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Ghost') {
 				return basePower * 1.1;
 			}
@@ -172,7 +172,7 @@ exports.BattleItems = {
 	},
 	"twistedspoon": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return basePower * 1.1;
 			}

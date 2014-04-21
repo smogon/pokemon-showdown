@@ -62,17 +62,17 @@ exports.Formats = [
 		name: "XY Battle Spot Singles",
 		section: "XY Singles",
 
-		onBegin: function() {
+		onBegin: function () {
 			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0,3);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,3);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		banlist: [], // The neccessary bans are in Standard GBU
-		validateTeam: function(team, format) {
+		validateTeam: function (team, format) {
 			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
 		}
 	},
@@ -80,27 +80,27 @@ exports.Formats = [
 		name: "2014 April Friendly",
 		section: "XY Singles",
 
-		onBegin: function() {
+		onBegin: function () {
 			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0,3);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,3);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,
 		requirePentagon: true,
 		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview GBU', 'Kalos Pokedex'],
 		banlist: ['Unreleased', 'Illegal'],
-		validateTeam: function(team, format) {
+		validateTeam: function (team, format) {
 			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
 		},
-		onModifyMove: function(move) {
+		onModifyMove: function (move) {
 			if (move.id === 'camouflage') {
-				move.onHit = function(target) {
+				move.onHit = function (target) {
 					if (target.setType('Ground')) this.add('-start', target, 'typechange', 'Ground');
 				};
 			} else if (move.id === 'naturepower') {
-				move.onHit = function(target) {
+				move.onHit = function (target) {
 					this.useMove('earthquake', target);
 				};
 			} else if (move.id === 'secretpower') {
@@ -129,7 +129,7 @@ exports.Formats = [
 	// XY Doubles
 	///////////////////////////////////////////////////////////////////
 
-	
+
 	{
 		name: "Random Doubles Battle",
 		section: "XY Doubles",
@@ -209,16 +209,16 @@ exports.Formats = [
 		section: "XY Doubles",
 
 		gameType: 'doubles',
-		onBegin: function() {
+		onBegin: function () {
 			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		validateTeam: function(team, format) {
+		validateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least 4 Pokemon.'];
 		}
 	},
@@ -227,18 +227,18 @@ exports.Formats = [
 		section: "XY Doubles",
 
 		gameType: 'doubles',
-		onBegin: function() {
+		onBegin: function () {
 			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
 		requirePentagon: true,
 		banlist: [], // The neccessary bans are in Standard GBU
-		validateTeam: function(team, format) {
+		validateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least 4 Pokemon.'];
 		}
 	},
@@ -276,7 +276,7 @@ exports.Formats = [
 		banlist: [
 			"Arceus", "Arceus-Bug", "Arceus-Dark", "Arceus-Dragon", "Arceus-Electric", "Arceus-Fairy", "Arceus-Fighting", "Arceus-Fire",
 			"Arceus-Flying", "Arceus-Ghost", "Arceus-Grass", "Arceus-Ground", "Arceus-Ice", "Arceus-Poison", "Arceus-Psychic", "Arceus-Rock", "Arceus-Steel",
-			"Arceus-Water", "Darkrai", "Deoxys", "Deoxys-Attack", "Dialga", "Giratina", "Giratina-Origin"," Groudon", "Ho-Oh", "Kyurem-White", "Lugia",
+			"Arceus-Water", "Darkrai", "Deoxys", "Deoxys-Attack", "Dialga", "Giratina", "Giratina-Origin", "Groudon", "Ho-Oh", "Kyurem-White", "Lugia",
 			"Mewtwo", "Mewtwo-Mega-X", "Mewtwo-Mega-Y", "Palkia", "Rayquaza", "Reshiram", "Xerneas", "Zekrom", "Regigigas", "Slaking", "Ampharosite", "Gyaradosite",
 			"Meloetta"
 		]
@@ -309,7 +309,7 @@ exports.Formats = [
 
 		team: 'randomCC',
 		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod'],
-		onBegin: function() {
+		onBegin: function () {
 			this.debug('Cutting down to 1');
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
@@ -390,10 +390,10 @@ exports.Formats = [
 		name: "Sky Battles",
 		section: "Other Metagames",
 
-		validateSet: function(set) {
+		validateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
 			if (template.types.indexOf('Flying') === -1 && set.ability !== 'Levitate') {
-				return [set.species+" is not a Flying type and does not have the ability Levitate."];
+				return [set.species + " is not a Flying type and does not have the ability Levitate."];
 			}
 		},
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -452,10 +452,10 @@ exports.Formats = [
 		name: "1v1",
 		section: 'Other Metagames',
 
-		onBegin: function() {
-			this.p1.pokemon = this.p1.pokemon.slice(0,1);
+		onBegin: function () {
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,1);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		ruleset: ['Pokemon', 'Standard'],
@@ -479,7 +479,7 @@ exports.Formats = [
 		banlist: ['Illegal', 'Eviolite'],
 		maxLevel: 50,
 		defaultLevel: 50,
-		validateSet: function(set) {
+		validateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
 			if (!template.evos || template.evos.length === 0 || !template.prevo) {
 				return [set.species + " is not the middle Pokémon in an evolution chain."];
@@ -524,11 +524,11 @@ exports.Formats = [
 			'Blaziken', 'Blaziken-Mega', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre',
 			'Kyurem-White', 'Lugia', 'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom'
 		],
-		validateTeam: function(team, format) {
+		validateTeam: function (team, format) {
 			var letters = {};
 			var letter = '';
 			for (var i = 0; i < team.length; i++) {
-				letter = Tools.getTemplate(team[i]).species.slice(0,1).toUpperCase();
+				letter = Tools.getTemplate(team[i]).species.slice(0, 1).toUpperCase();
 				if (letter in letters) return ['Your team cannot have more that one Pokémon starting with the letter "' + letter + '".'];
 				letters[letter] = 1;
 			}
@@ -604,7 +604,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] RU'],
-		banlist: ['RU','BL3', 'Prankster + Assist']
+		banlist: ['RU', 'BL3', 'Prankster + Assist']
 	},
 	{
 		name: "[Gen 5] LC",
@@ -620,15 +620,15 @@ exports.Formats = [
 		section: "BW2 Singles",
 
 		mod: 'gen5',
-		validateSet: function(set) {
+		validateSet: function (set) {
 			if (!set.level || set.level >= 50) set.forcedLevel = 50;
 			return [];
 		},
-		onBegin: function() {
+		onBegin: function () {
 			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0,3);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,3);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
@@ -681,11 +681,11 @@ exports.Formats = [
 
 		mod: 'gen5',
 		gameType: 'doubles',
-		onBegin: function() {
+		onBegin: function () {
 			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,

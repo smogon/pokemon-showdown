@@ -1,15 +1,15 @@
 exports.BattleItems = {
 	"choiceband": {
 		inherit: true,
-		onStart: function() { }
+		onStart: function () { }
 	},
 	"choicescarf": {
 		inherit: true,
-		onStart: function() { }
+		onStart: function () { }
 	},
 	"choicespecs": {
 		inherit: true,
-		onStart: function() { }
+		onStart: function () { }
 	},
 	"custapberry": {
 		id: "custapberry",
@@ -20,8 +20,8 @@ exports.BattleItems = {
 			basePower: 80,
 			type: "Ghost"
 		},
-		onBeforeTurn: function(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp/4 || (pokemon.hp <= pokemon.maxhp/2 && pokemon.ability === 'gluttony')) {
+		onBeforeTurn: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
 				var decision = this.willMove(pokemon);
 				if (!decision) return;
 				this.addQueue({
@@ -34,16 +34,16 @@ exports.BattleItems = {
 				});
 			}
 		},
-		onCustap: function(pokemon) {
+		onCustap: function (pokemon) {
 			var decision = this.willMove(pokemon);
-			this.debug('custap decision: '+decision);
+			this.debug('custap decision: ' + decision);
 			if (decision) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function(pokemon) {
+		onEat: function (pokemon) {
 			var decision = this.willMove(pokemon);
-			this.debug('custap eaten: '+decision);
+			this.debug('custap eaten: ' + decision);
 			if (decision) {
 				this.cancelDecision(pokemon);
 				this.add('-message', "Custap Berry activated.");
@@ -54,7 +54,7 @@ exports.BattleItems = {
 	},
 	"ironball": {
 		inherit: true,
-		onModifyPokemon: function(pokemon) {
+		onModifyPokemon: function (pokemon) {
 			pokemon.negateImmunity['Ground'] = true;
 		},
 		desc: "Holder's Speed is halved and it becomes grounded."
@@ -66,7 +66,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
-		onBasePower: function(basePower, user, target) {
+		onBasePower: function (basePower, user, target) {
 			if (!target.volatiles['substitute']) {
 				user.addVolatile('lifeorb');
 			}
@@ -74,9 +74,9 @@ exports.BattleItems = {
 		},
 		effect: {
 			duration: 1,
-			onAfterMoveSecondarySelf: function(source, target, move) {
+			onAfterMoveSecondarySelf: function (source, target, move) {
 				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb']) {
-					this.damage(source.maxhp/10, source, source, this.getItem('lifeorb'));
+					this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}
 			}
@@ -91,11 +91,11 @@ exports.BattleItems = {
 		spritenum: 285,
 		fling: {
 			basePower: 10,
-			effect: function(pokemon) {
+			effect: function (pokemon) {
 				pokemon.removeVolatile('attract');
 			}
 		},
-		onUpdate: function(pokemon) {
+		onUpdate: function (pokemon) {
 			if (pokemon.volatiles.attract && pokemon.useItem()) {
 				pokemon.removeVolatile('attract');
 			}
@@ -105,7 +105,7 @@ exports.BattleItems = {
 	"metronome": {
 		inherit: true,
 		effect: {
-			onBasePower: function(basePower, pokemon, target, move) {
+			onBasePower: function (basePower, pokemon, target, move) {
 				if (pokemon.item !== 'metronome') {
 					pokemon.removeVolatile('metronome');
 					return;
@@ -116,7 +116,7 @@ exports.BattleItems = {
 				} else if (this.effectData.numConsecutive < 10) {
 					this.effectData.numConsecutive++;
 				}
-				return basePower * (1+(this.effectData.numConsecutive/10));
+				return basePower * (1 + (this.effectData.numConsecutive / 10));
 			}
 		}
 	}

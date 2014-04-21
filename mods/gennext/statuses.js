@@ -1,12 +1,12 @@
 exports.BattleStatuses = {
 	frz: {
 		effectType: 'Status',
-		onStart: function(target) {
+		onStart: function (target) {
 			this.add('-status', target, 'frz');
 		},
 		duration: 2,
 		onBeforeMovePriority: 2,
-		onBeforeMove: function(pokemon, target, move) {
+		onBeforeMove: function (pokemon, target, move) {
 			if (move.thawsUser) {
 				pokemon.cureStatus();
 				return;
@@ -14,21 +14,21 @@ exports.BattleStatuses = {
 			this.add('cant', pokemon, 'frz');
 			return false;
 		},
-		onHit: function(target, source, move) {
+		onHit: function (target, source, move) {
 			if (move.type === 'Fire' && move.category !== 'Status' || move.thawsUser) {
 				target.cureStatus();
 			}
 		},
-		onEnd: function(target) {
+		onEnd: function (target) {
 			this.battle.add('-curestatus', target, 'frz');
 		}
 	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
-		durationCallback: function() {
-			return this.random(2,4);
+		durationCallback: function () {
+			return this.random(2, 4);
 		},
-		onResidual: function(target) {
+		onResidual: function (target) {
 			var move = this.getMove(target.lastMove);
 			if (!move.self || move.self.volatileStatus !== 'lockedmove') {
 				// don't lock, and bypass confusion for calming
@@ -38,32 +38,32 @@ exports.BattleStatuses = {
 				delete target.volatiles['lockedmove'];
 			}
 		},
-		onEnd: function(target) {
+		onEnd: function (target) {
 			this.add('-end', target, 'rampage');
 			target.addVolatile('confusion');
 		},
-		onLockMove: function(pokemon) {
+		onLockMove: function (pokemon) {
 			return pokemon.lastMove;
 		}
 	},
 	confusion: {
 		// this is a volatile status
-		onStart: function(target, source, sourceEffect) {
+		onStart: function (target, source, sourceEffect) {
 			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
 			if (!result) return result;
 			this.add('-start', target, 'confusion');
-			this.effectData.time = this.random(3,4);
+			this.effectData.time = this.random(3, 4);
 		},
-		onEnd: function(target) {
+		onEnd: function (target) {
 			this.add('-end', target, 'confusion');
 		},
-		onBeforeMove: function(pokemon) {
+		onBeforeMove: function (pokemon) {
 			pokemon.volatiles.confusion.time--;
 			if (!pokemon.volatiles.confusion.time) {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
-			this.directDamage(this.getDamage(pokemon,pokemon,30));
+			this.directDamage(this.getDamage(pokemon, pokemon, 30));
 		}
 	},
 
@@ -72,7 +72,7 @@ exports.BattleStatuses = {
 
 	raindance: {
 		inherit: true,
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function (basePower, attacker, defender, move) {
 			if (move.id === 'scald') {
 				return;
 			}
@@ -88,7 +88,7 @@ exports.BattleStatuses = {
 	},
 	sunnyday: {
 		inherit: true,
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function (basePower, attacker, defender, move) {
 			if (move.id === 'scald') {
 				return;
 			}
@@ -111,26 +111,26 @@ exports.BattleStatuses = {
 
 	unown: {
 		// Unown: Shadow Tag
-		onImmunity: function(type) {
+		onImmunity: function (type) {
 			if (type === 'Ground') return false;
 		},
-		onStart: function(pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.ability === 'levitate') {
 				pokemon.ability = 'shadowtag';
 				pokemon.baseAbility = 'shadowtag';
 			}
 		},
-		onModifyPokemon: function(pokemon) {
+		onModifyPokemon: function (pokemon) {
 			if (pokemon.transformed) return;
 			pokemon.types = [pokemon.hpType || 'Dark'];
 		}
 	},
 	bronzong: {
 		// Bronzong: Heatproof
-		onImmunity: function(type) {
+		onImmunity: function (type) {
 			if (type === 'Ground') return false;
 		},
-		onStart: function(pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.ability === 'levitate') {
 				pokemon.ability = 'heatproof';
 				pokemon.baseAbility = 'heatproof';
@@ -139,10 +139,10 @@ exports.BattleStatuses = {
 	},
 	weezing: {
 		// Weezing: Aftermath
-		onImmunity: function(type) {
+		onImmunity: function (type) {
 			if (type === 'Ground') return false;
 		},
-		onStart: function(pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.ability === 'levitate') {
 				pokemon.ability = 'aftermath';
 				pokemon.baseAbility = 'aftermath';
@@ -151,10 +151,10 @@ exports.BattleStatuses = {
 	},
 	flygon: {
 		// Flygon: Compoundeyes
-		onImmunity: function(type) {
+		onImmunity: function (type) {
 			if (type === 'Ground') return false;
 		},
-		onStart: function(pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.ability === 'levitate') {
 				pokemon.ability = 'compoundeyes';
 				pokemon.baseAbility = 'compoundeyes';
@@ -163,10 +163,10 @@ exports.BattleStatuses = {
 	},
 	eelektross: {
 		// Eelektross: Poison Heal
-		onImmunity: function(type) {
+		onImmunity: function (type) {
 			if (type === 'Ground') return false;
 		},
-		onStart: function(pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.ability === 'levitate') {
 				pokemon.ability = 'poisonheal';
 				pokemon.baseAbility = 'poisonheal';
@@ -175,10 +175,10 @@ exports.BattleStatuses = {
 	},
 	claydol: {
 		// Claydol: Filter
-		onImmunity: function(type) {
+		onImmunity: function (type) {
 			if (type === 'Ground') return false;
 		},
-		onStart: function(pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.ability === 'levitate') {
 				pokemon.ability = 'filter';
 				pokemon.baseAbility = 'filter';
@@ -187,10 +187,10 @@ exports.BattleStatuses = {
 	},
 	gengar: {
 		// Gengar: Cursed Body
-		onImmunity: function(type, pokemon) {
+		onImmunity: function (type, pokemon) {
 			if (pokemon.template.id !== 'gengarmega' && type === 'Ground') return false;
 		},
-		onStart: function(pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.ability === 'levitate') {
 				pokemon.ability = 'cursedbody';
 				pokemon.baseAbility = 'cursedbody';
@@ -199,10 +199,10 @@ exports.BattleStatuses = {
 	},
 	mismagius: {
 		// Mismagius: Cursed Body
-		onImmunity: function(type) {
+		onImmunity: function (type) {
 			if (type === 'Ground') return false;
 		},
-		onStart: function(pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.ability === 'levitate') {
 				pokemon.ability = 'cursedbody';
 				pokemon.baseAbility = 'cursedbody';
@@ -211,21 +211,21 @@ exports.BattleStatuses = {
 	},
 	cryogonal: {
 		// Cryogonal: infinite hail, Ice Body
-		onModifyMove: function(move) {
+		onModifyMove: function (move) {
 			if (move.id === 'hail') {
 				var weather = move.weather;
 				move.weather = null;
-				move.onHit = function(target, source) {
+				move.onHit = function (target, source) {
 					this.setWeather(weather, source, this.getAbility('snowwarning'));
 					this.weatherData.duration = 0;
 				};
 				move.target = 'self';
 			}
 		},
-		onImmunity: function(type) {
+		onImmunity: function (type) {
 			if (type === 'Ground') return false;
 		},
-		onStart: function(pokemon) {
+		onStart: function (pokemon) {
 			if (pokemon.ability === 'levitate') {
 				pokemon.ability = 'icebody';
 				pokemon.baseAbility = 'icebody';
@@ -234,11 +234,11 @@ exports.BattleStatuses = {
 	},
 	probopass: {
 		// Probopass: infinite sand
-		onModifyMove: function(move) {
+		onModifyMove: function (move) {
 			if (move.id === 'sandstorm') {
 				var weather = move.weather;
 				move.weather = null;
-				move.onHit = function(target, source) {
+				move.onHit = function (target, source) {
 					this.setWeather(weather, source, this.getAbility('sandstream'));
 					this.weatherData.duration = 0;
 				};
@@ -248,11 +248,11 @@ exports.BattleStatuses = {
 	},
 	phione: {
 		// Phione: infinite rain
-		onModifyMove: function(move) {
+		onModifyMove: function (move) {
 			if (move.id === 'raindance') {
 				var weather = move.weather;
 				move.weather = null;
-				move.onHit = function(target, source) {
+				move.onHit = function (target, source) {
 					this.setWeather(weather, source, this.getAbility('drizzle'));
 					this.weatherData.duration = 0;
 				};
