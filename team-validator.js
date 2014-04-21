@@ -11,11 +11,11 @@ if (!process.send) {
 	var validationCount = 0;
 	var pendingValidations = {};
 
-	var ValidatorProcess = (function() {
+	var ValidatorProcess = (function () {
 		function ValidatorProcess() {
 			this.process = require('child_process').fork('team-validator.js');
 			var self = this;
-			this.process.on('message', function(message) {
+			this.process.on('message', function (message) {
 				// Protocol:
 				// success: "[id]|1[details]"
 				// failure: "[id]|0[details]"
@@ -33,20 +33,20 @@ if (!process.send) {
 		ValidatorProcess.prototype.load = 0;
 		ValidatorProcess.prototype.active = true;
 		ValidatorProcess.processes = [];
-		ValidatorProcess.spawn = function() {
+		ValidatorProcess.spawn = function () {
 			var num = Config.validatorprocesses || 1;
 			for (var i = 0; i < num; ++i) {
 				this.processes.push(new ValidatorProcess());
 			}
 		};
-		ValidatorProcess.respawn = function() {
-			this.processes.splice(0).forEach(function(process) {
+		ValidatorProcess.respawn = function () {
+			this.processes.splice(0).forEach(function (process) {
 				process.active = false;
 				if (!process.load) process.process.disconnect();
 			});
 			this.spawn();
 		};
-		ValidatorProcess.acquire = function() {
+		ValidatorProcess.acquire = function () {
 			var process = this.processes[0];
 			for (var i = 1; i < this.processes.length; ++i) {
 				if (this.processes[i].load < process.load) {
@@ -56,13 +56,13 @@ if (!process.send) {
 			++process.load;
 			return process;
 		};
-		ValidatorProcess.release = function(process) {
+		ValidatorProcess.release = function (process) {
 			--process.load;
 			if (!process.load && !process.active) {
 				process.process.disconnect();
 			}
 		};
-		ValidatorProcess.send = function(format, team, callback) {
+		ValidatorProcess.send = function (format, team, callback) {
 			var process = this.acquire();
 			pendingValidations[validationCount] = callback;
 			try {
@@ -79,20 +79,20 @@ if (!process.send) {
 	exports.ValidatorProcess = ValidatorProcess;
 	exports.pendingValidations = pendingValidations;
 
-	exports.validateTeam = function(format, team, callback) {
+	exports.validateTeam = function (format, team, callback) {
 		ValidatorProcess.send(format, team, callback);
 	};
 
 	var synchronousValidators = {};
-	exports.validateTeamSync = function(format, team) {
+	exports.validateTeamSync = function (format, team) {
 		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
 		return synchronousValidators[format].validateTeam(team);
 	};
-	exports.validateSetSync = function(format, set, teamHas) {
+	exports.validateSetSync = function (format, set, teamHas) {
 		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
 		return synchronousValidators[format].validateSet(set, teamHas);
 	};
-	exports.checkLearnsetSync = function(format, move, template, lsetData) {
+	exports.checkLearnsetSync = function (format, move, template, lsetData) {
 		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
 		return synchronousValidators[format].checkLearnset(move, template, lsetData);
 	};
@@ -114,7 +114,7 @@ if (!process.send) {
 	 * If an object with an ID is passed, its ID will be returned.
 	 * Otherwise, an empty string will be returned.
 	 */
-	global.toId = function(text) {
+	global.toId = function (text) {
 		if (text && text.id) text = text.id;
 		else if (text && text.userid) text = text.userid;
 
@@ -125,7 +125,7 @@ if (!process.send) {
 	 * Validates a username or Pokemon nickname
 	 */
 	var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
-	global.toName = function(name) {
+	global.toName = function (name) {
 		name = string(name);
 		name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
 		while (bannedNameStartChars[name.charAt(0)]) {
@@ -144,7 +144,7 @@ if (!process.send) {
 	 * If we're expecting a string and being given anything that isn't a string
 	 * or a number, it's safe to assume it's an error, and return ''
 	 */
-	global.string = function(str) {
+	global.string = function (str) {
 		if (typeof str === 'string' || typeof str === 'number') return '' + str;
 		return '';
 	};
@@ -157,7 +157,7 @@ if (!process.send) {
 		process.send(id + (success ? '|1' : '|0') + details);
 	}
 
-	process.on('message', function(message) {
+	process.on('message', function (message) {
 		// protocol:
 		// "[id]|[format]|[team]"
 		var pipeIndex = message.indexOf('|');
@@ -181,13 +181,13 @@ if (!process.send) {
 	});
 }
 
-var Validator = (function() {
+var Validator = (function () {
 	function Validator(format) {
 		this.format = Tools.getFormat(format);
 		this.tools = Tools.mod(this.format);
 	}
 
-	Validator.prototype.validateTeam = function(team) {
+	Validator.prototype.validateTeam = function (team) {
 		var format = this.format;
 		var tools = this.tools;
 
@@ -247,7 +247,7 @@ var Validator = (function() {
 		return problems;
 	};
 
-	Validator.prototype.validateSet = function(set, teamHas) {
+	Validator.prototype.validateSet = function (set, teamHas) {
 		var format = this.format;
 		var tools = this.tools;
 
@@ -391,7 +391,7 @@ var Validator = (function() {
 			}
 		}
 		if (set.moves && Array.isArray(set.moves)) {
-			set.moves = set.moves.filter(function(val){ return val; });
+			set.moves = set.moves.filter(function (val){ return val; });
 		}
 		if (!set.moves || !set.moves.length) {
 			problems.push(name + " has no moves.");
@@ -534,7 +534,7 @@ var Validator = (function() {
 		return problems;
 	};
 
-	Validator.prototype.checkLearnset = function(move, template, lsetData) {
+	Validator.prototype.checkLearnset = function (move, template, lsetData) {
 		var tools = this.tools;
 
 		move = toId(move);

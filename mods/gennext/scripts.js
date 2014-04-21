@@ -1,5 +1,5 @@
 exports.BattleScripts = {
-	init: function() {
+	init: function () {
 		this.modData('Pokedex', 'cherrimsunshine').types = ['Grass', 'Fire'];
 
 		// Give Hurricane to all the Bug/Flying Quiver-dancers

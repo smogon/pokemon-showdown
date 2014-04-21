@@ -43,7 +43,7 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
 		return;
 	}
 	var blocklist = BLOCKLISTS[index];
-	dns.resolve4(reversedIpDot + blocklist, function(err, addresses) {
+	dns.resolve4(reversedIpDot + blocklist, function (err, addresses) {
 		if (!err) {
 			// blocked
 			callback(dnsblCache[ip] = blocklist);

@@ -1,6 +1,6 @@
 exports.BattleScripts = {
 	gen: 6,
-	runMove: function(move, pokemon, target, sourceEffect) {
+	runMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && toId(move) !== 'struggle') {
 			var changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
 			if (changedMove && changedMove !== true) {
@@ -47,7 +47,7 @@ exports.BattleScripts = {
 		this.runEvent('AfterMove', target, pokemon, move);
 		this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
-	useMove: function(move, pokemon, target, sourceEffect) {
+	useMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMoveCopy(move);
 		var baseTarget = move.target;
@@ -182,7 +182,7 @@ exports.BattleScripts = {
 		}
 		return true;
 	},
-	tryMoveHit: function(target, pokemon, move, spreadHit) {
+	tryMoveHit: function (target, pokemon, move, spreadHit) {
 		if (move.selfdestruct && spreadHit) {
 			pokemon.hp = 0;
 		}
@@ -285,7 +285,7 @@ exports.BattleScripts = {
 
 		return damage;
 	},
-	moveHit: function(target, pokemon, move, moveData, isSecondary, isSelf) {
+	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
 		var damage;
 		move = this.getMoveCopy(move);
 
@@ -495,7 +495,7 @@ exports.BattleScripts = {
 		return damage;
 	},
 
-	runMegaEvo: function(pokemon) {
+	runMegaEvo: function (pokemon) {
 		var side = pokemon.side;
 		var item = this.getItem(pokemon.item);
 		if (!item.megaStone) return false;
@@ -517,12 +517,12 @@ exports.BattleScripts = {
 		return true;
 	},
 
-	isAdjacent: function(pokemon1, pokemon2) {
+	isAdjacent: function (pokemon1, pokemon2) {
 		if (!pokemon1.fainted && !pokemon2.fainted && pokemon2.position !== pokemon1.position && Math.abs(pokemon2.position - pokemon1.position) <= 1) {
 			return true;
 		}
 	},
-	checkAbilities: function(selectedAbilities, defaultAbilities) {
+	checkAbilities: function (selectedAbilities, defaultAbilities) {
 		if (!selectedAbilities.length) return true;
 		var selectedAbility = selectedAbilities.pop();
 		var isValid = false;
@@ -539,7 +539,7 @@ exports.BattleScripts = {
 		if (!isValid) selectedAbilities.push(selectedAbility);
 		return isValid;
 	},
-	canMegaEvo: function(template) {
+	canMegaEvo: function (template) {
 		if (template.otherFormes) {
 			var forme = this.getTemplate(template.otherFormes[0]);
 			if (forme.requiredItem) {
@@ -549,7 +549,7 @@ exports.BattleScripts = {
 		}
 		return false;
 	},
-	getTeam: function(side, team) {
+	getTeam: function (side, team) {
 		var format = side.battle.getFormat();
 		if (format.team === 'random') {
 			return this.randomTeam(side);
@@ -561,7 +561,7 @@ exports.BattleScripts = {
 			return this.randomTeam(side);
 		}
 	},
-	randomCCTeam: function(side) {
+	randomCCTeam: function (side) {
 		var teamdexno = [];
 		var team = [];
 
@@ -718,7 +718,7 @@ exports.BattleScripts = {
 		//console.log(team);
 		return team;
 	},
-	randomSet: function(template, i) {
+	randomSet: function (template, i) {
 		if (i === undefined) i = 1;
 		template = this.getTemplate(template);
 		var name = template.name;
@@ -1235,7 +1235,7 @@ exports.BattleScripts = {
 			if (template.abilities['H']) {
 				abilities.push(template.abilities['H']);
 			}
-			abilities.sort(function(a, b){
+			abilities.sort(function (a, b){
 				return this.getAbility(b).rating - this.getAbility(a).rating;
 			}.bind(this));
 			var ability0 = this.getAbility(abilities[0]);
@@ -1596,7 +1596,7 @@ exports.BattleScripts = {
 			shiny: (Math.random() * 1024 <= 1)
 		};
 	},
-	randomTeam: function(side) {
+	randomTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
@@ -1714,7 +1714,7 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomBetaTeam: function(side) {
+	randomBetaTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
@@ -1828,7 +1828,7 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomDoublesTeam: function(side) {
+	randomDoublesTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
@@ -1926,7 +1926,7 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomDoublesSet: function(template) {
+	randomDoublesSet: function (template) {
 		template = this.getTemplate(template);
 		var name = template.name;
 
@@ -2427,7 +2427,7 @@ exports.BattleScripts = {
 			if (template.abilities['H']) {
 				abilities.push(template.abilities['H']);
 			}
-			abilities.sort(function(a, b){
+			abilities.sort(function (a, b){
 				return this.getAbility(b).rating - this.getAbility(a).rating;
 			}.bind(this));
 			var ability0 = this.getAbility(abilities[0]);

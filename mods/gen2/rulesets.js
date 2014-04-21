@@ -1,7 +1,7 @@
 exports.BattleFormats = {
 	pokemon: {
 		effectType: 'Banlist',
-		validateSet: function(set, format) {
+		validateSet: function (set, format) {
 			var template = this.getTemplate(set.species);
 			var problems = [];
 			if (set.species === set.name) delete set.name;
@@ -106,7 +106,7 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Ignore Illegal Abilities'],
-		validateSet: function(set) {
+		validateSet: function (set) {
 			// limit one of each move in Standard
 			var moves = [];
 			if (set.moves) {

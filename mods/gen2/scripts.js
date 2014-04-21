@@ -20,7 +20,7 @@ exports.BattleScripts = {
 
 		return stat;
 	},
-	getDamage: function(pokemon, target, move, suppressMessages) {
+	getDamage: function (pokemon, target, move, suppressMessages) {
 		// We get the move
 		if (typeof move === 'string') move = this.getMove(move);
 		if (typeof move === 'number') move = {
@@ -184,11 +184,11 @@ exports.BattleScripts = {
 		// We are done, this is the final damage
 		return Math.floor(baseDamage);
 	},
-	faint: function(pokemon, source, effect) {
+	faint: function (pokemon, source, effect) {
 		pokemon.faint(source, effect);
 		this.queue = [];
 	},
-	comparePriority: function(a, b) {
+	comparePriority: function (a, b) {
 		a.priority = a.priority || 0;
 		a.subPriority = a.subPriority || 0;
 		a.speed = a.speed || 0;
@@ -218,13 +218,13 @@ exports.BattleScripts = {
 		}
 		return Math.random() - 0.5;
 	},
-	getResidualStatuses: function(thing, callbackType) {
+	getResidualStatuses: function (thing, callbackType) {
 		var statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
 		statuses.sort(this.comparePriority);
 		//if (statuses[0]) this.debug('match ' + (callbackType || 'residualCallback') + ': ' + statuses[0].status.id);
 		return statuses;
 	},
-	residualEvent: function(eventid, relayVar) {
+	residualEvent: function (eventid, relayVar) {
 		var statuses = this.getRelevantEffectsInner(this, 'on' + eventid, null, null, false, true, 'duration');
 		statuses.sort(this.comparePriority);
 		while (statuses.length) {
@@ -241,13 +241,13 @@ exports.BattleScripts = {
 			this.singleEvent(eventid, status, statusObj.statusData, statusObj.thing, relayVar);
 		}
 	},
-	getRelevantEffects: function(thing, callbackType, foeCallbackType, foeThing, checkChildren) {
+	getRelevantEffects: function (thing, callbackType, foeCallbackType, foeThing, checkChildren) {
 		var statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
 		statuses.sort(this.comparePriority);
 		//if (statuses[0]) this.debug('match ' + callbackType + ': ' + statuses[0].status.id);
 		return statuses;
 	},
-	addQueue: function(decision, noSort, side) {
+	addQueue: function (decision, noSort, side) {
 		if (decision) {
 			if (Array.isArray(decision)) {
 				for (var i = 0; i < decision.length; i++) {

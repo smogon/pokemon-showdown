@@ -58,7 +58,7 @@ var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_l
  *     if he's muted, will warn him that he's muted, and
  *     return false.
  */
-var parse = exports.parse = function(message, room, user, connection, levelsDeep) {
+var parse = exports.parse = function (message, room, user, connection, levelsDeep) {
 	var cmd = '', target = '';
 	if (!message || !message.trim().length) return;
 	if (!levelsDeep) {
@@ -110,26 +110,26 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 	}
 	if (commandHandler) {
 		var context = {
-			sendReply: function(data) {
+			sendReply: function (data) {
 				if (this.broadcasting) {
 					room.add(data, true);
 				} else {
 					connection.sendTo(room, data);
 				}
 			},
-			sendReplyBox: function(html) {
+			sendReplyBox: function (html) {
 				this.sendReply('|raw|<div class="infobox">' + html + '</div>');
 			},
-			popupReply: function(message) {
+			popupReply: function (message) {
 				connection.popup(message);
 			},
-			add: function(data) {
+			add: function (data) {
 				room.add(data, true);
 			},
-			send: function(data) {
+			send: function (data) {
 				room.send(data);
 			},
-			privateModCommand: function(data) {
+			privateModCommand: function (data) {
 				for (var i in room.users) {
 					if (room.users[i].isStaff) {
 						room.users[i].sendTo(room, data);
@@ -138,14 +138,14 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				this.logEntry(data);
 				this.logModCommand(data);
 			},
-			logEntry: function(data) {
+			logEntry: function (data) {
 				room.logEntry(data);
 			},
-			addModCommand: function(text, logOnlyText) {
+			addModCommand: function (text, logOnlyText) {
 				this.add(text);
 				this.logModCommand(text + (logOnlyText || ""));
 			},
-			logModCommand: function(result) {
+			logModCommand: function (result) {
 				if (!modlog[room.id]) {
 					if (room.battle) {
 						modlog[room.id] = modlog['battle'];
@@ -155,14 +155,14 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				}
 				modlog[room.id].write('[' + (new Date().toJSON()) + '] (' + room.id + ') ' + result + '\n');
 			},
-			can: function(permission, target, room) {
+			can: function (permission, target, room) {
 				if (!user.can(permission, target, room)) {
 					this.sendReply("/" + cmd + " - Access denied.");
 					return false;
 				}
 				return true;
 			},
-			canBroadcast: function(suppressMessage) {
+			canBroadcast: function (suppressMessage) {
 				if (broadcast) {
 					message = this.canTalk(message);
 					if (!message) return false;
@@ -187,17 +187,17 @@ var parse = exports.parse = function(message, room, user, connection, levelsDeep
 				}
 				return true;
 			},
-			parse: function(message) {
+			parse: function (message) {
 				if (levelsDeep > MAX_PARSE_RECURSION) {
 					return this.sendReply("Error: Too much recursion");
 				}
 				return parse(message, room, user, connection, levelsDeep + 1);
 			},
-			canTalk: function(message, relevantRoom) {
+			canTalk: function (message, relevantRoom) {
 				var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
 				return canTalk(user, innerRoom, connection, message);
 			},
-			targetUserOrSelf: function(target, exactName) {
+			targetUserOrSelf: function (target, exactName) {
 				if (!target) {
 					this.targetUsername = user.name;
 					return user;
@@ -348,19 +348,19 @@ function canTalk(user, room, connection, message) {
 }
 
 exports.package = {};
-fs.readFile('package.json', function(err, data) {
+fs.readFile('package.json', function (err, data) {
 	if (err) return;
 	exports.package = JSON.parse(data);
 });
 
-exports.uncacheTree = function(root) {
+exports.uncacheTree = function (root) {
 	var uncache = [require.resolve(root)];
 	do {
 		var newuncache = [];
 		for (var i = 0; i < uncache.length; ++i) {
 			if (require.cache[uncache[i]]) {
 				newuncache.push.apply(newuncache,
-					require.cache[uncache[i]].children.map(function(module) {
+					require.cache[uncache[i]].children.map(function (module) {
 						return module.filename;
 					})
 				);

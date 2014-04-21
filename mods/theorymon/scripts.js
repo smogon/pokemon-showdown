@@ -4,7 +4,7 @@
  */
 exports.BattleScripts = {
 	gen: 6,
-	init: function() {
+	init: function () {
 		this.modData('Pokedex', 'ampharosmega').abilities = {0: 'Regenerator'};
 		this.modData('Pokedex', 'mismagius').types = ['Ghost', 'Fairy'];
 		this.modData('Learnsets', 'empoleon').learnset.roost = ['6L100'];

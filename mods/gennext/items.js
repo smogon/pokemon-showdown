@@ -14,7 +14,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Fire',
 		desc: "Changes Genesect to Genesect-Burn."
@@ -34,7 +34,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Ice',
 		desc: "Changes Genesect to Genesect-Chill."
@@ -54,7 +54,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Water',
 		desc: "Changes Genesect to Genesect-Douse."
@@ -74,14 +74,14 @@ exports.BattleItems = {
 				}
 			}
 		},
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Electric',
 		desc: "Changes Genesect to Genesect-Shock."
 	},
 	"widelens": {
 		inherit: true,
-		onModifyMove: function(move, user, target) {
+		onModifyMove: function (move, user, target) {
 			if (typeof move.accuracy === 'number') {
 				move.accuracy *= 1.3;
 			}
@@ -89,7 +89,7 @@ exports.BattleItems = {
 	},
 	"zoomlens": {
 		inherit: true,
-		onModifyMove: function(move, user, target) {
+		onModifyMove: function (move, user, target) {
 			if (typeof move.accuracy === 'number' && !this.willMove(target)) {
 				this.debug('Zoom Lens boosting accuracy');
 				move.accuracy *= 1.6;
@@ -98,7 +98,7 @@ exports.BattleItems = {
 	},
 	"bigroot": {
 		inherit: true,
-		onAfterMoveSelf: function(source, target) {
+		onAfterMoveSelf: function (source, target) {
 			if (source.hasType('Grass')) {
 				if (source.lastDamage > 0) {
 					this.heal(source.lastDamage / 8, source);
@@ -107,7 +107,7 @@ exports.BattleItems = {
 		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
-		onResidual: function(pokemon) {
+		onResidual: function (pokemon) {
 			if (pokemon.hasType('Grass')) {
 				this.heal(pokemon.maxhp / 16);
 			}
@@ -117,7 +117,7 @@ exports.BattleItems = {
 		inherit: true,
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
-		onResidual: function(pokemon) {
+		onResidual: function (pokemon) {
 			if (pokemon.hasType('Poison')) {
 				this.heal(pokemon.maxhp / (pokemon.getTypes().length === 1 ? 8 : 16));
 			} else {
@@ -132,7 +132,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onDamage: function(damage, target, source, effect) {
+		onDamage: function (damage, target, source, effect) {
 			var types = target.getTypes();
 			if (types.length === 1 && types[0] === 'Fighting' &&
 					effect && effect.effectType === 'Move' &&
@@ -151,7 +151,7 @@ exports.BattleItems = {
 	},
 	"wiseglasses": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.category === 'Special') {
 				var types = user.getTypes();
 				if (types.length === 1 && types[0] === 'Psychic') {
@@ -163,7 +163,7 @@ exports.BattleItems = {
 	},
 	"muscleband": {
 		inherit: true,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			if (move.category === 'Physical') {
 				var types = user.getTypes();
 				if (types.length === 1 && types[0] === 'Fighting') {
@@ -182,22 +182,22 @@ exports.BattleItems = {
 		spritenum: 475,
 		// The Stick is a stand-in for a number of pokemon-exclusive items
 		// introduced with Gen Next
-		onModifyMove: function(move, user) {
+		onModifyMove: function (move, user) {
 			if (user.template.species === 'Farfetch\'d') {
 				move.critRatio += 2;
 			}
 		},
-		onModifyDef: function(def, pokemon) {
+		onModifyDef: function (def, pokemon) {
 			if (pokemon.template.species === 'Shuckle') {
 				return def * 1.5;
 			}
 		},
-		onModifySpA: function(spa, pokemon) {
+		onModifySpA: function (spa, pokemon) {
 			if (pokemon.template.species === 'Unown') {
 				return spa * 2;
 			}
 		},
-		onModifySpD: function(spd, pokemon) {
+		onModifySpD: function (spd, pokemon) {
 			if (pokemon.template.species === 'Unown') {
 				return spd * 2;
 			}
@@ -205,12 +205,12 @@ exports.BattleItems = {
 				return spd * 1.5;
 			}
 		},
-		onModifySpe: function(spe, pokemon) {
+		onModifySpe: function (spe, pokemon) {
 			if (pokemon.template.species === 'Unown') {
 				return spe * 2;
 			}
 		},
-		onFoeBasePower: function(basePower, attacker, defender, move) {
+		onFoeBasePower: function (basePower, attacker, defender, move) {
 			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Lilligant":1, "Vivillon":1};
 			if (GossamerWingUsers[defender.template.species]) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
@@ -219,7 +219,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		onDamage: function(damage, defender, attacker, effect) {
+		onDamage: function (damage, defender, attacker, effect) {
 			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
 			if (GossamerWingUsers[defender.template.species]) {
 				if (effect && effect.id === 'stealthrock') {
@@ -227,7 +227,7 @@ exports.BattleItems = {
 				}
 			}
 		},
-		// onResidual: function(pokemon) {
+		// onResidual: function (pokemon) {
 		// 	if (pokemon.template.species === 'Shuckle') {
 		// 		this.heal(this.clampIntRange(pokemon.maxhp / 16, 1));
 		// 	}

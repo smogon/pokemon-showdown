@@ -1,7 +1,7 @@
 exports.BattleStatuses = {
 	brn: {
 		inherit: true,
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePower: function (basePower, attacker, defender, move) {
 			if (move && move.category === 'Physical' && attacker && attacker.ability !== 'guts') {
 				return this.chainModify(0.5); // This should really take place directly in the damage function but it's here for now
 			}
@@ -9,13 +9,13 @@ exports.BattleStatuses = {
 	},
 	slp: {
 		inherit: true,
-		onSwitchIn: function(target) {
+		onSwitchIn: function (target) {
 			this.effectData.time = this.effectData.startTime;
 		}
 	},
 	partiallytrapped: {
 		inherit: true,
-		onResidual: function(pokemon) {
+		onResidual: function (pokemon) {
 			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0)) {
 				pokemon.removeVolatile('partiallytrapped');
 				return;
@@ -31,10 +31,10 @@ exports.BattleStatuses = {
 		// Protect, Detect, Endure counter
 		duration: 2,
 		counterMax: 256,
-		onStart: function() {
+		onStart: function () {
 			this.effectData.counter = 2;
 		},
-		onStallMove: function() {
+		onStallMove: function () {
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			var counter = this.effectData.counter || 1;
@@ -45,7 +45,7 @@ exports.BattleStatuses = {
 			this.debug("Success chance: " + Math.round(100 / counter) + "%");
 			return (this.random(counter) === 0);
 		},
-		onRestart: function() {
+		onRestart: function () {
 			if (this.effectData.counter < this.effect.counterMax) {
 				this.effectData.counter *= 2;
 			}
@@ -54,7 +54,7 @@ exports.BattleStatuses = {
 	},
 	gem: {
 		duration: 1,
-		onBasePower: function(basePower, user, target, move) {
+		onBasePower: function (basePower, user, target, move) {
 			this.debug('Gem Boost');
 			return this.chainModify(1.5);
 		}
