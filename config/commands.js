@@ -1070,11 +1070,6 @@ var commands = exports.commands = {
 		this.sendReply("You must win a rated battle to register.");
 	},
 
-	br: 'banredirect',
-	banredirect: function(){
-		this.sendReply('/banredirect - This command is obsolete and has been removed.');
-	},
-
 	lobbychat: function(target, room, user, connection) {
 		if (!Rooms.lobby) return this.popupReply("This server doesn't have a lobby.");
 		target = toId(target);
