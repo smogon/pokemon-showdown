@@ -11,12 +11,12 @@
  * /whois.
  *
  * But to actually define a command, it's a function:
- *   birkal: function(target, room, user) {
+ *   birkal: function (target, room, user) {
  *     this.sendReply("It's not funny anymore.");
  *   },
  *
  * Commands are actually passed five parameters:
- *   function(target, room, user, connection, cmd, message)
+ *   function (target, room, user, connection, cmd, message)
  * Most of the time, you only need the first three, though.
  *
  * target = the part of the message after the command
@@ -152,7 +152,7 @@ var commands = exports.commands = {
 	alt: 'whois',
 	alts: 'whois',
 	getalts: 'whois',
-	whois: function(target, room, user) {
+	whois: function (target, room, user) {
 		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
@@ -199,7 +199,7 @@ var commands = exports.commands = {
 		this.sendReply('|raw|' + output);
 	},
 
-	ipsearch: function(target, room, user) {
+	ipsearch: function (target, room, user) {
 		if (!this.can('rangeban')) return;
 		var atLeastOne = false;
 		this.sendReply("Users with IP " + target + ":");
@@ -217,7 +217,7 @@ var commands = exports.commands = {
 	 * Shortcuts
 	 *********************************************************/
 
-	invite: function(target, room, user) {
+	invite: function (target, room, user) {
 		target = this.splitTarget(target);
 		if (!this.targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
@@ -236,7 +236,7 @@ var commands = exports.commands = {
 	stats: 'data',
 	dex: 'data',
 	pokedex: 'data',
-	data: function(target, room, user) {
+	data: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 
 		var data = '';
@@ -432,7 +432,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		var results = Object.keys(dex).map(function(speciesid) {return dex[speciesid].species;});
+		var results = Object.keys(dex).map(function (speciesid) {return dex[speciesid].species;});
 		var resultsStr = "";
 		if (results.length > 0) {
 			if (showAll || results.length <= output) {
@@ -452,7 +452,7 @@ var commands = exports.commands = {
 	learnall: 'learn',
 	learn5: 'learn',
 	g6learn: 'learn',
-	learn: function(target, room, user, connection, cmd) {
+	learn: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help learn');
 
 		if (!this.canBroadcast()) return;
@@ -513,7 +513,7 @@ var commands = exports.commands = {
 	},
 
 	weak: 'weakness',
-	weakness: function(target, room, user){
+	weakness: function (target, room, user){
 		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
 
@@ -553,7 +553,7 @@ var commands = exports.commands = {
 	eff: 'effectiveness',
 	type: 'effectiveness',
 	matchup: 'effectiveness',
-	effectiveness: function(target, room, user) {
+	effectiveness: function (target, room, user) {
 		var targets = target.split(/[,/]/).slice(0, 2);
 		if (targets.length !== 2) return this.sendReply("Attacker and defender must be separated with a comma.");
 
@@ -606,7 +606,7 @@ var commands = exports.commands = {
 		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
 	},
 
-	uptime: function(target, room, user) {
+	uptime: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		var uptime = process.uptime();
 		var uptimeText;
@@ -621,7 +621,7 @@ var commands = exports.commands = {
 		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
 	},
 
-	groups: function(target, room, user) {
+	groups: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
@@ -633,7 +633,7 @@ var commands = exports.commands = {
 		);
 	},
 
-	opensource: function(target, room, user) {
+	opensource: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"Pokemon Showdown is open source:<br />" +
@@ -644,13 +644,13 @@ var commands = exports.commands = {
 		);
 	},
 
-	avatars: function(target, room, user) {
+	avatars: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox("Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown. Custom avatars are only obtainable by staff.");
 	},
 
 	introduction: 'intro',
-	intro: function(target, room, user) {
+	intro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"New to competitive pokemon?<br />" +
@@ -663,7 +663,7 @@ var commands = exports.commands = {
 
 	mentoring: 'smogintro',
 	smogonintro: 'smogintro',
-	smogintro: function(target, room, user) {
+	smogintro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"Welcome to Smogon's Official Pokémon Showdown server! The Mentoring room can be found <a href=\"http://play.pokemonshowdown.com/communitymentoring\">here</a> or by using /join communitymentoring.<br /><br />" +
@@ -677,7 +677,7 @@ var commands = exports.commands = {
 	},
 
 	calculator: 'calc',
-	calc: function(target, room, user) {
+	calc: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"Pokemon Showdown! damage calculator. (Courtesy of Honko)<br />" +
@@ -685,7 +685,7 @@ var commands = exports.commands = {
 		);
 	},
 
-	cap: function(target, room, user) {
+	cap: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"An introduction to the Create-A-Pokemon project:<br />" +
@@ -696,7 +696,7 @@ var commands = exports.commands = {
 		);
 	},
 
-	gennext: function(target, room, user) {
+	gennext: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />" +
@@ -708,7 +708,7 @@ var commands = exports.commands = {
 	},
 
 	om: 'othermetas',
-	othermetas: function(target, room, user) {
+	othermetas: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		target = toId(target);
 		var buffer = "";
@@ -770,7 +770,7 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
-	roomhelp: function(target, room, user) {
+	roomhelp: function (target, room, user) {
 		if (room.id === 'lobby') return this.sendReply("This command is too spammy for lobby.");
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
@@ -800,7 +800,7 @@ var commands = exports.commands = {
 		);
 	},
 
-	restarthelp: function(target, room, user) {
+	restarthelp: function (target, room, user) {
 		if (room.id === 'lobby' && !this.can('lockdown')) return false;
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
@@ -813,7 +813,7 @@ var commands = exports.commands = {
 	},
 
 	rule: 'rules',
-	rules: function(target, room, user) {
+	rules: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
 			this.sendReplyBox("Please follow the rules:<br />" +
@@ -835,7 +835,7 @@ var commands = exports.commands = {
 		}
 	},
 
-	faq: function(target, room, user) {
+	faq: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		target = target.toLowerCase();
 		var buffer = "";
@@ -876,7 +876,7 @@ var commands = exports.commands = {
 
 	banlists: 'tiers',
 	tier: 'tiers',
-	tiers: function(target, room, user) {
+	tiers: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		target = toId(target);
 		var buffer = "";
@@ -923,7 +923,7 @@ var commands = exports.commands = {
 
 	analysis: 'smogdex',
 	strategy: 'smogdex',
-	smogdex: function(target, room, user) {
+	smogdex: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 
 		var targets = target.split(',');
@@ -1025,7 +1025,7 @@ var commands = exports.commands = {
 	 * Miscellaneous commands
 	 *********************************************************/
 
-	potd: function(target, room, user) {
+	potd: function (target, room, user) {
 		if (!this.can('potd')) return false;
 
 		Config.potd = target;
@@ -1040,7 +1040,7 @@ var commands = exports.commands = {
 	},
 
 	roll: 'dice',
-	dice: function(target, room, user) {
+	dice: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		var d = target.indexOf("d");
 		if (d != -1) {
@@ -1065,12 +1065,12 @@ var commands = exports.commands = {
 		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
 	},
 
-	register: function() {
+	register: function () {
 		if (!this.canBroadcast()) return;
 		this.sendReply("You must win a rated battle to register.");
 	},
 
-	lobbychat: function(target, room, user, connection) {
+	lobbychat: function (target, room, user, connection) {
 		if (!Rooms.lobby) return this.popupReply("This server doesn't have a lobby.");
 		target = toId(target);
 		if (target === 'off') {
@@ -1083,7 +1083,7 @@ var commands = exports.commands = {
 		}
 	},
 
-	showimage: function(target, room, user) {
+	showimage: function (target, room, user) {
 		if (!target) return this.parse('/help showimage');
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canBroadcast()) return;
@@ -1096,7 +1096,7 @@ var commands = exports.commands = {
 		this.sendReply('|raw|<img src="' + sanitize(targets[0]) + '" alt="" width="' + toId(targets[1]) + '" height="' + toId(targets[2]) + '" />');
 	},
 
-	htmlbox: function(target, room, user) {
+	htmlbox: function (target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
 		if (!user.can('gdeclare', null, room) && (!user.can('declare', null, room) || !user.can('announce'))) {
 			return this.sendReply("/htmlbox - Access denied.");
@@ -1106,7 +1106,7 @@ var commands = exports.commands = {
 		this.sendReplyBox(target);
 	},
 
-	a: function(target, room, user) {
+	a: function (target, room, user) {
 		if (!this.can('rawpacket')) return false;
 		// secret sysop command
 		room.add(target);
@@ -1119,7 +1119,7 @@ var commands = exports.commands = {
 	commands: 'help',
 	h: 'help',
 	'?': 'help',
-	help: function(target, room, user) {
+	help: function (target, room, user) {
 		target = target.toLowerCase();
 		var matched = false;
 		if (target === 'all' || target === 'msg' || target === 'pm' || target === 'whisper' || target === 'w') {

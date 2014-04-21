@@ -13,7 +13,7 @@ exports.BattleItems = {
 	berserkgene: {
 		id: "berserkgene",
 		name: "Berserk Gene",
-		onUpdate: function(pokemon) {
+		onUpdate: function (pokemon) {
 			this.boost({atk: 2});
 			pokemon.addVolatile('confuse');
 			pokemon.setItem('');
@@ -38,12 +38,12 @@ exports.BattleItems = {
 	},
 	metalpowder: {
 		inherit: true,
-		onModifyDef: function(def, pokemon) {
+		onModifyDef: function (def, pokemon) {
 			if (pokemon.template.species === 'Ditto') {
 				return def * 1.5;
 			}
 		},
-		onModifySpD: function(def, pokemon) {
+		onModifySpD: function (def, pokemon) {
 			if (pokemon.template.species === 'Ditto') {
 				return def * 1.5;
 			}
@@ -51,7 +51,7 @@ exports.BattleItems = {
 	},
 	leppaberry: {
 		inherit: true,
-		onEat: function(pokemon) {
+		onEat: function (pokemon) {
 			var move;
 			if (pokemon.volatiles['leppaberry']) {
 				move = pokemon.volatiles['leppaberry'].move;

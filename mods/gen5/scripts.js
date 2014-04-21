@@ -1,6 +1,6 @@
 exports.BattleScripts = {
 	gen: 5,
-	randomSet: function(template, i) {
+	randomSet: function (template, i) {
 		if (i === undefined) i = 1;
 		template = this.getTemplate(template);
 		var name = template.name;
@@ -487,7 +487,7 @@ exports.BattleScripts = {
 			if (template.abilities['H']) {
 				abilities.push(template.abilities['H']);
 			}
-			abilities.sort(function(a, b){
+			abilities.sort(function (a, b){
 				return this.getAbility(b).rating - this.getAbility(a).rating;
 			}.bind(this));
 			var ability0 = this.getAbility(abilities[0]);
@@ -817,7 +817,7 @@ exports.BattleScripts = {
 			shiny: (Math.random() * 1024 <= 1)
 		};
 	},
-	randomTeam: function(side) {
+	randomTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];

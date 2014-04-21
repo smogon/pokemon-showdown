@@ -11,14 +11,14 @@ exports.BattleScripts = {
 			var learnset = this.data.Learnsets[i].learnset;
 			for (var moveid in learnset) {
 				if (typeof learnset[moveid] === 'string') learnset[moveid] = [learnset[moveid]];
-				learnset[moveid] = learnset[moveid].filter(function(source) {
+				learnset[moveid] = learnset[moveid].filter(function (source) {
 					return source[0] === '1';
 				});
 				if (!learnset[moveid].length) delete learnset[moveid];
 			}
 		}
 	},
-	debug: function(activity) {
+	debug: function (activity) {
 		if (this.getFormat().debug) {
 			this.add('debug', activity);
 		}
@@ -46,7 +46,7 @@ exports.BattleScripts = {
 
 		return stat;
 	},
-	runMove: function(move, pokemon, target, sourceEffect) {
+	runMove: function (move, pokemon, target, sourceEffect) {
 		move = this.getMove(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
 		if (target.subFainted) delete target.subFainted;
@@ -120,7 +120,7 @@ exports.BattleScripts = {
 			} // If we move to here, the move failed and there's no partial trapping lock
 		}
 	},
-	useMove: function(move, pokemon, target, sourceEffect) {
+	useMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMove(move);
 		baseMove = move;
@@ -197,7 +197,7 @@ exports.BattleScripts = {
 		}
 		return true;
 	},
-	rollMoveHit: function(target, pokemon, move, spreadHit) {
+	rollMoveHit: function (target, pokemon, move, spreadHit) {
 		var boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		var doSelfDestruct = true;
 		var damage = 0;
@@ -308,7 +308,7 @@ exports.BattleScripts = {
 
 		return damage;
 	},
-	moveHit: function(target, pokemon, move, moveData, isSecondary, isSelf) {
+	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
 		var damage = 0;
 		move = this.getMoveCopy(move);
 
@@ -532,7 +532,7 @@ exports.BattleScripts = {
 
 		return damage;
 	},
-	getDamage: function(pokemon, target, move, suppressMessages) {
+	getDamage: function (pokemon, target, move, suppressMessages) {
 		// We get the move
 		if (typeof move === 'string') move = this.getMove(move);
 		if (typeof move === 'number') move = {
@@ -738,7 +738,7 @@ exports.BattleScripts = {
 		// We are done, this is the final damage
 		return Math.floor(baseDamage);
 	},
-	boost: function(boost, target, source, effect) {
+	boost: function (boost, target, source, effect) {
 		// Editing boosts to take into account para and burn stat drops glitches
 		if (this.event) {
 			if (!target) target = this.event.target;
@@ -782,7 +782,7 @@ exports.BattleScripts = {
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
 	},
-	damage: function(damage, target, source, effect) {
+	damage: function (damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -837,7 +837,7 @@ exports.BattleScripts = {
 		return damage;
 	},
 	// This is random teams making for gen 1
-	randomCCTeam: function(side) {
+	randomCCTeam: function (side) {
 		var teamdexno = [];
 		var team = [];
 
@@ -941,7 +941,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomTeam: function(side) {
+	randomTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
@@ -965,7 +965,7 @@ exports.BattleScripts = {
 
 		return pokemon;
 	},
-	randomSet: function(template, i) {
+	randomSet: function (template, i) {
 		if (i === undefined) i = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1
@@ -1105,7 +1105,7 @@ exports.BattleScripts = {
 			gender: false
 		};
 	},
-	faint: function(pokemon, source, effect) {
+	faint: function (pokemon, source, effect) {
 		pokemon.faint(source, effect);
 		this.queue = [];
 	}

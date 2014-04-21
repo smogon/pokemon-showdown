@@ -10,7 +10,7 @@
 const LOGIN_SERVER_TIMEOUT = 15000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
-module.exports = (function() {
+module.exports = (function () {
 	var http = require("http");
 	var url = require('url');
 
@@ -33,7 +33,7 @@ module.exports = (function() {
 	LoginServer.prototype.lastRequest = 0;
 	LoginServer.prototype.openRequests = 0;
 
-	var getLoginServer = function(action) {
+	var getLoginServer = function (action) {
 		var uri;
 		if (Config.loginservers) {
 			uri = Config.loginservers[action] || Config.loginservers[null];
@@ -46,19 +46,19 @@ module.exports = (function() {
 		}
 		return LoginServer.loginServers[uri] || new LoginServer(uri);
 	};
-	LoginServer.instantRequest = function(action, data, callback) {
+	LoginServer.instantRequest = function (action, data, callback) {
 		return getLoginServer(action).instantRequest(action, data, callback);
 	};
-	LoginServer.request = function(action, data, callback) {
+	LoginServer.request = function (action, data, callback) {
 		return getLoginServer(action).request(action, data, callback);
 	};
 
-	var parseJSON = function(json) {
+	var parseJSON = function (json) {
 		if (json[0] === ']') json = json.substr(1);
 		return JSON.parse(json);
 	};
 
-	LoginServer.prototype.instantRequest = function(action, data, callback) {
+	LoginServer.prototype.instantRequest = function (action, data, callback) {
 		if (typeof data === 'function') {
 			callback = data;
 			data = null;
@@ -74,15 +74,15 @@ module.exports = (function() {
 				dataString += '&' + i + '=' + encodeURIComponent('' + data[i]);
 			}
 		}
-		var req = http.get(url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + Config.servertoken + '&nocache=' + new Date().getTime() + dataString), function(res) {
+		var req = http.get(url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + Config.servertoken + '&nocache=' + new Date().getTime() + dataString), function (res) {
 			var buffer = '';
 			res.setEncoding('utf8');
 
-			res.on('data', function(chunk) {
+			res.on('data', function (chunk) {
 				buffer += chunk;
 			});
 
-			res.on('end', function() {
+			res.on('end', function () {
 				var data = null;
 				try {
 					data = parseJSON(buffer);
@@ -92,14 +92,14 @@ module.exports = (function() {
 			});
 		});
 
-		req.on('error', function(error) {
+		req.on('error', function (error) {
 			callback(null, null, error);
 			this.openRequests--;
 		});
 
 		req.end();
 	};
-	LoginServer.prototype.request = function(action, data, callback) {
+	LoginServer.prototype.request = function (action, data, callback) {
 		if (typeof data === 'function') {
 			callback = data;
 			data = null;
@@ -114,7 +114,7 @@ module.exports = (function() {
 		this.requestQueue.push(data);
 		this.requestTimerPoke();
 	};
-	LoginServer.prototype.requestTimerPoke = function() {
+	LoginServer.prototype.requestTimerPoke = function () {
 		// "poke" the request timer, i.e. make sure it knows it should make
 		// a request soon
 
@@ -123,7 +123,7 @@ module.exports = (function() {
 
 		this.requestTimer = setTimeout(this.makeRequests.bind(this), LOGIN_SERVER_BATCH_TIME);
 	};
-	LoginServer.prototype.makeRequests = function() {
+	LoginServer.prototype.makeRequests = function () {
 		this.requestTimer = null;
 		var self = this;
 		var requests = this.requestQueue;
@@ -148,7 +148,7 @@ module.exports = (function() {
 		};
 
 		var req = null;
-		var reqError = function(error) {
+		var reqError = function (error) {
 			if (self.requestTimeoutTimer) {
 				clearTimeout(self.requestTimeoutTimer);
 				self.requestTimeoutTimer = null;
@@ -160,11 +160,11 @@ module.exports = (function() {
 			self.requestEnd();
 		};
 
-		self.requestTimeoutTimer = setTimeout(function() {
+		self.requestTimeoutTimer = setTimeout(function () {
 			reqError('timeout');
 		}, LOGIN_SERVER_TIMEOUT);
 
-		req = http.request(requestOptions, function(res) {
+		req = http.request(requestOptions, function (res) {
 			if (self.requestTimeoutTimer) {
 				clearTimeout(self.requestTimeoutTimer);
 				self.requestTimeoutTimer = null;
@@ -172,11 +172,11 @@ module.exports = (function() {
 			var buffer = '';
 			res.setEncoding('utf8');
 
-			res.on('data', function(chunk) {
+			res.on('data', function (chunk) {
 				buffer += chunk;
 			});
 
-			var endReq = function() {
+			var endReq = function () {
 				if (self.requestTimeoutTimer) {
 					clearTimeout(self.requestTimeoutTimer);
 					self.requestTimeoutTimer = null;
@@ -198,7 +198,7 @@ module.exports = (function() {
 			res.on('end', endReq);
 			res.on('close', endReq);
 
-			self.requestTimeoutTimer = setTimeout(function(){
+			self.requestTimeoutTimer = setTimeout(function (){
 				if (res.connection) res.connection.destroy();
 				endReq();
 			}, LOGIN_SERVER_TIMEOUT);
@@ -209,18 +209,18 @@ module.exports = (function() {
 		req.write(postData);
 		req.end();
 	};
-	LoginServer.prototype.requestStart = function(size) {
+	LoginServer.prototype.requestStart = function (size) {
 		this.lastRequest = Date.now();
 		this.requestLog += ' | ' + size + ' requests: ';
 		this.openRequests++;
 	};
-	LoginServer.prototype.requestEnd = function() {
+	LoginServer.prototype.requestEnd = function () {
 		this.openRequests = 0;
 		this.requestLog += '' + (Date.now() - this.lastRequest).duration();
 		this.requestLog = this.requestLog.substr(-1000);
 		this.requestTimerPoke();
 	};
-	LoginServer.prototype.getLog = function() {
+	LoginServer.prototype.getLog = function () {
 		return this.requestLog + (this.lastRequest ? ' (' + (Date.now() - this.lastRequest).duration() + ' since last request)' : '');
 	};
 
