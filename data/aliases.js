@@ -10,7 +10,7 @@ exports.BattleAliases = {
 	"monotype": "OU Monotype",
 	"createapokemon": "CAP",
 	"cc1v1": "Challenge Cup 1vs1",
-	
+
 	// mega evos
 	"megaabomasnow": "Abomasnow-Mega",
 	"megaabsol": "Absol-Mega",
@@ -137,7 +137,7 @@ exports.BattleAliases = {
 	"scarf": "Choice Scarf",
 	"specs": "Choice Specs",
 	"yache": "Yache Berry",
-	
+
 	// gen 1-2 berries
 	"berry": "Oran Berry",
 	"bitterberry": "Persim Berry",

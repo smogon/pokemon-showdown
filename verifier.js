@@ -23,13 +23,13 @@ if (!process.send) {
 	var callbackData = {};
 
 	var child = require('child_process').fork('verifier.js');
-	exports.verify = function(data, signature, callback) {
+	exports.verify = function (data, signature, callback) {
 		var localGuid = guid++;
 		callbacks[localGuid] = callback;
 		callbackData[localGuid] = data;
 		child.send({data: data, sig: signature, guid: localGuid});
 	};
-	child.on('message', function(response) {
+	child.on('message', function (response) {
 		if (callbacks[response.guid]) {
 			callbacks[response.guid](response.success, callbackData[response.guid]);
 			delete callbacks[response.guid];
@@ -47,7 +47,7 @@ if (!process.send) {
 	var keyalgo = Config.loginserverkeyalgo;
 	var pkey = Config.loginserverpublickey;
 
-	process.on('message', function(message) {
+	process.on('message', function (message) {
 		var verifier = crypto.createVerify(keyalgo);
 		verifier.update(message.data);
 		var success = false;
