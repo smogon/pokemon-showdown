@@ -1361,7 +1361,7 @@ exports.BattleScripts = {
 			if (template.species === 'Alakazam' || template.species === 'Scizor' || template.species === 'Garchomp') {
 				shouldMegaEvo = 'maybe';
 			}
-			
+
 			if (template.species === 'Latios' || template.species === 'Latias') {
 				shouldMegaEvo = false;
 			}
@@ -1670,7 +1670,7 @@ exports.BattleScripts = {
 			}
 
 			var set = this.randomSet(template, i);
-			
+
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
 

@@ -129,7 +129,7 @@ exports.Formats = [
 	// XY Doubles
 	///////////////////////////////////////////////////////////////////
 
-	
+
 	{
 		name: "Random Doubles Battle",
 		section: "XY Doubles",
