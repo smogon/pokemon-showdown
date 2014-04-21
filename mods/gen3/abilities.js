@@ -139,18 +139,13 @@ exports.BattleAbilities = {
 			if (!target || target.fainted) return;
 			var ability = this.getAbility(target.ability);
 			var bannedAbilities = {forecast:1, multitype:1, trace:1};
-			if (bannedAbilities[target.ability]) {
-				return;
-			}
-			if (ability === 'Intimidate')
-			{
-				if (pokemon.setAbility('Illuminate')) {  // Temporary fix so Intimidate doesn't activate in third gen when traced
-					this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
-				}
-			}
-			else if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
-			}
+			var onStartAbilities = {drizzle:1, drought:1, intimidate:1};
+  			if (bannedAbilities[target.ability]) {
+  				return;
+  			}
+ 			if (onStartAbilities[target.ability] || pokemon.setAbility(ability)) {
+  				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
+  			}
 		}
 	},
 	"voltabsorb": {
