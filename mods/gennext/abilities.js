@@ -62,9 +62,9 @@ exports.BattleAbilities = {
 		},
 		onSourceBasePower: function(basePower) {
 			if (this.isWeather('hail')) {
-				return basePower * 3/4;
+				return basePower * 3 / 4;
 			}
-			return basePower * 7/8;
+			return basePower * 7 / 8;
 		},
 		onAccuracy: function() {}
 	},
@@ -75,7 +75,7 @@ exports.BattleAbilities = {
 		},
 		onSourceBasePower: function(basePower) {
 			if (this.isWeather('sandstorm')) {
-				return basePower * 4/5;
+				return basePower * 4 / 5;
 			}
 		},
 		onAccuracy: function() {}
@@ -84,9 +84,9 @@ exports.BattleAbilities = {
 		inherit: true,
 		onSourceBasePower: function(basePower) {
 			if (this.isWeather('raindance')) {
-				return basePower * 3/4;
+				return basePower * 3 / 4;
 			}
-			return basePower * 7/8;
+			return basePower * 7 / 8;
 		}
 	},
 	"icebody": {
@@ -95,7 +95,7 @@ exports.BattleAbilities = {
 			if (type === 'hail') return false;
 		},
 		onResidual: function(target, source, effect) {
-			this.heal(target.maxhp/16);
+			this.heal(target.maxhp / 16);
 		},
 		onAfterDamage: function(damage, target, source, move) {
 			if (move && move.isContact && this.isWeather('hail')) {
@@ -147,13 +147,13 @@ exports.BattleAbilities = {
 				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
 					this.add('-formechange', pokemon, 'Cherrim-Sunshine');
-					this.add('-message', pokemon.name+' transformed!');
+					this.add('-message', pokemon.name + ' transformed!');
 					this.boost({spd:1});
 				}
 			} else if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme) {
 				delete this.effectData.forme;
 				this.add('-formechange', pokemon, 'Cherrim');
-				this.add('-message', pokemon.name+' transformed!');
+				this.add('-message', pokemon.name + ' transformed!');
 			}
 		},
 		effect: {
@@ -223,7 +223,7 @@ exports.BattleAbilities = {
 		onFoeBasePower: function(basePower, attacker, defender, move) {
 			if (this.getEffectiveness(move.type, defender) > 0) {
 				this.add('-message', "The attack was weakened by Solid Rock!");
-				return basePower * 1/2;
+				return basePower * 1 / 2;
 			}
 		}
 	},
@@ -232,7 +232,7 @@ exports.BattleAbilities = {
 		onFoeBasePower: function(basePower, attacker, defender, move) {
 			if (this.getEffectiveness(move.type, defender) > 0) {
 				this.add('-message', "The attack was weakened by Filter!");
-				return basePower * 1/2;
+				return basePower * 1 / 2;
 			}
 		}
 	},
@@ -250,7 +250,7 @@ exports.BattleAbilities = {
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (move.recoil || move.hasCustomRecoil || attacker.item === 'lifeorb') {
 				this.debug('Reckless boost');
-				return basePower * 12/10;
+				return basePower * 12 / 10;
 			}
 		}
 	},
@@ -260,7 +260,7 @@ exports.BattleAbilities = {
 			for (var i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
-					this.add("-message", target.name+"'s stats were not lowered! (placeholder)");
+					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
 				}
 			}
 		}
@@ -283,7 +283,7 @@ exports.BattleAbilities = {
 			var foeactive = pokemon.side.foe.active;
 			var totaldef = 0;
 			var totalspd = 0;
-			for (var i=0; i<foeactive.length; i++) {
+			for (var i = 0; i < foeactive.length; i++) {
 				if (!foeactive[i] || foeactive[i].fainted) continue;
 				totaldef += foeactive[i].stats.def;
 				totalspd += foeactive[i].stats.spd;
@@ -308,7 +308,7 @@ exports.BattleAbilities = {
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Shell Armor!");
-				damage -= target.maxhp/8;
+				damage -= target.maxhp / 8;
 				if (damage < 0) damage = 0;
 				return damage;
 			}
@@ -324,7 +324,7 @@ exports.BattleAbilities = {
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Battle Armor!");
-				damage -= target.maxhp/8;
+				damage -= target.maxhp / 8;
 				if (damage < 0) damage = 0;
 				return damage;
 			}
@@ -334,7 +334,7 @@ exports.BattleAbilities = {
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Weak Armor!");
-				damage -= target.maxhp/8;
+				damage -= target.maxhp / 8;
 				if (damage < 0) damage = 0;
 				target.setAbility('');
 				this.boost({spe: 1});
@@ -351,7 +351,7 @@ exports.BattleAbilities = {
 		},
 		onDamage: function(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				damage -= target.maxhp/8;
+				damage -= target.maxhp / 8;
 				if (damage < 0) damage = 0;
 				if (effect.type === 'Ice' || effect.type === 'Water') {
 					this.add('-activate', target, 'ability: Magma Armor');
@@ -369,7 +369,7 @@ exports.BattleAbilities = {
 		onSourceModifyDamage: function(damage, source, target, move) {
 			if (target.hp >= target.maxhp) {
 				this.add('-message', "The attack was slightly weakened by Multiscale!");
-				return this.chainModify(2/3);
+				return this.chainModify(2 / 3);
 			}
 		}
 	},
@@ -387,7 +387,7 @@ exports.BattleAbilities = {
 			if (move.category !== "Status") {
 				this.debug('Adding Stench flinch');
 				if (!move.secondaries) move.secondaries = [];
-				for (var i=0; i<move.secondaries.length; i++) {
+				for (var i = 0; i < move.secondaries.length; i++) {
 					if (move.secondaries[i].volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
@@ -401,7 +401,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onFaint: function(target, source, effect) {
 			if (effect && effect.effectType === 'Move' && source) {
-				this.damage(source.maxhp/3, source, target);
+				this.damage(source.maxhp / 3, source, target);
 			}
 		}
 	},
@@ -467,7 +467,7 @@ exports.BattleAbilities = {
 			onBeforeMove: function(pokemon, target, move) {
 				if (pokemon.removeVolatile('truant')) {
 					this.add('cant', pokemon, 'ability: Truant');
-					this.heal(pokemon.maxhp/3);
+					this.heal(pokemon.maxhp / 3);
 					return false;
 				}
 			}
@@ -488,7 +488,7 @@ exports.BattleAbilities = {
 		},
 		onFoeModifyPokemon: function(pokemon) {
 			var foeMoves = this.effectData.target.moveset;
-			for (var f=0; f<foeMoves.length; f++) {
+			for (var f = 0; f < foeMoves.length; f++) {
 				pokemon.disabledMoves[foeMoves[f].id] = true;
 			}
 		},

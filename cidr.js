@@ -11,7 +11,7 @@
 var ipToLong = exports.ipToLong = function(ip) {
 	var numIp = 0;
 	var parts = ip.split('.');
-	for (var i=0, len=parts.length; i<len; i++) {
+	for (var i = 0, len = parts.length; i < len; i++) {
 		numIp *= 256;
 		numIp += Number(parts[i]);
 	}
@@ -23,7 +23,7 @@ var getPattern = exports.getPattern = function(cidr) {
 	var index = cidr.indexOf('/');
 	if (index > 0) {
 		var subnet = ipToLong(cidr.substr(0, index));
-		var bits = parseInt(cidr.substr(index+1), 10);
+		var bits = parseInt(cidr.substr(index + 1), 10);
 		var mask = -1 << (32 - bits);
 		return [subnet & mask, mask];
 	}

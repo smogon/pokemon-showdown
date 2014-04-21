@@ -15,7 +15,7 @@ exports.BattleStatuses = {
 		},
 		onResidualOrder: 9,
 		onResidual: function(pokemon) {
-			this.damage(pokemon.maxhp/8);
+			this.damage(pokemon.maxhp / 8);
 		}
 	},
 	par: {
@@ -41,7 +41,7 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target, 'slp');
 			// 1-3 turns
-			this.effectData.startTime = this.random(2,5);
+			this.effectData.startTime = this.random(2, 5);
 			this.effectData.time = this.effectData.startTime;
 		},
 		onBeforeMovePriority: 2,
@@ -88,7 +88,7 @@ exports.BattleStatuses = {
 		},
 		onResidualOrder: 9,
 		onResidual: function(pokemon) {
-			this.damage(pokemon.maxhp/8);
+			this.damage(pokemon.maxhp / 8);
 		}
 	},
 	tox: {
@@ -109,7 +109,7 @@ exports.BattleStatuses = {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
-			this.damage(this.clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
 		}
 	},
 	confusion: {
@@ -118,7 +118,7 @@ exports.BattleStatuses = {
 			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
 			if (!result) return result;
 			this.add('-start', target, 'confusion');
-			this.effectData.time = this.random(2,6);
+			this.effectData.time = this.random(2, 6);
 		},
 		onEnd: function(target) {
 			this.add('-end', target, 'confusion');
@@ -133,7 +133,7 @@ exports.BattleStatuses = {
 			if (this.random(2) === 0) {
 				return;
 			}
-			this.directDamage(this.getDamage(pokemon,pokemon,40));
+			this.directDamage(this.getDamage(pokemon, pokemon, 40));
 			return false;
 		}
 	},
@@ -165,10 +165,10 @@ exports.BattleStatuses = {
 		duration: 5,
 		durationCallback: function(target, source) {
 			if (source.item === 'gripclaw') return 8;
-			return this.random(5,7);
+			return this.random(5, 7);
 		},
 		onStart: function(pokemon, source) {
-			this.add('-activate', pokemon, 'move: ' +this.effectData.sourceEffect, '[of] '+source);
+			this.add('-activate', pokemon, 'move: ' +this.effectData.sourceEffect, '[of] ' + source);
 		},
 		onResidualOrder: 11,
 		onResidual: function(pokemon) {
@@ -177,9 +177,9 @@ exports.BattleStatuses = {
 				return;
 			}
 			if (this.effectData.source.item === 'bindingband') {
-				this.damage(pokemon.maxhp/6);
+				this.damage(pokemon.maxhp / 6);
 			} else {
-				this.damage(pokemon.maxhp/8);
+				this.damage(pokemon.maxhp / 8);
 			}
 		},
 		onEnd: function(pokemon) {
@@ -200,7 +200,7 @@ exports.BattleStatuses = {
 			this.effectData.trueDuration--;
 		},
 		onStart: function(target, source, effect) {
-			this.effectData.trueDuration = this.random(2,4);
+			this.effectData.trueDuration = this.random(2, 4);
 			this.effectData.move = effect.id;
 		},
 		onRestart: function() {
@@ -251,7 +251,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			var moves = pokemon.moveset;
-			for (var i=0; i<moves.length; i++) {
+			for (var i = 0; i < moves.length; i++) {
 				if (moves[i].id !== this.effectData.move) {
 					moves[i].disabled = true;
 				}
@@ -271,14 +271,14 @@ exports.BattleStatuses = {
 		// this is a side condition
 		onStart: function(side) {
 			this.effectData.positions = [];
-			for (var i=0; i<side.active.length; i++) {
+			for (var i = 0; i < side.active.length; i++) {
 				this.effectData.positions[i] = null;
 			}
 		},
 		onResidualOrder: 3,
 		onResidual: function(side) {
 			var finished = true;
-			for (var i=0; i<side.active.length; i++) {
+			for (var i = 0; i < side.active.length; i++) {
 				var posData = this.effectData.positions[i];
 				if (!posData) continue;
 
@@ -293,12 +293,12 @@ exports.BattleStatuses = {
 				var target = side.foe.active[posData.targetPosition];
 				var move = this.getMove(posData.move);
 				if (target.fainted) {
-					this.add('-hint', ''+move.name+' did not hit because the target is fainted.');
+					this.add('-hint', '' + move.name + ' did not hit because the target is fainted.');
 					this.effectData.positions[i] = null;
 					continue;
 				}
 
-				this.add('-message', ''+move.name+' hit! (placeholder)');
+				this.add('-message', '' + move.name + ' hit! (placeholder)');
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
 
@@ -326,7 +326,7 @@ exports.BattleStatuses = {
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			var counter = this.effectData.counter || 1;
-			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			this.debug("Success chance: " + Math.round(100 / counter) + "%");
 			return (this.random(counter) === 0);
 		},
 		onRestart: function() {
@@ -370,7 +370,7 @@ exports.BattleStatuses = {
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
 				this.effectData.duration = 0;
-				this.add('-weather', 'RainDance', '[from] ability: '+effect, '[of] '+source);
+				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'RainDance');
 			}
@@ -406,7 +406,7 @@ exports.BattleStatuses = {
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
 				this.effectData.duration = 0;
-				this.add('-weather', 'SunnyDay', '[from] ability: '+effect, '[of] '+source);
+				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'SunnyDay');
 			}
@@ -443,7 +443,7 @@ exports.BattleStatuses = {
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
 				this.effectData.duration = 0;
-				this.add('-weather', 'Sandstorm', '[from] ability: '+effect, '[of] '+source);
+				this.add('-weather', 'Sandstorm', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Sandstorm');
 			}
@@ -454,7 +454,7 @@ exports.BattleStatuses = {
 			if (this.isWeather('sandstorm')) this.eachEvent('Weather');
 		},
 		onWeather: function(target) {
-			this.damage(target.maxhp/16);
+			this.damage(target.maxhp / 16);
 		},
 		onEnd: function() {
 			this.add('-weather', 'none');
@@ -472,7 +472,7 @@ exports.BattleStatuses = {
 		onStart: function(battle, source, effect) {
 			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
 				this.effectData.duration = 0;
-				this.add('-weather', 'Hail', '[from] ability: '+effect, '[of] '+source);
+				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Hail');
 			}
@@ -483,7 +483,7 @@ exports.BattleStatuses = {
 			if (this.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather: function(target) {
-			this.damage(target.maxhp/16);
+			this.damage(target.maxhp / 16);
 		},
 		onEnd: function() {
 			this.add('-weather', 'none');

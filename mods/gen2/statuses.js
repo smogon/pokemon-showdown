@@ -5,7 +5,7 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'brn');
 		},
 		onAfterMoveSelf: function(pokemon) {
-			this.damage(pokemon.maxhp/8);
+			this.damage(pokemon.maxhp / 8);
 		},
 		onBasePower: function(basePower, attacker, defender, move) {
 			if (move && move.category === 'Physical' && attacker && attacker.ability !== 'guts') {
@@ -15,7 +15,7 @@ exports.BattleStatuses = {
 		onSwitchIn: function (pokemon){
 			pokemon.addVolatile('brnattackdrop');
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp/8);
+				this.damage(pokemon.maxhp / 8);
 			}
 		}
 	},
@@ -34,7 +34,7 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target.id, 'slp');
 			// 1-5 turns
-			this.effectData.time = this.random(2,6);
+			this.effectData.time = this.random(2, 6);
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon, target, move) {
@@ -56,11 +56,11 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'psn');
 		},
 		onAfterMoveSelf: function(pokemon) {
-			this.damage(pokemon.maxhp/8);
+			this.damage(pokemon.maxhp / 8);
 		},
 		onSwitchIn: function (pokemon) {
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp/8);
+				this.damage(pokemon.maxhp / 8);
 			}
 		}
 	},
@@ -74,13 +74,13 @@ exports.BattleStatuses = {
 			if (this.effectData.stage < 15) {
 				this.effectData.stage++;
 			}
-			this.damage(this.clampIntRange(pokemon.maxhp/16, 1)*this.effectData.stage);
+			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
 		},
 		onSwitchIn: function (pokemon) {
 			this.effectData.stage = 0;
 			pokemon.setStatus('psn');
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp/8);
+				this.damage(pokemon.maxhp / 8);
 			}
 		}
 	},

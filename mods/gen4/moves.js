@@ -28,10 +28,10 @@ exports.BattleMovedex = {
 		desc: "The user performs a random move from any of the Pokemon on its team. Assist cannot generate itself, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Protect, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief or Trick.",
 		onHit: function(target) {
 			var moves = [];
-			for (var j=0; j<target.side.pokemon.length; j++) {
+			for (var j = 0; j < target.side.pokemon.length; j++) {
 				var pokemon = target.side.pokemon[j];
 				if (pokemon === target) continue;
-				for (var i=0; i<pokemon.moves.length; i++) {
+				for (var i = 0; i < pokemon.moves.length; i++) {
 					var move = pokemon.moves[i];
 					var noAssist = {
 						assist:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, protect:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, trick:1
@@ -120,7 +120,7 @@ exports.BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage*2});
+					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage * 2});
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
@@ -193,7 +193,7 @@ exports.BattleMovedex = {
 	crushgrip: {
 		inherit: true,
 		basePowerCallback: function(pokemon) {
-			return Math.floor(pokemon.hp*120/pokemon.maxhp) + 1;
+			return Math.floor(pokemon.hp * 120 / pokemon.maxhp) + 1;
 		}
 	},
 	curse: {
@@ -205,12 +205,12 @@ exports.BattleMovedex = {
 					this.add('-fail', pokemon);
 					return false;
 				}
-				this.add('-start', pokemon, 'Curse', '[of] '+source);
-				this.directDamage(source.maxhp/2, source, source);
+				this.add('-start', pokemon, 'Curse', '[of] ' + source);
+				this.directDamage(source.maxhp / 2, source, source);
 			},
 			onResidualOrder: 10,
 			onResidual: function(pokemon) {
-				this.damage(pokemon.maxhp/4);
+				this.damage(pokemon.maxhp / 4);
 			}
 		},
 		type: "???"
@@ -233,7 +233,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'disable',
 		effect: {
 			durationCallback: function() {
-				return this.random(4,8);
+				return this.random(4, 8);
 			},
 			noCopy: true,
 			onStart: function(pokemon) {
@@ -244,7 +244,7 @@ exports.BattleMovedex = {
 					return false;
 				}
 				var moves = pokemon.moveset;
-				for (var i=0; i<moves.length; i++) {
+				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === pokemon.lastMove) {
 						if (!moves[i].pp) {
 							return false;
@@ -258,7 +258,7 @@ exports.BattleMovedex = {
 				return false;
 			},
 			onEnd: function(pokemon) {
-				this.add('-message', pokemon.name+' is no longer disabled! (placeholder)');
+				this.add('-message', pokemon.name + ' is no longer disabled! (placeholder)');
 			},
 			onBeforeMove: function(attacker, defender, move) {
 				if (move.id === this.effectData.move) {
@@ -268,7 +268,7 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemon: function(pokemon) {
 				var moves = pokemon.moveset;
-				for (var i=0; i<moves.length; i++) {
+				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
 						moves[i].disabled = true;
 					}
@@ -317,14 +317,14 @@ exports.BattleMovedex = {
 		volatileStatus: 'encore',
 		effect: {
 			durationCallback: function() {
-				return this.random(4,9);
+				return this.random(4, 9);
 			},
 			onStart: function(target) {
 				var noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, transform:1};
 				var moveIndex = target.moves.indexOf(target.lastMove);
 				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 					// it failed
-					this.add('-fail',target);
+					this.add('-fail', target);
 					delete target.volatiles['encore'];
 					return;
 				}
@@ -352,7 +352,7 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (var i=0; i<pokemon.moveset.length; i++) {
+				for (var i = 0; i < pokemon.moveset.length; i++) {
 					if (pokemon.moveset[i].id !== this.effectData.move) {
 						pokemon.moveset[i].disabled = true;
 					}
@@ -362,7 +362,7 @@ exports.BattleMovedex = {
 	},
 	endeavor: {
 		inherit: true,
-		damageCallback: function(pokemon,target) {
+		damageCallback: function(pokemon, target) {
 			if (target.hp > pokemon.hp) {
 				return target.hp - pokemon.hp;
 			}
@@ -465,7 +465,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onStart: function(side) {
-				this.debug('Healing Wish started on '+side.name);
+				this.debug('Healing Wish started on ' + side.name);
 			},
 			onSwitchInPriority: -6,
 			// Accounting for the offchance that 5 remaining pokemon are KO'd by entry hazards
@@ -477,7 +477,7 @@ exports.BattleMovedex = {
 					var source = this.effectData.source;
 					var damage = target.heal(target.maxhp);
 					target.setStatus('');
-					this.add('-heal',target,target.getHealth,'[from] move: Healing Wish');
+					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
 					target.side.removeSideCondition('healingwish');
 				}
 			}
@@ -564,7 +564,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		onMoveFail: function(target, source, move) {
 			var damage = this.getDamage(source, target, move, true);
-			this.damage(this.clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
+			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source);
 		}
 	},
 	iciclespear: {
@@ -576,9 +576,9 @@ exports.BattleMovedex = {
 		isSnatchable: false,
 		onTryHit: function(pokemon) {
 			var targets = pokemon.side.foe.active;
-			for (var i=0; i<targets.length; i++) {
+			for (var i = 0; i < targets.length; i++) {
 				if (!targets[i] || targets[i].fainted) continue;
-				for (var j=0; j<pokemon.moves.length; j++) {
+				for (var j = 0; j < pokemon.moves.length; j++) {
 					if (targets[i].moves.indexOf(pokemon.moves[j]) >= 0) return;
 				}
 			}
@@ -593,7 +593,7 @@ exports.BattleMovedex = {
 		pp: 25,
 		onMoveFail: function(target, source, move) {
 			var damage = this.getDamage(source, target, move, true);
-			this.damage(this.clampIntRange(damage/2, 1, Math.floor(target.maxhp/2)), source);
+			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source);
 		}
 	},
 	lastresort: {
@@ -703,12 +703,12 @@ exports.BattleMovedex = {
 				move: move.name,
 				id: move.id,
 				pp: 5,
-				maxpp: move.pp * 8/5,
+				maxpp: move.pp * 8 / 5,
 				disabled: false,
 				used: false
 			};
 			source.moves[moveslot] = toId(move.name);
-			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
+			this.add('-message', source.name + ' learned ' + move.name + '! (placeholder)');
 		}
 	},
 	minimize: {
@@ -831,7 +831,7 @@ exports.BattleMovedex = {
 			source.moveset[moveslot] = sketchedMove;
 			source.baseMoveset[moveslot] = sketchedMove;
 			source.moves[moveslot] = toId(move.name);
-			this.add('-message', source.name+' learned '+move.name+'! (placeholder)');
+			this.add('-message', source.name + ' learned ' + move.name + '! (placeholder)');
 		}
 	},
 	skillswap: {
@@ -941,7 +941,7 @@ exports.BattleMovedex = {
 				if (!pokemon.runImmunity('Ground')) return;
 				if (!pokemon.runImmunity('Poison')) return;
 				if (pokemon.hasType('Poison')) {
-					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] '+pokemon);
+					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
 				}
 				if (pokemon.volatiles['substitute']) {
@@ -980,8 +980,8 @@ exports.BattleMovedex = {
 				var target = side.active[this.effectData.sourcePosition];
 				if (!target.fainted) {
 					var source = this.effectData.source;
-					var damage = this.heal(target.maxhp/2, target, target);
-					if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] '+source.name);
+					var damage = this.heal(target.maxhp / 2, target, target);
+					if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + source.name);
 				}
 			}
 		}
@@ -1003,7 +1003,7 @@ exports.BattleMovedex = {
 	wringout: {
 		inherit: true,
 		basePowerCallback: function(pokemon) {
-			return Math.floor(pokemon.hp*120/pokemon.maxhp) + 1;
+			return Math.floor(pokemon.hp * 120 / pokemon.maxhp) + 1;
 		}
 	},
 	magikarpsrevenge: null

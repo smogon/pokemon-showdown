@@ -21,9 +21,9 @@ exports.BattleStatuses = {
 				return;
 			}
 			if (this.effectData.source.item === 'bindingband') {
-				this.damage(pokemon.maxhp/8);
+				this.damage(pokemon.maxhp / 8);
 			} else {
-				this.damage(pokemon.maxhp/16);
+				this.damage(pokemon.maxhp / 16);
 			}
 		}
 	},
@@ -40,9 +40,9 @@ exports.BattleStatuses = {
 			var counter = this.effectData.counter || 1;
 			if (counter >= 256) {
 				// 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
-				return (this.random()*4294967296 < 1);
+				return (this.random() * 4294967296 < 1);
 			}
-			this.debug("Success chance: "+Math.round(100/counter)+"%");
+			this.debug("Success chance: " + Math.round(100 / counter) + "%");
 			return (this.random(counter) === 0);
 		},
 		onRestart: function() {

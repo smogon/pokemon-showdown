@@ -67,7 +67,7 @@ var commands = exports.commands = {
 		if (!user.lastPM) {
 			return this.sendReply("No one has PMed you yet.");
 		}
-		return this.parse('/msg ' + (user.lastPM||'') + ', ' + target);
+		return this.parse('/msg ' + (user.lastPM || '') + ', ' + target);
 	},
 
 	pm: 'msg',
@@ -544,7 +544,7 @@ var commands = exports.commands = {
 		if (alts.length) this.addModCommand(targetUser.name + "'s alts were also muted: " + alts.join(", "));
 		this.add('|unlink|' + targetUser.userid);
 
-		targetUser.mute(room.id, 7*60*1000);
+		targetUser.mute(room.id, 7 * 60 * 1000);
 	},
 
 	hm: 'hourmute',
@@ -561,7 +561,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('mute', targetUser, room)) return false;
 
-		if (((targetUser.mutedRooms[room.id] && (targetUser.muteDuration[room.id]||0) >= 50*60*1000) || targetUser.locked) && !target) {
+		if (((targetUser.mutedRooms[room.id] && (targetUser.muteDuration[room.id] || 0) >= 50 * 60 * 1000) || targetUser.locked) && !target) {
 			var problem = " but was already " + (!targetUser.connected ? "offline" : targetUser.locked ? "locked" : "muted");
 			return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
 		}
@@ -572,7 +572,7 @@ var commands = exports.commands = {
 		if (alts.length) this.addModCommand(targetUser.name + "'s alts were also muted: " + alts.join(", "));
 		this.add('|unlink|' + targetUser.userid);
 
-		targetUser.mute(room.id, 60*60*1000, true);
+		targetUser.mute(room.id, 60 * 60 * 1000, true);
 	},
 
 	um: 'unmute',
@@ -829,7 +829,7 @@ var commands = exports.commands = {
 			room.modchat = target;
 			break;
 		}
-		if (currentModchat == room.modchat) {
+		if (currentModchat === room.modchat) {
 			return this.sendReply("Modchat is already set to " + currentModchat + ".");
 		}
 		if (!room.modchat) {
@@ -950,7 +950,7 @@ var commands = exports.commands = {
 			roomNames = 'all rooms';
 			// Get a list of all the rooms
 			var fileList = fs.readdirSync('logs/modlog');
-			for (var i=0; i<fileList.length; ++i) {
+			for (var i = 0; i < fileList.length; ++i) {
 				filename += 'logs/modlog/' + fileList[i] + ' ';
 			}
 		} else {
@@ -963,8 +963,8 @@ var commands = exports.commands = {
 		command = 'tail -' + lines + ' ' + filename;
 		var grepLimit = 100;
 		if (wordSearch) { // searching for a word instead
-			if (target.match(/^["'].+["']$/)) target = target.substring(1,target.length-1);
-			command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -i '" + target.replace(/\\/g,'\\\\\\\\').replace(/["'`]/g,'\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g,'[$&]') + "'";
+			if (target.match(/^["'].+["']$/)) target = target.substring(1, target.length - 1);
+			command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -i '" + target.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]') + "'";
 		}
 
 		// Execute the file search to see modlog
@@ -1213,7 +1213,7 @@ var commands = exports.commands = {
 			if (err) return;
 			data = ('' + data).split('\n');
 			var rangebans = [];
-			for (var i=0; i<data.length; ++i) {
+			for (var i = 0; i < data.length; ++i) {
 				var line = data[i].split('#')[0].trim();
 				if (!line) continue;
 				if (line.indexOf('/') >= 0) {
@@ -1389,7 +1389,7 @@ var commands = exports.commands = {
 			this.sendReply('||<< ' + eval(target));
 		} catch (e) {
 			this.sendReply('||<< error: ' + e.message);
-			var stack = '||' + ('' + e.stack).replace(/\n/g,'\n||');
+			var stack = '||' + ('' + e.stack).replace(/\n/g, '\n||');
 			connection.sendTo(room, stack);
 		}
 	},
@@ -1430,7 +1430,7 @@ var commands = exports.commands = {
 			logidx = 3;
 		}
 		var data = room.getLog(logidx).join("\n");
-		var datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g,'')).digest('hex');
+		var datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 
 		LoginServer.request('prepreplay', {
 			id: room.id.substr(7),
@@ -1462,7 +1462,7 @@ var commands = exports.commands = {
 	switch: function(target, room, user) {
 		if (!room.decision) return this.sendReply("You can only do this in battle rooms.");
 
-		room.decision(user, 'choose', 'switch ' + parseInt(target,10));
+		room.decision(user, 'choose', 'switch ' + parseInt(target, 10));
 	},
 
 	choose: function(target, room, user) {
@@ -1543,10 +1543,10 @@ var commands = exports.commands = {
 		if (!this.can('autotimer')) return;
 		if (target === 'off' || target === 'false' || target === 'stop') {
 			Config.forcetimer = false;
-			this.addModCommand("Forcetimer is now OFF: The timer is now opt-in. (set by "+user.name+")");
+			this.addModCommand("Forcetimer is now OFF: The timer is now opt-in. (set by " + user.name + ")");
 		} else if (target === 'on' || target === 'true' || !target) {
 			Config.forcetimer = true;
-			this.addModCommand("Forcetimer is now ON: All battles will be timed. (set by "+user.name+")");
+			this.addModCommand("Forcetimer is now ON: All battles will be timed. (set by " + user.name + ")");
 		} else {
 			this.sendReply("'" + target + "' is not a recognized forcetimer setting.");
 		}
@@ -1739,12 +1739,12 @@ var commands = exports.commands = {
 		var targetAuth = false;
 		var targetToken = '';
 		if (commaIndex >= 0) {
-			targetName = target.substr(0,commaIndex);
+			targetName = target.substr(0, commaIndex);
 			target = target.substr(commaIndex + 1);
 			commaIndex = target.indexOf(',');
 			targetAuth = target;
 			if (commaIndex >= 0) {
-				targetAuth = !!parseInt(target.substr(0,commaIndex),10);
+				targetAuth = !!parseInt(target.substr(0, commaIndex), 10);
 				targetToken = target.substr(commaIndex + 1);
 			}
 		}

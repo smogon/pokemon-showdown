@@ -26,7 +26,7 @@ exports.BattleStatuses = {
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		durationCallback: function() {
-			return this.random(2,4);
+			return this.random(2, 4);
 		},
 		onResidual: function(target) {
 			var move = this.getMove(target.lastMove);
@@ -52,7 +52,7 @@ exports.BattleStatuses = {
 			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
 			if (!result) return result;
 			this.add('-start', target, 'confusion');
-			this.effectData.time = this.random(3,4);
+			this.effectData.time = this.random(3, 4);
 		},
 		onEnd: function(target) {
 			this.add('-end', target, 'confusion');
@@ -63,7 +63,7 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
-			this.directDamage(this.getDamage(pokemon,pokemon,30));
+			this.directDamage(this.getDamage(pokemon, pokemon, 30));
 		}
 	},
 

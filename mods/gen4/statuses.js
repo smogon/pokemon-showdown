@@ -14,7 +14,7 @@ exports.BattleStatuses = {
 		onStart: function(target) {
 			this.add('-status', target, 'slp');
 			// 1-4 turns
-			this.effectData.time = this.random(2,6);
+			this.effectData.time = this.random(2, 6);
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function(pokemon, target, move) {
@@ -41,7 +41,7 @@ exports.BattleStatuses = {
 		inherit: true,
 		durationCallback: function(target, source) {
 			if (source.item === 'gripclaw') return 6;
-			return this.random(3,7);
+			return this.random(3, 7);
 		}
 	},
 	stall: {

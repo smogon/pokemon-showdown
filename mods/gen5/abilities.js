@@ -6,7 +6,7 @@ exports.BattleAbilities = {
 		onStart: function(pokemon) {
 			var target = pokemon.side.foe.randomActive();
 			if (target && target.item) {
-				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] '+pokemon);
+				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
 			}
 		}
 	},
@@ -27,7 +27,7 @@ exports.BattleAbilities = {
 		onUpdate: function(pokemon) {
 			if (pokemon.volatiles['attract']) {
 				pokemon.removeVolatile('attract');
-				this.add("-message", pokemon.name+" got over its infatuation. (placeholder)");
+				this.add("-message", pokemon.name + " got over its infatuation. (placeholder)");
 			}
 		},
 		onTryHit: function(pokemon, target, move) {

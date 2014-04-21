@@ -101,7 +101,7 @@ exports.BattleItems = {
 		onAfterMoveSelf: function(source, target) {
 			if (source.hasType('Grass')) {
 				if (source.lastDamage > 0) {
-					this.heal(source.lastDamage/8, source);
+					this.heal(source.lastDamage / 8, source);
 				}
 			}
 		},
@@ -109,7 +109,7 @@ exports.BattleItems = {
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (pokemon.hasType('Grass')) {
-				this.heal(pokemon.maxhp/16);
+				this.heal(pokemon.maxhp / 16);
 			}
 		}
 	},
@@ -119,9 +119,9 @@ exports.BattleItems = {
 		onResidualSubOrder: 2,
 		onResidual: function(pokemon) {
 			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.maxhp/(pokemon.getTypes().length===1 ? 8 : 16));
+				this.heal(pokemon.maxhp / (pokemon.getTypes().length === 1 ? 8 : 16));
 			} else {
-				this.damage(pokemon.maxhp/8);
+				this.damage(pokemon.maxhp / 8);
 			}
 		}
 	},
@@ -138,10 +138,10 @@ exports.BattleItems = {
 					effect && effect.effectType === 'Move' &&
 					target.useItem()) {
 				if (damage >= target.hp) {
-					this.add("-message",target.name+" held on using its Focus Band!");
+					this.add("-message", target.name + " held on using its Focus Band!");
 					return target.hp - 1;
 				} else {
-					this.add("-message",target.name+"'s Focus Band broke!");
+					this.add("-message", target.name + "'s Focus Band broke!");
 				}
 			}
 		},
@@ -189,25 +189,25 @@ exports.BattleItems = {
 		},
 		onModifyDef: function(def, pokemon) {
 			if (pokemon.template.species === 'Shuckle') {
-				return def*1.5;
+				return def * 1.5;
 			}
 		},
 		onModifySpA: function(spa, pokemon) {
 			if (pokemon.template.species === 'Unown') {
-				return spa*2;
+				return spa * 2;
 			}
 		},
 		onModifySpD: function(spd, pokemon) {
 			if (pokemon.template.species === 'Unown') {
-				return spd*2;
+				return spd * 2;
 			}
 			if (pokemon.template.species === 'Shuckle') {
-				return spd*1.5;
+				return spd * 1.5;
 			}
 		},
 		onModifySpe: function(spe, pokemon) {
 			if (pokemon.template.species === 'Unown') {
-				return spe*2;
+				return spe * 2;
 			}
 		},
 		onFoeBasePower: function(basePower, attacker, defender, move) {
@@ -229,7 +229,7 @@ exports.BattleItems = {
 		},
 		// onResidual: function(pokemon) {
 		// 	if (pokemon.template.species === 'Shuckle') {
-		// 		this.heal(this.clampIntRange(pokemon.maxhp/16, 1));
+		// 		this.heal(this.clampIntRange(pokemon.maxhp / 16, 1));
 		// 	}
 		// },
 		desc: "Raises Farfetch'd's critical hit rate two stages."

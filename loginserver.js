@@ -71,10 +71,10 @@ module.exports = (function() {
 		var dataString = '';
 		if (data) {
 			for (var i in data) {
-				dataString += '&'+i+'='+encodeURIComponent(''+data[i]);
+				dataString += '&' + i + '=' + encodeURIComponent('' + data[i]);
 			}
 		}
-		var req = http.get(url.parse(this.uri+'action.php?act='+action+'&serverid='+Config.serverid+'&servertoken='+Config.servertoken+'&nocache='+new Date().getTime()+dataString), function(res) {
+		var req = http.get(url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + Config.servertoken + '&nocache=' + new Date().getTime() + dataString), function(res) {
 			var buffer = '';
 			res.setEncoding('utf8');
 
@@ -132,15 +132,15 @@ module.exports = (function() {
 		if (!requests.length) return;
 
 		var requestCallbacks = [];
-		for (var i=0,len=requests.length; i<len; i++) {
+		for (var i = 0, len = requests.length; i < len; i++) {
 			var request = requests[i];
 			requestCallbacks[i] = request.callback;
 			delete request.callback;
 		}
 
 		this.requestStart(requests.length);
-		var postData = 'serverid='+Config.serverid+'&servertoken='+Config.servertoken+'&nocache='+new Date().getTime()+'&json='+encodeURIComponent(JSON.stringify(requests))+'\n';
-		var requestOptions = url.parse(this.uri+'action.php');
+		var postData = 'serverid=' + Config.serverid + '&servertoken=' + Config.servertoken + '&nocache=' + new Date().getTime() + '&json=' + encodeURIComponent(JSON.stringify(requests)) + '\n';
+		var requestOptions = url.parse(this.uri + 'action.php');
 		requestOptions.method = 'post';
 		requestOptions.headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
@@ -154,7 +154,7 @@ module.exports = (function() {
 				self.requestTimeoutTimer = null;
 			}
 			req.abort();
-			for (var i=0,len=requestCallbacks.length; i<len; i++) {
+			for (var i = 0, len = requestCallbacks.length; i < len; i++) {
 				requestCallbacks[i](null, null, error);
 			}
 			self.requestEnd();
@@ -181,12 +181,12 @@ module.exports = (function() {
 					clearTimeout(self.requestTimeoutTimer);
 					self.requestTimeoutTimer = null;
 				}
-				//console.log('RESPONSE: '+buffer);
+				//console.log('RESPONSE: ' + buffer);
 				var data = null;
 				try {
 					data = parseJSON(buffer);
 				} catch (e) {}
-				for (var i=0,len=requestCallbacks.length; i<len; i++) {
+				for (var i = 0, len = requestCallbacks.length; i < len; i++) {
 					if (data) {
 						requestCallbacks[i](data[i], res.statusCode);
 					} else {
@@ -211,17 +211,17 @@ module.exports = (function() {
 	};
 	LoginServer.prototype.requestStart = function(size) {
 		this.lastRequest = Date.now();
-		this.requestLog += ' | '+size+' requests: ';
+		this.requestLog += ' | ' + size + ' requests: ';
 		this.openRequests++;
 	};
 	LoginServer.prototype.requestEnd = function() {
 		this.openRequests = 0;
-		this.requestLog += ''+(Date.now() - this.lastRequest).duration();
+		this.requestLog += '' + (Date.now() - this.lastRequest).duration();
 		this.requestLog = this.requestLog.substr(-1000);
 		this.requestTimerPoke();
 	};
 	LoginServer.prototype.getLog = function() {
-		return this.requestLog + (this.lastRequest?' ('+(Date.now() - this.lastRequest).duration()+' since last request)':'');
+		return this.requestLog + (this.lastRequest ? ' (' + (Date.now() - this.lastRequest).duration() + ' since last request)' : '');
 	};
 
 	return LoginServer;

@@ -64,9 +64,9 @@ exports.Formats = [
 
 		onBegin: function() {
 			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0,3);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,3);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,
@@ -82,9 +82,9 @@ exports.Formats = [
 
 		onBegin: function() {
 			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0,3);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,3);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,
@@ -211,9 +211,9 @@ exports.Formats = [
 		gameType: 'doubles',
 		onBegin: function() {
 			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,
@@ -229,9 +229,9 @@ exports.Formats = [
 		gameType: 'doubles',
 		onBegin: function() {
 			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,
@@ -276,7 +276,7 @@ exports.Formats = [
 		banlist: [
 			"Arceus", "Arceus-Bug", "Arceus-Dark", "Arceus-Dragon", "Arceus-Electric", "Arceus-Fairy", "Arceus-Fighting", "Arceus-Fire",
 			"Arceus-Flying", "Arceus-Ghost", "Arceus-Grass", "Arceus-Ground", "Arceus-Ice", "Arceus-Poison", "Arceus-Psychic", "Arceus-Rock", "Arceus-Steel",
-			"Arceus-Water", "Darkrai", "Deoxys", "Deoxys-Attack", "Dialga", "Giratina", "Giratina-Origin"," Groudon", "Ho-Oh", "Kyurem-White", "Lugia",
+			"Arceus-Water", "Darkrai", "Deoxys", "Deoxys-Attack", "Dialga", "Giratina", "Giratina-Origin", "Groudon", "Ho-Oh", "Kyurem-White", "Lugia",
 			"Mewtwo", "Mewtwo-Mega-X", "Mewtwo-Mega-Y", "Palkia", "Rayquaza", "Reshiram", "Xerneas", "Zekrom", "Regigigas", "Slaking", "Ampharosite", "Gyaradosite",
 			"Meloetta"
 		]
@@ -393,7 +393,7 @@ exports.Formats = [
 		validateSet: function(set) {
 			var template = this.getTemplate(set.species || set.name);
 			if (template.types.indexOf('Flying') === -1 && set.ability !== 'Levitate') {
-				return [set.species+" is not a Flying type and does not have the ability Levitate."];
+				return [set.species + " is not a Flying type and does not have the ability Levitate."];
 			}
 		},
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -453,9 +453,9 @@ exports.Formats = [
 		section: 'Other Metagames',
 
 		onBegin: function() {
-			this.p1.pokemon = this.p1.pokemon.slice(0,1);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,1);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		ruleset: ['Pokemon', 'Standard'],
@@ -528,7 +528,7 @@ exports.Formats = [
 			var letters = {};
 			var letter = '';
 			for (var i = 0; i < team.length; i++) {
-				letter = Tools.getTemplate(team[i]).species.slice(0,1).toUpperCase();
+				letter = Tools.getTemplate(team[i]).species.slice(0, 1).toUpperCase();
 				if (letter in letters) return ['Your team cannot have more that one Pokémon starting with the letter "' + letter + '".'];
 				letters[letter] = 1;
 			}
@@ -604,7 +604,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] RU'],
-		banlist: ['RU','BL3', 'Prankster + Assist']
+		banlist: ['RU', 'BL3', 'Prankster + Assist']
 	},
 	{
 		name: "[Gen 5] LC",
@@ -626,9 +626,9 @@ exports.Formats = [
 		},
 		onBegin: function() {
 			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0,3);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,3);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
@@ -683,9 +683,9 @@ exports.Formats = [
 		gameType: 'doubles',
 		onBegin: function() {
 			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0,4);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0,4);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		maxForcedLevel: 50,

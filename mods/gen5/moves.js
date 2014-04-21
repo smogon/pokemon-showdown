@@ -16,10 +16,10 @@ exports.BattleMovedex = {
 		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
 		onHit: function(target) {
 			var moves = [];
-			for (var j=0; j<target.side.pokemon.length; j++) {
+			for (var j = 0; j < target.side.pokemon.length; j++) {
 				var pokemon = target.side.pokemon[j];
 				if (pokemon === target) continue;
-				for (var i=0; i<pokemon.moves.length; i++) {
+				for (var i = 0; i < pokemon.moves.length; i++) {
 					var move = pokemon.moves[i];
 					var noAssist = {
 						assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1
@@ -128,7 +128,7 @@ exports.BattleMovedex = {
 			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1};
 			for (var i in sideConditions) {
 				if (pokemon.side.removeSideCondition(i)) {
-					this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Defog', '[of] '+pokemon);
+					this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Defog', '[of] ' + pokemon);
 				}
 			}
 		}
@@ -251,7 +251,7 @@ exports.BattleMovedex = {
 	},
 	healpulse: {
 		inherit: true,
-		heal: [1,2],
+		heal: [1, 2],
 		onHit: function() {}
 	},
 	heatwave: {

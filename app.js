@@ -134,18 +134,18 @@ global.ResourceMonitor = {
 	 */
 	log: function(text) {
 		console.log(text);
-		if (Rooms.rooms.staff) Rooms.rooms.staff.add('||'+text);
+		if (Rooms.rooms.staff) Rooms.rooms.staff.add('||' + text);
 	},
 	countConnection: function(ip, name) {
 		var now = Date.now();
 		var duration = now - this.connectionTimes[ip];
-		name = (name ? ': '+name : '');
-		if (ip in this.connections && duration < 30*60*1000) {
+		name = (name ? ': ' + name : '');
+		if (ip in this.connections && duration < 30 * 60 * 1000) {
 			this.connections[ip]++;
-			if (duration < 5*60*1000 && this.connections[ip] % 20 === 0) {
-				this.log('[ResourceMonitor] IP '+ip+' has connected '+this.connections[ip]+' times in the last '+duration.duration()+name);
-			} else if (this.connections[ip] % 60 == 0) {
-				this.log('[ResourceMonitor] IP '+ip+' has connected '+this.connections[ip]+' times in the last '+duration.duration()+name);
+			if (duration < 5 * 60 * 1000 && this.connections[ip] % 20 === 0) {
+				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
+			} else if (this.connections[ip] % 60 === 0) {
+				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
 			}
 		} else {
 			this.connections[ip] = 1;
@@ -158,13 +158,13 @@ global.ResourceMonitor = {
 	countBattle: function(ip, name) {
 		var now = Date.now();
 		var duration = now - this.battleTimes[ip];
-		name = (name ? ': '+name : '');
-		if (ip in this.battles && duration < 30*60*1000) {
+		name = (name ? ': ' + name : '');
+		if (ip in this.battles && duration < 30 * 60 * 1000) {
 			this.battles[ip]++;
-			if (duration < 5*60*1000 && this.battles[ip] % 15 == 0) {
-				this.log('[ResourceMonitor] IP '+ip+' has battled '+this.battles[ip]+' times in the last '+duration.duration()+name);
-			} else if (this.battles[ip] % 75 == 0) {
-				this.log('[ResourceMonitor] IP '+ip+' has battled '+this.battles[ip]+' times in the last '+duration.duration()+name);
+			if (duration < 5 * 60 * 1000 && this.battles[ip] % 15 === 0) {
+				this.log('[ResourceMonitor] IP ' + ip + ' has battled ' + this.battles[ip] + ' times in the last ' + duration.duration() + name);
+			} else if (this.battles[ip] % 75 === 0) {
+				this.log('[ResourceMonitor] IP ' + ip + ' has battled ' + this.battles[ip] + ' times in the last ' + duration.duration() + name);
 			}
 		} else {
 			this.battles[ip] = 1;
@@ -177,7 +177,7 @@ global.ResourceMonitor = {
 	countPrepBattle: function(ip) {
 		var now = Date.now();
 		var duration = now - this.battlePrepTimes[ip];
-		if (ip in this.battlePreps && duration < 3*60*1000) {
+		if (ip in this.battlePreps && duration < 3 * 60 * 1000) {
 			this.battlePreps[ip]++;
 			if (this.battlePreps[ip] > 6) {
 				return true;
@@ -202,7 +202,7 @@ global.ResourceMonitor = {
 	writeNetworkUse: function() {
 		var buf = '';
 		for (var i in this.networkUse) {
-			buf += ''+this.networkUse[i]+'\t'+this.networkCount[i]+'\t'+i+'\n';
+			buf += '' + this.networkUse[i] + '\t' + this.networkCount[i] + '\t' + i + '\n';
 		}
 		fs.writeFile('logs/networkuse.tsv', buf);
 	},
@@ -237,28 +237,28 @@ global.ResourceMonitor = {
 	countCmd: function(ip, name) {
 		var now = Date.now();
 		var duration = now - this.cmdsTimes[ip];
-		name = (name ? ': '+name : '');
+		name = (name ? ': ' + name : '');
 		if (!this.cmdsTotal) this.cmdsTotal = {lastCleanup: 0, count: 0};
-		if (now - this.cmdsTotal.lastCleanup > 60*1000) {
+		if (now - this.cmdsTotal.lastCleanup > 60 * 1000) {
 			this.cmdsTotal.count = 0;
 			this.cmdsTotal.lastCleanup = now;
 		}
 		this.cmdsTotal.count++;
-		if (ip in this.cmds && duration < 60*1000) {
+		if (ip in this.cmds && duration < 60 * 1000) {
 			this.cmds[ip]++;
-			if (duration < 60*1000 && this.cmds[ip] % 5 === 0) {
+			if (duration < 60 * 1000 && this.cmds[ip] % 5 === 0) {
 				if (this.cmds[ip] >= 3) {
-					if (this.cmds[ip] % 30 === 0) this.log('CMD command from '+ip+' blocked for '+this.cmds[ip]+'th use in the last '+duration.duration()+name);
+					if (this.cmds[ip] % 30 === 0) this.log('CMD command from ' + ip + ' blocked for ' + this.cmds[ip] + 'th use in the last ' + duration.duration() + name);
 					return true;
 				}
-				this.log('[ResourceMonitor] IP '+ip+' has used CMD command '+this.cmds[ip]+' times in the last '+duration.duration()+name);
+				this.log('[ResourceMonitor] IP ' + ip + ' has used CMD command ' + this.cmds[ip] + ' times in the last ' + duration.duration() + name);
 			} else if (this.cmds[ip] % 15 === 0) {
-				this.log('CMD command from '+ip+' blocked for '+this.cmds[ip]+'th use in the last '+duration.duration()+name);
+				this.log('CMD command from ' + ip + ' blocked for ' + this.cmds[ip] + 'th use in the last ' + duration.duration() + name);
 				return true;
 			}
 		} else if (this.cmdsTotal.count > 8000) {
 			// One CMD check per user per minute on average (to-do: make this better)
-			this.log('CMD command for '+ip+' blocked because CMD has been used '+this.cmdsTotal.count+' times in the last minute.');
+			this.log('CMD command for ' + ip + ' blocked because CMD has been used ' + this.cmdsTotal.count + ' times in the last minute.');
 			return true;
 		} else {
 			this.cmds[ip] = 1;
@@ -308,7 +308,7 @@ global.toId = function(text) {
 global.toName = function(name) {
 	name = string(name);
 	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
-	if (name.length > 18) name = name.substr(0,18).trim();
+	if (name.length > 18) name = name.substr(0, 18).trim();
 	return name;
 };
 
@@ -317,7 +317,7 @@ global.toName = function(name) {
  * If strEscape is true, escapes it for JavaScript, too
  */
 global.sanitize = function(str, strEscape) {
-	str = (''+(str||''));
+	str = ('' + (str || ''));
 	str = str.escapeHTML();
 	if (strEscape) str = str.replace(/'/g, '\\\'');
 	return str;
@@ -325,12 +325,12 @@ global.sanitize = function(str, strEscape) {
 
 /**
  * Safely ensures the passed variable is a string
- * Simply doing ''+str can crash if str.toString crashes or isn't a function
+ * Simply doing '' + str can crash if str.toString crashes or isn't a function
  * If we're expecting a string and being given anything that isn't a string
  * or a number, it's safe to assume it's an error, and return ''
  */
 global.string = function(str) {
-	if (typeof str === 'string' || typeof str === 'number') return ''+str;
+	if (typeof str === 'string' || typeof str === 'number') return '' + str;
 	return '';
 };
 
@@ -371,9 +371,9 @@ if (Config.crashguard) {
 		quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5);
 		lastCrash = Date.now();
 		if (quietCrash) return;
-		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
+		var stack = ("" + err.stack).split("\n").slice(0, 2).join("<br />");
 		if (Rooms.lobby) {
-			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
+			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
 			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		}
 		Config.modchat = 'crash';
@@ -405,9 +405,9 @@ global.TeamValidator = require('./team-validator.js');
 // load ipbans at our leisure
 fs.readFile('./config/ipbans.txt', function (err, data) {
 	if (err) return;
-	data = (''+data).split("\n");
+	data = ('' + data).split("\n");
 	var rangebans = [];
-	for (var i=0; i<data.length; i++) {
+	for (var i = 0; i < data.length; i++) {
 		data[i] = data[i].split('#')[0].trim();
 		if (!data[i]) continue;
 		if (data[i].indexOf('/') >= 0) {

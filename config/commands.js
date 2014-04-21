@@ -206,7 +206,7 @@ var commands = exports.commands = {
 		for (var userid in Users.users) {
 			var user = Users.users[userid];
 			if (user.latestIp === target) {
-				this.sendReply((user.connected?" + ":"-") + " " + user.name);
+				this.sendReply((user.connected ? " + " : "-") + " " + user.name);
 				atLeastOne = true;
 			}
 		}
@@ -264,8 +264,8 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
 		var searches = {};
-		var allTiers = {'uber':1,'ou':1,'uu':1,'lc':1,'cap':1,'bl':1};
-		var allColours = {'green':1,'red':1,'blue':1,'white':1,'brown':1,'yellow':1,'purple':1,'pink':1,'gray':1,'black':1};
+		var allTiers = {'uber':1, 'ou':1, 'uu':1, 'lc':1, 'cap':1, 'bl':1};
+		var allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 		var showAll = false;
 		var megaSearch = null;
 		var output = 10;
@@ -273,7 +273,7 @@ var commands = exports.commands = {
 		for (var i in targets) {
 			var isNotSearch = false;
 			target = targets[i].trim().toLowerCase();
-			if (target.slice(0,1) === '!') {
+			if (target.slice(0, 1) === '!') {
 				isNotSearch = true;
 				target = target.slice(1);
 			}
@@ -357,7 +357,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		for (var search in {'moves':1,'types':1,'ability':1,'tier':1,'gen':1,'color':1}) {
+		for (var search in {'moves':1, 'types':1, 'ability':1, 'tier':1, 'gen':1, 'color':1}) {
 			if (!searches[search]) continue;
 			switch (search) {
 				case 'types':
@@ -421,7 +421,7 @@ var commands = exports.commands = {
 							while (prevoTemp.prevo && prevoTemp.learnset && !(prevoTemp.learnset[move.id])) {
 								prevoTemp = Tools.getTemplate(prevoTemp.prevo);
 							}
-							var canLearn = (prevoTemp.learnset.sketch && !(move.id in {'chatter':1,'struggle':1,'magikarpsrevenge':1})) || prevoTemp.learnset[move.id];
+							var canLearn = (prevoTemp.learnset.sketch && !(move.id in {'chatter':1, 'struggle':1, 'magikarpsrevenge':1})) || prevoTemp.learnset[move.id];
 							if ((!canLearn && searches[search][i]) || (searches[search][i] === false && canLearn)) delete dex[mon];
 						}
 					}
@@ -484,7 +484,7 @@ var commands = exports.commands = {
 		}
 		var buffer = template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
 		if (!problem) {
-			var sourceNames = {E:"egg",S:"event",D:"dream world"};
+			var sourceNames = {E:"egg", S:"event", D:"dream world"};
 			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul class=\"message-learn-list\">";
 			if (lsetData.sources) {
 				var sources = lsetData.sources.sort();
@@ -492,16 +492,16 @@ var commands = exports.commands = {
 				var prevSourceType;
 				for (var i = 0, len = sources.length; i < len; ++i) {
 					var source = sources[i];
-					if (source.substr(0,2) === prevSourceType) {
+					if (source.substr(0, 2) === prevSourceType) {
 						if (prevSourceCount < 0) buffer += ": " + source.substr(2);
 						else if (all || prevSourceCount < 3) buffer += ", " + source.substr(2);
-						else if (prevSourceCount == 3) buffer += ", ...";
+						else if (prevSourceCount === 3) buffer += ", ...";
 						++prevSourceCount;
 						continue;
 					}
-					prevSourceType = source.substr(0,2);
-					prevSourceCount = source.substr(2)?0:-1;
-					buffer += "<li>gen " + source.substr(0,1) + " " + sourceNames[source.substr(1,1)];
+					prevSourceType = source.substr(0, 2);
+					prevSourceCount = source.substr(2) ? 0 : -1;
+					buffer += "<li>gen " + source.substr(0, 1) + " " + sourceNames[source.substr(1, 1)];
 					if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
 					if (source.substr(2)) buffer += ": " + source.substr(2);
 				}
@@ -538,8 +538,8 @@ var commands = exports.commands = {
 			var notImmune = Tools.getImmunity(type, pokemon);
 			if (notImmune) {
 				var typeMod = Tools.getEffectiveness(type, pokemon);
-				if (typeMod == 1) weaknesses.push(type);
-				if (typeMod == 2) weaknesses.push("<b>" + type + "</b>");
+				if (typeMod === 1) weaknesses.push(type);
+				if (typeMod === 2) weaknesses.push("<b>" + type + "</b>");
 			}
 		});
 
@@ -791,7 +791,7 @@ var commands = exports.commands = {
 			"<br />" +
 			"Room owners (#) can also use:<br />" +
 			"- /roomdesc <em>description</em>: set the room description on the room join page<br />" +
-			"- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />" +
+			"- /rules <em>rules link < /em>: set the room rules link seen when using /rules<br />" +
 			"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />" +
 			"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />" +
 			"- /modchat <em>[%/@/#]</em>: set modchat level<br />" +
@@ -935,7 +935,7 @@ var commands = exports.commands = {
 		var atLeastOne = false;
 		var generation = (targets[1] || 'bw').trim().toLowerCase();
 		var genNumber = 5;
-		var doublesFormats = {'vgc2012':1,'vgc2013':1,'doubles':1};
+		var doublesFormats = {'vgc2012':1, 'vgc2013':1, 'doubles':1};
 		var doublesFormat = (!targets[2] && generation in doublesFormats)? generation : (targets[2] || '').trim().toLowerCase();
 		var doublesText = '';
 		if (generation === 'bw' || generation === 'bw2' || generation === '5' || generation === 'five') {
@@ -957,10 +957,10 @@ var commands = exports.commands = {
 		}
 		if (doublesFormat !== '') {
 			// Smogon only has doubles formats analysis from gen 5 onwards.
-			if (!(generation in {'bw':1,'xy':1}) || !(doublesFormat in doublesFormats)) {
+			if (!(generation in {'bw':1, 'xy':1}) || !(doublesFormat in doublesFormats)) {
 				doublesFormat = '';
 			} else {
-				doublesText = {'vgc2012':"VGC 2012",'vgc2013':"VGC 2013",'doubles':"Doubles"}[doublesFormat];
+				doublesText = {'vgc2012':"VGC 2012", 'vgc2013':"VGC 2013", 'doubles':"Doubles"}[doublesFormat];
 				doublesFormat = '/' + doublesFormat;
 			}
 		}
@@ -981,13 +981,13 @@ var commands = exports.commands = {
 			if (poke === 'farfetch\'d') poke = 'farfetchd';
 			if (poke === 'mr. mime') poke = 'mr_mime';
 			if (poke === 'mime jr.') poke = 'mime_jr';
-			if (poke === 'deoxys-attack' || poke === 'deoxys-defense' || poke === 'deoxys-speed' || poke === 'kyurem-black' || poke === 'kyurem-white') poke = poke.substr(0,8);
+			if (poke === 'deoxys-attack' || poke === 'deoxys-defense' || poke === 'deoxys-speed' || poke === 'kyurem-black' || poke === 'kyurem-white') poke = poke.substr(0, 8);
 			if (poke === 'wormadam-trash') poke = 'wormadam-s';
 			if (poke === 'wormadam-sandy') poke = 'wormadam-g';
-			if (poke === 'rotom-wash' || poke === 'rotom-frost' || poke === 'rotom-heat') poke = poke.substr(0,7);
+			if (poke === 'rotom-wash' || poke === 'rotom-frost' || poke === 'rotom-heat') poke = poke.substr(0, 7);
 			if (poke === 'rotom-mow') poke = 'rotom-c';
 			if (poke === 'rotom-fan') poke = 'rotom-s';
-			if (poke === 'giratina-origin' || poke === 'tornadus-therian' || poke === 'landorus-therian') poke = poke.substr(0,10);
+			if (poke === 'giratina-origin' || poke === 'tornadus-therian' || poke === 'landorus-therian') poke = poke.substr(0, 10);
 			if (poke === 'shaymin-sky') poke = 'shaymin-s';
 			if (poke === 'arceus') poke = 'arceus-normal';
 			if (poke === 'thundurus-therian') poke = 'thundurus-t';
@@ -1044,7 +1044,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		var d = target.indexOf("d");
 		if (d != -1) {
-			var num = parseInt(target.substring(0,d));
+			var num = parseInt(target.substring(0, d));
 			var faces;
 			if (target.length > d) faces = parseInt(target.substring(d + 1));
 			if (isNaN(num)) num = 1;
@@ -1088,7 +1088,7 @@ var commands = exports.commands = {
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canBroadcast()) return;
 
-		targets = target.split(', ');
+		targets = target.split(',');
 		if (targets.length != 3) {
 			return this.parse('/help showimage');
 		}
