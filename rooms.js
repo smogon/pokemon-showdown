@@ -1194,8 +1194,7 @@ var ChatRoom = (function() {
 		this.bannedIps = {};
 		if (!this.modchat) this.modchat = (Config.chatmodchat || false);
 
-		// `Config.loglobby` is a legacy name
-		if (Config.logchat || Config.loglobby) {
+		if (Config.logchat) {
 			this.rollLogFile(true);
 			this.logEntry = function(entry, date) {
 				var timestamp = (new Date()).format('{HH}:{mm}:{ss} ');

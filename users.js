@@ -568,13 +568,6 @@ var User = (function () {
 		}
 	};
 	var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
-	/**
-	 *
-	 * @param name        The name you want
-	 * @param token       Signed assertion returned from login server
-	 * @param auth        Make sure this account will identify as registered
-	 * @param connection  The connection asking for the rename
-	 */
 	User.prototype.filterName = function(name) {
 		if (Config.namefilter) {
 			name = Config.namefilter(name);
@@ -585,6 +578,13 @@ var User = (function () {
 		}
 		return name;
 	};
+	/**
+	 *
+	 * @param name        The name you want
+	 * @param token       Signed assertion returned from login server
+	 * @param auth        Make sure this account will identify as registered
+	 * @param connection  The connection asking for the rename
+	 */
 	User.prototype.rename = function(name, token, auth, connection) {
 		for (var i in this.roomCount) {
 			var room = Rooms.get(i);
