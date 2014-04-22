@@ -314,9 +314,6 @@ var commands = exports.commands = {
 		if (!Config.groups[nextGroup]) {
 			return this.sendReply("Group '" + nextGroup + "' does not exist.");
 		}
-		if (Config.groups[nextGroup].globalonly) {
-			return this.sendReply("The rank of " + Config.groups[nextGroup].name + " is global-only and can't be room-promoted to.");
-		}
 
 		if (Config.groups[nextGroup].globalonly) {
 			return this.sendReply("Group 'room" + Config.groups[nextGroup].id + "' does not exist as a room rank.");
@@ -342,6 +339,8 @@ var commands = exports.commands = {
 		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
 			if (targetUser) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
+		} else if (nextGroup === '#') {
+			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
 		} else {
 			this.addModCommand("" + name + " was promoted to Room " + groupName + " by " + user.name + ".");
 		}
