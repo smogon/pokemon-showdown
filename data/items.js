@@ -3462,7 +3462,7 @@ exports.BattleItems = {
 		},
 		num: 540,
 		gen: 5,
-		desc: "If holder is hit by a contact move, the attacker loses 1/8 of its max HP."
+		desc: "If holder is hit by a contact move, the attacker loses 1/6 of its max HP."
 	},
 	"rootfossil": {
 		id: "rootfossil",
