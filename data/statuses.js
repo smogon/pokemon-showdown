@@ -65,6 +65,10 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'frz');
+			if (target.species === 'Shaymin-Sky') {
+				target.formeChange('Shaymin');
+				this.add('-formechange', target, 'Shaymin');
+			}
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon, target, move) {
