@@ -249,10 +249,9 @@ exports.BattleFormats = {
 	},
 	potd: {
 		effectType: 'Rule',
-		onPotD: '',
 		onStart: function () {
-			if (this.effect.onPotD) {
-				this.add('rule', 'Pokemon of the Day: ' + this.effect.onPotD);
+			if (Config.potd) {
+				this.add('rule', "Pokemon of the Day: " + this.getTemplate(Config.potd).name);
 			}
 		}
 	},
