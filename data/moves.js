@@ -2497,6 +2497,7 @@ exports.BattleMovedex = {
 		name: "Diamond Storm",
 		pp: 5,
 		priority: 0,
+		isUnreleased: true,
 		secondary: {
 			chance: 50,
 			self: {
@@ -6481,6 +6482,7 @@ exports.BattleMovedex = {
 		name: "Hyperspace Hole",
 		pp: 5,
 		priority: 0,
+		isUnreleased: true,
 		isContact: true,
 		breaksProtect: true,
 		secondary: false,
@@ -12625,6 +12627,7 @@ exports.BattleMovedex = {
 		name: "Steam Eruption",
 		pp: 5,
 		priority: 0,
+		isUnreleased: true,
 		secondary: {
 			chance: 30,
 			status: 'brn'
@@ -13623,6 +13626,7 @@ exports.BattleMovedex = {
 		name: "Thousand Arrows",
 		pp: 10,
 		priority: 0,
+		isUnreleased: true,
 		affectedByImmunities: false,
 		volatileStatus: 'smackdown',
 		secondary: false,
@@ -13640,6 +13644,7 @@ exports.BattleMovedex = {
 		name: "Thousand Waves",
 		pp: 10,
 		priority: 0,
+		isUnreleased: true,
 		onHit: function (target) {
 			target.addVolatile('trapped');
 		},
