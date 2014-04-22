@@ -2404,6 +2404,12 @@ var Battle = (function () {
 		if (pokemon.illusion && pokemon.illusion.template.isMega) {
 			this.add('-formechange', pokemon.illusion, pokemon.illusion.template.species);
 		}
+		if (pokemon.wasFrozen)
+		{
+			pokemon.formeChange('Shaymin');
+			pokemon.ability = this.getAbility('Natural Cure');
+			this.add('-formechange', pokemon, 'Shaymin');
+		}
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
