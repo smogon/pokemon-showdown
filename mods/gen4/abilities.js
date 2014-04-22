@@ -3,9 +3,9 @@ exports.BattleAbilities = {
 		inherit: true,
 		desc: "If this Pokemon, or its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
 		shortDesc: "If this Pokemon is hit by a critical hit, its Attack is boosted by 12.",
-		onCriticalHit: function(target) {
+		onCriticalHit: function (target) {
 			target.setBoost({atk: 6});
-			this.add('-setboost',target,'atk',12,'[from] ability: Anger Point');
+			this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 		}
 	},
 	"lightningrod": {
@@ -20,12 +20,12 @@ exports.BattleAbilities = {
 	"magicguard": {
 		//desc: "",
 		shortDesc: "This Pokemon can only be damaged by direct attacks.",
-		onDamage: function(damage, target, source, effect) {
+		onDamage: function (damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
 				return false;
 			}
 		},
-		onSetStatus: function(status, target, source, effect) {
+		onSetStatus: function (status, target, source, effect) {
 			if (effect && effect.id === 'toxicspikes') {
 				return false;
 			}
@@ -38,12 +38,12 @@ exports.BattleAbilities = {
 	"minus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Plus ability.",
 		shortDesc: "If an ally has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
-		onModifySpA: function(spa, pokemon) {
+		onModifySpA: function (spa, pokemon) {
 			var allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (var i=0; i<allyActive.length; i++) {
+			for (var i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].ability === 'plus') {
 					return spa * 1.5
 				}
@@ -65,12 +65,12 @@ exports.BattleAbilities = {
 	"plus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Minus ability.",
 		shortDesc: "If an ally has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
-		onModifySpA: function(spa, pokemon) {
+		onModifySpA: function (spa, pokemon) {
 			var allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (var i=0; i<allyActive.length; i++) {
+			for (var i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].ability === 'minus') {
 					return spa * 1.5
 				}
@@ -102,9 +102,9 @@ exports.BattleAbilities = {
 		desc: "This Pokemon is immune to OHKO moves.",
 		shortDesc: "OHKO moves fail on this Pokemon.",
 		onDamagePriority: -100,
-		onDamage: function(damage, target, source, effect) {
+		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.ohko) {
-				this.add('-activate',target,'Sturdy');
+				this.add('-activate', target, 'Sturdy');
 				return 0;
 			}
 		},
@@ -115,7 +115,7 @@ exports.BattleAbilities = {
 	},
 	"synchronize": {
 		inherit: true,
-		onAfterSetStatus: function(status, target, source) {
+		onAfterSetStatus: function (status, target, source) {
 			if (!source || source === target) return;
 			var status = status.id;
 			if (status === 'slp' || status === 'frz') return;
@@ -125,7 +125,7 @@ exports.BattleAbilities = {
 	},
 	"trace": {
 		inherit: true,
-		onUpdate: function(pokemon) {
+		onUpdate: function (pokemon) {
 			var target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
 			var ability = this.getAbility(target.ability);
@@ -134,15 +134,15 @@ exports.BattleAbilities = {
 				return;
 			}
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		}
 	},
 	"wonderguard": {
 		inherit: true,
-		onTryHit: function(target, source, move) {
+		onTryHit: function (target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.id === 'firefang') return;
-			this.debug('Wonder Guard immunity: '+move.id);
+			this.debug('Wonder Guard immunity: ' + move.id);
 			if (this.getEffectiveness(move.type, target) <= 0) {
 				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;

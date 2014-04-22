@@ -135,6 +135,7 @@ Contributors
 - Cody Thompson [Rising_Dusk] - Development
 - Kyle Dove [Kyle_Dove] - Art (battle backdrops)
 - Leonardo Julca [Slayer95] - Development
+- Quinton Lee [sirDonovan] - Development
 - Robin Vandenbrande [Quinella] - Development
 - Samuel Teo [Yilx] - Art (main background)
 - Vivian Zou [Vtas] - Art (alternate main background)
