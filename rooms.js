@@ -462,7 +462,7 @@ var GlobalRoom = (function () {
 
 		//console.log('BATTLE START BETWEEN: ' + p1.userid + ' ' + p2.userid);
 		var i = this.lastBattle + 1;
-		var formaturlid = format.toLowerCase().replace(/[^a-z0-9] + /g, '');
+		var formaturlid = format.toLowerCase().replace(/[^a-z0-9]+/g, '');
 		while(rooms['battle-' + formaturlid + i]) {
 			i++;
 		}
