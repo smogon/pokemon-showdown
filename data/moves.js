@@ -5593,7 +5593,7 @@ exports.BattleMovedex = {
 			this.add('-clearallboost');
 			for (var i = 0; i < this.sides.length; i++) {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
-					this.sides[i].active[j].clearBoosts();
+					if (this.sides[i].active[j]) this.sides[i].active[j].clearBoosts();
 				}
 			}
 		},
