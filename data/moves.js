@@ -11825,7 +11825,7 @@ exports.BattleMovedex = {
 				return null;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
 		onTryHit: function (target) {
@@ -11836,7 +11836,6 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'skydrop',
 			onDragOut: false,
 			onSourceDragOut: false,
 			onFoeModifyPokemon: function (defender) {
