@@ -7350,6 +7350,7 @@ exports.BattleMovedex = {
 		name: "Light of Ruin",
 		pp: 5,
 		priority: 0,
+		isUnreleased: true,
 		recoil: [1, 2],
 		secondary: false,
 		target: "normal",
