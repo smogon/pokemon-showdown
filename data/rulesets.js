@@ -9,22 +9,22 @@ exports.BattleFormats = {
 	standard: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal']
+		banlist: ['Unreleased', 'Illegal', 'Leavanny + Knock Off + Sticky Web', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass']
 	},
 	standardnext: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'HP Percentage Mod'],
-		banlist: ['Illegal', 'Soul Dew']
+		banlist: ['Illegal', 'Soul Dew', 'Leavanny + Knock Off + Sticky Web', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass']
 	},
 	standardubers: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal']
+		banlist: ['Unreleased', 'Illegal', 'Leavanny + Knock Off + Sticky Web', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass']
 	},
 	standardgbu: {
 		effectType: 'Banlist',
 		ruleset: ['Species Clause', 'Item Clause'],
-		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
+		banlist: ['Unreleased', 'Illegal', 'Soul Dew', 'Leavanny + Knock Off + Sticky Web', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass',
 			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
 			'Mew',
 			'Lugia',
@@ -58,7 +58,7 @@ exports.BattleFormats = {
 	standarddoubles: {
 		effectType: 'Banlist',
 		ruleset: ['Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal']
+		banlist: ['Unreleased', 'Illegal', 'Leavanny + Knock Off + Sticky Web', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass']
 	},
 	pokemon: {
 		effectType: 'Banlist',
