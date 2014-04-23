@@ -2400,15 +2400,9 @@ var Battle = (function () {
 			pokemon.moveset[m].used = false;
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
-		if (pokemon.template.isMega) this.add('-formechange', pokemon, pokemon.template.species);
+		if (pokemon.template.isMega || pokemon.wasFrozen) this.add('-formechange', pokemon, pokemon.template.species);
 		if (pokemon.illusion && pokemon.illusion.template.isMega) {
 			this.add('-formechange', pokemon.illusion, pokemon.illusion.template.species);
-		}
-		if (pokemon.wasFrozen)
-		{
-			pokemon.formeChange('Shaymin');
-			pokemon.ability = this.getAbility('Natural Cure');
-			this.add('-formechange', pokemon, 'Shaymin');
 		}
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
@@ -2467,7 +2461,7 @@ var Battle = (function () {
 			pokemon.moveset[m].used = false;
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
-		if (pokemon.template.isMega) this.add('-formechange', pokemon, pokemon.template.species);
+		if (pokemon.template.isMega || pokemon.wasFrozen) this.add('-formechange', pokemon, pokemon.template.species);
 		if (pokemon.illusion && pokemon.illusion.template.isMega) {
 			this.add('-formechange', pokemon.illusion, pokemon.illusion.template.species);
 		}
