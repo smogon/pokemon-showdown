@@ -1675,6 +1675,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	heracrossmega: {
+		viableMoves: {"pinmissile":1,"rockblast":1,"closecombat":1,"bulletseed":1,"swordsdance":1,"earthquake":1,"substitute":1,"bulkup":1},
 		requiredItem: "Heracronite"
 	},
 	sneasel: {
