@@ -11813,7 +11813,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			if (defender.weightkg >= 200) {
-				this.add('message', defender.species + ' is too heavy. (placeholder)');
+				this.add('-fail', defender, '[heavy]');
 				return null;
 			}
 			if (defender.volatiles['protect']) {
