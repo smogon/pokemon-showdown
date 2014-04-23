@@ -67,9 +67,12 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'frz');
 			if (target.species === 'Shaymin-Sky' && !target.wasFrozen) {
 				target.wasFrozen = true;
-				target.formeChange('Shaymin');
-				target.ability = this.getAbility('Natural Cure');
-				this.add('-formechange', target, 'Shaymin');
+				var template = this.getTemplate('Shaymin');
+				this.add('-formechange', target, template.species);
+				target.formeChange(template);
+				target.baseTemplate = template;
+				target.setAbility(template.abilities['0']);
+				target.baseAbility = target.ability;
 			}
 		},
 		onBeforeMovePriority: 2,
