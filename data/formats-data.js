@@ -1172,7 +1172,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	flareon: {
-		viableMoves: {"flamecharge":1,"facade":1,"flareblitz":1,"superpower":1,"wish":1,"protect":1,"lavaplume":1,"toxic":1},
+		viableMoves: {"flamecharge":1,"facade":1,"flareblitz":1,"superpower":1,"wish":1,"protect":1,"toxic":1},
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["tailwhip","tackle","helpinghand","sandattack"]},
 			{"generation":6,"level":10,"isHidden":false,"moves":["celebrate","tailwhip","sandattack","ember"],"pokeball":"cherishball"}
