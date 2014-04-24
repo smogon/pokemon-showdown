@@ -686,7 +686,7 @@ var commands = exports.commands = {
 	},
 
 	unbanall: function (target, room, user) {
-		if (!this.can('ban')) return false;
+		if (!this.can('rangeban')) return false;
 		// we have to do this the hard way since it's no longer a global
 		for (var i in Users.bannedIps) {
 			delete Users.bannedIps[i];

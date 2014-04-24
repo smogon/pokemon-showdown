@@ -1297,9 +1297,9 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/unban [username] - Unban a user. Requires: @ & ~");
 		}
-		if (target === '@' || target === 'unbanall') {
+		if (target === '&' || target === 'unbanall') {
 			matched = true;
-			this.sendReply("/unbanall - Unban all IP addresses. Requires: @ & ~");
+			this.sendReply("/unbanall - Unban all IP addresses. Requires: & ~");
 		}
 		if (target === '%' || target === 'modlog') {
 			matched = true;
@@ -1406,14 +1406,14 @@ var commands = exports.commands = {
 			this.sendReply("/help OR /h OR /? - Gives you help.");
 		}
 		if (!target) {
-			this.sendReply("COMMANDS: /msg, /reply, /ignore, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps, /highlight");
+			this.sendReply("COMMANDS: /nick, /avatar, /rating, /whois, /msg, /reply, /ignore, /away, /back, /timestamps, /highlight");
 			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: + % @ & ~))");
 			this.sendReply("For details on all room commands, use /roomhelp");
 			this.sendReply("For details on all commands, use /help all");
 			if (user.group !== Config.groupsranking[0]) {
-				this.sendReply("DRIVER COMMANDS: /mute, /unmute, /announce, /modlog, /forcerename, /alts");
-				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /redirect, /kick");
-				this.sendReply("LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare");
+				this.sendReply("DRIVER COMMANDS: /warn, /mute, /unmute, /alts, /forcerename, /modlog, /lock, /unlock, /announce, /redirect");
+				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip");
+				this.sendReply("LEADER COMMANDS: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /unbanall");
 				this.sendReply("For details on all moderator commands, use /help @");
 			}
 			this.sendReply("For details of a specific command, use something like: /help data");
