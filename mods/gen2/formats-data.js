@@ -1,595 +1,18 @@
 exports.BattleFormatsData = {
-	aipom: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["scratch","tailwhip","mimic"]}
-		],
-		tier: "UU"
-	},
-	arbok: {
-		tier: "UU"
-	},
-	arcanine: {
-		tier: "UU"
-	},
-	ariados: {
-		tier: "UU"
-	},
-	azumarill: {
-		tier: "UU"
-	},
-	beedrill: {
-		tier: "UU"
-	},
-	bellossom: {
-		tier: "UU"
-	},
-	blastoise: {
-		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["watergun","bite","rapidspin"]}
-		],
-		tier: "UU"
-	},
-	butterfree: {
-		tier: "UU"
-	},
-	chansey: {
-		eventPokemon: [
-			{"generation":2,"level":5,"gender":"F","moves":["pound","sweetscent"]}
-		],
-		tier: "UU"
-	},
-	corsola: {
-		tier: "UU"
-	},
-	crobat: {
-		tier: "UU"
-	},
-	delibird: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["present","payday"]},
-			{"generation":2,"level":5,"moves":["present","spikes"]}
-		],
-		tier: "UU"
-	},
-	dewgong: {
-		tier: "UU"
-	},
-	ditto: {
-		tier: "UU"
-	},
-	dodrio: {
-		tier: "UU"
-	},
-	dugtrio: {
-		tier: "UU"
-	},
-	dunsparce: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["rage","defensecurl","furyattack"]},
-			{"generation":2,"level":5,"moves":["rage","defensecurl","horndrill"]}
-		],
-		tier: "UU"
-	},
-	electabuzz: {
-		tier: "UU"
-	},
-	electrode: {
-		tier: "UU"
-	},
-	farfetchd: {
-		tier: "UU"
-	},
-	fearow: {
-		eventPokemon: [
-			{"generation":1,"level":20,"moves":["growl","leer","furyattack","payday"]}
-		],
-		tier: "UU"
-	},
-	feraligatr: {
-		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["watergun","bite","scaryface"]}
-		],
-		tier: "UU"
-	},
-	flareon: {
-		tier: "UU"
-	},
-	furret: {
-		tier: "UU"
-	},
-	girafarig: {
-		tier: "UU"
-	},
-	gligar: {
-		tier: "UU"
-	},
-	golduck: {
-		tier: "UU"
-	},
-	granbull: {
-		tier: "UU"
-	},
-	gyarados: {
-		tier: "UU"
-	},
-	hitmonchan: {
-		tier: "UU"
-	},
-	hitmonlee: {
-		tier: "UU"
-	},
-	hitmontop: {
-		tier: "UU"
-	},
-	hypno: {
-		tier: "UU"
-	},
-	jumpluff: {
-		tier: "UU"
-	},
-	kabutops: {
-		tier: "UU"
-	},
-	kingler: {
-		tier: "UU"
-	},
-	lanturn: {
-		tier: "UU"
-	},
-	ledian: {
-		tier: "UU"
-	},
-	lickitung: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["lick","doubleslap"]}
-		],
-		tier: "UU"
-	},
-	magcargo: {
-		tier: "UU"
-	},
-	magmar: {
-		tier: "UU"
-	},
-	magneton: {
-		tier: "UU"
-	},
-	mantine: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","bubble","gust"]}
-		],
-		tier: "UU"
-	},
-	mrmime: {
-		tier: "UU"
-	},
-	murkrow: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["peck","beatup"]}
-		],
-		tier: "UU"
-	},
-	nidoqueen: {
-		tier: "UU"
-	},
-	ninetales: {
-		tier: "UU"
-	},
-	noctowl: {
-		tier: "UU"
-	},
-	octillery: {
-		tier: "UU"
-	},
-	omastar: {
-		tier: "UU"
-	},
-	parasect: {
-		tier: "UU"
-	},
-	persian: {
-		tier: "UU"
-	},
-	pidgeot: {
-		tier: "UU"
-	},
-	pikachu: {
-		eventPokemon: [
-			{"generation":1,"level":5,"moves":["surf"]},
-			{"generation":1,"level":5,"moves":["fly"]},
-			{"generation":1,"level":5,"moves":["thundershock","growl","surf"]}
-		],
-		tier: "UU"
-	},
-	piloswine: {
-		tier: "UU"
-	},
-	pinsir: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["vicegrip","rockthrow"]}
-		],
-		tier: "UU"
-	},
-	politoed: {
-		tier: "UU"
-	},
-	poliwrath: {
-		tier: "UU"
-	},
-	primeape: {
-		tier: "UU"
-	},
-	quagsire: {
-		tier: "UU"
-	},
-	qwilfish: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","poisonsting","doubleedge"]}
-		],
-		tier: "UU"
-	},
-	raichu: {
-		tier: "UU"
-	},
-	rapidash: {
-		eventPokemon: [
-			{"generation":1,"level":40,"moves":["ember","firespin","stomp","payday"]}
-		],
-		tier: "UU"
-	},
-	raticate: {
-		tier: "UU"
-	},
-	sandslash: {
-		tier: "UU"
-	},
-	scyther: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["quickattack","leer","sonicboom"]}
-		],
-		tier: "UU"
-	},
-	seaking: {
-		tier: "UU"
-	},
-	shuckle: {
-		tier: "UU"
-	},
-	slowbro: {
-		tier: "UU"
-	},
-	slowking: {
-		tier: "UU"
-	},
-	smeargle: {
-		tier: "UU"
-	},
-	sneasel: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["scratch","leer","moonlight"]}
-		],
-		tier: "UU"
-	},
-	stantler: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","safeguard"]}
-		],
-		tier: "UU"
-	},
-	sudowoodo: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["rockthrow","mimic","substitute"]}
-		],
-		tier: "UU"
-	},
-	sunflora: {
-		tier: "UU"
-	},
-	tangela: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["constrict","sleeppowder","synthesis"]}
-		],
-		tier: "UU"
-	},
-	togetic: {
-		tier: "UU"
-	},
-	unown: {
-		tier: "UU"
-	},
-	venomoth: {
-		tier: "UU"
-	},
-	venusaur: {
-		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["poisonpowder","sleeppowder","razorleaf"]}
-		],
-		tier: "UU"
-	},
-	victreebel: {
-		tier: "UU"
-	},
-	vileplume: {
-		tier: "UU"
-	},
-	weezing: {
-		tier: "UU"
-	},
-	wigglytuff: {
-		tier: "UU"
-	},
-	wobbuffet: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["mirrorcoat","safeguard","destinybond"]}
-		],
-		tier: "UU"
-	},
-	xatu: {
-		tier: "UU"
-	},
-	yanma: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","foresight","steelwing"]},
-			{"generation":2,"level":5,"moves":["tackle","foresight","sweetkiss"]}
-		],
-		tier: "UU"
-	},
-	celebi: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["leechseed","confusion","healbell"]}
-		],
-		tier: "Uber"
-	},
-	hooh: {
-		tier: "Uber"
-	},
-	lugia: {
-		eventPokemon: [
-			{"generation":2,"level":40,"shiny":true,"moves":["aeroblast","safeguard","gust"]}
-		],
-		tier: "Uber"
-	},
-	mew: {
-		eventPokemon: [
-			{"generation":1,"level":5,"moves":["pound"]},
-			{"generation":2,"level":5,"moves":["pound"]}
-		],
-		tier: "Uber"
-	},
-	mewtwo: {
-		eventPokemon: [
-			{"generation":2,"level":70,"shiny":true,"moves":["psychup","futuresight","mist"]}
-		],
-		tier: "Uber"
-	},
-	blissey: {
-		tier: "OU"
-	},
-	cloyster: {
-		tier: "OU"
-	},
-	exeggutor: {
-		tier: "OU"
-	},
-	forretress: {
-		tier: "OU"
-	},
-	gengar: {
-		tier: "OU"
-	},
-	heracross: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","leer","seismictoss"]}
-		],
-		tier: "OU"
-	},
-	jolteon: {
-		tier: "OU"
-	},
-	machamp: {
-		tier: "OU"
-	},
-	marowak: {
-		tier: "OU"
-	},
-	miltank: {
-		eventPokemon: [
-			{"generation":2,"level":5,"gender":"F","moves":["tackle","growl","megakick"]}
-		],
-		tier: "OU"
-	},
-	misdreavus: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["growl","hypnosis"]}
-		],
-		tier: "OU"
-	},
-	nidoking: {
-		tier: "OU"
-	},
-	porygon: {
-		eventPokemon: [
-			{"generation":2,"level":5,"shiny":true,"moves":["tackle","conversion","barrier"]}
-		],
-		tier: "NFE"
-	},
-	raikou: {
-		eventPokemon: [
-			{"generation":2,"level":40,"shiny":true,"moves":["leer","thundershock","roar"]}
-		],
-		tier: "OU"
-	},
-	rhydon: {
-		tier: "OU"
-	},
-	skarmory: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["leer","furycutter"]}
-		],
-		tier: "OU"
-	},
-	snorlax: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","lovelykiss"]},
-			{"generation":2,"level":5,"moves":["tackle","splash"]},
-			{"generation":2,"level":5,"moves":["tackle","sweetkiss"]}
-		],
-		tier: "OU"
-	},
-	starmie: {
-		tier: "OU"
-	},
-	steelix: {
-		tier: "OU"
-	},
-	suicune: {
-		eventPokemon: [
-			{"generation":2,"level":40,"shiny":true,"moves":["leer","watergun","roar"]}
-		],
-		tier: "OU"
-	},
-	tyranitar: {
-		tier: "OU"
-	},
-	umbreon: {
-		tier: "OU"
-	},
-	vaporeon: {
-		tier: "OU"
-	},
-	zapdos: {
-		eventPokemon: [
-			{"generation":2,"level":50,"shiny":true,"moves":["thunderwave","agility","detect"]}
-		],
-		tier: "OU"
-	},
-	aerodactyl: {
-		eventPokemon: [
-			{"generation":2,"level":5,"shiny":true,"moves":["wingattack","rockthrow"]}
-		],
-		tier: "BL"
-	},
-	alakazam: {
-		tier: "BL"
-	},
-	ampharos: {
-		tier: "BL"
-	},
-	articuno: {
-		eventPokemon: [
-			{"generation":2,"level":50,"shiny":true,"moves":["mist","agility","mindreader"]}
-		],
-		tier: "BL"
-	},
-	charizard: {
-		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["rage","scaryface","flamethrower"]}
-		],
-		tier: "BL"
-	},
-	clefable: {
-		tier: "BL"
-	},
-	donphan: {
-		tier: "BL"
-	},
-	dragonite: {
-		tier: "BL"
-	},
-	entei: {
-		eventPokemon: [
-			{"generation":2,"level":40,"shiny":true,"moves":["leer","ember","roar"]}
-		],
-		tier: "BL"
-	},
-	espeon: {
-		tier: "BL"
-	},
-	golem: {
-		tier: "BL"
-	},
-	houndoom: {
-		tier: "BL"
-	},
-	jynx: {
-		tier: "BL"
-	},
-	kangaskhan: {
-		eventPokemon: [
-			{"generation":2,"level":5,"gender":"F","moves":["cometpunch","feintattack"]}
-		],
-		tier: "BL"
-	},
-	kingdra: {
-		tier: "BL"
-	},
-	lapras: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["watergun","growl","sing"]},
-			{"generation":2,"level":5,"moves":["watergun","growl","sing"]}
-		],
-		tier: "BL"
-	},
-	meganium: {
-		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["reflect","poisonpowder","synthesis"]}
-		],
-		tier: "BL"
-	},
-	moltres: {
-		eventPokemon: [
-			{"generation":2,"level":50,"shiny":true,"moves":["firespin","agility","endure"]}
-		],
-		tier: "BL"
-	},
-	muk: {
-		tier: "BL"
-	},
-	scizor: {
-		tier: "BL"
-	},
-	tauros: {
-		eventPokemon: [
-			{"generation":2,"level":5,"gender":"M","moves":["tackle","tailwhip","quickattack"]}
-		],
-		tier: "BL"
-	},
-	tentacruel: {
-		tier: "BL"
-	},
-	typhlosion: {
-		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["smokescreen","ember","quickattack"]}
-		],
-		tier: "BL"
-	},
-	ursaring: {
-		tier: "BL"
-	},
-	abra: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["teleport","foresight"]}
-		],
-		tier: "NFE"
-	},
-	bayleef: {
-		tier: "NFE"
-	},
-	bellsprout: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["vinewhip","lovelykiss"]},
-			{"generation":2,"level":5,"moves":["vinewhip","sweetkiss"]}
-		],
-		tier: "NFE"
-	},
 	bulbasaur: {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","growl","ancientpower"]}
 		],
 		tier: "NFE"
 	},
-	caterpie: {
+	ivysaur: {
 		tier: "NFE"
+	},
+	venusaur: {
+		eventPokemon: [
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["poisonpowder","sleeppowder","razorleaf"]}
+		],
+		tier: "UU"
 	},
 	charmander: {
 		eventPokemon: [
@@ -600,301 +23,77 @@ exports.BattleFormatsData = {
 	charmeleon: {
 		tier: "NFE"
 	},
-	chikorita: {
+	charizard: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","growl","petaldance"]}
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["rage","scaryface","flamethrower"]}
+		],
+		tier: "BL"
+	},
+	squirtle: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","tailwhip","zapcannon"]}
 		],
 		tier: "NFE"
 	},
-	chinchou: {
+	wartortle: {
+		tier: "NFE"
+	},
+	blastoise: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["bubble","thunderwave","supersonic"]}
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["watergun","bite","rapidspin"]}
 		],
-		tier: "NFE"
+		tier: "UU"
 	},
-	clefairy: {
-		tier: "NFE"
-	},
-	cleffa: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["pound","charm","encore"]},
-			{"generation":2,"level":5,"moves":["pound","charm","encore"]},
-			{"generation":2,"level":5,"moves":["pound","charm","encore"]}
-		],
-		tier: "NFE"
-	},
-	croconaw: {
-		tier: "NFE"
-	},
-	cubone: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["growl","tailwhip","furyattack"]}
-		],
-		tier: "NFE"
-	},
-	cyndaquil: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","leer","doubleedge"]}
-		],
-		tier: "NFE"
-	},
-	diglett: {
-		tier: "NFE"
-	},
-	doduo: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["peck","growl","lowkick"]}
-		],
-		tier: "NFE"
-	},
-	dragonair: {
-		tier: "NFE"
-	},
-	dratini: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["wrap","leer","hydropump"]}
-		],
-		tier: "NFE"
-	},
-	drowzee: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["pound","hypnosis","amnesia"]}
-		],
-		tier: "NFE"
-	},
-	eevee: {
-		eventPokemon: [
-			{"generation":2,"level":5,"shiny":true,"moves":["tackle","tailwhip","growth"]}
-		],
-		tier: "NFE"
-	},
-	ekans: {
-		tier: "NFE"
-	},
-	elekid: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["quickattack","leer","dizzypunch"]},
-			{"generation":2,"level":5,"moves":["quickattack","leer","pursuit"]}
-		],
-		tier: "NFE"
-	},
-	exeggcute: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["barrage","hypnosis","sweetscent"]}
-		],
-		tier: "NFE"
-	},
-	flaaffy: {
-		tier: "NFE"
-	},
-	gastly: {
-		tier: "NFE"
-	},
-	geodude: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","rapidspin"]}
-		],
-		tier: "NFE"
-	},
-	gloom: {
-		tier: "NFE"
-	},
-	golbat: {
-		tier: "NFE"
-	},
-	goldeen: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["peck","tailwhip","swordsdance"]}
-		],
-		tier: "NFE"
-	},
-	graveler: {
-		tier: "NFE"
-	},
-	grimer: {
-		tier: "NFE"
-	},
-	growlithe: {
-		tier: "NFE"
-	},
-	haunter: {
-		tier: "NFE"
-	},
-	hoothoot: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","growl","nightshade"]}
-		],
-		tier: "NFE"
-	},
-	hoppip: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["splash","synthesis","agility"]}
-		],
-		tier: "NFE"
-	},
-	horsea: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["bubble","haze"]}
-		],
-		tier: "NFE"
-	},
-	houndour: {
-		tier: "NFE"
-	},
-	igglybuff: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["sing","charm","defensecurl"]},
-			{"generation":2,"level":5,"moves":["sing","charm","defensecurl"]},
-			{"generation":2,"level":5,"moves":["sing","charm","defensecurl"]}
-		],
-		tier: "NFE"
-	},
-	ivysaur: {
-		tier: "NFE"
-	},
-	jigglypuff: {
-		tier: "NFE"
-	},
-	kabuto: {
-		eventPokemon: [
-			{"generation":2,"level":5,"shiny":true,"moves":["scratch","harden","rockthrow"]}
-		],
-		tier: "NFE"
-	},
-	kadabra: {
-		tier: "NFE"
-	},
-	kakuna: {
-		tier: "NFE"
-	},
-	koffing: {
-		tier: "NFE"
-	},
-	krabby: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["bubble","leer","metalclaw"]}
-		],
-		tier: "NFE"
-	},
-	larvitar: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["bite","leer","rage"]}
-		],
-		tier: "NFE"
-	},
-	ledyba: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","barrier"]}
-		],
-		tier: "NFE"
-	},
-	machoke: {
-		tier: "NFE"
-	},
-	machop: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["lowkick","leer","falseswipe"]},
-			{"generation":2,"level":5,"moves":["lowkick","leer","thrash"]}
-		],
-		tier: "NFE"
-	},
-	magby: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["ember","feintattack"]}
-		],
-		tier: "NFE"
-	},
-	magikarp: {
-		eventPokemon: [
-			{"generation":1,"level":5,"moves":["dragonrage"]},
-			{"generation":2,"level":5,"moves":["splash","bubble"]},
-			{"generation":2,"level":5,"moves":["splash","reversal"]}
-		],
-		tier: "NFE"
-	},
-	magnemite: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","agility"]}
-		],
-		tier: "NFE"
-	},
-	mankey: {
-		tier: "NFE"
-	},
-	mareep: {
-		tier: "NFE"
-	},
-	marill: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","defensecurl","dizzypunch"]},
-			{"generation":2,"level":5,"moves":["tackle","defensecurl","hydropump"]},
-			{"generation":2,"level":5,"moves":["tackle","defensecurl","scaryface"]}
-		],
-		tier: "NFE"
-	},
-	meowth: {
+	caterpie: {
 		tier: "NFE"
 	},
 	metapod: {
 		tier: "NFE"
 	},
-	natu: {
+	butterfree: {
+		tier: "UU"
+	},
+	weedle: {
+		tier: "NFE"
+	},
+	kakuna: {
+		tier: "NFE"
+	},
+	beedrill: {
+		tier: "UU"
+	},
+	pidgey: {
+		tier: "NFE"
+	},
+	pidgeotto: {
+		tier: "NFE"
+	},
+	pidgeot: {
+		tier: "UU"
+	},
+	rattata: {
+		tier: "NFE"
+	},
+	raticate: {
+		tier: "UU"
+	},
+	spearow: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["peck","leer","safeguard"]}
+			{"generation":2,"level":5,"moves":["peck","growl","sonicboom"]}
 		],
 		tier: "NFE"
 	},
-	nidoranf: {
+	fearow: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["growl","tackle","lovelykiss"]},
-			{"generation":2,"level":5,"moves":["growl","tackle","moonlight"]},
-			{"generation":2,"level":5,"moves":["growl","tackle","sweetkiss"]}
+			{"generation":1,"level":20,"moves":["growl","leer","furyattack","payday"]}
 		],
+		tier: "UU"
+	},
+	ekans: {
 		tier: "NFE"
 	},
-	nidoranm: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["leer","tackle","lovelykiss"]},
-			{"generation":2,"level":5,"moves":["leer","tackle","morningsun"]},
-			{"generation":2,"level":5,"moves":["leer","tackle","sweetkiss"]}
-		],
-		tier: "NFE"
-	},
-	nidorina: {
-		tier: "NFE"
-	},
-	nidorino: {
-		tier: "NFE"
-	},
-	oddish: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["absorb","leechseed"]}
-		],
-		tier: "NFE"
-	},
-	omanyte: {
-		eventPokemon: [
-			{"generation":2,"level":5,"shiny":true,"moves":["constrict","withdraw","rockthrow"]}
-		],
-		tier: "NFE"
-	},
-	onix: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","screech","sharpen"]}
-		],
-		tier: "NFE"
-	},
-	paras: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["scratch","synthesis"]}
-		],
-		tier: "NFE"
-	},
-	phanpy: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","growl","absorb"]}
-		],
-		tier: "NFE"
+	arbok: {
+		tier: "UU"
 	},
 	pichu: {
 		eventPokemon: [
@@ -905,17 +104,161 @@ exports.BattleFormatsData = {
 		],
 		tier: "NFE"
 	},
-	pidgeotto: {
-		tier: "NFE"
-	},
-	pidgey: {
-		tier: "NFE"
-	},
-	pineco: {
+	pikachu: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","protect","substitute"]}
+			{"generation":1,"level":5,"moves":["surf"]},
+			{"generation":1,"level":5,"moves":["fly"]},
+			{"generation":1,"level":5,"moves":["thundershock","growl","surf"]}
+		],
+		tier: "UU"
+	},
+	raichu: {
+		tier: "UU"
+	},
+	sandshrew: {
+		tier: "NFE"
+	},
+	sandslash: {
+		tier: "UU"
+	},
+	nidoranf: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["growl","tackle","lovelykiss"]},
+			{"generation":2,"level":5,"moves":["growl","tackle","moonlight"]},
+			{"generation":2,"level":5,"moves":["growl","tackle","sweetkiss"]}
 		],
 		tier: "NFE"
+	},
+	nidorina: {
+		tier: "NFE"
+	},
+	nidoqueen: {
+		tier: "UU"
+	},
+	nidoranm: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["leer","tackle","lovelykiss"]},
+			{"generation":2,"level":5,"moves":["leer","tackle","morningsun"]},
+			{"generation":2,"level":5,"moves":["leer","tackle","sweetkiss"]}
+		],
+		tier: "NFE"
+	},
+	nidorino: {
+		tier: "NFE"
+	},
+	nidoking: {
+		tier: "OU"
+	},
+	cleffa: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["pound","charm","encore"]},
+			{"generation":2,"level":5,"moves":["pound","charm","encore"]},
+			{"generation":2,"level":5,"moves":["pound","charm","encore"]}
+		],
+		tier: "NFE"
+	},
+	clefairy: {
+		tier: "NFE"
+	},
+	clefable: {
+		tier: "BL"
+	},
+	vulpix: {
+		tier: "NFE"
+	},
+	ninetales: {
+		tier: "UU"
+	},
+	igglybuff: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["sing","charm","defensecurl"]},
+			{"generation":2,"level":5,"moves":["sing","charm","defensecurl"]},
+			{"generation":2,"level":5,"moves":["sing","charm","defensecurl"]}
+		],
+		tier: "NFE"
+	},
+	jigglypuff: {
+		tier: "NFE"
+	},
+	wigglytuff: {
+		tier: "UU"
+	},
+	zubat: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["leechlife","flail"]}
+		],
+		tier: "NFE"
+	},
+	golbat: {
+		tier: "NFE"
+	},
+	crobat: {
+		tier: "UU"
+	},
+	oddish: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["absorb","leechseed"]}
+		],
+		tier: "NFE"
+	},
+	gloom: {
+		tier: "NFE"
+	},
+	vileplume: {
+		tier: "UU"
+	},
+	bellossom: {
+		tier: "UU"
+	},
+	paras: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["scratch","synthesis"]}
+		],
+		tier: "NFE"
+	},
+	parasect: {
+		tier: "UU"
+	},
+	venonat: {
+		tier: "NFE"
+	},
+	venomoth: {
+		tier: "UU"
+	},
+	diglett: {
+		tier: "NFE"
+	},
+	dugtrio: {
+		tier: "UU"
+	},
+	meowth: {
+		tier: "NFE"
+	},
+	persian: {
+		tier: "UU"
+	},
+	psyduck: {
+		eventPokemon: [
+			{"generation":1,"level":15,"moves":["scratch","amnesia"]},
+			{"generation":2,"level":5,"moves":["scratch","tailwhip","petaldance"]},
+			{"generation":2,"level":5,"moves":["scratch","tailwhip","triattack"]}
+		],
+		tier: "NFE"
+	},
+	golduck: {
+		tier: "UU"
+	},
+	mankey: {
+		tier: "NFE"
+	},
+	primeape: {
+		tier: "UU"
+	},
+	growlithe: {
+		tier: "NFE"
+	},
+	arcanine: {
+		tier: "UU"
 	},
 	poliwag: {
 		eventPokemon: [
@@ -928,44 +271,112 @@ exports.BattleFormatsData = {
 	poliwhirl: {
 		tier: "NFE"
 	},
+	poliwrath: {
+		tier: "UU"
+	},
+	politoed: {
+		tier: "UU"
+	},
+	abra: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["teleport","foresight"]}
+		],
+		tier: "NFE"
+	},
+	kadabra: {
+		tier: "NFE"
+	},
+	alakazam: {
+		tier: "BL"
+	},
+	machop: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["lowkick","leer","falseswipe"]},
+			{"generation":2,"level":5,"moves":["lowkick","leer","thrash"]}
+		],
+		tier: "NFE"
+	},
+	machoke: {
+		tier: "NFE"
+	},
+	machamp: {
+		tier: "OU"
+	},
+	bellsprout: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["vinewhip","lovelykiss"]},
+			{"generation":2,"level":5,"moves":["vinewhip","sweetkiss"]}
+		],
+		tier: "NFE"
+	},
+	weepinbell: {
+		tier: "NFE"
+	},
+	victreebel: {
+		tier: "UU"
+	},
+	tentacool: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["poisonsting","confuseray"]}
+		],
+		tier: "NFE"
+	},
+	tentacruel: {
+		tier: "BL"
+	},
+	geodude: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","rapidspin"]}
+		],
+		tier: "NFE"
+	},
+	graveler: {
+		tier: "NFE"
+	},
+	golem: {
+		tier: "BL"
+	},
 	ponyta: {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","growl","lowkick"]}
 		],
 		tier: "NFE"
 	},
-	psyduck: {
+	rapidash: {
 		eventPokemon: [
-			{"generation":1,"level":15,"moves":["scratch","amnesia"]},
-			{"generation":2,"level":5,"moves":["scratch","tailwhip","petaldance"]},
-			{"generation":2,"level":5,"moves":["scratch","tailwhip","triattack"]}
+			{"generation":1,"level":40,"moves":["ember","firespin","stomp","payday"]}
+		],
+		tier: "UU"
+	},
+	slowpoke: {
+		tier: "NFE"
+	},
+	slowbro: {
+		tier: "UU"
+	},
+	slowking: {
+		tier: "UU"
+	},
+	magnemite: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","agility"]}
 		],
 		tier: "NFE"
 	},
-	pupitar: {
-		tier: "NFE"
+	magneton: {
+		tier: "UU"
 	},
-	quilava: {
-		tier: "NFE"
+	farfetchd: {
+		tier: "UU"
 	},
-	rattata: {
-		tier: "NFE"
-	},
-	remoraid: {
+	doduo: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["watergun","amnesia"]},
-			{"generation":2,"level":5,"moves":["watergun","mist"]}
+			{"generation":2,"level":5,"moves":["peck","growl","lowkick"]}
 		],
 		tier: "NFE"
 	},
-	rhyhorn: {
-		tier: "NFE"
-	},
-	sandshrew: {
-		tier: "NFE"
-	},
-	seadra: {
-		tier: "NFE"
+	dodrio: {
+		tier: "UU"
 	},
 	seel: {
 		eventPokemon: [
@@ -973,23 +384,179 @@ exports.BattleFormatsData = {
 		],
 		tier: "NFE"
 	},
-	sentret: {
-		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","defensecurl","dizzypunch"]}
-		],
+	dewgong: {
+		tier: "UU"
+	},
+	grimer: {
 		tier: "NFE"
+	},
+	muk: {
+		tier: "BL"
 	},
 	shellder: {
 		tier: "NFE"
 	},
-	skiploom: {
+	cloyster: {
+		tier: "OU"
+	},
+	gastly: {
 		tier: "NFE"
 	},
-	slowpoke: {
+	haunter: {
 		tier: "NFE"
 	},
-	slugma: {
+	gengar: {
+		tier: "OU"
+	},
+	onix: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","screech","sharpen"]}
+		],
 		tier: "NFE"
+	},
+	steelix: {
+		tier: "OU"
+	},
+	drowzee: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["pound","hypnosis","amnesia"]}
+		],
+		tier: "NFE"
+	},
+	hypno: {
+		tier: "UU"
+	},
+	krabby: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["bubble","leer","metalclaw"]}
+		],
+		tier: "NFE"
+	},
+	kingler: {
+		tier: "UU"
+	},
+	voltorb: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","agility"]}
+		],
+		tier: "NFE"
+	},
+	electrode: {
+		tier: "UU"
+	},
+	exeggcute: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["barrage","hypnosis","sweetscent"]}
+		],
+		tier: "NFE"
+	},
+	exeggutor: {
+		tier: "OU"
+	},
+	cubone: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["growl","tailwhip","furyattack"]}
+		],
+		tier: "NFE"
+	},
+	marowak: {
+		tier: "OU"
+	},
+	tyrogue: {
+		eventPokemon: [
+			{"generation":2,"level":5,"gender":"M","moves":["tackle","rage"]}
+		],
+		tier: "NFE"
+	},
+	hitmonlee: {
+		tier: "UU"
+	},
+	hitmonchan: {
+		tier: "UU"
+	},
+	hitmontop: {
+		tier: "UU"
+	},
+	lickitung: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["lick","doubleslap"]}
+		],
+		tier: "UU"
+	},
+	koffing: {
+		tier: "NFE"
+	},
+	weezing: {
+		tier: "UU"
+	},
+	rhyhorn: {
+		tier: "NFE"
+	},
+	rhydon: {
+		tier: "OU"
+	},
+	chansey: {
+		eventPokemon: [
+			{"generation":2,"level":5,"gender":"F","moves":["pound","sweetscent"]}
+		],
+		tier: "UU"
+	},
+	blissey: {
+		tier: "OU"
+	},
+	tangela: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["constrict","sleeppowder","synthesis"]}
+		],
+		tier: "UU"
+	},
+	kangaskhan: {
+		eventPokemon: [
+			{"generation":2,"level":5,"gender":"F","moves":["cometpunch","feintattack"]}
+		],
+		tier: "BL"
+	},
+	horsea: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["bubble","haze"]}
+		],
+		tier: "NFE"
+	},
+	seadra: {
+		tier: "NFE"
+	},
+	kingdra: {
+		tier: "BL"
+	},
+	goldeen: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["peck","tailwhip","swordsdance"]}
+		],
+		tier: "NFE"
+	},
+	seaking: {
+		tier: "UU"
+	},
+	staryu: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","harden","twister"]}
+		],
+		tier: "NFE"
+	},
+	starmie: {
+		tier: "OU"
+	},
+	mrmime: {
+		tier: "UU"
+	},
+	scyther: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["quickattack","leer","sonicboom"]}
+		],
+		tier: "UU"
+	},
+	scizor: {
+		tier: "BL"
 	},
 	smoochum: {
 		eventPokemon: [
@@ -998,62 +565,195 @@ exports.BattleFormatsData = {
 		],
 		tier: "NFE"
 	},
-	snubbull: {
+	jynx: {
+		tier: "BL"
+	},
+	elekid: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","scaryface","tailwhip"]}
+			{"generation":2,"level":5,"moves":["quickattack","leer","dizzypunch"]},
+			{"generation":2,"level":5,"moves":["quickattack","leer","pursuit"]}
 		],
 		tier: "NFE"
 	},
-	spearow: {
+	electabuzz: {
+		tier: "UU"
+	},
+	magby: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["peck","growl","sonicboom"]}
+			{"generation":2,"level":5,"moves":["ember","feintattack"]}
 		],
 		tier: "NFE"
 	},
-	spinarak: {
+	magmar: {
+		tier: "UU"
+	},
+	pinsir: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["poisonsting","stringshot","growth"]}
+			{"generation":2,"level":5,"moves":["vicegrip","rockthrow"]}
+		],
+		tier: "UU"
+	},
+	tauros: {
+		eventPokemon: [
+			{"generation":2,"level":5,"gender":"M","moves":["tackle","tailwhip","quickattack"]}
+		],
+		tier: "BL"
+	},
+	magikarp: {
+		eventPokemon: [
+			{"generation":1,"level":5,"moves":["dragonrage"]},
+			{"generation":2,"level":5,"moves":["splash","bubble"]},
+			{"generation":2,"level":5,"moves":["splash","reversal"]}
 		],
 		tier: "NFE"
 	},
-	squirtle: {
+	gyarados: {
+		tier: "UU"
+	},
+	lapras: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","tailwhip","zapcannon"]}
+			{"generation":2,"level":5,"moves":["watergun","growl","sing"]},
+			{"generation":2,"level":5,"moves":["watergun","growl","sing"]}
+		],
+		tier: "BL"
+	},
+	ditto: {
+		tier: "UU"
+	},
+	eevee: {
+		eventPokemon: [
+			{"generation":2,"level":5,"shiny":true,"moves":["tackle","tailwhip","growth"]}
 		],
 		tier: "NFE"
 	},
-	staryu: {
+	vaporeon: {
+		tier: "OU"
+	},
+	jolteon: {
+		tier: "OU"
+	},
+	flareon: {
+		tier: "UU"
+	},
+	espeon: {
+		tier: "BL"
+	},
+	umbreon: {
+		tier: "OU"
+	},
+	porygon: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","harden","twister"]}
+			{"generation":2,"level":5,"shiny":true,"moves":["tackle","conversion","barrier"]}
 		],
 		tier: "NFE"
 	},
-	sunkern: {
+	porygon2: {
+		tier: "OU"
+	},
+	omanyte: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["absorb","growth","splash"]}
+			{"generation":2,"level":5,"shiny":true,"moves":["constrict","withdraw","rockthrow"]}
 		],
 		tier: "NFE"
 	},
-	swinub: {
+	omastar: {
+		tier: "UU"
+	},
+	kabuto: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","whirlwind"]}
+			{"generation":2,"level":5,"shiny":true,"moves":["scratch","harden","rockthrow"]}
 		],
 		tier: "NFE"
 	},
-	teddiursa: {
+	kabutops: {
+		tier: "UU"
+	},
+	aerodactyl: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["scratch","leer","sweetscent"]}
+			{"generation":2,"level":5,"shiny":true,"moves":["wingattack","rockthrow"]}
+		],
+		tier: "BL"
+	},
+	snorlax: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","lovelykiss"]},
+			{"generation":2,"level":5,"moves":["tackle","splash"]},
+			{"generation":2,"level":5,"moves":["tackle","sweetkiss"]}
+		],
+		tier: "OU"
+	},
+	articuno: {
+		eventPokemon: [
+			{"generation":2,"level":50,"shiny":true,"moves":["mist","agility","mindreader"]}
+		],
+		tier: "BL"
+	},
+	zapdos: {
+		eventPokemon: [
+			{"generation":2,"level":50,"shiny":true,"moves":["thunderwave","agility","detect"]}
+		],
+		tier: "OU"
+	},
+	moltres: {
+		eventPokemon: [
+			{"generation":2,"level":50,"shiny":true,"moves":["firespin","agility","endure"]}
+		],
+		tier: "BL"
+	},
+	dratini: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["wrap","leer","hydropump"]}
 		],
 		tier: "NFE"
 	},
-	tentacool: {
+	dragonair: {
+		tier: "NFE"
+	},
+	dragonite: {
+		tier: "BL"
+	},
+	mewtwo: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["poisonsting","confuseray"]}
+			{"generation":2,"level":70,"shiny":true,"moves":["psychup","futuresight","mist"]}
+		],
+		tier: "Uber"
+	},
+	mew: {
+		eventPokemon: [
+			{"generation":1,"level":5,"moves":["pound"]},
+			{"generation":2,"level":5,"moves":["pound"]}
+		],
+		tier: "Uber"
+	},
+	chikorita: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","growl","petaldance"]}
 		],
 		tier: "NFE"
 	},
-	togepi: {
+	bayleef: {
 		tier: "NFE"
+	},
+	meganium: {
+		eventPokemon: [
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["reflect","poisonpowder","synthesis"]}
+		],
+		tier: "BL"
+	},
+	cyndaquil: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","leer","doubleedge"]}
+		],
+		tier: "NFE"
+	},
+	quilava: {
+		tier: "NFE"
+	},
+	typhlosion: {
+		eventPokemon: [
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["smokescreen","ember","quickattack"]}
+		],
+		tier: "BL"
 	},
 	totodile: {
 		eventPokemon: [
@@ -1061,32 +761,134 @@ exports.BattleFormatsData = {
 		],
 		tier: "NFE"
 	},
-	tyrogue: {
+	croconaw: {
+		tier: "NFE"
+	},
+	feraligatr: {
 		eventPokemon: [
-			{"generation":2,"level":5,"gender":"M","moves":["tackle","rage"]}
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["watergun","bite","scaryface"]}
+		],
+		tier: "UU"
+	},
+	sentret: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","defensecurl","dizzypunch"]}
 		],
 		tier: "NFE"
 	},
-	venonat: {
-		tier: "NFE"
+	furret: {
+		tier: "UU"
 	},
-	voltorb: {
+	hoothoot: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","agility"]}
+			{"generation":2,"level":5,"moves":["tackle","growl","nightshade"]}
 		],
 		tier: "NFE"
 	},
-	vulpix: {
+	noctowl: {
+		tier: "UU"
+	},
+	ledyba: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","barrier"]}
+		],
 		tier: "NFE"
 	},
-	wartortle: {
+	ledian: {
+		tier: "UU"
+	},
+	spinarak: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["poisonsting","stringshot","growth"]}
+		],
 		tier: "NFE"
 	},
-	weedle: {
+	ariados: {
+		tier: "UU"
+	},
+	chinchou: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["bubble","thunderwave","supersonic"]}
+		],
 		tier: "NFE"
 	},
-	weepinbell: {
+	lanturn: {
+		tier: "UU"
+	},
+	togepi: {
 		tier: "NFE"
+	},
+	togetic: {
+		tier: "UU"
+	},
+	natu: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["peck","leer","safeguard"]}
+		],
+		tier: "NFE"
+	},
+	xatu: {
+		tier: "UU"
+	},
+	mareep: {
+		tier: "NFE"
+	},
+	flaaffy: {
+		tier: "NFE"
+	},
+	ampharos: {
+		tier: "BL"
+	},
+	marill: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","defensecurl","dizzypunch"]},
+			{"generation":2,"level":5,"moves":["tackle","defensecurl","hydropump"]},
+			{"generation":2,"level":5,"moves":["tackle","defensecurl","scaryface"]}
+		],
+		tier: "NFE"
+	},
+	azumarill: {
+		tier: "UU"
+	},
+	sudowoodo: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["rockthrow","mimic","substitute"]}
+		],
+		tier: "UU"
+	},
+	hoppip: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["splash","synthesis","agility"]}
+		],
+		tier: "NFE"
+	},
+	skiploom: {
+		tier: "NFE"
+	},
+	jumpluff: {
+		tier: "UU"
+	},
+	aipom: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["scratch","tailwhip","mimic"]}
+		],
+		tier: "UU"
+	},
+	sunkern: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["absorb","growth","splash"]}
+		],
+		tier: "NFE"
+	},
+	sunflora: {
+		tier: "UU"
+	},
+	yanma: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","foresight","steelwing"]},
+			{"generation":2,"level":5,"moves":["tackle","foresight","sweetkiss"]}
+		],
+		tier: "UU"
 	},
 	wooper: {
 		eventPokemon: [
@@ -1095,10 +897,211 @@ exports.BattleFormatsData = {
 		],
 		tier: "NFE"
 	},
-	zubat: {
+	quagsire: {
+		tier: "UU"
+	},
+	murkrow: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["leechlife","flail"]}
+			{"generation":2,"level":5,"moves":["peck","beatup"]}
+		],
+		tier: "UU"
+	},
+	misdreavus: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["growl","hypnosis"]}
+		],
+		tier: "OU"
+	},
+	unown: {
+		tier: "UU"
+	},
+	wobbuffet: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["mirrorcoat","safeguard","destinybond"]}
+		],
+		tier: "UU"
+	},
+	girafarig: {
+		tier: "UU"
+	},
+	pineco: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","protect","substitute"]}
 		],
 		tier: "NFE"
+	},
+	forretress: {
+		tier: "OU"
+	},
+	dunsparce: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["rage","defensecurl","furyattack"]},
+			{"generation":2,"level":5,"moves":["rage","defensecurl","horndrill"]}
+		],
+		tier: "UU"
+	},
+	gligar: {
+		tier: "UU"
+	},
+	snubbull: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","scaryface","tailwhip"]}
+		],
+		tier: "NFE"
+	},
+	granbull: {
+		tier: "UU"
+	},
+	qwilfish: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","poisonsting","doubleedge"]}
+		],
+		tier: "UU"
+	},
+	shuckle: {
+		tier: "UU"
+	},
+	heracross: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","leer","seismictoss"]}
+		],
+		tier: "OU"
+	},
+	sneasel: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["scratch","leer","moonlight"]}
+		],
+		tier: "UU"
+	},
+	teddiursa: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["scratch","leer","sweetscent"]}
+		],
+		tier: "NFE"
+	},
+	ursaring: {
+		tier: "BL"
+	},
+	slugma: {
+		tier: "NFE"
+	},
+	magcargo: {
+		tier: "UU"
+	},
+	swinub: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","whirlwind"]}
+		],
+		tier: "NFE"
+	},
+	piloswine: {
+		tier: "UU"
+	},
+	corsola: {
+		tier: "UU"
+	},
+	remoraid: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["watergun","amnesia"]},
+			{"generation":2,"level":5,"moves":["watergun","mist"]}
+		],
+		tier: "NFE"
+	},
+	octillery: {
+		tier: "UU"
+	},
+	delibird: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["present","payday"]},
+			{"generation":2,"level":5,"moves":["present","spikes"]}
+		],
+		tier: "UU"
+	},
+	mantine: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","bubble","gust"]}
+		],
+		tier: "UU"
+	},
+	skarmory: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["leer","furycutter"]}
+		],
+		tier: "OU"
+	},
+	houndour: {
+		tier: "NFE"
+	},
+	houndoom: {
+		tier: "BL"
+	},
+	phanpy: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","growl","absorb"]}
+		],
+		tier: "NFE"
+	},
+	donphan: {
+		tier: "BL"
+	},
+	stantler: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["tackle","safeguard"]}
+		],
+		tier: "UU"
+	},
+	smeargle: {
+		tier: "UU"
+	},
+	miltank: {
+		eventPokemon: [
+			{"generation":2,"level":5,"gender":"F","moves":["tackle","growl","megakick"]}
+		],
+		tier: "OU"
+	},
+	raikou: {
+		eventPokemon: [
+			{"generation":2,"level":40,"shiny":true,"moves":["leer","thundershock","roar"]}
+		],
+		tier: "OU"
+	},
+	entei: {
+		eventPokemon: [
+			{"generation":2,"level":40,"shiny":true,"moves":["leer","ember","roar"]}
+		],
+		tier: "BL"
+	},
+	suicune: {
+		eventPokemon: [
+			{"generation":2,"level":40,"shiny":true,"moves":["leer","watergun","roar"]}
+		],
+		tier: "OU"
+	},
+	larvitar: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["bite","leer","rage"]}
+		],
+		tier: "NFE"
+	},
+	pupitar: {
+		tier: "NFE"
+	},
+	tyranitar: {
+		tier: "OU"
+	},
+	lugia: {
+		eventPokemon: [
+			{"generation":2,"level":40,"shiny":true,"moves":["aeroblast","safeguard","gust"]}
+		],
+		tier: "Uber"
+	},
+	hooh: {
+		tier: "Uber"
+	},
+	celebi: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["leechseed","confusion","healbell"]}
+		],
+		tier: "Uber"
 	}
 };
