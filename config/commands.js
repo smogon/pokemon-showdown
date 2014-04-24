@@ -146,12 +146,9 @@
 var commands = exports.commands = {
 
 	ip: 'whois',
-	getip: 'whois',
 	rooms: 'whois',
-	altcheck: 'whois',
 	alt: 'whois',
 	alts: 'whois',
-	getalts: 'whois',
 	whois: function (target, room, user) {
 		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
@@ -1130,16 +1127,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to.");
 		}
-		if (target === 'all' || target === 'getip' || target === 'ip') {
-			matched = true;
-			this.sendReply("/ip - Get your own IP address.");
-			this.sendReply("/ip [username] - Get a user's IP address. Requires: @ & ~");
-		}
-		if (target === 'all' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
-			matched = true;
-			this.sendReply("/alts OR /altcheck - Get your own alts.");
-			this.sendReply("/alts OR /altcheck [username] - Get a user's alts. Requires: % @ & ~");
-		}
 		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder') {
 			matched = true;
 			this.sendReply("/rating - Get your own rating.");
@@ -1153,13 +1140,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/avatar [new avatar number] - Change your trainer sprite.");
 		}
-		if (target === 'all' || target === 'rooms') {
+		if (target === 'all' || target === 'whois' || target === 'alts' || target === 'ip' || target === 'rooms') {
 			matched = true;
-			this.sendReply("/rooms [username] - Show what rooms a user is in.");
-		}
-		if (target === 'all' || target === 'whois') {
-			matched = true;
-			this.sendReply("/whois [username] - Get details on a username: group, and rooms.");
+			this.sendReply("/whois - Get details on yourself: alts, group, IP address, and rooms.");
+			this.sendReply("/whois [username] - Get details on a username: alts (Requires: % @ & ~), group, IP address (Requires: @ & ~), and rooms.");
 		}
 		if (target === 'all' || target === 'data') {
 			matched = true;
