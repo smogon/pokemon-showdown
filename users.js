@@ -936,6 +936,14 @@ var User = (function () {
 			--this.ips[connection.ip];
 		}
 		this.connections = [];
+		for (var i in this.roomCount) {
+			if (this.roomCount[i] > 0) {
+				// should never happen.
+				console.log('!! room miscount: ' + i + ' not left');
+				Rooms.get(i, 'lobby').onLeave(this);
+			}
+		}
+		this.roomCount = {};
 	};
 	User.prototype.getAlts = function () {
 		var alts = [];
