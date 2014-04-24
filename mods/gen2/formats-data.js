@@ -80,6 +80,9 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	fearow: {
+		eventPokemon: [
+			{"generation":1,"level":20,"moves":["growl","leer","furyattack","payday"]}
+		],
 		tier: "UU"
 	},
 	feraligatr: {
@@ -191,6 +194,11 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	pikachu: {
+		eventPokemon: [
+			{"generation":1,"level":5,"moves":["surf"]},
+			{"generation":1,"level":5,"moves":["fly"]},
+			{"generation":1,"level":5,"moves":["thundershock","growl","surf"]}
+		],
 		tier: "UU"
 	},
 	piloswine: {
@@ -224,6 +232,9 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	rapidash: {
+		eventPokemon: [
+			{"generation":1,"level":40,"moves":["ember","firespin","stomp","payday"]}
+		],
 		tier: "UU"
 	},
 	raticate: {
@@ -340,6 +351,7 @@ exports.BattleFormatsData = {
 	},
 	mew: {
 		eventPokemon: [
+			{"generation":1,"level":5,"moves":["pound"]},
 			{"generation":2,"level":5,"moves":["pound"]}
 		],
 		tier: "Uber"
@@ -794,6 +806,7 @@ exports.BattleFormatsData = {
 	},
 	magikarp: {
 		eventPokemon: [
+			{"generation":1,"level":5,"moves":["dragonrage"]},
 			{"generation":2,"level":5,"moves":["splash","bubble"]},
 			{"generation":2,"level":5,"moves":["splash","reversal"]}
 		],
@@ -923,6 +936,7 @@ exports.BattleFormatsData = {
 	},
 	psyduck: {
 		eventPokemon: [
+			{"generation":1,"level":15,"moves":["scratch","amnesia"]},
 			{"generation":2,"level":5,"moves":["scratch","tailwhip","petaldance"]},
 			{"generation":2,"level":5,"moves":["scratch","tailwhip","triattack"]}
 		],
