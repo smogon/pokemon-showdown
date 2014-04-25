@@ -461,7 +461,7 @@ exports.BattleScripts = {
 				if (moveData.onAfterHit) hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
 			}
 
-			if (!hitResult && !didSomething && !moveData.self) {
+			if (!hitResult && !didSomething && !moveData.self && !moveData.selfdestruct) {
 				if (!isSelf && !isSecondary) {
 					if (hitResult === false || didSomething === false) this.add('-fail', target);
 				}
