@@ -1356,14 +1356,17 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["tackle","growl","razorleaf"]}
 		],
+		unreleasedHidden: true,
 		tier: "LC"
 	},
 	bayleef: {
 		viableMoves: {"reflect":1,"lightscreen":1,"aromatherapy":1,"grasswhistle":1,"leechseed":1,"toxic":1,"gigadrain":1,"synthesis":1},
+		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	meganium: {
 		viableMoves: {"reflect":1,"lightscreen":1,"aromatherapy":1,"grasswhistle":1,"leechseed":1,"toxic":1,"gigadrain":1,"synthesis":1,"dragontail":1},
+		unreleasedHidden: true,
 		tier: "Limbo"
 	},
 	cyndaquil: {
@@ -1371,10 +1374,12 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["tackle","leer","smokescreen"]}
 		],
+		unreleasedHidden: true,
 		tier: "LC"
 	},
 	quilava: {
 		viableMoves: {"eruption":1,"fireblast":1,"flamethrower":1,"hiddenpowergrass":1,"hiddenpowerice":1},
+		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	typhlosion: {
@@ -1382,6 +1387,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["quickattack","flamewheel","swift","flamethrower"]}
 		],
+		unreleasedHidden: true,
 		tier: "Limbo"
 	},
 	totodile: {
@@ -1389,14 +1395,17 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["scratch","leer","rage"]}
 		],
+		unreleasedHidden: true,
 		tier: "LC"
 	},
 	croconaw: {
 		viableMoves: {"aquajet":1,"waterfall":1,"crunch":1,"icepunch":1,"superpower":1,"dragondance":1,"swordsdance":1},
+		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	feraligatr: {
 		viableMoves: {"aquajet":1,"waterfall":1,"crunch":1,"icepunch":1,"dragondance":1,"swordsdance":1,"earthquake":1,"superpower":1},
+		unreleasedHidden: true,
 		tier: "Limbo"
 	},
 	sentret: {
@@ -3474,10 +3483,12 @@ exports.BattleFormatsData = {
 	},
 	tepig: {
 		viableMoves: {"flamecharge":1,"flareblitz":1,"wildcharge":1,"superpower":1,"headsmash":1},
+		unreleasedHidden: true,
 		tier: "LC"
 	},
 	pignite: {
 		viableMoves: {"flamecharge":1,"flareblitz":1,"wildcharge":1,"superpower":1,"headsmash":1},
+		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	emboar: {
@@ -3485,6 +3496,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["flareblitz","hammerarm","wildcharge","headsmash"],"pokeball":"cherishball"}
 		],
+		unreleasedHidden: true,
 		tier: "Limbo"
 	},
 	oshawott: {
