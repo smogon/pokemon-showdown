@@ -3,7 +3,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","growl","ancientpower"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	ivysaur: {
 		tier: "NFE"
@@ -18,7 +18,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["scratch","growl","crunch"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	charmeleon: {
 		tier: "NFE"
@@ -33,7 +33,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","tailwhip","zapcannon"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	wartortle: {
 		tier: "NFE"
@@ -45,7 +45,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	caterpie: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	metapod: {
 		tier: "NFE"
@@ -54,7 +54,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	weedle: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	kakuna: {
 		tier: "NFE"
@@ -63,7 +63,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	pidgey: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	pidgeotto: {
 		tier: "NFE"
@@ -72,7 +72,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	rattata: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	raticate: {
 		tier: "UU"
@@ -81,7 +81,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["peck","growl","sonicboom"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	fearow: {
 		eventPokemon: [
@@ -90,7 +90,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	ekans: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	arbok: {
 		tier: "UU"
@@ -102,7 +102,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["thundershock","charm","scaryface"]},
 			{"generation":2,"level":5,"moves":["thundershock","charm","sing"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	pikachu: {
 		eventPokemon: [
@@ -116,7 +116,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	sandshrew: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	sandslash: {
 		tier: "UU"
@@ -127,7 +127,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["growl","tackle","moonlight"]},
 			{"generation":2,"level":5,"moves":["growl","tackle","sweetkiss"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	nidorina: {
 		tier: "NFE"
@@ -141,7 +141,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["leer","tackle","morningsun"]},
 			{"generation":2,"level":5,"moves":["leer","tackle","sweetkiss"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	nidorino: {
 		tier: "NFE"
@@ -155,7 +155,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["pound","charm","encore","scaryface"]},
 			{"generation":2,"level":5,"moves":["pound","charm","encore","swift"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	clefairy: {
 		tier: "NFE"
@@ -164,7 +164,7 @@ exports.BattleFormatsData = {
 		tier: "BL"
 	},
 	vulpix: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	ninetales: {
 		tier: "UU"
@@ -175,7 +175,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["sing","charm","defensecurl","petaldance"]},
 			{"generation":2,"level":5,"moves":["sing","charm","defensecurl","scaryface"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	jigglypuff: {
 		tier: "NFE"
@@ -187,7 +187,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["leechlife","flail"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	golbat: {
 		tier: "NFE"
@@ -199,7 +199,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["absorb","leechseed"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	gloom: {
 		tier: "NFE"
@@ -214,25 +214,25 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["scratch","synthesis"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	parasect: {
 		tier: "UU"
 	},
 	venonat: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	venomoth: {
 		tier: "UU"
 	},
 	diglett: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	dugtrio: {
 		tier: "UU"
 	},
 	meowth: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	persian: {
 		tier: "UU"
@@ -243,19 +243,19 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["scratch","tailwhip","petaldance"]},
 			{"generation":2,"level":5,"moves":["scratch","tailwhip","triattack"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	golduck: {
 		tier: "UU"
 	},
 	mankey: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	primeape: {
 		tier: "UU"
 	},
 	growlithe: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	arcanine: {
 		tier: "UU"
@@ -266,7 +266,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["bubble","lovelykiss"]},
 			{"generation":2,"level":5,"moves":["bubble","sweetkiss"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	poliwhirl: {
 		tier: "NFE"
@@ -281,7 +281,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["teleport","foresight"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	kadabra: {
 		tier: "NFE"
@@ -294,7 +294,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["lowkick","leer","falseswipe"]},
 			{"generation":2,"level":5,"moves":["lowkick","leer","thrash"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	machoke: {
 		tier: "NFE"
@@ -307,7 +307,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["vinewhip","lovelykiss"]},
 			{"generation":2,"level":5,"moves":["vinewhip","sweetkiss"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	weepinbell: {
 		tier: "NFE"
@@ -319,7 +319,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["poisonsting","confuseray"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	tentacruel: {
 		tier: "BL"
@@ -328,7 +328,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","rapidspin"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	graveler: {
 		tier: "NFE"
@@ -340,7 +340,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","growl","lowkick"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	rapidash: {
 		eventPokemon: [
@@ -349,7 +349,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	slowpoke: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	slowbro: {
 		tier: "UU"
@@ -361,7 +361,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","agility"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	magneton: {
 		tier: "UU"
@@ -377,7 +377,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["peck","growl","lowkick"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	dodrio: {
 		tier: "UU"
@@ -386,25 +386,25 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["headbutt","growl","flail"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	dewgong: {
 		tier: "UU"
 	},
 	grimer: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	muk: {
 		tier: "BL"
 	},
 	shellder: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	cloyster: {
 		tier: "OU"
 	},
 	gastly: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	haunter: {
 		tier: "NFE"
@@ -416,7 +416,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","screech","sharpen"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	steelix: {
 		tier: "OU"
@@ -425,7 +425,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["pound","hypnosis","amnesia"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	hypno: {
 		tier: "UU"
@@ -434,7 +434,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["bubble","leer","metalclaw"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	kingler: {
 		tier: "UU"
@@ -443,7 +443,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","agility"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	electrode: {
 		tier: "UU"
@@ -452,7 +452,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["barrage","hypnosis","sweetscent"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	exeggutor: {
 		tier: "OU"
@@ -461,7 +461,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["growl","tailwhip","furyattack"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	marowak: {
 		tier: "OU"
@@ -470,7 +470,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"gender":"M","moves":["tackle","rage"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	hitmonlee: {
 		tier: "UU"
@@ -488,13 +488,13 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	koffing: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	weezing: {
 		tier: "UU"
 	},
 	rhyhorn: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	rhydon: {
 		tier: "OU"
@@ -524,7 +524,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["bubble","haze"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	seadra: {
 		tier: "NFE"
@@ -536,7 +536,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["peck","tailwhip","swordsdance"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	seaking: {
 		tier: "UU"
@@ -545,7 +545,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","harden","twister"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	starmie: {
 		tier: "OU"
@@ -570,7 +570,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"gender":"F","moves":["pound","lick","metronome"]},
 			{"generation":2,"level":5,"gender":"F","moves":["pound","lick","petaldance"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	jynx: {
 		tier: "BL"
@@ -580,7 +580,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["quickattack","leer","dizzypunch"]},
 			{"generation":2,"level":5,"moves":["quickattack","leer","pursuit"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	electabuzz: {
 		tier: "UU"
@@ -589,7 +589,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["ember","feintattack"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	magmar: {
 		tier: "UU"
@@ -612,7 +612,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["splash","bubble"]},
 			{"generation":2,"level":5,"moves":["splash","reversal"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	gyarados: {
 		tier: "UU"
@@ -631,7 +631,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"shiny":true,"moves":["tackle","tailwhip","growth"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	vaporeon: {
 		tier: "OU"
@@ -652,7 +652,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"shiny":true,"moves":["tackle","conversion","barrier"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	porygon2: {
 		tier: "OU"
@@ -661,7 +661,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"shiny":true,"moves":["constrict","withdraw","rockthrow"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	omastar: {
 		tier: "UU"
@@ -670,7 +670,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"shiny":true,"moves":["scratch","harden","rockthrow"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	kabutops: {
 		tier: "UU"
@@ -711,7 +711,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["wrap","leer","hydropump"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	dragonair: {
 		tier: "NFE"
@@ -736,7 +736,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","growl","petaldance"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	bayleef: {
 		tier: "NFE"
@@ -751,7 +751,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","leer","doubleedge"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	quilava: {
 		tier: "NFE"
@@ -766,7 +766,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["scratch","leer","submission"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	croconaw: {
 		tier: "NFE"
@@ -781,7 +781,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","defensecurl","dizzypunch"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	furret: {
 		tier: "UU"
@@ -790,7 +790,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","growl","nightshade"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	noctowl: {
 		tier: "UU"
@@ -799,7 +799,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","barrier"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	ledian: {
 		tier: "UU"
@@ -808,7 +808,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["poisonsting","stringshot","growth"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	ariados: {
 		tier: "UU"
@@ -817,13 +817,13 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["bubble","thunderwave","supersonic","lightscreen"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	lanturn: {
 		tier: "UU"
 	},
 	togepi: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	togetic: {
 		tier: "UU"
@@ -832,13 +832,13 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["peck","leer","safeguard"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	xatu: {
 		tier: "UU"
 	},
 	mareep: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	flaaffy: {
 		tier: "NFE"
@@ -852,7 +852,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["tackle","defensecurl","hydropump"]},
 			{"generation":2,"level":5,"moves":["tackle","defensecurl","scaryface"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	azumarill: {
 		tier: "UU"
@@ -867,7 +867,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["splash","synthesis","agility"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	skiploom: {
 		tier: "NFE"
@@ -885,7 +885,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["absorb","growth","splash"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	sunflora: {
 		tier: "UU"
@@ -902,7 +902,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["watergun","tailwhip","bellydrum"]},
 			{"generation":2,"level":5,"moves":["watergun","tailwhip","scaryface"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	quagsire: {
 		tier: "UU"
@@ -935,7 +935,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","protect","substitute"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	forretress: {
 		tier: "OU"
@@ -957,7 +957,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","scaryface","tailwhip","lovelykiss"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	granbull: {
 		tier: "UU"
@@ -987,13 +987,13 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["scratch","leer","sweetscent"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	ursaring: {
 		tier: "BL"
 	},
 	slugma: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	magcargo: {
 		tier: "UU"
@@ -1002,7 +1002,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["tackle","whirlwind"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	piloswine: {
 		tier: "UU"
@@ -1015,7 +1015,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["watergun","amnesia"]},
 			{"generation":2,"level":5,"moves":["watergun","mist"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	octillery: {
 		tier: "UU"
@@ -1040,7 +1040,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	houndour: {
-		tier: "NFE"
+		tier: "LC"
 	},
 	houndoom: {
 		tier: "BL"
@@ -1050,7 +1050,7 @@ exports.BattleFormatsData = {
 			{"generation":2,"level":5,"moves":["tackle","growl","absorb"]},
 			{"generation":2,"level":5,"moves":["tackle","growl","encore"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	donphan: {
 		tier: "BL"
@@ -1092,7 +1092,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["bite","leer","rage"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	pupitar: {
 		tier: "NFE"
