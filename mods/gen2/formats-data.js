@@ -10,7 +10,7 @@ exports.BattleFormatsData = {
 	},
 	venusaur: {
 		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["poisonpowder","sleeppowder","razorleaf"]}
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["poisonpowder","sleeppowder","razorleaf","sweetscent"]}
 		],
 		tier: "UU"
 	},
@@ -25,7 +25,7 @@ exports.BattleFormatsData = {
 	},
 	charizard: {
 		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["rage","scaryface","flamethrower"]}
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["rage","scaryface","flamethrower","wingattack"]}
 		],
 		tier: "BL"
 	},
@@ -40,7 +40,7 @@ exports.BattleFormatsData = {
 	},
 	blastoise: {
 		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["watergun","bite","rapidspin"]}
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["watergun","bite","rapidspin","protect"]}
 		],
 		tier: "UU"
 	},
@@ -151,9 +151,9 @@ exports.BattleFormatsData = {
 	},
 	cleffa: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["pound","charm","encore"]},
-			{"generation":2,"level":5,"moves":["pound","charm","encore"]},
-			{"generation":2,"level":5,"moves":["pound","charm","encore"]}
+			{"generation":2,"level":5,"moves":["pound","charm","encore","petaldance"]},
+			{"generation":2,"level":5,"moves":["pound","charm","encore","scaryface"]},
+			{"generation":2,"level":5,"moves":["pound","charm","encore","swift"]}
 		],
 		tier: "NFE"
 	},
@@ -171,9 +171,9 @@ exports.BattleFormatsData = {
 	},
 	igglybuff: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["sing","charm","defensecurl"]},
-			{"generation":2,"level":5,"moves":["sing","charm","defensecurl"]},
-			{"generation":2,"level":5,"moves":["sing","charm","defensecurl"]}
+			{"generation":2,"level":5,"moves":["sing","charm","defensecurl","mimic"]},
+			{"generation":2,"level":5,"moves":["sing","charm","defensecurl","petaldance"]},
+			{"generation":2,"level":5,"moves":["sing","charm","defensecurl","scaryface"]}
 		],
 		tier: "NFE"
 	},
@@ -367,6 +367,10 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	farfetchd: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["batonpass","swordsdance","agility","slash"]},
+			{"generation":2,"level":5,"moves":["peck","furycutter"]}
+		],
 		tier: "UU"
 	},
 	doduo: {
@@ -547,6 +551,9 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	mrmime: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["barrier","mindreader"]}
+		],
 		tier: "UU"
 	},
 	scyther: {
@@ -612,8 +619,8 @@ exports.BattleFormatsData = {
 	},
 	lapras: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["watergun","growl","sing"]},
-			{"generation":2,"level":5,"moves":["watergun","growl","sing"]}
+			{"generation":2,"level":5,"moves":["watergun","growl","sing","bite"]},
+			{"generation":2,"level":5,"moves":["watergun","growl","sing","futuresight"]}
 		],
 		tier: "BL"
 	},
@@ -684,19 +691,19 @@ exports.BattleFormatsData = {
 	},
 	articuno: {
 		eventPokemon: [
-			{"generation":2,"level":50,"shiny":true,"moves":["mist","agility","mindreader"]}
+			{"generation":2,"level":50,"shiny":true,"moves":["mist","agility","mindreader","icebeam"]}
 		],
 		tier: "BL"
 	},
 	zapdos: {
 		eventPokemon: [
-			{"generation":2,"level":50,"shiny":true,"moves":["thunderwave","agility","detect"]}
+			{"generation":2,"level":50,"shiny":true,"moves":["thunderwave","agility","detect","drillpeck"]}
 		],
 		tier: "OU"
 	},
 	moltres: {
 		eventPokemon: [
-			{"generation":2,"level":50,"shiny":true,"moves":["firespin","agility","endure"]}
+			{"generation":2,"level":50,"shiny":true,"moves":["firespin","agility","endure","flamethrower"]}
 		],
 		tier: "BL"
 	},
@@ -714,7 +721,7 @@ exports.BattleFormatsData = {
 	},
 	mewtwo: {
 		eventPokemon: [
-			{"generation":2,"level":70,"shiny":true,"moves":["psychup","futuresight","mist"]}
+			{"generation":2,"level":70,"shiny":true,"moves":["psychup","futuresight","mist","psychic"]}
 		],
 		tier: "Uber"
 	},
@@ -736,7 +743,7 @@ exports.BattleFormatsData = {
 	},
 	meganium: {
 		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["reflect","poisonpowder","synthesis"]}
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["reflect","poisonpowder","synthesis","bodyslam"]}
 		],
 		tier: "BL"
 	},
@@ -751,7 +758,7 @@ exports.BattleFormatsData = {
 	},
 	typhlosion: {
 		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["smokescreen","ember","quickattack"]}
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["smokescreen","ember","quickattack","flamewheel"]}
 		],
 		tier: "BL"
 	},
@@ -766,7 +773,7 @@ exports.BattleFormatsData = {
 	},
 	feraligatr: {
 		eventPokemon: [
-			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["watergun","bite","scaryface"]}
+			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["watergun","bite","scaryface","slash"]}
 		],
 		tier: "UU"
 	},
@@ -808,7 +815,7 @@ exports.BattleFormatsData = {
 	},
 	chinchou: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["bubble","thunderwave","supersonic"]}
+			{"generation":2,"level":5,"moves":["bubble","thunderwave","supersonic","lightscreen"]}
 		],
 		tier: "NFE"
 	},
@@ -917,7 +924,7 @@ exports.BattleFormatsData = {
 	},
 	wobbuffet: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["mirrorcoat","safeguard","destinybond"]}
+			{"generation":2,"level":5,"moves":["mirrorcoat","safeguard","destinybond","mimic"]}
 		],
 		tier: "UU"
 	},
@@ -941,11 +948,14 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	gligar: {
+		eventPokemon: [
+			{"generation":2,"level":5,"moves":["earthquake","poisonsting","counter","wingattack"]}
+		],
 		tier: "UU"
 	},
 	snubbull: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","scaryface","tailwhip"]}
+			{"generation":2,"level":5,"moves":["tackle","scaryface","tailwhip","lovelykiss"]}
 		],
 		tier: "NFE"
 	},
@@ -1037,7 +1047,8 @@ exports.BattleFormatsData = {
 	},
 	phanpy: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["tackle","growl","absorb"]}
+			{"generation":2,"level":5,"moves":["tackle","growl","absorb"]},
+			{"generation":2,"level":5,"moves":["tackle","growl","encore"]}
 		],
 		tier: "NFE"
 	},
@@ -1061,19 +1072,19 @@ exports.BattleFormatsData = {
 	},
 	raikou: {
 		eventPokemon: [
-			{"generation":2,"level":40,"shiny":true,"moves":["leer","thundershock","roar"]}
+			{"generation":2,"level":40,"shiny":true,"moves":["leer","thundershock","roar","quickattack"]}
 		],
 		tier: "OU"
 	},
 	entei: {
 		eventPokemon: [
-			{"generation":2,"level":40,"shiny":true,"moves":["leer","ember","roar"]}
+			{"generation":2,"level":40,"shiny":true,"moves":["leer","ember","roar","firespin"]}
 		],
 		tier: "BL"
 	},
 	suicune: {
 		eventPokemon: [
-			{"generation":2,"level":40,"shiny":true,"moves":["leer","watergun","roar"]}
+			{"generation":2,"level":40,"shiny":true,"moves":["leer","watergun","roar","gust"]}
 		],
 		tier: "OU"
 	},
@@ -1091,16 +1102,19 @@ exports.BattleFormatsData = {
 	},
 	lugia: {
 		eventPokemon: [
-			{"generation":2,"level":40,"shiny":true,"moves":["aeroblast","safeguard","gust"]}
+			{"generation":2,"level":40,"shiny":true,"moves":["aeroblast","safeguard","gust","recover"]}
 		],
 		tier: "Uber"
 	},
 	hooh: {
+		eventPokemon: [
+			{"generation":2,"level":40,"shiny":true,"moves":["sacredfire","safeguard","gust","recover"]}
+		],
 		tier: "Uber"
 	},
 	celebi: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["leechseed","confusion","healbell"]}
+			{"generation":2,"level":5,"moves":["leechseed","confusion","healbell","recover"]}
 		],
 		tier: "Uber"
 	}
