@@ -30,7 +30,7 @@ var plugins = exports.plugins = {
 		participants: {},
 		finished: [],
 		commands: {
-			scavengerstarthunt: function(target, room, user) {
+			scavengerstarthunt: function (target, room, user) {
 				if (!this.can('scavengers', room)) return false;
 				if (room.id !== 'scavengers') return this.sendReply('You can only start scavenger hunts on Scavengers room.');
 				if (plugins.scavenger.status === 'on') return this.sendReply('There is already an active scavenger hunt.');
@@ -50,7 +50,7 @@ var plugins = exports.plugins = {
 				);
 				return this.sendReply('Scavenger hunt started.');
 			},
-			scavengerendhunt: function(target, room, user) {
+			scavengerendhunt: function (target, room, user) {
 				if (!this.can('scavengers', room)) return false;
 				if (room.id !== 'scavengers') return this.sendReply('You can only end scavenger hunts on Scavengers room.');
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt.');
@@ -69,7 +69,7 @@ var plugins = exports.plugins = {
 				this.parse('/scavengerresethunt');
 				return this.sendReply('Scavenger hunt finished.');
 			},
-			scavengerresethunt: function(target, room, user) {
+			scavengerresethunt: function (target, room, user) {
 				if (!this.can('scavengers', room)) return false;
 				if (room.id !== 'scavengers') return this.sendReply('You can only reset scavenger hunts on Scavengers room.');
 				plugins.scavenger.status = 'off';
@@ -84,10 +84,10 @@ var plugins = exports.plugins = {
 				return this.sendReply('Scavenger hunt reset.');
 			},
 			scavenger: 'scavengers',
-			scavengers: function(target, room, user) {
+			scavengers: function (target, room, user) {
 				return this.parse('/join scavengers');
 			},
-			scavengerhint: function(target, room, user) {
+			scavengerhint: function (target, room, user) {
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt right now.');
 				if (!plugins.scavenger.participants[user.userid]) return this.sendReply('You are not participating in the current scavenger hunt.');
 				if (plugins.scavenger.participants[user.userid].room >= 3) return this.sendReply('You have already finished!');
@@ -97,7 +97,7 @@ var plugins = exports.plugins = {
 					+ '. Type /scavenge [solution] to find out if you are right.'
 				);
 			},
-			scavenge: function(target, room, user) {
+			scavenge: function (target, room, user) {
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt right now.');
 				if (!plugins.scavenger.participants[user.userid]) return this.sendReply('You are not participating in the current scavenger hunt.');
 				if (plugins.scavenger.participants[user.userid].room >= 3) return this.sendReply('You have already finished!');
@@ -127,13 +127,13 @@ var plugins = exports.plugins = {
 					return this.sendReply('Fat luck - that is not the next room!');
 				}
 			},
-			joinhunt: function(target, room, user) {
+			joinhunt: function (target, room, user) {
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt right now.');
 				if (plugins.scavenger.participants[user.userid]) return this.sendReply('You are already participating in the current scavenger hunt.');
 				plugins.scavenger.participants[user.userid] = {id: user.userid, room: 0};
 				return this.sendReply('You joined the scavenger hunt! Type /scavenge name to try to find the room and /scavengerhint to read your current hint.');
 			},
-			scavengerstatus: function(target, room, user) {
+			scavengerstatus: function (target, room, user) {
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt right now.');
 				if (!plugins.scavenger.participants[user.userid]) return this.sendReply('You are not participating in the current scavenger hunt.');
 				var currentHint = {0:'firstHint', 1:'secondHint', 2:'thirdHint'};
@@ -143,7 +143,7 @@ var plugins = exports.plugins = {
 					+ plugins.scavenger[currentHint[room]] : '. You have finished') + '.'
 				);
 			},
-			scavengerhelp: function(target, room, user) {
+			scavengerhelp: function (target, room, user) {
 				if (room.id !== 'scavengers') return;
 				if (!this.canBroadcast()) return;
 				this.sendReplyBox(

@@ -12,11 +12,6 @@
 
 require('sugar');
 
-global.fs = require('fs');
-if (!('existsSync' in fs)) {
-	// for compatibility with ancient versions of node
-	fs.existsSync = require('path').existsSync;
-}
 global.Config = require('./config/config.js');
 
 // graceful crash - allow current battles to finish before restarting
@@ -32,21 +27,20 @@ global.Config = require('./config/config.js');
  * If an object with an ID is passed, its ID will be returned.
  * Otherwise, an empty string will be returned.
  */
-global.toId = function(text) {
+global.toId = function (text) {
 	if (text && text.id) text = text.id;
 	else if (text && text.userid) text = text.userid;
 
 	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
-global.toUserid = toId;
 
 /**
  * Validates a username or Pokemon nickname
  */
-global.toName = function(name) {
+global.toName = function (name) {
 	name = string(name);
 	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
-	if (name.length > 18) name = name.substr(0,18).trim();
+	if (name.length > 18) name = name.substr(0, 18).trim();
 	return name;
 };
 
@@ -54,8 +48,8 @@ global.toName = function(name) {
  * Escapes a string for HTML
  * If strEscape is true, escapes it for JavaScript, too
  */
-global.sanitize = function(str, strEscape) {
-	str = (''+(str||''));
+global.sanitize = function (str, strEscape) {
+	str = ('' + (str || ''));
 	str = str.escapeHTML();
 	if (strEscape) str = str.replace(/'/g, '\\\'');
 	return str;
@@ -63,25 +57,13 @@ global.sanitize = function(str, strEscape) {
 
 /**
  * Safely ensures the passed variable is a string
- * Simply doing ''+str can crash if str.toString crashes or isn't a function
+ * Simply doing '' + str can crash if str.toString crashes or isn't a function
  * If we're expecting a string and being given anything that isn't a string
  * or a number, it's safe to assume it's an error, and return ''
  */
-global.string = function(str) {
-	if (typeof str === 'string' || typeof str === 'number') return ''+str;
+global.string = function (str) {
+	if (typeof str === 'string' || typeof str === 'number') return '' + str;
 	return '';
-};
-
-/**
- * Converts any variable to an integer (numbers get floored, non-numbers
- * become 0). Then clamps it between min and (optionally) max.
- */
-clampIntRange = function(num, min, max) {
-	if (typeof num !== 'number') num = 0;
-	num = Math.floor(num);
-	if (num < min) num = min;
-	if (max !== undefined && num > max) num = max;
-	return num;
 };
 
 global.Tools = require('./tools.js');
@@ -90,12 +72,12 @@ var Battles = {};
 
 // Receive and process a message sent using Simulator.prototype.send in
 // another process.
-battleEngineFakeProcess.client.on('message', function(message) {
-	//console.log('CHILD MESSAGE RECV: "'+message+'"');
+battleEngineFakeProcess.client.on('message', function (message) {
+	//console.log('CHILD MESSAGE RECV: "' + message + '"');
 	var nlIndex = message.indexOf("\n");
 	var more = '';
 	if (nlIndex > 0) {
-		more = message.substr(nlIndex+1);
+		more = message.substr(nlIndex + 1);
 		message = message.substr(0, nlIndex);
 	}
 	var data = message.split('|');
@@ -110,10 +92,10 @@ battleEngineFakeProcess.client.on('message', function(message) {
 				var fakeErr = {stack: stack};
 
 				if (!require('./crashlogger.js')(fakeErr, 'A battle')) {
-					var ministack = (""+err.stack).split("\n").slice(0,2).join("<br />");
-					battleEngineFakeProcess.client.send(data[0]+'\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> '+ministack+'</div>');
+					var ministack = ("" + err.stack).split("\n").slice(0, 2).join("<br />");
+					battleEngineFakeProcess.client.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
 				} else {
-					battleEngineFakeProcess.client.send(data[0]+'\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
+					battleEngineFakeProcess.client.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
 				}
 			}
 		}
@@ -156,7 +138,7 @@ battleEngineFakeProcess.client.on('message', function(message) {
 	}
 });
 
-var BattlePokemon = (function() {
+var BattlePokemon = (function () {
 	function BattlePokemon(set, side) {
 		this.side = side;
 		this.battle = side.battle;
@@ -170,14 +152,14 @@ var BattlePokemon = (function() {
 
 		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
-			this.battle.debug('Unidentified species: '+this.species);
+			this.battle.debug('Unidentified species: ' + this.species);
 			this.baseTemplate = this.battle.getTemplate('Unown');
 		}
 		this.species = this.baseTemplate.species;
 		if (set.name === set.species || !set.name || !set.species) {
 			set.name = this.species;
 		}
-		this.name = (set.name || set.species || 'Bulbasaur').substr(0,20);
+		this.name = (set.name || set.species || 'Bulbasaur').substr(0, 20);
 		this.speciesid = toId(this.species);
 		this.template = this.baseTemplate;
 		this.moves = [];
@@ -186,16 +168,16 @@ var BattlePokemon = (function() {
 		this.moveset = [];
 		this.baseMoveset = [];
 
-		this.level = clampIntRange(set.forcedLevel || set.level || 100, 1, 1000);
+		this.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 1000);
 
-		var genders = {M:'M',F:'F'};
-		this.gender = this.template.gender || genders[set.gender] || (Math.random()*2<1?'M':'F');
+		var genders = {M:'M', F:'F'};
+		this.gender = this.template.gender || genders[set.gender] || (Math.random() * 2 < 1 ? 'M' : 'F');
 		if (this.gender === 'N') this.gender = '';
-		this.happiness = typeof set.happiness === 'number' ? clampIntRange(set.happiness, 0, 255) : 255;
+		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = this.set.pokeball || 'pokeball';
 
 		this.fullname = this.side.id + ': ' + this.name;
-		this.details = this.species + (this.level==100?'':', L'+this.level) + (this.gender===''?'':', '+this.gender) + (this.set.shiny?', shiny':'');
+		this.details = this.species + (this.level === 100 ? '' : ', L' + this.level) + (this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 
 		this.id = this.fullname; // shouldn't really be used anywhere
 
@@ -221,7 +203,7 @@ var BattlePokemon = (function() {
 		this.types = this.baseTemplate.types;
 		this.typesData = [];
 
-		for (var i=0, l=this.types.length; i<l; i++) {
+		for (var i = 0, l = this.types.length; i < l; i++) {
 			this.typesData.push({
 				type: this.types[i],
 				suppressed: false,
@@ -230,7 +212,7 @@ var BattlePokemon = (function() {
 		}
 
 		if (this.set.moves) {
-			for (var i=0; i<this.set.moves.length; i++) {
+			for (var i = 0; i < this.set.moves.length; i++) {
 				var move = this.battle.getMove(this.set.moves[i]);
 				if (!move.id) continue;
 				if (move.id === 'hiddenpower') {
@@ -242,8 +224,8 @@ var BattlePokemon = (function() {
 				this.baseMoveset.push({
 					move: move.name,
 					id: move.id,
-					pp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
-					maxpp: (move.noPPBoosts ? move.pp : move.pp * 8/5),
+					pp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
+					maxpp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
 					target: (move.nonGhostTarget && !this.hasType('Ghost') ? move.nonGhostTarget : move.target),
 					disabled: false,
 					used: false
@@ -268,13 +250,13 @@ var BattlePokemon = (function() {
 			if (!this.set.ivs[i] && this.set.ivs[i] !== 0) this.set.ivs[i] = 31;
 		}
 		for (var i in this.set.evs) {
-			this.set.evs[i] = clampIntRange(this.set.evs[i], 0, 255);
+			this.set.evs[i] = this.battle.clampIntRange(this.set.evs[i], 0, 255);
 		}
 		for (var i in this.set.ivs) {
-			this.set.ivs[i] = clampIntRange(this.set.ivs[i], 0, 31);
+			this.set.ivs[i] = this.battle.clampIntRange(this.set.ivs[i], 0, 31);
 		}
 
-		var hpTypes = ['Fighting','Flying','Poison','Ground','Rock','Bug','Ghost','Steel','Fire','Water','Grass','Electric','Psychic','Ice','Dragon','Dark'];
+		var hpTypes = ['Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark'];
 		if (this.battle.gen && this.battle.gen === 2) {
 			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
 			var atkDV = Math.floor(this.set.ivs.atk / 2);
@@ -282,7 +264,7 @@ var BattlePokemon = (function() {
 			var speDV = Math.floor(this.set.ivs.spe / 2);
 			var spcDV = Math.floor(this.set.ivs.spa / 2);
 			this.hpType = hpTypes[4 * (atkDV % 4) + (defDV % 4)];
-			this.hpPower = Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV>2?3:spcDV)) / 2 + 31);
+			this.hpPower = Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV > 2 ? 3 : spcDV)) / 2 + 31);
 		} else {
 			// Hidden Power check for gen 3 onwards
 			var hpTypeX = 0, hpPowerX = 0;
@@ -305,14 +287,14 @@ var BattlePokemon = (function() {
 		this.baseStats = {atk:10, def:10, spa:10, spd:10, spe:10};
 		for (var statName in this.baseStats) {
 			var stat = this.template.baseStats[statName];
-			stat = Math.floor(Math.floor(2*stat+this.set.ivs[statName]+Math.floor(this.set.evs[statName]/4))*this.level / 100 + 5);
+			stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
 			var nature = this.battle.getNature(this.set.nature);
 			if (statName === nature.plus) stat *= 1.1;
 			if (statName === nature.minus) stat *= 0.9;
 			this.baseStats[statName] = Math.floor(stat);
 		}
 
-		this.maxhp = Math.floor(Math.floor(2*this.template.baseStats['hp']+this.set.ivs['hp']+Math.floor(this.set.evs['hp']/4)+100)*this.level / 100 + 10);
+		this.maxhp = Math.floor(Math.floor(2 * this.template.baseStats['hp'] + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100) * this.level / 100 + 10);
 		if (this.template.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
 		this.hp = this.hp || this.maxhp;
 
@@ -350,20 +332,20 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.hpPower = 60;
 	BattlePokemon.prototype.speed = 0;
 
-	BattlePokemon.prototype.toString = function() {
+	BattlePokemon.prototype.toString = function () {
 		var fullname = this.fullname;
 		if (this.illusion) fullname = this.illusion.fullname;
 
-		var positionList = ['a','b','c','d','e','f'];
-		if (this.isActive) return fullname.substr(0,2) + positionList[this.position] + fullname.substr(2);
+		var positionList = 'abcdef';
+		if (this.isActive) return fullname.substr(0, 2) + positionList[this.position] + fullname.substr(2);
 		return fullname;
 	};
 	// "static" function
-	BattlePokemon.getDetails = function(side) {
+	BattlePokemon.getDetails = function (side) {
 		if (this.illusion) return this.illusion.details + '|' + this.getHealth(side);
 		return this.details + '|' + this.getHealth(side);
 	};
-	BattlePokemon.prototype.update = function(init) {
+	BattlePokemon.prototype.update = function (init) {
 		// reset for Light Metal etc
 		this.weightkg = this.template.weightkg;
 		// reset for diabled moves
@@ -407,7 +389,7 @@ var BattlePokemon = (function() {
 
 		this.speed = this.getStat('spe');
 	};
-	BattlePokemon.prototype.calculateStat = function(statName, boost, modifier) {
+	BattlePokemon.prototype.calculateStat = function (statName, boost, modifier) {
 		statName = toId(statName);
 		// var boost = this.boosts[statName];
 
@@ -418,7 +400,7 @@ var BattlePokemon = (function() {
 
 		// stat boosts
 		// boost = this.boosts[statName];
-		var boostTable = [1,1.5,2,2.5,3,3.5,4];
+		var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 		if (boost > 6) boost = 6;
 		if (boost < -6) boost = -6;
 		if (boost >= 0) {
@@ -436,7 +418,7 @@ var BattlePokemon = (function() {
 
 		return stat;
 	};
-	BattlePokemon.prototype.getStat = function(statName, unboosted, unmodified) {
+	BattlePokemon.prototype.getStat = function (statName, unboosted, unmodified) {
 		statName = toId(statName);
 
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
@@ -447,7 +429,7 @@ var BattlePokemon = (function() {
 		// stat boosts
 		if (!unboosted) {
 			var boost = this.boosts[statName];
-			var boostTable = [1,1.5,2,2.5,3,3.5,4];
+			var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 			if (boost > 6) boost = 6;
 			if (boost < -6) boost = -6;
 			if (boost >= 0) {
@@ -461,7 +443,7 @@ var BattlePokemon = (function() {
 		if (!unmodified) {
 			var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
 			var statMod = 1;
-			statMod = this.battle.runEvent('Modify'+statTable[statName], this, null, null, statMod);
+			statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
 			stat = this.battle.modify(stat, statMod);
 		}
 		if (this.battle.getStatCallback) {
@@ -469,9 +451,9 @@ var BattlePokemon = (function() {
 		}
 		return stat;
 	};
-	BattlePokemon.prototype.getMoveData = function(move) {
+	BattlePokemon.prototype.getMoveData = function (move) {
 		move = this.battle.getMove(move);
-		for (var i=0; i<this.moveset.length; i++) {
+		for (var i = 0; i < this.moveset.length; i++) {
 			var moveData = this.moveset[i];
 			if (moveData.id === move.id) {
 				return moveData;
@@ -479,7 +461,7 @@ var BattlePokemon = (function() {
 		}
 		return null;
 	};
-	BattlePokemon.prototype.deductPP = function(move, amount, source) {
+	BattlePokemon.prototype.deductPP = function (move, amount, source) {
 		move = this.battle.getMove(move);
 		var ppData = this.getMoveData(move);
 		var success = false;
@@ -487,7 +469,7 @@ var BattlePokemon = (function() {
 			ppData.used = true;
 		}
 		if (ppData && ppData.pp) {
-			ppData.pp -= this.battle.runEvent('DeductPP', this, source||this, move, amount||1);
+			ppData.pp -= this.battle.runEvent('DeductPP', this, source || this, move, amount || 1);
 			if (ppData.pp <= 0) {
 				ppData.pp = 0;
 			}
@@ -495,11 +477,11 @@ var BattlePokemon = (function() {
 		}
 		return success;
 	};
-	BattlePokemon.prototype.moveUsed = function(move) {
+	BattlePokemon.prototype.moveUsed = function (move) {
 		this.lastMove = this.battle.getMove(move).id;
 		this.moveThisTurn = this.lastMove;
 	};
-	BattlePokemon.prototype.gotAttacked = function(move, damage, source) {
+	BattlePokemon.prototype.gotAttacked = function (move, damage, source) {
 		if (!damage) damage = 0;
 		move = this.battle.getMove(move);
 		this.lastAttackedBy = {
@@ -509,12 +491,12 @@ var BattlePokemon = (function() {
 			thisTurn: true
 		};
 	};
-	BattlePokemon.prototype.getLockedMove = function() {
+	BattlePokemon.prototype.getLockedMove = function () {
 		var lockedMove = this.battle.runEvent('LockMove', this);
 		if (lockedMove === true) lockedMove = false;
 		return lockedMove;
 	};
-	BattlePokemon.prototype.getMoves = function(lockedMove) {
+	BattlePokemon.prototype.getMoves = function (lockedMove) {
 		if (lockedMove) {
 			lockedMove = toId(lockedMove);
 			this.trapped = true;
@@ -527,11 +509,14 @@ var BattlePokemon = (function() {
 		}
 		var moves = [];
 		var hasValidMove = false;
-		for (var i=0; i<this.moveset.length; i++) {
+		for (var i = 0; i < this.moveset.length; i++) {
 			var move = this.moveset[i];
 			if (lockedMove) {
 				if (lockedMove === move.id) {
-					return [move];
+					return [{
+						move: move.move,
+						id: move.id
+					}];
 				}
 				continue;
 			}
@@ -542,8 +527,8 @@ var BattlePokemon = (function() {
 			}
 			var moveName = move.move;
 			if (move.id === 'hiddenpower') {
-				moveName = 'Hidden Power '+this.hpType;
-				if (this.gen < 6) moveName += ' '+this.hpPower;
+				moveName = 'Hidden Power ' + this.hpType;
+				if (this.gen < 6) moveName += ' ' + this.hpPower;
 			}
 			moves.push({
 				move: moveName,
@@ -568,24 +553,24 @@ var BattlePokemon = (function() {
 		}
 		return moves;
 	};
-	BattlePokemon.prototype.getRequestData = function() {
+	BattlePokemon.prototype.getRequestData = function () {
 		var lockedMove = this.getLockedMove();
 		var data = {moves: this.getMoves(lockedMove)};
-		if (lockedMove && this.trapped) {
+		if (this.trapped) {
 			data.trapped = true;
 		} else if (this.maybeTrapped) {
 			data.maybeTrapped = true;
 		}
 		return data;
 	};
-	BattlePokemon.prototype.positiveBoosts = function() {
+	BattlePokemon.prototype.positiveBoosts = function () {
 		var boosts = 0;
 		for (var i in this.boosts) {
 			if (this.boosts[i] > 0) boosts += this.boosts[i];
 		}
 		return boosts;
 	};
-	BattlePokemon.prototype.boostBy = function(boost, source, effect) {
+	BattlePokemon.prototype.boostBy = function (boost, source, effect) {
 		var changed = false;
 		for (var i in boost) {
 			var delta = boost[i];
@@ -603,19 +588,19 @@ var BattlePokemon = (function() {
 		this.update();
 		return changed;
 	};
-	BattlePokemon.prototype.clearBoosts = function() {
+	BattlePokemon.prototype.clearBoosts = function () {
 		for (var i in this.boosts) {
 			this.boosts[i] = 0;
 		}
 		this.update();
 	};
-	BattlePokemon.prototype.setBoost = function(boost) {
+	BattlePokemon.prototype.setBoost = function (boost) {
 		for (var i in boost) {
 			this.boosts[i] = boost[i];
 		}
 		this.update();
 	};
-	BattlePokemon.prototype.copyVolatileFrom = function(pokemon) {
+	BattlePokemon.prototype.copyVolatileFrom = function (pokemon) {
 		this.clearVolatile();
 		this.boosts = pokemon.boosts;
 		this.volatiles = pokemon.volatiles;
@@ -629,7 +614,7 @@ var BattlePokemon = (function() {
 			this.battle.singleEvent('Copy', status, this.volatiles[i], this);
 		}
 	};
-	BattlePokemon.prototype.transformInto = function(pokemon, user) {
+	BattlePokemon.prototype.transformInto = function (pokemon, user) {
 		var template = pokemon.template;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 			return false;
@@ -642,7 +627,7 @@ var BattlePokemon = (function() {
 		}
 		this.transformed = true;
 		this.typesData = [];
-		for (var i=0, l=pokemon.typesData.length; i<l; i++) {
+		for (var i = 0, l = pokemon.typesData.length; i < l; i++) {
 			this.typesData.push({
 				type: pokemon.typesData[i].type,
 				suppressed: false,
@@ -657,12 +642,12 @@ var BattlePokemon = (function() {
 		this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
 		this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 		this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
-		for (var i=0; i<pokemon.moveset.length; i++) {
+		for (var i = 0; i < pokemon.moveset.length; i++) {
 			var move = this.battle.getMove(this.set.moves[i]);
 			var moveData = pokemon.moveset[i];
 			var moveName = moveData.move;
 			if (moveData.id === 'hiddenpower') {
-				moveName = 'Hidden Power '+this.hpType;
+				moveName = 'Hidden Power ' + this.hpType;
 			}
 			this.moveset.push({
 				move: moveName,
@@ -682,7 +667,7 @@ var BattlePokemon = (function() {
 		this.update();
 		return true;
 	};
-	BattlePokemon.prototype.formeChange = function(template, dontRecalculateStats) {
+	BattlePokemon.prototype.formeChange = function (template, dontRecalculateStats) {
 		template = this.battle.getTemplate(template);
 
 		if (!template.abilities) return false;
@@ -690,7 +675,7 @@ var BattlePokemon = (function() {
 		this.types = template.types;
 		this.typesData = [];
 		this.types = template.types;
-		for (var i=0, l=this.types.length; i<l; i++) {
+		for (var i = 0, l = this.types.length; i < l; i++) {
 			this.typesData.push({
 				type: this.types[i],
 				suppressed: false,
@@ -700,7 +685,7 @@ var BattlePokemon = (function() {
 		if (!dontRecalculateStats) {
 			for (var statName in this.stats) {
 				var stat = this.template.baseStats[statName];
-				stat = Math.floor(Math.floor(2*stat+this.set.ivs[statName]+Math.floor(this.set.evs[statName]/4))*this.level / 100 + 5);
+				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
 
 				// nature
 				var nature = this.battle.getNature(this.set.nature);
@@ -712,7 +697,7 @@ var BattlePokemon = (function() {
 		}
 		return true;
 	};
-	BattlePokemon.prototype.clearVolatile = function(init) {
+	BattlePokemon.prototype.clearVolatile = function (init) {
 		this.boosts = {
 			atk: 0,
 			def: 0,
@@ -729,7 +714,7 @@ var BattlePokemon = (function() {
 		// DO NOT "optimize" it to copy just the pointer
 		// if you don't know what a pointer is, please don't
 		// touch this code
-		for (var i=0; i<this.baseMoveset.length; i++) {
+		for (var i = 0; i < this.baseMoveset.length; i++) {
 			this.moveset.push(this.baseMoveset[i]);
 			this.moves.push(toId(this.baseMoveset[i].move));
 		}
@@ -761,7 +746,7 @@ var BattlePokemon = (function() {
 	BattlePokemon.prototype.hasType = function (type) {
 		if (!type) return false;
 		if (Array.isArray(type)) {
-			for (var i=0; i<type.length; i++) {
+			for (var i = 0; i < type.length; i++) {
 				if (this.hasType(type[i])) return true;
 			}
 		} else {
@@ -770,7 +755,7 @@ var BattlePokemon = (function() {
 		return false;
 	};
 	// returns the amount of damage actually dealt
-	BattlePokemon.prototype.faint = function(source, effect) {
+	BattlePokemon.prototype.faint = function (source, effect) {
 		if (this.fainted) return 0;
 		var d = this.hp;
 		this.hp = 0;
@@ -784,7 +769,7 @@ var BattlePokemon = (function() {
 		});
 		return d;
 	};
-	BattlePokemon.prototype.damage = function(d, source, effect) {
+	BattlePokemon.prototype.damage = function (d, source, effect) {
 		if (!this.hp) return 0;
 		if (d < 1 && d > 0) d = 1;
 		d = Math.floor(d);
@@ -797,27 +782,27 @@ var BattlePokemon = (function() {
 		}
 		return d;
 	};
-	BattlePokemon.prototype.tryTrap = function() {
+	BattlePokemon.prototype.tryTrap = function () {
 		if (this.runImmunity('trapped')) {
 			this.trapped = true;
 			return true;
 		}
 		return false;
 	};
-	BattlePokemon.prototype.hasMove = function(moveid) {
+	BattlePokemon.prototype.hasMove = function (moveid) {
 		moveid = toId(moveid);
-		if (moveid.substr(0,11) === 'hiddenpower') moveid = 'hiddenpower';
-		for (var i=0; i<this.moveset.length; i++) {
+		if (moveid.substr(0, 11) === 'hiddenpower') moveid = 'hiddenpower';
+		for (var i = 0; i < this.moveset.length; i++) {
 			if (moveid === this.battle.getMove(this.moveset[i].move).id) {
 				return moveid;
 			}
 		}
 		return false;
 	};
-	BattlePokemon.prototype.getValidMoves = function() {
-		var pMoves = this.getMoves(this.getLockedMove());
+	BattlePokemon.prototype.getValidMoves = function (lockedMove) {
+		var pMoves = this.getMoves(lockedMove);
 		var moves = [];
-		for (var i=0; i<pMoves.length; i++) {
+		for (var i = 0; i < pMoves.length; i++) {
 			if (!pMoves[i].disabled) {
 				moves.push(pMoves[i].id);
 			}
@@ -826,7 +811,7 @@ var BattlePokemon = (function() {
 		return moves;
 	};
 	// returns the amount of damage actually healed
-	BattlePokemon.prototype.heal = function(d) {
+	BattlePokemon.prototype.heal = function (d) {
 		if (!this.hp) return false;
 		d = Math.floor(d);
 		if (isNaN(d)) return false;
@@ -840,12 +825,12 @@ var BattlePokemon = (function() {
 		return d;
 	};
 	// sets HP, returns delta
-	BattlePokemon.prototype.sethp = function(d) {
+	BattlePokemon.prototype.sethp = function (d) {
 		if (!this.hp) return 0;
 		d = Math.floor(d);
 		if (isNaN(d)) return;
 		if (d < 1) d = 1;
-		d = d-this.hp;
+		d = d - this.hp;
 		this.hp += d;
 		if (this.hp > this.maxhp) {
 			d -= this.hp - this.maxhp;
@@ -853,12 +838,12 @@ var BattlePokemon = (function() {
 		}
 		return d;
 	};
-	BattlePokemon.prototype.trySetStatus = function(status, source, sourceEffect) {
+	BattlePokemon.prototype.trySetStatus = function (status, source, sourceEffect) {
 		if (!this.hp) return false;
 		if (this.status) return false;
 		return this.setStatus(status, source, sourceEffect);
 	};
-	BattlePokemon.prototype.cureStatus = function() {
+	BattlePokemon.prototype.cureStatus = function () {
 		if (!this.hp) return false;
 		// unlike clearStatus, gives cure message
 		if (this.status) {
@@ -866,7 +851,7 @@ var BattlePokemon = (function() {
 			this.setStatus('');
 		}
 	};
-	BattlePokemon.prototype.setStatus = function(status, source, sourceEffect, ignoreImmunities) {
+	BattlePokemon.prototype.setStatus = function (status, source, sourceEffect, ignoreImmunities) {
 		if (!this.hp) return false;
 		status = this.battle.getEffect(status);
 		if (this.battle.event) {
@@ -876,7 +861,7 @@ var BattlePokemon = (function() {
 
 		if (!ignoreImmunities && status.id) {
 			// the game currently never ignores immunities
-			if (!this.runImmunity(status.id==='tox'?'psn':status.id)) {
+			if (!this.runImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 				this.battle.debug('immune to status');
 				return false;
 			}
@@ -886,7 +871,7 @@ var BattlePokemon = (function() {
 		var prevStatus = this.status;
 		var prevStatusData = this.statusData;
 		if (status.id && !this.battle.runEvent('SetStatus', this, source, sourceEffect, status)) {
-			this.battle.debug('set status ['+status.id+'] interrupted');
+			this.battle.debug('set status [' + status.id + '] interrupted');
 			return false;
 		}
 
@@ -901,7 +886,7 @@ var BattlePokemon = (function() {
 		}
 
 		if (status.id && !this.battle.singleEvent('Start', status, this.statusData, this, source, sourceEffect)) {
-			this.battle.debug('status start ['+status.id+'] interrupted');
+			this.battle.debug('status start [' + status.id + '] interrupted');
 			// cancel the setstatus
 			this.status = prevStatus;
 			this.statusData = prevStatusData;
@@ -913,14 +898,14 @@ var BattlePokemon = (function() {
 		}
 		return true;
 	};
-	BattlePokemon.prototype.clearStatus = function() {
+	BattlePokemon.prototype.clearStatus = function () {
 		// unlike cureStatus, does not give cure message
 		return this.setStatus('');
 	};
-	BattlePokemon.prototype.getStatus = function() {
+	BattlePokemon.prototype.getStatus = function () {
 		return this.battle.getEffect(this.status);
 	};
-	BattlePokemon.prototype.eatItem = function(item, source, sourceEffect) {
+	BattlePokemon.prototype.eatItem = function (item, source, sourceEffect) {
 		if (!this.hp || !this.isActive) return false;
 		if (!this.item) return false;
 
@@ -945,7 +930,7 @@ var BattlePokemon = (function() {
 		}
 		return false;
 	};
-	BattlePokemon.prototype.useItem = function(item, source, sourceEffect) {
+	BattlePokemon.prototype.useItem = function (item, source, sourceEffect) {
 		if (!this.isActive) return false;
 		if (!this.item) return false;
 
@@ -958,7 +943,7 @@ var BattlePokemon = (function() {
 		if (this.battle.runEvent('UseItem', this, null, null, item)) {
 			switch (item.id) {
 			case 'redcard':
-				this.battle.add('-enditem', this, item, '[of] '+source);
+				this.battle.add('-enditem', this, item, '[of] ' + source);
 				break;
 			default:
 				if (!item.isGem) {
@@ -978,7 +963,7 @@ var BattlePokemon = (function() {
 		}
 		return false;
 	};
-	BattlePokemon.prototype.takeItem = function(source) {
+	BattlePokemon.prototype.takeItem = function (source) {
 		if (!this.hp || !this.isActive) return false;
 		if (!this.item) return false;
 		if (!source) source = this;
@@ -991,7 +976,7 @@ var BattlePokemon = (function() {
 		}
 		return false;
 	};
-	BattlePokemon.prototype.setItem = function(item, source, effect) {
+	BattlePokemon.prototype.setItem = function (item, source, effect) {
 		if (!this.hp || !this.isActive) return false;
 		item = this.battle.getItem(item);
 		this.lastItem = this.item;
@@ -1003,10 +988,10 @@ var BattlePokemon = (function() {
 		if (this.lastItem) this.usedItemThisTurn = true;
 		return true;
 	};
-	BattlePokemon.prototype.getItem = function() {
+	BattlePokemon.prototype.getItem = function () {
 		return this.battle.getItem(this.item);
 	};
-	BattlePokemon.prototype.hasItem = function(item) {
+	BattlePokemon.prototype.hasItem = function (item) {
 		if (this.ignore['Item']) return false;
 		var ownItem = this.item;
 		if (!Array.isArray(item)) {
@@ -1014,10 +999,10 @@ var BattlePokemon = (function() {
 		}
 		return (item.map(toId).indexOf(ownItem) >= 0);
 	};
-	BattlePokemon.prototype.clearItem = function() {
+	BattlePokemon.prototype.clearItem = function () {
 		return this.setItem('');
 	};
-	BattlePokemon.prototype.setAbility = function(ability, source, effect, noForce) {
+	BattlePokemon.prototype.setAbility = function (ability, source, effect, noForce) {
 		if (!this.hp) return false;
 		ability = this.battle.getAbility(ability);
 		if (noForce && this.ability === ability.id) {
@@ -1032,10 +1017,10 @@ var BattlePokemon = (function() {
 		}
 		return true;
 	};
-	BattlePokemon.prototype.getAbility = function() {
+	BattlePokemon.prototype.getAbility = function () {
 		return this.battle.getAbility(this.ability);
 	};
-	BattlePokemon.prototype.hasAbility = function(ability) {
+	BattlePokemon.prototype.hasAbility = function (ability) {
 		if (this.ignore['Ability']) return false;
 		var ownAbility = this.ability;
 		if (!Array.isArray(ability)) {
@@ -1043,13 +1028,13 @@ var BattlePokemon = (function() {
 		}
 		return (ability.map(toId).indexOf(ownAbility) >= 0);
 	};
-	BattlePokemon.prototype.clearAbility = function() {
+	BattlePokemon.prototype.clearAbility = function () {
 		return this.setAbility('');
 	};
-	BattlePokemon.prototype.getNature = function() {
+	BattlePokemon.prototype.getNature = function () {
 		return this.battle.getNature(this.set.nature);
 	};
-	BattlePokemon.prototype.addVolatile = function(status, source, sourceEffect) {
+	BattlePokemon.prototype.addVolatile = function (status, source, sourceEffect) {
 		var result;
 		if (!this.hp) return false;
 		status = this.battle.getEffect(status);
@@ -1065,7 +1050,7 @@ var BattlePokemon = (function() {
 		if (!this.runImmunity(status.id)) return false;
 		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
 		if (!result) {
-			this.battle.debug('add volatile ['+status.id+'] interrupted');
+			this.battle.debug('add volatile [' + status.id + '] interrupted');
 			return result;
 		}
 		this.volatiles[status.id] = {id: status.id};
@@ -1092,12 +1077,12 @@ var BattlePokemon = (function() {
 		this.update();
 		return true;
 	};
-	BattlePokemon.prototype.getVolatile = function(status) {
+	BattlePokemon.prototype.getVolatile = function (status) {
 		status = this.battle.getEffect(status);
 		if (!this.volatiles[status.id]) return null;
 		return status;
 	};
-	BattlePokemon.prototype.removeVolatile = function(status) {
+	BattlePokemon.prototype.removeVolatile = function (status) {
 		if (!this.hp) return false;
 		status = this.battle.getEffect(status);
 		if (!this.volatiles[status.id]) return false;
@@ -1107,11 +1092,11 @@ var BattlePokemon = (function() {
 		return true;
 	};
 	// "static" function
-	BattlePokemon.getHealth = function(side) {
+	BattlePokemon.getHealth = function (side) {
 		if (!this.hp) return '0 fnt';
 		var hpstring;
 		if ((side === true) || (this.side === side) || this.battle.getFormat().debug) {
-			hpstring = ''+this.hp+'/'+this.maxhp;
+			hpstring = '' + this.hp + '/' + this.maxhp;
 		} else {
 			var ratio = this.hp / this.maxhp;
 			if (this.battle.reportPercentages) {
@@ -1135,7 +1120,7 @@ var BattlePokemon = (function() {
 		if (this.status) hpstring += ' ' + this.status;
 		return hpstring;
 	};
-	BattlePokemon.prototype.setType = function(newType, enforce) {
+	BattlePokemon.prototype.setType = function (newType, enforce) {
 		// Arceus first type cannot be normally changed
 		if (!enforce && this.num === 493) return false;
 
@@ -1147,10 +1132,10 @@ var BattlePokemon = (function() {
 
 		return true;
 	};
-	BattlePokemon.prototype.addType = function(newType) {
+	BattlePokemon.prototype.addType = function (newType) {
 		// removes any types added previously and adds another one
 
-		this.typesData = this.typesData.filter(function(typeData) {
+		this.typesData = this.typesData.filter(function (typeData) {
 			return !typeData.isAdded;
 		}).concat([{
 			type: newType,
@@ -1160,9 +1145,9 @@ var BattlePokemon = (function() {
 
 		return true;
 	};
-	BattlePokemon.prototype.getTypes = function(getAll) {
+	BattlePokemon.prototype.getTypes = function (getAll) {
 		var types = [];
-		for (var i=0, l=this.typesData.length; i<l; i++) {
+		for (var i = 0, l = this.typesData.length; i < l; i++) {
 			if (getAll || !this.typesData[i].suppressed) {
 				types.push(this.typesData[i].type);
 			}
@@ -1171,7 +1156,7 @@ var BattlePokemon = (function() {
 		if (this.battle.gen >= 5) return ['Normal'];
 		return ['???'];
 	};
-	BattlePokemon.prototype.runImmunity = function(type, message) {
+	BattlePokemon.prototype.runImmunity = function (type, message) {
 		if (this.fainted) {
 			return false;
 		}
@@ -1199,7 +1184,7 @@ var BattlePokemon = (function() {
 		}
 		return true;
 	};
-	BattlePokemon.prototype.destroy = function() {
+	BattlePokemon.prototype.destroy = function () {
 		// deallocate ourself
 		// get rid of some possibly-circular references
 		this.battle = null;
@@ -1208,7 +1193,7 @@ var BattlePokemon = (function() {
 	return BattlePokemon;
 })();
 
-var BattleSide = (function() {
+var BattleSide = (function () {
 	function BattleSide(name, battle, n, team) {
 		this.battle = battle;
 		this.n = n;
@@ -1217,7 +1202,7 @@ var BattleSide = (function() {
 		this.active = [null];
 		this.sideConditions = {};
 
-		this.id = (n?'p2':'p1');
+		this.id = n ? 'p2' : 'p1';
 
 		switch (this.battle.gameType) {
 		case 'doubles':
@@ -1226,12 +1211,12 @@ var BattleSide = (function() {
 		}
 
 		this.team = this.battle.getTeam(this, team);
-		for (var i=0; i<this.team.length && i<6; i++) {
-			//console.log("NEW POKEMON: "+(this.team[i]?this.team[i].name:'[unidentified]'));
+		for (var i = 0; i < this.team.length && i < 6; i++) {
+			//console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
 			this.pokemon.push(new BattlePokemon(this.team[i], this));
 		}
 		this.pokemonLeft = this.pokemon.length;
-		for (var i=0; i<this.pokemon.length; i++) {
+		for (var i = 0; i < this.pokemon.length; i++) {
 			this.pokemon[i].position = i;
 		}
 	}
@@ -1243,16 +1228,16 @@ var BattleSide = (function() {
 	BattleSide.prototype.decision = null;
 	BattleSide.prototype.foe = null;
 
-	BattleSide.prototype.toString = function() {
-		return this.id+': '+this.name;
+	BattleSide.prototype.toString = function () {
+		return this.id + ': ' + this.name;
 	};
-	BattleSide.prototype.getData = function() {
+	BattleSide.prototype.getData = function () {
 		var data = {
 			name: this.name,
 			id: this.id,
 			pokemon: []
 		};
-		for (var i=0; i<this.pokemon.length; i++) {
+		for (var i = 0; i < this.pokemon.length; i++) {
 			var pokemon = this.pokemon[i];
 			data.pokemon.push({
 				ident: pokemon.fullname,
@@ -1266,9 +1251,9 @@ var BattleSide = (function() {
 					spd: pokemon.baseStats['spd'],
 					spe: pokemon.baseStats['spe']
 				},
-				moves: pokemon.moves.map(function(move) {
+				moves: pokemon.moves.map(function (move) {
 					if (move === 'hiddenpower') {
-						return move + toId(pokemon.hpType) + (pokemon.hpPower == 70?'':pokemon.hpPower);
+						return move + toId(pokemon.hpType) + (pokemon.hpPower === 70 ? '' : pokemon.hpPower);
 					}
 					return move;
 				}),
@@ -1280,15 +1265,15 @@ var BattleSide = (function() {
 		}
 		return data;
 	};
-	BattleSide.prototype.randomActive = function() {
-		var actives = this.active.filter(function(active) {
+	BattleSide.prototype.randomActive = function () {
+		var actives = this.active.filter(function (active) {
 			return active && !active.fainted;
 		});
 		if (!actives.length) return null;
 		var i = Math.floor(Math.random() * actives.length);
 		return actives[i];
 	};
-	BattleSide.prototype.addSideCondition = function(status, source, sourceEffect) {
+	BattleSide.prototype.addSideCondition = function (status, source, sourceEffect) {
 		status = this.battle.getEffect(status);
 		if (this.sideConditions[status.id]) {
 			if (!status.onRestart) return false;
@@ -1313,12 +1298,12 @@ var BattleSide = (function() {
 		this.battle.update();
 		return true;
 	};
-	BattleSide.prototype.getSideCondition = function(status) {
+	BattleSide.prototype.getSideCondition = function (status) {
 		status = this.battle.getEffect(status);
 		if (!this.sideConditions[status.id]) return null;
 		return status;
 	};
-	BattleSide.prototype.removeSideCondition = function(status) {
+	BattleSide.prototype.removeSideCondition = function (status) {
 		status = this.battle.getEffect(status);
 		if (!this.sideConditions[status.id]) return false;
 		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
@@ -1326,23 +1311,23 @@ var BattleSide = (function() {
 		this.battle.update();
 		return true;
 	};
-	BattleSide.prototype.emitCallback = function() {
+	BattleSide.prototype.emitCallback = function () {
 		this.battle.send('callback', this.id + "\n" +
 			Array.prototype.slice.call(arguments).join('|'));
 	};
-	BattleSide.prototype.emitRequest = function(update) {
-		this.battle.send('request', this.id+"\n"+this.battle.rqid+"\n"+JSON.stringify(update));
+	BattleSide.prototype.emitRequest = function (update) {
+		this.battle.send('request', this.id + "\n" + this.battle.rqid + "\n" + JSON.stringify(update));
 	};
-	BattleSide.prototype.destroy = function() {
+	BattleSide.prototype.destroy = function () {
 		// deallocate ourself
 
 		// deallocate children and get rid of references to them
-		for (var i=0; i<this.pokemon.length; i++) {
+		for (var i = 0; i < this.pokemon.length; i++) {
 			if (this.pokemon[i]) this.pokemon[i].destroy();
 			this.pokemon[i] = null;
 		}
 		this.pokemon = null;
-		for (var i=0; i<this.active.length; i++) {
+		for (var i = 0; i < this.active.length; i++) {
 			this.active[i] = null;
 		}
 		this.active = null;
@@ -1360,13 +1345,13 @@ var BattleSide = (function() {
 	return BattleSide;
 })();
 
-var Battle = (function() {
+var Battle = (function () {
 	var Battle = {};
 
-	Battle.construct = (function() {
+	Battle.construct = (function () {
 		var battleProtoCache = {};
-		return function(roomid, formatarg, rated) {
-			var battle = Object.create((function() {
+		return function (roomid, formatarg, rated) {
+			var battle = Object.create((function () {
 				if (battleProtoCache[formatarg] !== undefined) {
 					return battleProtoCache[formatarg];
 				}
@@ -1389,7 +1374,7 @@ var Battle = (function() {
 
 	Battle.prototype = {};
 
-	Battle.prototype.init = function(roomid, formatarg, rated) {
+	Battle.prototype.init = function (roomid, formatarg, rated) {
 		var format = Tools.getFormat(formatarg);
 
 		this.log = [];
@@ -1442,8 +1427,8 @@ var Battle = (function() {
 	Battle.prototype.lastMoveLine = 0;
 	Battle.prototype.reportPercentages = false;
 
-	Battle.prototype.toString = function() {
-		return 'Battle: '+this.format;
+	Battle.prototype.toString = function () {
+		return 'Battle: ' + this.format;
 	};
 
 
@@ -1452,51 +1437,51 @@ var Battle = (function() {
 	// This RNG uses a 32-bit initial seed
 
 	// This function has three different results, depending on arguments:
-	// - random() returns a real number in [0,1), just like Math.random()
-	// - random(n) returns an integer in [0,n)
-	// - random(m,n) returns an integer in [m,n)
+	// - random() returns a real number in [0, 1), just like Math.random()
+	// - random(n) returns an integer in [0, n)
+	// - random(m, n) returns an integer in [m, n)
 
 	// m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
 	/*
-	Battle.prototype.random = function(m, n) {
+	Battle.prototype.random = function (m, n) {
 		this.seed = (this.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
 		var result = this.seed >>> 16; // the first 16 bits of the seed are the random value
 		m = Math.floor(m);
 		n = Math.floor(n);
-		return (m ? (n ? (result%(n-m))+m : result%m) : result/0x10000);
+		return (m ? (n ? (result % (n - m)) + m : result % m) : result / 0x10000);
 	};
 	*/
 
 	// This function is designed to emulate the on-cartridge PRNG for Gen 5 and uses a 64-bit initial seed
 
 	// This function has three different results, depending on arguments:
-	// - random() returns a real number in [0,1), just like Math.random()
-	// - random(n) returns an integer in [0,n)
-	// - random(m,n) returns an integer in [m,n)
+	// - random() returns a real number in [0, 1), just like Math.random()
+	// - random(n) returns an integer in [0, n)
+	// - random(m, n) returns an integer in [m, n)
 
 	// m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
 
-	Battle.prototype.random = function(m, n) {
+	Battle.prototype.random = function (m, n) {
 		this.seed = this.nextFrame(); // Advance the RNG
 		var result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
 		m = Math.floor(m);
 		n = Math.floor(n);
-		result = (m ? (n ? Math.floor(result*(n-m) / 0x100000000)+m : Math.floor(result*m / 0x100000000)) : result/0x100000000);
-		this.debug('randBW(' + (m ? (n ? m + ',' + n : m) : '') + ') = ' + result);
+		result = (m ? (n ? Math.floor(result * (n - m) / 0x100000000) + m : Math.floor(result * m / 0x100000000)) : result / 0x100000000);
+		this.debug('randBW(' + (m ? (n ? m + ', ' + n : m) : '') + ') = ' + result);
 		return result;
 	};
 
-	Battle.prototype.nextFrame = function(n) {
+	Battle.prototype.nextFrame = function (n) {
 		var seed = this.seed;
 		n = n || 1;
 		for (var frame = 0; frame < n; ++frame) {
-			// The RNG is a Linear Congruential Generator (LCG) in the form: x_n+1 = (a x_n + c) % m
+			// The RNG is a Linear Congruential Generator (LCG) in the form: x_{n + 1} = (a x_n + c) % m
 			// Where: x_0 is the seed, x_n is the random number after n iterations,
 			//     a = 0x5D588B656C078965, c = 0x00269EC3 and m = 2^64
 			// Javascript doesnt handle such large numbers properly, so this function does it in 16-bit parts.
-			// x_n+1 = (x_n * a) + c
+			// x_{n + 1} = (x_n * a) + c
 			// Let any 64 bit number n = (n[0] << 48) + (n[1] << 32) + (n[2] << 16) + n[3]
-			// Then x_n+1 =
+			// Then x_{n + 1} =
 			//     ((a[3] x_n[0] + a[2] x_n[1] + a[1] x_n[2] + a[0] x_n[3] + c[0]) << 48) +
 			//     ((a[3] x_n[1] + a[2] x_n[2] + a[1] x_n[3] + c[1]) << 32) +
 			//     ((a[3] x_n[2] + a[2] x_n[3] + c[2]) << 16) +
@@ -1513,7 +1498,7 @@ var Battle = (function() {
 			//     ((a[b-1] x_n[0] + a[b-2] x_n[1] + ... + a[1] x_n[b-2] + a[0] + x_n[b-1] + c[0]) << (16 * (b-1)))
 			// Which produces this equation: \sum_{l=0}^{b-1}\left(\sum_{m=b-l-1}^{b-1}\left\{a[2b-m-l-2] x_n[m]\right\}+c[b-l-1]\ll16l\right)
 			// This is all ignoring overflow/carry because that cannot be shown in a pseudo-mathematical equation.
-			// The below code implements a simplified version of that equation while also checking for overflow/carry.
+			// The below code implements a optimised version of that equation while also checking for overflow/carry.
 
 			var a = [0x5D58, 0x8B65, 0x6C07, 0x8965];
 			var c = [0, 0, 0x26, 0x9EC3];
@@ -1542,7 +1527,7 @@ var Battle = (function() {
 		return seed;
 	};
 
-	Battle.prototype.setWeather = function(status, source, sourceEffect) {
+	Battle.prototype.setWeather = function (status, source, sourceEffect) {
 		status = this.getEffect(status);
 		if (sourceEffect === undefined && this.effect) sourceEffect = this.effect;
 		if (source === undefined && this.event && this.event.target) source = this.event.target;
@@ -1574,28 +1559,28 @@ var Battle = (function() {
 		this.update();
 		return true;
 	};
-	Battle.prototype.clearWeather = function() {
+	Battle.prototype.clearWeather = function () {
 		return this.setWeather('');
 	};
-	Battle.prototype.effectiveWeather = function(target) {
+	Battle.prototype.effectiveWeather = function (target) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 		}
 		if (!this.runEvent('TryWeather', target)) return '';
 		return this.weather;
 	};
-	Battle.prototype.isWeather = function(weather, target) {
+	Battle.prototype.isWeather = function (weather, target) {
 		var ourWeather = this.effectiveWeather(target);
 		if (!Array.isArray(weather)) {
 			return ourWeather === toId(weather);
 		}
 		return (weather.map(toId).indexOf(ourWeather) >= 0);
 	};
-	Battle.prototype.getWeather = function() {
+	Battle.prototype.getWeather = function () {
 		return this.getEffect(this.weather);
 	};
 
-	Battle.prototype.setTerrain = function(status, source, sourceEffect) {
+	Battle.prototype.setTerrain = function (status, source, sourceEffect) {
 		status = this.getEffect(status);
 		if (sourceEffect === undefined && this.effect) sourceEffect = this.effect;
 		if (source === undefined && this.event && this.event.target) source = this.event.target;
@@ -1627,31 +1612,31 @@ var Battle = (function() {
 		this.update();
 		return true;
 	};
-	Battle.prototype.clearTerrain = function() {
+	Battle.prototype.clearTerrain = function () {
 		return this.setTerrain('');
 	};
-	Battle.prototype.effectiveTerrain = function(target) {
+	Battle.prototype.effectiveTerrain = function (target) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 		}
 		if (!this.runEvent('TryTerrain', target)) return '';
 		return this.terrain;
 	};
-	Battle.prototype.isTerrain = function(terrain, target) {
+	Battle.prototype.isTerrain = function (terrain, target) {
 		var ourTerrain = this.effectiveTerrain(target);
 		if (!Array.isArray(terrain)) {
 			return ourTerrain === toId(terrain);
 		}
 		return (terrain.map(toId).indexOf(ourTerrain) >= 0);
 	};
-	Battle.prototype.getTerrain = function() {
+	Battle.prototype.getTerrain = function () {
 		return this.getEffect(this.terrain);
 	};
 
-	Battle.prototype.getFormat = function() {
+	Battle.prototype.getFormat = function () {
 		return this.getEffect(this.format);
 	};
-	Battle.prototype.addPseudoWeather = function(status, source, sourceEffect) {
+	Battle.prototype.addPseudoWeather = function (status, source, sourceEffect) {
 		status = this.getEffect(status);
 		if (this.pseudoWeather[status.id]) {
 			if (!status.onRestart) return false;
@@ -1675,12 +1660,12 @@ var Battle = (function() {
 		this.update();
 		return true;
 	};
-	Battle.prototype.getPseudoWeather = function(status) {
+	Battle.prototype.getPseudoWeather = function (status) {
 		status = this.getEffect(status);
 		if (!this.pseudoWeather[status.id]) return null;
 		return status;
 	};
-	Battle.prototype.removePseudoWeather = function(status) {
+	Battle.prototype.removePseudoWeather = function (status) {
 		status = this.getEffect(status);
 		if (!this.pseudoWeather[status.id]) return false;
 		this.singleEvent('End', status, this.pseudoWeather[status.id], this);
@@ -1688,7 +1673,7 @@ var Battle = (function() {
 		this.update();
 		return true;
 	};
-	Battle.prototype.setActiveMove = function(move, pokemon, target) {
+	Battle.prototype.setActiveMove = function (move, pokemon, target) {
 		if (!move) move = null;
 		if (!pokemon) pokemon = null;
 		if (!target) target = pokemon;
@@ -1699,7 +1684,7 @@ var Battle = (function() {
 		// Mold Breaker and the like
 		this.update();
 	};
-	Battle.prototype.clearActiveMove = function(failed) {
+	Battle.prototype.clearActiveMove = function (failed) {
 		if (this.activeMove) {
 			if (!failed) {
 				this.lastMove = this.activeMove.id;
@@ -1713,19 +1698,19 @@ var Battle = (function() {
 		}
 	};
 
-	Battle.prototype.update = function() {
+	Battle.prototype.update = function () {
 		var actives = this.p1.active;
-		for (var i=0; i<actives.length; i++) {
+		for (var i = 0; i < actives.length; i++) {
 			if (actives[i]) actives[i].update();
 		}
 		actives = this.p2.active;
-		for (var i=0; i<actives.length; i++) {
+		for (var i = 0; i < actives.length; i++) {
 			if (actives[i]) actives[i].update();
 		}
 	};
 
 	// bubbles up
-	Battle.comparePriority = function(a, b) { // intentionally not in Battle.prototype
+	Battle.comparePriority = function (a, b) { // intentionally not in Battle.prototype
 		a.priority = a.priority || 0;
 		a.subPriority = a.subPriority || 0;
 		a.speed = a.speed || 0;
@@ -1734,10 +1719,10 @@ var Battle = (function() {
 		b.speed = b.speed || 0;
 		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
 			if (typeof a.order !== 'number') {
-				return -(1);
+				return -1;
 			}
 			if (typeof b.order !== 'number') {
-				return -(-1);
+				return 1;
 			}
 			if (b.order - a.order) {
 				return -(b.order - a.order);
@@ -1752,37 +1737,37 @@ var Battle = (function() {
 		if (b.subOrder - a.subOrder) {
 			return -(b.subOrder - a.subOrder);
 		}
-		return Math.random()-0.5;
+		return Math.random() - 0.5;
 	};
-	Battle.prototype.getResidualStatuses = function(thing, callbackType) {
+	Battle.prototype.getResidualStatuses = function (thing, callbackType) {
 		var statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
 		statuses.sort(Battle.comparePriority);
-		//if (statuses[0]) this.debug('match '+(callbackType||'residualCallback')+': '+statuses[0].status.id);
+		//if (statuses[0]) this.debug('match ' + (callbackType || 'residualCallback') + ': ' + statuses[0].status.id);
 		return statuses;
 	};
-	Battle.prototype.eachEvent = function(eventid, effect, relayVar) {
+	Battle.prototype.eachEvent = function (eventid, effect, relayVar) {
 		var actives = [];
 		if (!effect && this.effect) effect = this.effect;
-		for (var i=0; i<this.sides.length;i++) {
+		for (var i = 0; i < this.sides.length;i++) {
 			var side = this.sides[i];
-			for (var j=0; j<side.active.length; j++) {
+			for (var j = 0; j < side.active.length; j++) {
 				if (side.active[j]) actives.push(side.active[j]);
 			}
 		}
-		actives.sort(function(a, b) {
+		actives.sort(function (a, b) {
 			if (b.speed - a.speed) {
 				return b.speed - a.speed;
 			}
-			return Math.random()-0.5;
+			return Math.random() - 0.5;
 		});
-		for (var i=0; i<actives.length; i++) {
+		for (var i = 0; i < actives.length; i++) {
 			if (actives[i].isStarted) {
 				this.runEvent(eventid, actives[i], null, effect, relayVar);
 			}
 		}
 	};
-	Battle.prototype.residualEvent = function(eventid, relayVar) {
-		var statuses = this.getRelevantEffectsInner(this, 'on'+eventid, null, null, false, true, 'duration');
+	Battle.prototype.residualEvent = function (eventid, relayVar) {
+		var statuses = this.getRelevantEffectsInner(this, 'on' + eventid, null, null, false, true, 'duration');
 		statuses.sort(Battle.comparePriority);
 		while (statuses.length) {
 			var statusObj = statuses.shift();
@@ -1799,18 +1784,18 @@ var Battle = (function() {
 		}
 	};
 	// The entire event system revolves around this function
-	// (and its helper functions, getRelevant*)
-	Battle.prototype.singleEvent = function(eventid, effect, effectData, target, source, sourceEffect, relayVar) {
+	// (and its helper functions, getRelevant * )
+	Battle.prototype.singleEvent = function (eventid, effect, effectData, target, source, sourceEffect, relayVar) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
 			this.add('message', 'PLEASE REPORT IN BUG THREAD');
-			this.add('message', 'Event: '+eventid);
-			this.add('message', 'Parent event: '+this.event.id);
+			this.add('message', 'Event: ' + eventid);
+			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
 			return false;
 		}
-		//this.add('Event: '+eventid+' (depth '+this.eventDepth+')');
+		//this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
 		effect = this.getEffect(effect);
 		var hasRelayVar = true;
 		if (relayVar === undefined) {
@@ -1823,15 +1808,15 @@ var Battle = (function() {
 			return relayVar;
 		}
 		if (target.ignore && target.ignore[effect.effectType]) {
-			this.debug(eventid+' handler suppressed by Gastro Acid, Klutz or Magic Room');
+			this.debug(eventid + ' handler suppressed by Gastro Acid, Klutz or Magic Room');
 			return relayVar;
 		}
-		if (target.ignore && target.ignore[effect.effectType+'Target']) {
-			this.debug(eventid+' handler suppressed by Air Lock');
+		if (target.ignore && target.ignore[effect.effectType + 'Target']) {
+			this.debug(eventid + ' handler suppressed by Air Lock');
 			return relayVar;
 		}
 
-		if (effect['on'+eventid] === undefined) return relayVar;
+		if (effect['on' + eventid] === undefined) return relayVar;
 		var parentEffect = this.effect;
 		var parentEffectData = this.effectData;
 		var parentEvent = this.event;
@@ -1842,10 +1827,10 @@ var Battle = (function() {
 		var args = [target, source, sourceEffect];
 		if (hasRelayVar) args.unshift(relayVar);
 		var returnVal;
-		if (typeof effect['on'+eventid] === 'function') {
-			returnVal = effect['on'+eventid].apply(this, args);
+		if (typeof effect['on' + eventid] === 'function') {
+			returnVal = effect['on' + eventid].apply(this, args);
 		} else {
-			returnVal = effect['on'+eventid];
+			returnVal = effect['on' + eventid];
 		}
 		this.eventDepth--;
 		this.effect = parentEffect;
@@ -1890,11 +1875,11 @@ var Battle = (function() {
 	 * can modify what happens during an event.
 	 *
 	 * event handlers are passed:
-	 *   function(target, source, effect)
+	 *   function (target, source, effect)
 	 * although some of these can be blank.
 	 *
 	 * certain events have a relay variable, in which case they're passed:
-	 *   function(relayVar, target, source, effect)
+	 *   function (relayVar, target, source, effect)
 	 *
 	 * Relay variables are variables that give additional information about the
 	 * event. For instance, the damage event has a relayVar which is the amount
@@ -1958,22 +1943,22 @@ var Battle = (function() {
 	 *   variables that are passed as arguments to the event handler, but
 	 *   they're useful for functions called by the event handler.
 	 */
-	Battle.prototype.runEvent = function(eventid, target, source, effect, relayVar, onEffect) {
+	Battle.prototype.runEvent = function (eventid, target, source, effect, relayVar, onEffect) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
 			this.add('message', 'PLEASE REPORT IN BUG THREAD');
-			this.add('message', 'Event: '+eventid);
-			this.add('message', 'Parent event: '+this.event.id);
+			this.add('message', 'Event: ' + eventid);
+			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
 			return false;
 		}
 		if (!target) target = this;
-		var statuses = this.getRelevantEffects(target, 'on'+eventid, 'onSource'+eventid, source);
+		var statuses = this.getRelevantEffects(target, 'on' + eventid, 'onSource' + eventid, source);
 		var hasRelayVar = true;
 		effect = this.getEffect(effect);
 		var args = [target, source, effect];
-		//console.log('Event: '+eventid+' (depth '+this.eventDepth+') t:'+target.id+' s:'+(!source||source.id)+' e:'+effect.id);
+		//console.log('Event: ' + eventid + ' (depth ' + this.eventDepth + ') t:' + target.id + ' s:' + (!source || source.id) + ' e:' + effect.id);
 		if (relayVar === undefined || relayVar === null) {
 			relayVar = true;
 			hasRelayVar = false;
@@ -1985,13 +1970,13 @@ var Battle = (function() {
 		this.event = {id: eventid, target: target, source: source, effect: effect, modifier: 1};
 		this.eventDepth++;
 
-		if (onEffect && 'on'+eventid in effect) {
-			statuses.unshift({status: effect, callback: effect['on'+eventid], statusData: {}, end: null, thing: target});
+		if (onEffect && 'on' + eventid in effect) {
+			statuses.unshift({status: effect, callback: effect['on' + eventid], statusData: {}, end: null, thing: target});
 		}
-		for (var i=0; i<statuses.length; i++) {
+		for (var i = 0; i < statuses.length; i++) {
 			var status = statuses[i].status;
 			var thing = statuses[i].thing;
-			//this.debug('match '+eventid+': '+status.id+' '+status.effectType);
+			//this.debug('match ' + eventid + ': ' + status.id + ' ' + status.effectType);
 			if (status.effectType === 'Status' && thing.status !== status.id) {
 				// it's changed; call it off
 				continue;
@@ -2024,18 +2009,18 @@ var Battle = (function() {
 				};
 				if (eventid in AttackingEvents) {
 					if (eventid !== 'ModifyPokemon') {
-						this.debug(eventid+' handler suppressed by Mold Breaker');
+						this.debug(eventid + ' handler suppressed by Mold Breaker');
 					}
 					continue;
 				}
 			} else if (thing.ignore && thing.ignore[status.effectType]) {
 				if (eventid !== 'ModifyPokemon' && eventid !== 'Update') {
-					this.debug(eventid+' handler suppressed by Gastro Acid, Klutz or Magic Room');
+					this.debug(eventid + ' handler suppressed by Gastro Acid, Klutz or Magic Room');
 				}
 				continue;
 			}
-			if (target.ignore && (target.ignore[status.effectType+'Target'] || target.ignore[eventid+'Target'])) {
-				this.debug(eventid+' handler suppressed by Air Lock');
+			if (target.ignore && (target.ignore[status.effectType + 'Target'] || target.ignore[eventid + 'Target'])) {
+				this.debug(eventid + ' handler suppressed by Air Lock');
 				continue;
 			}
 			var returnVal;
@@ -2065,25 +2050,25 @@ var Battle = (function() {
 
 		this.eventDepth--;
 		if (this.event.modifier !== 1 && typeof relayVar === 'number') {
-			// this.debug(eventid+' modifier: 0x'+('0000'+(this.event.modifier * 4096).toString(16)).slice(-4).toUpperCase());
+			// this.debug(eventid + ' modifier: 0x' + ('0000' + (this.event.modifier * 4096).toString(16)).slice(-4).toUpperCase());
 			relayVar = this.modify(relayVar, this.event.modifier);
 		}
 		this.event = parentEvent;
 
 		return relayVar;
 	};
-	Battle.prototype.resolveLastPriority = function(statuses, callbackType) {
+	Battle.prototype.resolveLastPriority = function (statuses, callbackType) {
 		var order = false;
 		var priority = 0;
 		var subOrder = 0;
-		var status = statuses[statuses.length-1];
-		if (status.status[callbackType+'Order']) {
-			order = status.status[callbackType+'Order'];
+		var status = statuses[statuses.length - 1];
+		if (status.status[callbackType + 'Order']) {
+			order = status.status[callbackType + 'Order'];
 		}
-		if (status.status[callbackType+'Priority']) {
-			priority = status.status[callbackType+'Priority'];
-		} else if (status.status[callbackType+'SubOrder']) {
-			subOrder = status.status[callbackType+'SubOrder'];
+		if (status.status[callbackType + 'Priority']) {
+			priority = status.status[callbackType + 'Priority'];
+		} else if (status.status[callbackType + 'SubOrder']) {
+			subOrder = status.status[callbackType + 'SubOrder'];
 		}
 
 		status.order = order;
@@ -2092,13 +2077,13 @@ var Battle = (function() {
 		if (status.thing && status.thing.getStat) status.speed = status.thing.speed;
 	};
 	// bubbles up to parents
-	Battle.prototype.getRelevantEffects = function(thing, callbackType, foeCallbackType, foeThing, checkChildren) {
+	Battle.prototype.getRelevantEffects = function (thing, callbackType, foeCallbackType, foeThing, checkChildren) {
 		var statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
 		statuses.sort(Battle.comparePriority);
-		//if (statuses[0]) this.debug('match '+callbackType+': '+statuses[0].status.id);
+		//if (statuses[0]) this.debug('match ' + callbackType + ': ' + statuses[0].status.id);
 		return statuses;
 	};
-	Battle.prototype.getRelevantEffectsInner = function(thing, callbackType, foeCallbackType, foeThing, bubbleUp, bubbleDown, getAll) {
+	Battle.prototype.getRelevantEffectsInner = function (thing, callbackType, foeCallbackType, foeThing, bubbleUp, bubbleDown, getAll) {
 		if (!callbackType || !thing) return [];
 		var statuses = [];
 		var status;
@@ -2108,27 +2093,27 @@ var Battle = (function() {
 				status = this.getPseudoWeather(i);
 				if (status[callbackType] !== undefined || (getAll && thing.pseudoWeather[i][getAll])) {
 					statuses.push({status: status, callback: status[callbackType], statusData: this.pseudoWeather[i], end: this.removePseudoWeather, thing: thing});
-					this.resolveLastPriority(statuses,callbackType);
+					this.resolveLastPriority(statuses, callbackType);
 				}
 			}
 			status = this.getWeather();
 			if (status[callbackType] !== undefined || (getAll && thing.weatherData[getAll])) {
-				statuses.push({status: status, callback: status[callbackType], statusData: this.weatherData, end: this.clearWeather, thing: thing, priority: status[callbackType+'Priority']||0});
-				this.resolveLastPriority(statuses,callbackType);
+				statuses.push({status: status, callback: status[callbackType], statusData: this.weatherData, end: this.clearWeather, thing: thing, priority: status[callbackType + 'Priority'] || 0});
+				this.resolveLastPriority(statuses, callbackType);
 			}
 			status = this.getTerrain();
 			if (status[callbackType] !== undefined || (getAll && thing.terrainData[getAll])) {
-				statuses.push({status: status, callback: status[callbackType], statusData: this.terrainData, end: this.clearTerrain, thing: thing, priority: status[callbackType+'Priority']||0});
-				this.resolveLastPriority(statuses,callbackType);
+				statuses.push({status: status, callback: status[callbackType], statusData: this.terrainData, end: this.clearTerrain, thing: thing, priority: status[callbackType + 'Priority'] || 0});
+				this.resolveLastPriority(statuses, callbackType);
 			}
 			status = this.getFormat();
 			if (status[callbackType] !== undefined || (getAll && thing.formatData[getAll])) {
-				statuses.push({status: status, callback: status[callbackType], statusData: this.formatData, end: function(){}, thing: thing, priority: status[callbackType+'Priority']||0});
-				this.resolveLastPriority(statuses,callbackType);
+				statuses.push({status: status, callback: status[callbackType], statusData: this.formatData, end: function (){}, thing: thing, priority: status[callbackType + 'Priority'] || 0});
+				this.resolveLastPriority(statuses, callbackType);
 			}
 			if (bubbleDown) {
-				statuses = statuses.concat(this.getRelevantEffectsInner(this.p1, callbackType,null,null,false,true, getAll));
-				statuses = statuses.concat(this.getRelevantEffectsInner(this.p2, callbackType,null,null,false,true, getAll));
+				statuses = statuses.concat(this.getRelevantEffectsInner(this.p1, callbackType, null, null, false, true, getAll));
+				statuses = statuses.concat(this.getRelevantEffectsInner(this.p2, callbackType, null, null, false, true, getAll));
 			}
 			return statuses;
 		}
@@ -2138,18 +2123,18 @@ var Battle = (function() {
 				status = thing.getSideCondition(i);
 				if (status[callbackType] !== undefined || (getAll && thing.sideConditions[i][getAll])) {
 					statuses.push({status: status, callback: status[callbackType], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing});
-					this.resolveLastPriority(statuses,callbackType);
+					this.resolveLastPriority(statuses, callbackType);
 				}
 			}
 			if (foeCallbackType) {
-				statuses = statuses.concat(this.getRelevantEffectsInner(thing.foe, foeCallbackType,null,null,false,false, getAll));
+				statuses = statuses.concat(this.getRelevantEffectsInner(thing.foe, foeCallbackType, null, null, false, false, getAll));
 			}
 			if (bubbleUp) {
-				statuses = statuses.concat(this.getRelevantEffectsInner(this, callbackType,null,null,true,false, getAll));
+				statuses = statuses.concat(this.getRelevantEffectsInner(this, callbackType, null, null, true, false, getAll));
 			}
 			if (bubbleDown) {
-				for (var i=0;i<thing.active.length;i++) {
-					statuses = statuses.concat(this.getRelevantEffectsInner(thing.active[i], callbackType,null,null,false,true, getAll));
+				for (var i = 0;i < thing.active.length;i++) {
+					statuses = statuses.concat(this.getRelevantEffectsInner(thing.active[i], callbackType, null, null, false, true, getAll));
 				}
 			}
 			return statuses;
@@ -2162,60 +2147,60 @@ var Battle = (function() {
 		var status = thing.getStatus();
 		if (status[callbackType] !== undefined || (getAll && thing.statusData[getAll])) {
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.statusData, end: thing.clearStatus, thing: thing});
-			this.resolveLastPriority(statuses,callbackType);
+			this.resolveLastPriority(statuses, callbackType);
 		}
 		for (var i in thing.volatiles) {
 			status = thing.getVolatile(i);
 			if (status[callbackType] !== undefined || (getAll && thing.volatiles[i][getAll])) {
 				statuses.push({status: status, callback: status[callbackType], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing});
-				this.resolveLastPriority(statuses,callbackType);
+				this.resolveLastPriority(statuses, callbackType);
 			}
 		}
 		status = thing.getAbility();
 		if (status[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
-			this.resolveLastPriority(statuses,callbackType);
+			this.resolveLastPriority(statuses, callbackType);
 		}
 		status = thing.getItem();
 		if (status[callbackType] !== undefined || (getAll && thing.itemData[getAll])) {
 			statuses.push({status: status, callback: status[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
-			this.resolveLastPriority(statuses,callbackType);
+			this.resolveLastPriority(statuses, callbackType);
 		}
 		status = this.getEffect(thing.template.baseSpecies);
 		if (status[callbackType] !== undefined) {
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.speciesData, end: function(){}, thing: thing});
-			this.resolveLastPriority(statuses,callbackType);
+			statuses.push({status: status, callback: status[callbackType], statusData: thing.speciesData, end: function (){}, thing: thing});
+			this.resolveLastPriority(statuses, callbackType);
 		}
 
-		if (foeThing && foeCallbackType && foeCallbackType.substr(0,8) !== 'onSource') {
-			statuses = statuses.concat(this.getRelevantEffectsInner(foeThing, foeCallbackType,null,null,false,false, getAll));
+		if (foeThing && foeCallbackType && foeCallbackType.substr(0, 8) !== 'onSource') {
+			statuses = statuses.concat(this.getRelevantEffectsInner(foeThing, foeCallbackType, null, null, false, false, getAll));
 		} else if (foeCallbackType) {
 			var foeActive = thing.side.foe.active;
 			var allyActive = thing.side.active;
 			var eventName = '';
-			if (foeCallbackType.substr(0,8) === 'onSource') {
+			if (foeCallbackType.substr(0, 8) === 'onSource') {
 				eventName = foeCallbackType.substr(8);
 				if (foeThing) {
-					statuses = statuses.concat(this.getRelevantEffectsInner(foeThing, foeCallbackType,null,null,false,false, getAll));
+					statuses = statuses.concat(this.getRelevantEffectsInner(foeThing, foeCallbackType, null, null, false, false, getAll));
 				}
-				foeCallbackType = 'onFoe'+eventName;
+				foeCallbackType = 'onFoe' + eventName;
 				foeThing = null;
 			}
-			if (foeCallbackType.substr(0,5) === 'onFoe') {
+			if (foeCallbackType.substr(0, 5) === 'onFoe') {
 				eventName = foeCallbackType.substr(5);
-				for (var i=0; i<allyActive.length; i++) {
+				for (var i = 0; i < allyActive.length; i++) {
 					if (!allyActive[i] || allyActive[i].fainted) continue;
-					statuses = statuses.concat(this.getRelevantEffectsInner(allyActive[i], 'onAlly'+eventName,null,null,false,false, getAll));
-					statuses = statuses.concat(this.getRelevantEffectsInner(allyActive[i], 'onAny'+eventName,null,null,false,false, getAll));
+					statuses = statuses.concat(this.getRelevantEffectsInner(allyActive[i], 'onAlly' + eventName, null, null, false, false, getAll));
+					statuses = statuses.concat(this.getRelevantEffectsInner(allyActive[i], 'onAny' + eventName, null, null, false, false, getAll));
 				}
-				for (var i=0; i<foeActive.length; i++) {
+				for (var i = 0; i < foeActive.length; i++) {
 					if (!foeActive[i] || foeActive[i].fainted) continue;
-					statuses = statuses.concat(this.getRelevantEffectsInner(foeActive[i], 'onAny'+eventName,null,null,false,false, getAll));
+					statuses = statuses.concat(this.getRelevantEffectsInner(foeActive[i], 'onAny' + eventName, null, null, false, false, getAll));
 				}
 			}
-			for (var i=0; i<foeActive.length; i++) {
+			for (var i = 0; i < foeActive.length; i++) {
 				if (!foeActive[i] || foeActive[i].fainted) continue;
-				statuses = statuses.concat(this.getRelevantEffectsInner(foeActive[i], foeCallbackType,null,null,false,false, getAll));
+				statuses = statuses.concat(this.getRelevantEffectsInner(foeActive[i], foeCallbackType, null, null, false, false, getAll));
 			}
 		}
 		if (bubbleUp) {
@@ -2223,19 +2208,19 @@ var Battle = (function() {
 		}
 		return statuses;
 	};
-	Battle.prototype.getPokemon = function(id) {
+	Battle.prototype.getPokemon = function (id) {
 		if (typeof id !== 'string') id = id.id;
-		for (var i=0; i<this.p1.pokemon.length; i++) {
+		for (var i = 0; i < this.p1.pokemon.length; i++) {
 			var pokemon = this.p1.pokemon[i];
 			if (pokemon.id === id) return pokemon;
 		}
-		for (var i=0; i<this.p2.pokemon.length; i++) {
+		for (var i = 0; i < this.p2.pokemon.length; i++) {
 			var pokemon = this.p2.pokemon[i];
 			if (pokemon.id === id) return pokemon;
 		}
 		return null;
 	};
-	Battle.prototype.makeRequest = function(type, requestDetails) {
+	Battle.prototype.makeRequest = function (type, requestDetails) {
 		if (!this.p1.isActive || !this.p2.isActive) {
 			return;
 		}
@@ -2287,7 +2272,7 @@ var Battle = (function() {
 			break;
 
 		case 'teampreview':
-			this.add('teampreview'+(requestDetails?'|'+requestDetails:''));
+			this.add('teampreview' + (requestDetails ? '|' + requestDetails : ''));
 			this.p1.currentRequest = 'teampreview';
 			p1request = {teamPreview: true, side: this.p1.getData(), rqid: this.rqid};
 			this.p2.currentRequest = 'teampreview';
@@ -2297,13 +2282,13 @@ var Battle = (function() {
 		default:
 			var activeData;
 			this.p1.currentRequest = 'move';
-			activeData = this.p1.active.map(function(pokemon) {
+			activeData = this.p1.active.map(function (pokemon) {
 				if (pokemon) return pokemon.getRequestData();
 			});
 			p1request = {active: activeData, side: this.p1.getData(), rqid: this.rqid};
 
 			this.p2.currentRequest = 'move';
-			activeData = this.p2.active.map(function(pokemon) {
+			activeData = this.p2.active.map(function (pokemon) {
 				if (pokemon) return pokemon.getRequestData();
 			});
 			p2request = {active: activeData, side: this.p2.getData(), rqid: this.rqid};
@@ -2353,10 +2338,10 @@ var Battle = (function() {
 			return;
 		}
 	};
-	Battle.prototype.tie = function() {
+	Battle.prototype.tie = function () {
 		this.win();
 	};
-	Battle.prototype.win = function(side) {
+	Battle.prototype.win = function (side) {
 		if (this.ended) {
 			return false;
 		}
@@ -2365,7 +2350,7 @@ var Battle = (function() {
 		} else if (side !== this.p1 && side !== this.p2) {
 			side = null;
 		}
-		this.winner = side?side.name:'';
+		this.winner = side ? side.name : '';
 
 		this.add('');
 		if (side) {
@@ -2378,7 +2363,7 @@ var Battle = (function() {
 		this.currentRequest = '';
 		return true;
 	};
-	Battle.prototype.switchIn = function(pokemon, pos) {
+	Battle.prototype.switchIn = function (pokemon, pos) {
 		if (!pokemon || pokemon.isActive) return false;
 		if (!pos) pos = 0;
 		var side = pokemon.side;
@@ -2417,9 +2402,9 @@ var Battle = (function() {
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
-	Battle.prototype.canSwitch = function(side) {
+	Battle.prototype.canSwitch = function (side) {
 		var canSwitchIn = [];
-		for (var i=side.active.length; i<side.pokemon.length; i++) {
+		for (var i = side.active.length; i < side.pokemon.length; i++) {
 			var pokemon = side.pokemon[i];
 			if (!pokemon.fainted) {
 				canSwitchIn.push(pokemon);
@@ -2427,9 +2412,9 @@ var Battle = (function() {
 		}
 		return canSwitchIn.length;
 	};
-	Battle.prototype.getRandomSwitchable = function(side) {
+	Battle.prototype.getRandomSwitchable = function (side) {
 		var canSwitchIn = [];
-		for (var i=side.active.length; i<side.pokemon.length; i++) {
+		for (var i = side.active.length; i < side.pokemon.length; i++) {
 			var pokemon = side.pokemon[i];
 			if (!pokemon.fainted) {
 				canSwitchIn.push(pokemon);
@@ -2440,7 +2425,7 @@ var Battle = (function() {
 		}
 		return canSwitchIn[this.random(canSwitchIn.length)];
 	};
-	Battle.prototype.dragIn = function(side, pos) {
+	Battle.prototype.dragIn = function (side, pos) {
 		if (pos >= side.active.length) return false;
 		var pokemon = this.getRandomSwitchable(side);
 		if (!pos) pos = 0;
@@ -2479,7 +2464,7 @@ var Battle = (function() {
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
 	};
-	Battle.prototype.swapPosition = function(source, newPos, from) {
+	Battle.prototype.swapPosition = function (source, newPos, from) {
 		var target = source.side.active[newPos];
 		if (target.fainted) return false;
 		var side = source.side;
@@ -2492,13 +2477,13 @@ var Battle = (function() {
 		this.add('swap', source, target, (from ? '[from] ' + from : ''));
 		return true;
 	};
-	Battle.prototype.faint = function(pokemon, source, effect) {
+	Battle.prototype.faint = function (pokemon, source, effect) {
 		pokemon.faint(source, effect);
 	};
-	Battle.prototype.nextTurn = function() {
+	Battle.prototype.nextTurn = function () {
 		this.turn++;
-		for (var i=0; i<this.sides.length; i++) {
-			for (var j=0; j<this.sides[i].active.length; j++) {
+		for (var i = 0; i < this.sides.length; i++) {
+			for (var j = 0; j < this.sides[i].active.length; j++) {
 				var pokemon = this.sides[i].active[j];
 				if (!pokemon) continue;
 				pokemon.moveThisTurn = '';
@@ -2515,7 +2500,7 @@ var Battle = (function() {
 		this.add('turn', this.turn);
 		this.makeRequest('move');
 	};
-	Battle.prototype.start = function() {
+	Battle.prototype.start = function () {
 		if (this.active) return;
 
 		if (!this.p1 || !this.p1.isActive || !this.p2 || !this.p2.isActive) {
@@ -2549,7 +2534,7 @@ var Battle = (function() {
 			this.add('rated');
 		}
 		if (format && format.ruleset) {
-			for (var i=0; i<format.ruleset.length; i++) {
+			for (var i = 0; i < format.ruleset.length; i++) {
 				this.addPseudoWeather(format.ruleset[i]);
 			}
 		}
@@ -2565,7 +2550,7 @@ var Battle = (function() {
 		this.midTurn = true;
 		if (!this.currentRequest) this.go();
 	};
-	Battle.prototype.boost = function(boost, target, source, effect) {
+	Battle.prototype.boost = function (boost, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -2593,7 +2578,7 @@ var Battle = (function() {
 					if (effect.effectType === 'Move') {
 						this.add(msg, target, i, boost[i]);
 					} else {
-						this.add(msg, target, i, boost[i], '[from] '+effect.fullname);
+						this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 					}
 					break;
 				}
@@ -2603,7 +2588,7 @@ var Battle = (function() {
 		this.runEvent('AfterBoost', target, source, effect, boost);
 		return success;
 	};
-	Battle.prototype.damage = function(damage, target, source, effect) {
+	Battle.prototype.damage = function (damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -2612,7 +2597,7 @@ var Battle = (function() {
 		if (!target || !target.hp) return 0;
 		effect = this.getEffect(effect);
 		if (!(damage || damage === 0)) return damage;
-		if (damage !== 0) damage = clampIntRange(damage, 1);
+		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 
 		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
 			if (effect.effectType === 'Weather' && !target.runImmunity(effect.id)) {
@@ -2630,28 +2615,28 @@ var Battle = (function() {
 				this.add('replace', target, target.getDetails);
 			}
 		}
-		if (damage !== 0) damage = clampIntRange(damage, 1);
+		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;
 		var name = effect.fullname;
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {
 		case 'partiallytrapped':
-			this.add('-damage', target, target.getHealth, '[from] '+this.effectData.sourceEffect.fullname, '[partiallytrapped]');
+			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
 			break;
 		default:
 			if (effect.effectType === 'Move') {
 				this.add('-damage', target, target.getHealth);
 			} else if (source && source !== target) {
-				this.add('-damage', target, target.getHealth, '[from] '+effect.fullname, '[of] '+source);
+				this.add('-damage', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
 			} else {
-				this.add('-damage', target, target.getHealth, '[from] '+name);
+				this.add('-damage', target, target.getHealth, '[from] ' + name);
 			}
 			break;
 		}
 
 		if (effect.recoil && source) {
-			this.damage(clampIntRange(Math.round(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
+			this.damage(this.clampIntRange(Math.round(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
 		}
 		if (effect.drain && source) {
 			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
@@ -2666,7 +2651,7 @@ var Battle = (function() {
 		}
 		return damage;
 	};
-	Battle.prototype.directDamage = function(damage, target, source, effect) {
+	Battle.prototype.directDamage = function (damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -2674,7 +2659,7 @@ var Battle = (function() {
 		}
 		if (!target || !target.hp) return 0;
 		if (!damage) return 0;
-		damage = clampIntRange(damage, 1);
+		damage = this.clampIntRange(damage, 1);
 
 		damage = target.damage(damage, source, effect);
 		switch (effect.id) {
@@ -2691,7 +2676,7 @@ var Battle = (function() {
 		if (target.fainted) this.faint(target);
 		return damage;
 	};
-	Battle.prototype.heal = function(damage, target, source, effect) {
+	Battle.prototype.heal = function (damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -2712,7 +2697,7 @@ var Battle = (function() {
 			this.add('-heal', target, target.getHealth, '[silent]');
 			break;
 		case 'drain':
-			this.add('-heal', target, target.getHealth, '[from] drain', '[of] '+source);
+			this.add('-heal', target, target.getHealth, '[from] drain', '[of] ' + source);
 			break;
 		case 'wish':
 			break;
@@ -2720,16 +2705,16 @@ var Battle = (function() {
 			if (effect.effectType === 'Move') {
 				this.add('-heal', target, target.getHealth);
 			} else if (source && source !== target) {
-				this.add('-heal', target, target.getHealth, '[from] '+effect.fullname, '[of] '+source);
+				this.add('-heal', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
 			} else {
-				this.add('-heal', target, target.getHealth, '[from] '+effect.fullname);
+				this.add('-heal', target, target.getHealth, '[from] ' + effect.fullname);
 			}
 			break;
 		}
 		this.runEvent('Heal', target, source, effect, damage);
 		return damage;
 	};
-	Battle.prototype.chain = function(previousMod, nextMod) {
+	Battle.prototype.chain = function (previousMod, nextMod) {
 		// previousMod or nextMod can be either a number or an array [numerator, denominator]
 		if (previousMod.length) previousMod = Math.floor(previousMod[0] * 4096 / previousMod[1]);
 		else previousMod = Math.floor(previousMod * 4096);
@@ -2737,7 +2722,7 @@ var Battle = (function() {
 		else nextMod = Math.floor(nextMod * 4096);
 		return ((previousMod * nextMod + 2048) >> 12) / 4096; // M'' = ((M * M') + 0x800) >> 12
 	};
-	Battle.prototype.chainModify = function(numerator, denominator) {
+	Battle.prototype.chainModify = function (numerator, denominator) {
 		var previousMod = Math.floor(this.event.modifier * 4096);
 
 		if (numerator.length) {
@@ -2746,14 +2731,14 @@ var Battle = (function() {
 		}
 		var nextMod = 0;
 		if (this.event.ceilModifier) {
-			nextMod = Math.ceil(numerator * 4096 / (denominator||1));
+			nextMod = Math.ceil(numerator * 4096 / (denominator || 1));
 		} else {
-			nextMod = Math.floor(numerator * 4096 / (denominator||1));
+			nextMod = Math.floor(numerator * 4096 / (denominator || 1));
 		}
 
 		this.event.modifier = ((previousMod * nextMod + 2048) >> 12) / 4096;
 	};
-	Battle.prototype.modify = function(value, numerator, denominator) {
+	Battle.prototype.modify = function (value, numerator, denominator) {
 		// You can also use:
 		// modify(value, [numerator, denominator])
 		// modify(value, fraction) - assuming you trust JavaScript's floating-point handler
@@ -2762,14 +2747,14 @@ var Battle = (function() {
 			denominator = numerator[1];
 			numerator = numerator[0];
 		}
-		var modifier = Math.floor(numerator*4096/denominator);
+		var modifier = Math.floor(numerator * 4096 / denominator);
 		return Math.floor((value * modifier + 2048 - 1) / 4096);
 	};
-	Battle.prototype.getCategory = function(move) {
+	Battle.prototype.getCategory = function (move) {
 		move = this.getMove(move);
 		return move.category || 'Physical';
 	};
-	Battle.prototype.getDamage = function(pokemon, target, move, suppressMessages) {
+	Battle.prototype.getDamage = function (pokemon, target, move, suppressMessages) {
 		if (typeof move === 'string') move = this.getMove(move);
 
 		if (typeof move === 'number') move = {
@@ -2825,13 +2810,13 @@ var Battle = (function() {
 			if (basePower === 0) return; // returning undefined means not dealing damage
 			return basePower;
 		}
-		basePower = clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		if (this.gen <= 5) {
-			move.critRatio = clampIntRange(move.critRatio, 0, 5);
+			move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
 			var critMult = [0, 16, 8, 4, 3, 2];
 		} else {
-			move.critRatio = clampIntRange(move.critRatio, 0, 4);
+			move.critRatio = this.clampIntRange(move.critRatio, 0, 4);
 			var critMult = [0, 16, 8, 2, 1];
 		}
 
@@ -2849,7 +2834,7 @@ var Battle = (function() {
 		basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 
 		if (!basePower) return 0;
-		basePower = clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		var level = pokemon.level;
 
@@ -2895,11 +2880,11 @@ var Battle = (function() {
 		else defense = defender.calculateStat(defenseStat, defBoosts);
 
 		// Apply Stat Modifiers
-		attack = this.runEvent('Modify'+statTable[attackStat], attacker, defender, move, attack);
-		defense = this.runEvent('Modify'+statTable[defenseStat], defender, attacker, move, defense);
+		attack = this.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
+		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
-		//int(int(int(2*L/5+2)*A*P/D)/50);
-		var baseDamage = Math.floor(Math.floor(Math.floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
+		//int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
+		var baseDamage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * basePower * attack / defense) / 50) + 2;
 
 		// multi-target modifier (doubles only)
 		if (move.spreadHit) {
@@ -2918,7 +2903,7 @@ var Battle = (function() {
 		// randomizer
 		// this is not a modifier
 		// gen 1-2
-		//var randFactor = Math.floor(Math.random()*39)+217;
+		//var randFactor = Math.floor(Math.random() * 39) + 217;
 		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
 		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
@@ -2937,19 +2922,19 @@ var Battle = (function() {
 			totalTypeMod = this.getEffectiveness(move, target, pokemon);
 		}
 
-		totalTypeMod = clampIntRange(totalTypeMod, -3, 3);
+		totalTypeMod = this.clampIntRange(totalTypeMod, -3, 3);
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
-			for (var i=0; i<totalTypeMod; i++) {
+			for (var i = 0; i < totalTypeMod; i++) {
 				baseDamage *= 2;
 			}
 		}
 		if (totalTypeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
 
-			for (var i=0; i>totalTypeMod; i--) {
-				baseDamage = Math.floor(baseDamage/2);
+			for (var i = 0; i > totalTypeMod; i--) {
+				baseDamage = Math.floor(baseDamage / 2);
 			}
 		}
 
@@ -2965,13 +2950,13 @@ var Battle = (function() {
 	/**
 	 * Returns whether a proposed target for a move is valid.
 	 */
-	Battle.prototype.validTargetLoc = function(targetLoc, source, targetType) {
+	Battle.prototype.validTargetLoc = function (targetLoc, source, targetType) {
 		var numSlots = source.side.active.length;
 		if (!Math.abs(targetLoc) && Math.abs(targetLoc) > numSlots) return false;
 
-		var sourceLoc = -(source.position+1);
+		var sourceLoc = -(source.position + 1);
 		var isFoe = (targetLoc > 0);
-		var isAdjacent = (isFoe ? Math.abs(-(numSlots+1-targetLoc)-sourceLoc)<=1 : Math.abs(targetLoc-sourceLoc)<=1);
+		var isAdjacent = (isFoe ? Math.abs(-(numSlots + 1 - targetLoc) - sourceLoc) <= 1 : Math.abs(targetLoc - sourceLoc) <= 1);
 		var isSelf = (sourceLoc === targetLoc);
 
 		switch (targetType) {
@@ -2989,24 +2974,25 @@ var Battle = (function() {
 		}
 		return false;
 	};
-	Battle.prototype.validTarget = function(target, source, targetType) {
-		var targetLoc;
-		if (target.side == source.side) {
-			targetLoc = -(target.position+1);
+	Battle.prototype.getTargetLoc = function (target, source) {
+		if (target.side === source.side) {
+			return -(target.position + 1);
 		} else {
-			targetLoc = target.position+1;
+			return target.position + 1;
 		}
-		return this.validTargetLoc(targetLoc, source, targetType);
 	};
-	Battle.prototype.getTarget = function(decision) {
+	Battle.prototype.validTarget = function (target, source, targetType) {
+		return this.validTargetLoc(this.getTargetLoc(target, source), source, targetType);
+	};
+	Battle.prototype.getTarget = function (decision) {
 		var move = this.getMove(decision.move);
 		var target;
 		if ((move.target !== 'randomNormal') &&
 				this.validTargetLoc(decision.targetLoc, decision.pokemon, move.target)) {
 			if (decision.targetLoc > 0) {
-				target = decision.pokemon.side.foe.active[decision.targetLoc-1];
+				target = decision.pokemon.side.foe.active[decision.targetLoc - 1];
 			} else {
-				target = decision.pokemon.side.active[(-decision.targetLoc)-1];
+				target = decision.pokemon.side.active[-decision.targetLoc - 1];
 			}
 			if (target) {
 				if (!target.fainted) {
@@ -3026,7 +3012,7 @@ var Battle = (function() {
 		}
 		return decision.targetSide.active[decision.targetPosition];
 	};
-	Battle.prototype.resolveTarget = function(pokemon, move) {
+	Battle.prototype.resolveTarget = function (pokemon, move) {
 		// A move was used without a chosen target
 
 		// For instance: Metronome chooses Ice Beam. Since the user didn't
@@ -3039,11 +3025,11 @@ var Battle = (function() {
 
 		move = this.getMove(move);
 		if (move.target === 'adjacentAlly' && pokemon.side.active.length > 1) {
-			if (pokemon.side.active[pokemon.position-1]) {
-				return pokemon.side.active[pokemon.position-1];
+			if (pokemon.side.active[pokemon.position - 1]) {
+				return pokemon.side.active[pokemon.position - 1];
 			}
-			else if (pokemon.side.active[pokemon.position+1]) {
-				return pokemon.side.active[pokemon.position+1];
+			else if (pokemon.side.active[pokemon.position + 1]) {
+				return pokemon.side.active[pokemon.position + 1];
 			}
 		}
 		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' || move.target === 'allyTeam' || move.target === 'adjacentAlly' || move.target === 'adjacentAllyOrSelf') {
@@ -3051,7 +3037,7 @@ var Battle = (function() {
 		}
 		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
 	};
-	Battle.prototype.checkFainted = function() {
+	Battle.prototype.checkFainted = function () {
 		function isFainted(a) {
 			if (!a) return false;
 			if (a.fainted) {
@@ -3064,7 +3050,7 @@ var Battle = (function() {
 		var p1fainted = this.p1.active.map(isFainted);
 		var p2fainted = this.p2.active.map(isFainted);
 	};
-	Battle.prototype.faintMessages = function() {
+	Battle.prototype.faintMessages = function () {
 		while (this.faintQueue.length) {
 			var faintData = this.faintQueue.shift();
 			if (!faintData.target.fainted) {
@@ -3091,10 +3077,10 @@ var Battle = (function() {
 		}
 		return false;
 	};
-	Battle.prototype.addQueue = function(decision, noSort, side) {
+	Battle.prototype.addQueue = function (decision, noSort, side) {
 		if (decision) {
 			if (Array.isArray(decision)) {
-				for (var i=0; i<decision.length; i++) {
+				for (var i = 0; i < decision.length; i++) {
 					this.addQueue(decision[i], noSort);
 				}
 				return;
@@ -3162,65 +3148,65 @@ var Battle = (function() {
 			this.queue.sort(Battle.comparePriority);
 		}
 	};
-	Battle.prototype.prioritizeQueue = function(decision, source, sourceEffect) {
+	Battle.prototype.prioritizeQueue = function (decision, source, sourceEffect) {
 		if (this.event) {
 			if (!source) source = this.event.source;
 			if (!sourceEffect) sourceEffect = this.effect;
 		}
-		for (var i=0; i<this.queue.length; i++) {
+		for (var i = 0; i < this.queue.length; i++) {
 			if (this.queue[i] === decision) {
-				this.queue.splice(i,1);
+				this.queue.splice(i, 1);
 				break;
 			}
 		}
 		decision.sourceEffect = sourceEffect;
 		this.queue.unshift(decision);
 	};
-	Battle.prototype.willAct = function() {
-		for (var i=0; i<this.queue.length; i++) {
+	Battle.prototype.willAct = function () {
+		for (var i = 0; i < this.queue.length; i++) {
 			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') {
 				return this.queue[i];
 			}
 		}
 		return null;
 	};
-	Battle.prototype.willMove = function(pokemon) {
-		for (var i=0; i<this.queue.length; i++) {
+	Battle.prototype.willMove = function (pokemon) {
+		for (var i = 0; i < this.queue.length; i++) {
 			if (this.queue[i].choice === 'move' && this.queue[i].pokemon === pokemon) {
 				return this.queue[i];
 			}
 		}
 		return null;
 	};
-	Battle.prototype.cancelDecision = function(pokemon) {
+	Battle.prototype.cancelDecision = function (pokemon) {
 		var success = false;
-		for (var i=0; i<this.queue.length; i++) {
+		for (var i = 0; i < this.queue.length; i++) {
 			if (this.queue[i].pokemon === pokemon) {
-				this.queue.splice(i,1);
+				this.queue.splice(i, 1);
 				i--;
 				success = true;
 			}
 		}
 		return success;
 	};
-	Battle.prototype.cancelMove = function(pokemon) {
-		for (var i=0; i<this.queue.length; i++) {
+	Battle.prototype.cancelMove = function (pokemon) {
+		for (var i = 0; i < this.queue.length; i++) {
 			if (this.queue[i].choice === 'move' && this.queue[i].pokemon === pokemon) {
-				this.queue.splice(i,1);
+				this.queue.splice(i, 1);
 				return true;
 			}
 		}
 		return false;
 	};
-	Battle.prototype.willSwitch = function(pokemon) {
-		for (var i=0; i<this.queue.length; i++) {
+	Battle.prototype.willSwitch = function (pokemon) {
+		for (var i = 0; i < this.queue.length; i++) {
 			if (this.queue[i].choice === 'switch' && this.queue[i].pokemon === pokemon) {
 				return true;
 			}
 		}
 		return false;
 	};
-	Battle.prototype.runDecision = function(decision) {
+	Battle.prototype.runDecision = function (decision) {
 		var pokemon;
 
 		// returns whether or not we ended in a callback
@@ -3231,17 +3217,17 @@ var Battle = (function() {
 			if (beginCallback) beginCallback.call(this);
 
 			this.add('start');
-			for (var pos=0; pos<this.p1.active.length; pos++) {
+			for (var pos = 0; pos < this.p1.active.length; pos++) {
 				this.switchIn(this.p1.pokemon[pos], pos);
 			}
-			for (var pos=0; pos<this.p2.active.length; pos++) {
+			for (var pos = 0; pos < this.p2.active.length; pos++) {
 				this.switchIn(this.p2.pokemon[pos], pos);
 			}
-			for (var pos=0; pos<this.p1.pokemon.length; pos++) {
+			for (var pos = 0; pos < this.p1.pokemon.length; pos++) {
 				pokemon = this.p1.pokemon[pos];
 				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
 			}
-			for (var pos=0; pos<this.p2.pokemon.length; pos++) {
+			for (var pos = 0; pos < this.p2.pokemon.length; pos++) {
 				pokemon = this.p2.pokemon[pos];
 				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
 			}
@@ -3258,30 +3244,30 @@ var Battle = (function() {
 		case 'beforeTurnMove':
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
-			this.debug('before turn callback: '+decision.move.id);
+			this.debug('before turn callback: ' + decision.move.id);
 			decision.move.beforeTurnCallback.call(this, decision.pokemon, this.getTarget(decision));
 			break;
 		case 'event':
 			this.runEvent(decision.event, decision.pokemon);
 			break;
 		case 'team':
-			var i = parseInt(decision.team[0], 10)-1;
+			var i = parseInt(decision.team[0], 10) - 1;
 			if (i >= 6 || i < 0) return;
 
 			if (decision.team[1]) {
 				// validate the choice
 				var len = decision.side.pokemon.length;
-				var newPokemon = [null,null,null,null,null,null].slice(0, len);
-				for (var j=0; j<len; j++) {
-					var i = parseInt(decision.team[j], 10)-1;
+				var newPokemon = [null, null, null, null, null, null].slice(0, len);
+				for (var j = 0; j < len; j++) {
+					var i = parseInt(decision.team[j], 10) - 1;
 					newPokemon[j] = decision.side.pokemon[i];
 				}
 				var reject = false;
-				for (var j=0; j<len; j++) {
+				for (var j = 0; j < len; j++) {
 					if (!newPokemon[j]) reject = true;
 				}
 				if (!reject) {
-					for (var j=0; j<len; j++) {
+					for (var j = 0; j < len; j++) {
 						newPokemon[j].position = j;
 					}
 					decision.side.pokemon = newPokemon;
@@ -3289,7 +3275,7 @@ var Battle = (function() {
 				}
 			}
 
-			if (i == 0) return;
+			if (i === 0) return;
 			pokemon = decision.side.pokemon[i];
 			if (!pokemon) return;
 			decision.side.pokemon[i] = decision.side.pokemon[0];
@@ -3369,7 +3355,7 @@ var Battle = (function() {
 
 		if (!this.queue.length) this.checkFainted();
 
-		function hasSwitchFlag(a) { return a?a.switchFlag:false; }
+		function hasSwitchFlag(a) { return a ? a.switchFlag : false; }
 		function removeSwitchFlag(a) { if (a) a.switchFlag = false; }
 		var p1switch = this.p1.active.any(hasSwitchFlag);
 		var p2switch = this.p2.active.any(hasSwitchFlag);
@@ -3392,7 +3378,7 @@ var Battle = (function() {
 
 		return false;
 	};
-	Battle.prototype.go = function() {
+	Battle.prototype.go = function () {
 		this.add('');
 		if (this.currentRequest) {
 			this.currentRequest = '';
@@ -3441,7 +3427,7 @@ var Battle = (function() {
 	 * You probably want the OverrideDecision event (which doesn't
 	 * change priority order).
 	 */
-	Battle.prototype.changeDecision = function(pokemon, decision) {
+	Battle.prototype.changeDecision = function (pokemon, decision) {
 		this.cancelDecision(pokemon);
 		if (!decision.pokemon) decision.pokemon = pokemon;
 		this.addQueue(decision);
@@ -3450,7 +3436,7 @@ var Battle = (function() {
 	 * Takes a choice string passed from the client. Starts the next
 	 * turn if all required choices have been made.
 	 */
-	Battle.prototype.choose = function(sideid, choice, rqid) {
+	Battle.prototype.choose = function (sideid, choice, rqid) {
 		var side = null;
 		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
 		// This condition should be impossible because the sideid comes
@@ -3478,7 +3464,7 @@ var Battle = (function() {
 			this.commitDecisions();
 		}
 	};
-	Battle.prototype.commitDecisions = function() {
+	Battle.prototype.commitDecisions = function () {
 		if (this.p1.decision !== true) {
 			this.addQueue(this.p1.decision, true, this.p1);
 		}
@@ -3495,7 +3481,7 @@ var Battle = (function() {
 
 		this.go();
 	};
-	Battle.prototype.undoChoice = function(sideid) {
+	Battle.prototype.undoChoice = function (sideid) {
 		var side = null;
 		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
 		// The following condition can never occur for the reasons given in
@@ -3517,7 +3503,7 @@ var Battle = (function() {
 	 *
 	 * Choice validation is also done here.
 	 */
-	Battle.prototype.parseChoice = function(choices, side) {
+	Battle.prototype.parseChoice = function (choices, side) {
 		var prevSwitches = {};
 		if (!side.currentRequest) return true;
 
@@ -3526,13 +3512,13 @@ var Battle = (function() {
 		var decisions = [];
 		var len = choices.length;
 		if (side.currentRequest === 'move') len = side.active.length;
-		for (var i=0; i<len; i++) {
-			var choice = (choices[i]||'').trim();
+		for (var i = 0; i < len; i++) {
+			var choice = (choices[i] || '').trim();
 
 			var data = '';
 			var firstSpaceIndex = choice.indexOf(' ');
 			if (firstSpaceIndex >= 0) {
-				data = choice.substr(firstSpaceIndex+1).trim();
+				data = choice.substr(firstSpaceIndex + 1).trim();
 				choice = choice.substr(0, firstSpaceIndex).trim();
 			}
 
@@ -3597,15 +3583,15 @@ var Battle = (function() {
 					}
 				}
 
-				data = parseInt(data, 10)-1;
+				data = parseInt(data, 10) - 1;
 				if (data < 0) data = 0;
-				if (data > side.pokemon.length-1) data = side.pokemon.length-1;
+				if (data > side.pokemon.length - 1) data = side.pokemon.length - 1;
 
 				if (!side.pokemon[data]) {
 					this.debug("Can't switch: You can't switch to a pokemon that doesn't exist");
 					return false;
 				}
-				if (data == i) {
+				if (data === i) {
 					this.debug("Can't switch: You can't switch to yourself");
 					return false;
 				}
@@ -3634,24 +3620,29 @@ var Battle = (function() {
 			case 'move':
 				var targetLoc = 0;
 				var pokemon = side.pokemon[i];
-				var validMoves = pokemon.getValidMoves();
+				var lockedMove = pokemon.getLockedMove();
+				var validMoves = pokemon.getValidMoves(lockedMove);
 				var moveid = '';
 
-				if (data.substr(data.length-2) === ' 1') targetLoc = 1;
-				if (data.substr(data.length-2) === ' 2') targetLoc = 2;
-				if (data.substr(data.length-2) === ' 3') targetLoc = 3;
-				if (data.substr(data.length-3) === ' -1') targetLoc = -1;
-				if (data.substr(data.length-3) === ' -2') targetLoc = -2;
-				if (data.substr(data.length-3) === ' -3') targetLoc = -3;
+				if (data.substr(data.length - 2) === ' 1') targetLoc = 1;
+				if (data.substr(data.length - 2) === ' 2') targetLoc = 2;
+				if (data.substr(data.length - 2) === ' 3') targetLoc = 3;
+				if (data.substr(data.length - 3) === ' -1') targetLoc = -1;
+				if (data.substr(data.length - 3) === ' -2') targetLoc = -2;
+				if (data.substr(data.length - 3) === ' -3') targetLoc = -3;
 
 				if (targetLoc) data = data.substr(0, data.lastIndexOf(' '));
 
-				if (data.substr(data.length-5) === ' mega') {
-					decisions.push({
-						choice: 'megaEvo',
-						pokemon: pokemon
-					});
-					data = data.substr(0, data.length-5);
+				if (lockedMove) targetLoc = (this.runEvent('LockMoveTarget', pokemon) || 0);
+
+				if (data.substr(data.length - 5) === ' mega') {
+					if (!lockedMove) {
+						decisions.push({
+							choice: 'megaEvo',
+							pokemon: pokemon
+						});
+					}
+					data = data.substr(0, data.length - 5);
 				}
 
 				if (data.search(/^[0-9]+$/) >= 0) {
@@ -3680,13 +3671,13 @@ var Battle = (function() {
 		}
 		return decisions;
 	};
-	Battle.prototype.add = function() {
+	Battle.prototype.add = function () {
 		var parts = Array.prototype.slice.call(arguments);
-		var functions = parts.map(function(part) {
+		var functions = parts.map(function (part) {
 			return typeof part === 'function';
 		});
 		if (functions.indexOf(true) < 0) {
-			this.log.push('|'+parts.join('|'));
+			this.log.push('|' + parts.join('|'));
 		} else {
 			this.log.push('|split');
 			var sides = this.sides.concat(null, true);
@@ -3704,32 +3695,32 @@ var Battle = (function() {
 			}
 		}
 	};
-	Battle.prototype.addMove = function() {
+	Battle.prototype.addMove = function () {
 		this.lastMoveLine = this.log.length;
-		this.log.push('|'+Array.prototype.slice.call(arguments).join('|'));
+		this.log.push('|' + Array.prototype.slice.call(arguments).join('|'));
 	};
-	Battle.prototype.attrLastMove = function() {
-		this.log[this.lastMoveLine] += '|'+Array.prototype.slice.call(arguments).join('|');
+	Battle.prototype.attrLastMove = function () {
+		this.log[this.lastMoveLine] += '|' + Array.prototype.slice.call(arguments).join('|');
 	};
-	Battle.prototype.debug = function(activity) {
+	Battle.prototype.debug = function (activity) {
 		if (this.getFormat().debug) {
 			this.add('debug', activity);
 		}
 	};
-	Battle.prototype.debugError = function(activity) {
+	Battle.prototype.debugError = function (activity) {
 		this.add('debug', activity);
 	};
 
 	// players
 
-	Battle.prototype.join = function(slot, name, avatar, team) {
+	Battle.prototype.join = function (slot, name, avatar, team) {
 		if (this.p1 && this.p1.isActive && this.p2 && this.p2.isActive) return false;
 		if ((this.p1 && this.p1.isActive && this.p1.name === name) || (this.p2 && this.p2.isActive && this.p2.name === name)) return false;
 		if (this.p1 && this.p1.isActive || slot === 'p2') {
 			if (this.started) {
 				this.p2.name = name;
 			} else {
-				//console.log("NEW SIDE: "+name);
+				//console.log("NEW SIDE: " + name);
 				this.p2 = new BattleSide(name, this, 1, team);
 				this.sides[1] = this.p2;
 			}
@@ -3740,7 +3731,7 @@ var Battle = (function() {
 			if (this.started) {
 				this.p1.name = name;
 			} else {
-				//console.log("NEW SIDE: "+name);
+				//console.log("NEW SIDE: " + name);
 				this.p1 = new BattleSide(name, this, 0, team);
 				this.sides[0] = this.p1;
 			}
@@ -3751,7 +3742,7 @@ var Battle = (function() {
 		this.start();
 		return true;
 	};
-	Battle.prototype.rename = function(slot, name, avatar) {
+	Battle.prototype.rename = function (slot, name, avatar) {
 		if (slot === 'p1' || slot === 'p2') {
 			var side = this[slot];
 			side.name = name;
@@ -3759,12 +3750,12 @@ var Battle = (function() {
 			this.add('player', slot, name, side.avatar);
 		}
 	};
-	Battle.prototype.leave = function(slot) {
+	Battle.prototype.leave = function (slot) {
 		if (slot === 'p1' || slot === 'p2') {
 			var side = this[slot];
 			if (!side) {
-				console.log('**** '+slot+' tried to leave before it was possible in '+this.id);
-				require('./crashlogger.js')({stack: '**** '+slot+' tried to leave before it was possible in '+this.id}, 'A simulator process');
+				console.log('**** ' + slot + ' tried to leave before it was possible in ' + this.id);
+				require('./crashlogger.js')({stack: '**** ' + slot + ' tried to leave before it was possible in ' + this.id}, 'A simulator process');
 				return;
 			}
 
@@ -3780,12 +3771,12 @@ var Battle = (function() {
 
 	// Messages sent by this function are received and handled in
 	// Simulator.prototype.receive in simulator.js (in another process).
-	Battle.prototype.send = function(type, data) {
+	Battle.prototype.send = function (type, data) {
 		if (Array.isArray(data)) data = data.join("\n");
-		battleEngineFakeProcess.client.send(this.id+"\n"+type+"\n"+data);
+		battleEngineFakeProcess.client.send(this.id + "\n" + type + "\n" + data);
 	};
 	// This function is called by this process's 'message' event.
-	Battle.prototype.receive = function(data, more) {
+	Battle.prototype.receive = function (data, more) {
 		this.messageLog.push(data.join(' '));
 		var logPos = this.log.length;
 		var alreadyEnded = this.ended;
@@ -3795,7 +3786,7 @@ var Battle = (function() {
 			try {
 				if (more) team = Tools.fastUnpackTeam(more);
 			} catch (e) {
-				console.log('TEAM PARSE ERROR: '+more);
+				console.log('TEAM PARSE ERROR: ' + more);
 				team = null;
 			}
 			this.join(data[2], data[3], data[4], team);
@@ -3830,21 +3821,21 @@ var Battle = (function() {
 			var battle = this;
 			var p1 = this.p1;
 			var p2 = this.p2;
-			var p1active = p1?p1.active[0]:null;
-			var p2active = p2?p2.active[0]:null;
+			var p1active = p1 ? p1.active[0] : null;
+			var p2active = p2 ? p2.active[0] : null;
 			data[2] = data[2].replace(/\f/g, '\n');
-			this.add('', '>>> '+data[2]);
+			this.add('', '>>> ' + data[2]);
 			try {
-				this.add('', '<<< '+eval(data[2]));
+				this.add('', '<<< ' + eval(data[2]));
 			} catch (e) {
-				this.add('', '<<< error: '+e.message);
+				this.add('', '<<< error: ' + e.message);
 			}
 			break;
 		}
 
 		this.sendUpdates(logPos, alreadyEnded);
 	};
-	Battle.prototype.sendUpdates = function(logPos, alreadyEnded) {
+	Battle.prototype.sendUpdates = function (logPos, alreadyEnded) {
 		if (this.p1 && this.p2) {
 			var inactiveSide = -1;
 			if (!this.p1.isActive && this.p2.isActive) {
@@ -3883,17 +3874,17 @@ var Battle = (function() {
 		}
 	};
 
-	Battle.prototype.destroy = function() {
+	Battle.prototype.destroy = function () {
 		// deallocate ourself
 
 		// deallocate children and get rid of references to them
-		for (var i=0; i<this.sides.length; i++) {
+		for (var i = 0; i < this.sides.length; i++) {
 			if (this.sides[i]) this.sides[i].destroy();
 			this.sides[i] = null;
 		}
 		this.p1 = null;
 		this.p2 = null;
-		for (var i=0; i<this.queue.length; i++) {
+		for (var i = 0; i < this.queue.length; i++) {
 			delete this.queue[i].pokemon;
 			delete this.queue[i].side;
 			this.queue[i] = null;

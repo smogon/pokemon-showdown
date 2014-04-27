@@ -13,11 +13,11 @@
 
 var simulators = {};
 
-var SimulatorProcess = (function() {
+var SimulatorProcess = (function () {
 	function SimulatorProcess() {
 		global.battleEngineFakeProcess = new (require('./fake-process').FakeProcess)();
-		this.process = battleEngineFakeProcess.server; //require('child_process').fork('battle-engine.js');
-		this.process.on('message', function(message) {
+		this.process = battleEngineFakeProcess.server;
+		this.process.on('message', function (message) {
 			var lines = message.split('\n');
 			var sim = simulators[lines[0]];
 			if (sim) {
@@ -30,20 +30,20 @@ var SimulatorProcess = (function() {
 	SimulatorProcess.prototype.load = 0;
 	SimulatorProcess.prototype.active = true;
 	SimulatorProcess.processes = [];
-	SimulatorProcess.spawn = function(num) {
+	SimulatorProcess.spawn = function (num) {
 		/*if (!num) num = Config.simulatorProcesses || 1;
 		for (var i = this.processes.length; i < num; ++i) {
 			this.processes.push(new SimulatorProcess());
 		}*/
 	};
-	SimulatorProcess.respawn = function() {
-		/*this.processes.splice(0).forEach(function(process) {
+	SimulatorProcess.respawn = function () {
+		/*this.processes.splice(0).forEach(function (process) {
 			process.active = false;
 			if (!process.load) process.process.disconnect();
 		});
 		this.spawn();*/
 	};
-	SimulatorProcess.acquire = function() {
+	SimulatorProcess.acquire = function () {
 		var process = this.processes[0];
 		for (var i = 1; i < this.processes.length; ++i) {
 			if (this.processes[i].load < process.load) {
@@ -53,14 +53,14 @@ var SimulatorProcess = (function() {
 		++process.load;
 		return process;
 	};
-	SimulatorProcess.release = function(process) {
+	SimulatorProcess.release = function (process) {
 		--process.load;
 		/*if (!process.load && !process.active) {
 			process.process.disconnect();
 		}*/
 	};
-	SimulatorProcess.eval = function(code) {
-		this.processes.forEach(function(process) {
+	SimulatorProcess.eval = function (code) {
+		this.processes.forEach(function (process) {
 			process.send('|eval|' + code);
 		});
 	};
@@ -73,7 +73,7 @@ SimulatorProcess.processes.push(new SimulatorProcess());
 
 var slice = Array.prototype.slice;
 
-var Simulator = (function(){
+var Simulator = (function (){
 	function Simulator(id, format, rated, room) {
 		if (simulators[id]) {
 			// ???
@@ -92,7 +92,7 @@ var Simulator = (function(){
 
 		simulators[id] = this;
 
-		this.send('init', this.format, rated?'1':'');
+		this.send('init', this.format, rated ? '1' : '');
 	}
 
 	Simulator.prototype.id = '';
@@ -112,26 +112,26 @@ var Simulator = (function(){
 	Simulator.prototype.logData = null;
 	Simulator.prototype.endType = 'normal';
 
-	Simulator.prototype.getFormat = function() {
+	Simulator.prototype.getFormat = function () {
 		return Tools.getFormat(this.format);
 	};
 	Simulator.prototype.lastIp = null;
-	Simulator.prototype.send = function() {
+	Simulator.prototype.send = function () {
 		this.activeIp = ResourceMonitor.activeIp;
-		this.process.send(''+this.id+'|'+slice.call(arguments).join('|'));
+		this.process.send('' + this.id + '|' + slice.call(arguments).join('|'));
 	};
-	Simulator.prototype.sendFor = function(user, action) {
-		var player = this.playerTable[toUserid(user)];
+	Simulator.prototype.sendFor = function (user, action) {
+		var player = this.playerTable[toId(user)];
 		if (!player) {
-			console.log('SENDFOR FAILED: Player doesn\'t exist: '+user.name);
+			console.log('SENDFOR FAILED: Player doesn\'t exist: ' + user.name);
 			return;
 		}
 
 		this.send.apply(this, [action, player].concat(slice.call(arguments, 2)));
 	};
-	Simulator.prototype.sendForOther = function(user, action) {
+	Simulator.prototype.sendForOther = function (user, action) {
 		var opposite = {'p1':'p2', 'p2':'p1'};
-		var player = this.playerTable[toUserid(user)];
+		var player = this.playerTable[toId(user)];
 		if (!player) return;
 
 		this.send.apply(this, [action, opposite[player]].concat(slice.call(arguments, 2)));
@@ -139,7 +139,7 @@ var Simulator = (function(){
 
 	Simulator.prototype.rqid = '';
 	Simulator.prototype.inactiveQueued = false;
-	Simulator.prototype.receive = function(lines) {
+	Simulator.prototype.receive = function (lines) {
 		var player;
 		ResourceMonitor.activeIp = this.activeIp;
 		switch (lines[1]) {
@@ -174,7 +174,7 @@ var Simulator = (function(){
 			var rqid = lines[3];
 			if (player) {
 				this.requests[player.userid] = lines[4];
-				player.sendTo(this.id, '|request|'+lines[4]);
+				player.sendTo(this.id, '|request|' + lines[4]);
 			}
 			if (rqid !== this.rqid) {
 				this.rqid = rqid;
@@ -197,40 +197,40 @@ var Simulator = (function(){
 		ResourceMonitor.activeIp = null;
 	};
 
-	Simulator.prototype.resendRequest = function(user) {
+	Simulator.prototype.resendRequest = function (user) {
 		if (this.requests[user.userid]) {
-			user.sendTo(this.id, '|request|'+this.requests[user.userid]);
+			user.sendTo(this.id, '|request|' + this.requests[user.userid]);
 		}
 	};
-	Simulator.prototype.win = function(user) {
+	Simulator.prototype.win = function (user) {
 		if (!user) {
 			this.tie();
 			return;
 		}
 		this.sendFor(user, 'win');
 	};
-	Simulator.prototype.lose = function(user) {
+	Simulator.prototype.lose = function (user) {
 		this.sendForOther(user, 'win');
 	};
-	Simulator.prototype.tie = function() {
+	Simulator.prototype.tie = function () {
 		this.send('tie');
 	};
-	Simulator.prototype.chat = function(user, message) {
-		this.send('chat', user.name+"\n"+message);
+	Simulator.prototype.chat = function (user, message) {
+		this.send('chat', user.name + "\n" + message);
 	};
 
-	Simulator.prototype.isEmpty = function() {
+	Simulator.prototype.isEmpty = function () {
 		if (this.p1) return false;
 		if (this.p2) return false;
 		return true;
 	};
 
-	Simulator.prototype.isFull = function() {
+	Simulator.prototype.isFull = function () {
 		if (this.p1 && this.p2) return true;
 		return false;
 	};
 
-	Simulator.prototype.setPlayer = function(user, slot) {
+	Simulator.prototype.setPlayer = function (user, slot) {
 		if (this.players[slot]) {
 			delete this.players[slot].battles[this.id];
 		}
@@ -248,51 +248,51 @@ var Simulator = (function(){
 		this.playerids[slot] = (user ? user.userid : null);
 		this.playerTable = {};
 		this.active = !this.ended;
-		for (var i=0, len=this.players.length; i<len; i++) {
+		for (var i = 0, len = this.players.length; i < len; i++) {
 			var player = this.players[i];
-			this['p'+(i+1)] = player?player.name:'';
+			this['p' + (i + 1)] = player ? player.name :    '';
 			if (!player) {
 				this.active = false;
 				continue;
 			}
-			this.playerTable[player.userid] = 'p'+(i+1);
+			this.playerTable[player.userid] = 'p' + (i + 1);
 		}
 	};
-	Simulator.prototype.getPlayer = function(slot) {
+	Simulator.prototype.getPlayer = function (slot) {
 		if (typeof slot === 'string') {
-			if (slot.substr(0,1) === 'p') {
-				slot = parseInt(slot.substr(1),10)-1;
+			if (slot.substr(0, 1) === 'p') {
+				slot = parseInt(slot.substr(1), 10) - 1;
 			} else {
 				slot = parseInt(slot, 10);
 			}
 		}
 		return this.players[slot];
 	};
-	Simulator.prototype.getSlot = function(player) {
+	Simulator.prototype.getSlot = function (player) {
 		return this.players.indexOf(player);
 	};
 
-	Simulator.prototype.join = function(user, slot, team) {
+	Simulator.prototype.join = function (user, slot, team) {
 		if (slot === undefined) {
 			slot = 0;
 			while (this.players[slot]) slot++;
 		}
-		// console.log('joining: '+user.name+' '+slot);
+		// console.log('joining: ' + user.name + ' ' + slot);
 		if (this.players[slot] || slot >= this.players.length) return false;
 
 		this.setPlayer(user, slot);
 
-		var message = ''+user.avatar;
+		var message = '' + user.avatar;
 		if (!this.started) {
-			message += "\n"+team;
+			message += "\n" + team;
 		}
 		if (this.p1 && this.p2) this.started = true;
 		this.sendFor(user, 'join', user.name, message);
 		return true;
 	};
 
-	Simulator.prototype.rename = function() {
-		for (var i=0, len=this.players.length; i<len; i++) {
+	Simulator.prototype.rename = function () {
+		for (var i = 0, len = this.players.length; i < len; i++) {
 			var player = this.players[i];
 			var playerid = this.playerids[i];
 			if (!player) continue;
@@ -303,8 +303,8 @@ var Simulator = (function(){
 		}
 	};
 
-	Simulator.prototype.leave = function(user) {
-		for (var i=0, len=this.players.length; i<len; i++) {
+	Simulator.prototype.leave = function (user) {
+		for (var i = 0, len = this.players.length; i < len; i++) {
 			var player = this.players[i];
 			if (player === user) {
 				this.sendFor(user, 'leave');
@@ -315,7 +315,7 @@ var Simulator = (function(){
 		return false;
 	};
 
-	Simulator.prototype.destroy = function() {
+	Simulator.prototype.destroy = function () {
 		this.send('dealloc');
 
 		this.players = null;
@@ -332,7 +332,7 @@ exports.Simulator = Simulator;
 exports.simulators = simulators;
 exports.SimulatorProcess = SimulatorProcess;
 
-exports.create = function(id, format, rated, room) {
+exports.create = function (id, format, rated, room) {
 	if (simulators[id]) return simulators[id];
 	return new Simulator(id, format, rated, room);
 };

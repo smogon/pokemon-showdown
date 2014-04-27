@@ -24,13 +24,13 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	var callbackData = {};
 
 	//var child = require('child_process').fork('verifier.js');
-	exports.verify = function(data, signature, callback) {
+	exports.verify = function (data, signature, callback) {
 		var localGuid = guid++;
 		callbacks[localGuid] = callback;
 		callbackData[localGuid] = data;
 		fakeProcess.server.send({data: data, sig: signature, guid: localGuid});
 	};
-	fakeProcess.server.on('message', function(response) {
+	fakeProcess.server.on('message', function (response) {
 		if (callbacks[response.guid]) {
 			callbacks[response.guid](response.success, callbackData[response.guid]);
 			delete callbacks[response.guid];
@@ -48,7 +48,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	var keyalgo = Config.loginServer.keyAlgorithm;
 	var pkey = Config.loginServer.publicKey;
 
-	fakeProcess.client.on('message', function(message) {
+	fakeProcess.client.on('message', function (message) {
 		var verifier = crypto.createVerify(keyalgo);
 		verifier.update(message.data);
 		var success = false;

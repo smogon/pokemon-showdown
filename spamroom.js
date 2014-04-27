@@ -3,8 +3,10 @@ if (!spamroom) {
 	Rooms.global.addChatRoom('Spam Room');
 	spamroom = Rooms.get('spamroom');
 	spamroom.isPrivate = true;
+	spamroom.staffRoom = true;
 	if (spamroom.chatRoomData) {
 		spamroom.chatRoomData.isPrivate = true;
+		spamroom.chatRoomData.staffRoom = true;
 		spamroom.addedUsers = spamroom.chatRoomData.addedUsers = {};
 		Rooms.global.writeChatRoomData();
 	} else {

@@ -83,6 +83,42 @@ exports.BattlePokedex = {
 		inherit: true,
 		abilities:{0:"Pressure"}
 	},
+	chikorita: {
+		inherit: true,
+		abilities:{0:"Overgrow"}
+	},
+	bayleef: {
+		inherit: true,
+		abilities:{0:"Overgrow"}
+	},
+	meganium: {
+		inherit: true,
+		abilities:{0:"Overgrow"}
+	},
+	cyndaquil: {
+		inherit: true,
+		abilities:{0:"Blaze"}
+	},
+	quilava: {
+		inherit: true,
+		abilities:{0:"Blaze"}
+	},
+	typhlosion: {
+		inherit: true,
+		abilities:{0:"Blaze"}
+	},
+	totodile: {
+		inherit: true,
+		abilities:{0:"Torrent"}
+	},
+	croconaw: {
+		inherit: true,
+		abilities:{0:"Torrent"}
+	},
+	feraligatr: {
+		inherit: true,
+		abilities:{0:"Torrent"}
+	},
 	igglybuff: {
 		inherit: true,
 		types:["Normal"],
@@ -245,6 +281,18 @@ exports.BattlePokedex = {
 		inherit: true,
 		abilities: {0:"Overgrow"}
 	},
+	tepig: {
+		inherit: true,
+		abilities:{0:"Blaze"}
+	},
+	pignite: {
+		inherit: true,
+		abilities:{0:"Blaze"}
+	},
+	emboar: {
+		inherit: true,
+		abilities:{0:"Blaze"}
+	},
 	oshawott: {
 		inherit: true,
 		abilities: {0:"Torrent"}
@@ -313,10 +361,6 @@ exports.BattlePokedex = {
 	gothitelle: {
 		inherit: true,
 		abilities: {0:"Frisk",H:"Shadow Tag"}
-	},
-	ferroseed: {
-		inherit: true,
-		abilities: {0:"Iron Barbs"}
 	},
 	ferrothorn: {
 		inherit: true,

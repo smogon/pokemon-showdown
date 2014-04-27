@@ -30,6 +30,10 @@ function createTournament(room, format, generator, isRated, args, output) {
 		output.sendReply("A tournament is already running in the room.");
 		return;
 	}
+	if (Rooms.global.lockdown) {
+		output.sendReply("The server is restarting soon, so a tournament cannot be created.");
+		return;
+	}
 	if (Tools.getFormat(format).effectType !== 'Format') {
 		output.sendReply(format + " is not a valid format.");
 		output.sendReply("Valid formats: " + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
@@ -663,7 +667,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		if (params.length < 2)
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 
-		createTournament(room, params.shift(), params.shift(), config.isTournamentsRated, params, this);
+		createTournament(room, params.shift(), params.shift(), Config.isTournamentsRated, params, this);
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament)

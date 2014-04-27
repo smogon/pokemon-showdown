@@ -20,7 +20,7 @@ exports.BattleScripts = {
 
 		return stat;
 	},
-	getDamage: function(pokemon, target, move, suppressMessages) {
+	getDamage: function (pokemon, target, move, suppressMessages) {
 		// We get the move
 		if (typeof move === 'string') move = this.getMove(move);
 		if (typeof move === 'number') move = {
@@ -83,10 +83,10 @@ exports.BattleScripts = {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
 			return basePower;
 		}
-		basePower = clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit ratio
-		move.critRatio = clampIntRange(move.critRatio, 0, 5);
+		move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
 		var critMult = [0, 16, 8, 4, 3, 2];
 		move.crit = move.willCrit || false;
 		if (typeof move.willCrit === 'undefined') {
@@ -106,7 +106,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (!basePower) return 0;
-		basePower = clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// We now check for attacker and defender
 		var level = pokemon.level;
@@ -123,19 +123,19 @@ exports.BattleScripts = {
 			move.ignoreNegativeOffensive = true;
 			move.ignorePositiveDefensive = true;
 		}
-		if (move.ignoreNegativeOffensive && attack < attacker.getStat(move.category==='Physical'?'atk':'spa', true, true)) {
+		if (move.ignoreNegativeOffensive && attack < attacker.getStat(move.category === 'Physical' ? 'atk' : 'spa', true, true)) {
 			move.ignoreOffensive = true;
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.getStat(move.category==='Physical'?'atk':'spa', true, true);
+			attack = attacker.getStat(move.category === 'Physical' ? 'atk' : 'spa', true, true);
 		}
-		if (move.ignorePositiveDefensive && defense > target.getStat(move.defensiveCategory==='Physical'?'def':'spd', true, true)) {
+		if (move.ignorePositiveDefensive && defense > target.getStat(move.defensiveCategory === 'Physical' ? 'def' : 'spd', true, true)) {
 			move.ignoreDefensive = true;
 		}
 		if (move.ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
-			defense = target.getStat(move.defensiveCategory==='Physical'?'def':'spd', true, true);
+			defense = target.getStat(move.defensiveCategory === 'Physical' ? 'def' : 'spd', true, true);
 		}
 
 		// Gen 2 damage formula
@@ -173,7 +173,7 @@ exports.BattleScripts = {
 		}
 
 		// Randomizer, it's a number between 217 and 255
-		var randFactor = Math.floor(Math.random()*39)+217;
+		var randFactor = Math.floor(Math.random() * 39) + 217;
 		baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
 
 		// If damage is less than 1, we return 1
@@ -184,11 +184,11 @@ exports.BattleScripts = {
 		// We are done, this is the final damage
 		return Math.floor(baseDamage);
 	},
-	faint: function(pokemon, source, effect) {
+	faint: function (pokemon, source, effect) {
 		pokemon.faint(source, effect);
 		this.queue = [];
 	},
-	comparePriority: function(a, b) {
+	comparePriority: function (a, b) {
 		a.priority = a.priority || 0;
 		a.subPriority = a.subPriority || 0;
 		a.speed = a.speed || 0;
@@ -197,10 +197,10 @@ exports.BattleScripts = {
 		b.speed = b.speed || 0;
 		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
 			if (typeof a.order !== 'number') {
-				return -(1);
+				return -1;
 			}
 			if (typeof b.order !== 'number') {
-				return -(-1);
+				return 1;
 			}
 			if (b.order - a.order) {
 				return -(b.order - a.order);
@@ -216,16 +216,16 @@ exports.BattleScripts = {
 		if (b.subOrder - a.subOrder) {
 			return -(b.subOrder - a.subOrder);
 		}
-		return Math.random()-0.5;
+		return Math.random() - 0.5;
 	},
-	getResidualStatuses: function(thing, callbackType) {
+	getResidualStatuses: function (thing, callbackType) {
 		var statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
 		statuses.sort(this.comparePriority);
-		//if (statuses[0]) this.debug('match '+(callbackType||'residualCallback')+': '+statuses[0].status.id);
+		//if (statuses[0]) this.debug('match ' + (callbackType || 'residualCallback') + ': ' + statuses[0].status.id);
 		return statuses;
 	},
-	residualEvent: function(eventid, relayVar) {
-		var statuses = this.getRelevantEffectsInner(this, 'on'+eventid, null, null, false, true, 'duration');
+	residualEvent: function (eventid, relayVar) {
+		var statuses = this.getRelevantEffectsInner(this, 'on' + eventid, null, null, false, true, 'duration');
 		statuses.sort(this.comparePriority);
 		while (statuses.length) {
 			var statusObj = statuses.shift();
@@ -241,16 +241,16 @@ exports.BattleScripts = {
 			this.singleEvent(eventid, status, statusObj.statusData, statusObj.thing, relayVar);
 		}
 	},
-	getRelevantEffects: function(thing, callbackType, foeCallbackType, foeThing, checkChildren) {
+	getRelevantEffects: function (thing, callbackType, foeCallbackType, foeThing, checkChildren) {
 		var statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
 		statuses.sort(this.comparePriority);
-		//if (statuses[0]) this.debug('match '+callbackType+': '+statuses[0].status.id);
+		//if (statuses[0]) this.debug('match ' + callbackType + ': ' + statuses[0].status.id);
 		return statuses;
 	},
-	addQueue: function(decision, noSort, side) {
+	addQueue: function (decision, noSort, side) {
 		if (decision) {
 			if (Array.isArray(decision)) {
-				for (var i=0; i<decision.length; i++) {
+				for (var i = 0; i < decision.length; i++) {
 					this.addQueue(decision[i], noSort);
 				}
 				return;
