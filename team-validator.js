@@ -7,7 +7,7 @@
  * @license MIT license
  */
 
-if (!process.send) {
+/*if (!process.send) {
 	var validationCount = 0;
 	var pendingValidations = {};
 
@@ -77,10 +77,19 @@ if (!process.send) {
 	ValidatorProcess.spawn();
 
 	exports.ValidatorProcess = ValidatorProcess;
-	exports.pendingValidations = pendingValidations;
+	exports.pendingValidations = pendingValidations;*/
 
 	exports.validateTeam = function (format, team, callback) {
-		ValidatorProcess.send(format, team, callback);
+		var parsedTeam = Tools.fastUnpackTeam(team);
+		var problems = this.validateTeamSync(format, parsedTeam);
+		if (problems && problems.length)
+			setImmediate(callback.bind(null, false, problems.join('\n')));
+		else {
+			var packedTeam = Tools.packTeam(parsedTeam);
+			if (packedTeam === team)
+				packedTeam = '';
+			setImmediate(callback.bind(null, true, packedTeam));
+		}
 	};
 
 	var synchronousValidators = {};
@@ -96,13 +105,13 @@ if (!process.send) {
 		if (!synchronousValidators[format]) synchronousValidators[format] = new Validator(format);
 		return synchronousValidators[format].checkLearnset(move, template, lsetData);
 	};
-} else {
+/*} else {
 	require('sugar');
 	global.Config = require('./config/config.js');
 
 	process.on('uncaughtException', function (err) {
 		require('./crashlogger.js')(err, 'A team validator process');
-	});
+	});*/
 
 	/**
 	 * Converts anything to an ID. An ID must have only lowercase alphanumeric
@@ -112,17 +121,17 @@ if (!process.send) {
 	 * If an object with an ID is passed, its ID will be returned.
 	 * Otherwise, an empty string will be returned.
 	 */
-	global.toId = function (text) {
+	/*global.toId = function (text) {
 		if (text && text.id) text = text.id;
 		else if (text && text.userid) text = text.userid;
 
 		return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-	};
+	};*/
 
 	/**
 	 * Validates a username or Pokemon nickname
 	 */
-	var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
+	/*var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
 	global.toName = function (name) {
 		name = string(name);
 		name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
@@ -134,7 +143,7 @@ if (!process.send) {
 			name = Config.nameFilter(name);
 		}
 		return name.trim();
-	};
+	};*/
 
 	/**
 	 * Safely ensures the passed variable is a string
@@ -142,7 +151,7 @@ if (!process.send) {
 	 * If we're expecting a string and being given anything that isn't a string
 	 * or a number, it's safe to assume it's an error, and return ''
 	 */
-	global.string = function (str) {
+	/*global.string = function (str) {
 		if (typeof str === 'string' || typeof str === 'number') return '' + str;
 		return '';
 	};
@@ -177,7 +186,7 @@ if (!process.send) {
 			respond(id, true, packedTeam);
 		}
 	});
-}
+}*/
 
 var Validator = (function () {
 	function Validator(format) {
@@ -411,7 +420,7 @@ var Validator = (function () {
 					clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
 					problems.push(name + "'s move " + set.moves[i] + " is banned" + clause + ".");
 				}
-				
+
 				if (banlistTable['Unreleased']) {
 					if (move.isUnreleased) problems.push(name + "'s move " + set.moves[i] + " is unreleased.");
 				}
