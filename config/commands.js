@@ -1152,6 +1152,65 @@ var commands = exports.commands = {
 	},
 
 	/*********************************************************
+	 * Custom commands
+	 *********************************************************/
+
+	reminders: 'reminder',
+	reminder: function(target, room, user) {
+		if (room.type !== 'chat') return this.sendReply("This command can only be used in chatrooms.");
+
+		var parts = target.split(',');
+		var cmd = parts[0].trim().toLowerCase();
+
+		if (cmd in {'':1, show:1, view:1, display:1}) {
+			if (!this.canBroadcast()) return;
+			message = "<strong><font size=\"3\">Reminders for " + room.title + ":</font></strong>";
+			if (room.reminders && room.reminders.length > 0)
+				message += '<ol><li>' + room.reminders.join('</li><li>') + '</li></ol>';
+			else
+				message += "<br /><br />There are no reminders to display";
+			message += "Contact a room owner, leader, or admin if you have a reminder you would like added.";
+			return this.sendReplyBox(message);
+		}
+
+		if (!this.can('declare', room)) return false;
+		if (!room.reminders) room.reminders = room.chatRoomData.reminders = [];
+
+		var index = parseInt(parts[1], 10) - 1;
+		var message = parts.slice(2).join(',').trim();
+		switch (cmd) {
+			case 'add':
+				index = room.reminders.length;
+				message = parts.slice(1).join(',').trim();
+				// Fallthrough
+
+			case 'insert':
+				if (!message) return this.sendReply("Your reminder was empty.");
+				if (message.length > 250) return this.sendReply("Your reminder cannot be greater than 250 characters in length.");
+
+				room.reminders.splice(index, 0, message);
+				Rooms.global.writeChatRoomData();
+				return this.sendReply("Your reminder has been inserted.");
+
+			case 'edit':
+				if (!room.reminders[index]) return this.sendReply("There is no such reminder.");
+				if (!message) return this.sendReply("Your reminder was empty.");
+				if (message.length > 250) return this.sendReply("Your reminder cannot be greater than 250 characters in length.");
+
+				room.reminders[index] = message;
+				Rooms.global.writeChatRoomData();
+				return this.sendReply("The reminder has been modified.");
+
+			case 'delete':
+				if (!room.reminders[index]) return this.sendReply("There is no such reminder.");
+
+				this.sendReply(room.reminders.splice(index, 1)[0]);
+				Rooms.global.writeChatRoomData();
+				return this.sendReply("has been deleted from the reminders.");
+		}
+	},
+
+	/*********************************************************
 	 * Help commands
 	 *********************************************************/
 
