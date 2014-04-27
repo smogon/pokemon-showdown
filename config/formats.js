@@ -721,6 +721,16 @@ exports.Formats = [
 		column: 2
 	},
 	{
+		name: "[Gen 4] Ubers (beta)",
+		section: "Past Generations",
+
+		mod: 'gen4',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Arceus'],
+
+		column: 2
+	},
+	{
 		name: "[Gen 4] UU (beta)",
 		section: "Past Generations",
 
