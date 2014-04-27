@@ -146,12 +146,9 @@
 var commands = exports.commands = {
 
 	ip: 'whois',
-	getip: 'whois',
 	rooms: 'whois',
-	altcheck: 'whois',
 	alt: 'whois',
 	alts: 'whois',
-	getalts: 'whois',
 	whois: function (target, room, user) {
 		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
@@ -265,7 +262,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
 		var searches = {};
-		var allTiers = {'uber':1, 'ou':1, 'uu':1, 'lc':1, 'cap':1, 'bl':1};
+		var allTiers = {'uber':1, 'ou':1, 'uu':1, 'lc':1, 'cap':1, 'bl':1, 'bl2':1};
 		var allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 		var showAll = false;
 		var megaSearch = null;
@@ -819,7 +816,7 @@ var commands = exports.commands = {
 				"- <a href=\"http://pokemonshowdown.com/rules\">" + (room.rulesLink ? "Global rules" : "Rules") + "</a>");
 			return;
 		}
-		if (!this.can('roommod', room)) return;
+		if (!this.can('declare', room)) return;
 		if (target.length > 80) {
 			return this.sendReply("Error: Room rules link is too long (must be under 80 characters). You can use a URL shortener to shorten the link.");
 		}
@@ -1129,16 +1126,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to.");
 		}
-		if (target === 'all' || target === 'getip' || target === 'ip') {
-			matched = true;
-			this.sendReply("/ip - Get your own IP address.");
-			this.sendReply("/ip [username] - Get a user's IP address. Requires: " + Users.getGroupsThatCan('ip', Config.groups.default.global).join(" "));
-		}
-		if (target === 'all' || target === 'altcheck' || target === 'alt' || target === 'alts' || target === 'getalts') {
-			matched = true;
-			this.sendReply("/alts OR /altcheck - Get your own alts.");
-			this.sendReply("/alts OR /altcheck [username] - Get a user's alts. Requires: " + Users.getGroupsThatCan('alts', Config.groups.default.global).join(" "));
-		}
 		if (target === 'all' || target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder') {
 			matched = true;
 			this.sendReply("/rating - Get your own rating.");
@@ -1152,13 +1139,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/avatar [new avatar number] - Change your trainer sprite.");
 		}
-		if (target === 'all' || target === 'rooms') {
+		if (target === 'all' || target === 'whois' || target === 'alts' || target === 'ip' || target === 'rooms') {
 			matched = true;
-			this.sendReply("/rooms [username] - Show what rooms a user is in.");
-		}
-		if (target === 'all' || target === 'whois') {
-			matched = true;
-			this.sendReply("/whois [username] - Get details on a username: group, and rooms.");
+			this.sendReply("/whois - Get details on yourself: alts, group, IP address, and rooms.");
+			this.sendReply("/whois [username] - Get details on a username: alts (Requires: % @ & ~), group, IP address (Requires: @ & ~), and rooms.");
 		}
 		if (target === 'all' || target === 'data') {
 			matched = true;
@@ -1429,14 +1413,14 @@ var commands = exports.commands = {
 			this.sendReply("/help OR /h OR /? - Gives you help.");
 		}
 		if (!target) {
-			this.sendReply("COMMANDS: /msg, /reply, /ignore, /ip, /rating, /nick, /avatar, /rooms, /whois, /help, /away, /back, /timestamps, /highlight");
-			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: " + Users.getGroupsThatCan('broadcast', room).join(" ") + ")");
+			this.sendReply("COMMANDS: /nick, /avatar, /rating, /whois, /msg, /reply, /ignore, /away, /back, /timestamps, /highlight");
+			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. (Requires: " + Users.getGroupsThatCan('broadcast', room).join(" ") + "))");
 			this.sendReply("For details on all room commands, use /roomhelp");
 			this.sendReply("For details on all commands, use /help all");
 			if (user.group !== Config.groups.default[roomType]) {
-				this.sendReply("DRIVER COMMANDS: /mute, /unmute, /announce, /modlog, /forcerename, /alts");
-				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /unbanall, /ip, /redirect, /kick");
-				this.sendReply("LEADER COMMANDS: /promote, /demote, /forcewin, /forcetie, /declare");
+				this.sendReply("DRIVER COMMANDS: /warn, /mute, /unmute, /alts, /forcerename, /modlog, /lock, /unlock, /announce, /redirect");
+				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip");
+				this.sendReply("LEADER COMMANDS: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /unbanall");
 				this.sendReply("For details on all moderator commands, use /help " + Users.getGroupsThatCan('staff', room)[0]);
 			}
 			this.sendReply("For details of a specific command, use something like: /help data");

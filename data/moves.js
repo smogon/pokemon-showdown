@@ -2497,6 +2497,7 @@ exports.BattleMovedex = {
 		name: "Diamond Storm",
 		pp: 5,
 		priority: 0,
+		isUnreleased: true,
 		secondary: {
 			chance: 50,
 			self: {
@@ -6481,6 +6482,7 @@ exports.BattleMovedex = {
 		name: "Hyperspace Hole",
 		pp: 5,
 		priority: 0,
+		isUnreleased: true,
 		isContact: true,
 		breaksProtect: true,
 		secondary: false,
@@ -7348,6 +7350,7 @@ exports.BattleMovedex = {
 		name: "Light of Ruin",
 		pp: 5,
 		priority: 0,
+		isUnreleased: true,
 		recoil: [1, 2],
 		secondary: false,
 		target: "normal",
@@ -11810,7 +11813,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			if (defender.weightkg >= 200) {
-				this.add('message', defender.species + ' is too heavy. (placeholder)');
+				this.add('-fail', defender, '[heavy]');
 				return null;
 			}
 			if (defender.volatiles['protect']) {
@@ -11822,7 +11825,7 @@ exports.BattleMovedex = {
 				return null;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			attacker.addVolatile(move.id, defender);
+			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
 		onTryHit: function (target) {
@@ -11833,7 +11836,6 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onLockMove: 'skydrop',
 			onDragOut: false,
 			onSourceDragOut: false,
 			onFoeModifyPokemon: function (defender) {
@@ -12625,6 +12627,7 @@ exports.BattleMovedex = {
 		name: "Steam Eruption",
 		pp: 5,
 		priority: 0,
+		isUnreleased: true,
 		secondary: {
 			chance: 30,
 			status: 'brn'
@@ -13623,6 +13626,7 @@ exports.BattleMovedex = {
 		name: "Thousand Arrows",
 		pp: 10,
 		priority: 0,
+		isUnreleased: true,
 		affectedByImmunities: false,
 		volatileStatus: 'smackdown',
 		secondary: false,
@@ -13640,6 +13644,7 @@ exports.BattleMovedex = {
 		name: "Thousand Waves",
 		pp: 10,
 		priority: 0,
+		isUnreleased: true,
 		onHit: function (target) {
 			target.addVolatile('trapped');
 		},

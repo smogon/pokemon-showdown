@@ -513,7 +513,10 @@ var BattlePokemon = (function () {
 			var move = this.moveset[i];
 			if (lockedMove) {
 				if (lockedMove === move.id) {
-					return [move];
+					return [{
+						move: move.move,
+						id: move.id
+					}];
 				}
 				continue;
 			}

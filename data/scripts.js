@@ -461,7 +461,7 @@ exports.BattleScripts = {
 				if (moveData.onAfterHit) hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
 			}
 
-			if (!hitResult && !didSomething && !moveData.self) {
+			if (!hitResult && !didSomething && !moveData.self && !moveData.selfdestruct) {
 				if (!isSelf && !isSecondary) {
 					if (hitResult === false || didSomething === false) this.add('-fail', target);
 				}
@@ -470,7 +470,12 @@ exports.BattleScripts = {
 			}
 		}
 		if (moveData.self) {
-			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
+			var selfRoll;
+			if (!isSecondary && moveData.self.boosts) selfRoll = this.random(100);
+			// This is done solely to mimic in-game RNG behaviour. All self drops have a 100% chance of happening but still grab a random number.
+			if (typeof moveData.self.chance === 'undefined' || selfRoll < moveData.self.chance) {
+				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
+			}
 		}
 		if (moveData.secondaries) {
 			var secondaryRoll;

@@ -303,6 +303,8 @@ var commands = exports.commands = {
 		if (Config.groups.bySymbol[nextGroup][room.type + 'RoomRank'] < Config.groups.bySymbol[currentGroup][room.type + 'RoomRank']) {
 			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
 			if (targetUser) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
+		} else if (nextGroup === '#') {
+			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
 		} else {
 			this.addModCommand("" + name + " was promoted to Room " + groupName + " by " + user.name + ".");
 		}
@@ -648,7 +650,7 @@ var commands = exports.commands = {
 	},
 
 	unbanall: function (target, room, user) {
-		if (!this.can('ban')) return false;
+		if (!this.can('rangeban')) return false;
 		// we have to do this the hard way since it's no longer a global
 		for (var i in Users.bannedIps) {
 			delete Users.bannedIps[i];
