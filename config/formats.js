@@ -535,15 +535,6 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Gen-NEXT OU",
-		section: "Other Metagames",
-
-		mod: 'gennext',
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
-		banlist: ['Uber']
-	},
-	{
 		name: "[Gen 5] Glitchmons",
 		section: "Other Metagames",
 
@@ -705,119 +696,6 @@ exports.Formats = [
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
-	},
-
-	// Past Generations
-	///////////////////////////////////////////////////////////////////
-
-	{
-		name: "[Gen 4] OU (beta)",
-		section: "Past Generations",
-
-		mod: 'gen4',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber'],
-
-		column: 2
-	},
-	{
-		name: "[Gen 4] UU (beta)",
-		section: "Past Generations",
-
-		mod: 'gen4',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'OU', 'BL']
-	},
-	{
-		name: "[Gen 4] LC (beta)",
-		section: "Past Generations",
-
-		mod: 'gen4',
-		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard', 'Little Cup'],
-		banlist: ['Sonic Boom', 'Dragon Rage', 'DeepSeaTooth', 'Berry Juice', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Misdreavus', 'Meditite', 'Murkrow']
-	},
-	{
-		name: "[Gen 4] Hackmons",
-		section: "Past Generations",
-
-		mod: 'gen4',
-		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod'],
-		banlist: []
-	},
-	{
-		name: "[Gen 4] Custom Game",
-		section: "Past Generations",
-
-		mod: 'gen4',
-		searchShow: false,
-		debug: true,
-		ruleset: []
-	},
-	{
-		name: "[Gen 3] OU (beta)",
-		section: "Past Generations",
-
-		mod: 'gen3',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Smeargle + Ingrain'],
-
-		column: 2
-	},
-	{
-		name: "[Gen 3] Hackmons",
-		section: "Past Generations",
-
-		mod: 'gen3',
-		searchShow: false,
-		debug: true,
-		ruleset: ['Pokemon', 'HP Percentage Mod'],
-		banlist: []
-	},
-	{
-		name: "[Gen 3] Custom Game",
-		section: "Past Generations",
-
-		mod: 'gen3',
-		searchShow: false,
-		debug: true,
-		ruleset: []
-	},
-	{
-		name: "[Gen 2] OU (beta)",
-		section: "Past Generations",
-
-		mod: 'gen2',
-		debug: true,
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Mean Look + Hypnosis + Perish Song']
-	},
-	{
-		name: "[Gen 2] Custom Game",
-		section: "Past Generations",
-
-		mod: 'gen2',
-		searchShow: false,
-		debug: true,
-		ruleset: []
-	},
-	{
-		name: "[Gen 1] OU (beta)",
-		section: "Past Generations",
-
-		mod: 'gen1',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
-	},
-	{
-		name: "[Gen 1] Custom Game",
-		section: "Past Generations",
-
-		mod: 'gen1',
-		searchShow: false,
-		debug: true,
-		ruleset: []
 	}
 
 ];
