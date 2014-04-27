@@ -1151,10 +1151,6 @@ var commands = exports.commands = {
 		return this.sendReply("Poof is now enabled.");
 	},
 
-	/*********************************************************
-	 * Custom commands
-	 *********************************************************/
-
 	reminders: 'reminder',
 	reminder: function(target, room, user) {
 		if (room.type !== 'chat') return this.sendReply("This command can only be used in chatrooms.");
@@ -1210,10 +1206,6 @@ var commands = exports.commands = {
 		}
 	},
 
-	/*********************************************************
-	 * Custom commands
-	 *********************************************************/
-
 	hide: 'hideauth',
 	hideauth: function(target, room, user) {
 		if (!this.can('hideauth')) return false;
@@ -1242,19 +1234,11 @@ var commands = exports.commands = {
 		return this.sendReply("You are now showing your authority!");
 	},
 
-	/*********************************************************
-	 * Custom commands
-	 *********************************************************/
-
 	pr: 'pickrandom',
 	pickrandom: function(target, room, user) {
 		if (!this.canBroadcast()) return false;
 		return this.sendReply(target.split(',').map(function (s) { return s.trim(); }).randomize()[0]);
 	},
-
-	/*********************************************************
-	 * Custom commands
-	 *********************************************************/
 
 	spam: 'spamroom',
 	spamroom: function (target, room, user) {
