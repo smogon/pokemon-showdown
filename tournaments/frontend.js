@@ -30,6 +30,10 @@ function createTournament(room, format, generator, isRated, args, output) {
 		output.sendReply("A tournament is already running in the room.");
 		return;
 	}
+	if (Rooms.global.lockdown) {
+		output.sendReply("The server is restarting soon, so a tournament cannot be created.");
+		return;
+	}
 	if (Tools.getFormat(format).effectType !== 'Format') {
 		output.sendReply(format + " is not a valid format.");
 		output.sendReply("Valid formats: " + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
@@ -496,12 +500,14 @@ var Tournament = (function () {
 			// Prevent double accepts
 			return;
 
+		var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
+		if (!room) return;
+
 		this.pendingChallenges.set(challenge.from, null);
 		this.pendingChallenges.set(user, null);
 		challenge.from.sendTo(this.room, '|tournament|update|{"challenging":null}');
 		user.sendTo(this.room, '|tournament|update|{"challenged":null}');
 
-		var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
 		this.inProgressMatches.set(challenge.from, {to: user, room: room});
 		this.room.add('|tournament|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id);
 
@@ -661,7 +667,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		if (params.length < 2)
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 
-		createTournament(room, params.shift(), params.shift(), config.istournamentsrated, params, this);
+		createTournament(room, params.shift(), params.shift(), Config.istournamentsrated, params, this);
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament)

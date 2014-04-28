@@ -32,7 +32,7 @@ exports.query = function queryDnsbl(ip, callback) {
 		callback(dnsblCache[ip]);
 		return;
 	}
-	var reversedIpDot = ip.split('.').reverse().join('.')+'.';
+	var reversedIpDot = ip.split('.').reverse().join('.') + '.';
 	queryDnsblLoop(ip, callback, reversedIpDot, 0);
 };
 
@@ -43,13 +43,13 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
 		return;
 	}
 	var blocklist = BLOCKLISTS[index];
-	dns.resolve4(reversedIpDot+blocklist, function(err, addresses) {
+	dns.resolve4(reversedIpDot + blocklist, function (err, addresses) {
 		if (!err) {
 			// blocked
 			callback(dnsblCache[ip] = blocklist);
 		} else {
 			// not blocked, try next blocklist
-			queryDnsblLoop(ip, callback, reversedIpDot, index+1);
+			queryDnsblLoop(ip, callback, reversedIpDot, index + 1);
 		}
 	});
 }

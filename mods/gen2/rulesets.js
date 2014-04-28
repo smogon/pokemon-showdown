@@ -1,36 +1,36 @@
 exports.BattleFormats = {
 	pokemon: {
 		effectType: 'Banlist',
-		validateSet: function(set, format) {
+		validateSet: function (set, format) {
 			var template = this.getTemplate(set.species);
 			var problems = [];
 			if (set.species === set.name) delete set.name;
 
 			if (template.gen > this.gen) {
-				problems.push(set.species+' does not exist in gen '+this.gen+'.');
+				problems.push(set.species + ' does not exist in gen ' + this.gen + '.');
 			} else if (template.isNonstandard) {
-				problems.push(set.species+' is not a real Pokemon.');
+				problems.push(set.species + ' is not a real Pokemon.');
 			}
 			var hasHP = false;
 			if (set.item) {
 				var item = this.getItem(set.item);
 				if (item.gen > this.gen) {
-					problems.push(item.name+' does not exist in gen '+this.gen+'.');
+					problems.push(item.name + ' does not exist in gen ' + this.gen + '.');
 				} else if (item.isNonstandard) {
 					problems.push(item.name + ' is not a real item.');
 				}
 			}
-			if (set.moves) for (var i=0; i<set.moves.length; i++) {
+			if (set.moves) for (var i = 0; i < set.moves.length; i++) {
 				var move = this.getMove(set.moves[i]);
 				if (move.gen > this.gen) {
-					problems.push(move.name+' does not exist in gen '+this.gen+'.');
+					problems.push(move.name + ' does not exist in gen ' + this.gen + '.');
 				} else if (move.isNonstandard) {
-					problems.push(move.name+' is not a real move.');
+					problems.push(move.name + ' is not a real move.');
 				}
 				if (move.id === 'hiddenpower') hasHP = true;
 			}
 			if (set.moves && set.moves.length > 4) {
-				problems.push((set.name||set.species) + ' has more than four moves.');
+				problems.push((set.name || set.species) + ' has more than four moves.');
 			}
 
 			// Automatically set ability to None
@@ -106,12 +106,12 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Ignore Illegal Abilities'],
-		validateSet: function(set) {
+		validateSet: function (set) {
 			// limit one of each move in Standard
 			var moves = [];
 			if (set.moves) {
 				var hasMove = {};
-				for (var i=0; i<set.moves.length; i++) {
+				for (var i = 0; i < set.moves.length; i++) {
 					var move = this.getMove(set.moves[i]);
 					var moveid = move.id;
 					if (hasMove[moveid]) continue;

@@ -14,12 +14,12 @@ exports.BattleMovedex = {
 	assist: {
 		inherit: true,
 		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
-		onHit: function(target) {
+		onHit: function (target) {
 			var moves = [];
-			for (var j=0; j<target.side.pokemon.length; j++) {
+			for (var j = 0; j < target.side.pokemon.length; j++) {
 				var pokemon = target.side.pokemon[j];
 				if (pokemon === target) continue;
-				for (var i=0; i<pokemon.moves.length; i++) {
+				for (var i = 0; i < pokemon.moves.length; i++) {
 					var move = pokemon.moves[i];
 					var noAssist = {
 						assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1
@@ -40,7 +40,7 @@ exports.BattleMovedex = {
 	assurance: {
 		inherit: true,
 		basePower: 50,
-		basePowerCallback: function(pokemon, target) {
+		basePowerCallback: function (pokemon, target) {
 			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt) {
 				this.debug('Boosted for being damaged this turn');
 				return 100;
@@ -72,7 +72,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "The user's type changes based on the battle terrain. Ground-type in Wi-Fi battles. (In-game: Ground-type in puddles, rocky ground, and sand, Water-type on water, Rock-type in caves, Ice-type on snow and ice, and Normal-type everywhere else.) Fails if the user's type cannot be changed or if the user is already purely that type.",
 		shortDesc: "Changes user's type based on terrain. (Ground)",
-		onHit: function(target) {
+		onHit: function (target) {
 			if (!target.setType('Ground')) return false;
 			this.add('-start', target, 'typechange', 'Ground');
 		}
@@ -99,7 +99,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
 		shortDesc: "Uses the last move used in the battle.",
-		onHit: function(pokemon) {
+		onHit: function (pokemon) {
 			var noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1};
 			if (!this.lastMove || noCopycat[this.lastMove]) {
 				return false;
@@ -109,7 +109,7 @@ exports.BattleMovedex = {
 	},
 	cottonspore: {
 		inherit: true,
-		onTryHit: function() {}
+		onTryHit: function () {}
 	},
 	covet: {
 		inherit: true,
@@ -123,12 +123,12 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "Lowers one adjacent target's evasion by 1 stage. Whether or not the target's evasion was affected, the effects of Reflect, Light Screen, Safeguard, Mist, Spikes, Toxic Spikes, and Stealth Rock end for the target's side. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves. Ignores a target's Substitute, although a Substitute will still block the evasion lowering.",
 		shortDesc: "Removes target's hazards, lowers evasion by 1.",
-		onHit: function(pokemon) {
+		onHit: function (pokemon) {
 			if (!pokemon.volatiles['substitute']) this.boost({evasion:-1});
 			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1};
 			for (var i in sideConditions) {
 				if (pokemon.side.removeSideCondition(i)) {
-					this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Defog', '[of] '+pokemon);
+					this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Defog', '[of] ' + pokemon);
 				}
 			}
 		}
@@ -156,7 +156,7 @@ exports.BattleMovedex = {
 	firepledge: {
 		inherit: true,
 		basePower: 50,
-		basePowerCallback: function(target, source, move) {
+		basePowerCallback: function (target, source, move) {
 			if (move.sourceEffect in {grasspledge:1, waterpledge:1}) {
 				this.add('-combine');
 				return 150;
@@ -183,7 +183,7 @@ exports.BattleMovedex = {
 	furycutter: {
 		inherit: true,
 		basePower: 20,
-		basePowerCallback: function(pokemon) {
+		basePowerCallback: function (pokemon) {
 			if (!pokemon.volatiles.furycutter) {
 				pokemon.addVolatile('furycutter');
 			}
@@ -191,10 +191,10 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onStart: function() {
+			onStart: function () {
 				this.effectData.multiplier = 1;
 			},
-			onRestart: function() {
+			onRestart: function () {
 				if (this.effectData.multiplier < 8) {
 					this.effectData.multiplier <<= 1;
 				}
@@ -205,7 +205,7 @@ exports.BattleMovedex = {
 	futuresight: {
 		inherit: true,
 		basePower: 100,
-		onTryHit: function(target, source) {
+		onTryHit: function (target, source) {
 			source.side.addSideCondition('futuremove');
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
 				return false;
@@ -233,7 +233,7 @@ exports.BattleMovedex = {
 	grasspledge: {
 		inherit: true,
 		basePower: 50,
-		basePowerCallback: function(target, source, move) {
+		basePowerCallback: function (target, source, move) {
 			if (move.sourceEffect in {waterpledge:1, firepledge:1}) {
 				this.add('-combine');
 				return 150;
@@ -251,8 +251,8 @@ exports.BattleMovedex = {
 	},
 	healpulse: {
 		inherit: true,
-		heal: [1,2],
-		onHit: function() {}
+		heal: [1, 2],
+		onHit: function () {}
 	},
 	heatwave: {
 		inherit: true,
@@ -261,7 +261,7 @@ exports.BattleMovedex = {
 	hex: {
 		inherit: true,
 		basePower: 50,
-		basePowerCallback: function(pokemon, target) {
+		basePowerCallback: function (pokemon, target) {
 			if (target.status) return 100;
 			return 50;
 		}
@@ -269,7 +269,7 @@ exports.BattleMovedex = {
 	hiddenpower: {
 		inherit: true,
 		basePower: 0,
-		basePowerCallback: function(pokemon) {
+		basePowerCallback: function (pokemon) {
 			return pokemon.hpPower || 70;
 		},
 		desc: "Deals damage to one adjacent target. This move's type and power depend on the user's individual values (IVs). Power varies between 30 and 70, and type can be any but Normal.",
@@ -356,7 +356,7 @@ exports.BattleMovedex = {
 		basePower: 30,
 		desc: "Deals damage to all adjacent foes and destroys any Berry they may be holding.",
 		shortDesc: "Destroys the foe(s) Berry.",
-		onHit: function(pokemon, source) {
+		onHit: function (pokemon, source) {
 			var item = pokemon.getItem();
 			if (item.isBerry && pokemon.takeItem(source)) {
 				this.add('-enditem', pokemon, item.name, '[from] move: Incinerate');
@@ -373,7 +373,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
 		shortDesc: "Removes the target's held item.",
 		pp: 20,
-		onBasePower: function() {}
+		onBasePower: function () {}
 	},
 	leafstorm: {
 		inherit: true,
@@ -403,7 +403,7 @@ exports.BattleMovedex = {
 	},
 	metronome: {
 		inherit: true,
-		onHit: function(target) {
+		onHit: function (target) {
 			var moves = [];
 			for (var i in exports.BattleMovedex) {
 				var move = exports.BattleMovedex[i];
@@ -451,16 +451,16 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		volatileStatus: 'mudsport',
-		onTryHitField: function(target, source) {
+		onTryHitField: function (target, source) {
 			if (source.volatiles['mudsport']) return false;
 		},
 		effect: {
 			noCopy: true,
-			onStart: function(pokemon) {
+			onStart: function (pokemon) {
 				this.add("-start", pokemon, 'Mud Sport');
 			},
 			onBasePowerPriority: 1,
-			onAnyBasePower: function(basePower, user, target, move) {
+			onAnyBasePower: function (basePower, user, target, move) {
 				if (move.type === 'Electric') return this.chainModify([0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			}
 		},
@@ -476,7 +476,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "This move calls another move for use depending on the battle terrain. Earthquake in Wi-Fi battles.",
 		shortDesc: "Attack changes based on terrain. (Earthquake)",
-		onHit: function(target) {
+		onHit: function (target) {
 			this.useMove('earthquake', target);
 		}
 	},
@@ -489,13 +489,20 @@ exports.BattleMovedex = {
 		accuracy: 85,
 		basePower: 14
 	},
+	poisonfang: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			status: 'tox'
+		},
+	},
 	poisongas: {
 		inherit: true,
 		accuracy: 80
 	},
 	poisonpowder: {
 		inherit: true,
-		onTryHit: function() {}
+		onTryHit: function () {}
 	},
 	powergem: {
 		inherit: true,
@@ -513,19 +520,19 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "The user and its party members are protected from attacks with original priority greater than 0 made by other Pokemon, including allies, during this turn. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
 		stallingMove: true, // Note: stallingMove is not used anywhere.
-		onTryHitSide: function(side, source) {
+		onTryHitSide: function (side, source) {
 			return this.willAct() && this.runEvent('StallMove', source);
 		},
-		onHitSide: function(side, source) {
+		onHitSide: function (side, source) {
 			source.addVolatile('stall');
 		},
 		effect: {
 			duration: 1,
-			onStart: function(target, source) {
+			onStart: function (target, source) {
 				this.add('-singleturn', source, 'Quick Guard');
 			},
 			onTryHitPriority: 4,
-			onTryHit: function(target, source, effect) {
+			onTryHit: function (target, source, effect) {
 				// Quick Guard only blocks moves with a natural positive priority
 				// (e.g. it doesn't block 0 priority moves boosted by Prankster)
 				if (effect && (effect.id === 'Feint' || this.getMove(effect.id).priority <= 0)) {
@@ -594,7 +601,7 @@ exports.BattleMovedex = {
 	},
 	skydrop: {
 		inherit: true,
-		onTry: function(attacker, defender, move) {
+		onTry: function (attacker, defender, move) {
 			if (defender.fainted) return false;
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -617,12 +624,12 @@ exports.BattleMovedex = {
 	},
 	sleeppowder: {
 		inherit: true,
-		onTryHit: function() {}
+		onTryHit: function () {}
 	},
 	smellingsalts: {
 		inherit: true,
 		basePower: 60,
-		basePowerCallback: function(pokemon, target) {
+		basePowerCallback: function (pokemon, target) {
 			if (target.status === 'par') return 120;
 			return 60;
 		}
@@ -637,7 +644,7 @@ exports.BattleMovedex = {
 	},
 	spore: {
 		inherit: true,
-		onTryHit: function() {}
+		onTryHit: function () {}
 	},
 	stormthrow: {
 		inherit: true,
@@ -657,7 +664,7 @@ exports.BattleMovedex = {
 	},
 	stunspore: {
 		inherit: true,
-		onTryHit: function() {}
+		onTryHit: function () {}
 	},
 	surf: {
 		inherit: true,
@@ -706,7 +713,7 @@ exports.BattleMovedex = {
 	},
 	toxic: {
 		inherit: true,
-		onModifyMove: function() {}
+		onModifyMove: function () {}
 	},
 	vinewhip: {
 		inherit: true,
@@ -716,7 +723,7 @@ exports.BattleMovedex = {
 	wakeupslap: {
 		inherit: true,
 		basePower: 60,
-		basePowerCallback: function(pokemon, target) {
+		basePowerCallback: function (pokemon, target) {
 			if (target.status === 'slp') return 120;
 			return 60;
 		}
@@ -724,7 +731,7 @@ exports.BattleMovedex = {
 	waterpledge: {
 		inherit: true,
 		basePower: 50,
-		basePowerCallback: function(target, source, move) {
+		basePowerCallback: function (target, source, move) {
 			if (move.sourceEffect in {firepledge:1, grasspledge:1}) {
 				this.add('-combine');
 				return 150;
@@ -744,16 +751,16 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		volatileStatus: 'watersport',
-		onTryHitField: function(target, source) {
+		onTryHitField: function (target, source) {
 			if (source.volatiles['watersport']) return false;
 		},
 		effect: {
 			noCopy: true,
-			onStart: function(pokemon) {
+			onStart: function (pokemon) {
 				this.add("-start", pokemon, 'move: Water Sport');
 			},
 			onBasePowerPriority: 1,
-			onAnyBasePower: function(basePower, user, target, move) {
+			onAnyBasePower: function (basePower, user, target, move) {
 				if (move.type === 'Fire') return this.chainModify([0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			}
 		},
@@ -770,10 +777,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side. Priority +3.",
 		stallingMove: true, // Note: stallingMove is not used anywhere.
-		onTryHitSide: function(side, source) {
+		onTryHitSide: function (side, source) {
 			return this.willAct() && this.runEvent('StallMove', source);
 		},
-		onHitSide: function(side, source) {
+		onHitSide: function (side, source) {
 			source.addVolatile('stall');
 		},
 	},

@@ -8,29 +8,29 @@
  * @license MIT license
  */
 
-module.exports = (function() {
+module.exports = (function () {
 	var lastCrashLog = 0;
-	return function(err, description) {
-		console.log("\nCRASH: "+err.stack+"\n");
-		fs.createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function(fd) {
-			this.write("\n"+err.stack+"\n");
+	return function (err, description) {
+		console.log("\nCRASH: " + err.stack + "\n");
+		require('fs').createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function (fd) {
+			this.write("\n" + err.stack + "\n");
 			this.end();
 		}).on("error", function (err) {
-			console.log("\nSUBCRASH: "+err.stack+"\n");
+			console.log("\nSUBCRASH: " + err.stack + "\n");
 		});
 		var datenow = Date.now();
-		if (config.crashguardemail && ((datenow - lastCrashLog) > 1000 * 60 * 5)) {
+		if (Config.crashguardemail && ((datenow - lastCrashLog) > 1000 * 60 * 5)) {
 			lastCrashLog = datenow;
 			var transport;
 			try {
 				transport = require('nodemailer').createTransport(
-					config.crashguardemail.transport,
-					config.crashguardemail.options
+					Config.crashguardemail.transport,
+					Config.crashguardemail.options
 				);
 				transport.sendMail({
-					from: config.crashguardemail.from,
-					to: config.crashguardemail.to,
-					subject: config.crashguardemail.subject,
+					from: Config.crashguardemail.from,
+					to: Config.crashguardemail.to,
+					subject: Config.crashguardemail.subject,
 					text: description + ' crashed with this stack trace:\n' + err.stack
 				});
 			} catch (e) {
