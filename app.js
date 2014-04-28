@@ -100,7 +100,7 @@ global.reloadCustomAvatars = function() {
 		if (ext !== '.png' && ext !== '.gif')
 			return;
 
-		var user = toUserid(path.basename(file, ext));
+		var user = toId(path.basename(file, ext));
 		newCustomAvatars[user] = file;
 		delete Config.customAvatars[user];
 	});
