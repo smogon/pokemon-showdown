@@ -19,7 +19,7 @@ The type was decided with the following operation:
 4 * (atkDV % 4) + (defDV % 4)
 Which gives as a number from 0 to 16, giving us the index in the type table to use.
 The Hidden Power base power was decided with the following formula:
-Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV>2?3:spcDV)) / 2 + 31);
+Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV > 2 ? 3 : spcDV)) / 2 + 31);
 The DVs are shifted 3 positions, taking thus the most important byte, thus having no value under 8 DVs and a value on 8 and higher.
 The most important DV was attack and special.
 

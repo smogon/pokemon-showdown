@@ -4,13 +4,19 @@
  */
 exports.BattleScripts = {
 	gen: 6,
-	init: function() {
-		this.modData('Pokedex', 'ampharosmega').abilities = {0: 'Regenerator'};
-		this.modData('Pokedex', 'mismagius').types = ['Ghost', 'Fairy'];
-		this.modData('Learnsets', 'empoleon').learnset.roost = ['6L100'];
-		this.modData('Pokedex', 'altaria').types = ['Dragon', 'Fairy'];
-		this.modData('Learnsets', 'scrafty').learnset.partingshot = ['6L100'];
-		this.modData('Pokedex', 'metagross').abilities = {0: 'Bulletproof'};
-		this.modData('Pokedex', 'cresselia').types = ['Psychic', 'Fairy'];
+	init: function () {
+		// March theorymons
+		this.modData('Pokedex', 'gourgeist').abilities = {0: 'Flash Fire'};
+		this.modData('Pokedex', 'snorlax').abilities = {0: 'Poison Heal'};
+		this.modData('Pokedex', 'drapion').abilities = {0: 'Tough Claws'};
+		this.modData('Pokedex', 'milotic').types = ['Water', 'Fairy'];
+		this.modData('Pokedex', 'registeel').abilities = {0: 'Regenerator'};
+
+		// April theorymons
+		this.modData('Pokedex', 'eelektross').types = ['Electric', 'Poison'];
+		this.modData('Pokedex', 'escavalier').abilities = {0: 'Dry Skin'};
+		this.modData('Pokedex', 'luxray').types = ['Electric', 'Dark'];
+		this.modData('Pokedex', 'salamence').abilities = {0: 'Gale Wings'};
+		this.modData('Pokedex', 'kyurem').abilities = {0: 'Snow Warning'};
 	}
 };

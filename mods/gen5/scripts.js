@@ -1,6 +1,6 @@
 exports.BattleScripts = {
 	gen: 5,
-	randomSet: function(template, i) {
+	randomSet: function (template, i) {
 		if (i === undefined) i = 1;
 		template = this.getTemplate(template);
 		var name = template.name;
@@ -9,7 +9,7 @@ exports.BattleScripts = {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
 			template = this.getTemplate('unown');
 
-			var stack = 'Template incompatible with random battles: '+name;
+			var stack = 'Template incompatible with random battles: ' + name;
 			var fakeErr = {stack: stack};
 			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
 		}
@@ -49,13 +49,13 @@ exports.BattleScripts = {
 		var counter = {};
 		var setupType = '';
 
-		var j=0;
+		var j = 0;
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.length<4 && j<moveKeys.length) {
+			while (moves.length < 4 && j < moveKeys.length) {
 				var moveid = toId(moveKeys[j]);
 				j++;
-				if (moveid.substr(0,11) === 'hiddenpower') {
+				if (moveid.substr(0, 11) === 'hiddenpower') {
 					if (!hasMove['hiddenpower']) {
 						hasMove['hiddenpower'] = true;
 					} else {
@@ -76,7 +76,7 @@ exports.BattleScripts = {
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
 			// Iterate through all moves we've chosen so far and keep track of what they do:
-			for (var k=0; k<moves.length; k++) {
+			for (var k = 0; k < moves.length; k++) {
 				var move = this.getMove(moves[k]);
 				var moveid = move.id;
 				// Keep track of all moves we have:
@@ -179,7 +179,7 @@ exports.BattleScripts = {
 			}
 
 			// Iterate through the moves again, this time to cull them:
-			for (var k=0; k<moves.length; k++) {
+			for (var k = 0; k < moves.length; k++) {
 				var moveid = moves[k];
 				var move = this.getMove(moveid);
 				var rejected = false;
@@ -216,7 +216,7 @@ exports.BattleScripts = {
 					isSetup = true;
 					break;
 				case 'shellsmash': case 'growth': case 'workup':
-					if (counter.Physical+counter.Special < 2 && !hasMove['batonpass']) rejected = true;
+					if (counter.Physical + counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Mixed' || counter['mixedsetup'] > 1) rejected = true;
 					isSetup = true;
 					break;
@@ -404,8 +404,8 @@ exports.BattleScripts = {
 				}
 
 				// Remove rejected moves from the move list.
-				if (rejected && j<moveKeys.length) {
-					moves.splice(k,1);
+				if (rejected && j < moveKeys.length) {
+					moves.splice(k, 1);
 					break;
 				}
 
@@ -417,24 +417,24 @@ exports.BattleScripts = {
 					}
 				}
 			}
-			if (j<moveKeys.length && moves.length === 4) {
+			if (j < moveKeys.length && moves.length === 4) {
 				// Move post-processing:
-				if (damagingMoves.length===0) {
+				if (damagingMoves.length === 0) {
 					// Have a 60% chance of rejecting one move at random:
-					if (Math.random()*1.66<1) moves.splice(Math.floor(Math.random()*moves.length),1);
-				} else if (damagingMoves.length===1) {
+					if (Math.random() * 1.66 < 1) moves.splice(Math.floor(Math.random() * moves.length), 1);
+				} else if (damagingMoves.length === 1) {
 					// Night Shade, Seismic Toss, etc. don't count:
 					if (!damagingMoves[0].damage) {
-						damagingid = damagingMoves[0].id;
-						damagingType = damagingMoves[0].type;
+						var damagingid = damagingMoves[0].id;
+						var damagingType = damagingMoves[0].type;
 						var replace = false;
 						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
 							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
-							if (!hasMove['encore'] && Math.random()*2>1) replace = true;
+							if (!hasMove['encore'] && Math.random() * 2 > 1) replace = true;
 						} else if (damagingid === 'focuspunch') {
 							// Focus Punch is a bad idea without a sub:
 							if (!hasMove['substitute']) replace = true;
-						} else if (damagingid.substr(0,11) === 'hiddenpower' && damagingType === 'Ice') {
+						} else if (damagingid.substr(0, 11) === 'hiddenpower' && damagingType === 'Ice') {
 							// Mono-HP-Ice is never acceptable.
 							replace = true;
 						} else {
@@ -450,9 +450,9 @@ exports.BattleScripts = {
 								}
 							}
 						}
-						if (replace) moves.splice(damagingMoveIndex[damagingid],1);
+						if (replace) moves.splice(damagingMoveIndex[damagingid], 1);
 					}
-				} else if (damagingMoves.length===2) {
+				} else if (damagingMoves.length === 2) {
 					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric, Ghost/Fighting, or Dark/Fighting, reject one of them at random.
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
@@ -462,20 +462,20 @@ exports.BattleScripts = {
 					} else {
 						rejectCombo = false;
 					}
-					if (rejectCombo) moves.splice(Math.floor(Math.random()*moves.length),1);
+					if (rejectCombo) moves.splice(Math.floor(Math.random() * moves.length), 1);
 				} else {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
 					var isStab = false;
-					for (var l=0; l<damagingMoves.length; l++) {
+					for (var l = 0; l < damagingMoves.length; l++) {
 						if (hasStab[damagingMoves[l].type]) {
 							isStab = true;
 							break;
 						}
 					}
-					if (!isStab) moves.splice(Math.floor(Math.random()*moves.length),1);
+					if (!isStab) moves.splice(Math.floor(Math.random() * moves.length), 1);
 				}
 			}
-		} while (moves.length<4 && j<moveKeys.length);
+		} while (moves.length < 4 && j < moveKeys.length);
 
 		// any moveset modification goes here
 		//moves[0] = 'Safeguard';
@@ -487,7 +487,7 @@ exports.BattleScripts = {
 			if (template.abilities['H']) {
 				abilities.push(template.abilities['H']);
 			}
-			abilities.sort(function(a,b){
+			abilities.sort(function (a, b){
 				return this.getAbility(b).rating - this.getAbility(a).rating;
 			}.bind(this));
 			var ability0 = this.getAbility(abilities[0]);
@@ -496,11 +496,11 @@ exports.BattleScripts = {
 			if (abilities[1]) {
 
 				if (ability0.rating <= ability1.rating) {
-					if (Math.random()*2<1) {
+					if (Math.random() * 2 < 1) {
 						ability = ability1.name;
 					}
 				} else if (ability0.rating - 0.6 <= ability1.rating) {
-					if (Math.random()*3<1) {
+					if (Math.random() * 3 < 1) {
 						ability = ability1.name;
 					}
 				}
@@ -620,17 +620,17 @@ exports.BattleScripts = {
 				item = 'Focus Sash';
 			} else if (template.species === 'Unown') {
 				item = 'Choice Specs';
-			} else if ((template.species === 'Wynaut' || template.species === 'Wobbuffet') && hasMove['destinybond'] && Math.random()*2 > 1) {
+			} else if ((template.species === 'Wynaut' || template.species === 'Wobbuffet') && hasMove['destinybond'] && Math.random() * 2 > 1) {
 				item = 'Custap Berry';
 			} else if (hasMove['trick'] && hasMove['gyroball'] && (ability === 'Levitate' || hasType['Flying'])) {
 				item = 'Macho Brace';
 			} else if (hasMove['trick'] && hasMove['gyroball']) {
 				item = 'Iron Ball';
 			} else if (hasMove['trick'] || hasMove['switcheroo']) {
-				var randomNum = Math.random()*2;
-				if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum>1)) {
+				var randomNum = Math.random() * 2;
+				if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum > 1)) {
 					item = 'Choice Band';
-				} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum>1)) {
+				} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum > 1)) {
 					item = 'Choice Specs';
 				} else {
 					item = 'Choice Scarf';
@@ -685,7 +685,7 @@ exports.BattleScripts = {
 				}
 				if ((hasMove['return'] || hasMove['hyperfang']) && !hasMove['facade']) {
 					// lol no
-					for (var j=0; j<moves.length; j++) {
+					for (var j = 0; j < moves.length; j++) {
 						if (moves[j] === 'Return' || moves[j] === 'HyperFang') {
 							moves[j] = 'Facade';
 							break;
@@ -698,13 +698,13 @@ exports.BattleScripts = {
 				// less priority than if you'd had both
 				item = 'Light Clay';
 			} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
-				if (Math.random()*3 > 1) {
+				if (Math.random() * 3 > 1) {
 					item = 'Choice Band';
 				} else {
 					item = 'Expert Belt';
 				}
 			} else if (counter.Special >= 4) {
-				if (Math.random()*3 > 1) {
+				if (Math.random() * 3 > 1) {
 					item = 'Choice Specs';
 				} else {
 					item = 'Expert Belt';
@@ -729,7 +729,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Iron Barbs') {
 				// only Iron Barbs for now
 				item = 'Rocky Helmet';
-			} else if ((template.baseStats.hp+75)*(template.baseStats.def+template.baseStats.spd+175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
+			} else if ((template.baseStats.hp + 75) * (template.baseStats.def + template.baseStats.spd + 175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
 				// skarmory and forretress get exceptions for their typing
 				item = 'Leftovers';
 			} else if (counter.Physical + counter.Special >= 3 && setupType) {
@@ -738,7 +738,7 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else if (counter.Physical + counter.Special >= 4) {
 				item = 'Expert Belt';
-			} else if (i===0 && ability !== 'Sturdy' && !counter['recoil']) {
+			} else if (i === 0 && ability !== 'Sturdy' && !counter['recoil']) {
 				item = 'Focus Sash';
 			} else if (hasMove['outrage']) {
 				item = 'Lum Berry';
@@ -814,10 +814,10 @@ exports.BattleScripts = {
 			ivs: ivs,
 			item: item,
 			level: level,
-			shiny: (Math.random()*1024<=1)
+			shiny: (Math.random() * 1024 <= 1)
 		};
 	},
-	randomTeam: function(side) {
+	randomTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
@@ -831,7 +831,7 @@ exports.BattleScripts = {
 		// PotD stuff
 		var potd = {};
 		if ('Rule:potd' in this.getFormat().banlistTable) {
-			potd = this.getTemplate(config.potd);
+			potd = this.getTemplate(Config.potd);
 		}
 
 		var typeCount = {};
@@ -839,7 +839,7 @@ exports.BattleScripts = {
 		var uberCount = 0;
 		var nuCount = 0;
 
-		for (var i=0; i<keys.length && pokemonLeft < 6; i++) {
+		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(keys[i]);
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
@@ -847,23 +847,23 @@ exports.BattleScripts = {
 			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
 			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
 			if (tier === 'LC' && nuCount > 1) continue;
-			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random()*5>1) continue;
-			if (tier === 'Uber' && uberCount > 1 && Math.random()*5>1) continue;
+			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
+			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
 
 			// CAPs have 20% the normal rate
-			if (tier === 'CAP' && Math.random()*5>1) continue;
+			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
 			// Arceus formes have 1/17 the normal rate each (so Arceus as a whole has a normal rate)
-			if (keys[i].substr(0,6) === 'arceus' && Math.random()*17>1) continue;
+			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 17 > 1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
-			if (keys[i].substr(0,8) === 'basculin' && Math.random()*2>1) continue;
+			if (keys[i].substr(0, 8) === 'basculin' && Math.random() * 2 > 1) continue;
 			// Not available on BW
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
 			// Limit 2 of any type
 			var types = template.types;
 			var skip = false;
-			for (var t=0; t<types.length; t++) {
-				if (typeCount[types[t]] > 1 && Math.random()*5>1) {
+			for (var t = 0; t < types.length; t++) {
+				if (typeCount[types[t]] > 1 && Math.random() * 5 > 1) {
 					skip = true;
 					break;
 				}
@@ -872,7 +872,7 @@ exports.BattleScripts = {
 
 			if (potd && potd.name && potd.types) {
 				// The Pokemon of the Day belongs in slot 2
-				if (i===1) {
+				if (i === 1) {
 					template = potd;
 					if (template.species === 'Magikarp') {
 						template.viableMoves = {magikarpsrevenge:1, splash:1, bounce:1};
@@ -899,7 +899,7 @@ exports.BattleScripts = {
 
 			pokemonLeft++;
 			// Now that our Pokemon has passed all checks, we can increment the type counter
-			for (var t=0; t<types.length; t++) {
+			for (var t = 0; t < types.length; t++) {
 				if (types[t] in typeCount) {
 					typeCount[types[t]]++;
 				} else {

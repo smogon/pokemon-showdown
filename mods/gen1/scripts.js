@@ -11,14 +11,14 @@ exports.BattleScripts = {
 			var learnset = this.data.Learnsets[i].learnset;
 			for (var moveid in learnset) {
 				if (typeof learnset[moveid] === 'string') learnset[moveid] = [learnset[moveid]];
-				learnset[moveid] = learnset[moveid].filter(function(source) {
+				learnset[moveid] = learnset[moveid].filter(function (source) {
 					return source[0] === '1';
 				});
 				if (!learnset[moveid].length) delete learnset[moveid];
 			}
 		}
 	},
-	debug: function(activity) {
+	debug: function (activity) {
 		if (this.getFormat().debug) {
 			this.add('debug', activity);
 		}
@@ -46,7 +46,7 @@ exports.BattleScripts = {
 
 		return stat;
 	},
-	runMove: function(move, pokemon, target, sourceEffect) {
+	runMove: function (move, pokemon, target, sourceEffect) {
 		move = this.getMove(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
 		if (target.subFainted) delete target.subFainted;
@@ -54,7 +54,7 @@ exports.BattleScripts = {
 		this.setActiveMove(move, pokemon, target);
 
 		if (pokemon.movedThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
-			this.debug(''+pokemon.id+' move interrupted; movedThisTurn: '+pokemon.movedThisTurn);
+			this.debug('' + pokemon.id + ' move interrupted; movedThisTurn: ' + pokemon.movedThisTurn);
 			this.clearActiveMove(true);
 			// This is only run for sleep
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -97,7 +97,7 @@ exports.BattleScripts = {
 					if (pokemon.volatiles['partialtrappinglock'].locked !== target && target !== pokemon) {
 						// The target switched, therefor, we must re-roll the duration
 						var roll = this.random(6);
-						var duration = [2,2,3,3,4,5][roll];
+						var duration = [2, 2, 3, 3, 4, 5][roll];
 						pokemon.volatiles['partialtrappinglock'].duration = duration;
 						pokemon.volatiles['partialtrappinglock'].locked = target;
 						// Duration reset thus partially trapped at 2 always
@@ -120,7 +120,7 @@ exports.BattleScripts = {
 			} // If we move to here, the move failed and there's no partial trapping lock
 		}
 	},
-	useMove: function(move, pokemon, target, sourceEffect) {
+	useMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMove(move);
 		baseMove = move;
@@ -160,8 +160,8 @@ exports.BattleScripts = {
 
 		var movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
-		if (sourceEffect) attrs += '|[from]'+this.getEffect(sourceEffect);
-		this.addMove('move', pokemon, movename, target+attrs);
+		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
+		this.addMove('move', pokemon, movename, target + attrs);
 
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return true;
@@ -197,15 +197,15 @@ exports.BattleScripts = {
 		}
 		return true;
 	},
-	rollMoveHit: function(target, pokemon, move, spreadHit) {
-		var boostTable = [1, 4/3, 5/3, 2, 7/3, 8/3, 3];
+	rollMoveHit: function (target, pokemon, move, spreadHit) {
+		var boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		var doSelfDestruct = true;
 		var damage = 0;
 
 		// Calculate true accuracy
 		var accuracy = move.accuracy;
 		if (accuracy !== true) {
-			accuracy = Math.floor(accuracy*255/100);
+			accuracy = Math.floor(accuracy * 255 / 100);
 		}
 
 		// Partial trapping moves: true accuracy while it lasts
@@ -255,13 +255,13 @@ exports.BattleScripts = {
 						var roll = this.random(6);
 						hits = [2, 2, 3, 3, 4, 5][roll];
 					} else {
-						hits = this.random(hits[0], hits[1]+1);
+						hits = this.random(hits[0], hits[1] + 1);
 					}
 				}
 				hits = Math.floor(hits);
 				// In gen 1, all the hits have the same damage for multihits move
 				var moveDamage = 0;
-				for (var i=0; i<hits && target.hp && pokemon.hp; i++) {
+				for (var i = 0; i < hits && target.hp && pokemon.hp; i++) {
 					if (i === 0) {
 						// First hit, we calculate
 						moveDamage = this.moveHit(target, pokemon, move);
@@ -308,7 +308,7 @@ exports.BattleScripts = {
 
 		return damage;
 	},
-	moveHit: function(target, pokemon, move, moveData, isSecondary, isSelf) {
+	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
 		var damage = 0;
 		move = this.getMoveCopy(move);
 
@@ -520,7 +520,7 @@ exports.BattleScripts = {
 			var effectChance;
 			for (var i = 0; i < moveData.secondaries.length; i++) {
 				secondaryRoll = this.random(256);
-				effectChance = Math.floor(moveData.secondaries[i].chance*255/100);
+				effectChance = Math.floor(moveData.secondaries[i].chance * 255 / 100);
 				if (typeof moveData.secondaries[i].chance === 'undefined' || secondaryRoll < effectChance) {
 					this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
 				}
@@ -532,7 +532,7 @@ exports.BattleScripts = {
 
 		return damage;
 	},
-	getDamage: function(pokemon, target, move, suppressMessages) {
+	getDamage: function (pokemon, target, move, suppressMessages) {
 		// We get the move
 		if (typeof move === 'string') move = this.getMove(move);
 		if (typeof move === 'number') move = {
@@ -605,11 +605,11 @@ exports.BattleScripts = {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
 			return basePower;
 		}
-		basePower = clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit ratio
 		// First, we check if it's a 100% crit move
-		move.critRatio = clampIntRange(move.critRatio, 0, 5);
+		move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
 		move.crit = move.willCrit || false;
 		var critRatio = 0;
 		// Otherwise, we calculate the critical hit chance
@@ -662,7 +662,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (!basePower) return 0;
-		basePower = clampIntRange(basePower, 1);
+		basePower = this.clampIntRange(basePower, 1);
 
 		// We now check for attacker and defender
 		var level = pokemon.level;
@@ -727,7 +727,7 @@ exports.BattleScripts = {
 		}
 
 		// Randomizer, it's a number between 217 and 255
-		var randFactor = Math.floor(Math.random()*39)+217;
+		var randFactor = Math.floor(Math.random() * 39) + 217;
 		baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
 
 		// If damage is less than 1, we return 1
@@ -738,7 +738,7 @@ exports.BattleScripts = {
 		// We are done, this is the final damage
 		return Math.floor(baseDamage);
 	},
-	boost: function(boost, target, source, effect) {
+	boost: function (boost, target, source, effect) {
 		// Editing boosts to take into account para and burn stat drops glitches
 		if (this.event) {
 			if (!target) target = this.event.target;
@@ -775,14 +775,14 @@ exports.BattleScripts = {
 				if (effect.effectType === 'Move') {
 					this.add(msg, target, i, boost[i]);
 				} else {
-					this.add(msg, target, i, boost[i], '[from] '+effect.fullname);
+					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
 	},
-	damage: function(damage, target, source, effect) {
+	damage: function (damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -791,7 +791,7 @@ exports.BattleScripts = {
 		if (!target || !target.hp) return 0;
 		effect = this.getEffect(effect);
 		if (!(damage || damage === 0)) return damage;
-		if (damage !== 0) damage = clampIntRange(damage, 1);
+		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 
 		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
 			damage = this.runEvent('Damage', target, source, effect, damage);
@@ -800,22 +800,22 @@ exports.BattleScripts = {
 				return damage;
 			}
 		}
-		if (damage !== 0) damage = clampIntRange(damage, 1);
+		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;
 		var name = effect.fullname;
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {
 		case 'partiallytrapped':
-			this.add('-damage', target, target.getHealth, '[from] '+this.effectData.sourceEffect.fullname, '[partiallytrapped]');
+			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
 			break;
 		default:
 			if (effect.effectType === 'Move') {
 				this.add('-damage', target, target.getHealth);
 			} else if (source && source !== target) {
-				this.add('-damage', target, target.getHealth, '[from] '+effect.fullname, '[of] '+source);
+				this.add('-damage', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
 			} else {
-				this.add('-damage', target, target.getHealth, '[from] '+name);
+				this.add('-damage', target, target.getHealth, '[from] ' + name);
 			}
 			break;
 		}
@@ -837,17 +837,17 @@ exports.BattleScripts = {
 		return damage;
 	},
 	// This is random teams making for gen 1
-	randomCCTeam: function(side) {
+	randomCCTeam: function (side) {
 		var teamdexno = [];
 		var team = [];
 
 		//pick six random pokmeon--no repeats, even among formes
 		//also need to either normalize for formes or select formes at random
 		//unreleased are okay. No CAP for now, but maybe at some later date
-		for (var i=0; i<6; i++)
+		for (var i = 0; i < 6; i++)
 		{
 			while (true) {
-				var x=Math.floor(Math.random()*150)+1;
+				var x = Math.floor(Math.random() * 150) + 1;
 				if (teamdexno.indexOf(x) === -1) {
 					teamdexno.push(x);
 					break;
@@ -855,7 +855,7 @@ exports.BattleScripts = {
 			}
 		}
 
-		for (var i=0; i<6; i++) {
+		for (var i = 0; i < 6; i++) {
 
 			//choose forme
 			var formes = [];
@@ -873,22 +873,22 @@ exports.BattleScripts = {
 			var stats = template.baseStats;
 
 			// Modified base stat total assumes 30 IVs, 255 EVs in every stat
-			var mbst = (stats["hp"]*2+30+63+100)+10;
-			mbst += (stats["atk"]*2+30+63+100)+5;
-			mbst += (stats["def"]*2+30+63+100)+5;
-			mbst += (stats["spa"]*2+30+63+100)+5;
-			mbst += (stats["spd"]*2+30+63+100)+5;
-			mbst += (stats["spe"]*2+30+63+100)+5;
+			var mbst = (stats["hp"] * 2 + 30 + 63 + 100) + 10;
+			mbst += (stats["atk"] * 2 + 30 + 63 + 100) + 5;
+			mbst += (stats["def"] * 2 + 30 + 63 + 100) + 5;
+			mbst += (stats["spa"] * 2 + 30 + 63 + 100) + 5;
+			mbst += (stats["spd"] * 2 + 30 + 63 + 100) + 5;
+			mbst += (stats["spe"] * 2 + 30 + 63 + 100) + 5;
 
-			var level = Math.floor(100*mbstmin/mbst); // Initial level guess will underestimate
+			var level = Math.floor(100 * mbstmin/mbst); // Initial level guess will underestimate
 
 			while (level < 100) {
-				mbst = Math.floor((stats["hp"]*2+30+63+100)*level/100+10);
-				mbst += Math.floor(((stats["atk"]*2+30+63+100)*level/100+5)*level/100); //since damage is roughly proportional to lvl
-				mbst += Math.floor((stats["def"]*2+30+63+100)*level/100+5);
-				mbst += Math.floor(((stats["spa"]*2+30+63+100)*level/100+5)*level/100);
-				mbst += Math.floor((stats["spd"]*2+30+63+100)*level/100+5);
-				mbst += Math.floor((stats["spe"]*2+30+63+100)*level/100+5);
+				mbst = Math.floor((stats["hp"] * 2 + 30 + 63 + 100) * level / 100 + 10);
+				mbst += Math.floor(((stats["atk"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100); //since damage is roughly proportional to lvl
+				mbst += Math.floor((stats["def"] * 2 + 30 + 63 + 100) * level / 100 + 5);
+				mbst += Math.floor(((stats["spa"] * 2 + 30 + 63 + 100) * level / 100 + 5) * level / 100);
+				mbst += Math.floor((stats["spd"] * 2 + 30 + 63 + 100) * level / 100 + 5);
+				mbst += Math.floor((stats["spe"] * 2 + 30 + 63 + 100) * level / 100 + 5);
 
 				if (mbst >= mbstmin)
 					break;
@@ -897,12 +897,12 @@ exports.BattleScripts = {
 
 			// Random IVs
 			var ivs = {
-				hp: Math.floor(Math.random()*31),
-				atk: Math.floor(Math.random()*31),
-				def: Math.floor(Math.random()*31),
-				spa: Math.floor(Math.random()*31),
-				spd: Math.floor(Math.random()*31),
-				spe: Math.floor(Math.random()*31)
+				hp: Math.floor(Math.random() * 31),
+				atk: Math.floor(Math.random() * 31),
+				def: Math.floor(Math.random() * 31),
+				spa: Math.floor(Math.random() * 31),
+				spd: Math.floor(Math.random() * 31),
+				spe: Math.floor(Math.random() * 31)
 			};
 
 			// ALl EVs
@@ -941,7 +941,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomTeam: function(side) {
+	randomTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
@@ -954,7 +954,7 @@ exports.BattleScripts = {
 
 		var ruleset = this.getFormat().ruleset;
 
-		for (var i=0; i<keys.length && pokemonLeft < 6; i++) {
+		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(keys[i]);
 			if (!template || !template.name || !template.types) continue;
 			var set = this.randomSet(template, i);
@@ -965,7 +965,7 @@ exports.BattleScripts = {
 
 		return pokemon;
 	},
-	randomSet: function(template, i) {
+	randomSet: function (template, i) {
 		if (i === undefined) i = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1
@@ -979,7 +979,7 @@ exports.BattleScripts = {
 		var counter = {};
 		var setupType = '';
 
-		var j=0;
+		var j = 0;
 		do {
 			hasMove = {};
 			counter = {
@@ -987,7 +987,7 @@ exports.BattleScripts = {
 				recoil: 0, inaccurate: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
-			for (var k=0; k<moves.length; k++) {
+			for (var k = 0; k < moves.length; k++) {
 				var move = this.getMove(moves[k]);
 				var moveid = move.id;
 				hasMove[moveid] = true;
@@ -1024,7 +1024,7 @@ exports.BattleScripts = {
 				setupType = 'Physical';
 			}
 
-			for (var k=0; k<moves.length; k++) {
+			for (var k = 0; k < moves.length; k++) {
 				var moveid = moves[k];
 				var move = this.getMove(moveid);
 				var rejected = false;
@@ -1072,12 +1072,12 @@ exports.BattleScripts = {
 					rejected = true;
 				}
 
-				if (rejected && j<moveKeys.length) {
+				if (rejected && j < moveKeys.length) {
 					moves.splice(k, 1);
 					break;
 				}
 			} // End of for
-		} while (moves.length<4 && j<moveKeys.length);
+		} while (moves.length < 4 && j < moveKeys.length);
 
 		var levelScale = {
 			LC: 95,
@@ -1105,7 +1105,7 @@ exports.BattleScripts = {
 			gender: false
 		};
 	},
-	faint: function(pokemon, source, effect) {
+	faint: function (pokemon, source, effect) {
 		pokemon.faint(source, effect);
 		this.queue = [];
 	}

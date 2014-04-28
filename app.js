@@ -51,13 +51,13 @@ function runNpm(command) {
 	console.log('Running `npm ' + command + '`...');
 	var child_process = require('child_process');
 	var npm = child_process.spawn('npm', [command]);
-	npm.stdout.on('data', function(data) {
+	npm.stdout.on('data', function (data) {
 		process.stdout.write(data);
 	});
-	npm.stderr.on('data', function(data) {
+	npm.stderr.on('data', function (data) {
 		process.stderr.write(data);
 	});
-	npm.on('close', function(code) {
+	npm.on('close', function (code) {
 		if (!code) {
 			child_process.fork('app.js').disconnect();
 		}
@@ -76,10 +76,7 @@ if (!Object.select) {
 // Make sure config.js exists, and copy it over from config-example.js
 // if it doesn't
 
-global.fs = require('fs');
-if (!('existsSync' in fs)) {
-	fs.existsSync = require('path').existsSync;
-}
+var fs = require('fs');
 
 // Synchronously, since it's needed before we can start the server
 if (!fs.existsSync('./config/config.js')) {
@@ -93,9 +90,9 @@ if (!fs.existsSync('./config/config.js')) {
  * Load configuration
  *********************************************************/
 
-global.config = require('./config/config.js');
+global.Config = require('./config/config.js');
 
-var watchFile = function() {
+var watchFile = function () {
 	try {
 		return fs.watchFile.apply(fs, arguments);
 	} catch (e) {
@@ -103,19 +100,19 @@ var watchFile = function() {
 	}
 };
 
-if (config.watchconfig) {
-	watchFile('./config/config.js', function(curr, prev) {
+if (Config.watchconfig) {
+	watchFile('./config/config.js', function (curr, prev) {
 		if (curr.mtime <= prev.mtime) return;
 		try {
 			delete require.cache[require.resolve('./config/config.js')];
-			config = require('./config/config.js');
+			Config = require('./config/config.js');
 			console.log('Reloaded config/config.js');
 		} catch (e) {}
 	});
 }
 
 if (process.argv[2] && parseInt(process.argv[2])) {
-	config.port = parseInt(process.argv[2]);
+	Config.port = parseInt(process.argv[2]);
 }
 
 global.ResourceMonitor = {
@@ -135,20 +132,20 @@ global.ResourceMonitor = {
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
 	 */
-	log: function(text) {
+	log: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) Rooms.rooms.staff.add('||'+text);
+		if (Rooms.rooms.staff) Rooms.rooms.staff.add('||' + text);
 	},
-	countConnection: function(ip, name) {
+	countConnection: function (ip, name) {
 		var now = Date.now();
 		var duration = now - this.connectionTimes[ip];
-		name = (name ? ': '+name : '');
-		if (ip in this.connections && duration < 30*60*1000) {
+		name = (name ? ': ' + name : '');
+		if (ip in this.connections && duration < 30 * 60 * 1000) {
 			this.connections[ip]++;
-			if (duration < 5*60*1000 && this.connections[ip] % 20 === 0) {
-				this.log('[ResourceMonitor] IP '+ip+' has connected '+this.connections[ip]+' times in the last '+duration.duration()+name);
-			} else if (this.connections[ip] % 60 == 0) {
-				this.log('[ResourceMonitor] IP '+ip+' has connected '+this.connections[ip]+' times in the last '+duration.duration()+name);
+			if (duration < 5 * 60 * 1000 && this.connections[ip] % 20 === 0) {
+				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
+			} else if (this.connections[ip] % 60 === 0) {
+				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
 			}
 		} else {
 			this.connections[ip] = 1;
@@ -158,16 +155,16 @@ global.ResourceMonitor = {
 	/**
 	 * Counts a battle. Returns true if the connection should be terminated for abuse.
 	 */
-	countBattle: function(ip, name) {
+	countBattle: function (ip, name) {
 		var now = Date.now();
 		var duration = now - this.battleTimes[ip];
-		name = (name ? ': '+name : '');
-		if (ip in this.battles && duration < 30*60*1000) {
+		name = (name ? ': ' + name : '');
+		if (ip in this.battles && duration < 30 * 60 * 1000) {
 			this.battles[ip]++;
-			if (duration < 5*60*1000 && this.battles[ip] % 15 == 0) {
-				this.log('[ResourceMonitor] IP '+ip+' has battled '+this.battles[ip]+' times in the last '+duration.duration()+name);
-			} else if (this.battles[ip] % 75 == 0) {
-				this.log('[ResourceMonitor] IP '+ip+' has battled '+this.battles[ip]+' times in the last '+duration.duration()+name);
+			if (duration < 5 * 60 * 1000 && this.battles[ip] % 15 === 0) {
+				this.log('[ResourceMonitor] IP ' + ip + ' has battled ' + this.battles[ip] + ' times in the last ' + duration.duration() + name);
+			} else if (this.battles[ip] % 75 === 0) {
+				this.log('[ResourceMonitor] IP ' + ip + ' has battled ' + this.battles[ip] + ' times in the last ' + duration.duration() + name);
 			}
 		} else {
 			this.battles[ip] = 1;
@@ -177,10 +174,10 @@ global.ResourceMonitor = {
 	/**
 	 * Counts battle prep. Returns true if too much
 	 */
-	countPrepBattle: function(ip) {
+	countPrepBattle: function (ip) {
 		var now = Date.now();
 		var duration = now - this.battlePrepTimes[ip];
-		if (ip in this.battlePreps && duration < 3*60*1000) {
+		if (ip in this.battlePreps && duration < 3 * 60 * 1000) {
 			this.battlePreps[ip]++;
 			if (this.battlePreps[ip] > 6) {
 				return true;
@@ -193,7 +190,7 @@ global.ResourceMonitor = {
 	/**
 	 * data
 	 */
-	countNetworkUse: function(size) {
+	countNetworkUse: function (size) {
 		if (this.activeIp in this.networkUse) {
 			this.networkUse[this.activeIp] += size;
 			this.networkCount[this.activeIp]++;
@@ -202,21 +199,21 @@ global.ResourceMonitor = {
 			this.networkCount[this.activeIp] = 1;
 		}
 	},
-	writeNetworkUse: function() {
+	writeNetworkUse: function () {
 		var buf = '';
 		for (var i in this.networkUse) {
-			buf += ''+this.networkUse[i]+'\t'+this.networkCount[i]+'\t'+i+'\n';
+			buf += '' + this.networkUse[i] + '\t' + this.networkCount[i] + '\t' + i + '\n';
 		}
 		fs.writeFile('logs/networkuse.tsv', buf);
 	},
-	clearNetworkUse: function() {
+	clearNetworkUse: function () {
 		this.networkUse = {};
 		this.networkCount = {};
 	},
 	/**
 	 * Counts roughly the size of an object to have an idea of the server load.
 	 */
-	sizeOfObject: function(object) {
+	sizeOfObject: function (object) {
 		var objectList = [];
 		var stack = [object];
 		var bytes = 0;
@@ -237,31 +234,31 @@ global.ResourceMonitor = {
 	/**
 	 * Controls the amount of times a cmd command is used
 	 */
-	countCmd: function(ip, name) {
-	 	var now = Date.now();
+	countCmd: function (ip, name) {
+		var now = Date.now();
 		var duration = now - this.cmdsTimes[ip];
-		name = (name ? ': '+name : '');
+		name = (name ? ': ' + name : '');
 		if (!this.cmdsTotal) this.cmdsTotal = {lastCleanup: 0, count: 0};
-		if (now - this.cmdsTotal.lastCleanup > 60*1000) {
+		if (now - this.cmdsTotal.lastCleanup > 60 * 1000) {
 			this.cmdsTotal.count = 0;
 			this.cmdsTotal.lastCleanup = now;
 		}
 		this.cmdsTotal.count++;
-		if (ip in this.cmds && duration < 60*1000) {
+		if (ip in this.cmds && duration < 60 * 1000) {
 			this.cmds[ip]++;
-			if (duration < 60*1000 && this.cmds[ip] % 5 === 0) {
+			if (duration < 60 * 1000 && this.cmds[ip] % 5 === 0) {
 				if (this.cmds[ip] >= 3) {
-					if (this.cmds[ip] % 30 === 0) this.log('CMD command from '+ip+' blocked for '+this.cmds[ip]+'th use in the last '+duration.duration()+name);
+					if (this.cmds[ip] % 30 === 0) this.log('CMD command from ' + ip + ' blocked for ' + this.cmds[ip] + 'th use in the last ' + duration.duration() + name);
 					return true;
 				}
-				this.log('[ResourceMonitor] IP '+ip+' has used CMD command '+this.cmds[ip]+' times in the last '+duration.duration()+name);
+				this.log('[ResourceMonitor] IP ' + ip + ' has used CMD command ' + this.cmds[ip] + ' times in the last ' + duration.duration() + name);
 			} else if (this.cmds[ip] % 15 === 0) {
-				this.log('CMD command from '+ip+' blocked for '+this.cmds[ip]+'th use in the last '+duration.duration()+name);
+				this.log('CMD command from ' + ip + ' blocked for ' + this.cmds[ip] + 'th use in the last ' + duration.duration() + name);
 				return true;
 			}
 		} else if (this.cmdsTotal.count > 8000) {
 			// One CMD check per user per minute on average (to-do: make this better)
-			this.log('CMD command for '+ip+' blocked because CMD has been used '+this.cmdsTotal.count+' times in the last minute.');
+			this.log('CMD command for ' + ip + ' blocked because CMD has been used ' + this.cmdsTotal.count + ' times in the last minute.');
 			return true;
 		} else {
 			this.cmds[ip] = 1;
@@ -282,13 +279,12 @@ global.ResourceMonitor = {
  * If an object with an ID is passed, its ID will be returned.
  * Otherwise, an empty string will be returned.
  */
-global.toId = function(text) {
+global.toId = function (text) {
 	if (text && text.id) text = text.id;
 	else if (text && text.userid) text = text.userid;
 
 	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
-global.toUserid = toId;
 
 /**
  * Sanitizes a username or Pokemon nickname
@@ -309,10 +305,10 @@ global.toUserid = toId;
  * toName also enforces that there are not multiple space characters
  * in the name, although this is not strictly necessary for safety.
  */
-global.toName = function(name) {
+global.toName = function (name) {
 	name = string(name);
 	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
-	if (name.length > 18) name = name.substr(0,18).trim();
+	if (name.length > 18) name = name.substr(0, 18).trim();
 	return name;
 };
 
@@ -320,8 +316,8 @@ global.toName = function(name) {
  * Escapes a string for HTML
  * If strEscape is true, escapes it for JavaScript, too
  */
-global.sanitize = function(str, strEscape) {
-	str = (''+(str||''));
+global.sanitize = function (str, strEscape) {
+	str = ('' + (str || ''));
 	str = str.escapeHTML();
 	if (strEscape) str = str.replace(/'/g, '\\\'');
 	return str;
@@ -329,33 +325,21 @@ global.sanitize = function(str, strEscape) {
 
 /**
  * Safely ensures the passed variable is a string
- * Simply doing ''+str can crash if str.toString crashes or isn't a function
+ * Simply doing '' + str can crash if str.toString crashes or isn't a function
  * If we're expecting a string and being given anything that isn't a string
  * or a number, it's safe to assume it's an error, and return ''
  */
-global.string = function(str) {
-	if (typeof str === 'string' || typeof str === 'number') return ''+str;
+global.string = function (str) {
+	if (typeof str === 'string' || typeof str === 'number') return '' + str;
 	return '';
-};
-
-/**
- * Converts any variable to an integer (numbers get floored, non-numbers
- * become 0). Then clamps it between min and (optionally) max.
- */
-global.clampIntRange = function(num, min, max) {
-	if (typeof num !== 'number') num = 0;
-	num = Math.floor(num);
-	if (num < min) num = min;
-	if (max !== undefined && num > max) num = max;
-	return num;
 };
 
 global.LoginServer = require('./loginserver.js');
 
-watchFile('./config/custom.css', function(curr, prev) {
-	LoginServer.request('invalidatecss', {}, function() {});
+watchFile('./config/custom.css', function (curr, prev) {
+	LoginServer.request('invalidatecss', {}, function () {});
 });
-LoginServer.request('invalidatecss', {}, function() {});
+LoginServer.request('invalidatecss', {}, function () {});
 
 global.Users = require('./users.js');
 
@@ -374,26 +358,26 @@ global.Tournaments = require('./tournaments/frontend.js');
 try {
 	global.Dnsbl = require('./dnsbl.js');
 } catch (e) {
-	global.Dnsbl = {query:function(){}};
+	global.Dnsbl = {query:function (){}};
 }
 
 global.Cidr = require('./cidr.js');
 
-if (config.crashguard) {
+if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	var lastCrash = 0;
-	process.on('uncaughtException', function(err) {
+	process.on('uncaughtException', function (err) {
 		var dateNow = Date.now();
 		var quietCrash = require('./crashlogger.js')(err, 'The main process');
 		quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5);
 		lastCrash = Date.now();
 		if (quietCrash) return;
-		var stack = (""+err.stack).split("\n").slice(0,2).join("<br />");
+		var stack = ("" + err.stack).split("\n").slice(0, 2).join("<br />");
 		if (Rooms.lobby) {
-			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> '+stack+'<br />Please restart the server.</div>');
+			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
 			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
 		}
-		config.modchat = 'crash';
+		Config.modchat = 'crash';
 		Rooms.global.lockdown = true;
 	});
 }
@@ -422,9 +406,9 @@ global.TeamValidator = require('./team-validator.js');
 // load ipbans at our leisure
 fs.readFile('./config/ipbans.txt', function (err, data) {
 	if (err) return;
-	data = (''+data).split("\n");
+	data = ('' + data).split("\n");
 	var rangebans = [];
-	for (var i=0; i<data.length; i++) {
+	for (var i = 0; i < data.length; i++) {
 		data[i] = data[i].split('#')[0].trim();
 		if (!data[i]) continue;
 		if (data[i].indexOf('/') >= 0) {
