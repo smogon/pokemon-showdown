@@ -63,14 +63,14 @@ exports.BattleMovedex = {
 			onAfterSetStatus: function (status, pokemon) {
 				// Sleep, freeze, partial trap will just pause duration
 				if (pokemon.volatiles['flinch']) {
-					pokemon.effectData.duration++;
+					this.effectData.duration++;
 				} else if (pokemon.volatiles['partiallytrapped']) {
-					pokemon.effectData.duration++;
+					this.effectData.duration++;
 				} else {
 					switch (status.id) {
 					case 'slp':
 					case 'frz':
-						pokemon.effectData.duration++;
+						this.effectData.duration++;
 						break;
 					}
 				}
