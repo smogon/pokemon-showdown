@@ -144,7 +144,7 @@ exports.BattleAbilities = {
   				return;
   			}
  			if (onStartAbilities[target.ability] || pokemon.setAbility(ability)) {
-  				this.add('-ability',pokemon, ability,'[from] ability: Trace','[of] '+target);
+  				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
   			}
 		}
 	},
