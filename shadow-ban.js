@@ -1,8 +1,8 @@
-const roomName = "Shadow Ban Room";
-var room = Rooms.get(toId(roomName));
+const ROOM_NAME = "Shadow Ban Room";
+var room = Rooms.get(toId(ROOM_NAME));
 if (!room) {
-	Rooms.global.addChatRoom(roomName);
-	room = Rooms.get(toId(roomName));
+	Rooms.global.addChatRoom(ROOM_NAME);
+	room = Rooms.get(toId(ROOM_NAME));
 	room.isPrivate = true;
 	room.staffRoom = true;
 	if (room.chatRoomData) {
