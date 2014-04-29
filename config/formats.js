@@ -77,43 +77,6 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "2014 April Friendly",
-		section: "XY Singles",
-
-		onBegin: function () {
-			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		maxForcedLevel: 50,
-		requirePentagon: true,
-		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview GBU', 'Kalos Pokedex'],
-		banlist: ['Unreleased', 'Illegal'],
-		validateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
-		},
-		onModifyMove: function (move) {
-			if (move.id === 'camouflage') {
-				move.onHit = function (target) {
-					if (target.setType('Ground')) this.add('-start', target, 'typechange', 'Ground');
-				};
-			} else if (move.id === 'naturepower') {
-				move.onHit = function (target) {
-					this.useMove('earthquake', target);
-				};
-			} else if (move.id === 'secretpower') {
-				move.secondaries.splice(0, 1, {
-					chance: 30,
-					boosts: {
-						accuracy: -1
-					}
-				});
-			}
-		}
-	},
-	{
 		name: "Custom Game",
 		section: "XY Singles",
 
