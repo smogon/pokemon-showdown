@@ -1265,6 +1265,14 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/unlock [username] - Unlocks the user. Requires: % @ & ~");
 		}
+		if (target === '@' || target === 'shadowban' || target === 'sban') {
+			matched = true;
+			this.sendReply("/shadowban OR /sban [username], [secondary command], [reason] - Sends all the user\'s messages to the shadow ban room. Requires: @ & ~");
+		}
+		if (target === '@' || target === 'unshadowban' || target === 'unsban') {
+			matched = true;
+			this.sendReply("/unshadowban OR /unsban [username] - Undoes /shadowban (except the secondary command). Requires: @ & ~");
+		}
 		if (target === '%' || target === 'redirect' || target === 'redir') {
 			matched = true;
 			this.sendReply("/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~");
