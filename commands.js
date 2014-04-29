@@ -435,18 +435,17 @@ var commands = exports.commands = {
 				success = true;
 			}
 		}
-		if (success) {
-			targetUser.popup("" + user.name + " has unbanned you from the room " + room.id + ".");
-			this.addModCommand("" + targetUser.name + " was unbanned from room " + room.id + " by " + user.name + ".");
-			var alts = targetUser.getAlts();
-			if (!alts.length) return;
-			for (var i = 0; i < alts.length; ++i) {
-				var altId = toId(alts[i]);
-				if (room.bannedUsers[altId]) delete room.bannedUsers[altId];
-			}
-			return this.addModCommand("" + targetUser.name + "'s alts were also unbanned from room " + room.id + ": " + alts.join(", "));
+		if (!success) return this.sendReply("User " + targetUser.name + " is not banned from room " + room.id + ".");
+
+		targetUser.popup("" + user.name + " has unbanned you from the room " + room.id + ".");
+		this.addModCommand("" + targetUser.name + " was unbanned from room " + room.id + " by " + user.name + ".");
+		var alts = targetUser.getAlts();
+		if (!alts.length) return;
+		for (var i = 0; i < alts.length; ++i) {
+			var altId = toId(alts[i]);
+			if (room.bannedUsers[altId]) delete room.bannedUsers[altId];
 		}
-		this.sendReply("User " + targetUser.name + " is not banned from room " + room.id + ".");
+		this.addModCommand("" + targetUser.name + "'s alts were also unbanned from room " + room.id + ": " + alts.join(", "));
 	},
 
 	roomauth: function (target, room, user, connection) {
