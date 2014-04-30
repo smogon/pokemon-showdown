@@ -11813,7 +11813,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			if (defender.weightkg >= 200) {
-				this.add('-fail', defender, '[heavy]');
+				this.add('-fail', defender, 'move: Sky Drop', '[heavy]');
 				return null;
 			}
 			if (defender.volatiles['protect']) {
