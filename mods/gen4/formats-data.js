@@ -2859,137 +2859,67 @@ exports.BattleFormatsData = {
 	},
 	arceusbug: {
 		viableMoves: {"swordsdance":1,"xscissor":1,"stoneedge":1,"recover":1,"calmmind":1,"judgment":1,"icebeam":1,"fireblast":1},
-		requiredItem: "Insect Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Insect Plate"
 	},
 	arceusdark: {
 		viableMoves: {"calmmind":1,"judgment":1,"recover":1,"refresh":1},
-		requiredItem: "Dread Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Dread Plate"
 	},
 	arceusdragon: {
 		viableMoves: {"swordsdance":1,"outrage":1,"extremespeed":1,"earthquake":1,"recover":1},
-		requiredItem: "Draco Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Draco Plate"
 	},
 	arceuselectric: {
 		viableMoves: {"calmmind":1,"judgment":1,"recover":1,"icebeam":1},
-		requiredItem: "Zap Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Zap Plate"
 	},
 	arceusfighting: {
 		viableMoves: {"calmmind":1,"judgment":1,"icebeam":1,"darkpulse":1,"recover":1,"toxic":1},
-		requiredItem: "Fist Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Fist Plate"
 	},
 	arceusfire: {
 		viableMoves: {"calmmind":1,"flamethrower":1,"fireblast":1,"thunderbolt":1,"recover":1},
-		requiredItem: "Flame Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Flame Plate"
 	},
 	arceusflying: {
 		viableMoves: {"calmmind":1,"judgment":1,"refresh":1,"recover":1},
-		requiredItem: "Sky Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Sky Plate"
 	},
 	arceusghost: {
 		viableMoves: {"calmmind":1,"judgment":1,"focusblast":1,"flamethrower":1,"recover":1,"swordsdance":1,"shadowclaw":1,"brickbreak":1,"willowisp":1,"roar":1},
-		requiredItem: "Spooky Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Spooky Plate"
 	},
 	arceusgrass: {
 		viableMoves: {"calmmind":1,"icebeam":1,"judgment":1,"earthpower":1,"recover":1,"stealthrock":1,"thunderwave":1},
-		requiredItem: "Meadow Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Meadow Plate"
 	},
 	arceusground: {
 		viableMoves: {"swordsdance":1,"earthquake":1,"stoneedge":1,"recover":1,"calmmind":1,"judgment":1,"icebeam":1,"stealthrock":1},
-		requiredItem: "Earth Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Earth Plate"
 	},
 	arceusice: {
 		viableMoves: {"calmmind":1,"judgment":1,"icebeam":1,"thunderbolt":1,"focusblast":1,"recover":1},
-		requiredItem: "Icicle Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Icicle Plate"
 	},
 	arceuspoison: {
 		viableMoves: {"calmmind":1,"judgment":1,"sludgebomb":1,"focusblast":1,"fireblast":1,"recover":1,"willowisp":1,"icebeam":1,"stealthrock":1},
-		requiredItem: "Toxic Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Toxic Plate"
 	},
 	arceuspsychic: {
 		viableMoves: {"calmmind":1,"psyshock":1,"focusblast":1,"recover":1,"willowisp":1,"judgment":1},
-		requiredItem: "Mind Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Mind Plate"
 	},
 	arceusrock: {
 		viableMoves: {"calmmind":1,"judgment":1,"recover":1,"willowisp":1,"swordsdance":1,"stoneedge":1,"earthquake":1,"refresh":1},
-		requiredItem: "Stone Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Stone Plate"
 	},
 	arceussteel: {
 		viableMoves: {"calmmind":1,"judgment":1,"recover":1,"roar":1,"willowisp":1,"swordsdance":1,"ironhead":1},
-		requiredItem: "Iron Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Iron Plate"
 	},
 	arceuswater: {
 		viableMoves: {"swordsdance":1,"waterfall":1,"extremespeed":1,"dragonclaw":1,"recover":1,"calmmind":1,"judgment":1,"icebeam":1,"fireblast":1},
-		requiredItem: "Splash Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
-	},
-	arceusunknown: {
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
-		],
-		tier: "Uber"
+		requiredItem: "Splash Plate"
 	},
 	missingno: {
 		isNonstandard: true,
