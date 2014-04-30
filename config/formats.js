@@ -781,7 +781,14 @@ exports.Formats = [
 
 		mod: 'gen1',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
+		banlist: ['Uber', 
+			'Nidoking + Fury Attack + Thrash',
+			'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp', 'Exeggutor + Stun Spore + Stomp',
+			'Eevee + Tackle + Growl',
+			'Vaporeon + Tackle + Growl',
+			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
+			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember'
+		]
 	},
 	{
 		name: "[Gen 1] Custom Game",
