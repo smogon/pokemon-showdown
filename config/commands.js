@@ -1194,7 +1194,7 @@ var commands = exports.commands = {
 
 					if (Config.customAvatars[userid].toString().split('.').slice(0, -1).join('.') !== userid)
 						return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") cannot be removed with this script.");
-					fs.unlink('./config/avatars/' + Config.customAvatars[userid], (function (e) {
+					require('fs').unlink('./config/avatars/' + Config.customAvatars[userid], (function (e) {
 						if (e) return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") could not be removed: " + e.toString());
 
 						delete Config.customAvatars[userid];
