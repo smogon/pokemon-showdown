@@ -77,6 +77,35 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Inverse Battle",
+		section: "Other Metagames",
+
+		mod: 'inverse',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Kangaskhanite', 'Soul Dew',
+			'Arceus',
+			'Darkrai',
+			'Deoxys-Attack',
+			'Deoxys',
+			'Gengarite',
+			'Giratina', 'Giratina-Origin',
+			'Groudon',
+			'Ho-Oh',
+			'Kyogre',
+			'Kyurem-Black',
+			'Lugia',
+			'Mewtwo',
+			'Palkia',
+			'Rayquaza',
+			'Reshiram',
+			'Shaymin-Sky',
+			'Kyurem-White',
+			'Xerneas',
+			'Yveltal',
+			'Zekrom'
+		]
+	},
+	{
 		name: "Custom Game",
 		section: "XY Singles",
 
@@ -302,35 +331,6 @@ exports.Formats = [
 			'Pinsir-Mega', 'Gengar-Mega',
 			// Illegal Ubers
 			'Arceus-Flying', 'Giratina', 'Giratina-Origin', 'Ho-Oh', 'Lugia', 'Rayquaza', 'Yveltal'
-		]
-	},
-	{
-		name: "Inverse Battle",
-		section: "Other Metagames",
-
-		mod: 'inverse',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Kangaskhanite', 'Soul Dew',
-			'Arceus',
-			'Darkrai',
-			'Deoxys-Attack',
-			'Deoxys',
-			'Gengarite',
-			'Giratina', 'Giratina-Origin',
-			'Groudon',
-			'Ho-Oh',
-			'Kyogre',
-			'Kyurem-Black',
-			'Lugia',
-			'Mewtwo',
-			'Palkia',
-			'Rayquaza',
-			'Reshiram',
-			'Shaymin-Sky',
-			'Kyurem-White',
-			'Xerneas',
-			'Yveltal',
-			'Zekrom'
 		]
 	},
 	{
