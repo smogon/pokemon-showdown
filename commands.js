@@ -1396,7 +1396,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all') {
 			this.sendReply("Calculating Total size...");
-			var total = (roomSize + configSize + rmSize + appSize + cpSize + simSize + toolsSize + usersSize) || 0;
+			var total = (roomSize + configSize + rmSize + cpSize + simSize + toolsSize + usersSize) || 0;
 			var units = ["bytes", "K", "M", "G"];
 			var converted = total;
 			var unit = 0;
