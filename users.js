@@ -1062,6 +1062,12 @@ var User = (function () {
 		this.autoconfirmed = '';
 		this.updateIdentity();
 	};
+	User.prototype.getLastId = function () {
+		// finds the most recent userid of the user; this is the current
+		// userid if the user is named or has no previous names, or otherwise 
+		// the last entry in the keys of user.prevNames
+		return (this.named ? this.userid : (Object.keys(this.prevNames).last() || this.userid));
+	};
 	User.prototype.joinRoom = function (room, connection) {
 		room = Rooms.get(room);
 		if (!room) return false;

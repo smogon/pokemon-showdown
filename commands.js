@@ -488,8 +488,7 @@ var commands = exports.commands = {
 
 		this.addModCommand("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn ' + target);
-		var nickToUnlink = targetUser.named ? targetUser.userid : (Object.keys(targetUser.prevNames).last() || targetUser.userid);
-		this.add('|unlink|' + nickToUnlink);
+		this.add('|unlink|' + targetUser.getLastId());
 	},
 
 	redirect: 'redir',
@@ -542,8 +541,7 @@ var commands = exports.commands = {
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 7 minutes." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also muted: " + alts.join(", "));
-		var nickToUnlink = targetUser.named ? targetUser.userid : (Object.keys(targetUser.prevNames).last() || targetUser.userid);
-		this.add('|unlink|' + nickToUnlink);
+		this.add('|unlink|' + targetUser.getLastId());
 
 		targetUser.mute(room.id, 7 * 60 * 1000);
 	},
@@ -571,8 +569,7 @@ var commands = exports.commands = {
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 60 minutes." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also muted: " + alts.join(", "));
-		var nickToUnlink = targetUser.named ? targetUser.userid : (Object.keys(targetUser.prevNames).last() || targetUser.userid);
-		this.add('|unlink|' + nickToUnlink);
+		this.add('|unlink|' + targetUser.getLastId());
 
 		targetUser.mute(room.id, 60 * 60 * 1000, true);
 	},
@@ -620,8 +617,7 @@ var commands = exports.commands = {
 		this.addModCommand("" + targetUser.name + " was locked from talking by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also locked: " + alts.join(", "));
-		var nickToUnlink = targetUser.named ? targetUser.userid : (Object.keys(targetUser.prevNames).last() || targetUser.userid);
-		this.add('|unlink|' + nickToUnlink);
+		this.add('|unlink|' + targetUser.getLastId());
 
 		targetUser.lock();
 	},
@@ -672,8 +668,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		var nickToUnlink = targetUser.named ? targetUser.userid : (Object.keys(targetUser.prevNames).last() || targetUser.userid);
-		this.add('|unlink|' + nickToUnlink);
+		this.add('|unlink|' + targetUser.getLastId());
 		targetUser.ban();
 	},
 
