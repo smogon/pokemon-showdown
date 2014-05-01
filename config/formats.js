@@ -77,33 +77,23 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Inverse Battle",
-		section: "Other Metagames",
+		name: "XY Battle Spot Special 4",
+		section: "XY Singles",
 
 		mod: 'inverse',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Kangaskhanite', 'Soul Dew',
-			'Arceus',
-			'Darkrai',
-			'Deoxys-Attack',
-			'Deoxys',
-			'Gengarite',
-			'Giratina', 'Giratina-Origin',
-			'Groudon',
-			'Ho-Oh',
-			'Kyogre',
-			'Kyurem-Black',
-			'Lugia',
-			'Mewtwo',
-			'Palkia',
-			'Rayquaza',
-			'Reshiram',
-			'Shaymin-Sky',
-			'Kyurem-White',
-			'Xerneas',
-			'Yveltal',
-			'Zekrom'
-		]
+		onBegin: function () {
+			this.debug('cutting down to 3');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
+		banlist: [], // The neccessary bans are in Standard GBU
+		validateTeam: function (team, format) {
+			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
+		}
 	},
 	{
 		name: "Custom Game",
@@ -331,6 +321,35 @@ exports.Formats = [
 			'Pinsir-Mega', 'Gengar-Mega',
 			// Illegal Ubers
 			'Arceus-Flying', 'Giratina', 'Giratina-Origin', 'Ho-Oh', 'Lugia', 'Rayquaza', 'Yveltal'
+		]
+	},
+	{
+		name: "Inverse Battle",
+		section: "Other Metagames",
+
+		mod: 'inverse',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Kangaskhanite', 'Soul Dew',
+			'Arceus',
+			'Darkrai',
+			'Deoxys-Attack',
+			'Deoxys',
+			'Gengarite',
+			'Giratina', 'Giratina-Origin',
+			'Groudon',
+			'Ho-Oh',
+			'Kyogre',
+			'Kyurem-Black',
+			'Lugia',
+			'Mewtwo',
+			'Palkia',
+			'Rayquaza',
+			'Reshiram',
+			'Shaymin-Sky',
+			'Kyurem-White',
+			'Xerneas',
+			'Yveltal',
+			'Zekrom'
 		]
 	},
 	{
