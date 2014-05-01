@@ -120,13 +120,7 @@ var commands = exports.commands = {
 
 		var message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 		user.send(message);
-		if (targetUser !== user) {
-			if (ShadowBan.isShadowBanned(user)) {
-				ShadowBan.room.add('|c|' + user.getIdentity() + "|__(Private to " + targetUser.getIdentity() + ")__ " + target);
-			} else {
-				targetUser.send(message);
-			}
-		}
+		if (targetUser !== user) targetUser.send(message);
 		targetUser.lastPM = user.userid;
 		user.lastPM = targetUser.userid;
 	},
@@ -642,46 +636,6 @@ var commands = exports.commands = {
 		} else {
 			this.sendReply("User " + target + " is not locked.");
 		}
-	},
-
-	sban: 'shadowban',
-	shadowban: function (target, room, user) {
-		if (!target) return this.parse('/help shadowban');
-
-		var params = this.splitTarget(target).split(',');
-		var action = params[0].trim().toLowerCase();
-		var reason = params.slice(1).join(',').trim();
-		if (!(action in CommandParser.commands)) {
-			action = 'mute';
-			reason = params.join(',').trim();
-		}
-
-		if (!this.targetUser) {
-			return this.sendReply("User '" + this.targetUsername + "' not found.");
-		}
-		if (!this.can('shadowban', this.targetUser)) return false;
-
-		var targets = ShadowBan.addUser(this.targetUser);
-		if (targets.length === 0) {
-			return this.sendReply("That user's messages are already being redirected to the shadow ban room.");
-		}
-		this.privateModCommand("(" + user.name + " has added to the shadow ban user list: " + targets.join(", ") + (reason ? " (" + reason + ")" : "") + ")");
-
-		return this.parse('/' + action + ' ' + user.userid + ',' + reason);
-	},
-
-	unsban: 'unshadowban',
-	unshadowban: function (target, room, user) {
-		if (!target) return this.parse('/help unshadowban');
-		this.splitTarget(target);
-
-		if (!this.can('shadowban')) return false;
-
-		var targets = ShadowBan.removeUser(this.targetUser || this.targetUsername);
-		if (targets.length === 0) {
-			return this.sendReply("That user is not in the shadow ban list.");
-		}
-		this.privateModCommand("(" + user.name + " has removed from the shadow ban user list: " + targets.join(", ") + ")");
 	},
 
 	b: 'ban',
