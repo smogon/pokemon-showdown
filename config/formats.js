@@ -56,7 +56,7 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'LC Uber', 'Swagger']
+		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
 	},
 	{
 		name: "XY Battle Spot Singles",
@@ -501,7 +501,7 @@ exports.Formats = [
 		mod: 'gen5',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Sonicboom', 'Dragon Rage', 'Berry Juice', 'Carvanha', 'Meditite', 'Gligar', 'Scyther', 'Sneasel', 'Tangela', 'Vulpix', 'Yanma', 'Soul Dew']
+		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Gligar', 'Scyther', 'Sneasel', 'Tangela']
 	},
 	{
 		name: "[Gen 5] GBU Singles",
@@ -630,7 +630,7 @@ exports.Formats = [
 		mod: 'gen4',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Little Cup'],
-		banlist: ['Sonic Boom', 'Dragon Rage', 'DeepSeaTooth', 'Berry Juice', 'Scyther', 'Sneasel', 'Yanma', 'Tangela', 'Misdreavus', 'Meditite', 'Murkrow']
+		banlist: ['Berry Juice', 'DeepSeaTooth', 'Dragon Rage', 'Sonic Boom', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma']
 	},
 	{
 		name: "[Gen 4] Custom Game",
