@@ -1066,11 +1066,6 @@ var commands = exports.commands = {
 		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
 	},
 
-	register: function () {
-		if (!this.canBroadcast()) return;
-		this.sendReply("You must win a rated battle to register.");
-	},
-
 	lobbychat: function (target, room, user, connection) {
 		if (!Rooms.lobby) return this.popupReply("This server doesn't have a lobby.");
 		target = toId(target);
