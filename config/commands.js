@@ -343,7 +343,7 @@ var commands = exports.commands = {
 				searches['moves'][targetMove.name] = !isNotSearch;
 				continue;
 			} else {
-				return this.sendReply('"' + target + '" could not be found in any of the search categories.');
+				if (target.length) return this.sendReply('"' + target + '" could not be found in any of the search categories.');
 			}
 		}
 
@@ -413,13 +413,11 @@ var commands = exports.commands = {
 				case 'moves':
 					for (var mon in dex) {
 						var template = Tools.getTemplate(dex[mon].id);
-						if (!template.learnset) {
-							if (megaSearch && template.isMega) {
-								template = Tools.getTemplate(template.baseSpecies);
-							} else {
-								delete dex[mon];
-								continue;
-							}
+						if (mon !== toId(template.baseSpecies) && toId(template.baseSpecies) in dex) {
+							delete dex[mon];
+							continue;
+						} else {
+							template = Tools.getTemplate(template.baseSpecies);
 						}
 						if (!template.learnset) continue;
 						for (var i in searches[search]) {
