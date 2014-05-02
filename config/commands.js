@@ -430,6 +430,10 @@ var commands = exports.commands = {
 		}
 
 		var results = Object.keys(dex).map(function (speciesid) {return dex[speciesid].species;});
+		results = results.filter(function (species) {
+			var template = Tools.getTemplate(species);
+			return !(species !== template.baseSpecies && results.indexOf(template.baseSpecies) > -1);
+		});
 		var resultsStr = "";
 		if (results.length > 0) {
 			if (showAll || results.length <= output) {
