@@ -1308,10 +1308,10 @@ var commands = exports.commands = {
 		if (!message) return false;
 
 		if (!global.tells) global.tells = {};
-		if (!tells[toUserid(this.targetUsername)]) tells[toUserid(this.targetUsername)] = [];
-		if (tells[toUserid(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
+		if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
+		if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
 
-		tells[toUserid(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
+		tells[toId(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
 
