@@ -1438,8 +1438,6 @@ var ChatRoom = (function () {
 			this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(100).join('\n') + modchat, connection);
 			if (this.reminders && this.reminders.length > 0)
 				CommandParser.parse('/reminder', this, user, connection);
-			if (this.reminders && this.reminders.length > 0)
-				CommandParser.parse('/reminder', this, user, connection);
 			CommandParser.parse('/donate', this, user, connection);
 		}
 		if (global.Tournaments && Tournaments.get(this.id))
