@@ -634,6 +634,7 @@ var commands = exports.commands = {
 		);
 	},
 
+	github: 'opensource',
 	opensource: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
