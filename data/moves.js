@@ -10100,6 +10100,9 @@ exports.BattleMovedex = {
 		onTryHitSide: function (side, source) {
 			return this.willAct();
 		},
+		onHitSide: function (side, source) {
+			source.addVolatile('stall');
+		},
 		effect: {
 			duration: 1,
 			onStart: function (target, source) {
@@ -14736,6 +14739,9 @@ exports.BattleMovedex = {
 		sideCondition: 'wideguard',
 		onTryHitSide: function (side, source) {
 			return this.willAct();
+		},
+		onHitSide: function (side, source) {
+			source.addVolatile('stall');
 		},
 		effect: {
 			duration: 1,
