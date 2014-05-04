@@ -648,7 +648,7 @@ var commands = exports.commands = {
 
 	avatars: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown. Custom avatars are only obtainable by staff.");
+		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
 	},
 
 	introduction: 'intro',
@@ -1069,7 +1069,7 @@ var commands = exports.commands = {
 
 	register: function () {
 		if (!this.canBroadcast()) return;
-		this.sendReply("You must win a rated battle to register.");
+		this.sendReplyBox('You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right.');
 	},
 
 	lobbychat: function (target, room, user, connection) {
