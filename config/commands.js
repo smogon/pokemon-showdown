@@ -1069,7 +1069,7 @@ var commands = exports.commands = {
 
 	register: function () {
 		if (!this.canBroadcast()) return;
-		this.sendReply("You must win a rated battle to register.");
+		this.sendReply("To register your account, you must win a rated battle or use the options menu (the gear in the top-right corner).");
 	},
 
 	lobbychat: function (target, room, user, connection) {
