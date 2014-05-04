@@ -31,7 +31,7 @@ var plugins = exports.plugins = {
 		finished: [],
 		commands: {
 			scavengerstarthunt: function (target, room, user) {
-				if (!this.can('ban', null, room)) return false;
+				if (!this.can('mute', null, room)) return false;
 				if (room.id !== 'scavengers') return this.sendReply('You can only start scavenger hunts on Scavengers room.');
 				if (plugins.scavenger.status === 'on') return this.sendReply('There is already an active scavenger hunt.');
 				var targets = target.split(',');
@@ -51,7 +51,7 @@ var plugins = exports.plugins = {
 				return this.sendReply('Scavenger hunt started.');
 			},
 			scavengerendhunt: function (target, room, user) {
-				if (!this.can('ban', null, room)) return false;
+				if (!this.can('mute', null, room)) return false;
 				if (room.id !== 'scavengers') return this.sendReply('You can only end scavenger hunts on Scavengers room.');
 				if (plugins.scavenger.status !== 'on') return this.sendReply('There is no active scavenger hunt.');
 				var result = '';
@@ -70,7 +70,7 @@ var plugins = exports.plugins = {
 				return this.sendReply('Scavenger hunt finished.');
 			},
 			scavengerresethunt: function (target, room, user) {
-				if (!this.can('ban', null, room)) return false;
+				if (!this.can('mute', null, room)) return false;
 				if (room.id !== 'scavengers') return this.sendReply('You can only reset scavenger hunts on Scavengers room.');
 				plugins.scavenger.status = 'off';
 				plugins.scavenger.roomOne = '';
