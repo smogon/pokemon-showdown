@@ -583,7 +583,11 @@ var commands = {
 		l: 'leave',
 		out: 'leave',
 		leave: function (tournament, user) {
-			tournament.removeUser(user, this);
+			if (tournament.isTournamentStarted) {
+				tournament.disqualifyUser(user, this);
+			} else {
+				tournament.removeUser(user, this);
+			}
 		},
 		getupdate: function (tournament, user) {
 			tournament.update(user);
@@ -601,9 +605,6 @@ var commands = {
 		},
 		acceptchallenge: function (tournament, user) {
 			tournament.acceptChallenge(user, this);
-		},
-		selfdq: function (tournament, user) {
-			tournament.disqualifyUser(user, this);
 		}
 	},
 	creation: {
