@@ -601,6 +601,9 @@ var commands = {
 		},
 		acceptchallenge: function (tournament, user) {
 			tournament.acceptChallenge(user, this);
+		},
+		selfdq: function (tournament, user) {
+			tournament.disqualifyUser(user, this);
 		}
 	},
 	creation: {
