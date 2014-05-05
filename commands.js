@@ -1422,8 +1422,6 @@ var commands = exports.commands = {
 	 * Battle commands
 	 *********************************************************/
 
-	concede: 'forfeit',
-	surrender: 'forfeit',
 	forfeit: function (target, room, user) {
 		if (!room.battle) {
 			return this.sendReply("There's nothing to forfeit here.");
