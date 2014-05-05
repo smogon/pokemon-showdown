@@ -346,9 +346,8 @@ var commands = exports.commands = {
 					searches['types'][target] = !isNotSearch;
 					continue;
 				}
-			} else {
-				return this.sendReplyBox("'" + sanitize(target, true) + "' could not be found in any of the search categories.");
 			}
+			return this.sendReplyBox("'" + sanitize(target, true) + "' could not be found in any of the search categories.");
 		}
 
 		if (showAll && Object.size(searches) === 0 && megaSearch === null && feSearch === null) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.");
