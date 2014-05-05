@@ -294,9 +294,10 @@ Minor move changes:
 - Stomp and Steamroller now have 100 Base Power and perfect accuracy to
   reflect their thematic status as counters to Minimize
 
-- Bide now gives the user Endure (the user survives all move damage with
-  at least 1 HP) for its duration. Bide fails if the user has 1 HP when it's
-  used, or if the user's last move used was Bide.
+- Bide is now a +1 priority moves that gives the user Endure (the user
+  survives all move damage with at least 1 HP) for its duration. Bide fails
+  if the user has 1 HP when it's used, or if the user's last move used was
+  Bide.
 
 - Withdraw gives +1 SpD as well as +1 Def
 
