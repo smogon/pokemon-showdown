@@ -139,6 +139,8 @@ exports.BattleAliases = {
 	"scarf": "Choice Scarf",
 	"specs": "Choice Specs",
 	"yache": "Yache Berry",
+	"av": "Assault Vest",
+	"assvest": "Assault Vest",
 
 	// gen 1-2 berries
 	"berry": "Oran Berry",
