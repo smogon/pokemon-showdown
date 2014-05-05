@@ -44,6 +44,7 @@ exports.BattleAliases = {
 	"megapinsir": "Pinsir-Mega",
 	"megascizor": "Scizor-Mega",
 	"megatyranitar": "Tyranitar-Mega",
+	"megattar": "Tyranitar-Mega",
 	"megavenusaur": "Venusaur-Mega",
 
 	// formes
@@ -61,6 +62,7 @@ exports.BattleAliases = {
 	"darmanitanz": "Darmanitan-Zen",
 	"darmanitanzenmode": "Darmanitan-Zen",
 	"deoxysnormal": "Deoxys",
+	"deon": "Deoxys",
 	"deoxysa": "Deoxys-Attack",
 	"deoa": "Deoxys-Attack",
 	"deoxysd": "Deoxys-Defense",
@@ -145,6 +147,7 @@ exports.BattleAliases = {
 	"goldberry": "Sitrus Berry",
 	"iceberry": "Aspear Berry",
 	"mintberry": "Chesto Berry",
+	"miracleberry": "Lum Berry",
 	"mysteryberry": "Leppa Berry",
 	"przcureberry": "Cheri Berry",
 	"psncureberry": "Pecha Berry",
