@@ -4226,6 +4226,7 @@ exports.BattleFormatsData = {
 		dreamWorldPokeball: 'cherishball',
 		tier: "OU"
 	},
+	keldeoresolute: {},
 	meloetta: {
 		viableMoves: {"relicsong":1,"closecombat":1,"calmmind":1,"psychic":1,"thunderbolt":1,"hypervoice":1,"uturn":1},
 		eventPokemon: [
