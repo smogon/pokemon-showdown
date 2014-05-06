@@ -150,6 +150,24 @@ var commands = exports.commands = {
 		return this.sendReply("You are no longer blocking Private Messages.");
 	},
 
+	spop: 'sendpopup',
+	sendpopup: function(target, room, user) {
+		if (!this.can('popup')) return false;
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.sendReply('/sendpopup [user], [message] - You missed the user');
+		if (!target) return this.sendReply('/sendpopup [user], [message] - You missed the message');
+
+		targetUser.popup(target);
+		this.sendReply(targetUser.name + ' got the message as popup: ' + target);
+
+		targetUser.send(user.name+' sent a popup message to you.');
+
+		this.logModCommand(user.name+' send a popup message to '+targetUser.name);
+	},
+
 	tell: function(target, room, user) {
 		if (user.locked) return this.sendReply('You cannot use this command while locked.');
 		if (user.forceRenamed) return this.sendReply('You cannot use this command while under a name that you have been forcerenamed to.');
