@@ -121,12 +121,12 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	{
-		name: "Smogon Doubles",
+		name: "Smogon Doubles (suspect test)",
 		section: "XY Doubles",
 
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
-		banlist: ['Dark Void', 'Soul Dew',
+		banlist: ['Dark Void', 'Soul Dew', 'Kangaskhanite',
 			'Mewtwo',
 			'Lugia',
 			'Ho-Oh',
