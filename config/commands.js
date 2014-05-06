@@ -262,10 +262,11 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
 		var searches = {};
-		var allTiers = {'uber':1, 'ou':1, 'uu':1, 'lc':1, 'cap':1, 'bl':1, 'bl2':1};
+		var allTiers = {'uber':1, 'ou':1, 'uu':1, 'lc':1, 'cap':1, 'bl':1, 'bl2':1, 'ru':1};
 		var allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 		var showAll = false;
 		var megaSearch = null;
+		var feSearch = null; // search for fully evolved pokemon only
 		var output = 10;
 
 		for (var i in targets) {
@@ -321,6 +322,22 @@ var commands = exports.commands = {
 				continue;
 			}
 
+			if (target === 'fe' || target === 'fullyevolved' || target === 'nfe' || target === 'notfullyevolved') {
+				if (target === 'nfe' || target === 'notfullyevolved') isNotSearch = !isNotSearch;
+				if ((feSearch && isNotSearch) || (feSearch === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include fully evolved Pokémon.');
+				feSearch = !isNotSearch;
+				continue;
+			}
+
+			var targetMove = Tools.getMove(target);
+			if (targetMove.exists) {
+				if (!searches['moves']) searches['moves'] = {};
+				if (Object.count(searches['moves'], true) === 4 && !isNotSearch) return this.sendReplyBox("Specify a maximum of 4 moves.");
+				if ((searches['moves'][targetMove.name] && isNotSearch) || (searches['moves'][targetMove.name] === false && !isNotSearch)) return this.sendReplyBox("A search cannot both exclude and include a move.");
+				searches['moves'][targetMove.name] = !isNotSearch;
+				continue;
+			}
+
 			if (target.indexOf(' type') > -1) {
 				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
 				if (target in Tools.data.TypeChart) {
@@ -331,26 +348,18 @@ var commands = exports.commands = {
 					continue;
 				}
 			}
-
-			var targetMove = Tools.getMove(target);
-			if (targetMove.exists) {
-				if (!searches['moves']) searches['moves'] = {};
-				if (Object.count(searches['moves'], true) === 4 && !isNotSearch) return this.sendReplyBox("Specify a maximum of 4 moves.");
-				if ((searches['moves'][targetMove.name] && isNotSearch) || (searches['moves'][targetMove.name] === false && !isNotSearch)) return this.sendReplyBox("A search cannot both exclude and include a move.");
-				searches['moves'][targetMove.name] = !isNotSearch;
-				continue;
-			} else {
-				return this.sendReplyBox("'" + sanitize(target, true) + "' could not be found in any of the search categories.");
-			}
+			return this.sendReplyBox("'" + sanitize(target, true) + "' could not be found in any of the search categories.");
 		}
 
-		if (showAll && Object.size(searches) === 0 && megaSearch === null) return this.sendReplyBox("No search parameters other than 'all' were found.\nTry '/help dexsearch' for more information on this command.");
+		if (showAll && Object.size(searches) === 0 && megaSearch === null && feSearch === null) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.");
 
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
 			var template = Tools.getTemplate(pokemon);
+			var megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
+			var feSearchResult = (feSearch === null || (feSearch === true && !template.evos.length) || (feSearch === false && template.evos.length))
 			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) &&
-				(megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega))) {
+				megaSearchResult && feSearchResult) {
 				dex[pokemon] = template;
 			}
 		}
@@ -431,6 +440,10 @@ var commands = exports.commands = {
 		}
 
 		var results = Object.keys(dex).map(function (speciesid) {return dex[speciesid].species;});
+		results = results.filter(function (species) {
+			var template = Tools.getTemplate(species);
+			return !(species !== template.baseSpecies && results.indexOf(template.baseSpecies) > -1);
+		});
 		var resultsStr = "";
 		if (results.length > 0) {
 			if (showAll || results.length <= output) {
@@ -628,6 +641,7 @@ var commands = exports.commands = {
 		}, ""));
 	},
 
+	git: 'opensource',
 	opensource: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
@@ -641,7 +655,7 @@ var commands = exports.commands = {
 
 	avatars: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("Your avatar can be changed using the Options menu (it looks like a gear) in the upper right of Pokemon Showdown. Custom avatars are only obtainable by staff.");
+		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
 	},
 
 	introduction: 'intro',
@@ -1062,7 +1076,7 @@ var commands = exports.commands = {
 
 	register: function () {
 		if (!this.canBroadcast()) return;
-		this.sendReply("You must win a rated battle to register.");
+		this.sendReplyBox('You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right.');
 	},
 
 	lobbychat: function (target, room, user, connection) {
@@ -1328,15 +1342,15 @@ var commands = exports.commands = {
 			this.sendReply("/effectiveness OR /matchup OR /eff OR /type [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.");
 			this.sendReply("!effectiveness OR /matchup OR !eff OR !type [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.");
 		}
-		if (target === 'all' || target === 'dexsearch' || target === 'dsearch') {
+		if (target === 'all' || target === 'dexsearch' || target === 'dsearch' || target === 'ds') {
 			matched = true;
 			this.sendReply("/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.");
 			this.sendReply("Search categories are: type, tier, color, moves, ability, gen.");
 			this.sendReply("Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.");
-			this.sendReply("Valid tiers are: Uber/OU/BL/LC/CAP.");
+			this.sendReply("Valid tiers are: Uber/OU/BL/UU/BL2/RU/LC/CAP.");
 			this.sendReply("Types must be followed by ' type', e.g., 'dragon type'.");
 			this.sendReply("Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.");
-			this.sendReply("The parameter 'mega' can be added to search for Mega Evolutions only.");
+			this.sendReply("The parameter 'mega' can be added to search for Mega Evolutions only, and the parameters 'FE' or 'NFE' can be added to search fully or not-fully evolved Pokemon only.");
 			this.sendReply("The order of the parameters does not matter.");
 		}
 		if (target === 'all' || target === 'dice' || target === 'roll') {
