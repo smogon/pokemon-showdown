@@ -145,7 +145,9 @@ function socketConnect(worker, workerid, socketid, ip) {
 	var connection = connections[id] = new Connection(id, worker, socketid, null, ip);
 
 	if (ResourceMonitor.countConnection(ip)) {
-		return connection.destroy();
+		connection.destroy();
+		bannedIps[ip] = '#cflood';
+		return;
 	}
 	var checkResult = Users.checkBanned(ip);
 	if (!checkResult && Users.checkRangeBanned(ip)) {
@@ -155,6 +157,8 @@ function socketConnect(worker, workerid, socketid, ip) {
 		console.log('CONNECT BLOCKED - IP BANNED: ' + ip + ' (' + checkResult + ')');
 		if (checkResult === '#ipban') {
 			connection.send("|popup|Your IP (" + ip + ") is on our abuse list and is permanently banned. If you are using a proxy, stop.");
+		} else if (checkResult === '#cflood') {
+			connection.send("|popup|PS is under heavy load and cannot accommodate your connection right now.");
 		} else {
 			connection.send("|popup|Your IP (" + ip + ") used is banned under the username '" + checkResult + "''. Your ban will expire in a few days." + (Config.appealUri ? " Or you can appeal at:\n" + Config.appealUri : ""));
 		}
