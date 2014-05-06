@@ -50,7 +50,7 @@ exports.BattleMovedex = {
 	},
 	clearsmog: {
 		inherit: true,
-		basePowder: 90
+		basePower: 90
 	},
 	/******************************************************************
 	HMs:
@@ -952,10 +952,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: true
 	},
-	twineedle: {
-		inherit: true,
-		accuracy: true
-	},
 	/******************************************************************
 	Draining moves:
 	- buff Leech Life
@@ -1583,6 +1579,7 @@ exports.BattleMovedex = {
 	******************************************************************/
 	twineedle: {
 		inherit: true,
+		accuracy: true,
 		basePower: 50
 	},
 	drillpeck: {
