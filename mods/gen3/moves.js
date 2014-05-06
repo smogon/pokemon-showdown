@@ -702,42 +702,6 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	"wish2": {
-		num: -273,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "This is a move that is here to satisfy the wish2 side condition. It has no use otherwise.",
-		shortDesc: "No competitive use.",
-		id: "wish2",
-		name: "Wish2",
-		pp: 0,
-		priority: 0,
-		isSnatchable: true,
-		sideCondition: 'Wish2',
-		effect: {
-			onResidualOrder: 2,
-			onSwitchInPriority: -1,
-			onSwitchIn: function(target) {
-				if (target && !target.fainted && target.hp > 0) {
-					if (!source2) {
-						var source = this.effectData.source;
-					} else {
-						var source = source2;
-						delete source2;
-					}
-					var damage = target.heal(target.maxhp / 2, target, target);
-					if (damage) this.add('-heal',target,target.getHealth,'[from] move: Wish', '[wisher] ' + source.name);
-					target.side.removeSideCondition('Wish2');
-				} else {
-					return;
-				}
-			}
-		},
-		secondary: false,
-		target: "self",
-		type: "Normal"
-	},
 	wrap: {
 		inherit: true,
 		accuracy: 85
