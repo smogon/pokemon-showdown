@@ -94,7 +94,7 @@ var commands = exports.commands = {
 
 		if (Config.modchat.pm) {
 			var userGroup = user.group;
-			if (Config.groups.bySymbol[userGroup].globalRank < Config.groups.bySymbol[Config.modchat.pm].globalRank) {
+			if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[Config.modchat.pm].rank) {
 				var groupName = Config.groups.bySymbol[Config.modchat.pm].name || Config.modchat.pm;
 				this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to PM users.");
 				return false;
@@ -300,7 +300,7 @@ var commands = exports.commands = {
 			room.auth[userid] = nextGroup;
 		}
 
-		if (Config.groups.bySymbol[nextGroup][room.type + 'RoomRank'] < Config.groups.bySymbol[currentGroup][room.type + 'RoomRank']) {
+		if (Config.groups.bySymbol[nextGroup].rank < Config.groups.bySymbol[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
 			if (targetUser) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
 		} else if (nextGroup === '#') {
@@ -743,7 +743,7 @@ var commands = exports.commands = {
 			return this.sendReply("/promote - WARNING: This user is offline and could be unregistered. Use /forcepromote if you're sure you want to risk it.");
 		}
 
-		if (Config.groups.bySymbol[nextGroup].globalRank < Config.groups.bySymbol[currentGroup].globalRank) {
+		if (Config.groups.bySymbol[nextGroup].rank < Config.groups.bySymbol[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to " + groupName + " by " + user.name + ".)");
 			if (targetUser) targetUser.popup("You were demoted to " + groupName + " by " + user.name + ".");
 		} else {
@@ -1563,7 +1563,7 @@ var commands = exports.commands = {
 		if (target) {
 			if (Config.modchat.pm) {
 				var userGroup = user.group;
-				if (Config.groups.bySymbol[userGroup].globalRank < Config.groups.bySymbol[Config.modchat.pm].globalRank) {
+				if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[Config.modchat.pm].rank) {
 					var groupName = Config.groups.bySymbol[Config.modchat.pm].name || Config.modchat.pm;
 					this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to search for a battle.");
 					return false;
@@ -1587,7 +1587,7 @@ var commands = exports.commands = {
 		}
 		if (Config.modchat.pm) {
 			var userGroup = user.group;
-			if (Config.groups.bySymbol[userGroup].globalRank < Config.groups.bySymbol[Config.modchat.pm].globalRank) {
+			if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[Config.modchat.pm].rank) {
 				var groupName = Config.groups.bySymbol[Config.modchat.pm].name || Config.modchat.pm;
 				this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to challenge users.");
 				return false;
