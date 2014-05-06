@@ -48,6 +48,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 90
 	},
+	clearsmog: {
+		inherit: true,
+		basePowder: 90
+	},
 	/******************************************************************
 	HMs:
 	- shouldn't suck (as much)
@@ -945,6 +949,10 @@ exports.BattleMovedex = {
 		accuracy: true
 	},
 	tailslap: {
+		inherit: true,
+		accuracy: true
+	},
+	twineedle: {
 		inherit: true,
 		accuracy: true
 	},
