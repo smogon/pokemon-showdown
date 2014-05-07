@@ -37,7 +37,9 @@ exports.BattleAliases = {
 	"megaluke": "Lucario-Mega",
 	"megamanectric": "Manectric-Mega",
 	"megamawile": "Mawile-Mega",
+	"megamaw": "Mawile-Mega",
 	"megamedicham": "Medicham-Mega",
+	"megamedi": "Medicham-Mega",
 	"megamewtwo": "Mewtwo-Mega-Y",
 	"megamewtwox": "Mewtwo-Mega-X",
 	"megamewtwoy": "Mewtwo-Mega-Y",
@@ -46,6 +48,9 @@ exports.BattleAliases = {
 	"megatyranitar": "Tyranitar-Mega",
 	"megattar": "Tyranitar-Mega",
 	"megavenusaur": "Venusaur-Mega",
+	"megavenu": "Venusaur-Mega",
+	"mmx": "Mewtwo-Mega-X",
+	"mmy": "Mewtwo-Mega-Y",
 
 	// formes
 	"basculinb": "Basculin-Blue-Striped",
