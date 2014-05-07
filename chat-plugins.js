@@ -512,13 +512,21 @@ var plugins = exports.plugins = {
 					} else {
 						result = 'Town';
 					}
-						
+					
+					if (!(key in plugins.mafia.inspectionresults)) {
+						plugins.mafia.inspectionresults.key = {};
+					}
+					
 					plugins.mafia.inspectionresults.key[targets['targetUser']] = result;
 				}
 
 				for (var key in plugins.mafia.nightactions['Mafia Seer']) {
 					var targets = getTargets(key);
 					if (targets['targetUser'] === 'no one') continue;
+
+					if (!(key in plugins.mafia.inspectionresults)) {
+						plugins.mafia.inspectionresults.key = {};
+					}
 
 					if (targetRole === 'Werewolf') {
 						plugins.mafia.inspectionresults.key[targets['targetUser']] = 'Werewolf';
