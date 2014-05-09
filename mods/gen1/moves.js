@@ -790,9 +790,6 @@ exports.BattleMovedex = {
 		beforeMoveCallback: function (pokemon) {
 			this.add('-message', pokemon.name + ' has no moves left! (placeholder)');
 		},
-		onModifyMove: function (move) {
-			move.type = '???';
-		},
 		recoil: [1, 2],
 		secondary: false,
 		target: "normal",
