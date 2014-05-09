@@ -240,6 +240,32 @@ function exportUsergroups() {
 }
 importUsergroups();
 
+var useravatars = {};
+
+function importUseravatars() {
+	for (var i in useravatars) delete useravatars[i];
+	fs.readFile('config/useravatars.csv', function(err, data) {
+		if (err) return;
+		data = (''+data).split("\n");
+		for (var i = 0; i < data.length; i++) {
+			if (!data[i]) continue;
+			var row = data[i].split(",");
+			row[1] = row[1].trim();
+			if (row[1]) useravatars[toUserid(row[0])] = row[1];
+		}
+	});
+}
+
+function exportUseravatars() {
+	var buffer = '';
+	for (var i in useravatars) {
+		buffer += i + ', ' + useravatars[i] + "\n";
+	}
+	fs.writeFile('config/useravatars.csv', buffer);
+}
+
+importUseravatars();
+
 var bannedWords = {};
 function importBannedWords() {
 	fs.readFile('config/bannedwords.txt', function (err, data) {
