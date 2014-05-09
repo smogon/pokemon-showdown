@@ -1541,21 +1541,16 @@ exports.BattleScripts = {
 
 		// 95-86-82-78-74-70
 		var levelScale = {
-			LC: 95,
+			LC: 94,
+			'LC Uber': 92,
 			NFE: 90,
-			'LC Uber': 86,
+			Limbo: 86,
 			NU: 86,
 			BL3: 84,
 			RU: 82,
 			BL2: 80,
 			UU: 78,
 			BL: 76,
-
-			'Limbo': 86,
-			'Limbo C': 83,
-			'Limbo B': 80,
-			'Limbo A': 77,
-
 			OU: 74,
 			CAP: 74,
 			Unreleased: 74,

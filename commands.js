@@ -94,7 +94,7 @@ var commands = exports.commands = {
 
 		if (Config.modchat.pm) {
 			var userGroup = user.group;
-			if (Config.groups.bySymbol[userGroup].globalRank < Config.groups.bySymbol[Config.modchat.pm].globalRank) {
+			if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[Config.modchat.pm].rank) {
 				var groupName = Config.groups.bySymbol[Config.modchat.pm].name || Config.modchat.pm;
 				this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to PM users.");
 				return false;
@@ -306,7 +306,7 @@ var commands = exports.commands = {
 			room.auth[userid] = nextGroup;
 		}
 
-		if (Config.groups.bySymbol[nextGroup][room.type + 'RoomRank'] < Config.groups.bySymbol[currentGroup][room.type + 'RoomRank']) {
+		if (Config.groups.bySymbol[nextGroup].rank < Config.groups.bySymbol[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
 			if (targetUser) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
 		} else if (nextGroup === '#') {
@@ -388,26 +388,34 @@ var commands = exports.commands = {
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
+		var success;
 
 		if (!userid || !targetUser) return this.sendReply("User '" + name + "' does not exist.");
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!room.bannedUsers || !room.bannedIps) {
 			return this.sendReply("Room bans are not meant to be used in room " + room.id + ".");
 		}
-		if (room.bannedUsers[userid]) delete room.bannedUsers[userid];
-		for (var ip in targetUser.ips) {
-			if (room.bannedIps[ip]) delete room.bannedIps[ip];
+		if (room.bannedUsers[userid]) {
+			delete room.bannedUsers[userid];
+			success = true;
 		}
+		for (var ip in targetUser.ips) {
+			if (room.bannedIps[ip]) {
+				delete room.bannedIps[ip];
+				success = true;
+			}
+		}
+		if (!success) return this.sendReply("User " + targetUser.name + " is not banned from room " + room.id + ".");
+
 		targetUser.popup("" + user.name + " has unbanned you from the room " + room.id + ".");
 		this.addModCommand("" + targetUser.name + " was unbanned from room " + room.id + " by " + user.name + ".");
 		var alts = targetUser.getAlts();
-		if (alts.length) {
-			this.addModCommand("" + targetUser.name + "'s alts were also unbanned from room " + room.id + ": " + alts.join(", "));
-			for (var i = 0; i < alts.length; ++i) {
-				var altId = toId(alts[i]);
-				if (room.bannedUsers[altId]) delete room.bannedUsers[altId];
-			}
+		if (!alts.length) return;
+		for (var i = 0; i < alts.length; ++i) {
+			var altId = toId(alts[i]);
+			if (room.bannedUsers[altId]) delete room.bannedUsers[altId];
 		}
+		this.addModCommand("" + targetUser.name + "'s alts were also unbanned from room " + room.id + ": " + alts.join(", "));
 	},
 
 	roomauth: function (target, room, user, connection) {
@@ -458,7 +466,7 @@ var commands = exports.commands = {
 
 		this.addModCommand("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn ' + target);
-		this.add('|unlink|' + targetUser.userid);
+		this.add('|unlink|' + this.getLastIdOf(targetUser));
 	},
 
 	redirect: 'redir',
@@ -511,7 +519,7 @@ var commands = exports.commands = {
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 7 minutes." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also muted: " + alts.join(", "));
-		this.add('|unlink|' + targetUser.userid);
+		this.add('|unlink|' + this.getLastIdOf(targetUser));
 
 		targetUser.mute(room.id, 7 * 60 * 1000);
 	},
@@ -539,7 +547,7 @@ var commands = exports.commands = {
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 60 minutes." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also muted: " + alts.join(", "));
-		this.add('|unlink|' + targetUser.userid);
+		this.add('|unlink|' + this.getLastIdOf(targetUser));
 
 		targetUser.mute(room.id, 60 * 60 * 1000, true);
 	},
@@ -587,7 +595,7 @@ var commands = exports.commands = {
 		this.addModCommand("" + targetUser.name + " was locked from talking by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also locked: " + alts.join(", "));
-		this.add('|unlink|' + targetUser.userid);
+		this.add('|unlink|' + this.getLastIdOf(targetUser));
 
 		targetUser.lock();
 	},
@@ -638,7 +646,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		this.add('|unlink|' + targetUser.userid);
+		this.add('|unlink|' + this.getLastIdOf(targetUser));
 		targetUser.ban();
 	},
 
@@ -744,7 +752,7 @@ var commands = exports.commands = {
 			return this.sendReply("/promote - WARNING: This user is offline and could be unregistered. Use /forcepromote if you're sure you want to risk it.");
 		}
 
-		if (Config.groups.bySymbol[nextGroup].globalRank < Config.groups.bySymbol[currentGroup].globalRank) {
+		if (Config.groups.bySymbol[nextGroup].rank < Config.groups.bySymbol[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to " + groupName + " by " + user.name + ".)");
 			if (targetUser) targetUser.popup("You were demoted to " + groupName + " by " + user.name + ".");
 		} else {
@@ -1320,8 +1328,6 @@ var commands = exports.commands = {
 	 * Battle commands
 	 *********************************************************/
 
-	concede: 'forfeit',
-	surrender: 'forfeit',
 	forfeit: function (target, room, user) {
 		if (!room.battle) {
 			return this.sendReply("There's nothing to forfeit here.");
@@ -1499,7 +1505,7 @@ var commands = exports.commands = {
 		if (target) {
 			if (Config.modchat.pm) {
 				var userGroup = user.group;
-				if (Config.groups.bySymbol[userGroup].globalRank < Config.groups.bySymbol[Config.modchat.pm].globalRank) {
+				if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[Config.modchat.pm].rank) {
 					var groupName = Config.groups.bySymbol[Config.modchat.pm].name || Config.modchat.pm;
 					this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to search for a battle.");
 					return false;
@@ -1523,7 +1529,7 @@ var commands = exports.commands = {
 		}
 		if (Config.modchat.pm) {
 			var userGroup = user.group;
-			if (Config.groups.bySymbol[userGroup].globalRank < Config.groups.bySymbol[Config.modchat.pm].globalRank) {
+			if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[Config.modchat.pm].rank) {
 				var groupName = Config.groups.bySymbol[Config.modchat.pm].name || Config.modchat.pm;
 				this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to challenge users.");
 				return false;

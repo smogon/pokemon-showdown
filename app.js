@@ -174,6 +174,10 @@ global.ResourceMonitor = {
 			} else if (this.connections[ip] % 60 === 0) {
 				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
 			}
+			if (this.connections[ip] > 500) {
+				this.log('[ResourceMonitor] IP ' + ip + ' banned for connection flooding');
+				return true;
+			}
 		} else {
 			this.connections[ip] = 1;
 			this.connectionTimes[ip] = now;

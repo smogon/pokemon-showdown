@@ -88,7 +88,7 @@ exports.BattleScripts = {
 		// For partial trapping moves, we are saving the target
 		if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
 			// Let's check if the lock exists
-			if (pokemon.volatiles['partialtrappinglock']) {
+			if (pokemon.volatiles['partialtrappinglock'] && target.volatiles['partiallytrapped']) {
 				// Here the partialtrappinglock volatile has been already applied
 				if (!pokemon.volatiles['partialtrappinglock'].locked) {
 					// If it's the first hit, we save the target
