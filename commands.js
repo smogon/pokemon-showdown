@@ -53,6 +53,49 @@ function updateAvatar(avatar, room, connection, user, targetUser) {
 	});
 }
 
+function splint(target, separator, length) {
+        if (!separator) separator = ',';
+ 
+        var cmdArr = [];
+        if (length > 0) {
+                var sepIndex = -1;
+                for (var count = 0; ; count++) {
+                        sepIndex = target.indexOf(separator);
+                        if (count + 1  === length ) {
+                                cmdArr.push(target);
+                                break;
+                        } else if (sepIndex === -1) {
+                                cmdArr.push(target);
+                                break;
+                        } else {
+                                cmdArr.push(target.to(sepIndex));
+                                target = target.from(sepIndex+1);
+                        }
+                }
+        } else if (length < 0) {
+                var sepIndex = -1;
+                for (var count = length; ; count++) {
+                        sepIndex = target.lastIndexOf(separator);
+                        if (count === -1) {
+                                cmdArr.unshift(target);
+                                break;
+                        } else if (sepIndex === -1) {
+                                cmdArr.unshift(target);
+                                break;
+                        } else {
+                                cmdArr.unshift(target.from(sepIndex+1));
+                                target = target.to(sepIndex);
+                        }
+                }
+        } else {
+                cmdArr = target.split(separator);
+        }
+        for (var i = 0, l=cmdArr.length; i<l; i++) {
+                cmdArr[i] = cmdArr[i].trim();
+        }
+        return cmdArr;
+}
+
 var crypto = require('crypto');
 var fs = require('fs');
 
