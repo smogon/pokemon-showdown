@@ -124,7 +124,25 @@ var commands = exports.commands = {
 		if (target) target = this.canTalk(target);
 		if (!target) return;
 
-		return '/me ' + target;
+		var message = '/me ' + target;
+		// if user is not in spamroom
+		if (spamroom[user.userid] === undefined) {
+			// check to see if an alt exists in list
+			for (var u in spamroom) {
+				if (Users.get(user.userid) === Users.get(u)) {
+					// if alt exists, add new user id to spamroom, break out of loop.
+					spamroom[user.userid] = true;
+					break;
+				}
+			}
+		}
+
+		if (user.userid in spamroom) {
+			this.sendReply('|c|' + user.getIdentity() + '|' + message);
+			return Rooms.rooms['spamroom'].add('|c|' + user.getIdentity() + '|' + message);
+		} else {
+			return message;
+		}
 	},
 
 	mee: function (target, room, user, connection) {
@@ -132,7 +150,25 @@ var commands = exports.commands = {
 		if (target) target = this.canTalk(target);
 		if (!target) return;
 
-		return '/mee ' + target;
+		var message = '/mee ' + target;
+		// if user is not in spamroom
+		if (spamroom[user.userid] === undefined) {
+			// check to see if an alt exists in list
+			for (var u in spamroom) {
+				if (Users.get(user.userid) === Users.get(u)) {
+					// if alt exists, add new user id to spamroom, break out of loop.
+					spamroom[user.userid] = true;
+					break;
+				}
+			}
+		}
+
+		if (user.userid in spamroom) {
+			this.sendReply('|c|' + user.getIdentity() + '|' + message);
+			return Rooms.rooms['spamroom'].add('|c|' + user.getIdentity() + '|' + message);
+		} else {
+			return message;
+		}
 	},
 
 	avatar: function (target, room, user) {
@@ -216,8 +252,24 @@ var commands = exports.commands = {
 
 		var message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 		user.send(message);
-		if (targetUser !== user) targetUser.send(message);
-		targetUser.lastPM = user.userid;
+		// if user is not in spamroom
+		if(spamroom[user.userid] === undefined){
+			// check to see if an alt exists in list
+			for(var u in spamroom){
+				if(Users.get(user.userid) === Users.get(u)){
+					// if alt exists, add new user id to spamroom, break out of loop.
+					spamroom[user.userid] = true;
+					break;
+				}
+			}
+		}
+
+		if (user.userid in spamroom) {
+			Rooms.rooms.spamroom.add('|c|' + user.getIdentity() + '|(__Private to ' + targetUser.getIdentity()+ "__) " + target );
+		} else {
+			if (targetUser !== user) targetUser.send(message);
+			targetUser.lastPM = user.userid;
+		}
 		user.lastPM = targetUser.userid;
 	},
 
