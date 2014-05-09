@@ -471,6 +471,25 @@ var commands = exports.commands = {
 		}
 		user.leaveRoom(targetRoom || room, connection);
 	},
+	
+	join: function (target, room, user, connection) {
+                var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
+                if (target && !targetRoom) {
+                        if (target === 'lobby') return connection.sendTo(target, "|noinit|nonexistent|");
+                        return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
+                }
+                if (targetRoom && targetRoom.isPrivate && !user.named) {
+                        return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '"+target+"'.");
+                }
+                if (!user.joinRoom(targetRoom || room, connection)) {
+                        // This condition appears to be impossible for now.
+                        return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' could not be joined.");
+                }
+                if (room.id == "lobby" && !user.welcomed) {
+                user.welcomed = true;
+                  this.sendReply('|raw|<div class="broadcast-red">Welcome to Parukia, a Pokemon community where you can have lots of intense battles and fun conversations! Talk, battle and enjoy yourself! <b>Advertising, spamming and trolling are against the rules here. Religious discussions are forbidden. <u>Stupidity is a bannable offense.</u></b><br><br><b>Interested in donating to Parukia? Type /donate for more info!<br><br>Users may donate $5 for a custom avatar or $10 for voice! If you do so, be sure to message Chinlar, Professor Oak Jr. or Fokkusu to get your promotion and/or custom avatar.<br></b></div>');
+         }
+	},
 
 	/*********************************************************
 	 * Moderating: Punishments
