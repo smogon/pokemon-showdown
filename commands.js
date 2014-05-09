@@ -507,7 +507,101 @@ var commands = exports.commands = {
 		}
 		user.leaveRoom(targetRoom || room, connection);
 	},
-
+	/*********************************************************
+	 * Custom avatar
+	 *********************************************************/
+	 customavatar: 'cavatar',
+        cavatar: function(target, room, user, connection) {
+                if (config.groupsranking.indexOf(user.group) < 1) return this.sendReply('Debes ser destacado para utilizar este comando.')
+                var targets = splint(target);
+                var avatar = targets[0].toLowerCase();
+                if (!avatar) {
+                        var configavatar = Users.useravatars[user.userid];
+                        return this.sendReply('Indique el nombre del avatar deseado.'+((configavatar && configavatar !== user.avatar) ? ' Quizas le gustaria '+configavatar : ''));
+                }
+                if (targets[1]) {
+                        if (!user.can('hotpatch')) return this.sendReply('No tienes autorizacion para modificar el avatar de otro.');
+                        var targetUser = Users.users[toId(targets[1])];
+                        if (!targetUser) return this.sendReply(targets[1]+' no existe o no esta conectado.');
+                        if (!targetUser.named || !targetUser.authenticated) return this.sendReply(targets[1]+' es un invitado o no esta autenticado.');
+                } else {
+                        var targetUser = user;
+                }
+                if (avatar.indexOf('.') === -1) return this.sendReply('No olvides incluir la extension de la imagen que deseas como avatar.');
+                if (targetUser.avatar === avatar) return this.sendReply('Ese avatar ya esta puesto.');
+                var unique = true;
+                if (!user.can('hotpatch')) {
+                        for (var uid in Users.useravatars) {
+                                if (Users.useravatars[uid] === avatar && targetUser.userid !== uid) {
+                                        unique = false;
+                                        var altsarray = targetUser.getAlts();
+                                        for (var i = 0; i < altsarray.length; i++) {
+                                                if (uid === toId(altsarray[i])) {
+                                                        unique = true;
+                                                        break;
+                                                }
+                                        }
+                                        break;
+                                }
+                        }
+                }
+                if (!unique) return this.sendReply('Este avatar esta reservado por '+toUserName(uid)+'. Si esa es una cuenta alternativa tuya, conectate un momento desde ella e intenta otra vez.');
+                updateAvatar(avatar, room, connection, user, targetUser);
+        },
+ 
+        avatardownload: 'savatar',
+        saveavatar: 'savatar',
+        savatar: function(target, room, user, connection) {
+                if (!this.can('declare')) return;
+                var targets = splint(target);
+                if (!targets[1]) return this.sendReply('Indica como segundo parametro la URL del avatar que guardaras.');
+                var lengthOne = targets[1].length;
+                if (targets[1].charAt(lengthOne - 1) === '/') {
+                        targets[1] = targets[1].substr(0, lengthOne - 1);
+                }
+                for (var i = lengthOne - 1; i > -1; i--) {
+                        if (targets[1].charAt(i) === '/') return this.sendReply('URL no soportada por este comando.');
+                        if (targets[1].charAt(i) === '.') {
+                                var dotindex = i;
+                                break;
+                        }
+                }
+ 
+                if (dotindex && targets[0].indexOf('.') === -1) {
+                        var extension = targets[1].substr(dotindex + 1, targets[1].length - dotindex - 1);
+                        if (targets[0].indexOf('.') === -1) targets[0] += '.'+extension;
+                } else {
+                        //return this.sendReply('Debes guardar solo una imagen, no una pagina completa.');
+                }
+ 
+                var colonindex = targets[1].indexOf(':');
+                if (colonindex === -1) return this.sendReply('Olvidaste escribir el protocolo de la URL. Sera http o https?');
+                var protocol = targets[1].substr(0, colonindex).toLowerCase();
+                if (protocol === 'http') {
+                        var module = require('http');
+                } else if (protocol === 'https') {
+                        var module = require('https');
+                } else if (protocol === 'ftp') {
+                        try {
+                                var ftp = require('ftp-get');
+                                connection.sendTo(room, 'Avatar '+targets[0]+' guardado.');
+                                ftp.get(targets[1], 'config/avatars/'+targets[0], function(error, result) {
+                                        if (error) return;
+                                });
+                        } catch (e) {
+                                connection.sendTo(room, 'Protocolo FTP no soportado. Ejecutar `npm install ftp-get`');
+                        }
+                } else {
+                        return this.sendReply('El protocolo '+protocol+' no esta soportado por este comando.');
+                }
+                if (protocol !== 'ftp') {
+                        this.sendReply('Avatar '+targets[0]+' guardado.');
+                        var file = fs.createWriteStream("config/avatars/"+targets[0]);
+                        var request = module.get(targets[1], function(response) {
+                                response.pipe(file);
+                        });
+                }
+        },
 	/*********************************************************
 	 * Moderating: Punishments
 	 *********************************************************/
