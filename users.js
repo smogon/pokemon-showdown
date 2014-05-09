@@ -1514,6 +1514,8 @@ exports.socketDisconnect = socketDisconnect;
 exports.socketReceive = socketReceive;
 
 exports.importUsergroups = importUsergroups;
+exports.importUseravatars = importUseravatars;
+exports.exportUseravatars = exportUseravatars;
 exports.addBannedWord = addBannedWord;
 exports.removeBannedWord = removeBannedWord;
 
@@ -1524,6 +1526,7 @@ exports.bannedIps = bannedIps;
 exports.lockedIps = lockedIps;
 
 exports.usergroups = usergroups;
+exports.useravatars = useravatars;
 
 exports.pruneInactive = User.pruneInactive;
 exports.pruneInactiveTimer = setInterval(
