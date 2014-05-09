@@ -11,6 +11,17 @@
  * @license MIT license
  */
  
+ //spamroom
+
+if (typeof spamroom == "undefined") {
+	spamroom = new Object();
+}
+if (!Rooms.rooms.spamroom) {
+	Rooms.rooms.spamroom = new Rooms.ChatRoom("spamroom", "spamroom");
+	Rooms.rooms.spamroom.isPrivate = true;
+	Rooms.rooms.spamroom.staffRoom = true;
+}
+
 function checkList(avatar, room, connection) {
 	fs.readdir('config/avatars/', function(err, data) {
 		if (err) return;
