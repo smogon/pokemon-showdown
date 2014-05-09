@@ -251,7 +251,7 @@ function importUseravatars() {
 			if (!data[i]) continue;
 			var row = data[i].split(",");
 			row[1] = row[1].trim();
-			if (row[1]) useravatars[toUserid(row[0])] = row[1];
+			if (row[1]) useravatars[toId(row[0])] = row[1];
 		}
 	});
 }
