@@ -45,7 +45,7 @@ var plugins = exports.plugins = {
 				plugins.scavenger.roomThree = toId(targets[4]);
 				plugins.scavenger.thirdHint = targets[5].trim();
 				if (Rooms.rooms.scavengers) Rooms.rooms.scavengers.add(
-					'|raw|<div class="broadcast-blue"><strong>A new Scavenger Hunt has been started!' 
+					'|raw|<div class="broadcast-blue"><strong>A new Scavenger Hunt has been started!'
 					+ ' The first hint is: ' + plugins.scavenger.firstHint + '</strong></div>'
 				);
 				return this.sendReply('Scavenger hunt started.');
@@ -63,7 +63,7 @@ var plugins = exports.plugins = {
 				result += '</strong> Second place: ' + ((second)? second : 'no one') + '.';
 				result += ' Third place: ' + ((third)? third : 'no one') + '.';
 				result += ' Consolation prize to: ' + ((consolation.length > 0)? consolation.join(', ') : 'no one') + '.';
-				result += '<br />Solution: ' + plugins.scavenger.roomOne + ', ' 
+				result += '<br />Solution: ' + plugins.scavenger.roomOne + ', '
 				+ plugins.scavenger.roomTwo + ', ' + plugins.scavenger.roomThree + '.';
 				if (Rooms.rooms.scavengers) Rooms.rooms.scavengers.add('|raw|<div class="broadcast-blue"><strong>' + result + '</strong></div>');
 				this.parse('/scavengerresethunt');
@@ -92,7 +92,7 @@ var plugins = exports.plugins = {
 				if (!plugins.scavenger.participants[user.userid]) return this.sendReply('You are not participating in the current scavenger hunt.');
 				if (plugins.scavenger.participants[user.userid].room >= 3) return this.sendReply('You have already finished!');
 				return this.sendReply(
-					'Your current hint: ' 
+					'Your current hint: '
 					+ plugins.scavenger[{0:'firstHint', 1:'secondHint', 2:'thirdHint'}[plugins.scavenger.participants[user.userid].room]]
 					+ '. Type /scavenge [solution] to find out if you are right.'
 				);
@@ -184,7 +184,7 @@ var plugins = exports.plugins = {
 				if (plugins.mafia.status !== 'off') return this.sendReply('There is already an active mafia game.');
 				plugins.mafia.status = 'signups';
 				if (Rooms.rooms.mafia) Rooms.rooms.mafia.add(
-					'|raw|<div class="broadcast-blue"><strong>A new mafia game has been started!' 
+					'|raw|<div class="broadcast-blue"><strong>A new mafia game has been started!'
 					+ ' Type /joinmafia to sign up</strong></div>'
 				);
 			},
@@ -195,11 +195,11 @@ var plugins = exports.plugins = {
 				if (Object.keys(plugins.mafia.participants).length < 3) return this.sendReply('There are not enough participants so signups cannot end. (minimum 3 players)')
 				plugins.mafia.status = 'on';
 
-				/** 
-				* to assign roles randomly we create an array of unique, incrementing and 
+				/**
+				* to assign roles randomly we create an array of unique, incrementing and
 				* shuffled integers of length equal to the number of participants, and assign roles
-				* based on what the value of the array is for that participants index compared to that of 
-				* the "roles" array. 
+				* based on what the value of the array is for that participants index compared to that of
+				* the "roles" array.
 				*/
 				var keys = Object.keys(plugins.mafia.participants);
 				var len = keys.length;
@@ -231,7 +231,7 @@ var plugins = exports.plugins = {
     			}
 
 				if (Rooms.rooms.mafia) Rooms.rooms.mafia.add(
-					'|raw|<div class="broadcast-blue"><strong>Signups for the mafia game have now ended!' 
+					'|raw|<div class="broadcast-blue"><strong>Signups for the mafia game have now ended!'
 					+ ' It is ' + plugins.mafia.stage + ' and there are: ' + JSON.stringify(plugins.mafia.totals) + '. type "/myrole" to see your role</strong></div>'
 				);
 			},
@@ -338,9 +338,9 @@ var plugins = exports.plugins = {
 							plugins.mafia.inspectionresults = {};
 							plugins.mafia.votes = {};
 							return;
-						}				
+						}
 					}
-					if (Rooms.rooms.mafia) Rooms.rooms.mafia.add('|raw|<div class="broadcast-blue"><strong>It is now ' + plugins.mafia.stage + '. If you have a nightaction you can use it using "/nightaction target"</strong></div>');	
+					if (Rooms.rooms.mafia) Rooms.rooms.mafia.add('|raw|<div class="broadcast-blue"><strong>It is now ' + plugins.mafia.stage + '. If you have a nightaction you can use it using "/nightaction target"</strong></div>');
 					room.modchat = '+';
 					plugins.mafia.votes = {};
 
@@ -376,9 +376,9 @@ var plugins = exports.plugins = {
     						plugins.mafia.nightactions[role][key] = '';
     					}
 					}
-					if (Rooms.rooms.mafia) Rooms.rooms.mafia.add('|raw|<div class="broadcast-blue"><strong>It is now ' + plugins.mafia.stage + '</strong></div>');	
+					if (Rooms.rooms.mafia) Rooms.rooms.mafia.add('|raw|<div class="broadcast-blue"><strong>It is now ' + plugins.mafia.stage + '</strong></div>');
 					room.modchat = '+';
-				}	
+				}
 			},
 
 			nightaction: function(target, room, user) {
@@ -392,7 +392,7 @@ var plugins = exports.plugins = {
 					targetUser = 'no one';
 				} else if (!plugins.mafia.participants[targetUser]) return this.sendReply(this.targetUsername + ' is not participating in this mafia game or has died');
 
-				
+
 				var role = plugins.mafia.participants[user.userid];
 
 				if (role === 'Mafia Pretty Lady' || role === 'Mafia Seer') {
@@ -402,10 +402,12 @@ var plugins = exports.plugins = {
 					}
 				}
 
-				if (plugins.mafia.nightactors.indexOf(role) === -1 && role.indexOf("Mafia") === -1) return this.sendReply('You do not have a night action');	
+				if (plugins.mafia.nightactors.indexOf(role) === -1 && role.indexOf("Mafia") === -1) return this.sendReply('You do not have a night action');
 
-				if (role.indexOf("Mafia") !== -1 && (role !== 'Mafia Pretty Lady' || role !== 'Mafia Seer') && targetUser !== 'no one') {
-					if (plugins.mafia.participants[targetUser].indexOf("Mafia") === -1) {
+				if (role.indexOf("Mafia") !== -1 && (role !== 'Mafia Pretty Lady' || role !== 'Mafia Seer')) {
+					if (targetUser === 'no one') {
+						plugins.mafia.nightactions['Mafia'][user.userid] = targetUser;
+					} else if (plugins.mafia.participants[targetUser].indexOf("Mafia") === -1) {
 						plugins.mafia.nightactions['Mafia'][user.userid] = targetUser;
 					} else {
 						return this.sendReply(targetUser + ' is mafia and so cannot be targeted');
@@ -512,11 +514,11 @@ var plugins = exports.plugins = {
 					} else {
 						result = 'Town';
 					}
-					
+
 					if (!(key in plugins.mafia.inspectionresults)) {
 						plugins.mafia.inspectionresults.key = {};
 					}
-					
+
 					plugins.mafia.inspectionresults.key[targets['targetUser']] = result;
 				}
 
