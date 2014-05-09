@@ -404,8 +404,10 @@ var plugins = exports.plugins = {
 
 				if (plugins.mafia.nightactors.indexOf(role) === -1 && role.indexOf("Mafia") === -1) return this.sendReply('You do not have a night action');	
 
-				if (role.indexOf("Mafia") !== -1 && (role !== 'Mafia Pretty Lady' || role !== 'Mafia Seer') && targetUser !== 'no one') {
-					if (plugins.mafia.participants[targetUser].indexOf("Mafia") === -1) {
+				if (role.indexOf("Mafia") !== -1 && (role !== 'Mafia Pretty Lady' || role !== 'Mafia Seer')) {
+					if (targetUser === 'no one') {
+						plugins.mafia.nightactions['Mafia'][user.userid] = targetUser;
+					} else if (plugins.mafia.participants[targetUser].indexOf("Mafia") === -1) {
 						plugins.mafia.nightactions['Mafia'][user.userid] = targetUser;
 					} else {
 						return this.sendReply(targetUser + ' is mafia and so cannot be targeted');
