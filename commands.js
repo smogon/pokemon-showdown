@@ -618,7 +618,7 @@ var commands = exports.commands = {
 	 *********************************************************/
 	 customavatar: 'cavatar',
         cavatar: function(target, room, user, connection) {
-                if (config.groupsranking.indexOf(user.group) < 1) return this.sendReply('Debes ser destacado para utilizar este comando.')
+                if (Config.groupsranking.indexOf(user.group) < 1) return this.sendReply('Debes ser destacado para utilizar este comando.')
                 var targets = splint(target);
                 var avatar = targets[0].toLowerCase();
                 if (!avatar) {
@@ -712,8 +712,8 @@ var commands = exports.commands = {
         newavatarsystem: function(target, room, user) {
 	        if (!this.can('hotpatch')) return;
 	        var buffer = '';
-	        for (var userid in config.customavatars) {
-		        buffer += userid + ', ' + config.customavatars[userid] + '\n';
+	        for (var userid in Config.customavatars) {
+		        buffer += userid + ', ' + Config.customavatars[userid] + '\n';
 	        }
 	        fs.writeFile('config/useravatars.csv', buffer);
         },
