@@ -759,9 +759,7 @@ var User = (function () {
 			if (body !== '1') {
 				authenticated = true;
 
-				if (Config.customavatars && Config.customavatars[userid]) {
-					avatar = Config.customavatars[userid];
-				}
+				if (Users.useravatars[userid]) avatar = Users.useravatars[userid];
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0, 1);
