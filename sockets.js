@@ -100,7 +100,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		worker.send('#' + channelid + '\n' + message);
 	};
 	exports.channelAdd = function (worker, channelid, socketid) {
-		worker.send('+'+channelid + '\n' + socketid);
+		worker.send('+' + channelid + '\n' + socketid);
 	};
 	exports.channelRemove = function (worker, channelid, socketid) {
 		worker.send('-' + channelid + '\n' + socketid);

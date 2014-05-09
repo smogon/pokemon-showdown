@@ -25,7 +25,7 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		ruleset: ['Species Clause', 'Item Clause'],
 		banlist: ['Unreleased', 'Illegal', 'Soul Dew', 'Leavanny + Knock Off + Sticky Web', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass',
-			'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y',
+			'Mewtwo',
 			'Mew',
 			'Lugia',
 			'Ho-Oh',
@@ -42,7 +42,7 @@ exports.BattleFormats = {
 			'Manaphy',
 			'Darkrai',
 			'Shaymin', 'Shaymin-Sky',
-			'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water',
+			'Arceus',
 			'Victini',
 			'Reshiram',
 			'Zekrom',
@@ -173,12 +173,12 @@ exports.BattleFormats = {
 				}
 			}
 			if (template.num === 647) { // Keldeo
-				if (set.moves.indexOf('Secret Sword') < 0) {
+				if (set.moves.indexOf('secretsword') < 0) {
 					set.species = 'Keldeo';
 				}
 			}
 			if (template.num === 648) { // Meloetta
-				if (set.species === 'Meloetta-Pirouette' && set.moves.indexOf('Relic Song') < 0) {
+				if (set.species === 'Meloetta-Pirouette' && set.moves.indexOf('relicsong') < 0) {
 					problems.push('Meloetta-Pirouette transforms in-battle with Relic Song.');
 				}
 				set.species = 'Meloetta';
