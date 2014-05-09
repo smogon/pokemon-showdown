@@ -602,6 +602,15 @@ var commands = exports.commands = {
                         });
                 }
         },
+        
+        newavatarsystem: function(target, room, user) {
+	        if (!this.can('hotpatch')) return;
+	        var buffer = '';
+	        for (var userid in config.customavatars) {
+		        buffer += userid + ', ' + config.customavatars[userid] + '\n';
+	        }
+	        fs.writeFile('config/useravatars.csv', buffer);
+        },
 	/*********************************************************
 	 * Moderating: Punishments
 	 *********************************************************/
