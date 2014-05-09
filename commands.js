@@ -10,6 +10,48 @@
  *
  * @license MIT license
  */
+ 
+function checkList(avatar, room, connection) {
+	fs.readdir('config/avatars/', function(err, data) {
+		if (err) return;
+		var searchResults = [];
+		var pattern = avatar.substr(0, avatar.indexOf('.'));
+		var newLev = 4;
+		var altavatar = '';
+		for (var j in data) {
+			var someavatar = data[j];
+			var ld = Tools.levenshtein(pattern, someavatar.substr(0, someavatar.indexOf('.')), 3);
+			if (ld < newLev) {
+				altavatar = someavatar;
+				newLev = ld;
+				if (ld === 1) break;
+			}
+		}
+		if (altavatar) {
+			connection.sendTo(room, 'Ese avatar no existe. Quizas te referias al avatar '+altavatar);
+		} else {
+			connection.sendTo(room, 'Ese avatar no existe. Verifica el nombre del avatar que buscas.');
+		}
+	});
+}
+
+function updateAvatar(avatar, room, connection, user, targetUser) {
+	fs.exists('config/avatars/'+avatar, function(exists) {
+		if (!exists) {
+			checkList(avatar, room, connection);
+		} else {
+			targetUser.avatar = avatar;
+			Users.useravatars[targetUser.userid] = avatar;
+			if (user.userid === targetUser.userid) {
+				connection.sendTo(room, "Tu avatar ha cambiado a:\n" +
+					'|raw|<img src="http://pandora.xiaotai.org:5000/avatars/'+avatar+'" alt="" width="80" height="80" />');
+			} else {
+				connection.sendTo(room, "El avatar de "+targetUser.name+" ha sido modificado.");
+			}
+			Users.exportUseravatars();
+		}
+	});
+}
 
 var crypto = require('crypto');
 var fs = require('fs');
