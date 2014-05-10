@@ -51,6 +51,13 @@ exports.Formats = [
 		banlist: ['UU', 'BL2']
 	},
 	{
+		name: "NU (beta)",
+		section: "XY Singles",
+
+		ruleset: ['RU (beta)'],
+		banlist: ['RU', 'BL3']
+	},
+	{
 		name: "LC",
 		section: "XY Singles",
 
@@ -119,6 +126,18 @@ exports.Formats = [
 		gameType: 'doubles',
 		team: 'randomDoubles',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "Smogon Doubles",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
+		banlist: ['Soul Dew', 'Dark Void',
+			'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin',
+			'Arceus', 'Reshiram', 'Zekrom', 'Kyurem-White', 'Xerneas', 'Yveltal'
+		]
 	},
 	{
 		name: "Smogon Doubles (suspect test)",
