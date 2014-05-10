@@ -1082,7 +1082,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('forcerenameto', targetUser)) return false;
 
-		if (targetUser.userid === toUserid(this.targetUser)) {
+		if (targetUser.userid === toId(this.targetUser)) {
 			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
 			this.privateModCommand('(' + entry + ')');
 			targetUser.forceRename(target, undefined, true);
