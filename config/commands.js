@@ -1329,7 +1329,7 @@ var commands = exports.commands = {
 	},
 	
 	showtells: function (target, room, user){
-		return this.sendReply(Object.keys(tells));
+		return this.sendReply("These users have currently have queued tells: " + Object.keys(tells));
 	},
 	
 	tellmove: function (target, room, user){
@@ -1346,7 +1346,7 @@ var commands = exports.commands = {
 		Array.prototype.push.apply(tells[newId], tells[oldId]);
 		delete tells[oldId]; 
 
-		this.sendReply("tells successfully moved.");	
+		this.sendReply(this.targetUsername + "\'s tells successfully moved into "+ newId +"\'s queue.");	
 	},
 	
 	hide: 'hideauth',
