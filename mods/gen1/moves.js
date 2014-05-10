@@ -214,21 +214,8 @@ exports.BattleMovedex = {
 	dig: {
 		inherit: true,
 		basePower: 100,
-		onTry: function (attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name, defender);
-			if (!this.runEvent('ChargeMove', attacker, defender)) {
-				this.add('-anim', attacker, move.name, defender);
-				return;
-			}
-			attacker.addVolatile(move.id, defender);
-			return null;
-		},
 		effect: {
 			duration: 2,
-			onLockMove: 'dig',
 			onAccuracy: function (accuracy, target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
@@ -645,35 +632,10 @@ exports.BattleMovedex = {
 		target: "normal"
 	},
 	razorwind: {
-		num: 13,
+		inherit: true,
 		accuracy: 75,
-		category: "Physical",
-		desc: "Deals damage to a foe. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns.",
-		shortDesc: "Charges, then hits foe turn 2.",
-		id: "razorwind",
-		name: "Razor Wind",
-		pp: 10,
-		priority: 0,
-		isTwoTurnMove: true,
-		onTry: function (attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name, defender);
-			if (!this.runEvent('ChargeMove', attacker, defender)) {
-				this.add('-anim', attacker, move.name, defender);
-				return;
-			}
-			attacker.addVolatile(move.id, defender);
-			return null;
-		},
-		effect: {
-			duration: 2,
-			onLockMove: 'razorwind'
-		},
-		secondary: false,
-		target: "normal",
-		type: "Normal"
+		critRatio: 1,
+		target: "normal"
 	},
 	recover: {
 		inherit: true,
