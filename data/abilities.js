@@ -2375,7 +2375,7 @@ exports.BattleAbilities = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk: function (atk, pokemon) {
-				if (!pokemon.hasAbility('slowstart')) {
+				if (pokemon.ignore['Ability'] === true || pokemon.ability !== 'slowstart') {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
@@ -2992,7 +2992,7 @@ exports.BattleAbilities = {
 		},
 		effect: {
 			onModifySpe: function (speMod, pokemon) {
-				if (!pokemon.hasAbility('unburden')) {
+				if (pokemon.ignore['Ability'] === true || pokemon.ability !== 'unburden') {
 					pokemon.removeVolatile('unburden');
 					return;
 				}
