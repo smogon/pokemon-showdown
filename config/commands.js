@@ -1327,7 +1327,28 @@ var commands = exports.commands = {
 		tells[toId(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
+	
+	showtells: function (target, room, user){
+		return this.sendReply(Object.keys(tells));
+	},
+	
+	tellswap: function (target, room, user){
+		if (!this.can('ban')) return;
+	
+		var newId = this.splitTarget(target);
+		if (!newId) return this.sendReply("You forgot the comma.");
+		newId = toId(newId);
+		
+		var oldId = toId(this.targetUsername);
+		if (!tells[oldId]) return this.sendReply(this.targetUsername + " has no tells queued."); 
+		
+		if (!tells[newId]) tells[newId] = []; 
+		Array.prototype.push.apply(tells[newId], tells[oldId]);
+		delete tells[oldId]; 
 
+		this.sendReply("tellswap successful.");	
+	},
+	
 	hide: 'hideauth',
 	hideauth: function(target, room, user) {
 		if (!this.can('hideauth')) return false;
