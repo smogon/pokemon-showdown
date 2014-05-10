@@ -65,6 +65,15 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'frz');
+			if (target.species === 'Shaymin-Sky' && !target.wasFrozen) {
+				target.wasFrozen = true;
+				var template = this.getTemplate('Shaymin');
+				this.add('-formechange', target, template.species);
+				target.formeChange(template);
+				target.baseTemplate = template;
+				target.setAbility(template.abilities['0']);
+				target.baseAbility = target.ability;
+			}
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon, target, move) {
