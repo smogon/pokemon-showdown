@@ -1069,6 +1069,27 @@ var commands = exports.commands = {
 
 		if (targetUser) targetUser.updateIdentity();
 	},
+		frt: 'forcerenameto',
+	forcerenameto: function(target, room, user) {
+		if (!target) return this.parse('/help forcerenameto');
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (!target) {
+			return this.sendReply('No new name was specified.');
+		}
+		if (!this.can('forcerenameto', targetUser)) return false;
+
+		if (targetUser.userid === toUserid(this.targetUser)) {
+			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
+			this.privateModCommand('(' + entry + ')');
+			targetUser.forceRename(target, undefined, true);
+		} else {
+			this.sendReply("User "+targetUser.name+" is no longer using that name.");
+		}
+	},
 
 	forcepromote: function (target, room, user) {
 		// warning: never document this command in /help
