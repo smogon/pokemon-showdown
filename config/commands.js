@@ -1332,7 +1332,7 @@ var commands = exports.commands = {
 		return this.sendReply(Object.keys(tells));
 	},
 	
-	tellswap: function (target, room, user){
+	tellmove: function (target, room, user){
 		if (!this.can('ban')) return;
 	
 		var newId = this.splitTarget(target);
@@ -1346,7 +1346,7 @@ var commands = exports.commands = {
 		Array.prototype.push.apply(tells[newId], tells[oldId]);
 		delete tells[oldId]; 
 
-		this.sendReply("tellswap successful.");	
+		this.sendReply("tells successfully moved.");	
 	},
 	
 	hide: 'hideauth',
