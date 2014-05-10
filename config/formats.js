@@ -54,7 +54,7 @@ exports.Formats = [
 		name: "NU (beta)",
 		section: "XY Singles",
 
-		ruleset: ['RU'],
+		ruleset: ['RU (beta)'],
 		banlist: ['RU', 'BL3']
 	},
 	{
