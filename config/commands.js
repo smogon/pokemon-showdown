@@ -1076,6 +1076,13 @@ var commands = exports.commands = {
 		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
 	},
 
+	choose: 'pickrandom',
+	pr: 'pickrandom',
+	pickrandom: function (target, room, user) {
+		if (!this.canBroadcast()) return false;
+		return this.sendReply('||' + target.split(',').sample().trim());
+	},
+
 	register: function () {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right.');
