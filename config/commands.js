@@ -1094,7 +1094,7 @@ var commands = exports.commands = {
 
 	showimage: function (target, room, user) {
 		if (!target) return this.parse('/help showimage');
-		if (!this.can('declare', null, room)) return false;
+		if (!this.can('declare', room)) return false;
 		if (!this.canBroadcast()) return;
 
 		targets = target.split(',');
