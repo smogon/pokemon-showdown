@@ -680,6 +680,7 @@ var BattlePokemon = (function () {
 		template = this.battle.getTemplate(template);
 
 		if (!template.abilities) return false;
+		this.illusion = null;
 		this.template = template;
 		this.types = template.types;
 		this.typesData = [];
