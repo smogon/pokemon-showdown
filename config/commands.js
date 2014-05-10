@@ -1076,8 +1076,8 @@ var commands = exports.commands = {
 		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
 	},
 
-	choose: 'pickrandom',
 	pr: 'pickrandom',
+	pick: 'pickrandom',
 	pickrandom: function (target, room, user) {
 		if (!this.canBroadcast()) return false;
 		return this.sendReply('||' + target.split(',').sample().trim());
