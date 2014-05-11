@@ -392,6 +392,7 @@ var plugins = exports.plugins = {
 			nightaction: function(target, room, user) {
 				if (plugins.mafia.status !== 'on') return this.sendReply('A mafia game hasn\'t started yet');
 				if (plugins.mafia.stage !== 'night') return this.sendReply('It is not currently night');
+				if (!(user.userid in plugins.mafia.participants)) return this.sendReply('You are not participating in the current mafia game.');
 
 				target = this.splitTarget(target);
 				var targetUser = this.targetUser;
@@ -459,8 +460,8 @@ var plugins = exports.plugins = {
 				function whores(key, targetRole, targetUser) {
 					if (targetRole === 'Werewolf') {
 						plugins.mafia.nightactions.targetRole[targetUser] = key;
-					} else {
-						if (plugins.mafia.nightactions.targetRole[targetUser]) {
+					} else if (targetRole in plugins.mafia.nightactions) {
+						if (targetUser in plugins.mafia.nightactions.targetRole) {
 							plugins.mafia.nightactions.targetRole[targetUser] = 'no one';
 						}
 					}
@@ -737,7 +738,20 @@ var plugins = exports.plugins = {
 				if (room.id !== 'mafia') return this.sendReply('You can only use this command in the Mafia room.');
 				if (plugins.mafia.status !== 'on') return this.sendReply('A mafia game hasn\'t started yet');
 				if (!this.canBroadcast()) return;
-				return this.sendReply('Current roles are: ' + JSON.stringify(plugins.mafia.totals));
+
+				var totals = {};
+
+				for (var key in plugins.mafia.participants) {
+					var role = plugins.mafia.participants[key];
+
+					if (role in totals) {
+						totals[role]++;
+					} else {
+						totals[role] = 1;
+					}
+				}
+
+				return this.sendReply('Current roles are: ' + JSON.stringify(totals));
 			},
 
 			mafiahelp: function(target, room, user) {
