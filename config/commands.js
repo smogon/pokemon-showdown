@@ -1077,11 +1077,12 @@ var commands = exports.commands = {
 	},
 
 	pr: 'pickrandom',
-	pick: 'pickrandom',
-	pickrandom: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
-		return this.sendReply('||' + target.split(',').sample().trim());
-	},
+        pick: 'pickrandom',
+        pickrandom: function (target, room, user) {
+                if (!this.canBroadcast()) return false;
+                this.sendReplyBox(target.split(',').sample().trim());
+        return;
+        },
 
 	register: function () {
 		if (!this.canBroadcast()) return;
