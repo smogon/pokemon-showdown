@@ -193,7 +193,7 @@ exports.BattleAliases = {
 	"cm": "Calm Mind",
 	"dd": "Dragon Dance",
 	"eq": "Earthquake",
-	"espeed": "ExtremeSpeed"
+	"espeed": "ExtremeSpeed",
 	"faintattack": "Feint Attack",
 	"hjk": "High Jump Kick",
 	"hijumpkick": "High Jump Kick",
