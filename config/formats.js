@@ -51,13 +51,6 @@ exports.Formats = [
 		banlist: ['UU', 'BL2']
 	},
 	{
-		name: "NU (beta)",
-		section: "XY Singles",
-
-		ruleset: ['RU (beta)'],
-		banlist: ['RU', 'BL3']
-	},
-	{
 		name: "LC",
 		section: "XY Singles",
 
@@ -283,6 +276,13 @@ exports.Formats = [
 
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger']
+	},
+	{
+		name: "NU (alpha)",
+		section: "Other Metagames",
+
+		ruleset: ['RU (beta)'],
+		banlist: ['RU', 'BL3']
 	},
 	{
 		name: "Challenge Cup",
