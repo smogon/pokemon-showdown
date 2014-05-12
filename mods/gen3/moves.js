@@ -261,6 +261,10 @@ exports.BattleMovedex = {
 	},
 	explosion: {
 		inherit: true,
+		onHit: function(target) {
+			if (!target) return;
+			this.cancelMove(target);
+		},
 		basePower: 500
 	},
 	extrasensory: {
@@ -546,6 +550,10 @@ exports.BattleMovedex = {
 	},
 	selfdestruct: {
 		inherit: true,
+		onHit: function(target) {
+			if (!target) return;
+			this.cancelMove(target);
+		},
 		basePower: 400
 	},
 	skillswap: {
