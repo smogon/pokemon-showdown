@@ -1085,7 +1085,7 @@ var commands = exports.commands = {
 	pick: 'pickrandom',
 	pickrandom: function (target, room, user) {
 		var options = target.split(',');
-		if (options.length < 2) return this.sendReplyBox("Please give more than one option, separated by spaces");
+		if (options.length < 2) return this.sendReplyBox("Please give more than one option, separated by commas");
 		if (!this.canBroadcast()) return false;
 		return this.sendReplyBox('<em>We randomly picked:</em> ' + sanitize(options.sample().trim()));
 	},
