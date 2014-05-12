@@ -238,7 +238,7 @@ var plugins = exports.plugins = {
 
 			myrole: function(target, room, user) {
 				if (plugins.mafia.status !== 'on') return this.sendReply('A mafia game hasn\'t started yet');
-				if (!plugins.mafia.participants[user.userid]) return this.sendReply('You are not participating in the current mafia game.');
+				if (!(user.userid in plugins.mafia.participants)) return this.sendReply('You are not participating in the current mafia game.');
 
 				var role = plugins.mafia.participants[user.userid];
 				var mafia = [];
@@ -259,23 +259,36 @@ var plugins = exports.plugins = {
 			joinmafia: function(target, room, user) {
 				if (plugins.mafia.status !== 'signups') return this.sendReply('Signups are not happening right now');
 				if (room.id !== 'mafia') return this.sendReply('You can only join mafia games in the Mafia room.');
-				if (plugins.mafia.participants[user.userid]) return this.sendReply('You are already participating in the current mafia game.');
+				if (user.userid in plugins.mafia.participants) return this.sendReply('You are already participating in the current mafia game.');
 				plugins.mafia.participants[user.userid] = '';
 				if (Rooms.rooms.mafia) Rooms.rooms.mafia.add(user + ' has joined! Total players: ' + Object.keys(plugins.mafia.participants).length);
 				return this.sendReply('(You joined the mafia game!)');
 			},
 
+			leavemafia: function(target, room, user) {
+				if (plugins.mafia.status !== 'signups') return this.sendReply('You can only leave during signups');
+				if (!(user.userid in plugins.mafia.participants)) return this.sendReply('You are not signed up in the current mafia game.');
+				delete plugins.mafia.participants[user.userid];
+				if (Rooms.rooms.mafia) Rooms.rooms.mafia.add(user + ' has left!');
+				return this.sendReply('(You left the mafia game!)');
+			},
+
 			lynch: function(target, room, user) {
 				if (plugins.mafia.status !== 'on') return this.sendReply('A mafia game hasn\'t started yet');
-				if (!plugins.mafia.participants[user.userid]) return this.sendReply('You are not participating in the current mafia game.');
+				if (!(user.userid in plugins.mafia.participants)) return this.sendReply('You are not participating in the current mafia game.');
 				if (plugins.mafia.stage !== 'day') return this.sendReply('You can only lynch during the day');
 
 				target = this.splitTarget(target);
 				var targetUser = this.targetUser;
+				var targetUserid = toId(this.targetUsername);
 
-				if (!targetUser) {
-					targetUser = 'no lynch';
-				} else if (!plugins.mafia.participants[targetUser]) return this.sendReply(target + ' is not participating in this mafia game or has died');
+				if (!(targetUserid in plugins.mafia.participants)) {
+					if (targetUserid === '') {
+						targetUser = 'no lynch';
+					} else {
+						return this.sendReply(this.targetUsername + ' is not participating in this mafia game or has died');
+					}
+				}
 
 				plugins.mafia.votes[user.userid] = targetUser;
 
@@ -308,8 +321,8 @@ var plugins = exports.plugins = {
 						if (Rooms.rooms.mafia) Rooms.rooms.mafia.add('|raw|<div class="broadcast-blue"><strong>No one was lynched!</strong></div>');
 						plugins.mafia.participants[target] = 'Villager';
 					} else {
-						if (Rooms.rooms.mafia) Rooms.rooms.mafia.add('|raw|<div class="broadcast-blue"><strong>' + this.targetUsername + ' was lynched and was a ' + plugins.mafia.participants[targetUser] + '!');
-						delete plugins.mafia.participants[targetUser];
+						if (Rooms.rooms.mafia) Rooms.rooms.mafia.add('|raw|<div class="broadcast-blue"><strong>' + this.targetUsername + ' was lynched and was a ' + plugins.mafia.participants[targetUserid] + '!');
+						delete plugins.mafia.participants[targetUserid];
 
 						var winner = [];
 
@@ -384,14 +397,19 @@ var plugins = exports.plugins = {
 			nightaction: function(target, room, user) {
 				if (plugins.mafia.status !== 'on') return this.sendReply('A mafia game hasn\'t started yet');
 				if (plugins.mafia.stage !== 'night') return this.sendReply('It is not currently night');
+				if (!(user.userid in plugins.mafia.participants)) return this.sendReply('You are not participating in the current mafia game.');
 
 				target = this.splitTarget(target);
 				var targetUser = this.targetUser;
+				var targetUserid = toId(this.targetUsername);
 
-				if (!targetUser) {
-					targetUser = 'no one';
-				} else if (!plugins.mafia.participants[targetUser]) return this.sendReply(this.targetUsername + ' is not participating in this mafia game or has died');
-
+				if (!(targetUserid in plugins.mafia.participants)) {
+					if (targetUserid === '') {
+						targetUser = 'no one';
+					} else {
+						return this.sendReply(this.targetUsername + ' is not participating in this mafia game or has died');
+					}
+				}
 
 				var role = plugins.mafia.participants[user.userid];
 
@@ -404,8 +422,10 @@ var plugins = exports.plugins = {
 
 				if (plugins.mafia.nightactors.indexOf(role) === -1 && role.indexOf("Mafia") === -1) return this.sendReply('You do not have a night action');
 
-				if (role.indexOf("Mafia") !== -1 && (role !== 'Mafia Pretty Lady' || role !== 'Mafia Seer') && targetUser !== 'no one') {
-					if (plugins.mafia.participants[targetUser].indexOf("Mafia") === -1) {
+				if (role.indexOf("Mafia") !== -1 && (role !== 'Mafia Pretty Lady' || role !== 'Mafia Seer')) {
+					if (targetUser === 'no one') {
+						plugins.mafia.nightactions['Mafia'][user.userid] = targetUser;
+					} else if (plugins.mafia.participants[targetUserid].indexOf("Mafia") === -1) {
 						plugins.mafia.nightactions['Mafia'][user.userid] = targetUser;
 					} else {
 						return this.sendReply(targetUser + ' is mafia and so cannot be targeted');
@@ -449,8 +469,8 @@ var plugins = exports.plugins = {
 				function whores(key, targetRole, targetUser) {
 					if (targetRole === 'Werewolf') {
 						plugins.mafia.nightactions.targetRole[targetUser] = key;
-					} else {
-						if (plugins.mafia.nightactions.targetRole[targetUser]) {
+					} else if (targetRole in plugins.mafia.nightactions) {
+						if (targetUser in plugins.mafia.nightactions.targetRole) {
 							plugins.mafia.nightactions.targetRole[targetUser] = 'no one';
 						}
 					}
@@ -634,7 +654,7 @@ var plugins = exports.plugins = {
 
 				plugins.mafia.nightactions = {Mafia: {}};
 				plugins.mafia.stage = 'day';
-				room.modchat = '';
+				room.modchat = false;
 			},
 
 			modkill: function(target, room, user) {
@@ -643,17 +663,18 @@ var plugins = exports.plugins = {
 				if (plugins.mafia.status !== 'on') return this.sendReply('There is no active mafia game.');
 				target = this.splitTarget(target);
 				var targetUser = this.targetUser;
-				if (!plugins.mafia.participants[targetUser]) return this.sendReply(this.targetUsername + ' is not participating in this mafia game or has died');
-				var role = plugins.mafia.participants[targetUser];
+				var targetUserid = toId(this.targetUsername);
+				if (targetUserid === '' || !(targetUserid in plugins.mafia.participants)) return this.sendReply(this.targetUsername + ' is not participating in this mafia game or has died');
+				var role = plugins.mafia.participants[targetUserid];
 
 				if (role.indexOf('Mafia') !== -1 && role !== 'Mafia Pretty Lady' && role !== 'Mafia Seer') {
 					role = 'Mafia';
 				}
 
-				delete plugins.mafia.participants[targetUser];
+				delete plugins.mafia.participants[targetUserid];
 
 				if (plugins.mafia.nightactions.role) {
-					delete plugins.mafia.nightactions.role[targetUser];
+					delete plugins.mafia.nightactions.role[targetUserid];
 				}
 
 				if (Rooms.rooms.mafia) Rooms.rooms.mafia.add('|raw|<div class="broadcast-blue"><strong>' + this.targetUsername + ' the ' + role + ' was killed by a mod!</strong></div>');
@@ -684,6 +705,7 @@ var plugins = exports.plugins = {
 					plugins.mafia.participants = {};
 					plugins.mafia.inspectionresults = {};
 					plugins.mafia.votes = {};
+					room.modchat = false;
 				}
 			},
 
@@ -691,6 +713,7 @@ var plugins = exports.plugins = {
 				if (room.id !== 'mafia') return this.sendReply('You can only see mafia votes in the Mafia room.');
 				if (plugins.mafia.status !== 'on') return this.sendReply('A mafia game hasn\'t started yet');
 				if (plugins.mafia.participants[user.userid] !== 'Cop' && plugins.mafia.participants[user.userid] !== 'Mafia Seer') return this.sendReply('You are not a cop or mafia seer');
+				if (!(user.userid in plugins.mafia.inspectionresults)) return this.sendReply('You dont have any inspections yet');
 
 				return this.sendReply('The results of your inspections are: ' + JSON.stringify(plugins.mafia.inspectionresults[user.userid]));
 			},
@@ -725,7 +748,20 @@ var plugins = exports.plugins = {
 				if (room.id !== 'mafia') return this.sendReply('You can only use this command in the Mafia room.');
 				if (plugins.mafia.status !== 'on') return this.sendReply('A mafia game hasn\'t started yet');
 				if (!this.canBroadcast()) return;
-				return this.sendReply('Current roles are: ' + JSON.stringify(plugins.mafia.totals));
+
+				var totals = {};
+
+				for (var key in plugins.mafia.participants) {
+					var role = plugins.mafia.participants[key];
+
+					if (role in totals) {
+						totals[role]++;
+					} else {
+						totals[role] = 1;
+					}
+				}
+
+				return this.sendReply('Current roles are: ' + JSON.stringify(totals));
 			},
 
 			mafiahelp: function(target, room, user) {
@@ -734,10 +770,12 @@ var plugins = exports.plugins = {
 				this.sendReplyBox(
 					'<strong>Player commands:</strong><br />' +
 					'- /joinmafia: Join the current mafia game (only available during signups)<br />' +
+					'- /leavemafia: leave the current mafia game (only available during signups)<br />' +
 					'- /lynch <em>name</em>: Vote to lynch the target. If a target is not given then it is no lynch. Only available during the day<br />' +
 					'- /votes: See current lynch votes<br />' +
 					'- /players: See the current living players<br />' +
 					'- /roles: See what roles are still alive<br />' +
+					'- /inspections: See the results of your inspections. Only available to Cop and Mafia Seer<br />' +
 					'- /nightaction <em>name</em>: Use your nightaction on the target. Only available to roles with nightactions and only during the night<br />' +
 					'<br />' +
 					'<strong>Admin commands:</strong><br />' +
@@ -746,7 +784,6 @@ var plugins = exports.plugins = {
 					'- /modkill <em>name</em>: Kill a target<br />'
 				);
 			}
-
 		}
 	}
 };

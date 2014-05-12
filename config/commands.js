@@ -653,6 +653,11 @@ var commands = exports.commands = {
 		);
 	},
 
+	staff: function (target, room, user) {
+	    if (!this.canBroadcast()) return;
+	    this.sendReplyBox("<a href=\"http://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
+	},
+
 	avatars: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
@@ -1074,6 +1079,15 @@ var commands = exports.commands = {
 		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
 	},
 
+	pr: 'pickrandom',
+	pick: 'pickrandom',
+	pickrandom: function (target, room, user) {
+		var options = target.split(',');
+		if (options.length < 2) return this.sendReplyBox("Please give more than one option, separated by spaces");
+		if (!this.canBroadcast()) return false;
+		return this.sendReplyBox('<em>We randomly picked:</em> ' + sanitize(options.sample().trim()));
+	},
+
 	register: function () {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right.');
@@ -1094,7 +1108,7 @@ var commands = exports.commands = {
 
 	showimage: function (target, room, user) {
 		if (!target) return this.parse('/help showimage');
-		if (!this.can('declare', null, room)) return false;
+		if (!this.can('declare', room)) return false;
 		if (!this.canBroadcast()) return;
 
 		targets = target.split(',');
