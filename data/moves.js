@@ -932,13 +932,16 @@ exports.BattleMovedex = {
 			},
 			onBeforeMove: function (pokemon) {
 				if (this.effectData.duration === 1) {
+					this.add('-end', pokemon, 'Bide');
 					if (!this.effectData.totalDamage) {
-						this.add('-end', pokemon, 'Bide');
 						this.add('-fail', pokemon);
 						return false;
 					}
-					this.add('-end', pokemon, 'Bide');
 					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					if (!target) {
+						this.add('-fail', pokemon);
+						return false;
+					}
 					if (!target.runImmunity('Normal')) {
 						this.add('-immune', target, '[msg]');
 						return false;
