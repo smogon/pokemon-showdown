@@ -1332,21 +1332,19 @@ var commands = exports.commands = {
 		return this.sendReply("These users have currently have queued tells: " + Object.keys(tells));
 	},
 	
-	tellmove: function (target, room, user){
-		if (!this.can('ban')) return;
-	
-		var newId = this.splitTarget(target);
-		if (!newId) return this.sendReply("You forgot the comma.");
-		newId = toId(newId);
-		
-		var oldId = toId(this.targetUsername);
-		if (!tells[oldId]) return this.sendReply(this.targetUsername + " has no tells queued."); 
-		
-		if (!tells[newId]) tells[newId] = []; 
-		Array.prototype.push.apply(tells[newId], tells[oldId]);
-		delete tells[oldId]; 
+	tellmove: function (target, room, user) {
+		if (!this.can('ban')) return;	
 
-		this.sendReply(this.targetUsername + "\'s tells successfully moved into "+ newId +"\'s queue.");	
+		var targets = target.split(',').map(toId);
+		if(targets.length !== 2) this.sendReply("Usage: /tellmove from, to");
+
+		if (!tells[targets[0]]) return this.sendReply(targets[0] + " has no tells queued."); 
+		
+		if (!tells[targets[1]]) tells[targets[1]] = []; 
+		Array.prototype.push.apply(tells[targets[1]], tells[targets[0]]);
+		delete tells[targets[0]]; 
+
+		this.sendReply("" + targets[0] + "'s tells successfully moved into " + targets[1] + "'s queue.");	
 	},
 	
 	hide: 'hideauth',
