@@ -468,11 +468,10 @@ var plugins = exports.plugins = {
 
 				function whores(key, targetRole, targetUser) {
 					if (targetRole === 'Werewolf') {
-						plugins.mafia.nightactions.targetRole[targetUser] = key;
-					} else if (targetRole in plugins.mafia.nightactions) {
-						if (targetUser in plugins.mafia.nightactions.targetRole) {
-							plugins.mafia.nightactions.targetRole[targetUser] = 'no one';
-						}
+						plugins.mafia.nightactions[targetRole][targetUser] = key;
+					} else if (targetRole === 'Mafia' || plugins.mafia.nightactors.indexOf(targetRole) !== -1) {
+						plugins.mafia.nightactions[targetRole][targetUser] = 'no one';
+
 					}
 				}
 
