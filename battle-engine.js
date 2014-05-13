@@ -689,7 +689,7 @@ var BattlePokemon = (function () {
 				var nature = this.battle.getNature(this.set.nature);
 				if (statName === nature.plus) stat *= 1.1;
 				if (statName === nature.minus) stat *= 0.9;
-				this.stats[statName] = Math.floor(stat);
+				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
 			}
 			this.speed = this.stats.spe;
 		}
