@@ -54,17 +54,6 @@ global.toName = function (name) {
 };
 
 /**
- * Escapes a string for HTML
- * If strEscape is true, escapes it for JavaScript, too
- */
-global.sanitize = function (str, strEscape) {
-	str = ('' + (str || ''));
-	str = str.escapeHTML();
-	if (strEscape) str = str.replace(/'/g, '\\\'');
-	return str;
-};
-
-/**
  * Safely ensures the passed variable is a string
  * Simply doing '' + str can crash if str.toString crashes or isn't a function
  * If we're expecting a string and being given anything that isn't a string
