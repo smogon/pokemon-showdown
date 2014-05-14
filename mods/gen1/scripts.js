@@ -827,13 +827,12 @@ exports.BattleScripts = {
 			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
 		}
 
-		if (target.fainted) this.faint(target);
-		else {
+		if (target.fainted) {
+			this.faint(target);
+		} else {
 			damage = this.runEvent('AfterDamage', target, source, effect, damage);
-			if (effect && !effect.negateSecondary) {
-				this.runEvent('Secondary', target, source, effect);
-			}
 		}
+
 		return damage;
 	},
 	// This is random teams making for gen 1
