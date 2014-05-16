@@ -459,7 +459,7 @@ var plugins = exports.plugins = {
 					if (targets['targetUser'] === 'no one') return targets;
 					targets['targetRole'] = plugins.mafia.participants[targets['targetUser']];
 
-					if (targets['targetRole'].indexOf('Mafia') !== -1 && targets['targetRole'] !== 'Mafia Pretty Lady' && targets['targetRole'] !== 'Mafia Seer') {
+					if (targets['targetRole'].indexOf('Mafia') !== -1 && targets['targetRole'] !== 'Mafia Pretty Lady' && targets['targetRole'] !== 'Mafia Seer' && targets['targetRole'] !== 'Mafia Godfather') {
 						targets['targetRole'] = 'Mafia';
 					}
 
@@ -468,11 +468,10 @@ var plugins = exports.plugins = {
 
 				function whores(key, targetRole, targetUser) {
 					if (targetRole === 'Werewolf') {
-						plugins.mafia.nightactions.targetRole[targetUser] = key;
-					} else if (targetRole in plugins.mafia.nightactions) {
-						if (targetUser in plugins.mafia.nightactions.targetRole) {
-							plugins.mafia.nightactions.targetRole[targetUser] = 'no one';
-						}
+						plugins.mafia.nightactions[targetRole][targetUser] = key;
+					} else if (targetRole === 'Mafia' || plugins.mafia.nightactors.indexOf(targetRole) !== -1) {
+						plugins.mafia.nightactions[targetRole][targetUser] = 'no one';
+
 					}
 				}
 
@@ -534,10 +533,10 @@ var plugins = exports.plugins = {
 					}
 
 					if (!(key in plugins.mafia.inspectionresults)) {
-						plugins.mafia.inspectionresults.key = {};
+						plugins.mafia.inspectionresults[key] = {};
 					}
 
-					plugins.mafia.inspectionresults.key[targets['targetUser']] = result;
+					plugins.mafia.inspectionresults[key][targets['targetUser']] = result;
 				}
 
 				for (var key in plugins.mafia.nightactions['Mafia Seer']) {
@@ -545,13 +544,13 @@ var plugins = exports.plugins = {
 					if (targets['targetUser'] === 'no one') continue;
 
 					if (!(key in plugins.mafia.inspectionresults)) {
-						plugins.mafia.inspectionresults.key = {};
+						plugins.mafia.inspectionresults[key] = {};
 					}
 
 					if (targetRole === 'Werewolf') {
-						plugins.mafia.inspectionresults.key[targets['targetUser']] = 'Werewolf';
+						plugins.mafia.inspectionresults[key][targets['targetUser']] = 'Werewolf';
 					} else {
-						plugins.mafia.inspectionresults.key[targets['targetUser']] = 'Human';
+						plugins.mafia.inspectionresults[key][targets['targetUser']] = 'Human';
 					}
 				}
 
