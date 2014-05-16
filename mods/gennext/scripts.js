@@ -104,9 +104,9 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'mismagius').abilities['1'] = 'Cursed Body';
 		this.modData('Pokedex', 'cryogonal').abilities['1'] = 'Ice Body';
 
-		// Every DW ability becomes released
+		// Every hidden ability becomes released
 		for (var i in this.data.FormatsData) {
-			this.modData('FormatsData', i).dreamWorldRelease = true;
+			this.modData('FormatsData', i).unreleasedHidden = false;
 		}
 	}
 };
