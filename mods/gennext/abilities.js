@@ -265,6 +265,17 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"whitesmoke": {
+		inherit: true,
+		onBoost: function (boost, target, source) {
+			for (var i in boost) {
+				if (boost[i]] < 0) {
+					delete boost[i];
+					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
+				}
+			}
+		}
+	},
 	"rockhead": {
 		inherit: true,
 		onModifyMove: function (move) {
