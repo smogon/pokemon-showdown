@@ -232,7 +232,7 @@ var plugins = exports.plugins = {
 
 				if (Rooms.rooms.mafia) Rooms.rooms.mafia.add(
 					'|raw|<div class="broadcast-blue"><strong>Signups for the mafia game have now ended!'
-					+ ' It is ' + plugins.mafia.stage + ' and there are: ' + JSON.stringify(plugins.mafia.totals) + '. type "/myrole" to see your role</strong></div>'
+					+ ' It is ' + plugins.mafia.stage + ' and there are: ' + require("util").inspect(plugins.mafia.totals) + '. type "/myrole" to see your role</strong></div>'
 				);
 			},
 
@@ -648,7 +648,7 @@ var plugins = exports.plugins = {
 					plugins.mafia.votes = {};
 
 				} else {
-					if (Rooms.rooms.mafia) Rooms.rooms.mafia.add('|raw|<div class="broadcast-blue"><strong>It is now day! The remaining players are: ' + Object.keys(plugins.mafia.participants) + '</strong></div>');
+					if (Rooms.rooms.mafia) Rooms.rooms.mafia.add('|raw|<div class="broadcast-blue"><strong>It is now day! The remaining players are: ' + Object.keys(plugins.mafia.participants).join(' ') + '</strong></div>');
 				}
 
 				plugins.mafia.nightactions = {Mafia: {}};
@@ -714,7 +714,7 @@ var plugins = exports.plugins = {
 				if (plugins.mafia.participants[user.userid] !== 'Cop' && plugins.mafia.participants[user.userid] !== 'Mafia Seer') return this.sendReply('You are not a cop or mafia seer');
 				if (!(user.userid in plugins.mafia.inspectionresults)) return this.sendReply('You dont have any inspections yet');
 
-				return this.sendReply('The results of your inspections are: ' + JSON.stringify(plugins.mafia.inspectionresults[user.userid]));
+				return this.sendReply('The results of your inspections are: ' + require("util").inspect(plugins.mafia.inspectionresults[user.userid]));
 			},
 
 			votes: function(target, room, user) {
@@ -733,14 +733,14 @@ var plugins = exports.plugins = {
 					}
 				}
 
-				return this.sendReply('Current votes are: ' + JSON.stringify(totals));
+				return this.sendReply('There are currently ' + Object.keys(plugins.mafia.participants).length + ' active players. Current votes are: ' + require("util").inspect(totals));
 			},
 
 			players: function(target, room, user) {
 				if (room.id !== 'mafia') return this.sendReply('You can only use this command in the Mafia room.');
 				if (plugins.mafia.status !== 'on') return this.sendReply('A mafia game hasn\'t started yet');
 				if (!this.canBroadcast()) return;
-				return this.sendReply('Current players are: ' + Object.keys(plugins.mafia.participants));
+				return this.sendReply('There are currently ' + Object.keys(plugins.mafia.participants).length + ' active players. Current players are: ' + Object.keys(plugins.mafia.participants).join(' '));
 			},
 
 			roles: function(target, room, user) {
@@ -760,7 +760,7 @@ var plugins = exports.plugins = {
 					}
 				}
 
-				return this.sendReply('Current roles are: ' + JSON.stringify(totals));
+				return this.sendReply('Current roles are: ' + require("util").inspect(totals));
 			},
 
 			mafiahelp: function(target, room, user) {
