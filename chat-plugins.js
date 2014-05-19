@@ -702,6 +702,7 @@ var plugins = exports.plugins = {
 					plugins.mafia.stage = 'day';
 					plugins.mafia.totals = {};
 					plugins.mafia.participants = {};
+					plugins.mafia.nightactions = {Mafia: {}};
 					plugins.mafia.inspectionresults = {};
 					plugins.mafia.votes = {};
 					room.modchat = false;
