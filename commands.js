@@ -14,6 +14,10 @@
 var crypto = require('crypto');
 var fs = require('fs');
 
+if (typeof tells === 'undefined') {
+	tells = {};
+}
+
 const MAX_REASON_LENGTH = 300;
 
 var commands = exports.commands = {
