@@ -348,7 +348,7 @@ var commands = exports.commands = {
 					continue;
 				}
 			}
-			return this.sendReplyBox("'" + sanitize(target, true) + "' could not be found in any of the search categories.");
+			return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' could not be found in any of the search categories.");
 		}
 
 		if (showAll && Object.size(searches) === 0 && megaSearch === null && feSearch === null) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.");
@@ -541,7 +541,7 @@ var commands = exports.commands = {
 			pokemon = {types: [type1.id]};
 			target = type1.id;
 		} else {
-			return this.sendReplyBox("" + sanitize(target) + " isn't a recognized type or pokemon.");
+			return this.sendReplyBox("" + Tools.escapeHTML(target) + " isn't a recognized type or pokemon.");
 		}
 
 		var weaknesses = [];
@@ -637,7 +637,7 @@ var commands = exports.commands = {
 		this.sendReplyBox(Config.groups.byRank.reduce(function (info, group) {
 			if (!Config.groups.bySymbol[group].name || !Config.groups.bySymbol[group].description)
 				return info;
-			return info + (info ? "<br />" : "") + sanitize(group) + " <strong>" + sanitize(Config.groups.bySymbol[group].name) + "</strong> - " + sanitize(Config.groups.bySymbol[group].description);
+			return info + (info ? "<br />" : "") + Tools.escapeHTML(group) + " <strong>" + Tools.escapeHTML(Config.groups.bySymbol[group].name) + "</strong> - " + Tools.escapeHTML(Config.groups.bySymbol[group].description);
 		}, ""));
 	},
 
@@ -680,13 +680,11 @@ var commands = exports.commands = {
 	smogintro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"Welcome to Smogon's Official Pokémon Showdown server! The Mentoring room can be found <a href=\"http://play.pokemonshowdown.com/communitymentoring\">here</a> or by using /join communitymentoring.<br /><br />" +
-			"Here are some useful links to Smogon\'s Mentorship Program to help you get integrated into the community:<br />" +
+			"Welcome to Smogon's official simulator! Here are some useful links to <a href=\"http://www.smogon.com/mentorship/\">Smogon\'s Mentorship Program</a> to help you get integrated into the community:<br />" +
 			"- <a href=\"http://www.smogon.com/mentorship/primer\">Smogon Primer: A brief introduction to Smogon's subcommunities</a><br />" +
 			"- <a href=\"http://www.smogon.com/mentorship/introductions\">Introduce yourself to Smogon!</a><br />" +
 			"- <a href=\"http://www.smogon.com/mentorship/profiles\">Profiles of current Smogon Mentors</a><br />" +
-			"- <a href=\"http://mibbit.com/#mentor@irc.synirc.net\">#mentor: the Smogon Mentorship IRC channel</a><br />" +
-			"All of these links and more can be found at the <a href=\"http://www.smogon.com/mentorship/\">Smogon Mentorship Program's hub</a>."
+			"- <a href=\"http://mibbit.com/#mentor@irc.synirc.net\">#mentor: the Smogon Mentorship IRC channel</a>"
 		);
 	},
 
@@ -831,7 +829,7 @@ var commands = exports.commands = {
 		if (!target) {
 			if (!this.canBroadcast()) return;
 			this.sendReplyBox("Please follow the rules:<br />" +
-				(room.rulesLink ? "- <a href=\"" + sanitize(room.rulesLink) + "\">" + sanitize(room.title) + " room rules</a><br />" : "") +
+				(room.rulesLink ? "- <a href=\"" + Tools.escapeHTML(room.rulesLink) + "\">" + Tools.escapeHTML(room.title) + " room rules</a><br />" : "") +
 				"- <a href=\"http://pokemonshowdown.com/rules\">" + (room.rulesLink ? "Global rules" : "Rules") + "</a>");
 			return;
 		}
@@ -1083,9 +1081,9 @@ var commands = exports.commands = {
 	pick: 'pickrandom',
 	pickrandom: function (target, room, user) {
 		var options = target.split(',');
-		if (options.length < 2) return this.sendReplyBox("Please give more than one option, separated by spaces");
+		if (options.length < 2) return this.sendReplyBox("Please give more than one option, separated by commas");
 		if (!this.canBroadcast()) return false;
-		return this.sendReplyBox('<em>We randomly picked:</em> ' + sanitize(options.sample().trim()));
+		return this.sendReplyBox('<em>We randomly picked:</em> ' + Tools.escapeHTML(options.sample().trim()));
 	},
 
 	register: function () {
@@ -1116,7 +1114,7 @@ var commands = exports.commands = {
 			return this.parse('/help showimage');
 		}
 
-		this.sendReply('|raw|<img src="' + sanitize(targets[0]) + '" alt="" width="' + toId(targets[1]) + '" height="' + toId(targets[2]) + '" />');
+		this.sendReply('|raw|<img src="' + Tools.escapeHTML(targets[0]) + '" alt="" width="' + toId(targets[1]) + '" height="' + toId(targets[2]) + '" />');
 	},
 
 	htmlbox: function (target, room, user) {

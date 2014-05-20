@@ -587,7 +587,7 @@ var User = (function () {
 			name = Config.nameFilter(name);
 		}
 		name = toName(name);
-		while (Config.groups.bySymbol[name.charAt(0)] || name.charAt(0) === Config.mutedSymbol || name.charAt(0) === Config.lockedSymbol) {
+		while (!/[A-Za-z0-9]/.test(name.charAt(0))) {
 			name = name.substr(1);
 		}
 		return name;
