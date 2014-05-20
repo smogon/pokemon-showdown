@@ -2119,22 +2119,22 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
-		volatileStatus: 'craftyshield',
-		onTryHit: function (target, source, move) {
-			return !!this.willAct() && this.runEvent('StallMove', target);
+		sideCondition: 'craftyshield',
+		onTryHitSide: function (side, source) {
+			return !!this.willAct() && this.runEvent('StallMove', source);
 		},
-		onHit: function (pokemon) {
-			pokemon.addVolatile('stall');
+		onHitSide: function (side, source) {
+			source.addVolatile('stall');
 		},
 		effect: {
 			duration: 1,
-			onStart: function (target) {
-				this.add('-singleturn', target, 'Crafty Shield');
+			onStart: function (target, source) {
+				this.add('-singleturn', source, 'Crafty Shield');
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (move.breaksProtect) {
-					target.removeVolatile('Crafty Shield');
+					target.side.removeSideCondition('craftyshield');
 					return;
 				}
 				if (move && (move.target === 'self' || move.category !== 'Status')) return;
@@ -2143,7 +2143,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "self",
+		target: "allySide",
 		type: "Fairy"
 	},
 	"crosschop": {

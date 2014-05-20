@@ -2561,7 +2561,7 @@ var Battle = (function () {
 					boost[i] = -boost[i];
 				}
 				switch (effect.id) {
-				case 'intimidate':
+				case 'intimidate': case 'gooey':
 					this.add(msg, target, i, boost[i]);
 					break;
 				default:
