@@ -571,13 +571,12 @@ var User = (function () {
 			Rooms.get(i, 'lobby').onUpdateIdentity(this);
 		}
 	};
-	var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1, '{':1, '}':1};
 	User.prototype.filterName = function (name) {
 		if (Config.namefilter) {
 			name = Config.namefilter(name);
 		}
 		name = toName(name);
-		while (bannedNameStartChars[name.charAt(0)]) {
+		while (!/[A-Za-z0-9]/.test(name.charAt(0))) {
 			name = name.substr(1);
 		}
 		return name;
