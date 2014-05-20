@@ -1399,10 +1399,23 @@ var ChatRoom = (function () {
 
 		return '';
 	};
+	ChatRoom.prototype.getRoomTopic = function (noNewline) {
+		if (this.desc) {
+			var text = !noNewline ? '\n' : '';
+			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			text += '|raw|<div class="infobox">Topic for <b>' + this.title + '</b> is: ' + this.desc.replace(re, '<a href="$1">$1</a>') + '<br />';
+			if (this.rulesLink) text += '<b>Room rules:</b> ' + this.rulesLink.replace(re, '<a href="$1">$1</a>') + '';
+			text += '</div>';
+			return text;
+		}
+
+		return '';
+	};
 	ChatRoom.prototype.onJoinConnection = function (user, connection) {
 		var userList = this.userList ? this.userList : this.getUserList();
 		var modchat = this.getModchatNote();
-		this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(25).join('\n') + modchat, connection);
+		var roomtopic = this.getRoomTopic();
+		this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(25).join('\n') + modchat + roomtopic, connection);
 		if (global.Tournaments && Tournaments.get(this.id))
 			Tournaments.get(this.id).update(user);
 	};
@@ -1427,7 +1440,8 @@ var ChatRoom = (function () {
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
 			var modchat = this.getModchatNote();
-			this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(100).join('\n') + modchat, connection);
+			var roomtopic = this.getRoomTopic();
+			this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(100).join('\n') + modchat + roomtopic, connection);
 		}
 		if (global.Tournaments && Tournaments.get(this.id))
 			Tournaments.get(this.id).update(user);
