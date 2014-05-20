@@ -153,6 +153,8 @@ if (!process.send) {
 
 	global.Tools = require('./tools.js');
 
+	require('./repl.js').start('team-validator-', process.pid, function (cmd) { return eval(cmd); });
+
 	var validators = {};
 
 	var respond = function respond(id, success, details) {
