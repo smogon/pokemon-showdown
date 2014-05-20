@@ -241,6 +241,7 @@ exports.BattleScripts = {
 			return false;
 		}
 
+		var totalDamage = 0;
 		var damage = 0;
 		pokemon.lastDamage = 0;
 		if (move.multihit) {
@@ -265,6 +266,8 @@ exports.BattleScripts = {
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
 				damage = (moveDamage || 0);
+				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
+				totalDamage += damage;
 				this.eachEvent('Update');
 			}
 			if (i === 0) return true;
@@ -272,6 +275,11 @@ exports.BattleScripts = {
 			this.add('-hitcount', target, i);
 		} else {
 			damage = this.moveHit(target, pokemon, move);
+			totalDamage = damage;
+		}
+
+		if (move.recoil) {
+			this.damage(this.clampIntRange(Math.round(totalDamage * move.recoil[0] / move.recoil[1]), 1), pokemon, target, 'recoil');
 		}
 
 		if (target && move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
@@ -510,12 +518,13 @@ exports.BattleScripts = {
 		if (pokemon.baseTemplate.species !== template.baseSpecies) return false;
 
 		// okay, mega evolution is possible
-		this.add('-formechange', pokemon, template.species);
-		this.add('message', template.baseSpecies + " has Mega Evolved into Mega " + template.baseSpecies + "!");
 		pokemon.formeChange(template);
 		pokemon.baseTemplate = template; // mega evolution is permanent :o
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
+		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+		this.add('detailschange', pokemon, pokemon.details);
+		this.add('message', template.baseSpecies + " has Mega Evolved into Mega " + template.baseSpecies + "!");
 
 		side.megaEvo = 1;
 		for (var i = 0; i < side.pokemon.length; i++) side.pokemon[i].canMegaEvo = false;

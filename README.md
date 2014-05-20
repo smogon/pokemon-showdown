@@ -98,7 +98,7 @@ The Pokémon Showdown development IRC channel is `#showdown` at `irc.synirc.net`
 
 You can also visit the [Pokémon Showdown forums][4] for discussion and help.
 
-  [4]: http://pokemonshowdown.com/forums/
+  [4]: http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
 
 
 License
