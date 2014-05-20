@@ -239,6 +239,40 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;
+	
+//tells
+	var alts = user.getAlts();
+	for (var u in alts) {
+		var alt = toId(alts[u]);
+		if (alt in tells) {
+			if (!tells[user.userid]) tells[user.userid] = [];
+			for (var tell in tells[alt]) {
+				tells[user.userid].add(tells[alt][tell]);
+			}
+			delete tells[alt];
+		}
+	}
+
+	if (tells[user.userid] && user.authenticated) {
+		for (var tell in tells[user.userid]) {
+			connection.sendTo(room, tells[user.userid][tell]);
+		}
+		delete tells[user.userid];
+	}
+
+	if (message) {
+        if (user.isAway === true) {
+        	if (user.name === user.originalName) user.isAway = false; connection.sendTo(user, 'Your name has been left unaltered and no longer marked as away.');
+
+            user.isAway = false;
+            var newName = user.originalName;
+
+            user.forceRename(newName, undefined, true);
+            user.authenticated = true;
+            connection.sendTo(room, '|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away');
+            user.originalName = '';
+        }
+    }
 
 	return message;
 };
