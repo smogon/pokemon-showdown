@@ -407,3 +407,9 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 	}
 	Users.checkRangeBanned = Cidr.checker(rangebans);
 });
+
+/*********************************************************
+ * Start up the REPL server
+ *********************************************************/
+
+require('./repl.js').start('app', function (cmd) { return eval(cmd); });
