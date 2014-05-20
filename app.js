@@ -344,17 +344,6 @@ global.toName = function (name) {
 };
 
 /**
- * Escapes a string for HTML
- * If strEscape is true, escapes it for JavaScript, too
- */
-global.sanitize = function (str, strEscape) {
-	str = ('' + (str || ''));
-	str = str.escapeHTML();
-	if (strEscape) str = str.replace(/'/g, '\\\'');
-	return str;
-};
-
-/**
  * Safely ensures the passed variable is a string
  * Simply doing '' + str can crash if str.toString crashes or isn't a function
  * If we're expecting a string and being given anything that isn't a string
@@ -401,7 +390,7 @@ process.on('uncaughtException', function (err) {
 	quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5);
 	lastCrash = Date.now();
 	if (quietCrash) return;
-	var stack = ("" + err.stack).split("\n").slice(0, 2).join("<br />");
+	var stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
 	if (Rooms.lobby) {
 		Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
 		Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');

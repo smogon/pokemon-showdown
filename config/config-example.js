@@ -203,7 +203,7 @@ exports.appealUri = '';
 //     - modchatall: Set modchat to all available groups.
 //     - mute: Muting and unmuting.
 //     - potd: Set the Pokemon of the Day.
-//     - privateroom: /privateroom command.
+//     - privateroom: /privateroom and /modjoin commands.
 //     - promote: Global promoting and demoting. Will only work if both to and from groups are in jurisdiction.
 //     - rangeban: /ipban command.
 //     - rawpacket: Ability to add a raw packet into the room's packet log.
@@ -258,6 +258,7 @@ exports.groups = {
 			jurisdiction: 'u',
 			declare: true,
 			modchatall: true,
+			privateroom: true,
 			roomdesc: true,
 			roompromote: 'u'
 		},
