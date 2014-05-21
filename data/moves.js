@@ -8923,6 +8923,7 @@ exports.BattleMovedex = {
 		name: "Nuzzle",
 		pp: 20,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 100,
 			status: 'par'
