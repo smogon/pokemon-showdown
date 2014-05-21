@@ -14,6 +14,8 @@
 var crypto = require('crypto');
 var fs = require('fs');
 
+var isMotd = false;
+
 if (typeof tells === 'undefined') {
 	tells = {};
 }
