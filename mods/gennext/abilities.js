@@ -216,7 +216,7 @@ exports.BattleAbilities = {
 		id: "keeneye",
 		name: "Keen Eye",
 		rating: 3.5,
-		num: 14
+		num: 51
 	},
 	"solidrock": {
 		inherit: true,
