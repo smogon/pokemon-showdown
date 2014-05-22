@@ -23,7 +23,7 @@
  * @license MIT license
  */
 
-const THROTTLE_DELAY = 800;
+const THROTTLE_DELAY = 400;
 const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 4;
 
