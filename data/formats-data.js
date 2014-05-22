@@ -4646,6 +4646,11 @@ exports.BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP"
 	},
+	volkraken: {
+		viableMoves: {"scald":1,"powergem":1,"hydropump":1,"memento":1,"hiddenpower":1,"flamethrower":1,"fireblast":1,"overheat":1,"willowisp":1,"uturn":1,"substitute":1,"flashcannon":1,"surf":1},
+		isNonstandard: true,
+		tier: "CAP"
+	},
 	syclant: {
 		viableMoves: {"bugbuzz":1,"icebeam":1,"blizzard":1,"earthpower":1,"spikes":1,"superpower":1,"tailglow":1,"uturn":1,"focusblast":1},
 		isNonstandard: true,
