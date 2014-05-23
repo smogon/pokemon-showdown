@@ -106,7 +106,7 @@ function can(group, permission, targetGroup, room, isSelf) {
 		if (checkedGroups[group]) return false;
 		checkedGroups[group] = true;
 
-		if (groupData[permission]) {
+		if (permission in groupData) {
 			var jurisdiction = groupData[permission];
 			if (!targetGroup) {
 				return !!jurisdiction;
