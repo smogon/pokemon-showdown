@@ -1118,6 +1118,7 @@ exports.BattleMovedex = {
 				moveData: {
 					basePower: 80,
 					category: "Special",
+					affectedByImmunities: false,
 					type: 'Normal'
 				}
 			};
