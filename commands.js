@@ -270,6 +270,7 @@ var commands = exports.commands = {
 		}
 	},
 
+	topic: 'roomdesc',
 	roomdesc: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
@@ -279,7 +280,7 @@ var commands = exports.commands = {
 			return;
 		}
 		if (!this.can('roommod', null, room)) return false;
-		if (target.length > 80) return this.sendReply("Error: Room description is too long (must be at most 80 characters).");
+		if (target.length > 300) return this.sendReply("Error: Room description is too long (must be at most 300 characters).");
 
 		room.desc = target;
 		this.sendReply("(The room description is now: " + target + ")");
