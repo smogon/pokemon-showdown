@@ -483,9 +483,7 @@ var commands = exports.commands = {
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
-		if (!targetUser || !targetUser.connected) {
-			return this.sendReply("User " + this.targetUsername + " not found.");
-		}
+		if (!targetUser || !targetUser.connected) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
 		if (room.isPrivate && room.auth) {
 			return this.sendReply("You can't warn here: This is a privately-owned room not subject to global rules.");
 		}
@@ -530,9 +528,7 @@ var commands = exports.commands = {
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
-		if (!targetUser) {
-			return this.sendReply("User " + this.targetUsername + " not found.");
-		}
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -560,9 +556,7 @@ var commands = exports.commands = {
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
-		if (!targetUser) {
-			return this.sendReply("User " + this.targetUsername + " not found.");
-		}
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -586,9 +580,7 @@ var commands = exports.commands = {
 	unmute: function (target, room, user) {
 		if (!target) return this.parse('/help unmute');
 		var targetUser = Users.get(target);
-		if (!targetUser) {
-			return this.sendReply("User " + target + " not found.");
-		}
+		if (!targetUser) return this.sendReply("User '" + target + "' does not exist.");
 		if (!this.can('mute', targetUser, room)) return false;
 
 		if (!targetUser.mutedRooms[room.id]) {
@@ -607,9 +599,7 @@ var commands = exports.commands = {
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
-		if (!targetUser) {
-			return this.sendReply("User " + this.targetUser + " not found.");
-		}
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -642,7 +632,7 @@ var commands = exports.commands = {
 				((names.length > 1) ? "were" : "was") +
 				" unlocked by " + user.name + ".");
 		} else {
-			this.sendReply("User " + target + " is not locked.");
+			this.sendReply("User '" + target + "' is not locked.");
 		}
 	},
 
@@ -652,9 +642,7 @@ var commands = exports.commands = {
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
-		if (!targetUser) {
-			return this.sendReply("User " + this.targetUsername + " not found.");
-		}
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
@@ -689,7 +677,7 @@ var commands = exports.commands = {
 		if (name) {
 			this.addModCommand("" + name + " was unbanned by " + user.name + ".");
 		} else {
-			this.sendReply("User " + target + " is not banned.");
+			this.sendReply("User '" + target + "' is not banned.");
 		}
 	},
 
