@@ -592,7 +592,7 @@ var commands = exports.commands = {
 		if (!this.can('mute', targetUser, room)) return false;
 
 		if (!targetUser.mutedRooms[room.id]) {
-			return this.sendReply("" + targetUser.name + " isn't muted.");
+			return this.sendReply("" + targetUser.name + " is not muted.");
 		}
 
 		this.addModCommand("" + targetUser.name + " was unmuted by " + user.name + ".");
