@@ -3,15 +3,6 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: 'OU'
 	},
-	diancie: {
-		inherit: true,
-		isUnreleased: false,
-		tier: 'OU'
-	},
-	genesect: {
-		inherit: true,
-		tier: 'OU'
-	},
 	deoxysdefense: {
 		inherit: true,
 		tier: 'Uber'
@@ -20,6 +11,10 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: 'Uber'
 	},
+	genesect: {
+		inherit: true,
+		tier: 'OU'
+	},
 	kyurem: {
 		inherit: true,
 		tier: 'Uber'
@@ -27,5 +22,10 @@ exports.BattleFormatsData = {
 	kyuremblack: {
 		inherit: true,
 		tier: 'Uber'
+	},
+	diancie: {
+		inherit: true,
+		isUnreleased: false,
+		tier: 'OU'
 	}
 };
