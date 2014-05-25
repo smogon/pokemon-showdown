@@ -1197,6 +1197,8 @@ var ChatRoom = (function () {
 		this.destroyingLog = false;
 		this.bannedUsers = {};
 		this.bannedIps = {};
+		this.active = true;
+		this.inactiveCount = 0;
 		if (!this.modchat) this.modchat = (Config.chatmodchat || false);
 
 		if (Config.logchat) {
