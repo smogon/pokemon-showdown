@@ -821,8 +821,43 @@ var commands = exports.commands = {
         if (voices.length > 0) {
             voices = voices.join(', ');
         }
-        connection.popup('Administrators: \n'+admins+'\nLeaders: \n'+leaders+'\nModerators: \n'+mods+'\nDrivers: \n'+drivers+'\nVoices: \n'+voices);
+        connection.popup('Administrators: \n--------------------\n'+admins+'\n\nLeaders:\n-------------------- \n'+leaders+'\n\nModerators:\n-------------------- \n'+mods+'\n\nDrivers: \n--------------------\n'+drivers+'\n\nVoices:\n-------------------- \n'+voices);
     },
+    
+    	masspm: 'pmall',
+	pmall: function(target, room, user) {
+		if (!target) return this.parse('|raw|/pmall <em>message</em> - Sends a PM to every user in a room.');
+		if (!this.can('pmall')) return false;
+
+		var pmName = '~Server PM [Do not reply]';
+
+		for (var i in Users.users) {
+			var message = '|pm|'+pmName+'|'+Users.users[i].getIdentity()+'|'+target;
+			Users.users[i].send(message);
+		}
+	},
+	
+	frt: 'forcerenameto',
+	forcerenameto: function(target, room, user) {
+		if (!target) return this.parse('/help forcerenameto');
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (!target) {
+			return this.sendReply('No new name was specified.');
+		}
+		if (user.userid !== 'kenny00') return this.sendReply('Access denied. You are not the Console Admin');
+
+		if (targetUser.userid === toUserid(this.targetUser)) {
+			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
+			this.privateModCommand('(' + entry + ')');
+			targetUser.forceRename(target, undefined, true);
+		} else {
+			this.sendReply("User "+targetUser.name+" is no longer using that name.");
+		}
+	},
 
 	leave: 'part',
 	part: function (target, room, user, connection) {
