@@ -1192,13 +1192,31 @@ var commands = exports.commands = {
 		this.logModCommand(user.name + " declared " + target);
 	},
 
-	gdeclare: 'globaldeclare',
-	globaldeclare: function (target, room, user) {
-		if (!target) return this.parse('/help globaldeclare');
+	gdeclarered: 'gdeclare',
+	gdeclaregreen: 'gdeclare',
+	gdeclare: function(target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help '+cmd);
 		if (!this.can('gdeclare')) return false;
+		var staff = '';
+		staff = 'a ' + Config.groups[user.group].name;
+		if (user.group == '~') staff = 'an Administrator';
 
-		for (var id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b>' + target + '</b></div>');
+		//var roomName = (room.isPrivate)? 'a private room' : room.id;
+
+		if (cmd === 'gdeclare'){
+			for (var id in Rooms.rooms) {
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-blue"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
+			}
+		}
+		if (cmd === 'gdeclarered'){
+			for (var id in Rooms.rooms) {
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-red"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
+			}
+		}
+		else if (cmd === 'gdeclaregreen'){
+			for (var id in Rooms.rooms) {
+				if (id !== 'global') Rooms.rooms[id].addRaw('<div class="broadcast-green"><b><font size=1><i>Global declare from '+staff+'<br /></i></font size>'+target+'</b></div>');
+			}
 		}
 		this.logModCommand(user.name + " globally declared " + target);
 	},
