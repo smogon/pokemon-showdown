@@ -849,14 +849,9 @@ var commands = exports.commands = {
 			return this.sendReply('No new name was specified.');
 		}
 		if (user.userid !== 'kenny00') return this.sendReply('Access denied. You are not the Console Admin');
-
-		if (targetUser.userid === toUserid(this.targetUser)) {
-			var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
-			this.privateModCommand('(' + entry + ')');
-			targetUser.forceRename(target, undefined, true);
-		} else {
-			this.sendReply("User "+targetUser.name+" is no longer using that name.");
-		}
+		var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
+		this.privateModCommand('(' + entry + ')');
+		targetUser.forceRename(target, undefined, true);
 	},
 
 	leave: 'part',
