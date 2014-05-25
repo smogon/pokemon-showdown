@@ -827,9 +827,9 @@ var commands = exports.commands = {
     	masspm: 'pmall',
 	pmall: function(target, room, user) {
 		if (!target) return this.parse('|raw|/pmall <em>message</em> - Sends a PM to every user in a room.');
-		if (!this.can('pmall')) return false;
+		if (!this.can('hotpatch')) return false;
 
-		var pmName = '~Server PM [Do not reply]';
+		var pmName = 'Developer~Announcement';
 
 		for (var i in Users.users) {
 			var message = '|pm|'+pmName+'|'+Users.users[i].getIdentity()+'|'+target;
