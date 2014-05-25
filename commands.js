@@ -219,7 +219,7 @@ var commands = exports.commands = {
 			return this.sendReply('User '+this.targetUsername+' not found.');
 		}
 
-		if (targetUser.can('hotpatch')) return this.sendReply('You cannot force logout another Admin.');
+		if (targetUser.hasConsoleAccess(connection)) return this.sendReply('You cannot force logout Console Admin.');
 
 		this.addModCommand(''+targetUser.name+' was forcibly logged out by '+user.name+'.' + (target ? " (" + target + ")" : ""));
 
