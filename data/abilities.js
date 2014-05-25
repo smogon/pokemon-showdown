@@ -372,10 +372,10 @@ exports.BattleAbilities = {
 	"compoundeyes": {
 		desc: "The accuracy of this Pokemon's moves receives a 30% increase; for example, a 75% accurate move becomes 97.5% accurate.",
 		shortDesc: "This Pokemon's moves have their accuracy boosted to 1.3x.",
-		onModifyMove: function (move) {
-			if (typeof move.accuracy !== 'number') return;
+		onSourceAccuracy: function (accuracy) {
+			if (typeof accuracy !== 'number') return;
 			this.debug('compoundeyes - enhancing accuracy');
-			move.accuracy *= 1.3;
+			return accuracy * 1.3;
 		},
 		id: "compoundeyes",
 		name: "Compound Eyes",

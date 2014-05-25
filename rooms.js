@@ -1473,6 +1473,7 @@ var ChatRoom = (function () {
 	 */
 	ChatRoom.prototype.onUpdateIdentity = function (user) {
 		if (user && user.connected && user.named) {
+			if (!this.users[user.userid]) return false;
 			var entry = '|N|' + user.getIdentity(this.id) + '|' + user.userid;
 			if (Config.reportjoinsperiod) {
 				this.reportJoinsQueue.push(entry);
