@@ -402,6 +402,26 @@ var commands = exports.commands = {
 			}
 		}
 	},
+	
+	roomlist: function(target, room, user, connection) {
+		if (!user.can('hotpatch')) return false;
+			for (var u in Rooms.rooms) {
+				if (Rooms.rooms[u].type === "chat") {
+					if (!Rooms.rooms[u].active && !Rooms.rooms[u].isPrivate) {
+						connection.sendTo(room.id, '|raw|INACTIVE: <font color=red><b>'+u+'</b></font>');
+					}
+					if (Rooms.rooms[u].isPrivate && Rooms.rooms[u].active) {
+						connection.sendTo(room.id, '|raw|PRIVATE: <b>'+u+'</b>');
+					}
+					if (!Rooms.rooms[u].active && Rooms.rooms[u].isPrivate) {
+						connection.sendTo(room.id, '|raw|INACTIVE and PRIVATE: <font color=red><b>'+u+'</font></b>');
+					}
+					if (Rooms.rooms[u].active && !Rooms.rooms[u].isPrivate) {
+						connection.sendTo(room.id, '|raw|<font color=green>'+u+'</font>');
+					}
+				}
+			}
+		},
 
 	makechatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
