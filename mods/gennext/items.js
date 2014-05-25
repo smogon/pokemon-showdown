@@ -1,4 +1,33 @@
 exports.BattleItems = {
+	"bigroot": {
+		inherit: true,
+		onAfterMoveSelf: function (source, target) {
+			if (source.hasType('Grass')) {
+				if (source.lastDamage > 0) {
+					this.heal(source.lastDamage / 8, source);
+				}
+			}
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 2,
+		onResidual: function (pokemon) {
+			if (pokemon.hasType('Grass')) {
+				this.heal(pokemon.maxhp / 16);
+			}
+		}
+	},
+	"blacksludge": {
+		inherit: true,
+		onResidualOrder: 5,
+		onResidualSubOrder: 2,
+		onResidual: function (pokemon) {
+			if (pokemon.hasType('Poison')) {
+				this.heal(pokemon.maxhp / (pokemon.getTypes().length === 1 ? 8 : 16));
+			} else {
+				this.damage(pokemon.maxhp / 8);
+			}
+		}
+	},
 	"burndrive": {
 		id: "burndrive",
 		name: "Burn Drive",
@@ -59,72 +88,6 @@ exports.BattleItems = {
 		onDrive: 'Water',
 		desc: "Changes Genesect to Genesect-Douse."
 	},
-	"shockdrive": {
-		id: "shockdrive",
-		name: "Shock Drive",
-		spritenum: 103,
-		fling: {
-			basePower: 70
-		},
-		onStart: function (pokemon) {
-			if (pokemon.species === 'Genesect') {
-				this.add('-item', pokemon, 'Shock Drive');
-				if (pokemon.formeChange('Genesect-Shock')) {
-					this.add('-formechange', pokemon, 'Genesect-Shock');
-				}
-			}
-		},
-		onBasePower: function (basePower, user, target, move) {
-		},
-		onDrive: 'Electric',
-		desc: "Changes Genesect to Genesect-Shock."
-	},
-	"widelens": {
-		inherit: true,
-		onModifyMove: function (move, user, target) {
-			if (typeof move.accuracy === 'number') {
-				move.accuracy *= 1.3;
-			}
-		}
-	},
-	"zoomlens": {
-		inherit: true,
-		onModifyMove: function (move, user, target) {
-			if (typeof move.accuracy === 'number' && !this.willMove(target)) {
-				this.debug('Zoom Lens boosting accuracy');
-				move.accuracy *= 1.6;
-			}
-		}
-	},
-	"bigroot": {
-		inherit: true,
-		onAfterMoveSelf: function (source, target) {
-			if (source.hasType('Grass')) {
-				if (source.lastDamage > 0) {
-					this.heal(source.lastDamage / 8, source);
-				}
-			}
-		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 2,
-		onResidual: function (pokemon) {
-			if (pokemon.hasType('Grass')) {
-				this.heal(pokemon.maxhp / 16);
-			}
-		}
-	},
-	"blacksludge": {
-		inherit: true,
-		onResidualOrder: 5,
-		onResidualSubOrder: 2,
-		onResidual: function (pokemon) {
-			if (pokemon.hasType('Poison')) {
-				this.heal(pokemon.maxhp / (pokemon.getTypes().length === 1 ? 8 : 16));
-			} else {
-				this.damage(pokemon.maxhp / 8);
-			}
-		}
-	},
 	"focusband": {
 		id: "focusband",
 		name: "Focus Band",
@@ -149,18 +112,6 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Holder has a 10% chance to survive an attack that would KO it with 1HP."
 	},
-	"wiseglasses": {
-		inherit: true,
-		onBasePower: function (basePower, user, target, move) {
-			if (move.category === 'Special') {
-				var types = user.getTypes();
-				if (types.length === 1 && types[0] === 'Psychic') {
-					return basePower * 1.2;
-				}
-				return basePower * 1.1;
-			}
-		}
-	},
 	"muscleband": {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
@@ -172,6 +123,26 @@ exports.BattleItems = {
 				return basePower * 1.1;
 			}
 		},
+	},
+	"shockdrive": {
+		id: "shockdrive",
+		name: "Shock Drive",
+		spritenum: 103,
+		fling: {
+			basePower: 70
+		},
+		onStart: function (pokemon) {
+			if (pokemon.species === 'Genesect') {
+				this.add('-item', pokemon, 'Shock Drive');
+				if (pokemon.formeChange('Genesect-Shock')) {
+					this.add('-formechange', pokemon, 'Genesect-Shock');
+				}
+			}
+		},
+		onBasePower: function (basePower, user, target, move) {
+		},
+		onDrive: 'Electric',
+		desc: "Changes Genesect to Genesect-Shock."
 	},
 	"stick": {
 		id: "stick",
@@ -234,4 +205,33 @@ exports.BattleItems = {
 		// },
 		desc: "Raises Farfetch'd's critical hit rate two stages."
 	},
+	"widelens": {
+		inherit: true,
+		onModifyMove: function (move, user, target) {
+			if (typeof move.accuracy === 'number') {
+				move.accuracy *= 1.3;
+			}
+		}
+	},
+	"wiseglasses": {
+		inherit: true,
+		onBasePower: function (basePower, user, target, move) {
+			if (move.category === 'Special') {
+				var types = user.getTypes();
+				if (types.length === 1 && types[0] === 'Psychic') {
+					return basePower * 1.2;
+				}
+				return basePower * 1.1;
+			}
+		}
+	},
+	"zoomlens": {
+		inherit: true,
+		onModifyMove: function (move, user, target) {
+			if (typeof move.accuracy === 'number' && !this.willMove(target)) {
+				this.debug('Zoom Lens boosting accuracy');
+				move.accuracy *= 1.6;
+			}
+		}
+	}
 };
