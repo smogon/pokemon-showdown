@@ -2382,7 +2382,7 @@ exports.BattleAbilities = {
 				return this.chainModify(0.5);
 			},
 			onModifySpe: function (speMod, pokemon) {
-				if (!pokemon.hasAbility('slowstart')) {
+				if (pokemon.ignore['Ability'] === true || pokemon.ability !== 'slowstart') {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
