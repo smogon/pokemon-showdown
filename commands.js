@@ -898,22 +898,18 @@ var commands = exports.commands = {
 	fr: 'forcerename',
 	forcerename: function (target, room, user) {
 		if (!target) return this.parse('/help forcerename');
-		target = this.splitTarget(target);
+		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 		if (!targetUser) {
-			return this.sendReply("User " + this.targetUsername + " not found.");
+			return this.sendReply("User '" + this.targetUsername + "' was not found or had already changed its name.");
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 
-		if (targetUser.userid === toId(this.targetUser)) {
-			var entry = targetUser.name + " was forced to choose a new name by " + user.name + (target ? ": " + target: "");
-			this.privateModCommand("(" + entry + ")");
-			Rooms.global.cancelSearch(targetUser);
-			targetUser.resetName();
-			targetUser.send("|nametaken||" + user.name + " has forced you to change your name. " + target);
-		} else {
-			this.sendReply("User " + targetUser.name + " is no longer using that name.");
-		}
+		var entry = targetUser.name + " was forced to choose a new name by " + user.name + (target ? ": " + target: "");
+		this.privateModCommand("(" + entry + ")");
+		Rooms.global.cancelSearch(targetUser);
+		targetUser.resetName();
+		targetUser.send("|nametaken||" + user.name + " has forced you to change your name. " + target);
 	},
 
 	modlog: function (target, room, user, connection) {
