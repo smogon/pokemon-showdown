@@ -1216,7 +1216,7 @@ var commands = exports.commands = {
 			this.sendReply("/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.");
 			this.sendReply("!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ & ~");
 		}
-		if (target === 'all' || target === 'calc' || target === 'caculator') {
+		if (target === 'all' || target === 'calc' || target === 'calculator') {
 			matched = true;
 			this.sendReply("/calc - Provides a link to a damage calculator");
 			this.sendReply("!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~");
