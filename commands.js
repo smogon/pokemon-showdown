@@ -722,7 +722,7 @@ var commands = exports.commands = {
 	 *********************************************************/
 
 	modnote: function (target, room, user, connection, cmd) {
-		if (!target) return this.parse('/help note');
+		if (!target) return this.parse('/help modnote');
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The note is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}

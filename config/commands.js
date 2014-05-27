@@ -1055,6 +1055,7 @@ var commands = exports.commands = {
 
 	roll: 'dice',
 	dice: function (target, room, user) {
+		if (!target) return this.parse('/help dice');
 		if (!this.canBroadcast()) return;
 		var d = target.indexOf("d");
 		if (d != -1) {
@@ -1083,7 +1084,7 @@ var commands = exports.commands = {
 	pick: 'pickrandom',
 	pickrandom: function (target, room, user) {
 		var options = target.split(',');
-		if (options.length < 2) return this.sendReplyBox("Please give more than one option, separated by commas");
+		if (options.length < 2) return this.parse('/help pick');
 		if (!this.canBroadcast()) return false;
 		return this.sendReplyBox('<em>We randomly picked:</em> ' + Tools.escapeHTML(options.sample().trim()));
 	},
@@ -1270,6 +1271,10 @@ var commands = exports.commands = {
 			this.sendReply("/dice [optional max number] - Randomly picks a number between 1 and 6, or between 1 and the number you choose.");
 			this.sendReply("/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.");
 		}
+		if (target === 'all' || target === 'pick' || target === 'pickrandom') {
+			matched = true;
+			this.sendReply("/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.");
+		}
 		if (target === 'all' || target === 'join') {
 			matched = true;
 			this.sendReply("/join [roomname] - Attempts to join the room [roomname].");
@@ -1315,9 +1320,21 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/ban OR /b [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ & ~");
 		}
+		if (target === '@' || target === '#' || target === 'roompromote') {
+			matched = true;
+			this.sendReply("/roompromote [username], [group] - Promotes the user to the specified group or next ranked group. Requires: @ # & ~");
+		}
+		if (target === '@' || target === '#' || target === 'roomdemote') {
+			matched = true;
+			this.sendReply("/roomdemote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: @ # & ~");
+		}
 		if (target === '&' || target === 'banip') {
 			matched = true;
 			this.sendReply("/banip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~");
+		}
+		if (target === '&' || target === 'unbanip') {
+			matched = true;
+			this.sendReply("/unbanip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~");
 		}
 		if (target === '@' || target === 'unban') {
 			matched = true;
@@ -1378,6 +1395,10 @@ var commands = exports.commands = {
 		if (target === '~' || target === 'globaldeclare' || target === 'gdeclare') {
 			matched = true;
 			this.sendReply("/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~");
+		}
+		if (target === '~' || target === 'htmlbox') {
+			matched = true;
+			this.sendReply("/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # with global authority");
 		}
 		if (target === '%' || target === 'announce' || target === 'wall') {
 			matched = true;
