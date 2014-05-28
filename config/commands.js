@@ -170,6 +170,19 @@ var commands = exports.commands = {
 				output = Object.keys(targetAlt.prevNames).join(", ");
 				if (output) this.sendReply("Previous names: " + output);
 			}
+			
+			if (targetUser.locked) {
+				var userid = toId(targetUser.name);
+				var userips = targetUser.ips;
+				output = '';
+				for (var ip in Users.lockedIps) {
+        				if (userips && (ip in user.ips) && Users.lockedIps[ip] !== userid) {
+                				if (output) output += ", ";
+                				output += Users.lockedIps[ip];
+        				}
+				}
+				if (output) this.sendReply('Locked on: '+output);
+			}
 		}
 		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
 			this.sendReply("Group: " + Config.groups[targetUser.group].name + " (" + targetUser.group + ")");
