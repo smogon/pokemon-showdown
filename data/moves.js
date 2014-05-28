@@ -422,7 +422,7 @@ exports.BattleMovedex = {
 	},
 	"aromaticmist": {
 		num: 597,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user raises the Special Defense stat of itself and ally Pokemon by 1.",
@@ -1817,6 +1817,7 @@ exports.BattleMovedex = {
 		name: "Confide",
 		pp: 20,
 		priority: 0,
+		isSoundBased: true,
 		isNotProtectable: true,
 		boosts: {
 			spa: -1
@@ -2635,6 +2636,7 @@ exports.BattleMovedex = {
 		name: "Disarming Voice",
 		pp: 15,
 		priority: 0,
+		isSoundBased: true,
 		secondary: false,
 		target: "normal",
 		type: "Fairy"
@@ -3845,6 +3847,7 @@ exports.BattleMovedex = {
 		name: "Fell Stinger",
 		pp: 25,
 		priority: 0,
+		isContact: true,
 		onHit: function (target, pokemon) {
 			pokemon.addVolatile('fellstinger');
 		},
@@ -3898,7 +3901,6 @@ exports.BattleMovedex = {
 		name: "Final Gambit",
 		pp: 5,
 		priority: 0,
-		isContact: true,
 		selfdestruct: true,
 		secondary: false,
 		target: "normal",
@@ -4420,6 +4422,7 @@ exports.BattleMovedex = {
 			return this.getEffectiveness(type, target) + this.getEffectiveness('Flying', target);
 		},
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -6486,7 +6489,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isUnreleased: true,
-		isContact: true,
 		breaksProtect: true,
 		secondary: false,
 		target: "normal",
@@ -7095,7 +7097,7 @@ exports.BattleMovedex = {
 		id: "knockoff",
 		isViable: true,
 		name: "Knock Off",
-		pp: 25,
+		pp: 20,
 		priority: 0,
 		isContact: true,
 		onBasePowerPriority: 4,
@@ -7769,6 +7771,7 @@ exports.BattleMovedex = {
 		name: "Magnetic Flux",
 		pp: 20,
 		priority: 0,
+		isSnatchable: true,
 		onHitSide: function (side, source) {
 			var targets = [];
 			for (var p in side.active) {
@@ -7867,6 +7870,7 @@ exports.BattleMovedex = {
 		name: "Mat Block",
 		pp: 10,
 		priority: 0,
+		isSnatchable: true,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'matblock',
 		onTryHitSide: function (side, source) {
@@ -8904,6 +8908,7 @@ exports.BattleMovedex = {
 		name: "Noble Roar",
 		pp: 30,
 		priority: 0,
+		isSoundBased: true,
 		boosts: {
 			atk: -1,
 			spa: -1
@@ -9687,6 +9692,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		isPunchAttack: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -12937,7 +12943,7 @@ exports.BattleMovedex = {
 		shortDesc: "Has 1/4 recoil.",
 		id: "submission",
 		name: "Submission",
-		pp: 25,
+		pp: 20,
 		priority: 0,
 		isContact: true,
 		recoil: [1, 4],
@@ -13303,7 +13309,7 @@ exports.BattleMovedex = {
 		shortDesc: "Hits adjacent Pokemon sharing the user's type.",
 		id: "synchronoise",
 		name: "Synchronoise",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		onTryHit: function (target, source) {
 			return target.hasType(source.getTypes());
