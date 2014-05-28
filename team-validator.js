@@ -180,7 +180,6 @@
 			respond(id, false, problems.join('\n'));
 		} else {
 			var packedTeam = Tools.packTeam(parsedTeam);
-			if (packedTeam === message.substr(pipeIndex2 + 1)) packedTeam = '';
 			// console.log('FROM: ' + message.substr(pipeIndex2 + 1));
 			// console.log('TO: ' + packedTeam);
 			respond(id, true, packedTeam);
