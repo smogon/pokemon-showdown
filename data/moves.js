@@ -9341,15 +9341,15 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 90,
 		category: "Physical",
-		desc: "30% chance to lower the target's Attack by 1 stage. Makes contact.",
-		shortDesc: "30% chance to lower the target's Attack by 1.",
+		desc: "10% chance to lower the target's Attack by 1 stage. Makes contact.",
+		shortDesc: "10% chance to lower the target's Attack by 1.",
 		id: "playrough",
 		name: "Play Rough",
 		pp: 10,
 		priority: 0,
 		isContact: true,
 		secondary: {
-			chance: 30,
+			chance: 10,
 			boosts: {
 				atk: -1
 			}
