@@ -422,7 +422,7 @@ exports.BattleMovedex = {
 	},
 	"aromaticmist": {
 		num: 597,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user raises the Special Defense stat of itself and ally Pokemon by 1.",
@@ -1811,12 +1811,13 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers the target's Special Attack stat by 1.",
+		desc: "Lowers the target's Special Attack by 1 stage. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "Lowers the target's Sp. Atk by 1.",
 		id: "confide",
 		name: "Confide",
 		pp: 20,
 		priority: 0,
+		isSoundBased: true,
 		isNotProtectable: true,
 		boosts: {
 			spa: -1
@@ -2629,12 +2630,13 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 40,
 		category: "Special",
-		desc: "Deals damage to one adjacent target and does not check accuracy. Makes contact.",
+		desc: "Deals damage to one adjacent target. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "This move does not check accuracy.",
 		id: "disarmingvoice",
 		name: "Disarming Voice",
 		pp: 15,
 		priority: 0,
+		isSoundBased: true,
 		secondary: false,
 		target: "normal",
 		type: "Fairy"
@@ -3839,12 +3841,13 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 30,
 		category: "Physical",
-		desc: "When the user knocks out a target with this move, the user's Attack stat rises sharply.",
+		desc: "When the user knocks out a target with this move, the user's Attack stat rises sharply. Makes contact.",
 		shortDesc: "Raises Attack by 2 if knocks out target.",
 		id: "fellstinger",
 		name: "Fell Stinger",
 		pp: 25,
 		priority: 0,
+		isContact: true,
 		onHit: function (target, pokemon) {
 			pokemon.addVolatile('fellstinger');
 		},
@@ -3892,13 +3895,12 @@ exports.BattleMovedex = {
 			return damage;
 		},
 		category: "Special",
-		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints. Makes contact.",
+		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints.",
 		shortDesc: "Does damage equal to the user's HP. User faints.",
 		id: "finalgambit",
 		name: "Final Gambit",
 		pp: 5,
 		priority: 0,
-		isContact: true,
 		selfdestruct: true,
 		secondary: false,
 		target: "normal",
@@ -4410,7 +4412,7 @@ exports.BattleMovedex = {
 		accuracy: 95,
 		basePower: 80,
 		category: "Physical",
-		desc: "Both Fighting-type and Flying-type simultaneously.",
+		desc: "Both Fighting-type and Flying-type simultaneously. Makes contact.",
 		shortDesc: "Both Fighting-type and Flying-type simultaneously.",
 		id: "flyingpress",
 		name: "Flying Press",
@@ -4420,6 +4422,7 @@ exports.BattleMovedex = {
 			return this.getEffectiveness(type, target) + this.getEffectiveness('Flying', target);
 		},
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -6486,7 +6489,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isUnreleased: true,
-		isContact: true,
 		breaksProtect: true,
 		secondary: false,
 		target: "normal",
@@ -7095,7 +7097,7 @@ exports.BattleMovedex = {
 		id: "knockoff",
 		isViable: true,
 		name: "Knock Off",
-		pp: 25,
+		pp: 20,
 		priority: 0,
 		isContact: true,
 		onBasePowerPriority: 4,
@@ -7769,6 +7771,7 @@ exports.BattleMovedex = {
 		name: "Magnetic Flux",
 		pp: 20,
 		priority: 0,
+		isSnatchable: true,
 		onHitSide: function (side, source) {
 			var targets = [];
 			for (var p in side.active) {
@@ -7867,6 +7870,7 @@ exports.BattleMovedex = {
 		name: "Mat Block",
 		pp: 10,
 		priority: 0,
+		isSnatchable: true,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'matblock',
 		onTryHitSide: function (side, source) {
@@ -8898,12 +8902,13 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers the target's Attack and Special Attack by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		desc: "Lowers the target's Attack and Special Attack by 1 stage. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "Lowers target's Atk and SpAtk by 1.",
 		id: "nobleroar",
 		name: "Noble Roar",
 		pp: 30,
 		priority: 0,
+		isSoundBased: true,
 		boosts: {
 			atk: -1,
 			spa: -1
@@ -9341,15 +9346,15 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 90,
 		category: "Physical",
-		desc: "May lower the target's Attack stat by 1.",
-		shortDesc: "May lower the target's Attack by 1.",
+		desc: "10% chance to lower the target's Attack by 1 stage. Makes contact.",
+		shortDesc: "10% chance to lower the target's Attack by 1.",
 		id: "playrough",
 		name: "Play Rough",
 		pp: 10,
 		priority: 0,
 		isContact: true,
 		secondary: {
-			chance: 30,
+			chance: 10,
 			boosts: {
 				atk: -1
 			}
@@ -9680,13 +9685,14 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
-		desc: "Hitting a target raises the Attack stat.",
+		desc: "Hitting a target raises Attack by 1 stage. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "Hitting a target raises Attack by 1",
 		id: "poweruppunch",
 		name: "Power-Up Punch",
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		isPunchAttack: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -12937,7 +12943,7 @@ exports.BattleMovedex = {
 		shortDesc: "Has 1/4 recoil.",
 		id: "submission",
 		name: "Submission",
-		pp: 25,
+		pp: 20,
 		priority: 0,
 		isContact: true,
 		recoil: [1, 4],
@@ -13303,7 +13309,7 @@ exports.BattleMovedex = {
 		shortDesc: "Hits adjacent Pokemon sharing the user's type.",
 		id: "synchronoise",
 		name: "Synchronoise",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		onTryHit: function (target, source) {
 			return target.hasType(source.getTypes());
