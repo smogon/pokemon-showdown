@@ -381,6 +381,7 @@ var commands = exports.commands = {
 	rb: 'roomban',
 	roomban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help roomban');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
@@ -407,12 +408,13 @@ var commands = exports.commands = {
 				room.bannedUsers[altId] = true;
 			}
 		}
-		this.add('|unlink|' + targetUser.userid);
+		this.add('|unlink|' + this.getLastIdOf(targetUser));
 		targetUser.leaveRoom(room.id);
 	},
 
 	roomunban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help roomunban');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
@@ -480,6 +482,7 @@ var commands = exports.commands = {
 	k: 'warn',
 	warn: function (target, room, user) {
 		if (!target) return this.parse('/help warn');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -500,6 +503,7 @@ var commands = exports.commands = {
 	redirect: 'redir',
 	redir: function (target, room, user, connection) {
 		if (!target) return this.parse('/help redirect');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
@@ -525,6 +529,7 @@ var commands = exports.commands = {
 	m: 'mute',
 	mute: function (target, room, user) {
 		if (!target) return this.parse('/help mute');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -553,6 +558,7 @@ var commands = exports.commands = {
 	hm: 'hourmute',
 	hourmute: function (target, room, user) {
 		if (!target) return this.parse('/help hourmute');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -579,6 +585,7 @@ var commands = exports.commands = {
 	um: 'unmute',
 	unmute: function (target, room, user) {
 		if (!target) return this.parse('/help unmute');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		var targetUser = Users.get(target);
 		if (!targetUser) return this.sendReply("User '" + target + "' does not exist.");
 		if (!this.can('mute', targetUser, room)) return false;
@@ -596,6 +603,7 @@ var commands = exports.commands = {
 	ipmute: 'lock',
 	lock: function (target, room, user) {
 		if (!target) return this.parse('/help lock');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -622,6 +630,7 @@ var commands = exports.commands = {
 
 	unlock: function (target, room, user) {
 		if (!target) return this.parse('/help unlock');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		if (!this.can('lock')) return false;
 
 		var unlocked = Users.unlock(target);
@@ -639,6 +648,7 @@ var commands = exports.commands = {
 	b: 'ban',
 	ban: function (target, room, user) {
 		if (!target) return this.parse('/help ban');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -670,6 +680,7 @@ var commands = exports.commands = {
 
 	unban: function (target, room, user) {
 		if (!target) return this.parse('/help unban');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		if (!this.can('ban')) return false;
 
 		var name = Users.unban(target);
@@ -683,6 +694,7 @@ var commands = exports.commands = {
 
 	unbanall: function (target, room, user) {
 		if (!this.can('rangeban')) return false;
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		// we have to do this the hard way since it's no longer a global
 		for (var i in Users.bannedIps) {
 			delete Users.bannedIps[i];
@@ -694,6 +706,7 @@ var commands = exports.commands = {
 	},
 
 	banip: function (target, room, user) {
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		target = target.trim();
 		if (!target) {
 			return this.parse('/help banip');
@@ -705,6 +718,7 @@ var commands = exports.commands = {
 	},
 
 	unbanip: function (target, room, user) {
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		target = target.trim();
 		if (!target) {
 			return this.parse('/help unbanip');
@@ -792,6 +806,7 @@ var commands = exports.commands = {
 
 	modchat: function (target, room, user) {
 		if (!target) return this.sendReply("Moderated chat is currently set to: " + room.modchat);
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		if (!this.can('modchat', null, room)) return false;
 
 		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > 1 && !user.can('modchatall', null, room)) {
@@ -898,6 +913,7 @@ var commands = exports.commands = {
 	fr: 'forcerename',
 	forcerename: function (target, room, user) {
 		if (!target) return this.parse('/help forcerename');
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 		if (!targetUser) {
