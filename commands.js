@@ -1188,7 +1188,7 @@ var commands = exports.commands = {
 				}
 			}
 			Users.checkRangeBanned = Cidr.checker(rangebans);
-			connection.sendTo(room, "ibans.txt has been reloaded.");
+			connection.sendTo(room, "ipbans.txt has been reloaded.");
 		});
 	},
 

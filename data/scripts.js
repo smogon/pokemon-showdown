@@ -1016,7 +1016,7 @@ exports.BattleScripts = {
 					if (setupType && hasMove['gigadrain']) rejected = true;
 					break;
 				case 'weatherball':
-					if (!hasMove['sunnyday']) rejected = true;
+					if (!hasMove['sunnyday'] && !hasMove['raindance']) rejected = true;
 					break;
 				case 'firepunch':
 					if (hasMove['flareblitz']) rejected = true;
