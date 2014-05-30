@@ -45,7 +45,7 @@ var plugins = exports.plugins = {
 				}
 				plugins.scavengers.status = 'on';
 				if (cmd === 'startofficialhunt') {
-					if (!this.can('declare', null, room)) return false;
+					if (!this.can('ban', null, room)) return false;
 					plugins.scavengers.blitz = setTimeout(function () {
 						plugins.scavengers.blitz = null;
 					}, 60000);
@@ -148,9 +148,11 @@ var plugins = exports.plugins = {
 					'- /scavenge <em>guess</em> - Attempt to answer the hint<br />' +
 					'- /scavengerstatus - Get your current game status<br />' +
 					'<br />' +
-					'<strong>Admin commands:</strong><br />' +
-					'- /starthunt <em>hint, answer, hint, answer, hint, answer</em> - Start a new scavenger hunt<br />' +
-					'- /endhunt - Finish the current hunt and announce the winners'
+					'<strong>Staff commands:</strong><br />' +
+					'- /starthunt <em>hint, answer, hint, answer, hint, answer</em> - Start a new scavenger hunt (Requires: % @ # & ~)<br />' +
+					'- /startofficialhunt <em>hint, answer, hint, answer, hint, answer</em> - Start an official hunt with 60 seconds blitz period (Requires: @ # & ~)<br />' +
+					'- /endhunt - Finish the current hunt and announce the winners (Requires: % @ # & ~)<br />' +
+					'- /resethunt - Reset the scavenger hunt to mint status (Requires: % @ # & ~)'
 				);
 			}
 		}
