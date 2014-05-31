@@ -602,7 +602,7 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 4] OU (beta)",
+		name: "[Gen 4] OU",
 		section: "Past Generations",
 		column: 2,
 
@@ -611,7 +611,7 @@ exports.Formats = [
 		banlist: ['Uber']
 	},
 	{
-		name: "[Gen 4] Ubers (beta)",
+		name: "[Gen 4] Ubers",
 		section: "Past Generations",
 
 		mod: 'gen4',
@@ -619,7 +619,7 @@ exports.Formats = [
 		banlist: ['Arceus']
 	},
 	{
-		name: "[Gen 4] UU (beta)",
+		name: "[Gen 4] UU",
 		section: "Past Generations",
 
 		mod: 'gen4',
@@ -627,7 +627,7 @@ exports.Formats = [
 		banlist: ['Uber', 'OU', 'BL']
 	},
 	{
-		name: "[Gen 4] LC (beta)",
+		name: "[Gen 4] LC",
 		section: "Past Generations",
 
 		mod: 'gen4',
