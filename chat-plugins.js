@@ -29,6 +29,7 @@ var plugins = exports.plugins = {
 		answerThree: '',
 		participants: {},
 		finished: [],
+		result: null,
 		commands: {
 			scavenger: 'scavengers',
 			scavengers: function (target, room, user) {
@@ -56,7 +57,7 @@ var plugins = exports.plugins = {
 				plugins.scavengers.answerTwo = toId(targets[3]);
 				plugins.scavengers.hintThree = targets[4].trim();
 				plugins.scavengers.answerThree = toId(targets[5]);
-				var result = (cmd === 'startofficialhunt' ? 'An official' : 'A new') + ' Scavenger Hunt has started! The first hint is: ' + plugins.scavengers.hintOne;
+				var result = (cmd === 'startofficialhunt' ? 'An official' : 'A new') + ' Scavenger Hunt has been started by <em> ' + user.name + '</em>! The first hint is: ' + plugins.scavengers.hintOne;
 				Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
 			},
 			joinhunt: function (target, room, user) {
@@ -109,17 +110,17 @@ var plugins = exports.plugins = {
 				var second = plugins.scavengers.finished[1];
 				var third = plugins.scavengers.finished[2];
 				var consolation = plugins.scavengers.finished.slice(3).join(', ');
-				var result = '<strong>The Scavenger Hunt has ended! ';
+				var result = 'The Scavenger Hunt was ended by <em>' + Tools.escapeHTML(user.name) + '</em>. ';
 				if (winner) {
-					result += 'Winner: <em>' + Tools.escapeHTML(winner) + '</em>.</strong>';
+					result += '<br />Winner: <em>' + Tools.escapeHTML(winner) + '</em>.';
 					if (second) result += ' Second place: <em>' + Tools.escapeHTML(second) + '</em>.';
 					if (third) result += ' Third place: <em>' + Tools.escapeHTML(third) + '</em>.';
 					if (consolation) result += ' Consolation prize to: ' + Tools.escapeHTML(consolation) + '.';
 				} else {
-					result += 'No user has completed the hunt.</strong>';
+					result += 'No user has completed the hunt.';
 				}
 				result += '<br />Solution: ' + plugins.scavengers.answerOne + ', ' + plugins.scavengers.answerTwo + ', ' + plugins.scavengers.answerThree + '.';
-				Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>' + result + '</strong></div>');
+				plugins.scavengers.result = result;
 				this.parse('/resethunt');
 			},
 			resethunt: function (target, room, user) {
@@ -136,7 +137,12 @@ var plugins = exports.plugins = {
 				plugins.scavengers.answerThree = '';
 				plugins.scavengers.participants = {};
 				plugins.scavengers.finished = [];
-				this.sendReply('Scavenger hunt reset.');
+				if (plugins.scavengers.result) {
+					Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>' + plugins.scavengers.result + '</strong></div>');
+				} else {
+					Rooms.rooms.scavengers.addRaw('<div class="broadcast-blue"><strong>The Scavenger Hunt was reset by <em>' + user.name + '</em>.</strong></div>');
+				}
+				plugins.scavengers.result = null;
 			},
 			scavengerhelp: function (target, room, user) {
 				if (room.id !== 'scavengers') return;
