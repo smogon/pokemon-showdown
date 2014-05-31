@@ -12316,6 +12316,12 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		isBounceable: true,
+		onTryHit: function (pokemon) {
+			var bannedAbilities = {multitype:1};
+			if (bannedAbilities[pokemon.ability]) {
+				return false;
+			}
+		},	
 		onHit: function (target) {
 			if (!target.setType('Water')) return false;
 			this.add('-start', target, 'typechange', 'Water');
