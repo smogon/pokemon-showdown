@@ -411,6 +411,7 @@ var commands = exports.commands = {
 		targetUser.leaveRoom(room.id);
 	},
 
+	unroomban: 'roomunban',
 	roomunban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help roomunban');
 
