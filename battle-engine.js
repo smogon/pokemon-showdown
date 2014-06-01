@@ -1120,7 +1120,7 @@ var BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.setType = function (newType, enforce) {
 		// Arceus first type cannot be normally changed
-		if (!enforce && this.num === 493) return false;
+		if (!enforce && this.template.num === 493) return false;
 
 		this.typesData = [{
 			type: newType,
