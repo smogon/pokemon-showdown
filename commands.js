@@ -412,6 +412,7 @@ var commands = exports.commands = {
 		targetUser.leaveRoom(room.id);
 	},
 
+	unroomban: 'roomunban',
 	roomunban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help roomunban');
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
