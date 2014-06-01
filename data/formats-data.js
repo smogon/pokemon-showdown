@@ -737,7 +737,8 @@ exports.BattleFormatsData = {
 		viableDoublesMoves: {"shadowball":1,"sludgebomb":1,"focusblast":1,"thunderbolt":1,"substitute":1,"disable":1,"taunt":1,"hypnosis":1,"gigadrain":1,"trick":1,"dazzlinggleam":1,"protect":1},
 		eventPokemon: [
 			{"generation":6,"level":25,"nature":"Timid","moves":["psychic","confuseray","suckerpunch","shadowpunch"],"pokeball":"cherishball"},
-			{"generation":6,"level":25,"moves":["nightshade","confuseray","suckerpunch","shadowpunch"],"pokeball":"cherishball"}
+			{"generation":6,"level":25,"moves":["nightshade","confuseray","suckerpunch","shadowpunch"],"pokeball":"cherishball"},
+			{"generation":6,"level":50,"moves":["shadowball","sludgebomb","willowisp","destinybond"],"pokeball":"cherishball"}
 		],
 		tier: "OU"
 	},
@@ -935,7 +936,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":5,"gender":"F","abilities":["earlybird"],"moves":["yawn","wish"]},
 			{"generation":3,"level":10,"gender":"F","abilities":["earlybird"],"moves":["cometpunch","leer","bite"]},
-			{"generation":3,"level":36,"gender":"F","abilities":["earlybird"],"moves":["sing","earthquake","tailwhip","dizzypunch"]}
+			{"generation":3,"level":36,"gender":"F","abilities":["earlybird"],"moves":["sing","earthquake","tailwhip","dizzypunch"]},
+			{"generation":6,"level":50,"gender":"F","isHidden":false,"abilities":["scrappy"],"moves":["fakeout","return","earthquake","suckerpunch"],"pokeball":"cherishball"}
 		],
 		tier: "NU"
 	},
@@ -1131,7 +1133,7 @@ exports.BattleFormatsData = {
 	gyarados: {
 		viableMoves: {"dragondance":1,"waterfall":1,"earthquake":1,"bounce":1,"rest":1,"sleeptalk":1,"dragontail":1,"stoneedge":1,"substitute":1,"icefang":1},
 		eventPokemon: [
-			{"generation":6,"level":50,"isHidden":false,"abilities":["intimidate"],"moves":["waterfall","earthquake","icefang","dragondance"],"pokeball":"cherishball"}
+			{"generation":6,"level":50,"isHidden":false,"moves":["waterfall","earthquake","icefang","dragondance"],"pokeball":"cherishball"}
 		],
 		tier: "OU"
 	},
@@ -1872,7 +1874,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["thrash","scaryface","crunch","earthquake"]},
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["fireblast","icebeam","stoneedge","crunch"],"pokeball":"cherishball"},
-			{"generation":5,"level":55,"gender":"M","isHidden":true,"moves":["payback","crunch","earthquake","seismictoss"]}
+			{"generation":5,"level":55,"gender":"M","isHidden":true,"moves":["payback","crunch","earthquake","seismictoss"]},
+			{"generation":6,"level":50,"isHidden":false,"moves":["stoneedge","crunch","earthquake","icepunch"],"pokeball":"cherishball"}
 		],
 		tier: "OU"
 	},
