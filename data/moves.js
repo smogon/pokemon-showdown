@@ -10438,7 +10438,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function (target, source) {
-			if (source.num === 493) return false;
+			if (source.template && source.template.num === 493) return false;
 			this.add('-start', source, 'typechange', target.getTypes(true).join('/'), '[from] move: Reflect Type', '[of] ' + target);
 			source.typesData = [];
 			for (var i = 0, l = target.typesData.length; i < l; i++) {
