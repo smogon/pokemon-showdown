@@ -126,6 +126,7 @@ var plugins = exports.plugins = {
 			resethunt: function (target, room, user) {
 				if (room.id !== 'scavengers') return;
 				if (!this.can('mute', null, room)) return false;
+				if (plugins.scavengers.status !== 'on') return this.sendReply('There is no active scavenger hunt.');
 				plugins.scavengers.status = 'off';
 				if (plugins.scavengers.blitz) clearTimeout(plugins.scavengers.blitz);
 				plugins.scavengers.blitz = null;
