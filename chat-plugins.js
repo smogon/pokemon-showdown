@@ -144,6 +144,7 @@ var plugins = exports.plugins = {
 				}
 				plugins.scavengers.result = null;
 			},
+			scavengershelp: 'scavengerhelp',
 			scavengerhelp: function (target, room, user) {
 				if (room.id !== 'scavengers') return;
 				if (!this.canBroadcast()) return;
