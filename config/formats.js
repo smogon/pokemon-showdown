@@ -351,6 +351,26 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "Ability Exchange",
+		section: "Other Metagames",
+
+		searchShow: false,
+		ruleset: ['Pokemon', 'Ability Exchange Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal', 'Ignore Illegal Abilities', 'Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger', 'Slaking', 'Regigigas']
+	},
+	{
+		name: "Ability Shift",
+		section: "Other Metagames",
+
+		mod: 'abilityshift',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Ampharosite', 'Gyaradosite',
+			'Arceus', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyurem-White',
+			'Lugia', 'Meloetta', 'Mewtwo', 'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Xerneas', 'Zekrom'
+		]
+	},
+	{
 		name: "Almost Any Ability",
 		section: "Other Metagames",
 
@@ -370,26 +390,6 @@ exports.Formats = [
 				if (!legalAbility) return ['The ability "' + set.ability + '" is banned on Pokémon that do not naturally have it.'];
 			}
 		}
-	},
-	{
-		name: "Ability Exchange",
-		section: "Other Metagames",
-
-		searchShow: false,
-		ruleset: ['Pokemon', 'Ability Exchange Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal', 'Ignore Illegal Abilities', 'Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger', 'Slaking', 'Regigigas']
-	},
-	{
-		name: "Ability Shift",
-		section: "Other Metagames",
-
-		mod: 'abilityshift',
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Ampharosite', 'Gyaradosite',
-			'Arceus', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyurem-White',
-			'Lugia', 'Meloetta', 'Mewtwo', 'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Xerneas', 'Zekrom'
-		]
 	},
 	{
 		name: "Alphabet Cup",
