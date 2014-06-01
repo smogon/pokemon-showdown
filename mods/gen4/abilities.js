@@ -8,6 +8,15 @@ exports.BattleAbilities = {
 			this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 		}
 	},
+	"leafguard": {
+		onSetStatus: function (status, target, source, effect) {
+			if (effect && effect.id === 'rest') {
+				return;
+			} else if (this.isWeather('sunnyday')) {
+				return false;
+			}
+		}
+	},
 	"lightningrod": {
 		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment.",
 		shortDesc: "This Pokemon draws Electric moves to itself.",
