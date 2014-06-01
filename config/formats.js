@@ -161,7 +161,7 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Smogon Doubles'],
+		ruleset: ['Smogon Doubles (current)'],
 		banlist: ['Abomasnow', 'Aegislash', 'Amoonguss', 'Ampharos', 'Azumarill', 'Bisharp', 'Breloom', 'Chandelure', 'Charizard', 'Conkeldurr',
 			'Cresselia', 'Dragonite', 'Dusclops', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Gardevoir', 'Gastrodon', 'Genesect', 'Gengar',
 			'Gliscor', 'Greninja', 'Gyarados', 'Heatran', 'Hitmontop', 'Jirachi', 'Kangaskhan', 'Klefki', 'Landorus-T', 'Latios',
