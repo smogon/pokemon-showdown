@@ -83,6 +83,20 @@ exports.Formats = [
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
 	},
 	{
+		name: "LC UU",
+		section: "XY Singles",
+
+		searchShow: false,
+		maxLevel: 5,
+		ruleset: ['LC'],
+		banlist: ['Abra', 'Aipom', 'Archen', 'Bellsprout', 'Bunnelby', 'Carvanha', 'Chinchou', 'Clamperl', 'Cottonee', 'Cranidos',
+			'Croagunk', 'Diglett', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Fletchling', 'Foongus', 'Gastly', 'Honedge',
+			'Houndour', 'Magnemite', 'Meditite', 'Mienfoo', 'Misdreavus', 'Omanyte', 'Onix', 'Pawniard', 'Ponyta', 'Porygon',
+			'Riolu', 'Scraggy', 'Shellder', 'Slowpoke', 'Snubbull', 'Spritzee', 'Staryu', 'Taillow', 'Timburr', 'Tirtouga',
+			'Trubbish', 'Vullaby', 'Vulpix', 'Zigzagoon'
+		]
+	},
+	{
 		name: "XY Battle Spot Singles",
 		section: "XY Singles",
 
