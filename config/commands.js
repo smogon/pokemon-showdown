@@ -748,11 +748,11 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3479358/\">Tier Shift</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/tier-shift-xy.3508369/\">Tier Shift</a><br />";
 		}
 		if (target === 'all' || target === 'stabmons') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3484106/\">STABmons</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/stabmons-see-post-2-for-ban-considerations.3493081/\">STABmons</a><br />";
 		}
 		if (target === 'all' || target === 'omotm' || target === 'omofthemonth' || target === 'month') {
 			matched = true;
