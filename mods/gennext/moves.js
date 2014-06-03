@@ -1119,6 +1119,7 @@ exports.BattleMovedex = {
 					basePower: 80,
 					category: "Special",
 					isSoundBased: true,
+					isNotProtectable: true,
 					affectedByImmunities: false,
 					type: 'Normal'
 				}
