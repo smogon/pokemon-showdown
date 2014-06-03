@@ -305,26 +305,6 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Tier Shift",
-		section: "Other Metagames",
-
-		mod: 'tiershift',
-		ruleset: ['OU']
-	},
-	{
-		name: "Hackmons",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'HP Percentage Mod']
-	},
-	{
-		name: "Balanced Hackmons",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod', 'Ability Clause'],
-		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power', 'Parental Bond']
-	},
-	{
 		name: "1v1",
 		section: 'Other Metagames',
 
@@ -341,11 +321,17 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "OU Monotype",
+		name: "Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['OU', 'Same Type Clause'],
-		banlist: ['Talonflame']
+		ruleset: ['Pokemon', 'HP Percentage Mod']
+	},
+	{
+		name: "Balanced Hackmons",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod', 'Ability Clause'],
+		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power', 'Parental Bond']
 	},
 	{
 		name: "Sky Battles",
@@ -378,6 +364,20 @@ exports.Formats = [
 			'Arceus', 'Darkrai', 'Deoxys-Attack', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Lugia',
 			'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Kyurem-White', 'Xerneas', 'Yveltal', 'Zekrom'
 		]
+	},
+	{
+		name: "OU Monotype",
+		section: "Other Metagames",
+
+		ruleset: ['OU', 'Same Type Clause'],
+		banlist: ['Talonflame']
+	},
+	{
+		name: "Tier Shift",
+		section: "Other Metagames",
+
+		mod: 'tiershift',
+		ruleset: ['OU']
 	},
 	{
 		name: "Ability Exchange",
