@@ -305,6 +305,13 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Tier Shift",
+		section: "Other Metagames",
+
+		mod: 'tiershift',
+		ruleset: ['OU']
+	},
+	{
 		name: "Hackmons",
 		section: "Other Metagames",
 
