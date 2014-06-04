@@ -1350,7 +1350,7 @@ var commands = exports.commands = {
 		}
 		if (target === "%" || target === 'kickbattle ') {
 			matched = true;
-			this.sendReply("/kickbattle [username], [reason] - Kicks an user from a battle with reason. Requires: % @ & ~");
+			this.sendReply("/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ & ~");
 		}
 		if (target === "%" || target === 'warn' || target === 'k') {
 			matched = true;
