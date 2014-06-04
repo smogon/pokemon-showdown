@@ -438,8 +438,8 @@ Minor ability changes:
   or is Protected against), and will heal the user by 33% during its Truant
   turn
 
-- Clear Body prevents all stat lowering (relevant: the Regis' Superpower and
-  Metagross' Hammer Arm)
+- Clear Body and White Smoke prevent all stat lowering (relevant: Heatmor's/Regi's Superpower, Torkoal's Shell
+  Smash/Overheat, and Metagross' Hammer Arm)
 
 - Thick Fat grants half damage from Fighting
 
