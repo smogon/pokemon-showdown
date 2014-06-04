@@ -112,6 +112,14 @@ exports.BattleAbilities = {
 			if (type === 'hail') return false;
 		}
 	},
+	"cute charm": {
+		inherit: true,
+		onAfterDamage: function (damage, target, source, move) {
+			if (move && move.isContact) {
+				source.addVolatile('attract', target);
+			}
+		}
+	},
 	"static": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
