@@ -154,6 +154,8 @@ New mechanic: Signature Pokemon:
   - Drapion: Poison Fang (65 base power, 100% toxic poison, 30% flinch)
 
   - Seviper: Poison Tail (60 base power, 60% toxic poison)
+  
+  - Persian: Slash (60 base power, 30% -1 Def)
 
   - Muk: Sludge (60 base power, 100% poison)
 
@@ -248,7 +250,7 @@ Minor move changes:
 - Rock Throw and Rapid Spin remove hazards before fainting from Rocky
   Helmet etc
 
-- all moves' accuracy is rounded up to the nearest multiple of 10%
+- All moves' accuracy is rounded up to the nearest multiple of 10%
   (except Jump Kick, which will be rebalanced later)
 
 - Charge Beam and Rock Slide are now 100% accurate
