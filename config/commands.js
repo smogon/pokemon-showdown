@@ -1155,7 +1155,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'death stare'){
 			matched = true;
-			this.sendReplyBox('<img src="http://i.kinja-img.com/gawker-media/image/upload/s--IL80Wq6b--/spnlcrxx0fwzwtszk2fm.gif" />');
+			this.sendReplyBox('<img src="http://i.kinja-img.com/gawker-media/image/upload/s--IL80Wq6b--/spnlcrxx0fwzwtszk2fm.gif" height="169" width="318" />');
 		}
 
                 if (target === ''){
