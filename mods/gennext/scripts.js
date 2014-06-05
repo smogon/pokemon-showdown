@@ -92,6 +92,12 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'emboar').abilities['1'] = 'Sheer Force';
 		// Samurott
 		this.modData('Pokedex', 'samurott').abilities['1'] = 'Technician';
+		// Chesnaught
+		this.modData('Pokedex', 'chesnaught').abilities['1'] = 'Battle Armor';
+		// Delphox
+		this.modData('Pokedex', 'delphox').abilities['1'] = 'Magic Guard';
+		// Greninja
+		this.modData('Pokedex', 'greninja').abilities['1'] = 'Pickpocket';
 
 		// Levitate mons
 		this.modData('Pokedex', 'unown').abilities['1'] = 'Shadow Tag';
