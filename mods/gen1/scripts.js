@@ -123,7 +123,7 @@ exports.BattleScripts = {
 	useMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMove(move);
-		baseMove = move;
+		var baseMove = move;
 		move = this.getMoveCopy(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
