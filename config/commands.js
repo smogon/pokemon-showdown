@@ -11,9 +11,11 @@
  * /whois.
  *
  * But to actually define a command, it's a function:
- *   birkal: function (target, room, user) {
- *     this.sendReply("It's not funny anymore.");
- *   },
+ *
+ *   allowchallenges: function (target, room, user) {
+ *     user.blockChallenges = false;
+ *     this.sendReply("You are available for challenges from now on.");
+ *   }
  *
  * Commands are actually passed five parameters:
  *   function (target, room, user, connection, cmd, message)
@@ -88,12 +90,17 @@
  *   has permission to. This will check to see if the user used
  *   "!command" instead of "/command". If so, it will check to see
  *   if the user has permission to broadcast (by default, voice+ can),
- *   and return false if not. Otherwise, it will set it up so that
+ *   and return false if not. Otherwise, it will add the message to
+ *   the room, and turn on the flag this.broadcasting, so that
  *   this.sendReply and this.sendReplyBox will broadcast to the room
  *   instead of just the user that used the command.
  *
  *   Should usually be near the top of the command, like:
  *     if (!this.canBroadcast()) return false;
+ *
+ * this.canBroadcast(suppressMessage)
+ *   Functionally the same as this.canBroadcast(). However, it
+ *   will look as if the user had written the text suppressMessage.
  *
  * this.canTalk()
  *   Checks to see if the user can speak in the room. Returns false
@@ -103,11 +110,14 @@
  *   Should usually be near the top of the command, like:
  *     if (!this.canTalk()) return false;
  *
- * this.canTalk(message)
- *   Checks to see if the user can say the message. In addition to
- *   running the checks from this.canTalk(), it also checks to see if
- *   the message has any banned words or is too long. Returns the
- *   filtered message, or a falsy value if the user can't speak.
+ * this.canTalk(message, room)
+ *   Checks to see if the user can say the message in the room.
+ *   If a room is not specified, it will default to the current one.
+ *   If it has a falsy value, the check won't be attached to any room.
+ *   In addition to running the checks from this.canTalk(), it also
+ *   checks to see if the message has any banned words, is too long,
+ *   or was just sent by the user. Returns the filtered message, or a
+ *   falsy value if the user can't speak.
  *
  *   Should usually be near the top of the command, like:
  *     target = this.canTalk(target);
@@ -124,15 +134,22 @@
  *   called by this.parse from a command called by this.parse etc)
  *   we will assume it's a bug in your command and error out.
  *
- * this.targetUserOrSelf(target)
+ * this.targetUserOrSelf(target, exactName)
  *   If target is blank, returns the user that sent the message.
  *   Otherwise, returns the user with the username in target, or
  *   a falsy value if no user with that username exists.
+ *   By default, this will track users across name changes. However,
+ *   if exactName is true, it will enforce exact matches.
  *
- * this.splitTarget(target)
+ * this.getLastIdOf(user)
+ *   Returns the last userid of an specified user.
+ *
+ * this.splitTarget(target, exactName)
  *   Splits a target in the form "user, message" into its
  *   constituent parts. Returns message, and sets this.targetUser to
  *   the user, and this.targetUsername to the username.
+ *   By default, this will track users across name changes. However,
+ *   if exactName is true, it will enforce exact matches.
  *
  *   Remember to check if this.targetUser exists before going further.
  *
