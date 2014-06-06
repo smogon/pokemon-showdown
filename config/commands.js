@@ -687,6 +687,7 @@ var commands = exports.commands = {
 		if (!this.can('modchat', null, room)) return;
 		this.splitTarget(target);
 		if (!this.targetUser) return this.sendReply('user not found');
+		if (!room.users[this.targetUser.id]) return this.sendReply('not a showderper');
 		this.targetUser.avatar = '#showtan';
 		this.sendReply('ok');
 	},
