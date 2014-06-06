@@ -149,8 +149,10 @@ global.ResourceMonitor = {
 			} else if (this.connections[ip] === 500) {
 				this.log('[ResourceMonitor] IP ' + ip + ' has been banned for connection flooding (' + this.connections[ip] + ' times in the last ' + duration.duration() + name + ')');
 				return true;
-			} else if (this.connections[ip] > 500 && this.connections[ip] % 200 === 0) {
-				this.log('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
+			} else if (this.connections[ip] > 500) {
+				if (this.connections[ip] % 200 === 0) {
+					this.log('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
+				}
 				return true;
 			}
 		} else {
