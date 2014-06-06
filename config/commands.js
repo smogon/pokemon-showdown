@@ -682,6 +682,15 @@ var commands = exports.commands = {
 		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
 	},
 
+	showtan: function (target, room, user) {
+		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with 'showtan', type '//showtan'.");
+		if (!this.can('modchat', null, room)) return;
+		this.splitTarget(target);
+		if (!this.targetUser) return this.sendReply('user not found');
+		this.targetUser.avatar = '#showtan';
+		this.sendReply('ok');
+	},
+
 	introduction: 'intro',
 	intro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
