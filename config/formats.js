@@ -30,14 +30,6 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger']
 	},
 	{
-		name: "OU (suspect test)",
-		section: "XY Singles",
-
-		challengeShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger']
-	},
-	{
 		name: "Ubers",
 		section: "XY Singles",
 
@@ -133,13 +125,13 @@ exports.Formats = [
 			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
 		}
 	},
-	{
+	/*{
 		name: "CAP Volkraken Playtest",
 		section: "XY Singles",
 
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Tomohawk', 'Necturna', 'Mollux', 'Aurumoth', 'Malaconda', 'Cawmodore', 'Syclant', 'Revenankh', 'Pyroak', 'Fidgit', 'Stratagem', 'Arghonaut', 'Kitsunoh', 'Cyclohm', 'Colossoil', 'Krilowatt', 'Voodoom']
-	},
+	},*/
 	{
 		name: "Custom Game",
 		section: "XY Singles",
@@ -279,7 +271,6 @@ exports.Formats = [
 		name: "CAP",
 		section: "Other Metagames",
 
-		searchShow: false,
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger']
 	},
