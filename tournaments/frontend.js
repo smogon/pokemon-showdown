@@ -189,6 +189,11 @@ var Tournament = (function () {
 	};
 
 	Tournament.prototype.addUser = function (user, isAllowAlts, output) {
+		if (!user.named) {
+			output.sendReply('|tournament|error|UserNotNamed');
+			return;
+		}
+
 		if (!isAllowAlts) {
 			var users = {};
 			this.generator.getUsers().forEach(function (user) { users[user.name] = 1; });
