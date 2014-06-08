@@ -1239,6 +1239,19 @@ exports.BattleMovedex = {
 			status: 'tox'
 		}
 	},
+	slash: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function (power, user) {
+			if (user.template.id === 'persian') return power * 1.5;
+		},
+		secondary: {
+			chance: 30,
+			boosts: {
+				def: -1
+			}
+		}
+	},
 	sludge: {
 		inherit: true,
 		basePower: 60,

@@ -261,9 +261,13 @@ exports.BattleMovedex = {
 	},
 	explosion: {
 		inherit: true,
-		onHit: function(target) {
-			if (!target) return;
-			this.cancelMove(target);
+		onAfterMove: function(pokemon) {
+			for (var i = 0; i < pokemon.side.active.length; i++) {
+				this.cancelMove(pokemon.side.active[i]);
+			}
+			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
+				this.cancelMove(pokemon.side.foe.active[i]);
+			}
 		},
 		basePower: 500
 	},
@@ -550,9 +554,13 @@ exports.BattleMovedex = {
 	},
 	selfdestruct: {
 		inherit: true,
-		onHit: function(target) {
-			if (!target) return;
-			this.cancelMove(target);
+		onAfterMove: function(pokemon) {
+			for (var i = 0; i < pokemon.side.active.length; i++) {
+				this.cancelMove(pokemon.side.active[i]);
+			}
+			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
+				this.cancelMove(pokemon.side.foe.active[i]);
+			}
 		},
 		basePower: 400
 	},
