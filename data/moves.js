@@ -2041,10 +2041,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getCategory(pokemon.lastAttackedBy.move) === 'Physical') {
-				return 2 * pokemon.lastAttackedBy.damage;
-			}
-			return false;
+			if (!pokemon.volatiles['counter']) return 0;
+			return pokemon.volatiles['counter'].damage || 1;
 		},
 		category: "Physical",
 		desc: "Deals damage to the last foe to hit the user with a physical attack this turn. The damage is equal to twice the HP lost by the user from that attack. If that foe's position is no longer in use, damage is done to a random foe in range. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by a foe's physical attack this turn. Makes contact. Priority -5.",
@@ -2055,8 +2053,34 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -5,
 		isContact: true,
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('counter');
+		},
+		onTryHit: function (target, source, move) {
+			if (!source.volatiles['counter']) return false;
+			if (source.volatiles['counter'].position === null) return false;
+		},
+		effect: {
+			duration: 1,
+			noCopy: true,
+			onStart: function (target, source, source2, move) {
+				this.effectData.position = null;
+				this.effectData.damage = 0;
+			},
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				return source.side.foe.active[this.effectData.position];
+			},
+			onDamagePriority: -101,
+			onDamage: function (damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Physical') {
+					this.effectData.position = source.position;
+					this.effectData.damage = 2 * damage;
+				}
+			}
+		},
 		secondary: false,
-		target: "scripted",
+		target: "self",
 		type: "Fighting"
 	},
 	"covet": {
@@ -8080,10 +8104,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
-				return 1.5 * pokemon.lastAttackedBy.damage;
-			}
-			return false;
+			if (!pokemon.volatiles['metalburst']) return 0;
+			return pokemon.volatiles['metalburst'].damage || 1;
 		},
 		category: "Physical",
 		desc: "Deals damage to the last foe to hit the user with an attack this turn. The damage is equal to 1.5x the HP lost by the user from that attack. If that foe's position is no longer in use, damage is done to a random foe in range. Only the last hit of a multi-hit attack is counted. Fails if the user moves first or if the user was not hit by a foe's attack this turn.",
@@ -8092,8 +8114,34 @@ exports.BattleMovedex = {
 		name: "Metal Burst",
 		pp: 10,
 		priority: 0,
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('metalburst');
+		},
+		onTryHit: function (target, source, move) {
+			if (!source.volatiles['metalburst']) return false;
+			if (source.volatiles['metalburst'].position === null) return false;
+		},
+		effect: {
+			duration: 1,
+			noCopy: true,
+			onStart: function (target, source, source2, move) {
+				this.effectData.position = null;
+				this.effectData.damage = 0;
+			},
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				return source.side.foe.active[this.effectData.position];
+			},
+			onDamagePriority: -101,
+			onDamage: function (damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && source.side !== target.side) {
+					this.effectData.position = source.position;
+					this.effectData.damage = 1.5 * damage;
+				}
+			}
+		},
 		secondary: false,
-		target: "scripted",
+		target: "self",
 		type: "Steel"
 	},
 	"metalclaw": {
@@ -8332,10 +8380,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getCategory(pokemon.lastAttackedBy.move) === 'Special') {
-				return 2 * pokemon.lastAttackedBy.damage;
-			}
-			return false;
+			if (!pokemon.volatiles['mirrorcoat']) return 0;
+			return pokemon.volatiles['mirrorcoat'].damage || 1;
 		},
 		category: "Special",
 		desc: "Deals damage to the last foe to hit the user with a special attack this turn. The damage is equal to twice the HP lost by the user from that attack. If that foe's position is no longer in use, damage is done to a random foe in range. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by a foe's special attack this turn. Priority -5.",
@@ -8345,8 +8391,34 @@ exports.BattleMovedex = {
 		name: "Mirror Coat",
 		pp: 20,
 		priority: -5,
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('mirrorcoat');
+		},
+		onTryHit: function (target, source, move) {
+			if (!source.volatiles['mirrorcoat']) return false;
+			if (source.volatiles['mirrorcoat'].position === null) return false;
+		},
+		effect: {
+			duration: 1,
+			noCopy: true,
+			onStart: function (target, source, source2, move) {
+				this.effectData.position = null;
+				this.effectData.damage = 0;
+			},
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				return source.side.foe.active[this.effectData.position];
+			},
+			onDamagePriority: -101,
+			onDamage: function (damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Special') {
+					this.effectData.position = source.position;
+					this.effectData.damage = 2 * damage;
+				}
+			}
+		},
 		secondary: false,
-		target: "scripted",
+		target: "self",
 		type: "Psychic"
 	},
 	"mirrormove": {
