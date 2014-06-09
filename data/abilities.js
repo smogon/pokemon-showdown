@@ -56,10 +56,9 @@ exports.BattleAbilities = {
 		shortDesc: "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
 		id: "aftermath",
 		name: "Aftermath",
-		onAfterDamageOrder: 1,
-		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.isContact && !target.hp) {
-				this.damage(source.maxhp / 4, source, target, null, true);
+		onFaint: function (target, source, effect) {
+			if (effect && effect.effectType === 'Move' && effect.isContact && source) {
+				this.damage(source.maxhp / 4, source, target);
 			}
 		},
 		rating: 3,
@@ -1232,7 +1231,7 @@ exports.BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				this.damage(source.maxhp / 8, source, target, null, true);
+				this.damage(source.maxhp / 8, source, target);
 			}
 		},
 		id: "ironbarbs",
@@ -1385,7 +1384,7 @@ exports.BattleAbilities = {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
 			var canOoze = {drain: 1, leechseed: 1};
 			if (canOoze[effect.id]) {
-				this.damage(damage, null, null, null, true);
+				this.damage(damage);
 				return 0;
 			}
 		},
@@ -2133,7 +2132,7 @@ exports.BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				this.damage(source.maxhp / 8, source, target, null, true);
+				this.damage(source.maxhp / 8, source, target);
 			}
 		},
 		id: "roughskin",
