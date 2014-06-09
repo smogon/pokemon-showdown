@@ -3038,6 +3038,7 @@ var Battle = (function () {
 		var p2fainted = this.p2.active.map(isFainted);
 	};
 	Battle.prototype.faintMessages = function (lastFirst) {
+		if (this.ended) return;
 		if (lastFirst && this.faintQueue.length) {
 			this.faintQueue.unshift(this.faintQueue.pop());
 		}
@@ -3055,7 +3056,7 @@ var Battle = (function () {
 			}
 		}
 		if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
-			this.win(faintData.target.side);
+			this.win(faintData && faintData.target.side);
 			return true;
 		}
 		if (!this.p1.pokemonLeft) {
