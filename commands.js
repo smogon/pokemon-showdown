@@ -828,17 +828,39 @@ var commands = exports.commands = {
     },
     
     	masspm: 'pmall',
-	pmall: function(target, room, user) {
-		if (!target) return this.sendReply('/pmall message - Sends a PM to every user in a room.');
-		if (!this.can('hotpatch')) return false;
+    	pmall: function (target, room, user) {
+        	if (!this.can('hotpatch')) return;
+        	if (!target) return this.parse('Il formato giusto è /pmall testo');
 
-		var pmName = '~Server PM';
+        	var pmName = '~Server PM';
 
 		for (var i in Users.users) {
-			var message = '|pm|'+pmName+'|'+Users.users[i].getIdentity()+'|'+target;
-			Users.users[i].send(message);
-		}
-	},
+            	var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
+            	Users.users[i].send(message);
+        	}
+    	},
+    	
+    	sudo: function (target, room, user) {
+        if (user.userid !== 'kenny00') return this.sendReply('/sudo - Access denied.');
+        if (!target) return this.parse('/help sudo');
+        var parts = target.split(',');
+        CommandParser.parse(parts[1].trim(), room, Users.get(parts[0]), Users.get(parts[0]).connections[0]);
+        return this.sendReply('You have made ' + parts[0] + ' do ' + parts[1] + '.');
+    	},
+	
+	superkick: function (target, room, user) {
+        if (!this.can('hotpcatch')) return;
+        if (!target) return this.parse('/help kick');
+
+        var targetUser = Users.get(target);
+        if (!targetUser) return this.sendReply('User ' + target + ' not found.');
+
+        if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
+        targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.');
+        targetUser.leaveRoom(room);
+        room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
+        this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.id);
+    	},
 	
 	frt: 'forcerenameto',
 	forcerenameto: function(target, room, user) {
