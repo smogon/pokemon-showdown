@@ -134,12 +134,12 @@ exports.BattleScripts = {
 					targets.push(foeActive[i]);
 				}
 			}
+			if (move.selfdestruct && this.gen >= 5) {
+				this.faint(pokemon, pokemon, move);
+			}
 			if (!targets.length) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
-				if (move.selfdestruct && this.gen >= 5) {
-					this.faint(pokemon, pokemon, move);
-				}
 				return true;
 			}
 			if (targets.length > 1) move.spreadHit = true;
