@@ -2578,7 +2578,7 @@ var Battle = (function () {
 		this.runEvent('AfterBoost', target, source, effect, boost);
 		return success;
 	};
-	Battle.prototype.damage = function (damage, target, source, effect) {
+	Battle.prototype.damage = function (damage, target, source, effect, instafaint) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -2629,8 +2629,9 @@ var Battle = (function () {
 			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
 		}
 
-		if (target.fainted) {
-			this.faint(target);
+		if (instafaint && !target.hp) {
+			this.debug('instafaint: '+this.faintQueue.map('target').map('name'));
+			this.faintMessages(true);
 		} else {
 			damage = this.runEvent('AfterDamage', target, source, effect, damage);
 		}
@@ -3036,7 +3037,10 @@ var Battle = (function () {
 		var p1fainted = this.p1.active.map(isFainted);
 		var p2fainted = this.p2.active.map(isFainted);
 	};
-	Battle.prototype.faintMessages = function () {
+	Battle.prototype.faintMessages = function (lastFirst) {
+		if (lastFirst && this.faintQueue.length) {
+			this.faintQueue.unshift(this.faintQueue.pop());
+		}
 		var faintData;
 		while (this.faintQueue.length) {
 			faintData = this.faintQueue.shift();
