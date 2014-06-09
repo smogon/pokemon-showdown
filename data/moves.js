@@ -2080,7 +2080,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "self",
+		target: "scripted",
 		type: "Fighting"
 	},
 	"covet": {
@@ -8141,7 +8141,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "self",
+		target: "scripted",
 		type: "Steel"
 	},
 	"metalclaw": {
@@ -8418,7 +8418,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "self",
+		target: "scripted",
 		type: "Psychic"
 	},
 	"mirrormove": {
