@@ -468,7 +468,7 @@ exports.BattleItems = {
 			if (move.type === 'Bug') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Bug Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -891,7 +891,7 @@ exports.BattleItems = {
 			if (move.type === 'Dark') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Dark Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -1033,7 +1033,7 @@ exports.BattleItems = {
 			if (move.type === 'Dragon') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Dragon Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -1151,7 +1151,7 @@ exports.BattleItems = {
 			if (move.type === 'Electric') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Electric Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -1249,7 +1249,7 @@ exports.BattleItems = {
 			if (move.type === 'Fairy') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Fairy Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -1276,7 +1276,7 @@ exports.BattleItems = {
 			if (move.type === 'Fighting') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Fighting Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -1319,7 +1319,7 @@ exports.BattleItems = {
 			if (move.type === 'Fire') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Fire Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -1405,7 +1405,7 @@ exports.BattleItems = {
 			if (move.type === 'Flying') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Flying Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -1538,7 +1538,7 @@ exports.BattleItems = {
 			if (move.type === 'Ghost') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Ghost Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -1557,7 +1557,7 @@ exports.BattleItems = {
 			if (move.type === 'Grass') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Grass Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -1632,7 +1632,7 @@ exports.BattleItems = {
 			if (move.type === 'Ground') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Ground Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -1807,7 +1807,7 @@ exports.BattleItems = {
 			if (move.type === 'Ice') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Ice Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -2846,7 +2846,7 @@ exports.BattleItems = {
 			if (move.type === 'Normal') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Normal Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -3140,7 +3140,7 @@ exports.BattleItems = {
 			if (move.type === 'Poison') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Poison Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -3205,7 +3205,7 @@ exports.BattleItems = {
 			if (move.type === 'Psychic') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Psychic Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -3441,7 +3441,7 @@ exports.BattleItems = {
 			if (move.type === 'Rock') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Rock Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -3996,7 +3996,7 @@ exports.BattleItems = {
 			if (move.type === 'Steel') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Steel Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
@@ -4242,7 +4242,7 @@ exports.BattleItems = {
 			if (move.type === 'Water') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Water Gem', '[from] gem', '[move] ' + move.name);
-					source.addVolatile('gem');
+					source.addVolatile('gem', null, null, true);
 				}
 			}
 		},
