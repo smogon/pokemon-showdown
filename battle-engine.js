@@ -1032,10 +1032,10 @@ var BattlePokemon = (function () {
 	BattlePokemon.prototype.getNature = function () {
 		return this.battle.getNature(this.set.nature);
 	};
-	BattlePokemon.prototype.addVolatile = function (status, source, sourceEffect, force) {
+	BattlePokemon.prototype.addVolatile = function (status, source, sourceEffect) {
 		var result;
 		status = this.battle.getEffect(status);
-		if (!this.hp && !force) return false;
+		if (!this.hp && !status.affectsFainted) return false;
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
 			if (!sourceEffect) sourceEffect = this.battle.effect;
