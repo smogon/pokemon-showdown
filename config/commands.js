@@ -11,9 +11,11 @@
  * /whois.
  *
  * But to actually define a command, it's a function:
- *   birkal: function (target, room, user) {
- *     this.sendReply("It's not funny anymore.");
- *   },
+ *
+ *   allowchallenges: function (target, room, user) {
+ *     user.blockChallenges = false;
+ *     this.sendReply("You are available for challenges from now on.");
+ *   }
  *
  * Commands are actually passed five parameters:
  *   function (target, room, user, connection, cmd, message)
@@ -88,12 +90,17 @@
  *   has permission to. This will check to see if the user used
  *   "!command" instead of "/command". If so, it will check to see
  *   if the user has permission to broadcast (by default, voice+ can),
- *   and return false if not. Otherwise, it will set it up so that
+ *   and return false if not. Otherwise, it will add the message to
+ *   the room, and turn on the flag this.broadcasting, so that
  *   this.sendReply and this.sendReplyBox will broadcast to the room
  *   instead of just the user that used the command.
  *
  *   Should usually be near the top of the command, like:
  *     if (!this.canBroadcast()) return false;
+ *
+ * this.canBroadcast(suppressMessage)
+ *   Functionally the same as this.canBroadcast(). However, it
+ *   will look as if the user had written the text suppressMessage.
  *
  * this.canTalk()
  *   Checks to see if the user can speak in the room. Returns false
@@ -103,11 +110,14 @@
  *   Should usually be near the top of the command, like:
  *     if (!this.canTalk()) return false;
  *
- * this.canTalk(message)
- *   Checks to see if the user can say the message. In addition to
- *   running the checks from this.canTalk(), it also checks to see if
- *   the message has any banned words or is too long. Returns the
- *   filtered message, or a falsy value if the user can't speak.
+ * this.canTalk(message, room)
+ *   Checks to see if the user can say the message in the room.
+ *   If a room is not specified, it will default to the current one.
+ *   If it has a falsy value, the check won't be attached to any room.
+ *   In addition to running the checks from this.canTalk(), it also
+ *   checks to see if the message has any banned words, is too long,
+ *   or was just sent by the user. Returns the filtered message, or a
+ *   falsy value if the user can't speak.
  *
  *   Should usually be near the top of the command, like:
  *     target = this.canTalk(target);
@@ -124,15 +134,22 @@
  *   called by this.parse from a command called by this.parse etc)
  *   we will assume it's a bug in your command and error out.
  *
- * this.targetUserOrSelf(target)
+ * this.targetUserOrSelf(target, exactName)
  *   If target is blank, returns the user that sent the message.
  *   Otherwise, returns the user with the username in target, or
  *   a falsy value if no user with that username exists.
+ *   By default, this will track users across name changes. However,
+ *   if exactName is true, it will enforce exact matches.
  *
- * this.splitTarget(target)
+ * this.getLastIdOf(user)
+ *   Returns the last userid of an specified user.
+ *
+ * this.splitTarget(target, exactName)
  *   Splits a target in the form "user, message" into its
  *   constituent parts. Returns message, and sets this.targetUser to
  *   the user, and this.targetUsername to the username.
+ *   By default, this will track users across name changes. However,
+ *   if exactName is true, it will enforce exact matches.
  *
  *   Remember to check if this.targetUser exists before going further.
  *
@@ -347,7 +364,7 @@ var commands = exports.commands = {
 					continue;
 				}
 			}
-			return this.sendReplyBox("'" + sanitize(target, true) + "' could not be found in any of the search categories.");
+			return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' could not be found in any of the search categories.");
 		}
 
 		if (showAll && Object.size(searches) === 0 && megaSearch === null && feSearch === null) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.");
@@ -540,7 +557,7 @@ var commands = exports.commands = {
 			pokemon = {types: [type1.id]};
 			target = type1.id;
 		} else {
-			return this.sendReplyBox("" + sanitize(target) + " isn't a recognized type or pokemon.");
+			return this.sendReplyBox("" + Tools.escapeHTML(target) + " isn't a recognized type or pokemon.");
 		}
 
 		var weaknesses = [];
@@ -638,8 +655,8 @@ var commands = exports.commands = {
 			"% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />" +
 			"@ <b>Moderator</b> - The above, and they can ban users<br />" +
 			"&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />" +
-			"~ <b>Administrator</b> - They can do anything, like change what this message says<br />" +
-			"# <b>Room Owner</b> - They are administrators of the room and can almost totally control it"
+			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br />" +
+			"~ <b>Administrator</b> - They can do anything, like change what this message says"
 		);
 	},
 
@@ -655,9 +672,24 @@ var commands = exports.commands = {
 		);
 	},
 
+	staff: function (target, room, user) {
+	    if (!this.canBroadcast()) return;
+	    this.sendReplyBox("<a href=\"http://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
+	},
+
 	avatars: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
+	},
+
+	showtan: function (target, room, user) {
+		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with 'showtan', type '//showtan'.");
+		if (!this.can('modchat', null, room)) return;
+		target = this.splitTarget(target);
+		if (!this.targetUser) return this.sendReply('user not found');
+		if (!room.users[this.targetUser.userid]) return this.sendReply('not a showderper');
+		this.targetUser.avatar = '#showtan';
+		room.add(user.name+' applied showtan to affected area of '+this.targetUser.name);
 	},
 
 	introduction: 'intro',
@@ -677,13 +709,11 @@ var commands = exports.commands = {
 	smogintro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"Welcome to Smogon's Official Pokémon Showdown server! The Mentoring room can be found <a href=\"http://play.pokemonshowdown.com/communitymentoring\">here</a> or by using /join communitymentoring.<br /><br />" +
-			"Here are some useful links to Smogon\'s Mentorship Program to help you get integrated into the community:<br />" +
+			"Welcome to Smogon's official simulator! Here are some useful links to <a href=\"http://www.smogon.com/mentorship/\">Smogon\'s Mentorship Program</a> to help you get integrated into the community:<br />" +
 			"- <a href=\"http://www.smogon.com/mentorship/primer\">Smogon Primer: A brief introduction to Smogon's subcommunities</a><br />" +
 			"- <a href=\"http://www.smogon.com/mentorship/introductions\">Introduce yourself to Smogon!</a><br />" +
 			"- <a href=\"http://www.smogon.com/mentorship/profiles\">Profiles of current Smogon Mentors</a><br />" +
-			"- <a href=\"http://mibbit.com/#mentor@irc.synirc.net\">#mentor: the Smogon Mentorship IRC channel</a><br />" +
-			"All of these links and more can be found at the <a href=\"http://www.smogon.com/mentorship/\">Smogon Mentorship Program's hub</a>."
+			"- <a href=\"http://mibbit.com/#mentor@irc.synirc.net\">#mentor: the Smogon Mentorship IRC channel</a>"
 		);
 	},
 
@@ -734,7 +764,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'balancedhackmons' || target === 'bh') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3463764/\">Balanced Hackmons</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3489849/\">Balanced Hackmons</a><br />";
 			if (target !== 'all') {
 				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3499973/\">Balanced Hackmons Mentoring Program</a><br />";
 			}
@@ -745,11 +775,11 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3479358/\">Tier Shift</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/tier-shift-xy.3508369/\">Tier Shift</a><br />";
 		}
 		if (target === 'all' || target === 'stabmons') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3484106/\">STABmons</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/stabmons-see-post-2-for-ban-considerations.3493081/\">STABmons</a><br />";
 		}
 		if (target === 'all' || target === 'omotm' || target === 'omofthemonth' || target === 'month') {
 			matched = true;
@@ -828,7 +858,7 @@ var commands = exports.commands = {
 		if (!target) {
 			if (!this.canBroadcast()) return;
 			this.sendReplyBox("Please follow the rules:<br />" +
-				(room.rulesLink ? "- <a href=\"" + sanitize(room.rulesLink) + "\">" + sanitize(room.title) + " room rules</a><br />" : "") +
+				(room.rulesLink ? "- <a href=\"" + Tools.escapeHTML(room.rulesLink) + "\">" + Tools.escapeHTML(room.title) + " room rules</a><br />" : "") +
 				"- <a href=\"http://pokemonshowdown.com/rules\">" + (room.rulesLink ? "Global rules" : "Rules") + "</a>");
 			return;
 		}
@@ -1197,6 +1227,7 @@ var commands = exports.commands = {
 
 	roll: 'dice',
 	dice: function (target, room, user) {
+		if (!target) return this.parse('/help dice');
 		if (!this.canBroadcast()) return;
 		var d = target.indexOf("d");
 		if (d != -1) {
@@ -1219,6 +1250,15 @@ var commands = exports.commands = {
 		var maxRoll = (target)? target : 6;
 		var rand = Math.floor(maxRoll * Math.random()) + 1;
 		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
+	},
+
+	pr: 'pickrandom',
+	pick: 'pickrandom',
+	pickrandom: function (target, room, user) {
+		var options = target.split(',');
+		if (options.length < 2) return this.parse('/help pick');
+		if (!this.canBroadcast()) return false;
+		return this.sendReplyBox('<em>We randomly picked:</em> ' + Tools.escapeHTML(options.sample().trim()));
 	},
 
 	register: function () {
@@ -1249,7 +1289,7 @@ var commands = exports.commands = {
 			return this.parse('/help showimage');
 		}
 
-		this.sendReply('|raw|<img src="' + sanitize(targets[0]) + '" alt="" width="' + toId(targets[1]) + '" height="' + toId(targets[2]) + '" />');
+		this.sendReply('|raw|<img src="' + Tools.escapeHTML(targets[0]) + '" alt="" width="' + toId(targets[1]) + '" height="' + toId(targets[2]) + '" />');
 	},
 
 	htmlbox: function (target, room, user) {
@@ -1349,7 +1389,7 @@ var commands = exports.commands = {
 			this.sendReply("/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.");
 			this.sendReply("!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ & ~");
 		}
-		if (target === 'all' || target === 'calc' || target === 'caclulator') {
+		if (target === 'all' || target === 'calc' || target === 'calculator') {
 			matched = true;
 			this.sendReply("/calc - Provides a link to a damage calculator");
 			this.sendReply("!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~");
@@ -1403,6 +1443,10 @@ var commands = exports.commands = {
 			this.sendReply("/dice [optional max number] - Randomly picks a number between 1 and 6, or between 1 and the number you choose.");
 			this.sendReply("/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.");
 		}
+		if (target === 'all' || target === 'pick' || target === 'pickrandom') {
+			matched = true;
+			this.sendReply("/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.");
+		}
 		if (target === 'all' || target === 'join') {
 			matched = true;
 			this.sendReply("/join [roomname] - Attempts to join the room [roomname].");
@@ -1448,9 +1492,21 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/ban OR /b [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ & ~");
 		}
+		if (target === '@' || target === '#' || target === 'roompromote') {
+			matched = true;
+			this.sendReply("/roompromote [username], [group] - Promotes the user to the specified group or next ranked group. Requires: @ # & ~");
+		}
+		if (target === '@' || target === '#' || target === 'roomdemote') {
+			matched = true;
+			this.sendReply("/roomdemote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: @ # & ~");
+		}
 		if (target === '&' || target === 'banip') {
 			matched = true;
 			this.sendReply("/banip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~");
+		}
+		if (target === '&' || target === 'unbanip') {
+			matched = true;
+			this.sendReply("/unbanip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~");
 		}
 		if (target === '@' || target === 'unban') {
 			matched = true;
@@ -1466,7 +1522,7 @@ var commands = exports.commands = {
 		}
 		if (target === "%" || target === 'kickbattle ') {
 			matched = true;
-			this.sendReply("/kickbattle [username], [reason] - Kicks an user from a battle with reason. Requires: % @ & ~");
+			this.sendReply("/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ & ~");
 		}
 		if (target === "%" || target === 'warn' || target === 'k') {
 			matched = true;
@@ -1516,6 +1572,10 @@ var commands = exports.commands = {
 		if (target === '~' || target === 'globaldeclare' || target === 'gdeclare') {
 			matched = true;
 			this.sendReply("/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~");
+		}
+		if (target === '~' || target === 'htmlbox') {
+			matched = true;
+			this.sendReply("/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # with global authority");
 		}
 		if (target === '%' || target === 'announce' || target === 'wall') {
 			matched = true;

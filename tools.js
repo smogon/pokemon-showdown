@@ -568,6 +568,11 @@ module.exports = (function () {
 		return num;
 	};
 
+	Tools.prototype.escapeHTML = function (str) {
+		if (!str) return '';
+		return ('' + str).escapeHTML();
+	};
+
 	Tools.prototype.dataSearch = function (target, searchIn) {
 		if (!target) {
 			return false;

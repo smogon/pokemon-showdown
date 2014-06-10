@@ -92,10 +92,16 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'emboar').abilities['1'] = 'Sheer Force';
 		// Samurott
 		this.modData('Pokedex', 'samurott').abilities['1'] = 'Technician';
+		// Chesnaught
+		this.modData('Pokedex', 'chesnaught').abilities['1'] = 'Battle Armor';
+		// Delphox
+		this.modData('Pokedex', 'delphox').abilities['1'] = 'Magic Guard';
+		// Greninja
+		this.modData('Pokedex', 'greninja').abilities['1'] = 'Pickpocket';
 
 		// Levitate mons
 		this.modData('Pokedex', 'unown').abilities['1'] = 'Shadow Tag';
-		this.modData('Pokedex', 'flygon').abilities['1'] = 'Compoundeyes';
+		this.modData('Pokedex', 'flygon').abilities['1'] = 'Compound Eyes';
 		this.modData('Pokedex', 'flygon').abilities['H'] = 'Sand Rush';
 		this.modData('Pokedex', 'weezing').abilities['1'] = 'Aftermath';
 		this.modData('Pokedex', 'eelektross').abilities['1'] = 'Poison Heal';
@@ -104,9 +110,9 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'mismagius').abilities['1'] = 'Cursed Body';
 		this.modData('Pokedex', 'cryogonal').abilities['1'] = 'Ice Body';
 
-		// Every DW ability becomes released
+		// Every hidden ability becomes released
 		for (var i in this.data.FormatsData) {
-			this.modData('FormatsData', i).dreamWorldRelease = true;
+			this.modData('FormatsData', i).unreleasedHidden = false;
 		}
 	}
 };

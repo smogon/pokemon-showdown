@@ -65,6 +65,16 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'frz');
+			if (target.species === 'Shaymin-Sky' && target.baseTemplate.species === target.species) {
+				var template = this.getTemplate('Shaymin');
+				target.formeChange(template);
+				target.baseTemplate = template;
+				target.setAbility(template.abilities['0']);
+				target.baseAbility = target.ability;
+				target.details = template.species + (target.level === 100 ? '' : ', L' + target.level) + (target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
+				this.add('detailschange', target, target.details);
+				this.add('message', target.species + " has reverted to Land Forme! (placeholder)");
+			}
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon, target, move) {
@@ -338,6 +348,7 @@ exports.BattleStatuses = {
 	},
 	gem: {
 		duration: 1,
+		affectsFainted: true,
 		onBasePower: function (basePower, user, target, move) {
 			this.debug('Gem Boost');
 			return this.chainModify([0x14CD, 0x1000]);

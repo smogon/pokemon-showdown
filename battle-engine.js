@@ -18,7 +18,7 @@ if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', function (err) {
 		require('./crashlogger.js')(err, 'A simulator process');
-		/* var stack = ("" + err.stack).split("\n").slice(0, 2).join("<br />");
+		/* var stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
 		if (Rooms.lobby) {
 			Rooms.lobby.addRaw('<div><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
 			Rooms.lobby.addRaw('<div>You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
@@ -51,17 +51,6 @@ global.toName = function (name) {
 	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
 	if (name.length > 18) name = name.substr(0, 18).trim();
 	return name;
-};
-
-/**
- * Escapes a string for HTML
- * If strEscape is true, escapes it for JavaScript, too
- */
-global.sanitize = function (str, strEscape) {
-	str = ('' + (str || ''));
-	str = str.escapeHTML();
-	if (strEscape) str = str.replace(/'/g, '\\\'');
-	return str;
 };
 
 /**
@@ -101,7 +90,7 @@ process.on('message', function (message) {
 				var fakeErr = {stack: stack};
 
 				if (!require('./crashlogger.js')(fakeErr, 'A battle')) {
-					var ministack = ("" + err.stack).split("\n").slice(0, 2).join("<br />");
+					var ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
 					process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>A BATTLE PROCESS HAS CRASHED:</b> ' + ministack + '</div>');
 				} else {
 					process.send(data[0] + '\nupdate\n|html|<div class="broadcast-red"><b>The battle crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
@@ -700,7 +689,7 @@ var BattlePokemon = (function () {
 				var nature = this.battle.getNature(this.set.nature);
 				if (statName === nature.plus) stat *= 1.1;
 				if (statName === nature.minus) stat *= 0.9;
-				this.stats[statName] = Math.floor(stat);
+				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
 			}
 			this.speed = this.stats.spe;
 		}
@@ -1045,8 +1034,8 @@ var BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.addVolatile = function (status, source, sourceEffect) {
 		var result;
-		if (!this.hp) return false;
 		status = this.battle.getEffect(status);
+		if (!this.hp && !status.affectsFainted) return false;
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
 			if (!sourceEffect) sourceEffect = this.battle.effect;
@@ -1131,7 +1120,7 @@ var BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.setType = function (newType, enforce) {
 		// Arceus first type cannot be normally changed
-		if (!enforce && this.num === 493) return false;
+		if (!enforce && this.template.num === 493) return false;
 
 		this.typesData = [{
 			type: newType,
@@ -2403,10 +2392,6 @@ var Battle = (function () {
 			pokemon.moveset[m].used = false;
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
-		if (pokemon.template.isMega) this.add('-formechange', pokemon, pokemon.template.species);
-		if (pokemon.illusion && pokemon.illusion.template.isMega) {
-			this.add('-formechange', pokemon.illusion, pokemon.illusion.template.species);
-		}
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -2464,10 +2449,6 @@ var Battle = (function () {
 			pokemon.moveset[m].used = false;
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
-		if (pokemon.template.isMega) this.add('-formechange', pokemon, pokemon.template.species);
-		if (pokemon.illusion && pokemon.illusion.template.isMega) {
-			this.add('-formechange', pokemon.illusion, pokemon.illusion.template.species);
-		}
 		pokemon.update();
 		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
@@ -2580,7 +2561,7 @@ var Battle = (function () {
 					boost[i] = -boost[i];
 				}
 				switch (effect.id) {
-				case 'intimidate':
+				case 'intimidate': case 'gooey':
 					this.add(msg, target, i, boost[i]);
 					break;
 				default:
@@ -2597,7 +2578,7 @@ var Battle = (function () {
 		this.runEvent('AfterBoost', target, source, effect, boost);
 		return success;
 	};
-	Battle.prototype.damage = function (damage, target, source, effect) {
+	Battle.prototype.damage = function (damage, target, source, effect, instafaint) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -2644,20 +2625,17 @@ var Battle = (function () {
 			break;
 		}
 
-		if (effect.recoil && source) {
-			this.damage(this.clampIntRange(Math.round(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
-		}
 		if (effect.drain && source) {
 			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
 		}
 
-		if (target.fainted) this.faint(target);
-		else {
+		if (instafaint && !target.hp) {
+			this.debug('instafaint: '+this.faintQueue.map('target').map('name'));
+			this.faintMessages(true);
+		} else {
 			damage = this.runEvent('AfterDamage', target, source, effect, damage);
-			if (effect && !effect.negateSecondary) {
-				this.runEvent('Secondary', target, source, effect);
-			}
 		}
+
 		return damage;
 	};
 	Battle.prototype.directDamage = function (damage, target, source, effect) {
@@ -3059,9 +3037,14 @@ var Battle = (function () {
 		var p1fainted = this.p1.active.map(isFainted);
 		var p2fainted = this.p2.active.map(isFainted);
 	};
-	Battle.prototype.faintMessages = function () {
+	Battle.prototype.faintMessages = function (lastFirst) {
+		if (this.ended) return;
+		if (lastFirst && this.faintQueue.length) {
+			this.faintQueue.unshift(this.faintQueue.pop());
+		}
+		var faintData;
 		while (this.faintQueue.length) {
-			var faintData = this.faintQueue.shift();
+			faintData = this.faintQueue.shift();
 			if (!faintData.target.fainted) {
 				this.add('faint', faintData.target);
 				this.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
@@ -3073,7 +3056,7 @@ var Battle = (function () {
 			}
 		}
 		if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
-			this.win();
+			this.win(faintData && faintData.target.side);
 			return true;
 		}
 		if (!this.p1.pokemonLeft) {
@@ -3314,6 +3297,12 @@ var Battle = (function () {
 				}
 			}
 			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
+				if (this.gen <= 4) {
+					decision.priority = -101;
+					this.addQueue(decision, true);
+					this.debug('Pursuit target fainted');
+					break;
+				}
 				this.debug('A Pokemon can\'t switch between when it runs out of HP and when it faints');
 				break;
 			}

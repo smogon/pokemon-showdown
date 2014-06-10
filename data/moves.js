@@ -422,7 +422,7 @@ exports.BattleMovedex = {
 	},
 	"aromaticmist": {
 		num: 597,
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "The user raises the Special Defense stat of itself and ally Pokemon by 1.",
@@ -445,7 +445,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Belch, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Spiky Shield, Struggle, Switcheroo, Thief, Transform, or Trick.",
+		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Belch, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, King's Shield, Mat Block, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Spiky Shield, Struggle, Switcheroo, Thief, Transform, or Trick.",
 		shortDesc: "Uses a random move known by a team member.",
 		id: "assist",
 		name: "Assist",
@@ -459,7 +459,7 @@ exports.BattleMovedex = {
 				for (var i = 0; i < pokemon.moves.length; i++) {
 					var move = pokemon.moves[i];
 					var noAssist = {
-						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
+						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, kingsshield:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
 					};
 					if (move && !noAssist[move]) {
 						moves.push(move);
@@ -690,7 +690,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target) {
-			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
+			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.pokemon === target) {
 				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
 				return 120;
 			}
@@ -932,13 +932,16 @@ exports.BattleMovedex = {
 			},
 			onBeforeMove: function (pokemon) {
 				if (this.effectData.duration === 1) {
+					this.add('-end', pokemon, 'Bide');
 					if (!this.effectData.totalDamage) {
-						this.add('-end', pokemon, 'Bide');
 						this.add('-fail', pokemon);
 						return false;
 					}
-					this.add('-end', pokemon, 'Bide');
 					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					if (!target) {
+						this.add('-fail', pokemon);
+						return false;
+					}
 					if (!target.runImmunity('Normal')) {
 						this.add('-immune', target, '[msg]');
 						return false;
@@ -1808,12 +1811,13 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers the target's Special Attack stat by 1.",
+		desc: "Lowers the target's Special Attack by 1 stage. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "Lowers the target's Sp. Atk by 1.",
 		id: "confide",
 		name: "Confide",
 		pp: 20,
 		priority: 0,
+		isSoundBased: true,
 		isNotProtectable: true,
 		boosts: {
 			spa: -1
@@ -2037,10 +2041,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getCategory(pokemon.lastAttackedBy.move) === 'Physical') {
-				return 2 * pokemon.lastAttackedBy.damage;
-			}
-			return false;
+			if (!pokemon.volatiles['counter']) return 0;
+			return pokemon.volatiles['counter'].damage || 1;
 		},
 		category: "Physical",
 		desc: "Deals damage to the last foe to hit the user with a physical attack this turn. The damage is equal to twice the HP lost by the user from that attack. If that foe's position is no longer in use, damage is done to a random foe in range. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by a foe's physical attack this turn. Makes contact. Priority -5.",
@@ -2051,6 +2053,32 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -5,
 		isContact: true,
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('counter');
+		},
+		onTryHit: function (target, source, move) {
+			if (!source.volatiles['counter']) return false;
+			if (source.volatiles['counter'].position === null) return false;
+		},
+		effect: {
+			duration: 1,
+			noCopy: true,
+			onStart: function (target, source, source2, move) {
+				this.effectData.position = null;
+				this.effectData.damage = 0;
+			},
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				return source.side.foe.active[this.effectData.position];
+			},
+			onDamagePriority: -101,
+			onDamage: function (damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Physical') {
+					this.effectData.position = source.position;
+					this.effectData.damage = 2 * damage;
+				}
+			}
+		},
 		secondary: false,
 		target: "scripted",
 		type: "Fighting"
@@ -2116,22 +2144,22 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
-		volatileStatus: 'craftyshield',
-		onTryHit: function (target, source, move) {
-			return !!this.willAct() && this.runEvent('StallMove', target);
+		sideCondition: 'craftyshield',
+		onTryHitSide: function (side, source) {
+			return !!this.willAct() && this.runEvent('StallMove', source);
 		},
-		onHit: function (pokemon) {
-			pokemon.addVolatile('stall');
+		onHitSide: function (side, source) {
+			source.addVolatile('stall');
 		},
 		effect: {
 			duration: 1,
-			onStart: function (target) {
-				this.add('-singleturn', target, 'Crafty Shield');
+			onStart: function (target, source) {
+				this.add('-singleturn', source, 'Crafty Shield');
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
 				if (move.breaksProtect) {
-					target.removeVolatile('Crafty Shield');
+					target.side.removeSideCondition('craftyshield');
 					return;
 				}
 				if (move && (move.target === 'self' || move.category !== 'Status')) return;
@@ -2140,7 +2168,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "self",
+		target: "allySide",
 		type: "Fairy"
 	},
 	"crosschop": {
@@ -2626,12 +2654,13 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 40,
 		category: "Special",
-		desc: "Deals damage to one adjacent target and does not check accuracy. Makes contact.",
+		desc: "Deals damage to one adjacent target. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "This move does not check accuracy.",
 		id: "disarmingvoice",
 		name: "Disarming Voice",
 		pp: 15,
 		priority: 0,
+		isSoundBased: true,
 		secondary: false,
 		target: "normal",
 		type: "Fairy"
@@ -3836,12 +3865,13 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 30,
 		category: "Physical",
-		desc: "When the user knocks out a target with this move, the user's Attack stat rises sharply.",
+		desc: "When the user knocks out a target with this move, the user's Attack stat rises sharply. Makes contact.",
 		shortDesc: "Raises Attack by 2 if knocks out target.",
 		id: "fellstinger",
 		name: "Fell Stinger",
 		pp: 25,
 		priority: 0,
+		isContact: true,
 		onHit: function (target, pokemon) {
 			pokemon.addVolatile('fellstinger');
 		},
@@ -3889,13 +3919,12 @@ exports.BattleMovedex = {
 			return damage;
 		},
 		category: "Special",
-		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints. Makes contact.",
+		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints.",
 		shortDesc: "Does damage equal to the user's HP. User faints.",
 		id: "finalgambit",
 		name: "Final Gambit",
 		pp: 5,
 		priority: 0,
-		isContact: true,
 		selfdestruct: true,
 		secondary: false,
 		target: "normal",
@@ -4407,7 +4436,7 @@ exports.BattleMovedex = {
 		accuracy: 95,
 		basePower: 80,
 		category: "Physical",
-		desc: "Both Fighting-type and Flying-type simultaneously.",
+		desc: "Both Fighting-type and Flying-type simultaneously. Makes contact.",
 		shortDesc: "Both Fighting-type and Flying-type simultaneously.",
 		id: "flyingpress",
 		name: "Flying Press",
@@ -4417,6 +4446,7 @@ exports.BattleMovedex = {
 			return this.getEffectiveness(type, target) + this.getEffectiveness('Flying', target);
 		},
 		priority: 0,
+		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -6483,7 +6513,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isUnreleased: true,
-		isContact: true,
 		breaksProtect: true,
 		secondary: false,
 		target: "normal",
@@ -7092,7 +7121,7 @@ exports.BattleMovedex = {
 		id: "knockoff",
 		isViable: true,
 		name: "Knock Off",
-		pp: 25,
+		pp: 20,
 		priority: 0,
 		isContact: true,
 		onBasePowerPriority: 4,
@@ -7766,6 +7795,7 @@ exports.BattleMovedex = {
 		name: "Magnetic Flux",
 		pp: 20,
 		priority: 0,
+		isSnatchable: true,
 		onHitSide: function (side, source) {
 			var targets = [];
 			for (var p in side.active) {
@@ -7864,6 +7894,7 @@ exports.BattleMovedex = {
 		name: "Mat Block",
 		pp: 10,
 		priority: 0,
+		isSnatchable: true,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'matblock',
 		onTryHitSide: function (side, source) {
@@ -8073,10 +8104,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
-				return 1.5 * pokemon.lastAttackedBy.damage;
-			}
-			return false;
+			if (!pokemon.volatiles['metalburst']) return 0;
+			return pokemon.volatiles['metalburst'].damage || 1;
 		},
 		category: "Physical",
 		desc: "Deals damage to the last foe to hit the user with an attack this turn. The damage is equal to 1.5x the HP lost by the user from that attack. If that foe's position is no longer in use, damage is done to a random foe in range. Only the last hit of a multi-hit attack is counted. Fails if the user moves first or if the user was not hit by a foe's attack this turn.",
@@ -8085,6 +8114,32 @@ exports.BattleMovedex = {
 		name: "Metal Burst",
 		pp: 10,
 		priority: 0,
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('metalburst');
+		},
+		onTryHit: function (target, source, move) {
+			if (!source.volatiles['metalburst']) return false;
+			if (source.volatiles['metalburst'].position === null) return false;
+		},
+		effect: {
+			duration: 1,
+			noCopy: true,
+			onStart: function (target, source, source2, move) {
+				this.effectData.position = null;
+				this.effectData.damage = 0;
+			},
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				return source.side.foe.active[this.effectData.position];
+			},
+			onDamagePriority: -101,
+			onDamage: function (damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && source.side !== target.side) {
+					this.effectData.position = source.position;
+					this.effectData.damage = 1.5 * damage;
+				}
+			}
+		},
 		secondary: false,
 		target: "scripted",
 		type: "Steel"
@@ -8325,10 +8380,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback: function (pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && this.getCategory(pokemon.lastAttackedBy.move) === 'Special') {
-				return 2 * pokemon.lastAttackedBy.damage;
-			}
-			return false;
+			if (!pokemon.volatiles['mirrorcoat']) return 0;
+			return pokemon.volatiles['mirrorcoat'].damage || 1;
 		},
 		category: "Special",
 		desc: "Deals damage to the last foe to hit the user with a special attack this turn. The damage is equal to twice the HP lost by the user from that attack. If that foe's position is no longer in use, damage is done to a random foe in range. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by a foe's special attack this turn. Priority -5.",
@@ -8338,6 +8391,32 @@ exports.BattleMovedex = {
 		name: "Mirror Coat",
 		pp: 20,
 		priority: -5,
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('mirrorcoat');
+		},
+		onTryHit: function (target, source, move) {
+			if (!source.volatiles['mirrorcoat']) return false;
+			if (source.volatiles['mirrorcoat'].position === null) return false;
+		},
+		effect: {
+			duration: 1,
+			noCopy: true,
+			onStart: function (target, source, source2, move) {
+				this.effectData.position = null;
+				this.effectData.damage = 0;
+			},
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				return source.side.foe.active[this.effectData.position];
+			},
+			onDamagePriority: -101,
+			onDamage: function (damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Special') {
+					this.effectData.position = source.position;
+					this.effectData.damage = 2 * damage;
+				}
+			}
+		},
 		secondary: false,
 		target: "scripted",
 		type: "Psychic"
@@ -8895,12 +8974,13 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Lowers the target's Attack and Special Attack by 1 stage. Pokemon protected by Magic Coat or the Ability Magic Bounce are unaffected and instead use this move themselves.",
+		desc: "Lowers the target's Attack and Special Attack by 1 stage. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "Lowers target's Atk and SpAtk by 1.",
 		id: "nobleroar",
 		name: "Noble Roar",
 		pp: 30,
 		priority: 0,
+		isSoundBased: true,
 		boosts: {
 			atk: -1,
 			spa: -1
@@ -8920,6 +9000,7 @@ exports.BattleMovedex = {
 		name: "Nuzzle",
 		pp: 20,
 		priority: 0,
+		isContact: true,
 		secondary: {
 			chance: 100,
 			status: 'par'
@@ -9337,15 +9418,15 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 90,
 		category: "Physical",
-		desc: "May lower the target's Attack stat by 1.",
-		shortDesc: "May lower the target's Attack by 1.",
+		desc: "10% chance to lower the target's Attack by 1 stage. Makes contact.",
+		shortDesc: "10% chance to lower the target's Attack by 1.",
 		id: "playrough",
 		name: "Play Rough",
 		pp: 10,
 		priority: 0,
 		isContact: true,
 		secondary: {
-			chance: 30,
+			chance: 10,
 			boosts: {
 				atk: -1
 			}
@@ -9676,13 +9757,14 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
-		desc: "Hitting a target raises the Attack stat.",
+		desc: "Hitting a target raises Attack by 1 stage. Damage is boosted to 1.2x by the Ability Iron Fist.",
 		shortDesc: "Hitting a target raises Attack by 1",
 		id: "poweruppunch",
 		name: "Power-Up Punch",
 		pp: 20,
 		priority: 0,
 		isContact: true,
+		isPunchAttack: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -10428,7 +10510,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		onHit: function (target, source) {
-			if (source.num === 493) return false;
+			if (source.template && source.template.num === 493) return false;
 			this.add('-start', source, 'typechange', target.getTypes(true).join('/'), '[from] move: Reflect Type', '[of] ' + target);
 			source.typesData = [];
 			for (var i = 0, l = target.typesData.length; i < l; i++) {
@@ -10572,8 +10654,8 @@ exports.BattleMovedex = {
 		num: 279,
 		accuracy: 100,
 		basePower: 60,
-		basePowerCallback: function (pokemon, source) {
-			if (source.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn) {
+		basePowerCallback: function (pokemon, target) {
+			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.pokemon === target) {
 				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
 				return 120;
 			}
@@ -12933,7 +13015,7 @@ exports.BattleMovedex = {
 		shortDesc: "Has 1/4 recoil.",
 		id: "submission",
 		name: "Submission",
-		pp: 25,
+		pp: 20,
 		priority: 0,
 		isContact: true,
 		recoil: [1, 4],
@@ -13299,7 +13381,7 @@ exports.BattleMovedex = {
 		shortDesc: "Hits adjacent Pokemon sharing the user's type.",
 		id: "synchronoise",
 		name: "Synchronoise",
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		onTryHit: function (target, source) {
 			return target.hasType(source.getTypes());

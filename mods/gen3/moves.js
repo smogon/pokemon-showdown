@@ -261,6 +261,14 @@ exports.BattleMovedex = {
 	},
 	explosion: {
 		inherit: true,
+		onAfterMove: function(pokemon) {
+			for (var i = 0; i < pokemon.side.active.length; i++) {
+				this.cancelMove(pokemon.side.active[i]);
+			}
+			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
+				this.cancelMove(pokemon.side.foe.active[i]);
+			}
+		},
 		basePower: 500
 	},
 	extrasensory: {
@@ -546,6 +554,14 @@ exports.BattleMovedex = {
 	},
 	selfdestruct: {
 		inherit: true,
+		onAfterMove: function(pokemon) {
+			for (var i = 0; i < pokemon.side.active.length; i++) {
+				this.cancelMove(pokemon.side.active[i]);
+			}
+			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
+				this.cancelMove(pokemon.side.foe.active[i]);
+			}
+		},
 		basePower: 400
 	},
 	skillswap: {

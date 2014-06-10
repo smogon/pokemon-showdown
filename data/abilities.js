@@ -56,9 +56,10 @@ exports.BattleAbilities = {
 		shortDesc: "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
 		id: "aftermath",
 		name: "Aftermath",
-		onFaint: function (target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.isContact && source) {
-				this.damage(source.maxhp / 4, source, target);
+		onAfterDamageOrder: 1,
+		onAfterDamage: function (damage, target, source, move) {
+			if (source && source !== target && move && move.isContact && !target.hp) {
+				this.damage(source.maxhp / 4, source, target, null, true);
 			}
 		},
 		rating: 3,
@@ -169,10 +170,10 @@ exports.BattleAbilities = {
 		num: 71
 	},
 	"aromaveil": {
-		desc: "Protects allies from attacks that limit their move choices.",
-		shortDesc: "Protects allies from attacks that limit their move choices.",
+		desc: "Protects this Pokemon and its allies from Attract, Disable, Encore, Heal Block, Taunt, and Torment.",
+		shortDesc: "Protects from Attract, Disable, Encore, Heal Block, Taunt, and Torment.",
 		onAllyTryHit: function (target, source, move) {
-			if (move && move.id in {disable:1, encore:1, healblock:1, imprison:1, taunt:1, torment:1}) {
+			if (move && move.id in {attract:1, disable:1, encore:1, healblock:1, taunt:1, torment:1}) {
 				return false;
 			}
 		},
@@ -372,10 +373,10 @@ exports.BattleAbilities = {
 	"compoundeyes": {
 		desc: "The accuracy of this Pokemon's moves receives a 30% increase; for example, a 75% accurate move becomes 97.5% accurate.",
 		shortDesc: "This Pokemon's moves have their accuracy boosted to 1.3x.",
-		onModifyMove: function (move) {
-			if (typeof move.accuracy !== 'number') return;
+		onSourceAccuracy: function (accuracy) {
+			if (typeof accuracy !== 'number') return;
 			this.debug('compoundeyes - enhancing accuracy');
-			move.accuracy *= 1.3;
+			return accuracy * 1.3;
 		},
 		id: "compoundeyes",
 		name: "Compound Eyes",
@@ -1231,7 +1232,7 @@ exports.BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				this.damage(source.maxhp / 8, source, target);
+				this.damage(source.maxhp / 8, source, target, null, true);
 			}
 		},
 		id: "ironbarbs",
@@ -1384,7 +1385,7 @@ exports.BattleAbilities = {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
 			var canOoze = {drain: 1, leechseed: 1};
 			if (canOoze[effect.id]) {
-				this.damage(damage);
+				this.damage(damage, null, null, null, true);
 				return 0;
 			}
 		},
@@ -2132,7 +2133,7 @@ exports.BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				this.damage(source.maxhp / 8, source, target);
+				this.damage(source.maxhp / 8, source, target, null, true);
 			}
 		},
 		id: "roughskin",
@@ -2375,14 +2376,14 @@ exports.BattleAbilities = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk: function (atk, pokemon) {
-				if (!pokemon.hasAbility('slowstart')) {
+				if (pokemon.ignore['Ability'] === true || pokemon.ability !== 'slowstart') {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
 				return this.chainModify(0.5);
 			},
 			onModifySpe: function (speMod, pokemon) {
-				if (!pokemon.hasAbility('slowstart')) {
+				if (pokemon.ignore['Ability'] === true || pokemon.ability !== 'slowstart') {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
@@ -2992,7 +2993,7 @@ exports.BattleAbilities = {
 		},
 		effect: {
 			onModifySpe: function (speMod, pokemon) {
-				if (!pokemon.hasAbility('unburden')) {
+				if (pokemon.ignore['Ability'] === true || pokemon.ability !== 'unburden') {
 					pokemon.removeVolatile('unburden');
 					return;
 				}
