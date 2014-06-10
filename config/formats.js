@@ -258,7 +258,8 @@ exports.Formats = [
 		name: "STABmons",
 		section: "OM of the Month",
 
-		ruleset: ['OU']
+		ruleset: ['OU'],
+		banlist: ['Sylveon']
 	},
 	{
 		name: "OU Theorymon",
