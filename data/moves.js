@@ -4436,7 +4436,7 @@ exports.BattleMovedex = {
 		accuracy: 95,
 		basePower: 80,
 		category: "Physical",
-		desc: "Both Fighting-type and Flying-type simultaneously. Makes contact.",
+		desc: "Deals damage to one adjacent or non-adjacent target. Both Fighting-type and Flying-type simultaneously. Makes contact.",
 		shortDesc: "Both Fighting-type and Flying-type simultaneously.",
 		id: "flyingpress",
 		name: "Flying Press",
@@ -4448,7 +4448,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Fighting"
 	},
 	"focusblast": {
@@ -5796,7 +5796,7 @@ exports.BattleMovedex = {
 			else this.heal(Math.ceil(target.maxhp * 0.5));
 		},
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Psychic"
 	},
 	"healingwish": {
@@ -9013,7 +9013,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		desc: "Deals damage to one adjacent target. The user recovers 75% of the HP lost by the target, rounded up.",
+		desc: "Deals damage to one adjacent or non-adjacent target. The user recovers 75% of the HP lost by the target, rounded up.",
 		shortDesc: "User recovers 75% of the damage dealt.",
 		id: "oblivionwing",
 		isViable: true,
@@ -9022,7 +9022,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		drain: [3, 4],
 		secondary: false,
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"octazooka": {
