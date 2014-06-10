@@ -216,6 +216,4 @@ var components = exports.components = {
         };
     })(),
     
-};
-    
     Object.merge(CommandParser.commands, components);
