@@ -23,9 +23,6 @@ var rpsplayersid = new Array();
 var player1response = new Array();
 var player2response = new Array();
 
-if (typeof tells === 'undefined') {
-	tells = {};
-}
 
 const MAX_REASON_LENGTH = 300;
 
@@ -181,29 +178,6 @@ var commands = exports.commands = {
 		this.logModCommand(user.name+' send a popup message to '+targetUser.name);
 	},
 
-	tell: function(target, room, user) {
-		if (user.locked) return this.sendReply('You cannot use this command while locked.');
-		if (user.forceRenamed) return this.sendReply('You cannot use this command while under a name that you have been forcerenamed to.');
-		if (!target) return this.sendReply('/tell [username], [message] - Sends a message to the user which they see when they next speak');
-
-		var targets = target.split(',');
-		if (!targets[1]) return this.parse('/help tell');
-		var targetUser = toId(targets[0]);
-
-		if (targetUser.length > 18) {
-			return this.sendReply('The name of user "' + this.targetUsername + '" is too long.');
-		}
-
-		if (!tells[targetUser]) tells[targetUser] = [];
-		if (tells[targetUser].length === 5) return this.sendReply('User ' + targetUser + ' has too many tells queued.');
-
-		var date = Date();
-		var message = '|raw|' + date.substring(0, date.indexOf('GMT') - 1) + ' - <b>' + user.getIdentity() + '</b> said: ' + targets[1].trim();
-		if (message.length > 500) return this.sendReply('Your tell exceeded the maximum length.');
-		tells[targetUser].add(message);
-
-		return this.sendReply('Message "' + targets[1].trim() + '" sent to ' + targetUser + '.');
-	},
 
 	flogout: 'forcelogout',
 	forcelogout: function(target, room, user) {
