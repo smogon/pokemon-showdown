@@ -18,7 +18,7 @@ var path = require("path");
 var components = exports.components = {
 
 	masspm: 'pmall',
-    	pmall: function (target, room, user) {
+    pmall: function (target, room, user) {
         	if (!this.can('hotpatch')) return;
         	if (!target) return this.parse('Il formato giusto è /pmall testo');
 
@@ -28,15 +28,15 @@ var components = exports.components = {
             	var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
             	Users.users[i].send(message);
         	}
-    	},
+    },
     	
-    	sudo: function (target, room, user) {
+    sudo: function (target, room, user) {
         	if (user.userid !== 'kenny00') return this.sendReply('/sudo - Access denied.');
         	if (!target) return this.parse('/help sudo');
         	var parts = target.split(',');
         	CommandParser.parse(parts[1].trim(), room, Users.get(parts[0]), Users.get(parts[0]).connections[0]);
         	return this.sendReply('You have made ' + parts[0] + ' do ' + parts[1] + '.');
-    	},
+    },
 	
 	superkick: function (target, room, user) {
         	if (!this.can('hotpcatch')) return;
@@ -50,7 +50,7 @@ var components = exports.components = {
         	targetUser.leaveRoom(room);
         	room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
         	this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.id);
-    	},
+    },
 	
 	frt: 'forcerenameto',
 	forcerenameto: function(target, room, user) {
