@@ -196,8 +196,6 @@ New mechanic: Signature Pokemon:
   - Snorlax: Snore (100 base power)
   
   - Persian: Slash (60 base power 30% -1 Def)
-  
-
 
 - Again, note that while the Signature Pokemon will get the 1.5x damage boost,
   all Pokemon will get the other changes to the move listed above.
@@ -446,7 +444,7 @@ Minor ability changes:
   turn
 
 - Clear Body and White Smoke prevents all stat lowering (relevant: the Regis' 
-Superpower, Metagross' Hammer Arm, and Torkoal's Overheat)
+  Superpower, Metagross' Hammer Arm, and Torkoal's Overheat)
 
 - Thick Fat grants half damage from Fighting
 
