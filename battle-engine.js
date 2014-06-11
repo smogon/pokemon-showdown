@@ -2456,15 +2456,16 @@ var Battle = (function () {
 	};
 	Battle.prototype.swapPosition = function (source, newPos, from) {
 		var target = source.side.active[newPos];
-		if (target.fainted) return false;
+		if (newPos !== 1 && (!target || target.fainted)) return false;
+		this.add('swap', source, newPos, (from ? '[from] ' + from : ''));
+
 		var side = source.side;
 		side.pokemon[source.position] = target;
 		side.pokemon[newPos] = source;
 		side.active[source.position] = side.pokemon[source.position];
 		side.active[newPos] = side.pokemon[newPos];
-		target.position = source.position;
+		if (target) target.position = source.position;
 		source.position = newPos;
-		this.add('swap', source, target, (from ? '[from] ' + from : ''));
 		return true;
 	};
 	Battle.prototype.faint = function (pokemon, source, effect) {

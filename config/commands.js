@@ -760,7 +760,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'hackmons') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3475624/\">Hackmons</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3500418/\">Hackmons</a><br />";
 		}
 		if (target === 'all' || target === 'balancedhackmons' || target === 'bh') {
 			matched = true;
