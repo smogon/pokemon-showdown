@@ -3915,7 +3915,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		damageCallback: function (pokemon) {
 			var damage = pokemon.hp;
-			pokemon.hp = 0;
+			pokemon.faint();
 			return damage;
 		},
 		category: "Special",
