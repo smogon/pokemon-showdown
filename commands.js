@@ -862,7 +862,7 @@ var commands = exports.commands = {
         this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.id);
     	},
 	
-	frt: 'forcerenameto',
+	/*	frt: 'forcerenameto',
 	forcerenameto: function(target, room, user) {
 		if (!target) return this.parse('/help forcerenameto');
 		target = this.splitTarget(target);
@@ -877,7 +877,7 @@ var commands = exports.commands = {
 		var entry = ''+targetUser.name+' was forcibly renamed to '+target+' by '+user.name+'.';
 		this.privateModCommand('(' + entry + ')');
 		targetUser.forceRename(target, undefined, true);
-	},
+	}, */
 
 	leave: 'part',
 	part: function (target, room, user, connection) {
