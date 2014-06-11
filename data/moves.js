@@ -5997,12 +5997,17 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 1,
 			onStart: function (target, source) {
+				this.effectData.multiplier = 1.5;
 				this.add('-singleturn', target, 'Helping Hand', '[of] ' + source);
+			},
+			onRestart: function(target, source) {
+				this.effectData.multiplier *= 1.5;
+				this.add('singleturn', target, 'Helping Hand', '[of] ' + source);
 			},
 			onBasePowerPriority: 3,
 			onBasePower: function (basePower) {
-				this.debug('Boosting from Helping Hand');
-				return this.chainModify(1.5);
+				this.debug('Boosting from Helping Hand: ' + this.effectData.multiplier);
+				return this.chainModify(this.effectData.multiplier);
 			}
 		},
 		secondary: false,
