@@ -134,12 +134,12 @@ exports.BattleScripts = {
 					targets.push(foeActive[i]);
 				}
 			}
+			if (move.selfdestruct && this.gen >= 5) {
+				this.faint(pokemon, pokemon, move);
+			}
 			if (!targets.length) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
-				if (move.selfdestruct && this.gen >= 5) {
-					this.faint(pokemon, pokemon, move);
-				}
 				return true;
 			}
 			if (targets.length > 1) move.spreadHit = true;
@@ -249,8 +249,11 @@ exports.BattleScripts = {
 			if (hits.length) {
 				// yes, it's hardcoded... meh
 				if (hits[0] === 2 && hits[1] === 5) {
-					var roll = this.random(6);
-					hits = [2, 2, 3, 3, 4, 5][roll];
+					if (this.gen >= 5) {
+						hits = [2, 2, 3, 3, 4, 5][this.random(6)];
+					} else {
+						hits = [2, 2, 2, 3, 3, 3, 4, 5][this.random(8)];
+					}
 				} else {
 					hits = this.random(hits[0], hits[1] + 1);
 				}
@@ -1016,7 +1019,7 @@ exports.BattleScripts = {
 					if (setupType && hasMove['gigadrain']) rejected = true;
 					break;
 				case 'weatherball':
-					if (!hasMove['sunnyday']) rejected = true;
+					if (!hasMove['sunnyday'] && !hasMove['raindance']) rejected = true;
 					break;
 				case 'firepunch':
 					if (hasMove['flareblitz']) rejected = true;

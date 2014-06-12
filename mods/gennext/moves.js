@@ -71,6 +71,7 @@ exports.BattleMovedex = {
 	},
 	cut: {
 		inherit: true,
+		accuracy: 100,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -1238,6 +1239,19 @@ exports.BattleMovedex = {
 			status: 'tox'
 		}
 	},
+	slash: {
+		inherit: true,
+		basePower: 60,
+		onBasePower: function (power, user) {
+			if (user.template.id === 'persian') return power * 1.5;
+		},
+		secondary: {
+			chance: 30,
+			boosts: {
+				def: -1
+			}
+		}
+	},
 	sludge: {
 		inherit: true,
 		basePower: 60,
@@ -1467,6 +1481,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 100
 	},
+	flyingpress: {
+		inherit: true,
+		accuracy: 100
+	},
 	crushclaw: {
 		inherit: true,
 		accuracy: 100
@@ -1484,6 +1502,10 @@ exports.BattleMovedex = {
 		accuracy: 100
 	},
 	diamondstorm: {
+		inherit: true,
+		accuracy: 100
+	},
+	steameruption: {
 		inherit: true,
 		accuracy: 100
 	},
@@ -1523,6 +1545,14 @@ exports.BattleMovedex = {
 			status: 'brn'
 		}
 	},
+	dragonrush: {
+		inherit: true,
+		accuracy: 80
+	},
+	rocktomb: {
+		inherit: true,
+		accuracy: 100
+	},
 	fireblast: {
 		inherit: true,
 		accuracy: 80,
@@ -1531,9 +1561,21 @@ exports.BattleMovedex = {
 			status: 'brn'
 		}
 	},
+	irontail: {
+		inherit: true,
+		accuracy: 80
+	},
 	magmastorm: {
 		inherit: true,
 		accuracy: 80
+	},
+	megahorn: {
+		inherit: true,
+		accuracy: 90
+	},
+	megapunch: {
+		inherit: true,
+		accuracy: 90
 	},
 	megakick: {
 		inherit: true,
@@ -1551,9 +1593,17 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 80
 	},
+	sweetkiss: {
+		inherit: true,
+		accuracy: 80
+	},
 	lovelykiss: {
 		inherit: true,
 		accuracy: 80
+	},
+	whirlpool: {
+		inherit: true,
+		accuracy: 90
 	},
 	eggbomb: {
 		inherit: true,
