@@ -259,7 +259,7 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		ruleset: ['OU'],
-		banlist: ['Sylveon']
+		banlist: ['Porygon-Z', 'Sylveon']
 	},
 	{
 		name: "OU Theorymon",
