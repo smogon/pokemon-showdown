@@ -687,7 +687,7 @@ var commands = exports.commands = {
 		if (!this.targetUser) return this.sendReply('user not found');
 		if (!room.users[this.targetUser.userid]) return this.sendReply('not a showderper');
 		this.targetUser.avatar = '#showtan';
-		this.sendReply('ok');
+		room.add(user.name+' applied showtan to affected area of '+this.targetUser.name);
 	},
 
 	introduction: 'intro',
@@ -758,11 +758,11 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'hackmons') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3475624/\">Hackmons</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3500418/\">Hackmons</a><br />";
 		}
 		if (target === 'all' || target === 'balancedhackmons' || target === 'bh') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3463764/\">Balanced Hackmons</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3489849/\">Balanced Hackmons</a><br />";
 			if (target !== 'all') {
 				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3499973/\">Balanced Hackmons Mentoring Program</a><br />";
 			}
