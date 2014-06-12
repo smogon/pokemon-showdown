@@ -92,7 +92,7 @@ if (!fs.existsSync('./config/config.js')) {
 
 global.Config = require('./config/config.js');
 
-global.reloadCustomAvatars = function() {
+global.reloadCustomAvatars = function () {
 	var path = require('path');
 	var newCustomAvatars = {};
 	fs.readdirSync('./config/avatars').forEach(function (file) {
