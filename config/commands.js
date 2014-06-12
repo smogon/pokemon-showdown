@@ -1169,7 +1169,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'fuck this'){
 			matched = true;
-			this.sendReplyBox('<img src="http://i.imgur.com/BInENNm.gif?1" />');
+			this.sendReplyBox('<img src="https://i.imgur.com/S3Oof4K.gif" />');
 		}
 		if (target === 'slowbro'){
 			matched = true;
