@@ -754,12 +754,12 @@ var BattlePokemon = (function () {
 	};
 	// returns the amount of damage actually dealt
 	BattlePokemon.prototype.faint = function (source, effect) {
-		if (this.fainted) return 0;
+		if (this.fainted || this.status === 'fnt') return 0;
 		var d = this.hp;
 		this.hp = 0;
 		this.switchFlag = false;
 		this.status = 'fnt';
-		//this.fainted = true;
+		// this.fainted = true;
 		this.battle.faintQueue.push({
 			target: this,
 			source: source,
