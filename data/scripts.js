@@ -535,9 +535,9 @@ exports.BattleScripts = {
 	},
 
 	isAdjacent: function (pokemon1, pokemon2) {
-		if (!pokemon1.fainted && !pokemon2.fainted && pokemon2.position !== pokemon1.position && Math.abs(pokemon2.position - pokemon1.position) <= 1) {
-			return true;
-		}
+		if (pokemon1.fainted || pokemon2.fainted) return false;
+		if (pokemon1.side === pokemon2.side) return Math.abs(pokemon1.position - pokemon2.position) === 1;
+		return Math.abs(pokemon1.position + pokemon2.position + 1 - pokemon1.side.active.length) <= 1;
 	},
 	checkAbilities: function (selectedAbilities, defaultAbilities) {
 		if (!selectedAbilities.length) return true;
