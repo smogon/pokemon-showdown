@@ -56,9 +56,10 @@ exports.BattleAbilities = {
 		shortDesc: "If this Pokemon is KOed with a contact move, that move's user loses 1/4 its max HP.",
 		id: "aftermath",
 		name: "Aftermath",
-		onFaint: function (target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.isContact && source) {
-				this.damage(source.maxhp / 4, source, target);
+		onAfterDamageOrder: 1,
+		onAfterDamage: function (damage, target, source, move) {
+			if (source && source !== target && move && move.isContact && !target.hp) {
+				this.damage(source.maxhp / 4, source, target, null, true);
 			}
 		},
 		rating: 3,
@@ -1211,6 +1212,7 @@ exports.BattleAbilities = {
 			var foeactive = pokemon.side.foe.active;
 			for (var i = 0; i < foeactive.length; i++) {
 				if (!foeactive[i] || foeactive[i].fainted) continue;
+				if (!this.validTarget(foeactive[i], pokemon, 'adjacentFoe')) continue;
 				if (foeactive[i].volatiles['substitute']) {
 					// does it give a message?
 					this.add('-activate', foeactive[i], 'Substitute', 'ability: Intimidate', '[of] ' + pokemon);
@@ -1231,7 +1233,7 @@ exports.BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				this.damage(source.maxhp / 8, source, target);
+				this.damage(source.maxhp / 8, source, target, null, true);
 			}
 		},
 		id: "ironbarbs",
@@ -1384,7 +1386,7 @@ exports.BattleAbilities = {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
 			var canOoze = {drain: 1, leechseed: 1};
 			if (canOoze[effect.id]) {
-				this.damage(damage);
+				this.damage(damage, null, null, null, true);
 				return 0;
 			}
 		},
@@ -2132,7 +2134,7 @@ exports.BattleAbilities = {
 		onAfterDamageOrder: 1,
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				this.damage(source.maxhp / 8, source, target);
+				this.damage(source.maxhp / 8, source, target, null, true);
 			}
 		},
 		id: "roughskin",

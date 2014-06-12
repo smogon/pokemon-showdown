@@ -348,6 +348,7 @@ exports.BattleStatuses = {
 	},
 	gem: {
 		duration: 1,
+		affectsFainted: true,
 		onBasePower: function (basePower, user, target, move) {
 			this.debug('Gem Boost');
 			return this.chainModify([0x14CD, 0x1000]);

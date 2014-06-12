@@ -149,6 +149,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		pp: 30
 	},
+	finalgambit: {
+		inherit: true,
+		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints. Makes contact.",
+		isContact: true
+	},
 	fireblast: {
 		inherit: true,
 		basePower: 120
@@ -372,7 +377,6 @@ exports.BattleMovedex = {
 		basePower: 20,
 		desc: "Deals damage to one adjacent target and causes it to drop its held item. This move cannot force Pokemon with the Ability Sticky Hold to lose their held item, or force a Giratina, an Arceus, or a Genesect to lose their Griseous Orb, Plate, or Drive, respectively. Items lost to this move cannot be regained with Recycle. Makes contact.",
 		shortDesc: "Removes the target's held item.",
-		pp: 20,
 		onBasePower: function () {}
 	},
 	leafstorm: {
@@ -666,6 +670,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		onTryHit: function () {}
 	},
+	submission: {
+		inherit: true,
+		pp: 25
+	},
 	surf: {
 		inherit: true,
 		basePower: 95
@@ -688,7 +696,8 @@ exports.BattleMovedex = {
 	},
 	synchronoise: {
 		inherit: true,
-		basePower: 70
+		basePower: 70,
+		pp: 15
 	},
 	tailwind: {
 		inherit: true,
