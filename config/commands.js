@@ -930,31 +930,39 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'ubers' || target === 'uber') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/bw/tiers/uber\">Uber Pokemon</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3496305/\">Ubers Viability Ranking Thread</a><br />";
 		}
 		if (target === 'all' || target === 'overused' || target === 'ou') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/bw/tiers/ou\">Overused Pokemon</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3507765/\">np: OU Stage 3</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3502428/\">OU Viability Ranking Thread</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3491371/\">Official OU Banlist</a><br />";
 		}
 		if (target === 'all' || target === 'underused' || target === 'uu') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/bw/tiers/uu\">Underused Pokemon</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3508311/\">np: UU Stage 2</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3500340/\">UU Viability Ranking Thread</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3502698/#post-5323505\">Official UU Banlist</a><br />";
 		}
 		if (target === 'all' || target === 'rarelyused' || target === 'ru') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/bw/tiers/ru\">Rarelyused Pokemon</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3508302/\">np: RU Stage 1</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3506500/\">RU Viability Ranking Thread</a><br />";
 		}
 		if (target === 'all' || target === 'neverused' || target === 'nu') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/bw/tiers/nu\">Neverused Pokemon</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3506287/\">np: NU (beta)</a><br />";
 		}
 		if (target === 'all' || target === 'littlecup' || target === 'lc') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/bw/tiers/lc\">Little Cup Pokemon</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3496013/\">LC Viability Ranking Thread</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3490462/\">Official LC Banlist</a><br />";
 		}
 		if (target === 'all' || target === 'doubles') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/bw/metagames/doubles\">Doubles</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3506251/\">np: Doubles Stage 3</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3496306/\">Doubles Viability Ranking Thread</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3498688/\">Official Doubles Banlist</a><br />";
 		}
 		if (!matched) {
 			return this.sendReply("The Tiers entry '" + target + "' was not found. Try /tiers for general help.");
