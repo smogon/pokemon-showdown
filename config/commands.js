@@ -632,6 +632,21 @@ var commands = exports.commands = {
 
 		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
 	},
+	
+	st: 'showtier',
+	showtier: function(target, room, user) {
+        	if (!this.canBroadcast()) return;
+        	var targetId = toId(target);
+        	var newTargets = Tools.dataSearch(target);
+        	if (newTargets && newTargets.length) {
+                	for (var i = 0; i < newTargets.length; i++) {
+                        	var template = Tools.getTemplate(newTargets[i].species);
+                        	return this.sendReplyBox("" + template.name + " is in the " + template.tier + " tier.");
+                        	}
+        	} else {
+                	return this.sendReplyBox("No Pokemon named '" + target + "' was found.");
+        	}
+	},
 
 	uptime: function (target, room, user) {
 		if (!this.canBroadcast()) return;
