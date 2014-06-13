@@ -164,5 +164,101 @@ var plugins = exports.plugins = {
 				);
 			}
 		}
-	}
+	},
+
+	/**
+	* The Studio: Artist of the Day Plugin
+	* This is a daily activity where users get to nominate an artist to be Artist of the day, and it's randomly selected
+	* Only works in a room with the id "The Studio"
+	*/
+	studio: {
+		commands: {
+            		startaotd: function (target, room, user) {
+                		if (!this.canTalk()) return;
+        			return this.parse('/toggleaotd on');
+            		},
+
+            		endaotd: function (target, room, user) {
+                		if (!this.canTalk()) return;
+                		return this.parse('/toggleaotd off');
+            		},
+
+            		taotd: 'toggleaotd',
+            		toggleaotd: function (target, room, user) {
+         			if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
+                		if (!this.can('ban', null, room)) return;
+                		if (!target) {
+                			return this.sendReply("/toggleaotd [on / off] - If on, this will start AOTD, if off, this will no longer allow people to use /naotd.");
+                		}
+                		if (target === 'on') {
+                    			room.addRaw(
+                        			'<div class=\"broadcast-blue\"><font size="3"><center><b>Artist of the Day has started!</b><br />' +
+                        			'</font><center>(Started by ' + Tools.escapeHTML(user.name) + ')<br />' +
+                        			'Use <b>/naotd</b> [artist] to nominate an artist!</center>'
+                    			);
+                    			room.aotdOn = true;
+                    			this.logModCommand("Artist of the Day was started by " + Tools.escapeHTML(user.name) + ".");
+                		}
+                		if (target === 'off') {
+                    			room.addRaw("<b>Nominations are over!</b> (Turned off by " + Tools.escapeHTML(user.name) + ")");
+                    			room.aotdOn = false;
+                		}
+            		},
+
+            		aotdfaq: 'aotdhelp',
+            		aotdhelp: function (target, room, user) {
+                		if (!this.canBroadcast()) return;
+                		if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
+                		this.sendReplyBox(
+                    			'<b>Artist of the Day:</b><br />' +
+                    			'This is a room actity for The Studio where users nomiate artists for the title of "Artist of the Day".  To find out more information about this activity, click <a href="http://thepsstudioroom.weebly.com/artist-of-the-day.html">here</a>.<br> <br />' +
+                    			'Command List:<br />' +
+                    			'/naotd (artist) - This will nominate your artist of the day; only do this once, please. <br />' +
+                    			'/aotd - This allows you to see who the current Artist of the Day is. <br/>' +
+                    			'/aotd (artist) - Sets an artist of the day. (requires @, #) <br />' +
+                    			'/startaotd - Will start AOTD (requires @, #) <br />' +
+                    			'/endaotd - Will turn off the use of /naotd, ending AOTD (requires @, #) <br />' +
+                    			'-- <i>For more information on Artist of the Day, click <a href="http://thepsstudioroom.weebly.com/artist-of-the-day.html">here</a>. <br />' +
+                    			'-- <i><a href="http://thepsstudioroom.weebly.com/rules.html">Room rules</a></i>.'
+                		);
+            		},
+
+            		nominateartistoftheday: 'naotd',
+            		naotd: function (target, room, user) {
+                		if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
+                		if (!room.aotdOn) {
+                    			return this.sendReply("The Artist of the Day has already been chosen.");
+                		} 
+                		if (!target) return this.sendReply("/naotd [artist] - Nominates an artist for Artist of the Day.");
+                		if (target.length > 25) {
+                    			return this.sendReply("This Artist\'s name is too long; it cannot exceed 25 characters.");
+                		}
+                		if (!this.canTalk()) return;
+                		room.addRaw(Tools.escapeHTML(user.name) + "\'s nomination for Artist of the Day is: <b><i>" + Tools.escapeHTML(target) + "</i></b>");
+            		},
+
+            		artistoftheday: 'aotd',
+			aotd: function (target, room, user) {
+        			if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
+				if (!target) {
+                			if (!this.canBroadcast()) return;
+                			this.sendReplyBox("The current Artist of the Day is: <b>" + Tools.escapeHTML(room.aotd) + "</b>");
+                			return;
+        			}
+        			if (!this.canTalk()) return;
+        			if (target.length > 25) {
+                			return this.sendReply("This Artist\'s name is too long; it cannot exceed 25 characters.");
+        			}
+        			if (!this.can('ban', null, room)) return;
+        			room.aotd = target;
+        			room.addRaw(
+        				'<div class=\"broadcast-green\"><font size="2"><b>The Artist of the Day is now </font><b><font color="black" size="2">' + Tools.escapeHTML(target) + '</font></b><br />' +
+        				'(Set by ' + Tools.escapeHTML(user.name) + '.)<br />' +
+        				'This Artist will be posted on our <a href="http://thepsstudioroom.weebly.com/artist-of-the-day.html">Artist of the Day page</a>.</div>'
+        			);
+        			room.aotdOn = false;
+        			this.logModCommand("The Artist of the Day was changed to " + Tools.escapeHTML(target) + " by " + Tools.escapeHTML(user.name) + ".");
+			}
+            	}
+    	}
 };
