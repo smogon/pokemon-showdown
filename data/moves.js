@@ -6907,7 +6907,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Changes Normal-type moves to Electric-type moves. Priority +1.",
-		shortDesc: "Changes Normal moves to Electric type. Priority +1.",
+		shortDesc: "Normal moves become Electric type. Priority +1.",
 		id: "iondeluge",
 		name: "Ion Deluge",
 		pp: 25,
