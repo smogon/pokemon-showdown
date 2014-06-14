@@ -246,6 +246,19 @@ var commands = exports.commands = {
 	/*********************************************************
 	 * Informational commands
 	 *********************************************************/
+	 nature: function(target, room, user) {
+		if (!target) return this.sendReply('/nature [nature] - Returns the nature\'s name, plus value, and minus value.');
+		target = target.charAt(0).toUpperCase() + target.slice(1);
+		var targetId = toId(target);
+		var newtarget = Tools.getNature(target);
+		if (!newtarget) return this.sendReply('There is no nature named "'+target+'"');
+		try {
+			return this.sendReplyBox(target+": +<font color='green'><b>"+newtarget.plus.toUpperCase()+"</b></font> / -<font color='red'><b>"+newtarget.minus.toUpperCase()+"</b></font>");
+		} catch (e) {
+			return this.sendReplyBox(target+": <font color='blue'><b>Neutral</b></font>");
+		}
+		
+	},
 
 	stats: 'data',
 	dex: 'data',
