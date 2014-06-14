@@ -393,6 +393,7 @@ var commands = exports.commands = {
 		if (!room.bannedUsers || !room.bannedIps) {
 			return this.sendReply("Room bans are not meant to be used in room " + room.id + ".");
 		}
+		if (room.bannedUsers[userid] || room.bannedIps[targetUser.latestIp]) return this.sendReply("User " + targetUser.name + " is already banned from room " + room.id + ".");
 		room.bannedUsers[userid] = true;
 		for (var ip in targetUser.ips) {
 			room.bannedIps[ip] = true;
@@ -713,6 +714,7 @@ var commands = exports.commands = {
 			return this.parse('/help banip');
 		}
 		if (!this.can('rangeban')) return false;
+		if (Users.bannedIps[target] === '#ipban') return this.sendReply("The IP " + (target.charAt(target.length - 1) === '*' ? "range " : "") + target + " has already been temporarily banned.");
 
 		Users.bannedIps[target] = '#ipban';
 		this.addModCommand("" + user.name + " temporarily banned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
