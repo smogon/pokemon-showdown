@@ -7,12 +7,16 @@ exports.BattleScripts = {
 	init: function () {
 		// May
 		this.modData('Learnsets', 'braviary').learnset.extremespeed = ['6L1'];
-		this.modData('Pokedex', 'tangrowth').types = ['Poison'];
+		this.modData('Pokedex', 'tangrowth').types = ['Grass', 'Poison'];
 		this.modData('Learnsets', 'blastoise').learnset.slackoff = ['6L1'];
 		this.modData('Learnsets', 'hydreigon').learnset.defog = ['6L1'];
 		this.modData('Pokedex', 'zygarde').abilities['1'] = 'Shed Skin';
 
 		// June
 		this.modData('Pokedex', 'torterra').abilities['1'] = 'Drought';
+		this.modData('Pokedex', 'umbreon').types = ['Dark', 'Poison'];
+		this.modData('Learnsets', 'aggron').learnset.shiftgear = ['6L1'];
+		this.modData('Pokedex', 'noivern').abilities['H'] = 'Drizzle';
+		this.modData('Pokedex', 'honchkrow').abilities['1'] = 'Tough Claws';
 	}
 };
