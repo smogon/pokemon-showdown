@@ -632,6 +632,160 @@ var commands = exports.commands = {
 
 		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
 	},
+	
+	nature: 'n',
+        n: function(target, room, user) {
+                if (!this.canBroadcast()) return;
+                target = target.toLowerCase();
+                target = target.trim();
+                var matched = false;
+                if (target === 'hardy') {
+                        matched = true;
+                        this.sendReplyBox('<b>Hardy</b>: <font color="blue"><b>Neutral</b></font>');
+                }
+                if (target === 'lonely' || target ==='+atk -def') {
+                        matched = true;
+                        this.sendReplyBox('<b>Lonely</b>: <font color="green"><b>Attack</b></font>, <font color="red"><b>Defense</b></font>');
+                }
+                if (target === 'brave' || target ==='+atk -spe') {
+                        matched = true;
+                        this.sendReplyBox('<b>Brave</b>: <font color="green"><b>Attack</b></font>, <font color="red"><b>Speed</b></font>');
+                }
+                if (target === 'adamant' || target === '+atk -spa') {
+                        matched = true;
+                        this.sendReplyBox('<b>Adamant</b>: <font color="green"><b>Attack</b></font>, <font color="red"><b>Special Attack</b></font>');
+                }
+                if (target === 'naughty' || target ==='+atk -spd') {
+                        matched = true;
+                        this.sendReplyBox('<b>Naughty</b>: <font color="green"><b>Attack</b></font>, <font color="red"><b>Special Defense</b></font>');
+                }
+                if (target === 'bold' || target ==='+def -atk') {
+                        matched = true;
+                        this.sendReplyBox('<b>Bold</b>: <font color="green"><b>Defense</b></font>, <font color="red"><b>Attack</b></font>');
+                }
+                if (target === 'docile') {
+                        matched = true;
+                        this.sendReplyBox('<b>Docile</b>: <font color="blue"><b>Neutral</b></font>');
+                }
+                if (target === 'relaxed' || target ==='+def -spe') {
+                        matched = true;
+                        this.sendReplyBox('<b>Relaxed</b>: <font color="green"><b>Defense</b></font>, <font color="red"><b>Speed</b></font>');
+                }
+                if (target === 'impish' || target ==='+def -spa') {
+                        matched = true;
+                        this.sendReplyBox('<b>Impish</b>: <font color="green"><b>Defense</b></font>, <font color="red"><b>Special Attack</b></font>');
+                }
+                if (target === 'lax' || target ==='+def -spd') {
+                        matched = true;
+                        this.sendReplyBox('<b>Lax</b>: <font color="green"><b>Defense</b></font>, <font color="red"><b>Special Defense</b></font>');
+                }
+                if (target === 'timid' || target ==='+spe -atk') {
+                        matched = true;
+                        this.sendReplyBox('<b>Timid</b>: <font color="green"><b>Speed</b></font>, <font color="red"><b>Attack</b></font>');
+                }
+                if (target ==='hasty' || target ==='+spe -def') {
+                        matched = true;
+                        this.sendReplyBox('<b>Hasty</b>: <font color="green"><b>Speed</b></font>, <font color="red"><b>Defense</b></font>');
+                }
+                if (target ==='serious') {
+                        matched = true;
+                        this.sendReplyBox('<b>Serious</b>: <font color="blue"><b>Neutral</b></font>');
+                }
+                if (target ==='jolly' || target ==='+spe -spa') {
+                        matched= true;
+                        this.sendReplyBox('<b>Jolly</b>: <font color="green"><b>Speed</b></font>, <font color="red"><b>Special Attack</b></font>');
+                }
+                if (target==='naive' || target ==='+spe -spd') {
+                        matched = true;
+                        this.sendReplyBox('<b>Naive</b>: <font color="green"><b>Speed</b></font>, <font color="red"><b>Special Defense</b></font>');
+                }
+                if (target==='modest' || target ==='+spa -atk') {
+                        matched = true;
+                        this.sendReplyBox('<b>Modest</b>: <font color="green"><b>Special Attack</b></font>, <font color="red"><b>Attack</b></font>');
+                }
+                if (target==='mild' || target ==='+spa -def') {
+                        matched = true;
+                        this.sendReplyBox('<b>Mild</b>: <font color="green"><b>Special Attack</b></font>, <font color="red"><b>Defense</b></font>');
+                }
+                if (target==='quiet' || target ==='+spa -spe') {
+                        matched = true;
+                        this.sendReplyBox('<b>Quiet</b>: <font color="green"><b>Special Attack</b></font>, <font color="red"><b>Speed</b></font>');
+                }
+                if (target==='bashful') {
+                        matched = true;
+                        this.sendReplyBox('<b>Bashful</b>: <font color="blue"><b>Neutral</b></font>');
+                }
+                if (target ==='rash' || target === '+spa -spd') {
+                        matched = true;
+                        this.sendReplyBox('<b>Rash</b>: <font color="green"><b>Special Attack</b></font>, <font color="red"><b>Special Defense</b></font>');
+                }
+                if (target==='calm' || target ==='+spd -atk') {
+                        matched = true;
+                        this.sendReplyBox('<b>Calm</b>: <font color="green"><b>Special Defense</b></font>, <font color="red"><b>Attack</b></font>');
+                }
+                if (target==='gentle' || target ==='+spd -def') {
+                        matched = true;
+                        this.sendReplyBox('<b>Gentle</b>: <font color="green"><b>Special Defense</b></font>, <font color="red"><b>Defense</b></font>');
+                }
+                if (target==='sassy' || target ==='+spd -spe') {
+                        matched = true;
+                        this.sendReplyBox('<b>Sassy</b>: <font color="green"><b>Special Defense</b></font>, <font color="red"><b>Speed</b></font>');
+                }
+                if (target==='careful' || target ==='+spd -spa') {
+                        matched = true;
+                        this.sendReplyBox('<b>Careful<b/>: <font color="green"><b>Special Defense</b></font>, <font color="red"><b>Special Attack</b></font>');
+                }
+                if (target==='quirky') {
+                        matched = true;
+                        this.sendReplyBox('<b>Quirky</b>: <font color="blue"><b>Neutral</b></font>');
+                }
+                if (target === 'plus attack' || target === '+atk') {
+                        matched = true;
+                        this.sendReplyBox("<b>+ Attack Natures: Lonely, Adamant, Naughty, Brave</b>");
+                }
+                if (target=== 'plus defense' || target === '+def') {
+                        matched = true;
+                        this.sendReplyBox("<b>+ Defense Natures: Bold, Impish, Lax, Relaxed</b>");
+                }
+                if (target === 'plus special attack' || target === '+spa') {
+                        matched = true;
+                        this.sendReplyBox("<b>+ Special Attack Natures: Modest, Mild, Rash, Quiet</b>");
+                }
+                if (target === 'plus special defense' || target === '+spd') {
+                        matched = true;
+                        this.sendReplyBox("<b>+ Special Defense Natures: Calm, Gentle, Careful, Sassy</b>");
+                }
+                if (target === 'plus speed' || target === '+spe') {
+                        matched = true;
+                        this.sendReplyBox("<b>+ Speed Natures: Timid, Hasty, Jolly, Naive</b>");
+                }
+                if (target === 'minus attack' || target==='-atk') {
+                        matched = true;
+                        this.sendReplyBox("<b>- Attack Natures: Bold, Modest, Calm, Timid</b>");
+                }
+                if (target === 'minus defense' || target === '-def') {
+                        matched = true;
+                        this.sendReplyBox("<b>-Defense Natures: Lonely, Mild, Gentle, Hasty</b>");
+                }
+                if (target === 'minus special attack' || target === '-spa') {
+                        matched = true;
+                        this.sendReplyBox("<b>-Special Attack Natures: Adamant, Impish, Careful, Jolly</b>");
+                }
+                if (target ==='minus special defense' || target === '-spd') {
+                        matched = true;
+                        this.sendReplyBox("<b>-Special Defense Natures: Naughty, Lax, Rash, Naive</b>");
+                }
+                if (target === 'minus speed' || target === '-spe') {
+                        matched = true;
+                        this.sendReplyBox("<b>-Speed Natures: Brave, Relaxed, Quiet, Sassy</b>");
+                }
+                if (!target) {
+                        this.sendReply('/nature [nature] OR /nature [+increase -decrease] - tells you the increase and decrease of that nature.');
+                }
+                if (!matched) {
+                        this.sendReply('Nature "'+target+'" not found. Check your spelling?');
+                }
+    	},
 
 	uptime: function (target, room, user) {
 		if (!this.canBroadcast()) return;
