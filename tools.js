@@ -103,6 +103,33 @@ module.exports = (function () {
 				}
 			});
 		}
+		data['Natures'] = {
+			adamant: {name: "Adamant", plus:'atk', minus:'spa'},
+			bashful: {name: "Bashful"},
+			bold: {name: "Bold", plus:'def', minus:'atk'},
+			brave: {name: "Brave", plus:'atk', minus:'spe'},
+			calm: {name: "Calm", plus:'spd', minus:'atk'},
+			careful: {name: "Careful", plus:'spd', minus:'spa'},
+			docile: {name: "Docile"},
+			gentle: {name: "Gentle", plus:'spd', minus:'def'},
+			hardy: {name: "Hardy"},
+			hasty: {name: "Hasty", plus:'spe', minus:'def'},
+			impish: {name: "Impish", plus:'def', minus:'spa'},
+			jolly: {name: "Jolly", plus:'spe', minus:'spa'},
+			lax: {name: "Lax", plus:'def', minus:'spd'},
+			lonely: {name: "Lonely", plus:'atk', minus:'def'},
+			mild: {name: "Mild", plus:'spa', minus:'def'},
+			modest: {name: "Modest", plus:'spa', minus:'atk'},
+			naive: {name: "Naive", plus:'spe', minus:'spd'},
+			naughty: {name: "Naughty", plus:'atk', minus:'spd'},
+			quiet: {name: "Quiet", plus:'spa', minus:'spe'},
+			quirky: {name: "Quirky"},
+			rash: {name: "Rash", plus:'spa', minus:'spd'},
+			relaxed: {name: "Relaxed", plus:'def', minus:'spe'},
+			sassy: {name: "Sassy", plus:'spd', minus:'spe'},
+			serious: {name: "Serious"},
+			timid: {name: "Timid", plus:'spe', minus:'atk'}
+		};
 	}
 
 	Tools.prototype.mod = function (mod) {
@@ -414,41 +441,26 @@ module.exports = (function () {
 		}
 		return type;
 	};
-	var BattleNatures = {
-		Adamant: {plus:'atk', minus:'spa'},
-		Bashful: {},
-		Bold: {plus:'def', minus:'atk'},
-		Brave: {plus:'atk', minus:'spe'},
-		Calm: {plus:'spd', minus:'atk'},
-		Careful: {plus:'spd', minus:'spa'},
-		Docile: {},
-		Gentle: {plus:'spd', minus:'def'},
-		Hardy: {},
-		Hasty: {plus:'spe', minus:'def'},
-		Impish: {plus:'def', minus:'spa'},
-		Jolly: {plus:'spe', minus:'spa'},
-		Lax: {plus:'def', minus:'spd'},
-		Lonely: {plus:'atk', minus:'def'},
-		Mild: {plus:'spa', minus:'def'},
-		Modest: {plus:'spa', minus:'atk'},
-		Naive: {plus:'spe', minus:'spd'},
-		Naughty: {plus:'atk', minus:'spd'},
-		Quiet: {plus:'spa', minus:'spe'},
-		Quirky: {},
-		Rash: {plus:'spa', minus:'spd'},
-		Relaxed: {plus:'def', minus:'spe'},
-		Sassy: {plus:'spd', minus:'spe'},
-		Serious: {},
-		Timid: {plus:'spe', minus:'atk'}
-	};
 	Tools.prototype.getNature = function (nature) {
-		if (typeof nature === 'string') nature = BattleNatures[nature];
-		if (!nature) nature = {};
+		if (!nature || typeof nature === 'string') {
+			var name = (nature || '').trim();
+			var id = toId(name);
+			nature = {};
+			if (id && this.data.Natures[id]) {
+				nature = this.data.Natures[id];
+				if (nature.cached) return nature;
+				nature.cached = true;
+				nature.exists = true;
+			}
+			if (!nature.id) nature.id = id;
+			if (!nature.name) nature.name = name;
+			nature.toString = this.effectToString;
+			if (!nature.effectType) nature.effectType = 'Nature';
+		}
 		return nature;
 	};
 	Tools.prototype.natureModify = function (stats, nature) {
-		if (typeof nature === 'string') nature = BattleNatures[nature];
-		if (!nature) return stats;
+		nature = this.getNature(nature);
 		if (nature.plus) stats[nature.plus] *= 1.1;
 		if (nature.minus) stats[nature.minus] *= 0.9;
 		return stats;
