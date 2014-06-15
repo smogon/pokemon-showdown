@@ -136,7 +136,7 @@ Major changes:
 
 - Twister is now a 80 base power Flying move with a 30% confusion chance
 
-- Diancie is released
+- Diancie and Volcanion are released
 
 New mechanic: Signature Pokemon:
 
@@ -194,6 +194,8 @@ New mechanic: Signature Pokemon:
   - Masquerain: Surf (10% -1 Spe)
 
   - Snorlax: Snore (100 base power)
+  
+  - Persian: Slash (60 base power 30% -1 Def)
 
 - Again, note that while the Signature Pokemon will get the 1.5x damage boost,
   all Pokemon will get the other changes to the move listed above.
@@ -248,7 +250,7 @@ Minor move changes:
 - Rock Throw and Rapid Spin remove hazards before fainting from Rocky
   Helmet etc
 
-- all moves' accuracy is rounded up to the nearest multiple of 10%
+- All moves' accuracy is rounded up to the nearest multiple of 10%
   (except Jump Kick, which will be rebalanced later)
 
 - Charge Beam and Rock Slide are now 100% accurate
@@ -371,7 +373,7 @@ Minor learnset changes:
   - Rotom-Heat: Heat Wave
   - Rotom-Mow: Magical Leaf
 
-- Starters get new abilities
+- Starters get a new ability option
   - Venusaur: Leaf Guard
   - Charizard: Flash Fire
   - Blastoise: Shell Armor
@@ -387,6 +389,9 @@ Minor learnset changes:
   - Serperior: Own Tempo
   - Emboar: Sheer Force
   - Samurott: Technician
+  - Chesnaught: Battle Armor
+  - Delphox: Magic Guard
+  - Greninja: Pickpocket
 
 Minor ability changes:
 
@@ -438,8 +443,8 @@ Minor ability changes:
   or is Protected against), and will heal the user by 33% during its Truant
   turn
 
-- Clear Body prevents all stat lowering (relevant: the Regis' Superpower and
-  Metagross' Hammer Arm)
+- Clear Body and White Smoke prevents all stat lowering (relevant: the Regis' 
+  Superpower, Metagross' Hammer Arm, and Torkoal's Overheat)
 
 - Thick Fat grants half damage from Fighting
 
