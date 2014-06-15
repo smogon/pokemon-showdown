@@ -104,31 +104,31 @@ module.exports = (function () {
 			});
 		}
 		data['Natures'] = {
-			adamant: {name: "Adamant", plus:'atk', minus:'spa'},
-			bashful: {name: "Bashful"},
-			bold: {name: "Bold", plus:'def', minus:'atk'},
-			brave: {name: "Brave", plus:'atk', minus:'spe'},
-			calm: {name: "Calm", plus:'spd', minus:'atk'},
-			careful: {name: "Careful", plus:'spd', minus:'spa'},
-			docile: {name: "Docile"},
-			gentle: {name: "Gentle", plus:'spd', minus:'def'},
-			hardy: {name: "Hardy"},
-			hasty: {name: "Hasty", plus:'spe', minus:'def'},
-			impish: {name: "Impish", plus:'def', minus:'spa'},
-			jolly: {name: "Jolly", plus:'spe', minus:'spa'},
-			lax: {name: "Lax", plus:'def', minus:'spd'},
-			lonely: {name: "Lonely", plus:'atk', minus:'def'},
-			mild: {name: "Mild", plus:'spa', minus:'def'},
-			modest: {name: "Modest", plus:'spa', minus:'atk'},
-			naive: {name: "Naive", plus:'spe', minus:'spd'},
-			naughty: {name: "Naughty", plus:'atk', minus:'spd'},
-			quiet: {name: "Quiet", plus:'spa', minus:'spe'},
-			quirky: {name: "Quirky"},
-			rash: {name: "Rash", plus:'spa', minus:'spd'},
-			relaxed: {name: "Relaxed", plus:'def', minus:'spe'},
-			sassy: {name: "Sassy", plus:'spd', minus:'spe'},
-			serious: {name: "Serious"},
-			timid: {name: "Timid", plus:'spe', minus:'atk'}
+			adamant: {name:"Adamant", plus:'atk', minus:'spa'},
+			bashful: {name:"Bashful"},
+			bold: {name:"Bold", plus:'def', minus:'atk'},
+			brave: {name:"Brave", plus:'atk', minus:'spe'},
+			calm: {name:"Calm", plus:'spd', minus:'atk'},
+			careful: {name:"Careful", plus:'spd', minus:'spa'},
+			docile: {name:"Docile"},
+			gentle: {name:"Gentle", plus:'spd', minus:'def'},
+			hardy: {name:"Hardy"},
+			hasty: {name:"Hasty", plus:'spe', minus:'def'},
+			impish: {name:"Impish", plus:'def', minus:'spa'},
+			jolly: {name:"Jolly", plus:'spe', minus:'spa'},
+			lax: {name:"Lax", plus:'def', minus:'spd'},
+			lonely: {name:"Lonely", plus:'atk', minus:'def'},
+			mild: {name:"Mild", plus:'spa', minus:'def'},
+			modest: {name:"Modest", plus:'spa', minus:'atk'},
+			naive: {name:"Naive", plus:'spe', minus:'spd'},
+			naughty: {name:"Naughty", plus:'atk', minus:'spd'},
+			quiet: {name:"Quiet", plus:'spa', minus:'spe'},
+			quirky: {name:"Quirky"},
+			rash: {name:"Rash", plus:'spa', minus:'spd'},
+			relaxed: {name:"Relaxed", plus:'def', minus:'spe'},
+			sassy: {name:"Sassy", plus:'spd', minus:'spe'},
+			serious: {name:"Serious"},
+			timid: {name:"Timid", plus:'spe', minus:'atk'}
 		};
 	}
 
@@ -590,18 +590,16 @@ module.exports = (function () {
 			return false;
 		}
 
-		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items'];
+		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items', 'Natures'];
 
-		var searchFunctions = { Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem' };
-		var searchTypes = { Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item' };
+		var searchFunctions = {Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature'};
+		var searchTypes = {Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature'};
 		var searchResults = [];
 		for (var i = 0; i < searchIn.length; i++) {
-			if (typeof this[searchFunctions[searchIn[i]]] === "function") {
-				var res = this[searchFunctions[searchIn[i]]](target);
-				if (res.exists) {
-					res.searchType = searchTypes[searchIn[i]];
-					searchResults.push(res);
-				}
+			var res = this[searchFunctions[searchIn[i]]](target);
+			if (res.exists) {
+				res.searchType = searchTypes[searchIn[i]];
+				searchResults.push(res);
 			}
 		}
 		if (searchResults.length) {
