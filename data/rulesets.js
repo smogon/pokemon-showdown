@@ -418,7 +418,7 @@ exports.BattleFormats = {
 		name: 'Endless Battle Clause',
 		banlist: ['Leppa Berry + Recycle', 'Harvest + Leppa Berry', 'Shadow Tag + Leppa Berry + Trick'],
 		onStart: function () {
-			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned.');
+			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned');
 		}
 	},
 	moodyclause: {
@@ -427,6 +427,25 @@ exports.BattleFormats = {
 		banlist: ['Moody'],
 		onStart: function () {
 			this.add('rule', 'Moody Clause: Moody is banned');
+		}
+	},
+	batonpassclause: {
+		effectType: 'Banlist',
+		name: 'Baton Pass Clause',
+		onStart: function () {
+			this.add('rule', 'Baton Pass Clause: Limit 3 pokemon knowing Baton Pass');
+		},
+		validateTeam: function (team, format) {
+			var problems = [];
+			var BPcount = 0;
+			for (var i = 0, l = team.length; i < l; i++) {
+				if (team[i].moves.indexOf('Baton Pass') > -1) BPcount++;
+				if (BPcount > 3) {
+					problems.push("You are limited to 3 pokemon with the move Baton Pass by the Baton Pass Clause.");
+					break;
+				}
+			}
+			return problems;
 		}
 	},
 	hppercentagemod: {
