@@ -201,11 +201,21 @@ var Validator = (function () {
 			}
 			return ["You sent invalid team data. If you're not using a custom client, please report this as a bug."];
 		}
-		if (!team.length) {
-			return ["Your team has no pokemon."];
-		}
 		if (team.length > 6) {
 			return ["Your team has more than 6 pokemon."];
+		}
+		switch (format.gameType) {
+			case 'doubles':
+				if (team.length < 2) return ["Your Doubles team needs at least 2 pokemon."];
+				break;
+			case 'triples':
+				if (team.length < 3) return ["Your Triples team needs at least 3 pokemon."];
+				break;
+			case 'rotation':
+				if (team.length < 3) return ["Your Rotation team needs at least 3 pokemon."];
+				break;
+			default:
+				if (team.length < 1) return ["Your team has no pokemon."];
 		}
 		var teamHas = {};
 		for (var i = 0; i < team.length; i++) {
