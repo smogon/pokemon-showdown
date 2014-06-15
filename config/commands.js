@@ -259,12 +259,22 @@ var commands = exports.commands = {
 		if (newTargets && newTargets.length) {
 			for (var i = 0; i < newTargets.length; ++i) {
 				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
-					data = "No Pokemon, item, move or ability named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
+					data = "No Pokemon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
 				}
-				data += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+				if (newTargets[i].searchType === 'nature') {
+					data += "" + newTargets[i].name + " nature: ";
+					if (newTargets[i].plus) {
+						var statNames = {'atk': "Attack", 'def': "Defense", 'spa': "Special Attack", 'spd': "Special Defense", 'spe': "Speed"};
+						data += "+10% " + statNames[newTargets[i].plus] + ", -10% " + statNames[newTargets[i].minus] + ".";
+					} else {
+						data += "No effect.";
+					}
+				} else {
+					data += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+				}
 			}
 		} else {
-			data = "No Pokemon, item, move or ability named '" + target + "' was found. (Check your spelling?)";
+			data = "No Pokemon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)";
 		}
 
 		this.sendReply(data);
