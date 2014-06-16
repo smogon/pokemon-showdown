@@ -3157,7 +3157,7 @@ var Battle = (function () {
 	};
 	Battle.prototype.willAct = function () {
 		for (var i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') {
+			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'shift') {	
 				return this.queue[i];
 			}
 		}
@@ -3320,6 +3320,11 @@ var Battle = (function () {
 				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
 				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
 			}
+			break;
+		case 'shift':
+			if (!decision.pokemon.isActive) return false;
+			if (decision.pokemon.fainted) return false;
+			this.swapPosition(decision.pokemon, 1);
 			break;
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');
@@ -3533,8 +3538,9 @@ var Battle = (function () {
 					});
 					continue;
 				}
-				if (choice !== 'move' && choice !== 'switch') {
+				if (choice !== 'move' && choice !== 'switch' && choice !== 'shift') {
 					if (i === 0) return false;
+					// fallback
 					choice = 'move';
 					data = '1';
 				}
@@ -3613,6 +3619,23 @@ var Battle = (function () {
 					priority: (side.currentRequest === 'switch' ? 101 : undefined),
 					pokemon: side.pokemon[i],
 					target: side.pokemon[data]
+				});
+				break;
+
+			case 'shift':
+				if (i > side.active.length || i > side.pokemon.length) continue;
+				if (this.gameType !== 'triples') {
+					this.debug("Can't shift: You can't shift a pokemon to the center except in a triple battle");
+					return false;
+				}
+				if (i === 1) {
+					this.debug("Can't shift: You can't shift a pokemon to its own position");
+					return false;
+				}
+
+				decisions.push({
+					choice: 'shift',
+					pokemon: side.pokemon[i]
 				});
 				break;
 
