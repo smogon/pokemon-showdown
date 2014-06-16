@@ -153,7 +153,13 @@ exports.BattleScripts = {
 				// if a targeted foe faints, the move is retargeted
 				target = this.resolveTarget(pokemon, move);
 			}
-			if (target.fainted) {
+			var lacksTarget = target.fainted;
+			if (!lacksTarget) {
+				if (move.target === 'adjacentFoe' || move.target === 'adjacentAlly' || move.target === 'normal' || move.target === 'randomNormal') {
+					lacksTarget = !this.isAdjacent(target, pokemon);
+				}
+			}
+			if (lacksTarget) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
 				return true;

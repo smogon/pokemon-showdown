@@ -3017,16 +3017,26 @@ var Battle = (function () {
 		// when used without an explicit target.
 
 		move = this.getMove(move);
-		if (move.target === 'adjacentAlly' && pokemon.side.active.length > 1) {
-			if (pokemon.side.active[pokemon.position - 1]) {
-				return pokemon.side.active[pokemon.position - 1];
-			}
-			else if (pokemon.side.active[pokemon.position + 1]) {
-				return pokemon.side.active[pokemon.position + 1];
-			}
-		}
-		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' || move.target === 'allyTeam' || move.target === 'adjacentAlly' || move.target === 'adjacentAllyOrSelf') {
+		if (move.target === 'adjacentAlly') {
+			var adjacentAllies = [pokemon.side.active[pokemon.position - 1], pokemon.side.active[pokemon.position + 1]].filter(function (active) {
+				return active && !active.fainted;
+			});
+			if (adjacentAllies.length) return adjacentAllies[Math.floor(Math.random() * adjacentAllies.length)];
 			return pokemon;
+		}
+		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' || move.target === 'allyTeam' || move.target === 'adjacentAllyOrSelf') {
+			return pokemon;
+		}
+		if (pokemon.side.active.length > 2) {
+			if (move.target === 'adjacentFoe' || move.target === 'normal' || move.target === 'randomNormal') {
+				var foeActives = pokemon.side.foe.active;
+				var frontPosition = foeActives.length - 1 - pokemon.position;
+				var adjacentFoes = foeActives.slice(frontPosition < 1 ? 0 : frontPosition - 1, frontPosition + 2).filter(function (active) {
+					return active && !active.fainted;
+				});
+				if (adjacentFoes.length) return adjacentFoes[Math.floor(Math.random() * adjacentFoes.length)];
+				// no valid target at all, return a foe for any possible redirection
+			}
 		}
 		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
 	};
