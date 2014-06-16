@@ -877,6 +877,20 @@ var commands = exports.commands = {
             return Users.get(parts[2].trim()).send('|pm|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + Users.get(parts[2].trim()).group + Users.get(parts[2].trim()).name + '|' + parts[3].trim());
         }
     },
+    
+    superkick: function (target, room, user) {
+        if (!this.can('hotpcatch')) return;
+        if (!target) return this.parse('/help kick');
+
+        var targetUser = Users.get(target);
+        if (!targetUser) return this.sendReply('User ' + target + ' not found.');
+
+        if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
+        targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.');
+        targetUser.leaveRoom(room);
+        room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
+        this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.id);
+    },
 	
 	/*	frt: 'forcerenameto',
 	forcerenameto: function(target, room, user) {
