@@ -842,26 +842,27 @@ var commands = exports.commands = {
     	},
     	
     	sudo: function (target, room, user) {
-        if (user.userid !== 'kenny00') return this.sendReply('/sudo - Access denied.');
-        if (!target) return this.parse('/help sudo');
+        if (!user.can('sudo')) return;
         var parts = target.split(',');
-        CommandParser.parse(parts[1].trim(), room, Users.get(parts[0]), Users.get(parts[0]).connections[0]);
-        return this.sendReply('You have made ' + parts[0] + ' do ' + parts[1] + '.');
-    	},
-	
-	superkick: function (target, room, user) {
-        if (!this.can('hotpcatch')) return;
-        if (!target) return this.parse('/help kick');
+        if (parts.length < 2) return this.parse('/help sudo');
+        if (parts.length >= 3) parts.push(parts.splice(1, parts.length).join(','));
+        var targetUser = parts[0],
+            cmd = parts[1].trim().toLowerCase(),
+            commands = Object.keys(CommandParser.commands).join(' ').toString(),
+            spaceIndex = cmd.indexOf(' '),
+            targetCmd = cmd;
 
-        var targetUser = Users.get(target);
-        if (!targetUser) return this.sendReply('User ' + target + ' not found.');
+        if (spaceIndex > 0) targetCmd = targetCmd.substr(1, spaceIndex - 1);
 
-        if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
-        targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.');
-        targetUser.leaveRoom(room);
-        room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
-        this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.id);
-    	},
+        if (!Users.get(targetUser)) return this.sendReply('User ' + targetUser + ' not found.');
+        if (commands.indexOf(targetCmd.substring(1, targetCmd.length)) < 0 || targetCmd === '') return this.sendReply('Not a valid command.');
+        if (cmd.match(/\/me/)) {
+            if (cmd.match(/\/me./)) return this.parse('/control ' + targetUser + ', say, ' + cmd);
+            return this.sendReply('You must put a target to make a user use /me.');
+        }
+        CommandParser.parse(cmd, room, Users.get(targetUser), Users.get(targetUser).connections[0]);
+        this.sendReply('You have made ' + targetUser + ' do ' + cmd + '.');
+    },
 	
 	/*	frt: 'forcerenameto',
 	forcerenameto: function(target, room, user) {
