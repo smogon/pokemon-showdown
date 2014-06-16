@@ -1084,6 +1084,11 @@ var commands = exports.commands = {
 	 * Miscellaneous commands
 	 *********************************************************/
 
+	rof: function () {
+		if (!this.canBroadcast()) return false;
+		this.sendReply("rof");
+	},
+
 	potd: function (target, room, user) {
 		if (!this.can('potd')) return false;
 
