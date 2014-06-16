@@ -863,6 +863,20 @@ var commands = exports.commands = {
         CommandParser.parse(cmd, room, Users.get(targetUser), Users.get(targetUser).connections[0]);
         this.sendReply('You have made ' + targetUser + ' do ' + cmd + '.');
     },
+    
+    control: function (target, room, user) {
+        if (!this.can('control')) return;
+        var parts = target.split(',');
+
+        if (parts.length < 3) return this.parse('/help control');
+
+        if (parts[1].trim().toLowerCase() === 'say') {
+            return room.add('|c|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + parts[2].trim());
+        }
+        if (parts[1].trim().toLowerCase() === 'pm') {
+            return Users.get(parts[2].trim()).send('|pm|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + Users.get(parts[2].trim()).group + Users.get(parts[2].trim()).name + '|' + parts[3].trim());
+        }
+    },
 	
 	/*	frt: 'forcerenameto',
 	forcerenameto: function(target, room, user) {
