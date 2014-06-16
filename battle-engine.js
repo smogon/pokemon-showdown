@@ -2240,29 +2240,21 @@ var Battle = (function () {
 
 		switch (type) {
 		case 'switch':
-			var switchablesLeft = 0;
-			var switchTable = null;
-			function canSwitch(a) {
-				return !a.fainted;
+			var switchTable = [];
+			var active;
+			for (var i=0, l=this.p1.active.length; i<l; i++) {
+				active = this.p1.active[i];
+				switchTable.push(!!(active && active.switchFlag));
 			}
-			function shouldSwitch(a) {
-				if (!a) return false;
-				if (!switchablesLeft) {
-					a.switchFlag = false;
-					return false;
-				}
-				if (a.switchFlag) switchablesLeft--;
-				return !!a.switchFlag;
-			}
-
-			switchablesLeft = this.p1.pokemon.slice(this.p1.active.length).count(canSwitch);
-			switchTable = this.p1.active.map(shouldSwitch);
 			if (switchTable.any(true)) {
 				this.p1.currentRequest = 'switch';
 				p1request = {forceSwitch: switchTable, side: this.p1.getData(), rqid: this.rqid};
 			}
-			switchablesLeft = this.p2.pokemon.slice(this.p2.active.length).count(canSwitch);
-			switchTable = this.p2.active.map(shouldSwitch);
+			switchTable = [];
+			for (var i=0, l=this.p2.active.length; i<l; i++) {
+				active = this.p2.active[i];
+				switchTable.push(!!(active && active.switchFlag));
+			}
 			if (switchTable.any(true)) {
 				this.p2.currentRequest = 'switch';
 				p2request = {forceSwitch: switchTable, side: this.p2.getData(), rqid: this.rqid};
@@ -3091,7 +3083,6 @@ var Battle = (function () {
 				}
 				return;
 			}
-			if (decision.choice === 'pass') return;
 			if (!decision.side && side) decision.side = side;
 			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
 			if (!decision.choice && decision.move) decision.choice = 'move';
@@ -3291,6 +3282,12 @@ var Battle = (function () {
 			return;
 			// we return here because the update event would crash since there are no active pokemon yet
 			break;
+		case 'pass':
+			if (!decision.priority || decision.priority <= 101) return;
+			if (decision.pokemon) {
+				decision.pokemon.switchFlag = false;
+			}
+			break;
 		case 'switch':
 			if (decision.pokemon) {
 				decision.pokemon.beingCalledBack = true;
@@ -3370,7 +3367,12 @@ var Battle = (function () {
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (!this.queue.length) this.checkFainted();
+		if (!this.queue.length) {
+			this.checkFainted();
+		} else if (decision.choice === 'pass') {
+			this.eachEvent('Update');
+			return false;
+		}
 
 		function hasSwitchFlag(a) { return a ? a.switchFlag : false; }
 		function removeSwitchFlag(a) { if (a) a.switchFlag = false; }
@@ -3529,6 +3531,13 @@ var Battle = (function () {
 		var decisions = [];
 		var len = choices.length;
 		if (side.currentRequest === 'move') len = side.active.length;
+
+		var freeSwitchCount = {'switch':0, 'pass':0};
+		if (side.currentRequest === 'switch') {
+			var canSwitch = side.active.filter(function (mon) {return mon && mon.switchFlag;}).length;
+			freeSwitchCount['switch'] = Math.min(canSwitch, side.pokemon.slice(side.active.length).filter(function (mon) {return !mon.fainted;}).length);
+			freeSwitchCount['pass'] = canSwitch - freeSwitchCount['switch'];
+		}
 		for (var i = 0; i < len; i++) {
 			var choice = (choices[i] || '').trim();
 
@@ -3567,7 +3576,8 @@ var Battle = (function () {
 					});
 					continue;
 				}
-				if (choice !== 'switch') return false;
+				if (choice !== 'switch' && choice !== 'pass') return false;
+				freeSwitchCount[choice]--;
 				break;
 			default:
 				return false;
@@ -3702,8 +3712,22 @@ var Battle = (function () {
 					move: moveid
 				});
 				break;
+
+			case 'pass':
+				if (i > side.active.length || i > side.pokemon.length) continue;
+				if (side.currentRequest !== 'switch') {
+					this.debug("No se pudo pasar el turno.");
+					return false;
+				}
+				decisions.push({
+					choice: 'pass',
+					priority: 102,
+					pokemon: side.active[i]
+				});
 			}
 		}
+		if (freeSwitchCount['switch'] !== 0 || freeSwitchCount['pass'] !== 0) return false;
+
 		return decisions;
 	};
 	Battle.prototype.add = function () {
