@@ -3594,8 +3594,8 @@ var Battle = (function () {
 					this.debug("Can't switch: You can't switch to yourself");
 					return false;
 				}
-				if (this.battleType !== 'triples' && data < side.active.length) {
-					this.debug("Can't switch: You can't switch to an active pokemon except in triples");
+				if (data < side.active.length) {
+					this.debug("Can't switch: You can't switch to an active pokemon");
 					return false;
 				}
 				if (side.pokemon[data].fainted) {
