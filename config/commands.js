@@ -278,6 +278,26 @@ var commands = exports.commands = {
 		}
 
 		this.sendReply(data);
+		},
+	dt: 'details',
+	details: function (target, room, user) {
+		if (!target) return this.sendReply('Specify pokemon');
+		if (!this.canBroadcast()) return;
+
+		var details = '';
+		var targets = target.split(',');
+		var pokemon = Tools.getTemplate(target);
+		if (pokemon.exists) {
+			var newTargets = Tools.dataSearch(target);
+			for (var i = 0; i < newTargets.length; ++i) {
+				if (newTargets && newTargets.length) {
+					details += '|c|~|/details-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+				}
+			}
+		} else {
+			return this.sendReply("Pokemon '" + target + "' not found.");
+		}
+		this.sendReply(details);
 	},
 
 	ds: 'dexsearch',
@@ -1221,6 +1241,11 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability.");
 			this.sendReply("!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ & ~");
+		}
+		if (target === 'all' || target === 'details') {
+			matched = true;
+			this.sendReply("/details [pokemon] - Get additional details on this pokemon.");
+			this.sendReply("!details [pokemon] - Show everyone these details. Requires: + % @ & ~");
 		}
 		if (target === 'all' || target === 'analysis') {
 			matched = true;
