@@ -131,8 +131,10 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			},
 			privateModCommand: function (data) {
 				for (var i in room.users) {
-					if (room.users[i].isStaff) {
-						room.users[i].sendTo(room, data);
+					var user = room.users[i];
+					// hardcoded for performance reasonss (this is an inner loop)
+					if (user.isStaff || (room.auth && (room.auth[user.userid] || '+') !== '+')) {
+						user.sendTo(room, data);
 					}
 				}
 				this.logEntry(data);
