@@ -145,7 +145,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move.category === 'Status') {
-					if (move.notSubBlocked) {
+					if (move.notSubBlocked || move.isSoundBased) {
 						return;
 					}
 					var SubBlocked = {
@@ -290,12 +290,19 @@ exports.BattleMovedex = {
 		onTryHit: function (target) {
 			target.removeVolatile('substitute');
 		},
-		effect: {
-			duration: 2,
-			onLockMove: 'skullbash',
-			onStart: function (pokemon) {
-				this.boost({def:1, spd:1, accuracy:1}, pokemon, pokemon, this.getMove('skullbash'));
+				onTry: function (attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
 			}
+			this.add('-prepare', attacker, move.name, defender);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				this.add('-anim', attacker, move.name, defender);
+				attacker.removeVolatile(move.id);
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			this.boost({def:1, spd:1, accuracy:1}, attacker, attacker, this.getMove('skullbash'));
+			return null;
 		},
 		breaksProtect: true
 	},
