@@ -651,11 +651,11 @@ var commands = exports.commands = {
 	groups: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"  <b>Peasant</b> - They support Parukia by acting as our regular users, those who are mandatory for success<br />" +
+			"  <b>Peasant</b> - They support Parukia by acting as our regular users, those mandatory for succcess<br />" +
 			"+ <b>Voice (Semi-Peasant)</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
 			"% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />" +
 			"@ <b>Moderator</b> - The above, and they can ban users<br />" +
-			"&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />" +
+			"&amp; <b>Leader</b> - The above, and they can promote to moderator, force ties and set the PoTD<br />" +
 			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br />" +
 			"~ <b>Administrator</b> - They can do anything, like change what this message says"
 		);
