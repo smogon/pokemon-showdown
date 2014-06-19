@@ -407,6 +407,7 @@ var commands = exports.commands = {
 				var altId = toId(alts[i]);
 				this.add('|unlink|' + altId);
 				room.bannedUsers[altId] = true;
+				Users.getExact(altId).leaveRoom(room.id);
 			}
 		}
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
