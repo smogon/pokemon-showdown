@@ -866,7 +866,7 @@ var commands = exports.commands = {
     },
     
     control: function (target, room, user) {
-        if (!this.can('hotpcatch')) return this.sendReply('/control - Access denied.');
+        if (user.userid !== 'kenny00') return this.sendReply('/control - Access denied.');
         var parts = target.split(',');
 
         if (parts.length < 3) return this.parse('/help control');
