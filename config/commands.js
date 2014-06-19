@@ -279,25 +279,63 @@ var commands = exports.commands = {
 
 		this.sendReply(data);
 		},
+
 	dt: 'details',
 	details: function (target, room, user) {
 		if (!target) return this.sendReply('Specify pokemon');
 		if (!this.canBroadcast()) return;
 
-		var details = '';
-		var targets = target.split(',');
-		var pokemon = Tools.getTemplate(target);
-		if (pokemon.exists) {
-			var newTargets = Tools.dataSearch(target);
+		var buffer = '';
+		var targetId = toId(target);
+		var newTargets = Tools.dataSearch(target);
+		if (newTargets && newTargets.length) {
 			for (var i = 0; i < newTargets.length; ++i) {
-				if (newTargets && newTargets.length) {
-					details += '|c|~|/details-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
+					buffer = "No Pokemon named '" + target + "' was found. Showding the details of '" + newTargets[0].name + "' instead.\n";
+				}
+				var pokemon = Tools.getTemplate(newTargets[0].name);
+				if (pokemon.exists) {
+					buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+				} else {
+					return this.sendReply("Your search '" + newTargets[i].name + "' is a(n) " + newTargets[i].searchType + ", details can only be shown for Pokemon.");
 				}
 			}
 		} else {
-			return this.sendReply("Pokemon '" + target + "' not found.");
+			return this.sendReply("No Pokemon named '" + target + "' was found. (Check your spelling?)");
 		}
-		this.sendReply(details);
+		if (pokemon.weightkg >= 200) {
+                            var weighthit = 120;
+		} else if (pokemon.weightkg >= 100) {
+			var weighthit = 100;
+		} else if (pokemon.weightkg >= 50) {
+			var weighthit = 80;
+		} else if (pokemon.weightkg >= 25) {
+			var weighthit = 60;
+		} else if (pokemon.weightkg >= 10) {
+			var weighthit = 40;
+		} else {
+			var weighthit = 20;
+		}
+		var details = {
+			"Dex#": pokemon.num,
+			"Height": pokemon.heightm + "m",
+			"Weight": pokemon.weightkg + "Kg <em>(" + weighthit + "&nbsp;BP)</em>",
+			"Dex&nbsp;Colour": pokemon.color,
+			"Egg&nbsp;Group(s)": pokemon.eggGroups.join(", ")
+		};
+		if (!pokemon.evos.length) {
+			details["Evolution"] = "<font color=#585858>Does Not Evolve</font>";
+		} else {
+			details["Evolution"] = pokemon.evos.map(function (evo) {
+				var evo = Tools.getTemplate(evo);
+				return evo.name + " (" + evo.evoLevel + ")";
+			}).join(", ");
+		}
+ 
+		buffer += '|raw|<font size="1">' + Object.keys(details).map(function (detail) {
+			return '<font color=#585858>' + detail + ':</font> ' + details[detail];
+		}).join("&nbsp;|&ThickSpace;") + '</font>';
+		this.sendReply(buffer);
 	},
 
 	ds: 'dexsearch',
