@@ -291,7 +291,7 @@ var commands = exports.commands = {
 		if (newTargets && newTargets.length) {
 			for (var i = 0; i < newTargets.length; ++i) {
 				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
-					buffer = "No Pokemon named '" + target + "' was found. Showding the details of '" + newTargets[0].name + "' instead.\n";
+					buffer = "No Pokemon named '" + target + "' was found. Showing the details of '" + newTargets[0].name + "' instead.\n";
 				}
 				var pokemon = Tools.getTemplate(newTargets[0].name);
 				if (pokemon.exists) {
