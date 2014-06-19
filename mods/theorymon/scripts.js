@@ -5,19 +5,18 @@
 exports.BattleScripts = {
 	gen: 6,
 	init: function () {
-		// March theorymons
-		this.modData('Pokedex', 'gourgeist').abilities['0'] = 'Flash Fire';
-		this.modData('Pokedex', 'snorlax').abilities['0'] = 'Poison Heal';
-		this.modData('Pokedex', 'drapion').abilities['1'] = 'Tough Claws';
-		this.modData('Pokedex', 'milotic').types = ['Water', 'Fairy'];
-		this.modData('Pokedex', 'registeel').abilities['0'] = 'Regenerator';
+		// May
+		this.modData('Learnsets', 'braviary').learnset.extremespeed = ['6L1'];
+		this.modData('Pokedex', 'tangrowth').types = ['Grass', 'Poison'];
+		this.modData('Learnsets', 'blastoise').learnset.slackoff = ['6L1'];
+		this.modData('Learnsets', 'hydreigon').learnset.defog = ['6L1'];
+		this.modData('Pokedex', 'zygarde').abilities['1'] = 'Shed Skin';
 
-		// April theorymons
-		this.modData('Pokedex', 'eelektross').types = ['Electric', 'Poison'];
-		this.modData('Pokedex', 'escavalier').abilities['1'] = 'Dry Skin';
-		this.modData('Pokedex', 'luxray').types = ['Electric', 'Dark'];
-		this.modData('Pokedex', 'salamence').abilities['1'] = 'Gale Wings';
-		this.modData('Pokedex', 'kyurem').abilities['1'] = 'Snow Warning';
-		this.modData('Pokedex', 'togekiss').abilities['0'] = 'Thick Fat';
+		// June
+		this.modData('Pokedex', 'torterra').abilities['1'] = 'Drought';
+		this.modData('Pokedex', 'umbreon').types = ['Dark', 'Poison'];
+		this.modData('Learnsets', 'aggron').learnset.shiftgear = ['6L1'];
+		this.modData('Pokedex', 'noivern').abilities['H'] = 'Drizzle';
+		this.modData('Pokedex', 'honchkrow').abilities['1'] = 'Tough Claws';
 	}
 };
