@@ -305,11 +305,11 @@ var commands = exports.commands = {
 					"Egg Group(s)": pokemon.eggGroups.join(", ")
 				};
 				if (!pokemon.evos.length) {
-					details["Evolution"] = "Does Not Evolve";
+					details["Evolution"] = "<font color=#585858>Does Not Evolve</font>";
 				} else {
 					details["Evolution"] = pokemon.evos.map(function (evo) {
-					var evo = Tools.getTemplate(evo);
-					return evo.name + " (" + evo.evoLevel + ")";
+						var evo = Tools.getTemplate(evo);
+						return evo.name + " (" + evo.evoLevel + ")";
 					}).join(", ");
 				}
 
@@ -318,23 +318,21 @@ var commands = exports.commands = {
 				var details = {
 					"Priority": move.priority,
 				};
-				if (move.secondary) {
-					details["Secondary effect"] = "Yes";
-				} else {
-					details["Secondary effect"] = "No";
-				if (move.isContact) {
-					details["Makes contact"] = "Yes";
-				} else {
-					details["Makes contact"] = "No";
+				
+				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";	
+				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
 
-				if (move.target === 'normal') { details["Target"] = "Adjacent Pokemon";}
-				if (move.target === 'self') { details["Target"] = "Self";}
-				if (move.target === 'adjacentAlly') { details["Target"] = "Single Ally";}
-				if (move.target === 'allAdjacentFoes') { details["Target"] = "Adjacent Foes";}
-				if (move.target === 'foeSide') { details["Target"] = "All Foes";}
-				if (move.target === 'allySide') { details["Target"] = "All Allies";}
-				if (move.target === 'allAdjacent') { details["Target"] = "All Adjacent Pokemon";}
-				if (move.target === 'all') { details["Target"] = "All Pokemon";}
+				details["Target"] = {
+					'normal': "Adjacent Pokemon",
+					'self': "Self",
+					'adjacentAlly': "Single Ally",
+					'allAdjacentFoes': "Adjacent Foes",
+					'foeSide': "All Foes",
+					'allySide': "All Allies",
+					'allAdjacent': "All Adjacent Pokemon",
+					'any': "Any Pokemon",
+					'all': "All Pokemon"
+				}[move.target] || "Unknown";
 
 			} else if (newTargets[0].searchType === 'item') {
 				var item = Tools.getItem(newTargets[0].name);
@@ -344,13 +342,13 @@ var commands = exports.commands = {
 					if (item.fling.status) details["Fling Effect"] = item.fling.status;
 					if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
 					if (item.isBerry) details["Fling Effect"] = "Activates effect of berry on target.";
-					if (item.id === 'whiteherb')  details["Fling Effect"] = "Removes all negative stat levels on the target.";
-					if (item.id === 'mentalherb')  details["Fling Effect"] = "Removes the effects of infatuation, Taunt, Encore, Torment, Disable, and Cursed Body on the target.";
+					if (item.id === 'whiteherb') details["Fling Effect"] = "Removes all negative stat levels on the target.";
+					if (item.id === 'mentalherb') details["Fling Effect"] = "Removes the effects of infatuation, Taunt, Encore, Torment, Disable, and Cursed Body on the target.";
 				}
 				if (!item.fling) details["Fling"] = "This item cannot be used with Fling";
 				if (item.naturalGift) {
-					details["Natural&nbsp;Gift&nbsp;Type"] = item.naturalGift.type;
-					details["Natural&nbsp;Gift&nbsp;BP"] = item.naturalGift.basePower;
+					details["Natural Gift Type"] = item.naturalGift.type;
+					details["Natural Gift BP"] = item.naturalGift.basePower;
 				}
 
 			} else {
@@ -358,7 +356,7 @@ var commands = exports.commands = {
 			}
 
 			buffer += '|raw|<font size="1">' + Object.keys(details).map(function (detail) {
-				return '<font color=#585858>' + detail + ':</font> ' + details[detail];
+				return '<font color=#585858>' + detail + (details[detail] !== null ? ':</font> ' + details[detail] : '</font>');
 			}).join("&nbsp;|&ThickSpace;") + '</font>';
 		}
 		this.sendReply(buffer);
