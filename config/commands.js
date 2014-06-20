@@ -250,39 +250,9 @@ var commands = exports.commands = {
 	stats: 'data',
 	dex: 'data',
 	pokedex: 'data',
-	data: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-
-		var data = '';
-		var targetId = toId(target);
-		var newTargets = Tools.dataSearch(target);
-		if (newTargets && newTargets.length) {
-			for (var i = 0; i < newTargets.length; ++i) {
-				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
-					data = "No Pokemon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
-				}
-				if (newTargets[i].searchType === 'nature') {
-					data += "" + newTargets[i].name + " nature: ";
-					if (newTargets[i].plus) {
-						var statNames = {'atk': "Attack", 'def': "Defense", 'spa': "Special Attack", 'spd': "Special Defense", 'spe': "Speed"};
-						data += "+10% " + statNames[newTargets[i].plus] + ", -10% " + statNames[newTargets[i].minus] + ".";
-					} else {
-						data += "No effect.";
-					}
-				} else {
-					data += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
-				}
-			}
-		} else {
-			data = "No Pokemon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)";
-		}
-
-		this.sendReply(data);
-		},
-
-	dt: 'details',
-	details: function (target, room, user) {
-		if (!target) return this.sendReply('Specify pokemon');
+	details: 'data',
+	dt: 'data',
+	data: function (target, room, user, connection, cmd) {
 		if (!this.canBroadcast()) return;
 
 		var buffer = '';
@@ -291,50 +261,107 @@ var commands = exports.commands = {
 		if (newTargets && newTargets.length) {
 			for (var i = 0; i < newTargets.length; ++i) {
 				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
-					buffer = "No Pokemon named '" + target + "' was found. Showing the details of '" + newTargets[0].name + "' instead.\n";
+					buffer = "No Pokemon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
 				}
-				var pokemon = Tools.getTemplate(newTargets[0].name);
-				if (pokemon.exists) {
-					buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+				if (newTargets[i].searchType === 'nature') {
+					buffer += "" + newTargets[i].name + " nature: ";
+					if (newTargets[i].plus) {
+						var statNames = {'atk': "Attack", 'def': "Defense", 'spa': "Special Attack", 'spd': "Special Defense", 'spe': "Speed"};
+						buffer += "+10% " + statNames[newTargets[i].plus] + ", -10% " + statNames[newTargets[i].minus] + ".";
+					} else {
+						buffer += "No effect.";
+					}
+					return this.sendReply(buffer);
 				} else {
-					return this.sendReply("Your search '" + newTargets[i].name + "' is a(n) " + newTargets[i].searchType + ", details can only be shown for Pokemon.");
+					buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
 				}
 			}
 		} else {
-			return this.sendReply("No Pokemon named '" + target + "' was found. (Check your spelling?)");
+			return this.sendReply("No Pokemon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
 		}
-		if (pokemon.weightkg >= 200) {
-                            var weighthit = 120;
-		} else if (pokemon.weightkg >= 100) {
-			var weighthit = 100;
-		} else if (pokemon.weightkg >= 50) {
-			var weighthit = 80;
-		} else if (pokemon.weightkg >= 25) {
-			var weighthit = 60;
-		} else if (pokemon.weightkg >= 10) {
-			var weighthit = 40;
-		} else {
-			var weighthit = 20;
-		}
-		var details = {
-			"Dex#": pokemon.num,
-			"Height": pokemon.heightm + "m",
-			"Weight": pokemon.weightkg + "Kg <em>(" + weighthit + "&nbsp;BP)</em>",
-			"Dex&nbsp;Colour": pokemon.color,
-			"Egg&nbsp;Group(s)": pokemon.eggGroups.join(", ")
-		};
-		if (!pokemon.evos.length) {
-			details["Evolution"] = "<font color=#585858>Does Not Evolve</font>";
-		} else {
-			details["Evolution"] = pokemon.evos.map(function (evo) {
-				var evo = Tools.getTemplate(evo);
-				return evo.name + " (" + evo.evoLevel + ")";
-			}).join(", ");
-		}
- 
+
+		var showDetails = (cmd === 'dt' || cmd === 'details');
+		if (showDetails) {
+			if (newTargets[0].searchType === 'pokemon') {
+				var pokemon = Tools.getTemplate(newTargets[0].name);
+				if (pokemon.weightkg >= 200) {
+					var weighthit = 120;
+				} else if (pokemon.weightkg >= 100) {
+					var weighthit = 100;
+				} else if (pokemon.weightkg >= 50) {
+					var weighthit = 80;
+				} else if (pokemon.weightkg >= 25) {
+					var weighthit = 60;
+				} else if (pokemon.weightkg >= 10) {
+					var weighthit = 40;
+				} else {
+					var weighthit = 20;
+				}
+				var details = {
+					"Dex#": pokemon.num,
+					"Height": pokemon.heightm + " m",
+					"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+					"Dex Colour": pokemon.color,
+					"Egg Group(s)": pokemon.eggGroups.join(", ")
+				};
+				if (!pokemon.evos.length) {
+					details["Evolution"] = "Does Not Evolve";
+				} else {
+					details["Evolution"] = pokemon.evos.map(function (evo) {
+					var evo = Tools.getTemplate(evo);
+					return evo.name + " (" + evo.evoLevel + ")";
+					}).join(", ");
+				}
+
+		 	} else if (newTargets[0].searchType === 'move') {
+				var move = Tools.getMove(newTargets[0].name);
+				var details = {
+					"Priority": move.priority,
+				};
+				if (move.secondary) {
+					details["Secondary effect"] = "Yes";
+				} else {
+					details["Secondary effect"] = "No";
+				}
+				if (move.isContact) {
+					details["Makes contact"] = "Yes";
+				} else {
+					details["Makes contact"] = "No";
+				}
+				if (move.target === 'normal') { details["Target"] = "Adjacent Pokemon";}
+				if (move.target === 'self') { details["Target"] = "Self";}
+				if (move.target === 'adjacentAlly') { details["Target"] = "Single Ally";}
+				if (move.target === 'allAdjacentFoes') { details["Target"] = "Adjacent Foes";}
+				if (move.target === 'foeSide') { details["Target"] = "All Foes";}
+				if (move.target === 'allySide') { details["Target"] = "All Allies";}
+				if (move.target === 'allAdjacent') { details["Target"] = "All Adjacent Pokemon";}
+				if (move.target === 'all') { details["Target"] = "All Pokemon";}
+
+			} else if (newTargets[0].searchType === 'item') {
+				var item = Tools.getItem(newTargets[0].name);
+				var details = {};
+				if (item.fling) {
+					details["Fling Base Power"] = item.fling.basePower;
+					if (item.fling.status) { details["Fling Effect"] = item.fling.status;}
+					if (item.fling.volatileStatus) { details["Fling Effect"] = item.fling.volatileStatus;}
+					if (item.isBerry) { details["Fling Effect"] = "Activates effect of berry on target.";}
+					if (item.id === 'whiteherb') {  details["Fling Effect"] = "Removes all negative stat levels on the target.";}
+					if (item.id === 'mentalherb') {  details["Fling Effect"] = "Removes the effects of infatuation, Taunt, Encore, Torment, Disable, and Cursed Body on the target.";}
+				}
+				if (!item.fling) { details["Fling"] = "This item cannot be used with Fling";}
+				if (item.naturalGift) {
+					details["Natural&nbsp;Gift&nbsp;Type"] = item.naturalGift.type;
+					details["Natural&nbsp;Gift&nbsp;BP"] = item.naturalGift.basePower;
+				}
+
+			} else {
+				var details = {};
+			}
+
 		buffer += '|raw|<font size="1">' + Object.keys(details).map(function (detail) {
 			return '<font color=#585858>' + detail + ':</font> ' + details[detail];
 		}).join("&nbsp;|&ThickSpace;") + '</font>';
+		}
 		this.sendReply(buffer);
 	},
 
@@ -1277,12 +1304,12 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'data') {
 			matched = true;
-			this.sendReply("/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability.");
+			this.sendReply("/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature.");
 			this.sendReply("!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ & ~");
 		}
-		if (target === 'all' || target === 'details') {
+		if (target === 'all' || target === 'details' || target === 'dt') {
 			matched = true;
-			this.sendReply("/details [pokemon] - Get additional details on this pokemon.");
+			this.sendReply("/details [pokemon] - Get additional details on this pokemon/item/move/ability/nature.");
 			this.sendReply("!details [pokemon] - Show everyone these details. Requires: + % @ & ~");
 		}
 		if (target === 'all' || target === 'analysis') {
