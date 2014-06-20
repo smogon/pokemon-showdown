@@ -1177,7 +1177,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	jolteon: {
-		viableMoves: {"thunderbolt":1,"voltswitch":1,"hiddenpowergrass":1,"hiddenpowerice":1,"chargebeam":1,"batonpass":1,"substitute":1,"signalbeam":1},
+		viableMoves: {"thunderbolt":1,"voltswitch":1,"hiddenpowerice":1,"chargebeam":1,"batonpass":1,"substitute":1,"signalbeam":1},
 		viableDoublesMoves: {"thunderbolt":1,"voltswitch":1,"hiddenpowergrass":1,"hiddenpowerice":1,"helpinghand":1,"protect":1,"substitute":1,"signalbeam":1},
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["tailwhip","tackle","helpinghand","sandattack"]},
@@ -1852,7 +1852,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	raikou: {
-		viableMoves: {"thunderbolt":1,"hiddenpowerice":1,"hiddenpowergrass":1,"aurasphere":1,"calmmind":1,"substitute":1,"voltswitch":1,"extrasensory":1},
+		viableMoves: {"thunderbolt":1,"hiddenpowerice":1,"aurasphere":1,"calmmind":1,"substitute":1,"voltswitch":1,"extrasensory":1},
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["quickattack","spark","reflect","crunch"]},
 			{"generation":4,"level":30,"shiny":true,"nature":"Rash","moves":["zapcannon","aurasphere","extremespeed","weatherball"],"pokeball":"cherishball"}
