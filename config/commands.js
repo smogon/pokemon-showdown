@@ -1134,7 +1134,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'i dont always'){
 			matched = true;
-			this.sendReplyBox('<img src="https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-xpf1/v/t34.0-12/10419628_486226498189680_2972767021759520544_n.jpg?oh=c3ce4c8cae45fc03fabb5b7f0e099003&oe=53A6A603&__gda__=1403415292_839bff0865a5e191a555a80362fba071" height="314" width="320" />');
+			this.sendReplyBox('<img src="http://i.imgur.com/H0BPFem.jpg" height="314" width="320" />');
 		}
 		if (target === 'all of the homo'){
 			matched = true;
