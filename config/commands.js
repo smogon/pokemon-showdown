@@ -258,6 +258,7 @@ var commands = exports.commands = {
 		var buffer = '';
 		var targetId = toId(target);
 		var newTargets = Tools.dataSearch(target);
+		var showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
 			for (var i = 0; i < newTargets.length; ++i) {
 				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
@@ -280,7 +281,6 @@ var commands = exports.commands = {
 			return this.sendReply("No Pokemon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
 		}
 
-		var showDetails = (cmd === 'dt' || cmd === 'details');
 		if (showDetails) {
 			if (newTargets[0].searchType === 'pokemon') {
 				var pokemon = Tools.getTemplate(newTargets[0].name);
@@ -318,16 +318,11 @@ var commands = exports.commands = {
 				var details = {
 					"Priority": move.priority,
 				};
-				if (move.secondary) {
-					details["Secondary effect"] = "Yes";
-				} else {
-					details["Secondary effect"] = "No";
-				}
-				if (move.isContact) {
-					details["Makes contact"] = "Yes";
-				} else {
-					details["Makes contact"] = "No";
-				}
+				if (move.secondary) details["Secondary effect"] = "Yes";
+				else details["Secondary effect"] = "No";
+				if (move.isContact) details["Makes contact"] = "Yes";
+				else details["Makes contact"] = "No";
+
 				if (move.target === 'normal') { details["Target"] = "Adjacent Pokemon";}
 				if (move.target === 'self') { details["Target"] = "Self";}
 				if (move.target === 'adjacentAlly') { details["Target"] = "Single Ally";}
@@ -342,13 +337,13 @@ var commands = exports.commands = {
 				var details = {};
 				if (item.fling) {
 					details["Fling Base Power"] = item.fling.basePower;
-					if (item.fling.status) { details["Fling Effect"] = item.fling.status;}
-					if (item.fling.volatileStatus) { details["Fling Effect"] = item.fling.volatileStatus;}
-					if (item.isBerry) { details["Fling Effect"] = "Activates effect of berry on target.";}
-					if (item.id === 'whiteherb') {  details["Fling Effect"] = "Removes all negative stat levels on the target.";}
-					if (item.id === 'mentalherb') {  details["Fling Effect"] = "Removes the effects of infatuation, Taunt, Encore, Torment, Disable, and Cursed Body on the target.";}
+					if (item.fling.status) details["Fling Effect"] = item.fling.status;
+					if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
+					if (item.isBerry) details["Fling Effect"] = "Activates effect of berry on target.";
+					if (item.id === 'whiteherb')  details["Fling Effect"] = "Removes all negative stat levels on the target.";
+					if (item.id === 'mentalherb')  details["Fling Effect"] = "Removes the effects of infatuation, Taunt, Encore, Torment, Disable, and Cursed Body on the target.";
 				}
-				if (!item.fling) { details["Fling"] = "This item cannot be used with Fling";}
+				if (!item.fling) details["Fling"] = "This item cannot be used with Fling";
 				if (item.naturalGift) {
 					details["Natural&nbsp;Gift&nbsp;Type"] = item.naturalGift.type;
 					details["Natural&nbsp;Gift&nbsp;BP"] = item.naturalGift.basePower;
@@ -358,9 +353,9 @@ var commands = exports.commands = {
 				var details = {};
 			}
 
-		buffer += '|raw|<font size="1">' + Object.keys(details).map(function (detail) {
-			return '<font color=#585858>' + detail + ':</font> ' + details[detail];
-		}).join("&nbsp;|&ThickSpace;") + '</font>';
+			buffer += '|raw|<font size="1">' + Object.keys(details).map(function (detail) {
+				return '<font color=#585858>' + detail + ':</font> ' + details[detail];
+			}).join("&nbsp;|&ThickSpace;") + '</font>';
 		}
 		this.sendReply(buffer);
 	},
