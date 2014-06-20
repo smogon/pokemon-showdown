@@ -356,7 +356,7 @@ var commands = exports.commands = {
 			}
 
 			buffer += '|raw|<font size="1">' + Object.keys(details).map(function (detail) {
-				return '<font color=#585858>' + detail + (details[detail] !== null ? ':</font> ' + details[detail] : '</font>');
+				return '<font color=#585858>' + detail + (details[detail] !== '' ? ':</font> ' + details[detail] : '</font>');
 			}).join("&nbsp;|&ThickSpace;") + '</font>';
 		}
 		this.sendReply(buffer);
