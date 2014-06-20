@@ -250,34 +250,116 @@ var commands = exports.commands = {
 	stats: 'data',
 	dex: 'data',
 	pokedex: 'data',
-	data: function (target, room, user) {
+	details: 'data',
+	dt: 'data',
+	data: function (target, room, user, connection, cmd) {
 		if (!this.canBroadcast()) return;
 
-		var data = '';
+		var buffer = '';
 		var targetId = toId(target);
 		var newTargets = Tools.dataSearch(target);
+		var showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
 			for (var i = 0; i < newTargets.length; ++i) {
 				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
-					data = "No Pokemon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
+					buffer = "No Pokemon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
 				}
 				if (newTargets[i].searchType === 'nature') {
-					data += "" + newTargets[i].name + " nature: ";
+					buffer += "" + newTargets[i].name + " nature: ";
 					if (newTargets[i].plus) {
 						var statNames = {'atk': "Attack", 'def': "Defense", 'spa': "Special Attack", 'spd': "Special Defense", 'spe': "Speed"};
-						data += "+10% " + statNames[newTargets[i].plus] + ", -10% " + statNames[newTargets[i].minus] + ".";
+						buffer += "+10% " + statNames[newTargets[i].plus] + ", -10% " + statNames[newTargets[i].minus] + ".";
 					} else {
-						data += "No effect.";
+						buffer += "No effect.";
 					}
+					return this.sendReply(buffer);
 				} else {
-					data += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
+					buffer += '|c|~|/data-' + newTargets[i].searchType + ' ' + newTargets[i].name + '\n';
 				}
 			}
 		} else {
-			data = "No Pokemon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)";
+			return this.sendReply("No Pokemon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
 		}
 
-		this.sendReply(data);
+		if (showDetails) {
+			if (newTargets[0].searchType === 'pokemon') {
+				var pokemon = Tools.getTemplate(newTargets[0].name);
+				if (pokemon.weightkg >= 200) {
+					var weighthit = 120;
+				} else if (pokemon.weightkg >= 100) {
+					var weighthit = 100;
+				} else if (pokemon.weightkg >= 50) {
+					var weighthit = 80;
+				} else if (pokemon.weightkg >= 25) {
+					var weighthit = 60;
+				} else if (pokemon.weightkg >= 10) {
+					var weighthit = 40;
+				} else {
+					var weighthit = 20;
+				}
+				var details = {
+					"Dex#": pokemon.num,
+					"Height": pokemon.heightm + " m",
+					"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+					"Dex Colour": pokemon.color,
+					"Egg Group(s)": pokemon.eggGroups.join(", ")
+				};
+				if (!pokemon.evos.length) {
+					details["Evolution"] = "<font color=#585858>Does Not Evolve</font>";
+				} else {
+					details["Evolution"] = pokemon.evos.map(function (evo) {
+						var evo = Tools.getTemplate(evo);
+						return evo.name + " (" + evo.evoLevel + ")";
+					}).join(", ");
+				}
+
+		 	} else if (newTargets[0].searchType === 'move') {
+				var move = Tools.getMove(newTargets[0].name);
+				var details = {
+					"Priority": move.priority,
+				};
+				
+				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";	
+				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
+
+				details["Target"] = {
+					'normal': "Adjacent Pokemon",
+					'self': "Self",
+					'adjacentAlly': "Single Ally",
+					'allAdjacentFoes': "Adjacent Foes",
+					'foeSide': "All Foes",
+					'allySide': "All Allies",
+					'allAdjacent': "All Adjacent Pokemon",
+					'any': "Any Pokemon",
+					'all': "All Pokemon"
+				}[move.target] || "Unknown";
+
+			} else if (newTargets[0].searchType === 'item') {
+				var item = Tools.getItem(newTargets[0].name);
+				var details = {};
+				if (item.fling) {
+					details["Fling Base Power"] = item.fling.basePower;
+					if (item.fling.status) details["Fling Effect"] = item.fling.status;
+					if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
+					if (item.isBerry) details["Fling Effect"] = "Activates effect of berry on target.";
+					if (item.id === 'whiteherb') details["Fling Effect"] = "Removes all negative stat levels on the target.";
+					if (item.id === 'mentalherb') details["Fling Effect"] = "Removes the effects of infatuation, Taunt, Encore, Torment, Disable, and Cursed Body on the target.";
+				}
+				if (!item.fling) details["Fling"] = "This item cannot be used with Fling";
+				if (item.naturalGift) {
+					details["Natural Gift Type"] = item.naturalGift.type;
+					details["Natural Gift BP"] = item.naturalGift.basePower;
+				}
+
+			} else {
+				var details = {};
+			}
+
+			buffer += '|raw|<font size="1">' + Object.keys(details).map(function (detail) {
+				return '<font color=#585858>' + detail + (details[detail] !== '' ? ':</font> ' + details[detail] : '</font>');
+			}).join("&nbsp;|&ThickSpace;") + '</font>';
+		}
+		this.sendReply(buffer);
 	},
 
 	ds: 'dexsearch',
@@ -1219,8 +1301,13 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'data') {
 			matched = true;
-			this.sendReply("/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability.");
+			this.sendReply("/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature.");
 			this.sendReply("!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ & ~");
+		}
+		if (target === 'all' || target === 'details' || target === 'dt') {
+			matched = true;
+			this.sendReply("/details [pokemon] - Get additional details on this pokemon/item/move/ability/nature.");
+			this.sendReply("!details [pokemon] - Show everyone these details. Requires: + % @ & ~");
 		}
 		if (target === 'all' || target === 'analysis') {
 			matched = true;
