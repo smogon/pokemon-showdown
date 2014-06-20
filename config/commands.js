@@ -318,10 +318,14 @@ var commands = exports.commands = {
 				var details = {
 					"Priority": move.priority,
 				};
-				if (move.secondary) details["Secondary effect"] = "Yes";
-				else details["Secondary effect"] = "No";
-				if (move.isContact) details["Makes contact"] = "Yes";
-				else details["Makes contact"] = "No";
+				if (move.secondary) {
+					details["Secondary effect"] = "Yes";
+				} else {
+					details["Secondary effect"] = "No";
+				if (move.isContact) {
+					details["Makes contact"] = "Yes";
+				} else {
+					details["Makes contact"] = "No";
 
 				if (move.target === 'normal') { details["Target"] = "Adjacent Pokemon";}
 				if (move.target === 'self') { details["Target"] = "Self";}
