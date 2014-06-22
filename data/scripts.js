@@ -354,7 +354,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (target && isSecondary && !moveData.self) {
-			hitResult = this.runEvent('TrySecondaryHit', target, pokemon, moveData);
+			hitResult = true;
 		}
 		if (!hitResult) {
 			return false;
@@ -488,7 +488,7 @@ exports.BattleScripts = {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 		}
-		if (moveData.secondaries) {
+		if (moveData.secondaries && this.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
 			var secondaryRoll;
 			for (var i = 0; i < moveData.secondaries.length; i++) {
 				secondaryRoll = this.random(100);
