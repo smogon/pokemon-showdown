@@ -30,6 +30,14 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger']
 	},
 	{
+		name: "OU (suspect test)",
+		section: "XY Singles",
+
+		challengeShow: false,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger']
+	},
+	{
 		name: "Ubers",
 		section: "XY Singles",
 
@@ -47,15 +55,6 @@ exports.Formats = [
 		name: "RU",
 		section: "XY Singles",
 
-		searchShow: false,
-		ruleset: ['UU'],
-		banlist: ['UU', 'BL2']
-	},
-	{
-		name: "RU (suspect test)",
-		section: "XY Singles",
-
-		challengeShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2']
 	},
@@ -272,7 +271,7 @@ exports.Formats = [
 		name: "CAP",
 		section: "Other Metagames",
 
-		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview'],
+		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger']
 	},
 	{

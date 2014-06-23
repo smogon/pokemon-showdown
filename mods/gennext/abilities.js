@@ -410,9 +410,9 @@ exports.BattleAbilities = {
 	},
 	"aftermath": {
 		inherit: true,
-		onFaint: function (target, source, effect) {
-			if (effect && effect.effectType === 'Move' && source) {
-				this.damage(source.maxhp / 3, source, target);
+		onAfterDamage: function (damage, target, source, move) {
+			if (source && source !== target && move && !target.hp) {
+				this.damage(source.maxhp / 3, source, target, null, true);
 			}
 		}
 	},
