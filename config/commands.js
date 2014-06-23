@@ -305,7 +305,7 @@ var commands = exports.commands = {
 					"Egg Group(s)": pokemon.eggGroups.join(", ")
 				};
 				if (!pokemon.evos.length) {
-					details["Evolution"] = "<font color=#585858>Does Not Evolve</font>";
+					details["<font color=#585858>Does Not Evolve</font>"] = "";
 				} else {
 					details["Evolution"] = pokemon.evos.map(function (evo) {
 						var evo = Tools.getTemplate(evo);
@@ -321,6 +321,8 @@ var commands = exports.commands = {
 				
 				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";	
 				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
+				if (move.isBullet) details["<font color=black>&#10003; Bullet</font>"] = "";
+				if (move.isPulseMove) details["<font color=black>&#10003; Pulse</font>"] = "";
 
 				details["Target"] = {
 					'normal': "Adjacent Pokemon",
