@@ -4955,7 +4955,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			onStart: function (pokemon) {
-				this.add('-endability', pokemon, pokemon.ability);
+				this.add('-endability', pokemon);
 			},
 			onModifyPokemonPriority: 2,
 			onModifyPokemon: function (pokemon) {
