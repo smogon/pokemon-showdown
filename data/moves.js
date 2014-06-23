@@ -10893,6 +10893,7 @@ exports.BattleMovedex = {
 		name: "Rock Wrecker",
 		pp: 5,
 		priority: 0,
+		isBullet: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -11330,6 +11331,7 @@ exports.BattleMovedex = {
 		name: "Searing Shot",
 		pp: 5,
 		priority: 0,
+		isBullet: true,
 		secondary: {
 			chance: 30,
 			status: 'brn'
@@ -15164,6 +15166,7 @@ exports.BattleMovedex = {
 		name: "Zap Cannon",
 		pp: 5,
 		priority: 0,
+		isBullet: true,
 		secondary: {
 			chance: 100,
 			status: 'par'
