@@ -1989,7 +1989,7 @@ exports.BattleAbilities = {
 			if (!move || pokemon.volatiles.mustrecharge) return;
 			var moveType = (move.id === 'hiddenpower' ? pokemon.hpType : move.type);
 			if (pokemon.getTypes().join() !== moveType) {
-				if (!pokemon.setType(moveType)) return false;
+				if (!pokemon.setType(moveType)) return;
 				this.add('-start', pokemon, 'typechange', moveType, '[from] Protean');
 			}
 		},
