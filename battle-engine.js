@@ -962,7 +962,7 @@ var BattlePokemon = (function () {
 		return false;
 	};
 	BattlePokemon.prototype.takeItem = function (source) {
-		if (!this.hp || !this.isActive) return false;
+		if (!this.isActive) return false;
 		if (!this.item) return false;
 		if (!source) source = this;
 		var item = this.getItem();
