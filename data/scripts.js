@@ -735,9 +735,9 @@ exports.BattleScripts = {
 		//console.log(team);
 		return team;
 	},
-	randomSet: function (template, i) {
+	randomSet: function (template, i, noMega) {
 		if (i === undefined) i = 1;
-		template = this.getTemplate(template);
+		var baseTemplate = template = this.getTemplate(template);
 		var name = template.name;
 
 		if (!template.exists || (!template.viableMoves && !template.learnset)) {
@@ -747,6 +747,12 @@ exports.BattleScripts = {
 			var stack = 'Template incompatible with random battles: ' + name;
 			var fakeErr = {stack: stack};
 			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
+		}
+
+		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
+		if (!noMega && this.canMegaEvo(template) && template.species !== 'Latios' && template.species !== 'Latias') {
+			// If there's more than one mega evolution, randomly pick one
+			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
 
 		var moveKeys = Object.keys(template.viableMoves || template.learnset).randomize();
@@ -1245,12 +1251,12 @@ exports.BattleScripts = {
 		if (template.requiredItem && template.requiredItem.slice(-5) === 'Drive' && !hasMove['technoblast']) moves[3] = 'Techno Blast';
 
 		{
-			var abilities = [template.abilities['0']];
-			if (template.abilities['1']) {
-				abilities.push(template.abilities['1']);
+			var abilities = [baseTemplate.abilities['0']];
+			if (baseTemplate.abilities['1']) {
+				abilities.push(baseTemplate.abilities['1']);
 			}
-			if (template.abilities['H']) {
-				abilities.push(template.abilities['H']);
+			if (baseTemplate.abilities['H']) {
+				abilities.push(baseTemplate.abilities['H']);
 			}
 			abilities.sort(function (a, b){
 				return this.getAbility(b).rating - this.getAbility(a).rating;
@@ -1362,6 +1368,10 @@ exports.BattleScripts = {
 					// it always gets Hustle but its only physical move is Endeavor, which loses accuracy
 					ability = 'Honey Gather';
 				}
+				if (template.id === 'mawilemega') {
+					// Mega Mawile only needs Intimidate for a starting ability
+					ability = 'Intimidate';
+				}
 			}
 
 			if (hasMove['gyroball']) {
@@ -1372,15 +1382,6 @@ exports.BattleScripts = {
 				ivs.spe = 0;
 				evs.hp += evs.spe;
 				evs.spe = 0;
-			}
-
-			var shouldMegaEvo = this.canMegaEvo(template);
-			if (template.species === 'Alakazam' || template.species === 'Scizor' || template.species === 'Garchomp') {
-				shouldMegaEvo = 'maybe';
-			}
-
-			if (template.species === 'Latios' || template.species === 'Latias') {
-				shouldMegaEvo = false;
 			}
 
 			item = 'Leftovers';
@@ -1435,10 +1436,6 @@ exports.BattleScripts = {
 				item = 'Leftovers';
 			} else if (template.species === 'Dusclops') {
 				item = 'Eviolite';
-			} else if (shouldMegaEvo === true) {
-				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
-				// Mega Mawile should never start with Sheer Force
-				if (template.species === 'Mawile') ability = 'Intimidate';
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 				item = 'Light Clay';
 			} else if (hasMove['shellsmash']) {
@@ -1470,8 +1467,6 @@ exports.BattleScripts = {
 
 			// medium priority
 
-			} else if (shouldMegaEvo) {
-				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 			} else if (ability === 'Guts') {
 				if (hasMove['drainpunch']) {
 					item = 'Flame Orb';
@@ -1585,10 +1580,10 @@ exports.BattleScripts = {
 			Snover: 95, Vulpix: 95, Ninetales: 78, Tentacruel: 78, Toxicroak: 78,
 
 			// Banned mega
-			Kangaskhan: 72, Gengar: 72, Blaziken: 72,
+			"Kangaskhan-Mega": 72, "Gengar-Mega": 72, "Blaziken-Mega": 72,
 
 			// Holistic judgment
-			Carvanha: 90, Lucario: 72, Genesect: 72, Kyurem: 78
+			Carvanha: 90, "Lucario-Mega": 72, Genesect: 72, Kyurem: 78
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
@@ -1613,7 +1608,8 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && !this.data.FormatsData[i].isNonstandard && !this.getTemplate(i).evos.length) {
+			var template = this.getTemplate(i);
+			if (this.data.FormatsData[i].viableMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0,4) !== 'Mega')) {
 				keys.push(i);
 			}
 		}
@@ -1681,7 +1677,7 @@ exports.BattleScripts = {
 				}
 			}
 
-			var set = this.randomSet(template, i);
+			var set = this.randomSet(template, i, megaCount);
 
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
@@ -1845,7 +1841,8 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].viableMoves && !this.data.FormatsData[i].isNonstandard && !this.getTemplate(i).evos.length) {
+			var template = this.getTemplate(i);
+			if (this.data.FormatsData[i].viableMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0,4) !== 'Mega')) {
 				keys.push(i);
 			}
 		}
@@ -1901,7 +1898,7 @@ exports.BattleScripts = {
 				}
 			}
 
-			var set = this.randomDoublesSet(template);
+			var set = this.randomDoublesSet(template, megaCount);
 
 			// Limit 1 of any type combination
 			var typeCombo = types.join();
@@ -1938,8 +1935,8 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomDoublesSet: function (template) {
-		template = this.getTemplate(template);
+	randomDoublesSet: function (template, noMega) {
+		var baseTemplate = template = this.getTemplate(template);
 		var name = template.name;
 
 		if (!template.exists || (!template.viableDoublesMoves && !template.viableMoves && !template.learnset)) {
@@ -1948,6 +1945,12 @@ exports.BattleScripts = {
 			var stack = 'Template incompatible with random battles: ' + name;
 			var fakeErr = {stack: stack};
 			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
+		}
+		
+		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
+		if (!noMega && this.canMegaEvo(template) && template.species !== 'Latios' && template.species !== 'Latias') {
+			// If there's more than one mega evolution, randomly pick one
+			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
 
 		var moveKeys = Object.keys(template.viableDoublesMoves || template.viableMoves || template.learnset).randomize();
@@ -2432,12 +2435,12 @@ exports.BattleScripts = {
 		} while (moves.length < 4 && j < moveKeys.length);
 
 		{
-			var abilities = [template.abilities['0']];
-			if (template.abilities['1']) {
-				abilities.push(template.abilities['1']);
+			var abilities = [baseTemplate.abilities['0']];
+			if (baseTemplate.abilities['1']) {
+				abilities.push(baseTemplate.abilities['1']);
 			}
-			if (template.abilities['H']) {
-				abilities.push(template.abilities['H']);
+			if (baseTemplate.abilities['H']) {
+				abilities.push(baseTemplate.abilities['H']);
 			}
 			abilities.sort(function (a, b){
 				return this.getAbility(b).rating - this.getAbility(a).rating;
@@ -2570,11 +2573,6 @@ exports.BattleScripts = {
 				ivs.spe = 0;
 			}
 
-			var shouldMegaEvo = this.canMegaEvo(template);
-			if (template.species === 'Alakazam' || template.species === 'Scizor' || template.species === 'Garchomp') {
-				shouldMegaEvo = 'maybe';
-			}
-
 			item = 'Sitrus Berry';
 			if (template.requiredItem) {
 				item = template.requiredItem;
@@ -2622,8 +2620,6 @@ exports.BattleScripts = {
 				item = 'Assault Vest';
 			} else if (template.species === 'Amoonguss') {
 				item = 'Black Sludge';
-			} else if (shouldMegaEvo === true) {
-				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 				item = 'Light Clay';
 			} else if (hasMove['shellsmash']) {
@@ -2659,8 +2655,6 @@ exports.BattleScripts = {
 				}
 
 			// medium priority
-			} else if (shouldMegaEvo) {
-				item = this.getTemplate((template.otherFormes[1]) ? template.otherFormes[Math.round(Math.random())] : template.otherFormes[0]).requiredItem;
 			} else if (ability === 'Guts') {
 				if (hasMove['drainpunch']) {
 					item = 'Flame Orb';
@@ -2733,13 +2727,7 @@ exports.BattleScripts = {
 		// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
 		// Every 10.35 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
 		// To-do: adjust levels of mons with boosting items (Light Ball, Thick Club etc)
-		var itemObj = this.getItem(item);
-		if (shouldMegaEvo && itemObj.megaEvolves && itemObj.megaEvolves === template.species) {
-			var megaTemplate = this.getTemplate(itemObj.megaStone);
-			var bst = megaTemplate.baseStats.hp + megaTemplate.baseStats.atk + megaTemplate.baseStats.def + megaTemplate.baseStats.spa + megaTemplate.baseStats.spd + megaTemplate.baseStats.spe;
-		} else {
-			var bst = template.baseStats.hp + template.baseStats.atk + template.baseStats.def + template.baseStats.spa + template.baseStats.spd + template.baseStats.spe;
-		}
+		var bst = template.baseStats.hp + template.baseStats.atk + template.baseStats.def + template.baseStats.spa + template.baseStats.spd + template.baseStats.spe;
 		var level = 70 + Math.floor(((600 - this.clampIntRange(bst, 300, 600)) / 10.35));
 
 		return {
