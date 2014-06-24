@@ -1666,7 +1666,9 @@ exports.BattleAbilities = {
 		name: "Mummy",
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				if (source.setAbility('mummy', source, 'mummy', true)) {
+				var oldAbility = source.setAbility('mummy', source, 'mummy', true);
+				if (oldAbility) {
+					this.add('-endability', source, oldAbility, '[from] Mummy');
 					this.add('-ability', source, 'Mummy', '[from] Mummy');
 				}
 			}
@@ -1989,7 +1991,7 @@ exports.BattleAbilities = {
 			if (!move || pokemon.volatiles.mustrecharge) return;
 			var moveType = (move.id === 'hiddenpower' ? pokemon.hpType : move.type);
 			if (pokemon.getTypes().join() !== moveType) {
-				if (!pokemon.setType(moveType)) return false;
+				if (!pokemon.setType(moveType)) return;
 				this.add('-start', pokemon, 'typechange', moveType, '[from] Protean');
 			}
 		},

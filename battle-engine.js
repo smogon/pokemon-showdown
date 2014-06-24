@@ -962,7 +962,7 @@ var BattlePokemon = (function () {
 		return false;
 	};
 	BattlePokemon.prototype.takeItem = function (source) {
-		if (!this.hp || !this.isActive) return false;
+		if (!this.isActive) return false;
 		if (!this.item) return false;
 		if (!source) source = this;
 		var item = this.getItem();
@@ -1003,17 +1003,18 @@ var BattlePokemon = (function () {
 	BattlePokemon.prototype.setAbility = function (ability, source, effect, noForce) {
 		if (!this.hp) return false;
 		ability = this.battle.getAbility(ability);
-		if (noForce && this.ability === ability.id) {
+		var oldAbility = this.ability;
+		if (noForce && oldAbility === ability.id) {
 			return false;
 		}
 		if (ability.id in {illusion:1, multitype:1, stancechange:1}) return false;
-		if (this.ability in {multitype:1, stancechange:1}) return false;
+		if (oldAbility in {multitype:1, stancechange:1}) return false;
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
 		if (ability.id) {
 			this.battle.singleEvent('Start', ability, this.abilityData, this, source, effect);
 		}
-		return true;
+		return oldAbility;
 	};
 	BattlePokemon.prototype.getAbility = function () {
 		return this.battle.getAbility(this.ability);
