@@ -1291,6 +1291,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's held item has no effect, except Macho Brace. Fling cannot be used.",
 		onModifyPokemonPriority: 1,
 		onModifyPokemon: function (pokemon) {
+			if (pokemon.getItem().megaEvolves) return;
 			pokemon.ignore['Item'] = true;
 		},
 		id: "klutz",
