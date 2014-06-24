@@ -42,14 +42,12 @@ exports.BattleAbilities = {
 		onImmunity: function (type, pokemon) {
 			if (type === 'hail') return false;
 		},
-		onModifyAtkPriority: 6,
 		onSourceModifyAtk: function (atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
 				this.add('-message', "The attack was weakened by Thick Fat!");
 				return this.chainModify(0.5);
 			}
 		},
-		onModifySpAPriority: 5,
 		onSourceModifySpA: function (atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
 				this.add('-message', "The attack was weakened by Thick Fat!");
