@@ -837,8 +837,8 @@ var commands = exports.commands = {
 			"NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/blob/master/mods/gennext/README.md\">README: overview of NEXT</a><br />" +
 			"Example replays:<br />" +
-			"- <a href=\"http://replay.pokemonshowdown.com/gennextou-37815908\">roseyraid vs Zarel</a><br />" +
-			"- <a href=\"http://replay.pokemonshowdown.com/gennextou-37900768\">QwietQwilfish vs pickdenis</a>"
+			"- <a href=\"http://replay.pokemonshowdown.com/gennextou-120689854\">Zergo vs Mr Weegle Snarf</a><br />" +
+			"- <a href=\"http://replay.pokemonshowdown.com/gennextou-130756055\">NickMP vs Khalogie</a>"
 		);
 	},
 
