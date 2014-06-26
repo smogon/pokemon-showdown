@@ -1462,6 +1462,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/roomdemote [username], [group] - Demotes the user to the specified group or previous ranked group. Requires: @ # & ~");
 		}
+		if (target === '@' || target === '#' || target === 'tempvoice') {
+			matched = true;
+			this.sendReply("/tempvoice [username] - Temporarily voices the user if modchat is set to + or autoconfirmed. Once modchat is disabled, tempvoiced users are deroomvoiced. Requires: @ # & ~");
+		}
 		if (target === '&' || target === 'banip') {
 			matched = true;
 			this.sendReply("/banip [ip] - Kick users on this IP or IP range from all rooms and bans it. Accepts wildcards to ban ranges. Requires: & ~");
