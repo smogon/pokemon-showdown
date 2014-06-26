@@ -349,6 +349,34 @@ var commands = exports.commands = {
 		if (room.chatRoomData) Rooms.global.writeChatRoomData();
 	},
 
+	tvoice: 'tempvoice',
+	tempvoice: function (target, room, user, connection) {
+		if (!room.auth) return this.sendReply("This command is meant to be used only in rooms with per-room moderation.");
+		if (!target || !(room.modchat === '+' || room.modchat === 'autoconfirmed')) return this.parse('/help tempvoice');
+
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		var userid = toId(this.targetUsername);
+		var name = targetUser ? targetUser.name : this.targetUsername;
+
+		if (!userid) return this.parse('/help tempvoice');
+		if (!user.can('roomvoice', null, room)) return this.sendReply("/tempvoice - Access denied.");
+		if (!targetUser) return this.sendReply("User '" + name + "' is offline, and so can't be temporarily voiced.");
+		if (room.auth && room.auth[userid]) return this.sendReply("User '" + name + "' is already authed, and so can't be temporarily voiced.");
+
+		room.auth[userid] = '+';
+		this.addModCommand("" + name + " was temporarily promoted to Room Voice by " + user.name + ".");
+
+		if (!room.tempVoices) {
+			room.tempVoices = [userid];
+		} else {
+			room.tempVoices.push(userid);
+		}
+
+		if (targetUser) targetUser.updateIdentity();
+		if (room.chatRoomData) Rooms.global.writeChatRoomData();
+	},
+
 	autojoin: function (target, room, user, connection) {
 		Rooms.global.autojoinRooms(user, connection);
 	},
@@ -824,6 +852,12 @@ var commands = exports.commands = {
 		case 'false':
 		case 'no':
 			room.modchat = false;
+			if (room.tempVoices) {
+				for (var i = 0; i < room.tempVoices.length; i++) {
+					this.parse('/deroomvoice ' + room.tempVoices[i]);
+				}
+				delete room.tempVoices;	
+			}
 			break;
 		case 'ac':
 		case 'autoconfirmed':
