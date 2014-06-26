@@ -122,7 +122,7 @@ exports.BattleStatuses = {
 		},
 		onModifyPokemon: function (pokemon) {
 			if (pokemon.transformed) return;
-			pokemon.types = [pokemon.hpType || 'Dark'];
+			pokemon.setType(pokemon.hpType || 'Dark');
 		}
 	},
 	bronzong: {
