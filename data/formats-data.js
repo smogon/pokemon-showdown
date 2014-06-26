@@ -3810,7 +3810,7 @@ exports.BattleFormatsData = {
 	},
 	sigilyph: {
 		viableMoves: {"cosmicpower":1,"roost":1,"storedpower":1,"psychoshift":1},
-		tier: "NU"
+		tier: "BL3"
 	},
 	yamask: {
 		viableMoves: {"nastyplot":1,"trickroom":1,"shadowball":1,"hiddenpowerfighting":1,"willowisp":1,"haze":1,"rest":1,"sleeptalk":1,"painsplit":1},
