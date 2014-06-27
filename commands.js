@@ -486,13 +486,18 @@ var commands = exports.commands = {
 
 	roomauth: function (target, room, user, connection) {
 		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefore has no auth list.");
-		var buffer = [];
+
+		var rankLists = {'#':[], '@':[], '%':[], '+':[]};
 		for (var u in room.auth) {
-			buffer.push(room.auth[u] + u);
+			rankLists[room.auth[u]].push(u);
 		}
-		if (buffer.length > 0) {
-			buffer = buffer.join(", ");
-		} else {
+		var buffer = '';
+		for (var r in rankLists) {
+			if (!rankLists[r].length) continue;
+			buffer += Config.groups[r].name + 's (' + r + '):\n';
+			buffer += rankLists[r].sort().join(', ') + '\n\n';
+		}
+		if (!buffer.length) {
 			buffer = "This room has no auth.";
 		}
 		connection.popup(buffer);
