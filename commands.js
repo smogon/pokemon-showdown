@@ -290,6 +290,37 @@ var commands = exports.commands = {
 		}
 	},
 
+	roomintro: function (target, room, user) {
+		if (!target) {
+			if (!this.canBroadcast()) return;
+			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
+			this.sendReplyBox(room.introMessage);
+			if (!this.broadcasting && user.can('declare', null, room)) {
+				this.sendReply('Source:');
+				this.sendReplyBox('<code>'+Tools.escapeHTML(room.introMessage)+'</code>');
+			}
+			return;
+		}
+		if (!this.can('declare', null, room)) return false;
+		if (!this.canHTML(target)) return;
+		if (!/</.test(target)) {
+			// not HTML, do some simple URL linking
+			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			target = target.replace(re, '<a href="$1">$1</a>');
+		}
+
+		if (!target.trim()) target = '';
+		room.introMessage = target;
+		this.sendReply("(The room introduction has been changed to:)");
+		this.sendReplyBox(target);
+
+		if (room.chatRoomData) {
+			room.chatRoomData.introMessage = room.introMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
 	roomdemote: 'roompromote',
 	roompromote: function (target, room, user, connection, cmd) {
 		if (!room.auth) {

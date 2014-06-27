@@ -1387,22 +1387,23 @@ var ChatRoom = (function () {
 
 		return log;
 	};
-	ChatRoom.prototype.getModchatNote = function (noNewline) {
+	ChatRoom.prototype.getIntroMessage = function () {
+		var html = this.introMessage || '';
 		if (this.modchat) {
-			var text = !noNewline ? '\n' : '';
-			text += '|raw|<div class="broadcast-red">';
-			text += '<b>Moderated chat is currently set to ' + this.modchat + '!</b><br />';
-			text += 'Only users of rank ' + this.modchat + ' and higher can talk.';
-			text += '</div>';
-			return text;
+			if (html) html += '<br /><br />';
+			html += '<div class="broadcast-red">';
+			html += '<b>Moderated chat is currently set to ' + this.modchat + '!</b><br />';
+			html += 'Only users of rank ' + this.modchat + ' and higher can talk.';
+			html += '</div>';
 		}
+
+		if (html) return '\n|raw|<div class="infobox">' + html + '</div>';
 
 		return '';
 	};
 	ChatRoom.prototype.onJoinConnection = function (user, connection) {
 		var userList = this.userList ? this.userList : this.getUserList();
-		var modchat = this.getModchatNote();
-		this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(25).join('\n') + modchat, connection);
+		this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(25).join('\n') + this.getIntroMessage(), connection);
 		if (global.Tournaments && Tournaments.get(this.id))
 			Tournaments.get(this.id).update(user);
 	};
@@ -1426,8 +1427,7 @@ var ChatRoom = (function () {
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
-			var modchat = this.getModchatNote();
-			this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(100).join('\n') + modchat, connection);
+			this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(100).join('\n') + this.getIntroMessage(), connection);
 		}
 		if (global.Tournaments && Tournaments.get(this.id))
 			Tournaments.get(this.id).update(user);
