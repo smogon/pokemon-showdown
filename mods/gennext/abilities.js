@@ -288,7 +288,7 @@ exports.BattleAbilities = {
 	"download": {
 		inherit: true,
 		onStart: function (pokemon) {
-			if (pokemon.template.id === 'genesect') {
+			if (pokemon.template.baseSpecies === 'Genesect') {
 				if (!pokemon.getItem().onDrive) return;
 			}
 			var foeactive = pokemon.side.foe.active;

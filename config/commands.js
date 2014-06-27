@@ -837,8 +837,8 @@ var commands = exports.commands = {
 			"NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/blob/master/mods/gennext/README.md\">README: overview of NEXT</a><br />" +
 			"Example replays:<br />" +
-			"- <a href=\"http://replay.pokemonshowdown.com/gennextou-37815908\">roseyraid vs Zarel</a><br />" +
-			"- <a href=\"http://replay.pokemonshowdown.com/gennextou-37900768\">QwietQwilfish vs pickdenis</a>"
+			"- <a href=\"http://replay.pokemonshowdown.com/gennextou-120689854\">Zergo vs Mr Weegle Snarf</a><br />" +
+			"- <a href=\"http://replay.pokemonshowdown.com/gennextou-130756055\">NickMP vs Khalogie</a>"
 		);
 	},
 
@@ -1028,7 +1028,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'overused' || target === 'ou') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3507765/\">np: OU Stage 3</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3509824/\">np: OU Stage 4</a><br />";
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3502428/\">OU Viability Ranking Thread</a><br />";
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3491371/\">Official OU Banlist</a><br />";
 		}
@@ -1040,12 +1040,13 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'rarelyused' || target === 'ru') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3508302/\">np: RU Stage 1</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3510066/\">np: RU Stage 2</a><br />";
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3506500/\">RU Viability Ranking Thread</a><br />";
 		}
 		if (target === 'all' || target === 'neverused' || target === 'nu') {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3506287/\">np: NU (beta)</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3509494/\">NU Viability Ranking Thread</a><br />";
 		}
 		if (target === 'all' || target === 'littlecup' || target === 'lc') {
 			matched = true;
@@ -1054,7 +1055,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'doubles') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3506251/\">np: Doubles Stage 3</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3509279/\">np: Doubles Stage 3.5</a><br />";
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3496306/\">Doubles Viability Ranking Thread</a><br />";
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3498688/\">Official Doubles Banlist</a><br />";
 		}
@@ -1251,9 +1252,8 @@ var commands = exports.commands = {
 
 	htmlbox: function (target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
-		if (!user.can('gdeclare', null, room) && (!user.can('declare', null, room) || !user.can('announce'))) {
-			return this.sendReply("/htmlbox - Access denied.");
-		}
+		if (!this.can('declare', null, room)) return;
+		if (!this.canHTML(target)) return;
 		if (!this.canBroadcast('!htmlbox')) return;
 
 		this.sendReplyBox(target);
