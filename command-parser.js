@@ -199,6 +199,18 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
 				return canTalk(user, innerRoom, connection, message);
 			},
+			canHTML: function (html) {
+				html = ''+(html||'');
+				var images = html.match(/<img\b[^<>]*/ig);
+				if (!images) return true;
+				for (var i = 0; i < images.length; i++) {
+					if (!/width=([0-9]+|"[0-9]+")/i.test(images[i]) || !!/height=([0-9]+|"[0-9]+")/i.test(images[i])) {
+						this.sendReply('All images must have a width and height attribute');
+						return false;
+					}
+				}
+				return true;
+			},
 			targetUserOrSelf: function (target, exactName) {
 				if (!target) {
 					this.targetUsername = user.name;
