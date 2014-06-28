@@ -888,7 +888,7 @@ exports.BattleScripts = {
 				}
 				// Moves that boost Attack:
 				var PhysicalSetup = {
-					swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1, bellydrum:1, shiftgear:1, honeclaws:1, howl:1
+					swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1, bellydrum:1, shiftgear:1, honeclaws:1, howl:1, poweruppunch:1
 				};
 				// Moves which boost Special Attack:
 				var SpecialSetup = {
@@ -963,7 +963,7 @@ exports.BattleScripts = {
 					break;
 
 				// bad after setup
-				case 'seismictoss': case 'nightshade': case 'superfang':
+				case 'seismictoss': case 'nightshade': case 'superfang': case 'foulplay':
 					if (setupType) rejected = true;
 					break;
 				case 'perishsong': case 'magiccoat': case 'spikes':
