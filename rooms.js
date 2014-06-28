@@ -1553,7 +1553,7 @@ var newRoom = function (roomid, format, p1, p2, parent, rated) {
 	return rooms[roomid];
 };
 
-var rooms = {};
+var rooms = Object.create(null);
 console.log("NEW GLOBAL: global");
 rooms.global = new GlobalRoom('global');
 
