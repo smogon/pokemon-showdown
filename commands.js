@@ -1044,7 +1044,7 @@ var commands = exports.commands = {
 			return this.sendReply("Battle hotpatching is not supported with the single process hack.");
 
 		} else if (target === 'formats') {
-			/*try {
+			try {
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
@@ -1052,17 +1052,17 @@ var commands = exports.commands = {
 				// rebuild the formats list
 				Rooms.global.formatListText = Rooms.global.getFormatListText();
 				// respawn validator processes
-				TeamValidator.ValidatorProcess.respawn();
+				//TeamValidator.ValidatorProcess.respawn();
+				battleProtoCache = {};
 				// respawn simulator processes
-				Simulator.SimulatorProcess.respawn();
+				//Simulator.SimulatorProcess.respawn();
 				// broadcast the new formats list to clients
 				Rooms.global.send(Rooms.global.formatListText);
 
 				return this.sendReply("Formats have been hotpatched.");
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch formats: \n" + e.stack);
-			}*/
-			return this.sendReply("Formats hotpatching is not supported with the single process hack.");
+			}
 
 		} else if (target === 'learnsets') {
 			try {
