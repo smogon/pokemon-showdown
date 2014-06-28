@@ -29,7 +29,7 @@ const THROTTLE_MULTILINE_WARN = 4;
 
 var fs = require('fs');
 
-var users = {};
+var users = Object.create(null);
 var prevUsers = {};
 var numUsers = 0;
 
