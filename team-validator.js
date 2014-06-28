@@ -189,13 +189,12 @@
 
 var Validator = (function () {
 	function Validator(format) {
-		this.format = Tools.getFormat(format);
-		this.tools = Tools.mod(this.format);
+		this.format = format;
 	}
 
 	Validator.prototype.validateTeam = function (team) {
-		var format = this.format;
-		var tools = this.tools;
+		var format = Tools.getFormat(this.format);
+		var tools = Tools.mod(format);
 
 		var problems = [];
 		tools.getBanlistTable(format);
@@ -254,8 +253,8 @@ var Validator = (function () {
 	};
 
 	Validator.prototype.validateSet = function (set, teamHas) {
-		var format = this.format;
-		var tools = this.tools;
+		var format = Tools.getFormat(this.format);
+		var tools = Tools.mod(format);
 
 		var problems = [];
 		if (!set) {
@@ -545,7 +544,7 @@ var Validator = (function () {
 	};
 
 	Validator.prototype.checkLearnset = function (move, template, lsetData) {
-		var tools = this.tools;
+		var tools = Tools.mod(Tools.getFormat(format));
 
 		move = toId(move);
 		template = tools.getTemplate(template);
