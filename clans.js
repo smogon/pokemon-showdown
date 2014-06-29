@@ -176,7 +176,7 @@ exports.startWar = function (clanA, clanB, room) {
 		return false;
 
 	var matchups = {};
-	for (var m = 0; m < memberCount; ++m)
+	for (var m = 0; m < memberCount; m)
 		matchups[toId(clanAMembers[m])] = {from: clanAMembers[m], to: clanBMembers[m]};
 
 	pendingWars[clanAId] = {
@@ -215,14 +215,14 @@ exports.setWarResult = function (clanA, clanB, result) {
 		clans[clanBId].rating = 1000;
 
 	if (result === 1) {
-		++clans[clanAId].wins;
-		++clans[clanBId].losses;
+		clans[clanAId].wins;
+		clans[clanBId].losses;
 	} else if (result === 0) {
-		++clans[clanAId].losses;
-		++clans[clanBId].wins;
+		clans[clanAId].losses;
+		clans[clanBId].wins;
 	} else {
-		++clans[clanAId].draws;
-		++clans[clanBId].draws;
+		clans[clanAId].draws;
+		clans[clanBId].draws;
 	}
 
 	writeClanData();
@@ -269,7 +269,7 @@ exports.setWarMatchResult = function (userA, userB, result) {
 	if (matchup.to === winnerUserId)
 		--pendingWars[clanId].score;
 	else
-		++pendingWars[clanId].score;
+		pendingWars[clanId].score;
 
 	return true;
 };
