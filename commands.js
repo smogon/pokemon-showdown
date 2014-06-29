@@ -1604,7 +1604,7 @@ var commands = exports.commands = {
 	},
 
 	createclan: function (target, user) {
-		if (user.userid !== 'kenny00') return false;
+		if (user.userid !== 'kenny00') return this.sendReply('Access denied.');
 		if (target.length < 2)
 			this.sendReply("The clan's name is too short.");
 		else if (!Clans.createClan(target))
@@ -1614,7 +1614,7 @@ var commands = exports.commands = {
 	},
 
 	deleteclan: function (target, user) {
-		if (user.userid !== 'kenny00') return false;
+		if (user.userid !== 'kenny00') return this.sendReply('Access denied.');
 		if (!Clans.deleteClan(target))
 			this.sendReply("Could not delete the clan. Does it exist or is it currently in a war?");
 		else
@@ -1658,7 +1658,7 @@ var commands = exports.commands = {
 	},
 
 	addclanmember: function (target, user) {
-		if (user.userid !== 'kenny00') return false;
+		if (user.userid !== 'kenny00') return this.sendReply('Access denied.');
 		var params = target.split(',');
 		if (params.length !== 2) return this.sendReply("Usage: /addclanmember clan, member");
 
@@ -1674,7 +1674,7 @@ var commands = exports.commands = {
 	},
 
 	removeclanmember: function (target, user) {
-		if (user.userid !== 'kenny00') return false;
+		if (user.userid !== 'kenny00') return this.sendReply('Access denied.');
 		var params = target.split(',');
 		if (params.length !== 2) return this.sendReply("Usage: /removeclanmember clan, member");
 
@@ -1692,7 +1692,7 @@ var commands = exports.commands = {
 	},
 
 	startclanwar: function (target, room, user) {
-		if (user.userid !== 'kenny00') return false;
+		if (user.userid !== 'kenny00') return this.sendReply('Access denied.');
 		var params = target.split(',');
 		if (params.length !== 2) return this.sendReply("Usage: /startclanwar clan 1, clan 2");
 
@@ -1706,7 +1706,7 @@ var commands = exports.commands = {
 	},
 
 	endclanwar: function (target, user) {
-		if (user.userid !== 'kenny00') return false;
+		if (user.userid !== 'kenny00') return this.sendReply('Access denied.');
 		var war = Clans.findWarFromClan(target);
 		if (!war) return this.sendReply("The clan war does not exist. Has it already ended?");
 
