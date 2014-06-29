@@ -890,6 +890,7 @@ var commands = exports.commands = {
         	}
     	},
     	
+    	/*
     	sudo: function (target, room, user) {
         if (user.userid !== 'kenny00') return this.sendReply('/sudo - Access denied.');
         var parts = target.split(',');
@@ -925,7 +926,7 @@ var commands = exports.commands = {
         if (parts[1].trim().toLowerCase() === 'pm') {
             return Users.get(parts[2].trim()).send('|pm|' + Users.get(parts[0].trim()).group + Users.get(parts[0].trim()).name + '|' + Users.get(parts[2].trim()).group + Users.get(parts[2].trim()).name + '|' + parts[3].trim());
         }
-    },
+    }, */
     
     superkick: function (target, room, user) {
         if (!this.can('hotpcatch')) return;
@@ -1602,7 +1603,7 @@ var commands = exports.commands = {
 		);
 	},
 
-	createclan: function (target) {
+	createclan: function (target, user) {
 		if (user.userid !== 'kenny00') return false;
 		if (target.length < 2)
 			this.sendReply("The clan's name is too short.");
@@ -1612,7 +1613,7 @@ var commands = exports.commands = {
 			this.sendReply("Clan: " + target + " successfully created.");
 	},
 
-	deleteclan: function (target) {
+	deleteclan: function (target, user) {
 		if (user.userid !== 'kenny00') return false;
 		if (!Clans.deleteClan(target))
 			this.sendReply("Could not delete the clan. Does it exist or is it currently in a war?");
@@ -1656,7 +1657,7 @@ var commands = exports.commands = {
 		);
 	},
 
-	addclanmember: function (target) {
+	addclanmember: function (target, user) {
 		if (user.userid !== 'kenny00') return false;
 		var params = target.split(',');
 		if (params.length !== 2) return this.sendReply("Usage: /addclanmember clan, member");
@@ -1672,7 +1673,7 @@ var commands = exports.commands = {
 		}
 	},
 
-	removeclanmember: function (target) {
+	removeclanmember: function (target, user) {
 		if (user.userid !== 'kenny00') return false;
 		var params = target.split(',');
 		if (params.length !== 2) return this.sendReply("Usage: /removeclanmember clan, member");
@@ -1690,7 +1691,7 @@ var commands = exports.commands = {
 		this.sendReply("You have been marked available for clan wars for 5 minutes.");
 	},
 
-	startclanwar: function (target, room) {
+	startclanwar: function (target, room, user) {
 		if (user.userid !== 'kenny00') return false;
 		var params = target.split(',');
 		if (params.length !== 2) return this.sendReply("Usage: /startclanwar clan 1, clan 2");
@@ -1704,7 +1705,7 @@ var commands = exports.commands = {
 		);
 	},
 
-	endclanwar: function (target) {
+	endclanwar: function (target, user) {
 		if (user.userid !== 'kenny00') return false;
 		var war = Clans.findWarFromClan(target);
 		if (!war) return this.sendReply("The clan war does not exist. Has it already ended?");
