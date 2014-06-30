@@ -867,7 +867,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3489849/\">Balanced Hackmons</a><br />";
 			if (target !== 'all') {
-				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3506502/\">Balanced Hackmons Viability Rankings / Threat List</a><br />";
+				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3510149/\">Balanced Hackmons Threatlist</a><br />";
 				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3499973/\">Balanced Hackmons Mentoring Program</a><br />";
 			}
 		}
