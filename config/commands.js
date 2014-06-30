@@ -1222,7 +1222,7 @@ var commands = exports.commands = {
 	},
 	parukiarules: function(target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<font size="5" color="black"><b>The Parukian Guidelines</b></font><br><font size="3" color="black"><b>We don\'t follow the same rules as main!</b></font><br><br>1.) There is no such thing as racism on Parukia.<br>2.) Hazeel is a nut, no matter how many times he denies it.<br>3.) Chinlar x Pikachudude is Parukia\'s OTP<br>4.) Playfully trolling one another is how we show we care<br>5.) We\'re all assholes, so if you\'re sensitive to certain issues warn us beforehand (no guarantee we\'ll respect that, though!)<br>6.) raiykid is rice, no exceptions.');
+		this.sendReplyBox('<font size="5" color="black"><b>The Parukian Guidelines</b></font><br><font size="3" color="black"><b>We don\'t follow the same rules as main!</b></font><br><br>1.) There is no such thing as racism on Parukia.<br>2.) Hazeel is a nut, no matter how many times he denies it.<br>3.) Chinlar x Pikachudude is Parukia\'s OTP<br>4.) Playfully trolling one another is how we show we care<br>5.) We\'re all assholes, so if you\'re sensitive to certain issues warn us beforehand (no guarantee we\'ll respect that, though!)<br>6.) raiykid is rice, no exceptions.<br>7.) If you\'re not neutral with Red, you get no sympathy from the rest of us.<br>8.) If you pray to Jin, the hax grace will save you!<br>9.) If you piss off Niku, Oak will give you your last rites.<br>10.) Click all links at your own risk, it\'ll most likely be NSFW.');
 	},
 	
 	/*********************************************************
