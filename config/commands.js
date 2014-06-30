@@ -777,7 +777,7 @@ var commands = exports.commands = {
 	},
 
 	showtan: function (target, room, user) {
-		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with 'showtan', type '//showtan'.");
+		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with '/showtan', type '//showtan'.");
 		if (!this.can('modchat', null, room)) return;
 		target = this.splitTarget(target);
 		if (!this.targetUser) return this.sendReply('user not found');
