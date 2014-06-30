@@ -853,6 +853,7 @@ var commands = exports.commands = {
 			buffer += "- <a href=\"http://www.smogon.com/forums/forums/206/\">Other Metagames Forum</a><br />";
 			if (target !== 'all') {
 				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3505031/\">Other Metagames Index</a><br />";
+				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3507466/\">Sample teams for entering Other Metagames</a><br />";
 			}
 		}
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
@@ -893,6 +894,9 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'stabmons') {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3493081/\">STABmons</a><br />";
+			if (target !== 'all') {
+				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3510465/\">STABmons Threatlist</a><br />";
+			}
 		}
 		if (target === 'all' || target === 'skybattles' || target === 'skybattle') {
 			matched = true;
