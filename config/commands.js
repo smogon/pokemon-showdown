@@ -850,36 +850,51 @@ var commands = exports.commands = {
 		var matched = false;
 		if (!target || target === 'all') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/forums/206/\">Information on the Other Metagames</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/forums/206/\">Other Metagames Forum</a><br />";
+			if (target !== 'all') {
+				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3505031/\">Other Metagames Index</a><br />";
+			}
 		}
-		if (target === 'all' || target === 'hackmons') {
+		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3500418/\">Hackmons</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3481155/\">OM of the Month</a><br />";
+		}
+		if (target === 'all' || target === 'pokemonthrowback' || target === 'throwback') {
+			matched = true;
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3510401/\">Pokémon Throwback</a><br />";
 		}
 		if (target === 'all' || target === 'balancedhackmons' || target === 'bh') {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3489849/\">Balanced Hackmons</a><br />";
 			if (target !== 'all') {
+				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3506502/\">Balanced Hackmons Viability Rankings / Threat List</a><br />";
 				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3499973/\">Balanced Hackmons Mentoring Program</a><br />";
 			}
 		}
-		if (target === 'all' || target === 'glitchmons') {
+		if (target === 'all' || target === '1v1') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3467120/\">Glitchmons</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3496773/\">1v1</a><br />";
+		}
+		if (target === 'all' || target === 'oumonotype' || target === 'monotype') {
+			matched = true;
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3493087/\">OU Monotype</a><br />";
+			if (target !== 'all') {
+				buffer += "- <a href=\"http://www.smogon.com/forums/threads/3507565/\">OU Monotype Viability Rankings</a><br />";
+			}
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/tier-shift-xy.3508369/\">Tier Shift</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3508369/\">Tier Shift</a><br />";
+		}
+		if (target === 'all' || target === 'almostanyability' || target === 'aaa') {
+			matched = true;
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3495737/\">Almost Any Ability</a><br />";
 		}
 		if (target === 'all' || target === 'stabmons') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/stabmons-see-post-2-for-ban-considerations.3493081/\">STABmons</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3493081/\">STABmons</a><br />";
 		}
-		if (target === 'all' || target === 'omotm' || target === 'omofthemonth' || target === 'month') {
-			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3481155/\">OM of the Month</a><br />";
-		}
-		if (target === 'all' || target === 'skybattles') {
+		if (target === 'all' || target === 'skybattles' || target === 'skybattle') {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3493601/\">Sky Battles</a><br />";
 		}
@@ -887,17 +902,17 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3492433/\">Inverse Battle</a><br />";
 		}
-		if (target === 'all' || target === 'middlecup' || target === 'mc') {
+		if (target === 'all' || target === 'hackmons' || target === 'ph') {
+			matched = true;
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3500418/\">Hackmons</a><br />";
+		}
+		if (target === 'middlecup' || target === 'mc') {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
 		}
-		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
+		if (target === 'glitchmons') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3499219/\">OU Theorymon</a><br />";
-		}
-		if (target === 'all' || target === 'index') {
-			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/other-metagames-index.3472405/\">OM Index</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3467120/\">Glitchmons</a><br />";
 		}
 		if (!matched) {
 			return this.sendReply("The Other Metas entry '" + target + "' was not found. Try /othermetas or /om for general help.");
