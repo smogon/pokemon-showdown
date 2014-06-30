@@ -291,18 +291,25 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "STABmons",
+		name: "Mediocremons",
 		section: "OM of the Month",
 
 		ruleset: ['OU'],
-		banlist: ['Porygon-Z', 'Sylveon']
+		banlist: ['Clefable', 'Abomasite', 'Mawilite', 'Medichamite', 'Huge Power', 'Pure Power'],
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species || set.name);
+			for (var stat in template.baseStats) {
+				if (template.baseStats[stat] >= 100) return [set.species + " has a base stat of 100 or more."];
+			}
+		}
 	},
 	{
-		name: "OU Theorymon",
+		name: "Pokemon Throwback",
 		section: "OM of the Month",
 
-		mod: 'theorymon',
-		ruleset: ['OU']
+		mod: 'gen4',
+		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod', 'Ability Clause'],
+		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power']
 	},
 	{
 		name: "CAP",
@@ -333,6 +340,13 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Balanced Hackmons",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod', 'Ability Clause'],
+		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power', 'Parental Bond']
+	},
+	{
 		name: "1v1",
 		section: 'Other Metagames',
 
@@ -349,17 +363,45 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Hackmons",
+		name: "OU Monotype",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'HP Percentage Mod']
+		ruleset: ['OU', 'Same Type Clause'],
+		banlist: ['Talonflame']
 	},
 	{
-		name: "Balanced Hackmons",
+		name: "Tier Shift",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod', 'Ability Clause'],
-		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power', 'Parental Bond']
+		mod: 'tiershift',
+		ruleset: ['OU']
+	},
+	{
+		name: "Almost Any Ability",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Ignore Illegal Abilities', 'Uber', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew',
+			'Archeops', 'Kyurem-Black', 'Regigigas', 'Slaking', 'Shedinja + Sturdy', 'Smeargle + Prankster'
+		],
+		validateSet: function(set) {
+			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
+			if (set.ability in bannedAbilities) {
+				var template = this.getTemplate(set.species || set.name);
+				var legalAbility = false;
+				for (var i in template.abilities) {
+					if (set.ability === template.abilities[i]) legalAbility = true;
+				}
+				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pokémon that do not naturally have it.'];
+			}
+		}
+	},
+	{
+		name: "STABmons",
+		section: "Other Metagames",
+
+		ruleset: ['OU'],
+		banlist: ['Porygon-Z', 'Sylveon']
 	},
 	{
 		name: "Sky Battles",
@@ -394,26 +436,10 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "OU Monotype",
+		name: "Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['OU', 'Same Type Clause'],
-		banlist: ['Talonflame']
-	},
-	{
-		name: "Tier Shift",
-		section: "Other Metagames",
-
-		mod: 'tiershift',
-		ruleset: ['OU']
-	},
-	{
-		name: "Ability Exchange",
-		section: "Other Metagames",
-
-		searchShow: false,
-		ruleset: ['Pokemon', 'Ability Exchange Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Baton Pass Clause', 'HP Percentage Mod', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal', 'Ignore Illegal Abilities', 'Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Swagger', 'Slaking', 'Regigigas']
+		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
 	{
 		name: "Ability Shift",
@@ -426,27 +452,6 @@ exports.Formats = [
 			'Arceus', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyurem-White',
 			'Lugia', 'Meloetta', 'Mewtwo', 'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Xerneas', 'Zekrom'
 		]
-	},
-	{
-		name: "Almost Any Ability",
-		section: "Other Metagames",
-
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Ignore Illegal Abilities', 'Uber', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew',
-			'Archeops', 'Kyurem-Black', 'Regigigas', 'Slaking', 'Shedinja + Sturdy', 'Smeargle + Prankster'
-		],
-		validateSet: function(set) {
-			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
-			if (set.ability in bannedAbilities) {
-				var template = this.getTemplate(set.species || set.name);
-				var legalAbility = false;
-				for (var i in template.abilities) {
-					if (set.ability === template.abilities[i]) legalAbility = true;
-				}
-				if (!legalAbility) return ['The ability "' + set.ability + '" is banned on Pokémon that do not naturally have it.'];
-			}
-		}
 	},
 	{
 		name: "Alphabet Cup",
@@ -475,15 +480,6 @@ exports.Formats = [
 		banlist: ['DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Light Ball', 'Mawilite', 'Medichamite', 'Soul Dew', 'Thick Club', 'Huge Power', 'Pure Power', 'Shedinja', 'Smeargle']
 	},
 	{
-		name: "Gen-NEXT OU",
-		section: "Other Metagames",
-
-		mod: 'gennext',
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
-		banlist: ['Uber']
-	},
-	{
 		name: "Middle Cup",
 		section: "Other Metagames",
 
@@ -508,6 +504,15 @@ exports.Formats = [
 		mimicGlitch: true,
 		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Unreleased']
+	},
+	{
+		name: "Gen-NEXT OU",
+		section: "Other Metagames",
+
+		mod: 'gennext',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
+		banlist: ['Uber']
 	},
 
 	// BW2 Singles

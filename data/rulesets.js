@@ -224,29 +224,6 @@ exports.BattleFormats = {
 			}
 		}
 	},
-	abilityexchangepokemon: {
-		effectType: 'Banlist',
-		validateTeam: function (team, format) {
-			var selectedAbilities = [];
-			var defaultAbilities = [];
-			var bannedAbilities = {adaptability:1, arenatrap:1, contrary:1, hugepower:1, imposter:1, purepower:1, prankster:1, serenegrace:1, shadowtag:1, simple:1, speedboost:1, tintedlens:1, wonderguard:1};
-			var problems = [];
-			for (var i = 0; i < team.length; i++) {
-				var template = this.getTemplate(team[i].species);
-				var ability = this.getAbility(team[i].ability);
-				var abilities = Object.extended(template.abilities).values();
-				if (ability.id in bannedAbilities && abilities.indexOf(ability.name) === -1) {
-					problems.push(ability.name + ' is banned on Pokemon that do not legally have it.');
-				}
-				selectedAbilities.push(ability.name);
-				defaultAbilities.push(abilities);
-			}
-			if (problems.length) return problems;
-			if (!this.checkAbilities(selectedAbilities, defaultAbilities)) {
-				return ['That is not a valid Ability Exchange team.'];
-			}
-		}
-	},
 	potd: {
 		effectType: 'Rule',
 		onStart: function () {
@@ -330,14 +307,14 @@ exports.BattleFormats = {
 	speciesclause: {
 		effectType: 'Rule',
 		onStart: function () {
-			this.add('rule', 'Species Clause: Limit one of each Pokemon');
+			this.add('rule', 'Species Clause: Limit one of each Pokémon');
 		},
 		validateTeam: function (team, format) {
 			var speciesTable = {};
 			for (var i = 0; i < team.length; i++) {
 				var template = this.getTemplate(team[i].species);
 				if (speciesTable[template.num]) {
-					return ["You are limited to one of each pokemon by Species Clause.", "(You have more than one " + template.name + ")"];
+					return ["You are limited to one of each Pokémon by Species Clause.", "(You have more than one " + template.name + ")"];
 				}
 				speciesTable[template.num] = true;
 			}
@@ -441,7 +418,7 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		name: 'Baton Pass Clause',
 		onStart: function () {
-			this.add('rule', 'Baton Pass Clause: Limit 3 pokemon knowing Baton Pass');
+			this.add('rule', 'Baton Pass Clause: Limit three Pokémon knowing Baton Pass');
 		},
 		validateTeam: function (team, format) {
 			var problems = [];
@@ -449,7 +426,7 @@ exports.BattleFormats = {
 			for (var i = 0, l = team.length; i < l; i++) {
 				if (team[i].moves.indexOf('Baton Pass') > -1) BPcount++;
 				if (BPcount > 3) {
-					problems.push("You are limited to 3 pokemon with the move Baton Pass by the Baton Pass Clause.");
+					problems.push("You are limited to three Pokémon with the move Baton Pass by the Baton Pass Clause.");
 					break;
 				}
 			}
@@ -510,7 +487,7 @@ exports.BattleFormats = {
 	sametypeclause: {
 		effectType: 'Rule',
 		onStart: function () {
-			this.add('rule', 'Same Type Clause: Pokemon in a team must share a type');
+			this.add('rule', 'Same Type Clause: Pokémon in a team must share a type');
 		},
 		validateTeam: function (team, format) {
 			var typeTable = {};
