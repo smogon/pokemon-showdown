@@ -1220,6 +1220,11 @@ var commands = exports.commands = {
 		this.sendReplyBox('Join Parukia\'s forums and engage in more fun discussions with the community! <br />' +
 			'<a href="http://parukia.net/community/">http://parukia.net/community/</a>');
 	},
+	parukiarules: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<font size="5" color="black"><b>The Parukian Guidelines</b></font><font size="3" color="black"><b>We don\'t follow the same rules as main!</b></font><br><br>1.) There is no such thing as racism on Parukia.<br>2.) Hazeel is a nut, no matter how many times he denies it.');
+	},
+	
 	/*********************************************************
 	 * Miscellaneous commands
 	 *********************************************************/
