@@ -858,9 +858,10 @@ var commands = exports.commands = {
 	rules: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
-			this.sendReplyBox("Please follow the rules:<br />" +
+			this.sendReplyBox('<font size="5" color="black"><b>The Parukian Guidelines</b></font>' +
 				(room.rulesLink ? "- <a href=\"" + Tools.escapeHTML(room.rulesLink) + "\">" + Tools.escapeHTML(room.title) + " room rules</a><br />" : "") +
-				"- <a href=\"http://pokemonshowdown.com/rules\">" + (room.rulesLink ? "Global rules" : "Rules") + "</a>");
+				"- <a href=\"http://pokemonshowdown.com/rules\">" + (room.rulesLink ? "Global rules" : "Main's rules") + "</a>"); +
+				'<font size="3" color="black"><b>Parukia\'s Rules<br><br>1.)'
 			return;
 		}
 		if (!this.can('roommod', null, room)) return;
