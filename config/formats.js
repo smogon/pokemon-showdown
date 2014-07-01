@@ -356,11 +356,14 @@ exports.Formats = [
 			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
-		ruleset: ['Pokemon', 'Standard', 'Swagger Clause'],
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview 1v1'],
 		banlist: ['Unreleased', 'Illegal', 'Focus Sash', 'Kangaskhanite', 'Soul Dew',
 			'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
 			'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom'
-		]
+		],
+		validateTeam: function (team, format) {
+			if (team.length > 3) return ['You may only bring up to three Pokémon.'];
+		}
 	},
 	{
 		name: "OU Monotype",
