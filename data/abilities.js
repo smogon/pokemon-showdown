@@ -1408,8 +1408,10 @@ exports.BattleAbilities = {
 			}
 			if (move.isBounceable) {
 				var newMove = this.getMoveCopy(move.id);
+				var choiceLocked = target.volatiles['choicelock'];
 				newMove.hasBounced = true;
 				this.useMove(newMove, target, source);
+				if (!choiceLocked) target.removeVolatile('choicelock');
 				return null;
 			}
 		},
@@ -1421,8 +1423,10 @@ exports.BattleAbilities = {
 			}
 			if (move.isBounceable) {
 				var newMove = this.getMoveCopy(move.id);
+				var choiceLocked = target.volatiles['choicelock'];
 				newMove.hasBounced = true;
 				this.useMove(newMove, target, source);
+				if (!choiceLocked) target.removeVolatile('choicelock');
 				return null;
 			}
 		},
