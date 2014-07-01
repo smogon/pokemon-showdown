@@ -925,7 +925,7 @@ var commands = exports.commands = {
 	},
 
 	roomhelp: function (target, room, user) {
-		if (room.id === 'lobby') return this.sendReply("This command is too spammy for lobby.");
+		if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"Room drivers (%) can use:<br />" +
