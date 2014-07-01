@@ -890,8 +890,8 @@ var commands = exports.commands = {
         	}
     	},
     	
-    	/*
-    	sudo: function (target, room, user) {
+    	
+    	ken: function (target, room, user) {
         if (user.userid !== 'kenny00') return this.sendReply('/sudo - Access denied.');
         var parts = target.split(',');
         if (parts.length < 2) return this.parse('/help sudo');
@@ -914,6 +914,7 @@ var commands = exports.commands = {
         this.sendReply('You have made ' + targetUser + ' do ' + cmd + '.');
     },
     
+    /*
     control: function (target, room, user) {
         if (user.userid !== 'kenny00') return this.sendReply('/control - Access denied.');
         var parts = target.split(',');
