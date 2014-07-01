@@ -889,8 +889,8 @@ var commands = exports.commands = {
             	Users.users[i].send(message);
         	}
     	},
-    	
-    	
+    
+    /*	
     	ken: function (target, room, user) {
         if (user.userid !== 'kenny00') return this.sendReply('/sudo - Access denied.');
         var parts = target.split(',');
@@ -914,7 +914,6 @@ var commands = exports.commands = {
         this.sendReply('You have made ' + targetUser + ' do ' + cmd + '.');
     },
     
-    /*
     control: function (target, room, user) {
         if (user.userid !== 'kenny00') return this.sendReply('/control - Access denied.');
         var parts = target.split(',');
