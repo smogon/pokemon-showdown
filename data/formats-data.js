@@ -655,7 +655,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["refresh","doubleedge","raindance","thunder"]}
 		],
-		tier: "NFE"
+		tier: "RU"
 	},
 	magnezone: {
 		viableMoves: {"thunderbolt":1,"substitute":1,"flashcannon":1,"hiddenpowerice":1,"voltswitch":1,"chargebeam":1,"hiddenpowerfire":1},
@@ -1092,7 +1092,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"gender":"M","nature":"Adamant","moves":["thunderpunch","icepunch","crosschop","earthquake"]},
 			{"generation":4,"level":50,"gender":"M","nature":"Serious","moves":["lightscreen","thunderpunch","discharge","thunderbolt"],"pokeball":"cherishball"}
 		],
-		tier: "RU"
+		tier: "NU"
 	},
 	magby: {
 		viableMoves: {"flareblitz":1,"substitute":1,"fireblast":1,"hiddenpowergrass":1,"hiddenpowerice":1,"crosschop":1,"thunderpunch":1,"overheat":1},
@@ -4394,7 +4394,7 @@ exports.BattleFormatsData = {
 	},
 	fletchinder: {
 		viableMoves: {"roost":1,"swordsdance":1,"uturn":1,"return":1,"overheat":1,"flamecharge":1,"tailwind":1},
-		tier: "NFE"
+		tier: "RU"
 	},
 	talonflame: {
 		viableMoves: {"bravebird":1,"flareblitz":1,"roost":1,"swordsdance":1,"uturn":1,"willowisp":1,"tailwind":1},
@@ -4496,7 +4496,7 @@ exports.BattleFormatsData = {
 	},
 	slurpuff: {
 		viableMoves: {"calmmind":1,"dazzlinggleam":1,"surf":1,"psychic":1,"flamethrower":1,"thunderbolt":1},
-		tier: "RU"
+		tier: "NU"
 	},
 	inkay: {
 		viableMoves: {"topsyturvy":1,"switcheroo":1,"superpower":1,"psychocut":1,"flamethrower":1,"rockslide":1,"trickroom":1,"swagger":1,"foulplay":1},
