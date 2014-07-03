@@ -944,7 +944,7 @@ var commands = exports.commands = {
 			"- /modchat <em>[off/autoconfirmed/+]</em>: set modchat level<br />" +
 			"<br />" +
 			"Room owners (#) can also use:<br />" +
-			"- /roomdesc <em>description</em>: set the room description on the room join page<br />" +
+			"- /roomintro <em>intro</em>: sets the room introduction that will be displayed for all users joining the room<br />" +
 			"- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />" +
 			"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />" +
 			"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />" +
