@@ -731,7 +731,6 @@ exports.Formats = [
 		section: "Past Generations",
 
 		mod: 'gen2',
-		debug: true,
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber',
 			'Hypnosis + Perish Song + Mean Look',
