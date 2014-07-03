@@ -184,8 +184,8 @@ module.exports = (function () {
 		if (!template || typeof template === 'string') {
 			var name = (template || '').trim();
 			var id = toId(name);
-			if (this.data.Aliases[id]) {
-				name = this.data.Aliases[id];
+			if (this.checkAlias(id)) {
+				name = this.checkAlias(id);
 				id = toId(name);
 			}
 			template = {};
@@ -239,8 +239,8 @@ module.exports = (function () {
 		if (!move || typeof move === 'string') {
 			var name = (move || '').trim();
 			var id = toId(name);
-			if (this.data.Aliases[id]) {
-				name = this.data.Aliases[id];
+			if (this.checkAlias(id)) {
+				name = this.checkAlias(id);
 				id = toId(name);
 			}
 			move = {};
@@ -338,8 +338,8 @@ module.exports = (function () {
 		if (!effect || typeof effect === 'string') {
 			var name = (effect || '').trim();
 			var id = toId(name);
-			if (this.data.Aliases[id]) {
-				name = this.data.Aliases[id];
+			if (this.checkAlias(id)) {
+				name = this.checkAlias(id);
 				id = toId(name);
 			}
 			effect = {};
@@ -365,8 +365,8 @@ module.exports = (function () {
 		if (!item || typeof item === 'string') {
 			var name = (item || '').trim();
 			var id = toId(name);
-			if (this.data.Aliases[id]) {
-				name = this.data.Aliases[id];
+			if (this.checkAlias(id)) {
+				name = this.checkAlias(id);
 				id = toId(name);
 			}
 			item = {};
@@ -524,6 +524,10 @@ module.exports = (function () {
 		}
 		return banlistTable;
 	};
+	
+	Tools.prototype.checkAlias = function (id) {
+		return this.data.Aliases[id];
+	}
 
 	Tools.prototype.levenshtein = function (s, t, l) { // s = string 1, t = string 2, l = limit
 		// Original levenshtein distance function by James Westgate, turned out to be the fastest

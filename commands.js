@@ -483,7 +483,7 @@ var commands = exports.commands = {
 
 	join: function (target, room, user, connection) {
 		if (!target) return false;
-		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
+		var targetRoom = Rooms.get(target) || Rooms.get(toId(target)) || Rooms.get(toId(Tools.checkAlias(toId(target))));
 		if (!targetRoom) {
 			return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
 		}
