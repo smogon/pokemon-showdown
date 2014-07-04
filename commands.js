@@ -529,9 +529,13 @@ var commands = exports.commands = {
 		targetUser.leaveRoom(room);
 	},
 
+	hm: 'mute',
+	hourmute: 'mute',
 	m: 'mute',
-	mute: function (target, room, user) {
-		if (!target) return this.parse('/help mute');
+	mute: function (target, room, user, connection, cmd) {
+		var hourMute = (cmd === "hm" || cmd === "hourmute");
+		if (!target && !hourMute) return this.parse('/help mute');
+		if (!target && hourMute) return this.parse('/help hourmute');
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = this.splitTarget(target);
@@ -541,6 +545,7 @@ var commands = exports.commands = {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
 		if (!this.can('mute', targetUser, room)) return false;
+		if (room.type === 'battle' && targetUser.can('mute')) return this.sendReply('/' + cmd + ' - Access denied.');
 		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {
 			var problem = " but was already " + (!targetUser.connected ? "offline" : targetUser.locked ? "locked" : "muted");
 			if (!target) {
@@ -549,40 +554,23 @@ var commands = exports.commands = {
 			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		targetUser.popup("" + user.name + " has muted you for 7 minutes. " + target);
-		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 7 minutes." + (target ? " (" + target + ")" : ""));
-		var alts = targetUser.getAlts();
-		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also muted: " + alts.join(", "));
-		this.add('|unlink|' + this.getLastIdOf(targetUser));
+		if (!hourMute) {
+			targetUser.popup("" + user.name + " has muted you for 7 minutes. " + target);
+			this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 7 minutes." + (target ? " (" + target + ")" : ""));
+			var alts = targetUser.getAlts();
+			if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also muted: " + alts.join(", "));
+			this.add('|unlink|' + this.getLastIdOf(targetUser));
 
-		targetUser.mute(room.id, 7 * 60 * 1000);
-	},
+			targetUser.mute(room.id, 7 * 60 * 1000);
+		} else {
+			targetUser.popup("" + user.name + " has muted you for 60 minutes. " + target);
+			this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 60 minutes." + (target ? " (" + target + ")" : ""));
+			var alts = targetUser.getAlts();
+			if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also muted: " + alts.join(", "));
+			this.add('|unlink|' + this.getLastIdOf(targetUser));
 
-	hm: 'hourmute',
-	hourmute: function (target, room, user) {
-		if (!target) return this.parse('/help hourmute');
-		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
-
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
-		if (target.length > MAX_REASON_LENGTH) {
-			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+			targetUser.mute(room.id, 60 * 60 * 1000, true);
 		}
-		if (!this.can('mute', targetUser, room)) return false;
-
-		if (((targetUser.mutedRooms[room.id] && (targetUser.muteDuration[room.id] || 0) >= 50 * 60 * 1000) || targetUser.locked) && !target) {
-			var problem = " but was already " + (!targetUser.connected ? "offline" : targetUser.locked ? "locked" : "muted");
-			return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
-		}
-
-		targetUser.popup("" + user.name + " has muted you for 60 minutes. " + target);
-		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 60 minutes." + (target ? " (" + target + ")" : ""));
-		var alts = targetUser.getAlts();
-		if (alts.length) this.addModCommand("" + targetUser.name + "'s alts were also muted: " + alts.join(", "));
-		this.add('|unlink|' + this.getLastIdOf(targetUser));
-
-		targetUser.mute(room.id, 60 * 60 * 1000, true);
 	},
 
 	um: 'unmute',

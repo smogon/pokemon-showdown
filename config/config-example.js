@@ -226,6 +226,8 @@ exports.groups = {
 		id: "player",
 		name: "Player",
 		inherit: '+',
+		jurisdiction: 'u',
+		mute: true,
 		roomvoice: true,
 		modchat: true,
 		roomonly: true,
