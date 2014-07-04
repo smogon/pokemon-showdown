@@ -127,14 +127,15 @@ Owner
 
 Staff
 
-- Bill Meltsner [bmelts] - Development
 - Hugh Gordon [V4] - Research (game mechanics), Development
-- Juanma Serrano [Joim] - Development
+- Leonardo Julca [Slayer95] - Development
 - [The Immortal] - Development
 
 Retired Staff
 
+- Bill Meltsner [bmelts] - Development
 - Cathy J. Fitzpatrick [cathyjf] - Development
+- Juanma Serrano [Joim] - Development
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 
 Contributors
@@ -143,7 +144,6 @@ Contributors
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
 - Kyle Dove [Kyle_Dove] - Art (battle backdrops)
-- Leonardo Julca [Slayer95] - Development
 - Quinton Lee [sirDonovan] - Development
 - Robin Vandenbrande [Quinella] - Development
 - Samuel Teo [Yilx] - Art (main background)
