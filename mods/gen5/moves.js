@@ -95,6 +95,26 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact."
 	},
+	conversion: {
+		inherit: true,
+		desc: "The user's type changes to match the original type of one of its four moves besides this move, at random, but not either of its current types. Fails if the user cannot change its type, or if this move would only be able to select one of the user's current types.",
+		shortDesc: "Changes user's type to match a known move.",
+		onHit: function (target) {
+			var possibleTypes = target.moveset.map(function (val){
+				var move = this.getMove(val.id);
+				if (move.id !== 'conversion' && !target.hasType(move.type)) {
+					return move.type;
+				}
+			}, this).compact();
+			if (!possibleTypes.length) {
+				return false;
+			}
+			var type = possibleTypes[this.random(possibleTypes.length)];
+
+			if (!target.setType(type)) return false;
+			this.add('-start', target, 'typechange', type);
+		}
+	},
 	copycat: {
 		inherit: true,
 		desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",

@@ -1887,26 +1887,16 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user's type changes to match the original type of one of its four moves besides this move, at random, but not either of its current types. Fails if the user cannot change its type, or if this move would only be able to select one of the user's current types.",
-		shortDesc: "Changes user's type to match a known move.",
+		desc: "The user's type changes to match the original type of the move in its first move slot. Fails if the user cannot change its type, or if this move is one of the user's current types.",
+		shortDesc: "Changes user's type to match its first move.",
 		id: "conversion",
 		name: "Conversion",
 		pp: 30,
 		priority: 0,
 		isSnatchable: true,
 		onHit: function (target) {
-			var possibleTypes = target.moveset.map(function (val){
-				var move = this.getMove(val.id);
-				if (move.id !== 'conversion' && !target.hasType(move.type)) {
-					return move.type;
-				}
-			}, this).compact();
-			if (!possibleTypes.length) {
-				return false;
-			}
-			var type = possibleTypes[this.random(possibleTypes.length)];
-
-			if (!target.setType(type)) return false;
+			var type = this.getMove(target.moveset[0].id).type;
+			if (target.hasType(type) || !target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
 		},
 		secondary: false,
