@@ -48,6 +48,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 90
 	},
+	clearsmog: {
+		inherit: true,
+		basePower: 90
+	},
 	/******************************************************************
 	HMs:
 	- shouldn't suck (as much)
@@ -714,26 +718,6 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	quiverdance: {
-		// Quiver Dance is nerfed because Volc
-		inherit: true,
-		boosts: {
-			spd: 1,
-			spe: 1,
-			accuracy: 1
-		},
-		onModifyMove: function (move, user) {
-			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Lilligant":1, "Vivillon":1};
-			if (user.item === 'stick' && GossamerWingUsers[user.template.species]) {
-				move.boosts = {
-					spa: 1,
-					spd: 1,
-					spe: 1,
-					accuracy: 1
-				};
-			}
-		}
-	},
 	/******************************************************************
 	Silver Wind, Ominous Wind, AncientPower:
 	- 100% chance of raising one stat, instead of 10% chance of raising
@@ -954,6 +938,18 @@ exports.BattleMovedex = {
 	},
 	tailslap: {
 		inherit: true,
+		accuracy: true
+	},
+	triplekick: {
+		inherit: true,
+		accuracy: true
+	},
+	twineedle: {
+		inherit: true
+		accuracy: true
+	},
+	watershuriken: {
+		inherit: true
 		accuracy: true
 	},
 	/******************************************************************
