@@ -13125,7 +13125,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		onTryHit: function (target) {
 			var decision = this.willMove(target);
-			if (!decision || decision.choice !== 'move' || (decision.move.category === 'Status' && decision.move.id !== 'mefirst')) {
+			if (!decision || decision.choice !== 'move' || (decision.move.category === 'Status' && decision.move.id !== 'mefirst') || target.volatiles.mustrecharge) {
 				return false;
 			}
 		},
