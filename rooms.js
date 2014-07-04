@@ -1392,8 +1392,7 @@ var ChatRoom = (function () {
 		if (this.modchat) {
 			if (html) html += '<br /><br />';
 			html += '<div class="broadcast-red">';
-			html += '<b>Moderated chat is currently set to ' + this.modchat + '!</b><br />';
-			html += 'Only users of rank ' + this.modchat + ' and higher can talk.';
+			html += 'Must be rank ' + this.modchat + ' or higher to talk right now.';
 			html += '</div>';
 		}
 
