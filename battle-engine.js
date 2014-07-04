@@ -1206,6 +1206,9 @@ var BattleSide = (function () {
 		case 'doubles':
 			this.active = [null, null];
 			break;
+		case 'triples': case 'rotation':
+			this.active = [null, null, null];
+			break;
 		}
 
 		this.team = this.battle.getTeam(this, team);
