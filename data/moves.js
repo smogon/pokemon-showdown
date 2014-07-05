@@ -1887,26 +1887,16 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user's type changes to match the original type of one of its four moves besides this move, at random, but not either of its current types. Fails if the user cannot change its type, or if this move would only be able to select one of the user's current types.",
-		shortDesc: "Changes user's type to match a known move.",
+		desc: "The user's type changes to match the original type of the move in its first move slot. Fails if the user cannot change its type, or if this move is one of the user's current types.",
+		shortDesc: "Changes user's type to match its first move.",
 		id: "conversion",
 		name: "Conversion",
 		pp: 30,
 		priority: 0,
 		isSnatchable: true,
 		onHit: function (target) {
-			var possibleTypes = target.moveset.map(function (val){
-				var move = this.getMove(val.id);
-				if (move.id !== 'conversion' && !target.hasType(move.type)) {
-					return move.type;
-				}
-			}, this).compact();
-			if (!possibleTypes.length) {
-				return false;
-			}
-			var type = possibleTypes[this.random(possibleTypes.length)];
-
-			if (!target.setType(type)) return false;
+			var type = this.getMove(target.moveset[0].id).type;
+			if (target.hasType(type) || !target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
 		},
 		secondary: false,
@@ -4955,7 +4945,7 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			onStart: function (pokemon) {
-				this.add('-endability', pokemon, pokemon.ability);
+				this.add('-endability', pokemon);
 			},
 			onModifyPokemonPriority: 2,
 			onModifyPokemon: function (pokemon) {
@@ -6907,7 +6897,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Changes Normal-type moves to Electric-type moves. Priority +1.",
-		shortDesc: "Changes Normal moves to Electric type. Priority +1.",
+		shortDesc: "Normal moves become Electric type. Priority +1.",
 		id: "iondeluge",
 		name: "Ion Deluge",
 		pp: 25,
@@ -8237,11 +8227,14 @@ exports.BattleMovedex = {
 					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snatch:1, snarl:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, vcreate:1, wideguard:1, diamondstorm:1, steameruption:1, hyperspacehole:1, thousandarrows:1, thousandwaves:1
 				};
 				if (!noMetronome[move.id]) {
-					moves.push(move.id);
+					moves.push(move);
 				}
 			}
 			var move = '';
-			if (moves.length) move = moves[this.random(moves.length)];
+			if (moves.length) {
+				moves.sort(function(a,b){return a.num-b.num;});
+				move = moves[this.random(moves.length)].id;
+			}
 			if (!move) {
 				return false;
 			}
@@ -9468,8 +9461,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
-		desc: "Deals damage to one adjacent target with a 30% chance to badly poison it. Makes contact.",
-		shortDesc: "30% chance to badly poison the target.",
+		desc: "Deals damage to one adjacent target with a 50% chance to badly poison it. Makes contact.",
+		shortDesc: "50% chance to badly poison the target.",
 		id: "poisonfang",
 		name: "Poison Fang",
 		pp: 15,
@@ -10893,6 +10886,7 @@ exports.BattleMovedex = {
 		name: "Rock Wrecker",
 		pp: 5,
 		priority: 0,
+		isBullet: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -11330,6 +11324,7 @@ exports.BattleMovedex = {
 		name: "Searing Shot",
 		pp: 5,
 		priority: 0,
+		isBullet: true,
 		secondary: {
 			chance: 30,
 			status: 'brn'
@@ -13130,7 +13125,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		onTryHit: function (target) {
 			var decision = this.willMove(target);
-			if (!decision || decision.choice !== 'move' || (decision.move.category === 'Status' && decision.move.id !== 'mefirst')) {
+			if (!decision || decision.choice !== 'move' || (decision.move.category === 'Status' && decision.move.id !== 'mefirst') || target.volatiles.mustrecharge) {
 				return false;
 			}
 		},
@@ -15164,6 +15159,7 @@ exports.BattleMovedex = {
 		name: "Zap Cannon",
 		pp: 5,
 		priority: 0,
+		isBullet: true,
 		secondary: {
 			chance: 100,
 			status: 'par'

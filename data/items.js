@@ -1448,6 +1448,14 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "If holder's HP is full, will survive an attack that would KO it with 1HP. Single use."
 	},
+	"friendball": {
+		id: "friendball",
+		name: "Friend Ball",
+		spritenum: 153,
+		num: 497,
+		gen: 2,
+		desc: "A Poké Ball that makes caught Pokémon more friendly."
+	},
 	"fullincense": {
 		id: "fullincense",
 		name: "Full Incense",
@@ -3865,13 +3873,13 @@ exports.BattleItems = {
 		},
 		onModifySpAPriority: 1,
 		onModifySpA: function (spa, pokemon) {
-			if (pokemon.baseTemplate.species === 'Latios' || pokemon.baseTemplate.species === 'Latias') {
+			if (pokemon.baseTemplate.num === 380 || pokemon.baseTemplate.num === 381) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
 		onModifySpD: function (spd, pokemon) {
-			if (pokemon.baseTemplate.species === 'Latios' || pokemon.baseTemplate.species === 'Latias') {
+			if (pokemon.baseTemplate.num === 380 || pokemon.baseTemplate.num === 381) {
 				return this.chainModify(1.5);
 			}
 		},

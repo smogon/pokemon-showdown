@@ -1,19 +1,28 @@
 Pokémon Showdown
 ========================================================================
 
-Pokémon Showdown is a simulator of Pokémon battles. It currently supports singles battles in all the games out so far (Generations 1 through 6).
+Navigation: [Website][1] | **Server repository** | [Client repository][2]
+
+  [1]: http://pokemonshowdown.com/
+  [2]: https://github.com/Zarel/Pokemon-Showdown-Client
+  
+Introduction
+------------------------------------------------------------------------
+
+This is the source code for the game server of [Pokémon Showdown][3], a website for Pokémon battling. Pokémon Showdown simulates singles and doubles battles in all the games out so far (Generations 1 through 6).
 
 This repository contains the files needed to set up your own Pokémon Showdown server. Note that to set up a server, you'll also need a server computer.
 
-You can use your own computer as a server, but for other people to connect to your computer, you'll need to expose a port (default is 8000 but you can choose a different one) to connect to, which sometimes requires [port forwarding][1] (note that this isn't possible on certain internet connections).
+You can use your own computer as a server, but for other people to connect to your computer, you'll need to expose a port (default is 8000 but you can choose a different one) to connect to, which sometimes requires [port forwarding][4] (note that this isn't possible on certain internet connections).
 
-  [1]: http://en.wikipedia.org/wiki/Port_forwarding
+  [3]: http://pokemonshowdown.com/
+  [4]: http://en.wikipedia.org/wiki/Port_forwarding
 
 
 Installing
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires [node.js][2], v0.10.2 and up. Install `node.js` if you don't have it yet; the latest stable version is a good choice to install.
+Pokémon Showdown requires [node.js][5], v0.10.2 and up. Install `node.js` if you don't have it yet; the latest stable version is a good choice to install.
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone" button in the bottom of the right sidebar, or if you're really lazy, there's a "ZIP" download button. I recommend the Clone method - it's more time-consuming to set up, but much easier to update.
 
@@ -49,10 +58,10 @@ Yes, you can test even if you are behind a NAT without port forwarding: `http://
 
 You will be redirected to `http://SERVER.psim.us`. The reason your server is visited through `psim.us` is to make it more difficult for servers to see a user's password in any form, by handling logins globally. You can embed this in an `iframe` in your website if the URL is a big deal with you.
 
-If you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][3]. It's not recommended for beginners, though.
+If you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][6]. It's not recommended for beginners, though.
 
-  [2]: http://nodejs.org/
-  [3]: https://github.com/Zarel/Pokemon-Showdown-Client
+  [5]: http://nodejs.org/
+  [6]: https://github.com/Zarel/Pokemon-Showdown-Client
 
 
 Setting up an Administrator account
@@ -96,17 +105,17 @@ Community
 
 The Pokémon Showdown development IRC channel is `#showdown` at `irc.synirc.net`.
 
-You can also visit the [Pokémon Showdown forums][4] for discussion and help.
+You can also visit the [Pokémon Showdown forums][7] for discussion and help.
 
-  [4]: http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
+  [7]: http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
 
 
 License
 ------------------------------------------------------------------------
 
-Pokémon Showdown's server is distributed under the terms of the [MIT License][5].
+Pokémon Showdown's server is distributed under the terms of the [MIT License][8].
 
-  [5]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
+  [8]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
 
 
 Credits
@@ -118,14 +127,15 @@ Owner
 
 Staff
 
-- Bill Meltsner [bmelts] - Development
 - Hugh Gordon [V4] - Research (game mechanics), Development
-- Juanma Serrano [Joim] - Development
+- Leonardo Julca [Slayer95] - Development
 - [The Immortal] - Development
 
 Retired Staff
 
+- Bill Meltsner [bmelts] - Development
 - Cathy J. Fitzpatrick [cathyjf] - Development
+- Juanma Serrano [Joim] - Development
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 
 Contributors
@@ -134,7 +144,6 @@ Contributors
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
 - Kyle Dove [Kyle_Dove] - Art (battle backdrops)
-- Leonardo Julca [Slayer95] - Development
 - Quinton Lee [sirDonovan] - Development
 - Robin Vandenbrande [Quinella] - Development
 - Samuel Teo [Yilx] - Art (main background)

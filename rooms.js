@@ -1392,22 +1392,22 @@ var ChatRoom = (function () {
 
 		return log;
 	};
-	ChatRoom.prototype.getModchatNote = function (noNewline) {
+	ChatRoom.prototype.getIntroMessage = function () {
+		var html = this.introMessage || '';
 		if (this.modchat) {
-			var text = !noNewline ? '\n' : '';
-			text += '|raw|<div class="broadcast-red">';
-			text += '<b>Moderated chat is currently set to ' + this.modchat + '!</b><br />';
-			text += 'Only users of rank ' + this.modchat + ' and higher can talk.';
-			text += '</div>';
-			return text;
+			if (html) html += '<br /><br />';
+			html += '<div class="broadcast-red">';
+			html += 'Must be rank ' + this.modchat + ' or higher to talk right now.';
+			html += '</div>';
 		}
+
+		if (html) return '\n|raw|<div class="infobox">' + html + '</div>';
 
 		return '';
 	};
 	ChatRoom.prototype.onJoinConnection = function (user, connection) {
 		var userList = this.userList ? this.userList : this.getUserList();
-		var modchat = this.getModchatNote();
-		this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(25).join('\n') + modchat, connection);
+		this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(25).join('\n') + this.getIntroMessage(), connection);
 		if (global.Tournaments && Tournaments.get(this.id))
 			Tournaments.get(this.id).update(user);
 		if (this.reminders && this.reminders.length > 0)
@@ -1433,8 +1433,7 @@ var ChatRoom = (function () {
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
-			var modchat = this.getModchatNote();
-			this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(100).join('\n') + modchat, connection);
+			this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(100).join('\n') + this.getIntroMessage(), connection);
 			if (this.reminders && this.reminders.length > 0)
 				CommandParser.parse('/reminder', this, user, connection);
 		}
@@ -1445,6 +1444,17 @@ var ChatRoom = (function () {
 	};
 	ChatRoom.prototype.onRename = function (user, oldid, joining) {
 		delete this.users[oldid];
+		if (this.bannedUsers && (user.userid in this.bannedUsers || user.autoconfirmed in this.bannedUsers)) {
+			this.bannedUsers[oldid] = true;
+			for (var ip in user.ips) this.bannedIps[ip] = true;
+			user.leaveRoom(this);
+			var alts = user.getAlts();
+			for (var i = 0; i < alts.length; ++i) {
+				this.bannedUsers[toId(alts[i])] = true;
+				Users.getExact(alts[i]).leaveRoom(this);
+			}
+			return;
+		}
 		this.users[user.userid] = user;
 		var entry;
 		if (joining) {
@@ -1556,7 +1566,7 @@ var newRoom = function (roomid, format, p1, p2, parent, rated) {
 	return rooms[roomid];
 };
 
-var rooms = {};
+var rooms = Object.create(null);
 console.log("NEW GLOBAL: global");
 rooms.global = new GlobalRoom('global');
 
