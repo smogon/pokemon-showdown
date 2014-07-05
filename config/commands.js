@@ -935,6 +935,7 @@ var commands = exports.commands = {
 			"- /unmute <em>username</em>: unmute<br />" +
 			"- /announce OR /wall <em>message</em>: make an announcement<br />" +
 			"- /modlog <em>username</em>: search the moderator log of the room<br />" +
+			"- /modnote <em>note</em>: adds a moderator note that can be read through modlog<br/>" +
 			"<br />" +
 			"Room moderators (@) can also use:<br />" +
 			"- /roomban OR /rb <em>username</em>: bans user from the room<br />" +
@@ -950,6 +951,8 @@ var commands = exports.commands = {
 			"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />" +
 			"- /modchat <em>[%/@/#]</em>: set modchat level<br />" +
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
+			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
+			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
 			"</div>"
 		);
 	},
