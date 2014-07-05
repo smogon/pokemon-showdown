@@ -422,7 +422,7 @@ var Validator = (function () {
 					clause = typeof banlistTable[check] === 'string' ? " by "+ banlistTable[check] : '';
 					problems.push(name + "'s move " + set.moves[i] + " is banned" + clause + ".");
 				}
-				
+
 				if (banlistTable['Unreleased']) {
 					if (move.isUnreleased) problems.push(name + "'s move " + set.moves[i] + " is unreleased.");
 				}

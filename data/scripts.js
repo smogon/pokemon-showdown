@@ -1946,7 +1946,7 @@ exports.BattleScripts = {
 			var fakeErr = {stack: stack};
 			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
 		}
-		
+
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
 		if (!noMega && this.canMegaEvo(template) && template.species !== 'Latios' && template.species !== 'Latias') {
 			// If there's more than one mega evolution, randomly pick one
