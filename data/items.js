@@ -1448,6 +1448,14 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "If holder's HP is full, will survive an attack that would KO it with 1HP. Single use."
 	},
+	"friendball": {
+		id: "friendball",
+		name: "Friend Ball",
+		spritenum: 153,
+		num: 497,
+		gen: 2,
+		desc: "A Poké Ball that makes caught Pokémon more friendly."
+	},
 	"fullincense": {
 		id: "fullincense",
 		name: "Full Incense",
