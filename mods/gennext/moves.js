@@ -944,12 +944,8 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: true
 	},
-	twineedle: {
-		inherit: true
-		accuracy: true
-	},
 	watershuriken: {
-		inherit: true
+		inherit: true,
 		accuracy: true
 	},
 	/******************************************************************
@@ -1629,6 +1625,7 @@ exports.BattleMovedex = {
 	******************************************************************/
 	twineedle: {
 		inherit: true,
+		accuracy: true,
 		basePower: 50
 	},
 	drillpeck: {
