@@ -6,14 +6,6 @@ exports.BattleItems = {
 		fling: {
 			basePower: 70
 		},
-		onStart: function (pokemon) {
-			if (pokemon.species === 'Genesect') {
-				this.add('-item', pokemon, 'Burn Drive');
-				if (pokemon.formeChange('Genesect-Burn')) {
-					this.add('-formechange', pokemon, 'Genesect-Burn');
-				}
-			}
-		},
 		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Fire',
@@ -25,14 +17,6 @@ exports.BattleItems = {
 		spritenum: 103,
 		fling: {
 			basePower: 70
-		},
-		onStart: function (pokemon) {
-			if (pokemon.species === 'Genesect') {
-				this.add('-item', pokemon, 'Chill Drive');
-				if (pokemon.formeChange('Genesect-Chill')) {
-					this.add('-formechange', pokemon, 'Genesect-Chill');
-				}
-			}
 		},
 		onBasePower: function (basePower, user, target, move) {
 		},
@@ -46,14 +30,6 @@ exports.BattleItems = {
 		fling: {
 			basePower: 70
 		},
-		onStart: function (pokemon) {
-			if (pokemon.species === 'Genesect') {
-				this.add('-item', pokemon, 'Douse Drive');
-				if (pokemon.formeChange('Genesect-Douse')) {
-					this.add('-formechange', pokemon, 'Genesect-Douse');
-				}
-			}
-		},
 		onBasePower: function (basePower, user, target, move) {
 		},
 		onDrive: 'Water',
@@ -65,14 +41,6 @@ exports.BattleItems = {
 		spritenum: 103,
 		fling: {
 			basePower: 70
-		},
-		onStart: function (pokemon) {
-			if (pokemon.species === 'Genesect') {
-				this.add('-item', pokemon, 'Shock Drive');
-				if (pokemon.formeChange('Genesect-Shock')) {
-					this.add('-formechange', pokemon, 'Genesect-Shock');
-				}
-			}
 		},
 		onBasePower: function (basePower, user, target, move) {
 		},

@@ -187,7 +187,7 @@ var plugins = exports.plugins = {
             		toggleaotd: function (target, room, user) {
          			if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
                 		if (!this.canTalk()) return;
-                		if (!this.can('mute', null, room)) return;
+                		if (!this.can('aotd', room)) return;
                 		if (!target) {
                 			return this.sendReply("/toggleaotd [on / off] - If on, this will start AOTD, if off, this will no longer allow people to use /naotd.");
                 		}
@@ -231,7 +231,7 @@ var plugins = exports.plugins = {
                 		if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
                 		if (!room.aotdOn) {
                     			return this.sendReply("The Artist of the Day has already been chosen.");
-                		} 
+                		}
                 		if (!target) return this.sendReply("/naotd [artist] - Nominates an artist for Artist of the Day.");
                 		if (target.length > 25) {
                     			return this.sendReply("This Artist\'s name is too long; it cannot exceed 25 characters.");
@@ -252,7 +252,7 @@ var plugins = exports.plugins = {
         			if (target.length > 25) {
                 			return this.sendReply("This Artist\'s name is too long; it cannot exceed 25 characters.");
         			}
-        			if (!this.can('mute', null, room)) return;
+        			if (!this.can('aotd', room)) return;
         			room.aotd = target;
         			room.addRaw(
         				'<div class=\"broadcast-green\"><font size="2"><b>The Artist of the Day is now </font><b><font color="black" size="2">' + Tools.escapeHTML(target) + '</font></b><br />' +
@@ -264,7 +264,7 @@ var plugins = exports.plugins = {
 			}
             	}
     	},
-    	
+
     	/**
 	* The Happy Place: Quote of the Day Plugin
 	* This is a command that allows a room owner to set an inspirational "quote" of the day.
@@ -283,7 +283,7 @@ var plugins = exports.plugins = {
 					if (!plugins.happy.quote) return this.sendReplyBox("The Quote of the Day has not been set.");
                				return this.sendReplyBox("The current <b>\"Inspirational Quote of the Day\"</b> is: <br /> " + plugins.happy.quote + "");
 				}
-      				if (!this.can('declare', null, room)) return false;
+      				if (!this.can('qotd', room)) return false;
       				if (target === 'off' || target === 'disable' || target === 'reset') {
 					if (!plugins.happy.quote) return this.sendReply("The Quote of the Day has already been reset.");
 					plugins.happy.quote = '';
