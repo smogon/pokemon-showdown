@@ -1082,7 +1082,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'fuck yeah'){
 			matched = true;
-			this.sendReplyBox('<img src="http://logout.hu/dl/upc/2011-06/139344_mem.jpg" />');
+			this.sendReplyBox('<img src="http://cdn.ebaumsworld.com/mediaFiles/picture/602006/80615085.jpg" height="200" width="200" />');
 		}
 		if (target === 'so hard'){
 			matched = true;
