@@ -1186,8 +1186,10 @@ var commands = exports.commands = {
 			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
 			if (Rooms.rooms[id].requestKickInactive && !Rooms.rooms[id].battle.ended) {
 				Rooms.rooms[id].requestKickInactive(user, true);
-				Rooms.rooms[id].modchat = '+';
-				Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>");
+				if (Rooms.rooms[id].modchat !== '+') {
+					Rooms.rooms[id].modchat = '+';
+					Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>");
+				}
 			}
 		}
 
