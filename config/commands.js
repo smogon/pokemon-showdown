@@ -318,8 +318,8 @@ var commands = exports.commands = {
 				var details = {
 					"Priority": move.priority,
 				};
-				
-				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";	
+
+				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";
 				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
 				if (move.isBullet) details["<font color=black>&#10003; Bullet</font>"] = "";
 				if (move.isPulseMove) details["<font color=black>&#10003; Pulse</font>"] = "";

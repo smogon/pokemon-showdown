@@ -194,7 +194,7 @@ New mechanic: Signature Pokemon:
   - Masquerain: Surf (10% -1 Spe)
 
   - Snorlax: Snore (100 base power)
-  
+
   - Persian: Slash (60 base power 30% -1 Def)
 
 - Again, note that while the Signature Pokemon will get the 1.5x damage boost,
@@ -443,7 +443,7 @@ Minor ability changes:
   or is Protected against), and will heal the user by 33% during its Truant
   turn
 
-- Clear Body and White Smoke prevents all stat lowering (relevant: the Regis' 
+- Clear Body and White Smoke prevents all stat lowering (relevant: the Regis'
   Superpower, Metagross' Hammer Arm, and Torkoal's Overheat)
 
 - Thick Fat grants half damage from Fighting
