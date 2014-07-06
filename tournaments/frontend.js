@@ -367,11 +367,11 @@ var Tournament = (function () {
 		var isTournamentEnded = this.generator.disqualifyUser(user);
 		if (typeof isTournamentEnded === 'string') {
 			output.sendReply('|tournament|error|' + isTournamentEnded);
-			return;
+			return false;
 		}
 		if (this.disqualifiedUsers.get(user)) {
 			output.sendReply('|tournament|error|AlreadyDisqualified');
-			return;
+			return false;
 		}
 
 		this.disqualifiedUsers.set(user, true);
@@ -421,6 +421,7 @@ var Tournament = (function () {
 			this.onTournamentEnd();
 		else
 			this.update();
+		return true;
 	};
 
 	Tournament.prototype.challenge = function (from, to, output) {
@@ -634,8 +635,8 @@ var commands = {
 			var targetUser = Users.get(params[0]);
 			if (!targetUser)
 				return this.sendReply("User " + params[0] + " not found.");
-			tournament.disqualifyUser(targetUser, this);
-			this.privateModCommand("("+targetUser.name+" was disqualified from the tournament by "+user.name+")");
+			if (tournament.disqualifyUser(targetUser, this))
+				this.privateModCommand("("+targetUser.name+" was disqualified from the tournament by "+user.name+")");
 		},
 		end: 'delete',
 		stop: 'delete',
