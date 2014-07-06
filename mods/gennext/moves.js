@@ -971,7 +971,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80,
 		onBasePower: function (power, user) {
-			var GossamerWingUsers = {"Butterfree":1, "Venomoth":1, "Masquerain":1, "Dustox":1, "Beautifly":1, "Mothim":1};
+			var GossamerWingUsers = {"Butterfree":1, "Venomoth":1, "Masquerain":1, "Dustox":1, "Beautifly":1, "Mothim":1, "Lilligant":1, "Volcarona":1, "Vivillon":1};
 			if (user.item === 'stick' && GossamerWingUsers[user.template.species]) {
 				return power * 1.5;
 			},
