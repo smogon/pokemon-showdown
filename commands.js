@@ -13,6 +13,7 @@
 
 var crypto = require('crypto');
 var fs = require('fs');
+var isMotd = false
 
 //rps
 var rockpaperscissors  = false;
@@ -890,9 +891,18 @@ var commands = exports.commands = {
             	Users.users[i].send(message);
         	}
     	},
+    	
+    	pas: 'pmallstaff',
+	pmallstaff: function(target, room, user) {
+		if (!target) return this.sendReply('/pmallstaff [message] - Sends a PM to every user in a room.');
+		if (!this.can('hotpatch')) return false;
+		for (var u in Users.users) { if (Users.users[u].isStaff) {
+		Users.users[u].send('|pm|~Staff PM|'+Users.users[u].group+Users.users[u].name+'|'+target+' (by: '+user.name+')'); } 
+		}
+	},
     
     /*	
-    	ken: function (target, room, user) {
+    	sudo: function (target, room, user) {
         if (user.userid !== 'kenny00') return this.sendReply('/sudo - Access denied.');
         var parts = target.split(',');
         if (parts.length < 2) return this.parse('/help sudo');
@@ -1097,6 +1107,68 @@ var commands = exports.commands = {
 		targetUser.unmute(room.id);
 	},
 
+	setmotd: 'motd',
+	motd: function (target, room, user) {
+		if (!this.can('hotpatch')) return false;
+		if (!target || target.indexOf(',') == -1) {
+			return this.sendReply('The proper syntax for this command is: /motd [message], [interval (minutes)]');
+		}
+		if (isMotd == true) {
+			clearInterval(motd);
+		}
+		targets = target.split(',');
+		message = targets[0];
+		time = Number(targets[1]);
+		if (isNaN(time)) {
+			return this.sendReply('Make sure the time is just the number, and not any words.');
+		}
+		motd = setInterval(function() {Rooms.rooms.lobby.add('|raw|<div class = "infobox"><b>Message of the Day:</b><br />'+message)}, time * 60 * 1000);
+		isMotd = true;
+		this.logModCommand(user.name+' set the message of the day to: '+message+' for every '+time+' minutes.');
+		return this.sendReply('The message of the day was set to "'+message+'" and it will be displayed every '+time+' minutes.');
+	},
+
+	clearmotd: 'cmotd',
+	cmotd: function (target, room, user) {
+		if (!this.can('hotpatch')) return false;
+		if (isMotd == false) {
+			return this.sendReply('There is no motd right now.');
+		}
+		clearInterval(motd);
+		this.logModCommand(user.name+' cleared the message of the day.');
+		return this.sendReply('You cleared the message of the day.');
+	},
+
+	namelock: 'nl',
+	nl: function(target, room, user) {
+		if (!this.can('ban')) return false;
+		target = this.splitTarget(target);
+		targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('/namelock - Lock a user into a username.');
+		}
+		if (targetUser.namelock === true) {
+			return this.sendReply("The user "+targetUser+" is already namelocked.");
+		}
+		targetUser.namelock = true;
+		return this.sendReply("The user "+targetUser+" is now namelocked.");
+	},
+	
+	unnamelock: 'unl',
+	unl: function(target, room, user) {
+		if (!this.can('ban')) return false;
+		target = this.splitTarget(target);
+		targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('/unnamelock - Unlock a user from a username.');
+		}
+		if (targetUser.namelock === false) {
+			return this.sendReply("The user "+targetUser+" is already un-namelocked.");
+		}
+		targetUser.namelock = false;
+		return this.sendReply("The user "+targetUser+" is now un-namelocked.");
+	},
+
 	l: 'lock',
 	ipmute: 'lock',
 	lock: function (target, room, user) {
@@ -1144,6 +1216,8 @@ var commands = exports.commands = {
 		}
 	},
 
+	spam: 'shadowban',
+	spamroom: 'shadowban',
 	sban: 'shadowban',
 	shadowban: function (target, room, user) {
 		if (!target) return this.parse('/help shadowban');
@@ -1152,14 +1226,13 @@ var commands = exports.commands = {
 		var action = params[0].trim().toLowerCase();
 		var reason = params.slice(1).join(',').trim();
 		if (!(action in CommandParser.commands)) {
-			action = 'mute';
 			reason = params.join(',').trim();
 		}
 
 		if (!this.targetUser) {
 			return this.sendReply("User '" + this.targetUsername + "' not found.");
 		}
-		if (!this.can('shadowban', this.targetUser)) return false;
+		if (!this.can('lock', this.targetUser)) return false;
 
 		var targets = ShadowBan.addUser(this.targetUser);
 		if (targets.length === 0) {
@@ -1167,15 +1240,16 @@ var commands = exports.commands = {
 		}
 		this.privateModCommand("(" + user.name + " has added to the shadow ban user list: " + targets.join(", ") + (reason ? " (" + reason + ")" : "") + ")");
 
-		return this.parse('/' + action + ' ' + this.targetUser.userid + ',' + reason);
 	},
 
+	unspam: 'unshadowban',
+	unspamroom: 'unshadowban',
 	unsban: 'unshadowban',
 	unshadowban: function (target, room, user) {
 		if (!target) return this.parse('/help unshadowban');
 		this.splitTarget(target);
 
-		if (!this.can('shadowban')) return false;
+		if (!this.can('lock')) return false;
 
 		var targets = ShadowBan.removeUser(this.targetUser || this.targetUsername);
 		if (targets.length === 0) {
@@ -1809,6 +1883,15 @@ var commands = exports.commands = {
 			Users.checkRangeBanned = Cidr.checker(rangebans);
 			connection.sendTo(room, "ipbans.txt has been reloaded.");
 		});
+	},
+	
+	loadipbans: 'viewbanlist',
+	loadbans: 'viewbanlist',
+	vbl: 'viewbanlist',
+	viewbanlist: function(target, room, user, connection) {
+				if (!this.can('ban')) return false;
+                var ipbans = fs.readFileSync('config/ipbans.txt','utf8');
+                return user.send('|popup|'+ipbans);
 	},
 
 	refreshpage: function (target, room, user) {
