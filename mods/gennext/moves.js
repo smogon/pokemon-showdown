@@ -970,6 +970,12 @@ exports.BattleMovedex = {
 	twister: {
 		inherit: true,
 		basePower: 80,
+		onBasePower: function (power, user) {
+			var GossamerWingUsers = {"Butterfree":1, "Venomoth":1, "Masquerain":1, "Dustox":1, "Beautifly":1, "Mothim":1, "Lilligant":1, "Volcarona":1, "Vivillon":1};
+			if (user.item === 'stick' && GossamerWingUsers[user.template.species]) {
+				return power * 1.5;
+			},
+		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'confusion'
@@ -1058,7 +1064,7 @@ exports.BattleMovedex = {
 		willCrit: true
 	},
 	/******************************************************************
-	Scald:
+	Scald and Steam eruption:
 	- base power not affected by weather
 	- 60% burn in sun
 
@@ -1066,6 +1072,16 @@ exports.BattleMovedex = {
 	- rain could use a nerf
 	******************************************************************/
 	scald: {
+		inherit: true,
+		onModifyMove: function (move) {
+			switch (this.effectiveWeather()) {
+			case 'sunnyday':
+				move.secondary.chance = 60;
+				break;
+			}
+		}
+	},
+	steameruption: {
 		inherit: true,
 		onModifyMove: function (move) {
 			switch (this.effectiveWeather()) {
