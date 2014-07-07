@@ -421,8 +421,11 @@ var Tournament = (function () {
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
 
-		if (isTournamentEnded) this.onTournamentEnd();
-		else this.update();
+		if (isTournamentEnded) {
+			this.onTournamentEnd();
+		} else {
+			this.update();
+		}
 		return true;
 	};
 
@@ -502,9 +505,10 @@ var Tournament = (function () {
 	};
 	Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
 		if (!result) return;
-		if (!this.pendingChallenges.get(user)) return;
+		
 		// Prevent double accepts
-
+		if (!this.pendingChallenges.get(user)) return;
+		
 		var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
 		if (!room) return;
 
@@ -530,8 +534,11 @@ var Tournament = (function () {
 		var to = Users.get(room.p2);
 
 		var result = 'draw';
-		if (from === winner) result = 'win';
-		else if (to === winner) result = 'loss';
+		if (from === winner) {
+			result = 'win';
+		} else if (to === winner) {
+			result = 'loss';
+		}
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
 			this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(',') + '|fail');
@@ -563,8 +570,11 @@ var Tournament = (function () {
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
 
-		if (isTournamentEnded) this.onTournamentEnd();
-		else this.update();
+		if (isTournamentEnded) {
+			this.onTournamentEnd();
+		} else {
+			this.update();
+		}
 	};
 	Tournament.prototype.onTournamentEnd = function () {
 		this.room.add('|tournament|end|' + JSON.stringify({results: this.generator.getResults().map(usersToNames), bracketData: this.getBracketData()}));
@@ -710,8 +720,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 
 		if (!commandHandler) {
 			this.sendReply(cmd + " is not a tournament command.");
-		}
-		else {
+		} else {
 			commandHandler.call(this, tournament, user, params, cmd);
 		}
 	}
