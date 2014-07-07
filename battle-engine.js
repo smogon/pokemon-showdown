@@ -2220,9 +2220,6 @@ var Battle = (function () {
 		return null;
 	};
 	Battle.prototype.makeRequest = function (type, requestDetails) {
-		if (!this.p1.isActive || !this.p2.isActive) {
-			return;
-		}
 		if (type) {
 			this.currentRequest = type;
 			this.rqid++;
