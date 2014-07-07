@@ -478,7 +478,26 @@ var commands = exports.commands = {
 	},
 
 	autojoin: function (target, room, user, connection) {
-		Rooms.global.autojoinRooms(user, connection);
+		if (!target) return Rooms.global.autojoinRooms(user, connection);
+		var targets = target.split(',');
+		var opt = targets[0];
+		if (opt !== 'add' && opt !== 'delete' && opt !== 'list') return this.parse('/help autojoin');
+
+		var autojoins = [opt];
+		var tarLen = targets.length;
+		if ((opt === 'add' && tarLen === 1) || (opt === 'list' && tarLen > 1)) return this.parse('/help autojoin');
+		if ((opt === 'add' || opt === 'delete') && tarLen > 1) {
+			for (var i = 1; i < tarLen; i++) {
+				var tarRoom = toId(targets[i]);
+				if (!Rooms.rooms[tarRoom]) continue;
+				tarRoom = Rooms.rooms[tarRoom].title;
+				// the global room's title property is undefined
+				if (tarRoom && tarRoom !== 'Lobby' && tarRoom !== 'Staff') autojoins.push(tarRoom);
+			}
+			if (autojoins.length === 1) return this.sendReply('No valid rooms were specified.');
+		}
+		autojoins = autojoins.join(',');
+		return connection.sendTo(room, "|autojoins|" + autojoins);
 	},
 
 	join: function (target, room, user, connection) {
