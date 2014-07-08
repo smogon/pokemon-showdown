@@ -596,7 +596,12 @@ var Tournament = (function () {
 			this.update();
 	};
 	Tournament.prototype.onTournamentEnd = function () {
-		this.room.add('|tournament|end|' + JSON.stringify({results: this.generator.getResults().map(usersToNames), bracketData: this.getBracketData()}));
+		this.room.add('|tournament|end|' + JSON.stringify({
+			results: this.generator.getResults().map(usersToNames),
+			format: this.format,
+			generator: this.generator.name,
+			bracketData: this.getBracketData()
+		}));
 		this.isEnded = true;
 		delete exports.tournaments[toId(this.room.id)];
 	};
