@@ -1558,7 +1558,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "No in-game effect.",
+		desc: "The Pokémon congratulates you on your special day!",
 		shortDesc: "No in-game effect.",
 		id: "celebrate",
 		name: "Celebrate",
@@ -6307,6 +6307,24 @@ exports.BattleMovedex = {
 		noFaint: true,
 		secondary: false,
 		target: "normal",
+		type: "Normal"
+	},
+	"holdhands": {
+		num: 615,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Ally Pokémon hold hands. This makes them very happy.",
+		shortDesc: "No in-game effect.",
+		id: "holdhands",
+		name: "Hold Hands",
+		pp: 40,
+		priority: 0,
+		onTryHit: function (target, source) {
+			return null;
+		},
+		secondary: false,
+		target: "adjacentAlly",
 		type: "Normal"
 	},
 	"honeclaws": {
