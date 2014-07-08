@@ -700,7 +700,7 @@ var commands = exports.commands = {
 				if (typeMod === -1) resistances.push(type);
 				if (typeMod === -2) resistances.push("<b>" + type + "</b>");
 			}
-			else {
+			else if (!notImmune) {
 				this.sendReplyBox("" + target + " è immune a " + type + ".");
 			}	
 		});
