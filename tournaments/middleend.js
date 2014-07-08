@@ -665,7 +665,7 @@ var commands = {
 			if (!targetUser)
 				return this.sendReply("User " + params[0] + " not found.");
 			tournament.disqualifyUser(targetUser, this);
-			this.privateModCommand("("+targetUser.name+" was disqualified from the tournament by "+user.name+")");
+			this.privateModCommand("(" + targetUser.name + " was disqualified from the tournament by " + user.name + ")");
 		},
 		end: 'delete',
 		stop: 'delete',
