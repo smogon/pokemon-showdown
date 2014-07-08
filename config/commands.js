@@ -699,10 +699,8 @@ var commands = exports.commands = {
 				var typeMod = Tools.getEffectiveness(type, pokemon);
 				if (typeMod === -1) resistances.push(type);
 				if (typeMod === -2) resistances.push("<b>" + type + "</b>");
+				if (typeMod === -3) resistances.push("<i>" + type + "</i>");
 			}
-			else if (!notImmune) {
-				this.sendReplyBox("" + target + " è immune a " + type + ".");
-			}	
 		});
 
 		if (!resistances.length) {
