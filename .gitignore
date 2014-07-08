@@ -47,4 +47,4 @@ local_settings.py
 pip-log.txt
 
 # clans
-clans.js
+/clans.js
