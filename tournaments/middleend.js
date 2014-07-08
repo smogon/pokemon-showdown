@@ -1,5 +1,7 @@
 require('es6-shim');
 
+const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
+
 var TournamentGenerators = {
 	roundrobin: require('./generator-round-robin.js').RoundRobin,
 	elimination: require('./generator-elimination.js').Elimination
@@ -69,6 +71,8 @@ var Tournament = (function () {
 		this.isRated = isRated;
 
 		this.isBracketInvalidated = true;
+		this.lastBracketUpdate = 0;
+		this.bracketUpdateTimer = null;
 		this.bracketCache = null;
 
 		this.isTournamentStarted = false;
@@ -79,6 +83,8 @@ var Tournament = (function () {
 		this.availableMatchesCache = null;
 
 		this.pendingChallenges = null;
+
+		this.isEnded = false;
 
 		room.add('|tournament|create|' + this.format + '|' + generator.name);
 		room.send('|tournament|update|' + JSON.stringify({
@@ -120,12 +126,20 @@ var Tournament = (function () {
 				if (match)
 					delete match.room.win;
 			});
+		this.isEnded = true;
 		this.room.add('|tournament|forceend');
+		this.isEnded = true;
 	};
 
 	Tournament.prototype.update = function (targetUser) {
-		if (targetUser && (this.isBracketInvalidated || (this.isTournamentStarted && this.isAvailableMatchesInvalidated))) {
-			this.room.add("Error: update() called with a target user when data invalidated: " + this.isBracketInvalidated + ", " + (this.isTournamentStarted && this.isAvailableMatchesInvalidated) + "; Please report this to an admin.");
+		if (this.isEnded) return;
+		if (targetUser && ((!this.bracketUpdateTimer && this.isBracketInvalidated) || (this.isTournamentStarted && this.isAvailableMatchesInvalidated))) {
+			this.room.add(
+				"Error: update() called with a target user when data invalidated: " +
+				(!this.bracketUpdateTimer && this.isBracketInvalidated) + ", " +
+				(this.isTournamentStarted && this.isAvailableMatchesInvalidated) +
+				"; Please report this to an admin."
+			);
 			return;
 		}
 
@@ -152,9 +166,19 @@ var Tournament = (function () {
 			}
 		} else {
 			if (this.isBracketInvalidated) {
-				this.bracketCache = this.getBracketData();
-				this.isBracketInvalidated = false;
-				this.room.send('|tournament|update|' + JSON.stringify({bracketData: this.bracketCache}));
+				if (Date.now() < this.lastBracketUpdate + BRACKET_MINIMUM_UPDATE_INTERVAL) {
+					if (this.bracketUpdateTimer) clearTimeout(this.bracketUpdateTimer);
+					this.bracketUpdateTimer = setTimeout((function () {
+						this.bracketUpdateTimer = null;
+						this.update();
+					}).bind(this), BRACKET_MINIMUM_UPDATE_INTERVAL);
+				} else {
+					this.lastBracketUpdate = Date.now();
+
+					this.bracketCache = this.getBracketData();
+					this.isBracketInvalidated = false;
+					this.room.send('|tournament|update|' + JSON.stringify({bracketData: this.bracketCache}));
+				}
 			}
 
 			if (this.isTournamentStarted && this.isAvailableMatchesInvalidated) {
@@ -572,7 +596,13 @@ var Tournament = (function () {
 			this.update();
 	};
 	Tournament.prototype.onTournamentEnd = function () {
-		this.room.add('|tournament|end|' + JSON.stringify({results: this.generator.getResults().map(usersToNames), bracketData: this.getBracketData()}));
+		this.room.add('|tournament|end|' + JSON.stringify({
+			results: this.generator.getResults().map(usersToNames),
+			format: this.format,
+			generator: this.generator.name,
+			bracketData: this.getBracketData()
+		}));
+		this.isEnded = true;
 		delete exports.tournaments[toId(this.room.id)];
 	};
 
@@ -594,6 +624,11 @@ var commands = {
 			} else {
 				tournament.removeUser(user, this);
 			}
+		},
+		getusers: function (tournament) {
+			if (!this.canBroadcast()) return;
+			var users = usersToNames(tournament.generator.getUsers()).sort();
+			this.sendReplyBox("<strong>" + users.length + " users are in this tournament:</strong><br />" + users.join(", "));
 		},
 		getupdate: function (tournament, user) {
 			tournament.update(user);
@@ -635,7 +670,7 @@ var commands = {
 			if (!targetUser)
 				return this.sendReply("User " + params[0] + " not found.");
 			tournament.disqualifyUser(targetUser, this);
-			this.privateModCommand("("+targetUser.name+" was disqualified from the tournament by "+user.name+")");
+			this.privateModCommand("(" + targetUser.name + " was disqualified from the tournament by " + user.name + ")");
 		},
 		end: 'delete',
 		stop: 'delete',
