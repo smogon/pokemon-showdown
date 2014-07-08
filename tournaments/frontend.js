@@ -184,7 +184,9 @@ var Tournament = (function () {
 				// but the second argument will not be used in this situation
 				if (this.isTournamentStarted) {
 					if (!this.disqualifiedUsers.get(user)) this.disqualifyUser(user);
-				} else this.removeUser(user);
+				} else {
+					this.removeUser(user);
+				}
 			}
 		}, this);
 	};
