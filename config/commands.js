@@ -698,14 +698,17 @@ var commands = exports.commands = {
 			if (notImmune) {
 				var typeMod = Tools.getEffectiveness(type, pokemon);
 				if (typeMod === -1) resistances.push(type);
-				if (typeMod === 0) resistances.push("<b>" + type + "</b>");
+				if (typeMod === -2) resistances.push("<b>" + type + "</b>");
 			}
+			else {
+				this.sendReplyBox("" + target + " è immune a " + type + ".");
+			}	
 		});
 
 		if (!resistances.length) {
-			this.sendReplyBox("" + target + " has no resistances.");
+			this.sendReplyBox("" + target + " non ha resistenze.");
 		} else {
-			this.sendReplyBox("" + target + " è resistente a: " + resistances.join(", ") + " (not counting abilities).");
+			this.sendReplyBox("" + target + " è resistente a: " + resistances.join(", ") + " (senza contare le abilità).");
 		}
 	},
 
