@@ -701,6 +701,9 @@ var commands = exports.commands = {
 				if (typeMod === -2) resistances.push("<b>" + type + "</b>");
 				if (typeMod === -3) resistances.push("<i>" + type + "</i>");
 			}
+			if (!notImmune) {
+				this.sendReplyBox("" + target + " è immune a " + type + ".");
+			}
 		});
 
 		if (!resistances.length) {
