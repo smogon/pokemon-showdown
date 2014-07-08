@@ -1389,6 +1389,14 @@ var commands = exports.commands = {
 			this.sendReply("/highlight delete, word - delete a word from the highlight list.");
 			this.sendReply("/highlight delete - clear the highlight list");
 		}
+		if (target === 'all' || target === 'autojoin') {
+			matched = true;
+			this.sendReply("Set which rooms to automatically join when Pokémon Showdown loads:");
+			this.sendReply("/autojoin add, [room] - add a room to the autojoin list.");
+			this.sendReply("/autojoin list - list all the rooms that are autojoined.");
+			this.sendReply("/autojoin delete, [room] - remove a room from the autojoin list.");
+			this.sendReply("/autojoin delete - clear the autojoin list.");
+		}
 		if (target === 'all' || target === 'timestamps') {
 			matched = true;
 			this.sendReply("Set your timestamps preference:");
