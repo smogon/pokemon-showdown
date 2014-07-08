@@ -697,8 +697,8 @@ var commands = exports.commands = {
 			var notImmune = Tools.getImmunity(type, pokemon);
 			if (notImmune) {
 				var typeMod = Tools.getEffectiveness(type, pokemon);
-				if (typeMod === 0) resistances.push(type);
-				if (typeMod === 3) resistances.push("<b>" + type + "</b>");
+				if (typeMod === -1) resistances.push(type);
+				if (typeMod === 0) resistances.push("<b>" + type + "</b>");
 			}
 		});
 
