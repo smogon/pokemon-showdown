@@ -126,6 +126,7 @@ var Tournament = (function () {
 				if (match)
 					delete match.room.win;
 			});
+		this.isEnded = true;
 		this.room.add('|tournament|forceend');
 		this.isEnded = true;
 	};
@@ -618,6 +619,11 @@ var commands = {
 			} else {
 				tournament.removeUser(user, this);
 			}
+		},
+		getusers: function (tournament) {
+			if (!this.canBroadcast()) return;
+			var users = usersToNames(tournament.generator.getUsers()).sort();
+			this.sendReplyBox("<strong>" + users.length + " users are in this tournament:</strong><br />" + users.join(", "));
 		},
 		getupdate: function (tournament, user) {
 			tournament.update(user);
