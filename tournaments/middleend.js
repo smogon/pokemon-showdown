@@ -1,6 +1,7 @@
 require('es6-shim');
 
 const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
+const AUTO_DISQUALIFY_WARNING_TIMEOUT = 30 * 1000;
 
 var TournamentGenerators = {
 	roundrobin: require('./generator-round-robin.js').RoundRobin,
@@ -343,6 +344,8 @@ var Tournament = (function () {
 		this.inProgressMatches = new Map();
 		this.pendingChallenges = new Map();
 		this.disqualifiedUsers = new Map();
+		this.isAutoDisqualifyWarned = new Map();
+		this.lastActionTimes = new Map();
 		var users = this.generator.getUsers();
 		users.forEach(function (user) {
 			var availableMatches = new Map();
@@ -353,9 +356,12 @@ var Tournament = (function () {
 			this.inProgressMatches.set(user, null);
 			this.pendingChallenges.set(user, null);
 			this.disqualifiedUsers.set(user, false);
+			this.isAutoDisqualifyWarned.set(user, false);
+			this.lastActionTimes.set(user, Date.now());
 		}, this);
 
 		this.isTournamentStarted = true;
+		this.autoDisqualifyTimeout = Infinity;
 		this.isBracketInvalidated = true;
 		this.room.add('|tournament|start');
 		this.room.send('|tournament|update|{"isStarted":true}');
@@ -371,15 +377,19 @@ var Tournament = (function () {
 		var users = this.generator.getUsers();
 		var challenges = new Map();
 		var challengeBys = new Map();
+		var oldAvailableMatchCounts = new Map();
 
 		users.forEach(function (user) {
 			challenges.set(user, []);
 			challengeBys.set(user, []);
 
 			var availableMatches = this.availableMatches.get(user);
-			users.forEach(function (user) {
+			var oldAvailableMatchCount = 0;
+			availableMatches.forEach(function (isAvailable, user) {
+				oldAvailableMatchCount += isAvailable;
 				availableMatches.set(user, false);
 			});
+			oldAvailableMatchCounts.set(user, oldAvailableMatchCount);
 		}, this);
 
 		matches.forEach(function (match) {
@@ -387,6 +397,16 @@ var Tournament = (function () {
 			challengeBys.get(match[1]).push(match[0]);
 
 			this.availableMatches.get(match[0]).set(match[1], true);
+		}, this);
+
+		this.availableMatches.forEach(function (availableMatches, user) {
+			if (oldAvailableMatchCounts.get(user) !== 0) return;
+
+			var availableMatchCount = 0;
+			availableMatches.forEach(function (isAvailable, user) {
+				availableMatchCount += isAvailable;
+			});
+			if (availableMatchCount > 0) this.lastActionTimes.set(user, Date.now());
 		}, this);
 
 		return {
@@ -453,8 +473,50 @@ var Tournament = (function () {
 		} else {
 			this.update();
 		}
-		
+
 		return true;
+	};
+
+	Tournament.prototype.setAutoDisqualifyTimeout = function (timeout, output) {
+		if (!this.isTournamentStarted) {
+			output.sendReply('|tournament|error|NotStarted');
+			return false;
+		}
+		if (!(timeout > 0)) {
+			output.sendReply('|tournament|error|InvalidAutoDisqualifyTimeout');
+			return false;
+		}
+
+		this.autoDisqualifyTimeout = parseFloat(timeout);
+		if (this.autoDisqualifyTimeout === Infinity) {
+			this.room.add('|tournament|autodq|off');
+		} else {
+			this.room.add('|tournament|autodq|on|' + this.autoDisqualifyTimeout);
+		}
+
+		this.runAutoDisqualify();
+		return true;
+	};
+	Tournament.prototype.runAutoDisqualify = function () {
+		this.lastActionTimes.forEach(function (time, user) {
+			var availableMatches = 0;
+			this.availableMatches.get(user).forEach(function (isAvailable) {
+				availableMatches += isAvailable;
+			});
+			var pendingChallenge = this.pendingChallenges.get(user);
+
+			if (availableMatches === 0 && !pendingChallenge) return;
+			if (pendingChallenge && pendingChallenge.to) return;
+
+			if (Date.now() > time + this.autoDisqualifyTimeout) {
+				this.disqualifyUser(user);
+			} else if (Date.now() > time + this.autoDisqualifyTimeout - AUTO_DISQUALIFY_WARNING_TIMEOUT && !this.isAutoDisqualifyWarned.get(user)) {
+				this.isAutoDisqualifyWarned.set(user, true);
+				user.sendTo(this.room, '|tournament|autodq|target|' + (this.autoDisqualifyTimeout - Date.now() + time));
+			} else {
+				this.isAutoDisqualifyWarned.set(user, false);
+			}
+		}, this);
 	};
 
 	Tournament.prototype.challenge = function (from, to, output) {
@@ -492,6 +554,8 @@ var Tournament = (function () {
 			return;
 		}
 
+		this.lastActionTimes.set(from, Date.now());
+		this.lastActionTimes.set(to, Date.now());
 		this.pendingChallenges.set(from, {to: to, team: from.team});
 		this.pendingChallenges.set(to, {from: from, team: from.team});
 		from.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenging: to.name}));
@@ -533,7 +597,7 @@ var Tournament = (function () {
 	};
 	Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
 		if (!result) return;
-		
+
 		// Prevent double accepts
 		if (!this.pendingChallenges.get(user)) return;
 
@@ -549,6 +613,7 @@ var Tournament = (function () {
 		this.room.add('|tournament|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id);
 
 		this.isBracketInvalidated = true;
+		this.runAutoDisqualify();
 		this.update();
 
 		var self = this;
@@ -578,6 +643,7 @@ var Tournament = (function () {
 			this.isBracketInvalidated = true;
 			this.isAvailableMatchesInvalidated = true;
 
+			this.runAutoDisqualify();
 			this.update();
 			return;
 		}
@@ -601,6 +667,7 @@ var Tournament = (function () {
 		if (isTournamentEnded) {
 			this.onTournamentEnd();
 		} else {
+			this.runAutoDisqualify();
 			this.update();
 		}
 	};
@@ -685,6 +752,19 @@ var commands = {
 			if (tournament.disqualifyUser(targetUser, this)) {
 				this.privateModCommand("(" + targetUser.name + " was disqualified from the tournament by " + user.name + ")");
 			}
+		},
+		autodq: 'setautodq',
+		setautodq: function (tournament, user, params, cmd) {
+			if (params.length < 1) {
+				return this.sendReply("Usage: " + cmd + " <minutes|off>");
+			}
+			var timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0];
+			if (tournament.setAutoDisqualifyTimeout(timeout * 60 * 1000, this)) {
+				this.privateModCommand("(The tournament auto disqualify timeout was set to " + params[0] + " by " + user.name + ")");
+			}
+		},
+		runautodq: function (tournament) {
+			tournament.runAutoDisqualify();
 		},
 		end: 'delete',
 		stop: 'delete',
