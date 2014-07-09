@@ -287,7 +287,7 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		ruleset: ['OU'],
-		banlist: ['Clefable', 'Kingdra', 'Abomasite', 'Mawilite', 'Medichamite', 'Huge Power', 'Pure Power'],
+		banlist: ['Clefable', 'Kingdra', 'Venomoth', 'Abomasite', 'Mawilite', 'Medichamite', 'Huge Power', 'Pure Power'],
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
 			for (var stat in template.baseStats) {
