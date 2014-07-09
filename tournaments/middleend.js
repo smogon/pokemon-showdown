@@ -800,6 +800,9 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
 			"- begin/start: Starts the tournament in the current room.<br />" +
 			"- dq/disqualify &lt;user>: Disqualifies a user.<br />" +
+			"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
+			"- runautodq: Manually run the automatic disqualifier.<br />" +
+			"- getusers: Lists the users in the current tournament.<br />" +
 			"More detailed help can be found <a href=\"https://gist.github.com/kotarou3/7872574\">here</a>"
 		);
 	} else if (cmd === 'create' || cmd === 'new') {
