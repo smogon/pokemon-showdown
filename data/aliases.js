@@ -184,6 +184,7 @@ exports.BattleAliases = {
 	"chomp": "Garchomp",
 	"dnite": "Dragonite",
 	"don": "Groudon",
+	"dogars": "Koffing"
 	"ferro": "Ferrothorn",
 	"forry": "Forretress",
 	"gar": "Gengar",
