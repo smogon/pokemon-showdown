@@ -701,6 +701,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 	var cmdParts = paramString.split(' ');
 	var cmd = cmdParts.shift().trim().toLowerCase();
 	var params = cmdParts.join(' ').split(',').map(function (param) { return param.trim(); });
+	if (!params[0]) params = [];
 
 	if (cmd === '') {
 		if (!this.canBroadcast()) return;
