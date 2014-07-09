@@ -98,7 +98,7 @@ Some outgoing message types
 `USER` = a user, the first character being their rank (users with no rank are
 represented by a space), and the rest of the string being their username.
 
-**Room initialization**
+####Room initialization
 
 `|init|ROOMTYPE`
 
@@ -110,7 +110,7 @@ represented by a space), and the rest of the string being their username.
 > `USERLIST` is a comma-separated list of `USER`s, sent from chat rooms when
 > they're joined.
 
-**Room messages**
+####Room messages
 
 `||MESSAGE` or `MESSAGE`
 
@@ -144,16 +144,128 @@ represented by a space), and the rest of the string being their username.
 > A battle started between `USER1` and `USER2`, and the battle room has
 > ID `ROOMID`.
 
-**Battle messages**
+####Battle messages
 
-Battle messages aren't documented yet.
+`|player|ID|USERNAME|AVATAR`
+
+> Appears when you join a battle room. `ID` denotes which player it is
+> (`p1` or `p2`) and `USERNAME` is the username. `AVATAR` is the player's
+> avatar number.
+
+    |gametype|GAMETYPE
+    |gen|GENNUM
+    |tier|TIERNAME
+    |rated
+    |rule|RULE
+
+> Additional details when you join a battle room. `GAMETYPE` is either
+> `singles` or `doubles`, `GENNUM` denotes the Pokemon Generation you're
+> playing in, `tier` is the tier, and there are multiple `rule` tags to
+> denote the rules that are in effect (Sleep Clause, etc). `rated` only
+> appears if the battle is rated.
+
+    |clearpoke
+    |poke|PLAYER|SPECIES
+    |teampreview
+
+> These three messages appear if you're playing a format that uses team
+> previews. `PLAYER` is the player ID (see above) and `SPECIES` is the
+> species of the Pokemon. `teampreview` commonly appears after `rule`
+> tags instead of after the Pokemon in the team preview.
+
+`|request|TEAMDATA`
+
+> Gives an encoded JSON object of your current team. `TEAMDATA.active`
+> has the moves of your active Pokemon, while `TEAMDATA.side` has the
+> rest of the data about your team as a whole.
+
+`|inactive|MESSAGE`
+
+> A message related to the battle timer has been sent.
+
+`|start`
+
+> Indicates that the game has started. If the tier uses a teampreview,
+> this message cannot 
+
+**Pokemon Actions**
+
+In battle, most Pokemon actions come in the form `|ACTION|POKEID|DETAILS` 
+followed by a few messages detailing what happens after the action occurs. 
+`POKEID` is the form `POSITION: NAME`. `POSITION` is the spot that the 
+Pokemon is in: it consists of the `ID` of the player (see `player` above), 
+followed by a letter indicating the given Pokemon's position, counting from
+`a`. Note that in triples battles, `a` will refer to the leftmost Pokemon
+on one team and the rightmost Pokemon on the other, so take note of this
+if you're planning to write a bot that works with triples battles. `NAME` 
+is the nickname of the Pokemon performing the action.
+
+`|move|POKEID|MOVE|TARGET`
+
+> The specified Pokemon has used move `MOVE`. If a move is a single-target
+> move, then `TARGET` will also be specified.
+
+`|switch|POKEID|SPECIES|HP STATUS`
+
+> A Pokemon at the specified `POSITION` has switched with a new Pokemon of
+> species `SPECIES`, with a given `HP` and `STATUS`. `HP` is specified as
+> a fraction; if it is your Pokemon then it will be `CURRENT/MAX`, otherwise
+> it becomes a percentage value out of 100.
+
+`|cant|POKEID|REASON`
+
+> The Pokemon at `POKEID` could not perform its action as normal for the
+> indicated `REASON`.
+
+`|faint|POKEID`
+
+> The Pokemon at `POKEID` has fainted.
+
+**Details**
+
+After moves have been made, details will appear denoting the results of the 
+moves and other details in the battle, such as damage, stat boosts, and weather.
+
+`|-damage|POKEID|HP STATUS|ETC`
+
+> The specified Pokemon at `POKEID` has taken damage, and it has `HP` remaining
+> (percentage if it's the opponents') and the following statuses `STATUS`.
+> Any additional data is found in `ETC`; for example, if the Pokemon took
+> damage because of poison, it might say `[from] psn`. If the Pokemon faints from
+> the damage, then `STATUS` will be `fnt`.
+
+`|-heal|POKEID|HP STATUS|ETC`
+
+> Same as `-damage`, but the Pokemon has recovered damage instead.
+
+`|-status|POKEID|STATUS`
+
+> The Pokemon at `POKEID` has been inflicted with `STATUS`.
+
+`|-boost|POKEID|STAT|AMT`
+
+> The specified Pokemon at `POKEID` has gained `AMT` in `STAT`, using the 
+> standard rules for Pokemon stat changes in-battle. The `STAT` is a 
+> three-letter abbreviation fot the stat in question, so Speed will be `spe`, 
+> Special Defense will be `spd`, etc.
+
+`|-unboost|POKEID|STAT|AMT`
+
+> Same as `-boost`, but for negative stat changes instead.
+
+`|-weather|WEATHER|[upkeep]`
+
+> Indicates the weather that is currently in effect. If `|[upkeep]` is present,
+> it means that `WEATHER` was active previously and is still in effect that
+> turn. Otherwise, it means that the weather has changed due to a move or ability,
+> or has expired, in which case `WEATHER` will be `none`.
 
 I'll document all the message types eventually, but for now this should be
 enough to get you started. You can watch the data sent and received from
 the server on a regular connection, or look at the client source code
 for a full list of message types.
 
-**Global messages**
+####Global messages
 
 `|popup|MESSAGE`
 
