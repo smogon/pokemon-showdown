@@ -23,7 +23,7 @@
  * @license MIT license
  */
 
-const THROTTLE_DELAY = 600;
+const THROTTLE_DELAY = 400;
 const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 4;
 
@@ -37,6 +37,16 @@ var bannedIps = {};
 var bannedUsers = {};
 var lockedIps = {};
 var lockedUsers = {};
+
+var ipbans = fs.createWriteStream("config/ipbans.txt", {flags: "a"}); // do not remove this line
+
+try {
+	exports.bannedMessages = fs.readFileSync('config/bannedmessages.txt','utf8');
+} catch(e) {
+	exports.bannedMessages = '';
+	fs.writeFileSync('config/bannedmessages.txt','','utf8');
+}
+exports.bannedMessages = exports.bannedMessages.split('\n');
 
 /**
  * Get a user.
@@ -308,6 +318,7 @@ var User = (function () {
 		users[this.userid] = this;
 	}
 
+	User.prototype.namelock = false;
 	User.prototype.isSysop = false;
 	User.prototype.forceRenamed = false;
 
@@ -626,6 +637,11 @@ var User = (function () {
 			this.send('|nametaken|' + name + "|Someone is already using the name \"" + users[userid].name + "\".");
 			return false;
 		}
+		
+		if (this.namelock === true) {
+ 			this.send('|nametaken|'+name+"|You are namelock!");
+ 			return false;
+ 		}
 
 		if (token && token.substr(0, 1) !== ';') {
 			var tokenSemicolonPos = token.indexOf(';');

@@ -806,7 +806,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			"More detailed help can be found <a href=\"https://gist.github.com/kotarou3/7872574\">here</a>"
 		);
 	} else if (cmd === 'create' || cmd === 'new') {
-		if (!user.can('tournaments', null, room)) {
+		if (!user.can('ban', null, room)) {
 			return this.sendReply(cmd + " -  Access denied.");
 		}
 		if (params.length < 2) {
@@ -826,14 +826,15 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 
 		if (commands.creation[cmd]) {
-			if (!user.can('tournaments', null, room)) {
+			if (!user.can('ban', null, room)){
 				return this.sendReply(cmd + " -  Access denied.");
 			}
 			commandHandler = typeof commands.creation[cmd] === 'string' ? commands.creation[commands.creation[cmd]] : commands.creation[cmd];
 		}
 
 		if (commands.moderation[cmd]) {
-			if (!user.can('tournamentsmoderation', null, room)) {
+			if (!user.can('ban', null, room)) {
+
 				return this.sendReply(cmd + " -  Access denied.");
 			}
 			commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];

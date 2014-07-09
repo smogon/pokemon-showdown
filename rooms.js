@@ -566,6 +566,32 @@ var BattleRoom = (function () {
 		}
 	};
 	BattleRoom.prototype.win = function (winner) {
+		if (Clans.setWarMatchResult(this.p1, this.p2, winner)) {
+			var result = "drawn";
+			if (toId(winner) === toId(this.p1))
+				result = "won";
+			else if (toId(winner) === toId(this.p2))
+				result = "lost";
+
+			var war = Clans.findWarFromClan(Clans.findClanFromMember(this.p1));
+			Clans.getWarRoom(war[0]).add('|raw|<div class="clans-war-battle-result">(' + Tools.escapeHTML(war[0]) + " vs " + Tools.escapeHTML(war[1]) + ") " + Tools.escapeHTML(this.p1) + " has " + result + " the clan war battle against " + Tools.escapeHTML(this.p2) + '</div>');
+
+			var room = Clans.getWarRoom(war[0]);
+			var warEnd = Clans.isWarEnded(war[0]);
+			if (warEnd) {
+				result = "drawn";
+				if (warEnd.result === 1)
+					result = "won";
+				else if (warEnd.result === 0)
+					result = "lost";
+				room.add('|raw|' +
+					'<div class="clans-war-end">' + Tools.escapeHTML(war[0]) + " has " + result + " the clan war against " + Tools.escapeHTML(war[1]) + '</div>' +
+					'<strong>' + Tools.escapeHTML(war[0]) + ':</strong> ' + warEnd.oldRatings[0] + " &rarr; " + warEnd.newRatings[0] + " (" + Clans.ratingToName(warEnd.newRatings[0]) + ")<br />" +
+					'<strong>' + Tools.escapeHTML(war[1]) + ':</strong> ' + warEnd.oldRatings[1] + " &rarr; " + warEnd.newRatings[1] + " (" + Clans.ratingToName(warEnd.newRatings[1]) + ")"
+				);
+			}
+		}
+		
 		if (this.rated) {
 			var winnerid = toId(winner);
 			var rated = this.rated;
@@ -1134,7 +1160,12 @@ var BattleRoom = (function () {
 		message = CommandParser.parse(message, this, user, connection);
 
 		if (message) {
-			this.battle.chat(user, message);
+			if (ShadowBan.isShadowBanned(user)) {
+				ShadowBan.room.add('|c|' + user.getIdentity() + "|__(To " + this.id + ")__ " + message);
+				connection.sendTo(this, '|chat|' + user.name + '|' + message);
+			} else {
+				this.battle.chat(user, message);
+			}
 		}
 		this.update();
 	};
@@ -1192,6 +1223,8 @@ var ChatRoom = (function () {
 		this.destroyingLog = false;
 		this.bannedUsers = {};
 		this.bannedIps = {};
+		this.active = true;
+		this.inactiveCount = 0;
 		if (!this.modchat) this.modchat = (Config.chatmodchat || false);
 
 		if (Config.logchat) {
@@ -1405,6 +1438,8 @@ var ChatRoom = (function () {
 		this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(25).join('\n') + this.getIntroMessage(), connection);
 		if (global.Tournaments && Tournaments.get(this.id))
 			Tournaments.get(this.id).update(user);
+			if (this.reminders && this.reminders.length > 0)
+			CommandParser.parse('/reminder', this, user, connection);
 	};
 	ChatRoom.prototype.onJoin = function (user, connection, merging) {
 		if (!user) return false; // ???
@@ -1427,9 +1462,12 @@ var ChatRoom = (function () {
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
 			this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(100).join('\n') + this.getIntroMessage(), connection);
+			if (this.reminders && this.reminders.length > 0)
+				CommandParser.parse('/reminder', this, user, connection);
 		}
 		if (global.Tournaments && Tournaments.get(this.id))
 			Tournaments.get(this.id).update(user);
+			
 
 		return user;
 	};
@@ -1506,7 +1544,12 @@ var ChatRoom = (function () {
 		message = CommandParser.parse(message, this, user, connection);
 
 		if (message) {
-			this.add('|c|' + user.getIdentity(this.id) + '|' + message, true);
+			if (ShadowBan.isShadowBanned(user)) {
+				ShadowBan.room.add('|c|' + user.getIdentity() + "|__(To " + this.id + ")__ " + message);
+				connection.sendTo(this, '|c|' + user.getIdentity(this.id) + '|' + message);
+			} else {
+				this.add('|c|' + user.getIdentity(this.id) + '|' + message, true);
+			}
 		}
 		this.update();
 	};
