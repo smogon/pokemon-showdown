@@ -30,14 +30,6 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
 	},
 	{
-		name: "OU (suspect test)",
-		section: "XY Singles",
-
-		challengeShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
-	},
-	{
 		name: "Ubers",
 		section: "XY Singles",
 
