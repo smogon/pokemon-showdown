@@ -1066,8 +1066,8 @@ var commands = exports.commands = {
 				CommandParser = require('./command-parser.js');
 
 				var runningTournaments = Tournaments.tournaments;
-				CommandParser.uncacheTree('./tournaments/frontend.js');
-				Tournaments = require('./tournaments/frontend.js');
+				CommandParser.uncacheTree('./tournaments/middleend.js');
+				Tournaments = require('./tournaments/middleend.js');
 				Tournaments.tournaments = runningTournaments;
 
 				return this.sendReply("Chat commands have been hot-patched.");
@@ -1079,8 +1079,8 @@ var commands = exports.commands = {
 
 			try {
 				var runningTournaments = Tournaments.tournaments;
-				CommandParser.uncacheTree('./tournaments/frontend.js');
-				Tournaments = require('./tournaments/frontend.js');
+				CommandParser.uncacheTree('./tournaments/middleend.js');
+				Tournaments = require('./tournaments/middleend.js');
 				Tournaments.tournaments = runningTournaments;
 				return this.sendReply("Tournaments have been hot-patched.");
 			} catch (e) {
@@ -1162,7 +1162,13 @@ var commands = exports.commands = {
 		Rooms.global.lockdown = true;
 		for (var id in Rooms.rooms) {
 			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
-			if (Rooms.rooms[id].requestKickInactive && !Rooms.rooms[id].battle.ended) Rooms.rooms[id].requestKickInactive(user, true);
+			if (Rooms.rooms[id].requestKickInactive && !Rooms.rooms[id].battle.ended) {
+				Rooms.rooms[id].requestKickInactive(user, true);
+				if (Rooms.rooms[id].modchat !== '+') {
+					Rooms.rooms[id].modchat = '+';
+					Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>");
+				}
+			}
 		}
 
 		this.logEntry(user.name + " used /lockdown");

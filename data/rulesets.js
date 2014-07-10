@@ -418,15 +418,15 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		name: 'Baton Pass Clause',
 		onStart: function () {
-			this.add('rule', 'Baton Pass Clause: Limit three Pokémon knowing Baton Pass');
+			this.add('rule', 'Baton Pass Clause: Limit one Pokémon knowing Baton Pass');
 		},
 		validateTeam: function (team, format) {
 			var problems = [];
 			var BPcount = 0;
-			for (var i = 0, l = team.length; i < l; i++) {
+			for (var i = 0; i < team.length; i++) {
 				if (team[i].moves.indexOf('Baton Pass') > -1) BPcount++;
-				if (BPcount > 3) {
-					problems.push("You are limited to three Pokémon with the move Baton Pass by the Baton Pass Clause.");
+				if (BPcount > 1) {
+					problems.push("You are limited to one Pokémon with the move Baton Pass by the Baton Pass Clause.");
 					break;
 				}
 			}
