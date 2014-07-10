@@ -5981,9 +5981,6 @@ exports.BattleMovedex = {
 		priority: 5,
 		isNotProtectable: true,
 		volatileStatus: 'helpinghand',
-		onTryHit: function (target, source) {
-			if (target === source) return false;
-		},
 		effect: {
 			duration: 1,
 			onStart: function (target, source) {
