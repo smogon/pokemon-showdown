@@ -482,7 +482,7 @@ var Tournament = (function () {
 			output.sendReply('|tournament|error|NotStarted');
 			return false;
 		}
-		if (!(timeout > 0)) {
+		if (!(timeout > 0) || timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT) {
 			output.sendReply('|tournament|error|InvalidAutoDisqualifyTimeout');
 			return false;
 		}
