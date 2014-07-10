@@ -279,6 +279,21 @@ exports.Formats = [
 		ruleset: ['Team Preview']
 	},
 
+	// XY Triples
+	///////////////////////////////////////////////////////////////////
+
+	{
+		name: "Triples Custom Game",
+		section: "XY Triples",
+
+		gameType: 'triples',
+		searchShow: false,
+		maxLevel: 9999,
+		defaultLevel: 100,
+		debug: true,
+		ruleset: ['Team Preview']
+	},
+
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 
