@@ -997,5 +997,22 @@
 			this.setWeather('Hail');
 			delete this.weatherData.duration;
 		}
+	},
+	// Fabulous February, February 2014
+	{
+		name: "[Seasonal] Fabulous February",
+		section: "OM of the Month",
+
+		mod: 'inverse',
+		gameType: 'doubles',
+		team: 'randomSeasonalFF',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		onBegin: function() {
+			this.add('-message', "新年快乐");
+		},
+		onModifyMove: function(move) {
+			if (move.id === 'explosion') move.name = 'Firecrackers';
+			else if (move.type === 'Fire') move.name = 'Fireworks';
+		}
 	}
 }
