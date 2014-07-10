@@ -48,13 +48,13 @@ exports.BattleItems = {
 		desc: "Changes Genesect to Genesect-Shock."
 	},
 	"lifeorb": {
-	inherit: true,
-	effect: {
-		duration: 1,
-		onAfterMoveSecondarySelf: function (source, target, move) {
-			if (move && move.effectType === 'Move' && move.category !== "Status" && source && source.volatiles['lifeorb']) {
-				this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
-				source.removeVolatile('lifeorb');
+		inherit: true,
+		effect: {
+			duration: 1,
+			onAfterMoveSecondarySelf: function (source, target, move) {
+				if (move && move.effectType === 'Move' && move.category !== "Status" && source && source.volatiles['lifeorb']) {
+					this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
+					source.removeVolatile('lifeorb');
 				}
 			}
 		}
