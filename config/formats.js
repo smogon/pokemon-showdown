@@ -287,6 +287,15 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Triples Challenge Cup",
+		section: 'XY Triples (beta)',
+
+		gameType: 'triples',
+		team: 'randomCC',
+		searchShow: false,
+		ruleset: ['Pokemon', 'HP Percentage Mod']
+	},
+	{
 		name: "Triples Custom Game",
 		section: "XY Triples (beta)",
 
