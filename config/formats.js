@@ -94,7 +94,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		banlist: [], // The neccessary bans are in Standard GBU
 		validateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
+			if (team.length < 3) return ['You must bring at least three Pokémon.'];
 		}
 	},
 	{
@@ -113,7 +113,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		banlist: [], // The neccessary bans are in Standard GBU
 		validateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least 3 Pokemon.'];
+			if (team.length < 3) return ['You must bring at least three Pokémon.'];
 		}
 	},
 	/*{
@@ -197,7 +197,7 @@ exports.Formats = [
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least 4 Pokémon.'];
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		}
 	},
 	{
@@ -217,7 +217,7 @@ exports.Formats = [
 		requirePentagon: true,
 		banlist: [], // The neccessary bans are in Standard GBU
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least 4 Pokémon.'];
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		}
 	},
 	{
@@ -236,7 +236,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview VGC'],
 		banlist: ['Unreleased', 'Illegal'],
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least 4 Pokémon.'];
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 			var legends = {Mewtwo:1, Mew:1, Lugia:1, 'Ho-Oh':1, Kyogre:1, Groudon:1, Rayquaza:1, Jirachi:1, Deoxys:1, Dialga:1, Palkia:1, Giratina:1, Phione:1, Manaphy:1, Darkrai:1, Shaymin:1, Arceus:1, Victini:1, Reshiram:1, Zekrom:1, Kyurem:1, Keldeo:1, Meloetta:1, Genesect:1, Xerneas:1, Yveltal:1, Zygarde:1};
 			var legendCount = 0;
 			for (var i = 0; i < team.length; i++) {
@@ -267,6 +267,7 @@ exports.Formats = [
 		maxLevel: 9999,
 		defaultLevel: 100,
 		debug: true,
+		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
 
@@ -274,14 +275,28 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Triples Custom Game",
-		section: "XY Triples",
+		name: "XY Battle Spot Triples",
+		section: "XY Triples (beta)",
 
 		gameType: 'triples',
 		searchShow: false,
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		validateTeam: function (team, format) {
+			if (team.length < 6) return ['You must bring six Pokémon.'];
+		}
+	},
+	{
+		name: "Triples Custom Game",
+		section: "XY Triples (beta)",
+
+		gameType: 'triples',
+		searchShow: false,
+		canUseRandomTeam: true,
 		maxLevel: 9999,
 		defaultLevel: 100,
 		debug: true,
+		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
 
@@ -692,8 +707,12 @@ exports.Formats = [
 
 		mod: 'gen4',
 		searchShow: false,
+		canUseRandomTeam: true,
 		debug: true,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
+		maxLevel: 9999,
+		defaultLevel: 100,
+		// no restrictions
+		ruleset: []
 	},
 	{
 		name: "[Gen 3] OU (beta)",
