@@ -188,6 +188,13 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Aura Break');
 		},
+		onAnyTryPrimaryHit: function (target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			source.addVolatile('aurabreak');
+		},
+		effect: {
+			duration: 1
+		},
 		id: "aurabreak",
 		name: "Aura Break",
 		rating: 2,
@@ -453,23 +460,10 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
-		onBasePowerPriority: 8,
-		onAnyBasePower: function (basePower, attacker, defender, move) {
-			var reverseAura = false;
-			for (var p in attacker.side.active) {
-				if (attacker.side.active[p] && attacker.side.active[p].hasAbility('aurabreak')) {
-					reverseAura = true;
-					this.debug('Reversing Dark Aura due to Aura Break');
-				}
-			}
-			for (var p in defender.side.active) {
-				if (defender.side.active[p] && defender.side.active[p].hasAbility('aurabreak')) {
-					reverseAura = true;
-					this.debug('Reversing Dark Aura due to Aura Break');
-				}
-			}
+		onAnyTryPrimaryHit: function (target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Dark') {
-				return this.chainModify(reverseAura? 0.75 : 4 / 3);
+				source.addVolatile('aura');
 			}
 		},
 		id: "darkaura",
@@ -628,23 +622,10 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
-		onBasePowerPriority: 8,
-		onAnyBasePower: function (basePower, attacker, defender, move) {
-			var reverseAura = false;
-			for (var p in attacker.side.active) {
-				if (attacker.side.active[p] && attacker.side.active[p].hasAbility('aurabreak')) {
-					reverseAura = true;
-					this.debug('Reversing Fairy Aura due to Aura Break');
-				}
-			}
-			for (var p in defender.side.active) {
-				if (defender.side.active[p] && defender.side.active[p].hasAbility('aurabreak')) {
-					reverseAura = true;
-					this.debug('Reversing Fairy Aura due to Aura Break');
-				}
-			}
+		onAnyTryPrimaryHit: function (target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Fairy') {
-				return this.chainModify(reverseAura? 0.75 : 4 / 3);
+				source.addVolatile('aura');
 			}
 		},
 		id: "fairyaura",
@@ -1211,7 +1192,7 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			var foeactive = pokemon.side.foe.active;
 			for (var i = 0; i < foeactive.length; i++) {
-				if (!foeactive[i] || foeactive[i].fainted) continue;
+				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
 				if (foeactive[i].volatiles['substitute']) {
 					// does it give a message?
 					this.add('-activate', foeactive[i], 'Substitute', 'ability: Intimidate', '[of] ' + pokemon);
@@ -1291,6 +1272,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's held item has no effect, except Macho Brace. Fling cannot be used.",
 		onModifyPokemonPriority: 1,
 		onModifyPokemon: function (pokemon) {
+			if (pokemon.getItem().megaEvolves) return;
 			pokemon.ignore['Item'] = true;
 		},
 		id: "klutz",
@@ -1449,7 +1431,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon steals the held item of a target it hits with a move.",
 		onHit: function (target, source, move) {
 			// We need to hard check if the ability is Magician since the event will be run both ways.
-			if (target && target !== source && move && source.ability === 'magician') {
+			if (target && target !== source && source.ability === 'magician' && move && move.category !== 'Status') {
 				if (source.item) return;
 				var yourItem = target.takeItem(source);
 				if (!yourItem) return;
@@ -1666,7 +1648,9 @@ exports.BattleAbilities = {
 		name: "Mummy",
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.isContact) {
-				if (source.setAbility('mummy', source, 'mummy', true)) {
+				var oldAbility = source.setAbility('mummy', source, 'mummy', true);
+				if (oldAbility) {
+					this.add('-endability', source, oldAbility, '[from] Mummy');
 					this.add('-ability', source, 'Mummy', '[from] Mummy');
 				}
 			}
@@ -1985,12 +1969,11 @@ exports.BattleAbilities = {
 	"protean": {
 		desc: "Right before this Pokemon uses a move, it changes its type to match that move. Hidden Power is interpreted as its Hidden Power type, rather than Normal.",
 		shortDesc: "Right before this Pokemon uses a move, it changes its type to match that move.",
-		onBeforeMove: function (pokemon, target, move) {
-			if (!move || pokemon.volatiles.mustrecharge) return;
-			var moveType = (move.id === 'hiddenpower' ? pokemon.hpType : move.type);
-			if (pokemon.getTypes().join() !== moveType) {
-				if (!pokemon.setType(moveType)) return false;
-				this.add('-start', pokemon, 'typechange', moveType, '[from] Protean');
+		onSourceTryPrimaryHit: function (target, source, move) {
+			if (!move || source.volatiles.mustrecharge) return;
+			if (source.getTypes().join() !== move.type) {
+				if (!source.setType(move.type)) return;
+				this.add('-start', source, 'typechange', move.type, '[from] Protean');
 			}
 		},
 		id: "protean",

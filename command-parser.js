@@ -131,8 +131,10 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			},
 			privateModCommand: function (data) {
 				for (var i in room.users) {
-					if (room.users[i].isStaff) {
-						room.users[i].sendTo(room, data);
+					var user = room.users[i];
+					// hardcoded for performance reasonss (this is an inner loop)
+					if (user.isStaff || (room.auth && (room.auth[user.userid] || '+') !== '+')) {
+						user.sendTo(room, data);
 					}
 				}
 				this.logEntry(data);
@@ -197,6 +199,18 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
 				return canTalk(user, innerRoom, connection, message);
 			},
+			canHTML: function (html) {
+				html = ''+(html||'');
+				var images = html.match(/<img\b[^<>]*/ig);
+				if (!images) return true;
+				for (var i = 0; i < images.length; i++) {
+					if (!/width=([0-9]+|"[0-9]+")/i.test(images[i]) || !/height=([0-9]+|"[0-9]+")/i.test(images[i])) {
+						this.sendReply('All images must have a width and height attribute');
+						return false;
+					}
+				}
+				return true;
+			},
 			targetUserOrSelf: function (target, exactName) {
 				if (!target) {
 					this.targetUsername = user.name;
@@ -233,7 +247,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 
 		if (message.substr(0, 1) === '/' && cmd) {
 			// To guard against command typos, we now emit an error message
-			return connection.sendTo(room.id, "The command '/" + cmd + "' was unrecognized. To send a message starting with '" + cmd + "', type '//" + cmd + "'.");
+			return connection.sendTo(room.id, "The command '/" + cmd + "' was unrecognized. To send a message starting with '/" + cmd + "', type '//" + cmd + "'.");
 		}
 	}
 

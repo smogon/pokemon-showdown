@@ -29,7 +29,7 @@ const THROTTLE_MULTILINE_WARN = 4;
 
 var fs = require('fs');
 
-var users = {};
+var users = Object.create(null);
 var prevUsers = {};
 var numUsers = 0;
 
@@ -372,7 +372,7 @@ var User = (function () {
 			return '!' + this.name;
 		}
 		var room = Rooms.rooms[roomid];
-		if (room.auth) {
+		if (room && room.auth) {
 			if (room.auth[this.userid]) {
 				return room.auth[this.userid] + this.name;
 			}

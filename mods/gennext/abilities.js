@@ -42,12 +42,18 @@ exports.BattleAbilities = {
 		onImmunity: function (type, pokemon) {
 			if (type === 'hail') return false;
 		},
-		onSourceBasePower: function (basePower, attacker, defender, move) {
+		onSourceModifyAtk: function (atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
 				this.add('-message', "The attack was weakened by Thick Fat!");
-				return basePower / 2;
+				return this.chainModify(0.5);
 			}
-		}
+		},
+		onSourceModifySpA: function (atk, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
+				this.add('-message', "The attack was weakened by Thick Fat!");
+				return this.chainModify(0.5);
+			}
+		},
 	},
 	"marvelscale": {
 		inherit:true,
@@ -288,7 +294,7 @@ exports.BattleAbilities = {
 	"download": {
 		inherit: true,
 		onStart: function (pokemon) {
-			if (pokemon.template.id === 'genesect') {
+			if (pokemon.template.baseSpecies === 'Genesect') {
 				if (!pokemon.getItem().onDrive) return;
 			}
 			var foeactive = pokemon.side.foe.active;
@@ -410,9 +416,9 @@ exports.BattleAbilities = {
 	},
 	"aftermath": {
 		inherit: true,
-		onFaint: function (target, source, effect) {
-			if (effect && effect.effectType === 'Move' && source) {
-				this.damage(source.maxhp / 3, source, target);
+		onAfterDamage: function (damage, target, source, move) {
+			if (source && source !== target && move && !target.hp) {
+				this.damage(source.maxhp / 3, source, target, null, true);
 			}
 		}
 	},

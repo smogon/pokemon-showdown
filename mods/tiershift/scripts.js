@@ -17,6 +17,7 @@ exports.BattleScripts = {
 			case 'BL3':
 			case 'NU':
 			case 'NFE':
+			case 'LC Uber':
 			case 'LC':
 				adjustment = 15;
 			}
