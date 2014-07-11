@@ -42,12 +42,18 @@ exports.BattleAbilities = {
 		onImmunity: function (type, pokemon) {
 			if (type === 'hail') return false;
 		},
-		onSourceBasePower: function (basePower, attacker, defender, move) {
+		onSourceModifyAtk: function (atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
 				this.add('-message', "The attack was weakened by Thick Fat!");
-				return basePower / 2;
+				return this.chainModify(0.5);
 			}
-		}
+		},
+		onSourceModifySpA: function (atk, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
+				this.add('-message', "The attack was weakened by Thick Fat!");
+				return this.chainModify(0.5);
+			}
+		},
 	},
 	"marvelscale": {
 		inherit:true,
