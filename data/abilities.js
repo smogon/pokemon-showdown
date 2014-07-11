@@ -1988,12 +1988,11 @@ exports.BattleAbilities = {
 	"protean": {
 		desc: "Right before this Pokemon uses a move, it changes its type to match that move. Hidden Power is interpreted as its Hidden Power type, rather than Normal.",
 		shortDesc: "Right before this Pokemon uses a move, it changes its type to match that move.",
-		onBeforeMove: function (pokemon, target, move) {
-			if (!move || pokemon.volatiles.mustrecharge) return;
-			var moveType = (move.id === 'hiddenpower' ? pokemon.hpType : move.type);
-			if (pokemon.getTypes().join() !== moveType) {
-				if (!pokemon.setType(moveType)) return;
-				this.add('-start', pokemon, 'typechange', moveType, '[from] Protean');
+		onSourceTryPrimaryHit: function (target, source, move) {
+			if (!move || source.volatiles.mustrecharge) return;
+			if (source.getTypes().join() !== move.type) {
+				if (!source.setType(move.type)) return;
+				this.add('-start', source, 'typechange', move.type, '[from] Protean');
 			}
 		},
 		id: "protean",
