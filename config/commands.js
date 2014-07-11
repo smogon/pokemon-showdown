@@ -910,11 +910,23 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3500418/\">Hackmons</a><br />";
 		}
-		if (target === 'middlecup' || target === 'mc') {
+		if (target === 'all' || target === 'smogontriples' || target === 'triples') {
+			matched = true;
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
+		}
+		if (target === 'all' || target === 'alphabetcup') {
+			matched = true;
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3498167/\">Alphabet Cup</a><br />";
+		}
+		if (target === 'all' || target === 'averagemons') {
+			matched = true;
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3495527/\">Averagemons</a><br />";
+		}
+		if (target === 'all' || target === 'middlecup' || target === 'mc') {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
 		}
-		if (target === 'glitchmons') {
+		if (target === 'all' || target === 'glitchmons') {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3467120/\">Glitchmons</a><br />";
 		}
