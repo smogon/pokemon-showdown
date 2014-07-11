@@ -10,6 +10,102 @@
  *
  * @license MIT license
  */
+ 
+ //spamroom
+
+if (typeof spamroom == "undefined") {
+	spamroom = new Object();
+}
+if (!Rooms.rooms.spamroom) {
+	Rooms.rooms.spamroom = new Rooms.ChatRoom("spamroom", "spamroom");
+	Rooms.rooms.spamroom.isPrivate = true;
+	Rooms.rooms.spamroom.staffRoom = true;
+}
+
+function checkList(avatar, room, connection) {
+	fs.readdir('config/avatars/', function(err, data) {
+		if (err) return;
+		var searchResults = [];
+		var pattern = avatar.substr(0, avatar.indexOf('.'));
+		var newLev = 4;
+		var altavatar = '';
+		for (var j in data) {
+			var someavatar = data[j];
+			var ld = Tools.levenshtein(pattern, someavatar.substr(0, someavatar.indexOf('.')), 3);
+			if (ld < newLev) {
+				altavatar = someavatar;
+				newLev = ld;
+				if (ld === 1) break;
+			}
+		}
+		if (altavatar) {
+			connection.sendTo(room, 'Ese avatar no existe. Quizas te referias al avatar '+altavatar);
+		} else {
+			connection.sendTo(room, 'Ese avatar no existe. Verifica el nombre del avatar que buscas.');
+		}
+	});
+}
+
+function updateAvatar(avatar, room, connection, user, targetUser) {
+	fs.exists('config/avatars/'+avatar, function(exists) {
+		if (!exists) {
+			checkList(avatar, room, connection);
+		} else {
+			targetUser.avatar = avatar;
+			Users.useravatars[targetUser.userid] = avatar;
+			if (user.userid === targetUser.userid) {
+				connection.sendTo(room, "Tu avatar ha cambiado a:\n" +
+					'|raw|<img src="http://pandora.xiaotai.org:5000/avatars/'+avatar+'" alt="" width="80" height="80" />');
+			} else {
+				connection.sendTo(room, "El avatar de "+targetUser.name+" ha sido modificado.");
+			}
+			Users.exportUseravatars();
+		}
+	});
+}
+
+function splint(target, separator, length) {
+        if (!separator) separator = ',';
+ 
+        var cmdArr = [];
+        if (length > 0) {
+                var sepIndex = -1;
+                for (var count = 0; ; count++) {
+                        sepIndex = target.indexOf(separator);
+                        if (count + 1  === length ) {
+                                cmdArr.push(target);
+                                break;
+                        } else if (sepIndex === -1) {
+                                cmdArr.push(target);
+                                break;
+                        } else {
+                                cmdArr.push(target.to(sepIndex));
+                                target = target.from(sepIndex+1);
+                        }
+                }
+        } else if (length < 0) {
+                var sepIndex = -1;
+                for (var count = length; ; count++) {
+                        sepIndex = target.lastIndexOf(separator);
+                        if (count === -1) {
+                                cmdArr.unshift(target);
+                                break;
+                        } else if (sepIndex === -1) {
+                                cmdArr.unshift(target);
+                                break;
+                        } else {
+                                cmdArr.unshift(target.from(sepIndex+1));
+                                target = target.to(sepIndex);
+                        }
+                }
+        } else {
+                cmdArr = target.split(separator);
+        }
+        for (var i = 0, l=cmdArr.length; i<l; i++) {
+                cmdArr[i] = cmdArr[i].trim();
+        }
+        return cmdArr;
+}
 
 var crypto = require('crypto');
 var fs = require('fs');
@@ -28,7 +124,25 @@ var commands = exports.commands = {
 		if (target) target = this.canTalk(target);
 		if (!target) return;
 
-		return '/me ' + target;
+		var message = '/me ' + target;
+		// if user is not in spamroom
+		if (spamroom[user.userid] === undefined) {
+			// check to see if an alt exists in list
+			for (var u in spamroom) {
+				if (Users.get(user.userid) === Users.get(u)) {
+					// if alt exists, add new user id to spamroom, break out of loop.
+					spamroom[user.userid] = true;
+					break;
+				}
+			}
+		}
+
+		if (user.userid in spamroom) {
+			this.sendReply('|c|' + user.getIdentity() + '|' + message);
+			return Rooms.rooms['spamroom'].add('|c|' + user.getIdentity() + '|' + message);
+		} else {
+			return message;
+		}
 	},
 
 	mee: function (target, room, user, connection) {
@@ -36,7 +150,25 @@ var commands = exports.commands = {
 		if (target) target = this.canTalk(target);
 		if (!target) return;
 
-		return '/mee ' + target;
+		var message = '/mee ' + target;
+		// if user is not in spamroom
+		if (spamroom[user.userid] === undefined) {
+			// check to see if an alt exists in list
+			for (var u in spamroom) {
+				if (Users.get(user.userid) === Users.get(u)) {
+					// if alt exists, add new user id to spamroom, break out of loop.
+					spamroom[user.userid] = true;
+					break;
+				}
+			}
+		}
+
+		if (user.userid in spamroom) {
+			this.sendReply('|c|' + user.getIdentity() + '|' + message);
+			return Rooms.rooms['spamroom'].add('|c|' + user.getIdentity() + '|' + message);
+		} else {
+			return message;
+		}
 	},
 
 	avatar: function (target, room, user) {
@@ -120,8 +252,24 @@ var commands = exports.commands = {
 
 		var message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 		user.send(message);
-		if (targetUser !== user) targetUser.send(message);
-		targetUser.lastPM = user.userid;
+		// if user is not in spamroom
+		if(spamroom[user.userid] === undefined){
+			// check to see if an alt exists in list
+			for(var u in spamroom){
+				if(Users.get(user.userid) === Users.get(u)){
+					// if alt exists, add new user id to spamroom, break out of loop.
+					spamroom[user.userid] = true;
+					break;
+				}
+			}
+		}
+
+		if (user.userid in spamroom) {
+			Rooms.rooms.spamroom.add('|c|' + user.getIdentity() + '|(__Private to ' + targetUser.getIdentity()+ "__) " + target );
+		} else {
+			if (targetUser !== user) targetUser.send(message);
+			targetUser.lastPM = user.userid;
+		}
 		user.lastPM = targetUser.userid;
 	},
 
@@ -482,29 +630,23 @@ var commands = exports.commands = {
 	},
 
 	join: function (target, room, user, connection) {
-		if (!target) return false;
-		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
-		if (!targetRoom) {
-			return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
-		}
-		if (targetRoom.isPrivate) {
-			if (targetRoom.modjoin) {
-				var userGroup = user.group;
-				if (targetRoom.auth) {
-					userGroup = targetRoom.auth[user.userid] || ' ';
-				}
-				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(targetRoom.modchat)) {
-					return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
-				}
-			}
-			if (!user.named) {
-				return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '" + target + "'.");
-			}
-		}
-		if (!user.joinRoom(targetRoom || room, connection)) {
-			return connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' could not be joined.");
-		}
-	},
+                var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
+                if (target && !targetRoom) {
+                        if (target === 'lobby') return connection.sendTo(target, "|noinit|nonexistent|");
+                        return connection.sendTo(target, "|noinit|nonexistent|The room '"+target+"' does not exist.");
+                }
+                if (targetRoom && targetRoom.isPrivate && !user.named) {
+                        return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '"+target+"'.");
+                }
+                if (!user.joinRoom(targetRoom || room, connection)) {
+                        // This condition appears to be impossible for now.
+                        return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' could not be joined.");
+                }
+                if (room.id == "lobby" && !user.welcomed) {
+                user.welcomed = true;
+                  this.sendReply('|raw|<div class="broadcast-red">Welcome to Parukia, a Pokemon community where you can have lots of intense battles and fun conversations! Talk, battle and enjoy yourself! <b>Advertising, spamming and trolling are against the rules here. Religious discussions are forbidden. <u>Stupidity is a bannable offense.</u></b><br><br><b>Interested in donating to Parukia? Type /donate for more info!<br><br>Type /parukiarules to read our rules!<br><br>Users may donate $5 for a custom avatar or $10 for voice! If you do so, be sure to message Chinlar, Professor Oak Jr. or Fokkusu to get your promotion and/or custom avatar.<br></b></div>');
+         }
+    },     
 
 	leave: 'part',
 	part: function (target, room, user, connection) {
@@ -517,8 +659,153 @@ var commands = exports.commands = {
 	},
 
 	/*********************************************************
+	 * Custom avatar
+	 *********************************************************/
+	 customavatar: 'cavatar',
+        cavatar: function(target, room, user, connection) {
+                if (Config.groupsranking.indexOf(user.group) < 1) return this.sendReply('Debes ser destacado para utilizar este comando.')
+                var targets = splint(target);
+                var avatar = targets[0].toLowerCase();
+                if (!avatar) {
+                        var configavatar = Users.useravatars[user.userid];
+                        return this.sendReply('Indique el nombre del avatar deseado.'+((configavatar && configavatar !== user.avatar) ? ' Quizas le gustaria '+configavatar : ''));
+                }
+                if (targets[1]) {
+                        if (!user.can('hotpatch')) return this.sendReply('No tienes autorizacion para modificar el avatar de otro.');
+                        var targetUser = Users.users[toId(targets[1])];
+                        if (!targetUser) return this.sendReply(targets[1]+' no existe o no esta conectado.');
+                        if (!targetUser.named || !targetUser.authenticated) return this.sendReply(targets[1]+' es un invitado o no esta autenticado.');
+                } else {
+                        var targetUser = user;
+                }
+                if (avatar.indexOf('.') === -1) return this.sendReply('No olvides incluir la extension de la imagen que deseas como avatar.');
+                if (targetUser.avatar === avatar) return this.sendReply('Ese avatar ya esta puesto.');
+                var unique = true;
+                if (!user.can('hotpatch')) {
+                        for (var uid in Users.useravatars) {
+                                if (Users.useravatars[uid] === avatar && targetUser.userid !== uid) {
+                                        unique = false;
+                                        var altsarray = targetUser.getAlts();
+                                        for (var i = 0; i < altsarray.length; i++) {
+                                                if (uid === toId(altsarray[i])) {
+                                                        unique = true;
+                                                        break;
+                                                }
+                                        }
+                                        break;
+                                }
+                        }
+                }
+                if (!unique) return this.sendReply('Este avatar esta reservado por '+toUserName(uid)+'. Si esa es una cuenta alternativa tuya, conectate un momento desde ella e intenta otra vez.');
+                updateAvatar(avatar, room, connection, user, targetUser);
+        },
+ 
+        avatardownload: 'savatar',
+        saveavatar: 'savatar',
+        savatar: function(target, room, user, connection) {
+                if (!this.can('declare')) return;
+                var targets = splint(target);
+                if (!targets[1]) return this.sendReply('Indica como segundo parametro la URL del avatar que guardaras.');
+                var lengthOne = targets[1].length;
+                if (targets[1].charAt(lengthOne - 1) === '/') {
+                        targets[1] = targets[1].substr(0, lengthOne - 1);
+                }
+                for (var i = lengthOne - 1; i > -1; i--) {
+                        if (targets[1].charAt(i) === '/') return this.sendReply('URL no soportada por este comando.');
+                        if (targets[1].charAt(i) === '.') {
+                                var dotindex = i;
+                                break;
+                        }
+                }
+ 
+                if (dotindex && targets[0].indexOf('.') === -1) {
+                        var extension = targets[1].substr(dotindex + 1, targets[1].length - dotindex - 1);
+                        if (targets[0].indexOf('.') === -1) targets[0] += '.'+extension;
+                } else {
+                        //return this.sendReply('Debes guardar solo una imagen, no una pagina completa.');
+                }
+ 
+                var colonindex = targets[1].indexOf(':');
+                if (colonindex === -1) return this.sendReply('Olvidaste escribir el protocolo de la URL. Sera http o https?');
+                var protocol = targets[1].substr(0, colonindex).toLowerCase();
+                if (protocol === 'http') {
+                        var module = require('http');
+                } else if (protocol === 'https') {
+                        var module = require('https');
+                } else if (protocol === 'ftp') {
+                        try {
+                                var ftp = require('ftp-get');
+                                connection.sendTo(room, 'Avatar '+targets[0]+' guardado.');
+                                ftp.get(targets[1], 'config/avatars/'+targets[0], function(error, result) {
+                                        if (error) return;
+                                });
+                        } catch (e) {
+                                connection.sendTo(room, 'Protocolo FTP no soportado. Ejecutar `npm install ftp-get`');
+                        }
+                } else {
+                        return this.sendReply('El protocolo '+protocol+' no esta soportado por este comando.');
+                }
+                if (protocol !== 'ftp') {
+                        this.sendReply('Avatar '+targets[0]+' guardado.');
+                        var file = fs.createWriteStream("config/avatars/"+targets[0]);
+                        var request = module.get(targets[1], function(response) {
+                                response.pipe(file);
+                        });
+                }
+        },
+        
+        newavatarsystem: function(target, room, user) {
+	        if (!this.can('hotpatch')) return;
+	        var buffer = '';
+	        for (var userid in Config.customavatars) {
+		        buffer += userid + ', ' + Config.customavatars[userid] + '\n';
+	        }
+	        fs.writeFile('config/useravatars.csv', buffer);
+        },
+	/*********************************************************
 	 * Moderating: Punishments
 	 *********************************************************/
+	 	spam: 'spamroom',
+	spammer: 'spamroom',
+	spamroom: function(target, room, user, connection) {
+		var target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser || !targetUser.connected) {
+			return this.sendReply('The user \'' + this.targetUsername + '\' does not exist.');
+		}
+		if (!this.can('mute', targetUser)) {
+			return false;
+		}
+		if (spamroom[targetUser]) {
+			return this.sendReply('That user\'s messages are already being redirected to the spamroom.');
+		}
+		spamroom[targetUser] = true;
+		Rooms.rooms['spamroom'].add('|raw|<b>' + this.targetUsername + ' was added to the spamroom list.</b>');
+		this.logModCommand(targetUser + ' was added to spamroom by ' + user.name);
+		return this.sendReply(this.targetUsername + ' was successfully added to the spamroom list.');
+	},
+
+	unspam: 'unspamroom',
+	unspammer: 'unspamroom',
+	unspamroom: function(target, room, user, connection) {
+		var target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser || !targetUser.connected) {
+			return this.sendReply('The user \'' + this.targetUsername + '\' does not exist.');
+		}
+		if (!this.can('mute', targetUser)) {
+			return false;
+		}
+		if (!spamroom[targetUser]) {
+			return this.sendReply('That user is not in the spamroom list.');
+		}
+		for(var u in spamroom)
+			if(targetUser == Users.get(u))
+				delete spamroom[u];
+		Rooms.rooms['spamroom'].add('|raw|<b>' + this.targetUsername + ' was removed from the spamroom list.</b>');
+		this.logModCommand(targetUser + ' was removed from spamroom by ' + user.name);
+		return this.sendReply(this.targetUsername + ' and their alts were successfully removed from the spamroom list.');
+	},
 
 	kick: 'warn',
 	k: 'warn',

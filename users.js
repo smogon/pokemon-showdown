@@ -240,6 +240,32 @@ function exportUsergroups() {
 }
 importUsergroups();
 
+var useravatars = {};
+
+function importUseravatars() {
+	for (var i in useravatars) delete useravatars[i];
+	fs.readFile('config/useravatars.csv', function(err, data) {
+		if (err) return;
+		data = (''+data).split("\n");
+		for (var i = 0; i < data.length; i++) {
+			if (!data[i]) continue;
+			var row = data[i].split(",");
+			row[1] = row[1].trim();
+			if (row[1]) useravatars[toId(row[0])] = row[1];
+		}
+	});
+}
+
+function exportUseravatars() {
+	var buffer = '';
+	for (var i in useravatars) {
+		buffer += i + ', ' + useravatars[i] + "\n";
+	}
+	fs.writeFile('config/useravatars.csv', buffer);
+}
+
+importUseravatars();
+
 var bannedWords = {};
 function importBannedWords() {
 	fs.readFile('config/bannedwords.txt', function (err, data) {
@@ -730,9 +756,7 @@ var User = (function () {
 			if (body !== '1') {
 				authenticated = true;
 
-				if (Config.customavatars && Config.customavatars[userid]) {
-					avatar = Config.customavatars[userid];
-				}
+				if (Users.useravatars[userid]) avatar = Users.useravatars[userid];
 
 				if (usergroups[userid]) {
 					group = usergroups[userid].substr(0, 1);
@@ -1486,6 +1510,8 @@ exports.socketDisconnect = socketDisconnect;
 exports.socketReceive = socketReceive;
 
 exports.importUsergroups = importUsergroups;
+exports.importUseravatars = importUseravatars;
+exports.exportUseravatars = exportUseravatars;
 exports.addBannedWord = addBannedWord;
 exports.removeBannedWord = removeBannedWord;
 
@@ -1496,6 +1522,7 @@ exports.bannedIps = bannedIps;
 exports.lockedIps = lockedIps;
 
 exports.usergroups = usergroups;
+exports.useravatars = useravatars;
 
 exports.pruneInactive = User.pruneInactive;
 exports.pruneInactiveTimer = setInterval(
