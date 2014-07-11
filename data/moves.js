@@ -6523,6 +6523,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isUnreleased: true,
 		breaksProtect: true,
+		notSubBlocked: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
