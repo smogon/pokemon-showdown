@@ -16,7 +16,7 @@ const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 var dns = require('dns');
 
-var dnsblCache = {
+var dnsblCache = exports.cache = {
 	'127.0.0.1': false
 };
 
