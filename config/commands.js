@@ -936,6 +936,40 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
+	formats: 'formathelp',
+	formatshelp: 'formathelp',
+	formathelp: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (this.broadcasting && (room.id === 'lobby' || room.battle)) return this.sendReply("This command is too spammy to broadcast in lobby/battles");
+		var buf = [];
+		var showAll = (target === 'all');
+		for (var id in Tools.data.Formats) {
+			var format = Tools.data.Formats[id];
+			if (!format) continue;
+			if (format.effectType !== 'Format') continue;
+			if (!format.challengeShow) continue;
+			if (!showAll && !format.searchShow) continue;
+			buf.push({
+				name: format.name,
+				gameType: format.gameType || 'singles',
+				mod: format.mod,
+				searchShow: format.searchShow,
+				desc: format.desc || 'No description.'
+			});
+		}
+		this.sendReplyBox(
+			"Available Formats: (<strong>Bold</strong> formats are on ladder.)<br />" +
+			buf.map(function (data) {
+				var str = "";
+				// Bold = Ladderable.
+				str += (data.searchShow ? "<strong>" + data.name + "</strong>" : data.name) + ": ";
+				str += "(" + (!data.mod || data.mod === 'base' ? "" : data.mod + " ") + data.gameType + " format) ";
+				str += data.desc;
+				return str;
+			}).join("<br />")
+		);
+	},
+
 	roomhelp: function (target, room, user) {
 		if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
 		if (!this.canBroadcast()) return;
