@@ -2515,7 +2515,6 @@ exports.BattleMovedex = {
 		name: "Diamond Storm",
 		pp: 5,
 		priority: 0,
-		isUnreleased: true,
 		secondary: {
 			chance: 50,
 			self: {

@@ -4673,8 +4673,11 @@ exports.BattleFormatsData = {
 		tier: "BL"
 	},
 	diancie: {
-		viableMoves: {"diamondstorm":1,"moonblast":1,"reflect":1,"lightscreen":1,"safeguard":1,"substitute":1,"calmmind":1,"psychic":1,"stealthrock":1},
+		viableMoves: {"diamondstorm":1,"moonblast":1,"reflect":1,"lightscreen":1,"substitute":1,"calmmind":1,"psychic":1,"stealthrock":1},
 		viableDoublesMoves: {"diamondstorm":1,"moonblast":1,"reflect":1,"lightscreen":1,"safeguard":1,"substitute":1,"calmmind":1,"psychic":1,"dazzlinggleam":1,"protect":1},
+		eventPokemon: [
+			{"generation":6,"level":50,"moves":["diamondstorm","moonblast","reflect","return"],"pokeball":"cherishball"}
+		],
 		tier: "OU"
 	},
 	hoopa: {
