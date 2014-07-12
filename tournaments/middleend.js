@@ -497,7 +497,11 @@ var Tournament = (function () {
 		this.runAutoDisqualify();
 		return true;
 	};
-	Tournament.prototype.runAutoDisqualify = function () {
+	Tournament.prototype.runAutoDisqualify = function (output) {
+		if (!this.isTournamentStarted) {
+			output.sendReply('|tournament|error|NotStarted');
+			return false;
+		}
 		this.lastActionTimes.forEach(function (time, user) {
 			var availableMatches = 0;
 			this.availableMatches.get(user).forEach(function (isAvailable) {
@@ -770,7 +774,7 @@ var commands = {
 			}
 		},
 		runautodq: function (tournament) {
-			tournament.runAutoDisqualify();
+			tournament.runAutoDisqualify(this);
 		},
 		end: 'delete',
 		stop: 'delete',
