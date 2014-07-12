@@ -11272,6 +11272,7 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		thawsUser: true,
+		thawsTarget: true,
 		secondary: {
 			chance: 30,
 			status: 'brn'

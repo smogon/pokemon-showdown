@@ -86,7 +86,7 @@ exports.BattleStatuses = {
 			return false;
 		},
 		onHit: function (target, source, move) {
-			if (move.type === 'Fire' && move.category !== 'Status') {
+			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
 		}
