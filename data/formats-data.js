@@ -3034,7 +3034,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	kricketune: {
-		viableMoves: {"x-scissor":1,"endeavor":1,"taunt":1,"toxic":1,"stickyweb":1,"knockoff":1},
+		viableMoves: {"xscissor":1,"endeavor":1,"taunt":1,"toxic":1,"stickyweb":1,"knockoff":1},
 		tier: "NU"
 	},
 	shinx: {
@@ -3324,7 +3324,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	mesprit: {
-		viableMoves: {"calmmind":1,"psyshoc":1,"thunderbolt":1,"icebeam":1,"substitute":1,"uturn":1,"trick":1,"stealthrock":1,"knockoff":1,"zenheadbutt":1},
+		viableMoves: {"calmmind":1,"psyshock":1,"thunderbolt":1,"icebeam":1,"substitute":1,"uturn":1,"trick":1,"stealthrock":1,"knockoff":1,"zenheadbutt":1},
 		tier: "NU"
 	},
 	azelf: {
