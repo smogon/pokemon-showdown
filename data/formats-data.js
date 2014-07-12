@@ -4411,6 +4411,12 @@ exports.BattleFormatsData = {
 	},
 	vivillon: {
 		viableMoves: {"sleeppowder":1,"quiverdance":1,"hurricane":1,"bugbuzz":1,"roost":1},
+		eventPokemon: [
+			// Poké Ball pattern
+			{"generation":6,"level":12,"gender":"M","isHidden":false,"moves":["stunspore","gust","lightscreen","strugglebug"],"pokeball":"cherishball"},
+			// Fancy pattern
+			{"generation":6,"level":12,"isHidden":false,"moves":["gust","lightscreen","strugglebug","holdhands"],"pokeball":"cherishball"}
+		],
 		tier: "NU"
 	},
 	litleo: {
