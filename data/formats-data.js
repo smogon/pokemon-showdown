@@ -2152,7 +2152,7 @@ exports.BattleFormatsData = {
 	gardevoirmega: {
 		viableMoves: {"psyshock":1,"focusblast":1,"shadowball":1,"calmmind":1,"thunderbolt":1,"hypervoice":1,"healingwish":1},
 		requiredItem: "Gardevoirite",
-		tier: "BL"
+		tier: "OU"
 	},
 	gallade: {
 		viableMoves: {"closecombat":1,"trick":1,"stoneedge":1,"shadowsneak":1,"drainpunch":1,"icepunch":1,"zenheadbutt":1,"swordsdance":1,"knockoff":1},
