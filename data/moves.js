@@ -2509,13 +2509,12 @@ exports.BattleMovedex = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
-		desc: "Deals damage to all adjacent Pokemon with a 50% chance to raise the user's Defense by 1 stage.",
-		shortDesc: "Hits all adjacent Pokemon. 50% chance to boost Def by 1.",
+		desc: "Deals damage to all adjacent foes with a 50% chance to raise the user's Defense by 1 stage.",
+		shortDesc: "Hits all adjacent foes. 50% chance to boost Def by 1.",
 		id: "diamondstorm",
 		name: "Diamond Storm",
 		pp: 5,
 		priority: 0,
-		isUnreleased: true,
 		secondary: {
 			chance: 50,
 			self: {
@@ -2524,7 +2523,7 @@ exports.BattleMovedex = {
 				}
 			}
 		},
-		target: "allAdjacent",
+		target: "allAdjacentFoes",
 		type: "Rock"
 	},
 	"dig": {
@@ -6524,6 +6523,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isUnreleased: true,
 		breaksProtect: true,
+		notSubBlocked: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -8226,7 +8226,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "A random move is selected for use, other than After You, Assist, Bestow, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Endure, Feint, Focus Punch, Follow Me, Freeze Shock, Helping Hand, Ice Burn, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Sketch, Sleep Talk, Snarl, Snatch, Snore, Struggle, Switcheroo, Techno Blast, Thief, Transform, Trick, V-create, or Wide Guard.",
+		desc: "A random move is selected for use, other than After You, Assist, Belch, Bestow, Celebrate, Chatter, Copycat, Counter, Covet, Crafty Shield, Destiny Bond, Detect, Diamond Storm, Endure, Feint, Focus Punch, Follow Me, Freeze Shock, Happy Hour, Helping Hand, Hold Hands, Hyperspace Hole, Ice Burn, King's Shield, Light of Ruin, Mat Block, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Sketch, Sleep Talk, Snarl, Snatch, Snore, Spiky Shield, Steam Eruption, Struggle, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Transform, Trick, V-create, or Wide Guard.",
 		shortDesc: "Picks a random move.",
 		id: "metronome",
 		name: "Metronome",
@@ -8239,7 +8239,7 @@ exports.BattleMovedex = {
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
 				var noMetronome = {
-					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snatch:1, snarl:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, vcreate:1, wideguard:1, diamondstorm:1, steameruption:1, hyperspacehole:1, thousandarrows:1, thousandwaves:1
+					afteryou:1, assist:1, belch:1, bestow:1, celebrate:1, chatter:1, copycat:1, counter:1, covet:1, craftyshield:1, destinybond:1, detect:1, diamondstorm:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, happyhour:1, helpinghand:1, holdhands:1, hyperspacehole:1, iceburn:1, kingsshield:1, lightofruin:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snarl:1, snatch:1, snore:1, spikyshield:1, steameruption:1, struggle:1, switcheroo:1, technoblast:1, thief:1, thousandarrows:1, thousandwaves:1, transform:1, trick:1, vcreate:1, wideguard:1
 				};
 				if (!noMetronome[move.id]) {
 					moves.push(move);
