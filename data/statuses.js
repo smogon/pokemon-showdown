@@ -354,6 +354,19 @@ exports.BattleStatuses = {
 			return this.chainModify([0x14CD, 0x1000]);
 		}
 	},
+	aura: {
+		duration: 1,
+		onBasePowerPriority: 8,
+		onBasePower: function (basePower, user, target, move) {
+			var modifier = 4 / 3;
+			this.debug('Aura Boost');
+			if (user.volatiles['aurabreak']) {
+				modifier = 0.75;
+				this.debug('Aura Boost reverted by Aura Break');
+			}
+			return this.chainModify(modifier);
+		}
+	},
 
 		// weather
 
