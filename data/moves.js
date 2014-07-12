@@ -5206,7 +5206,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For five turns, Pokemon on the ground restore 1/16 of their HP each turn. Their Grass-type moves are powered up by 50%.",
+		desc: "For five turns, Pokemon on the ground restore 1/16 of their HP each turn. Their Grass-type moves are powered up by 50%. Damage caused by Earthquake, Bulldoze or Magnitude is halved.",
 		shortDesc: "If on ground, restore HP + Grass moves stronger.",
 		id: "grassyterrain",
 		name: "Grassy Terrain",
@@ -5216,6 +5216,11 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onBasePower: function (basePower, attacker, defender, move) {
+				var weakenedMoves = {'earthquake':1, 'bulldoze':1, 'magnitude':1};
+				if (move.id in weakenedMoves) {
+					this.debug('move weakened by grassy terrain');
+					return this.chainModify(0.5);
+				}
 				if (move.type === 'Grass' && attacker.runImmunity('Ground')) {
 					this.debug('grassy terrain boost');
 					return this.chainModify(1.5);
@@ -5231,7 +5236,7 @@ exports.BattleMovedex = {
 				for (var s in battle.sides) {
 					for (var p in battle.sides[s].active) {
 						if (battle.sides[s].active[p].runImmunity('Ground')) {
-							this.debug('PokÃ©mon is grounded, healing through Grassy Terrain.');
+							this.debug('Pokémon is grounded, healing through Grassy Terrain.');
 							this.heal(battle.sides[s].active[p].maxhp / 16, battle.sides[s].active[p], battle.sides[s].active[p]);
 						}
 					}
@@ -7799,7 +7804,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the Defense and Sp. Def stats of ally PokÃ©mon with the Plus or Minus Ability.",
+		desc: "Raises the Defense and Sp. Def stats of ally Pokémon with the Plus or Minus Ability.",
 		shortDesc: "Raises defenses of ally Pokemon with Plus/Minus.",
 		id: "magneticflux",
 		name: "Magnetic Flux",
