@@ -1121,6 +1121,7 @@ exports.BattleItems = {
 		onAfterMoveSecondary: function (target, source, move) {
 			if (source && source !== target && target.hp && move && move.category !== 'Status') {
 				if (target.useItem()) {
+					this.cancelMove(target);
 					target.switchFlag = true;
 				}
 			}
