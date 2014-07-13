@@ -3984,7 +3984,7 @@ exports.BattleMovedex = {
 		onPrepareHit: function (target, source, move) {
 			for (var i = 0; i < this.queue.length; i++) {
 				var decision = this.queue[i];
-				if (!decision.pokemon || !decision.move) continue;
+				if (!decision.move || !decision.pokemon || !decision.pokemon.isActive || decision.pokemon.fainted) continue;
 				if (decision.pokemon.side === source.side && decision.move.id in {grasspledge:1, waterpledge:1}) {
 					this.prioritizeQueue(decision);
 					this.add('-waiting', source, decision.pokemon);
@@ -5142,7 +5142,7 @@ exports.BattleMovedex = {
 		onPrepareHit: function (target, source, move) {
 			for (var i = 0; i < this.queue.length; i++) {
 				var decision = this.queue[i];
-				if (!decision.pokemon || !decision.move) continue;
+				if (!decision.move || !decision.pokemon || !decision.pokemon.isActive || decision.pokemon.fainted) continue;
 				if (decision.pokemon.side === source.side && decision.move.id in {waterpledge:1, firepledge:1}) {
 					this.prioritizeQueue(decision);
 					this.add('-waiting', source, decision.pokemon);
@@ -14597,7 +14597,7 @@ exports.BattleMovedex = {
 		onPrepareHit: function (target, source, move) {
 			for (var i = 0; i < this.queue.length; i++) {
 				var decision = this.queue[i];
-				if (!decision.pokemon || !decision.move) continue;
+				if (!decision.move || !decision.pokemon || !decision.pokemon.isActive || decision.pokemon.fainted) continue;
 				if (decision.pokemon.side === source.side && decision.move.id in {firepledge:1, grasspledge:1}) {
 					this.prioritizeQueue(decision);
 					this.add('-waiting', source, decision.pokemon);
