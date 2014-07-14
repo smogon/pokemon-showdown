@@ -323,6 +323,26 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Pikachu Tournamentchu",
+		section: "XY Triples",
+
+		gameType: 'triples',
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
+		validateTeam: function (team, format) {
+			for (var i = 0; i < team.length; i++) {
+				if (Tools.getTemplate(team[i]).species === 'Pikachu') return;
+			}
+			return ['Your team must have Pikachu.'];
+		},
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0) {
+				return [set.species + " is banned as it cannot evolve."];
+			}
+		}
+	},
+	{
 		name: "Triples Challenge Cup",
 		section: "XY Triples",
 
