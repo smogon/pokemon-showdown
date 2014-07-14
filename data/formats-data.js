@@ -2151,8 +2151,7 @@ exports.BattleFormatsData = {
 	},
 	gardevoirmega: {
 		viableMoves: {"psyshock":1,"focusblast":1,"shadowball":1,"calmmind":1,"thunderbolt":1,"hypervoice":1,"healingwish":1},
-		requiredItem: "Gardevoirite",
-		tier: "OU"
+		requiredItem: "Gardevoirite"
 	},
 	gallade: {
 		viableMoves: {"closecombat":1,"trick":1,"stoneedge":1,"shadowsneak":1,"drainpunch":1,"icepunch":1,"zenheadbutt":1,"swordsdance":1,"knockoff":1},
@@ -3600,11 +3599,11 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	purrloin: {
-		viableMoves: {"swagger":1,"thunderwave":1,"substitute":1,"foulplay":1},
+		viableMoves: {"encore":1,"suckerpunch":1,"playrough":1,"uturn":1,"knockoff":1},
 		tier: "LC"
 	},
 	liepard: {
-		viableMoves: {"swagger":1,"thunderwave":1,"substitute":1,"foulplay":1},
+		viableMoves: {"encore":1,"thunderwave":1,"substitute":1,"knockoff":1,"playrough":1,"uturn":1,"suckerpunch":1},
 		eventPokemon: [
 			{"generation":5,"level":20,"gender":"F","nature":"Jolly","isHidden":true,"moves":["fakeout","foulplay","encore","swagger"]}
 		],
@@ -4506,7 +4505,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	inkay: {
-		viableMoves: {"topsyturvy":1,"switcheroo":1,"superpower":1,"psychocut":1,"flamethrower":1,"rockslide":1,"trickroom":1,"swagger":1,"foulplay":1},
+		viableMoves: {"topsyturvy":1,"switcheroo":1,"superpower":1,"psychocut":1,"flamethrower":1,"rockslide":1,"trickroom":1},
 		eventPokemon: [
 			{"generation":6,"level":10,"isHidden":false,"moves":["happyhour","foulplay","hypnosis","topsyturvy"],"pokeball":"cherishball"}
 		],
@@ -4602,7 +4601,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	klefki: {
-		viableMoves: {"reflect":1,"lightscreen":1,"spikes":1,"torment":1,"substitute":1,"thunderwave":1,"drainingkiss":1,"swagger":1,"foulplay":1,"flashcannon":1,"dazzlinggleam":1},
+		viableMoves: {"reflect":1,"lightscreen":1,"spikes":1,"torment":1,"substitute":1,"thunderwave":1,"drainingkiss":1,"flashcannon":1,"dazzlinggleam":1},
 		tier: "BL"
 	},
 	phantump: {
