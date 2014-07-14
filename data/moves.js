@@ -11820,10 +11820,10 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
-		onHit: function (target, source) {
+		onHit: function (target, source, move) {
 			var targetAbility = target.ability;
 			var sourceAbility = source.ability;
-			if (!target.setAbility(sourceAbility) || !source.setAbility(targetAbility)) {
+			if (!target.setAbility(sourceAbility, source, move, true) || !source.setAbility(targetAbility, source, move, true)) {
 				target.ability = targetAbility;
 				source.ability = sourceAbility;
 				return false;
