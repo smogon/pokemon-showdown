@@ -292,11 +292,30 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "XY Battle Spot Triples",
-		section: "XY Triples (beta)",
+		name: "Random Triples Battle",
+		section: "XY Triples",
+
+		gameType: 'triples',
+		team: 'randomDoubles',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "Smogon Triples",
+		section: "XY Triples",
 
 		gameType: 'triples',
 		searchShow: false,
+		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		banlist: ['Soul Dew', 'Dark Void',
+			'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin',
+			'Arceus', 'Reshiram', 'Zekrom', 'Kyurem-White', 'Xerneas', 'Yveltal'
+		]
+	},
+	{
+		name: "XY Battle Spot Triples",
+		section: "XY Triples",
+
+		gameType: 'triples',
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
 		validateTeam: function (team, format) {
@@ -304,8 +323,28 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Pikachu Tournamentchu",
+		section: "XY Triples",
+
+		gameType: 'triples',
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
+		validateTeam: function (team, format) {
+			for (var i = 0; i < team.length; i++) {
+				if (Tools.getTemplate(team[i]).species === 'Pikachu') return;
+			}
+			return ['Your team must have Pikachu.'];
+		},
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0) {
+				return [set.species + " is banned as it cannot evolve."];
+			}
+		}
+	},
+	{
 		name: "Triples Challenge Cup",
-		section: 'XY Triples (beta)',
+		section: "XY Triples",
 
 		gameType: 'triples',
 		team: 'randomCC',
@@ -314,7 +353,7 @@ exports.Formats = [
 	},
 	{
 		name: "Triples Custom Game",
-		section: "XY Triples (beta)",
+		section: "XY Triples",
 
 		gameType: 'triples',
 		searchShow: false,
