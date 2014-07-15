@@ -1068,8 +1068,8 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isBounceable: true,
-		onHit: function (target) {
-			if (!target.addVolatile('trapped')) {
+		onHit: function (target, source, move) {
+			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
 			}
 		},
@@ -7996,8 +7996,8 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isBounceable: true,
-		onHit: function (target) {
-			if (!target.addVolatile('trapped')) {
+		onHit: function (target, source, move) {
+			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
 			}
 		},
@@ -12538,8 +12538,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isBounceable: true,
-		onHit: function (target) {
-			if (!target.addVolatile('trapped')) {
+		onHit: function (target, source, move) {
+			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
 			}
 		},
@@ -13752,8 +13752,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isUnreleased: true,
-		onHit: function (target) {
-			target.addVolatile('trapped');
+		onHit: function (target, source, move) {
+			target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: false,
 		target: "normal",
