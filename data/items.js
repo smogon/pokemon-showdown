@@ -3686,7 +3686,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
-		onAfterMoveSelf: function (source, target) {
+		onAfterMoveSecondarySelfPriority: -1,
+		onAfterMoveSecondarySelf: function (source, target) {
 			if (source.lastDamage > 0) {
 				this.heal(source.lastDamage / 8, source);
 			}
