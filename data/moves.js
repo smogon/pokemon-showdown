@@ -4613,7 +4613,7 @@ exports.BattleMovedex = {
 		onHit: function (target) {
 			if (target.hasType('Grass')) return false;
 			if (!target.addType('Grass')) return false;
-			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Forest\'s Curse');
+			this.add('-start', target, 'typeadd', 'Grass', '[from] move: Forest\'s Curse');
 		},
 		secondary: false,
 		target: "normal",
@@ -14141,7 +14141,7 @@ exports.BattleMovedex = {
 		onHit: function (target) {
 			if (target.hasType('Ghost')) return false;
 			if (!target.addType('Ghost')) return false;
-			this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[from] move: Trick-or-Treat');
+			this.add('-start', target, 'typeadd', 'Ghost', '[from] move: Trick-or-Treat');
 		},
 		secondary: false,
 		target: "normal",
