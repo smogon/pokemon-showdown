@@ -934,7 +934,7 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
-	formats: 'formathelp',
+	/*formats: 'formathelp',
 	formatshelp: 'formathelp',
 	formathelp: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -966,7 +966,7 @@ var commands = exports.commands = {
 				return str;
 			}).join("<br />")
 		);
-	},
+	},*/
 
 	roomhelp: function (target, room, user) {
 		if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
