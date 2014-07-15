@@ -78,7 +78,7 @@ exports.BattleItems = {
 	},
 	"bigroot": {
 		inherit: true,
-		onAfterMoveSelf: function (source, target) {
+		onAfterMoveSecondarySelf: function (source, target) {
 			if (source.hasType('Grass')) {
 				if (source.lastDamage > 0) {
 					this.heal(source.lastDamage / 8, source);
