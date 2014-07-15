@@ -11934,8 +11934,8 @@ exports.BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		onTryHit: function (target) {
-			if (target !== this.effectData.source) return false;
+		onTryHit: function (target, source) {
+			if (target !== source.volatiles['twoturnmove'].source) return false;
 			if (target.hasType('Flying')) {
 				this.add('-immune', target, '[msg]');
 				return null;
