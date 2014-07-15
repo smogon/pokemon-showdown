@@ -188,6 +188,13 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Aura Break');
 		},
+		onAnyTryPrimaryHit: function (target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			source.addVolatile('aurabreak');
+		},
+		effect: {
+			duration: 1
+		},
 		id: "aurabreak",
 		name: "Aura Break",
 		rating: 2,
@@ -453,23 +460,10 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
-		onBasePowerPriority: 8,
-		onAnyBasePower: function (basePower, attacker, defender, move) {
-			var reverseAura = false;
-			for (var p in attacker.side.active) {
-				if (attacker.side.active[p] && attacker.side.active[p].hasAbility('aurabreak')) {
-					reverseAura = true;
-					this.debug('Reversing Dark Aura due to Aura Break');
-				}
-			}
-			for (var p in defender.side.active) {
-				if (defender.side.active[p] && defender.side.active[p].hasAbility('aurabreak')) {
-					reverseAura = true;
-					this.debug('Reversing Dark Aura due to Aura Break');
-				}
-			}
+		onAnyTryPrimaryHit: function (target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Dark') {
-				return this.chainModify(reverseAura? 0.75 : 4 / 3);
+				source.addVolatile('aura');
 			}
 		},
 		id: "darkaura",
@@ -628,23 +622,10 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
-		onBasePowerPriority: 8,
-		onAnyBasePower: function (basePower, attacker, defender, move) {
-			var reverseAura = false;
-			for (var p in attacker.side.active) {
-				if (attacker.side.active[p] && attacker.side.active[p].hasAbility('aurabreak')) {
-					reverseAura = true;
-					this.debug('Reversing Fairy Aura due to Aura Break');
-				}
-			}
-			for (var p in defender.side.active) {
-				if (defender.side.active[p] && defender.side.active[p].hasAbility('aurabreak')) {
-					reverseAura = true;
-					this.debug('Reversing Fairy Aura due to Aura Break');
-				}
-			}
+		onAnyTryPrimaryHit: function (target, source, move) {
+			if (target === source || move.category === 'Status') return;
 			if (move.type === 'Fairy') {
-				return this.chainModify(reverseAura? 0.75 : 4 / 3);
+				source.addVolatile('aura');
 			}
 		},
 		id: "fairyaura",
@@ -1988,8 +1969,7 @@ exports.BattleAbilities = {
 	"protean": {
 		desc: "Right before this Pokemon uses a move, it changes its type to match that move. Hidden Power is interpreted as its Hidden Power type, rather than Normal.",
 		shortDesc: "Right before this Pokemon uses a move, it changes its type to match that move.",
-		onSourceTryPrimaryHit: function (target, source, move) {
-			if (!move || source.volatiles.mustrecharge) return;
+		onPrepareHit: function (source, target, move) {
 			if (source.getTypes().join() !== move.type) {
 				if (!source.setType(move.type)) return;
 				this.add('-start', source, 'typechange', move.type, '[from] Protean');

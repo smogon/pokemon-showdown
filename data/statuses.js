@@ -86,7 +86,7 @@ exports.BattleStatuses = {
 			return false;
 		},
 		onHit: function (target, source, move) {
-			if (move.type === 'Fire' && move.category !== 'Status') {
+			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
 		}
@@ -352,6 +352,19 @@ exports.BattleStatuses = {
 		onBasePower: function (basePower, user, target, move) {
 			this.debug('Gem Boost');
 			return this.chainModify([0x14CD, 0x1000]);
+		}
+	},
+	aura: {
+		duration: 1,
+		onBasePowerPriority: 8,
+		onBasePower: function (basePower, user, target, move) {
+			var modifier = 4 / 3;
+			this.debug('Aura Boost');
+			if (user.volatiles['aurabreak']) {
+				modifier = 0.75;
+				this.debug('Aura Boost reverted by Aura Break');
+			}
+			return this.chainModify(modifier);
 		}
 	},
 

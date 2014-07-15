@@ -908,11 +908,23 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3500418/\">Hackmons</a><br />";
 		}
-		if (target === 'middlecup' || target === 'mc') {
+		if (target === 'all' || target === 'smogontriples' || target === 'triples') {
+			matched = true;
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
+		}
+		if (target === 'all' || target === 'alphabetcup') {
+			matched = true;
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3498167/\">Alphabet Cup</a><br />";
+		}
+		if (target === 'all' || target === 'averagemons') {
+			matched = true;
+			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3495527/\">Averagemons</a><br />";
+		}
+		if (target === 'all' || target === 'middlecup' || target === 'mc') {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
 		}
-		if (target === 'glitchmons') {
+		if (target === 'all' || target === 'glitchmons') {
 			matched = true;
 			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3467120/\">Glitchmons</a><br />";
 		}
@@ -921,6 +933,40 @@ var commands = exports.commands = {
 		}
 		this.sendReplyBox(buffer);
 	},
+
+	/*formats: 'formathelp',
+	formatshelp: 'formathelp',
+	formathelp: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (this.broadcasting && (room.id === 'lobby' || room.battle)) return this.sendReply("This command is too spammy to broadcast in lobby/battles");
+		var buf = [];
+		var showAll = (target === 'all');
+		for (var id in Tools.data.Formats) {
+			var format = Tools.data.Formats[id];
+			if (!format) continue;
+			if (format.effectType !== 'Format') continue;
+			if (!format.challengeShow) continue;
+			if (!showAll && !format.searchShow) continue;
+			buf.push({
+				name: format.name,
+				gameType: format.gameType || 'singles',
+				mod: format.mod,
+				searchShow: format.searchShow,
+				desc: format.desc || 'No description.'
+			});
+		}
+		this.sendReplyBox(
+			"Available Formats: (<strong>Bold</strong> formats are on ladder.)<br />" +
+			buf.map(function (data) {
+				var str = "";
+				// Bold = Ladderable.
+				str += (data.searchShow ? "<strong>" + data.name + "</strong>" : data.name) + ": ";
+				str += "(" + (!data.mod || data.mod === 'base' ? "" : data.mod + " ") + data.gameType + " format) ";
+				str += data.desc;
+				return str;
+			}).join("<br />")
+		);
+	},*/
 
 	roomhelp: function (target, room, user) {
 		if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
