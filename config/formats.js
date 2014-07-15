@@ -30,6 +30,13 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
 	},
 	{
+		name: "OU (suspect test)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Aegislash']
+	},
+	{
 		name: "Ubers",
 		section: "XY Singles",
 
@@ -61,6 +68,16 @@ exports.Formats = [
 		name: "LC",
 		section: "XY Singles",
 
+		searchShow: false,
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
+	},
+	{
+		name: "LC (suspect test)",
+		section: "XY Singles",
+
+		challengeShow: false,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
@@ -275,11 +292,30 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "XY Battle Spot Triples",
-		section: "XY Triples (beta)",
+		name: "Random Triples Battle",
+		section: "XY Triples",
+
+		gameType: 'triples',
+		team: 'randomDoubles',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "Smogon Triples",
+		section: "XY Triples",
 
 		gameType: 'triples',
 		searchShow: false,
+		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		banlist: ['Soul Dew', 'Dark Void',
+			'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin',
+			'Arceus', 'Reshiram', 'Zekrom', 'Kyurem-White', 'Xerneas', 'Yveltal'
+		]
+	},
+	{
+		name: "XY Battle Spot Triples",
+		section: "XY Triples",
+
+		gameType: 'triples',
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
 		validateTeam: function (team, format) {
@@ -287,8 +323,28 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Pikachu Tournamentchu",
+		section: "XY Triples",
+
+		gameType: 'triples',
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
+		validateTeam: function (team, format) {
+			for (var i = 0; i < team.length; i++) {
+				if (Tools.getTemplate(team[i]).species === 'Pikachu') return;
+			}
+			return ['Your team must have Pikachu.'];
+		},
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0) {
+				return [set.species + " is banned as it cannot evolve."];
+			}
+		}
+	},
+	{
 		name: "Triples Challenge Cup",
-		section: 'XY Triples (beta)',
+		section: "XY Triples",
 
 		gameType: 'triples',
 		team: 'randomCC',
@@ -297,7 +353,7 @@ exports.Formats = [
 	},
 	{
 		name: "Triples Custom Game",
-		section: "XY Triples (beta)",
+		section: "XY Triples",
 
 		gameType: 'triples',
 		searchShow: false,
@@ -315,6 +371,7 @@ exports.Formats = [
 	{
 		name: "Mediocremons",
 		section: "OM of the Month",
+		column: 2,
 
 		ruleset: ['OU'],
 		banlist: ['Clefable', 'Kingdra', 'Venomoth', 'Abomasite', 'Mawilite', 'Medichamite', 'Huge Power', 'Pure Power'],
@@ -343,6 +400,7 @@ exports.Formats = [
 	{
 		name: "CAP",
 		section: "Other Metagames",
+		column: 2,
 
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
@@ -541,7 +599,7 @@ exports.Formats = [
 	{
 		name: "[Gen 5] OU",
 		section: "BW2 Singles",
-		column: 2,
+		column: 3,
 
 		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
@@ -627,7 +685,7 @@ exports.Formats = [
 	{
 		name: "[Gen 5] Smogon Doubles",
 		section: 'BW2 Doubles',
-		column: 2,
+		column: 3,
 
 		mod: 'gen5',
 		gameType: 'doubles',
@@ -686,7 +744,7 @@ exports.Formats = [
 	{
 		name: "[Gen 4] OU",
 		section: "Past Generations",
-		column: 2,
+		column: 3,
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
