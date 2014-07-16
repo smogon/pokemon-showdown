@@ -126,13 +126,21 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"cutecharm": {
+		inherit: true,
+		onAfterDamage: function (damage, target, source, move) {
+			if (move && move.isContact) {
+				source.addVolatile('Attract', target);
+			}
+		}
+	},
 	"poisonpoint": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.isContact) {
 				source.trySetStatus('psn', target, move);
 			}
-		},
+		}
 	},
 	"flowergift": {
 		inherit: true,
@@ -325,7 +333,7 @@ exports.BattleAbilities = {
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Shell Armor!");
-				damage -= target.maxhp / 8;
+				damage -= target.maxhp / 10;
 				if (damage < 0) damage = 0;
 				return damage;
 			}
@@ -341,7 +349,7 @@ exports.BattleAbilities = {
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Battle Armor!");
-				damage -= target.maxhp / 8;
+				damage -= target.maxhp / 10;
 				if (damage < 0) damage = 0;
 				return damage;
 			}
@@ -351,7 +359,7 @@ exports.BattleAbilities = {
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Weak Armor!");
-				damage -= target.maxhp / 8;
+				damage -= target.maxhp / 10;
 				if (damage < 0) damage = 0;
 				target.setAbility('');
 				this.boost({spe: 1});
@@ -368,7 +376,7 @@ exports.BattleAbilities = {
 		},
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				damage -= target.maxhp / 8;
+				damage -= target.maxhp / 10;
 				if (damage < 0) damage = 0;
 				if (effect.type === 'Ice' || effect.type === 'Water') {
 					this.add('-activate', target, 'ability: Magma Armor');
