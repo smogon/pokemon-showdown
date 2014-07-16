@@ -333,7 +333,7 @@ exports.BattleAbilities = {
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Shell Armor!");
-				damage -= target.maxhp / 16;
+				damage -= target.maxhp / 10;
 				if (damage < 0) damage = 0;
 				return damage;
 			}
@@ -349,7 +349,7 @@ exports.BattleAbilities = {
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Battle Armor!");
-				damage -= target.maxhp / 16;
+				damage -= target.maxhp / 10;
 				if (damage < 0) damage = 0;
 				return damage;
 			}
@@ -359,7 +359,7 @@ exports.BattleAbilities = {
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Weak Armor!");
-				damage -= target.maxhp / 16;
+				damage -= target.maxhp / 10;
 				if (damage < 0) damage = 0;
 				target.setAbility('');
 				this.boost({spe: 1});
@@ -376,7 +376,7 @@ exports.BattleAbilities = {
 		},
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				damage -= target.maxhp / 16;
+				damage -= target.maxhp / 10;
 				if (damage < 0) damage = 0;
 				if (effect.type === 'Ice' || effect.type === 'Water') {
 					this.add('-activate', target, 'ability: Magma Armor');
