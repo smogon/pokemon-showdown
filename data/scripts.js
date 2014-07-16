@@ -115,7 +115,7 @@ exports.BattleScripts = {
 				if (damage === false) this.add('-fail', target);
 				return true;
 			}
-			damage = this.moveHit(target, pokemon, move);
+			damage = this.tryMoveHit(target, pokemon, move);
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
 			var targets = [];
 			if (move.target === 'allAdjacent') {
@@ -202,6 +202,10 @@ exports.BattleScripts = {
 		}
 
 		this.runEvent('PrepareHit', pokemon, target, move);
+
+		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+			return this.moveHit(target, pokemon, move);
+		}
 
 		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
 			return false;
