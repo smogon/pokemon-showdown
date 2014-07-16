@@ -391,13 +391,6 @@ exports.Formats = [
 		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power']
 	},
 	{
-		name: "Stat Reversal",
-		section: "Other Metagames",
-
-		mod: 'statreversal',
-		ruleset: ['OU'],
-	},
-	{
 		name: "CAP",
 		section: "Other Metagames",
 		column: 2,
@@ -572,6 +565,13 @@ exports.Formats = [
 		},
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Eviolite']
+	},
+	{
+		name: "Stat Reversal",
+		section: "Other Metagames",
+
+		mod: 'statreversal',
+		ruleset: ['OU'],
 	},
 	{
 		name: "[Gen 5] Glitchmons",
