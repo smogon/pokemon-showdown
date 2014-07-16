@@ -19,7 +19,7 @@ exports.BattleItems = {
 			pokemon.setItem('');
 		},
 		gen: 2,
-		desc: "Raises attack by 2 when holder is switched in.  Confuses holder.  Single use."
+		desc: "Raises attack by 2 when holder is switched in. Confuses holder. Single use."
 	},
 	cheriberry: {
 		inherit: true,
@@ -87,6 +87,28 @@ exports.BattleItems = {
 	persimberry: {
 		inherit: true,
 		gen: 2
+	},
+	pinkbow: {
+		id: "pinkbow",
+		name: "Pink Bow",
+		onBasePower: function (basePower, user, target, move) {
+			if (move.type === 'Normal') {
+				return basePower * 1.1;
+			}
+		},
+		gen: 2,
+		desc: "Holder's Normal-type attacks have 1.1x power."
+	},
+	polkadotbow: {
+		id: "polkadotbow",
+		name: "Polkadot Bow",
+		onBasePower: function (basePower, user, target, move) {
+			if (move.type === 'Normal') {
+				return basePower * 1.25;
+			}
+		},
+		gen: 2,
+		desc: "Holder's Normal-type attacks have 1.25x power."
 	},
 	rawstberry: {
 		inherit: true,
