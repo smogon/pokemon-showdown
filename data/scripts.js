@@ -106,15 +106,6 @@ exports.BattleScripts = {
 
 		var damage = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-			if (move.target === 'all') {
-				damage = this.runEvent('TryHitField', target, pokemon, move);
-			} else {
-				damage = this.runEvent('TryHitSide', target, pokemon, move);
-			}
-			if (!damage) {
-				if (damage === false) this.add('-fail', target);
-				return true;
-			}
 			damage = this.tryMoveHit(target, pokemon, move);
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
 			var targets = [];
@@ -188,9 +179,7 @@ exports.BattleScripts = {
 		return true;
 	},
 	tryMoveHit: function (target, pokemon, move, spreadHit) {
-		if (move.selfdestruct && spreadHit) {
-			pokemon.hp = 0;
-		}
+		if (move.selfdestruct && spreadHit) pokemon.hp = 0;
 
 		this.setActiveMove(move, pokemon, target);
 		var hitResult = true;
@@ -200,10 +189,18 @@ exports.BattleScripts = {
 			if (hitResult === false) this.add('-fail', target);
 			return false;
 		}
-
 		this.runEvent('PrepareHit', pokemon, target, move);
 
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+			if (move.target === 'all') {
+				hitResult = this.runEvent('TryHitField', target, pokemon, move);
+			} else {
+				hitResult = this.runEvent('TryHitSide', target, pokemon, move);
+			}
+			if (!hitResult) {
+				if (hitResult === false) this.add('-fail', target);
+				return true;
+			}
 			return this.moveHit(target, pokemon, move);
 		}
 
