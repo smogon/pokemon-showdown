@@ -306,7 +306,7 @@ exports.Formats = [
 		gameType: 'triples',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
-		banlist: ['Soul Dew', 'Dark Void',
+		banlist: ['Unreleased', 'Illegal', 'Soul Dew', 'Dark Void',
 			'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin',
 			'Arceus', 'Reshiram', 'Zekrom', 'Kyurem-White', 'Xerneas', 'Yveltal'
 		]
