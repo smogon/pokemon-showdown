@@ -41,6 +41,7 @@ var GlobalRoom = (function () {
 		if (!this.chatRoomData.length) {
 			this.chatRoomData = [{
 				title: 'Lobby',
+				isOfficial: true,
 				autojoin: true
 			}, {
 				title: 'Staff',
