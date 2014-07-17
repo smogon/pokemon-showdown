@@ -109,28 +109,23 @@ exports.Formats = [
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		banlist: [], // The neccessary bans are in Standard GBU
+		banlist: [], // The necessary bans are in Standard GBU
 		validateTeam: function (team, format) {
 			if (team.length < 3) return ['You must bring at least three Pokémon.'];
 		}
 	},
 	{
-		name: "XY Battle Spot Special 4",
+		name: "XY Battle Spot Special 5",
 		section: "XY Singles",
 
-		mod: 'inverse',
-		onBegin: function () {
-			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		banlist: [], // The neccessary bans are in Standard GBU
 		validateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least three Pokémon.'];
+			if (team.length < 6) return ['You must have six Pokémon.'];
+			for (var i = 0; i < team.length; i++) {
+				var item = toId(team[i].item);
+				if (item) return ["Pokémon cannot hold items for the Special format of this season."];
+			}
 		}
 	},
 	/*{
