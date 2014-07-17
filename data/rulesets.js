@@ -52,7 +52,8 @@ exports.BattleFormats = {
 			'Genesect',
 			'Xerneas',
 			'Yveltal',
-			'Zygarde'
+			'Zygarde',
+			'Diancie'
 		]
 	},
 	standarddoubles: {
