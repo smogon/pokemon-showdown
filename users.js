@@ -29,15 +29,6 @@ const THROTTLE_MULTILINE_WARN = 4;
 
 var fs = require('fs');
 
-var users = Object.create(null);
-var prevUsers = {};
-var numUsers = 0;
-
-var bannedIps = {};
-var bannedUsers = {};
-var lockedIps = {};
-var lockedUsers = {};
-
 /**
  * Get a user.
  *
@@ -53,7 +44,7 @@ var lockedUsers = {};
  *
  * If this behavior is undesirable, use Users.getExact.
  */
-function getUser(name, exactName) {
+var Users = module.exports = function(name, exactName) {
 	if (!name || name === '!') return null;
 	if (name && name.userid) return name;
 	var userid = toId(name);
@@ -63,7 +54,13 @@ function getUser(name, exactName) {
 		i++;
 	}
 	return users[userid];
-}
+};
+var getUser = Users.get = Users;
+
+// basic initialization
+var users = Users.users = Object.create(null);
+var prevUsers = Users.prevUsers = Object.create(null);
+var numUsers = 0;
 
 /**
  * Get a user by their exact username.
@@ -77,25 +74,17 @@ function getUser(name, exactName) {
  * true = don't track across username changes, false = do track. This
  * is not recommended since it's less readable.
  */
-function getExactUser(name) {
+var getExactUser = Users.getExact = function(name) {
 	return getUser(name, true);
-}
-
-function searchUser(name) {
-	var userid = toId(name);
-	while (userid && !users[userid]) {
-		userid = prevUsers[userid];
-	}
-	return users[userid];
-}
+};
 
 /*********************************************************
  * Routing
  *********************************************************/
 
-var connections = exports.connections = {};
+var connections = Users.connections = {};
 
-function socketConnect(worker, workerid, socketid, ip) {
+Users.socketConnect = function(worker, workerid, socketid, ip) {
 	var id = '' + workerid + '-' + socketid;
 	var connection = connections[id] = new Connection(id, worker, socketid, null, ip);
 
@@ -155,9 +144,9 @@ function socketConnect(worker, workerid, socketid, ip) {
 			if (connection.user) connection.user.lock(true);
 		}
 	});
-}
+};
 
-function socketDisconnect(worker, workerid, socketid) {
+Users.socketDisconnect = function(worker, workerid, socketid) {
 	var id = '' + workerid + '-' + socketid;
 
 	var connection = connections[id];
@@ -165,7 +154,7 @@ function socketDisconnect(worker, workerid, socketid) {
 	connection.onDisconnect();
 }
 
-function socketReceive(worker, workerid, socketid, message) {
+Users.socketReceive = function(worker, workerid, socketid, message) {
 	var id = '' + workerid + '-' + socketid;
 
 	var connection = connections[id];
@@ -213,10 +202,10 @@ function socketReceive(worker, workerid, socketid, message) {
 }
 
 /*********************************************************
- * User functions
+ * User groups
  *********************************************************/
 
-var usergroups = {};
+var usergroups = Users.usergroups = Object.create(null);
 function importUsergroups() {
 	// can't just say usergroups = {} because it's exported
 	for (var i in usergroups) delete usergroups[i];
@@ -239,6 +228,49 @@ function exportUsergroups() {
 	fs.writeFile('config/usergroups.csv', buffer);
 }
 importUsergroups();
+
+Users.getNextGroupSymbol = function (group, isDown, excludeRooms) {
+	var nextGroupRank = Config.groupsranking[Config.groupsranking.indexOf(group) + (isDown ? -1 : 1)];
+	if (excludeRooms === true && Config.groups[nextGroupRank]) {
+		var iterations = 0;
+		while (Config.groups[nextGroupRank].roomonly && iterations < 10) {
+			nextGroupRank = Config.groupsranking[Config.groupsranking.indexOf(group) + (isDown ? -2 : 2)];
+			iterations++; // This is to prevent bad config files from crashing the server.
+		}
+	}
+	if (!nextGroupRank) {
+		if (isDown) {
+			return Config.groupsranking[0];
+		} else {
+			return Config.groupsranking[Config.groupsranking.length - 1];
+		}
+	}
+	return nextGroupRank;
+};
+
+Users.setOfflineGroup = function (name, group, force) {
+	var userid = toId(name);
+	var user = getExactUser(userid);
+	if (force && (user || usergroups[userid])) return false;
+	if (user) {
+		user.setGroup(group);
+		return true;
+	}
+	if (!group || group === Config.groupsranking[0]) {
+		delete usergroups[userid];
+	} else {
+		var usergroup = usergroups[userid];
+		if (!usergroup && !force) return false;
+		name = usergroup ? usergroup.substr(1) : name;
+		usergroups[userid] = group + name;
+	}
+	exportUsergroups();
+	return true;
+};
+
+/*********************************************************
+ * Banned words
+ *********************************************************/
 
 var bannedWords = {};
 function importBannedWords() {
@@ -264,6 +296,14 @@ function removeBannedWord(word) {
 	exportBannedWords();
 }
 importBannedWords();
+
+Users.importUsergroups = importUsergroups;
+Users.addBannedWord = addBannedWord;
+Users.removeBannedWord = removeBannedWord;
+
+/*********************************************************
+ * User and Connection classes
+ *********************************************************/
 
 // User
 var User = (function () {
@@ -1399,8 +1439,24 @@ var Connection = (function () {
 	return Connection;
 })();
 
-// ban functions
+Users.User = User;
+Users.Connection = Connection;
 
+/*********************************************************
+ * Locks and bans
+ *********************************************************/
+
+var bannedIps = Users.bannedIps = Object.create(null);
+var bannedUsers = Object.create(null);
+var lockedIps = Users.lockedIps = Object.create(null);
+var lockedUsers = Object.create(null);
+
+/**
+ * Searches for IP in table.
+ *
+ * For instance, if IP is '1.2.3.4', will return the value corresponding
+ * to any of the keys in table match '1.2.3.4', '1.2.3.*', '1.2.*', or '1.*'
+ */
 function ipSearch(ip, table) {
 	if (table[ip]) return table[ip];
 	var dotIndex = ip.lastIndexOf('.');
@@ -1417,9 +1473,11 @@ function checkBanned(ip) {
 function checkLocked(ip) {
 	return ipSearch(ip, lockedIps);
 }
-exports.checkBanned = checkBanned;
-exports.checkLocked = checkLocked;
-exports.checkRangeBanned = function () {};
+Users.checkBanned = checkBanned;
+Users.checkLocked = checkLocked;
+
+// Defined in commands.js
+Users.checkRangeBanned = function () {};
 
 function unban(name) {
 	var success;
@@ -1472,73 +1530,17 @@ function unlock(name, unlocked, noRecurse) {
 	}
 	return unlocked;
 }
-exports.unban = unban;
-exports.unlock = unlock;
+Users.unban = unban;
+Users.unlock = unlock;
 
-exports.User = User;
-exports.Connection = Connection;
-exports.get = getUser;
-exports.getExact = getExactUser;
-exports.searchUser = searchUser;
+/*********************************************************
+ * Usergroups
+ *********************************************************/
 
-exports.socketConnect = socketConnect;
-exports.socketDisconnect = socketDisconnect;
-exports.socketReceive = socketReceive;
-
-exports.importUsergroups = importUsergroups;
-exports.addBannedWord = addBannedWord;
-exports.removeBannedWord = removeBannedWord;
-
-exports.users = users;
-exports.prevUsers = prevUsers;
-
-exports.bannedIps = bannedIps;
-exports.lockedIps = lockedIps;
-
-exports.usergroups = usergroups;
-
-exports.pruneInactive = User.pruneInactive;
-exports.pruneInactiveTimer = setInterval(
+Users.pruneInactive = User.pruneInactive;
+Users.pruneInactiveTimer = setInterval(
 	User.pruneInactive,
 	1000 * 60 * 30,
 	Config.inactiveuserthreshold || 1000 * 60 * 60
 );
 
-exports.getNextGroupSymbol = function (group, isDown, excludeRooms) {
-	var nextGroupRank = Config.groupsranking[Config.groupsranking.indexOf(group) + (isDown ? -1 : 1)];
-	if (excludeRooms === true && Config.groups[nextGroupRank]) {
-		var iterations = 0;
-		while (Config.groups[nextGroupRank].roomonly && iterations < 10) {
-			nextGroupRank = Config.groupsranking[Config.groupsranking.indexOf(group) + (isDown ? -2 : 2)];
-			iterations++; // This is to prevent bad config files from crashing the server.
-		}
-	}
-	if (!nextGroupRank) {
-		if (isDown) {
-			return Config.groupsranking[0];
-		} else {
-			return Config.groupsranking[Config.groupsranking.length - 1];
-		}
-	}
-	return nextGroupRank;
-};
-
-exports.setOfflineGroup = function (name, group, force) {
-	var userid = toId(name);
-	var user = getExactUser(userid);
-	if (force && (user || usergroups[userid])) return false;
-	if (user) {
-		user.setGroup(group);
-		return true;
-	}
-	if (!group || group === Config.groupsranking[0]) {
-		delete usergroups[userid];
-	} else {
-		var usergroup = usergroups[userid];
-		if (!usergroup && !force) return false;
-		name = usergroup ? usergroup.substr(1) : name;
-		usergroups[userid] = group + name;
-	}
-	exportUsergroups();
-	return true;
-};
