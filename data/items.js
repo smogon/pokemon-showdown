@@ -4468,6 +4468,6 @@ exports.BattleItems = {
 		},
 		num: 276,
 		gen: 4,
-		desc: "The accuracy of attacks by the holder is 1.2x if it moves after the target."
+		desc: "The accuracy of attacks by the holder is 1.2x if it is the last to move in a turn."
 	}
 };
