@@ -118,7 +118,7 @@ global.reloadCustomAvatars = function () {
 	Config.customAvatars = newCustomAvatars;
 }
 
-var watchFile = function () {
+var watchFile = global.watchFile = function () {
 	try {
 		return fs.watchFile.apply(fs, arguments);
 	} catch (e) {
@@ -359,11 +359,6 @@ global.string = function (str) {
 };
 
 global.LoginServer = require('./loginserver.js');
-
-watchFile('./config/custom.css', function (curr, prev) {
-	LoginServer.request('invalidatecss', {}, function () {});
-});
-LoginServer.request('invalidatecss', {}, function () {});
 
 global.Users = require('./users.js');
 

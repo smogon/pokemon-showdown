@@ -608,7 +608,8 @@ var Tournament = (function () {
 	Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
 		if (!result) return;
 
-		// Prevent double accepts
+		// Prevent double accepts and users that have been disqualified while between these two functions
+		if (!this.pendingChallenges.get(challenge.from)) return;
 		if (!this.pendingChallenges.get(user)) return;
 
 		var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
