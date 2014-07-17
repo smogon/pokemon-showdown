@@ -161,15 +161,14 @@ exports.BattleStatuses = {
 	trapped: {
 		noCopy: true,
 		onModifyPokemon: function (pokemon) {
-			if (!this.effectData.source || !this.effectData.source.isActive) {
-				delete pokemon.volatiles['trapped'];
-				return;
-			}
 			pokemon.tryTrap();
 		},
 		onStart: function (target) {
 			this.add('-activate', target, 'trapped');
 		}
+	},
+	trapper: {
+		noCopy: true
 	},
 	partiallytrapped: {
 		duration: 5,
