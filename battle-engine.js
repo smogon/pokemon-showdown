@@ -2471,18 +2471,19 @@ var Battle = (function () {
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
 	};
-	Battle.prototype.swapPosition = function (source, newPos, from) {
-		var target = source.side.active[newPos];
-		if (newPos !== 1 && (!target || target.fainted)) return false;
-		this.add('swap', source, newPos, (from ? '[from] ' + from : ''));
+	Battle.prototype.swapPosition = function (pokemon, slot, attributes) {
+		var target = pokemon.side.active[slot];
+		if (slot !== 1 && (!target || target.fainted)) return false;
 
-		var side = source.side;
-		side.pokemon[source.position] = target;
-		side.pokemon[newPos] = source;
-		side.active[source.position] = side.pokemon[source.position];
-		side.active[newPos] = side.pokemon[newPos];
-		if (target) target.position = source.position;
-		source.position = newPos;
+		this.add('swap', pokemon, slot, attributes || '');
+
+		var side = pokemon.side;
+		side.pokemon[pokemon.position] = target;
+		side.pokemon[slot] = pokemon;
+		side.active[pokemon.position] = side.pokemon[pokemon.position];
+		side.active[slot] = side.pokemon[slot];
+		if (target) target.position = pokemon.position;
+		pokemon.position = slot;
 		return true;
 	};
 	Battle.prototype.faint = function (pokemon, source, effect) {
@@ -2514,7 +2515,7 @@ var Battle = (function () {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
 					if (!this.sides[i].active[j] || this.sides[i].active[j].fainted) continue;
 					if (this.sides[i].active[j].position === 1) break;
-					this.swapPosition(this.sides[i].active[j], 1);
+					this.swapPosition(this.sides[i].active[j], 1, '[silent]');
 					center = true;
 					break;
 				}
