@@ -268,38 +268,7 @@ Users.setOfflineGroup = function (name, group, force) {
 	return true;
 };
 
-/*********************************************************
- * Banned words
- *********************************************************/
-
-var bannedWords = {};
-function importBannedWords() {
-	fs.readFile('config/bannedwords.txt', function (err, data) {
-		if (err) return;
-		data = ('' + data).split("\n");
-		bannedWords = {};
-		for (var i = 0; i < data.length; i++) {
-			if (!data[i]) continue;
-			bannedWords[data[i]] = true;
-		}
-	});
-}
-function exportBannedWords() {
-	fs.writeFile('config/bannedwords.txt', Object.keys(bannedWords).join('\n'));
-}
-function addBannedWord(word) {
-	bannedWords[word] = true;
-	exportBannedWords();
-}
-function removeBannedWord(word) {
-	delete bannedWords[word];
-	exportBannedWords();
-}
-importBannedWords();
-
 Users.importUsergroups = importUsergroups;
-Users.addBannedWord = addBannedWord;
-Users.removeBannedWord = removeBannedWord;
 
 /*********************************************************
  * User and Connection classes
@@ -652,12 +621,6 @@ var User = (function () {
 			this.send('|nametaken|' + "|You did not specify a name.");
 			return false;
 		} else {
-			for (var w in bannedWords) {
-				if (userid.indexOf(w) >= 0) {
-					this.send('|nametaken|' + "|That name contains a banned word or phrase.");
-					return false;
-				}
-			}
 			if (userid === this.userid && !auth) {
 				return this.forceRename(name, this.authenticated, this.forceRenamed);
 			}
