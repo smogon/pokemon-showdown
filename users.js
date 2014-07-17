@@ -1498,7 +1498,7 @@ Users.unban = unban;
 Users.unlock = unlock;
 
 /*********************************************************
- * Usergroups
+ * Inactive user pruning
  *********************************************************/
 
 Users.pruneInactive = User.pruneInactive;
@@ -1507,4 +1507,3 @@ Users.pruneInactiveTimer = setInterval(
 	1000 * 60 * 30,
 	Config.inactiveuserthreshold || 1000 * 60 * 60
 );
-
