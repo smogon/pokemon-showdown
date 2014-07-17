@@ -40,7 +40,7 @@ exports.Formats = [
 		name: "Ubers",
 		section: "XY Singles",
 
-		ruleset: ['Pokemon', 'Standard Ubers', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview'],
 		banlist: []
 	},
 	{
