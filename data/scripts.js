@@ -106,16 +106,7 @@ exports.BattleScripts = {
 
 		var damage = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-			if (move.target === 'all') {
-				damage = this.runEvent('TryHitField', target, pokemon, move);
-			} else {
-				damage = this.runEvent('TryHitSide', target, pokemon, move);
-			}
-			if (!damage) {
-				if (damage === false) this.add('-fail', target);
-				return true;
-			}
-			damage = this.moveHit(target, pokemon, move);
+			damage = this.tryMoveHit(target, pokemon, move);
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
 			var targets = [];
 			if (move.target === 'allAdjacent') {
@@ -188,9 +179,7 @@ exports.BattleScripts = {
 		return true;
 	},
 	tryMoveHit: function (target, pokemon, move, spreadHit) {
-		if (move.selfdestruct && spreadHit) {
-			pokemon.hp = 0;
-		}
+		if (move.selfdestruct && spreadHit) pokemon.hp = 0;
 
 		this.setActiveMove(move, pokemon, target);
 		var hitResult = true;
@@ -200,8 +189,20 @@ exports.BattleScripts = {
 			if (hitResult === false) this.add('-fail', target);
 			return false;
 		}
-
 		this.runEvent('PrepareHit', pokemon, target, move);
+
+		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+			if (move.target === 'all') {
+				hitResult = this.runEvent('TryHitField', target, pokemon, move);
+			} else {
+				hitResult = this.runEvent('TryHitSide', target, pokemon, move);
+			}
+			if (!hitResult) {
+				if (hitResult === false) this.add('-fail', target);
+				return true;
+			}
+			return this.moveHit(target, pokemon, move);
+		}
 
 		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
 			return false;
@@ -273,10 +274,13 @@ exports.BattleScripts = {
 			}
 			hits = Math.floor(hits);
 			var nullDamage = true;
+			var moveDamage;
+			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
+			var isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
 			for (var i = 0; i < hits && target.hp && pokemon.hp; i++) {
-				if (!move.sourceEffect && !move.sleepUsable && pokemon.status === 'slp') break;
+				if (pokemon.status === 'slp' && !isSleepUsable) break;
 
-				var moveDamage = this.moveHit(target, pokemon, move);
+				moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) break;
 				if (nullDamage && (moveDamage || moveDamage === 0)) nullDamage = false;
 				// Damage from each hit is individually counted for the
