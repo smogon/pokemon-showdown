@@ -18,7 +18,7 @@ exports.BattleFormats = {
 	},
 	standardubers: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'Swagger Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Huntail + Shell Smash + Sucker Punch', 'Leavanny + Knock Off + Sticky Web', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass']
 	},
 	standardgbu: {
@@ -52,7 +52,8 @@ exports.BattleFormats = {
 			'Genesect',
 			'Xerneas',
 			'Yveltal',
-			'Zygarde'
+			'Zygarde',
+			'Diancie'
 		]
 	},
 	standarddoubles: {

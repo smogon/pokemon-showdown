@@ -268,7 +268,7 @@ exports.BattleMovedex = {
 			var newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
 			if (!pokemon.side.active[newPosition]) return false;
 			if (pokemon.side.active[newPosition].fainted) return false;
-			this.swapPosition(pokemon, newPosition, 'move: Ally Switch');
+			this.swapPosition(pokemon, newPosition, '[from] move: Ally Switch');
 		},
 		secondary: false,
 		target: "self",
@@ -1068,8 +1068,8 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isBounceable: true,
-		onHit: function (target) {
-			if (!target.addVolatile('trapped')) {
+		onHit: function (target, source, move) {
+			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
 			}
 		},
@@ -7996,8 +7996,8 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		isBounceable: true,
-		onHit: function (target) {
-			if (!target.addVolatile('trapped')) {
+		onHit: function (target, source, move) {
+			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
 			}
 		},
@@ -12538,8 +12538,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isBounceable: true,
-		onHit: function (target) {
-			if (!target.addVolatile('trapped')) {
+		onHit: function (target, source, move) {
+			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
 			}
 		},
@@ -13752,8 +13752,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isUnreleased: true,
-		onHit: function (target) {
-			target.addVolatile('trapped');
+		onHit: function (target, source, move) {
+			target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: false,
 		target: "normal",
