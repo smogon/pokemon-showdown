@@ -96,6 +96,15 @@ var Tournament = (function () {
 			isStarted: false,
 			isJoined: false
 		}));
+		if (room.id === 'tournaments') {
+			var letter = this.format.charAt(0);
+			if (letter === 'a' || letter === 'e' || letter === 'i' || letter === 'o' || letter === 'u') {
+				var text = 'An';
+			} else {
+				var text = 'A';
+			}
+			Rooms.lobby.addRaw('<div class="broadcast-green"><b>Tournaments: ' + text + ' <a href="/tournaments" class="ilink">' + format + ' tournament</a> has been created!</b></div>');
+		}
 		this.update();
 	}
 
