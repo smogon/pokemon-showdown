@@ -125,9 +125,6 @@ var RoundRobin = (function () {
 			++this.userScores[row];
 			--this.pendingMatches;
 		}, this);
-
-		if (this.pendingMatches === 0)
-			return true;
 	};
 	RoundRobin.prototype.getUserBusy = function (user) {
 		if (!this.isBracketFrozen)
@@ -196,13 +193,14 @@ var RoundRobin = (function () {
 		this.userScores[userIndexA] += virtualScore[0];
 		this.userScores[userIndexB] += virtualScore[1];
 		--this.pendingMatches;
-
-		if (this.pendingMatches === 0)
-			return true;
 	};
 
+	RoundRobin.prototype.isTournamentEnded = function () {
+		return this.isBracketFrozen && this.pendingMatches === 0;
+	}
+
 	RoundRobin.prototype.getResults = function () {
-		if (!this.isBracketFrozen || this.pendingMatches !== 0)
+		if (!this.isTournamentEnded())
 			return 'TournamentNotEnded';
 
 		var sortedScores = this.userScores.map(function (score, userIndex) {
