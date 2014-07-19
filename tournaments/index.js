@@ -825,6 +825,11 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 
 		createTournament(room, params.shift(), params.shift(), Config.istournamentsrated, params, this);
+		var tournament = getTournament(room.title);
+		if (tournament && room.isOfficial && Rooms.lobby && room !== Rooms.lobby) {
+			var format = Tools.getFormat(tournament.format);
+			Rooms.lobby.addRaw('<div class="broadcast-green"><b><a href="/'+ room.id +'" class="ilink">' + room.title + ':</a> A new ' + format.name + ' tournament has been created!</b></div>');
+		}
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament) {
