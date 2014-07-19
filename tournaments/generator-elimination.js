@@ -314,8 +314,11 @@ var Elimination = (function () {
 
 			return !match;
 		});
-		if (match)
-			return this.setMatchResult(match, result);
+		if (match) {
+			var error = this.setMatchResult(match, result);
+			if (error)
+				throw new Error("Unexpected " + error + " from setMatchResult([" + match.join(", ") + "], " + result + ")");
+		}
 	};
 	Elimination.prototype.getUserBusy = function (user) {
 		if (!this.isBracketFrozen)
@@ -394,18 +397,21 @@ var Elimination = (function () {
 			if (userA && userB) {
 				targetNode.getParent().getValue().state = 'available';
 
+				var error = '';
 				if (this.users.get(userA).isDisqualified)
-					return this.setMatchResult([userA, userB], 'loss');
+					error = this.setMatchResult([userA, userB], 'loss');
 				else if (this.users.get(userB).isDisqualified)
-					return this.setMatchResult([userA, userB], 'win');
+					error = this.setMatchResult([userA, userB], 'win');
+
+				if (error)
+					throw new Error("Unexpected " + error + " from setMatchResult([" + userA + ", " + userB + "], ...)");
 			}
 		} else if (loserData.loseCount < this.maxSubtrees && !loserData.isDisqualified) {
 			var newRoot = new TreeNode(null, {state: 'available'});
 			newRoot.addChild(targetNode);
 			newRoot.addChild(new TreeNode(null, {user: loser}));
 			this.tree.tree = newRoot;
-		} else
-			return true;
+		}
 
 		if (match.onLoseNode) {
 			match.onLoseNode.getValue().user = loser;
@@ -414,16 +420,24 @@ var Elimination = (function () {
 			if (userA && userB) {
 				match.onLoseNode.getParent().getValue().state = 'available';
 
+				var error = '';
 				if (this.users.get(userA).isDisqualified)
-					return this.setMatchResult([userA, userB], 'loss');
+					error = this.setMatchResult([userA, userB], 'loss');
 				else if (this.users.get(userB).isDisqualified)
-					return this.setMatchResult([userA, userB], 'win');
+					error = this.setMatchResult([userA, userB], 'win');
+
+				if (error)
+					throw new Error("Unexpected " + error + " from setMatchResult([" + userA + ", " + userB + "], ...)");
 			}
 		}
 	};
 
+	Elimination.prototype.isTournamentEnded = function () {
+		return this.tree.tree.getValue().state === 'finished';
+	};
+
 	Elimination.prototype.getResults = function () {
-		if (this.tree.tree.getValue().state !== 'finished')
+		if (!this.isTournamentEnded())
 			return 'TournamentNotEnded';
 
 		var results = [];
