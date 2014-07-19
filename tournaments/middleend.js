@@ -714,7 +714,7 @@ var commands = {
 		},
 		getusers: function (tournament) {
 			if (!this.canBroadcast()) return;
-			var users = usersToNames(tournament.generator.getUsers()).sort();
+			var users = usersToNames(tournament.generator.getUsers().sort());
 			this.sendReplyBox("<strong>" + users.length + " users are in this tournament:</strong><br />" + users.join(", "));
 		},
 		getupdate: function (tournament, user) {
