@@ -746,6 +746,10 @@ var User = (function () {
 					this.autoconfirmed = userid;
 				} else if (body === '4') {
 					this.autoconfirmed = userid;
+				} else if (body === '5') {
+					this.lock();
+				} else if (body === '6') {
+					this.ban();
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
