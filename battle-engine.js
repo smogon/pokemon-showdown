@@ -846,16 +846,11 @@ var BattlePokemon = (function () {
 		if (this.status) return false;
 		return this.setStatus(status, source, sourceEffect);
 	};
-	BattlePokemon.prototype.cureStatus = function (source, effect) {
-		// unlike clearStatus, gives cure message
-		if (this.battle.event) {
-			if (!source) source = this.battle.event.source;
-			if (!effect) effect = this.battle.effect;
-		}
-		effect = this.battle.getEffect(effect);
+	BattlePokemon.prototype.cureStatus = function () {
 		if (!this.hp) return false;
+		// unlike clearStatus, gives cure message
 		if (this.status) {
-			this.battle.add('-curestatus', this, this.status, '[from] ' + effect.fullname);
+			this.battle.add('-curestatus', this, this.status);
 			this.setStatus('');
 		}
 	};
