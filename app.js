@@ -349,11 +349,9 @@ global.Cidr = require('./cidr.js');
 // graceful crash - allow current battles to finish before restarting
 var lastCrash = 0;
 process.on('uncaughtException', function (err) {
-	var dateNow = Date.now();
-	var quietCrash = require('./crashlogger.js')(err, 'The main process');
-	quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5);
+	var isQuietCrash = require('./crashlogger.js')(err, 'The main process') || Date.now() - lastCrash <= (5).minutes();
 	lastCrash = Date.now();
-	if (quietCrash) return;
+	if (isQuietCrash) return;
 	var stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
 	if (Rooms.lobby) {
 		Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
