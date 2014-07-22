@@ -88,6 +88,13 @@ exports.BattleMovedex = {
 			this.useMove(move, target);
 		}
 	},
+	powdersnow: {
+		inherit: true,
+		secondary: {
+			chance: 9.8,
+			status: 'frz',
+		}
+	},
 	rage: {
 		// todo
 		// Rage boosts in Gens 2-4 is for the duration of Rage only
