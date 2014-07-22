@@ -1597,10 +1597,10 @@ exports.BattleScripts = {
 			Snover: 95, Vulpix: 95, Ninetales: 78, Tentacruel: 78, Toxicroak: 78,
 
 			// Banned mega
-			"Kangaskhan-Mega": 72, "Gengar-Mega": 72, "Blaziken-Mega": 72,
+			"Kangaskhan-Mega": 72, "Gengar-Mega": 72, "Blaziken-Mega": 72, "Lucario-Mega": 72,
 
 			// Holistic judgment
-			Carvanha: 90, "Lucario-Mega": 72, Genesect: 72, Kyurem: 78
+			Carvanha: 90, Genesect: 72, Kyurem: 78, Sigilyph: 74
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
