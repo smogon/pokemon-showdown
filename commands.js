@@ -481,6 +481,7 @@ var commands = exports.commands = {
 		Rooms.global.autojoinRooms(user, connection);
 	},
 
+	joim: 'join',
 	join: function (target, room, user, connection) {
 		if (!target) return false;
 		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
