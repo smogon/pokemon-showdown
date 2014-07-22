@@ -691,7 +691,8 @@ exports.BattleMovedex = {
 		desc: "Does nothing.",
 		shortDesc: "Does nothing.",
 		isViable: false,
-		forceSwitch: false
+		forceSwitch: false,
+		onTryHit: function () {}
 	},
 	rockslide: {
 		inherit: true,
@@ -873,7 +874,8 @@ exports.BattleMovedex = {
 		desc: "Does nothing.",
 		shortDesc: "Does nothing.",
 		isViable: false,
-		forceSwitch: false
+		forceSwitch: false,
+		onTryHit: function () {}
 	},
 	wingattack: {
 		inherit: true,
