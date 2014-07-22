@@ -82,7 +82,7 @@ var getExactUser = Users.getExact = function(name) {
  * Routing
  *********************************************************/
 
-var connections = Users.connections = {};
+var connections = Users.connections = Object.create(null);
 
 Users.socketConnect = function(worker, workerid, socketid, ip) {
 	var id = '' + workerid + '-' + socketid;
@@ -301,7 +301,7 @@ Users.setOfflineGroup = function (name, group, force) {
 		user.setGroup(group);
 		return true;
 	}
-	if (!group || group === Config.groupsranking[0]) {
+	if (!group || group === Config.groups.default.global) {
 		delete usergroups[userid];
 	} else {
 		var usergroup = usergroups[userid];
@@ -757,6 +757,10 @@ var User = (function () {
 					this.autoconfirmed = userid;
 				} else if (body === '4') {
 					this.autoconfirmed = userid;
+				} else if (body === '5') {
+					this.lock();
+				} else if (body === '6') {
+					this.ban();
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
