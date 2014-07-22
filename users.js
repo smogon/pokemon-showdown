@@ -1260,16 +1260,12 @@ var User = (function () {
 		user.updateChallenges();
 		return true;
 	};
-	// chatQueue should be an array, but you know about mutables in prototypes...
-	// P.S. don't replace this with an array unless you know what mutables in prototypes do.
-	User.prototype.chatQueue = null;
-	User.prototype.chatQueueTimeout = null;
-	User.prototype.lastChatMessage = 0;
 	/**
 	 * The user says message in room.
 	 * Returns false if the rest of the user's messages should be discarded.
 	 */
 	User.prototype.chat = function (message, room, connection) {
+		if (!this.lastChatMessage) this.lastChatMessage = 0;
 		var now = new Date().getTime();
 
 		if (message.substr(0, 16) === '/cmd userdetails') {

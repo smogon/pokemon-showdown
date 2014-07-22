@@ -701,14 +701,9 @@ var BattlePokemon = (function () {
 			evasion: 0
 		};
 
-		this.moveset = [];
+		this.moveset = this.baseMoveset.slice();
 		this.moves = [];
-		// we're copying array contents
-		// DO NOT "optimize" it to copy just the pointer
-		// if you don't know what a pointer is, please don't
-		// touch this code
 		for (var i = 0; i < this.baseMoveset.length; i++) {
-			this.moveset.push(this.baseMoveset[i]);
 			this.moves.push(toId(this.baseMoveset[i].move));
 		}
 		this.transformed = false;
