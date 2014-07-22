@@ -2901,9 +2901,6 @@ var Battle = (function () {
 
 		// randomizer
 		// this is not a modifier
-		// gen 1-2
-		//var randFactor = Math.floor(Math.random() * 39) + 217;
-		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
 		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
 		// STAB
