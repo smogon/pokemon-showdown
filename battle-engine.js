@@ -14,19 +14,10 @@ require('sugar');
 
 global.Config = require('./config/config.js');
 
-if (Config.crashguard) {
-	// graceful crash - allow current battles to finish before restarting
-	process.on('uncaughtException', function (err) {
-		require('./crashlogger.js')(err, 'A simulator process');
-		/* var stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
-		if (Rooms.lobby) {
-			Rooms.lobby.addRaw('<div><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
-			Rooms.lobby.addRaw('<div>You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
-		}
-		Config.modchat = 'crash';
-		Rooms.global.lockdown = true; */
-	});
-}
+// graceful crash - allow current battles to finish before restarting
+process.on('uncaughtException', function (err) {
+	require('./crashlogger.js')(err, 'A simulator process');
+});
 
 /**
  * Converts anything to an ID. An ID must have only lowercase alphanumeric
@@ -3195,7 +3186,7 @@ var Battle = (function () {
 	};
 	Battle.prototype.willAct = function () {
 		for (var i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'shift') {	
+			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'shift') {
 				return this.queue[i];
 			}
 		}
