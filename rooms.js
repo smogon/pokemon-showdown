@@ -630,8 +630,6 @@ var BattleRoom = (function () {
 							p1rating = data.p1rating;
 							p2rating = data.p2rating;
 
-							//self.add("Ladder updated.");
-
 							var oldacre = Math.round(data.p1rating.oldacre);
 							var acre = Math.round(data.p1rating.acre);
 							var reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.99 ? 'winning' : (p1score < 0.01 ? 'losing' : 'tying'));
@@ -749,7 +747,7 @@ var BattleRoom = (function () {
 					fs.writeFile(curpath + '/' + self.id + '.log.json', JSON.stringify(logData));
 				});
 			});
-		}); // asychronicity
+		});
 		//console.log(JSON.stringify(logData));
 	};
 	BattleRoom.prototype.send = function (message, user) {

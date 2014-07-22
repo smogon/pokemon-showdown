@@ -380,7 +380,6 @@ var BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.calculateStat = function (statName, boost, modifier) {
 		statName = toId(statName);
-		// var boost = this.boosts[statName];
 
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
@@ -388,7 +387,6 @@ var BattlePokemon = (function () {
 		var stat = this.stats[statName];
 
 		// stat boosts
-		// boost = this.boosts[statName];
 		var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 		if (boost > 6) boost = 6;
 		if (boost < -6) boost = -6;
@@ -756,7 +754,6 @@ var BattlePokemon = (function () {
 		this.hp = 0;
 		this.switchFlag = false;
 		this.status = 'fnt';
-		// this.fainted = true;
 		this.battle.faintQueue.push({
 			target: this,
 			source: source,
@@ -1441,7 +1438,6 @@ var Battle = (function () {
 	Battle.prototype.toString = function () {
 		return 'Battle: ' + this.format;
 	};
-
 
 	// This function is designed to emulate the on-cartridge PRNG for Gens 3 and 4, as described in
 	// http://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
@@ -3347,7 +3343,6 @@ var Battle = (function () {
 				break;
 			}
 			this.switchIn(decision.target, decision.pokemon.position);
-			//decision.target.runSwitchIn();
 			break;
 		case 'runSwitch':
 			decision.pokemon.isStarted = true;
@@ -3441,20 +3436,11 @@ var Battle = (function () {
 		while (this.queue.length) {
 			var decision = this.queue.shift();
 
-			/* while (decision.priority < currentPriority && currentPriority > -6) {
-				this.eachEvent('Priority', null, currentPriority);
-				currentPriority--;
-			} */
-
 			this.runDecision(decision);
 
 			if (this.currentRequest) {
 				return;
 			}
-
-			// if (!this.queue.length || this.queue[0].choice === 'runSwitch') {
-			// 	if (this.faintMessages()) return;
-			// }
 
 			if (this.ended) return;
 		}

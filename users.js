@@ -969,9 +969,6 @@ var User = (function () {
 		var self = this;
 		formatid = toId(formatid);
 
-		// this should relieve login server strain
-		// this.mmrCache[formatid] = 1000;
-
 		if (this.mmrCache[formatid]) {
 			callback(this.mmrCache[formatid]);
 			return;
@@ -1197,7 +1194,7 @@ var User = (function () {
 			challengeTo: challengeTo
 		}));
 	};
-	User.prototype.makeChallenge = function (user, format/*, isPrivate*/) {
+	User.prototype.makeChallenge = function (user, format) {
 		user = getUser(user);
 		if (!user || this.challengeTo) {
 			return false;
@@ -1215,7 +1212,6 @@ var User = (function () {
 			from: this.userid,
 			to: user.userid,
 			format: '' + (format || ''),
-			//isPrivate: !!isPrivate, // currently unused
 			team: this.team
 		};
 		this.lastChallenge = time;
