@@ -322,7 +322,7 @@ var commands = exports.commands = {
 
 				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";
 				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
-				if (move.isSoundBased) details["<font color=black>&#10003; Sound Based</font>"] = "";
+				if (move.isSoundBased) details["<font color=black>&#10003; Sound</font>"] = "";
 				if (move.isBullet) details["<font color=black>&#10003; Bullet</font>"] = "";
 				if (move.isPulseMove) details["<font color=black>&#10003; Pulse</font>"] = "";
 
@@ -1447,7 +1447,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'effectiveness' || target === 'matchup' || target === 'eff' || target === 'type') {
 			matched = true;
 			this.sendReply("/effectiveness OR /matchup OR /eff OR /type [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.");
-			this.sendReply("!effectiveness OR /matchup OR !eff OR !type [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.");
+			this.sendReply("!effectiveness OR !matchup OR !eff OR !type [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.");
 		}
 		if (target === 'all' || target === 'dexsearch' || target === 'dsearch' || target === 'ds') {
 			matched = true;
