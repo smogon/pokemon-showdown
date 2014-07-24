@@ -324,6 +324,7 @@ exports.Formats = [
 		gameType: 'triples',
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
+		requirePentagon: true,
 		validateTeam: function (team, format) {
 			for (var i = 0; i < team.length; i++) {
 				if (Tools.getTemplate(team[i]).species === 'Pikachu') return;
