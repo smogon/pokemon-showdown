@@ -65,15 +65,15 @@ exports.BattleScripts = {
 		// Venusaur
 		this.modData('Pokedex', 'venusaur').abilities['1'] = 'Leaf Guard';
 		// Charizard
-		this.modData('Pokedex', 'charizard').abilities['1'] = 'Flash Fire';
+		this.modData('Pokedex', 'charizard').abilities['1'] = 'Flame Body';
 		// Blastoise
 		this.modData('Pokedex', 'blastoise').abilities['1'] = 'Shell Armor';
 		// Meganium
 		this.modData('Pokedex', 'meganium').abilities['1'] = 'Harvest';
 		// Typhlosion
-		this.modData('Pokedex', 'typhlosion').abilities['1'] = 'Flame Body';
+		this.modData('Pokedex', 'typhlosion').abilities['1'] = 'Magma Armor';
 		// Feraligatr
-		this.modData('Pokedex', 'feraligatr').abilities['1'] = 'Intimidate';
+		this.modData('Pokedex', 'feraligatr').abilities['1'] = 'Strong Jaw';
 		// Sceptile
 		this.modData('Pokedex', 'sceptile').abilities['1'] = 'Limber';
 		// Blaziken
@@ -109,6 +109,13 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'gengar').abilities['1'] = 'Cursed Body';
 		this.modData('Pokedex', 'mismagius').abilities['1'] = 'Cursed Body';
 		this.modData('Pokedex', 'cryogonal').abilities['1'] = 'Ice Body';
+		this.modData('Pokedex', 'mesprit').abilities['1'] = 'Serene Grace';
+		this.modData('Pokedex', 'uxie').abilities['1'] = 'Synchronize';
+		this.modData('Pokedex', 'azelf').abilities['1'] = 'Steadfast';
+		this.modData('Pokedex', 'hydreigon').abilities['1'] = 'Sheer Force';
+
+		// Adaptability change
+		this.modData('Pokedex', 'crawdaunt').abilities['H'] = 'Tough Claws';
 
 		// Every hidden ability becomes released
 		for (var i in this.data.FormatsData) {
