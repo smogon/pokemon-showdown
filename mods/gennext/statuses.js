@@ -209,6 +209,54 @@ exports.BattleStatuses = {
 			}
 		}
 	},
+	mesprit: {
+		// Mesprit: Serene Grace
+		onImmunity: function (type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'serenegrace';
+				pokemon.baseAbility = 'serenegrace';
+			}
+		}
+	},
+	uxie: {
+		// Uxie: Synchronize
+		onImmunity: function (type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'synchronize';
+				pokemon.baseAbility = 'synchronize';
+			}
+		}
+	},
+	azelf: {
+		// Azelf: Steadfast
+		onImmunity: function (type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'steadfast';
+				pokemon.baseAbility = 'steadfast';
+			}
+		}
+	},
+	hydreigon: {
+		// Hydreigon: Sheer Force
+		onImmunity: function (type) {
+			if (type === 'Ground') return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'sheerforce';
+				pokemon.baseAbility = 'sheerforce';
+			}
+		}
+	},
 	cryogonal: {
 		// Cryogonal: infinite hail, Ice Body
 		onModifyMove: function (move) {
