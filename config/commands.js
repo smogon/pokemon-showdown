@@ -321,7 +321,7 @@ var commands = exports.commands = {
 
 				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";
 				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
-				if (move.isSoundBased) details["<font color=black>&#10003; Sound Based</font>"] = "";
+				if (move.isSoundBased) details["<font color=black>&#10003; Sound</font>"] = "";
 				if (move.isBullet) details["<font color=black>&#10003; Bullet</font>"] = "";
 				if (move.isPulseMove) details["<font color=black>&#10003; Pulse</font>"] = "";
 
