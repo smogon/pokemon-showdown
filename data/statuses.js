@@ -161,15 +161,14 @@ exports.BattleStatuses = {
 	trapped: {
 		noCopy: true,
 		onModifyPokemon: function (pokemon) {
-			if (!this.effectData.source || !this.effectData.source.isActive) {
-				delete pokemon.volatiles['trapped'];
-				return;
-			}
 			pokemon.tryTrap();
 		},
 		onStart: function (target) {
 			this.add('-activate', target, 'trapped');
 		}
+	},
+	trapper: {
+		noCopy: true
 	},
 	partiallytrapped: {
 		duration: 5,
@@ -249,8 +248,8 @@ exports.BattleStatuses = {
 	},
 	choicelock: {
 		onStart: function (pokemon) {
+			if (!this.activeMove.id || this.activeMove.sourceEffect && this.activeMove.sourceEffect !== this.activeMove.id) return false;
 			this.effectData.move = this.activeMove.id;
-			if (!this.effectData.move) return false;
 		},
 		onModifyPokemon: function (pokemon) {
 			if (!pokemon.getItem().isChoice || !pokemon.hasMove(this.effectData.move)) {

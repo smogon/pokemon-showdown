@@ -592,15 +592,20 @@ var BattlePokemon = (function () {
 	BattlePokemon.prototype.copyVolatileFrom = function (pokemon) {
 		this.clearVolatile();
 		this.boosts = pokemon.boosts;
-		this.volatiles = pokemon.volatiles;
-		this.update();
-		pokemon.clearVolatile();
-		for (var i in this.volatiles) {
-			var status = this.getVolatile(i);
-			if (status.noCopy) {
-				delete this.volatiles[i];
+		for (var i in pokemon.volatiles) {
+			if (this.battle.getEffect(i).noCopy) continue;
+			// shallow clones
+			this.volatiles[i] = Object.clone(pokemon.volatiles[i]);
+			if (this.volatiles[i].linkedPokemon) {
+				delete pokemon.volatiles[i].linkedPokemon;
+				delete pokemon.volatiles[i].linkedStatus;
+				this.volatiles[i].linkedPokemon.volatiles[this.volatiles[i].linkedStatus].linkedPokemon = this;
 			}
-			this.battle.singleEvent('Copy', status, this.volatiles[i], this);
+		}
+		pokemon.clearVolatile();
+		this.update();
+		for (var i in this.volatiles) {
+			this.battle.singleEvent('Copy', this.getVolatile(i), this.volatiles[i], this);
 		}
 	};
 	BattlePokemon.prototype.transformInto = function (pokemon, user) {
@@ -660,6 +665,7 @@ var BattlePokemon = (function () {
 		template = this.battle.getTemplate(template);
 
 		if (!template.abilities) return false;
+		this.illusion = null;
 		this.template = template;
 		this.types = template.types;
 		this.typesData = [];
@@ -1024,7 +1030,7 @@ var BattlePokemon = (function () {
 	BattlePokemon.prototype.getNature = function () {
 		return this.battle.getNature(this.set.nature);
 	};
-	BattlePokemon.prototype.addVolatile = function (status, source, sourceEffect) {
+	BattlePokemon.prototype.addVolatile = function (status, source, sourceEffect, linkedStatus) {
 		var result;
 		status = this.battle.getEffect(status);
 		if (!this.hp && !status.affectsFainted) return false;
@@ -1064,6 +1070,13 @@ var BattlePokemon = (function () {
 			delete this.volatiles[status.id];
 			return result;
 		}
+		if (linkedStatus && source && !source.volatiles[linkedStatus]) {
+			source.addVolatile(linkedStatus, this, sourceEffect, status);
+			source.volatiles[linkedStatus].linkedPokemon = this;
+			source.volatiles[linkedStatus].linkedStatus = status;
+			this.volatiles[status].linkedPokemon = source;
+			this.volatiles[status].linkedStatus = linkedStatus;
+		}
 		this.update();
 		return true;
 	};
@@ -1077,7 +1090,12 @@ var BattlePokemon = (function () {
 		status = this.battle.getEffect(status);
 		if (!this.volatiles[status.id]) return false;
 		this.battle.singleEvent('End', status, this.volatiles[status.id], this);
+		var linkedPokemon = this.volatiles[status.id].linkedPokemon;
+		var linkedStatus = this.volatiles[status.id].linkedStatus;
 		delete this.volatiles[status.id];
+		if (linkedPokemon && linkedPokemon.volatiles[linkedStatus]) {
+			linkedPokemon.removeVolatile(linkedStatus);
+		}
 		this.update();
 		return true;
 	};
@@ -2440,18 +2458,19 @@ var Battle = (function () {
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
 	};
-	Battle.prototype.swapPosition = function (source, newPos, from) {
-		var target = source.side.active[newPos];
-		if (newPos !== 1 && (!target || target.fainted)) return false;
-		this.add('swap', source, newPos, (from ? '[from] ' + from : ''));
+	Battle.prototype.swapPosition = function (pokemon, slot, attributes) {
+		var target = pokemon.side.active[slot];
+		if (slot !== 1 && (!target || target.fainted)) return false;
 
-		var side = source.side;
-		side.pokemon[source.position] = target;
-		side.pokemon[newPos] = source;
-		side.active[source.position] = side.pokemon[source.position];
-		side.active[newPos] = side.pokemon[newPos];
-		if (target) target.position = source.position;
-		source.position = newPos;
+		this.add('swap', pokemon, slot, attributes || '');
+
+		var side = pokemon.side;
+		side.pokemon[pokemon.position] = target;
+		side.pokemon[slot] = pokemon;
+		side.active[pokemon.position] = side.pokemon[pokemon.position];
+		side.active[slot] = side.pokemon[slot];
+		if (target) target.position = pokemon.position;
+		pokemon.position = slot;
 		return true;
 	};
 	Battle.prototype.faint = function (pokemon, source, effect) {
@@ -2483,7 +2502,7 @@ var Battle = (function () {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
 					if (!this.sides[i].active[j] || this.sides[i].active[j].fainted) continue;
 					if (this.sides[i].active[j].position === 1) break;
-					this.swapPosition(this.sides[i].active[j], 1);
+					this.swapPosition(this.sides[i].active[j], 1, '[silent]');
 					center = true;
 					break;
 				}

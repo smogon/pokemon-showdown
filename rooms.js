@@ -41,6 +41,7 @@ var GlobalRoom = (function () {
 		if (!this.chatRoomData.length) {
 			this.chatRoomData = [{
 				title: 'Lobby',
+				isOfficial: true,
 				autojoin: true
 			}, {
 				title: 'Staff',
@@ -1545,7 +1546,7 @@ var ChatRoom = (function () {
 })();
 
 // to make sure you don't get null returned, pass the second argument
-var getRoom = function (roomid, fallback) {
+var Rooms = module.exports = function (roomid, fallback) {
 	if (roomid && roomid.id) return roomid;
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid] && fallback) {
@@ -1553,7 +1554,8 @@ var getRoom = function (roomid, fallback) {
 	}
 	return rooms[roomid];
 };
-var newRoom = function (roomid, format, p1, p2, parent, rated) {
+var getRoom = Rooms.get = Rooms;
+var newRoom = Rooms.create = function (roomid, format, p1, p2, parent, rated) {
 	if (roomid && roomid.id) return roomid;
 	if (!p1 || !p2) return false;
 	if (!roomid) roomid = 'default';
@@ -1566,16 +1568,13 @@ var newRoom = function (roomid, format, p1, p2, parent, rated) {
 	return rooms[roomid];
 };
 
-var rooms = Object.create(null);
+var rooms = Rooms.rooms = Object.create(null);
 console.log("NEW GLOBAL: global");
 rooms.global = new GlobalRoom('global');
 
-exports.GlobalRoom = GlobalRoom;
-exports.BattleRoom = BattleRoom;
-exports.ChatRoom = ChatRoom;
+Rooms.GlobalRoom = GlobalRoom;
+Rooms.BattleRoom = BattleRoom;
+Rooms.ChatRoom = ChatRoom;
 
-exports.get = getRoom;
-exports.create = newRoom;
-exports.rooms = rooms;
-exports.global = rooms.global;
-exports.lobby = rooms.lobby;
+Rooms.global = rooms.global;
+Rooms.lobby = rooms.lobby;
