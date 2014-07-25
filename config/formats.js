@@ -227,7 +227,7 @@ exports.Formats = [
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
 		requirePentagon: true,
-		banlist: [], // The neccessary bans are in Standard GBU
+		banlist: [], // The necessary bans are in Standard GBU
 		validateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		}
@@ -325,17 +325,12 @@ exports.Formats = [
 		maxForcedLevel: 30,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
 		requirePentagon: true,
+		banlist: ['Eviolite'],
 		validateTeam: function (team, format) {
-			var problems = [];
-			var hasPikachu = false;
-			var hasEviolite = false;
 			for (var i = 0; i < team.length; i++) {
-				if (Tools.getTemplate(team[i]).species === 'Pikachu') hasPikachu = true;
-				if (toId(team[i].item) === 'eviolite') hasEviolite = true;
+				if (Tools.getTemplate(team[i]).species === 'Pikachu') return;
 			}
-			if (!hasPikachu) problems.push('Your team must have Pikachu.');
-			if (hasEviolite) problems.push('Your team cannot have Eviolite');
-			return problems;
+			return ['Your team must have Pikachu.'];
 		},
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
