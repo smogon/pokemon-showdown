@@ -52,6 +52,27 @@ exports.BattleItems = {
 		},
 		desc: "Activates at 25% HP. Next move used goes first. One-time use."
 	},
+	"focussash": {
+		inherit: true,
+		onDamage: function () { },
+		onTryHit: function (target, source, move) {
+			if (target !== source && target.hp === target.maxhp) {
+				target.addVolatile('focussash');
+			}
+		},
+		effect: {
+			duration: 1,
+			onDamage: function (damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && damage >= target.hp && target.useItem()) {
+					target.removeVolatile('focussash');
+					return target.hp - 1;
+				}
+			},
+			onAfterMoveSecondary: function (target, source, move) {
+				target.removeVolatile('focussash');
+			}
+		}
+	},
 	"ironball": {
 		inherit: true,
 		onModifyPokemon: function (pokemon) {
