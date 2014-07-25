@@ -176,8 +176,6 @@ exports.BattleFormats = {
 			if (template.num === 647) { // Keldeo
 				if (set.moves.indexOf('secretsword') < 0) {
 					set.species = 'Keldeo';
-				} else {
-					set.species = 'Keldeo-Resolute';
 				}
 			}
 			if (template.num === 648) { // Meloetta
