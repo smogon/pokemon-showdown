@@ -616,7 +616,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] OU'],
-		banlist: ['OU', 'BL', 'Drought', 'Sand Stream']
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Snow Warning']
 	},
 	{
 		name: "[Gen 5] RU",
