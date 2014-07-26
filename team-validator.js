@@ -482,8 +482,8 @@ var Validator = (function () {
 					isHidden = false;
 				}
 			}
-			if (isHidden && lsetData.sourcesBefore < 5) {
-				if (!lsetData.sources) {
+			if (isHidden && lsetData.sourcesBefore) {
+				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
 					problems.push(name + " has a hidden ability - it can't have moves only learned before gen 5.");
 				} else if (template.gender) {
 					var compatibleSource = false;
@@ -688,6 +688,9 @@ var Validator = (function () {
 							} else if (learned.charAt(1) === 'S') {
 								sources.push(learned + ' ' + template.id);
 							} else {
+								// DW Pokemon are at level 10 or at the evolution level
+								var minLevel = (template.evoLevel && template.evoLevel > 10) ? template.evoLevel : 10;
+								if (set.level < minLevel) continue;
 								sources.push(learned);
 							}
 						}
