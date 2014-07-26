@@ -106,7 +106,7 @@ Major changes:
 
 - All Quiver Dancers get an item named GossamerWing (select "Stick" in the 
   teambuilder). It makes them take half damage from Rock, Ice, and Electric 
-  moves if they were weak to it, prevents them from taking double SR damage, 
+  moves if they are flying type, prevents them from taking double SR damage, 
   and makes Twister do 50% more damage.
 
 - Relic Song switches Meloetta's SpA and Atk EVs, boosts, and certain natures,
@@ -407,16 +407,16 @@ Minor ability changes:
   Surf over Hydro Pump, other pokemon are recommended not to use
   Justified
 
-- Weak Armor reduces incoming move damage by 1/8 of the user's max HP
+- Weak Armor reduces incoming move damage by 1/10 of the user's max HP
   and increases the user's Speed for the first hit after switch-in (and
   does not activate again until the next switch-in) instead of its
   previous effect
 
-- Shell Armor and Battle Armor reduce incoming move damage by 1/8 of
+- Shell Armor and Battle Armor reduce incoming move damage by 1/10 of
   the user's max HP in addition to their crit negation (also, Shell
   Armor is removed when using Shell Smash)
 
-- Magma Armor reduces incoming move damage by 1/8 of the user's max HP,
+- Magma Armor reduces incoming move damage by 1/10 of the user's max HP,
   provides immunity to Hail and freeze, and provides a one-time immunity
   to Water and Ice, after which it turns into Shell Armor
 
