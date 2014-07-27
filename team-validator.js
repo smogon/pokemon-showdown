@@ -485,7 +485,7 @@ var Validator = (function () {
 			if (isHidden && lsetData.sourcesBefore) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
 					problems.push(name + " has a hidden ability - it can't have moves only learned before gen 5.");
-				} else if (template.gender) {
+				} else if (lsetData.sources && template.gender && template.gender !== 'F' && !{'Nidoran-M':1, 'Nidorino':1, 'Nidoking':1, 'Volbeat':1}[template.species]) {
 					var compatibleSource = false;
 					for (var i = 0, len = lsetData.sources.length; i < len; i++) {
 						if (lsetData.sources[i].charAt(1) === 'E' || (lsetData.sources[i].substr(0, 2) === '5D' && set.level >= 10)) {
