@@ -242,34 +242,6 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Battle of Legends",
-		section: "XY Doubles",
-
-		gameType: 'doubles',
-		onBegin: function () {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		forcedLevel: 100,
-		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview VGC'],
-		banlist: ['Unreleased', 'Illegal', 'Diancie'],
-		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four Pokémon.'];
-			var legends = {Mewtwo:1, Mew:1, Lugia:1, 'Ho-Oh':1, Kyogre:1, Groudon:1, Rayquaza:1, Jirachi:1, Deoxys:1, Dialga:1, Palkia:1, Giratina:1, Phione:1, Manaphy:1, Darkrai:1, Shaymin:1, Arceus:1, Victini:1, Reshiram:1, Zekrom:1, Kyurem:1, Keldeo:1, Meloetta:1, Genesect:1, Xerneas:1, Yveltal:1, Zygarde:1};
-			var legendCount = 0;
-			for (var i = 0; i < team.length; i++) {
-				var pokemon = this.getTemplate(team[i].species).baseSpecies;
-				if (pokemon in legends) {
-					if (legendCount >= 2) return ["You may only use up to two legendary/mythical Pokémon."];
-					legendCount++;
-				}
-			}
-		}
-	},
-	{
 		name: "Doubles Challenge Cup",
 		section: 'XY Doubles',
 
