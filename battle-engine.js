@@ -2939,7 +2939,7 @@ var Battle = (function () {
 			totalTypeMod = this.getEffectiveness(move, target, pokemon);
 		}
 
-		totalTypeMod = this.clampIntRange(totalTypeMod, -3, 3);
+		totalTypeMod = this.clampIntRange(totalTypeMod, -6, 6);
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
