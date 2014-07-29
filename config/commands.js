@@ -635,6 +635,7 @@ var commands = exports.commands = {
 	},
 
 	weak: 'weakness',
+	resist: 'weakness',
 	weakness: function (target, room, user){
 		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
@@ -656,20 +657,48 @@ var commands = exports.commands = {
 		}
 
 		var weaknesses = [];
+		var resistances = [];
+		var immunities = [];
 		Object.keys(Tools.data.TypeChart).forEach(function (type) {
 			var notImmune = Tools.getImmunity(type, pokemon);
 			if (notImmune) {
 				var typeMod = Tools.getEffectiveness(type, pokemon);
-				if (typeMod === 1) weaknesses.push(type);
-				if (typeMod === 2) weaknesses.push("<b>" + type + "</b>");
+				switch (typeMod) {
+				case 1:
+					weaknesses.push(type);
+					break;
+				case 2:
+					weaknesses.push("<b>" + type + "</b>");
+					break;
+				case -1:
+					resistances.push(type);
+					break;
+				case -2:
+					resistances.push("<b>" + type + "</b>");
+					break;
+				}
+			} else {
+				immunities.push(type);
 			}
 		});
-
+ 
+		var buffer = "" + target + " has:";
 		if (!weaknesses.length) {
-			this.sendReplyBox("" + target + " has no weaknesses.");
+			buffer += " no weaknesses;";
 		} else {
-			this.sendReplyBox("" + target + " is weak to: " + weaknesses.join(", ") + " (not counting abilities).");
+			buffer += " weaknesses to " + weaknesses.join(", ") + ";";
 		}
+		if (!resistances.length) {
+			buffer += " no resistances;"
+		} else {
+			buffer += " resistances to " + resistances.join(", ") + ";";
+		}
+		if (!immunities.length) {
+			buffer += " and no immunities.";
+		} else {
+			buffer += " and immunities to " + immunities.join(", ") + ".";
+		}
+		this.sendReplyBox(buffer);
 	},
 
 	eff: 'effectiveness',
