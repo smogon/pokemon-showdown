@@ -682,21 +682,21 @@ var commands = exports.commands = {
 			}
 		});
  
-		var buffer = "" + target + " has:";
+		var buffer = "" + target + " (ignoring abilities):<br/> "
 		if (!weaknesses.length) {
-			buffer += " no weaknesses;";
+			buffer += " No <font color='#CC0000'>weaknesses</font>;<br/> ";
 		} else {
-			buffer += " weaknesses to " + weaknesses.join(", ") + ";";
+			buffer += " <font color='#CC0000'>Weaknesses</font>: " + weaknesses.join(", ") + ";<br/> "
 		}
 		if (!resistances.length) {
-			buffer += " no resistances;"
+			buffer += " No <font color='#00B200'>resistances</font>;"
 		} else {
-			buffer += " resistances to " + resistances.join(", ") + ";";
+			buffer += " <font color='#00B200'>Resistances</font>: " + resistances.join(", ") + ";<br/> "; 
 		}
 		if (!immunities.length) {
-			buffer += " and no immunities.";
+			buffer += " <font color='#505050'>No immunities</font>.";
 		} else {
-			buffer += " and immunities to " + immunities.join(", ") + ".";
+			buffer += " <font color='#505050'>Immunities</font>: " + immunities.join(", ") + "<br/> ";
 		}
 		this.sendReplyBox(buffer);
 	},
