@@ -295,7 +295,7 @@ exports.Formats = [
 
 		gameType: 'triples',
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
 		validateTeam: function (team, format) {
 			if (team.length < 6) return ['You must have six Pokémon.'];
 		}
@@ -306,7 +306,7 @@ exports.Formats = [
 
 		gameType: 'triples',
 		maxForcedLevel: 30,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview', 'Kalos Pokedex'],
 		requirePentagon: true,
 		banlist: ['Eviolite'],
 		validateTeam: function (team, format) {
