@@ -12984,7 +12984,7 @@ exports.BattleMovedex = {
 			}
 		},
 		secondary: false,
-		target: "normal",
+		target: "randomNormal",
 		type: "Normal"
 	},
 	"strugglebug": {
