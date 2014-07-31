@@ -339,17 +339,23 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Mediocremons",
+		name: "Metagamiate",
 		section: "OM of the Month",
 		column: 2,
 
 		ruleset: ['OU'],
-		banlist: ['Clefable', 'Kingdra', 'Venomoth', 'Abomasite', 'Mawilite', 'Medichamite', 'Huge Power', 'Pure Power'],
-		validateSet: function (set) {
-			var template = this.getTemplate(set.species || set.name);
-			for (var stat in template.baseStats) {
-				if (template.baseStats[stat] >= 100) return [set.species + " has a base stat of 100 or more."];
+		onModifyMove: function(move, pokemon) {
+			if (move.type === 'Normal' && move.id !== 'hiddenpower' && !pokemon.hasAbility(['refrigerate', 'pixilate', 'aerilate'])) {
+				var types = pokemon.getTypes();
+				if (!types[0] || types[0] === '???') return;
+				move.type = types[0];
+				move.isMetagamiate = true;
 			}
+		},
+		onBasePowerPriority: 9,
+		onBasePower: function(basePower, attacker, defender, move) {
+			if (!move.isMetagamiate) return;
+			return this.chainModify([0x14CD, 0x1000]);
 		}
 	},
 	{
@@ -358,7 +364,10 @@ exports.Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod', 'Ability Clause'],
-		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power']
+		banlist: [
+			'Ignore STAB Moves', 'Arceus', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre',
+			'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Sylveon', 'Kyurem-White',
+			'Xerneas', 'Yveltal', 'Zekrom', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Belly Drum']
 	},
 	{
 		name: "CAP",
@@ -454,7 +463,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Arceus', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre',
+		banlist: ['Ignore STAB Moves', 'Arceus', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre',
 			'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Porygon-Z', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Sylveon', 'Kyurem-White',
 			'Xerneas', 'Yveltal', 'Zekrom', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew']
 	},
