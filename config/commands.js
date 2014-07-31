@@ -635,6 +635,7 @@ var commands = exports.commands = {
 	},
 
 	weak: 'weakness',
+	resist: 'weakness',
 	weakness: function (target, room, user){
 		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
@@ -656,20 +657,48 @@ var commands = exports.commands = {
 		}
 
 		var weaknesses = [];
+		var resistances = [];
+		var immunities = [];
 		Object.keys(Tools.data.TypeChart).forEach(function (type) {
 			var notImmune = Tools.getImmunity(type, pokemon);
 			if (notImmune) {
 				var typeMod = Tools.getEffectiveness(type, pokemon);
-				if (typeMod === 1) weaknesses.push(type);
-				if (typeMod === 2) weaknesses.push("<b>" + type + "</b>");
+				switch (typeMod) {
+				case 1:
+					weaknesses.push(type);
+					break;
+				case 2:
+					weaknesses.push("<b>" + type + "</b>");
+					break;
+				case -1:
+					resistances.push(type);
+					break;
+				case -2:
+					resistances.push("<b>" + type + "</b>");
+					break;
+				}
+			} else {
+				immunities.push(type);
 			}
 		});
-
+ 
+		var buffer = "" + target + " (ignoring abilities):<br/> "
 		if (!weaknesses.length) {
-			this.sendReplyBox("" + target + " has no weaknesses.");
+			buffer += " No <font color='#CC0000'>weaknesses</font>;<br/> ";
 		} else {
-			this.sendReplyBox("" + target + " is weak to: " + weaknesses.join(", ") + " (not counting abilities).");
+			buffer += " <font color='#CC0000'>Weaknesses</font>: " + weaknesses.join(", ") + ";<br/> "
 		}
+		if (!resistances.length) {
+			buffer += " No <font color='#00B200'>resistances</font>;"
+		} else {
+			buffer += " <font color='#00B200'>Resistances</font>: " + resistances.join(", ") + ";<br/> "; 
+		}
+		if (!immunities.length) {
+			buffer += " <font color='#505050'>No immunities</font>.";
+		} else {
+			buffer += " <font color='#505050'>Immunities</font>: " + immunities.join(", ") + "<br/> ";
+		}
+		this.sendReplyBox(buffer);
 	},
 
 	eff: 'effectiveness',
