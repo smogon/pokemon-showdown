@@ -437,7 +437,8 @@ var commands = exports.commands = {
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 		targetUser.leaveRoom(room.id);
 	},
-
+	rub: 'roomunban',
+	urb: 'roomunban',
 	unroomban: 'roomunban',
 	roomunban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help roomunban');
