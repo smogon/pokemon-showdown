@@ -70,7 +70,6 @@ exports.Formats = [
 		name: "LC",
 		section: "XY Singles",
 
-		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
@@ -79,19 +78,10 @@ exports.Formats = [
 		name: "LC (suspect test)",
 		section: "XY Singles",
 
-		challengeShow: false,
-		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
-	},
-	{
-		name: "LC Suspect 4",
-		section: "XY Singles",
-
 		searchShow: false,
 		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar', 'Misdreavus', 'Fletchling']
+		ruleset: ['LC'],
+		banlist: ['Misdreavus', 'Fletchling']
 	},
 	{
 		name: "LC UU",
