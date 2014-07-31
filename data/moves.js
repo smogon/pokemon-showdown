@@ -11852,13 +11852,13 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
+			this.boost({def:1}, attacker, attacker, this.getMove('skullbash'));
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				this.add('-anim', attacker, move.name, defender);
 				attacker.removeVolatile(move.id);
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
-			this.boost({def:1}, attacker, attacker, this.getMove('skullbash'));
 			return null;
 		},
 		secondary: false,
