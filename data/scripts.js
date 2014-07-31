@@ -869,9 +869,9 @@ exports.BattleScripts = {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
-						// Bounce, Aeroblast aren't considered STABs.
+						// Bounce, Sky Attack aren't considered STABs.
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
-						if (moveid === 'aeroblast' || moveid === 'bounce') hasStab[move.type] = false;
+						if (moveid === 'skyattack' || moveid === 'bounce') hasStab[move.type] = false;
 					}
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
@@ -909,7 +909,7 @@ exports.BattleScripts = {
 				};
 				// Moves which boost Special Attack:
 				var SpecialSetup = {
-					nastyplot:1, tailglow:1, quiverdance:1, calmmind:1, chargebeam:1
+					nastyplot:1, tailglow:1, quiverdance:1, calmmind:1, chargebeam:1, geomancy:1
 				};
 				// Moves which boost Attack AND Special Attack:
 				var MixedSetup = {
