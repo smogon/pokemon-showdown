@@ -3379,7 +3379,6 @@ var Battle = (function () {
 			this.residualEvent('Residual');
 			break;
 		}
-		this.clearActiveMove();
 
 		// phazing (Roar, etc)
 
@@ -3393,6 +3392,8 @@ var Battle = (function () {
 		}
 		this.p1.active.forEach(checkForceSwitchFlag);
 		this.p2.active.forEach(checkForceSwitchFlag);
+
+		this.clearActiveMove();
 
 		// fainting
 
