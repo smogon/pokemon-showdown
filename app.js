@@ -92,16 +92,8 @@ if (!fs.existsSync('./config/config.js')) {
 
 global.Config = require('./config/config.js');
 
-var watchFile = global.watchFile = function () {
-	try {
-		return fs.watchFile.apply(fs, arguments);
-	} catch (e) {
-		console.log('Your version of node does not support `fs.watchFile`');
-	}
-};
-
 if (Config.watchconfig) {
-	watchFile('./config/config.js', function (curr, prev) {
+	fs.watchFile('./config/config.js', function (curr, prev) {
 		if (curr.mtime <= prev.mtime) return;
 		try {
 			delete require.cache[require.resolve('./config/config.js')];
