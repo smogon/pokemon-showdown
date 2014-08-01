@@ -682,23 +682,12 @@ var commands = exports.commands = {
 			}
 		});
  
-		var buffer = "" + target + " (ignoring abilities):<br/> "
-		if (!weaknesses.length) {
-			buffer += " No <font color='#CC0000'>weaknesses</font>;<br/> ";
-		} else {
-			buffer += " <font color='#CC0000'>Weaknesses</font>: " + weaknesses.join(", ") + ";<br/> "
-		}
-		if (!resistances.length) {
-			buffer += " No <font color='#00B200'>resistances</font>;"
-		} else {
-			buffer += " <font color='#00B200'>Resistances</font>: " + resistances.join(", ") + ";<br/> "; 
-		}
-		if (!immunities.length) {
-			buffer += " <font color='#505050'>No immunities</font>.";
-		} else {
-			buffer += " <font color='#505050'>Immunities</font>: " + immunities.join(", ") + "<br/> ";
-		}
-		this.sendReplyBox(buffer);
+		var buffer = []
+		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':')
+		buffer.push('<span class=\"message-effect-weak\">Weaknesses</span>: ' + (weaknesses.join(', ') || 'None'));
+		buffer.push('<span class=\"message-effect-resist\">Resistances</span>: ' + (resistances.join(', ') || 'None'));
+		buffer.push('<span class=\"message-effect-immune\">Immunities</span>: ' + (immunities.join(', ') || 'None'));
+		this.sendReplyBox(buffer.join('<br>'));
 	},
 
 	eff: 'effectiveness',
