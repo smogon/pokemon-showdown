@@ -219,6 +219,59 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	"kingsshield": {
+		inherit: true,
+		effect: {
+			duration: 1,
+			onStart: function (target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function (target, source, move) {
+                	        if (target.volatiles.substitute) return;
+				if (move.breaksProtect) {
+					target.removeVolatile('kingsshield');
+					return;
+				}
+				if (move && (move.category === 'Status' || move.isNotProtectable)) return;
+				this.add('-activate', target, 'Protect');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (move.isContact) {
+					this.boost({atk:-2}, source, target, this.getMove("King's Shield"));
+				}
+				return null;
+			}
+		},
+	},
+	"spikyshield": {
+		inherit: true,
+		effect: {
+			duration: 1,
+			onStart: function (target) {
+				this.add('-singleturn', target, 'move: Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function (target, source, move) {
+				if (target.volatiles.substitute) return;
+				if (move.breaksProtect) {
+					target.removeVolatile('spikyshield');
+					return;
+				}
+				if (move && (move.target === 'self' || move.id === 'suckerpunch')) return;
+				this.add('-activate', target, 'move: Protect');
+				if (move.isContact) {
+					this.damage(source.maxhp / 8, source, target);
+				}
+				return null;
+			}
+		},
+	},
 	minimize: {
 		inherit: true,
 		boosts: {
@@ -294,18 +347,18 @@ exports.BattleMovedex = {
 		onTryHit: function (target) {
 			target.removeVolatile('substitute');
 		},
-				onTry: function (attacker, defender, move) {
+		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
+			this.boost({def:1, spd:1, accuracy:1}, attacker, attacker, this.getMove('skullbash'));
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				this.add('-anim', attacker, move.name, defender);
 				attacker.removeVolatile(move.id);
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
-			this.boost({def:1, spd:1, accuracy:1}, attacker, attacker, this.getMove('skullbash'));
 			return null;
 		},
 		breaksProtect: true
