@@ -227,7 +227,7 @@ var LoginServer = module.exports = (function () {
 	return LoginServer;
 })();
 
-watchFile('./config/custom.css', function (curr, prev) {
+require('fs').watchFile('./config/custom.css', function (curr, prev) {
 	LoginServer.request('invalidatecss', {}, function () {});
 });
 LoginServer.request('invalidatecss', {}, function () {});
