@@ -2105,7 +2105,7 @@ exports.BattleFormatsData = {
 	},
 	shiftry: {
 		viableMoves: {"leafstorm":1,"swordsdance":1,"seedbomb":1,"suckerpunch":1,"defog":1,"lowkick":1},
-		tier: "NU"
+		tier: "RU"
 	},
 	taillow: {
 		viableMoves: {"bravebird":1,"facade":1,"quickattack":1,"uturn":1,"protect":1},
@@ -2141,7 +2141,7 @@ exports.BattleFormatsData = {
 	kirlia: {
 		viableMoves: {"trick":1,"dazzlinggleam":1,"psychic":1,"willowisp":1,"signalbeam":1,"thunderbolt":1,"destinybond":1,"substitute":1},
 		tier: "NFE"
-	},
+	},F
 	gardevoir: {
 		viableMoves: {"psyshock":1,"focusblast":1,"shadowball":1,"moonblast":1,"calmmind":1,"willowisp":1,"thunderbolt":1,"healingwish":1},
 		eventPokemon: [
