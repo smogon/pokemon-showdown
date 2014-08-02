@@ -2141,7 +2141,7 @@ exports.BattleFormatsData = {
 	kirlia: {
 		viableMoves: {"trick":1,"dazzlinggleam":1,"psychic":1,"willowisp":1,"signalbeam":1,"thunderbolt":1,"destinybond":1,"substitute":1},
 		tier: "NFE"
-	},F
+	},
 	gardevoir: {
 		viableMoves: {"psyshock":1,"focusblast":1,"shadowball":1,"moonblast":1,"calmmind":1,"willowisp":1,"thunderbolt":1,"healingwish":1},
 		eventPokemon: [
