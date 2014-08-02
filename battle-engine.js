@@ -2930,7 +2930,7 @@ var Battle = (function () {
 			totalTypeMod = this.getEffectiveness(move, target, pokemon);
 		}
 
-		totalTypeMod = this.clampIntRange(totalTypeMod, -3, 3);
+		totalTypeMod = this.clampIntRange(totalTypeMod, -6, 6);
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
@@ -3370,7 +3370,6 @@ var Battle = (function () {
 			this.residualEvent('Residual');
 			break;
 		}
-		this.clearActiveMove();
 
 		// phazing (Roar, etc)
 
@@ -3384,6 +3383,8 @@ var Battle = (function () {
 		}
 		this.p1.active.forEach(checkForceSwitchFlag);
 		this.p2.active.forEach(checkForceSwitchFlag);
+
+		this.clearActiveMove();
 
 		// fainting
 
