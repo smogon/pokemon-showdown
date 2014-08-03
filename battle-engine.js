@@ -193,7 +193,7 @@ var BattlePokemon = (function () {
 		this.baseAbility = toId(set.ability);
 		this.ability = this.baseAbility;
 		this.item = toId(set.item);
-		this.canMegaEvo = (this.battle.getItem(this.item).megaEvolves === this.species);
+		this.canMegaEvo = (this.battle.getItem(this.item).megaEvolves === this.baseTemplate.baseSpecies);
 		this.abilityData = {id: this.ability};
 		this.itemData = {id: this.item};
 		this.speciesData = {id: this.speciesid};
