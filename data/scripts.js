@@ -535,7 +535,7 @@ exports.BattleScripts = {
 		if (side.megaEvo) return false;
 		var template = this.getTemplate(item.megaStone);
 		if (!template.isMega) return false;
-		if (pokemon.baseTemplate.species !== template.baseSpecies) return false;
+		if (pokemon.baseTemplate.baseSpecies !== template.baseSpecies) return false;
 
 		// okay, mega evolution is possible
 		pokemon.formeChange(template);

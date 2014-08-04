@@ -248,7 +248,8 @@ exports.groups = {
 			modchatall: true,
 			potd: true,
 			promote: 'u',
-			rangeban: true
+			rangeban: true,
+			tournamentsmanagement: true
 		},
 		'#': {
 			id: 'owner',
@@ -260,7 +261,8 @@ exports.groups = {
 			modchatall: true,
 			privateroom: true,
 			roomdesc: true,
-			roompromote: 'u'
+			roompromote: 'u',
+			tournamentsmanagement: true
 		},
 		'\u2605': {
 			id: 'player',
@@ -283,7 +285,8 @@ exports.groups = {
 			ip: true,
 			modchat: true,
 			roompromote: '+ ',
-			scavengers: true
+			scavengers: true,
+			tournaments: true
 		},
 		'%': {
 			id: 'driver',
@@ -301,6 +304,7 @@ exports.groups = {
 			redirect: true,
 			staff: true,
 			timer: true,
+			tournamentsmoderation: true,
 			warn: true
 		},
 		'+': {
