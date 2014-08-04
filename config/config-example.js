@@ -202,7 +202,6 @@ exports.groups = {
 		name: "Administrator",
 		root: true,
 		globalonly: true,
-		gdeclare: true,
 		rank: 7
 	},
 	'&': {
@@ -218,6 +217,7 @@ exports.groups = {
 		potd: true,
 		disableladder: true,
 		globalonly: true,
+		tournamentsmanagement: true,
 		rank: 6
 	},
 	'#': {
@@ -230,6 +230,7 @@ exports.groups = {
 		declare: true,
 		modchatall: true,
 		roomonly: true,
+		tournamentsmanagement: true,
 		rank: 5
 	},
 	'\u2605': {
@@ -253,6 +254,7 @@ exports.groups = {
 		forcerename: true,
 		ip: true,
 		alts: '@u',
+		tournaments: true,
 		rank: 3
 	},
 	'%': {
@@ -271,6 +273,7 @@ exports.groups = {
 		alts: '%u',
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
+		tournamentsmoderation: true,
 		rank: 2
 	},
 	'+': {
