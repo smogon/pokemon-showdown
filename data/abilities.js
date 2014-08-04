@@ -1415,7 +1415,7 @@ exports.BattleAbilities = {
 	},
 	"magicguard": {
 		desc: "Prevents all damage except from direct attacks.",
-		shortDesc: "This Pokemon can only be damaged by direct attacks.",
+		shortDesc: "This Pokemon can only be damaged by direct attacks except Belly Drum.",
 		onDamage: function (damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
 				return false;
