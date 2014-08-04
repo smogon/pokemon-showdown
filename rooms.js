@@ -278,6 +278,9 @@ var GlobalRoom = (function () {
 		// users must be different
 		if (user1 === user2) return false;
 
+		// users must have different IPs
+		if (user1.latestIp === user2.latestIp) return false;
+
 		// users must not have been matched immediately previously
 		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
 
