@@ -399,7 +399,7 @@ if (customCommands && customCommands.commands) {
 /*********************************************************
  * Install plug-in commands
  *********************************************************/
-var plugins = require('./chat-plugins.js').plugins;
-for (var p in plugins) {
-	if (plugins[p].commands) Object.merge(commands, plugins[p].commands);
-}
+
+fs.readdirSync('./chat-plugins').forEach(function (file) {
+	Object.merge(commands, require('./chat-plugins/' + file).commands);
+});
