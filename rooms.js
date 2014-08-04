@@ -479,6 +479,13 @@ var GlobalRoom = (function () {
 		if (Config.reportbattles && rooms.lobby) {
 			rooms.lobby.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
 		}
+		if (Config.logladderip && rated) {
+			if (!this.ladderIpLog) {
+				this.ladderIpLog = fs.createWriteStream('logs/ladderip/ladderip.txt', {flags: 'a'});
+			}
+			this.ladderIpLog.write(p1.userid+': '+p1.latestIp+'\n');
+			this.ladderIpLog.write(p2.userid+': '+p2.latestIp+'\n');
+		}
 		return newRoom;
 	};
 	GlobalRoom.prototype.addRoom = function (room, format, p1, p2, parent, rated) {
