@@ -879,9 +879,9 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">OM of the Month</a><br />";
 		}
-		if (target === 'all' || target === 'pokemonthrowback' || target === 'throwback') {
+		if (target === 'all' || target === 'pokemonthrowback' || target === 'throwback' || target === 'gen4stabmons') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3510401/\">Pokémon Throwback</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/pokemon-throwback-gen-iv-stabmons.3510401/\">Pokémon Throwback - [Gen 4] STABmons</a><br />";
 		}
 		if (target === 'all' || target === 'balancedhackmons' || target === 'bh') {
 			matched = true;
@@ -950,6 +950,10 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'glitchmons') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3467120/\">Glitchmons</a><br />";
+		}
+		if (target === 'all' || target === 'metagamiate') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/metagamiate-omotm-august.3502303/\">Metagamiate</a><br >";
 		}
 		if (!matched) {
 			return this.sendReply("The Other Metas entry '" + target + "' was not found. Try /othermetas or /om for general help.");
