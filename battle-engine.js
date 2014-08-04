@@ -3609,7 +3609,9 @@ var Battle = (function () {
 				if (!side.active[i] || !side.active[i].switchFlag) {
 					if (choice !== 'pass') choices.splice(i, 0, 'pass');
 					decisions.push({
-						choice: 'pass'
+						choice: 'pass',
+						pokemon: side.active[i],
+						priority: 102
 					});
 					continue;
 				}
