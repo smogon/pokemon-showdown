@@ -3276,7 +3276,9 @@ var Battle = (function () {
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + decision.move.id);
-			decision.move.beforeTurnCallback.call(this, decision.pokemon, this.getTarget(decision));
+			var target = this.getTarget(decision);
+			if (!target) return false;
+			decision.move.beforeTurnCallback.call(this, decision.pokemon, target);
 			break;
 		case 'event':
 			this.runEvent(decision.event, decision.pokemon);
