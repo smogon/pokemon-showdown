@@ -199,7 +199,8 @@ var commands = exports.commands = {
 		}
 		if (!this.broadcasting && (user.can('ip', targetUser) || user === targetUser)) {
 			var ips = Object.keys(targetUser.ips);
-			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", "));
+			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ") +
+					(user.group !== ' ' && targetUser.latestHost ? "\nHost: " + targetUser.latestHost : ""));
 		}
 		var output = "In rooms: ";
 		var first = true;
