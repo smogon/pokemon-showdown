@@ -201,6 +201,7 @@ var commands = exports.commands = {
 		if (!this.broadcasting && (user.can('ip', targetUser) || user === targetUser)) {
 			var ips = Object.keys(targetUser.ips);
 			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", "));
+			this.sendReply("Host: " + targetUser.latestHost);
 		}
 		var output = "In rooms: ";
 		var first = true;
@@ -682,7 +683,7 @@ var commands = exports.commands = {
 				immunities.push(type);
 			}
 		});
- 
+
 		var buffer = []
 		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':')
 		buffer.push('<span class=\"message-effect-weak\">Weaknesses</span>: ' + (weaknesses.join(', ') || 'None'));
