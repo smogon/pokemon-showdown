@@ -2008,6 +2008,7 @@ var Battle = (function () {
 					BasePower: 1,
 					Immunity: 1,
 					Accuracy: 1,
+					RedirectTarget: 1,
 					Damage: 1,
 					SubDamage: 1,
 					Heal: 1,
