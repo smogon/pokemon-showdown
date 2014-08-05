@@ -10466,7 +10466,7 @@ exports.BattleMovedex = {
 		onHit: function (pokemon) {
 			if (!pokemon.item && pokemon.lastItem) {
 				pokemon.setItem(pokemon.lastItem);
-				this.add("-item", pokemon, pokemon.item, '[from] move: Recycle');
+				this.add("-item", pokemon, pokemon.getItem(), '[from] move: Recycle');
 			} else return false;
 		},
 		secondary: false,
