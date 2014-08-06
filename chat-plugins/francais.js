@@ -36,8 +36,8 @@ var winner       = 'personne';
 	},
 	vote: function(target, room, user){
 		if(room.id !== 'franais') return;
-		if(status == false) 			return this.sendReply('Il n\'y a pas de Chromaloterie en cours.');
-		if(isNaN(target)) 				return this.sendReply("Le vote doit être un nombre entier valide.");
+		if(status == false) return this.sendReply('Il n\'y a pas de Chromaloterie en cours.');
+		if(isNaN(target)) return this.sendReply("Le vote doit être un nombre entier valide.");
 		if(target < 1 || target > 100) 	return this.sendReply("Le vote doit être un nombre compris entre 1 et 100.");
 		//Voting process
 		if(votes.hasvoted[user] != 1){
