@@ -21,7 +21,7 @@ var winner       = 'personne';
 			status = true;
 			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong>La loterie a commencé !</strong> <br/> Vous pouvez voter en faisant /loterievote 5 (par exemple). <br/> Et n\'oubliez pas, le nombre doit être compris entre 1 et 100.</div>');
 		}else if(target === 'stop'){
-			var resultat = 1;//Math.floor(Math.random() * 100);
+			var resultat = Math.floor(Math.random() * 100);
 			//Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong>Fin de la Chromaloterie, merci d\'avoir joué !</strong></div>');			
 			for(var i=0;i<=participants.length;i++){
 				if(votes.votes[participants[i]] == resultat){
