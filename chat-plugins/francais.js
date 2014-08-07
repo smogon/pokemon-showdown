@@ -23,8 +23,8 @@ exports.commands = {
 		} else if (target === 'stop') {
 			var resultat = Math.floor(Math.random() * 100);
 			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong>Fin de la Chromaloterie, merci d\'avoir joué !</strong></div>');			
-			for (var i=0;i<=participants.length;i++){
-				if (votes.votes[participants[i]] == resultat){
+			for (var i=0;i<=participants.length;i++) {
+				if (votes.votes[participants[i]] == resultat) {
 					winner = participants[i];
 				}
 			}
@@ -40,7 +40,7 @@ exports.commands = {
 		if (isNaN(target)) return this.sendReply("Le vote doit être un nombre entier valide.");
 		if (target < 1 || target > 100) return this.sendReply("Le vote doit être un nombre compris entre 1 et 100.");
 		//Voting process
-		if (votes.hasvoted[user] != 1){
+		if (votes.hasvoted[user] != 1) {
 			votes.hasvoted[user] = 1;
 			votes.votes[user]    = target;
 			participants.push(user);
