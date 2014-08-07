@@ -8,10 +8,10 @@
 /******* Chromaloterie *******/
 /*****************************/
 
-var status       = false;
-var votes        = {hasvoted:{}, votes:{}};
+var status = false;
+var votes = {hasvoted:{}, votes:{}};
 var participants = [];
-var winner       = 'personne';
+var winner = 'personne';
 
 exports.commands = {
 	loterie: function (target, room, user) {
@@ -29,7 +29,7 @@ exports.commands = {
 				}
 			}
 			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong>Et le gagnant est... '+winner+' ! (numéro gagnant: '+resultat+')</strong></div>');
-			votes  = {hasvoted:{}, votes:{}};
+			votes = {hasvoted:{}, votes:{}};
 			status = false;
 			winner = 'personne';
 		}
@@ -42,7 +42,7 @@ exports.commands = {
 		//Voting process
 		if (votes.hasvoted[user] != 1) {
 			votes.hasvoted[user] = 1;
-			votes.votes[user]    = target;
+			votes.votes[user] = target;
 			participants.push(user);
 			this.sendReply('Vous avez voté: '+target);
 		} else {
