@@ -468,8 +468,11 @@ exports.BattleScripts = {
 				hitResult = this.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
 				didSomething = didSomething || hitResult;
 			}
-			if (moveData.forceSwitch || moveData.selfSwitch) {
-				didSomething = true; // at least defer the fail message to later
+			if (moveData.forceSwitch) {
+				if (this.canSwitch(target.side)) didSomething = true; // at least defer the fail message to later
+			}
+			if (moveData.selfSwitch) {
+				if (this.canSwitch(pokemon.side)) didSomething = true; // at least defer the fail message to later
 			}
 			// Hit events
 			//   These are like the TryHit events, except we don't need a FieldHit event.
