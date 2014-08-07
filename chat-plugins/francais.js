@@ -9,7 +9,7 @@
 /*****************************/
 
 var status       = false;
-var votes        = {"hasvoted":{}, "votes":{}};
+var votes        = {hasvoted:{}, votes:{}};
 var participants = [];
 var winner       = 'personne';
 
@@ -29,7 +29,7 @@ exports.commands = {
 				}
 			}
 			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong>Et le gagnant est... '+winner+' ! (numéro gagnant: '+resultat+')</strong></div>');
-			votes  = {"hasvoted":{}, "votes":{}};
+			votes  = {hasvoted:{}, votes:{}};
 			status = false;
 			winner = 'personne';
 		}
