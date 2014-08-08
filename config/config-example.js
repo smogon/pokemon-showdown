@@ -42,7 +42,7 @@ exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
 
 // crashguardemail - if the server has been running for more than an hour
 // and crashes, send an email using these settings, rather than locking down
-// the server. Uncomment this definition if you wan to use this feature;
+// the server. Uncomment this definition if you want to use this feature;
 // otherwise, all crashes will lock down the server.
 /**exports.crashguardemail = {
 	transport: 'SMTP',
