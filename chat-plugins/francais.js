@@ -69,7 +69,7 @@ exports.commands = {
 			this.sendReply('Vous avez déjà voté.');
 		}	
 
-	}
+	},
 
 	 /*****************************/
 	 /* Auctions (in development) */
@@ -116,9 +116,7 @@ exports.commands = {
 		}
 	},
 	
-	/* Ex: /settimer 5 
-	 * 5 secondes added each outbid. Default is setted to 8 seconds
-	 */
+	// Ex: /settimer 5 (5 secondes added each outbid. Default is setted to 8 seconds)
 	settimer: function (target, room, user) {
 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('mute', null, room)) return false;
@@ -126,5 +124,14 @@ exports.commands = {
 		if (isNaN(target)) return this.sendReply('Le timer doit être composé d\'un nombre entier valide.');
 		auctionTimer = target*1000;
 		Rooms.rooms.franais.addRawy(con, room, 'Le timer a été réglé sur <b>'+target+'</b> secondes.');
-	}
+	},
+	
+	//Informations
+	teamstatus: function (target, room, user) {
+		var status = '';
+		for (i = 0; i < teams.nb; i++) {
+			status += 'Team <b>'+teams[i].alias+'</b>: Capitaine: '+teams[i].cap+', Crédit restant, '+teams[i].money+', Joueurs: <br/>'
+		}
+		this.sendReplyBox(status);
+	},
  }
