@@ -185,5 +185,61 @@ exports.commands = {
 			status += 'Team <b>'+teams[i].alias+'</b>: Capitaine: '+teams[i].cap+', Crédit restant, '+teams[i].money+', Joueurs: <br/>'
 		}
 		this.sendReplyBox(status);
+	},
+	//Auction
+	nominate: function (target, room, user) {
+		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
+		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (participants.participe[target] == 0) return this.sendReply('Ce joueur a déjà été vendu.');
+		if (participants.participe[target] != 1) return this.sendReply('Ce joueur a déjà été vendu.');
+		Rooms.rooms.franais.addRaw('<b>'+target+' a été nominé !</b>');
+		currentParticipant = target;
+		outbid = setTimeout(function() {
+			for (var i = 0; i < teams.nb; i++) {
+				if (user == teams[i].cap) {
+					Rooms.rooms.franais.addRaw(currentParticipant+' a été vendu à la team '+teams[i].alias+' pour '+currentPrice+'€! Bravo !');
+					teams[i].money -= currentPrice;
+					Rooms.rooms.franais.addRaw('Il reste désormais '+teams[i].money+'€ à la team '+teams[i].alias+' !');
+					teams[i].players.push(currentParticipant);
+					Rooms.rooms.franais.addRaw('Voici la nouvelle composition de l\'équipe '+teams[i].alias+': '+JSON.stringify(teams[i].players));
+				}
+				break;
+			}
+			participants.participe[currentParticipant] = 0;
+			currentParticipant = '';
+			currentPrice = 0;
+			}, auctionTimer);
+		},
+	s: 'outbid',
+	outbid: function (target, room, user) {
+		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
+		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (currentParticipant === '') return this.sendReply('Il n\'y a pas de joueur actuellement nominé.');
+		if (isNaN(target)) return this.sendReply('Le vote doit être un nombre entier valide.');
+		if (target <= currentPrice) return this.sendReply('Votre proposition doit être supérieure à '+currentPrice+'€.');
+		if (participants.participe[target] == 0) return this.sendReply('Ce joueur a déjà été vendu.');
+		//Not enough money ?
+		for (var i = 0; i < teams.nb; i++) {
+			if (user == teams[i].capid) {
+				if (team[i].money - target < 0) return this.sendReply('Vous n\'avez pas assez de sous pour voter.');
+			}
+		}
+		currentPrice = target;
+		clearTimeout(outbid);
+		outbid = setTimeout( function() {
+			for (var i = 0; i < teams.nb; i++) {
+				if (user == teams[i].cap) {
+					Rooms.rooms.franais.addRaw(currentParticipant+' a été vendu à la team '+teams[i].alias+' pour '+currentPrice+'€! Bravo !');
+					teams[i].money -= currentPrice;
+					Rooms.rooms.franais.addRaw('Il reste désormais '+teams[i].money+'€ à la team '+teams[i].alias+' !');
+					teams[i].players.push(currentParticipant);
+					Rooms.rooms.franais.addRaw('Voici la nouvelle composition de l\'équipe '+teams[i].alias+': '+JSON.stringify(teams[i].players));
+				}
+				break;
+			}
+			participants.participe[currentParticipant] = 0;
+			currentParticipant = '';
+			currentPrice = 0;
+		}, auctionTimer);
 	}
  }
