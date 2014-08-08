@@ -4,16 +4,36 @@
  * Enchères FCL: Auction script used for the "French Community League". 
  */
 
-/*****************************/
-/******* Chromaloterie *******/
-/*****************************/
-
+//Chromaloterie resources
 var status = false;
 var votes = {hasvoted:{}, votes:{}};
 var participants = [];
 var winner = 'personne';
 
+//Auctions resources
+var checkauctions = 0;
+var participants = {participe:{}};
+var currentPrice;
+var currentParticipant;
+var currentCap;
+var auctionTimer = 8000;
+var outbid;
+var teams = {nb:0};
+
+function createTeam (alias, cap, money) {
+	this.aliasid = alias.replace(/ /g,'').toLowerCase();
+	this.alias = alias;
+	this.cap   = cap;
+	this.money = money;
+}
+
+
 exports.commands = {
+	
+	/*****************************/
+	/******* Chromaloterie *******/
+	/*****************************/
+	
 	loterie: function (target, room, user) {
 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('mute', null, room)) return false;
@@ -54,5 +74,57 @@ exports.commands = {
 	 /*****************************/
 	 /* Auctions (in development) */
 	 /*****************************/
-
+	//Initialization
+ 	auctions: 'auction',
+ 	auction: function (target, room, user) {
+ 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
+		if (!this.can('mute', null, room)) return false;
+		if (target == 'start') {
+			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong>Les enchères sont lancées ! Bonnes chance à tous !</strong></div>');
+			checkauctions = 1;
+		} else if (target == 'stop') {
+			this.sendReply('<div class="broadcast-blue"><strong> Les enchères sont terminées ! Merci d\'avoir participé !</strong></div>');
+			teams = {nb:0};
+			checkauctions = 0;
+			currentParticipant = '';
+			currentPrice = 0;
+			}
+	},
+	signup: function (target, room, user) {
+		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
+		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (participants.participe[target] == 1) return this.sendReply('Vous êtes déjà inscrit.');
+		participants.participe[target] = 1;
+		Rooms.rooms.franais.addRaw(user+' est inscrit aux enchères !');
+	},
+	
+	//Configuration
+	//Ex: /maketeam TEAM NAME HERE, CAP NAME, MONEY
+	maketeam: function (target, room, user) {
+		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
+		if (!this.can('mute', null, room)) return false;
+		if (checkauctions == 0) return sendReply('Il n\'y a pas d\'enchère en cours');
+		target = target.split(',');
+		//We assume there will be no more than 20 teams (edit if necessary...)
+		for (var i = 0; i<20; i++) {
+			if (typeof teams[i] === 'undefined') {
+				teams[i] = new createTeam(target[0], target[1], target[2]);
+				teams.nb++;
+				Rooms.rooms.franais.addRaw('La team a bien été créée. Capitaine: <b>'+target[1]+'</b>, Nom: <b>'+target[0]+'</b>, Crédit restant: <b>'+target[2]+'€</b>.');
+				break;
+			}
+		}
+	},
+	
+	/* Ex: /settimer 5 
+	 * 5 secondes added each outbid. Default is setted to 8 seconds
+	 */
+	settimer: function (target, room, user) {
+		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
+		if (!this.can('mute', null, room)) return false;
+		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (isNaN(target)) return this.sendReply('Le timer doit être composé d\'un nombre entier valide.');
+		auctionTimer = target*1000;
+		Rooms.rooms.franais.addRawy(con, room, 'Le timer a été réglé sur <b>'+target+'</b> secondes.');
+	}
  }
