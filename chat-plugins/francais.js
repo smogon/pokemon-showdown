@@ -125,7 +125,59 @@ exports.commands = {
 		auctionTimer = target*1000;
 		Rooms.rooms.franais.addRawy(con, room, 'Le timer a été réglé sur <b>'+target+'</b> secondes.');
 	},
-	
+	// Ex: /setcap TEAM NAME, Keb
+	setcap: 'setcaptain',
+	setcaptain: function (target, room, user) {
+		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
+		if (!this.can('mute', null, room)) return false;
+		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		target = target.split(',')
+		for (i = 0; i<teams.nb; i++) {
+			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
+				teams[i].cap = target[1];
+				Rooms.rooms.franais.addRaw('Le capitaine de l\'équipe '+teams[i].alias+' est désormais '+target[1]+' !')
+			}
+		}
+	},
+	// Ex: /setalias TEAM NAME, shoedrep 
+	setalias: function (target, room, user) {
+		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
+		if (!this.can('mute', null, room)) return false;
+		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		target = target.split(',')
+		for (i = 0; i<teams.nb; i++) {
+			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
+				Rooms.rooms.franais.addRaw('Le nouvel alias de l\'équipe '+teams[i].alias+' est désormais '+target[1]+' !');
+				teams[i].alias = target[1];
+				teams[i].aliasid = target[1].replace(/ /g,'').toLowerCase();
+			}
+		}		
+	},
+	// It works the same way
+	setmoney: function (target, room, user) {
+		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
+		if (!this.can('mute', null, room)) return false;
+		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		target = target.split(',')
+		for (i = 0; i<teams.nb; i++) {
+			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
+				teams[i].money = target[1];
+				Rooms.rooms.franais.addRaw('L\'équipe '+teams[i].alias+' dispose maintenant de '+target[1]+'€ !')
+			}
+		}	
+	},
+	addmoney: function (target, room, user) {
+		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
+		if (!this.can('mute', null, room)) return false;
+		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		target = target.split(',')
+		for (i = 0; i<teams.nb; i++) {
+			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
+				teams[i].money += target[1];
+				Rooms.rooms.franais.addRaw('L\'équipe '+teams[i].alias+' a été créditée de '+target[1]+'€ !')
+			}
+		}	
+	},
 	//Informations
 	teamstatus: function (target, room, user) {
 		var status = '';
@@ -133,5 +185,5 @@ exports.commands = {
 			status += 'Team <b>'+teams[i].alias+'</b>: Capitaine: '+teams[i].cap+', Crédit restant, '+teams[i].money+', Joueurs: <br/>'
 		}
 		this.sendReplyBox(status);
-	},
+	}
  }
