@@ -248,6 +248,7 @@ var commands = exports.commands = {
 	 * Informational commands
 	 *********************************************************/
 
+	pstats: 'data',
 	stats: 'data',
 	dex: 'data',
 	pokedex: 'data',
