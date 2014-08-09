@@ -101,11 +101,11 @@ Users.socketConnect = function(worker, workerid, socketid, ip) {
 	if (checkResult) {
 		console.log('CONNECT BLOCKED - IP BANNED: ' + ip + ' (' + checkResult + ')');
 		if (checkResult === '#ipban') {
-			connection.send("|popup|Your IP (" + ip + ") is on our abuse list and is permanently banned. If you are using a proxy, stop.");
+			connection.send("|popup|Your IP (" + ip + ") is not allowed to connect to PS, because it has been used to spam, hack, or otherwise attack our server.||Make sure you are not using any proxies to connect to PS.");
 		} else if (checkResult === '#cflood') {
 			connection.send("|popup|PS is under heavy load and cannot accommodate your connection right now.");
 		} else {
-			connection.send("|popup|Your IP (" + ip + ") used is banned under the username '" + checkResult + "''. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+			connection.send("|popup|Your IP (" + ip + ") used is banned under the username '" + checkResult + "'. Your ban will expire in a few days.||" + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
 		}
 		return connection.destroy();
 	}
@@ -149,8 +149,11 @@ Users.socketConnect = function(worker, workerid, socketid, ip) {
 
 	Dnsbl.query(connection.ip, function (isBlocked) {
 		if (isBlocked) {
-			connection.popup("Your IP is known for abuse and has been locked. If you're using a proxy, don't.");
-			if (connection.user) connection.user.lock(true);
+			connection.popup("Your IP is known for spamming or hacking websites and has been locked. If you're using a proxy, don't.");
+			if (connection.user) {
+				connection.user.locked = true;
+				connection.user.updateIdentity();
+			}
 		}
 	});
 };
