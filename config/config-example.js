@@ -1,3 +1,11 @@
+// The server ID - a unique ID describing this Showdown server
+exports.serverid = 'pokecommunity';
+
+// The server token - to access the login database and ladder on pokemonshowdown.com
+//   This token must be registered for accessing the ladder, but you will
+//   still be able to login with an unregistered token.
+exports.servertoken = 'filler';
+
 // The server port - the port to run Pokemon Showdown under
 exports.port = 8000;
 
@@ -109,7 +117,7 @@ exports.consoleips = ['127.0.0.1'];
 exports.watchconfig = true;
 
 // logchat - whether to log chat rooms.
-exports.logchat = false;
+exports.logchat = true;
 
 // loguserstats - how often (in milliseconds) to write user stats to the
 // lobby log. This has no effect if `logchat` is disabled.
@@ -138,13 +146,149 @@ exports.herokuhack = false;
 // Your server *must* be registered in order for your custom avatars to be
 // displayed in the client.
 exports.customavatars = {
-	//'userid': 'customavatar.png'
+	'ppn':'charizard_ppn.gif',
+	'wolf': 'suicune.gif',
+	'smusrn': 'suicune.gif',
+	'peanutbutterjelli': 'jelli.jpg',
+	'jelli': 'jelli.jpg',
+	'michonne': 'jelli.jpg',
+	'cstfrm': 'jelli.jpg',
+	'sandfrm': 'jelli.jpg',
+	'novae': 'twilight-sky.png',
+	'saeyru': 'twilight-sky.png',
+	'charis': 'twilight-sky.png',
+	'kjelle': 'doronjo.gif',
+	'captainsyrup': 'doronjo.gif',
+	'winry': 'lapras.png',
+	'lisanna': 'lapras.png',
+	'sanguine': 'sanguine.gif',
+	'memro': 'sanguine.gif',
+	'zeffy': 'zeffy.gif',
+	'cheffy': 'zeffy.gif',
+	'jinofthegale': 'jin.png',
+	'squirrel': 'ozzy.png',
+	'avogadro': 'ozzy.png',
+	'antemortem': 'ante.png',
+	'pachy': 'pachy.png',
+	'eldy': 'pachy.png',
+	'elod': 'pachy.png',
+	'ladygunner': 'lady-gunner.gif',
+	'queenofshipping': 'lady-gunner.gif',
+	'starrywindy': 'starry-windy.gif',
+	'twilightwindy': 'starry-windy.gif',
+	'vtn': 'starry-windy.gif',
+	'mtsuhney': 'starry-windy2.gif',
+	'sri': 'srinator.gif',
+	'correcty': 'rizon.png',
+	'attrage': 'rizon.png',
+	'aceofstars': 'rizon.png',
+	'bidoofftw': 'alakapwnage.png',
+	'djdoof': 'alakapwnage.png',
+	'isit420yet': 'alakapwnage.png',
+	'oxidation': 'yukis-sword.png',
+	'gaspppp': 'daydreamsaway.gif',
+	'travist': 'daydreamsaway2.gif',
+	'slate': 'daydreamsaway3.gif',
+	'sextor': 'sector-revenge.gif',
+	'milenakunis': 'sector-revenge.gif',
+	'konstantinova': 'sector-revenge.gif',
+	'nindbrv': 'sector-revenge.gif',
+	'weighty': 'weightywillbill.png',
+	'servineking': 'zach.gif',
+	'terbte': 'zach.gif',
+	'megaservine': 'zach.gif',
+	'hiddenpowerflying': 'tide.png',
+	'kingchuckles': 'chuckles.gif',
+	'chucklesthegenie': 'chuckles.gif',
+	'xxyveltalxx': 'xxyveltalxx.gif',
+	'pleurnicheur': 'ravio.gif',
+	'acemasterofturtles': 'ace_master_of_turtles.png',
+	'turtlebro6': 'ace_master_of_turtles.png',
+	'acertony': 'ace_master_of_turtles.png',
+	'lati': 'unidentified.png',
+	'clacla': 'clacla.png',
+	'somniac': 'somniac.png',
+	'ptchul': 'patchouli-knowledge.gif',
+	'ladypatchouli': 'patchouli-knowledge.gif',
+	'gensokyo': 'patchouli-knowledge.gif',
+	'patchyknwledg': 'patchouli-knowledge.gif',
+	'paladinbones': 'paladin-bones.png',
+	'pervertedpika': 'o07_eleven.gif',
+	'o07eleven': 'o07_eleven.gif',
+	'detectivededenne': 'pervertedpikachu.png',
+	'notspino': 'spinosaurus.gif',
+	'witchie': 'witchie.png',
+	'doctorsylveon': 'doctorsylveon.png',
+	'maidalice': 'scandalice.gif',
+	'scandalice': 'scandalice.gif',
+	'pnkscandalice': 'scandalice.gif',
+	'alcemargatrod': 'scandalice.gif',
+	'sairentotamashii': 'sairento-tamashii.gif',
+	'glaceongirl': 'paige-berlitz.png',
+	'paigebryan': 'paige-berlitz.png',
+	'littlebrother': 'littlebrother.png',
+	'battlebro': 'littlebrother.png',
+	'yukinagato': 'yukinagato.gif',
+	'yuihirsaw': 'yukinagato.gif',
+	'ladypatchouli': 'patchouli-knowledge.png',
+	'elst': 'patchouli-knowledge.png',
+	'marisakirisam': 'patchouli-knowledge.png',
+	'gensokyo': 'patchouli-knowledge.png',
+	'nidoking76': 'nidoking76.gif',
+	'wolfmasin': 'wolf-masin.gif',
+	'sargentwolf': 'wolf-masin.gif',
+	'jrrkein': 'jrrkein.jpg',
+	'anrindas': 'anrin-das.jpg',
+	'thefattestsnorlax': 'thefattestsnorlax.gif',
+	'sri': 'warpaint.gif',
+	'srinator': 'warpaint.gif',
+	'miguelruizcabal': 'miguelruizcabal.jpg',
+	'indiancharizard': 'indiancharizard.gif',
+	'supershape': 'supershape.gif',
+	'bellpix': 'bellpix.gif',
+	'bluray': 'blu-ray.gif',
+	'zaga': 'zaga.gif',
+	'ashketchumadmn': 'ashketchumadmn.png',
+	'shadowraze': 'shadowraze.png',
+	'pixieforest': 'pixieforest.jpg',
+	'pinkcessa': 'pixieforest.jpg',
+	'cacelyn': 'pixieforest.jpg',
+	'nylecac': 'pixieforest.jpg',
+	'applejacknred': 'isaac.gif',
+	'goldenfun': 'isaac.gif',
+	'imjackinred': 'isaac.gif',
+	'shadowe': 'nova.jpg',
+	'libr': 'nova.jpg',
+	'erelenemorgan': 'erelene-morgan.jpg',
+	'philmiester': 'philmiester.gif',
+	'programfreeze': 'programfreeze.jpg',
+	'oakaxxiii': 'oaka-xxiii.gif',
+	'actuallymr': 'mario.gif',
+	'kimisumi': 'kimisumi.png',
+	'zwlousquen': 'kimisumi2.gif',
+	'wint': 'kimisumi3.jpg',
+	'dos': 'kimisumi4.png',
+	'madokakanamee': 'furoichi.jpg',
+	'sirenttamashii': 'sairento-tamashii.jpg',
+	'sairenttamashii': 'sairento-tamashii.jpg',
+	'sirentamashii': 'sairento-tamashii.jpg',
+	'sairentotamashii': 'sairento-tamashii.jpg',
+	'mk1091': 'mk1091.png',
+	'brndonmcullum': 'brndon-mcullum.jpg',
+	'ejgmorgan': 'ejg-morgan.jpg',
+	'omicronhuh': 'omicron.png',
+	'omicrn': 'omicron.png',
+	'elheroeoscuro': 'elheroeoscuro.gif',
+	'imdonionrings': 'elheroeoscuro.gif',
+	'lightrestore': 'light-restore.png',
+	'heracrossdude': 'heracrossdude.jpg',
+	'darkvswhite': 'heracrossdude.jpg',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
 // disciplinary actions on your section. You can also leave this blank, in
 // which case users won't be given any information on how to appeal.
-exports.appealurl = '';
+exports.appealurl = 'http://www.pokecommunity.com/showthread.php?t=289012#rules';
 
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
@@ -185,14 +329,14 @@ exports.appealurl = '';
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
-exports.groupsranking = [' ', '+', '%', '@', '\u2605', '#', '&', '~'];
+exports.groupsranking = [' ', '\u2606', '+', '\u2605', '%', '@', '#', '&', '~'];
 exports.groups = {
 	'~': {
 		id: "admin",
 		name: "Administrator",
 		root: true,
 		globalonly: true,
-		rank: 7
+		rank: 8
 	},
 	'&': {
 		id: "leader",
@@ -201,14 +345,11 @@ exports.groups = {
 		jurisdiction: '@u',
 		promote: 'u',
 		forcewin: true,
-		declare: true,
-		modchatall: true,
-		rangeban: true,
 		potd: true,
 		disableladder: true,
 		globalonly: true,
 		tournamentsmanagement: true,
-		rank: 6
+		rank: 7
 	},
 	'#': {
 		id: "owner",
@@ -217,66 +358,72 @@ exports.groups = {
 		jurisdiction: 'u',
 		roommod: true,
 		roomdriver: true,
-		declare: true,
-		modchatall: true,
 		roomonly: true,
 		tournamentsmanagement: true,
-		rank: 5
-	},
-	'\u2605': {
-		id: "player",
-		name: "Player",
-		inherit: '+',
-		roomvoice: true,
-		modchat: true,
-		roomonly: true,
-		privateroom: true,
-		rank: 4
+		rank: 6
 	},
 	'@': {
 		id: "mod",
 		name: "Moderator",
 		inherit: '%',
-		jurisdiction: 'u',
+		jurisdiction: '@u',
 		ban: true,
 		modchat: true,
 		roomvoice: true,
 		forcerename: true,
 		ip: true,
-		alts: '@u',
-		tournaments: true,
-		rank: 3
+		modchatall: true,
+		rangeban: true,
+		roomswag: true,
+		rank: 5
 	},
 	'%': {
 		id: "driver",
 		name: "Driver",
 		inherit: '+',
 		jurisdiction: 'u',
-		announce: true,
 		warn: true,
 		kick: true,
 		mute: true,
 		lock: true,
-		forcerename: true,
 		timer: true,
 		modlog: true,
-		alts: '%u',
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
-		tournamentsmoderation: true,
-		rank: 2
+		rank: 4
+	},
+	'\u2605': {
+		id: "player",
+		name: "Player",
+		inherit: ' ',
+		rank: 3
 	},
 	'+': {
 		id: "voice",
 		name: "Voice",
 		inherit: ' ',
-		broadcast: true,
-		joinbattle: true,
+		tournaments: true,
+		tournamentsmoderation: true,
+		announce: true,
+		declare: true,
+		alts: '@u',
+		rank: 2
+	},
+	'\u2606': {
+		id: "swag",
+		name: "Swag",
+		inherit: ' ',
+		jurisdiction: '\u2606u',
+		roomonly: true,
+		announce: true,
+		declare: true,
 		rank: 1
 	},
 	' ': {
 		ip: 's',
 		alts: 's',
+		broadcast: true,
+		joinbattle: true,
 		rank: 0
 	}
 };
