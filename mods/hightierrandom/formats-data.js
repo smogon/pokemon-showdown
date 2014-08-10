@@ -7,5 +7,5 @@ exports.BattleFormatsData = {
 	lucariomega: {
 		viableMoves: {"swordsdance":1,"closecombat":1,"crunch":1,"extremespeed":1,"icepunch":1,"bulletpunch":1,"nastyplot":1,"aurasphere":1,"darkpulse":1,"vacuumwave":1,"flashcannon":1},
 		tier: "Uber"
-	},
+	}
 };
