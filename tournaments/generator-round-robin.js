@@ -10,7 +10,7 @@ var RoundRobin = (function () {
 
 		if (isDoubles)
 			this.name = "Double " + this.name;
-	};
+	}
 
 	RoundRobin.prototype.name = "Round Robin";
 	RoundRobin.prototype.isDrawingSupported = true;
@@ -197,7 +197,7 @@ var RoundRobin = (function () {
 
 	RoundRobin.prototype.isTournamentEnded = function () {
 		return this.isBracketFrozen && this.pendingMatches === 0;
-	}
+	};
 
 	RoundRobin.prototype.getResults = function () {
 		if (!this.isTournamentEnded())
