@@ -203,7 +203,8 @@ var Elimination = (function () {
 			user.loseCount = 0;
 		});
 
-		for (var t = 1; t < this.maxSubtrees && t < this.users.size - 1; ++t) {
+		this.maxSubtrees = Math.min(this.maxSubtrees, this.users.size - 1);
+		for (var t = 1; t < this.maxSubtrees; ++t) {
 			var matchesByDepth = {};
 			var queue = [{node: this.tree.tree, depth: 0}];
 			while (queue.length > 0) {
