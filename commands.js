@@ -1065,28 +1065,6 @@ var commands = exports.commands = {
 		});
 	},
 
-	bw: 'banword',
-	banword: function (target, room, user) {
-		if (!this.can('declare')) return false;
-		target = toId(target);
-		if (!target) {
-			return this.sendReply("Specify a word or phrase to ban.");
-		}
-		Users.addBannedWord(target);
-		this.sendReply("Added '" + target + "' to the list of banned words.");
-	},
-
-	ubw: 'unbanword',
-	unbanword: function (target, room, user) {
-		if (!this.can('declare')) return false;
-		target = toId(target);
-		if (!target) {
-			return this.sendReply("Specify a word or phrase to unban.");
-		}
-		Users.removeBannedWord(target);
-		this.sendReply("Removed '" + target + "' from the list of banned words.");
-	},
-
 	/*********************************************************
 	 * Server management commands
 	 *********************************************************/
