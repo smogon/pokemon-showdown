@@ -401,5 +401,5 @@ if (customCommands && customCommands.commands) {
  *********************************************************/
 
 fs.readdirSync('./chat-plugins').forEach(function (file) {
-	Object.merge(commands, require('./chat-plugins/' + file).commands);
+	if (file.substr(-3) === '.js') Object.merge(commands, require('./chat-plugins/' + file).commands);
 });
