@@ -124,7 +124,7 @@ exports.commands = {
 		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
 		if (isNaN(target)) return this.sendReply('Le timer doit être composé d\'un nombre entier valide.');
 		auctionTimer = target*1000;
-		Rooms.rooms.franais.addRawy('Le timer a été réglé sur <b>'+target+'</b> secondes.');
+		Rooms.rooms.franais.addRaw('Le timer a été réglé sur <b>'+target+'</b> secondes.');
 	},
 	// Ex: /setcap TEAM NAME, Keb
 	setcap: 'setcaptain',
