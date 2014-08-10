@@ -11,7 +11,7 @@ var participants = [];
 var winner = 'personne';
 
 //Auctions resources
-var checkauctions = 0
+var 	auctions = false
 	,participants = {participe:{}}
 	,currentPrice = 0
 	,currentParticipant = null
@@ -83,11 +83,11 @@ exports.commands = {
 		if (!this.can('ban', null, room)) return false;
 		if (target == 'start') {
 			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong>Les enchères sont lancées ! Bonne chance à tous !</strong></div>');
-			checkauctions = 1;
+			auctions = true;
 		} else if (target == 'stop') {
-			this.sendReply('<div class="broadcast-blue"><strong> Les enchères sont terminées ! Merci d\'avoir participé !</strong></div>');
+			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong> Les enchères sont terminées ! Merci d\'avoir participé !</strong></div>');
 			teams = {nb:0};
-			checkauctions = 0;
+			auctions = false;
 			currentParticipant = '';
 			currentPrice = 0;
 			}
@@ -105,7 +105,7 @@ exports.commands = {
 	maketeam: function (target, room, user) {
 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('ban', null, room)) return false;
-		if (checkauctions == 0) return sendReply('Il n\'y a pas d\'enchère en cours');
+		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchère en cours');
 		target = target.split(',');
 		if (isNaN(target[2])) return this.sendReply('Vous devez spécifier un nombre entier valide pour définir l\'argent de l\'équipe.');
 		//We assume there will be no more than 20 teams (edit if necessary...)
@@ -123,7 +123,7 @@ exports.commands = {
 	settimer: function (target, room, user) {
 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('ban', null, room)) return false;
-		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
 		if (isNaN(target)) return this.sendReply('Le timer doit être composé d\'un nombre entier valide.');
 		auctionTimer = target*1000;
 		Rooms.rooms.franais.addRaw('Le timer a été réglé sur <b>'+target+'</b> secondes.');
@@ -133,7 +133,7 @@ exports.commands = {
 	setcaptain: function (target, room, user) {
 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('ban', null, room)) return false;
-		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
 		target = target.split(',')
 		for (i = 0; i<teams.nb; i++) {
 			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
@@ -146,7 +146,7 @@ exports.commands = {
 	setalias: function (target, room, user) {
 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('ban', null, room)) return false;
-		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
 		target = target.split(',')
 		for (i = 0; i<teams.nb; i++) {
 			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
@@ -160,7 +160,7 @@ exports.commands = {
 	setmoney: function (target, room, user) {
 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('ban', null, room)) return false;
-		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
 		target = target.split(',')
 		for (i = 0; i<teams.nb; i++) {
 			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
@@ -172,7 +172,7 @@ exports.commands = {
 	addmoney: function (target, room, user) {
 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('ban', null, room)) return false;
-		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
 		target = target.split(',')
 		for (i = 0; i<teams.nb; i++) {
 			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
@@ -193,9 +193,10 @@ exports.commands = {
 	nominate: function (target, room, user) {
 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('mute', null, room)) return false;
-		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
 		if (participants.participe[target] == 0) return this.sendReply('Ce joueur a déjà été vendu.');
-		if (typeof participants.participe[target] === 'undefined') return this.sendReply('Ce joueur n\'est pas inscrit à l\'enchère.');
+		var targetid = target
+		if (typeof participants.participe[target.replace(/ /g,'').toLowerCase()] === 'undefined') return this.sendReply('Ce joueur n\'est pas inscrit à l\'enchère.');
 		Rooms.rooms.franais.addRaw('<b>'+target+' a été nominé !</b>');
 		currentParticipant = target;
 		outbid = setTimeout(function() {
@@ -205,20 +206,20 @@ exports.commands = {
 					Rooms.rooms.franais.addRaw('<b>'+currentParticipant+' a été vendu à la team '+teams[i].alias+' pour '+currentPrice+'€! Bravo !</b>');
 					teams[i].money -= currentPrice;
 					teams[i].players.push(currentParticipant);
+					participants.participe[currentParticipant] = 0;
+					currentParticipant = null;
 				}
 				//Status of all teams updated
 				status += 'Team <b>'+teams[i].alias+'</b>: Capitaine: '+teams[i].cap+', Crédit restant, <b>'+teams[i].money+'</b>, Joueurs: '+teams[i].players+'<br/>';
 			}
 			Rooms.rooms.franais.addRaw('<div class="infobox">'+status+'</div>');
-			participants.participe[currentParticipant] = 0;
-			currentParticipant = null;
 			}, auctionTimer);
 		},
 	s: 'outbid',
 	outbid: function (target, room, user) {
 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('mute', null, room)) return false;
-		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
+		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
 		if (currentParticipant === '') return this.sendReply('Il n\'y a pas de joueur actuellement nominé.');
 		if (isNaN(target)) return this.sendReply('Le vote doit être un nombre entier valide.');
 		if (target <= currentPrice) return this.sendReply('Votre proposition doit être supérieure à '+currentPrice+'€.');
