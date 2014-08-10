@@ -5731,16 +5731,16 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemon: function (pokemon) {
 				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
-				var moves = pokemon.moveset;
-				for (var i = 0; i < moves.length; i++) {
-					if (disabledMoves[moves[i].id] || this.getMove(moves[i].id).heal) {
-						pokemon.disabledMoves[moves[i].id] = true;
+				var move;
+				for (var i = 0; i < pokemon.moveset.length; i++) {
+					if (disabledMoves[pokemon.moveset[i].id] || (move = this.getMove(pokemon.moveset[i].id)).heal || move.drain) {
+						pokemon.disabledMoves[pokemon.moveset[i].id] = true;
 					}
 				}
 			},
 			onBeforeMove: function (pokemon, target, move) {
 				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
-				if (disabledMoves[move.id] || move.heal) {
+				if (disabledMoves[move.id] || move.heal || move.drain) {
 					this.add('cant', pokemon, 'move: Heal Block', move);
 					return false;
 				}
