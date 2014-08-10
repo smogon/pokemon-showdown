@@ -11,14 +11,15 @@ var participants = [];
 var winner = 'personne';
 
 //Auctions resources
-var checkauctions = 0;
-var participants = {participe:{}};
-var currentPrice;
-var currentParticipant;
-var currentCap;
-var auctionTimer = 8000;
-var outbid;
-var teams = {nb:0};
+var checkauctions = 0
+	,participants = {participe:{}}
+	,currentPrice = 0
+	,currentParticipant = null
+	,currentCap = null
+	,auctionTimer = 8000
+	,outbid = null
+	,teams = {nb:0};
+
 
 function createTeam (alias, cap, money) {
 	this.aliasid = alias.replace(/ /g,'').toLowerCase();
@@ -81,7 +82,7 @@ exports.commands = {
  		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
 		if (!this.can('ban', null, room)) return false;
 		if (target == 'start') {
-			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong>Les enchères sont lancées ! Bonnes chance à tous !</strong></div>');
+			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong>Les enchères sont lancées ! Bonne chance à tous !</strong></div>');
 			checkauctions = 1;
 		} else if (target == 'stop') {
 			this.sendReply('<div class="broadcast-blue"><strong> Les enchères sont terminées ! Merci d\'avoir participé !</strong></div>');
@@ -106,12 +107,13 @@ exports.commands = {
 		if (!this.can('ban', null, room)) return false;
 		if (checkauctions == 0) return sendReply('Il n\'y a pas d\'enchère en cours');
 		target = target.split(',');
+		if (isNaN(target[2])) return this.sendReply('Vous devez spécifier un nombre entier valide pour définir l\'argent de l\'équipe.');
 		//We assume there will be no more than 20 teams (edit if necessary...)
 		for (var i = 0; i<20; i++) {
 			if (typeof teams[i] === 'undefined') {
 				teams[i] = new createTeam(target[0], target[1], target[2]);
 				teams.nb++;
-				Rooms.rooms.franais.addRaw('La team a bien été créée. Capitaine: <b>'+target[1]+'</b>, Nom: <b>'+target[0]+'</b>, Crédit restant: <b>'+target[2]+'€</b>.');
+				Rooms.rooms.franais.addRaw('Nouvelle équipe ajoutée. Capitaine: <b>'+target[1]+'</b>, Nom: <b>'+target[0]+'</b>, Crédit restant: <b>'+target[2]+'€</b>.');
 				break;
 			}
 		}
@@ -193,23 +195,23 @@ exports.commands = {
 		if (!this.can('mute', null, room)) return false;
 		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
 		if (participants.participe[target] == 0) return this.sendReply('Ce joueur a déjà été vendu.');
-		if (participants.participe[target] != 1) return this.sendReply('Ce joueur a déjà été vendu.');
+		if (typeof participants.participe[target] === 'undefined') return this.sendReply('Ce joueur n\'est pas inscrit à l\'enchère.');
 		Rooms.rooms.franais.addRaw('<b>'+target+' a été nominé !</b>');
 		currentParticipant = target;
 		outbid = setTimeout(function() {
+			var status = '';
 			for (var i = 0; i < teams.nb; i++) {
-				if (user == teams[i].cap) {
-					Rooms.rooms.franais.addRaw(currentParticipant+' a été vendu à la team '+teams[i].alias+' pour '+currentPrice+'€! Bravo !');
+				if (user == teams[i].capid) {
+					Rooms.rooms.franais.addRaw('<b>'+currentParticipant+' a été vendu à la team '+teams[i].alias+' pour '+currentPrice+'€! Bravo !</b>');
 					teams[i].money -= currentPrice;
-					Rooms.rooms.franais.addRaw('Il reste désormais '+teams[i].money+'€ à la team '+teams[i].alias+' !');
 					teams[i].players.push(currentParticipant);
-					Rooms.rooms.franais.addRaw('Voici la nouvelle composition de l\'équipe '+teams[i].alias+': '+JSON.stringify(teams[i].players));
 				}
-				break;
+				//Status of all teams updated
+				status += 'Team <b>'+teams[i].alias+'</b>: Capitaine: '+teams[i].cap+', Crédit restant, <b>'+teams[i].money+'</b>, Joueurs: '+teams[i].players+'<br/>';
 			}
+			Rooms.rooms.franais.addRaw('<div class="infobox">'+status+'</div>');
 			participants.participe[currentParticipant] = 0;
-			currentParticipant = '';
-			currentPrice = 0;
+			currentParticipant = null;
 			}, auctionTimer);
 		},
 	s: 'outbid',
@@ -221,27 +223,30 @@ exports.commands = {
 		if (isNaN(target)) return this.sendReply('Le vote doit être un nombre entier valide.');
 		if (target <= currentPrice) return this.sendReply('Votre proposition doit être supérieure à '+currentPrice+'€.');
 		if (participants.participe[target] == 0) return this.sendReply('Ce joueur a déjà été vendu.');
+		if (typeof participants.participe[currentParticipant] === 'undefined') return this.sendReply('Ce joueur n\'est pas inscrit à l\'enchère.');
 		//Not enough money ?
 		for (var i = 0; i < teams.nb; i++) {
 			if (user == teams[i].capid) {
-				if (team[i].money - target < 0) return this.sendReply('Vous n\'avez pas assez de sous pour voter.');
+				if (teams[i].money - target < 0) return this.sendReply('Vous n\'avez pas assez de sous pour voter.');
 			}
 		}
 		currentPrice = target;
+		Rooms.rooms.franais.addRaw(user+' a surenchéri pour '+target+'€ !');
 		clearTimeout(outbid);
-		outbid = setTimeout( function() {
+		outbid = setTimeout(function() {
+			var status = '';
 			for (var i = 0; i < teams.nb; i++) {
-				if (user == teams[i].cap) {
+				if (user == teams[i].capid) {
 					Rooms.rooms.franais.addRaw(currentParticipant+' a été vendu à la team '+teams[i].alias+' pour '+currentPrice+'€! Bravo !');
 					teams[i].money -= currentPrice;
-					Rooms.rooms.franais.addRaw('Il reste désormais '+teams[i].money+'€ à la team '+teams[i].alias+' !');
 					teams[i].players.push(currentParticipant);
-					Rooms.rooms.franais.addRaw('Voici la nouvelle composition de l\'équipe '+teams[i].alias+': '+JSON.stringify(teams[i].players));
 				}
-				break;
+				status += 'Team <b>'+teams[i].alias+'</b>: Capitaine: '+teams[i].cap+', Crédit restant, <b>'+teams[i].money+'</b>, Joueurs: '+teams[i].players+'<br/>';
+
 			}
+			Rooms.rooms.franais.addRaw('<div class="infobox">'+status+'</div>');
 			participants.participe[currentParticipant] = 0;
-			currentParticipant = '';
+			currentParticipant = null;
 			currentPrice = 0;
 		}, auctionTimer);
 	}
