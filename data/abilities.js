@@ -604,7 +604,7 @@ exports.BattleAbilities = {
 		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become either poisoned, paralyzed or put to sleep. There is an equal chance to inflict each status.",
 		shortDesc: "30% chance of poisoning, paralyzing, or causing sleep on Pokemon making contact.",
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact && !source.status) {
+			if (move && move.isContact && !source.status && source.runImmunity('powder')) {
 				var r = this.random(100);
 				if (r < 11) source.setStatus('slp', target);
 				else if (r < 21) source.setStatus('par', target);
