@@ -52,12 +52,12 @@ exports.commands = {
 		if (!participants[user.userid]) return this.sendReply('You are not participating in the current scavenger hunt. Use the command /joinhunt to participate.');
 		if (participants[user.userid].room >= 3) return this.sendReply('You have already finished!');
 		target = toId(target);
-		var room = participants[user.userid].room;
-		if (answers[room] === target) {
+		var roomnum = participants[user.userid].room;
+		if (answers[roomnum] === target) {
 			participants[user.userid].room++;
-			room++;
-			if (room < 3) {
-				this.sendReply('Well done! Your ' + (room === 1 ? 'second' : 'final') + ' hint is: ' + hints[room]);
+			roomnum++;
+			if (roomnum < 3) {
+				this.sendReply('Well done! Your ' + (roomnum === 1 ? 'second' : 'final') + ' hint is: ' + hints[roomnum]);
 			} else {
 				finished.push(user.name);
 				var position = finished.length;
@@ -76,8 +76,8 @@ exports.commands = {
 		if (status !== 'on') return this.sendReply('There is no active scavenger hunt.');
 		if (!participants[user.userid]) return this.sendReply('You are not participating in the current scavenger hunt. Use the command /joinhunt to participate.');
 		if (participants[user.userid].room >= 3) return this.sendReply('You have finished the current scavenger hunt.');
-		var room = participants[user.userid].room;
-		this.sendReply('You are on hint number ' + (room + 1) + ': ' + hints[room]);
+		var roomnum = participants[user.userid].room;
+		this.sendReply('You are on hint number ' + (roomnum + 1) + ': ' + hints[roomnum]);
 	},
 	endhunt: function (target, room, user) {
 		if (room.id !== 'scavengers') return this.sendReply('This command can only be used in the Scavengers room.');
@@ -136,4 +136,4 @@ exports.commands = {
 			'- /resethunt - Reset the scavenger hunt to mint status (Requires: % @ # & ~)'
 		);
 	}
-}
+};
