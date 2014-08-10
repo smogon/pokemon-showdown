@@ -199,5 +199,5 @@ exports.BattleFormatsData = {
 	},
 	volbeat: {
 		viableMoves: {"metronome":1}
-	},
+	}
 };
