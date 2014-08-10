@@ -22,7 +22,7 @@ exports.commands = {
 			return this.sendReply("/toggleaotd [on / off] - If on, this will start AOTD, if off, this will no longer allow people to use /naotd.");
 		}
 		if (target === 'on') {
-			if (room.aotdOn == true) return this.sendReply("The Artist of the Day has already started.");
+			if (room.aotdOn) return this.sendReply("The Artist of the Day has already started.");
 			room.addRaw(
 				'<div class="broadcast-blue"><center>' +
 					'<h3>Artist of the Day has started!</h3>' +
@@ -93,4 +93,4 @@ exports.commands = {
 		room.aotdOn = false;
 		this.logModCommand("The Artist of the Day was changed to " + Tools.escapeHTML(target) + " by " + Tools.escapeHTML(user.name) + ".");
 	}
-}
+};

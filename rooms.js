@@ -599,7 +599,7 @@ var BattleRoom = (function () {
 			if (!rated.p1 || !rated.p2) {
 				this.push('|raw|ERROR: Ladder not updated: a player does not exist');
 			} else {
-				var winner = Users.get(winnerid);
+				winner = Users.get(winnerid);
 				if (winner && !winner.authenticated) {
 					this.send('|askreg|' + winner.userid, winner);
 				}
@@ -827,12 +827,12 @@ var BattleRoom = (function () {
 		var inactiveSide = this.getInactiveSide();
 
 		var ticksLeft = [0, 0];
-		if (inactiveSide != 1) {
+		if (inactiveSide !== 1) {
 			// side 0 is inactive
 			this.sideTurnTicks[0]--;
 			this.sideTicksLeft[0]--;
 		}
-		if (inactiveSide != 0) {
+		if (inactiveSide !== 0) {
 			// side 1 is inactive
 			this.sideTurnTicks[1]--;
 			this.sideTicksLeft[1]--;
@@ -909,12 +909,12 @@ var BattleRoom = (function () {
 		}
 		this.sideTicksLeft[0]++;
 		this.sideTicksLeft[1]++;
-		if (inactiveSide != 1) {
+		if (inactiveSide !== 1) {
 			// side 0 is inactive
 			var ticksLeft0 = Math.min(this.sideTicksLeft[0] + 1, maxTicksLeft);
 			this.send('|inactive|You have ' + (ticksLeft0 * 10) + ' seconds to make your decision.', this.battle.getPlayer(0));
 		}
-		if (inactiveSide != 0) {
+		if (inactiveSide !== 0) {
 			// side 1 is inactive
 			var ticksLeft1 = Math.min(this.sideTicksLeft[1] + 1, maxTicksLeft);
 			this.send('|inactive|You have ' + (ticksLeft1 * 10) + ' seconds to make your decision.', this.battle.getPlayer(1));
@@ -1076,7 +1076,7 @@ var BattleRoom = (function () {
 		this.kickInactiveUpdate();
 	};
 	BattleRoom.prototype.joinBattle = function (user, team) {
-		var slot = undefined;
+		var slot;
 		if (this.rated) {
 			if (this.rated.p1 === user.userid) {
 				slot = 0;
@@ -1541,6 +1541,7 @@ var ChatRoom = (function () {
 	return ChatRoom;
 })();
 
+/* global Rooms: true */
 // to make sure you don't get null returned, pass the second argument
 var Rooms = module.exports = function (roomid, fallback) {
 	if (roomid && roomid.id) return roomid;

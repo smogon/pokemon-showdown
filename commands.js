@@ -282,7 +282,7 @@ var commands = exports.commands = {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
 		}
-		var target = this.splitTarget(target, true);
+		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
@@ -304,7 +304,7 @@ var commands = exports.commands = {
 		if (!room.auth) {
 			return this.sendReply("/roomdeowner - This room isn't designed for per-room moderation");
 		}
-		var target = this.splitTarget(target, true);
+		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
@@ -885,7 +885,7 @@ var commands = exports.commands = {
 		case '*':
 		case 'player':
 			target = '\u2605';
-			// fallthrough
+			/* falls through */
 		default:
 			if (!Config.groups[target]) {
 				return this.parse('/help modchat');
@@ -1079,11 +1079,11 @@ var commands = exports.commands = {
 
 			try {
 				CommandParser.uncacheTree('./command-parser.js');
-				CommandParser = require('./command-parser.js');
+				global.CommandParser = require('./command-parser.js');
 
 				var runningTournaments = Tournaments.tournaments;
 				CommandParser.uncacheTree('./tournaments');
-				Tournaments = require('./tournaments');
+				global.Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
 
 				return this.sendReply("Chat commands have been hot-patched.");
@@ -1096,7 +1096,7 @@ var commands = exports.commands = {
 			try {
 				var runningTournaments = Tournaments.tournaments;
 				CommandParser.uncacheTree('./tournaments');
-				Tournaments = require('./tournaments');
+				global.Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
 				return this.sendReply("Tournaments have been hot-patched.");
 			} catch (e) {
@@ -1113,7 +1113,7 @@ var commands = exports.commands = {
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
-				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+				global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				Rooms.global.formatListText = Rooms.global.getFormatListText();
 				// respawn validator processes
@@ -1133,7 +1133,7 @@ var commands = exports.commands = {
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
-				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+				global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
 
 				return this.sendReply("Learnsets have been hotpatched.");
 			} catch (e) {
@@ -1403,10 +1403,9 @@ var commands = exports.commands = {
 			this.sendReply("Retrieving V8 memory usage...");
 			var o = process.memoryUsage();
 			this.sendReply(
-				"Resident set size: " + o.rss + ", " + o.heapUsed + " heap used of " + o.heapTotal  + " total heap. "
-				 + (o.heapTotal - o.heapUsed) + " heap left."
+				"Resident set size: " + o.rss + ", " + o.heapUsed + " heap used of " + o.heapTotal  + " total heap. " +
+				 (o.heapTotal - o.heapUsed) + " heap left."
 			);
-			delete o;
 		}
 		if (target === 'all') {
 			this.sendReply("Calculating Total size...");

@@ -1257,6 +1257,12 @@ var BattleSide = (function () {
 			id: this.id,
 			pokemon: []
 		};
+		function annotateHiddenPower(move) {
+			if (move === 'hiddenpower') {
+				return move + toId(pokemon.hpType) + (pokemon.hpPower === 70 ? '' : pokemon.hpPower);
+			}
+			return move;
+		}
 		for (var i = 0; i < this.pokemon.length; i++) {
 			var pokemon = this.pokemon[i];
 			data.pokemon.push({
@@ -1271,12 +1277,7 @@ var BattleSide = (function () {
 					spd: pokemon.baseStats['spd'],
 					spe: pokemon.baseStats['spe']
 				},
-				moves: pokemon.moves.map(function (move) {
-					if (move === 'hiddenpower') {
-						return move + toId(pokemon.hpType) + (pokemon.hpPower === 70 ? '' : pokemon.hpPower);
-					}
-					return move;
-				}),
+				moves: pokemon.moves.map(annotateHiddenPower),
 				baseAbility: pokemon.baseAbility,
 				item: pokemon.item,
 				pokeball: pokemon.pokeball,
@@ -1385,7 +1386,7 @@ var Battle = (function () {
 				var battle = Object.create(proto);
 				var ret = Object.create(battle);
 				tools.install(ret);
-				return battleProtoCache[formatarg] = ret;
+				return (battleProtoCache[formatarg] = ret);
 			})());
 			Battle.prototype.init.call(battle, roomid, formatarg, rated);
 			return battle;
@@ -1813,7 +1814,6 @@ var Battle = (function () {
 			this.add('message', 'Event: ' + eventid);
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
-			return false;
 		}
 		//this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
 		effect = this.getEffect(effect);
@@ -1971,7 +1971,6 @@ var Battle = (function () {
 			this.add('message', 'Event: ' + eventid);
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
-			return false;
 		}
 		if (!target) target = this;
 		var statuses = this.getRelevantEffects(target, 'on' + eventid, 'onSource' + eventid, source);
@@ -2830,12 +2829,13 @@ var Battle = (function () {
 		}
 		basePower = this.clampIntRange(basePower, 1);
 
+		var critMult;
 		if (this.gen <= 5) {
 			move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
-			var critMult = [0, 16, 8, 4, 3, 2];
+			critMult = [0, 16, 8, 4, 3, 2];
 		} else {
 			move.critRatio = this.clampIntRange(move.critRatio, 0, 4);
-			var critMult = [0, 16, 8, 2, 1];
+			critMult = [0, 16, 8, 2, 1];
 		}
 
 		move.crit = move.willCrit || false;
@@ -2875,12 +2875,8 @@ var Battle = (function () {
 			ignorePositiveDefensive = true;
 		}
 
-		if (move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0)) {
-			var ignoreOffensive = true;
-		}
-		if (move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0)) {
-			var ignoreDefensive = true;
-		}
+		var ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
+		var ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
 
 		if (ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
@@ -3196,7 +3192,7 @@ var Battle = (function () {
 	};
 	Battle.prototype.willAct = function () {
 		for (var i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'shift') {	
+			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'shift') {
 				return this.queue[i];
 			}
 		}
@@ -3316,9 +3312,8 @@ var Battle = (function () {
 			decision.side.pokemon[0] = pokemon;
 			decision.side.pokemon[i].position = i;
 			decision.side.pokemon[0].position = 0;
-			return;
 			// we return here because the update event would crash since there are no active pokemon yet
-			break;
+			return;
 		case 'pass':
 			if (!decision.priority || decision.priority <= 101) return;
 			if (decision.pokemon) {

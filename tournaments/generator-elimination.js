@@ -19,7 +19,7 @@ function fixSingleChildNode(parentNode) {
 		return newNode;
 	}
 
-	var value = parentNode.getValue()
+	var value = parentNode.getValue();
 	for (var key in value)
 		delete value[key];
 	Object.merge(value, parentNode.removeChildAt(0).getValue());
@@ -47,7 +47,7 @@ var Elimination = (function () {
 			this.name = "N-" + this.name;
 		else
 			this.name = maxSubtrees + "-tuple " + this.name;
-	};
+	}
 
 	Elimination.prototype.name = "Elimination";
 	Elimination.prototype.isDrawingSupported = false;
@@ -286,8 +286,9 @@ var Elimination = (function () {
 		}
 
 		this.tree.tree.traverse(function (node) {
-			if (!node.isLeaf() && node.getChildAt(0).getValue().user && node.getChildAt(1).getValue().user)
-				node.getValue().state = 'available'
+			if (!node.isLeaf() && node.getChildAt(0).getValue().user && node.getChildAt(1).getValue().user) {
+				node.getValue().state = 'available';
+			}
 		});
 	};
 
@@ -354,14 +355,11 @@ var Elimination = (function () {
 		return matches;
 	};
 	Elimination.prototype.setMatchResult = function (match, result, score) {
-		if (!this.isBracketFrozen)
-			return 'BracketNotFrozen';
+		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		if (!(result in {win:1, loss:1}))
-			return 'InvalidMatchResult';
+		if (!(result in {win:1, loss:1})) return 'InvalidMatchResult';
 
-		if (!this.users.has(match[0]) || !this.users.has(match[1]))
-			return 'UserNotAdded';
+		if (!this.users.has(match[0]) || !this.users.has(match[1])) return 'UserNotAdded';
 
 		var targetNode = null;
 		this.tree.tree.traverse(function (node) {
@@ -371,14 +369,15 @@ var Elimination = (function () {
 				targetNode = node;
 			return !targetNode;
 		});
-		if (!targetNode)
-			return 'InvalidMatch';
+		if (!targetNode) return 'InvalidMatch';
 
-		if (!score)
-			if (result === 'win')
+		if (!score) {
+			if (result === 'win') {
 				score = [1, 0];
-			else
+			} else {
 				score = [0, 1];
+			}
+		}
 
 		var match = targetNode.getValue();
 		match.state = 'finished';
@@ -399,13 +398,15 @@ var Elimination = (function () {
 				targetNode.getParent().getValue().state = 'available';
 
 				var error = '';
-				if (this.users.get(userA).isDisqualified)
+				if (this.users.get(userA).isDisqualified) {
 					error = this.setMatchResult([userA, userB], 'loss');
-				else if (this.users.get(userB).isDisqualified)
+				} else if (this.users.get(userB).isDisqualified) {
 					error = this.setMatchResult([userA, userB], 'win');
+				}
 
-				if (error)
+				if (error) {
 					throw new Error("Unexpected " + error + " from setMatchResult([" + userA + ", " + userB + "], ...)");
+				}
 			}
 		} else if (loserData.loseCount < this.maxSubtrees && !loserData.isDisqualified) {
 			var newRoot = new TreeNode(null, {state: 'available'});

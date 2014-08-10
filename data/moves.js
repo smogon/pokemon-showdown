@@ -8967,7 +8967,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'nightmare',
 		effect: {
-			onResidualOrder: 9,
 			onStart: function (pokemon) {
 				if (pokemon.status !== 'slp') {
 					return false;
@@ -14334,16 +14333,14 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 3,
+			onStart: function (target) {
+				this.add('-start', target, 'Uproar');
+			},
 			onResidual: function (target) {
 				if (target.lastMove === 'struggle') {
 					// don't lock
 					delete target.volatiles['uproar'];
 				}
-			},
-			onStart: function (target) {
-				this.add('-start', target, 'Uproar');
-			},
-			onResidual: function (target) {
 				this.add('-start', target, 'Uproar', '[upkeep]');
 			},
 			onEnd: function (target) {

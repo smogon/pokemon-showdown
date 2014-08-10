@@ -30,6 +30,7 @@ const THROTTLE_MULTILINE_WARN = 4;
 var fs = require('fs');
 var dns = require('dns');
 
+/* global Users: true */
 /**
  * Get a user.
  *
@@ -164,7 +165,7 @@ Users.socketDisconnect = function(worker, workerid, socketid) {
 	var connection = connections[id];
 	if (!connection) return;
 	connection.onDisconnect();
-}
+};
 
 Users.socketReceive = function(worker, workerid, socketid, message) {
 	var id = '' + workerid + '-' + socketid;
@@ -211,7 +212,7 @@ Users.socketReceive = function(worker, workerid, socketid, message) {
 	for (var i = 0; i < lines.length; i++) {
 		if (user.chat(lines[i], room, connection) === false) break;
 	}
-}
+};
 
 /*********************************************************
  * User groups
@@ -315,7 +316,7 @@ var User = (function () {
 
 		this.mutedRooms = {};
 		this.muteDuration = {};
-		this.locked = !!checkLocked(connection.ip);
+		this.locked = !!Users.checkLocked(connection.ip);
 		this.prevNames = {};
 		this.battles = {};
 		this.roomCount = {};
@@ -992,7 +993,8 @@ var User = (function () {
 			format: formatid,
 			user: this.userid
 		}, function (data, statusCode, error) {
-			var mmr = 1000, error = (error || true);
+			var mmr = 1000;
+			error = (error || true);
 			if (data) {
 				if (data.errorip) {
 					self.popup("This server's request IP " + data.errorip + " is not a registered server.");
@@ -1023,10 +1025,12 @@ var User = (function () {
 		if (time < 1) time = 1; // mostly to prevent bugs
 		if (time > 90 * 60000) time = 90 * 60000; // limit 90 minutes
 		// recurse only once; the root for-loop already mutes everything with your IP
-		if (!noRecurse) for (var i in users) {
-			if (users[i] === this) continue;
-			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			users[i].mute(roomid, time, force, true);
+		if (!noRecurse) {
+			for (var i in users) {
+				if (users[i] === this) continue;
+				if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
+				users[i].mute(roomid, time, force, true);
+			}
 		}
 
 		var self = this;
@@ -1049,10 +1053,12 @@ var User = (function () {
 	User.prototype.ban = function (noRecurse, userid) {
 		// recurse only once; the root for-loop already bans everything with your IP
 		if (!userid) userid = this.userid;
-		if (!noRecurse) for (var i in users) {
-			if (users[i] === this) continue;
-			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			users[i].ban(true, userid);
+		if (!noRecurse) {
+			for (var i in users) {
+				if (users[i] === this) continue;
+				if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
+				users[i].ban(true, userid);
+			}
 		}
 
 		for (var ip in this.ips) {
@@ -1068,10 +1074,12 @@ var User = (function () {
 	};
 	User.prototype.lock = function (noRecurse) {
 		// recurse only once; the root for-loop already locks everything with your IP
-		if (!noRecurse) for (var i in users) {
-			if (users[i] === this) continue;
-			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-			users[i].lock(true);
+		if (!noRecurse) {
+			for (var i in users) {
+				if (users[i] === this) continue;
+				if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
+				users[i].lock(true);
+			}
 		}
 
 		for (var ip in this.ips) {

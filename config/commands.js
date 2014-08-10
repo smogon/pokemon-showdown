@@ -219,9 +219,9 @@ var commands = exports.commands = {
 		var atLeastOne = false;
 		this.sendReply("Users with IP " + target + ":");
 		for (var userid in Users.users) {
-			var user = Users.users[userid];
-			if (user.latestIp === target) {
-				this.sendReply((user.connected ? " + " : "-") + " " + user.name);
+			var curUser = Users.users[userid];
+			if (curUser.latestIp === target) {
+				this.sendReply((curUser.connected ? " + " : "-") + " " + curUser.name);
 				atLeastOne = true;
 			}
 		}
@@ -310,12 +310,12 @@ var commands = exports.commands = {
 					details["<font color=#585858>Does Not Evolve</font>"] = "";
 				} else {
 					details["Evolution"] = pokemon.evos.map(function (evo) {
-						var evo = Tools.getTemplate(evo);
+						evo = Tools.getTemplate(evo);
 						return evo.name + " (" + evo.evoLevel + ")";
 					}).join(", ");
 				}
 
-		 	} else if (newTargets[0].searchType === 'move') {
+			} else if (newTargets[0].searchType === 'move') {
 				var move = Tools.getMove(newTargets[0].name);
 				var details = {
 					"Priority": move.priority,
@@ -470,7 +470,7 @@ var commands = exports.commands = {
 		for (var pokemon in Tools.data.Pokedex) {
 			var template = Tools.getTemplate(pokemon);
 			var megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
-			var feSearchResult = (feSearch === null || (feSearch === true && !template.evos.length) || (feSearch === false && template.evos.length))
+			var feSearchResult = (feSearch === null || (feSearch === true && !template.evos.length) || (feSearch === false && template.evos.length));
 			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) &&
 				megaSearchResult && feSearchResult) {
 				dex[pokemon] = template;
@@ -563,7 +563,7 @@ var commands = exports.commands = {
 				results.sort();
 				resultsStr = results.join(", ");
 			} else {
-				results.randomize()
+				results.randomize();
 				resultsStr = results.slice(0, 10).join(", ") + ", and " + string(results.length - output) + " more. Redo the search with 'all' as a search parameter to show all results.";
 			}
 		} else {
@@ -684,8 +684,8 @@ var commands = exports.commands = {
 			}
 		});
  
-		var buffer = []
-		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':')
+		var buffer = [];
+		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':');
 		buffer.push('<span class=\"message-effect-weak\">Weaknesses</span>: ' + (weaknesses.join(', ') || 'None'));
 		buffer.push('<span class=\"message-effect-resist\">Resistances</span>: ' + (resistances.join(', ') || 'None'));
 		buffer.push('<span class=\"message-effect-immune\">Immunities</span>: ' + (immunities.join(', ') || 'None'));

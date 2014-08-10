@@ -48,7 +48,7 @@ function createTournament(room, format, generator, isRated, args, output) {
 		output.sendReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
 		return;
 	}
-	return exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), isRated);
+	return (exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), isRated));
 }
 function deleteTournament(name, output) {
 	var id = toId(name);
@@ -536,7 +536,7 @@ var Tournament = (function () {
 		}
 
 		if (!this.availableMatches.get(from) || !this.availableMatches.get(from).get(to)) {
-			output.sendReply('|tournament|error|InvalidMatch')
+			output.sendReply('|tournament|error|InvalidMatch');
 			return;
 		}
 
