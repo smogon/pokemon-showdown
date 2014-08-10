@@ -147,8 +147,8 @@ exports.herokuhack = false;
 // displayed in the client.
 exports.customavatars = {
 	'ppn':'charizard_ppn.gif',
-	'wolf': 'suicune.gif',
-	'smusrn': 'suicune.gif',
+	'wolf': 'wolf.gif',
+	'smusrn': 'wolf.gif',
 	'peanutbutterjelli': 'jelli.jpg',
 	'jelli': 'jelli.jpg',
 	'michonne': 'jelli.jpg',
