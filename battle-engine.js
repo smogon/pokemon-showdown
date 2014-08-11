@@ -3236,8 +3236,6 @@ Battle = (function () {
 	Battle.prototype.runDecision = function (decision) {
 		var pokemon;
 
-		this.debug('running: '+decision.choice);
-
 		// returns whether or not we ended in a callback
 		switch (decision.choice) {
 		case 'start':
