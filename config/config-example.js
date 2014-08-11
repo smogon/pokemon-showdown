@@ -273,6 +273,7 @@ exports.customavatars = {
 	'sairenttamashii': 'sairento-tamashii.jpg',
 	'sirentamashii': 'sairento-tamashii.jpg',
 	'sairentotamashii': 'sairento-tamashii.jpg',
+	'ashadowssoul': 'sairento-tamashii.jpg',
 	'mk1091': 'mk1091.png',
 	'brndonmcullum': 'brndon-mcullum.jpg',
 	'ejgmorgan': 'ejg-morgan.jpg',
@@ -283,6 +284,10 @@ exports.customavatars = {
 	'lightrestore': 'light-restore.png',
 	'heracrossdude': 'heracrossdude.jpg',
 	'darkvswhite': 'heracrossdude.jpg',
+	'nimo': 'nimo.png',
+	'1ee7': 'nimo.png',
+	'sharingiscaring': 'nimo.png',
+	'hollowicrus': 'hollowicrus.jpg',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
