@@ -515,6 +515,30 @@ var commands = exports.commands = {
 		}
 		user.leaveRoom(targetRoom || room, connection);
 	},
+	
+	tell: function(target, room, user) {
+		if (user.locked) return this.sendReply('You cannot use this command while locked.');
+		if (user.forceRenamed) return this.sendReply('You cannot use this command while under a name that you have been forcerenamed to.');
+		if (!target) return this.parse('/help tell');
+
+		var commaIndex = target.indexOf(',');
+		if (commaIndex < 0) return this.sendReply('You forgot the comma.');
+		var targetUser = toId(target.slice(0, commaIndex));
+		var message = target.slice(commaIndex + 1).trim();
+
+		if (targetUser.length > 18) {
+			return this.sendReply('The name of user "' + targetUser + '" is too long.');
+		}
+
+		if (!tells[targetUser]) tells[targetUser] = [];
+		if (tells[targetUser].length === 5) return this.sendReply('User ' + targetUser + ' has too many tells queued.');
+
+		var date = Date();
+		var messageToSend = '|raw|' + date.slice(0, date.indexOf('GMT') - 1) + ' - <b>' + user.getIdentity() + '</b> said: ' + message;
+		tells[targetUser].add(messageToSend);
+
+		return this.sendReply('Message "' + message + '" sent to ' + targetUser + '.');
+	},
 
 	/*********************************************************
 	 * Moderating: Punishments
@@ -537,7 +561,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('warn', targetUser, room)) return false;
 
-		this.addModCommand("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		this.addModCommand("|raw|" + targetUser.name + " was warned by " + user.name + ". <a href=http://www.pokecommunity.com/showthread.php?t=289012#rules>Please follow the PC Battle Server rules</a>, and not those in the pop-up." + (target ? " (" + target + ")" : ""));
 		targetUser.send('|c|~|/warn ' + target);
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 	},
@@ -922,15 +946,16 @@ var commands = exports.commands = {
 		this.add('|raw|<div class="broadcast-blue"><b>' + Tools.escapeHTML(target) + '</b></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
-
-	htmldeclare: function (target, room, user) {
-		if (!target) return this.parse('/help htmldeclare');
-		if (!this.can('gdeclare', null, room)) return false;
+	
+	htmldeclare: 'html',
+	html: function(target, room, user) {
+		if (!target) return this.parse('/help declare');
+		if (!this.can('declare', null, room)) return false;
 
 		if (!this.canTalk()) return;
 
-		this.add('|raw|<div class="broadcast-blue"><b>' + target + '</b></div>');
-		this.logModCommand(user.name + " declared " + target);
+		this.add('|raw|<b>'+target+'</b>');
+		this.logModCommand(user.name+' declared '+target);
 	},
 
 	gdeclare: 'globaldeclare',
