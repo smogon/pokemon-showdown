@@ -250,7 +250,6 @@ var commands = exports.commands = {
 	roomintro: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
-			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
 			this.sendReplyBox(room.introMessage);
 			if (!this.broadcasting && user.can('declare', null, room)) {
@@ -792,7 +791,7 @@ var commands = exports.commands = {
 	 *********************************************************/
 
 	mn: 'modnote',
-	modnote: function (target, room, user, connection, cmd) {
+	modnote: function (target, room, user, connection) {
 		if (!target) return this.parse('/help modnote');
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The note is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
@@ -1030,7 +1029,6 @@ var commands = exports.commands = {
 			filename = 'logs/modlog/modlog_' + roomId + '.txt';
 		}
 
-		var roomLogs = {};
 		// Seek for all input rooms for the lines or text
 		command = 'tail -' + lines + ' ' + filename;
 		var grepLimit = 100;
@@ -1146,7 +1144,7 @@ var commands = exports.commands = {
 
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
-		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(BattleLearnsets) + ";\n");
+		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(Tools.data.Learnsets) + ";\n");
 		this.sendReply("learnsets.js saved.");
 	},
 
@@ -1364,39 +1362,40 @@ var commands = exports.commands = {
 		if (target === 'all') {
 			this.sendReply("Loading memory usage, this might take a while.");
 		}
+		var roomSize, configSize, rmSize, cpSize, simSize, usersSize, toolsSize;
 		if (target === 'all' || target === 'rooms' || target === 'room') {
 			this.sendReply("Calculating Room size...");
-			var roomSize = ResourceMonitor.sizeOfObject(Rooms);
+			roomSize = ResourceMonitor.sizeOfObject(Rooms);
 			this.sendReply("Rooms are using " + roomSize + " bytes of memory.");
 		}
 		if (target === 'all' || target === 'config') {
 			this.sendReply("Calculating config size...");
-			var configSize = ResourceMonitor.sizeOfObject(Config);
+			configSize = ResourceMonitor.sizeOfObject(Config);
 			this.sendReply("Config is using " + configSize + " bytes of memory.");
 		}
 		if (target === 'all' || target === 'resourcemonitor' || target === 'rm') {
 			this.sendReply("Calculating Resource Monitor size...");
-			var rmSize = ResourceMonitor.sizeOfObject(ResourceMonitor);
+			rmSize = ResourceMonitor.sizeOfObject(ResourceMonitor);
 			this.sendReply("The Resource Monitor is using " + rmSize + " bytes of memory.");
 		}
 		if (target === 'all' || target === 'cmdp' || target === 'cp' || target === 'commandparser') {
 			this.sendReply("Calculating Command Parser size...");
-			var cpSize = ResourceMonitor.sizeOfObject(CommandParser);
+			cpSize = ResourceMonitor.sizeOfObject(CommandParser);
 			this.sendReply("Command Parser is using " + cpSize + " bytes of memory.");
 		}
 		if (target === 'all' || target === 'sim' || target === 'simulator') {
 			this.sendReply("Calculating Simulator size...");
-			var simSize = ResourceMonitor.sizeOfObject(Simulator);
+			simSize = ResourceMonitor.sizeOfObject(Simulator);
 			this.sendReply("Simulator is using " + simSize + " bytes of memory.");
 		}
 		if (target === 'all' || target === 'users') {
 			this.sendReply("Calculating Users size...");
-			var usersSize = ResourceMonitor.sizeOfObject(Users);
+			usersSize = ResourceMonitor.sizeOfObject(Users);
 			this.sendReply("Users is using " + usersSize + " bytes of memory.");
 		}
 		if (target === 'all' || target === 'tools') {
 			this.sendReply("Calculating Tools size...");
-			var toolsSize = ResourceMonitor.sizeOfObject(Tools);
+			toolsSize = ResourceMonitor.sizeOfObject(Tools);
 			this.sendReply("Tools are using " + toolsSize + " bytes of memory.");
 		}
 		if (target === 'all' || target === 'v8') {
@@ -1409,7 +1408,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all') {
 			this.sendReply("Calculating Total size...");
-			var total = (roomSize + configSize + rmSize + cpSize + simSize + toolsSize + usersSize) || 0;
+			var total = (roomSize + configSize + rmSize + cpSize + simSize + usersSize + toolsSize) || 0;
 			var units = ["bytes", "K", "M", "G"];
 			var converted = total;
 			var unit = 0;
@@ -1434,7 +1433,7 @@ var commands = exports.commands = {
 		});
 	},
 
-	eval: function (target, room, user, connection, cmd, message) {
+	eval: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.sendReply("/eval - Access denied.");
 		}
@@ -1452,7 +1451,7 @@ var commands = exports.commands = {
 		}
 	},
 
-	evalbattle: function (target, room, user, connection, cmd, message) {
+	evalbattle: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.sendReply("/evalbattle - Access denied.");
 		}

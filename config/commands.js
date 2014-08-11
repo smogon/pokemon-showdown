@@ -284,22 +284,22 @@ var commands = exports.commands = {
 		}
 
 		if (showDetails) {
+			var details;
 			if (newTargets[0].searchType === 'pokemon') {
 				var pokemon = Tools.getTemplate(newTargets[0].name);
+				var weighthit = 20;
 				if (pokemon.weightkg >= 200) {
-					var weighthit = 120;
+					weighthit = 120;
 				} else if (pokemon.weightkg >= 100) {
-					var weighthit = 100;
+					weighthit = 100;
 				} else if (pokemon.weightkg >= 50) {
-					var weighthit = 80;
+					weighthit = 80;
 				} else if (pokemon.weightkg >= 25) {
-					var weighthit = 60;
+					weighthit = 60;
 				} else if (pokemon.weightkg >= 10) {
-					var weighthit = 40;
-				} else {
-					var weighthit = 20;
+					weighthit = 40;
 				}
-				var details = {
+				details = {
 					"Dex#": pokemon.num,
 					"Height": pokemon.heightm + " m",
 					"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
@@ -317,7 +317,7 @@ var commands = exports.commands = {
 
 			} else if (newTargets[0].searchType === 'move') {
 				var move = Tools.getMove(newTargets[0].name);
-				var details = {
+				details = {
 					"Priority": move.priority,
 				};
 
@@ -341,7 +341,7 @@ var commands = exports.commands = {
 
 			} else if (newTargets[0].searchType === 'item') {
 				var item = Tools.getItem(newTargets[0].name);
-				var details = {};
+				details = {};
 				if (item.fling) {
 					details["Fling Base Power"] = item.fling.basePower;
 					if (item.fling.status) details["Fling Effect"] = item.fling.status;
@@ -357,7 +357,7 @@ var commands = exports.commands = {
 				}
 
 			} else {
-				var details = {};
+				details = {};
 			}
 
 			buffer += '|raw|<font size="1">' + Object.keys(details).map(function (detail) {
@@ -614,12 +614,17 @@ var commands = exports.commands = {
 				var sources = lsetData.sources.sort();
 				var prevSource;
 				var prevSourceType;
+				var prevSourceCount = 0;
 				for (var i = 0, len = sources.length; i < len; ++i) {
 					var source = sources[i];
 					if (source.substr(0, 2) === prevSourceType) {
-						if (prevSourceCount < 0) buffer += ": " + source.substr(2);
-						else if (all || prevSourceCount < 3) buffer += ", " + source.substr(2);
-						else if (prevSourceCount === 3) buffer += ", ...";
+						if (prevSourceCount < 0) {
+							buffer += ": " + source.substr(2);
+						} else if (all || prevSourceCount < 3) {
+							buffer += ", " + source.substr(2);
+						} else if (prevSourceCount === 3) {
+							buffer += ", ...";
+						}
 						++prevSourceCount;
 						continue;
 					}
@@ -708,7 +713,8 @@ var commands = exports.commands = {
 		var atkName;
 		var defName;
 		for (var i = 0; i < 2; ++i) {
-			for (var method in searchMethods) {
+			var method;
+			for (method in searchMethods) {
 				foundData = Tools[method](targets[i]);
 				if (foundData.exists) break;
 			}
@@ -1323,7 +1329,7 @@ var commands = exports.commands = {
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canBroadcast()) return;
 
-		targets = target.split(',');
+		var targets = target.split(',');
 		if (targets.length != 3) {
 			return this.parse('/help showimage');
 		}

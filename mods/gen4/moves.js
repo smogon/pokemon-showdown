@@ -863,7 +863,7 @@ exports.BattleMovedex = {
 	suckerpunch: {
 		inherit: true,
 		onTryHit: function (target) {
-			decision = this.willMove(target);
+			var decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status') {
 				return false;
 			}

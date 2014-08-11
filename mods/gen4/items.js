@@ -27,7 +27,7 @@ exports.BattleItems = {
 				this.addQueue({
 					choice: 'event',
 					event: 'Custap',
-					priority: decision.priority + .1,
+					priority: decision.priority + 0.1,
 					pokemon: decision.pokemon,
 					move: decision.move,
 					target: decision.target

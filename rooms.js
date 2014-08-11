@@ -15,6 +15,11 @@ const REPORT_USER_STATS_INTERVAL = 1000 * 60 * 10;
 
 var fs = require('fs');
 
+/* global Rooms: true */
+var Rooms = module.exports = getRoom;
+
+var rooms = Rooms.rooms = Object.create(null);
+
 var GlobalRoom = (function () {
 	function GlobalRoom(roomid) {
 		this.id = roomid;
@@ -62,7 +67,7 @@ var GlobalRoom = (function () {
 			}
 			var id = toId(this.chatRoomData[i].title);
 			console.log("NEW CHATROOM: " + id);
-			var room = rooms[id] = new ChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
+			var room = Rooms.createChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
 			this.chatRooms.push(room);
 			if (room.autojoin) this.autojoin.push(id);
 			if (room.staffAutojoin) this.staffAutojoin.push(id);
@@ -204,18 +209,18 @@ var GlobalRoom = (function () {
 		return roomList;
 	};
 	GlobalRoom.prototype.getRooms = function () {
-		var rooms = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
+		var roomsData = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
 		for (var i = 0; i < this.chatRooms.length; i++) {
 			var room = this.chatRooms[i];
 			if (!room) continue;
 			if (room.isPrivate) continue;
-			(room.isOfficial ? rooms.official : rooms.chat).push({
+			(room.isOfficial ? roomsData.official : roomsData.chat).push({
 				title: room.title,
 				desc: room.desc,
 				userCount: Object.size(room.users)
 			});
 		}
-		return rooms;
+		return roomsData;
 	};
 	GlobalRoom.prototype.cancelSearch = function (user) {
 		var success = false;
@@ -347,7 +352,7 @@ var GlobalRoom = (function () {
 		var chatRoomData = {
 			title: title
 		};
-		var room = rooms[id] = new ChatRoom(id, title, chatRoomData);
+		var room = Rooms.createChatRoom(id, title, chatRoomData);
 		this.chatRoomData.push(chatRoomData);
 		this.chatRooms.push(room);
 		this.writeChatRoomData();
@@ -492,7 +497,7 @@ var GlobalRoom = (function () {
 		return newRoom;
 	};
 	GlobalRoom.prototype.addRoom = function (room, format, p1, p2, parent, rated) {
-		room = newRoom(room, format, p1, p2, parent, rated);
+		room = Rooms.createBattle(room, format, p1, p2, parent, rated);
 		if (this.id in room.i) return;
 		room.i[this.id] = this.rooms.length;
 		this.rooms.push(room);
@@ -704,8 +709,6 @@ var BattleRoom = (function () {
 				logs[2].push(line);
 			}
 		}
-		var roomid = this.id;
-		var self = this;
 		logs = logs.map(function (log) {
 			return log.join('\n');
 		});
@@ -764,25 +767,6 @@ var BattleRoom = (function () {
 	};
 	BattleRoom.prototype.tryExpire = function () {
 		this.expire();
-	};
-	BattleRoom.prototype.reset = function (reload) {
-		clearTimeout(this.resetTimer);
-		this.resetTimer = null;
-		this.resetUser = '';
-
-		if (rooms.global.lockdown) {
-			this.add('The battle was not restarted because the server is preparing to shut down.');
-			return;
-		}
-
-		this.add('RESET');
-		this.update();
-
-		rooms.global.battleCount += 0 - (this.active ? 1 : 0);
-		this.active = false;
-		if (this.parentid) {
-			getRoom(this.parentid).updateRooms();
-		}
 	};
 	BattleRoom.prototype.getInactiveSide = function () {
 		if (this.battle.players[0] && !this.battle.players[1]) return 1;
@@ -1240,12 +1224,12 @@ var ChatRoom = (function () {
 	};
 
 	ChatRoom.prototype.rollLogFile = function (sync) {
-		var mkdir = sync ? (function (path, mode, callback) {
+		var mkdir = sync ? function (path, mode, callback) {
 			try {
 				fs.mkdirSync(path, mode);
 			} catch (e) {}	// directory already exists
 			callback();
-		}) : fs.mkdir;
+		} : fs.mkdir;
 		var date = new Date();
 		var basepath = 'logs/chat/' + this.id + '/';
 		var self = this;
@@ -1541,18 +1525,18 @@ var ChatRoom = (function () {
 	return ChatRoom;
 })();
 
-/* global Rooms: true */
 // to make sure you don't get null returned, pass the second argument
-var Rooms = module.exports = function (roomid, fallback) {
+function getRoom(roomid, fallback) {
 	if (roomid && roomid.id) return roomid;
 	if (!roomid) roomid = 'default';
 	if (!rooms[roomid] && fallback) {
 		return rooms.global;
 	}
 	return rooms[roomid];
-};
-var getRoom = Rooms.get = Rooms;
-var newRoom = Rooms.create = function (roomid, format, p1, p2, parent, rated) {
+}
+Rooms.get = getRoom;
+
+Rooms.createBattle = function (roomid, format, p1, p2, parent, rated) {
 	if (roomid && roomid.id) return roomid;
 	if (!p1 || !p2) return false;
 	if (!roomid) roomid = 'default';
@@ -1564,8 +1548,14 @@ var newRoom = Rooms.create = function (roomid, format, p1, p2, parent, rated) {
 	}
 	return rooms[roomid];
 };
+Rooms.createChatRoom = function (roomid, title, data) {
+	var room;
+	if ((room = rooms[roomid])) return room;
 
-var rooms = Rooms.rooms = Object.create(null);
+	room = rooms[roomid] = new ChatRoom(roomid, title, data);
+	return room;
+};
+
 console.log("NEW GLOBAL: global");
 rooms.global = new GlobalRoom('global');
 

@@ -457,7 +457,7 @@ exports.BattleScripts = {
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
-					if (!type1 in hasStab && !type2 in hasStab) {
+					if (!(type1 in hasStab) && !(type2 in hasStab)) {
 						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
 					} else {
 						rejectCombo = false;

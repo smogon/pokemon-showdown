@@ -1105,7 +1105,8 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes direct damage.",
 		onBeforeSwitchIn: function (pokemon) {
 			pokemon.illusion = null;
-			for (var i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
+			var i;
+			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
 				if (!pokemon.side.pokemon[i]) continue;
 				if (!pokemon.side.pokemon[i].fainted) break;
 			}
