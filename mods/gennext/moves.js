@@ -228,7 +228,7 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-                	        if (target.volatiles.substitute) return;
+				if (target.volatiles.substitute) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('kingsshield');
 					return;
@@ -1136,6 +1136,7 @@ exports.BattleMovedex = {
 	},
 	steameruption: {
 		inherit: true,
+		accuracy: 100,
 		onModifyMove: function (move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
@@ -1573,10 +1574,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 100
 	},
-	steameruption: {
-		inherit: true,
-		accuracy: 100
-	},
 	snarl: {
 		inherit: true,
 		accuracy: 100
@@ -1672,10 +1669,6 @@ exports.BattleMovedex = {
 	whirlpool: {
 		inherit: true,
 		accuracy: 90
-	},
-	eggbomb: {
-		inherit: true,
-		accuracy: 80
 	},
 	grasswhistle: {
 		inherit: true,
@@ -1777,9 +1770,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		onModifyMove: function (move, user) {
 			if (user.illusion) {
-				var illusionMoves = user.illusion.moves.filter(function (illusionMove) {
-					var illusionMove = this.getMove(illusionMove);
-					return illusionMove.category !== 'Status';
+				var illusionMoves = user.illusion.moves.filter(function (move) {
+					return this.getMove(move).category !== 'Status';
 				}, this);
 				if (illusionMoves.length) move.name = this.getMove(illusionMoves.sample()).name;
 			}

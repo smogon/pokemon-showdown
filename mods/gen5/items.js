@@ -378,13 +378,6 @@ exports.BattleItems = {
 			type: "Grass"
 		}
 	},
-	pinapberry: {
-		inherit: true,
-		naturalGift: {
-			basePower: 70,
-			type: "Ice"
-		}
-	},
 	poisongem: {
 		inherit: true,
 		isUnreleased: false,

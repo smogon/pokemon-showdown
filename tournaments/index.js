@@ -8,6 +8,8 @@ var TournamentGenerators = {
 	elimination: require('./generator-elimination.js').Elimination
 };
 
+var Tournament;
+
 exports.tournaments = {};
 
 function usersToNames(users) {
@@ -66,7 +68,7 @@ function getTournament(name, output) {
 	}
 }
 
-var Tournament = (function () {
+Tournament = (function () {
 	function Tournament(room, format, generator, isRated) {
 		this.room = room;
 		this.format = toId(format);

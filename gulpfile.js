@@ -5,14 +5,22 @@ var jshint = require('gulp-jshint');
 var replace = require('gulp-replace');
 
 var jsHintOptions = {
-	"trailing": true,
 	"nonbsp": true,
 	"noarg": true,
-	"latedef": true,
 	"loopfunc": true,
+	"latedef": 'nofunc',
+
+	"freeze": true,
+	"immed": true,
+	"undef": true,
+
+	// style
+	// "indent": true,
+	"smarttabs": true,
+	"trailing": true,
+	"newcap": true,
 
 	"sub": true,
-	"smarttabs": true,
 	"evil": true,
 	"esnext": true,
 	"node": true,
@@ -40,7 +48,7 @@ var jsHintOptions = {
 };
 
 gulp.task('lint', function () {
-	var directories = ['./*.js', './data/*.js', './mods/*.js', './tournaments/*.js', './chat-plugins/*.js', './config/*.js'];
+	var directories = ['./*.js', './data/*.js', './mods/*/*.js', './tournaments/*.js', './chat-plugins/*.js', './config/*.js'];
 	console.log("\n\n*** Linting JavaScript Files ***\n\n");
 
 	// Replacing `var` with `let` is sort of a hack that stops jsHint from

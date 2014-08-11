@@ -7,6 +7,8 @@
  * @license MIT license
  */
 
+var Validator;
+
 if (!process.send) {
 	var validationCount = 0;
 	var pendingValidations = {};
@@ -180,7 +182,7 @@ if (!process.send) {
 	});
 }
 
-var Validator = (function () {
+Validator = (function () {
 	function Validator(format) {
 		this.format = Tools.getFormat(format);
 		this.tools = Tools.mod(this.format);
