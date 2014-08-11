@@ -24,7 +24,7 @@ function createTournamentGenerator(generator, args, output) {
 		return;
 	}
 	args.unshift(null);
-	return new (Generator.bind.apply(Generator, args));
+	return new (Generator.bind.apply(Generator, args))();
 }
 function createTournament(room, format, generator, isRated, args, output) {
 	if (room.type !== 'chat') {
@@ -173,10 +173,10 @@ Tournament = (function () {
 			if (this.isBracketInvalidated) {
 				if (Date.now() < this.lastBracketUpdate + BRACKET_MINIMUM_UPDATE_INTERVAL) {
 					if (this.bracketUpdateTimer) clearTimeout(this.bracketUpdateTimer);
-					this.bracketUpdateTimer = setTimeout((function () {
+					this.bracketUpdateTimer = setTimeout(function () {
 						this.bracketUpdateTimer = null;
 						this.update();
-					}).bind(this), BRACKET_MINIMUM_UPDATE_INTERVAL);
+					}.bind(this), BRACKET_MINIMUM_UPDATE_INTERVAL);
 				} else {
 					this.lastBracketUpdate = Date.now();
 
@@ -372,7 +372,7 @@ Tournament = (function () {
 	Tournament.prototype.getAvailableMatches = function () {
 		var matches = this.generator.getAvailableMatches();
 		if (typeof matches === 'string') {
-			this.room.add("Unexpected error from getAvailableMatches(): " + error + ". Please report this to an admin.");
+			this.room.add("Unexpected error from getAvailableMatches(): " + matches + ". Please report this to an admin.");
 			return;
 		}
 
@@ -484,7 +484,7 @@ Tournament = (function () {
 			output.sendReply('|tournament|error|NotStarted');
 			return false;
 		}
-		if (!(timeout > 0) || timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT) {
+		if (timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT || isNaN(timeout)) {
 			output.sendReply('|tournament|error|InvalidAutoDisqualifyTimeout');
 			return false;
 		}
