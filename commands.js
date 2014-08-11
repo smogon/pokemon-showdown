@@ -16,6 +16,10 @@ var fs = require('fs');
 
 const MAX_REASON_LENGTH = 300;
 
+if (typeof tells === 'undefined') {
+        tells = {};
+}
+
 var commands = exports.commands = {
 
 	version: function (target, room, user) {
