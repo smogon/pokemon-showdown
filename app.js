@@ -123,7 +123,7 @@ if (Config.watchConfig) {
 		if (curr.mtime <= prev.mtime) return;
 		try {
 			delete require.cache[require.resolve('./config/config.js')];
-			Config = require('./config/config.js');
+			global.Config = require('./config/config.js');
 			reloadCustomAvatars();
 			console.log('Reloaded config/config.js');
 		} catch (e) {}

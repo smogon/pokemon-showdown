@@ -604,7 +604,7 @@ exports.BattleAbilities = {
 		desc: "If an opponent directly attacks this Pokemon, there is a 30% chance that the opponent will become either poisoned, paralyzed or put to sleep. There is an equal chance to inflict each status.",
 		shortDesc: "30% chance of poisoning, paralyzing, or causing sleep on Pokemon making contact.",
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact && !source.status) {
+			if (move && move.isContact && !source.status && source.runImmunity('powder')) {
 				var r = this.random(100);
 				if (r < 11) source.setStatus('slp', target);
 				else if (r < 21) source.setStatus('par', target);
@@ -1105,7 +1105,8 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes direct damage.",
 		onBeforeSwitchIn: function (pokemon) {
 			pokemon.illusion = null;
-			for (var i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
+			var i;
+			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
 				if (!pokemon.side.pokemon[i]) continue;
 				if (!pokemon.side.pokemon[i].fainted) break;
 			}
@@ -1970,9 +1971,10 @@ exports.BattleAbilities = {
 		desc: "Right before this Pokemon uses a move, it changes its type to match that move. Hidden Power is interpreted as its Hidden Power type, rather than Normal.",
 		shortDesc: "Right before this Pokemon uses a move, it changes its type to match that move.",
 		onPrepareHit: function (source, target, move) {
-			if (source.getTypes().join() !== move.type) {
-				if (!source.setType(move.type)) return;
-				this.add('-start', source, 'typechange', move.type, '[from] Protean');
+			var type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] Protean');
 			}
 		},
 		id: "protean",
@@ -2892,15 +2894,24 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, it temporarily copies an opponent's ability. This ability remains with this Pokemon until it leaves the field.",
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 		onUpdate: function (pokemon) {
-			var target = pokemon.side.foe.randomActive();
-			if (!target) return;
-			var ability = this.getAbility(target.ability);
-			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
-			if (bannedAbilities[target.ability]) {
-				return;
+			var targets = [];
+			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
+				if (pokemon.side.foe.active[i] && !pokemon.side.foe.active[i].fainted) targets.push(pokemon.side.foe.active[i]);
 			}
-			this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
-			pokemon.setAbility(ability);
+			if (!targets.length) return;
+			for (var i = 0, target, rand; i < pokemon.side.foe.active.length; i++) {
+				rand = 0;
+				if (targets.length > 1) rand = this.random(targets.length);
+				target = targets[rand];
+				var ability = this.getAbility(target.ability);
+				var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
+				if (bannedAbilities[target.ability]) {
+					targets.splice(rand, 1);
+					continue;
+				}
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				pokemon.setAbility(ability);
+			}
 		},
 		id: "trace",
 		name: "Trace",

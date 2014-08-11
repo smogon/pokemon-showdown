@@ -30,6 +30,13 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
 	},
 	{
+		name: "OU (suspect test)",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite']
+	},
+	{
 		name: "Ubers",
 		section: "XY Singles",
 
@@ -56,11 +63,20 @@ exports.Formats = [
 		name: "RU",
 		section: "XY Singles",
 
+		searchShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2']
 	},
 	{
-		name: "NU (beta)",
+		name: "RU (suspect test)",
+		section: "XY Singles",
+
+		challengeShow: false,
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2']
+	},
+	{
+		name: "NU",
 		section: "XY Singles",
 
 		ruleset: ['RU'],
@@ -72,16 +88,7 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
-	},
-	{
-		name: "LC (suspect test)",
-		section: "XY Singles",
-
-		searchShow: false,
-		maxLevel: 5,
-		ruleset: ['LC'],
-		banlist: ['Misdreavus', 'Fletchling']
+		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar', 'Misdreavus']
 	},
 	{
 		name: "LC UU",
@@ -343,7 +350,12 @@ exports.Formats = [
 		section: "OM of the Month",
 		column: 2,
 
-		ruleset: ['OU'],
+		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
+		banlist: ['Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew',
+			'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Genesect', 'Giratina',
+			'Giratina-Origin', 'Groudon', 'Kyogre', 'Ho-Oh', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram',
+			'Shaymin-Sky', 'Kyurem-White', 'Xerneas', 'Yveltal', 'Zekrom'
+		],
 		onModifyMove: function(move, pokemon) {
 			if (move.type === 'Normal' && move.id !== 'hiddenpower' && !pokemon.hasAbility(['aerilate', 'pixilate', 'refrigerate'])) {
 				var types = pokemon.getTypes();
@@ -364,9 +376,10 @@ exports.Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Ignore STAB Moves', 'Soul Dew', 'Belly Drum',
-			'Arceus', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre',
-			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Shaymin-Sky']
+		banlist: ['Ignore STAB Moves', 'BrightPowder', 'Soul Dew', 'Belly Drum',
+			'Arceus', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Garchomp', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre',
+			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Shaymin-Sky', 'Wobbuffet', 'Wynaut'
+		]
 	},
 	{
 		name: "CAP",
@@ -441,7 +454,7 @@ exports.Formats = [
 		name: "Almost Any Ability",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Ignore Illegal Abilities', 'Uber', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew',
 			'Archeops', 'Kyurem-Black', 'Regigigas', 'Slaking', 'Shedinja + Sturdy', 'Smeargle + Prankster'
 		],

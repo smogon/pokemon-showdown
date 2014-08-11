@@ -256,7 +256,6 @@ var commands = exports.commands = {
 	roomintro: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
-			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
 			this.sendReplyBox(room.introMessage);
 			if (!this.broadcasting && user.can('roomintro', room)) {
@@ -458,7 +457,7 @@ var commands = exports.commands = {
 			return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
 		}
 		if (targetRoom.isPrivate) {
-			if (targetRoom.modjoin) {
+			if (targetRoom.modjoin && !user.can('bypassmodjoin')) {
 				var userGroup = user.group;
 				if (targetRoom.auth) {
 					userGroup = targetRoom.auth[user.userid] || Config.groups.default[room.type + 'Room'];
@@ -762,7 +761,7 @@ var commands = exports.commands = {
 	 *********************************************************/
 
 	mn: 'modnote',
-	modnote: function (target, room, user, connection, cmd) {
+	modnote: function (target, room, user, connection) {
 		if (!target) return this.parse('/help modnote');
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The note is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
@@ -1006,7 +1005,6 @@ var commands = exports.commands = {
 			filename = 'logs/modlog/modlog_' + roomId + '.txt';
 		}
 
-		var roomLogs = {};
 		// Seek for all input rooms for the lines or text
 		command = 'tail -' + lines + ' ' + filename;
 		var grepLimit = 100;
@@ -1041,28 +1039,6 @@ var commands = exports.commands = {
 		});
 	},
 
-	bw: 'banword',
-	banword: function (target, room, user) {
-		if (!this.can('banword')) return false;
-		target = toId(target);
-		if (!target) {
-			return this.sendReply("Specify a word or phrase to ban.");
-		}
-		Users.addBannedWord(target);
-		this.sendReply("Added '" + target + "' to the list of banned words.");
-	},
-
-	ubw: 'unbanword',
-	unbanword: function (target, room, user) {
-		if (!this.can('banword')) return false;
-		target = toId(target);
-		if (!target) {
-			return this.sendReply("Specify a word or phrase to unban.");
-		}
-		Users.removeBannedWord(target);
-		this.sendReply("Removed '" + target + "' from the list of banned words.");
-	},
-
 	/*********************************************************
 	 * Server management commands
 	 *********************************************************/
@@ -1077,11 +1053,11 @@ var commands = exports.commands = {
 
 			try {
 				CommandParser.uncacheTree('./command-parser.js');
-				CommandParser = require('./command-parser.js');
+				global.CommandParser = require('./command-parser.js');
 
 				var runningTournaments = Tournaments.tournaments;
 				CommandParser.uncacheTree('./tournaments');
-				Tournaments = require('./tournaments');
+				global.Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
 
 				return this.sendReply("Chat commands have been hot-patched.");
@@ -1094,7 +1070,7 @@ var commands = exports.commands = {
 			try {
 				var runningTournaments = Tournaments.tournaments;
 				CommandParser.uncacheTree('./tournaments');
-				Tournaments = require('./tournaments');
+				global.Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
 				return this.sendReply("Tournaments have been hot-patched.");
 			} catch (e) {
@@ -1112,7 +1088,7 @@ var commands = exports.commands = {
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
-				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+				global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				Rooms.global.formatListText = Rooms.global.getFormatListText();
 				// respawn validator processes
@@ -1133,7 +1109,7 @@ var commands = exports.commands = {
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
-				Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+				global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
 
 				return this.sendReply("Learnsets have been hotpatched.");
 			} catch (e) {
@@ -1146,7 +1122,7 @@ var commands = exports.commands = {
 
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
-		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(BattleLearnsets) + ";\n");
+		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(Tools.data.Learnsets) + ";\n");
 		this.sendReply("learnsets.js saved.");
 	},
 
@@ -1368,7 +1344,7 @@ var commands = exports.commands = {
 		});
 	},
 
-	eval: function (target, room, user, connection, cmd, message) {
+	eval: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.sendReply("/eval - Access denied.");
 		}
@@ -1386,7 +1362,7 @@ var commands = exports.commands = {
 		}
 	},
 
-	evalbattle: function (target, room, user, connection, cmd, message) {
+	evalbattle: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.sendReply("/evalbattle - Access denied.");
 		}

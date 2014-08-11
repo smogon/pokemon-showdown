@@ -546,12 +546,7 @@ exports.BattleAbilities = {
 			duration: 1,
 			onBasePowerPriority: 8,
 			onBasePower: function (basePower) {
-				if (this.effectData.hit) {
-					return this.chainModify(0.5);
-				} else {
-					return this.chainModify(0.5);
-					this.effectData.hit = true;
-				}
+				return this.chainModify(0.5);
 			}
 		},
 		id: "parentalbond",
