@@ -144,7 +144,7 @@ module.exports = (function () {
 		var parentMod = this.data.Scripts.inherit;
 		if (!parentMod) parentMod = 'base';
 		if (this.data[dataType][id] !== moddedTools[parentMod].data[dataType][id]) return this.data[dataType][id];
-		return this.data[dataType][id] = Object.clone(this.data[dataType][id], true);
+		return (this.data[dataType][id] = Object.clone(this.data[dataType][id], true));
 	};
 
 	Tools.prototype.effectToString = function () {
@@ -924,7 +924,7 @@ module.exports = (function () {
 		console.log("Error while loading mods: " + e);
 	}
 
-	moddedTools.base.__proto__.moddedTools = moddedTools;
+	Object.getPrototypeOf(moddedTools.base).moddedTools = moddedTools;
 
 	return moddedTools.base;
 })();

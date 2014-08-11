@@ -110,20 +110,20 @@ global.reloadCustomAvatars = function () {
 		if (typeof Config.customAvatars[a] === 'number')
 			newCustomAvatars[a] = Config.customAvatars[a];
 		else
-			fs.exists('./config/avatars/' + Config.customAvatars[a], (function (user, file, isExists) {
+			fs.exists('./config/avatars/' + Config.customAvatars[a], function (user, file, isExists) {
 				if (isExists)
 					Config.customAvatars[user] = file;
-			}).bind(null, a, Config.customAvatars[a]));
+			}.bind(null, a, Config.customAvatars[a]));
 
 	Config.customAvatars = newCustomAvatars;
-}
+};
 
 if (Config.watchConfig) {
 	fs.watchFile('./config/config.js', function (curr, prev) {
 		if (curr.mtime <= prev.mtime) return;
 		try {
 			delete require.cache[require.resolve('./config/config.js')];
-			Config = require('./config/config.js');
+			global.Config = require('./config/config.js');
 			reloadCustomAvatars();
 			console.log('Reloaded config/config.js');
 		} catch (e) {}

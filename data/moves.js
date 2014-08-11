@@ -5731,16 +5731,16 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemon: function (pokemon) {
 				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
-				var moves = pokemon.moveset;
-				for (var i = 0; i < moves.length; i++) {
-					if (disabledMoves[moves[i].id] || this.getMove(moves[i].id).heal) {
-						pokemon.disabledMoves[moves[i].id] = true;
+				var move;
+				for (var i = 0; i < pokemon.moveset.length; i++) {
+					if (disabledMoves[pokemon.moveset[i].id] || (move = this.getMove(pokemon.moveset[i].id)).heal || move.drain) {
+						pokemon.disabledMoves[pokemon.moveset[i].id] = true;
 					}
 				}
 			},
 			onBeforeMove: function (pokemon, target, move) {
 				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
-				if (disabledMoves[move.id] || move.heal) {
+				if (disabledMoves[move.id] || move.heal || move.drain) {
 					this.add('cant', pokemon, 'move: Heal Block', move);
 					return false;
 				}
@@ -8967,7 +8967,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		volatileStatus: 'nightmare',
 		effect: {
-			onResidualOrder: 9,
 			onStart: function (pokemon) {
 				if (pokemon.status !== 'slp') {
 					return false;
@@ -10466,7 +10465,7 @@ exports.BattleMovedex = {
 		onHit: function (pokemon) {
 			if (!pokemon.item && pokemon.lastItem) {
 				pokemon.setItem(pokemon.lastItem);
-				this.add("-item", pokemon, pokemon.item, '[from] move: Recycle');
+				this.add("-item", pokemon, pokemon.getItem(), '[from] move: Recycle');
 			} else return false;
 		},
 		secondary: false,
@@ -14334,16 +14333,14 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 3,
+			onStart: function (target) {
+				this.add('-start', target, 'Uproar');
+			},
 			onResidual: function (target) {
 				if (target.lastMove === 'struggle') {
 					// don't lock
 					delete target.volatiles['uproar'];
 				}
-			},
-			onStart: function (target) {
-				this.add('-start', target, 'Uproar');
-			},
-			onResidual: function (target) {
 				this.add('-start', target, 'Uproar', '[upkeep]');
 			},
 			onEnd: function (target) {

@@ -11,7 +11,7 @@
  * @license MIT license
  */
 
-var simulators = {};
+var battles = Object.create(null);
 
 var SimulatorProcess = (function () {
 	function SimulatorProcess() {
@@ -19,9 +19,9 @@ var SimulatorProcess = (function () {
 		this.process = battleEngineFakeProcess.server;
 		this.process.on('message', function (message) {
 			var lines = message.split('\n');
-			var sim = simulators[lines[0]];
-			if (sim) {
-				sim.receive(lines);
+			var battle = battles[lines[0]];
+			if (battle) {
+				battle.receive(lines);
 			}
 		});
 		this.send = this.process.send.bind(this.process);
@@ -50,11 +50,11 @@ var SimulatorProcess = (function () {
 				process = this.processes[i];
 			}
 		}
-		++process.load;
+		process.load++;
 		return process;
 	};
 	SimulatorProcess.release = function (process) {
-		--process.load;
+		process.load--;
 		/*if (!process.load && !process.active) {
 			process.process.disconnect();
 		}*/
@@ -73,11 +73,10 @@ SimulatorProcess.processes.push(new SimulatorProcess());
 
 var slice = Array.prototype.slice;
 
-var Simulator = (function (){
-	function Simulator(id, format, rated, room) {
-		if (simulators[id]) {
-			// ???
-			return;
+var Battle = (function (){
+	function Battle(id, format, rated, room) {
+		if (battles[id]) {
+			throw new Error("Battle with ID "+id+" already exists.");
 		}
 
 		this.id = id;
@@ -90,37 +89,37 @@ var Simulator = (function (){
 
 		this.process = SimulatorProcess.acquire();
 
-		simulators[id] = this;
+		battles[id] = this;
 
 		this.send('init', this.format, rated ? '1' : '');
 	}
 
-	Simulator.prototype.id = '';
+	Battle.prototype.id = '';
 
-	Simulator.prototype.started = false;
-	Simulator.prototype.ended = false;
-	Simulator.prototype.active = true;
-	Simulator.prototype.players = null;
-	Simulator.prototype.playerids = null;
-	Simulator.prototype.playerTable = null;
-	Simulator.prototype.format = null;
-	Simulator.prototype.room = null;
+	Battle.prototype.started = false;
+	Battle.prototype.ended = false;
+	Battle.prototype.active = true;
+	Battle.prototype.players = null;
+	Battle.prototype.playerids = null;
+	Battle.prototype.playerTable = null;
+	Battle.prototype.format = null;
+	Battle.prototype.room = null;
 
-	Simulator.prototype.requests = null;
+	Battle.prototype.requests = null;
 
 	// log information
-	Simulator.prototype.logData = null;
-	Simulator.prototype.endType = 'normal';
+	Battle.prototype.logData = null;
+	Battle.prototype.endType = 'normal';
 
-	Simulator.prototype.getFormat = function () {
+	Battle.prototype.getFormat = function () {
 		return Tools.getFormat(this.format);
 	};
-	Simulator.prototype.lastIp = null;
-	Simulator.prototype.send = function () {
+	Battle.prototype.lastIp = null;
+	Battle.prototype.send = function () {
 		this.activeIp = ResourceMonitor.activeIp;
 		this.process.send('' + this.id + '|' + slice.call(arguments).join('|'));
 	};
-	Simulator.prototype.sendFor = function (user, action) {
+	Battle.prototype.sendFor = function (user, action) {
 		var player = this.playerTable[toId(user)];
 		if (!player) {
 			console.log('SENDFOR FAILED: Player doesn\'t exist: ' + user.name);
@@ -129,7 +128,7 @@ var Simulator = (function (){
 
 		this.send.apply(this, [action, player].concat(slice.call(arguments, 2)));
 	};
-	Simulator.prototype.sendForOther = function (user, action) {
+	Battle.prototype.sendForOther = function (user, action) {
 		var opposite = {'p1':'p2', 'p2':'p1'};
 		var player = this.playerTable[toId(user)];
 		if (!player) return;
@@ -137,9 +136,9 @@ var Simulator = (function (){
 		this.send.apply(this, [action, opposite[player]].concat(slice.call(arguments, 2)));
 	};
 
-	Simulator.prototype.rqid = '';
-	Simulator.prototype.inactiveQueued = false;
-	Simulator.prototype.receive = function (lines) {
+	Battle.prototype.rqid = '';
+	Battle.prototype.inactiveQueued = false;
+	Battle.prototype.receive = function (lines) {
 		var player;
 		ResourceMonitor.activeIp = this.activeIp;
 		switch (lines[1]) {
@@ -197,40 +196,40 @@ var Simulator = (function (){
 		ResourceMonitor.activeIp = null;
 	};
 
-	Simulator.prototype.resendRequest = function (user) {
+	Battle.prototype.resendRequest = function (user) {
 		if (this.requests[user.userid]) {
 			user.sendTo(this.id, '|request|' + this.requests[user.userid]);
 		}
 	};
-	Simulator.prototype.win = function (user) {
+	Battle.prototype.win = function (user) {
 		if (!user) {
 			this.tie();
 			return;
 		}
 		this.sendFor(user, 'win');
 	};
-	Simulator.prototype.lose = function (user) {
+	Battle.prototype.lose = function (user) {
 		this.sendForOther(user, 'win');
 	};
-	Simulator.prototype.tie = function () {
+	Battle.prototype.tie = function () {
 		this.send('tie');
 	};
-	Simulator.prototype.chat = function (user, message) {
+	Battle.prototype.chat = function (user, message) {
 		this.send('chat', user.name + "\n" + message);
 	};
 
-	Simulator.prototype.isEmpty = function () {
+	Battle.prototype.isEmpty = function () {
 		if (this.p1) return false;
 		if (this.p2) return false;
 		return true;
 	};
 
-	Simulator.prototype.isFull = function () {
+	Battle.prototype.isFull = function () {
 		if (this.p1 && this.p2) return true;
 		return false;
 	};
 
-	Simulator.prototype.setPlayer = function (user, slot) {
+	Battle.prototype.setPlayer = function (user, slot) {
 		if (this.players[slot]) {
 			delete this.players[slot].battles[this.id];
 		}
@@ -258,7 +257,7 @@ var Simulator = (function (){
 			this.playerTable[player.userid] = 'p' + (i + 1);
 		}
 	};
-	Simulator.prototype.getPlayer = function (slot) {
+	Battle.prototype.getPlayer = function (slot) {
 		if (typeof slot === 'string') {
 			if (slot.substr(0, 1) === 'p') {
 				slot = parseInt(slot.substr(1), 10) - 1;
@@ -268,11 +267,11 @@ var Simulator = (function (){
 		}
 		return this.players[slot];
 	};
-	Simulator.prototype.getSlot = function (player) {
+	Battle.prototype.getSlot = function (player) {
 		return this.players.indexOf(player);
 	};
 
-	Simulator.prototype.join = function (user, slot, team) {
+	Battle.prototype.join = function (user, slot, team) {
 		if (slot === undefined) {
 			slot = 0;
 			while (this.players[slot]) slot++;
@@ -291,7 +290,7 @@ var Simulator = (function (){
 		return true;
 	};
 
-	Simulator.prototype.rename = function () {
+	Battle.prototype.rename = function () {
 		for (var i = 0, len = this.players.length; i < len; i++) {
 			var player = this.players[i];
 			var playerid = this.playerids[i];
@@ -303,7 +302,7 @@ var Simulator = (function (){
 		}
 	};
 
-	Simulator.prototype.leave = function (user) {
+	Battle.prototype.leave = function (user) {
 		for (var i = 0, len = this.players.length; i < len; i++) {
 			var player = this.players[i];
 			if (player === user) {
@@ -315,24 +314,24 @@ var Simulator = (function (){
 		return false;
 	};
 
-	Simulator.prototype.destroy = function () {
+	Battle.prototype.destroy = function () {
 		this.send('dealloc');
 
 		this.players = null;
 		this.room = null;
 		SimulatorProcess.release(this.process);
 		this.process = null;
-		delete simulators[this.id];
+		delete battles[this.id];
 	};
 
-	return Simulator;
+	return Battle;
 })();
 
-exports.Simulator = Simulator;
-exports.simulators = simulators;
+exports.Battle = Battle;
+exports.battles = battles;
 exports.SimulatorProcess = SimulatorProcess;
 
 exports.create = function (id, format, rated, room) {
-	if (simulators[id]) return simulators[id];
-	return new Simulator(id, format, rated, room);
+	if (battles[id]) return battles[id];
+	return new Battle(id, format, rated, room);
 };

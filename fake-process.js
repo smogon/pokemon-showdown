@@ -3,7 +3,7 @@ var EventEmitter = require("events").EventEmitter;
 function FakeProcessHelper(input, output) {
 	this.input = input;
 	this.output = output;
-};
+}
 FakeProcessHelper.prototype = {
 	input: null,
 	output: null,
