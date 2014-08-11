@@ -7,22 +7,6 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Random Battle",
-		section: "XY Singles",
-
-		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
-	},
-	{
-		name: "Unrated Random Battle",
-		section: "XY Singles",
-
-		team: 'random',
-		challengeShow: false,
-		rated: false,
-		ruleset: ['Random Battle']
-	},
-	{
 		name: "OU",
 		section: "XY Singles",
 
@@ -155,19 +139,166 @@ exports.Formats = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
-
-	// XY Doubles
+	
+	// Random Battles
 	///////////////////////////////////////////////////////////////////
 
-
 	{
-		name: "Random Doubles Battle",
-		section: "XY Doubles",
+		name: "Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "Unrated Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'random',
+		challengeShow: false,
+		rated: false,
+		ruleset: ['Random']
+	},
+	{
+		name: "Random (no PotD)",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'random',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "1v1 Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'Team Preview 1v1', 'Sleep Clause Mod', 'HP Percentage Mod'],
+		onBegin: function() {
+			this.debug('Cutting down to 1');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	{
+		name: "Uber Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomUber',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "High Tier Random",
+		section: "Random Battles (aka Randbats)",
+
+		mod: 'hightierrandom',
+		team: 'randomHighTier',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Low Tier Random",
+		section: "Random Battles (aka Randbats)",
+
+		mod: 'lowtierrandom',
+		team: 'randomLowTier',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "LC Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomLC',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Hoenn Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomHoenn',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Community Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomCommunity',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Furry Space Goat Random",
+		section: "Random Battles (aka Randbats)",
+
+		searchShow: false,
+		team: 'randomFurrySpaceGoat',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Metronome Random",
+		section: "Random Battles (aka Randbats)",
+
+		mod: 'metronomerandom',
+		team: 'randomMetronome',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Challenge Cup",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomCC',
+		ruleset: ['Pokemon', 'HP Percentage Mod']
+	},
+	{
+		name: "1v1 Challenge Cup",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomCC',
+		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod'],
+		onBegin: function () {
+			this.debug('Cutting down to 1');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	{
+		name: "Doubles Random",
+		section: "Random Battles (aka Randbats)",
 
 		gameType: 'doubles',
 		team: 'randomDoubles',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
+	{
+		name: "Doubles Challenge Cup",
+		section: "Random Battles (aka Randbats)",
+
+		gameType: 'doubles',
+		team: 'randomCC',
+		searchShow: false,
+		ruleset: ['Pokemon', 'HP Percentage Mod']
+	},
+	{
+		name: "Triples Random",
+		section: "Random Battles (aka Randbats)",
+
+		gameType: 'triples',
+		team: 'randomDoubles',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	},
+	{
+		name: "Triples Challenge Cup",
+		section: "Random Battles (aka Randbats)",
+
+		gameType: 'triples',
+		team: 'randomCC',
+		searchShow: false,
+		ruleset: ['Pokemon', 'HP Percentage Mod']
+	},
+
+	// XY Doubles
+	///////////////////////////////////////////////////////////////////
+
 	{
 		name: "Smogon Doubles",
 		section: "XY Doubles",
@@ -241,15 +372,6 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Doubles Challenge Cup",
-		section: 'XY Doubles',
-
-		gameType: 'doubles',
-		team: 'randomCC',
-		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
-	},
-	{
 		name: "Doubles Custom Game",
 		section: "XY Doubles",
 
@@ -266,14 +388,6 @@ exports.Formats = [
 	// XY Triples
 	///////////////////////////////////////////////////////////////////
 
-	{
-		name: "Random Triples Battle",
-		section: "XY Triples",
-
-		gameType: 'triples',
-		team: 'randomDoubles',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
-	},
 	{
 		name: "Smogon Triples",
 		section: "XY Triples",
@@ -318,15 +432,6 @@ exports.Formats = [
 				return [set.species + " is banned as it cannot evolve."];
 			}
 		}
-	},
-	{
-		name: "Triples Challenge Cup",
-		section: "XY Triples",
-
-		gameType: 'triples',
-		team: 'randomCC',
-		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
 	{
 		name: "Triples Custom Game",
@@ -388,27 +493,6 @@ exports.Formats = [
 
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
-	},
-	{
-		name: "Challenge Cup",
-		section: "Other Metagames",
-
-		team: 'randomCC',
-		ruleset: ['Pokemon', 'HP Percentage Mod']
-	},
-	{
-		name: "Challenge Cup 1-vs-1",
-		section: "Other Metagames",
-
-		team: 'randomCC',
-		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod'],
-		onBegin: function () {
-			this.debug('Cutting down to 1');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
 	},
 	{
 		name: "Balanced Hackmons",
