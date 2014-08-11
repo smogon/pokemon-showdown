@@ -277,7 +277,8 @@ exports.BattleScripts = {
 			var moveDamage;
 			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 			var isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
-			for (var i = 0; i < hits && target.hp && pokemon.hp; i++) {
+			var i;
+			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
 
 				moveDamage = this.moveHit(target, pokemon, move);

@@ -30,8 +30,28 @@ const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 
 const MAX_PARSE_RECURSION = 10;
 
-var crypto = require('crypto');
 var fs = require('fs');
+
+/*********************************************************
+ * Load command files
+ *********************************************************/
+
+var commands = exports.commands = require('./commands.js').commands;
+
+var customCommands = require('./config/commands.js');
+if (customCommands && customCommands.commands) {
+	Object.merge(commands, customCommands.commands);
+}
+
+// Install plug-in commands
+
+fs.readdirSync('./chat-plugins').forEach(function (file) {
+	if (file.substr(-3) === '.js') Object.merge(commands, require('./chat-plugins/' + file).commands);
+});
+
+/*********************************************************
+ * Parser
+ *********************************************************/
 
 var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'}), battle: fs.createWriteStream('logs/modlog/modlog_battle.txt', {flags:'a+'})};
 
@@ -383,22 +403,3 @@ exports.uncacheTree = function (root) {
 		uncache = newuncache;
 	} while (uncache.length > 0);
 };
-
-/*********************************************************
- * Commands
- *********************************************************/
-
-var commands = exports.commands = require('./commands.js').commands;
-
-var customCommands = require('./config/commands.js');
-if (customCommands && customCommands.commands) {
-	Object.merge(commands, customCommands.commands);
-}
-
-/*********************************************************
- * Install plug-in commands
- *********************************************************/
-
-fs.readdirSync('./chat-plugins').forEach(function (file) {
-	if (file.substr(-3) === '.js') Object.merge(commands, require('./chat-plugins/' + file).commands);
-});

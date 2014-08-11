@@ -126,10 +126,10 @@ exports.BattleAbilities = {
 		inherit: true,
 		onAfterSetStatus: function (status, target, source) {
 			if (!source || source === target) return;
-			var status = status.id;
-			if (status === 'slp' || status === 'frz') return;
-			if (status === 'tox') status = 'psn';
-			source.trySetStatus(status);
+			var id = status.id;
+			if (id === 'slp' || id === 'frz') return;
+			if (id === 'tox') id = 'psn';
+			source.trySetStatus(id);
 		}
 	},
 	"trace": {
@@ -140,12 +140,12 @@ exports.BattleAbilities = {
 			var ability = this.getAbility(target.ability);
 			var bannedAbilities = {forecast:1, multitype:1, trace:1};
 			var onStartAbilities = {drizzle:1, drought:1, intimidate:1};
-  			if (bannedAbilities[target.ability]) {
-  				return;
-  			}
- 			if (onStartAbilities[target.ability] || pokemon.setAbility(ability)) {
-  				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
-  			}
+			if (bannedAbilities[target.ability]) {
+				return;
+			}
+			if (onStartAbilities[target.ability] || pokemon.setAbility(ability)) {
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+			}
 		}
 	},
 	"voltabsorb": {

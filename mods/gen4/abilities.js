@@ -54,7 +54,7 @@ exports.BattleAbilities = {
 			}
 			for (var i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].ability === 'plus') {
-					return spa * 1.5
+					return spa * 1.5;
 				}
 			}
 		},
@@ -81,7 +81,7 @@ exports.BattleAbilities = {
 			}
 			for (var i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].ability === 'minus') {
-					return spa * 1.5
+					return spa * 1.5;
 				}
 			}
 		},
@@ -126,10 +126,10 @@ exports.BattleAbilities = {
 		inherit: true,
 		onAfterSetStatus: function (status, target, source) {
 			if (!source || source === target) return;
-			var status = status.id;
-			if (status === 'slp' || status === 'frz') return;
-			if (status === 'tox') status = 'psn';
-			source.trySetStatus(status);
+			var id = status.id;
+			if (id === 'slp' || id === 'frz') return;
+			if (id === 'tox') id = 'psn';
+			source.trySetStatus(id);
 		}
 	},
 	"trace": {

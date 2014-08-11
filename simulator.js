@@ -11,16 +11,16 @@
  * @license MIT license
  */
 
-var simulators = {};
+var battles = Object.create(null);
 
 var SimulatorProcess = (function () {
 	function SimulatorProcess() {
 		this.process = require('child_process').fork('battle-engine.js');
 		this.process.on('message', function (message) {
 			var lines = message.split('\n');
-			var sim = simulators[lines[0]];
-			if (sim) {
-				sim.receive(lines);
+			var battle = battles[lines[0]];
+			if (battle) {
+				battle.receive(lines);
 			}
 		});
 		this.send = this.process.send.bind(this.process);
@@ -48,11 +48,11 @@ var SimulatorProcess = (function () {
 				process = this.processes[i];
 			}
 		}
-		++process.load;
+		process.load++;
 		return process;
 	};
 	SimulatorProcess.release = function (process) {
-		--process.load;
+		process.load--;
 		if (!process.load && !process.active) {
 			process.process.disconnect();
 		}
@@ -72,9 +72,8 @@ var slice = Array.prototype.slice;
 
 var Battle = (function (){
 	function Battle(id, format, rated, room) {
-		if (simulators[id]) {
-			// ???
-			return;
+		if (battles[id]) {
+			throw new Error("Battle with ID "+id+" already exists.");
 		}
 
 		this.id = id;
@@ -87,7 +86,7 @@ var Battle = (function (){
 
 		this.process = SimulatorProcess.acquire();
 
-		simulators[id] = this;
+		battles[id] = this;
 
 		this.send('init', this.format, rated ? '1' : '');
 	}
@@ -319,7 +318,7 @@ var Battle = (function (){
 		this.room = null;
 		SimulatorProcess.release(this.process);
 		this.process = null;
-		delete simulators[this.id];
+		delete battles[this.id];
 	};
 
 	return Battle;

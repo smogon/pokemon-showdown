@@ -66,6 +66,8 @@ global.string = function (str) {
 
 global.Tools = require('./tools.js');
 
+var Battle, BattleSide, BattlePokemon;
+
 var Battles = {};
 
 // Receive and process a message sent using Simulator.prototype.send in
@@ -136,7 +138,7 @@ process.on('message', function (message) {
 	}
 });
 
-var BattlePokemon = (function () {
+BattlePokemon = (function () {
 	function BattlePokemon(set, side) {
 		this.side = side;
 		this.battle = side.battle;
@@ -568,7 +570,7 @@ var BattlePokemon = (function () {
 		}
 		return boosts;
 	};
-	BattlePokemon.prototype.boostBy = function (boost, source, effect) {
+	BattlePokemon.prototype.boostBy = function (boost) {
 		var changed = false;
 		for (var i in boost) {
 			var delta = boost[i];
@@ -1210,7 +1212,7 @@ var BattlePokemon = (function () {
 	return BattlePokemon;
 })();
 
-var BattleSide = (function () {
+BattleSide = (function () {
 	function BattleSide(name, battle, n, team) {
 		this.battle = battle;
 		this.n = n;
@@ -1257,12 +1259,6 @@ var BattleSide = (function () {
 			id: this.id,
 			pokemon: []
 		};
-		function annotateHiddenPower(move) {
-			if (move === 'hiddenpower') {
-				return move + toId(pokemon.hpType) + (pokemon.hpPower === 70 ? '' : pokemon.hpPower);
-			}
-			return move;
-		}
 		for (var i = 0; i < this.pokemon.length; i++) {
 			var pokemon = this.pokemon[i];
 			data.pokemon.push({
@@ -1277,7 +1273,12 @@ var BattleSide = (function () {
 					spd: pokemon.baseStats['spd'],
 					spe: pokemon.baseStats['spe']
 				},
-				moves: pokemon.moves.map(annotateHiddenPower),
+				moves: pokemon.moves.map(function (move) {
+					if (move === 'hiddenpower') {
+						return move + toId(pokemon.hpType) + (pokemon.hpPower === 70 ? '' : pokemon.hpPower);
+					}
+					return move;
+				}),
 				baseAbility: pokemon.baseAbility,
 				item: pokemon.item,
 				pokeball: pokemon.pokeball,
@@ -1366,7 +1367,7 @@ var BattleSide = (function () {
 	return BattleSide;
 })();
 
-var Battle = (function () {
+Battle = (function () {
 	var Battle = {};
 
 	Battle.construct = (function () {
@@ -2097,7 +2098,7 @@ var Battle = (function () {
 		if (status.thing && status.thing.getStat) status.speed = status.thing.speed;
 	};
 	// bubbles up to parents
-	Battle.prototype.getRelevantEffects = function (thing, callbackType, foeCallbackType, foeThing, checkChildren) {
+	Battle.prototype.getRelevantEffects = function (thing, callbackType, foeCallbackType, foeThing) {
 		var statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
 		statuses.sort(Battle.comparePriority);
 		//if (statuses[0]) this.debug('match ' + callbackType + ': ' + statuses[0].status.id);
@@ -3062,17 +3063,15 @@ var Battle = (function () {
 		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
 	};
 	Battle.prototype.checkFainted = function () {
-		function isFainted(a) {
-			if (!a) return false;
+		function check(a) {
+			if (!a) return;
 			if (a.fainted) {
 				a.switchFlag = true;
-				return true;
 			}
-			return false;
 		}
-		// make sure these don't get short-circuited out; all switch flags need to be set
-		var p1fainted = this.p1.active.map(isFainted);
-		var p2fainted = this.p2.active.map(isFainted);
+
+		this.p1.active.forEach(check);
+		this.p2.active.forEach(check);
 	};
 	Battle.prototype.faintMessages = function (lastFirst) {
 		if (this.ended) return;
@@ -3443,25 +3442,14 @@ var Battle = (function () {
 		}
 		this.addQueue(null);
 
-		var currentPriority = 6;
-
 		while (this.queue.length) {
 			var decision = this.queue.shift();
-
-			/* while (decision.priority < currentPriority && currentPriority > -6) {
-				this.eachEvent('Priority', null, currentPriority);
-				currentPriority--;
-			} */
 
 			this.runDecision(decision);
 
 			if (this.currentRequest) {
 				return;
 			}
-
-			// if (!this.queue.length || this.queue[0].choice === 'runSwitch') {
-			// 	if (this.faintMessages()) return;
-			// }
 
 			if (this.ended) return;
 		}
@@ -3618,7 +3606,6 @@ var Battle = (function () {
 				return false;
 			}
 
-			var decision = null;
 			switch (choice) {
 			case 'team':
 				decisions.push({

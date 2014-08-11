@@ -36,9 +36,11 @@ var getPattern = exports.getPattern = function (cidr) {
  * passed IP is in the range.
  */
 var checker = exports.checker = function (cidr) {
-	if (!cidr || !cidr.length) return function () {
-		return false;
-	};
+	if (!cidr || !cidr.length) {
+		return function () {
+			return false;
+		};
+	}
 
 	var patterns;
 	if (Array.isArray(cidr)) {
