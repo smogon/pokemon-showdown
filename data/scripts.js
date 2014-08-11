@@ -277,7 +277,8 @@ exports.BattleScripts = {
 			var moveDamage;
 			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 			var isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
-			for (var i = 0; i < hits && target.hp && pokemon.hp; i++) {
+			var i;
+			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
 
 				moveDamage = this.moveHit(target, pokemon, move);
@@ -757,7 +758,7 @@ exports.BattleScripts = {
 	},
 	randomSet: function (template, i, noMega) {
 		if (i === undefined) i = 1;
-		var baseTemplate = template = this.getTemplate(template);
+		var baseTemplate = (template = this.getTemplate(template));
 		var name = template.name;
 
 		if (!template.exists || (!template.viableMoves && !template.learnset)) {
@@ -1246,7 +1247,7 @@ exports.BattleScripts = {
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
-					if (!type1 in hasStab && !type2 in hasStab) {
+					if (!(type1 in hasStab) && !(type2 in hasStab)) {
 						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
 					} else {
 						rejectCombo = false;
@@ -1956,7 +1957,7 @@ exports.BattleScripts = {
 		return pokemon;
 	},
 	randomDoublesSet: function (template, noMega) {
-		var baseTemplate = template = this.getTemplate(template);
+		var baseTemplate = (template = this.getTemplate(template));
 		var name = template.name;
 
 		if (!template.exists || (!template.viableDoublesMoves && !template.viableMoves && !template.learnset)) {
@@ -2434,7 +2435,7 @@ exports.BattleScripts = {
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = true;
-					if (!type1 in hasStab && !type2 in hasStab) {
+					if (!(type1 in hasStab) && !(type2 in hasStab)) {
 						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
 					} else {
 						rejectCombo = false;

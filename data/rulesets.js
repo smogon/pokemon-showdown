@@ -79,12 +79,14 @@ exports.BattleFormats = {
 					problems.push(ability.name + ' does not exist in gen ' + this.gen + '.');
 				}
 			}
-			if (set.moves) for (var i = 0; i < set.moves.length; i++) {
-				var move = this.getMove(set.moves[i]);
-				if (move.gen > this.gen) {
-					problems.push(move.name + ' does not exist in gen ' + this.gen + '.');
-				} else if (!isNonstandard && move.isNonstandard) {
-					problems.push(move.name + ' is not a real move.');
+			if (set.moves) {
+				for (var i = 0; i < set.moves.length; i++) {
+					var move = this.getMove(set.moves[i]);
+					if (move.gen > this.gen) {
+						problems.push(move.name + ' does not exist in gen ' + this.gen + '.');
+					} else if (!isNonstandard && move.isNonstandard) {
+						problems.push(move.name + ' is not a real move.');
+					}
 				}
 			}
 			if (item.gen > this.gen) {

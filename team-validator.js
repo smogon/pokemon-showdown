@@ -7,6 +7,8 @@
  * @license MIT license
  */
 
+var Validator;
+
 if (!process.send) {
 	var validationCount = 0;
 	var pendingValidations = {};
@@ -153,9 +155,9 @@ if (!process.send) {
 
 	var validators = {};
 
-	function respond(id, success, details) {
+	var respond = function respond(id, success, details) {
 		process.send(id + (success ? '|1' : '|0') + details);
-	}
+	};
 
 	process.on('message', function (message) {
 		// protocol:
@@ -180,7 +182,7 @@ if (!process.send) {
 	});
 }
 
-var Validator = (function () {
+Validator = (function () {
 	function Validator(format) {
 		this.format = Tools.getFormat(format);
 		this.tools = Tools.mod(this.format);
@@ -558,7 +560,9 @@ var Validator = (function () {
 		var format = (lsetData.format || (lsetData.format = {}));
 		var alreadyChecked = {};
 		var level = set.level || 100;
-		if (format.id === 'alphabetcup') var alphabetCupLetter = template.speciesid.charAt(0);
+
+		var alphabetCupLetter;
+		if (format.id === 'alphabetcup') alphabetCupLetter = template.speciesid.charAt(0);
 
 		var isHidden = false;
 		if (set.ability && tools.getAbility(set.ability).name === template.abilities['H']) isHidden = true;

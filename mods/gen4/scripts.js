@@ -6,4 +6,4 @@ exports.BattleScripts = {
 			delete this.data.Pokedex[i].abilities['H'];
 		}
 	}
-}
+};

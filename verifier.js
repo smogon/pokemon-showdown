@@ -41,7 +41,7 @@ if (!process.send) {
 
 	// This is the child
 
-	var Config = require('./config/config.js');
+	global.Config = require('./config/config.js');
 	var crypto = require('crypto');
 
 	var keyalgo = Config.loginserverkeyalgo;

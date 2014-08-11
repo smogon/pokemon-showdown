@@ -66,6 +66,8 @@ global.string = function (str) {
 
 global.Tools = require('./tools.js');
 
+var Battle, BattleSide, BattlePokemon;
+
 var Battles = {};
 
 // Receive and process a message sent using Simulator.prototype.send in
@@ -136,7 +138,7 @@ process.on('message', function (message) {
 	}
 });
 
-var BattlePokemon = (function () {
+BattlePokemon = (function () {
 	function BattlePokemon(set, side) {
 		this.side = side;
 		this.battle = side.battle;
@@ -568,7 +570,7 @@ var BattlePokemon = (function () {
 		}
 		return boosts;
 	};
-	BattlePokemon.prototype.boostBy = function (boost, source, effect) {
+	BattlePokemon.prototype.boostBy = function (boost) {
 		var changed = false;
 		for (var i in boost) {
 			var delta = boost[i];
@@ -1210,7 +1212,7 @@ var BattlePokemon = (function () {
 	return BattlePokemon;
 })();
 
-var BattleSide = (function () {
+BattleSide = (function () {
 	function BattleSide(name, battle, n, team) {
 		this.battle = battle;
 		this.n = n;
@@ -1365,7 +1367,7 @@ var BattleSide = (function () {
 	return BattleSide;
 })();
 
-var Battle = (function () {
+Battle = (function () {
 	var Battle = {};
 
 	Battle.construct = (function () {
@@ -1385,7 +1387,7 @@ var Battle = (function () {
 				var battle = Object.create(proto);
 				var ret = Object.create(battle);
 				tools.install(ret);
-				return battleProtoCache[formatarg] = ret;
+				return (battleProtoCache[formatarg] = ret);
 			})());
 			Battle.prototype.init.call(battle, roomid, formatarg, rated);
 			return battle;
@@ -1813,7 +1815,6 @@ var Battle = (function () {
 			this.add('message', 'Event: ' + eventid);
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
-			return false;
 		}
 		//this.add('Event: ' + eventid + ' (depth ' + this.eventDepth + ')');
 		effect = this.getEffect(effect);
@@ -1971,7 +1972,6 @@ var Battle = (function () {
 			this.add('message', 'Event: ' + eventid);
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
-			return false;
 		}
 		if (!target) target = this;
 		var statuses = this.getRelevantEffects(target, 'on' + eventid, 'onSource' + eventid, source);
@@ -2098,7 +2098,7 @@ var Battle = (function () {
 		if (status.thing && status.thing.getStat) status.speed = status.thing.speed;
 	};
 	// bubbles up to parents
-	Battle.prototype.getRelevantEffects = function (thing, callbackType, foeCallbackType, foeThing, checkChildren) {
+	Battle.prototype.getRelevantEffects = function (thing, callbackType, foeCallbackType, foeThing) {
 		var statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
 		statuses.sort(Battle.comparePriority);
 		//if (statuses[0]) this.debug('match ' + callbackType + ': ' + statuses[0].status.id);
@@ -2830,12 +2830,13 @@ var Battle = (function () {
 		}
 		basePower = this.clampIntRange(basePower, 1);
 
+		var critMult;
 		if (this.gen <= 5) {
 			move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
-			var critMult = [0, 16, 8, 4, 3, 2];
+			critMult = [0, 16, 8, 4, 3, 2];
 		} else {
 			move.critRatio = this.clampIntRange(move.critRatio, 0, 4);
-			var critMult = [0, 16, 8, 2, 1];
+			critMult = [0, 16, 8, 2, 1];
 		}
 
 		move.crit = move.willCrit || false;
@@ -2875,12 +2876,8 @@ var Battle = (function () {
 			ignorePositiveDefensive = true;
 		}
 
-		if (move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0)) {
-			var ignoreOffensive = true;
-		}
-		if (move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0)) {
-			var ignoreDefensive = true;
-		}
+		var ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
+		var ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
 
 		if (ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
@@ -3066,17 +3063,15 @@ var Battle = (function () {
 		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
 	};
 	Battle.prototype.checkFainted = function () {
-		function isFainted(a) {
-			if (!a) return false;
+		function check(a) {
+			if (!a) return;
 			if (a.fainted) {
 				a.switchFlag = true;
-				return true;
 			}
-			return false;
 		}
-		// make sure these don't get short-circuited out; all switch flags need to be set
-		var p1fainted = this.p1.active.map(isFainted);
-		var p2fainted = this.p2.active.map(isFainted);
+
+		this.p1.active.forEach(check);
+		this.p2.active.forEach(check);
 	};
 	Battle.prototype.faintMessages = function (lastFirst) {
 		if (this.ended) return;
@@ -3196,7 +3191,7 @@ var Battle = (function () {
 	};
 	Battle.prototype.willAct = function () {
 		for (var i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'shift') {	
+			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'shift') {
 				return this.queue[i];
 			}
 		}
@@ -3316,9 +3311,8 @@ var Battle = (function () {
 			decision.side.pokemon[0] = pokemon;
 			decision.side.pokemon[i].position = i;
 			decision.side.pokemon[0].position = 0;
-			return;
 			// we return here because the update event would crash since there are no active pokemon yet
-			break;
+			return;
 		case 'pass':
 			if (!decision.priority || decision.priority <= 101) return;
 			if (decision.pokemon) {
@@ -3448,25 +3442,14 @@ var Battle = (function () {
 		}
 		this.addQueue(null);
 
-		var currentPriority = 6;
-
 		while (this.queue.length) {
 			var decision = this.queue.shift();
-
-			/* while (decision.priority < currentPriority && currentPriority > -6) {
-				this.eachEvent('Priority', null, currentPriority);
-				currentPriority--;
-			} */
 
 			this.runDecision(decision);
 
 			if (this.currentRequest) {
 				return;
 			}
-
-			// if (!this.queue.length || this.queue[0].choice === 'runSwitch') {
-			// 	if (this.faintMessages()) return;
-			// }
 
 			if (this.ended) return;
 		}
@@ -3623,7 +3606,6 @@ var Battle = (function () {
 				return false;
 			}
 
-			var decision = null;
 			switch (choice) {
 			case 'team':
 				decisions.push({
