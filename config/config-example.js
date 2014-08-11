@@ -404,8 +404,8 @@ exports.groups = {
 		inherit: ' ',
 		tournaments: true,
 		tournamentsmoderation: true,
-		announce: true,
 		declare: true,
+		announce: true,
 		alts: '@u',
 		rank: 2
 	},
@@ -415,8 +415,8 @@ exports.groups = {
 		inherit: ' ',
 		jurisdiction: '\u2606u',
 		roomonly: true,
-		announce: true,
 		declare: true,
+		announce: true,
 		rank: 1
 	},
 	' ': {
