@@ -2760,5 +2760,141 @@ exports.BattleScripts = {
 			level: level,
 			shiny: (Math.random() * (template.id === 'missingno' ? 4 : 1024) <= 1)
 		};
+	},
+	randomUberTeam: function(side) {
+		var pokemonList = ['aegislash', 'arceus', 'arceusbug', 'arceusdark', 'arceusdragon', 'arceuselectric', 'arceusfairy', 'arceusfighting', 'arceusfire', 'arceusflying', 'arceusghost', 'arceusgrass', 'arceusground', 'arceusice', 'arceuspoison', 'arceuspsychic', 'arceusrock', 'arceussteel', 'arceuswater', 'blaziken', 'darkrai', 'deoxys', 'deoxysattack', 'deoxysdefense', 'deoxysspeed', 'dialga', 'genesect', 'gengar', 'giratina', 'giratinaorigin', 'groudon', 'hooh', 'kangaskhan', 'kyogre', 'kyuremwhite', 'lucario', 'lugia', 'mewtwo', 'palkia', 'rayquaza', 'reshiram', 'shayminsky', 'xerneas', 'yveltal', 'zekrom'];
+
+		pokemonList = pokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(pokemonList[i], i);
+
+			set.level = 100;
+
+			team.push(set);
+		}
+
+		return team;
+	},
+	randomHighTierTeam: function(side) {
+		var pokemonList = ['azumarill', 'bisharp', 'breloom', 'chansey', 'charizard', 'clefable', 'conkeldurr', 'diancie', 'dragonite', 'espeon', 'excadrill', 'ferrothorn', 'garchomp', 'gardevoir', 'gengar', 'gliscor', 'greninja', 'gyarados', 'heatran', 'keldeo', 'kyuremblack', 'landorus', 'landorustherian', 'latias', 'latios', 'mamoswine', 'mandibuzz', 'manectric', 'mawile', 'medicham', 'pinsir', 'quagsire', 'rotomwash', 'scizor', 'scolipede', 'skarmory', 'smeargle', 'sylveon', 'talonflame', 'terrakion', 'thundurus', 'togekiss', 'tyranitar', 'vaporeon', 'venusaur', 'zapdos', 'alakazam', 'crawdaunt', 'diggersby', 'gothitelle', 'hawlucha', 'heracross', 'klefki', 'magnezone', 'manaphy', 'salamence', 'staraptor', 'thundurustherian', 'tornadustherian', 'venomoth', 'volcarona', 'weavile', 'wobbuffet', 'zygarde', 'absol', 'aerodactyl', 'aggron', 'ampharos', 'arcanine', 'azelf', 'blastoise', 'blissey', 'celebi', 'chandelure', 'chesnaught', 'cloyster', 'crobat', 'darmanitan', 'donphan', 'empoleon', 'entei', 'florges', 'flygon', 'forretress', 'galvantula', 'goodra', 'haxorus', 'hippowdon', 'honchkrow', 'houndoom', 'hydreigon', 'infernape', 'jirachi', 'kingdra', 'krookodile', 'lucario', 'machamp', 'metagross', 'mew', 'mienshao', 'milotic', 'nidoking', 'nidoqueen', 'noivern', 'porygonz', 'porygon2', 'raikou', 'roserade', 'rotomheat', 'sableye', 'scrafty', 'shaymin', 'slowbro', 'snorlax', 'starmie', 'suicune', 'swampert', 'tentacruel', 'toxicroak', 'trevenant', 'umbreon', 'victini', 'froslass', 'kyurem', 'shuckle', 'tornadus'];
+
+		pokemonList = pokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(pokemonList[i], i);
+
+			set.level = 100;
+
+			team.push(set);
+		}
+
+		return team;
+	},
+	randomLowTierTeam: function(side) {
+		var pokemonList = ['abomasnow', 'alomomola', 'ambipom', 'amoonguss', 'aromatisse', 'banette', 'braviary', 'bronzong', 'cinccino', 'clawitzer', 'claydol', 'cobalion', 'cofagrigus', 'cresselia', 'delphox', 'doublade', 'drapion', 'druddigon', 'dugtrio', 'durant', 'eelektross', 'emboar', 'escavalier', 'exploud', 'fletchinder', 'gallade', 'gastrodon', 'gligar', 'golbat', 'heliolisk', 'hitmonchan', 'hitmonlee', 'hitmontop', 'jellicent', 'jolteon', 'kabutops', 'magneton', 'meloetta', 'moltres', 'registeel', 'reuniclus', 'rhyperior', 'rotommow', 'sharpedo', 'skuntank', 'slowking', 'tangrowth', 'tyrantrum', 'virizion', 'whimsicott', 'yanmega', 'zoroark', 'combusken', 'sigilyph', 'accelgor', 'altaria', 'arbok', 'archeops', 'ariados', 'armaldo', 'articuno', 'audino', 'aurorus', 'avalugg', 'barbaracle', 'basculin', 'bastiodon', 'beartic', 'beautifly', 'beedrill', 'beheeyem', 'bellossom', 'bibarel', 'bouffalant', 'butterfree', 'cacturne', 'camerupt', 'carbink', 'carnivine', 'carracosta', 'castform', 'chatot', 'cherrim', 'chimecho', 'corsola', 'cradily', 'crustle', 'cryogonal', 'dedenne', 'delcatty', 'delibird', 'dewgong', 'ditto', 'dodrio', 'dragalge', 'dragonair', 'drifblim', 'dunsparce', 'duosion', 'dusclops', 'dusknoir', 'dustox', 'electivire', 'electrode', 'emolga', 'exeggutor', 'farfetchd', 'fearow', 'feraligatr', 'ferroseed', 'flareon', 'floatzel', 'floette', 'fraxure', 'frogadier', 'furfrou', 'furret', 'gabite', 'garbodor', 'gigalith', 'girafarig', 'glaceon', 'glalie', 'gogoat', 'golduck', 'golem', 'golurk', 'gorebyss', 'gothorita', 'gourgeist', 'gourgeistlarge', 'gourgeistsmall', 'gourgeistsuper', 'granbull', 'grumpig', 'gurdurr', 'hariyama', 'haunter', 'heatmor', 'huntail', 'hypno', 'illumise', 'jumpluff', 'jynx', 'kadabra', 'kangaskhan', 'kecleon', 'kingler', 'klinklang', 'kricketune', 'lampent', 'lanturn', 'lapras', 'leafeon', 'leavanny', 'ledian', 'lickilicky', 'liepard', 'lilligant', 'linoone', 'lopunny', 'ludicolo', 'lumineon', 'lunatone', 'luvdisc', 'luxray', 'machoke', 'magcargo', 'magmortar', 'malamar', 'mantine', 'maractus', 'marowak', 'masquerain', 'meganium', 'meowstic', 'meowsticf', 'mesprit', 'metang', 'mightyena', 'miltank', 'minun', 'misdreavus', 'mismagius', 'mothim', 'mrmime', 'muk', 'murkrow', 'musharna', 'ninetales', 'ninjask', 'noctowl', 'octillery', 'omastar', 'pachirisu', 'pangoro', 'parasect', 'pelipper', 'persian', 'phione', 'pidgeot', 'pikachu', 'piloswine', 'plusle', 'politoed', 'poliwrath', 'primeape', 'probopass', 'purugly', 'pyroar', 'quilladin', 'qwilfish', 'raichu', 'rampardos', 'rapidash', 'raticate', 'regice', 'regigigas', 'regirock', 'relicanth', 'rhydon', 'roselia', 'rotom', 'rotomfan', 'rotomfrost', 'samurott', 'sandslash', 'sawk', 'sawsbuck', 'sceptile', 'scyther', 'seadra', 'seaking', 'seismitoad', 'serperior', 'seviper', 'shedinja', 'shelgon', 'shiftry', 'simipour', 'simisage', 'simisear', 'slaking', 'sliggoo', 'slurpuff', 'sneasel', 'solrock', 'spinda', 'spiritomb', 'stantler', 'steelix', 'stoutland', 'stunfisk', 'sudowoodo', 'sunflora', 'swalot', 'swanna', 'swellow', 'swoobat', 'tangela', 'tauros', 'throh', 'togetic', 'torkoal', 'torterra', 'tropius', 'typhlosion', 'unfezant', 'unown', 'ursaring', 'uxie', 'vanilluxe', 'vespiquen', 'victreebel', 'vigoroth', 'vileplume', 'vivillon', 'volbeat', 'wailord', 'walrein', 'watchog', 'weezing', 'whiscash', 'wigglytuff', 'wormadam', 'wormadamsandy', 'wormadamtrash', 'xatu', 'zangoose', 'zebstrika'];
+
+		pokemonList = pokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(pokemonList[i], i);
+
+			set.level = 100;
+
+			team.push(set);
+		}
+
+		return team;
+	},
+	randomLCTeam: function(side) {
+		var pokemonList = ['abra', 'aipom', 'amaura', 'anorith', 'archen', 'aron', 'axew', 'azurill', 'bagon', 'baltoy', 'barboach', 'beldum', 'bellsprout', 'bergmite', 'bidoof', 'binacle', 'blitzle', 'bonsly', 'bronzor', 'budew', 'buizel', 'bulbasaur', 'buneary', 'bunnelby', 'burmy', 'cacnea', 'caterpie', 'charmander', 'cherubi', 'chespin', 'chikorita', 'chimchar', 'chinchou', 'chingling', 'clamperl', 'clauncher', 'combee', 'corphish', 'cottonee', 'cranidos', 'croagunk', 'chubchoo', 'cubone', 'cyndaquil', 'darumaka', 'deerling', 'deino', 'diglett', 'doduo', 'dratini', 'drifloon', 'drilbur', 'drowzee', 'ducklett', 'duskull', 'dwebble', 'eevee', 'ekans', 'electrike', 'elekid', 'elgyem', 'espurr', 'exeggcute', 'feebas', 'fennekin', 'finneon', 'flabebe', 'fletchling', 'foongus', 'frillish', 'froakie', 'gastly', 'geodude', 'gible', 'glameow', 'golett', 'goomy', 'gothita', 'grimer', 'growlithe', 'gulpin', 'happiny', 'helioptile', 'hippopotas', 'honedge', 'hoothoot', 'hoppip', 'horsea', 'houndour', 'igglybuff', 'inkay', 'joltik', 'kabuto', 'karrablast', 'klink', 'koffing', 'krabby', 'kricketot', 'larvesta', 'larvitar', 'ledyba', 'lickitung', 'lileep', 'lillipup', 'litleo', 'litwick', 'lotad', 'machop', 'magby', 'magikarp', 'magnemite', 'makuhita', 'mankey', 'mantyke', 'mareep', 'meowth', 'mienfoo', 'mimejr', 'minccino', 'mudkip', 'munna', 'nidoranf', 'nidoranm', 'nincada', 'noibat', 'nosepass', 'numel', 'oddish', 'omanyte', 'onix', 'oshawott', 'pancham', 'panpour', 'pansage', 'pansear', 'paras', 'patrat', 'pawniard', 'petilil', 'phanpy', 'phantump', 'pichu', 'pidgey', 'pidove', 'pineco', 'piplup', 'poliwag', 'ponyta', 'poochyena', 'porygon', 'psyduck', 'pumpkaboo', 'pumpkaboolarge', 'pumpkaboosmall', 'pumpkaboosuper', 'purrloin', 'ralts', 'rattata', 'remoraid', 'rhyhorn', 'riolu', 'roggenrola', 'rufflet', 'sandile', 'sandshrew', 'scatterbug', 'scraggy', 'seedot', 'seel', 'sentret', 'sewaddle', 'shellder', 'shellos', 'shelmet', 'shieldon', 'shinx', 'shroomish', 'shuppet', 'skidoo', 'skitty', 'skorupi', 'skrelp', 'slakoth', 'slowpoke', 'slugma', 'smoochum', 'snivy', 'snorunt', 'snover', 'snubbull', 'solosis', 'spearow', 'spheal', 'spinarak', 'spoink', 'spritzee', 'squirtle', 'starly', 'staryu', 'stunky', 'sunkern', 'surskit', 'swablu', 'swinub', 'swirlix', 'taillow', 'teddiursa', 'tentacool', 'tepig', 'timburr', 'tirtouga', 'togepi', 'torchic', 'totodile', 'trapinch', 'treecko', 'trubbish', 'turtwig', 'tympole', 'tynamo', 'tyrogue', 'tyrunt', 'vanillite', 'venipede', 'venonat', 'voltorb', 'vullaby', 'wailmer', 'weedle', 'whismur', 'wingull', 'woobat', 'wooper', 'wurmple', 'wynaut', 'yamask', 'zigzagoon', 'zorua', 'zubat'];
+
+		pokemonList = pokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(pokemonList[i], i);
+
+			set.level = 5;
+
+			team.push(set);
+		}
+
+		return team;
+	},
+	randomHoennTeam: function(side) {
+		var pokemonList = ['treecko', 'grovyle', 'sceptile', 'torchic', 'combusken', 'blaziken', 'mudkip', 'marshtomp', 'swampert', 'poochyena', 'mightyena', 'zigzagoon', 'linoone', 'wurmple', 'silcoon', 'beautifly', 'cascoon', 'dustox', 'lotad', 'lombre', 'ludicolo', 'seedot', 'nuzleaf', 'shiftry', 'taillow', 'swellow', 'wingull', 'pelipper', 'ralts', 'kirlia', 'gardevoir', 'surskit', 'masquerain', 'shroomish', 'breloom', 'slakoth', 'vigoroth', 'slaking', 'abra', 'kadabra', 'alakazam', 'nincada', 'ninjask', 'shedinja', 'whismur', 'loudred', 'exploud', 'makuhita', 'hariyama', 'goldeen', 'seaking', 'magikarp', 'gyarados', 'azurill', 'marill', 'azumarill', 'geodude', 'graveler', 'golem', 'nosepass', 'skitty', 'delcatty', 'zubat', 'golbat', 'crobat', 'tentacool', 'tentacruel', 'sableye', 'mawile', 'aron', 'lairon', 'aggron', 'machop', 'machoke', 'machamp', 'meditite', 'medicham', 'electrike', 'manectric', 'plusle', 'minun', 'magnemite', 'magneton', 'voltorb', 'electrode', 'volbeat', 'illumise', 'oddish', 'gloom', 'vileplume', 'bellossom', 'doduo', 'dodrio', 'roselia', 'gulpin', 'swalot', 'carvanha', 'sharpedo', 'wailmer', 'wailord', 'numel', 'camerupt', 'slugma', 'magcargo', 'torkoal', 'grimer', 'muk', 'koffing', 'weezing', 'spoink', 'grumpig', 'sandshrew', 'sandslash', 'spinda', 'skarmory', 'trapinch', 'vibrava', 'flygon', 'cacnea', 'cacturne', 'swablu', 'altaria', 'zangoose', 'seviper', 'lunatone', 'solrock', 'barboach', 'whiscash', 'corphish', 'crawdaunt', 'baltoy', 'claydol', 'lileep', 'cradily', 'anorith', 'armaldo', 'igglybuff', 'jigglypuff', 'wigglytuff', 'feebas', 'milotic', 'castform', 'staryu', 'starmie', 'kecleon', 'shuppet', 'banette', 'duskull', 'dusclops', 'tropius', 'chimecho', 'absol', 'vulpix', 'ninetales', 'pichu', 'pikachu', 'raichu', 'psyduck', 'golduck', 'wynaut', 'wobbuffet', 'natu', 'xatu', 'girafarig', 'phanpy', 'donphan', 'pinsir', 'heracross', 'rhyhorn', 'rhydon', 'snorunt', 'glalie', 'spheal', 'sealeo', 'walrein', 'clamperl', 'huntail', 'gorebyss', 'relicanth', 'corsola', 'chinchou', 'lanturn', 'luvdisc', 'horsea', 'seadra', 'kingdra', 'bagon', 'shelgon', 'salamence', 'beldum', 'metang', 'metagross', 'regirock', 'regice', 'registeel', 'latias', 'latios', 'kyogre', 'groudon', 'rayquaza', 'jirachi', 'deoxys', 'deoxysattack', 'deoxysdefense', 'deoxysspeed'];
+
+		pokemonList = pokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(pokemonList[i], i);
+
+			set.level = 100;
+
+			team.push(set);
+		}
+
+		return team;
+	},
+	randomCommunityTeam: function(side) {
+		var pokemonList = ['absol', 'alakazam', 'arcanine', 'arcanine', 'aromatisse', 'azelf', 'bayleef', 'bellossom', 'bidoof', 'bidoof', 'blaziken', 'castform', 'charizard', 'charizard', 'charmander', 'cofagrigus', 'crobat', 'cyndaquil', 'drifblim', 'dunsparce', 'espurr', 'espurr', 'feraligatr', 'gallade', 'garchomp', 'gardevoir', 'gengar', 'golurk', 'gourgeist', 'greninja', 'greninja', 'hawlucha', 'houndoom', 'houndoom', 'hydreigon', 'igglybuff', 'infernape', 'jynx', 'lapras', 'latias', 'latios', 'liepard', 'lucario', 'ludicolo', 'magikarp', 'mantine', 'masquerain', 'meganium', 'meloetta', 'mewtwo', 'milotic', 'nidoking', 'oshawott', 'pachirisu', 'pidgey', 'pikachu', 'porygon2', 'pumpkaboo', 'raichu', 'reuniclus', 'salamence', 'sandshrew', 'sceptile', 'scizor', 'scrafty', 'serperior', 'shaymin', 'slowbro', 'snivy', 'squirtle', 'starmie', 'suicune', 'swampert', 'sylveon', 'terrakion', 'togekiss', 'typhlosion', 'tyranitar', 'umbreon', 'ursaring', 'vaporeon', 'venusaur', 'victini', 'volcarona', 'vulpix', 'whimsicott', 'whimsicott', 'wigglytuff', 'zebstrika', 'zekrom'];
+
+		pokemonList = pokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(pokemonList[i], i);
+
+			set.level = 100;
+
+			team.push(set);
+		}
+
+		return team;
+	},
+	randomFurrySpaceGoatTeam: function(side) {
+		var pokemonList = ['liepard', 'purrloin', 'arceusbug', 'arceusdark', 'arceusdragon', 'arceuselectric', 'arceusfighting', 'arceusfire', 'arceusflying', 'arceusghost', 'arceusgrass', 'arceusground', 'arceusice', 'arceus', 'arceuspoison', 'arceuspsychic', 'arceusrock', 'arceussteel', 'arceuswater', 'darkrai', 'deoxys', 'deoxysattack', 'deoxysdefense', 'deoxysspeed', 'dialga', 'genesect', 'giratina', 'giratinaorigin', 'groudon', 'hooh', 'kyogre', 'kyuremwhite', 'landorus', 'lugia', 'manaphy', 'mewtwo', 'palkia', 'rayquaza', 'reshiram', 'shayminsky', 'thundurus', 'tornadustherian', 'zekrom'];
+
+		pokemonList = pokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(pokemonList[i], i);
+
+			set.level = 100;
+
+			team.push(set);
+		}
+
+		return team;
+	},
+	randomMetronomeTeam: function(side) {
+		var pokemonList = ['abra', 'aipom', 'alakazam', 'ambipom', 'banette', 'blissey', 'castform', 'celebi', 'chansey', 'clefable', 'clefairy', 'cleffa', 'drowzee', 'dusclops', 'gengar', 'geodude', 'golem', 'granbull', 'graveler', 'happiny', 'hariyama', 'hitmonchan', 'hitmonlee', 'hypno', 'illumise', 'jirachi', 'jynx', 'kadabra', 'kecleon', 'ludicolo', 'machamp', 'machoke', 'machop', 'makuhita', 'mankey', 'medicham', 'meditite', 'mew', 'mewtwo', 'miltank', 'minun', 'mrmime', 'munchlax', 'plusle', 'politoed', 'poliwhirl', 'poliwrath', 'primeape', 'sableye', 'smoochum', 'snorlax', 'snubbull', 'spinda', 'teddiursa', 'togekiss', 'togepi', 'togetic', 'ursaring', 'volbeat'];
+
+		pokemonList = pokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(pokemonList[i], i);
+
+			set.level = 100;
+
+			team.push(set);
+		}
+
+		return team;
 	}
 };
