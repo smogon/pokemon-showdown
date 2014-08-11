@@ -2377,6 +2377,9 @@ Battle = (function () {
 		if (!pokemon || pokemon.isActive) return false;
 		if (!pos) pos = 0;
 		var side = pokemon.side;
+		if (pos >= side.active.length) {
+			throw new Error("Invalid switch position");
+		}
 		if (side.active[pos]) {
 			var oldActive = side.active[pos];
 			var lastMove = null;
@@ -2469,6 +2472,9 @@ Battle = (function () {
 		return true;
 	};
 	Battle.prototype.swapPosition = function (pokemon, slot, attributes) {
+		if (slot >= pokemon.side.active.length) {
+			throw new Error("Invalid swap position");
+		}
 		var target = pokemon.side.active[slot];
 		if (slot !== 1 && (!target || target.fainted)) return false;
 
@@ -3399,7 +3405,7 @@ Battle = (function () {
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (!this.queue.length || this.gen <= 3) {
+		if (!this.queue.length || (this.gen <= 3 && this.queue[0].choice in {move:1,residual:1})) {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
