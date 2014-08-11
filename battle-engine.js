@@ -1019,7 +1019,7 @@ BattlePokemon = (function () {
 		if (oldAbility in {multitype:1, stancechange:1}) return false;
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
-		if (ability.id) {
+		if (ability.id && this.gen > 3) {
 			this.battle.singleEvent('Start', ability, this.abilityData, this, source, effect);
 		}
 		return oldAbility;
