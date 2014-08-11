@@ -237,11 +237,18 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				room.send(data);
 			},
 			privateModCommand: function (data) {
-				for (var i in room.users) {
-					var user = room.users[i];
-					// hardcoded for performance reasonss (this is an inner loop)
-					if (user.isStaff || (room.auth && (room.auth[user.userid] || '+') !== '+')) {
-						user.sendTo(room, data);
+				// hardcoded for performance reasons
+				var allowedGroups = Object.reject(Config.groups, {' ':1, '+':1, '\u2605':1});
+				var user, userid;
+				if (room.auth) {
+					for (userid in room.users) {
+						user = room.users[userid];
+						if (user.isStaff || room.auth[userid] in allowedGroups) user.sendTo(room, data);
+					}
+				} else {
+					for (userid in room.users) {
+						user = room.users[userid];
+						if (user.isStaff) user.sendTo(room, data);
 					}
 				}
 				this.logEntry(data);
