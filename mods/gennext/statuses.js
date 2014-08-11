@@ -82,7 +82,7 @@ exports.BattleStatuses = {
 			}
 			if (move.type === 'Fire') {
 				this.debug('rain fire suppress');
-				return basePower * .5;
+				return basePower * 0.5;
 			}
 		}
 	},
@@ -98,7 +98,7 @@ exports.BattleStatuses = {
 			}
 			if (move.type === 'Water') {
 				this.debug('Sunny Day water suppress');
-				return basePower * .5;
+				return basePower * 0.5;
 			}
 		}
 	},

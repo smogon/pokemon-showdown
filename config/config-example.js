@@ -40,7 +40,7 @@ exports.loginServer = {
 
 // crashGuardEmail - if the server has been running for more than an hour
 // and crashes, send an email using these settings, rather than locking down
-// the server. Uncomment this definition if you wan to use this feature;
+// the server. Uncomment this definition if you want to use this feature;
 // otherwise, all crashes will lock down the server.
 /**exports.crashGuardEmail = {
 	transport: 'SMTP',
@@ -248,7 +248,8 @@ exports.groups = {
 			modchatall: true,
 			potd: true,
 			promote: 'u',
-			rangeban: true
+			rangeban: true,
+			tournamentsmanagement: true
 		},
 		'#': {
 			id: 'owner',
@@ -260,7 +261,8 @@ exports.groups = {
 			modchatall: true,
 			privateroom: true,
 			roomdesc: true,
-			roompromote: 'u'
+			roompromote: 'u',
+			tournamentsmanagement: true
 		},
 		'\u2605': {
 			id: 'player',
@@ -283,7 +285,8 @@ exports.groups = {
 			ip: true,
 			modchat: true,
 			roompromote: '+ ',
-			scavengers: true
+			scavengers: true,
+			tournaments: true
 		},
 		'%': {
 			id: 'driver',
@@ -301,6 +304,7 @@ exports.groups = {
 			redirect: true,
 			staff: true,
 			timer: true,
+			tournamentsmoderation: true,
 			warn: true
 		},
 		'+': {

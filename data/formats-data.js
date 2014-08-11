@@ -1650,7 +1650,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["growl","psywave","spite"]}
 		],
-		tier: "LC"
+		tier: "LC Uber"
 	},
 	mismagius: {
 		viableMoves: {"nastyplot":1,"substitute":1,"willowisp":1,"shadowball":1,"thunderbolt":1,"dazzlinggleam":1,"healbell":1,"painsplit":1},
@@ -1996,7 +1996,7 @@ exports.BattleFormatsData = {
 	},
 	combusken: {
 		viableMoves: {"flareblitz":1,"skyuppercut":1,"protect":1,"swordsdance":1,"substitute":1,"batonpass":1,"shadowclaw":1},
-		tier: "NFE"
+		tier: "BL3"
 	},
 	blaziken: {
 		viableMoves: {"flareblitz":1,"highjumpkick":1,"protect":1,"swordsdance":1,"substitute":1,"batonpass":1,"stoneedge":1,"knockoff":1},
@@ -2105,7 +2105,7 @@ exports.BattleFormatsData = {
 	},
 	shiftry: {
 		viableMoves: {"leafstorm":1,"swordsdance":1,"seedbomb":1,"suckerpunch":1,"defog":1,"lowkick":1},
-		tier: "NU"
+		tier: "RU"
 	},
 	taillow: {
 		viableMoves: {"bravebird":1,"facade":1,"quickattack":1,"uturn":1,"protect":1},
@@ -2873,7 +2873,8 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"moves":["healingwish","psychic","swift","meteormash"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"moves":["dracometeor","meteormash","wish","followme"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"moves":["wish","healingwish","cosmicpower","meteormash"],"pokeball":"cherishball"},
-			{"generation":5,"level":50,"moves":["wish","healingwish","swift","return"],"pokeball":"cherishball"}
+			{"generation":5,"level":50,"moves":["wish","healingwish","swift","return"],"pokeball":"cherishball"},
+			{"generation":6,"level":10,"shiny":true,"moves":["wish","swift","healingwish","moonblast"],"pokeball":"cherishball"}
 		],
 		tier: "UU"
 	},
@@ -4485,7 +4486,7 @@ exports.BattleFormatsData = {
 	},
 	aegislash: {
 		viableMoves: {"kingsshield":1,"swordsdance":1,"shadowclaw":1,"sacredsword":1,"ironhead":1,"shadowsneak":1,"autotomize":1,"hiddenpowerice":1,"shadowball":1},
-		tier: "OU"
+		tier: "Uber"
 	},
 	spritzee: {
 		viableMoves: {"calmmind":1,"drainingkiss":1,"moonblast":1,"psychic":1,"aromatherapy":1,"wish":1,"trickroom":1,"thunderbolt":1},

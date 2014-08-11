@@ -42,7 +42,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 	// This is the child
 
-	var Config = require('./config/config.js');
+	global.Config = require('./config/config.js');
 	var crypto = require('crypto');
 
 	var keyalgo = Config.loginServer.keyAlgorithm;

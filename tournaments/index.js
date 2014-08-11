@@ -8,6 +8,8 @@ var TournamentGenerators = {
 	elimination: require('./generator-elimination.js').Elimination
 };
 
+var Tournament;
+
 exports.tournaments = {};
 
 function usersToNames(users) {
@@ -48,7 +50,7 @@ function createTournament(room, format, generator, isRated, args, output) {
 		output.sendReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
 		return;
 	}
-	return exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), isRated);
+	return (exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), isRated));
 }
 function deleteTournament(name, output) {
 	var id = toId(name);
@@ -66,7 +68,7 @@ function getTournament(name, output) {
 	}
 }
 
-var Tournament = (function () {
+Tournament = (function () {
 	function Tournament(room, format, generator, isRated) {
 		this.room = room;
 		this.format = toId(format);
@@ -536,7 +538,7 @@ var Tournament = (function () {
 		}
 
 		if (!this.availableMatches.get(from) || !this.availableMatches.get(from).get(to)) {
-			output.sendReply('|tournament|error|InvalidMatch')
+			output.sendReply('|tournament|error|InvalidMatch');
 			return;
 		}
 
@@ -814,11 +816,44 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
 			"- runautodq: Manually run the automatic disqualifier.<br />" +
 			"- getusers: Lists the users in the current tournament.<br />" +
+			"- on/off: Enables/disables allowing mods to start tournaments.<br />" +
 			"More detailed help can be found <a href=\"https://gist.github.com/kotarou3/7872574\">here</a>"
 		);
-	} else if (cmd === 'create' || cmd === 'new') {
-		if (!user.can('tournaments', null, room)) {
+	} else if (cmd === 'on' || cmd === 'enable') {
+		if (!user.can('tournamentsmanagement')) {
 			return this.sendReply(cmd + " -  Access denied.");
+		}
+		if (room.toursEnabled) {
+			return this.sendReply("Tournaments are already enabled.");
+		}
+		room.toursEnabled = true;
+		if (room.chatRoomData) {
+			room.chatRoomData.toursEnabled = true;
+			Rooms.global.writeChatRoomData();
+		}
+		return this.sendReply("Tournaments enabled.");
+	} else if (cmd === 'off' || cmd === 'disable') {
+		if (!user.can('tournamentsmanagement')) {
+			return this.sendReply(cmd + " -  Access denied.");
+		}
+		if (!room.toursEnabled) {
+			return this.sendReply("Tournaments are already disabled.");
+		}
+		delete room.toursEnabled;
+		if (room.chatRoomData) {
+			delete room.chatRoomData.toursEnabled;
+			Rooms.global.writeChatRoomData();
+		}
+		return this.sendReply("Tournaments disabled.");
+	} else if (cmd === 'create' || cmd === 'new') {
+		if (room.toursEnabled) {
+			if (!user.can('tournaments', room)) {
+				return this.sendReply(cmd + " -  Access denied.");
+			}
+		} else {
+			if (!user.can('tournamentsmanagement', room)) {
+				return this.sendReply("Tournaments are disabled in this room (" + room.id + ").");
+			}
 		}
 		if (params.length < 2) {
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
@@ -837,14 +872,20 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 
 		if (commands.creation[cmd]) {
-			if (!user.can('tournaments', null, room)) {
-				return this.sendReply(cmd + " -  Access denied.");
+			if (room.toursEnabled) {
+				if (!user.can('tournaments', room)) {
+					return this.sendReply(cmd + " -  Access denied.");
+				}
+			} else {
+				if (!user.can('tournamentsmanagement', room)) {
+					return this.sendReply("Tournaments are disabled in this room (" + room.id + ").");
+				}
 			}
 			commandHandler = typeof commands.creation[cmd] === 'string' ? commands.creation[commands.creation[cmd]] : commands.creation[cmd];
 		}
 
 		if (commands.moderation[cmd]) {
-			if (!user.can('tournamentsmoderation', null, room)) {
+			if (!user.can('tournamentsmoderation', room)) {
 				return this.sendReply(cmd + " -  Access denied.");
 			}
 			commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
