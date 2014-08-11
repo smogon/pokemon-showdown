@@ -3236,6 +3236,8 @@ Battle = (function () {
 	Battle.prototype.runDecision = function (decision) {
 		var pokemon;
 
+		this.debug('running: '+decision.choice);
+
 		// returns whether or not we ended in a callback
 		switch (decision.choice) {
 		case 'start':
@@ -3399,7 +3401,7 @@ Battle = (function () {
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (!this.queue.length) {
+		if (!this.queue.length || this.gen <= 3) {
 			this.checkFainted();
 		} else if (decision.choice === 'pass') {
 			this.eachEvent('Update');
@@ -3421,6 +3423,10 @@ Battle = (function () {
 		}
 
 		if (p1switch || p2switch) {
+			if (this.gen <= 1) {
+				// in gen 1, fainting ends the turn; residuals do not happen
+				this.queue = [];
+			}
 			this.makeRequest('switch');
 			return true;
 		}
