@@ -766,12 +766,11 @@ var commands = exports.commands = {
 	groups: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"+ <b>Voice</b> - They can use ! commands like !groups, and talk during moderated chat<br />" +
-			"% <b>Driver</b> - The above, and they can mute. Global % can also lock users and check for alts<br />" +
-			"@ <b>Moderator</b> - The above, and they can ban users<br />" +
-			"&amp; <b>Leader</b> - The above, and they can promote to moderator and force ties<br />" +
-			"# <b>Room Owner</b> - They are leaders of the room and can almost totally control it<br />" +
-			"~ <b>Administrator</b> - They can do anything, like change what this message says"
+			"+ <b>Voices</b> - Respected regulars. They can start tournaments; use /html, /declare, /showimage, /announce, /alts; and talk during moderated chat.<br />" +
+			"\u2605 <b>Players</b> - Members who have won a notable competition (temporary).<br />" +
+			"@ <b>Moderators</b> - Moderate the battle server and provide feedback on staff decisions. They can use most moderation commands.<br />" +
+			"~ <b>Administrators</b> - Manage the battle server. They can use all commands.<br />" +
+			"# <b>Room Owners</b> - Manage rooms and can almost totally control them."
 		);
 	},
 
@@ -789,7 +788,7 @@ var commands = exports.commands = {
 
 	staff: function (target, room, user) {
 	    if (!this.canBroadcast()) return;
-	    this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
+	    this.sendReplyBox("<a href=\"http://www.pokecommunity.com/showthread.php?t=289012#staff\">PC Battle Server Staff List</a>");
 	},
 
 	avatars: function (target, room, user) {
@@ -812,6 +811,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"New to competitive pokemon?<br />" +
+			"- <a href=\"http://www.pokecommunity.com/showthread.php?t=332177#resources\">PC's Battling & Team Building Resources</a><br />" +
 			"- <a href=\"https://www.smogon.com/sim/ps_guide\">Beginner's Guide to Pokémon Showdown</a><br />" +
 			"- <a href=\"https://www.smogon.com/dp/articles/intro_comp_pokemon\">An introduction to competitive Pokémon</a><br />" +
 			"- <a href=\"https://www.smogon.com/bw/articles/bw_tiers\">What do 'OU', 'UU', etc mean?</a><br />" +
@@ -1044,7 +1044,7 @@ var commands = exports.commands = {
 			if (!this.canBroadcast()) return;
 			this.sendReplyBox("Please follow the rules:<br />" +
 				(room.rulesLink ? "- <a href=\"" + Tools.escapeHTML(room.rulesLink) + "\">" + Tools.escapeHTML(room.title) + " room rules</a><br />" : "") +
-				"- <a href=\"https://pokemonshowdown.com/rules\">" + (room.rulesLink ? "Global rules" : "Rules") + "</a>");
+				"- <a href=\"http://www.pokecommunity.com/showthread.php?t=289012#rules\">" + (room.rulesLink ? "Global rules" : "PC Battle Server Rules") + "</a>");
 			return;
 		}
 		if (!this.can('roommod', null, room)) return;
@@ -1244,6 +1244,16 @@ var commands = exports.commands = {
 		if (!atLeastOne) {
 			return this.sendReplyBox("Pokemon, item, move, or ability not found for generation " + generation.toUpperCase() + ".");
 		}
+	},
+	
+	eng: 'en',
+	en: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox(
+			"Official chat rooms are English only. Other languages are allowed in battle rooms, private messages, and unofficial chat rooms.<br />" +
+			"- <a href=\"https://translate.google.com/#en/en/Official%20chat%20rooms%20are%20English%20only.%20Other%20languages%20are%20allowed%20in%20battle%20rooms%2C%20private%20messages%2C%20and%20unofficial%20chat%20rooms.\">TRANSLATION</a><br />" +
+			"- <a href=\"http://www.pokecommunity.com/showthread.php?t=289012#rules\">PC Battle Server Rules</a>"
+		);
 	},
 
 	/*********************************************************
@@ -1662,6 +1672,14 @@ var commands = exports.commands = {
 		if (target === '~' || target === 'privateroom') {
 			matched = true;
 			this.sendReply("/privateroom [on/off] - Makes or unmakes a room private. Requires: ~");
+		}
+		if (target === 'all' || target === 'tell') {
+			matched = true;
+			this.sendReply('/tell [user], [message] - Leaves a message for the specified user that will be received when they next talk.');
+		}
+		if (target === 'all' || target === 'en' || target === 'eng') {
+			matched = true;
+			this.sendReply('/en - Leaves a warning for foreign speakers.');
 		}
 		if (target === 'all' || target === 'help' || target === 'h' || target === '?' || target === 'commands') {
 			matched = true;
