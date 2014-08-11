@@ -261,11 +261,13 @@ exports.BattleScripts = {
 				hits = Math.floor(hits);
 				// In gen 1, all the hits have the same damage for multihits move
 				var moveDamage = 0;
-				for (var i = 0; i < hits && target.hp && pokemon.hp; i++) {
+				var firstDamage;
+				var i;
+				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 					if (i === 0) {
 						// First hit, we calculate
 						moveDamage = this.moveHit(target, pokemon, move);
-						var firstDamage = moveDamage;
+						firstDamage = moveDamage;
 					} else {
 						// We get the previous damage to make it fix damage
 						move.damage = firstDamage;
@@ -274,7 +276,7 @@ exports.BattleScripts = {
 					if (moveDamage === false) break;
 					damage = (moveDamage || 0);
 					if (target.subFainted) {
-						i++
+						i++;
 						break;
 					}
 				}
@@ -500,15 +502,12 @@ exports.BattleScripts = {
 				return false;
 			}
 		}
+		var targetHasSub = false;
 		if (target) {
 			var targetSub = target.getVolatile('substitute');
-			if (targetSub === null) {
-				var targetHasSub = false;
-			} else {
-				var targetHasSub = (targetSub.hp > 0);
+			if (targetSub !== null) {
+				targetHasSub = (targetSub.hp > 0);
 			}
-		} else {
-			var targetHasSub = false;
 		}
 
 		var doSelf = (targetHadSub && targetHasSub) || !targetHadSub;

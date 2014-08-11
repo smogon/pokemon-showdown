@@ -12,7 +12,7 @@
  */
 
 var cluster = require('cluster');
-var Config = require('./config/config');
+global.Config = require('./config/config');
 
 if (cluster.isMaster) {
 
@@ -122,7 +122,7 @@ if (cluster.isMaster) {
 
 	// It's optional if you don't need these features.
 
-	var Cidr = require('./cidr');
+	global.Cidr = require('./cidr');
 
 	// graceful crash
 	process.on('uncaughtException', function (err) {
@@ -221,6 +221,7 @@ if (cluster.isMaster) {
 	process.on('message', function (data) {
 		// console.log('worker received: ' + data);
 		var socket = null;
+		var channel = null;
 		var socketid = null;
 		var channelid = null;
 		switch (data.charAt(0)) {
@@ -263,7 +264,7 @@ if (cluster.isMaster) {
 			socket = sockets[socketid];
 			if (!socket) return;
 			channelid = data.substr(1, nlLoc - 1);
-			var channel = channels[channelid];
+			channel = channels[channelid];
 			if (!channel) channel = channels[channelid] = {};
 			channel[socketid] = socket;
 			break;
@@ -272,7 +273,7 @@ if (cluster.isMaster) {
 			// remove from channel
 			var nlLoc = data.indexOf('\n');
 			var channelid = data.substr(1, nlLoc - 1);
-			var channel = channels[channelid];
+			channel = channels[channelid];
 			if (!channel) return;
 			delete channel[data.substr(nlLoc + 1)];
 			var isEmpty = true;
@@ -307,7 +308,7 @@ if (cluster.isMaster) {
 		if (isTrustedProxyIp(socket.remoteAddress)) {
 			var ips = (socket.headers['x-forwarded-for'] || '').split(',');
 			var ip;
-			while (ip = ips.pop()) {
+			while ((ip = ips.pop())) {
 				ip = ip.trim();
 				if (!isTrustedProxyIp(ip)) {
 					socket.remoteAddress = ip;

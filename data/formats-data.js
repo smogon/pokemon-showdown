@@ -1650,7 +1650,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["growl","psywave","spite"]}
 		],
-		tier: "LC"
+		tier: "LC Uber"
 	},
 	mismagius: {
 		viableMoves: {"nastyplot":1,"substitute":1,"willowisp":1,"shadowball":1,"thunderbolt":1,"dazzlinggleam":1,"healbell":1,"painsplit":1},
@@ -1996,7 +1996,7 @@ exports.BattleFormatsData = {
 	},
 	combusken: {
 		viableMoves: {"flareblitz":1,"skyuppercut":1,"protect":1,"swordsdance":1,"substitute":1,"batonpass":1,"shadowclaw":1},
-		tier: "NFE"
+		tier: "BL3"
 	},
 	blaziken: {
 		viableMoves: {"flareblitz":1,"highjumpkick":1,"protect":1,"swordsdance":1,"substitute":1,"batonpass":1,"stoneedge":1,"knockoff":1},
