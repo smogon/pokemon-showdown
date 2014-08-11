@@ -116,20 +116,16 @@ function canTalk(user, room, connection, message) {
 		message = message.replace(/[\u0300-\u036f\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 
 		if (room && room.id === 'lobby') {
-			var normalized = message.trim();
-			if ((normalized === user.lastMessage) &&
-					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
-				connection.popup("You can't send the same message again so soon.");
-				return false;
+			if (user.group === ' ') {
+				var normalized = message.trim();
+				if ((normalized === user.lastMessage) &&
+						((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
+					connection.popup("You can't send the same message again so soon.");
+					return false;
+				}
 			}
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
-
-			if (user.group === ' ') {
-				if (message.toLowerCase().indexOf('spoiler:') >= 0 || message.toLowerCase().indexOf('spoilers:') >= 0) {
-					connection.sendTo(room, "Due to spam, spoilers can't be sent to the lobby.");
-					return false;
-				}
 			}
 		}
 
