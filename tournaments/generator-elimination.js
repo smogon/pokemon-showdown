@@ -379,7 +379,7 @@ var Elimination = (function () {
 			}
 		}
 
-		var match = targetNode.getValue();
+		match = targetNode.getValue();
 		match.state = 'finished';
 		match.result = result;
 		match.score = score.slice(0);
