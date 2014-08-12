@@ -236,16 +236,19 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			send: function (data) {
 				room.send(data);
 			},
-			privateModCommand: function (data) {
+			privateModCommand: function (data, noLog) {
+				this.sendModCommand(data);
+				this.logEntry(data);
+				this.logModCommand(data);
+			},
+			sendModCommand: function (data) {
 				for (var i in room.users) {
 					var user = room.users[i];
-					// hardcoded for performance reasonss (this is an inner loop)
+					// hardcoded for performance reasons (this is an inner loop)
 					if (user.isStaff || (room.auth && (room.auth[user.userid] || '+') !== '+')) {
 						user.sendTo(room, data);
 					}
 				}
-				this.logEntry(data);
-				this.logModCommand(data);
 			},
 			logEntry: function (data) {
 				room.logEntry(data);
