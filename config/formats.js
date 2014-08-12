@@ -6,14 +6,14 @@ exports.Formats = [
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/*{
 		name: "High Tier Random (BWknd XVII)",
 		section: "XY Singles",
 
 		mod: 'hightierrandom',
 		team: 'randomHighTier',
 		ruleset: ['Random (no PotD)']
-	},
+	},*/
 	{
 		name: "OU",
 		section: "XY Singles",
