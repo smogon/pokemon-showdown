@@ -2864,81 +2864,81 @@ exports.BattleScripts = {
 		waterList = waterList.randomize();
 
 		var dice = this.random(18);
-		var teamGenerator = [];
+		var teamGenerate = [];
 		if (dice < 1) {
-			teamGenerator = 'bugTeam';
+			teamGenerate = 'bugTeam';
 		} else if (dice < 2) {
-			teamGenerator = 'darkTeam';
+			teamGenerate = 'darkTeam';
 		} else if (dice < 3) {
-			teamGenerator = 'dragonTeam';
+			teamGenerate = 'dragonTeam';
 		} else if (dice < 4) {
-			teamGenerator = 'electricTeam';
+			teamGenerate = 'electricTeam';
 		} else if (dice < 5) {
-			teamGenerator = 'fairyTeam';
+			teamGenerate = 'fairyTeam';
 		} else if (dice < 6) {
-			teamGenerator = 'fightingTeam';
+			teamGenerate = 'fightingTeam';
 		} else if (dice < 7) {
-			teamGenerator = 'fireTeam';
+			teamGenerate = 'fireTeam';
 		} else if (dice < 8) {
-			teamGenerator = 'flyingTeam';
+			teamGenerate = 'flyingTeam';
 		} else if (dice < 9) {
-			teamGenerator = 'ghostTeam';
+			teamGenerate = 'ghostTeam';
 		} else if (dice < 10) {
-			teamGenerator = 'grassTeam';
+			teamGenerate = 'grassTeam';
 		} else if (dice < 11) {
-			teamGenerator = 'groundTeam';
+			teamGenerate = 'groundTeam';
 		} else if (dice < 12) {
-			teamGenerator = 'iceTeam';
+			teamGenerate = 'iceTeam';
 		} else if (dice < 13) {
-			teamGenerator = 'normalTeam';
+			teamGenerate = 'normalTeam';
 		} else if (dice < 14) {
-			teamGenerator = 'poisonTeam';
+			teamGenerate = 'poisonTeam';
 		} else if (dice < 15) {
-			teamGenerator = 'psychicTeam';
+			teamGenerate = 'psychicTeam';
 		} else if (dice < 16) {
-			teamGenerator = 'rockTeam';
+			teamGenerate = 'rockTeam';
 		} else if (dice < 17) {
-			teamGenerator = 'steelTeam';
+			teamGenerate = 'steelTeam';
 		} else {
-			teamGenerator = 'waterTeam';
+			teamGenerate = 'waterTeam';
 		}
 
 		var team = [];
 
 		var teamPool = [];
-		if (teamGenerator === 'bugTeam') {
+		if (teamGenerate === 'bugTeam') {
 			teamPool = bugList;
-		} else if (teamGenerator === 'darkTeam') {
+		} else if (teamGenerate === 'darkTeam') {
 			teamPool = darkList;
-		} else if (teamGenerator === 'dragonTeam') {
+		} else if (teamGenerate === 'dragonTeam') {
 			teamPool = dragonList;
-		} else if (teamGenerator === 'electricTeam') {
+		} else if (teamGenerate === 'electricTeam') {
 			teamPool = electricList;
-		} else if (teamGenerator === 'fairyTeam') {
+		} else if (teamGenerate === 'fairyTeam') {
 			teamPool = fairyList;
-		} else if (teamGenerator === 'fightingTeam') {
+		} else if (teamGenerate === 'fightingTeam') {
 			teamPool = fightingList;
-		} else if (teamGenerator === 'fireTeam') {
+		} else if (teamGenerate === 'fireTeam') {
 			teamPool = fireList;
-		} else if (teamGenerator === 'flyingTeam') {
+		} else if (teamGenerate === 'flyingTeam') {
 			teamPool = flyingList;
-		} else if (teamGenerator === 'ghostTeam') {
+		} else if (teamGenerate === 'ghostTeam') {
 			teamPool = ghostList;
-		} else if (teamGenerator === 'grassTeam') {
+		} else if (teamGenerate === 'grassTeam') {
 			teamPool = grassList;
-		} else if (teamGenerator === 'groundTeam') {
+		} else if (teamGenerate === 'groundTeam') {
 			teamPool = groundList;
-		} else if (teamGenerator === 'iceTeam') {
+		} else if (teamGenerate === 'iceTeam') {
 			teamPool = iceList;
-		} else if (teamGenerator === 'normalTeam') {
+		} else if (teamGenerate === 'normalTeam') {
 			teamPool = normalList;
-		} else if (teamGenerator === 'poisonTeam') {
+		} else if (teamGenerate === 'poisonTeam') {
 			teamPool = poisonList;
-		} else if (teamGenerator === 'psychicTeam') {
+		} else if (teamGenerate === 'psychicTeam') {
 			teamPool = psychicList;
-		} else if (teamGenerator === 'rockTeam') {
+		} else if (teamGenerate === 'rockTeam') {
 			teamPool = rockList;
-		} else if (teamGenerator === 'steelTeam') {
+		} else if (teamGenerate === 'steelTeam') {
 			teamPool = steelList;
 		} else {
 			teamPool = waterList;
