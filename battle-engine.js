@@ -113,7 +113,7 @@ process.on('message', function (message) {
 						'Additional information:\n' +
 						'message = ' + message + '\n' +
 						'currentRequest = ' + prevRequest + '\n\n' +
-						'Log:\n' + battle.log.join('\n');
+						'Log:\n' + battle.log.join('\n').replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*\n/g, '\n');
 				var fakeErr = {stack: stack};
 				require('./crashlogger.js')(fakeErr, 'A battle');
 
