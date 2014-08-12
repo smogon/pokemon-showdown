@@ -219,6 +219,13 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
+		name: "Monotype Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomMonotype',
+		ruleset: ['Random (no PotD)']
+	},
+	{
 		name: "Hoenn Random",
 		section: "Random Battles (aka Randbats)",
 
