@@ -49,8 +49,7 @@ Generation NEXT currently makes the following changes:
 Major changes:
 
 - Stealth Rock now does 1/4 damage against Flying-types, and 1/8 damage against
-  everything else. To prevent Volcarona from shooting into Ubers, Quiver Dance
-  now grants +1 SpD +1 Spe +1 accuracy.
+  everything else. 
 
 - Drives will change Genesect's typing immediately after switch-in, to Bug/Ice,
   Bug/Fire, Bug/Electric, or Bug/Water. However, Download will not activate
@@ -105,10 +104,10 @@ Major changes:
 - Flower Gift now only boosts Sp. Def, but if Sunny Day is used while Cherrim
   is out, the next switch-in also receives +1 SpD
 
-- Butterfree, Beautifly, Masquerain, Mothim, and Lilligant get an item named
-  GossamerWing (select "Stick" in the teambuilder). It makes them take half
-  damage from Rock, Ice, and Electric moves, prevents them from taking double
-  SR damage, and adds +1 SpA back to Quiver Dance.
+- All Quiver Dancers get an item named GossamerWing (select "Stick" in the 
+  teambuilder). It makes them take half damage from Rock, Ice, and Electric 
+  moves if they are flying type, prevents them from taking double SR damage, 
+  and makes Twister do 50% more damage.
 
 - Relic Song switches Meloetta's SpA and Atk EVs, boosts, and certain natures,
   specifically: Modest <-> Adamant, Jolly <-> Timid, other natures are left
@@ -222,6 +221,14 @@ New mechanic: Intrinsics:
   - Gengar: Cursed Body
 
   - Mismagius: Cursed Body
+  
+  - Mesprit: Serene Grace
+  
+  - Uxie: Synchronize
+  
+  - Azelf: Steadfast
+  
+  - Hydreigon: Sheer Force
 
 New: Type-specific items:
 
@@ -375,11 +382,11 @@ Minor learnset changes:
 
 - Starters get a new ability option
   - Venusaur: Leaf Guard
-  - Charizard: Flash Fire
+  - Charizard: Flame Body
   - Blastoise: Shell Armor
   - Meganium: Harvest
-  - Typhlosion: Flame Body
-  - Feraligatr: Intimidate
+  - Typhlosion: Magma Armor
+  - Feraligatr: Strong Jaw
   - Sceptile: Limber
   - Blaziken: Reckless
   - Swampert: Hydration
@@ -400,20 +407,21 @@ Minor ability changes:
   Surf over Hydro Pump, other pokemon are recommended not to use
   Justified
 
-- Weak Armor reduces incoming move damage by 1/8 of the user's max HP
+- Weak Armor reduces incoming move damage by 1/10 of the user's max HP
   and increases the user's Speed for the first hit after switch-in (and
   does not activate again until the next switch-in) instead of its
   previous effect
 
-- Shell Armor and Battle Armor reduce incoming move damage by 1/8 of
+- Shell Armor and Battle Armor reduce incoming move damage by 1/10 of
   the user's max HP in addition to their crit negation (also, Shell
   Armor is removed when using Shell Smash)
 
-- Magma Armor reduces incoming move damage by 1/8 of the user's max HP,
+- Magma Armor reduces incoming move damage by 1/10 of the user's max HP,
   provides immunity to Hail and freeze, and provides a one-time immunity
   to Water and Ice, after which it turns into Shell Armor
 
-- Adaptability is now 1.33x to non-STAB moves instead of to STAB moves
+- Adaptability is now 1.33x to non-STAB moves instead of to STAB moves.
+  Crawdaunt is given Tough Claws to compensate for this loss.
 
 - Shadow Tag now lasts only one turn
 
