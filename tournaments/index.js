@@ -24,7 +24,7 @@ function createTournamentGenerator(generator, args, output) {
 		return;
 	}
 	args.unshift(null);
-	return new (Generator.bind.apply(Generator, args));
+	return new (Generator.bind.apply(Generator, args))();
 }
 function createTournament(room, format, generator, isRated, args, output) {
 	if (room.type !== 'chat') {
@@ -173,10 +173,10 @@ Tournament = (function () {
 			if (this.isBracketInvalidated) {
 				if (Date.now() < this.lastBracketUpdate + BRACKET_MINIMUM_UPDATE_INTERVAL) {
 					if (this.bracketUpdateTimer) clearTimeout(this.bracketUpdateTimer);
-					this.bracketUpdateTimer = setTimeout((function () {
+					this.bracketUpdateTimer = setTimeout(function () {
 						this.bracketUpdateTimer = null;
 						this.update();
-					}).bind(this), BRACKET_MINIMUM_UPDATE_INTERVAL);
+					}.bind(this), BRACKET_MINIMUM_UPDATE_INTERVAL);
 				} else {
 					this.lastBracketUpdate = Date.now();
 
@@ -372,7 +372,7 @@ Tournament = (function () {
 	Tournament.prototype.getAvailableMatches = function () {
 		var matches = this.generator.getAvailableMatches();
 		if (typeof matches === 'string') {
-			this.room.add("Unexpected error from getAvailableMatches(): " + error + ". Please report this to an admin.");
+			this.room.add("Unexpected error from getAvailableMatches(): " + matches + ". Please report this to an admin.");
 			return;
 		}
 
@@ -484,7 +484,7 @@ Tournament = (function () {
 			output.sendReply('|tournament|error|NotStarted');
 			return false;
 		}
-		if (!(timeout > 0) || timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT) {
+		if (timeout < AUTO_DISQUALIFY_WARNING_TIMEOUT || isNaN(timeout)) {
 			output.sendReply('|tournament|error|InvalidAutoDisqualifyTimeout');
 			return false;
 		}
@@ -820,9 +820,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			"More detailed help can be found <a href=\"https://gist.github.com/kotarou3/7872574\">here</a>"
 		);
 	} else if (cmd === 'on' || cmd === 'enable') {
-		if (!user.can('tournamentsmanagement')) {
-			return this.sendReply(cmd + " -  Access denied.");
-		}
+		if (!this.can('tournamentsmanagement', null, room)) return;
 		if (room.toursEnabled) {
 			return this.sendReply("Tournaments are already enabled.");
 		}
@@ -833,9 +831,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 		return this.sendReply("Tournaments enabled.");
 	} else if (cmd === 'off' || cmd === 'disable') {
-		if (!user.can('tournamentsmanagement')) {
-			return this.sendReply(cmd + " -  Access denied.");
-		}
+		if (!this.can('tournamentsmanagement', null, room)) return;
 		if (!room.toursEnabled) {
 			return this.sendReply("Tournaments are already disabled.");
 		}
@@ -847,11 +843,9 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		return this.sendReply("Tournaments disabled.");
 	} else if (cmd === 'create' || cmd === 'new') {
 		if (room.toursEnabled) {
-			if (!user.can('tournaments', null, room)) {
-				return this.sendReply(cmd + " -  Access denied.");
-			}
+			if (!this.can('tournaments', null, room)) return;
 		} else {
-			if (!user.can('tournamentsmanagement'), null, room) {
+			if (!user.can('tournamentsmanagement', null, room)) {
 				return this.sendReply("Tournaments are disabled in this room ("+room.id+").");
 			}
 		}
