@@ -2830,6 +2830,115 @@ exports.BattleScripts = {
 
 		return team;
 	},
+	randomMonotypeTeam: function(side) {
+		var bugList = ['durant', 'escavalier', 'forretress', 'galvantula', 'heracross', 'pinsir', 'scizor', 'scolipede', 'shuckle', 'venomoth', 'volcarona', 'yanmega'];
+		var darkList = ['absol', 'bisharp', 'crawdaunt', 'drapion', 'greninja', 'honchkrow', 'houndoom', 'hydreigon', 'krookodile', 'mandibuzz', 'sableye', 'scrafty', 'sharpedo', 'skuntank', 'tyranitar', 'umbreon', 'weavile', 'zoroark'];
+		var dragonList = ['dragonite', 'druddigon', 'flygon', 'garchomp', 'goodra', 'haxorus', 'hydreigon', 'kingdra', 'kyurem', 'kyuremblack', 'latias', 'latios', 'noivern', 'salamence', 'tyrantrum', 'zygarde'];
+		var electricList = ['ampharos', 'eelektross', 'galvantula', 'heliolisk', 'jolteon', 'magnezone', 'manectric', 'raikou', 'rotomheat', 'rotommow', 'rotomwash', 'thundurus', 'thundurustherian', 'zapdos'];
+		var fairyList = ['aromatisse', 'azumarill', 'clefable', 'diancie', 'florges', 'gardevoir', 'klefki', 'mawile', 'sylveon', 'togekiss', 'whimsicott'];
+		var fightingList = ['breloom', 'chesnaught', 'cobalion', 'combusken', 'conkeldurr', 'emboar', 'gallade', 'hawlucha', 'heracross', 'hitmonchan', 'hitmonlee', 'hitmontop', 'infernape', 'keldeo', 'lucario', 'machamp', 'medicham', 'mienshao', 'scrafty', 'terrakion', 'toxicroak', 'virizion'];
+		var fireList = ['arcanine', 'chandelure', 'charizard', 'combusken', 'darmanitan', 'delphox', 'emboar', 'entei', 'heatran', 'houndoom', 'infernape', 'moltres', 'rotomheat', 'talonflame', 'victini', 'volcarona'];
+		var flyingList = ['aerodactyl', 'braviary', 'charizard', 'crobat', 'dragonite', 'gliscor', 'gyarados', 'hawlucha', 'honchkrow', 'landorus', 'landorustherian', 'mandibuzz', 'moltres', 'noivern', 'salamence', 'sigilyph', 'skarmory', 'staraptor', 'talonflame', 'thundurus', 'thundurustherian', 'togekiss', 'tornadus', 'tornadustherian', 'yanmega', 'zapdos'];
+		var ghostList = ['banette', 'chandelure', 'cofagrigus', 'doublade', 'froslass', 'gengar', 'jellicent', 'sableye', 'trevenant'];
+		var grassList = ['abomasnow', 'amoonguss', 'breloom', 'celebi', 'chesnaught', 'ferrothorn', 'roserade', 'rotommow', 'shaymin', 'tangrowth', 'trevenant', 'venusaur', 'virizion', 'whimsicott'];
+		var groundList = ['claydol', 'diggersby', 'donphan', 'dugtrio', 'excadrill', 'flygon', 'garchomp', 'gastrodon', 'gliscor', 'hippowdon', 'krookodile', 'landorus', 'landorustherian', 'mamoswine', 'nidoking', 'nidoqueen', 'quagsire', 'rhyperior', 'swampert', 'zygarde'];
+		var iceList = ['abomasnow', 'cloyster', 'froslass', 'kyurem', 'kyuremblack', 'mamoswine', 'weavile'];
+		var normalList = ['ambipom', 'blissey', 'braviary', 'chansey', 'cinccino', 'diggersby', 'exploud', 'heliolisk', 'meloetta', 'porygonz', 'porygon2', 'smeargle', 'snorlax', 'staraptor'];
+		var poisonList = ['amoonguss', 'crobat', 'drapion', 'gengar', 'nidoking', 'nidoqueen', 'roserade', 'scolipede', 'skuntank', 'tentacruel', 'toxicroak', 'venomoth', 'venusaur'];
+		var psychicList = ['alakazam', 'azelf', 'bronzong', 'celebi', 'claydol', 'cresselia', 'delphox', 'espeon', 'gallade', 'gardevoir', 'gothitelle', 'jirachi', 'latias', 'latios', 'medicham', 'meloetta', 'metagross', 'mew', 'reuniclus', 'sigilyph', 'slowbro', 'slowking', 'starmie', 'victini', 'wobbuffet'];
+		var rockList = ['aerodactyl', 'aggron', 'diancie', 'kabutops', 'rhyperior', 'shuckle', 'terrakion', 'tyranitar', 'tyrantrum'];
+		var steelList = ['aggron', 'bisharp', 'bronzong', 'cobalion', 'doublade', 'durant', 'empoleon', 'escavalier', 'excadrill', 'ferrothorn', 'forretress', 'heatran', 'jirachi', 'klefki', 'lucario', 'magnezone', 'mawile', 'metagross', 'registeel', 'scizor', 'skarmory'];
+		var waterList = ['alomomola', 'azumarill', 'blastoise', 'clawitzer', 'cloyster', 'crawdaunt', 'empoleon', 'gastrodon', 'greninja', 'gyarados', 'jellicent', 'kabutops', 'keldeo', 'kingdra', 'manaphy', 'milotic', 'quagsire', 'rotomwash', 'sharpedo', 'slowbro', 'slowking', 'starmie', 'suicune', 'swampert', 'tentacruel', 'vaporeon'];
+
+		var dice = this.random(18);
+		var teamGenerator = [];
+		if (dice < 1) {
+			teamGenerator = 'bugTeam';
+		} else if (dice < 2) {
+			teamGenerator = 'darkTeam';
+		} else if (dice < 3) {
+			teamGenerator = 'dragonTeam';
+		} else if (dice < 4) {
+			teamGenerator = 'electricTeam';
+		} else if (dice < 5) {
+			teamGenerator = 'fairyTeam';
+		} else if (dice < 6) {
+			teamGenerator = 'fightingTeam';
+		} else if (dice < 7) {
+			teamGenerator = 'fireTeam';
+		} else if (dice < 8) {
+			teamGenerator = 'flyingTeam';
+		} else if (dice < 9) {
+			teamGenerator = 'ghostTeam';
+		} else if (dice < 10) {
+			teamGenerator = 'grassTeam';
+		} else if (dice < 11) {
+			teamGenerator = 'groundTeam';
+		} else if (dice < 12) {
+			teamGenerator = 'iceTeam';
+		} else if (dice < 13) {
+			teamGenerator = 'normalTeam';
+		} else if (dice < 14) {
+			teamGenerator = 'poisonTeam';
+		} else if (dice < 15) {
+			teamGenerator = 'psychicTeam';
+		} else if (dice < 16) {
+			teamGenerator = 'rockTeam';
+		} else if (dice < 17) {
+			teamGenerator = 'steelTeam';
+		} else {
+			teamGenerator = 'waterTeam';
+		}
+
+		var team = [];
+
+		var teamPool = [];
+		if (teamGenerator === 'bugTeam') {
+			teamPool = bugList;
+		} else if (teamGenerator === 'darkTeam') {
+			teamPool = darkList;
+		} else if (teamGenerator === 'dragonTeam') {
+			teamPool = dragonList;
+		} else if (teamGenerator === 'electricTeam') {
+			teamPool = electricList;
+		} else if (teamGenerator === 'fairyTeam') {
+			teamPool = fairyList;
+		} else if (teamGenerator === 'fightingTeam') {
+			teamPool = fightingList;
+		} else if (teamGenerator === 'fireTeam') {
+			teamPool = fireList;
+		} else if (teamGenerator === 'flyingTeam') {
+			teamPool = flyingList;
+		} else if (teamGenerator === 'ghostTeam') {
+			teamPool = ghostList;
+		} else if (teamGenerator === 'grassTeam') {
+			teamPool = grassList;
+		} else if (teamGenerator === 'groundTeam') {
+			teamPool = groundList;
+		} else if (teamGenerator === 'iceTeam') {
+			teamPool = iceList;
+		} else if (teamGenerator === 'normalTeam') {
+			teamPool = normalList;
+		} else if (teamGenerator === 'poisonTeam') {
+			teamPool = poisonList;
+		} else if (teamGenerator === 'psychicTeam') {
+			teamPool = psychicList;
+		} else if (teamGenerator === 'rockTeam') {
+			teamPool = rockList;
+		} else if (teamGenerator === 'steelTeam') {
+			teamPool = steelList;
+		} else {
+			teamPool = waterList;
+		}
+		for (var i=0; i<6; i++) {
+			var pokemon = teamPool[i];
+			var template = this.getTemplate(pokemon);
+			var set = this.randomSet(template, i);
+			team.push(set);
+		}
+
+		return team;
+	},
 	randomHoennTeam: function(side) {
 		var pokemonList = ['treecko', 'grovyle', 'sceptile', 'torchic', 'combusken', 'blaziken', 'mudkip', 'marshtomp', 'swampert', 'poochyena', 'mightyena', 'zigzagoon', 'linoone', 'wurmple', 'silcoon', 'beautifly', 'cascoon', 'dustox', 'lotad', 'lombre', 'ludicolo', 'seedot', 'nuzleaf', 'shiftry', 'taillow', 'swellow', 'wingull', 'pelipper', 'ralts', 'kirlia', 'gardevoir', 'surskit', 'masquerain', 'shroomish', 'breloom', 'slakoth', 'vigoroth', 'slaking', 'abra', 'kadabra', 'alakazam', 'nincada', 'ninjask', 'shedinja', 'whismur', 'loudred', 'exploud', 'makuhita', 'hariyama', 'goldeen', 'seaking', 'magikarp', 'gyarados', 'azurill', 'marill', 'azumarill', 'geodude', 'graveler', 'golem', 'nosepass', 'skitty', 'delcatty', 'zubat', 'golbat', 'crobat', 'tentacool', 'tentacruel', 'sableye', 'mawile', 'aron', 'lairon', 'aggron', 'machop', 'machoke', 'machamp', 'meditite', 'medicham', 'electrike', 'manectric', 'plusle', 'minun', 'magnemite', 'magneton', 'voltorb', 'electrode', 'volbeat', 'illumise', 'oddish', 'gloom', 'vileplume', 'bellossom', 'doduo', 'dodrio', 'roselia', 'gulpin', 'swalot', 'carvanha', 'sharpedo', 'wailmer', 'wailord', 'numel', 'camerupt', 'slugma', 'magcargo', 'torkoal', 'grimer', 'muk', 'koffing', 'weezing', 'spoink', 'grumpig', 'sandshrew', 'sandslash', 'spinda', 'skarmory', 'trapinch', 'vibrava', 'flygon', 'cacnea', 'cacturne', 'swablu', 'altaria', 'zangoose', 'seviper', 'lunatone', 'solrock', 'barboach', 'whiscash', 'corphish', 'crawdaunt', 'baltoy', 'claydol', 'lileep', 'cradily', 'anorith', 'armaldo', 'igglybuff', 'jigglypuff', 'wigglytuff', 'feebas', 'milotic', 'castform', 'staryu', 'starmie', 'kecleon', 'shuppet', 'banette', 'duskull', 'dusclops', 'tropius', 'chimecho', 'absol', 'vulpix', 'ninetales', 'pichu', 'pikachu', 'raichu', 'psyduck', 'golduck', 'wynaut', 'wobbuffet', 'natu', 'xatu', 'girafarig', 'phanpy', 'donphan', 'pinsir', 'heracross', 'rhyhorn', 'rhydon', 'snorunt', 'glalie', 'spheal', 'sealeo', 'walrein', 'clamperl', 'huntail', 'gorebyss', 'relicanth', 'corsola', 'chinchou', 'lanturn', 'luvdisc', 'horsea', 'seadra', 'kingdra', 'bagon', 'shelgon', 'salamence', 'beldum', 'metang', 'metagross', 'regirock', 'regice', 'registeel', 'latias', 'latios', 'kyogre', 'groudon', 'rayquaza', 'jirachi', 'deoxys', 'deoxysattack', 'deoxysdefense', 'deoxysspeed'];
 
