@@ -2850,6 +2850,25 @@ exports.BattleScripts = {
 		var steelList = ['aggron', 'bisharp', 'bronzong', 'cobalion', 'doublade', 'durant', 'empoleon', 'escavalier', 'excadrill', 'ferrothorn', 'forretress', 'heatran', 'jirachi', 'klefki', 'lucario', 'magnezone', 'mawile', 'metagross', 'registeel', 'scizor', 'skarmory'];
 		var waterList = ['alomomola', 'azumarill', 'blastoise', 'clawitzer', 'cloyster', 'crawdaunt', 'empoleon', 'gastrodon', 'greninja', 'gyarados', 'jellicent', 'kabutops', 'keldeo', 'kingdra', 'manaphy', 'milotic', 'quagsire', 'rotomwash', 'sharpedo', 'slowbro', 'slowking', 'starmie', 'suicune', 'swampert', 'tentacruel', 'vaporeon'];
 
+		bugList = bugList.randomize();
+		darkList = darkList.randomize();
+		dragonList = dragonList.randomize();
+		electricList = electricList.randomize();
+		fairyList = fairyList.randomize();
+		fightingList = fightingList.randomize();
+		fireList = fireList.randomize();
+		flyingList = flyingList.randomize();
+		ghostList = ghostList.randomize();
+		grassList = grassList.randomize();
+		groundList = groundList.randomize();
+		iceList = iceList.randomize();
+		normalList = normalList.randomize();
+		poisonList = poisonList.randomize();
+		psychicList = psychicList.randomize();
+		rockList = rockList.randomize();
+		steelList = steelList.randomize();
+		waterList = waterList.randomize();
+
 		var dice = this.random(18);
 		var teamGenerator = [];
 		if (dice < 1) {
