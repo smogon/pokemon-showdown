@@ -2772,8 +2772,6 @@ exports.BattleScripts = {
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(pokemonList[i], i);
 
-			set.level = 100;
-
 			team.push(set);
 		}
 
@@ -2789,8 +2787,6 @@ exports.BattleScripts = {
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(pokemonList[i], i);
 
-			set.level = 100;
-
 			team.push(set);
 		}
 
@@ -2805,8 +2801,6 @@ exports.BattleScripts = {
 
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(pokemonList[i], i);
-
-			set.level = 100;
 
 			team.push(set);
 		}
@@ -2968,8 +2962,6 @@ exports.BattleScripts = {
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(pokemonList[i], i);
 
-			set.level = 100;
-
 			team.push(set);
 		}
 
@@ -2984,8 +2976,6 @@ exports.BattleScripts = {
 
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(pokemonList[i], i);
-
-			set.level = 100;
 
 			team.push(set);
 		}
@@ -3002,8 +2992,6 @@ exports.BattleScripts = {
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(pokemonList[i], i);
 
-			set.level = 100;
-
 			team.push(set);
 		}
 
@@ -3018,8 +3006,6 @@ exports.BattleScripts = {
 
 		for (var i=0; i<6; i++) {
 			var set = this.randomSet(pokemonList[i], i);
-
-			set.level = 100;
 
 			team.push(set);
 		}
