@@ -189,7 +189,7 @@ exports.BattleMovedex = {
 				}
 				if (move.category === 'Status') {
 					var SubBlocked = {
-						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1
+						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1, sketch:1
 					};
 					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
 						return false;
