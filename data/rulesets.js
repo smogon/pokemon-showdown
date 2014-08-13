@@ -440,7 +440,7 @@ exports.BattleFormats = {
 		effectType: 'Rule',
 		name: 'HP Percentage Mod',
 		onStart: function () {
-			this.add('rule', 'HP Percentage Mod: HP is reported as percentages');
+			this.add('rule', 'HP Percentage Mod: HP is shown in percentages');
 			this.reportPercentages = true;
 		}
 	},
