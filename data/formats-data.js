@@ -1506,7 +1506,7 @@ exports.BattleFormatsData = {
 	},
 	ariados: {
 		viableMoves: {"toxic":1,"megahorn":1,"toxicspikes":1,"poisonjab":1,"batonpass":1,"stickyweb":1},
-		viableDoublesMoves: {"protect":1,"megahorn":1,"stringshot":1,"poisonjab":1,"electroweb":1,"stickyweb":1,"ragepowder":1,"strugglebug"},
+		viableDoublesMoves: {"protect":1,"megahorn":1,"stringshot":1,"poisonjab":1,"electroweb":1,"stickyweb":1,"ragepowder":1,"strugglebug":1},
 		tier: "NU"
 	},
 	chinchou: {
