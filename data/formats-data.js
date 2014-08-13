@@ -2348,6 +2348,7 @@ exports.BattleFormatsData = {
 	},
 	sableye: {
 		viableMoves: {"recover":1,"willowisp":1,"taunt":1,"toxic":1,"knockoff":1,"foulplay":1},
+		viableDoublesMoves: {"recover":1,"willowisp":1,"taunt":1,"fakeout":1,"knockoff":1,"foulplay":1,"feint":1,"helpinghand":1,"snarl":1,"protect":1},
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","abilities":["keeneye"],"moves":["leer","scratch","foresight","nightshade"]},
 			{"generation":3,"level":33,"abilities":["keeneye"],"moves":["helpinghand","shadowball","feintattack","recover"]},
