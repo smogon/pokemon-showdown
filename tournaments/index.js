@@ -867,11 +867,9 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 
 		if (commands.creation[cmd]) {
 			if (room.toursEnabled) {
-				if (!user.can('tournaments', null, room)) {
-					return this.sendReply(cmd + " -  Access denied.");
-				}
+				if (!this.can('tournaments', null, room)) return;
 			} else {
-				if (!user.can('tournamentsmanagement'), null, room) {
+				if (!user.can('tournamentsmanagement', null, room)) {
 					return this.sendReply("Tournaments are disabled in this room ("+room.id+").");
 				}
 			}
