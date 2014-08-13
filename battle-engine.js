@@ -3345,12 +3345,15 @@ Battle = (function () {
 				}
 			}
 			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
+				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
+					// in gen 2-4, the switch still happens
 					decision.priority = -101;
-					this.addQueue(decision, true);
+					this.queue.unshift(decision);
 					this.debug('Pursuit target fainted');
 					break;
 				}
+				// in gen 5+, the switch is cancelled
 				this.debug('A Pokemon can\'t switch between when it runs out of HP and when it faints');
 				break;
 			}
