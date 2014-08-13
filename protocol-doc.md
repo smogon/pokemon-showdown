@@ -185,8 +185,7 @@ represented by a space), and the rest of the string being their username.
 
 `|start`
 
-> Indicates that the game has started. If the tier uses a teampreview,
-> this message cannot 
+> Indicates that the game has started.
 
 **Pokemon Actions**
 
