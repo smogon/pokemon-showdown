@@ -720,6 +720,7 @@ var commands = {
 			this.sendReplyBox("<strong>" + users.length + " users are in this tournament:</strong><br />" + users.join(", "));
 		},
 		getupdate: function (tournament, user) {
+			this.sendReply("Your tournament bracket has been updated.");
 			tournament.update(user);
 		},
 		challenge: function (tournament, user, params, cmd) {
