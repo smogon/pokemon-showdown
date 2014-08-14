@@ -1855,7 +1855,7 @@ exports.BattleScripts = {
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
 
-		var moveKeys = Object.keys(template.randomDoubleBattleMoves || template.randomBattleMoves || template.learnset).randomize();
+		var moveKeys = (template.randomDoubleBattleMoves || template.randomBattleMoves || Object.keys(template.learnset)).randomize();
 		// Make protect viable for everyone
 		// Delete this once all Pokémon have viable doubles sets
 		var hasProtectingMove = false;
