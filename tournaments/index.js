@@ -57,9 +57,11 @@ function deleteTournament(name, output) {
 	var tournament = exports.tournaments[id];
 	if (!tournament) {
 		output.sendReply(name + " doesn't exist.");
+		return false;
 	}
 	tournament.forceEnd(output);
 	delete exports.tournaments[id];
+	return true;
 }
 function getTournament(name, output) {
 	var id = toId(name);
@@ -331,13 +333,13 @@ Tournament = (function () {
 	Tournament.prototype.startTournament = function (output) {
 		if (this.isTournamentStarted) {
 			output.sendReply('|tournament|error|AlreadyStarted');
-			return;
+			return false;
 		}
 
 		this.purgeGhostUsers();
 		if (this.generator.getUsers().length < 2) {
 			output.sendReply('|tournament|error|NotEnoughUsers');
-			return;
+			return false;
 		}
 
 		this.generator.freezeBracket();
@@ -368,6 +370,7 @@ Tournament = (function () {
 		this.room.add('|tournament|start');
 		this.room.send('|tournament|update|{"isStarted":true}');
 		this.update();
+		return true;
 	};
 	Tournament.prototype.getAvailableMatches = function () {
 		var matches = this.generator.getAvailableMatches();
@@ -749,8 +752,10 @@ var commands = {
 			if (generator) tournament.setGenerator(generator, this);
 		},
 		begin: 'start',
-		start: function (tournament) {
-			tournament.startTournament(this);
+		start: function (tournament, user) {
+			if (tournament.startTournament(this)) {
+				this.sendModCommand("(" + user.name + " started the tournament.)");
+			}
 		}
 	},
 	moderation: {
@@ -782,8 +787,10 @@ var commands = {
 		},
 		end: 'delete',
 		stop: 'delete',
-		delete: function (tournament) {
-			deleteTournament(tournament.room.title, this);
+		delete: function (tournament, user) {
+			if (deleteTournament(tournament.room.title, this)) {
+				this.privateModCommand("(" + user.name + " forcibly ended a tournament.)");
+			}
 		}
 	}
 };
@@ -854,7 +861,8 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 		}
 
-		createTournament(room, params.shift(), params.shift(), Config.istournamentsrated, params, this);
+		var tour = createTournament(room, params.shift(), params.shift(), Config.istournamentsrated, params, this);
+		if (tour) this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament) {
