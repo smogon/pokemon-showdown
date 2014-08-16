@@ -220,6 +220,7 @@ exports.Formats = [
 		name: "Hoenn Random",
 		section: "Random Battles (aka Randbats)",
 
+		mod: 'gen3',
 		team: 'randomHoenn',
 		ruleset: ['Random (no PotD)']
 	},
