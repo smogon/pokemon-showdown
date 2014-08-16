@@ -2849,7 +2849,7 @@ exports.BattleFormatsData = {
 	},
 	gorebyss: {
 		randomBattleMoves: ["shellsmash","batonpass","hydropump","icebeam","hiddenpowergrass","substitute"],
-		randomDoubleBattleMoves:: ["shellsmash","batonpass","hydropump","icebeam","hiddenpowergrass","substitute","protect"],
+		randomDoubleBattleMoves: ["shellsmash","batonpass","hydropump","icebeam","hiddenpowergrass","substitute","protect"],
 		tier: "NU"
 	},
 	relicanth: {
