@@ -49,7 +49,6 @@ exports.BattlePokedex = {
 	},
 	golem: {
 		inherit: true,
-		baseStats: {hp:80,atk:120,def:130,spa:55,spd:65,spe:45},
 		abilities: {0:"Rock Head",1:"Sturdy"}
 	},
 	mrmime: {
