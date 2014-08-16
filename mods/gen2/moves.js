@@ -189,10 +189,15 @@ exports.BattleMovedex = {
 				}
 				if (move.category === 'Status') {
 					var SubBlocked = {
-						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1
+						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1, sketch:1
 					};
-					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
-						return false;
+					if (move.id === 'swagger') {
+						// this is safe, move is a copy
+						delete move.volatileStatus;
+					}
+					if (move.status || (move.boosts && move.id !== 'swagger') || move.volatileStatus === 'confusion' || SubBlocked[move.id] || move.drain) {
+						this.add('-activate', target, 'Substitute', '[block] '+move.name);
+						return null;
 					}
 					return;
 				}
