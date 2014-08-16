@@ -288,6 +288,9 @@ exports.customavatars = {
 	'1ee7': 'nimo.png',
 	'sharingiscaring': 'nimo.png',
 	'hollowicrus': 'hollowicrus.jpg',
+	'galladebosszolt': 'gallade-boss-zolt.gif',
+	'bossage': 'gallade-boss-zolt.gif',
+	'bearticsmalls': 'beartic-smalls.gif',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
