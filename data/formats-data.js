@@ -1620,7 +1620,7 @@ exports.BattleFormatsData = {
 	},
 	ambipom: {
 		randomBattleMoves: ["fakeout","return","knockoff","uturn","switcheroo","seedbomb","icepunch","lowkick"],
-		randomDoubleBattleMoves: ["Doublesfakeout","return","knockoff","uturn","switcheroo","seedbomb","icepunch","lowkick","protect"],
+		randomDoubleBattleMoves: ["fakeout","return","knockoff","uturn","switcheroo","seedbomb","icepunch","lowkick","protect"],
 		tier: "RU"
 	},
 	sunkern: {
