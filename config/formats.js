@@ -7,11 +7,11 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Hoenn Random (BWknd XVIII)",
+		name: "Low Tier Random (BWknd XVIII)",
 		section: "XY Singles",
 
-		mod: 'gen3',
-		team: 'randomHoenn',
+		mod: 'lowtierrandom',
+		team: 'randomLowTier',
 		ruleset: ['Random (no PotD)']
 	},
 	{
@@ -220,7 +220,6 @@ exports.Formats = [
 		name: "Hoenn Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'gen3',
 		team: 'randomHoenn',
 		ruleset: ['Random (no PotD)']
 	},
