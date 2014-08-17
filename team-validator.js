@@ -362,49 +362,6 @@ Validator = (function () {
 			}
 		}
 		setHas[toId(set.ability)] = true;
-		var totalEV = 0;
-		for (var k in set.evs) {
-			if (typeof set.evs[k] !== 'number' || set.evs[k] < 0) {
-				set.evs[k] = 0;
-			}
-			totalEV += set.evs[k];
-		}
-		// In gen 6, it is impossible to battle other players with pokemon that break the EV limit
-		if (totalEV > 510 && this.gen >= 6) {
-			problems.push(name + " has more than 510 total EVs.");
-		}
-		if (banlistTable['illegal']) {
-			// In gen 1 and 2, it was possible to max out all EVs
-			if (tools.gen >= 3 && totalEV > 510) {
-				problems.push(name + " has more than 510 total EVs.");
-			}
-
-			// Don't check abilities for metagames with All Abilities
-			if (tools.gen <= 2) {
-				set.ability = 'None';
-			} else if (!banlistTable['ignoreillegalabilities']) {
-				if (!ability.name) {
-					problems.push(name + " needs to have an ability.");
-				} else if (ability.name !== template.abilities['0'] &&
-					ability.name !== template.abilities['1'] &&
-					ability.name !== template.abilities['H']) {
-					problems.push(name + " can't have " + set.ability + ".");
-				}
-				if (ability.name === template.abilities['H']) {
-					isHidden = true;
-
-					if (template.unreleasedHidden && banlistTable['illegal']) {
-						problems.push(name + "'s hidden ability is unreleased.");
-					} else if (tools.gen === 5 && set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
-						problems.push(name + " must be at least level 10 with its hidden ability.");
-					}
-					if (template.maleOnlyHidden) {
-						set.gender = 'M';
-						lsetData.sources = ['5D'];
-					}
-				}
-			}
-		}
 		if (set.moves && Array.isArray(set.moves)) {
 			set.moves = set.moves.filter(function (val){ return val; });
 		}
