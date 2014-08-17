@@ -370,7 +370,7 @@ Validator = (function () {
 			totalEV += set.evs[k];
 		}
 		// In gen 6, it is impossible to battle other players with pokemon that break the EV limit
-		if (totalEV > 510 && tools.gen >= 6 && format.limitBreak != true) {
+		if (totalEV > 510 && tools.gen >= 6 && format.limitBreak !== true) {
 			problems.push(name + " has more than 510 total EVs.");
 		}
 		if (banlistTable['illegal']) {
