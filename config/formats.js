@@ -143,6 +143,7 @@ exports.Formats = [
 		debug: true,
 		maxLevel: 9999,
 		defaultLevel: 100,
+		limitBreak: true,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
@@ -250,6 +251,7 @@ exports.Formats = [
 		maxLevel: 9999,
 		defaultLevel: 100,
 		debug: true,
+		limitBreak: true,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
@@ -329,6 +331,7 @@ exports.Formats = [
 		maxLevel: 9999,
 		defaultLevel: 100,
 		debug: true,
+		limitBreak: true,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
