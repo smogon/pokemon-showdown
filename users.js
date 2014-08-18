@@ -246,8 +246,8 @@ Users.socketConnect = function(worker, workerid, socketid, ip) {
 	Dnsbl.query(connection.ip, function (isBlocked) {
 		if (isBlocked) {
 			connection.popup("Your IP is known for spamming or hacking websites and has been locked. If you're using a proxy, don't.");
-			if (connection.user) {
-				connection.user.locked = true;
+			if (connection.user && !connection.user.locked) {
+				connection.user.locked = '#dnsbl';
 				connection.user.updateIdentity();
 			}
 		}
@@ -411,7 +411,7 @@ User = (function () {
 
 		this.mutedRooms = {};
 		this.muteDuration = {};
-		this.locked = !!Users.checkLocked(connection.ip);
+		this.locked = Users.checkLocked(connection.ip);
 		this.prevNames = {};
 		this.battles = {};
 		this.roomCount = {};
@@ -874,7 +874,7 @@ User = (function () {
 					if (Object.isEmpty(Object.select(this.ips, user.ips))) {
 						user.mutedRooms = Object.merge(user.mutedRooms, this.mutedRooms);
 						user.muteDuration = Object.merge(user.muteDuration, this.muteDuration);
-						if (this.locked) user.locked = true;
+						if (this.locked) user.locked = this.locked;
 						this.mutedRooms = {};
 						this.muteDuration = {};
 						this.locked = false;
@@ -1162,18 +1162,19 @@ User = (function () {
 		if (this.autoconfirmed) bannedUsers[this.autoconfirmed] = userid;
 		if (this.authenticated) {
 			bannedUsers[this.userid] = userid;
-			this.locked = true; // in case of merging into a recently banned account
+			this.locked = userid; // in case of merging into a recently banned account
 			this.autoconfirmed = '';
 		}
 		this.disconnectAll();
 	};
-	User.prototype.lock = function (noRecurse) {
+	User.prototype.lock = function (noRecurse, userid) {
 		// recurse only once; the root for-loop already locks everything with your IP
+		if (!userid) userid = this.userid;
 		if (!noRecurse) {
 			for (var i in users) {
 				if (users[i] === this) continue;
 				if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
-				users[i].lock(true);
+				users[i].lock(true, userid);
 			}
 		}
 
@@ -1182,7 +1183,7 @@ User = (function () {
 		}
 		if (this.autoconfirmed) lockedUsers[this.autoconfirmed] = this.userid;
 		if (this.authenticated) lockedUsers[this.userid] = this.userid;
-		this.locked = true;
+		this.locked = userid;
 		this.autoconfirmed = '';
 		this.updateIdentity();
 	};

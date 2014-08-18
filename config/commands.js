@@ -187,6 +187,9 @@ var commands = exports.commands = {
 				output = Object.keys(targetAlt.prevNames).join(", ");
 				if (output) this.sendReply("Previous names: " + output);
 			}
+			if (targetUser.locked) {
+				this.sendReply("Locked under the username: "+targetUser.locked);
+			}
 		}
 		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
 			this.sendReply("Group: " + Config.groups[targetUser.group].name + " (" + targetUser.group + ")");
