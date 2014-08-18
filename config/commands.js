@@ -259,6 +259,16 @@ var commands = exports.commands = {
 
 		var buffer = '';
 		var targetId = toId(target);
+		if (targetId === '' + parseInt(targetId)) {
+			for (var p in Tools.data.Pokedex) {
+				var pokemon = Tools.getTemplate(p);
+				if (pokemon.num == parseInt(target)) {
+					target = pokemon.species;
+					targetId = pokemon.id;
+					break;
+				}
+			}
+		}
 		var newTargets = Tools.dataSearch(target);
 		var showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
