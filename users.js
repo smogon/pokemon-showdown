@@ -874,6 +874,8 @@ User = (function () {
 					if (Object.isEmpty(Object.select(this.ips, user.ips))) {
 						user.mutedRooms = Object.merge(user.mutedRooms, this.mutedRooms);
 						user.muteDuration = Object.merge(user.muteDuration, this.muteDuration);
+						if (user.locked === '#dnsbl' && !this.locked) user.locked = false;
+						if (!user.locked && this.locked === '#dnsbl') this.locked = false;
 						if (this.locked) user.locked = this.locked;
 						this.mutedRooms = {};
 						this.muteDuration = {};
