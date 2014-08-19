@@ -2876,6 +2876,7 @@ exports.BattleFormatsData = {
 	},
 	salamence: {
 		randomBattleMoves: ["outrage","fireblast","earthquake","dracometeor","roost","dragondance","dragonclaw","hydropump","stoneedge"],
+		randomDoubleBattleMoves: ["protect","fireblast","earthquake","dracometeor","tailwind","dragondance","dragonclaw","hydropump","rockslide"],
 		eventPokemon: [
 			{"generation":3,"level":50,"moves":["protect","dragonbreath","scaryface","fly"]},
 			{"generation":3,"level":50,"moves":["refresh","dragonclaw","dragondance","aerialace"]},
@@ -2897,6 +2898,7 @@ exports.BattleFormatsData = {
 	},
 	metagross: {
 		randomBattleMoves: ["meteormash","earthquake","agility","stealthrock","zenheadbutt","bulletpunch","thunderpunch","explosion","icepunch"],
+		randomDoubleBattleMoves: ["meteormash","earthquake","protect","zenheadbutt","bulletpunch","thunderpunch","explosion","icepunch"],
 		eventPokemon: [
 			{"generation":4,"level":62,"nature":"Brave","moves":["bulletpunch","meteormash","hammerarm","zenheadbutt"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"isHidden":false,"moves":["meteormash","earthquake","bulletpunch","hammerarm"],"pokeball":"cherishball"},
@@ -2910,6 +2912,7 @@ exports.BattleFormatsData = {
 	},
 	regirock: {
 		randomBattleMoves: ["stealthrock","thunderwave","stoneedge","drainpunch","curse","rest","sleeptalk","rockslide","toxic"],
+		randomDoubleBattleMoves: ["stealthrock","thunderwave","stoneedge","drainpunch","curse","rockslide","protect"],
 		eventPokemon: [
 			{"generation":3,"level":40,"moves":["curse","superpower","ancientpower","hyperbeam"]}
 		],
@@ -2918,6 +2921,7 @@ exports.BattleFormatsData = {
 	},
 	regice: {
 		randomBattleMoves: ["thunderwave","icebeam","thunderbolt","rest","sleeptalk","focusblast","rockpolish"],
+		randomDoubleBattleMoves: ["thunderwave","icebeam","thunderbolt","icywind","protect","focusblast","rockpolish"],
 		eventPokemon: [
 			{"generation":3,"level":40,"moves":["curse","superpower","ancientpower","hyperbeam"]}
 		],
@@ -2926,6 +2930,7 @@ exports.BattleFormatsData = {
 	},
 	registeel: {
 		randomBattleMoves: ["stealthrock","ironhead","curse","rest","thunderwave","toxic","seismictoss"],
+		randomDoubleBattleMoves: ["stealthrock","ironhead","curse","rest","thunderwave","protect","seismictoss"],
 		eventPokemon: [
 			{"generation":3,"level":40,"moves":["curse","superpower","ancientpower","hyperbeam"]}
 		],
@@ -2934,6 +2939,7 @@ exports.BattleFormatsData = {
 	},
 	latias: {
 		randomBattleMoves: ["dragonpulse","surf","thunderbolt","roost","calmmind","healingwish","defog"],
+		randomDoubleBattleMoves: ["dragonpulse","psychic","tailwind","helpinghand","healpulse","lightscreen","reflect","protect"],
 		eventPokemon: [
 			{"generation":3,"level":50,"gender":"F","moves":["charm","recover","psychic","mistball"]},
 			{"generation":3,"level":70,"gender":"F","moves":["mistball","psychic","recover","charm"]},
@@ -2943,11 +2949,13 @@ exports.BattleFormatsData = {
 	},
 	latiasmega: {
 		randomBattleMoves: ["dragonpulse","surf","thunderbolt","roost","calmmind","healingwish","defog"],
+		randomDoubleBattleMoves: ["dragonpulse","psychic","tailwind","helpinghand","healpulse","lightscreen","reflect","protect"],
 		requiredItem: "Latiasite",
 		tier: "Unreleased"
 	},
 	latios: {
 		randomBattleMoves: ["dracometeor","dragonpulse","surf","thunderbolt","psyshock","roost","trick","calmmind","defog"],
+		randomDoubleBattleMoves: ["dracometeor","dragonpulse","surf","thunderbolt","psyshock","substitute","trick","tailwind","protect","hiddenpowerfire"],
 		eventPokemon: [
 			{"generation":3,"level":50,"gender":"M","moves":["dragondance","recover","psychic","lusterpurge"]},
 			{"generation":3,"level":70,"gender":"M","moves":["lusterpurge","psychic","recover","dragondance"]},
@@ -2957,11 +2965,13 @@ exports.BattleFormatsData = {
 	},
 	latiosmega: {
 		randomBattleMoves: ["dracometeor","dragonpulse","surf","thunderbolt","psyshock","roost","calmmind","defog"],
+		randomDoubleBattleMoves: ["dracometeor","dragonpulse","surf","thunderbolt","psyshock","substitute","trick","tailwind","protect","hiddenpowerfire"],
 		requiredItem: "Latiosite",
 		tier: "Unreleased"
 	},
 	kyogre: {
 		randomBattleMoves: ["waterspout","surf","thunder","icebeam","calmmind","rest","sleeptalk","roar"],
+		randomDoubleBattleMoves: ["waterspout","muddywater","thunder","icebeam","calmmind","rest","sleeptalk","protect"],
 		eventPokemon: [
 			{"generation":5,"level":80,"moves":["icebeam","ancientpower","waterspout","thunder"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"moves":["waterspout","thunder","icebeam","sheercold"],"pokeball":"cherishball"}
@@ -2970,6 +2980,7 @@ exports.BattleFormatsData = {
 	},
 	groudon: {
 		randomBattleMoves: ["earthquake","roar","stealthrock","stoneedge","swordsdance","rockpolish","thunderwave","dragonclaw","firepunch"],
+		randomDoubleBattleMoves: ["earthquake","rockslide","protect","stoneedge","swordsdance","rockpolish","dragonclaw","firepunch"],
 		eventPokemon: [
 			{"generation":5,"level":80,"moves":["earthquake","ancientpower","eruption","solarbeam"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"moves":["eruption","hammerarm","earthpower","solarbeam"],"pokeball":"cherishball"}
@@ -2978,6 +2989,7 @@ exports.BattleFormatsData = {
 	},
 	rayquaza: {
 		randomBattleMoves: ["outrage","vcreate","extremespeed","dragondance","earthquake","dracometeor","dragonclaw"],
+		randomDoubleBattleMoves: ["tailwind","vcreate","extremespeed","dragondance","earthquake","dracometeor","dragonclaw","protect"],
 		eventPokemon: [
 			{"generation":5,"level":70,"shiny":true,"moves":["dragonpulse","ancientpower","outrage","dragondance"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"moves":["extremespeed","hyperbeam","dragonpulse","vcreate"],"pokeball":"cherishball"}
@@ -2986,6 +2998,7 @@ exports.BattleFormatsData = {
 	},
 	jirachi: {
 		randomBattleMoves: ["bodyslam","ironhead","firepunch","thunderwave","stealthrock","wish","uturn","calmmind","psychic","thunderbolt","icepunch","trick"],
+		randomDoubleBattleMoves: ["bodyslam","ironhead","icywind","thunderwave","helpinghand","trickroom","uturn","followme","psychic","protect"],
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["wish","confusion","rest"]},
 			{"generation":3,"level":30,"moves":["helpinghand","psychic","refresh","rest"]},
@@ -3001,6 +3014,7 @@ exports.BattleFormatsData = {
 	},
 	deoxys: {
 		randomBattleMoves: ["psychoboost","lowkick","extremespeed","icebeam","thunderbolt","firepunch","spikes","stealthrock","knockoff"],
+		randomDoubleBattleMoves: ["psychoboost","lowkick","extremespeed","icebeam","thunderbolt","firepunch","protect","knockoff"],
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["snatch","psychic","spikes","knockoff"]},
 			{"generation":3,"level":30,"moves":["superpower","psychic","pursuit","taunt"]},
@@ -3017,6 +3031,7 @@ exports.BattleFormatsData = {
 	},
 	deoxysattack: {
 		randomBattleMoves: ["psychoboost","superpower","extremespeed","icebeam","thunderbolt","firepunch","spikes","stealthrock","knockoff"],
+		randomDoubleBattleMoves: ["psychoboost","superpower","extremespeed","icebeam","thunderbolt","firepunch","protect","knockoff"],
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["snatch","psychic","spikes","knockoff"]},
 			{"generation":3,"level":30,"moves":["superpower","psychic","pursuit","taunt"]},
@@ -3033,6 +3048,7 @@ exports.BattleFormatsData = {
 	},
 	deoxysdefense: {
 		randomBattleMoves: ["spikes","stealthrock","recover","taunt","toxic","seismictoss","magiccoat"],
+		randomDoubleBattleMoves: ["protect","stealthrock","recover","taunt","reflect","seismictoss","lightscreen","trickroom"],
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["snatch","psychic","spikes","knockoff"]},
 			{"generation":3,"level":30,"moves":["superpower","psychic","pursuit","taunt"]},
@@ -3049,6 +3065,7 @@ exports.BattleFormatsData = {
 	},
 	deoxysspeed: {
 		randomBattleMoves: ["spikes","stealthrock","superpower","icebeam","psychoboost","taunt","lightscreen","reflect","magiccoat","knockoff"],
+		randomDoubleBattleMoves: ["superpower","icebeam","psychoboost","taunt","lightscreen","reflect","protect","knockoff"],
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["snatch","psychic","spikes","knockoff"]},
 			{"generation":3,"level":30,"moves":["superpower","psychic","pursuit","taunt"]},
