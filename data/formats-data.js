@@ -1482,7 +1482,7 @@ exports.BattleFormatsData = {
 	},
 	noctowl: {
 		randomBattleMoves: ["roost","whirlwind","airslash","nightshade","toxic","magiccoat"],
-		randomDoubleBattleMoves: ["roost","tailwind","airslash","nightshade","hypervoice","heatwave","protect","hypnosis"],
+		randomDoubleBattleMoves: ["roost","tailwind","airslash","hypervoice","heatwave","protect","hypnosis"],
 		tier: "NU"
 	},
 	ledyba: {
@@ -1649,7 +1649,7 @@ exports.BattleFormatsData = {
 	},
 	quagsire: {
 		randomBattleMoves: ["recover","earthquake","waterfall","scald","toxic","curse","yawn","icepunch"],
-		randomDoubleBattleMoves: ["bulldoze","earthquake","waterfall","scald","rockslide","curse","yawn","icepunch","protect"],
+		randomDoubleBattleMoves: ["icywind","earthquake","waterfall","scald","rockslide","curse","yawn","icepunch","protect"],
 		tier: "OU"
 	},
 	murkrow: {
