@@ -121,16 +121,15 @@ exports.BattleFormats = {
 			if (totalEV > 510 && this.gen >= 6) {
 				problems.push((set.name || set.species) + " has more than 510 total EVs.");
 			}
-			if (format.banlistTable['illegal']) {
-				// In gen 1 and 2, it was possible to max out all EVs
-				if (this.gen >= 3 && this.gen < 6 && totalEV > 510) {
-					problems.push((set.name || set.species) + " has more than 510 total EVs.");
-				}
-			}
 
 			// ----------- legality line ------------------------------------------
 			if (!format.banlistTable || !format.banlistTable['illegal']) return problems;
 			// everything after this line only happens if we're doing legality enforcement
+
+			// only in gen 1 and 2 it was legal to max out all EVs
+			if (this.gen >= 3 && totalEV > 510) {
+				problems.push((set.name || set.species) + " has more than 510 total EVs.");
+			}
 
 			// limit one of each move
 			var moves = [];
