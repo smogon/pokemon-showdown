@@ -3281,6 +3281,7 @@ exports.BattleFormatsData = {
 	},
 	gastrodon: {
 		randomBattleMoves: ["earthquake","icebeam","scald","toxic","recover"],
+		randomDoubleBattleMoves: ["earthpower","icebeam","scald","muddywater","recover","icywind","protect"],
 		tier: "RU"
 	},
 	drifloon: {
@@ -3289,6 +3290,7 @@ exports.BattleFormatsData = {
 	},
 	drifblim: {
 		randomBattleMoves: ["shadowball","substitute","calmmind","hiddenpowerfighting","thunderbolt","destinybond","willowisp","batonpass"],
+		randomDoubleBattleMoves: ["shadowball","substitute","hypnosis","hiddenpowerfighting","thunderbolt","destinybond","willowisp","protect"],
 		tier: "NU"
 	},
 	buneary: {
@@ -3297,6 +3299,7 @@ exports.BattleFormatsData = {
 	},
 	lopunny: {
 		randomBattleMoves: ["return","switcheroo","jumpkick","firepunch","icepunch","healingwish"],
+		randomDoubleBattleMoves: ["return","switcheroo","jumpkick","firepunch","icepunch","fakeout","protect","encore"],
 		tier: "NU"
 	},
 	glameow: {
@@ -3305,6 +3308,7 @@ exports.BattleFormatsData = {
 	},
 	purugly: {
 		randomBattleMoves: ["fakeout","uturn","suckerpunch","quickattack","return","knockoff"],
+		randomDoubleBattleMoves: ["fakeout","uturn","suckerpunch","quickattack","return","knockoff","protect"],
 		tier: "NU"
 	},
 	stunky: {
@@ -3313,6 +3317,7 @@ exports.BattleFormatsData = {
 	},
 	skuntank: {
 		randomBattleMoves: ["pursuit","suckerpunch","crunch","fireblast","taunt","poisonjab","playrough","defog"],
+		randomDoubleBattleMoves: ["protect","suckerpunch","crunch","fireblast","taunt","poisonjab","playrough","snarl","feint"],
 		tier: "RU"
 	},
 	bronzor: {
