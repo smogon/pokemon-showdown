@@ -1641,7 +1641,7 @@ exports.BattleFormatsData = {
 	},
 	yanmega: {
 		randomBattleMoves: ["bugbuzz","airslash","hiddenpowerground","uturn","protect","gigadrain"],
-		tier: "RU"
+		tier: "BL2"
 	},
 	wooper: {
 		randomBattleMoves: ["recover","earthquake","scald","toxic","stockpile","yawn","protect"],
@@ -4074,7 +4074,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":50,"gender":"M","nature":"Quirky","moves":["agility","embargo","punishment","snarl"],"pokeball":"cherishball"}
 		],
-		tier: "RU"
+		tier: "BL2"
 	},
 	minccino: {
 		randomBattleMoves: ["return","tailslap","wakeupslap","uturn","aquatail"],
