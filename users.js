@@ -1079,9 +1079,6 @@ User = (function () {
 		var self = this;
 		formatid = toId(formatid);
 
-		// this should relieve login server strain
-		// this.mmrCache[formatid] = 1000;
-
 		if (this.mmrCache[formatid]) {
 			callback(this.mmrCache[formatid]);
 			return;
@@ -1315,7 +1312,7 @@ User = (function () {
 			challengeTo: challengeTo
 		}));
 	};
-	User.prototype.makeChallenge = function (user, format/*, isPrivate*/) {
+	User.prototype.makeChallenge = function (user, format) {
 		user = getUser(user);
 		if (!user || this.challengeTo) {
 			return false;
@@ -1333,7 +1330,6 @@ User = (function () {
 			from: this.userid,
 			to: user.userid,
 			format: '' + (format || ''),
-			//isPrivate: !!isPrivate, // currently unused
 			team: this.team
 		};
 		this.lastChallenge = time;
@@ -1382,16 +1378,12 @@ User = (function () {
 		user.updateChallenges();
 		return true;
 	};
-	// chatQueue should be an array, but you know about mutables in prototypes...
-	// P.S. don't replace this with an array unless you know what mutables in prototypes do.
-	User.prototype.chatQueue = null;
-	User.prototype.chatQueueTimeout = null;
-	User.prototype.lastChatMessage = 0;
 	/**
 	 * The user says message in room.
 	 * Returns false if the rest of the user's messages should be discarded.
 	 */
 	User.prototype.chat = function (message, room, connection) {
+		if (!this.lastChatMessage) this.lastChatMessage = 0;
 		var now = new Date().getTime();
 
 		if (message.substr(0, 16) === '/cmd userdetails') {

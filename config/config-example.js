@@ -13,13 +13,6 @@ exports.proxyip = false;
 //   in every Random Battle team.
 exports.potd = '';
 
-// crash guard - write errors to log file instead of crashing
-//   This is normally not recommended - if Node wants to crash, the
-//   server needs to be restarted
-//   Unfortunately, socket.io bug 409 requires some sort of crash guard
-//   https://github.com/LearnBoost/socket.io/issues/609
-exports.crashguard = true;
-
 // login server data - don't forget the http:// and the trailing slash
 //   This is the URL of the user database and ladder mentioned earlier.
 //   Don't change this setting - there aren't any other login servers right now

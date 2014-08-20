@@ -124,12 +124,10 @@ if (cluster.isMaster) {
 
 	global.Cidr = require('./cidr');
 
-	if (Config.crashguard) {
-		// graceful crash
-		process.on('uncaughtException', function (err) {
-			require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')');
-		});
-	}
+	// graceful crash
+	process.on('uncaughtException', function (err) {
+		require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')');
+	});
 
 	var app = require('http').createServer();
 	var appssl;

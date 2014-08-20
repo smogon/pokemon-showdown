@@ -207,11 +207,6 @@ exports.BattleItems = {
 				}
 			}
 		},
-		// onResidual: function (pokemon) {
-		// 	if (pokemon.template.species === 'Shuckle') {
-		// 		this.heal(this.clampIntRange(pokemon.maxhp / 16, 1));
-		// 	}
-		// },
 		desc: "Raises Farfetch'd's critical hit rate two stages."
 	},
 };

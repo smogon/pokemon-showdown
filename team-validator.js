@@ -102,11 +102,9 @@ if (!process.send) {
 	require('sugar');
 	global.Config = require('./config/config.js');
 
-	if (Config.crashguard) {
-		process.on('uncaughtException', function (err) {
-			require('./crashlogger.js')(err, 'A team validator process');
-		});
-	}
+	process.on('uncaughtException', function (err) {
+		require('./crashlogger.js')(err, 'A team validator process');
+	});
 
 	/**
 	 * Converts anything to an ID. An ID must have only lowercase alphanumeric
