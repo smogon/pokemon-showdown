@@ -1087,7 +1087,7 @@ exports.BattleFormatsData = {
 	},
 	electivire: {
 		randomBattleMoves: ["wildcharge","crosschop","icepunch","flamethrower","earthquake"],
-		randomDoubleBattleMoves: ["wildcharge","crosschop","icepunch","substitute","flamethrower","earthquake","feint","protect","discharge"],
+		randomDoubleBattleMoves: ["wildcharge","crosschop","icepunch","substitute","flamethrower","earthquake","feint","protect","thunderbolt","followme","electricterrain"],
 		eventPokemon: [
 			{"generation":4,"level":50,"gender":"M","nature":"Adamant","moves":["thunderpunch","icepunch","crosschop","earthquake"]},
 			{"generation":4,"level":50,"gender":"M","nature":"Serious","moves":["lightscreen","thunderpunch","discharge","thunderbolt"],"pokeball":"cherishball"}
@@ -1111,7 +1111,7 @@ exports.BattleFormatsData = {
 	},
 	magmortar: {
 		randomBattleMoves: ["fireblast","focusblast","hiddenpowergrass","hiddenpowerice","thunderbolt","earthquake","willowisp"],
-		randomDoubleBattleMoves: ["fireblast","substitute","focusblast","hiddenpowergrass","hiddenpowerice","thunderbolt","lavaplume","willowisp","protect"],
+		randomDoubleBattleMoves: ["fireblast","taunt","focusblast","hiddenpowergrass","hiddenpowerice","thunderbolt","heatwave","willowisp","protect","followme"],
 		eventPokemon: [
 			{"generation":4,"level":50,"gender":"F","nature":"Modest","moves":["flamethrower","psychic","hyperbeam","solarbeam"]},
 			{"generation":4,"level":50,"gender":"M","nature":"Hardy","moves":["confuseray","firepunch","lavaplume","flamethrower"],"pokeball":"cherishball"}
@@ -1120,7 +1120,7 @@ exports.BattleFormatsData = {
 	},
 	pinsir: {
 		randomBattleMoves: ["swordsdance","earthquake","xscissor","quickattack","return"],
-		randomDoubleBattleMoves: ["feint","protect","swordsdance","xscissor","earthquake","closecombat","stealthrock","substitute","stoneedge","quickattack","return"],
+		randomDoubleBattleMoves: ["feint","protect","swordsdance","xscissor","earthquake","closecombat","substitute","stoneedge","quickattack","return"],
 		eventPokemon: [
 			{"generation":3,"level":35,"abilities":["hypercutter"],"moves":["helpinghand","guillotine","falseswipe","submission"]}
 		],
@@ -1128,7 +1128,7 @@ exports.BattleFormatsData = {
 	},
 	pinsirmega: {
 		randomBattleMoves: ["swordsdance","xscissor","earthquake","closecombat","stealthrock","substitute","stoneedge","quickattack","return"],
-		randomDoubleBattleMoves: ["feint","protect","swordsdance","xscissor","earthquake","closecombat","stealthrock","substitute","stoneedge","quickattack","return"],
+		randomDoubleBattleMoves: ["feint","protect","swordsdance","xscissor","earthquake","closecombat","substitute","stoneedge","quickattack","return"],
 		requiredItem: "Pinsirite"
 	},
 	tauros: {
@@ -1168,7 +1168,7 @@ exports.BattleFormatsData = {
 	},
 	lapras: {
 		randomBattleMoves: ["icebeam","thunderbolt","healbell","toxic","surf","rest","sleeptalk"],
-		randomDoubleBattleMoves: ["icebeam","thunderbolt","healbell","toxic","surf","dragondance","substitute","waterfall","return","avalanche","protect","iceshard"],
+		randomDoubleBattleMoves: ["icebeam","thunderbolt","healbell","hydropump","surf","substitute","protect","iceshard","icywind"],
 		eventPokemon: [
 			{"generation":3,"level":44,"moves":["hydropump","raindance","blizzard","healbell"]}
 		],
@@ -1209,6 +1209,7 @@ exports.BattleFormatsData = {
 	},
 	flareon: {
 		randomBattleMoves: ["flamecharge","facade","flareblitz","superpower","wish","protect","toxic"],
+		randomDoubleBattleMoves: ["flamecharge","facade","flareblitz","superpower","wish","protect","helpinghand"],
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["tailwhip","tackle","helpinghand","sandattack"]},
 			{"generation":6,"level":10,"isHidden":false,"moves":["celebrate","tailwhip","sandattack","ember"],"pokeball":"cherishball"}
