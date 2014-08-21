@@ -225,6 +225,45 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Battle Spot Special 6",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		onBegin: function () {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		banlist: [
+			'Charizard',
+			'Gengar',
+			'Kangaskhan',
+			'Gyarados',
+			'Tyranitar',
+			'Mawile',
+			'Salamence',
+			'Garchomp',
+			'Togekiss',
+			'Rotom', 'Rotom-Wash', 'Rotom-Heat', 'Rotom-Mow', 'Rotom-Frost', Rotom-Fan',
+			'Cresselia',
+			'Amoonguss',
+			'Thundurus',
+			'Landorus', 'Landorus-Therian',
+			'Greninja',
+			'Talonflame',
+			'Meowstic', 'Meowstic-F'
+			'Aegislash',
+			'Sylveon'
+		],
+		validateTeam: function (team, format) {
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
+		}
+	},
+	{
 		name: "Doubles Challenge Cup",
 		section: 'XY Doubles',
 
