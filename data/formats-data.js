@@ -1228,7 +1228,7 @@ exports.BattleFormatsData = {
 	},
 	umbreon: {
 		randomBattleMoves: ["wish","protect","healbell","toxic","batonpass","foulplay"],
-		randomDoubleBattleMoves: ["curse","moonlight","wish","protect","healbell","toxic","batonpass","foulplay","helpinghand"],
+		randomDoubleBattleMoves: ["moonlight","wish","protect","healbell","toxic","snarl","foulplay","helpinghand"],
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["feintattack","meanlook","screech","moonlight"]},
 			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["tailwhip","tackle","helpinghand","sandattack"]},
