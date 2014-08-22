@@ -476,6 +476,23 @@ exports.BattleMovedex = {
 		},
 		breaksProtect: true
 	},
+	phantomforce: {
+		inherit: true,
+		basePower: 60,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function (target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
 	shadowforce: {
 		inherit: true,
 		basePower: 40,
