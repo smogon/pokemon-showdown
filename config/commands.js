@@ -174,7 +174,7 @@ var commands = exports.commands = {
 
 		this.sendReply("User: " + targetUser.name);
 		if (user.can('alts', targetUser)) {
-			var alts = targetUser.getAlts();
+			var alts = targetUser.getAlts(true);
 			var output = Object.keys(targetUser.prevNames).join(", ");
 			if (output) this.sendReply("Previous names: " + output);
 
