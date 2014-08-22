@@ -1064,12 +1064,13 @@ User = (function () {
 		}
 		this.roomCount = {};
 	};
-	User.prototype.getAlts = function () {
+	User.prototype.getAlts = function (getAll) {
 		var alts = [];
 		for (var i in users) {
 			if (users[i] === this) continue;
 			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
 			if (!users[i].named && !users[i].connected) continue;
+			if (!getAll && users[i].group !== ' ' && this.group === ' ') continue;
 
 			alts.push(users[i].name);
 		}
