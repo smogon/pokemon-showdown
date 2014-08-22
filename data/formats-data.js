@@ -2594,7 +2594,7 @@ exports.BattleFormatsData = {
 	},
 	altaria: {
 		randomBattleMoves: ["dragondance","dracometeor","outrage","dragonclaw","earthquake","roost","fireblast","healbell"],
-		randomDoubleBattleMoves: ["dragondance","dracometeor","protect","dragonclaw","earthquake","protect","fireblast","tailwind"],
+		randomDoubleBattleMoves: ["dragondance","dracometeor","protect","dragonclaw","earthquake","fireblast","tailwind"],
 		eventPokemon: [
 			{"generation":3,"level":45,"moves":["takedown","dragonbreath","dragondance","refresh"]},
 			{"generation":3,"level":36,"moves":["healbell","dragonbreath","solarbeam","aerialace"]},
@@ -2834,7 +2834,7 @@ exports.BattleFormatsData = {
 	},
 	walrein: {
 		randomBattleMoves: ["substitute","protect","toxic","surf","icebeam","roar"],
-		randomDoubleBattleMoves: ["hydropump","protect","icywind","surf","icebeam","protect"],
+		randomDoubleBattleMoves: ["hydropump","protect","icywind","surf","icebeam"],
 		eventPokemon: [
 			{"generation":5,"level":50,"isHidden":false,"abilities":["thickfat"],"moves":["icebeam","surf","hail","sheercold"],"pokeball":"cherishball"}
 		],
