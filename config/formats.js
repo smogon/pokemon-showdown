@@ -89,7 +89,7 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "XY Battle Spot Singles",
+		name: "Battle Spot Singles",
 		section: "XY Singles",
 
 		onBegin: function () {
@@ -107,7 +107,7 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "XY Battle Spot Special 5",
+		name: "Battle Spot Special 5",
 		section: "XY Singles",
 
 		maxForcedLevel: 50,
@@ -187,7 +187,7 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "XY Battle Spot Doubles",
+		name: "Battle Spot Doubles",
 		section: "XY Doubles",
 
 		gameType: 'doubles',
@@ -200,6 +200,28 @@ exports.Formats = [
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		validateTeam: function (team, format) {
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
+		}
+	},
+	{
+		name: "Battle Spot Special 6",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		onBegin: function () {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		banlist: ['Aegislash', 'Amoonguss', 'Charizard', 'Cresselia', 'Garchomp', 'Gengar', 'Greninja', 'Gyarados', 'Kangaskhan', 'Landorus', 
+			'Landorus-Therian', 'Mawile', 'Meowstic', 'Meowstic-F', 'Rotom', 'Rotom-Fan', 'Rotom-Frost', 'Rotom-Heat', 'Rotom-Mow', 'Rotom-Wash',
+			'Salamence', 'Sylveon', 'Talonflame', 'Thundurus', 'Thundurus-Therian', 'Togekiss', 'Tyranitar'
+		],
 		validateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		}
@@ -220,45 +242,6 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
 		requirePentagon: true,
 		banlist: [], // The necessary bans are in Standard GBU
-		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four Pokémon.'];
-		}
-	},
-	{
-		name: "Battle Spot Special 6",
-		section: "XY Doubles",
-
-		gameType: 'doubles',
-		onBegin: function () {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		banlist: [
-			'Charizard',
-			'Gengar',
-			'Kangaskhan',
-			'Gyarados',
-			'Tyranitar',
-			'Mawile',
-			'Salamence',
-			'Garchomp',
-			'Togekiss',
-			'Rotom', 'Rotom-Wash', 'Rotom-Heat', 'Rotom-Mow', 'Rotom-Frost', 'Rotom-Fan',
-			'Cresselia',
-			'Amoonguss',
-			'Thundurus',
-			'Landorus', 'Landorus-Therian',
-			'Greninja',
-			'Talonflame',
-			'Meowstic', 'Meowstic-F',
-			'Aegislash',
-			'Sylveon'
-		],
 		validateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		}
@@ -310,7 +293,7 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "XY Battle Spot Triples",
+		name: "Battle Spot Triples",
 		section: "XY Triples",
 
 		gameType: 'triples',
