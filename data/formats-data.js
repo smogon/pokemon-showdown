@@ -945,7 +945,7 @@ exports.BattleFormatsData = {
 	},
 	kangaskhan: {
 		randomBattleMoves: ["return","suckerpunch","earthquake","poweruppunch","crunch"],
-		randomDoubleBattleMoves: ["fakeout","return","suckerpunch","earthquake","facade","poweruppunch","crunch"],
+		randomDoubleBattleMoves: ["fakeout","return","suckerpunch","earthquake","doubleedge","poweruppunch","crunch","protect"],
 		eventPokemon: [
 			{"generation":3,"level":5,"gender":"F","abilities":["earlybird"],"moves":["yawn","wish"]},
 			{"generation":3,"level":10,"gender":"F","abilities":["earlybird"],"moves":["cometpunch","leer","bite"]},
