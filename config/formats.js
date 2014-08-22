@@ -248,14 +248,14 @@ exports.Formats = [
 			'Salamence',
 			'Garchomp',
 			'Togekiss',
-			'Rotom', 'Rotom-Wash', 'Rotom-Heat', 'Rotom-Mow', 'Rotom-Frost', Rotom-Fan',
+			'Rotom', 'Rotom-Wash', 'Rotom-Heat', 'Rotom-Mow', 'Rotom-Frost', 'Rotom-Fan',
 			'Cresselia',
 			'Amoonguss',
 			'Thundurus',
 			'Landorus', 'Landorus-Therian',
 			'Greninja',
 			'Talonflame',
-			'Meowstic', 'Meowstic-F'
+			'Meowstic', 'Meowstic-F',
 			'Aegislash',
 			'Sylveon'
 		],
