@@ -291,6 +291,7 @@ exports.customavatars = {
 	'galladebosszolt': 'gallade-boss-zolt.gif',
 	'bossage': 'gallade-boss-zolt.gif',
 	'bearticsmalls': 'beartic-smalls.gif',
+	'shaneo': 'shaneo.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
@@ -326,7 +327,6 @@ exports.appealurl = 'http://www.pokecommunity.com/showthread.php?t=289012#rules'
 //     - mute: Muting and unmuting.
 //     - receivemutedpms: Receive PMs from muted users.
 //     - forcerename: /fr command.
-//     - forcerenameto: /frt command.
 //     - redirect: /redir command.
 //     - ip: IP checking.
 //     - alts: Alt checking.
@@ -416,6 +416,7 @@ exports.groups = {
 		declare: true,
 		announce: true,
 		alts: '@u',
+		ignorelimits: true,
 		rank: 2
 	},
 	'\u2606': {
