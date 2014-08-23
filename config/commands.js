@@ -1155,7 +1155,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'neverused' || target === 'nu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3506287/\">np: NU (beta)</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3514299/\">np: NU Stage 1</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509494/\">NU Viability Rankings</a><br />";
 		}
 		if (target === 'all' || target === 'littlecup' || target === 'lc') {
