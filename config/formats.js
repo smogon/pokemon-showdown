@@ -7,12 +7,18 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Low Tier Random (BWknd XVIII)",
+		name: "1v1 Random (BWknd 19)",
 		section: "XY Singles",
 
-		mod: 'lowtierrandom',
-		team: 'randomLowTier',
-		ruleset: ['Random (no PotD)']
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'Team Preview 1v1', 'Sleep Clause Mod', 'HP Percentage Mod'],
+		onBegin: function() {
+			this.debug('Cutting down to 1');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
 	},
 	{
 		name: "OU",
