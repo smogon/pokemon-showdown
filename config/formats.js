@@ -461,7 +461,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Ignore Illegal Abilities', 'Uber', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew',
+		banlist: ['Ignore Illegal Abilities', 'Uber', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Soul Dew',
 			'Archeops', 'Kyurem-Black', 'Regigigas', 'Slaking', 'Weavile', 'Shedinja + Sturdy', 'Smeargle + Prankster'
 		],
 		validateSet: function(set) {
@@ -550,7 +550,7 @@ exports.Formats = [
 
 		searchShow: false,
 		// no restrictions
-		ruleset: []
+		ruleset: ['HP Percentage Mod']
 	},
 	{
 		name: "Middle Cup",
