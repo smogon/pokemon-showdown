@@ -291,6 +291,7 @@ exports.customavatars = {
 	'galladebosszolt': 'gallade-boss-zolt.gif',
 	'bossage': 'gallade-boss-zolt.gif',
 	'bearticsmalls': 'beartic-smalls.gif',
+	'shaneo': 'shaneo.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
@@ -415,6 +416,7 @@ exports.groups = {
 		declare: true,
 		announce: true,
 		alts: '@u',
+		ignorelimits: true,
 		rank: 2
 	},
 	'\u2606': {
