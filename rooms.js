@@ -23,7 +23,6 @@ var rooms = Rooms.rooms = Object.create(null);
 var GlobalRoom = (function () {
 	function GlobalRoom(roomid) {
 		this.id = roomid;
-		this.i = {};
 
 		// init battle rooms
 		this.rooms = [];
@@ -498,20 +497,15 @@ var GlobalRoom = (function () {
 	};
 	GlobalRoom.prototype.addRoom = function (room, format, p1, p2, parent, rated) {
 		room = Rooms.createBattle(room, format, p1, p2, parent, rated);
-		if (this.id in room.i) return;
-		room.i[this.id] = this.rooms.length;
 		this.rooms.push(room);
 		return room;
 	};
 	GlobalRoom.prototype.removeRoom = function (room) {
 		room = getRoom(room);
 		if (!room) return;
-		if (this.id in room.i) {
-			this.rooms.splice(room.i[this.id], 1);
-			delete room.i[this.id];
-			for (var i = 0; i < this.rooms.length; i++) {
-				this.rooms[i].i[this.id] = i;
-			}
+		var index = this.rooms.indexOf(room);
+		if (index >= 0) {
+			this.rooms.splice(index, 1);
 		}
 	};
 	GlobalRoom.prototype.chat = function (user, message, connection) {
@@ -528,7 +522,6 @@ var BattleRoom = (function () {
 	function BattleRoom(roomid, format, p1, p2, parentid, rated) {
 		this.id = roomid;
 		this.title = "" + p1.name + " vs. " + p2.name;
-		this.i = {};
 		this.modchat = (Config.battlemodchat || false);
 
 		format = '' + (format || '');
@@ -1175,7 +1168,6 @@ var ChatRoom = (function () {
 		}
 		this.id = roomid;
 		this.title = title || roomid;
-		this.i = {};
 
 		this.log = [];
 		this.logTimes = [];

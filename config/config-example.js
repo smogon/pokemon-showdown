@@ -326,7 +326,6 @@ exports.appealurl = 'http://www.pokecommunity.com/showthread.php?t=289012#rules'
 //     - mute: Muting and unmuting.
 //     - receivemutedpms: Receive PMs from muted users.
 //     - forcerename: /fr command.
-//     - forcerenameto: /frt command.
 //     - redirect: /redir command.
 //     - ip: IP checking.
 //     - alts: Alt checking.
