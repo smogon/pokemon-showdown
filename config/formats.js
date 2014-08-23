@@ -519,12 +519,6 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Hackmons",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'HP Percentage Mod']
-	},
-	{
 		name: "Alphabet Cup",
 		section: "Other Metagames",
 
