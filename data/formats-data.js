@@ -2377,7 +2377,8 @@ exports.BattleFormatsData = {
 	mawilemega: {
 		randomBattleMoves: ["swordsdance","ironhead","firefang","substitute","playrough","suckerpunch","knockoff","focuspunch"],
 		randomDoubleBattleMoves: ["swordsdance","ironhead","firefang","substitute","playrough","suckerpunch","knockoff","protect"],
-		requiredItem: "Mawilite"
+		requiredItem: "Mawilite",
+		tier: "Uber"
 	},
 	aron: {
 		randomBattleMoves: ["headsmash","ironhead","earthquake","superpower","stealthrock","endeavor"],
