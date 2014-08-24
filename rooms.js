@@ -1065,6 +1065,11 @@ var BattleRoom = (function () {
 			}
 		}
 
+		if (this.battle.active) {
+			user.popup("This battle already has two players.")
+			return false;
+		}
+
 		this.auth[user.userid] = '\u2605';
 		this.battle.join(user, slot, team);
 		rooms.global.battleCount += (this.battle.active ? 1 : 0) - (this.active ? 1 : 0);
