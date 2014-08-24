@@ -1,7 +1,6 @@
 /*
  * Chromaloterie: Simple draw of lot. The winner wins a shiney Pokemon in the Official game Pokemon X or Y.
  *
- * Enchères FCL: Auction script used for the "French Community League". 
  */
 
 // Chromaloterie resources
@@ -9,26 +8,6 @@ var status = false;
 var votes = {hasvoted:{}, votes:{}};
 var participants = [];
 var winner = 'personne';
-
-// Auctions resources
-var 	auctions = false
-	,participants = {participe:{}}
-	,currentPrice = 0
-	,currentParticipant = null
-	,currentCap = null
-	,auctionTimer = 8000
-	,outbid = null
-	,teams = {nb:0};
-
-
-function createTeam (alias, cap, money) {
-	this.aliasid = alias.replace(/ /g,'').toLowerCase();
-	this.alias = alias;
-	this.capid = cap.replace(/ /g,'').toLowerCase();
-	this.cap   = cap;
-	this.money = money;
-}
-
 
 exports.commands = {
 	
@@ -56,7 +35,7 @@ exports.commands = {
 			winner = 'personne';
 		}
 	},
-	vote: function (target, room, user) {
+	loterievote: function (target, room, user) {
 		if (room.id !== 'franais') return;
 		if (status == false) return this.sendReply('Il n\'y a pas de Chromaloterie en cours.');
 		if (isNaN(target)) return this.sendReply("Le vote doit être un nombre entier valide.");
@@ -71,184 +50,5 @@ exports.commands = {
 			this.sendReply('Vous avez déjà voté.');
 		}	
 
-	},
-
-	 /*****************************/
-	 /* Auctions (in development) */
-	 /*****************************/
-	// Initialization
- 	auctions: 'auction',
- 	auction: function (target, room, user) {
- 		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
-		if (!this.can('ban', null, room)) return false;
-		if (target == 'start') {
-			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong>Les enchères sont lancées ! Bonne chance à tous !</strong></div>');
-			auctions = true;
-		} else if (target == 'stop') {
-			Rooms.rooms.franais.addRaw('<div class="broadcast-blue"><strong> Les enchères sont terminées ! Merci d\'avoir participé !</strong></div>');
-			teams = {nb:0};
-			auctions = false;
-			currentParticipant = '';
-			currentPrice = 0;
-		}
-	},
-	signup: function (target, room, user) {
-		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
-		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
-		if (participants.participe[target] == 1) return this.sendReply('Vous êtes déjà inscrit.');
-		participants.participe[target] = 1;
-		Rooms.rooms.franais.addRaw(user+' est inscrit aux enchères !');
-	},
-	
-	// Configuration
-	// Ex: /maketeam TEAM NAME HERE, CAP NAME, MONEY
-	maketeam: function (target, room, user) {
-		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
-		if (!this.can('ban', null, room)) return false;
-		if (checkauctions == 0) return this.sendReply('Il n\'y a pas d\'enchère en cours');
-		target = target.split(',');
-		if (isNaN(target[2])) return this.sendReply('Vous devez spécifier un nombre entier valide pour définir l\'argent de l\'équipe.');
-		// We assume there will be no more than 20 teams (edit if necessary...)
-		for (var i = 0; i<20; i++) {
-			if (typeof teams[i] === 'undefined') {
-				teams[i] = new createTeam(target[0], target[1], target[2]);
-				teams.nb++;
-				Rooms.rooms.franais.addRaw('Nouvelle équipe ajoutée. Capitaine: <b>'+target[1]+'</b>, Nom: <b>'+target[0]+'</b>, Crédit restant: <b>'+target[2]+'€</b>.');
-				break;
-			}
-		}
-	},
-	
-	// Ex: /settimer 5 (5 secondes added each outbid. Default is setted to 8 seconds)
-	settimer: function (target, room, user) {
-		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
-		if (!this.can('ban', null, room)) return false;
-		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
-		if (isNaN(target)) return this.sendReply('Le timer doit être composé d\'un nombre entier valide.');
-		auctionTimer = target*1000;
-		Rooms.rooms.franais.addRaw('Le timer a été réglé sur <b>'+target+'</b> secondes.');
-	},
-	// Ex: /setcap TEAM NAME, Keb
-	setcap: 'setcaptain',
-	setcaptain: function (target, room, user) {
-		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
-		if (!this.can('ban', null, room)) return false;
-		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
-		target = target.split(',')
-		for (i = 0; i<teams.nb; i++) {
-			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
-				teams[i].cap = target[1];
-				Rooms.rooms.franais.addRaw('Le capitaine de l\'équipe '+teams[i].alias+' est désormais '+target[1]+' !')
-			}
-		}
-	},
-	// Ex: /setalias TEAM NAME, shoedrep 
-	setalias: function (target, room, user) {
-		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
-		if (!this.can('ban', null, room)) return false;
-		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
-		target = target.split(',')
-		for (i = 0; i<teams.nb; i++) {
-			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
-				Rooms.rooms.franais.addRaw('Le nouvel alias de l\'équipe '+teams[i].alias+' est désormais '+target[1]+' !');
-				teams[i].alias = target[1];
-				teams[i].aliasid = target[1].replace(/ /g,'').toLowerCase();
-			}
-		}		
-	},
-	// It works the same way
-	setmoney: function (target, room, user) {
-		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
-		if (!this.can('ban', null, room)) return false;
-		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
-		target = target.split(',')
-		for (i = 0; i<teams.nb; i++) {
-			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
-				teams[i].money = target[1];
-				Rooms.rooms.franais.addRaw('L\'équipe '+teams[i].alias+' dispose maintenant de '+target[1]+'€ !')
-			}
-		}	
-	},
-	addmoney: function (target, room, user) {
-		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
-		if (!this.can('ban', null, room)) return false;
-		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
-		target = target.split(',')
-		for (i = 0; i<teams.nb; i++) {
-			if (teams[i].aliasid == target[0].replace(/ /g,'').toLowerCase()) {
-				teams[i].money += target[1];
-				Rooms.rooms.franais.addRaw('L\'équipe '+teams[i].alias+' a été créditée de '+target[1]+'€ !')
-			}
-		}	
-	},
-	// Informations
-	teamstatus: function (target, room, user) {
-		var status = '';
-		for (i = 0; i < teams.nb; i++) {
-			status += 'Team <b>'+teams[i].alias+'</b>: Capitaine: '+teams[i].cap+', Crédit restant, '+teams[i].money+', Joueurs: <br/>'
-		}
-		this.sendReplyBox(status);
-	},
-	// Auction
-	nominate: function (target, room, user) {
-		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
-		if (!this.can('mute', null, room)) return false;
-		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
-		if (participants.participe[target] == 0) return this.sendReply('Ce joueur a déjà été vendu.');
-		var targetid = target
-		if (typeof participants.participe[target.replace(/ /g,'').toLowerCase()] === 'undefined') return this.sendReply('Ce joueur n\'est pas inscrit à l\'enchère.');
-		Rooms.rooms.franais.addRaw('<b>'+target+' a été nominé !</b>');
-		currentParticipant = target;
-		outbid = setTimeout(function() {
-			var status = '';
-			for (var i = 0; i < teams.nb; i++) {
-				if (user == teams[i].capid) {
-					Rooms.rooms.franais.addRaw('<b>'+currentParticipant+' a été vendu à la team '+teams[i].alias+' pour '+currentPrice+'€! Bravo !</b>');
-					teams[i].money -= currentPrice;
-					teams[i].players.push(currentParticipant);
-					participants.participe[currentParticipant] = 0;
-					currentParticipant = null;
-				}
-				// Status of all teams updated
-				status += 'Team <b>'+teams[i].alias+'</b>: Capitaine: '+teams[i].cap+', Crédit restant, <b>'+teams[i].money+'</b>, Joueurs: '+teams[i].players+'<br/>';
-			}
-			Rooms.rooms.franais.addRaw('<div class="infobox">'+status+'</div>');
-			}, auctionTimer);
-		},
-	s: 'outbid',
-	outbid: function (target, room, user) {
-		if (room.id !== 'franais') return this.sendReply('This command is reserved to the room Français.');
-		if (!this.can('mute', null, room)) return false;
-		if (auctions === false) return this.sendReply('Il n\'y a pas d\'enchères en cours.');
-		if (currentParticipant === '') return this.sendReply('Il n\'y a pas de joueur actuellement nominé.');
-		if (isNaN(target)) return this.sendReply('Le vote doit être un nombre entier valide.');
-		if (target <= currentPrice) return this.sendReply('Votre proposition doit être supérieure à '+currentPrice+'€.');
-		if (participants.participe[target] == 0) return this.sendReply('Ce joueur a déjà été vendu.');
-		if (typeof participants.participe[currentParticipant] === 'undefined') return this.sendReply('Ce joueur n\'est pas inscrit à l\'enchère.');
-		// Not enough money ?
-		for (var i = 0; i < teams.nb; i++) {
-			if (user == teams[i].capid) {
-				if (teams[i].money - target < 0) return this.sendReply('Vous n\'avez pas assez de sous pour voter.');
-			}
-		}
-		currentPrice = target;
-		Rooms.rooms.franais.addRaw(user+' a surenchéri pour '+target+'€ !');
-		clearTimeout(outbid);
-		outbid = setTimeout(function() {
-			var status = '';
-			for (var i = 0; i < teams.nb; i++) {
-				if (user == teams[i].capid) {
-					Rooms.rooms.franais.addRaw(currentParticipant+' a été vendu à la team '+teams[i].alias+' pour '+currentPrice+'€! Bravo !');
-					teams[i].money -= currentPrice;
-					teams[i].players.push(currentParticipant);
-				}
-				status += 'Team <b>'+teams[i].alias+'</b>: Capitaine: '+teams[i].cap+', Crédit restant, <b>'+teams[i].money+'</b>, Joueurs: '+teams[i].players+'<br/>';
-
-			}
-			Rooms.rooms.franais.addRaw('<div class="infobox">'+status+'</div>');
-			participants.participe[currentParticipant] = 0;
-			currentParticipant = null;
-			currentPrice = 0;
-		}, auctionTimer);
 	}
  }
