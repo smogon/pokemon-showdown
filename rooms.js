@@ -852,6 +852,11 @@ var BattleRoom = (function () {
 		this.update();
 		return true;
 	};
+	BattleRoom.prototype.sendPlayer = function (num, message) {
+		var player = this.battle.getPlayer(num);
+		if (!player) return false;
+		this.sendUser(player, message);
+	};
 	BattleRoom.prototype.kickInactive = function () {
 		clearTimeout(this.resetTimer);
 		this.resetTimer = null;
@@ -946,12 +951,12 @@ var BattleRoom = (function () {
 		if (inactiveSide !== 1) {
 			// side 0 is inactive
 			var ticksLeft0 = Math.min(this.sideTicksLeft[0] + 1, maxTicksLeft);
-			this.sendUser(this.battle.getPlayer(0), '|inactive|You have ' + (ticksLeft0 * 10) + ' seconds to make your decision.');
+			this.sendPlayer(0, '|inactive|You have ' + (ticksLeft0 * 10) + ' seconds to make your decision.');
 		}
 		if (inactiveSide !== 0) {
 			// side 1 is inactive
 			var ticksLeft1 = Math.min(this.sideTicksLeft[1] + 1, maxTicksLeft);
-			this.sendUser(this.battle.getPlayer(1), '|inactive|You have ' + (ticksLeft1 * 10) + ' seconds to make your decision.');
+			this.sendPlayer(1, '|inactive|You have ' + (ticksLeft1 * 10) + ' seconds to make your decision.');
 		}
 
 		this.resetTimer = setTimeout(this.kickInactive.bind(this), 10 * 1000);
