@@ -1127,7 +1127,7 @@ var BattleRoom = (function () {
 		}
 
 		if (this.battle.active) {
-			user.popup("This battle already has two players.")
+			user.popup("This battle already has two players.");
 			return false;
 		}
 
