@@ -476,6 +476,23 @@ exports.BattleMovedex = {
 		},
 		breaksProtect: true
 	},
+	phantomforce: {
+		inherit: true,
+		basePower: 60,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function (target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
 	shadowforce: {
 		inherit: true,
 		basePower: 40,
@@ -590,6 +607,9 @@ exports.BattleMovedex = {
 	},
 	bide: {
 		inherit: true,
+		onTryHit: function (pokemon) {
+			return this.willAct() && this.runEvent('StallMove', pokemon);
+		},
 		effect: {
 			duration: 2,
 			onLockMove: 'bide',
@@ -1173,7 +1193,7 @@ exports.BattleMovedex = {
 		category: "Special",
 		isViable: true,
 		priority: 0,
-		isNotProtectable: true,
+		isSoundBased: true,
 		affectedByImmunities: false,
 		onHit: function (target, source) {
 			source.side.addSideCondition('futuremove');
@@ -1188,6 +1208,8 @@ exports.BattleMovedex = {
 				moveData: {
 					basePower: 80,
 					category: "Special",
+					isSoundBased: true,
+					isNotProtectable: true,
 					affectedByImmunities: false,
 					type: 'Normal'
 				}
