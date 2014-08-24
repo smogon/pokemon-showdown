@@ -200,7 +200,7 @@ Tournament = (function () {
 				}, this);
 			}
 		}
-		this.room.send('|tournament|updateEnd', targetUser);
+		this.room.sendUser(targetUser, '|tournament|updateEnd');
 	};
 
 	Tournament.prototype.purgeGhostUsers = function () {
