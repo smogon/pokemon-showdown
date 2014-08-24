@@ -489,6 +489,7 @@ exports.BattleAbilities = {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'Truant');
 			},
+			onBeforeMovePriority: 99,
 			onBeforeMove: function (pokemon, target, move) {
 				if (pokemon.removeVolatile('truant')) {
 					this.add('cant', pokemon, 'ability: Truant');
