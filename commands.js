@@ -1183,18 +1183,33 @@ var commands = exports.commands = {
 
 		Rooms.global.lockdown = true;
 		for (var id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
-			if (Rooms.rooms[id].requestKickInactive && !Rooms.rooms[id].battle.ended) {
-				Rooms.rooms[id].requestKickInactive(user, true);
-				if (Rooms.rooms[id].modchat !== '+') {
-					Rooms.rooms[id].modchat = '+';
-					Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>");
+			if (id === 'global') continue;
+			var curRoom = Rooms.rooms[id];
+			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+			if (curRoom.requestKickInactive && !curRoom.battle.ended) {
+				curRoom.requestKickInactive(user, true);
+				if (curRoom.modchat !== '+') {
+					curRoom.modchat = '+';
+					curRoom.addRaw("<div class=\"broadcast-red\"><b>Moderated chat was set to +!</b><br />Only users of rank + and higher can talk.</div>");
 				}
 			}
 		}
 
 		this.logEntry(user.name + " used /lockdown");
+	},
 
+	slowlockdown: function (target, room, user) {
+		if (!this.can('lockdown')) return false;
+
+		Rooms.global.lockdown = true;
+		for (var id in Rooms.rooms) {
+			if (id === 'global') continue;
+			var curRoom = Rooms.rooms[id];
+			if (curRoom.battle) continue;
+			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+		}
+
+		this.logEntry(user.name + " used /slowlockdown");
 	},
 
 	endlockdown: function (target, room, user) {
@@ -1209,7 +1224,6 @@ var commands = exports.commands = {
 		}
 
 		this.logEntry(user.name + " used /endlockdown");
-
 	},
 
 	emergency: function (target, room, user) {
