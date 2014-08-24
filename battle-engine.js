@@ -3919,10 +3919,10 @@ Battle = (function () {
 			var p2 = this.p2;
 			var p1active = p1 ? p1.active[0] : null;
 			var p2active = p2 ? p2.active[0] : null;
-			data[2] = data[2].replace(/\f/g, '\n');
-			this.add('', '>>> ' + data[2]);
+			var target = data.slice(2).join('|').replace(/\f/g, '\n');
+			this.add('', '>>> ' + target);
 			try {
-				this.add('', '<<< ' + eval(data[2]));
+				this.add('', '<<< ' + eval(target));
 			} catch (e) {
 				this.add('', '<<< error: ' + e.message);
 			}
