@@ -545,7 +545,7 @@ exports.Formats = [
 		banlist: ['DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Light Ball', 'Mawilite', 'Medichamite', 'Soul Dew', 'Thick Club', 'Huge Power', 'Pure Power', 'Shedinja', 'Smeargle']
 	},
 	{
-		name: "Hackmons",
+		name: "Classic Hackmons",
 		section: "Other Metagames",
 
 		searchShow: false,
