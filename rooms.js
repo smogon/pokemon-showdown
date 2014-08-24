@@ -1367,10 +1367,9 @@ var ChatRoom = (function () {
 		if (!user) return false; // ???
 		if (this.users[user.userid]) return user;
 
-		this.users[user.userid] = user;
 		if (user.named && Config.reportjoins) {
 			this.add('|j|' + user.getIdentity(this.id));
-			this.update(user);
+			this.update();
 		} else if (user.named) {
 			var entry = '|J|' + user.getIdentity(this.id);
 			if (Config.reportjoinsperiod) {
@@ -1380,6 +1379,8 @@ var ChatRoom = (function () {
 			}
 			this.logEntry(entry);
 		}
+
+		this.users[user.userid] = user;
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
