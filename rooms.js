@@ -55,16 +55,13 @@ var Room = (function () {
 	Room.prototype.sendUser = function (user, message) {
 		user.sendTo(this, message);
 	};
-	Room.prototype.add = function (message, noUpdate) {
+	Room.prototype.add = function (message) {
 		if (typeof message !== 'string') throw new Error("Deprecated message type");
 		this.logEntry(message);
 		if (this.logTimes && message.substr(0, 3) === '|c|') {
 			message = '|c:|' + (~~(Date.now() / 1000)) + '|' + message.substr(3);
 		}
 		this.log.push(message);
-		if (!noUpdate) {
-			this.update();
-		}
 	};
 	Room.prototype.logEntry = function () {};
 	Room.prototype.addRaw = function (message) {
@@ -84,7 +81,7 @@ var Room = (function () {
 		message = CommandParser.parse(message, this, user, connection);
 
 		if (message) {
-			this.add('|c|' + user.getIdentity(this.id) + '|' + message, true);
+			this.add('|c|' + user.getIdentity(this.id) + '|' + message);
 		}
 		this.update();
 	};
@@ -410,8 +407,8 @@ var GlobalRoom = (function () {
 	GlobalRoom.prototype.updateRooms = function (excludeUser) {
 		// do nothing
 	};
-	GlobalRoom.prototype.add = function (message, noUpdate) {
-		if (rooms.lobby) rooms.lobby.add(message, noUpdate);
+	GlobalRoom.prototype.add = function (message) {
+		if (rooms.lobby) rooms.lobby.add(message);
 	};
 	GlobalRoom.prototype.addRaw = function (message) {
 		if (rooms.lobby) rooms.lobby.addRaw(message);
@@ -685,7 +682,6 @@ var BattleRoom = (function () {
 					}
 					if (!data) {
 						self.addRaw('Ladder (probably) updated, but score could not be retrieved (' + error + ').');
-						self.update();
 						// log the battle anyway
 						if (!Tools.getFormat(self.format).noLog) {
 							self.logBattle(p1score);
@@ -1053,12 +1049,12 @@ var BattleRoom = (function () {
 		if (!user) return false;
 		if (this.users[user.userid]) return user;
 
-		this.users[user.userid] = user;
-
 		if (user.named) {
 			this.add('|join|' + user.name);
-			this.update(user);
+			this.update();
 		}
+
+		this.users[user.userid] = user;
 
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		return user;
@@ -1368,7 +1364,7 @@ var ChatRoom = (function () {
 
 		this.users[user.userid] = user;
 		if (user.named && Config.reportjoins) {
-			this.add('|j|' + user.getIdentity(this.id), true);
+			this.add('|j|' + user.getIdentity(this.id));
 			this.update(user);
 		} else if (user.named) {
 			var entry = '|J|' + user.getIdentity(this.id);
@@ -1426,8 +1422,9 @@ var ChatRoom = (function () {
 			}
 			this.logEntry(entry);
 		}
-		if (global.Tournaments && Tournaments.get(this.id))
+		if (global.Tournaments && Tournaments.get(this.id)) {
 			Tournaments.get(this.id).update(user);
+		}
 		return user;
 	};
 	/**
