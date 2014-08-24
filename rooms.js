@@ -20,6 +20,78 @@ var Rooms = module.exports = getRoom;
 
 var rooms = Rooms.rooms = Object.create(null);
 
+var Room = (function () {
+	function Room(roomid, title) {
+		this.id = roomid;
+		this.title = (title || roomid);
+
+		this.users = Object.create(null);
+
+		this.log = [];
+
+		this.bannedUsers = Object.create(null);
+		this.bannedIps = Object.create(null);
+	}
+	Room.prototype.title = "";
+	Room.prototype.type = 'chat';
+
+	Room.prototype.lastUpdate = 0;
+	Room.prototype.log = null;
+	Room.prototype.users = null;
+
+	Room.prototype.send = function (message, errorArgument) {
+		if (errorArgument) throw new Error("Use Room#sendUser");
+		if (this.id !== 'lobby') message = '>' + this.id + '\n' + message;
+		Sockets.channelBroadcast(this.id, message);
+	};
+	Room.prototype.sendAuth = function (message) {
+		for (var i in this.users) {
+			var user = this.users[i];
+			if (user.connected && user.can('receiveauthmessages', null, this)) {
+				user.sendTo(this, message);
+			}
+		}
+	};
+	Room.prototype.sendUser = function (user, message) {
+		user.sendTo(this, message);
+	};
+	Room.prototype.add = function (message, noUpdate) {
+		if (typeof message !== 'string') throw new Error("Deprecated message type");
+		this.logEntry(message);
+		if (this.logTimes && message.substr(0, 3) === '|c|') {
+			message = '|c:|' + (~~(Date.now() / 1000)) + '|' + message.substr(3);
+		}
+		this.log.push(message);
+		if (!noUpdate) {
+			this.update();
+		}
+	};
+	Room.prototype.logEntry = function () {};
+	Room.prototype.addRaw = function (message) {
+		this.add('|raw|' + message);
+	};
+	Room.prototype.getLogSlice = function (amount) {
+		var log = this.log.slice(amount);
+		log.unshift('|:|' + (~~(Date.now() / 1000)));
+		return log;
+	};
+	Room.prototype.chat = function (user, message, connection) {
+		// Battle actions are actually just text commands that are handled in
+		// parseCommand(), which in turn often calls Simulator.prototype.sendFor().
+		// Sometimes the call to sendFor is done indirectly, by calling
+		// room.decision(), where room.constructor === BattleRoom.
+
+		message = CommandParser.parse(message, this, user, connection);
+
+		if (message) {
+			this.add('|c|' + user.getIdentity(this.id) + '|' + message, true);
+		}
+		this.update();
+	};
+
+	return Room;
+})();
+
 var GlobalRoom = (function () {
 	function GlobalRoom(roomid) {
 		this.id = roomid;
@@ -520,13 +592,11 @@ var GlobalRoom = (function () {
 
 var BattleRoom = (function () {
 	function BattleRoom(roomid, format, p1, p2, parentid, rated) {
-		this.id = roomid;
-		this.title = "" + p1.name + " vs. " + p2.name;
+		Room.call(this, roomid, "" + p1.name + " vs. " + p2.name);
 		this.modchat = (Config.battlemodchat || false);
 
 		format = '' + (format || '');
 
-		this.users = {};
 		this.format = format;
 		this.auth = {};
 		//console.log("NEW BATTLE");
@@ -555,17 +625,15 @@ var BattleRoom = (function () {
 		this.sideTurnTicks = [0, 0];
 		this.disconnectTickDiff = [0, 0];
 
-		this.log = [];
-
 		if (Config.forcetimer) this.requestKickInactive(false);
 	}
+	BattleRoom.prototype = Object.create(Room.prototype);
 	BattleRoom.prototype.type = 'battle';
 
 	BattleRoom.prototype.resetTimer = null;
 	BattleRoom.prototype.resetUser = '';
 	BattleRoom.prototype.expireTimer = null;
 	BattleRoom.prototype.active = false;
-	BattleRoom.prototype.lastUpdate = 0;
 
 	BattleRoom.prototype.push = function (message) {
 		if (typeof message === 'string') {
@@ -599,7 +667,7 @@ var BattleRoom = (function () {
 			} else {
 				winner = Users.get(winnerid);
 				if (winner && !winner.authenticated) {
-					this.send('|askreg|' + winner.userid, winner);
+					this.sendUser(winner, '|askreg|' + winner.userid);
 				}
 				var p1rating, p2rating;
 				// update rankings
@@ -714,7 +782,7 @@ var BattleRoom = (function () {
 			if (user === excludeUser) continue;
 			var slot = this.battle.getSlot(user);
 			if (slot < 0) slot = 2;
-			this.send(logs[slot], user);
+			this.sendUser(user, logs[slot]);
 		}
 
 		// empty rooms time out after ten minutes
@@ -751,13 +819,6 @@ var BattleRoom = (function () {
 		}); // asychronicity
 		//console.log(JSON.stringify(logData));
 	};
-	BattleRoom.prototype.send = function (message, user) {
-		if (user) {
-			user.sendTo(this, message);
-		} else {
-			Sockets.channelBroadcast(this.id, '>' + this.id + '\n' + message);
-		}
-	};
 	BattleRoom.prototype.tryExpire = function () {
 		this.expire();
 	};
@@ -787,7 +848,7 @@ var BattleRoom = (function () {
 			name = this.rated[ids[side]];
 		}
 
-		this.addCmd('-message', name + message);
+		this.add('|-message|' + name + message);
 		this.battle.endType = 'forfeit';
 		this.battle.send('win', otherids[side]);
 		rooms.global.battleCount += (this.battle.active ? 1 : 0) - (this.active ? 1 : 0);
@@ -829,12 +890,12 @@ var BattleRoom = (function () {
 				// both sides are inactive
 				var inactiveUser0 = this.battle.getPlayer(0);
 				if (ticksLeft[0] % 3 === 0 || ticksLeft[0] <= 4) {
-					this.send('|inactive|' + (inactiveUser0 ? inactiveUser0.name : 'Player 1') + ' has ' + (ticksLeft[0] * 10) + ' seconds left.', inactiveUser0);
+					this.sendUser(inactiveUser0, '|inactive|' + (inactiveUser0 ? inactiveUser0.name : 'Player 1') + ' has ' + (ticksLeft[0] * 10) + ' seconds left.');
 				}
 
 				var inactiveUser1 = this.battle.getPlayer(1);
 				if (ticksLeft[1] % 3 === 0 || ticksLeft[1] <= 4) {
-					this.send('|inactive|' + (inactiveUser1 ? inactiveUser1.name : 'Player 2') + ' has ' + (ticksLeft[1] * 10) + ' seconds left.', inactiveUser1);
+					this.sendUser(inactiveUser1, '|inactive|' + (inactiveUser1 ? inactiveUser1.name : 'Player 2') + ' has ' + (ticksLeft[1] * 10) + ' seconds left.');
 				}
 			}
 			this.resetTimer = setTimeout(this.kickInactive.bind(this), 10 * 1000);
@@ -855,7 +916,7 @@ var BattleRoom = (function () {
 	};
 	BattleRoom.prototype.requestKickInactive = function (user, force) {
 		if (this.resetTimer) {
-			if (user) this.send('|inactive|The inactivity timer is already counting down.', user);
+			if (user) this.sendUser(user, '|inactive|The inactivity timer is already counting down.');
 			return false;
 		}
 		if (user) {
@@ -889,12 +950,12 @@ var BattleRoom = (function () {
 		if (inactiveSide !== 1) {
 			// side 0 is inactive
 			var ticksLeft0 = Math.min(this.sideTicksLeft[0] + 1, maxTicksLeft);
-			this.send('|inactive|You have ' + (ticksLeft0 * 10) + ' seconds to make your decision.', this.battle.getPlayer(0));
+			this.sendUser(this.battle.getPlayer(0), '|inactive|You have ' + (ticksLeft0 * 10) + ' seconds to make your decision.');
 		}
 		if (inactiveSide !== 0) {
 			// side 1 is inactive
 			var ticksLeft1 = Math.min(this.sideTicksLeft[1] + 1, maxTicksLeft);
-			this.send('|inactive|You have ' + (ticksLeft1 * 10) + ' seconds to make your decision.', this.battle.getPlayer(1));
+			this.sendUser(this.battle.getPlayer(1), '|inactive|You have ' + (ticksLeft1 * 10) + ' seconds to make your decision.');
 		}
 
 		this.resetTimer = setTimeout(this.kickInactive.bind(this), 10 * 1000);
@@ -982,7 +1043,7 @@ var BattleRoom = (function () {
 	// This function is only called when the room is not empty.
 	// Joining an empty room calls this.join() below instead.
 	BattleRoom.prototype.onJoinConnection = function (user, connection) {
-		this.send('|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'), connection);
+		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
@@ -995,16 +1056,16 @@ var BattleRoom = (function () {
 		this.users[user.userid] = user;
 
 		if (user.named) {
-			this.addCmd('join', user.name);
+			this.add('|join|' + user.name);
 			this.update(user);
 		}
 
-		this.send('|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'), connection);
+		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		return user;
 	};
 	BattleRoom.prototype.onRename = function (user, oldid, joining) {
 		if (joining) {
-			this.addCmd('join', user.name);
+			this.add('|join|' + user.name);
 		}
 		var resend = joining || !this.battle.playerTable[oldid];
 		if (this.battle.playerTable[oldid]) {
@@ -1042,7 +1103,7 @@ var BattleRoom = (function () {
 			return;
 		}
 		delete this.users[user.userid];
-		this.addCmd('leave', user.name);
+		this.add('|leave|' + user.name);
 
 		if (Object.isEmpty(this.users)) {
 			rooms.global.battleCount += 0 - (this.active ? 1 : 0);
@@ -1103,35 +1164,6 @@ var BattleRoom = (function () {
 		}
 		return true;
 	};
-	BattleRoom.prototype.addCmd = function () {
-		this.log.push('|' + Array.prototype.slice.call(arguments).join('|'));
-	};
-	BattleRoom.prototype.add = function (message) {
-		if (message.rawMessage) {
-			this.addCmd('raw', message.rawMessage);
-		} else if (message.name) {
-			this.addCmd('chat', message.name.substr(1), message.message);
-		} else {
-			this.log.push(message);
-		}
-	};
-	BattleRoom.prototype.addRaw = function (message) {
-		this.addCmd('raw', message);
-	};
-	BattleRoom.prototype.chat = function (user, message, connection) {
-		// Battle actions are actually just text commands that are handled in
-		// parseCommand(), which in turn often calls Simulator.prototype.sendFor().
-		// Sometimes the call to sendFor is done indirectly, by calling
-		// room.decision(), where room.constructor === BattleRoom.
-
-		message = CommandParser.parse(message, this, user, connection);
-
-		if (message) {
-			this.battle.chat(user, message);
-		}
-		this.update();
-	};
-	BattleRoom.prototype.logEntry = function () {};
 	BattleRoom.prototype.expire = function () {
 		this.send('|expire|');
 		this.destroy();
@@ -1167,23 +1199,16 @@ var BattleRoom = (function () {
 
 var ChatRoom = (function () {
 	function ChatRoom(roomid, title, options) {
+		Room.call(this, roomid, title);
 		if (options) {
 			this.chatRoomData = options;
 			Object.merge(this, options);
 		}
-		this.id = roomid;
-		this.title = title || roomid;
 
-		this.log = [];
-		this.logTimes = [];
-		this.lastUpdate = 0;
-		this.users = {};
-		this.searchers = [];
+		this.logTimes = true;
 		this.logFile = null;
 		this.logFilename = '';
 		this.destroyingLog = false;
-		this.bannedUsers = {};
-		this.bannedIps = {};
 		if (!this.modchat) this.modchat = (Config.chatmodchat || false);
 
 		if (Config.logchat) {
@@ -1206,6 +1231,7 @@ var ChatRoom = (function () {
 			);
 		}
 	}
+	ChatRoom.prototype = Object.create(Room.prototype);
 	ChatRoom.prototype.type = 'chat';
 
 	ChatRoom.prototype.reportRecentJoins = function () {
@@ -1311,73 +1337,10 @@ var ChatRoom = (function () {
 		var update = entries.join('\n');
 		if (this.log.length > 100) {
 			this.log.splice(0, this.log.length - 100);
-			this.logTimes.splice(0, this.logTimes.length - 100);
 		}
 		this.lastUpdate = this.log.length;
 
 		this.send(update);
-	};
-	ChatRoom.prototype.send = function (message, user) {
-		if (user) {
-			user.sendTo(this, message);
-		} else {
-			if (this.id !== 'lobby') message = '>' + this.id + '\n' + message;
-			Sockets.channelBroadcast(this.id, message);
-		}
-	};
-	ChatRoom.prototype.sendAuth = function (message) {
-		for (var i in this.users) {
-			var user = this.users[i];
-			if (user.connected && user.can('receiveauthmessages', null, this)) {
-				user.sendTo(this, message);
-			}
-		}
-	};
-	ChatRoom.prototype.add = function (message, noUpdate) {
-		this.logTimes.push(~~(Date.now() / 1000));
-		this.log.push(message);
-		this.logEntry(message);
-		if (!noUpdate) {
-			this.update();
-		}
-	};
-	ChatRoom.prototype.addRaw = function (message) {
-		this.add('|raw|' + message);
-	};
-	ChatRoom.prototype.logGetLast = function (amount, noTime) {
-		if (!amount) {
-			return [];
-		}
-		if (amount < 0) {
-			amount *= -1;
-		}
-
-		var logLength = this.log.length;
-		if (!logLength) {
-			return [];
-		}
-
-		var log = [];
-		var time = ~~(Date.now() / 1000);
-		for (var i = logLength - amount - 1; i < logLength; i++) {
-			if (i < 0) {
-				i = 0;
-			}
-
-			var logText = this.log[i];
-			if (!logText){
-				continue;
-			}
-
-			if (!noTime && logText.substr(0, 3) === '|c|') {
-				// Time is only added when it's a normal chat message
-				logText = '|tc|' + (time - this.logTimes[i]) + '|' + logText.substr(3);
-			}
-
-			log.push(logText);
-		}
-
-		return log;
 	};
 	ChatRoom.prototype.getIntroMessage = function () {
 		var html = this.introMessage || '';
@@ -1394,9 +1357,10 @@ var ChatRoom = (function () {
 	};
 	ChatRoom.prototype.onJoinConnection = function (user, connection) {
 		var userList = this.userList ? this.userList : this.getUserList();
-		this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(25).join('\n') + this.getIntroMessage(), connection);
-		if (global.Tournaments && Tournaments.get(this.id))
+		this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-25).join('\n') + this.getIntroMessage());
+		if (global.Tournaments && Tournaments.get(this.id)) {
 			Tournaments.get(this.id).update(user);
+		}
 	};
 	ChatRoom.prototype.onJoin = function (user, connection, merging) {
 		if (!user) return false; // ???
@@ -1418,10 +1382,11 @@ var ChatRoom = (function () {
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
-			this.send('|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.logGetLast(100).join('\n') + this.getIntroMessage(), connection);
+			this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage());
 		}
-		if (global.Tournaments && Tournaments.get(this.id))
+		if (global.Tournaments && Tournaments.get(this.id)) {
 			Tournaments.get(this.id).update(user);
+		}
 
 		return user;
 	};
@@ -1494,15 +1459,6 @@ var ChatRoom = (function () {
 			this.logEntry(entry);
 		}
 	};
-	ChatRoom.prototype.chat = function (user, message, connection) {
-		message = CommandParser.parse(message, this, user, connection);
-
-		if (message) {
-			this.add('|c|' + user.getIdentity(this.id) + '|' + message, true);
-		}
-		this.update();
-	};
-	ChatRoom.prototype.logEntry = function () {};
 	ChatRoom.prototype.destroy = function () {
 		// deallocate ourself
 
