@@ -388,7 +388,6 @@ module.exports = (function () {
 			effect.toString = this.effectToString;
 			if (!effect.category) effect.category = 'Effect';
 			if (!effect.effectType) effect.effectType = 'Effect';
-			this.getBanlistTable(effect);
 		}
 		return effect;
 	};
