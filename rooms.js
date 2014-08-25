@@ -728,15 +728,15 @@ var BattleRoom = (function () {
 		this.active = false;
 		this.update();
 	};
-	// idx = 0, 1 : player log
-	// idx = 2    : spectator log
-	// idx = 3    : replay log
-	BattleRoom.prototype.getLog = function (idx) {
+	// logNum = 0    : spectator log
+	// logNum = 1, 2 : player log
+	// logNum = 3    : replay log
+	BattleRoom.prototype.getLog = function (logNum) {
 		var log = [];
 		for (var i = 0; i < this.log.length; ++i) {
 			var line = this.log[i];
 			if (line === '|split') {
-				log.push(this.log[i + idx + 1]);
+				log.push(this.log[i + logNum + 1]);
 				i += 4;
 			} else {
 				log.push(line);
@@ -745,9 +745,9 @@ var BattleRoom = (function () {
 		return log;
 	};
 	BattleRoom.prototype.getLogForUser = function (user) {
-		var slot = this.battle.getSlot(user);
-		if (slot < 0) slot = 2;
-		return this.getLog(slot);
+		var logNum = this.battle.getSlot(user) + 1;
+		if (logNum < 0) logNum = 0;
+		return this.getLog(logNum);
 	};
 	BattleRoom.prototype.update = function (excludeUser) {
 		if (this.log.length <= this.lastUpdate) return;
@@ -756,9 +756,9 @@ var BattleRoom = (function () {
 		for (var i = 0; i < updateLines.length;) {
 			var line = updateLines[i++];
 			if (line === '|split') {
-				logs[0].push(updateLines[i++]); // player 0
+				logs[0].push(updateLines[i++]); // spectators
 				logs[1].push(updateLines[i++]); // player 1
-				logs[2].push(updateLines[i++]); // spectators
+				logs[2].push(updateLines[i++]); // player 2
 				i++; // replays
 			} else {
 				logs[0].push(line);
@@ -776,9 +776,9 @@ var BattleRoom = (function () {
 			var user = this.users[i];
 			hasUsers = true;
 			if (user === excludeUser) continue;
-			var slot = this.battle.getSlot(user);
-			if (slot < 0) slot = 2;
-			this.sendUser(user, logs[slot]);
+			var logNum = this.battle.getSlot(user) + 1;
+			if (logNum < 0) logNum = 0;
+			this.sendUser(user, logs[logNum]);
 		}
 
 		// empty rooms time out after ten minutes
