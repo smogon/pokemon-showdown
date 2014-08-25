@@ -95,7 +95,7 @@ var Battle = (function (){
 
 	Battle.prototype.started = false;
 	Battle.prototype.ended = false;
-	Battle.prototype.active = true;
+	Battle.prototype.active = false;
 	Battle.prototype.players = null;
 	Battle.prototype.playerids = null;
 	Battle.prototype.playerTable = null;
