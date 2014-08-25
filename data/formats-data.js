@@ -2789,7 +2789,7 @@ exports.BattleFormatsData = {
 	},
 	chimecho: {
 		randomBattleMoves: ["toxic","psychic","thunderwave","recover","calmmind","shadowball","dazzlinggleam","healingwish","healbell","taunt"],
-		randomDoubleBattleMoves: ["protect","psychic","thunderwave","recover","shadowball","dazzlingleam","trickroom","hepinghand","taunt"],
+		randomDoubleBattleMoves: ["protect","psychic","thunderwave","recover","shadowball","dazzlinggleam","trickroom","helpinghand","taunt"],
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["wrap","growl","astonish"]}
 		],
