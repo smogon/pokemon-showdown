@@ -171,6 +171,7 @@ Tournament = (function () {
 					targetUser.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenged: pendingChallenge.from.name}));
 				}
 			}
+			this.room.sendUser(targetUser, '|tournament|updateEnd');
 		} else {
 			if (this.isBracketInvalidated) {
 				if (Date.now() < this.lastBracketUpdate + BRACKET_MINIMUM_UPDATE_INTERVAL) {
@@ -199,8 +200,8 @@ Tournament = (function () {
 					user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challengeBys: usersToNames(opponents)}));
 				}, this);
 			}
+			this.room.send('|tournament|updateEnd');
 		}
-		this.room.sendUser(targetUser, '|tournament|updateEnd');
 	};
 
 	Tournament.prototype.purgeGhostUsers = function () {
