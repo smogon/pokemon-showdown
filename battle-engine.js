@@ -3776,7 +3776,7 @@ Battle = (function () {
 			this.log.push('|' + parts.join('|'));
 		} else {
 			this.log.push('|split');
-			var sides = this.sides.concat(null, true);
+			var sides = [null, this.sides[0], this.sides[1], true];
 			for (var i = 0; i < sides.length; ++i) {
 				var line = '';
 				for (var j = 0; j < parts.length; ++j) {
