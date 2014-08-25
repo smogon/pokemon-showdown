@@ -98,7 +98,7 @@ module.exports = (function () {
 						// {inherit: true} can be used to modify only parts of the parent data,
 						// instead of overwriting entirely
 						delete data[dataType][i].inherit;
-						Object.merge(data[dataType][i], parentData[dataType][i], true, false);
+						Object.merge(data[dataType][i], parentData[dataType][i], false, false);
 					}
 				}
 			});
