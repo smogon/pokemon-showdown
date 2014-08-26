@@ -871,12 +871,12 @@ var BattleRoom = (function () {
 			} else {
 				// both sides are inactive
 				var inactiveUser0 = this.battle.getPlayer(0);
-				if (inactiveUser0 && ticksLeft[0] % 3 === 0 || ticksLeft[0] <= 4) {
+				if (inactiveUser0 && (ticksLeft[0] % 3 === 0 || ticksLeft[0] <= 4)) {
 					this.sendUser(inactiveUser0, '|inactive|' + inactiveUser0.name + ' has ' + (ticksLeft[0] * 10) + ' seconds left.');
 				}
 
 				var inactiveUser1 = this.battle.getPlayer(1);
-				if (inactiveUser1 && ticksLeft[1] % 3 === 0 || ticksLeft[1] <= 4) {
+				if (inactiveUser1 && (ticksLeft[1] % 3 === 0 || ticksLeft[1] <= 4)) {
 					this.sendUser(inactiveUser1, '|inactive|' + inactiveUser1.name + ' has ' + (ticksLeft[1] * 10) + ' seconds left.');
 				}
 			}
