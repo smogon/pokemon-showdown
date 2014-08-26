@@ -1193,13 +1193,18 @@ User = (function () {
 	User.prototype.joinRoom = function (room, connection) {
 		room = Rooms.get(room);
 		if (!room) return false;
-		if (room.staffRoom && !this.isStaff) return false;
-		if (room.bannedUsers) {
-			if (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers) return false;
-		}
-		if (this.ips && room.bannedIps) {
-			for (var ip in this.ips) {
-				if (ip in room.bannedIps) return false;
+		if (!this.can('bypassall')) {
+			// check if user has permission to join
+			if (room.staffRoom && !this.isStaff) return false;
+			if (room.bannedUsers) {
+				if (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers) {
+					return false;
+				}
+			}
+			if (this.ips && room.bannedIps) {
+				for (var ip in this.ips) {
+					if (ip in room.bannedIps) return false;
+				}
 			}
 		}
 		if (!connection) {

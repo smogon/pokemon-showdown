@@ -438,7 +438,7 @@ var commands = exports.commands = {
 			}
 		}
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
-		targetUser.leaveRoom(room.id);
+		if (!targetUser.can('bypassall')) targetUser.leaveRoom(room.id);
 	},
 
 	unroomban: 'roomunban',
@@ -491,7 +491,7 @@ var commands = exports.commands = {
 			return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
 		}
 		if (targetRoom.isPrivate) {
-			if (targetRoom.modjoin && !user.can('bypassmodjoin')) {
+			if (targetRoom.modjoin && !user.can('bypassall')) {
 				var userGroup = user.group;
 				if (targetRoom.auth) {
 					userGroup = targetRoom.auth[user.userid] || ' ';
