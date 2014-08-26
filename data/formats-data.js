@@ -4686,7 +4686,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	frogadier: {
-		randomBattleMoves: {"hydropump":1,"surf":1,"icebeam":1,"uturn":1,"taunt":1,"toxicspikes":1},
+		randomBattleMoves: ["hydropump","surf","icebeam","uturn","taunt","toxicspikes"],
 		tier: "NFE"
 	},
 	greninja: {
