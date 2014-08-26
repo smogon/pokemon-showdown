@@ -59,7 +59,6 @@ room's log. Otherwise, it will be in the form:
 
 For example:
 
-    |tc|2|@Moderator|Some dude will join in two seconds!
     |j| Some dude
     |c|@Moderator|hi!
     |c| Some dude|you suck and i hate you!
@@ -69,7 +68,6 @@ For example:
 
 This might be displayed as:
 
-    @Moderator: Some dude will join in two seconds!
     Some dude joined.
     @Moderator: hi!
     Some dude: you suck and i hate you!
@@ -87,10 +85,6 @@ the equivalent of their lowercase versions, but are recommended not to be
 displayed inline because they happen too often. For instance, the main server
 gets around 5 joins/leaves a second, and showing that inline with chat would
 make it near-impossible to chat.
-
-`tc` is pretty much the same as `c`, but also gives the delta time; the amount
-of seconds passed since the message has been sent. This is so that when the
-chat replays for example, the times shown are correct.
 
 Some outgoing message types
 ---------------------------
@@ -138,6 +132,20 @@ represented by a space), and the rest of the string being their username.
 
 > `USER` said `MESSAGE`. Note that `MESSAGE` can contain `|` characters,
 > so you can't just split by `|` and take the fourth string.
+
+`|:|TIMESTAMP`
+
+`|c:|TIMESTAMP|USER|MESSAGE`
+
+> `c:` is pretty much the same as `c`, but also comes with a UNIX timestamp;
+> (the number of seconds since 1970). This is used for accurate timestamps
+> in chat logs.
+>
+> `:` is the current time according to the server, so that times can be
+> adjusted and reported in the local time in the case of a discrepancy.
+>
+> The exact fate of this command is uncertain - it may or may not be
+> replaced with a more generalized way to transmit timestamps at some point.
 
 `|battle|ROOMID|USER1|USER2` or `|b|ROOMID|USER1|USER2`
 
