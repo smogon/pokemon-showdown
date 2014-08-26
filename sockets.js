@@ -104,6 +104,15 @@ if (cluster.isMaster) {
 		worker.send('-' + channelid + '\n' + socketid);
 	};
 
+	exports.subchannelBroadcast = function (channelid, message) {
+		for (var workerid in workers) {
+			workers[workerid].send(':' + channelid + '\n' + message);
+		}
+	};
+	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
+		worker.send('.' + channelid + '\n' + subchannelid + '\n' + socketid);
+	};
+
 } else {
 	// is worker
 
@@ -195,6 +204,7 @@ if (cluster.isMaster) {
 
 	var sockets = {};
 	var channels = {};
+	var subchannels = {};
 
 	// Deal with phantom connections.
 	var sweepClosedSockets = function () {
@@ -270,23 +280,77 @@ if (cluster.isMaster) {
 			if (!socket) return;
 			channelid = data.substr(1, nlLoc - 1);
 			channel = channels[channelid];
-			if (!channel) channel = channels[channelid] = {};
+			if (!channel) channel = channels[channelid] = Object.create(null);
 			channel[socketid] = socket;
 			break;
 
 		case '-': // -channelid, socketid
 			// remove from channel
 			var nlLoc = data.indexOf('\n');
-			var channelid = data.substr(1, nlLoc - 1);
+			var channelid = data.slice(1, nlLoc);
 			channel = channels[channelid];
 			if (!channel) return;
-			delete channel[data.substr(nlLoc + 1)];
+			var socketid = data.slice(nlLoc + 1);
+			delete channel[socketid];
+			if (subchannels[channelid]) delete subchannels[channelid][socketid];
 			var isEmpty = true;
 			for (var socketid in channel) {
 				isEmpty = false;
 				break;
 			}
-			if (isEmpty) delete channels[channelid];
+			if (isEmpty) {
+				delete channels[channelid];
+				delete subchannels[channelid];
+			}
+			break;
+
+		case '.': // .channelid, subchannelid, socketid
+			// move subchannel
+			var nlLoc = data.indexOf('\n');
+			var channelid = data.slice(1, nlLoc);
+			var nlLoc2 = data.indexOf('\n', nlLoc + 1);
+			var subchannelid = data.slice(nlLoc + 1, nlLoc2);
+			var socketid = data.slice(nlLoc2 + 1);
+
+			var subchannel = subchannels[channelid];
+			if (!subchannel) subchannel = subchannels[channelid] = Object.create(null);
+			if (subchannelid === '0') {
+				delete subchannel[socketid];
+			} else {
+				subchannel[socketid] = subchannelid;
+			}
+			break;
+
+		case ':': // :channelid, message
+			// message to subchannel
+			var nlLoc = data.indexOf('\n');
+			var channelid = data.slice(1, nlLoc);
+			var channel = channels[channelid];
+			var subchannel = subchannels[channelid];
+			var message = data.substr(nlLoc + 1);
+			var messages = [null, null, null];
+			for (socketid in channel) {
+				switch (subchannel ? subchannel[socketid] : '0') {
+				case '1':
+					if (!messages[1]) {
+						messages[1] = message.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1\n');
+					}
+					channel[socketid].write(messages[1]);
+					break;
+				case '2':
+					if (!messages[2]) {
+						messages[2] = message.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1\n');
+					}
+					channel[socketid].write(messages[2]);
+					break;
+				default:
+					if (!messages[0]) {
+						messages[0] = message.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1\n');
+					}
+					channel[socketid].write(messages[0]);
+					break;
+				}
+			}
 			break;
 		}
 	});
