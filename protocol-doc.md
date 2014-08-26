@@ -59,10 +59,10 @@ room's log. Otherwise, it will be in the form:
 
 For example:
 
-    |tc|2|@Moderator|Some dude will join in two seconds!
+    |c:|0000030100|@Moderator|Some dude will join in two seconds!
     |j| Some dude
-    |c|@Moderator|hi!
-    |c| Some dude|you suck and i hate you!
+    |c:|0000032110|@Moderator|hi!
+    |c:|0000033015| Some dude|you suck and i hate you!
     Some dude was banned by Moderator.
     |l| Some dude
     |b|battle-ou-12| Cool guy|@Moderator
@@ -88,9 +88,9 @@ displayed inline because they happen too often. For instance, the main server
 gets around 5 joins/leaves a second, and showing that inline with chat would
 make it near-impossible to chat.
 
-`tc` is pretty much the same as `c`, but also gives the delta time; the amount
-of seconds passed since the message has been sent. This is so that when the
-chat replays for example, the times shown are correct.
+`c:` is pretty much the same as `c`, but also gives a UNIX timestamp, which is
+the number of milliseconds since the epoch when the message was sent. This is 
+so that when the chat replays for example, the times shown are correct.
 
 Some outgoing message types
 ---------------------------
