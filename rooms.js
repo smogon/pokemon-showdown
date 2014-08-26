@@ -751,37 +751,18 @@ var BattleRoom = (function () {
 	};
 	BattleRoom.prototype.update = function (excludeUser) {
 		if (this.log.length <= this.lastUpdate) return;
-		var logs = [[], [], []];
-		var updateLines = this.log.slice(this.lastUpdate);
-		for (var i = 0; i < updateLines.length;) {
-			var line = updateLines[i++];
-			if (line === '|split') {
-				logs[0].push(updateLines[i++]); // spectators
-				logs[1].push(updateLines[i++]); // player 1
-				logs[2].push(updateLines[i++]); // player 2
-				i++; // replays
-			} else {
-				logs[0].push(line);
-				logs[1].push(line);
-				logs[2].push(line);
-			}
-		}
-		logs = logs.map(function (log) {
-			return log.join('\n');
-		});
+		var message = this.log.slice(this.lastUpdate).join('\n');
 		this.lastUpdate = this.log.length;
 
-		var hasUsers = false;
-		for (var i in this.users) {
-			var user = this.users[i];
-			hasUsers = true;
-			if (user === excludeUser) continue;
-			var logNum = this.battle.getSlot(user) + 1;
-			if (logNum < 0) logNum = 0;
-			this.sendUser(user, logs[logNum]);
-		}
+		message = '>' + this.id + '\n\n' + message;
+		Sockets.subchannelBroadcast(this.id, message);
 
 		// empty rooms time out after ten minutes
+		var hasUsers = false;
+		for (var i in this.users) {
+			hasUsers = true;
+			break;
+		}
 		if (!hasUsers) {
 			if (!this.expireTimer) {
 				this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_EMPTY_DEALLOCATE);
