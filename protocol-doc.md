@@ -154,113 +154,144 @@ represented by a space), and the rest of the string being their username.
 
 ####Battle messages
 
-`|player|ID|USERNAME|AVATAR`
+`|player|PLAYER|USERNAME|AVATAR`
 
-> Appears when you join a battle room. `ID` denotes which player it is
+> Appears when you join a battle room. `PLAYER` denotes which player it is
 > (`p1` or `p2`) and `USERNAME` is the username. `AVATAR` is the player's
-> avatar number.
+> avatar identifier (usually a number, but other values can be used for
+> custom avatars).
 
     |gametype|GAMETYPE
     |gen|GENNUM
     |tier|TIERNAME
     |rated
-    |rule|RULE
+    |rule|RULE: DESCRIPTION
 
-> Additional details when you join a battle room. `GAMETYPE` is either
-> `singles` or `doubles`, `GENNUM` denotes the Pokemon Generation you're
-> playing in, `tier` is the tier, and there are multiple `rule` tags to
-> denote the rules that are in effect (Sleep Clause, etc). `rated` only
-> appears if the battle is rated.
+> Additional details when you join a battle room. `GAMETYPE` is one of
+> `singles`, `doubles`, or `triples`; `GENNUM` denotes the generation of
+> Pokemon being played; `tier` is the format; and `rule` appears multiple
+> times, once for each clause in effect. `rated` only appears if the battle
+> is rated.
 
     |clearpoke
     |poke|PLAYER|SPECIES
+    |poke|PLAYER|SPECIES
+    ...
     |teampreview
 
-> These three messages appear if you're playing a format that uses team
-> previews. `PLAYER` is the player ID (see above) and `SPECIES` is the
+> These messages appear if you're playing a format that uses team previews.
+> `PLAYER` is the player ID (see `|player|`) and `SPECIES` is the
 > species of the Pokemon. `teampreview` commonly appears after `rule`
 > tags instead of after the Pokemon in the team preview.
 
-`|request|TEAMDATA`
+`|request|REQUEST`
 
-> Gives an encoded JSON object of your current team. `TEAMDATA.active`
-> has the moves of your active Pokemon, while `TEAMDATA.side` has the
-> rest of the data about your team as a whole.
+> Gives a JSON object containing a request for a decision (to move or
+> switch). To assist in your decision, `REQUEST.active` has information
+> about your active Pokemon, and `REQUEST.side` has information about your
+> your team as a whole.
 
-`|inactive|MESSAGE`
+`|inactive|MESSAGE` or `|inactiveoff|MESSAGE`
 
-> A message related to the battle timer has been sent.
+> A message related to the battle timer has been sent. The official client
+> displays these messages in red.
+>
+> `inactive` means that the timer is on at the time the message was sent,
+> while `inactiveoff` means that the timer is off.
 
 `|start`
 
 > Indicates that the game has started.
 
-**Pokemon Actions**
+**Major actions**
 
-In battle, most Pokemon actions come in the form `|ACTION|POKEID|DETAILS` 
-followed by a few messages detailing what happens after the action occurs. 
-`POKEID` is the form `POSITION: NAME`. `POSITION` is the spot that the 
-Pokemon is in: it consists of the `ID` of the player (see `player` above), 
-followed by a letter indicating the given Pokemon's position, counting from
-`a`. Note that in triples battles, `a` will refer to the leftmost Pokemon
-on one team and the rightmost Pokemon on the other, so take note of this
-if you're planning to write a bot that works with triples battles. `NAME` 
-is the nickname of the Pokemon performing the action.
+In battle, most Pokemon actions come in the form `|ACTION|POKEMON|DETAILS`
+followed by a few messages detailing what happens after the action occurs.
 
-`|move|POKEID|MOVE|TARGET`
+A Pokemon is always identified in the form `POSITION: NAME`. `POSITION` is
+the spot that the Pokemon is in: it consists of the `PLAYER` of the player
+(see `|player|`), followed by a letter indicating the given Pokemon's
+position, counting from `a`.
 
-> The specified Pokemon has used move `MOVE`. If a move is a single-target
-> move, then `TARGET` will also be specified.
+In doubles and triples battles, `a` will refer to the leftmost Pokemon
+on one team and the rightmost Pokemon on the other (so `p1a` faces `p2c`,
+etc). `NAME` is the nickname of the Pokemon performing the action.
 
-`|switch|POKEID|SPECIES|HP STATUS`
+`|move|POKEMON|MOVE|TARGET`
 
-> A Pokemon at the specified `POSITION` has switched with a new Pokemon of
-> species `SPECIES`, with a given `HP` and `STATUS`. `HP` is specified as
-> a fraction; if it is your Pokemon then it will be `CURRENT/MAX`, otherwise
-> it becomes a percentage value out of 100.
+> The specified Pokemon has used move `MOVE` at `TARGET`. If a move has
+> multiple targets or no target, `TARGET` should be ignored. If a move
+> targets a side, `TARGET` will be a (possibly fainted) pokemon on that
+> side.
+>
+> `move` can be tagged with `|[miss]` to indicate that the move missed.
 
-`|cant|POKEID|REASON`
+`|switch|POKEMON|SPECIES|HP STATUS` or `|drag|POKEMON|SPECIES|HP STATUS`
 
-> The Pokemon at `POKEID` could not perform its action as normal for the
-> indicated `REASON`.
+> A Pokemon identified by `POKEMON` has switched in (the old Pokemon, if
+> still there, is switched out).
+>
+> The new Pokemon has species `SPECIES`, HP `HP`, and status `STATUS`. `HP`
+> is specified as a fraction; if it is your own Pokemon then it will be
+> `CURRENT/MAX`, if not, it will be `/100` if HP Percentage Mod is in effect
+> and `/48` otherwise. `STATUS` can be left blank, or it can be `slp`,
+> `par`, etc.
+>
+> `switch` means it was intentional, while `drag` means it was unintentional
+> (forced by Whirlwind, Roar, etc).
 
-`|faint|POKEID`
+`|cant|POKEMON|REASON` or `|cant|POKEMON|REASON|MOVE`
 
-> The Pokemon at `POKEID` has fainted.
+> The Pokemon `POKEMON` could not perform a move because of the indicated
+> `REASON` (such as paralysis, Disable, etc). Sometimes, the move it was
+> trying to use is given.
 
-**Details**
+`|faint|POKEMON`
 
-After moves have been made, details will appear denoting the results of the 
-moves and other details in the battle, such as damage, stat boosts, and weather.
+> The Pokemon `POKEMON` has fainted.
 
-`|-damage|POKEID|HP STATUS|ETC`
+**Minor actions**
 
-> The specified Pokemon at `POKEID` has taken damage, and it has `HP` remaining
-> (percentage if it's the opponents') and the following statuses `STATUS`.
-> Any additional data is found in `ETC`; for example, if the Pokemon took
-> damage because of poison, it might say `[from] psn`. If the Pokemon faints from
-> the damage, then `STATUS` will be `fnt`.
+Minor actions are less important than major actions. In the official client,
+they're usually displayed in small font if they have a message. Pretty much
+anything that happens in a battle other than a switch or the fact that a move
+was used is a minor action. So yes, the effects of a move such as damage or
+stat boosts are minor actions.
 
-`|-heal|POKEID|HP STATUS|ETC`
+Minor actions often come with tags such as `|[from] EFFECT|[of] SOURCE`.
+`EFFECT` will be an effect (move, ability, item, status, etc), and `SOURCE`
+will be a Pokemon. These can affect the message or animation displayed, but
+do not affect anything else. Other tags include `|[still]` (suppress
+animation) and `|[silent]` (suppress message).
 
-> Same as `-damage`, but the Pokemon has recovered damage instead.
+`|-damage|POKEMON|HP STATUS`
 
-`|-status|POKEID|STATUS`
+> The specified Pokemon `POKEMON` has taken damage, and is now at
+> `HP STATUS` (see `|switch|` for details).
+>
+> If `HP` is 0, `STATUS` should be ignored. The current behavior is for
+> `STATUS` to be `fnt`, but this may change and should not be relied upon.
 
-> The Pokemon at `POKEID` has been inflicted with `STATUS`.
+`|-heal|POKEMON|HP STATUS`
 
-`|-boost|POKEID|STAT|AMT`
+> Same as `-damage`, but the Pokemon has healed damage instead.
 
-> The specified Pokemon at `POKEID` has gained `AMT` in `STAT`, using the 
-> standard rules for Pokemon stat changes in-battle. The `STAT` is a 
-> three-letter abbreviation fot the stat in question, so Speed will be `spe`, 
+`|-status|POKEMON|STATUS`
+
+> The Pokemon `POKEMON` has been inflicted with `STATUS`.
+
+`|-boost|POKEMON|STAT|AMOUNT`
+
+> The specified Pokemon `POKEMON` has gained `AMOUNT` in `STAT`, using the
+> standard rules for Pokemon stat changes in-battle. `STAT` is a standard
+> three-letter abbreviation fot the stat in question, so Speed will be `spe`,
 > Special Defense will be `spd`, etc.
 
-`|-unboost|POKEID|STAT|AMT`
+`|-unboost|POKEMON|STAT|AMOUNT`
 
 > Same as `-boost`, but for negative stat changes instead.
 
-`|-weather|WEATHER|[upkeep]`
+`|-weather|WEATHER`
 
 > Indicates the weather that is currently in effect. If `|[upkeep]` is present,
 > it means that `WEATHER` was active previously and is still in effect that
