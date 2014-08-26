@@ -423,7 +423,6 @@ exports.groups = {
 		id: "swag",
 		name: "Swag",
 		inherit: ' ',
-		jurisdiction: '\u2606u',
 		roomonly: true,
 		declare: true,
 		announce: true,
