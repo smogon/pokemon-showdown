@@ -1359,7 +1359,7 @@ var ChatRoom = (function () {
 		var userList = this.userList ? this.userList : this.getUserList();
 		this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-25).join('\n') + this.getIntroMessage());
 		if (global.Tournaments && Tournaments.get(this.id)) {
-			Tournaments.get(this.id).update(user);
+			Tournaments.get(this.id).updateFor(user, connection);
 		}
 	};
 	ChatRoom.prototype.onJoin = function (user, connection, merging) {
@@ -1381,7 +1381,7 @@ var ChatRoom = (function () {
 			this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage());
 		}
 		if (global.Tournaments && Tournaments.get(this.id)) {
-			Tournaments.get(this.id).update(user);
+			Tournaments.get(this.id).updateFor(user, connection);
 		}
 
 		return user;
@@ -1418,7 +1418,7 @@ var ChatRoom = (function () {
 			this.reportJoin(entry);
 		}
 		if (global.Tournaments && Tournaments.get(this.id)) {
-			Tournaments.get(this.id).update(user);
+			Tournaments.get(this.id).updateFor(user);
 		}
 		return user;
 	};
