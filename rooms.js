@@ -751,11 +751,9 @@ var BattleRoom = (function () {
 	};
 	BattleRoom.prototype.update = function (excludeUser) {
 		if (this.log.length <= this.lastUpdate) return;
-		var message = this.log.slice(this.lastUpdate).join('\n');
 		this.lastUpdate = this.log.length;
 
-		message = '>' + this.id + '\n\n' + message;
-		Sockets.subchannelBroadcast(this.id, message);
+		Sockets.subchannelBroadcast(this.id, '>' + this.id + '\n\n' + this.log.slice(this.lastUpdate).join('\n'));
 
 		// empty rooms time out after ten minutes
 		var hasUsers = false;
