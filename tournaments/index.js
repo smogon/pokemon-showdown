@@ -174,7 +174,7 @@ Tournament = (function () {
 	};
 
 	Tournament.prototype.update = function (targetUser) {
-		if (targetUser) return this.updateFor(targetUser);
+		if (targetUser) throw new Error("Please use updateFor() to update the tournament for a specific user.");
 		if (this.isEnded) return;
 		if (this.isBracketInvalidated) {
 			if (Date.now() < this.lastBracketUpdate + BRACKET_MINIMUM_UPDATE_INTERVAL) {
@@ -726,8 +726,8 @@ var commands = {
 			this.sendReplyBox("<strong>" + users.length + " users are in this tournament:</strong><br />" + users.join(", "));
 		},
 		getupdate: function (tournament, user) {
+			tournament.updateFor(user);
 			this.sendReply("Your tournament bracket has been updated.");
-			tournament.update(user);
 		},
 		challenge: function (tournament, user, params, cmd) {
 			if (params.length < 1) {
