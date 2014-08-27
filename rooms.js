@@ -1328,7 +1328,7 @@ var ChatRoom = (function () {
 	ChatRoom.prototype.update = function () {
 		if (this.log.length <= this.lastUpdate) return;
 		var entries = this.log.slice(this.lastUpdate);
-		if (this.reportJoinsQueue) {
+		if (this.reportJoinsQueue && this.reportJoinsQueue.length) {
 			clearTimeout(this.reportJoinsInterval);
 			delete this.reportJoinsInterval;
 			Array.prototype.unshift.apply(entries, this.reportJoinsQueue);
