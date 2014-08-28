@@ -1070,7 +1070,7 @@ User = (function () {
 			if (users[i] === this) continue;
 			if (!users[i].named && !users[i].connected) continue;
 			if (!getAll && users[i].group !== ' ' && this.group === ' ') continue;
-			var ipIntersected;
+			var ipIntersected = false;
 			intersectLoop: for (var myIp in this.ips) {
 				for (var yourIp in users[i].ips) {
 					if (myIp === yourIp) {
