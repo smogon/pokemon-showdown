@@ -1068,11 +1068,20 @@ User = (function () {
 		var alts = [];
 		for (var i in users) {
 			if (users[i] === this) continue;
-			if (Object.isEmpty(Object.select(this.ips, users[i].ips))) continue;
 			if (!users[i].named && !users[i].connected) continue;
 			if (!getAll && users[i].group !== ' ' && this.group === ' ') continue;
-
-			alts.push(users[i].name);
+			var ipIntersected;
+			intersectLoop: for (var myIp in this.ips) {
+				for (var yourIp in users[i].ips) {
+					if (myIp === yourIp) {
+						ipIntersected = true;
+						break intersectLoop;
+					}
+				}
+			}
+			if (ipIntersected) {
+				alts.push(users[i].name);
+			}
 		}
 		return alts;
 	};
