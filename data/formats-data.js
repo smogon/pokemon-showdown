@@ -4915,7 +4915,7 @@ exports.BattleFormatsData = {
 	hawlucha: {
 		randomBattleMoves: ["swordsdance","highjumpkick","uturn","stoneedge","roost","batonpass"],
 		randomDoubleBattleMoves: ["swordsdance","highjumpkick","uturn","stoneedge","skydrop","encore","protect"],
-		tier: "UU"
+		tier: "BL"
 	},
 	dedenne: {
 		randomBattleMoves: ["voltswitch","thunderbolt","nuzzle","grassknot","hiddenpowerice","uturn","toxic"],
