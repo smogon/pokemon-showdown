@@ -1151,8 +1151,8 @@ exports.BattleAbilities = {
 		num: 150
 	},
 	"infiltrator": {
-		desc: "Ignores Substitute, Reflect, Light Screen, and Safeguard on the target.",
-		shortDesc: "This Pokemon's moves ignore the foe's Substitute, Reflect, Light Screen, Safeguard, and Mist.",
+		desc: "This Pokemon's moves ignore the target's Light Screen, Mist, Reflect, Safeguard, and Substitute.",
+		shortDesc: "Ignores Light Screen, Mist, Reflect, Safeguard, and Substitute.",
 		onModifyMove: function (move) {
 			move.notSubBlocked = true;
 			move.ignoreScreens = true;
