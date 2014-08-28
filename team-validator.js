@@ -246,12 +246,12 @@ Validator = (function () {
 			for (var i = 0; i < format.ruleset.length; i++) {
 				var subformat = tools.getFormat(format.ruleset[i]);
 				if (subformat.validateTeam) {
-					problems = problems.concat(subformat.validateTeam.call(tools, team, format) || []);
+					problems = problems.concat(subformat.validateTeam.call(tools, team, format, teamHas) || []);
 				}
 			}
 		}
 		if (format.validateTeam) {
-			problems = problems.concat(format.validateTeam.call(tools, team, format) || []);
+			problems = problems.concat(format.validateTeam.call(tools, team, format, teamHas) || []);
 		}
 
 		if (!problems.length) return false;
