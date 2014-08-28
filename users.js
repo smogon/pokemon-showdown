@@ -526,6 +526,7 @@ User = (function () {
 		this.prevNames = {};
 		this.battles = {};
 		this.roomCount = {};
+		this.tournamentCount = {};
 
 		// searches and challenges
 		this.searching = 0;
@@ -1638,6 +1639,10 @@ User = (function () {
 		for (var roomid in this.mutedRooms) {
 			clearTimeout(this.mutedRooms[roomid]);
 			delete this.mutedRooms[roomid];
+		}
+		for (var tourid in this.tournamentCount) {
+			var tournament = Tournaments.get(tourid);
+			if (tournament) tournament.disqualifyUser(this);
 		}
 		this.clearChatQueue();
 		delete users[this.userid];
