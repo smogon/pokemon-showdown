@@ -273,7 +273,7 @@ var GlobalRoom = (function () {
 			roomList[room.id] = roomData;
 
 			total++;
-			if (total >= 6 && !filter) break;
+			if (total >= 100) break;
 		}
 		return roomList;
 	};
