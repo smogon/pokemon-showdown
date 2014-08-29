@@ -529,6 +529,12 @@ exports.BattleFormats = {
 					break;
 				case 'Water':
 					if (teamHas['damprock']) return ["Damp Rock is banned from Water monotype teams."];
+					break;
+				case 'Dragon':
+					if (teamHas['kyuremwhite']) return ["Kyurem-White is banned from Dragon monotype teams."];
+					break;
+				case 'Flying':
+					if (teamHas['shayminsky']) return ["Shaymin-Sky is banned from Flying monotype teams."];
 				}
 			}
 		}
