@@ -127,7 +127,7 @@ exports.Formats = [
 		forcedLevel: 30,
 		requirePentagon: true,
 		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview GBU'],
-		banlist: ['Unreleased', 'Illegal'],
+		banlist: ['Unreleased', 'Illegal', 'Xerneas', 'Diancie'],
 		validateTeam: function (team) {
 			var problems = [];
 			if (team.length < 3) problems.push('You must bring at least three Pokémon.');
