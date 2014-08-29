@@ -95,7 +95,6 @@ var GlobalRoom = (function () {
 		this.id = roomid;
 
 		// init battle rooms
-		this.rooms = [];
 		this.battleCount = 0;
 		this.searchers = [];
 
@@ -260,8 +259,8 @@ var GlobalRoom = (function () {
 	GlobalRoom.prototype.getRoomList = function (filter) {
 		var roomList = {};
 		var total = 0;
-		for (var i = this.rooms.length - 1; i >= 0; i--) {
-			var room = this.rooms[i];
+		for (var i in Rooms.rooms) {
+			var room = Rooms.rooms[i];
 			if (!room || !room.active) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
 			var roomData = {};
@@ -404,9 +403,6 @@ var GlobalRoom = (function () {
 				user.sendTo(this, message);
 			}
 		}
-	};
-	GlobalRoom.prototype.updateRooms = function (excludeUser) {
-		// do nothing
 	};
 	GlobalRoom.prototype.add = function (message) {
 		if (rooms.lobby) rooms.lobby.add(message);
@@ -567,17 +563,9 @@ var GlobalRoom = (function () {
 	};
 	GlobalRoom.prototype.addRoom = function (room, format, p1, p2, parent, rated) {
 		room = Rooms.createBattle(room, format, p1, p2, parent, rated);
-		this.rooms.push(room);
 		return room;
 	};
-	GlobalRoom.prototype.removeRoom = function (room) {
-		room = getRoom(room);
-		if (!room) return;
-		var index = this.rooms.indexOf(room);
-		if (index >= 0) {
-			this.rooms.splice(index, 1);
-		}
-	};
+	GlobalRoom.prototype.removeRoom = function (room) {};
 	GlobalRoom.prototype.chat = function (user, message, connection) {
 		if (rooms.lobby) return rooms.lobby.chat(user, message, connection);
 		message = CommandParser.parse(message, this, user, connection);
@@ -891,10 +879,6 @@ var BattleRoom = (function () {
 
 		this.forfeit(this.battle.getPlayer(inactiveSide), ' lost due to inactivity.', inactiveSide);
 		this.resetUser = '';
-
-		if (this.parentid) {
-			getRoom(this.parentid).updateRooms();
-		}
 	};
 	BattleRoom.prototype.requestKickInactive = function (user, force) {
 		if (this.resetTimer) {
@@ -1016,9 +1000,6 @@ var BattleRoom = (function () {
 		if (this.active !== this.battle.active) {
 			rooms.global.battleCount += (this.battle.active ? 1 : 0) - (this.active ? 1 : 0);
 			this.active = this.battle.active;
-			if (this.parentid) {
-				getRoom(this.parentid).updateRooms();
-			}
 		}
 		this.update();
 	};
@@ -1078,9 +1059,6 @@ var BattleRoom = (function () {
 			this.battle.leave(user);
 			rooms.global.battleCount += (this.battle.active ? 1 : 0) - (this.active ? 1 : 0);
 			this.active = this.battle.active;
-			if (this.parentid) {
-				getRoom(this.parentid).updateRooms();
-			}
 		} else if (!user.named) {
 			delete this.users[user.userid];
 			return;
@@ -1125,10 +1103,6 @@ var BattleRoom = (function () {
 		}
 		this.update();
 		this.kickInactiveUpdate();
-
-		if (this.parentid) {
-			getRoom(this.parentid).updateRooms();
-		}
 	};
 	BattleRoom.prototype.leaveBattle = function (user) {
 		if (!user) return false; // ...
@@ -1142,10 +1116,6 @@ var BattleRoom = (function () {
 		this.active = this.battle.active;
 		this.update();
 		this.kickInactiveUpdate();
-
-		if (this.parentid) {
-			getRoom(this.parentid).updateRooms();
-		}
 		return true;
 	};
 	BattleRoom.prototype.expire = function () {
