@@ -1454,7 +1454,7 @@ exports.BattleItems = {
 		spritenum: 153,
 		num: 497,
 		gen: 2,
-		desc: "A Poké Ball that makes caught Pokémon more friendly."
+		desc: "A Poke Ball that makes caught Pokemon more friendly."
 	},
 	"fullincense": {
 		id: "fullincense",
