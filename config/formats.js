@@ -121,6 +121,25 @@ exports.Formats = [
 		]
 	},*/
 	{
+		name: "Fairy Face-Off",
+		section: "XY Singles",
+		
+		forcedLevel: 30,
+		requirePentagon: true,
+		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview GBU'],
+		banlist: ['Unreleased', 'Illegal'],
+		validateTeam: function (team) {
+			var problems = [];
+			if (team.length < 3) problems.push('You must bring at least three Pokémon.');
+			for (var i = 0; i < team.length; i++) {
+				if (Tools.getTemplate(team[i]).types.indexOf('Fairy') > -1) continue;
+				problems.push('You must only bring Fairy-type Pokémon.');
+				break;
+			}
+			return problems;
+		}
+	},
+	{
 		name: "Custom Game",
 		section: "XY Singles",
 
