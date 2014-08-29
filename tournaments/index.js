@@ -232,11 +232,9 @@ Tournament = (function () {
 		}
 
 		if (!isAllowAlts) {
-			var users = {};
-			this.generator.getUsers().forEach(function (user) { users[user.name] = 1; });
-			var alts = user.getAlts();
-			for (var a = 0; a < alts.length; ++a) {
-				if (users[alts[a]]) {
+			var users = this.generator.getUsers();
+			for (var i = 0; i < users.length; i++) {
+				if (users[i].latestIp === user.latestIp) {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
 				}
