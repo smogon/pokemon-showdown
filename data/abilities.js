@@ -1151,8 +1151,8 @@ exports.BattleAbilities = {
 		num: 150
 	},
 	"infiltrator": {
-		desc: "Ignores Substitute, Reflect, Light Screen, and Safeguard on the target.",
-		shortDesc: "This Pokemon's moves ignore the foe's Substitute, Reflect, Light Screen, Safeguard, and Mist.",
+		desc: "This Pokemon's moves ignore the target's Light Screen, Mist, Reflect, Safeguard, and Substitute.",
+		shortDesc: "Ignores Light Screen, Mist, Reflect, Safeguard, and Substitute.",
 		onModifyMove: function (move) {
 			move.notSubBlocked = true;
 			move.ignoreScreens = true;
@@ -2894,23 +2894,23 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, it temporarily copies an opponent's ability. This ability remains with this Pokemon until it leaves the field.",
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 		onUpdate: function (pokemon) {
-			var targets = [];
+			var possibleTargets = [];
 			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
-				if (pokemon.side.foe.active[i] && !pokemon.side.foe.active[i].fainted) targets.push(pokemon.side.foe.active[i]);
+				if (pokemon.side.foe.active[i] && !pokemon.side.foe.active[i].fainted) possibleTargets.push(pokemon.side.foe.active[i]);
 			}
-			if (!targets.length) return;
-			for (var i = 0, target, rand; i < pokemon.side.foe.active.length; i++) {
-				rand = 0;
-				if (targets.length > 1) rand = this.random(targets.length);
-				target = targets[rand];
+			while (possibleTargets.length) {
+				var rand = 0;
+				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
+				var target = possibleTargets[rand];
 				var ability = this.getAbility(target.ability);
 				var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
 				if (bannedAbilities[target.ability]) {
-					targets.splice(rand, 1);
+					possibleTargets.splice(rand, 1);
 					continue;
 				}
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 				pokemon.setAbility(ability);
+				return;
 			}
 		},
 		id: "trace",

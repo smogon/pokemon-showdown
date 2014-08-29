@@ -59,7 +59,6 @@ room's log. Otherwise, it will be in the form:
 
 For example:
 
-    |tc|2|@Moderator|Some dude will join in two seconds!
     |j| Some dude
     |c|@Moderator|hi!
     |c| Some dude|you suck and i hate you!
@@ -69,7 +68,6 @@ For example:
 
 This might be displayed as:
 
-    @Moderator: Some dude will join in two seconds!
     Some dude joined.
     @Moderator: hi!
     Some dude: you suck and i hate you!
@@ -88,17 +86,13 @@ displayed inline because they happen too often. For instance, the main server
 gets around 5 joins/leaves a second, and showing that inline with chat would
 make it near-impossible to chat.
 
-`tc` is pretty much the same as `c`, but also gives the delta time; the amount
-of seconds passed since the message has been sent. This is so that when the
-chat replays for example, the times shown are correct.
-
 Some outgoing message types
 ---------------------------
 
 `USER` = a user, the first character being their rank (users with no rank are
 represented by a space), and the rest of the string being their username.
 
-**Room initialization**
+####Room initialization
 
 `|init|ROOMTYPE`
 
@@ -110,7 +104,7 @@ represented by a space), and the rest of the string being their username.
 > `USERLIST` is a comma-separated list of `USER`s, sent from chat rooms when
 > they're joined.
 
-**Room messages**
+####Room messages
 
 `||MESSAGE` or `MESSAGE`
 
@@ -139,21 +133,177 @@ represented by a space), and the rest of the string being their username.
 > `USER` said `MESSAGE`. Note that `MESSAGE` can contain `|` characters,
 > so you can't just split by `|` and take the fourth string.
 
+`|:|TIMESTAMP`
+
+`|c:|TIMESTAMP|USER|MESSAGE`
+
+> `c:` is pretty much the same as `c`, but also comes with a UNIX timestamp;
+> (the number of seconds since 1970). This is used for accurate timestamps
+> in chat logs.
+>
+> `:` is the current time according to the server, so that times can be
+> adjusted and reported in the local time in the case of a discrepancy.
+>
+> The exact fate of this command is uncertain - it may or may not be
+> replaced with a more generalized way to transmit timestamps at some point.
+
 `|battle|ROOMID|USER1|USER2` or `|b|ROOMID|USER1|USER2`
 
 > A battle started between `USER1` and `USER2`, and the battle room has
 > ID `ROOMID`.
 
-**Battle messages**
+####Battle messages
 
-Battle messages aren't documented yet.
+`|player|PLAYER|USERNAME|AVATAR`
+
+> Appears when you join a battle room. `PLAYER` denotes which player it is
+> (`p1` or `p2`) and `USERNAME` is the username. `AVATAR` is the player's
+> avatar identifier (usually a number, but other values can be used for
+> custom avatars).
+
+    |gametype|GAMETYPE
+    |gen|GENNUM
+    |tier|TIERNAME
+    |rated
+    |rule|RULE: DESCRIPTION
+
+> Additional details when you join a battle room. `GAMETYPE` is one of
+> `singles`, `doubles`, or `triples`; `GENNUM` denotes the generation of
+> Pokemon being played; `tier` is the format; and `rule` appears multiple
+> times, once for each clause in effect. `rated` only appears if the battle
+> is rated.
+
+    |clearpoke
+    |poke|PLAYER|SPECIES
+    |poke|PLAYER|SPECIES
+    ...
+    |teampreview
+
+> These messages appear if you're playing a format that uses team previews.
+> `PLAYER` is the player ID (see `|player|`) and `SPECIES` is the
+> species of the Pokemon. `teampreview` commonly appears after `rule`
+> tags instead of after the Pokemon in the team preview.
+
+`|request|REQUEST`
+
+> Gives a JSON object containing a request for a decision (to move or
+> switch). To assist in your decision, `REQUEST.active` has information
+> about your active Pokemon, and `REQUEST.side` has information about your
+> your team as a whole.
+
+`|inactive|MESSAGE` or `|inactiveoff|MESSAGE`
+
+> A message related to the battle timer has been sent. The official client
+> displays these messages in red.
+>
+> `inactive` means that the timer is on at the time the message was sent,
+> while `inactiveoff` means that the timer is off.
+
+`|start`
+
+> Indicates that the game has started.
+
+**Major actions**
+
+In battle, most Pokemon actions come in the form `|ACTION|POKEMON|DETAILS`
+followed by a few messages detailing what happens after the action occurs.
+
+A Pokemon is always identified in the form `POSITION: NAME`. `POSITION` is
+the spot that the Pokemon is in: it consists of the `PLAYER` of the player
+(see `|player|`), followed by a letter indicating the given Pokemon's
+position, counting from `a`.
+
+In doubles and triples battles, `a` will refer to the leftmost Pokemon
+on one team and the rightmost Pokemon on the other (so `p1a` faces `p2c`,
+etc). `NAME` is the nickname of the Pokemon performing the action.
+
+`|move|POKEMON|MOVE|TARGET`
+
+> The specified Pokemon has used move `MOVE` at `TARGET`. If a move has
+> multiple targets or no target, `TARGET` should be ignored. If a move
+> targets a side, `TARGET` will be a (possibly fainted) pokemon on that
+> side.
+>
+> `move` can be tagged with `|[miss]` to indicate that the move missed.
+
+`|switch|POKEMON|SPECIES|HP STATUS` or `|drag|POKEMON|SPECIES|HP STATUS`
+
+> A Pokemon identified by `POKEMON` has switched in (the old Pokemon, if
+> still there, is switched out).
+>
+> The new Pokemon has species `SPECIES`, HP `HP`, and status `STATUS`. `HP`
+> is specified as a fraction; if it is your own Pokemon then it will be
+> `CURRENT/MAX`, if not, it will be `/100` if HP Percentage Mod is in effect
+> and `/48` otherwise. `STATUS` can be left blank, or it can be `slp`,
+> `par`, etc.
+>
+> `switch` means it was intentional, while `drag` means it was unintentional
+> (forced by Whirlwind, Roar, etc).
+
+`|cant|POKEMON|REASON` or `|cant|POKEMON|REASON|MOVE`
+
+> The Pokemon `POKEMON` could not perform a move because of the indicated
+> `REASON` (such as paralysis, Disable, etc). Sometimes, the move it was
+> trying to use is given.
+
+`|faint|POKEMON`
+
+> The Pokemon `POKEMON` has fainted.
+
+**Minor actions**
+
+Minor actions are less important than major actions. In the official client,
+they're usually displayed in small font if they have a message. Pretty much
+anything that happens in a battle other than a switch or the fact that a move
+was used is a minor action. So yes, the effects of a move such as damage or
+stat boosts are minor actions.
+
+Minor actions often come with tags such as `|[from] EFFECT|[of] SOURCE`.
+`EFFECT` will be an effect (move, ability, item, status, etc), and `SOURCE`
+will be a Pokemon. These can affect the message or animation displayed, but
+do not affect anything else. Other tags include `|[still]` (suppress
+animation) and `|[silent]` (suppress message).
+
+`|-damage|POKEMON|HP STATUS`
+
+> The specified Pokemon `POKEMON` has taken damage, and is now at
+> `HP STATUS` (see `|switch|` for details).
+>
+> If `HP` is 0, `STATUS` should be ignored. The current behavior is for
+> `STATUS` to be `fnt`, but this may change and should not be relied upon.
+
+`|-heal|POKEMON|HP STATUS`
+
+> Same as `-damage`, but the Pokemon has healed damage instead.
+
+`|-status|POKEMON|STATUS`
+
+> The Pokemon `POKEMON` has been inflicted with `STATUS`.
+
+`|-boost|POKEMON|STAT|AMOUNT`
+
+> The specified Pokemon `POKEMON` has gained `AMOUNT` in `STAT`, using the
+> standard rules for Pokemon stat changes in-battle. `STAT` is a standard
+> three-letter abbreviation fot the stat in question, so Speed will be `spe`,
+> Special Defense will be `spd`, etc.
+
+`|-unboost|POKEMON|STAT|AMOUNT`
+
+> Same as `-boost`, but for negative stat changes instead.
+
+`|-weather|WEATHER`
+
+> Indicates the weather that is currently in effect. If `|[upkeep]` is present,
+> it means that `WEATHER` was active previously and is still in effect that
+> turn. Otherwise, it means that the weather has changed due to a move or ability,
+> or has expired, in which case `WEATHER` will be `none`.
 
 I'll document all the message types eventually, but for now this should be
 enough to get you started. You can watch the data sent and received from
 the server on a regular connection, or look at the client source code
 for a full list of message types.
 
-**Global messages**
+####Global messages
 
 `|popup|MESSAGE`
 

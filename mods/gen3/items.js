@@ -178,5 +178,26 @@ exports.BattleItems = {
 			}
 		},
 		desc: "Holder's Psychic-type attacks have 1.1x power."
+	},
+	"kingsrock": {
+		id: "kingsrock",
+		name: "King's Rock",
+		spritenum: 236,
+		fling: {
+			basePower: 30,
+			volatileStatus: 'flinch'
+		},
+		onModifyMove: function (move) {
+			if (move.category !== "Status") {
+				if (move.secondaries && move.secondaries.length) return;
+				move.secondaries = [{
+					chance: 10,
+					volatileStatus: 'flinch'
+				}];
+			}
+		},
+		num: 221,
+		gen: 2,
+		desc: "Holder's attacks without a secondary gain a 10% chance to flinch."
 	}
 };
