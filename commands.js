@@ -1800,7 +1800,7 @@ var commands = exports.commands = {
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;
 			connection.send('|queryresponse|roomlist|' + JSON.stringify({
-				rooms: Rooms.global.getRoomList(true)
+				rooms: Rooms.global.getRoomList(target)
 			}));
 
 		} else if (cmd === 'rooms') {
