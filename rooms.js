@@ -1342,68 +1342,6 @@ var ChatRoom = (function () {
 
 		this.send(update);
 	};
-	ChatRoom.prototype.send = function (message, user) {
-		if (user) {
-			user.sendTo(this, message);
-		} else {
-			if (this.id !== 'lobby') message = '>' + this.id + '\n' + message;
-			Sockets.channelBroadcast(this.id, message);
-		}
-	};
-	ChatRoom.prototype.sendAuth = function (message) {
-		for (var i in this.users) {
-			var user = this.users[i];
-			if (user.connected && user.can('receiveauthmessages', null, this)) {
-				user.sendTo(this, message);
-			}
-		}
-	};
-	ChatRoom.prototype.add = function (message, noUpdate) {
-		this.logTimes.push(~~(Date.now() / 1000));
-		this.log.push(message);
-		this.logEntry(message);
-		if (!noUpdate) {
-			this.update();
-		}
-	};
-	ChatRoom.prototype.addRaw = function (message) {
-		this.add('|raw|' + message);
-	};
-	ChatRoom.prototype.logGetLast = function (amount, noTime) {
-		if (!amount) {
-			return [];
-		}
-		if (amount < 0) {
-			amount *= -1;
-		}
-
-		var logLength = this.log.length;
-		if (!logLength) {
-			return [];
-		}
-
-		var log = [];
-		var time = ~~(Date.now() / 1000);
-		for (var i = logLength - amount - 1; i < logLength; i++) {
-			if (i < 0) {
-				i = 0;
-			}
-
-			var logText = this.log[i];
-			if (!logText){
-				continue;
-			}
-
-			if (!noTime && logText.substr(0, 3) === '|c|') {
-				// Time is only added when it's a normal chat message
-				logText = '|tc|' + (time - this.logTimes[i]) + '|' + logText.substr(3);
-			}
-
-			log.push(logText);
-		}
-
-		return log;
-	};
 	ChatRoom.prototype.getIntroMessage = function () {
 		var html = this.introMessage || '';
 		if (this.modchat) {
