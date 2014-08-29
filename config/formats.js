@@ -132,7 +132,8 @@ exports.Formats = [
 			var problems = [];
 			if (team.length < 3) problems.push('You must bring at least three Pokémon.');
 			for (var i = 0; i < team.length; i++) {
-				if (Tools.getTemplate(team[i]).types.indexOf('Fairy') > -1) continue;
+				var types = Tools.getTemplate(team[i].species || team[i].name).types || [];
+				if (types.indexOf('Fairy') > -1) continue;
 				problems.push('You must only bring Fairy-type Pokémon.');
 				break;
 			}
