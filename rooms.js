@@ -38,6 +38,7 @@ var Room = (function () {
 	Room.prototype.lastUpdate = 0;
 	Room.prototype.log = null;
 	Room.prototype.users = null;
+	Room.prototype.userCount = 0;
 
 	Room.prototype.send = function (message, errorArgument) {
 		if (errorArgument) throw new Error("Use Room#sendUser");
@@ -230,7 +231,7 @@ var GlobalRoom = (function () {
 		}
 		LoginServer.request('updateuserstats', {
 			date: Date.now(),
-			users: Object.size(this.users)
+			users: this.userCount
 		}, function () {});
 	};
 
@@ -285,7 +286,7 @@ var GlobalRoom = (function () {
 			(room.isOfficial ? roomsData.official : roomsData.chat).push({
 				title: room.title,
 				desc: room.desc,
-				userCount: Object.size(room.users)
+				userCount: room.userCount
 			});
 		}
 		return roomsData;
@@ -1040,6 +1041,7 @@ var BattleRoom = (function () {
 		}
 
 		this.users[user.userid] = user;
+		this.userCount++;
 
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		return user;
@@ -1084,6 +1086,7 @@ var BattleRoom = (function () {
 			return;
 		}
 		delete this.users[user.userid];
+		this.userCount--;
 		this.add('|leave|' + user.name);
 
 		if (Object.isEmpty(this.users)) {
@@ -1375,6 +1378,7 @@ var ChatRoom = (function () {
 		}
 
 		this.users[user.userid] = user;
+		this.userCount++;
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
@@ -1434,7 +1438,10 @@ var ChatRoom = (function () {
 	};
 	ChatRoom.prototype.onLeave = function (user) {
 		if (!user) return; // ...
+
 		delete this.users[user.userid];
+		this.userCount--;
+
 		if (user.named && Config.reportjoins) {
 			this.add('|l|' + user.getIdentity(this.id));
 		} else if (user.named) {
