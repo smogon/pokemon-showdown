@@ -241,6 +241,8 @@ var commands = exports.commands = {
 		room.desc = target;
 		this.sendReply("(The room description is now: " + target + ")");
 
+		this.privateModCommand("(" + user.name + " changed the roomdesc to: \"" + target + "\".)");
+
 		if (room.chatRoomData) {
 			room.chatRoomData.desc = room.desc;
 			Rooms.global.writeChatRoomData();
@@ -270,6 +272,8 @@ var commands = exports.commands = {
 		room.introMessage = target;
 		this.sendReply("(The room introduction has been changed to:)");
 		this.sendReplyBox(target);
+
+		this.privateModCommand("(" + user.name + " changed the roomintro.)");
 
 		if (room.chatRoomData) {
 			room.chatRoomData.introMessage = room.introMessage;
@@ -398,7 +402,7 @@ var commands = exports.commands = {
 			}
 		}
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
-		targetUser.leaveRoom(room.id);
+		if (!targetUser.can('bypassall')) targetUser.leaveRoom(room.id);
 	},
 
 	unroomban: 'roomunban',
@@ -451,12 +455,12 @@ var commands = exports.commands = {
 			return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
 		}
 		if (targetRoom.isPrivate) {
-			if (targetRoom.modjoin && !user.can('bypassmodjoin')) {
+			if (targetRoom.modjoin && !user.can('bypassall')) {
 				var userGroup = user.group;
 				if (targetRoom.auth) {
 					userGroup = targetRoom.auth[user.userid] || Config.groups.default[room.type + 'Room'];
 				}
-				if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[targetRoom.modchat].rank) {
+				if (targetRoom.modchat && Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[targetRoom.modchat].rank) {
 					return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
 				}
 			}
@@ -627,7 +631,11 @@ var commands = exports.commands = {
 
 		this.addModCommand("" + targetUser.name + " was locked from talking by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
-		if (alts.length) this.privateModCommand("(" + targetUser.name + "'s alts were also locked: " + alts.join(", ") + ")");
+		if (alts.length) {
+			this.privateModCommand("(" + targetUser.name + "'s " + (targetUser.autoconfirmed ? " ac account: " + targetUser.autoconfirmed + ", " : "") + "locked alts: " + alts.join(", ") + ")");
+		} else if (targetUser.autoconfirmed) {
+			this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
+		}
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 
 		targetUser.lock();
@@ -686,10 +694,12 @@ var commands = exports.commands = {
 		this.addModCommand("" + targetUser.name + " was banned by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
 		var alts = targetUser.getAlts();
 		if (alts.length) {
-			this.privateModCommand("(" + targetUser.name + "'s alts were also banned: " + alts.join(", ") + ")");
+			this.privateModCommand("(" + targetUser.name + "'s " + (targetUser.autoconfirmed ? " ac account: " + targetUser.autoconfirmed + ", " : "") + "banned alts: " + alts.join(", ") + ")");
 			for (var i = 0; i < alts.length; ++i) {
 				this.add('|unlink|' + toId(alts[i]));
 			}
+		} else if (targetUser.autoconfirmed) {
+			this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
 		}
 
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
@@ -1145,18 +1155,33 @@ var commands = exports.commands = {
 
 		Rooms.global.lockdown = true;
 		for (var id in Rooms.rooms) {
-			if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
-			if (Rooms.rooms[id].requestKickInactive && !Rooms.rooms[id].battle.ended) {
-				Rooms.rooms[id].requestKickInactive(user, true);
-				if (!Rooms.rooms[id].modchat) {
-					Rooms.rooms[id].modchat = Users.getGroupsThatCan('joinbattle', this)[0];
-					Rooms.rooms[id].addRaw("<div class=\"broadcast-red\"><b>Moderated chat was set to " + Users.getGroupsThatCan('joinbattle', this)[0] + "!</b><br />Only users of rank " + Users.getGroupsThatCan('joinbattle', this)[0] + " and higher can talk.</div>");
+			if (id === 'global') continue;
+			var curRoom = Rooms.rooms[id];
+			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+			if (curRoom.requestKickInactive && !curRoom.battle.ended) {
+				curRoom.requestKickInactive(user, true);
+				if (!curRoom.modchat) {
+					curRoom.modchat = Users.getGroupsThatCan('joinbattle', curRoom)[0];
+					curRoom.addRaw("<div class=\"broadcast-red\"><b>Moderated chat was set to " + Users.getGroupsThatCan('joinbattle', curRoom)[0] + "!</b><br />Only users of rank " + Users.getGroupsThatCan('joinbattle', curRoom)[0] + " and higher can talk.</div>");
 				}
 			}
 		}
 
 		this.logEntry(user.name + " used /lockdown");
+	},
 
+	slowlockdown: function (target, room, user) {
+		if (!this.can('lockdown')) return false;
+
+		Rooms.global.lockdown = true;
+		for (var id in Rooms.rooms) {
+			if (id === 'global') continue;
+			var curRoom = Rooms.rooms[id];
+			if (curRoom.battle) continue;
+			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+		}
+
+		this.logEntry(user.name + " used /slowlockdown");
 	},
 
 	endlockdown: function (target, room, user) {
@@ -1171,7 +1196,6 @@ var commands = exports.commands = {
 		}
 
 		this.logEntry(user.name + " used /endlockdown");
-
 	},
 
 	emergency: function (target, room, user) {
@@ -1206,34 +1230,6 @@ var commands = exports.commands = {
 		if (!this.can('lockdown')) return false;
 
 		return this.sendReply("If you need to restart the server, please ask kota or pika.");
-
-		if (!Rooms.global.lockdown) {
-			return this.sendReply("For safety reasons, /kill can only be used during lockdown.");
-		}
-
-		if (CommandParser.updateServerLock) {
-			return this.sendReply("Wait for /updateserver to finish before using /kill.");
-		}
-
-		/*for (var i in Sockets.workers) {
-			Sockets.workers[i].kill();
-		}*/
-
-		if (!room.destroyLog) {
-			process.exit();
-			return;
-		}
-		room.destroyLog(function () {
-			room.logEntry(user.name + " used /kill");
-		}, function () {
-			process.exit();
-		});
-
-		// Just in the case the above never terminates, kill the process
-		// after 10 seconds.
-		setTimeout(function () {
-			process.exit();
-		}, 10000);
 	},
 
 	loadbanlist: function (target, room, user, connection) {

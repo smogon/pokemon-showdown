@@ -181,7 +181,6 @@ exports.appealUri = '';
 //     - alts: Ability to check alts.
 //     - announce: /announce command.
 //     - ban: Banning and unbanning.
-//     - banword: Banning and unbanning words to be used in usernames.
 //     - broadcast: Broadcast informational commands.
 //     - bypassblocks: Bypass blocks such as your challenge being blocked.
 //     - console: Developer console (also requires IP or userid in the `consoleIps` array).
