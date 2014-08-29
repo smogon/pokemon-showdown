@@ -1484,6 +1484,11 @@ exports.BattleScripts = {
 			} else {
 				item = 'Leftovers';
 			}
+
+			// For Trick / Switcheroo
+			if (item === 'Leftovers' && hasType['Poison']) {
+				item = 'Black Sludge';
+			}
 		}
 
 		// 95-86-82-78-74-70
@@ -2470,6 +2475,11 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else {
 				item = 'Sitrus Berry';
+			}
+
+			// For Trick / Switcheroo
+			if (item === 'Leftovers' && hasType['Poison']) {
+				item = 'Black Sludge';
 			}
 		}
 
