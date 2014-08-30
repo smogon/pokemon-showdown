@@ -123,11 +123,10 @@ exports.Formats = [
 	{
 		name: "Fairy Face-Off",
 		section: "XY Singles",
-		
+
 		forcedLevel: 30,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		requirePentagon: true,
-		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview GBU'],
-		banlist: ['Unreleased', 'Illegal', 'Xerneas', 'Diancie'],
 		validateTeam: function (team) {
 			var problems = [];
 			if (team.length < 3) problems.push('You must bring at least three Pokémon.');
@@ -513,23 +512,6 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Alphabet Cup",
-		section: "Other Metagames",
-
-		searchShow: false,
-		ruleset: ['OU'],
-		banlist: ['Swoobat'],
-		validateTeam: function (team, format) {
-			var letters = {};
-			var letter = '';
-			for (var i = 0; i < team.length; i++) {
-				letter = Tools.getTemplate(team[i]).species.slice(0, 1).toUpperCase();
-				if (letter in letters) return ['Your team cannot have more that one Pokémon starting with the letter "' + letter + '".'];
-				letters[letter] = 1;
-			}
-		}
-	},
-	{
 		name: "Averagemons",
 		section: "Other Metagames",
 
@@ -576,6 +558,20 @@ exports.Formats = [
 				problems.push((set.name || set.species) + ' is higher than level 100.');
 			}
 			return problems;
+		}
+	},
+	{
+		name: "Mediocremons",
+		section: "Other Metagames",
+
+		searchShow: false,
+		ruleset: ['OU'],
+		banlist: ['Clefable', 'Kingdra', 'Venomoth', 'Abomasite', 'Mawilite', 'Medichamite', 'Huge Power', 'Pure Power'],
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species || set.name);
+			for (var stat in template.baseStats) {
+				if (template.baseStats[stat] >= 100) return [set.species + " has a base stat of 100 or more."];
+			}
 		}
 	},
 	{

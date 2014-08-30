@@ -583,10 +583,8 @@ Validator = (function () {
 
 		do {
 			alreadyChecked[template.speciesid] = true;
-			// Stabmons hack to avoid copying all of validateSet to formats.
+			// STABmons hack to avoid copying all of validateSet to formats
 			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && template.types.indexOf(tools.getMove(move).type) > -1) return false;
-			// Alphabet Cup hack to do the same
-			if (alphabetCupLetter && alphabetCupLetter === Tools.getMove(move).id.slice(0, 1) && Tools.getMove(move).id !== 'sketch') return false;
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					sometimesPossible = true;
