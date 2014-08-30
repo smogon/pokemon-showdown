@@ -819,13 +819,13 @@ exports.Formats = [
 	},
 	{
         	name: "[Gen 3] LC",
-        	section: "Past Gen LC",
+        	section: "Past Generations",
     
         	maxLevel: 5,
         	mod: 'gen3',
         	searchShow: false,
         	ruleset: ['Pokemon', 'Standard', 'Little Cup'],
-        	banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'Scyther', 'Chansey', 'Meditite', 'Omanyte', 'Wynaut', 'Zigzagoon', 'OU', 'BL', 'UU', 'NU', 'Uber']
+        	banlist: ['Dragon Rage', 'Sonic Boom', 'Scyther', 'Chansey', 'Meditite', 'Omanyte', 'Wynaut', 'Zigzagoon', 'OU', 'BL', 'UU', 'NU', 'Uber']
     	},
 	{
 		name: "[Gen 3] Custom Game",
