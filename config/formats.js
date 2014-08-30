@@ -123,7 +123,7 @@ exports.Formats = [
 	{
 		name: "Fairy Face-Off",
 		section: "XY Singles",
-		
+
 		forcedLevel: 30,
 		requirePentagon: true,
 		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview GBU'],
