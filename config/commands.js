@@ -952,10 +952,6 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
 		}
-		if (target === 'alphabetcup') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498167/\">Alphabet Cup</a><br />";
-		}
 		if (target === 'averagemons') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3495527/\">Averagemons</a><br />";
@@ -963,6 +959,10 @@ var commands = exports.commands = {
 		if (target === 'hackmons' || target === 'purehackmons' || target === 'classichackmons') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3500418/\">Hackmons</a><br />";
+		}
+		if (target === 'mediocremons') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3507608/\">Mediocremons</a><br />";
 		}
 		if (target === 'middlecup' || target === 'mc') {
 			matched = true;
