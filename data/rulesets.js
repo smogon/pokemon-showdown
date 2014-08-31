@@ -67,6 +67,7 @@ exports.BattleFormats = {
 			var item = this.getItem(set.item);
 			var template = this.getTemplate(set.species);
 			var problems = [];
+			var totalEV = 0;
 
 			if (set.species === set.name) delete set.name;
 			if (template.gen > this.gen) {
@@ -110,10 +111,25 @@ exports.BattleFormats = {
 					problems.push(item.name + ' is not a real item.');
 				}
 			}
+			for (var k in set.evs) {
+				if (typeof set.evs[k] !== 'number' || set.evs[k] < 0) {
+					set.evs[k] = 0;
+				}
+				totalEV += set.evs[k];
+			}
+			// In gen 6, it is impossible to battle other players with pokemon that break the EV limit
+			if (totalEV > 510 && this.gen >= 6) {
+				problems.push((set.name || set.species) + " has more than 510 total EVs.");
+			}
 
 			// ----------- legality line ------------------------------------------
 			if (!format.banlistTable || !format.banlistTable['illegal']) return problems;
 			// everything after this line only happens if we're doing legality enforcement
+
+			// only in gen 1 and 2 it was legal to max out all EVs
+			if (this.gen >= 3 && totalEV > 510) {
+				problems.push((set.name || set.species) + " has more than 510 total EVs.");
+			}
 
 			// limit one of each move
 			var moves = [];
@@ -440,7 +456,7 @@ exports.BattleFormats = {
 		effectType: 'Rule',
 		name: 'HP Percentage Mod',
 		onStart: function () {
-			this.add('rule', 'HP Percentage Mod: HP is reported as percentages');
+			this.add('rule', 'HP Percentage Mod: HP is shown in percentages');
 			this.reportPercentages = true;
 		}
 	},
@@ -492,26 +508,29 @@ exports.BattleFormats = {
 		onStart: function () {
 			this.add('rule', 'Same Type Clause: Pokémon in a team must share a type');
 		},
-		validateTeam: function (team, format) {
-			var typeTable = {};
-			for (var i = 0; i < team.length; i++) {
-				var template = this.getTemplate(team[i].species);
-				if (!template.types) continue;
+		validateTeam: function (team, format, teamHas) {
+			if (!team[0]) return;
+			var template = this.getTemplate(team[0].species);
+			var typeTable = template.types;
+			if (!typeTable) return ["Your team must share a type."];
+			for (var i = 1; i < team.length; i++) {
+				template = this.getTemplate(team[i].species);
+				if (!template.types) return ["Your team must share a type."];
 
-				// first type
-				var type = template.types[0];
-				typeTable[type] = (typeTable[type] || 0) + 1;
-
-				// second type
-				type = template.types[1];
-				if (type) typeTable[type] = (typeTable[type] || 0) + 1;
+				typeTable = typeTable.intersect(template.types);
+				if (!typeTable.length) return ["Your team must share a type."];
 			}
-			for (var type in typeTable) {
-				if (typeTable[type] >= team.length) {
-					return;
+			if (format.id === 'oumonotype') {
+				// Very complex bans
+				if (typeTable.length > 1) return;
+				switch (typeTable[0]) {
+				case 'Steel':
+					if (teamHas['aegislash']) return ["Aegislash is banned from Steel monotype teams."];
+					break;
+				case 'Water':
+					if (teamHas['damprock']) return ["Damp Rock is banned from Water monotype teams."];
 				}
 			}
-			return ["Your team must share a type."];
 		}
 	}
 };

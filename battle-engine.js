@@ -104,7 +104,7 @@ battleEngineFakeProcess.client.on('message', function (message) {
 						'Additional information:\n' +
 						'message = ' + message + '\n' +
 						'currentRequest = ' + prevRequest + '\n\n' +
-						'Log:\n' + battle.log.join('\n');
+						'Log:\n' + battle.log.join('\n').replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*\n/g, '\n');
 				var fakeErr = {stack: stack};
 				require('./crashlogger.js')(fakeErr, 'A battle');
 
@@ -1010,7 +1010,7 @@ BattlePokemon = (function () {
 		if (oldAbility in {multitype:1, stancechange:1}) return false;
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
-		if (ability.id) {
+		if (ability.id && this.battle.gen > 3) {
 			this.battle.singleEvent('Start', ability, this.abilityData, this, source, effect);
 		}
 		return oldAbility;
@@ -2368,6 +2368,9 @@ Battle = (function () {
 		if (!pokemon || pokemon.isActive) return false;
 		if (!pos) pos = 0;
 		var side = pokemon.side;
+		if (pos >= side.active.length) {
+			throw new Error("Invalid switch position");
+		}
 		if (side.active[pos]) {
 			var oldActive = side.active[pos];
 			var lastMove = null;
@@ -2460,6 +2463,9 @@ Battle = (function () {
 		return true;
 	};
 	Battle.prototype.swapPosition = function (pokemon, slot, attributes) {
+		if (slot >= pokemon.side.active.length) {
+			throw new Error("Invalid swap position");
+		}
 		var target = pokemon.side.active[slot];
 		if (slot !== 1 && (!target || target.fainted)) return false;
 
@@ -3330,12 +3336,15 @@ Battle = (function () {
 				}
 			}
 			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
+				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
+					// in gen 2-4, the switch still happens
 					decision.priority = -101;
-					this.addQueue(decision, true);
+					this.queue.unshift(decision);
 					this.debug('Pursuit target fainted');
 					break;
 				}
+				// in gen 5+, the switch is cancelled
 				this.debug('A Pokemon can\'t switch between when it runs out of HP and when it faints');
 				break;
 			}
@@ -3390,7 +3399,9 @@ Battle = (function () {
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (!this.queue.length) {
+		if (!this.queue.length || (this.gen <= 3 && this.queue[0].choice in {move:1,residual:1})) {
+			// in gen 3 or earlier, switching in fainted pokemon is done after
+			// every move, rather than only at the end of the turn.
 			this.checkFainted();
 		} else if (decision.choice === 'pass') {
 			this.eachEvent('Update');
@@ -3412,6 +3423,10 @@ Battle = (function () {
 		}
 
 		if (p1switch || p2switch) {
+			if (this.gen <= 1) {
+				// in gen 1, fainting ends the turn; residuals do not happen
+				this.queue = [];
+			}
 			this.makeRequest('switch');
 			return true;
 		}
@@ -3752,7 +3767,7 @@ Battle = (function () {
 			this.log.push('|' + parts.join('|'));
 		} else {
 			this.log.push('|split');
-			var sides = this.sides.concat(null, true);
+			var sides = [null, this.sides[0], this.sides[1], true];
 			for (var i = 0; i < sides.length; ++i) {
 				var line = '';
 				for (var j = 0; j < parts.length; ++j) {
@@ -3895,10 +3910,10 @@ Battle = (function () {
 			var p2 = this.p2;
 			var p1active = p1 ? p1.active[0] : null;
 			var p2active = p2 ? p2.active[0] : null;
-			data[2] = data[2].replace(/\f/g, '\n');
-			this.add('', '>>> ' + data[2]);
+			var target = data.slice(2).join('|').replace(/\f/g, '\n');
+			this.add('', '>>> ' + target);
 			try {
-				this.add('', '<<< ' + eval(data[2]));
+				this.add('', '<<< ' + eval(target));
 			} catch (e) {
 				this.add('', '<<< error: ' + e.message);
 			}
