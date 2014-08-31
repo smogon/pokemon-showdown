@@ -102,8 +102,8 @@ exports.BattleAbilities = {
 		num: 76
 	},
 	"analytic": {
-		desc: "If the user moves last, the power of that move is increased by 30%.",
-		shortDesc: "This Pokemon's attacks do 1.3x damage if it is the last to move in a turn.",
+		desc: "This Pokemon's attacks do 1.3x damage if it is the last to move in a turn.",
+		shortDesc: "If the user moves last, the power of that move is increased by 30%.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
 			if (!this.willMove(defender)) {
@@ -221,8 +221,8 @@ exports.BattleAbilities = {
 		num: 123
 	},
 	"battlearmor": {
-		desc: "Critical Hits cannot strike this Pokemon.",
-		shortDesc: "This Pokemon cannot be struck by a critical hit.",
+		desc: "This Pokemon cannot be struck by a critical hit.",
+		shortDesc: "Critical Hits cannot strike this Pokemon.",
 		onCriticalHit: false,
 		id: "battlearmor",
 		name: "Battle Armor",
@@ -230,8 +230,8 @@ exports.BattleAbilities = {
 		num: 4
 	},
 	"bigpecks": {
-		desc: "Prevents the Pokemon's Defense stat from being reduced.",
-		shortDesc: "Prevents other Pokemon from lowering this Pokemon's Defense.",
+		desc: "Prevents other Pokemon from lowering this Pokemon's Defense.",
+		shortDesc: "Prevents the Pokemon's Defense stat from being reduced.",
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost['def'] && boost['def'] < 0) {
@@ -391,8 +391,8 @@ exports.BattleAbilities = {
 		num: 14
 	},
 	"contrary": {
-		desc: "Stat changes are inverted.",
-		shortDesc: "If this Pokemon has a stat boosted it is lowered instead, and vice versa.",
+		desc: "If this Pokemon has a stat boosted it is lowered instead, and vice versa.",
+		shortDesc: "Stat changes are inverted.",
 		onBoost: function (boost) {
 			for (var i in boost) {
 				boost[i] *= -1;
@@ -472,8 +472,8 @@ exports.BattleAbilities = {
 		num: 186
 	},
 	"defeatist": {
-		desc: "Attack and Special Attack are halved when HP is less than half.",
-		shortDesc: "When this Pokemon has 1/2 or less of its max HP, its Attack and Sp. Atk are halved.",
+		desc: "When this Pokemon has 1/2 or less of its max HP, its Attack and Sp. Atk are halved.",
+		shortDesc: "Attack and Special Attack are halved when HP is less than half.",
 		onModifyAtkPriority: 5,
 		onModifyAtk: function (atk, pokemon) {
 			if (pokemon.hp < pokemon.maxhp / 2) {
@@ -808,8 +808,8 @@ exports.BattleAbilities = {
 		num: 59
 	},
 	"forewarn": {
-		desc: "The move with the highest Base Power in the opponent's moveset is revealed.",
-		shortDesc: "On switch-in, this Pokemon is alerted to the foes' move with the highest Base Power.",
+		desc: "On switch-in, this Pokemon is alerted to the foes' move with the highest Base Power.",
+		shortDesc: "The move with the highest Base Power in the opponent's moveset is revealed.",
 		onStart: function (pokemon) {
 			var targets = pokemon.side.foe.active;
 			var warnMoves = [];
@@ -913,7 +913,7 @@ exports.BattleAbilities = {
 		num: 183
 	},
 	"grasspelt": {
-		desc: "This Pokemon's Defense is boosted in Grassy Terrain",
+		desc: "This Pokemon's Defense is boosted in Grassy Terrain.",
 		shortDesc: "This Pokemon's Defense is boosted in Grassy Terrain.",
 		onModifyDefPriority: 6,
 		onModifyDef: function (pokemon) {
@@ -1121,8 +1121,8 @@ exports.BattleAbilities = {
 		num: 149
 	},
 	"immunity": {
-		desc: "This Pokemon cannot become poisoned nor Toxic poisoned.",
-		shortDesc: "This Pokemon cannot be poisoned. Gaining this Ability while poisoned cures it.",
+		desc: "This Pokemon cannot be poisoned. Gaining this Ability while poisoned cures it.",
+		shortDesc: "This Pokemon cannot become poisoned nor Toxic poisoned.",
 		onUpdate: function (pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
 				pokemon.cureStatus();
@@ -1151,8 +1151,8 @@ exports.BattleAbilities = {
 		num: 150
 	},
 	"infiltrator": {
-		desc: "Ignores Substitute, Reflect, Light Screen, and Safeguard on the target.",
-		shortDesc: "This Pokemon's moves ignore the foe's Substitute, Reflect, Light Screen, Safeguard, and Mist.",
+		desc: "This Pokemon's moves ignore the target's Light Screen, Mist, Reflect, Safeguard, and Substitute.",
+		shortDesc: "Ignores Light Screen, Mist, Reflect, Safeguard, and Substitute.",
 		onModifyMove: function (move) {
 			move.notSubBlocked = true;
 			move.ignoreScreens = true;
@@ -1251,8 +1251,8 @@ exports.BattleAbilities = {
 		num: 154
 	},
 	"keeneye": {
-		desc: "This Pokemon's Accuracy cannot be lowered.",
-		shortDesc: "Prevents other Pokemon from lowering this Pokemon's accuracy.",
+		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy.",
+		shortDesc: "This Pokemon's Accuracy cannot be lowered.",
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost['accuracy'] && boost['accuracy'] < 0) {
@@ -1345,8 +1345,8 @@ exports.BattleAbilities = {
 		num: 32
 	},
 	"limber": {
-		desc: "This Pokemon cannot become paralyzed.",
-		shortDesc: "This Pokemon cannot be paralyzed. Gaining this Ability while paralyzed cures it.",
+		desc: "This Pokemon cannot be paralyzed. Gaining this Ability while paralyzed cures it.",
+		shortDesc: "This Pokemon cannot become paralyzed.",
 		onUpdate: function (pokemon) {
 			if (pokemon.status === 'par') {
 				pokemon.cureStatus();
@@ -1377,8 +1377,8 @@ exports.BattleAbilities = {
 		num: 64
 	},
 	"magicbounce": {
-		desc: "Non-damaging moves are reflected back at the user.",
-		shortDesc: "This Pokemon blocks certain status moves and uses the move itself.",
+		desc: "This Pokemon blocks certain status moves and uses the move itself.",
+		shortDesc: "Non-damaging moves are reflected back at the user.",
 		id: "magicbounce",
 		name: "Magic Bounce",
 		onTryHitPriority: 1,
@@ -1415,8 +1415,8 @@ exports.BattleAbilities = {
 		num: 156
 	},
 	"magicguard": {
-		desc: "Prevents all damage except from direct attacks.",
-		shortDesc: "This Pokemon can only be damaged by direct attacks.",
+		desc: "This Pokemon can only be damaged by direct attacks.",
+		shortDesc: "Prevents all damage except from direct attacks.",
 		onDamage: function (damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
 				return false;
@@ -1449,8 +1449,8 @@ exports.BattleAbilities = {
 		num: 170
 	},
 	"magmaarmor": {
-		desc: "This Pokemon cannot become frozen.",
-		shortDesc: "This Pokemon cannot be frozen. Gaining this Ability while frozen cures it.",
+		desc: "This Pokemon cannot be frozen. Gaining this Ability while frozen cures it.",
+		shortDesc: "This Pokemon cannot become frozen.",
 		onUpdate: function (pokemon) {
 			if (pokemon.status === 'frz') {
 				pokemon.cureStatus();
@@ -2384,7 +2384,7 @@ exports.BattleAbilities = {
 	},
 	"sniper": {
 		desc: "When this Pokemon lands a Critical Hit, the damage is increased to another 1.5x.",
-		shortDesc: "If this Pokemon strikes with a critical hit, the damage is increased by 50%",
+		shortDesc: "If this Pokemon strikes with a critical hit, the damage is increased by 50%.",
 		onModifyDamage: function (damage, source, target, move) {
 			if (move.crit) {
 				this.debug('Sniper boost');
@@ -2877,8 +2877,8 @@ exports.BattleAbilities = {
 		num: 137
 	},
 	"toughclaws": {
-		desc: "This Pokemon's contact attacks do 1.33x damage.",
-		shortDesc: "This Pokemon's contact attacks do 33% more damage.",
+		desc: "This Pokemon's contact attacks do 33% more damage.",
+		shortDesc: "This Pokemon's contact attacks do 1.33x damage.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
 			if (move.isContact) {
@@ -3198,8 +3198,8 @@ exports.BattleAbilities = {
 
 	// CAP
 	"mountaineer": {
-		desc: "This Pokémon avoids all Rock-type attacks and hazards when switching in.",
-		shortDesc: "On switch-in, this Pokemon avoids all Rock-type attacks and Stealth Rock.",
+		desc: "On switch-in, this Pokemon avoids all Rock-type attacks and Stealth Rock.",
+		shortDesc: "This Pokemon avoids all Rock-type attacks and hazards when switching in.",
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.id === 'stealthrock') {
 				return false;
@@ -3217,8 +3217,8 @@ exports.BattleAbilities = {
 		num: -2
 	},
 	"rebound": {
-		desc: "It can reflect the effect of status moves when switching in.",
-		shortDesc: "On switch-in, this Pokemon blocks certain status moves and uses the move itself.",
+		desc: "On switch-in, this Pokemon blocks certain status moves and uses the move itself.",
+		shortDesc: "It can reflect the effect of status moves when switching in.",
 		id: "rebound",
 		isNonstandard: true,
 		name: "Rebound",
@@ -3260,8 +3260,8 @@ exports.BattleAbilities = {
 		num: -3
 	},
 	"persistent": {
-		desc: "Increases the duration of many field effects by two turns when used by this Pokémon.",
-		shortDesc: "The duration of certain field effects is increased by 2 turns if used by this Pokemon.",
+		desc: "The duration of certain field effects is increased by 2 turns if used by this Pokemon.",
+		shortDesc: "Increases the duration of many field effects by two turns when used by this Pokemon.",
 		id: "persistent",
 		isNonstandard: true,
 		name: "Persistent",

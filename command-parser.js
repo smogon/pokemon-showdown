@@ -373,6 +373,9 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;
+	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
+		return parse(message, room, user, connection, levelsDeep + 1);
+	}
 
  	//tells
 	var alts = user.getAlts();

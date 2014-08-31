@@ -137,9 +137,10 @@ Tournament = (function () {
 		this.isEnded = true;
 	};
 
-	Tournament.prototype.update = function (targetUser) {
+	Tournament.prototype.updateFor = function (targetUser, connection) {
+		if (!connection) connection = targetUser;
 		if (this.isEnded) return;
-		if (targetUser && ((!this.bracketUpdateTimer && this.isBracketInvalidated) || (this.isTournamentStarted && this.isAvailableMatchesInvalidated))) {
+		if ((!this.bracketUpdateTimer && this.isBracketInvalidated) || (this.isTournamentStarted && this.isAvailableMatchesInvalidated)) {
 			this.room.add(
 				"Error: update() called with a target user when data invalidated: " +
 				(!this.bracketUpdateTimer && this.isBracketInvalidated) + ", " +
@@ -148,59 +149,61 @@ Tournament = (function () {
 			);
 			return;
 		}
-
-		if (targetUser) {
-			var isJoined = this.generator.getUsers().indexOf(targetUser) >= 0;
-			targetUser.sendTo(this.room, '|tournament|update|' + JSON.stringify({
-				format: this.format,
-				generator: this.generator.name,
-				isStarted: this.isTournamentStarted,
-				isJoined: isJoined,
-				bracketData: this.bracketCache
+		var isJoined = this.generator.getUsers().indexOf(targetUser) >= 0;
+		connection.sendTo(this.room, '|tournament|update|' + JSON.stringify({
+			format: this.format,
+			generator: this.generator.name,
+			isStarted: this.isTournamentStarted,
+			isJoined: isJoined,
+			bracketData: this.bracketCache
+		}));
+		if (this.isTournamentStarted && isJoined) {
+			connection.sendTo(this.room, '|tournament|update|' + JSON.stringify({
+				challenges: usersToNames(this.availableMatchesCache.challenges.get(targetUser)),
+				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(targetUser))
 			}));
-			if (this.isTournamentStarted && isJoined) {
-				targetUser.sendTo(this.room, '|tournament|update|' + JSON.stringify({
-					challenges: usersToNames(this.availableMatchesCache.challenges.get(targetUser)),
-					challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(targetUser))
-				}));
 
-				var pendingChallenge = this.pendingChallenges.get(targetUser);
-				if (pendingChallenge && pendingChallenge.to) {
-					targetUser.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenging: pendingChallenge.to.name}));
-				} else if (pendingChallenge && pendingChallenge.from) {
-					targetUser.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenged: pendingChallenge.from.name}));
-				}
-			}
-		} else {
-			if (this.isBracketInvalidated) {
-				if (Date.now() < this.lastBracketUpdate + BRACKET_MINIMUM_UPDATE_INTERVAL) {
-					if (this.bracketUpdateTimer) clearTimeout(this.bracketUpdateTimer);
-					this.bracketUpdateTimer = setTimeout(function () {
-						this.bracketUpdateTimer = null;
-						this.update();
-					}.bind(this), BRACKET_MINIMUM_UPDATE_INTERVAL);
-				} else {
-					this.lastBracketUpdate = Date.now();
-
-					this.bracketCache = this.getBracketData();
-					this.isBracketInvalidated = false;
-					this.room.send('|tournament|update|' + JSON.stringify({bracketData: this.bracketCache}));
-				}
-			}
-
-			if (this.isTournamentStarted && this.isAvailableMatchesInvalidated) {
-				this.availableMatchesCache = this.getAvailableMatches();
-				this.isAvailableMatchesInvalidated = false;
-
-				this.availableMatchesCache.challenges.forEach(function (opponents, user) {
-					user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenges: usersToNames(opponents)}));
-				}, this);
-				this.availableMatchesCache.challengeBys.forEach(function (opponents, user) {
-					user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challengeBys: usersToNames(opponents)}));
-				}, this);
+			var pendingChallenge = this.pendingChallenges.get(targetUser);
+			if (pendingChallenge && pendingChallenge.to) {
+				connection.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenging: pendingChallenge.to.name}));
+			} else if (pendingChallenge && pendingChallenge.from) {
+				connection.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenged: pendingChallenge.from.name}));
 			}
 		}
-		this.room.send('|tournament|updateEnd', targetUser);
+		connection.sendTo(this.room, '|tournament|updateEnd');
+	};
+
+	Tournament.prototype.update = function (targetUser) {
+		if (targetUser) throw new Error("Please use updateFor() to update the tournament for a specific user.");
+		if (this.isEnded) return;
+		if (this.isBracketInvalidated) {
+			if (Date.now() < this.lastBracketUpdate + BRACKET_MINIMUM_UPDATE_INTERVAL) {
+				if (this.bracketUpdateTimer) clearTimeout(this.bracketUpdateTimer);
+				this.bracketUpdateTimer = setTimeout(function () {
+					this.bracketUpdateTimer = null;
+					this.update();
+				}.bind(this), BRACKET_MINIMUM_UPDATE_INTERVAL);
+			} else {
+				this.lastBracketUpdate = Date.now();
+
+				this.bracketCache = this.getBracketData();
+				this.isBracketInvalidated = false;
+				this.room.send('|tournament|update|' + JSON.stringify({bracketData: this.bracketCache}));
+			}
+		}
+
+		if (this.isTournamentStarted && this.isAvailableMatchesInvalidated) {
+			this.availableMatchesCache = this.getAvailableMatches();
+			this.isAvailableMatchesInvalidated = false;
+
+			this.availableMatchesCache.challenges.forEach(function (opponents, user) {
+				user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challenges: usersToNames(opponents)}));
+			}, this);
+			this.availableMatchesCache.challengeBys.forEach(function (opponents, user) {
+				user.sendTo(this.room, '|tournament|update|' + JSON.stringify({challengeBys: usersToNames(opponents)}));
+			}, this);
+		}
+		this.room.send('|tournament|updateEnd');
 	};
 
 	Tournament.prototype.purgeGhostUsers = function () {
@@ -229,11 +232,9 @@ Tournament = (function () {
 		}
 
 		if (!isAllowAlts) {
-			var users = {};
-			this.generator.getUsers().forEach(function (user) { users[user.name] = 1; });
-			var alts = user.getAlts();
-			for (var a = 0; a < alts.length; ++a) {
-				if (users[alts[a]]) {
+			var users = this.generator.getUsers();
+			for (var i = 0; i < users.length; i++) {
+				if (users[i].latestIp === user.latestIp) {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
 				}
@@ -723,8 +724,8 @@ var commands = {
 			this.sendReplyBox("<strong>" + users.length + " users are in this tournament:</strong><br />" + users.join(", "));
 		},
 		getupdate: function (tournament, user) {
+			tournament.updateFor(user);
 			this.sendReply("Your tournament bracket has been updated.");
-			tournament.update(user);
 		},
 		challenge: function (tournament, user, params, cmd) {
 			if (params.length < 1) {
