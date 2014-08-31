@@ -261,7 +261,7 @@ var GlobalRoom = (function () {
 		var total = 0;
 		for (var i in Rooms.rooms) {
 			var room = Rooms.rooms[i];
-			if (!room || !room.active) continue;
+			if (!room || !room.active || room.isPrivate) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
 			var roomData = {};
 			if (room.active && room.battle) {
