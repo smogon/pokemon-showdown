@@ -1276,24 +1276,6 @@ var commands = exports.commands = {
 		}
 	},
 
-	donate: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center>Like this server and want to help keep the server running?<br /><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4PHAVXW3SHVCG"><img src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_SM.gif" /></a><br />Donations over $5 will get you a custom avatar! The money will go towards paying for the server.<br />After you\'ve donated, PM kupo, pika or kota to receive your avatar</center>');
-	},
-
-	forum: 'forums',
-	forums: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('TBT\'s forums are located <a href="http://thebattletower.xiaotai.org/">here</a>.');
-	},
-
-	league: function(target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox('TBT\'s Pokemon League can be found <a href="http://thebattletower.xiaotai.org/forumdisplay.php?fid=8">here</a>.<br />'+
-				  'Current Champion: None <br />'+
-				  'Beat the League and get your own custom avatar!');
-	},
-
 	/*********************************************************
 	 * Miscellaneous commands
 	 *********************************************************/
@@ -1398,110 +1380,6 @@ var commands = exports.commands = {
 	 * Custom commands
 	 *********************************************************/
 
-	kupkup: function(target, room, user) {
-		return this.parse("/me does THE KUPKUP CHANT: ♪kupo kupo kupochu~♫");
-	},
-	slap: function(target, room, user) {
-		return this.parse("/me slaps " + target + " with a large trout.");
-	},
-	dk: 'dropkick',
-	dropkick: function(target, room, user) {
-		return this.parse("/me dropkicks " + target + " across the Pokémon Stadium!");
-	},
-	punt: function(target, room, user) {
-		return this.parse("/me punts " + target + " to the moon!");
-	},
-	hug: function(target, room, user) {
-		return this.parse("/me hugs " + target + ".");
-	},
-	poke: function(target, room, user) {
-		return this.parse("/me pokes " + target + ".");
-	},
-	crai: 'cry',
-	cry: function(target, room, user) {
-		return this.parse("/me starts tearbending dramatically like Katara.");
-	},
-	pet: function(target, room, user) {
-		return this.parse("/me pets " + target + ".");
-	},
-
-	d: 'poof',
-	cpoof: 'poof',
-	poof: (function () {
-		var messages = [
-			"has vanished into nothingness!",
-			"visited kupo's bedroom and never returned!",
-			"used Explosion!",
-			"fell into the void.",
-			"was squished by pandaw's large behind!",
-			"became EnerG's slave!",
-			"became kupo's love slave!",
-			"has left the building.",
-			"felt Thundurus's wrath!",
-			"died of a broken heart.",
-			"got lost in a maze!",
-			"was hit by Magikarp's Revenge!",
-			"was sucked into a whirlpool!",
-			"got scared and left the server!",
-			"fell off a cliff!",
-			"got eaten by a bunch of piranhas!",
-			"is blasting off again!",
-			"A large spider descended from the sky and picked up {{user}}.",
-			"tried to touch RisingPokeStar!",
-			"got their sausage smoked by Charmanderp!",
-			"fell into a meerkat hole!",
-			"took an arrow to the knee... and then one to the face.",
-			"peered through the hole on Shedinja's back",
-			"recieved judgment from the almighty Arceus!",
-			"used Final Gambit and missed!",
-			"pissed off a Gyarados!",
-			"screamed \"BSHAX IMO\"!",
-			"was actually a 12 year and was banned for COPPA.",
-			"got lost in the illusion of reality.",
-			"was unfortunate and didn't get a cool message.",
-			"The Immortal accidently kicked {{user}} from the server!",
-			"was knocked out cold by Fallacies!",
-			"died making love to an Excadrill!",
-			"was shoved in a Blendtec Blender with iPad!",
-			"was BLEGHED on by LightBlue!",
-			"was bitten by a rabid Wolfie!",
-			"was kicked from server! (lel clause)",
-			"was Pan Hammered!"
-		];
-
-		return function(target, room, user) {
-			if (Config.poofOff) return this.sendReply("Poof is currently disabled.");
-			if (target && !this.can('broadcast')) return false;
-			if (room.id !== 'lobby') return false;
-			var message = target || messages[Math.floor(Math.random() * messages.length)];
-			if (message.indexOf('{{user}}') < 0)
-				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, user.name);
-			if (!this.canTalk(message)) return false;
-
-			var colour = '#' + [1, 1, 1].map(function () {
-				var part = Math.floor(Math.random() * 0xaa);
-				return (part < 0x10 ? '0' : '') + part.toString(16);
-			}).join('');
-
-			room.addRaw('<center><strong><font color="' + colour + '">~~ ' + Tools.escapeHTML(message) + ' ~~</font></strong></center>');
-			user.disconnectAll();
-		};
-	})(),
-
-	poofoff: 'nopoof',
-	nopoof: function() {
-		if (!this.can('poofoff')) return false;
-		Config.poofOff = true;
-		return this.sendReply("Poof is now disabled.");
-	},
-
-	poofon: function() {
-		if (!this.can('poofoff')) return false;
-		Config.poofOff = false;
-		return this.sendReply("Poof is now enabled.");
-	},
-
 	reminders: 'reminder',
 	reminder: function(target, room, user) {
 		if (room.type !== 'chat') return this.sendReply("This command can only be used in chatrooms.");
@@ -1591,34 +1469,6 @@ var commands = exports.commands = {
 		delete tells[targets[0]];
 
 		this.sendReply("" + targets[0] + "'s tells successfully moved into " + targets[1] + "'s queue.");
-	},
-
-	hide: 'hideauth',
-	hideauth: function(target, room, user) {
-		if (!this.can('hideauth')) return false;
-		target = target || Config.groups.default.global;
-		if (!Config.groups.global[target]) {
-			target = Config.groups.default.global;
-			this.sendReply("You have picked an invalid group, defaulting to '" + target + "'.");
-		} else if (Config.groups.bySymbol[target].globalRank >= Config.groups.bySymbol[user.group].globalRank)
-			return this.sendReply("The group you have chosen is either your current group OR one of higher rank. You cannot hide like that.");
-
-		user.getIdentity = function (roomid) {
-			var identity = Object.getPrototypeOf(this).getIdentity.call(this, roomid);
-			if (identity[0] === this.group)
-				return target + identity.slice(1);
-			return identity;
-		};
-		user.updateIdentity();
-		return this.sendReply("You are now hiding your auth as '" + target + "'.");
-	},
-
-	show: 'showauth',
-	showauth: function(target, room, user) {
-		if (!this.can('hideauth')) return false;
-		delete user.getIdentity;
-		user.updateIdentity();
-		return this.sendReply("You are now showing your authority!");
 	},
 
 	sk: 'superkick',
