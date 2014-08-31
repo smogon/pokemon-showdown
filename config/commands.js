@@ -1511,7 +1511,7 @@ var commands = exports.commands = {
 
 		if (cmd in {'':1, show:1, view:1, display:1}) {
 			if (!this.canBroadcast()) return;
-			message = "<strong><font size=\"3\">Reminders for " + room.title + ":</font></strong>";
+			var message = "<strong><font size=\"3\">Reminders for " + room.title + ":</font></strong>";
 			if (room.reminders && room.reminders.length > 0)
 				message += '<ol><li>' + room.reminders.join('</li><li>') + '</li></ol>';
 			else
@@ -1529,8 +1529,8 @@ var commands = exports.commands = {
 			case 'add':
 				index = room.reminders.length;
 				message = parts.slice(1).join(',').trim();
-				// Fallthrough
 
+				/* falls through */
 			case 'insert':
 				if (!message) return this.sendReply("Your reminder was empty.");
 				if (message.length > 250) return this.sendReply("Your reminder cannot be greater than 250 characters in length.");
@@ -1573,26 +1573,26 @@ var commands = exports.commands = {
 		tells[toId(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
-	
+
 	showtells: function (target, room, user){
 		return this.sendReply("These users have currently have queued tells: " + Object.keys(tells));
 	},
-	
+
 	tellmove: function (target, room, user) {
-		if (!this.can('ban')) return;	
+		if (!this.can('ban')) return;
 
 		var targets = target.split(',').map(toId);
 		if(targets.length !== 2) this.sendReply("Usage: /tellmove from, to");
 
-		if (!tells[targets[0]]) return this.sendReply(targets[0] + " has no tells queued."); 
-		
-		if (!tells[targets[1]]) tells[targets[1]] = []; 
-		Array.prototype.push.apply(tells[targets[1]], tells[targets[0]]);
-		delete tells[targets[0]]; 
+		if (!tells[targets[0]]) return this.sendReply(targets[0] + " has no tells queued.");
 
-		this.sendReply("" + targets[0] + "'s tells successfully moved into " + targets[1] + "'s queue.");	
+		if (!tells[targets[1]]) tells[targets[1]] = [];
+		Array.prototype.push.apply(tells[targets[1]], tells[targets[0]]);
+		delete tells[targets[0]];
+
+		this.sendReply("" + targets[0] + "'s tells successfully moved into " + targets[1] + "'s queue.");
 	},
-	
+
 	hide: 'hideauth',
 	hideauth: function(target, room, user) {
 		if (!this.can('hideauth')) return false;
@@ -1636,12 +1636,6 @@ var commands = exports.commands = {
 		targetUser.disconnectAll();
 	},
 
-	pr: 'pickrandom',
-	pickrandom: function(target, room, user) {
-		if (!this.canBroadcast()) return false;
-		return this.sendReply(target.split(',').map(function (s) { return s.trim(); }).randomize()[0]);
-	},
-
 	spam: 'spamroom',
 	spamroom: function (target, room, user) {
 		if (!target) return this.sendReply("Please specify a user.");
@@ -1679,7 +1673,7 @@ var commands = exports.commands = {
 
 	customavatars: 'customavatar',
 	customavatar: (function () {
-		const script = (function () {/*
+		const script = function () {/*
 			FILENAME=`mktemp`
 			function cleanup {
 				rm -f $FILENAME
@@ -1698,7 +1692,7 @@ var commands = exports.commands = {
 			fi
 
 			timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
-		*/}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+		*/}.toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
 
 		var pendingAdds = {};
 		return function (target) {
@@ -1732,8 +1726,8 @@ var commands = exports.commands = {
 						this.sendReply("If you want to continue, use: /customavatar forceset, " + hash);
 						return;
 					}
-					// Fallthrough
 
+					/* falls through */
 				case 'forceset':
 					var hash = parts[1].trim();
 					if (!pendingAdds[hash]) return this.sendReply("Invalid hash.");
@@ -1742,7 +1736,7 @@ var commands = exports.commands = {
 					var avatar = pendingAdds[hash].avatar;
 					delete pendingAdds[hash];
 
-					require('child_process').execFile('bash', ['-c', script, '-', avatar, './config/avatars/' + userid], (function (e, out, err) {
+					require('child_process').execFile('bash', ['-c', script, '-', avatar, './config/avatars/' + userid], function (e, out, err) {
 						if (e) {
 							this.sendReply(userid + "'s custom avatar failed to be set. Script output:");
 							(out + err).split('\n').forEach(this.sendReply.bind(this));
@@ -1751,7 +1745,7 @@ var commands = exports.commands = {
 
 						reloadCustomAvatars();
 						this.sendReply(userid + "'s custom avatar has been set.");
-					}).bind(this));
+					}.bind(this));
 					break;
 
 				case 'delete':
@@ -1760,12 +1754,12 @@ var commands = exports.commands = {
 
 					if (Config.customAvatars[userid].toString().split('.').slice(0, -1).join('.') !== userid)
 						return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") cannot be removed with this script.");
-					require('fs').unlink('./config/avatars/' + Config.customAvatars[userid], (function (e) {
+					require('fs').unlink('./config/avatars/' + Config.customAvatars[userid], function (e) {
 						if (e) return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") could not be removed: " + e.toString());
 
 						delete Config.customAvatars[userid];
 						this.sendReply(userid + "'s custom avatar removed successfully");
-					}).bind(this));
+					}.bind(this));
 					break;
 
 				default:

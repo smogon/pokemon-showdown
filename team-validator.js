@@ -544,7 +544,7 @@ Validator = (function () {
 	};
 
 	Validator.prototype.checkLearnset = function (move, template, lsetData) {
-		var tools = Tools.mod(Tools.getFormat(format));
+		var tools = Tools.mod(Tools.getFormat(this.format));
 
 		move = toId(move);
 		template = tools.getTemplate(template);
