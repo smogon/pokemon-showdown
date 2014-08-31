@@ -520,7 +520,7 @@ exports.BattleFormats = {
 				typeTable = typeTable.intersect(template.types);
 				if (!typeTable.length) return ["Your team must share a type."];
 			}
-			if (format.id === 'oumonotype') {
+			if (format.id === 'monotype') {
 				// Very complex bans
 				if (typeTable.length > 1) return;
 				switch (typeTable[0]) {
