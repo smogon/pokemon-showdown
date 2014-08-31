@@ -968,6 +968,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
 		}
+		if (target === 'mashup') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515232/\">OM Mashup</a><br />";
+		}
 		if (target === 'glitchmons') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3467120/\">Glitchmons</a><br />";

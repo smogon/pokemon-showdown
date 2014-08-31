@@ -598,6 +598,15 @@ exports.Formats = [
 		banlist: ['Eviolite']
 	},
 	{
+		name: "OM Mashup",
+		section: "Other Metagames",
+
+		mod: 'inverse',
+		searchShow: false,
+		ruleset: ['Pokemon', 'OHKO Clause', 'HP Percentage Mod', 'Team Preview', 'Ability Clause'],
+		banlist: ['Wonder Guard', 'Shadow Tag', 'Arena Trap', 'Pure Power', 'Huge Power', 'Parental Bond']
+	},
+	{
 		name: "[Gen 5] Glitchmons",
 		section: "Other Metagames",
 
