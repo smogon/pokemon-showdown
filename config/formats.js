@@ -429,7 +429,7 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "OU Monotype",
+		name: "Monotype",
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
