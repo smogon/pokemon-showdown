@@ -11024,7 +11024,7 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		heal: [1, 2],
 		self: {
-			volatileStatus: 'roost',
+			volatileStatus: 'roost'
 		},
 		effect: {
 			duration: 1,
