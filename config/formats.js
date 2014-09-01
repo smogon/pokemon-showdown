@@ -353,14 +353,14 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['OU', 'Freeze Clause'],
-		banlist: ["King's Rock"],
+		banlist: ["King's Rock", 'Razor Fang'],
 		onModifyMovePriority: -100,
 		onModifyMove: function (move) {
 			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 0;
 			move.willCrit = true;
 			if (move.secondaries) {
-				for (var n = 0; n < move.secondaries.length; n++) {
-					move.secondaries[n].chance = 100;
+				for (var i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance = 100;
 				}
 			}
 		}
