@@ -360,7 +360,7 @@ exports.Formats = [
 			move.willCrit = true;
 			if (move.secondaries) {
 				for (var n = 0; n < move.secondaries.length; n++) {
-					move.secondaries[s].chance = 100;
+					move.secondaries[n].chance = 100;
 				}
 			}
 		}
