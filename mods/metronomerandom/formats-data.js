@@ -1,200 +1,200 @@
 exports.BattleFormatsData = {
 	abra: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	aipom: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	alakazam: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	alakazammega: {
-		randomBattleMoves: {"metronome"},
+		randomBattleMoves: ["metronome"],
 		requiredItem: "Alakazite"
 	},
 	ambipom: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	banette: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	banettemega: {
-		randomBattleMoves: {"metronome"},
+		randomBattleMoves: ["metronome"],
 		requiredItem: "Banettite"
 	},
 	blissey: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	celebi: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	chansey: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	clefable: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	clefairy: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	cleffa: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	drowzee: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	dusclops: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	gengar: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	gengarmega: {
-		randomBattleMoves: {"metronome"},
+		randomBattleMoves: ["metronome"],
 		requiredItem: "Gengarite"
 	},
 	geodude: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	golem: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	granbull: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	graveler: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	happiny: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	hariyama: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	hitmonchan: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	hitmonlee: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	hypno: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	illumise: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	jirachi: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	jynx: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	kadabra: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	kecleon: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	ludicolo: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	machamp: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	machoke: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	machop: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	makuhita: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	mankey: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	medicham: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	medichammega: {
-		randomBattleMoves: {"metronome"},
+		randomBattleMoves: ["metronome"],
 		requiredItem: "Medichamite"
 	},
 	meditite: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	mew: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	mewtwo: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	mewtwomegax: {
-		randomBattleMoves: {"metronome"},
+		randomBattleMoves: ["metronome"],
 		requiredItem: "Mewtwonite X"
 	},
 	mewtwomegay: {
-		randomBattleMoves: {"metronome"},
+		randomBattleMoves: ["metronome"],
 		requiredItem: "Mewtwonite Y"
 	},
 	miltank: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	minun: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	mrmime: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	munchlax: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	plusle: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	politoed: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	poliwhirl: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	poliwrath: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	primeape: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	sableye: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	smoochum: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	snorlax: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	snubbull: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	spinda: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	teddiursa: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	togekiss: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	togepi: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	togetic: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	ursaring: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	},
 	volbeat: {
-		randomBattleMoves: {"metronome"}
+		randomBattleMoves: ["metronome"]
 	}
 };
