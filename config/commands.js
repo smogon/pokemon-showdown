@@ -926,6 +926,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3508369/\">Tier Shift</a><br />";
 		}
+		if (target === 'pu') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3513882/\">PU</a><br />";
+		}
 		if (target === 'almostanyability' || target === 'aaa') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3495737/\">Almost Any Ability</a><br />";
