@@ -1,5 +1,5 @@
 exports.BattleFormatsData = {
 	kangaskhanmega: {
-		randomBattleMoves: {"fakeout","return","suckerpunch","earthquake","wish","poweruppunch","crunch"}
+		randomBattleMoves: ["fakeout","return","suckerpunch","earthquake","wish","poweruppunch","crunch"]
 	}
 };
