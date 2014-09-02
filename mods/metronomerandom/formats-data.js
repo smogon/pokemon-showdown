@@ -1,133 +1,174 @@
 exports.BattleFormatsData = {
 	abra: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	aipom: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	alakazam: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "UU"
 	},
 	alakazammega: {
 		randomBattleMoves: ["metronome"],
-		requiredItem: "Alakazite"
+		requiredItem: "Alakazite",
+		tier: "BL"
 	},
 	ambipom: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "RU"
 	},
 	banette: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "RU"
 	},
 	banettemega: {
 		randomBattleMoves: ["metronome"],
 		requiredItem: "Banettite"
 	},
 	blissey: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "UU"
 	},
 	celebi: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "UU"
 	},
 	chansey: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "OU"
 	},
 	clefable: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "OU"
 	},
 	clefairy: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NFE"
 	},
 	cleffa: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	drowzee: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	dusclops: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NFE"
 	},
 	gengar: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "OU"
 	},
 	gengarmega: {
 		randomBattleMoves: ["metronome"],
-		requiredItem: "Gengarite"
+		requiredItem: "Gengarite",
+		tier: "Uber"
 	},
 	geodude: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	golem: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	granbull: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NU"
 	},
 	graveler: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NFE"
 	},
 	happiny: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	hariyama: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NU"
 	},
 	hitmonchan: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "RU"
 	},
 	hitmonlee: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "RU"
 	},
 	hypno: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	illumise: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	jirachi: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "UU"
 	},
 	jynx: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NU"
 	},
 	kadabra: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NFE"
 	},
 	kecleon: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	ludicolo: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NU"
 	},
 	machamp: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "UU"
 	},
 	machoke: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NFE"
 	},
 	machop: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	makuhita: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	mankey: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	medicham: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "OU"
 	},
 	medichammega: {
 		randomBattleMoves: ["metronome"],
-		requiredItem: "Medichamite"
+		requiredItem: "Medichamite",
+		tier: "BL"
 	},
 	meditite: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC Uber"
 	},
 	mew: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "OU"
 	},
 	mewtwo: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "Uber"
 	},
 	mewtwomegax: {
 		randomBattleMoves: ["metronome"],
@@ -138,63 +179,83 @@ exports.BattleFormatsData = {
 		requiredItem: "Mewtwonite Y"
 	},
 	miltank: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NU"
 	},
 	minun: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	mrmime: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	munchlax: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	plusle: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	politoed: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	poliwhirl: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NFE"
 	},
 	poliwrath: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	primeape: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NU"
 	},
 	sableye: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "UU"
 	},
 	smoochum: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	snorlax: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "UU"
 	},
 	snubbull: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	spinda: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	teddiursa: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	togekiss: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "UU"
 	},
 	togepi: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "LC"
 	},
 	togetic: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "NFE"
 	},
 	ursaring: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	},
 	volbeat: {
-		randomBattleMoves: ["metronome"]
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
 	}
 };
