@@ -1,10 +1,8 @@
 exports.BattleFormatsData = {
 	gengarmega: {
-		randomBattleMoves: {"shadowball":1,"sludgebomb":1,"focusblast":1,"thunderbolt":1,"substitute":1,"disable":1,"painsplit":1,"hypnosis":1,"gigadrain":1},
-		tier: "Uber"
+		randomBattleMoves: {"shadowball","sludgebomb","focusblast","thunderbolt","substitute","disable","painsplit","hypnosis","gigadrain"}
 	},
 	lucariomega: {
-		randomBattleMoves: {"swordsdance":1,"closecombat":1,"crunch":1,"extremespeed":1,"icepunch":1,"bulletpunch":1,"nastyplot":1,"aurasphere":1,"darkpulse":1,"vacuumwave":1,"flashcannon":1},
-		tier: "Uber"
+		randomBattleMoves: {"swordsdance","closecombat","crunch","extremespeed","icepunch","bulletpunch","nastyplot","aurasphere","darkpulse","vacuumwave","flashcannon"}
 	}
 };
