@@ -456,14 +456,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['NU'],
-		banlist: ['Accelgor', 'Archeops', 'Armaldo', 'Audino', 'Cacturne', 'Cradily', 'Crustle', 'Cryogonal', 'Dragalge', 'Electivire',
-			'Exeggutor', 'Feraligatr', 'Ferroseed', 'Golurk', 'Gorebyss', 'Granbull', 'Gurdurr', 'Hariyama', 'Jynx', 'Kangaskhan',
-			'Klinklang', 'Lanturn', 'Leafeon', 'Liepard', 'Lilligant', 'Ludicolo', 'Magmortar', 'Malamar', 'Mesprit', 'Miltank',
-			'Mismagius', 'Muk', 'Omastar', 'Pangoro', 'Pawniard', 'Primeape', 'Probopass', 'Pyroar', 'Qwilfish', 'Regirock',
-			'Rhydon', 'Rotom', 'Rotom-Fan', 'Samurott', 'Sandslash', 'Sawk', 'Sceptile', 'Seismitoad', 'Shiftry', 'Slurpuff',
-			'Spiritomb', 'Steelix', 'Swellow', 'Torkoal', 'Typhlosion', 'Uxie', 'Vileplume', 'Vivillon', 'Weezing', 'Xatu',
-			'Zangoose'
-		]
+		banlist: ['NU']
 	},
 	{
 		name: "Almost Any Ability",
