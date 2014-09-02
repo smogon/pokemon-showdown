@@ -25,9 +25,6 @@ exports.BattleFormatsData = {
 	blissey: {
 		viableMoves: {"metronome":1}
 	},
-	castform: {
-		viableMoves: {"metronome":1}
-	},
 	celebi: {
 		viableMoves: {"metronome":1}
 	},
