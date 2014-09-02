@@ -16,6 +16,7 @@ exports.BattleScripts = {
 				break;
 			case 'BL3':
 			case 'NU':
+			case 'PU':
 			case 'NFE':
 			case 'LC Uber':
 			case 'LC':
