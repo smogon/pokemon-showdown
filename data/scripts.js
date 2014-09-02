@@ -2736,7 +2736,7 @@ exports.BattleScripts = {
 		return team;
 	},
 	randomMetronomeTeam: function(side) {
-		var pokemonList = ['abra', 'aipom', 'alakazam', 'ambipom', 'banette', 'blissey', 'castform', 'celebi', 'chansey', 'clefable', 'clefairy', 'cleffa', 'drowzee', 'dusclops', 'gengar', 'geodude', 'golem', 'granbull', 'graveler', 'happiny', 'hariyama', 'hitmonchan', 'hitmonlee', 'hypno', 'illumise', 'jirachi', 'jynx', 'kadabra', 'kecleon', 'ludicolo', 'machamp', 'machoke', 'machop', 'makuhita', 'mankey', 'medicham', 'meditite', 'mew', 'mewtwo', 'miltank', 'minun', 'mrmime', 'munchlax', 'plusle', 'politoed', 'poliwhirl', 'poliwrath', 'primeape', 'sableye', 'smoochum', 'snorlax', 'snubbull', 'spinda', 'teddiursa', 'togekiss', 'togepi', 'togetic', 'ursaring', 'volbeat'];
+		var pokemonList = ['abra', 'aipom', 'alakazam', 'ambipom', 'banette', 'blissey', 'celebi', 'chansey', 'clefable', 'clefairy', 'cleffa', 'drowzee', 'dusclops', 'gengar', 'geodude', 'golem', 'granbull', 'graveler', 'happiny', 'hariyama', 'hitmonchan', 'hitmonlee', 'hypno', 'illumise', 'jirachi', 'jynx', 'kadabra', 'kecleon', 'ludicolo', 'machamp', 'machoke', 'machop', 'makuhita', 'mankey', 'medicham', 'meditite', 'mew', 'mewtwo', 'miltank', 'minun', 'mrmime', 'munchlax', 'plusle', 'politoed', 'poliwhirl', 'poliwrath', 'primeape', 'sableye', 'smoochum', 'snorlax', 'snubbull', 'spinda', 'teddiursa', 'togekiss', 'togepi', 'togetic', 'ursaring', 'volbeat'];
 
 		pokemonList = pokemonList.randomize();
 
