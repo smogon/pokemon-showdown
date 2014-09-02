@@ -1496,7 +1496,7 @@ exports.BattleScripts = {
 			LC: 94,
 			'LC Uber': 92,
 			NFE: 90,
-			Limbo: 86,
+			PU: 88,
 			NU: 86,
 			BL3: 84,
 			RU: 82,
