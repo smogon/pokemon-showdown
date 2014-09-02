@@ -60,6 +60,10 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["metronome"],
 		tier: "NFE"
 	},
+	dusknoir: {
+		randomBattleMoves: ["metronome"],
+		tier: "PU"
+	},
 	gengar: {
 		randomBattleMoves: ["metronome"],
 		tier: "OU"
