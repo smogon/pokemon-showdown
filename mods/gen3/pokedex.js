@@ -6,7 +6,7 @@ exports.BattlePokedex = {
 	},
 	mrmime: {
 		inherit: true,
-		abilities: {0:"Swarm",1:"Technician"},
+		abilities: {0:"Soundproof",1:"Filter"},
 		prevo: ''
 	},
 	snorlax: {
