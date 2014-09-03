@@ -1484,6 +1484,11 @@ exports.BattleScripts = {
 			} else {
 				item = 'Leftovers';
 			}
+
+			// For Trick / Switcheroo
+			if (item === 'Leftovers' && hasType['Poison']) {
+				item = 'Black Sludge';
+			}
 		}
 
 		// 95-86-82-78-74-70
@@ -1491,7 +1496,7 @@ exports.BattleScripts = {
 			LC: 94,
 			'LC Uber': 92,
 			NFE: 90,
-			Limbo: 86,
+			PU: 88,
 			NU: 86,
 			BL3: 84,
 			RU: 82,
@@ -1523,7 +1528,7 @@ exports.BattleScripts = {
 			"Kangaskhan-Mega": 72, "Gengar-Mega": 72, "Blaziken-Mega": 72, "Lucario-Mega": 72,
 
 			// Holistic judgment
-			Carvanha: 90, Genesect: 72, Kyurem: 78, Sigilyph: 74, Xerneas: 68
+			Carvanha: 90, Genesect: 72, Kyurem: 78, Sigilyph: 74, Xerneas: 64
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
@@ -2470,6 +2475,11 @@ exports.BattleScripts = {
 				item = 'Life Orb';
 			} else {
 				item = 'Sitrus Berry';
+			}
+
+			// For Trick / Switcheroo
+			if (item === 'Leftovers' && hasType['Poison']) {
+				item = 'Black Sludge';
 			}
 		}
 
