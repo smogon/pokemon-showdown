@@ -2891,7 +2891,7 @@ exports.BattleScripts = {
 			} else if (template.id === 'spheal') {
 				set.species = 'spheal';
 				set.name = 'Christos';
-				set.moves = ['Freeze-Dry'];
+				set.moves = ['Freeze-Dry', 'Surf', 'Yawn', 'Super Fang'];
 			} else if (template.id === 'squirtle') {
 				set.species = 'squirtle';
 				set.name = 'Manish Pandey';
