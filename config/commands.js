@@ -913,16 +913,20 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496773/\">1v1</a><br />";
 		}
-		if (target === 'oumonotype' || target === 'monotype') {
+		if (target === 'monotype') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">OU Monotype</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">Monotype</a><br />";
 			if (target !== 'all') {
-				buffer += "- <a href=\"https://www.smogon.com/forums/threads/3507565/\">OU Monotype Viability Rankings</a><br />";
+				buffer += "- <a href=\"https://www.smogon.com/forums/threads/3507565/\">Monotype Viability Rankings</a><br />";
 			}
 		}
 		if (target === 'tiershift' || target === 'ts') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3508369/\">Tier Shift</a><br />";
+		}
+		if (target === 'pu') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3513882/\">PU</a><br />";
 		}
 		if (target === 'almostanyability' || target === 'aaa') {
 			matched = true;
@@ -950,9 +954,9 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
 		}
-		if (target === 'alphabetcup') {
+		if (target === '350cup') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498167/\">Alphabet Cup</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3512945/\">350 Cup</a><br />";
 		}
 		if (target === 'averagemons') {
 			matched = true;
@@ -962,9 +966,17 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3500418/\">Hackmons</a><br />";
 		}
+		if (target === 'mediocremons') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3507608/\">Mediocremons</a><br />";
+		}
 		if (target === 'middlecup' || target === 'mc') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
+		}
+		if (target === 'mashup') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515232/\">OM Mashup</a><br />";
 		}
 		if (target === 'glitchmons') {
 			matched = true;
