@@ -2719,7 +2719,229 @@ exports.BattleScripts = {
 			
 			if (template.id === 'absol') {
 				set.species = 'absol';
-				set.name = '♀«α.™»\'';
+				set.name = 'Sanguine';
+			} else if (template.id === 'arcanine') {
+				set.species = 'arcanine';
+				set.name = 'Aslan';
+			} else if (template.id === 'aromatisse') {
+				set.species = 'aromatisse';
+				set.name = 'Necrum';
+			} else if (template.id === 'azelf') {
+				set.species = 'azelf';
+				set.name = 'Dark Azelf';
+			} else if (template.id === 'bellossom') {
+				set.species = 'bellossom';
+				set.name = 'Leijon';
+			} else if (template.id === 'bidoof') {
+				set.species = 'bidoof';
+				set.name = 'Lalapizzame';
+			} else if (template.id === 'castform') {
+				set.species = 'castform';
+				set.name = 'Michonne';
+			} else if (template.id === 'charizard') {
+				set.species = 'charizard';
+				set.name = 'Rukario';
+			} else if (template.id === 'cofagrigus') {
+				set.species = 'cofagrigus';
+				set.name = 'Zeffy';
+			} else if (template.id === 'crobat') {
+				set.species = 'crobat';
+				set.name = 'Timbjerr';
+			} else if (template.id === 'cyndaquil') {
+				set.species = 'cyndaquil';
+				set.name = 'Gallant192';
+			} else if (template.id === 'drifblim') {
+				set.species = 'drifblim';
+				set.name = 'antemortem';
+			} else if (template.id === 'emolga') {
+				set.species = 'emolga';
+				set.name = 'Hayley';
+			} else if (template.id === 'espurr') {
+				set.species = 'espurr';
+				set.name = 'machomuu';
+			} else if (template.id === 'feraligatr') {
+				set.species = 'feraligatr';
+				set.name = 'Jin Of The Gale';
+			} else if (template.id === 'gallade') {
+				set.species = 'gallade';
+				set.name = 'PlatinumDude';
+			} else if (template.id === 'galvantula') {
+				set.species = 'galvantula';
+				set.name = 'Autumn Reverie';
+			} else if (template.id === 'garchomp') {
+				set.species = 'garchomp';
+				set.name = 'Exile';
+			} else if (template.id === 'gardevoir') {
+				set.species = 'gardevoir';
+				set.name = 'Jellicent♀';
+			} else if (template.id === 'golurk') {
+				set.species = 'golurk';
+				set.name = 'Sheerow';
+			} else if (template.id === 'gourgeist') {
+				set.species = 'gourgeist';
+				set.name = 'Flushed';
+			} else if (template.id === 'greninja') {
+				set.species = 'greninja';
+				set.name = 'Chocolate™';
+			} else if (template.id === 'hawlucha') {
+				set.species = 'hawlucha';
+				set.name = 'ganesha';
+			} else if (template.id === 'hydreigon') {
+				set.species = 'hydreigon';
+				set.name = 'Overlord Drakow';
+			} else if (template.id === 'igglybuff') {
+				set.species = 'igglybuff';
+				set.name = '«Chuckles»';
+			} else if (template.id === 'infernape') {
+				set.species = 'infernape';
+				set.name = 'Nathan';
+			} else if (template.id === 'jynx') {
+				set.species = 'jynx';
+				set.name = 'Black Mage';
+			} else if (template.id === 'lapras') {
+				set.species = 'lapras';
+				set.name = 'Altairis';
+			} else if (template.id === 'latias') {
+				set.species = 'latias';
+				set.name = 'Sector';
+			} else if (template.id === 'latios') {
+				set.species = 'latios';
+				set.name = 'Retribution';
+			} else if (template.id === 'liepard') {
+				set.species = 'liepard';
+				set.name = 'Bruce Banner';
+			} else if (template.id === 'ludicolo') {
+				set.species = 'ludicolo';
+				set.name = 'Omicron';
+			} else if (template.id === 'magikarp') {
+				set.species = 'magikarp';
+				set.name = 'Clacla';
+			} else if (template.id === 'mantine') {
+				set.species = 'mantine';
+				set.name = 'Blu·Ray';
+			} else if (template.id === 'masquerain') {
+				set.species = 'masquerain';
+				set.name = 'abnegation';
+			} else if (template.id === 'meganium') {
+				set.species = 'meganium';
+				set.name = 'Cadance';
+			} else if (template.id === 'meloetta') {
+				set.species = 'meloetta';
+				set.name = 'enigmα.';
+			} else if (template.id === 'mewtwo') {
+				set.species = 'mewtwo';
+				set.name = 'Vital';
+			} else if (template.id === 'milotic') {
+				set.species = 'milotic';
+				set.name = 'Dragon';
+			} else if (template.id === 'mismagius') {
+				set.species = 'mismagius';
+				set.name = 'Polar Spectrum';
+			} else if (template.id === 'nidoking') {
+				set.species = 'nidoking';
+				set.name = 'jdthebud';
+			} else if (template.id === 'oshawott') {
+				set.species = 'oshawott';
+				set.name = 'Hikamaru';
+			} else if (template.id === 'pidgey') {
+				set.species = 'pidgey';
+				set.name = 'Olli';
+			} else if (template.id === 'pikachu') {
+				set.species = 'pikachu';
+				set.name = 'Kaori';
+			} else if (template.id === 'porygon2') {
+				set.species = 'porygon2';
+				set.name = 'Euphoric';
+			} else if (template.id === 'pumpkaboo') {
+				set.species = 'pumpkaboo';
+				set.name = 'Forever';
+			} else if (template.id === 'raichu') {
+				set.species = 'raichu';
+				set.name = 'Lance';
+			} else if (template.id === 'reuniclus') {
+				set.species = 'reuniclus';
+				set.name = 'Marisa';
+			} else if (template.id === 'salamence') {
+				set.species = 'salamence';
+				set.name = 'Isaac';
+			} else if (template.id === 'sandshrew') {
+				set.species = 'sandshrew';
+				set.name = 'Squirrel';
+			} else if (template.id === 'sceptile') {
+				set.species = 'sceptile';
+				set.name = 'Regeneration';
+			} else if (template.id === 'scizor') {
+				set.species = 'scizor';
+				set.name = 'srinator';
+			} else if (template.id === 'scrafty') {
+				set.species = 'scrafty';
+				set.name = 'Atwilko';
+			} else if (template.id === 'serperior') {
+				set.species = 'serperior';
+				set.name = 'Slayr231';
+			} else if (template.id === 'shaymin') {
+				set.species = 'shaymin';
+				set.name = 'Zorua';
+			} else if (template.id === 'slowbro') {
+				set.species = 'slowbro';
+				set.name = '.Aero';
+			} else if (template.id === 'snivy') {
+				set.species = 'snivy';
+				set.name = 'Zach';
+			} else if (template.id === 'spheal') {
+				set.species = 'spheal';
+				set.name = 'Christos';
+			} else if (template.id === 'squirtle') {
+				set.species = 'squirtle';
+				set.name = 'Manish Pandey';
+			} else if (template.id === 'staraptor') {
+				set.species = 'staraptor';
+				set.name = 'BadPokemon';
+			} else if (template.id === 'starmie') {
+				set.species = 'starmie';
+				set.name = 'shenanigans';
+			} else if (template.id === 'suicune') {
+				set.species = 'suicune';
+				set.name = 'wolf';
+			} else if (template.id === 'swampert') {
+				set.species = 'swampert';
+				set.name = 'O\'aka XXIII';
+			} else if (template.id === 'sylveon') {
+				set.species = 'sylveon';
+				set.name = 'Harmonious Fusion';
+			} else if (template.id === 'togekiss') {
+				set.species = 'togekiss';
+				set.name = 'Aurora';
+			} else if (template.id === 'typhlosion') {
+				set.species = 'typhlosion';
+				set.name = 'Libra';
+			} else if (template.id === 'tyranitar') {
+				set.species = 'tyranitar';
+				set.name = 'dontstay96';
+			} else if (template.id === 'vaporeon') {
+				set.species = 'vaporeon';
+				set.name = 'Eevee-kins';
+			} else if (template.id === 'venusaur') {
+				set.species = 'venusaur';
+				set.name = 'Garrabutártulo';
+			} else if (template.id === 'victini') {
+				set.species = 'victini';
+				set.name = 'Starry Windy';
+			} else if (template.id === 'volcarona') {
+				set.species = 'volcarona';
+				set.name = 'Lilith';
+			} else if (template.id === 'vulpix') {
+				set.species = 'vulpix';
+				set.name = 'Endless';
+			} else if (template.id === 'whimsicott') {
+				set.species = 'whimsicott';
+				set.name = 'Sheep';
+			} else if (template.id === 'wigglytuff') {
+				set.species = 'wigglytuff';
+				set.name = 'Guildmaster Wigglytuff';
+			} else if (template.id === 'zebstrika') {
+				set.species = 'zebstrika';
+				set.name = 'Vrai';
 			}
 
 			team.push(set);
