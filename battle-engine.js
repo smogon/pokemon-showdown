@@ -106,6 +106,7 @@ process.on('message', function (message) {
 		var battle = Battles[data[0]];
 		if (battle) {
 			var prevRequest = battle.currentRequest;
+			var prevRequestDetails = battle.currentRequestDetails || '';
 			try {
 				battle.receive(data, more);
 			} catch (err) {
@@ -121,7 +122,7 @@ process.on('message', function (message) {
 				battle.add('html', '<div class="broadcast-red"><b>The battle crashed</b><br />You can keep playing but it might crash again.</div>');
 				var nestedError;
 				try {
-					battle.makeRequest(prevRequest);
+					battle.makeRequest(prevRequest, prevRequestDetails);
 				} catch (e) {
 					nestedError = e;
 				}
@@ -1432,7 +1433,6 @@ Battle = (function () {
 	Battle.prototype.p1 = null;
 	Battle.prototype.p2 = null;
 	Battle.prototype.lastUpdate = 0;
-	Battle.prototype.currentRequest = '';
 	Battle.prototype.weather = '';
 	Battle.prototype.terrain = '';
 	Battle.prototype.ended = false;
@@ -1445,6 +1445,7 @@ Battle = (function () {
 	Battle.prototype.activeTarget = null;
 	Battle.prototype.midTurn = false;
 	Battle.prototype.currentRequest = '';
+	Battle.prototype.currentRequestDetails = '';
 	Battle.prototype.rqid = 0;
 	Battle.prototype.lastMoveLine = 0;
 	Battle.prototype.reportPercentages = false;
@@ -2244,11 +2245,13 @@ Battle = (function () {
 	Battle.prototype.makeRequest = function (type, requestDetails) {
 		if (type) {
 			this.currentRequest = type;
+			this.currentRequestDetails = requestDetails || '';
 			this.rqid++;
 			this.p1.decision = null;
 			this.p2.decision = null;
 		} else {
 			type = this.currentRequest;
+			requestDetails = this.currentRequestDetails;
 		}
 		this.update();
 
@@ -2371,6 +2374,7 @@ Battle = (function () {
 		this.ended = true;
 		this.active = false;
 		this.currentRequest = '';
+		this.currentRequestDetails = '';
 		return true;
 	};
 	Battle.prototype.switchIn = function (pokemon, pos) {
@@ -3448,6 +3452,7 @@ Battle = (function () {
 		this.add('');
 		if (this.currentRequest) {
 			this.currentRequest = '';
+			this.currentRequestDetails = '';
 		}
 
 		if (!this.midTurn) {
@@ -3528,6 +3533,7 @@ Battle = (function () {
 		}
 
 		this.currentRequest = '';
+		this.currentRequestDetails = '';
 		this.p1.currentRequest = '';
 		this.p2.currentRequest = '';
 
