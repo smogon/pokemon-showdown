@@ -2706,14 +2706,21 @@ exports.BattleScripts = {
 		return team;
 	},
 	randomCommunityTeam: function(side) {
-		var pokemonList = ['absol', 'alakazam', 'arcanine', 'arcanine', 'aromatisse', 'azelf', 'bayleef', 'bellossom', 'bidoof', 'bidoof', 'blaziken', 'castform', 'charizard', 'charizard', 'charmander', 'cofagrigus', 'crobat', 'cyndaquil', 'drifblim', 'dunsparce', 'espurr', 'espurr', 'feraligatr', 'gallade', 'garchomp', 'gardevoir', 'gengar', 'golurk', 'gourgeist', 'greninja', 'greninja', 'hawlucha', 'houndoom', 'houndoom', 'hydreigon', 'igglybuff', 'infernape', 'jynx', 'lapras', 'latias', 'latios', 'liepard', 'lucario', 'ludicolo', 'magikarp', 'mantine', 'masquerain', 'meganium', 'meloetta', 'mewtwo', 'milotic', 'nidoking', 'oshawott', 'pachirisu', 'pidgey', 'pikachu', 'porygon2', 'pumpkaboo', 'raichu', 'reuniclus', 'salamence', 'sandshrew', 'sceptile', 'scizor', 'scrafty', 'serperior', 'shaymin', 'slowbro', 'snivy', 'squirtle', 'starmie', 'suicune', 'swampert', 'sylveon', 'terrakion', 'togekiss', 'typhlosion', 'tyranitar', 'umbreon', 'ursaring', 'vaporeon', 'venusaur', 'victini', 'volcarona', 'vulpix', 'whimsicott', 'whimsicott', 'wigglytuff', 'zebstrika', 'zekrom'];
+		var pokemonList = ['absol', 'arcanine', 'aromatisse', 'azelf', 'bellossom', 'bidoof', 'castform', 'charizard', 'cofagrigus', 'crobat', 'cyndaquil', 'drifblim', 'emolga', 'espurr', 'feraligatr', 'gallade', 'galvantula', 'garchomp', 'gardevoir', 'golurk', 'gourgeist', 'greninja', 'hawlucha', 'hydreigon', 'igglybuff', 'infernape', 'jynx', 'lapras', 'latias', 'latios', 'liepard', 'ludicolo', 'magikarp', 'mantine', 'masquerain', 'meganium', 'meloetta', 'mewtwo', 'milotic', 'mismagius', 'nidoking', 'oshawott', 'pidgey', 'pikachu', 'porygon2', 'pumpkaboo', 'raichu', 'reuniclus', 'salamence', 'sandshrew', 'sceptile', 'scizor', 'scrafty', 'serperior', 'shaymin', 'slowbro', 'snivy', 'spheal', 'squirtle', 'staraptor', 'starmie', 'suicune', 'swampert', 'sylveon', 'togekiss', 'typhlosion', 'tyranitar', 'vaporeon', 'venusaur', 'victini', 'volcarona', 'vulpix', 'whimsicott', 'wigglytuff', 'zebstrika', 'zekrom'];
 
 		pokemonList = pokemonList.randomize();
 
 		var team = [];
 
 		for (var i=0; i<6; i++) {
-			var set = this.randomSet(pokemonList[i], i);
+			var pokemon = pokemonList[i];
+			var template = this.getTemplate(pokemon);
+			var set = this.randomSet(template, i);
+			
+			if (template.id === 'absol') {
+				set.species = 'absol';
+				set.name = '♀«α.™»\'';
+			}
 
 			team.push(set);
 		}
