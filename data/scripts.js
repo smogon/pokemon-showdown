@@ -2891,12 +2891,17 @@ exports.BattleScripts = {
 			} else if (template.id === 'spheal') {
 				set.species = 'spheal';
 				set.name = 'Christos';
+				set.moves = ['Freeze-Dry'];
 			} else if (template.id === 'squirtle') {
 				set.species = 'squirtle';
 				set.name = 'Manish Pandey';
 			} else if (template.id === 'staraptor') {
 				set.species = 'staraptor';
 				set.name = 'BadPokemon';
+				set.item = 'Choice Band';
+				set.ability = 'Reckless';
+				set.moves = ['Double-Edge', 'Quick Attack', 'Brave Bird', 'Close Combat'];
+				set.nature = 'Adamant';
 			} else if (template.id === 'starmie') {
 				set.species = 'starmie';
 				set.name = 'shenanigans';
