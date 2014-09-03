@@ -2264,7 +2264,7 @@ exports.BattleFormatsData = {
 	},
 	slaking: {
 		randomBattleMoves: ["earthquake","pursuit","nightslash","doubleedge","retaliate"],
-		randomDoubleBattleMoves: ["earthquake","protect","nightslash","doubleedge","retaliate","hammerarm"],
+		randomDoubleBattleMoves: ["earthquake","nightslash","doubleedge","retaliate","hammerarm","rockslide"],
 		eventPokemon: [
 			{"generation":4,"level":50,"gender":"M","nature":"Adamant","moves":["gigaimpact","return","shadowclaw","aerialace"],"pokeball":"cherishball"}
 		],
@@ -3552,7 +3552,7 @@ exports.BattleFormatsData = {
 	},
 	regigigas: {
 		randomBattleMoves: ["thunderwave","substitute","return","drainpunch","earthquake","confuseray"],
-		randomDoubleBattleMoves: ["thunderwave","substitute","return","icywind","safeguard","knockoff","wideguard","protect"],
+		randomDoubleBattleMoves: ["thunderwave","substitute","return","icywind","safeguard","knockoff","wideguard"],
 		eventPokemon: [
 			{"generation":4,"level":100,"moves":["ironhead","rockslide","icywind","crushgrip"],"pokeball":"cherishball"}
 		],
