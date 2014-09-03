@@ -2172,7 +2172,7 @@ exports.BattleFormatsData = {
 	shiftry: {
 		randomBattleMoves: ["leafstorm","swordsdance","seedbomb","suckerpunch","defog","lowkick"],
 		randomDoubleBattleMoves: ["leafstorm","swordsdance","seedbomb","suckerpunch","knockoff","lowkick","fakeout","protect"],
-		tier: "NU"
+		tier: "RU"
 	},
 	taillow: {
 		randomBattleMoves: ["bravebird","facade","quickattack","uturn","protect"],
