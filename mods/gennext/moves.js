@@ -247,7 +247,7 @@ exports.BattleMovedex = {
 				}
 				return null;
 			}
-		},
+		}
 	},
 	"spikyshield": {
 		inherit: true,
@@ -270,7 +270,7 @@ exports.BattleMovedex = {
 				}
 				return null;
 			}
-		},
+		}
 	},
 	minimize: {
 		inherit: true,
