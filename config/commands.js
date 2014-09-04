@@ -331,7 +331,7 @@ var commands = exports.commands = {
 			} else if (newTargets[0].searchType === 'move') {
 				var move = Tools.getMove(newTargets[0].name);
 				details = {
-					"Priority": move.priority,
+					"Priority": move.priority
 				};
 
 				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";
@@ -1727,6 +1727,6 @@ var commands = exports.commands = {
 		} else if (!matched) {
 			this.sendReply("Help for the command '" + target + "' was not found. Try /help for general help");
 		}
-	},
+	}
 
 };

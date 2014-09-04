@@ -369,7 +369,7 @@ exports.BattleMovedex = {
 	},
 	explosion: {
 		inherit: true,
-		basePower: 500,
+		basePower: 500
 		//desc: ""
 	},
 	extremespeed: {
@@ -809,7 +809,7 @@ exports.BattleMovedex = {
 	},
 	selfdestruct: {
 		inherit: true,
-		basePower: 400,
+		basePower: 400
 		//desc: ""
 	},
 	sketch: {
