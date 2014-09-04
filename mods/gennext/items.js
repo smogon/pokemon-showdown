@@ -151,7 +151,7 @@ exports.BattleItems = {
 				}
 				return basePower * 1.1;
 			}
-		},
+		}
 	},
 	"stick": {
 		id: "stick",
