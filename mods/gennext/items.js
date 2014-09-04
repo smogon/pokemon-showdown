@@ -213,5 +213,5 @@ exports.BattleItems = {
 		// 	}
 		// },
 		desc: "Raises Farfetch'd's critical hit rate two stages."
-	},
+	}
 };

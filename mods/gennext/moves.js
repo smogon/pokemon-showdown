@@ -1785,7 +1785,7 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 50,
 			volatileStatus: 'confusion'
-		},
+		}
 	},
 	nightdaze: {
 		inherit: true,
