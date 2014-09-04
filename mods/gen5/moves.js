@@ -125,7 +125,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.useMove(this.lastMove, pokemon);
-		},
+		}
 	},
 	cottonspore: {
 		inherit: true,
@@ -554,7 +554,7 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 30,
 			status: 'tox'
-		},
+		}
 	},
 	poisongas: {
 		inherit: true,
@@ -608,7 +608,7 @@ exports.BattleMovedex = {
 				}
 				return null;
 			}
-		},
+		}
 	},
 	ragepowder: {
 		num: 476,
@@ -851,7 +851,7 @@ exports.BattleMovedex = {
 		},
 		onHitSide: function (side, source) {
 			source.addVolatile('stall');
-		},
+		}
 	},
 	whirlpool: {
 		inherit: true,
