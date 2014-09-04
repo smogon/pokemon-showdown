@@ -335,6 +335,6 @@ exports.BattleStatuses = {
 				this.effectData.counter *= 2;
 			}
 			this.effectData.duration = 2;
-		},
+		}
 	}
 };
