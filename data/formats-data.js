@@ -4011,7 +4011,7 @@ exports.BattleFormatsData = {
 	scolipede: {
 		randomBattleMoves: ["spikes","toxicspikes","megahorn","rockslide","earthquake","swordsdance","batonpass","aquatail","superpower"],
 		randomDoubleBattleMoves: ["substitute","protect","megahorn","rockslide","poisonjab","swordsdance","batonpass","aquatail","superpower"],
-		tier: "BL"
+		tier: "OU"
 	},
 	cottonee: {
 		randomBattleMoves: ["encore","taunt","substitute","leechseed","toxic","stunspore"],
