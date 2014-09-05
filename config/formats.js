@@ -133,6 +133,7 @@ exports.Formats = [
 		},
 		forcedLevel: 30,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
+		banlist: ['Diancie', 'Xerneas'],
 		requirePentagon: true,
 		validateTeam: function (team) {
 			var problems = [];
