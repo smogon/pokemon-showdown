@@ -805,77 +805,61 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 	var params = cmdParts.join(' ').split(',').map(function (param) { return param.trim(); });
 	if (!params[0]) params = [];
 
-	if (cmd === '') {
-		if (!this.canBroadcast()) return;
-		this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).filter(function (tournament) {
-			tournament = exports.tournaments[tournament];
-			return !tournament.room.isPrivate && !tournament.room.staffRoom;
-		}).map(function (tournament) {
-			tournament = exports.tournaments[tournament];
-			return {room: tournament.room.title, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
-		})));
-	} else if (cmd === 'help') {
-		if (!this.canBroadcast()) return;
-		return this.sendReplyBox(
-			"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
-			"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
-			"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
-			"- begin/start: Starts the tournament in the current room.<br />" +
-			"- dq/disqualify &lt;user>: Disqualifies a user.<br />" +
-			"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
-			"- runautodq: Manually run the automatic disqualifier.<br />" +
-			"- getusers: Lists the users in the current tournament.<br />" +
-			"- on/off: Enables/disables allowing mods to start tournaments.<br />" +
-			"More detailed help can be found <a href=\"https://gist.github.com/kotarou3/7872574\">here</a>"
-		);
-	} else if (cmd === 'on' || cmd === 'enable') {
-		if (!this.can('tournamentsmanagement', null, room)) return;
-		if (room.toursEnabled) {
-			return this.sendReply("Tournaments are already enabled.");
-		}
-		room.toursEnabled = true;
-		if (room.chatRoomData) {
-			room.chatRoomData.toursEnabled = true;
-			Rooms.global.writeChatRoomData();
-		}
-		return this.sendReply("Tournaments enabled.");
-	} else if (cmd === 'off' || cmd === 'disable') {
-		if (!this.can('tournamentsmanagement', null, room)) return;
-		if (!room.toursEnabled) {
-			return this.sendReply("Tournaments are already disabled.");
-		}
-		delete room.toursEnabled;
-		if (room.chatRoomData) {
-			delete room.chatRoomData.toursEnabled;
-			Rooms.global.writeChatRoomData();
-		}
-		return this.sendReply("Tournaments disabled.");
-	} else if (cmd === 'create' || cmd === 'new') {
-		if (room.toursEnabled) {
-			if (!this.can('tournaments', null, room)) return;
-		} else {
-			if (!user.can('tournamentsmanagement', null, room)) {
-				return this.sendReply("Tournaments are disabled in this room ("+room.id+").");
+	switch (cmd) {
+		case '':
+			if (!this.canBroadcast()) return;
+			this.sendReply('|tournaments|info|' + JSON.stringify(Object.keys(exports.tournaments).filter(function (tournament) {
+				tournament = exports.tournaments[tournament];
+				return !tournament.room.isPrivate && !tournament.room.staffRoom;
+			}).map(function (tournament) {
+				tournament = exports.tournaments[tournament];
+				return {room: tournament.room.title, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
+			})));
+			break;
+
+		case 'help':
+			if (!this.canBroadcast()) return;
+			return this.sendReplyBox(
+				"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
+				"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
+				"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
+				"- begin/start: Starts the tournament in the current room.<br />" +
+				"- dq/disqualify &lt;user>: Disqualifies a user.<br />" +
+				"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
+				"- runautodq: Manually run the automatic disqualifier.<br />" +
+				"- getusers: Lists the users in the current tournament.<br />" +
+				"- on/off: Enables/disables allowing mods to start tournaments.<br />" +
+				"More detailed help can be found <a href=\"https://gist.github.com/kotarou3/7872574\">here</a>"
+			);
+
+		case 'on':
+		case 'enable':
+			if (!this.can('tournamentsmanagement', null, room)) return;
+			if (room.toursEnabled) {
+				return this.sendReply("Tournaments are already enabled.");
 			}
-		}
-		if (params.length < 2) {
-			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
-		}
+			room.toursEnabled = true;
+			if (room.chatRoomData) {
+				room.chatRoomData.toursEnabled = true;
+				Rooms.global.writeChatRoomData();
+			}
+			return this.sendReply("Tournaments enabled.");
 
-		var tour = createTournament(room, params.shift(), params.shift(), Config.istournamentsrated, params, this);
-		if (tour) this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
-	} else {
-		var tournament = getTournament(room.title);
-		if (!tournament) {
-			return this.sendReply("There is currently no tournament running in this room.");
-		}
+		case 'off':
+		case 'disable':
+			if (!this.can('tournamentsmanagement', null, room)) return;
+			if (!room.toursEnabled) {
+				return this.sendReply("Tournaments are already disabled.");
+			}
+			delete room.toursEnabled;
+			if (room.chatRoomData) {
+				delete room.chatRoomData.toursEnabled;
+				Rooms.global.writeChatRoomData();
+			}
+			return this.sendReply("Tournaments disabled.");
 
-		var commandHandler = null;
-		if (commands.basic[cmd]) {
-			commandHandler = typeof commands.basic[cmd] === 'string' ? commands.basic[commands.basic[cmd]] : commands.basic[cmd];
-		}
-
-		if (commands.creation[cmd]) {
+		case 'create':
+		case 'new':
 			if (room.toursEnabled) {
 				if (!this.can('tournaments', null, room)) return;
 			} else {
@@ -883,21 +867,49 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 					return this.sendReply("Tournaments are disabled in this room ("+room.id+").");
 				}
 			}
-			commandHandler = typeof commands.creation[cmd] === 'string' ? commands.creation[commands.creation[cmd]] : commands.creation[cmd];
-		}
-
-		if (commands.moderation[cmd]) {
-			if (!user.can('tournamentsmoderation', null, room)) {
-				return this.sendReply(cmd + " -  Access denied.");
+			if (params.length < 2) {
+				return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 			}
-			commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
-		}
-
-		if (!commandHandler) {
-			this.sendReply(cmd + " is not a tournament command.");
-		} else {
-			commandHandler.call(this, tournament, user, params, cmd);
-		}
+	
+			var tour = createTournament(room, params.shift(), params.shift(), Config.istournamentsrated, params, this);
+			if (tour) this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
+			break;
+		
+		default:
+			var tournament = getTournament(room.title);
+			if (!tournament) {
+				return this.sendReply("There is currently no tournament running in this room.");
+			}
+	
+			var commandHandler = null;
+			if (commands.basic[cmd]) {
+				commandHandler = typeof commands.basic[cmd] === 'string' ? commands.basic[commands.basic[cmd]] : commands.basic[cmd];
+			}
+	
+			if (commands.creation[cmd]) {
+				if (room.toursEnabled) {
+					if (!this.can('tournaments', null, room)) return;
+				} else {
+					if (!user.can('tournamentsmanagement', null, room)) {
+						return this.sendReply("Tournaments are disabled in this room ("+room.id+").");
+					}
+				}
+				commandHandler = typeof commands.creation[cmd] === 'string' ? commands.creation[commands.creation[cmd]] : commands.creation[cmd];
+			}
+	
+			if (commands.moderation[cmd]) {
+				if (!user.can('tournamentsmoderation', null, room)) {
+					return this.sendReply(cmd + " -  Access denied.");
+				}
+				commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
+			}
+	
+			if (!commandHandler) {
+				this.sendReply(cmd + " is not a tournament command.");
+			} else {
+				commandHandler.call(this, tournament, user, params, cmd);
+			}
+			break;
 	}
 };
 
