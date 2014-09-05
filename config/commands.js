@@ -911,6 +911,10 @@ var commands = exports.commands = {
 				buffer += "- <a href=\"https://www.smogon.com/forums/threads/3499973/\">Balanced Hackmons Mentoring Program</a><br />";
 			}
 		}
+		if (target === 'haxmons') {
++			matched = true;
++			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3500287/\">Haxmons</a><br />";
++		}
 		if (target === '1v1') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496773/\">1v1</a><br />";
