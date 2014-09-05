@@ -2867,6 +2867,7 @@ exports.BattleScripts = {
 			} else if (template.id === 'rotomfan') {
 				set.species = 'rotomfan';
 				set.name = 'littlebrother';
+				set.item = 'Leftovers';
 				set.moves = ['Discharge', 'Pain Split', 'Air Slash', 'Substitute'];
 			} else if (template.id === 'salamence') {
 				set.species = 'salamence';
