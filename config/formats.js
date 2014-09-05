@@ -353,7 +353,7 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['OU', 'Freeze Clause'],
-		banlist: ["King's Rock", 'Razor Fang'],
+		banlist: ["King's Rock", 'Razor Fang', 'Stench'],
 		onModifyMovePriority: -100,
 		onModifyMove: function (move) {
 			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 0;
