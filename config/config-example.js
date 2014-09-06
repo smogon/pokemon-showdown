@@ -289,8 +289,8 @@ exports.customavatars = {
 	'1ee7': 'nimo.png',
 	'sharingiscaring': 'nimo.png',
 	'hollowicrus': 'hollowicrus.jpg',
-	'galladebosszolt': 'gallade-boss-zolt.gif',
-	'bossage': 'gallade-boss-zolt.gif',
+	'gymlederzolt': 'gym-leder-zolt.jpg',
+	'galladebosszolt': 'gym-leder-zolt.jpg',
 	'bearticsmalls': 'beartic-smalls.gif',
 	'shaneo': 'shaneo.png',
 };
@@ -376,7 +376,6 @@ exports.groups = {
 		name: "Moderator",
 		inherit: '%',
 		jurisdiction: '@u',
-		ban: true,
 		modchat: true,
 		roomvoice: true,
 		ip: true,
@@ -400,6 +399,7 @@ exports.groups = {
 		modlog: true,
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
+		ban: true,
 		rank: 4
 	},
 	'\u2605': {
