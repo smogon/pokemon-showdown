@@ -2499,7 +2499,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":15,"moves":["refresh","waterpulse","bite","scaryface"]}
 		],
-		tier: "NFE"
+		tier: "LC"
 	},
 	sharpedo: {
 		randomBattleMoves: ["protect","hydropump","surf","icebeam","crunch","earthquake","waterfall","darkpulse","aquajet","destinybond"],
