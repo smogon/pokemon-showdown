@@ -416,7 +416,6 @@ exports.groups = {
 		tournamentsmoderation: true,
 		declare: true,
 		announce: true,
-		alts: '@u',
 		ignorelimits: true,
 		rank: 2
 	},
@@ -431,7 +430,7 @@ exports.groups = {
 	},
 	' ': {
 		ip: 's',
-		alts: 's',
+		alts: '@u',
 		broadcast: true,
 		joinbattle: true,
 		rank: 0
