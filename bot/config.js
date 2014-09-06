@@ -27,7 +27,7 @@ exports.rooms = ['lobby', 'darkalley'];
 // Any private rooms that should be joined.
 // Private rooms will be moderated differently (since /warn doesn't work in them).
 // The bot will also avoid leaking the private rooms through .seen
-exports.privaterooms = [];
+exports.privaterooms = ['staff'];
 
 // The character text should start with to be seen as a command.
 // Note that using / and ! might be 'dangerous' since these are used in
