@@ -833,14 +833,16 @@ exports.BattleScripts = {
 			'Technician':1, 'Skill Link':1, 'Iron Fist':1, 'Adaptability':1, 'Hustle':1
 		};
 
-		var damagingMoves = [];
-		var damagingMoveIndex = {};
-		var hasMove = {};
-		var counter = {};
-		var setupType = '';
+		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType;
 
 		var j = 0;
 		do {
+			damagingMoves = [];
+			damagingMoveIndex = {};
+			hasMove = {};
+			counter = {};
+			setupType = '';
+
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && j < moveKeys.length) {
 				var moveid = toId(moveKeys[j]);
@@ -1844,14 +1846,16 @@ exports.BattleScripts = {
 			'Technician':1, 'Skill Link':1, 'Iron Fist':1, 'Adaptability':1, 'Hustle':1
 		};
 
-		var damagingMoves = [];
-		var damagingMoveIndex = {};
-		var hasMove = {};
-		var counter = {};
-		var setupType = '';
+		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType;
 
 		var j = 0;
 		do {
+			damagingMoves = [];
+			damagingMoveIndex = {};
+			hasMove = {};
+			counter = {};
+			setupType = '';
+
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && j < moveKeys.length) {
 				var moveid = toId(moveKeys[j]);
