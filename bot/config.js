@@ -4,7 +4,7 @@
 // If you really don't know how to do this... Run `node getserver.js URL`.
 // Fill in the URL of the client where `URL` is.
 // For example: `node getserver.js http://example-server.psim.us/`
-exports.server = 'sim.psim.us';
+exports.server = 'pokecommunity.psim.us';
 exports.port = 8000;
 
 // This is the server id.
@@ -13,16 +13,16 @@ exports.port = 8000;
 // For example, on the Smogon server, it will say somewhere in the URL
 // ~~showdown, meaning that the server id is 'showdown'.
 // If you really don't know how to check this... run the said script above.
-exports.serverid = 'showdown';
+exports.serverid = 'pokecommunity';
 
 // The nick and password to log in with
 // If no password is required, leave pass empty
-exports.nick = 'Example bot nick';
-exports.pass = '';
+exports.nick = 'PokeCommBot';
+exports.pass = 'filler';
 
 // The rooms that should be joined.
 // Joining Smogon's Showdown's Lobby is not allowed.
-exports.rooms = ['example room name', 'another example'];
+exports.rooms = ['lobby', 'darkalley'];
 
 // Any private rooms that should be joined.
 // Private rooms will be moderated differently (since /warn doesn't work in them).
@@ -42,7 +42,7 @@ exports.defaultrank = '%';
 // Whether this file should be watched for changes or not.
 // If you change this option, the server has to be restarted in order for it to
 // take effect.
-exports.watchconfig = false;
+exports.watchconfig = true;
 
 // Secondary websocket protocols should be defined here, however, Showdown
 // doesn't support that yet, so it's best to leave this empty.
