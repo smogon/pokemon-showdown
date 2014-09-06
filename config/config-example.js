@@ -293,6 +293,7 @@ exports.customavatars = {
 	'galladebosszolt': 'gym-leder-zolt.jpg',
 	'bearticsmalls': 'beartic-smalls.gif',
 	'shaneo': 'shaneo.png',
+	'pokecommbot': 'pokecommbot.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
