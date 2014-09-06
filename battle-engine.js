@@ -2805,7 +2805,6 @@ Battle = (function () {
 
 		if (move.ohko) {
 			if (target.level > pokemon.level) {
-				this.add('-failed', target);
 				return false;
 			}
 			return target.maxhp;
