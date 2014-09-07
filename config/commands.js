@@ -942,7 +942,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'almostanyability' || target === 'aaa') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3495737/\">Almost Any Ability</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517022/\">Almost Any Ability</a><br />";
 			if (target !== 'all') {
 				buffer += "- <a href=\"https://www.smogon.com/forums/threads/3508794/\">Almost Any Ability Viability Rankings</a><br />";
 			}
