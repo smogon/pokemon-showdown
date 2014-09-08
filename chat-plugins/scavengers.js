@@ -21,7 +21,7 @@ exports.commands = {
 	startofficialhunt: 'starthunt',
 	starthunt: function (target, room, user, connection, cmd) {
 		if (room.id !== 'scavengers') return this.sendReply('This command can only be used in the Scavengers room.');
-		if (!this.can('mute', null, room)) return false;
+		if (!this.can('mute', null, room)) return;
 		if (status === 'on') return this.sendReply('There is already an active scavenger hunt.');
 		var targets = target.split(',');
 		if (!targets[0] || !targets[1] || !targets[2] || !targets[3] || !targets[4] || !targets[5] || targets[6]) {
