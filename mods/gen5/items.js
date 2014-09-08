@@ -32,7 +32,7 @@ exports.BattleItems = {
 		naturalGift: {
 			basePower: 60,
 			type: "Ice"
-		},
+		}
 	},
 	blukberry: {
 		inherit: true,
@@ -249,7 +249,7 @@ exports.BattleItems = {
 		naturalGift: {
 			basePower: 80,
 			type: "Flying"
-		},
+		}
 	},
 	leppaberry: {
 		inherit: true,
@@ -334,7 +334,7 @@ exports.BattleItems = {
 		naturalGift: {
 			basePower: 70,
 			type: "Steel"
-		},
+		}
 	},
 	passhoberry: {
 		inherit: true,
@@ -447,7 +447,7 @@ exports.BattleItems = {
 		naturalGift: {
 			basePower: 60,
 			type: "Ground"
-		},
+		}
 	},
 	sitrusberry: {
 		inherit: true,

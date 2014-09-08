@@ -3258,7 +3258,7 @@ exports.BattleFormatsData = {
 	},
 	arceusunknown: {
 		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
+			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"}
 		],
 		tier: "Uber"
 	},
