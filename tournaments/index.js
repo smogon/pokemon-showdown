@@ -80,7 +80,7 @@ Tournament = (function () {
 		this.format = toId(format);
 		this.generator = generator;
 		this.isRated = isRated;
-		this.playerCap = playerCap || 0;
+		this.playerCap = parseInt(playerCap) || 0;
 
 		this.isBracketInvalidated = true;
 		this.lastBracketUpdate = 0;
@@ -238,6 +238,11 @@ Tournament = (function () {
 		}
 
 		var users = this.generator.getUsers();
+		if (this.playerCap && users.length >= this.playerCap) {
+			output.sendReply('|tournament|error|Full');
+			return;
+		}
+
 		if (!isAllowAlts) {
 			for (var i = 0; i < users.length; i++) {
 				if (users[i].latestIp === user.latestIp) {
@@ -257,7 +262,7 @@ Tournament = (function () {
 		user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
 		this.isBracketInvalidated = true;
 		this.update();
-		if (parseInt(this.playerCap) === (users.length + 1)) this.room.add("The tournament is full");
+		if (this.playerCap === (users.length + 1)) this.room.add("The tournament is now full");
 	};
 	Tournament.prototype.removeUser = function (user, output) {
 		var error = this.generator.removeUser(user);
