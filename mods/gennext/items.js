@@ -151,7 +151,7 @@ exports.BattleItems = {
 				}
 				return basePower * 1.1;
 			}
-		},
+		}
 	},
 	"stick": {
 		id: "stick",
@@ -213,5 +213,5 @@ exports.BattleItems = {
 		// 	}
 		// },
 		desc: "Raises Farfetch'd's critical hit rate two stages."
-	},
+	}
 };
