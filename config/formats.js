@@ -511,7 +511,7 @@ exports.Formats = [
 		mod: '350cup',
 		searchShow: false,
 		ruleset: ['Ubers'],
-		banlist: ['Darumaka', 'Pawniard', 'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Light Ball', 'Thick Club']
+		banlist: ['Darumaka', 'Pawniard', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Light Ball', 'Thick Club']
 	},
 	{
 		name: "Averagemons",
