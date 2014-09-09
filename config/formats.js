@@ -83,20 +83,6 @@ exports.Formats = [
 			if (team.length < 3) return ['You must bring at least three Pokémon.'];
 		}
 	},
-	{
-		name: "Battle Spot Special 5",
-		section: "XY Singles",
-
-		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		validateTeam: function (team, format) {
-			if (team.length < 6) return ['You must have six Pokémon.'];
-			for (var i = 0; i < team.length; i++) {
-				var item = toId(team[i].item);
-				if (item) return ["Pokémon cannot hold items for the Special format of this season."];
-			}
-		}
-	},
 	/*{
 		name: "CAP 19 Playtest",
 		section: "XY Singles",
