@@ -117,8 +117,8 @@ exports.BattleAbilities = {
 		num: 148
 	},
 	"angerpoint": {
-		desc: "If this Pokemon, or its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
-		shortDesc: "If this Pokemon (not a Substitute) is hit by a critical hit, its Attack is boosted by 12.",
+		desc: "If this Pokemon, and not its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
+		shortDesc: "If this Pokemon is hit by a critical hit, its Attack is boosted by 12.",
 		onCriticalHit: function (target) {
 			if (!target.volatiles['substitute']) {
 				target.setBoost({atk: 6});
