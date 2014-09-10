@@ -1321,6 +1321,8 @@ exports.BattleScripts = {
 				}
 				if (template.id === 'sigilyph') {
 					ability = 'Magic Guard';
+				} else if (template.id === 'bisharp') {
+					ability = 'Defiant';
 				} else if (template.id === 'combee') {
 					// Combee always gets Hustle but its only physical move is Endeavor, which loses accuracy
 					ability = 'Honey Gather';
