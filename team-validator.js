@@ -641,8 +641,8 @@ Validator = (function () {
 							if (learned.charAt(1) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
 								if (learned.charAt(0) === '6') {
-									// gen 6 doesn't have egg move incompatibilities
-									sources.push('6E');
+									// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
+									sources.push(learned + template.id);
 									continue;
 								}
 								var eggGroups = template.eggGroups;
