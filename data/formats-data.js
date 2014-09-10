@@ -2665,7 +2665,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	crawdaunt: {
-		randomBattleMoves: ["dragondance","crabhammer","crunch","superpower","swordsdance","knockoff","aquajet"],
+		randomBattleMoves: ["dragondance","crabhammer","superpower","swordsdance","knockoff","aquajet"],
 		randomDoubleBattleMoves: ["dragondance","crabhammer","crunch","superpower","swordsdance","knockoff","aquajet","protect"],
 		eventPokemon: [
 			{"generation":3,"level":100,"moves":["taunt","crabhammer","swordsdance","guillotine"]},
@@ -3557,7 +3557,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	giratina: {
-		randomBattleMoves: ["rest","sleeptalk","dragontail","roar","willowisp","calmmind","dragonpulse","shadowball"],
+		randomBattleMoves: ["rest","sleeptalk","dragontail","roar","willowisp"],
 		randomDoubleBattleMoves: ["tailwind","icywind","protect","dragontail","willowisp","calmmind","dragonpulse","shadowball"],
 		eventPokemon: [
 			{"generation":5,"level":100,"shiny":true,"isHidden":false,"moves":["dragonpulse","dragonclaw","aurasphere","shadowforce"],"pokeball":"cherishball"}
@@ -3566,7 +3566,7 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	giratinaorigin: {
-		randomBattleMoves: ["dracometeor","shadowsneak","dragontail","hiddenpowerfire","willowisp","calmmind","substitute","dragonpulse","shadowball","aurasphere","outrage","earthquake"],
+		randomBattleMoves: ["dracometeor","shadowsneak","dragontail","willowisp","defog","toxic","shadowball","stoneedge","earthquake"],
 		randomDoubleBattleMoves: ["dracometeor","shadowsneak","tailwind","hiddenpowerfire","willowisp","calmmind","substitute","dragonpulse","shadowball","aurasphere","protect","earthquake"],
 		requiredItem: "Griseous Orb",
 		tier: "Uber"
@@ -4089,7 +4089,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	scrafty: {
-		randomBattleMoves: ["dragondance","icepunch","highjumpkick","drainpunch","rest","bulkup","crunch","knockoff"],
+		randomBattleMoves: ["dragondance","icepunch","highjumpkick","drainpunch","rest","bulkup","knockoff"],
 		randomDoubleBattleMoves: ["fakeout","drainpunch","knockoff","icepunch","stoneedge", "protect"],
 		eventPokemon: [
 			{"generation":5,"level":50,"gender":"M","nature":"Brave","isHidden":false,"abilities":["moxie"],"moves":["firepunch","payback","drainpunch","substitute"],"pokeball":"cherishball"}
@@ -4948,7 +4948,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	trevenant: {
-		randomBattleMoves: ["hornleech","woodhammer","leechseed","shadowclaw","substitute","willowisp","curse","earthquake","rockslide"],
+		randomBattleMoves: ["hornleech","leechseed","shadowclaw","substitute","willowisp","rest","phantomforce"],
 		randomDoubleBattleMoves: ["hornleech","woodhammer","leechseed","shadowclaw","willowisp","trickroom","earthquake","rockslide","protect"],
 		tier: "UU"
 	},
@@ -5069,7 +5069,7 @@ exports.BattleFormatsData = {
 		tier: "CAP"
 	},
 	malaconda: {
-		randomBattleMoves: ["powerwhip","glare","crunch","toxic","suckerpunch","rest","substitute","uturn","synthesis","rapidspin","knockoff"],
+		randomBattleMoves: ["powerwhip","glare","toxic","suckerpunch","rest","substitute","uturn","synthesis","rapidspin","knockoff"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
