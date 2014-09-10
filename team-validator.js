@@ -600,7 +600,8 @@ Validator = (function () {
 					for (var i = 0, len = lset.length; i < len; i++) {
 						var learned = lset[i];
 						if (noPastGen && learned.charAt(0) !== '6') continue;
-						if (parseInt(learned.charAt(0), 10) > tools.gen) continue;
+						// since Gen 3, Pokemon cannot be traded to past generations
+						if (tools.gen >= 3 && parseInt(learned.charAt(0), 10) > tools.gen) continue;
 						if (learned.charAt(0) !== '6' && isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
 							// check if the Pokemon's hidden ability was available
 							incompatibleHidden = true;
@@ -659,7 +660,7 @@ Validator = (function () {
 										// can't breed mons from future gens
 										dexEntry.gen <= parseInt(learned.charAt(0), 10) &&
 										// genderless pokemon can't pass egg moves
-										dexEntry.gender !== 'N') {
+										(dexEntry.gender !== 'N' || tools.gen <= 1 && dexEntry.gen <= 1)) {
 										if (
 											// chainbreeding
 											fromSelf ||
@@ -714,6 +715,7 @@ Validator = (function () {
 				template = tools.getTemplate(template.baseSpecies);
 			} else if (template.prevo) {
 				template = tools.getTemplate(template.prevo);
+				if (template.gen > Math.max(2, tools.gen)) template = null;
 			} else if (template.speciesid === 'shaymin') {
 				template = tools.getTemplate('shayminsky');
 			} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem') {
