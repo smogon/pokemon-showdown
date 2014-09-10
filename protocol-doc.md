@@ -240,6 +240,17 @@ etc). `NAME` is the nickname of the Pokemon performing the action.
 > `switch` means it was intentional, while `drag` means it was unintentional
 > (forced by Whirlwind, Roar, etc).
 
+`|detailschange|POKEMON|FORME|HP STATUS` or 
+`|detailschange|POKEMON|FORME, GENDER|HP STATUS` or 
+`|-formechange|POKEMON|FORME|HP STATUS`
+
+> The specified Pokemon has changed formes (via Mega Evolution, ability, etc.) 
+> to `FORME`. If the forme change cannot be reverted (Mega Evolution or a 
+> Shaymin-Sky that is frozen), then `detailschange` will appear; otherwise, 
+> the client will send `-formechange`. `GENDER` can appear in `detailschange` 
+> if the transforming Pokemon has a gender, displayed as `M` or `F`
+> for male and female, respectively.
+
 `|cant|POKEMON|REASON` or `|cant|POKEMON|REASON|MOVE`
 
 > The Pokemon `POKEMON` could not perform a move because of the indicated
@@ -264,6 +275,14 @@ will be a Pokemon. These can affect the message or animation displayed, but
 do not affect anything else. Other tags include `|[still]` (suppress
 animation) and `|[silent]` (suppress message).
 
+`|-fail|POKEMON|ACTION`
+
+> The specified `ACTION` has failed against the `POKEMON` targetted. The `ACTION`
+>  in question can be a move that fails, or a stat drop blocked by an ability 
+> like Hyper Cutter, in which case `ACTION` will be `unboost|STAT`, where `STAT` 
+> indicates where the ability prevents stat drops. (For abilities that block all 
+> stat drops, like Clear Body, `|STAT` does not appear.) 
+
 `|-damage|POKEMON|HP STATUS`
 
 > The specified Pokemon `POKEMON` has taken damage, and is now at
@@ -279,6 +298,15 @@ animation) and `|[silent]` (suppress message).
 `|-status|POKEMON|STATUS`
 
 > The Pokemon `POKEMON` has been inflicted with `STATUS`.
+
+`|-curestatus|POKEMON|STATUS`
+
+> The Pokemon `POKEMON` has recovered from `STATUS`.
+
+`|-cureteam|POKEMON`
+
+> The Pokemon `POKEMON` has used a move that cures its team of status effects, 
+> like Heal Bell.
 
 `|-boost|POKEMON|STAT|AMOUNT`
 
@@ -297,6 +325,39 @@ animation) and `|[silent]` (suppress message).
 > it means that `WEATHER` was active previously and is still in effect that
 > turn. Otherwise, it means that the weather has changed due to a move or ability,
 > or has expired, in which case `WEATHER` will be `none`.
+
+`|-crit|POKEMON`
+
+> A move has dealt a critical hit against the `POKEMON`.
+
+`|-supereffective|POKEMON`
+
+> A move was super effective against the `POKEMON`.
+
+`|-resisted|POKEMON`
+
+> A move was not very effective against the `POKEMON`.
+
+`|-immune|POKEMON`
+
+> The `POKEMON` was immune to a move.
+
+`|-item|POKEMON|ITEM`
+
+> Reveals the `ITEM` that `POKEMON` is holding. If a Pokemon's item has changed to
+> a different item, an ability reveals the item, or the item must be broadcast upon 
+> switch-in (like Air Balloon), this will appear.
+
+`|-enditem|POKEMON|ITEM`
+
+> The `ITEM` held by `POKEMON` has been removed, and it now holds no item. This can 
+> be because the item was consumed or destroyed by its own effects (Berries, Air 
+> Balloon), or was forcefully removed by a move or ability.
+
+`|-transform|POKEMON|SPECIES`
+
+> The Pokemon `POKEMON` has transformed into `SPECIES` by the effect of Transform 
+> or the ability Imposter.
 
 I'll document all the message types eventually, but for now this should be
 enough to get you started. You can watch the data sent and received from
