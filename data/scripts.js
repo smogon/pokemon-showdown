@@ -1021,6 +1021,9 @@ exports.BattleScripts = {
 				case 'waterfall':
 					if (hasMove['aquatail']) rejected = true;
 					break;
+				case 'shadowforce': case 'phantomforce':
+					if (hasMove['shadowclaw']) rejected = true;
+					break;
 				case 'airslash':
 					if (hasMove['hurricane']) rejected = true;
 					break;
@@ -1512,8 +1515,8 @@ exports.BattleScripts = {
 		var customScale = {
 			// Really bad Pokemon and jokemons
 			Azurill: 99, Burmy: 99, Cascoon: 99, Caterpie: 99, Cleffa: 99, Combee: 99, Feebas: 99, Igglybuff: 99, Happiny: 99, Hoppip: 99,
-			Kakuna: 99, Kricketot: 99, Ledyba: 99, Magikarp: 99, Metapod: 99, Pichu: 99, Ralts: 99, Sentret: 99, Shedinja: 99,
-			Silcoon: 99, Slakoth: 99, Sunkern: 99, Tynamo: 99, Tyrogue: 99, Unown: 99, Weedle: 99, Wurmple: 99, Zigzagoon: 99,
+			Kakuna: 99, Kricketot: 99, Ledyba: 99, Magikarp: 99, Metapod: 99, Pichu: 99, Ralts: 99, Sentret: 99, Shedinja: 99, Silcoon: 99,
+			Slakoth: 99, Sunkern: 99, Tynamo: 99, Tyrogue: 99, Unown: 99, Weedle: 99, Wurmple: 99, Zigzagoon: 99,
 			Clefairy: 95, Delibird: 95, "Farfetch'd": 95, Jigglypuff: 95, Kirlia: 95, Ledian: 95, Luvdisc: 95, Marill: 95, Skiploom: 95,
 			Pachirisu: 90,
 
@@ -1522,21 +1525,17 @@ exports.BattleScripts = {
 			Gligar: 90, Metang: 90, Monferno: 90, Roselia: 90, Seadra: 90, Togetic: 90, Wartortle: 90, Whirlipede: 90,
 			Dusclops: 84, Porygon2: 82, Chansey: 78,
 
-			// Weather or teammate dependent
-			Snover: 95, Vulpix: 95, Ninetales: 78, Tentacruel: 78, Toxicroak: 78,
-
-			// Banned mega
-			"Kangaskhan-Mega": 72, "Gengar-Mega": 72, "Blaziken-Mega": 72, "Lucario-Mega": 72,
+			// Banned Mega
+			"Gengar-Mega": 68, "Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72,
 
 			// Holistic judgment
-			Carvanha: 90, Genesect: 72, Kyurem: 78, Sigilyph: 74, Xerneas: 64
+			Genesect: 72, Sigilyph: 76, Xerneas: 66
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
-		if (template.name === 'Serperior' && ability === 'Contrary') level = 74;
-		if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 85;
-		if (template.name === 'Spinda' && ability !== 'Contrary') level = 95;
+		if (template.name === 'Serperior' && ability === 'Contrary') level = 76;
+		if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 90;
 
 		return {
 			name: name,
