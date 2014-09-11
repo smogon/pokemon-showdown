@@ -905,7 +905,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	rhyperior: {
-		randomBattleMoves: ["stoneedge","earthquake","aquatail","megahorn","stealthrock","rockblast","rockpolish","dragontail","protect"],
+		randomBattleMoves: ["stoneedge","earthquake","aquatail","megahorn","stealthrock","rockblast","rockpolish","dragontail"],
 		randomDoubleBattleMoves: ["stoneedge","earthquake","aquatail","megahorn","stealthrock","rockslide","protect"],
 		tier: "RU"
 	},
