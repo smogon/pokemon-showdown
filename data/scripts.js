@@ -1445,9 +1445,9 @@ exports.BattleScripts = {
 				// less priority than if you'd had both
 				item = 'Light Clay';
 			} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
-				item = Math.random() * 3 > 1 ? 'Choice Band' : 'Expert Belt';
+				item = template.baseStats.spe >= 85 && template.baseStats.spe < 110 && Math.random() * 3 > 1 ? 'Choice Scarf' : 'Choice Band';
 			} else if (counter.Special >= 4) {
-				item = Math.random() * 3 > 1 ? 'Choice Specs' : 'Expert Belt';
+				item = template.baseStats.spe >= 85 && template.baseStats.spe < 110 && Math.random() * 3 > 1 ? 'Choice Scarf' : 'Choice Specs';
 			} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
 			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
