@@ -1481,7 +1481,7 @@ exports.BattleScripts = {
 				item = 'Leftovers';
 			} else if (hasType['Poison']) {
 				item = 'Black Sludge';
-			} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
 			} else if (counter.Status <= 1 && ability !== 'Sturdy') {
 				item = 'Life Orb';
