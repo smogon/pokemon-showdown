@@ -577,6 +577,8 @@ Validator = (function () {
 		// the equivalent of adding "every source at or before this gen" to sources
 		var sourcesBefore = 0;
 		var noPastGen = format.requirePentagon;
+		// since Gen 3, Pokemon cannot be traded to past generations
+		var noFutureGen = tools.gen >= 3 ? true : format.banlistTable && format.banlistTable['tradeback'];
 
 		do {
 			alreadyChecked[template.speciesid] = true;
@@ -597,8 +599,7 @@ Validator = (function () {
 					for (var i = 0, len = lset.length; i < len; i++) {
 						var learned = lset[i];
 						if (noPastGen && learned.charAt(0) !== '6') continue;
-						// since Gen 3, Pokemon cannot be traded to past generations
-						if (tools.gen >= 3 && parseInt(learned.charAt(0), 10) > tools.gen) continue;
+						if (noFutureGen && parseInt(learned.charAt(0), 10) > tools.gen) continue;
 						if (learned.charAt(0) !== '6' && isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
 							// check if the Pokemon's hidden ability was available
 							incompatibleHidden = true;
