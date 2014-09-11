@@ -549,9 +549,6 @@ Validator = (function () {
 		var alreadyChecked = {};
 		var level = set.level || 100;
 
-		var alphabetCupLetter;
-		if (format.id === 'alphabetcup') alphabetCupLetter = template.speciesid.charAt(0);
-
 		var isHidden = false;
 		if (set.ability && tools.getAbility(set.ability).name === template.abilities['H']) isHidden = true;
 		var incompatibleHidden = false;
@@ -643,7 +640,8 @@ Validator = (function () {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
 								if (learned.charAt(0) === '6') {
 									// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
-									sources.push(learned + template.id);
+									learned = '6E' + (template.prevo ? template.id : '');
+									sources.push(learned);
 									continue;
 								}
 								var eggGroups = template.eggGroups;
