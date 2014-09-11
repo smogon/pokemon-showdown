@@ -564,17 +564,15 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Mediocremons",
+		name: "Hidden Type",
 		section: "Other Metagames",
 
 		searchShow: false,
 		ruleset: ['OU'],
-		banlist: ['Clefable', 'Kingdra', 'Venomoth', 'Abomasite', 'Mawilite', 'Medichamite', 'Huge Power', 'Pure Power'],
-		validateSet: function (set) {
-			var template = this.getTemplate(set.species || set.name);
-			for (var stat in template.baseStats) {
-				if (template.baseStats[stat] >= 100) return [set.species + " has a base stat of 100 or more."];
-			}
+		onSwitchInPriority: 101,
+		onSwitchIn: function (pokemon) {
+			var type = pokemon.hpType || 'Dark';
+			if (!pokemon.hasType(type)) pokemon.addType(type);
 		}
 	},
 	{
