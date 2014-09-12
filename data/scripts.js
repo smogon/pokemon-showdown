@@ -978,7 +978,7 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang': case 'foulplay':
 					if (setupType) rejected = true;
 					break;
-				case 'perishsong': case 'magiccoat': case 'spikes':
+				case 'perishsong': case 'magiccoat': case 'spikes': case 'defog':
 					if (setupType) rejected = true;
 					break;
 				case 'uturn': case 'voltswitch':
