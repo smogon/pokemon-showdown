@@ -80,7 +80,7 @@ Tournament = (function () {
 		this.format = toId(format);
 		this.generator = generator;
 		this.isRated = isRated;
-		this.playerCap = parseInt(playerCap) || 0;
+		this.playerCap = parseInt(playerCap) || Config.tournamentDefaultPlayerCap || 0;
 
 		this.isBracketInvalidated = true;
 		this.lastBracketUpdate = 0;
