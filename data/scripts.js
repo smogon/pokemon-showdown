@@ -1468,7 +1468,7 @@ exports.BattleScripts = {
 			} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179) {
 				item = 'Assault Vest';
 			} else if (counter.Physical + counter.Special >= 4) {
-				item = 'Expert Belt';
+				item = hasMove['fakeout'] || hasMove['return'] ? 'Life Orb' : 'Expert Belt';
 			} else if (i === 0 && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
 				item = 'Focus Sash';
 			} else if (hasMove['outrage']) {
