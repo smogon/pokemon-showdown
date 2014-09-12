@@ -2774,7 +2774,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	tropius: {
-		randomBattleMoves: ["leechseed","substitute","airslash","gigadrain","earthquake","hiddenpowerfire","roost","defog"],
+		randomBattleMoves: ["leechseed","substitute","airslash","gigadrain","toxic","protect"],
 		randomDoubleBattleMoves: ["leechseed","protect","airslash","gigadrain","earthquake","hiddenpowerfire","tailwind","sunnyday","roost"],
 		eventPokemon: [
 			{"generation":4,"level":53,"gender":"F","nature":"Jolly","abilities":["chlorophyll"],"moves":["airslash","synthesis","sunnyday","solarbeam"],"pokeball":"cherishball"}
