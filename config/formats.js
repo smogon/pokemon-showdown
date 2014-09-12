@@ -567,6 +567,7 @@ exports.Formats = [
 		name: "Hidden Type",
 		section: "Other Metagames",
 
+		mod: 'hiddentype',
 		searchShow: false,
 		ruleset: ['OU'],
 		onSwitchInPriority: 101,
