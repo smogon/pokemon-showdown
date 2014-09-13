@@ -189,10 +189,9 @@ exports.customavatars = {
 	'gaspppp': 'daydreamsaway.gif',
 	'travist': 'daydreamsaway2.gif',
 	'slate': 'daydreamsaway3.gif',
-	'sextor': 'sector-revenge.gif',
+	'sector': 'sector.gif',
 	'milenakunis': 'sector-revenge.gif',
-	'konstantinova': 'sector-revenge.gif',
-	'nindbrv': 'sector-revenge.gif',
+	'konstantinova': 'sector2.gif',
 	'weighty': 'weightywillbill.png',
 	'servineking': 'zach.gif',
 	'terbte': 'zach.gif',
@@ -294,6 +293,7 @@ exports.customavatars = {
 	'bearticsmalls': 'beartic-smalls.gif',
 	'shaneo': 'shaneo.png',
 	'pokecommbot': 'pokecommbot.png',
+	'ilovepokehack': 'ilovepokehack.jpg',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
