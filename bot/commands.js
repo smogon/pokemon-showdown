@@ -94,12 +94,22 @@ exports.commands = {
 			joke: 1,
 			choose: 1,
 			usagestats: 1,
+			buzz: 1,
 			helix: 1,
+			survivor: 1,
+			games: 1,
+			wifi: 1,
+			monotype: 1,
 			autoban: 1,
+			happy: 1,
+			guia: 1,
+			studio: 1,
+			'switch': 1,
 			banword: 1
 		};
 		var modOpts = {
 			flooding: 1,
+			caps: 1,
 			stretching: 1,
 			bannedwords: 1,
 			snen: 1
@@ -108,14 +118,14 @@ exports.commands = {
 		var opts = arg.split(',');
 		var cmd = toId(opts[0]);
 		if (cmd === 'mod' || cmd === 'm' || cmd === 'modding') {
-			if (!opts[1] || !toId(opts[1]) || !(toId(opts[1]) in modOpts)) return this.say(con, room, 'Incorrect command: correct syntax is .set mod, [' +
+			if (!opts[1] || !toId(opts[1]) || !(toId(opts[1]) in modOpts)) return this.say(con, room, 'Incorrect command: correct syntax is ' + config.commandcharacter + 'set mod, [' +
 				Object.keys(modOpts).join('/') + '](, [on/off])');
 
 			if (!this.settings['modding']) this.settings['modding'] = {};
 			if (!this.settings['modding'][room]) this.settings['modding'][room] = {};
 			if (opts[2] && toId(opts[2])) {
 				if (!this.hasRank(by, '#~')) return false;
-				if (!(toId(opts[2]) in {on: 1, off: 1}))  return this.say(con, room, 'Incorrect command: correct syntax is .set mod, [' +
+				if (!(toId(opts[2]) in {on: 1, off: 1}))  return this.say(con, room, 'Incorrect command: correct syntax is ' + config.commandcharacter + 'set mod, [' +
 					Object.keys(modOpts).join('/') + '](, [on/off])');
 				if (toId(opts[2]) === 'off') {
 					this.settings['modding'][room][toId(opts[1])] = 0;
@@ -131,7 +141,7 @@ exports.commands = {
 				return;
 			}
 		} else {
-			if (!Commands[cmd]) return this.say(con, room, '.' + opts[0] + ' is not a valid command.');
+			if (!Commands[cmd]) return this.say(con, room, config.commandcharacter + '' + opts[0] + ' is not a valid command.');
 			var failsafe = 0;
 			while (!(cmd in settable)) {
 				if (typeof Commands[cmd] === 'string') {
@@ -140,7 +150,7 @@ exports.commands = {
 					if (cmd in settable) {
 						break;
 					} else {
-						this.say(con, room, 'The settings for .' + opts[0] + ' cannot be changed.');
+						this.say(con, room, 'The settings for ' + config.commandcharacter + '' + opts[0] + ' cannot be changed.');
 						return;
 					}
 				} else {
@@ -149,7 +159,7 @@ exports.commands = {
 				}
 				failsafe++;
 				if (failsafe > 5) {
-					this.say(con, room, 'The command ".' + opts[0] + '" could not be found.');
+					this.say(con, room, 'The command "' + config.commandcharacter + '' + opts[0] + '" could not be found.');
 					return;
 				}
 			}
@@ -175,7 +185,7 @@ exports.commands = {
 				} else if (this.settings[cmd][room] === true) {
 					msg = '.' + cmd + ' is available for all users in this room.';
 				} else if (this.settings[cmd][room] === false) {
-					msg = '.' + cmd + ' is not available for use in this room.';
+					msg = '' + config.commandcharacter+''+ cmd + ' is not available for use in this room.';
 				}
 				this.say(con, room, msg);
 				return;
@@ -186,7 +196,7 @@ exports.commands = {
 				if (!this.settings[cmd]) this.settings[cmd] = {};
 				this.settings[cmd][room] = settingsLevels[newRank];
 				this.writeSettings();
-				this.say(con, room, 'The command .' + cmd + ' is now ' +
+				this.say(con, room, 'The command ' + config.commandcharacter + '' + cmd + ' is now ' +
 					(settingsLevels[newRank] === newRank ? ' available for users of rank ' + newRank + ' and above.' :
 					(this.settings[cmd][room] ? 'available for all users in this room.' : 'unavailable for use in this room.')))
 			}
@@ -440,7 +450,7 @@ exports.commands = {
 		} else {
 			var text = '/pm ' + by + ', ';
 		}
-		text += 'http://sim.smogon.com:8080/Stats/';
+		text += 'http://sim.smogon.com:8080/Stats/2014-08/';
 		this.say(con, room, text);
 	},
 	seen: function(arg, by, room, con) { // this command is still a bit buggy
@@ -491,5 +501,154 @@ exports.commands = {
 			case 20: text += "Don't count on it."; break;
 		}
 		this.say(con, room, text);
+	},
+
+	/**
+	 * Room specific commands
+	 *
+	 * These commands are used in specific rooms on the Smogon server.
+	 */
+	guia: function(arg, by, room, con) {
+		// this command is a guide for the Spanish room
+		if (!(toId(room) === 'espaol' && config.serverid === 'showdown')) return false;
+		var text = '';
+		if (!this.canUse('guia', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		text += 'Si sos nuevo en el sitio, revisa nuestra **Guía Introductoria** (http://goo.gl/Db1wPf) compilada por ``1 + Tan²x = Sec²x``!';
+		this.say(con, room, text);
+	},
+	studio: function(arg, by, room, con) {
+		if (!(toId(room) === 'thestudio' && config.serverid === 'showdown')) return false;
+		var text = '';
+		if (!this.canUse('studio', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		var messages = {
+			plug: '/announce The Studio\'s plug.dj can be found here: http://plug.dj/the-studio-3/'
+		};
+		this.say(con, room, text + (messages[toId(arg)] || ('Welcome to The Studio, a music sharing room on PS!. If you have any questions, feel free to PM a room staff member. Available commands for .studio: ' + Object.keys(messages).join(', '))));
+	},
+	'switch': function(arg, by, room, con) {
+		if (!(toId(room) === 'gamecorner' && config.serverid === 'showdown') ||
+			!this.canUse('switch', room, by)) return false;
+		this.say(con, room, 'Taking over the world. Starting with Game Corner. Room deregistered.');
+		this.say(con, room, '/k ' + (toId(arg) || by) + ', O3O YOU HAVE TOUCHED THE SWITCH');
+	},
+	wifi: function(arg, by, room, con) {
+		// links to relevant sites for the Wi-Fi room 
+		if (!(toId(room) === 'wifi' && config.serverid === 'showdown')) return false;
+		var text = '';
+		if (!this.canUse('wifi', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		var messages = {
+			intro: 'Here is an introduction to Wi-Fi: http://tinyurl.com/welcome2wifi',
+			rules: 'The rules for the Wi-Fi room can be found here: http://pstradingroom.weebly.com/rules.html',
+			faq: 'Wi-Fi room FAQs: http://pstradingroom.weebly.com/faqs.html',
+			faqs: 'Wi-Fi room FAQs: http://pstradingroom.weebly.com/faqs.html',
+			scammers: 'List of known scammers: http://tinyurl.com/psscammers',
+			cloners: 'List of approved cloners: http://goo.gl/WO8Mf4',
+			tips: 'Scamming prevention tips: http://pstradingroom.weebly.com/scamming-prevention-tips.html',
+			breeders: 'List of breeders: http://tinyurl.com/WiFIBReedingBrigade',
+			signup: 'Breeders Sign Up: http://tinyurl.com/GetBreeding',
+			bans: 'Ban appeals: http://pstradingroom.weebly.com/ban-appeals.html',
+			banappeals: 'Ban appeals: http://pstradingroom.weebly.com/ban-appeals.html',
+			lists: 'Major and minor list compilation: http://tinyurl.com/WifiSheets',
+			trainers: 'List of EV trainers: http://tinyurl.com/WifiEVtrainingCrew',
+			youtube: 'Wi-Fi room\'s official YouTube channel: http://tinyurl.com/wifiyoutube',
+			league: 'Wi-Fi Room Pokemon League: http://tinyurl.com/wifiroomleague'
+		};
+		text += (toId(arg) ? (messages[toId(arg)] || 'Unknown option. General links can be found here: http://pstradingroom.weebly.com/links.html') : 'Links can be found here: http://pstradingroom.weebly.com/links.html');
+		this.say(con, room, text);
+	},
+	mono: 'monotype',
+	monotype: function(arg, by, room, con) {
+		// links and info for the monotype room
+		if (!(toId(room) === 'monotype' && config.serverid === 'showdown')) return false;
+		var text = '';
+		if (!this.canUse('monotype', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		var messages = {
+			forums: 'The monotype room\'s forums can be found here: http://psmonotypeforum.createaforum.com/index.php',
+			plug: 'The monotype room\'s plug can be found here: http://plug.dj/monotype-3-am-club/',
+			rules: 'The monotype room\'s rules can be found here: http://psmonotype.wix.com/psmono#!rules/cnnz',
+			site: 'The monotype room\'s site can be found here: http://www.psmonotype.wix.com/psmono',
+			league: 'Information on the Monotype League can be found here: http://themonotypeleague.weebly.com/'
+		};
+		text += (toId(arg) ? (messages[toId(arg)] || 'Unknown option. General information can be found here: http://www.psmonotype.wix.com/psmono') : 'Welcome to the monotype room! Please visit our site to find more information. The site can be found here: http://www.psmonotype.wix.com/psmono');
+		this.say(con, room, text);
+	},
+	survivor: function(arg, by, room, con) {
+		// contains links and info for survivor in the Survivor room
+		if (!(toId(room) === 'survivor' && config.serverid === 'showdown')) return false;
+		var text = '';
+		if (!this.canUse('survivor', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		var gameTypes = {
+			hg: "http://survivor-ps.weebly.com/hunger-games.html",
+			hungergames: "http://survivor-ps.weebly.com/hunger-games.html",
+			classic: "http://survivor-ps.weebly.com/classic.html"
+		};
+		arg = toId(arg);
+		if (arg) {
+			if (!(arg in gameTypes)) return this.say(con, room, "Invalid game type. The game types can be found here: http://survivor-ps.weebly.com/themes.html");
+			text += "The rules for this game type can be found here: " + gameTypes[arg];
+		} else {
+			text += "The list of game types can be found here: http://survivor-ps.weebly.com/themes.html";
+		}
+		this.say(con, room, text);
+	},
+	games: function(arg, by, room, con) {
+		// lists the games for the games room
+		if (!(toId(room) === 'gamecorner' && config.serverid === 'showdown')) return false;
+		var text = '';
+		if (!this.canUse('games', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		this.say(con, room, text + 'Game List: 1. Would You Rather, 2. NickGames, 3. Scattegories, 4. Commonyms, 5. Questionnaires, 6. Funarios, 7. Anagrams, 8. Spot the Reference, 9. Pokemath, 10. Liar\'s Dice');
+		this.say(con, room, text + '11. Pun Game, 12. Dice Cup, 13. Who\'s That Pokemon?, 14. Pokemon V Pokemon (BST GAME), 15. Letter Getter, 16. Missing Link, 17. Parameters! More information can be found here: http://psgamecorner.weebly.com/games.html');
+	},
+	happy: function(arg, by, room, con) {
+		// info for The Happy Place
+		if (!(toId(room) === 'thehappyplace' && config.serverid === 'showdown')) return false;
+		var text = "";
+		if (!this.canUse('happy', room, by)) text += "/pm " + by + ", ";
+		arg = toId(arg);
+		if (arg === 'askstaff' || arg === 'ask' || arg === 'askannie') {
+			text += "http://thepshappyplace.weebly.com/ask-the-staff.html";
+		} else {
+			text += "The Happy Place, at its core, is a friendly environment for anyone just looking for a place to hang out and relax. We also specialize in taking time to give advice on life problems for users. Need a place to feel at home and unwind? Look no further!";
+		}
+		this.say(con, room, text);
+	},
+
+
+	/**
+	 * Jeopardy commands
+	 *
+	 * The following commands are used for Jeopardy in the Academics room
+	 * on the Smogon server.
+	 */
+
+
+	b: 'buzz',
+	buzz: function(arg, by, room, con) {
+		if (this.buzzed || !this.canUse('buzz', room, by) || room.charAt(0) === ',') return false;
+		this.say(con, room, '**' + by.substr(1) + ' has buzzed in!**');
+		this.buzzed = by;
+		var self = this;
+		this.buzzer = setTimeout(function(con, room, buzzMessage) {
+			self.say(con, room, buzzMessage);
+			self.buzzed = '';
+		}, 7000, con, room, by + ', your time to answer is up!');
+	},
+	reset: function(arg, by, room, con) {
+		if (!this.buzzed || !this.hasRank(by, '%@&#~') || room.charAt(0) === ',') return false;
+		clearTimeout(this.buzzer);
+		this.buzzed = '';
+		this.say(con, room, 'The buzzer has been reset.');
 	},
 };

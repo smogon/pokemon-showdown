@@ -37,7 +37,7 @@ if (process.argv[2]) {
 				data = data.substr(search.length, data.indexOf(';') - search.length);
 				data = JSON.parse(data);
 				console.log('---------------');
-				console.log('host: ' + data.host);
+				console.log('server: ' + data.host);
 				console.log('port: ' + data.port);
 				console.log('serverid: ' + data.id);
 			} else {
