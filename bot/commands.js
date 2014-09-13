@@ -94,22 +94,12 @@ exports.commands = {
 			joke: 1,
 			choose: 1,
 			usagestats: 1,
-			buzz: 1,
 			helix: 1,
-			survivor: 1,
-			games: 1,
-			wifi: 1,
-			monotype: 1,
 			autoban: 1,
-			happy: 1,
-			guia: 1,
-			studio: 1,
-			'switch': 1,
 			banword: 1
 		};
 		var modOpts = {
 			flooding: 1,
-			caps: 1,
 			stretching: 1,
 			bannedwords: 1,
 			snen: 1
