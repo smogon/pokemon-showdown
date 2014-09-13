@@ -2821,12 +2821,12 @@ exports.BattleScripts = {
 			} else if (template.id === 'masquerain') {
 				set.species = 'masquerain';
 				set.name = 'abnegation';
+			} else if (template.id === 'mawile') {
+				set.species = 'mawile';
+				set.name = 'enigmα.';
 			} else if (template.id === 'meganium') {
 				set.species = 'meganium';
 				set.name = 'Cadance';
-			} else if (template.id === 'meloetta') {
-				set.species = 'meloetta';
-				set.name = 'enigmα.';
 			} else if (template.id === 'mewtwo') {
 				set.species = 'mewtwo';
 				set.name = 'Vital';
