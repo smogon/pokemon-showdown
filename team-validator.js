@@ -549,9 +549,6 @@ Validator = (function () {
 		var alreadyChecked = {};
 		var level = set.level || 100;
 
-		var alphabetCupLetter;
-		if (format.id === 'alphabetcup') alphabetCupLetter = template.speciesid.charAt(0);
-
 		var isHidden = false;
 		if (set.ability && tools.getAbility(set.ability).name === template.abilities['H']) isHidden = true;
 		var incompatibleHidden = false;
@@ -580,6 +577,8 @@ Validator = (function () {
 		// the equivalent of adding "every source at or before this gen" to sources
 		var sourcesBefore = 0;
 		var noPastGen = format.requirePentagon;
+		// since Gen 3, Pokemon cannot be traded to past generations
+		var noFutureGen = tools.gen >= 3 ? true : format.banlistTable && format.banlistTable['tradeback'];
 
 		do {
 			alreadyChecked[template.speciesid] = true;
@@ -600,7 +599,7 @@ Validator = (function () {
 					for (var i = 0, len = lset.length; i < len; i++) {
 						var learned = lset[i];
 						if (noPastGen && learned.charAt(0) !== '6') continue;
-						if (parseInt(learned.charAt(0), 10) > tools.gen) continue;
+						if (noFutureGen && parseInt(learned.charAt(0), 10) > tools.gen) continue;
 						if (learned.charAt(0) !== '6' && isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
 							// check if the Pokemon's hidden ability was available
 							incompatibleHidden = true;
@@ -641,8 +640,9 @@ Validator = (function () {
 							if (learned.charAt(1) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
 								if (learned.charAt(0) === '6') {
-									// gen 6 doesn't have egg move incompatibilities
-									sources.push('6E');
+									// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
+									learned = '6E' + (template.prevo ? template.id : '');
+									sources.push(learned);
 									continue;
 								}
 								var eggGroups = template.eggGroups;
@@ -659,7 +659,7 @@ Validator = (function () {
 										// can't breed mons from future gens
 										dexEntry.gen <= parseInt(learned.charAt(0), 10) &&
 										// genderless pokemon can't pass egg moves
-										dexEntry.gender !== 'N') {
+										(dexEntry.gender !== 'N' || tools.gen <= 1 && dexEntry.gen <= 1)) {
 										if (
 											// chainbreeding
 											fromSelf ||
@@ -714,6 +714,7 @@ Validator = (function () {
 				template = tools.getTemplate(template.baseSpecies);
 			} else if (template.prevo) {
 				template = tools.getTemplate(template.prevo);
+				if (template.gen > Math.max(2, tools.gen)) template = null;
 			} else if (template.speciesid === 'shaymin') {
 				template = tools.getTemplate('shayminsky');
 			} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem') {

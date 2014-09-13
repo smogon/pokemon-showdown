@@ -74,20 +74,6 @@ exports.Formats = [
 			if (team.length < 3) return ['You must bring at least three Pokémon.'];
 		}
 	},
-	{
-		name: "Battle Spot Special 5",
-		section: "XY Singles",
-
-		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		validateTeam: function (team, format) {
-			if (team.length < 6) return ['You must have six Pokémon.'];
-			for (var i = 0; i < team.length; i++) {
-				var item = toId(team[i].item);
-				if (item) return ["Pokémon cannot hold items for the Special format of this season."];
-			}
-		}
-	},
 	/*{
 		name: "CAP 19 Playtest",
 		section: "XY Singles",
@@ -550,7 +536,8 @@ exports.Formats = [
 		banlist: ['Abra', 'Aipom', 'Archen', 'Bellsprout', 'Bunnelby', 'Carvanha', 'Chinchou', 'Corphish', 'Cottonee', 'Cranidos',
 			'Croagunk', 'Diglett', 'Drilbur', 'Dwebble', 'Ferroseed', 'Fletchling', 'Foongus', 'Gastly', 'Honedge', 'Houndour',
 			'Larvesta', 'Lileep', 'Magnemite', 'Mienfoo', 'Misdreavus', 'Munchlax', 'Onix', 'Pawniard', 'Ponyta', 'Porygon',
-			'Scraggy', 'Snubbull', 'Spritzee', 'Staryu', 'Timburr', 'Tirtouga', 'Trubbish', 'Vullaby', 'Vulpix', 'Zigzagoon'
+			'Scraggy', 'Snubbull', 'Spritzee', 'Staryu', 'Timburr', 'Tirtouga', 'Trubbish', 'Vullaby', 'Vulpix', 'Zigzagoon',
+			'Omanyte'
 		]
 	},
 	{
@@ -558,8 +545,10 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Ignore Illegal Abilities', 'Uber', 'Archeops', 'Kyurem-Black', 'Regigigas', 'Slaking', 'Weavile', 'Shedinja + Sturdy', 'Smeargle + Prankster',
-			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Soul Dew'
+		banlist: ['Ignore Illegal Abilities', 'Arceus', 'Archeops', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon',
+			'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram',
+			'Shedinja + Sturdy', 'Slaking', 'Smeargle + Baton Pass', 'Weavile', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew'
 		],
 		validateSet: function(set) {
 			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
@@ -580,7 +569,8 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Ignore STAB Moves', 'Arceus', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon',
 			'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Porygon-Z', 'Rayquaza', 'Reshiram', 'Shaymin-Sky',
-			'Sylveon', 'Kyurem-White', 'Xerneas', 'Yveltal', 'Zekrom', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Soul Dew']
+			'Sylveon', 'Xerneas', 'Yveltal', 'Zekrom', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Soul Dew'
+		]
 	},
 	{
 		name: "Sky Battles",
@@ -620,7 +610,7 @@ exports.Formats = [
 		mod: '350cup',
 		searchShow: false,
 		ruleset: ['Ubers'],
-		banlist: ['Darumaka', 'Pawniard', 'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Light Ball', 'Thick Club']
+		banlist: ['Darumaka', 'Pawniard', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Light Ball', 'Thick Club']
 	},
 	{
 		name: "Averagemons",
@@ -672,17 +662,16 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Mediocremons",
+		name: "Hidden Type",
 		section: "Other Metagames",
 
+		mod: 'hiddentype',
 		searchShow: false,
 		ruleset: ['OU'],
-		banlist: ['Clefable', 'Kingdra', 'Venomoth', 'Abomasite', 'Mawilite', 'Medichamite', 'Huge Power', 'Pure Power'],
-		validateSet: function (set) {
-			var template = this.getTemplate(set.species || set.name);
-			for (var stat in template.baseStats) {
-				if (template.baseStats[stat] >= 100) return [set.species + " has a base stat of 100 or more."];
-			}
+		onSwitchInPriority: 101,
+		onSwitchIn: function (pokemon) {
+			var type = pokemon.hpType || 'Dark';
+			if (!pokemon.hasType(type)) pokemon.addType(type);
 		}
 	},
 	{
