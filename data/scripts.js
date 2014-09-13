@@ -978,7 +978,7 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang': case 'foulplay':
 					if (setupType) rejected = true;
 					break;
-				case 'perishsong': case 'magiccoat': case 'spikes':
+				case 'perishsong': case 'magiccoat': case 'spikes': case 'defog':
 					if (setupType) rejected = true;
 					break;
 				case 'uturn': case 'voltswitch':
@@ -1020,6 +1020,9 @@ exports.BattleScripts = {
 					break;
 				case 'waterfall':
 					if (hasMove['aquatail']) rejected = true;
+					break;
+				case 'shadowforce': case 'phantomforce':
+					if (hasMove['shadowclaw']) rejected = true;
 					break;
 				case 'airslash':
 					if (hasMove['hurricane']) rejected = true;
@@ -1301,6 +1304,8 @@ exports.BattleScripts = {
 					rejectAbility = template.id === 'stunfisk';
 				} else if (ability === 'Lightningrod') {
 					rejectAbility = template.types.indexOf('Ground') >= 0;
+				} else if (ability === 'Gluttony') {
+					rejectAbility = true;
 				}
 
 				if (rejectAbility) {
@@ -1321,6 +1326,8 @@ exports.BattleScripts = {
 				}
 				if (template.id === 'sigilyph') {
 					ability = 'Magic Guard';
+				} else if (template.id === 'bisharp') {
+					ability = 'Defiant';
 				} else if (template.id === 'combee') {
 					// Combee always gets Hustle but its only physical move is Endeavor, which loses accuracy
 					ability = 'Honey Gather';
@@ -1440,17 +1447,17 @@ exports.BattleScripts = {
 				// less priority than if you'd had both
 				item = 'Light Clay';
 			} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
-				item = Math.random() * 3 > 1 ? 'Choice Band' : 'Expert Belt';
+				item = template.baseStats.spe >= 85 && template.baseStats.spe < 110 && Math.random() * 3 > 1 ? 'Choice Scarf' : 'Choice Band';
 			} else if (counter.Special >= 4) {
-				item = Math.random() * 3 > 1 ? 'Choice Specs' : 'Expert Belt';
+				item = template.baseStats.spe >= 85 && template.baseStats.spe < 110 && Math.random() * 3 > 1 ? 'Choice Scarf' : 'Choice Specs';
 			} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
 			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 				item = 'Choice Scarf';
-			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
-				item = 'Leftovers';
 			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
 				item = 'Focus Sash';
+			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
+				item = 'Leftovers';
 			} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 				item = 'Rocky Helmet';
 			} else if ((template.baseStats.hp + 75) * (template.baseStats.def + template.baseStats.spd + 175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
@@ -1461,7 +1468,7 @@ exports.BattleScripts = {
 			} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179) {
 				item = 'Assault Vest';
 			} else if (counter.Physical + counter.Special >= 4) {
-				item = 'Expert Belt';
+				item = hasMove['fakeout'] || hasMove['return'] ? 'Life Orb' : 'Expert Belt';
 			} else if (i === 0 && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
 				item = 'Focus Sash';
 			} else if (hasMove['outrage']) {
@@ -1476,7 +1483,7 @@ exports.BattleScripts = {
 				item = 'Leftovers';
 			} else if (hasType['Poison']) {
 				item = 'Black Sludge';
-			} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise']) {
 				item = 'Air Balloon';
 			} else if (counter.Status <= 1 && ability !== 'Sturdy') {
 				item = 'Life Orb';
@@ -1510,8 +1517,8 @@ exports.BattleScripts = {
 		var customScale = {
 			// Really bad Pokemon and jokemons
 			Azurill: 99, Burmy: 99, Cascoon: 99, Caterpie: 99, Cleffa: 99, Combee: 99, Feebas: 99, Igglybuff: 99, Happiny: 99, Hoppip: 99,
-			Kakuna: 99, Kricketot: 99, Ledyba: 99, Magikarp: 99, Metapod: 99, Pichu: 99, Ralts: 99, Sentret: 99, Shedinja: 99,
-			Silcoon: 99, Slakoth: 99, Sunkern: 99, Tynamo: 99, Tyrogue: 99, Unown: 99, Weedle: 99, Wurmple: 99, Zigzagoon: 99,
+			Kakuna: 99, Kricketot: 99, Ledyba: 99, Magikarp: 99, Metapod: 99, Pichu: 99, Ralts: 99, Sentret: 99, Shedinja: 99, Silcoon: 99,
+			Slakoth: 99, Sunkern: 99, Tynamo: 99, Tyrogue: 99, Unown: 99, Weedle: 99, Wurmple: 99, Zigzagoon: 99,
 			Clefairy: 95, Delibird: 95, "Farfetch'd": 95, Jigglypuff: 95, Kirlia: 95, Ledian: 95, Luvdisc: 95, Marill: 95, Skiploom: 95,
 			Pachirisu: 90,
 
@@ -1520,21 +1527,17 @@ exports.BattleScripts = {
 			Gligar: 90, Metang: 90, Monferno: 90, Roselia: 90, Seadra: 90, Togetic: 90, Wartortle: 90, Whirlipede: 90,
 			Dusclops: 84, Porygon2: 82, Chansey: 78,
 
-			// Weather or teammate dependent
-			Snover: 95, Vulpix: 95, Ninetales: 78, Tentacruel: 78, Toxicroak: 78,
-
-			// Banned mega
-			"Kangaskhan-Mega": 72, "Gengar-Mega": 72, "Blaziken-Mega": 72, "Lucario-Mega": 72,
+			// Banned Mega
+			"Gengar-Mega": 68, "Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72,
 
 			// Holistic judgment
-			Carvanha: 90, Genesect: 72, Kyurem: 78, Sigilyph: 74, Xerneas: 64
+			Genesect: 72, Sigilyph: 76, Xerneas: 66
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
-		if (template.name === 'Serperior' && ability === 'Contrary') level = 74;
-		if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 85;
-		if (template.name === 'Spinda' && ability !== 'Contrary') level = 95;
+		if (template.name === 'Serperior' && ability === 'Contrary') level = 76;
+		if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 90;
 
 		return {
 			name: name,
