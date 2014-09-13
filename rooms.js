@@ -20,6 +20,8 @@ var Rooms = module.exports = getRoom;
 
 var rooms = Rooms.rooms = Object.create(null);
 
+var aliases = {};
+
 var Room = (function () {
 	function Room(roomid, title) {
 		this.id = roomid;
@@ -136,6 +138,11 @@ var GlobalRoom = (function () {
 			var id = toId(this.chatRoomData[i].title);
 			console.log("NEW CHATROOM: " + id);
 			var room = Rooms.createChatRoom(id, this.chatRoomData[i].title, this.chatRoomData[i]);
+			if (room.aliases) {
+				for (var a = 0; a < room.aliases.length; a++) {
+					aliases[room.aliases[a]] = room;
+				}
+			}
 			this.chatRooms.push(room);
 			if (room.autojoin) this.autojoin.push(id);
 			if (room.staffAutojoin) this.staffAutojoin.push(id);
@@ -1478,3 +1485,4 @@ Rooms.ChatRoom = ChatRoom;
 
 Rooms.global = rooms.global;
 Rooms.lobby = rooms.lobby;
+Rooms.aliases = aliases;
