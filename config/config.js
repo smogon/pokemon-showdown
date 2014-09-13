@@ -377,6 +377,7 @@ exports.groups = {
 		name: "Moderator",
 		inherit: '%',
 		jurisdiction: '@u',
+		ban: true,
 		modchat: true,
 		roomvoice: true,
 		ip: true,
@@ -400,7 +401,6 @@ exports.groups = {
 		modlog: true,
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
-		ban: true,
 		rank: 4
 	},
 	'\u2605': {
