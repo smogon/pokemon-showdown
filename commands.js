@@ -900,6 +900,7 @@ var commands = exports.commands = {
 		return this.parse('/demote ' + target + ', deauth');
 	},
 
+	mc: 'modchat',
 	modchat: function (target, room, user) {
 		if (!target) return this.sendReply("Moderated chat is currently set to: " + room.modchat);
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
