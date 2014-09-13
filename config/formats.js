@@ -7,11 +7,18 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Community Random (BWknd 20)",
+		name: "1v1 Random (BWknd 21)",
 		section: "XY Singles",
 
-		team: 'randomCommunity',
-		ruleset: ['Random (no PotD)']
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'Team Preview 1v1', 'Sleep Clause Mod', 'HP Percentage Mod'],
+		onBegin: function() {
+			this.debug('Cutting down to 1');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
 	},
 	{
 		name: "OU",
