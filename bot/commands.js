@@ -197,7 +197,7 @@ exports.commands = {
 	ab: 'autoban',
 	autoban: function(arg, by, room, con) {
 		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-		if (!this.hasRank(this.ranks[toId(room)] || ' ', '@&#~')) return this.say(con, room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
+		if (!this.hasRank(this.ranks[toId(room)] || ' ', '~')) return this.say(con, room, config.nick + ' requires rank of ~ to (un)blacklist.');
 
 		arg = arg.split(',');
 		var added = [];
@@ -214,7 +214,7 @@ exports.commands = {
 				alreadyAdded.push(tarUser);
 				continue;
 			}
-			this.say(con, room, '/roomban ' + tarUser + ', Blacklisted user');
+			this.say(con, room, '/ban ' + tarUser + ', Blacklisted user');
 			this.say(con,room, '/modnote ' + tarUser + ' was added to the blacklist by ' + by + '.');
 			added.push(tarUser);
 		}
@@ -233,7 +233,7 @@ exports.commands = {
 	unab: 'unautoban',
 	unautoban: function(arg, by, room, con) {
 		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-		if (!this.hasRank(this.ranks[toId(room)] || ' ', '@&#~')) return this.say(con, room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
+		if (!this.hasRank(this.ranks[toId(room)] || ' ', '~')) return this.say(con, room, config.nick + ' requires rank of ~ to (un)blacklist.');
 
 		arg = arg.split(',');
 		var removed = [];
@@ -249,7 +249,7 @@ exports.commands = {
 				notRemoved.push(tarUser);
 				continue;
 			}
-			this.say(con, room, '/roomunban ' + tarUser);
+			this.say(con, room, '/unban ' + tarUser);
 			removed.push(tarUser);
 		}
 
