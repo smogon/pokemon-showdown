@@ -358,40 +358,6 @@ exports.commands = {
 	 * Add custom commands here.
 	 */
 
-	tournament: 'tour',
-	tour: function(arg, by, room, con) {
-		if (room.charAt(0) === ',' || !toId(arg)) return false;
-		if (!this.hasRank(this.ranks[room] || ' ', '#~')) {
-			if (!this.hasRank(by, '+%@&#~')) return false;
-			return this.say(con, room, config.nick + " requires # or higher to use the tournament system.");
-		}
-		arg = arg.split(',');
-		if (!this.settings.tourwhitelist) this.settings.tourwhitelist = {};
-		if (!this.settings.tourwhitelist[room]) this.settings.tourwhitelist[room] = {};
-		if (toId(arg[0]) === 'whitelist') {
-			if (!this.hasRank(by, '&#~')) return false;
-			var action = toId(arg[1] || '');
-			if (!action || action === 'view') {
-				var nickList = Object.keys(this.settings.tourwhitelist[room]);
-				if (!nickList.length) return this.say(con, room, "/pm " + by + ", No users are whitelisted in " + room + ".");
-				return this.uploadToHastebin(con, room, by, "The following users are allowed to control tournaments in " + room + ":\n\n" + nickList.join("\n"));
-			}
-			var target = toId(arg[2] || '');
-			if (!action || !(action in {'add': 1, 'remove': 1}) || !target) return this.say(con, room, "Incorrect syntax: .tour whitelist, [view/add/remove](, [user])");
-			if (action === 'add') {
-				this.settings.tourwhitelist[room][target] = 1;
-				this.say(con, room, "User " + arg[2] + " is now whitelisted and can control tournaments.");
-			} else {
-				if (target in this.settings.tourwhitelist[room]) delete this.settings.tourwhitelist[room][target];
-				this.say(con, room, "User " + arg[2] + " is no longer whitelisted.");
-			}
-			this.writeSettings();
-		} else {
-			if (!(this.hasRank(by, (toId(arg[0].split(' ')[0]) in {'dq': 1, 'disqualify': 1} ? '%@' : '') + '&#~') || toId(by) in this.settings.tourwhitelist[room])
-				|| toId(arg[0]) in {'join': 1, 'in': 1, 'j': 1}) return false;
-			this.say(con, room, "/tour " + arg.join(','));
-		}
-	},
 	tell: 'say',
 	say: function(arg, by, room, con) {
 		if (!this.canUse('say', room, by)) return false;
