@@ -299,7 +299,7 @@ exports.customavatars = {
 // appealurl - specify a URL containing information on how users can appeal
 // disciplinary actions on your section. You can also leave this blank, in
 // which case users won't be given any information on how to appeal.
-exports.appealurl = 'http://www.pokecommunity.com/showthread.php?t=289012#rules';
+exports.appealurl = 'http://www.pokecommunity.com/showthread.php?t=289012#seniorstaff';
 
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
