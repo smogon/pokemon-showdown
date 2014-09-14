@@ -262,7 +262,7 @@ exports.commands = {
 	vab: 'viewblacklist',
 	viewautobans: 'viewblacklist',
 	viewblacklist: function(arg, by, room, con) {
-		if (!this.hasRank(by, '@&#~')) return false;
+		if (!this.hasRank(by, '%@&#~')) return false;
 
 		var text = '';
 		if (!this.settings.blacklist || !this.settings.blacklist[room]) {
