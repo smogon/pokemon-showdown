@@ -195,8 +195,7 @@ exports.commands = {
 	ban: 'autoban',
 	ab: 'autoban',
 	autoban: function(arg, by, room, con) {
-		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-		if (!this.hasRank(this.ranks[toId(room)] || ' ', '~')) return this.say(con, room, config.nick + ' requires rank of ~ to (un)blacklist.');
+		if (!this.hasRank(by, '~')) return false;
 
 		arg = arg.split(',');
 		var added = [];
@@ -231,8 +230,7 @@ exports.commands = {
 	unban: 'unautoban',
 	unab: 'unautoban',
 	unautoban: function(arg, by, room, con) {
-		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-		if (!this.hasRank(this.ranks[toId(room)] || ' ', '~')) return this.say(con, room, config.nick + ' requires rank of ~ to (un)blacklist.');
+		if (!this.hasRank(by, '~')) return false;
 
 		arg = arg.split(',');
 		var removed = [];
@@ -264,7 +262,7 @@ exports.commands = {
 	vab: 'viewblacklist',
 	viewautobans: 'viewblacklist',
 	viewblacklist: function(arg, by, room, con) {
-		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
+		if (!this.hasRank(by, '@&#~')) return false;
 
 		var text = '';
 		if (!this.settings.blacklist || !this.settings.blacklist[room]) {
