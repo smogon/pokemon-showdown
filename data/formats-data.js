@@ -750,7 +750,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":6,"level":25,"nature":"Timid","moves":["psychic","confuseray","suckerpunch","shadowpunch"],"pokeball":"cherishball"},
 			{"generation":6,"level":25,"moves":["nightshade","confuseray","suckerpunch","shadowpunch"],"pokeball":"cherishball"},
-			{"generation":6,"level":50,"moves":["shadowball","sludgebomb","willowisp","destinybond"],"pokeball":"cherishball"}
+			{"generation":6,"level":50,"moves":["shadowball","sludgebomb","willowisp","destinybond"],"pokeball":"cherishball"},
+			{"generation":6,"level":25,"gender":"M","moves":["shadowball","sludgewave","confuseray","astonish"],"pokeball":"duskball"}
 		],
 		tier: "OU"
 	},
