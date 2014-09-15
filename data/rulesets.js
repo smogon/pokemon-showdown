@@ -526,6 +526,7 @@ exports.BattleFormats = {
 				switch (typeTable[0]) {
 				case 'Steel':
 					if (teamHas['aegislash']) return ["Aegislash is banned from Steel monotype teams."];
+					if (teamHas['genesect']) return ["Genesect is banned from Steel monotype teams."];
 					break;
 				case 'Water':
 					if (teamHas['damprock']) return ["Damp Rock is banned from Water monotype teams."];
