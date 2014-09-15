@@ -1018,7 +1018,7 @@ exports.BattleScripts = {
 				case 'waterfall':
 					if (hasMove['aquatail']) rejected = true;
 					break;
-				case 'shadowforce': case 'phantomforce':
+				case 'shadowforce': case 'phantomforce': case 'shadowsneak':
 					if (hasMove['shadowclaw']) rejected = true;
 					break;
 				case 'airslash':
@@ -1148,17 +1148,15 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder']) rejected = true;
 					break;
-				case 'lavaplume':
-					if (hasMove['willowisp']) rejected = true;
-					break;
 				case 'trickroom':
 					if (hasMove['rockpolish'] || hasMove['agility']) rejected = true;
 					break;
 				case 'willowisp':
-					if (hasMove['scald'] || hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder'] || hasMove['hypnosis']) rejected = true;
+					if (hasMove['scald'] || hasMove['lavaplume'] || hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder'] || hasMove['hypnosis']) rejected = true;
 					break;
 				case 'toxic':
-					if (hasMove['thunderwave'] || hasMove['willowisp'] || hasMove['scald'] || hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder'] || hasMove['stunspore'] || hasMove['hypnosis']) rejected = true;
+					if (hasMove['thunderwave'] || hasMove['willowisp'] || hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder'] || hasMove['stunspore'] || hasMove['hypnosis']) rejected = true;
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				}
 
