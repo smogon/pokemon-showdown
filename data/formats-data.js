@@ -3656,7 +3656,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Dread Plate"
 	},
 	arceusdragon: {
-		randomBattleMoves: ["swordsdance","outrage","extremespeed","earthquake","recover"],
+		randomBattleMoves: ["swordsdance","outrage","extremespeed","earthquake","recover","calmmind","judgment","fireblast","willowisp"],
 		randomDoubleBattleMoves: ["swordsdance","dragonclaw","extremespeed","earthquake","recover","protect"],
 		requiredItem: "Draco Plate"
 	},
@@ -3666,18 +3666,18 @@ exports.BattleFormatsData = {
 		requiredItem: "Zap Plate"
 	},
 	arceusfairy: {
-		randomBattleMoves: ["calmmind","judgment","recover","willowisp","defog","earthpower","thunderbolt"],
+		randomBattleMoves: ["calmmind","judgment","recover","willowisp","defog","thunderbolt","toxic"],
 		randomDoubleBattleMoves: ["calmmind","judgment","recover","willowisp","protect","earthpower","thunderbolt"],
 		requiredItem: "Pixie Plate",
 		gen: 6
 	},
 	arceusfighting: {
-		randomBattleMoves: ["calmmind","judgment","icebeam","shadowball","recover","toxic","defog"],
+		randomBattleMoves: ["thunderwave","judgment","stoneedge","shadowball","recover","toxic","defog"],
 		randomDoubleBattleMoves: ["calmmind","judgment","icebeam","shadowball","recover","willowisp","protect"],
 		requiredItem: "Fist Plate"
 	},
 	arceusfire: {
-		randomBattleMoves: ["calmmind","judgment","thunderbolt","recover"],
+		randomBattleMoves: ["calmmind","judgment","grassknot","thunderbolt","recover"],
 		randomDoubleBattleMoves: ["calmmind","judgment","thunderbolt","recover","heatwave","protect","willowisp"],
 		requiredItem: "Flame Plate"
 	},
@@ -3692,42 +3692,42 @@ exports.BattleFormatsData = {
 		requiredItem: "Spooky Plate"
 	},
 	arceusgrass: {
-		randomBattleMoves: ["calmmind","icebeam","judgment","earthpower","recover","stealthrock","thunderwave","defog"],
+		randomBattleMoves: ["judgment","willowisp","recover","earthquake","stoneedge","defog"],
 		randomDoubleBattleMoves: ["calmmind","icebeam","judgment","earthpower","recover","safeguard","thunderwave","protect"],
 		requiredItem: "Meadow Plate"
 	},
 	arceusground: {
-		randomBattleMoves: ["swordsdance","earthquake","stoneedge","recover","calmmind","judgment","icebeam","stealthrock"],
+		randomBattleMoves: ["swordsdance","earthquake","stoneedge","recover","extremespeed","icebeam"],
 		randomDoubleBattleMoves: ["swordsdance","earthquake","stoneedge","recover","calmmind","judgment","icebeam","rockslide","protect"],
 		requiredItem: "Earth Plate"
 	},
 	arceusice: {
-		randomBattleMoves: ["calmmind","judgment","thunderbolt","focusblast","recover"],
+		randomBattleMoves: ["calmmind","judgment","thunderbolt","fireblast","recover"],
 		randomDoubleBattleMoves: ["calmmind","judgment","thunderbolt","focusblast","recover","protect","icywind"],
 		requiredItem: "Icicle Plate"
 	},
 	arceuspoison: {
-		randomBattleMoves: ["calmmind","judgment","sludgebomb","fireblast","recover","willowisp","defog","stealthrock"],
+		randomBattleMoves: ["calmmind","sludgebomb","fireblast","recover","willowisp","defog","poisonjab","thunderwave"],
 		randomDoubleBattleMoves: ["calmmind","judgment","sludgebomb","heatwave","recover","willowisp","protect","earthpower"],
 		requiredItem: "Toxic Plate"
 	},
 	arceuspsychic: {
-		randomBattleMoves: ["calmmind","psyshock","focusblast","recover","willowisp","judgment"],
+		randomBattleMoves: ["judgment","payback","magiccoat","recover","willowisp","defog"],
 		randomDoubleBattleMoves: ["calmmind","psyshock","focusblast","recover","willowisp","judgment","protect"],
 		requiredItem: "Mind Plate"
 	},
 	arceusrock: {
-		randomBattleMoves: ["calmmind","judgment","recover","willowisp","defog","refresh"],
+		randomBattleMoves: ["judgment","recover","willowisp","defog"],
 		randomDoubleBattleMoves: ["swordsdance","stoneedge","recover","rockslide","earthquake","protect"],
 		requiredItem: "Stone Plate"
 	},
 	arceussteel: {
-		randomBattleMoves: ["calmmind","judgment","recover","roar","willowisp","defog"],
+		randomBattleMoves: ["calmmind","judgment","recover","willowisp","thunderbolt","swordsdance","ironhead","earthquake","stoneedge"],
 		randomDoubleBattleMoves: ["calmmind","judgment","recover","protect","willowisp"],
 		requiredItem: "Iron Plate"
 	},
 	arceuswater: {
-		randomBattleMoves: ["recover","calmmind","judgment","icebeam","fireblast","defog","willowisp"],
+		randomBattleMoves: ["recover","calmmind","judgment","refresh","defog","willowisp","grassknot"],
 		randomDoubleBattleMoves: ["recover","calmmind","judgment","icebeam","fireblast","icywind","surf","protect"],
 		requiredItem: "Splash Plate"
 	},
