@@ -205,6 +205,8 @@ var commands = exports.commands = {
 				room.chatRoomData.modjoin = true;
 				Rooms.global.writeChatRoomData();
 			}
+			if (!room.modchat) this.parse('/modchat ' + Config.groupsranking[1]);
+			if (!room.isPrivate) this.parse('/privateroom');
 		}
 	},
 
