@@ -1233,10 +1233,10 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onAccuracy: function (accuracy, target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
+				if (move.id === 'gust' || move.id === 'twister' || move.id === 'hurricane') {
 					return;
 				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
+				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'smackdown' || move.id === 'helpinghand') {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -1245,7 +1245,7 @@ exports.BattleMovedex = {
 				return 0;
 			},
 			onSourceBasePower: function (basePower, target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
+				if (move.id === 'gust' || move.id === 'twister' || move.id === 'hurricane') {
 					return this.chainModify(2);
 				}
 			}
@@ -4399,10 +4399,10 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onAccuracy: function (accuracy, target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
+				if (move.id === 'gust' || move.id === 'twister' || move.id === 'hurricane') {
 					return;
 				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
+				if (move.id === 'skyuppercut' || move.id === 'thunder'  || move.id === 'smackdown' || move.id === 'helpinghand') {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -4411,7 +4411,7 @@ exports.BattleMovedex = {
 				return 0;
 			},
 			onSourceBasePower: function (basePower, target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
+				if (move.id === 'gust' || move.id === 'twister' || move.id === 'hurricane') {
 					return this.chainModify(2);
 				}
 			}
@@ -11962,10 +11962,10 @@ exports.BattleMovedex = {
 				if (source === this.effectData.target && target === this.effectData.source) {
 					return;
 				}
-				if (move.id === 'gust' || move.id === 'twister') {
+				if (move.id === 'gust' || move.id === 'twister' || move.id === 'hurricane') {
 					return;
 				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
+				if (move.id === 'skyuppercut' || move.id === 'thunder'  || move.id === 'smackdown' || move.id === 'helpinghand') {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -11980,7 +11980,7 @@ exports.BattleMovedex = {
 				if (source === this.effectData.target && target === this.effectData.source) {
 					return;
 				}
-				if (move.id === 'gust' || move.id === 'twister') {
+				if (move.id === 'gust' || move.id === 'twister' || move.id === 'hurricane') {
 					return this.chainModify(2);
 				}
 			}
