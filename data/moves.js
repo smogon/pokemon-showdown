@@ -5821,7 +5821,7 @@ exports.BattleMovedex = {
 			},
 			onSwitchInPriority: 1,
 			onSwitchIn: function (target) {
-				if (target.position != this.effectData.sourcePosition) {
+				if (target.position !== this.effectData.sourcePosition) {
 					return;
 				}
 				if (!target.fainted) {
@@ -7600,7 +7600,7 @@ exports.BattleMovedex = {
 			},
 			onSwitchInPriority: 1,
 			onSwitchIn: function (target) {
-				if (target.position != this.effectData.sourcePosition) {
+				if (target.position !== this.effectData.sourcePosition) {
 					return;
 				}
 				if (!target.fainted) {

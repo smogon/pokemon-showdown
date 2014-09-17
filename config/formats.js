@@ -134,7 +134,6 @@ exports.Formats = [
 	// XY Doubles
 	///////////////////////////////////////////////////////////////////
 
-
 	{
 		name: "Random Doubles Battle",
 		section: "XY Doubles",
@@ -452,7 +451,7 @@ exports.Formats = [
 			'Shedinja + Sturdy', 'Slaking', 'Smeargle + Baton Pass', 'Weavile', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew'
 		],
-		validateSet: function(set) {
+		validateSet: function (set) {
 			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Protean': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
 			if (set.ability in bannedAbilities) {
 				var template = this.getTemplate(set.species || set.name);
@@ -510,7 +509,7 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Ubers', 'Evasion Moves Clause'],
 		banlist: ['Darumaka', 'Pawniard', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
-		validateSet: function(set) {
+		validateSet: function (set) {
 			var template = Tools.getTemplate(set.species);
 			var item = this.getItem(set.item);
 			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {

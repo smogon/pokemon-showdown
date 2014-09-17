@@ -549,7 +549,7 @@ var GlobalRoom = (function () {
 		//console.log('BATTLE START BETWEEN: ' + p1.userid + ' ' + p2.userid);
 		var i = this.lastBattle + 1;
 		var formaturlid = format.toLowerCase().replace(/[^a-z0-9]+/g, '');
-		while(rooms['battle-' + formaturlid + i]) {
+		while (rooms['battle-' + formaturlid + i]) {
 			i++;
 		}
 		this.lastBattle = i;
@@ -568,8 +568,8 @@ var GlobalRoom = (function () {
 			if (!this.ladderIpLog) {
 				this.ladderIpLog = fs.createWriteStream('logs/ladderip/ladderip.txt', {flags: 'a'});
 			}
-			this.ladderIpLog.write(p1.userid+': '+p1.latestIp+'\n');
-			this.ladderIpLog.write(p2.userid+': '+p2.latestIp+'\n');
+			this.ladderIpLog.write(p1.userid + ': ' + p1.latestIp + '\n');
+			this.ladderIpLog.write(p2.userid + ': ' + p2.latestIp + '\n');
 		}
 		return newRoom;
 	};
@@ -712,7 +712,7 @@ var BattleRoom = (function () {
 							Users.get(p1).cacheMMR(rated.format, data.p1rating);
 							Users.get(p2).cacheMMR(rated.format, data.p2rating);
 							self.update();
-						} catch(e) {
+						} catch (e) {
 							self.addRaw('There was an error calculating rating changes.');
 							self.update();
 						}
@@ -1460,7 +1460,7 @@ function getRoom(roomid, fallback) {
 	return rooms[roomid];
 }
 Rooms.get = getRoom;
-Rooms.search = function(name, fallback) {
+Rooms.search = function (name, fallback) {
 	return getRoom(name) || getRoom(toId(name)) || Rooms.aliases[toId(name)] || (fallback ? rooms.global : undefined);
 };
 

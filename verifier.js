@@ -15,7 +15,6 @@
 // Because I don't want two files, we're going to fork ourselves.
 
 if (!process.send) {
-
 	// This is the parent
 
 	var guid = 1;
@@ -36,9 +35,7 @@ if (!process.send) {
 			delete callbackData[response.guid];
 		}
 	});
-
 } else {
-
 	// This is the child
 
 	global.Config = require('./config/config.js');
@@ -59,5 +56,4 @@ if (!process.send) {
 			guid: message.guid
 		});
 	});
-
 }
