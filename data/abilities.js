@@ -639,7 +639,7 @@ exports.BattleAbilities = {
 		onSourceModifyDamage: function (damage, source, target, move) {
 			if (this.getEffectiveness(move, target) > 0) {
 				this.debug('Filter neutralize');
-					return this.chainModify(0.75);
+				return this.chainModify(0.75);
 			}
 		},
 		id: "filter",
