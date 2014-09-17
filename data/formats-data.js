@@ -4789,7 +4789,7 @@ exports.BattleFormatsData = {
 	},
 	meowstic: {
 		randomBattleMoves: ["fakeout","toxic","yawn","thunderwave","psyshock","trick","psychic","reflect","lightscreen"],
-		randomDoubleBattleMoves: ["fakeout","thunderwave","psyshock","trick","psychic","reflect","lightscreen","safeguard","swagger","protect"],
+		randomDoubleBattleMoves: ["fakeout","thunderwave","psyshock","psychic","reflect","lightscreen","safeguard","protect"],
 		tier: "PU"
 	},
 	meowsticf: {
