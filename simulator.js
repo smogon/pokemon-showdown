@@ -231,6 +231,9 @@ var Battle = (function (){
 			delete this.players[slot].battles[this.id];
 		}
 		if (user) {
+			if (user.battles[this.id]) {
+				return false;
+			}
 			user.battles[this.id] = true;
 		}
 		this.players[slot] = (user || null);
@@ -275,6 +278,7 @@ var Battle = (function (){
 		}
 		// console.log('joining: ' + user.name + ' ' + slot);
 		if (this.players[slot] || slot >= this.players.length) return false;
+		if (user === this.players[0] || user === this.players[1]) return false;
 
 		for (var i = 0; i < user.connections.length; i++) {
 			var connection = user.connections[i];
