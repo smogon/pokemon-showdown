@@ -344,15 +344,18 @@ animation) and `|[silent]` (suppress message).
 
 `|-item|POKEMON|ITEM`
 
-> Reveals the `ITEM` that `POKEMON` is holding. If a Pokemon's item has changed to
-> a different item, an ability reveals the item, or the item must be broadcast upon 
-> switch-in (like Air Balloon), this will appear.
+> The `ITEM` held by the `POKEMON` has been changed or revealed due to a move or 
+> ability. In addition, Air Balloon reveals itself when the Pokemon holding it 
+> switches in, so it will also cause this message to appear.
 
 `|-enditem|POKEMON|ITEM`
 
 > The `ITEM` held by `POKEMON` has been removed, and it now holds no item. This can 
 > be because the item was consumed or destroyed by its own effects (Berries, Air 
-> Balloon), or was forcefully removed by a move or ability.
+> Balloon), or was forcefully removed by a move or ability. Note that if an item was 
+> stolen by Thief, this message will not appear and you have to rely on earlier `move` 
+> messages and the fact that an `-item` message will appear for the Pokemon using Thief, 
+> instead.
 
 `|-transform|POKEMON|SPECIES`
 
