@@ -3222,7 +3222,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	bastiodon: {
-		randomBattleMoves: ["stealthrock","rockblast","magiccoat","protect","toxic","roar"],
+		randomBattleMoves: ["stealthrock","rockblast","metalburst","protect","toxic","roar"],
 		randomDoubleBattleMoves: ["stealthrock","stoneedge","metalburst","protect","wideguard","guardsplit"],
 		tier: "PU"
 	},
