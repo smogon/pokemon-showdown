@@ -854,6 +854,30 @@ var commands = exports.commands = {
 		this.addModCommand("" + user.name + " unbanned the " + (target.charAt(target.length - 1) === '*' ? "IP range" : "IP") + ": " + target);
 	},
 
+	rangelock: function (target, room, user) {
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if (!target) return this.sendReply("Please specify a domain to lock.");
+		if (!this.can('rangeban')) return false;
+		
+		var domain = Users.shortenHost(target);
+		if (Users.lockedDomains[domain]) return this.sendReply("The domain " + domain + " has already been temporarily locked.");
+
+		Users.lockDomain(domain);
+		this.addModCommand("" + user.name + " temporarily locked the domain " + domain + ".");
+	},
+
+	rangeunlock: function (target, room, user) {
+		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+		if (!target) return this.sendReply("Please specify a domain to unlock.");
+		if (!this.can('rangeban')) return false;
+		
+		var domain = Users.shortenHost(target);
+		if (!Users.lockedDomains[domain]) return this.sendReply("The domain " + domain + " is not locked.");
+
+		Users.unlockDomain(domain);
+		this.addModCommand("" + user.name + " unlocked the domain " + domain + ".");
+	},
+
 	/*********************************************************
 	 * Moderating: Other
 	 *********************************************************/
