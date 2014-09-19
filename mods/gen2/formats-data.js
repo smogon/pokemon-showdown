@@ -709,7 +709,8 @@ exports.BattleFormatsData = {
 	},
 	dratini: {
 		eventPokemon: [
-			{"generation":2,"level":5,"moves":["wrap","leer","hydropump"]}
+			{"generation":2,"level":5,"moves":["wrap","leer","hydropump"]},
+			{"generation":2,"level":5,"moves":["wrap","thunder","twister","extremespeed"]}
 		],
 		tier: "LC"
 	},
