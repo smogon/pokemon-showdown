@@ -292,6 +292,7 @@ var commands = exports.commands = {
 		if (!this.can('setalias')) return false;
 		var alias = toId(target);
 		if (!alias.length) return this.sendReply("Only alphanumeric characters are valid in an alias.");
+		if (alias.length > room.id.length) return this.sendReply("You cannot set an alias longer than the room's name.");
 		if (Rooms.get(alias) || Rooms.aliases[alias]) return this.sendReply("You cannot set an alias to an existing room or alias.");
 
 		this.privateModCommand("(" + user.name + " added the room alias '" + target + "'.)");
