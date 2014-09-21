@@ -368,6 +368,7 @@ exports.groups = {
 		jurisdiction: 'u',
 		roommod: true,
 		roomdriver: true,
+		roomplayer: true,
 		roomonly: true,
 		tournamentsmanagement: true,
 		rank: 6
