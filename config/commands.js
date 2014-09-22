@@ -954,7 +954,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'inversebattle' || target === 'inverse') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3492433/\">Inverse Battle</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3518146/\">Inverse Battle</a><br />";
 		}
 		if (target === '350cup') {
 			matched = true;
