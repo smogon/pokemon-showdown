@@ -3558,7 +3558,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	giratina: {
-		randomBattleMoves: ["rest","sleeptalk","dragontail","roar","willowisp","dragonpulse","calmmind","shadowball",],
+		randomBattleMoves: ["rest","sleeptalk","dragontail","roar","willowisp","dragonpulse","shadowball",],
 		randomDoubleBattleMoves: ["tailwind","icywind","protect","dragontail","willowisp","calmmind","dragonpulse","shadowball"],
 		eventPokemon: [
 			{"generation":5,"level":100,"shiny":true,"isHidden":false,"moves":["dragonpulse","dragonclaw","aurasphere","shadowforce"],"pokeball":"cherishball"}
