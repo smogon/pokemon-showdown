@@ -1150,9 +1150,9 @@ var commands = exports.commands = {
 		}
 		if (target === 'overused' || target === 'ou') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511596/\">np: OU Stage 5</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3491371/\">OU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3502428/\">OU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3514144/\">np: OU Stage 6</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515714/\">OU Viability Rankings</a><br />";
 		}
 		if (target === 'ubers' || target === 'uber') {
 			matched = true;
@@ -1162,17 +1162,19 @@ var commands = exports.commands = {
 		if (target === 'underused' || target === 'uu') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516640/\">np: UU Stage 3</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3502698/#post-5323505\">UU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3500340/\">UU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516418/\">UU Viability Rankings</a><br />";
 		}
 		if (target === 'rarelyused' || target === 'ru') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515615/\">np: RU Stage 4</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3506500/\">RU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516783/\">RU Viability Rankings</a><br />";
 		}
 		if (target === 'neverused' || target === 'nu') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516675/\">np: NU Stage 2</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509494/\">NU Viability Rankings</a><br />";
 		}
 		if (target === 'littlecup' || target === 'lc') {
