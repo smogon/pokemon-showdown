@@ -455,19 +455,20 @@ User = (function () {
 		this.send('|popup|' + message.replace(/\n/g, '||'));
 	};
 	User.prototype.getIdentity = function (roomid) {
-		if (!roomid) roomid = 'lobby';
 		if (this.locked) {
 			return '‽' + this.name;
 		}
-		if (this.mutedRooms[roomid]) {
-			return '!' + this.name;
-		}
-		var room = Rooms.rooms[roomid];
-		if (room && room.auth) {
-			if (room.auth[this.userid]) {
-				return room.auth[this.userid] + this.name;
+		if (roomid) {
+			if (this.mutedRooms[roomid]) {
+				return '!' + this.name;
 			}
-			if (room.isPrivate) return ' ' + this.name;
+			var room = Rooms.rooms[roomid];
+			if (room && room.auth) {
+				if (room.auth[this.userid]) {
+					return room.auth[this.userid] + this.name;
+				}
+				if (room.isPrivate) return ' ' + this.name;
+			}
 		}
 		return this.group + this.name;
 	};
