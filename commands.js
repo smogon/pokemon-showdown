@@ -439,7 +439,8 @@ var commands = exports.commands = {
 		});
 
 		if (!buffer.length) {
-			buffer = "This room has no auth.";
+			connection.popup("This room has no auth.");
+			return;
 		}
 		connection.popup(buffer.join("\n\n"));
 	},
