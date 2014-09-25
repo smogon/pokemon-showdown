@@ -350,17 +350,24 @@ animation) and `|[silent]` (suppress message).
 
 `|-enditem|POKEMON|ITEM`
 
-> The `ITEM` held by `POKEMON` has been removed, and it now holds no item. This can 
-> be because the item was consumed or destroyed by its own effects (Berries, Air 
-> Balloon), or was forcefully removed by a move or ability. Note that if an item was 
-> stolen by Thief, this message will not appear and you have to rely on earlier `move` 
-> messages and the fact that an `-item` message will appear for the Pokemon using Thief, 
-> instead.
+> The `ITEM` held by `POKEMON` has been destroyed, and it now holds no item. This can 
+> be because of an item's own effects (consumed Berries, Air Balloon), or by a move or 
+> ability, like Knock Off. If a berry is consumed, it also has an additional modifier 
+> `|[eat]` to indicate that it was consumed. This message does not appear if the item's 
+> ownership was changed (with a move or ability like Thief or Trick), even if the move 
+> or ability would result in a Pokemon without an item.
 
 `|-transform|POKEMON|SPECIES`
 
 > The Pokemon `POKEMON` has transformed into `SPECIES` by the effect of Transform 
 > or the ability Imposter.
+
+`|-activate|EFFECT`
+
+> A miscellaneous effect has activated. This is triggered whenever an effect could 
+> not be better described by one of the other minor messages: for example, healing 
+> abilities like Water Absorb simply use `-heal`, and items that are consumed upon 
+> use have the `-enditem` message instead.
 
 I'll document all the message types eventually, but for now this should be
 enough to get you started. You can watch the data sent and received from
