@@ -458,18 +458,18 @@ var commands = exports.commands = {
 		if (!userid || !targetUser) return this.sendReply("User '" + name + "' does not exist.");
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!room.bannedUsers || !room.bannedIps) {
-			return this.sendReply("Room bans are not meant to be used in room " + room.id + ".");
+			return this.sendReply("Room bans are not meant to be used in room " + room.title + ".");
 		}
 		if (room.bannedUsers[userid] || room.bannedIps[targetUser.latestIp]) return this.sendReply("User " + targetUser.name + " is already banned from room " + room.id + ".");
 		room.bannedUsers[userid] = true;
 		for (var ip in targetUser.ips) {
 			room.bannedIps[ip] = true;
 		}
-		targetUser.popup("" + user.name + " has banned you from the room " + room.id + ". To appeal the ban, PM the moderator that banned you or a room owner." + (target ? " (" + target + ")" : ""));
-		this.addModCommand("" + targetUser.name + " was banned from room " + room.id + " by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		targetUser.popup("" + user.name + " has banned you from the room " + room.title + ". To appeal the ban, PM the moderator that banned you or a room owner." + (target ? " (" + target + ")" : ""));
+		this.addModCommand("" + targetUser.name + " was banned from room " + room.title + " by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) {
-			this.privateModCommand("(" + targetUser.name + "'s alts were also banned from room " + room.id + ": " + alts.join(", ") + ")");
+			this.privateModCommand("(" + targetUser.name + "'s alts were also banned from room " + room.title + ": " + alts.join(", ") + ")");
 			for (var i = 0; i < alts.length; ++i) {
 				var altId = toId(alts[i]);
 				this.add('|unlink|' + altId);
@@ -495,7 +495,7 @@ var commands = exports.commands = {
 		if (!userid || !targetUser) return this.sendReply("User '" + name + "' does not exist.");
 		if (!this.can('ban', targetUser, room)) return false;
 		if (!room.bannedUsers || !room.bannedIps) {
-			return this.sendReply("Room bans are not meant to be used in room " + room.id + ".");
+			return this.sendReply("Room bans are not meant to be used in room " + room.title + ".");
 		}
 		if (room.bannedUsers[userid]) {
 			delete room.bannedUsers[userid];
@@ -507,17 +507,17 @@ var commands = exports.commands = {
 				success = true;
 			}
 		}
-		if (!success) return this.sendReply("User " + targetUser.name + " is not banned from room " + room.id + ".");
+		if (!success) return this.sendReply("User " + targetUser.name + " is not banned from room " + room.title + ".");
 
-		targetUser.popup("" + user.name + " has unbanned you from the room " + room.id + ".");
-		this.addModCommand("" + targetUser.name + " was unbanned from room " + room.id + " by " + user.name + ".");
+		targetUser.popup("" + user.name + " has unbanned you from the room " + room.title + ".");
+		this.addModCommand("" + targetUser.name + " was unbanned from room " + room.title + " by " + user.name + ".");
 		var alts = targetUser.getAlts();
 		if (!alts.length) return;
 		for (var i = 0; i < alts.length; ++i) {
 			var altId = toId(alts[i]);
 			if (room.bannedUsers[altId]) delete room.bannedUsers[altId];
 		}
-		this.privateModCommand("(" + targetUser.name + "'s alts were also unbanned from room " + room.id + ": " + alts.join(", ") + ")");
+		this.privateModCommand("(" + targetUser.name + "'s alts were also unbanned from room " + room.title + ": " + alts.join(", ") + ")");
 	},
 
 	autojoin: function (target, room, user, connection) {
@@ -603,7 +603,7 @@ var commands = exports.commands = {
 			return this.sendReply("User " + targetUser.name + " is already in the room " + targetRoom.title + "!");
 		}
 		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
-			return this.sendReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
+			return this.sendReply("User " + this.targetUsername + " is not in the room " + room.title + ".");
 		}
 		if (targetUser.joinRoom(targetRoom.id) === false) return this.sendReply("User " + targetUser.name + " could not be joined to room " + targetRoom.title + ". They could be banned from the room.");
 		var roomName = (targetRoom.isPrivate)? "a private room" : "room " + targetRoom.title;
