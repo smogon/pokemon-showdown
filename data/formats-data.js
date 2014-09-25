@@ -3145,7 +3145,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	empoleon: {
-		randomBattleMoves: ["stealthrock","hydropump","scald","icebeam","hiddenpowerelectric","roar","grassknot","flashcannon","defog","agility"],
+		randomBattleMoves: ["stealthrock","hydropump","scald","icebeam","roar","grassknot","flashcannon","defog","agility"],
 		randomDoubleBattleMoves: ["icywind","hydropump","scald","icebeam","hiddenpowerelectric","protect","grassknot","flashcannon"],
 		eventPokemon: [
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["hydropump","icebeam","aquajet","grassknot"],"pokeball":"cherishball"}
@@ -3558,7 +3558,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	giratina: {
-		randomBattleMoves: ["rest","sleeptalk","dragontail","roar","willowisp"],
+		randomBattleMoves: ["rest","sleeptalk","dragontail","roar","willowisp","shadowball","dragonpulse"],
 		randomDoubleBattleMoves: ["tailwind","icywind","protect","dragontail","willowisp","calmmind","dragonpulse","shadowball"],
 		eventPokemon: [
 			{"generation":5,"level":100,"shiny":true,"isHidden":false,"moves":["dragonpulse","dragonclaw","aurasphere","shadowforce"],"pokeball":"cherishball"}

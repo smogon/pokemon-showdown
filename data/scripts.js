@@ -1053,6 +1053,10 @@ exports.BattleScripts = {
 					break;
 				case 'drainpunch':
 					if (hasMove['closecombat'] || hasMove['highjumpkick'] || hasMove['crosschop'] || hasMove['focuspunch']) rejected = true;
+					if (!setupType && hasMove['superpower']) rejected = true;
+					break;
+				case 'superpower':
+					if (setupType && hasMove['drainpunch']) rejected = true;
 					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || hasMove['thunder']) rejected = true;
