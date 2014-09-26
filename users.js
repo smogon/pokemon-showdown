@@ -483,7 +483,7 @@ User = (function () {
 		var checkedGroups = {};
 
 		// does not inherit
-		if (groupData['root']) {
+		if (groupData && groupData['root']) {
 			return true;
 		}
 
