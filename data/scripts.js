@@ -1332,6 +1332,8 @@ exports.BattleScripts = {
 				} else if (template.id === 'combee') {
 					// Combee always gets Hustle but its only physical move is Endeavor, which loses accuracy
 					ability = 'Honey Gather';
+				} else if (template.id === 'lopunny' && hasMove['switcheroo'] && Math.random() * 3 > 1) {
+					ability = 'Klutz';
 				} else if (template.id === 'mawilemega') {
 					// Mega Mawile only needs Intimidate for a starting ability
 					ability = 'Intimidate';
@@ -1373,6 +1375,9 @@ exports.BattleScripts = {
 				item = 'Macho Brace';
 			} else if (hasMove['trick'] && hasMove['gyroball']) {
 				item = 'Iron Ball';
+			} else if (ability === 'Klutz' && hasMove['switcheroo']) {
+				// To perma-taunt a Pokemon by giving it Assault Vest
+				item = 'Assault Vest';
 			} else if (hasMove['trick'] || hasMove['switcheroo']) {
 				var randomNum = Math.random() * 2;
 				if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum > 1)) {
