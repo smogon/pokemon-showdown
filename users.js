@@ -500,20 +500,19 @@ User = (function () {
 		this.send('|popup|' + message.replace(/\n/g, '||'));
 	};
 	User.prototype.getIdentity = function (roomid) {
-		if (!roomid) roomid = 'lobby';
 		if (this.locked) {
 			return Config.lockedSymbol + this.name;
 		}
-		if (this.mutedRooms[roomid]) {
-			return Config.mutedSymbol + this.name;
-		}
-		var room = Rooms.rooms[roomid];
-		if (room && room.auth) {
-			if (room.auth[this.userid]) {
-				return room.auth[this.userid] + this.name;
+		if (roomid) {
+			if (this.mutedRooms[roomid]) {
+				return Config.mutedSymbol + this.name;
 			}
-			if (room.isPrivate) {
-				return Config.groups.default[room.type + 'Room'] + this.name;
+			var room = Rooms.rooms[roomid];
+			if (room && room.auth) {
+				if (room.auth[this.userid]) {
+					return room.auth[this.userid] + this.name;
+				}
+				if (room.isPrivate) return Config.groups.default[room.type + 'Room'] + this.name;
 			}
 		}
 		return this.group + this.name;
