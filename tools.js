@@ -98,7 +98,7 @@ module.exports = (function () {
 						// {inherit: true} can be used to modify only parts of the parent data,
 						// instead of overwriting entirely
 						delete data[dataType][i].inherit;
-						Object.merge(data[dataType][i], parentData[dataType][i], true, false);
+						Object.merge(data[dataType][i], parentData[dataType][i], false, false);
 					}
 				}
 			});
@@ -131,8 +131,39 @@ module.exports = (function () {
 			timid: {name:"Timid", plus:'spe', minus:'atk'}
 		};
 	}
+	Tools.loadMods = function() {
+		if (Tools.modsLoaded) return;
+		var parentMods = {};
+
+		try {
+			var mods = fs.readdirSync('./mods/');
+
+			mods.forEach(function (mod) {
+				if (fs.existsSync('./mods/' + mod + '/scripts.js')) {
+					parentMods[mod] = require('./mods/' + mod + '/scripts.js').BattleScripts.inherit || 'base';
+				} else {
+					parentMods[mod] = 'base';
+				}
+			});
+
+			var didSomething = false;
+			do {
+				didSomething = false;
+				for (var i in parentMods) {
+					if (!moddedTools[i] && moddedTools[parentMods[i]]) {
+						moddedTools[i] = Tools.construct(i, parentMods[i]);
+						didSomething = true;
+					}
+				}
+			} while (didSomething);
+		} catch (e) {
+			console.log("Error while loading mods: " + e);
+		}
+		Tools.modsLoaded = true;
+	};
 
 	Tools.prototype.mod = function (mod) {
+		Tools.loadMods();
 		if (!moddedTools[mod]) {
 			mod = this.getFormat(mod).mod;
 		}
@@ -357,7 +388,6 @@ module.exports = (function () {
 			effect.toString = this.effectToString;
 			if (!effect.category) effect.category = 'Effect';
 			if (!effect.effectType) effect.effectType = 'Effect';
-			this.getBanlistTable(effect);
 		}
 		return effect;
 	};
@@ -896,33 +926,6 @@ module.exports = (function () {
 
 	// "gen6" is an alias for the current base data
 	moddedTools.gen6 = moddedTools.base;
-
-	var parentMods = {};
-
-	try {
-		var mods = fs.readdirSync('./mods/');
-
-		mods.forEach(function (mod) {
-			if (fs.existsSync('./mods/' + mod + '/scripts.js')) {
-				parentMods[mod] = require('./mods/' + mod + '/scripts.js').BattleScripts.inherit || 'base';
-			} else {
-				parentMods[mod] = 'base';
-			}
-		});
-
-		var didSomething = false;
-		do {
-			didSomething = false;
-			for (var i in parentMods) {
-				if (!moddedTools[i] && moddedTools[parentMods[i]]) {
-					moddedTools[i] = Tools.construct(i, parentMods[i]);
-					didSomething = true;
-				}
-			}
-		} while (didSomething);
-	} catch (e) {
-		console.log("Error while loading mods: " + e);
-	}
 
 	Object.getPrototypeOf(moddedTools.base).moddedTools = moddedTools;
 

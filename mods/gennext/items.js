@@ -151,7 +151,7 @@ exports.BattleItems = {
 				}
 				return basePower * 1.1;
 			}
-		},
+		}
 	},
 	"stick": {
 		id: "stick",
@@ -191,7 +191,7 @@ exports.BattleItems = {
 			}
 		},
 		onFoeBasePower: function (basePower, attacker, defender, move) {
-			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Lilligant":1, "Vivillon":1};
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
 			if (GossamerWingUsers[defender.template.species]) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
 					this.add('-message', "The attack was weakened by GoassamerWing!");
@@ -213,5 +213,5 @@ exports.BattleItems = {
 		// 	}
 		// },
 		desc: "Raises Farfetch'd's critical hit rate two stages."
-	},
+	}
 };

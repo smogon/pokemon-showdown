@@ -23,6 +23,26 @@ exports.BattleStatuses = {
 			return false;
 		}
 	},
+	frz: {
+		effectType: 'Status',
+		onStart: function (target) {
+			this.add('-status', target, 'frz');
+		},
+		onBeforeMovePriority: 2,
+		onBeforeMove: function (pokemon, target, move) {
+			if (move.thawsUser || this.random(5) === 0) {
+				pokemon.cureStatus();
+				return;
+			}
+			this.add('cant', pokemon, 'frz');
+			return false;
+		},
+		onHit: function (target, source, move) {
+			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status' && move.id !== 'hiddenpower') {
+				target.cureStatus();
+			}
+		}
+	},
 	trapped: {
 		inherit: true,
 		noCopy: false

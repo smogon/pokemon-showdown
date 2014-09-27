@@ -98,7 +98,7 @@ var Battle = (function (){
 
 	Battle.prototype.started = false;
 	Battle.prototype.ended = false;
-	Battle.prototype.active = true;
+	Battle.prototype.active = false;
 	Battle.prototype.players = null;
 	Battle.prototype.playerids = null;
 	Battle.prototype.playerTable = null;
@@ -234,6 +234,9 @@ var Battle = (function (){
 			delete this.players[slot].battles[this.id];
 		}
 		if (user) {
+			if (user.battles[this.id]) {
+				return false;
+			}
 			user.battles[this.id] = true;
 		}
 		this.players[slot] = (user || null);
@@ -278,7 +281,12 @@ var Battle = (function (){
 		}
 		// console.log('joining: ' + user.name + ' ' + slot);
 		if (this.players[slot] || slot >= this.players.length) return false;
+		if (user === this.players[0] || user === this.players[1]) return false;
 
+		for (var i = 0; i < user.connections.length; i++) {
+			var connection = user.connections[i];
+			Sockets.subchannelMove(connection.worker, this.id, slot + 1, connection.socketid);
+		}
 		this.setPlayer(user, slot);
 
 		var message = '' + user.avatar;
@@ -307,6 +315,10 @@ var Battle = (function (){
 			var player = this.players[i];
 			if (player === user) {
 				this.sendFor(user, 'leave');
+				for (var j = 0; j < user.connections.length; j++) {
+					var connection = user.connections[j];
+					Sockets.subchannelMove(connection.worker, this.id, '0', connection.socketid);
+				}
 				this.setPlayer(null, i);
 				return true;
 			}

@@ -84,12 +84,10 @@ var Validator;
 	exports.validateTeam = function (format, team, callback) {
 		var parsedTeam = Tools.fastUnpackTeam(team);
 		var problems = this.validateTeamSync(format, parsedTeam);
-		if (problems && problems.length)
+		if (problems && problems.length) {
 			setImmediate(callback.bind(null, false, problems.join('\n')));
-		else {
+		} else {
 			var packedTeam = Tools.packTeam(parsedTeam);
-			if (packedTeam === team)
-				packedTeam = '';
 			setImmediate(callback.bind(null, true, packedTeam));
 		}
 	};
@@ -191,13 +189,12 @@ var Validator;
 
 Validator = (function () {
 	function Validator(format) {
-		this.format = Tools.getFormat(format);
-		this.tools = Tools.mod(this.format);
+		this.format = format;
 	}
 
 	Validator.prototype.validateTeam = function (team) {
-		var format = this.format;
-		var tools = this.tools;
+		var format = Tools.getFormat(this.format);
+		var tools = Tools.mod(format);
 
 		var problems = [];
 		tools.getBanlistTable(format);
@@ -253,12 +250,12 @@ Validator = (function () {
 			for (var i = 0; i < format.ruleset.length; i++) {
 				var subformat = tools.getFormat(format.ruleset[i]);
 				if (subformat.validateTeam) {
-					problems = problems.concat(subformat.validateTeam.call(tools, team, format) || []);
+					problems = problems.concat(subformat.validateTeam.call(tools, team, format, teamHas) || []);
 				}
 			}
 		}
 		if (format.validateTeam) {
-			problems = problems.concat(format.validateTeam.call(tools, team, format) || []);
+			problems = problems.concat(format.validateTeam.call(tools, team, format, teamHas) || []);
 		}
 
 		if (!problems.length) return false;
@@ -266,8 +263,8 @@ Validator = (function () {
 	};
 
 	Validator.prototype.validateSet = function (set, teamHas) {
-		var format = this.format;
-		var tools = this.tools;
+		var format = Tools.getFormat(this.format);
+		var tools = Tools.mod(format);
 
 		var problems = [];
 		if (!set) {
@@ -370,18 +367,6 @@ Validator = (function () {
 		}
 		setHas[toId(set.ability)] = true;
 		if (banlistTable['illegal']) {
-			var totalEV = 0;
-			for (var k in set.evs) {
-				if (typeof set.evs[k] !== 'number' || set.evs[k] < 0) {
-					set.evs[k] = 0;
-				}
-				totalEV += set.evs[k];
-			}
-			// In gen 1 and 2, it was possible to max out all EVs
-			if (tools.gen >= 3 && totalEV > 510) {
-				problems.push(name + " has more than 510 total EVs.");
-			}
-
 			// Don't check abilities for metagames with All Abilities
 			if (tools.gen <= 2) {
 				set.ability = 'None';
@@ -557,7 +542,7 @@ Validator = (function () {
 	};
 
 	Validator.prototype.checkLearnset = function (move, template, lsetData) {
-		var tools = this.tools;
+		var tools = Tools.mod(Tools.getFormat(this.format));
 
 		move = toId(move);
 		template = tools.getTemplate(template);
@@ -567,9 +552,6 @@ Validator = (function () {
 		var format = (lsetData.format || (lsetData.format = {}));
 		var alreadyChecked = {};
 		var level = set.level || 100;
-
-		var alphabetCupLetter;
-		if (format.id === 'alphabetcup') alphabetCupLetter = template.speciesid.charAt(0);
 
 		var isHidden = false;
 		if (set.ability && tools.getAbility(set.ability).name === template.abilities['H']) isHidden = true;
@@ -599,13 +581,13 @@ Validator = (function () {
 		// the equivalent of adding "every source at or before this gen" to sources
 		var sourcesBefore = 0;
 		var noPastGen = format.requirePentagon;
+		// since Gen 3, Pokemon cannot be traded to past generations
+		var noFutureGen = tools.gen >= 3 ? true : format.banlistTable && format.banlistTable['tradeback'];
 
 		do {
 			alreadyChecked[template.speciesid] = true;
-			// Stabmons hack to avoid copying all of validateSet to formats.
+			// STABmons hack to avoid copying all of validateSet to formats
 			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && template.types.indexOf(tools.getMove(move).type) > -1) return false;
-			// Alphabet Cup hack to do the same
-			if (alphabetCupLetter && alphabetCupLetter === Tools.getMove(move).id.slice(0, 1) && Tools.getMove(move).id !== 'sketch') return false;
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					sometimesPossible = true;
@@ -621,8 +603,8 @@ Validator = (function () {
 					for (var i = 0, len = lset.length; i < len; i++) {
 						var learned = lset[i];
 						if (noPastGen && learned.charAt(0) !== '6') continue;
-						if (parseInt(learned.charAt(0), 10) > tools.gen) continue;
-						if (tools.gen < 6 && isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
+						if (noFutureGen && parseInt(learned.charAt(0), 10) > tools.gen) continue;
+						if (learned.charAt(0) !== '6' && isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
 							// check if the Pokemon's hidden ability was available
 							incompatibleHidden = true;
 							continue;
@@ -662,8 +644,9 @@ Validator = (function () {
 							if (learned.charAt(1) === 'E') {
 								// it's an egg move, so we add each pokemon that can be bred with to its sources
 								if (learned.charAt(0) === '6') {
-									// gen 6 doesn't have egg move incompatibilities
-									sources.push('6E');
+									// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
+									learned = '6E' + (template.prevo ? template.id : '');
+									sources.push(learned);
 									continue;
 								}
 								var eggGroups = template.eggGroups;
@@ -680,7 +663,7 @@ Validator = (function () {
 										// can't breed mons from future gens
 										dexEntry.gen <= parseInt(learned.charAt(0), 10) &&
 										// genderless pokemon can't pass egg moves
-										dexEntry.gender !== 'N') {
+										(dexEntry.gender !== 'N' || tools.gen <= 1 && dexEntry.gen <= 1)) {
 										if (
 											// chainbreeding
 											fromSelf ||
@@ -735,6 +718,7 @@ Validator = (function () {
 				template = tools.getTemplate(template.baseSpecies);
 			} else if (template.prevo) {
 				template = tools.getTemplate(template.prevo);
+				if (template.gen > Math.max(2, tools.gen)) template = null;
 			} else if (template.speciesid === 'shaymin') {
 				template = tools.getTemplate('shayminsky');
 			} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem') {

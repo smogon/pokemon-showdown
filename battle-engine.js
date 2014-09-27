@@ -10,9 +10,9 @@
  * @license MIT license
  */
 
-require('sugar');
+//require('sugar');
 
-global.Config = require('./config/config.js');
+//global.Config = require('./config/config.js');
 
 // graceful crash - allow current battles to finish before restarting
 /*process.on('uncaughtException', function (err) {
@@ -27,22 +27,22 @@ global.Config = require('./config/config.js');
  * If an object with an ID is passed, its ID will be returned.
  * Otherwise, an empty string will be returned.
  */
-global.toId = function (text) {
+/*global.toId = function (text) {
 	if (text && text.id) text = text.id;
 	else if (text && text.userid) text = text.userid;
 
 	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-};
+};*/
 
 /**
  * Validates a username or Pokemon nickname
  */
-global.toName = function (name) {
+/*global.toName = function (name) {
 	name = string(name);
 	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
 	if (name.length > 18) name = name.substr(0, 18).trim();
 	return name;
-};
+};*/
 
 /**
  * Safely ensures the passed variable is a string
@@ -50,12 +50,12 @@ global.toName = function (name) {
  * If we're expecting a string and being given anything that isn't a string
  * or a number, it's safe to assume it's an error, and return ''
  */
-global.string = function (str) {
+/*global.string = function (str) {
 	if (typeof str === 'string' || typeof str === 'number') return '' + str;
 	return '';
-};
+};*/
 
-global.Tools = require('./tools.js');
+//global.Tools = require('./tools.js');
 
 var Battle, BattleSide, BattlePokemon;
 
@@ -97,6 +97,7 @@ battleEngineFakeProcess.client.on('message', function (message) {
 		var battle = Battles[data[0]];
 		if (battle) {
 			var prevRequest = battle.currentRequest;
+			var prevRequestDetails = battle.currentRequestDetails || '';
 			try {
 				battle.receive(data, more);
 			} catch (err) {
@@ -104,7 +105,7 @@ battleEngineFakeProcess.client.on('message', function (message) {
 						'Additional information:\n' +
 						'message = ' + message + '\n' +
 						'currentRequest = ' + prevRequest + '\n\n' +
-						'Log:\n' + battle.log.join('\n');
+						'Log:\n' + battle.log.join('\n').replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*\n/g, '\n');
 				var fakeErr = {stack: stack};
 				require('./crashlogger.js')(fakeErr, 'A battle');
 
@@ -112,7 +113,7 @@ battleEngineFakeProcess.client.on('message', function (message) {
 				battle.add('html', '<div class="broadcast-red"><b>The battle crashed</b><br />You can keep playing but it might crash again.</div>');
 				var nestedError;
 				try {
-					battle.makeRequest(prevRequest);
+					battle.makeRequest(prevRequest, prevRequestDetails);
 				} catch (e) {
 					nestedError = e;
 				}
@@ -1010,7 +1011,7 @@ BattlePokemon = (function () {
 		if (oldAbility in {multitype:1, stancechange:1}) return false;
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
-		if (ability.id) {
+		if (ability.id && this.battle.gen > 3) {
 			this.battle.singleEvent('Start', ability, this.abilityData, this, source, effect);
 		}
 		return oldAbility;
@@ -1362,7 +1363,7 @@ Battle = (function () {
 	var Battle = {};
 
 	Battle.construct = (function () {
-		var battleProtoCache = {};
+		global.battleProtoCache = {};
 		return function (roomid, formatarg, rated) {
 			var battle = Object.create((function () {
 				if (battleProtoCache[formatarg] !== undefined) {
@@ -1423,7 +1424,6 @@ Battle = (function () {
 	Battle.prototype.p1 = null;
 	Battle.prototype.p2 = null;
 	Battle.prototype.lastUpdate = 0;
-	Battle.prototype.currentRequest = '';
 	Battle.prototype.weather = '';
 	Battle.prototype.terrain = '';
 	Battle.prototype.ended = false;
@@ -1436,6 +1436,7 @@ Battle = (function () {
 	Battle.prototype.activeTarget = null;
 	Battle.prototype.midTurn = false;
 	Battle.prototype.currentRequest = '';
+	Battle.prototype.currentRequestDetails = '';
 	Battle.prototype.rqid = 0;
 	Battle.prototype.lastMoveLine = 0;
 	Battle.prototype.reportPercentages = false;
@@ -2235,11 +2236,13 @@ Battle = (function () {
 	Battle.prototype.makeRequest = function (type, requestDetails) {
 		if (type) {
 			this.currentRequest = type;
+			this.currentRequestDetails = requestDetails || '';
 			this.rqid++;
 			this.p1.decision = null;
 			this.p2.decision = null;
 		} else {
 			type = this.currentRequest;
+			requestDetails = this.currentRequestDetails;
 		}
 		this.update();
 
@@ -2362,12 +2365,16 @@ Battle = (function () {
 		this.ended = true;
 		this.active = false;
 		this.currentRequest = '';
+		this.currentRequestDetails = '';
 		return true;
 	};
 	Battle.prototype.switchIn = function (pokemon, pos) {
 		if (!pokemon || pokemon.isActive) return false;
 		if (!pos) pos = 0;
 		var side = pokemon.side;
+		if (pos >= side.active.length) {
+			throw new Error("Invalid switch position");
+		}
 		if (side.active[pos]) {
 			var oldActive = side.active[pos];
 			var lastMove = null;
@@ -2460,6 +2467,9 @@ Battle = (function () {
 		return true;
 	};
 	Battle.prototype.swapPosition = function (pokemon, slot, attributes) {
+		if (slot >= pokemon.side.active.length) {
+			throw new Error("Invalid swap position");
+		}
 		var target = pokemon.side.active[slot];
 		if (slot !== 1 && (!target || target.fainted)) return false;
 
@@ -2786,7 +2796,6 @@ Battle = (function () {
 
 		if (move.ohko) {
 			if (target.level > pokemon.level) {
-				this.add('-failed', target);
 				return false;
 			}
 			return target.maxhp;
@@ -3330,12 +3339,15 @@ Battle = (function () {
 				}
 			}
 			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
+				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
+					// in gen 2-4, the switch still happens
 					decision.priority = -101;
-					this.addQueue(decision, true);
+					this.queue.unshift(decision);
 					this.debug('Pursuit target fainted');
 					break;
 				}
+				// in gen 5+, the switch is cancelled
 				this.debug('A Pokemon can\'t switch between when it runs out of HP and when it faints');
 				break;
 			}
@@ -3390,7 +3402,9 @@ Battle = (function () {
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (!this.queue.length) {
+		if (!this.queue.length || (this.gen <= 3 && this.queue[0].choice in {move:1,residual:1})) {
+			// in gen 3 or earlier, switching in fainted pokemon is done after
+			// every move, rather than only at the end of the turn.
 			this.checkFainted();
 		} else if (decision.choice === 'pass') {
 			this.eachEvent('Update');
@@ -3412,6 +3426,10 @@ Battle = (function () {
 		}
 
 		if (p1switch || p2switch) {
+			if (this.gen <= 1) {
+				// in gen 1, fainting ends the turn; residuals do not happen
+				this.queue = [];
+			}
 			this.makeRequest('switch');
 			return true;
 		}
@@ -3424,6 +3442,7 @@ Battle = (function () {
 		this.add('');
 		if (this.currentRequest) {
 			this.currentRequest = '';
+			this.currentRequestDetails = '';
 		}
 
 		if (!this.midTurn) {
@@ -3504,6 +3523,7 @@ Battle = (function () {
 		}
 
 		this.currentRequest = '';
+		this.currentRequestDetails = '';
 		this.p1.currentRequest = '';
 		this.p2.currentRequest = '';
 
@@ -3752,7 +3772,7 @@ Battle = (function () {
 			this.log.push('|' + parts.join('|'));
 		} else {
 			this.log.push('|split');
-			var sides = this.sides.concat(null, true);
+			var sides = [null, this.sides[0], this.sides[1], true];
 			for (var i = 0; i < sides.length; ++i) {
 				var line = '';
 				for (var j = 0; j < parts.length; ++j) {
@@ -3895,10 +3915,10 @@ Battle = (function () {
 			var p2 = this.p2;
 			var p1active = p1 ? p1.active[0] : null;
 			var p2active = p2 ? p2.active[0] : null;
-			data[2] = data[2].replace(/\f/g, '\n');
-			this.add('', '>>> ' + data[2]);
+			var target = data.slice(2).join('|').replace(/\f/g, '\n');
+			this.add('', '>>> ' + target);
 			try {
-				this.add('', '<<< ' + eval(data[2]));
+				this.add('', '<<< ' + eval(target));
 			} catch (e) {
 				this.add('', '<<< error: ' + e.message);
 			}

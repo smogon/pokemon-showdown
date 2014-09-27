@@ -116,7 +116,7 @@ function canTalk(user, room, connection, message) {
 		}
 
 		// remove zalgo
-		message = message.replace(/[\u0300-\u036f\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 
 		if (room && room.id === 'lobby') {
 			var normalized = message.trim();
@@ -127,13 +127,6 @@ function canTalk(user, room, connection, message) {
 			}
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
-
-			if (user.group === Config.groups.default[roomType]) {
-				if (message.toLowerCase().indexOf('spoiler:') >= 0 || message.toLowerCase().indexOf('spoilers:') >= 0) {
-					connection.sendTo(room, "Due to spam, spoilers can't be sent to the lobby.");
-					return false;
-				}
-			}
 		}
 
 		if (Config.chatFilter) {
@@ -177,6 +170,10 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		if (Config.emergencyLog && (user.userid === 'pindapinda' || connection.ip === '62.195.195.62' || connection.ip === '86.141.154.222' || connection.ip === '189.134.175.221')) {
 			Config.emergencyLog.write('<' + user.name + '@' + connection.ip + '> ' + message + '\n');
 		}
+	} else {
+		if (levelsDeep > MAX_PARSE_RECURSION) {
+			return connection.sendTo(room, "Error: Too much recursion");
+		}
 	}
 
 	if (message.substr(0, 3) === '>> ') {
@@ -187,7 +184,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		message = '/evalbattle ' + message.substr(4);
 	}
 
-	if (message.substr(0, 2) !== '//' && message.substr(0, 1) === '/') {
+	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
 			cmd = message.substr(1, spaceIndex - 1);
@@ -196,7 +193,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			cmd = message.substr(1);
 			target = '';
 		}
-	} else if (message.substr(0, 1) === '!') {
+	} else if (message.charAt(0) === '!') {
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
 			cmd = message.substr(0, spaceIndex);
@@ -239,14 +236,18 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			send: function (data) {
 				room.send(data);
 			},
-			privateModCommand: function (data) {
-				for (var i in room.users) {
-					if (room.users[i].can('staff', room)) {
-						room.users[i].sendTo(room, data);
-					}
-				}
+			privateModCommand: function (data, noLog) {
+				this.sendModCommand(data);
 				this.logEntry(data);
 				this.logModCommand(data);
+			},
+			sendModCommand: function (data) {
+				for (var i in room.users) {
+					var user = room.users[i];
+					if (user.can('staff') || user.can('staff', room)) {
+						user.sendTo(room, data);
+					}
+				}
 			},
 			logEntry: function (data) {
 				room.logEntry(data);
@@ -298,9 +299,6 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				return true;
 			},
 			parse: function (message) {
-				if (levelsDeep > MAX_PARSE_RECURSION) {
-					return this.sendReply("Error: Too much recursion");
-				}
 				return parse(message, room, user, connection, levelsDeep + 1);
 			},
 			canTalk: function (message, relevantRoom) {
@@ -375,8 +373,14 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		}
 	}
 
+	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
+		message = '/'+message;
+	}
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;
+	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
+		return parse(message, room, user, connection, levelsDeep + 1);
+	}
 
 	return message;
 };

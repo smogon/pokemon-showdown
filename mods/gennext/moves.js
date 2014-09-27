@@ -247,7 +247,7 @@ exports.BattleMovedex = {
 				}
 				return null;
 			}
-		},
+		}
 	},
 	"spikyshield": {
 		inherit: true,
@@ -270,7 +270,7 @@ exports.BattleMovedex = {
 				}
 				return null;
 			}
-		},
+		}
 	},
 	minimize: {
 		inherit: true,
@@ -476,6 +476,23 @@ exports.BattleMovedex = {
 		},
 		breaksProtect: true
 	},
+	phantomforce: {
+		inherit: true,
+		basePower: 60,
+		willCrit: true,
+		accuracy: true,
+		onTryHitPriority: 10,
+		onTryHit: function (target) {
+			target.removeVolatile('substitute');
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1
+			}
+		},
+		breaksProtect: true
+	},
 	shadowforce: {
 		inherit: true,
 		basePower: 40,
@@ -590,6 +607,9 @@ exports.BattleMovedex = {
 	},
 	bide: {
 		inherit: true,
+		onTryHit: function (pokemon) {
+			return this.willAct() && this.runEvent('StallMove', pokemon);
+		},
 		effect: {
 			duration: 2,
 			onLockMove: 'bide',
@@ -1173,7 +1193,7 @@ exports.BattleMovedex = {
 		category: "Special",
 		isViable: true,
 		priority: 0,
-		isNotProtectable: true,
+		isSoundBased: true,
 		affectedByImmunities: false,
 		onHit: function (target, source) {
 			source.side.addSideCondition('futuremove');
@@ -1188,6 +1208,8 @@ exports.BattleMovedex = {
 				moveData: {
 					basePower: 80,
 					category: "Special",
+					isSoundBased: true,
+					isNotProtectable: true,
 					affectedByImmunities: false,
 					type: 'Normal'
 				}
@@ -1255,7 +1277,7 @@ exports.BattleMovedex = {
 	firefang: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'flareon') return power * 1.5;
+			if (user.template.id === 'flareon') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondaries: [
@@ -1266,7 +1288,7 @@ exports.BattleMovedex = {
 	icefang: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'walrein') return power * 1.5;
+			if (user.template.id === 'walrein') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondaries: [
@@ -1277,7 +1299,7 @@ exports.BattleMovedex = {
 	thunderfang: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'luxray') return power * 1.5;
+			if (user.template.id === 'luxray') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondaries: [
@@ -1288,7 +1310,7 @@ exports.BattleMovedex = {
 	poisonfang: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'drapion') return power * 1.5;
+			if (user.template.id === 'drapion') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondaries: [
@@ -1300,7 +1322,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'seviper') return power * 1.5;
+			if (user.template.id === 'seviper') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondary: {
@@ -1312,7 +1334,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'persian') return power * 1.5;
+			if (user.template.id === 'persian') return this.chainModify(1.5);
 		},
 		secondary: {
 			chance: 30,
@@ -1325,7 +1347,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'muk') return power * 1.5;
+			if (user.template.id === 'muk') return this.chainModify(1.5);
 		},
 		secondary: {
 			chance: 100,
@@ -1337,7 +1359,7 @@ exports.BattleMovedex = {
 		basePower: 75,
 		accuracy: 100,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'weezing') return power * 1.5;
+			if (user.template.id === 'weezing') return this.chainModify(1.5);
 		},
 		secondary: {
 			chance: 100,
@@ -1348,25 +1370,25 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'rapidash') return power * 1.5;
+			if (user.template.id === 'rapidash') return this.chainModify(1.5);
 		}
 	},
 	flamewheel: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'darmanitan') return power * 1.5;
+			if (user.template.id === 'darmanitan') return this.chainModify(1.5);
 		}
 	},
 	spark: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'eelektross') return power * 1.5;
+			if (user.template.id === 'eelektross') return this.chainModify(1.5);
 		}
 	},
 	bubblebeam: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'kingdra') return power * 1.5;
+			if (user.template.id === 'kingdra') return this.chainModify(1.5);
 		},
 		secondary: {
 			chance: 30,
@@ -1379,7 +1401,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'galvantula') return power * 1.5;
+			if (user.template.id === 'galvantula') return this.chainModify(1.5);
 		},
 		accuracy: 100
 	},
@@ -1387,7 +1409,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'beautifly') return power * 1.5;
+			if (user.template.id === 'beautifly') return this.chainModify(1.5);
 		},
 		accuracy: 100
 	},
@@ -1395,7 +1417,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'glaceon') return power * 1.5;
+			if (user.template.id === 'glaceon') return this.chainModify(1.5);
 		},
 		accuracy: 100
 	},
@@ -1403,7 +1425,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'swampert') return power * 1.5;
+			if (user.template.id === 'swampert') return this.chainModify(1.5);
 		},
 		accuracy: 100
 	},
@@ -1411,7 +1433,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 80,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'kyurem') return power * 1.5;
+			if (user.template.id === 'kyurem') return this.chainModify(1.5);
 		},
 		accuracy: 100
 	},
@@ -1419,7 +1441,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 75,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'octillery') return power * 1.5;
+			if (user.template.id === 'octillery') return this.chainModify(1.5);
 		},
 		accuracy: 90,
 		secondary: {
@@ -1433,7 +1455,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 75,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'serperior') return power * 1.5;
+			if (user.template.id === 'serperior') return this.chainModify(1.5);
 		},
 		accuracy: 90,
 		secondary: {
@@ -1446,32 +1468,32 @@ exports.BattleMovedex = {
 	iceshard: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'weavile') return power * 1.5;
+			if (user.template.id === 'weavile') return this.chainModify(1.5);
 		}
 	},
 	aquajet: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'sharpedo') return power * 1.5;
+			if (user.template.id === 'sharpedo') return this.chainModify(1.5);
 		}
 	},
 	machpunch: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'hitmonchan') return power * 1.5;
+			if (user.template.id === 'hitmonchan') return this.chainModify(1.5);
 		}
 	},
 	shadowsneak: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'banette') return power * 1.5;
+			if (user.template.id === 'banette') return this.chainModify(1.5);
 		}
 	},
 	steelwing: {
 		inherit: true,
 		basePower: 60,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'skarmory') return power * 1.5;
+			if (user.template.id === 'skarmory') return this.chainModify(1.5);
 		},
 		accuracy: 100,
 		secondary: {
@@ -1486,13 +1508,19 @@ exports.BattleMovedex = {
 	surf: {
 		inherit: true,
 		onBasePower: function (power, user) {
-			if (user.template.id === 'masquerain') return power * 1.5;
+			if (user.template.id === 'masquerain') return this.chainModify(1.5);
 		},
 		secondary: {
 			chance: 10,
 			boosts: {
 				spe: -1
 			}
+		}
+	},
+	hiddenpower: {
+		inherit: true,
+		onBasePower: function (power, user) {
+			if (user.template.id === 'unown') return this.chainModify(1.5);
 		}
 	},
 	/******************************************************************
@@ -1763,7 +1791,7 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 50,
 			volatileStatus: 'confusion'
-		},
+		}
 	},
 	nightdaze: {
 		inherit: true,
