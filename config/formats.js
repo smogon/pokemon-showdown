@@ -337,6 +337,20 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "[Gen 3] 1v1",
+		section: "OM of the Month",
+
+		mod: 'gen3',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'Smeargle + Ingrain'],
+		onBegin: function () {
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	{
 		name: "CAP",
 		section: "Other Metagames",
 		column: 2,
@@ -601,6 +615,15 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Illegal', 'Unreleased']
 	},
+	{
+		name: "Gen-NEXT OU",
+		section: "Other Metagames",
+
+		mod: 'gennext',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
+		banlist: ['Uber']
+	},
 
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
@@ -745,6 +768,128 @@ exports.Formats = [
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
+	},
+
+	// Past Generations
+	///////////////////////////////////////////////////////////////////
+
+	{
+		name: "[Gen 4] OU",
+		section: "Past Generations",
+		column: 3,
+
+		mod: 'gen4',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber']
+	},
+	{
+		name: "[Gen 4] Ubers",
+		section: "Past Generations",
+
+		mod: 'gen4',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Arceus']
+	},
+	{
+		name: "[Gen 4] UU",
+		section: "Past Generations",
+
+		mod: 'gen4',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'OU', 'BL']
+	},
+	{
+		name: "[Gen 4] LC",
+		section: "Past Generations",
+
+		mod: 'gen4',
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Little Cup'],
+		banlist: ['Berry Juice', 'DeepSeaTooth', 'Dragon Rage', 'Sonic Boom', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma']
+	},
+	{
+		name: "[Gen 4] Custom Game",
+		section: "Past Generations",
+
+		mod: 'gen4',
+		searchShow: false,
+		canUseRandomTeam: true,
+		debug: true,
+		maxLevel: 9999,
+		defaultLevel: 100,
+		// no restrictions
+		ruleset: []
+	},
+	{
+		name: "[Gen 3] OU (beta)",
+		section: "Past Generations",
+
+		mod: 'gen3',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'Smeargle + Ingrain']
+	},
+	{
+		name: "[Gen 3] Custom Game",
+		section: "Past Generations",
+
+		mod: 'gen3',
+		searchShow: false,
+		debug: true,
+		ruleset: ['Pokemon', 'HP Percentage Mod']
+	},
+	{
+		name: "[Gen 2] OU (beta)",
+		section: "Past Generations",
+
+		mod: 'gen2',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber',
+			'Hypnosis + Perish Song + Mean Look',
+			'Hypnosis + Perish Song + Spider Web',
+			'Lovely Kiss + Perish Song + Mean Look',
+			'Lovely Kiss + Perish Song + Spider Web',
+			'Sing + Perish Song + Mean Look',
+			'Sing + Perish Song + Spider Web',
+			'Sleep Powder + Perish Song + Mean Look',
+			'Sleep Powder + Perish Song + Spider Web',
+			'Spore + Perish Song + Mean Look',
+			'Spore + Perish Song + Spider Web'
+		]
+	},
+	{
+		name: "[Gen 2] Custom Game",
+		section: "Past Generations",
+
+		mod: 'gen2',
+		searchShow: false,
+		debug: true,
+		ruleset: ['Pokemon', 'HP Percentage Mod']
+	},
+	{
+		name: "[Gen 1] OU (beta)",
+		section: "Past Generations",
+
+		mod: 'gen1',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber',
+			'Kakuna + Poison Sting + Harden', 'Kakuna + String Shot + Harden',
+			'Beedrill + Poison Sting + Harden', 'Beedrill + String Shot + Harden',
+			'Nidoking + Fury Attack + Thrash',
+			'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp', 'Exeggutor + Stun Spore + Stomp',
+			'Eevee + Tackle + Growl',
+			'Vaporeon + Tackle + Growl',
+			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
+			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember'
+		]
+	},
+	{
+		name: "[Gen 1] Custom Game",
+		section: "Past Generations",
+
+		mod: 'gen1',
+		searchShow: false,
+		debug: true,
+		ruleset: ['Pokemon', 'HP Percentage Mod']
 	}
 
 ];

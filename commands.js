@@ -1280,9 +1280,9 @@ var commands = exports.commands = {
 			return this.sendReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		for (var i in Sockets.workers) {
+		/*for (var i in Sockets.workers) {
 			Sockets.workers[i].kill();
-		}
+		}*/
 
 		if (!room.destroyLog) {
 			process.exit();

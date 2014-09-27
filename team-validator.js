@@ -84,12 +84,10 @@ var Validator;
 	exports.validateTeam = function (format, team, callback) {
 		var parsedTeam = Tools.fastUnpackTeam(team);
 		var problems = this.validateTeamSync(format, parsedTeam);
-		if (problems && problems.length)
+		if (problems && problems.length) {
 			setImmediate(callback.bind(null, false, problems.join('\n')));
-		else {
+		} else {
 			var packedTeam = Tools.packTeam(parsedTeam);
-			if (packedTeam === team)
-				packedTeam = '';
 			setImmediate(callback.bind(null, true, packedTeam));
 		}
 	};
