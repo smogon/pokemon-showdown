@@ -266,10 +266,15 @@ var GlobalRoom = (function () {
 	GlobalRoom.prototype.getRoomList = function (filter) {
 		var roomList = {};
 		var total = 0;
+		var skipCount = 0;
+		if (this.battleCount > 150) {
+			skipCount = this.battleCount - 150;
+		}
 		for (var i in Rooms.rooms) {
 			var room = Rooms.rooms[i];
 			if (!room || !room.active || room.isPrivate) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
+			if (skipCount && skipCount--) continue;
 			var roomData = {};
 			if (room.active && room.battle) {
 				if (room.battle.players[0]) roomData.p1 = room.battle.players[0].getIdentity();
