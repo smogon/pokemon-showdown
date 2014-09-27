@@ -763,9 +763,8 @@ var BattleRoom = (function () {
 			break;
 		}
 		if (!hasUsers) {
-			if (!this.expireTimer) {
-				this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_EMPTY_DEALLOCATE);
-			}
+			if (this.expireTimer) clearTimeout(this.expireTimer);
+			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_EMPTY_DEALLOCATE);
 		} else {
 			if (this.expireTimer) clearTimeout(this.expireTimer);
 			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_INACTIVE_DEALLOCATE);
