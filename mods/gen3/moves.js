@@ -591,7 +591,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			return false;
-		},
+		}
 	},
 	stockpile: {
 		inherit: true,

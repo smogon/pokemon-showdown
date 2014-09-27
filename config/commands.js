@@ -332,7 +332,7 @@ var commands = exports.commands = {
 			} else if (newTargets[0].searchType === 'move') {
 				var move = Tools.getMove(newTargets[0].name);
 				details = {
-					"Priority": move.priority,
+					"Priority": move.priority
 				};
 
 				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";
@@ -389,7 +389,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
 		var searches = {};
-		var allTiers = {'uber':1, 'ou':1, 'uu':1, 'lc':1, 'cap':1, 'bl':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1};
+		var allTiers = {'uber':1, 'ou':1, 'uu':1, 'lc':1, 'cap':1, 'bl':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1, 'pu':1};
 		var allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 		var showAll = false;
 		var megaSearch = null;
@@ -895,13 +895,19 @@ var commands = exports.commands = {
 		target = toId(target);
 		var buffer = "";
 		var matched = false;
-		if (!target || target === 'all') {
+		if (!target) {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/forums/206/\">Other Metagames Forum</a><br />";
-			if (target !== 'all') {
-				buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505031/\">Other Metagames Index</a><br />";
-				buffer += "- <a href=\"https://www.smogon.com/forums/threads/3507466/\">Sample teams for entering Other Metagames</a><br />";
-			}
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505031/\">Other Metagames Index</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3507466/\">Sample teams for entering Other Metagames</a><br />";
+		}
+		if (target === 'smogondoublesuu' || target === 'doublesuu') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516968/\">Doubles UU</a><br />";
+		}
+		if (target === 'smogontriples' || target === 'triples') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
 		}
 		if (target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
@@ -914,38 +920,40 @@ var commands = exports.commands = {
 		if (target === 'balancedhackmons' || target === 'bh') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3489849/\">Balanced Hackmons</a><br />";
-			if (target !== 'all') {
-				buffer += "- <a href=\"https://www.smogon.com/forums/threads/3499973/\">Balanced Hackmons Mentoring Program</a><br />";
-			}
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3499973/\">Balanced Hackmons Mentoring Program</a><br />";
 		}
 		if (target === '1v1') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496773/\">1v1</a><br />";
 		}
-		if (target === 'oumonotype' || target === 'monotype') {
+		if (target === 'monotype') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">OU Monotype</a><br />";
-			if (target !== 'all') {
-				buffer += "- <a href=\"https://www.smogon.com/forums/threads/3507565/\">OU Monotype Viability Rankings</a><br />";
-			}
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">Monotype</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517737/\">Monotype Viability Rankings</a><br />";
 		}
 		if (target === 'tiershift' || target === 'ts') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3508369/\">Tier Shift</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3514386/\">Tier Shift Viability Rankings</a><br />";
+		}
+		if (target === 'pu') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3513882/\">PU</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517353/\">PU Viability Rankings</a><br />";
+		}
+		if (target === 'lcuu') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516967/\">LC UU</a><br />";
 		}
 		if (target === 'almostanyability' || target === 'aaa') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3495737/\">Almost Any Ability</a><br />";
-			if (target !== 'all') {
-				buffer += "- <a href=\"https://www.smogon.com/forums/threads/3508794/\">Almost Any Ability Viability Rankings</a><br />";
-			}
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517022/\">Almost Any Ability</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3508794/\">Almost Any Ability Viability Rankings</a><br />";
 		}
 		if (target === 'stabmons') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493081/\">STABmons</a><br />";
-			if (target !== 'all') {
-				buffer += "- <a href=\"https://www.smogon.com/forums/threads/3512215/\">STABmons Viability Rankings</a><br />";
-			}
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3512215/\">STABmons Viability Rankings</a><br />";
 		}
 		if (target === 'skybattles' || target === 'skybattle') {
 			matched = true;
@@ -953,15 +961,11 @@ var commands = exports.commands = {
 		}
 		if (target === 'inversebattle' || target === 'inverse') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3492433/\">Inverse Battle</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3518146/\">Inverse Battle</a><br />";
 		}
-		if (target === 'smogontriples' || target === 'triples') {
+		if (target === '350cup') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
-		}
-		if (target === 'alphabetcup') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498167/\">Alphabet Cup</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3512945/\">350 Cup</a><br />";
 		}
 		if (target === 'averagemons') {
 			matched = true;
@@ -971,9 +975,17 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3500418/\">Hackmons</a><br />";
 		}
+		if (target === 'hiddentype') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Hidden Type</a><br />";
+		}
 		if (target === 'middlecup' || target === 'mc') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
+		}
+		if (target === 'mashup') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515232/\">OM Mashup</a><br />";
 		}
 		if (target === 'glitchmons') {
 			matched = true;
@@ -1114,7 +1126,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'star' || target === 'player') {
 			matched = true;
-			buffer += '<a href="http://www.smogon.com/sim/faq#star">Why is there this star (&starf;) behind my username?</a><br />';
+			buffer += '<a href="http://www.smogon.com/sim/faq#star">Why is there this star (&starf;) in front of my username?</a><br />';
 		}
 		if (target === 'staff') {
 			matched = true;
@@ -1143,30 +1155,33 @@ var commands = exports.commands = {
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/tiering-faq.3498332/\">Tiering FAQ</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/xyhub/tiers\">The banlists for each tier</a><br />";
 		}
-		if (target === 'ubers' || target === 'uber') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496305/\">Ubers Viability Rankings</a><br />";
-		}
 		if (target === 'overused' || target === 'ou') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511596/\">np: OU Stage 5</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3491371/\">OU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3502428/\">OU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3514144/\">np: OU Stage 6</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515714/\">OU Viability Rankings</a><br />";
+		}
+		if (target === 'ubers' || target === 'uber') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3513127/\">np: XY Ubers Gengarite Suspect Test</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496305/\">Ubers Viability Rankings</a><br />";
 		}
 		if (target === 'underused' || target === 'uu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3508311/\">np: UU Stage 2</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3502698/#post-5323505\">UU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3500340/\">UU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516640/\">np: UU Stage 3</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516418/\">UU Viability Rankings</a><br />";
 		}
 		if (target === 'rarelyused' || target === 'ru') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515615/\">np: RU Stage 4</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3506500/\">RU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516783/\">RU Viability Rankings</a><br />";
 		}
 		if (target === 'neverused' || target === 'nu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3514299/\">np: NU Stage 1</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516675/\">np: NU Stage 2</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509494/\">NU Viability Rankings</a><br />";
 		}
 		if (target === 'littlecup' || target === 'lc') {
@@ -1174,7 +1189,7 @@ var commands = exports.commands = {
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496013/\">LC Viability Rankings</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3490462/\">Official LC Banlist</a><br />";
 		}
-		if (target === 'doubles') {
+		if (target === 'smogondoubles' || target === 'doubles') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509279/\">np: Doubles Stage 3.5</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles Banlist</a><br />";
@@ -1521,103 +1536,6 @@ var commands = exports.commands = {
 		this.privateModCommand("(" + user.name + " has removed from the spamroom user list: " + targets.join(", ") + ")");
 	},
 
-	customavatars: 'customavatar',
-	customavatar: (function () {
-		const script = function () {/*
-			FILENAME=`mktemp`
-			function cleanup {
-				rm -f $FILENAME
-			}
-			trap cleanup EXIT
-
-			set -xe
-
-			timeout 10 wget "$1" -nv -O $FILENAME
-
-			FRAMES=`identify $FILENAME | wc -l`
-			if [ $FRAMES -gt 1 ]; then
-				EXT=".gif"
-			else
-				EXT=".png"
-			fi
-
-			timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
-		*/}.toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
-
-		var pendingAdds = {};
-		return function (target) {
-			var parts = target.split(',');
-			var cmd = parts[0].trim().toLowerCase();
-
-			if (cmd in {'':1, show:1, view:1, display:1}) {
-				var message = "";
-				for (var a in Config.customAvatars)
-					message += "<strong>" + Tools.escapeHTML(a) + ":</strong> " + Tools.escapeHTML(Config.customAvatars[a]) + "<br />";
-				return this.sendReplyBox(message);
-			}
-
-			if (!this.can('customavatar')) return false;
-
-			switch (cmd) {
-				case 'set':
-					var userid = toId(parts[1]);
-					var user = Users.getExact(userid);
-					var avatar = parts.slice(2).join(',').trim();
-
-					if (!userid) return this.sendReply("You didn't specify a user.");
-					if (Config.customAvatars[userid]) return this.sendReply(userid + " already has a custom avatar.");
-
-					var hash = require('crypto').createHash('sha512').update(userid + '\u0000' + avatar).digest('hex').slice(0, 8);
-					pendingAdds[hash] = {userid: userid, avatar: avatar};
-					parts[1] = hash;
-
-					if (!user) {
-						this.sendReply("Warning: " + userid + " is not online.");
-						this.sendReply("If you want to continue, use: /customavatar forceset, " + hash);
-						return;
-					}
-
-					/* falls through */
-				case 'forceset':
-					var hash = parts[1].trim();
-					if (!pendingAdds[hash]) return this.sendReply("Invalid hash.");
-
-					var userid = pendingAdds[hash].userid;
-					var avatar = pendingAdds[hash].avatar;
-					delete pendingAdds[hash];
-
-					require('child_process').execFile('bash', ['-c', script, '-', avatar, './config/avatars/' + userid], function (e, out, err) {
-						if (e) {
-							this.sendReply(userid + "'s custom avatar failed to be set. Script output:");
-							(out + err).split('\n').forEach(this.sendReply.bind(this));
-							return;
-						}
-
-						reloadCustomAvatars();
-						this.sendReply(userid + "'s custom avatar has been set.");
-					}.bind(this));
-					break;
-
-				case 'delete':
-					var userid = toId(parts[1]);
-					if (!Config.customAvatars[userid]) return this.sendReply(userid + " does not have a custom avatar.");
-
-					if (Config.customAvatars[userid].toString().split('.').slice(0, -1).join('.') !== userid)
-						return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") cannot be removed with this script.");
-					require('fs').unlink('./config/avatars/' + Config.customAvatars[userid], function (e) {
-						if (e) return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") could not be removed: " + e.toString());
-
-						delete Config.customAvatars[userid];
-						this.sendReply(userid + "'s custom avatar removed successfully");
-					}.bind(this));
-					break;
-
-				default:
-					return this.sendReply("Invalid command. Valid commands are `/customavatar set, user, avatar` and `/customavatar delete, user`.");
-			}
-		};
-	})(),
-
 	/*********************************************************
 	 * Help commands
 	 *********************************************************/
@@ -1748,7 +1666,7 @@ var commands = exports.commands = {
 			this.sendReply("/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.");
 			this.sendReply("Search categories are: type, tier, color, moves, ability, gen.");
 			this.sendReply("Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.");
-			this.sendReply("Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/LC/CAP.");
+			this.sendReply("Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/PU/LC/CAP.");
 			this.sendReply("Types must be followed by ' type', e.g., 'dragon type'.");
 			this.sendReply("Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.");
 			this.sendReply("The parameter 'mega' can be added to search for Mega Evolutions only, and the parameters 'FE' or 'NFE' can be added to search fully or not-fully evolved Pokemon only.");
@@ -1973,6 +1891,6 @@ var commands = exports.commands = {
 		} else if (!matched) {
 			this.sendReply("Help for the command '" + target + "' was not found. Try /help for general help");
 		}
-	},
+	}
 
 };

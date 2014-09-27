@@ -46,14 +46,14 @@ var jsHintOptions = {
 		"TeamValidator": false,
 		"battleEngineFakeProcess": false,
 		"battleProtoCache": false,
-		"reloadCustomAvatars": false,
 		"tells": false,
 		"Spamroom": false
 	}
 };
 
-gulp.task('lint', function () {
-	var directories = ['./*.js', './data/*.js', './mods/*/*.js', './tournaments/*.js', './chat-plugins/*.js', './config/*.js'];
+gulp.task('data', function () {
+	var directories = ['./data/*.js', './mods/*/*.js'];
+	jsHintOptions['es3'] = true;
 
 	// Replacing `var` with `let` is sort of a hack that stops jsHint from
 	// complaining that I'm using `var` like `let` should be used, but
@@ -68,6 +68,7 @@ gulp.task('lint', function () {
 
 gulp.task('fastlint', function () {
 	var directories = ['./*.js', './tournaments/*.js', './chat-plugins/*.js', './config/*.js'];
+	delete jsHintOptions['es3'];
 
 	return gulp.src(directories)
 		.pipe(replace(/\bvar\b/g, 'let'))
@@ -76,4 +77,5 @@ gulp.task('fastlint', function () {
 		.pipe(jshint.reporter('fail'));
 });
 
-gulp.task('default', ['lint']);
+gulp.task('default', ['fastlint', 'data']);
+gulp.task('lint', ['fastlint', 'data']);
