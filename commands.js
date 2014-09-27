@@ -1156,7 +1156,6 @@ var commands = exports.commands = {
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch formats: \n" + e.stack);
 			}
-			return this.sendReply("Formats hotpatching is not supported with the single process hack.");
 
 		} else if (target === 'learnsets') {
 			try {
