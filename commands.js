@@ -653,7 +653,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('mute', targetUser, room)) return false;
 
-		if (((targetUser.mutedRooms[room.id] && (targetUser.muteDuration[room.id] || 0) >= 50 * 60 * 1000) || targetUser.locked) && !target) {
+		if (((targetUser.mutedRooms[room.id] && (targetUser.muteDuration[room.id] || 0) >= 60 * 60 * 1000) || targetUser.locked) && !target) {
 			var problem = " but was already " + (!targetUser.connected ? "offline" : targetUser.locked ? "locked" : "muted");
 			return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
 		}
