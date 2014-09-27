@@ -1272,7 +1272,33 @@ var commands = exports.commands = {
 	kill: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
 
-		return this.sendReply("If you need to restart the server, please ask kota or pika.");
+		if (!Rooms.global.lockdown) {
+			return this.sendReply("For safety reasons, /kill can only be used during lockdown.");
+		}
+
+		if (CommandParser.updateServerLock) {
+			return this.sendReply("Wait for /updateserver to finish before using /kill.");
+		}
+
+		for (var i in Sockets.workers) {
+			Sockets.workers[i].kill();
+		}
+
+		if (!room.destroyLog) {
+			process.exit();
+			return;
+		}
+		room.destroyLog(function () {
+			room.logEntry(user.name + " used /kill");
+		}, function () {
+			process.exit();
+		});
+
+		// Just in the case the above never terminates, kill the process
+		// after 10 seconds.
+		setTimeout(function () {
+			process.exit();
+		}, 10000);
 	},
 
 	loadbanlist: function (target, room, user, connection) {
