@@ -126,7 +126,17 @@ global.ResourceMonitor = {
 	 */
 	log: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) Rooms.rooms.staff.add('||' + text);
+		if (Rooms.rooms.staff) {
+			Rooms.rooms.staff.add('||' + text);
+			Rooms.rooms.staff.update();
+		}
+	},
+	logHTML: function (text) {
+		console.log(text);
+		if (Rooms.rooms.staff) {
+			Rooms.rooms.staff.add('|html|' + text);
+			Rooms.rooms.staff.update();
+		}
 	},
 	countConnection: function (ip, name) {
 		var now = Date.now();
