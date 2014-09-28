@@ -500,7 +500,7 @@ exports.Formats = [
 
 		mod: 'inverse',
 		ruleset: ['OU'],
-		banlist: []
+		banlist: ['Kyurem-Black', 'Snorlax']
 	},
 	{
 		name: "350 Cup",
