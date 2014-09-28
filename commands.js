@@ -423,12 +423,15 @@ var commands = exports.commands = {
 	},
 
 	roomauth: function (target, room, user, connection) {
-		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefore has no auth list.");
-
+		var targetRoom = room;
+		if (target) targetRoom = Rooms.get(target) || Rooms.get(toId(target)) || Rooms.aliases[toId(target)];
+		if (!targetRoom || (targetRoom !== room && targetRoom.modjoin && !user.can('bypassall'))) return this.sendReply("The room '" + target + "' does not exist.");
+		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list.");
+		
 		var rankLists = {};
-		for (var u in room.auth) {
-			if (!rankLists[room.auth[u]]) rankLists[room.auth[u]] = [];
-			rankLists[room.auth[u]].push(u);
+		for (var u in targetRoom.auth) {
+			if (!rankLists[targetRoom.auth[u]]) rankLists[targetRoom.auth[u]] = [];
+			rankLists[targetRoom.auth[u]].push(u);
 		}
 
 		var buffer = [];
@@ -439,9 +442,10 @@ var commands = exports.commands = {
 		});
 
 		if (!buffer.length) {
-			connection.popup("This room has no auth.");
+			connection.popup("The room '" + targetRoom.title + "' has no auth.");
 			return;
 		}
+		if (targetRoom !== room) buffer.unshift("" + targetRoom.title + " room auth:");
 		connection.popup(buffer.join("\n\n"));
 	},
 
