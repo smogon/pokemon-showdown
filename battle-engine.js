@@ -143,11 +143,15 @@ BattlePokemon = (function () {
 	function BattlePokemon(set, side) {
 		this.side = side;
 		this.battle = side.battle;
+
+		var pokemonScripts = this.battle.data.Scripts.pokemon;
+		if (pokemonScripts) Object.merge(this, pokemonScripts);
+
 		if (typeof set === 'string') set = {name: set};
 
 		// "pre-bound" functions for nicer syntax (avoids repeated use of `bind`)
-		this.getHealth = BattlePokemon.getHealth.bind(this);
-		this.getDetails = BattlePokemon.getDetails.bind(this);
+		this.getHealth = this.getHealth || BattlePokemon.getHealth.bind(this);
+		this.getDetails = this.getDetails || BattlePokemon.getDetails.bind(this);
 
 		this.set = set;
 
@@ -1215,6 +1219,9 @@ BattlePokemon = (function () {
 
 BattleSide = (function () {
 	function BattleSide(name, battle, n, team) {
+		var sideScripts = battle.data.Scripts.side;
+		if (sideScripts) Object.merge(this, sideScripts);
+
 		this.battle = battle;
 		this.n = n;
 		this.name = name;
