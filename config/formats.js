@@ -573,12 +573,7 @@ exports.Formats = [
 
 		mod: 'hiddentype',
 		searchShow: false,
-		ruleset: ['OU'],
-		onSwitchInPriority: 101,
-		onSwitchIn: function (pokemon) {
-			var type = pokemon.hpType || 'Dark';
-			if (!pokemon.hasType(type)) pokemon.addType(type);
-		}
+		ruleset: ['OU']
 	},
 	{
 		name: "Middle Cup",

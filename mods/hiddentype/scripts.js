@@ -1,27 +1,42 @@
 exports.BattleScripts = {
-	runMegaEvo: function (pokemon) {
-		var side = pokemon.side;
-		var item = this.getItem(pokemon.item);
-		if (!item.megaStone) return false;
-		if (side.megaEvo) return false;
-		var template = this.getTemplate(item.megaStone);
-		if (!template.isMega) return false;
-		if (pokemon.baseTemplate.baseSpecies !== template.baseSpecies) return false;
+	pokemon: {
+		formeChange: function (template, dontRecalculateStats) {
+			template = this.battle.getTemplate(template);
 
-		// okay, mega evolution is possible
-		pokemon.formeChange(template);
-		pokemon.baseTemplate = template; // mega evolution is permanent :o
-		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-		this.add('detailschange', pokemon, pokemon.details);
-		this.add('message', template.baseSpecies + " has Mega Evolved into Mega " + template.baseSpecies + "!");
-		pokemon.setAbility(template.abilities['0']);
-		pokemon.baseAbility = pokemon.ability;
+			if (!template.abilities) return false;
+			this.illusion = null;
+			this.template = template;
+			this.types = template.types;
+			this.typesData = [];
+			for (var i = 0, l = this.types.length; i < l; i++) {
+				this.typesData.push({
+					type: this.types[i],
+					suppressed: false,
+					isAdded: false
+				});
+			}
+			if (this.types.indexOf(this.hpType) === -1) {
+				this.typesData.push({
+					type: this.hpType,
+					suppressed: false,
+					isAdded: true
+				});
+			}
 
-		var type = pokemon.hpType || 'Dark';
-		if (!pokemon.hasType(type)) pokemon.addType(type);
+			if (!dontRecalculateStats) {
+				for (var statName in this.stats) {
+					var stat = this.template.baseStats[statName];
+					stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
 
-		side.megaEvo = 1;
-		for (var i = 0; i < side.pokemon.length; i++) side.pokemon[i].canMegaEvo = false;
-		return true;
+					// nature
+					var nature = this.battle.getNature(this.set.nature);
+					if (statName === nature.plus) stat *= 1.1;
+					if (statName === nature.minus) stat *= 0.9;
+					this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
+				}
+				this.speed = this.stats.spe;
+			}
+			return true;
+		}
 	}
 };
