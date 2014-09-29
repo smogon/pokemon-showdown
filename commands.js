@@ -73,7 +73,7 @@ var commands = exports.commands = {
 	pm: 'msg',
 	whisper: 'msg',
 	w: 'msg',
-	msg: function (target, room, user) {
+	msg: function (target, room, user, connection) {
 		if (!target) return this.parse('/help msg');
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -121,15 +121,14 @@ var commands = exports.commands = {
 		if (target.charAt(0) === '/' && target.charAt(1) !== '/') {
 			// PM command
 			var targetCmdIndex = target.indexOf(' ');
-			var targetCmd = (targetCmdIndex >= 0 ? target.slice(1, targetCmdIndex) : target);
+			var targetCmd = (targetCmdIndex >= 0 ? target.slice(1, targetCmdIndex) : target.slice(1));
 			switch (targetCmd) {
 			case 'me':
 			case 'announce':
 			case 'invite':
 				break;
 			default:
-				target = '/'+target;
-				break;
+				return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text The command '/" + targetCmd + "' was unrecognized or unavailable in private messages. To send a message starting with '/" + targetCmd + "', type '//" + targetCmd + "'.");
 			}
 		}
 
