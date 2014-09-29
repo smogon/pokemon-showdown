@@ -261,7 +261,7 @@ exports.BattleMovedex = {
 	},
 	explosion: {
 		inherit: true,
-		onAfterMove: function(pokemon) {
+		onAfterMove: function (pokemon) {
 			for (var i = 0; i < pokemon.side.active.length; i++) {
 				this.cancelMove(pokemon.side.active[i]);
 			}
@@ -385,7 +385,7 @@ exports.BattleMovedex = {
 		onModifyMove: function (move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
 			var specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
-			move.category = specialTypes[move.type]? 'Special' : 'Physical';
+			move.category = specialTypes[move.type] ? 'Special' : 'Physical';
 		},
 		secondary: false,
 		target: "normal",
@@ -438,7 +438,7 @@ exports.BattleMovedex = {
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
 				var noMetronome = {
-				assist:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, focuspunch:1, followme:1, helpinghand:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, protect:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, thief:1, trick:1
+					assist:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, focuspunch:1, followme:1, helpinghand:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, protect:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, thief:1, trick:1
 				};
 				if (!noMetronome[move.id] && move.num < 355) {
 					moves.push(move.id);
@@ -554,7 +554,7 @@ exports.BattleMovedex = {
 	},
 	selfdestruct: {
 		inherit: true,
-		onAfterMove: function(pokemon) {
+		onAfterMove: function (pokemon) {
 			for (var i = 0; i < pokemon.side.active.length; i++) {
 				this.cancelMove(pokemon.side.active[i]);
 			}

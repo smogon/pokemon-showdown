@@ -1,5 +1,5 @@
 exports.BattleScripts = {
-	init: function() {
+	init: function () {
 		for (var i in this.data.Pokedex) {
 			var tier = '';
 			var adjustment = 0;

@@ -9,7 +9,7 @@ exports.BattleScripts = {
 		var newCategory = '';
 		for (var i in this.data.Movedex) {
 			if (this.data.Movedex[i].category === 'Status') continue;
-			newCategory = specialTypes[this.data.Movedex[i].type]? 'Special' : 'Physical';
+			newCategory = specialTypes[this.data.Movedex[i].type] ? 'Special' : 'Physical';
 			if (newCategory !== this.data.Movedex[i].category) {
 				this.modData('Movedex', i).category = newCategory;
 			}
