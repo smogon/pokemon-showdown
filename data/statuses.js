@@ -177,7 +177,7 @@ exports.BattleStatuses = {
 			return this.random(5, 7);
 		},
 		onStart: function (pokemon, source) {
-			this.add('-activate', pokemon, 'move: ' +this.effectData.sourceEffect, '[of] ' + source);
+			this.add('-activate', pokemon, 'move: ' + this.effectData.sourceEffect, '[of] ' + source);
 		},
 		onResidualOrder: 11,
 		onResidual: function (pokemon) {

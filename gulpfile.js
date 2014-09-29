@@ -49,6 +49,8 @@ var jsHintOptions = {
 };
 
 var jscsOptions = {
+	"excludeFiles": ["./**/pokedex.js", "./**/formats-data.js", "./**/learnsets.js", "./**/learnsets-g6.js"],
+
 	"preset": "google",
 
 	"requireCurlyBraces": null,
@@ -57,6 +59,7 @@ var jscsOptions = {
 	"validateIndentation": "\t",
 	"validateQuoteMarks": null,
 
+	"disallowMixedSpacesAndTabs": "smart",
 	"disallowMultipleVarDecl": null,
 
 	"requireSpaceAfterKeywords": true,
@@ -100,7 +103,8 @@ gulp.task('data', function () {
 		.pipe(replace(/\bvar\b/g, 'let'))
 		.pipe(jshint(jsHintOptions))
 		.pipe(jshint.reporter(jshintStylish))
-		.pipe(jshint.reporter('fail'));
+		.pipe(jshint.reporter('fail'))
+		.pipe(jscs(jscsOptions));
 });
 
 gulp.task('fastlint', function () {

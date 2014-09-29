@@ -813,9 +813,7 @@ exports.BattleMovedex = {
 				do {
 					this.effectData.index++;
 					if (this.effectData.index >= 6) break;
-				} while (!pokemon.side.pokemon[this.effectData.index] ||
-						pokemon.side.pokemon[this.effectData.index].fainted ||
-						pokemon.side.pokemon[this.effectData.index].status);
+				} while (!pokemon.side.pokemon[this.effectData.index] || pokemon.side.pokemon[this.effectData.index].fainted || pokemon.side.pokemon[this.effectData.index].status);
 			}
 		},
 		secondary: false,
@@ -2281,7 +2279,7 @@ exports.BattleMovedex = {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
 				delete move.onHit;
-				move.self = { boosts: {atk:1, def:1, spe:-1}};
+				move.self = {boosts: {atk:1, def:1, spe:-1}};
 				move.target = move.nonGhostTarget;
 			}
 		},
@@ -3952,7 +3950,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		isBiteAttack: true,
-		secondaries: [ {
+		secondaries: [
+			{
 				chance: 10,
 				status: 'brn'
 			}, {
@@ -5105,7 +5104,7 @@ exports.BattleMovedex = {
 				this.debug('40 bp');
 				return 40;
 			}
-				this.debug('20 bp');
+			this.debug('20 bp');
 			return 20;
 		},
 		category: "Special",
@@ -5991,7 +5990,7 @@ exports.BattleMovedex = {
 				this.effectData.multiplier = 1.5;
 				this.add('-singleturn', target, 'Helping Hand', '[of] ' + source);
 			},
-			onRestart: function(target, source) {
+			onRestart: function (target, source) {
 				this.effectData.multiplier *= 1.5;
 				this.add('singleturn', target, 'Helping Hand', '[of] ' + source);
 			},
@@ -6680,7 +6679,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		isBiteAttack: true,
-		secondaries: [ {
+		secondaries: [
+			{
 				chance: 10,
 				status: 'frz'
 			}, {
@@ -8252,7 +8252,7 @@ exports.BattleMovedex = {
 			}
 			var move = '';
 			if (moves.length) {
-				moves.sort(function(a,b){return a.num-b.num;});
+				moves.sort(function (a, b) {return a.num - b.num;});
 				move = moves[this.random(moves.length)].id;
 			}
 			if (!move) {
@@ -13810,7 +13810,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		isBiteAttack: true,
-		secondaries: [ {
+		secondaries: [
+			{
 				chance: 10,
 				status: 'par'
 			}, {
