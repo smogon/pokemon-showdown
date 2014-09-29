@@ -1460,6 +1460,9 @@ function getRoom(roomid, fallback) {
 	return rooms[roomid];
 }
 Rooms.get = getRoom;
+Rooms.search = function(name, fallback) {
+	return getRoom(name) || getRoom(toId(name)) || Rooms.aliases[toId(name)] || (fallback ? rooms.global : undefined);
+};
 
 Rooms.createBattle = function (roomid, format, p1, p2, parent, rated) {
 	if (roomid && roomid.id) return roomid;
