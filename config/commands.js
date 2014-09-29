@@ -240,11 +240,11 @@ var commands = exports.commands = {
 		if (!this.targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
-		var roomid = (target || room.id);
-		if (!Rooms.get(roomid)) {
-			return this.sendReply("Room " + roomid + " not found.");
+		var targetRoom = (target ? Rooms.search(target) : room);
+		if (!targetRoom) {
+			return this.sendReply("Room " + target + " not found.");
 		}
-		return this.parse('/msg ' + this.targetUsername + ', /invite ' + roomid);
+		return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
 	},
 
 	/*********************************************************
