@@ -105,6 +105,7 @@ exports.Formats = [
 		},
 		forcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
+		banlist: ['Rotom', 'Rotom-Fan', 'Rotom-Frost', 'Rotom-Heat', 'Rotom-Mow', 'Rotom-Wash'],
 		requirePentagon: true,
 		validateTeam: function (team) {
 			var problems = [];
@@ -603,33 +604,6 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard']
-	},
-	{
-		name: "Fairy Face-Off",
-		section: "Other Metagames",
-
-		searchShow: false,
-		onBegin: function () {
-			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		forcedLevel: 30,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		requirePentagon: true,
-		validateTeam: function (team) {
-			var problems = [];
-			if (team.length < 3) problems.push('You must bring at least three Pokémon.');
-			for (var i = 0; i < team.length; i++) {
-				var types = Tools.getTemplate(team[i].species || team[i].name).types || [];
-				if (types.indexOf('Fairy') > -1) continue;
-				problems.push('You must only bring Fairy-type Pokémon.');
-				break;
-			}
-			return problems;
-		}
 	},
 	{
 		name: "[Gen 5] Glitchmons",
