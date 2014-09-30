@@ -272,7 +272,7 @@ var commands = exports.commands = {
 			this.sendReplyBox(room.introMessage);
 			if (!this.broadcasting && user.can('declare', null, room)) {
 				this.sendReply('Source:');
-				this.sendReplyBox('<code>'+Tools.escapeHTML(room.introMessage)+'</code>');
+				this.sendReplyBox('<code>' + Tools.escapeHTML(room.introMessage) + '</code>');
 			}
 			return;
 		}
@@ -441,7 +441,7 @@ var commands = exports.commands = {
 		if (target) targetRoom = Rooms.search(target);
 		if (!targetRoom || (targetRoom !== room && targetRoom.modjoin && !user.can('bypassall'))) return this.sendReply("The room '" + target + "' does not exist.");
 		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list.");
-		
+
 		var rankLists = {};
 		for (var u in targetRoom.auth) {
 			if (!rankLists[targetRoom.auth[u]]) rankLists[targetRoom.auth[u]] = [];
@@ -450,7 +450,7 @@ var commands = exports.commands = {
 
 		var buffer = [];
 		Object.keys(rankLists).sort(function (a, b) {
-			return (Config.groups[b]||{rank:0}).rank - (Config.groups[a]||{rank:0}).rank;
+			return (Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank;
 		}).forEach(function (r) {
 			buffer.push((Config.groups[r] ? Config.groups[r] .name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
 		});
@@ -1055,7 +1055,7 @@ var commands = exports.commands = {
 			return this.sendReply("User '" + target + "' had already changed its name to '" + targetUser.name + "'.");
 		}
 
-		var entry = targetUser.name + " was forced to choose a new name by " + user.name + (reason ? ": " + reason: "");
+		var entry = targetUser.name + " was forced to choose a new name by " + user.name + (reason ? ": " + reason : "");
 		this.privateModCommand("(" + entry + ")");
 		Rooms.global.cancelSearch(targetUser);
 		targetUser.resetName();
@@ -1145,7 +1145,6 @@ var commands = exports.commands = {
 		this.logEntry(user.name + " used /hotpatch " + target);
 
 		if (target === 'chat' || target === 'commands') {
-
 			try {
 				CommandParser.uncacheTree('./command-parser.js');
 				global.CommandParser = require('./command-parser.js');
@@ -1159,9 +1158,7 @@ var commands = exports.commands = {
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch chat: \n" + e.stack);
 			}
-
 		} else if (target === 'tournaments') {
-
 			try {
 				var runningTournaments = Tournaments.tournaments;
 				CommandParser.uncacheTree('./tournaments');
@@ -1171,12 +1168,9 @@ var commands = exports.commands = {
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch tournaments: \n" + e.stack);
 			}
-
 		} else if (target === 'battles') {
-
 			Simulator.SimulatorProcess.respawn();
 			return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
-
 		} else if (target === 'formats') {
 			try {
 				// uncache the tools.js dependency tree
@@ -1196,7 +1190,6 @@ var commands = exports.commands = {
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch formats: \n" + e.stack);
 			}
-
 		} else if (target === 'learnsets') {
 			try {
 				// uncache the tools.js dependency tree
@@ -1208,7 +1201,6 @@ var commands = exports.commands = {
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch learnsets: \n" + e.stack);
 			}
-
 		}
 		this.sendReply("Your hot-patch command was unrecognized.");
 	},
@@ -1486,10 +1478,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'v8') {
 			this.sendReply("Retrieving V8 memory usage...");
 			var o = process.memoryUsage();
-			this.sendReply(
-				"Resident set size: " + o.rss + ", " + o.heapUsed + " heap used of " + o.heapTotal  + " total heap. " +
-				 (o.heapTotal - o.heapUsed) + " heap left."
-			);
+			this.sendReply("Resident set size: " + o.rss + ", " + o.heapUsed + " heap used of " + o.heapTotal  + " total heap. " + (o.heapTotal - o.heapUsed) + " heap left.");
 		}
 		if (target === 'all') {
 			this.sendReply("Calculating Total size...");
@@ -1714,7 +1703,6 @@ var commands = exports.commands = {
 			room.battle.win(target);
 			this.logModCommand(user.name + " forced a win for " + target + ".");
 		}
-
 	},
 
 	/*********************************************************
@@ -1820,7 +1808,6 @@ var commands = exports.commands = {
 			target = '';
 		}
 		if (cmd === 'userdetails') {
-
 			var targetUser = Users.get(target);
 			if (!trustable || !targetUser) {
 				connection.send('|queryresponse|userdetails|' + JSON.stringify({
@@ -1857,19 +1844,16 @@ var commands = exports.commands = {
 				}
 			}
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
-
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;
 			connection.send('|queryresponse|roomlist|' + JSON.stringify({
 				rooms: Rooms.global.getRoomList(target)
 			}));
-
 		} else if (cmd === 'rooms') {
 			if (!trustable) return false;
 			connection.send('|queryresponse|rooms|' + JSON.stringify(
 				Rooms.global.getRooms()
 			));
-
 		}
 	},
 
@@ -1889,6 +1873,6 @@ var commands = exports.commands = {
 			}
 		}
 		user.rename(targetName, targetToken, targetAuth, connection);
-	},
+	}
 
 };

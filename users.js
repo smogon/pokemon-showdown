@@ -80,7 +80,7 @@ Users.get = getUser;
  * true = don't track across username changes, false = do track. This
  * is not recommended since it's less readable.
  */
-var getExactUser = Users.getExact = function(name) {
+var getExactUser = Users.getExact = function (name) {
 	return getUser(name, true);
 };
 
@@ -181,7 +181,7 @@ Users.unlock = unlock;
 
 var connections = Users.connections = Object.create(null);
 
-Users.socketConnect = function(worker, workerid, socketid, ip) {
+Users.socketConnect = function (worker, workerid, socketid, ip) {
 	var id = '' + workerid + '-' + socketid;
 	var connection = connections[id] = new Connection(id, worker, socketid, null, ip);
 
@@ -207,7 +207,7 @@ Users.socketConnect = function(worker, workerid, socketid, ip) {
 	}
 	// Emergency mode connections logging
 	if (Config.emergency) {
-		fs.appendFile('logs/cons.emergency.log', '[' + ip + ']\n', function (err){
+		fs.appendFile('logs/cons.emergency.log', '[' + ip + ']\n', function (err) {
 			if (err) {
 				console.log('!! Error in emergency conns log !!');
 				throw err;
@@ -234,7 +234,7 @@ Users.socketConnect = function(worker, workerid, socketid, ip) {
 		}
 	});
 
-	dns.reverse(ip, function(err, hosts) {
+	dns.reverse(ip, function (err, hosts) {
 		if (hosts && hosts[0]) {
 			user.latestHost = hosts[0];
 			if (Config.hostfilter) Config.hostfilter(hosts[0], user);
@@ -254,7 +254,7 @@ Users.socketConnect = function(worker, workerid, socketid, ip) {
 	});
 };
 
-Users.socketDisconnect = function(worker, workerid, socketid) {
+Users.socketDisconnect = function (worker, workerid, socketid) {
 	var id = '' + workerid + '-' + socketid;
 
 	var connection = connections[id];
@@ -262,7 +262,7 @@ Users.socketDisconnect = function(worker, workerid, socketid) {
 	connection.onDisconnect();
 };
 
-Users.socketReceive = function(worker, workerid, socketid, message) {
+Users.socketReceive = function (worker, workerid, socketid, message) {
 	var id = '' + workerid + '-' + socketid;
 
 	var connection = connections[id];
@@ -297,7 +297,7 @@ Users.socketReceive = function(worker, workerid, socketid, message) {
 	}
 	// Emergency logging
 	if (Config.emergency) {
-		fs.appendFile('logs/emergency.log', '['+ user + ' (' + connection.ip + ')] ' + message + '\n', function (err){
+		fs.appendFile('logs/emergency.log', '[' + user + ' (' + connection.ip + ')] ' + message + '\n', function (err) {
 			if (err) {
 				console.log('!! Error in emergency log !!');
 				throw err;
@@ -621,13 +621,13 @@ User = (function () {
 		if (authenticated && userid in bannedUsers) {
 			var bannedUnder = '';
 			if (bannedUsers[userid] !== userid) bannedUnder = ' under the username ' + bannedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl:""));
+			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
 			this.ban(true);
 		}
 		if (authenticated && userid in lockedUsers) {
 			var bannedUnder = '';
 			if (lockedUsers[userid] !== userid) bannedUnder = ' under the username ' + lockedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl:""));
+			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
 			this.lock(true);
 		}
 
@@ -1426,7 +1426,7 @@ User = (function () {
 
 		if (this.chatQueueTimeout) {
 			if (!this.chatQueue) this.chatQueue = []; // this should never happen
-			if (this.chatQueue.length >= THROTTLE_BUFFER_LIMIT-1) {
+			if (this.chatQueue.length >= THROTTLE_BUFFER_LIMIT - 1) {
 				connection.sendTo(room, '|raw|' +
 					"<strong class=\"message-throttle-notice\">Your message was not sent because you've been typing too quickly.</strong>"
 				);

@@ -181,7 +181,7 @@ exports.BattleItems = {
 			type: "Ground"
 		},
 		onUpdate: function (pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4|| (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hasAbility('gluttony'))) {
 				pokemon.eatItem();
 			}
 		},
