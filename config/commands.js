@@ -188,7 +188,7 @@ var commands = exports.commands = {
 				if (output) this.sendReply("Previous names: " + output);
 			}
 			if (targetUser.locked) {
-				this.sendReply("Locked under the username: "+targetUser.locked);
+				this.sendReply("Locked under the username: " + targetUser.locked);
 			}
 		}
 		if (Config.groups[targetUser.group] && Config.groups[targetUser.group].name) {
@@ -265,7 +265,7 @@ var commands = exports.commands = {
 		if (targetId === '' + parseInt(targetId)) {
 			for (var p in Tools.data.Pokedex) {
 				var pokemon = Tools.getTemplate(p);
-				if (pokemon.num == parseInt(target)) {
+				if (pokemon.num === parseInt(target)) {
 					target = pokemon.species;
 					targetId = pokemon.id;
 					break;
@@ -327,7 +327,6 @@ var commands = exports.commands = {
 						return evo.name + " (" + evo.evoLevel + ")";
 					}).join(", ");
 				}
-
 			} else if (newTargets[0].searchType === 'move') {
 				var move = Tools.getMove(newTargets[0].name);
 				details = {
@@ -351,7 +350,6 @@ var commands = exports.commands = {
 					'any': "Any Pokemon",
 					'all': "All Pokemon"
 				}[move.target] || "Unknown";
-
 			} else if (newTargets[0].searchType === 'item') {
 				var item = Tools.getItem(newTargets[0].name);
 				details = {};
@@ -368,7 +366,6 @@ var commands = exports.commands = {
 					details["Natural Gift Type"] = item.naturalGift.type;
 					details["Natural Gift BP"] = item.naturalGift.basePower;
 				}
-
 			} else {
 				details = {};
 			}
@@ -526,7 +523,8 @@ var commands = exports.commands = {
 					for (var mon in dex) {
 						if (searches[search][String(dex[mon][search]).toLowerCase()] === false) {
 							delete dex[mon];
-						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) delete dex[mon];					}
+						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) delete dex[mon];
+					}
 					break;
 
 				case 'ability':
@@ -656,7 +654,7 @@ var commands = exports.commands = {
 
 	weak: 'weakness',
 	resist: 'weakness',
-	weakness: function (target, room, user){
+	weakness: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
 
@@ -701,7 +699,7 @@ var commands = exports.commands = {
 				immunities.push(type);
 			}
 		});
- 
+
 		var buffer = [];
 		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':');
 		buffer.push('<span class=\"message-effect-weak\">Weaknesses</span>: ' + (weaknesses.join(', ') || 'None'));
@@ -807,8 +805,8 @@ var commands = exports.commands = {
 	},
 
 	staff: function (target, room, user) {
-	    if (!this.canBroadcast()) return;
-	    this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
 	},
 
 	avatars: function (target, room, user) {
@@ -820,10 +818,10 @@ var commands = exports.commands = {
 		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with '/showtan', type '//showtan'.");
 		if (!this.can('modchat', null, room)) return;
 		target = this.splitTarget(target);
-		if (!this.targetUser) return this.sendReply('user not found');
-		if (!room.users[this.targetUser.userid]) return this.sendReply('not a showderper');
+		if (!this.targetUser) return this.sendReply("User not found");
+		if (!room.users[this.targetUser.userid]) return this.sendReply("Not a showderper");
 		this.targetUser.avatar = '#showtan';
-		room.add(user.name+' applied showtan to affected area of '+this.targetUser.name);
+		room.add("" + user.name + " applied showtan to affected area of " + this.targetUser.name);
 	},
 
 	introduction: 'intro',
@@ -1226,7 +1224,7 @@ var commands = exports.commands = {
 		} else if (generation === 'gsc' || generation === 'gs' || generation === '2' || generation === 'two') {
 			generation = 'gs';
 			genNumber = 2;
-		} else if(generation === 'rby' || generation === 'rb' || generation === '1' || generation === 'one') {
+		} else if (generation === 'rby' || generation === 'rb' || generation === '1' || generation === 'one') {
 			generation = 'rb';
 			genNumber = 1;
 		} else {
@@ -1307,7 +1305,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dice');
 		if (!this.canBroadcast()) return;
 		var d = target.indexOf("d");
-		if (d != -1) {
+		if (d >= 0) {
 			var num = parseInt(target.substring(0, d));
 			var faces;
 			if (target.length > d) faces = parseInt(target.substring(d + 1));
@@ -1362,7 +1360,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 
 		var targets = target.split(',');
-		if (targets.length != 3) {
+		if (targets.length !== 3) {
 			return this.parse('/help showimage');
 		}
 

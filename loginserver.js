@@ -199,7 +199,7 @@ var LoginServer = module.exports = (function () {
 			res.on('end', endReq);
 			res.on('close', endReq);
 
-			self.requestTimeoutTimer = setTimeout(function (){
+			self.requestTimeoutTimer = setTimeout(function () {
 				if (res.connection) res.connection.destroy();
 				endReq();
 			}, LOGIN_SERVER_TIMEOUT);

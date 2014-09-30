@@ -74,9 +74,7 @@ exports.BattleMovedex = {
 				do {
 					this.effectData.index++;
 					if (this.effectData.index >= 6) break;
-				} while (!pokemon.side.pokemon[this.effectData.index] ||
-					pokemon.side.pokemon[this.effectData.index].fainted ||
-					pokemon.side.pokemon[this.effectData.index].status);
+				} while (!pokemon.side.pokemon[this.effectData.index] || pokemon.side.pokemon[this.effectData.index].fainted || pokemon.side.pokemon[this.effectData.index].status);
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk: function (atk, pokemon) {
@@ -203,7 +201,7 @@ exports.BattleMovedex = {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
 				delete move.onHit;
-				move.self = { boosts: {atk:1, def:1, spe:-1}};
+				move.self = {boosts: {atk:1, def:1, spe:-1}};
 				move.target = move.nonGhostTarget;
 			} else if (target.volatiles['substitute']) {
 				delete move.volatileStatus;
@@ -469,7 +467,7 @@ exports.BattleMovedex = {
 			},
 			onSwitchInPriority: -1,
 			onSwitchIn: function (target) {
-				if (target.position != this.effectData.sourcePosition) {
+				if (target.position !== this.effectData.sourcePosition) {
 					return;
 				}
 				if (target.hp > 0) {

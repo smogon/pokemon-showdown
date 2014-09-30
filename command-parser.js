@@ -304,7 +304,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				return canTalk(user, innerRoom, connection, message);
 			},
 			canHTML: function (html) {
-				html = ''+(html||'');
+				html = '' + (html || '');
 				var images = html.match(/<img\b[^<>]*/ig);
 				if (!images) return true;
 				for (var i = 0; i < images.length; i++) {
@@ -371,7 +371,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	}
 
 	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
-		message = '/'+message;
+		message = '/' + message;
 	}
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;

@@ -50,6 +50,7 @@
     "gulp-util": "~2.2.14",
     "gulp": "~3.8.7",
     "gulp-jshint": "~1.8.4",
+    "gulp-jscs": "~1.1.2",
     "gulp-replace": "~0.4.0",
     "jshint-stylish": "~0.1.5"
   }

@@ -134,24 +134,24 @@ exports.BattleMovedex = {
 	},
 	sleeptalk: {
 		inherit: true,
-			onHit: function (pokemon) {
-				var moves = [];
-				for (var i = 0; i < pokemon.moveset.length; i++) {
-					var move = pokemon.moveset[i].id;
-					var NoSleepTalk = {
-						bide:1, dig:1, fly:1, metronome:1, mirrormove:1,
-						skullbash:1, skyattack:1, sleeptalk:1, solarbeam:1, razorwind:1
-					};
-					if (move && !NoSleepTalk[move]) {
-						moves.push(move);
-					}
+		onHit: function (pokemon) {
+			var moves = [];
+			for (var i = 0; i < pokemon.moveset.length; i++) {
+				var move = pokemon.moveset[i].id;
+				var NoSleepTalk = {
+					bide:1, dig:1, fly:1, metronome:1, mirrormove:1,
+					skullbash:1, skyattack:1, sleeptalk:1, solarbeam:1, razorwind:1
+				};
+				if (move && !NoSleepTalk[move]) {
+					moves.push(move);
 				}
-				var move = '';
-				if (moves.length) move = moves[this.random(moves.length)];
-				if (!move) return false;
-				move.isSleepTalk = true;
-				this.useMove(move, pokemon);
 			}
+			var move = '';
+			if (moves.length) move = moves[this.random(moves.length)];
+			if (!move) return false;
+			move.isSleepTalk = true;
+			this.useMove(move, pokemon);
+		}
 	},
 	spikes: {
 		inherit: true,
@@ -196,7 +196,7 @@ exports.BattleMovedex = {
 						delete move.volatileStatus;
 					}
 					if (move.status || (move.boosts && move.id !== 'swagger') || move.volatileStatus === 'confusion' || SubBlocked[move.id] || move.drain) {
-						this.add('-activate', target, 'Substitute', '[block] '+move.name);
+						this.add('-activate', target, 'Substitute', '[block] ' + move.name);
 						return null;
 					}
 					return;

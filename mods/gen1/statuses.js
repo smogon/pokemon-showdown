@@ -17,7 +17,7 @@ exports.BattleStatuses = {
 		onAfterMoveSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 16);
 		},
-		onSwitchIn: function (pokemon){
+		onSwitchIn: function (pokemon) {
 			pokemon.addVolatile('brnattackdrop');
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
 				this.damage(pokemon.maxhp / 16);
@@ -44,7 +44,7 @@ exports.BattleStatuses = {
 				return false;
 			}
 		},
-		onSwitchIn: function (pokemon){
+		onSwitchIn: function (pokemon) {
 			pokemon.addVolatile('parspeeddrop');
 		}
 	},

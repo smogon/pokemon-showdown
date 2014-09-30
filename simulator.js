@@ -70,10 +70,10 @@ SimulatorProcess.spawn();
 
 var slice = Array.prototype.slice;
 
-var Battle = (function (){
+var Battle = (function () {
 	function Battle(id, format, rated, room) {
 		if (battles[id]) {
-			throw new Error("Battle with ID "+id+" already exists.");
+			throw new Error("Battle with ID " + id + " already exists.");
 		}
 
 		this.id = id;

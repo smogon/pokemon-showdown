@@ -67,7 +67,6 @@ exports.BattleStatuses = {
 		}
 	},
 
-
 	// weather!
 
 	raindance: {

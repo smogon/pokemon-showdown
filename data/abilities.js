@@ -639,7 +639,7 @@ exports.BattleAbilities = {
 		onSourceModifyDamage: function (damage, source, target, move) {
 			if (this.getEffectiveness(move, target) > 0) {
 				this.debug('Filter neutralize');
-					return this.chainModify(0.75);
+				return this.chainModify(0.75);
 			}
 		},
 		id: "filter",
@@ -3160,7 +3160,7 @@ exports.BattleAbilities = {
 			if (pokemon.baseTemplate.species !== 'Darmanitan') {
 				return;
 			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitan'){
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitan') {
 				pokemon.addVolatile('zenmode');
 			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitanzen') {
 				pokemon.removeVolatile('zenmode');
