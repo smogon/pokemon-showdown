@@ -12591,7 +12591,7 @@ exports.BattleMovedex = {
 				var side = pokemon.side;
 				if (!pokemon.runImmunity('Ground')) return;
 				var damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
-				var damage = this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
+				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			}
 		},
 		secondary: false,
@@ -12708,13 +12708,8 @@ exports.BattleMovedex = {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onSwitchIn: function (pokemon) {
-				var typeMod = this.getEffectiveness('Rock', pokemon);
-				var factor = 8;
-				if (typeMod === 1) factor = 4;
-				if (typeMod >= 2) factor = 2;
-				if (typeMod === -1) factor = 16;
-				if (typeMod <= -2) factor = 32;
-				var damage = this.damage(pokemon.maxhp / factor);
+				var typeMod = this.clampIntRange(this.getEffectiveness('Rock', pokemon), -6, 6);
+				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			}
 		},
 		secondary: false,

@@ -73,7 +73,7 @@ var commands = exports.commands = {
 	pm: 'msg',
 	whisper: 'msg',
 	w: 'msg',
-	msg: function (target, room, user) {
+	msg: function (target, room, user, connection) {
 		if (!target) return this.parse('/help msg');
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -117,6 +117,20 @@ var commands = exports.commands = {
 
 		target = this.canTalk(target, null);
 		if (!target) return false;
+
+		if (target.charAt(0) === '/' && target.charAt(1) !== '/') {
+			// PM command
+			var targetCmdIndex = target.indexOf(' ');
+			var targetCmd = (targetCmdIndex >= 0 ? target.slice(1, targetCmdIndex) : target.slice(1));
+			switch (targetCmd) {
+			case 'me':
+			case 'announce':
+			case 'invite':
+				break;
+			default:
+				return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text The command '/" + targetCmd + "' was unrecognized or unavailable in private messages. To send a message starting with '/" + targetCmd + "', type '//" + targetCmd + "'.");
+			}
+		}
 
 		var message = '|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|' + target;
 		user.send(message);
@@ -165,7 +179,7 @@ var commands = exports.commands = {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
 		if (!id) return this.parse('/help deregisterchatroom');
-		var targetRoom = Rooms.get(id);
+		var targetRoom = Rooms.search(id);
 		if (!targetRoom) return this.sendReply("The room '" + target + "' doesn't exist.");
 		target = targetRoom.title || targetRoom.id;
 		if (Rooms.global.deregisterChatRoom(id)) {
@@ -393,25 +407,29 @@ var commands = exports.commands = {
 	},
 
 	roomauth: function (target, room, user, connection) {
-		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefore has no auth list.");
+		var targetRoom = room;
+		if (target) targetRoom = Rooms.search(target);
+		if (!targetRoom || (targetRoom !== room && targetRoom.modjoin && !user.can('bypassall'))) return this.sendReply("The room '" + target + "' does not exist.");
+		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list.");
 
 		var rankLists = {};
-		for (var u in room.auth) {
-			if (!rankLists[room.auth[u]]) rankLists[room.auth[u]] = [];
-			rankLists[room.auth[u]].push(u);
+		for (var u in targetRoom.auth) {
+			if (!rankLists[targetRoom.auth[u]]) rankLists[targetRoom.auth[u]] = [];
+			rankLists[targetRoom.auth[u]].push(u);
 		}
 
 		var buffer = [];
 		Object.keys(rankLists).sort(function (a, b) {
-			return Config.groups.bySymbol[b].rank - Config.groups.bySymbol[a].rank;
+			return (Config.groups.bySymbol[b] || {rank: 0}).rank - (Config.groups.bySymbol[a] || {rank: 0}).rank;
 		}).forEach(function (r) {
-			buffer.push(Config.groups.bySymbol[r].name + "s (" + r + "):\n" + rankLists[r].sort().join(", "));
+			buffer.push((Config.groups.bySymbol[r] ? Config.groups.bySymbol[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
 		});
 
 		if (!buffer.length) {
-			connection.popup("This room has no auth.");
+			connection.popup("The room '" + targetRoom.title + "' has no auth.");
 			return;
 		}
+		if (targetRoom !== room) buffer.unshift("" + targetRoom.title + " room auth:");
 		connection.popup(buffer.join("\n\n"));
 	},
 
@@ -496,7 +514,7 @@ var commands = exports.commands = {
 
 	join: function (target, room, user, connection) {
 		if (!target) return false;
-		var targetRoom = Rooms.get(target) || Rooms.get(toId(target)) || Rooms.aliases[toId(target)];
+		var targetRoom = Rooms.search(target);
 		if (!targetRoom) {
 			return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
 		}
@@ -522,7 +540,7 @@ var commands = exports.commands = {
 	leave: 'part',
 	part: function (target, room, user, connection) {
 		if (room.id === 'global') return false;
-		var targetRoom = Rooms.get(target);
+		var targetRoom = Rooms.search(target);
 		if (target && !targetRoom) {
 			return this.sendReply("The room '" + target + "' does not exist.");
 		}
@@ -561,7 +579,7 @@ var commands = exports.commands = {
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
-		var targetRoom = Rooms.get(target) || Rooms.get(toId(target)) || Rooms.aliases[toId(target)];
+		var targetRoom = Rooms.search(target);
 		if (!targetRoom) {
 			return this.sendReply("The room '" + target + "' does not exist.");
 		}

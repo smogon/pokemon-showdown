@@ -241,11 +241,11 @@ var commands = exports.commands = {
 		if (!this.targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
-		var roomid = (target || room.id);
-		if (!Rooms.get(roomid)) {
-			return this.sendReply("Room " + roomid + " not found.");
+		var targetRoom = (target ? Rooms.search(target) : room);
+		if (!targetRoom) {
+			return this.sendReply("Room " + target + " not found.");
 		}
-		return this.parse('/msg ' + this.targetUsername + ', /invite ' + roomid);
+		return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
 	},
 
 	/*********************************************************
@@ -864,8 +864,8 @@ var commands = exports.commands = {
 			"An introduction to the Create-A-Pokemon project:<br />" +
 			"- <a href=\"https://www.smogon.com/cap/\">CAP project website and description</a><br />" +
 			"- <a href=\"https://www.smogon.com/forums/showthread.php?t=48782\">What Pokemon have been made?</a><br />" +
-			"- <a href=\"https://www.smogon.com/forums/showthread.php?t=3464513\">Talk about the metagame here</a><br />" +
-			"- <a href=\"https://www.smogon.com/forums/showthread.php?t=3466826\">Practice BW CAP teams</a>"
+			"- <a href=\"https://www.smogon.com/forums/forums/311\">Talk about the metagame here</a><br />" +
+			"- <a href=\"https://www.smogon.com/forums/threads/3512318/#post-5594694\">Sample XY CAP teams</a>"
 		);
 	},
 
