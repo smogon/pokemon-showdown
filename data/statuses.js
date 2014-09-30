@@ -314,6 +314,15 @@ exports.BattleStatuses = {
 				if (typeof posData.moveData.affectedByImmunities === 'undefined') {
 					posData.moveData.affectedByImmunities = true;
 				}
+				
+				if (target.hasAbility('wonderguard') && this.gen > 5) {
+					this.debug('Wonder Guard immunity: ' + move.id);
+					if (this.getEffectiveness(move, target) <= 0) {
+						this.add('-activate', target, 'ability: Wonder Guard');
+						this.effectData.positions[i] = null;
+						return null;
+					}
+				}
 
 				this.moveHit(target, posData.source, move, posData.moveData);
 
