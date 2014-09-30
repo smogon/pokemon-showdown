@@ -1148,6 +1148,7 @@ exports.BattleScripts = {
 				case 'rockpolish': case 'agility': case 'autotomize':
 					if (!setupType && !hasMove['batonpass'] && hasMove['thunderwave']) rejected = true;
 					if ((hasMove['stealthrock'] || hasMove['spikes'] || hasMove['toxicspikes']) && !hasMove['batonpass']) rejected = true;
+					if (hasMove['rest'] || hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'thunderwave': case 'stunspore':
 					if (setupType || hasMove['rockpolish'] || hasMove['agility']) rejected = true;
