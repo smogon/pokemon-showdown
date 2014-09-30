@@ -452,13 +452,13 @@ var commands = exports.commands = {
 				feSearch = !isNotSearch;
 				continue;
 			}
-			
+
 			if (target === 'recovery') {
 				if ((recoverySearch && isNotSearch) || (recoverySearch === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and recovery moves.');
 				if (!searches['recovery']) searches['recovery'] = {};
 				recoverySearch = !isNotSearch;
 				continue;
-			}	
+			}
 
 			var targetMove = Tools.getMove(target);
 			if (targetMove.exists) {
@@ -572,12 +572,13 @@ var commands = exports.commands = {
 						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
 						if (!template.learnset) continue;
 						var recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder"];
+						var canLearn = false;
 						for (var i = 0; i < recoveryMoves.length; i++) {
 							var prevoTemp = Tools.getTemplate(template.id);
 							while (prevoTemp.prevo && prevoTemp.learnset && !(prevoTemp.learnset[recoveryMoves[i]])) {
 								prevoTemp = Tools.getTemplate(prevoTemp.prevo);
 							}
-							var canLearn = (prevoTemp.learnset.sketch) || prevoTemp.learnset[recoveryMoves[i]];
+							canLearn = (prevoTemp.learnset.sketch) || prevoTemp.learnset[recoveryMoves[i]];
 							if (canLearn) break;
 						}
 						if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
