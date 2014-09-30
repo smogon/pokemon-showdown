@@ -46,8 +46,7 @@ var jsHintOptions = {
 		"TeamValidator": false,
 		"battleEngineFakeProcess": false,
 		"battleProtoCache": false,
-		"tells": false,
-		"Spamroom": false
+		"tells": false
 	}
 };
 

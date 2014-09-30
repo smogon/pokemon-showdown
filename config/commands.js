@@ -241,11 +241,11 @@ var commands = exports.commands = {
 		if (!this.targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
-		var roomid = (target || room.id);
-		if (!Rooms.get(roomid)) {
-			return this.sendReply("Room " + roomid + " not found.");
+		var targetRoom = (target ? Rooms.search(target) : room);
+		if (!targetRoom) {
+			return this.sendReply("Room " + target + " not found.");
 		}
-		return this.parse('/msg ' + this.targetUsername + ', /invite ' + roomid);
+		return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
 	},
 
 	/*********************************************************
@@ -873,8 +873,8 @@ var commands = exports.commands = {
 			"An introduction to the Create-A-Pokemon project:<br />" +
 			"- <a href=\"https://www.smogon.com/cap/\">CAP project website and description</a><br />" +
 			"- <a href=\"https://www.smogon.com/forums/showthread.php?t=48782\">What Pokemon have been made?</a><br />" +
-			"- <a href=\"https://www.smogon.com/forums/showthread.php?t=3464513\">Talk about the metagame here</a><br />" +
-			"- <a href=\"https://www.smogon.com/forums/showthread.php?t=3466826\">Practice BW CAP teams</a>"
+			"- <a href=\"https://www.smogon.com/forums/forums/311\">Talk about the metagame here</a><br />" +
+			"- <a href=\"https://www.smogon.com/forums/threads/3512318/#post-5594694\">Sample XY CAP teams</a>"
 		);
 	},
 
@@ -1499,41 +1499,6 @@ var commands = exports.commands = {
 		room.add(targetUser.name + " was " + msg);
 		targetUser.popup("You have been " + msg);
 		targetUser.disconnectAll();
-	},
-
-	spam: 'spamroom',
-	spamroom: function (target, room, user) {
-		if (!target) return this.sendReply("Please specify a user.");
-		this.splitTarget(target);
-
-		if (!this.targetUser) {
-			return this.sendReply("The user '" + this.targetUsername + "' does not exist.");
-		}
-		if (!this.can('mute', this.targetUser)) {
-			return false;
-		}
-
-		var targets = Spamroom.addUser(this.targetUser);
-		if (targets.length === 0) {
-			return this.sendReply("That user's messages are already being redirected to the spamroom.");
-		}
-		this.privateModCommand("(" + user.name + " has added to the spamroom user list: " + targets.join(", ") + ")");
-	},
-
-	unspam: 'unspamroom',
-	unspamroom: function (target, room, user) {
-		if (!target) return this.sendReply("Please specify a user.");
-		this.splitTarget(target);
-
-		if (!this.can('mute')) {
-			return false;
-		}
-
-		var targets = Spamroom.removeUser(this.targetUser || this.targetUsername);
-		if (targets.length === 0) {
-			return this.sendReply("That user is not in the spamroom list.");
-		}
-		this.privateModCommand("(" + user.name + " has removed from the spamroom user list: " + targets.join(", ") + ")");
 	},
 
 	/*********************************************************
