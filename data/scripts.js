@@ -1069,7 +1069,7 @@ exports.BattleScripts = {
 				case 'ancientpower':
 					if (hasMove['paleowave']) rejected = true;
 					break;
-				case 'dragonpulse':
+				case 'dragonpulse': case 'spacialrend':
 					if (hasMove['dracometeor']) rejected = true;
 					break;
 				case 'return':
