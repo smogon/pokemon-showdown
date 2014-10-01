@@ -323,36 +323,20 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Haxmons",
+		name: "Hidden Type",
 		section: "OM of the Month",
 		column: 2,
 
-		ruleset: ['OU', 'Freeze Clause'],
-		banlist: ["King's Rock", 'Razor Fang', 'Stench'],
-		onModifyMovePriority: -100,
-		onModifyMove: function (move) {
-			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 0;
-			move.willCrit = true;
-			if (move.secondaries) {
-				for (var i = 0; i < move.secondaries.length; i++) {
-					move.secondaries[i].chance = 100;
-				}
-			}
-		}
+		mod: 'hiddentype',
+		ruleset: ['OU']
 	},
 	{
-		name: "[Gen 3] 1v1",
+		name: "[Gen 4] Tier Shift",
 		section: "OM of the Month",
 
-		mod: 'gen3',
+		mod: 'throwback',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Smeargle + Ingrain'],
-		onBegin: function () {
-			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		banlist: ['Uber']
 	},
 	{
 		name: "CAP",
@@ -570,14 +554,6 @@ exports.Formats = [
 			}
 			return problems;
 		}
-	},
-	{
-		name: "Hidden Type",
-		section: "Other Metagames",
-
-		mod: 'hiddentype',
-		searchShow: false,
-		ruleset: ['OU']
 	},
 	{
 		name: "Middle Cup",
