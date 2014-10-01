@@ -15,7 +15,6 @@ var cluster = require('cluster');
 global.Config = require('./config/config');
 
 if (cluster.isMaster) {
-
 	cluster.setupMaster({
 		exec: 'sockets.js'
 	});
@@ -112,7 +111,6 @@ if (cluster.isMaster) {
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
 		worker.send('.' + channelid + '\n' + subchannelid + '\n' + socketid);
 	};
-
 } else {
 	// is worker
 
@@ -428,5 +426,4 @@ if (cluster.isMaster) {
 	}
 
 	console.log('Test your server at http://localhost:' + Config.port);
-
 }

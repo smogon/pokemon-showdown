@@ -374,7 +374,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	}
 
 	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
-		message = '/'+message;
+		message = '/' + message;
 	}
 	message = canTalk(user, room, connection, message);
 	if (!message) return false;
