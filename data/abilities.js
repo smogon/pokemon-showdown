@@ -90,7 +90,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
 		shortDesc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
 		onStart: function (pokemon) {
-			this.add('-message', 'The effects of weather disappeared. (placeholder)');
+			this.add('-ability', pokemon, 'Air Lock');
 		},
 		onAnyModifyPokemon: function (pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
@@ -327,7 +327,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
 		shortDesc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
 		onStart: function (pokemon) {
-			this.add('-message', 'The effects of weather disappeared. (placeholder)');
+			this.add('-ability', pokemon, 'Cloud Nine');
 		},
 		onAnyModifyPokemon: function (pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
