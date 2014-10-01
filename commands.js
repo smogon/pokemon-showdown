@@ -373,7 +373,7 @@ var commands = exports.commands = {
 		}
 		if (!user.can('makeroom')) {
 			if (!user.can('roompromote', currentGroup, room)) {
-				return this.sendReply("/" + cmd + " - Access denied for removing " + (Config.groups.bySymbol[currentGroup].name || "regular user") + ".");
+				return this.sendReply("/" + cmd + " - Access denied for removing " + ((Config.groups.bySymbol[currentGroup] ? Config.groups.bySymbol[currentGroup].name : "an undefined group") || "regular user") + ".");
 			}
 			if (!user.can('roompromote', nextGroup, room)) {
 				return this.sendReply("/" + cmd + " - Access denied for giving " + groupName + ".");
@@ -1025,7 +1025,7 @@ var commands = exports.commands = {
 			return this.sendReply("User '" + target + "' had already changed its name to '" + targetUser.name + "'.");
 		}
 
-		var entry = targetUser.name + " was forced to choose a new name by " + user.name + (reason ? ": " + reason: "");
+		var entry = targetUser.name + " was forced to choose a new name by " + user.name + (reason ? ": " + reason : "");
 		this.privateModCommand("(" + entry + ")");
 		Rooms.global.cancelSearch(targetUser);
 		targetUser.resetName();
@@ -1115,7 +1115,6 @@ var commands = exports.commands = {
 		this.logEntry(user.name + " used /hotpatch " + target);
 
 		if (target === 'chat' || target === 'commands') {
-
 			try {
 				CommandParser.uncacheTree('./command-parser.js');
 				global.CommandParser = require('./command-parser.js');
@@ -1129,9 +1128,7 @@ var commands = exports.commands = {
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch chat: \n" + e.stack);
 			}
-
 		} else if (target === 'tournaments') {
-
 			try {
 				var runningTournaments = Tournaments.tournaments;
 				CommandParser.uncacheTree('./tournaments');
@@ -1141,13 +1138,10 @@ var commands = exports.commands = {
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch tournaments: \n" + e.stack);
 			}
-
 		} else if (target === 'battles') {
-
 			/*Simulator.SimulatorProcess.respawn();
 			return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");*/
 			return this.sendReply("Battle hotpatching is not supported with the single process hack.");
-
 		} else if (target === 'formats') {
 			try {
 				// uncache the tools.js dependency tree
@@ -1168,7 +1162,6 @@ var commands = exports.commands = {
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch formats: \n" + e.stack);
 			}
-
 		} else if (target === 'learnsets') {
 			try {
 				// uncache the tools.js dependency tree
@@ -1180,7 +1173,6 @@ var commands = exports.commands = {
 			} catch (e) {
 				return this.sendReply("Something failed while trying to hotpatch learnsets: \n" + e.stack);
 			}
-
 		}
 		this.sendReply("Your hot-patch command was unrecognized.");
 	},
@@ -1458,10 +1450,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'v8') {
 			this.sendReply("Retrieving V8 memory usage...");
 			var o = process.memoryUsage();
-			this.sendReply(
-				"Resident set size: " + o.rss + ", " + o.heapUsed + " heap used of " + o.heapTotal  + " total heap. " +
-				 (o.heapTotal - o.heapUsed) + " heap left."
-			);
+			this.sendReply("Resident set size: " + o.rss + ", " + o.heapUsed + " heap used of " + o.heapTotal  + " total heap. " + (o.heapTotal - o.heapUsed) + " heap left.");
 		}
 		if (target === 'all') {
 			this.sendReply("Calculating Total size...");
@@ -1689,7 +1678,6 @@ var commands = exports.commands = {
 			room.battle.win(target);
 			this.logModCommand(user.name + " forced a win for " + target + ".");
 		}
-
 	},
 
 	/*********************************************************
@@ -1795,7 +1783,6 @@ var commands = exports.commands = {
 			target = '';
 		}
 		if (cmd === 'userdetails') {
-
 			var targetUser = Users.get(target);
 			if (!trustable || !targetUser) {
 				connection.send('|queryresponse|userdetails|' + JSON.stringify({
@@ -1832,19 +1819,16 @@ var commands = exports.commands = {
 				}
 			}
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
-
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;
 			connection.send('|queryresponse|roomlist|' + JSON.stringify({
 				rooms: Rooms.global.getRoomList(target)
 			}));
-
 		} else if (cmd === 'rooms') {
 			if (!trustable) return false;
 			connection.send('|queryresponse|rooms|' + JSON.stringify(
 				Rooms.global.getRooms()
 			));
-
 		}
 	},
 
@@ -1864,6 +1848,6 @@ var commands = exports.commands = {
 			}
 		}
 		user.rename(targetName, targetToken, targetAuth, connection);
-	},
+	}
 
 };

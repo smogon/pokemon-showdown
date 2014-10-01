@@ -639,7 +639,7 @@ exports.BattleAbilities = {
 		onSourceModifyDamage: function (damage, source, target, move) {
 			if (this.getEffectiveness(move, target) > 0) {
 				this.debug('Filter neutralize');
-					return this.chainModify(0.75);
+				return this.chainModify(0.75);
 			}
 		},
 		id: "filter",
@@ -3125,7 +3125,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon only receives damage from attacks belonging to types that cause Super Effective to this Pokemon. Wonder Guard does not protect a Pokemon from status ailments (burn, freeze, paralysis, poison, sleep, Toxic or any of their side effects or damage), recoil damage nor the moves Beat Up, Bide, Doom Desire, Fire Fang, Future Sight, Hail, Leech Seed, Sandstorm, Spikes, Stealth Rock and Struggle. Wonder Guard cannot be Skill Swapped nor Role Played. Trace, however, does copy Wonder Guard.",
 		shortDesc: "This Pokemon can only be damaged by super effective moves and indirect damage.",
 		onTryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
+			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.isFutureMove) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
 			if (this.getEffectiveness(move, target) <= 0) {
 				this.add('-activate', target, 'ability: Wonder Guard');
@@ -3160,7 +3160,7 @@ exports.BattleAbilities = {
 			if (pokemon.baseTemplate.species !== 'Darmanitan') {
 				return;
 			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitan'){
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitan') {
 				pokemon.addVolatile('zenmode');
 			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.template.speciesid === 'darmanitanzen') {
 				pokemon.removeVolatile('zenmode');

@@ -479,288 +479,283 @@ exports.BattleScripts = {
 
 		// any moveset modification goes here
 		//moves[0] = 'Safeguard';
-		{
-			var abilities = [template.abilities['0']];
-			if (template.abilities['1']) {
-				abilities.push(template.abilities['1']);
-			}
-			if (template.abilities['H']) {
-				abilities.push(template.abilities['H']);
-			}
-			abilities.sort(function (a, b){
-				return this.getAbility(b).rating - this.getAbility(a).rating;
-			}.bind(this));
-			var ability0 = this.getAbility(abilities[0]);
-			var ability1 = this.getAbility(abilities[1]);
-			var ability = ability0.name;
-			if (abilities[1]) {
-
-				if (ability0.rating <= ability1.rating) {
-					if (Math.random() * 2 < 1) {
-						ability = ability1.name;
-					}
-				} else if (ability0.rating - 0.6 <= ability1.rating) {
-					if (Math.random() * 3 < 1) {
-						ability = ability1.name;
-					}
+		var abilities = [template.abilities['0']];
+		if (template.abilities['1']) {
+			abilities.push(template.abilities['1']);
+		}
+		if (template.abilities['H']) {
+			abilities.push(template.abilities['H']);
+		}
+		abilities.sort(function (a, b) {
+			return this.getAbility(b).rating - this.getAbility(a).rating;
+		}.bind(this));
+		var ability0 = this.getAbility(abilities[0]);
+		var ability1 = this.getAbility(abilities[1]);
+		var ability = ability0.name;
+		if (abilities[1]) {
+			if (ability0.rating <= ability1.rating) {
+				if (Math.random() * 2 < 1) {
+					ability = ability1.name;
 				}
-
-				var rejectAbility = false;
-				if (ability === 'Blaze' && !counter['blaze']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Overgrow' && !counter['overgrow']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Swarm' && !counter['swarm']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Torrent' && !counter['torrent']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Contrary' && !counter['contrary']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Technician' && !counter['technician']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Skill Link' && !counter['skilllink']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Iron Fist' && !counter['ironfist']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Adaptability' && !counter['adaptability']) {
-					rejectAbility = true;
-				}
-				if ((ability === 'Rock Head' || ability === 'Reckless') && !counter['recoil']) {
-					rejectAbility = true;
-				}
-				if ((ability === 'No Guard' || ability === 'Compoundeyes') && !counter['inaccurate']) {
-					rejectAbility = true;
-				}
-				if ((ability === 'Sheer Force' || ability === 'Serene Grace') && !counter['sheerforce']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Hustle' && !counter['hustle']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Simple' && !setupType && !hasMove['flamecharge'] && !hasMove['stockpile']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Prankster' && !counter['Status']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
-					rejectAbility = true;
-				}
-				// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
-				if (ability === 'Swift Swim' && !hasMove['raindance']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Chlorophyll' && !hasMove['sunnyday']) {
-					rejectAbility = true;
-				}
-				if (ability === 'Moody' && template.id !== 'bidoof') {
-					rejectAbility = true;
-				}
-				if (ability === 'Lightningrod' && template.types.indexOf('Ground') >= 0) {
-					rejectAbility = true;
-				}
-
-				if (rejectAbility) {
-					if (ability === ability1.name) { // or not
-						ability = ability0.name;
-					} else if (ability1.rating > 0) { // only switch if the alternative doesn't suck
-						ability = ability1.name;
-					}
-				}
-				if ((abilities[0] === 'Guts' || abilities[1] === 'Guts' || abilities[2] === 'Guts') && ability !== 'Quick Feet' && hasMove['facade']) {
-					ability = 'Guts';
-				}
-				if ((abilities[0] === 'Swift Swim' || abilities[1] === 'Swift Swim' || abilities[2] === 'Swift Swim') && hasMove['raindance']) {
-					ability = 'Swift Swim';
-				}
-				if ((abilities[0] === 'Chlorophyll' || abilities[1] === 'Chlorophyll' || abilities[2] === 'Chlorophyll') && ability !== 'Solar Power' && hasMove['sunnyday']) {
-					ability = 'Chlorophyll';
-				}
-				if (template.id === 'combee') {
-					// it always gets Hustle but its only physical move is Endeavor, which loses accuracy
-					ability = 'Honey Gather';
+			} else if (ability0.rating - 0.6 <= ability1.rating) {
+				if (Math.random() * 3 < 1) {
+					ability = ability1.name;
 				}
 			}
 
-			if (hasMove['gyroball']) {
-				ivs.spe = 0;
-				//evs.atk += evs.spe;
-				evs.spe = 0;
-			} else if (hasMove['trickroom']) {
-				ivs.spe = 0;
-				//evs.hp += evs.spe;
-				evs.spe = 0;
+			var rejectAbility = false;
+			if (ability === 'Blaze' && !counter['blaze']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Overgrow' && !counter['overgrow']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Swarm' && !counter['swarm']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Torrent' && !counter['torrent']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Contrary' && !counter['contrary']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Technician' && !counter['technician']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Skill Link' && !counter['skilllink']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Iron Fist' && !counter['ironfist']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Adaptability' && !counter['adaptability']) {
+				rejectAbility = true;
+			}
+			if ((ability === 'Rock Head' || ability === 'Reckless') && !counter['recoil']) {
+				rejectAbility = true;
+			}
+			if ((ability === 'No Guard' || ability === 'Compoundeyes') && !counter['inaccurate']) {
+				rejectAbility = true;
+			}
+			if ((ability === 'Sheer Force' || ability === 'Serene Grace') && !counter['sheerforce']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Hustle' && !counter['hustle']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Simple' && !setupType && !hasMove['flamecharge'] && !hasMove['stockpile']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Prankster' && !counter['Status']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Defiant' && !counter['Physical'] && !hasMove['batonpass']) {
+				rejectAbility = true;
+			}
+			// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
+			if (ability === 'Swift Swim' && !hasMove['raindance']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Chlorophyll' && !hasMove['sunnyday']) {
+				rejectAbility = true;
+			}
+			if (ability === 'Moody' && template.id !== 'bidoof') {
+				rejectAbility = true;
+			}
+			if (ability === 'Lightningrod' && template.types.indexOf('Ground') >= 0) {
+				rejectAbility = true;
 			}
 
+			if (rejectAbility) {
+				if (ability === ability1.name) { // or not
+					ability = ability0.name;
+				} else if (ability1.rating > 0) { // only switch if the alternative doesn't suck
+					ability = ability1.name;
+				}
+			}
+			if ((abilities[0] === 'Guts' || abilities[1] === 'Guts' || abilities[2] === 'Guts') && ability !== 'Quick Feet' && hasMove['facade']) {
+				ability = 'Guts';
+			}
+			if ((abilities[0] === 'Swift Swim' || abilities[1] === 'Swift Swim' || abilities[2] === 'Swift Swim') && hasMove['raindance']) {
+				ability = 'Swift Swim';
+			}
+			if ((abilities[0] === 'Chlorophyll' || abilities[1] === 'Chlorophyll' || abilities[2] === 'Chlorophyll') && ability !== 'Solar Power' && hasMove['sunnyday']) {
+				ability = 'Chlorophyll';
+			}
+			if (template.id === 'combee') {
+				// it always gets Hustle but its only physical move is Endeavor, which loses accuracy
+				ability = 'Honey Gather';
+			}
+		}
+
+		if (hasMove['gyroball']) {
+			ivs.spe = 0;
+			//evs.atk += evs.spe;
+			evs.spe = 0;
+		} else if (hasMove['trickroom']) {
+			ivs.spe = 0;
+			//evs.hp += evs.spe;
+			evs.spe = 0;
+		}
+
+		item = 'Leftovers';
+		if (template.requiredItem) {
+			item = template.requiredItem;
+		} else if (template.species === 'Rotom-Fan') {
+			// this is just to amuse myself
+			item = 'Air Balloon';
+		} else if (template.species === 'Delibird') {
+			// to go along with the Christmas Delibird set
 			item = 'Leftovers';
-			if (template.requiredItem) {
-				item = template.requiredItem;
-			} else if (template.species === 'Rotom-Fan') {
-				// this is just to amuse myself
-				item = 'Air Balloon';
-			} else if (template.species === 'Delibird') {
-				// to go along with the Christmas Delibird set
-				item = 'Leftovers';
 
-			// First, the extra high-priority items
-
-			} else if (ability === 'Imposter') {
-				item = 'Choice Scarf';
-			} else if (hasMove["magikarpsrevenge"]) {
+		// First, the extra high-priority items
+		} else if (ability === 'Imposter') {
+			item = 'Choice Scarf';
+		} else if (hasMove["magikarpsrevenge"]) {
+			item = 'Choice Band';
+		} else if (ability === 'Wonder Guard') {
+			item = 'Focus Sash';
+		} else if (template.species === 'Unown') {
+			item = 'Choice Specs';
+		} else if ((template.species === 'Wynaut' || template.species === 'Wobbuffet') && hasMove['destinybond'] && Math.random() * 2 > 1) {
+			item = 'Custap Berry';
+		} else if (hasMove['trick'] && hasMove['gyroball'] && (ability === 'Levitate' || hasType['Flying'])) {
+			item = 'Macho Brace';
+		} else if (hasMove['trick'] && hasMove['gyroball']) {
+			item = 'Iron Ball';
+		} else if (hasMove['trick'] || hasMove['switcheroo']) {
+			var randomNum = Math.random() * 2;
+			if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum > 1)) {
 				item = 'Choice Band';
-			} else if (ability === 'Wonder Guard') {
-				item = 'Focus Sash';
-			} else if (template.species === 'Unown') {
+			} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum > 1)) {
 				item = 'Choice Specs';
-			} else if ((template.species === 'Wynaut' || template.species === 'Wobbuffet') && hasMove['destinybond'] && Math.random() * 2 > 1) {
-				item = 'Custap Berry';
-			} else if (hasMove['trick'] && hasMove['gyroball'] && (ability === 'Levitate' || hasType['Flying'])) {
-				item = 'Macho Brace';
-			} else if (hasMove['trick'] && hasMove['gyroball']) {
-				item = 'Iron Ball';
-			} else if (hasMove['trick'] || hasMove['switcheroo']) {
-				var randomNum = Math.random() * 2;
-				if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum > 1)) {
-					item = 'Choice Band';
-				} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum > 1)) {
-					item = 'Choice Specs';
-				} else {
-					item = 'Choice Scarf';
-				}
-			} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
-				item = 'Chesto Berry';
-			} else if (hasMove['naturalgift']) {
-				item = 'Liechi Berry';
-			} else if (ability === 'Harvest') {
-				item = 'Sitrus Berry';
-			} else if (template.species === 'Cubone' || template.species === 'Marowak') {
-				item = 'Thick Club';
-			} else if (template.species === 'Pikachu') {
-				item = 'Light Ball';
-			} else if (template.species === 'Clamperl') {
-				item = 'DeepSeaTooth';
-			} else if (hasMove['reflect'] && hasMove['lightscreen']) {
-				item = 'Light Clay';
-			} else if (hasMove['acrobatics']) {
-				item = 'Flying Gem';
-			} else if (hasMove['shellsmash']) {
-				item = 'White Herb';
-			} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost') {
-				item = 'Toxic Orb';
-			} else if (hasMove['raindance']) {
-				item = 'Damp Rock';
-			} else if (hasMove['sunnyday']) {
-				item = 'Heat Rock';
-			} else if (hasMove['sandstorm']) { // lol
-				item = 'Smooth Rock';
-			} else if (hasMove['hail']) { // lol
-				item = 'Icy Rock';
-			} else if (ability === 'Magic Guard' && hasMove['psychoshift']) {
-				item = 'Flame Orb';
-			} else if (ability === 'Sheer Force' || ability === 'Magic Guard') {
-				item = 'Life Orb';
-			} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
-				// Give Unburden mons a random Gem of the type of one of their damaging moves
-				var shuffledMoves = moves.randomize();
-				for (var m in shuffledMoves) {
-					var move = this.getMove(shuffledMoves[m]);
-					if (move.basePower || move.basePowerCallback) {
-						item = move.type + ' Gem';
-						break;
-					}
-				}
-			} else if (ability === 'Guts') {
-				if (hasMove['drainpunch']) {
-					item = 'Flame Orb';
-				} else {
-					item = 'Toxic Orb';
-				}
-				if ((hasMove['return'] || hasMove['hyperfang']) && !hasMove['facade']) {
-					// lol no
-					for (var j = 0; j < moves.length; j++) {
-						if (moves[j] === 'Return' || moves[j] === 'HyperFang') {
-							moves[j] = 'Facade';
-							break;
-						}
-					}
-				}
-			} else if (ability === 'Marvel Scale' && hasMove['psychoshift']) {
-				item = 'Flame Orb';
-			} else if (hasMove['reflect'] || hasMove['lightscreen']) {
-				// less priority than if you'd had both
-				item = 'Light Clay';
-			} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
-				if (Math.random() * 3 > 1) {
-					item = 'Choice Band';
-				} else {
-					item = 'Expert Belt';
-				}
-			} else if (counter.Special >= 4) {
-				if (Math.random() * 3 > 1) {
-					item = 'Choice Specs';
-				} else {
-					item = 'Expert Belt';
-				}
-			} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
-				item = 'Air Balloon';
-			} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
-				item = 'Choice Scarf';
-			} else if (hasMove['substitute'] && hasMove['reversal']) {
-				var shuffledMoves = moves.randomize();
-				for (var m in shuffledMoves) {
-					var move = this.getMove(shuffledMoves[m]);
-					if (move.basePower || move.basePowerCallback) {
-						item = move.type + ' Gem';
-						break;
-					}
-				}
-			} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
-				item = 'Leftovers';
-			} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
-				item = 'Focus Sash';
-			} else if (ability === 'Iron Barbs') {
-				// only Iron Barbs for now
-				item = 'Rocky Helmet';
-			} else if ((template.baseStats.hp + 75) * (template.baseStats.def + template.baseStats.spd + 175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
-				// skarmory and forretress get exceptions for their typing
-				item = 'Leftovers';
-			} else if (counter.Physical + counter.Special >= 3 && setupType) {
-				item = 'Life Orb';
-			} else if (counter.Special >= 3 && setupType) {
-				item = 'Life Orb';
-			} else if (counter.Physical + counter.Special >= 4) {
-				item = 'Expert Belt';
-			} else if (i === 0 && ability !== 'Sturdy' && !counter['recoil']) {
-				item = 'Focus Sash';
-			} else if (hasMove['outrage']) {
-				item = 'Lum Berry';
-
-			// this is the "REALLY can't think of a good item" cutoff
-			// why not always Leftovers? Because it's boring. :P
-
-			} else if (hasType['Flying'] || ability === 'Levitate') {
-				item = 'Leftovers';
-			} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
-				item = 'Air Balloon';
-			} else if (hasType['Poison']) {
-				item = 'Black Sludge';
-			} else if (counter.Status <= 1) {
-				item = 'Life Orb';
 			} else {
-				item = 'Leftovers';
+				item = 'Choice Scarf';
 			}
+		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
+			item = 'Chesto Berry';
+		} else if (hasMove['naturalgift']) {
+			item = 'Liechi Berry';
+		} else if (ability === 'Harvest') {
+			item = 'Sitrus Berry';
+		} else if (template.species === 'Cubone' || template.species === 'Marowak') {
+			item = 'Thick Club';
+		} else if (template.species === 'Pikachu') {
+			item = 'Light Ball';
+		} else if (template.species === 'Clamperl') {
+			item = 'DeepSeaTooth';
+		} else if (hasMove['reflect'] && hasMove['lightscreen']) {
+			item = 'Light Clay';
+		} else if (hasMove['acrobatics']) {
+			item = 'Flying Gem';
+		} else if (hasMove['shellsmash']) {
+			item = 'White Herb';
+		} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost') {
+			item = 'Toxic Orb';
+		} else if (hasMove['raindance']) {
+			item = 'Damp Rock';
+		} else if (hasMove['sunnyday']) {
+			item = 'Heat Rock';
+		} else if (hasMove['sandstorm']) { // lol
+			item = 'Smooth Rock';
+		} else if (hasMove['hail']) { // lol
+			item = 'Icy Rock';
+		} else if (ability === 'Magic Guard' && hasMove['psychoshift']) {
+			item = 'Flame Orb';
+		} else if (ability === 'Sheer Force' || ability === 'Magic Guard') {
+			item = 'Life Orb';
+		} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
+			// Give Unburden mons a random Gem of the type of one of their damaging moves
+			var shuffledMoves = moves.randomize();
+			for (var m in shuffledMoves) {
+				var move = this.getMove(shuffledMoves[m]);
+				if (move.basePower || move.basePowerCallback) {
+					item = move.type + ' Gem';
+					break;
+				}
+			}
+		} else if (ability === 'Guts') {
+			if (hasMove['drainpunch']) {
+				item = 'Flame Orb';
+			} else {
+				item = 'Toxic Orb';
+			}
+			if ((hasMove['return'] || hasMove['hyperfang']) && !hasMove['facade']) {
+				// lol no
+				for (var j = 0; j < moves.length; j++) {
+					if (moves[j] === 'Return' || moves[j] === 'HyperFang') {
+						moves[j] = 'Facade';
+						break;
+					}
+				}
+			}
+		} else if (ability === 'Marvel Scale' && hasMove['psychoshift']) {
+			item = 'Flame Orb';
+		} else if (hasMove['reflect'] || hasMove['lightscreen']) {
+			// less priority than if you'd had both
+			item = 'Light Clay';
+		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
+			if (Math.random() * 3 > 1) {
+				item = 'Choice Band';
+			} else {
+				item = 'Expert Belt';
+			}
+		} else if (counter.Special >= 4) {
+			if (Math.random() * 3 > 1) {
+				item = 'Choice Specs';
+			} else {
+				item = 'Expert Belt';
+			}
+		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			item = 'Air Balloon';
+		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
+			item = 'Choice Scarf';
+		} else if (hasMove['substitute'] && hasMove['reversal']) {
+			var shuffledMoves = moves.randomize();
+			for (var m in shuffledMoves) {
+				var move = this.getMove(shuffledMoves[m]);
+				if (move.basePower || move.basePowerCallback) {
+					item = move.type + ' Gem';
+					break;
+				}
+			}
+		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
+			item = 'Leftovers';
+		} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
+			item = 'Focus Sash';
+		} else if (ability === 'Iron Barbs') {
+			// only Iron Barbs for now
+			item = 'Rocky Helmet';
+		} else if ((template.baseStats.hp + 75) * (template.baseStats.def + template.baseStats.spd + 175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
+			// skarmory and forretress get exceptions for their typing
+			item = 'Leftovers';
+		} else if (counter.Physical + counter.Special >= 3 && setupType) {
+			item = 'Life Orb';
+		} else if (counter.Special >= 3 && setupType) {
+			item = 'Life Orb';
+		} else if (counter.Physical + counter.Special >= 4) {
+			item = 'Expert Belt';
+		} else if (i === 0 && ability !== 'Sturdy' && !counter['recoil']) {
+			item = 'Focus Sash';
+		} else if (hasMove['outrage']) {
+			item = 'Lum Berry';
 
-			if (item === 'Leftovers' && hasType['Poison']) {
-				item = 'Black Sludge';
-			}
+		// this is the "REALLY can't think of a good item" cutoff
+		// why not always Leftovers? Because it's boring. :P
+		} else if (hasType['Flying'] || ability === 'Levitate') {
+			item = 'Leftovers';
+		} else if (this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			item = 'Air Balloon';
+		} else if (hasType['Poison']) {
+			item = 'Black Sludge';
+		} else if (counter.Status <= 1) {
+			item = 'Life Orb';
+		} else {
+			item = 'Leftovers';
+		}
+
+		if (item === 'Leftovers' && hasType['Poison']) {
+			item = 'Black Sludge';
 		}
 
 		// 95-86-82-78-74-70

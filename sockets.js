@@ -10,13 +10,13 @@
  *
  * @license MIT license
  */
+/* jscs:disable validateIndentation */
 
 //var cluster = require('cluster');
 global.Config = require('./config/config');
 var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 /*if (cluster.isMaster) {
-
 	cluster.setupMaster({
 		exec: 'sockets.js'
 	});*/
@@ -114,7 +114,6 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
 		worker.send('.' + channelid + '\n' + subchannelid + '\n' + socketid);
 	};
-
 //} else {
 	// is worker
 
@@ -430,5 +429,4 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	}
 
 	console.log('Test your server at http://localhost:' + Config.port);
-
 //}
