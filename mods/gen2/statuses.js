@@ -12,7 +12,7 @@ exports.BattleStatuses = {
 				return basePower / 2;
 			}
 		},
-		onSwitchIn: function (pokemon){
+		onSwitchIn: function (pokemon) {
 			pokemon.addVolatile('brnattackdrop');
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
 				this.damage(pokemon.maxhp / 8);

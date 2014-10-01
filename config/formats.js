@@ -41,7 +41,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Alakazite', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Drizzle', 'Drought', 'Shadow Tag', 'Geomancy']
+		banlist: ['OU', 'BL', 'Alakazite', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Drizzle', 'Drought', 'Shadow Tag']
 	},
 	{
 		name: "RU",
@@ -93,7 +93,7 @@ exports.Formats = [
 		]
 	},*/
 	{
-		name: "Fairy Face-Off",
+		name: "Halloween Party",
 		section: "XY Singles",
 
 		onBegin: function () {
@@ -103,18 +103,23 @@ exports.Formats = [
 			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
-		forcedLevel: 30,
+		forcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
+		banlist: ['Rotom', 'Rotom-Fan', 'Rotom-Frost', 'Rotom-Heat', 'Rotom-Mow', 'Rotom-Wash'],
 		requirePentagon: true,
 		validateTeam: function (team) {
 			var problems = [];
 			if (team.length < 3) problems.push('You must bring at least three Pokémon.');
+			var hasGhost = true;
+			var hasGourgeist = false;
 			for (var i = 0; i < team.length; i++) {
-				var types = Tools.getTemplate(team[i].species || team[i].name).types || [];
-				if (types.indexOf('Fairy') > -1) continue;
-				problems.push('You must only bring Fairy-type Pokémon.');
-				break;
+				var pokemon = Tools.getTemplate(team[i].species || team[i].name);
+				var types = pokemon.types || [];
+				if (types.indexOf('Ghost') < 0) hasGhost = false;
+				if (pokemon.species === 'Gourgeist-Super') hasGourgeist = true;
 			}
+			if (!hasGhost) problems.push('You must only bring Ghost-type Pokémon.');
+			if (!hasGourgeist) problems.push('You must have Gourgeist-Super on your team.');
 			return problems;
 		}
 	},
@@ -133,7 +138,6 @@ exports.Formats = [
 
 	// XY Doubles
 	///////////////////////////////////////////////////////////////////
-
 
 	{
 		name: "Random Doubles Battle",
@@ -452,7 +456,7 @@ exports.Formats = [
 			'Shedinja + Sturdy', 'Slaking', 'Smeargle + Baton Pass', 'Weavile', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew'
 		],
-		validateSet: function(set) {
+		validateSet: function (set) {
 			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Protean': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
 			if (set.ability in bannedAbilities) {
 				var template = this.getTemplate(set.species || set.name);
@@ -500,7 +504,7 @@ exports.Formats = [
 
 		mod: 'inverse',
 		ruleset: ['OU'],
-		banlist: []
+		banlist: ['Kyurem-Black', 'Snorlax']
 	},
 	{
 		name: "350 Cup",
@@ -510,7 +514,7 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Ubers', 'Evasion Moves Clause'],
 		banlist: ['Darumaka', 'Pawniard', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
-		validateSet: function(set) {
+		validateSet: function (set) {
 			var template = Tools.getTemplate(set.species);
 			var item = this.getItem(set.item);
 			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
@@ -573,12 +577,7 @@ exports.Formats = [
 
 		mod: 'hiddentype',
 		searchShow: false,
-		ruleset: ['OU'],
-		onSwitchInPriority: 101,
-		onSwitchIn: function (pokemon) {
-			var type = pokemon.hpType || 'Dark';
-			if (!pokemon.hasType(type)) pokemon.addType(type);
-		}
+		ruleset: ['OU']
 	},
 	{
 		name: "Middle Cup",

@@ -829,8 +829,7 @@ exports.BattleScripts = {
 		//pick six random pokmeon--no repeats, even among formes
 		//also need to either normalize for formes or select formes at random
 		//unreleased are okay. No CAP for now, but maybe at some later date
-		for (var i = 0; i < 6; i++)
-		{
+		for (var i = 0; i < 6; i++) {
 			while (true) {
 				var x = Math.floor(Math.random() * 150) + 1;
 				if (teamdexno.indexOf(x) === -1) {
@@ -841,7 +840,6 @@ exports.BattleScripts = {
 		}
 
 		for (var i = 0; i < 6; i++) {
-
 			//choose forme
 			var formes = [];
 			for (var j in this.data.Pokedex) {
@@ -865,7 +863,7 @@ exports.BattleScripts = {
 			mbst += (stats["spd"] * 2 + 30 + 63 + 100) + 5;
 			mbst += (stats["spe"] * 2 + 30 + 63 + 100) + 5;
 
-			var level = Math.floor(100 * mbstmin/mbst); // Initial level guess will underestimate
+			var level = Math.floor(100 * mbstmin / mbst); // Initial level guess will underestimate
 
 			while (level < 100) {
 				mbst = Math.floor((stats["hp"] * 2 + 30 + 63 + 100) * level / 100 + 10);
@@ -931,9 +929,9 @@ exports.BattleScripts = {
 		var pokemonLeft = 0;
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
-			//if (this.data.FormatsData[i].randomBattleMoves) {
+			if (this.data.FormatsData[i].randomBattleMoves) {
 				keys.push(i);
-			//}
+			}
 		}
 		keys = keys.randomize();
 
