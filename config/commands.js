@@ -266,7 +266,7 @@ var commands = exports.commands = {
 		if (targetId === '' + parseInt(targetId)) {
 			for (var p in Tools.data.Pokedex) {
 				var pokemon = Tools.getTemplate(p);
-				if (pokemon.num == parseInt(target)) {
+				if (pokemon.num === parseInt(target)) {
 					target = pokemon.species;
 					targetId = pokemon.id;
 					break;
@@ -328,7 +328,6 @@ var commands = exports.commands = {
 						return evo.name + " (" + evo.evoLevel + ")";
 					}).join(", ");
 				}
-
 			} else if (newTargets[0].searchType === 'move') {
 				var move = Tools.getMove(newTargets[0].name);
 				details = {
@@ -352,7 +351,6 @@ var commands = exports.commands = {
 					'any': "Any Pokemon",
 					'all': "All Pokemon"
 				}[move.target] || "Unknown";
-
 			} else if (newTargets[0].searchType === 'item') {
 				var item = Tools.getItem(newTargets[0].name);
 				details = {};
@@ -369,7 +367,6 @@ var commands = exports.commands = {
 					details["Natural Gift Type"] = item.naturalGift.type;
 					details["Natural Gift BP"] = item.naturalGift.basePower;
 				}
-
 			} else {
 				details = {};
 			}
@@ -394,6 +391,7 @@ var commands = exports.commands = {
 		var showAll = false;
 		var megaSearch = null;
 		var feSearch = null; // search for fully evolved pokemon only
+		var recoverySearch = null;
 		var output = 10;
 
 		for (var i in targets) {
@@ -456,6 +454,13 @@ var commands = exports.commands = {
 				continue;
 			}
 
+			if (target === 'recovery') {
+				if ((recoverySearch && isNotSearch) || (recoverySearch === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and recovery moves.');
+				if (!searches['recovery']) searches['recovery'] = {};
+				recoverySearch = !isNotSearch;
+				continue;
+			}
+
 			var targetMove = Tools.getMove(target);
 			if (targetMove.exists) {
 				if (!searches['moves']) searches['moves'] = {};
@@ -491,7 +496,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		for (var search in {'moves':1, 'types':1, 'ability':1, 'tier':1, 'gen':1, 'color':1}) {
+		for (var search in {'moves':1, 'recovery':1, 'types':1, 'ability':1, 'tier':1, 'gen':1, 'color':1}) {
 			if (!searches[search]) continue;
 			switch (search) {
 				case 'types':
@@ -527,7 +532,8 @@ var commands = exports.commands = {
 					for (var mon in dex) {
 						if (searches[search][String(dex[mon][search]).toLowerCase()] === false) {
 							delete dex[mon];
-						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) delete dex[mon];					}
+						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) delete dex[mon];
+					}
 					break;
 
 				case 'ability':
@@ -558,6 +564,25 @@ var commands = exports.commands = {
 							var canLearn = (prevoTemp.learnset.sketch && !(move.id in {'chatter':1, 'struggle':1, 'magikarpsrevenge':1})) || prevoTemp.learnset[move.id];
 							if ((!canLearn && searches[search][i]) || (searches[search][i] === false && canLearn)) delete dex[mon];
 						}
+					}
+					break;
+
+				case 'recovery':
+					for (var mon in dex) {
+						var template = Tools.getTemplate(dex[mon].id);
+						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+						if (!template.learnset) continue;
+						var recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder"];
+						var canLearn = false;
+						for (var i = 0; i < recoveryMoves.length; i++) {
+							var prevoTemp = Tools.getTemplate(template.id);
+							while (prevoTemp.prevo && prevoTemp.learnset && !(prevoTemp.learnset[recoveryMoves[i]])) {
+								prevoTemp = Tools.getTemplate(prevoTemp.prevo);
+							}
+							canLearn = (prevoTemp.learnset.sketch) || prevoTemp.learnset[recoveryMoves[i]];
+							if (canLearn) break;
+						}
+						if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
 					}
 					break;
 
@@ -657,7 +682,7 @@ var commands = exports.commands = {
 
 	weak: 'weakness',
 	resist: 'weakness',
-	weakness: function (target, room, user){
+	weakness: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
 
@@ -768,12 +793,12 @@ var commands = exports.commands = {
 		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
 	},
 
-	uptime: (function (){
+	uptime: (function () {
 		function formatUptime(uptime) {
 			if (uptime > 24 * 60 * 60) {
 				var uptimeText = "";
 				var uptimeDays = Math.floor(uptime / (24 * 60 * 60));
-				uptimeText = uptimeDays + " " + (uptimeDays == 1 ? "day" : "days");
+				uptimeText = uptimeDays + " " + (uptimeDays === 1 ? "day" : "days");
 				var uptimeHours = Math.floor(uptime / (60 * 60)) - uptimeDays * 24;
 				if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours === 1 ? "hour" : "hours");
 				return uptimeText;
@@ -782,7 +807,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		return function(target, room, user) {
+		return function (target, room, user) {
 			if (!this.canBroadcast()) return;
 			var uptime = process.uptime();
 			this.sendReplyBox("Uptime: <b>" + formatUptime(uptime) + "</b>" +
@@ -805,8 +830,8 @@ var commands = exports.commands = {
 		this.sendReplyBox(
 			"Pokemon Showdown is open source:<br />" +
 			"- Language: JavaScript (Node.js)<br />" +
-			"- <a href=\"https://github.com/kupochu/Pokemon-Showdown\">TBT's Source Code</a><br />"+
-			"- <a href=\"https://github.com/kupochu/Pokemon-Showdown/commits/master\">TBT's latest updates</a><br />"+
+			"- <a href=\"https://github.com/kupochu/Pokemon-Showdown\">TBT's Source Code</a><br />" +
+			"- <a href=\"https://github.com/kupochu/Pokemon-Showdown/commits/master\">TBT's latest updates</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Server source code</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a>"
@@ -814,8 +839,8 @@ var commands = exports.commands = {
 	},
 
 	staff: function (target, room, user) {
-	    if (!this.canBroadcast()) return;
-	    this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
 	},
 
 	avatars: function (target, room, user) {
@@ -827,10 +852,10 @@ var commands = exports.commands = {
 		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with '/showtan', type '//showtan'.");
 		if (!this.can('showtan', room)) return;
 		target = this.splitTarget(target);
-		if (!this.targetUser) return this.sendReply('user not found');
-		if (!room.users[this.targetUser.userid]) return this.sendReply('not a showderper');
+		if (!this.targetUser) return this.sendReply("User not found");
+		if (!room.users[this.targetUser.userid]) return this.sendReply("Not a showderper");
 		this.targetUser.avatar = '#showtan';
-		room.add(user.name+' applied showtan to affected area of '+this.targetUser.name);
+		room.add("" + user.name + " applied showtan to affected area of " + this.targetUser.name);
 	},
 
 	introduction: 'intro',
@@ -1233,7 +1258,7 @@ var commands = exports.commands = {
 		} else if (generation === 'gsc' || generation === 'gs' || generation === '2' || generation === 'two') {
 			generation = 'gs';
 			genNumber = 2;
-		} else if(generation === 'rby' || generation === 'rb' || generation === '1' || generation === 'one') {
+		} else if (generation === 'rby' || generation === 'rb' || generation === '1' || generation === 'one') {
 			generation = 'rb';
 			genNumber = 1;
 		} else {
@@ -1314,7 +1339,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dice');
 		if (!this.canBroadcast()) return;
 		var d = target.indexOf("d");
-		if (d != -1) {
+		if (d >= 0) {
 			var num = parseInt(target.substring(0, d));
 			var faces;
 			if (target.length > d) faces = parseInt(target.substring(d + 1));
@@ -1369,7 +1394,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 
 		var targets = target.split(',');
-		if (targets.length != 3) {
+		if (targets.length !== 3) {
 			return this.parse('/help showimage');
 		}
 
@@ -1396,7 +1421,7 @@ var commands = exports.commands = {
 	 *********************************************************/
 
 	reminders: 'reminder',
-	reminder: function(target, room, user) {
+	reminder: function (target, room, user) {
 		if (room.type !== 'chat') return this.sendReply("This command can only be used in chatrooms.");
 
 		var parts = target.split(',');
@@ -1450,7 +1475,7 @@ var commands = exports.commands = {
 		}
 	},
 
-	tell: function(target, room, user) {
+	tell: function (target, room, user) {
 		if (!target) return false;
 		var message = this.splitTarget(target);
 		if (!message) return this.sendReply("You forgot the comma.");
@@ -1467,7 +1492,7 @@ var commands = exports.commands = {
 		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
 	},
 
-	showtells: function (target, room, user){
+	showtells: function (target, room, user) {
 		return this.sendReply("These users have currently have queued tells: " + Object.keys(tells));
 	},
 
@@ -1475,7 +1500,7 @@ var commands = exports.commands = {
 		if (!this.can('ban')) return;
 
 		var targets = target.split(',').map(toId);
-		if(targets.length !== 2) this.sendReply("Usage: /tellmove from, to");
+		if (targets.length !== 2) this.sendReply("Usage: /tellmove from, to");
 
 		if (!tells[targets[0]]) return this.sendReply(targets[0] + " has no tells queued.");
 
@@ -1487,7 +1512,7 @@ var commands = exports.commands = {
 	},
 
 	sk: 'superkick',
-	superkick: function(target, room, user){
+	superkick: function (target, room, user) {
 		if (!target) return;
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -1495,7 +1520,7 @@ var commands = exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 		if (!this.can('warn', targetUser, room)) return false;
-		var msg = "kicked by " + user.name + (!target?"":" (" + target + ")") + ".";
+		var msg = "kicked by " + user.name + (target ? " (" + target + ")" : "") + ".";
 		room.add(targetUser.name + " was " + msg);
 		targetUser.popup("You have been " + msg);
 		targetUser.disconnectAll();

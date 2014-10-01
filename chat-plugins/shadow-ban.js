@@ -51,7 +51,7 @@ function intersectAndExclude(a, b) {
 
 	var ai = 0;
 	var bi = 0;
-	for (var ai = 0, bi = 0; ai < a.length && bi < b.length; ) {
+	while (ai < a.length && bi < b.length) {
 		var difference = a[ai].localeCompare(b[bi]);
 		if (difference < 0) {
 			exclusionA.push(a[ai]);

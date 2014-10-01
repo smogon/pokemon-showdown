@@ -1,6 +1,6 @@
 exports.commands = {
 	k: 'kick',
-	kick: function (target, room, user){
+	kick: function (target, room, user) {
 		if (!target) return;
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;

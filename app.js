@@ -48,29 +48,19 @@
 // aren't
 
 function runNpm(command) {
-	console.log('Running `npm ' + command + '`...');
-	var child_process = require('child_process');
-	var npm = child_process.spawn('npm', [command]);
-	npm.stdout.on('data', function (data) {
-		process.stdout.write(data);
-	});
-	npm.stderr.on('data', function (data) {
-		process.stderr.write(data);
-	});
-	npm.on('close', function (code) {
-		if (!code) {
-			child_process.fork('app.js').disconnect();
-		}
-	});
+	command = 'npm ' + command + ' && ' + process.execPath + ' app.js';
+	console.log('Running `' + command + '`...');
+	require('child_process').spawn('sh', ['-c', command], {stdio: 'inherit', detached: true});
+	process.exit(0);
 }
 
 try {
 	require('sugar');
 } catch (e) {
-	return runNpm('install');
+	runNpm('install');
 }
 if (!Object.select) {
-	return runNpm('update');
+	runNpm('update');
 }
 
 // Make sure config.js exists, and copy it over from config-example.js
@@ -233,9 +223,9 @@ global.ResourceMonitor = {
 			if (typeof value === 'boolean') bytes += 4;
 			else if (typeof value === 'string') bytes += value.length * 2;
 			else if (typeof value === 'number') bytes += 8;
-			else if (typeof value === 'object' && objectList.indexOf( value ) === -1) {
-				objectList.push( value );
-				for (var i in value) stack.push( value[ i ] );
+			else if (typeof value === 'object' && objectList.indexOf(value) === -1) {
+				objectList.push(value);
+				for (var i in value) stack.push(value[i]);
 			}
 		}
 
@@ -351,7 +341,7 @@ global.Tournaments = require('./tournaments');
 try {
 	global.Dnsbl = require('./dnsbl.js');
 } catch (e) {
-	global.Dnsbl = {query:function (){}};
+	global.Dnsbl = {query:function () {}};
 }
 
 global.Cidr = require('./cidr.js');

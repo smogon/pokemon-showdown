@@ -1,5 +1,5 @@
 exports.BattleScripts = {
-	init: function() {
+	init: function () {
 		for (var i in this.data.Pokedex) {
 			this.modData('Pokedex', i).baseStats = {
 				hp: this.data.Pokedex[i].baseStats.spe,
