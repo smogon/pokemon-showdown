@@ -3584,7 +3584,7 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			if (target.setAbility(source.ability)) {
-				this.add('-ability', target, target.ability);
+				this.add('-ability', target, target.ability, '[from] move: Entrainment');
 				return;
 			}
 			return false;
