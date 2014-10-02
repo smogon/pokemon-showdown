@@ -858,7 +858,7 @@ var commands = exports.commands = {
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		if (!target) return this.sendReply("Please specify a domain to lock.");
 		if (!this.can('rangeban')) return false;
-		
+
 		var domain = Users.shortenHost(target);
 		if (Users.lockedDomains[domain]) return this.sendReply("The domain " + domain + " has already been temporarily locked.");
 
@@ -870,7 +870,7 @@ var commands = exports.commands = {
 		if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
 		if (!target) return this.sendReply("Please specify a domain to unlock.");
 		if (!this.can('rangeban')) return false;
-		
+
 		var domain = Users.shortenHost(target);
 		if (!Users.lockedDomains[domain]) return this.sendReply("The domain " + domain + " is not locked.");
 

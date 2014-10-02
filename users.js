@@ -219,7 +219,7 @@ var connections = Users.connections = Object.create(null);
 
 Users.shortenHost = function (host) {
 	var dotIndex = host.lastIndexOf('.');
-	if (host.substr(-6,4) === '.co.') dotIndex = host.length - 6;
+	if (host.substr(-6, 4) === '.co.') dotIndex = host.length - 6;
 	if (dotIndex >= 1) dotIndex = host.lastIndexOf('.', dotIndex - 1);
 	var shortHost = (dotIndex >= 1 ? host.substr(dotIndex + 1) : host);
 	return shortHost;
