@@ -4969,7 +4969,9 @@ exports.BattleFormatsData = {
 	},
 	pumpkaboosuper: {
 		randomBattleMoves: ["willowisp","shadowsneak","fireblast","painsplit","seedbomb"],
-		unreleasedHidden: true,
+		eventPokemon: [
+			{"generation":6,"level":50,"moves":["trickortreat","astonish","scaryface","shadowsneak"],"pokeball":"cherishball"}
+		],
 		tier: "LC"
 	},
 	gourgeist: {
@@ -4992,7 +4994,6 @@ exports.BattleFormatsData = {
 	gourgeistsuper: {
 		randomBattleMoves: ["willowisp","shadowsneak","painsplit","seedbomb","leechseed","phantomforce","explosion"],
 		randomDoubleBattleMoves: ["willowisp","shadowsneak","painsplit","seedbomb","leechseed","phantomforce","explosion","protect","trickroom"],
-		unreleasedHidden: true,
 		tier: "PU"
 	},
 	bergmite: {
