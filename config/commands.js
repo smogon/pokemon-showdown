@@ -1493,6 +1493,7 @@ var commands = exports.commands = {
 	},
 
 	showtells: function (target, room, user) {
+		if (!global.tells) global.tells = {};
 		return this.sendReply("These users have currently have queued tells: " + Object.keys(tells));
 	},
 
