@@ -367,8 +367,7 @@ animation) and `|[silent]` (suppress message).
 
 `|-endability|POKEMON`
 
-> The `POKEMON` has had its ability surpressed, either by a move like Gastro Acid, or 
-> by the effects of Mummy.
+> The `POKEMON` has had its ability surpressed by a move or ability, like Gastro Acid.
 
 `|-transform|POKEMON|SPECIES`
 
