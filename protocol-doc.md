@@ -357,6 +357,19 @@ animation) and `|[silent]` (suppress message).
 > ownership was changed (with a move or ability like Thief or Trick), even if the move 
 > or ability would result in a Pokemon without an item.
 
+`|-ability|POKEMON|ABILITY`
+
+> The `ABILITY` of the `POKEMON` has been changed or revealed due to a move or ability.
+> This also includes abilities that reveal themselves upon switch-in, like Mold Breaker. 
+> The only move tha does not trigger this message is Skill Swap, so that if you use Skill 
+> Swap between teammates in a doubles or triples battle, the abilities of the two Pokemon 
+> are not revealed to the opponent, similar to its behavior in game.
+
+`|-endability|POKEMON`
+
+> The `POKEMON` has had its ability surpressed, either by a move like Gastro Acid, or 
+> by the effects of Mummy.
+
 `|-transform|POKEMON|SPECIES`
 
 > The Pokemon `POKEMON` has transformed into `SPECIES` by the effect of Transform 
