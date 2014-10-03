@@ -274,7 +274,7 @@ exports.customavatars = {
 	'sairentotamashii': 'sairento-tamashii.jpg',
 	'ashadowssoul': 'sairento-tamashii.jpg',
 	'mk1091': 'mk1091.png',
-	'brndonmcullum': 'brndon-mcullum.jpg',
+	'brndncullum': 'brndn-cullum.png',
 	'ejgmorgan': 'ejg-morgan.jpg',
 	'omicronhuh': 'omicron.png',
 	'omicrn': 'omicron.png',
@@ -294,6 +294,8 @@ exports.customavatars = {
 	'shaneo': 'shaneo.png',
 	'pokecommbot': 'pokecommbot.png',
 	'ilovepokehack': 'ilovepokehack.jpg',
+	'achromaticlv': 'achromaticlv.png',
+	'aevon': 'aevon.gif',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
