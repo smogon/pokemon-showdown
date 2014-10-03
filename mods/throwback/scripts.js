@@ -1,6 +1,5 @@
 exports.BattleScripts = {
-	inherit: 'gen5',
-	gen: 4,
+	inherit: 'gen4',
 	init: function () {
 		for (var i in this.data.Pokedex) {
 			var tier = '';
