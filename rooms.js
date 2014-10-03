@@ -266,10 +266,15 @@ var GlobalRoom = (function () {
 	GlobalRoom.prototype.getRoomList = function (filter) {
 		var roomList = {};
 		var total = 0;
+		var skipCount = 0;
+		if (this.battleCount > 150) {
+			skipCount = this.battleCount - 150;
+		}
 		for (var i in Rooms.rooms) {
 			var room = Rooms.rooms[i];
 			if (!room || !room.active || room.isPrivate) continue;
 			if (filter && filter !== room.format && filter !== true) continue;
+			if (skipCount && skipCount--) continue;
 			var roomData = {};
 			if (room.active && room.battle) {
 				if (room.battle.players[0]) roomData.p1 = room.battle.players[0].getIdentity();
@@ -544,7 +549,7 @@ var GlobalRoom = (function () {
 		//console.log('BATTLE START BETWEEN: ' + p1.userid + ' ' + p2.userid);
 		var i = this.lastBattle + 1;
 		var formaturlid = format.toLowerCase().replace(/[^a-z0-9]+/g, '');
-		while(rooms['battle-' + formaturlid + i]) {
+		while (rooms['battle-' + formaturlid + i]) {
 			i++;
 		}
 		this.lastBattle = i;
@@ -563,8 +568,8 @@ var GlobalRoom = (function () {
 			if (!this.ladderIpLog) {
 				this.ladderIpLog = fs.createWriteStream('logs/ladderip/ladderip.txt', {flags: 'a'});
 			}
-			this.ladderIpLog.write(p1.userid+': '+p1.latestIp+'\n');
-			this.ladderIpLog.write(p2.userid+': '+p2.latestIp+'\n');
+			this.ladderIpLog.write(p1.userid + ': ' + p1.latestIp + '\n');
+			this.ladderIpLog.write(p2.userid + ': ' + p2.latestIp + '\n');
 		}
 		return newRoom;
 	};
@@ -707,7 +712,7 @@ var BattleRoom = (function () {
 							Users.get(p1).cacheMMR(rated.format, data.p1rating);
 							Users.get(p2).cacheMMR(rated.format, data.p2rating);
 							self.update();
-						} catch(e) {
+						} catch (e) {
 							self.addRaw('There was an error calculating rating changes.');
 							self.update();
 						}
@@ -758,9 +763,8 @@ var BattleRoom = (function () {
 			break;
 		}
 		if (!hasUsers) {
-			if (!this.expireTimer) {
-				this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_EMPTY_DEALLOCATE);
-			}
+			if (this.expireTimer) clearTimeout(this.expireTimer);
+			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_EMPTY_DEALLOCATE);
 		} else {
 			if (this.expireTimer) clearTimeout(this.expireTimer);
 			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_INACTIVE_DEALLOCATE);
@@ -1456,6 +1460,9 @@ function getRoom(roomid, fallback) {
 	return rooms[roomid];
 }
 Rooms.get = getRoom;
+Rooms.search = function (name, fallback) {
+	return getRoom(name) || getRoom(toId(name)) || Rooms.aliases[toId(name)] || (fallback ? rooms.global : undefined);
+};
 
 Rooms.createBattle = function (roomid, format, p1, p2, parent, rated) {
 	if (roomid && roomid.id) return roomid;

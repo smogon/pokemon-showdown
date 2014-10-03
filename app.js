@@ -48,29 +48,19 @@
 // aren't
 
 function runNpm(command) {
-	console.log('Running `npm ' + command + '`...');
-	var child_process = require('child_process');
-	var npm = child_process.spawn('npm', [command]);
-	npm.stdout.on('data', function (data) {
-		process.stdout.write(data);
-	});
-	npm.stderr.on('data', function (data) {
-		process.stderr.write(data);
-	});
-	npm.on('close', function (code) {
-		if (!code) {
-			child_process.fork('app.js').disconnect();
-		}
-	});
+	command = 'npm ' + command + ' && ' + process.execPath + ' app.js';
+	console.log('Running `' + command + '`...');
+	require('child_process').spawn('sh', ['-c', command], {stdio: 'inherit', detached: true});
+	process.exit(0);
 }
 
 try {
 	require('sugar');
 } catch (e) {
-	return runNpm('install');
+	runNpm('install');
 }
 if (!Object.select) {
-	return runNpm('update');
+	runNpm('update');
 }
 
 // Make sure config.js exists, and copy it over from config-example.js
@@ -126,7 +116,17 @@ global.ResourceMonitor = {
 	 */
 	log: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) Rooms.rooms.staff.add('||' + text);
+		if (Rooms.rooms.staff) {
+			Rooms.rooms.staff.add('||' + text);
+			Rooms.rooms.staff.update();
+		}
+	},
+	logHTML: function (text) {
+		console.log(text);
+		if (Rooms.rooms.staff) {
+			Rooms.rooms.staff.add('|html|' + text);
+			Rooms.rooms.staff.update();
+		}
 	},
 	countConnection: function (ip, name) {
 		var now = Date.now();
@@ -134,15 +134,15 @@ global.ResourceMonitor = {
 		name = (name ? ': ' + name : '');
 		if (ip in this.connections && duration < 30 * 60 * 1000) {
 			this.connections[ip]++;
-			if (this.connections[ip] < 500 && duration < 5 * 60 * 1000 && this.connections[ip] % 20 === 0) {
+			if (this.connections[ip] < 500 && duration < 5 * 60 * 1000 && this.connections[ip] % 30 === 0) {
 				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
-			} else if (this.connections[ip] < 500 && this.connections[ip] % 60 === 0) {
+			} else if (this.connections[ip] < 500 && this.connections[ip] % 90 === 0) {
 				this.log('[ResourceMonitor] IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
 			} else if (this.connections[ip] === 500) {
 				this.log('[ResourceMonitor] IP ' + ip + ' has been banned for connection flooding (' + this.connections[ip] + ' times in the last ' + duration.duration() + name + ')');
 				return true;
 			} else if (this.connections[ip] > 500) {
-				if (this.connections[ip] % 200 === 0) {
+				if (this.connections[ip] % 250 === 0) {
 					this.log('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
 				}
 				return true;
@@ -223,9 +223,9 @@ global.ResourceMonitor = {
 			if (typeof value === 'boolean') bytes += 4;
 			else if (typeof value === 'string') bytes += value.length * 2;
 			else if (typeof value === 'number') bytes += 8;
-			else if (typeof value === 'object' && objectList.indexOf( value ) === -1) {
-				objectList.push( value );
-				for (var i in value) stack.push( value[ i ] );
+			else if (typeof value === 'object' && objectList.indexOf(value) === -1) {
+				objectList.push(value);
+				for (var i in value) stack.push(value[i]);
 			}
 		}
 
@@ -341,7 +341,7 @@ global.Tournaments = require('./tournaments');
 try {
 	global.Dnsbl = require('./dnsbl.js');
 } catch (e) {
-	global.Dnsbl = {query:function (){}};
+	global.Dnsbl = {query:function () {}};
 }
 
 global.Cidr = require('./cidr.js');

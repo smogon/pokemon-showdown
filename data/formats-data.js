@@ -1926,7 +1926,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":10,"gender":"M","abilities":["owntempo"],"moves":["sketch"]},
 			{"generation":5,"level":50,"gender":"F","nature":"Jolly","abilities":["technician"],"moves":["falseswipe","spore","odorsleuth","meanlook"],"pokeball":"cherishball"}
 		],
-		tier: "UU"
+		tier: "BL"
 	},
 	miltank: {
 		randomBattleMoves: ["milkdrink","stealthrock","bodyslam","healbell","curse","earthquake","thunderwave"],
@@ -3145,7 +3145,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	empoleon: {
-		randomBattleMoves: ["stealthrock","hydropump","scald","icebeam","hiddenpowerelectric","roar","grassknot","flashcannon","defog","agility"],
+		randomBattleMoves: ["stealthrock","hydropump","scald","icebeam","roar","grassknot","flashcannon","defog","agility"],
 		randomDoubleBattleMoves: ["icywind","hydropump","scald","icebeam","hiddenpowerelectric","protect","grassknot","flashcannon"],
 		eventPokemon: [
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["hydropump","icebeam","aquajet","grassknot"],"pokeball":"cherishball"}
@@ -3558,7 +3558,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	giratina: {
-		randomBattleMoves: ["rest","sleeptalk","dragontail","roar","willowisp"],
+		randomBattleMoves: ["rest","sleeptalk","dragontail","roar","willowisp","shadowball","dragonpulse"],
 		randomDoubleBattleMoves: ["tailwind","icywind","protect","dragontail","willowisp","calmmind","dragonpulse","shadowball"],
 		eventPokemon: [
 			{"generation":5,"level":100,"shiny":true,"isHidden":false,"moves":["dragonpulse","dragonclaw","aurasphere","shadowforce"],"pokeball":"cherishball"}
@@ -3739,7 +3739,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"moves":["vcreate","fusionflare","fusionbolt","searingshot"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"moves":["vcreate","blueflare","boltstrike","glaciate"],"pokeball":"cherishball"}
 		],
-		tier: "BL"
+		tier: "UU"
 	},
 	snivy: {
 		randomBattleMoves: ["leafstorm","hiddenpowerfire","substitute","leechseed","hiddenpowerice","gigadrain"],
@@ -4969,7 +4969,9 @@ exports.BattleFormatsData = {
 	},
 	pumpkaboosuper: {
 		randomBattleMoves: ["willowisp","shadowsneak","fireblast","painsplit","seedbomb"],
-		unreleasedHidden: true,
+		eventPokemon: [
+			{"generation":6,"level":50,"moves":["trickortreat","astonish","scaryface","shadowsneak"],"pokeball":"cherishball"}
+		],
 		tier: "LC"
 	},
 	gourgeist: {
@@ -4992,7 +4994,6 @@ exports.BattleFormatsData = {
 	gourgeistsuper: {
 		randomBattleMoves: ["willowisp","shadowsneak","painsplit","seedbomb","leechseed","phantomforce","explosion"],
 		randomDoubleBattleMoves: ["willowisp","shadowsneak","painsplit","seedbomb","leechseed","phantomforce","explosion","protect","trickroom"],
-		unreleasedHidden: true,
 		tier: "PU"
 	},
 	bergmite: {

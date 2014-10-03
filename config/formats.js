@@ -33,7 +33,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Alakazite', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Drizzle', 'Drought', 'Shadow Tag', 'Geomancy']
+		banlist: ['OU', 'BL', 'Alakazite', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Drizzle', 'Drought', 'Shadow Tag']
 	},
 	{
 		name: "RU",
@@ -72,7 +72,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		banlist: [], // The necessary bans are in Standard GBU
 		validateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least three PokÃ©mon.'];
+			if (team.length < 3) return ['You must bring at least three Pokémon.'];
 		}
 	},
 	/*{
@@ -85,7 +85,7 @@ exports.Formats = [
 		]
 	},*/
 	{
-		name: "Fairy Face-Off",
+		name: "Halloween Party",
 		section: "XY Singles",
 
 		onBegin: function () {
@@ -95,18 +95,23 @@ exports.Formats = [
 			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
-		forcedLevel: 30,
+		forcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
+		banlist: ['Rotom', 'Rotom-Fan', 'Rotom-Frost', 'Rotom-Heat', 'Rotom-Mow', 'Rotom-Wash'],
 		requirePentagon: true,
 		validateTeam: function (team) {
 			var problems = [];
-			if (team.length < 3) problems.push('You must bring at least three PokÃ©mon.');
+			if (team.length < 3) problems.push('You must bring at least three Pokémon.');
+			var hasGhost = true;
+			var hasGourgeist = false;
 			for (var i = 0; i < team.length; i++) {
-				var types = Tools.getTemplate(team[i].species || team[i].name).types || [];
-				if (types.indexOf('Fairy') > -1) continue;
-				problems.push('You must only bring Fairy-type PokÃ©mon.');
-				break;
+				var pokemon = Tools.getTemplate(team[i].species || team[i].name);
+				var types = pokemon.types || [];
+				if (types.indexOf('Ghost') < 0) hasGhost = false;
+				if (pokemon.species === 'Gourgeist-Super') hasGourgeist = true;
 			}
+			if (!hasGhost) problems.push('You must only bring Ghost-type Pokémon.');
+			if (!hasGourgeist) problems.push('You must have Gourgeist-Super on your team.');
 			return problems;
 		}
 	},
@@ -122,7 +127,7 @@ exports.Formats = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview']
 	},
-	
+
 	// Random Battles
 	///////////////////////////////////////////////////////////////////
 
@@ -154,7 +159,7 @@ exports.Formats = [
 		section: "Random Battles (aka Randbats)",
 
 		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Team Preview 1v1', 'Sleep Clause Mod', 'HP Percentage Mod'],
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview 1v1'],
 		onBegin: function() {
 			this.debug('Cutting down to 1');
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -231,6 +236,22 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
+		name: "Doubles Random",
+		section: "Random Battles (aka Randbats)",
+
+		gameType: 'doubles',
+		team: 'randomDoubles',
+		ruleset: ['Random']
+	},
+	{
+		name: "Triples Random",
+		section: "Random Battles (aka Randbats)",
+
+		gameType: 'triples',
+		team: 'randomDoubles',
+		ruleset: ['Random']
+	},
+	{
 		name: "Challenge Cup",
 		section: "Random Battles (aka Randbats)",
 
@@ -252,29 +273,13 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Doubles Random",
-		section: "Random Battles (aka Randbats)",
-
-		gameType: 'doubles',
-		team: 'randomDoubles',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview']
-	},
-	{
 		name: "Doubles Challenge Cup",
-		section: "Random Battles (aka Randbats)",
+		section: 'Random Battles (aka Randbats)',
 
 		gameType: 'doubles',
 		team: 'randomCC',
 		searchShow: false,
 		ruleset: ['Pokemon', 'HP Percentage Mod']
-	},
-	{
-		name: "Triples Random",
-		section: "Random Battles (aka Randbats)",
-
-		gameType: 'triples',
-		team: 'randomDoubles',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview']
 	},
 	{
 		name: "Triples Challenge Cup",
@@ -337,7 +342,7 @@ exports.Formats = [
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four PokÃ©mon.'];
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		}
 	},
 	{
@@ -359,7 +364,7 @@ exports.Formats = [
 			'Salamence', 'Sylveon', 'Talonflame', 'Thundurus', 'Thundurus-Therian', 'Togekiss', 'Tyranitar'
 		],
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four PokÃ©mon.'];
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		}
 	},
 	{
@@ -379,7 +384,7 @@ exports.Formats = [
 		requirePentagon: true,
 		banlist: [], // The necessary bans are in Standard GBU
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four PokÃ©mon.'];
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		}
 	},
 	{
@@ -418,7 +423,7 @@ exports.Formats = [
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
 		validateTeam: function (team, format) {
-			if (team.length < 6) return ['You must have six PokÃ©mon.'];
+			if (team.length < 6) return ['You must have six Pokémon.'];
 		}
 	},
 	{
@@ -439,36 +444,20 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Haxmons",
+		name: "Hidden Type",
 		section: "OM of the Month",
 		column: 2,
 
-		ruleset: ['OU', 'Freeze Clause'],
-		banlist: ["King's Rock", 'Razor Fang', 'Stench'],
-		onModifyMovePriority: -100,
-		onModifyMove: function (move) {
-			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 0;
-			move.willCrit = true;
-			if (move.secondaries) {
-				for (var i = 0; i < move.secondaries.length; i++) {
-					move.secondaries[i].chance = 100;
-				}
-			}
-		}
+		mod: 'hiddentype',
+		ruleset: ['OU']
 	},
 	{
-		name: "[Gen 3] 1v1",
+		name: "[Gen 4] Tier Shift",
 		section: "OM of the Month",
 
-		mod: 'gen3',
+		mod: 'throwback',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Smeargle + Ingrain'],
-		onBegin: function () {
-			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		banlist: ['Uber']
 	},
 	{
 		name: "CAP",
@@ -495,7 +484,7 @@ exports.Formats = [
 			'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew'
 		],
 		validateTeam: function (team, format) {
-			if (team.length > 3) return ['You may only bring up to three PokÃ©mon.'];
+			if (team.length > 3) return ['You may only bring up to three Pokémon.'];
 		},
 		onBegin: function () {
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -551,15 +540,15 @@ exports.Formats = [
 			'Shedinja + Sturdy', 'Slaking', 'Smeargle + Baton Pass', 'Weavile', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew'
 		],
-		validateSet: function(set) {
-			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
+		validateSet: function (set) {
+			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Protean': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
 			if (set.ability in bannedAbilities) {
 				var template = this.getTemplate(set.species || set.name);
 				var legalAbility = false;
 				for (var i in template.abilities) {
 					if (set.ability === template.abilities[i]) legalAbility = true;
 				}
-				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on PokÃ©mon that do not naturally have it.'];
+				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pokémon that do not naturally have it.'];
 			}
 		}
 	},
@@ -598,11 +587,8 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		mod: 'inverse',
-		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Arceus', 'Darkrai', 'Deoxys-Attack', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Lugia',
-			'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Kyurem-White', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Gengarite', 'Kangaskhanite', 'Soul Dew'
-		]
+		ruleset: ['OU'],
+		banlist: ['Kyurem-Black', 'Snorlax']
 	},
 	{
 		name: "350 Cup",
@@ -611,7 +597,14 @@ exports.Formats = [
 		mod: '350cup',
 		searchShow: false,
 		ruleset: ['Ubers', 'Evasion Moves Clause'],
-		banlist: ['Darumaka', 'Pawniard', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Light Ball', 'Thick Club']
+		banlist: ['Darumaka', 'Pawniard', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
+		validateSet: function (set) {
+			var template = Tools.getTemplate(set.species);
+			var item = this.getItem(set.item);
+			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
+				return ['Eviolite is banned on Pokémon with 350 or lower BST.'];
+			}
+		}
 	},
 	{
 		name: "Averagemons",
@@ -663,19 +656,6 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Hidden Type",
-		section: "Other Metagames",
-
-		mod: 'hiddentype',
-		searchShow: false,
-		ruleset: ['OU'],
-		onSwitchInPriority: 101,
-		onSwitchIn: function (pokemon) {
-			var type = pokemon.hpType || 'Dark';
-			if (!pokemon.hasType(type)) pokemon.addType(type);
-		}
-	},
-	{
 		name: "Middle Cup",
 		section: "Other Metagames",
 
@@ -685,7 +665,7 @@ exports.Formats = [
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
 			if (!template.evos || template.evos.length === 0 || !template.prevo) {
-				return [set.species + " is not the middle PokÃ©mon in an evolution chain."];
+				return [set.species + " is not the middle Pokémon in an evolution chain."];
 			}
 		},
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
@@ -695,10 +675,26 @@ exports.Formats = [
 		name: "OM Mashup",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Team Preview', 'HP Percentage Mod'],
-		banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard']
+		maxLevel: 50,
+		defaultLevel: 50,
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview 1v1'],
+		banlist: ['Eviolite', 'Focus Sash'],
+		validateTeam: function (team, format) {
+			if (team.length > 3) return ['You may only bring up to three Pokémon.'];
+		},
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0 || !template.prevo) {
+				return [set.species + " is not the middle Pokémon in an evolution chain."];
+			}
+		},
+		onBegin: function () {
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
 	},
 	{
 		name: "[Gen 5] Glitchmons",

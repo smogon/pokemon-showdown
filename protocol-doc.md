@@ -350,17 +350,37 @@ animation) and `|[silent]` (suppress message).
 
 `|-enditem|POKEMON|ITEM`
 
-> The `ITEM` held by `POKEMON` has been removed, and it now holds no item. This can 
-> be because the item was consumed or destroyed by its own effects (Berries, Air 
-> Balloon), or was forcefully removed by a move or ability. Note that if an item was 
-> stolen by Thief, this message will not appear and you have to rely on earlier `move` 
-> messages and the fact that an `-item` message will appear for the Pokemon using Thief, 
-> instead.
+> The `ITEM` held by `POKEMON` has been destroyed, and it now holds no item. This can 
+> be because of an item's own effects (consumed Berries, Air Balloon), or by a move or 
+> ability, like Knock Off. If a berry is consumed, it also has an additional modifier 
+> `|[eat]` to indicate that it was consumed. This message does not appear if the item's 
+> ownership was changed (with a move or ability like Thief or Trick), even if the move 
+> or ability would result in a Pokemon without an item.
+
+`|-ability|POKEMON|ABILITY`
+
+> The `ABILITY` of the `POKEMON` has been changed or revealed due to a move or ability.
+> This also includes abilities that reveal themselves upon switch-in, like Mold Breaker. 
+> The only move tha does not trigger this message is Skill Swap, so that if you use Skill 
+> Swap between teammates in a doubles or triples battle, the abilities of the two Pokemon 
+> are not revealed to the opponent, similar to its behavior in game.
+
+`|-endability|POKEMON`
+
+> The `POKEMON` has had its ability surpressed, either by a move like Gastro Acid, or 
+> by the effects of Mummy.
 
 `|-transform|POKEMON|SPECIES`
 
 > The Pokemon `POKEMON` has transformed into `SPECIES` by the effect of Transform 
 > or the ability Imposter.
+
+`|-activate|EFFECT`
+
+> A miscellaneous effect has activated. This is triggered whenever an effect could 
+> not be better described by one of the other minor messages: for example, healing 
+> abilities like Water Absorb simply use `-heal`, and items that are consumed upon 
+> use have the `-enditem` message instead.
 
 I'll document all the message types eventually, but for now this should be
 enough to get you started. You can watch the data sent and received from
