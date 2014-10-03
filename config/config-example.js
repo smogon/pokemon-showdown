@@ -245,7 +245,7 @@ exports.customavatars = {
 	'indiancharizard': 'indiancharizard.gif',
 	'supershape': 'supershape.gif',
 	'bellpix': 'bellpix.gif',
-	'bluray': 'blu-ray.gif',c
+	'bluray': 'blu-ray.gif',
 	'zaga': 'zaga.gif',
 	'ashketchumadmn': 'ashketchumadmn.png',
 	'shadowraze': 'shadowraze.png',
