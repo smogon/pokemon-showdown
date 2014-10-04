@@ -3160,7 +3160,6 @@ exports.BattleScripts = {
 				set.species = 'snivy';
 				set.name = 'Tsutarja';
 			} else if (template.id === 'zekrom') {
-				set.species = 'zekrom';
 				set.item = 'lifeorb';
 				set.moves = ['boltstrike', 'dracometeor', 'outrage', 'focusblast'];
 				set.nature = 'naughty';
