@@ -235,6 +235,22 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
+		name: "PC Staff Random",
+		section: "Random Battles (aka Randbats)",
+
+		searchShow: false,
+		team: 'randomPCStaff',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "PC Staff Doubles Random",
+		section: "Random Battles (aka Randbats)",
+
+		searchShow: false,
+		team: 'randomPCStaffDoubles',
+		ruleset: ['Random (no PotD)']
+	},
+	{
 		name: "Doubles Random",
 		section: "Random Battles (aka Randbats)",
 
