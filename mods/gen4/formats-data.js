@@ -1778,7 +1778,7 @@ exports.BattleFormatsData = {
 	slaking: {
 		randomBattleMoves: ["return","earthquake","pursuit","firepunch","suckerpunch","doubleedge","retaliate","gigaimpact","hammerarm"],
 		eventPokemon: [
-			{"generation":4,"level":50,"gender":"M","nature":"Adamant","abilities":["traunt"],"moves":["gigaimpact","return","shadowclaw","aerialace"]}
+			{"generation":4,"level":50,"gender":"M","nature":"Adamant","abilities":["truant"],"moves":["gigaimpact","return","shadowclaw","aerialace"]}
 		],
 		tier: "NU"
 	},
