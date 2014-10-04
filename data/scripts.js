@@ -2713,8 +2713,8 @@ exports.BattleScripts = {
 			} else if (template.id === 'bellossom') {
 				set.species = 'bellossom';
 				set.name = 'Leijon';
-				set.gender = 'F';
-				set.moves = ['Petal Dance', 'Attract', 'Hidden Power Fire', 'Synthesis'];
+				set.gender = 'f';
+				set.moves = ['petaldance', 'attract', 'hiddenpowerfire', 'synthesis'];
 			} else if (template.id === 'bidoof') {
 				set.species = 'bidoof';
 				var dice = this.random(2);
@@ -2841,9 +2841,9 @@ exports.BattleScripts = {
 			} else if (template.id === 'mismagius') {
 				set.species = 'mismagius';
 				set.name = 'Polar Spectrum';
-				set.item = 'Colbur Berry';
-				set.moves = ['Will-O-Wisp', 'Hex', 'Nasty Plot', 'Power Gem'];
-				set.nature = 'Timid';
+				set.item = 'colburberry';
+				set.moves = ['willowisp', 'hex', 'nastyplot', 'powergem'];
+				set.nature = 'timid';
 				set.evs = {hp: 0, def: 0, spd: 4, spa: 252, atk: 0, spe: 252};
 			} else if (template.id === 'nidoking') {
 				set.species = 'nidoking';
@@ -2875,8 +2875,8 @@ exports.BattleScripts = {
 			} else if (template.id === 'rotomfan') {
 				set.species = 'rotomfan';
 				set.name = 'littlebrother';
-				set.item = 'Leftovers';
-				set.moves = ['Discharge', 'Pain Split', 'Air Slash', 'Substitute'];
+				set.item = 'leftovers';
+				set.moves = ['discharge', 'painsplit', 'airslash', 'substitute'];
 			} else if (template.id === 'sandshrew') {
 				set.species = 'sandshrew';
 				set.name = 'Squirrel';
@@ -2886,11 +2886,11 @@ exports.BattleScripts = {
 			} else if (template.id === 'scizor') {
 				set.species = 'scizor';
 				set.name = 'srinator';
-				set.gender = 'M';
-				set.item = 'Choice Band';
-				set.ability = 'Technician';
-				set.moves = ['Bullet Punch', 'U-turn', 'Aerial Ace', 'Superpower'];
-				set.nature = 'Adamant';
+				set.gender = 'm';
+				set.item = 'choiceband';
+				set.ability = 'technician';
+				set.moves = ['bulletpunch', 'uturn', 'aerialace', 'superpower'];
+				set.nature = 'adamant';
 				set.evs = {hp: 252, def: 0, spd: 4, spa: 0, atk: 252, spe: 0};
 			} else if (template.id === 'scolipede') {
 				set.species = 'scolipede';
@@ -2916,14 +2916,14 @@ exports.BattleScripts = {
 			} else if (template.id === 'spheal') {
 				set.species = 'spheal';
 				set.name = 'Christos';
-				set.moves = ['Freeze-Dry', 'Surf', 'Yawn', 'Super Fang'];
+				set.moves = ['freezedry', 'surf', 'yawn', 'superfang'];
 			} else if (template.id === 'staraptor') {
 				set.species = 'staraptor';
 				set.name = 'BadPokemon';
-				set.item = 'Choice Band';
-				set.ability = 'Reckless';
-				set.moves = ['Double-Edge', 'Quick Attack', 'Brave Bird', 'Close Combat'];
-				set.nature = 'Adamant';
+				set.item = 'choiceband';
+				set.ability = 'reckless';
+				set.moves = ['doubleedge', 'quickattack', 'bravebird', 'closecombat'];
+				set.nature = 'adamant';
 			} else if (template.id === 'starmie') {
 				set.species = 'starmie';
 				set.name = 'shenanigans';
