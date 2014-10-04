@@ -7,11 +7,10 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Low Tier Random (BWknd 22)",
+		name: "XY Anniversary Random (BWknd 23)",
 		section: "XY Singles",
 
-		mod: 'lowtierrandom',
-		team: 'randomLowTier',
+		team: 'randomXY',
 		ruleset: ['Random (no PotD)']
 	},
 	{
@@ -72,7 +71,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		banlist: [], // The necessary bans are in Standard GBU
 		validateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least three PokÈmon.'];
+			if (team.length < 3) return ['You must bring at least three Pok√©mon.'];
 		}
 	},
 	/*{
@@ -101,7 +100,7 @@ exports.Formats = [
 		requirePentagon: true,
 		validateTeam: function (team) {
 			var problems = [];
-			if (team.length < 3) problems.push('You must bring at least three PokÈmon.');
+			if (team.length < 3) problems.push('You must bring at least three Pok√©mon.');
 			var hasGhost = true;
 			var hasGourgeist = false;
 			for (var i = 0; i < team.length; i++) {
@@ -110,7 +109,7 @@ exports.Formats = [
 				if (types.indexOf('Ghost') < 0) hasGhost = false;
 				if (pokemon.species === 'Gourgeist-Super') hasGourgeist = true;
 			}
-			if (!hasGhost) problems.push('You must only bring Ghost-type PokÈmon.');
+			if (!hasGhost) problems.push('You must only bring Ghost-type Pok√©mon.');
 			if (!hasGourgeist) problems.push('You must have Gourgeist-Super on your team.');
 			return problems;
 		}
@@ -342,7 +341,7 @@ exports.Formats = [
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four PokÈmon.'];
+			if (team.length < 4) return ['You must bring at least four Pok√©mon.'];
 		}
 	},
 	{
@@ -364,7 +363,7 @@ exports.Formats = [
 			'Salamence', 'Sylveon', 'Talonflame', 'Thundurus', 'Thundurus-Therian', 'Togekiss', 'Tyranitar'
 		],
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four PokÈmon.'];
+			if (team.length < 4) return ['You must bring at least four Pok√©mon.'];
 		}
 	},
 	{
@@ -384,7 +383,7 @@ exports.Formats = [
 		requirePentagon: true,
 		banlist: [], // The necessary bans are in Standard GBU
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four PokÈmon.'];
+			if (team.length < 4) return ['You must bring at least four Pok√©mon.'];
 		}
 	},
 	{
@@ -423,7 +422,7 @@ exports.Formats = [
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
 		validateTeam: function (team, format) {
-			if (team.length < 6) return ['You must have six PokÈmon.'];
+			if (team.length < 6) return ['You must have six Pok√©mon.'];
 		}
 	},
 	{
@@ -484,7 +483,7 @@ exports.Formats = [
 			'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew'
 		],
 		validateTeam: function (team, format) {
-			if (team.length > 3) return ['You may only bring up to three PokÈmon.'];
+			if (team.length > 3) return ['You may only bring up to three Pok√©mon.'];
 		},
 		onBegin: function () {
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -548,7 +547,7 @@ exports.Formats = [
 				for (var i in template.abilities) {
 					if (set.ability === template.abilities[i]) legalAbility = true;
 				}
-				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on PokÈmon that do not naturally have it.'];
+				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok√©mon that do not naturally have it.'];
 			}
 		}
 	},
@@ -602,7 +601,7 @@ exports.Formats = [
 			var template = Tools.getTemplate(set.species);
 			var item = this.getItem(set.item);
 			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
-				return ['Eviolite is banned on PokÈmon with 350 or lower BST.'];
+				return ['Eviolite is banned on Pok√©mon with 350 or lower BST.'];
 			}
 		}
 	},
@@ -665,7 +664,7 @@ exports.Formats = [
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
 			if (!template.evos || template.evos.length === 0 || !template.prevo) {
-				return [set.species + " is not the middle PokÈmon in an evolution chain."];
+				return [set.species + " is not the middle Pok√©mon in an evolution chain."];
 			}
 		},
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
@@ -681,12 +680,12 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview 1v1'],
 		banlist: ['Eviolite', 'Focus Sash'],
 		validateTeam: function (team, format) {
-			if (team.length > 3) return ['You may only bring up to three PokÈmon.'];
+			if (team.length > 3) return ['You may only bring up to three Pok√©mon.'];
 		},
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
 			if (!template.evos || template.evos.length === 0 || !template.prevo) {
-				return [set.species + " is not the middle PokÈmon in an evolution chain."];
+				return [set.species + " is not the middle Pok√©mon in an evolution chain."];
 			}
 		},
 		onBegin: function () {
