@@ -3015,5 +3015,20 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	}
+	},
+	randomXYTeam: function(side) {
+		var pokemonList = ['chespin', 'quilladin', 'chesnaught', 'fennekin', 'braixen', 'delphox', 'froakie', 'frogadier', 'greninja', 'bunnelby', 'diggersby', 'fletchling', 'fletchinder', 'talonflame', 'scatterbug', 'spewpa', 'vivillon', 'litleo', 'pyroar', 'flabebe', 'floette', 'florges', 'skiddo', 'gogoat', 'pancham', 'pangoro', 'furfrou', 'espurr', 'meowstic', 'meowsticf', 'honedge', 'doublade', 'aegislash', 'spritzee', 'aromatisse', 'swirlix', 'slurpuff', 'inkay', 'malamar', 'binacle', 'barbaracle', 'skrelp', 'dragalge', 'clauncher', 'clawitzer', 'helioptile', 'heliolisk', 'tyrunt', 'tyrantrum', 'amaura', 'aurorus', 'sylveon', 'hawlucha', 'dedenne', 'carbink', 'goomy', 'sliggoo', 'goodra', 'klefki', 'phantump', 'trevenant', 'pumpkaboo', 'pumpkaboosmall', 'pumpkaboolarge', 'pumpkaboosuper', 'gourgeist', 'gourgeistsmall', 'gourgeistlarge', 'gourgeistsuper', 'bergmite', 'avalugg', 'noibat', 'noivern', 'xerneas', 'yveltal', 'zygarde', 'diancie'];
+
+		pokemonList = pokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(pokemonList[i], i);
+
+			team.push(set);
+		}
+
+		return team;
+	},
 };
