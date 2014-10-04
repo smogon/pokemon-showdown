@@ -3118,4 +3118,91 @@ exports.BattleScripts = {
 
 		return team;
 	},
+	randomPCStaffDoublesTeam: function(side) {
+		var pokemonList = ['suicune', 'lucario', 'serperior', 'ludicolo', 'togekiss', 'spheal', 'ninetales', 'snivy', 'zekrom', 'tyranitar', 'salamence', 'meganium', 'alakazam', 'altaria', 'whimsicott', 'malamar', 'milotic'];
+
+		pokemonList = pokemonList.randomize();
+
+		var team = [];
+
+		for (var i=0; i<6; i++) {
+			var pokemon = pokemonList[i];
+			var template = this.getTemplate(pokemon);
+			var set = this.randomDoublesSet(template, i);
+			
+			if (template.id === 'suicune') {
+				set.species = 'suicune';
+				set.name = 'wolf';
+			} else if (template.id === 'lucario') {
+				set.species = 'lucario';
+				set.name = 'Antemortem';
+			} else if (template.id === 'serperior') {
+				set.species = 'serperior';
+				set.name = 'Nolafus';
+			} else if (template.id === 'ludicolo') {
+				set.species = 'ludicolo';
+				set.name = 'Omicron';
+			} else if (template.id === 'togekiss') {
+				set.species = 'togekiss';
+				set.name = 'Sora';
+			} else if (template.id === 'spheal') {
+				set.species = 'spheal';
+				set.name = 'Christos';
+			} else if (template.id === 'ninetales') {
+				set.species = 'ninetales';
+				var dice = this.random(2);
+				if (dice < 1) {
+					set.name = 'Magic';
+				} else {
+					set.name = 'Peitharchia';
+				}
+			} else if (template.id === 'snivy') {
+				set.species = 'snivy';
+				set.name = 'Tsutarja';
+			} else if (template.id === 'zekrom') {
+				set.species = 'zekrom';
+				set.item = 'lifeorb';
+				set.moves = ['boltstrike', 'dracometeor', 'outrage', 'focusblast'];
+				set.nature = 'naughty';
+				set.evs = {hp: 0, def: 4, spd: 0, spa: 140, atk: 252, spe: 112};
+			} else if (template.id === 'tyranitar') {
+				set.species = 'tyranitar';
+				set.name = 'Necrum';
+				set.gender = 'm';
+				set.item = 'assaultvest';
+				set.ability = 'sandstream';
+				set.moves = ['stoneedge', 'crunch', 'earthquake', 'ironhead'];
+				set.nature = 'jolly';
+			} else if (template.id === 'salamence') {
+				set.species = 'salamence';
+				set.name = 'Livewire';
+			} else if (template.id === 'meganium') {
+				set.species = 'meganium';
+				set.name = 'Denny Hamlin';
+				set.item = 'lightclay';
+				set.moves = ['gigadrain', 'reflect', 'lightscreen', 'synthesis'];
+			} else if (template.id === 'alakazam') {
+				set.species = 'alakazam';
+				set.name = 'donavannj';
+			} else if (template.id === 'altaria') {
+				set.species = 'altaria';
+				set.name = 'Sydian';
+				set.shiny = true;
+			} else if (template.id === 'whimsicott') {
+				set.species = 'whimsicott';
+				set.name = 'Sheep';
+				set.shiny = true;
+			} else if (template.id === 'malamar') {
+				set.species = 'malamar';
+				set.name = 'curiousnathan';
+			} else if (template.id === 'milotic') {
+				set.species = 'milotic';
+				set.name = 'Dragon';
+			}
+
+			team.push(set);
+		}
+
+		return team;
+	},
 };
