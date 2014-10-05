@@ -848,7 +848,7 @@ var commands = exports.commands = {
 		if (!this.targetUser) return this.sendReply("User not found");
 		if (!room.users[this.targetUser.userid]) return this.sendReply("Not a showderper");
 		this.targetUser.avatar = '#showtan';
-		room.add("" + user.name + " applied showtan to affected area of " + this.targetUser.name);
+		room.add(user.name + " applied showtan to affected area of " + this.targetUser.name);
 	},
 
 	introduction: 'intro',
