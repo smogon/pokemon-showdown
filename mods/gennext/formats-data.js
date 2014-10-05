@@ -5,7 +5,6 @@ exports.BattleFormatsData = {
 	},
 	diancie: {
 		inherit: true,
-		isUnreleased: false,
 		tier: 'OU'
 	},
 	genesect: {
