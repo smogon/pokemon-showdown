@@ -241,6 +241,7 @@ exports.customavatars = {
 	'thefattestsnorlax': 'thefattestsnorlax.gif',
 	'sri': 'warpaint.gif',
 	'srinator': 'warpaint.gif',
+	'srintor': 'warpaint.gif',
 	'miguelruizcabal': 'miguelruizcabal.jpg',
 	'indiancharizard': 'indiancharizard.gif',
 	'supershape': 'supershape.gif',
