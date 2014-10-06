@@ -2713,7 +2713,7 @@ exports.BattleScripts = {
 			} else if (template.id === 'bellossom') {
 				set.species = 'bellossom';
 				set.name = 'Leijon';
-				set.gender = 'f';
+				set.gender = 'F';
 				set.moves = ['petaldance', 'attract', 'hiddenpowerfire', 'synthesis'];
 			} else if (template.id === 'bidoof') {
 				set.species = 'bidoof';
@@ -2886,7 +2886,7 @@ exports.BattleScripts = {
 			} else if (template.id === 'scizor') {
 				set.species = 'scizor';
 				set.name = 'srinator';
-				set.gender = 'm';
+				set.gender = 'M';
 				set.item = 'choiceband';
 				set.ability = 'technician';
 				set.moves = ['bulletpunch', 'uturn', 'aerialace', 'superpower'];
@@ -3081,7 +3081,7 @@ exports.BattleScripts = {
 			} else if (template.id === 'tyranitar') {
 				set.species = 'tyranitar';
 				set.name = 'Necrum';
-				set.gender = 'm';
+				set.gender = 'M';
 				set.item = 'assaultvest';
 				set.ability = 'sandstream';
 				set.moves = ['stoneedge', 'crunch', 'earthquake', 'ironhead'];
@@ -3219,7 +3219,7 @@ exports.BattleScripts = {
 					set.name = 'wolf';
 				}
 				if (template.id === 'ninetales') {
-					set.gender = 'f';
+					set.gender = 'F';
 					set.shiny = true;
 					set.item = 'widelens';
 					set.ability = 'flashfire';
@@ -3227,16 +3227,16 @@ exports.BattleScripts = {
 					set.nature = 'timid';
 				}
 				if (template.id === 'honchkrow') {
-					set.gender = 'm';
+					set.gender = 'M';
 				}
 				if (template.id === 'aggron') {
-					set.gender = 'm';
+					set.gender = 'M';
 				}
 				if (template.id === 'trevenant') {
-					set.gender = 'f';
+					set.gender = 'F';
 				}
 				if (template.id === 'aromatisse') {
-					set.gender = 'f';
+					set.gender = 'F';
 				}
 			}
 			if (teamGenerate === 'antemortemTeam') {
@@ -3335,28 +3335,28 @@ exports.BattleScripts = {
 				if (template.id === 'tyranitar') {
 					set.species = 'tyranitar';
 					set.name = 'Necrum';
-					set.gender = 'm';
+					set.gender = 'M';
 					set.item = 'focussash';
 					set.ability = 'sandstream';
 					set.moves = ['stoneedge', 'crunch', 'earthquake', 'ironhead'];
 					set.nature = 'jolly';
 				}
 				if (template.id === 'blastoise') {
-					set.gender = 'm';
+					set.gender = 'M';
 					set.item = 'blastoisinite';
 					set.ability = 'torrent';
 					set.moves = ['waterpulse', 'dragonpulse', 'aurasphere', 'darkpulse'];
 					set.nature = 'modest';
 				}
 				if (template.id === 'swalot') {
-					set.gender = 'm';
+					set.gender = 'M';
 					set.item = 'sitrusberry';
 					set.ability = 'liquidooze';
 					set.moves = ['gunkshot', 'earthquake', 'poweruppunch', 'protect'];
 					set.nature = 'adamant';
 				}
 				if (template.id === 'yanmega') {
-					set.gender = 'f';
+					set.gender = 'F';
 					set.item = 'lifeorb';
 					set.ability = 'speedboost';
 					set.moves = ['bugbuzz', 'airslash', 'protect', 'hiddenpowerice'];
@@ -3368,7 +3368,7 @@ exports.BattleScripts = {
 					set.nature = 'timid';
 				}
 				if (template.id === 'aromatisse') {
-					set.gender = 'f';
+					set.gender = 'F';
 					set.ability = 'aromaveil';
 					set.moves = ['moonblast', 'calmmind', 'psyshock', 'energyball'];
 					set.nature = 'sassy';
@@ -3427,7 +3427,7 @@ exports.BattleScripts = {
 					set.name = 'Denny Hamlin';
 				}
 				if (template.id === 'unfezant') {
-					set.gender = 'm';
+					set.gender = 'M';
 				}
 			}
 			if (teamGenerate === 'peitharchiaTeam') {
@@ -3497,7 +3497,7 @@ exports.BattleScripts = {
 			} else if (template.id === 'tyranitar') {
 				set.species = 'tyranitar';
 				set.name = 'Necrum';
-				set.gender = 'm';
+				set.gender = 'M';
 				set.item = 'assaultvest';
 				set.ability = 'sandstream';
 				set.moves = ['stoneedge', 'crunch', 'earthquake', 'ironhead'];
