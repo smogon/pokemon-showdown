@@ -3118,6 +3118,335 @@ exports.BattleScripts = {
 
 		return team;
 	},
+	randomPCStaffTeamTeam: function(side) {
+		var wolfList = ['suicune', 'ninetales', 'honchkrow', 'aggron', 'trevenant', 'aromatisse'];
+		var antemortemList = ['venusaur', 'azumarill', 'garchomp', 'heatran', 'excadrill', 'tyranitar'];
+		var nolafusList = ['venusaur', 'magnezone', 'volcarona', 'starmie', 'conkeldurr', 'crawdaunt'];
+		var omicronList = ['lugia', 'lucario', 'ludicolo', 'politoed', 'salamence', 'mamoswine'];
+		var soraList = ['espeon', 'hawlucha', 'mawile', 'porygon2', 'greninja', 'chandelure'];
+		var christosList = ['breloom', 'excadrill', 'azumarill', 'thundurus', 'heatran', 'pinsir'];
+		var tsutarjaList = ['sylveon', 'darmanitan', 'feraligatr', 'tropius', 'garchomp', 'pikachu'];
+		var zekromList = ['zekrom', 'blissey', 'metagross', 'garchomp', 'staraptor', 'volcarona'];
+		var necrumList = ['tyranitar', 'blastoise', 'swalot', 'yanmega', 'thundurustherian', 'aromatisse'];
+		var livewireList = ['gyarados', 'talonflame', 'tyrantrum', 'raikou', 'honchkrow'];
+		var donavannjList = ['alakazam', 'meloettapirouette', 'altaria', 'nidoking', 'aegislash', 'raichu'];
+		var sheepList = ['whimsicott', 'ampharos', 'virizion', 'honchkrow', 'lopunny', 'cinccino'];
+		var curiousnathanList = ['reuniclus', 'volcarona', 'blastoise', 'garchomp', 'tyrantrum', 'sceptile'];
+		var dennyhamlinList = ['meganium', 'ninetales', 'florges', 'floatzel', 'mienshao', 'unfezant'];
+		var peitharchiaList = ['ninetales', 'cresselia', 'machamp', 'dusknoir', 'metagross', 'chansey'];
+		var dragonList = ['roserade', 'arcanine', 'milotic', 'lucario', 'flygon', 'espeon'];
+
+		var dice = this.random(3);
+		var teamGenerate = [];
+		if (dice < 1) {
+			teamGenerate = 'wolfTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'antemortemTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'nolafusTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'omicronTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'soraTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'christosTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'tsutarjaTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'zekromTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'necrumTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'livewireTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'donavannjTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'sheepTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'curiousnathanTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'dennyhamlinTeam';
+		} else if (dice < 2) {
+			teamGenerate = 'peitharchiaTeam';
+		} else {
+			teamGenerate = 'dragonTeam';
+		}
+
+		var team = [];
+
+		var teamPool = [];
+		if (teamGenerate === 'wolfTeam') {
+			teamPool = wolfList;
+		} else if (teamGenerate === 'antemortemTeam') {
+			teamPool = antemortemList;
+		} else if (teamGenerate === 'nolafusTeam') {
+			teamPool = nolafusList;
+		} else if (teamGenerate === 'omicronTeam') {
+			teamPool = omicronList;
+		} else if (teamGenerate === 'soraTeam') {
+			teamPool = soraList;
+		} else if (teamGenerate === 'christosTeam') {
+			teamPool = christosList;
+		} else if (teamGenerate === 'tsutarjaTeam') {
+			teamPool = tsutarjaList;
+		} else if (teamGenerate === 'zekromTeam') {
+			teamPool = zekromList;
+		} else if (teamGenerate === 'necrumTeam') {
+			teamPool = necrumList;
+		} else if (teamGenerate === 'livewireTeam') {
+			teamPool = livewireList;
+		} else if (teamGenerate === 'donavannjTeam') {
+			teamPool = donavannjList;
+		} else if (teamGenerate === 'sheepTeam') {
+			teamPool = sheepList;
+		} else if (teamGenerate === 'curiousnathanTeam') {
+			teamPool = curiousnathanList;
+		} else if (teamGenerate === 'dennyhamlinTeam') {
+			teamPool = dennyhamlinList;
+		} else if (teamGenerate === 'peitharchiaTeam') {
+			teamPool = peitharchiaList;
+		} else {
+			teamPool = dragonList;
+		}
+		for (var i=0; i<6; i++) {
+			var pokemon = teamPool[i];
+			var template = this.getTemplate(pokemon);
+			var set = this.randomSet(template, i);
+
+			if (teamGenerate === 'wolfTeam') {
+				if (template.id === 'suicune') {
+					set.species = 'suicune';
+					set.name = 'wolf';
+				}
+				if (template.id === 'ninetales') {
+					set.gender = 'f';
+					set.shiny = true;
+					set.item = 'widelens';
+					set.ability = 'flashfire';
+					set.moves = ['hypnosis', 'willowisp', 'fireblast', 'energyball'];
+					set.nature = 'timid';
+				}
+				if (template.id === 'honchkrow') {
+					set.gender = 'm';
+				}
+				if (template.id === 'aggron') {
+					set.gender = 'm';
+				}
+				if (template.id === 'trevenant') {
+					set.gender = 'f';
+				}
+				if (template.id === 'aromatisse') {
+					set.gender = 'f';
+				}
+			}
+			if (teamGenerate === 'antemortemTeam') {
+				if (template.id === 'venusaur') {
+					set.species = 'venusaur';
+					set.name = 'Antemortem';
+				}
+			}
+			if (teamGenerate === 'nolafusTeam') {
+				if (template.id === 'venusaur') {
+					set.species = 'venusaur';
+					set.name = 'Nolafus';
+					set.item = 'venusaurite';
+				}
+			}
+			if (teamGenerate === 'omicronTeam') {
+				if (template.id === 'lugia') {
+					set.species = 'lugia';
+					set.name = 'Omicron';
+				}
+				if (template.id === 'lucario') {
+					set.item = 'lucarionite';
+				}
+			}
+			if (teamGenerate === 'soraTeam') {
+				if (template.id === 'espeon') {
+					set.species = 'espeon';
+					set.name = 'Sora';
+				}
+				if (template.id === 'mawile') {
+					set.item = 'mawilite';
+				}
+			}
+			if (teamGenerate === 'christosTeam') {
+				if (template.id === 'breloom') {
+					set.species = 'breloom';
+					set.name = 'Christos';
+				}
+				if (template.id === 'pinsir') {
+					set.item = 'pinsirite';
+				}
+			}
+			if (teamGenerate === 'tsutarjaTeam') {
+				if (template.id === 'sylveon') {
+					set.species = 'sylveon';
+					set.name = 'Tsutarja';
+				}
+				if (template.id === 'garchomp') {
+					set.item = 'garchompite';
+				}
+			}
+			if (teamGenerate === 'zekromTeam') {
+				if (template.id === 'zekrom') {
+					set.item = 'lifeorb';
+					set.moves = ['boltstrike', 'dracometeor', 'outrage', 'focusblast'];
+					set.nature = 'naughty';
+					set.evs = {hp: 0, def: 4, spd: 0, spa: 140, atk: 252, spe: 112};
+				}
+				if (template.id === 'blissey') {
+					set.item = 'leftovers';
+					set.ability = 'naturalcure';
+					set.moves = ['wish', 'protect', 'healbell', 'flamethrower'];
+					set.nature = 'calm';
+					set.evs = {hp: 4, def: 252, spd: 252, spa: 0, atk: 0, spe: 0};
+				}
+				if (template.id === 'metagross') {
+					set.item = 'assaultvest';
+					set.ability = 'clearbody';
+					set.moves = ['meteormash', 'earthquake', 'zenheadbutt', 'bulletpunch'];
+					set.nature = 'adamant';
+					set.evs = {hp: 252, def: 0, spd: 4, spa: 0, atk: 252, spe: 0};
+				}
+				if (template.id === 'garchomp') {
+					set.item = 'focussash';
+					set.ability = 'roughskin';
+					set.moves = ['dragonclaw', 'swordsdance', 'earthquake', 'stoneedge'];
+					set.nature = 'jolly';
+					set.evs = {hp: 0, def: 0, spd: 4, spa: 0, atk: 252, spe: 252};
+				}
+				if (template.id === 'staraptor') {
+					set.item = 'choiceband';
+					set.ability = 'reckless';
+					set.moves = ['bravebird', 'closecombat', 'doubleedge', 'quickattack'];
+					set.nature = 'adamant';
+					set.evs = {hp: 0, def: 4, spd: 0, spa: 0, atk: 252, spe: 252};
+				}
+				if (template.id === 'volcarona') {
+					set.item = 'expertbelt';
+					set.ability = 'flamebody';
+					set.moves = ['fierydance', 'quiverdance', 'bugbuzz', 'gigadrain'];
+					set.nature = 'timid';
+					set.evs = {hp: 0, def: 0, spd: 0, spa: 252, atk: 0, spe: 252};
+				}
+			}
+			if (teamGenerate === 'necrumTeam') {
+				if (template.id === 'tyranitar') {
+					set.species = 'tyranitar';
+					set.name = 'Necrum';
+					set.gender = 'm';
+					set.item = 'focussash';
+					set.ability = 'sandstream';
+					set.moves = ['stoneedge', 'crunch', 'earthquake', 'ironhead'];
+					set.nature = 'jolly';
+				}
+				if (template.id === 'blastoise') {
+					set.gender = 'm';
+					set.item = 'blastoisinite';
+					set.ability = 'torrent';
+					set.moves = ['waterpulse', 'dragonpulse', 'aurasphere', 'darkpulse'];
+					set.nature = 'modest';
+				}
+				if (template.id === 'swalot') {
+					set.gender = 'm';
+					set.item = 'sitrusberry';
+					set.ability = 'liquidooze';
+					set.moves = ['gunkshot', 'earthquake', 'poweruppunch', 'protect'];
+					set.nature = 'adamant';
+				}
+				if (template.id === 'yanmega') {
+					set.gender = 'f';
+					set.item = 'lifeorb';
+					set.ability = 'speedboost';
+					set.moves = ['bugbuzz', 'airslash', 'protect', 'hiddenpowerice'];
+					set.nature = 'modest';
+				}
+				if (template.id === 'thundurustherian') {
+					set.item = 'assaultvest';
+					set.moves = ['thunderbolt', 'flashcannon', 'psychic', 'darkpulse'];
+					set.nature = 'timid';
+				}
+				if (template.id === 'aromatisse') {
+					set.gender = 'f';
+					set.ability = 'aromaveil';
+					set.moves = ['moonblast', 'calmmind', 'psyshock', 'energyball'];
+					set.nature = 'sassy';
+				}
+			}
+			if (teamGenerate === 'livewireTeam') {
+				if (template.id === 'gyarados') {
+					set.species = 'gyarados';
+					set.name = 'Livewire';
+					set.item = 'gyaradosite';
+				}
+			}
+			if (teamGenerate === 'donavannjTeam') {
+				if (template.id === 'alakazam') {
+					set.species = 'alakazam';
+					set.name = 'donavannj';
+				}
+				if (template.id === 'meloettapirouette') {
+					set.species = 'meloettapirouette';
+					set.item = 'lifeorb';
+					set.moves = ['return', 'closecombat', 'knockoff', 'icepunch'];
+					set.nature = 'jolly';
+					set.evs = {hp: 4, def: 0, spd: 0, spa: 0, atk: 252, spe: 252};
+				}
+			}
+			if (teamGenerate === 'sheepTeam') {
+				if (template.id === 'whimsicott') {
+					set.species = 'whimsicott';
+					set.name = 'Sheep';
+					set.shiny = true;
+				}
+				if (template.id === 'ampharos') {
+					set.shiny = true;
+					set.item = 'ampharosite';
+				}
+				if (template.id === 'virizion') {
+					set.shiny = true;
+				}
+				if (template.id === 'lopunny') {
+					set.shiny = true;
+				}
+			}
+			if (teamGenerate === 'curiousnathanTeam') {
+				if (template.id === 'reuniclus') {
+					set.species = 'reuniclus';
+					set.name = 'curiousnathan';
+				}
+				if (template.id === 'garchomp') {
+					set.item = 'garchompite';
+				}
+			}
+			if (teamGenerate === 'dennyhamlinTeam') {
+				if (template.id === 'meganium') {
+					set.species = 'meganium';
+					set.name = 'Denny Hamlin';
+				}
+				if (template.id === 'unfezant') {
+					set.gender = 'm';
+				}
+			}
+			if (teamGenerate === 'peitharchiaTeam') {
+				if (template.id === 'ninetales') {
+					set.species = 'ninetales';
+					set.name = 'Peitharchia';
+				}
+			}
+			if (teamGenerate === 'dragonTeam') {
+				if (template.id === 'roserade') {
+					set.species = 'roserade';
+					set.name = 'Dragon';
+				}
+			}
+
+			team.push(set);
+		}
+
+		return team;
+	},
 	randomPCStaffDoublesTeam: function(side) {
 		var pokemonList = ['suicune', 'lucario', 'serperior', 'ludicolo', 'togekiss', 'spheal', 'ninetales', 'snivy', 'zekrom', 'tyranitar', 'salamence', 'meganium', 'alakazam', 'altaria', 'whimsicott', 'malamar', 'milotic'];
 
