@@ -3388,6 +3388,7 @@ exports.BattleScripts = {
 				}
 				if (template.id === 'meloettapirouette') {
 					set.species = 'meloettapirouette';
+					set.level = '82';
 					set.item = 'lifeorb';
 					set.moves = ['return', 'closecombat', 'knockoff', 'icepunch'];
 					set.nature = 'jolly';
