@@ -3136,37 +3136,37 @@ exports.BattleScripts = {
 		var peitharchiaList = ['ninetales', 'cresselia', 'machamp', 'dusknoir', 'metagross', 'chansey'];
 		var dragonList = ['roserade', 'arcanine', 'milotic', 'lucario', 'flygon', 'espeon'];
 
-		var dice = this.random(3);
+		var dice = this.random(16);
 		var teamGenerate = [];
 		if (dice < 1) {
 			teamGenerate = 'wolfTeam';
 		} else if (dice < 2) {
 			teamGenerate = 'antemortemTeam';
-		} else if (dice < 2) {
+		} else if (dice < 3) {
 			teamGenerate = 'nolafusTeam';
-		} else if (dice < 2) {
+		} else if (dice < 4) {
 			teamGenerate = 'omicronTeam';
-		} else if (dice < 2) {
+		} else if (dice < 5) {
 			teamGenerate = 'soraTeam';
-		} else if (dice < 2) {
+		} else if (dice < 6) {
 			teamGenerate = 'christosTeam';
-		} else if (dice < 2) {
+		} else if (dice < 7) {
 			teamGenerate = 'tsutarjaTeam';
-		} else if (dice < 2) {
+		} else if (dice < 8) {
 			teamGenerate = 'zekromTeam';
-		} else if (dice < 2) {
+		} else if (dice < 9) {
 			teamGenerate = 'necrumTeam';
-		} else if (dice < 2) {
+		} else if (dice < 10) {
 			teamGenerate = 'livewireTeam';
-		} else if (dice < 2) {
+		} else if (dice < 11) {
 			teamGenerate = 'donavannjTeam';
-		} else if (dice < 2) {
+		} else if (dice < 12) {
 			teamGenerate = 'sheepTeam';
-		} else if (dice < 2) {
+		} else if (dice < 13) {
 			teamGenerate = 'curiousnathanTeam';
-		} else if (dice < 2) {
+		} else if (dice < 14) {
 			teamGenerate = 'dennyhamlinTeam';
-		} else if (dice < 2) {
+		} else if (dice < 15) {
 			teamGenerate = 'peitharchiaTeam';
 		} else {
 			teamGenerate = 'dragonTeam';
