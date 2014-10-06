@@ -6,13 +6,13 @@ exports.Formats = [
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/*{
 		name: "XY Anniversary Random (BWknd 23)",
 		section: "XY Singles",
 
 		team: 'randomXY',
 		ruleset: ['Random (no PotD)']
-	},
+	},*/
 	{
 		name: "OU",
 		section: "XY Singles",
@@ -240,6 +240,14 @@ exports.Formats = [
 
 		searchShow: false,
 		team: 'randomPCStaff',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "PC Staff Team Random",
+		section: "Random Battles (aka Randbats)",
+
+		searchShow: false,
+		team: 'randomPCStaffTeam',
 		ruleset: ['Random (no PotD)']
 	},
 	{
