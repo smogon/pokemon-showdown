@@ -323,36 +323,20 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Haxmons",
+		name: "Hidden Type",
 		section: "OM of the Month",
 		column: 2,
 
-		ruleset: ['OU', 'Freeze Clause'],
-		banlist: ["King's Rock", 'Razor Fang', 'Stench'],
-		onModifyMovePriority: -100,
-		onModifyMove: function (move) {
-			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 0;
-			move.willCrit = true;
-			if (move.secondaries) {
-				for (var i = 0; i < move.secondaries.length; i++) {
-					move.secondaries[i].chance = 100;
-				}
-			}
-		}
+		mod: 'hiddentype',
+		ruleset: ['OU']
 	},
 	{
-		name: "[Gen 3] 1v1",
+		name: "[Gen 4] Tier Shift",
 		section: "OM of the Month",
 
-		mod: 'gen3',
+		mod: 'throwback',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Smeargle + Ingrain'],
-		onBegin: function () {
-			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
+		banlist: ['Uber']
 	},
 	{
 		name: "CAP",
@@ -452,8 +436,8 @@ exports.Formats = [
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Ignore Illegal Abilities', 'Arceus', 'Archeops', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon',
-			'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram',
-			'Shedinja + Sturdy', 'Slaking', 'Smeargle + Baton Pass', 'Weavile', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Ho-Oh', 'Keldeo', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Regigigas',
+			'Reshiram', 'Shedinja + Sturdy', 'Slaking', 'Smeargle + Baton Pass', 'Weavile', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew'
 		],
 		validateSet: function (set) {
@@ -572,14 +556,6 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Hidden Type",
-		section: "Other Metagames",
-
-		mod: 'hiddentype',
-		searchShow: false,
-		ruleset: ['OU']
-	},
-	{
 		name: "Middle Cup",
 		section: "Other Metagames",
 
@@ -599,10 +575,26 @@ exports.Formats = [
 		name: "OM Mashup",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Team Preview', 'HP Percentage Mod'],
-		banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard']
+		maxLevel: 50,
+		defaultLevel: 50,
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview 1v1'],
+		banlist: ['Eviolite', 'Focus Sash'],
+		validateTeam: function (team, format) {
+			if (team.length > 3) return ['You may only bring up to three Pokémon.'];
+		},
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (!template.evos || template.evos.length === 0 || !template.prevo) {
+				return [set.species + " is not the middle Pokémon in an evolution chain."];
+			}
+		},
+		onBegin: function () {
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
 	},
 	{
 		name: "[Gen 5] Glitchmons",
