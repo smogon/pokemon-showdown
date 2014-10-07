@@ -3688,7 +3688,7 @@ exports.BattleItems = {
 		},
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf: function (pokemon, target, move) {
-			if (move.id !== 'metronome' && pokemon.lastDamage > 0) {
+			if (move.category !== 'Status' && pokemon.lastDamage > 0) {
 				this.heal(pokemon.lastDamage / 8, pokemon);
 			}
 		},
