@@ -1415,6 +1415,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":10,"abilities":["naturalcure"],"moves":["leechseed","recover","healbell","safeguard"]},
 			{"generation":3,"level":30,"abilities":["naturalcure"],"moves":["healbell","safeguard","ancientpower","futuresight"]}
 		],
+		unobtainableShiny: true,
 		tier: "OU"
 	},
 	treecko: {

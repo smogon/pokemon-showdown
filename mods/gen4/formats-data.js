@@ -1577,6 +1577,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":30,"abilities":["naturalcure"],"moves":["healbell","safeguard","ancientpower","futuresight"]},
 			{"generation":4,"level":50,"abilities":["naturalcure"],"moves":["leafstorm","recover","nastyplot","healingwish"]}
 		],
+		unobtainableShiny: true,
 		tier: "OU"
 	},
 	treecko: {
@@ -2855,6 +2856,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":100,"abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
 		],
+		unobtainableShiny: true,
 		tier: "Uber"
 	},
 	arceusbug: {

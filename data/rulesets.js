@@ -223,6 +223,10 @@ exports.BattleFormats = {
 			if (template.num === 681) { // Aegislash
 				set.species = 'Aegislash';
 			}
+
+			if (template.unobtainableShiny) {
+				set.shiny = false;
+			}
 			return problems;
 		}
 	},
