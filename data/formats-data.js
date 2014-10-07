@@ -2023,6 +2023,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"moves":["leafstorm","recover","nastyplot","healingwish"],"pokeball":"cherishball"},
 			{"generation":6,"level":10,"moves":["recover","healbell","safeguard","holdback"],"pokeball":"luxuryball"}
 		],
+		unobtainableShiny: true,
 		tier: "UU"
 	},
 	treecko: {
@@ -3643,6 +3644,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
+		unobtainableShiny: true,
 		tier: "Uber"
 	},
 	arceusbug: {
@@ -3739,6 +3741,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"moves":["vcreate","fusionflare","fusionbolt","searingshot"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"moves":["vcreate","blueflare","boltstrike","glaciate"],"pokeball":"cherishball"}
 		],
+		unobtainableShiny: true,
 		tier: "UU"
 	},
 	snivy: {
@@ -4562,6 +4565,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":100,"moves":["blueflare","fusionflare","mist","dracometeor"],"pokeball":"cherishball"}
 		],
+		unobtainableShiny: true,
 		tier: "Uber"
 	},
 	zekrom: {
@@ -4570,6 +4574,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":100,"moves":["boltstrike","fusionbolt","haze","outrage"],"pokeball":"cherishball"}
 		],
+		unobtainableShiny: true,
 		tier: "Uber"
 	},
 	landorus: {
@@ -4606,6 +4611,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"moves":["sacredsword","hydropump","aquajet","swordsdance"],"pokeball":"cherishball"}
 		],
 		dreamWorldPokeball: 'cherishball',
+		unobtainableShiny: true,
 		tier: "OU"
 	},
 	keldeoresolute: {},
@@ -4617,6 +4623,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"moves":["round","teeterdance","psychic","closecombat"],"pokeball":"cherishball"}
 		],
 		dreamWorldPokeball: 'cherishball',
+		unobtainableShiny: true,
 		tier: "RU"
 	},
 	genesect: {
@@ -5017,16 +5024,19 @@ exports.BattleFormatsData = {
 	xerneas: {
 		randomBattleMoves: ["geomancy","moonblast","thunder","focusblast"],
 		randomDoubleBattleMoves: ["geomancy","dazzlinggleam","thunder","focusblast","protect"],
+		unobtainableShiny: true,
 		tier: "Uber"
 	},
 	yveltal: {
 		randomBattleMoves: ["darkpulse","oblivionwing","taunt","focusblast","hurricane","roost","suckerpunch"],
 		randomDoubleBattleMoves: ["darkpulse","oblivionwing","taunt","focusblast","hurricane","roost","suckerpunch","snarl","skydrop","protect"],
+		unobtainableShiny: true,
 		tier: "Uber"
 	},
 	zygarde: {
 		randomBattleMoves: ["dragondance","earthquake","extremespeed","outrage","coil","stoneedge"],
 		randomDoubleBattleMoves: ["dragondance","landswrath","extremespeed","rockslide","coil","stoneedge","glare","protect"],
+		unobtainableShiny: true,
 		tier: "BL"
 	},
 	diancie: {
@@ -5035,6 +5045,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":6,"level":50,"moves":["diamondstorm","moonblast","reflect","return"],"pokeball":"cherishball"}
 		],
+		unobtainableShiny: true,
 		tier: "UU"
 	},
 	hoopa: {
