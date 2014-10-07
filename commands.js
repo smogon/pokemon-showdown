@@ -1776,6 +1776,7 @@ var commands = exports.commands = {
 	away: 'blockchallenges',
 	idle: 'blockchallenges',
 	blockchallenges: function (target, room, user) {
+		if (user.blockChallenges) return this.sendReply("You are already blocking challenges!");
 		user.blockChallenges = true;
 		this.sendReply("You are now blocking all incoming challenge requests.");
 	},
