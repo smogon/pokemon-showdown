@@ -2418,7 +2418,7 @@ exports.BattleScripts = {
 			item = 'Life Orb';
 		} else if (counter.Special >= 4 && !hasMove['eruption'] && !hasMove['waterspout']) {
 			item = 'Life Orb';
-		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Shuca Berry';
 		} else if (this.getEffectiveness('Ice', template) >= 2) {
 			item = 'Yache Berry';
@@ -2426,7 +2426,7 @@ exports.BattleScripts = {
 			item = 'Charti Berry';
 		} else if (this.getEffectiveness('Fire', template) >= 2) {
 			item = 'Occa Berry';
-		} else if (this.getImmunity('Fighting', template) && this.getEffectiveness('Fighting', template) >= 1) {
+		} else if (this.getImmunity('Fighting', template) && this.getEffectiveness('Fighting', template) >= 2) {
 			item = 'Chople Berry';
 		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
 			item = 'Leftovers';
