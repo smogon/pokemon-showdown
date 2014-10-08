@@ -3742,7 +3742,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":100,"moves":["vcreate","blueflare","boltstrike","glaciate"],"pokeball":"cherishball"}
 		],
 		unobtainableShiny: true,
-		tier: "UU"
+		tier: "BL"
 	},
 	snivy: {
 		randomBattleMoves: ["leafstorm","hiddenpowerfire","substitute","leechseed","hiddenpowerice","gigadrain"],
