@@ -1849,6 +1849,7 @@ var commands = exports.commands = {
 
 	back: 'allowchallenges',
 	allowchallenges: function (target, room, user) {
+		if (!user.blockChallenges) return this.sendReply("You are already available for challenges!");
 		user.blockChallenges = false;
 		this.sendReply("You are available for challenges from now on.");
 	},
