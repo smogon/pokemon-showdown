@@ -245,12 +245,6 @@ exports.commands = {
 		if (!answer) return this.sendReply('"' + target + '" is not a valid answer.');
 		var userid = user.userid;
 		var response = 'You have selected "' + answer + '" as your answer.';
-		if (mode === 'number') {
-			var index = responders.indexOf(userid);
-			if (index > -1) responders.splice(index, 1);
-			if (curA.indexOf(answer) > -1) responders.push(userid);
-			return this.sendReply(response);
-		}
 		if (mode === 'custom') {
 			if (userid === askedBy || askedBy in user.prevNames) return this.sendReply('You can\'t answer your own question!');
 			var alts = user.getAlts();
@@ -258,13 +252,13 @@ exports.commands = {
 				if (toId(alts[i]) === askedBy) return this.sendReply('You can\'t answer your own question!');
 			}
 		} else if (!(userid in participants)) {
-			for (var oldid in user.prevNames) {
-				if (!(oldid in participants)) continue;
-				participants[userid] = participants[oldid];
-				delete participants[oldid];
-				return this.sendReply(response + 'Your score is now being counted under the name "' + user.name + '."');
-			}
 			return this.sendReply('You are not a participant in this trivia game.');
+		}
+		if (mode === 'number') {
+			var index = responders.indexOf(userid);
+			if (index > -1) responders.splice(index, 1);
+			if (curA.indexOf(answer) > -1) responders.push(userid);
+			return this.sendReply(response);
 		}
 		if (curA.indexOf(answer) < 0) return this.sendReply(response);
 
@@ -310,7 +304,7 @@ exports.commands = {
 	triviaend: function (target, room, user) {
 		if (room.id !== 'trivia' || !this.can('mute', null, room)) return false;
 		if (!phase) return this.sendReply('There is no trivia game in progress.');
-		updateLeaderboard();
+		if (phase !== 'signup') updateLeaderboard();
 		return room.addRaw('<div class="broadcast-blue">' + Tools.escapeHTML(user.name) + ' has forced the game to end.</div>');
 	},
 	triviacustom: function (target, room, user) {
