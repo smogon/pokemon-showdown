@@ -485,6 +485,7 @@ User = (function () {
 	// for the anti-spamming mechanism
 	User.prototype.lastMessage = '';
 	User.prototype.lastMessageTime = 0;
+	User.prototype.lastReportTime = 0;
 
 	User.prototype.blockChallenges = false;
 	User.prototype.ignorePMs = false;
