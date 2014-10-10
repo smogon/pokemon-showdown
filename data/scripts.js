@@ -1461,7 +1461,7 @@ exports.BattleScripts = {
 		} else if ((template.baseStats.hp + 75) * (template.baseStats.def + template.baseStats.spd + 175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
 			// skarmory and forretress get exceptions for their typing
 			item = 'Leftovers';
-		} else if ((counter.Physical + counter.Special >= 3 || counter.Special >= 3) && setupType && ability !== 'Sturdy') {
+		} else if ((counter.Physical + counter.Special >= 3 || counter.Special >= 3) && setupType && ability !== 'Sturdy' && !hasMove['eruption'] && !hasMove['waterspout']) {
 			item = 'Life Orb';
 		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179) {
 			item = 'Assault Vest';
@@ -2416,9 +2416,9 @@ exports.BattleScripts = {
 			item = 'Flame Orb';
 		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
 			item = 'Life Orb';
-		} else if (counter.Special >= 4) {
+		} else if (counter.Special >= 4 && !hasMove['eruption'] && !hasMove['waterspout']) {
 			item = 'Life Orb';
-		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Shuca Berry';
 		} else if (this.getEffectiveness('Ice', template) >= 2) {
 			item = 'Yache Berry';
@@ -2426,7 +2426,7 @@ exports.BattleScripts = {
 			item = 'Charti Berry';
 		} else if (this.getEffectiveness('Fire', template) >= 2) {
 			item = 'Occa Berry';
-		} else if (this.getImmunity('Fighting', template) && this.getEffectiveness('Fighting', template) >= 1) {
+		} else if (this.getImmunity('Fighting', template) && this.getEffectiveness('Fighting', template) >= 2) {
 			item = 'Chople Berry';
 		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
 			item = 'Leftovers';

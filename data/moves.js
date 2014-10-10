@@ -506,6 +506,11 @@ exports.BattleMovedex = {
 					this.debug('damaged this turn');
 					this.effectData.hurt = true;
 				}
+			},
+			onFoeSwitchOut: function (pokemon) {
+				if (pokemon.position === this.effectData.position) {
+					this.effectData.hurt = false;
+				}
 			}
 		},
 		isContact: true,

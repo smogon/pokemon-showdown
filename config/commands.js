@@ -172,7 +172,7 @@ var commands = exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 
-		this.sendReply("User: " + targetUser.name);
+		this.sendReply("|raw|User: " + targetUser.name + (!targetUser.connected ? ' <font color="gray"><em>(offline)</em></font>' : ''));
 		if (user.can('alts', targetUser)) {
 			var alts = targetUser.getAlts(true);
 			var output = Object.keys(targetUser.prevNames).join(", ");
@@ -183,7 +183,7 @@ var commands = exports.commands = {
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.group === '~' && user.group !== '~') continue;
 
-				this.sendReply("Alt: " + targetAlt.name);
+				this.sendReply("|raw|Alt: " + targetAlt.name + (!targetAlt.connected ? ' <font color="gray"><em>(offline)</em></font>' : ''));
 				output = Object.keys(targetAlt.prevNames).join(", ");
 				if (output) this.sendReply("Previous names: " + output);
 			}
@@ -200,7 +200,7 @@ var commands = exports.commands = {
 		if (!targetUser.authenticated) {
 			this.sendReply("(Unregistered)");
 		}
-		if (!this.broadcasting && (user.can('ip', targetUser) || user === targetUser)) {
+		if (user.can('ip', targetUser) || user === targetUser) {
 			var ips = Object.keys(targetUser.ips);
 			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ") +
 					(user.group !== ' ' && targetUser.latestHost ? "\nHost: " + targetUser.latestHost : ""));
@@ -208,11 +208,12 @@ var commands = exports.commands = {
 		var output = "In rooms: ";
 		var first = true;
 		for (var i in targetUser.roomCount) {
-			if (i === 'global' || Rooms.get(i).isPrivate) continue;
+			var targetRoom = Rooms.get(i);
+			if (i === 'global' || targetRoom.isPrivate) continue;
 			if (!first) output += " | ";
 			first = false;
 
-			output += '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			output += (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
 		}
 		this.sendReply('|raw|' + output);
 	},
