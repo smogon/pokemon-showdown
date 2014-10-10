@@ -33,11 +33,12 @@ function getAllAlts(user) {
 	} else {
 		user.getAlts().concat(user.name).forEach(function (altName) {
 			var alt = Users.get(altName);
-			if (!alt.named) return;
 
-			targets[toId(alt)] = 1;
+			var id = toId(alt);
+			if (id.slice(0, 5) !== 'guest') targets[toId(alt)] = 1;
 			Object.keys(alt.prevNames).forEach(function (name) {
-				targets[toId(name)] = 1;
+				var id = toId(name);
+				if (id.slice(0, 5) !== 'guest') targets[toId(name)] = 1;
 			});
 		});
 	}
@@ -75,7 +76,6 @@ var checkBannedCache = {};
 var checkBanned = exports.checkBanned = function (user) {
 	var userId = toId(user);
 	if (userId in checkBannedCache) return checkBannedCache[userId];
-	console.log("Shadow ban cache miss:", userId);
 
 	var targets = Object.keys(getAllAlts(user)).sort();
 	var bannedUsers = Object.keys(room.addedUsers).sort();
