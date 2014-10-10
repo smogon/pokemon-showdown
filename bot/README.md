@@ -9,8 +9,7 @@ A chat bot for [Pokémon Showdown][1]. This bot has a number of commands, some h
 Installation
 ------------
 
-**This is not recommended for beginners!**
-Why? Because I'm too lazy to explain everything in detail.
+[Click here][4] for an in-depth installation guide, courtesy of Rival Nick. Otherwise, basic instructions follow.
 
 Pokémon Showdown Bot requires [node.js][2] to run.
 This bot has not been tested on every `node.js` version possible, but has the same version requirements as [Pokémon Showdown][3]: either v0.6.3 through v0.8.22, or v0.10.2 and up.
@@ -34,6 +33,7 @@ Some information will be shown, and will automatically join the room(s) you spec
 
   [2]: http://nodejs.org/
   [3]: https://github.com/Zarel/Pokemon-Showdown
+  [4]: https://github.com/RivalNick/PS-Bot/wiki/How-To-set-up-Bot
 
 Development
 -----------
@@ -44,10 +44,11 @@ However, please refrain from adding more example commands.
 Credits:
  - TalkTakesTime (Development)
  - Quinella (Development)
+ - Rival Nick (Guide)
 
 License
 -------
 
-Pokémon Showdown Bot is distributed under the terms of the [MIT License][4].
+Pokémon Showdown Bot is distributed under the terms of the [MIT License][5].
 
-  [4]: https://github.com/Quinella/Pokemon-Showdown-Bot/blob/master/LICENSE
+  [5]: https://github.com/Quinella/Pokemon-Showdown-Bot/blob/master/LICENSE

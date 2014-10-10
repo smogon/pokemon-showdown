@@ -16,6 +16,8 @@ const ACTION_COOLDOWN = 3*1000;
 const FLOOD_MESSAGE_NUM = 5;
 const FLOOD_PER_MSG_MIN = 500; // this is the minimum time between messages for legitimate spam. It's used to determine what "flooding" is caused by lag
 const FLOOD_MESSAGE_TIME = 6*1000;
+const MIN_CAPS_LENGTH = 18;
+const MIN_CAPS_PROPORTION = 0.8;
 
 settings = {};
 try {
@@ -196,7 +198,7 @@ exports.parse = {
 				var by = spl[2];
 				spl.splice(0, 3);
 				this.processChatData(by, this.room || 'lobby', connection, spl.join('|'));
-				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/ban ' + by + ', Blacklisted user');
+				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/roomban ' + by + ', Blacklisted user');
 				this.chatMessage(spl.join('|'), by, this.room || 'lobby', connection);
 				this.room = '';
 				break;
@@ -204,7 +206,7 @@ exports.parse = {
 				var by = spl[3];
 				spl.splice(0, 4);
 				this.processChatData(by, this.room || 'lobby', connection, spl.join('|'));
-				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/ban ' + by + ', Blacklisted user');
+				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/roomban ' + by + ', Blacklisted user');
 				this.chatMessage(spl.join('|'), by, this.room || 'lobby', connection);
 				this.room = '';
 				break;
@@ -224,7 +226,7 @@ exports.parse = {
 				break;
 			case 'J': case 'j':
 				var by = spl[2];
-				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/ban ' + by + ', Blacklisted user');
+				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/roomban ' + by + ', Blacklisted user');
 				this.updateSeen(by, spl[1], (this.room === '' ? 'lobby' : this.room));
 				if (toId(by) !== toId(config.nick) || ' +%@&#~'.indexOf(by.charAt(0)) === -1) return;
 				this.ranks[toId(this.room === '' ? 'lobby' : this.room)] = by.charAt(0);
@@ -339,7 +341,6 @@ exports.parse = {
 		}
 		user = toId(user);
 		if (!user || room.charAt(0) === ',') return;
-		room = toId(room);
 		msg = msg.trim().replace(/ +/g, " "); // removes extra spaces so it doesn't trigger stretching
 		this.updateSeen(user, 'c', room);
 		var time = Date.now();
@@ -348,27 +349,31 @@ exports.parse = {
 			lastSeen: '',
 			seenAt: time
 		};
-		if (!this.chatData[user][room]) this.chatData[user][room] = {times:[], points:0, lastAction:0};
+		var chatData = this.chatData[user];
+		if (!chatData[room]) chatData[room] = {times:[], points:0, lastAction:0};
+		chatData = chatData[room];
 
-		this.chatData[user][room].times.push(time);
+		chatData.times.push(time);
 
 		// this deals with punishing rulebreakers, but note that the bot can't think, so it might make mistakes
 		if (config.allowmute && this.hasRank(this.ranks[room] || ' ', '%@&#~') && config.whitelist.indexOf(user) === -1) {
 			var useDefault = !(this.settings['modding'] && this.settings['modding'][room]);
 			var pointVal = 0;
 			var muteMessage = '';
+			var modSettings = useDefault ? null : this.settings['modding'][room];
 
 			// moderation for spamming "snen" multiple times on a line (a la the snen spammer)
 			var snenMatch = msg.toLowerCase().match(/snen/g);
-			if ((useDefault || this.settings['modding'][room]['snen'] !== 0) && snenMatch && snenMatch.length > 6) {
+			if ((useDefault || modSettings['snen'] !== 0) && snenMatch && snenMatch.length > 6) {
 				if (pointVal < 4) {
 					muteMessage = ', Automated response: possible "snen" spammer';
 					pointVal = (room === 'lobby') ? 5 : 4;
 				}
 			}
 			// moderation for banned words
-			if (useDefault || this.settings['modding'][room]['bannedwords'] !== 0 && pointVal < 2) {
-				var bannedPhrases = !!this.settings.bannedphrases ? (Object.keys(this.settings.bannedphrases[room] || {})).concat(Object.keys(this.settings.bannedphrases['global'] || {})) : [];
+			if (useDefault || modSettings['bannedwords'] !== 0 && pointVal < 2) {
+				var banphraseSettings = this.settings.bannedphrases;
+				var bannedPhrases = !!banphraseSettings ? (Object.keys(banphraseSettings[room] || {})).concat(Object.keys(banphraseSettings['global'] || {})) : [];
 				for (var i = 0; i < bannedPhrases.length; i++) {
 					if (msg.toLowerCase().indexOf(bannedPhrases[i]) > -1) {
 						pointVal = 2;
@@ -378,51 +383,61 @@ exports.parse = {
 				}
 			}
 			// moderation for flooding (more than x lines in y seconds)
-			var isFlooding = (this.chatData[user][room].times.length >= FLOOD_MESSAGE_NUM && (time - this.chatData[user][room].times[this.chatData[user][room].times.length - FLOOD_MESSAGE_NUM]) < FLOOD_MESSAGE_TIME
-				&& (time - this.chatData[user][room].times[this.chatData[user][room].times.length - FLOOD_MESSAGE_NUM]) > (FLOOD_PER_MSG_MIN * FLOOD_MESSAGE_NUM));
-			if ((useDefault || this.settings['modding'][room]['flooding'] !== 0) && isFlooding) {
+			var times = chatData.times;
+			var isFlooding = (times.length >= FLOOD_MESSAGE_NUM && (time - times[times.length - FLOOD_MESSAGE_NUM]) < FLOOD_MESSAGE_TIME
+				&& (time - times[times.length - FLOOD_MESSAGE_NUM]) > (FLOOD_PER_MSG_MIN * FLOOD_MESSAGE_NUM));
+			if ((useDefault || modSettings['flooding'] !== 0) && isFlooding) {
 				if (pointVal < 2) {
 					pointVal = 2;
 					muteMessage = ', Automated response: flooding';
 				}
 			}
+			// moderation for caps (over x% of the letters in a line of y characters are capital)
+			var capsMatch = msg.replace(/[^A-Za-z]/g, '').match(/[A-Z]/g);
+			if ((useDefault || modSettings['caps'] !== 0) && capsMatch && toId(msg).length > MIN_CAPS_LENGTH && (capsMatch.length >= Math.floor(toId(msg).length * MIN_CAPS_PROPORTION))) {
+				if (pointVal < 1) {
+					pointVal = 1;
+					muteMessage = ', Automated response: caps';
+				}
+			}
 			// moderation for stretching (over x consecutive characters in the message are the same)
-			var stretchMatch = msg.toLowerCase().match(/(.)\1{60,}/g) || msg.toLowerCase().match(/(..+)\1{38,}/g); // matches the same character (or group of characters) 8 (or 5) or more times in a row
-			if ((useDefault || this.settings['modding'][room]['stretching'] !== 0) && stretchMatch) {
+			var stretchMatch = msg.toLowerCase().match(/(.)\1{7,}/g) || msg.toLowerCase().match(/(..+)\1{4,}/g); // matches the same character (or group of characters) 8 (or 5) or more times in a row
+			if ((useDefault || modSettings['stretching'] !== 0) && stretchMatch) {
 				if (pointVal < 1) {
 					pointVal = 1;
 					muteMessage = ', Automated response: stretching';
 				}
 			}
 
-			if (pointVal > 0 && !(time - this.chatData[user][room].lastAction < ACTION_COOLDOWN)) {
+			if (pointVal > 0 && !(time - chatData.lastAction < ACTION_COOLDOWN)) {
 				var cmd = 'mute';
 				// defaults to the next punishment in config.punishVals instead of repeating the same action (so a second warn-worthy
 				// offence would result in a mute instead of a warn, and the third an hourmute, etc)
-				if (this.chatData[user][room].points >= pointVal && pointVal < 4) {
-					this.chatData[user][room].points++;
-					cmd = config.punishvals[this.chatData[user][room].points] || cmd;
+				if (chatData.points >= pointVal && pointVal < 4) {
+					chatData.points++;
+					cmd = config.punishvals[chatData.points] || cmd;
 				} else { // if the action hasn't been done before (is worth more points) it will be the one picked
 					cmd = config.punishvals[pointVal] || cmd;
-					this.chatData[user][room].points = pointVal; // next action will be one level higher than this one (in most cases)
+					chatData.points = pointVal; // next action will be one level higher than this one (in most cases)
 				}
 				if (config.privaterooms.indexOf(room) >= 0 && cmd === 'warn') cmd = 'mute'; // can't warn in private rooms
 				// if the bot has % and not @, it will default to hourmuting as its highest level of punishment instead of roombanning
-				if (this.chatData[user][room].points >= 4 && !this.hasRank(this.ranks[room] || ' ', '@&#~')) cmd = 'hourmute';
-				if (this.chatData[user].zeroTol > 4) { // if zero tolerance users break a rule they get an instant roomban or hourmute
+				if (chatData.points >= 4 && !this.hasRank(this.ranks[room] || ' ', '@&#~')) cmd = 'hourmute';
+				if (chatData.zeroTol > 4) { // if zero tolerance users break a rule they get an instant roomban or hourmute
 					muteMessage = ', Automated response: zero tolerance user';
 					cmd = this.hasRank(this.ranks[room] || ' ', '@&#~') ? 'roomban' : 'hourmute';
 				}
-				if (this.chatData[user][room].points >= 2) this.chatData[user].zeroTol++; // getting muted or higher increases your zero tolerance level (warns do not)
-				this.chatData[user][room].lastAction = time;
+				if (chatData.points >= 2) this.chatData[user].zeroTol++; // getting muted or higher increases your zero tolerance level (warns do not)
+				chatData.lastAction = time;
 				this.say(connection, room, '/' + cmd + ' ' + user + muteMessage);
 			}
 		}
 	},
+
 	updateSeen: function(user, type, detail) {
 		user = toId(user);
 		type = toId(type);
-		if (type in {j:1, l:1, c:1} && (config.rooms.indexOf(toId(detail)) === -1 || config.privaterooms.indexOf(toId(detail)) > -1)) return;
+		if (type !== 'n' && config.rooms.indexOf(detail) === -1 || config.privaterooms.indexOf(toId(detail)) > -1) return;
 		var time = Date.now();
 		if (!this.chatData[user]) this.chatData[user] = {
 			zeroTol: 0,
@@ -431,15 +446,24 @@ exports.parse = {
 		};
 		if (!detail) return;
 		var msg = '';
-		if (type in {j:1, l:1, c:1}) {
-			msg += (type === 'j' ? 'joining' : (type === 'l' ? 'leaving' : 'chatting in')) + ' ' + detail.trim() + '.';
-		} else if (type === 'n') {
-			msg += 'changing nick to ' + ('+%@&#~'.indexOf(detail.trim().charAt(0)) === -1 ? detail.trim() : detail.trim().substr(1)) + '.';
+		switch (type) {
+		case 'j':
+			msg += 'joining ';
+			break;
+		case 'l':
+			msg += 'leaving ';
+			break;
+		case 'c':
+			msg += 'chatting in ';
+			break;
+		case 'n':
+			msg += 'changing nick to ';
+			if (detail.charAt(0) !== ' ') detail = detail.substr(1);
+			break;
 		}
-		if (msg) {
-			this.chatData[user].lastSeen = msg;
-			this.chatData[user].seenAt = time;
-		}
+		msg += detail.trim() + '.';
+		this.chatData[user].lastSeen = msg;
+		this.chatData[user].seenAt = time;
 	},
 	getTimeAgo: function(time) {
 		time = Date.now() - time;
