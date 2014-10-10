@@ -18,11 +18,11 @@ exports.serverid = 'pokecommunity';
 // The nick and password to log in with
 // If no password is required, leave pass empty
 exports.nick = 'PokeCommBot';
-exports.pass = 'filler';
+exports.pass = '';
 
 // The rooms that should be joined.
 // Joining Smogon's Showdown's Lobby is not allowed.
-exports.rooms = ['lobby', 'darkalley'];
+exports.rooms = ['lobby'];
 
 // Any private rooms that should be joined.
 // Private rooms will be moderated differently (since /warn doesn't work in them).
