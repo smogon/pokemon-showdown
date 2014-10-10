@@ -6,13 +6,13 @@ exports.Formats = [
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
 
-	/*{
+	{
 		name: "XY Anniversary Random (BWknd 23)",
 		section: "XY Singles",
 
 		team: 'randomXY',
 		ruleset: ['Random (no PotD)']
-	},*/
+	},
 	{
 		name: "OU",
 		section: "XY Singles",
