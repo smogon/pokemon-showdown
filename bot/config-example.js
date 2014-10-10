@@ -18,7 +18,7 @@ exports.serverid = 'pokecommunity';
 // The nick and password to log in with
 // If no password is required, leave pass empty
 exports.nick = 'PokeCommBot';
-exports.pass = '';
+exports.pass = 'filler';
 
 // The rooms that should be joined.
 // Joining Smogon's Showdown's Lobby is not allowed.
@@ -85,4 +85,3 @@ exports.punishvals = {
 	4: 'roomban',
 	5: 'ban'
 };
-
