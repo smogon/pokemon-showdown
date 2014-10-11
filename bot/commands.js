@@ -95,7 +95,6 @@ exports.commands = {
 			choose: 1,
 			usagestats: 1,
 			helix: 1,
-			autoban: 1,
 			banword: 1
 		};
 		var modOpts = {
