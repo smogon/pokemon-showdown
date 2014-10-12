@@ -155,12 +155,13 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they are part Flying-type, have the Levitate ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn. Flying-type and Levitate Pokemon cannot escape if they are holding Iron Ball or Gravity is in effect. Levitate Pokemon also cannot escape if their ability is disabled through other means, such as Skill Swap or Gastro Acid.",
 		shortDesc: "Prevents foes from switching out normally unless they have immunity to Ground.",
 		onFoeModifyPokemon: function (pokemon) {
-			if (pokemon.runImmunity('Ground', false)) {
+			if (pokemon.runImmunity('Ground', false) && this.isAdjacent(pokemon, this.effectData.target)) {
 				pokemon.tryTrap();
 			}
 		},
-		onFoeMaybeTrapPokemon: function (pokemon) {
-			if (pokemon.runImmunity('Ground', false)) {
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if (pokemon.runImmunity('Ground', false) && this.isAdjacent(pokemon, source)) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -1468,12 +1469,13 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, Steel-type opponents cannot switch out nor flee the battle unless they are holding Shed Shell or use attacks like U-Turn or Baton Pass.",
 		shortDesc: "Prevents Steel-type foes from switching out normally.",
 		onFoeModifyPokemon: function (pokemon) {
-			if (pokemon.hasType('Steel')) {
+			if (pokemon.hasType('Steel') && this.isAdjacent(pokemon, this.effectData.target)) {
 				pokemon.tryTrap();
 			}
 		},
-		onFoeMaybeTrapPokemon: function (pokemon) {
-			if (pokemon.hasType('Steel')) {
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if (pokemon.hasType('Steel') && this.isAdjacent(pokemon, source)) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -2247,12 +2249,13 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, its non-Ghost-type opponents cannot switch or flee the battle unless they have the same ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn.",
 		shortDesc: "Prevents foes from switching out normally unless they also have this Ability.",
 		onFoeModifyPokemon: function (pokemon) {
-			if (!pokemon.hasAbility('shadowtag')) {
+			if (!pokemon.hasAbility('shadowtag') && this.isAdjacent(pokemon, this.effectData.target)) {
 				pokemon.tryTrap();
 			}
 		},
-		onFoeMaybeTrapPokemon: function (pokemon) {
-			if (!pokemon.hasAbility('shadowtag')) {
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if (!pokemon.hasAbility('shadowtag') && this.isAdjacent(pokemon, source)) {
 				pokemon.maybeTrapped = true;
 			}
 		},
