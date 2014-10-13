@@ -630,7 +630,7 @@ Tournament = (function () {
 		if (!this.pendingChallenges.get(challenge.from)) return;
 		if (!this.pendingChallenges.get(user)) return;
 
-		var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
+		var room = Rooms.global.startBattle(challenge.from, user, this.format, challenge.team, user.team, {rated: this.isRated, tour: this});
 		if (!room) return;
 
 		this.pendingChallenges.set(challenge.from, null);
@@ -644,12 +644,6 @@ Tournament = (function () {
 		this.isBracketInvalidated = true;
 		this.runAutoDisqualify();
 		this.update();
-
-		var self = this;
-		room.win = function (winner) {
-			self.onBattleWin(this, Users.get(winner));
-			return Object.getPrototypeOf(this).win.call(this, winner);
-		};
 	};
 	Tournament.prototype.onBattleWin = function (room, winner) {
 		var from = Users.get(room.p1);
