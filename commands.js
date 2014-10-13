@@ -269,7 +269,7 @@ var commands = exports.commands = {
 			this.sendReplyBox("The room description is: " + room.desc.replace(re, '<a href="$1">$1</a>'));
 			return;
 		}
-		if (!this.can('declare', null, room)) return false;
+		if (!this.can('roommod', null, room)) return false;
 		if (target.length > 80) return this.sendReply("Error: Room description is too long (must be at most 80 characters).");
 
 		room.desc = target;
@@ -294,7 +294,7 @@ var commands = exports.commands = {
 			}
 			return;
 		}
-		if (!this.can('declare', null, room)) return false;
+		if (!this.can('roommod', null, room)) return false;
 		if (!this.canHTML(target)) return;
 		if (!/</.test(target)) {
 			// not HTML, do some simple URL linking
