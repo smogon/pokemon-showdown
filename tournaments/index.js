@@ -81,6 +81,9 @@ Tournament = (function () {
 		this.generator = generator;
 		this.isRated = isRated;
 		this.playerCap = parseInt(playerCap) || Config.tournamentDefaultPlayerCap || 0;
+		if (Config.tournamentDefaultPlayerCap && this.playerCap > Config.tournamentDefaultPlayerCap) {
+			Rooms.rooms.staff.add('|html|<div class="broadcast-blue"><b>Room ' + room.id + ' starting a tour over default cap (' + this.playerCap + ')</b></div>');
+		}
 
 		this.isBracketInvalidated = true;
 		this.lastBracketUpdate = 0;
@@ -644,6 +647,12 @@ Tournament = (function () {
 		this.isBracketInvalidated = true;
 		this.runAutoDisqualify();
 		this.update();
+
+		var self = this;
+		room.win = function (winner) {
+			self.onBattleWin(this, Users.get(winner));
+			return Object.getPrototypeOf(this).win.call(this, winner);
+		};
 	};
 	Tournament.prototype.onBattleWin = function (room, winner) {
 		var from = Users.get(room.p1);
