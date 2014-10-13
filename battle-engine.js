@@ -389,7 +389,6 @@ BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.calculateStat = function (statName, boost, modifier) {
 		statName = toId(statName);
-		// var boost = this.boosts[statName];
 
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
@@ -712,16 +711,9 @@ BattlePokemon = (function () {
 			evasion: 0
 		};
 
-		this.moveset = [];
-		this.moves = [];
-		// we're copying array contents
-		// DO NOT "optimize" it to copy just the pointer
-		// if you don't know what a pointer is, please don't
-		// touch this code
-		for (var i = 0; i < this.baseMoveset.length; i++) {
-			this.moveset.push(this.baseMoveset[i]);
-			this.moves.push(toId(this.baseMoveset[i].move));
-		}
+		this.moveset = this.baseMoveset.slice();
+		this.moves = this.moveset.map('move');
+
 		this.transformed = false;
 		this.ability = this.baseAbility;
 		this.set.ivs = this.baseIvs;
@@ -760,12 +752,14 @@ BattlePokemon = (function () {
 	};
 	// returns the amount of damage actually dealt
 	BattlePokemon.prototype.faint = function (source, effect) {
+		// This function only puts the pokemon in the faint queue;
+		// actually setting of this.fainted comes later when the
+		// faint queue is resolved.
 		if (this.fainted || this.status === 'fnt') return 0;
 		var d = this.hp;
 		this.hp = 0;
 		this.switchFlag = false;
 		this.status = 'fnt';
-		// this.fainted = true;
 		this.battle.faintQueue.push({
 			target: this,
 			source: source,
@@ -2927,9 +2921,6 @@ Battle = (function () {
 
 		// randomizer
 		// this is not a modifier
-		// gen 1-2
-		//var randFactor = Math.floor(Math.random() * 39) + 217;
-		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
 		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
 		// STAB
@@ -3366,7 +3357,6 @@ Battle = (function () {
 				break;
 			}
 			this.switchIn(decision.target, decision.pokemon.position);
-			//decision.target.runSwitchIn();
 			break;
 		case 'runSwitch':
 			decision.pokemon.isStarted = true;
