@@ -82,7 +82,7 @@ Tournament = (function () {
 		this.isRated = isRated;
 		this.playerCap = parseInt(playerCap) || Config.tournamentDefaultPlayerCap || 0;
 		if (Config.tournamentDefaultPlayerCap && this.playerCap > Config.tournamentDefaultPlayerCap) {
-			Rooms.rooms.staff.add('|html|<div class="broadcast-blue"><b>Room ' + room.id + ' starting a tour over default cap (' + this.playerCap + ')</b></div>');
+			ResourceMonitor.log('[ResourceMonitor] Room ' + room.id + ' starting a tour over default cap (' + this.playerCap + ')');
 		}
 
 		this.isBracketInvalidated = true;
