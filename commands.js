@@ -15,6 +15,7 @@ var crypto = require('crypto');
 var fs = require('fs');
 
 const MAX_REASON_LENGTH = 300;
+const REPORT_COOLDOWN = 5 * 60 * 1000;
 
 if (typeof tells === 'undefined') {
         tells = {};
@@ -63,6 +64,19 @@ var commands = exports.commands = {
 
 	logout: function (target, room, user) {
 		user.resetName();
+	},
+
+	requesthelp: 'report',
+	report: function (target, room, user) {
+		var targetRoom = Rooms.get('staff');
+		if (!targetRoom) return this.sendReply("This server is not designed to use the report system.");
+		if ((Date.now() - user.lastReportTime) < REPORT_COOLDOWN) return this.sendReply("You can't send another report so soon.");
+		var assisted = "Assisted: " + user.name + (target ? " (" + target + ")" : "");
+		var pm = "/pm " + user.name + ", Hello, staff member here to assist with your report";
+		targetRoom.addRaw('<button name="send" value="' + Tools.escapeHTML(assisted) + '&#10;' + Tools.escapeHTML(pm) + '">' + Tools.escapeHTML(user.name) + ' needs assistance' + (target ? ': ' + Tools.escapeHTML(target) : '') + '</button>');
+		targetRoom.update();
+		user.lastReportTime = Date.now();
+		this.sendReply("Your report has been sent to the staff. You will be contacted shortly.");
 	},
 
 	r: 'reply',
@@ -464,6 +478,48 @@ var commands = exports.commands = {
 			return;
 		}
 		if (targetRoom !== room) buffer.unshift("" + targetRoom.title + " room auth:");
+		connection.popup(buffer.join("\n\n"));
+	},
+
+	userauth: function (target, room, user, connection) {
+		var targetId = toId(target) || user.userid;
+		var targetUser = Users.getExact(targetId);
+		var targetUsername = (targetUser ? targetUser.name : target);
+
+		var buffer = [];
+		var innerBuffer = [];
+		var group = Users.usergroups[targetId];
+		if (group) {
+			buffer.push('Global auth: ' + group.charAt(0));
+		}
+		for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
+			var curRoom = Rooms.global.chatRooms[i];
+			if (!curRoom.auth || curRoom.isPrivate) continue;
+			group = curRoom.auth[targetId];
+			if (!group) continue;
+			innerBuffer.push(group + curRoom.id);
+		}
+		if (innerBuffer.length) {
+			buffer.push('Room auth: ' + innerBuffer.join(', '));
+		}
+		if (targetId === user.id || user.can('makeroom')) {
+			innerBuffer = [];
+			for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
+				var curRoom = Rooms.global.chatRooms[i];
+				if (!curRoom.auth || !curRoom.isPrivate) continue;
+				var auth = curRoom.auth[targetId];
+				if (!auth) continue;
+				innerBuffer.push(auth + curRoom.id);
+			}
+			if (innerBuffer.length) {
+				buffer.push('Private room auth: ' + innerBuffer.join(', '));
+			}
+		}
+		if (!buffer.length) {
+			buffer.push("No global or room auth.");
+		}
+
+		buffer.unshift("" + targetUsername + " user auth:");
 		connection.popup(buffer.join("\n\n"));
 	},
 
@@ -925,6 +981,8 @@ var commands = exports.commands = {
 		return this.privateModCommand("(" + user.name + " notes: " + target + ")");
 	},
 
+	globaldemote: 'promote',
+	globalpromote: 'promote',
 	demote: 'promote',
 	promote: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help promote');
@@ -983,6 +1041,11 @@ var commands = exports.commands = {
 
 	deauth: function (target, room, user) {
 		return this.parse('/demote ' + target + ', deauth');
+	},
+
+	deroomauth: 'roomdeauth',
+	roomdeauth: function (target, room, user) {
+		return this.parse('/roomdemote ' + target + ', deauth');
 	},
 
 	mc: 'modchat',
