@@ -12,7 +12,7 @@ const CAPS = {short: 20, medium: 35, long: 50};
 
 var triviaData = {};
 try {
-	triviaData = require('./triviadata.json');
+	triviaData = require('../config/chat-plugins/triviadata.json');
 } catch (e) {} // file doesn't exist or contains invalid JSON
 if (!Object.isObject(triviaData)) triviaData = {};
 if (!Object.isObject(triviaData.leaderboard)) triviaData.leaderboard = {};
@@ -36,12 +36,12 @@ var writeTriviaData = (function () {
 			return;
 		}
 		var data = JSON.stringify(triviaData, null, 2);
-		fs.writeFile('chat-plugins/triviadata.json.0', data, function () {
+		fs.writeFile('config/chat-plugins/triviadata.json.0', data, function () {
 			// rename is atomic on POSIX, but will throw an error on Windows
-			fs.rename('chat-plugins/triviadata.json.0', 'chat-plugins/triviadata.json', function (err) {
+			fs.rename('config/chat-plugins/triviadata.json.0', 'config/chat-plugins/triviadata.json', function (err) {
 				if (err) {
 					// This should only happen on Windows
-					fs.writeFile('chat-plugins/triviadata.json', data, finishWriting);
+					fs.writeFile('config/chat-plugins/triviadata.json', data, finishWriting);
 					return;
 				}
 				finishWriting();
