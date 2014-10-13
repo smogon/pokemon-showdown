@@ -20,7 +20,7 @@ var Rooms = module.exports = getRoom;
 
 var rooms = Rooms.rooms = Object.create(null);
 
-var aliases = {};
+var aliases = Object.create(null);
 
 var Room = (function () {
 	function Room(roomid, title) {
