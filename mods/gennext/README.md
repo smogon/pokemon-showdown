@@ -105,10 +105,11 @@ Major changes:
 - Flower Gift now only boosts Sp. Def, but if Sunny Day is used while Cherrim
   is out, the next switch-in also receives +1 SpD
 
-- All Quiver Dancers (except Smeargle) get an item named GossamerWing (Select
+- All Quiver Dancers (except Smeargle) get an item named Gossamer Wing (Select
   "Stick" in the teambuilder). It makes them take half damage from Rock, Ice,
   and Electric moves if they are Flying type, prevents them from taking
-  double SR damage, and makes Twister do 1.5x Damage.
+  double SR damage, heals 1/16 after using a Status move, and makes Twister
+  do 1.5x Damage.
 
 - Relic Song switches Meloetta's SpA and Atk EVs, boosts, and certain natures,
   specifically: Modest <-> Adamant, Jolly <-> Timid, other natures are left
