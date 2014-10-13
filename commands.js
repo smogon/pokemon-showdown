@@ -953,6 +953,8 @@ var commands = exports.commands = {
 		return this.privateModCommand("(" + user.name + " notes: " + target + ")");
 	},
 
+	globaldemote: 'promote',
+	globalpromote: 'promote',
 	demote: 'promote',
 	promote: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help promote');
@@ -1011,6 +1013,11 @@ var commands = exports.commands = {
 
 	deauth: function (target, room, user) {
 		return this.parse('/demote ' + target + ', deauth');
+	},
+
+	deroomauth: 'roomdeauth',
+	roomdeauth: function (target, room, user) {
+		return this.parse('/roomdemote ' + target + ', deauth');
 	},
 
 	modchat: function (target, room, user) {
