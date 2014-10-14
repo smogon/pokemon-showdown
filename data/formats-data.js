@@ -5096,6 +5096,11 @@ exports.BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP"
 	},
+	plasmanta: {
+		randomBattleMoves: ["sludgebomb","thunderbolt","substitute","hiddenpowerice","psyshock","dazzlinggleam","flashcannon"],
+		isNonstandard: true,
+		tier: "CAP"
+	},
 	syclant: {
 		randomBattleMoves: ["bugbuzz","icebeam","blizzard","earthpower","spikes","superpower","tailglow","uturn","focusblast"],
 		isNonstandard: true,
