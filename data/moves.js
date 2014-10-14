@@ -456,12 +456,12 @@ exports.BattleMovedex = {
 			for (var j = 0; j < target.side.pokemon.length; j++) {
 				var pokemon = target.side.pokemon[j];
 				if (pokemon === target) continue;
-				for (var i = 0; i < pokemon.moves.length; i++) {
-					var move = pokemon.moves[i];
+				for (var i = 0; i < pokemon.moveset.length; i++) {
+					var move = pokemon.moveset[i].id;
 					var noAssist = {
 						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, kingsshield:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
 					};
-					if (move && !noAssist[move]) {
+					if (!noAssist[move]) {
 						moves.push(move);
 					}
 				}

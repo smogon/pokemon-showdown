@@ -712,7 +712,9 @@ BattlePokemon = (function () {
 		};
 
 		this.moveset = this.baseMoveset.slice();
-		this.moves = this.moveset.map('move');
+		this.moves = this.moveset.map(function(move) {
+			return toId(move.move);
+		});
 
 		this.transformed = false;
 		this.ability = this.baseAbility;
