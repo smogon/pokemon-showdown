@@ -117,10 +117,10 @@ var commands = exports.commands = {
 			}
 		}
 
-		if (user.locked && !targetUser.can('lock', user)) {
+		if (user.locked && !targetUser.can('lock')) {
 			return this.popupReply("You can only private message members of the moderation team (users marked by %, @, &, or ~) when locked.");
 		}
-		if (targetUser.locked && !user.can('lock', targetUser)) {
+		if (targetUser.locked && !user.can('lock')) {
 			return this.popupReply("This user is locked and cannot PM.");
 		}
 		if (targetUser.ignorePMs && !user.can('lock')) {
