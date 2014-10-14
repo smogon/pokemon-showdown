@@ -5092,7 +5092,7 @@ exports.BattleFormatsData = {
 		tier: "CAP"
 	},
 	volkraken: {
-		randomBattleMoves: ["scald","powergem","hydropump","memento","hiddenpower","flamethrower","fireblast","overheat","willowisp","uturn","substitute","flashcannon","surf"],
+		randomBattleMoves: ["scald","powergem","hydropump","memento","hiddenpowerice","fireblast","willowisp","uturn","substitute","flashcannon","surf"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
