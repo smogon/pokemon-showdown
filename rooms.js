@@ -538,7 +538,7 @@ var GlobalRoom = (function () {
 			return;
 		}
 
-		if (this.lockdown) {
+		if (this.lockdown === true) {
 			this.cancelSearch(p1, true);
 			this.cancelSearch(p2, true);
 			p1.popup("The server is shutting down. Battles cannot be started at this time.");
