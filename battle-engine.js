@@ -554,9 +554,7 @@ BattlePokemon = (function () {
 	BattlePokemon.prototype.getRequestData = function () {
 		var lockedMove = this.getLockedMove();
 		var data = {moves: this.getMoves(lockedMove)};
-		if (this.trapped) {
-			data.trapped = true;
-		} else if (this.maybeTrapped) {
+		if (this.maybeTrapped) {
 			data.maybeTrapped = true;
 		}
 		return data;
