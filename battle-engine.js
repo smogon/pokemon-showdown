@@ -3518,6 +3518,11 @@ Battle = (function () {
 		// client. However, just in case, we maintain this check for now.
 		if (typeof choice === 'string') choice = choice.split(',');
 
+		if (side.decision && side.decision.finalDecision) {
+			this.debug("Can't cancel decision: the last pokemon could have been trapped");
+			return;
+		}
+
 		side.decision = this.parseChoice(choice, side);
 
 		if (this.p1.decision && this.p2.decision) {
