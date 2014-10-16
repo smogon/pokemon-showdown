@@ -3057,6 +3057,11 @@ exports.BattleFormatsData = {
 		],
 		tier: "Uber"
 	},
+	kyogreprimal: {
+		randomBattleMoves: ["waterspout","surf","thunder","icebeam","calmmind","rest","sleeptalk","roar"],
+		//requiredItem: "",
+		tier: "Unreleased"
+	},
 	groudon: {
 		randomBattleMoves: ["earthquake","roar","stealthrock","stoneedge","swordsdance","rockpolish","thunderwave","firepunch"],
 		randomDoubleBattleMoves: ["earthquake","rockslide","protect","stoneedge","swordsdance","rockpolish","dragonclaw","firepunch"],
@@ -3065,6 +3070,11 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":100,"moves":["eruption","hammerarm","earthpower","solarbeam"],"pokeball":"cherishball"}
 		],
 		tier: "Uber"
+	},
+	groudonprimal: {
+		randomBattleMoves: ["earthquake","lavaplume","stealthrock","stoneedge","swordsdance","overheat","rockpolish","firepunch"],
+		//requiredItem: "",
+		tier: "Unreleased"
 	},
 	rayquaza: {
 		randomBattleMoves: ["outrage","vcreate","extremespeed","dragondance","earthquake","dracometeor","dragonclaw"],
