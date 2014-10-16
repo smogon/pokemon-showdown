@@ -3734,6 +3734,14 @@ exports.BattleScripts = {
 			if (baseFormes[template.baseSpecies]) continue;
 			baseFormes[template.baseSpecies] = 1;
 
+			if (template.id === 'purrloin') {
+				set.item = 'leftovers';
+				set.moves = ['foulplay', 'swagger', 'substitute', 'thunderwave'];
+			} else if (template.id === 'liepard') {
+				set.item = 'leftovers';
+				set.moves = ['foulplay', 'swagger', 'substitute', 'thunderwave'];
+			}
+
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
