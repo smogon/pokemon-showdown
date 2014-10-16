@@ -3034,18 +3034,13 @@ exports.BattleScripts = {
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
+			var types = template.types;
+			var skip = false;
+
 			var set = this.randomSet(template, i, megaCount);
 
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
-
-			// Limit 1 of any type combination
-			var typeCombo = types.join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
-				// Drought and Drizzle don't count towards the type combo limit
-				typeCombo = set.ability;
-			}
-			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
 			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
