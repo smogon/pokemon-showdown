@@ -1295,7 +1295,7 @@ exports.BattleScripts = {
 				rejectAbility = template.id !== 'bidoof';
 			} else if (ability === 'Limber') {
 				rejectAbility = template.id === 'stunfisk';
-			} else if (ability === 'Lightningrod') {
+			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
 			} else if (ability === 'Gluttony') {
 				rejectAbility = true;
@@ -2258,7 +2258,7 @@ exports.BattleScripts = {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
 			} else if (ability === 'Moody') {
 				rejectAbility = template.id !== 'bidoof';
-			} else if (ability === 'Lightningrod') {
+			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
 			}
 

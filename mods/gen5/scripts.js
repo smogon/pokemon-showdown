@@ -562,7 +562,7 @@ exports.BattleScripts = {
 			if (ability === 'Moody' && template.id !== 'bidoof') {
 				rejectAbility = true;
 			}
-			if (ability === 'Lightningrod' && template.types.indexOf('Ground') >= 0) {
+			if (ability === 'Lightning Rod' && template.types.indexOf('Ground') >= 0) {
 				rejectAbility = true;
 			}
 
