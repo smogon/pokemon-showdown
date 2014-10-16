@@ -363,16 +363,17 @@ BattlePokemon = (function () {
 			if (side === this.side) continue;
 			for (var j = 0; j < side.active.length; ++j) {
 				var pokemon = side.active[j];
-				if (!pokemon || pokemon.fainted ||
-					!pokemon.template.abilities) continue;
-				for (var k in pokemon.template.abilities) {
-					var ability = pokemon.template.abilities[k];
+				if (!pokemon || pokemon.fainted) continue;
+				var template = (pokemon.illusion || pokemon).template;
+				if (!template.abilities) continue;
+				for (var k in template.abilities) {
+					var ability = template.abilities[k];
 					if (ability === pokemon.ability) {
 						// This event was already run above so we don't need
 						// to run it again.
 						continue;
 					}
-					if ((k === 'H') && pokemon.template.unreleasedHidden) {
+					if ((k === 'H') && template.unreleasedHidden) {
 						// unreleased hidden ability
 						continue;
 					}
@@ -553,9 +554,7 @@ BattlePokemon = (function () {
 	BattlePokemon.prototype.getRequestData = function () {
 		var lockedMove = this.getLockedMove();
 		var data = {moves: this.getMoves(lockedMove)};
-		if (this.trapped) {
-			data.trapped = true;
-		} else if (this.maybeTrapped) {
+		if (this.maybeTrapped) {
 			data.maybeTrapped = true;
 		}
 		return data;
@@ -3509,6 +3508,11 @@ Battle = (function () {
 		// from splitting the string sent by our forked process, not from the
 		// client. However, just in case, we maintain this check for now.
 		if (typeof choice === 'string') choice = choice.split(',');
+
+		if (side.decision && side.decision.finalDecision) {
+			this.debug("Can't cancel decision: the last pokemon could have been trapped");
+			return;
+		}
 
 		side.decision = this.parseChoice(choice, side);
 
