@@ -157,6 +157,21 @@ exports.BattleItems = {
 		gen: 6,
 		desc: "Mega-evolves Alakazam."
 	},
+	"altarite": {
+		id: "altarite",
+		name: "Altarite",
+		spritenum: 0,
+		megaStone: "Altaria-Mega",
+		megaEvolves: "Altaria",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Altaria."
+	},
 	"ampharosite": {
 		id: "ampharosite",
 		name: "Ampharosite",
@@ -249,6 +264,21 @@ exports.BattleItems = {
 		gen: 6,
 		desc: "Holder's Sp. Def is 1.5x, but it can only use damaging moves."
 	},
+	"audinite": {
+		id: "audinite",
+		name: "Audinite",
+		spritenum: 0,
+		megaStone: "Audino-Mega",
+		megaEvolves: "Audino",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Audino."
+	},
 	"babiriberry": {
 		id: "babiriberry",
 		name: "Babiri Berry",
@@ -284,6 +314,21 @@ exports.BattleItems = {
 		num: 668,
 		gen: 6,
 		desc: "Mega-evolves Banette."
+	},
+	"beedrillite": {
+		id: "beedrillite",
+		name: "Beedrillite",
+		spritenum: 0,
+		megaStone: "Beedrill-Mega",
+		megaEvolves: "Beedrill",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Beedrill."
 	},
 	"belueberry": {
 		id: "belueberry",
@@ -493,6 +538,21 @@ exports.BattleItems = {
 		num: 118,
 		gen: 5,
 		desc: "Holder's Techno Blast is Fire-type."
+	},
+	"cameruptite": {
+		id: "cameruptite",
+		name: "Cameruptite",
+		spritenum: 0,
+		megaStone: "Camerupt-Mega",
+		megaEvolves: "Camerupt",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: 767,
+		gen: 6,
+		desc: "Mega-evolves Camerupt."
 	},
 	"cellbattery": {
 		id: "cellbattery",
@@ -949,6 +1009,21 @@ exports.BattleItems = {
 		num: 280,
 		gen: 4,
 		desc: "If holder becomes infatuated, the other Pokemon also becomes infatuated."
+	},
+	"diancite": {
+		id: "diancite",
+		name: "Diancite",
+		spritenum: 0,
+		megaStone: "Diancie-Mega",
+		megaEvolves: "Diancie",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Diancie."
 	},
 	"diveball": {
 		id: "diveball",
@@ -1472,6 +1547,21 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "Holder moves last in its priority bracket."
 	},
+	"galladite": {
+		id: "galladite",
+		name: "Galladite",
+		spritenum: 0,
+		megaStone: "Gallade-Mega",
+		megaEvolves: "Gallade",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Gallade."
+	},
 	"ganlonberry": {
 		id: "ganlonberry",
 		name: "Ganlon Berry",
@@ -1553,6 +1643,21 @@ exports.BattleItems = {
 		num: 560,
 		gen: 5,
 		desc: "Holder's first successful Ghost-type attack will have 1.3x power. Single use."
+	},
+	"glalite": {
+		id: "glalite",
+		name: "Glalite",
+		spritenum: 0,
+		megaStone: "Glalie-Mega",
+		megaEvolves: "Glalie",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: 763,
+		gen: 6,
+		desc: "Mega-evolves Glalie."
 	},
 	"grassgem": {
 		id: "grassgem",
@@ -2083,7 +2188,7 @@ exports.BattleItems = {
 	"latiasite": {
 		id: "latiasite",
 		name: "Latiasite",
-		spritenum: -6,
+		spritenum: 0,
 		megaStone: "Latias-Mega",
 		megaEvolves: "Latias",
 		isUnreleased: true,
@@ -2098,7 +2203,7 @@ exports.BattleItems = {
 	"latiosite": {
 		id: "latiosite",
 		name: "Latiosite",
-		spritenum: -6,
+		spritenum: 0,
 		megaStone: "Latios-Mega",
 		megaEvolves: "Latios",
 		isUnreleased: true,
@@ -2271,6 +2376,21 @@ exports.BattleItems = {
 		num: 269,
 		gen: 4,
 		desc: "Holder's use of Light Screen or Reflect lasts 8 turns instead of 5."
+	},
+	"lopunnite": {
+		id: "lopunnite",
+		name: "Lopunnite",
+		spritenum: 0,
+		megaStone: "Lopunny-Mega",
+		megaEvolves: "Lopunny",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Lopunny."
 	},
 	"loveball": {
 		id: "loveball",
@@ -2580,6 +2700,21 @@ exports.BattleItems = {
 		num: 219,
 		gen: 3,
 		desc: "Cures holder if affected by Attract, Disable, Encore, Taunt, Torment. Single use."
+	},
+	"metagrossite": {
+		id: "metagrossite",
+		name: "Metagrossite",
+		spritenum: 0,
+		megaStone: "Metagross-Mega",
+		megaEvolves: "Metagross",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: 758,
+		gen: 6,
+		desc: "Mega-evolves Metagross."
 	},
 	"metalcoat": {
 		id: "metalcoat",
@@ -3063,6 +3198,21 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Raises Sp. Atk by 1 when at 1/4 max HP or less. Single use."
 	},
+	"pidgeotite": {
+		id: "pidgeotite",
+		name: "Pidgeotite",
+		spritenum: 0,
+		megaStone: "Pidgeot-Mega",
+		megaEvolves: "Pidgeot",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Pidgeot."
+	},
 	"pinapberry": {
 		id: "pinapberry",
 		name: "Pinap Berry",
@@ -3322,6 +3472,21 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Holder is cured if it is burned. Single use."
 	},
+	"rayquazite": {
+		id: "rayquazite",
+		name: "Rayquazite",
+		spritenum: 0,
+		megaStone: "Rayquaza-Mega",
+		megaEvolves: "Rayquaza",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: 754,
+		gen: 6,
+		desc: "Mega-evolves Rayquaza."
+	},
 	"razorclaw": {
 		id: "razorclaw",
 		name: "Razor Claw",
@@ -3562,6 +3727,21 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use."
 	},
+	"sableite": {
+		id: "sableite",
+		name: "Sableite",
+		spritenum: 0,
+		megaStone: "Sableye-Mega",
+		megaEvolves: "Sableye",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: 754,
+		gen: 6,
+		desc: "Mega-evolves Sableye."
+	},
 	"safariball": {
 		id: "safariball",
 		name: "Safari Ball",
@@ -3601,6 +3781,36 @@ exports.BattleItems = {
 		num: 203,
 		gen: 3,
 		desc: "Raises Speed by 1 when at 1/4 max HP or less. Single use."
+	},
+	"salamencite": {
+		id: "salamencite",
+		name: "Salamencite",
+		spritenum: 0,
+		megaStone: "Salamence-Mega",
+		megaEvolves: "Salamence",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Salamence."
+	},
+	"sceptilite": {
+		id: "sceptilite",
+		name: "Sceptilite",
+		spritenum: 0,
+		megaStone: "Sceptile-Mega",
+		megaEvolves: "Sceptile",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: 753,
+		gen: 6,
+		desc: "Mega-evolves Sceptile."
 	},
 	"scizorite": {
 		id: "scizorite",
@@ -3663,6 +3873,21 @@ exports.BattleItems = {
 		num: 244,
 		gen: 2,
 		desc: "Holder's Flying-type attacks have 1.2x power."
+	},
+	"sharpedite": {
+		id: "sharpedite",
+		name: "Sharpedite",
+		spritenum: 0,
+		megaStone: "Sharpedo-Mega",
+		megaEvolves: "Sharpedo",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: 759,
+		gen: 6,
+		desc: "Mega-evolves Sharpedo."
 	},
 	"shedshell": {
 		id: "shedshell",
@@ -3819,6 +4044,21 @@ exports.BattleItems = {
 		num: 306,
 		gen: 4,
 		desc: "Holder's Flying-type attacks have 1.2x power. Judgment is Flying-type."
+	},
+	"slowbronite": {
+		id: "slowbronite",
+		name: "Slowbronite",
+		spritenum: 0,
+		megaStone: "Slowbro-Mega",
+		megaEvolves: "Slowbro",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Mega-evolves Slowbro."
 	},
 	"smoothrock": {
 		id: "smoothrock",
@@ -3994,6 +4234,21 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Raises a random stat by 2 when at 1/4 max HP or less (not acc/eva). Single use."
 	},
+	"steelixite": {
+		id: "steelixite",
+		name: "Steelixite",
+		spritenum: 0,
+		megaStone: "Steelix-Mega",
+		megaEvolves: "Steelix",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: 761,
+		gen: 6,
+		desc: "Mega-evolves Steelix."
+	},
 	"steelgem": {
 		id: "steelgem",
 		name: "Steel Gem",
@@ -4069,6 +4324,21 @@ exports.BattleItems = {
 		num: 309,
 		gen: 4,
 		desc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock-type."
+	},
+	"swampertite": {
+		id: "swampertite",
+		name: "Swampertite",
+		spritenum: 0,
+		megaStone: "Swampert-Mega",
+		megaEvolves: "Swampert",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: 752,
+		gen: 6,
+		desc: "Mega-evolves Swampert."
 	},
 	"tamatoberry": {
 		id: "tamatoberry",
