@@ -2891,6 +2891,28 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Dragon"
 	},
+	"dragonascent": {
+		num: 620,
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		desc: "Deals damage to one adjacent target and lowers the user's Defense and Special Defense by 1 stage. Makes contact.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
+		id: "dragonascent",
+		name: "Dragon Ascent",
+		pp: 5,
+		priority: 0,
+		isUnreleased: true,
+		isContact: true,
+		self: {
+			boosts: {
+				def: -1,
+				spd: -1
+			}
+		},
+		target: "normal",
+		type: "Flying"
+	},
 	"dragonbreath": {
 		num: 225,
 		accuracy: 100,
@@ -6519,6 +6541,24 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
+	"hyperspacefury": {
+		num: 621,
+		accuracy: true,
+		basePower: 100,
+		category: "Special",
+		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. Makes contact.",
+		shortDesc: "Breaks protection for this turn.",
+		id: "hyperspacefury",
+		name: "Hyperspace Fury",
+		pp: 5,
+		priority: 0,
+		isUnreleased: true,
+		breaksProtect: true,
+		notSubBlocked: true,
+		secondary: false,
+		target: "normal",
+		type: "Dark"
+	},
 	"hyperspacehole": {
 		num: 593,
 		accuracy: true,
@@ -9111,6 +9151,22 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
+	"originpulse": {
+		num: 618,
+		accuracy: 85,
+		basePower: 110,
+		category: "Special",
+		desc: "Deals damage to all adjacent foes.",
+		shortDesc: "Deals damage to all adjacent foes.",
+		id: "originpulse",
+		name: "Origin Pulse",
+		pp: 10,
+		priority: 0,
+		isUnreleased: true,
+		isPulseMove: true,
+		target: "allAdjacentFoes",
+		type: "Water"
+	},
 	"outrage": {
 		num: 200,
 		accuracy: 100,
@@ -9814,6 +9870,21 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Grass"
+	},
+	"precipiceblades": {
+		num: 619,
+		accuracy: 85,
+		basePower: 120,
+		category: "Physical",
+		desc: "Deals damage to all adjacent foes.",
+		shortDesc: "Deals damage to all adjacent foes.",
+		id: "precipiceblades",
+		name: "Precipice Blades",
+		pp: 10,
+		priority: 0,
+		isUnreleased: true,
+		target: "allAdjacentFoes",
+		type: "Ground"
 	},
 	"present": {
 		num: 217,
