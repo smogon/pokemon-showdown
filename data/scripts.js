@@ -2898,15 +2898,6 @@ exports.BattleScripts = {
 		var rockList = ['aerodactyl', 'aggron', 'diancie', 'kabutops', 'rhyperior', 'shuckle', 'terrakion', 'tyranitar', 'tyrantrum'];
 		var steelList = ['aggron', 'bisharp', 'bronzong', 'cobalion', 'doublade', 'durant', 'empoleon', 'escavalier', 'excadrill', 'ferrothorn', 'forretress', 'heatran', 'jirachi', 'klefki', 'lucario', 'magnezone', 'mawile', 'metagross', 'registeel', 'scizor', 'skarmory'];
 		var waterList = ['alomomola', 'azumarill', 'blastoise', 'clawitzer', 'cloyster', 'crawdaunt', 'empoleon', 'gastrodon', 'greninja', 'gyarados', 'jellicent', 'kabutops', 'keldeo', 'kingdra', 'manaphy', 'milotic', 'quagsire', 'rotomwash', 'sharpedo', 'slowbro', 'slowking', 'starmie', 'suicune', 'swampert', 'tentacruel', 'vaporeon'];
-		pokemonList = pokemonList.randomize();
-		for (var i in this.data.FormatsData) {
-			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
-				keys.push(i);
-			}
-		}
-		keys = keys.randomize();
-
 		bugList = bugList.randomize();
 		darkList = darkList.randomize();
 		dragonList = dragonList.randomize();
@@ -2925,6 +2916,13 @@ exports.BattleScripts = {
 		rockList = rockList.randomize();
 		steelList = steelList.randomize();
 		waterList = waterList.randomize();
+		for (var i in this.data.FormatsData) {
+			var template = this.getTemplate(i);
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+				keys.push(i);
+			}
+		}
+		keys = keys.randomize();
 
 		var dice = this.random(18);
 		var teamGenerate = [];
