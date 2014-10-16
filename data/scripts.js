@@ -2501,6 +2501,7 @@ exports.BattleScripts = {
 		var uberCount = 0;
 		var nuCount = 0;
 		var megaCount = 0;
+		var ouCount = 0;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(pokemonList[i]);
