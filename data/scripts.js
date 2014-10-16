@@ -2501,13 +2501,17 @@ exports.BattleScripts = {
 		var uberCount = 0;
 		var nuCount = 0;
 		var megaCount = 0;
-		var ouCount = 0;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(pokemonList[i]);
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
 
+			if (template.species === 'aegislash' && Math.random() * 7 > 1) continue;
+			if (template.species === 'blaziken' && Math.random() * 7 > 1) continue;
+			if (template.species === 'gengar' && Math.random() * 7 > 1) continue;
+			if (template.species === 'kangaskhan' && Math.random() * 7 > 1) continue;
+			if (template.species === 'lucario' && Math.random() * 7 > 1) continue;
 			// CAPs have 20% the normal rate
 			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
 			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
@@ -2547,8 +2551,6 @@ exports.BattleScripts = {
 
 			// Limit the number of Megas to one, just like in-game
 			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
-
-			if (tier === 'OU' && ouCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
