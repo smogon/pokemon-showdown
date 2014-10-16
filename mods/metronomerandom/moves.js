@@ -25,7 +25,7 @@ exports.BattleMovedex = {
 			}
 			var move = '';
 			if (moves.length) {
-				moves.sort(function(a,b){return a.num-b.num;});
+				moves.sort(function (a, b) {return a.num - b.num;});
 				move = moves[this.random(moves.length)].id;
 			}
 			if (!move) {
