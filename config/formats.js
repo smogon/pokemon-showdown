@@ -6,13 +6,13 @@ exports.Formats = [
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/*{
 		name: "XY Anniversary Random (BWknd 23)",
 		section: "XY Singles",
 
 		team: 'randomXY',
 		ruleset: ['Random (no PotD)']
-	},
+	},*/
 	{
 		name: "OU",
 		section: "XY Singles",
@@ -221,6 +221,13 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
+		name: "XY Anniversary Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomXYAnniversary',
+		ruleset: ['Random (no PotD)']
+	},
+	{
 		name: "Community Random",
 		section: "Random Battles (aka Randbats)",
 
@@ -228,11 +235,10 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
-		name: "Furry Space Goat Random",
+		name: "Furry Random",
 		section: "Random Battles (aka Randbats)",
 
-		searchShow: false,
-		team: 'randomFurrySpaceGoat',
+		team: 'randomFurry',
 		ruleset: ['Random (no PotD)']
 	},
 	{
