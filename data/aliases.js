@@ -48,6 +48,9 @@ exports.BattleAliases = {
 	"megattar": "Tyranitar-Mega",
 	"megavenusaur": "Venusaur-Mega",
 	"megavenu": "Venusaur-Mega",
+	"megazam": "Alakazam-Mega",
+	"megazardx": "Charizard-Mega-X",
+	"megazardy": "Charizard-Mega-y",
 	"mmx": "Mewtwo-Mega-X",
 	"mmy": "Mewtwo-Mega-Y",
 
@@ -80,7 +83,6 @@ exports.BattleAliases = {
 	"castformfire": "Castform-Sunny",
 	"cherrims": "Cherrim-Sunshine",
 	"cherrimsunny": "Cherrim-Sunshine",
-	"cofag": "Cofagrigus",
 	"darmanitanz": "Darmanitan-Zen",
 	"darmanitanzenmode": "Darmanitan-Zen",
 	"deoxysnormal": "Deoxys",
@@ -92,8 +94,6 @@ exports.BattleAliases = {
 	"deod": "Deoxys-Defense",
 	"deoxyss": "Deoxys-Speed",
 	"deos": "Deoxys-Speed",
-	"ekiller": "Arceus",
-	"esca": "Escavalier",
 	"giratinao": "Giratina-Origin",
 	"gourgeisthuge": "Gourgeist-Super",
 	"keldeor": "Keldeo-Resolute",
@@ -149,6 +149,8 @@ exports.BattleAliases = {
 	"gastrodonwest": "Gastrodon",
 
 	// items
+	"assvest": "Assault Vest",
+	"av": "Assault Vest",
 	"band": "Choice Band",
 	"cb": "Choice Band",
 	"chesto": "Chesto Berry",
@@ -156,6 +158,7 @@ exports.BattleAliases = {
 	"custap": "Custap Berry",
 	"fightgem": "Fighting Gem",
 	"flightgem": "Flying Gem",
+	"goggles": "Safety Goggles",
 	"lefties": "Leftovers",
 	"lo": "Life Orb",
 	"lum": "Lum Berry",
@@ -165,8 +168,6 @@ exports.BattleAliases = {
 	"specs": "Choice Specs",
 	"sash": "Focus Sash",
 	"yache": "Yache Berry",
-	"av": "Assault Vest",
-	"assvest": "Assault Vest",
 
 	// gen 1-2 berries
 	"berry": "Oran Berry",
@@ -183,9 +184,12 @@ exports.BattleAliases = {
 	// pokemon
 	"aboma": "Abomasnow",
 	"chomp": "Garchomp",
+	"cofag": "Cofagrigus",
 	"dnite": "Dragonite",
 	"don": "Groudon",
 	"dogars": "Koffing",
+	"ekiller": "Arceus",
+	"esca": "Escavalier",
 	"ferro": "Ferrothorn",
 	"forry": "Forretress",
 	"gar": "Gengar",
@@ -218,9 +222,11 @@ exports.BattleAliases = {
 	"eq": "Earthquake",
 	"espeed": "ExtremeSpeed",
 	"faintattack": "Feint Attack",
+	"glowpunch": "Power-up Punch",
 	"hjk": "High Jump Kick",
 	"hijumpkick": "High Jump Kick",
 	"np": "Nasty Plot",
+	"playaround": "Play Rough",
 	"pup": "Power-up Punch",
 	"qd": "Quiver Dance",
 	"rocks": "Stealth Rock",
@@ -236,8 +242,6 @@ exports.BattleAliases = {
 	"twave": "Thunder Wave",
 	"web": "Sticky Web",
 	"wow": "Will-O-Wisp",
-	"playaround": "Play Rough",
-	"glowpunch": "Power-up Punch",
 
 	// Japanese names
 	"birijion": "Virizion",
