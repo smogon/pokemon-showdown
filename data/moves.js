@@ -2896,7 +2896,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
-		desc: "Deals damage to one adjacent target and lowers the user's Defense and Special Defense by 1 stage. Makes contact.",
+		desc: "Deals damage to one adjacent or non-adjacent target and lowers the user's Defense and Special Defense by 1 stage. Makes contact.",
 		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
 		id: "dragonascent",
 		name: "Dragon Ascent",
@@ -2910,7 +2910,7 @@ exports.BattleMovedex = {
 				spd: -1
 			}
 		},
-		target: "normal",
+		target: "any",
 		type: "Flying"
 	},
 	"dragonbreath": {
@@ -6546,8 +6546,8 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 100,
 		category: "Special",
-		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. Makes contact.",
-		shortDesc: "Breaks protection for this turn.",
+		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. Lowers the user's Defense by 1 stage. Makes contact.",
+		shortDesc: "Breaks protect and lowers user's Def. by 1.",
 		id: "hyperspacefury",
 		name: "Hyperspace Fury",
 		pp: 5,
@@ -6555,6 +6555,11 @@ exports.BattleMovedex = {
 		isUnreleased: true,
 		breaksProtect: true,
 		notSubBlocked: true,
+		self: {
+			boosts: {
+				def: -1,
+			}
+		},
 		secondary: false,
 		target: "normal",
 		type: "Dark"
