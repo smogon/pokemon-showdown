@@ -3041,6 +3041,8 @@ exports.BattleScripts = {
 
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
+			
+			var typeCombo = types.join();
 
 			// Limit the number of Megas to one, just like in-game
 			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
