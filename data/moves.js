@@ -456,12 +456,12 @@ exports.BattleMovedex = {
 			for (var j = 0; j < target.side.pokemon.length; j++) {
 				var pokemon = target.side.pokemon[j];
 				if (pokemon === target) continue;
-				for (var i = 0; i < pokemon.moves.length; i++) {
-					var move = pokemon.moves[i];
+				for (var i = 0; i < pokemon.moveset.length; i++) {
+					var move = pokemon.moveset[i].id;
 					var noAssist = {
 						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, kingsshield:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
 					};
-					if (move && !noAssist[move]) {
+					if (!noAssist[move]) {
 						moves.push(move);
 					}
 				}
@@ -2890,6 +2890,28 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Dragon"
+	},
+	"dragonascent": {
+		num: 620,
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		desc: "Deals damage to one adjacent or non-adjacent target and lowers the user's Defense and Special Defense by 1 stage. Makes contact.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
+		id: "dragonascent",
+		name: "Dragon Ascent",
+		pp: 5,
+		priority: 0,
+		isUnreleased: true,
+		isContact: true,
+		self: {
+			boosts: {
+				def: -1,
+				spd: -1
+			}
+		},
+		target: "any",
+		type: "Flying"
 	},
 	"dragonbreath": {
 		num: 225,
@@ -6519,6 +6541,29 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Normal"
 	},
+	"hyperspacefury": {
+		num: 621,
+		accuracy: true,
+		basePower: 100,
+		category: "Special",
+		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. Lowers the user's Defense by 1 stage. Makes contact.",
+		shortDesc: "Breaks protect and lowers user's Def. by 1.",
+		id: "hyperspacefury",
+		name: "Hyperspace Fury",
+		pp: 5,
+		priority: 0,
+		isUnreleased: true,
+		breaksProtect: true,
+		notSubBlocked: true,
+		self: {
+			boosts: {
+				def: -1,
+			}
+		},
+		secondary: false,
+		target: "normal",
+		type: "Dark"
+	},
 	"hyperspacehole": {
 		num: 593,
 		accuracy: true,
@@ -9111,6 +9156,22 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
+	"originpulse": {
+		num: 618,
+		accuracy: 85,
+		basePower: 110,
+		category: "Special",
+		desc: "Deals damage to all adjacent foes.",
+		shortDesc: "Deals damage to all adjacent foes.",
+		id: "originpulse",
+		name: "Origin Pulse",
+		pp: 10,
+		priority: 0,
+		isUnreleased: true,
+		isPulseMove: true,
+		target: "allAdjacentFoes",
+		type: "Water"
+	},
 	"outrage": {
 		num: 200,
 		accuracy: 100,
@@ -9814,6 +9875,21 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Grass"
+	},
+	"precipiceblades": {
+		num: 619,
+		accuracy: 85,
+		basePower: 120,
+		category: "Physical",
+		desc: "Deals damage to all adjacent foes.",
+		shortDesc: "Deals damage to all adjacent foes.",
+		id: "precipiceblades",
+		name: "Precipice Blades",
+		pp: 10,
+		priority: 0,
+		isUnreleased: true,
+		target: "allAdjacentFoes",
+		type: "Ground"
 	},
 	"present": {
 		num: 217,

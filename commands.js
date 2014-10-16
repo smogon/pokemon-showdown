@@ -67,14 +67,16 @@ var commands = exports.commands = {
 	},
 
 	requesthelp: 'report',
-	report: function (target, room, user) {
+	report: function (target, room, user, connection, cmd) {
 		var targetRoom = Rooms.get('staff');
 		if (!targetRoom) return this.sendReply("This server is not designed to use the report system.");
 		if ((Date.now() - user.lastReportTime) < REPORT_COOLDOWN) return this.sendReply("You can't send another report so soon.");
-		var assisted = "Assisted: " + user.name + (target ? " (" + target + ")" : "");
-		var pm = "/pm " + user.name + ", Hello, staff member here to assist with your report";
-		targetRoom.addRaw('<button name="send" value="' + Tools.escapeHTML(assisted) + '&#10;' + Tools.escapeHTML(pm) + '">' + Tools.escapeHTML(user.name) + ' needs assistance' + (target ? ': ' + Tools.escapeHTML(target) : '') + '</button>');
+		var assisted = "**Assisted:** " + user.name + (target ? " (" + target + ")" : "");
+		var pm = "/pm " + user.name + ", hi";
+		targetRoom.send('|html|/' + cmd + ' used: <button name="send" value="' + Tools.escapeHTML(assisted) + '&#10;' + Tools.escapeHTML(pm) + '">' + Tools.escapeHTML(user.name) + ' needs assistance' + (target ? ': ' + Tools.escapeHTML(target) : '') + '</button>');
 		targetRoom.update();
+		targetRoom.log.push('|html|/' + cmd + ' used: <button disabled>' + Tools.escapeHTML(user.name) + ' needs assistance' + (target ? ': ' + Tools.escapeHTML(target) : '') + '</button>');
+		targetRoom.lastUpdate++;
 		user.lastReportTime = Date.now();
 		this.sendReply("Your report has been sent to the staff. You will be contacted shortly.");
 	},
@@ -119,10 +121,10 @@ var commands = exports.commands = {
 			}
 		}
 
-		if (user.locked && !targetUser.can('lock', user)) {
+		if (user.locked && !targetUser.can('lock')) {
 			return this.popupReply("You can only private message members of the moderation team (users marked by %, @, &, or ~) when locked.");
 		}
-		if (targetUser.locked && !user.can('lock', targetUser)) {
+		if (targetUser.locked && !user.can('lock')) {
 			return this.popupReply("This user is locked and cannot PM.");
 		}
 		if (targetUser.ignorePMs && !user.can('lock')) {
