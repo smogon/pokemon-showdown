@@ -2655,14 +2655,6 @@ exports.BattleScripts = {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
 			baseFormes[template.baseSpecies] = 1;
-			
-			if (template.id === 'gengar') {
-				set.item = 'blacksludge';
-			} else if (template.id === 'mawile') {
-				set.item = 'leftovers';
-			} else if (template.id === 'lucario') {
-				set.item = 'lifeorb';
-			}
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2763,10 +2755,6 @@ exports.BattleScripts = {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
 			baseFormes[template.baseSpecies] = 1;
-			
-			if (template.id === 'kangaskhan') {
-				set.item = 'lifeorb';
-			}
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
