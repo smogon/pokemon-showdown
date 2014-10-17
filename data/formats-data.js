@@ -678,7 +678,7 @@ exports.BattleFormatsData = {
 	},
 	slowbromega: {
 		randomBattleMoves: ["scald","fireblast","icebeam","calmmind","psyshock","rest","sleeptalk"],
-		requiredItem: "Slowbonite",
+		requiredItem: "Slowbronite",
 		tier: "Unreleased"
 	},
 	slowking: {
