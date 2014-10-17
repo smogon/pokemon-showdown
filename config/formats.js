@@ -238,7 +238,7 @@ exports.Formats = [
 		name: "Furry Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'metronomefurry',
+		mod: 'furryrandom',
 		team: 'randomFurry',
 		ruleset: ['Random (no PotD)']
 	},
