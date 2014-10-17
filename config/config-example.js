@@ -382,6 +382,7 @@ exports.groups = {
 		roomplayer: true,
 		roomonly: true,
 		tournamentsmanagement: true,
+		rmall: true,
 		rank: 6
 	},
 	'@': {
@@ -430,6 +431,7 @@ exports.groups = {
 		declare: true,
 		announce: true,
 		ignorelimits: true,
+		poll: true,
 		rank: 2
 	},
 	'\u2606': {
