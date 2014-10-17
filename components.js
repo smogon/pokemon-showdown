@@ -708,7 +708,6 @@ var components = exports.components = {
         var parts = target.split(',');
         Core.profile.color = Core.stdin('control-panel', 'color');
         Core.profile.avatarurl = Core.stdin('control-panel', 'avatar');
-        Core.tournaments.tourSize = Number(Core.stdin('control-panel', 'toursize'));
         Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
         Core.tournaments.runnerUpElo = Number(Core.stdin('control-panel', 'runnerup'));
         if (parts.length !== 2) {
