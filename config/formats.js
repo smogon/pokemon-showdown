@@ -285,6 +285,7 @@ exports.Formats = [
 		section: "Random Battles (aka Randbats)",
 
 		searchShow: false,
+		gameType: 'doubles',
 		team: 'randomPCStaffDoubles',
 		ruleset: ['Random (no PotD)']
 	},
