@@ -3275,6 +3275,144 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
+	randomSmashBrosTeam: function (side) {
+		var keys = [];
+		var pokemonLeft = 0;
+		var pokemon = [this.randomSet(this.getTemplate(lead), 0)];
+		var pikachuList = ['pichu', 'meowth', 'electrode', 'raikou', 'zapdos', 'dedenne'];
+		var jigglypuffList = ['chansey', 'clefairy', 'snorlax', 'porygon', 'porygon2', 'togepi', 'munchlax', 'eevee', 'arceus', 'meloetta', 'swirlix', 'xerneas'];
+		var mewtwoList = ['mew', 'celebi', 'lugia', 'unown', 'wobbuffet', 'deoxys', 'gardevoir', 'jirachi', 'latias', 'latios', 'victini'];
+		var charizardList = ['charmander', 'cyndaquil', 'entei', 'hooh', 'moltres', 'groudon', 'torchic', 'fennekin', 'fletchling'];
+		var ivysaurList = ['beedrill', 'koffing', 'venusaur', 'bellossom', 'chikorita', 'weezing', 'gulpin', 'abomasnow', 'snivy', 'chespin', 'gogoat', 'spewpa'];
+		var squirtleList = ['blastoise', 'goldeen', 'articuno', 'marill', 'staryu', 'suicune', 'piplup', 'kyogre', 'manaphy', 'palkia', 'oshawott', 'kyurem', 'keldeo'];
+		var lucarioList = ['hitmonlee', 'onix', 'scizor', 'bonsly', 'metagross', 'genesect'];
+		var greninjaList = ['starmie', 'weavile', 'giratina', 'darkrai', 'zoroark', 'inkay'];
+		pikachuList = pikachuList.randomize();
+		jigglypuffList = jigglypuffList.randomize();
+		mewtwoList = mewtwoList.randomize();
+		charizardList = charizardList.randomize();
+		ivysaurList = ivysaurList.randomize();
+		squirtleList = squirtleList.randomize();
+		lucarioList = lucarioList.randomize();
+		greninjaList = greninjaList.randomize();
+		for (var i in this.data.FormatsData) {
+			var template = this.getTemplate(i);
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+				keys.push(i);
+			}
+		}
+		keys = keys.randomize();
+
+		var dice = this.random(8);
+		var teamGenerate = [];
+		if (dice < 1) {
+			lead = 'pikachu';
+		} else if (dice < 2) {
+			lead = 'jigglypuff';
+		} else if (dice < 3) {
+			lead = 'mewtwo';
+		} else if (dice < 4) {
+			lead = 'charizard';
+		} else if (dice < 5) {
+			lead = 'ivysaur';
+		} else if (dice < 6) {
+			lead = 'squirtle';
+		} else if (dice < 7) {
+			lead = 'lucario';
+		} else {
+			lead = 'greninja';
+		}
+
+		var teamPool = [];
+		if (lead === 'pikachu') {
+			teamPool = pikachuList;
+		} else if (lead === 'jigglypuff') {
+			teamPool = jigglypuffList;
+		} else if (lead === 'mewtwo') {
+			teamPool = mewtwoList;
+		} else if (lead === 'charizard') {
+			teamPool = charizardList;
+		} else if (lead === 'ivysaur') {
+			teamPool = ivysaurList;
+		} else if (lead === 'squirtle') {
+			teamPool = squirtleList;
+		} else if (lead === 'lucario') {
+			teamPool = lucarioList;
+		} else {
+			teamPool = greninjaList;
+		}
+
+		var typeCount = {};
+		var typeComboCount = {};
+		var baseFormes = {};
+		var uberCount = 0;
+		var nuCount = 0;
+		var megaCount = 0;
+
+		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
+			var template = this.getTemplate(teamPool[i]);
+			if (!template || !template.name || !template.types) continue;
+			var tier = template.tier;
+			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
+			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
+			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
+			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
+			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
+
+			// CAPs have 20% the normal rate
+			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
+			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
+			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 18 > 1) continue;
+			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
+			if (keys[i].substr(0, 8) === 'basculin' && Math.random() * 2 > 1) continue;
+			// Genesect formes have 1/5 the normal rate each (so Genesect as a whole has a normal rate)
+			if (keys[i].substr(0, 8) === 'genesect' && Math.random() * 5 > 1) continue;
+			// Gourgeist formes have 1/4 the normal rate each (so Gourgeist as a whole has a normal rate)
+			if (keys[i].substr(0, 9) === 'gourgeist' && Math.random() * 4 > 1) continue;
+			// Not available on XY
+			if (template.species === 'Pichu-Spiky-eared') continue;
+
+			var types = template.types;
+			var skip = false;
+
+			var set = this.randomSet(template, i, megaCount);
+
+			// Illusion shouldn't be on the last pokemon of the team
+			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
+			
+			var typeCombo = types.join();
+
+			// Limit the number of Megas to one, just like in-game
+			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
+			baseFormes[template.baseSpecies] = 1;
+
+			// Okay, the set passes, add it to our team
+			pokemon.push(set);
+
+			pokemonLeft++;
+			// Now that our Pokemon has passed all checks, we can increment the type counter
+			for (var t = 0; t < types.length; t++) {
+				if (types[t] in typeCount) {
+					typeCount[types[t]]++;
+				} else {
+					typeCount[types[t]] = 1;
+				}
+			}
+			typeComboCount[typeCombo] = 1;
+
+			// Increment Uber/NU and mega counter
+			if (tier === 'Uber') {
+				uberCount++;
+			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
+				nuCount++;
+			}
+			if (this.getItem(set.item).megaStone) megaCount++;
+		}
+		return pokemon;
+	},
 	randomCommunityTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
