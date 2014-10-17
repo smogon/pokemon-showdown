@@ -228,6 +228,13 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
+		name: "Smash Bros. Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomSmashBros',
+		ruleset: ['Random (no PotD)']
+	},
+	{
 		name: "Community Random",
 		section: "Random Battles (aka Randbats)",
 
