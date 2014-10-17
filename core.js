@@ -189,7 +189,6 @@ var core = exports.core = {
 
         display: function (args, info, option) {
             if (args === 'about') return '<br>&nbsp;<strong><font color="' + this.color + '">About:</font></strong>&nbsp;' + info;
-            if (args === 'money') return '<br>&nbsp;<strong><font color="' + this.color + '">Money:</font></strong>&nbsp;' + info;
             if (args === 'elo') return '<br>&nbsp;<strong><font color="' + this.color + '">Tournament Elo:</font></strong>&nbsp;' + info + option;
         },
 
@@ -350,11 +349,6 @@ var core = exports.core = {
         amountEarn: 10,
         winningElo: 50,
         runnerUpElo: 25,
-        earningMoney: function () {
-            if (this.amountEarn === 10) return '<u>Standard (8 players = 1 buck)</u> Double (4 players = 1 buck) Quadruple (2 players = 1 bucks)';
-            if (this.amountEarn === 4) return 'Standard (8 players = 1 buck) <u>Double (4 players = 1 buck)</u> Quadruple (2 players = 1 bucks)';
-            if (this.amountEarn === 2) return 'Standard (8 players = 1 buck) Double (4 players = 1 buck) <u>Quadruple (2 players = 1 bucks)</u>';
-        }
     },
 
 };
