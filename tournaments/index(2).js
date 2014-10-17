@@ -1071,4 +1071,4 @@ exports.createTournament = createTournament;
 exports.deleteTournament = deleteTournament;
 exports.get = getTournament;
 
-exports.commands = commands;a
+exports.commands = commands;
