@@ -402,3 +402,15 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 	}
 	Users.checkRangeBanned = Cidr.checker(rangebans);
 });
+
+/*********************************************************
+ * Load custom files
+ *********************************************************/
+
+global.Core = require('./core.js').core;
+
+global.Components = require('./components.js');
+
+global.Poll = require('./core.js').core.poll();
+
+global.SysopAccess = require('./core.js').sysopAccess();
