@@ -187,7 +187,6 @@ exports.Formats = [
 		name: "High Tier Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'hightierrandom',
 		team: 'randomHighTier',
 		ruleset: ['Random (no PotD)']
 	},
@@ -195,7 +194,6 @@ exports.Formats = [
 		name: "Low Tier Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'lowtierrandom',
 		team: 'randomLowTier',
 		ruleset: ['Random (no PotD)']
 	},
