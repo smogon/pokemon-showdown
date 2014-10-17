@@ -166,7 +166,7 @@ var components = exports.components = {
 
     emoticons: 'emoticon',
     emoticon: function (target, room, user) {
-        if (!this.canBroadcast()) return;
+        if (!this.can('declare')) return;
         var name = Object.keys(Core.emoticons),
             emoticons = [];
         var len = name.length;
