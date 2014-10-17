@@ -3084,7 +3084,7 @@ exports.BattleFormatsData = {
 	},
 	kyogreprimal: {
 		randomBattleMoves: ["waterspout","surf","thunder","icebeam","calmmind","rest","sleeptalk","roar"],
-		//requiredItem: "",
+		requiredItem: "Blue Orb",
 		tier: "Unreleased"
 	},
 	groudon: {
@@ -3098,7 +3098,7 @@ exports.BattleFormatsData = {
 	},
 	groudonprimal: {
 		randomBattleMoves: ["earthquake","lavaplume","stealthrock","stoneedge","swordsdance","overheat","rockpolish","firepunch"],
-		//requiredItem: "",
+		requiredItem: "Red Orb",
 		tier: "Unreleased"
 	},
 	rayquaza: {
