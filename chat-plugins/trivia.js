@@ -513,7 +513,8 @@ exports.commands = {
 		var buffer = '<strong>' + playersLen + '</strong> players are participating in this trivia game:<br />';
 		if (!playersLen) return this.sendReplyBox('There are no players in this trivia game.');
 		for (var i = 0; i < playersLen; i++) {
-			players[i] = Users.get(players[i]).name;
+			var player = Users.get(players[i]);
+			if (player) players[i] = player.name;
 		}
 		buffer += Tools.escapeHTML(players.join(', '));
 		this.sendReplyBox(buffer);
