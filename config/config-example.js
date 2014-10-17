@@ -432,6 +432,7 @@ exports.groups = {
 		announce: true,
 		ignorelimits: true,
 		poll: true,
+		roomlist: true,
 		rank: 2
 	},
 	'\u2606': {
