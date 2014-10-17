@@ -228,7 +228,7 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
-		name: "Smash Bros. Random",
+		name: "Super Smash Bros. Random",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomSmashBros',
