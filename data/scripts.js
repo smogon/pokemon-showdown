@@ -2507,11 +2507,11 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
 
-			if (template.species === 'aegislash' && Math.random() * 7 > 1) continue;
-			if (template.species === 'blaziken' && Math.random() * 7 > 1) continue;
-			if (template.species === 'gengar' && Math.random() * 7 > 1) continue;
-			if (template.species === 'kangaskhan' && Math.random() * 7 > 1) continue;
-			if (template.species === 'lucario' && Math.random() * 7 > 1) continue;
+			if (template.species === 'aegislash' && Math.random() * 8 > 1) continue;
+			if (template.species === 'blaziken' && Math.random() * 8 > 1) continue;
+			if (template.species === 'gengar' && Math.random() * 8 > 1) continue;
+			if (template.species === 'kangaskhan' && Math.random() * 8 > 1) continue;
+			if (template.species === 'lucario' && Math.random() * 8 > 1) continue;
 			// CAPs have 20% the normal rate
 			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
 			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
@@ -2655,6 +2655,14 @@ exports.BattleScripts = {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
 			baseFormes[template.baseSpecies] = 1;
+			
+			if (template.id === 'gengar') {
+				set.item = 'blacksludge';
+			} else if (template.id === 'mawile') {
+				set.item = 'leftovers';
+			} else if (template.id === 'lucario') {
+				set.item = 'lifeorb';
+			}
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2755,6 +2763,10 @@ exports.BattleScripts = {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
 			baseFormes[template.baseSpecies] = 1;
+			
+			if (template.id === 'kangaskhan') {
+				set.item = 'lifeorb';
+			}
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
