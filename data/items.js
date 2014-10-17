@@ -473,6 +473,22 @@ exports.BattleItems = {
 		gen: 6,
 		desc: "Mega-evolves Blaziken."
 	},
+	"blueorb": {
+		id: "blueorb",
+		name: "Blue Orb",
+		spritenum: 0,
+		// TODO: implement Primal Reversion
+		primalOrb: "Kyogre-Primal",
+		primalReverses: "Kyogre",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.primalReverses === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Primal-reverses Kyogre."
+	},
 	"blukberry": {
 		id: "blukberry",
 		name: "Bluk Berry",
@@ -3558,6 +3574,22 @@ exports.BattleItems = {
 		num: 542,
 		gen: 5,
 		desc: "If holder is hit, it forces the attacker to switch to a random ally. Single use."
+	},
+	"redorb": {
+		id: "redorb",
+		name: "Red Orb",
+		spritenum: 0,
+		// TODO: implement Primal Reversion
+		primalOrb: "Groudon-Primal",
+		primalReverses: "Groudon",
+		isUnreleased: true,
+		onTakeItem: function (item, source) {
+			if (item.primalReverses === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		num: -6,
+		gen: 6,
+		desc: "Primal-reverses Groudon."
 	},
 	"repeatball": {
 		id: "repeatball",
