@@ -396,6 +396,7 @@ exports.groups = {
 		modchatall: true,
 		rangeban: true,
 		gdeclare: true,
+		clearall: true,
 		roomswag: true,
 		rank: 5
 	},
