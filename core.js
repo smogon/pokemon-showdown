@@ -345,7 +345,6 @@ var core = exports.core = {
     },
 
     tournaments: {
-        tourSize: 8,
         amountEarn: 10,
         winningElo: 50,
         runnerUpElo: 25,
