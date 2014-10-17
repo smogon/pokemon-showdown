@@ -180,6 +180,7 @@ exports.Formats = [
 		name: "Uber Random",
 		section: "Random Battles (aka Randbats)",
 
+		mod: 'uberrandom',
 		team: 'randomUber',
 		ruleset: ['Random (no PotD)']
 	},
@@ -204,6 +205,13 @@ exports.Formats = [
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomLC',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Halloween Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomHalloween',
 		ruleset: ['Random (no PotD)']
 	},
 	{
