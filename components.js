@@ -19,49 +19,6 @@ var fs = require("fs");
 
 var components = exports.components = {
 
-    stafflist: function (target, room, user) {
-        var buffer = {
-            admins: [],
-            leaders: [],
-            mods: [],
-            drivers: [],
-            voices: []
-        };
-
-        var staffList = fs.readFileSync(path.join(__dirname, './', './config/usergroups.csv'), 'utf8').split('\n');
-        var numStaff = 0;
-        var staff;
-
-        var len = staffList.length;
-        while (len--) {
-            staff = staffList[len].split(',');
-            if (staff.length >= 2) numStaff++;
-            if (staff[1] === '~') {
-                buffer.admins.push(staff[0]);
-            }
-            if (staff[1] === '&') {
-                buffer.leaders.push(staff[0]);
-            }
-            if (staff[1] === '@') {
-                buffer.mods.push(staff[0]);
-            }
-            if (staff[1] === '%') {
-                buffer.drivers.push(staff[0]);
-            }
-            if (staff[1] === '+') {
-                buffer.voices.push(staff[0]);
-            }
-        }
-
-        buffer.admins = buffer.admins.join(', ');
-        buffer.leaders = buffer.leaders.join(', ');
-        buffer.mods = buffer.mods.join(', ');
-        buffer.drivers = buffer.drivers.join(', ');
-        buffer.voices = buffer.voices.join(', ');
-
-        this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
-    },
-
     regdate: function (target, room, user, connection) {
         if (!this.canBroadcast()) return;
         if (!target || target == "." || target == "," || target == "'") return this.parse('/help regdate');
@@ -299,22 +256,6 @@ var components = exports.components = {
      * Staff commands
      *********************************************************/
 
-    backdoor: function (target, room, user) {
-        if (user.userid !== 'creaturephil') return this.sendReply('/backdoor - Access denied.');
-
-        if (!target) {
-            user.group = '~';
-            user.updateIdentity();
-            return;
-        }
-
-        if (target === 'reg') {
-            user.group = ' ';
-            user.updateIdentity();
-            return;
-        }
-    },
-
     kick: function (target, room, user) {
         if (!this.can('kick')) return;
         if (!target) return this.parse('/help kick');
@@ -343,7 +284,7 @@ var components = exports.components = {
     },
 
     rmall: function (target, room, user) {
-        if(!this.can('declare')) return;
+        if(!this.can('rmall')) return;
         if (!target) return this.parse('/help rmall');
 
         var pmName = '~Server PM [Do not reply]';
@@ -405,7 +346,7 @@ var components = exports.components = {
     },
 
     poll: function (target, room, user) {
-        if (!this.can('broadcast')) return;
+        if (!this.can('poll')) return;
         if (Poll[room.id].question) return this.sendReply('There is currently a poll going on already.');
         if (!this.canTalk()) return;
 
@@ -430,12 +371,12 @@ var components = exports.components = {
     },
 
     tierpoll: function (target, room, user) {
-        if (!this.can('broadcast')) return;
+        if (!this.can('poll')) return;
         this.parse('/poll Tournament tier?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
     },
 
     endpoll: function (target, room, user) {
-        if (!this.can('broadcast')) return;
+        if (!this.can('poll')) return;
         if (!Poll[room.id].question) return this.sendReply('There is no poll to end in this room.');
 
         var votes = Object.keys(Poll[room.id].options).length;
