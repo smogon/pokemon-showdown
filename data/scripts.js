@@ -3278,6 +3278,24 @@ exports.BattleScripts = {
 	randomSmashBrosTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
+		var dice = this.random(8);
+		if (dice < 1) {
+			lead = 'pikachu';
+		} else if (dice < 2) {
+			lead = 'jigglypuff';
+		} else if (dice < 3) {
+			lead = 'mewtwo';
+		} else if (dice < 4) {
+			lead = 'charizard';
+		} else if (dice < 5) {
+			lead = 'ivysaur';
+		} else if (dice < 6) {
+			lead = 'squirtle';
+		} else if (dice < 7) {
+			lead = 'lucario';
+		} else {
+			lead = 'greninja';
+		}
 		var pokemon = [this.randomSet(this.getTemplate(lead), 0)];
 		var pikachuList = ['pichu', 'meowth', 'electrode', 'raikou', 'zapdos', 'dedenne'];
 		var jigglypuffList = ['chansey', 'clefairy', 'snorlax', 'porygon', 'porygon2', 'togepi', 'munchlax', 'eevee', 'arceus', 'meloetta', 'swirlix', 'xerneas'];
@@ -3302,26 +3320,6 @@ exports.BattleScripts = {
 			}
 		}
 		keys = keys.randomize();
-
-		var dice = this.random(8);
-		var teamGenerate = [];
-		if (dice < 1) {
-			lead = 'pikachu';
-		} else if (dice < 2) {
-			lead = 'jigglypuff';
-		} else if (dice < 3) {
-			lead = 'mewtwo';
-		} else if (dice < 4) {
-			lead = 'charizard';
-		} else if (dice < 5) {
-			lead = 'ivysaur';
-		} else if (dice < 6) {
-			lead = 'squirtle';
-		} else if (dice < 7) {
-			lead = 'lucario';
-		} else {
-			lead = 'greninja';
-		}
 
 		var teamPool = [];
 		if (lead === 'pikachu') {
