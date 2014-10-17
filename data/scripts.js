@@ -2485,7 +2485,7 @@ exports.BattleScripts = {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
-		var pokemonList = ['aegislash', 'arceus', 'arceusbug', 'arceusdark', 'arceusdragon', 'arceuselectric', 'arceusfairy', 'arceusfighting', 'arceusfire', 'arceusflying', 'arceusghost', 'arceusgrass', 'arceusground', 'arceusice', 'arceuspoison', 'arceuspsychic', 'arceusrock', 'arceussteel', 'arceuswater', 'blaziken', 'darkrai', 'deoxys', 'deoxysattack', 'deoxysdefense', 'deoxysspeed', 'dialga', 'genesect', 'gengar', 'giratina', 'giratinaorigin', 'groudon', 'hooh', 'kangaskhan', 'kyogre', 'kyuremwhite', 'lucario', 'lugia', 'mewtwo', 'palkia', 'rayquaza', 'reshiram', 'shayminsky', 'xerneas', 'yveltal', 'zekrom'];
+		var pokemonList = ['aegislash', 'arceus', 'arceusbug', 'arceusdark', 'arceusdragon', 'arceuselectric', 'arceusfairy', 'arceusfighting', 'arceusfire', 'arceusflying', 'arceusghost', 'arceusgrass', 'arceusground', 'arceusice', 'arceuspoison', 'arceuspsychic', 'arceusrock', 'arceussteel', 'arceuswater', 'blaziken', 'darkrai', 'deoxys', 'deoxysattack', 'deoxysdefense', 'deoxysspeed', 'dialga', 'genesect', 'gengar', 'giratina', 'giratinaorigin', 'groudon', 'hooh', 'kangaskhan', 'kyogre', 'kyuremwhite', 'lucario', 'lugia', 'mawile', 'mewtwo', 'palkia', 'rayquaza', 'reshiram', 'shayminsky', 'xerneas', 'yveltal', 'zekrom'];
 		pokemonList = pokemonList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
@@ -2507,11 +2507,6 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
 
-			if (template.species === 'aegislash' && Math.random() * 8 > 1) continue;
-			if (template.species === 'blaziken' && Math.random() * 8 > 1) continue;
-			if (template.species === 'gengar' && Math.random() * 8 > 1) continue;
-			if (template.species === 'kangaskhan' && Math.random() * 8 > 1) continue;
-			if (template.species === 'lucario' && Math.random() * 8 > 1) continue;
 			// CAPs have 20% the normal rate
 			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
 			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
