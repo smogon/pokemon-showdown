@@ -6557,7 +6557,7 @@ exports.BattleMovedex = {
 		notSubBlocked: true,
 		self: {
 			boosts: {
-				def: -1,
+				def: -1
 			}
 		},
 		secondary: false,
