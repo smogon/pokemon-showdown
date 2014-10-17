@@ -268,12 +268,14 @@ exports.customavatars = {
 	'zwlousquen': 'kimisumi2.gif',
 	'wint': 'kimisumi3.jpg',
 	'dos': 'kimisumi4.png',
+	'yungblds': 'kimisumi5.jpg',
 	'madokakanamee': 'furoichi.jpg',
 	'sirenttamashii': 'sairento-tamashii.jpg',
 	'sairenttamashii': 'sairento-tamashii.jpg',
 	'sirentamashii': 'sairento-tamashii.jpg',
 	'sairentotamashii': 'sairento-tamashii.jpg',
 	'ashadowssoul': 'sairento-tamashii.jpg',
+	'lostchristms': 'sairento-tamashii.jpg',
 	'mk1091': 'mk1091.png',
 	'brndncullum': 'brndn-cullum.png',
 	'ejgmorgan': 'ejg-morgan.jpg',
@@ -297,6 +299,12 @@ exports.customavatars = {
 	'ilovepokehack': 'ilovepokehack.jpg',
 	'achromaticlv': 'achromaticlv.png',
 	'aevon': 'aevon.gif',
+	'qwertypops': 'qwertypops.png',
+	'kfcutman': 'kfcutman.gif',
+	'infernogirl': 'kfcutman.gif',
+	'kfcpupitar': 'kfcutman.gif',
+	'megaman775': 'megaman775.gif',
+	'jeran': 'jeran.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
