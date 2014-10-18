@@ -770,7 +770,7 @@ exports.BattleScripts = {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
-		if (this.getTemplate(template.otherFormes[0]).forme === 'Primal' && Math.random() >= 0.5) {
+		if (template.otherFormes && this.getTemplate(template.otherFormes[0]).forme === 'Primal' && Math.random() >= 0.5) {
 			template = this.getTemplate(template.otherFormes[0]);
 		}
 
@@ -1777,7 +1777,7 @@ exports.BattleScripts = {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
-		if (this.getTemplate(template.otherFormes[0]).forme === 'Primal' && Math.random() >= 0.5) {
+		if (template.otherFormes && this.getTemplate(template.otherFormes[0]).forme === 'Primal' && Math.random() >= 0.5) {
 			template = this.getTemplate(template.otherFormes[0]);
 		}
 
