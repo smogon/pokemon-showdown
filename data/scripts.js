@@ -588,6 +588,16 @@ exports.BattleScripts = {
 		}
 		return false;
 	},
+	canPrimalRev: function (template) {
+		if (template.otherFormes) {
+			var forme = this.getTemplate(template.otherFormes[0]);
+			if (forme.requiredItem) {
+				var item = this.getItem(forme.requiredItem);
+				if (item.primalOrb) return true;
+			}
+		}
+		return false;
+	},
 	getTeam: function (side, team) {
 		var format = side.battle.getFormat();
 		if (format.team === 'random') {
@@ -766,9 +776,12 @@ exports.BattleScripts = {
 		}
 
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!noMega && this.canMegaEvo(template) && template.species !== 'Latios' && template.species !== 'Latias') {
+		if (!noMega && this.canMegaEvo(template)) {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
+		}
+		if (this.canPrimalRev(template) && (Math.random() * 2) > 1) {
+			template = this.getTemplate(template.otherFormes[0]);
 		}
 
 		var moveKeys = (template.randomBattleMoves || Object.keys(template.learnset)).randomize();
@@ -1552,7 +1565,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -1670,7 +1683,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -1770,9 +1783,12 @@ exports.BattleScripts = {
 		}
 
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!noMega && this.canMegaEvo(template) && template.species !== 'Latios' && template.species !== 'Latias') {
+		if (!noMega && this.canMegaEvo(template)) {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
+		}
+		if (this.canPrimalRev(template) && (Math.random() * 2) > 1) {
+			template = this.getTemplate(template.otherFormes[0]);
 		}
 
 		var moveKeys = (template.randomDoubleBattleMoves || template.randomBattleMoves || Object.keys(template.learnset)).randomize();
