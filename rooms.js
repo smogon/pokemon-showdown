@@ -479,9 +479,18 @@ var GlobalRoom = (function () {
 		}
 	};
 	GlobalRoom.prototype.checkAutojoin = function (user, connection) {
-		if (user.isStaff) {
-			for (var i = 0; i < this.staffAutojoin.length; i++) {
-				user.joinRoom(this.staffAutojoin[i], connection);
+		for (var i = 0; i < this.staffAutojoin.length; i++) {
+			var room = Rooms.get(this.staffAutojoin[i]);
+			if (!room) {
+				this.staffAutojoin.splice(i, 1);
+				i--;
+				continue;
+			}
+			if (room.staffAutojoin === true && user.isStaff ||
+					typeof room.staffAutojoin === 'string' && room.staffAutojoin.indexOf(user.group) >= 0) {
+				// if staffAutojoin is true: autojoin if isStaff
+				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
+				user.joinRoom(room.id, connection);
 			}
 		}
 	};
