@@ -477,17 +477,26 @@ exports.BattleItems = {
 		id: "blueorb",
 		name: "Blue Orb",
 		spritenum: 0,
-		// TODO: implement Primal Reversion
-		primalOrb: "Kyogre-Primal",
-		primalReverses: "Kyogre",
 		isUnreleased: true,
+		onStart: function (pokemon) {
+			if (pokemon.isActive && pokemon.baseTemplate.species === 'Kyogre') {
+				var template = this.getTemplate('Kyogre-Primal');
+				pokemon.formeChange(template);
+				pokemon.baseTemplate = template;
+				pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				this.add('detailschange', pokemon, pokemon.details);
+				this.add('message', pokemon.name + "'s Primal Reversion! It reverted to its primal form!");
+				pokemon.setAbility(template.abilities['0']);
+				pokemon.baseAbility = pokemon.ability;
+			}
+		},
 		onTakeItem: function (item, source) {
-			if (item.primalReverses === source.baseTemplate.baseSpecies) return false;
+			if (source.baseTemplate.baseSpecies === 'Kyogre') return false;
 			return true;
 		},
 		num: -6,
 		gen: 6,
-		desc: "Primal-reverses Kyogre."
+		desc: "Reverts Kyogre to its Primal form."
 	},
 	"blukberry": {
 		id: "blukberry",
@@ -3579,17 +3588,26 @@ exports.BattleItems = {
 		id: "redorb",
 		name: "Red Orb",
 		spritenum: 0,
-		// TODO: implement Primal Reversion
-		primalOrb: "Groudon-Primal",
-		primalReverses: "Groudon",
 		isUnreleased: true,
+		onStart: function (pokemon) {
+			if (pokemon.isActive && pokemon.baseTemplate.species === 'Groudon') {
+				var template = this.getTemplate('Groudon-Primal');
+				pokemon.formeChange(template);
+				pokemon.baseTemplate = template;
+				pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				this.add('detailschange', pokemon, pokemon.details);
+				this.add('message', pokemon.name + "'s Primal Reversion! It reverted to its primal form!");
+				pokemon.setAbility(template.abilities['0']);
+				pokemon.baseAbility = pokemon.ability;
+			}
+		},
 		onTakeItem: function (item, source) {
-			if (item.primalReverses === source.baseTemplate.baseSpecies) return false;
+			if (source.baseTemplate.baseSpecies === 'Groudon') return false;
 			return true;
 		},
 		num: -6,
 		gen: 6,
-		desc: "Primal-reverses Groudon."
+		desc: "Reverts Groudon to its Primal form."
 	},
 	"repeatball": {
 		id: "repeatball",

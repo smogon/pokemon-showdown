@@ -588,16 +588,6 @@ exports.BattleScripts = {
 		}
 		return false;
 	},
-	canPrimalRev: function (template) {
-		if (template.otherFormes) {
-			var forme = this.getTemplate(template.otherFormes[0]);
-			if (forme.requiredItem) {
-				var item = this.getItem(forme.requiredItem);
-				if (item.primalOrb) return true;
-			}
-		}
-		return false;
-	},
 	getTeam: function (side, team) {
 		var format = side.battle.getFormat();
 		if (format.team === 'random') {
@@ -780,7 +770,7 @@ exports.BattleScripts = {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
-		if (this.canPrimalRev(template) && (Math.random() * 2) > 1) {
+		if (this.getTemplate(template.otherFormes[0]).forme === 'Primal' && Math.random() >= 0.5) {
 			template = this.getTemplate(template.otherFormes[0]);
 		}
 
@@ -1787,7 +1777,7 @@ exports.BattleScripts = {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
-		if (this.canPrimalRev(template) && (Math.random() * 2) > 1) {
+		if (this.getTemplate(template.otherFormes[0]).forme === 'Primal' && Math.random() >= 0.5) {
 			template = this.getTemplate(template.otherFormes[0]);
 		}
 
