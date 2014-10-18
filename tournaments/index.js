@@ -655,10 +655,10 @@ Tournament = (function () {
 		};
 	};
 	Tournament.prototype.onBattleWin = function (room, winner) {
-		var from = Users.get(room.p1);
-		var to = Users.get(room.p2);
-		fromElo = Number(Core.stdin('elo', toId(from))),
-		toElo = Number(Core.stdin('elo', toId(to))), arr;
+		var from = Users.get(room.p1),
+			to = Users.get(room.p2),
+			fromElo = Number(Core.stdin('elo', toId(from))),
+			toElo = Number(Core.stdin('elo', toId(to))), arr;
 
 		var result = 'draw';
 		if (from === winner) {
