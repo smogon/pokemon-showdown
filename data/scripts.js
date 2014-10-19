@@ -1539,6 +1539,14 @@ exports.BattleScripts = {
 		if (template.name === 'Serperior' && ability === 'Contrary') level = 76;
 		if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 90;
 
+		if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
+			var hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+			if (hp % 2 > 0) {
+				evs.hp -= 4;
+				evs.atk += 4;
+			}
+		}
+
 		return {
 			name: name,
 			moves: moves,
