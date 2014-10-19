@@ -1532,7 +1532,8 @@ exports.BattleScripts = {
 			// Holistic judgment
 			Genesect: 72, Sigilyph: 76, Xerneas: 66
 		};
-		var level = levelScale[template.tier] || 90;
+		var tier = template.forme && template.tier === 'Unreleased' ? this.getTemplate(template.baseSpecies).tier : template.tier;
+		var level = levelScale[tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		if (template.name === 'Serperior' && ability === 'Contrary') level = 76;
