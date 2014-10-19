@@ -363,16 +363,17 @@ BattlePokemon = (function () {
 			if (side === this.side) continue;
 			for (var j = 0; j < side.active.length; ++j) {
 				var pokemon = side.active[j];
-				if (!pokemon || pokemon.fainted ||
-					!pokemon.template.abilities) continue;
-				for (var k in pokemon.template.abilities) {
-					var ability = pokemon.template.abilities[k];
+				if (!pokemon || pokemon.fainted) continue;
+				var template = (pokemon.illusion || pokemon).template;
+				if (!template.abilities) continue;
+				for (var k in template.abilities) {
+					var ability = template.abilities[k];
 					if (ability === pokemon.ability) {
 						// This event was already run above so we don't need
 						// to run it again.
 						continue;
 					}
-					if ((k === 'H') && pokemon.template.unreleasedHidden) {
+					if ((k === 'H') && template.unreleasedHidden) {
 						// unreleased hidden ability
 						continue;
 					}
@@ -389,7 +390,6 @@ BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.calculateStat = function (statName, boost, modifier) {
 		statName = toId(statName);
-		// var boost = this.boosts[statName];
 
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
@@ -554,9 +554,7 @@ BattlePokemon = (function () {
 	BattlePokemon.prototype.getRequestData = function () {
 		var lockedMove = this.getLockedMove();
 		var data = {moves: this.getMoves(lockedMove)};
-		if (this.trapped) {
-			data.trapped = true;
-		} else if (this.maybeTrapped) {
+		if (this.maybeTrapped) {
 			data.maybeTrapped = true;
 		}
 		return data;
@@ -712,16 +710,11 @@ BattlePokemon = (function () {
 			evasion: 0
 		};
 
-		this.moveset = [];
-		this.moves = [];
-		// we're copying array contents
-		// DO NOT "optimize" it to copy just the pointer
-		// if you don't know what a pointer is, please don't
-		// touch this code
-		for (var i = 0; i < this.baseMoveset.length; i++) {
-			this.moveset.push(this.baseMoveset[i]);
-			this.moves.push(toId(this.baseMoveset[i].move));
-		}
+		this.moveset = this.baseMoveset.slice();
+		this.moves = this.moveset.map(function (move) {
+			return toId(move.move);
+		});
+
 		this.transformed = false;
 		this.ability = this.baseAbility;
 		this.set.ivs = this.baseIvs;
@@ -760,12 +753,14 @@ BattlePokemon = (function () {
 	};
 	// returns the amount of damage actually dealt
 	BattlePokemon.prototype.faint = function (source, effect) {
+		// This function only puts the pokemon in the faint queue;
+		// actually setting of this.fainted comes later when the
+		// faint queue is resolved.
 		if (this.fainted || this.status === 'fnt') return 0;
 		var d = this.hp;
 		this.hp = 0;
 		this.switchFlag = false;
 		this.status = 'fnt';
-		// this.fainted = true;
 		this.battle.faintQueue.push({
 			target: this,
 			source: source,
@@ -2927,9 +2922,6 @@ Battle = (function () {
 
 		// randomizer
 		// this is not a modifier
-		// gen 1-2
-		//var randFactor = Math.floor(Math.random() * 39) + 217;
-		//baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
 		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
 		// STAB
@@ -3366,7 +3358,6 @@ Battle = (function () {
 				break;
 			}
 			this.switchIn(decision.target, decision.pokemon.position);
-			//decision.target.runSwitchIn();
 			break;
 		case 'runSwitch':
 			decision.pokemon.isStarted = true;
@@ -3517,6 +3508,11 @@ Battle = (function () {
 		// from splitting the string sent by our forked process, not from the
 		// client. However, just in case, we maintain this check for now.
 		if (typeof choice === 'string') choice = choice.split(',');
+
+		if (side.decision && side.decision.finalDecision) {
+			this.debug("Can't cancel decision: the last pokemon could have been trapped");
+			return;
+		}
 
 		side.decision = this.parseChoice(choice, side);
 

@@ -33,6 +33,15 @@ exports.Formats = [
 		name: "Ubers",
 		section: "XY Singles",
 
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview'],
+		banlist: []
+	},
+	{
+		name: "Ubers (suspect test)",
+		section: "XY Singles",
+
+		challengeShow: false,
 		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview'],
 		banlist: []
 	},
@@ -66,6 +75,15 @@ exports.Formats = [
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
 	},
 	{
+		name: "CAP Plasmanta Playtest",
+		section: "XY Singles",
+
+		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew',
+			'Tomohawk', 'Necturna', 'Mollux', 'Aurumoth', 'Malaconda', 'Cawmodore', 'Volkraken', 'Syclant', 'Revenankh', 'Pyroak', 'Fidgit', 'Stratagem', 'Arghonaut', 'Kitsunoh', 'Cyclohm', 'Colossoil', 'Krilowatt', 'Voodoom'
+		]
+	},
+	{
 		name: "Battle Spot Singles",
 		section: "XY Singles",
 
@@ -83,15 +101,6 @@ exports.Formats = [
 			if (team.length < 3) return ['You must bring at least three Pokémon.'];
 		}
 	},
-	/*{
-		name: "CAP 19 Playtest",
-		section: "XY Singles",
-
-		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Soul Dew',
-			'Tomohawk', 'Necturna', 'Mollux', 'Aurumoth', 'Malaconda', 'Cawmodore', 'Volkraken', 'Syclant', 'Revenankh', 'Pyroak', 'Fidgit', 'Stratagem', 'Arghonaut', 'Kitsunoh', 'Cyclohm', 'Colossoil', 'Krilowatt', 'Voodoom'
-		]
-	},*/
 	{
 		name: "Halloween Party",
 		section: "XY Singles",
@@ -371,7 +380,7 @@ exports.Formats = [
 		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Team Preview', 'HP Percentage Mod'],
+		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard']
 	},
 	{

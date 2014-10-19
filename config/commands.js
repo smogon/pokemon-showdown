@@ -172,7 +172,7 @@ var commands = exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 
-		this.sendReply("User: " + targetUser.name);
+		this.sendReply("|raw|User: " + targetUser.name + (!targetUser.connected ? ' <font color="gray"><em>(offline)</em></font>' : ''));
 		if (user.can('alts', targetUser)) {
 			var alts = targetUser.getAlts(true);
 			var output = Object.keys(targetUser.prevNames).join(", ");
@@ -183,7 +183,7 @@ var commands = exports.commands = {
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.group === '~' && user.group !== '~') continue;
 
-				this.sendReply("Alt: " + targetAlt.name);
+				this.sendReply("|raw|Alt: " + targetAlt.name + (!targetAlt.connected ? ' <font color="gray"><em>(offline)</em></font>' : ''));
 				output = Object.keys(targetAlt.prevNames).join(", ");
 				if (output) this.sendReply("Previous names: " + output);
 			}
@@ -200,7 +200,7 @@ var commands = exports.commands = {
 		if (!targetUser.authenticated) {
 			this.sendReply("(Unregistered)");
 		}
-		if (!this.broadcasting && (user.can('ip', targetUser) || user === targetUser)) {
+		if (user.can('ip', targetUser) || user === targetUser) {
 			var ips = Object.keys(targetUser.ips);
 			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ") +
 					(user.group !== ' ' && targetUser.latestHost ? "\nHost: " + targetUser.latestHost : ""));
@@ -208,11 +208,12 @@ var commands = exports.commands = {
 		var output = "In rooms: ";
 		var first = true;
 		for (var i in targetUser.roomCount) {
-			if (i === 'global' || Rooms.get(i).isPrivate) continue;
+			var targetRoom = Rooms.get(i);
+			if (i === 'global' || targetRoom.isPrivate) continue;
 			if (!first) output += " | ";
 			first = false;
 
-			output += '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			output += (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
 		}
 		this.sendReply('|raw|' + output);
 	},
@@ -385,11 +386,10 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
 		var searches = {};
-		var allTiers = {'uber':1, 'ou':1, 'uu':1, 'lc':1, 'cap':1, 'bl':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1, 'pu':1};
+		var allTiers = {'uber':1, 'ou':1, 'uu':1, 'lc':1, 'cap':1, 'bl':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1, 'pu':1, 'nfe':1};
 		var allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 		var showAll = false;
 		var megaSearch = null;
-		var feSearch = null; // search for fully evolved pokemon only
 		var recoverySearch = null;
 		var output = 10;
 
@@ -446,13 +446,6 @@ var commands = exports.commands = {
 				continue;
 			}
 
-			if (target === 'fe' || target === 'fullyevolved' || target === 'nfe' || target === 'notfullyevolved') {
-				if (target === 'nfe' || target === 'notfullyevolved') isNotSearch = !isNotSearch;
-				if ((feSearch && isNotSearch) || (feSearch === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include fully evolved Pokémon.');
-				feSearch = !isNotSearch;
-				continue;
-			}
-
 			if (target === 'recovery') {
 				if ((recoverySearch && isNotSearch) || (recoverySearch === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and recovery moves.');
 				if (!searches['recovery']) searches['recovery'] = {};
@@ -482,15 +475,14 @@ var commands = exports.commands = {
 			return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' could not be found in any of the search categories.");
 		}
 
-		if (showAll && Object.size(searches) === 0 && megaSearch === null && feSearch === null) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.");
+		if (showAll && Object.size(searches) === 0 && megaSearch === null) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.");
 
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
 			var template = Tools.getTemplate(pokemon);
 			var megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
-			var feSearchResult = (feSearch === null || (feSearch === true && !template.evos.length) || (feSearch === false && template.evos.length));
 			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) &&
-				megaSearchResult && feSearchResult) {
+				megaSearchResult) {
 				dex[pokemon] = template;
 			}
 		}
@@ -1181,7 +1173,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'ubers' || target === 'uber') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3513127/\">np: XY Ubers Gengarite Suspect Test</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3519501/\">np: XY Ubers Shadow Tag Suspect Test</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496305/\">Ubers Viability Rankings</a><br />";
 		}
 		if (target === 'underused' || target === 'uu') {
@@ -1204,8 +1196,9 @@ var commands = exports.commands = {
 		}
 		if (target === 'littlecup' || target === 'lc') {
 			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505710/\">Metagame Discussion Thread</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3490462/\">LC Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496013/\">LC Viability Rankings</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3490462/\">Official LC Banlist</a><br />";
 		}
 		if (target === 'smogondoubles' || target === 'doubles') {
 			matched = true;
@@ -1538,7 +1531,7 @@ var commands = exports.commands = {
 			this.sendReply("/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria.");
 			this.sendReply("Search categories are: type, tier, color, moves, ability, gen.");
 			this.sendReply("Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.");
-			this.sendReply("Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/PU/LC/CAP.");
+			this.sendReply("Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/PU/NFE/LC/CAP.");
 			this.sendReply("Types must be followed by ' type', e.g., 'dragon type'.");
 			this.sendReply("Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.");
 			this.sendReply("The parameter 'mega' can be added to search for Mega Evolutions only, and the parameters 'FE' or 'NFE' can be added to search fully or not-fully evolved Pokemon only.");

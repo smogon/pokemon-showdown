@@ -766,9 +766,12 @@ exports.BattleScripts = {
 		}
 
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!noMega && this.canMegaEvo(template) && template.species !== 'Latios' && template.species !== 'Latias') {
+		if (!noMega && this.canMegaEvo(template)) {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
+		}
+		if (template.otherFormes && this.getTemplate(template.otherFormes[0]).forme === 'Primal' && Math.random() >= 0.5) {
+			template = this.getTemplate(template.otherFormes[0]);
 		}
 
 		var moveKeys = (template.randomBattleMoves || Object.keys(template.learnset)).randomize();
@@ -1295,7 +1298,7 @@ exports.BattleScripts = {
 				rejectAbility = template.id !== 'bidoof';
 			} else if (ability === 'Limber') {
 				rejectAbility = template.id === 'stunfisk';
-			} else if (ability === 'Lightningrod') {
+			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
 			} else if (ability === 'Gluttony') {
 				rejectAbility = true;
@@ -1529,7 +1532,8 @@ exports.BattleScripts = {
 			// Holistic judgment
 			Genesect: 72, Sigilyph: 76, Xerneas: 66
 		};
-		var level = levelScale[template.tier] || 90;
+		var tier = template.forme && template.tier === 'Unreleased' ? this.getTemplate(template.baseSpecies).tier : template.tier;
+		var level = levelScale[tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		if (template.name === 'Serperior' && ability === 'Contrary') level = 76;
@@ -1552,7 +1556,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -1670,7 +1674,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -1770,9 +1774,12 @@ exports.BattleScripts = {
 		}
 
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!noMega && this.canMegaEvo(template) && template.species !== 'Latios' && template.species !== 'Latias') {
+		if (!noMega && this.canMegaEvo(template)) {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
+		}
+		if (template.otherFormes && this.getTemplate(template.otherFormes[0]).forme === 'Primal' && Math.random() >= 0.5) {
+			template = this.getTemplate(template.otherFormes[0]);
 		}
 
 		var moveKeys = (template.randomDoubleBattleMoves || template.randomBattleMoves || Object.keys(template.learnset)).randomize();
@@ -2258,7 +2265,7 @@ exports.BattleScripts = {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
 			} else if (ability === 'Moody') {
 				rejectAbility = template.id !== 'bidoof';
-			} else if (ability === 'Lightningrod') {
+			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
 			}
 
