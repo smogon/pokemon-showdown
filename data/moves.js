@@ -5367,7 +5367,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day, raises the user's Attack and Special Attack by 2 stages.",
-		shortDesc: "Boosts the user's Attack and Sp. Atk by 1.",
+		shortDesc: "Boosts the user's Attack and Sp. Atk by 1, or 2 in sun.",
 		id: "growth",
 		isViable: true,
 		name: "Growth",
