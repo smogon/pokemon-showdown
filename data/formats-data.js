@@ -2905,7 +2905,7 @@ exports.BattleFormatsData = {
 	},
 	glaliemega: {
 		randomBattleMoves: ["crunch","iceshard","taunt","earthquake","explosion","return"],
-		requiredItem: "Glalite",
+		requiredItem: "Glalitite",
 		tier: "Unreleased"
 	},
 	froslass: {
