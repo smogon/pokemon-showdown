@@ -209,6 +209,7 @@ exports.BattleAliases = {
 	"terra": "Terrakion",
 	"ttar": "Tyranitar",
 	"zam": "Alakazam",
+	"ohmagod":"Plasmanta",
 
 	// moves
 	"bpass": "Baton Pass",
