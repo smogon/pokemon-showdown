@@ -5312,9 +5312,19 @@ exports.BattleMovedex = {
 					pokemon.disabledMoves[m] = true;
 				}
 				var applies = false;
-				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly') || pokemon.removeVolatile('skydrop')) {
+				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
 					applies = true;
 					this.cancelMove(pokemon);
+				}
+				if (pokemon.volatiles['skydrop']) {
+					applies = true;
+					this.cancelMove(pokemon);
+
+					if (pokemon.volatiles['skydrop'].source) {
+						this.add('-end', pokemon.volatiles['twoturnmove'].source, 'Sky Drop', '[interrupt]');
+					}
+					pokemon.removeVolatile('skydrop');
+					pokemon.removeVolatile('twoturnmove');
 				}
 				if (pokemon.volatiles['magnetrise']) {
 					applies = true;
@@ -11989,37 +11999,32 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isTwoTurnMove: true,
-		onTry: function (attacker, defender, move) {
-			if (defender.fainted) return false;
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			if (defender.volatiles['substitute'] || defender.side === attacker.side) {
-				return false;
-			}
-			if (defender.weightkg >= 200) {
-				this.add('-fail', defender, 'move: Sky Drop', '[heavy]');
+		onTryHit: function (target, source, move) {
+			if (target.fainted) return false;
+			if (source.removeVolatile(move.id)) {
+				if (target !== source.volatiles['twoturnmove'].source) return false;
+
+				if (target.hasType('Flying') && !target.negateImmunity['Ground']) {
+					this.add('-immune', target, '[msg]');
+					this.add('-end', target, 'Sky Drop');
+					return null;
+				}
+			} else {
+				if (target.volatiles['substitute'] || target.side === source.side) {
+					return false;
+				}
+				if (target.weightkg >= 200) {
+					this.add('-fail', target, 'move: Sky Drop', '[heavy]');
+					return null;
+				}
+
+				this.add('-prepare', source, move.name, target);
+				source.addVolatile('twoturnmove', target);
 				return null;
 			}
-			if (defender.volatiles['protect']) {
-				this.add('-activate', defender, 'Protect');
-				return null;
-			}
-			if (defender.volatiles['bounce'] || defender.volatiles['dig'] || defender.volatiles['dive'] || defender.volatiles['fly'] || defender.volatiles['phantomforce'] || defender.volatiles['shadowforce'] || defender.volatiles['skydrop']) {
-				this.add('-miss', attacker, defender);
-				return null;
-			}
-			this.add('-prepare', attacker, move.name, defender);
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
 		},
-		onTryHit: function (target, source) {
-			if (target !== source.volatiles['twoturnmove'].source) return false;
-			if (target.hasType('Flying')) {
-				this.add('-immune', target, '[msg]');
-				return null;
-			}
+		onHit: function (target, source) {
+			this.add('-end', target, 'Sky Drop');
 		},
 		effect: {
 			duration: 2,
@@ -12029,12 +12034,18 @@ exports.BattleMovedex = {
 				if (defender !== this.effectData.source) return;
 				defender.trapped = true;
 			},
+			onFoeBeforeMovePriority: 11,
 			onFoeBeforeMove: function (attacker, defender, move) {
 				if (attacker === this.effectData.source) {
 					this.debug('Sky drop nullifying.');
 					this.add('-message', '(Sky Drop prevented a Pokemon from moving.)');
 					return null;
 				}
+			},
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				if (this.effectData.source.fainted) return;
+				return this.effectData.source;
 			},
 			onAnyAccuracy: function (accuracy, target, source, move) {
 				if (target !== this.effectData.target && target !== this.effectData.source) {
@@ -12063,6 +12074,11 @@ exports.BattleMovedex = {
 				}
 				if (move.id === 'gust' || move.id === 'twister') {
 					return this.chainModify(2);
+				}
+			},
+			onFaint: function (target) {
+				if (target.volatiles['skydrop'] && target.volatiles['twoturnmove'].source) {
+					this.add('-end', target.volatiles['twoturnmove'].source, 'Sky Drop', '[interrupt]');
 				}
 			}
 		},
