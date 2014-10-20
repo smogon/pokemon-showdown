@@ -93,7 +93,6 @@ exports.commands = {
 			say: 1,
 			joke: 1,
 			choose: 1,
-			usagestats: 1,
 			helix: 1,
 			banword: 1
 		};
@@ -395,32 +394,6 @@ exports.commands = {
 
 		var choice = choices[Math.floor(Math.random()*choices.length)];
 		this.say(con, room, ((this.canUse('choose', room, by) || room.charAt(0) === ',') ? '':'/pm ' + by + ', ') + stripCommands(choice));
-	},
-	usage: 'usagestats',
-	usagestats: function(arg, by, room, con) {
-		if (this.canUse('usagestats', room, by) || room.charAt(0) === ',') {
-			var text = '';
-		} else {
-			var text = '/pm ' + by + ', ';
-		}
-		text += 'http://sim.smogon.com:8080/Stats/';
-		this.say(con, room, text);
-	},
-	seen: function(arg, by, room, con) { // this command is still a bit buggy
-		var text = (room.charAt(0) === ',' ? '' : '/pm ' + by + ', ');
-		arg = toId(arg);
-		if (!arg || arg.length > 18) return this.say(con, room, text + 'Invalid username.');
-		if (arg === toId(by)) {
-			text += 'Have you looked in the mirror lately?';
-		} else if (arg === toId(config.nick)) {
-			text += 'You might be either blind or illiterate. Might want to get that checked out.';
-		} else if (!this.chatData[arg] || !this.chatData[arg].seenAt) {
-			text += 'The user ' + arg + ' has never been seen.';
-		} else {
-			text += arg + ' was last seen ' + this.getTimeAgo(this.chatData[arg].seenAt) + ' ago' + (
-				this.chatData[arg].lastSeen ? ', ' + this.chatData[arg].lastSeen : '.');
-		}
-		this.say(con, room, text);
 	},
 	helix: function(arg, by, room, con) {
 		if (this.canUse('helix', room, by) || room.charAt(0) === ',') {
