@@ -305,6 +305,9 @@ exports.customavatars = {
 	'kfcpupitar': 'kfcutman.gif',
 	'megaman775': 'megaman775.gif',
 	'jeran': 'jeran.png',
+	'dracomasterpain': 'dracomasterpain.gif',
+	'langur': 'langur.gif',
+	'masterneyney': 'masterneyney.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
