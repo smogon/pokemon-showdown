@@ -81,6 +81,9 @@ Tournament = (function () {
 		this.generator = generator;
 		this.isRated = isRated;
 		this.playerCap = parseInt(playerCap) || Config.tournamentDefaultPlayerCap || 0;
+		if (Config.tournamentDefaultPlayerCap && this.playerCap > Config.tournamentDefaultPlayerCap) {
+			ResourceMonitor.log('[ResourceMonitor] Room ' + room.id + ' starting a tour over default cap (' + this.playerCap + ')');
+		}
 
 		this.isBracketInvalidated = true;
 		this.lastBracketUpdate = 0;
@@ -630,7 +633,7 @@ Tournament = (function () {
 		if (!this.pendingChallenges.get(challenge.from)) return;
 		if (!this.pendingChallenges.get(user)) return;
 
-		var room = Rooms.global.startBattle(challenge.from, user, this.format, this.isRated, challenge.team, user.team);
+		var room = Rooms.global.startBattle(challenge.from, user, this.format, challenge.team, user.team, {rated: this.isRated, tour: this});
 		if (!room) return;
 
 		this.pendingChallenges.set(challenge.from, null);

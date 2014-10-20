@@ -456,12 +456,12 @@ exports.BattleMovedex = {
 			for (var j = 0; j < target.side.pokemon.length; j++) {
 				var pokemon = target.side.pokemon[j];
 				if (pokemon === target) continue;
-				for (var i = 0; i < pokemon.moves.length; i++) {
-					var move = pokemon.moves[i];
+				for (var i = 0; i < pokemon.moveset.length; i++) {
+					var move = pokemon.moveset[i].id;
 					var noAssist = {
 						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, kingsshield:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
 					};
-					if (move && !noAssist[move]) {
+					if (!noAssist[move]) {
 						moves.push(move);
 					}
 				}
@@ -505,6 +505,11 @@ exports.BattleMovedex = {
 				if (target.position === this.effectData.position) {
 					this.debug('damaged this turn');
 					this.effectData.hurt = true;
+				}
+			},
+			onFoeSwitchOut: function (pokemon) {
+				if (pokemon.position === this.effectData.position) {
+					this.effectData.hurt = false;
 				}
 			}
 		},
@@ -2885,6 +2890,28 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Dragon"
+	},
+	"dragonascent": {
+		num: 620,
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		desc: "Deals damage to one adjacent or non-adjacent target and lowers the user's Defense and Special Defense by 1 stage. Makes contact.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
+		id: "dragonascent",
+		name: "Dragon Ascent",
+		pp: 5,
+		priority: 0,
+		isUnreleased: true,
+		isContact: true,
+		self: {
+			boosts: {
+				def: -1,
+				spd: -1
+			}
+		},
+		target: "any",
+		type: "Flying"
 	},
 	"dragonbreath": {
 		num: 225,
@@ -5285,9 +5312,19 @@ exports.BattleMovedex = {
 					pokemon.disabledMoves[m] = true;
 				}
 				var applies = false;
-				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly') || pokemon.removeVolatile('skydrop')) {
+				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
 					applies = true;
 					this.cancelMove(pokemon);
+				}
+				if (pokemon.volatiles['skydrop']) {
+					applies = true;
+					this.cancelMove(pokemon);
+
+					if (pokemon.volatiles['skydrop'].source) {
+						this.add('-end', pokemon.volatiles['twoturnmove'].source, 'Sky Drop', '[interrupt]');
+					}
+					pokemon.removeVolatile('skydrop');
+					pokemon.removeVolatile('twoturnmove');
 				}
 				if (pokemon.volatiles['magnetrise']) {
 					applies = true;
@@ -6513,6 +6550,29 @@ exports.BattleMovedex = {
 		},
 		target: "normal",
 		type: "Normal"
+	},
+	"hyperspacefury": {
+		num: 621,
+		accuracy: true,
+		basePower: 100,
+		category: "Special",
+		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. Lowers the user's Defense by 1 stage. Makes contact.",
+		shortDesc: "Breaks protect and lowers user's Def. by 1.",
+		id: "hyperspacefury",
+		name: "Hyperspace Fury",
+		pp: 5,
+		priority: 0,
+		isUnreleased: true,
+		breaksProtect: true,
+		notSubBlocked: true,
+		self: {
+			boosts: {
+				def: -1
+			}
+		},
+		secondary: false,
+		target: "normal",
+		type: "Dark"
 	},
 	"hyperspacehole": {
 		num: 593,
@@ -8231,7 +8291,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "A random move is selected for use, other than After You, Assist, Belch, Bestow, Celebrate, Chatter, Copycat, Counter, Covet, Crafty Shield, Destiny Bond, Detect, Diamond Storm, Endure, Feint, Focus Punch, Follow Me, Freeze Shock, Happy Hour, Helping Hand, Hold Hands, Hyperspace Hole, Ice Burn, King's Shield, Light of Ruin, Mat Block, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Sketch, Sleep Talk, Snarl, Snatch, Snore, Spiky Shield, Steam Eruption, Struggle, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Transform, Trick, V-create, or Wide Guard.",
+		desc: "A random move is selected for use, other than After You, Assist, Belch, Bestow, Celebrate, Chatter, Copycat, Counter, Covet, Crafty Shield, Destiny Bond, Detect, Diamond Storm, Dragon Ascent, Endure, Feint, Focus Punch, Follow Me, Freeze Shock, Happy Hour, Helping Hand, Hold Hands, Hyperspace Fury, Hyperspace Hole, Ice Burn, King's Shield, Light of Ruin, Mat Block, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Origin Pulse, Precipice Blade, Protect, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Sketch, Sleep Talk, Snarl, Snatch, Snore, Spiky Shield, Steam Eruption, Struggle, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Transform, Trick, V-create, or Wide Guard.",
 		shortDesc: "Picks a random move.",
 		id: "metronome",
 		name: "Metronome",
@@ -8244,7 +8304,7 @@ exports.BattleMovedex = {
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
 				var noMetronome = {
-					afteryou:1, assist:1, belch:1, bestow:1, celebrate:1, chatter:1, copycat:1, counter:1, covet:1, craftyshield:1, destinybond:1, detect:1, diamondstorm:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, happyhour:1, helpinghand:1, holdhands:1, hyperspacehole:1, iceburn:1, kingsshield:1, lightofruin:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snarl:1, snatch:1, snore:1, spikyshield:1, steameruption:1, struggle:1, switcheroo:1, technoblast:1, thief:1, thousandarrows:1, thousandwaves:1, transform:1, trick:1, vcreate:1, wideguard:1
+					afteryou:1, assist:1, belch:1, bestow:1, celebrate:1, chatter:1, copycat:1, counter:1, covet:1, craftyshield:1, destinybond:1, detect:1, diamondstorm:1, dragonascent:1, endure:1, feint:1, focuspunch:1, followme:1, freezeshock:1, happyhour:1, helpinghand:1, holdhands:1, hyperspacefury:1, hyperspacehole:1, iceburn:1, kingsshield:1, lightofruin:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, originpulse:1, precipiceblades:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snarl:1, snatch:1, snore:1, spikyshield:1, steameruption:1, struggle:1, switcheroo:1, technoblast:1, thief:1, thousandarrows:1, thousandwaves:1, transform:1, trick:1, vcreate:1, wideguard:1
 				};
 				if (!noMetronome[move.id]) {
 					moves.push(move);
@@ -9106,6 +9166,22 @@ exports.BattleMovedex = {
 		target: "normal",
 		type: "Ghost"
 	},
+	"originpulse": {
+		num: 618,
+		accuracy: 85,
+		basePower: 110,
+		category: "Special",
+		desc: "Deals damage to all adjacent foes.",
+		shortDesc: "Deals damage to all adjacent foes.",
+		id: "originpulse",
+		name: "Origin Pulse",
+		pp: 10,
+		priority: 0,
+		isUnreleased: true,
+		isPulseMove: true,
+		target: "allAdjacentFoes",
+		type: "Water"
+	},
 	"outrage": {
 		num: 200,
 		accuracy: 100,
@@ -9809,6 +9885,21 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Grass"
+	},
+	"precipiceblades": {
+		num: 619,
+		accuracy: 85,
+		basePower: 120,
+		category: "Physical",
+		desc: "Deals damage to all adjacent foes.",
+		shortDesc: "Deals damage to all adjacent foes.",
+		id: "precipiceblades",
+		name: "Precipice Blades",
+		pp: 10,
+		priority: 0,
+		isUnreleased: true,
+		target: "allAdjacentFoes",
+		type: "Ground"
 	},
 	"present": {
 		num: 217,
@@ -11908,37 +11999,32 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isContact: true,
-		isTwoTurnMove: true,
-		onTry: function (attacker, defender, move) {
-			if (defender.fainted) return false;
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			if (defender.volatiles['substitute'] || defender.side === attacker.side) {
-				return false;
-			}
-			if (defender.weightkg >= 200) {
-				this.add('-fail', defender, 'move: Sky Drop', '[heavy]');
+		onTryHit: function (target, source, move) {
+			if (target.fainted) return false;
+			if (source.removeVolatile(move.id)) {
+				if (target !== source.volatiles['twoturnmove'].source) return false;
+
+				if (target.hasType('Flying') && !target.negateImmunity['Ground']) {
+					this.add('-immune', target, '[msg]');
+					this.add('-end', target, 'Sky Drop');
+					return null;
+				}
+			} else {
+				if (target.volatiles['substitute'] || target.side === source.side) {
+					return false;
+				}
+				if (target.weightkg >= 200) {
+					this.add('-fail', target, 'move: Sky Drop', '[heavy]');
+					return null;
+				}
+
+				this.add('-prepare', source, move.name, target);
+				source.addVolatile('twoturnmove', target);
 				return null;
 			}
-			if (defender.volatiles['protect']) {
-				this.add('-activate', defender, 'Protect');
-				return null;
-			}
-			if (defender.volatiles['bounce'] || defender.volatiles['dig'] || defender.volatiles['dive'] || defender.volatiles['fly'] || defender.volatiles['phantomforce'] || defender.volatiles['shadowforce'] || defender.volatiles['skydrop']) {
-				this.add('-miss', attacker, defender);
-				return null;
-			}
-			this.add('-prepare', attacker, move.name, defender);
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
 		},
-		onTryHit: function (target, source) {
-			if (target !== source.volatiles['twoturnmove'].source) return false;
-			if (target.hasType('Flying')) {
-				this.add('-immune', target, '[msg]');
-				return null;
-			}
+		onHit: function (target, source) {
+			this.add('-end', target, 'Sky Drop');
 		},
 		effect: {
 			duration: 2,
@@ -11948,12 +12034,18 @@ exports.BattleMovedex = {
 				if (defender !== this.effectData.source) return;
 				defender.trapped = true;
 			},
+			onFoeBeforeMovePriority: 11,
 			onFoeBeforeMove: function (attacker, defender, move) {
 				if (attacker === this.effectData.source) {
 					this.debug('Sky drop nullifying.');
 					this.add('-message', '(Sky Drop prevented a Pokemon from moving.)');
 					return null;
 				}
+			},
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				if (this.effectData.source.fainted) return;
+				return this.effectData.source;
 			},
 			onAnyAccuracy: function (accuracy, target, source, move) {
 				if (target !== this.effectData.target && target !== this.effectData.source) {
@@ -11982,6 +12074,11 @@ exports.BattleMovedex = {
 				}
 				if (move.id === 'gust' || move.id === 'twister') {
 					return this.chainModify(2);
+				}
+			},
+			onFaint: function (target) {
+				if (target.volatiles['skydrop'] && target.volatiles['twoturnmove'].source) {
+					this.add('-end', target.volatiles['twoturnmove'].source, 'Sky Drop', '[interrupt]');
 				}
 			}
 		},

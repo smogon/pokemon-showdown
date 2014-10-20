@@ -158,6 +158,10 @@ exports.BattleFormats = {
 						}
 					}
 					if (!niceAbility) set.ability = baseAbilities['0'];
+				} else if (template.isPrimal) {
+					// Primal Reversion happens in-battle
+					set.species = template.baseSpecies;
+					set.ability = Tools.getTemplate(set.species).abilities['0'];
 				}
 				if (item.name !== template.requiredItem) {
 					problems.push((set.name || set.species) + ' needs to hold ' + template.requiredItem + '.');
@@ -222,6 +226,10 @@ exports.BattleFormats = {
 			}
 			if (template.num === 681) { // Aegislash
 				set.species = 'Aegislash';
+			}
+
+			if (template.unobtainableShiny) {
+				set.shiny = false;
 			}
 			return problems;
 		}
