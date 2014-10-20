@@ -396,9 +396,6 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		};
 		delete tells[user.userid];
 	}
-	
-	if (!Core.processChatData(user, room, connection, message)) return false;
-	
 	return message;
 };
 
