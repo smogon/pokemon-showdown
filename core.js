@@ -112,7 +112,7 @@ var core = exports.core = {
 
             if (online === true) {
                 if (user.connected === true) {
-                    return '<br>&nbsp;<strong><font color="' + this.color + '">Last Seen:</font></strong>&nbsp;<font color="green">Current Online</font>';
+                    return '<br>&nbsp;<strong><font color="' + this.color + '">Last Seen:</font></strong>&nbsp;<font color="green">Currently Online</font>';
                 }
                 lastSeen = Number(Core.stdin('lastSeen', user.userid));
             } else {
