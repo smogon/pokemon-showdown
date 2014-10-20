@@ -89,7 +89,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		banlist: [], // The necessary bans are in Standard GBU
 		validateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least three Pokémon.'];
+			if (team.length < 3) return ['You must bring at least three PokÃ©mon.'];
 		}
 	},
 	{
@@ -109,7 +109,7 @@ exports.Formats = [
 		requirePentagon: true,
 		validateTeam: function (team) {
 			var problems = [];
-			if (team.length < 3) problems.push('You must bring at least three Pokémon.');
+			if (team.length < 3) problems.push('You must bring at least three PokÃ©mon.');
 			var hasGhost = true;
 			var hasGourgeist = false;
 			for (var i = 0; i < team.length; i++) {
@@ -118,7 +118,7 @@ exports.Formats = [
 				if (types.indexOf('Ghost') < 0) hasGhost = false;
 				if (pokemon.species === 'Gourgeist-Super') hasGourgeist = true;
 			}
-			if (!hasGhost) problems.push('You must only bring Ghost-type Pokémon.');
+			if (!hasGhost) problems.push('You must only bring Ghost-type PokÃ©mon.');
 			if (!hasGourgeist) problems.push('You must have Gourgeist-Super on your team.');
 			return problems;
 		}
