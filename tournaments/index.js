@@ -138,7 +138,10 @@ Tournament = (function () {
 	Tournament.prototype.forceEnd = function () {
 		if (this.isTournamentStarted) {
 			this.inProgressMatches.forEach(function (match) {
-				if (match) delete match.room.tour;
+				if (match) {
+					delete match.room.tour;
+					match.room.addRaw("<div class=\"broadcast-red\"><b>The tournament was forcefully ended.</b><br />You can finish playing, but this battle is no longer considered a tournament battle.</div>");
+				}
 			});
 		}
 		this.isEnded = true;
