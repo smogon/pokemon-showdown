@@ -749,12 +749,12 @@ var BattleRoom = (function () {
 				});
 			}
 		}
-		// if (this.tour) {
-		// 	var winnerid = toId(winner);
-		// 	winner = Users.get(winner);
-		// 	var tour = this.tour.tour;
-		// 	tour.onBattleWin(this, winner);
-		// }
+		if (this.tour) {
+			var winnerid = toId(winner);
+			winner = Users.get(winner);
+			var tour = this.tour.tour;
+			tour.onBattleWin(this, winner);
+		}
 		rooms.global.battleCount += 0 - (this.active ? 1 : 0);
 		this.active = false;
 		this.update();
