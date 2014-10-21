@@ -13825,7 +13825,12 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		isUnreleased: true,
-		affectedByImmunities: false,
+		onModifyMovePriority: -5,
+		onModifyMove: function (move) {
+			if (move.type === 'Ground') {
+				move.affectedByImmunities = false;
+			}
+		},
 		volatileStatus: 'smackdown',
 		secondary: false,
 		target: "normal",
