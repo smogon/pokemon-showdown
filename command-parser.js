@@ -341,7 +341,24 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			}
 		};
 
-		var result = commandHandler.call(context, target, room, user, connection, cmd, message);
+		var result;
+		try {
+			result = commandHandler.call(context, target, room, user, connection, cmd, message);
+		} catch (err) {
+			var stack = err.stack + '\n\n' +
+					'Additional information:\n' +
+					'user = ' + user.name + '\n' +
+					'room = ' + room.id + '\n' +
+					'message = ' + message;
+			var fakeErr = {stack: stack};
+
+			if (!require('./crashlogger.js')(fakeErr, 'A chat command')) {
+				var ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+				Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
+			} else {
+				context.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
+			}
+		}
 		if (result === undefined) result = false;
 
 		return result;
