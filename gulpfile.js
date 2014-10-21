@@ -49,7 +49,7 @@ var jsHintOptions = {
 };
 
 var jscsOptions = {
-	"excludeFiles": ["./**/pokedex.js", "./**/formats-data.js", "./**/learnsets.js", "./**/learnsets-g6.js"],
+	"excludeFiles": ["./**/pokedex.js", "./**/formats-data.js", "./**/learnsets.js", "./**/learnsets-g6.js", "./config/config.js"],
 
 	"preset": "google",
 
@@ -84,7 +84,7 @@ var jscsOptions = {
 	"disallowSpaceBeforePostfixUnaryOperators": true,
 
 	"disallowTrailingComma": true,
-	"validateLineBreaks": "LF",
+	"validateLineBreaks": process.platform === 'win32' ? null : "LF",
 	"validateParameterSeparator": ", ",
 
 	"requireCapitalizedConstructors": true
