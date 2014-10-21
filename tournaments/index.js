@@ -138,7 +138,7 @@ Tournament = (function () {
 	Tournament.prototype.forceEnd = function () {
 		if (this.isTournamentStarted) {
 			this.inProgressMatches.forEach(function (match) {
-				if (match) delete match.room.win;
+				if (match) delete match.room.tour;
 			});
 		}
 		this.isEnded = true;
@@ -647,12 +647,6 @@ Tournament = (function () {
 		this.isBracketInvalidated = true;
 		this.runAutoDisqualify();
 		this.update();
-
-		var self = this;
-		room.win = function (winner) {
-			self.onBattleWin(this, Users.get(winner));
-			return Object.getPrototypeOf(this).win.call(this, winner);
-		};
 	};
 	Tournament.prototype.onBattleWin = function (room, winner) {
 		var from = Users.get(room.p1);
