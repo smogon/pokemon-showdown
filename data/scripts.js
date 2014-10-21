@@ -1537,7 +1537,10 @@ exports.BattleScripts = {
 			"Gengar-Mega": 68, "Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72,
 
 			// Holistic judgment
-			Genesect: 72, Sigilyph: 76, Xerneas: 66
+			Genesect: 72, Sigilyph: 76, Xerneas: 66,
+
+			// ORAS
+			"Groudon-Primal": 70, "Kyogre-Primal": 70, "Rayquaza-Mega": 70
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
