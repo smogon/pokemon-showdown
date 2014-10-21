@@ -10680,9 +10680,9 @@ exports.BattleMovedex = {
 			duration: 1,
 			onAfterMoveSecondarySelf: function (pokemon, target, move) {
 				if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta')) {
-					this.add('-formechange', pokemon, 'Meloetta');
+					this.add('-formechange', pokemon, 'Meloetta', '[msg]');
 				} else if (pokemon.formeChange('Meloetta-Pirouette')) {
-					this.add('-formechange', pokemon, 'Meloetta-Pirouette');
+					this.add('-formechange', pokemon, 'Meloetta-Pirouette', '[msg]');
 				}
 				pokemon.removeVolatile('relicsong');
 			}
