@@ -746,14 +746,12 @@ exports.BattleAbilities = {
 			if (this.isWeather('sunnyday')) {
 				if (this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
-					this.add('-formechange', pokemon, 'Cherrim-Sunshine');
-					this.add('-message', pokemon.name + ' transformed! (placeholder)');
+					this.add('-formechange', pokemon, 'Cherrim-Sunshine', '[msg]');
 				}
 			} else {
 				if (this.effectData.forme) {
 					delete this.effectData.forme;
-					this.add('-formechange', pokemon, 'Cherrim');
-					this.add('-message', pokemon.name + ' transformed! (placeholder)');
+					this.add('-formechange', pokemon, 'Cherrim', '[msg]');
 				}
 			}
 		},
@@ -820,8 +818,7 @@ exports.BattleAbilities = {
 			}
 			if (pokemon.isActive && forme) {
 				pokemon.formeChange(forme);
-				this.add('-formechange', pokemon, forme);
-				this.add('-message', pokemon.name + ' transformed! (placeholder)');
+				this.add('-formechange', pokemon, forme, '[msg]');
 			}
 		},
 		id: "forecast",
