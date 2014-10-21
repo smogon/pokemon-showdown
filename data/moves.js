@@ -10619,7 +10619,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function (target, source) {
 			if (source.template && source.template.num === 493) return false;
-			this.add('-start', source, 'typechange', target.getTypes(true).join('/'), '[from] move: Reflect Type', '[of] ' + target);
+			this.add('-start', source, 'typechange', '[from] move: Reflect Type', '[of] ' + target);
 			source.typesData = [];
 			for (var i = 0, l = target.typesData.length; i < l; i++) {
 				if (target.typesData[i].suppressed) continue;
