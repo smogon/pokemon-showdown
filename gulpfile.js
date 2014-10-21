@@ -84,7 +84,7 @@ var jscsOptions = {
 	"disallowSpaceBeforePostfixUnaryOperators": true,
 
 	"disallowTrailingComma": true,
-	"validateLineBreaks": require('os').EOL,
+	"validateLineBreaks": require('os').EOL.replace(/\r/g, 'CR').replace(/\n/g, 'LF'),
 	"validateParameterSeparator": ", ",
 
 	"requireCapitalizedConstructors": true
