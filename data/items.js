@@ -1522,7 +1522,7 @@ exports.BattleItems = {
 		},
 		onDamage: function (damage, target, source, effect) {
 			if (this.random(10) === 0 && damage >= target.hp && effect && effect.effectType === 'Move') {
-				this.add("-message", target.name + " held on using its Focus Band! (placeholder)");
+				this.add("-activate", target.name, "item: Focus Band");
 				return target.hp - 1;
 			}
 		},
