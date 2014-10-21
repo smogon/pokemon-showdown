@@ -259,27 +259,22 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	pikachurockstar: {
-		randomBattleMoves: ["volttackle","meteormash","brickbreak","extremespeed","knockoff","substitute"],
 		tier: "Unreleased",
 		gen: 6
 	},
 	pikachubelle: {
-		randomBattleMoves: ["volttackle","voltswitch","grassknot","brickbreak","iciclecrash","extremespeed","substitute","knockoff"],
 		tier: "Unreleased",
 		gen: 6
 	},
 	pikachupopstar: {
-		randomBattleMoves: ["thunderbolt","volttackle","voltswitch","grassknot","hiddenpowerice","brickbreak","extremespeed","encore","substitute","knockoff","signalbeam"],
 		tier: "Unreleased",
 		gen: 6
 	},
 	pikachuphd: {
-		randomBattleMoves: ["thunderbolt","volttackle","voltswitch","grassknot","hiddenpowerice","brickbreak","extremespeed","encore","substitute","knockoff","signalbeam"],
 		tier: "Unreleased",
 		gen: 6
 	},
 	pikachulibre: {
-		randomBattleMoves: ["volttackle","voltswitch","grassknot","flyingpress","extremespeed","substitute","knockoff"],
 		tier: "Unreleased",
 		gen: 6
 	},
