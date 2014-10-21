@@ -471,7 +471,7 @@ Tournament = (function () {
 		if (matchFrom) {
 			this.generator.setUserBusy(matchFrom.to, false);
 			this.inProgressMatches.set(user, null);
-			delete matchFrom.room.win;
+			delete matchFrom.room.tour;
 			matchFrom.room.forfeit(user);
 		}
 
@@ -482,7 +482,7 @@ Tournament = (function () {
 		if (matchTo) {
 			this.generator.setUserBusy(matchTo, false);
 			var matchRoom = this.inProgressMatches.get(matchTo).room;
-			delete matchRoom.win;
+			delete matchRoom.tour;
 			matchRoom.forfeit(user);
 			this.inProgressMatches.set(matchTo, null);
 		}
