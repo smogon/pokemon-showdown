@@ -164,6 +164,7 @@ var Trivia = {
 		buffer += Tools.escapeHTML(Users.get(winner).name) + ' won the game with a total of <strong>' + score + '</strong> points, and their leaderboard score has increased by <strong>' + prize + '</strong>!</div>';
 		room.addRaw(buffer);
 		updateLeaderboard(winner);
+		Trivia.curQs = [];
 	}
 };
 
@@ -223,7 +224,7 @@ exports.commands = {
 		Trivia.askQuestion(room);
 	},
 	triviakick: function (target, room, user) {
-		if (room.id !== 'trivia' || !target) return false;
+		if (room.id !== 'trivia' || !this.can('mute', null, room) || !target) return false;
 		if (!phase) return this.sendReply('There is no trivia game in progress.');
 		if (phase === 'signup') return this.sendReply('Please wait until the game starts before disqualifying anyone.');
 		if (mode === 'custom') return this.sendReply('Custom trivia games have no list of participants.');
@@ -294,6 +295,7 @@ exports.commands = {
 		}
 		buffer += 'They won the game with a final score of <strong>' + score[0] + '</strong>, and their leaderboard score has increased by <strong>' + prize + '</strong> points!</div>';
 		updateLeaderboard(userid);
+		Trivia.curQs = [];
 		room.addRaw(buffer);
 	},
 	// trivia end question timeout
@@ -306,8 +308,14 @@ exports.commands = {
 	},
 	triviaend: function (target, room, user) {
 		if (room.id !== 'trivia' || !this.can('mute', null, room)) return false;
-		if (!phase) return this.sendReply('There is no trivia game in progress.');
-		if (phase !== 'signup') updateLeaderboard();
+		if (!phase && !Trivia.curQs.length) return this.sendReply('There is no trivia game in progress.');
+		if (phase === 'signup') {
+			phase = false;
+			participants = {};
+		} else {
+			updateLeaderboard();
+			Trivia.curQs = [];
+		}
 		return room.addRaw('<div class="broadcast-blue">' + Tools.escapeHTML(user.name) + ' has forced the game to end.</div>');
 	},
 	triviacustom: function (target, room, user) {
