@@ -84,7 +84,7 @@ var jscsOptions = {
 	"disallowSpaceBeforePostfixUnaryOperators": true,
 
 	"disallowTrailingComma": true,
-	"validateLineBreaks": process.platform === 'win32' ? null : "LF",
+	"validateLineBreaks": require('os').EOL,
 	"validateParameterSeparator": ", ",
 
 	"requireCapitalizedConstructors": true
