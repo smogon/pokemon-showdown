@@ -3868,7 +3868,7 @@ Battle = (function () {
 	// IPC
 
 	// Messages sent by this function are received and handled in
-	// Simulator.prototype.receive in simulator.js (in another process).
+	// Battle.prototype.receive in simulator.js (in another process).
 	Battle.prototype.send = function (type, data) {
 		if (Array.isArray(data)) data = data.join("\n");
 		process.send(this.id + "\n" + type + "\n" + data);
