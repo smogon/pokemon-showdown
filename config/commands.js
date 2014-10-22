@@ -822,6 +822,7 @@ var commands = exports.commands = {
 		);
 	},
 
+	stafflist: 'staff',
 	staff: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox("<a href=\"http://www.pokecommunity.com/showthread.php?t=289012#staff\">PC Battle Server Staff List</a>");
