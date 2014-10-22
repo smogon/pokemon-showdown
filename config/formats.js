@@ -570,6 +570,13 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "OU Monotype",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
+		banlist: ['OU']
+	},
+	{
 		name: "Tier Shift",
 		section: "Other Metagames",
 
