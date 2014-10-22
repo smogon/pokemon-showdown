@@ -179,7 +179,7 @@ var components = exports.components = {
     u: 'urbandefine',
     ud: 'urbandefine',
     urbandefine: function (target, room, user) {
-        if (!this.can('declare')) return;
+        if (!this.can('declare', null, room)) return false;
         if (!target) return this.parse('/help urbandefine')
         if (target > 50) return this.sendReply('Phrase can not be longer than 50 characters.');
 
@@ -256,8 +256,9 @@ var components = exports.components = {
      * Staff commands
      *********************************************************/
 
+    k: 'kick',
     kick: function (target, room, user) {
-        if (!this.can('kick')) return;
+        if (!this.can('kick', null, room)) return false;
         if (!target) return this.parse('/help kick');
 
         var targetUser = Users.get(target);
@@ -296,7 +297,7 @@ var components = exports.components = {
     },
 
     roomlist: function (target, room, user) {
-        if(!this.can('roomlist')) return;
+        if (!this.can('declare', null, room)) return false;
 
         var rooms = Object.keys(Rooms.rooms),
             len = rooms.length,
@@ -346,7 +347,7 @@ var components = exports.components = {
     },
 
     poll: function (target, room, user) {
-        if (!this.can('poll')) return;
+        if (!this.can('poll', null, room)) return false;
         if (Poll[room.id].question) return this.sendReply('There is currently a poll going on already.');
         if (!this.canTalk()) return;
 
@@ -371,12 +372,12 @@ var components = exports.components = {
     },
 
     tierpoll: function (target, room, user) {
-        if (!this.can('poll')) return;
+        if (!this.can('poll', null, room)) return false;
         this.parse('/poll Tournament tier?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
     },
 
     endpoll: function (target, room, user) {
-        if (!this.can('poll')) return;
+        if (!this.can('poll', null, room)) return false;
         if (!Poll[room.id].question) return this.sendReply('There is no poll to end in this room.');
 
         var votes = Object.keys(Poll[room.id].options).length;
@@ -432,7 +433,7 @@ var components = exports.components = {
     },
 
     clearall: function (target, room, user) {
-        if (!this.can('clearall')) return;
+        if (!this.can('clearall', null, room)) return false;
         if (room.battle) return this.sendReply('You cannot do it on battle rooms.');
         
         var len = room.log.length,
