@@ -222,78 +222,78 @@ exports.BattleItems = {
 	},
 	"altarite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"audinite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"beedrillite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"cameruptite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"diancite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"galladite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"glalitite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"latiasite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"latiosite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"lopunnite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"metagrossite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"pidgeotite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"sableite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"salamencite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"sceptilite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"sharpedite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"slowbronite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"steelixite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	},
 	"swampertite": {
 		inherit: true,
-		isUnreleased: false,
+		isUnreleased: false
 	}
 };
