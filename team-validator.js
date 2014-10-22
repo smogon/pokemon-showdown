@@ -353,7 +353,7 @@ Validator = (function () {
 			clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
 			problems.push(name + "'s item " + set.item + " is banned" + clause + ".");
 		}
-		if (banlistTable['illegal'] && item.isUnreleased) {
+		if (banlistTable['Unreleased'] && item.isUnreleased) {
 			problems.push(name + "'s item " + set.item + " is unreleased.");
 		}
 		if (banlistTable['Unreleased'] && template.isUnreleased) {
