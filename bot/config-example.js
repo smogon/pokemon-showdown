@@ -62,7 +62,7 @@ exports.debuglevel = 3;
 exports.excepts = [];
 
 // Whitelisted users are those who the bot will not enforce moderation for.
-exports.whitelist = [];
+exports.whitelist = ['PokeCommBot'];
 
 // Add a link to the help for the bot here. When there is a link here, .help and .guide
 // will link to it.
