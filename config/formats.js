@@ -20,7 +20,7 @@ exports.Formats = [
 		team: 'random',
 		challengeShow: false,
 		rated: false,
-		ruleset: ['Random Battle']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	{
 		name: "OU",
@@ -340,18 +340,22 @@ exports.Formats = [
 		ruleset: ['OU']
 	},
 	{
-		name: "[Gen 4] Tier Shift",
+		name: "ORAS OU",
 		section: "OM of the Month",
 
-		mod: 'throwback',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
+		mod: 'oras',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Illegal', 'Uber', 'Floette-Eternal-Flower', 'Hoopa', 'Volcanion', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Soul Dew',
+			'Bug Gem', 'Custap Berry', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem',
+			'Grass Gem', 'Ground Gem', 'Ice Gem', 'Mail', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'
+		]
 	},
 	{
 		name: "CAP",
 		section: "Other Metagames",
 		column: 2,
 
+		searchShow: false,
 		ruleset: ['CAP Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite']
 	},
@@ -427,17 +431,12 @@ exports.Formats = [
 		banlist: ['NU']
 	},
 	{
-		name: "LC UU",
+		name: "Inverse Battle",
 		section: "Other Metagames",
 
-		maxLevel: 5,
-		ruleset: ['LC'],
-		banlist: ['Abra', 'Aipom', 'Archen', 'Bellsprout', 'Bunnelby', 'Carvanha', 'Chinchou', 'Corphish', 'Cottonee', 'Cranidos',
-			'Croagunk', 'Diglett', 'Drilbur', 'Dwebble', 'Ferroseed', 'Fletchling', 'Foongus', 'Gastly', 'Honedge', 'Houndour',
-			'Larvesta', 'Lileep', 'Magnemite', 'Mienfoo', 'Misdreavus', 'Munchlax', 'Onix', 'Pawniard', 'Ponyta', 'Porygon',
-			'Scraggy', 'Snubbull', 'Spritzee', 'Staryu', 'Timburr', 'Tirtouga', 'Trubbish', 'Vullaby', 'Vulpix', 'Zigzagoon',
-			'Omanyte'
-		]
+		mod: 'inverse',
+		ruleset: ['OU'],
+		banlist: ['Kyurem-Black', 'Snorlax']
 	},
 	{
 		name: "Almost Any Ability",
@@ -472,32 +471,17 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Sky Battles",
+		name: "LC UU",
 		section: "Other Metagames",
 
-		validateSet: function (set) {
-			var template = this.getTemplate(set.species || set.name);
-			if (template.types.indexOf('Flying') === -1 && set.ability !== 'Levitate') {
-				return [set.species + " is not a Flying type and does not have the ability Levitate."];
-			}
-		},
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Archen', 'Chatot', 'Delibird', 'Dodrio', 'Doduo', 'Ducklett', "Farfetch'd", 'Fletchling', 'Gastly',
-			'Gengar', 'Hawlucha', 'Hoothoot', 'Murkrow', 'Natu', 'Pidgey', 'Pidove', 'Rufflet', 'Shaymin-Sky', 'Spearow',
-			'Starly', 'Taillow', 'Vullaby', 'Iron Ball', 'Pinsirite', 'Soul Dew',
-			'Body Slam', 'Bulldoze', 'Dig', 'Dive', 'Earth Power', 'Earthquake', 'Electric Terrain', 'Fire Pledge', 'Fissure', 'Flying Press',
-			'Frenzy Plant', 'Geomancy', 'Grass Knot', 'Grass Pledge', 'Grassy Terrain', 'Gravity', 'Heat Crash', 'Heavy Slam', 'Ingrain', "Land's Wrath",
-			'Magnitude', 'Mat Block', 'Misty Terrain', 'Mud Sport', 'Muddy Water', 'Rototiller', 'Seismic Toss', 'Slam', 'Smack Down', 'Spikes',
-			'Stomp', 'Substitute', 'Surf', 'Toxic Spikes', 'Water Pledge', 'Water Sport'
+		maxLevel: 5,
+		ruleset: ['LC'],
+		banlist: ['Abra', 'Aipom', 'Archen', 'Bellsprout', 'Bunnelby', 'Carvanha', 'Chinchou', 'Corphish', 'Cottonee', 'Cranidos',
+			'Croagunk', 'Diglett', 'Drilbur', 'Dwebble', 'Ferroseed', 'Fletchling', 'Foongus', 'Gastly', 'Honedge', 'Houndour',
+			'Larvesta', 'Lileep', 'Magnemite', 'Mienfoo', 'Misdreavus', 'Munchlax', 'Onix', 'Pawniard', 'Ponyta', 'Porygon',
+			'Scraggy', 'Snubbull', 'Spritzee', 'Staryu', 'Timburr', 'Tirtouga', 'Trubbish', 'Vullaby', 'Vulpix', 'Zigzagoon',
+			'Omanyte'
 		]
-	},
-	{
-		name: "Inverse Battle",
-		section: "Other Metagames",
-
-		mod: 'inverse',
-		ruleset: ['OU'],
-		banlist: ['Kyurem-Black', 'Snorlax']
 	},
 	{
 		name: "350 Cup",
@@ -606,14 +590,25 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "[Gen 5] Glitchmons",
+		name: "Sky Battle",
 		section: "Other Metagames",
 
-		mod: 'gen5',
 		searchShow: false,
-		mimicGlitch: true,
-		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod'],
-		banlist: ['Illegal', 'Unreleased']
+		validateSet: function (set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (template.types.indexOf('Flying') === -1 && set.ability !== 'Levitate') {
+				return [set.species + " is not a Flying type and does not have the ability Levitate."];
+			}
+		},
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
+		banlist: ['Uber', 'Archen', 'Chatot', 'Delibird', 'Dodrio', 'Doduo', 'Ducklett', "Farfetch'd", 'Fletchling', 'Gastly',
+			'Gengar', 'Hawlucha', 'Hoothoot', 'Murkrow', 'Natu', 'Pidgey', 'Pidove', 'Rufflet', 'Shaymin-Sky', 'Spearow',
+			'Starly', 'Taillow', 'Vullaby', 'Iron Ball', 'Pinsirite', 'Soul Dew',
+			'Body Slam', 'Bulldoze', 'Dig', 'Dive', 'Earth Power', 'Earthquake', 'Electric Terrain', 'Fire Pledge', 'Fissure', 'Flying Press',
+			'Frenzy Plant', 'Geomancy', 'Grass Knot', 'Grass Pledge', 'Grassy Terrain', 'Gravity', 'Heat Crash', 'Heavy Slam', 'Ingrain', "Land's Wrath",
+			'Magnitude', 'Mat Block', 'Misty Terrain', 'Mud Sport', 'Muddy Water', 'Rototiller', 'Seismic Toss', 'Slam', 'Smack Down', 'Spikes',
+			'Stomp', 'Substitute', 'Surf', 'Toxic Spikes', 'Water Pledge', 'Water Sport'
+		]
 	},
 	{
 		name: "Gen-NEXT OU",
