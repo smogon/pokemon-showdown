@@ -1239,7 +1239,7 @@ exports.BattleMovedex = {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return;
 				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
+				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -4428,7 +4428,7 @@ exports.BattleMovedex = {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return;
 				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
+				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -10619,7 +10619,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		onHit: function (target, source) {
 			if (source.template && source.template.num === 493) return false;
-			this.add('-start', source, 'typechange', target.getTypes(true).join('/'), '[from] move: Reflect Type', '[of] ' + target);
+			this.add('-start', source, 'typechange', '[from] move: Reflect Type', '[of] ' + target);
 			source.typesData = [];
 			for (var i = 0, l = target.typesData.length; i < l; i++) {
 				if (target.typesData[i].suppressed) continue;
@@ -10680,9 +10680,9 @@ exports.BattleMovedex = {
 			duration: 1,
 			onAfterMoveSecondarySelf: function (pokemon, target, move) {
 				if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta')) {
-					this.add('-formechange', pokemon, 'Meloetta');
+					this.add('-formechange', pokemon, 'Meloetta', '[msg]');
 				} else if (pokemon.formeChange('Meloetta-Pirouette')) {
-					this.add('-formechange', pokemon, 'Meloetta-Pirouette');
+					this.add('-formechange', pokemon, 'Meloetta-Pirouette', '[msg]');
 				}
 				pokemon.removeVolatile('relicsong');
 			}
@@ -12057,7 +12057,7 @@ exports.BattleMovedex = {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return;
 				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'helpinghand') {
+				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -13818,17 +13818,22 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "Deals damage to one adjacent target. This move can hit a target using Bounce, Fly, or Sky Drop. If this move hits a target under the effect of Bounce, Fly, Magnet Rise, or Telekinesis, the effect ends. If the target is a Flying-type that has not used Roost this turn or a Pokemon with the Ability Levitate, it loses its immunity to Ground-type attacks and the Ability Arena Trap as long as it remains active. During the effect, Magnet Rise fails for the target and Telekinesis fails against the target.",
-		shortDesc: "Removes the target's Ground immunity.",
+		desc: "Deals damage to adjacent foes. This move can hit Pokemon using Bounce, Fly, or Sky Drop. If this move hits a Pokemon under the effect of Bounce, Fly, Magnet Rise, or Telekinesis, the effect ends. If the Pokemon is a Flying-type that has not used Roost this turn or a Pokemon with the Ability Levitate, it loses its immunity to Ground-type attacks and the Ability Arena Trap as long as it remains active. During the effect, Magnet Rise fails for the affected Pokemon, and Telekinesis fails for the affected Pokemon.",
+		shortDesc: "Hits adjacent foes and removes their Ground immunity.",
 		id: "thousandarrows",
 		name: "Thousand Arrows",
 		pp: 10,
 		priority: 0,
 		isUnreleased: true,
-		affectedByImmunities: false,
+		onModifyMovePriority: -5,
+		onModifyMove: function (move) {
+			if (move.type === 'Ground') {
+				move.affectedByImmunities = false;
+			}
+		},
 		volatileStatus: 'smackdown',
 		secondary: false,
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Ground"
 	},
 	"thousandwaves": {
