@@ -1740,7 +1740,7 @@ var commands = exports.commands = {
 		} else if (!matched) {
 			this.sendReply("Help for the command '" + target + "' was not found. Try /help for general help");
 		}
-	}
+	},
 
 	/*********************************************************
 	 * Parukia commands
