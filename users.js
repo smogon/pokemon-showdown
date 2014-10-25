@@ -1076,7 +1076,6 @@ User = (function () {
 				for (var j in connection.rooms) {
 					this.leaveRoom(connection.rooms[j], connection, true);
 				}
-				connection.user = null;
 				--this.ips[connection.ip];
 				this.connections.splice(i, 1);
 				break;
@@ -1092,7 +1091,7 @@ User = (function () {
 				}
 			}
 			this.roomCount = {};
-			if (!this.named && !Object.size(this.prevNames)) {
+			if (!this.named && Object.isEmpty(this.prevNames)) {
 				// user never chose a name (and therefore never talked/battled)
 				// there's no need to keep track of this user, so we can
 				// immediately deallocate
@@ -1112,14 +1111,17 @@ User = (function () {
 		for (var i = 0; i < this.connections.length; i++) {
 			// console.log('DESTROY: ' + this.userid);
 			connection = this.connections[i];
-			connection.user = null;
 			for (var j in connection.rooms) {
 				this.leaveRoom(connection.rooms[j], connection, true);
 			}
 			connection.destroy();
 			--this.ips[connection.ip];
 		}
-		this.connections = [];
+		if (this.connections.length) {
+			// should never happen
+			console.log('!! failed to drop all connections for ' + this.userid);
+			this.connections = [];
+		}
 		for (var i in this.roomCount) {
 			if (this.roomCount[i] > 0) {
 				// should never happen.
@@ -1585,6 +1587,7 @@ Connection = (function () {
 	Connection.prototype.destroy = function () {
 		Sockets.socketDisconnect(this.worker, this.socketid);
 		this.onDisconnect();
+		this.user = null;
 	};
 	Connection.prototype.onDisconnect = function () {
 		delete connections[this.id];
