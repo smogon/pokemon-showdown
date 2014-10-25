@@ -2376,13 +2376,13 @@ exports.BattleItems = {
 		},
 		onModifyAtkPriority: 1,
 		onModifyAtk: function (atk, pokemon) {
-			if (pokemon.baseTemplate.species === 'Pikachu') {
+			if (pokemon.baseTemplate.baseSpecies === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpAPriority: 1,
 		onModifySpA: function (spa, pokemon) {
-			if (pokemon.baseTemplate.species === 'Pikachu') {
+			if (pokemon.baseTemplate.baseSpecies === 'Pikachu') {
 				return this.chainModify(2);
 			}
 		},
