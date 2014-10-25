@@ -421,8 +421,8 @@ if (cluster.isMaster) {
 		});
 	});
 	server.installHandlers(app, {});
-	app.listen(Config.port);
-	console.log('Worker ' + cluster.worker.id + ' now listening on port ' + Config.port);
+	app.listen(Config.port, Config.bindaddress);
+	console.log('Worker ' + cluster.worker.id + ' now listening on ' + Config.bindaddress + ':' + Config.port);
 
 	if (appssl) {
 		server.installHandlers(appssl, {});
@@ -430,5 +430,5 @@ if (cluster.isMaster) {
 		console.log('Worker ' + cluster.worker.id + ' now listening for SSL on port ' + Config.ssl.port);
 	}
 
-	console.log('Test your server at http://localhost:' + Config.port);
+	console.log('Test your server at http://' + Config.bindaddress + ':' + Config.port);
 }
