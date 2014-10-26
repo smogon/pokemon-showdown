@@ -55,7 +55,7 @@ exports.BattleAbilities = {
 			}
 		},
 		id: "lightningrod",
-		name: "Lightningrod",
+		name: "Lightning Rod",
 		rating: 3.5,
 		num: 32
 	},

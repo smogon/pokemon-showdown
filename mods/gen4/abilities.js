@@ -22,7 +22,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon draws Electric moves to itself.",
 		// drawing not implemented
 		id: "lightningrod",
-		name: "Lightningrod",
+		name: "Lightning Rod",
 		rating: 0,
 		num: 32
 	},

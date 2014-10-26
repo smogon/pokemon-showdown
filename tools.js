@@ -255,6 +255,9 @@ module.exports = (function () {
 				if (template.forme && template.forme in {'Mega':1, 'Mega-X':1, 'Mega-Y':1}) {
 					template.gen = 6;
 					template.isMega = true;
+				} else if (template.forme === 'Primal') {
+					template.gen = 6;
+					template.isPrimal = true;
 				} else if (template.num >= 650) template.gen = 6;
 				else if (template.num >= 494) template.gen = 5;
 				else if (template.num >= 387) template.gen = 4;
