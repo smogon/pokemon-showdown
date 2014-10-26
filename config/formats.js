@@ -351,13 +351,6 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Stat Reversal",
-		section: "Other Metagames",
-
-		mod: 'statreversal',
-		ruleset: ['OU']
-	},
-	{
 		name: "CAP",
 		section: "Other Metagames",
 		column: 2,
@@ -625,6 +618,13 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
+	},
+	{
+		name: "Stat Reversal",
+		section: "Other Metagames",
+
+		mod: 'statreversal',
+		ruleset: ['OU']
 	},
 
 	// BW2 Singles
