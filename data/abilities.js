@@ -90,7 +90,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
 		shortDesc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
 		onStart: function (pokemon) {
-			this.add('-message', 'The effects of weather disappeared. (placeholder)');
+			this.add('-ability', pokemon, 'Air Lock');
 		},
 		onAnyModifyPokemon: function (pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
@@ -155,12 +155,13 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they are part Flying-type, have the Levitate ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn. Flying-type and Levitate Pokemon cannot escape if they are holding Iron Ball or Gravity is in effect. Levitate Pokemon also cannot escape if their ability is disabled through other means, such as Skill Swap or Gastro Acid.",
 		shortDesc: "Prevents foes from switching out normally unless they have immunity to Ground.",
 		onFoeModifyPokemon: function (pokemon) {
-			if (pokemon.runImmunity('Ground', false)) {
+			if (pokemon.runImmunity('Ground', false) && this.isAdjacent(pokemon, this.effectData.target)) {
 				pokemon.tryTrap();
 			}
 		},
-		onFoeMaybeTrapPokemon: function (pokemon) {
-			if (pokemon.runImmunity('Ground', false)) {
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if (pokemon.runImmunity('Ground', false) && this.isAdjacent(pokemon, source)) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -327,7 +328,7 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
 		shortDesc: "While this Pokemon is active, all weather conditions and their effects are disabled.",
 		onStart: function (pokemon) {
-			this.add('-message', 'The effects of weather disappeared. (placeholder)');
+			this.add('-ability', pokemon, 'Cloud Nine');
 		},
 		onAnyModifyPokemon: function (pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
@@ -515,6 +516,27 @@ exports.BattleAbilities = {
 		name: "Defiant",
 		rating: 2,
 		num: 128
+	},
+	"deltastream": {
+		desc: "When this Pokemon enters the battlefield, the weather becomes strong winds for as long as this Pokemon is on the battlefield",
+		shortDesc: "The weather becomes strong winds until this Pokemon leaves battle.",
+		// TODO: implement strong winds
+		id: "deltastream",
+		name: "Delta Stream",
+		rating: 5,
+		num: 191
+	},
+	"desolateland": {
+		desc: "When this Pokemon enters the battlefield, the weather becomes heavy sun for as long as this Pokemon is on the battlefield.",
+		shortDesc: "The weather becomes heavy sun until this Pokemon leaves battle.",
+		// TODO: implement heavy sun
+		onStart: function (source) {
+			this.setWeather('sunnyday');
+		},
+		id: "desolateland",
+		name: "Desolate Land",
+		rating: 5,
+		num: 190
 	},
 	"download": {
 		desc: "If this Pokemon switches into an opponent with equal Defenses or higher Defense than Special Defense, this Pokemon's Special Attack receives a 50% boost. If this Pokemon switches into an opponent with higher Special Defense than Defense, this Pokemon's Attack receive a 50% boost.",
@@ -724,14 +746,12 @@ exports.BattleAbilities = {
 			if (this.isWeather('sunnyday')) {
 				if (this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
-					this.add('-formechange', pokemon, 'Cherrim-Sunshine');
-					this.add('-message', pokemon.name + ' transformed! (placeholder)');
+					this.add('-formechange', pokemon, 'Cherrim-Sunshine', '[msg]');
 				}
 			} else {
 				if (this.effectData.forme) {
 					delete this.effectData.forme;
-					this.add('-formechange', pokemon, 'Cherrim');
-					this.add('-message', pokemon.name + ' transformed! (placeholder)');
+					this.add('-formechange', pokemon, 'Cherrim', '[msg]');
 				}
 			}
 		},
@@ -798,8 +818,7 @@ exports.BattleAbilities = {
 			}
 			if (pokemon.isActive && forme) {
 				pokemon.formeChange(forme);
-				this.add('-formechange', pokemon, forme);
-				this.add('-message', pokemon.name + ' transformed! (placeholder)');
+				this.add('-formechange', pokemon, forme, '[msg]');
 			}
 		},
 		id: "forecast",
@@ -1340,7 +1359,7 @@ exports.BattleAbilities = {
 			}
 		},
 		id: "lightningrod",
-		name: "Lightningrod",
+		name: "Lightning Rod",
 		rating: 3.5,
 		num: 32
 	},
@@ -1468,12 +1487,13 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, Steel-type opponents cannot switch out nor flee the battle unless they are holding Shed Shell or use attacks like U-Turn or Baton Pass.",
 		shortDesc: "Prevents Steel-type foes from switching out normally.",
 		onFoeModifyPokemon: function (pokemon) {
-			if (pokemon.hasType('Steel')) {
+			if (pokemon.hasType('Steel') && this.isAdjacent(pokemon, this.effectData.target)) {
 				pokemon.tryTrap();
 			}
 		},
-		onFoeMaybeTrapPokemon: function (pokemon) {
-			if (pokemon.hasType('Steel')) {
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if (pokemon.hasType('Steel') && this.isAdjacent(pokemon, source)) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -1967,6 +1987,18 @@ exports.BattleAbilities = {
 		rating: 1.5,
 		num: 46
 	},
+	"primordialsea": {
+		desc: "When this Pokemon enters the battlefield, the weather becomes heavy rain for as long as this Pokemon is on the battlefield",
+		shortDesc: "The weather becomes heavy rain until this Pokemon leaves battle.",
+		// TODO: implement heavy rain
+		onStart: function (source) {
+			this.setWeather('raindance');
+		},
+		id: "primordialsea",
+		name: "Primordial Sea",
+		rating: 5,
+		num: 189
+	},
 	"protean": {
 		desc: "Right before this Pokemon uses a move, it changes its type to match that move. Hidden Power is interpreted as its Hidden Power type, rather than Normal.",
 		shortDesc: "Right before this Pokemon uses a move, it changes its type to match that move.",
@@ -2247,12 +2279,13 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, its non-Ghost-type opponents cannot switch or flee the battle unless they have the same ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn.",
 		shortDesc: "Prevents foes from switching out normally unless they also have this Ability.",
 		onFoeModifyPokemon: function (pokemon) {
-			if (!pokemon.hasAbility('shadowtag')) {
+			if (!pokemon.hasAbility('shadowtag') && this.isAdjacent(pokemon, this.effectData.target)) {
 				pokemon.tryTrap();
 			}
 		},
-		onFoeMaybeTrapPokemon: function (pokemon) {
-			if (!pokemon.hasAbility('shadowtag')) {
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if (!pokemon.hasAbility('shadowtag') && this.isAdjacent(pokemon, source)) {
 				pokemon.maybeTrapped = true;
 			}
 		},

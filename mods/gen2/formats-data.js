@@ -1122,6 +1122,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["leechseed","confusion","healbell","recover"]}
 		],
+		unobtainableShiny: true,
 		tier: "Uber"
 	}
 };

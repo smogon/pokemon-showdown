@@ -3,11 +3,6 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: 'OU'
 	},
-	diancie: {
-		inherit: true,
-		isUnreleased: false,
-		tier: 'OU'
-	},
 	genesect: {
 		inherit: true,
 		tier: 'OU'
