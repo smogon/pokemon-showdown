@@ -1,5 +1,6 @@
 // The server port - the port to run Pokemon Showdown under
 exports.port = 8000;
+exports.bindaddress = 'localhost';
 
 // proxyip - proxy IPs with trusted X-Forwarded-For headers
 //   This can be either false (meaning not to trust any proxies) or an array
