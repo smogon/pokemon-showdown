@@ -4456,9 +4456,8 @@ exports.BattleMovedex = {
 		id: "flyingpress",
 		name: "Flying Press",
 		pp: 10,
-		getEffectiveness: function (source, target, pokemon) {
-			var type = source.type || source;
-			return this.getEffectiveness(type, target) + this.getEffectiveness('Flying', target);
+		onEffectiveness: function (typeMod, type, move) {
+			return this.getEffectiveness(move, type) + this.getEffectiveness('Flying', type);
 		},
 		priority: 0,
 		isContact: true,
@@ -4674,25 +4673,8 @@ exports.BattleMovedex = {
 		name: "Freeze-Dry",
 		pp: 20,
 		priority: 0,
-		getEffectiveness: function (source, target, pokemon) {
-			var type = source.type || source;
-			var totalTypeMod = 0;
-			var types = target.getTypes && target.getTypes() || target.types;
-			for (var i = 0; i < types.length; i++) {
-				if (!this.data.TypeChart[types[i]]) continue;
-				if (types[i] === 'Water') {
-					totalTypeMod++;
-					continue;
-				}
-				var typeMod = this.data.TypeChart[types[i]].damageTaken[type];
-				if (typeMod === 1) { // super-effective
-					totalTypeMod++;
-				}
-				if (typeMod === 2) { // resist
-					totalTypeMod--;
-				}
-			}
-			return totalTypeMod;
+		onEffectiveness: function (typeMod, type) {
+			if (type === 'Water') return 1;
 		},
 		secondary: {
 			chance: 10,
@@ -12687,6 +12669,7 @@ exports.BattleMovedex = {
 			onSwitchIn: function (pokemon) {
 				var side = pokemon.side;
 				if (!pokemon.runImmunity('Ground')) return;
+				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				var damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			}
@@ -12876,6 +12859,7 @@ exports.BattleMovedex = {
 			},
 			onSwitchIn: function (pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
+				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getMove('stickyweb'));
 			}
@@ -14126,6 +14110,7 @@ exports.BattleMovedex = {
 			onSwitchIn: function (pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
 				if (!pokemon.runImmunity('Poison')) return;
+				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');

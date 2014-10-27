@@ -233,7 +233,7 @@ exports.BattleAbilities = {
 	"solidrock": {
 		inherit: true,
 		onFoeBasePower: function (basePower, attacker, defender, move) {
-			if (this.getEffectiveness(move.type, defender) > 0) {
+			if (defender.runEffectiveness(move) > 0) {
 				this.add('-message', "The attack was weakened by Solid Rock!");
 				return basePower * 1 / 2;
 			}
@@ -242,7 +242,7 @@ exports.BattleAbilities = {
 	"filter": {
 		inherit: true,
 		onFoeBasePower: function (basePower, attacker, defender, move) {
-			if (this.getEffectiveness(move.type, defender) > 0) {
+			if (defender.runEffectiveness(move) > 0) {
 				this.add('-message', "The attack was weakened by Filter!");
 				return basePower * 1 / 2;
 			}
