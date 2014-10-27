@@ -89,7 +89,7 @@ exports.BattleAbilities = {
 	"waterveil": {
 		inherit: true,
 		onSourceBasePower: function (basePower) {
-			if (this.isWeather('raindance')) {
+			if (this.isWeather(['raindance', 'primordialsea'])) {
 				return basePower * 3 / 4;
 			}
 			return basePower * 7 / 8;
@@ -157,7 +157,7 @@ exports.BattleAbilities = {
 			}
 		},
 		onUpdate: function (pokemon) {
-			if (this.isWeather('sunnyday')) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
 					this.add('-formechange', pokemon, 'Cherrim-Sunshine', '[msg]');
