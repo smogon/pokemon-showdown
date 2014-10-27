@@ -434,9 +434,14 @@ exports.Formats = [
 		name: "Inverse Battle",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		ruleset: ['OU'],
-		banlist: ['Kyurem-Black', 'Snorlax']
+		banlist: ['Kyurem-Black', 'Snorlax'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, source, target) {
+			return -typeMod;
+		}
 	},
 	{
 		name: "Almost Any Ability",

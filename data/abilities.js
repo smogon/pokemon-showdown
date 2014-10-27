@@ -155,13 +155,17 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the field, its opponents cannot switch or flee the battle unless they are part Flying-type, have the Levitate ability, are holding Shed Shell, or they use the moves Baton Pass or U-Turn. Flying-type and Levitate Pokemon cannot escape if they are holding Iron Ball or Gravity is in effect. Levitate Pokemon also cannot escape if their ability is disabled through other means, such as Skill Swap or Gastro Acid.",
 		shortDesc: "Prevents foes from switching out normally unless they have immunity to Ground.",
 		onFoeModifyPokemon: function (pokemon) {
-			if (pokemon.runImmunity('Ground', false) && this.isAdjacent(pokemon, this.effectData.target)) {
+			if (!this.isAdjacent(pokemon, this.effectData.target)) return;
+			if (!pokemon.runImmunity('Ground', false)) return;
+			if (!pokemon.hasType('Flying') || pokemon.hasType('ironball') || this.getPseudoWeather('gravity') || pokemon.volatiles['ingrain']) {
 				pokemon.tryTrap();
 			}
 		},
 		onFoeMaybeTrapPokemon: function (pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (pokemon.runImmunity('Ground', false) && this.isAdjacent(pokemon, source)) {
+			if (!this.isAdjacent(pokemon, source)) return;
+			if (!pokemon.runImmunity('Ground', false)) return;
+			if (!pokemon.hasType('Flying') || pokemon.hasType('ironball') || this.getPseudoWeather('gravity') || pokemon.volatiles['ingrain']) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -659,7 +663,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
 		onSourceModifyDamage: function (damage, source, target, move) {
-			if (this.getEffectiveness(move, target) > 0) {
+			if (target.runEffectiveness(move) > 0) {
 				this.debug('Filter neutralize');
 				return this.chainModify(0.75);
 			}
@@ -2481,7 +2485,7 @@ exports.BattleAbilities = {
 		desc: "Super-effective attacks only deal 3/4 their usual damage against this Pokemon.",
 		shortDesc: "This Pokemon receives 3/4 damage from super effective attacks.",
 		onSourceModifyDamage: function (damage, source, target, move) {
-			if (this.getEffectiveness(move, target) > 0) {
+			if (target.runEffectiveness(move) > 0) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -2863,7 +2867,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's attacks that are not very effective on a target do double damage.",
 		shortDesc: "This Pokemon's attacks that are not very effective on a target do double damage.",
 		onModifyDamage: function (damage, source, target, move) {
-			if (this.getEffectiveness(move, target) < 0) {
+			if (target.runEffectiveness(move) < 0) {
 				this.debug('Tinted Lens boost');
 				return this.chainModify(2);
 			}
@@ -3160,7 +3164,7 @@ exports.BattleAbilities = {
 		onTryHit: function (target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.isFutureMove) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (this.getEffectiveness(move, target) <= 0) {
+			if (target.runEffectiveness(move) <= 0) {
 				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;
 			}
