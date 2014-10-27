@@ -190,26 +190,25 @@ module.exports = (function () {
 		}
 		return true;
 	};
-	Tools.prototype.getEffectiveness = function (source, target, pokemon) {
-		if (source.getEffectiveness) {
-			return source.getEffectiveness.call(this, source, target, pokemon);
-		}
-		var type = source.type || source;
+	Tools.prototype.getEffectiveness = function (source, target) {
+		var sourceType = source.type || source;
 		var totalTypeMod = 0;
-		var targetTypes = target.getTypes && target.getTypes() || target.types;
-		for (var i = 0; i < targetTypes.length; i++) {
-			if (!this.data.TypeChart[targetTypes[i]]) continue;
-			var typeMod = this.data.TypeChart[targetTypes[i]].damageTaken[type];
-			if (typeMod === 1) { // super-effective
-				totalTypeMod++;
+		var targetTyping = target.getTypes && target.getTypes() || target.types || target;
+		if (Array.isArray(targetTyping)) {
+			for (var i = 0; i < targetTyping.length; i++) {
+				totalTypeMod += this.getEffectiveness(sourceType, targetTyping[i]);
 			}
-			if (typeMod === 2) { // resist
-				totalTypeMod--;
-			}
+			return totalTypeMod;
+		}
+		var typeData = this.data.TypeChart[targetTyping];
+		if (!typeData) return 0;
+		switch (typeData.damageTaken[sourceType]) {
+			case 1: return 1; // super-effective
+			case 2: return -1; // resist
 			// in case of weird situations like Gravity, immunity is
 			// handled elsewhere
+			default: return 0;
 		}
-		return totalTypeMod;
 	};
 	Tools.prototype.getTemplate = function (template) {
 		if (!template || typeof template === 'string') {

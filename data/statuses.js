@@ -317,7 +317,7 @@ exports.BattleStatuses = {
 
 				if (target.hasAbility('wonderguard') && this.gen > 5) {
 					this.debug('Wonder Guard immunity: ' + move.id);
-					if (this.getEffectiveness(move, target) <= 0) {
+					if (target.runEffectiveness(move) <= 0) {
 						this.add('-activate', target, 'ability: Wonder Guard');
 						this.effectData.positions[i] = null;
 						return null;
