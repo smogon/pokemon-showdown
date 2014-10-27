@@ -171,7 +171,7 @@ var Trivia = {
 exports.commands = {
 	// trivia game commands
 	trivianew: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.can('mute', null, room) || !target) return false;
+		if (room.id !== 'trivia' || !this.can('broadcast', null, room) || !target) return false;
 		if (phase) return this.sendReply('There is already a trivia game in progress.');
 		target = target.split(',');
 		if (target.length !== 3) return this.sendReply('Invalid number of arguments given. View /triviahelp gcommands for more information.');
@@ -209,7 +209,7 @@ exports.commands = {
 		this.sendReply('You have signed up for the next trivia game!');
 	},
 	triviastart: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.can('mute', null, room)) return false;
+		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
 		if (!phase) return this.sendReply('There is no trivia game to start.');
 		if (phase !== 'signup') return this.sendReply('There is already a trivia game in progress.');
 		if (Object.keys(participants).length < 3) return this.sendReply('Not enough users have signed up! There must be at least three participants before the trivia game can start.');
@@ -307,7 +307,7 @@ exports.commands = {
 		Trivia.askQuestion(room);
 	},
 	triviaend: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.can('mute', null, room)) return false;
+		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
 		if (!phase && !Trivia.curQs.length) return this.sendReply('There is no trivia game in progress.');
 		if (phase === 'signup') {
 			phase = false;
@@ -319,7 +319,7 @@ exports.commands = {
 		return room.addRaw('<div class="broadcast-blue">' + Tools.escapeHTML(user.name) + ' has forced the game to end.</div>');
 	},
 	triviacustom: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.can('mute', null, room) || !target) return false;
+		if (room.id !== 'trivia' || !this.can('broadcast', null, room) || !target) return false;
 		if (phase) return this.sendReply('There is already a trivia game in progress.');
 		target = target.split('|');
 		if (target.length !== 3) return this.sendReply('/triviacustom requires a category, a question, and at least one answer. View /triviahelp gcommands for more information.');
@@ -576,14 +576,14 @@ exports.commands = {
 			break;
 		case 'gcommands':
 			this.sendReplyBox('<strong>Game commands:</strong><br />' +
-			                  '- /trivianew mode, category, length - begins the signup phase of a new trivia game. Requires: % @ # & ~<br />' +
+			                  '- /trivianew mode, category, length - begins the signup phase of a new trivia game. Requires: + % @ # & ~<br />' +
 			                  '- /triviajoin - enters you in the list of players during the signup phase<br />' +
-			                  '- /triviastart - begins the game once enough users have signed up. Requires: % @ # & ~<br />' +
+			                  '- /triviastart - begins the game once enough users have signed up. Requires: + % @ # & ~<br />' +
 			                  '- /ta - answers the current question<br />' +
 			                  '- /teqt - ends the 30 second intermission period between questions early and asks the next question. Requires: % @ # & ~<br />' +
 			                  '- /triviakick - disqualifies a player from the current trivia game. Requires: % @ # & ~<br />' +
-			                  '- /triviaend - forces a trivia game to end early. Requires: % @ # & ~<br />' +
-			                  '- /triviacustom category | question | answer1, answer2, ... answern - starts a custom trivia game. Requires: % @ # & ~');
+			                  '- /triviaend - forces a trivia game to end early. Requires: + % @ # & ~<br />' +
+			                  '- /triviacustom category | question | answer1, answer2, ... answern - starts a custom trivia game. Requires: + % @ # & ~');
 			break;
 		case 'qcommands':
 			this.sendReplyBox('<strong>Question modifying commands:</strong><br />' +
