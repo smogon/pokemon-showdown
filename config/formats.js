@@ -439,7 +439,9 @@ exports.Formats = [
 		onModifyPokemon: function (pokemon) {
 			pokemon.negateImmunity['Type'] = true;
 		},
-		onEffectiveness: function (typeMod, source, target) {
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
 			return -typeMod;
 		}
 	},

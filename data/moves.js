@@ -4457,7 +4457,7 @@ exports.BattleMovedex = {
 		name: "Flying Press",
 		pp: 10,
 		onEffectiveness: function (typeMod, type, move) {
-			return this.getEffectiveness(move, type) + this.getEffectiveness('Flying', type);
+			return typeMod + this.getEffectiveness('Flying', type);
 		},
 		priority: 0,
 		isContact: true,
