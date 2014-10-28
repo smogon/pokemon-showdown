@@ -181,13 +181,19 @@ module.exports = (function () {
 	Tools.prototype.effectToString = function () {
 		return this.name;
 	};
-	Tools.prototype.getImmunity = function (type, target) {
-		var types = target.getTypes && target.getTypes() || target.types;
-		for (var i = 0; i < types.length; i++) {
-			if (this.data.TypeChart[types[i]] && this.data.TypeChart[types[i]].damageTaken && this.data.TypeChart[types[i]].damageTaken[type] === 3) {
-				return false;
+	Tools.prototype.getImmunity = function (source, target) {
+		// returns false if the target is immune; true otherwise
+		// also checks immunity to some statuses
+		var sourceType = source.type || source;
+		var targetTyping = target.getTypes && target.getTypes() || target.types || target;
+		if (Array.isArray(targetTyping)) {
+			for (var i = 0; i < targetTyping.length; i++) {
+				if (!this.getImmunity(sourceType, targetTyping[i])) return false;
 			}
+			return true;
 		}
+		var typeData = this.data.TypeChart[targetTyping];
+		if (typeData && typeData.damageTaken[sourceType] === 3) return false;
 		return true;
 	};
 	Tools.prototype.getEffectiveness = function (source, target) {

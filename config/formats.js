@@ -442,6 +442,7 @@ exports.Formats = [
 		onEffectiveness: function (typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, target)) return 1;
 			return -typeMod;
 		}
 	},
