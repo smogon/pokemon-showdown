@@ -95,7 +95,7 @@ if (Config.watchconfig) {
 
 // Autoconfigure the app when running in cloud hosting environments:
 var cloudenv = require('cloud-env');
-Config.bindaddress = cloudenv.get('IP', Config.bindaddress || 'localhost');
+Config.bindaddress = cloudenv.get('IP', Config.bindaddress || '');
 Config.port = cloudenv.get('PORT', Config.port);
 
 if (process.argv[2] && parseInt(process.argv[2])) {
