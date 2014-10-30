@@ -421,6 +421,10 @@ if (cluster.isMaster) {
 		});
 	});
 	server.installHandlers(app, {});
+  // Autoconfigure the app when running in cloud hosting environments:
+  var cloudenv = require('cloud-env');
+  Config.port = cloudenv.get('PORT', Config.port);
+  Config.bindaddress = cloudenv.get('IP', Config.bindaddress || 'localhost');
 	app.listen(Config.port, Config.bindaddress);
 	console.log('Worker ' + cluster.worker.id + ' now listening on ' + Config.bindaddress + ':' + Config.port);
 
