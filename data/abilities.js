@@ -158,7 +158,7 @@ exports.BattleAbilities = {
 			if (!this.isAdjacent(pokemon, this.effectData.target)) return;
 			if (!pokemon.runImmunity('Ground', false)) return;
 			if (!pokemon.hasType('Flying') || pokemon.hasType('ironball') || this.getPseudoWeather('gravity') || pokemon.volatiles['ingrain']) {
-				pokemon.tryTrap();
+				pokemon.tryTrap(true);
 			}
 		},
 		onFoeMaybeTrapPokemon: function (pokemon, source) {
@@ -1503,7 +1503,7 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents Steel-type foes from switching out normally.",
 		onFoeModifyPokemon: function (pokemon) {
 			if (pokemon.hasType('Steel') && this.isAdjacent(pokemon, this.effectData.target)) {
-				pokemon.tryTrap();
+				pokemon.tryTrap(true);
 			}
 		},
 		onFoeMaybeTrapPokemon: function (pokemon, source) {
@@ -2299,7 +2299,7 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents foes from switching out normally unless they also have this Ability.",
 		onFoeModifyPokemon: function (pokemon) {
 			if (!pokemon.hasAbility('shadowtag') && this.isAdjacent(pokemon, this.effectData.target)) {
-				pokemon.tryTrap();
+				pokemon.tryTrap(true);
 			}
 		},
 		onFoeMaybeTrapPokemon: function (pokemon, source) {
