@@ -422,7 +422,7 @@ exports.BattleStatuses = {
 		onTryMove: function (target, source, effect) {
 			if (effect.type === 'Fire') {
 				this.debug('Primordial Sea fire suppress');
-				this.add('-fail', source, effect, '[from] Desolate Land');
+				this.add('-fail', source, effect, '[from] Primordial Sea');
 				return null;
 			}
 		},
