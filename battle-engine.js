@@ -553,11 +553,31 @@ BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.getRequestData = function () {
 		var lockedMove = this.getLockedMove();
+
 		var data = {moves: this.getMoves(lockedMove)};
-		if (this.maybeTrapped) {
-			data.maybeTrapped = true;
+
+		// Information should be restricted for the last active Pokémon
+		var isLastActive = this.isLastActive();
+		if (isLastActive) {
+			if (this.trapped === true) {
+				data.trapped = true;
+			} else if (this.maybeTrapped) {
+				data.maybeTrapped = true;
+			}
+		} else {
+			if (this.trapped) data.trapped = true;
 		}
+
 		return data;
+	};
+	BattlePokemon.prototype.isLastActive = function () {
+		if (!this.isActive) return false;
+
+		var allyActive = this.side.active;
+		for (var i = this.position + 1; i < allyActive.length; i++) {
+			if (allyActive[i] && !allyActive.fainted) return false;
+		}
+		return true;
 	};
 	BattlePokemon.prototype.positiveBoosts = function () {
 		var boosts = 0;
@@ -781,9 +801,9 @@ BattlePokemon = (function () {
 		}
 		return d;
 	};
-	BattlePokemon.prototype.tryTrap = function () {
+	BattlePokemon.prototype.tryTrap = function (isHidden) {
 		if (this.runImmunity('trapped')) {
-			this.trapped = true;
+			this.trapped = isHidden ? 'hidden' : true;
 			return true;
 		}
 		return false;
@@ -3678,12 +3698,7 @@ Battle = (function () {
 						return false;
 					} else if (side.pokemon[i].maybeTrapped) {
 						var finalDecision = true;
-						for (var j = i + 1; j < side.active.length; ++j) {
-							if (side.active[j] && !side.active[j].fainted) {
-								finalDecision = false;
-							}
-						}
-						decisions.finalDecision = decisions.finalDecision || finalDecision;
+						decisions.finalDecision = decisions.finalDecision || side.pokemon[i].isLastActive();
 					}
 				}
 
