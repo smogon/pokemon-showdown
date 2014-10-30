@@ -570,15 +570,16 @@ exports.BattleAbilities = {
 		effect: {
 			onFoeModifyPokemon: function (pokemon) {
 				if (pokemon.ability !== 'shadowtag') {
-					pokemon.tryTrap();
+					pokemon.tryTrap(true);
 				}
 			}
 		},
 		onBeforeMove: function (pokemon) {
 			pokemon.removeVolatile('shadowtag');
 		},
-		onFoeMaybeTrapPokemon: function (pokemon) {
-			if (pokemon.ability !== 'shadowtag') {
+		onFoeMaybeTrapPokemon: function (pokemon, source) {
+			if (!source) source = this.effectData.target;
+			if (pokemon.ability !== 'shadowtag' && !source.lastMove) {
 				pokemon.maybeTrapped = true;
 			}
 		}
