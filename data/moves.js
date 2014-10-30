@@ -6951,7 +6951,7 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemon: function (pokemon) {
 				pokemon.negateImmunity['Ground'] = true;
-				pokemon.trapped = true;
+				pokemon.tryTrap();
 			},
 			onDragOut: function (pokemon) {
 				this.add('-activate', pokemon, 'move: Ingrain');
