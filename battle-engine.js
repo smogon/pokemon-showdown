@@ -3644,21 +3644,6 @@ Battle = (function () {
 
 			case 'switch':
 				if (i > side.active.length || i > side.pokemon.length) continue;
-				if (side.currentRequest === 'move') {
-					if (side.pokemon[i].trapped) {
-						//this.debug("Can't switch: The active pokemon is trapped");
-						side.emitCallback('trapped', i);
-						return false;
-					} else if (side.pokemon[i].maybeTrapped) {
-						var finalDecision = true;
-						for (var j = i + 1; j < side.active.length; ++j) {
-							if (side.active[j] && !side.active[j].fainted) {
-								finalDecision = false;
-							}
-						}
-						decisions.finalDecision = decisions.finalDecision || finalDecision;
-					}
-				}
 
 				data = parseInt(data, 10) - 1;
 				if (data < 0) data = 0;
@@ -3685,6 +3670,22 @@ Battle = (function () {
 					return false;
 				}
 				prevSwitches[data] = true;
+
+				if (side.currentRequest === 'move') {
+					if (side.pokemon[i].trapped) {
+						//this.debug("Can't switch: The active pokemon is trapped");
+						side.emitCallback('trapped', i);
+						return false;
+					} else if (side.pokemon[i].maybeTrapped) {
+						var finalDecision = true;
+						for (var j = i + 1; j < side.active.length; ++j) {
+							if (side.active[j] && !side.active[j].fainted) {
+								finalDecision = false;
+							}
+						}
+						decisions.finalDecision = decisions.finalDecision || finalDecision;
+					}
+				}
 
 				decisions.push({
 					choice: 'switch',
