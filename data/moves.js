@@ -4992,6 +4992,7 @@ exports.BattleMovedex = {
 		desc: "The user charges turn one, then sharply raise Special Attack, Special Defense, and Speed the next turn.",
 		shortDesc: "Sharply raises SpAtk, SpDef, and Speed on turn 2.",
 		id: "geomancy",
+		isViable: true,
 		name: "Geomancy",
 		pp: 10,
 		priority: 0,
