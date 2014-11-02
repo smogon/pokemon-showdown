@@ -102,37 +102,6 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Halloween Party",
-		section: "XY Singles",
-
-		onBegin: function () {
-			this.debug('cutting down to 3');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		forcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		banlist: ['Rotom', 'Rotom-Fan', 'Rotom-Frost', 'Rotom-Heat', 'Rotom-Mow', 'Rotom-Wash'],
-		requirePentagon: true,
-		validateTeam: function (team) {
-			var problems = [];
-			if (team.length < 3) problems.push('You must bring at least three Pokémon.');
-			var hasGhost = true;
-			var hasGourgeist = false;
-			for (var i = 0; i < team.length; i++) {
-				var pokemon = Tools.getTemplate(team[i].species || team[i].name);
-				var types = pokemon.types || [];
-				if (types.indexOf('Ghost') < 0) hasGhost = false;
-				if (pokemon.species === 'Gourgeist-Super') hasGourgeist = true;
-			}
-			if (!hasGhost) problems.push('You must only bring Ghost-type Pokémon.');
-			if (!hasGourgeist) problems.push('You must have Gourgeist-Super on your team.');
-			return problems;
-		}
-	},
-	{
 		name: "Custom Game",
 		section: "XY Singles",
 
