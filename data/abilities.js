@@ -2250,7 +2250,7 @@ exports.BattleAbilities = {
 		num: 8
 	},
 	"sapsipper": {
-		desc: "This Pokemon is immune to Grass moves. If hit by a Grass move, its Attack is increased by one stage (once for each hit of Bullet Seed). Does not affect Aromatherapy.",
+		desc: "This Pokemon is immune to Grass moves. If hit by a Grass move, its Attack is increased by one stage (once for each hit of Bullet Seed). Does not affect Aromatherapy, but the move will still trigger an Attack increase.",
 		shortDesc: "This Pokemon's Attack is boosted by 1 if hit by any Grass move; Grass immunity.",
 		onTryHit: function (target, source, move) {
 			if (target !== source && move.type === 'Grass') {
@@ -2258,6 +2258,13 @@ exports.BattleAbilities = {
 					this.add('-immune', target, '[msg]');
 				}
 				return null;
+			}
+		},
+		onAllyTryHitSide: function (target, source, move) {
+			if (target.side !== source.side) return;
+
+			if (move.type === 'Grass') {
+				this.boost({atk:1}, this.effectData.target);
 			}
 		},
 		id: "sapsipper",
