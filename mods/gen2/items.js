@@ -15,7 +15,7 @@ exports.BattleItems = {
 		name: "Berserk Gene",
 		onUpdate: function (pokemon) {
 			this.boost({atk: 2});
-			pokemon.addVolatile('confuse');
+			pokemon.addVolatile('confusion');
 			pokemon.setItem('');
 		},
 		gen: 2,

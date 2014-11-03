@@ -181,35 +181,40 @@ module.exports = (function () {
 	Tools.prototype.effectToString = function () {
 		return this.name;
 	};
-	Tools.prototype.getImmunity = function (type, target) {
-		var types = target.getTypes && target.getTypes() || target.types;
-		for (var i = 0; i < types.length; i++) {
-			if (this.data.TypeChart[types[i]] && this.data.TypeChart[types[i]].damageTaken && this.data.TypeChart[types[i]].damageTaken[type] === 3) {
-				return false;
+	Tools.prototype.getImmunity = function (source, target) {
+		// returns false if the target is immune; true otherwise
+		// also checks immunity to some statuses
+		var sourceType = source.type || source;
+		var targetTyping = target.getTypes && target.getTypes() || target.types || target;
+		if (Array.isArray(targetTyping)) {
+			for (var i = 0; i < targetTyping.length; i++) {
+				if (!this.getImmunity(sourceType, targetTyping[i])) return false;
 			}
+			return true;
 		}
+		var typeData = this.data.TypeChart[targetTyping];
+		if (typeData && typeData.damageTaken[sourceType] === 3) return false;
 		return true;
 	};
-	Tools.prototype.getEffectiveness = function (source, target, pokemon) {
-		if (source.getEffectiveness) {
-			return source.getEffectiveness.call(this, source, target, pokemon);
-		}
-		var type = source.type || source;
+	Tools.prototype.getEffectiveness = function (source, target) {
+		var sourceType = source.type || source;
 		var totalTypeMod = 0;
-		var targetTypes = target.getTypes && target.getTypes() || target.types;
-		for (var i = 0; i < targetTypes.length; i++) {
-			if (!this.data.TypeChart[targetTypes[i]]) continue;
-			var typeMod = this.data.TypeChart[targetTypes[i]].damageTaken[type];
-			if (typeMod === 1) { // super-effective
-				totalTypeMod++;
+		var targetTyping = target.getTypes && target.getTypes() || target.types || target;
+		if (Array.isArray(targetTyping)) {
+			for (var i = 0; i < targetTyping.length; i++) {
+				totalTypeMod += this.getEffectiveness(sourceType, targetTyping[i]);
 			}
-			if (typeMod === 2) { // resist
-				totalTypeMod--;
-			}
+			return totalTypeMod;
+		}
+		var typeData = this.data.TypeChart[targetTyping];
+		if (!typeData) return 0;
+		switch (typeData.damageTaken[sourceType]) {
+			case 1: return 1; // super-effective
+			case 2: return -1; // resist
 			// in case of weird situations like Gravity, immunity is
 			// handled elsewhere
+			default: return 0;
 		}
-		return totalTypeMod;
 	};
 	Tools.prototype.getTemplate = function (template) {
 		if (!template || typeof template === 'string') {
@@ -255,6 +260,9 @@ module.exports = (function () {
 				if (template.forme && template.forme in {'Mega':1, 'Mega-X':1, 'Mega-Y':1}) {
 					template.gen = 6;
 					template.isMega = true;
+				} else if (template.forme === 'Primal') {
+					template.gen = 6;
+					template.isPrimal = true;
 				} else if (template.num >= 650) template.gen = 6;
 				else if (template.num >= 494) template.gen = 5;
 				else if (template.num >= 387) template.gen = 4;

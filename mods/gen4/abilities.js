@@ -22,7 +22,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon draws Electric moves to itself.",
 		// drawing not implemented
 		id: "lightningrod",
-		name: "Lightningrod",
+		name: "Lightning Rod",
 		rating: 0,
 		num: 32
 	},
@@ -152,7 +152,7 @@ exports.BattleAbilities = {
 		onTryHit: function (target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.id === 'firefang') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (this.getEffectiveness(move.type, target) <= 0) {
+			if (target.runEffectiveness(move) <= 0) {
 				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;
 			}
