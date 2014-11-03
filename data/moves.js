@@ -3610,8 +3610,10 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function (target, source) {
-			if (target.setAbility(source.ability)) {
+			var oldAbility = target.setAbility(source.ability);
+			if (oldAbility) {
 				this.add('-ability', target, target.ability, '[from] move: Entrainment');
+				this.runEvent('EndAbility', target, oldAbility);
 				return;
 			}
 			return false;
@@ -4456,9 +4458,8 @@ exports.BattleMovedex = {
 		id: "flyingpress",
 		name: "Flying Press",
 		pp: 10,
-		getEffectiveness: function (source, target, pokemon) {
-			var type = source.type || source;
-			return this.getEffectiveness(type, target) + this.getEffectiveness('Flying', target);
+		onEffectiveness: function (typeMod, type, move) {
+			return typeMod + this.getEffectiveness('Flying', type);
 		},
 		priority: 0,
 		isContact: true,
@@ -4674,25 +4675,8 @@ exports.BattleMovedex = {
 		name: "Freeze-Dry",
 		pp: 20,
 		priority: 0,
-		getEffectiveness: function (source, target, pokemon) {
-			var type = source.type || source;
-			var totalTypeMod = 0;
-			var types = target.getTypes && target.getTypes() || target.types;
-			for (var i = 0; i < types.length; i++) {
-				if (!this.data.TypeChart[types[i]]) continue;
-				if (types[i] === 'Water') {
-					totalTypeMod++;
-					continue;
-				}
-				var typeMod = this.data.TypeChart[types[i]].damageTaken[type];
-				if (typeMod === 1) { // super-effective
-					totalTypeMod++;
-				}
-				if (typeMod === 2) { // resist
-					totalTypeMod--;
-				}
-			}
-			return totalTypeMod;
+		onEffectiveness: function (typeMod, type) {
+			if (type === 'Water') return 1;
 		},
 		secondary: {
 			chance: 10,
@@ -4971,6 +4955,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function (pokemon) {
 				this.add('-endability', pokemon);
+				this.runEvent('EndAbility', pokemon, pokemon.ability);
 			},
 			onModifyPokemonPriority: 2,
 			onModifyPokemon: function (pokemon) {
@@ -5007,6 +4992,7 @@ exports.BattleMovedex = {
 		desc: "The user charges turn one, then sharply raise Special Attack, Special Defense, and Speed the next turn.",
 		shortDesc: "Sharply raises SpAtk, SpDef, and Speed on turn 2.",
 		id: "geomancy",
+		isViable: true,
 		name: "Geomancy",
 		pp: 10,
 		priority: 0,
@@ -5385,7 +5371,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		onModifyMove: function (move) {
-			if (this.isWeather('sunnyday')) move.boosts = {atk: 2, spa: 2};
+			if (this.isWeather(['sunnyday', 'desolateland'])) move.boosts = {atk: 2, spa: 2};
 		},
 		boosts: {
 			atk: 1,
@@ -5573,6 +5559,12 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		weather: 'hail',
+		onTry: function (target, source) {
+			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
+				this.add('-fail', source, 'move: Hail', '[from]: ' + this.effectiveWeather());
+				return null;
+			}
+		},
 		secondary: false,
 		target: "all",
 		type: "Ice"
@@ -6469,8 +6461,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onModifyMove: function (move) {
-			if (this.isWeather('raindance')) move.accuracy = true;
-			else if (this.isWeather('sunnyday')) move.accuracy = 50;
+			if (this.isWeather(['raindance', 'primordialsea'])) move.accuracy = true;
+			else if (this.isWeather(['sunnyday', 'desolateland'])) move.accuracy = 50;
 		},
 		secondary: {
 			chance: 30,
@@ -6960,7 +6952,7 @@ exports.BattleMovedex = {
 			},
 			onModifyPokemon: function (pokemon) {
 				pokemon.negateImmunity['Ground'] = true;
-				pokemon.trapped = true;
+				pokemon.tryTrap();
 			},
 			onDragOut: function (pokemon) {
 				this.add('-activate', pokemon, 'move: Ingrain');
@@ -8684,8 +8676,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		onHit: function (pokemon) {
-			if (this.isWeather('sunnyday')) this.heal(this.modify(pokemon.maxhp, 0.667));
-			else if (this.isWeather(['raindance', 'sandstorm', 'hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
+			if (this.isWeather(['sunnyday', 'desolateland'])) this.heal(this.modify(pokemon.maxhp, 0.667));
+			else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
 			else this.heal(this.modify(pokemon.maxhp, 0.5));
 		},
 		secondary: false,
@@ -8706,8 +8698,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		onHit: function (pokemon) {
-			if (this.isWeather('sunnyday')) this.heal(this.modify(pokemon.maxhp, 0.667));
-			else if (this.isWeather(['raindance', 'sandstorm', 'hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
+			if (this.isWeather(['sunnyday', 'desolateland'])) this.heal(this.modify(pokemon.maxhp, 0.667));
+			else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
 			else this.heal(this.modify(pokemon.maxhp, 0.5));
 		},
 		secondary: false,
@@ -9705,7 +9697,7 @@ exports.BattleMovedex = {
 			},
 			onBeforeMove: function (pokemon, target, move) {
 				var item = pokemon.getItem();
-				if (move.type === 'Fire' || (move.name === 'Hidden Power' && pokemon.hpType === 'Fire') || (move.name === 'Weather Ball' && this.isWeather('sunnyday')) || (item.isBerry && move.name === 'Natural Gift' && item.naturalGift.type === 'Fire') || (move.name === 'Judgment' && item.name === 'Flame Plate')) {
+				if (move.type === 'Fire' || (move.name === 'Hidden Power' && pokemon.hpType === 'Fire') || (move.name === 'Weather Ball' && this.isWeather(['sunnyday', 'desolateland'])) || (item.isBerry && move.name === 'Natural Gift' && item.naturalGift.type === 'Fire') || (move.name === 'Judgment' && item.name === 'Flame Plate')) {
 					this.add('-activate', pokemon, 'Powder');
 					this.directDamage(Math.floor(pokemon.maxhp / 4) + 1);
 					return false;
@@ -10418,6 +10410,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		weather: 'RainDance',
+		onTry: function (target, source) {
+			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
+				this.add('-fail', source, 'move: Rain Dance', '[from]: ' + this.effectiveWeather());
+				return null;
+			}
+		},
 		secondary: false,
 		target: "all",
 		type: "Water"
@@ -11023,8 +11021,10 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function (target, source) {
-			if (source.setAbility(target.ability)) {
+			var oldAbility = source.setAbility(target.ability);
+			if (oldAbility) {
 				this.add('-ability', source, source.ability, '[from] move: Role Play', '[of] ' + target);
+				this.runEvent('EndAbility', source, oldAbility);
 				return;
 			}
 			return false;
@@ -11345,6 +11345,12 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		weather: 'Sandstorm',
+		onTry: function (target, source) {
+			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
+				this.add('-fail', source, 'move: Sandstorm', '[from]: ' + this.effectiveWeather());
+				return null;
+			}
+		},
 		secondary: false,
 		target: "all",
 		type: "Rock"
@@ -11829,8 +11835,10 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function (pokemon) {
-			if (pokemon.setAbility('simple')) {
+			var oldAbility = pokemon.setAbility('simple');
+			if (oldAbility) {
 				this.add('-ability', pokemon, 'Simple', '[from] move: Simple Beam');
+				this.runEvent('EndAbility', pokemon, oldAbility);
 				return;
 			}
 			return false;
@@ -11919,6 +11927,18 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.add('-activate', source, 'move: Skill Swap', this.getAbility(targetAbility), this.getAbility(sourceAbility), '[of] ' + target);
+
+			// Change the source of an ORAS weather (will this really happen in-game?)
+			var weather = this.getWeather();
+			if (weather.id in {desolateland:1, primordialsea:1, deltastream:1}) {
+				var weatherSource = this.weatherData.source;
+				if (weatherSource === source) {
+					this.weatherData.source = target;
+				} else if (weatherSource === target) {
+					this.weatherData.source = source;
+				}
+				this.debug(this.weatherData.source);
+			}
 		},
 		secondary: false,
 		target: "normal",
@@ -12550,7 +12570,7 @@ exports.BattleMovedex = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
-			if (this.isWeather('sunnyday') || !this.runEvent('ChargeMove', attacker, defender, move)) {
+			if (this.isWeather(['sunnyday', 'desolateland']) || !this.runEvent('ChargeMove', attacker, defender, move)) {
 				this.add('-anim', attacker, move.name, defender);
 				return;
 			}
@@ -12559,7 +12579,7 @@ exports.BattleMovedex = {
 		},
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon, target) {
-			if (this.isWeather(['raindance', 'sandstorm', 'hail'])) {
+			if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
 			}
@@ -12687,6 +12707,7 @@ exports.BattleMovedex = {
 			onSwitchIn: function (pokemon) {
 				var side = pokemon.side;
 				if (!pokemon.runImmunity('Ground')) return;
+				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				var damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			}
@@ -12876,6 +12897,7 @@ exports.BattleMovedex = {
 			},
 			onSwitchIn: function (pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
+				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getMove('stickyweb'));
 			}
@@ -13259,6 +13281,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		weather: 'sunnyday',
+		onTry: function (target, source) {
+			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
+				this.add('-fail', source, 'move: Sunny Day', '[from]: ' + this.effectiveWeather());
+				return null;
+			}
+		},
 		secondary: false,
 		target: "all",
 		type: "Fire"
@@ -13517,8 +13545,8 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		onHit: function (pokemon) {
-			if (this.isWeather('sunnyday')) this.heal(this.modify(pokemon.maxhp, 0.667));
-			else if (this.isWeather(['raindance', 'sandstorm', 'hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
+			if (this.isWeather(['sunnyday', 'desolateland'])) this.heal(this.modify(pokemon.maxhp, 0.667));
+			else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
 			else this.heal(this.modify(pokemon.maxhp, 0.5));
 		},
 		secondary: false,
@@ -13888,8 +13916,8 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		onModifyMove: function (move) {
-			if (this.isWeather('raindance')) move.accuracy = true;
-			else if (this.isWeather('sunnyday')) move.accuracy = 50;
+			if (this.isWeather(['raindance', 'primordialsea'])) move.accuracy = true;
+			else if (this.isWeather(['sunnyday', 'desolateland'])) move.accuracy = 50;
 		},
 		secondary: {
 			chance: 30,
@@ -14126,6 +14154,7 @@ exports.BattleMovedex = {
 			onSwitchIn: function (pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
 				if (!pokemon.runImmunity('Poison')) return;
+				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
@@ -14872,9 +14901,11 @@ exports.BattleMovedex = {
 		onModifyMove: function (move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
+			case 'desolateland':
 				move.type = 'Fire';
 				break;
 			case 'raindance':
+			case 'primordialsea':
 				move.type = 'Water';
 				break;
 			case 'sandstorm':
@@ -15166,11 +15197,13 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function (pokemon) {
-			if (pokemon.setAbility('insomnia')) {
+			var oldAbility = pokemon.setAbility('insomnia');
+			if (oldAbility) {
 				this.add('-ability', pokemon, 'Insomnia', '[from] move: Worry Seed');
 				if (pokemon.status === 'slp') {
 					pokemon.cureStatus();
 				}
+				this.runEvent('EndAbility', pokemon, oldAbility);
 				return;
 			}
 			return false;
@@ -15351,7 +15384,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 120,
 		category: "Physical",
-		desc: "Deals damage to one adjacent target with a 100% chance to confuse it and lower its Defense and Special Attack by 1 stage. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If this move is successful, the weather changes to Rain Dance for 5 turns unless Rain Dance is already in effect, the user gains the effects of Aqua Ring and Magic Coat, and the user must recharge on the following turn and cannot make a move. Makes contact.",
+		desc: "Deals damage to one adjacent target with a 100% chance to confuse it and lower its Defense and Special Attack by 1 stage. The user recovers half of the HP lost by the target, rounded up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If this move is successful, the weather changes to rain unless it is already in effect, the user gains the effects of Aqua Ring and Magic Coat, and the user must recharge on the following turn and cannot make a move. Makes contact.",
 		shortDesc: "Does many things turn 1. Can't move turn 2.",
 		id: "magikarpsrevenge",
 		isNonstandard: true,
