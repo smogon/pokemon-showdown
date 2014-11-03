@@ -775,11 +775,15 @@ var commands = exports.commands = {
 
 		var factor = 0;
 		if (Tools.getImmunity(source.type || source, defender)) {
+			var totalTypeMod = 0;
 			if (source.effectType !== 'Move' || source.basePower || source.basePowerCallback) {
-				factor = Math.pow(2, Tools.getEffectiveness(source, defender));
-			} else {
-				factor = 1;
+				for (var i = 0; i < defender.types.length; i++) {
+					var baseMod = Tools.getEffectiveness(source, defender.types[i]);
+					var moveMod = source.onEffectiveness && source.onEffectiveness.call(Tools, baseMod, defender.types[i], source);
+					totalTypeMod += typeof moveMod === 'number' ? moveMod : baseMod;
+				}
 			}
+			factor = Math.pow(2, totalTypeMod);
 		}
 
 		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
@@ -991,10 +995,6 @@ var commands = exports.commands = {
 		if (target === 'middlecup' || target === 'mc') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
-		}
-		if (target === 'mashup') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3518763/\">OM Mashup</a><br />";
 		}
 		if (target === 'skybattle') {
 			matched = true;

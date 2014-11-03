@@ -93,6 +93,11 @@ if (Config.watchConfig) {
 	});
 }
 
+// Autoconfigure the app when running in cloud hosting environments:
+var cloudenv = require('cloud-env');
+Config.bindAddress = cloudenv.get('IP', Config.bindAddress || '');
+Config.port = cloudenv.get('PORT', Config.port);
+
 if (process.argv[2] && parseInt(process.argv[2])) {
 	Config.port = parseInt(process.argv[2]);
 }
