@@ -544,11 +544,31 @@ BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.getRequestData = function () {
 		var lockedMove = this.getLockedMove();
+
 		var data = {moves: this.getMoves(lockedMove)};
-		if (this.maybeTrapped) {
-			data.maybeTrapped = true;
+
+		// Information should be restricted for the last active Pokémon
+		var isLastActive = this.isLastActive();
+		if (isLastActive) {
+			if (this.trapped === true) {
+				data.trapped = true;
+			} else if (this.maybeTrapped) {
+				data.maybeTrapped = true;
+			}
+		} else {
+			if (this.trapped) data.trapped = true;
 		}
+
 		return data;
+	};
+	BattlePokemon.prototype.isLastActive = function () {
+		if (!this.isActive) return false;
+
+		var allyActive = this.side.active;
+		for (var i = this.position + 1; i < allyActive.length; i++) {
+			if (allyActive[i] && !allyActive.fainted) return false;
+		}
+		return true;
 	};
 	BattlePokemon.prototype.positiveBoosts = function () {
 		var boosts = 0;
@@ -772,9 +792,9 @@ BattlePokemon = (function () {
 		}
 		return d;
 	};
-	BattlePokemon.prototype.tryTrap = function () {
+	BattlePokemon.prototype.tryTrap = function (isHidden) {
 		if (this.runImmunity('trapped')) {
-			this.trapped = true;
+			this.trapped = isHidden ? 'hidden' : true;
 			return true;
 		}
 		return false;
@@ -1158,6 +1178,16 @@ BattlePokemon = (function () {
 		if (types.length) return types;
 		if (this.battle.gen >= 5) return ['Normal'];
 		return ['???'];
+	};
+	BattlePokemon.prototype.runEffectiveness = function (move) {
+		var totalTypeMod = 0;
+		var types = this.getTypes();
+		for (var i = 0; i < types.length; i++) {
+			var typeMod = this.battle.getEffectiveness(move, types[i]);
+			typeMod = this.battle.singleEvent('Effectiveness', move, null, types[i], move, null, typeMod);
+			totalTypeMod += this.battle.runEvent('Effectiveness', this, types[i], move, typeMod);
+		}
+		return totalTypeMod;
 	};
 	BattlePokemon.prototype.runImmunity = function (type, message) {
 		if (this.fainted) {
@@ -2927,7 +2957,7 @@ Battle = (function () {
 		var totalTypeMod = 0;
 
 		if (target.negateImmunity[move.type] !== 'IgnoreEffectiveness' || this.getImmunity(move.type, target)) {
-			totalTypeMod = this.getEffectiveness(move, target, pokemon);
+			totalTypeMod = target.runEffectiveness(move);
 		}
 
 		totalTypeMod = this.clampIntRange(totalTypeMod, -6, 6);
@@ -3625,21 +3655,6 @@ Battle = (function () {
 
 			case 'switch':
 				if (i > side.active.length || i > side.pokemon.length) continue;
-				if (side.currentRequest === 'move') {
-					if (side.pokemon[i].trapped) {
-						//this.debug("Can't switch: The active pokemon is trapped");
-						side.emitCallback('trapped', i);
-						return false;
-					} else if (side.pokemon[i].maybeTrapped) {
-						var finalDecision = true;
-						for (var j = i + 1; j < side.active.length; ++j) {
-							if (side.active[j] && !side.active[j].fainted) {
-								finalDecision = false;
-							}
-						}
-						decisions.finalDecision = decisions.finalDecision || finalDecision;
-					}
-				}
 
 				data = parseInt(data, 10) - 1;
 				if (data < 0) data = 0;
@@ -3666,6 +3681,17 @@ Battle = (function () {
 					return false;
 				}
 				prevSwitches[data] = true;
+
+				if (side.currentRequest === 'move') {
+					if (side.pokemon[i].trapped) {
+						//this.debug("Can't switch: The active pokemon is trapped");
+						side.emitCallback('trapped', i);
+						return false;
+					} else if (side.pokemon[i].maybeTrapped) {
+						var finalDecision = true;
+						decisions.finalDecision = decisions.finalDecision || side.pokemon[i].isLastActive();
+					}
+				}
 
 				decisions.push({
 					choice: 'switch',
