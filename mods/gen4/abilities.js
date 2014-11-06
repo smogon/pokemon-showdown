@@ -90,6 +90,12 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 57
 	},
+	"soundproof": {
+		inherit: true,
+		desc: "This Pokemon is immune to the effects of sound-based moves, which are: Bug Buzz, Chatter, Echoed Voice, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Relic Song, Roar, Round, Screech, Sing, Snarl, Snore, Supersonic, and Uproar.",
+		shortDesc: "This Pokemon is immune to sound-based moves."
+		// differences implemented in allyTeam targetting
+	},
 	"stench": {
 		desc: "No in-battle effect.",
 		shortDesc: "No in-battle effect.",

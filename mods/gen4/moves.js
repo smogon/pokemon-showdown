@@ -450,6 +450,12 @@ exports.BattleMovedex = {
 			spa: 1
 		}
 	},
+	healbell: {
+		inherit: true,
+		onHit: function (pokemon, source) {
+			pokemon.setStatus('');
+		}
+	},
 	healblock: {
 		inherit: true,
 		isBounceable: false
