@@ -106,23 +106,32 @@ exports.BattleScripts = {
 		}
 
 		var damage = false;
-		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam' && this.gen === 5) {
 			damage = this.tryMoveHit(target, pokemon, move);
-		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
+		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes' || move.target === 'allyTeam') {
 			var targets = [];
-			if (move.target === 'allAdjacent') {
-				var allyActive = pokemon.side.active;
-				for (var i = 0; i < allyActive.length; i++) {
-					if (allyActive[i] && Math.abs(i - pokemon.position) <= 1 && i !== pokemon.position && !allyActive[i].fainted) {
-						targets.push(allyActive[i]);
+			if (move.target === 'allyTeam') {
+				var allyTeam = pokemon.side.pokemon;
+				for (var i = 0; i < allyTeam.length; i++) {
+					if (allyTeam[i] && !allyTeam[i].fainted) {
+						targets.push(allyTeam[i]);
 					}
 				}
-			}
-			var foeActive = pokemon.side.foe.active;
-			var foePosition = foeActive.length - pokemon.position - 1;
-			for (var i = 0; i < foeActive.length; i++) {
-				if (foeActive[i] && Math.abs(i - foePosition) <= 1 && !foeActive[i].fainted) {
-					targets.push(foeActive[i]);
+			} else {
+				if (move.target === 'allAdjacent') {
+					var allyActive = pokemon.side.active;
+					for (var i = 0; i < allyActive.length; i++) {
+						if (allyActive[i] && Math.abs(i - pokemon.position) <= 1 && i !== pokemon.position && !allyActive[i].fainted) {
+							targets.push(allyActive[i]);
+						}
+					}
+				}
+				var foeActive = pokemon.side.foe.active;
+				var foePosition = foeActive.length - pokemon.position - 1;
+				for (var i = 0; i < foeActive.length; i++) {
+					if (foeActive[i] && Math.abs(i - foePosition) <= 1 && !foeActive[i].fainted) {
+						targets.push(foeActive[i]);
+					}
 				}
 			}
 			if (move.selfdestruct && this.gen >= 5) {
@@ -192,7 +201,7 @@ exports.BattleScripts = {
 		}
 		this.runEvent('PrepareHit', pokemon, target, move);
 
-		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam' && this.gen === 5) {
 			if (move.target === 'all') {
 				hitResult = this.runEvent('TryHitField', target, pokemon, move);
 			} else {
