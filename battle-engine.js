@@ -2204,20 +2204,23 @@ Battle = (function () {
 				this.resolveLastPriority(statuses, callbackType);
 			}
 		}
-		status = thing.getAbility();
-		if (status[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
-		}
-		status = thing.getItem();
-		if (status[callbackType] !== undefined || (getAll && thing.itemData[getAll])) {
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
-		}
-		status = this.getEffect(thing.template.baseSpecies);
-		if (status[callbackType] !== undefined) {
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.speciesData, end: function () {}, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
+		if (thing.isActive || this.gen <= 4) {
+			// inactive effects for inactive Pokémon since Gen 5
+			status = thing.getAbility();
+			if (status[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
+				statuses.push({status: status, callback: status[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
+				this.resolveLastPriority(statuses, callbackType);
+			}
+			status = thing.getItem();
+			if (status[callbackType] !== undefined || (getAll && thing.itemData[getAll])) {
+				statuses.push({status: status, callback: status[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
+				this.resolveLastPriority(statuses, callbackType);
+			}
+			status = this.getEffect(thing.template.baseSpecies);
+			if (status[callbackType] !== undefined) {
+				statuses.push({status: status, callback: status[callbackType], statusData: thing.speciesData, end: function () {}, thing: thing});
+				this.resolveLastPriority(statuses, callbackType);
+			}
 		}
 
 		if (foeThing && foeCallbackType && foeCallbackType.substr(0, 8) !== 'onSource') {
