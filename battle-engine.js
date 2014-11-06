@@ -2823,12 +2823,6 @@ Battle = (function () {
 			}
 		}
 
-		if (move.isSoundBased && (pokemon !== target || this.gen <= 4)) {
-			if (!target.runImmunity('sound', true)) {
-				return false;
-			}
-		}
-
 		if (move.ohko) {
 			if (target.level > pokemon.level) {
 				return false;

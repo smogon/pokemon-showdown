@@ -205,7 +205,7 @@ exports.BattleScripts = {
 			return this.moveHit(target, pokemon, move);
 		}
 
-		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
+		if (move.affectedByImmunities && !target.runImmunity(move.type, true)) {
 			return false;
 		}
 
