@@ -289,7 +289,7 @@ exports.BattleAbilities = {
 		desc: "Restores HP when this Pokemon consumes a berry.",
 		shortDesc: "Restores HP when this Pokemon consumes a berry.",
 		onEatItem: function (item, pokemon) {
-			this.heal(pokemon.maxhp / 4);
+			this.heal(pokemon.maxhp / 3);
 		},
 		id: "cheekpouch",
 		name: "Cheek Pouch",
