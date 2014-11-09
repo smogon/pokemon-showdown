@@ -425,19 +425,19 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user raises the Special Defense stat of itself and ally Pokemon by 1.",
-		shortDesc: "Raises user's and allies' Special Defense by 1.",
+		desc: "Raises an adjacent ally's Special Defense by 1 stage. Fails if there is no ally adjacent to the user.",
+		shortDesc: "Raises an ally's Special Defense by 1.",
 		id: "aromaticmist",
 		name: "Aromatic Mist",
 		pp: 20,
 		priority: 0,
-		onHit: function (pokemon) {
-			for (var p in pokemon.side.active) {
-				this.boost({spd: 1}, pokemon.side.active[p], pokemon.side.active[p], this.getMove("aromaticmist"));
-			}
+		isNotProtectable: true,
+		notSubBlocked: true,
+		boosts: {
+			spd: 1
 		},
 		secondary: false,
-		target: "self",
+		target: "adjacentAlly",
 		type: "Fairy"
 	},
 	"assist": {
