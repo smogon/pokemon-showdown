@@ -6557,6 +6557,18 @@ exports.BattleMovedex = {
 		isUnreleased: true,
 		breaksProtect: true,
 		notSubBlocked: true,
+		onTry: function (pokemon) {
+			/* TODO: Use real forme name
+			if (pokemon.species === 'Hoopa-Forme' && pokemon.baseTemplate.species === pokemon.species) {
+				return;
+			}*/
+			if (pokemon.baseTemplate.species === 'Hoopa') {
+				this.add('cant', pokemon, 'Hoopa');
+				return null;
+			}
+			this.add('cant', pokemon, 'Not Hoopa');
+			return null;
+		},
 		self: {
 			boosts: {
 				def: -1
