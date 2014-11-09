@@ -476,7 +476,7 @@ exports.BattleItems = {
 	"blueorb": {
 		id: "blueorb",
 		name: "Blue Orb",
-		spritenum: 0,
+		spritenum: 41,
 		isUnreleased: true,
 		onStart: function (pokemon) {
 			if (pokemon.isActive && pokemon.baseTemplate.species === 'Kyogre') {
@@ -3587,7 +3587,7 @@ exports.BattleItems = {
 	"redorb": {
 		id: "redorb",
 		name: "Red Orb",
-		spritenum: 0,
+		spritenum: 390,
 		isUnreleased: true,
 		onStart: function (pokemon) {
 			if (pokemon.isActive && pokemon.baseTemplate.species === 'Groudon') {
