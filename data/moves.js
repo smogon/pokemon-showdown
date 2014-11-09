@@ -2654,7 +2654,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSoundBased: true,
 		secondary: false,
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Fairy"
 	},
 	"discharge": {
@@ -5608,7 +5608,7 @@ exports.BattleMovedex = {
 			return null;
 		},
 		secondary: false,
-		target: "self",
+		target: "allySide",
 		type: "Normal"
 	},
 	"harden": {
@@ -13880,7 +13880,7 @@ exports.BattleMovedex = {
 			target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: false,
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Ground"
 	},
 	"thrash": {
@@ -14552,7 +14552,7 @@ exports.BattleMovedex = {
 			return false;
 		},
 		secondary: false,
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Poison"
 	},
 	"venoshock": {
