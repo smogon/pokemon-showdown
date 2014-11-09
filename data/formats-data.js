@@ -4822,7 +4822,7 @@ exports.BattleFormatsData = {
 	diggersby: {
 		randomBattleMoves: ["earthquake","uturn","return","wildcharge","swordsdance","quickattack","agility"],
 		randomDoubleBattleMoves: ["earthquake","uturn","return","wildcharge","protect","quickattack"],
-		tier: "BL"
+		tier: "UU"
 	},
 	fletchling: {
 		randomBattleMoves: ["roost","swordsdance","uturn","return","overheat","flamecharge","tailwind"],
