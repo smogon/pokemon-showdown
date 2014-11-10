@@ -731,7 +731,7 @@ exports.BattleScripts = {
 			var moves;
 			var pool = ['struggle'];
 			if (poke === 'Smeargle') {
-				pool = Object.keys(this.data.Movedex).exclude('struggle', 'chatter');
+				pool = Object.keys(this.data.Movedex).exclude('struggle', 'chatter', 'magikarpsrevenge');
 			} else if (template.learnset) {
 				pool = Object.keys(template.learnset);
 			}
