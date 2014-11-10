@@ -651,6 +651,7 @@ exports.BattleMovedex = {
 	},
 	secretpower: {
 		inherit: true,
+		onHit: function () {},
 		secondary: {
 			chance: 30,
 			boosts: {
