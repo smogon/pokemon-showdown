@@ -6563,10 +6563,10 @@ exports.BattleMovedex = {
 				return;
 			}*/
 			if (pokemon.baseTemplate.species === 'Hoopa') {
-				this.add('cant', pokemon, 'Hoopa');
+				this.add('-fail', pokemon, 'move: Hyperspace Fury');
 				return null;
 			}
-			this.add('cant', pokemon, 'Not Hoopa');
+			this.add('-fail', pokemon, 'move: Hyperspace Fury');
 			return null;
 		},
 		self: {
