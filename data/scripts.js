@@ -2520,7 +2520,7 @@ exports.BattleScripts = {
 			(5 * hash + 192) % 721
 		];
 		var randoms = {};
-		for (var i=0; i<6; i++) {
+		for (var i = 0; i < 6; i++) {
 			if (randNums[i] < 1) randNums[i] = 1;
 			randoms[randNums[i]] = true;
 		}
