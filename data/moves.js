@@ -11472,9 +11472,30 @@ exports.BattleMovedex = {
 		name: "Secret Power",
 		pp: 20,
 		priority: 0,
+		onHit: function (target, source, move) {
+			if (this.isTerrain('')) return;
+			move.secondaries = [];
+			if (this.isTerrain('electricterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					status: 'par'
+				});
+			} else if (this.isTerrain('grassyterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					status: 'slp'
+				});
+			} else if (this.isTerrain('mistyterrain')) {
+				move.secondaries.push({
+					chance: 30,
+					boosts: {
+						spa: -1
+					}
+				});
+			}
+		},
 		secondary: {
 			chance: 30,
-			// TODO: Look into the effects on different terrain
 			status: 'par'
 		},
 		target: "normal",
@@ -14768,7 +14789,7 @@ exports.BattleMovedex = {
 				this.add('-sideend', targetSide, 'Water Pledge');
 			},
 			onModifyMove: function (move) {
-				if (move.secondaries) {
+				if (move.secondaries && move.id !== 'secretpower') {
 					this.debug('doubling secondary chance');
 					for (var i = 0; i < move.secondaries.length; i++) {
 						move.secondaries[i].chance *= 2;

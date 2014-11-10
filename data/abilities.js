@@ -2289,7 +2289,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's moves have their secondary effect chance doubled. For example, if this Pokemon uses Ice Beam, it will have a 20% chance to freeze its target.",
 		shortDesc: "This Pokemon's moves have their secondary effect chance doubled.",
 		onModifyMove: function (move) {
-			if (move.secondaries) {
+			if (move.secondaries && move.id !== 'secretpower') {
 				this.debug('doubling secondary chance');
 				for (var i = 0; i < move.secondaries.length; i++) {
 					move.secondaries[i].chance *= 2;
