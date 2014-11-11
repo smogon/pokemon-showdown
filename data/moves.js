@@ -2632,7 +2632,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			}
@@ -3499,7 +3499,7 @@ exports.BattleMovedex = {
 				}
 				for (var i = 0; i < pokemon.moveset.length; i++) {
 					if (pokemon.moveset[i].id !== this.effectData.move) {
-						pokemon.moveset[i].disabled = true;
+						pokemon.disableMove(pokemon.moveset[i].id);
 					}
 				}
 			}
@@ -5295,7 +5295,7 @@ exports.BattleMovedex = {
 				pokemon.negateImmunity['Ground'] = true;
 				var disabledMoves = {bounce:1, fly:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
 				for (var m in disabledMoves) {
-					pokemon.disabledMoves[m] = true;
+					pokemon.disableMove(m);
 				}
 				var applies = false;
 				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
@@ -5762,7 +5762,7 @@ exports.BattleMovedex = {
 				var move;
 				for (var i = 0; i < pokemon.moveset.length; i++) {
 					if (disabledMoves[pokemon.moveset[i].id] || (move = this.getMove(pokemon.moveset[i].id)).heal || move.drain) {
-						pokemon.disabledMoves[pokemon.moveset[i].id] = true;
+						pokemon.disableMove(pokemon.moveset[i].id);
 					}
 				}
 			},
@@ -6869,7 +6869,7 @@ exports.BattleMovedex = {
 			onFoeModifyPokemon: function (pokemon) {
 				var foeMoves = this.effectData.source.moveset;
 				for (var f = 0; f < foeMoves.length; f++) {
-					pokemon.disabledMoves[foeMoves[f].id] = true;
+					pokemon.disableMove(foeMoves[f].id, true);
 				}
 			},
 			onFoeBeforeMove: function (attacker, defender, move) {
@@ -13743,7 +13743,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (this.getMove(moves[i].move).category === 'Status') {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			},
@@ -14129,7 +14129,7 @@ exports.BattleMovedex = {
 				this.add('-end', pokemon, 'Torment');
 			},
 			onModifyPokemon: function (pokemon) {
-				if (pokemon.lastMove !== 'struggle') pokemon.disabledMoves[pokemon.lastMove] = true;
+				if (pokemon.lastMove !== 'struggle') pokemon.disableMove(pokemon.lastMove);
 			}
 		},
 		secondary: false,

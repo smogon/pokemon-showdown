@@ -292,7 +292,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (disabledMoves[moves[i].id] || this.getMove(moves[i].id).heal) {
-						pokemon.disabledMoves[moves[i].id] = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			},

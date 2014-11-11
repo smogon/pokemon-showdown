@@ -513,7 +513,7 @@ exports.BattleAbilities = {
 		onFoeModifyPokemon: function (pokemon) {
 			var foeMoves = this.effectData.target.moveset;
 			for (var f = 0; f < foeMoves.length; f++) {
-				pokemon.disabledMoves[foeMoves[f].id] = true;
+				pokemon.disableMove(foeMoves[f].id, true);
 			}
 		},
 		onFoeBeforeMove: function (attacker, defender, move) {

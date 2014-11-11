@@ -830,6 +830,19 @@ BattlePokemon = (function () {
 		if (!moves.length) return ['struggle'];
 		return moves;
 	};
+	BattlePokemon.prototype.disableMove = function (moveid, isHidden, sourceEffect) {
+		if (!sourceEffect && this.battle.event) {
+			sourceEffect = this.battle.effect;
+		}
+		moveid = toId(moveid);
+		if (moveid.substr(0, 11) === 'hiddenpower') moveid = 'hiddenpower';
+
+		if (this.disabledMoves[moveid] && !this.disabledMoves[moveid].isHidden) return;
+		this.disabledMoves[moveid] = {
+			isHidden: !!isHidden,
+			sourceEffect: sourceEffect
+		};
+	};
 	// returns the amount of damage actually healed
 	BattlePokemon.prototype.heal = function (d) {
 		if (!this.hp) return false;
