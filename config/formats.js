@@ -334,12 +334,10 @@ exports.Formats = [
 		mod: 'oras',
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Huntail + Shell Smash + Sucker Punch',
-			'Floette-Eternal-Flower', 'Hoopa', 'Volcanion', 'Soul Dew', 'Dark Void',
-			'Bug Gem', 'Custap Berry', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem',
-			'Grass Gem', 'Ground Gem', 'Ice Gem', 'Mail', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem',
-			'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin',
-			'Arceus', 'Reshiram', 'Zekrom', 'Kyurem-White', 'Xerneas', 'Yveltal'
+		banlist: ['Illegal', 'Floette-Eternal-Flower', 'Hoopa', 'Volcanion', 'Soul Dew', 'Dark Void', 'Bug Gem', 'Custap Berry', 'Dark Gem', 'Dragon Gem',
+			'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Mail', 'Poison Gem',
+			'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem', 'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia',
+			'Giratina', 'Giratina-Origin', 'Arceus', 'Reshiram', 'Zekrom', 'Kyurem-White', 'Xerneas', 'Yveltal'
 		]
 	},
 	{
