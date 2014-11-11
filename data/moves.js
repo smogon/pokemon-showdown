@@ -12855,7 +12855,7 @@ exports.BattleMovedex = {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onSwitchIn: function (pokemon) {
-				var typeMod = this.clampIntRange(this.getEffectiveness('Rock', pokemon), -6, 6);
+				var typeMod = this.clampIntRange(pokemon.runEffectiveness('Rock'), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			}
 		},
