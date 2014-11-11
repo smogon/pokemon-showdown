@@ -459,7 +459,7 @@ exports.Formats = [
 				}
 			} else {
 				// Change move type time to time only when the move is not present.
-				if (this.random(100) < 40 && move.target !== 'self') {
+				if (this.random(100) < 35 && move.target !== 'self') {
 					var type = '';
 					switch (move.type.toLowerCase()){
 					case 'rock':
@@ -484,6 +484,9 @@ exports.Formats = [
 						type = 'Bug';
 						break;
 					case 'dragon':
+					case 'poison':
+						type = 'Fairy';
+						break;
 					case 'electric':
 						type = 'Ice';
 						break;
@@ -494,7 +497,6 @@ exports.Formats = [
 						type = 'Electric';
 						break;
 					case 'normal':
-					case 'poison':
 						type = 'Ghost';
 						break;
 					case 'psychic':
@@ -503,15 +505,18 @@ exports.Formats = [
 					case 'steel':
 						type = 'Poison';
 						break;
+					case 'fairy':
+						type = 'Dragon';
+						break;
 					}
 
 					move.type = type;
-					this.add('-message', 'lol trolled I changed yer move type hahaha');
+					this.add('-message', 'LOL trolled I changed yer move type hahaha');
 				}
 			}
 		},
 		onSwitchIn: function (pokemon) {
-			if (this.random(100) < 33) {
+			if (this.random(100) < 25) {
 				this.add('-message', pokemon.name + " drank way too much!");
 				pokemon.addVolatile('confusion');
 				pokemon.statusData.time = 0;
