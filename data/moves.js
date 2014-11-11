@@ -13119,9 +13119,6 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		isContact: true,
-		beforeMoveCallback: function (pokemon) {
-			this.add('-activate', pokemon, 'move: Struggle');
-		},
 		onModifyMove: function (move) {
 			move.type = '???';
 		},

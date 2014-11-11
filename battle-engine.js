@@ -3808,6 +3808,7 @@ Battle = (function () {
 				var moves = pokemon.getMoves();
 				if (!moves.length || moves[0].id === 'struggle') {
 					// override decision and use Struggle if there are no other valid moves
+					side.send('-activate', pokemon, 'move: Struggle');
 					moveid = 'struggle';
 				} else {
 					// at least a move is valid (other than Struggle)
