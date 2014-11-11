@@ -2536,6 +2536,15 @@ exports.BattleScripts = {
 			}
 		}
 
+		// There is a very improbable chance in which two hashes collide, leaving the player with five Pokémon. Fix that.
+		var defaults = ['zapdos', 'venusaur', 'aegislash', 'heatran', 'unown', 'liepard'].randomize();
+		while (mons < 6) {
+			var set = this.randomSet(this.getTemplate(defaults[mons]), mons);
+			set.moves[3] = 'Present';
+			team.push(set);
+			mons++;
+		}
+
 		return team;
 	}
 };
