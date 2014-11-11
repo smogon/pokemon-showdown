@@ -803,6 +803,7 @@ BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.tryTrap = function (isHidden) {
 		if (this.runImmunity('trapped')) {
+			if (this.trapped && isHidden) return true;
 			this.trapped = isHidden ? 'hidden' : true;
 			return true;
 		}
