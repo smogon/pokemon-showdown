@@ -218,6 +218,7 @@ exports.groups = {
 		roomdriver: true,
 		declare: true,
 		modchatall: true,
+		promote: 'u',
 		roomonly: true,
 		tournamentsmanagement: true,
 		rank: 5
