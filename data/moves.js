@@ -6871,6 +6871,7 @@ exports.BattleMovedex = {
 				for (var f = 0; f < foeMoves.length; f++) {
 					pokemon.disableMove(foeMoves[f].id, true);
 				}
+				pokemon.maybeDisabled = true;
 			},
 			onFoeBeforeMove: function (attacker, defender, move) {
 				if (attacker.disabledMoves[move.id]) {

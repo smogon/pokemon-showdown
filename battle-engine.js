@@ -305,6 +305,7 @@ BattlePokemon = (function () {
 
 	BattlePokemon.prototype.trapped = false;
 	BattlePokemon.prototype.maybeTrapped = false;
+	BattlePokemon.prototype.maybeDisabled = false;
 	BattlePokemon.prototype.hp = 0;
 	BattlePokemon.prototype.maxhp = 100;
 	BattlePokemon.prototype.illusion = null;
@@ -350,6 +351,7 @@ BattlePokemon = (function () {
 		this.disabledMoves = {};
 		this.negateImmunity = {};
 		this.trapped = this.maybeTrapped = false;
+		this.maybeDisabled = false;
 		// reset for ignore settings
 		this.ignore = {};
 		for (var i in this.moveset) {
@@ -358,6 +360,7 @@ BattlePokemon = (function () {
 		if (init) return;
 
 		if (this.runImmunity('trapped')) this.battle.runEvent('MaybeTrapPokemon', this);
+		// Disable the faculty to cancel switches if a foe may have a trapping ability
 		for (var i = 0; i < this.battle.sides.length; ++i) {
 			var side = this.battle.sides[i];
 			if (side === this.side) continue;
@@ -494,7 +497,7 @@ BattlePokemon = (function () {
 		if (lockedMove === true) lockedMove = false;
 		return lockedMove;
 	};
-	BattlePokemon.prototype.getMoves = function (lockedMove) {
+	BattlePokemon.prototype.getMoves = function (lockedMove, restrictData) {
 		if (lockedMove) {
 			lockedMove = toId(lockedMove);
 			this.trapped = true;
@@ -518,9 +521,9 @@ BattlePokemon = (function () {
 				}
 				continue;
 			}
-			if (this.disabledMoves[move.id] || !move.pp && (this.battle.gen !== 1 || !this.volatiles['partialtrappinglock'])) {
-				move.disabled = true;
-			} else if (!move.disabled) {
+			if (this.disabledMoves[move.id] && (!restrictData || !this.disabledMoves[move.id].isHidden) || !move.pp && (this.battle.gen !== 1 || !this.volatiles['partialtrappinglock'])) {
+				move.disabled = !restrictData && this.disabledMoves[move.id] && this.disabledMoves[move.id].isHidden ? 'hidden' : true;
+			} else if (!move.disabled || move.disabled === 'hidden' && restrictData) {
 				hasValidMove = true;
 			}
 			var moveName = move.move;
@@ -543,22 +546,24 @@ BattlePokemon = (function () {
 				id: lockedMove
 			}];
 		}
-		if (!hasValidMove) {
-			return [{
-				move: 'Struggle',
-				id: 'struggle'
-			}];
-		}
-		return moves;
+		if (hasValidMove) return moves;
+
+		return [{
+			move: 'Struggle',
+			id: 'struggle'
+		}];
 	};
 	BattlePokemon.prototype.getRequestData = function () {
 		var lockedMove = this.getLockedMove();
 
-		var data = {moves: this.getMoves(lockedMove)};
-
 		// Information should be restricted for the last active Pokémon
 		var isLastActive = this.isLastActive();
+		var data = {moves: this.getMoves(lockedMove, isLastActive)};
+
 		if (isLastActive) {
+			if (this.maybeDisabled) {
+				data.maybeDisabled = true;
+			}
 			if (this.trapped === true) {
 				data.trapped = true;
 			} else if (this.maybeTrapped) {
@@ -3548,7 +3553,7 @@ Battle = (function () {
 		if (typeof choice === 'string') choice = choice.split(',');
 
 		if (side.decision && side.decision.finalDecision) {
-			this.debug("Can't cancel decision: the last pokemon could have been trapped");
+			this.debug("Can't override decision: the last pokemon could have been trapped or disabled");
 			return;
 		}
 
@@ -3586,7 +3591,7 @@ Battle = (function () {
 		if (!side.currentRequest) return;
 
 		if (side.decision && side.decision.finalDecision) {
-			this.debug("Can't cancel decision: the last pokemon could have been trapped");
+			this.debug("Can't cancel decision: the last pokemon could have been trapped or disabled");
 			return;
 		}
 
@@ -3606,7 +3611,7 @@ Battle = (function () {
 
 		var decisions = [];
 		var len = choices.length;
-		if (side.currentRequest === 'move') len = side.active.length;
+		if (side.currentRequest !== 'teampreview') len = side.active.length;
 
 		var freeSwitchCount = {'switch':0, 'pass':0};
 		if (side.currentRequest === 'switch') {
@@ -3624,15 +3629,27 @@ Battle = (function () {
 				choice = choice.substr(0, firstSpaceIndex).trim();
 			}
 
+			var pokemon = side.pokemon[i];
+
 			switch (side.currentRequest) {
 			case 'teampreview':
 				if (choice !== 'team' || i > 0) return false;
 				break;
 			case 'move':
 				if (i >= side.active.length) return false;
-				if (!side.pokemon[i] || side.pokemon[i].fainted) {
+				if (!pokemon || pokemon.fainted) {
 					decisions.push({
 						choice: 'pass'
+					});
+					continue;
+				}
+				var lockedMove = pokemon.getLockedMove();
+				if (lockedMove) {
+					decisions.push({
+						choice: 'move',
+						pokemon: pokemon,
+						targetLoc: this.runEvent('LockMoveTarget', pokemon) || 0,
+						move: lockedMove
 					});
 					continue;
 				}
@@ -3736,46 +3753,84 @@ Battle = (function () {
 				break;
 
 			case 'move':
+				var moveid = '';
 				var targetLoc = 0;
 				var pokemon = side.pokemon[i];
-				var lockedMove = pokemon.getLockedMove();
-				var validMoves = pokemon.getValidMoves(lockedMove);
-				var moveid = '';
 
-				if (data.substr(data.length - 2) === ' 1') targetLoc = 1;
-				if (data.substr(data.length - 2) === ' 2') targetLoc = 2;
-				if (data.substr(data.length - 2) === ' 3') targetLoc = 3;
-				if (data.substr(data.length - 3) === ' -1') targetLoc = -1;
-				if (data.substr(data.length - 3) === ' -2') targetLoc = -2;
-				if (data.substr(data.length - 3) === ' -3') targetLoc = -3;
+				if (data.substr(-2) === ' 1') targetLoc = 1;
+				if (data.substr(-2) === ' 2') targetLoc = 2;
+				if (data.substr(-2) === ' 3') targetLoc = 3;
+				if (data.substr(-3) === ' -1') targetLoc = -1;
+				if (data.substr(-3) === ' -2') targetLoc = -2;
+				if (data.substr(-3) === ' -3') targetLoc = -3;
 
 				if (targetLoc) data = data.substr(0, data.lastIndexOf(' '));
 
-				if (lockedMove) targetLoc = (this.runEvent('LockMoveTarget', pokemon) || 0);
-
-				if (data.substr(data.length - 5) === ' mega') {
-					if (!lockedMove) {
-						decisions.push({
-							choice: 'megaEvo',
-							pokemon: pokemon
-						});
-					}
+				if (data.substr(-5) === ' mega') {
+					decisions.push({
+						choice: 'megaEvo',
+						pokemon: pokemon
+					});
 					data = data.substr(0, data.length - 5);
 				}
 
+				/**
+				 *	Parse the move identifier (name or index), according to the request sent to the client.
+				 *	If the move is not found, the decision is invalid without requiring further inspection.
+				 */
+
+				var requestMoves = pokemon.getRequestData().moves;
 				if (data.search(/^[0-9]+$/) >= 0) {
-					moveid = validMoves[parseInt(data, 10) - 1];
+					// parse a one-based move index
+					var moveIndex = parseInt(data, 10) - 1;
+					if (!requestMoves[moveIndex]) {
+						this.debug("Can't use an unexpected move");
+						return false;
+					}
+					moveid = requestMoves[moveIndex].id;
 				} else {
+					// parse a move name
 					moveid = toId(data);
 					if (moveid.substr(0, 11) === 'hiddenpower') {
 						moveid = 'hiddenpower';
 					}
-					if (validMoves.indexOf(moveid) < 0) {
-						moveid = '';
+					if (!requestMoves.map('id').any(moveid)) {
+						this.debug("Can't use an unexpected move");
+						return false;
 					}
 				}
-				if (!moveid) {
-					moveid = validMoves[0];
+
+				/**
+				 *	Check whether the chosen move is really valid, accounting for effects active in battle,
+				 *	which could be unknown for the client.
+				 */
+
+				var moves = pokemon.getMoves();
+				if (!moves.length || moves[0].id === 'struggle') {
+					// override decision and use Struggle if there are no other valid moves
+					moveid = 'struggle';
+				} else {
+					// at least a move is valid (other than Struggle)
+					// check if the chosen one is
+					var isEnabled = false;
+					for (var j = 0; j < moves.length; j++) {
+						if (moves[j].id !== moveid) continue;
+						if (!moves[j].disabled) {
+							isEnabled = true;
+							break;
+						}
+					}
+					if (!isEnabled) {
+						// request a different choice
+						var sourceEffect = pokemon.disabledMoves[moveid] && pokemon.disabledMoves[moveid].sourceEffect;
+						side.emitCallback('cant', pokemon, sourceEffect ? sourceEffect.fullname : '', moveid);
+						return false;
+					}
+					// the chosen move is valid
+				}
+
+				if (pokemon.maybeDisabled) {
+					decisions.finalDecision = decisions.finalDecision || pokemon.isLastActive();
 				}
 
 				decisions.push({
