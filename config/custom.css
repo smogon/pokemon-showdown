@@ -8,38 +8,34 @@
  * your server.
  */
 ul.userlist {
-background: repeating-linear-gradient(
-45deg,
-transparent,
-transparent 10px,
-#D6A5C7 10px,
-#A3879B 20px
-),
-linear-gradient(
-to bottom,
-transparent 10px,
-#D69AC4,
-#877E84,
-#363335
-);
+    background: linear-gradient(to bottom, #dbd9db 12%,#dbd9db 12%,#d8a4c2 49%,#d8a4c2 49%,#d8a4c2 68%,#d8a4c2 69%,#d8a4c2 72%,#aa5ca1 79%,#aa5ca1 82%,#d8a4c2 91%,#d8a4c2 93%,#c46095 96%);
+    /* Old browsers */
+    /* FF3.6+ */
+    /* Chrome,Safari4+ */
+    /* Chrome10+,Safari5.1+ */
+    /* Opera 11.10+ */
+    /* IE10+ */
+    /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dbd9db', endColorstr='#c46095',GradientType=0 );
+    /* IE6-9 */
 }
 
 .menugroup .button:hover {
-background: rgb(175, 122, 175);
+    background: rgb(175, 122, 175);
 }
 
 .menugroup .button {
-background: rgb(226, 185, 221);
-color: #3300FF;
-text-shadow: 0px 0px 9px #00D0FF;
-font-family: Angrybirds
+    background: rgb(226, 185, 221);
+    color: #3300FF;
+    text-shadow: 0px 0px 9px #00D0FF;
+    font-family: Angrybirds
 ;
 }
 
 .menugroup {
-background: rgba(243, 125, 196, 0.34);
+    background: rgba(243, 125, 196, 0.34);
 }
 
 body,html {
-background: url("http://i.imgur.com/iCJUbaF.jpg");
+    background: url("http://i.imgur.com/5dpeWPn.jpg");
 }
