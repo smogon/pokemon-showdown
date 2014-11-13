@@ -550,9 +550,6 @@ exports.BattleItems = {
 		id: "burndrive",
 		name: "Burn Drive",
 		spritenum: 54,
-		fling: {
-			basePower: 70
-		},
 		onTakeItem: function (item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
 				return false;
@@ -742,9 +739,6 @@ exports.BattleItems = {
 		id: "chilldrive",
 		name: "Chill Drive",
 		spritenum: 67,
-		fling: {
-			basePower: 70
-		},
 		onTakeItem: function (item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
 				return false;
@@ -1073,9 +1067,6 @@ exports.BattleItems = {
 		id: "dousedrive",
 		name: "Douse Drive",
 		spritenum: 103,
-		fling: {
-			basePower: 70
-		},
 		onTakeItem: function (item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
 				return false;
@@ -1091,15 +1082,18 @@ exports.BattleItems = {
 		id: "dracoplate",
 		name: "Draco Plate",
 		spritenum: 105,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Dragon',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 311,
 		gen: 4,
@@ -1145,15 +1139,18 @@ exports.BattleItems = {
 		id: "dreadplate",
 		name: "Dread Plate",
 		spritenum: 110,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Dark',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 312,
 		gen: 4,
@@ -1192,15 +1189,18 @@ exports.BattleItems = {
 		id: "earthplate",
 		name: "Earth Plate",
 		spritenum: 117,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Ground',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Ground') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 305,
 		gen: 4,
@@ -1431,15 +1431,18 @@ exports.BattleItems = {
 		id: "fistplate",
 		name: "Fist Plate",
 		spritenum: 143,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Fighting',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 303,
 		gen: 4,
@@ -1466,15 +1469,18 @@ exports.BattleItems = {
 		id: "flameplate",
 		name: "Flame Plate",
 		spritenum: 146,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Fire',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Fire') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 298,
 		gen: 4,
@@ -1957,15 +1963,18 @@ exports.BattleItems = {
 		id: "icicleplate",
 		name: "Icicle Plate",
 		spritenum: 220,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Ice',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Ice') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 302,
 		gen: 4,
@@ -1986,15 +1995,18 @@ exports.BattleItems = {
 		id: "insectplate",
 		name: "Insect Plate",
 		spritenum: 223,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Bug',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Bug') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 308,
 		gen: 4,
@@ -2022,15 +2034,18 @@ exports.BattleItems = {
 		id: "ironplate",
 		name: "Iron Plate",
 		spritenum: 225,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Steel',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Steel') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 313,
 		gen: 4,
@@ -2664,15 +2679,18 @@ exports.BattleItems = {
 		id: "meadowplate",
 		name: "Meadow Plate",
 		spritenum: 282,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Grass',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 301,
 		gen: 4,
@@ -2872,15 +2890,18 @@ exports.BattleItems = {
 		id: "mindplate",
 		name: "Mind Plate",
 		spritenum: 291,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Psychic',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 307,
 		gen: 4,
@@ -3269,15 +3290,18 @@ exports.BattleItems = {
 		id: "pixieplate",
 		name: "Pixie Plate",
 		spritenum: 610,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Fairy',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Fairy') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: -6,
 		gen: 6,
@@ -3804,6 +3828,9 @@ exports.BattleItems = {
 		id: "safetygoggles",
 		name: "Safety Goggles",
 		spritenum: 604,
+		fling: {
+			basePower: 80
+		},
 		onImmunity: function (type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
@@ -3975,9 +4002,6 @@ exports.BattleItems = {
 		id: "shockdrive",
 		name: "Shock Drive",
 		spritenum: 442,
-		fling: {
-			basePower: 70
-		},
 		onTakeItem: function (item, pokemon, source) {
 			if ((source && source.baseTemplate.num === 649) || pokemon.baseTemplate.num === 649) {
 				return false;
@@ -4081,15 +4105,18 @@ exports.BattleItems = {
 		id: "skyplate",
 		name: "Sky Plate",
 		spritenum: 450,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Flying',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Flying') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 306,
 		gen: 4,
@@ -4212,15 +4239,18 @@ exports.BattleItems = {
 		id: "splashplate",
 		name: "Splash Plate",
 		spritenum: 463,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Water',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Water') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 299,
 		gen: 4,
@@ -4230,15 +4260,18 @@ exports.BattleItems = {
 		id: "spookyplate",
 		name: "Spooky Plate",
 		spritenum: 464,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Ghost',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Ghost') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 310,
 		gen: 4,
@@ -4361,15 +4394,18 @@ exports.BattleItems = {
 		id: "stoneplate",
 		name: "Stone Plate",
 		spritenum: 477,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Rock',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Rock') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 309,
 		gen: 4,
@@ -4471,15 +4507,18 @@ exports.BattleItems = {
 		id: "toxicplate",
 		name: "Toxic Plate",
 		spritenum: 516,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Poison',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Poison') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 304,
 		gen: 4,
@@ -4759,15 +4798,18 @@ exports.BattleItems = {
 		id: "zapplate",
 		name: "Zap Plate",
 		spritenum: 572,
-		fling: {
-			basePower: 90
-		},
 		onPlate: 'Electric',
 		onBasePowerPriority: 6,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Electric') {
 				return this.chainModify(1.2);
 			}
+		},
+		onTakeItem: function (item, pokemon, source) {
+			if ((source && source.baseTemplate.num === 493) || pokemon.baseTemplate.num === 493) {
+				return false;
+			}
+			return true;
 		},
 		num: 300,
 		gen: 4,

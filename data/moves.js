@@ -886,7 +886,7 @@ exports.BattleMovedex = {
 				return false;
 			}
 			var yourItem = source.takeItem();
-			if (!yourItem) {
+			if (!yourItem || (yourItem.onTakeItem && yourItem.onTakeItem(yourItem, target) === false)) {
 				return false;
 			}
 			if (!target.setItem(yourItem)) {
@@ -4331,7 +4331,8 @@ exports.BattleMovedex = {
 		beforeMoveCallback: function (pokemon) {
 			if (pokemon.ignore['Item']) return;
 			var item = pokemon.getItem();
-			if (item.fling) {
+			var noFling = item.onTakeItem && item.onTakeItem(item, pokemon) === false;
+			if (item.fling && !noFling) {
 				pokemon.addVolatile('fling');
 				pokemon.setItem('');
 			}
@@ -7206,19 +7207,19 @@ exports.BattleMovedex = {
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon, target) {
 			var item = target.getItem();
-			var noKnockOff = ((item.onPlate && target.baseTemplate.baseSpecies === 'Arceus') ||
-				(item.onDrive && target.baseTemplate.baseSpecies === 'Genesect') || (item.onTakeItem && item.onTakeItem(item, target) === false));
+			var noKnockOff = item.onTakeItem && item.onTakeItem(item, target) === false;
 			if (item.id && !noKnockOff) {
 				return this.chainModify(1.5);
 			}
 		},
 		onAfterHit: function (target, source) {
+			if (target.hasAbility('stickyhold')) return;
 			if (source.hp) {
 				var item = target.getItem();
 				if (item.id === 'mail') {
 					target.setItem('');
 				} else {
-					item = target.takeItem(source);
+					item = target.takeItem();
 				}
 				if (item) {
 					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
@@ -13504,10 +13505,17 @@ exports.BattleMovedex = {
 		name: "Switcheroo",
 		pp: 10,
 		priority: 0,
+		onTryHit: function (target) {
+			if (target.hasAbility('stickyhold')) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
+		},
 		onHit: function (target, source) {
 			var yourItem = target.takeItem(source);
 			var myItem = source.takeItem();
-			if (target.item || source.item || (!yourItem && !myItem)) {
+			if (target.item || source.item || (!yourItem && !myItem) ||
+					(myItem.onTakeItem && myItem.onTakeItem(myItem, target) === false)) {
 				if (yourItem) target.item = yourItem;
 				if (myItem) source.item = myItem;
 				return false;
@@ -14263,10 +14271,17 @@ exports.BattleMovedex = {
 		name: "Trick",
 		pp: 10,
 		priority: 0,
+		onTryHit: function (target) {
+			if (target.hasAbility('stickyhold')) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
+		},
 		onHit: function (target, source) {
 			var yourItem = target.takeItem(source);
 			var myItem = source.takeItem();
-			if (target.item || source.item || (!yourItem && !myItem)) {
+			if (target.item || source.item || (!yourItem && !myItem) ||
+					(myItem.onTakeItem && myItem.onTakeItem(myItem, target) === false)) {
 				if (yourItem) target.item = yourItem;
 				if (myItem) source.item = myItem;
 				return false;

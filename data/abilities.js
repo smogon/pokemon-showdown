@@ -1669,9 +1669,6 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon is Arceus, its type and sprite change to match its held Plate. Either way, this Pokemon is holding a Plate, the Plate cannot be taken (such as by Trick or Thief). This ability cannot be Skill Swapped, Role Played or Traced.",
 		shortDesc: "If this Pokemon is Arceus, its type changes to match its held Plate.",
 		// Multitype's type-changing itself is implemented in statuses.js
-		onTakeItem: function (item) {
-			if (item.onPlate) return false;
-		},
 		id: "multitype",
 		name: "Multitype",
 		rating: 4,
@@ -2776,7 +2773,12 @@ exports.BattleAbilities = {
 		desc: "This Pokemon immediately passes its item to an ally after their item is consumed.",
 		shortDesc: "This Pokemon passes its item to an ally after their item is consumed.",
 		onAllyAfterUseItem: function (item, pokemon) {
-			var sourceItem = this.effectData.target.takeItem();
+			var sourceItem = this.effectData.target.getItem();
+			var noSharing = sourceItem.onTakeItem && sourceItem.onTakeItem(sourceItem, pokemon) === false;
+			if (!sourceItem || noSharing) {
+				return;
+			}
+			sourceItem = this.effectData.target.takeItem();
 			if (!sourceItem) {
 				return;
 			}
