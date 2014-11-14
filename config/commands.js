@@ -251,6 +251,51 @@ var commands = exports.commands = {
 	/*********************************************************
 	 * Informational commands
 	 *********************************************************/
+	
+	regdate: function(target, room, user, connection) {
+		if (!this.canBroadcast()) return;
+		var username = target;
+		var userid = toId(target);
+		username = Tools.escapeHTML(username);
+		if (userid == '') return this.sendReplyBox(username+' is not a valid username.');
+		var util = require("util"),
+		http = require("http");
+
+		var options = {
+			host: "www.pokemonshowdown.com",
+			port: 80,
+			path: "/forum/~"+userid
+		};
+
+		var content = "";
+		var self = this;
+		var req = http.request(options, function(res) {
+
+			res.setEncoding("utf8");
+			res.on("data", function (chunk) {
+				content += chunk;
+			});
+			res.on("end", function () {
+				content = content.split("<em");
+				if (content[1]) {
+					content = content[1].split("</p>");
+					if (content[0]) {
+						content = content[0].split("</em>");
+						if (content[1]) {
+							regdate = content[1];
+							data = username+' was registered on'+regdate+'.';
+						}
+					}
+				}
+				else {
+					data = username+' is not registered.';
+				}
+				self.sendReplyBox(data);
+				room.update();
+			});
+		});
+		req.end();
+	},
 
 	pstats: 'data',
 	stats: 'data',
@@ -1399,6 +1444,304 @@ var commands = exports.commands = {
 	},
 
 	/*********************************************************
+	 * Custom commands
+	 *********************************************************/
+
+	d: 'poof',
+	cpoof: 'poof',
+	poof: (function () {
+		var messages = [
+			"has vanished into nothingness!",
+			"visited James's bedroom and never returned!",
+			"used Explosion!",
+			"fell into the void.",
+			"was squished by Chin's mom's large behind!",
+			"became Soma's slave!",
+			"became NC's love slave!",
+			"has left the building.",
+			"felt Thundurus's wrath!",
+			"died of a broken heart.",
+			"got lost in a maze!",
+			"was hit by Magikarp's Revenge!",
+			"was sucked into a whirlpool!",
+			"got scared and left the server!",
+			"fell off a cliff!",
+			"got eaten by a bunch of piranhas!",
+			"is blasting off again!",
+			"A large spider descended from the sky and picked up {{user}}.",
+			"was Volt Tackled!",
+			"got their sausage smoked by Charmander!",
+			"was forced to give Zarel an oil massage!",
+			"took an arrow to the knee... and then one to the face.",
+			"peered through the hole on Shedinja's back",
+			"received judgment from the almighty Arceus!",
+			"used Final Gambit and missed!",
+			"pissed off a wild GB!",
+			"was frozen by Ice Beam!",
+			"was actually a 12 year and was banned for COPPA.",
+			"got lost in the illusion of reality.",
+			"was unfortunate and didn't get a cool message.",
+			"Jin The Cat accidently kicked {{user}} from the server!",
+			"was knocked out cold by Frage!",
+			"died making love to an James!",
+			"was glomped to death by Blaze!",
+			"was hit by a wrecking ball!",
+			"was hit by a train!",
+			"used Run Away!",
+			"was splashed by a Magikarp!",
+			"said Nick x Niku!",
+			"fled from Gary Oak!"
+		];
+
+		return function (target, room, user) {
+			if (Config.poofOff) return this.sendReply("Poof is currently disabled.");
+			if (target && !this.can('broadcast')) return false;
+			if (room.id !== 'lobby') return false;
+			var message = target || messages[Math.floor(Math.random() * messages.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+			if (!this.canTalk(message)) return false;
+
+			var colour = '#' + [1, 1, 1].map(function () {
+				var part = Math.floor(Math.random() * 0xaa);
+				return (part < 0x10 ? '0' : '') + part.toString(16);
+			}).join('');
+
+			room.addRaw('<center><strong><font color="' + colour + '">~~ ' + Tools.escapeHTML(message) + ' ~~</font></strong></center>');
+			user.disconnectAll();
+		};
+	})(),
+
+	poofoff: 'nopoof',
+	nopoof: function () {
+		if (!this.can('poofoff')) return false;
+		Config.poofOff = true;
+		return this.sendReply("Poof is now disabled.");
+	},
+
+	poofon: function () {
+		if (!this.can('poofoff')) return false;
+		Config.poofOff = false;
+		return this.sendReply("Poof is now enabled.");
+	},
+
+	reminders: 'reminder',
+	reminder: function (target, room, user) {
+		if (room.type !== 'chat') return this.sendReply("This command can only be used in chatrooms.");
+
+		var parts = target.split(',');
+		var cmd = parts[0].trim().toLowerCase();
+
+		if (cmd in {'':1, show:1, view:1, display:1}) {
+			if (!this.canBroadcast()) return;
+			message = "<strong><font size=\"3\">Reminders for " + room.title + ":</font></strong>";
+			if (room.reminders && room.reminders.length > 0)
+				message += '<ol><li>' + room.reminders.join('</li><li>') + '</li></ol>';
+			else
+				message += "<br /><br />There are no reminders to display";
+			message += "Contact a room owner, leader, or admin if you have a reminder you would like added.";
+			return this.sendReplyBox(message);
+		}
+
+		if (!this.can('declare', room)) return false;
+		if (!room.reminders) room.reminders = room.chatRoomData.reminders = [];
+
+		var index = parseInt(parts[1], 10) - 1;
+		var message = parts.slice(2).join(',').trim();
+		switch (cmd) {
+			case 'add':
+				index = room.reminders.length;
+				message = parts.slice(1).join(',').trim();
+				// Fallthrough
+
+			case 'insert':
+				if (!message) return this.sendReply("Your reminder was empty.");
+				if (message.length > 250) return this.sendReply("Your reminder cannot be greater than 250 characters in length.");
+
+				room.reminders.splice(index, 0, message);
+				Rooms.global.writeChatRoomData();
+				return this.sendReply("Your reminder has been inserted.");
+
+			case 'edit':
+				if (!room.reminders[index]) return this.sendReply("There is no such reminder.");
+				if (!message) return this.sendReply("Your reminder was empty.");
+				if (message.length > 250) return this.sendReply("Your reminder cannot be greater than 250 characters in length.");
+
+				room.reminders[index] = message;
+				Rooms.global.writeChatRoomData();
+				return this.sendReply("The reminder has been modified.");
+
+			case 'delete':
+				if (!room.reminders[index]) return this.sendReply("There is no such reminder.");
+
+				this.sendReply(room.reminders.splice(index, 1)[0]);
+				Rooms.global.writeChatRoomData();
+				return this.sendReply("has been deleted from the reminders.");
+		}
+	},
+
+	hide: 'hideauth',
+	hideauth: function (target, room, user) {
+		if (!this.can('hideauth')) return false;
+		target = target || Config.groups.default.global;
+		if (!Config.groups.global[target]) {
+			target = Config.groups.default.global;
+			this.sendReply("You have picked an invalid group, defaulting to '" + target + "'.");
+		} else if (Config.groups.bySymbol[target].globalRank >= Config.groups.bySymbol[user.group].globalRank)
+			return this.sendReply("The group you have chosen is either your current group OR one of higher rank. You cannot hide like that.");
+
+		user.getIdentity = function (roomid) {
+			var identity = Object.getPrototypeOf(this).getIdentity.call(this, roomid);
+			if (identity[0] === this.group)
+				return target + identity.slice(1);
+			return identity;
+		};
+		user.updateIdentity();
+		return this.sendReply("You are now hiding your auth as '" + target + "'.");
+	},
+
+	show: 'showauth',
+	showauth: function (target, room, user) {
+		if (!this.can('hideauth')) return false;
+		delete user.getIdentity;
+		user.updateIdentity();
+		return this.sendReply("You are now showing your authority!");
+	},
+
+	spam: 'spamroom',
+	spamroom: function (target, room, user) {
+		if (!target) return this.sendReply("Please specify a user.");
+		this.splitTarget(target);
+
+		if (!this.targetUser) {
+			return this.sendReply("The user '" + this.targetUsername + "' does not exist.");
+		}
+		if (!this.can('mute', this.targetUser)) {
+			return false;
+		}
+
+		var targets = Spamroom.addUser(this.targetUser);
+		if (targets.length === 0) {
+			return this.sendReply("That user's messages are already being redirected to the spamroom.");
+		}
+		this.privateModCommand("(" + user.name + " has added to the spamroom user list: " + targets.join(", ") + ")");
+	},
+
+	unspam: 'unspamroom',
+	unspamroom: function (target, room, user) {
+		if (!target) return this.sendReply("Please specify a user.");
+		this.splitTarget(target);
+
+		if (!this.can('mute')) {
+			return false;
+		}
+
+		var targets = Spamroom.removeUser(this.targetUser || this.targetUsername);
+		if (targets.length === 0) {
+			return this.sendReply("That user is not in the spamroom list.");
+		}
+		this.privateModCommand("(" + user.name + " has removed from the spamroom user list: " + targets.join(", ") + ")");
+	},
+
+	customavatars: 'customavatar',
+	customavatar: (function () {
+		const script = (function () {/*
+			FILENAME=`mktemp`
+			function cleanup {
+				rm -f $FILENAME
+			}
+			trap cleanup EXIT
+
+			set -xe
+
+			timeout 10 wget "$1" -nv -O $FILENAME
+
+			FRAMES=`identify $FILENAME | wc -l`
+			if [ $FRAMES -gt 1 ]; then
+				EXT=".gif"
+			else
+				EXT=".png"
+			fi
+
+			timeout 10 convert $FILENAME -layers TrimBounds -coalesce -adaptive-resize 80x80\> -background transparent -gravity center -extent 80x80 "$2$EXT"
+		*/}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+
+		var pendingAdds = {};
+		return function (target) {
+			var parts = target.split(',');
+			var cmd = parts[0].trim().toLowerCase();
+
+			if (cmd in {'':1, show:1, view:1, display:1}) {
+				var message = "";
+				for (var a in Config.customAvatars)
+					message += "<strong>" + Tools.escapeHTML(a) + ":</strong> " + Tools.escapeHTML(Config.customAvatars[a]) + "<br />";
+				return this.sendReplyBox(message);
+			}
+
+			if (!this.can('customavatar')) return false;
+
+			switch (cmd) {
+				case 'set':
+					var userid = toId(parts[1]);
+					var user = Users.getExact(userid);
+					var avatar = parts.slice(2).join(',').trim();
+
+					if (!userid) return this.sendReply("You didn't specify a user.");
+					if (Config.customAvatars[userid]) return this.sendReply(userid + " already has a custom avatar.");
+
+					var hash = require('crypto').createHash('sha512').update(userid + '\u0000' + avatar).digest('hex').slice(0, 8);
+					pendingAdds[hash] = {userid: userid, avatar: avatar};
+					parts[1] = hash;
+
+					if (!user) {
+						this.sendReply("Warning: " + userid + " is not online.");
+						this.sendReply("If you want to continue, use: /customavatar forceset, " + hash);
+						return;
+					}
+					// Fallthrough
+
+				case 'forceset':
+					var hash = parts[1].trim();
+					if (!pendingAdds[hash]) return this.sendReply("Invalid hash.");
+
+					var userid = pendingAdds[hash].userid;
+					var avatar = pendingAdds[hash].avatar;
+					delete pendingAdds[hash];
+
+					require('child_process').execFile('bash', ['-c', script, '-', avatar, './config/avatars/' + userid], (function (e, out, err) {
+						if (e) {
+							this.sendReply(userid + "'s custom avatar failed to be set. Script output:");
+							(out + err).split('\n').forEach(this.sendReply.bind(this));
+							return;
+						}
+
+						reloadCustomAvatars();
+						this.sendReply(userid + "'s custom avatar has been set.");
+					}).bind(this));
+					break;
+
+				case 'delete':
+					var userid = toId(parts[1]);
+					if (!Config.customAvatars[userid]) return this.sendReply(userid + " does not have a custom avatar.");
+
+					if (Config.customAvatars[userid].toString().split('.').slice(0, -1).join('.') !== userid)
+						return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") cannot be removed with this script.");
+					require('fs').unlink('./config/avatars/' + Config.customAvatars[userid], (function (e) {
+						if (e) return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") could not be removed: " + e.toString());
+
+						delete Config.customAvatars[userid];
+						this.sendReply(userid + "'s custom avatar removed successfully");
+					}).bind(this));
+					break;
+
+				default:
+					return this.sendReply("Invalid command. Valid commands are `/customavatar set, user, avatar` and `/customavatar delete, user`.");
+			}
+		};
+	})(),
+
+	/*********************************************************
 	 * Help commands
 	 *********************************************************/
 
@@ -1744,6 +2087,213 @@ var commands = exports.commands = {
 		} else if (!matched) {
 			this.sendReply("Help for the command '" + target + "' was not found. Try /help for general help");
 		}
-	}
+	},
 
+	/*********************************************************
+	 * Parukia commands
+	 *********************************************************/
+
+	memes: 'meme',
+	meme: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		target = target.toLowerCase();
+		var matched = false;
+		if (target === ''){
+			matched = true;
+			this.sendReplyBox('<b><font color="purple">List of memes:<br><br>-Aliens<br>-Fragequit<br>-Fuck yeah<br>-Umad<br>-Burnheal<br>-OU Train<br>-Gary Train<br>-If you know what I mean<br>-Doge<br>-Troll<br>-Fail<br>-Wtf<br>-Hawkward<br>-I dont always<br>-So hard<br>-ALL OF THE HOMO<br>-Cool story bro<br>-Udense<br>-Professor Oak<br>-Dodge<br>-You dont say<br>-Cockblocked<br>-Save the Titanic<br>-Ninjask\'d<br>-Fuck this<br>-Slowbro<br>-He has a point<br>-Rekt<br>-Death Stare<br>-What is love<br>-Badass<br>-Onixpected<br>-Wood Hammer<br>-Excuses<br>-Hax<br>-Spheal with it<br>-Hazeel<br>-Trick master is love<br><br>Is there a meme missing that you want added? Message a & or ~ and we will consider adding it!</font></b>');
+                }
+		if (target === 'aliens'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i.imgflip.com/26am.jpg" />');
+		}
+		if (target === 'fragequit'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i0.kym-cdn.com/photos/images/original/000/000/578/1234931504682.jpg" height="189" width="317" />');
+		}
+		if (target === 'fuck yeah'){
+			matched = true;
+			this.sendReplyBox('<img src="http://cdn.ebaumsworld.com/mediaFiles/picture/602006/80615085.jpg" height="200" width="200" />');
+		}
+		if (target === 'so hard'){
+			matched = true;
+			this.sendReplyBox('<img src="http://oi57.tinypic.com/io24g4.jpg" />');
+		}
+		if (target === 'umad'){
+			matched = true;
+			this.sendReplyBox('<img src="http://dailysnark.com/wp-content/uploads/2013/11/umad.gif" />');
+		}
+		if (target === 'burnheal'){
+			matched = true;
+			this.sendReplyBox('<img src="http://yoshi348.thedailypos.org/imagefest/yellow/yoshi3/poke157.png" />');
+		}
+		if (target === 'ou train'){
+			matched = true;
+			this.sendReplyBox('<img src="https://i.chzbgr.com/maxW500/7970259968/h1BCECD4B/" height="300" width="400" />');
+		}
+		if (target === 'gary train'){
+			matched = true;
+			this.sendReplyBox('<img src="http://25.media.tumblr.com/79f09b46546f72a8be7643b73760aae7/tumblr_mkziy58ed71s79jjoo1_250.gif" />');
+		}
+		if (target === 'if you know what i mean'){
+			matched = true;
+			this.sendReplyBox('<img src="http://fcdn.mtbr.com/attachments/california-norcal/805709d1370480032-should-strava-abandon-kom-dh-2790387-if-you-know-what-i-mean.png" />');
+		}
+		if (target === 'doge'){
+			matched = true;
+			this.sendReplyBox('<img src="http://0.media.dorkly.cvcdn.com/79/63/33f2d1f368e229c7e09baa64804307b4-a-wild-doge-appeared.jpg" height="242" width="300" />');
+		}
+		if (target === 'troll'){
+			matched = true;
+			this.sendReplyBox('<img src="http://static3.wikia.nocookie.net/__cb20131014231760/legomessageboards/images/c/c2/Troll-face.png" height="200" width="200" />');
+		}
+		if (target === 'fail'){
+			matched = true;
+			this.sendReplyBox('<img src="http://diginomica.com/wp-content/uploads/2013/11/+big-fail2.jpg" height="180" width="320" />');
+		}
+		if (target === 'wtf'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i.imgur.com/rcwmZSE.png" />');
+		}
+		if (target === 'professor oak'){
+			matched = true;
+			this.sendReplyBox('<img src="http://fc05.deviantart.net/fs71/f/2012/092/a/b/not_sure_if___meme_8_by_therealfry1-d4urwmg.jpg" />');
+		}
+		if (target === 'hawkward'){
+			matched = true;
+			this.sendReplyBox('<img src="https://i.imgflip.com/e6cip.jpg" height="350" width="330" />');
+		}
+		if (target === 'i dont always'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i.imgur.com/H0BPFem.jpg" height="314" width="320" />');
+		}
+		if (target === 'all of the homo'){
+			matched = true;
+			this.sendReplyBox('<img src="http://31.media.tumblr.com/tumblr_lurr17gQZ61r190lwo1_500.gif" height="143" width="250" />');
+		}
+		if (target === 'cool story bro'){
+			matched = true;
+			this.sendReplyBox('<img src="http://www.troll.me/images/creepy-willy-wonka/cool-story-bro-lets-hear-it-one-more-time.jpg" height="275" width="275" />');
+		}
+		if (target === 'udense'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i2.kym-cdn.com/photos/images/newsfeed/000/461/903/3a9.png" height="250" width="340" />');
+		}
+		if (target === 'dodge'){
+			matched = true;
+			this.sendReplyBox('<img src="http://weknowmemes.com/generator/uploads/generated/g1336276473177814171.jpg" height="250" width="256" />');
+		}
+		if (target === 'you dont say'){
+			matched = true;
+			this.sendReplyBox('<img src="http://www.wired.com/images_blogs/gamelife/2014/01/youdontsay.jpg" height="209" width="250" />');
+		}
+		if (target === 'cockblocked'){
+			matched = true;
+			this.sendReplyBox('<img src="http://www.quickmeme.com/img/27/27cf7456b43b14cc55bc557d678445f0048beca248d48779c902fbc1715d2753.jpg" height="300" width="300" />');
+		}
+		if (target === 'save the titanic'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i.imgur.com/hl6VKnp.png" />');
+		}
+		if (target === 'ninjask\'d'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i.imgur.com/ST7DNnh.png" />');
+		}
+		if (target === 'fuck this'){
+			matched = true;
+			this.sendReplyBox('<img src="https://i.imgur.com/S3Oof4K.gif" />');
+		}
+		if (target === 'slowbro'){
+			matched = true;
+			this.sendReplyBox('<img src="http://static.fjcdn.com/pictures/U_698d9e_2568950.jpg" height="216" width="199" />');
+		}
+		if (target === 'he has a point'){
+			matched = true;
+			this.sendReplyBox('<img src="http://m.memegen.com/56jc1t.jpg" height="192" width="256" />');
+		}
+		if (target === 'rekt'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i3.kym-cdn.com/entries/icons/original/000/014/969/1374702421151.jpg" height="264" width="235" />');
+		}
+		if (target === 'death stare'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i.kinja-img.com/gawker-media/image/upload/s--IL80Wq6b--/spnlcrxx0fwzwtszk2fm.gif" height="169" width="318" />');
+		}
+		if (target === 'what is love'){
+			matched = true;
+			this.sendReplyBox('<img src="http://img2.wikia.nocookie.net/__cb20130318010351/fantendo/images/a/a4/What-is-love-570898416.gif" />');
+		}
+		if (target === 'badass'){
+			matched = true;
+			this.sendReplyBox('<img src="http://www.memelinks.com/watch-out-we-got-a-badass-over-here.jpg" height="242" width="313" />');
+		}
+		if (target === 'onixpected'){
+			matched = true;
+			this.sendReplyBox('<img src="https://s3.amazonaws.com/colorslive/png/1016349-V7YrNOJxjNbeeSYR.png" height="200" width="300" />');
+		}
+		if (target === 'wood hammer'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i.imgur.com/kVOXqph.png" />');
+		}
+		if (target === 'excuses'){
+			matched = true;
+			this.sendReplyBox('<img src="http://cdn.memegenerator.net/instances/400x/37768972.jpg" height="200" width="200" />');
+		}
+		if (target === 'hax'){
+			matched = true;
+			this.sendReplyBox('<img src="http://cdn.memegenerator.net/instances/500x/52485639.jpg" height="188" width="250" />');
+		}
+		if (target === 'spheal with it'){
+			matched = true;
+			this.sendReplyBox('<img src="http://www.majhost.com/gallery/Ultimatetransfan/Reactions/spheal_with_it_2.jpg" />');
+		}
+		if (target === 'hazeel'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i.imgur.com/z4lB7eO.gif" />');
+		}
+		if (target === 'trick master is love'){
+			matched = true;
+			this.sendReplyBox('<img src="http://i.imgur.com/6YvQuXX.png" width="411" height="204" />');
+		}
+
+                if (target === ''){
+			}
+		else if (!matched) {
+
+			this.sendReply(''+target+' is not available or non existent.');
+		}
+	},
+
+	donate: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('Donate to Parukia to help us keep our servers online as well as raise enough money for Oak to buy a new laptop!<br><br><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=QPKGXD5TUBRVJ&lc=US&item_name=Parukia&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted">Donate!</a><br><b>NOTE: You must be logged into a Paypal account to donate. To donate money without having a bank account, credit card or debit card (basically via cash), see this page on <a href="https://www.paypal.com/webapps/mpp/greendot-moneypak">MoneyPaks</a>.</b><br><br>Bitcoin: 15SvTTzqYat9pPyC94kLjV2kirqiAySLxL<br><br>We also accept donations via <a href="http://www.google.com/wallet/">Google Wallet!</a> Send all money to <b>ayyysexyladies@gmail.com</b> to be accepted via Paypal.<br><b>Note:</b> Your Google account must state that you are 18 years or older to donate this way!');
+	},
+	
+	forums: 'forum',
+	forum: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('Join Parukia\'s forums and engage in more fun discussions with the community! <br />' +
+			'<a href="http://parukia.net/community/">http://parukia.net/community/</a>');
+	},
+	
+	parukiarules: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<font size="5" color="black"><b>The Parukian Guidelines</b></font><br><font size="3" color="black"><b>We don\'t follow the same rules as main!</b></font><br><br>1.) There is no such thing as racism on Parukia.<br>2.) Hazeel is a nut, no matter how many times he denies it.<br>3.) Chinlar x Knight of Zer0 and Hazeel x Gasper are Parukia\'s OTPs(One True Pairings)<br>4.) Playfully trolling one another is how we show we care<br>5.) We\'re all assholes, so if you\'re sensitive to certain issues warn us beforehand (no guarantee we\'ll respect that, though!)<br>6.) raiykid is rice, no exceptions.<br>7.) If you\'re not neutral with Red, you get no sympathy from the rest of us.<br>8.) If you pray to Jin, the hax grace will save you!<br>9.) If you piss off Niku, Oak will give you your last rites.<br>10.) Click all links at your own risk, it\'ll most likely be NSFW (in other words, you won\'t want your mother looking at it).<br>11.) Everything you say can and will be c/p\'d and turned into a dirty joke.<br>12.) Don\'t fuck with Blaze, Parukia\'s official mascot, or raiykid\'s gonna go all Canadian terrorist on your ass(ALALALALA EH?)<br>13.) You cannot go nope.avi to all these rules<br>14.) If you intended to go nope.avi to all these rules before reading #13, GG WP you\'ve just been rekt.<br>15.) Lost Saga cannot be found, please try again later.<br>16.) Accuracy hates you<br>17.) Nick is not poop, contrary to popular belief.<br>18.) GB can kick your ass in Project M. This rule is not up for debate, it is fact.<br>19.) If you stall, you will get haxed. This is undeniable law.<br>20.) Do not mess with a Starfish Nazi and a Mighty Tree!<br>21.) If you are asking y is the rum gone...raiy drank it all.<br>22.) If you have a fight, <b>settle it in smash!</b> If you don\'t have smash, you automatically lose!<br>23.) Paradoxical username user zero infinity is awesome when he\'s drunk!<br>24.) <a href="https://www.youtube.com/watch?v=qGyPuey-1Jw">Drunken Sailor</a> and <a href="https://www.youtube.com/watch?v=izGwDsrQ1eQ">Careless Whisper</a> are Parukia\'s official theme songs! ');
+
+        },
+        
+        parukiatiers: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('Parukia\'s Tiers:<br><a href="http://parukia.net/community/threads/parukian-tier-system.294/">http://parukia.net/community/threads/parukian-tier-system.294/</a><br><br>If you believe something is broken and deserves to be banned/suspected, contact Nickoop@, Kamui Senketsu/Pikachudude, SP Scep or Redace100!');
+	},
+
+        away: function (target, room, user) {
+		user.away = !user.away;
+		user.updateIdentity();
+		this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
+	},
+	
+	carelesswhispers: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<b>Parukia\'s Careless Whispers Button:</b><br><a href="http://parukia.net/carelesswhispers.html">http://parukia.net/carelesswhispers.html</a>');
+	},
 };
