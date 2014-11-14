@@ -1811,9 +1811,9 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReplyBox('<img src="http://fc05.deviantart.net/fs71/f/2012/092/a/b/not_sure_if___meme_8_by_therealfry1-d4urwmg.jpg" />');
 		}
-		if (target === 'peachness'){
+		if (target === 'hawkward'){
 			matched = true;
-			this.sendReplyBox('<img src="http://oi62.tinypic.com/161kpqe.jpg" />');
+			this.sendReplyBox('<img src="https://i.imgflip.com/e6cip.jpg" />');
 		}
 		if (target === 'i dont always'){
 			matched = true;
