@@ -298,7 +298,7 @@ exports.Formats = [
 
 		mod: '350cup',
 		ruleset: ['Ubers', 'Evasion Moves Clause'],
-		banlist: ['Darumaka', 'Pawniard', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
+		banlist: ['Darumaka', 'Pawniard', 'Smeargle', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
 		validateSet: function (set) {
 			var template = Tools.getTemplate(set.species);
 			var item = this.getItem(set.item);
