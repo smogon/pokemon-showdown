@@ -308,6 +308,7 @@ exports.customavatars = {
 	'dracomasterpain': 'dracomasterpain.gif',
 	'langur': 'langur.gif',
 	'masterneyney': 'masterneyney.png',
+	'chaos': 'chaos.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
