@@ -2320,7 +2320,7 @@ exports.BattleItems = {
 			}
 			move.pp += 10;
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
-			this.add("-message", pokemon.name + " restored " + move.move + "'s PP using its Leppa Berry! (placeholder)");
+			this.add('-activate', pokemon, 'item: Leppa Berry', 'move: ' + move.name);
 		},
 		num: 154,
 		gen: 3,

@@ -3787,7 +3787,7 @@ exports.BattleMovedex = {
 		isContact: true,
 		onTryHit: function (target, pokemon) {
 			if (pokemon.activeTurns > 1) {
-				this.add('-message', '(Fake Out only works your first turn out.)');
+				this.add('-hint', "Fake Out only works on your first turn out.");
 				return false;
 			}
 		},
@@ -7979,7 +7979,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'matblock',
 		onTryHitSide: function (side, source) {
 			if (source.activeTurns > 1) {
-				this.add('-message', '(Mat Block only works your first turn out.)');
+				this.add('-hint', "Mat Block only works on your first turn out.");
 				return false;
 			}
 		},
@@ -12092,7 +12092,6 @@ exports.BattleMovedex = {
 			onFoeBeforeMove: function (attacker, defender, move) {
 				if (attacker === this.effectData.source) {
 					this.debug('Sky drop nullifying.');
-					this.add('-message', '(Sky Drop prevented a Pokemon from moving.)');
 					return null;
 				}
 			},
@@ -15442,9 +15441,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		drain: [1, 2],
-		onTryHit: function (target, source) {
-			if (source.template.name !== 'Magikarp') {
-				this.add('-message', 'It didn\'t work since it wasn\'t used by a Magikarp!'); // TODO?
+		onTry: function (pokemon) {
+			if (pokemon.template.name !== 'Magikarp') {
+				this.add('-fail', pokemon, 'move: Magikarp\'s Revenge');
 				return null;
 			}
 		},
