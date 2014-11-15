@@ -170,7 +170,7 @@ exports.BattleMovedex = {
 				return false;
 			},
 			onEnd: function (pokemon) {
-				this.add('-message', pokemon.name + ' is no longer disabled! (placeholder)');
+				this.add('-end', pokemon, 'move: Disable');
 			},
 			onBeforeMove: function (attacker, defender, move) {
 				if (move.id === this.effectData.move) {
@@ -607,7 +607,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		beforeMoveCallback: function (pokemon) {
-			this.add('-message', pokemon.name + ' has no moves left! (placeholder)');
+			this.add('-activate', pokemon.name, 'move: Struggle');
 		},
 		onModifyMove: function (move) {
 			move.type = '???';
