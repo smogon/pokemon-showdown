@@ -205,7 +205,7 @@ exports.BattleScripts = {
 			return this.moveHit(target, pokemon, move);
 		}
 
-		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
+		if (move.affectedByImmunities && !target.runImmunity(move.type, true)) {
 			return false;
 		}
 
@@ -731,7 +731,7 @@ exports.BattleScripts = {
 			var moves;
 			var pool = ['struggle'];
 			if (poke === 'Smeargle') {
-				pool = Object.keys(this.data.Movedex).exclude('struggle', 'chatter');
+				pool = Object.keys(this.data.Movedex).exclude('struggle', 'chatter', 'magikarpsrevenge');
 			} else if (template.learnset) {
 				pool = Object.keys(template.learnset);
 			}
@@ -1537,7 +1537,7 @@ exports.BattleScripts = {
 			"Gengar-Mega": 68, "Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72,
 
 			// Holistic judgment
-			Genesect: 72, Sigilyph: 76, Xerneas: 66,
+			Articuno: 86, Genesect: 72, Sigilyph: 76, Xerneas: 66,
 
 			// ORAS
 			"Groudon-Primal": 70, "Kyogre-Primal": 70, "Rayquaza-Mega": 70
@@ -2452,10 +2452,6 @@ exports.BattleScripts = {
 			item = 'Occa Berry';
 		} else if (this.getImmunity('Fighting', template) && this.getEffectiveness('Fighting', template) >= 2) {
 			item = 'Chople Berry';
-		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
-			item = 'Leftovers';
-		} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
-			item = 'Focus Sash';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
 		} else if ((template.baseStats.hp + 75) * (template.baseStats.def + template.baseStats.spd + 175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
@@ -2471,6 +2467,12 @@ exports.BattleScripts = {
 			item = 'Expert Belt';
 		} else if (hasMove['outrage']) {
 			item = 'Lum Berry';
+		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
+			item = 'Leftovers';
+		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			item = 'Shuca Berry';
+		} else if (this.getEffectiveness('Ice', template) >= 1) {
+			item = 'Yache Berry';
 
 		// this is the "REALLY can't think of a good item" cutoff
 		} else if (counter.Physical + counter.Special >= 2 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd > 315) {
@@ -2504,6 +2506,46 @@ exports.BattleScripts = {
 			level: level,
 			shiny: (Math.random() * (template.id === 'missingno' ? 4 : 1024) <= 1)
 		};
+	},
+	randomSeasonalSBTeam: function (side) {
+		var crypto = require('crypto');
+		var date = new Date();
+		var hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').substr(0, 8), 16) + date.getDate();
+		var randNums = [
+			(13 * hash + 6) % 721,
+			(18 * hash + 12) % 721,
+			(25 * hash + 24) % 721,
+			(1 * hash + 48) % 721,
+			(23 * hash + 96) % 721,
+			(5 * hash + 192) % 721
+		];
+		var randoms = {};
+		for (var i = 0; i < 6; i++) {
+			if (randNums[i] < 1) randNums[i] = 1;
+			randoms[randNums[i]] = true;
+		}
+		var team = [];
+		var mons = 0;
+		for (var p in this.data.Pokedex) {
+			if (this.data.Pokedex[p].num in randoms) {
+				var set = this.randomSet(this.getTemplate(p), mons);
+				set.moves[3] = 'Present';
+				team.push(set);
+				delete randoms[this.data.Pokedex[p].num];
+				mons++;
+			}
+		}
+
+		// There is a very improbable chance in which two hashes collide, leaving the player with five Pokémon. Fix that.
+		var defaults = ['zapdos', 'venusaur', 'aegislash', 'heatran', 'unown', 'liepard'].randomize();
+		while (mons < 6) {
+			var set = this.randomSet(this.getTemplate(defaults[mons]), mons);
+			set.moves[3] = 'Present';
+			team.push(set);
+			mons++;
+		}
+
+		return team;
 	},
 	randomUberTeam: function (side) {
 		var keys = [];
