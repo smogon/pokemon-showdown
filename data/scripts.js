@@ -1009,6 +1009,9 @@ exports.BattleScripts = {
 				case 'overheat':
 					if (setupType === 'Special' || hasMove['fireblast']) rejected = true;
 					break;
+				case 'flamecharge':
+					if (hasMove['tailwind']) rejected = true;
+					break;
 				case 'icebeam':
 					if (hasMove['blizzard']) rejected = true;
 					break;
