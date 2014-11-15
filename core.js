@@ -288,46 +288,6 @@ var core = exports.core = {
         return hashColor(name);
     },
 
-    emoticons: {
-        'kappa253': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-ddc6e3a8732cb50f-25x28.png'
-    },
-
-    processEmoticons: function (text) {
-        var patterns = [],
-            metachars = /[[\]{}()*+?.\\|^$\-,&#\s]/g,
-            self = this;
-
-        for (var i in this.emoticons) {
-            if (this.emoticons.hasOwnProperty(i)) {
-                patterns.push('(' + i.replace(metachars, "\\$&") + ')');
-            }
-        }
-
-        return text.replace(new RegExp(patterns.join('|'), 'g'), function (match) {
-            if (match === 'feelsbd' || match === 'feelsgd') return typeof self.emoticons[match] != 'undefined' ?
-                '<img src="' + self.emoticons[match] + '" title="' + match + '" width="30" height="30"/>' :
-                match;
-            return typeof self.emoticons[match] != 'undefined' ?
-                '<img src="' + self.emoticons[match] + '" title="' + match + '"/>' :
-                match;
-        });
-    },
-
-    processChatData: function (user, room, connection, message) {
-        var match = false;
-        
-        for (var i in this.emoticons) {
-            if (message.indexOf(i) >= 0) {
-                match = true;
-            }
-        }
-        if (!match || message.charAt(0) === '!') return true;
-        message = Tools.escapeHTML(message);
-        message = this.processEmoticons(message);
-        room.add('|raw|<div class="chat"><strong><font color="' + Core.hashColor(user.userid)+'"><small>' + user.group + '</small><span class="username" data-name="' + user.group + user.name + '">' + user.name + '</span>:</font></strong> <em class="mine">' + message + '</em></div>');
-        return false;
-    },
-
     tournaments: {
         amountEarn: 10,
         winningElo: 50,
