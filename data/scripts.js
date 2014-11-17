@@ -205,7 +205,7 @@ exports.BattleScripts = {
 			return this.moveHit(target, pokemon, move);
 		}
 
-		if ((move.affectedByImmunities && !target.runImmunity(move.type, true)) || (move.isSoundBased && (pokemon !== target || this.gen <= 4) && !target.runImmunity('sound', true))) {
+		if (move.affectedByImmunities && !target.runImmunity(move.type, true)) {
 			return false;
 		}
 
@@ -731,7 +731,7 @@ exports.BattleScripts = {
 			var moves;
 			var pool = ['struggle'];
 			if (poke === 'Smeargle') {
-				pool = Object.keys(this.data.Movedex).exclude('struggle', 'chatter');
+				pool = Object.keys(this.data.Movedex).exclude('struggle', 'chatter', 'magikarpsrevenge');
 			} else if (template.learnset) {
 				pool = Object.keys(template.learnset);
 			}
@@ -1008,6 +1008,9 @@ exports.BattleScripts = {
 					break;
 				case 'overheat':
 					if (setupType === 'Special' || hasMove['fireblast']) rejected = true;
+					break;
+				case 'flamecharge':
+					if (hasMove['tailwind']) rejected = true;
 					break;
 				case 'icebeam':
 					if (hasMove['blizzard']) rejected = true;
@@ -2506,5 +2509,45 @@ exports.BattleScripts = {
 			level: level,
 			shiny: (Math.random() * (template.id === 'missingno' ? 4 : 1024) <= 1)
 		};
+	},
+	randomSeasonalSBTeam: function (side) {
+		var crypto = require('crypto');
+		var date = new Date();
+		var hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').substr(0, 8), 16) + date.getDate();
+		var randNums = [
+			(13 * hash + 6) % 721,
+			(18 * hash + 12) % 721,
+			(25 * hash + 24) % 721,
+			(1 * hash + 48) % 721,
+			(23 * hash + 96) % 721,
+			(5 * hash + 192) % 721
+		];
+		var randoms = {};
+		for (var i = 0; i < 6; i++) {
+			if (randNums[i] < 1) randNums[i] = 1;
+			randoms[randNums[i]] = true;
+		}
+		var team = [];
+		var mons = 0;
+		for (var p in this.data.Pokedex) {
+			if (this.data.Pokedex[p].num in randoms) {
+				var set = this.randomSet(this.getTemplate(p), mons);
+				set.moves[3] = 'Present';
+				team.push(set);
+				delete randoms[this.data.Pokedex[p].num];
+				mons++;
+			}
+		}
+
+		// There is a very improbable chance in which two hashes collide, leaving the player with five Pokémon. Fix that.
+		var defaults = ['zapdos', 'venusaur', 'aegislash', 'heatran', 'unown', 'liepard'].randomize();
+		while (mons < 6) {
+			var set = this.randomSet(this.getTemplate(defaults[mons]), mons);
+			set.moves[3] = 'Present';
+			team.push(set);
+			mons++;
+		}
+
+		return team;
 	}
 };

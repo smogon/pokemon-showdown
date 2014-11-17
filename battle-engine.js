@@ -794,6 +794,7 @@ BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.tryTrap = function (isHidden) {
 		if (this.runImmunity('trapped')) {
+			if (this.trapped && isHidden) return true;
 			this.trapped = isHidden ? 'hidden' : true;
 			return true;
 		}
@@ -2810,12 +2811,6 @@ Battle = (function () {
 
 		if (move.affectedByImmunities) {
 			if (!target.runImmunity(move.type, true)) {
-				return false;
-			}
-		}
-
-		if (move.isSoundBased && (pokemon !== target || this.gen <= 4)) {
-			if (!target.runImmunity('sound', true)) {
 				return false;
 			}
 		}

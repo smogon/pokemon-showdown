@@ -128,6 +128,7 @@ Owner
 Staff
 
 - Hugh Gordon [V4] - Research (game mechanics), Development
+- Juanma Serrano [Joim] - Development
 - Leonardo Julca [Slayer95] - Development
 - [The Immortal] - Development
 
@@ -135,7 +136,6 @@ Retired Staff
 
 - Bill Meltsner [bmelts] - Development
 - Cathy J. Fitzpatrick [cathyjf] - Development
-- Juanma Serrano [Joim] - Development
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 
 Contributors
