@@ -421,6 +421,9 @@ module.exports = (function () {
 			if (!item.category) item.category = 'Effect';
 			if (!item.effectType) item.effectType = 'Item';
 			if (item.isBerry) item.fling = {basePower: 10};
+			if (item.onPlate) item.fling = {basePower: 90};
+			if (item.onDrive) item.fling = {basePower: 70};
+			if (item.megaStone) item.fling = {basePower: 80};
 			if (!item.gen) {
 				if (item.num >= 577) item.gen = 6;
 				else if (item.num >= 537) item.gen = 5;
