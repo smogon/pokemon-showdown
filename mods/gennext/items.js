@@ -208,7 +208,7 @@ exports.BattleItems = {
 			}
 		},
 		onAfterMoveSecondarySelf: function (source, target, move) {
-			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1, "Venomoth":1, "Volcarona":1};
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1, "Venomoth":1, "Volcarona":1, "Dustox": 1, "Lilligant":1};
 			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers[source.template.species]) {
 				this.heal(source.maxhp / 16);
 			}

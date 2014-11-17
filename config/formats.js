@@ -33,15 +33,6 @@ exports.Formats = [
 		name: "Ubers",
 		section: "XY Singles",
 
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview'],
-		banlist: []
-	},
-	{
-		name: "Ubers (suspect test)",
-		section: "XY Singles",
-
-		challengeShow: false,
 		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview'],
 		banlist: []
 	},
@@ -307,7 +298,7 @@ exports.Formats = [
 
 		mod: '350cup',
 		ruleset: ['Ubers', 'Evasion Moves Clause'],
-		banlist: ['Darumaka', 'Pawniard', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
+		banlist: ['Darumaka', 'Pawniard', 'Smeargle', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
 		validateSet: function (set) {
 			var template = Tools.getTemplate(set.species);
 			var item = this.getItem(set.item);
@@ -326,6 +317,214 @@ exports.Formats = [
 			'Bug Gem', 'Custap Berry', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem',
 			'Grass Gem', 'Ground Gem', 'Ice Gem', 'Mail', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'
 		]
+	},
+	{
+		name: "ORAS Smogon Doubles",
+		section: "OM of the Month",
+
+		mod: 'oras',
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		banlist: ['Illegal', 'Floette-Eternal-Flower', 'Hoopa', 'Volcanion', 'Soul Dew', 'Dark Void', 'Bug Gem', 'Custap Berry', 'Dark Gem', 'Dragon Gem',
+			'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Mail', 'Poison Gem',
+			'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem', 'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia',
+			'Giratina', 'Giratina-Origin', 'Arceus', 'Reshiram', 'Zekrom', 'Kyurem-White', 'Xerneas', 'Yveltal'
+		]
+	},
+	{
+		name: "[Seasonal] Strikes Back",
+		section: "OM of the Month",
+
+		gameType: 'triples',
+		team: 'randomSeasonalSB',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		onBegin: function () {
+			this.add('-message', "V4 is a big poo-poo!");
+		},
+		onModifyMove: function (move) {
+			// Change present mechanics
+			if (move.id === 'present') {
+				move.category = 'Status';
+				move.basePower = 0;
+				delete move.heal;
+				move.accuracy = 100;
+				switch (this.random(16)) {
+				case 0:
+					move.onTryHit = function () {
+						this.add('-message', "The present was a bomb!");
+					};
+					move.category = 'Physical';
+					move.basePower = 250;
+					break;
+				case 1:
+					move.onTryHit = function () {
+						this.add('-message', "The present was confusion!");
+					};
+					move.volatileStatus = 'confusion';
+					break;
+				case 2:
+					move.onTryHit = function () {
+						this.add('-message', "The present was Disable!");
+					};
+					move.volatileStatus = 'disable';
+					break;
+				case 3:
+					move.onTryHit = function () {
+						this.add('-message', "The present was a taunt!");
+					};
+					move.volatileStatus = 'taunt';
+					break;
+				case 4:
+					move.onTryHit = function () {
+						this.add('-message', "The present was some seeds!");
+					};
+					move.volatileStatus = 'leechseed';
+					break;
+				case 5:
+					move.onTryHit = function () {
+						this.add('-message', "The present was an embargo!");
+					};
+					move.volatileStatus = 'embargo';
+					break;
+				case 6:
+					move.onTryHit = function () {
+						this.add('-message', "The present was a music box!");
+					};
+					move.volatileStatus = 'perishsong';
+					break;
+				case 7:
+					move.onTryHit = function () {
+						this.add('-message', "The present was a curse!");
+					};
+					move.volatileStatus = 'curse';
+					break;
+				case 8:
+					move.onTryHit = function () {
+						this.add('-message', "The present was Torment!");
+					};
+					move.volatileStatus = 'torment';
+					break;
+				case 9:
+					move.onTryHit = function () {
+						this.add('-message', "The present was a trap!");
+					};
+					move.volatileStatus = 'partiallytrapped';
+					break;
+				case 10:
+					move.onTryHit = function () {
+						this.add('-message', "The present was a root!");
+					};
+					move.volatileStatus = 'ingrain';
+					break;
+				case 11:
+					move.onTryHit = function () {
+						this.add('-message', "The present was a makeover!");
+					};
+					var boosts = {};
+					var possibleBoosts = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'].randomize();
+					boosts[possibleBoosts[0]] = 1;
+					boosts[possibleBoosts[1]] = -1;
+					boosts[possibleBoosts[2]] = -1;
+					move.boosts = boosts;
+					break;
+				case 12:
+					move.onTryHit = function () {
+						this.add('-message', "The present was psychic powers!");
+					};
+					move.volatileStatus = 'telekinesis';
+					break;
+				case 13:
+					move.onTryHit = function () {
+						this.add('-message', "The present was fatigue!");
+					};
+					move.volatileStatus = 'mustrecharge';
+					break;
+				case 14:
+				case 15:
+					move.onTryHit = function () {
+						this.add('-message', "The present was a snowball hit!");
+					};
+					move.category = 'Ice';
+					move.basePower = 250;
+					break;
+				}
+			} else {
+				// Change move type time to time only when the move is not present.
+				if (this.random(100) < 35 && move.target !== 'self') {
+					var type = '';
+					switch (move.type.toLowerCase()){
+					case 'rock':
+					case 'ground':
+						type = 'Grass';
+						break;
+					case 'fire':
+					case 'bug':
+						type = 'Water';
+						break;
+					case 'water':
+					case 'grass':
+						type = 'Fire';
+						break;
+					case 'flying':
+						type = 'Fighting';
+						break;
+					case 'fighting':
+						type = 'Flying';
+						break;
+					case 'dark':
+						type = 'Bug';
+						break;
+					case 'dragon':
+					case 'poison':
+						type = 'Fairy';
+						break;
+					case 'electric':
+						type = 'Ice';
+						break;
+					case 'ghost':
+						type = 'Normal';
+						break;
+					case 'ice':
+						type = 'Electric';
+						break;
+					case 'normal':
+						type = 'Ghost';
+						break;
+					case 'psychic':
+						type = 'Dark';
+						break;
+					case 'steel':
+						type = 'Poison';
+						break;
+					case 'fairy':
+						type = 'Dragon';
+						break;
+					}
+
+					move.type = type;
+					this.add('-message', 'LOL trolled I changed yer move type hahaha');
+				}
+			}
+		},
+		onSwitchIn: function (pokemon) {
+			if (this.random(100) < 25) {
+				this.add('-message', pokemon.name + " drank way too much!");
+				pokemon.addVolatile('confusion');
+				pokemon.statusData.time = 0;
+			}
+		},
+		onFaint: function (pokemon) {
+			// A poem every time a Pokemon faints
+			var haikus = ["You suck a lot / You are a bad trainer / let a mon faint", "they see me driving / round town with the girl i love / and I'm like, haikou",
+			"Ain't no Pokemon tough enough / ain't no bulk decent enough / ain't no recovery good enough / to keep me from fainting you, babe",
+			"Roses are red / violets are blue / you must be on some med / 'coz as a trainer you suck",
+			"You're gonna be the very worst / like no one ever was / to lose all the battles is your test / to faint them all is your cause",
+			'Twinkle twinkle little star / screw you that was my best sweeper', "I'm wheezy and I'm sleezy / but as a trainer you're measly",
+			"You're sharp as a rock / you're bright as a hole / you're one to mock / you could be beaten by a maimed mole",
+			"Alas, poor trainer! I knew him, your Pokémon, a fellow of infinite jest, of most excellent fancy."];
+			haikus = haikus.randomize();
+			this.add('-message', haikus[0]);
+		}
 	},
 	{
 		name: "CAP",
