@@ -382,6 +382,20 @@ animation) and `|[silent]` (suppress message).
 > abilities like Water Absorb simply use `-heal`, and items that are consumed upon 
 > use have the `-enditem` message instead.
 
+`|-hint|MESSAGE`
+
+> Displays a message in parentheses to the client. Hint messages appear to explain and 
+> clarify why certain actions, such as Fake Out and Mat Block failing, have occurred,  
+> when there would normally be no in-game messages.
+
+`|-message|MESSAGE`
+
+> Displays a miscellaneous message to the client. These messages are primarily used 
+> for messages from game mods that aren't supported by the client, like rule clauses 
+> such as Sleep Clause, or other metagames with custom messages for specific scenarios. 
+> It is also used in triples battles for the automatic centering of Pokemon when only 
+> one remains on each side.
+
 I'll document all the message types eventually, but for now this should be
 enough to get you started. You can watch the data sent and received from
 the server on a regular connection, or look at the client source code
