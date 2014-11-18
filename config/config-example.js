@@ -146,6 +146,11 @@ exports.customAvatars = {
 // which case users won't be given any information on how to appeal.
 exports.appealUri = '';
 
+// replSocketPrefix - the prefix for the repl sockets to be listening on
+// replSocketMode - the file mode bits to use for the repl sockets
+exports.replSocketPrefix = './repl/';
+exports.replSocketMode = 0600;
+
 // Symbols, Groups and Permissions
 //   mutedSymbol - The symbol representing a muted user.
 //   lockedSymbol - The symbol representing a locked user.

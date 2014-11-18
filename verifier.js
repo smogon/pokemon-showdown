@@ -58,4 +58,6 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			guid: message.guid
 		});
 	});
+
+	require('./repl.js').start('verifier', function (cmd) { return eval(cmd); });
 //}
