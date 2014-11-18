@@ -61,6 +61,8 @@ var Battle, BattleSide, BattlePokemon;
 
 var Battles = {};
 
+require('./repl.js').start('battle-engine-', process.pid, function (cmd) { return eval(cmd); });
+
 // Receive and process a message sent using Simulator.prototype.send in
 // another process.
 battleEngineFakeProcess.client.on('message', function (message) {
