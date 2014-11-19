@@ -2429,7 +2429,7 @@ exports.BattleFormatsData = {
 	sableyemega: {
 		randomBattleMoves: ["recover","willowisp","darkpulse","calmmind","shadowball"],
 		randomDoubleBattleMoves: ["fakeout","knockoff","darkpulse","shadowball","willowisp","protect"],
-		requiredItem: "Sableite",
+		requiredItem: "Sablenite",
 		tier: "Unreleased"
 	},
 	mawile: {
@@ -2576,7 +2576,7 @@ exports.BattleFormatsData = {
 	},
 	sharpedomega: {
 		randomBattleMoves: ["protect","icefang","crunch","earthquake","waterfall","zenheadbutt"],
-		requiredItem: "Sharpedite",
+		requiredItem: "Sharpedonite",
 		tier: "Unreleased"
 	},
 	wailmer: {
@@ -2691,7 +2691,7 @@ exports.BattleFormatsData = {
 	altariamega: {
 		randomBattleMoves: ["dragondance","return","outrage","dragonclaw","earthquake","roost","dracometeor","fireblast"],
 		randomDoubleBattleMoves: ["dragondance","return","doubleedge","dragonclaw","earthquake","protect","fireblast"],
-		requiredItem: "Altarite",
+		requiredItem: "Altarianite",
 		tier: "Unreleased"
 	},
 	zangoose: {

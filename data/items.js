@@ -157,9 +157,9 @@ exports.BattleItems = {
 		gen: 6,
 		desc: "Mega-evolves Alakazam."
 	},
-	"altarite": {
-		id: "altarite",
-		name: "Altarite",
+	"altarianite": {
+		id: "altarianite",
+		name: "Altarianite",
 		spritenum: 0,
 		megaStone: "Altaria-Mega",
 		megaEvolves: "Altaria",
@@ -168,7 +168,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 755,
 		gen: 6,
 		desc: "Mega-evolves Altaria."
 	},
@@ -275,7 +275,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 757,
 		gen: 6,
 		desc: "Mega-evolves Audino."
 	},
@@ -326,7 +326,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 770,
 		gen: 6,
 		desc: "Mega-evolves Beedrill."
 	},
@@ -1040,7 +1040,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 764,
 		gen: 6,
 		desc: "Mega-evolves Diancie."
 	},
@@ -1589,7 +1589,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 756,
 		gen: 6,
 		desc: "Mega-evolves Gallade."
 	},
@@ -2428,7 +2428,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 768,
 		gen: 6,
 		desc: "Mega-evolves Lopunny."
 	},
@@ -3255,7 +3255,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 762,
 		gen: 6,
 		desc: "Mega-evolves Pidgeot."
 	},
@@ -3801,9 +3801,9 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "If holder is hit by a special move, attacker loses 1/8 of its max HP. Single use."
 	},
-	"sableite": {
-		id: "sableite",
-		name: "Sableite",
+	"sablenite": {
+		id: "sablenite",
+		name: "Sablenite",
 		spritenum: 0,
 		megaStone: "Sableye-Mega",
 		megaEvolves: "Sableye",
@@ -3870,7 +3870,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 769,
 		gen: 6,
 		desc: "Mega-evolves Salamence."
 	},
@@ -3951,9 +3951,9 @@ exports.BattleItems = {
 		gen: 2,
 		desc: "Holder's Flying-type attacks have 1.2x power."
 	},
-	"sharpedite": {
-		id: "sharpedite",
-		name: "Sharpedite",
+	"sharpedonite": {
+		id: "sharpedonite",
+		name: "Sharpedonite",
 		spritenum: 0,
 		megaStone: "Sharpedo-Mega",
 		megaEvolves: "Sharpedo",
@@ -4133,7 +4133,7 @@ exports.BattleItems = {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},
-		num: -6,
+		num: 760,
 		gen: 6,
 		desc: "Mega-evolves Slowbro."
 	},
