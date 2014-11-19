@@ -4,7 +4,7 @@
 // If you really don't know how to do this... Run `node getserver.js URL`.
 // Fill in the URL of the client where `URL` is.
 // For example: `node getserver.js http://example-server.psim.us/`
-exports.server = 'sim.psim.us';
+exports.server = 'cbc.pokecommunity.com';
 exports.port = 8000;
 
 // This is the server id.
@@ -13,21 +13,21 @@ exports.port = 8000;
 // For example, on the Smogon server, it will say somewhere in the URL
 // ~~showdown, meaning that the server id is 'showdown'.
 // If you really don't know how to check this... run the said script above.
-exports.serverid = 'showdown';
+exports.serverid = 'pokecommunity';
 
 // The nick and password to log in with
 // If no password is required, leave pass empty
-exports.nick = 'Example bot nick';
-exports.pass = '';
+exports.nick = 'PokeCommBot';
+exports.pass = 'filler';
 
 // The rooms that should be joined.
 // Joining Smogon's Showdown's Lobby is not allowed.
-exports.rooms = ['example room name', 'another example'];
+exports.rooms = ['lobby'];
 
 // Any private rooms that should be joined.
 // Private rooms will be moderated differently (since /warn doesn't work in them).
 // The bot will also avoid leaking the private rooms through .seen
-exports.privaterooms = [];
+exports.privaterooms = ['staff'];
 
 // The character text should start with to be seen as a command.
 // Note that using / and ! might be 'dangerous' since these are used in
@@ -42,7 +42,7 @@ exports.defaultrank = '%';
 // Whether this file should be watched for changes or not.
 // If you change this option, the server has to be restarted in order for it to
 // take effect.
-exports.watchconfig = false;
+exports.watchconfig = true;
 
 // Secondary websocket protocols should be defined here, however, Showdown
 // doesn't support that yet, so it's best to leave this empty.
@@ -62,11 +62,11 @@ exports.debuglevel = 3;
 exports.excepts = [];
 
 // Whitelisted users are those who the bot will not enforce moderation for.
-exports.whitelist = [];
+exports.whitelist = ['PokeCommBot'];
 
 // Add a link to the help for the bot here. When there is a link here, .help and .guide
 // will link to it.
-exports.botguide = '';
+exports.botguide = 'http://www.pokecommunity.com/showthread.php?t=289012#bot';
 
 // This allows the bot to act as an automated moderator. If enabled, the bot will
 // mute users who send 6 lines or more in 6 or fewer seconds for 7 minutes. NOTE: THIS IS
@@ -74,7 +74,7 @@ exports.botguide = '';
 // exercise moderator discretion. In addition, it currently uses a very simple method of 
 // determining who to mute and so may miss people who should be muted, or mute those who 
 // shouldn't. Use with caution.
-exports.allowmute = false;
+exports.allowmute = true;
 
 // The punishment values system allows you to customise how you want the bot to deal with
 // rulebreakers. Spamming has a points value of 2, all caps has a points value of 1, etc.
