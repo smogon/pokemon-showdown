@@ -1,4 +1,4 @@
-﻿/**
+/**
  * This is the file where commands get parsed
  *
  * Some parts of this code are taken from the Pokémon Showdown server code, so
@@ -16,6 +16,8 @@ const ACTION_COOLDOWN = 3*1000;
 const FLOOD_MESSAGE_NUM = 5;
 const FLOOD_PER_MSG_MIN = 500; // this is the minimum time between messages for legitimate spam. It's used to determine what "flooding" is caused by lag
 const FLOOD_MESSAGE_TIME = 6*1000;
+const MIN_CAPS_LENGTH = 18;
+const MIN_CAPS_PROPORTION = 0.8;
 
 settings = {};
 try {
@@ -42,17 +44,17 @@ exports.parse = {
 			}
 		}
 	},
-	message: function(message, connection) {
+	message: function(message, connection, lastMessage) {
 		if (!message) return;
 
 		if (message.indexOf('\n') > -1) {
 			var spl = message.split('\n');
-			for (var i = 0; i < spl.length; i++) {
+			for (var i = 0, len = spl.length; i < len; i++) {
 				if (spl[i].split('|')[1] && (spl[i].split('|')[1] === 'init' || spl[i].split('|')[1] === 'tournament')) {
 					this.room = '';
 					break;
 				}
-				this.message(spl[i], connection);
+				this.message(spl[i], connection, i === len - 1);
 			}
 			return;
 		}
@@ -60,9 +62,8 @@ exports.parse = {
 		var spl = message.split('|');
 		if (!spl[1]) {
 			spl = message.split('>');
-			if (!spl[1])
-				return;
-			this.room = spl[1];
+			if (spl[1]) this.room = spl[1];
+			return;
 		}
 
 		switch (spl[1]) {
@@ -186,54 +187,54 @@ exports.parse = {
 					function() {self.chatData = cleanChatData(self.chatData);},
 					30*60*1000
 				);
-				this.room = '';
+				if (lastMessage) this.room = '';
 				break;
 			case 'title':
 				ok('joined ' + spl[2]);
-				this.room = '';
+				if (lastMessage) this.room = '';
 				break;
 			case 'c':
 				var by = spl[2];
 				spl.splice(0, 3);
 				this.processChatData(by, this.room || 'lobby', connection, spl.join('|'));
-				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/ban ' + by + ', Blacklisted user');
+				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/roomban ' + by + ', Blacklisted user');
 				this.chatMessage(spl.join('|'), by, this.room || 'lobby', connection);
-				this.room = '';
+				if (lastMessage) this.room = '';
 				break;
 			case 'c:':
 				var by = spl[3];
 				spl.splice(0, 4);
 				this.processChatData(by, this.room || 'lobby', connection, spl.join('|'));
-				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/ban ' + by + ', Blacklisted user');
+				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/roomban ' + by + ', Blacklisted user');
 				this.chatMessage(spl.join('|'), by, this.room || 'lobby', connection);
-				this.room = '';
+				if (lastMessage) this.room = '';
 				break;
 			case 'pm':
 				var by = spl[2];
 				if (by.substr(1) === config.nick) return;
 				spl.splice(0, 4);
 				this.chatMessage(spl.join('|'), by, ',' + by, connection);
-				this.room = '';
+				if (lastMessage) this.room = '';
 				break;
 			case 'N':
 				var by = spl[2];
 				this.updateSeen(spl[3], spl[1], by);
 				if (toId(by) !== toId(config.nick) || ' +%@&#~'.indexOf(by.charAt(0)) === -1) return;
-				this.ranks[toId(this.room === '' ? 'lobby' : this.room)] = by.charAt(0);
-				this.room = '';
+				this.ranks[this.room || 'lobby'] = by.charAt(0);
+				if (lastMessage) this.room = '';
 				break;
 			case 'J': case 'j':
 				var by = spl[2];
-				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/ban ' + by + ', Blacklisted user');
-				this.updateSeen(by, spl[1], (this.room === '' ? 'lobby' : this.room));
+				if (this.room && this.isBlacklisted(toId(by), this.room)) this.say(connection, this.room, '/roomban ' + by + ', Blacklisted user');
+				this.updateSeen(by, spl[1], this.room || 'lobby');
 				if (toId(by) !== toId(config.nick) || ' +%@&#~'.indexOf(by.charAt(0)) === -1) return;
-				this.ranks[toId(this.room === '' ? 'lobby' : this.room)] = by.charAt(0);
-				this.room = '';
+				this.ranks[this.room || 'lobby'] = by.charAt(0);
+				if (lastMessage) this.room = '';
 				break;
 			case 'l': case 'L':
 				var by = spl[2];
-				this.updateSeen(by, spl[1], (this.room === '' ? 'lobby' : this.room));
-				this.room = '';
+				this.updateSeen(by, spl[1], this.room || 'lobby');
+				if (lastMessage) this.room = '';
 				break;
 		}
 	},
@@ -339,7 +340,8 @@ exports.parse = {
 		}
 		user = toId(user);
 		if (!user || room.charAt(0) === ',') return;
-		msg = msg.trim().replace(/ +/g, " "); // removes extra spaces so it doesn't trigger stretching
+		room = toId(room);
+		msg = msg.trim().replace(/[ \u0000\u200B-\u200F]+/g, " "); // removes extra spaces and null characters so messages that should trigger stretching do so
 		this.updateSeen(user, 'c', room);
 		var time = Date.now();
 		if (!this.chatData[user]) this.chatData[user] = {
@@ -390,8 +392,16 @@ exports.parse = {
 					muteMessage = ', Automated response: flooding';
 				}
 			}
+			// moderation for caps (over x% of the letters in a line of y characters are capital)
+			var capsMatch = msg.replace(/[^A-Za-z]/g, '').match(/[A-Z]/g);
+			if ((useDefault || modSettings['caps'] !== 0) && capsMatch && toId(msg).length > MIN_CAPS_LENGTH && (capsMatch.length >= Math.floor(toId(msg).length * MIN_CAPS_PROPORTION))) {
+				if (pointVal < 1) {
+					pointVal = 1;
+					muteMessage = ', Automated response: caps';
+				}
+			}
 			// moderation for stretching (over x consecutive characters in the message are the same)
-			var stretchMatch = msg.toLowerCase().match(/(.)\1{60,}/g) || msg.toLowerCase().match(/(..+)\1{38,}/g); // matches the same character (or group of characters) 8 (or 5) or more times in a row
+			var stretchMatch = msg.toLowerCase().match(/(.)\1{7,}/g) || msg.toLowerCase().match(/(..+)\1{4,}/g); // matches the same character (or group of characters) 8 (or 5) or more times in a row
 			if ((useDefault || modSettings['stretching'] !== 0) && stretchMatch) {
 				if (pointVal < 1) {
 					pointVal = 1;
@@ -493,7 +503,6 @@ exports.parse = {
 			if (writing) {
 				writePending = true;
 				return;
-
 			}
 			writing = true;
 			var data = JSON.stringify(this.settings);
