@@ -307,7 +307,7 @@ exports.BattleStatuses = {
 					continue;
 				}
 
-				this.add('-message', '' + move.name + ' hit! (placeholder)');
+				this.add('-end', target, 'move: ' + move.name);
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
 

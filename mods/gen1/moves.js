@@ -86,7 +86,7 @@ exports.BattleMovedex = {
 					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage * 2});
 					return false;
 				}
-				this.add('-message', pokemon.name + ' is storing energy! (placeholder)');
+				this.add('-activate', pokemon, 'Bide');
 				return false;
 			},
 			onModifyPokemon: function (pokemon) {
@@ -761,7 +761,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isContact: true,
 		beforeMoveCallback: function (pokemon) {
-			this.add('-message', pokemon.name + ' has no moves left! (placeholder)');
+			this.add('-activate', pokemon, 'move: Struggle');
 		},
 		recoil: [1, 2],
 		secondary: false,

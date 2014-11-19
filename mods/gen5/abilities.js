@@ -27,7 +27,7 @@ exports.BattleAbilities = {
 		onUpdate: function (pokemon) {
 			if (pokemon.volatiles['attract']) {
 				pokemon.removeVolatile('attract');
-				this.add("-message", pokemon.name + " got over its infatuation. (placeholder)");
+				this.add('-end', pokemon, 'move: Attract');
 			}
 		},
 		onTryHit: function (pokemon, target, move) {
