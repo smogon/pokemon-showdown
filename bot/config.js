@@ -85,3 +85,4 @@ exports.punishvals = {
 	4: 'roomban',
 	5: 'ban'
 };
+
