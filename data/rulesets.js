@@ -9,22 +9,22 @@ exports.BattleFormats = {
 	standard: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass']
+		banlist: ['Unreleased', 'Illegal']
 	},
 	standardnext: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'HP Percentage Mod'],
-		banlist: ['Illegal', 'Soul Dew', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass']
+		banlist: ['Illegal', 'Soul Dew']
 	},
 	standardubers: {
 		effectType: 'Banlist',
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass']
+		banlist: ['Unreleased', 'Illegal']
 	},
 	standardgbu: {
 		effectType: 'Banlist',
 		ruleset: ['Species Clause', 'Item Clause'],
-		banlist: ['Unreleased', 'Illegal', 'Soul Dew', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass',
+		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
 			'Mewtwo',
 			'Mew',
 			'Lugia',
@@ -59,7 +59,7 @@ exports.BattleFormats = {
 	standarddoubles: {
 		effectType: 'Banlist',
 		ruleset: ['Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
-		banlist: ['Unreleased', 'Illegal', 'Sylveon + Hyper Voice + Heal Bell + Wish + Baton Pass']
+		banlist: ['Unreleased', 'Illegal']
 	},
 	pokemon: {
 		effectType: 'Banlist',
