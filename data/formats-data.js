@@ -259,23 +259,18 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	pikachurockstar: {
-		tier: "Unreleased",
 		gen: 6
 	},
 	pikachubelle: {
-		tier: "Unreleased",
 		gen: 6
 	},
 	pikachupopstar: {
-		tier: "Unreleased",
 		gen: 6
 	},
 	pikachuphd: {
-		tier: "Unreleased",
 		gen: 6
 	},
 	pikachulibre: {
-		tier: "Unreleased",
 		gen: 6
 	},
 	raichu: {
