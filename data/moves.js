@@ -6558,10 +6558,9 @@ exports.BattleMovedex = {
 		breaksProtect: true,
 		notSubBlocked: true,
 		onTry: function (pokemon) {
-			/* TODO: Use real forme name
-			if (pokemon.species === 'Hoopa-Forme' && pokemon.baseTemplate.species === pokemon.species) {
+			if (pokemon.species === 'Hoopa-Unbound' && pokemon.baseTemplate.species === pokemon.species) {
 				return;
-			}*/
+			}
 			if (pokemon.baseTemplate.species === 'Hoopa') {
 				this.add('-fail', pokemon, 'move: Hyperspace Fury', '[forme]');
 				return null;

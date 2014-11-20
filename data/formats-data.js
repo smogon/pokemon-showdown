@@ -5167,6 +5167,10 @@ exports.BattleFormatsData = {
 		isUnreleased: true,
 		tier: "Unreleased"
 	},
+	hoopaunbound: {
+		isUnreleased: true,
+		tier: "Unreleased"
+	},
 	volcanion: {
 		isUnreleased: true,
 		tier: "Unreleased"
