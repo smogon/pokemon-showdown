@@ -2902,7 +2902,6 @@ exports.BattleMovedex = {
 		name: "Dragon Ascent",
 		pp: 5,
 		priority: 0,
-		isUnreleased: true,
 		isContact: true,
 		self: {
 			boosts: {
@@ -9182,7 +9181,6 @@ exports.BattleMovedex = {
 		name: "Origin Pulse",
 		pp: 10,
 		priority: 0,
-		isUnreleased: true,
 		isPulseMove: true,
 		target: "allAdjacentFoes",
 		type: "Water"
@@ -9902,7 +9900,6 @@ exports.BattleMovedex = {
 		name: "Precipice Blades",
 		pp: 10,
 		priority: 0,
-		isUnreleased: true,
 		target: "allAdjacentFoes",
 		type: "Ground"
 	},
