@@ -1003,6 +1003,7 @@ var commands = exports.commands = {
 		target = this.splitTarget(target, true);
 		var name = this.targetUsername;
 		var nextGroup = target || Users.getNextGroupSymbol(' ', false);
+		if (!Config.groups[nextGroup]) return this.sendReply("Group '" + nextGroup + "' does not exist.");
 
 		if (!Users.setOfflineGroup(name, nextGroup, true)) {
 			return this.sendReply("/forcepromote - Don't forcepromote unless you have to.");
