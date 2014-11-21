@@ -61,6 +61,8 @@ var Battle, BattleSide, BattlePokemon;
 
 var Battles = {};
 
+require('./repl.js').start('battle-engine-', process.pid, function (cmd) { return eval(cmd); });
+
 // Receive and process a message sent using Simulator.prototype.send in
 // another process.
 battleEngineFakeProcess.client.on('message', function (message) {
@@ -2431,7 +2433,6 @@ Battle = (function () {
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
 		pokemon.update();
-		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
 	Battle.prototype.canSwitch = function (side) {
@@ -2489,7 +2490,6 @@ Battle = (function () {
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
 		pokemon.update();
-		this.runEvent('SwitchIn', pokemon);
 		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
 		return true;
 	};
@@ -3376,6 +3376,7 @@ Battle = (function () {
 			this.switchIn(decision.target, decision.pokemon.position);
 			break;
 		case 'runSwitch':
+			this.runEvent('SwitchIn', decision.pokemon);
 			decision.pokemon.isStarted = true;
 			if (!decision.pokemon.fainted) {
 				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);

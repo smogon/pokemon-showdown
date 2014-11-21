@@ -430,4 +430,6 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	}
 
 	console.log('Test your server at http://' + (Config.bindAddress || 'localhost') + ':' + Config.port);
+
+	require('./repl.js').start('sockets-', /*cluster.worker.id + '-' +*/ process.pid, function (cmd) { return eval(cmd); });
 //}
