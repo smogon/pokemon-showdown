@@ -4969,13 +4969,11 @@ exports.BattleFormatsData = {
 	},
 	skrelp: {
 		randomBattleMoves: ["scald","sludgebomb","thunderbolt","shadowball","toxicspikes","hydropump"],
-		unreleasedHidden: true,
 		tier: "LC"
 	},
 	dragalge: {
 		randomBattleMoves: ["scald","sludgebomb","thunderbolt","toxicspikes","hydropump","focusblast","dracometeor","dragontail","substitute"],
 		randomDoubleBattleMoves: ["scald","sludgebomb","thunderbolt","protect","hydropump","focusblast","dracometeor","dragonpulse","substitute"],
-		unreleasedHidden: true,
 		tier: "NU"
 	},
 	clauncher: {
