@@ -65,7 +65,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
 	},
-	{
+	/*{
 		name: "CAP Plasmanta Playtest",
 		section: "XY Singles",
 
@@ -73,7 +73,7 @@ exports.Formats = [
 		banlist: ['Uber', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew',
 			'Tomohawk', 'Necturna', 'Mollux', 'Aurumoth', 'Malaconda', 'Cawmodore', 'Volkraken', 'Syclant', 'Revenankh', 'Pyroak', 'Fidgit', 'Stratagem', 'Arghonaut', 'Kitsunoh', 'Cyclohm', 'Colossoil', 'Krilowatt', 'Voodoom'
 		]
-	},
+	},*/
 	{
 		name: "Battle Spot Singles",
 		section: "XY Singles",
@@ -163,28 +163,6 @@ exports.Formats = [
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four Pokémon.'];
-		}
-	},
-	{
-		name: "Battle Spot Special 6",
-		section: "XY Doubles",
-
-		gameType: 'doubles',
-		onBegin: function () {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		},
-		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		banlist: ['Aegislash', 'Amoonguss', 'Charizard', 'Cresselia', 'Garchomp', 'Gengar', 'Greninja', 'Gyarados', 'Kangaskhan', 'Landorus',
-			'Landorus-Therian', 'Mawile', 'Meowstic', 'Meowstic-F', 'Rotom', 'Rotom-Fan', 'Rotom-Frost', 'Rotom-Heat', 'Rotom-Mow', 'Rotom-Wash',
-			'Salamence', 'Sylveon', 'Talonflame', 'Thundurus', 'Thundurus-Therian', 'Togekiss', 'Tyranitar'
-		],
 		validateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		}
@@ -306,30 +284,6 @@ exports.Formats = [
 				return ['Eviolite is banned on Pokémon with 350 or lower BST.'];
 			}
 		}
-	},
-	{
-		name: "ORAS OU",
-		section: "OM of the Month",
-
-		mod: 'oras',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Illegal', 'Uber', 'Floette-Eternal-Flower', 'Hoopa', 'Volcanion', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Soul Dew',
-			'Bug Gem', 'Custap Berry', 'Dark Gem', 'Dragon Gem', 'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem',
-			'Grass Gem', 'Ground Gem', 'Ice Gem', 'Mail', 'Poison Gem', 'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem'
-		]
-	},
-	{
-		name: "ORAS Smogon Doubles",
-		section: "OM of the Month",
-
-		mod: 'oras',
-		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Floette-Eternal-Flower', 'Hoopa', 'Volcanion', 'Soul Dew', 'Dark Void', 'Bug Gem', 'Custap Berry', 'Dark Gem', 'Dragon Gem',
-			'Electric Gem', 'Fairy Gem', 'Fighting Gem', 'Fire Gem', 'Flying Gem', 'Ghost Gem', 'Grass Gem', 'Ground Gem', 'Ice Gem', 'Mail', 'Poison Gem',
-			'Psychic Gem', 'Rock Gem', 'Steel Gem', 'Water Gem', 'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia',
-			'Giratina', 'Giratina-Origin', 'Arceus', 'Reshiram', 'Zekrom', 'Kyurem-White', 'Xerneas', 'Yveltal'
-		]
 	},
 	{
 		name: "[Seasonal] Strikes Back",
@@ -531,7 +485,6 @@ exports.Formats = [
 		section: "Other Metagames",
 		column: 2,
 
-		searchShow: false,
 		ruleset: ['CAP Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite']
 	},
@@ -651,7 +604,8 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Ignore STAB Moves', 'Arceus', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon',
 			'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Porygon-Z', 'Rayquaza', 'Reshiram', 'Shaymin-Sky',
-			'Sylveon', 'Xerneas', 'Yveltal', 'Zekrom', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Soul Dew'
+			'Sylveon', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Gengarite', 'Kangaskhanite', "King's Rock", 'Lucarionite', 'Mawilite', 'Razor Claw', 'Soul Dew'
 		]
 	},
 	{
@@ -973,6 +927,14 @@ exports.Formats = [
 		mod: 'gen3',
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Uber', 'Smeargle + Ingrain']
+	},
+	{
+		name: "[Gen 3] Ubers (beta)",
+		section: "Past Generations",
+
+		mod: 'gen3',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Wobbuffet + Leftovers']
 	},
 	{
 		name: "[Gen 3] Custom Game",

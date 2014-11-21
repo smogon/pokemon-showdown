@@ -140,7 +140,7 @@ exports.BattleAbilities = {
 				for (var j = 0; j < targets[i].moveset.length; j++) {
 					var move = this.getMove(targets[i].moveset[j].move);
 					if (move.category !== 'Status' && (this.getImmunity(move.type, pokemon) && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
-						this.add('-message', pokemon.name + ' shuddered! (placeholder)');
+						this.add('-activate', pokemon, 'ability: Anticipation');
 						return;
 					}
 				}
@@ -1736,12 +1736,11 @@ exports.BattleAbilities = {
 		onUpdate: function (pokemon) {
 			if (pokemon.volatiles['attract']) {
 				pokemon.removeVolatile('attract');
-				this.add("-message", pokemon.name + " got over its infatuation. (placeholder)");
+				this.add('-end', pokemon, 'move: Attract');
 			}
 			if (pokemon.volatiles['taunt']) {
 				pokemon.removeVolatile('taunt');
-				// TODO: Research proper message.
-				this.add("-message", pokemon.name + " got over its taunt. (placeholder)");
+				// Taunt's volatile already sends the -end message when removed
 			}
 		},
 		onImmunity: function (type, pokemon) {
@@ -3235,7 +3234,6 @@ exports.BattleAbilities = {
 			onStart: function (pokemon) {
 				if (pokemon.formeChange('Darmanitan-Zen')) {
 					this.add('-formechange', pokemon, 'Darmanitan-Zen');
-					this.add('-message', 'Zen Mode triggered! (placeholder)');
 				} else {
 					return false;
 				}
@@ -3243,7 +3241,6 @@ exports.BattleAbilities = {
 			onEnd: function (pokemon) {
 				if (pokemon.formeChange('Darmanitan')) {
 					this.add('-formechange', pokemon, 'Darmanitan');
-					this.add('-message', 'Zen Mode ended! (placeholder)');
 				} else {
 					return false;
 				}
