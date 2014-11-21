@@ -535,12 +535,19 @@ exports.BattleScripts = {
 
 	runMegaEvo: function (pokemon) {
 		var side = pokemon.side;
-		var item = this.getItem(pokemon.item);
-		if (!item.megaStone) return false;
 		if (side.megaEvo) return false;
-		var template = this.getTemplate(item.megaStone);
+
+		if (pokemon.baseTemplate.otherFormes) var otherForme = this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
+		if (otherForme && otherForme.isMega && otherForme.requiredMove) {
+			if (pokemon.moves.indexOf(toId(otherForme.requiredMove)) < 0) return false;
+			var template = otherForme;
+		} else {
+			var item = this.getItem(pokemon.item);
+			if (!item.megaStone) return false;
+			var template = this.getTemplate(item.megaStone);
+			if (pokemon.baseTemplate.baseSpecies !== template.baseSpecies) return false;
+		}
 		if (!template.isMega) return false;
-		if (pokemon.baseTemplate.baseSpecies !== template.baseSpecies) return false;
 
 		var foeActive = side.foe.active;
 		for (var i = 0; i < foeActive.length; i++) {
@@ -591,6 +598,8 @@ exports.BattleScripts = {
 			if (forme.requiredItem) {
 				var item = this.getItem(forme.requiredItem);
 				if (item.megaStone) return true;
+			} else if (forme.requiredMove && forme.isMega) {
+				return true;
 			}
 		}
 		return false;
@@ -1268,6 +1277,11 @@ exports.BattleScripts = {
 			moves[3] = 'Techno Blast';
 			hasMove['technoblast'] = true;
 		}
+		if (template.requiredMove && !hasMove[toId(template.requiredMove)]) {
+			delete hasMove[toId(moves[3])];
+			moves[3] = template.requiredMove;
+			hasMove[toId(template.requiredMove)] = true;
+		}
 
 		var abilities = Object.values(baseTemplate.abilities).sort(function (a, b) {
 			return this.getAbility(b).rating - this.getAbility(a).rating;
@@ -1537,13 +1551,10 @@ exports.BattleScripts = {
 			Dusclops: 84, Porygon2: 82, Chansey: 78,
 
 			// Banned Mega
-			"Gengar-Mega": 68, "Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72,
+			"Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72,
 
 			// Holistic judgment
-			Articuno: 86, Genesect: 72, Sigilyph: 76, Xerneas: 66,
-
-			// ORAS
-			"Groudon-Primal": 70, "Kyogre-Primal": 70, "Rayquaza-Mega": 70
+			Articuno: 86, Genesect: 72, "Gengar-Mega": 68, "Rayquaza-Mega": 68, Sigilyph: 76, Xerneas: 66
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
