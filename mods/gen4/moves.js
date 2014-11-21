@@ -78,7 +78,7 @@ exports.BattleMovedex = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk: function (atk, pokemon) {
-				this.add("-message", pokemon.side.pokemon[this.effectData.index].name + "'s attack!");
+				this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + pokemon.side.pokemon[this.effectData.index].name);
 				return pokemon.side.pokemon[this.effectData.index].template.baseStats.atk;
 			},
 			onFoeModifyDefPriority: 5,
@@ -253,7 +253,7 @@ exports.BattleMovedex = {
 				return false;
 			},
 			onEnd: function (pokemon) {
-				this.add('-message', pokemon.name + ' is no longer disabled! (placeholder)');
+				this.add('-end', pokemon, 'move: Disable');
 			},
 			onBeforeMove: function (attacker, defender, move) {
 				if (move.id === this.effectData.move) {
@@ -707,7 +707,7 @@ exports.BattleMovedex = {
 				used: false
 			};
 			source.moves[moveslot] = toId(move.name);
-			this.add('-message', source.name + ' learned ' + move.name + '! (placeholder)');
+			this.add('-activate', source, 'move: Mimic', move.name);
 		}
 	},
 	minimize: {
@@ -830,7 +830,7 @@ exports.BattleMovedex = {
 			source.moveset[moveslot] = sketchedMove;
 			source.baseMoveset[moveslot] = sketchedMove;
 			source.moves[moveslot] = toId(move.name);
-			this.add('-message', source.name + ' learned ' + move.name + '! (placeholder)');
+			this.add('-activate', source, 'move: Mimic', move.name);
 		}
 	},
 	skillswap: {
