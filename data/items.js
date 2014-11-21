@@ -474,7 +474,8 @@ exports.BattleItems = {
 		id: "blueorb",
 		name: "Blue Orb",
 		spritenum: 41,
-		onStart: function (pokemon) {
+		onSwitchInPriority: -6,
+		onSwitchIn: function (pokemon) {
 			if (pokemon.isActive && pokemon.baseTemplate.species === 'Kyogre') {
 				var template = this.getTemplate('Kyogre-Primal');
 				pokemon.formeChange(template);
@@ -3598,7 +3599,8 @@ exports.BattleItems = {
 		id: "redorb",
 		name: "Red Orb",
 		spritenum: 390,
-		onStart: function (pokemon) {
+		onSwitchInPriority: -6,
+		onSwitchIn: function (pokemon) {
 			if (pokemon.isActive && pokemon.baseTemplate.species === 'Groudon') {
 				var template = this.getTemplate('Groudon-Primal');
 				pokemon.formeChange(template);
