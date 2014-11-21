@@ -1210,7 +1210,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	gyaradosmega: {
-		randomBattleMoves: ["dragondance","waterfall","earthquake","stoneedge","substitute","icefang","taunt"],
+		randomBattleMoves: ["dragondance","waterfall","earthquake","stoneedge","substitute","icefang","crunch"],
 		randomDoubleBattleMoves: ["dragondance","waterfall","earthquake","bounce","taunt","protect","thunderwave","stoneedge","substitute","icefang"],
 		requiredItem: "Gyaradosite"
 	},
@@ -1831,7 +1831,7 @@ exports.BattleFormatsData = {
 		tier: "LC Uber"
 	},
 	weavile: {
-		randomBattleMoves: ["iceshard","icepunch","knockoff","pursuit","swordsdance","lowkick"],
+		randomBattleMoves: ["iceshard","iciclecrash","knockoff","pursuit","swordsdance","lowkick"],
 		randomDoubleBattleMoves: ["iceshard","icepunch","knockoff","fakeout","swordsdance","lowkick","taunt","protect","feint"],
 		eventPokemon: [
 			{"generation":4,"level":30,"gender":"M","nature":"Jolly","moves":["fakeout","iceshard","nightslash","brickbreak"],"pokeball":"cherishball"}
@@ -4813,7 +4813,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	greninja: {
-		randomBattleMoves: ["hydropump","uturn","surf","icebeam","spikes","taunt","darkpulse","toxicspikes","hiddenpowerfire"],
+		randomBattleMoves: ["hydropump","uturn","surf","icebeam","spikes","taunt","darkpulse","toxicspikes","hiddenpowerfire","gunkshot"],
 		randomDoubleBattleMoves: ["hydropump","uturn","surf","icebeam","matblock","taunt","darkpulse","protect","hiddenpowerfire"],
 		tier: "OU"
 	},
@@ -4898,7 +4898,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	pangoro: {
-		randomBattleMoves: ["partingshot","hammerarm","crunch","circlethrow","stoneedge","earthquake","poisonjab"],
+		randomBattleMoves: ["partingshot","hammerarm","knockoff","circlethrow","stoneedge","earthquake","poisonjab"],
 		randomDoubleBattleMoves: ["partingshot","hammerarm","crunch","circlethrow","stoneedge","earthquake","poisonjab","protect"],
 		tier: "NU"
 	},
@@ -4912,7 +4912,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	meowstic: {
-		randomBattleMoves: ["fakeout","toxic","yawn","thunderwave","psyshock","trick","psychic","reflect","lightscreen"],
+		randomBattleMoves: ["fakeout","toxic","yawn","thunderwave","psyshock","trick","psychic","reflect","lightscreen","healbell"],
 		randomDoubleBattleMoves: ["fakeout","thunderwave","psyshock","psychic","reflect","lightscreen","safeguard","protect"],
 		tier: "PU"
 	},
@@ -4963,7 +4963,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	malamar: {
-		randomBattleMoves: ["switcheroo","superpower","psychocut","rockslide","trickroom","nightslash"],
+		randomBattleMoves: ["switcheroo","superpower","psychocut","rockslide","trickroom","knockoff"],
 		randomDoubleBattleMoves: ["switcheroo","superpower","psychocut","rockslide","trickroom","nightslash","protect"],
 		tier: "NU"
 	},
@@ -5009,7 +5009,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	tyrantrum: {
-		randomBattleMoves: ["stealthrock","dragondance","stoneedge","dragonclaw","earthquake","icefang","firefang"],
+		randomBattleMoves: ["stealthrock","dragondance","stoneedge","dragonclaw","earthquake","firefang","outrage"],
 		randomDoubleBattleMoves: ["rockslide","dragondance","stoneedge","dragonclaw","earthquake","icefang","firefang","protect"],
 		unreleasedHidden: true,
 		tier: "RU"
@@ -5034,7 +5034,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	hawlucha: {
-		randomBattleMoves: ["swordsdance","highjumpkick","uturn","stoneedge","roost","batonpass"],
+		randomBattleMoves: ["swordsdance","highjumpkick","uturn","stoneedge","roost","batonpass","thunderpunch"],
 		randomDoubleBattleMoves: ["swordsdance","highjumpkick","uturn","stoneedge","skydrop","encore","protect"],
 		tier: "BL"
 	},
