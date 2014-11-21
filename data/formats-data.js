@@ -258,20 +258,29 @@ exports.BattleFormatsData = {
 		],
 		tier: "NFE"
 	},
+	pikachucosplay: {
+		gen: 6,
+		tier: "PU"
+	},
 	pikachurockstar: {
-		gen: 6
+		gen: 6,
+		tier: "PU"
 	},
 	pikachubelle: {
-		gen: 6
+		gen: 6,
+		tier: "PU"
 	},
 	pikachupopstar: {
-		gen: 6
+		gen: 6,
+		tier: "PU"
 	},
 	pikachuphd: {
-		gen: 6
+		gen: 6,
+		tier: "PU"
 	},
 	pikachulibre: {
-		gen: 6
+		gen: 6,
+		tier: "PU"
 	},
 	raichu: {
 		randomBattleMoves: ["nastyplot","encore","thunderbolt","grassknot","hiddenpowerice","focusblast","substitute"],
