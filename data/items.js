@@ -3509,20 +3509,6 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Holder is cured if it is burned. Single use."
 	},
-	"rayquazite": {
-		id: "rayquazite",
-		name: "Rayquazite",
-		spritenum: 0,
-		megaStone: "Rayquaza-Mega",
-		megaEvolves: "Rayquaza",
-		onTakeItem: function (item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
-			return true;
-		},
-		num: 754,
-		gen: 6,
-		desc: "Mega-evolves Rayquaza."
-	},
 	"razorclaw": {
 		id: "razorclaw",
 		name: "Razor Claw",

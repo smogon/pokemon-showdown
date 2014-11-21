@@ -145,27 +145,28 @@ exports.BattleFormats = {
 			}
 			set.moves = moves;
 
-			if (template.requiredItem) {
-				if (template.isMega) {
-					// Mega evolutions evolve in-battle
-					set.species = template.baseSpecies;
-					var baseAbilities = Tools.getTemplate(set.species).abilities;
-					var niceAbility = false;
-					for (var i in baseAbilities) {
-						if (baseAbilities[i] === set.ability) {
-							niceAbility = true;
-							break;
-						}
+			if (template.isMega) {
+				// Mega evolutions evolve in-battle
+				set.species = template.baseSpecies;
+				var baseAbilities = Tools.getTemplate(set.species).abilities;
+				var niceAbility = false;
+				for (var i in baseAbilities) {
+					if (baseAbilities[i] === set.ability) {
+						niceAbility = true;
+						break;
 					}
-					if (!niceAbility) set.ability = baseAbilities['0'];
-				} else if (template.isPrimal) {
-					// Primal Reversion happens in-battle
-					set.species = template.baseSpecies;
-					set.ability = Tools.getTemplate(set.species).abilities['0'];
 				}
-				if (item.name !== template.requiredItem) {
-					problems.push((set.name || set.species) + ' needs to hold ' + template.requiredItem + '.');
-				}
+				if (!niceAbility) set.ability = baseAbilities['0'];
+			} else if (template.isPrimal) {
+				// Primal Reversion happens in-battle
+				set.species = template.baseSpecies;
+				set.ability = Tools.getTemplate(set.species).abilities['0'];
+			}
+			if (template.requiredItem && item.name !== template.requiredItem) {
+				problems.push((set.name || set.species) + ' needs to hold ' + template.requiredItem + '.');
+			}
+			if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+				problems.push((set.name || set.species) + ' needs to have the move ' + template.requiredMove + '.');
 			}
 			if (template.num === 351) { // Castform
 				set.species = 'Castform';
