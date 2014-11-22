@@ -5835,7 +5835,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		onTryHit: function (pokemon, target, move) {
-			if (pokemon.side.pokemonLeft <= 1) {
+			if (!this.canSwitch(pokemon.side)) {
 				delete move.selfdestruct;
 				return false;
 			}
@@ -5844,19 +5844,29 @@ exports.BattleMovedex = {
 		sideCondition: 'healingwish',
 		effect: {
 			duration: 2,
-			onStart: function (side) {
+			onStart: function (side, source) {
 				this.debug('Healing Wish started on ' + side.name);
+				this.effectData.positions = [];
+				for (var i = 0; i < side.active.length; i++) {
+					this.effectData.positions[i] = false;
+				}
+				this.effectData.positions[source.position] = true;
+			},
+			onRestart: function (side, source) {
+				this.effectData.positions[source.position] = true;
 			},
 			onSwitchInPriority: 1,
 			onSwitchIn: function (target) {
-				if (target.position !== this.effectData.sourcePosition) {
+				if (!this.effectData.positions[target.position]) {
 					return;
 				}
 				if (!target.fainted) {
-					var source = this.effectData.source;
-					var damage = target.heal(target.maxhp);
+					target.heal(target.maxhp);
 					target.setStatus('');
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
+					this.effectData.positions[target.position] = false;
+				}
+				if (!this.effectData.positions.any(true)) {
 					target.side.removeSideCondition('healingwish');
 				}
 			}
@@ -7649,7 +7659,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		isSnatchable: true,
 		onTryHit: function (pokemon, target, move) {
-			if (pokemon.side.pokemonLeft <= 1) {
+			if (!this.canSwitch(pokemon.side)) {
 				delete move.selfdestruct;
 				return false;
 			}
@@ -7658,8 +7668,16 @@ exports.BattleMovedex = {
 		sideCondition: 'lunardance',
 		effect: {
 			duration: 2,
-			onStart: function (side) {
+			onStart: function (side, source) {
 				this.debug('Lunar Dance started on ' + side.name);
+				this.effectData.positions = [];
+				for (var i = 0; i < side.active.length; i++) {
+					this.effectData.positions[i] = false;
+				}
+				this.effectData.positions[source.position] = true;
+			},
+			onRestart: function (side, source) {
+				this.effectData.positions[source.position] = true;
 			},
 			onSwitchInPriority: 1,
 			onSwitchIn: function (target) {
@@ -7667,13 +7685,15 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (!target.fainted) {
-					var source = this.effectData.source;
-					var damage = target.heal(target.maxhp);
+					target.heal(target.maxhp);
 					target.setStatus('');
 					for (var m in target.moveset) {
 						target.moveset[m].pp = target.moveset[m].maxpp;
 					}
 					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
+					this.effectData.positions[target.position] = false;
+				}
+				if (!this.effectData.positions.any(true)) {
 					target.side.removeSideCondition('lunardance');
 				}
 			}
