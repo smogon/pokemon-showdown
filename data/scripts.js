@@ -537,14 +537,16 @@ exports.BattleScripts = {
 		var side = pokemon.side;
 		if (side.megaEvo) return false;
 
-		if (pokemon.baseTemplate.otherFormes) var otherForme = this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
+		var otherForme;
+		var template;
+		if (pokemon.baseTemplate.otherFormes) otherForme = this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
 		if (otherForme && otherForme.isMega && otherForme.requiredMove) {
 			if (pokemon.moves.indexOf(toId(otherForme.requiredMove)) < 0) return false;
-			var template = otherForme;
+			template = otherForme;
 		} else {
 			var item = this.getItem(pokemon.item);
 			if (!item.megaStone) return false;
-			var template = this.getTemplate(item.megaStone);
+			template = this.getTemplate(item.megaStone);
 			if (pokemon.baseTemplate.baseSpecies !== template.baseSpecies) return false;
 		}
 		if (!template.isMega) return false;
