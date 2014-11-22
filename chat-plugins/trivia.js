@@ -90,7 +90,8 @@ var updateLeaderboard = function (winner) {
 			rank[1] += score[0];
 			rank[2] += score[1];
 		} else {
-			leaderboard[player] = score.unshift(0);
+			score.unshift(0);
+			leaderboard[player] = score;
 		}
 	}
 	if (winner) leaderboard[winner][0] += prize;
@@ -137,28 +138,27 @@ var Trivia = {
 		phase = 'intermission';
 		var respondersLen = responders.length;
 		var points = Math.round(5 - 4 * (respondersLen - 1) / (Object.keys(participants).length - 1));
-		var winner = null;
+		var winnerid = null;
 		var score = cap - 1;
 		var innerBuffer = [];
 		for (var i = 0; i < respondersLen; i++) {
-			var responder = responders[i];
-			var responderRank = participants[responder];
+			var responderid = responders[i];
+			var responderRank = participants[responderid];
 			var responderScore = responderRank[0] += points;
 			responderRank[1]++;
-			var targetUser = Users.get(responder);
-			if (targetUser) responder = Tools.escapeHTML(targetUser.name);
 			if (responderScore > score) {
-				winner = responder;
+				winnerid = responderid;
 				score = responderScore;
 			}
-			innerBuffer.push(responder);
+			var responder = Users.get(responderid);
+			innerBuffer.push(responder ? Tools.escapeHTML(responder.name) : responderid);
 		}
 
+		responders = [];
 		var buffer = '<div class="broadcast-blue"><strong>The answering period has ended!</strong><br />' +
 		             'Correct: ' + innerBuffer.join(', ') + '<br />' +
 		             'Answer(s): ' + curA.join(', ') + '<br />';
-		responders = [];
-		if (!winner) {
+		if (!winnerid) {
 			buffer += (respondersLen > 1 ? 'Each of them' : 'They') + ' gained <strong>' + points + '</strong> points!</div>';
 			room.addRaw(buffer);
 			room.update();
@@ -166,10 +166,11 @@ var Trivia = {
 			sleep = setTimeout(function () { self.askQuestion(room); }, 30 * 1000);
 			return false;
 		}
-		buffer += winner + ' won the game with a final score of <strong>' + score + '</strong>, and their leaderboard score has increased by <strong>' + prize + '</strong> points!</div>';
+		var winner = Users.get(winnerid);
+		buffer += (winner ? Tools.escapeHTML(winner.name) : winnerid) + ' won the game with a final score of <strong>' + score + '</strong>, and their leaderboard score has increased by <strong>' + prize + '</strong> points!</div>';
 		room.addRaw(buffer);
 		room.update();
-		updateLeaderboard(winner);
+		updateLeaderboard(winnerid);
 		this.curQs = [];
 	}
 };
@@ -414,10 +415,10 @@ exports.commands = {
 		if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.can('declare', null, room)) return false;
 		var submissions = triviaData.submissions;
 		var submissionsLen = submissions.length;
-		var buffer = '<div class="ladder"><table><tr>';
+		var buffer = '|raw|<div class="ladder"><table><tr>';
 		if (!submissionsLen) {
 			buffer += '<td>No questions await review.</td></tr></table></div>';
-			return this.sendReplyBox(buffer);
+			return this.sendReply(buffer);
 		}
 
 		buffer += '<td colspan="4"><strong>' + submissionsLen + '</strong> questions await review:</td></tr>' +
@@ -427,7 +428,7 @@ exports.commands = {
 			buffer += '<tr><td><strong>' + (i + 1) + '</strong></td><td>' + entry.category + '</td><td>' + entry.question + '</td><td>' + entry.answers.join(', ') + '</td></tr>';
 		}
 		buffer += '</table></div>';
-		this.sendReplyBox(buffer);
+		this.sendReply(buffer);
 	},
 	triviareject: 'triviaaccept',
 	triviaaccept: function (target, room, user, connection, cmd) {
@@ -494,10 +495,10 @@ exports.commands = {
 		if (CATEGORIES.indexOf(category) < 0) return this.sendReply('"' + target + '" is not a valid option for /triviaqs. View /triviahelp ginfo for more information.');
 		var list = triviaData.questions.filter(function (question) { return question.category === category; });
 		var listLen = list.length;
-		var buffer = '<div class="ladder"><table><tr>';
+		var buffer = '|raw|<div class="ladder"><table><tr>';
 		if (!listLen) {
 			buffer += '<td>There are no questions in the ' + target + ' category.</td></table></div>';
-			return this.sendReplyBox(buffer);
+			return this.sendReply(buffer);
 		}
 
 		if (user.can('declare', null, room)) {
@@ -516,7 +517,7 @@ exports.commands = {
 			}
 		}
 		buffer += '</table></div>';
-		this.sendReplyBox(buffer);
+		this.sendReply(buffer);
 	},
 
 	//informational commands
