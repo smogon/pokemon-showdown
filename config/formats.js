@@ -41,7 +41,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Drizzle', 'Drought', 'Shadow Tag']
+		banlist: ['OU', 'BL', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Metagrossite', 'Salamencite', 'Drizzle', 'Drought', 'Shadow Tag']
 	},
 	{
 		name: "RU",
