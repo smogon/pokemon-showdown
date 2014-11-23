@@ -463,7 +463,7 @@ exports.BattleMovedex = {
 	leechlife: {
 		inherit: true,
 		basePower: 60
-	},	
+	},
 	leechseed: {
 		inherit: true,
 		onHit: function (target, source, move) {
@@ -920,7 +920,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		type: "bug",
 		critRatio: 2
-	},	
+	},
 	whirlwind: {
 		inherit: true,
 		accuracy: 85,
