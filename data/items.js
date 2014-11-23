@@ -474,7 +474,8 @@ exports.BattleItems = {
 		id: "blueorb",
 		name: "Blue Orb",
 		spritenum: 41,
-		onStart: function (pokemon) {
+		onSwitchInPriority: -6,
+		onSwitchIn: function (pokemon) {
 			if (pokemon.isActive && pokemon.baseTemplate.species === 'Kyogre') {
 				var template = this.getTemplate('Kyogre-Primal');
 				pokemon.formeChange(template);
@@ -3508,20 +3509,6 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Holder is cured if it is burned. Single use."
 	},
-	"rayquazite": {
-		id: "rayquazite",
-		name: "Rayquazite",
-		spritenum: 0,
-		megaStone: "Rayquaza-Mega",
-		megaEvolves: "Rayquaza",
-		onTakeItem: function (item, source) {
-			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
-			return true;
-		},
-		num: 754,
-		gen: 6,
-		desc: "Mega-evolves Rayquaza."
-	},
 	"razorclaw": {
 		id: "razorclaw",
 		name: "Razor Claw",
@@ -3598,7 +3585,8 @@ exports.BattleItems = {
 		id: "redorb",
 		name: "Red Orb",
 		spritenum: 390,
-		onStart: function (pokemon) {
+		onSwitchInPriority: -6,
+		onSwitchIn: function (pokemon) {
 			if (pokemon.isActive && pokemon.baseTemplate.species === 'Groudon') {
 				var template = this.getTemplate('Groudon-Primal');
 				pokemon.formeChange(template);
