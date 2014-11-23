@@ -1370,7 +1370,7 @@ var ChatRoom = (function () {
 		this.send(update);
 	};
 	ChatRoom.prototype.getIntroMessage = function () {
-		var html = this.introMessage || '';
+		var html = this.introMessage || 'This is a mod server, so choose the Violet Version format!';
 		if (this.modchat) {
 			if (html) html += '<br /><br />';
 			html += '<div class="broadcast-red">';
