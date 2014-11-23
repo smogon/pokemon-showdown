@@ -5,7 +5,13 @@
 exports.BattleMovedex = {
 	acid: {
 		inherit: true,
-		target: "normal"
+		basePower: 60,
+		secondary: {
+			chance: 50,
+			boosts: {
+				def: -1
+			}
+		}
 	},
 	amnesia: {
 		inherit: true,
@@ -105,6 +111,8 @@ exports.BattleMovedex = {
 	},
 	bind: {
 		inherit: true,
+		basePower: 30,
+		pp: 10,
 		affectedByImmunities: false,
 		volatileStatus: 'partiallytrapped',
 		self: {
@@ -147,8 +155,9 @@ exports.BattleMovedex = {
 	},
 	clamp: {
 		inherit: true,
+		basePower: 70,
 		accuracy: 75,
-		pp: 10,
+		pp: 5,
 		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock'
@@ -284,6 +293,17 @@ exports.BattleMovedex = {
 		shortDesc: "Has 25% recoil.",
 		recoil: [25, 100]
 	},
+	dreameater: {
+		inherit: true,
+		basePower: 200,
+		type: "ghost",
+		onTryHit: function (target) {
+			if (target.status !== 'psn') {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
+		}
+	},
 	explosion: {
 		inherit: true,
 		basePower: 340,
@@ -300,8 +320,9 @@ exports.BattleMovedex = {
 	},
 	firespin: {
 		inherit: true,
+		pp: 5,
 		accuracy: 70,
-		basePower: 15,
+		basePower: 30,
 		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock'
@@ -437,9 +458,12 @@ exports.BattleMovedex = {
 		}
 	},
 	karatechop: {
-		inherit: true,
-		type: "Normal"
+		inherit: true
 	},
+	leechlife: {
+		inherit: true,
+		basePower: 60
+	},	
 	leechseed: {
 		inherit: true,
 		onHit: function (target, source, move) {
@@ -604,8 +628,13 @@ exports.BattleMovedex = {
 		inherit: true,
 		affectedByImmunities: false
 	},
+	petaldance: {
+		inherit: true,
+		basePower: 120
+	},
 	poisonsting: {
 		inherit: true,
+		basePower: 80,
 		secondary: {
 			chance: 20,
 			status: 'psn'
@@ -857,6 +886,11 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Normal"
 	},
+	thrash: {
+		inherit: true,
+		basePower: 70,
+		type: "dragon"
+	},
 	thunder: {
 		inherit: true,
 		secondary: {
@@ -876,8 +910,17 @@ exports.BattleMovedex = {
 	},
 	triattack: {
 		inherit: true,
-		secondary: false
+		type: "ghost"
 	},
+	twineedle: {
+		inherit: true,
+		basePower: 40
+	},
+	vicegrip: {
+		inherit: true,
+		type: "bug",
+		critRatio: 2
+	},	
 	whirlwind: {
 		inherit: true,
 		accuracy: 85,
@@ -893,6 +936,8 @@ exports.BattleMovedex = {
 	},
 	wrap: {
 		inherit: true,
+		basePower: 30,
+		pp: 10,
 		accuracy: 85,
 		affectedByImmunities: false,
 		volatileStatus: 'partiallytrapped',
