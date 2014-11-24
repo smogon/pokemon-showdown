@@ -557,7 +557,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['NU'],
-		banlist: ['NU']
+		banlist: ['NU', 'Altarianite', 'Beedrillite', 'Lopunnite']
 	},
 	{
 		name: "Inverse Battle",
