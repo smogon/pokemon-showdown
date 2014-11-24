@@ -4682,7 +4682,6 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":100,"moves":["blueflare","fusionflare","mist","dracometeor"],"pokeball":"cherishball"}
 		],
-		unobtainableShiny: true,
 		tier: "Uber"
 	},
 	zekrom: {
@@ -4691,7 +4690,6 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":100,"moves":["boltstrike","fusionbolt","haze","outrage"],"pokeball":"cherishball"}
 		],
-		unobtainableShiny: true,
 		tier: "Uber"
 	},
 	landorus: {
