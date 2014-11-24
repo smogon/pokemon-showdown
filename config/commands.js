@@ -1167,9 +1167,9 @@ var commands = exports.commands = {
 		}
 		if (target === 'overused' || target === 'ou') {
 			matched = true;
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3521201/\">Metagame Discussion Thread</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521201/\">Metagame Discussion Thread</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a><br />";
-			buffer += "- <a href=\"http://www.smogon.com/forums/threads/3521602/\">OU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521602/\">OU Viability Rankings</a><br />";
 		}
 		if (target === 'ubers' || target === 'uber') {
 			matched = true;
