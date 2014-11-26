@@ -5171,10 +5171,14 @@ exports.BattleFormatsData = {
 	},
 	hoopa: {
 		isUnreleased: true,
+		randomBattleMoves: ["calmmind","shadowball","focusblast","thunderwave","energyball","thunderbolt"],
+		randomDoubleBattleMoves: ["hyperspacehole","shadowball","focusblast","protect","thunderwave","energyball","thunderbolt"],
 		tier: "Unreleased"
 	},
 	hoopaunbound: {
 		isUnreleased: true,
+		randomBattleMoves: ["calmmind","shadowball","focusblast","thunderwave","energyball","thunderbolt"],
+		randomDoubleBattleMoves: ["hyperspacehole","shadowball","focusblast","protect","thunderwave","energyball","thunderbolt"],
 		tier: "Unreleased"
 	},
 	volcanion: {
