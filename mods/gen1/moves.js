@@ -908,6 +908,10 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	toxic: {
+		inherit: true,
+		accuracy: 100
+	},
 	triattack: {
 		inherit: true,
 		type: "ghost"
