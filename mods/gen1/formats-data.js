@@ -47,7 +47,7 @@ exports.BattleFormatsData = {
 	},
 	beedrill: {
 		randomBattleMoves: ["twineedle","hyperbeam","swordsdance","agility"],
-		tier: "Uber"
+		tier: "UU"
 	},
 	pidgey: {
 		tier: "Uber"
@@ -171,7 +171,7 @@ exports.BattleFormatsData = {
 	},
 	venomoth: {
 		randomBattleMoves: ["psychic","megadrain","sleeppowder","stunspore"],
-		tier: "UU"
+		tier: "Uber"
 	},
 	diglett: {
 		tier: "Uber"
