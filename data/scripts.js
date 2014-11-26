@@ -563,7 +563,7 @@ exports.BattleScripts = {
 		pokemon.baseTemplate = template; // mega evolution is permanent :o
 		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 		this.add('detailschange', pokemon, pokemon.details);
-		this.add('message', template.baseSpecies + " has Mega Evolved into Mega " + template.baseSpecies + "!");
+		this.add('-mega', pokemon, item);
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
 
