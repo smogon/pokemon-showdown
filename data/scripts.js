@@ -564,8 +564,10 @@ exports.BattleScripts = {
 		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 		this.add('detailschange', pokemon, pokemon.details);
 		this.add('message', template.baseSpecies + " has Mega Evolved into Mega " + template.baseSpecies + "!");
+		var oldAbility = pokemon.ability;
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
+		this.runEvent('EndAbility', pokemon, oldAbility);
 
 		side.megaEvo = 1;
 		for (var i = 0; i < side.pokemon.length; i++) side.pokemon[i].canMegaEvo = false;
