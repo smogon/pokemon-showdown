@@ -121,6 +121,7 @@ exports.BattleAliases = {
 	"deos": "Deoxys-Speed",
 	"giratinao": "Giratina-Origin",
 	"gourgeisthuge": "Gourgeist-Super",
+	"hoopau": "Hoopa-Unbound",
 	"keldeor": "Keldeo-Resolute",
 	"keldeoresolution": "Keldeo-Resolute",
 	"kyuremb": "Kyurem-Black",
