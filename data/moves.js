@@ -6559,7 +6559,7 @@ exports.BattleMovedex = {
 		num: 621,
 		accuracy: true,
 		basePower: 100,
-		category: "Special",
+		category: "Physical",
 		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. Lowers the user's Defense by 1 stage. Makes contact.",
 		shortDesc: "Breaks protect and lowers user's Def. by 1.",
 		id: "hyperspacefury",
