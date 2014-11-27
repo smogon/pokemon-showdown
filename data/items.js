@@ -4152,7 +4152,6 @@ exports.BattleItems = {
 	"souldew": {
 		id: "souldew",
 		name: "Soul Dew",
-		isUnreleased: true,
 		spritenum: 459,
 		fling: {
 			basePower: 30
