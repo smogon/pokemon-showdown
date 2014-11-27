@@ -420,7 +420,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 0,
 		onTryMove: function (target, source, effect) {
-			if (effect.type === 'Fire') {
+			if (effect.type === 'Fire' && effect.category !== 'Status') {
 				this.debug('Primordial Sea fire suppress');
 				this.add('-fail', source, effect, '[from] Primordial Sea');
 				return null;
@@ -504,7 +504,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 0,
 		onTryMove: function (target, source, effect) {
-			if (effect.type === 'Water') {
+			if (effect.type === 'Water' && effect.category !== 'Status') {
 				this.debug('Desolate Land water suppress');
 				this.add('-fail', source, effect, '[from] Desolate Land');
 				return null;
