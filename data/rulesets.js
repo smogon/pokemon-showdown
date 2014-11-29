@@ -548,5 +548,17 @@ exports.BattleFormats = {
 				}
 			}
 		}
+	},
+	megarayquazabanmod: {
+		effectType: 'Rule',
+		onStart: function () {
+			this.add('rule', 'Mega Rayquaza Ban Mod: You cannot mega evolve Rayquaza');
+			for (var i = 0; i < this.sides[0].pokemon.length; i++) {
+				if (this.sides[0].pokemon[i].speciesid === 'rayquaza') this.sides[0].pokemon[i].canMegaEvo = false;
+			}
+			for (var i = 0; i < this.sides[1].pokemon.length; i++) {
+				if (this.sides[1].pokemon[i].speciesid === 'rayquaza') this.sides[1].pokemon[i].canMegaEvo = false;
+			}
+		}
 	}
 };
