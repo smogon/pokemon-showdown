@@ -534,8 +534,7 @@ exports.BattleScripts = {
 	},
 
 	runMegaEvo: function (pokemon) {
-		var side = pokemon.side;
-		if (side.megaEvo) return false;
+		if (!pokemon.canMegaEvo) return false;
 
 		var otherForme;
 		var template;
@@ -551,6 +550,7 @@ exports.BattleScripts = {
 		}
 		if (!template.isMega) return false;
 
+		var side = pokemon.side;
 		var foeActive = side.foe.active;
 		for (var i = 0; i < foeActive.length; i++) {
 			if (foeActive[i].volatiles['skydrop'] && foeActive[i].volatiles['skydrop'].source === pokemon) {
@@ -569,7 +569,6 @@ exports.BattleScripts = {
 		pokemon.baseAbility = pokemon.ability;
 		this.runEvent('EndAbility', pokemon, oldAbility);
 
-		side.megaEvo = 1;
 		for (var i = 0; i < side.pokemon.length; i++) side.pokemon[i].canMegaEvo = false;
 		return true;
 	},
