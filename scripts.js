@@ -628,5 +628,45 @@ exports.BattleScripts = {
 			team.push(set);
 		}
 		return team;
+	},
+	randomSeasonalSBTeam: function (side) {
+		var crypto = require('crypto');
+		var date = new Date();
+		var hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').substr(0, 8), 16) + date.getDate();
+		var randNums = [
+			(13 * hash + 6) % 721,
+			(18 * hash + 12) % 721,
+			(25 * hash + 24) % 721,
+			(1 * hash + 48) % 721,
+			(23 * hash + 96) % 721,
+			(5 * hash + 192) % 721
+		];
+		var randoms = {};
+		for (var i = 0; i < 6; i++) {
+			if (randNums[i] < 1) randNums[i] = 1;
+			randoms[randNums[i]] = true;
+		}
+		var team = [];
+		var mons = 0;
+		for (var p in this.data.Pokedex) {
+			if (this.data.Pokedex[p].num in randoms) {
+				var set = this.randomSet(this.getTemplate(p), mons);
+				set.moves[3] = 'Present';
+				team.push(set);
+				delete randoms[this.data.Pokedex[p].num];
+				mons++;
+			}
+		}
+
+		// There is a very improbable chance in which two hashes collide, leaving the player with five Pokémon. Fix that.
+		var defaults = ['zapdos', 'venusaur', 'aegislash', 'heatran', 'unown', 'liepard'].randomize();
+		while (mons < 6) {
+			var set = this.randomSet(this.getTemplate(defaults[mons]), mons);
+			set.moves[3] = 'Present';
+			team.push(set);
+			mons++;
+		}
+
+		return team;
 	}
 ];
