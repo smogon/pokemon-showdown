@@ -44,7 +44,9 @@ var jsHintOptions = {
 		"Cidr": false,
 		"Sockets": false,
 		"Tools": false,
-		"TeamValidator": false
+		"TeamValidator": false,
+		"battleEngineFakeProcess": false,
+		"battleProtoCache": false
 	}
 };
 

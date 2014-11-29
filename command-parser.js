@@ -72,6 +72,7 @@ function canTalk(user, room, connection, message) {
 		connection.sendTo(room, "You are muted and cannot talk in this room.");
 		return false;
 	}
+	var roomType = room && room.auth ? room.type + 'Room' : 'global';
 	if (room && room.modchat) {
 		if (room.modchat === 'crash') {
 			if (!user.can('ignorelimits')) {
@@ -84,14 +85,16 @@ function canTalk(user, room, connection, message) {
 				if (room.auth[user.userid]) {
 					userGroup = room.auth[user.userid];
 				} else if (room.isPrivate) {
-					userGroup = ' ';
+					userGroup = Config.groups.default[roomType];
 				}
 			}
-			if (!user.autoconfirmed && (room.auth && room.auth[user.userid] || user.group) === ' ' && room.modchat === 'autoconfirmed') {
-				connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
-				return false;
-			} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat)) {
-				var groupName = Config.groups[room.modchat].name || room.modchat;
+			if (room.modchat === 'autoconfirmed') {
+				if (!user.autoconfirmed && userGroup === Config.groups.default[roomType]) {
+					connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
+					return false;
+				}
+			} else if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[room.modchat].rank) {
+				var groupName = Config.groups.bySymbol[room.modchat].name || room.modchat;
 				connection.sendTo(room, "Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
 				return false;
 			}
@@ -126,8 +129,8 @@ function canTalk(user, room, connection, message) {
 			user.lastMessageTime = Date.now();
 		}
 
-		if (Config.chatfilter) {
-			return Config.chatfilter(user, room, connection, message);
+		if (Config.chatFilter) {
+			return Config.chatFilter(user, room, connection, message);
 		}
 		return message;
 	}
@@ -237,8 +240,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			sendModCommand: function (data) {
 				for (var i in room.users) {
 					var user = room.users[i];
-					// hardcoded for performance reasons (this is an inner loop)
-					if (user.isStaff || (room.auth && (room.auth[user.userid] || '+') !== '+')) {
+					if (user.can('staff') || user.can('staff', room)) {
 						user.sendTo(room, data);
 					}
 				}
@@ -271,7 +273,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				if (broadcast) {
 					message = this.canTalk(message);
 					if (!message) return false;
-					if (!user.can('broadcast', null, room)) {
+					if (!user.can('broadcast', room)) {
 						connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
 						connection.sendTo(room, "To see it for yourself, use: /" + message.substr(1));
 						return false;
@@ -305,7 +307,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				if (!images) return true;
 				for (var i = 0; i < images.length; i++) {
 					if (!/width=([0-9]+|"[0-9]+")/i.test(images[i]) || !/height=([0-9]+|"[0-9]+")/i.test(images[i])) {
-						this.sendReply('All images must have a width and height attribute');
+						this.sendReply("All images must have a width and height attribute");
 						return false;
 					}
 				}
@@ -364,16 +366,19 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		return result;
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
-		for (var g in Config.groups) {
-			var groupid = Config.groups[g].id;
-			if (cmd === groupid || cmd === 'global' + groupid) {
-				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection);
-			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
-				return parse('/demote ' + toId(target), room, user, connection);
-			} else if (cmd === 'room' + groupid) {
-				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection);
-			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
-				return parse('/roomdemote ' + toId(target), room, user, connection);
+		var isRoom = false;
+		var promoteCmd = cmd;
+		if (promoteCmd.substr(0, 6) === 'global') {
+			promoteCmd = promoteCmd.slice(6);
+		} else if (promoteCmd.substr(0, 4) === 'room') {
+			isRoom = true;
+			promoteCmd = promoteCmd.slice(4);
+		}
+		for (var g in Config.groups[isRoom ? room.type + 'Room' : 'global']) {
+			var groupId = Config.groups.bySymbol[g].id;
+			var isDemote = promoteCmd === 'de' + groupId || promoteCmd === 'un' + groupId;
+			if (promoteCmd === groupId || isDemote) {
+				return parse('/' + (isRoom ? 'room' : '') + (isDemote ? 'demote' : 'promote') + ' ' + toId(target) + (isDemote ? '' : ',' + g), room, user, connection);
 			}
 		}
 

@@ -17,7 +17,7 @@ exports.commands = {
 	toggleaotd: function (target, room, user) {
 		if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
 		if (!this.canTalk()) return;
-		if (!this.can('mute', null, room)) return;
+		if (!this.can('aotd', room)) return;
 		if (!target) {
 			return this.sendReply("/toggleaotd [on / off] - If on, this will start AOTD, if off, this will no longer allow people to use /naotd.");
 		}
@@ -81,7 +81,7 @@ exports.commands = {
 		}
 		if (!this.canTalk()) return;
 		if (target.length > 25) return this.sendReply("This Artist\'s name is too long; it cannot exceed 25 characters.");
-		if (!this.can('mute', null, room)) return;
+		if (!this.can('aotd', room)) return;
 		room.aotd = target;
 		room.addRaw(
 			'<div class="broadcast-green">' +
