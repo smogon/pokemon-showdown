@@ -65,6 +65,13 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
 	},
+	{
+		name: "Anything Goes",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal']
+	},
 	/*{
 		name: "CAP Plasmanta Playtest",
 		section: "XY Singles",
