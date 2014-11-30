@@ -207,13 +207,14 @@ var commands = exports.commands = {
 		}
 		var output = "In rooms: ";
 		var first = true;
+		var canMute = user.can('mute', targetUser); // Don't perform this check on every room
 		for (var i in targetUser.roomCount) {
 			var targetRoom = Rooms.get(i);
-			if (i === 'global' || targetRoom.isPrivate) continue;
+			if (i === 'global' || targetRoom.isPrivate && !canMute && targetRoom.type !== "battle") continue;
 			if (!first) output += " | ";
 			first = false;
 
-			output += (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			output += (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>' + (targetRoom.isPrivate ? '<sup>P</sup>' : '');
 		}
 		this.sendReply('|raw|' + output);
 	},
