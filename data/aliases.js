@@ -51,6 +51,7 @@ exports.BattleAliases = {
 	"megamewtwo": "Mewtwo-Mega-Y",
 	"megamewtwox": "Mewtwo-Mega-X",
 	"megamewtwoy": "Mewtwo-Mega-Y",
+	"megaobama": "Abomasnow-Mega",
 	"megapidgeot": "Pidgeot-Mega",
 	"megapinsir": "Pinsir-Mega",
 	"megarayquaza": "Rayquaza-Mega",
@@ -186,13 +187,15 @@ exports.BattleAliases = {
 	"flightgem": "Flying Gem",
 	"goggles": "Safety Goggles",
 	"lefties": "Leftovers",
+	"leppa": "Leppa berry"
 	"lo": "Life Orb",
 	"lum": "Lum Berry",
 	"occa": "Occa Berry",
 	"salac": "Salac Berry",
-	"scarf": "Choice Scarf",
-	"specs": "Choice Specs",
 	"sash": "Focus Sash",
+	"scarf": "Choice Scarf",
+	"sitrus": "Sitrus Berry",
+	"specs": "Choice Specs",
 	"yache": "Yache Berry",
 
 	// gen 1-2 berries
@@ -228,6 +231,7 @@ exports.BattleAliases = {
 	"landot": "Landorus-Therian",
 	"luke":  "Lucario",
 	"mence": "Salamence",
+	"obama": "Abomasnow",
 	"ogre": "Kyogre",
 	"p2": "Porygon2",
 	"pory2": "Porygon2",
@@ -243,6 +247,7 @@ exports.BattleAliases = {
 
 	// moves
 	"bpass": "Baton Pass",
+	"bp": "Baton Pass",
 	"cc": "Close Combat",
 	"cm": "Calm Mind",
 	"dd": "Dragon Dance",
