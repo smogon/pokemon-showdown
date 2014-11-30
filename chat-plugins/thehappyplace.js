@@ -17,7 +17,7 @@ exports.commands = {
 			if (!quote) return this.sendReplyBox("The Quote of the Day has not been set.");
 			return this.sendReplyBox("The current <strong>'Inspirational Quote of the Day'</strong> is:<br />" + quote);
 		}
-		if (!this.can('declare', null, room)) return false;
+		if (!this.can('qotd', room)) return false;
 		if (target === 'off' || target === 'disable' || target === 'reset') {
 			if (!quote) return this.sendReply("The Quote of the Day has already been reset.");
 			quote = "";

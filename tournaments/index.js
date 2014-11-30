@@ -868,9 +868,11 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		return this.sendReply("Tournaments disabled.");
 	} else if (cmd === 'create' || cmd === 'new') {
 		if (room.toursEnabled) {
-			if (!this.can('tournaments', null, room)) return;
+			if (!user.can('tournaments', room)) {
+				return this.sendReply(cmd + " -  Access denied.");
+			}
 		} else {
-			if (!user.can('tournamentsmanagement', null, room)) {
+			if (!user.can('tournamentsmanagement', room)) {
 				return this.sendReply("Tournaments are disabled in this room (" + room.id + ").");
 			}
 		}
@@ -878,7 +880,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			return this.sendReply("Usage: " + cmd + " <format>, <type> [, <comma-separated arguments>]");
 		}
 
-		var tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.istournamentsrated, params, this);
+		var tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.isTournamentsRated, params, this);
 		if (tour) this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
 	} else {
 		var tournament = getTournament(room.title);
@@ -893,9 +895,11 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 
 		if (commands.creation[cmd]) {
 			if (room.toursEnabled) {
-				if (!this.can('tournaments', null, room)) return;
+				if (!user.can('tournaments', room)) {
+					return this.sendReply(cmd + " -  Access denied.");
+				}
 			} else {
-				if (!user.can('tournamentsmanagement', null, room)) {
+				if (!user.can('tournamentsmanagement', room)) {
 					return this.sendReply("Tournaments are disabled in this room (" + room.id + ").");
 				}
 			}
@@ -903,7 +907,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 
 		if (commands.moderation[cmd]) {
-			if (!user.can('tournamentsmoderation', null, room)) {
+			if (!user.can('tournamentsmoderation', room)) {
 				return this.sendReply(cmd + " -  Access denied.");
 			}
 			commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
