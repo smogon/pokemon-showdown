@@ -210,7 +210,7 @@ var commands = exports.commands = {
 		var canMute = user.can('mute', targetUser); // Don't perform this check on every room
 		for (var i in targetUser.roomCount) {
 			var targetRoom = Rooms.get(i);
-			if (i === 'global' || targetRoom.isPrivate && !canMute && targetRoom.type != "battle") continue;
+			if (i === 'global' || targetRoom.isPrivate && !canMute && targetRoom.type !== "battle") continue;
 			if (!first) output += " | ";
 			first = false;
 
