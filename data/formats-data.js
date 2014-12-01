@@ -579,8 +579,7 @@ exports.BattleFormatsData = {
 	alakazammega: {
 		randomBattleMoves: ["calmmind","psyshock","focusblast","shadowball","encore","substitute"],
 		randomDoubleBattleMoves: ["protect","psychic","psyshock","focusblast","shadowball","encore","substitute","energyball"],
-		requiredItem: "Alakazite",
-		tier: "BL"
+		requiredItem: "Alakazite"
 	},
 	machop: {
 		randomBattleMoves: ["dynamicpunch","payback","bulkup","icepunch","rockslide","bulletpunch","knockoff"],
