@@ -567,14 +567,14 @@ exports.BattleMovedex = {
 	skillswap: {
 		inherit: true,
 		onHit: function (target, source) {
-			var targetAbility = target.ability;
-			var sourceAbility = source.ability;
-			if (!target.setAbility(sourceAbility) || !source.setAbility(targetAbility)) {
-				target.ability = targetAbility;
-				source.ability = sourceAbility;
+			var targetAbility = this.getAbility(target.ability);
+			var sourceAbility = this.getAbility(source.ability);
+			if (targetAbility.id === sourceAbility.id) {
 				return false;
 			}
 			this.add('-activate', source, 'move: Skill Swap');
+			source.setAbility(targetAbility);
+			target.setAbility(sourceAbility);
 		}
 	},
 	spikes: {

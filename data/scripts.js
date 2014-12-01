@@ -567,7 +567,6 @@ exports.BattleScripts = {
 		var oldAbility = pokemon.ability;
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
-		this.runEvent('EndAbility', pokemon, oldAbility);
 
 		side.megaEvo = 1;
 		for (var i = 0; i < side.pokemon.length; i++) side.pokemon[i].canMegaEvo = false;
