@@ -187,7 +187,7 @@ exports.BattleAliases = {
 	"flightgem": "Flying Gem",
 	"goggles": "Safety Goggles",
 	"lefties": "Leftovers",
-	"leppa": "Leppa berry"
+	"leppa": "Leppa Berry",
 	"lo": "Life Orb",
 	"lum": "Lum Berry",
 	"occa": "Occa Berry",
