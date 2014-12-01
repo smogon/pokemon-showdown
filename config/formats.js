@@ -353,6 +353,7 @@ exports.Formats = [
 	{
 		name: "Stat Switch",
 		section: "OM of the Month",
+		column: 2,
 
 		mod: 'statswitch',
 		ruleset: ['OU'],
