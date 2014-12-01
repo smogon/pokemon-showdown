@@ -356,8 +356,13 @@ exports.Formats = [
 		column: 2,
 
 		mod: 'statswitch',
-		ruleset: ['OU'],
-		banlist: ['Azumarill']
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: [
+			'Arceus', 'Azumarill', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed',
+			'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia',
+			'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Soul Dew', 'Diancite', 'Gengarite', 'Lucarionite', 'Mawilite', 'Salamencite'
+		]
 	},
 	{
 		name: "[Seasonal] Strikes Back",
