@@ -782,7 +782,6 @@ BattlePokemon = (function () {
 		var d = this.hp;
 		this.hp = 0;
 		this.switchFlag = false;
-		this.status = 'fnt';
 		this.battle.faintQueue.push({
 			target: this,
 			source: source,
@@ -2431,6 +2430,7 @@ Battle = (function () {
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
+			if (oldActive.fainted) oldActive.status = 'fnt';
 			this.cancelMove(oldActive);
 			oldActive.clearVolatile();
 		}
