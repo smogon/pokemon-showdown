@@ -41,7 +41,7 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Metagrossite', 'Salamencite', 'Drizzle', 'Drought', 'Shadow Tag']
+		banlist: ['OU', 'BL', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Metagrossite', 'Drizzle', 'Drought', 'Shadow Tag']
 	},
 	{
 		name: "RU",
@@ -636,7 +636,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['NU'],
-		banlist: ['NU', 'Altarianite', 'Beedrillite', 'Lopunnite']
+		banlist: ['NU', 'BL4', 'Altarianite', 'Beedrillite', 'Lopunnite']
 	},
 	{
 		name: "Inverse Battle",

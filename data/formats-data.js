@@ -125,8 +125,7 @@ exports.BattleFormatsData = {
 	beedrillmega: {
 		randomBattleMoves: ["toxicspikes","xscissor","swordsdance","uturn","endeavor","poisonjab","drillrun","knockoff"],
 		randomDoubleBattleMoves: ["xscissor","uturn","substitute","poisonjab","drillrun","knockoff","protect"],
-		requiredItem: "Beedrillite",
-		tier: "NU"
+		requiredItem: "Beedrillite"
 	},
 	pidgey: {
 		randomBattleMoves: ["roost","bravebird","heatwave","return","workup","uturn","thief"],
@@ -2685,8 +2684,7 @@ exports.BattleFormatsData = {
 	altariamega: {
 		randomBattleMoves: ["dragondance","return","outrage","dragonclaw","earthquake","roost","dracometeor","fireblast"],
 		randomDoubleBattleMoves: ["dragondance","return","doubleedge","dragonclaw","earthquake","protect","fireblast"],
-		requiredItem: "Altarianite",
-		tier: "NU"
+		requiredItem: "Altarianite"
 	},
 	zangoose: {
 		randomBattleMoves: ["swordsdance","closecombat","knockoff","quickattack","facade"],
@@ -2981,7 +2979,8 @@ exports.BattleFormatsData = {
 	salamencemega: {
 		randomBattleMoves: ["doubleedge","fireblast","earthquake","dracometeor","roost","dragondance","dragonclaw"],
 		randomDoubleBattleMoves: ["doubleedge","fireblast","earthquake","dracometeor","protect","dragondance","dragonclaw"],
-		requiredItem: "Salamencite"
+		requiredItem: "Salamencite",
+		tier: "Uber"
 	},
 	beldum: {
 		randomBattleMoves: ["ironhead","zenheadbutt","headbutt","irondefense"],
@@ -3421,8 +3420,7 @@ exports.BattleFormatsData = {
 	lopunnymega: {
 		randomBattleMoves: ["return","highjumpkick","poweruppunch","fakeout","icepunch"],
 		randomDoubleBattleMoves: ["return","highjumpkick","protect","fakeout","icepunch","encore"],
-		requiredItem: "Lopunnite",
-		tier: "NU"
+		requiredItem: "Lopunnite"
 	},
 	glameow: {
 		randomBattleMoves: ["fakeout","uturn","suckerpunch","hypnosis","quickattack","return","foulplay"],
