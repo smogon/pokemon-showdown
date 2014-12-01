@@ -538,7 +538,7 @@ Tournament = (function () {
 			if (pendingChallenge && pendingChallenge.to) return;
 
 			if (Date.now() > time + this.autoDisqualifyTimeout && this.isAutoDisqualifyWarned.get(user)) {
-				this.disqualifyUser(user);
+				this.disqualifyUser(user, output);
 				this.room.update();
 			} else if (Date.now() > time + this.autoDisqualifyTimeout - AUTO_DISQUALIFY_WARNING_TIMEOUT && !this.isAutoDisqualifyWarned.get(user)) {
 				var remainingTime = this.autoDisqualifyTimeout - Date.now() + time;
