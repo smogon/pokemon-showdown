@@ -127,7 +127,7 @@ function canTalk(user, room, connection, message) {
 		}
 
 		if (Config.chatfilter) {
-			return Config.chatfilter(user, room, connection, message);
+			return Config.chatfilter(message, user, room, connection);
 		}
 		return message;
 	}
