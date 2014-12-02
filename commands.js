@@ -508,7 +508,7 @@ var commands = exports.commands = {
 		if (innerBuffer.length) {
 			buffer.push('Room auth: ' + innerBuffer.join(', '));
 		}
-		if (targetId === user.id || user.can('makeroom')) {
+		if (targetId === user.userid || user.can('makeroom')) {
 			innerBuffer = [];
 			for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
 				var curRoom = Rooms.global.chatRooms[i];
