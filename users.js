@@ -791,7 +791,7 @@ User = (function () {
 			// technically it's not "taken", but if your client doesn't warn you
 			// before it gets to this stage it's your own fault for getting a
 			// bad error message
-			this.send('|nametaken|' + "|You did not specify a name.");
+			this.send('|nametaken|' + "|You did not specify a name or your name was invalid.");
 			return false;
 		} else {
 			if (userid === this.userid && !auth) {
