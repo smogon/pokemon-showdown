@@ -618,8 +618,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 0,
 		onEffectiveness: function (typeMod, target, type, move) {
-			if (move && move.id === 'stealthrock') return;
-			if (type === 'Flying' && typeMod > 0) {
+			if (move && move.effectType === 'Move' && type === 'Flying' && typeMod > 0) {
 				this.add('-activate', '', 'deltastream');
 				return 0;
 			}
