@@ -217,7 +217,30 @@ exports.BattleMovedex = {
 	detect: {
 		inherit: true,
 		//desc: "",
-		priority: 3
+		priority: 3,
+		effect: {
+			duration: 1,
+			onStart: function (target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function (target, source, move) {
+				if (move.breaksProtect) {
+					target.removeVolatile('Protect');
+					return;
+				}
+				if (move && (move.target === 'self' || move.isNotProtectable)) return;
+				this.add('-activate', target, 'Protect');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is NOT reset
+					if (source.volatiles['lockedmove'].trueDuration >= 2) {
+						source.volatiles['lockedmove'].duration = 2;
+					}
+				}
+				return null;
+			}
+		}
 	},
 	disable: {
 		inherit: true,
@@ -756,7 +779,30 @@ exports.BattleMovedex = {
 	protect: {
 		inherit: true,
 		//desc: "",
-		priority: 3
+		priority: 3,
+		effect: {
+			duration: 1,
+			onStart: function (target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function (target, source, move) {
+				if (move.breaksProtect) {
+					target.removeVolatile('Protect');
+					return;
+				}
+				if (move && (move.target === 'self' || move.isNotProtectable)) return;
+				this.add('-activate', target, 'Protect');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is NOT reset
+					if (source.volatiles['lockedmove'].trueDuration >= 2) {
+						source.volatiles['lockedmove'].duration = 2;
+					}
+				}
+				return null;
+			}
+		}
 	},
 	psychup: {
 		inherit: true,
