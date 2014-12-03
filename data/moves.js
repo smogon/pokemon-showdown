@@ -4957,7 +4957,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function (pokemon) {
 				this.add('-endability', pokemon);
-				this.runEvent('EndAbility', pokemon, pokemon.ability);
+				this.singleEvent('End', this.getAbility(pokemon.ability), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
 			},
 			onModifyPokemonPriority: 2,
 			onModifyPokemon: function (pokemon) {
@@ -11973,26 +11973,19 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function (target, source, move) {
-			var targetAbility = target.ability;
-			var sourceAbility = source.ability;
-			if (!target.setAbility(sourceAbility, source, move, true) || !source.setAbility(targetAbility, source, move, true)) {
-				target.ability = targetAbility;
-				source.ability = sourceAbility;
-				return false;
+			var targetAbility = this.getAbility(target.ability);
+			var sourceAbility = this.getAbility(source.ability);
+			this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
+			if (targetAbility.id !== sourceAbility.id) {
+				source.battle.singleEvent('End', sourceAbility, source.abilityData, source);
+				target.battle.singleEvent('End', targetAbility, target.abilityData, target);
+				source.ability = targetAbility.id;
+				target.ability = sourceAbility.id;
+				source.abilityData = {id: source.ability.id, target: source};
+				target.abilityData = {id: target.ability.id, target: target};
 			}
-			this.add('-activate', source, 'move: Skill Swap', this.getAbility(targetAbility), this.getAbility(sourceAbility), '[of] ' + target);
-
-			// Change the source of an ORAS weather (will this really happen in-game?)
-			var weather = this.getWeather();
-			if (weather.id in {desolateland:1, primordialsea:1, deltastream:1}) {
-				var weatherSource = this.weatherData.source;
-				if (weatherSource === source) {
-					this.weatherData.source = target;
-				} else if (weatherSource === target) {
-					this.weatherData.source = source;
-				}
-				this.debug(this.weatherData.source);
-			}
+			source.battle.singleEvent('Start', targetAbility, source.abilityData, source);
+			target.battle.singleEvent('Start', sourceAbility, target.abilityData, target);
 		},
 		secondary: false,
 		target: "normal",

@@ -1033,6 +1033,7 @@ BattlePokemon = (function () {
 		}
 		if (ability.id in {illusion:1, multitype:1, stancechange:1}) return false;
 		if (oldAbility in {multitype:1, stancechange:1}) return false;
+		this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source, effect);
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
 		if (ability.id && this.battle.gen > 3) {
@@ -1858,7 +1859,7 @@ Battle = (function () {
 			// it's changed; call it off
 			return relayVar;
 		}
-		if (target.ignore && target.ignore[effect.effectType]) {
+		if (target.ignore && target.ignore[effect.effectType] && target.ignore[effect.effectType] !== 'A') {
 			this.debug(eventid + ' handler suppressed by Gastro Acid, Klutz or Magic Room');
 			return relayVar;
 		}
@@ -2482,6 +2483,7 @@ Battle = (function () {
 				return false;
 			}
 			this.runEvent('SwitchOut', oldActive);
+			this.singleEvent('End', this.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
 			oldActive.position = pokemon.position;
@@ -3111,6 +3113,7 @@ Battle = (function () {
 			if (!faintData.target.fainted) {
 				this.add('faint', faintData.target);
 				this.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
+				this.singleEvent('End', this.getAbility(faintData.target.ability), faintData.target.abilityData, faintData.target);
 				faintData.target.fainted = true;
 				faintData.target.isActive = false;
 				faintData.target.isStarted = false;
@@ -3364,6 +3367,7 @@ Battle = (function () {
 					// a switch-out.
 					break;
 				}
+				this.singleEvent('End', this.getAbility(decision.pokemon.ability), decision.pokemon.abilityData, decision.pokemon);
 			}
 			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
 				// a pokemon fainted from Pursuit before it could switch

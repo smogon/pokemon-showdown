@@ -440,23 +440,6 @@ exports.BattleStatuses = {
 			this.add('-weather', 'PrimordialSea', '[upkeep]');
 			this.eachEvent('Weather');
 		},
-		onEndAbility: function (pokemon, oldability) {
-			if (this.weatherData.source !== pokemon) return;
-			if (oldability !== 'primordialsea') return;
-			this.clearWeather();
-		},
-		onFaint: function (pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			this.clearWeather();
-		},
-		onDragOut: function (pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			this.clearWeather();
-		},
-		onSwitchOut: function (pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			this.clearWeather();
-		},
 		onEnd: function () {
 			this.add('-weather', 'none');
 		}
@@ -526,23 +509,6 @@ exports.BattleStatuses = {
 		onResidual: function () {
 			this.add('-weather', 'DesolateLand', '[upkeep]');
 			this.eachEvent('Weather');
-		},
-		onEndAbility: function (pokemon, oldability) {
-			if (this.weatherData.source !== pokemon) return;
-			if (oldability !== 'desolateland') return;
-			this.clearWeather();
-		},
-		onFaint: function (pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			this.clearWeather();
-		},
-		onDragOut: function (pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			this.clearWeather();
-		},
-		onSwitchOut: function (pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			this.clearWeather();
 		},
 		onEnd: function () {
 			this.add('-weather', 'none');
@@ -630,23 +596,6 @@ exports.BattleStatuses = {
 		onResidual: function () {
 			this.add('-weather', 'DeltaStream', '[upkeep]');
 			this.eachEvent('Weather');
-		},
-		onEndAbility: function (pokemon, oldability) {
-			if (this.weatherData.source !== pokemon) return;
-			if (oldability !== 'deltastream') return;
-			this.clearWeather();
-		},
-		onFaint: function (pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			this.clearWeather();
-		},
-		onDragOut: function (pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			this.clearWeather();
-		},
-		onSwitchOut: function (pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			this.clearWeather();
 		},
 		onEnd: function () {
 			this.add('-weather', 'none');

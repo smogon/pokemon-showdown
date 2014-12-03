@@ -527,6 +527,20 @@ exports.BattleAbilities = {
 		onStart: function (source) {
 			this.setWeather('deltastream');
 		},
+		onEnd: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			for (var i = 0; i < this.sides.length; i++) {
+				for (var j = 0; j < this.sides[i].active.length; j++) {
+					var target = this.sides[i].active[j];
+					if (target === pokemon) continue;
+					if (target && target.hp && target.ability === 'deltastream' && target.ignore['Ability'] !== true) {
+						this.weatherData.source = target;
+						return;
+					}
+				}
+			}
+			this.clearWeather();
+		},
 		id: "deltastream",
 		name: "Delta Stream",
 		rating: 5,
@@ -537,6 +551,20 @@ exports.BattleAbilities = {
 		shortDesc: "The weather becomes harsh sun until this Pokemon leaves battle.",
 		onStart: function (source) {
 			this.setWeather('desolateland');
+		},
+		onEnd: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			for (var i = 0; i < this.sides.length; i++) {
+				for (var j = 0; j < this.sides[i].active.length; j++) {
+					var target = this.sides[i].active[j];
+					if (target === pokemon) continue;
+					if (target && target.hp && target.ability === 'desolateland' && target.ignore['Ability'] !== true) {
+						this.weatherData.source = target;
+						return;
+					}
+				}
+			}
+			this.clearWeather();
 		},
 		id: "desolateland",
 		name: "Desolate Land",
@@ -2004,6 +2032,20 @@ exports.BattleAbilities = {
 		shortDesc: "The weather becomes heavy rain until this Pokemon leaves battle.",
 		onStart: function (source) {
 			this.setWeather('primordialsea');
+		},
+		onEnd: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			for (var i = 0; i < this.sides.length; i++) {
+				for (var j = 0; j < this.sides[i].active.length; j++) {
+					var target = this.sides[i].active[j];
+					if (target === pokemon) continue;
+					if (target && target.hp && target.ability === 'primordialsea' && target.ignore['Ability'] !== true) {
+						this.weatherData.source = target;
+						return;
+					}
+				}
+			}
+			this.clearWeather();
 		},
 		id: "primordialsea",
 		name: "Primordial Sea",
