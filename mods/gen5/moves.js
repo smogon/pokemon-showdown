@@ -659,6 +659,19 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	skillswap: {
+		inherit: true,
+		onHit: function (target, source) {
+			var targetAbility = target.ability;
+			var sourceAbility = source.ability;
+			if (targetAbility === sourceAbility) {
+				return false;
+			}
+			this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
+			source.setAbility(targetAbility);
+			target.setAbility(sourceAbility);
+		}
+	},
 	skullbash: {
 		inherit: true,
 		basePower: 100,
