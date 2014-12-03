@@ -1464,9 +1464,9 @@ exports.BattleAbilities = {
 	"magician": {
 		desc: "If this Pokemon is not holding an item, it steals the held item of a target it hits with a move.",
 		shortDesc: "This Pokemon steals the held item of a target it hits with a move.",
-		onHit: function (target, source, move) {
-			// We need to hard check if the ability is Magician since the event will be run both ways.
-			if (target && target !== source && source.ability === 'magician' && move && move.category !== 'Status') {
+		onSourceHit: function (target, source, move) {
+			if (!move || !target) return;
+			if (target !== source && move.category !== 'Status') {
 				if (source.item) return;
 				var yourItem = target.takeItem(source);
 				if (!yourItem) return;
