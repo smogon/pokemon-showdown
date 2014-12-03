@@ -655,14 +655,28 @@ Tournament = (function () {
 		this.update();
 	};
 	Tournament.prototype.onBattleWin = function (room, winner) {
-		var from = Users.get(room.p1);
-		var to = Users.get(room.p2);
+		var from = Users.get(room.p1),
+			to = Users.get(room.p2),
+			fromElo = Number(Core.stdin('elo', toId(from))),
+			toElo = Number(Core.stdin('elo', toId(to))), arr;
 
 		var result = 'draw';
 		if (from === winner) {
 			result = 'win';
+			if (this.room.isOfficial) {
+				arr = Core.calculateElo(fromElo, toElo);
+				Core.stdout('elo', toId(from), arr[0], function () {
+					Core.stdout('elo', toId(to), arr[1]);
+				});
+			}
 		} else if (to === winner) {
 			result = 'loss';
+			if (this.room.isOfficial) {
+				arr = Core.calculateElo(toElo, fromElo);
+				Core.stdout('elo', toId(to), arr[0], function () {
+					Core.stdout('elo', toId(from), arr[1]);
+				});
+			}
 		}
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
@@ -711,6 +725,43 @@ Tournament = (function () {
 			generator: this.generator.name,
 			bracketData: this.getBracketData()
 		}));
+		
+		var data = {
+			results: this.generator.getResults().map(usersToNames),
+			bracketData: this.getBracketData()
+		}, runnerUp = false, winner;
+		data = data['results'].toString();
+
+		if (data.indexOf(',') >= 0) {
+			data = data.split(',');
+			winner = data[0];
+			if (data[1]) runnerUp = data[1];
+		} else {
+			winner = data;
+		}
+
+		if (this.room.isOfficial) {
+			var wid = toId(winner), // winner's userid
+				rid = toId(runnerUp); // runnerUp's userid
+
+			// file i/o
+			var tourWin = Number(Core.stdin('tourWins', wid));
+			var winnerElo = Number(Core.stdin('elo', wid));
+			if (winnerElo === 0) winnerElo = 1000;
+			if (runnerUp) {
+				var runnerUpElo = Number(Core.stdin('elo', rid));
+				if (runnerUpElo === 0) runnerUpElo = 1000;
+				Core.stdout('tourWins', wid, (tourWin + 1), function () {
+					Core.stdout('elo', wid, (winnerElo + Core.tournaments.winningElo), function () {
+						Core.stdout('elo', rid, (runnerUpElo + Core.tournaments.runnerUpElo));
+					});
+				});
+			} else {
+				Core.stdout('tourWins', wid, (tourWin + 1), function () {
+					Core.stdout('elo', wid, (winnerElo + Core.tournaments.winningElo));
+				});
+			}
+		}
 		this.isEnded = true;
 		delete exports.tournaments[toId(this.room.id)];
 	};
