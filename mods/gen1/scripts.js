@@ -22,7 +22,7 @@ exports.BattleScripts = {
 		} else if (pokemon.volatiles['lightscreen'] && statName === 'spd') {
 			this.debug('Light Screen doubles Special Defense');
 			stat *= 2;
-			// Max on reflect is 1024
+			// Max on light screen is 1024
 			if (stat > 1024) stat = 1024;
 			if (stat < 1) stat = 1;
 		} else {
@@ -96,8 +96,8 @@ exports.BattleScripts = {
 							if (pokemon.moveset[m].id === move.id) usedMovePos = m;
 						}
 						if (usedMovePos > -1 && pokemon.moveset[usedMovePos].pp === 0) {
-							// If we were on the middle of the 0 PP sequence, the PPs get reset
-							pokemon.moveset[usedMovePos].pp = pokemon.moveset[usedMovePos].maxpp;
+							// If we were on the middle of the 0 PP sequence, the PPs get reset to 63.
+							pokemon.moveset[usedMovePos].pp = 63;
 						} else {
 							// Otherwise, plain reduct
 							pokemon.deductPP(move, null, target);
