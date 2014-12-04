@@ -12,7 +12,7 @@ exports.BattleScripts = {
 	},
 	/**
 	 * We deal with gen 1 stats using the getStatCallback which is called always that we get a stat.
-	 * We add here a specific unboosted argument to use it with crits, as in gen 1 we need this 
+	 * We add here a specific unboosted argument to use it with crits, as in gen 1 we need this
 	 * specific callback to deal with screen stats.
 	 */
 	getStatCallback: function (stat, statName, pokemon, unboosted) {
