@@ -665,9 +665,13 @@ exports.BattleScripts = {
 		var attack = attacker.getStat(atkType);
 		var defense = defender.getStat(defType);
 
+		// In the event of a critical hit, the ofense and defense changes are ignored.
+		// Also, level is doubled in damage calculation.
 		if (move.crit) {
 			move.ignoreOffensive = true;
 			move.ignoreDefensive = true;
+			level *= 2;
+			if (!suppressMessages) this.add('-crit', target);
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
@@ -684,12 +688,6 @@ exports.BattleScripts = {
 		// S is the Stab modifier, T is the type effectiveness modifier, R is random between 217 and 255
 		// The max damage is 999
 		var baseDamage = Math.min(Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * attack * basePower / defense) / 50), 997) + 2;
-
-		// Crit damage addition (usually doubling)
-		if (move.crit) {
-			if (!suppressMessages) this.add('-crit', target);
-			baseDamage = this.modify(baseDamage, move.critModifier || 2);
-		}
 
 		// STAB damage bonus, the "???" type never gets STAB
 		if (type !== '???' && pokemon.hasType(type)) {
