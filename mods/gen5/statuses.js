@@ -20,7 +20,7 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('partiallytrapped');
 				return;
 			}
-			if (this.effectData.source.item === 'bindingband') {
+			if (this.effectData.source.hasItem('bindingband')) {
 				this.damage(pokemon.maxhp / 8);
 			} else {
 				this.damage(pokemon.maxhp / 16);
