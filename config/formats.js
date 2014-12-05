@@ -564,8 +564,8 @@ exports.Formats = [
 		section: "Other Metagames",
 		column: 2,
 
-		ruleset: ['CAP Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
+		ruleset: ['OU'],
+		banlist: ['Allow CAP']
 	},
 	{
 		name: "Challenge Cup",
