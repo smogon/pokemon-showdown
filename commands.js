@@ -830,19 +830,6 @@ var commands = exports.commands = {
 		}
 	},
 
-	lockdt: 'lockdetails',
-	lockdetails: function (target, room, user) {
-		if (!this.can('lock')) return false;
-		var targetUser = Users.get(target);
-		if (!targetUser) return this.sendReply("User '" + target + "' does not exist.");
-		if (!targetUser.locked) return this.sendReply("User '" + targetUser.name + "' was not locked from chat.");
-		var canIp = user.can('ip', targetUser);
-		for (var ip in targetUser.ips) {
-			if (Dnsbl.cache[ip]) return this.sendReply("User '" + targetUser.name + "' is locked due to their IP " + (canIp ? "(" + ip + ") " : "") + "being in a DNS-based blacklist" + (canIp ? " (" + Dnsbl.cache[ip] + ")." : "."));
-		}
-		return this.sendReply("User '" + targetUser.name + "' is locked for unknown reasons. Check their modlog?");
-	},
-
 	b: 'ban',
 	ban: function (target, room, user) {
 		if (!target) return this.parse('/help ban');
