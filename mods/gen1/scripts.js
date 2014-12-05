@@ -20,17 +20,17 @@ exports.BattleScripts = {
 		if (pokemon.volatiles['reflect'] && statName === 'def' && !unboosted) {
 			this.debug('Reflect doubles Defense');
 			stat *= 2;
-			// Max on reflect is 1024
-			if (stat > 1024) stat = 1024;
+			// If the defense is higher than 1024, it is rolled over. The min is always 1.
+			if (stat > 1024) stat -= 1024;
 			if (stat < 1) stat = 1;
 		} else if (pokemon.volatiles['lightscreen'] && statName === 'spd' && !unboosted) {
 			this.debug('Light Screen doubles Special Defense');
 			stat *= 2;
-			// Max on light screen is 1024
-			if (stat > 1024) stat = 1024;
+			// If the special defense is higher than 1024, it is rolled over. The min is always 1.
+			if (stat > 1024) stat -= 1024;
 			if (stat < 1) stat = 1;
 		} else {
-			// Gen 1 caps stats at 999 and min is 1
+			// Gen 1 normally caps stats at 999 and min is 1.
 			if (stat > 999) stat = 999;
 			if (stat < 1) stat = 1;
 		}
