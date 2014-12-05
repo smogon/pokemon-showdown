@@ -14,9 +14,5 @@ exports.BattleScripts = {
 				this.modData('Movedex', i).category = newCategory;
 			}
 		}
-	},
-	faint: function (pokemon, source, effect) {
-		pokemon.faint(source, effect);
-		this.queue = [];
 	}
 };
