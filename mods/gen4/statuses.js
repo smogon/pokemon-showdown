@@ -44,7 +44,7 @@ exports.BattleStatuses = {
 	partiallytrapped: {
 		inherit: true,
 		durationCallback: function (target, source) {
-			if (source.item === 'gripclaw') return 6;
+			if (source.hasItem('gripclaw')) return 6;
 			return this.random(3, 7);
 		}
 	},
