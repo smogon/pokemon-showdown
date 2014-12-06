@@ -1024,14 +1024,17 @@ exports.BattleScripts = {
 				case 'icebeam':
 					if (hasMove['blizzard']) rejected = true;
 					break;
+				case 'naturepower':
+					if (hasMove['hypervoice']) rejected = true;
+					break;
 				case 'surf':
 					if (hasMove['scald'] || hasMove['hydropump']) rejected = true;
 					break;
-				case 'hydropump':
+				case 'hydropump': case 'originpulse':
 					if (hasMove['razorshell'] || hasMove['scald']) rejected = true;
 					break;
 				case 'waterfall':
-					if (hasMove['aquatail']) rejected = true;
+					if (hasMove['aquatail'] || hasMove['scald']) rejected = true;
 					break;
 				case 'shadowforce': case 'phantomforce': case 'shadowsneak':
 					if (hasMove['shadowclaw']) rejected = true;
