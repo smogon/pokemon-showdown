@@ -629,7 +629,10 @@ var commands = exports.commands = {
 				return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '" + target + "'.");
 			}
 		}
-		if (!user.joinRoom(targetRoom || room, connection)) {
+		if (targetRoom.bannedUsers[user.userid]) {
+			return connection.sendTo(target, "|noinit|banned|You are banned from the room '" + target + "'.");
+		}
+		if (!user.joinRoom(targetRoom || room, connection) && !targetRoom.bannedUsers[user.userid]) {
 			return connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' could not be joined.");
 		}
 	},
