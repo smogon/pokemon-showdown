@@ -629,8 +629,13 @@ var commands = exports.commands = {
 				return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '" + target + "'.");
 			}
 		}
-		if (!user.joinRoom(targetRoom || room, connection)) {
-			return connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' could not be joined.");
+
+		var joinResult = user.joinRoom(targetRoom, connection);
+		if (!joinResult) {
+			if (joinResult === null) {
+				return connection.sendTo(target, "|noinit|joinfailed|You are banned from the room '" + target + "'.");
+			}
+			return connection.sendTo(target, "|noinit|joinfailed|You do not have permission to join '" + target + "'.");
 		}
 	},
 
