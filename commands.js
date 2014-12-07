@@ -715,10 +715,6 @@ var commands = exports.commands = {
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
-		if (targetUser.can('hotpatch')) {
-			this.sendReply("You cannot mute an administrator.");
-			return false;
-		}
 		if (!this.can('mute', targetUser, room)) return false;
 		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {
 			var problem = " but was already " + (!targetUser.connected ? "offline" : targetUser.locked ? "locked" : "muted");
@@ -792,10 +788,6 @@ var commands = exports.commands = {
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
-		}
-		if (targetUser.can('hotpatch')) {
-			this.sendReply("You cannot lock an administrator.");
-			return false;
 		}
 		if (!this.can('lock', targetUser)) return false;
 
