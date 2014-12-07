@@ -859,6 +859,16 @@ var commands = exports.commands = {
 		room.add("" + user.name + " applied showtan to affected area of " + this.targetUser.name);
 	},
 
+	cpgtan: function (target, room, user) {
+		if (room.id !== 'cpg') return this.sendReply("The command '/cpgtan' was unrecognized. To send a message starting with '/cpgtan', type '//cpgtan'.");
+		if (!this.can('modchat', null, room)) return;
+		target = this.splitTarget(target);
+		if (!this.targetUser) return this.sendReply("User not found");
+		if (!room.users[this.targetUser.userid]) return this.sendReply("Not a cpger");
+		this.targetUser.avatar = '#cpgtan';
+		room.add("" + user.name + " applied cpgtan to affected area of " + this.targetUser.name);
+	},
+
 	introduction: 'intro',
 	intro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
