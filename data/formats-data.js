@@ -260,26 +260,32 @@ exports.BattleFormatsData = {
 	},
 	pikachucosplay: {
 		gen: 6,
+		unobtainableShiny: true,
 		tier: "PU"
 	},
 	pikachurockstar: {
 		gen: 6,
+		unobtainableShiny: true,
 		tier: "PU"
 	},
 	pikachubelle: {
 		gen: 6,
+		unobtainableShiny: true,
 		tier: "PU"
 	},
 	pikachupopstar: {
 		gen: 6,
+		unobtainableShiny: true,
 		tier: "PU"
 	},
 	pikachuphd: {
 		gen: 6,
+		unobtainableShiny: true,
 		tier: "PU"
 	},
 	pikachulibre: {
 		gen: 6,
+		unobtainableShiny: true,
 		tier: "PU"
 	},
 	raichu: {
