@@ -123,17 +123,16 @@ var Trivia = {
 		room.addRaw('<div class="broadcast-blue"><strong>Question: ' + head.question + '</strong><br />' +
 			    'Category: ' + head.category + '</div>');
 		room.update();
-		var self = this;
 		switch (mode) {
 		case 'number':
-			sleep = setTimeout(function () { self.tallyAnswers(room); }, 10 * 1000);
+			sleep = setTimeout(function () { this.tallyAnswers(room); }.bind(this), 10 * 1000);
 			break;
 		case 'timer':
 			this.askedAt = Date.now();
-			sleep = setTimeout(function () { self.timeAnswers(room); }, 15 * 1000);
+			sleep = setTimeout(function () { this.timeAnswers(room); }.bind(this), 15 * 1000);
 			break;
 		case 'first':
-			sleep = setTimeout(function () { self.noAnswer(room); }, 15 * 1000);
+			sleep = setTimeout(function () { this.noAnswer(room); }.bind(this), 15 * 1000);
 			break;
 		}
 	},
@@ -146,8 +145,7 @@ var Trivia = {
 			    'Answer(s): ' + curA.join(', ') + '<br />' +
 			    'Nobody gained any points.</div>');
 		room.update();
-		var self = this;
-		sleep = setTimeout(function () { self.askQuestion(room); }, 30 * 1000);
+		sleep = setTimeout(function () { this.askQuestion(room); }.bind(this), 30 * 1000);
 	},
 	timeAnswers: function (room) {
 		if (Object.isEmpty(responders)) return this.noAnswer(room);
@@ -160,11 +158,11 @@ var Trivia = {
 			     'Answer(s): ' + curA.join(', ') + '<br /><br />' +
 			     '<table width="100%" bgcolor="#9CBEDF">' +
 			     '<tr bgcolor="6688AA"><th width="100px">Points Gained</th><th>Correct</th></tr>';
-		var row = 4;
 		var innerBuffer = [[], [], [], [], []];
 
 		for (var responderid in responders) {
 			var points = 5 - Math.floor((responders[responderid] - this.askedAt) / (3 * 1000));
+			if (!points) continue;
 			var responderRank = participants[responderid];
 			var responderScore = responderRank[0] += points;
 			responderRank[1]++;
@@ -175,8 +173,7 @@ var Trivia = {
 			}
 			var responder = Users.get(responderid);
 
-			if (points !== row + 1) row = points - 1;
-			innerBuffer[row].push(responder ? responder.name : responderid);
+			innerBuffer[points - 1].push(responder ? responder.name : responderid);
 		}
 		for (var i = 5; i--;) {
 			if (!innerBuffer[i].length) continue;
@@ -188,8 +185,7 @@ var Trivia = {
 			buffer += '</table></div>';
 			room.addRaw(buffer);
 			room.update();
-			var self = this;
-			sleep = setTimeout(function () { self.askQuestion(room); }, 30 * 1000);
+			sleep = setTimeout(function () { this.askQuestion(room); }.bind(this), 30 * 1000);
 			return false;
 		}
 		var winner = Users.get(winnerid);
@@ -230,8 +226,7 @@ var Trivia = {
 			buffer += (respondersLen > 1 ? 'Each of them' : 'They') + ' gained <strong>' + points + '</strong> points!</div>';
 			room.addRaw(buffer);
 			room.update();
-			var self = this;
-			sleep = setTimeout(function () { self.askQuestion(room); }, 30 * 1000);
+			sleep = setTimeout(function () { this.askQuestion(room); }.bind(this), 30 * 1000);
 			return false;
 		}
 		var winner = Users.get(winnerid);
@@ -630,7 +625,7 @@ exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 	triviahelp: function (target, room) {
-		if (room.id !== 'trivia' || !this.canBroadcast()) return false;
+		if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.canBroadcast()) return false;
 		target = toId(target);
 		switch (target) {
 		case 'ginfo':
