@@ -1162,6 +1162,9 @@ var commands = exports.commands = {
 		// Otherwise, the text is defaulted to text search in current room's modlog.
 		var roomId = room.id;
 		var hideIps = !user.can('ban');
+		var isWin = (process.platform === 'win32');
+		// This is neccessary as the type command of Windows doesn't understand the /-char in paths
+		var sep = (isWin ? "\\" : "/");
 
 		if (target.indexOf(',') > -1) {
 			var targets = target.split(',');
@@ -1186,26 +1189,34 @@ var commands = exports.commands = {
 			// Get a list of all the rooms
 			var fileList = fs.readdirSync('logs/modlog');
 			for (var i = 0; i < fileList.length; ++i) {
-				filename += 'logs/modlog/' + fileList[i] + ' ';
+				filename += 'logs' + sep + 'modlog' + sep + fileList[i] + ' ';
 			}
 		} else {
 			if (!this.can('modlog', null, Rooms.get(roomId))) return;
 			roomNames = 'the room ' + roomId;
-			filename = 'logs/modlog/modlog_' + roomId + '.txt';
+			filename = 'logs' + sep + 'modlog' + sep + 'modlog_' + roomId + '.txt';
 		}
 
 		// Seek for all input rooms for the lines or text
-		command = 'tail -' + lines + ' ' + filename;
+		if (isWin) {
+			command = 'winmodlog tail ' + lines + ' ' + filename;
+		} else {
+			command = 'tail -' + lines + ' ' + filename;
+		}
 		var grepLimit = 100;
 		if (wordSearch) { // searching for a word instead
 			if (target.match(/^["'].+["']$/)) target = target.substring(1, target.length - 1);
-			command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -i '" + target.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]') + "'";
+			if (isWin) {
+				command = 'winmodlog ws ' + grepLimit + ' "' + target.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1") + '" ' + filename;
+			} else {
+				command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -i '" + target.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]') + "'";
+			}
 		}
 
 		// Execute the file search to see modlog
 		require('child_process').exec(command, function (error, stdout, stderr) {
 			if (error && stderr) {
-				connection.popup("/modlog empty on " + roomNames + " or erred - modlog does not support Windows");
+				connection.popup("/modlog empty on " + roomNames + " or erred");
 				console.log("/modlog error: " + error);
 				return false;
 			}
