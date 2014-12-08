@@ -1163,8 +1163,8 @@ var commands = exports.commands = {
 		var roomId = room.id;
 		var hideIps = !user.can('ban');
 		var isWin = (process.platform === 'win32');
-		// This is neccessary as the type command of Windows doesn't understand the /-char in paths
-		var sep = (isWin ? "\\" : "/");
+		// This is necessary as the type command of Windows doesn't understand the /-char in paths
+		var logPath = (isWin ? 'logs\\modlog\\' : 'logs/modlog/');
 
 		if (target.indexOf(',') > -1) {
 			var targets = target.split(',');
@@ -1189,17 +1189,17 @@ var commands = exports.commands = {
 			// Get a list of all the rooms
 			var fileList = fs.readdirSync('logs/modlog');
 			for (var i = 0; i < fileList.length; ++i) {
-				filename += 'logs' + sep + 'modlog' + sep + fileList[i] + ' ';
+				filename += logPath + fileList[i] + ' ';
 			}
 		} else {
 			if (!this.can('modlog', null, Rooms.get(roomId))) return;
 			roomNames = 'the room ' + roomId;
-			filename = 'logs' + sep + 'modlog' + sep + 'modlog_' + roomId + '.txt';
+			filename = logPath + 'modlog_' + roomId + '.txt';
 		}
 
 		// Seek for all input rooms for the lines or text
 		if (isWin) {
-			command = 'winmodlog tail ' + lines + ' ' + filename;
+			command = 'lib\\winmodlog tail ' + lines + ' ' + filename;
 		} else {
 			command = 'tail -' + lines + ' ' + filename;
 		}
@@ -1207,7 +1207,7 @@ var commands = exports.commands = {
 		if (wordSearch) { // searching for a word instead
 			if (target.match(/^["'].+["']$/)) target = target.substring(1, target.length - 1);
 			if (isWin) {
-				command = 'winmodlog ws ' + grepLimit + ' "' + target.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1") + '" ' + filename;
+				command = 'lib\\winmodlog ws ' + grepLimit + ' "' + target.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1") + '" ' + filename;
 			} else {
 				command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -i '" + target.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]') + "'";
 			}

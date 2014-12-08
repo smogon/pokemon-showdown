@@ -31,7 +31,7 @@ SET search=%3
 SET files="%~4"
 :wordsearchFilenameLoop
 IF "%~4"=="" GOTO diplaylines
-	SET files=%files% "%~4"
+SET files=%files% "%~4"
 SHIFT /4
 GOTO wordsearchFilenameLoop
 
