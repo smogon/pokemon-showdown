@@ -881,6 +881,8 @@ exports.BattleMovedex = {
 		name: "Bestow",
 		pp: 15,
 		priority: 0,
+		isNotProtectable: true,
+		notSubBlocked: true,
 		onHit: function (target, source) {
 			if (target.item) {
 				return false;
@@ -1070,6 +1072,7 @@ exports.BattleMovedex = {
 		name: "Block",
 		pp: 5,
 		priority: 0,
+		isNotProtectable: true,
 		isBounceable: true,
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
@@ -8080,6 +8083,7 @@ exports.BattleMovedex = {
 		name: "Mean Look",
 		pp: 5,
 		priority: 0,
+		isNotProtectable: true,
 		isBounceable: true,
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
