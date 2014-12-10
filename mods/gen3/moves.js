@@ -182,7 +182,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			}
@@ -253,7 +253,7 @@ exports.BattleMovedex = {
 				}
 				for (var i = 0; i < pokemon.moveset.length; i++) {
 					if (pokemon.moveset[i].id !== this.effectData.move) {
-						pokemon.moveset[i].disabled = true;
+						pokemon.disableMove(pokemon.moveset[i].id);
 					}
 				}
 			}
@@ -644,7 +644,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (this.getMove(moves[i].move).category === 'Status') {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			},

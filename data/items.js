@@ -255,7 +255,7 @@ exports.BattleItems = {
 			var moves = pokemon.moveset;
 			for (var i = 0; i < moves.length; i++) {
 				if (this.getMove(moves[i].move).category === 'Status') {
-					moves[i].disabled = true;
+					pokemon.disableMove(moves[i].id);
 				}
 			}
 		},

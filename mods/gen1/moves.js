@@ -96,7 +96,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id !== 'bide') {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			}
@@ -265,7 +265,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			}
