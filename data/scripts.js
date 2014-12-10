@@ -2524,44 +2524,40 @@ exports.BattleScripts = {
 			shiny: (Math.random() * (template.id === 'missingno' ? 4 : 1024) <= 1)
 		};
 	},
-	randomSeasonalSBTeam: function (side) {
-		var crypto = require('crypto');
-		var date = new Date();
-		var hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').substr(0, 8), 16) + date.getDate();
-		var randNums = [
-			(13 * hash + 6) % 721,
-			(18 * hash + 12) % 721,
-			(25 * hash + 24) % 721,
-			(1 * hash + 48) % 721,
-			(23 * hash + 96) % 721,
-			(5 * hash + 192) % 721
-		];
-		var randoms = {};
-		for (var i = 0; i < 6; i++) {
-			if (randNums[i] < 1) randNums[i] = 1;
-			randoms[randNums[i]] = true;
-		}
-		var team = [];
-		var mons = 0;
-		for (var p in this.data.Pokedex) {
-			if (this.data.Pokedex[p].num in randoms) {
-				var set = this.randomSet(this.getTemplate(p), mons);
-				set.moves[3] = 'Present';
-				team.push(set);
-				delete randoms[this.data.Pokedex[p].num];
-				mons++;
-			}
-		}
+	randomSeasonalSSTeam: function (side) {
+		// All Pokémon in this Seasonal. They are meant to pull the sleigh.
+		var seasonalPokemonList = [
+			'abomasnow', 'accelgor', 'aggron', 'arbok', 'arcanine', 'arceus', 'ariados', 'armaldo', 'audino', 'aurorus', 'avalugg',
+			'barbaracle', 'bastiodon', 'beartic', 'bellossom', 'bibarel', 'bisharp', 'blastoise', 'blaziken', 'bouffalant', 'cacturne',
+			'camerupt', 'carracosta', 'cherrim', 'cobalion', 'conkeldurr', 'crawdaunt', 'crustle', 'darmanitan', 'dedenne', 'delcatty',
+			'delibird', 'dialga', 'dodrio', 'donphan', 'drapion', 'druddigon', 'dunsparce', 'durant', 'eevee', 'electivire', 'electrode',
+			'emboar', 'entei', 'espeon', 'exeggutor', 'exploud', 'feraligatr', 'flareon', 'furfrou', 'furret', 'gallade', 'galvantula',
+			'garbodor', 'garchomp', 'gastrodon', 'genesect', 'gigalith', 'girafarig', 'glaceon', 'glaceon', 'glalie', 'gogoat', 'golem',
+			'golurk', 'granbull', 'groudon', 'grumpig', 'hariyama', 'haxorus', 'heatmor', 'heatran', 'heliolisk', 'hippowdon', 'hitmonchan',
+			'hitmonlee', 'hitmontop', 'houndoom', 'hypno', 'infernape', 'jolteon', 'jynx', 'kabutops', 'kangaskhan', 'kecleon', 'keldeo',
+			'kingler', 'krookodile', 'kyurem', 'kyuremblack', 'kyuremwhite', 'lapras', 'leafeon', 'leavanny', 'lickilicky', 'liepard',
+			'lilligant', 'linoone', 'lopunny', 'lucario', 'ludicolo', 'luxray', 'machamp', 'magcargo', 'magmortar', 'malamar', 'mamoswine',
+			'manectric', 'marowak', 'meganium', 'meowstic', 'metagross', 'mewtwo', 'mightyena', 'miltank', 'nidoking', 'nidoqueen',
+			'ninetales', 'octillery', 'omastar', 'pachirisu', 'palkia', 'pangoro', 'parasect', 'persian', 'poliwrath', 'primeape', 'purugly',
+			'pyroar', 'raichu', 'raikou', 'rampardos', 'rapidash', 'raticate', 'regice', 'regigigas', 'regirock', 'registeel', 'reshiram',
+			'rhydon', 'rhyperior', 'samurott', 'sandslash', 'sawk', 'sawsbuck', 'sceptile', 'scolipede', 'seismitoad', 'shaymin', 'shiftry',
+			'simipour', 'simisage', 'simisear', 'skuntank', 'slaking', 'slowbro', 'slowking', 'slurpuff', 'spinda', 'stantler', 'steelix',
+			'stoutland', 'sudowoodo', 'suicune', 'sunflora', 'swampert', 'sylveon', 'tangrowth', 'tauros', 'terrakion', 'throh', 'torkoal',
+			'torterra', 'typhlosion', 'tyrantrum', 'umbreon', 'ursaring', 'ursaring', 'vaporeon', 'venusaur', 'vileplume', 'virizion',
+			'whimsicott', 'wobbuffet', 'xerneas', 'zangoose', 'zebstrika', 'zekrom', 'zoroark'
+		].randomize();
 
-		// There is a very improbable chance in which two hashes collide, leaving the player with five Pokémon. Fix that.
-		var defaults = ['zapdos', 'venusaur', 'aegislash', 'heatran', 'unown', 'liepard'].randomize();
-		while (mons < 6) {
-			var set = this.randomSet(this.getTemplate(defaults[mons]), mons);
+		// We create the team now
+		var team = [];
+		for (var i = 0; i < 6; i++) {
+			var pokemon = seasonalPokemonList[i];
+			var template = this.getTemplate(pokemon);
+			var set = this.randomSet(template, i);
 			set.moves[3] = 'Present';
 			team.push(set);
-			mons++;
 		}
 
+		// Done, return the result.
 		return team;
 	}
 };
