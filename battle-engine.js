@@ -1381,6 +1381,28 @@ BattleSide = (function () {
 		this.battle.update();
 		return true;
 	};
+	BattleSide.prototype.send = function () {
+		var parts = Array.prototype.slice.call(arguments);
+		var functions = parts.map(function (part) {
+			return typeof part === 'function';
+		});
+		var sideUpdate = [];
+		if (functions.indexOf(true) < 0) {
+			sideUpdate.push('|' + parts.join('|'));
+		} else {
+			var line = '';
+			for (var j = 0; j < parts.length; ++j) {
+				line += '|';
+				if (functions[j]) {
+					line += parts[j](this);
+				} else {
+					line += parts[j];
+				}
+			}
+			sideUpdate.push(line);
+		}
+		this.battle.send('sideupdate', this.id + "\n" + sideUpdate);
+	};
 	BattleSide.prototype.emitCallback = function () {
 		this.battle.send('callback', this.id + "\n" +
 			Array.prototype.slice.call(arguments).join('|'));
