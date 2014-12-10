@@ -1277,12 +1277,12 @@ exports.BattleScripts = {
 		//moves[0] = 'Safeguard';
 		if (template.requiredItem && template.requiredItem.slice(-5) === 'Drive' && !hasMove['technoblast']) {
 			delete hasMove[toId(moves[3])];
-			moves[3] = 'Techno Blast';
+			moves[3] = 'technoblast';
 			hasMove['technoblast'] = true;
 		}
 		if (template.requiredMove && !hasMove[toId(template.requiredMove)]) {
 			delete hasMove[toId(moves[3])];
-			moves[3] = template.requiredMove;
+			moves[3] = toId(template.requiredMove);
 			hasMove[toId(template.requiredMove)] = true;
 		}
 
@@ -1463,8 +1463,8 @@ exports.BattleScripts = {
 			if ((hasMove['return'] || hasMove['hyperfang']) && !hasMove['facade']) {
 				// lol no
 				for (var j = 0; j < moves.length; j++) {
-					if (moves[j] === 'Return' || moves[j] === 'Hyper Fang') {
-						moves[j] = 'Facade';
+					if (moves[j] === 'return' || moves[j] === 'hyperfang') {
+						moves[j] = 'facade';
 						break;
 					}
 				}
