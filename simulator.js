@@ -158,6 +158,13 @@ var Battle = (function () {
 			this.inactiveSide = -1;
 			break;
 
+		case 'sideupdate':
+			player = this.getPlayer(lines[2]);
+			if (player) {
+				player.sendTo(this.id, lines[3]);
+			}
+			break;
+
 		case 'callback':
 			player = this.getPlayer(lines[2]);
 			if (player) {
