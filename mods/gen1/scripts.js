@@ -595,7 +595,6 @@ exports.BattleScripts = {
 		// Checking for the move's Critical Hit possibility. We check if it's a 100% crit move, otherwise we calculate the chance.
 		move.crit = move.willCrit || false;
 		if (!move.crit) {
-			console.log('Move not default crit, checking chances');
 			// In gen 1, the critical chance is based on speed.
 			// First, we get the base speed, divide it by 2 and floor it. This is our current crit chance.
 			var critChance = Math.floor(pokemon.template.baseStats['spe'] / 2);

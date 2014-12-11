@@ -361,7 +361,7 @@ exports.BattleMovedex = {
 				this.add('-start', pokemon, 'move: Focus Energy');
 			},
 			// This does nothing as it's dealt with on critical hit calculation.
-			onModifyMove: function (move) {}
+			onModifyMove: function () {}
 		},
 		secondary: false,
 		target: "self",
