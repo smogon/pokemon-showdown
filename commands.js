@@ -1162,9 +1162,9 @@ var commands = exports.commands = {
 		// Otherwise, the text is defaulted to text search in current room's modlog.
 		var roomId = room.id;
 		var hideIps = !user.can('ban');
-		var isWin = (process.platform === 'win32');
-		// This is necessary as the type command of Windows doesn't understand the /-char in paths
-		var logPath = (isWin ? 'logs\\modlog\\' : 'logs/modlog/');
+		var path = require('path');
+		var isWin = process.platform === 'win32';
+		var logPath = 'logs/modlog/';
 
 		if (target.indexOf(',') > -1) {
 			var targets = target.split(',');
@@ -1184,22 +1184,21 @@ var commands = exports.commands = {
 		var filename = '';
 		var command = '';
 		if (roomId === 'all' && wordSearch) {
-			if (!this.can('modlog')) return;
-			roomNames = 'all rooms';
+			roomNames = "all rooms";
 			// Get a list of all the rooms
 			var fileList = fs.readdirSync('logs/modlog');
 			for (var i = 0; i < fileList.length; ++i) {
-				filename += logPath + fileList[i] + ' ';
+				filename += path.normalize(__dirname + '/' + logPath + fileList[i]) + ' ';
 			}
 		} else {
 			if (!this.can('modlog', null, Rooms.get(roomId))) return;
-			roomNames = 'the room ' + roomId;
-			filename = logPath + 'modlog_' + roomId + '.txt';
+			roomNames = "the room " + roomId;
+			filename = path.normalize(__dirname + '/' + logPath + 'modlog_' + roomId + '.txt');
 		}
 
 		// Seek for all input rooms for the lines or text
 		if (isWin) {
-			command = 'lib\\winmodlog tail ' + lines + ' ' + filename;
+			command = path.normalize(__dirname + '/lib/winmodlog') + ' tail ' + lines + ' ' + filename;
 		} else {
 			command = 'tail -' + lines + ' ' + filename;
 		}
@@ -1207,7 +1206,7 @@ var commands = exports.commands = {
 		if (wordSearch) { // searching for a word instead
 			if (target.match(/^["'].+["']$/)) target = target.substring(1, target.length - 1);
 			if (isWin) {
-				command = 'lib\\winmodlog ws ' + grepLimit + ' "' + target.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1") + '" ' + filename;
+				command = path.normalize(__dirname + '/lib/winmodlog') + ' ws ' + grepLimit + ' "' + target.replace(/%/g, "%%").replace(/([\^"&<>\|])/g, "^$1") + '" ' + filename;
 			} else {
 				command = "awk '{print NR,$0}' " + filename + " | sort -nr | cut -d' ' -f2- | grep -m" + grepLimit + " -i '" + target.replace(/\\/g, '\\\\\\\\').replace(/["'`]/g, '\'\\$&\'').replace(/[\{\}\[\]\(\)\$\^\.\?\+\-\*]/g, '[$&]') + "'";
 			}
