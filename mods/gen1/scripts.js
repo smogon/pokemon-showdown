@@ -87,8 +87,8 @@ exports.BattleScripts = {
 				} else {
 					if (pokemon.volatiles['partialtrappinglock'].locked !== target && target !== pokemon) {
 						// The target switched, therefor, we must re-roll the duration
-						var roll = this.random(6);
-						var duration = [2, 2, 3, 3, 4, 5][roll];
+						var roll = this.random(8);
+						var duration = [2, 2, 2, 3, 3, 3, 4, 5][roll];
 						pokemon.volatiles['partialtrappinglock'].duration = duration;
 						pokemon.volatiles['partialtrappinglock'].locked = target;
 						// Duration reset thus partially trapped at 2 always
