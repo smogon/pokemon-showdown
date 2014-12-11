@@ -415,6 +415,7 @@ exports.Formats = [
 				move.boosts = null;
 				move.target = 'normal';
 				move.status = null;
+				move.type = 'Normal';
 				switch (this.random(9)) {
 					case 0:
 						move.onTryHit = function () {
@@ -513,8 +514,10 @@ exports.Formats = [
 				}
 			} else {
 				// If no obstacles, the trainer advances as much meters as speed its Pokémon has.
-				this.add('-message', pokemon.side.name + ' has advanced down the mountain ' + pokemon.speed + ' meters!');
-				this.seasonal.position[pokemon.side.name] += pokemon.speed;
+				var advance = pokemon.speed;
+				if (advance < 0) advance *= -1;
+				this.add('-message', pokemon.side.name + ' has advanced down the mountain ' + advance + ' meters!');
+				this.seasonal.position[pokemon.side.name] += advance;
 			}
 
 			// Showdownville is about 4000 meters away from the mountaintop.
