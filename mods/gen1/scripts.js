@@ -241,8 +241,7 @@ exports.BattleScripts = {
 				if (hits.length) {
 					// Yes, it's hardcoded... meh
 					if (hits[0] === 2 && hits[1] === 5) {
-						var roll = this.random(6);
-						hits = [2, 2, 3, 3, 4, 5][roll];
+						hits = [2, 2, 3, 3, 4, 5][this.random(6)];
 					} else {
 						hits = this.random(hits[0], hits[1] + 1);
 					}
@@ -571,9 +570,7 @@ exports.BattleScripts = {
 		}
 
 		// There's no move for some reason, create it
-		if (!move) {
-			move = {};
-		}
+		if (!move) move = {};
 
 		// We check the category and typing to calculate later on the damage
 		if (!move.category) move.category = 'Physical';
@@ -595,54 +592,45 @@ exports.BattleScripts = {
 		}
 		basePower = this.clampIntRange(basePower, 1);
 
-		// Checking for the move's Critical Hit ratio
-		// First, we check if it's a 100% crit move
-		move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
+		// Checking for the move's Critical Hit possibility. We check if it's a 100% crit move, otherwise we calculate the chance.
 		move.crit = move.willCrit || false;
-		var critRatio = 0;
-		// Otherwise, we calculate the critical hit chance
-		if (typeof move.willCrit === 'undefined') {
-			// In gen 1, the critical chance is based on speed
-			switch (move.critRatio) {
-			case 1:
-				// Normal crit-rate: BaseSpeed * 100 / 512.
-				critRatio = pokemon.template.baseStats['spe'] * 100 / 512;
-				break;
-			case 2:
-				// High crit-rate: BaseSpeed * 100 / 64
-				critRatio = pokemon.template.baseStats['spe'] * 100 / 64;
-				break;
-			case -2:
-				// Crit rate destroyed by Focus Energy (dumb trainer is dumb)
-				critRatio = (pokemon.template.baseStats['spe'] * 100 / 64) * 0.25;
-				this.debug('Using ruined normal crit-rate: (template.baseStats[\'spe\'] * 100 / 64) * 0.25');
-				break;
-			case -1:
-				// High crit move ruined by Focus Energy. Deppends on speed
-				if (pokemon.speed > target.speed) {
-					// Critical rate not decreased if pokemon is faster than target
-					critRatio = pokemon.template.baseStats['spe'] * 100 / 64;
-					 this.debug('Using ruined high crit-rate: template.baseStats[\'spe\'] * 100 / 64');
-				} else {
-					// If you are slower, you can't crit on this moves
-					this.debug('Ruined crit rate, too slow, cannnot crit');
-					critRatio = false;
-				}
-				break;
+		if (!move.crit) {
+			console.log('Move not default crit, checking chances');
+			// In gen 1, the critical chance is based on speed.
+			// First, we get the base speed, divide it by 2 and floor it. This is our current crit chance.
+			var critChance = Math.floor(pokemon.template.baseStats['spe'] / 2);
+
+			// Now we check for focus energy volatile.
+			if (pokemon.volatiles['focusenergy']) {
+				// If it exists, crit chance is divided by 2 again and floored.
+				critChance = Math.floor(critChance / 2);
+			} else {
+				// Normally, without focus energy, crit chance is multiplied by 2 and capped at 255 here.
+				critChance = this.clampIntRange(critChance * 2, 1, 255);
+			}
+			
+			// Now we check for the move's critical hit ratio.
+			if (move.critRatio === 1) {
+				// Normal hit ratio, we divide the crit chance by 2 and floor the result again.
+				critChance = Math.floor(critChance / 2);
+			} else if (move.critRatio === 2) {
+				// High crit ratio, we multiply the result so far by 4 and cap it at 255.
+				critChance = this.clampIntRange(critChance * 4, 1, 255);
 			}
 
-			// Last, we check deppending on ratio if the move hits
-			if (critRatio) {
-				critRatio = critRatio.floor();
-				var random = Math.random() * 100;
-				move.crit = (random.floor() <= critRatio);
+			// Last, we check deppending on ratio if the move critical hits or not.
+			// We compare our critical hit chance against a random number between 0 and 255.
+			// If the random number is lower, we get a critical hit. This means there is always a 1/255 chance of not hitting critically.
+			if (critChance > 0) {
+				move.crit = (this.random(256) < critChance);
 			}
 		}
+		// There is a critical hit.
 		if (move.crit) {
 			move.crit = this.runEvent('CriticalHit', target, null, move);
 		}
 
-		// Happens after crit calculation
+		// Happens after crit calculation.
 		if (basePower) {
 			basePower = this.runEvent('BasePower', pokemon, target, move, basePower);
 			if (move.basePowerModifier) {

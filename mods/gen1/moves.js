@@ -360,9 +360,8 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'move: Focus Energy');
 			},
-			onModifyMove: function (move) {
-				move.critRatio = -3;
-			}
+			// This does nothing as it's dealt with on critical hit calculation.
+			onModifyMove: function (move) {}
 		},
 		secondary: false,
 		target: "self",
