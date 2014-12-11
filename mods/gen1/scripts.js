@@ -149,10 +149,8 @@ exports.BattleScripts = {
 			attrs = '|[still]'; // Suppress the default move animation
 		}
 
-		var movename = move.name;
-		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
-		this.addMove('move', pokemon, movename, target + attrs);
+		this.addMove('move', pokemon, move.name, target + attrs);
 
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return true;
