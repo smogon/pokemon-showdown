@@ -498,9 +498,10 @@ exports.Formats = [
 					this.damage(Math.ceil(pokemon.maxhp / 10), pokemon, pokemon, 'head injuries');
 					break;
 				case 3:
-					this.add('-message', pokemon.name + ' hit a snow bank!');
 					pokemon.setStatus('frz', pokemon, null, true);
-					break;
+					this.add('-message', pokemon.name + ' hit a snow bank!');
+					this.add('cant', pokemon, 'frz');
+					return false;
 				case 4:
 					this.add('-message', pokemon.name + ' fell into a traphole!');
 					this.boost({spe: -1}, pokemon, pokemon, move);
@@ -522,28 +523,9 @@ exports.Formats = [
 				this.win(pokemon.side.id);
 			}
 		},
-		onResidual: function () {
-			// Getting frozen by chance only lasts one turn.
-			for (var i = 0, l = this.p1.active.length; i < l; i++) {
-				var target = this.p1.active[i];
-				if (target.status === 'frz') {
-					if (target.statusData.recover) {
-						target.cureStatus();
-					} else {
-						target.statusData.recover = true;
-					}
-				}
-			}
-			for (var i = 0, l = this.p2.active.length; i < l; i++) {
-				var target = this.p2.active[i];
-				if (target.status === 'frz') {
-					if (target.statusData.recover) {
-						target.cureStatus();
-					} else {
-						target.statusData.recover = true;
-					}
-				}
-			}
+		onHit: function (target) {
+			// Getting hit thaws the ice if you are frozen.
+			if (target.status === 'frz') target.cureStatus();
 		}
 	},
 	{

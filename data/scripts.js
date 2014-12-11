@@ -2554,6 +2554,7 @@ exports.BattleScripts = {
 			var template = this.getTemplate(pokemon);
 			var set = this.randomSet(template, i);
 			set.moves[3] = 'Present';
+			if (this.getItem(set.item).megaStone) set.item = 'Life Orb';
 			team.push(set);
 		}
 
