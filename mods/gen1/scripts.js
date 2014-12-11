@@ -607,7 +607,7 @@ exports.BattleScripts = {
 				// Normally, without focus energy, crit chance is multiplied by 2 and capped at 255 here.
 				critChance = this.clampIntRange(critChance * 2, 1, 255);
 			}
-			
+
 			// Now we check for the move's critical hit ratio.
 			if (move.critRatio === 1) {
 				// Normal hit ratio, we divide the crit chance by 2 and floor the result again.
