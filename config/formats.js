@@ -390,7 +390,7 @@ exports.Formats = [
 		onModifyMove: function (move) {
 			if (move.type === 'Fire') {
 				move.onHit = function (pokemon, source) {
-					this.add('-message', 'The fire melts down the snow, slowing down the sleigh!');
+					this.add('-message', 'The fire melts the snow, slowing down the sleigh!');
 					this.boost({spe: -1}, pokemon, source);
 				};
 			}
@@ -402,7 +402,7 @@ exports.Formats = [
 			}
 			if (move.type === 'Ice') {
 				move.onHit = function (pokemon, source) {
-					this.add('-message', 'The ice makes the surface more slippery, fastening the sleigh!');
+					this.add('-message', 'The ice makes the surface more slippery, speeding up the sleigh!');
 					this.boost({spe: 1}, pokemon, source);
 				};
 			}
@@ -493,17 +493,17 @@ exports.Formats = [
 				case 0:
 				case 1:
 				case 2:
-					this.add('-message', pokemon.name + ' hit into a tree and some snow felt on him!');
+					this.add('-message', pokemon.name + ' hit a tree and some snow fell on it!');
 					pokemon.cureStatus();
-					pokemon.hp -= Math.ceil(pokemon.maxhp / 10);
+					this.damage(Math.ceil(pokemon.maxhp / 10), pokemon, pokemon, 'head injuries');
 					break;
 				case 3:
-					this.add('-message', pokemon.name + ' hit a snowball and froze!');
+					this.add('-message', pokemon.name + ' hit a snow bank!');
 					pokemon.setStatus('frz', pokemon, null, true);
 					break;
 				case 4:
-					this.add('-message', pokemon.name + ' felt into a traphole!');
-					this.boost({spe: -1}, pokemon, pokemon);
+					this.add('-message', pokemon.name + ' fell into a traphole!');
+					this.boost({spe: -1}, pokemon, pokemon, move);
 					break;
 				case 5:
 					this.add('-message', pokemon.name + ' hit a heavy wall!');
@@ -522,10 +522,27 @@ exports.Formats = [
 				this.win(pokemon.side.id);
 			}
 		},
-		onHit: function (target, source) {
+		onResidual: function () {
 			// Getting frozen by chance only lasts one turn.
-			if (target.status === 'frz') {
-				target.cureStatus();
+			for (var i = 0, l = this.p1.active.length; i < l; i++) {
+				var target = this.p1.active[i];
+				if (target.status === 'frz') {
+					if (target.statusData.recover) {
+						target.cureStatus();
+					} else {
+						target.statusData.recover = true;
+					}
+				}
+			}
+			for (var i = 0, l = this.p2.active.length; i < l; i++) {
+				var target = this.p2.active[i];
+				if (target.status === 'frz') {
+					if (target.statusData.recover) {
+						target.cureStatus();
+					} else {
+						target.statusData.recover = true;
+					}
+				}
 			}
 		}
 	},
