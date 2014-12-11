@@ -17,6 +17,53 @@ exports.BattleMovedex = {
 			this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
 		}
 	},
+	encore: {
+		inherit: true,
+		effect: {
+			durationCallback: function () {
+				return this.random(3, 7);
+			},
+			onStart: function (target) {
+				var noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, transform:1, sleeptalk:1};
+				var moveIndex = target.moves.indexOf(target.lastMove);
+				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
+					// it failed
+					this.add('-fail', target);
+					delete target.volatiles['encore'];
+					return;
+				}
+				this.effectData.move = target.lastMove;
+				this.add('-start', target, 'Encore');
+				if (!this.willMove(target)) {
+					this.effectData.duration++;
+				}
+			},
+			onOverrideDecision: function (pokemon) {
+				return this.effectData.move;
+			},
+			onResidualOrder: 13,
+			onResidual: function (target) {
+				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) {
+					// early termination if you run out of PP
+					delete target.volatiles.encore;
+					this.add('-end', target, 'Encore');
+				}
+			},
+			onEnd: function (target) {
+				this.add('-end', target, 'Encore');
+			},
+			onModifyPokemon: function (pokemon) {
+				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
+					return;
+				}
+				for (var i = 0; i < pokemon.moveset.length; i++) {
+					if (pokemon.moveset[i].id !== this.effectData.move) {
+						pokemon.disableMove(pokemon.moveset[i].id);
+					}
+				}
+			}
+		}
+	},
 	leechseed: {
 		inherit: true,
 		onHit: function (target, source, move) {
