@@ -1184,6 +1184,7 @@ var commands = exports.commands = {
 		var filename = '';
 		var command = '';
 		if (roomId === 'all' && wordSearch) {
+			if (!this.can('modlog')) return;
 			roomNames = "all rooms";
 			// Get a list of all the rooms
 			var fileList = fs.readdirSync('logs/modlog');
