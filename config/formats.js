@@ -27,13 +27,13 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
 	},
 	{
 		name: "Ubers",
 		section: "XY Singles",
 
-		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Ban Mod'],
 		banlist: []
 	},
 	{
@@ -41,14 +41,16 @@ exports.Formats = [
 		section: "XY Singles",
 
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Metagrossite', 'Salamencite', 'Drizzle', 'Drought', 'Shadow Tag']
+		banlist: ['OU', 'BL', 'Altarianite', 'Diancite', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Metagrossite',
+			'Drizzle', 'Drought', 'Shadow Tag'
+		]
 	},
 	{
 		name: "RU",
 		section: "XY Singles",
 
 		ruleset: ['UU'],
-		banlist: ['UU', 'BL2']
+		banlist: ['UU', 'BL2', 'Galladite']
 	},
 	{
 		name: "NU",
@@ -64,6 +66,13 @@ exports.Formats = [
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
+	},
+	{
+		name: "Anything Goes",
+		section: "XY Singles",
+
+		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		banlist: ['Unreleased', 'Illegal']
 	},
 	/*{
 		name: "CAP Plasmanta Playtest",
@@ -117,14 +126,23 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	{
-		name: "Smogon Doubles",
+		name: "Smogon Doubles (current)",
 		section: "XY Doubles",
 
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
-		banlist: ['Soul Dew', 'Dark Void',
-			'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin',
-			'Arceus', 'Reshiram', 'Zekrom', 'Kyurem-White', 'Xerneas', 'Yveltal'
+		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
+			'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal', 'Zekrom', 'Soul Dew', 'Dark Void'
+		]
+	},
+	{
+		name: "Smogon Doubles (suspect test)",
+		section: "XY Doubles",
+
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
+		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
+			'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal', 'Zekrom', 'Salamencite', 'Soul Dew', 'Dark Void'
 		]
 	},
 	{
@@ -256,7 +274,9 @@ exports.Formats = [
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC', 'Kalos Pokedex'],
 		requirePentagon: true,
-		banlist: [], // The necessary bans are in Standard GBU
+		banlist: ['Red Orb', 'Blue Orb', 'Swampertite', 'Sceptilite', 'Sablenite', 'Altarianite', 'Galladite', 'Audinite', 'Metagrossite', 'Sharpedonite',
+			'Slowbronite', 'Steelixite', 'Pidgeotite', 'Glalitite', 'Diancite', 'Cameruptite', 'Lopunnite', 'Salamencite', 'Beedrillite'
+		],
 		validateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		}
@@ -344,214 +364,171 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "350 Cup",
+		name: "Stat Switch",
 		section: "OM of the Month",
 		column: 2,
 
-		mod: '350cup',
-		ruleset: ['Ubers', 'Evasion Moves Clause'],
-		banlist: ['Darumaka', 'Pawniard', 'Smeargle', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
-		validateSet: function (set) {
-			var template = Tools.getTemplate(set.species);
-			var item = this.getItem(set.item);
-			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
-				return ['Eviolite is banned on Pokémon with 350 or lower BST.'];
-			}
-		}
+		mod: 'statswitch',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Arceus', 'Azumarill', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Giratina', 'Giratina-Origin',
+			'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Regice', 'Reshiram', 'Xerneas',
+			'Yveltal', 'Zekrom', 'Diancite', 'Gengarite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew'
+		]
 	},
 	{
-		name: "[Seasonal] Strikes Back",
+		name: "[Seasonal] Sleigh Showdown",
 		section: "OM of the Month",
 
-		gameType: 'triples',
-		team: 'randomSeasonalSB',
+		team: 'randomSeasonalSS',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin: function () {
-			this.add('-message', "V4 is a big poo-poo!");
+			this.add('-message', "Yikes! You are a grinch in a reckless, regretless sleigh race, running for Showdownville to ruin christmas. But, to achieve that, you must first defeat your opponent. Fight hard and take care with the obstacles!");
+			this.seasonal = {position: {}};
+			this.seasonal.position[this.p1.name] = 0;
+			this.seasonal.position[this.p2.name] = 0;
 		},
 		onModifyMove: function (move) {
-			// Change present mechanics
+			if (move.type === 'Fire') {
+				move.onHit = function (pokemon, source) {
+					this.add('-message', 'The fire melts the snow, slowing down the sleigh!');
+					this.boost({spe: -1}, pokemon, source);
+				};
+			}
+			if (move.type === 'Water') {
+				if (this.random(100) < 25) {
+					this.add('-message', 'The cold froze your Water-type attack, making it Ice-type instead!');
+					move.type = 'Ice';
+				}
+			}
+			if (move.type === 'Ice') {
+				move.onHit = function (pokemon, source) {
+					this.add('-message', 'The ice makes the surface more slippery, speeding up the sleigh!');
+					this.boost({spe: 1}, pokemon, source);
+				};
+			}
 			if (move.id === 'present') {
-				move.category = 'Status';
-				move.basePower = 0;
-				delete move.heal;
+				move.name = 'Throw sack present';
 				move.accuracy = 100;
-				switch (this.random(16)) {
+				move.basePower = 0;
+				move.category = 'Status';
+				move.heal = null;
+				move.boosts = null;
+				move.target = 'normal';
+				move.status = null;
+				move.type = 'Normal';
+				switch (this.random(9)) {
+					case 0:
+						move.onTryHit = function () {
+							this.add('-message', 'You got an Excadreydle from the sack!');
+						};
+						move.boosts = {spe: -1};
+						break;
+					case 1:
+						move.onTryHit = function () {
+							this.add('-message', 'You got a Chandelnukkiyah from the sack!');
+						};
+						move.status = 'brn';
+						break;
+					case 2:
+						move.onTryHit = function () {
+							this.add('-message', 'You got a Glalie from the sack! Ka-boom!');
+						};
+						move.category = 'Special';
+						move.basePower = 300;
+						break;
+					case 3:
+						move.onTryHit = function () {
+							this.add('-message', 'You got a tree Starmie from the sack!');
+						};
+						move.category = 'Special';
+						move.type = 'Water';
+						move.basePower = 150;
+						break;
+					case 4:
+						move.onTryHit = function () {
+							this.add('-message', 'You got an Abomaxmas tree from the sack!');
+						};
+						move.category = 'Physical';
+						move.type = 'Ice';
+						move.basePower = 150;
+						break;
+					case 5:
+						move.onTryHit = function () {
+							this.add('-message', 'You got a Chansey egg nog from the sack!');
+						};
+						move.target = 'self';
+						move.heal = [3, 4];
+						break;
+					case 6:
+						move.onTryHit = function () {
+							this.add('-message', 'You got Cryogonal snowflakes from the sack!');
+						};
+						move.category = 'Special';
+						move.type = 'Ice';
+						move.basePower = 200;
+						break;
+					case 7:
+						move.onTryHit = function () {
+							this.add('-message', 'You got Pikachu-powered christmas lights from the sack!');
+						};
+						move.category = 'Special';
+						move.type = 'Electric';
+						move.basePower = 250;
+						break;
+					case 8:
+						move.onTryHit = function () {
+							this.add('-message', 'You got Shaymin-Sky mistletoe from the sack!');
+						};
+						move.category = 'Special';
+						move.type = 'Grass';
+						move.basePower = 200;
+						break;
+				}
+			}
+		},
+		onBeforeMove: function (pokemon, target, move) {
+			// Before every move, trainers advance on their sleighs. There might be obstacles.
+			if (this.random(100) < Math.ceil(pokemon.speed / 10) + 15) {
+				// If an obstacle is found, the trainer won't advance this turn.
+				switch (this.random(6)) {
 				case 0:
-					move.onTryHit = function () {
-						this.add('-message', "The present was a bomb!");
-					};
-					move.category = 'Physical';
-					move.basePower = 250;
-					break;
 				case 1:
-					move.onTryHit = function () {
-						this.add('-message', "The present was confusion!");
-					};
-					move.volatileStatus = 'confusion';
-					break;
 				case 2:
-					move.onTryHit = function () {
-						this.add('-message', "The present was Disable!");
-					};
-					move.volatileStatus = 'disable';
+					this.add('-message', pokemon.name + ' hit a tree and some snow fell on it!');
+					pokemon.cureStatus();
+					this.damage(Math.ceil(pokemon.maxhp / 10), pokemon, pokemon, 'head injuries');
 					break;
 				case 3:
-					move.onTryHit = function () {
-						this.add('-message', "The present was a taunt!");
-					};
-					move.volatileStatus = 'taunt';
-					break;
+					pokemon.setStatus('frz', pokemon, null, true);
+					this.add('-message', pokemon.name + ' hit a snow bank!');
+					this.add('cant', pokemon, 'frz');
+					return false;
 				case 4:
-					move.onTryHit = function () {
-						this.add('-message', "The present was some seeds!");
-					};
-					move.volatileStatus = 'leechseed';
+					this.add('-message', pokemon.name + ' fell into a traphole!');
+					this.boost({spe: -1}, pokemon, pokemon, move);
 					break;
 				case 5:
-					move.onTryHit = function () {
-						this.add('-message', "The present was an embargo!");
-					};
-					move.volatileStatus = 'embargo';
-					break;
-				case 6:
-					move.onTryHit = function () {
-						this.add('-message', "The present was a music box!");
-					};
-					move.volatileStatus = 'perishsong';
-					break;
-				case 7:
-					move.onTryHit = function () {
-						this.add('-message', "The present was a curse!");
-					};
-					move.volatileStatus = 'curse';
-					break;
-				case 8:
-					move.onTryHit = function () {
-						this.add('-message', "The present was Torment!");
-					};
-					move.volatileStatus = 'torment';
-					break;
-				case 9:
-					move.onTryHit = function () {
-						this.add('-message', "The present was a trap!");
-					};
-					move.volatileStatus = 'partiallytrapped';
-					break;
-				case 10:
-					move.onTryHit = function () {
-						this.add('-message', "The present was a root!");
-					};
-					move.volatileStatus = 'ingrain';
-					break;
-				case 11:
-					move.onTryHit = function () {
-						this.add('-message', "The present was a makeover!");
-					};
-					var boosts = {};
-					var possibleBoosts = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'].randomize();
-					boosts[possibleBoosts[0]] = 1;
-					boosts[possibleBoosts[1]] = -1;
-					boosts[possibleBoosts[2]] = -1;
-					move.boosts = boosts;
-					break;
-				case 12:
-					move.onTryHit = function () {
-						this.add('-message', "The present was psychic powers!");
-					};
-					move.volatileStatus = 'telekinesis';
-					break;
-				case 13:
-					move.onTryHit = function () {
-						this.add('-message', "The present was fatigue!");
-					};
-					move.volatileStatus = 'mustrecharge';
-					break;
-				case 14:
-				case 15:
-					move.onTryHit = function () {
-						this.add('-message', "The present was a snowball hit!");
-					};
-					move.category = 'Ice';
-					move.basePower = 250;
+					this.add('-message', pokemon.name + ' hit a heavy wall!');
+					pokemon.setStatus('par', pokemon, null, true);
 					break;
 				}
 			} else {
-				// Change move type time to time only when the move is not present.
-				if (this.random(100) < 35 && move.target !== 'self') {
-					var type = '';
-					switch (move.type.toLowerCase()){
-					case 'rock':
-					case 'ground':
-						type = 'Grass';
-						break;
-					case 'fire':
-					case 'bug':
-						type = 'Water';
-						break;
-					case 'water':
-					case 'grass':
-						type = 'Fire';
-						break;
-					case 'flying':
-						type = 'Fighting';
-						break;
-					case 'fighting':
-						type = 'Flying';
-						break;
-					case 'dark':
-						type = 'Bug';
-						break;
-					case 'dragon':
-					case 'poison':
-						type = 'Fairy';
-						break;
-					case 'electric':
-						type = 'Ice';
-						break;
-					case 'ghost':
-						type = 'Normal';
-						break;
-					case 'ice':
-						type = 'Electric';
-						break;
-					case 'normal':
-						type = 'Ghost';
-						break;
-					case 'psychic':
-						type = 'Dark';
-						break;
-					case 'steel':
-						type = 'Poison';
-						break;
-					case 'fairy':
-						type = 'Dragon';
-						break;
-					}
+				// If no obstacles, the trainer advances as much meters as speed its Pokémon has.
+				var advance = pokemon.speed;
+				if (advance < 0) advance *= -1;
+				this.add('-message', pokemon.side.name + ' has advanced down the mountain ' + advance + ' meters!');
+				this.seasonal.position[pokemon.side.name] += advance;
+			}
 
-					move.type = type;
-					this.add('-message', 'LOL trolled I changed yer move type hahaha');
-				}
+			// Showdownville is about 4000 meters away from the mountaintop.
+			if (this.seasonal.position[pokemon.side.name] >= 4000) {
+				this.add('-message', pokemon.side.name + ' has arrived to Showdownville first and ruined christmas! The race is won!');
+				this.win(pokemon.side.id);
 			}
 		},
-		onSwitchIn: function (pokemon) {
-			if (this.random(100) < 25) {
-				this.add('-message', pokemon.name + " drank way too much!");
-				pokemon.addVolatile('confusion');
-				pokemon.statusData.time = 0;
-			}
-		},
-		onFaint: function (pokemon) {
-			// A poem every time a Pokemon faints
-			var haikus = ["You suck a lot / You are a bad trainer / let a mon faint", "they see me driving / round town with the girl i love / and I'm like, haikou",
-			"Ain't no Pokemon tough enough / ain't no bulk decent enough / ain't no recovery good enough / to keep me from fainting you, babe",
-			"Roses are red / violets are blue / you must be on some med / 'coz as a trainer you suck",
-			"You're gonna be the very worst / like no one ever was / to lose all the battles is your test / to faint them all is your cause",
-			'Twinkle twinkle little star / screw you that was my best sweeper', "I'm wheezy and I'm sleezy / but as a trainer you're measly",
-			"You're sharp as a rock / you're bright as a hole / you're one to mock / you could be beaten by a maimed mole",
-			"Alas, poor trainer! I knew him, your Pokémon, a fellow of infinite jest, of most excellent fancy."];
-			haikus = haikus.randomize();
-			this.add('-message', haikus[0]);
+		onHit: function (target) {
+			// Getting hit thaws the ice if you are frozen.
+			if (target.status === 'frz') target.cureStatus();
 		}
 	},
 	{
@@ -559,8 +536,8 @@ exports.Formats = [
 		section: "Other Metagames",
 		column: 2,
 
-		ruleset: ['CAP Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite']
+		ruleset: ['OU'],
+		banlist: ['Allow CAP']
 	},
 	{
 		name: "Challenge Cup",
@@ -616,7 +593,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
 		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
 			'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Gengarite', 'Kangaskhanite', 'Lucarionite'
+			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Soul Dew'
 		]
 	},
 	{
@@ -631,7 +608,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['NU'],
-		banlist: ['NU', 'Altarianite', 'Beedrillite', 'Lopunnite']
+		banlist: ['NU', 'BL4', 'Altarianite', 'Beedrillite', 'Lopunnite']
 	},
 	{
 		name: "Inverse Battle",
@@ -678,8 +655,8 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Ignore STAB Moves', 'Arceus', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Groudon',
 			'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Porygon-Z', 'Rayquaza', 'Reshiram', 'Shaymin-Sky',
-			'Sylveon', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Gengarite', 'Kangaskhanite', "King's Rock", 'Lucarionite', 'Mawilite', 'Razor Claw', 'Soul Dew'
+			'Sylveon', 'Xerneas', 'Yveltal', 'Zekrom', 'Altarianite', 'Gengarite', 'Kangaskhanite', "King's Rock", 'Lopunnite', 'Lucarionite',
+			'Mawilite', 'Metagrossite', 'Razor Claw', 'Salamencite', 'Soul Dew'
 		]
 	},
 	{
@@ -694,6 +671,22 @@ exports.Formats = [
 			'Scraggy', 'Snubbull', 'Spritzee', 'Staryu', 'Timburr', 'Tirtouga', 'Trubbish', 'Vullaby', 'Vulpix', 'Zigzagoon',
 			'Omanyte'
 		]
+	},
+	{
+		name: "350 Cup",
+		section: "Other Metagames",
+
+		mod: '350cup',
+		searchShow: false,
+		ruleset: ['Ubers', 'Evasion Moves Clause'],
+		banlist: ['Abra', 'Cranidos', 'Darumaka', 'Gastly', 'Pawniard', 'Smeargle', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
+		validateSet: function (set) {
+			var template = Tools.getTemplate(set.species);
+			var item = this.getItem(set.item);
+			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
+				return ['Eviolite is banned on Pokémon with 350 or lower BST.'];
+			}
+		}
 	},
 	{
 		name: "Averagemons",

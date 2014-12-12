@@ -187,6 +187,7 @@ exports.replSocketMode = 0600;
 //     - announce: /announce command.
 //     - ban: Banning and unbanning.
 //     - broadcast: Broadcast informational commands.
+//     - bypassall: Bypass all limitations. Also used to identify an admin.
 //     - bypassblocks: Bypass blocks such as your challenge being blocked.
 //     - console: Developer console (also requires IP or userid in the `consoleIps` array).
 //     - declare: /declare command.
@@ -195,7 +196,7 @@ exports.replSocketMode = 0600;
 //     - forcerename: /forcerename command.
 //     - forcewin: /forcewin command.
 //     - gdeclare: /gdeclare and /cdeclare commands.
-//     - hotpatch: /hotpatch, /updateserver and /crashfixed commands. Also used to identify an admin.
+//     - hotpatch: /hotpatch, /updateserver and /crashfixed commands.
 //     - ignorelimits: Ignore limits such as chat message length.
 //     - ip: Ability to check IPs.
 //     - joinbattle: Ability to join an existing battle as a player.
