@@ -504,15 +504,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		isContact: true
 	},
-	payback: {
-		inherit: true,
-		basePowerCallback: function (pokemon, target) {
-			if (this.willMove(target)) {
-				return 50;
-			}
-			return 100;
-		}
-	},
 	petaldance: {
 		inherit: true,
 		basePower: 70,
