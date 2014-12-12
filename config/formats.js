@@ -390,55 +390,55 @@ exports.Formats = [
 		onModifyMove: function (move) {
 			if (move.type === 'Fire') {
 				move.onHit = function (pokemon, source) {
-					this.add('-message', 'The fire melts the snow, slowing down the sleigh!');
+					this.add('-message', "The fire melts the snow, slowing down the sleigh!");
 					this.boost({spe: -1}, pokemon, source);
 				};
 			}
 			if (move.type === 'Water') {
 				if (this.random(100) < 25) {
-					this.add('-message', 'The cold froze your Water-type attack, making it Ice-type instead!');
+					this.add('-message', "The cold froze your Water-type attack, making it Ice-type instead!");
 					move.type = 'Ice';
 				}
 			}
 			if (move.type === 'Ice') {
 				move.onHit = function (pokemon, source) {
-					this.add('-message', 'The ice makes the surface more slippery, speeding up the sleigh!');
+					this.add('-message', "The ice makes the surface more slippery, speeding up the sleigh!");
 					this.boost({spe: 1}, pokemon, source);
 				};
 			}
 			if (move.id === 'present') {
-				move.name = 'Throw sack present';
+				move.name = "Throw sack present";
 				move.accuracy = 100;
 				move.basePower = 0;
-				move.category = 'Status';
+				move.category = "Status";
 				move.heal = null;
 				move.boosts = null;
 				move.target = 'normal';
 				move.status = null;
-				move.type = 'Normal';
+				move.type = "Normal";
 				switch (this.random(9)) {
 					case 0:
 						move.onTryHit = function () {
-							this.add('-message', 'You got an Excadreydle from the sack!');
+							this.add('-message', "You got an Excadreydle from the sack!");
 						};
 						move.boosts = {spe: -1};
 						break;
 					case 1:
 						move.onTryHit = function () {
-							this.add('-message', 'You got a Chandelnukkiyah from the sack!');
+							this.add('-message', "You got a Chandelnukkiyah from the sack!");
 						};
 						move.status = 'brn';
 						break;
 					case 2:
 						move.onTryHit = function () {
-							this.add('-message', 'You got a Glalie from the sack! Ka-boom!');
+							this.add('-message', "You got a Glalie from the sack! Ka-boom!");
 						};
 						move.category = 'Special';
 						move.basePower = 300;
 						break;
 					case 3:
 						move.onTryHit = function () {
-							this.add('-message', 'You got a tree Starmie from the sack!');
+							this.add('-message', "You got a tree Starmie from the sack!");
 						};
 						move.category = 'Special';
 						move.type = 'Water';
@@ -446,7 +446,7 @@ exports.Formats = [
 						break;
 					case 4:
 						move.onTryHit = function () {
-							this.add('-message', 'You got an Abomaxmas tree from the sack!');
+							this.add('-message', "You got an Abomaxmas tree from the sack!");
 						};
 						move.category = 'Physical';
 						move.type = 'Ice';
@@ -454,14 +454,14 @@ exports.Formats = [
 						break;
 					case 5:
 						move.onTryHit = function () {
-							this.add('-message', 'You got a Chansey egg nog from the sack!');
+							this.add('-message', "You got a Chansey egg nog from the sack!");
 						};
 						move.target = 'self';
 						move.heal = [3, 4];
 						break;
 					case 6:
 						move.onTryHit = function () {
-							this.add('-message', 'You got Cryogonal snowflakes from the sack!');
+							this.add('-message', "You got Cryogonal snowflakes from the sack!");
 						};
 						move.category = 'Special';
 						move.type = 'Ice';
@@ -469,7 +469,7 @@ exports.Formats = [
 						break;
 					case 7:
 						move.onTryHit = function () {
-							this.add('-message', 'You got Pikachu-powered christmas lights from the sack!');
+							this.add('-message', "You got Pikachu-powered christmas lights from the sack!");
 						};
 						move.category = 'Special';
 						move.type = 'Electric';
@@ -477,7 +477,7 @@ exports.Formats = [
 						break;
 					case 8:
 						move.onTryHit = function () {
-							this.add('-message', 'You got Shaymin-Sky mistletoe from the sack!');
+							this.add('-message', "You got Shaymin-Sky mistletoe from the sack!");
 						};
 						move.category = 'Special';
 						move.type = 'Grass';
@@ -488,41 +488,42 @@ exports.Formats = [
 		},
 		onBeforeMove: function (pokemon, target, move) {
 			// Before every move, trainers advance on their sleighs. There might be obstacles.
-			if (this.random(100) < Math.ceil(pokemon.speed / 10) + 15) {
+			var speed = Math.abs(pokemon.speed);
+			if (this.random(100) < Math.ceil(speed / 10) + 15) {
+				var name = pokemon.illusion ? pokemon.illusion.name : pokemon.name;
 				// If an obstacle is found, the trainer won't advance this turn.
 				switch (this.random(6)) {
 				case 0:
 				case 1:
 				case 2:
-					this.add('-message', pokemon.name + ' hit a tree and some snow fell on it!');
+					this.add('-message', "" + name + " hit a tree and some snow fell on it!");
 					pokemon.cureStatus();
-					this.damage(Math.ceil(pokemon.maxhp / 10), pokemon, pokemon, 'head injuries');
+					this.damage(Math.ceil(pokemon.maxhp / 10), pokemon, pokemon, "head injuries", true);
 					break;
 				case 3:
 					pokemon.setStatus('frz', pokemon, null, true);
-					this.add('-message', pokemon.name + ' hit a snow bank!');
+					this.add('-message', "" + name + " hit a snow bank!");
 					this.add('cant', pokemon, 'frz');
 					return false;
 				case 4:
-					this.add('-message', pokemon.name + ' fell into a traphole!');
+					this.add('-message', "" + name + " fell into a traphole!");
 					this.boost({spe: -1}, pokemon, pokemon, move);
 					break;
 				case 5:
-					this.add('-message', pokemon.name + ' hit a heavy wall!');
+					this.add('-message', "" + name + " hit a heavy wall!");
+					// override status
 					pokemon.setStatus('par', pokemon, null, true);
 					break;
 				}
 			} else {
 				// If no obstacles, the trainer advances as much meters as speed its Pokémon has.
-				var advance = pokemon.speed;
-				if (advance < 0) advance *= -1;
-				this.add('-message', pokemon.side.name + ' has advanced down the mountain ' + advance + ' meters!');
-				this.seasonal.position[pokemon.side.name] += advance;
+				this.add('-message', "" + pokemon.side.name + " has advanced down the mountain " + speed + " meters!");
+				this.seasonal.position[pokemon.side.name] += speed;
 			}
 
 			// Showdownville is about 4000 meters away from the mountaintop.
 			if (this.seasonal.position[pokemon.side.name] >= 4000) {
-				this.add('-message', pokemon.side.name + ' has arrived to Showdownville first and ruined christmas! The race is won!');
+				this.add('-message', "" + pokemon.side.name + " has arrived to Showdownville first and ruined christmas! The race is won!");
 				this.win(pokemon.side.id);
 			}
 		},
