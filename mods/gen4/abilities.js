@@ -69,7 +69,7 @@ exports.BattleAbilities = {
 		id: "pickup",
 		name: "Pickup",
 		rating: 0,
-		num: 1
+		num: 53
 	},
 	"plus": {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Minus ability.",

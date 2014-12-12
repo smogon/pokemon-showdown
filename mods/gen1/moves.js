@@ -32,7 +32,7 @@ exports.BattleMovedex = {
 		ignoreEvasion: true,
 		effect: {
 			duration: 2,
-			durationCallBack: function (target, source, effect) {
+			durationCallback: function (target, source, effect) {
 				return this.random(3, 4);
 			},
 			onStart: function (pokemon) {
