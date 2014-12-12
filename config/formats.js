@@ -501,8 +501,8 @@ exports.Formats = [
 					this.damage(Math.ceil(pokemon.maxhp / 10), pokemon, pokemon, "head injuries", true);
 					break;
 				case 3:
-					pokemon.setStatus('frz', pokemon, null, true);
 					this.add('-message', "" + name + " hit a snow bank!");
+					pokemon.setStatus('frz', pokemon, null, true);
 					this.add('cant', pokemon, 'frz');
 					return false;
 				case 4:
