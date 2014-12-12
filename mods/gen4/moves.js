@@ -217,7 +217,30 @@ exports.BattleMovedex = {
 	detect: {
 		inherit: true,
 		//desc: "",
-		priority: 3
+		priority: 3,
+		effect: {
+			duration: 1,
+			onStart: function (target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function (target, source, move) {
+				if (move.breaksProtect) {
+					target.removeVolatile('Protect');
+					return;
+				}
+				if (move && (move.target === 'self' || move.isNotProtectable)) return;
+				this.add('-activate', target, 'Protect');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is NOT reset
+					if (source.volatiles['lockedmove'].trueDuration >= 2) {
+						source.volatiles['lockedmove'].duration = 2;
+					}
+				}
+				return null;
+			}
+		}
 	},
 	disable: {
 		inherit: true,
@@ -265,7 +288,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			}
@@ -756,7 +779,30 @@ exports.BattleMovedex = {
 	protect: {
 		inherit: true,
 		//desc: "",
-		priority: 3
+		priority: 3,
+		effect: {
+			duration: 1,
+			onStart: function (target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit: function (target, source, move) {
+				if (move.breaksProtect) {
+					target.removeVolatile('Protect');
+					return;
+				}
+				if (move && (move.target === 'self' || move.isNotProtectable)) return;
+				this.add('-activate', target, 'Protect');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is NOT reset
+					if (source.volatiles['lockedmove'].trueDuration >= 2) {
+						source.volatiles['lockedmove'].duration = 2;
+					}
+				}
+				return null;
+			}
+		}
 	},
 	psychup: {
 		inherit: true,
@@ -838,12 +884,12 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			var targetAbility = target.ability;
 			var sourceAbility = source.ability;
-			if (!target.setAbility(sourceAbility) || !source.setAbility(targetAbility)) {
-				target.ability = targetAbility;
-				source.ability = sourceAbility;
+			if (targetAbility === sourceAbility) {
 				return false;
 			}
 			this.add('-activate', source, 'move: Skill Swap');
+			source.setAbility(targetAbility);
+			target.setAbility(sourceAbility);
 		}
 	},
 	spikes: {
@@ -974,7 +1020,7 @@ exports.BattleMovedex = {
 		sideCondition: 'Wish',
 		effect: {
 			duration: 2,
-			onResidualOrder: 2,
+			onResidualOrder: 0,
 			onEnd: function (side) {
 				var target = side.active[this.effectData.sourcePosition];
 				if (!target.fainted) {
