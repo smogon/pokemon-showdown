@@ -56,6 +56,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		pp: 30
 	},
+	bestow: {
+		inherit: true,
+		isNotProtectable: false,
+		notSubBlocked: false
+	},
 	bind: {
 		inherit: true,
 		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move. Makes contact."
@@ -63,6 +68,10 @@ exports.BattleMovedex = {
 	blizzard: {
 		inherit: true,
 		basePower: 120
+	},
+	block: {
+		inherit: true,
+		isNotProtectable: false
 	},
 	bubble: {
 		inherit: true,
@@ -292,7 +301,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (disabledMoves[moves[i].id] || this.getMove(moves[i].id).heal) {
-						pokemon.disabledMoves[moves[i].id] = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			},
@@ -455,6 +464,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move.",
 		basePower: 120
+	},
+	meanlook: {
+		inherit: true,
+		isNotProtectable: false
 	},
 	meteormash: {
 		inherit: true,
@@ -657,6 +670,19 @@ exports.BattleMovedex = {
 			boosts: {
 				accuracy: -1
 			}
+		}
+	},
+	skillswap: {
+		inherit: true,
+		onHit: function (target, source) {
+			var targetAbility = target.ability;
+			var sourceAbility = source.ability;
+			if (targetAbility === sourceAbility) {
+				return false;
+			}
+			this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
+			source.setAbility(targetAbility);
+			target.setAbility(sourceAbility);
 		}
 	},
 	skullbash: {
