@@ -881,6 +881,8 @@ exports.BattleMovedex = {
 		name: "Bestow",
 		pp: 15,
 		priority: 0,
+		isNotProtectable: true,
+		notSubBlocked: true,
 		onHit: function (target, source) {
 			if (target.item) {
 				return false;
@@ -1070,6 +1072,7 @@ exports.BattleMovedex = {
 		name: "Block",
 		pp: 5,
 		priority: 0,
+		isNotProtectable: true,
 		isBounceable: true,
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
@@ -2633,7 +2636,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			}
@@ -3500,7 +3503,7 @@ exports.BattleMovedex = {
 				}
 				for (var i = 0; i < pokemon.moveset.length; i++) {
 					if (pokemon.moveset[i].id !== this.effectData.move) {
-						pokemon.moveset[i].disabled = true;
+						pokemon.disableMove(pokemon.moveset[i].id);
 					}
 				}
 			}
@@ -4957,7 +4960,7 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function (pokemon) {
 				this.add('-endability', pokemon);
-				this.runEvent('EndAbility', pokemon, pokemon.ability);
+				this.singleEvent('End', this.getAbility(pokemon.ability), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
 			},
 			onModifyPokemonPriority: 2,
 			onModifyPokemon: function (pokemon) {
@@ -5297,7 +5300,7 @@ exports.BattleMovedex = {
 				pokemon.negateImmunity['Ground'] = true;
 				var disabledMoves = {bounce:1, fly:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
 				for (var m in disabledMoves) {
-					pokemon.disabledMoves[m] = true;
+					pokemon.disableMove(m);
 				}
 				var applies = false;
 				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
@@ -5764,7 +5767,7 @@ exports.BattleMovedex = {
 				var move;
 				for (var i = 0; i < pokemon.moveset.length; i++) {
 					if (disabledMoves[pokemon.moveset[i].id] || (move = this.getMove(pokemon.moveset[i].id)).heal || move.drain) {
-						pokemon.disabledMoves[pokemon.moveset[i].id] = true;
+						pokemon.disableMove(pokemon.moveset[i].id);
 					}
 				}
 			},
@@ -6559,7 +6562,7 @@ exports.BattleMovedex = {
 		num: 621,
 		accuracy: true,
 		basePower: 100,
-		category: "Special",
+		category: "Physical",
 		desc: "Deals damage to one adjacent target and breaks through Protect and Detect for this turn, allowing other Pokemon to attack the target normally. Lowers the user's Defense by 1 stage. Makes contact.",
 		shortDesc: "Breaks protect and lowers user's Def. by 1.",
 		id: "hyperspacefury",
@@ -6880,8 +6883,9 @@ exports.BattleMovedex = {
 			onFoeModifyPokemon: function (pokemon) {
 				var foeMoves = this.effectData.source.moveset;
 				for (var f = 0; f < foeMoves.length; f++) {
-					pokemon.disabledMoves[foeMoves[f].id] = true;
+					pokemon.disableMove(foeMoves[f].id, true);
 				}
+				pokemon.maybeDisabled = true;
 			},
 			onFoeBeforeMove: function (attacker, defender, move) {
 				if (attacker.disabledMoves[move.id]) {
@@ -8080,6 +8084,7 @@ exports.BattleMovedex = {
 		name: "Mean Look",
 		pp: 5,
 		priority: 0,
+		isNotProtectable: true,
 		isBounceable: true,
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
@@ -11973,26 +11978,19 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function (target, source, move) {
-			var targetAbility = target.ability;
-			var sourceAbility = source.ability;
-			if (!target.setAbility(sourceAbility, source, move, true) || !source.setAbility(targetAbility, source, move, true)) {
-				target.ability = targetAbility;
-				source.ability = sourceAbility;
-				return false;
+			var targetAbility = this.getAbility(target.ability);
+			var sourceAbility = this.getAbility(source.ability);
+			this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
+			if (targetAbility.id !== sourceAbility.id) {
+				source.battle.singleEvent('End', sourceAbility, source.abilityData, source);
+				target.battle.singleEvent('End', targetAbility, target.abilityData, target);
+				source.ability = targetAbility.id;
+				target.ability = sourceAbility.id;
+				source.abilityData = {id: source.ability.id, target: source};
+				target.abilityData = {id: target.ability.id, target: target};
 			}
-			this.add('-activate', source, 'move: Skill Swap', this.getAbility(targetAbility), this.getAbility(sourceAbility), '[of] ' + target);
-
-			// Change the source of an ORAS weather (will this really happen in-game?)
-			var weather = this.getWeather();
-			if (weather.id in {desolateland:1, primordialsea:1, deltastream:1}) {
-				var weatherSource = this.weatherData.source;
-				if (weatherSource === source) {
-					this.weatherData.source = target;
-				} else if (weatherSource === target) {
-					this.weatherData.source = source;
-				}
-				this.debug(this.weatherData.source);
-			}
+			source.battle.singleEvent('Start', targetAbility, source.abilityData, source);
+			target.battle.singleEvent('Start', sourceAbility, target.abilityData, target);
 		},
 		secondary: false,
 		target: "normal",
@@ -13138,9 +13136,6 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		isContact: true,
-		beforeMoveCallback: function (pokemon) {
-			this.add('-activate', pokemon, 'move: Struggle');
-		},
 		onModifyMove: function (move) {
 			move.type = '???';
 		},
@@ -13770,7 +13765,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (this.getMove(moves[i].move).category === 'Status') {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			},
@@ -14156,7 +14151,7 @@ exports.BattleMovedex = {
 				this.add('-end', pokemon, 'Torment');
 			},
 			onModifyPokemon: function (pokemon) {
-				if (pokemon.lastMove !== 'struggle') pokemon.disabledMoves[pokemon.lastMove] = true;
+				if (pokemon.lastMove !== 'struggle') pokemon.disableMove(pokemon.lastMove);
 			}
 		},
 		secondary: false,

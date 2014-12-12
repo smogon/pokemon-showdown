@@ -116,7 +116,7 @@ function canTalk(user, room, connection, message) {
 		}
 
 		// remove zalgo
-		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u064b-\u065f\u0670\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 
 		if (room && room.id === 'lobby') {
 			var normalized = message.trim();
@@ -130,7 +130,7 @@ function canTalk(user, room, connection, message) {
 		}
 
 		if (Config.chatFilter) {
-			return Config.chatFilter(user, room, connection, message);
+			return Config.chatFilter(message, user, room, connection);
 		}
 		return message;
 	}

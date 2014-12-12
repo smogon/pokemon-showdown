@@ -800,7 +800,7 @@ User = (function () {
 			// technically it's not "taken", but if your client doesn't warn you
 			// before it gets to this stage it's your own fault for getting a
 			// bad error message
-			this.send('|nametaken|' + "|You did not specify a name.");
+			this.send('|nametaken|' + "|You did not specify a name or your name was invalid.");
 			return false;
 		} else {
 			if (userid === this.userid && !auth) {
@@ -1284,12 +1284,12 @@ User = (function () {
 			if (room.staffRoom && !this.can('staff')) return false;
 			if (room.bannedUsers) {
 				if (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers) {
-					return false;
+					return null;
 				}
 			}
 			if (this.ips && room.bannedIps) {
 				for (var ip in this.ips) {
-					if (ip in room.bannedIps) return false;
+					if (ip in room.bannedIps) return null;
 				}
 			}
 		}
@@ -1301,7 +1301,7 @@ User = (function () {
 					this.joinRoom(room, this.connections[i]);
 				}
 			}
-			return;
+			return true;
 		}
 		if (!connection.rooms[room.id]) {
 			if (!this.roomCount[room.id]) {
