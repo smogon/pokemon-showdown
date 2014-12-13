@@ -1927,14 +1927,6 @@ var commands = exports.commands = {
 				avatar: targetUser.avatar,
 				rooms: roomList
 			};
-			if (user.can('ip', targetUser)) {
-				var ips = Object.keys(targetUser.ips);
-				if (ips.length === 1) {
-					userdetails.ip = ips[0];
-				} else {
-					userdetails.ips = ips;
-				}
-			}
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;
