@@ -1991,6 +1991,110 @@ var commands = exports.commands = {
 			}
 		}
 		user.rename(targetName, targetToken, targetAuth, connection);
-	}
+	},
+	/*********************************************************
+	 * Custom Commands
+	 *********************************************************/
+	 
+	 model: 'sprite',
+    sprite: function(target, room, user) {
+        if (!this.canBroadcast()) return;
+        var targets = target.split(',');
+        target = targets[0].trim();
+        target1 = targets[1];
+        if (!toId(target)) return this.sendReply("/sprite [Pokémon], [shiny/back] - Shows the animated model of the specified Pokémon.");
+        var clean = target.toLowerCase();
+        if (target.toLowerCase().indexOf(' ') !== -1) {
+            target = target.toLowerCase().replace(/ /g, '-');
+        }
+        //this won't interfere with the generation of yanmega's sprite, since it doesn't have any alternate animations.
+        //It however DOES somewhat interfere with porygon2. So we're gonna make that one an exception.
+        if (target.indexOf('mega') == -1 && toId(target) != 'porygon2') {
+            if (target.lastIndexOf('-') > -1) {
+                for (var i = 0; i <= target.lastIndexOf('-'); i++) {
+                    var a = target.substring(0, target.lastIndexOf('-')).replace(/-/g, ' ');
+                    break;
+                }
+            }
+        }
+
+        var correction = a ? Tools.dataSearch(a) : Tools.dataSearch(target);
+        if (correction && correction.length) {
+            for (var i = 0; i < correction.length; ++i) {
+                if (correction[i].id !== target && !i) {
+                    target = a ? target.replace(a, correction[0].id) : correction[0].name.toLowerCase();
+                }
+            }
+        } else {
+            return this.sendReply((a || clean) + ' is not a valid Pokémon.');
+        }
+
+        if (!target1) {
+            var numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            for (var x = 0; x < numbers.length; x++) {
+                if (target.indexOf('-' + numbers[x]) > -1) {
+                    return this.sendReply('|html|<img src = "http://www.pkparaiso.com/imagenes/xy/sprites/animados/' + target + '.gif">');
+                }
+            }
+            return this.sendReply('|html|<img src = "http://play.pokemonshowdown.com/sprites/xyani/' + target + '.gif">');
+        } else {
+            if (toId(target1) === 'back') {
+                return this.sendReply('|html|<img src = "http://play.pokemonshowdown.com/sprites/xyani-back/' + target.toLowerCase().trim().replace(/ /g, '-') + '.gif">');
+            } else if (toId(target1) === 'shiny') {
+                return this.sendReply('|html|<img src = "http://play.pokemonshowdown.com/sprites/xyani-shiny/' + target.toLowerCase().trim().replace(/ /g, '-') + '.gif">');
+            } else {
+                this.sendReply(target1 + ' is not a valid parameter.');
+                var numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+                for (var x = 0; x < numbers.length; x++) {
+                    if (target.indexOf('-' + numbers[x]) > -1) {
+                        return this.sendReply('|html|<img src = "http://www.pkparaiso.com/imagenes/xy/sprites/animados/' + target + '.gif">');
+                    }
+                }
+                return this.sendReply('|html|<img src = "http://play.pokemonshowdown.com/sprites/xyani/' + target + '.gif">');
+            }
+        }
+    },
+    d: 'poof',
+	cpoof: 'poof',
+	poof: (function () {
+		var messages = [
+			"has vanished into nothingness!",
+			"visited Codelegend's bedroom and never returned!",
+			"used Explosion!",
+			"fell into the void.",
+			"became Anrin's slave!",
+			"became Assista's love slave!",
+			"has left the building.",
+			"felt Goomy's wrath!",
+			"died of a broken heart.",
+			"got lost in a maze!",
+			"was hit by Based Parasect\'s Fell Stinger!",
+			"was sucked into a whirlpool!",
+			"got scared and left the server!",
+			"fell off a cliff!",
+			"got eaten by a bunch of Carvanha!",
+			"is blasting off again!",
+			"A large spider descended from the sky and picked up {{user}}.",
+			"tried to touch RisingPokeStar!",
+			"fell into a meerkat hole!",
+			"took an arrow to the knee... and then one to the face.",
+			"peered through the hole on Shedinja's back",
+			"recieved judgment from the almighty Parasect!",
+			"used Final Gambit and missed!",
+			"pissed off a Male Combee!",
+			"got lost in the illusion of reality.",
+			"was unfortunate and didn't get a cool message.",
+			"was knocked out cold by Snover!",
+			"was thrown out the window by Karthick.M!",
+			"was bitten by a rabid Bart!",
+			"fed the wild Nightanglet and is now paying the price!",
+			"was incinerated by Magcargo!",
+			"is better as Ghost!",
+			"was drowned by Wooper's divine mud!",
+			"was rejected by Len Kagamine!",
+			"was been hour munted by demon lrod helix!",
+			"was killed by the God Ebola Virus!",
+			"Siiilver sucked {{user}}'s soul!",
+			"is jealous of Sanjj's VGC crown!",
 
 };
