@@ -83,7 +83,7 @@ function canTalk(user, room, connection, message) {
 			if (room.auth) {
 				if (room.auth[user.userid]) {
 					userGroup = room.auth[user.userid];
-				} else if (room.isPrivate) {
+				} else if (room.isPrivate === true) {
 					userGroup = ' ';
 				}
 			}
