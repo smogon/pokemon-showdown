@@ -189,8 +189,16 @@ var commands = exports.commands = {
 		return this.sendReply("The room '" + target + "' isn't registered.");
 	},
 
-	privateroom: function (target, room, user) {
-		if (!this.can('privateroom', null, room)) return;
+	hideroom: 'privateroom',
+	hiddenroom: 'privateroom',
+	privateroom: function (target, room, user, connection, cmd) {
+		if (!this.can('privateroom', null, room) || (cmd === 'privateroom' && !this.can('makeroom'))) return;
+		if (cmd !== 'privateroom' && room.isPrivate === true) {
+			if (this.can('makeroom')) {
+				this.sendReply("This room is a secret room. Use /secretroom to toggle instead.");
+			}
+			return;
+		}
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand("" + user.name + " made this room public.");
@@ -199,8 +207,8 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			room.isPrivate = true;
-			this.addModCommand("" + user.name + " made this room private.");
+			room.isPrivate = (cmd === 'privateroom' ? true : 'hidden');
+			this.addModCommand("" + user.name + " made this room " + (cmd === 'privateroom' ? 'secret' : 'hidden') + ".");
 			if (room.chatRoomData) {
 				room.chatRoomData.isPrivate = true;
 				Rooms.global.writeChatRoomData();
@@ -608,7 +616,10 @@ var commands = exports.commands = {
 			if (targetRoom.modjoin && !user.can('bypassall')) {
 				var userGroup = user.group;
 				if (targetRoom.auth) {
-					userGroup = targetRoom.auth[user.userid] || ' ';
+					if (targetRoom.isPrivate === true) {
+						userGroup = ' ';
+					}
+					userGroup = targetRoom.auth[user.userid] || userGroup;
 				}
 				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(targetRoom.modjoin !== true ? targetRoom.modjoin : targetRoom.modchat)) {
 					return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
