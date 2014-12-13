@@ -10,23 +10,27 @@ exports.BattleScripts = {
 			this.add('debug', activity);
 		}
 	},
-	// getStat callback for gen 1 stat dealing
-	getStatCallback: function (stat, statName, pokemon) {
+	/**
+	 * We deal with gen 1 stats using the getStatCallback which is called always that we get a stat.
+	 * We add here a specific unboosted argument to use it with crits, as in gen 1 we need this
+	 * specific callback to deal with screen stats.
+	 */
+	getStatCallback: function (stat, statName, pokemon, unboosted) {
 		// Hard coded Reflect and Light Screen boosts
-		if (pokemon.volatiles['reflect'] && statName === 'def') {
+		if (pokemon.volatiles['reflect'] && statName === 'def' && !unboosted) {
 			this.debug('Reflect doubles Defense');
 			stat *= 2;
-			// Max on reflect is 1024
-			if (stat > 1024) stat = 1024;
+			// If the defense is higher than 1024, it is rolled over. The min is always 1.
+			if (stat > 1024) stat -= 1024;
 			if (stat < 1) stat = 1;
-		} else if (pokemon.volatiles['lightscreen'] && statName === 'spd') {
+		} else if (pokemon.volatiles['lightscreen'] && statName === 'spd' && !unboosted) {
 			this.debug('Light Screen doubles Special Defense');
 			stat *= 2;
-			// Max on reflect is 1024
-			if (stat > 1024) stat = 1024;
+			// If the special defense is higher than 1024, it is rolled over. The min is always 1.
+			if (stat > 1024) stat -= 1024;
 			if (stat < 1) stat = 1;
 		} else {
-			// Gen 1 caps stats at 999 and min is 1
+			// Gen 1 normally caps stats at 999 and min is 1.
 			if (stat > 999) stat = 999;
 			if (stat < 1) stat = 1;
 		}
@@ -83,8 +87,8 @@ exports.BattleScripts = {
 				} else {
 					if (pokemon.volatiles['partialtrappinglock'].locked !== target && target !== pokemon) {
 						// The target switched, therefor, we must re-roll the duration
-						var roll = this.random(6);
-						var duration = [2, 2, 3, 3, 4, 5][roll];
+						var roll = this.random(8);
+						var duration = [2, 2, 2, 3, 3, 3, 4, 5][roll];
 						pokemon.volatiles['partialtrappinglock'].duration = duration;
 						pokemon.volatiles['partialtrappinglock'].locked = target;
 						// Duration reset thus partially trapped at 2 always
@@ -96,8 +100,8 @@ exports.BattleScripts = {
 							if (pokemon.moveset[m].id === move.id) usedMovePos = m;
 						}
 						if (usedMovePos > -1 && pokemon.moveset[usedMovePos].pp === 0) {
-							// If we were on the middle of the 0 PP sequence, the PPs get reset
-							pokemon.moveset[usedMovePos].pp = pokemon.moveset[usedMovePos].maxpp;
+							// If we were on the middle of the 0 PP sequence, the PPs get reset to 63.
+							pokemon.moveset[usedMovePos].pp = 63;
 						} else {
 							// Otherwise, plain reduct
 							pokemon.deductPP(move, null, target);
@@ -145,10 +149,8 @@ exports.BattleScripts = {
 			attrs = '|[still]'; // Suppress the default move animation
 		}
 
-		var movename = move.name;
-		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
-		this.addMove('move', pokemon, movename, target + attrs);
+		this.addMove('move', pokemon, move.name, target + attrs);
 
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return true;
@@ -239,8 +241,7 @@ exports.BattleScripts = {
 				if (hits.length) {
 					// Yes, it's hardcoded... meh
 					if (hits[0] === 2 && hits[1] === 5) {
-						var roll = this.random(6);
-						hits = [2, 2, 3, 3, 4, 5][roll];
+						hits = [2, 2, 3, 3, 4, 5][this.random(6)];
 					} else {
 						hits = this.random(hits[0], hits[1] + 1);
 					}
@@ -569,9 +570,7 @@ exports.BattleScripts = {
 		}
 
 		// There's no move for some reason, create it
-		if (!move) {
-			move = {};
-		}
+		if (!move) move = {};
 
 		// We check the category and typing to calculate later on the damage
 		if (!move.category) move.category = 'Physical';
@@ -593,54 +592,44 @@ exports.BattleScripts = {
 		}
 		basePower = this.clampIntRange(basePower, 1);
 
-		// Checking for the move's Critical Hit ratio
-		// First, we check if it's a 100% crit move
-		move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
+		// Checking for the move's Critical Hit possibility. We check if it's a 100% crit move, otherwise we calculate the chance.
 		move.crit = move.willCrit || false;
-		var critRatio = 0;
-		// Otherwise, we calculate the critical hit chance
-		if (typeof move.willCrit === 'undefined') {
-			// In gen 1, the critical chance is based on speed
-			switch (move.critRatio) {
-			case 1:
-				// Normal crit-rate: BaseSpeed * 100 / 512.
-				critRatio = pokemon.template.baseStats['spe'] * 100 / 512;
-				break;
-			case 2:
-				// High crit-rate: BaseSpeed * 100 / 64
-				critRatio = pokemon.template.baseStats['spe'] * 100 / 64;
-				break;
-			case -2:
-				// Crit rate destroyed by Focus Energy (dumb trainer is dumb)
-				critRatio = (pokemon.template.baseStats['spe'] * 100 / 64) * 0.25;
-				this.debug('Using ruined normal crit-rate: (template.baseStats[\'spe\'] * 100 / 64) * 0.25');
-				break;
-			case -1:
-				// High crit move ruined by Focus Energy. Deppends on speed
-				if (pokemon.speed > target.speed) {
-					// Critical rate not decreased if pokemon is faster than target
-					critRatio = pokemon.template.baseStats['spe'] * 100 / 64;
-					 this.debug('Using ruined high crit-rate: template.baseStats[\'spe\'] * 100 / 64');
-				} else {
-					// If you are slower, you can't crit on this moves
-					this.debug('Ruined crit rate, too slow, cannnot crit');
-					critRatio = false;
-				}
-				break;
+		if (!move.crit) {
+			// In gen 1, the critical chance is based on speed.
+			// First, we get the base speed, divide it by 2 and floor it. This is our current crit chance.
+			var critChance = Math.floor(pokemon.template.baseStats['spe'] / 2);
+
+			// Now we check for focus energy volatile.
+			if (pokemon.volatiles['focusenergy']) {
+				// If it exists, crit chance is divided by 2 again and floored.
+				critChance = Math.floor(critChance / 2);
+			} else {
+				// Normally, without focus energy, crit chance is multiplied by 2 and capped at 255 here.
+				critChance = this.clampIntRange(critChance * 2, 1, 255);
 			}
 
-			// Last, we check deppending on ratio if the move hits
-			if (critRatio) {
-				critRatio = critRatio.floor();
-				var random = Math.random() * 100;
-				move.crit = (random.floor() <= critRatio);
+			// Now we check for the move's critical hit ratio.
+			if (move.critRatio === 1) {
+				// Normal hit ratio, we divide the crit chance by 2 and floor the result again.
+				critChance = Math.floor(critChance / 2);
+			} else if (move.critRatio === 2) {
+				// High crit ratio, we multiply the result so far by 4 and cap it at 255.
+				critChance = this.clampIntRange(critChance * 4, 1, 255);
+			}
+
+			// Last, we check deppending on ratio if the move critical hits or not.
+			// We compare our critical hit chance against a random number between 0 and 255.
+			// If the random number is lower, we get a critical hit. This means there is always a 1/255 chance of not hitting critically.
+			if (critChance > 0) {
+				move.crit = (this.random(256) < critChance);
 			}
 		}
+		// There is a critical hit.
 		if (move.crit) {
 			move.crit = this.runEvent('CriticalHit', target, null, move);
 		}
 
-		// Happens after crit calculation
+		// Happens after crit calculation.
 		if (basePower) {
 			basePower = this.runEvent('BasePower', pokemon, target, move, basePower);
 			if (move.basePowerModifier) {
@@ -661,9 +650,13 @@ exports.BattleScripts = {
 		var attack = attacker.getStat(atkType);
 		var defense = defender.getStat(defType);
 
+		// In the event of a critical hit, the ofense and defense changes are ignored.
+		// Also, level is doubled in damage calculation.
 		if (move.crit) {
 			move.ignoreOffensive = true;
 			move.ignoreDefensive = true;
+			level *= 2;
+			if (!suppressMessages) this.add('-crit', target);
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
@@ -680,12 +673,6 @@ exports.BattleScripts = {
 		// S is the Stab modifier, T is the type effectiveness modifier, R is random between 217 and 255
 		// The max damage is 999
 		var baseDamage = Math.min(Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * attack * basePower / defense) / 50), 997) + 2;
-
-		// Crit damage addition (usually doubling)
-		if (move.crit) {
-			if (!suppressMessages) this.add('-crit', target);
-			baseDamage = this.modify(baseDamage, move.critModifier || 2);
-		}
 
 		// STAB damage bonus, the "???" type never gets STAB
 		if (type !== '???' && pokemon.hasType(type)) {

@@ -32,7 +32,7 @@ exports.BattleMovedex = {
 		ignoreEvasion: true,
 		effect: {
 			duration: 2,
-			durationCallBack: function (target, source, effect) {
+			durationCallback: function (target, source, effect) {
 				return this.random(3, 4);
 			},
 			onStart: function (pokemon) {
@@ -96,7 +96,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id !== 'bide') {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			}
@@ -265,7 +265,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			}
@@ -350,23 +350,13 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "If the attack deals critical hits sometimes, then the chance of its happening is quartered. If a move has a high chance of dealing a critical hit, if the user iis currently faster than the opposing Pokemon its critical hit ratio is not decreased. If it's slower, its chances of dealing a critical hit is cut by 50%. If the user is significantly slower than the opposing Pokemon, then the user will be unable to deal critical hits to the opposing Pokemon.",
 		shortDesc: "Reduces the user's chance for a critical hit.",
-		id: "focusenergy",
-		name: "Focus Energy",
-		pp: 30,
-		priority: 0,
-		isSnatchable: true,
-		volatileStatus: 'focusenergy',
 		effect: {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'move: Focus Energy');
 			},
-			onModifyMove: function (move) {
-				move.critRatio = -3;
-			}
-		},
-		secondary: false,
-		target: "self",
-		type: "Normal"
+			// This does nothing as it's dealt with on critical hit calculation.
+			onModifyMove: function () {}
+		}
 	},
 	glare: {
 		inherit: true,

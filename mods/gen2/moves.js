@@ -17,6 +17,62 @@ exports.BattleMovedex = {
 			this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
 		}
 	},
+	counter: {
+		inherit: true,
+		damageCallback: function (pokemon, target) {
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower') && target.lastMove !== 'sleeptalk') {
+				return 2 * pokemon.lastAttackedBy.damage;
+			}
+			return false;
+		}
+	},
+	encore: {
+		inherit: true,
+		effect: {
+			durationCallback: function () {
+				return this.random(3, 7);
+			},
+			onStart: function (target) {
+				var noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, transform:1, sleeptalk:1};
+				var moveIndex = target.moves.indexOf(target.lastMove);
+				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
+					// it failed
+					this.add('-fail', target);
+					delete target.volatiles['encore'];
+					return;
+				}
+				this.effectData.move = target.lastMove;
+				this.add('-start', target, 'Encore');
+				if (!this.willMove(target)) {
+					this.effectData.duration++;
+				}
+			},
+			onOverrideDecision: function (pokemon) {
+				return this.effectData.move;
+			},
+			onResidualOrder: 13,
+			onResidual: function (target) {
+				if (target.moves.indexOf(target.lastMove) >= 0 && target.moveset[target.moves.indexOf(target.lastMove)].pp <= 0) {
+					// early termination if you run out of PP
+					delete target.volatiles.encore;
+					this.add('-end', target, 'Encore');
+				}
+			},
+			onEnd: function (target) {
+				this.add('-end', target, 'Encore');
+			},
+			onModifyPokemon: function (pokemon) {
+				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
+					return;
+				}
+				for (var i = 0; i < pokemon.moveset.length; i++) {
+					if (pokemon.moveset[i].id !== this.effectData.move) {
+						pokemon.disableMove(pokemon.moveset[i].id);
+					}
+				}
+			}
+		}
+	},
 	leechseed: {
 		inherit: true,
 		onHit: function (target, source, move) {
@@ -88,8 +144,30 @@ exports.BattleMovedex = {
 			this.useMove(move, target);
 		}
 	},
+	mirrorcoat: {
+		inherit: true,
+		effect: {
+			duration: 1,
+			noCopy: true,
+			onStart: function (target, source, source2, move) {
+				this.effectData.position = null;
+				this.effectData.damage = 0;
+			},
+			onRedirectTarget: function (target, source, source2) {
+				if (source !== this.effectData.target) return;
+				return source.side.foe.active[this.effectData.position];
+			},
+			onDamagePriority: -101,
+			onDamage: function (damage, target, source, effect) {
+				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Special' && target.lastMove !== 'sleeptalk') {
+					this.effectData.position = source.position;
+					this.effectData.damage = 2 * damage;
+				}
+			}
+		}
+	},
 	rage: {
-		// todo
+		// TODO
 		// Rage boosts in Gens 2-4 is for the duration of Rage only
 		// Disable does not build
 		inherit: true

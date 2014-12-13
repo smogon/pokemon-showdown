@@ -288,7 +288,7 @@ exports.BattleMovedex = {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
-						moves[i].disabled = true;
+						pokemon.disableMove(moves[i].id);
 					}
 				}
 			}
@@ -884,12 +884,12 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			var targetAbility = target.ability;
 			var sourceAbility = source.ability;
-			if (!target.setAbility(sourceAbility) || !source.setAbility(targetAbility)) {
-				target.ability = targetAbility;
-				source.ability = sourceAbility;
+			if (targetAbility === sourceAbility) {
 				return false;
 			}
 			this.add('-activate', source, 'move: Skill Swap');
+			source.setAbility(targetAbility);
+			target.setAbility(sourceAbility);
 		}
 	},
 	spikes: {

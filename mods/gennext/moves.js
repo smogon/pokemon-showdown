@@ -1045,7 +1045,7 @@ exports.BattleMovedex = {
 		basePower: 80,
 		onBasePower: function (power, user) {
 			var GossamerWingUsers = {"Butterfree":1, "Venomoth":1, "Masquerain":1, "Dustox":1, "Beautifly":1, "Mothim":1, "Lilligant":1, "Volcarona":1, "Vivillon":1};
-			if (user.item === 'stick' && GossamerWingUsers[user.template.species]) {
+			if (user.hasItem('stick') && GossamerWingUsers[user.template.species]) {
 				return power * 1.5;
 			}
 		},
@@ -1846,7 +1846,7 @@ exports.BattleMovedex = {
 		basePower: 30,
 		category: "Special",
 		desc: "Hits 3 times. Has a 10% chance to burn, paralyze or freeze the target each time.",
-		shortDesc: "hits 3x; 10% chance to paralyze/burn/freeze.",
+		shortDesc: "Hits 3x; 10% chance to paralyze/burn/freeze.",
 		id: "triattack",
 		name: "Tri Attack",
 		pp: 10,

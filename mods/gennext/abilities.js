@@ -513,8 +513,9 @@ exports.BattleAbilities = {
 		onFoeModifyPokemon: function (pokemon) {
 			var foeMoves = this.effectData.target.moveset;
 			for (var f = 0; f < foeMoves.length; f++) {
-				pokemon.disabledMoves[foeMoves[f].id] = true;
+				pokemon.disableMove(foeMoves[f].id, true);
 			}
+			pokemon.maybeDisabled = true;
 		},
 		onFoeBeforeMove: function (attacker, defender, move) {
 			if (attacker.disabledMoves[move.id]) {
@@ -547,12 +548,7 @@ exports.BattleAbilities = {
 			onBasePower: function (basePower) {
 				return this.chainModify(0.5);
 			}
-		},
-		id: "parentalbond",
-		name: "Parental Bond",
-		rating: 4.5,
-		num: -6,
-		gen: 6
+		}
 	},
 	"adaptability": {
 		inherit: true,
