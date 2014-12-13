@@ -1954,7 +1954,8 @@ exports.BattleFormatsData = {
 	houndoommega: {
 		randomBattleMoves: ["nastyplot","darkpulse","suckerpunch","fireblast","hiddenpowerfighting"],
 		randomDoubleBattleMoves: ["nastyplot","darkpulse","suckerpunch","heatwave","hiddenpowerfighting","protect"],
-		requiredItem: "Houndoominite"
+		requiredItem: "Houndoominite",
+		tier: "BL2"
 	},
 	phanpy: {
 		randomBattleMoves: ["stealthrock","earthquake","iceshard","headsmash","knockoff","seedbomb","superpower","playrough"],
