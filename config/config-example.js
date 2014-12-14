@@ -317,6 +317,11 @@ exports.customavatars = {
 // which case users won't be given any information on how to appeal.
 exports.appealurl = 'http://www.pokecommunity.com/showthread.php?t=289012#seniorstaff';
 
+// replsocketprefix - the prefix for the repl sockets to be listening on
+// replsocketmode - the file mode bits to use for the repl sockets
+exports.replsocketprefix = './logs/repl/';
+exports.replsocketmode = 0600;
+
 // permissions and groups:
 //   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
