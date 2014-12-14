@@ -60,72 +60,6 @@ var components = exports.components = {
         req.end();
     },
 
-    atm: 'profile',
-    profile: function (target, room, user, connection, cmd) {
-        if (!this.canBroadcast()) return;
-        if (cmd === 'atm') return this.sendReply('Use /profile instead.');
-        if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
-
-        var targetUser = this.targetUserOrSelf(target);
-
-        if (!targetUser) {
-            var userId = toId(target);
-            var elo = Core.profile.tournamentElo(userId);
-            var about = Core.profile.about(userId);
-
-            if (elo === 1000 && about === 0) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + '<br clear="all">');
-            }
-            if (elo === 1000) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + '<br clear="all">');
-            }
-            if (about === 0) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
-            }
-            return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
-        }
-
-        var elo = Core.profile.tournamentElo(toId(targetUser.userid));
-        var about = Core.profile.about(targetUser.userid);
-
-        if (elo === 1000 && about === 0) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + '<br clear="all">');
-        }
-        if (elo === 1000) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + '<br clear="all">');
-        }
-        if (about === 0) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
-        }
-        return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
-    },
-
-    setabout: 'about',
-    about: function (target, room, user) {
-        if (!target) return this.parse('/help about');
-        if (target.length > 60) return this.sendReply('About cannot be over 60 characters.');
-
-        var now = Date.now();
-
-        if ((now - user.lastAbout) * 0.001 < 30) {
-            this.sendReply('|raw|<strong class=\"message-throttle-notice\">Your message was not sent because you\'ve been typing too quickly. You must wait ' + Math.floor(
-                (30 - (now - user.lastAbout) * 0.001)) + ' seconds</strong>');
-            return;
-        }
-
-        user.lastAbout = now;
-
-        target = Tools.escapeHTML(target);
-        target = target.replace(/[^A-Za-z\d ]+/g, '');
-
-        var data = Core.stdin('about', user.userid);
-        if (data === target) return this.sendReply('This about is the same as your current one.');
-
-        Core.stdout('about', user.userid, target);
-
-        this.sendReply('Your about is now: "' + target + '"');
-    },
-
     tourladder: 'tournamentladder',
     tournamentladder: function (target, room, user) {
         if (!this.canBroadcast()) return;
@@ -629,23 +563,17 @@ var components = exports.components = {
         if (!this.can('controlpanel')) return;
         if (target.toLowerCase() === 'help') {
             return this.sendReplyBox(
-                '/cp color, [COLOR]<br/>' +
-                '/cp avatar, [AVATAR COLOR URL]<br/>' +
                 '/cp winner, [WINNER ELO BONUS]<br/>' +
                 '/cp runnerup, [RUNNERUP ELO BONUS]<br/>'
                 );
         }
         var parts = target.split(',');
-        Core.profile.color = Core.stdin('control-panel', 'color');
-        Core.profile.avatarurl = Core.stdin('control-panel', 'avatar');
         Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
         Core.tournaments.runnerUpElo = Number(Core.stdin('control-panel', 'runnerup'));
         if (parts.length !== 2) {
             return this.sendReplyBox(
                 '<center>' +
                 '<h3><b><u>Control Panel</u></b></h3>' +
-                '<i>Color:</i> ' + '<font color="' + Core.profile.color + '">' + Core.profile.color + '</font><br />' +
-                '<i>Custom Avatar URL:</i> ' + Core.profile.avatarurl + '<br />' +
                 '<i>Winner Elo Bonus:</i> ' + Core.tournaments.winningElo + '<br />' +
                 '<i>RunnerUp Elo Bonus:</i> ' + Core.tournaments.runnerUpElo + '<br /><br />' +
                 'To edit this info, use /cp help' +
@@ -659,18 +587,6 @@ var components = exports.components = {
         var self = this,
             match = false,
             cmds = {
-                color: function () {
-                    Core.stdout('control-panel', 'color', parts[1], function () {
-                        Core.profile.color = Core.stdin('control-panel', 'color');
-                    });
-                    self.sendReply('Color is now ' + parts[1]);
-                },
-                avatar: function () {
-                    Core.stdout('control-panel', 'avatar', parts[1], function () {
-                        Core.profile.avatarurl = Core.stdin('control-panel', 'avatar');
-                    });
-                    self.sendReply('Avatar URL is now ' + parts[1]);
-                },
                 winner: function () {
                     Core.stdout('control-panel', 'winner', parts[1], function () {
                         Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
