@@ -14,6 +14,10 @@ body {
     color:#FFFFFF;
 }
 
+.menugroup {
+    background:rgba(62, 214, 238, .34);
+}
+
 .header {
     background:#3ED6EE;
 }
@@ -37,4 +41,36 @@ body {
 .chat-log {
     background:url("http://fc04.deviantart.net/fs43/f/2009/073/e/9/Suicune_by_Xous54.png");
     background-position:left;
+}
+
+.teambuilder-results { 
+    color:#FFF812;
+}
+
+.ps-room.ps-room-light.scrollable {
+    background:url(235, 35, 242, .44);
+        color:#FFFFFF;
+}
+
+.pm-window {
+    background: rgba(34, 34, 34, 0.8);
+}
+
+.pm-log {
+    background:url("http://i.imgur.com/Q8vHT0Y.png");
+    color:#333333;
+    font-style:italic;
+}
+
+.pm-log:hover {
+    color:#000000;
+}
+
+.pm-log-add {
+    background: rgba(34, 34, 34, 0.8);
+    border-radius: 0px;
+}
+
+.pm-log-add:hover {
+    background:#222;
 }
