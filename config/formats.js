@@ -232,7 +232,14 @@ exports.Formats = [
 
 		mod: 'metronomerandom',
 		team: 'randomMetronome',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview GBU'],
+		onBegin: function() {
+			this.debug('Cutting down to 3');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
 	},
 	{
 		name: "PC Staff Random",
