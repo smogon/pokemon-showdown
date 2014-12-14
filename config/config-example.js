@@ -418,6 +418,7 @@ exports.groups = {
 		modlog: true,
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
+		tournamentsmoderation: true,
 		rank: 4
 	},
 	'\u2605': {
@@ -431,7 +432,6 @@ exports.groups = {
 		name: "Voice",
 		inherit: ' ',
 		tournaments: true,
-		tournamentsmoderation: true,
 		declare: true,
 		announce: true,
 		ignorelimits: true,
