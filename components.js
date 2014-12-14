@@ -219,7 +219,7 @@ var components = exports.components = {
     },
 
     roomlist: function (target, room, user) {
-        if (!this.can('declare', null, room)) return false;
+        if (!this.can('warn', null, room)) return false;
 
         var rooms = Object.keys(Rooms.rooms),
             len = rooms.length,
