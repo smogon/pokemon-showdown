@@ -148,7 +148,7 @@ var Trivia = {
 
 		for (var responderid in this.responders) {
 			var points = 5 - Math.floor((this.responders[responderid] - this.askedAt) / (3 * 1000));
-			if (!points) continue;
+			if (points < 1) continue;
 			var responder = Users.get(responderid);
 			innerBuffer[points - 1].push(responder ? responder.name : responderid);
 
@@ -535,7 +535,7 @@ exports.commands = {
 			username = Tools.escapeHTML(user.name);
 		} else {
 			userid = toId(target);
-			var targetUser = Users.get(userid);
+			var targetUser = Users.getExact(userid);
 			username = Tools.escapeHTML(targetUser ? targetUser.name : target);
 		}
 		var score = triviaData.leaderboard[userid];
