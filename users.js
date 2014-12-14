@@ -1063,7 +1063,6 @@ User = (function () {
 		this.lastConnected = Date.now();
 	};
 	User.prototype.onDisconnect = function (connection) {
-		Core.stdout('lastSeen', this.userid, Date.now());
 		for (var i = 0; i < this.connections.length; i++) {
 			if (this.connections[i] === connection) {
 				// console.log('DISCONNECT: ' + this.userid);
@@ -1575,7 +1574,7 @@ Connection = (function () {
 
 	Connection.prototype.sendTo = function (roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
-		if (roomid && roomid !== 'battle') data = '>' + roomid + '\n' + data;
+		if (roomid && roomid !== 'lobby') data = '>' + roomid + '\n' + data;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		ResourceMonitor.countNetworkUse(data.length);
 	};
