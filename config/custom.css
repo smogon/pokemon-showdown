@@ -1,10 +1,15 @@
-body{background-image:url("http://fc05.deviantart.net/fs70/f/2009/346/e/b/Suicune_Wallpaper_by_Super_Bastard.jpg");background-repeat:no-repeat;background-position:center}
+body{background-image:url("http://fc05.deviantart.net/fs70/f/2009/346/e/b/Suicune_Wallpaper_by_Super_Bastard.jpg");
+	background-repeat:no-repeat;
+	background-position:center
+}
+
 .menugroup .button{
-    background:url(235, 35, 242, .8);
-    color:#FFFFFF;
+        background:url(235, 35, 242, .8);
+        color:#FFFFFF;
 }
- 
+     
 .menugroup .button:hover {
-    background:#EB23F2;
-    color:#FFFFFF;
+        background:#EB23F2;
+        color:#FFFFFF;
 }
+
