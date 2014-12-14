@@ -277,7 +277,7 @@ exports.customavatars = {
 	'ashadowssoul': 'sairento-tamashii.jpg',
 	'lostchristms': 'sairento-tamashii.jpg',
 	'mk1091': 'mk1091.png',
-	'brndncullum': 'brndn-cullum.png',
+	'brndncullum': 'brndn-cullum.jpg',
 	'ejgmorgan': 'ejg-morgan.jpg',
 	'omicronhuh': 'omicron.png',
 	'omicrn': 'omicron.png',
@@ -309,6 +309,7 @@ exports.customavatars = {
 	'langur': 'langur.gif',
 	'masterneyney': 'masterneyney.png',
 	'chaos': 'chaos.png',
+	'seif': 'seif.gif',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
