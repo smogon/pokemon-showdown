@@ -163,6 +163,7 @@ var core = exports.core = {
         'pjsalt': 'https://i.imgur.com/ailgvSe.png',
         '(y)': 'https://i.imgur.com/28x5Nty.png',
         ':wobbuffet:': 'https://i.imgur.com/RRB2r2t.png',
+        ':wynaut:': 'https://i.imgur.com/sgRxjEv.png',
         ':castform:': 'https://i.imgur.com/HN8H7xD.png',
         ':spheal:': 'https://i.imgur.com/rAxYMV2.png',
         ':wooper:': 'https://i.imgur.com/y1oYqa2.png',
