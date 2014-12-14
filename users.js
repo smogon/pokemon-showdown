@@ -1575,7 +1575,7 @@ Connection = (function () {
 
 	Connection.prototype.sendTo = function (roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
-		if (roomid && roomid !== 'lobby') data = '>' + roomid + '\n' + data;
+		if (roomid && roomid !== 'battle') data = '>' + roomid + '\n' + data;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		ResourceMonitor.countNetworkUse(data.length);
 	};
