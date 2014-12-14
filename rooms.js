@@ -358,6 +358,14 @@ var GlobalRoom = (function () {
 			newSearch.rating = mmr;
 			self.addSearch(newSearch, user);
 		});
+		for (var i in this.users) {
+			var user = this.users[i];
+			if (user.locked) {
+			// do nothing
+			} else if (user.named) {
+				Rooms.rooms.lobby.add('|c|' + user.group + '' + user.name + '|/me **is searching for a ' + formatid + ' battle!**');
+			}
+		}
 	};
 	GlobalRoom.prototype.matchmakingOK = function (search1, search2, user1, user2) {
 		// users must be different
@@ -490,6 +498,17 @@ var GlobalRoom = (function () {
 					typeof room.staffAutojoin === 'string' && room.staffAutojoin.indexOf(user.group) >= 0) {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
+				user.joinRoom(room.id, connection);
+			}
+		}
+		for (var i = 0; i < this.autojoin.length; i++) {
+			var room = Rooms.get(this.autojoin[i]);
+			if (!room) {
+				this.autojoin.splice(i, 1);
+				i--;
+				continue;
+			}
+			if (room.autojoin === true) {
 				user.joinRoom(room.id, connection);
 			}
 		}
