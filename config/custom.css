@@ -1,15 +1,40 @@
-body{background-image:url("http://fc05.deviantart.net/fs70/f/2009/346/e/b/Suicune_Wallpaper_by_Super_Bastard.jpg");
-	background-repeat:no-repeat;
-	background-position:center
+body {
+    background-image:url("http://fc05.deviantart.net/fs70/f/2009/346/e/b/Suicune_Wallpaper_by_Super_Bastard.jpg");
+    background-repeat:no-repeat;
+    background-position:center
 }
 
-.menugroup .button{
-        background:url(235, 35, 242, .8);
-        color:#FFFFFF;
+.menugroup .button {
+    background:url(235, 35, 242, .8);
+    color:#FFFFFF;
 }
-     
+
 .menugroup .button:hover {
-        background:#EB23F2;
-        color:#FFFFFF;
+    background:#EB23F2;
+    color:#FFFFFF;
 }
 
+.header {
+    background:#3ED6EE;
+}
+
+.userlist {
+    background:rgba(62, 214, 238, .7);
+}
+
+.userlist li {
+    border-bottom: 1px solid #000;
+}
+
+.userlist li em.group {
+    color: #000;
+}
+
+.userlist li button:hover {
+    background:#1DA7BC;
+}
+
+.chat-log {
+    background:url("http://fc04.deviantart.net/fs43/f/2009/073/e/9/Suicune_by_Xous54.png");
+    background-position:left;
+}
