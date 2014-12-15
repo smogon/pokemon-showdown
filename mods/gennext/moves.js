@@ -1841,17 +1841,11 @@ exports.BattleMovedex = {
 		basePower: 95
 	},
 	triattack: {
-		num: 161,
+		inherit: true,
 		accuracy: true,
 		basePower: 30,
-		category: "Special",
 		desc: "Hits 3 times. Has a 10% chance to burn, paralyze or freeze the target each time.",
 		shortDesc: "Hits 3x; 10% chance to paralyze/burn/freeze.",
-		id: "triattack",
-		name: "Tri Attack",
-		pp: 10,
-		isViable: true,
-		priority: 0,
 		multihit: [3, 3],
 		secondary: {
 			chance: 10,
@@ -1865,8 +1859,6 @@ exports.BattleMovedex = {
 					target.trySetStatus('frz', source);
 				}
 			}
-		},
-		target: "normal",
-		type: "Normal"
+		}
 	}
 };

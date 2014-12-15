@@ -7,14 +7,6 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: 'OU'
 	},
-	deoxysdefense: {
-		inherit: true,
-		tier: 'Uber'
-	},
-	deoxysspeed: {
-		inherit: true,
-		tier: 'Uber'
-	},
 	kyurem: {
 		inherit: true,
 		tier: 'Uber'
