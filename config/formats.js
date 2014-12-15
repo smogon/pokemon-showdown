@@ -1055,7 +1055,7 @@ exports.Formats = [
 		section: "Past Generations",
 
 		mod: 'gen1',
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'Freeze Clause'],
 		banlist: ['Uber',
 			'Kakuna + Poison Sting + Harden', 'Kakuna + String Shot + Harden',
 			'Beedrill + Poison Sting + Harden', 'Beedrill + String Shot + Harden',
