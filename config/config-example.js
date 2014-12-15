@@ -272,6 +272,7 @@ exports.groups = {
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
+		jeopardy: true,
 		rank: 2
 	},
 	'+': {
