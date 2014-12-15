@@ -73,6 +73,10 @@ exports.reportjoins = true;
 //   getting more than 160 or so users.
 exports.reportbattles = true;
 
+// report joins and leaves in battle - shows messages like "<USERNAME> joined" in battle
+//   Turn this off on large tournament servers where battles get a lot of joins and leaves.
+exports.reportbattlejoins = true;
+
 // moderated chat - prevent unvoiced users from speaking
 //   This should only be enabled in special situations, such as temporarily
 //   when you're dealing with huge influxes of spammy users.

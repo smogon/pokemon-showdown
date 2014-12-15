@@ -1058,7 +1058,7 @@ var BattleRoom = (function () {
 		if (this.users[user.userid]) return user;
 
 		if (user.named) {
-			this.add('|join|' + user.name);
+			if (Config.reportbattlejoins) this.add('|join|' + user.name);
 			this.update();
 		}
 
@@ -1069,7 +1069,7 @@ var BattleRoom = (function () {
 		return user;
 	};
 	BattleRoom.prototype.onRename = function (user, oldid, joining) {
-		if (joining) {
+		if (joining && Config.reportbattlejoins) {
 			this.add('|join|' + user.name);
 		}
 		var resend = joining || !this.battle.playerTable[oldid];
@@ -1106,7 +1106,7 @@ var BattleRoom = (function () {
 		}
 		delete this.users[user.userid];
 		this.userCount--;
-		this.add('|leave|' + user.name);
+		if (Config.reportbattlejoins) this.add('|leave|' + user.name);
 
 		if (Object.isEmpty(this.users)) {
 			rooms.global.battleCount += 0 - (this.active ? 1 : 0);
