@@ -8,28 +8,28 @@ exports.Formats = [
 
 	/*{
 		name: "XY Anniversary Random (BWknd 23)",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		team: 'randomXY',
 		ruleset: ['Random (no PotD)']
 	},*/
 	{
 		name: "OU",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
 	},
 	{
 		name: "Ubers",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Ban Mod'],
 		banlist: []
 	},
 	{
 		name: "UU",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Altarianite', 'Diancite', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Metagrossite',
@@ -38,21 +38,21 @@ exports.Formats = [
 	},
 	{
 		name: "RU",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2', 'Galladite', 'Houndoominite']
 	},
 	{
 		name: "NU",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		ruleset: ['RU'],
 		banlist: ['RU', 'BL3']
 	},
 	{
 		name: "LC",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
@@ -60,14 +60,14 @@ exports.Formats = [
 	},
 	{
 		name: "Anything Goes",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal']
 	},
 	/*{
 		name: "CAP Plasmanta Playtest",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew',
@@ -76,7 +76,7 @@ exports.Formats = [
 	},*/
 	{
 		name: "Battle Spot Singles",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		onBegin: function () {
 			this.debug('cutting down to 3');
@@ -94,7 +94,7 @@ exports.Formats = [
 	},
 	{
 		name: "Custom Game",
-		section: "XY Singles",
+		section: "ORAS Singles",
 
 		searchShow: false,
 		canUseRandomTeam: true,
@@ -327,7 +327,7 @@ exports.Formats = [
 
 	{
 		name: "Smogon Doubles",
-		section: "XY Doubles",
+		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		searchShow: false,
@@ -338,7 +338,7 @@ exports.Formats = [
 	},
 	{
 		name: "Smogon Doubles (current)",
-		section: "XY Doubles",
+		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		challengeShow: false,
@@ -346,7 +346,7 @@ exports.Formats = [
 	},
 	{
 		name: "Smogon Doubles (suspect test)",
-		section: "XY Doubles",
+		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
@@ -356,7 +356,7 @@ exports.Formats = [
 	},
 	{
 		name: "Smogon Doubles Ubers",
-		section: "XY Doubles",
+		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
@@ -364,7 +364,7 @@ exports.Formats = [
 	},
 	{
 		name: "Smogon Doubles UU",
-		section: "XY Doubles",
+		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		ruleset: ['Smogon Doubles'],
@@ -378,7 +378,7 @@ exports.Formats = [
 	},
 	{
 		name: "Battle Spot Doubles",
-		section: "XY Doubles",
+		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		onBegin: function () {
@@ -396,7 +396,7 @@ exports.Formats = [
 	},
 	{
 		name: "Battle Spot Special 7",
-		section: "XY Doubles",
+		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
@@ -470,7 +470,7 @@ exports.Formats = [
 	},
 	{
 		name: "VGC 2014",
-		section: "XY Doubles",
+		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		onBegin: function () {
@@ -491,8 +491,27 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "VGC 2015",
+		section: "ORAS Doubles",
+
+		gameType: 'doubles',
+		onBegin: function () {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		requirePentagon: true,
+		validateTeam: function (team, format) {
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
+		}
+	},
+	{
 		name: "Doubles Custom Game",
-		section: "XY Doubles",
+		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		searchShow: false,
@@ -509,7 +528,7 @@ exports.Formats = [
 
 	{
 		name: "Smogon Triples",
-		section: "XY Triples",
+		section: "ORAS Triples",
 
 		gameType: 'triples',
 		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
@@ -520,7 +539,7 @@ exports.Formats = [
 	},
 	{
 		name: "Battle Spot Triples",
-		section: "XY Triples",
+		section: "ORAS Triples",
 
 		gameType: 'triples',
 		maxForcedLevel: 50,
@@ -531,7 +550,7 @@ exports.Formats = [
 	},
 	{
 		name: "Triples Custom Game",
-		section: "XY Triples",
+		section: "ORAS Triples",
 
 		gameType: 'triples',
 		searchShow: false,
@@ -727,7 +746,7 @@ exports.Formats = [
 		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod'],
+		ruleset: ['Pokemon', 'Ability Clause', '-ate Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard']
 	},
 	{
@@ -1215,7 +1234,7 @@ exports.Formats = [
 		section: "Past Generations",
 
 		mod: 'gen1',
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'Freeze Clause'],
 		banlist: ['Uber',
 			'Kakuna + Poison Sting + Harden', 'Kakuna + String Shot + Harden',
 			'Beedrill + Poison Sting + Harden', 'Beedrill + String Shot + Harden',

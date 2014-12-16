@@ -381,6 +381,22 @@ exports.BattleFormats = {
 			}
 		}
 	},
+	ateclause: {
+		effectType: 'Rule',
+		onStart: function () {
+			this.add('rule', '-ate Clause: Limit one of Aerilate/Refrigerate/Pixilate');
+		},
+		validateTeam: function (team, format) {
+			var ateAbility = false;
+			for (var i = 0; i < team.length; i++) {
+				var ability = toId(team[i].ability);
+				if (ability === 'refrigerate' || ability === 'pixilate' || ability === 'aerilate') {
+					if (ateAbility) return ["You have more than one of Aerilate/Refrigerate/Pixilate, which is banned by -ate Clause."];
+					ateAbility = true;
+				}
+			}
+		}
+	},
 	ohkoclause: {
 		effectType: 'Rule',
 		onStart: function () {

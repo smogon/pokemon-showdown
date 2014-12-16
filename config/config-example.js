@@ -425,6 +425,7 @@ exports.groups = {
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
+		jeopardy: true,
 		rank: 4
 	},
 	'\u2605': {
