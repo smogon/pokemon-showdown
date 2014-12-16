@@ -1739,9 +1739,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, distance: 1, authentic: 1},
 		isSoundBased: true,
-		onModifyMove: function (move, pokemon) {
-			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
-		},
 		secondary: {
 			chance: 100,
 			volatileStatus: 'confusion'
@@ -2118,7 +2115,7 @@ exports.BattleMovedex = {
 			if (!pokemon.runImmunity('powder')) return false;
 		},
 		secondary: false,
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Grass"
 	},
 	"counter": {
@@ -9337,7 +9334,7 @@ exports.BattleMovedex = {
 			this.useMove(moveToUse, target);
 		},
 		secondary: false,
-		target: "self",
+		target: "normal",
 		type: "Normal"
 	},
 	"needlearm": {
