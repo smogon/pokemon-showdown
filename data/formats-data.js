@@ -894,7 +894,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	hitmonlee: {
-		randomBattleMoves: ["highjumpkick","suckerpunch","stoneedge","machpunch","rapidspin","knockoff","poisonjab"],
+		randomBattleMoves: ["highjumpkick","suckerpunch","stoneedge","machpunch","rapidspin","knockoff","poisonjab","fakeout"],
 		randomDoubleBattleMoves: ["helpinghand","suckerpunch","stoneedge","machpunch","substitute","fakeout","closecombat","earthquake","blazekick","feint","wideguard","protect"],
 		eventPokemon: [
 			{"generation":3,"level":38,"abilities":["limber"],"moves":["refresh","highjumpkick","mindreader","megakick"]}
