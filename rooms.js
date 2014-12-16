@@ -1044,8 +1044,8 @@ var BattleRoom = (function () {
 		}
 		this.update();
 	};
-	// This function is only called when the room is not empty.
-	// Joining an empty room calls this.join() below instead.
+	// This function is only called when the user is already in the room (with another connection).
+	// First-time join calls this.onJoin() below instead.
 	BattleRoom.prototype.onJoinConnection = function (user, connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		// this handles joining a battle in which a user is a participant,
