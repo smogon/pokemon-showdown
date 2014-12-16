@@ -159,21 +159,21 @@ var core = exports.core = {
     },
 
     emoticons: {
-        'kappa': 'https://i.imgur.com/HIjiypy.png',
-        'pjsalt': 'https://i.imgur.com/ailgvSe.png',
-        '(y)': 'https://i.imgur.com/28x5Nty.png',
-        ':wobbuffet:': 'https://i.imgur.com/RRB2r2t.png',
-        ':wynaut:': 'https://i.imgur.com/sgRxjEv.png',
         ':castform:': 'https://i.imgur.com/HN8H7xD.png',
-        ':spheal:': 'https://i.imgur.com/rAxYMV2.png',
-        ':wooper:': 'https://i.imgur.com/y1oYqa2.png',
+        ':jigglypuff:': 'https://i.imgur.com/8oqKNDT.png',
+        ':jynx:': 'https://i.imgur.com/Olu3RJk.png',
+        ':kappa:': 'https://i.imgur.com/HIjiypy.png',
+        ':luvdisc:': 'https://i.imgur.com/5wyPMwy.png',
         ':magikarp:': 'https://i.imgur.com/m7PJxJy.png',
+        ':pjsalt:': 'https://i.imgur.com/ailgvSe.png',
         ':psyduck:': 'https://i.imgur.com/rPBVwRi.png',
         ':slowpoke:': 'https://i.imgur.com/kzJ6XNA.png',
-        ':jigglypuff:': 'https://i.imgur.com/8oqKNDT.png',
         ':snorlax:': 'https://i.imgur.com/TqOKaXP.png',
-        ':luvdisc:': 'https://i.imgur.com/5wyPMwy.png',
-        ':jynx:': 'https://i.imgur.com/Olu3RJk.png',
+        ':spheal:': 'https://i.imgur.com/rAxYMV2.png',
+        ':wobbuffet:': 'https://i.imgur.com/RRB2r2t.png',
+        ':wooper:': 'https://i.imgur.com/y1oYqa2.png',
+        ':wynaut:': 'https://i.imgur.com/sgRxjEv.png',
+        ':y:': 'https://i.imgur.com/28x5Nty.png'
     },
 
     processEmoticons: function (text) {
