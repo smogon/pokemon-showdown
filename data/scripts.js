@@ -2560,7 +2560,12 @@ exports.BattleScripts = {
 			var pokemon = seasonalPokemonList[i];
 			var template = this.getTemplate(pokemon);
 			var set = this.randomSet(template, i);
-			set.moves[3] = 'Present';
+			// We presserve top priority moves over the rest.
+			if ((toId(set.item) === 'heatrock' && toId(set.moves[3]) === 'sunnyday') || toId(set.moves[3]) === 'geomancy' || (toId(set.moves[3]) === 'rest' && toId(set.item) === 'chestoberry') || (pokemon === 'haxorus' && toId(set.moves[3]) === 'dragondance') || (toId(set.ability) === 'guts' && toId(set.moves[3]) === 'facade')) {
+				set.moves[2] = 'Present';
+			} else {
+				set.moves[3] = 'Present';
+			}
 			if (this.getItem(set.item).megaStone) set.item = 'Life Orb';
 			team.push(set);
 		}
