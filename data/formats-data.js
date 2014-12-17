@@ -3408,7 +3408,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	cherrim: {
-		randomBattleMoves: ["sunnyday","solarbeam","weatherball","hiddenpowerice"],
+		randomBattleMoves: ["sunnyday","solarbeam","weatherball","hiddenpowerice","energyball","synthesis"],
 		randomDoubleBattleMoves: ["sunnyday","solarbeam","weatherball","hiddenpowerice","protect"],
 		tier: "PU"
 	},
