@@ -1304,6 +1304,8 @@ exports.BattleScripts = {
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability === 'Rock Head' || ability === 'Reckless') {
 				rejectAbility = !counter['recoil'];
+			} else if (ability === 'Sturdy') {
+				rejectAbility = !!counter['recoil'];
 			} else if (ability === 'No Guard' || ability === 'Compoundeyes') {
 				rejectAbility = !counter['inaccurate'];
 			} else if ((ability === 'Sheer Force' || ability === 'Serene Grace')) {
@@ -1548,6 +1550,9 @@ exports.BattleScripts = {
 			Clefairy: 95, Delibird: 95, "Farfetch'd": 95, Jigglypuff: 95, Kirlia: 95, Ledian: 95, Luvdisc: 95, Marill: 95, Skiploom: 95,
 			Pachirisu: 90,
 
+			// Balloon Fan Rotom
+			"Rotom-Fan": 88,
+
 			// Eviolite
 			Ferroseed: 95, Misdreavus: 95, Munchlax: 95, Murkrow: 95, Natu: 95,
 			Gligar: 90, Metang: 90, Monferno: 90, Roselia: 90, Seadra: 90, Togetic: 90, Wartortle: 90, Whirlipede: 90,
@@ -1557,7 +1562,7 @@ exports.BattleScripts = {
 			"Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72,
 
 			// Holistic judgment
-			Articuno: 86, Genesect: 72, "Gengar-Mega": 68, "Rayquaza-Mega": 68, Sigilyph: 76, Xerneas: 66
+			Articuno: 82, Genesect: 72, "Gengar-Mega": 68, "Rayquaza-Mega": 68, Sigilyph: 76, Xerneas: 66
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
