@@ -71,7 +71,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -643,8 +642,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, pulse: 1, mirror: 1, distance: 1},
-		isPulseMove: true,
-		isBullet: true,
 		secondary: false,
 		target: "any",
 		type: "Fighting"
@@ -775,7 +772,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -1032,7 +1028,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		isBiteAttack: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -1547,7 +1542,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -2312,7 +2306,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		isBiteAttack: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -2437,7 +2430,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, pulse: 1, mirror: 1, distance: 1},
-		isPulseMove: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -3109,7 +3101,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, pulse: 1, mirror: 1, distance: 1},
-		isPulseMove: true,
 		secondary: false,
 		target: "any",
 		type: "Dragon"
@@ -3419,7 +3410,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3521,7 +3511,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Electric"
@@ -3732,7 +3721,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -4150,7 +4138,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		isBiteAttack: true,
 		secondaries: [
 			{
 				chance: 10,
@@ -4670,7 +4657,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -5772,7 +5758,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -6825,7 +6810,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		isBiteAttack: true,
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch'
@@ -6949,7 +6933,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		isBullet: true,
 		effect: {
 			duration: 2,
 			onLockMove: 'iceball',
@@ -7039,7 +7022,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		isBiteAttack: true,
 		secondaries: [
 			{
 				chance: 10,
@@ -8211,7 +8193,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -8977,7 +8958,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -9136,7 +9116,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -9520,7 +9499,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -9588,7 +9566,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, pulse: 1, mirror: 1},
-		isPulseMove: true,
 		target: "allAdjacentFoes",
 		type: "Water"
 	},
@@ -9990,7 +9967,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		isBiteAttack: true,
 		secondary: {
 			chance: 50,
 			status: 'tox'
@@ -11489,7 +11465,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {bullet: 1, recharge: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -11953,7 +11928,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: {
 			chance: 30,
 			status: 'brn'
@@ -12033,7 +12007,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -12109,7 +12082,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -12822,7 +12794,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -14572,7 +14543,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		isBiteAttack: true,
 		secondaries: [
 			{
 				chance: 10,
@@ -15452,7 +15422,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, pulse: 1, mirror: 1, distance: 1},
-		isPulseMove: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion'
@@ -15575,7 +15544,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		onModifyMove: function (move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
@@ -16004,7 +15972,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
-		isBullet: true,
 		secondary: {
 			chance: 100,
 			status: 'par'
