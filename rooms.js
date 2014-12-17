@@ -358,14 +358,6 @@ var GlobalRoom = (function () {
 			newSearch.rating = mmr;
 			self.addSearch(newSearch, user);
 		});
-		for (var i in this.users) {
-			var user = this.users[i];
-			if (user.locked) {
-			// do nothing
-			} else if (user.named) {
-				Rooms.rooms.lobby.add('|c|' + user.group + '' + user.name + '|/me **is searching for a ' + formatid + ' battle!**');
-			}
-		}
 	};
 	GlobalRoom.prototype.matchmakingOK = function (search1, search2, user1, user2) {
 		// users must be different
@@ -404,6 +396,10 @@ var GlobalRoom = (function () {
 				this.cancelSearch(searchUser, true);
 				user.send('|updatesearch|' + JSON.stringify({searching: false}));
 				this.startBattle(searchUser, user, search.formatid, search.team, newSearch.team, {rated: true});
+				if (searchUser.locked) {
+					// do nothing
+				} else if (searchUser.named) {
+					Rooms.rooms.lobby.add('|c|' + user.group + '' + searchUser.name + '|/me **is searching for a ' + formatid + ' battle!**');}
 				return;
 			}
 		}
