@@ -9325,13 +9325,13 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {},
-		onHit: function (target) {
+		onHit: function (target, source) {
 			var moveToUse = 'triattack';
 			if (this.isTerrain('electricterrain')) moveToUse = 'thunderbolt';
 			else if (this.isTerrain('grassyterrain')) moveToUse = 'energyball';
 			else if (this.isTerrain('mistyterrain')) moveToUse = 'moonblast';
 
-			this.useMove(moveToUse, target);
+			this.useMove(moveToUse, source, target);
 		},
 		secondary: false,
 		target: "normal",
