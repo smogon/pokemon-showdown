@@ -1304,8 +1304,6 @@ exports.BattleScripts = {
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability === 'Rock Head' || ability === 'Reckless') {
 				rejectAbility = !counter['recoil'];
-			} else if (ability === 'Rock Head' && counter['recoil'] < 2) {
-				rejectAbility = true;
 			} else if (ability === 'Sturdy') {
 				rejectAbility = !!counter['recoil'];
 			} else if (ability === 'No Guard' || ability === 'Compoundeyes') {
