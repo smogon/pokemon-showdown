@@ -2574,5 +2574,82 @@ exports.BattleScripts = {
 
 		// Done, return the result.
 		return team;
-	}
+	},
+	randomTeam: function (side) {
+		var keys = [];
+		var pokemonLeft = 0;
+		var pokemon = [];
+		var pokemonList = ['aegislash', 'arceus', 'arceusbug', 'arceusdark', 'arceusdragon', 'arceuselectric', 'arceusfairy', 'arceusfighting', 'arceusfire', 'arceusflying', 'arceusghost', 'arceusgrass', 'arceusground', 'arceusice', 'arceuspoison', 'arceuspsychic', 'arceusrock', 'arceussteel', 'arceuswater', 'blaziken', 'darkrai', 'deoxys', 'deoxysattack', 'deoxysdefense', 'deoxysspeed', 'dialga', 'genesect', 'gengar', 'giratina', 'giratinaorigin', 'groudon', 'hooh', 'kangaskhan', 'kyogre', 'kyuremwhite', 'lucario', 'lugia', 'mawile', 'mewtwo', 'palkia', 'rayquaza', 'reshiram', 'salamence', 'shayminsky', 'xerneas', 'yveltal', 'zekrom'];
+		pokemonList = pokemonList.randomize();
+		for (var i in this.data.FormatsData) {
+			var template = this.getTemplate(i);
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
+				keys.push(i);
+			}
+		}
+		keys = keys.randomize();
+
+		var typeCount = {};
+		var typeComboCount = {};
+		var baseFormes = {};
+		var megaCount = 0;
+
+		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
+			var template = this.getTemplate(pokemonList[i]);
+			if (!template || !template.name || !template.types) continue;
+			var tier = template.tier;
+
+			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
+			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 18 > 1) continue;
+			// Genesect formes have 1/5 the normal rate each (so Genesect as a whole has a normal rate)
+			if (keys[i].substr(0, 8) === 'genesect' && Math.random() * 5 > 1) continue;
+
+			// Limit 2 of any type
+			var types = template.types;
+			var skip = false;
+			for (var t = 0; t < types.length; t++) {
+				if (typeCount[types[t]] > 1 && Math.random() * 5 > 1) {
+					skip = true;
+					break;
+				}
+			}
+			if (skip) continue;
+
+			var set = this.randomSet(template, i, megaCount);
+
+			// Limit 1 of any type combination
+			var typeCombo = types.join();
+			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
+				// Drought and Drizzle don't count towards the type combo limit
+				typeCombo = set.ability;
+			}
+			if (typeCombo in typeComboCount) continue;
+
+			// Limit the number of Megas to one, just like in-game
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
+			baseFormes[template.baseSpecies] = 1;
+
+			// Okay, the set passes, add it to our team
+			pokemon.push(set);
+
+			pokemonLeft++;
+			// Now that our Pokemon has passed all checks, we can increment the type counter
+			for (var t = 0; t < types.length; t++) {
+				if (types[t] in typeCount) {
+					typeCount[types[t]]++;
+				} else {
+					typeCount[types[t]] = 1;
+				}
+			}
+			typeComboCount[typeCombo] = 1;
+
+			if (isMegaSet) megaCount++;
+		}
+		return pokemon;
+	},
 };
