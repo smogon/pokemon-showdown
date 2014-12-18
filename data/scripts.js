@@ -1525,12 +1525,12 @@ exports.BattleScripts = {
 			item = 'Black Sludge';
 		}
 
-		// 95-86-82-78-74-70
 		var levelScale = {
-			LC: 94,
+			LC: 92,
 			'LC Uber': 92,
 			NFE: 90,
 			PU: 88,
+			BL4: 88,
 			NU: 86,
 			BL3: 84,
 			RU: 82,
@@ -1550,19 +1550,19 @@ exports.BattleScripts = {
 			Clefairy: 95, Delibird: 95, "Farfetch'd": 95, Jigglypuff: 95, Kirlia: 95, Ledian: 95, Luvdisc: 95, Marill: 95, Skiploom: 95,
 			Pachirisu: 90,
 
-			// Balloon Fan Rotom
-			"Rotom-Fan": 88,
-
 			// Eviolite
 			Ferroseed: 95, Misdreavus: 95, Munchlax: 95, Murkrow: 95, Natu: 95,
 			Gligar: 90, Metang: 90, Monferno: 90, Roselia: 90, Seadra: 90, Togetic: 90, Wartortle: 90, Whirlipede: 90,
 			Dusclops: 84, Porygon2: 82, Chansey: 78,
 
 			// Banned Mega
-			"Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72,
+			"Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72, "Rayquaza-Mega": 68, "Salamence-Mega": 72,
+
+			// Not holding mega stone
+			Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Medicham: 78, Metagross: 78, Sableye: 78, Venusaur: 78,
 
 			// Holistic judgment
-			Articuno: 82, Genesect: 72, "Gengar-Mega": 68, "Rayquaza-Mega": 68, Sigilyph: 76, Xerneas: 66
+			Articuno: 82, Genesect: 72, "Gengar-Mega": 68, "Rotom-Fan": 88, Sigilyph: 80, Xerneas: 66
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
