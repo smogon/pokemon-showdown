@@ -201,11 +201,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		affectedByImmunities: false,
 		willCrit: false,
-		damageCallback: function (pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn &&
-					((this.getMove(pokemon.lastAttackedBy.move).type === 'Normal' || this.getMove(pokemon.lastAttackedBy.move).type === 'Fighting')) &&
-					this.getMove(pokemon.lastAttackedBy.move).id !== 'seismictoss') {
-				return 2 * pokemon.lastAttackedBy.damage;
+		damageCallback: function (pokemon, target) {
+			// Counter mechanics on gen 1 might be hard to understand.
+			// It will fail if the last move selected by the opponent has base power 0 or is not Normal or Fighting Type.
+			// If both are true, counter will deal twice the last damage dealt in battle.
+			// That means that, if opponent switches, counter will use last counter damage * 2.
+			var lastUsedMove = this.getMove(target.side.lastMove);
+			if (lastUsedMove && lastUsedMove.basePower && lastUsedMove.basePower > 0 && lastUsedMove.type in {'Normal': 1, 'Fighting': 1} && target.battle.lastDamage > 0) {
+				return 2 * target.battle.lastDamage;
 			}
 			this.add('-fail', pokemon);
 			return false;
