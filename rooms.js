@@ -396,11 +396,6 @@ var GlobalRoom = (function () {
 				this.cancelSearch(searchUser, true);
 				user.send('|updatesearch|' + JSON.stringify({searching: false}));
 				this.startBattle(searchUser, user, search.formatid, search.team, newSearch.team, {rated: true});
-				if (user.locked) {
-					// do nothing
-				} else if (user.named) {
-					Rooms.rooms.lobby.add('|c|' + user.group + '' + user.name + '|/me **is searching for a ' + search.formatid + ' battle!**');
-				}
 				return;
 			}
 		}
@@ -495,17 +490,6 @@ var GlobalRoom = (function () {
 					typeof room.staffAutojoin === 'string' && room.staffAutojoin.indexOf(user.group) >= 0) {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
-				user.joinRoom(room.id, connection);
-			}
-		}
-		for (var i = 0; i < this.autojoin.length; i++) {
-			var room = Rooms.get(this.autojoin[i]);
-			if (!room) {
-				this.autojoin.splice(i, 1);
-				i--;
-				continue;
-			}
-			if (room.autojoin === true) {
 				user.joinRoom(room.id, connection);
 			}
 		}
