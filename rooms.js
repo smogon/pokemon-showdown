@@ -1058,7 +1058,11 @@ var BattleRoom = (function () {
 		if (this.users[user.userid]) return user;
 
 		if (user.named) {
-			this.add('|join|' + user.name);
+			if (Config.reportbattlejoins) {
+				this.add('|join|' + user.name);
+			} else {
+				this.add('|J|' + user.name);
+			}
 			this.update();
 		}
 
@@ -1070,7 +1074,11 @@ var BattleRoom = (function () {
 	};
 	BattleRoom.prototype.onRename = function (user, oldid, joining) {
 		if (joining) {
-			this.add('|join|' + user.name);
+			if (Config.reportbattlejoins) {
+				this.add('|join|' + user.name);
+			} else {
+				this.add('|J|' + user.name);
+			}
 		}
 		var resend = joining || !this.battle.playerTable[oldid];
 		if (this.battle.playerTable[oldid]) {
@@ -1106,7 +1114,11 @@ var BattleRoom = (function () {
 		}
 		delete this.users[user.userid];
 		this.userCount--;
-		this.add('|leave|' + user.name);
+		if (Config.reportbattlejoins) {
+			this.add('|leave|' + user.name);
+		} else {
+			this.add('|L|' + user.name);
+		}
 
 		if (Object.isEmpty(this.users)) {
 			rooms.global.battleCount += 0 - (this.active ? 1 : 0);
