@@ -275,7 +275,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon is protected from some Ball and Bomb moves.",
 		shortDesc: "This Pokemon is protected from ball and bomb moves.",
 		onTryHit: function (pokemon, target, move) {
-			if (move.flags['bullet']) {
+			if (move.flags && move.flags['bullet']) {
 				this.add('-immune', pokemon, '[msg]', '[from] Bulletproof');
 				return null;
 			}
@@ -1564,7 +1564,7 @@ exports.BattleAbilities = {
 		shortDesc: "Boosts the power of Aura/Pulse moves by 50%.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.flags['pulse']) {
+			if (move.flags && move.flags['pulse']) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -2704,7 +2704,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's bite-based attacks do 1.5x damage.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.flags['bite']) {
+			if (move.flags && move.flags['bite']) {
 				return this.chainModify(1.5);
 			}
 		},
