@@ -10,6 +10,13 @@ exports.BattleScripts = {
 			this.add('debug', activity);
 		}
 	},
+	// Gen 1 stores the last damage dealt by a move in the battle.
+	lastDamage: 0,
+	// BattleSide scripts.
+	// In gen 1, last move information is stored on the side rather than on the active Pokémon.
+	side: {
+		lastMove: ''
+	},
 	/**
 	 * We deal with gen 1 stats using the getStatCallback which is called always that we get a stat.
 	 * We add here a specific unboosted argument to use it with crits, as in gen 1 we need this
@@ -36,6 +43,75 @@ exports.BattleScripts = {
 		}
 
 		return stat;
+	},
+	// We need to override addQueue just to save the last used move.
+	addQueue: function (decision, noSort, side) {
+		if (decision) {
+			if (Array.isArray(decision)) {
+				for (var i = 0; i < decision.length; i++) {
+					this.addQueue(decision[i], noSort);
+				}
+				return;
+			}
+			if (!decision.side && side) decision.side = side;
+			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
+			if (!decision.choice && decision.move) decision.choice = 'move';
+			if (!decision.priority) {
+				var priorities = {
+					'beforeTurn': 100,
+					'beforeTurnMove': 99,
+					'switch': 6,
+					'runSwitch': 6.1,
+					'residual': -100,
+					'team': 102,
+					'start': 101
+				};
+				if (priorities[decision.choice]) {
+					decision.priority = priorities[decision.choice];
+				}
+			}
+			if (decision.choice === 'move') {
+				decision.side.lastMove = decision.move;
+				if (this.getMove(decision.move).beforeTurnCallback) {
+					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc}, true);
+				}
+			} else if (decision.choice === 'switch') {
+				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
+					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
+				}
+				decision.pokemon.switchFlag = false;
+				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.speed;
+			}
+			if (decision.move) {
+				var target;
+
+				if (!decision.targetPosition) {
+					target = this.resolveTarget(decision.pokemon, decision.move);
+					decision.targetSide = target.side;
+					decision.targetPosition = target.position;
+				}
+
+				decision.move = this.getMoveCopy(decision.move);
+				if (!decision.priority) {
+					var priority = decision.move.priority;
+					priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
+					decision.priority = priority;
+				}
+			}
+			if (!decision.pokemon && !decision.speed) decision.speed = 1;
+			if (!decision.speed && decision.choice === 'switch' && decision.target) decision.speed = decision.target.speed;
+			if (!decision.speed) decision.speed = decision.pokemon.speed;
+
+			if (decision.choice === 'switch' && !decision.side.pokemon[0].isActive) {
+				// if there's no actives, switches happen before activations
+				decision.priority = 6.2;
+			}
+
+			this.queue.push(decision);
+		}
+		if (!noSort) {
+			this.queue.sort(this.comparePriority);
+		}
 	},
 	runMove: function (move, pokemon, target, sourceEffect) {
 		move = this.getMove(move);
@@ -175,6 +251,10 @@ exports.BattleScripts = {
 			damage = this.rollMoveHit(target, pokemon, move);
 		}
 
+		// Store 0 damage for last damage if move failed or dealt 0 damage.
+		if (!damage) pokemon.battle.lastDamage = 0;
+
+		// Go ahead with results of the used move.
 		if (!damage && damage !== 0) {
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			return true;
@@ -774,6 +854,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
+		target.battle.lastDamage = damage;
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;
 		var name = effect.fullname;

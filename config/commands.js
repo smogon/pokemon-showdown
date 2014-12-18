@@ -346,19 +346,29 @@ var commands = exports.commands = {
 					"Priority": move.priority
 				};
 
-				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";
-				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
-				if (move.isSoundBased) details["<font color=black>&#10003; Sound</font>"] = "";
-				if (move.isBullet) details["<font color=black>&#10003; Bullet</font>"] = "";
-				if (move.isPulseMove) details["<font color=black>&#10003; Pulse</font>"] = "";
+				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary effect</font>"] = "";
+				if (move.flags['contact']) details["<font color=black>&#10003; Contact</font>"] = "";
+				if (move.flags['sound']) details["<font color=black>&#10003; Sound</font>"] = "";
+				if (move.flags['bullet']) details["<font color=black>&#10003; Bullet</font>"] = "";
+				if (move.flags['pulse']) details["<font color=black>&#10003; Pulse</font>"] = "";
+				if (move.flags['protect']) details["<font color=black>&#10003; Blocked by Protect</font>"] = "";
+				if (move.flags['authentic']) details["<font color=black>&#10003; Ignores substitutes</font>"] = "";
+				if (move.flags['defrost']) details["<font color=black>&#10003; Thaws user</font>"] = "";
+				if (move.flags['bite']) details["<font color=black>&#10003; Bite</font>"] = "";
+				if (move.flags['punch']) details["<font color=black>&#10003; Punch</font>"] = "";
+				if (move.flags['powder']) details["<font color=black>&#10003; Powder</font>"] = "";
+				if (move.flags['reflectable']) details["<font color=black>&#10003; Bounceable</font>"] = "";
 
 				details["Target"] = {
-					'normal': "Adjacent Pokemon",
-					'self': "Self",
-					'adjacentAlly': "Single Ally",
-					'allAdjacentFoes': "Adjacent Foes",
-					'foeSide': "All Foes",
-					'allySide': "All Allies",
+					'normal': "One Adjacent Pokemon",
+					'self': "User",
+					'adjacentAlly': "One Ally",
+					'adjacentAllyOrSelf': "User or Ally",
+					'adjacentFoe': "One Adjacent Opposing Pokemon",
+					'allAdjacentFoes': "All Adjacent Opponents",
+					'foeSide': "Opposing Side",
+					'allySide': "User's Side",
+					'allyTeam': "User's Side",
 					'allAdjacent': "All Adjacent Pokemon",
 					'any': "Any Pokemon",
 					'all': "All Pokemon"
@@ -370,14 +380,15 @@ var commands = exports.commands = {
 					details["Fling Base Power"] = item.fling.basePower;
 					if (item.fling.status) details["Fling Effect"] = item.fling.status;
 					if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
-					if (item.isBerry) details["Fling Effect"] = "Activates effect of berry on target.";
-					if (item.id === 'whiteherb') details["Fling Effect"] = "Removes all negative stat levels on the target.";
-					if (item.id === 'mentalherb') details["Fling Effect"] = "Removes the effects of infatuation, Taunt, Encore, Torment, Disable, and Cursed Body on the target.";
+					if (item.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
+					if (item.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
+					if (item.id === 'mentalherb') details["Fling Effect"] = "Removes the effects of Attract, Disable, Encore, Heal Block, Taunt, and Torment from the target.";
+				} else {
+					details["Fling"] = "This item cannot be used with Fling.";
 				}
-				if (!item.fling) details["Fling"] = "This item cannot be used with Fling";
 				if (item.naturalGift) {
 					details["Natural Gift Type"] = item.naturalGift.type;
-					details["Natural Gift BP"] = item.naturalGift.basePower;
+					details["Natural Gift Base Power"] = item.naturalGift.basePower;
 				}
 			} else {
 				details = {};
