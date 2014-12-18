@@ -665,11 +665,14 @@ var BattleRoom = (function () {
 		}
 	};
 	BattleRoom.prototype.win = function (winner) {
+		// Declare variables here in case we need them for non-rated battles logging.
+		var p1score = 0.5;
+		var winnerid = toId(winner);
+
+		// Check if the battle was rated to update the ladder, return its response, and log the battle.
 		if (this.rated) {
-			var winnerid = toId(winner);
 			var rated = this.rated;
 			this.rated = false;
-			var p1score = 0.5;
 
 			if (winnerid === rated.p1) {
 				p1score = 1;
@@ -748,6 +751,15 @@ var BattleRoom = (function () {
 					}
 				});
 			}
+		} else if (Config.logchallenges) {
+			// Log challenges if the challenge logging config is enabled.
+			if (winnerid === this.p1.userid) {
+				p1score = 1;
+			} else if (winnerid === this.p2.userid) {
+				p1score = 0;
+			}
+			this.update();
+			this.logBattle(p1score);
 		}
 		if (this.tour) {
 			var winnerid = toId(winner);
