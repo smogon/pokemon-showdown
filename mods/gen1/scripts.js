@@ -420,6 +420,12 @@ exports.BattleScripts = {
 
 		if (target) {
 			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
+
+			// Handle here the applying of partial trapping moves to Pokémon with Substitute
+			if (targetSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
+				target.addVolatile(moveData.volatileStatus, pokemon, move);
+			}
+
 			if (!hitResult) {
 				if (hitResult === false) this.add('-fail', target);
 				return false;
