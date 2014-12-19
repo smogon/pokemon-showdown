@@ -396,7 +396,7 @@ exports.BattleScripts = {
 		}
 
 		// If we used a partial trapping move, we save the damage to repeat it
-		if (pokemon.volatiles['partialtrappinglock'] && !pokemon.volatiles['partialtrappinglock'].damage) {
+		if (pokemon.volatiles['partialtrappinglock']) {
 			pokemon.volatiles['partialtrappinglock'].damage = damage;
 		}
 
