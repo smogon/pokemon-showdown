@@ -6265,7 +6265,7 @@ exports.BattleMovedex = {
 			},
 			onRestart: function (target, source) {
 				this.effectData.multiplier *= 1.5;
-				this.add('singleturn', target, 'Helping Hand', '[of] ' + source);
+				this.add('-singleturn', target, 'Helping Hand', '[of] ' + source);
 			},
 			onBasePowerPriority: 3,
 			onBasePower: function (basePower) {
