@@ -3900,7 +3900,7 @@ exports.BattleScripts = {
 		var megaCount = 0;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
-			var template = this.getTemplate(pokemonList[i]);
+			var template = this.getTemplate(keys[i]);
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
 			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
