@@ -291,7 +291,7 @@ var Trivia = {
 var triviaCommands = exports.triviaCommands = {
 	// trivia game commands
 	'new': function (target, room) {
-		if (room.id !== 'trivia' || !this.can('broadcast', null, room) ) return false;
+		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
 		if (Trivia.phase) return this.sendReply('There is already a trivia game in progress.');
 		target = ('' + target).split(',');
 		if (target.length !== 3) return this.sendReply('Invalid number of arguments given. View /triviahelp gcommands for more information.');
@@ -592,7 +592,7 @@ var triviaCommands = exports.triviaCommands = {
 		this.sendReplyBox(buffer);
 	},
 	help: {
-		ginfo : function (target, room) {
+		ginfo: function (target, room) {
 			if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.canBroadcast()) return false;
 			this.sendReplyBox(
 				'<strong>Modes:</strong><br />' +
@@ -606,7 +606,7 @@ var triviaCommands = exports.triviaCommands = {
 				'- Medium: whoever surpasses 35 points with the highest score wins the game and gains 4 points on the trivia leaderboard<br />' +
 				'- Long: whoever surpasses 50 points with the highest score wins the game and gains 5 points on the trivia leaderboard');
 		},
-		gcommands : function (target, room) {
+		gcommands: function (target, room) {
 			if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.canBroadcast()) return false;
 			this.sendReplyBox(
 				'<strong>Game commands:</strong><br />' +
@@ -617,7 +617,7 @@ var triviaCommands = exports.triviaCommands = {
 				'- kick - disqualifies a player from the current trivia game. Requires: % @ # & ~<br />' +
 				'- end - forces a trivia game to end early. Requires: + % @ # & ~');
 		},
-		qcommands : function (target, room) {
+		qcommands: function (target, room) {
 			if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.canBroadcast()) return false;
 			this.sendReplyBox(
 				'<strong>Question modifying commands:</strong><br />' +
@@ -630,7 +630,7 @@ var triviaCommands = exports.triviaCommands = {
 				'- accept <em>index1, index2, ... indexn OR all</em> - adds the specified question(s) to the question database. Requires: % @ # & ~<br />' +
 				'- reject <em>index1, index2, ... indexn OR all</em> - removes the specified question(s) from the submission list. Requires: % @ # & ~');
 		},
-		icommands : function (target, room) {
+		icommands: function (target, room) {
 			if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.canBroadcast()) return false;
 			this.sendReplyBox(
 				'<strong>Informational commands:</strong><br />' +
@@ -638,9 +638,9 @@ var triviaCommands = exports.triviaCommands = {
 				'- players - returns a list of the players in the current trivia game<br />' +
 				'- rank - returns your trivia leaderboard score, total points earned in trivia games, and total correct answers<br />' +
 				'- help <em>category</em> - you\'re looking at it right now');
-		}, 
+		},
 		// default help.
-		'' : function (target, room) {
+		'': function (target, room) {
 			if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.canBroadcast()) return false;
 			this.sendReplyBox(
 				'<strong>/triviahelp topics:</strong><br />' +
@@ -653,12 +653,12 @@ var triviaCommands = exports.triviaCommands = {
 };
 
 exports.commands = {
-	trivia : triviaCommands,
+	trivia: triviaCommands,
 	// shorthand commands
-	ta : 'triviahelp',
-	triviajoin : 'triviahelp',
-	triviahelp : function(target, room, user, connection, cmd) {
-		if( cmd === 'ta' ) cmd = 'triviaanswer';
+	ta: 'triviahelp',
+	triviajoin: 'triviahelp',
+	triviahelp: function (target, room, user, connection, cmd) {
+		if (cmd === 'ta') cmd = 'triviaanswer';
 		return this.parse('/trivia ' + cmd.substr(6) + ' ' + target);
 	}
 };
