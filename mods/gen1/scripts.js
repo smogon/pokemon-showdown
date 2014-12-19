@@ -71,7 +71,9 @@ exports.BattleScripts = {
 				}
 			}
 			if (decision.choice === 'move') {
+				// On gen 1 moves are stored when they are chosen.
 				decision.side.lastMove = decision.move;
+				decision.pokemon.lastMove = decision.move;
 				if (this.getMove(decision.move).beforeTurnCallback) {
 					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc}, true);
 				}
