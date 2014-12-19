@@ -823,7 +823,7 @@ exports.BattleMovedex = {
 				if (!target.lastAttackedBy) target.lastAttackedBy = {pokemon: source, thisTurn: true};
 				target.lastAttackedBy.move = move.id;
 				target.lastAttackedBy.damage = damage;
-				return 0; // hit
+				return 0;
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'Substitute');
