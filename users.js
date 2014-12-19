@@ -920,9 +920,9 @@ User = (function () {
 				} else if (body === '4') {
 					this.autoconfirmed = userid;
 				} else if (body === '5') {
-					this.lock();
+					this.lock(false, userid);
 				} else if (body === '6') {
-					this.ban();
+					this.ban(false, userid);
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
@@ -1264,7 +1264,7 @@ User = (function () {
 		}
 
 		for (var ip in this.ips) {
-			lockedIps[ip] = this.userid;
+			lockedIps[ip] = userid;
 		}
 		if (this.autoconfirmed) lockedUsers[this.autoconfirmed] = this.userid;
 		if (this.authenticated) lockedUsers[this.userid] = this.userid;

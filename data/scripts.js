@@ -1304,8 +1304,6 @@ exports.BattleScripts = {
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability === 'Rock Head' || ability === 'Reckless') {
 				rejectAbility = !counter['recoil'];
-			} else if (ability === 'Rock Head' && counter['recoil'] < 2) {
-				rejectAbility = true;
 			} else if (ability === 'Sturdy') {
 				rejectAbility = !!counter['recoil'];
 			} else if (ability === 'No Guard' || ability === 'Compoundeyes') {
@@ -1379,6 +1377,10 @@ exports.BattleScripts = {
 		item = 'Leftovers';
 		if (template.requiredItem) {
 			item = template.requiredItem;
+		} else if (template.species === 'Rotom-Fan') {
+			// this is just to amuse myself
+			// do we really have to keep this
+			item = 'Air Balloon';
 		} else if (template.species === 'Delibird') {
 			// to go along with the Christmas Delibird set
 			item = 'Leftovers';
@@ -1560,7 +1562,7 @@ exports.BattleScripts = {
 			Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Medicham: 78, Metagross: 78, Sableye: 78, Venusaur: 78,
 
 			// Holistic judgment
-			Articuno: 82, Genesect: 72, "Gengar-Mega": 68, Sigilyph: 80, Xerneas: 66
+			Articuno: 82, Genesect: 72, "Gengar-Mega": 68, "Rotom-Fan": 88, Sigilyph: 80, Xerneas: 66
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];

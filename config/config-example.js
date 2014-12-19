@@ -115,6 +115,9 @@ exports.watchconfig = true;
 // logchat - whether to log chat rooms.
 exports.logchat = false;
 
+// logchallenges - whether to log challenge battles. Useful for tournament servers.
+exports.logchallenges = false;
+
 // loguserstats - how often (in milliseconds) to write user stats to the
 // lobby log. This has no effect if `logchat` is disabled.
 exports.loguserstats = 1000 * 60 * 10; // 10 minutes
