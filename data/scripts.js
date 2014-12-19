@@ -2579,11 +2579,11 @@ exports.BattleScripts = {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
-		var pokemonList = ['aegislash', 'arceus', 'arceusbug', 'arceusdark', 'arceusdragon', 'arceuselectric', 'arceusfairy', 'arceusfighting', 'arceusfire', 'arceusflying', 'arceusghost', 'arceusgrass', 'arceusground', 'arceusice', 'arceuspoison', 'arceuspsychic', 'arceusrock', 'arceussteel', 'arceuswater', 'blaziken', 'darkrai', 'deoxys', 'deoxysattack', 'deoxysdefense', 'deoxysspeed', 'dialga', 'genesect', 'gengar', 'giratina', 'giratinaorigin', 'groudon', 'hooh', 'kangaskhan', 'kyogre', 'kyuremwhite', 'lucario', 'lugia', 'mawile', 'mewtwo', 'palkia', 'rayquaza', 'reshiram', 'shayminsky', 'xerneas', 'yveltal', 'zekrom'];
+		var pokemonList = ['aegislash', 'arceus', 'arceusbug', 'arceusdark', 'arceusdragon', 'arceuselectric', 'arceusfairy', 'arceusfighting', 'arceusfire', 'arceusflying', 'arceusghost', 'arceusgrass', 'arceusground', 'arceusice', 'arceuspoison', 'arceuspsychic', 'arceusrock', 'arceussteel', 'arceuswater', 'blaziken', 'darkrai', 'deoxys', 'deoxysattack', 'deoxysdefense', 'deoxysspeed', 'dialga', 'genesect', 'gengar', 'giratina', 'giratinaorigin', 'groudon', 'hooh', 'kangaskhan', 'kyogre', 'kyuremwhite', 'lucario', 'lugia', 'mawile', 'mewtwo', 'palkia', 'rayquaza', 'reshiram', 'salamence', 'shayminsky', 'xerneas', 'yveltal', 'zekrom'];
 		pokemonList = pokemonList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -2592,8 +2592,6 @@ exports.BattleScripts = {
 		var typeCount = {};
 		var typeComboCount = {};
 		var baseFormes = {};
-		var uberCount = 0;
-		var nuCount = 0;
 		var megaCount = 0;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
@@ -2639,7 +2637,9 @@ exports.BattleScripts = {
 			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
@@ -2659,13 +2659,7 @@ exports.BattleScripts = {
 			}
 			typeComboCount[typeCombo] = 1;
 
-			// Increment Uber/NU and mega counter
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
-				nuCount++;
-			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
@@ -2677,7 +2671,7 @@ exports.BattleScripts = {
 		pokemonList = pokemonList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -2686,20 +2680,12 @@ exports.BattleScripts = {
 		var typeCount = {};
 		var typeComboCount = {};
 		var baseFormes = {};
-		var uberCount = 0;
-		var nuCount = 0;
 		var megaCount = 0;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(pokemonList[i]);
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
-			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
-			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
-			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
-			if (tier === 'LC' && nuCount > 1) continue;
-			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
-			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
 
 			// CAPs have 20% the normal rate
 			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
@@ -2739,7 +2725,9 @@ exports.BattleScripts = {
 			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
@@ -2759,13 +2747,7 @@ exports.BattleScripts = {
 			}
 			typeComboCount[typeCombo] = 1;
 
-			// Increment Uber/NU and mega counter
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
-				nuCount++;
-			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
@@ -2777,7 +2759,7 @@ exports.BattleScripts = {
 		pokemonList = pokemonList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -2786,20 +2768,12 @@ exports.BattleScripts = {
 		var typeCount = {};
 		var typeComboCount = {};
 		var baseFormes = {};
-		var uberCount = 0;
-		var nuCount = 0;
 		var megaCount = 0;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(pokemonList[i]);
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
-			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
-			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
-			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
-			if (tier === 'LC' && nuCount > 1) continue;
-			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
-			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
 
 			// CAPs have 20% the normal rate
 			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
@@ -2839,7 +2813,9 @@ exports.BattleScripts = {
 			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
@@ -2859,13 +2835,7 @@ exports.BattleScripts = {
 			}
 			typeComboCount[typeCombo] = 1;
 
-			// Increment Uber/NU and mega counter
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
-				nuCount++;
-			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
@@ -2877,7 +2847,7 @@ exports.BattleScripts = {
 		pokemonList = pokemonList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -2886,8 +2856,6 @@ exports.BattleScripts = {
 		var typeCount = {};
 		var typeComboCount = {};
 		var baseFormes = {};
-		var uberCount = 0;
-		var nuCount = 0;
 		var megaCount = 0;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
@@ -2933,13 +2901,13 @@ exports.BattleScripts = {
 			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
 			baseFormes[template.baseSpecies] = 1;
-
-			set.level = 5;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2955,13 +2923,7 @@ exports.BattleScripts = {
 			}
 			typeComboCount[typeCombo] = 1;
 
-			// Increment Uber/NU and mega counter
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
-				nuCount++;
-			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
@@ -3007,7 +2969,7 @@ exports.BattleScripts = {
 		waterList = waterList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -3124,17 +3086,24 @@ exports.BattleScripts = {
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
 			var types = template.types;
-			var skip = false;
 
 			var set = this.randomSet(template, i, megaCount);
 
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
-			
+
+			// Limit 1 of any type combination
 			var typeCombo = types.join();
+			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
+				// Drought and Drizzle don't count towards the type combo limit
+				typeCombo = set.ability;
+			}
+			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
@@ -3160,7 +3129,7 @@ exports.BattleScripts = {
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
@@ -3172,7 +3141,7 @@ exports.BattleScripts = {
 		pokemonList = pokemonList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -3234,7 +3203,9 @@ exports.BattleScripts = {
 			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
@@ -3260,7 +3231,7 @@ exports.BattleScripts = {
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
@@ -3284,7 +3255,7 @@ exports.BattleScripts = {
 		rayquazaList = rayquazaList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -3315,105 +3286,6 @@ exports.BattleScripts = {
 			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
 			if (tier === 'LC' && nuCount > 1) continue;
 			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
-
-			// CAPs have 20% the normal rate
-			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
-			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
-			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 18 > 1) continue;
-			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
-			if (keys[i].substr(0, 8) === 'basculin' && Math.random() * 2 > 1) continue;
-			// Genesect formes have 1/5 the normal rate each (so Genesect as a whole has a normal rate)
-			if (keys[i].substr(0, 8) === 'genesect' && Math.random() * 5 > 1) continue;
-			// Gourgeist formes have 1/4 the normal rate each (so Gourgeist as a whole has a normal rate)
-			if (keys[i].substr(0, 9) === 'gourgeist' && Math.random() * 4 > 1) continue;
-			// Not available on XY
-			if (template.species === 'Pichu-Spiky-eared') continue;
-
-			// Limit 2 of any type
-			var types = template.types;
-			var skip = false;
-			for (var t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 && Math.random() * 5 > 1) {
-					skip = true;
-					break;
-				}
-			}
-			if (skip) continue;
-
-			var set = this.randomSet(template, i, megaCount);
-
-			// Illusion shouldn't be on the last pokemon of the team
-			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
-
-			// Limit 1 of any type combination
-			var typeCombo = types.join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
-				// Drought and Drizzle don't count towards the type combo limit
-				typeCombo = set.ability;
-			}
-			if (typeCombo in typeComboCount) continue;
-
-			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
-
-			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseSpecies]) continue;
-			baseFormes[template.baseSpecies] = 1;
-
-			// Okay, the set passes, add it to our team
-			pokemon.push(set);
-
-			pokemonLeft++;
-			// Now that our Pokemon has passed all checks, we can increment the type counter
-			for (var t = 0; t < types.length; t++) {
-				if (types[t] in typeCount) {
-					typeCount[types[t]]++;
-				} else {
-					typeCount[types[t]] = 1;
-				}
-			}
-			typeComboCount[typeCombo] = 1;
-
-			// Increment Uber/NU and mega counter
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
-				nuCount++;
-			}
-			if (this.getItem(set.item).megaStone) megaCount++;
-		}
-		return pokemon;
-	},
-	randomXYAnniversaryTeam: function (side) {
-		var keys = [];
-		var pokemonLeft = 0;
-		var pokemon = [];
-		var pokemonList = ['chespin', 'quilladin', 'chesnaught', 'fennekin', 'braixen', 'delphox', 'froakie', 'frogadier', 'greninja', 'bunnelby', 'diggersby', 'fletchling', 'fletchinder', 'talonflame', 'scatterbug', 'spewpa', 'vivillon', 'litleo', 'pyroar', 'flabebe', 'floette', 'florges', 'skiddo', 'gogoat', 'pancham', 'pangoro', 'furfrou', 'espurr', 'meowstic', 'meowsticf', 'honedge', 'doublade', 'aegislash', 'spritzee', 'aromatisse', 'swirlix', 'slurpuff', 'inkay', 'malamar', 'binacle', 'barbaracle', 'skrelp', 'dragalge', 'clauncher', 'clawitzer', 'helioptile', 'heliolisk', 'tyrunt', 'tyrantrum', 'amaura', 'aurorus', 'sylveon', 'hawlucha', 'dedenne', 'carbink', 'goomy', 'sliggoo', 'goodra', 'klefki', 'phantump', 'trevenant', 'pumpkaboo', 'pumpkaboosmall', 'pumpkaboolarge', 'pumpkaboosuper', 'gourgeist', 'gourgeistsmall', 'gourgeistlarge', 'gourgeistsuper', 'bergmite', 'avalugg', 'noibat', 'noivern', 'xerneas', 'yveltal', 'zygarde', 'diancie'];
-		pokemonList = pokemonList.randomize();
-		for (var i in this.data.FormatsData) {
-			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
-				keys.push(i);
-			}
-		}
-		keys = keys.randomize();
-
-		var typeCount = {};
-		var typeComboCount = {};
-		var baseFormes = {};
-		var uberCount = 0;
-		var nuCount = 0;
-		var megaCount = 0;
-
-		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
-			var template = this.getTemplate(pokemonList[i]);
-			if (!template || !template.name || !template.types) continue;
-			var tier = template.tier;
-			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
-			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
-			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
-			if (tier === 'LC' && nuCount > 1) continue;
-			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
 			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
 
 			// CAPs have 20% the normal rate
@@ -3454,7 +3326,9 @@ exports.BattleScripts = {
 			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
@@ -3480,13 +3354,12 @@ exports.BattleScripts = {
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
 	randomSmashBrosTeam: function (side) {
 		var keys = [];
-		var pokemonLeft = 0;
 		var dice = this.random(8);
 		if (dice < 1) {
 			lead = 'pikachu';
@@ -3524,7 +3397,7 @@ exports.BattleScripts = {
 		greninjaList = greninjaList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -3560,14 +3433,11 @@ exports.BattleScripts = {
 			var template = this.getTemplate(teamPool[i]);
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
-			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
-			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
-			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
-			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
-			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
 
 			// CAPs have 20% the normal rate
 			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
+			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
+			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 18 > 1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
 			if (keys[i].substr(0, 8) === 'basculin' && Math.random() * 2 > 1) continue;
 			// Genesect formes have 1/5 the normal rate each (so Genesect as a whole has a normal rate)
@@ -3578,17 +3448,24 @@ exports.BattleScripts = {
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
 			var types = template.types;
-			var skip = false;
 
 			var set = this.randomSet(template, i, megaCount);
 
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
-			
+
+			// Limit 1 of any type combination
 			var typeCombo = types.join();
+			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
+				// Drought and Drizzle don't count towards the type combo limit
+				typeCombo = set.ability;
+			}
+			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
@@ -3614,7 +3491,7 @@ exports.BattleScripts = {
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
@@ -3626,7 +3503,7 @@ exports.BattleScripts = {
 		pokemonList = pokemonList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -3688,7 +3565,9 @@ exports.BattleScripts = {
 			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
@@ -3997,7 +3876,7 @@ exports.BattleScripts = {
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
@@ -4009,7 +3888,7 @@ exports.BattleScripts = {
 		var pokemon = [this.randomSet(this.getTemplate(lead), 0)];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -4023,7 +3902,7 @@ exports.BattleScripts = {
 		var megaCount = 0;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
-			var template = this.getTemplate(keys[i]);
+			var template = this.getTemplate(pokemonList[i]);
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
 			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
@@ -4071,7 +3950,9 @@ exports.BattleScripts = {
 			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
@@ -4105,7 +3986,7 @@ exports.BattleScripts = {
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
@@ -4113,9 +3994,11 @@ exports.BattleScripts = {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
+		var pokemonList = [''];
+		pokemonList = pokemonList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega')) {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -4129,7 +4012,7 @@ exports.BattleScripts = {
 		var megaCount = 0;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
-			var template = this.getTemplate(keys[i]);
+			var template = this.getTemplate(pokemonList[i]);
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
 			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
@@ -4177,7 +4060,9 @@ exports.BattleScripts = {
 			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
-			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && megaCount > 0) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
@@ -4205,7 +4090,7 @@ exports.BattleScripts = {
 			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
-			if (this.getItem(set.item).megaStone) megaCount++;
+			if (isMegaSet) megaCount++;
 		}
 		return pokemon;
 	},
