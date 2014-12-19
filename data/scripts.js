@@ -1813,7 +1813,7 @@ exports.BattleScripts = {
 
 			var stack = 'Template incompatible with random battles: ' + name;
 			var fakeErr = {stack: stack};
-			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
+			require('../crashlogger.js')(fakeErr, 'The doubles randbat set generator');
 		}
 
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
@@ -2310,6 +2310,8 @@ exports.BattleScripts = {
 				rejectAbility = template.id !== 'bidoof';
 			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
+			} else if (ability === 'Chlorophyll') {
+				rejectAbility = !hasMove['sunnyday'];
 			}
 
 			if (rejectAbility) {
