@@ -569,29 +569,13 @@ exports.BattleMovedex = {
 		}
 	},
 	mirrormove: {
-		num: 119,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "The user uses the last move used by a selected adjacent target. The copied move is used against that target, if possible. Fails if the target has not yet used a move, or the last move used was Counter, Haze, Light Screen, Mimic, Reflect, Struggle, Transform, or any move that is self-targeting.",
-		shortDesc: "User uses the target's last used move against it.",
-		id: "mirrormove",
-		name: "Mirror Move",
-		pp: 20,
-		priority: 0,
-		isNotProtectable: true,
+		inherit: true,
 		onTryHit: function (target) {
-			var noMirrorMove = {acupressure:1, afteryou:1, aromatherapy:1, chatter:1, feint:1, finalgambit:1, focuspunch:1, futuresight:1, gravity:1, guardsplit:1, hail:1, haze:1, healbell:1, healpulse:1, helpinghand:1, lightscreen:1, luckychant:1, mefirst:1, mimic:1, mirrorcoat:1, mirrormove:1, mist:1, mudsport:1, naturepower:1, perishsong:1, powersplit:1, psychup:1, quickguard:1, raindance:1, reflect:1, reflecttype:1, roleplay:1, safeguard:1, sandstorm:1, sketch:1, spikes:1, spitup:1, stealthrock:1, sunnyday:1, tailwind:1, taunt:1, teeterdance:1, toxicspikes:1, transform:1, watersport:1, wideguard:1};
-			if (!target.lastMove || noMirrorMove[target.lastMove] || this.getMove(target.lastMove).target === 'self') {
+			var noMirrorMove = {mirrormove: 1, struggle: 1};
+			if (!target.lastMove || noMirrorMove[target.lastMove]) {
 				return false;
 			}
-		},
-		onHit: function (target, source) {
-			this.useMove(this.lastMove, source);
-		},
-		secondary: false,
-		target: "normal",
-		type: "Flying"
+		}
 	},
 	nightshade: {
 		inherit: true,
