@@ -6,13 +6,13 @@ exports.BattleFormatsData = {
 			{"generation":6,"level":25,"nature":"Timid","moves":["psychic","confuseray","suckerpunch","shadowpunch"],"pokeball":"cherishball"},
 			{"generation":6,"level":25,"moves":["nightshade","confuseray","suckerpunch","shadowpunch"],"pokeball":"cherishball"},
 			{"generation":6,"level":50,"moves":["shadowball","sludgebomb","willowisp","destinybond"],"pokeball":"cherishball"},
-			{"generation":6,"level":25,"shiny":true,"gender":"M","moves":["shadowball","sludgewave","confuseray","astonish"],"pokeball":"duskball"}
+			{"generation":6,"level":25,"shiny":true,"moves":["shadowball","sludgewave","confuseray","astonish"],"pokeball":"duskball"}
 		],
 		requiredItem: "Gengarite",
 		tier: "OU"
 	},
 	kangaskhan: {
-		randomBattleMoves: ["return","suckerpunch","earthquake","poweruppunch","crunch"],
+		randomBattleMoves: ["return","suckerpunch","earthquake","poweruppunch","crunch","fakeout"],
 		randomDoubleBattleMoves: ["fakeout","return","suckerpunch","earthquake","doubleedge","poweruppunch","crunch","protect"],
 		eventPokemon: [
 			{"generation":3,"level":5,"gender":"F","abilities":["earlybird"],"moves":["yawn","wish"]},
@@ -32,6 +32,18 @@ exports.BattleFormatsData = {
 			{"generation":6,"level":50,"isHidden":false,"abilities":["intimidate"],"moves":["ironhead","playrough","firefang","suckerpunch"],"pokeball":"cherishball"}
 		],
 		requiredItem: "Mawilite",
+		tier: "UU"
+	},
+	salamence: {
+		randomBattleMoves: ["outrage","fireblast","earthquake","dracometeor","roost","dragondance","dragonclaw","hydropump","stoneedge"],
+		randomDoubleBattleMoves: ["protect","fireblast","earthquake","dracometeor","tailwind","dragondance","dragonclaw","hydropump","rockslide"],
+		eventPokemon: [
+			{"generation":3,"level":50,"moves":["protect","dragonbreath","scaryface","fly"]},
+			{"generation":3,"level":50,"moves":["refresh","dragonclaw","dragondance","aerialace"]},
+			{"generation":4,"level":50,"gender":"M","nature":"Naughty","moves":["hydropump","stoneedge","fireblast","dragonclaw"],"pokeball":"cherishball"},
+			{"generation":5,"level":50,"isHidden":false,"moves":["dragondance","dragonclaw","outrage","aerialace"],"pokeball":"cherishball"}
+		],
+		requiredItem: "Salamencite",
 		tier: "OU"
 	},
 	lucario: {
