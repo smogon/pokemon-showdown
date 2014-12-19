@@ -2575,7 +2575,7 @@ exports.BattleScripts = {
 		// Done, return the result.
 		return team;
 	},
-	randomTeam: function (side) {
+	randomUberTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
