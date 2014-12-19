@@ -95,9 +95,6 @@ exports.BattleMovedex = {
 		basePower: 60,
 		desc: "Deals damage to one adjacent or non-adjacent target. This move has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "10% chance to confuse the target.",
-		onModifyMove: function (move, pokemon) {
-			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
-		},
 		secondary: {
 			chance: 10,
 			volatileStatus: 'confusion'
@@ -141,8 +138,7 @@ exports.BattleMovedex = {
 	},
 	cottonspore: {
 		inherit: true,
-		onTryHit: function () {},
-		target: "normal"
+		onTryHit: function () {}
 	},
 	covet: {
 		inherit: true,
@@ -551,8 +547,7 @@ exports.BattleMovedex = {
 		shortDesc: "Attack changes based on terrain. (Earthquake)",
 		onHit: function (target) {
 			this.useMove('earthquake', target);
-		},
-		target: "self"
+		}
 	},
 	overheat: {
 		inherit: true,

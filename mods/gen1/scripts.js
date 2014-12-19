@@ -10,136 +10,32 @@ exports.BattleScripts = {
 			this.add('debug', activity);
 		}
 	},
-	// Gen 1 stores the last damage dealt by a move in the battle.
-	lastDamage: 0,
-	// BattleSide scripts.
-	// In gen 1, last move information is stored on the side rather than on the active Pokémon.
-	side: {
-		lastMove: ''
-	},
-	// BattlePokemon scripts.
-	pokemon: {
-		getStat: function (statName, unboosted, unmodified) {
-			statName = toId(statName);
-			if (statName === 'hp') return this.maxhp;
-
-			// base stat
-			var stat = this.stats[statName];
-
-			// stat boosts
-			if (!unboosted) {
-				var boost = this.boosts[statName];
-				var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
-				if (boost > 6) boost = 6;
-				if (boost < -6) boost = -6;
-				if (boost >= 0) {
-					stat = Math.floor(stat * boostTable[boost]);
-				} else {
-					stat = Math.floor(stat / boostTable[-boost]);
-				}
-			}
-
-			// Stat modifier effects
-			if (!unmodified) {
-				var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-				var statMod = 1;
-				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
-				stat = this.battle.modify(stat, statMod);
-			}
-
-			// Hard coded Reflect and Light Screen boosts
-			if (this.volatiles['reflect'] && statName === 'def' && !unboosted) {
-				this.debug('Reflect doubles Defense');
-				stat *= 2;
-				// If the defense is higher than 1024, it is rolled over. The min is always 1.
-				if (stat > 1024) stat -= 1024;
-				if (stat < 1) stat = 1;
-			} else if (this.volatiles['lightscreen'] && statName === 'spd' && !unboosted) {
-				this.debug('Light Screen doubles Special Defense');
-				stat *= 2;
-				// If the special defense is higher than 1024, it is rolled over. The min is always 1.
-				if (stat > 1024) stat -= 1024;
-				if (stat < 1) stat = 1;
-			} else {
-				// Gen 1 normally caps stats at 999 and min is 1.
-				if (stat > 999) stat = 999;
-				if (stat < 1) stat = 1;
-			}
-
-			return stat;
+	/**
+	 * We deal with gen 1 stats using the getStatCallback which is called always that we get a stat.
+	 * We add here a specific unboosted argument to use it with crits, as in gen 1 we need this
+	 * specific callback to deal with screen stats.
+	 */
+	getStatCallback: function (stat, statName, pokemon, unboosted) {
+		// Hard coded Reflect and Light Screen boosts
+		if (pokemon.volatiles['reflect'] && statName === 'def' && !unboosted) {
+			this.debug('Reflect doubles Defense');
+			stat *= 2;
+			// If the defense is higher than 1024, it is rolled over. The min is always 1.
+			if (stat > 1024) stat -= 1024;
+			if (stat < 1) stat = 1;
+		} else if (pokemon.volatiles['lightscreen'] && statName === 'spd' && !unboosted) {
+			this.debug('Light Screen doubles Special Defense');
+			stat *= 2;
+			// If the special defense is higher than 1024, it is rolled over. The min is always 1.
+			if (stat > 1024) stat -= 1024;
+			if (stat < 1) stat = 1;
+		} else {
+			// Gen 1 normally caps stats at 999 and min is 1.
+			if (stat > 999) stat = 999;
+			if (stat < 1) stat = 1;
 		}
-	},
-	// Battle scripts.
-	// We need to override addQueue just to save the last used move.
-	addQueue: function (decision, noSort, side) {
-		if (decision) {
-			if (Array.isArray(decision)) {
-				for (var i = 0; i < decision.length; i++) {
-					this.addQueue(decision[i], noSort);
-				}
-				return;
-			}
-			if (!decision.side && side) decision.side = side;
-			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
-			if (!decision.choice && decision.move) decision.choice = 'move';
-			if (!decision.priority) {
-				var priorities = {
-					'beforeTurn': 100,
-					'beforeTurnMove': 99,
-					'switch': 6,
-					'runSwitch': 6.1,
-					'residual': -100,
-					'team': 102,
-					'start': 101
-				};
-				if (priorities[decision.choice]) {
-					decision.priority = priorities[decision.choice];
-				}
-			}
-			if (decision.choice === 'move') {
-				// On gen 1 moves are stored when they are chosen.
-				decision.side.lastMove = decision.move;
-				decision.pokemon.lastMove = decision.move;
-				if (this.getMove(decision.move).beforeTurnCallback) {
-					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc}, true);
-				}
-			} else if (decision.choice === 'switch') {
-				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
-					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
-				}
-				decision.pokemon.switchFlag = false;
-				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.speed;
-			}
-			if (decision.move) {
-				var target;
 
-				if (!decision.targetPosition) {
-					target = this.resolveTarget(decision.pokemon, decision.move);
-					decision.targetSide = target.side;
-					decision.targetPosition = target.position;
-				}
-
-				decision.move = this.getMoveCopy(decision.move);
-				if (!decision.priority) {
-					var priority = decision.move.priority;
-					priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
-					decision.priority = priority;
-				}
-			}
-			if (!decision.pokemon && !decision.speed) decision.speed = 1;
-			if (!decision.speed && decision.choice === 'switch' && decision.target) decision.speed = decision.target.speed;
-			if (!decision.speed) decision.speed = decision.pokemon.speed;
-
-			if (decision.choice === 'switch' && !decision.side.pokemon[0].isActive) {
-				// if there's no actives, switches happen before activations
-				decision.priority = 6.2;
-			}
-
-			this.queue.push(decision);
-		}
-		if (!noSort) {
-			this.queue.sort(this.comparePriority);
-		}
+		return stat;
 	},
 	runMove: function (move, pokemon, target, sourceEffect) {
 		move = this.getMove(move);
@@ -221,7 +117,7 @@ exports.BattleScripts = {
 		var baseMove = move;
 		move = this.getMoveCopy(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
-		if (move.target === 'self') {
+		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
 		}
 		if (sourceEffect) move.sourceEffect = sourceEffect.id;
@@ -268,17 +164,17 @@ exports.BattleScripts = {
 		}
 
 		var damage = false;
-		if (target.fainted) {
-			this.attrLastMove('[notarget]');
-			this.add('-notarget');
-			return true;
+		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+			damage = this.moveHit(target, pokemon, move);
+		} else {
+			if (target.fainted) {
+				this.attrLastMove('[notarget]');
+				this.add('-notarget');
+				return true;
+			}
+			damage = this.rollMoveHit(target, pokemon, move);
 		}
-		damage = this.rollMoveHit(target, pokemon, move);
 
-		// Store 0 damage for last damage if move failed or dealt 0 damage.
-		if (!damage) pokemon.battle.lastDamage = 0;
-
-		// Go ahead with results of the used move.
 		if (!damage && damage !== 0) {
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			return true;
@@ -396,7 +292,7 @@ exports.BattleScripts = {
 		}
 
 		// If we used a partial trapping move, we save the damage to repeat it
-		if (pokemon.volatiles['partialtrappinglock']) {
+		if (pokemon.volatiles['partialtrappinglock'] && !pokemon.volatiles['partialtrappinglock'].damage) {
 			pokemon.volatiles['partialtrappinglock'].damage = damage;
 		}
 
@@ -418,14 +314,50 @@ exports.BattleScripts = {
 		var targetSub = (target)? target.volatiles['substitute'] : false;
 		var targetHadSub = (targetSub !== null && targetSub !== false && (typeof targetSub !== 'undefined'));
 
+		// TryHit events:
+		//   STEP 1: we see if the move will succeed at all:
+		//   - TryHit, TryHitSide, or TryHitField are run on the move,
+		//     depending on move target
+		//   == primary hit line ==
+		//   Everything after this only happens on the primary hit (not on
+		//   secondary or self-hits)
+		//   STEP 2: we see if anything blocks the move from hitting:
+		//   - TryFieldHit is run on the target
+		//   STEP 3: we see if anything blocks the move from hitting the target:
+		//   - If the move's target is a pokemon, TryHit is run on that pokemon
+
+		// Note:
+		//   If the move target is `foeSide`:
+		//     event target = pokemon 0 on the target side
+		//   If the move target is `allySide` or `all`:
+		//     event target = the move user
+		//
+		//   This is because events can't accept actual sides or fields as
+		//   targets. Choosing these event targets ensures that the correct
+		//   side or field is hit.
+		//
+		//   It is the `TryHitField` event handler's responsibility to never
+		//   use `target`.
+		//   It is the `TryFieldHit` event handler's responsibility to read
+		//   move.target and react accordingly.
+		//   An exception is `TryHitSide`, which is passed the target side.
+
+		// Note 2:
+		//   In case you didn't notice, FieldHit and HitField mean different things.
+		//     TryFieldHit - something in the field was hit
+		//     TryHitField - our move has a target of 'all' i.e. the field, and hit
+		//   This is a VERY important distinction: Every move triggers
+		//   TryFieldHit, but only  moves with a target of "all" (e.g.
+		//   Haze) trigger TryHitField.
+
 		if (target) {
-			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
-
-			// Handle here the applying of partial trapping moves to Pokémon with Substitute
-			if (targetSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
-				target.addVolatile(moveData.volatileStatus, pokemon, move);
+			if (move.target === 'all' && !isSelf) {
+				hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
+			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
+				hitResult = this.singleEvent('TryHitSide', moveData, {}, target.side, pokemon, move);
+			} else {
+				hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 			}
-
 			if (!hitResult) {
 				if (hitResult === false) this.add('-fail', target);
 				return false;
@@ -433,7 +365,13 @@ exports.BattleScripts = {
 
 			// Only run the hit events for the hit itself, not the secondary or self hits
 			if (!isSelf && !isSecondary) {
-				hitResult = this.runEvent('TryHit', target, pokemon, move);
+				if (move.target === 'all') {
+					hitResult = this.runEvent('TryHitField', target, pokemon, move);
+				} else if (move.target === 'foeSide' || move.target === 'allySide') {
+					hitResult = this.runEvent('TryHitSide', target, pokemon, move);
+				} else {
+					hitResult = this.runEvent('TryHit', target, pokemon, move);
+				}
 				if (!hitResult) {
 					if (hitResult === false) this.add('-fail', target);
 					// Special Substitute hit flag
@@ -535,9 +473,17 @@ exports.BattleScripts = {
 				}
 			}
 			// Hit events
-			hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
-			if (!isSelf && !isSecondary) {
-				this.runEvent('Hit', target, pokemon, move);
+			//   These are like the TryHit events, except we don't need a FieldHit event.
+			//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
+			if (move.target === 'all' && !isSelf) {
+				hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
+			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
+				hitResult = this.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
+			} else {
+				hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
+				if (!isSelf && !isSecondary) {
+					this.runEvent('Hit', target, pokemon, move);
+				}
 			}
 			if (!hitResult && !didSomething) {
 				if (hitResult === false) this.add('-fail', target);
@@ -828,7 +774,6 @@ exports.BattleScripts = {
 			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-		target.battle.lastDamage = damage;
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;
 		var name = effect.fullname;
@@ -1147,42 +1092,5 @@ exports.BattleScripts = {
 	faint: function (pokemon, source, effect) {
 		pokemon.faint(source, effect);
 		this.queue = [];
-	},
-	directDamage: function (damage, target, source, effect) {
-		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
-		}
-		if (!target || !target.hp) return 0;
-		if (!damage) return 0;
-		damage = this.clampIntRange(damage, 1);
-		// Check here for Substitute on confusion since it's not exactly a move that causes the damage and thus it can't TryMoveHit.
-		if (effect.id === 'confusion' && target.volatiles['substitute']) {
-			target.volatiles['substitute'].hp -= damage;
-			if (target.volatiles['substitute'].hp <= 0) {
-				target.removeVolatile('substitute');
-				target.subFainted = true;
-			} else {
-				this.add('-activate', target, 'Substitute', '[damage]');
-			}
-		} else {
-			damage = target.damage(damage, source, effect);
-		}
-
-		// Now we sent the proper -damage.
-		switch (effect.id) {
-		case 'strugglerecoil':
-			this.add('-damage', target, target.getHealth, '[from] recoil');
-			break;
-		case 'confusion':
-			this.add('-damage', target, target.getHealth, '[from] confusion');
-			break;
-		default:
-			this.add('-damage', target, target.getHealth);
-			break;
-		}
-		if (target.fainted) this.faint(target);
-		return damage;
 	}
 };

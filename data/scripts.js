@@ -608,6 +608,10 @@ exports.BattleScripts = {
 		var format = side.battle.getFormat();
 		if (format.team === 'random') {
 			return this.randomTeam(side);
+		} else if (format.team === 'randommonotype') {
+			return this.randomMonotypeTeam(side);
+		} else if (format.team === 'randomlc') {
+			return this.randomLCTeam(side);
 		} else if (typeof format.team === 'string' && format.team.substr(0, 6) === 'random') {
 			return this[format.team + 'Team'](side);
 		} else if (team) {
@@ -1709,6 +1713,151 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
+		randomMonotypeTeam: function (side) {
+		var keys = [];
+		var pokemonLeft = 0;
+		var pokemon = [];
+		for (var i in this.data.FormatsData) {
+			var template = this.getTemplate(i);
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0,4) !== 'Mega')) {
+				keys.push(i);
+			}
+		}
+		keys = keys.randomize();
+
+		var typeCount = {};
+		var typeComboCount = {};
+		var baseFormes = {};
+		var uberCount = 0;
+		var nuCount = 0;
+		var megaCount = 0;
+		var randomNumber = Math.floor((Object.keys(this.data.TypeChart).length - 1) * Math.random()) + 1;
+		var monoType = Object.keys(this.data.TypeChart)[randomNumber];
+
+		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
+			var template = this.getTemplate(keys[i]);
+			if (!template || !template.name || !template.types) continue;
+			var tier = template.tier;
+
+			if (tier === 'LC' && nuCount > 1) continue;
+			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
+			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
+			if (template.types.indexOf(monoType) < 0) continue;
+
+			// CAPs have 20% the normal rate
+			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
+			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
+			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 18 > 1) continue;
+			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
+			if (keys[i].substr(0, 8) === 'basculin' && Math.random() * 2 > 1) continue;
+			// Genesect formes have 1/5 the normal rate each (so Genesect as a whole has a normal rate)
+			if (keys[i].substr(0, 8) === 'genesect' && Math.random() * 5 > 1) continue;
+			// Gourgeist formes have 1/4 the normal rate each (so Gourgeist as a whole has a normal rate)
+			if (keys[i].substr(0, 9) === 'gourgeist' && Math.random() * 4 > 1) continue;
+			// Not available on XY
+			if (template.species === 'Pichu-Spiky-eared') continue;
+
+			var set = this.randomSet(template, i);
+
+			// Illusion shouldn't be on the last pokemon of the team
+			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
+
+			// Limit the number of Megas to one, just like in-game
+			if (this.getItem(set.item).megaStone && megaCount > 0) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
+			baseFormes[template.baseSpecies] = 1;
+
+			// Okay, the set passes, add it to our team
+			pokemon.push(set);
+
+			pokemonLeft++;
+
+			if (this.getItem(set.item).megaStone) megaCount++;
+
+		}
+		return pokemon;
+	},
+	randomLCTeam: function (side) {
+		var keys = [];
+		var pokemonLeft = 0;
+		var pokemon = [];
+		for (var i in this.data.FormatsData) {
+			var template = this.getTemplate(i);
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && (template.forme.substr(0,4) !== 'Mega')) {
+				keys.push(i);
+			}
+		}
+		keys = keys.randomize();
+
+		var typeCount = {};
+		var typeComboCount = {};
+		var baseFormes = {};
+		var uberCount = 0;
+		var bannedPokemon = ['Feebas','Magikarp','Caterpie','Weedle','Igglybuff','Sunkern','Wurmple','Burmy','Combee', 'Scatterbug'];
+
+		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
+			var template = this.getTemplate(keys[i]);
+			if (!template || !template.name || !template.types) continue;
+			var tier = template.tier;
+
+			if (tier !== 'LC' && tier !== 'LC Uber') continue;
+			if (tier === 'LC Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
+			if (bannedPokemon.indexOf(template.name) > -1) continue;
+
+			// Not available on XY
+			if (template.species === 'Pichu-Spiky-eared') continue;
+
+			// Limit 2 of any type
+			var types = template.types;
+			var skip = false;
+			for (var t = 0; t < types.length; t++) {
+				if (typeCount[types[t]] > 1 && Math.random() * 5 > 1) {
+					skip = true;
+					break;
+				}
+			}
+			if (skip) continue;
+
+			var set = this.randomSet(template, i, true);
+			set.level = 5;
+
+			// Illusion shouldn't be on the last pokemon of the team
+			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
+
+			// Limit 1 of any type combination
+			var typeCombo = types.join();
+			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
+				// Drought and Drizzle don't count towards the type combo limit
+				typeCombo = set.ability;
+			}
+			if (typeCombo in typeComboCount) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
+			baseFormes[template.baseSpecies] = 1;
+
+			// Okay, the set passes, add it to our team
+			pokemon.push(set);
+
+			pokemonLeft++;
+			// Now that our Pokemon has passed all checks, we can increment the type counter
+			for (var t = 0; t < types.length; t++) {
+				if (types[t] in typeCount) {
+					typeCount[types[t]]++;
+				} else {
+					typeCount[types[t]] = 1;
+				}
+			}
+			typeComboCount[typeCombo] = 1;
+
+			if (tier === 'LC Uber') {
+				uberCount++;
+			}
+		}
+		return pokemon;
+	},
 	randomDoublesTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;
@@ -2576,5 +2725,21 @@ exports.BattleScripts = {
 
 		// Done, return the result.
 		return team;
+	},
+		randomMetronomeTeam: function(side) {
+		var seasonalPokemonList = [
+			'raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster', 'exeggutor', 'starmie', 'jynx',
+			'lapras', 'snorlax', 'articuno', 'azumarill', 'granbull', 'delibird', 'stantler', 'miltank', 'blissey', 'swalot', 'lunatone',
+			'castform', 'chimecho', 'glalie', 'walrein', 'regice', 'jirachi', 'bronzong', 'chatot', 'abomasnow', 'weavile', 'togekiss',
+			'glaceon', 'probopass', 'froslass', 'rotom-frost', 'uxie', 'mesprit', 'azelf', 'victini', 'vanilluxe', 'sawsbuck', 'beartic',
+			'cryogonal', 'chandelure', 'gardevoir', 'amaura', 'aurorus', 'bergmite', 'avalugg'
+		];
+		seasonalPokemonList = seasonalPokemonList.randomize();
+		var team = [];
+		for (var i=0; i<6; i++) {
+			var set = this.randomSet(seasonalPokemonList[i], i);
+			set.moves = ['Metronome'];
+			team.push(set);
+		}
 	}
 };

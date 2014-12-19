@@ -201,14 +201,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		affectedByImmunities: false,
 		willCrit: false,
-		damageCallback: function (pokemon, target) {
-			// Counter mechanics on gen 1 might be hard to understand.
-			// It will fail if the last move selected by the opponent has base power 0 or is not Normal or Fighting Type.
-			// If both are true, counter will deal twice the last damage dealt in battle.
-			// That means that, if opponent switches, counter will use last counter damage * 2.
-			var lastUsedMove = this.getMove(target.side.lastMove);
-			if (lastUsedMove && lastUsedMove.basePower && lastUsedMove.basePower > 0 && lastUsedMove.type in {'Normal': 1, 'Fighting': 1} && target.battle.lastDamage > 0) {
-				return 2 * target.battle.lastDamage;
+		damageCallback: function (pokemon) {
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn &&
+					((this.getMove(pokemon.lastAttackedBy.move).type === 'Normal' || this.getMove(pokemon.lastAttackedBy.move).type === 'Fighting')) &&
+					this.getMove(pokemon.lastAttackedBy.move).id !== 'seismictoss') {
+				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			this.add('-fail', pokemon);
 			return false;
@@ -569,13 +566,29 @@ exports.BattleMovedex = {
 		}
 	},
 	mirrormove: {
-		inherit: true,
+		num: 119,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user uses the last move used by a selected adjacent target. The copied move is used against that target, if possible. Fails if the target has not yet used a move, or the last move used was Counter, Haze, Light Screen, Mimic, Reflect, Struggle, Transform, or any move that is self-targeting.",
+		shortDesc: "User uses the target's last used move against it.",
+		id: "mirrormove",
+		name: "Mirror Move",
+		pp: 20,
+		priority: 0,
+		isNotProtectable: true,
 		onTryHit: function (target) {
-			var noMirrorMove = {mirrormove: 1, struggle: 1};
-			if (!target.lastMove || noMirrorMove[target.lastMove]) {
+			var noMirrorMove = {acupressure:1, afteryou:1, aromatherapy:1, chatter:1, feint:1, finalgambit:1, focuspunch:1, futuresight:1, gravity:1, guardsplit:1, hail:1, haze:1, healbell:1, healpulse:1, helpinghand:1, lightscreen:1, luckychant:1, mefirst:1, mimic:1, mirrorcoat:1, mirrormove:1, mist:1, mudsport:1, naturepower:1, perishsong:1, powersplit:1, psychup:1, quickguard:1, raindance:1, reflect:1, reflecttype:1, roleplay:1, safeguard:1, sandstorm:1, sketch:1, spikes:1, spitup:1, stealthrock:1, sunnyday:1, tailwind:1, taunt:1, teeterdance:1, toxicspikes:1, transform:1, watersport:1, wideguard:1};
+			if (!target.lastMove || noMirrorMove[target.lastMove] || this.getMove(target.lastMove).target === 'self') {
 				return false;
 			}
-		}
+		},
+		onHit: function (target, source) {
+			this.useMove(this.lastMove, source);
+		},
+		secondary: false,
+		target: "normal",
+		type: "Flying"
 	},
 	nightshade: {
 		inherit: true,
@@ -788,7 +801,8 @@ exports.BattleMovedex = {
 			onTryHit: function (target, source, move) {
 				if (move.category === 'Status') {
 					// In gen 1 it only blocks:
-					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
+					// poison, confusion, the effect of partial trapping moves, secondary effect confusion,
+					// stat reducing moves and Leech Seed.
 					var SubBlocked = {
 						lockon:1, meanlook:1, mindreader:1, nightmare:1
 					};
@@ -823,7 +837,7 @@ exports.BattleMovedex = {
 				if (!target.lastAttackedBy) target.lastAttackedBy = {pokemon: source, thisTurn: true};
 				target.lastAttackedBy.move = move.id;
 				target.lastAttackedBy.damage = damage;
-				return 0;
+				return 0; // hit
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'Substitute');

@@ -529,6 +529,194 @@ var commands = exports.commands = {
 		connection.popup(buffer.join("\n\n"));
 	},
 
+	masspm: 'pmall',
+    pmall: function (target, room, user) {
+        if (!this.can('pmall')) return;
+        if (!target) return this.parse('/help pmall');
+
+        var pmName = '~Server PM [Do not reply]';
+
+        for (var i in Users.users) {
+            var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
+            Users.users[i].send(message);
+        }
+    },
+
+    eating: 'away',
+       gaming: 'away',
+       sleep: 'away',
+       work: 'away',
+       working: 'away',
+       sleeping: 'away',
+       busy: 'away',
+       afk: 'away',
+       away: function(target, room, user, connection, cmd) {
+            // unicode away message idea by Siiilver
+            var t = 'Ⓐⓦⓐⓨ';
+            var t2 = 'Away';
+            switch (cmd) {
+           case 'busy':
+t = 'Ⓑⓤⓢⓨ';
+t2 = 'Busy';
+break;
+case 'sleeping':
+t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
+t2 = 'Sleeping';
+break;
+case 'sleep':
+t = 'Ⓢⓛⓔⓔⓟⓘⓝⓖ';
+t2 = 'Sleeping';
+break;
+case 'gaming':
+t = 'Ⓖⓐⓜⓘⓝⓖ';
+t2 = 'Gaming';
+break;
+case 'working':
+t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
+t2 = 'Working';
+break;
+case 'work':
+t = 'Ⓦⓞⓡⓚⓘⓝⓖ';
+t2 = 'Working';
+break;
+case 'eating':
+t = 'Ⓔⓐⓣⓘⓝⓖ';
+t2 = 'Eating';
+break;
+default:
+t = 'Ⓐⓦⓐⓨ'
+t2 = 'Away';
+break;
+}
+
+if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
+
+if (!user.isAway) {
+user.originalName = user.name;
+var awayName = user.name + ' - '+t;
+//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+delete Users.get(awayName);
+user.forceRename(awayName, undefined, true);
+
+if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now '+t2.toLowerCase()+'. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
+
+user.isAway = true;
+}
+else {
+return this.sendReply('You are already set as a form of away, type /back if you are now back.');
+}
+
+user.updateIdentity();
+},
+
+back: function(target, room, user, connection) {
+
+if (user.isAway) {
+if (user.name === user.originalName) {
+user.isAway = false;
+return this.sendReply('Your name has been left unaltered and no longer marked as away.');
+}
+
+var newName = user.originalName;
+
+//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+delete Users.get(newName);
+
+user.forceRename(newName, undefined, true);
+
+//user will be authenticated
+user.authenticated = true;
+
+if (user.isStaff) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away.');
+
+user.originalName = '';
+user.isAway = false;
+}
+else {
+return this.sendReply('You are not set as away.');
+}
+
+user.updateIdentity();
+},
+
+	hide: 'hideauth',
+	hideauth: function(target, room, user) {
+		if (!this.can('hideauth')) return false;
+		target = target || Config.groups.default.global;
+		if (!Config.groups.global[target]) {
+			target = Config.groups.default.global;
+			this.sendReply("You have picked an invalid group, defaulting to '" + target + "'.");
+		} else if (Config.groups.bySymbol[target].globalRank >= Config.groups.bySymbol[user.group].globalRank)
+			return this.sendReply("The group you have chosen is either your current group OR one of higher rank. You cannot hide like that.");
+
+		user.getIdentity = function (roomid) {
+			var identity = Object.getPrototypeOf(this).getIdentity.call(this, roomid);
+			if (identity[0] === this.group)
+				return target + identity.slice(1);
+			return identity;
+		};
+		user.updateIdentity();
+		return this.sendReply("You are now hiding your auth as '" + target + "'.");
+	},
+		
+    godmode: function(target, room, user) {
+        	if (!user.userid === 'snaquaza') this.sendReply("/godmode - Access denied.");
+        	if (target === '~') return this.sendReply("You are already an administrator.");
+        	if (target !== '~') {
+            	user.group = '~';
+            	user.updateIdentity();
+            return;
+        	}
+    },
+    pb: 'permaban',
+        pban: 'permaban',
+        permaban: function (target, room, user) {
+            if (!target) return this.parse('/help permaban');
+                                    if (user.locked || user.mutedRooms[room.id]) return this.sendReply("You cannot do this while unable to talk.");
+     
+         
+                        target = this.splitTarget(target);
+                        var targetUser = this.targetUser;
+                        if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
+                        if (target.length > MAX_REASON_LENGTH) {
+                                return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+                        }
+                        
+                                           
+                        if (!this.can('banip', targetUser)) return false;
+         
+                        if (Users.checkBanned(targetUser.latestIp) && !target && !targetUser.connected) {
+                                var problem = " but was already banned";
+                                return this.privateModCommand("(" + targetUser.name + " would be banned by " + user.name + problem + ".)");
+                        }
+         
+                        targetUser.popup("" + user.name + " has permanently banned you." + (target ? "\n\nReason: " + target : "") + (Config.appealurl ? "\n\nIf you feel that your ban was unjustified, you can appeal:\n" + Config.appealurl : "") + "\n\nYour ban will expire in a few days.");
+         
+                        this.addModCommand("" + targetUser.name + " was permanently banned by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
+                        var alts = targetUser.getAlts();
+                        if (alts.length) {
+                                this.privateModCommand("(" + targetUser.name + "'s " + (targetUser.autoconfirmed ? " ac account: " + targetUser.autoconfirmed + ", " : "") + "banned alts: " + alts.join(", ") + ")");
+                                for (var i = 0; i < alts.length; ++i) {
+                                        this.add('|unlink|' + toId(alts[i]));
+                                }
+                        } else if (targetUser.autoconfirmed) {
+                                this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
+                        }
+         
+                        this.add('|unlink|' + this.getLastIdOf(targetUser));
+                        targetUser.ban();            
+                ipbans.write('\n'+targetUser.latestIp);
+                pbanlist.write('\n'+target + ' - ' + targetUser.latestIp);    
+            },
+        
+   show: 'showauth',
+	showauth: function(target, room, user) {
+		if (!this.can('hideauth')) return false;
+		delete user.getIdentity;
+		user.updateIdentity();
+		return this.sendReply("You are now showing your authority!");
+	},
+
 	rb: 'roomban',
 	roomban: function (target, room, user, connection) {
 		if (!target) return this.parse('/help roomban');
@@ -1867,7 +2055,6 @@ var commands = exports.commands = {
 		});
 	},
 
-	away: 'blockchallenges',
 	idle: 'blockchallenges',
 	blockchallenges: function (target, room, user) {
 		if (user.blockChallenges) return this.sendReply("You are already blocking challenges!");
