@@ -1175,5 +1175,42 @@ exports.BattleScripts = {
 	faint: function (pokemon, source, effect) {
 		pokemon.faint(source, effect);
 		this.queue = [];
+	},
+	directDamage: function (damage, target, source, effect) {
+		if (this.event) {
+			if (!target) target = this.event.target;
+			if (!source) source = this.event.source;
+			if (!effect) effect = this.effect;
+		}
+		if (!target || !target.hp) return 0;
+		if (!damage) return 0;
+		damage = this.clampIntRange(damage, 1);
+		// Check here for Substitute on confusion since it's not exactly a move that causes the damage and thus it can't TryMoveHit.
+		if (effect.id === 'confusion' && target.volatiles['substitute']) {
+			target.volatiles['substitute'].hp -= damage;
+			if (target.volatiles['substitute'].hp <= 0) {
+				target.removeVolatile('substitute');
+				target.subFainted = true;
+			} else {
+				this.add('-activate', target, 'Substitute', '[damage]');
+			}
+		} else {
+			damage = target.damage(damage, source, effect);
+		}
+
+		// Now we sent the proper -damage.
+		switch (effect.id) {
+		case 'strugglerecoil':
+			this.add('-damage', target, target.getHealth, '[from] recoil');
+			break;
+		case 'confusion':
+			this.add('-damage', target, target.getHealth, '[from] confusion');
+			break;
+		default:
+			this.add('-damage', target, target.getHealth);
+			break;
+		}
+		if (target.fainted) this.faint(target);
+		return damage;
 	}
 };

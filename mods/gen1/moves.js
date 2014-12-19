@@ -788,8 +788,7 @@ exports.BattleMovedex = {
 			onTryHit: function (target, source, move) {
 				if (move.category === 'Status') {
 					// In gen 1 it only blocks:
-					// poison, confusion, the effect of partial trapping moves, secondary effect confusion,
-					// stat reducing moves and Leech Seed.
+					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
 					var SubBlocked = {
 						lockon:1, meanlook:1, mindreader:1, nightmare:1
 					};
