@@ -17,33 +17,59 @@ exports.BattleScripts = {
 	side: {
 		lastMove: ''
 	},
-	/**
-	 * We deal with gen 1 stats using the getStatCallback which is called always that we get a stat.
-	 * We add here a specific unboosted argument to use it with crits, as in gen 1 we need this
-	 * specific callback to deal with screen stats.
-	 */
-	getStatCallback: function (stat, statName, pokemon, unboosted) {
-		// Hard coded Reflect and Light Screen boosts
-		if (pokemon.volatiles['reflect'] && statName === 'def' && !unboosted) {
-			this.debug('Reflect doubles Defense');
-			stat *= 2;
-			// If the defense is higher than 1024, it is rolled over. The min is always 1.
-			if (stat > 1024) stat -= 1024;
-			if (stat < 1) stat = 1;
-		} else if (pokemon.volatiles['lightscreen'] && statName === 'spd' && !unboosted) {
-			this.debug('Light Screen doubles Special Defense');
-			stat *= 2;
-			// If the special defense is higher than 1024, it is rolled over. The min is always 1.
-			if (stat > 1024) stat -= 1024;
-			if (stat < 1) stat = 1;
-		} else {
-			// Gen 1 normally caps stats at 999 and min is 1.
-			if (stat > 999) stat = 999;
-			if (stat < 1) stat = 1;
-		}
+	// BattlePokemon scripts.
+	pokemon: {
+		getStat: function (statName, unboosted, unmodified) {
+			statName = toId(statName);
+			if (statName === 'hp') return this.maxhp;
 
-		return stat;
+			// base stat
+			var stat = this.stats[statName];
+
+			// stat boosts
+			if (!unboosted) {
+				var boost = this.boosts[statName];
+				var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
+				if (boost > 6) boost = 6;
+				if (boost < -6) boost = -6;
+				if (boost >= 0) {
+					stat = Math.floor(stat * boostTable[boost]);
+				} else {
+					stat = Math.floor(stat / boostTable[-boost]);
+				}
+			}
+
+			// Stat modifier effects
+			if (!unmodified) {
+				var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
+				var statMod = 1;
+				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
+				stat = this.battle.modify(stat, statMod);
+			}
+
+			// Hard coded Reflect and Light Screen boosts
+			if (this.volatiles['reflect'] && statName === 'def' && !unboosted) {
+				this.debug('Reflect doubles Defense');
+				stat *= 2;
+				// If the defense is higher than 1024, it is rolled over. The min is always 1.
+				if (stat > 1024) stat -= 1024;
+				if (stat < 1) stat = 1;
+			} else if (this.volatiles['lightscreen'] && statName === 'spd' && !unboosted) {
+				this.debug('Light Screen doubles Special Defense');
+				stat *= 2;
+				// If the special defense is higher than 1024, it is rolled over. The min is always 1.
+				if (stat > 1024) stat -= 1024;
+				if (stat < 1) stat = 1;
+			} else {
+				// Gen 1 normally caps stats at 999 and min is 1.
+				if (stat > 999) stat = 999;
+				if (stat < 1) stat = 1;
+			}
+
+			return stat;
+		}
 	},
+	// Battle scripts.
 	// We need to override addQueue just to save the last used move.
 	addQueue: function (decision, noSort, side) {
 		if (decision) {
