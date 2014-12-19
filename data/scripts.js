@@ -2908,7 +2908,7 @@ exports.BattleScripts = {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
 			baseFormes[template.baseSpecies] = 1;
-			
+
 			set.level = 5;
 
 			// Okay, the set passes, add it to our team
