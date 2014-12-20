@@ -56,15 +56,11 @@ exports.BattleScripts = {
 			if (this.volatiles['reflect'] && statName === 'def' && !unboosted) {
 				this.debug('Reflect doubles Defense');
 				stat *= 2;
-				// If the defense is higher than 1024, it is rolled over. The min is always 1.
-				if (stat > 1024) stat -= 1024;
-				if (stat < 1) stat = 1;
+				stat = this.battle.clampIntRange(stat, 1, 1998);
 			} else if (this.volatiles['lightscreen'] && statName === 'spd' && !unboosted) {
 				this.debug('Light Screen doubles Special Defense');
 				stat *= 2;
-				// If the special defense is higher than 1024, it is rolled over. The min is always 1.
-				if (stat > 1024) stat -= 1024;
-				if (stat < 1) stat = 1;
+				stat = this.battle.clampIntRange(stat, 1, 1998);
 			} else {
 				// Gen 1 normally caps stats at 999 and min is 1.
 				stat = this.battle.clampIntRange(stat, 1, 999);
@@ -327,10 +323,12 @@ exports.BattleScripts = {
 			damage = false;
 		}
 
+		// Check if the Pokémon is immune to this move.
 		if (move.affectedByImmunities && !target.runImmunity(move.type, true)) {
 			damage = false;
 		}
 
+		// If damage is 0 and not false it means it didn't miss, let's calc.
 		if (damage !== false) {
 			pokemon.lastDamage = 0;
 			if (move.multihit) {
@@ -567,7 +565,7 @@ exports.BattleScripts = {
 		return damage;
 	},
 	getDamage: function (pokemon, target, move, suppressMessages) {
-		// We get the move
+		// First of all, we get the move.
 		if (typeof move === 'string') move = this.getMove(move);
 		if (typeof move === 'number') move = {
 			basePower: move,
@@ -575,15 +573,16 @@ exports.BattleScripts = {
 			category: 'Physical'
 		};
 
-		// First of all, we test for immunities
+		// Let's see if the target is immune to the move.
 		if (move.affectedByImmunities) {
 			if (!target.runImmunity(move.type, true)) {
 				return false;
 			}
 		}
 
-		// Is it ok?
+		// Is it an OHKO move?
 		if (move.ohko) {
+			// If it is, move hits if the Pokémon is faster.
 			if (target.speed > pokemon.speed) {
 				this.add('-failed', target);
 				return false;
@@ -591,48 +590,45 @@ exports.BattleScripts = {
 			return target.maxhp;
 		}
 
-		// We edit the damage through move's damage callback
+		// We edit the damage through move's damage callback if necessary.
 		if (move.damageCallback) {
 			return move.damageCallback.call(this, pokemon, target);
 		}
 
-		// We take damage from damage=level moves
+		// We take damage from damage=level moves (seismic toss).
 		if (move.damage === 'level') {
 			return pokemon.level;
 		}
 
-		// If there's a fix move damage, we run it
+		// If there's a fix move damage, we return that.
 		if (move.damage) {
 			return move.damage;
 		}
 
-		// If it's the first hit on a Normal-type partially trap move, it hits Ghosts but damage is 0
+		// If it's the first hit on a Normal-type partially trap move, it hits Ghosts anyways but damage is 0.
 		if (move.volatileStatus === 'partiallytrapped' && move.type === 'Normal' && target.hasType('Ghost')) {
 			return 0;
 		}
 
-		// Let's check if we are in middle of a partial trap sequence
+		// Let's check if we are in middle of a partial trap sequence to return the previous damage.
 		if (pokemon.volatiles['partialtrappinglock'] && (target !== pokemon) && (target === pokemon.volatiles['partialtrappinglock'].locked)) {
 			return pokemon.volatiles['partialtrappinglock'].damage;
 		}
 
-		// There's no move for some reason, create it
-		if (!move) move = {};
-
-		// We check the category and typing to calculate later on the damage
+		// We check the category and typing to calculate later on the damage.
 		if (!move.category) move.category = 'Physical';
 		if (!move.defensiveCategory) move.defensiveCategory = move.category;
 		// '???' is typeless damage: used for Struggle and Confusion etc
 		if (!move.type) move.type = '???';
 		var type = move.type;
 
-		// We get the base power and apply basePowerCallback if necessary
+		// We get the base power and apply basePowerCallback if necessary.
 		var basePower = move.basePower;
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
 		}
 
-		// We check for Base Power
+		// We check if the base power is proper.
 		if (!basePower) {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
 			return basePower;
@@ -686,7 +682,7 @@ exports.BattleScripts = {
 		if (!basePower) return 0;
 		basePower = this.clampIntRange(basePower, 1);
 
-		// We now check for attacker and defender
+		// We now check attacker's and defender's stats.
 		var level = pokemon.level;
 		var attacker = pokemon;
 		var defender = target;
@@ -698,6 +694,7 @@ exports.BattleScripts = {
 		var defense = defender.getStat(defType);
 
 		// In the event of a critical hit, the ofense and defense changes are ignored.
+		// This includes both boosts and screens.
 		// Also, level is doubled in damage calculation.
 		if (move.crit) {
 			move.ignoreOffensive = true;
@@ -714,49 +711,66 @@ exports.BattleScripts = {
 			defense = target.getStat(defType, true);
 		}
 
-		// Gen 1 damage formula:
-		// (min(((2 * L / 5 + 2) * Atk * BP) / max(1, Def) / 50, 997) + 2) * Stab * TypeEffect * Random / 255
-		// Where: L: user level, A: current attack, P: move power, D: opponent current defense,
-		// S is the Stab modifier, T is the type effectiveness modifier, R is random between 217 and 255
-		// The max damage is 999
-		var baseDamage = Math.min(Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * attack * basePower / defense) / 50), 997) + 2;
+		// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
+		// This is what cuases the roll over bugs.
+		if (attack >= 256 || defense >= 256) {
+			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
+			// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
+			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
+		}
+
+		// Let's go with the calculation now that we have what we need.
+		// We do it step by step just like the game does.
+		var damage = level * 2;
+		damage = Math.floor(damage / 5);
+		damage += 2;
+		damage *= basePower;
+		damage *= attack;
+		damage = Math.floor(damage / defense);
+		damage = this.clampIntRange(damage / 50, 1, 997);
+		damage += 2;
 
 		// STAB damage bonus, the "???" type never gets STAB
 		if (type !== '???' && pokemon.hasType(type)) {
-			baseDamage = Math.floor(baseDamage * 1.5);
+			damage += Math.floor(damage / 2);
 		}
 
-		// Type effectiveness
+		// Type effectiveness.
+		// The order here is not correct, must change to check the move versus each type.
 		var totalTypeMod = this.getEffectiveness(type, target);
 		// Super effective attack
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
-			baseDamage *= 2;
+			damage *= 20;
+			damage = Math.floor(damage / 10);
 			if (totalTypeMod >= 2) {
-				baseDamage *= 2;
+				damage *= 20;
+				damage = Math.floor(damage / 10);
 			}
 		}
-
-		// Resisted attack
 		if (totalTypeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
-			baseDamage = Math.floor(baseDamage / 2);
+			damage *= 5;
+			damage = Math.floor(damage / 10);
 			if (totalTypeMod <= -2) {
-				baseDamage = Math.floor(baseDamage / 2);
+				damage *= 5;
+				damage = Math.floor(damage / 10);
 			}
 		}
 
-		// Randomizer, it's a number between 217 and 255
-		var randFactor = Math.floor(Math.random() * 39) + 217;
-		baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
+		// If damage becomes 0, the move is made to miss.
+		// This occurs when damage was either 2 or 3 prior to applying STAB/Type matchup, and target is 4x resistant to the move.
+		if (damage === 0) return damage;
 
-		// If damage is less than 1, we return 1
-		if (basePower && !Math.floor(baseDamage)) {
-			return 1;
+		// Apply random factor is damage is greater than 1
+		if (damage > 1) {
+			damage *= this.random(217, 256);
+			damage = Math.floor(damage / 255);
+			if (damage > target.hp) damage = target.hp;
 		}
 
-		// We are done, this is the final damage
-		return Math.floor(baseDamage);
+		// We are done, this is the final damage.
+		return Math.floor(damage);
 	},
 	boost: function (boost, target, source, effect) {
 		// Editing boosts to take into account para and burn stat drops glitches
@@ -1147,7 +1161,7 @@ exports.BattleScripts = {
 		// Check here for Substitute on confusion since it's not exactly a move that causes the damage and thus it can't TryMoveHit.
 		// The hi jump kick recoil also hits the sub.
 		if (effect.id in {'confusion': 1, 'highjumpkick': 1} && target.volatiles['substitute']) {
-			target.volatiles['substitute'].hp -= damage;
+			target.volatiles['substitute'].hp -= damag;
 			if (target.volatiles['substitute'].hp <= 0) {
 				target.removeVolatile('substitute');
 				target.subFainted = true;
