@@ -45,6 +45,11 @@ exports.BattleScripts = {
 				var statMod = 1;
 				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
 				stat = this.battle.modify(stat, statMod);
+				// Burn attack drop is checked when you get the attack stat.
+				// In fact it's calculate upon switch in and stored, but this works as intended.
+				if (this.status === 'brn' && statName === 'atk') {
+					stat = this.clampIntRange(Math.floor(stat / 2), 1);
+				}
 			}
 
 			// Hard coded Reflect and Light Screen boosts
@@ -62,8 +67,7 @@ exports.BattleScripts = {
 				if (stat < 1) stat = 1;
 			} else {
 				// Gen 1 normally caps stats at 999 and min is 1.
-				if (stat > 999) stat = 999;
-				if (stat < 1) stat = 1;
+				stat = this.clampIntRange(stat, 1, 999);
 			}
 
 			return stat;
@@ -120,11 +124,7 @@ exports.BattleScripts = {
 				}
 
 				decision.move = this.getMoveCopy(decision.move);
-				if (!decision.priority) {
-					var priority = decision.move.priority;
-					priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
-					decision.priority = priority;
-				}
+				if (!decision.priority) decision.priority = decision.move.priority;
 			}
 			if (!decision.pokemon && !decision.speed) decision.speed = 1;
 			if (!decision.speed && decision.choice === 'switch' && decision.target) decision.speed = decision.target.speed;
@@ -134,12 +134,9 @@ exports.BattleScripts = {
 				// if there's no actives, switches happen before activations
 				decision.priority = 6.2;
 			}
-
 			this.queue.push(decision);
 		}
-		if (!noSort) {
-			this.queue.sort(this.comparePriority);
-		}
+		if (!noSort) this.queue.sort(this.comparePriority);
 	},
 	runMove: function (move, pokemon, target, sourceEffect) {
 		move = this.getMove(move);
@@ -780,18 +777,12 @@ exports.BattleScripts = {
 				if (boost[i] < 0) {
 					msg = '-unboost';
 					boost[i] = -boost[i];
-					// Re-add attack and speed drops if not present
-					if (i === 'atk' && target.status === 'brn' && !target.volatiles['brnattackdrop']) {
-						target.addVolatile('brnattackdrop');
-					}
+					// Re-add speed drop if not present
 					if (i === 'spe' && target.status === 'par' && !target.volatiles['parspeeddrop']) {
 						target.addVolatile('parspeeddrop');
 					}
 				} else {
-					// Check for boost increases deleting attack or speed drops
-					if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
-						target.removeVolatile('brnattackdrop');
-					}
+					// Check for boost increases deleting speed drop
 					if (i === 'spe' && target.status === 'par' && target.volatiles['parspeeddrop']) {
 						target.removeVolatile('parspeeddrop');
 					}
