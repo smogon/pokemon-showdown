@@ -12,22 +12,13 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'brn');
-			target.addVolatile('brnattackdrop');
 		},
 		onAfterMoveSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 16);
 		},
 		onSwitchIn: function (pokemon) {
-			pokemon.addVolatile('brnattackdrop');
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
 				this.damage(pokemon.maxhp / 16);
-			}
-		}
-	},
-	brnattackdrop: {
-		onBasePower: function (basePower, attacker, defender, move) {
-			if (move && move.category === 'Physical' && attacker) {
-				return basePower / 2;
 			}
 		}
 	},
@@ -39,8 +30,16 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon) {
-			if (this.random(4) === 0) {
+			if (this.random(256) < 64) {
 				this.add('cant', pokemon, 'par');
+				pokemon.removeVolatile('bide');
+				pokemon.removeVolatile('lockedmovee');
+				pokemon.removeVolatile('twoturnmove');
+				pokemon.removeVolatile('fly');
+				pokemon.removeVolatile('dig');
+				pokemon.removeVolatile('solarbeam');
+				pokemon.removeVolatile('skullbash');
+				pokemon.removeVolatile('partialtrappinglock');
 				return false;
 			}
 		},
@@ -49,8 +48,8 @@ exports.BattleStatuses = {
 		}
 	},
 	parspeeddrop: {
-		onModifySpe: function (spe, pokemon) {
-			return spe / 4;
+		onModifySpe: function (spe) {
+			return this.clampIntRange(Math.floor(spe / 4), 1);
 		}
 	},
 	slp: {
@@ -142,11 +141,19 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (this.random(2) === 0) {
-				return;
+			if (this.random(256) >= 128) {
+				this.directDamage(this.getDamage(pokemon, pokemon, 40));
+				pokemon.removeVolatile('bide');
+				pokemon.removeVolatile('lockedmovee');
+				pokemon.removeVolatile('twoturnmove');
+				pokemon.removeVolatile('fly');
+				pokemon.removeVolatile('dig');
+				pokemon.removeVolatile('solarbeam');
+				pokemon.removeVolatile('skullbash');
+				pokemon.removeVolatile('partialtrappinglock');
+				return false;
 			}
-			this.directDamage(this.getDamage(pokemon, pokemon, 40));
-			return false;
+			return;
 		}
 	},
 	flinch: {
@@ -324,6 +331,36 @@ exports.BattleStatuses = {
 	ragemiss: {
 		onModifyMove: function (move) {
 			if (move.id === 'rage') move.accuracy = 1 / 255 * 100;
+		}
+	},
+	diginvulnerable: {
+		onAccuracy: function (accuracy, target, source, move) {
+			if (move.id === 'swift') return true;
+			this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
+			return null;
+		},
+		onDamage: function (damage, target, source, move) {
+			if (!move || move.effectType !== 'Move') return;
+			if (!source) return;
+			if (move.id === 'earthquake') {
+				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
+				return null;
+			}
+		}
+	},
+	flyinvulnerable: {
+		onAccuracy: function (accuracy, target, source, move) {
+			if (move.id === 'swift') return true;
+			this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
+			return null;
+		},
+		onDamage: function (damage, target, source, move) {
+			if (!move || move.effectType !== 'Move') return;
+			if (!source || source.side === target.side) return;
+			if (move.id === 'gust' || move.id === 'thunder') {
+				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
+				return null;
+			}
 		}
 	}
 };
