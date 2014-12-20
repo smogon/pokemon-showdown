@@ -1039,7 +1039,7 @@ exports.BattleScripts = {
 				case 'shadowforce': case 'phantomforce': case 'shadowsneak':
 					if (hasMove['shadowclaw']) rejected = true;
 					break;
-				case 'airslash':
+				case 'airslash': case 'oblivionwing':
 					if (hasMove['hurricane']) rejected = true;
 					break;
 				case 'acrobatics': case 'pluck': case 'drillpeck':
@@ -1559,7 +1559,7 @@ exports.BattleScripts = {
 			"Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72, "Rayquaza-Mega": 68, "Salamence-Mega": 72,
 
 			// Not holding mega stone
-			Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Medicham: 78, Metagross: 78, Sableye: 78, Venusaur: 78,
+			Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Medicham: 78, Metagross: 78, Sableye: 78, Venusaur: 78,
 
 			// Holistic judgment
 			Articuno: 82, Genesect: 72, "Gengar-Mega": 68, "Rotom-Fan": 88, Sigilyph: 80, Xerneas: 66
