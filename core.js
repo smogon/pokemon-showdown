@@ -162,10 +162,10 @@ var core = exports.core = {
         ':castform:': 'https://i.imgur.com/HN8H7xD.png',
         ':cookie:': 'https://i.imgur.com/nDaxxYI.gif',
         ':hamster:': 'https://i.imgur.com/Ya5xQjl.png',
-        ':hermit:': 'https://i.imgur.com/YTG2PZC.png',
         ':jigglypuff:': 'https://i.imgur.com/8oqKNDT.png',
         ':jynx:': 'https://i.imgur.com/Olu3RJk.png',
         ':kappa:': 'https://i.imgur.com/HIjiypy.png',
+        ':kermit:': 'https://i.imgur.com/YTG2PZC.png',
         ':ludicolo:': 'https://i.imgur.com/ozXe1Eu.png',
         ':luvdisc:': 'https://i.imgur.com/5wyPMwy.png',
         ':magikarp:': 'https://i.imgur.com/m7PJxJy.png',
@@ -197,6 +197,9 @@ var core = exports.core = {
         }
 
         return text.replace(new RegExp(patterns.join('|'), 'g'), function (match) {
+            if (match === ':kermit:' || match === ':superman:' || match === ':sweep:') return typeof self.emoticons[match] != 'undefined' ?
+                '<img src="' + self.emoticons[match] + '" title="' + match + '" width="30" height="30"/>' :
+                match;
             return typeof self.emoticons[match] != 'undefined' ?
                 '<img src="' + self.emoticons[match] + '" title="' + match + '"/>' :
                 match;
