@@ -1099,6 +1099,8 @@ var commands = exports.commands = {
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
 			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
+			"<br />" +
+			"More detailed help can be found in the <a href=\"https://www.smogon.com/sim/roomauth_guide\">roomauth guide</a><br />" +
 			"</div>"
 		);
 	},
