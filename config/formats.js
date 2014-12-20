@@ -9,7 +9,6 @@ exports.Formats = [
 	/*{
 		name: "XY Anniversary Random (BWknd 23)",
 		section: "ORAS Singles",
-
 		team: 'randomXY',
 		ruleset: ['Random (no PotD)']
 	},*/
@@ -113,7 +112,7 @@ exports.Formats = [
 		section: "Random Battles (aka Randbats)",
 
 		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	{
 		name: "Unrated Random",
@@ -122,14 +121,14 @@ exports.Formats = [
 		team: 'random',
 		challengeShow: false,
 		rated: false,
-		ruleset: ['Random']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	{
 		name: "Random (no PotD)",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'random',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview']
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	{
 		name: "1v1 Random",
@@ -198,13 +197,6 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
-		name: "XY Anniversary Random",
-		section: "Random Battles (aka Randbats)",
-
-		team: 'randomXYAnniversary',
-		ruleset: ['Random (no PotD)']
-	},
-	{
 		name: "Super Smash Bros. Random",
 		section: "Random Battles (aka Randbats)",
 
@@ -227,7 +219,7 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
-		name: "Metronome Random",
+		name: "Metronome 3v3 Random",
 		section: "Random Battles (aka Randbats)",
 
 		mod: 'metronomerandom',
@@ -242,28 +234,11 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "PC Staff Random",
+		name: "Metronome 6v6 Random",
 		section: "Random Battles (aka Randbats)",
 
-		searchShow: false,
-		team: 'randomPCStaff',
-		ruleset: ['Random (no PotD)']
-	},
-	{
-		name: "PC Staff Team Random",
-		section: "Random Battles (aka Randbats)",
-
-		searchShow: false,
-		team: 'randomPCStaffTeam',
-		ruleset: ['Random (no PotD)']
-	},
-	{
-		name: "PC Staff Doubles Random",
-		section: "Random Battles (aka Randbats)",
-
-		searchShow: false,
-		gameType: 'doubles',
-		team: 'randomPCStaffDoubles',
+		mod: 'metronomerandom',
+		team: 'randomMetronome',
 		ruleset: ['Random (no PotD)']
 	},
 	{
@@ -272,7 +247,7 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		team: 'randomDoubles',
-		ruleset: ['Random']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	{
 		name: "Triples Random",
@@ -280,7 +255,7 @@ exports.Formats = [
 
 		gameType: 'triples',
 		team: 'randomDoubles',
-		ruleset: ['Random']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	{
 		name: "Challenge Cup",
@@ -790,13 +765,6 @@ exports.Formats = [
 			'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Salamencite', 'Soul Dew'
 		]
-	},
-	{
-		name: "OU Monotype",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
-		banlist: ['OU']
 	},
 	{
 		name: "Tier Shift",
