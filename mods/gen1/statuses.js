@@ -134,7 +134,7 @@ exports.BattleStatuses = {
 		onEnd: function (target) {
 			this.add('-end', target, 'confusion');
 		},
-		onBeforeMove: function (pokemon) {
+		onBeforeMove: function (pokemon, target) {
 			pokemon.volatiles.confusion.time--;
 			if (!pokemon.volatiles.confusion.time) {
 				pokemon.removeVolatile('confusion');
@@ -142,7 +142,17 @@ exports.BattleStatuses = {
 			}
 			this.add('-activate', pokemon, 'confusion');
 			if (this.random(256) >= 128) {
-				this.directDamage(this.getDamage(pokemon, pokemon, 40));
+				// We check here to implement the substitute bug since otherwise we need to change directDamage to take target.
+				if (pokemon.volatiles['substitute']) {
+					// If there is Substitute, we check for opposing substitute.
+					if (target.volatiles['substitute']) {
+						// Damage that one instead.
+						this.directDamage(this.getDamage(pokemon, pokemon, 40), target);
+					}
+				} else {
+					// No substitute, direct damage to itself.
+					this.directDamage(this.getDamage(pokemon, pokemon, 40));
+				}
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('lockedmovee');
 				pokemon.removeVolatile('twoturnmove');
