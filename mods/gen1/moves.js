@@ -219,6 +219,7 @@ exports.BattleMovedex = {
 		basePower: 100,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
+				attacker.removeVolatile('diginvulnerable');
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
@@ -330,6 +331,7 @@ exports.BattleMovedex = {
 		shortDesc: "Flies up on first turn, then strikes the next turn.",
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
+				attacker.removeVolatile('flyinvulnerable');
 				return;
 			}
 			this.add('-prepare', attacker, move.name, defender);
