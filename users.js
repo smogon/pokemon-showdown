@@ -1115,7 +1115,6 @@ User = (function () {
 				this.leaveRoom(connection.rooms[j], connection, true);
 			}
 			connection.destroy();
-			--this.ips[connection.ip];
 		}
 		if (this.connections.length) {
 			// should never happen
@@ -1587,11 +1586,11 @@ Connection = (function () {
 	Connection.prototype.destroy = function () {
 		Sockets.socketDisconnect(this.worker, this.socketid);
 		this.onDisconnect();
-		this.user = null;
 	};
 	Connection.prototype.onDisconnect = function () {
 		delete connections[this.id];
 		if (this.user) this.user.onDisconnect(this);
+		this.user = null;
 	};
 
 	Connection.prototype.popup = function (message) {
