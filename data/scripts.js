@@ -4108,13 +4108,13 @@ exports.BattleScripts = {
 
 			// we're gonna modify the default template
 			template = Object.clone(template, true);
-			delete template.viableMoves.ironhead;
-			delete template.viableMoves.fireblast;
-			delete template.viableMoves.overheat;
-			delete template.viableMoves.vcreate;
-			delete template.viableMoves.blueflare;
+			delete template.randomBattleMoves.ironhead;
+			delete template.randomBattleMoves.fireblast;
+			delete template.randomBattleMoves.overheat;
+			delete template.randomBattleMoves.vcreate;
+			delete template.randomBattleMoves.blueflare;
 			if (template.id === 'chandelure') {
-				template.viableMoves.flameburst = 1;
+				template.randomBattleMoves.flameburst = 1;
 				template.abilities.DW = 'Flash Fire';
 			}
 
