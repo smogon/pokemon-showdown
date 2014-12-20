@@ -689,11 +689,7 @@ exports.Formats = [
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin: function () {
 			this.add('-message', "Yikes! You are a grinch in a reckless, regretless sleigh race, running for Showdownville to ruin christmas. But, to achieve that, you must first defeat your opponent. Fight hard and take care with the obstacles!");
-			this.seasonal = {position: {}, weight: {}};
-			this.seasonal.position[this.p1.name] = 0;
-			this.seasonal.position[this.p2.name] = 0;
-			this.seasonal.weight[this.p1.name] = 2500;
-			this.seasonal.weight[this.p2.name] = 2500;
+			this.seasonal = {position: [0, 0], weight: [2500, 2500]};
 		},
 		onModifyMove: function (move) {
 			if (move.type === 'Fire') {
@@ -728,21 +724,21 @@ exports.Formats = [
 					case 0:
 						move.onTryHit = function (target, source) {
 							this.add('-message', "You got an Excadreydle from the sack!");
-							this.seasonal.weight[source.side.name] -= 40.4;
+							this.seasonal.weight[source.side.n] -= 40.4;
 						};
 						move.boosts = {spe: -1};
 						break;
 					case 1:
 						move.onTryHit = function (target, source) {
 							this.add('-message', "You got a Chandelnukkiyah from the sack!");
-							this.seasonal.weight[source.side.name] -= 34.3;
+							this.seasonal.weight[source.side.n] -= 34.3;
 						};
 						move.status = 'brn';
 						break;
 					case 2:
 						move.onTryHit = function (target, source) {
 							this.add('-message', "You got a Glalie from the sack! Ka-boom!");
-							this.seasonal.weight[source.side.name] -= 256.5;
+							this.seasonal.weight[source.side.n] -= 256.5;
 						};
 						move.category = 'Special';
 						move.basePower = 300;
@@ -750,7 +746,7 @@ exports.Formats = [
 					case 3:
 						move.onTryHit = function (target, source) {
 							this.add('-message', "You got a tree Starmie from the sack!");
-							this.seasonal.weight[source.side.name] -= 80;
+							this.seasonal.weight[source.side.n] -= 80;
 						};
 						move.category = 'Special';
 						move.type = 'Water';
@@ -759,7 +755,7 @@ exports.Formats = [
 					case 4:
 						move.onTryHit = function (target, source) {
 							this.add('-message', "You got an Abomaxmas tree from the sack!");
-							this.seasonal.weight[source.side.name] -= 40.4;
+							this.seasonal.weight[source.side.n] -= 40.4;
 						};
 						move.category = 'Physical';
 						move.type = 'Ice';
@@ -768,7 +764,7 @@ exports.Formats = [
 					case 5:
 						move.onTryHit = function (target, source) {
 							this.add('-message', "You got a Chansey egg nog from the sack!");
-							this.seasonal.weight[source.side.name] -= 34.6;
+							this.seasonal.weight[source.side.n] -= 34.6;
 						};
 						move.target = 'self';
 						move.heal = [3, 4];
@@ -776,7 +772,7 @@ exports.Formats = [
 					case 6:
 						move.onTryHit = function (target, source) {
 							this.add('-message', "You got Cryogonal snowflakes from the sack!");
-							this.seasonal.weight[source.side.name] -= 148;
+							this.seasonal.weight[source.side.n] -= 148;
 						};
 						move.category = 'Special';
 						move.type = 'Ice';
@@ -785,7 +781,7 @@ exports.Formats = [
 					case 7:
 						move.onTryHit = function (target, source) {
 							this.add('-message', "You got Pikachu-powered christmas lights from the sack!");
-							this.seasonal.weight[source.side.name] -= 6;
+							this.seasonal.weight[source.side.n] -= 6;
 						};
 						move.category = 'Special';
 						move.type = 'Electric';
@@ -794,7 +790,7 @@ exports.Formats = [
 					case 8:
 						move.onTryHit = function (target, source) {
 							this.add('-message', "You got Shaymin-Sky mistletoe from the sack!");
-							this.seasonal.weight[source.side.name] -= 5.2;
+							this.seasonal.weight[source.side.n] -= 5.2;
 						};
 						move.category = 'Special';
 						move.type = 'Grass';
@@ -807,7 +803,7 @@ exports.Formats = [
 			// Before every move, trainers advance on their sleighs. There might be obstacles.
 			// We add more speed the less loaded the sleigh is.
 			// Then, we get a random number from 0 to 99, then calculate if it's less than (Pokémon's speed * 0.083) + 5.
-			var speed = Math.abs(pokemon.speed) + Math.ceil((2500 - this.seasonal.weight[pokemon.side.name]) / 25);
+			var speed = Math.abs(pokemon.speed) + Math.ceil((2500 - this.seasonal.weight[pokemon.side.n]) / 25);
 			if (this.random(100) < Math.ceil(speed * 0.083) + 5) {
 				var name = pokemon.illusion ? pokemon.illusion.name : pokemon.name;
 				// If an obstacle is found, the trainer won't advance this turn.
@@ -837,11 +833,11 @@ exports.Formats = [
 			} else {
 				// If no obstacles, the trainer advances as much meters as speed its Pokémon has.
 				this.add('-message', "" + pokemon.side.name + " has advanced down the mountain " + speed + " meters!");
-				this.seasonal.position[pokemon.side.name] += speed;
+				this.seasonal.position[pokemon.side.n] += speed;
 			}
 
 			// Showdownville is about 4000 meters away from the mountaintop.
-			if (this.seasonal.position[pokemon.side.name] >= 3500) {
+			if (this.seasonal.position[pokemon.side.n] >= 3500) {
 				this.add('-message', "" + pokemon.side.name + " has arrived to Showdownville first and ruined christmas! The race is won!");
 				this.win(pokemon.side.id);
 			}
@@ -1351,17 +1347,8 @@ exports.Formats = [
 		section: "Past Generations",
 
 		mod: 'gen1',
-		ruleset: ['Pokemon', 'Standard', 'Freeze Clause'],
-		banlist: ['Uber',
-			'Kakuna + Poison Sting + Harden', 'Kakuna + String Shot + Harden',
-			'Beedrill + Poison Sting + Harden', 'Beedrill + String Shot + Harden',
-			'Nidoking + Fury Attack + Thrash',
-			'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp', 'Exeggutor + Stun Spore + Stomp',
-			'Eevee + Tackle + Growl',
-			'Vaporeon + Tackle + Growl',
-			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
-			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember'
-		]
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber']
 	},
 	{
 		name: "[Gen 1] Custom Game",
