@@ -14,6 +14,17 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},*/
 	{
+		name: "Snowy OU",
+		section: "ORAS Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Drought', 'Sunny Day', 'Drizzle', 'Rain Dance', 'Sand Stream', 'Sandstorm'],
+		onBegin: function() {
+			this.setWeather('Hail');
+			delete this.weatherData.duration;
+		}
+	},
+	{
 		name: "OU",
 		section: "ORAS Singles",
 
@@ -108,6 +119,123 @@ exports.Formats = [
 	// Random Battles
 	///////////////////////////////////////////////////////////////////
 
+	{
+		name: "Winter Wonderland",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomSeasonalWW',
+		onBegin: function() {
+			this.setWeather('Hail');
+			delete this.weatherData.duration;
+		},
+		onModifyMove: function(move) {
+			if (move.id === 'present') {
+				move.category = 'Status';
+				move.basePower = 0;
+				delete move.heal;
+				move.accuracy = 100;
+				switch (this.random(20)) {
+				case 0:
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a bomb!");
+					};
+					move.category = 'Physical';
+					move.basePower = 200;
+					break;
+				case 5:
+					move.onTryHit = function() {
+						this.add('-message', "The present was confusion!");
+					};
+					move.volatileStatus = 'confusion';
+					break;
+				case 6:
+					move.onTryHit = function() {
+						this.add('-message', "The present was Disable!");
+					};
+					move.volatileStatus = 'disable';
+					break;
+				case 7:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a taunt!");
+					};
+					move.volatileStatus = 'taunt';
+					break;
+				case 8:
+					move.onTryHit = function() {
+						this.add('-message', "The present was some seeds!");
+					};
+					move.volatileStatus = 'leechseed';
+					break;
+				case 9:
+					move.onTryHit = function() {
+						this.add('-message', "The present was an embargo!");
+					};
+					move.volatileStatus = 'embargo';
+					break;
+				case 10:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a music box!");
+					};
+					move.volatileStatus = 'perishsong';
+					break;
+				case 11:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a curse!");
+					};
+					move.volatileStatus = 'curse';
+					break;
+				case 12:
+					move.onTryHit = function() {
+						this.add('-message', "The present was Torment!");
+					};
+					move.volatileStatus = 'torment';
+					break;
+				case 13:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a trap!");
+					};
+					move.volatileStatus = 'partiallytrapped';
+					break;
+				case 14:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a root!");
+					};
+					move.volatileStatus = 'ingrain';
+					break;
+				case 15:
+				case 16:
+				case 17:
+					move.onTryHit = function() {
+						this.add('-message', "The present was a makeover!");
+					};
+					var boosts = {};
+					var possibleBoosts = ['atk','def','spa','spd','spe','accuracy'].randomize();
+					boosts[possibleBoosts[0]] = 1;
+					boosts[possibleBoosts[1]] = -1;
+					boosts[possibleBoosts[2]] = -1;
+					move.boosts = boosts;
+					break;
+				case 18:
+					move.onTryHit = function() {
+						this.add('-message', "The present was psychic powers!");
+					};
+					move.volatileStatus = 'telekinesis';
+					break;
+				case 19:
+					move.onTryHit = function() {
+						this.add('-message', "The present was fatigue!");
+					};
+					move.volatileStatus = 'mustrecharge';
+					break;
+				}
+			}
+		},
+		ruleset: ['Random (no PotD)']
+	},
 	{
 		name: "Random",
 		section: "Random Battles (aka Randbats)",
