@@ -48,7 +48,7 @@ exports.BattleScripts = {
 				// Burn attack drop is checked when you get the attack stat.
 				// In fact it's calculate upon switch in and stored, but this works as intended.
 				if (this.status === 'brn' && statName === 'atk') {
-					stat = this.clampIntRange(Math.floor(stat / 2), 1);
+					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
 				}
 			}
 
@@ -67,7 +67,7 @@ exports.BattleScripts = {
 				if (stat < 1) stat = 1;
 			} else {
 				// Gen 1 normally caps stats at 999 and min is 1.
-				stat = this.clampIntRange(stat, 1, 999);
+				stat = this.battle.clampIntRange(stat, 1, 999);
 			}
 
 			return stat;
@@ -1146,7 +1146,8 @@ exports.BattleScripts = {
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
 		// Check here for Substitute on confusion since it's not exactly a move that causes the damage and thus it can't TryMoveHit.
-		if (effect.id === 'confusion' && target.volatiles['substitute']) {
+		// The hi jump kick recoil also hits the sub.
+		if (effect.id in {'confusion': 1, 'highjumpkick': 1} && target.volatiles['substitute']) {
 			target.volatiles['substitute'].hp -= damage;
 			if (target.volatiles['substitute'].hp <= 0) {
 				target.removeVolatile('substitute');
@@ -1156,21 +1157,21 @@ exports.BattleScripts = {
 			}
 		} else {
 			damage = target.damage(damage, source, effect);
+			// Now we sent the proper -damage.
+			switch (effect.id) {
+			case 'strugglerecoil':
+				this.add('-damage', target, target.getHealth, '[from] recoil');
+				break;
+			case 'confusion':
+				this.add('-damage', target, target.getHealth, '[from] confusion');
+				break;
+			default:
+				this.add('-damage', target, target.getHealth);
+				break;
+			}
+			if (target.fainted) this.faint(target);
 		}
 
-		// Now we sent the proper -damage.
-		switch (effect.id) {
-		case 'strugglerecoil':
-			this.add('-damage', target, target.getHealth, '[from] recoil');
-			break;
-		case 'confusion':
-			this.add('-damage', target, target.getHealth, '[from] confusion');
-			break;
-		default:
-			this.add('-damage', target, target.getHealth);
-			break;
-		}
-		if (target.fainted) this.faint(target);
 		return damage;
 	}
 };
