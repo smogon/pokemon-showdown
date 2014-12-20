@@ -3096,14 +3096,6 @@ exports.BattleScripts = {
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
 
-			// Limit 1 of any type combination
-			var typeCombo = types.join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
-				// Drought and Drizzle don't count towards the type combo limit
-				typeCombo = set.ability;
-			}
-			if (typeCombo in typeComboCount) continue;
-
 			// Limit the number of Megas to one, just like in-game
 			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
 			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
@@ -3453,14 +3445,6 @@ exports.BattleScripts = {
 
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
-
-			// Limit 1 of any type combination
-			var typeCombo = types.join();
-			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
-				// Drought and Drizzle don't count towards the type combo limit
-				typeCombo = set.ability;
-			}
-			if (typeCombo in typeComboCount) continue;
 
 			// Limit the number of Megas to one, just like in-game
 			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
