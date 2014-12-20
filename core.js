@@ -160,10 +160,13 @@ var core = exports.core = {
 
     emoticons: {
         ':castform:': 'https://i.imgur.com/HN8H7xD.png',
+        ':cookie:': 'https://i.imgur.com/nDaxxYI.gif',
         ':hamster:': 'https://i.imgur.com/Ya5xQjl.png',
+        ':hermit:': 'https://i.imgur.com/YTG2PZC.png',
         ':jigglypuff:': 'https://i.imgur.com/8oqKNDT.png',
         ':jynx:': 'https://i.imgur.com/Olu3RJk.png',
         ':kappa:': 'https://i.imgur.com/HIjiypy.png',
+        ':ludicolo:': 'https://i.imgur.com/ozXe1Eu.png',
         ':luvdisc:': 'https://i.imgur.com/5wyPMwy.png',
         ':magikarp:': 'https://i.imgur.com/m7PJxJy.png',
         ':meganium:': 'https://i.imgur.com/ZPLvPk5.png',
@@ -173,6 +176,8 @@ var core = exports.core = {
         ':snorlax:': 'https://i.imgur.com/TqOKaXP.png',
         ':spheal:': 'https://i.imgur.com/rAxYMV2.png',
         ':suicune:': 'https://i.imgur.com/AsrEbOq.png',
+        ':superman:': 'https://i.imgur.com/6XvvgmT.png',
+        ':sweep:': 'https://i.imgur.com/yoxzFOw.gif',
         ':vulpix:': 'https://i.imgur.com/nNStR2k.png',
         ':wobbuffet:': 'https://i.imgur.com/RRB2r2t.png',
         ':wooper:': 'https://i.imgur.com/y1oYqa2.png',
