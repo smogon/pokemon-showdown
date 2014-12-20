@@ -198,6 +198,13 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
+		name: "XY Anniversary Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomXYAnniversary',
+		ruleset: ['Random (no PotD)']
+	},
+	{
 		name: "Super Smash Bros. Random",
 		section: "Random Battles (aka Randbats)",
 
@@ -220,7 +227,7 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
-		name: "Metronome 3v3 Random",
+		name: "Metronome Random",
 		section: "Random Battles (aka Randbats)",
 
 		mod: 'metronomerandom',
@@ -235,11 +242,28 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Metronome 6v6 Random",
+		name: "PC Staff Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'metronomerandom',
-		team: 'randomMetronome',
+		searchShow: false,
+		team: 'randomPCStaff',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "PC Staff Team Random",
+		section: "Random Battles (aka Randbats)",
+
+		searchShow: false,
+		team: 'randomPCStaffTeam',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "PC Staff Doubles Random",
+		section: "Random Battles (aka Randbats)",
+
+		searchShow: false,
+		gameType: 'doubles',
+		team: 'randomPCStaffDoubles',
 		ruleset: ['Random (no PotD)']
 	},
 	{
