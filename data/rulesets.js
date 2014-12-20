@@ -503,10 +503,10 @@ exports.BattleFormats = {
 			}
 		}
 	},
-	freezeclause: {
+	freezeclausemod: {
 		effectType: 'Rule',
 		onStart: function () {
-			this.add('rule', 'Freeze Clause: Limit one foe frozen');
+			this.add('rule', 'Freeze Clause Mod: Limit one foe frozen');
 		},
 		onSetStatus: function (status, target, source) {
 			if (source && source.side === target.side) {
