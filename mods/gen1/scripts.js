@@ -1161,7 +1161,7 @@ exports.BattleScripts = {
 		// Check here for Substitute on confusion since it's not exactly a move that causes the damage and thus it can't TryMoveHit.
 		// The hi jump kick recoil also hits the sub.
 		if (effect.id in {'confusion': 1, 'highjumpkick': 1} && target.volatiles['substitute']) {
-			target.volatiles['substitute'].hp -= damag;
+			target.volatiles['substitute'].hp -= damage;
 			if (target.volatiles['substitute'].hp <= 0) {
 				target.removeVolatile('substitute');
 				target.subFainted = true;
