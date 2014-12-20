@@ -405,7 +405,7 @@ exports.BattleMovedex = {
 		shortDesc: "User takes 1 HP damage it would have dealt if miss.",
 		onMoveFail: function (target, source, move) {
 			if (target.type !== 'ghost') {
-				this.damage(1, source);
+				this.directDamage(1, source);
 			}
 		}
 	},
