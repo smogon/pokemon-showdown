@@ -210,24 +210,6 @@ exports.BattleStatuses = {
 			}
 		}
 	},
-	rage: {
-		// Rage lock
-		duration: 255,
-		onStart: function (target, source, effect) {
-			this.effectData.move = 'rage';
-		},
-		onLockMove: 'rage',
-		onTryHit: function (target, source, move) {
-			if (target.boosts.atk < 6 && move.id === 'disable') {
-				this.boost({atk:1});
-			}
-		},
-		onHit: function (target, source, move) {
-			if (target.boosts.atk < 6 && move.category !== 'Status') {
-				this.boost({atk:1});
-			}
-		}
-	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		durationCallback: function () {
@@ -337,6 +319,11 @@ exports.BattleStatuses = {
 				this.effectData.counter *= 2;
 			}
 			this.effectData.duration = 2;
+		}
+	},
+	ragemiss: {
+		onModifyMove: function (move) {
+			if (move.id === 'rage') move.accuracy = 1 / 255 * 100;
 		}
 	}
 };

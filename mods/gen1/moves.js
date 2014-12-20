@@ -604,6 +604,27 @@ exports.BattleMovedex = {
 		inherit: true,
 		self: {
 			volatileStatus: 'rage'
+		},
+		effect: {
+			// Rage lock
+			duration: 255,
+			onStart: function (target, source, effect) {
+				this.effectData.move = 'rage';
+			},
+			onLockMove: 'rage',
+			onTryHit: function (target, source, move) {
+				if (target.boosts.atk < 6 && move.id === 'disable') {
+					this.boost({atk:1});
+				}
+			},
+			onHit: function (target, source, move) {
+				if (target.boosts.atk < 6 && move.category !== 'Status') {
+					this.boost({atk:1});
+				}
+			},
+			onMoveFail: function (target, source, move) {
+				source.addVolatile('ragemiss');
+			}
 		}
 	},
 	razorleaf: {

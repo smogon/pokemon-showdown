@@ -295,18 +295,18 @@ exports.BattleScripts = {
 		var doSelfDestruct = true;
 		var damage = 0;
 
-		// Calculate true accuracy
+		// First, let's calculate the accuracy.
 		var accuracy = move.accuracy;
-		if (accuracy !== true) {
-			accuracy = Math.floor(accuracy * 255 / 100);
-		}
 
 		// Partial trapping moves: true accuracy while it lasts
 		if (move.volatileStatus === 'partiallytrapped' && pokemon.volatiles['partialtrappinglock']) {
 			accuracy = true;
 		}
 
+		// Calculate true accuracy for gen 1, which uses 0-255.
 		if (accuracy !== true) {
+			accuracy = Math.floor(accuracy * 255 / 100);
+			// Check also for accuracy modifiers.
 			if (!move.ignoreAccuracy) {
 				if (pokemon.boosts.accuracy > 0) {
 					accuracy *= boostTable[pokemon.boosts.accuracy];
@@ -322,12 +322,9 @@ exports.BattleScripts = {
 				}
 			}
 		}
-
-		// Bypasses ohko accuracy modifiers
-		if (move.alwaysHit) accuracy = true;
 		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 
-		// Gen 1, 1/256 chance of missing always, no matter what
+		// 1/256 chance of missing always, no matter what.
 		if (accuracy !== true && this.random(256) >= accuracy) {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
