@@ -65,6 +65,7 @@ exports.BattleStatuses = {
 		onBeforeMove: function (pokemon, target, move) {
 			pokemon.statusData.time--;
 			this.add('cant', pokemon, 'slp');
+			pokemon.lastMove = '';
 			return false;
 		},
 		onAfterMoveSelf: function (pokemon) {
@@ -79,6 +80,7 @@ exports.BattleStatuses = {
 		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon, target, move) {
 			this.add('cant', pokemon, 'frz');
+			pokemon.lastMove = '';
 			return false;
 		},
 		onHit: function (target, source, move) {
