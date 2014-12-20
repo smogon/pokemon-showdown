@@ -3358,6 +3358,7 @@ exports.BattleScripts = {
 	},
 	randomSmashBrosTeam: function (side) {
 		var keys = [];
+		var pokemonLeft = 0;
 		var dice = this.random(8);
 		if (dice < 1) {
 			lead = 'pikachu';
