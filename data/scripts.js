@@ -3983,8 +3983,6 @@ exports.BattleScripts = {
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
-		var pokemonList = [''];
-		pokemonList = pokemonList.randomize();
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
 			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
