@@ -311,7 +311,7 @@ exports.Formats = [
 	},
 	{
 		name: "Doubles Challenge Cup",
-		section: 'XY Doubles',
+		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		team: 'randomCC',
