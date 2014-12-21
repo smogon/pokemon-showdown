@@ -173,7 +173,7 @@ exports.BattleStatuses = {
 	partiallytrapped: {
 		duration: 5,
 		durationCallback: function (target, source) {
-			if (source.hasItem('gripclaw')) return 8;
+			if (source.item === 'gripclaw') return 8;
 			return this.random(5, 7);
 		},
 		onStart: function (pokemon, source) {
@@ -185,7 +185,7 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('partiallytrapped');
 				return;
 			}
-			if (this.effectData.source.hasItem('bindingband')) {
+			if (this.effectData.source.item === 'bindingband') {
 				this.damage(pokemon.maxhp / 6);
 			} else {
 				this.damage(pokemon.maxhp / 8);
@@ -262,7 +262,7 @@ exports.BattleStatuses = {
 			var moves = pokemon.moveset;
 			for (var i = 0; i < moves.length; i++) {
 				if (moves[i].id !== this.effectData.move) {
-					pokemon.disableMove(moves[i].id, false, this.effectData.sourceEffect);
+					moves[i].disabled = true;
 				}
 			}
 		}
@@ -384,7 +384,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function (source, effect) {
-			if (source && source.hasItem('damprock')) {
+			if (source && source.item === 'damprock') {
 				return 8;
 			}
 			return 5;
@@ -440,6 +440,23 @@ exports.BattleStatuses = {
 			this.add('-weather', 'PrimordialSea', '[upkeep]');
 			this.eachEvent('Weather');
 		},
+		onEndAbility: function (pokemon, oldability) {
+			if (this.weatherData.source !== pokemon) return;
+			if (oldability !== 'primordialsea') return;
+			this.clearWeather();
+		},
+		onFaint: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			this.clearWeather();
+		},
+		onDragOut: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			this.clearWeather();
+		},
+		onSwitchOut: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			this.clearWeather();
+		},
 		onEnd: function () {
 			this.add('-weather', 'none');
 		}
@@ -448,7 +465,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function (source, effect) {
-			if (source && source.hasItem('heatrock')) {
+			if (source && source.item === 'heatrock') {
 				return 8;
 			}
 			return 5;
@@ -510,6 +527,23 @@ exports.BattleStatuses = {
 			this.add('-weather', 'DesolateLand', '[upkeep]');
 			this.eachEvent('Weather');
 		},
+		onEndAbility: function (pokemon, oldability) {
+			if (this.weatherData.source !== pokemon) return;
+			if (oldability !== 'desolateland') return;
+			this.clearWeather();
+		},
+		onFaint: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			this.clearWeather();
+		},
+		onDragOut: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			this.clearWeather();
+		},
+		onSwitchOut: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			this.clearWeather();
+		},
 		onEnd: function () {
 			this.add('-weather', 'none');
 		}
@@ -518,7 +552,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function (source, effect) {
-			if (source && source.hasItem('smoothrock')) {
+			if (source && source.item === 'smoothrock') {
 				return 8;
 			}
 			return 5;
@@ -555,7 +589,7 @@ exports.BattleStatuses = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function (source, effect) {
-			if (source && source.hasItem('icyrock')) {
+			if (source && source.item === 'icyrock') {
 				return 8;
 			}
 			return 5;
@@ -596,6 +630,23 @@ exports.BattleStatuses = {
 		onResidual: function () {
 			this.add('-weather', 'DeltaStream', '[upkeep]');
 			this.eachEvent('Weather');
+		},
+		onEndAbility: function (pokemon, oldability) {
+			if (this.weatherData.source !== pokemon) return;
+			if (oldability !== 'deltastream') return;
+			this.clearWeather();
+		},
+		onFaint: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			this.clearWeather();
+		},
+		onDragOut: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			this.clearWeather();
+		},
+		onSwitchOut: function (pokemon) {
+			if (this.weatherData.source !== pokemon) return;
+			this.clearWeather();
 		},
 		onEnd: function () {
 			this.add('-weather', 'none');
