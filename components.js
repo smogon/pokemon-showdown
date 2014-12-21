@@ -450,6 +450,7 @@ var components = exports.components = {
         room.addRaw('<b>' + user.name + ' has ended the dice game</b>');
         delete economy.dice[room.id];
     }
+},
 
         buy: function (target, room, user) {
         if (!target) this.parse('/help buy');
