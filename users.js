@@ -288,48 +288,15 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 	user.joinRoom('global', connection);
 
 	Dnsbl.query(connection.ip, function (isBlocked) {
-		/*if (isBlocked) {
-			connection.popup("Your IP is known for abuse and has been locked. If you're using a proxy, don't.");
-			if (connection.user) connection.user.lock(true);
-		}*/
 		if (isBlocked) {
-			switch (isBlocked) {
-				case 'sbl.spamhaus.org':
-				connection.popup('Your IP is known for abuse and has been locked. If you\'re using a proxy, don\'t.');
-				if (connection.user) connection.user.lock(true);
-				break;
-				case 'rbl.efnetrbl.org':
-				connection.popup('Your IP is listed in rbl.efnetrbl.org and has been automatically banned. For more information, please visit http://rbl.efnetrbl.org/.');
-				if (connection.user) connection.user.ban();
-				break;
-				case 'dnsbl.dronebl.org':
-				connection.popup('Your IP is listed in dnsbl.dronebl.org and has been automatically banned. For more information, please visit http://dronebl.org/lookup?ip='+connection.ip+'.');
-				if (connection.user) connection.user.ban();
-				break;
-				case '8000.156.93.184.192.ip-port.exitlist.torproject.org':
-				connection.popup('Your IP is listed as a TOR exit node and has been automatically banned.');
-				if (connection.user) connection.user.ban();
-				break;
-				case 'http.dnsbl.sorbs.net':
-				connection.popup('Your IP is known for running proxy servers and has been automatically banned.');
-				if (connection.user) connection.user.ban();
-				break;
-				case 'socks.dnsbl.sorbs.net':
-				connection.popup('Your IP is known for running proxy servers and has been automatically banned.');
-				if (connection.user) connection.user.ban();
-				break;
-				case 'misc.dnsbl.sorbs.net':
-				connection.popup('Your IP is known for running proxy servers and has been automatically banned.');
-				if (connection.user) connection.user.ban();
-				break;
-				default:
-				connection.popup('Your IP is known for abuse and has been locked. If you\'re using a proxy, don\'t.');
-				if (connection.user) connection.user.lock(true);
-				break;
+			connection.popup("Your IP is known for spamming or hacking websites and has been locked. If you're using a proxy, don't.");
+			if (connection.user && !connection.user.locked) {
+				connection.user.locked = '#dnsbl';
+				connection.user.updateIdentity();
 			}
 		}
 	});
-}
+};
 
 Users.socketDisconnect = function (worker, workerid, socketid) {
 	var id = '' + workerid + '-' + socketid;
@@ -1652,5 +1619,4 @@ Users.pruneInactiveTimer = setInterval(
 	User.pruneInactive,
 	1000 * 60 * 30,
 	Config.inactiveUserThreshold || 1000 * 60 * 60
-	)
-}),
+);
