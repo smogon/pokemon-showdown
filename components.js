@@ -15,7 +15,6 @@
 var fs = require("fs");
     path = require("path"),
     http = require("http"),
-    request = require('request');
 
 var components = exports.components = {
 
