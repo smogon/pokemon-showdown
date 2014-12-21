@@ -1652,3 +1652,5 @@ Users.pruneInactiveTimer = setInterval(
 	User.pruneInactive,
 	1000 * 60 * 30,
 	Config.inactiveUserThreshold || 1000 * 60 * 60
+	)
+}),
