@@ -45,9 +45,8 @@ exports.BattleScripts = {
 				var statMod = 1;
 				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
 				stat = this.battle.modify(stat, statMod);
-				// Burn attack drop is checked when you get the attack stat.
-				// In fact it's calculate upon switch in and stored, but this works as intended.
-				if (this.status === 'brn' && statName === 'atk') {
+				// Burn attack drop is checked when you get the attack stat upon switch in and used until switch out.
+				if (this.volatiles['brnattackdrop'] && statName === 'atk') {
 					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
 				}
 			}
@@ -795,12 +794,18 @@ exports.BattleScripts = {
 				if (boost[i] < 0) {
 					msg = '-unboost';
 					boost[i] = -boost[i];
-					// Re-add speed drop if not present
+					// Re-add attack and speed drops if not present
+					if (i === 'atk' && target.status === 'brn' && !target.volatiles['brnattackdrop']) {
+						target.addVolatile('brnattackdrop');
+					}
 					if (i === 'spe' && target.status === 'par' && !target.volatiles['parspeeddrop']) {
 						target.addVolatile('parspeeddrop');
 					}
 				} else {
-					// Check for boost increases deleting speed drop
+					// Check for boost increases deleting attack or speed drops
+					if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
+						target.removeVolatile('brnattackdrop');
+					}
 					if (i === 'spe' && target.status === 'par' && target.volatiles['parspeeddrop']) {
 						target.removeVolatile('parspeeddrop');
 					}
