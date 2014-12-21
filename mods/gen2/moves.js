@@ -166,6 +166,12 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	psywave: {
+		inherit: true,
+		damageCallback: function (pokemon) {
+			return this.random(1, pokemon.level + Math.floor(pokemon.level / 2));
+		}
+	},
 	rage: {
 		// TODO
 		// Rage boosts in Gens 2-4 is for the duration of Rage only
