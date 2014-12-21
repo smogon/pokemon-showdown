@@ -10,7 +10,7 @@
  */
 
 var config = {
-    name: 'Aqua',
+    name: 'Aqua Bot',
     userid: function () {
         return toId(this.name);
     },
@@ -360,6 +360,40 @@ var commands = {
             if (target === 'blakjack') message = 'I\'m better than you and you know it! BITCH!';
 
             this.sendReply(message);
+        };
+    })(),
+    
+    
+ roleplay: (function () {
+        var reply = [
+            "A group of kids who were friends of White of Black are about to start their journey. But before they leave, they hear of a man named N who was once the leader of Team Plasma. Soon the kids will recieve their pokemon and be on their merry way to becoming Champion. But is that what they really want as they listen to White's touching tale of her lost love? Many of the kids change their minds and decide to go to that one mysterious island where N is. But that mysterious island has a horrible secret of magic and trickery. Anyone who takes a step on that island becomes a half pokemon half human called Gajinka. So what has happened to N? Note: All people who step on the island become half of the first pokemon they ever had. In this RP, you can have pokemon from any region. On the island are Gajinka and Pokemon. The kids haven't recieved their pokemon yet.",
+            "In the future of the Pokemon world, when ash and his friends have died off, a new team rises. Team Dark Shadows. They use pokèmon in experiments, turning them into shadow pokemon, the failures usually shinies. They plan to eventually clone the legendaries, making shadow counterparts. Will you fight against this evil plot, or possibly join fight against the light itself, and turn to the darkness?",
+            "The Legendaries now have human guardians called the Legendary Guardians. The Legendary Guardians are blessed beings, having the abilities and powers of their legendary pokemon. They travel with the pokemon on their journey throughout the regions. The Guardians must help protect the Legendary pokemon from being hurt badly. But the Guardians are failing at their jobs because of a few immature Guardians starting a huge fight between all of them. Who will win? Or will there even be a winner before the legendaries destroy the world... and themselves? Note: This takes place in Johto. Any Legendary that has been used already cannot be used. There is only one of each Legendary. No Arceus either.",
+            "In a time long after the death of Ash and friends, there has been disasters. Oil supplies ran dry. Some small wars happened. Then, one day, all of the regions waged one, huge, nuclearwar on each other. The war wiped out most of the population of earth, with only a few survivors. 200 years passed, and the regions are rebuilding themselves. However, another war is beginning, and, if it doesn't stop, it will be a mirror of the nuclear war that happened many years ago.",
+            "Males and females are at war including Pokemon and people. Each gender thinks they're better and want control of the world. The males control Jhoto and Hoenn while females control Sinnoh and Unova. They constantly fight for control of Kanto and many people die because of it. Women have taken the eastern half and men the western. The war is getting worse and worse because the populations are rapidly declining. But a small group with the simple name Rebellion, having both men and women in its ranks, is slowly creating free land and convincing people not to fight and that it was silly. However some people won't hear of it and try to kill them, trying to stop the peace...",
+            "Team Rocket, Magma, Aqua, Galaxy, and Plasma have banded together to take Pokemon for their own. However, the teams have a higher advantage because to original heroes aren't around to stop them. It is up to a new band of heroes to defeat the teams and let everyone have Pokemon. The teams have half of their respective region with the exception of Team Magma who has half of Johto. The heroes take the other half of each region.",
+            "Be a trainer in each region, starting at Kanto, going in order to Unova! No, you don't have to be a pre-made character! You can be yourself or someone totally different! Battle other trainers til their Pokemon faint! Beat all the gym leaders! Defeat the evil teams that want to take over! And become Champion! Have fun!",
+            "Two trainers who became friends are captured by scientists and are mutated with pokemon DNA. ",
+            "Lt. Surge- Electric types saved me during the Kanto war",
+            "Pokemon are not what they once were. Ten years ago a type of flu went around, getting to all of the Pokemon in the world except legendaries. The legendaries fled from Earth, hiding in unreachable places: the bottom of the ocean, the tops of the mountains, the deepest of caves, etc. All hope left mankind when their guardians left them.The Pokemon who caught the flu turned into evil, terrible monsters. They turned into what people call Rampants. They are hideous, deformed Pokemon who feed on flesh and blood. They are twice as strong, twice as fast, but a hundred times dumber. They attack everything that is not another Rampant and try to eat it.",
+            "Thousands of years later, in the present day, an evil team has arisen called Team Red Dawn. The goals of this team is to capture the mystic trio and use them to rule the world, no matter how many perish. They also have a secret weapon which they use to hypnotize Pokemon to do their bidding, or to cause them to make havoc. Only one human, Ryan McAndrews, can save Earth from the consequences, but he can't do it alone.",
+            "Rp in the Mystery Dungeon world as either an explorer, a rescuer, or an adventurer.",
+            "You are a lvl 5 evee setting out on your mission to become your desired eveelution",
+            "Level fifteen?. You get better movesets as you go along. You can be any Pokemon that evolves up to level fifteen. You may level up through the RP, but no godmodding and saying '/me goes up to Lv 100'",
+            "You are in a world of everlasting rain and the fire pokemon are becoming extinct set out on your adventure to find kyogre to stop the rain",
+            "You are ruled by 3 members of the royal pokemon family  everyone else is either a priest, merchant, peasant, or pokemon",
+            "A Young boy with otherworldy, satanic powers, is taken hostage by a secret government organization, torn from the girl he truly cares for, forced into gruesome experiments, turned into a monster of a man. After about 10 years, his 18th birthday, he escapes and tries desperately to find the girl he loved years ago",
+            "Two brothers, thinking they're just best friends, find out their parents aren't their parents and they are in fact, clones of their 'father'",
+            "A dog from heaven finds a young girl, and befriends her. When she finds out he's not from this world, it turns her life upside down and she becomes an angel to fight for god's armies against the legions of hell that suddenly flood earth",
+            "Three friends from childhood recieve their first Pokemon, but, jealousy sets in among one as he had recieved a Bagon and the others recieved a Chimchar and a Charmeleon, so, he gets pissed and surprises his friends by attacking"
+        ];
+
+        return function (target, room, user) {
+            if (!target) return;
+            var message = reply[Math.floor(Math.random() * reply.length)];
+          
+            this.sendReply(message);
+            this.sendReply('**ROLEPLAY BEGIN**');
         };
     })(),
 
