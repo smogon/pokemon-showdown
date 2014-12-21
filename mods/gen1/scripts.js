@@ -29,13 +29,14 @@ exports.BattleScripts = {
 			// stat boosts
 			if (!unboosted) {
 				var boost = this.boosts[statName];
-				var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 				if (boost > 6) boost = 6;
 				if (boost < -6) boost = -6;
 				if (boost >= 0) {
+					var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 					stat = Math.floor(stat * boostTable[boost]);
 				} else {
-					stat = Math.floor(stat / boostTable[-boost]);
+					var numerators = [100, 66, 50, 40, 33, 28, 25];
+					stat = Math.floor(stat * numerators[-boost] / 100);
 				}
 			}
 

@@ -4,22 +4,56 @@
 exports.BattleScripts = {
 	inherit: 'gen3',
 	gen: 2,
-	getStatCallback: function (stat, statName, pokemon) {
-		// Gen 2 caps stats at 999 and min is 1. Stats over 1023 with items roll over (Marowak, Pikachu)
-		if (pokemon.species === 'Marowak' && pokemon.item === 'thickclub' && statName === 'atk' && stat > 1023) {
-			stat = stat - 1024;
-		} else if (pokemon.species === 'Pikachu' && pokemon.item === 'lightball' && statName === 'spa' && stat > 1023) {
-			stat = stat - 1024;
-		} else if (pokemon.species === 'Ditto' && pokemon.item === 'metalpowder' && statName in {def:1, spd:1} && stat > 1023) {
-			// what. the. fuck. stop playing pokémon
-			stat = stat - 1024;
-		} else {
-			if (stat > 999) stat = 999;
-		}
-		if (stat < 1) stat = 1;
+	// BattlePokemon scripts.
+	pokemon: {
+		getStat: function (statName, unboosted, unmodified) {
+			statName = toId(statName);
+			if (statName === 'hp') return this.maxhp;
 
-		return stat;
+			// base stat
+			var stat = this.stats[statName];
+
+			// stat boosts
+			if (!unboosted) {
+				var boost = this.boosts[statName];
+				if (boost > 6) boost = 6;
+				if (boost < -6) boost = -6;
+				if (boost >= 0) {
+					var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
+					stat = Math.floor(stat * boostTable[boost]);
+				} else {
+					var numerators = [100, 66, 50, 40, 33, 28, 25];
+					stat = Math.floor(stat * numerators[-boost] / 100);
+				}
+			}
+
+			// Stat modifier effects
+			if (!unmodified) {
+				var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
+				var statMod = 1;
+				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
+				stat = this.battle.modify(stat, statMod);
+			}
+
+			// Gen 2 caps stats at 999 and min is 1.
+			// Stats over 1023 with items roll over (Marowak, Pikachu)
+			// TO-DO: Change formula to use the mod for the proper roll-over.
+			if (this.species === 'Marowak' && this.item === 'thickclub' && statName === 'atk' && stat > 1023) {
+				stat -= 1024;
+			} else if (this.species === 'Pikachu' && this.item === 'lightball' && statName === 'spa' && stat > 1023) {
+				stat -= 1024;
+			} else if (this.species === 'Ditto' && this.item === 'metalpowder' && statName in {def:1, spd:1} && stat > 1023) {
+				// what. the. fuck. stop playing pokémon
+				stat -= 1024;
+			} else {
+				stat = this.battle.clampIntRange(stat, 1, 999);
+			}
+			if (stat < 1) stat = 1;
+
+			return stat;
+		}
 	},
+	// Battle scripts.
 	getDamage: function (pokemon, target, move, suppressMessages) {
 		// We get the move
 		if (typeof move === 'string') move = this.getMove(move);
