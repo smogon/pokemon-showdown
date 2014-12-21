@@ -50,6 +50,9 @@ exports.BattleScripts = {
 				if (this.volatiles['brnattackdrop'] && statName === 'atk') {
 					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
 				}
+				if (this.volatiles['parspeeddrop'] && statName === 'spe') {
+					stat = this.battle.clampIntRange(Math.floor(stat / 4), 1);
+				}
 			}
 
 			// Hard coded Reflect and Light Screen boosts
