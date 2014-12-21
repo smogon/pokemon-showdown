@@ -12,11 +12,13 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'brn');
+			target.addVolatile('brnattackdrop');
 		},
 		onAfterMoveSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 16);
 		},
 		onSwitchIn: function (pokemon) {
+			pokemon.addVolatile('brnattackdrop');
 			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
 				this.damage(pokemon.maxhp / 16);
 			}
