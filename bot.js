@@ -10,7 +10,7 @@
  */
 
 var config = {
-    name: 'Aqua Bot',
+    name: 'Aqua',
     userid: function () {
         return toId(this.name);
     },
