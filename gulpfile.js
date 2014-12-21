@@ -44,7 +44,12 @@ var jsHintOptions = {
 		"Cidr": false,
 		"Sockets": false,
 		"Tools": false,
-		"TeamValidator": false
+		"TeamValidator": false,
+		"battleEngineFakeProcess": false,
+		"battleProtoCache": false,
+		"reloadCustomAvatars": false,
+		"tells": false,
+		"Spamroom": false
 	}
 };
 
@@ -115,8 +120,7 @@ gulp.task('fastlint', function () {
 		.pipe(jscs(jscsOptions))
 		.pipe(replace(/\bvar\b/g, 'let'))
 		.pipe(jshint(jsHintOptions))
-		.pipe(jshint.reporter(jshintStylish))
-		.pipe(jshint.reporter('fail'));
+		.pipe(jshint.reporter(jshintStylish));
 });
 
 gulp.task('default', ['fastlint', 'data']);
