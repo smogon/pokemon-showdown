@@ -49,11 +49,6 @@ exports.BattleStatuses = {
 			pokemon.addVolatile('parspeeddrop');
 		}
 	},
-	parspeeddrop: {
-		onModifySpe: function (spe) {
-			return this.clampIntRange(Math.floor(spe / 4), 1);
-		}
-	},
 	slp: {
 		effectType: 'Status',
 		onStart: function (target) {
