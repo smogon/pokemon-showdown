@@ -595,6 +595,16 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	psywave: {
+		inherit: true,
+		damageCallback: function (pokemon) {
+			var damage = 0;
+			while (damage === 0 || damage > pokemon.level + Math.floor(pokemon.level / 2)) {
+				damage = this.random(256);
+			}
+			return damage;
+		}
+	},
 	rage: {
 		inherit: true,
 		self: {
