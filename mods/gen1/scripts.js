@@ -302,12 +302,12 @@ exports.BattleScripts = {
 				if (pokemon.boosts.accuracy > 0) {
 					accuracy *= boostTable[pokemon.boosts.accuracy];
 				} else {
-					accuracy /= boostTable[-pokemon.boosts.accuracy];
+					accuracy = Math.floor(accuracy / boostTable[-pokemon.boosts.accuracy]);
 				}
 			}
 			if (!move.ignoreEvasion) {
 				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-					accuracy /= boostTable[target.boosts.evasion];
+					accuracy = Math.floor(accuracy / boostTable[target.boosts.evasion]);
 				} else if (target.boosts.evasion < 0) {
 					accuracy *= boostTable[-target.boosts.evasion];
 				}
@@ -484,7 +484,7 @@ exports.BattleScripts = {
 				this.boost(moveData.boosts, target, pokemon, move);
 			}
 			if (moveData.heal && !target.fainted) {
-				var d = target.heal(Math.round(target.maxhp * moveData.heal[0] / moveData.heal[1]));
+				var d = target.heal(Math.floor(target.maxhp * moveData.heal[0] / moveData.heal[1]));
 				if (!d) {
 					this.add('-fail', target);
 					return false;
@@ -731,7 +731,7 @@ exports.BattleScripts = {
 		damage *= basePower;
 		damage *= attack;
 		damage = Math.floor(damage / defense);
-		damage = this.clampIntRange(damage / 50, 1, 997);
+		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
 		damage += 2;
 
 		// STAB damage bonus, the "???" type never gets STAB
@@ -860,10 +860,10 @@ exports.BattleScripts = {
 		}
 
 		if (effect.recoil && source) {
-			this.damage(Math.round(damage * effect.recoil[0] / effect.recoil[1]), source, target, 'recoil');
+			this.damage(this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
 		}
 		if (effect.drain && source) {
-			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
+			this.heal(this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
 		}
 
 		if (target.fainted) {
