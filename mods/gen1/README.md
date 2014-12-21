@@ -13,6 +13,7 @@ a similar fashion, Pokes used to have 30 IVs on each stat.
 The following sources have been used and extremly useful when developing this mod:
 https://raw.github.com/po-devs/pokemon-online/master/bin/database/rby-stuff.txt
 http://www.smogon.com/rb/articles/differences
+http://www.smogon.com/forums/threads/past-gens-research-thread.3506992/#post-5878612
 
 Special Stat
 ------------
@@ -41,10 +42,9 @@ Status
 Freeze never thaws unless hit by a Fire-type attack or by Haze.
 Sleep lasts 1-7 turns and you wake up at the end of the turn.
 
-
 1/256 miss
 ----------
-All moves but Swift and Bide have a 1/256 chance to miss.
+All moves but Swift and Bide (while on duration, not first hit) have a 1/256 chance to miss.
 
 Partial Trapping Moves
 ----------------------
@@ -52,7 +52,4 @@ Partial trapping moves let eiher Pokemon switch but target will be unable to mov
 
 TODO. Glitches not implemented
 ------------------------------
-Being fully paralysed or self-hit from confusion in the immune turn of Fly or Dig granted you immunity for the rest of the match
-until you switch or use Fly/Dig again.
-This glitch is not implemented by now since, besides game-breaking, relies in luck to reproduce and it's not part of the metagame.
-Since it's difficult to reproduce and to properly play, this will be implemented in the future, but not right now.
+There are a couple of divisions by zero in the original game in the cartridge. Those have not been implemented.
