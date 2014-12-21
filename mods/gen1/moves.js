@@ -287,7 +287,7 @@ exports.BattleMovedex = {
 	},
 	explosion: {
 		inherit: true,
-		basePower: 340,
+		basePower: 170,
 		target: "normal"
 	},
 	fireblast: {
@@ -706,7 +706,7 @@ exports.BattleMovedex = {
 	},
 	selfdestruct: {
 		inherit: true,
-		basePower: 260,
+		basePower: 130,
 		target: "normal"
 	},
 	skullbash: {

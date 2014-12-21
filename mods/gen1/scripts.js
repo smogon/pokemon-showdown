@@ -719,6 +719,11 @@ exports.BattleScripts = {
 			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
 		}
 
+		// Self destruct moves halve defense at this point.
+		if (move.selfdestruct && defType === 'def') {
+			defense = this.clampIntRange(Math.floor(defense / 2), 1);
+		}
+
 		// Let's go with the calculation now that we have what we need.
 		// We do it step by step just like the game does.
 		var damage = level * 2;
