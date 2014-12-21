@@ -13,6 +13,10 @@
 
 var crypto = require('crypto');
 var fs = require('fs');
+var avatars = fs.createWriteStream("config/avatars.csv", {"flags": "a"});
+var inShop = ['symbol', 'avatar', 'trainer', 'voice', 'room']
+var closeShop = false;
+var closedShop = 0;
 
 const MAX_REASON_LENGTH = 300;
 
@@ -207,6 +211,520 @@ var commands = exports.commands = {
 			}
 		}
 	},
+awardbucks: 'givebucks',
+	gb: 'givebucks',
+	givebucks: function(target, room, user) {
+		if(!user.can('hotpatch')) return this.sendReply('You do not have enough authority to do this.');
+		if(!target) return this.parse('/help givebucks');
+		if (target.indexOf(',') != -1) {
+			var parts = target.split(',');
+			parts[0] = this.splitTarget(parts[0]);
+			var targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (isNaN(parts[1])) {
+			return this.sendReply('Very funny, now use a real number.');
+		}
+		var cleanedUp = parts[1].trim();
+		var giveMoney = Number(cleanedUp);
+		var data = fs.readFileSync('config/money.csv','utf8')
+		var match = false;
+		var money = 0;
+		var line = '';
+		var row = (''+data).split("\n");
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			var userid = toId(parts[0]);
+			if (targetUser.userid == userid) {
+			var x = Number(parts[1]);
+			var money = x;
+			match = true;
+			if (match === true) {
+				line = line + row[i];
+				break;
+			}
+			}
+		}
+		targetUser.money = money;
+		targetUser.money += giveMoney;
+		if (match === true) {
+			var re = new RegExp(line,"g");
+			fs.readFile('config/money.csv', 'utf8', function (err,data) {
+			if (err) {
+				return console.log(err);
+			}
+			var result = data.replace(re, targetUser.userid+','+targetUser.money);
+			fs.writeFile('config/money.csv', result, 'utf8', function (err) {
+				if (err) return console.log(err);
+			});
+			});
+		} else {
+			var log = fs.createWriteStream('config/money.csv', {'flags': 'a'});
+			log.write("\n"+targetUser.userid+','+targetUser.money);
+		}
+		var p = 'bucks';
+		if (giveMoney < 2) p = 'buck';
+		this.sendReply(targetUser.name + ' was given ' + giveMoney + ' ' + p + '. This user now has ' + targetUser.money + ' bucks.');
+		targetUser.send(user.name + ' has given you ' + giveMoney + ' ' + p + '.');
+		} else {
+			return this.parse('/help givebucks');
+		}
+	},
+		
+	takebucks: 'removebucks',
+	removebucks: function(target, room, user) {
+		if(!user.can('hotpatch')) return this.sendReply('You do not have enough authority to do this.');
+		if(!target) return this.parse('/help removebucks');
+		if (target.indexOf(',') != -1) {
+			var parts = target.split(',');
+			parts[0] = this.splitTarget(parts[0]);
+			var targetUser = this.targetUser;
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+		if (isNaN(parts[1])) {
+			return this.sendReply('Very funny, now use a real number.');
+		}
+		var cleanedUp = parts[1].trim();
+		var takeMoney = Number(cleanedUp);
+		var data = fs.readFileSync('config/money.csv','utf8')
+		var match = false;
+		var money = 0;
+		var line = '';
+		var row = (''+data).split("\n");
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			var userid = toId(parts[0]);
+			if (targetUser.userid == userid) {
+			var x = Number(parts[1]);
+			var money = x;
+			match = true;
+			if (match === true) {
+				line = line + row[i];
+				break;
+			}
+			}
+		}
+		targetUser.money = money;
+		targetUser.money -= takeMoney;
+		if (match === true) {
+			var re = new RegExp(line,"g");
+			fs.readFile('config/money.csv', 'utf8', function (err,data) {
+			if (err) {
+				return console.log(err);
+			}
+			var result = data.replace(re, targetUser.userid+','+targetUser.money);
+			fs.writeFile('config/money.csv', result, 'utf8', function (err) {
+				if (err) return console.log(err);
+			});
+			});
+		} else {
+			var log = fs.createWriteStream('config/money.csv', {'flags': 'a'});
+			log.write("\n"+targetUser.userid+','+targetUser.money);
+		}
+		var p = 'bucks';
+		if (takeMoney < 2) p = 'buck';
+		this.sendReply(targetUser.name + ' has had ' + takeMoney + ' ' + p + ' removed. This user now has ' + targetUser.money + ' bucks.');
+		targetUser.send(user.name + ' has removed ' + takeMoney + ' bucks from you.');
+		} else {
+			return this.parse('/help removebucks');
+		}
+	},
+
+	buy: function(target, room, user) {
+		if (!target) return this.parse('/help buy');
+		if (closeShop) return this.sendReply('The shop is currently closed and will open shortly.');
+		var target2 = target;
+		var target3 = target;
+		target = target.split(', ');
+		var avatar = '';
+		var voice = '';
+		var data = fs.readFileSync('config/money.csv','utf8')
+		var match = false;
+		var money = 0;
+		var line = '';
+		var row = (''+data).split("\n");
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i]) continue;
+			var parts = row[i].split(",");
+			var userid = toId(parts[0]);
+			if (user.userid == userid) {
+			var x = Number(parts[1]);
+			var money = x;
+			match = true;
+			if (match === true) {
+				line = line + row[i];
+				break;
+			}
+			}
+		}
+		user.money = money;
+		var price = 0;
+		if (target2 === 'symbol') {
+			price = 5;
+			if (price <= user.money) {
+				user.money = user.money - price;
+				this.sendReply('You have purchased a custom symbol. You will have this until you log off for more than an hour.');
+				this.sendReply('Use /customsymbol [symbol] to change your symbol now!');
+				user.canCustomSymbol = true;
+				this.add(user.name + ' has purchased a custom symbol!');
+			} else {
+				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
+			}
+		}
+
+		if (target[0] === 'avatar') {
+			price = 10;
+			if (price <= user.money) {
+				if (!target[1]) return this.sendReply('Please specify the avatar you would like you buy. It has a maximum size of 80x80 and must be in .gif format. ex: /buy animated, [url to the avatar]');
+       				var filename = target[1].split('.');
+				filename = '.'+filename.pop();
+				user.money = user.money - price;
+				this.sendReply('You have purchased a custom animated avatar. Staff have been notified and it will be added in due time.');
+				user.canAnimatedAvatar = true;
+				Rooms.rooms.staff.add(user.name+' has purchased a custom animated avatar. Image: '+target[1]);
+				for (var u in Users.users) {
+					if (Users.users[u].group == "~" || Users.users[u].group == "&") {
+						Users.users[u].send('|pm|~Pokelunar|'+Users.users[u].group+Users.users[u].name+'|'+user.name+' has purchased a custom animated avatar. Image: '+target[1]);
+					}
+				}
+			} else {
+				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
+			}
+		}
+
+		if (target[0] === 'room') {
+			price = 30;
+			if (price <= user.money) {
+				user.money = user.money - price;
+				this.sendReply('You have purchased a chat room. You need to message an Admin so that the room can be made.');
+				user.canChatRoom = true;
+				this.add(user.name + ' has purchased a chat room!');
+			} else {
+				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
+			}
+		}
+
+		if (target2 === 'trainer') {
+			price = 30;
+			if (price <= user.money) {
+				user.money = user.money - price;
+				this.sendReply('You have purchased a trainer card. You need to message an Admin capable of adding this (Master Float).');
+				user.canTrainerCard = true;
+				this.add(user.name + ' has purchased a trainer card!');
+			} else {
+				return this.sendReply('You do not have enough bucks for this. You need ' + (price - user.money) + ' more bucks to buy ' + target + '.');
+			}
+		}
+		if (target2 === 'voice') {
+			price = 20;
+			if (price <= user.money) {
+				user.money = user.money - price;
+				this.sendReply('You have purchased global voice on the server. Senior staff have been notified and will promote you as soon as possible.');
+				user.canVoice = true;
+				this.add(user.name + ' has purchased global voice on the server.');
+				for (var u in Users.users) {
+			    if (Users.users[u].group == '~' || Users.users[u].group == '&') { 
+                Users.users[u].send('|pm|~Server|'+Users.user[u].group+Users.users[u].name+'|'+user.name + ' has purchased global voice on the server.');
+			        }
+				}
+			} else {
+			return this.sendReply("You do not have enough bucks for this. You need " + (price - user.money) + " more bucks to buy " + target + ".")
+			}
+		}
+	
+		
+		if (match === true) {
+			var re = new RegExp(line,"g");
+			fs.readFile('config/money.csv', 'utf8', function (err,data) {
+			if (err) {
+				return console.log(err);
+			}
+			var result = data.replace(re, user.userid+','+user.money);
+			fs.writeFile('config/money.csv', result, 'utf8', function (err) {
+				if (err) return console.log(err);
+			});
+			});
+		}
+	},
+	checkvoice: function(target, room, user) {
+		if (!user.can('banip')) return false;
+		if (!target) return this.sendReply("You need to specify a username.");
+		var targetUser = this.targetUser;
+		if (!targetUser.canVoice) {
+			return this.sendReply(targetUser.name + " has not bought global voice from the shop.");
+		}
+		else {
+			return this.sendReply(targetUser.name + " has bought global voice from the shop.");
+		}
+	},
+	customsymbol: function(target, room, user) {
+		if(!user.canCustomSymbol) return this.sendReply('You need to buy this item from the shop to use.');
+		if(!target || target.length > 1) return this.sendReply('/customsymbol [symbol] - changes your symbol (usergroup) to the specified symbol. The symbol can only be one character');
+		var bannedsymbols = /'[abcdefghijklmnopqrstuvwxyz+%@&~#]'/ 
+		if (target.indexOf(bannedsymbols) > -1) {
+			return this.sendReply("Sorry but you cannot change your symbol to " + target + " for safety/stability reasons.");
+		}
+		user.getIdentity = function(){
+			if(this.muted)	return '!' + this.name;
+			if(this.locked) return '‽' + this.name;
+			return target + this.name;
+		};
+		user.updateIdentity();
+		user.canCustomSymbol = false;
+		user.hasCustomSymbol = true;
+	},
+	
+	shop: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><h4><b><u>Shop</u></b></h4><table border="1" cellspacing ="0" cellpadding="3" bgcolor="#FFFFFF" width="100%"><tr><th>Command</th><th>Description</th><th>Cost</th></tr>' +
+			'<tr><td><b>Symbol</b></td><td>Buys a custom symbol, you\'re set back to reg once the server restarts.</td><td>5</td></tr>' +
+			'<tr><td><b>Avatar</b></td><td>Buys an avatar of your choice.</td><td>10</td></tr>' +
+			'<tr><td><b>Trainer Card</b></td><td>Buys a trainer card which shows information through a command such as /masterfloat</td><td>15</td></tr>' +
+			'<tr><td><b>Voice</b></td><td>Buys you a global voice, pm Master Float to get it.</td><td>20</td></tr>' +
+			'<tr><td><b>Room</b></td><td>Buys a chatroom for you to own</td><td>30</td></tr>' +         
+			'</table><br /><center>Drivers and higher can have 1 <u>free</u> room.</center><br /><center> To buy an item from the shop, use ( <i>/buy [item]</i> ).</center><center>The command to give money is ( <i>/givebucks [amount], [person]</i> ).</center><center>No refunds!</center><center>If you\'re new here, you get <b>1 free buck</b> to get started.</center>');
+		if (closeShop) return this.sendReply('|raw|<center><h3><b>The shop is currently closed and will open shortly.</b></h3></center>');
+	},
+
+	lockshop: 'closeshop',
+	closeshop: function(target, room, user) {
+		if (!user.can('hotpatch')) return this.sendReply('You do not have enough authority to do this.');
+
+		if(closeShop && closedShop === 1) closedShop--;
+
+		if (closeShop) {
+			return this.sendReply('The shop is already closed. Use /openshop to open the shop to buyers.');
+		}
+		else if (!closeShop) {
+			if (closedShop === 0) {
+				this.sendReply('Are you sure you want to close the shop? People will not ebe able to buy anything. If you do, use the command again.');
+				closedShop++;
+			}
+			else if (closedShop === 1) {
+				closeShop = true;
+				closedShop--;
+				this.add('|raw|<center><h4><b>The shop has been temporarily closed, during this time you cannot buy items.</b></h4></center>');
+			}
+		}
+	},
+
+
+
+	openshop: function(target, room, user) {
+		if (!user.can('hotpatch')) return this.sendReply('You do not have enough authority to do this.');
+
+		if (!closeShop && closedShop === 1) closedShop--;
+
+		if (!closeShop) {
+			return this.sendRepy('The shop is already closed. Use /closeshop to close the shop to buyers.');
+		}
+		else if (closeShop) {
+			if (closedShop === 0) {
+				this.sendReply('Are you sure you want to open the shop? People will be able to buy again. If you do, use the command again.');
+				closedShop++;
+			}
+			else if (closedShop === 1) {
+				closeShop = false;
+				closedShop--;
+				this.add('|raw|<center><h4><b>The shop has been opened, you can now buy from the shop.</b></h4></center>');
+			}
+		}
+	},
+    
+	shoplift: 'awarditem',
+	giveitem: 'awarditem',
+	awarditem: function(target, room, user) {
+		if (!target) return this.parse('/help awarditem');
+		if(!user.can('hotpatch')) return this.sendReply('You do not have enough authority to do this.');
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+
+		if (!target) return this.parse('/help awarditem');
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+
+		var matched = false;
+		var isItem = false;
+		var theItem = '';
+		for (var i = 0; i < inShop.length; i++) {
+			if (target.toLowerCase() === inShop[i]) {
+				isItem = true;
+				theItem = inShop[i];
+			}
+		}
+		if (isItem === true) {
+			if (theItem === 'symbol') {
+				if (targetUser.canCustomSymbol === true) {
+					return this.sendReply('The user has already purchased this item.');
+				}
+				if (targetUser.canCustomSymbol === false) {
+					matched = true;
+					this.sendReply(targetUser.name + ' can now use /customsymbol to get a custom symbol.');
+					targetUser.canCustomSymbol = true;
+					Rooms.rooms.lobby.add(user.name + ' has stolen custom symbol from the shop!');
+					targetUser.send(user.name + ' has given you ' + theItem + '! Use /customsymbol [symbol] to add the symbol!');
+				}
+			}
+			if (theItem === 'avatar') {
+				if (targetUser.canAnimated === true) {
+					return this.sendReply('The user has already purchased this item.');
+				}
+				if (targetUser.canCustomAvatar === false) {
+					matched = true;
+					targetUser.canCustomAvatar = true;
+					Rooms.rooms.lobby.add(user.name + ' has stolen a custom avatar from the shop!');
+					targetUser.send(user.name + ' has given you ' + theItem + '!');
+				}
+			}
+			if (theItem === 'voice') {
+				if (targetUser.canVoice === true) {
+					return this.sendReply('The user has already purchased this item.');
+				}
+				if (targetUser.canVoice === false) {
+					matched = true;
+					targetUser.canVoice = true;
+					Rooms.rooms.lobby.add(user.name + ' has bought a voice!');
+					targetUser.send(user.name + ' has given you ' + theItem + '!');
+				}
+			}
+			if (theItem === 'room') {
+				if (targetUser.canChatRoom === true) {
+					return this.sendReply('The user has already purchased this item.');
+				}
+				if (targetUser.canChatRoom === false) {
+					matched = true;
+					targetUser.canChatRoom = true;
+					Rooms.rooms.lobby.add(user.name + ' has stolen a chat room from the shop!');
+					targetUser.send(user.name + ' has given you ' + theItem + '!');
+				}
+			}
+			if (theItem === 'trainer') {
+				if (targetUser.canTrainerCard === true) {
+					return this.sendReply('The user has already purchased this item.');
+				}
+				if (targetUser.canTrainerCard === false) {
+					matched = true;
+					targetUser.canTrainerCard = true;
+					Rooms.rooms.lobby.add(user.name + ' has stolen a trainer card from the shop!');
+					targetUser.send(user.name + ' has given you ' + theItem + '!');
+				}
+			}
+			else
+				if (!matched) return this.sendReply('Maybe that item isn\'t in the shop yet.');
+		}
+		else 
+			return this.sendReply('Shop item could not be found, please check /shop for all items - ' + theItem);
+	},
+
+	removeitem: function(target, room, user) {
+		if (!target) return this.parse('/help removeitem');
+		if(!user.can('hotpatch')) return this.sendReply('You do not have enough authority to do this.');
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+
+		if (!target) return this.parse('/help removeitem');
+		if (!targetUser) {
+			return this.sendReply('User '+this.targetUsername+' not found.');
+		}
+
+		if (target === 'symbol') {
+			if (targetUser.canCustomSymbol) {
+				targetUser.canCustomSymbol = false;
+				this.sendReply(targetUser.name + ' no longer has a custom symbol ready to use.');
+				targetUser.send(user.name + ' has removed the custom symbol from you.');
+			}
+			else
+				return this.sendReply('They do not have a custom symbol for you to remove.');
+		}
+		
+		else if (target === 'avatar') {
+			if (targetUser.canCustomAvatar) {
+				targetUser.canCustomAvatar = false;
+				this.sendReply(targetUser.name + ' no longer has a custom avatar ready to use.');
+				targetUser.send(user.name + ' has removed the custom avatar from you.');
+			}
+			else
+				return this.sendReply('They do not have a custom avatar for you to remove.');
+		}
+		else if (target === 'room') {
+			if (targetUser.canChatRoom) {
+				targetUser.canChatRoom = false;
+				this.sendReply(targetUser.name + ' no longer has a chat room ready to use.');
+				targetUser.send(user.name + ' has removed the chat room from you.');
+			}
+			else
+				return this.sendReply('They do not have a chat room for you to remove.');
+		}
+		else if (target === 'trainer') {
+			if (targetUser.canTrainerCard) {
+				targetUser.canTrainerCard = false;
+				this.sendReply(targetUser.name + ' no longer has a trainer card ready to use.');
+				targetUser.send(user.name + ' has removed the trainer card from you.');
+			}
+			else
+				return this.sendReply('They do not have a trainer card for you to remove.');
+		}
+		else
+			return this.sendReply('The item is invalid!');
+	},
+
+	moneycommands: function(target, room, user) {
+		if (!this.canBroadcast()) return;
+		return this.sendReplyBox('The command for the Money system:<br />' + 
+			'/shop - Show the shop with the items you can buy.<br />' + 
+			'/buy [command] - Buy an item from the shop using the item command name.<br />' +
+			'/atm [username] - Show your bucks (if just /atm) or show someone else\'s bucks.<br />' + 
+			'/transferbucks [username], [amount] - Tranfers your specified amount of bucks to another user.');
+	},
+
+atm: 'profile',
+    profile: function (target, room, user, connection, cmd) {
+        if (!this.canBroadcast()) return;
+        if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
+
+        var targetUser = this.targetUserOrSelf(target);
+
+        if (!targetUser) {
+            var userId = toId(target);
+            var money = Core.profile.money(userId);
+            var elo = Core.profile.tournamentElo(userId);
+            var about = Core.profile.about(userId);
+
+            if (elo === 1000 && about === 0) {
+                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + '<br clear="all">');
+            }
+            if (elo === 1000) {
+                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + '<br clear="all">');
+            }
+            if (about === 0) {
+                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
+            }
+            return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
+        }
+
+        var money = Core.profile.money(targetUser.userid);
+        var elo = Core.profile.tournamentElo(toId(targetUser.userid));
+        var about = Core.profile.about(targetUser.userid);
+
+        if (elo === 1000 && about === 0) {
+            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + '<br clear="all">');
+        }
+        if (elo === 1000) {
+            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + '<br clear="all">');
+        }
+        if (about === 0) {
+            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
+        }
+        return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
+    },
+	
 
 	modjoin: function (target, room, user) {
 		if (!this.can('privateroom', null, room)) return;
@@ -255,6 +773,8 @@ var commands = exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+
+
 
 	roomdesc: function (target, room, user) {
 		if (!target) {
@@ -2062,7 +2582,6 @@ user.updateIdentity();
 		this.sendReply("You are now blocking all incoming challenge requests.");
 	},
 
-	back: 'allowchallenges',
 	allowchallenges: function (target, room, user) {
 		if (!user.blockChallenges) return this.sendReply("You are already available for challenges!");
 		user.blockChallenges = false;

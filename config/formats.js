@@ -96,14 +96,6 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
-		{
-		name: "Random Metronome",
-		section: "Random Formats",
-
-		team: 'randomMetronome',
-		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
-	},
   	{
 		name: "Balanced Hackmons Challenge Cup",
 		section: "Random Formats",
