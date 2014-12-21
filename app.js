@@ -407,7 +407,6 @@ process.on('uncaughtException', function (err) {
 
 global.Sockets = require('./sockets.js');
 
-global.Bot = require('./bot.js');
 
 /*********************************************************
  * Set up our last global
