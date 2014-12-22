@@ -39,8 +39,7 @@ exports.BattleScripts = {
 			stat = this.battle.clampIntRange(stat, 1, 999);
 
 			// Treat here the items.
-			if ((this.species in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk')
-			|| (this.species === 'Pikachu' && this.item === 'lightball' && statName in {'spa':1, 'atk':1})) {
+			if ((this.species in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk') || (this.species === 'Pikachu' && this.item === 'lightball' && statName in {'spa':1, 'atk':1})) {
 				stat *= 2;
 			} else if (this.species === 'Ditto' && this.item === 'metalpowder' && statName in {'def':1, 'spd':1}) {
 				// what. the. fuck. stop playing pokémon
@@ -51,6 +50,54 @@ exports.BattleScripts = {
 		}
 	},
 	// Battle scripts.
+	runMove: function (move, pokemon, target, sourceEffect) {
+		if (!sourceEffect && toId(move) !== 'struggle') {
+			var changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
+			if (changedMove && changedMove !== true) {
+				move = changedMove;
+				target = null;
+			}
+		}
+		move = this.getMove(move);
+		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
+
+		this.setActiveMove(move, pokemon, target);
+
+		if (pokemon.moveThisTurn) {
+			// THIS IS PURELY A SANITY CHECK
+			// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
+			// USE this.cancelMove INSTEAD
+			this.debug('' + pokemon.id + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
+			this.clearActiveMove(true);
+			return;
+		}
+		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
+			this.clearActiveMove(true);
+			// This is only run for sleep and fully paralysed.
+			this.runEvent('AfterMoveSelf', pokemon, target, move);
+			return;
+		}
+		if (move.beforeMoveCallback) {
+			if (move.beforeMoveCallback.call(this, pokemon, target, move)) {
+				this.clearActiveMove(true);
+				return;
+			}
+		}
+		pokemon.lastDamage = 0;
+		var lockedMove = this.runEvent('LockMove', pokemon);
+		if (lockedMove === true) lockedMove = false;
+		if (!lockedMove) {
+			if (!pokemon.deductPP(move, null, target) && (move.id !== 'struggle')) {
+				this.add('cant', pokemon, 'nopp', move);
+				this.clearActiveMove(true);
+				return;
+			}
+		}
+		pokemon.moveUsed(move);
+		this.useMove(move, pokemon, target, sourceEffect);
+		this.runEvent('AfterMove', target, pokemon, move);
+		this.runEvent('AfterMoveSelf', pokemon, target, move);
+	},
 	getDamage: function (pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
 		if (typeof move === 'string') move = this.getMove(move);
@@ -201,7 +248,7 @@ exports.BattleScripts = {
 		// Super effective attack
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
-			v *= 2;
+			damage *= 2;
 			if (totalTypeMod >= 2) {
 				damage *= 2;
 			}
