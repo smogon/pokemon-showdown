@@ -11,19 +11,18 @@
  * @license MIT license
  */
 
-//var cluster = require('cluster');
+var cluster = require('cluster');
 global.Config = require('./config/config');
-var fakeProcess = new (require('./fake-process').FakeProcess)();
 
-/*if (cluster.isMaster) {
+if (cluster.isMaster) {
 	cluster.setupMaster({
 		exec: 'sockets.js'
-	});*/
+	});
 
 	var workers = exports.workers = {};
 
 	var spawnWorker = exports.spawnWorker = function () {
-		var worker = fakeProcess.server;
+		var worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || ''});
 		var id = worker.id;
 		workers[id] = worker;
 		worker.on('message', function (data) {
@@ -49,13 +48,13 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		});
 	};
 
-	//var workerCount = Config.workers || 1;
-	//for (var i = 0; i < workerCount; i++) {
+	var workerCount = Config.workers || 1;
+	for (var i = 0; i < workerCount; i++) {
 		spawnWorker();
-	//}
+	}
 
 	var killWorker = exports.killWorker = function (worker) {
-		/*var idd = worker.id + '-';
+		var idd = worker.id + '-';
 		var count = 0;
 		for (var connectionid in Users.connections) {
 			if (connectionid.substr(idd.length) === idd) {
@@ -68,18 +67,17 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			worker.kill();
 		} catch (e) {}
 		delete workers[worker.id];
-		return count;*/
-		return 0;
+		return count;
 	};
 
 	var killPid = exports.killPid = function (pid) {
-		/*pid = '' + pid;
+		pid = '' + pid;
 		for (var id in workers) {
 			var worker = workers[id];
 			if (pid === '' + worker.process.pid) {
 				return killWorker(worker);
 			}
-		}*/
+		}
 		return false;
 	};
 
@@ -113,8 +111,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
 		worker.send('.' + channelid + '\n' + subchannelid + '\n' + socketid);
 	};
-
-//} else {
+} else {
 	// is worker
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
@@ -135,10 +132,12 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 	global.Cidr = require('./cidr');
 
-	// graceful crash
-	/*process.on('uncaughtException', function (err) {
-		require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')');
-	});*/
+	if (Config.crashguard) {
+		// graceful crash
+		process.on('uncaughtException', function (err) {
+			require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')');
+		});
+	}
 
 	var app = require('http').createServer();
 	var appssl;
@@ -147,7 +146,6 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	}
 	try {
 		(function () {
-			var fs = require('fs');
 			var nodestatic = require('node-static');
 			var cssserver = new nodestatic.Server('./config');
 			var avatarserver = new nodestatic.Server('./config/avatars');
@@ -155,7 +153,10 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			var staticRequestHandler = function (request, response) {
 				request.resume();
 				request.addListener('end', function () {
-					if (Config.customHttpResponse && Config.customHttpResponse(request, response)) return;
+					if (Config.customhttpresponse &&
+							Config.customhttpresponse(request, response)) {
+						return;
+					}
 					var server;
 					if (request.url === '/custom.css') {
 						server = cssserver;
@@ -169,10 +170,6 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 						server = staticserver;
 					}
 					server.serve(request, response, function (e, res) {
-						fs.appendFile('logs/access.log',
-							request.socket.remoteAddress + ' - - [' + new Date().toLocaleString() + '] "' +
-							request.method + ' ' + request.url + ' HTTP/' + request.httpVersion + '" ' +
-							(e ? e.status : 200) + ' ? "' + (request.headers['referer'] || '-') + '" "' + (request.headers['user-agent'] || '-') + '"\n');
 						if (e && (e.status === 404)) {
 							staticserver.serveFile('404.html', 404, {}, request, response);
 						}
@@ -201,7 +198,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			if (severity === 'error') console.log('ERROR: ' + message);
 		},
 		prefix: '/showdown',
-		websocket: !Config.disableWebsocket
+		websocket: !Config.disablewebsocket
 	});
 
 	var sockets = {};
@@ -231,11 +228,11 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		}
 	};
 	var interval;
-	if (!Config.herokuHack) {
+	if (!Config.herokuhack) {
 		interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
 	}
 
-	fakeProcess.client.on('message', function (data) {
+	process.on('message', function (data) {
 		// console.log('worker received: ' + data);
 		var socket = null;
 		var channel = null;
@@ -358,7 +355,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	});
 
 	// this is global so it can be hotpatched if necessary
-	var isTrustedProxyIp = Cidr.checker(Config.proxyIps);
+	var isTrustedProxyIp = Cidr.checker(Config.proxyip);
 	var socketCounter = 0;
 	server.on('connection', function (socket) {
 		if (!socket) {
@@ -388,11 +385,11 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			}
 		}
 
-		fakeProcess.client.send('*' + socketid + '\n' + socket.remoteAddress);
+		process.send('*' + socketid + '\n' + socket.remoteAddress);
 
 		// console.log('CONNECT: ' + socket.remoteAddress + ' [' + socket.id + ']');
 		var interval;
-		if (Config.herokuHack) {
+		if (Config.herokuhack) {
 			// see https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187
 			interval = setInterval(function () {
 				try {
@@ -409,14 +406,14 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
 			// drop legacy JSON messages
 			if (message.charAt(0) === '{') return;
-			fakeProcess.client.send('<' + socketid + '\n' + message);
+			process.send('<' + socketid + '\n' + message);
 		});
 
 		socket.on('close', function () {
 			if (interval) {
 				clearInterval(interval);
 			}
-			fakeProcess.client.send('!' + socketid);
+			process.send('!' + socketid);
 
 			delete sockets[socketid];
 			for (var channelid in channels) {
@@ -425,15 +422,16 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		});
 	});
 	server.installHandlers(app, {});
-	app.listen(Config.port, Config.bindAddress || undefined);
-	console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening on ' + (Config.bindAddress || '*') + ':' + Config.port);
+	app.listen(Config.port, Config.bindaddress || undefined);
+	console.log('Worker ' + cluster.worker.id + ' now listening on ' + (Config.bindaddress || '*') + ':' + Config.port);
 
 	if (appssl) {
 		server.installHandlers(appssl, {});
 		appssl.listen(Config.ssl.port);
-		console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening for SSL on port ' + Config.ssl.port);
+		console.log('Worker ' + cluster.worker.id + ' now listening for SSL on port ' + Config.ssl.port);
 	}
 
-	console.log('Test your server at http://' + (Config.bindAddress || 'localhost') + ':' + Config.port);
+	console.log('Test your server at http://' + (Config.bindaddress || 'localhost') + ':' + Config.port);
 
-//}
+	require('./repl.js').start('sockets-', cluster.worker.id + '-' + process.pid, function (cmd) { return eval(cmd); });
+}
