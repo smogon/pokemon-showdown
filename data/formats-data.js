@@ -2183,7 +2183,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["bellydrum","extremespeed","seedbomb","substitute","shadowclaw"],
 		randomDoubleBattleMoves: ["bellydrum","extremespeed","seedbomb","protect","shadowclaw"],
 		eventPokemon: [
-			{"generation":6,"level":50,"isHidden":false,"moves":["extremespeed","helpinghand","babydolleyes","protect"],"pokeball":"cherishball"},
+			{"generation":6,"level":50,"isHidden":false,"moves":["extremespeed","helpinghand","babydolleyes","protect"],"pokeball":"cherishball"}
 		],
 		tier: "PU"
 	},
