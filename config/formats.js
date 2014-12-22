@@ -1114,6 +1114,14 @@ exports.Formats = [
         ruleset: ['OU'],
         banlist: ['The Power Within']
     },
+    {
+        name: "Noobmons",
+        section: "New Other Metagames",
+  
+        mod: 'noobmons',
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
+    },
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
 

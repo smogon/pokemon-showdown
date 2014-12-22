@@ -608,34 +608,31 @@ var commands = exports.commands = {
 		Rooms.global.autojoinRooms(user, connection);
 	},
 
-	joim: 'join',
-	join: function (target, room, user, connection) {
+	join: function(target, room, user, connection) {
 		if (!target) return false;
-		var targetRoom = Rooms.search(target);
+		var targetRoom = Rooms.get(target) || Rooms.get(toId(target));
 		if (!targetRoom) {
 			return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
 		}
-		if (targetRoom.isPrivate) {
-			if (targetRoom.modjoin && !user.can('bypassall')) {
-				var userGroup = user.group;
-				if (targetRoom.auth) {
-					userGroup = targetRoom.auth[user.userid] || ' ';
-				}
-				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(targetRoom.modjoin !== true ? targetRoom.modjoin : targetRoom.modchat)) {
-					return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
-				}
-			}
-			if (!user.named) {
-				return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '" + target + "'.");
-			}
+		if (targetRoom.isPrivate && !user.named) {
+			return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '" + target + "'.");
 		}
-
-		var joinResult = user.joinRoom(targetRoom, connection);
-		if (!joinResult) {
-			if (joinResult === null) {
-				return connection.sendTo(target, "|noinit|joinfailed|You are banned from the room '" + target + "'.");
+		if (!user.joinRoom(targetRoom || room, connection)) {
+			return connection.sendTo(target, "|noinit|joinfailed|The room '" + target + "' could not be joined.");
+		}
+		if (targetRoom.lockedRoom === true && !user.can('banip')) {
+			return connection.sendTo(target, "|noinit|joinfailed|The room '"+target+"' is currently locked.");
 			}
-			return connection.sendTo(target, "|noinit|joinfailed|You do not have permission to join '" + target + "'.");
+			
+		//If you need to add another host, type in || user.latestHost == "host" after the previous statement. Its user.latestIp for IPs.
+		/*if (user.latestHost == '' ) {
+			user.popup('You are on Coding World\'s banlist. Make sure you are not using any proxies.');
+			user.ban();
+		}*/
+
+		if (user.latestHost == 'ANantes-657-1-69-248.w81-50.abo.wanadoo.fr' || user.latestIp == '81.50.208.248') {
+			user.popup('Due to your latest destructive activities you have been banlisted. Make sure you\'re not using proxies!');
+			user.ban();
 		}
 	},
 
