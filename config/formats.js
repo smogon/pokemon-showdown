@@ -1122,6 +1122,19 @@ exports.Formats = [
         ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
         banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite']
     },
+       {
+        name: "Protect: The Metagame",
+        section: 'Other Metagames',
+
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite'],
+        onModifyMove: function (move) {
+            if (move.id === 'protect' || move.id === 'detect') {
+                move.onPrepareHit = {};
+                move.onHit = {};
+            }
+        }
+    },
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
 
