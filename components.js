@@ -14,7 +14,8 @@
 
 var fs = require("fs");
     path = require("path"),
-    http = require("http");
+    http = require("http"),
+    request = require('request');
 
 var components = exports.components = {
 
@@ -507,6 +508,82 @@ user.updateIdentity();
         this.sendReplyBox('<b><u>List of emoticons:</b></u> <br/><br/>' + emoticons.join(' ').toString());
     },
 
+    u: 'urbandefine',
+    ud: 'urbandefine',
+    urbandefine: function (target, room, user) {
+        if (!this.canBroadcast()) return;
+        if (!target) return this.parse('/help urbandefine')
+        if (target > 50) return this.sendReply('Phrase can not be longer than 50 characters.');
+
+        var self = this;
+        var options = {
+            url: 'http://www.urbandictionary.com/iphone/search/define',
+            term: target,
+            headers: {
+                'Referer': 'http://m.urbandictionary.com'
+            },
+            qs: {
+                'term': target
+            }
+        };
+
+        function callback(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                var page = JSON.parse(body);
+                var definitions = page['list'];
+                if (page['result_type'] == 'no_results') {
+                    self.sendReplyBox('No results for <b>"' + Tools.escapeHTML(target) + '"</b>.');
+                    return room.update();
+                } else {
+                    if (!definitions[0]['word'] || !definitions[0]['definition']) {
+                        self.sendReplyBox('No results for <b>"' + Tools.escapeHTML(target) + '"</b>.');
+                        return room.update();
+                    }
+                    var output = '<b>' + Tools.escapeHTML(definitions[0]['word']) + ':</b> ' + Tools.escapeHTML(definitions[0]['definition']).replace(/\r\n/g, '<br />').replace(/\n/g, ' ');
+                    if (output.length > 400) output = output.slice(0, 400) + '...';
+                    self.sendReplyBox(output);
+                    return room.update();
+                }
+            }
+        }
+        request(options, callback);
+    },
+
+    def: 'define',
+    define: function (target, room, user) {
+        if (!this.canBroadcast()) return;
+        if (!target) return this.parse('/help define');
+        target = toId(target);
+        if (target > 50) return this.sendReply('Word can not be longer than 50 characters.');
+
+        var self = this;
+        var options = {
+            url: 'http://api.wordnik.com:80/v4/word.json/' + target + '/definitions?limit=3&sourceDictionaries=all' +
+                '&useCanonical=false&includeTags=false&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5',
+        };
+
+        function callback(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                var page = JSON.parse(body);
+                var output = '<font color=' + Core.profile.color + '><b>Definitions for ' + target + ':</b></font><br />';
+                if (!page[0]) {
+                    self.sendReplyBox('No results for <b>"' + target + '"</b>.');
+                    return room.update();
+                } else {
+                    var count = 1;
+                    for (var u in page) {
+                        if (count > 3) break;
+                        output += '(' + count + ') ' + page[u]['text'] + '<br />';
+                        count++;
+                    }
+                    self.sendReplyBox(output);
+                    return room.update();
+                }
+            }
+        }
+        request(options, callback);
+    },
+
     /*********************************************************
      * Staff commands
      *********************************************************/
@@ -853,6 +930,10 @@ user.updateIdentity();
             CommandParser.uncacheTree(path.join(__dirname, './', 'command-parser.js'));
             CommandParser = require(path.join(__dirname, './', 'command-parser.js'));
 
+            this.sendReply('Reloading Bot...');
+            CommandParser.uncacheTree(path.join(__dirname, './', 'bot.js'));
+            Bot = require(path.join(__dirname, './', 'bot.js'));
+
             this.sendReply('Reloading Tournaments...');
             var runningTournaments = Tournaments.tournaments;
             CommandParser.uncacheTree(path.join(__dirname, './', './tournaments/index.js'));
@@ -977,6 +1058,149 @@ user.updateIdentity();
 
         cmds[parts[0].toLowerCase()]();
     },
+	
+	    dicerules: 'dicecommands',
+        dicehelp: 'dicecommands',
+        dicecommands: function(target, room, user) {
+            if (!this.canBroadcast()) return;
+            return this.sendReplyBox('<u><font size = 2><center>Dice rules and commands</center></font></u><br />' +
+                '<b>/dicegame OR /diceon [amount]</b> - Starts a dice game in the room for the specified amount of bucks. Must be ranked + or higher to use.<br />' +
+                '<b>/play</b> - Joins the game of dice. You must have more or the same number of bucks the game is for. Winning a game wins you the amount of bucks the game is for. Losing the game removes that amount from you.<br />' +
+                '<b>/diceend</b> - Ends the current game of dice in the room. You must be ranked + or higher to use this.');
+        },
+
+        dicegame: 'diceon',
+        diceon: function(target, room, user, connection, cmd) {
+            if (!this.can('broadcast', null, room)) return this.sendReply('You must be ranked + or higher to be able to start a game of dice.');
+            if (room.dice) {
+                return this.sendReply('There is already a dice game going on');
+            }
+            target = toId(target);
+            if (!target) return this.sendReply('/'+cmd+' [amount] - Starts a dice game. The specified amount will be the amount of cash betted for.');
+            if (isNaN(target)) return this.sendReply('That isn\'t a number, smartass.');
+            if (target < 1) return this.sendReply('You cannot start a game for anything less than 1 buck.');
+            room.dice = {};
+            room.dice.members = [];
+            room.dice.award = parseInt(target);
+            var point = (target == 1) ? 'buck' : 'bucks';
+            this.add('|html|<div class="infobox"><font color = #007cc9><center><h2>' + user.name + ' has started a dice game for <font color = green>' + room.dice.award + '</font color> '+point+'!<br />' +
+                '<center><button name="send" value="/play" target="_blank">Click to join!</button>');
+        },
+
+        play: function(target, room, user, connection, cmd) {
+            if (!room.dice) {
+                return this.sendReply('There is no dice game going on now');
+            }
+            if (parseInt(Core.stdin('money', user.userid)) < room.dice.award) {
+                return this.sendReply("You don't have enough money to join this game of dice.");
+            }
+            for (var i = 0; i < room.dice.members.length; i++) {
+                if (Users.get(room.dice.members[i]).userid == user.userid) return this.sendReply("You have already joined this game of dice!");
+            }
+            room.dice.members.push(user.userid);
+            this.add('|html|<b>' + user.name + ' has joined the game!');
+            if (room.dice.members.length == 2) {
+            	var point = (room.dice.award == 1) ? 'buck' : 'bucks';
+                result1 = Math.floor((Math.random() * 6) + 1);
+                result2 = Math.floor((Math.random() * 6) + 1);
+                if (result1 > result2) {
+                    var result3 = '' + Users.get(room.dice.members[0]).name + ' has won ' + room.dice.award + ' '+point+'!'
+                    var losemessage = 'Better luck next time, '+Users.get(room.dice.members[1]).name+'!';
+                } else if (result2 > result1) {
+                    var result3 = '' + Users.get(room.dice.members[1]).name + ' has won ' + room.dice.award + ' '+point+'!'
+                    var losemessage = 'Better luck next time, '+Users.get(room.dice.members[0]).name+'!';
+                } else {
+                    var result3;
+                    var losemessage;
+                    do {
+                        result1 = Math.floor((Math.random() * 6) + 1);
+                        result2 = Math.floor((Math.random() * 6) + 1);
+                    } while (result1 === result2);
+                    if (result1 > result2) {
+                        result3 = '' + Users.get(room.dice.members[0]).name + ' has won ' + room.dice.award + ' '+point+'!';
+                        var losemessage = 'Better luck next time, '+Users.get(room.dice.members[1]).name+'!';
+                    } else {
+                        result3 = '' + Users.get(room.dice.members[1]).name + ' has won ' + room.dice.award + ' '+point+'!';
+                        var losemessage = 'Better luck next time, '+Users.get(room.dice.members[0]).name+'!';
+                    }
+                }
+                var dice1, dice2;
+                switch (result1) {
+                    case 1:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/1_zps4bef0fe2.png";
+                        break;
+                    case 2:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/2_zpsa0efaac0.png";
+                        break;
+                    case 3:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/3_zps36d44175.png";
+                        break;
+                    case 4:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/4_zpsd3983524.png";
+                        break;
+                    case 5:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/5_zpsc9bc5572.png";
+                        break;
+                    case 6:
+                        dice1 = "http://i1171.photobucket.com/albums/r545/Brahak/6_zps05c8b6f5.png";
+                        break;
+                }
+
+                switch (result2) {
+                    case 1:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/1_zps4bef0fe2.png";
+                        break;
+                    case 2:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/2_zpsa0efaac0.png";
+                        break;
+                    case 3:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/3_zps36d44175.png";
+                        break;
+                    case 4:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/4_zpsd3983524.png";
+                        break;
+                    case 5:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/5_zpsc9bc5572.png";
+                        break;
+                    case 6:
+                        dice2 = "http://i1171.photobucket.com/albums/r545/Brahak/6_zps05c8b6f5.png";
+                        break;
+                }
+
+                room.add('|html|<div class="infobox"><center><b>The dice game has been started!</b><br />' +
+                    'Two users have joined the game.<br />' +
+                    'Rolling the dice...<br />' +
+                    '<img src = "' + dice1 + '" align = "left"><img src = "' + dice2 + '" align = "right"><br/>' +
+                    '<b>' + Users.get(room.dice.members[0]).name + '</b> rolled ' + result1 + '!<br />' +
+                    '<b>' + Users.get(room.dice.members[1]).name + '</b> rolled ' + result2 + '!<br />' +
+                    '<b>' + result3 + '</b><br />'+losemessage);
+                    var user1 = Core.stdin('money', Users.get(room.dice.members[0]).userid);
+                    var user2 = Core.stdin('money', Users.get(room.dice.members[1]).userid);
+                if (result3 === '' + Users.get(room.dice.members[0]).name + ' has won ' + room.dice.award + ' '+point+'!') {
+                	var userMoney = parseInt(user1) + parseInt(room.dice.award);
+                	var targetMoney = parseInt(user2) - parseInt(room.dice.award);
+                	var loser = Users.get(room.dice.members[1]).userid;
+                	Core.stdout('money', Users.get(room.dice.members[0]).userid, userMoney, function () {
+                		Core.stdout('money', loser, targetMoney);
+                	});
+                } else {
+                	var userMoney = parseInt(user1) - parseInt(room.dice.award);
+                	var targetMoney = parseInt(user2) + parseInt(room.dice.award);
+                	var winner = Users.get(room.dice.members[1]).userid;
+                	Core.stdout('money', Users.get(room.dice.members[0]).userid, userMoney, function () {
+                		Core.stdout('money', winner, targetMoney);
+                	});
+                }
+                delete room.dice;
+            }
+        },
+
+        diceend: function(target, room, user) {
+                if (!this.can('broadcast', null, room)) return false;
+                    if (!room.dice) return this.sendReply("There is no game of dice going on in this room right now."); this.add('|html|<b>The game of dice has been ended by ' + user.name); delete room.dice;
+                },
+	
+
     
     roomfounder: function (target, room, user) {
 		if (!room.chatRoomData) {
