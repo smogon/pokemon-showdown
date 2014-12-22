@@ -19,7 +19,7 @@
     "node": "> 0.10.1"
   },
   "engineStrict": true,
-  "main": "app.js",
+  "main": "rhc.js",
   "scripts": {
     "start": "node app.js",
     "test": "gulp"
