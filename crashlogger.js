@@ -19,19 +19,19 @@ module.exports = (function () {
 			console.log("\nSUBCRASH: " + err.stack + "\n");
 		});
 		var datenow = Date.now();
-		if (Config.crashGuardEmail && ((datenow - lastCrashLog) > 1000 * 60 * 5)) {
+		if (Config.crashguardemail && ((datenow - lastCrashLog) > 1000 * 60 * 5)) {
 			lastCrashLog = datenow;
 			var transport;
 			try {
 				transport = require('nodemailer').createTransport(
-					Config.crashGuardEmail.transport,
-					Config.crashGuardEmail.options
+					Config.crashguardemail.transport,
+					Config.crashguardemail.options
 				);
 				transport.sendMail({
-					from: Config.crashGuardEmail.from,
-					to: Config.crashGuardEmail.to,
-					subject: Config.crashGuardEmail.subject,
-					text: description + ' crashed with this stack trace:\n' + err.stack
+					from: Config.crashguardemail.from,
+					to: Config.crashguardemail.to,
+					subject: Config.crashguardemail.subject,
+					text: description + ' crashed with this stack trace:\n' + (err.stack || err)
 				});
 			} catch (e) {
 				// could not send an email...
