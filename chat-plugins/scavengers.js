@@ -27,13 +27,13 @@ exports.commands = {
 		if (!targets[0] || !targets[1] || !targets[2] || !targets[3] || !targets[4] || !targets[5] || targets[6]) {
 			return this.sendReply('You must specify three hints and three answers.');
 		}
-		status = 'on';
 		if (cmd === 'startofficialhunt') {
 			if (!this.can('ban', null, room)) return false;
 			blitz = setTimeout(function () {
 				blitz = null;
 			}, 60000);
 		}
+		status = 'on';
 		hints = [targets[0].trim(), targets[2].trim(), targets[4].trim()];
 		answers = [toId(targets[1]), toId(targets[3]), toId(targets[5])];
 		var result = (cmd === 'startofficialhunt' ? 'An official' : 'A new') + ' Scavenger Hunt has been started by <em> ' + Tools.escapeHTML(user.name) + '</em>! The first hint is: ' + Tools.escapeHTML(hints[0]);
