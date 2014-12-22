@@ -72,7 +72,6 @@ function canTalk(user, room, connection, message) {
 		connection.sendTo(room, "You are muted and cannot talk in this room.");
 		return false;
 	}
-	var roomType = room && room.auth ? room.type + 'Room' : 'global';
 	if (room && room.modchat) {
 		if (room.modchat === 'crash') {
 			if (!user.can('ignorelimits')) {
@@ -85,16 +84,14 @@ function canTalk(user, room, connection, message) {
 				if (room.auth[user.userid]) {
 					userGroup = room.auth[user.userid];
 				} else if (room.isPrivate) {
-					userGroup = Config.groups.default[roomType];
+					userGroup = ' ';
 				}
 			}
-			if (room.modchat === 'autoconfirmed') {
-				if (!user.autoconfirmed && userGroup === Config.groups.default[roomType]) {
-					connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
-					return false;
-				}
-			} else if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[room.modchat].rank) {
-				var groupName = Config.groups.bySymbol[room.modchat].name || room.modchat;
+			if (!user.autoconfirmed && (room.auth && room.auth[user.userid] || user.group) === ' ' && room.modchat === 'autoconfirmed') {
+				connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
+				return false;
+			} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat)) {
+				var groupName = Config.groups[room.modchat].name || room.modchat;
 				connection.sendTo(room, "Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
 				return false;
 			}
@@ -206,11 +203,43 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		cmd = cmd.substr(1);
 	}
 
-	var commandHandler = commands[cmd];
-	if (typeof commandHandler === 'string') {
-		// in case someone messed up, don't loop
-		commandHandler = commands[commandHandler];
+	var namespaces = [];
+	var currentCommands = commands;
+	var originalMessage = message;
+	var commandHandler;
+	do {
+		commandHandler = currentCommands[cmd];
+		if (typeof commandHandler === 'string') {
+			// in case someone messed up, don't loop
+			commandHandler = currentCommands[commandHandler];
+		}
+		if (commandHandler && typeof commandHandler === 'object') {
+			namespaces.push(cmd);
+
+			var newCmd = target;
+			var newTarget = '';
+			var spaceIndex = target.indexOf(' ');
+			if (spaceIndex > 0) {
+				newCmd = target.substr(0, spaceIndex);
+				newTarget = target.substr(spaceIndex + 1);
+			}
+			newCmd = newCmd.toLowerCase();
+			var newMessage = message.replace(cmd + (target ? ' ' : ''), '');
+
+			cmd = newCmd;
+			target = newTarget;
+			message = newMessage;
+			currentCommands = commandHandler;
+		}
+	} while (commandHandler && typeof commandHandler === 'object');
+	if (!commandHandler && currentCommands.default) {
+		commandHandler = currentCommands.default;
+		if (typeof commandHandler === 'string') {
+			commandHandler = currentCommands[commandHandler];
+		}
 	}
+	var fullCmd = namespaces.concat(cmd).join(' ');
+
 	if (commandHandler) {
 		var context = {
 			sendReply: function (data) {
@@ -240,7 +269,8 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			sendModCommand: function (data) {
 				for (var i in room.users) {
 					var user = room.users[i];
-					if (user.can('staff') || user.can('staff', room)) {
+					// hardcoded for performance reasons (this is an inner loop)
+					if (user.isStaff || (room.auth && (room.auth[user.userid] || '+') !== '+')) {
 						user.sendTo(room, data);
 					}
 				}
@@ -264,16 +294,16 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			},
 			can: function (permission, target, room) {
 				if (!user.can(permission, target, room)) {
-					this.sendReply("/" + cmd + " - Access denied.");
+					this.sendReply("/" + fullCmd + " - Access denied.");
 					return false;
 				}
 				return true;
 			},
 			canBroadcast: function (suppressMessage) {
 				if (broadcast) {
-					message = this.canTalk(message);
+					var message = this.canTalk(originalMessage);
 					if (!message) return false;
-					if (!user.can('broadcast', room)) {
+					if (!user.can('broadcast', null, room)) {
 						connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
 						connection.sendTo(room, "To see it for yourself, use: /" + message.substr(1));
 						return false;
@@ -295,6 +325,9 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				return true;
 			},
 			parse: function (message) {
+				if (message[0] === '/' || message[0] === '!') {
+					message = message[0] + namespaces.concat(message.slice(1)).join(" ");
+				}
 				return parse(message, room, user, connection, levelsDeep + 1);
 			},
 			canTalk: function (message, relevantRoom) {
@@ -307,7 +340,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				if (!images) return true;
 				for (var i = 0; i < images.length; i++) {
 					if (!/width=([0-9]+|"[0-9]+")/i.test(images[i]) || !/height=([0-9]+|"[0-9]+")/i.test(images[i])) {
-						this.sendReply("All images must have a width and height attribute");
+						this.sendReply('All images must have a width and height attribute');
 						return false;
 					}
 				}
@@ -366,23 +399,22 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		return result;
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
-		var isRoom = false;
-		var promoteCmd = cmd;
-		if (promoteCmd.substr(0, 4) === 'room') {
-			isRoom = true;
-			promoteCmd = promoteCmd.slice(4);
-		}
-		for (var g in Config.groups[isRoom ? room.type + 'Room' : 'global']) {
-			var groupId = Config.groups.bySymbol[g].id;
-			var isDemote = promoteCmd === 'de' + groupId || promoteCmd === 'un' + groupId;
-			if (promoteCmd === groupId || isDemote) {
-				return parse('/' + (isRoom ? 'room' : '') + (isDemote ? 'demote' : 'promote') + ' ' + toId(target) + (isDemote ? '' : ',' + g), room, user, connection);
+		for (var g in Config.groups) {
+			var groupid = Config.groups[g].id;
+			if (cmd === groupid || cmd === 'global' + groupid) {
+				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection);
+			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
+				return parse('/demote ' + toId(target), room, user, connection);
+			} else if (cmd === 'room' + groupid) {
+				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection);
+			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
+				return parse('/roomdemote ' + toId(target), room, user, connection);
 			}
 		}
 
-		if (message.substr(0, 1) === '/' && cmd) {
+		if (message.substr(0, 1) === '/' && fullCmd) {
 			// To guard against command typos, we now emit an error message
-			return connection.sendTo(room.id, "The command '/" + cmd + "' was unrecognized. To send a message starting with '/" + cmd + "', type '//" + cmd + "'.");
+			return connection.sendTo(room.id, "The command '/" + fullCmd + "' was unrecognized. To send a message starting with '/" + fullCmd + "', type '//" + fullCmd + "'.");
 		}
 	}
 
@@ -393,17 +425,6 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	if (!message) return false;
 	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
 		return parse(message, room, user, connection, levelsDeep + 1);
-	}
-
-	if (user.authenticated && global.tells) {
-		var alts = user.getAlts();
-		alts.push(user.name);
-		alts.map(toId).forEach(function (user) {
-			if (tells[user]) {
-				tells[user].forEach(connection.sendTo.bind(connection, room));
-				delete tells[user];
-			}
-		});
 	}
 
 	return message;
