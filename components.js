@@ -210,7 +210,7 @@ user.updateIdentity();
     atm: 'profile',
     profile: function (target, room, user, connection, cmd) {
         if (!this.canBroadcast()) return;
-        if (cmd === 'atm') return this.sendReply('Use /profile instead.');
+        if (cmd === 'bucks') return this.sendReply('Use /profile instead.');
         if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
 
         var targetUser = this.targetUserOrSelf(target);
@@ -1090,7 +1090,6 @@ user.updateIdentity();
                 }
 
                 room.add('|html|<div class="infobox"><center><b>The dice game has been started!</b><br />' +
-                    'Two users have joined the game.<br />' +
                     'Rolling the dice...<br />' +
                     '<img src = "' + dice1 + '" align = "left"><img src = "' + dice2 + '" align = "right"><br/>' +
                     '<b>' + Users.get(room.dice.members[0]).name + '</b> rolled ' + result1 + '!<br />' +
