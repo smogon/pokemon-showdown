@@ -800,7 +800,7 @@ exports.Formats = [
 			}
 		},
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Eviolite']
+		banlist: ['Chansey', 'Frogadier', 'Eviolite']
 	},
 	{
 		name: "Sky Battle",
