@@ -652,8 +652,11 @@ exports.Formats = [
 		name: "Inverse Battle",
 		section: "Other Metagames",
 
-		ruleset: ['OU'],
-		banlist: ['Kyurem-Black', 'Snorlax'],
+		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
+		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
+			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Snorlax',
+			'Xerneas', 'Yveltal', 'Zekrom', 'Gengarite', 'Kangaskhanite', 'Salamencite', 'Soul Dew'
+		],
 		onModifyPokemon: function (pokemon) {
 			pokemon.negateImmunity['Type'] = true;
 		},
