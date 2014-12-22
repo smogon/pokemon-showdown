@@ -57,11 +57,11 @@ exports.BattleScripts = {
 
 			// Hard coded Reflect and Light Screen boosts
 			if (this.volatiles['reflect'] && statName === 'def' && !unboosted) {
-				this.debug('Reflect doubles Defense');
+				this.battle.debug('Reflect doubles Defense');
 				stat *= 2;
 				stat = this.battle.clampIntRange(stat, 1, 1998);
 			} else if (this.volatiles['lightscreen'] && statName === 'spd' && !unboosted) {
-				this.debug('Light Screen doubles Special Defense');
+				this.battle.debug('Light Screen doubles Special Defense');
 				stat *= 2;
 				stat = this.battle.clampIntRange(stat, 1, 1998);
 			} else {
