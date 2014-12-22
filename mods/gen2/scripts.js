@@ -96,7 +96,7 @@ exports.BattleScripts = {
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.runEvent('AfterMove', target, pokemon, move);
-		this.runEvent('AfterMoveSelf', pokemon, target, move);
+		if (!move.selfSwitch) this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	getDamage: function (pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
