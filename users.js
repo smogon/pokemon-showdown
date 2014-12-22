@@ -665,6 +665,29 @@ User = (function () {
 			this.mmrCache = {};
 		}
 
+		if (authenticated && userid in bannedUsers) {
+			var bannedUnder = '';
+			if (bannedUsers[userid] !== userid) bannedUnder = ' under the username ' + bannedUsers[userid];
+			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+			this.ban(true, userid);
+			return;
+		}
+		if (authenticated && userid in lockedUsers) {
+			var bannedUnder = '';
+			if (lockedUsers[userid] !== userid) bannedUnder = ' under the username ' + lockedUsers[userid];
+			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+			this.lock(true, userid);
+		}
+		if (!this.locked && this.group === Config.groupsranking[0]) {
+			var shortHost = Users.shortenHost(this.latestHost);
+			if (lockedDomains[shortHost]) {
+				this.send("|popup|Your ISP is temporarily locked from talking in chats, battles, and PMing regular users.");
+				lockedDomainsUsers[shortHost][userid] = 1;
+				this.locked = '#range';
+				this.updateIdentity();
+			}
+		}
+
 		this.name = name;
 		var oldid = this.userid;
 		delete users[oldid];
@@ -672,28 +695,6 @@ User = (function () {
 		users[userid] = this;
 		this.authenticated = !!authenticated;
 		this.forceRenamed = !!forcible;
-
-		if (authenticated && userid in bannedUsers) {
-			var bannedUnder = '';
-			if (bannedUsers[userid] !== userid) bannedUnder = ' under the username ' + bannedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-			this.ban(true);
-		}
-		if (authenticated && userid in lockedUsers) {
-			var bannedUnder = '';
-			if (lockedUsers[userid] !== userid) bannedUnder = ' under the username ' + lockedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-			this.lock(true);
-		}
-		if (!this.locked && this.group === Config.groupsranking[0]) {
-			var shortHost = Users.shortenHost(this.latestHost);
-			if (lockedDomains[shortHost]) {
-				this.send("|popup|Your ISP is temporarily locked from talking in chats, battles, and PMing regular users.");
-				lockedDomainsUsers[shortHost][this.userid] = 1;
-				this.locked = '#range';
-				this.updateIdentity();
-			}
-		}
 
 		for (var i = 0; i < this.connections.length; i++) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
@@ -920,9 +921,9 @@ User = (function () {
 				} else if (body === '4') {
 					this.autoconfirmed = userid;
 				} else if (body === '5') {
-					this.lock();
+					this.lock(false, userid);
 				} else if (body === '6') {
-					this.ban();
+					this.ban(false, userid);
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
@@ -1115,7 +1116,6 @@ User = (function () {
 				this.leaveRoom(connection.rooms[j], connection, true);
 			}
 			connection.destroy();
-			--this.ips[connection.ip];
 		}
 		if (this.connections.length) {
 			// should never happen
@@ -1264,7 +1264,7 @@ User = (function () {
 		}
 
 		for (var ip in this.ips) {
-			lockedIps[ip] = this.userid;
+			lockedIps[ip] = userid;
 		}
 		if (this.autoconfirmed) lockedUsers[this.autoconfirmed] = this.userid;
 		if (this.authenticated) lockedUsers[this.userid] = this.userid;
@@ -1280,12 +1280,12 @@ User = (function () {
 			if (room.staffRoom && !this.isStaff) return false;
 			if (room.bannedUsers) {
 				if (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers) {
-					return false;
+					return null;
 				}
 			}
 			if (this.ips && room.bannedIps) {
 				for (var ip in this.ips) {
-					if (ip in room.bannedIps) return false;
+					if (ip in room.bannedIps) return null;
 				}
 			}
 		}
@@ -1297,7 +1297,7 @@ User = (function () {
 					this.joinRoom(room, this.connections[i]);
 				}
 			}
-			return;
+			return true;
 		}
 		if (!connection.rooms[room.id]) {
 			if (!this.roomCount[room.id]) {
@@ -1587,11 +1587,11 @@ Connection = (function () {
 	Connection.prototype.destroy = function () {
 		Sockets.socketDisconnect(this.worker, this.socketid);
 		this.onDisconnect();
-		this.user = null;
 	};
 	Connection.prototype.onDisconnect = function () {
 		delete connections[this.id];
 		if (this.user) this.user.onDisconnect(this);
+		this.user = null;
 	};
 
 	Connection.prototype.popup = function (message) {

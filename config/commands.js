@@ -346,19 +346,29 @@ var commands = exports.commands = {
 					"Priority": move.priority
 				};
 
-				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";
-				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
-				if (move.isSoundBased) details["<font color=black>&#10003; Sound</font>"] = "";
-				if (move.isBullet) details["<font color=black>&#10003; Bullet</font>"] = "";
-				if (move.isPulseMove) details["<font color=black>&#10003; Pulse</font>"] = "";
+				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary effect</font>"] = "";
+				if (move.flags['contact']) details["<font color=black>&#10003; Contact</font>"] = "";
+				if (move.flags['sound']) details["<font color=black>&#10003; Sound</font>"] = "";
+				if (move.flags['bullet']) details["<font color=black>&#10003; Bullet</font>"] = "";
+				if (move.flags['pulse']) details["<font color=black>&#10003; Pulse</font>"] = "";
+				if (move.flags['protect']) details["<font color=black>&#10003; Blocked by Protect</font>"] = "";
+				if (move.flags['authentic']) details["<font color=black>&#10003; Ignores substitutes</font>"] = "";
+				if (move.flags['defrost']) details["<font color=black>&#10003; Thaws user</font>"] = "";
+				if (move.flags['bite']) details["<font color=black>&#10003; Bite</font>"] = "";
+				if (move.flags['punch']) details["<font color=black>&#10003; Punch</font>"] = "";
+				if (move.flags['powder']) details["<font color=black>&#10003; Powder</font>"] = "";
+				if (move.flags['reflectable']) details["<font color=black>&#10003; Bounceable</font>"] = "";
 
 				details["Target"] = {
-					'normal': "Adjacent Pokemon",
-					'self': "Self",
-					'adjacentAlly': "Single Ally",
-					'allAdjacentFoes': "Adjacent Foes",
-					'foeSide': "All Foes",
-					'allySide': "All Allies",
+					'normal': "One Adjacent Pokemon",
+					'self': "User",
+					'adjacentAlly': "One Ally",
+					'adjacentAllyOrSelf': "User or Ally",
+					'adjacentFoe': "One Adjacent Opposing Pokemon",
+					'allAdjacentFoes': "All Adjacent Opponents",
+					'foeSide': "Opposing Side",
+					'allySide': "User's Side",
+					'allyTeam': "User's Side",
 					'allAdjacent': "All Adjacent Pokemon",
 					'any': "Any Pokemon",
 					'all': "All Pokemon"
@@ -370,14 +380,15 @@ var commands = exports.commands = {
 					details["Fling Base Power"] = item.fling.basePower;
 					if (item.fling.status) details["Fling Effect"] = item.fling.status;
 					if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
-					if (item.isBerry) details["Fling Effect"] = "Activates effect of berry on target.";
-					if (item.id === 'whiteherb') details["Fling Effect"] = "Removes all negative stat levels on the target.";
-					if (item.id === 'mentalherb') details["Fling Effect"] = "Removes the effects of infatuation, Taunt, Encore, Torment, Disable, and Cursed Body on the target.";
+					if (item.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
+					if (item.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
+					if (item.id === 'mentalherb') details["Fling Effect"] = "Removes the effects of Attract, Disable, Encore, Heal Block, Taunt, and Torment from the target.";
+				} else {
+					details["Fling"] = "This item cannot be used with Fling.";
 				}
-				if (!item.fling) details["Fling"] = "This item cannot be used with Fling";
 				if (item.naturalGift) {
 					details["Natural Gift Type"] = item.naturalGift.type;
-					details["Natural Gift BP"] = item.naturalGift.basePower;
+					details["Natural Gift Base Power"] = item.naturalGift.basePower;
 				}
 			} else {
 				details = {};
@@ -859,6 +870,16 @@ var commands = exports.commands = {
 		room.add("" + user.name + " applied showtan to affected area of " + this.targetUser.name);
 	},
 
+	cpgtan: function (target, room, user) {
+		if (room.id !== 'cpg') return this.sendReply("The command '/cpgtan' was unrecognized. To send a message starting with '/cpgtan', type '//cpgtan'.");
+		if (!this.can('modchat', null, room)) return;
+		target = this.splitTarget(target);
+		if (!this.targetUser) return this.sendReply("User not found");
+		if (!room.users[this.targetUser.userid]) return this.sendReply("Not a cpger");
+		this.targetUser.avatar = '#cpgtan';
+		room.add("" + user.name + " applied cpgtan to affected area of " + this.targetUser.name);
+	},
+
 	introduction: 'intro',
 	intro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1078,6 +1099,8 @@ var commands = exports.commands = {
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
 			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
+			"<br />" +
+			"More detailed help can be found in the <a href=\"https://www.smogon.com/sim/roomauth_guide\">roomauth guide</a><br />" +
 			"</div>"
 		);
 	},
@@ -1214,7 +1237,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'smogondoubles' || target === 'doubles') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522688/\">np: Doubles Stage 0</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523833/\">np: Doubles Stage 1</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522814/\">Doubles Viability Rankings</a><br />";
 		}
