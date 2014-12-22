@@ -6,15 +6,16 @@ exports.BattleScripts = {
 	gen: 2,
 	// BattlePokemon scripts.
 	pokemon: {
-		getStat: function (statName, unboosted, unmodified) {
+		getStat: function (statName, unboosted, unmodified, burndrop) {
 			statName = toId(statName);
 			if (statName === 'hp') return this.maxhp;
 
 			// base stat
 			var stat = this.stats[statName];
 
-			// stat boosts
-			if (!unboosted) {
+			// Stat boosts.
+			// If the attacker is burned, stat level modifications are always ignored.
+			if (!unboosted && (statName !== 'atk' || (statName === 'atk' && this.status !== 'brn'))) {
 				var boost = this.boosts[statName];
 				if (boost > 6) boost = 6;
 				if (boost < -6) boost = -6;
@@ -27,12 +28,21 @@ exports.BattleScripts = {
 				}
 			}
 
-			// Stat modifier effects
+			// Stat modifier effects.
 			if (!unmodified) {
 				var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
 				var statMod = 1;
 				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
 				stat = this.battle.modify(stat, statMod);
+				// Burn attack drop is checked when you get the attack stat upon switch in and used until switch out.
+				if (this.status === 'brn' && statName === 'atk') {
+					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
+				}
+			}
+
+			// Critical hits may apply burn even if unmodified is in effect.
+			if (unmodified && burndrop && this.status === 'brn' && statName === 'atk') {
+				stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
 			}
 
 			// Gen 2 caps stats at 999 and min is 1.
@@ -168,6 +178,7 @@ exports.BattleScripts = {
 				move.crit = (this.random(critMult[move.critRatio]) === 0);
 			}
 		}
+
 		if (move.crit) {
 			move.crit = this.runEvent('CriticalHit', target, null, move);
 		}
@@ -193,25 +204,27 @@ exports.BattleScripts = {
 		var attack = attacker.getStat(atkType);
 		var defense = defender.getStat(defType);
 
+		// The move is a critical hit. Several things happen here.
+		// Level is doubled for damage calculation.
+		// Stat level modifications are ignored if they are neutral to or favour the defender.
+		// Reflect and Light Screen defensive boosts are only ignored if stat level modifications were also ignored as a result of that.
 		if (move.crit) {
-			move.ignoreNegativeOffensive = true;
-			move.ignorePositiveDefensive = true;
 			level *= 2;
 			if (!suppressMessages) this.add('-crit', target);
+			if (attacker.status === 'brn' || attacker.boosts[atkType] <= defender.boosts[defType]) {
+				move.ignoreOffensive = true;
+				move.ignoreDefensive = true;
+			}
 		}
-		if (move.ignoreNegativeOffensive && attack < attacker.getStat(move.category === 'Physical' ? 'atk' : 'spa', true, true)) {
-			move.ignoreOffensive = true;
-		}
+		// Ignore offense only if attack is lower than boosted and modified.
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.getStat(move.category === 'Physical' ? 'atk' : 'spa', true, true);
-		}
-		if (move.ignorePositiveDefensive && defense > target.getStat(move.defensiveCategory === 'Physical' ? 'def' : 'spd', true, true)) {
-			move.ignoreDefensive = true;
+			// The attack drop from the burn is only applied when attacker's attack level is higher than defender's defense level.
+			attack = attacker.getStat(atkType, true, true, attack > defense);
 		}
 		if (move.ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
-			defense = target.getStat(move.defensiveCategory === 'Physical' ? 'def' : 'spd', true, true);
+			defense = target.getStat(defType, true, true);
 		}
 
 		// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
