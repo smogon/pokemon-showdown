@@ -53,5 +53,4 @@ rhcApp.setupwatch( 'config/usergroups.csv', ddir + 'usergroups.csv');
 rhcApp.setupwatch( 'config/chatrooms.json', ddir + 'chatrooms.json');
 rhcApp.setupwatch( ddir + 'custom.css', 'config/custom.css');
 
-
 rhcApp.runapp();
