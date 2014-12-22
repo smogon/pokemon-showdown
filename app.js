@@ -82,39 +82,12 @@ if (!fs.existsSync('./config/config.js')) {
 
 global.Config = require('./config/config.js');
 
-global.reloadCustomAvatars = function () {
-	var path = require('path');
-	var newCustomAvatars = {};
-	fs.readdirSync('./config/avatars').forEach(function (file) {
-		var ext = path.extname(file);
-		if (ext !== '.png' && ext !== '.gif')
-			return;
-
-		var user = toId(path.basename(file, ext));
-		newCustomAvatars[user] = file;
-		delete Config.customAvatars[user];
-	});
-
-	// Make sure the manually entered avatars exist
-	for (var a in Config.customAvatars)
-		if (typeof Config.customAvatars[a] === 'number')
-			newCustomAvatars[a] = Config.customAvatars[a];
-		else
-			fs.exists('./config/avatars/' + Config.customAvatars[a], function (user, file, isExists) {
-				if (isExists)
-					Config.customAvatars[user] = file;
-			}.bind(null, a, Config.customAvatars[a]));
-
-	Config.customAvatars = newCustomAvatars;
-};
-
-if (Config.watchConfig) {
+if (Config.watchconfig) {
 	fs.watchFile('./config/config.js', function (curr, prev) {
 		if (curr.mtime <= prev.mtime) return;
 		try {
 			delete require.cache[require.resolve('./config/config.js')];
 			global.Config = require('./config/config.js');
-			reloadCustomAvatars();
 			console.log('Reloaded config/config.js');
 		} catch (e) {}
 	});
@@ -344,12 +317,6 @@ global.toName = function (name) {
 	return name;
 };
 
-global.sanitize = function(str, strEscape) {
-	str = (''+(str||''));
-	str = str.escapeHTML();
-	if (strEscape) str = str.replace(/'/g, '\\\'');
-	return str;
-};
 /**
  * Safely ensures the passed variable is a string
  * Simply doing '' + str can crash if str.toString crashes or isn't a function
@@ -384,29 +351,30 @@ try {
 
 global.Cidr = require('./cidr.js');
 
-// graceful crash - allow current battles to finish before restarting
-var lastCrash = 0;
-process.on('uncaughtException', function (err) {
-	var dateNow = Date.now();
-	var quietCrash = require('./crashlogger.js')(err, 'The main process');
-	quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5);
-	lastCrash = Date.now();
-	if (quietCrash) return;
-	var stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
-	if (Rooms.lobby) {
-		Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
-		Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
-	}
-	Config.modchat = 'crash';
-	Rooms.global.lockdown = true;
-});
+if (Config.crashguard) {
+	// graceful crash - allow current battles to finish before restarting
+	var lastCrash = 0;
+	process.on('uncaughtException', function (err) {
+		var dateNow = Date.now();
+		var quietCrash = require('./crashlogger.js')(err, 'The main process');
+		quietCrash = quietCrash || ((dateNow - lastCrash) <= 1000 * 60 * 5);
+		lastCrash = Date.now();
+		if (quietCrash) return;
+		var stack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+		if (Rooms.lobby) {
+			Rooms.lobby.addRaw('<div class="broadcast-red"><b>THE SERVER HAS CRASHED:</b> ' + stack + '<br />Please restart the server.</div>');
+			Rooms.lobby.addRaw('<div class="broadcast-red">You will not be able to talk in the lobby or start new battles until the server restarts.</div>');
+		}
+		Config.modchat = 'crash';
+		Rooms.global.lockdown = true;
+	});
+}
 
 /*********************************************************
  * Start networking processes to be connected to
  *********************************************************/
 
 global.Sockets = require('./sockets.js');
-
 
 /*********************************************************
  * Set up our last global
@@ -440,18 +408,11 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
 	Users.checkRangeBanned = Cidr.checker(rangebans);
 });
 
-reloadCustomAvatars();
+/*********************************************************
+ * Start up the REPL server
+ *********************************************************/
 
-global.Spamroom = require('./spamroom.js');
-
-fs.readFile('./logs/uptime.txt', function (err, uptime) {
-	if (!err) global.uptimeRecord = parseInt(uptime, 10);
-	global.uptimeRecordInterval = setInterval(function () {
-		if (global.uptimeRecord && process.uptime() <= global.uptimeRecord) return;
-		global.uptimeRecord = process.uptime();
-		fs.writeFile('./logs/uptime.txt', global.uptimeRecord.toFixed(0));
-	}, (1).hour());
-});
+require('./repl.js').start('app', function (cmd) { return eval(cmd); });
 
 // load source files
 
