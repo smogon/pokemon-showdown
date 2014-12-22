@@ -1056,18 +1056,7 @@ exports.Formats = [
 
 		mod: 'gen2',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber',
-			'Hypnosis + Perish Song + Mean Look',
-			'Hypnosis + Perish Song + Spider Web',
-			'Lovely Kiss + Perish Song + Mean Look',
-			'Lovely Kiss + Perish Song + Spider Web',
-			'Sing + Perish Song + Mean Look',
-			'Sing + Perish Song + Spider Web',
-			'Sleep Powder + Perish Song + Mean Look',
-			'Sleep Powder + Perish Song + Spider Web',
-			'Spore + Perish Song + Mean Look',
-			'Spore + Perish Song + Spider Web'
-		]
+		banlist: ['Uber']
 	},
 	{
 		name: "[Gen 2] Custom Game",
