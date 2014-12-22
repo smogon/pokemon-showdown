@@ -1051,7 +1051,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
 	{
-		name: "[Gen 2] OU (beta)",
+		name: "[Gen 2] OU",
 		section: "Past Generations",
 
 		mod: 'gen2',
