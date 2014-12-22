@@ -36,26 +36,23 @@ exports.BattleScripts = {
 			}
 
 			// Gen 2 caps stats at 999 and min is 1.
-			// Stats over 1023 with items roll over (Marowak, Pikachu)
-			// TO-DO: Change formula to use the mod for the proper roll-over.
-			if (this.species === 'Marowak' && this.item === 'thickclub' && statName === 'atk' && stat > 1023) {
-				stat -= 1024;
-			} else if (this.species === 'Pikachu' && this.item === 'lightball' && statName === 'spa' && stat > 1023) {
-				stat -= 1024;
-			} else if (this.species === 'Ditto' && this.item === 'metalpowder' && statName in {def:1, spd:1} && stat > 1023) {
+			stat = this.battle.clampIntRange(stat, 1, 999);
+
+			// Treat here the items.
+			if ((this.species in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk')
+			|| (this.species === 'Pikachu' && this.item === 'lightball' && statName in {'spa':1, 'atk':1})) {
+				stat *= 2;
+			} else if (this.species === 'Ditto' && this.item === 'metalpowder' && statName in {'def':1, 'spd':1}) {
 				// what. the. fuck. stop playing pokémon
-				stat -= 1024;
-			} else {
-				stat = this.battle.clampIntRange(stat, 1, 999);
+				stat *= 1.5;
 			}
-			if (stat < 1) stat = 1;
 
 			return stat;
 		}
 	},
 	// Battle scripts.
 	getDamage: function (pokemon, target, move, suppressMessages) {
-		// We get the move
+		// First of all, we get the move.
 		if (typeof move === 'string') move = this.getMove(move);
 		if (typeof move === 'number') move = {
 			basePower: move,
@@ -63,15 +60,16 @@ exports.BattleScripts = {
 			category: 'Physical'
 		};
 
-		// First of all, we test for immunities
+		// Let's test for immunities.
 		if (move.affectedByImmunities) {
 			if (!target.runImmunity(move.type, true)) {
 				return false;
 			}
 		}
 
-		// Is it ok?
+		// Is it an OHKO move?
 		if (move.ohko) {
+			// If it is, move hits if the Pokémon is more level.
 			if (target.level > pokemon.level) {
 				this.add('-failed', target);
 				return false;
@@ -151,6 +149,8 @@ exports.BattleScripts = {
 		if (move.crit) {
 			move.ignoreNegativeOffensive = true;
 			move.ignorePositiveDefensive = true;
+			level *= 2;
+			if (!suppressMessages) this.add('-crit', target);
 		}
 		if (move.ignoreNegativeOffensive && attack < attacker.getStat(move.category === 'Physical' ? 'atk' : 'spa', true, true)) {
 			move.ignoreOffensive = true;
@@ -167,18 +167,33 @@ exports.BattleScripts = {
 			defense = target.getStat(move.defensiveCategory === 'Physical' ? 'def' : 'spd', true, true);
 		}
 
-		// Gen 2 damage formula
-		var baseDamage = Math.min(Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * attack * basePower / defense) / 50), 997) + 2;
-
-		// Crit damage addition (usually doubling)
-		if (move.crit) {
-			if (!suppressMessages) this.add('-crit', target);
-			baseDamage = this.modify(baseDamage, move.critModifier || 2);
+		// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
+		// This is what cuases the roll over bugs.
+		if (attack >= 256 || defense >= 256) {
+			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
+			// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
+			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
 		}
+
+		// Self destruct moves halve defense at this point.
+		if (move.selfdestruct && defType === 'def') {
+			defense = this.clampIntRange(Math.floor(defense / 2), 1);
+		}
+
+		// Let's go with the calculation now that we have what we need.
+		// We do it step by step just like the game does.
+		var damage = level * 2;
+		damage = Math.floor(damage / 5);
+		damage += 2;
+		damage *= basePower;
+		damage *= attack;
+		damage = Math.floor(damage / defense);
+		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
+		damage += 2;
 
 		// STAB damage bonus, the "???" type never gets STAB
 		if (type !== '???' && pokemon.hasType(type)) {
-			baseDamage = Math.floor(baseDamage * 1.5);
+			damage += Math.floor(damage / 2);
 		}
 
 		// Type effectiveness
@@ -186,32 +201,34 @@ exports.BattleScripts = {
 		// Super effective attack
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
-			baseDamage *= 2;
+			v *= 2;
 			if (totalTypeMod >= 2) {
-				baseDamage *= 2;
+				damage *= 2;
 			}
 		}
-
 		// Resisted attack
 		if (totalTypeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
-			baseDamage = Math.floor(baseDamage / 2);
+			damage = Math.floor(damage / 2);
 			if (totalTypeMod <= -2) {
-				baseDamage = Math.floor(baseDamage / 2);
+				damage = Math.floor(damage / 2);
 			}
 		}
 
-		// Randomizer, it's a number between 217 and 255
-		var randFactor = Math.floor(Math.random() * 39) + 217;
-		baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
+		// Apply random factor is damage is greater than 1
+		if (damage > 1) {
+			damage *= this.random(217, 256);
+			damage = Math.floor(damage / 255);
+			if (damage > target.hp) damage = target.hp;
+		}
 
 		// If damage is less than 1, we return 1
-		if (basePower && !Math.floor(baseDamage)) {
+		if (basePower && !Math.floor(damage)) {
 			return 1;
 		}
 
 		// We are done, this is the final damage
-		return Math.floor(baseDamage);
+		return damage;
 	},
 	faint: function (pokemon, source, effect) {
 		pokemon.faint(source, effect);

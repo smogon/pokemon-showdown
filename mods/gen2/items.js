@@ -38,16 +38,9 @@ exports.BattleItems = {
 	},
 	metalpowder: {
 		inherit: true,
-		onModifyDef: function (def, pokemon) {
-			if (pokemon.template.species === 'Ditto') {
-				return def * 1.5;
-			}
-		},
-		onModifySpD: function (def, pokemon) {
-			if (pokemon.template.species === 'Ditto') {
-				return def * 1.5;
-			}
-		}
+		// On Gen 2 this happens in stat calculation directly.
+		onModifyDef: function () {},
+		onModifySpD: function () {}
 	},
 	leppaberry: {
 		inherit: true,
@@ -71,6 +64,12 @@ exports.BattleItems = {
 		},
 		gen: 2,
 		desc: "Restores 5PP to the first of the holder's moves to reach 0PP. Single use."
+	},
+	lightball: {
+		inherit: true,
+		// On Gen 2 this happens in stat calculation directly.
+		onModifyAtk: function () {},
+		onModifySpA: function () {}
 	},
 	lumberry: {
 		inherit: true,
@@ -117,5 +116,10 @@ exports.BattleItems = {
 	sitrusberry: {
 		inherit: true,
 		gen: 2
+	},
+	thickclub: {
+		inherit: true,
+		// On Gen 2 this happens in stat calculation directly.
+		onModifyAtk: function () {}
 	}
 };
