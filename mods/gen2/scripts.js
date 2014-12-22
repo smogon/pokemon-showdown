@@ -6,7 +6,7 @@ exports.BattleScripts = {
 	gen: 2,
 	// BattlePokemon scripts.
 	pokemon: {
-		getStat: function (statName, unboosted, unmodified, burndrop) {
+		getStat: function (statName, unboosted, unmodified) {
 			statName = toId(statName);
 			if (statName === 'hp') return this.maxhp;
 
@@ -14,8 +14,7 @@ exports.BattleScripts = {
 			var stat = this.stats[statName];
 
 			// Stat boosts.
-			// If the attacker is burned, stat level modifications are always ignored.
-			if (!unboosted && (statName !== 'atk' || (statName === 'atk' && this.status !== 'brn'))) {
+			if (!unboosted) {
 				var boost = this.boosts[statName];
 				if (boost > 6) boost = 6;
 				if (boost < -6) boost = -6;
@@ -26,23 +25,19 @@ exports.BattleScripts = {
 					var numerators = [100, 66, 50, 40, 33, 28, 25];
 					stat = Math.floor(stat * numerators[-boost] / 100);
 				}
-			}
 
-			// Stat modifier effects.
-			if (!unmodified) {
+				// On Gen 2 we check modifications here from moves and items
 				var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
 				var statMod = 1;
 				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
 				stat = this.battle.modify(stat, statMod);
+			}
+
+			if (!unmodified) {
 				// Burn attack drop is checked when you get the attack stat upon switch in and used until switch out.
 				if (this.status === 'brn' && statName === 'atk') {
 					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
 				}
-			}
-
-			// Critical hits may apply burn even if unmodified is in effect.
-			if (unmodified && burndrop && this.status === 'brn' && statName === 'atk') {
-				stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
 			}
 
 			// Gen 2 caps stats at 999 and min is 1.
@@ -201,26 +196,32 @@ exports.BattleScripts = {
 		if (move.useSourceDefensive) defender = pokemon;
 		var atkType = (move.category === 'Physical')? 'atk' : 'spa';
 		var defType = (move.defensiveCategory === 'Physical')? 'def' : 'spd';
-		var attack = attacker.getStat(atkType);
-		var defense = defender.getStat(defType);
+		var unboosted = false;
+		var noburndrop = false;
 
 		// The move is a critical hit. Several things happen here.
-		// Level is doubled for damage calculation.
-		// Stat level modifications are ignored if they are neutral to or favour the defender.
-		// Reflect and Light Screen defensive boosts are only ignored if stat level modifications were also ignored as a result of that.
 		if (move.crit) {
+			// Level is doubled for damage calculation.
 			level *= 2;
 			if (!suppressMessages) this.add('-crit', target);
-			if (attacker.status === 'brn' || attacker.boosts[atkType] <= defender.boosts[defType]) {
-				move.ignoreOffensive = true;
-				move.ignoreDefensive = true;
+			// If the attacker is burned, stat level modifications are always ignored. This includes screens.
+			if (attacker.status === 'brn') unboosted = true;
+			// Stat level modifications are ignored if they are neutral to or favour the defender.
+			// Reflect and Light Screen defensive boosts are only ignored if stat level modifications were also ignored as a result of that.
+			if (attacker.boosts[atkType] <= defender.boosts[defType]) {
+				unboosted = true;
+				noburndrop = true;
 			}
 		}
-		// Ignore offense only if attack is lower than boosted and modified.
+		// Get stats now.
+		var attack = attacker.getStat(atkType, unboosted, noburndrop);
+		var defense = defender.getStat(defType, unboosted);
+
+		// Moves that ignore offense and defense respectively.
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
 			// The attack drop from the burn is only applied when attacker's attack level is higher than defender's defense level.
-			attack = attacker.getStat(atkType, true, true, attack > defense);
+			attack = attacker.getStat(atkType, true, true);
 		}
 		if (move.ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
@@ -231,7 +232,6 @@ exports.BattleScripts = {
 		// This is what cuases the roll over bugs.
 		if (attack >= 256 || defense >= 256) {
 			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
-			// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
 			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
 		}
 
