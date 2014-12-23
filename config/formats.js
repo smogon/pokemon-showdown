@@ -695,6 +695,26 @@ exports.Formats = [
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		}
 	},
+		{
+		name: "2v2",
+		section: 'Other Metagames',
+		gameType: 'doubles',
+
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview'],
+		banlist: ['Arceus', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
+			'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal',
+			'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew', 'Explosion', 'Selfdestruct', 'Perish Song', 'Dark Void'
+		],
+		validateTeam: function (team, format) {
+			if (team.length > 4) return ['You may only bring up to three Pokémon.'];
+		},
+		onBegin: function () {
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
 	{
 		name: "Monotype",
 		section: "Other Metagames",
