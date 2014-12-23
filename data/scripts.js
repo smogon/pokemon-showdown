@@ -1713,7 +1713,7 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-		   randomCCBHTeam: function (side) {
+    randomCCBHTeam: function (side) {
         var teamdexno = [];
         var team = [];
 
@@ -1838,7 +1838,7 @@ exports.BattleScripts = {
             });
         }
 
-        //console.log(team);
+        console.log(team);
         return team;
     },
 		randomMonotypeTeam: function (side) {
