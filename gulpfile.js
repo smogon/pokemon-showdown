@@ -93,6 +93,18 @@ var jscsOptions = {
 gulp.task('data', function () {
 	var directories = ['./data/*.js', './mods/*/*.js'];
 	jsHintOptions['es3'] = true;
+
+	// Replacing `var` with `let` is sort of a hack that stops jsHint from
+	// complaining that I'm using `var` like `let` should be used, but
+	// without having to deal with iffy `let` support.
+
+	return gulp.src(directories)
+		.pipe(jscs(jscsOptions))
+		.pipe(replace(/\bvar\b/g, 'let'))
+		.pipe(jshint(jsHintOptions))
+		.pipe(jshint.reporter(jshintStylish))
+		.pipe(jshint.reporter('fail'))
+		.pipe(jscs(jscsOptions));
 });
 
 gulp.task('fastlint', function () {
