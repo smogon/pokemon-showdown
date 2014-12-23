@@ -522,7 +522,7 @@ User = (function () {
 				if (room.auth[this.userid]) {
 					return room.auth[this.userid] + this.name;
 				}
-				if (room.isPrivate) return ' ' + this.name;
+				if (room.isPrivate === true) return ' ' + this.name;
 			}
 		}
 		return this.group + this.name;
@@ -545,14 +545,14 @@ User = (function () {
 		if (room && room.auth) {
 			if (room.auth[this.userid]) {
 				group = room.auth[this.userid];
-			} else if (room.isPrivate) {
+			} else if (room.isPrivate === true) {
 				group = ' ';
 			}
 			groupData = Config.groups[group];
 			if (target) {
 				if (room.auth[target.userid]) {
 					targetGroup = room.auth[target.userid];
-				} else if (room.isPrivate) {
+				} else if (room.isPrivate === true) {
 					targetGroup = ' ';
 				}
 			}
