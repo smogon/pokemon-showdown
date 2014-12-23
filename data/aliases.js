@@ -9,6 +9,9 @@ exports.BattleAliases = {
 	"bh": "Balanced Hackmons",
 	"createapokemon": "CAP",
 	"cc1v1": "Challenge Cup 1vs1",
+	"bhcc": "Balanced Hackmons Challenge Cup",
+	"bhcc1v1": "Balanced Hackmons Challenge Cup 1vs1"
+	"cc2v2": "Doubles Challenge Cup 2vs2",
 
 	// mega evos
 	"megaabomasnow": "Abomasnow-Mega",

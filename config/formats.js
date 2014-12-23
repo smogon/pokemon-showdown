@@ -94,7 +94,6 @@ exports.Formats = [
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		}
 	},
-
 	{
 		name: "Doubles Challenge Cup",
 		section: "Random Formats",
@@ -104,7 +103,20 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'HP Percentage Mod']
 	},
+	{
+		name: "Doubles Challenge Cup 2-vs-2",
+		section: 'Random Formats',
 
+		gameType: 'doubles',
+		team: 'randomCC',
+		ruleset: ['Pokemon', 'Team Preview', 'HP Percentage Mod'],
+		onBegin: function () {
+			this.p1.pokemon = this.p1.pokemon.slice(0, 2);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 2);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
 	{
 		name: "Triples Challenge Cup",
 		section: "Random Formats",
@@ -695,23 +707,24 @@ exports.Formats = [
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		}
 	},
-		{
-		name: "2v2",
+	{
+		name: "2v2 Doubles",
 		section: 'Other Metagames',
+
 		gameType: 'doubles',
 
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Arceus', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
 			'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal',
-			'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew', 'Explosion', 'Selfdestruct', 'Perish Song', 'Dark Void'
+			'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew', 'Perish Song'
 		],
 		validateTeam: function (team, format) {
-			if (team.length > 4) return ['You may only bring up to three Pokémon.'];
+			if (team.length > 4) return ['You may only bring up to four Pokémon.'];
 		},
 		onBegin: function () {
-			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemon = this.p1.pokemon.slice(0, 2);
 			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemon = this.p2.pokemon.slice(0, 2);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		}
 	},
