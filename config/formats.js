@@ -24,6 +24,24 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
 	},
 	{
+		name: "Random Haxmons",
+		section: "Random Formats",
+		team: 'random',
+
+		ruleset: ['OU', 'Freeze Clause'],
+		banlist: ["King's Rock", 'Razor Fang', 'Stench'],
+		onModifyMovePriority: -100,
+		onModifyMove: function (move) {
+			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 0;
+			move.willCrit = true;
+			if (move.secondaries) {
+				for (var i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance = 100;
+				}
+			}
+		}
+	},
+	{
 		name: "Random Monotype",
 		section: "Random Formats",
 
@@ -847,10 +865,45 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Haxmons",
+		section: "Other Metagames",
+		column: 2,
+
+		ruleset: ['OU', 'Freeze Clause'],
+		banlist: ["King's Rock", 'Razor Fang', 'Stench'],
+		onModifyMovePriority: -100,
+		onModifyMove: function (move) {
+			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 0;
+			move.willCrit = true;
+			if (move.secondaries) {
+				for (var i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance = 100;
+				}
+			}
+		}
+	},
+	{
+		name: "No Haxmons",
+		section: "Other Metagames",
+		column: 2,
+
+		ruleset: ['OU'],
+		banlist: [],
+		onModifyMovePriority: -100,
+		onModifyMove: function (move) {
+			if (move.accuracy !== true && move.accuracy < 100) move.accuracy = 100;
+			move.willCrit = false;
+			if (move.secondaries) {
+				for (var i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance = 0;
+				}
+			}
+		}
+	},
+	{
 		name: "Hidden Type",
 		section: "Other Metagames",
 
-		searchShow: false,
 		mod: 'hiddentype',
 		ruleset: ['OU']
 	},
