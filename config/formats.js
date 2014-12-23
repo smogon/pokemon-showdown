@@ -57,7 +57,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['RU'],
-		banlist: ['RU', 'BL3']
+		banlist: ['RU', 'BL3', 'Glalitite']
 	},
 	{
 		name: "LC",
