@@ -155,14 +155,6 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Smogon Doubles (current)",
-		section: "ORAS Doubles",
-
-		gameType: 'doubles',
-		challengeShow: false,
-		ruleset: ['Smogon Doubles']
-	},
-	{
 		name: "Smogon Doubles (suspect test)",
 		section: "ORAS Doubles",
 
