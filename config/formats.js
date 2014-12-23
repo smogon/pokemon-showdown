@@ -620,6 +620,44 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard']
 	},
+	    {
+          name: "Pre-EV Limit Balanced Hackmons",
+          section: "Other Metagames",
+          ruleset: ['Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod'],
+          banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard'],
+          validateSet: function (set) {
+              var template = this.getTemplate(set.species);
+              var item = this.getItem(set.item);
+              var problems = [];
+              if (set.species === set.name) delete set.name;
+              if (template.isNonstandard) {
+                  problems.push(set.species + ' is not a real Pokemon.');
+              }
+              if (item.isNonstandard) {
+                  problems.push(item.name + ' is not a real item.');
+              }
+              var ability = {};
+            if (set.ability) ability = this.getAbility(set.ability);
+              if (ability.isNonstandard) {
+                problems.push(ability.name + ' is not a real ability.');
+              }
+              if (set.moves) {
+                  for (var i = 0; i < set.moves.length; i++) {
+                  var move = this.getMove(set.moves[i]);
+                  if (move.isNonstandard) {
+                      problems.push(move.name + ' is not a real move.');
+                    }
+                  }
+                  if (set.moves.length > 4) {
+                  problems.push((set.name || set.species) + ' has more than four moves.');
+                  }
+              }
+              if (set.level && set.level > 100) {
+                  problems.push((set.name || set.species) + ' is higher than level 100.');
+              }
+            return problems;
+          }
+    },
 	{
 		name: "1v1",
 		section: 'Other Metagames',
@@ -754,7 +792,6 @@ exports.Formats = [
 		name: "Classic Hackmons",
 		section: "Other Metagames",
 
-		searchShow: false,
 		ruleset: ['HP Percentage Mod'],
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species);
