@@ -324,8 +324,8 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				}
 				return true;
 			},
-			parse: function (message) {
-				if (message[0] === '/' || message[0] === '!') {
+			parse: function (message, inNamespace) {
+				if (inNamespace && (message[0] === '/' || message[0] === '!')) {
 					message = message[0] + namespaces.concat(message.slice(1)).join(" ");
 				}
 				return parse(message, room, user, connection, levelsDeep + 1);
