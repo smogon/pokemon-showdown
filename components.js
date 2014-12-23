@@ -252,6 +252,15 @@ user.updateIdentity();
         this.add('|raw|<div class="broadcast-blue"><img src=' + target[0] + picSize + '></div>');
         this.logModCommand(user.name + ' added the image ' + target[0]);
     },
+rangelock: function(target, room, user) {
+        if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+        if (!target) return this.sendReply("Please specify a domain to lock.");
+        if (!this.can('rangeban')) return false;
+        var domain = Users.shortenHost(target);
+        if (Users.lockedDomains[domain]) return this.sendReply("The domain " + domain + " as already been temporary locked.");
+        Users.lockDomain(domain);
+        this.addModCommand(user.name + "temporarily locked the domain " + domain);
+    },
 
 sca: 'customavatar',
     setcustomavatar: 'customavatar',
