@@ -1033,6 +1033,24 @@ exports.Formats = [
 		banlist: ['Uber']
 	},
 	{
+		name: "[Gen 1] OU (Tradeback)",
+		section: "Past Generations",
+
+		mod: 'gen1',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
+		banlist: ['Uber', 'Unreleased', 'Illegal',
+			'Kakuna + Poison Sting + Harden', 'Kakuna + String Shot + Harden',
+			'Beedrill + Poison Sting + Harden', 'Beedrill + String Shot + Harden',
+			'Nidoking + Fury Attack + Thrash',
+			'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp', 'Exeggutor + Stun Spore + Stomp',
+			'Eevee + Tackle + Growl',
+			'Vaporeon + Tackle + Growl',
+			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
+			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember'
+		]
+	},
+	{
 		name: "[Gen 1] Custom Game",
 		section: "Past Generations",
 
