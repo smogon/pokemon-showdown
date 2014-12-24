@@ -132,6 +132,15 @@ exports.BattleFormats = {
 				problems.push((set.name || set.species) + " has more than 510 total EVs.");
 			}
 
+			// Gen 6 legendary Pokemon must have at least 3 perfect IVs
+			if (set.ivs && this.gen >= 6 && template.species in {Xerneas:1, Yveltal:1, Zygarde:1}) {
+				var perfectIVs = 0;
+				for (var i in set.ivs) {
+					if (set.ivs[i] >= 31) perfectIVs++;
+				}
+				if (perfectIVs < 3) problems.push((set.name || set.species) + " has less than three perfect IVs.");
+			}
+
 			// limit one of each move
 			var moves = [];
 			if (set.moves) {
