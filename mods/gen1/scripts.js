@@ -29,13 +29,14 @@ exports.BattleScripts = {
 			// stat boosts
 			if (!unboosted) {
 				var boost = this.boosts[statName];
-				var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 				if (boost > 6) boost = 6;
 				if (boost < -6) boost = -6;
 				if (boost >= 0) {
+					var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 					stat = Math.floor(stat * boostTable[boost]);
 				} else {
-					stat = Math.floor(stat / boostTable[-boost]);
+					var numerators = [100, 66, 50, 40, 33, 28, 25];
+					stat = Math.floor(stat * numerators[-boost] / 100);
 				}
 			}
 
@@ -45,25 +46,27 @@ exports.BattleScripts = {
 				var statMod = 1;
 				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
 				stat = this.battle.modify(stat, statMod);
+				// Burn attack drop is checked when you get the attack stat upon switch in and used until switch out.
+				if (this.volatiles['brnattackdrop'] && statName === 'atk') {
+					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
+				}
+				if (this.volatiles['parspeeddrop'] && statName === 'spe') {
+					stat = this.battle.clampIntRange(Math.floor(stat / 4), 1);
+				}
 			}
 
 			// Hard coded Reflect and Light Screen boosts
 			if (this.volatiles['reflect'] && statName === 'def' && !unboosted) {
-				this.debug('Reflect doubles Defense');
+				this.battle.debug('Reflect doubles Defense');
 				stat *= 2;
-				// If the defense is higher than 1024, it is rolled over. The min is always 1.
-				if (stat > 1024) stat -= 1024;
-				if (stat < 1) stat = 1;
+				stat = this.battle.clampIntRange(stat, 1, 1998);
 			} else if (this.volatiles['lightscreen'] && statName === 'spd' && !unboosted) {
-				this.debug('Light Screen doubles Special Defense');
+				this.battle.debug('Light Screen doubles Special Defense');
 				stat *= 2;
-				// If the special defense is higher than 1024, it is rolled over. The min is always 1.
-				if (stat > 1024) stat -= 1024;
-				if (stat < 1) stat = 1;
+				stat = this.battle.clampIntRange(stat, 1, 1998);
 			} else {
 				// Gen 1 normally caps stats at 999 and min is 1.
-				if (stat > 999) stat = 999;
-				if (stat < 1) stat = 1;
+				stat = this.battle.clampIntRange(stat, 1, 999);
 			}
 
 			return stat;
@@ -120,11 +123,7 @@ exports.BattleScripts = {
 				}
 
 				decision.move = this.getMoveCopy(decision.move);
-				if (!decision.priority) {
-					var priority = decision.move.priority;
-					priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
-					decision.priority = priority;
-				}
+				if (!decision.priority) decision.priority = decision.move.priority;
 			}
 			if (!decision.pokemon && !decision.speed) decision.speed = 1;
 			if (!decision.speed && decision.choice === 'switch' && decision.target) decision.speed = decision.target.speed;
@@ -134,12 +133,9 @@ exports.BattleScripts = {
 				// if there's no actives, switches happen before activations
 				decision.priority = 6.2;
 			}
-
 			this.queue.push(decision);
 		}
-		if (!noSort) {
-			this.queue.sort(this.comparePriority);
-		}
+		if (!noSort) this.queue.sort(this.comparePriority);
 	},
 	runMove: function (move, pokemon, target, sourceEffect) {
 		move = this.getMove(move);
@@ -191,8 +187,7 @@ exports.BattleScripts = {
 				} else {
 					if (pokemon.volatiles['partialtrappinglock'].locked !== target && target !== pokemon) {
 						// The target switched, therefor, we must re-roll the duration
-						var roll = this.random(8);
-						var duration = [2, 2, 2, 3, 3, 3, 4, 5][roll];
+						var duration = [2, 2, 2, 3, 3, 3, 4, 5][this.random(8)];
 						pokemon.volatiles['partialtrappinglock'].duration = duration;
 						pokemon.volatiles['partialtrappinglock'].locked = target;
 						// Duration reset thus partially trapped at 2 always
@@ -295,49 +290,48 @@ exports.BattleScripts = {
 		var doSelfDestruct = true;
 		var damage = 0;
 
-		// Calculate true accuracy
+		// First, let's calculate the accuracy.
 		var accuracy = move.accuracy;
-		if (accuracy !== true) {
-			accuracy = Math.floor(accuracy * 255 / 100);
-		}
 
 		// Partial trapping moves: true accuracy while it lasts
 		if (move.volatileStatus === 'partiallytrapped' && pokemon.volatiles['partialtrappinglock']) {
 			accuracy = true;
 		}
 
+		// Calculate true accuracy for gen 1, which uses 0-255.
 		if (accuracy !== true) {
+			accuracy = Math.floor(accuracy * 255 / 100);
+			// Check also for accuracy modifiers.
 			if (!move.ignoreAccuracy) {
 				if (pokemon.boosts.accuracy > 0) {
 					accuracy *= boostTable[pokemon.boosts.accuracy];
 				} else {
-					accuracy /= boostTable[-pokemon.boosts.accuracy];
+					accuracy = Math.floor(accuracy / boostTable[-pokemon.boosts.accuracy]);
 				}
 			}
 			if (!move.ignoreEvasion) {
 				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-					accuracy /= boostTable[target.boosts.evasion];
+					accuracy = Math.floor(accuracy / boostTable[target.boosts.evasion]);
 				} else if (target.boosts.evasion < 0) {
 					accuracy *= boostTable[-target.boosts.evasion];
 				}
 			}
 		}
-
-		// Bypasses ohko accuracy modifiers
-		if (move.alwaysHit) accuracy = true;
 		accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
 
-		// Gen 1, 1/256 chance of missing always, no matter what
+		// 1/256 chance of missing always, no matter what.
 		if (accuracy !== true && this.random(256) >= accuracy) {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
 			damage = false;
 		}
 
+		// Check if the Pokémon is immune to this move.
 		if (move.affectedByImmunities && !target.runImmunity(move.type, true)) {
 			damage = false;
 		}
 
+		// If damage is 0 and not false it means it didn't miss, let's calc.
 		if (damage !== false) {
 			pokemon.lastDamage = 0;
 			if (move.multihit) {
@@ -494,7 +488,7 @@ exports.BattleScripts = {
 				this.boost(moveData.boosts, target, pokemon, move);
 			}
 			if (moveData.heal && !target.fainted) {
-				var d = target.heal(Math.round(target.maxhp * moveData.heal[0] / moveData.heal[1]));
+				var d = target.heal(Math.floor(target.maxhp * moveData.heal[0] / moveData.heal[1]));
 				if (!d) {
 					this.add('-fail', target);
 					return false;
@@ -574,7 +568,7 @@ exports.BattleScripts = {
 		return damage;
 	},
 	getDamage: function (pokemon, target, move, suppressMessages) {
-		// We get the move
+		// First of all, we get the move.
 		if (typeof move === 'string') move = this.getMove(move);
 		if (typeof move === 'number') move = {
 			basePower: move,
@@ -582,15 +576,16 @@ exports.BattleScripts = {
 			category: 'Physical'
 		};
 
-		// First of all, we test for immunities
+		// Let's see if the target is immune to the move.
 		if (move.affectedByImmunities) {
 			if (!target.runImmunity(move.type, true)) {
 				return false;
 			}
 		}
 
-		// Is it ok?
+		// Is it an OHKO move?
 		if (move.ohko) {
+			// If it is, move hits if the Pokémon is faster.
 			if (target.speed > pokemon.speed) {
 				this.add('-failed', target);
 				return false;
@@ -598,48 +593,45 @@ exports.BattleScripts = {
 			return target.maxhp;
 		}
 
-		// We edit the damage through move's damage callback
+		// We edit the damage through move's damage callback if necessary.
 		if (move.damageCallback) {
 			return move.damageCallback.call(this, pokemon, target);
 		}
 
-		// We take damage from damage=level moves
+		// We take damage from damage=level moves (seismic toss).
 		if (move.damage === 'level') {
 			return pokemon.level;
 		}
 
-		// If there's a fix move damage, we run it
+		// If there's a fix move damage, we return that.
 		if (move.damage) {
 			return move.damage;
 		}
 
-		// If it's the first hit on a Normal-type partially trap move, it hits Ghosts but damage is 0
+		// If it's the first hit on a Normal-type partially trap move, it hits Ghosts anyways but damage is 0.
 		if (move.volatileStatus === 'partiallytrapped' && move.type === 'Normal' && target.hasType('Ghost')) {
 			return 0;
 		}
 
-		// Let's check if we are in middle of a partial trap sequence
+		// Let's check if we are in middle of a partial trap sequence to return the previous damage.
 		if (pokemon.volatiles['partialtrappinglock'] && (target !== pokemon) && (target === pokemon.volatiles['partialtrappinglock'].locked)) {
 			return pokemon.volatiles['partialtrappinglock'].damage;
 		}
 
-		// There's no move for some reason, create it
-		if (!move) move = {};
-
-		// We check the category and typing to calculate later on the damage
+		// We check the category and typing to calculate later on the damage.
 		if (!move.category) move.category = 'Physical';
 		if (!move.defensiveCategory) move.defensiveCategory = move.category;
 		// '???' is typeless damage: used for Struggle and Confusion etc
 		if (!move.type) move.type = '???';
 		var type = move.type;
 
-		// We get the base power and apply basePowerCallback if necessary
+		// We get the base power and apply basePowerCallback if necessary.
 		var basePower = move.basePower;
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
 		}
 
-		// We check for Base Power
+		// We check if the base power is proper.
 		if (!basePower) {
 			if (basePower === 0) return; // Returning undefined means not dealing damage
 			return basePower;
@@ -693,7 +685,7 @@ exports.BattleScripts = {
 		if (!basePower) return 0;
 		basePower = this.clampIntRange(basePower, 1);
 
-		// We now check for attacker and defender
+		// We now check attacker's and defender's stats.
 		var level = pokemon.level;
 		var attacker = pokemon;
 		var defender = target;
@@ -705,6 +697,7 @@ exports.BattleScripts = {
 		var defense = defender.getStat(defType);
 
 		// In the event of a critical hit, the ofense and defense changes are ignored.
+		// This includes both boosts and screens.
 		// Also, level is doubled in damage calculation.
 		if (move.crit) {
 			move.ignoreOffensive = true;
@@ -721,49 +714,71 @@ exports.BattleScripts = {
 			defense = target.getStat(defType, true);
 		}
 
-		// Gen 1 damage formula:
-		// (min(((2 * L / 5 + 2) * Atk * BP) / max(1, Def) / 50, 997) + 2) * Stab * TypeEffect * Random / 255
-		// Where: L: user level, A: current attack, P: move power, D: opponent current defense,
-		// S is the Stab modifier, T is the type effectiveness modifier, R is random between 217 and 255
-		// The max damage is 999
-		var baseDamage = Math.min(Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * attack * basePower / defense) / 50), 997) + 2;
+		// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
+		// This is what cuases the roll over bugs.
+		if (attack >= 256 || defense >= 256) {
+			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
+			// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
+			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
+		}
+
+		// Self destruct moves halve defense at this point.
+		if (move.selfdestruct && defType === 'def') {
+			defense = this.clampIntRange(Math.floor(defense / 2), 1);
+		}
+
+		// Let's go with the calculation now that we have what we need.
+		// We do it step by step just like the game does.
+		var damage = level * 2;
+		damage = Math.floor(damage / 5);
+		damage += 2;
+		damage *= basePower;
+		damage *= attack;
+		damage = Math.floor(damage / defense);
+		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
+		damage += 2;
 
 		// STAB damage bonus, the "???" type never gets STAB
 		if (type !== '???' && pokemon.hasType(type)) {
-			baseDamage = Math.floor(baseDamage * 1.5);
+			damage += Math.floor(damage / 2);
 		}
 
-		// Type effectiveness
+		// Type effectiveness.
+		// The order here is not correct, must change to check the move versus each type.
 		var totalTypeMod = this.getEffectiveness(type, target);
 		// Super effective attack
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
-			baseDamage *= 2;
+			damage *= 20;
+			damage = Math.floor(damage / 10);
 			if (totalTypeMod >= 2) {
-				baseDamage *= 2;
+				damage *= 20;
+				damage = Math.floor(damage / 10);
 			}
 		}
-
-		// Resisted attack
 		if (totalTypeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
-			baseDamage = Math.floor(baseDamage / 2);
+			damage *= 5;
+			damage = Math.floor(damage / 10);
 			if (totalTypeMod <= -2) {
-				baseDamage = Math.floor(baseDamage / 2);
+				damage *= 5;
+				damage = Math.floor(damage / 10);
 			}
 		}
 
-		// Randomizer, it's a number between 217 and 255
-		var randFactor = Math.floor(Math.random() * 39) + 217;
-		baseDamage *= Math.floor(randFactor * 100 / 255) / 100;
+		// If damage becomes 0, the move is made to miss.
+		// This occurs when damage was either 2 or 3 prior to applying STAB/Type matchup, and target is 4x resistant to the move.
+		if (damage === 0) return damage;
 
-		// If damage is less than 1, we return 1
-		if (basePower && !Math.floor(baseDamage)) {
-			return 1;
+		// Apply random factor is damage is greater than 1
+		if (damage > 1) {
+			damage *= this.random(217, 256);
+			damage = Math.floor(damage / 255);
+			if (damage > target.hp) damage = target.hp;
 		}
 
-		// We are done, this is the final damage
-		return Math.floor(baseDamage);
+		// We are done, this is the final damage.
+		return Math.floor(damage);
 	},
 	boost: function (boost, target, source, effect) {
 		// Editing boosts to take into account para and burn stat drops glitches
@@ -849,10 +864,10 @@ exports.BattleScripts = {
 		}
 
 		if (effect.recoil && source) {
-			this.damage(Math.round(damage * effect.recoil[0] / effect.recoil[1]), source, target, 'recoil');
+			this.damage(this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
 		}
 		if (effect.drain && source) {
-			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
+			this.heal(this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
 		}
 
 		if (target.fainted) {
@@ -1158,7 +1173,8 @@ exports.BattleScripts = {
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
 		// Check here for Substitute on confusion since it's not exactly a move that causes the damage and thus it can't TryMoveHit.
-		if (effect.id === 'confusion' && target.volatiles['substitute']) {
+		// The hi jump kick recoil also hits the sub.
+		if (effect.id in {'confusion': 1, 'highjumpkick': 1} && target.volatiles['substitute']) {
 			target.volatiles['substitute'].hp -= damage;
 			if (target.volatiles['substitute'].hp <= 0) {
 				target.removeVolatile('substitute');
@@ -1168,21 +1184,21 @@ exports.BattleScripts = {
 			}
 		} else {
 			damage = target.damage(damage, source, effect);
+			// Now we sent the proper -damage.
+			switch (effect.id) {
+			case 'strugglerecoil':
+				this.add('-damage', target, target.getHealth, '[from] recoil');
+				break;
+			case 'confusion':
+				this.add('-damage', target, target.getHealth, '[from] confusion');
+				break;
+			default:
+				this.add('-damage', target, target.getHealth);
+				break;
+			}
+			if (target.fainted) this.faint(target);
 		}
 
-		// Now we sent the proper -damage.
-		switch (effect.id) {
-		case 'strugglerecoil':
-			this.add('-damage', target, target.getHealth, '[from] recoil');
-			break;
-		case 'confusion':
-			this.add('-damage', target, target.getHealth, '[from] confusion');
-			break;
-		default:
-			this.add('-damage', target, target.getHealth);
-			break;
-		}
-		if (target.fainted) this.faint(target);
 		return damage;
 	}
 };

@@ -166,7 +166,8 @@ var commands = exports.commands = {
 	rooms: 'whois',
 	alt: 'whois',
 	alts: 'whois',
-	whois: function (target, room, user) {
+	whoare: 'whois',
+	whois: function (target, room, user, connection, cmd) {
 		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
@@ -212,22 +213,34 @@ var commands = exports.commands = {
 		if (!targetUser.authenticated) {
 			this.sendReply("(Unregistered)");
 		}
-		if (user.can('ip', targetUser) || user === targetUser) {
+		if ((cmd === 'ip' || cmd === 'whoare') && (user.can('ip', targetUser) || user === targetUser)) {
 			var ips = Object.keys(targetUser.ips);
 			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ") +
 					(user.group !== ' ' && targetUser.latestHost ? "\nHost: " + targetUser.latestHost : ""));
 		}
-		var output = "In rooms: ";
+		var publicrooms = "In rooms: ";
+		var hiddenrooms = "In hidden rooms: ";
 		var first = true;
+		var hiddencount = 0;
 		for (var i in targetUser.roomCount) {
 			var targetRoom = Rooms.get(i);
-			if (i === 'global' || targetRoom.isPrivate) continue;
-			if (!first) output += " | ";
-			first = false;
+			if (i === 'global' || targetRoom.isPrivate === true) continue;
 
-			output += (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			var output = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			if (targetRoom.isPrivate) {
+				if (hiddencount > 0) hiddenrooms += " | ";
+				++hiddencount;
+				hiddenrooms += output;
+			} else {
+				if (!first) publicrooms += " | ";
+				first = false;
+				publicrooms += output;
+			}
 		}
-		this.sendReply('|raw|' + output);
+		this.sendReply('|raw|' + publicrooms);
+		if (cmd === 'whoare' && user.can('lock') && hiddencount > 0) {
+			this.sendReply('|raw|' + hiddenrooms);
+		}
 	},
 
 	ipsearch: function (target, room, user) {
@@ -1025,7 +1038,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'middlecup' || target === 'mc') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524287/\">Middle Cup</a><br />";
 		}
 		if (target === 'skybattle') {
 			matched = true;
@@ -1100,6 +1113,8 @@ var commands = exports.commands = {
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
 			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
+			"<br />" +
+			"More detailed help can be found in the <a href=\"https://www.smogon.com/sim/roomauth_guide\">roomauth guide</a><br />" +
 			"</div>"
 		);
 	},

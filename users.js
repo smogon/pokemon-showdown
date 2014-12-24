@@ -522,7 +522,7 @@ User = (function () {
 				if (room.auth[this.userid]) {
 					return room.auth[this.userid] + this.name;
 				}
-				if (room.isPrivate) return ' ' + this.name;
+				if (room.isPrivate === true) return ' ' + this.name;
 			}
 		}
 		return this.group + this.name;
@@ -545,14 +545,14 @@ User = (function () {
 		if (room && room.auth) {
 			if (room.auth[this.userid]) {
 				group = room.auth[this.userid];
-			} else if (room.isPrivate) {
+			} else if (room.isPrivate === true) {
 				group = ' ';
 			}
 			groupData = Config.groups[group];
 			if (target) {
 				if (room.auth[target.userid]) {
 					targetGroup = room.auth[target.userid];
-				} else if (room.isPrivate) {
+				} else if (room.isPrivate === true) {
 					targetGroup = ' ';
 				}
 			}
@@ -665,6 +665,29 @@ User = (function () {
 			this.mmrCache = {};
 		}
 
+		if (authenticated && userid in bannedUsers) {
+			var bannedUnder = '';
+			if (bannedUsers[userid] !== userid) bannedUnder = ' under the username ' + bannedUsers[userid];
+			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+			this.ban(true, userid);
+			return;
+		}
+		if (authenticated && userid in lockedUsers) {
+			var bannedUnder = '';
+			if (lockedUsers[userid] !== userid) bannedUnder = ' under the username ' + lockedUsers[userid];
+			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+			this.lock(true, userid);
+		}
+		if (!this.locked && this.group === Config.groupsranking[0]) {
+			var shortHost = Users.shortenHost(this.latestHost);
+			if (lockedDomains[shortHost]) {
+				this.send("|popup|Your ISP is temporarily locked from talking in chats, battles, and PMing regular users.");
+				lockedDomainsUsers[shortHost][userid] = 1;
+				this.locked = '#range';
+				this.updateIdentity();
+			}
+		}
+
 		this.name = name;
 		var oldid = this.userid;
 		delete users[oldid];
@@ -672,28 +695,6 @@ User = (function () {
 		users[userid] = this;
 		this.authenticated = !!authenticated;
 		this.forceRenamed = !!forcible;
-
-		if (authenticated && userid in bannedUsers) {
-			var bannedUnder = '';
-			if (bannedUsers[userid] !== userid) bannedUnder = ' under the username ' + bannedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-			this.ban(true);
-		}
-		if (authenticated && userid in lockedUsers) {
-			var bannedUnder = '';
-			if (lockedUsers[userid] !== userid) bannedUnder = ' under the username ' + lockedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-			this.lock(true);
-		}
-		if (!this.locked && this.group === Config.groupsranking[0]) {
-			var shortHost = Users.shortenHost(this.latestHost);
-			if (lockedDomains[shortHost]) {
-				this.send("|popup|Your ISP is temporarily locked from talking in chats, battles, and PMing regular users.");
-				lockedDomainsUsers[shortHost][this.userid] = 1;
-				this.locked = '#range';
-				this.updateIdentity();
-			}
-		}
 
 		for (var i = 0; i < this.connections.length; i++) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
@@ -1115,7 +1116,6 @@ User = (function () {
 				this.leaveRoom(connection.rooms[j], connection, true);
 			}
 			connection.destroy();
-			--this.ips[connection.ip];
 		}
 		if (this.connections.length) {
 			// should never happen
@@ -1587,11 +1587,11 @@ Connection = (function () {
 	Connection.prototype.destroy = function () {
 		Sockets.socketDisconnect(this.worker, this.socketid);
 		this.onDisconnect();
-		this.user = null;
 	};
 	Connection.prototype.onDisconnect = function () {
 		delete connections[this.id];
 		if (this.user) this.user.onDisconnect(this);
+		this.user = null;
 	};
 
 	Connection.prototype.popup = function (message) {

@@ -44,7 +44,6 @@ exports.BattleScripts = {
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
-		if (this.gen <= 2) this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	useMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
@@ -536,12 +535,13 @@ exports.BattleScripts = {
 
 		var otherForme;
 		var template;
+		var item;
 		if (pokemon.baseTemplate.otherFormes) otherForme = this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
 		if (otherForme && otherForme.isMega && otherForme.requiredMove) {
 			if (pokemon.moves.indexOf(toId(otherForme.requiredMove)) < 0) return false;
 			template = otherForme;
 		} else {
-			var item = this.getItem(pokemon.item);
+			item = this.getItem(pokemon.item);
 			if (!item.megaStone) return false;
 			template = this.getTemplate(item.megaStone);
 			if (pokemon.baseTemplate.baseSpecies !== template.baseSpecies) return false;
@@ -561,7 +561,7 @@ exports.BattleScripts = {
 		pokemon.baseTemplate = template; // mega evolution is permanent :o
 		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 		this.add('detailschange', pokemon, pokemon.details);
-		this.add('message', template.baseSpecies + " has Mega Evolved into Mega " + template.baseSpecies + "!");
+		this.add('-mega', pokemon, template.baseSpecies, item);
 		var oldAbility = pokemon.ability;
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
@@ -1039,7 +1039,7 @@ exports.BattleScripts = {
 				case 'shadowforce': case 'phantomforce': case 'shadowsneak':
 					if (hasMove['shadowclaw']) rejected = true;
 					break;
-				case 'airslash':
+				case 'airslash': case 'oblivionwing':
 					if (hasMove['hurricane']) rejected = true;
 					break;
 				case 'acrobatics': case 'pluck': case 'drillpeck':
@@ -1154,7 +1154,7 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['roar'] || hasMove['circlethrow']) rejected = true;
 					break;
-				case 'suckerpunch':
+				case 'suckerpunch': case 'lunardance':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'cottonguard':
@@ -1305,7 +1305,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Rock Head' || ability === 'Reckless') {
 				rejectAbility = !counter['recoil'];
 			} else if (ability === 'Sturdy') {
-				rejectAbility = !!counter['recoil'];
+				rejectAbility = !!counter['recoil'] && !hasMove['recover'] && !hasMove['roost'];
 			} else if (ability === 'No Guard' || ability === 'Compoundeyes') {
 				rejectAbility = !counter['inaccurate'];
 			} else if ((ability === 'Sheer Force' || ability === 'Serene Grace')) {
@@ -1559,7 +1559,7 @@ exports.BattleScripts = {
 			"Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72, "Rayquaza-Mega": 68, "Salamence-Mega": 72,
 
 			// Not holding mega stone
-			Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Medicham: 78, Metagross: 78, Sableye: 78, Venusaur: 78,
+			Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Medicham: 78, Metagross: 78, Sableye: 78, Venusaur: 78,
 
 			// Holistic judgment
 			Articuno: 82, Genesect: 72, "Gengar-Mega": 68, "Rotom-Fan": 88, Sigilyph: 80, Xerneas: 66

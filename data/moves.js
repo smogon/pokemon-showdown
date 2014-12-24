@@ -5176,7 +5176,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		multihit: [2, 2],
+		multihit: 2,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
