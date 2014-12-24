@@ -1305,7 +1305,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Rock Head' || ability === 'Reckless') {
 				rejectAbility = !counter['recoil'];
 			} else if (ability === 'Sturdy') {
-				rejectAbility = !!counter['recoil'];
+				rejectAbility = !!counter['recoil'] && !hasMove['recover'] && !hasMove['roost'];
 			} else if (ability === 'No Guard' || ability === 'Compoundeyes') {
 				rejectAbility = !counter['inaccurate'];
 			} else if ((ability === 'Sheer Force' || ability === 'Serene Grace')) {
