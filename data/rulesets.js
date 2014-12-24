@@ -132,8 +132,9 @@ exports.BattleFormats = {
 				problems.push((set.name || set.species) + " has more than 510 total EVs.");
 			}
 
-			// Gen 6 legendary Pokemon must have at least 3 perfect IVs
-			if (set.ivs && this.gen >= 6 && template.species in {Xerneas:1, Yveltal:1, Zygarde:1}) {
+			// "Undiscovered" egg group Pokemon caught in the wild in gen 6 must have at least 3 perfect IVs
+			if (set.ivs && this.gen >= 6 && ((template.species in {Xerneas:1, Yveltal:1, Zygarde:1}) ||
+				(format.requirePentagon && template.eggGroups.indexOf('Undiscovered') > -1 && !template.evos.length))) {
 				var perfectIVs = 0;
 				for (var i in set.ivs) {
 					if (set.ivs[i] >= 31) perfectIVs++;
