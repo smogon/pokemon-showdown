@@ -1037,7 +1037,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'middlecup' || target === 'mc') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524287/\">Middle Cup</a><br />";
 		}
 		if (target === 'skybattle') {
 			matched = true;
