@@ -1,4 +1,4 @@
-﻿/**
+/**
  * This is the file where the bot commands are located
  *
  * @license MIT license
@@ -20,7 +20,7 @@ exports.commands = {
 		} else {
 			var text = '/pm ' + by + ', ';
 		}
-		text += '**Pokémon Showdown Bot** by: Quinella and TalkTakesTime';
+		text += '**Pok�mon Showdown Bot** by: Quinella and TalkTakesTime';
 		this.say(con, room, text);
 	},
 	help: 'guide',
@@ -403,7 +403,7 @@ exports.commands = {
 		} else {
 			var text = '/pm ' + by + ', ';
 		}
-		text += 'http://sim.smogon.com:8080/Stats/';
+		text += 'http://sim.smogon.com:8080/Stats/2014-09/';
 		this.say(con, room, text);
 	},
 	seen: function(arg, by, room, con) { // this command is still a bit buggy
