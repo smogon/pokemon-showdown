@@ -1109,7 +1109,7 @@ User = (function () {
 		this.clearChatQueue();
 		var connection = null;
 		this.markInactive();
-		for (var i = 0; i < this.connections.length; i++) {
+		for (var i = this.connections.length - 1; i >= 0; i--) {
 			// console.log('DESTROY: ' + this.userid);
 			connection = this.connections[i];
 			for (var j in connection.rooms) {
@@ -1119,14 +1119,12 @@ User = (function () {
 		}
 		if (this.connections.length) {
 			// should never happen
-			console.log('!! failed to drop all connections for ' + this.userid);
-			this.connections = [];
+			throw new Error("Failed to drop all connections for " + this.userid);
 		}
 		for (var i in this.roomCount) {
 			if (this.roomCount[i] > 0) {
 				// should never happen.
-				console.log('!! room miscount: ' + i + ' not left');
-				Rooms.get(i, 'lobby').onLeave(this);
+				throw new Error("Room miscount: " + i + " not left for " + this.userid);
 			}
 		}
 		this.roomCount = {};
