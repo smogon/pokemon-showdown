@@ -1069,6 +1069,10 @@ var BattleRoom = (function () {
 		if (!user) return false;
 		if (this.users[user.userid]) return user;
 
+		this.users[user.userid] = user;
+		this.userCount++;
+
+		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		if (user.named) {
 			if (Config.reportbattlejoins) {
 				this.add('|join|' + user.name);
@@ -1078,10 +1082,6 @@ var BattleRoom = (function () {
 			this.update();
 		}
 
-		this.users[user.userid] = user;
-		this.userCount++;
-
-		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		return user;
 	};
 	BattleRoom.prototype.onRename = function (user, oldid, joining) {
@@ -1417,20 +1417,19 @@ var ChatRoom = (function () {
 		if (!user) return false; // ???
 		if (this.users[user.userid]) return user;
 
-		if (user.named && Config.reportjoins) {
-			this.add('|j|' + user.getIdentity(this.id));
-			this.update();
-		} else if (user.named) {
-			var entry = '|J|' + user.getIdentity(this.id);
-			this.reportJoin(entry);
-		}
-
 		this.users[user.userid] = user;
 		this.userCount++;
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
 			this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage());
+		}
+		if (user.named && Config.reportjoins) {
+			this.add('|j|' + user.getIdentity(this.id));
+			this.update();
+		} else if (user.named) {
+			var entry = '|J|' + user.getIdentity(this.id);
+			this.reportJoin(entry);
 		}
 		if (global.Tournaments && Tournaments.get(this.id)) {
 			Tournaments.get(this.id).updateFor(user, connection);
