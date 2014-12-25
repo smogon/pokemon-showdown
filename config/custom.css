@@ -69,3 +69,5 @@ body {
 .pm-log-add:hover {
     background:#222;
 }
+
+.chat-log-add {background:rgba(62, 214, 238, 0.7);}
