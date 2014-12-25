@@ -276,6 +276,7 @@ exports.customavatars = {
 	'wint': 'kimisumi3.jpg',
 	'dos': 'kimisumi4.png',
 	'yungblds': 'kimisumi5.jpg',
+	'sphealkimimi': 'kimisumi6.gif',
 	'madokakanamee': 'furoichi.jpg',
 	'sirenttamashii': 'sairento-tamashii.jpg',
 	'sairenttamashii': 'sairento-tamashii.jpg',
@@ -317,6 +318,11 @@ exports.customavatars = {
 	'masterneyney': 'masterneyney.png',
 	'chaos': 'chaos.png',
 	'seif': 'seif.gif',
+	'dsrlop95': 'dsrlop95.png',
+	'tutur31': 'dsrlop95.png',
+	'pomman': 'pomman.gif',
+	'dracomasterbrit': 'pomman.gif',
+	'arguso': 'arguso.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
