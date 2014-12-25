@@ -1063,7 +1063,7 @@ var BattleRoom = (function () {
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
-		this.battle.resendRequest(user);
+		this.battle.resendRequest(connection);
 	};
 	BattleRoom.prototype.onJoin = function (user, connection) {
 		if (!user) return false;
