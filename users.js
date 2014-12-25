@@ -1454,7 +1454,7 @@ User = (function () {
 	User.prototype.acceptChallengeFrom = function (user) {
 		var userid = toId(user);
 		user = getUser(user);
-		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid) {
+		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid || !this.connected || !user.connected) {
 			if (this.challengesFrom[userid]) {
 				delete this.challengesFrom[userid];
 				this.updateChallenges();
