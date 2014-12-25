@@ -195,7 +195,7 @@ var commands = exports.commands = {
 		if (!this.can('privateroom', null, room) || (cmd === 'privateroom' && !this.can('makeroom'))) return;
 		if (cmd !== 'privateroom' && room.isPrivate === true) {
 			if (this.can('makeroom')) {
-				this.sendReply("This room is a secret room. Use /secretroom to toggle instead.");
+				this.sendReply("This room is a secret room. Use /privateroom to toggle instead.");
 			}
 			return;
 		}
@@ -673,7 +673,7 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
-		if (room.isPrivate && room.auth) {
+		if (room.isPrivate === true && room.auth) {
 			return this.sendReply("You can't warn here: This is a privately-owned room not subject to global rules.");
 		}
 		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
