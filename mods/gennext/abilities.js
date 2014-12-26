@@ -548,12 +548,7 @@ exports.BattleAbilities = {
 			onBasePower: function (basePower) {
 				return this.chainModify(0.5);
 			}
-		},
-		id: "parentalbond",
-		name: "Parental Bond",
-		rating: 4.5,
-		num: -6,
-		gen: 6
+		}
 	},
 	"adaptability": {
 		inherit: true,
