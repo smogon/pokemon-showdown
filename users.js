@@ -1028,7 +1028,7 @@ User = (function () {
 			}
 			this.roomCount[i]++;
 			if (room.battle) {
-				room.battle.resendRequest(this);
+				room.battle.resendRequest(connection);
 			}
 		}
 	};
@@ -1109,7 +1109,7 @@ User = (function () {
 		this.clearChatQueue();
 		var connection = null;
 		this.markInactive();
-		for (var i = 0; i < this.connections.length; i++) {
+		for (var i = this.connections.length - 1; i >= 0; i--) {
 			// console.log('DESTROY: ' + this.userid);
 			connection = this.connections[i];
 			for (var j in connection.rooms) {
@@ -1119,14 +1119,12 @@ User = (function () {
 		}
 		if (this.connections.length) {
 			// should never happen
-			console.log('!! failed to drop all connections for ' + this.userid);
-			this.connections = [];
+			throw new Error("Failed to drop all connections for " + this.userid);
 		}
 		for (var i in this.roomCount) {
 			if (this.roomCount[i] > 0) {
 				// should never happen.
-				console.log('!! room miscount: ' + i + ' not left');
-				Rooms.get(i, 'lobby').onLeave(this);
+				throw new Error("Room miscount: " + i + " not left for " + this.userid);
 			}
 		}
 		this.roomCount = {};
@@ -1300,6 +1298,7 @@ User = (function () {
 			return true;
 		}
 		if (!connection.rooms[room.id]) {
+			connection.joinRoom(room);
 			if (!this.roomCount[room.id]) {
 				this.roomCount[room.id] = 1;
 				room.onJoin(this, connection);
@@ -1307,7 +1306,6 @@ User = (function () {
 				this.roomCount[room.id]++;
 				room.onJoinConnection(this, connection);
 			}
-			connection.joinRoom(room);
 		}
 		return true;
 	};
@@ -1456,7 +1454,7 @@ User = (function () {
 	User.prototype.acceptChallengeFrom = function (user) {
 		var userid = toId(user);
 		user = getUser(user);
-		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid) {
+		if (!user || !user.challengeTo || user.challengeTo.to !== this.userid || !this.connected || !user.connected) {
 			if (this.challengesFrom[userid]) {
 				delete this.challengesFrom[userid];
 				this.updateChallenges();

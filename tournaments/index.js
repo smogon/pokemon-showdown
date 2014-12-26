@@ -634,6 +634,9 @@ Tournament = (function () {
 	Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
 		if (!result) return;
 
+		// Prevent battles between offline users from starting
+		if (!challenge.from.connected || !user.connected) return;
+
 		// Prevent double accepts and users that have been disqualified while between these two functions
 		if (!this.pendingChallenges.get(challenge.from)) return;
 		if (!this.pendingChallenges.get(user)) return;
