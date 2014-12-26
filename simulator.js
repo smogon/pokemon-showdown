@@ -200,9 +200,10 @@ var Battle = (function () {
 		ResourceMonitor.activeIp = null;
 	};
 
-	Battle.prototype.resendRequest = function (user) {
-		if (this.requests[user.userid]) {
-			user.sendTo(this.id, '|request|' + this.requests[user.userid]);
+	Battle.prototype.resendRequest = function (connection) {
+		var request = this.requests[connection.user];
+		if (request) {
+			connection.sendTo(this.id, '|request|' + request);
 		}
 	};
 	Battle.prototype.win = function (user) {

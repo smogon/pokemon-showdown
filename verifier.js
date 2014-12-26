@@ -56,4 +56,6 @@ if (!process.send) {
 			guid: message.guid
 		});
 	});
+
+	require('./repl.js').start('verifier', function (cmd) { return eval(cmd); });
 }

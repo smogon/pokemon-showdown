@@ -189,8 +189,16 @@ var commands = exports.commands = {
 		return this.sendReply("The room '" + target + "' isn't registered.");
 	},
 
-	privateroom: function (target, room, user) {
-		if (!this.can('privateroom', room)) return;
+	hideroom: 'privateroom',
+	hiddenroom: 'privateroom',
+	privateroom: function (target, room, user, connection, cmd) {
+		if (!this.can('privateroom', room) || (cmd === 'privateroom' && !this.can('makeroom'))) return;
+		if (cmd !== 'privateroom' && room.isPrivate === true) {
+			if (this.can('makeroom')) {
+				this.sendReply("This room is a secret room. Use /privateroom to toggle instead.");
+			}
+			return;
+		}
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand("" + user.name + " made this room public.");
@@ -199,8 +207,8 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			room.isPrivate = true;
-			this.addModCommand("" + user.name + " made this room private.");
+			room.isPrivate = (cmd === 'privateroom' ? true : 'hidden');
+			this.addModCommand("" + user.name + " made this room " + (cmd === 'privateroom' ? 'secret' : 'hidden') + ".");
 			if (room.chatRoomData) {
 				room.chatRoomData.isPrivate = true;
 				Rooms.global.writeChatRoomData();
@@ -233,7 +241,7 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 			if (!room.modchat) this.parse('/modchat ' + Config.groups.default[room.type + 'Room']);
-			if (!room.isPrivate) this.parse('/privateroom');
+			if (!room.isPrivate) this.parse('/hiddenroom');
 		}
 	},
 
@@ -583,7 +591,10 @@ var commands = exports.commands = {
 			if (targetRoom.modjoin && !user.can('bypassall')) {
 				var userGroup = user.group;
 				if (targetRoom.auth) {
-					userGroup = targetRoom.auth[user.userid] || Config.groups.default[room.type + 'Room'];
+					if (targetRoom.isPrivate === true) {
+						userGroup = Config.groups.default[room.type + 'Room'];
+					}
+					userGroup = targetRoom.auth[user.userid] || userGroup;
 				}
 				var modjoinLevel = targetRoom.modjoin !== true ? targetRoom.modjoin : targetRoom.modchat;
 				if (modjoinLevel && Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[modjoinLevel].rank) {
@@ -627,7 +638,7 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
-		if (room.isPrivate && room.auth) {
+		if (room.isPrivate === true && room.auth) {
 			return this.sendReply("You can't warn here: This is a privately-owned room not subject to global rules.");
 		}
 		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
@@ -765,10 +776,11 @@ var commands = exports.commands = {
 
 		this.addModCommand("" + targetUser.name + " was locked from talking by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
+		var acAccount = (targetUser.autoconfirmed !== targetUser.userid && targetUser.autoconfirmed);
 		if (alts.length) {
-			this.privateModCommand("(" + targetUser.name + "'s " + (targetUser.autoconfirmed ? " ac account: " + targetUser.autoconfirmed + ", " : "") + "locked alts: " + alts.join(", ") + ")");
-		} else if (targetUser.autoconfirmed) {
-			this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
+			this.privateModCommand("(" + targetUser.name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "locked alts: " + alts.join(", ") + ")");
+		} else if (acAccount) {
+			this.privateModCommand("(" + targetUser.name + "'s ac account: " + acAccount + ")");
 		}
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 
@@ -814,13 +826,14 @@ var commands = exports.commands = {
 
 		this.addModCommand("" + targetUser.name + " was banned by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
 		var alts = targetUser.getAlts();
+		var acAccount = (targetUser.autoconfirmed !== targetUser.userid && targetUser.autoconfirmed);
 		if (alts.length) {
-			this.privateModCommand("(" + targetUser.name + "'s " + (targetUser.autoconfirmed ? " ac account: " + targetUser.autoconfirmed + ", " : "") + "banned alts: " + alts.join(", ") + ")");
+			this.privateModCommand("(" + targetUser.name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "banned alts: " + alts.join(", ") + ")");
 			for (var i = 0; i < alts.length; ++i) {
 				this.add('|unlink|' + toId(alts[i]));
 			}
-		} else if (targetUser.autoconfirmed) {
-			this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
+		} else if (acAccount) {
+			this.privateModCommand("(" + targetUser.name + "'s ac account: " + acAccount + ")");
 		}
 
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
@@ -1932,14 +1945,6 @@ var commands = exports.commands = {
 				avatar: targetUser.avatar,
 				rooms: roomList
 			};
-			if (user.can('ip', targetUser)) {
-				var ips = Object.keys(targetUser.ips);
-				if (ips.length === 1) {
-					userdetails.ip = ips[0];
-				} else {
-					userdetails.ips = ips;
-				}
-			}
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;

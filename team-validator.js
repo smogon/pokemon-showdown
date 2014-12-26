@@ -151,6 +151,8 @@ if (!process.send) {
 
 	global.Tools = require('./tools.js');
 
+	require('./repl.js').start('team-validator-', process.pid, function (cmd) { return eval(cmd); });
+
 	var validators = {};
 
 	var respond = function respond(id, success, details) {
@@ -674,7 +676,10 @@ Validator = (function () {
 								// chainbreeding with itself from earlier gen
 								if (!atLeastOne) sources.push(learned + template.id);
 							} else if (learned.charAt(1) === 'S') {
+								// Event Pokémon:
+								//	Available as long as the past gen can get the Pokémon and then trade it back.
 								sources.push(learned + ' ' + template.id);
+								if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
 							} else {
 								// DW Pokemon are at level 10 or at the evolution level
 								var minLevel = (template.evoLevel && template.evoLevel > 10) ? template.evoLevel : 10;
