@@ -166,6 +166,12 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	psywave: {
+		inherit: true,
+		damageCallback: function (pokemon) {
+			return this.random(1, pokemon.level + Math.floor(pokemon.level / 2));
+		}
+	},
 	rage: {
 		// TODO
 		// Rage boosts in Gens 2-4 is for the duration of Rage only
@@ -265,6 +271,10 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
+				if (move.drain) {
+					this.add('-miss', source);
+					return null;
+				}
 				if (move.category === 'Status') {
 					var SubBlocked = {
 						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1, sketch:1
@@ -273,7 +283,7 @@ exports.BattleMovedex = {
 						// this is safe, move is a copy
 						delete move.volatileStatus;
 					}
-					if (move.status || (move.boosts && move.id !== 'swagger') || move.volatileStatus === 'confusion' || SubBlocked[move.id] || move.drain) {
+					if (move.status || (move.boosts && move.id !== 'swagger') || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
 						this.add('-activate', target, 'Substitute', '[block] ' + move.name);
 						return null;
 					}

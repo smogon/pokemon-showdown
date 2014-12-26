@@ -4064,7 +4064,7 @@ Battle = (function () {
 
 		if (this.log.length > logPos) {
 			if (alreadyEnded !== undefined && this.ended && !alreadyEnded) {
-				if (this.rated) {
+				if (this.rated || Config.logChallenges) {
 					var log = {
 						turns: this.turn,
 						p1: this.p1.name,
