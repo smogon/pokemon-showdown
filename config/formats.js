@@ -1265,7 +1265,7 @@ exports.Formats = [
     },
        {
         name: "Protect: The Metagame",
-        section: 'Other Metagames',
+        section: 'New Other Metagames',
 
         ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
         banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite'],
@@ -1275,6 +1275,26 @@ exports.Formats = [
                 move.onHit = {};
             }
         }
+    },
+    {
+        name: "Clockmons",
+        section: "New Other Metagames",
+
+        mod: 'clockmons',
+        ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite']
+    },
+    {
+        name: "Type Enhancements",
+        section: "New Other Metagames",
+ 
+        mods: 'typeenhancements',
+        ruleset: ['OU'],
+        banlist: ['Shedinja', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Aegislash',
+                'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Speed', 'Deoxys-Attack', 'Deoxys-Defense', 'Dialga',
+                'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram',
+                'Skaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom', 'Illegal', 'Unreleased'
+        ]
     },
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////

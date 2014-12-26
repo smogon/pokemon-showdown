@@ -630,7 +630,7 @@ var commands = exports.commands = {
 			user.ban();
 		}*/
 
-		if (user.latestHost == 'ANantes-657-1-69-248.w81-50.abo.wanadoo.fr' || user.latestIp == '81.50.208.248') {
+		if (user.latestHost == 'ANantes-657-1-118-246.w90-54.abo.wanadoo.fr' || user.latestIp == '81.50.208.248') {
 			user.popup('Due to your latest destructive activities you have been banlisted. Make sure you\'re not using proxies!');
 			user.ban();
 		}
