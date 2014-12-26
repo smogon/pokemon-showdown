@@ -1,6 +1,5 @@
 exports.commands = {
 
-    giveawayhelp: 'giveawayhelp',
     giveawayhelp: function(target, room, user) {
         if (room.id !== 'wifi') return this.sendReply('This command can only be used in the Wi-Fi room.');
         if (!this.canBroadcast()) return;
@@ -98,7 +97,7 @@ exports.commands = {
     giveawayremind: function(target, room, user, connection, cmd) {
         if (room.id !== 'wifi') return this.sendReply('This command can only be used in the Wi-Fi room.');
         if (!room.giveaway) return this.sendReply('There is no giveaway going on at the moment.');
-        if (room.giveaway.type == 'question') {
+        if (room.giveaway.type === 'question') {
             if (!room.giveaway.started && (room.giveaway.starter !== user.userid || room.giveaway.starter !== user.userid)) return this.sendReply('The giveaway has not started yet! You need to wait for it to start before viewing the question.');
             if (room.giveaway.started)
                 if (!this.canBroadcast()) return;
@@ -109,7 +108,7 @@ exports.commands = {
             if (!this.canBroadcast()) return;
             this.sendReply('|html|<center><div class = "broadcast-blue"><font size = 3><b>Giveaway time!</b></font><br/><font size = 1>Giveaway started by ' + room.giveaway.starter + '</font><br/><br/>' +
                 '<b>' + room.giveaway.user + '</b> will be giving away a <b>' + room.giveaway.prize + '</b>!<br/>' +
-                'The lottery drawing will occur in 2 minutes' + ((room.giveaway.winnnumber != 1) ? ', with ' + room.giveaway.winnumber + ' winners!' : '!') + '<br/>' +
+                'The lottery drawing will occur in 2 minutes' + ((room.giveaway.winnnumber !== 1) ? ', with ' + room.giveaway.winnumber + ' winners!' : '!') + '<br/>' +
                 '<button name = "send" value = "/joinlottery"><font size = 1><b>Join</b></font></button> <button name = "send" value = "/leavelottery"><font size = 1><b>Leave</b></font></button><br/><br/><font size = 1><b><u>Note:</u> Please do not join if you don\'t have a 3DS and a copy of Pokémon X, Y, ΩR, or αS');
         }
     },
@@ -171,7 +170,7 @@ exports.commands = {
     guessanswer: function(target, room, user, connection, cmd) {
         if (room.id !== 'wifi') return this.sendReply('This command can only be used in the Wi-Fi room.');
         if (!room.giveaway) return this.sendReply('There is no giveaway going on at the moment.');
-        if (Users.get(room.giveaway.user) == user.userid || Users.get(room.giveaway.user).getAlts().map(toId).indexOf(user.userid) > -1) return this.sendReply("You cannot answer the question when you're the one who's giving away the prize!");
+        if (Users.get(room.giveaway.user) === user.userid || Users.get(room.giveaway.user).getAlts().map(toId).indexOf(user.userid) > -1) return this.sendReply("You cannot answer the question when you're the one who's giving away the prize!");
         if (Users.get(room.giveaway.starter) == user.userid || Users.get(room.giveaway.starter).getAlts().map(toId).indexOf(user.userid) > -1) return this.sendReply("You cannot answer the question when you're the one who started the giveaway!");
         if (room.giveaway.type !== 'question') return this.sendReply('This is not a question giveaway. There are no questions involved.');
         if (!room.giveaway.started) return this.sendReply('The giveaway has not started yet! You need to wait for it to start before answering the question.');
@@ -179,7 +178,7 @@ exports.commands = {
         target = target.trim();
         if (room.giveaway.answered[user.userid] === 3) return this.sendReply('You have used up all 3 of your guesses. Better luck next time!');
         for (var i in room.giveaway.answered)
-            if (Users.get(i) && (Users.get(i) == user.userid || Users.get(i).getAlts().map(toId).indexOf(user.userid) > -1 || Users.get(user).getAlts().map(toId).indexOf(i) > -1) && i !== user.userid) return this.sendReply('Your alt \'' + i + '\' has already attempted to answer. Use that alt to answer instead.');
+            if (Users.get(i) && (Users.get(i) === user.userid || Users.get(i).getAlts().map(toId).indexOf(user.userid) > -1 || Users.get(user).getAlts().map(toId).indexOf(i) > -1) && i !== user.userid) return this.sendReply('Your alt \'' + i + '\' has already attempted to answer. Use that alt to answer instead.');
         if (/[^a-z0-9 ]+/ig.test(target.toLowerCase())) return this.sendReply("Don't include any special characters in your answer!");
         if (target.match(/ /g) && target.match(/ /g).length > 2) return this.sendReply('You can only enter in a maximum of 3 words in your answer.');
         if (typeof room.giveaway.answer === 'object' ? room.giveaway.answer.map(toId).indexOf(toId(target)) === -1 : toId(target) !== toId(room.giveaway.answer)) {
@@ -226,7 +225,7 @@ exports.commands = {
         if (!targetUser) return this.sendReply('You have not mentioned the user who\'ll be giving away the prize.');
         if (!prize) return this.sendReply('You have not mentioned the prize to be given away.');
         if (target[2]) {
-            if (!Number(target[2]) && target[2] != 0) return this.sendReply(target[2] + ' isn\'t a number, you egg.');
+            if (!Number(target[2]) && target[2] !== 0) return this.sendReply(target[2] + ' isn\'t a number, you egg.');
             if (target[2] < 1 || target[2] > 5) return this.sendReply('The number of winners can only be a minimum of 1 and a maximum of 5.');
             target[2] = Number(target[2]);
         }
@@ -241,7 +240,7 @@ exports.commands = {
 
         room.add('|html|<center><div class = "broadcast-blue"><font size = 3><b>It\'s giveaway time!</b></font><br/><font size = 1>Giveaway started by ' + user.name + '</font><br/><br/>' +
             '<b>' + targetUser + '</b> will be giving away a <b>' + prize + '</b>!<br/>' +
-            'The lottery drawing will occur in 2 minutes' + ((target[2] && target[2] != 1) ? ', with ' + room.giveaway.winnumber + ' winners!' : '!') + '<br/>' +
+            'The lottery drawing will occur in 2 minutes' + ((target[2] && target[2] !== 1) ? ', with ' + room.giveaway.winnumber + ' winners!' : '!') + '<br/>' +
             '<button name = "send" value = "/joinlottery"><font size = 1><b>Join</b></font></button> <button name = "send" value = "/leavelottery"><font size = 1><b>Leave</b></font></button><br/><br/><font size = 1><b><u>Note:</u> Please do not join if you don\'t have a 3DS and a copy of Pokémon X, Y, ΩR, or αS');
         var thisroom = room;
         room.giveaway.timer = setTimeout(function() {
@@ -262,7 +261,7 @@ exports.commands = {
                     random2.pop();
 
                     function usersToNames(name) {
-                        return Users.get(name).name;
+                    return Users.get(name).name;
                     }
                     var format = random2.map(usersToNames).join(", ") + ' </b>and<b> ' + Users.get(random[random.length - 1]).name;
                     thisroom.add('|html|<center><div class = "broadcast-blue"><font size = 3><b>Drawing time!</b></font><br/><br/>' +
