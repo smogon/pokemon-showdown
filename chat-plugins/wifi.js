@@ -111,7 +111,7 @@ exports.commands = {
         if (room.id !== 'wifi') return this.sendReply('This command can only be used in the Wi-Fi room.');
         if (!room.giveaway) return this.sendReply('There is no giveaway going on at the moment.');
         if (room.giveaway.type === 'question') {
-            if (!room.giveaway.started && (room.giveaway.starter !== user.userid || room.giveaway.starter !== user.userid)) return
+            if (!room.giveaway.started && (room.giveaway.starter !== user.userid || room.giveaway.starter !== user.userid)) return;
             this.sendReply(
                 'The giveaway has not started yet! You need to wait for it to start before viewing the question.'
             );
