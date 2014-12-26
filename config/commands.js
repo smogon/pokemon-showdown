@@ -166,7 +166,8 @@ var commands = exports.commands = {
 	rooms: 'whois',
 	alt: 'whois',
 	alts: 'whois',
-	whois: function (target, room, user) {
+	whoare: 'whois',
+	whois: function (target, room, user, connection, cmd) {
 		var targetUser = this.targetUserOrSelf(target, user.group === Config.groups.default.global);
 		if (!targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
@@ -189,7 +190,19 @@ var commands = exports.commands = {
 				if (output) this.sendReply("Previous names: " + output);
 			}
 			if (targetUser.locked) {
-				this.sendReply("Locked under the username: " + targetUser.locked);
+				switch (targetUser.locked) {
+				case '#dnsbl':
+					this.sendReply("Locked: IP is in a DNS-based blacklist. ");
+					break;
+				case '#range':
+					this.sendReply("Locked: host is in a temporary range-lock.");
+					break;
+				case '#hostfilter':
+					this.sendReply("Locked: host is permanently locked for being a proxy.");
+					break;
+				default:
+					this.sendReply("Locked under the username: " + targetUser.locked);
+				}
 			}
 		}
 		if (Config.groups.bySymbol[targetUser.group] && Config.groups.bySymbol[targetUser.group].name) {
@@ -201,22 +214,34 @@ var commands = exports.commands = {
 		if (!targetUser.authenticated) {
 			this.sendReply("(Unregistered)");
 		}
-		if (user.can('ip', targetUser) || user === targetUser) {
+		if ((cmd === 'ip' || cmd === 'whoare') && (user.can('ip', targetUser) || user === targetUser)) {
 			var ips = Object.keys(targetUser.ips);
 			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", "));
 			this.sendReply("Host: " + targetUser.latestHost);
 		}
-		var output = "In rooms: ";
+		var publicrooms = "In rooms: ";
+		var hiddenrooms = "In hidden rooms: ";
 		var first = true;
+		var hiddencount = 0;
 		for (var i in targetUser.roomCount) {
 			var targetRoom = Rooms.get(i);
-			if (i === 'global' || targetRoom.isPrivate) continue;
-			if (!first) output += " | ";
-			first = false;
+			if (i === 'global' || targetRoom.isPrivate === true) continue;
 
-			output += (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			var output = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			if (targetRoom.isPrivate) {
+				if (hiddencount > 0) hiddenrooms += " | ";
+				++hiddencount;
+				hiddenrooms += output;
+			} else {
+				if (!first) publicrooms += " | ";
+				first = false;
+				publicrooms += output;
+			}
 		}
-		this.sendReply('|raw|' + output);
+		this.sendReply('|raw|' + publicrooms);
+		if (cmd === 'whoare' && user.can('lock') && hiddencount > 0) {
+			this.sendReply('|raw|' + hiddenrooms);
+		}
 	},
 
 	ipsearch: function (target, room, user) {
@@ -335,19 +360,29 @@ var commands = exports.commands = {
 					"Priority": move.priority
 				};
 
-				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary Effect</font>"] = "";
-				if (move.isContact) details["<font color=black>&#10003; Contact</font>"] = "";
-				if (move.isSoundBased) details["<font color=black>&#10003; Sound</font>"] = "";
-				if (move.isBullet) details["<font color=black>&#10003; Bullet</font>"] = "";
-				if (move.isPulseMove) details["<font color=black>&#10003; Pulse</font>"] = "";
+				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary effect</font>"] = "";
+				if (move.flags['contact']) details["<font color=black>&#10003; Contact</font>"] = "";
+				if (move.flags['sound']) details["<font color=black>&#10003; Sound</font>"] = "";
+				if (move.flags['bullet']) details["<font color=black>&#10003; Bullet</font>"] = "";
+				if (move.flags['pulse']) details["<font color=black>&#10003; Pulse</font>"] = "";
+				if (move.flags['protect']) details["<font color=black>&#10003; Blocked by Protect</font>"] = "";
+				if (move.flags['authentic']) details["<font color=black>&#10003; Ignores substitutes</font>"] = "";
+				if (move.flags['defrost']) details["<font color=black>&#10003; Thaws user</font>"] = "";
+				if (move.flags['bite']) details["<font color=black>&#10003; Bite</font>"] = "";
+				if (move.flags['punch']) details["<font color=black>&#10003; Punch</font>"] = "";
+				if (move.flags['powder']) details["<font color=black>&#10003; Powder</font>"] = "";
+				if (move.flags['reflectable']) details["<font color=black>&#10003; Bounceable</font>"] = "";
 
 				details["Target"] = {
-					'normal': "Adjacent Pokemon",
-					'self': "Self",
-					'adjacentAlly': "Single Ally",
-					'allAdjacentFoes': "Adjacent Foes",
-					'foeSide': "All Foes",
-					'allySide': "All Allies",
+					'normal': "One Adjacent Pokemon",
+					'self': "User",
+					'adjacentAlly': "One Ally",
+					'adjacentAllyOrSelf': "User or Ally",
+					'adjacentFoe': "One Adjacent Opposing Pokemon",
+					'allAdjacentFoes': "All Adjacent Opponents",
+					'foeSide': "Opposing Side",
+					'allySide': "User's Side",
+					'allyTeam': "User's Side",
 					'allAdjacent': "All Adjacent Pokemon",
 					'any': "Any Pokemon",
 					'all': "All Pokemon"
@@ -359,14 +394,15 @@ var commands = exports.commands = {
 					details["Fling Base Power"] = item.fling.basePower;
 					if (item.fling.status) details["Fling Effect"] = item.fling.status;
 					if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
-					if (item.isBerry) details["Fling Effect"] = "Activates effect of berry on target.";
-					if (item.id === 'whiteherb') details["Fling Effect"] = "Removes all negative stat levels on the target.";
-					if (item.id === 'mentalherb') details["Fling Effect"] = "Removes the effects of infatuation, Taunt, Encore, Torment, Disable, and Cursed Body on the target.";
+					if (item.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
+					if (item.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
+					if (item.id === 'mentalherb') details["Fling Effect"] = "Removes the effects of Attract, Disable, Encore, Heal Block, Taunt, and Torment from the target.";
+				} else {
+					details["Fling"] = "This item cannot be used with Fling.";
 				}
-				if (!item.fling) details["Fling"] = "This item cannot be used with Fling";
 				if (item.naturalGift) {
 					details["Natural Gift Type"] = item.naturalGift.type;
-					details["Natural Gift BP"] = item.naturalGift.basePower;
+					details["Natural Gift Base Power"] = item.naturalGift.basePower;
 				}
 			} else {
 				details = {};
@@ -845,6 +881,16 @@ var commands = exports.commands = {
 		room.add("" + user.name + " applied showtan to affected area of " + this.targetUser.name);
 	},
 
+	cpgtan: function (target, room, user) {
+		if (room.id !== 'cpg') return this.sendReply("The command '/cpgtan' was unrecognized. To send a message starting with '/cpgtan', type '//cpgtan'.");
+		if (!this.can('cpgtan', room)) return;
+		target = this.splitTarget(target);
+		if (!this.targetUser) return this.sendReply("User not found");
+		if (!room.users[this.targetUser.userid]) return this.sendReply("Not a cpger");
+		this.targetUser.avatar = '#cpgtan';
+		room.add("" + user.name + " applied cpgtan to affected area of " + this.targetUser.name);
+	},
+
 	introduction: 'intro',
 	intro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -925,6 +971,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">OM of the Month</a><br />";
 		}
+		if (target === 'seasonal') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a><br />";
+		}
 		if (target === 'balancedhackmons' || target === 'bh') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3489849/\">Balanced Hackmons</a><br />";
@@ -975,9 +1025,9 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3495527/\">Averagemons</a><br />";
 		}
-		if (target === 'hackmons' || target === 'purehackmons' || target === 'classichackmons') {
+		if (target === 'classichackmons' || target === 'hackmons') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3500418/\">Hackmons</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521887/\">Classic Hackmons</a><br />";
 		}
 		if (target === 'hiddentype') {
 			matched = true;
@@ -985,7 +1035,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'middlecup' || target === 'mc') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524287/\">Middle Cup</a><br />";
 		}
 		if (target === 'skybattle') {
 			matched = true;
@@ -1060,6 +1110,8 @@ var commands = exports.commands = {
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
 			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
+			"<br />" +
+			"More detailed help can be found in the <a href=\"https://www.smogon.com/sim/roomauth_guide\">roomauth guide</a><br />" +
 			"</div>"
 		);
 	},
@@ -1086,8 +1138,8 @@ var commands = exports.commands = {
 			return;
 		}
 		if (!this.can('declare', room)) return;
-		if (target.length > 80) {
-			return this.sendReply("Error: Room rules link is too long (must be under 80 characters). You can use a URL shortener to shorten the link.");
+		if (target.length > 100) {
+			return this.sendReply("Error: Room rules link is too long (must be under 100 characters). You can use a URL shortener to shorten the link.");
 		}
 
 		room.rulesLink = target.trim();
@@ -1136,6 +1188,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "A user is autoconfirmed when they have won at least one rated battle and have been registered for a week or longer.<br />";
 		}
+		if (target === 'customavatar' || target === 'ca') {
+			matched = true;
+			buffer += "<a href=\"https://www.smogon.com/sim/faq#customavatar\">How can I get a custom avatar?</a><br />";
+		}
 		if (!matched) {
 			return this.sendReply("The FAQ entry '" + target + "' was not found. Try /faq for general help.");
 		}
@@ -1157,44 +1213,44 @@ var commands = exports.commands = {
 		}
 		if (target === 'overused' || target === 'ou') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3514144/\">np: OU Stage 6</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521201/\">OU Metagame Discussion</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515714/\">OU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521602/\">OU Viability Rankings</a><br />";
 		}
 		if (target === 'ubers' || target === 'uber') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3519501/\">np: XY Ubers Shadow Tag Suspect Test</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496305/\">Ubers Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522911/\">Ubers Metagame Discussion</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523419/\">Ubers Viability Rankings</a><br />";
 		}
 		if (target === 'underused' || target === 'uu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516640/\">np: UU Stage 3</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522744/\">np: UU Stage 1</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516418/\">UU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523649/\">UU Viability Rankings</a><br />";
 		}
 		if (target === 'rarelyused' || target === 'ru') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515615/\">np: RU Stage 4</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522572/\">np: RU Stage 5</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516783/\">RU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523627/\">RU Viability Rankings</a><br />";
 		}
 		if (target === 'neverused' || target === 'nu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516675/\">np: NU Stage 2</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522559/\">np: NU Stage 3</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509494/\">NU Viability Rankings</a><br />";
 		}
 		if (target === 'littlecup' || target === 'lc') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505710/\">Metagame Discussion Thread</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505710/\">LC Metagame Discussion</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3490462/\">LC Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496013/\">LC Viability Rankings</a><br />";
 		}
 		if (target === 'smogondoubles' || target === 'doubles') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509279/\">np: Doubles Stage 3.5</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523833/\">np: Doubles Stage 1</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496306/\">Doubles Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522814/\">Doubles Viability Rankings</a><br />";
 		}
 		if (!matched) {
 			return this.sendReply("The Tiers entry '" + target + "' was not found. Try /tiers for general help.");
@@ -1545,6 +1601,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/ignore [user] - Ignores all messages from the user [user].");
 			this.sendReply("Note that staff messages cannot be ignored.");
+		}
+		if (target === 'unignore') {
+			matched = true;
+			this.sendReply("/unignore [user] - Removes user [user] from your ignore list.");
 		}
 		if (target === 'invite') {
 			matched = true;
