@@ -95,6 +95,9 @@ exports.BattleMovedex = {
 		basePower: 60,
 		desc: "Deals damage to one adjacent or non-adjacent target. This move has an X% chance to confuse the target, where X is 0 unless the user is a Chatot that hasn't Transformed. If the user is a Chatot, X is 0 or 10 depending on the volume of Chatot's recorded cry, if any; 0 for a low volume or no recording, 10 for a medium to high volume recording. Pokemon with the Ability Soundproof are immune.",
 		shortDesc: "10% chance to confuse the target.",
+		onModifyMove: function (move, pokemon) {
+			if (pokemon.template.species !== 'Chatot') delete move.secondaries;
+		},
 		secondary: {
 			chance: 10,
 			volatileStatus: 'confusion'
@@ -138,7 +141,8 @@ exports.BattleMovedex = {
 	},
 	cottonspore: {
 		inherit: true,
-		onTryHit: function () {}
+		onTryHit: function () {},
+		target: "normal"
 	},
 	covet: {
 		inherit: true,
@@ -433,10 +437,6 @@ exports.BattleMovedex = {
 			}
 		}
 	},
-	infestation: {
-		inherit: true,
-		desc: "Deals damage to one adjacent target and prevents it from switching for four or five turns; seven turns if the user is holding Grip Claw. Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin. This effect is not stackable or reset by using this or another partial-trapping move."
-	},
 	knockoff: {
 		inherit: true,
 		basePower: 20,
@@ -551,7 +551,8 @@ exports.BattleMovedex = {
 		shortDesc: "Attack changes based on terrain. (Earthquake)",
 		onHit: function (target) {
 			this.useMove('earthquake', target);
-		}
+		},
+		target: "self"
 	},
 	overheat: {
 		inherit: true,

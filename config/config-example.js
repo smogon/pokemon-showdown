@@ -71,6 +71,10 @@ exports.reportJoins = true;
 //   getting more than 160 or so users.
 exports.reportBattles = true;
 
+// report joins and leaves in battle - shows messages like "<USERNAME> joined" in battle
+// Turn this off on large tournament servers where battles get a lot of joins and leaves.
+exports.reportBattleJoins = true;
+
 // moderated chat - prevent unvoiced users from speaking
 //   This should only be enabled in special situations, such as temporarily
 //   when you're dealing with huge influxes of spammy users.
@@ -111,6 +115,9 @@ exports.watchConfig = true;
 // logChat - whether to log chat rooms.
 exports.logChat = false;
 
+// logChallenges - whether to log challenge battles. Useful for tournament servers.
+exports.logChallenges = false;
+
 // logUserStats - how often (in milliseconds) to write user stats to the
 // lobby log. This has no effect if `logchat` is disabled.
 exports.logUserStats = 1000 * 60 * 10; // 10 minutes
@@ -148,7 +155,7 @@ exports.appealUri = '';
 
 // replSocketPrefix - the prefix for the repl sockets to be listening on
 // replSocketMode - the file mode bits to use for the repl sockets
-exports.replSocketPrefix = './repl/';
+exports.replSocketPrefix = './logs/repl/';
 exports.replSocketMode = 0600;
 
 // Symbols, Groups and Permissions
@@ -303,6 +310,7 @@ exports.groups = {
 			announce: true,
 			bypassblocks: 'u%@&~',
 			forcerename: true,
+			jeopardy: true,
 			kick: true,
 			lock: true,
 			mute: true,
