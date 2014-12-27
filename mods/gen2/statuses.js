@@ -90,6 +90,12 @@ exports.BattleStatuses = {
 			return this.random(3, 6);
 		}
 	},
+	sandstorm: {
+		inherit: true,
+		onWeather: function (target) {
+			this.damage(target.maxhp / 8);
+		}
+	},
 	stall: {
 		duration: 2,
 		counterMax: 255,
