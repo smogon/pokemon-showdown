@@ -551,13 +551,16 @@ exports.BattleScripts = {
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
 		if (moveData.secondaries) {
-			var secondaryRoll;
-			var effectChance;
 			for (var i = 0; i < moveData.secondaries.length; i++) {
-				secondaryRoll = this.random(256);
-				effectChance = Math.floor(moveData.secondaries[i].chance * 255 / 100);
-				if (typeof moveData.secondaries[i].chance === 'undefined' || secondaryRoll < effectChance) {
-					this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
+				// We check here whether to negate the probable secondary status if it's para, burn, or freeze.
+				// In the game, this is checked and if true, the random number generator is not called.
+				// That means that a move that does not share the type of the target can status it.
+				// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
+				if (!(moveData.secondaries[i].status && moveData.secondaries[i].status in {'par':1, 'brn':1, 'frz':1} && target.hasType(move.type))) {
+					var effectChance = Math.floor(moveData.secondaries[i].chance * 255 / 100);
+					if (typeof moveData.secondaries[i].chance === 'undefined' || this.random(256) < effectChance) {
+						this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
+					}
 				}
 			}
 		}
