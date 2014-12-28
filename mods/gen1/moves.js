@@ -588,7 +588,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one target with a 30% chance to lower its Special by 1 stage.",
 		shortDesc: "30% chance to lower the target's Special by 1.",
 		secondary: {
-			chance: 30,
+			chance: 33,
 			boosts: {
 				spd: -1,
 				spa: -1
