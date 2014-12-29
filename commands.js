@@ -192,13 +192,23 @@ var commands = exports.commands = {
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
 	privateroom: function (target, room, user, connection, cmd) {
-		if (!this.can('privateroom', null, room) || (cmd === 'privateroom' && !this.can('makeroom'))) return;
-		if (cmd !== 'privateroom' && room.isPrivate === true) {
-			if (this.can('makeroom')) {
-				this.sendReply("This room is a secret room. Use /privateroom to toggle instead.");
+		var setting;
+		switch (cmd) {
+		case 'privateroom':
+			if (!this.can('makeroom')) return;
+			setting = true;
+			break;
+		default:
+			if (!this.can('privateroom', null, room)) return;
+			if (room.isPrivate === true) {
+				if (this.can('makeroom'))
+					this.sendReply("This room is a secret room. Use /privateroom to toggle instead.");
+				return;
 			}
-			return;
+			setting = 'hidden';
+			break;
 		}
+
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand("" + user.name + " made this room public.");
@@ -207,10 +217,10 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			room.isPrivate = (cmd === 'privateroom' ? true : 'hidden');
-			this.addModCommand("" + user.name + " made this room " + (cmd === 'privateroom' ? 'secret' : 'hidden') + ".");
+			room.isPrivate = setting;
+			this.addModCommand("" + user.name + " made this room " + (setting === true ? 'secret' : setting) + ".");
 			if (room.chatRoomData) {
-				room.chatRoomData.isPrivate = true;
+				room.chatRoomData.isPrivate = setting;
 				Rooms.global.writeChatRoomData();
 			}
 		}
