@@ -777,7 +777,7 @@ exports.BattleScripts = {
 		if (damage > 1) {
 			damage *= this.random(217, 256);
 			damage = Math.floor(damage / 255);
-			if (damage > target.hp) damage = target.hp;
+			if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
 		}
 
 		// We are done, this is the final damage.
