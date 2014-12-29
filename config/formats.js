@@ -1296,6 +1296,14 @@ exports.Formats = [
                 'Skaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom', 'Illegal', 'Unreleased'
         ]
     },
+    {
+        name: "Five Items",
+        section: "Other Metagames",
+      
+        ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+        banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite'],
+        mod: 'fiveitems'
+    },
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
 
