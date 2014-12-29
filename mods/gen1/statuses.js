@@ -42,6 +42,9 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('solarbeam');
 				pokemon.removeVolatile('skullbash');
 				pokemon.removeVolatile('partialtrappinglock');
+				// Remove these two if you want 100% accurate mechanics
+				pokemon.removeVolatile('flyinvulnerable');
+				pokemon.removeVolatile('diginvulnerable');
 				return false;
 			}
 		},
@@ -158,6 +161,9 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('solarbeam');
 				pokemon.removeVolatile('skullbash');
 				pokemon.removeVolatile('partialtrappinglock');
+				// Remove these two if you want 100% accurate mechanics
+				pokemon.removeVolatile('flyinvulnerable');
+				pokemon.removeVolatile('diginvulnerable');
 				return false;
 			}
 			return;
