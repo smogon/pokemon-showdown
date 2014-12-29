@@ -268,7 +268,7 @@ exports.BattleScripts = {
 			this.add('-notarget');
 			return true;
 		}
-		damage = this.rollMoveHit(target, pokemon, move);
+		damage = this.tryMoveHit(target, pokemon, move);
 
 		// Store 0 damage for last damage if move failed or dealt 0 damage.
 		if (!damage) pokemon.battle.lastDamage = 0;
@@ -285,7 +285,7 @@ exports.BattleScripts = {
 		}
 		return true;
 	},
-	rollMoveHit: function (target, pokemon, move, spreadHit) {
+	tryMoveHit: function (target, pokemon, move, spreadHit) {
 		var boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		var doSelfDestruct = true;
 		var damage = 0;
