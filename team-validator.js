@@ -153,8 +153,6 @@ if (!process.send) {
 
 	global.Tools = require('./tools.js');
 
-	require('./repl.js').start('team-validator-', process.pid, function (cmd) { return eval(cmd); });
-
 	var validators = {};
 
 	var respond = function respond(id, success, details) {
@@ -717,7 +715,7 @@ Validator = (function () {
 				if (template.gen > Math.max(2, tools.gen)) template = null;
 			} else if (template.speciesid === 'shaymin') {
 				template = tools.getTemplate('shayminsky');
-			} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem' && template.baseSpecies !== 'Pikachu') {
+			} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem') {
 				template = tools.getTemplate(template.baseSpecies);
 			} else {
 				template = null;
