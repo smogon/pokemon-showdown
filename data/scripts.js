@@ -2710,6 +2710,7 @@ exports.BattleScripts = {
         //console.log(team);
         return team;
     },
+    
 		randomMonotypeTeam: function (side) {
 		var keys = [];
 		var pokemonLeft = 0;

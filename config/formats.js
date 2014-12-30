@@ -477,6 +477,14 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "OU Theorymons",
+		section: "OM of the Month",
+		mod: 'theorymon',
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
+	},
+	{
 		name: "[Seasonal] Sleigh Showdown",
 		section: "OM of the Month",
 
@@ -1298,7 +1306,7 @@ exports.Formats = [
     },
     {
         name: "Five Items",
-        section: "Other Metagames",
+        section: "New Other Metagames",
       
         ruleset: ['Pokemon', 'Standard', 'Team Preview'],
         banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite'],

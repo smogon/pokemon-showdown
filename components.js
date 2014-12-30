@@ -310,7 +310,7 @@ rangelock: function(target, room, user) {
     profile: function (target, room, user, connection, cmd) {
         if (!this.canBroadcast()) return;
         if (cmd === 'bucks') return this.sendReply('Use /profile instead.');
-        if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');
+        if (target.length >= 19) return this.sendReply('Usernames are required to be less than 19 characters long.');//
 
         var targetUser = this.targetUserOrSelf(target);
 
@@ -1090,7 +1090,7 @@ rangelock: function(target, room, user) {
                 '<b>/diceend</b> - Ends the current game of dice in the room. You must be ranked + or higher to use this.');
         },
 
-        dicegame: 'diceon',
+        /*dicegame: 'diceon',
         diceon: function(target, room, user, connection, cmd) {
             if (!this.can('broadcast', null, room)) return this.sendReply('You must be ranked + or higher to be able to start a game of dice.');
             if (room.dice) {
@@ -1218,7 +1218,7 @@ rangelock: function(target, room, user) {
         diceend: function(target, room, user) {
                 if (!this.can('broadcast', null, room)) return false;
                     if (!room.dice) return this.sendReply("There is no game of dice going on in this room right now."); this.add('|html|<b>The game of dice has been ended by ' + user.name); delete room.dice;
-                },
+                },*/
 	
 
     
