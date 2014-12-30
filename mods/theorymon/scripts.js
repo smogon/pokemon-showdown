@@ -13,6 +13,6 @@ exports.BattleScripts = {
 			this.modData('Pokedex', 'milotic').abilities['1'] = 'Multiscale';
 			this.modData('Pokedex', 'empoleon').abilities['1'] = 'Lightningrod';
 			this.modData('Learnsets', 'reuniclus').learnset.voltswitch = ['5L1'];
-		    	this.modData('Pokedex', 'steelixmega').abilities['1'] = 'Arena Trap';
+		    this.modData('Pokedex', 'steelixmega').abilities['1'] = 'Arena Trap';
 		}
 	};
