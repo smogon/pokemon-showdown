@@ -73,6 +73,10 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	explosion: {
+		inherit: true,
+		basePower: 250
+	},
 	leechseed: {
 		inherit: true,
 		onHit: function (target, source, move) {
@@ -215,6 +219,10 @@ exports.BattleMovedex = {
 			}
 		},
 		priority: -1
+	},
+	selfdestruct: {
+		inherit: true,
+		basePower: 200
 	},
 	sleeptalk: {
 		inherit: true,
