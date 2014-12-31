@@ -3604,7 +3604,12 @@ exports.BattleScripts = {
 				set.name = 'R.F.';
 			} else if (template.id === 'charizard') {
 				set.species = 'charizard';
-				set.name = 'Rukario';
+				var dice = this.random(2);
+				if (dice < 1) {
+					set.name = 'IndianCharizard#';
+				} else {
+					set.name = 'Rukario';
+				}
 			} else if (template.id === 'cofagrigus') {
 				set.species = 'cofagrigus';
 				set.name = 'Zeffy';
@@ -3848,12 +3853,7 @@ exports.BattleScripts = {
 				set.name = 'Eevee-kins';
 			} else if (template.id === 'venusaur') {
 				set.species = 'venusaur';
-				var dice = this.random(2);
-				if (dice < 1) {
-					set.name = 'Garrabutártulo';
-				} else {
-					set.name = 'IndianCharizard#';
-				}
+				set.name = 'Garrabutártulo';
 			} else if (template.id === 'victini') {
 				set.species = 'victini';
 				set.name = 'Starry Windy';
