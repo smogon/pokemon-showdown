@@ -590,7 +590,7 @@ var GlobalRoom = (function () {
 		if (rooms.lobby) return rooms.lobby.chat(user, message, connection);
 		message = CommandParser.parse(message, this, user, connection);
 		if (message) {
-			connection.sendPopup("You can't send messages directly to the server.");
+			connection.popup("You can't send messages directly to the server.");
 		}
 	};
 	return GlobalRoom;
