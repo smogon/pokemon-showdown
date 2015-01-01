@@ -4087,7 +4087,7 @@ exports.BattleScripts = {
 			baseFormes[template.baseSpecies] = 1;
 
 			set.moves = ['metronome'];
-			
+
 			if (set.item === 'assaultvest') {
 				set.item = 'leftovers';
 			}
