@@ -19,7 +19,7 @@ exports.BattleScripts = {
 	},
 	// BattlePokemon scripts.
 	pokemon: {
-		getStat: function (statName, unboosted, unmodified) {
+		getStat: function (statName, unboosted, unmodified, noscreens) {
 			statName = toId(statName);
 			if (statName === 'hp') return this.maxhp;
 
@@ -56,11 +56,11 @@ exports.BattleScripts = {
 			}
 
 			// Hard coded Reflect and Light Screen boosts
-			if (this.volatiles['reflect'] && statName === 'def' && !unboosted) {
+			if (this.volatiles['reflect'] && statName === 'def' && !unboosted && !noscreens) {
 				this.battle.debug('Reflect doubles Defense');
 				stat *= 2;
 				stat = this.battle.clampIntRange(stat, 1, 1998);
-			} else if (this.volatiles['lightscreen'] && statName === 'spd' && !unboosted) {
+			} else if (this.volatiles['lightscreen'] && statName === 'spd' && !unboosted && !noscreens) {
 				this.battle.debug('Light Screen doubles Special Defense');
 				stat *= 2;
 				stat = this.battle.clampIntRange(stat, 1, 1998);
