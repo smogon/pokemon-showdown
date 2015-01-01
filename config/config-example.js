@@ -411,6 +411,7 @@ exports.groups = {
 		roomplayer: true,
 		roomonly: true,
 		tournamentsmanagement: true,
+		rmall: true,
 		rank: 6
 	},
 	'@': {
