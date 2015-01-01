@@ -328,6 +328,7 @@ exports.customavatars = {
 	'insanelover': 'insane-lover.png',
 	'slrloer': 'insane-lover.png',
 	'alliancelver': 'insane-lover.png',
+	'pinkrabbit': 'pink-rabbit.gif',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
