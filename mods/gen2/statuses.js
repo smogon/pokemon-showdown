@@ -44,6 +44,20 @@ exports.BattleStatuses = {
 			return false;
 		}
 	},
+	frz: {
+		inherit: true,
+		onBeforeMove: function (pokemon, target, move) {
+			if (move.thawsUser) return;
+			this.add('cant', pokemon, 'frz');
+			return false;
+		},
+		onAfterMoveSelf: function (pokemon, target, move) {
+			if (move.thawsUser) pokemon.cureStatus();
+		},
+		onResidual: function (pokemon) {
+			if (this.random(256) < 25) pokemon.cureStatus();
+		}
+	},
 	psn: {
 		effectType: 'Status',
 		onStart: function (target) {
