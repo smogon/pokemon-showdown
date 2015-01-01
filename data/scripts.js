@@ -4090,7 +4090,7 @@ exports.BattleScripts = {
 			
 			if (set.item === 'assaultvest') {
 				set.item = 'leftovers';
-			};
+			}
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
