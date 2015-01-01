@@ -221,7 +221,7 @@ var components = exports.components = {
     },
 
     rmall: function (target, room, user) {
-        if(!this.can('pmall')) return;
+        if(!this.can('rmall')) return;
         if (!target) return this.parse('/help rmall');
 
         var pmName = '~Server PM [Do not reply]';
