@@ -322,15 +322,17 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Stat Switch",
+		name: "FU",
 		section: "OM of the Month",
 		column: 2,
 
-		mod: 'statswitch',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Arceus', 'Azumarill', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Giratina', 'Giratina-Origin',
-			'Groudon', 'Ho-Oh', 'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Regice', 'Reshiram', 'Xerneas',
-			'Yveltal', 'Zekrom', 'Diancite', 'Gengarite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew'
+		ruleset: ['PU'],
+		banlist: ['Altaria', 'Aurorus', 'Avalugg', 'Barbaracle', 'Basculin', 'Bastiodon', 'Beheeyem', 'Bouffalant', 'Camerupt', 'Carracosta',
+			'Chatot', 'Dodrio', 'Dusclops', 'Dusknoir', 'Electrode', 'Flareon', 'Floatzel', 'Garbodor', 'Gogoat', 'Golem',
+			'Gourgeist-Super', 'Haunter', 'Heatmor', 'Kadabra', 'Kecleon', 'Kingler', 'Leavanny', 'Lickilicky', 'Lumineon', 'Luxray',
+			'Mantine', 'Marowak', 'Mightyena', 'Mr. Mime', 'Musharna', 'Ninetales', 'Pelipper', 'Piloswine', 'Poliwrath', 'Purugly',
+			'Raichu', 'Rampardos', 'Rapidash', 'Regice', 'Rotom-Frost', 'Scyther', 'Serperior', 'Slaking', 'Sneasel', 'Stoutland',
+			'Tangela', 'Tauros', 'Throh', 'Togetic', 'Torterra', 'Ursaring', 'Vigoroth', 'Wartortle', 'Zebstrika'
 		]
 	},
 	{
