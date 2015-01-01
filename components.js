@@ -192,13 +192,15 @@ var components = exports.components = {
 
     k: 'kick',
     kick: function (target, room, user) {
-        if (!this.can('kick', null, room)) return false;
         if (!target) return this.parse('/help kick');
 
         var targetUser = Users.get(target);
         if (!targetUser) return this.sendReply('User ' + target + ' not found.');
 
         if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
+
+        if (!this.can('kick', targetUser, room)) return false;
+
         targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.');
         targetUser.leaveRoom(room);
         room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
