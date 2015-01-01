@@ -9,12 +9,16 @@
 	// Seasoning Greetings, November 2012
 	{
 		name: "[Seasonal] Seasoning's Greetings",
+		section: "OM of the Month",
+
 		team: 'randomSeasonal',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	// Winter Wonderland, December 2012 and January 2013
 	{
 		name: "[Seasonal] Winter Wonderland",
+		section: "OM of the Month",
+
 		team: 'randomSeasonalWW',
 		onBegin: function() {
 			this.setWeather('Hail');
@@ -131,6 +135,8 @@
 	// Valentine Venture, February 2013
 	{
 		name: "[Seasonal] Valentine Venture",
+		section: "OM of the Month",
+
 		team: 'randomSeasonalVV',
 		gameType: 'doubles',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
@@ -138,6 +144,8 @@
 	// Spring Forward, March 2013
 	{
 		name: "[Seasonal] Spring Forward",
+		section: "OM of the Month",
+
 		team: 'randomSeasonalSF',
 		onBegin: function() {
 			if (this.random(100) < 75) {
@@ -215,7 +223,7 @@
 	// Fools Festival, April 2013
 	{
 		name: "[Seasonal] Fools Festival",
-		section: 'OM of the Month',
+		section: "OM of the Month",
 
 		team: 'randomSeasonalFF',
 		onBegin: function() {
@@ -423,7 +431,9 @@
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause']
 	},
 	{
-		name: "May Mayhem",
+		name: "[Seasonal] May Mayhem",
+		section: "OM of the Month",
+
 		section: "Seasonal",
 		team: 'randomSeasonalMM',
 		onBegin: function() {
@@ -476,8 +486,7 @@
 				this.add('-message', "Reshiram caused " + weatherMsg + " with its tail!");
 				delete this.weatherData.duration;
 			}
-		},
-		onBeforeMove: function(pokemon) {
+
 			if (!pokemon.side.battle.seasonal) pokemon.side.battle.seasonal = {'none':false, 'drizzle':false, 'hail':false};
 			if (pokemon.side.battle.turn >= 4 && pokemon.side.battle.seasonal.none === false) {
 				this.add('-message', "You are travelling north and you have arrived to North Dakota! There's a clear sky and the temperature is lower here.");
@@ -514,6 +523,7 @@
 	{
 		name: "[Seasonal] Jolly July",
 		section: "OM of the Month",
+
 		team: 'randomSeasonalJuly',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin: function() {
