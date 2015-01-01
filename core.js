@@ -159,7 +159,7 @@ var core = exports.core = {
     },
 
     emoticons: {
-        ':bidoof:': 'http://i.cubeupload.com/CG0qpn.png',
+        ':bidoof:': 'http://i.cubeupload.com/YyY1w6.png',
         ':castform:': 'http://i.cubeupload.com/T5FfCG.png',
         ':cookie:': 'http://i.cubeupload.com/jg1pGi.gif',
         ':hamster:': 'http://i.cubeupload.com/Qc5Fuv.png',
@@ -199,7 +199,7 @@ var core = exports.core = {
         }
 
         return text.replace(new RegExp(patterns.join('|'), 'g'), function (match) {
-            if (match === ':bidoof:' || match === ':kermit:' || match === ':superman:' || match === ':sweep:') return typeof self.emoticons[match] != 'undefined' ?
+            if (match === ':kermit:' || match === ':superman:' || match === ':sweep:') return typeof self.emoticons[match] != 'undefined' ?
                 '<img src="' + self.emoticons[match] + '" title="' + match + '" width="30" height="30"/>' :
                 match;
             return typeof self.emoticons[match] != 'undefined' ?
