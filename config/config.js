@@ -323,6 +323,11 @@ exports.customavatars = {
 	'pomman': 'pomman.gif',
 	'dracomasterbrit': 'pomman.gif',
 	'arguso': 'arguso.png',
+	'duzzy': 'jellicent.gif',
+	'cluricaun': 'cluricaun.gif',
+	'insanelover': 'insane-lover.png',
+	'slrloer': 'insane-lover.png',
+	'alliancelver': 'insane-lover.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
