@@ -159,14 +159,14 @@ var core = exports.core = {
     },
 
     emoticons: {
-        ':bidoof:': 'http://i.cubeupload.com/YyY1w6.png',
+        ':bidoof:': 'http://i.cubeupload.com/LuPbQy.png',
         ':castform:': 'http://i.cubeupload.com/T5FfCG.png',
         ':cookie:': 'http://i.cubeupload.com/jg1pGi.gif',
-        ':hamster:': 'http://i.cubeupload.com/Qc5Fuv.png',
+        ':hamster:': 'http://i.cubeupload.com/mfzNvI.png',
         ':jigglypuff:': 'http://i.cubeupload.com/YztizI.png',
         ':jynx:': 'http://i.cubeupload.com/ofwdUJ.png',
         ':kappa:': 'http://i.cubeupload.com/lpKLpS.png',
-        ':kermit:': 'http://i.cubeupload.com/kOmvYT.png',
+        ':kermit:': 'http://i.cubeupload.com/tcKMod.png',
         ':ludicolo:': 'http://i.cubeupload.com/ciac6L.png',
         ':luvdisc:': 'http://i.cubeupload.com/PtSs8M.png',
         ':magikarp:': 'http://i.cubeupload.com/n6mgll.png',
@@ -178,7 +178,7 @@ var core = exports.core = {
         ':spheal:': 'http://i.cubeupload.com/MbU8MF.png',
         ':sri:': 'http://i.cubeupload.com/TP8Zut.png',
         ':suicune:': 'http://i.cubeupload.com/bctlyl.png',
-        ':superman:': 'http://i.cubeupload.com/UIkm8Q.png',
+        ':superman:': 'http://i.cubeupload.com/1211Wf.png',
         ':sweep:': 'http://i.cubeupload.com/gFmzfa.gif',
         ':vulpix:': 'http://i.cubeupload.com/QWGl1Y.png',
         ':wobbuffet:': 'http://i.cubeupload.com/bhIIQe.png',
@@ -199,7 +199,7 @@ var core = exports.core = {
         }
 
         return text.replace(new RegExp(patterns.join('|'), 'g'), function (match) {
-            if (match === ':kermit:' || match === ':superman:' || match === ':sweep:') return typeof self.emoticons[match] != 'undefined' ?
+            if (match === ':bidoof:' || match === ':kermit:' || match === ':superman:' || match === ':sweep:') return typeof self.emoticons[match] != 'undefined' ?
                 '<img src="' + self.emoticons[match] + '" title="' + match + '" width="30" height="30"/>' :
                 match;
             return typeof self.emoticons[match] != 'undefined' ?
