@@ -207,7 +207,7 @@ exports.BattleMovedex = {
 			// If both are true, counter will deal twice the last damage dealt in battle.
 			// That means that, if opponent switches, counter will use last counter damage * 2.
 			var lastUsedMove = this.getMove(target.side.lastMove);
-			if (lastUsedMove && lastUsedMove.basePower && lastUsedMove.basePower > 0 && lastUsedMove.type in {'Normal': 1, 'Fighting': 1} && target.battle.lastDamage > 0) {
+			if (lastUsedMove && (lastUsedMove.basePower > 0 || lastUsedMove.id === 'seismictoss') && lastUsedMove.type in {'Normal': 1, 'Fighting': 1} && target.battle.lastDamage > 0) {
 				return 2 * target.battle.lastDamage;
 			}
 			this.add('-fail', pokemon);
@@ -588,7 +588,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to one target with a 30% chance to lower its Special by 1 stage.",
 		shortDesc: "30% chance to lower the target's Special by 1.",
 		secondary: {
-			chance: 30,
+			chance: 33,
 			boosts: {
 				spd: -1,
 				spa: -1

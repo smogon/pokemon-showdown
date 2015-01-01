@@ -44,7 +44,7 @@ exports.BattleScripts = {
 			stat = this.battle.clampIntRange(stat, 1, 999);
 
 			// Treat here the items.
-			if ((this.species in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk') || (this.species === 'Pikachu' && this.item === 'lightball' && statName in {'spa':1, 'atk':1})) {
+			if ((this.species in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk') || (this.species === 'Pikachu' && this.item === 'lightball' && statName === 'spa')) {
 				stat *= 2;
 			} else if (this.species === 'Ditto' && this.item === 'metalpowder' && statName in {'def':1, 'spd':1}) {
 				// what. the. fuck. stop playing pokémon
@@ -77,6 +77,8 @@ exports.BattleScripts = {
 			return;
 		}
 		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
+			// Prevent invulnerability from persisting until the turn ends
+			pokemon.removeVolatile('twoturnmove');
 			this.clearActiveMove(true);
 			// This is only run for sleep and fully paralysed.
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -102,6 +104,176 @@ exports.BattleScripts = {
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.runEvent('AfterMove', target, pokemon, move);
 		if (!move.selfSwitch) this.runEvent('AfterMoveSelf', pokemon, target, move);
+	},
+	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
+		var damage;
+		move = this.getMoveCopy(move);
+
+		if (!moveData) moveData = move;
+		var hitResult = true;
+
+		if (move.target === 'all' && !isSelf) {
+			hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
+		} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
+			hitResult = this.singleEvent('TryHitSide', moveData, {}, target.side, pokemon, move);
+		} else if (target) {
+			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
+		}
+		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
+			return false;
+		}
+
+		if (target && !isSecondary && !isSelf) {
+			hitResult = this.runEvent('TryPrimaryHit', target, pokemon, moveData);
+			if (hitResult === 0) {
+				// special Substitute flag
+				hitResult = true;
+				target = null;
+			}
+		}
+		if (target && isSecondary && !moveData.self) {
+			hitResult = true;
+		}
+		if (!hitResult) {
+			return false;
+		}
+
+		if (target) {
+			var didSomething = false;
+			damage = this.getDamage(pokemon, target, moveData);
+
+			if ((damage || damage === 0) && !target.fainted) {
+				if (move.noFaint && damage >= target.hp) {
+					damage = target.hp - 1;
+				}
+				damage = this.damage(damage, target, pokemon, move);
+				if (!(damage || damage === 0)) {
+					this.debug('damage interrupted');
+					return false;
+				}
+				didSomething = true;
+			}
+			if (damage === false || damage === null) {
+				if (damage === false) {
+					this.add('-fail', target);
+				}
+				this.debug('damage calculation interrupted');
+				return false;
+			}
+
+			if (moveData.boosts && !target.fainted) {
+				hitResult = this.boost(moveData.boosts, target, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.heal && !target.fainted) {
+				var d = target.heal(Math.round(target.maxhp * moveData.heal[0] / moveData.heal[1]));
+				if (!d && d !== 0) {
+					this.add('-fail', target);
+					this.debug('heal interrupted');
+					return false;
+				}
+				this.add('-heal', target, target.getHealth);
+				didSomething = true;
+			}
+			if (moveData.status) {
+				if (!target.status) {
+					hitResult = target.setStatus(moveData.status, pokemon, move);
+					didSomething = didSomething || hitResult;
+				} else if (!isSecondary) {
+					if (target.status === moveData.status) {
+						this.add('-fail', target, target.status);
+					} else {
+						this.add('-fail', target);
+					}
+					return false;
+				}
+			}
+			if (moveData.forceStatus) {
+				hitResult = target.setStatus(moveData.forceStatus, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.volatileStatus) {
+				hitResult = target.addVolatile(moveData.volatileStatus, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.sideCondition) {
+				hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.weather) {
+				hitResult = this.setWeather(moveData.weather, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.pseudoWeather) {
+				hitResult = this.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.forceSwitch) {
+				if (this.canSwitch(target.side)) didSomething = true; // at least defer the fail message to later
+			}
+			if (moveData.selfSwitch) {
+				if (this.canSwitch(pokemon.side)) didSomething = true; // at least defer the fail message to later
+			}
+			// Hit events
+			//   These are like the TryHit events, except we don't need a FieldHit event.
+			//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
+			hitResult = null;
+			if (move.target === 'all' && !isSelf) {
+				if (moveData.onHitField) hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
+			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
+				if (moveData.onHitSide) hitResult = this.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
+			} else {
+				if (moveData.onHit) hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
+				if (!isSelf && !isSecondary) {
+					this.runEvent('Hit', target, pokemon, move);
+				}
+				if (moveData.onAfterHit) hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
+			}
+
+			if (!hitResult && !didSomething && !moveData.self && !moveData.selfdestruct) {
+				if (!isSelf && !isSecondary) {
+					if (hitResult === false || didSomething === false) this.add('-fail', target);
+				}
+				this.debug('move failed because it did nothing');
+				return false;
+			}
+		}
+		if (moveData.self) {
+			var selfRoll;
+			if (!isSecondary && moveData.self.boosts) selfRoll = this.random(100);
+			// This is done solely to mimic in-game RNG behaviour. All self drops have a 100% chance of happening but still grab a random number.
+			if (typeof moveData.self.chance === 'undefined' || selfRoll < moveData.self.chance) {
+				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
+			}
+		}
+		if (moveData.secondaries && this.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
+			for (var i = 0; i < moveData.secondaries.length; i++) {
+				// We check here whether to negate the probable secondary status if it's burn or freeze.
+				// In the game, this is checked and if true, the random number generator is not called.
+				// That means that a move that does not share the type of the target can status it.
+				// This means tri-attack can burn fire-types and freeze ice-types.
+				// Unlike gen 1, though, paralysis works for all unless the target is immune to direct move (ie. ground-types and t-wave).
+				if (!(moveData.secondaries[i].status && moveData.secondaries[i].status in {'brn':1, 'frz':1} && target && target.hasType(move.type))) {
+					var effectChance = Math.floor(moveData.secondaries[i].chance * 255 / 100);
+					if (typeof moveData.secondaries[i].chance === 'undefined' || this.random(256) < effectChance) {
+						this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
+					}
+				}
+			}
+		}
+		if (target && target.hp > 0 && pokemon.hp > 0 && moveData.forceSwitch && this.canSwitch(target.side)) {
+			hitResult = this.runEvent('DragOut', target, pokemon, move);
+			if (hitResult) {
+				target.forceSwitchFlag = true;
+			} else if (hitResult === false) {
+				this.add('-fail', target);
+			}
+		}
+		if (move.selfSwitch && pokemon.hp) {
+			pokemon.switchFlag = move.selfSwitch;
+		}
+		return damage;
 	},
 	getDamage: function (pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
@@ -279,7 +451,7 @@ exports.BattleScripts = {
 		if (damage > 1) {
 			damage *= this.random(217, 256);
 			damage = Math.floor(damage / 255);
-			if (damage > target.hp) damage = target.hp;
+			if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
 		}
 
 		// If damage is less than 1, we return 1
@@ -293,36 +465,6 @@ exports.BattleScripts = {
 	faint: function (pokemon, source, effect) {
 		pokemon.faint(source, effect);
 		this.queue = [];
-	},
-	comparePriority: function (a, b) {
-		a.priority = a.priority || 0;
-		a.subPriority = a.subPriority || 0;
-		a.speed = a.speed || 0;
-		b.priority = b.priority || 0;
-		b.subPriority = b.subPriority || 0;
-		b.speed = b.speed || 0;
-		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
-			if (typeof a.order !== 'number') {
-				return -1;
-			}
-			if (typeof b.order !== 'number') {
-				return 1;
-			}
-			if (b.order - a.order) {
-				return -(b.order - a.order);
-			}
-		}
-		if (b.priority - a.priority) {
-			return b.priority - a.priority;
-		}
-		if (b.speed - a.speed) {
-			if (b.priority === -1 && a.priority === -1) return a.speed - b.speed;
-			return b.speed - a.speed;
-		}
-		if (b.subOrder - a.subOrder) {
-			return -(b.subOrder - a.subOrder);
-		}
-		return Math.random() - 0.5;
 	},
 	getResidualStatuses: function (thing, callbackType) {
 		var statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
@@ -418,5 +560,34 @@ exports.BattleScripts = {
 		if (!noSort) {
 			this.queue.sort(this.comparePriority);
 		}
+	},
+	comparePriority: function (a, b) {
+		a.priority = a.priority || 0;
+		a.subPriority = a.subPriority || 0;
+		a.speed = a.speed || 0;
+		b.priority = b.priority || 0;
+		b.subPriority = b.subPriority || 0;
+		b.speed = b.speed || 0;
+		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
+			if (typeof a.order !== 'number') {
+				return -1;
+			}
+			if (typeof b.order !== 'number') {
+				return 1;
+			}
+			if (b.order - a.order) {
+				return -(b.order - a.order);
+			}
+		}
+		if (b.priority - a.priority) {
+			return b.priority - a.priority;
+		}
+		if (b.speed - a.speed) {
+			return b.speed - a.speed;
+		}
+		if (b.subOrder - a.subOrder) {
+			return -(b.subOrder - a.subOrder);
+		}
+		return Math.random() - 0.5;
 	}
 };

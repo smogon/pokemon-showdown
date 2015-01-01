@@ -73,6 +73,10 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	explosion: {
+		inherit: true,
+		basePower: 250
+	},
 	leechseed: {
 		inherit: true,
 		onHit: function (target, source, move) {
@@ -216,6 +220,10 @@ exports.BattleMovedex = {
 		},
 		priority: -1
 	},
+	selfdestruct: {
+		inherit: true,
+		basePower: 200
+	},
 	sleeptalk: {
 		inherit: true,
 		onHit: function (pokemon) {
@@ -318,6 +326,24 @@ exports.BattleMovedex = {
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'Substitute');
+			}
+		}
+	},
+	triattack: {
+		inherit: true,
+		secondary: {
+			chance: 20,
+			onHit: function (target, source) {
+				if (!target.hasType('Normal')) {
+					var result = this.random(3);
+					if (result === 0) {
+						target.trySetStatus('brn', source);
+					} else if (result === 1) {
+						target.trySetStatus('par', source);
+					} else {
+						target.trySetStatus('frz', source);
+					}
+				}
 			}
 		}
 	},
