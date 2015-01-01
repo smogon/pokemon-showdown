@@ -3567,7 +3567,7 @@ exports.BattleScripts = {
 			if (template.id === 'absol') {
 				set.species = 'absol';
 				set.name = 'Sanguine';
-			if (template.id === 'aerodactyl') {
+			} else if (template.id === 'aerodactyl') {
 				set.species = 'aerodactyl';
 				set.name = 'H.A.N.';
 			} else if (template.id === 'arcanine') {
