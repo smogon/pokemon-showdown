@@ -331,12 +331,12 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['PU'],
-		banlist: ['Altaria', 'Avalugg', 'Barbaracle', 'Basculin', 'Bastiodon', 'Beedrill', 'Beheeyem', 'Bouffalant', 'Camerupt', 'Carbink',
-			'Carracosta', 'Chatot', 'Ditto', 'Dodrio', 'Dusclops', 'Dusknoir', 'Electrode', 'Flareon', 'Floatzel', 'Garbodor',
-			'Glalie', 'Golem', 'Gourgeist-Super', 'Haunter', 'Kadabra', 'Kecleon', 'Leafeon', 'Lickilicky', 'Lopunny', 'Mantine',
-			'Marowak', 'Misdreavus', 'Mr. Mime', 'Ninetales', 'Pelipper', 'Pidgeot', 'Piloswine', 'Poliwrath', 'Raichu', 'Regice',
-			'Roselia', 'Rotom-Frost', 'Scyther', 'Serperior', 'Sneasel', 'Solrock', 'Stoutland', 'Stunfisk', 'Tangela', 'Tauros',
-			'Throh', 'Togetic', 'Torterra', 'Victreebel', 'Vigoroth', 'Zebstrika'
+		banlist: ['Altaria', 'Aurorus', 'Avalugg', 'Barbaracle', 'Basculin', 'Bastiodon', 'Beedrill', 'Beheeyem', 'Bouffalant', 'Camerupt',
+			'Carbink', 'Carracosta', 'Chatot', 'Ditto', 'Dodrio', 'Dusclops', 'Dusknoir', 'Electrode', 'Flareon', 'Floatzel',
+			'Garbodor', 'Glalie', 'Golem', 'Gourgeist-Super', 'Haunter', 'Kadabra', 'Kecleon', 'Leafeon', 'Lickilicky', 'Lopunny',
+			'Mantine', 'Marowak', 'Misdreavus', 'Mr. Mime', 'Ninetales', 'Pelipper', 'Pidgeot', 'Piloswine', 'Poliwrath', 'Purugly',
+			'Raichu', 'Regice', 'Relicanth', 'Roselia', 'Rotom-Frost', 'Scyther', 'Serperior', 'Sneasel', 'Stoutland', 'Stunfisk',
+			'Tangela', 'Tauros', 'Throh', 'Togetic', 'Torterra', 'Victreebel', 'Vigoroth', 'Zebstrika'
 		]
 	},
 	{
