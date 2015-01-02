@@ -533,7 +533,7 @@ BattlePokemon = (function () {
 			var moveName = move.move;
 			if (move.id === 'hiddenpower') {
 				moveName = 'Hidden Power ' + this.hpType;
-				if (this.gen < 6) moveName += ' ' + this.hpPower;
+				if (this.battle.gen < 6) moveName += ' ' + this.hpPower;
 			}
 			moves.push({
 				move: moveName,
