@@ -186,7 +186,7 @@ exports.BattleScripts = {
 					pokemon.volatiles['partialtrappinglock'].locked = target;
 				} else {
 					if (pokemon.volatiles['partialtrappinglock'].locked !== target && target !== pokemon) {
-						// The target switched, therefor, we must re-roll the duration
+						// The target switched, therefor, we must re-roll the duration, damage, and accuracy.
 						var duration = [2, 2, 2, 3, 3, 3, 4, 5][this.random(8)];
 						pokemon.volatiles['partialtrappinglock'].duration = duration;
 						pokemon.volatiles['partialtrappinglock'].locked = target;
@@ -294,7 +294,7 @@ exports.BattleScripts = {
 		var accuracy = move.accuracy;
 
 		// Partial trapping moves: true accuracy while it lasts
-		if (move.volatileStatus === 'partiallytrapped' && pokemon.volatiles['partialtrappinglock']) {
+		if (move.volatileStatus === 'partiallytrapped' && pokemon.volatiles['partialtrappinglock'] && target === pokemon.volatiles['partialtrappinglock'].locked) {
 			accuracy = true;
 		}
 
