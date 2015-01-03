@@ -19,9 +19,9 @@ exports.BattleStatuses = {
 		},
 		onSwitchIn: function (pokemon) {
 			pokemon.addVolatile('brnattackdrop');
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 16);
-			}
+		},
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(pokemon.maxhp / 16);
 		}
 	},
 	par: {
@@ -42,9 +42,6 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('solarbeam');
 				pokemon.removeVolatile('skullbash');
 				pokemon.removeVolatile('partialtrappinglock');
-				// Remove these two if you want 100% accurate mechanics
-				pokemon.removeVolatile('flyinvulnerable');
-				pokemon.removeVolatile('diginvulnerable');
 				return false;
 			}
 		},
@@ -96,10 +93,8 @@ exports.BattleStatuses = {
 		onAfterMoveSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 16);
 		},
-		onSwitchIn: function (pokemon) {
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 16);
-			}
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(pokemon.maxhp / 16);
 		}
 	},
 	tox: {
@@ -114,7 +109,7 @@ exports.BattleStatuses = {
 			}
 			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
 		},
-		onSwitchIn: function (pokemon) {
+		onAfterSwitchInSelf: function (pokemon) {
 			this.effectData.stage = 0; // probably unnecessary...
 			pokemon.setStatus('psn');
 			// normal poison damage...
@@ -162,9 +157,6 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('solarbeam');
 				pokemon.removeVolatile('skullbash');
 				pokemon.removeVolatile('partialtrappinglock');
-				// Remove these two if you want 100% accurate mechanics
-				pokemon.removeVolatile('flyinvulnerable');
-				pokemon.removeVolatile('diginvulnerable');
 				return false;
 			}
 			return;
