@@ -345,35 +345,5 @@ exports.BattleStatuses = {
 		onModifyMove: function (move) {
 			if (move.id === 'rage') move.accuracy = 1 / 255 * 100;
 		}
-	},
-	diginvulnerable: {
-		onAccuracy: function (accuracy, target, source, move) {
-			if (move.id === 'swift') return true;
-			this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-			return null;
-		},
-		onDamage: function (damage, target, source, move) {
-			if (!move || move.effectType !== 'Move') return;
-			if (!source) return;
-			if (move.id === 'earthquake') {
-				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-				return null;
-			}
-		}
-	},
-	flyinvulnerable: {
-		onAccuracy: function (accuracy, target, source, move) {
-			if (move.id === 'swift') return true;
-			this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-			return null;
-		},
-		onDamage: function (damage, target, source, move) {
-			if (!move || move.effectType !== 'Move') return;
-			if (!source || source.side === target.side) return;
-			if (move.id === 'gust' || move.id === 'thunder') {
-				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-				return null;
-			}
-		}
 	}
 };

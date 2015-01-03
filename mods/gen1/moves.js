@@ -217,19 +217,22 @@ exports.BattleMovedex = {
 	dig: {
 		inherit: true,
 		basePower: 100,
-		onTry: function (attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				attacker.removeVolatile('diginvulnerable');
-				return;
+		effect: {
+			duration: 2,
+			onLockMove: 'dig',
+			onAccuracy: function (accuracy, target, source, move) {
+				if (move.id === 'swift') return true;
+				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
+				return null;
+			},
+			onDamage: function (damage, target, source, move) {
+				if (!move || move.effectType !== 'Move') return;
+				if (!source) return;
+				if (move.id === 'earthquake') {
+					this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
+					return null;
+				}
 			}
-			this.add('-prepare', attacker, move.name, defender);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				this.add('-anim', attacker, move.name, defender);
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			attacker.addVolatile('diginvulnerable', defender);
-			return null;
 		}
 	},
 	disable: {
@@ -329,19 +332,22 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "Deals damage to target. This attack charges on the first turn and strikes on the second. The user cannot make a move between turns. (Field: Can be used to fly to a previously visited area.)",
 		shortDesc: "Flies up on first turn, then strikes the next turn.",
-		onTry: function (attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				attacker.removeVolatile('flyinvulnerable');
-				return;
+		effect: {
+			duration: 2,
+			onLockMove: 'fly',
+			onAccuracy: function (accuracy, target, source, move) {
+				if (move.id === 'swift') return true;
+				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
+				return null;
+			},
+			onDamage: function (damage, target, source, move) {
+				if (!move || move.effectType !== 'Move') return;
+				if (!source || source.side === target.side) return;
+				if (move.id === 'gust' || move.id === 'thunder') {
+					this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
+					return null;
+				}
 			}
-			this.add('-prepare', attacker, move.name, defender);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				this.add('-anim', attacker, move.name, defender);
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			attacker.addVolatile('flyinvulnerable', defender);
-			return null;
 		}
 	},
 	focusenergy: {
