@@ -436,37 +436,18 @@ exports.BattleMovedex = {
 	},
 	leechseed: {
 		inherit: true,
-		onHit: function (target, source, move) {
-			if (!source || source.fainted || source.hp <= 0) {
-				// Well this shouldn't happen
-				this.debug('Nothing to leech into');
-				return;
-			}
-			if (target.newlySwitched && target.speed <= source.speed) {
-				var toLeech;
-				if (target.status === 'tox') {
-					// Stage plus one since leech seed runs before Toxic
-					toLeech = this.clampIntRange(target.maxhp / 16, 1) * (target.statusData.stage + 1);
-				} else {
-					toLeech = this.clampIntRange(target.maxhp / 16, 1);
-				}
-				var damage = this.damage(toLeech, target, source, 'move: Leech Seed');
-				if (damage) {
-					this.heal(damage, source, target);
-				}
-			}
-		},
+		onHit: function () {},
 		effect: {
 			onStart: function (target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
 			onAfterMoveSelf: function (pokemon) {
-				var target = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
-				if (!target || target.fainted || target.hp <= 0) {
+				var leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				// We check if target has Toxic to increase leeched damage
+				// We check if leeched Pokémon has Toxic to increase leeched damage
 				var toLeech;
 				if (pokemon.status === 'tox') {
 					// Stage plus one since leech seed runs before Toxic
@@ -474,9 +455,9 @@ exports.BattleMovedex = {
 				} else {
 					toLeech = this.clampIntRange(pokemon.maxhp / 16, 1);
 				}
-				var damage = this.damage(toLeech, pokemon, target);
+				var damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) {
-					this.heal(damage, target, pokemon);
+					this.heal(damage, leecher, pokemon);
 				}
 			}
 		}
