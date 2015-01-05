@@ -55,7 +55,7 @@ var Trivia = (function () {
 	var instance = null;
 
 	function Trivia() {
-		var room = {};
+		var room = null;
 		var mode = '';
 		var category = '';
 		var cap = '';
@@ -253,7 +253,6 @@ var Trivia = (function () {
 
 			phase = '';
 			participants = {};
-			if (mode !== 'first') responders = [];
 
 			writeTriviaData();
 		}
@@ -271,7 +270,7 @@ var Trivia = (function () {
 			return output.sendReplyBox(buffer);
 		};
 
-		this.startSignups = function (target, trivia, output) {
+		this.startSignups = function (target, roomid, output) {
 			if (phase) return output.sendReply('There is already a trivia game in progress.');
 
 			target = target.split(',');
@@ -284,7 +283,12 @@ var Trivia = (function () {
 			cap = CAPS[toId(target[2])];
 			if (!cap) return output.sendReply('"' + target[2].trim() + '" is not a valid score cap. View /triviahelp ginfo for more information.');
 
-			room = trivia;
+			if (!room) {
+				room = roomid;
+				room.triviaData = triviaData;
+				room.writeTriviaData = writeTriviaData;
+			}
+
 			phase = 'signup';
 			prize = (cap - 5) / 15 + 2;
 			room.addRaw('<div class="broadcast-blue"><strong>Signups for a new trivia game have begun! Enter /triviajoin to join.</strong><br />' +
@@ -388,8 +392,10 @@ var Trivia = (function () {
 				} else {
 					clearInterval(questionInterval);
 					questionInterval = null;
-					if (phase === 'question') clearTimeout(answeringPeriod);
-					responders = {};
+					if (phase === 'question') {
+						clearTimeout(answeringPeriod);
+						responders = {};
+					}
 				}
 				answeringPeriod = null;
 			}
