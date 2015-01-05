@@ -701,6 +701,10 @@ exports.BattleMovedex = {
 					var source = this.effectData.source;
 					var damage = this.heal(target.maxhp / 2, target, target);
 					if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + source.name);
+				} else if (!target || target.fainted || target.hp <= 0) {
+					var source = this.effectData.source;
+					global.source2 = source;
+					target.side.addSideCondition('Wish2');
 				}
 			}
 		}

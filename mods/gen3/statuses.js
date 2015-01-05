@@ -67,5 +67,25 @@ exports.BattleStatuses = {
 		// See http://upokecenter.dreamhosters.com/dex/?lang=en&move=182
 		inherit: true,
 		counterMax: 8
+	},
+	wish2: {
+		// this is a side condition
+		onResidualOrder: 2,
+		onSwitchInPriority: -1,
+		onSwitchIn: function(target) {
+			if (target && !target.fainted && target.hp > 0) {
+				if (!source2) {
+					var source = this.effectData.source;
+				} else {
+					var source = source2;
+					delete source2;
+				}
+				var damage = target.heal(target.maxhp / 2, target, target);
+				if (damage) this.add('-heal',target,target.getHealth,'[from] move: Wish', '[wisher] ' + source.name);
+				target.side.removeSideCondition('Wish2');
+			} else {
+				return;
+			}
+		}
 	}
 };
