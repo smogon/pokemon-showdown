@@ -586,7 +586,8 @@ exports.BattleFormatsData = {
 	alakazammega: {
 		randomBattleMoves: ["calmmind","psyshock","focusblast","shadowball","encore","substitute"],
 		randomDoubleBattleMoves: ["protect","psychic","psyshock","focusblast","shadowball","encore","substitute","energyball"],
-		requiredItem: "Alakazite"
+		requiredItem: "Alakazite",
+		tier: "BL"
 	},
 	machop: {
 		randomBattleMoves: ["dynamicpunch","payback","bulkup","icepunch","rockslide","bulletpunch","knockoff"],
@@ -2304,8 +2305,7 @@ exports.BattleFormatsData = {
 	gallademega: {
 		randomBattleMoves: ["closecombat","stoneedge","drainpunch","icepunch","zenheadbutt","swordsdance","knockoff"],
 		randomDoubleBattleMoves: ["closecombat","stoneedge","drainpunch","icepunch","zenheadbutt","swordsdance","knockoff","protect"],
-		requiredItem: "Galladite",
-		tier: "OU"
+		requiredItem: "Galladite"
 	},
 	surskit: {
 		randomBattleMoves: ["hydropump","signalbeam","hiddenpowerfire","stickyweb","gigadrain","powersplit"],
@@ -2706,8 +2706,7 @@ exports.BattleFormatsData = {
 	altariamega: {
 		randomBattleMoves: ["dragondance","return","outrage","dragonclaw","earthquake","roost","dracometeor","fireblast"],
 		randomDoubleBattleMoves: ["dragondance","return","doubleedge","dragonclaw","earthquake","protect","fireblast"],
-		requiredItem: "Altarianite",
-		tier: "OU"
+		requiredItem: "Altarianite"
 	},
 	zangoose: {
 		randomBattleMoves: ["swordsdance","closecombat","knockoff","quickattack","facade"],
@@ -3449,8 +3448,7 @@ exports.BattleFormatsData = {
 	lopunnymega: {
 		randomBattleMoves: ["return","highjumpkick","poweruppunch","fakeout","icepunch"],
 		randomDoubleBattleMoves: ["return","highjumpkick","protect","fakeout","icepunch","encore"],
-		requiredItem: "Lopunnite",
-		tier: "OU"
+		requiredItem: "Lopunnite"
 	},
 	glameow: {
 		randomBattleMoves: ["fakeout","uturn","suckerpunch","hypnosis","quickattack","return","foulplay"],
@@ -5197,7 +5195,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["dragondance","earthquake","extremespeed","outrage","coil","stoneedge"],
 		randomDoubleBattleMoves: ["dragondance","landswrath","extremespeed","rockslide","coil","stoneedge","glare","protect"],
 		unobtainableShiny: true,
-		tier: "UU"
+		tier: "BL"
 	},
 	diancie: {
 		randomBattleMoves: ["diamondstorm","moonblast","reflect","lightscreen","substitute","calmmind","psychic","stealthrock"],
@@ -5211,8 +5209,7 @@ exports.BattleFormatsData = {
 	dianciemega: {
 		randomBattleMoves: ["diamondstorm","moonblast","calmmind","psyshock","earthpower","hiddenpowerfire"],
 		randomDoubleBattleMoves: ["diamondstorm","moonblast","calmmind","psyshock","earthpower","hiddenpowerfire","dazzlinggleam","protect"],
-		requiredItem: "Diancite",
-		tier: "BL"
+		requiredItem: "Diancite"
 	},
 	hoopa: {
 		isUnreleased: true,
