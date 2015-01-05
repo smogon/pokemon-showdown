@@ -1468,15 +1468,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to.");
 		}
-		if (target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder') {
-			matched = true;
-			this.sendReply("/rating - Get your own rating.");
-			this.sendReply("/rating [username] - Get user's rating.");
-		}
-		if (target === 'nick') {
-			matched = true;
-			this.sendReply("/nick [new username] - Change your username.");
-		}
 		if (target === 'avatar') {
 			matched = true;
 			this.sendReply("/avatar [new avatar number] - Change your trainer sprite.");
@@ -1554,21 +1545,6 @@ var commands = exports.commands = {
 			this.sendReply("/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.");
 			this.sendReply("!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: + % @ & ~");
 		}
-		if (target === 'highlight') {
-			matched = true;
-			this.sendReply("Set up highlights:");
-			this.sendReply("/highlight add, word - add a new word to the highlight list.");
-			this.sendReply("/highlight list - list all words that currently highlight you.");
-			this.sendReply("/highlight delete, word - delete a word from the highlight list.");
-			this.sendReply("/highlight delete - clear the highlight list");
-		}
-		if (target === 'timestamps') {
-			matched = true;
-			this.sendReply("Set your timestamps preference:");
-			this.sendReply("/timestamps [all|lobby|pms], [minutes|seconds|off]");
-			this.sendReply("all - change all timestamps preferences, lobby - change only lobby chat preferences, pms - change only PM preferences");
-			this.sendReply("off - set timestamps off, minutes - show timestamps of the form [hh:mm], seconds - show timestamps of the form [hh:mm:ss]");
-		}
 		if (target === 'effectiveness' || target === 'matchup' || target === 'eff' || target === 'type') {
 			matched = true;
 			this.sendReply("/effectiveness OR /matchup OR /eff OR /type [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.");
@@ -1593,19 +1569,6 @@ var commands = exports.commands = {
 		if (target === 'pick' || target === 'pickrandom') {
 			matched = true;
 			this.sendReply("/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.");
-		}
-		if (target === 'join') {
-			matched = true;
-			this.sendReply("/join [roomname] - Attempts to join the room [roomname].");
-		}
-		if (target === 'ignore') {
-			matched = true;
-			this.sendReply("/ignore [user] - Ignores all messages from the user [user].");
-			this.sendReply("Note that staff messages cannot be ignored.");
-		}
-		if (target === 'unignore') {
-			matched = true;
-			this.sendReply("/unignore [user] - Removes user [user] from your ignore list.");
 		}
 		if (target === 'invite') {
 			matched = true;
