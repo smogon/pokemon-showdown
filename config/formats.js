@@ -340,169 +340,131 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "[Seasonal] Sleigh Showdown",
+		name: "[Seasonal] Spacetime Funtimes",
 		section: "OM of the Month",
 
-		team: 'randomSeasonalSS',
+		team: 'randomSeasonalSFT',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin: function () {
-			this.add('-message', "Yikes! You are a grinch in a reckless, regretless sleigh race, running for Showdownville to ruin christmas. But, to achieve that, you must first defeat your opponent. Fight hard and take care with the obstacles!");
-			this.seasonal = {position: [0, 0], weight: [2500, 2500]};
-		},
-		onModifyMove: function (move) {
-			if (move.type === 'Fire') {
-				move.onHit = function (pokemon, source) {
-					this.add('-message', "The fire melts the snow, slowing down the sleigh!");
-					this.boost({spe: -1}, pokemon, source);
-				};
-			}
-			if (move.type === 'Water') {
-				if (this.random(100) < 25) {
-					this.add('-message', "The cold froze your Water-type attack, making it Ice-type instead!");
-					move.type = 'Ice';
-				}
-			}
-			if (move.type === 'Ice') {
-				move.onHit = function (pokemon, source) {
-					this.add('-message', "The ice makes the surface more slippery, speeding up the sleigh!");
-					this.boost({spe: 1}, pokemon, source);
-				};
-			}
-			if (move.id === 'present') {
-				move.name = "Throw sack present";
-				move.accuracy = 100;
-				move.basePower = 0;
-				move.category = "Status";
-				move.heal = null;
-				move.boosts = null;
-				move.target = 'normal';
-				move.status = null;
-				move.type = "Normal";
-				switch (this.random(9)) {
-					case 0:
-						move.onTryHit = function (target, source) {
-							this.add('-message', "You got an Excadreydle from the sack!");
-							this.seasonal.weight[source.side.n] -= 40.4;
-						};
-						move.boosts = {spe: -1};
-						break;
-					case 1:
-						move.onTryHit = function (target, source) {
-							this.add('-message', "You got a Chandelnukkiyah from the sack!");
-							this.seasonal.weight[source.side.n] -= 34.3;
-						};
-						move.status = 'brn';
-						break;
-					case 2:
-						move.onTryHit = function (target, source) {
-							this.add('-message', "You got a Glalie from the sack! Ka-boom!");
-							this.seasonal.weight[source.side.n] -= 256.5;
-						};
-						move.category = 'Special';
-						move.basePower = 300;
-						break;
-					case 3:
-						move.onTryHit = function (target, source) {
-							this.add('-message', "You got a tree Starmie from the sack!");
-							this.seasonal.weight[source.side.n] -= 80;
-						};
-						move.category = 'Special';
-						move.type = 'Water';
-						move.basePower = 150;
-						break;
-					case 4:
-						move.onTryHit = function (target, source) {
-							this.add('-message', "You got an Abomaxmas tree from the sack!");
-							this.seasonal.weight[source.side.n] -= 40.4;
-						};
-						move.category = 'Physical';
-						move.type = 'Ice';
-						move.basePower = 150;
-						break;
-					case 5:
-						move.onTryHit = function (target, source) {
-							this.add('-message', "You got a Chansey egg nog from the sack!");
-							this.seasonal.weight[source.side.n] -= 34.6;
-						};
-						move.target = 'self';
-						move.heal = [3, 4];
-						break;
-					case 6:
-						move.onTryHit = function (target, source) {
-							this.add('-message', "You got Cryogonal snowflakes from the sack!");
-							this.seasonal.weight[source.side.n] -= 148;
-						};
-						move.category = 'Special';
-						move.type = 'Ice';
-						move.basePower = 200;
-						break;
-					case 7:
-						move.onTryHit = function (target, source) {
-							this.add('-message', "You got Pikachu-powered christmas lights from the sack!");
-							this.seasonal.weight[source.side.n] -= 6;
-						};
-						move.category = 'Special';
-						move.type = 'Electric';
-						move.basePower = 250;
-						break;
-					case 8:
-						move.onTryHit = function (target, source) {
-							this.add('-message', "You got Shaymin-Sky mistletoe from the sack!");
-							this.seasonal.weight[source.side.n] -= 5.2;
-						};
-						move.category = 'Special';
-						move.type = 'Grass';
-						move.basePower = 200;
-						break;
-				}
-			}
-		},
-		onBeforeMove: function (pokemon, target, move) {
-			// Before every move, trainers advance on their sleighs. There might be obstacles.
-			// We add more speed the less loaded the sleigh is.
-			// Then, we get a random number from 0 to 99, then calculate if it's less than (Pokémon's speed * 0.083) + 5.
-			var speed = Math.abs(pokemon.speed) + Math.ceil((2500 - this.seasonal.weight[pokemon.side.n]) / 25);
-			if (this.random(100) < Math.ceil(speed * 0.083) + 5) {
-				var name = pokemon.illusion ? pokemon.illusion.name : pokemon.name;
-				// If an obstacle is found, the trainer won't advance this turn.
-				switch (this.random(6)) {
-				case 0:
-				case 1:
-				case 2:
-					this.add('-message', "" + name + " hit a tree and some snow fell on it!");
-					pokemon.cureStatus();
-					this.damage(Math.ceil(pokemon.maxhp / 10), pokemon, pokemon, "head injuries", true);
-					break;
-				case 3:
-					this.add('-message', "" + name + " hit a snow bank!");
-					pokemon.setStatus('frz', pokemon, null, true);
-					this.add('cant', pokemon, 'frz');
-					return false;
-				case 4:
-					this.add('-message', "" + name + " fell into a traphole!");
-					this.boost({spe: -1}, pokemon, pokemon, move);
-					break;
-				case 5:
-					this.add('-message', "" + name + " hit a heavy wall!");
-					// override status
-					pokemon.setStatus('par', pokemon, null, true);
-					break;
-				}
-			} else {
-				// If no obstacles, the trainer advances as much meters as speed its Pokémon has.
-				this.add('-message', "" + pokemon.side.name + " has advanced down the mountain " + speed + " meters!");
-				this.seasonal.position[pokemon.side.n] += speed;
+			this.add('-message', "Dialga and Palkia have distorted space and time!");
+			// This shouldn't happen.
+			if (!this.seasonal) this.seasonal = {scenario: 'lotr'};
+
+			// Let's see what's the scenario and change space and time.
+			if (this.seasonal.scenario === 'lotr') {
+				this.addPseudoWeather('wonderroom', this.p1.pokemon[0], null, '[of] Seasonal');
+				delete this.pseudoWeather.wonderroom.duration;
+			} else if (this.seasonal.scenario === 'terminator') {
+				this.addPseudoWeather('trickroom', this.p1.pokemon[0], null, '[of] Seasonal');
+				delete this.pseudoWeather.trickroom.duration;
+			} else if (this.seasonal.scenario === 'gen1') {
+				this.addPseudoWeather('magicroom', this.p1.pokemon[0], null, '[of] Seasonal');
+				delete this.pseudoWeather.magicroom.duration;
+			} else if (this.seasonal.scenario === 'desert') {
+				this.setWeather(['Sandstorm', 'Sunnyday'][this.random(2)]);
+				delete this.weatherData.duration;
+			} else if (this.seasonal.scenario === 'shipwreck') {
+				this.setWeather('raindance');
+				this.addPseudoWeather('watersport', this.p1.pokemon[0], null, '[of] Seasonal');
+				delete this.pseudoWeather.watersport.duration;
+				delete this.weatherData.duration;
 			}
 
-			// Showdownville is about 4000 meters away from the mountaintop.
-			if (this.seasonal.position[pokemon.side.n] >= 3500) {
-				this.add('-message', "" + pokemon.side.name + " has arrived to Showdownville first and ruined christmas! The race is won!");
-				this.win(pokemon.side.id);
+			// Add the message for the scenario.
+			this.add('-message', {
+				'gen1': 'It appears that you have travelled to the past! This looks like... 1997!',
+				'lotr': 'You find yourselves in middle of an epic battle for Middle Earth!',
+				'redblue': 'Wow! You are taking part in the most epic Pokémon fight ever!',
+				'terminator': 'You are caught up in the epic apocalyptic battle of the machines against the humans!',
+				'desert': "It's no less than the exodus itself!",
+				'shipwreck': "Wow, that giant ship has just been rekt by an iceberg. And you're on it now. And the fish Pokémon want to eat the sailors!"
+			}[this.seasonal.scenario]);
+		},
+		onFaint: function (target, source) {
+			if (this.seasonal.scenario === 'gen1') {
+				if (source && source.removeVolatile) source.removeVolatile('mustrecharge');
+				this.queue = [];
 			}
 		},
-		onHit: function (target) {
-			// Getting hit thaws the ice if you are frozen.
-			if (target.status === 'frz') target.cureStatus();
+		onModifyMove: function (move) {
+			if (this.seasonal.scenario === 'gen1') {
+				if (move.id === 'blizzard') {
+					move.accuracy = 90;
+				}
+				if (move.id === 'psychic') {
+					move.secondary = {chance: 33, boosts: {spd: -1, spa: -1}};
+				}
+				if (move.id === 'amnesia') {
+					move.boosts = {spa:2, spd:2};
+				}
+				if (move.id === 'hyperbeam') {
+					move.category = 'Physical';
+				}
+			}
+			if (this.seasonal.scenario === 'lotr') {
+				if (move.id === 'growl') {
+					move.name = 'Throw ring to lava';
+					move.category = 'Special';
+					move.basePower = 160;
+					move.type = 'Fire';
+					move.accuracy = true;
+					move.self = {volatileStatus: 'mustrecharge'};
+					move.onTryHit = function () {
+						this.add('-message', 'Frodo throws the one ring into the lava!');
+					};
+				}
+			}
+		},
+		onSwitchIn: function (pokemon) {
+			if (this.seasonal.scenario === 'lotr') {
+				if (pokemon.name === 'Frodo') {
+					this.add('-message', 'The One Ring gives power to Frodo!');
+					this.boost({def:2, spd:2}, pokemon);
+				}
+				if (pokemon.name === 'Gandalf') {
+					this.add('-message', 'Fly, you fools!');
+					this.boost({spd:1}, pokemon);
+				}
+				if (pokemon.name === 'Saruman') {
+					this.add('-message', 'Against the power of Mordor there can be no victory.');
+					this.boost({spe:1}, pokemon);
+				}
+				if (pokemon.name === 'Legolas') {
+					this.add('-message', "They're taking the hobbits to Isengard!");
+					this.boost({atk:1, spa:1}, pokemon);
+				}
+				if (pokemon.name === 'Boromir') {
+					this.add('-message', 'One does not simply walk into Mordor.');
+					pokemon.addVolatile('confusion');
+				}
+				if (pokemon.name === 'Aragorn') {
+					this.add('-message', 'Aragorn, son of Arathor, king of Gondor.');
+					this.boost({spd:1}, pokemon);
+				}
+				if (pokemon.name === 'Pippin') {
+					this.add('-message', 'How about second breakfast?');
+					this.boost({def:1, spd:1}, pokemon);
+				}
+				if (pokemon.name === 'Merry') {
+					this.add('-message', "I don't think he knows about second breakfast, Pippin.");
+					this.boost({def:1, spd:1}, pokemon);
+				}
+				if (pokemon.name === 'Samwise') {
+					this.add('-message', 'Mr. Frodo!!');
+					this.boost({spe:3}, pokemon);
+				}
+				if (pokemon.name === 'Nazgûl') {
+					this.add('-message', 'One ring to rule them all.');
+					this.boost({spe:6}, pokemon);
+				}
+				if (pokemon.name === 'Smaug') {
+					this.add('-message', 'I am fire. I am death.');
+				}
+				if (pokemon.name === 'Treebeard') {
+					this.add('-message', 'Come, my friends. The ents are going to war!');
+					this.boost({spe:2}, pokemon);
+				}
+			}
 		}
 	},
 	{
