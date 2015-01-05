@@ -288,6 +288,10 @@ exports.BattleMovedex = {
 		shortDesc: "Has 25% recoil.",
 		recoil: [25, 100]
 	},
+	dragonrage: {
+		inherit: true,
+		basePower: 1
+	},
 	explosion: {
 		inherit: true,
 		basePower: 170,
@@ -584,7 +588,8 @@ exports.BattleMovedex = {
 		}
 	},
 	psywave: {
-		inherit: true
+		inherit: true,
+		basePower: 1
 	},
 	rage: {
 		inherit: true,
@@ -840,6 +845,10 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "self",
 		type: "Normal"
+	},
+	superfang: {
+		inherit: true,
+		basePower: 1
 	},
 	thunder: {
 		inherit: true,
