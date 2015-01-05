@@ -447,7 +447,6 @@ exports.Formats = [
 				}
 				if (pokemon.name === 'Nazgûl') {
 					this.add('-message', 'One ring to rule them all.');
-					this.boost({spe:6}, pokemon);
 				}
 				if (pokemon.name === 'Smaug') {
 					this.add('-message', 'I am fire. I am death.');

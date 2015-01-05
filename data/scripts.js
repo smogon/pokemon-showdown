@@ -2854,9 +2854,9 @@ exports.BattleScripts = {
 				set.species = toId(set.name);
 				set.name = mordor[p];
 				if (p === 'yveltal') {
-					set.item = 'Life Orb';
+					set.item = 'Choice Scarf';
 					set.moves = ['oblivionwing', 'darkpulse', 'hurricane', 'uturn'];
-					set.nature = 'Modest';
+					set.nature = 'Timid';
 					set.evs = {hp:0, atk:4, def:0, spa:252, spd:0, spe:252};
 					set.level = 70;
 				}
