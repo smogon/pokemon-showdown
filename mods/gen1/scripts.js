@@ -382,7 +382,12 @@ exports.BattleScripts = {
 			this.faint(pokemon, pokemon, move);
 		}
 
-		if (!damage && damage !== 0) return false;
+		// The move missed.
+		if (!damage && damage !== 0) {
+			// Delete the partial trap lock if necessary.
+			delete pokemon.volatiles['partialtrappinglock'];
+			return false;
+		}
 
 		if (!move.negateSecondary) {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
