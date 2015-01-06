@@ -2667,7 +2667,7 @@ exports.BattleScripts = {
 					evs: {hp:4, atk:0, def:0, spa:252, spd:0, spe:252},
 					ivs: {hp:31, atk:0, def:31, spa:31, spd:31, spe:31},
 					item: 'lifeorb',
-					level: 80,
+					level: 75,
 					shiny: false,
 					nature: 'Modest',
 					ability: 'Magic Guard'
@@ -2779,8 +2779,8 @@ exports.BattleScripts = {
 			for (var i = 0; i < 6; i++) {
 				set = sets[setsIndex[i]];
 				set.ability = 'None';
-				set.evs = {hp:255, atk:255, def:255, spa:255, spd:255, spe:255};
-				set.ivs = {hp:30, atk:30, def:30, spa:30, spd:30, spe:30};
+				set.evs = {hp:255, atk:255, def:0, spa:255, spd:0, spe:255};
+				set.ivs = {hp:0, atk:30, def:0, spa:30, spd:0, spe:30};
 				set.item = '';
 				set.level = 100;
 				set.shiny = false;
@@ -2797,11 +2797,15 @@ exports.BattleScripts = {
 			set.level = 72;
 			team.push(set);
 
-			// We get one elf.
-			var elf = ['jynx', 'azelf', 'celebi', 'victini'][this.random(4)];
+			// We get one elf or bard.
+			var elf = ['jynx', 'azelf', 'celebi', 'victini', 'landorustherian'][this.random(5)];
 			set = this.randomSet(this.getTemplate(elf));
 			set.species = toId(set.name);
-			set.name = {'jynx':'Galadriel', 'azelf':'Legolas', 'celebi':'Celeborn', 'victini':'Elrond'}[elf];
+			set.name = {'jynx':'Galadriel', 'azelf':'Legolas', 'celebi':'Celeborn', 'victini':'Elrond', 'landorustherian':'Bard'}[elf];
+			if (elf === 'landorustherian') {
+				set.item = 'Earth Plate';
+				set.moves = ['thousandarrows', 'thousandwaves', 'uturn', 'superpower'];
+			}
 			team.push(set);
 
 			// Now we add some other characters from the fellowship.
@@ -2981,6 +2985,7 @@ exports.BattleScripts = {
 			set.name = 'Ramesses II';
 			set.ability = 'Water Absorb';
 			set.item = 'Life Orb';
+			set.level = 67;
 			team.push(set);
 
 			for (var i = 1; i < 6; i++) {
@@ -3033,18 +3038,21 @@ exports.BattleScripts = {
 				var set = this.randomSet(template, i);
 				// Sailor team is made of pretty bad mons, boost them a little.
 				if (lead === 'machamp') {
-					set.level = 91;
-					var hasFishKilling = false;
-					for (var n = 0; n < 4; n++) {
-						var move = this.getMove(set.moves[n]);
-						if (move.type in {'Electric':1}) {
-							hasFishKilling = true;
-							break;
-						}
-					}
 					var isAtk = (template.baseStats.atk > template.baseStats.spa);
-					if (!hasFishKilling) {
-						set.moves[3] = isAtk ? 'boltstrike' : 'thunder';
+					// Swampert is too OP to get an electric attack.
+					if (pokemon !== 'swampert') {
+						set.level = 91;
+						var hasFishKilling = false;
+						for (var n = 0; n < 4; n++) {
+							var move = this.getMove(set.moves[n]);
+							if (move.type in {'Electric':1}) {
+								hasFishKilling = true;
+								break;
+							}
+						}
+						if (!hasFishKilling) {
+							set.moves[3] = isAtk ? 'boltstrike' : 'thunder';
+						}
 					}
 					set.evs = {hp:252, atk:0, def:0, spa:0, spd:4, spe:0};
 					if (isAtk) {
