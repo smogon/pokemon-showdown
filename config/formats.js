@@ -405,13 +405,21 @@ exports.Formats = [
 						this.add('-message', 'Frodo throws the one ring into the lava!');
 					};
 				}
+				if (move.id === 'thousandarrows') {
+					move.onBasePower = function (basePower, pokemon, target) {
+						if (target.name === 'Smaug') {
+							this.add('-message', "Bard's arrow pierces through Smaug's diamond-tough skin!");
+							return this.chainModify(3);
+						}
+					};
+				}
 			}
 		},
 		onSwitchIn: function (pokemon) {
 			if (this.seasonal.scenario === 'lotr') {
 				if (pokemon.name === 'Frodo') {
 					this.add('-message', 'The One Ring gives power to Frodo!');
-					this.boost({def:2, spd:2}, pokemon);
+					this.boost({def:2, spd:2, evasion:2}, pokemon);
 				}
 				if (pokemon.name === 'Gandalf') {
 					this.add('-message', 'Fly, you fools!');
@@ -454,6 +462,10 @@ exports.Formats = [
 				if (pokemon.name === 'Treebeard') {
 					this.add('-message', 'Come, my friends. The ents are going to war!');
 					this.boost({spe:2}, pokemon);
+				}
+				if (pokemon.name === 'Bard') {
+					this.add('-message', 'Black arrow! Go now and speed well!');
+					this.boost({accuracy:1, evasion:1}, pokemon);
 				}
 			}
 		}
@@ -988,5 +1000,4 @@ exports.Formats = [
 		debug: true,
 		ruleset: ['Pokemon', 'HP Percentage Mod']
 	}
-
 ];
