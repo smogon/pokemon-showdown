@@ -2837,7 +2837,7 @@ exports.BattleScripts = {
 				['sudowoodo', 'trevenant', 'abomasnow', 'shiftry', 'cacturne', 'nuzleaf'][this.random(6)],
 				['pidgeot', 'staraptor', 'braviary', 'aerodactyl', 'noivern', 'lugia', 'hooh', 'moltres', 'articuno', 'zapdos'][this.random(10)]
 			][this.random(7)];
-			set = this.randomSet(this.getTemplate(goodguy));
+			set = this.randomSet(this.getTemplate(goodguy), 5, true);
 			set.species = toId(set.name);
 			set.name = {
 				'primeape':'Gimli', 'aegislash':'Faramir', 'mimejr':'Pippin', 'timburr':'Merry', 'lucario':'Boromir',
@@ -2891,16 +2891,17 @@ exports.BattleScripts = {
 			set.species = toId(set.name);
 			set.name = 'Terminator T-1000';
 			set.item = 'Choice Band';
-			set.moves = ['extremespeed', 'ironhead', 'blazekick', 'uturn'];
+			set.ability = 'Filter';
+			set.moves = ['extremespeed', 'ironhead', 'blazekick', 'transform'];
 			team.push(set);
 
 			// The rest are just random botmons
 			var bots = [
-				'golurk', 'porygon', 'porygon2', 'porygonz', 'rotom', 'rotomheat', 'rotomwash', 'rotommow', 'rotomfan',
-				'rotomfrost', 'regice', 'regirock', 'registeel', 'magnezone', 'magneton', 'magnemite', 'heatran', 'klinklang',
-				'klang', 'klink', 'nosepass', 'probopass', 'electivire', 'metagross', 'armaldo', 'aggron', 'bronzong'
+				'golurk', 'porygon2', 'porygonz', 'rotom', 'rotomheat', 'rotomwash', 'rotommow', 'rotomfan', 'rotomfrost',
+				'regice', 'regirock', 'registeel', 'magnezone', 'magneton', 'magnemite', 'heatran', 'klinklang', 'klang',
+				'probopass', 'electivire', 'metagross', 'armaldo', 'aggron', 'bronzong', 'excavalier', 'claydol'
 			].randomize();
-			var names = ['T-850', 'E-3000', 'T-700', 'ISO-9001', 'WinME'];
+			var names = ['T-850', 'E-3000', 'T-700', 'ISO-9001', 'Win-ME'];
 			for (var i = 0; i < 5; i++) {
 				var pokemon = bots[i];
 				var template = this.getTemplate(pokemon);
@@ -2913,8 +2914,8 @@ exports.BattleScripts = {
 		} else if (lead === 'alakazam') {
 			// Human survival team.
 			var humans = [
-				'medicham', 'mrmime', 'gallade', 'gardevoir', 'lucario', 'hitmonlee', 'hitmonchan', 'hitmontop', 'tyrogue',
-				'chansey', 'blissey', 'meloetta', 'sawk', 'throh', 'scrafty'
+				'medicham', 'mrmime', 'gallade', 'gardevoir', 'lucario', 'hitmonlee', 'hitmonchan', 'hitmontop',
+				['chansey', 'blissey'][this.random(2)], 'meloetta', 'sawk', 'throh', 'scrafty'
 			].randomize();
 			humans.unshift(lead);
 			var names = ['John Connor', 'Sarah Connor', 'Terminator T-800', 'Kyle Reese', 'Miles Bennett Dyson', 'Dr. Silberman'];
@@ -2924,7 +2925,7 @@ exports.BattleScripts = {
 			for (var i = 0; i < 6; i++) {
 				var pokemon = humans[i];
 				var template = this.getTemplate(pokemon);
-				set = this.randomSet(template, i);
+				set = this.randomSet(template, i, !!i);
 				set.species = toId(set.name);
 				set.name = names[i];
 				var hasBotKilling = false;
@@ -2938,7 +2939,6 @@ exports.BattleScripts = {
 				}
 				if (!hasBotKilling) {
 					set.moves[3] = (template.baseStats.atk > template.baseStats.spa)? ['flareblitz', 'closecombat'][this.random(2)] : ['flamethrower', 'aurasphere'][this.random(2)];
-					set.level += 2;
 				}
 				// If we have Gardevoir, make it the mega. Then, Gallade.
 				if (humans[i] === 'gardevoir') {
@@ -2980,14 +2980,17 @@ exports.BattleScripts = {
 			set = this.randomSet(template, 0);
 			set.species = toId(set.name);
 			set.name = 'Ramesses II';
-			set.ability = 'Water Absorb';
-			set.item = 'Life Orb';
+			set.ability = 'Rivalry';
+			if (toId(set.item) === 'redorb') {
+				set.item = 'Life Orb';
+			}
 			team.push(set);
 
 			for (var i = 1; i < 6; i++) {
 				var pokemon = egyptians[i];
 				template = this.getTemplate(pokemon);
-				set = this.randomSet(template, i);
+				var set = this.randomSet(template, i, !!megaCount);
+				if (this.getItem(set.item).megaStone) megaCount++;
 				set.species = toId(set.name);
 				set.name = 'Egyptian ' + template.species;
 				team.push(set);
@@ -2995,8 +2998,8 @@ exports.BattleScripts = {
 		} else if (lead === 'probopass') {
 			// Jews from the exodus battle.
 			var jews = [
-				'nosepass', 'arceus', 'arceusfire', 'mareep', 'flaaffy', 'tauros', 'miltank', 'gogoat', 'excadrill', 'seismitoad',
-				'toxicroak', 'yanmega'
+				'nosepass', ['arceus', 'arceusfire'][this.random(2)], 'flaaffy', 'tauros', 'miltank', 'gogoat', 'excadrill',
+				'seismitoad', 'toxicroak', 'yanmega'
 			].randomize();
 			var template = this.getTemplate(lead);
 			set = this.randomSet(template, 0);
