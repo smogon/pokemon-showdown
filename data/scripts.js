@@ -3042,17 +3042,27 @@ exports.BattleScripts = {
 					var isAtk = (template.baseStats.atk > template.baseStats.spa);
 					// Swampert is too OP to get an electric attack.
 					if (pokemon !== 'swampert') {
-						set.level = 91;
-						var hasFishKilling = false;
-						for (var n = 0; n < 4; n++) {
-							var move = this.getMove(set.moves[n]);
-							if (move.type in {'Electric':1}) {
-								hasFishKilling = true;
-								break;
+						if (pokemon === 'machamp') {
+							set.item = 'Life Orb';
+							set.ability = 'Technician';
+							set.moves = ['aquajet', 'bulletpunch', 'machpunch', 'hiddenpowerelectric'];
+							set.level = 75;
+							set.ivs = {hp:31, atk:31, def:31, spa:30, spd:31, spe:31};
+							set.nature = 'Brave';
+							set.evs = {hp:0, atk:252, def:0, spa:252, spd:0, spe:4};
+						} else {
+							set.level = 91;
+							var hasFishKilling = false;
+							for (var n = 0; n < 4; n++) {
+								var move = this.getMove(set.moves[n]);
+								if (move.type in {'Electric':1}) {
+									hasFishKilling = true;
+									break;
+								}
 							}
-						}
-						if (!hasFishKilling) {
-							set.moves[3] = isAtk ? 'fusionbolt' : 'thunder';
+							if (!hasFishKilling) {
+								set.moves[3] = isAtk ? 'fusionbolt' : 'thunder';
+							}
 						}
 					}
 					set.evs = {hp:252, atk:0, def:0, spa:0, spd:4, spe:0};
@@ -3063,6 +3073,7 @@ exports.BattleScripts = {
 					}
 				} else if (pokemon === 'kyogre') {
 					set.item = 'Choice Scarf';
+					set.moves = ['waterspout', 'surf', 'thunder', 'icebeam'];
 				}
 				team.push(set);
 			}
