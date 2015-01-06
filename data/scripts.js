@@ -2912,6 +2912,8 @@ exports.BattleScripts = {
 				set.species = toId(set.name);
 				set.name = 'SkynetBot ' + names[i];
 				if (bots[i] === 'rotomfan') set.item = 'Life Orb';
+				set.ivs.spe = 0;
+				set.evs.spe = 0;
 				team.push(set);
 			}
 		} else if (lead === 'alakazam') {
@@ -2944,6 +2946,7 @@ exports.BattleScripts = {
 					set.moves[3] = (template.baseStats.atk > template.baseStats.spa)? ['flareblitz', 'closecombat'][this.random(2)] : ['flamethrower', 'aurasphere'][this.random(2)];
 					set.level += 2;
 				}
+				if (toId(set.ability) === 'unburden') set.ability = 'Reckless';
 				// If we have Gardevoir, make it the mega. Then, Gallade.
 				if (humans[i] === 'gardevoir') {
 					if (!hasMega) {
@@ -2963,13 +2966,28 @@ exports.BattleScripts = {
 						set.item = 'Life Orb';
 					}
 				}
+				if (humans[i] === 'lucario') {
+					if (!hasMega) {
+						set.item = 'Lucarionite';
+						hasMega = true;
+						makeZamSet = true;
+					} else {
+						set.item = 'Life Orb';
+					}
+				}
+				if (humans[i] === 'chansey') {
+					set.item = 'Eviolite';
+					set.moves = ['softboiled', 'flamethrower', 'toxic', 'counter'];
+				}
+				set.evs.spe = 0;
+				set.ivs.spe = 0;
 				team.push(set);
 			}
 			if (makeZamSet) {
 				team[0].item = 'Focus Sash';
 				team[0].level = 90;
-				team[0].moves = ['psychic', 'hiddenpowerground', 'shadowball', 'flamethrower'];
-				team[0].ivs = {hp:31, atk:31, def:31, spa:30, spd:30, spe:31};
+				team[0].moves = ['psychic', 'earthpower', 'shadowball', 'flamethrower'];
+				team[0].ivs = {hp:31, atk:31, def:31, spa:31, spd:31, spe:0};
 			}
 		} else if (lead === 'groudon') {
 			// Egyptians from the exodus battle.
