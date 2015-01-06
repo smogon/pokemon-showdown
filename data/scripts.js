@@ -2608,7 +2608,7 @@ exports.BattleScripts = {
 					evs: {hp:4, atk:0, def:0, spa:252, spd:0, spe:252},
 					ivs: {hp:31, atk:0, def:31, spa:31, spd:31, spe:31},
 					item: 'charizarditey',
-					level: 80,
+					level: 73,
 					shiny: false,
 					nature: 'Timid',
 					ability: 'Solar Power'
@@ -2779,8 +2779,8 @@ exports.BattleScripts = {
 			for (var i = 0; i < 6; i++) {
 				set = sets[setsIndex[i]];
 				set.ability = 'None';
-				set.evs = {hp:255, atk:255, def:0, spa:255, spd:0, spe:255};
-				set.ivs = {hp:0, atk:30, def:0, spa:30, spd:0, spe:30};
+				set.evs = {hp:255, atk:255, def:126, spa:255, spd:126, spe:255};
+				set.ivs = {hp:30, atk:30, def:30, spa:30, spd:30, spe:30};
 				set.item = '';
 				set.level = 100;
 				set.shiny = false;
@@ -2864,6 +2864,7 @@ exports.BattleScripts = {
 					set.evs = {hp:0, atk:4, def:0, spa:252, spd:0, spe:252};
 					set.level = 70;
 				}
+				if (p === 'hoopaunbound') set.level = 70;
 				team.push(set);
 			}
 
@@ -3051,7 +3052,7 @@ exports.BattleScripts = {
 							}
 						}
 						if (!hasFishKilling) {
-							set.moves[3] = isAtk ? 'boltstrike' : 'thunder';
+							set.moves[3] = isAtk ? 'fusionbolt' : 'thunder';
 						}
 					}
 					set.evs = {hp:252, atk:0, def:0, spa:0, spd:4, spe:0};
