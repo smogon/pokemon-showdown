@@ -2621,7 +2621,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	cameruptmega: {
-		randomBattleMoves: ["rockpolish","fireblast","earthpower","rockslide","flashcannon"],
+		randomBattleMoves: ["stealthrock","fireblast","earthpower","rockslide","flashcannon"],
 		randomDoubleBattleMoves: ["fireblast","earthpower","heatwave","eruption","rockslide","protect"],
 		requiredItem: "Cameruptite"
 	},
