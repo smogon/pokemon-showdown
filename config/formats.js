@@ -339,9 +339,19 @@ exports.Formats = [
 		team: 'randomSeasonalSFT',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin: function () {
-			this.add('-message', "Dialga and Palkia have distorted space and time!");
+			this.add('message', "Dialga and Palkia have distorted space and time!");
 			// This shouldn't happen.
 			if (!this.seasonal) this.seasonal = {scenario: 'lotr'};
+
+			// Add the message for the scenario.
+			this.add('-message', {
+				'gen1': "It appears that you have travelled to the past! This looks like... 1997!",
+				'lotr': "You find yourselves in middle of an epic battle for Middle Earth!",
+				'redblue': "Wow! You are taking part in the most epic Pokémon fight ever!",
+				'terminator': "You are caught up in the epic apocalyptic battle of the machines against the humans!",
+				'desert': "It's no less than the exodus itself!",
+				'shipwreck': "You're on a giant ship that was rekt by an iceberg. And the fish Pokémon want to eat the sailors!"
+			}[this.seasonal.scenario]);
 
 			// Let's see what's the scenario and change space and time.
 			if (this.seasonal.scenario === 'lotr') {
@@ -362,16 +372,6 @@ exports.Formats = [
 				delete this.pseudoWeather.watersport.duration;
 				delete this.weatherData.duration;
 			}
-
-			// Add the message for the scenario.
-			this.add('-message', {
-				'gen1': 'It appears that you have travelled to the past! This looks like... 1997!',
-				'lotr': 'You find yourselves in middle of an epic battle for Middle Earth!',
-				'redblue': 'Wow! You are taking part in the most epic Pokémon fight ever!',
-				'terminator': 'You are caught up in the epic apocalyptic battle of the machines against the humans!',
-				'desert': "It's no less than the exodus itself!",
-				'shipwreck': "Wow, that giant ship has just been rekt by an iceberg. And you're on it now. And the fish Pokémon want to eat the sailors!"
-			}[this.seasonal.scenario]);
 		},
 		onFaint: function (target, source) {
 			if (this.seasonal.scenario === 'gen1') {
