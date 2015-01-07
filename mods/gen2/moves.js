@@ -24,7 +24,10 @@ exports.BattleMovedex = {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			return false;
-		}
+		},
+		beforeTurnCallback: function () {},
+		onTryHit: function () {},
+		effect: {}
 	},
 	encore: {
 		inherit: true,
