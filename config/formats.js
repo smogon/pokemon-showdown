@@ -483,13 +483,15 @@ exports.Formats = [
 					this.add('-message', 'My preciousssss!');
 					this.boost({accuracy:6, evasion:1}, pokemon);
 				}
+			}
+			if (this.seasonal.scenario === 'gen1') {
+				pokemon.side.removeSideCondition('reflect');
+			}
+			if (this.seasonal.scenario === 'desert') {
 				if (pokemon.name === 'Moses') {
 					this.add('-message', 'Let my people go!');
 					this.boost({spd:1}, pokemon);
 				}
-			}
-			if (this.seasonal.scenario === 'gen1') {
-				pokemon.side.removeSideCondition('reflect');
 			}
 		}
 	},
