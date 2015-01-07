@@ -94,14 +94,14 @@ var Trivia = (function () {
 
 			switch (mode) {
 			case 'first':
-				answeringPeriod = setTimeout(noAnswer.bind(this), 15 * 1000);
+				answeringPeriod = setTimeout(noAnswer, 15 * 1000);
 				break;
 			case 'timer':
 				askedAt = Date.now();
-				answeringPeriod = setTimeout(timerAnswers.bind(this), 15 * 1000);
+				answeringPeriod = setTimeout(timerAnswers, 15 * 1000);
 				break;
 			case 'number':
-				answeringPeriod = setTimeout(numberAnswers.bind(this), 15 * 1000);
+				answeringPeriod = setTimeout(numberAnswers, 15 * 1000);
 				break;
 			}
 		}
@@ -113,7 +113,7 @@ var Trivia = (function () {
 				    'Answer' + (curA.length > 1 ? 's: ' : ': ') + curA.join(', ') + '<br />' +
 				    'Nobody gained any points.</div>');
 			room.update();
-			if (mode === 'first') answeringPeriod = setTimeout(askQuestion.bind(this), 30 * 1000);
+			if (mode === 'first') answeringPeriod = setTimeout(askQuestion, 30 * 1000);
 		}
 
 		function firstAnswer(user) {
@@ -130,7 +130,7 @@ var Trivia = (function () {
 			if (score[0] < cap) {
 				buffer += 'They gained <strong>5</strong> points!</div>';
 				room.addRaw(buffer);
-				answeringPeriod = setTimeout(askQuestion.bind(this), 30 * 1000);
+				answeringPeriod = setTimeout(askQuestion, 30 * 1000);
 				return false;
 			}
 
@@ -241,9 +241,9 @@ var Trivia = (function () {
 				var score = participants[participant];
 				if (!score[1]) continue;
 				var rank = leaderboard[participant];
-				if (Array.isArray(rank)) {
-					rank[0] += score[0];
-					rank[1] += score[1];
+				if (rank) {
+					rank[1] += score[0];
+					rank[2] += score[1];
 				} else {
 					score.unshift(0);
 					leaderboard[participant] = score;
@@ -274,14 +274,14 @@ var Trivia = (function () {
 			if (phase) return output.sendReply('There is already a trivia game in progress.');
 
 			target = target.split(',');
-			if (target.length !== 3) return output.sendReply('Invallid arguments specified. View /triviahelp gcommands for more information.');
+			if (target.length !== 3) return output.sendReply('Invallid arguments specified. View /trivia help gcommands for more information.');
 
 			mode = toId(target[0]);
-			if (MODES.indexOf(mode) < 0) return output.sendReply('"' + target[0].trim() + '" is not a valid mode. View /triviahelp ginfo for more information.');
+			if (MODES.indexOf(mode) < 0) return output.sendReply('"' + target[0].trim() + '" is not a valid mode. View /trivia help ginfo for more information.');
 			category = toId(target[1]);
-			if (CATEGORIES.indexOf(category) < 0) return output.sendReply('"' + target[1].trim() + '" is not a valid category. View /triviahelp ginfo for more information.');
+			if (CATEGORIES.indexOf(category) < 0) return output.sendReply('"' + target[1].trim() + '" is not a valid category. View /trivia help ginfo for more information.');
 			cap = CAPS[toId(target[2])];
-			if (!cap) return output.sendReply('"' + target[2].trim() + '" is not a valid score cap. View /triviahelp ginfo for more information.');
+			if (!cap) return output.sendReply('"' + target[2].trim() + '" is not a valid score cap. View /trivia help ginfo for more information.');
 
 			if (!room) {
 				room = roomid;
@@ -291,7 +291,7 @@ var Trivia = (function () {
 
 			phase = 'signup';
 			prize = (cap - 5) / 15 + 2;
-			room.addRaw('<div class="broadcast-blue"><strong>Signups for a new trivia game have begun! Enter /triviajoin to join.</strong><br />' +
+			room.addRaw('<div class="broadcast-blue"><strong>Signups for a new trivia game have begun! Enter /trivia join to join.</strong><br />' +
 				    'Mode: ' + mode + ' | Category: ' + category + ' | Score cap: ' + cap + '</div>');
 		};
 
@@ -332,11 +332,11 @@ var Trivia = (function () {
 			if (!userid) return false;
 
 			var targetUser = Users.get(userid);
-			if (!participants[userid]) return output.sendReply('User ' + (targetUser ? targetUser.name : userid) + ' is not a participant in this trivia game.');
+			if (!participants[userid]) return output.sendReply('User "' + (targetUser ? targetUser.name : userid) + '" is not a participant in this trivia game.');
 
 			if (mode !== 'first' && responders[userid]) delete responders[userid];
 			delete participants[userid];
-			output.sendReply('User ' + (targetUser ? targetUser.name : userid) + ' has been disqualified from the trivia game.');
+			output.sendReply('User "' + (targetUser ? targetUser.name : userid) + '" has been disqualified from the trivia game.');
 		};
 
 		this.startGame = function (output) {
@@ -352,7 +352,7 @@ var Trivia = (function () {
 			}
 
 			room.addRaw('<div class="broadcast-blue">Signups have ended and the game has begun!');
-			if (mode !== 'first') questionInterval = setInterval(askQuestion.bind(this), 45 * 1000);
+			if (mode !== 'first') questionInterval = setInterval(askQuestion, 45 * 1000);
 			askQuestion();
 		};
 
@@ -414,44 +414,44 @@ var Trivia = (function () {
 	};
 })();
 
-exports.commands = {
+var commands = {
 	// trivia game commands
-	trivianew: function (target, room) {
+	new: function (target, room) {
 		if (room.id !== 'trivia' || !this.can('broadcast', null, room) || !target) return false;
 		Trivia.getInstance().startSignups(target, room, this);
 	},
-	triviajoin: function (target, room, user) {
+	join: function (target, room, user) {
 		if (room.id !== 'trivia') return false;
 		Trivia.getInstance().addParticipant(user, this);
 	},
-	triviastart: function (target, room) {
+	start: function (target, room) {
 		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
 		Trivia.getInstance().startGame(this);
 	},
-	triviakick: function (target, room) {
+	kick: function (target, room) {
 		if (room.id !== 'trivia' || !this.can('mute', null, room) || !target) return false;
 		Trivia.getInstance().kickParticipant(target, this);
 	},
-	ta: function (target, room, user) {
+	answer: function (target, room, user) {
 		if (room.id !== 'trivia' || !target) return false;
 		Trivia.getInstance().answerQuestion(target, user, this);
 	},
-	triviaend: function (target, room, user) {
+	end: function (target, room, user) {
 		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
 		Trivia.getInstance().endGame(room, user, this);
 	},
 
 	// question database modifying commands
-	triviasubmit: 'triviaadd',
-	triviaadd: function (target, room, user, connection, cmd) {
-		if (room.id !== 'trivia' && room.id !== 'qstaff' || cmd === 'triviaadd' && !this.can('mute', null, room) || !target) return false;
+	submit: 'add',
+	add: function (target, room, user, connection, cmd) {
+		if (room.id !== 'questionworkshop' || cmd === 'triviaadd' && !this.can('mute', null, room) || !target) return false;
 
 		target = target.split('|');
-		if (target.length !== 3) return this.sendReply('Invalid arguments specified. View /triviahelp qcommands for more information.');
+		if (target.length !== 3) return this.sendReply('Invalid arguments specified. View /trivia help qcommands for more information.');
 
 		var category = toId(target[0]);
 		if (category === 'random') return false;
-		if (CATEGORIES.indexOf(category) < 0) return this.sendReply('"' + target[0].trim() + '" is not a valid category. View /triviahelp ginfo for more information.');
+		if (CATEGORIES.indexOf(category) < 0) return this.sendReply('"' + target[0].trim() + '" is not a valid category. View /trivia help ginfo for more information.');
 
 		var question = Tools.escapeHTML(target[1]).trim();
 		if (!question) return this.sendReply('"' + target[1].trim() + '" is not a valid question.');
@@ -470,7 +470,7 @@ exports.commands = {
 		if (!answers.length) return this.sendReply('No valid answers were specified.');
 
 		var submissions = triviaData.submissions;
-		if (cmd === 'triviaadd') {
+		if (cmd === 'add') {
 			for (var i = submissions.length; i--;) {
 				if (submissions[i].question === question) return this.sendReply('Question "' + target[1].trim() + '" has already been submitted.');
 			}
@@ -496,8 +496,8 @@ exports.commands = {
 			this.sendReply('Question "' + target[1].trim() + '" was submitted for review.');
 		}
 	},
-	triviareview: function (target, room) {
-		if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.can('mute', null, room)) return false;
+	review: function (target, room) {
+		if (room.id !== 'questionworkshop' || !this.can('mute', null, room)) return false;
 
 		var submissions = triviaData.submissions;
 		var submissionsLen = submissions.length;
@@ -517,11 +517,11 @@ exports.commands = {
 		buffer += '</table></div>';
 		this.sendReply(buffer);
 	},
-	triviareject: 'triviaaccept',
-	triviaaccept: function (target, room, user, connection, cmd) {
-		if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.can('mute', null, room) || !target) return false;
+	reject: 'accept',
+	accept: function (target, room, user, connection, cmd) {
+		if (room.id !== 'questionworkshop' || !this.can('mute', null, room) || !target) return false;
 
-		var isAccepting = cmd === 'triviaaccept';
+		var isAccepting = cmd === 'accept';
 		var submissions = triviaData.submissions;
 
 		if (toId(target) === 'all') {
@@ -554,7 +554,7 @@ exports.commands = {
 			}
 
 			var indicesLen = indices.length;
-			if (!indicesLen) return this.sendReply('"' + target.join(', ') + '" is not a valid set of index numbers. View /triviareview and /triviahelp qcommands for more information.');
+			if (!indicesLen) return this.sendReply('"' + target.join(', ') + '" is not a valid set of index numbers. View /trivia review and /trivia help qcommands for more information.');
 
 			indices = indices.sort(function (a, b) {
 				return a - b;
@@ -580,10 +580,10 @@ exports.commands = {
 			return writeTriviaData();
 		}
 
-		this.sendReply('"' + target + '" is an invalid argument. View /triviahelp qcommands for more information.');
+		this.sendReply('"' + target + '" is an invalid argument. View /trivia help qcommands for more information.');
 	},
-	triviadelete: function (target, room) {
-		if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.can('mute', null, room) || !target) return false;
+	delete: function (target, room) {
+		if (room.id !== 'questionworkshop' || !this.can('mute', null, room) || !target) return false;
 
 		var question = Tools.escapeHTML(target).trim();
 		if (!question) return this.sendReply('"' + target.trim() + '" is not a valid question.');
@@ -598,14 +598,13 @@ exports.commands = {
 
 		this.sendReply('Question "' + target.trim() + '" was not found in the question database.');
 	},
-	triviaquestions: 'triviaqs',
-	triviaqs: function (target, room, user) {
-		if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.can('mute', null, room)) return false;
-		if (!target) return this.sendReply('/triviaqs requires a specified category. View /triviahelp gamehelp for more information.');
+	qs: function (target, room, user) {
+		if (room.id !== 'questionworkshop' || !this.can('mute', null, room)) return false;
+		if (!target) return this.sendReply('/trivia qs requires a specified category. View /trivia help gamehelp for more information.');
 
 		var category = toId(target);
 		if (category === 'random') return false;
-		if (CATEGORIES.indexOf(category) < 0) return this.sendReply('"' + target + '" is not a valid option for /triviaqs. View /triviahelp ginfo for more information.');
+		if (CATEGORIES.indexOf(category) < 0) return this.sendReply('"' + target + '" is not a valid option for /trivia qs. View /trivia help ginfo for more information.');
 
 		var list = triviaData.questions.filter(function (question) {
 			return question.category === category;
@@ -636,15 +635,15 @@ exports.commands = {
 	},
 
 	// informational commands
-	triviastatus: function (target, room, user) {
+	status: function (target, room, user) {
 		if (room.id !== 'trivia') return false;
 		Trivia.getInstance().getStatus(user, this);
 	},
-	triviaplayers: function (target, room) {
+	players: function (target, room) {
 		if (room.id !== 'trivia') return false;
 		Trivia.getInstance().getParticipants(this);
 	},
-	triviarank: function (target, room, user) {
+	rank: function (target, room, user) {
 		if (room.id !== 'trivia') return false;
 
 		var userid = '';
@@ -659,12 +658,12 @@ exports.commands = {
 		}
 
 		var score = triviaData.leaderboard[userid];
-		if (!score) return this.sendReplyBox('User ' + username + ' has not played any trivia games yet.');
+		if (!score) return this.sendReplyBox('User "' + username + '" has not played any trivia games yet.');
 
 		if (!Array.isArray(score)) {
 			delete triviaData.leaderboard[userid];
 			writeTriviaData();
-			return this.sendReplyBox('User ' + username + ' has not played any trivia games yet.');
+			return this.sendReplyBox('User "' + username + '" has not played any trivia games yet.');
 		}
 
 		this.sendReplyBox('User: <strong>' + username + '</strong><br />' +
@@ -672,10 +671,11 @@ exports.commands = {
 		                  'Total game points: <strong>' + score[1] + '</strong><br />' +
 		                  'Total correct answers: <strong>' + score[2] + '</strong>');
 	},
-	triviahelp: function (target, room) {
-		if (room.id !== 'trivia' && room.id !== 'qstaff' || !this.canBroadcast()) return false;
+	help: function (target, room) {
+		if (!this.canBroadcast()) return false;
 
 		target = toId(target);
+		if (room.id === 'trivia' && target === 'qcommands') target = '';
 		switch (target) {
 		case 'ginfo':
 			this.sendReplyBox('<strong>Modes:</strong><br />' +
@@ -691,38 +691,43 @@ exports.commands = {
 			break;
 		case 'gcommands':
 			this.sendReplyBox('<strong>Game commands:</strong><br />' +
-			                  '- /trivianew mode, category, length - begins the signup phase of a new trivia game. Requires: + % @ # & ~<br />' +
-			                  '- /triviajoin - enters you in the list of players during the signup phase<br />' +
-			                  '- /triviastart - begins the game once enough users have signed up. Requires: + % @ # & ~<br />' +
+			                  '- /trivia new mode, category, length - begins the signup phase of a new trivia game. Requires: + % @ # & ~<br />' +
+			                  '- /trivia join - enters you in the list of players during the signup phase<br />' +
+			                  '- /trivia start - begins the game once enough users have signed up. Requires: + % @ # & ~<br />' +
 			                  '- /ta - answers the current question<br />' +
-			                  '- /triviakick - disqualifies a player from the current trivia game. Requires: % @ # & ~<br />' +
-			                  '- /triviaend - forces a trivia game to end early. Requires: + % @ # & ~');
+			                  '- /trivia kick - disqualifies a player from the current trivia game. Requires: % @ # & ~<br />' +
+			                  '- /trivia end - forces a trivia game to end early. Requires: + % @ # & ~');
 			break;
 		case 'qcommands':
 			this.sendReplyBox('<strong>Question modifying commands:</strong><br />' +
-			                  '- /triviaadd category | question | answer1, answer2, ... answern - adds a question to the question database. Requires: % @ # & ~<br />' +
-			                  '- /triviadelete question - deletes a question from the trivia database. Requires: % @ # & ~<br />' +
-			                  '- /triviaqs category - returns the list of questions in the specified category. Viewing their answers requires # & ~. Requires: % @ # & ~<br />' +
+			                  '- /trivia add category | question | answer1, answer2, ... answern - adds a question to the question database. Requires: % @ # & ~<br />' +
+			                  '- /trivia delete question - deletes a question from the trivia database. Requires: % @ # & ~<br />' +
+			                  '- /trivia qs category - returns the list of questions in the specified category. Viewing their answers requires # & ~. Requires: % @ # & ~<br />' +
 					  '<strong>Question submission commands</strong><br />' +
-			                  '- /triviasubmit category | question | answer1, answer2 ... answern - adds a question to the submission list for staff to review before adding or rejecting it<br />' +
-			                  '- /triviareview - returns a list of all the questions on the submission list. Requires: % @ # & ~<br />' +
-			                  '- /triviaaccept index1, index2, ... indexn OR all - adds the specified question(s) to the question database. Requires: % @ # & ~<br />' +
-			                  '- /triviareject index1, index2, ... indexn OR all - removes the specified question(s) from the submission list. Requires: % @ # & ~');
+			                  '- /trivia submit category | question | answer1, answer2 ... answern - adds a question to the submission list for staff to review before adding or rejecting it<br />' +
+			                  '- /trivia review - returns a list of all the questions on the submission list. Requires: % @ # & ~<br />' +
+			                  '- /trivia accept index1, index2, ... indexn OR all - adds the specified question(s) to the question database. Requires: % @ # & ~<br />' +
+			                  '- /trivia reject index1, index2, ... indexn OR all - removes the specified question(s) from the submission list. Requires: % @ # & ~');
 			break;
 		case 'icommands':
 			this.sendReplyBox('<strong>Informational commands:</strong><br />' +
-			                  '- /triviastatus - returns the status of the trivia game, including its phase, mode, category, score cap, current question, as well as your current score and number of correct answers<br />' +
-			                  '- /triviaplayers - returns a list of the players in the current trivia game<br />' +
-			                  '- /triviarank - returns your trivia leaderboard score, total points earned in trivia games, and total correct answers<br />' +
-			                  '- /triviahelp category - you\'re looking at it right now');
+			                  '- /trivia status - returns the status of the trivia game, including its phase, mode, category, score cap, current question, as well as your current score and number of correct answers<br />' +
+			                  '- /trivia players - returns a list of the players in the current trivia game<br />' +
+			                  '- /trivia rank - returns your trivia leaderboard score, total points earned in trivia games, and total correct answers<br />' +
+			                  '- /trivia help category - you\'re looking at it right now');
 			break;
 		default:
 			this.sendReplyBox('<strong>/triviahelp topics:</strong><br />' +
-			                  '- /triviahelp ginfo - information about trivia game modes, categories, and lengths<br />' +
-			                  '- /triviahelp gcommands - information about commands used to participate in trivia games<br />' +
-			                  '- /triviahelp qcommands - information about commands used for the question submission system<br />' +
-			                  '- /triviahelp icommands - information about informational commands, such as this one');
+			                  '- /trivia help ginfo - information about trivia game modes, categories, and lengths<br />' +
+			                  '- /trivia help gcommands - information about commands used to participate in trivia games<br />' +
+			                  (room.id === 'trivia' ? '' : '- /trivia help qcommands - information about commands used for the question submission system<br />') +
+			                  '- /trivia help icommands - information about informational commands, such as this one');
 			break;
 		}
 	}
+};
+
+exports.commands = {
+	trivia: commands,
+	ta: commands.answer
 };
