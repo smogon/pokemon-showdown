@@ -502,7 +502,9 @@ exports.BattleScripts = {
 				didSomething = true;
 			}
 			if (moveData.status) {
-				if (!target.status) {
+				// Gen 1 bug: If the target has just used hyperbeam and must recharge, its status will be ignored and put to sleep.
+				// This does NOT revert the paralyse speed drop or the burn attack drop.
+				if (!target.status || moveData.status === 'slp' && target.volatiles['mustrecharge']) {
 					target.setStatus(moveData.status, pokemon, move);
 				} else if (!isSecondary) {
 					if (target.status === moveData.status) {
