@@ -1572,11 +1572,39 @@ exports.BattleScripts = {
 		if (template.name === 'Serperior' && ability === 'Contrary') level = 76;
 		if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 90;
 
+		// Prepare HP for Belly Drum.
 		if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
 			var hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			if (hp % 2 > 0) {
 				evs.hp -= 4;
 				evs.atk += 4;
+			}
+		} else {
+			// Prepare HP for double Stealth Rock weaknesses. Those are mutually exclusive with Belly Drum HP check.
+			// First, 25% damage.
+			if (this.getEffectiveness('Rock', template) === 1) {
+				var hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+				if (hp % 4 === 0) {
+					evs.hp -= 4;
+					if (counter.Physical > counter.Special) {
+						evs.atk += 4;
+					} else {
+						evs.spa += 4;
+					}
+				}
+			}
+
+			// Then, prepare it for 50% damage.
+			if (this.getEffectiveness('Rock', template) === 2) {
+				var hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+				if (hp % 2 === 0) {
+					evs.hp -= 4;
+					if (counter.Physical > counter.Special) {
+						evs.atk += 4;
+					} else {
+						evs.spa += 4;
+					}
+				}
 			}
 		}
 
