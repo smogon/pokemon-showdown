@@ -298,6 +298,11 @@ exports.BattleScripts = {
 			accuracy = true;
 		}
 
+		// If a sleep inducing move is used while the user is recharging, the accuracy is true.
+		if (move.status === 'slp' && target && target.volatiles['mustrecharge']) {
+			accuracy = true;
+		}
+
 		// Calculate true accuracy for gen 1, which uses 0-255.
 		if (accuracy !== true) {
 			accuracy = Math.floor(accuracy * 255 / 100);
