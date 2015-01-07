@@ -2941,7 +2941,7 @@ exports.BattleScripts = {
 				set.name = 'Gollum';
 				set.moves = ['fakeout', 'bind', 'soak', 'infestation'];
 				set.item = 'Leftovers';
-				set.leel = 99;
+				set.level = 99;
 				team.push(set);
 			}
 		} else if (lead === 'genesect') {
@@ -3168,6 +3168,7 @@ exports.BattleScripts = {
 							// Give Shell Smashers and Mega Swampert a little bit of speed
 							set.evs.atk = 200;
 							set.evs.spe = 56;
+							set.level -= 5;
 						} else if (pokemon === 'lucario') {
 							// Lucario has physical and special moves, so balance the attack EVs
 							set.evs.atk = 128;
@@ -3183,6 +3184,8 @@ exports.BattleScripts = {
 				} else if (pokemon === 'kyogre') {
 					set.item = 'Choice Scarf';
 					set.moves = ['waterspout', 'surf', 'thunder', 'icebeam'];
+				} else if (pokemon === 'milotic') {
+					set.level -= 5;
 				}
 				team.push(set);
 			}
