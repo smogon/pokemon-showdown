@@ -2542,6 +2542,7 @@ exports.BattleScripts = {
 		var lead = 'gallade';
 		var team = [];
 		var set = {};
+		var megaCount = 0;
 
 		// If the other team has been chosen, we get its opposing force.
 		if (this.seasonal && this.seasonal.scenario) {
@@ -3040,54 +3041,68 @@ exports.BattleScripts = {
 			var	seasonalPokemonList = [];
 			if (lead === 'kyogre') {
 				seasonalPokemonList = [
-					'carvanha', 'sharpedo', 'inkay', 'malamar', 'octillery', 'gyarados', 'clawitzer', 'whiscash', 'relicanth',
-					'thundurus', 'thundurustherian', 'tornadus', 'tornadustherian', 'wingull', 'pelipper', 'wailmer', 'wailord',
-					'avalugg', 'milotic'
+					'sharpedo', 'malamar', 'octillery', 'gyarados', 'clawitzer', 'whiscash', 'relicanth', 'thundurus', 'thundurustherian',
+					'thundurus', 'thundurustherian', 'tornadus', 'tornadustherian', 'pelipper', 'wailord', 'avalugg', 'milotic', 'crawdaunt'
 				].randomize();
 			} else if (lead === 'machamp') {
 				seasonalPokemonList = [
 					'chatot', 'feraligatr', 'poliwrath', 'swampert', 'barbaracle', 'carracosta', 'lucario', 'ursaring', 'vigoroth',
-					'machoke', 'machop', 'conkeldurr', 'timburr', 'gurdurr'
+					'machoke', 'conkeldurr', 'gurdurr', 'seismitoad', 'chesnaught', 'electivire'
 				].randomize();
 			}
 			seasonalPokemonList.unshift(lead);
 			for (var i = 0; i < 6; i++) {
 				var pokemon = seasonalPokemonList[i];
 				var template = this.getTemplate(pokemon);
-				var set = this.randomSet(template, i);
+				var set = this.randomSet(template, i, !!megaCount);
+				if (this.getItem(set.item).megaStone) megaCount++;
+
 				// Sailor team is made of pretty bad mons, boost them a little.
 				if (lead === 'machamp') {
 					var isAtk = (template.baseStats.atk > template.baseStats.spa);
-					// Swampert is too OP to get an electric attack.
-					if (pokemon !== 'swampert') {
-						if (pokemon === 'machamp') {
-							set.item = 'Life Orb';
-							set.ability = 'Technician';
-							set.moves = ['aquajet', 'bulletpunch', 'machpunch', 'hiddenpowerelectric'];
-							set.level = 75;
-							set.ivs = {hp:31, atk:31, def:31, spa:30, spd:31, spe:31};
-							set.nature = 'Brave';
-							set.evs = {hp:0, atk:252, def:0, spa:252, spd:0, spe:4};
-						} else {
-							set.level = 91;
-							var hasFishKilling = false;
-							for (var n = 0; n < 4; n++) {
-								var move = this.getMove(set.moves[n]);
-								if (move.type in {'Electric':1}) {
-									hasFishKilling = true;
-									break;
-								}
-							}
-							if (!hasFishKilling) {
-								set.moves[3] = isAtk ? 'fusionbolt' : 'thunder';
+					if (pokemon === 'machamp') {
+						set.item = 'Life Orb';
+						set.ability = 'Technician';
+						set.moves = ['aquajet', 'bulletpunch', 'machpunch', 'hiddenpowerelectric'];
+						set.level = 75;
+						set.ivs = {hp:31, atk:31, def:31, spa:30, spd:31, spe:31};
+						set.nature = 'Brave';
+						set.evs = {hp:0, atk:252, def:0, spa:252, spd:0, spe:4};
+					} else {
+						var hasFishKilling = false;
+						var shellSmashPos = -1;
+						for (var n = 0; n < 4; n++) {
+							var move = this.getMove(set.moves[n]);
+							if (move.type in {'Electric':1}) {
+								hasFishKilling = true;
+							} else if (move.id === 'raindance') { // useless, replace ASAP
+								// Swampert is too OP for an electric move, so we give it another move
+								set.moves[n] = (pokemon === 'swampert' ? 'doubleedge' : 'fusionbolt');
+								hasFishKilling = true;
+							} else if (move.id === 'shellsmash') { // don't replace this!
+								shellSmashPos = n;
 							}
 						}
-					}
-					set.evs = {hp:252, atk:0, def:0, spa:0, spd:4, spe:0};
-					if (isAtk) {
-						set.evs.atk = 252;
-					} else {
-						set.evs.spa = 252;
+						if (!hasFishKilling && pokemon !== 'swampert') {
+							var fishKillerPos = (shellSmashPos === 3 ? 2 : 3);
+							set.moves[fishKillerPos] = isAtk ? 'fusionbolt' : 'thunder';
+						}
+						set.evs = {hp:252, atk:0, def:0, spa:0, spd:0, spe:0};
+						if (shellSmashPos > -1 || toId(set.ability) === 'swiftswim' || (pokemon === 'swampert' && this.getItem(set.item).megaStone)) {
+							// Give Shell Smashers and Mega Swampert a little bit of speed
+							set.evs.atk = 200;
+							set.evs.spe = 56;
+						} else if (pokemon === 'lucario') {
+							// Lucario has physical and special moves, so balance the attack EVs
+							set.evs.atk = 128;
+							set.evs.spa = 128;
+						} else if (isAtk) {
+							set.evs.atk = 252;
+							set.evs.spd = 4;
+						} else {
+							set.evs.spa = 252;
+							set.evs.spd = 4;
+						}
 					}
 				} else if (pokemon === 'kyogre') {
 					set.item = 'Choice Scarf';
