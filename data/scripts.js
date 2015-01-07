@@ -3003,15 +3003,18 @@ exports.BattleScripts = {
 			set = this.randomSet(template, 0);
 			set.species = toId(set.name);
 			set.name = 'Ramesses II';
-			set.ability = 'Water Absorb';
-			set.item = 'Life Orb';
+			set.ability = 'Rivalry';
+			if (toId(set.item) === 'redorb') {
+				set.item = 'Life Orb';
+			}
 			set.level = 67;
 			team.push(set);
 
 			for (var i = 1; i < 6; i++) {
 				var pokemon = egyptians[i];
 				template = this.getTemplate(pokemon);
-				set = this.randomSet(template, i);
+				var set = this.randomSet(template, i, !!megaCount);
+				if (this.getItem(set.item).megaStone) megaCount++;
 				set.species = toId(set.name);
 				set.name = 'Egyptian ' + template.species;
 				team.push(set);
@@ -3019,8 +3022,8 @@ exports.BattleScripts = {
 		} else if (lead === 'probopass') {
 			// Jews from the exodus battle.
 			var jews = [
-				'nosepass', 'arceus', 'arceusfire', 'mareep', 'flaaffy', 'tauros', 'miltank', 'gogoat', 'excadrill', 'seismitoad',
-				'toxicroak', 'yanmega'
+				'nosepass', ['arceus', 'arceusfire'][this.random(2)], 'flaaffy', 'tauros', 'miltank', 'gogoat', 'excadrill',
+				'seismitoad', 'toxicroak', 'yanmega'
 			].randomize();
 			var template = this.getTemplate(lead);
 			set = this.randomSet(template, 0);
