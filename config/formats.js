@@ -376,6 +376,7 @@ exports.Formats = [
 		onFaint: function (target, source) {
 			if (this.seasonal.scenario === 'gen1') {
 				if (source && source.removeVolatile) source.removeVolatile('mustrecharge');
+				if (target && target.side) target.side.removeSideCondition('reflect');
 				this.queue = [];
 			}
 		},
@@ -468,6 +469,9 @@ exports.Formats = [
 					this.add('-message', 'Black arrow! Go now and speed well!');
 					this.boost({accuracy:1, evasion:1}, pokemon);
 				}
+			}
+			if (this.seasonal.scenario === 'gen1') {
+				pokemon.side.removeSideCondition('reflect');
 			}
 		}
 	},
