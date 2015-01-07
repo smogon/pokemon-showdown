@@ -421,15 +421,20 @@ exports.Formats = [
 			if (this.seasonal.scenario === 'lotr') {
 				if (pokemon.name === 'Frodo') {
 					this.add('-message', 'The One Ring gives power to Frodo!');
+					this.add('-start', pokemon, 'typechange', 'Ground/Fairy');
 					this.boost({def:2, spd:2, evasion:2}, pokemon);
+					pokemon.typesData = [
+						{type: 'Ground', suppressed: false,  isAdded: false},
+						{type: 'Fairy', suppressed: false,  isAdded: true}
+					];
 				}
 				if (pokemon.name === 'Gandalf') {
 					this.add('-message', 'Fly, you fools!');
-					this.boost({spd:1}, pokemon);
+					this.boost({spe:1}, pokemon);
 				}
 				if (pokemon.name === 'Saruman') {
 					this.add('-message', 'Against the power of Mordor there can be no victory.');
-					this.boost({spe:1}, pokemon);
+					this.boost({spd:1}, pokemon);
 				}
 				if (pokemon.name === 'Legolas') {
 					this.add('-message', "They're taking the hobbits to Isengard!");
@@ -453,7 +458,12 @@ exports.Formats = [
 				}
 				if (pokemon.name === 'Samwise') {
 					this.add('-message', 'Mr. Frodo!!');
+					this.add('-start', pokemon, 'typechange', 'Normal/Fairy');
 					this.boost({spe:3}, pokemon);
+					pokemon.typesData = [
+						{type: 'Normal', suppressed: false,  isAdded: false},
+						{type: 'Fairy', suppressed: false,  isAdded: true}
+					];
 				}
 				if (pokemon.name === 'Nazgûl') {
 					this.add('-message', 'One ring to rule them all.');
@@ -468,6 +478,14 @@ exports.Formats = [
 				if (pokemon.name === 'Bard') {
 					this.add('-message', 'Black arrow! Go now and speed well!');
 					this.boost({accuracy:1, evasion:1}, pokemon);
+				}
+				if (pokemon.name === 'Gollum') {
+					this.add('-message', 'My preciousssss!');
+					this.boost({accuracy:6, evasion:1}, pokemon);
+				}
+				if (pokemon.name === 'Moses') {
+					this.add('-message', 'Let my people go!');
+					this.boost({spd:1}, pokemon);
 				}
 			}
 			if (this.seasonal.scenario === 'gen1') {
