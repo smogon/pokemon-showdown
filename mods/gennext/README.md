@@ -59,8 +59,7 @@ Major changes:
   It doubles its SpA, SpD, and Spe, and changes its type to the type of its
   Hidden Power.
 
-- Weather-inducing abilities now last for only 5 turns (or 8 with the right
-  item). Weather moves have +1 priority.
+- Weather moves have +1 priority.
 
 - Forecast will make weather moves last forever. Cherrim will make Sunny Day
   last forever. Phione will make Rain Dance last forever. Cryogonal will make
@@ -137,7 +136,7 @@ Major changes:
 
 - Twister is now a 80 base power Flying move with a 30% confusion chance
 
-- Hoopa and Volcanion are released
+- Hoopa(both forms), Volcanion and Floetta-Eternal-Flower are released
 
 New mechanic: Signature Pokemon:
 
@@ -284,8 +283,6 @@ Minor move changes:
 
 - Multi-hit moves are now all perfect-accuracy
 
-- Whirlwind and Roar have perfect accuracy
-
 - Silver Wind, Ominous Wind, and AncientPower have a 100% chance of raising
   one of Def/SpA/SpD/Spe at random, rather than a 10% chance of raising every
   stat
@@ -371,7 +368,7 @@ Minor learnset changes:
 
 - Virizion gets Horn Leech
 
-- Milotic, Scolipede, and Steelix get Coil
+- Scolipede and Steelix get Coil
 
 - Spinda gets Superpower with no incompatibilities
 
