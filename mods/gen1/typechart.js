@@ -100,7 +100,7 @@ exports.BattleTypeChart = {
 			"Ground": 1,
 			"Ice": 0,
 			"Normal": 0,
-			"Poison": 1,
+			"Poison": 2,
 			"Psychic": 1,
 			"Rock": 0,
 			"Water": 0
