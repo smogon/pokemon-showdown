@@ -1021,7 +1021,6 @@ exports.Formats = [
 		section: "Past Generations",
 
 		mod: 'gen1',
-		searchShow: false,
 		team: 'random',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod']
 	},
