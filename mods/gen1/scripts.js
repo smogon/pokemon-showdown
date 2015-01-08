@@ -998,13 +998,18 @@ exports.BattleScripts = {
 		return team;
 	},
 	randomTeam: function (side) {
+		// Get what we need ready.
 		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
-		for (var i in this.data.FormatsData) {
-			if (this.data.FormatsData[i].randomBattleMoves) {
-				keys.push(i);
+		var i = 1;
+
+		// We need to check it's one of the first 151 because formats data are installed onto main format data, not replaced.
+		for (var n in this.data.FormatsData) {
+			if (this.data.FormatsData[n].randomBattleMoves && i < 152) {
+				keys.push(n);
 			}
+			i++;
 		}
 		keys = keys.randomize();
 
@@ -1041,13 +1046,6 @@ exports.BattleScripts = {
 			while (moves.length < 4 && j < moveKeys.length) {
 				var moveid = toId(moveKeys[j]);
 				j++;
-				if (moveid.substr(0, 11) === 'hiddenpower') {
-					if (!hasMove['hiddenpower']) {
-						hasMove['hiddenpower'] = true;
-					} else {
-						continue;
-					}
-				}
 				moves.push(moveid);
 			}
 
@@ -1113,8 +1111,8 @@ exports.BattleScripts = {
 				case 'icebeam':
 					if (hasMove['blizzard']) rejected = true;
 					break;
-				case 'surf':
-					if (hasMove['hydropump']) rejected = true;
+				case 'hydropump':
+					if (hasMove['surf']) rejected = true;
 					break;
 				case 'petaldance': case 'solarbeam':
 					if (hasMove['megadrain'] || hasMove['razorleaf']) rejected = true;

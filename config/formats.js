@@ -1017,6 +1017,15 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "[Gen 1] Random Battle",
+		section: "Past Generations",
+
+		mod: 'gen1',
+		searchShow: false,
+		team: 'random',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod']
+	},
+	{
 		name: "[Gen 1] Custom Game",
 		section: "Past Generations",
 
