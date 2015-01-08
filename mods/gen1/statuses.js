@@ -14,11 +14,12 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'brn');
 			target.addVolatile('brnattackdrop');
 			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
-			if (!target.volatiles['residualdmg'].counter) target.volatiles['residualdmg'].counter = 1;
+			if (!target.volatiles['residualdmg'].counter) target.volatiles['residualdmg'].counter = 0;
+			target.volatiles['residualdmg'].counter++;
 		},
-		onAfterMoveSelfPriority: 1,
+		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
-			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * pokemon.volatiles['residualdmg'].counter);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter);
 		},
 		onSwitchIn: function (pokemon) {
 			pokemon.addVolatile('brnattackdrop');
@@ -26,7 +27,7 @@ exports.BattleStatuses = {
 			pokemon.volatiles['residualdmg'].counter = 1;
 		},
 		onAfterSwitchInSelf: function (pokemon) {
-			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1));
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		}
 	},
 	par: {
@@ -95,16 +96,17 @@ exports.BattleStatuses = {
 		onStart: function (target) {
 			this.add('-status', target, 'psn');
 			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
-			if (!target.volatiles['residualdmg'].counter) target.volatiles['residualdmg'].counter = 1;
+			if (!target.volatiles['residualdmg'].counter) target.volatiles['residualdmg'].counter = 0;
+			target.volatiles['residualdmg'].counter++;
 		},
-		onAfterMoveSelfPriority: 1,
+		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
-			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * pokemon.volatiles['residualdmg'].counter);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter);
 		},
 		onAfterSwitchInSelf: function (pokemon) {
 			pokemon.addVolatile('residualdmg');
 			pokemon.volatiles['residualdmg'].counter = 1;
-			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1));
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		}
 	},
 	tox: {
@@ -112,19 +114,19 @@ exports.BattleStatuses = {
 		onStart: function (target) {
 			this.add('-status', target, 'tox');
 			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
-			target.volatiles['residualdmg'].counter = 1;
+			if (!target.volatiles['residualdmg'].counter) target.volatiles['residualdmg'].counter = 0;
 		},
-		onAfterMoveSelfPriority: 1,
+		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
-			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * pokemon.volatiles['residualdmg'].counter);
 			pokemon.volatiles['residualdmg'].counter++;
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter);
 		},
 		onAfterSwitchInSelf: function (pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
 			pokemon.setStatus('psn');
 			pokemon.addVolatile('residualdmg');
 			pokemon.volatiles['residualdmg'].counter = 1;
-			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1));
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		}
 	},
 	confusion: {
