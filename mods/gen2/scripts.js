@@ -103,7 +103,7 @@ exports.BattleScripts = {
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.runEvent('AfterMove', target, pokemon, move);
-		if (!move.selfSwitch) this.runEvent('AfterMoveSelf', pokemon, target, move);
+		if (!move.selfSwitch && target.hp > 0) this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
 		var damage;
