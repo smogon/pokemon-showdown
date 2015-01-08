@@ -702,13 +702,14 @@ exports.BattleScripts = {
 			break;
 		case 'runSwitch':
 			this.runEvent('SwitchIn', decision.pokemon);
-			if (!decision.pokemon.side.faintedThisTurn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
+			if (!decision.pokemon.side.faintedThisTurn && decision.pokemon.draggedIn !== this.turn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
 			if (!decision.pokemon.hp) break;
 			decision.pokemon.isStarted = true;
 			if (!decision.pokemon.fainted) {
 				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
 				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
 			}
+			delete decision.pokemon.draggedIn;
 			break;
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');
@@ -773,5 +774,42 @@ exports.BattleScripts = {
 		this.eachEvent('Update');
 
 		return false;
+	},
+	dragIn: function (side, pos) {
+		if (pos >= side.active.length) return false;
+		var pokemon = this.getRandomSwitchable(side);
+		if (!pos) pos = 0;
+		if (!pokemon || pokemon.isActive) return false;
+		this.runEvent('BeforeSwitchIn', pokemon);
+		if (side.active[pos]) {
+			var oldActive = side.active[pos];
+			if (!oldActive.hp) {
+				return false;
+			}
+			if (!this.runEvent('DragOut', oldActive)) {
+				return false;
+			}
+			this.runEvent('SwitchOut', oldActive);
+			this.singleEvent('End', this.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
+			oldActive.isActive = false;
+			oldActive.isStarted = false;
+			oldActive.position = pokemon.position;
+			pokemon.position = pos;
+			side.pokemon[pokemon.position] = pokemon;
+			side.pokemon[oldActive.position] = oldActive;
+			this.cancelMove(oldActive);
+			oldActive.clearVolatile();
+		}
+		side.active[pos] = pokemon;
+		pokemon.isActive = true;
+		pokemon.activeTurns = 0;
+		pokemon.draggedIn = this.turn;
+		for (var m in pokemon.moveset) {
+			pokemon.moveset[m].used = false;
+		}
+		this.add('drag', pokemon, pokemon.getDetails);
+		pokemon.update();
+		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
+		return true;
 	}
 };
