@@ -3898,21 +3898,19 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":5,"level":5,"gender":"M","nature":"Hardy","isHidden":false,"moves":["growth","synthesis","energyball","aromatherapy"],"pokeball":"cherishball"}
 		],
-		unreleasedHidden: true,
 		tier: "LC"
 	},
 	servine: {
 		randomBattleMoves: ["leafstorm","hiddenpowerfire","substitute","leechseed","hiddenpowerice","gigadrain"],
-		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	serperior: {
 		randomBattleMoves: ["leafstorm","hiddenpowerfire","substitute","leechseed","dragonpulse","gigadrain"],
 		randomDoubleBattleMoves: ["leafstorm","hiddenpowerfire","substitute","taunt","grassyterrain","gigadrain","protect"],
 		eventPokemon: [
-			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["leafstorm","substitute","gigadrain","leechseed"],"pokeball":"cherishball"}
+			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["leafstorm","substitute","gigadrain","leechseed"],"pokeball":"cherishball"},
+			{"generation":6,"level":50,"gender":"M","isHidden":true,"moves":["leafstorm","holdback","wringout","gigadrain"],"pokeball":"cherishball"}
 		],
-		unreleasedHidden: true,
 		tier: "PU"
 	},
 	tepig: {
