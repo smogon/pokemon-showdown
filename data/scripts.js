@@ -1569,7 +1569,6 @@ exports.BattleScripts = {
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
-		if (template.name === 'Serperior' && ability === 'Contrary') level = 76;
 		if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 90;
 
 		// Prepare HP for Belly Drum.
