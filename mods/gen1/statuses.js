@@ -113,9 +113,7 @@ exports.BattleStatuses = {
 			this.effectData.stage = 0; // probably unnecessary...
 			pokemon.setStatus('psn');
 			// normal poison damage...
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 16);
-			}
+			this.damage(pokemon.maxhp / 16);
 		}
 	},
 	confusion: {
