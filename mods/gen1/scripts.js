@@ -1321,7 +1321,7 @@ exports.BattleScripts = {
 			break;
 		case 'runSwitch':
 			this.runEvent('SwitchIn', decision.pokemon);
-			this.runEvent('AfterSwitchInSelf', decision.pokemon);
+			if (!decision.pokemon.side.faintedThisTurn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
 			if (!decision.pokemon.hp) break;
 			decision.pokemon.isStarted = true;
 			if (!decision.pokemon.fainted) {
