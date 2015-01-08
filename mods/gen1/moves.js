@@ -444,8 +444,11 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function (target) {
 				this.add('-start', target, 'move: Leech Seed');
+				if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
+				if (!target.volatiles['residualdmg'].counter) target.volatiles['residualdmg'].counter = 0;
+				target.volatiles['residualdmg'].counter++;
 			},
-			onAfterMoveSelfPriority: 2,
+			onAfterMoveSelfPriority: 1,
 			onAfterMoveSelf: function (pokemon) {
 				var leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
@@ -453,8 +456,12 @@ exports.BattleMovedex = {
 					return;
 				}
 				// We check if leeched Pokémon has Toxic to increase leeched damage.
-				var toxicCounter = pokemon.volatiles['residualdmg'] ? pokemon.volatiles['residualdmg'].counter : 1;
-				var toLeech = this.clampIntRange(pokemon.maxhp / 16, 1) * toxicCounter;
+				var toxicCounter = 1;
+				if (pokemon.volatiles['residualdmg']) {
+					if (pokemon.status === 'tox') pokemon.volatiles['residualdmg'].counter++;
+					toxicCounter = pokemon.volatiles['residualdmg'].counter;
+				}
+				var toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
 				var damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) this.heal(damage, leecher, pokemon);
 			}
