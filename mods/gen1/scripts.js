@@ -859,7 +859,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-		target.battle.lastDamage = damage;
+		if (!(effect.id in {'recoil':1, 'drain':1})) target.battle.lastDamage = damage;
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;
 		var name = effect.fullname;
@@ -886,8 +886,9 @@ exports.BattleScripts = {
 			this.heal(this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
 		}
 
-		if (target.fainted) {
+		if (target.fainted || target.hp <= 0) {
 			this.faint(target);
+			this.queue = [];
 		} else {
 			damage = this.runEvent('AfterDamage', target, source, effect, damage);
 		}
