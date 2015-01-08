@@ -1070,7 +1070,7 @@ exports.BattleScripts = {
 				if (move.accuracy && move.accuracy !== true && move.accuracy < 90) {
 					counter['inaccurate']++;
 				}
-				var PhysicalSetup = {swordsdance:1};
+				var PhysicalSetup = {swordsdance:1, sharpen:1};
 				var SpecialSetup = {amnesia:1};
 				var MixedSetup = {growth:1};
 				if (PhysicalSetup[moveid]) {
@@ -1132,6 +1132,9 @@ exports.BattleScripts = {
 				case 'softboiled':
 					if (hasMove['recover']) rejected = true;
 					break;
+				case 'sharpen':
+					if (counter['Special'] > counter['Physical']) rejected = true;
+					break;
 				} // End of switch for moveid
 				if (setupType === 'Physical' && move.category !== 'Physical' && counter['Physical'] < 2) {
 					rejected = true;
@@ -1144,6 +1147,7 @@ exports.BattleScripts = {
 					moves.splice(k, 1);
 					break;
 				}
+				counter[move.category]++;
 			} // End of for
 		} while (moves.length < 4 && j < moveKeys.length);
 
