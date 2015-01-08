@@ -165,7 +165,6 @@ exports.BattleScripts = {
 		}
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.runEvent('AfterMove', target, pokemon, move);
-		this.runEvent('AfterMoveSelf', pokemon, target, move);
 
 		// If rival fainted
 		if (target.hp <= 0) {
@@ -174,6 +173,8 @@ exports.BattleScripts = {
 			// We remove screens
 			target.side.removeSideCondition('reflect');
 			target.side.removeSideCondition('lightscreen');
+		} else {
+			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
 
 		// For partial trapping moves, we are saving the target
