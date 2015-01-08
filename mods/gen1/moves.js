@@ -698,6 +698,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 65
 	},
+	sandattack: {
+		inherit: true,
+		affectedByImmunities: false,
+		type: "Normal"
+	},
 	seismictoss: {
 		inherit: true,
 		affectedByImmunities: false,
