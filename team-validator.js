@@ -677,6 +677,8 @@ Validator = (function () {
 								}
 								// chainbreeding with itself from earlier gen
 								if (!atLeastOne) sources.push(learned + template.id);
+								// Egg move tradeback for gens 1 and 2.
+								if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
 							} else if (learned.charAt(1) === 'S') {
 								// Event Pokémon:
 								//	Available as long as the past gen can get the Pokémon and then trade it back.
