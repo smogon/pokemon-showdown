@@ -1161,7 +1161,7 @@ exports.BattleScripts = {
 		// Really bad Pokemon and jokemons and MEWTWO.
 		var customScale = {
 			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99,
-			Clefairy: 95, "Farfetch'd": 95, Jigglypuff: 95, Mewtwo: 65
+			Clefairy: 95, "Farfetch'd": 95, Jigglypuff: 95, Mewtwo: 71
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
