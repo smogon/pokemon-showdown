@@ -2968,7 +2968,7 @@ exports.BattleScripts = {
 				set.species = toId(set.name);
 				set.name = 'SkynetBot ' + names[i];
 				if (bots[i] === 'rotomfan') set.item = 'Life Orb';
-				set.ivs.spe = 0;
+				set.ivs.spe = set.ivs.spe % 2;
 				set.evs.spe = 0;
 				team.push(set);
 			}
@@ -3047,7 +3047,7 @@ exports.BattleScripts = {
 					set.nature = 'Brave';
 				}
 				set.evs.spe = 0;
-				set.ivs.spe = 0;
+				set.ivs.spe = set.ivs.spe % 2;
 				team.push(set);
 			}
 			if (makeZamSet) {
