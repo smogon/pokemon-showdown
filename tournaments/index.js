@@ -133,6 +133,7 @@ Tournament = (function () {
 		this.room.send('|tournament|update|' + JSON.stringify({generator: generator.name}));
 		this.isBracketInvalidated = true;
 		this.update();
+		return true;
 	};
 
 	Tournament.prototype.forceEnd = function () {
@@ -769,7 +770,15 @@ var commands = {
 				return this.sendReply("Usage: " + cmd + " <type> [, <comma-separated arguments>]");
 			}
 			var generator = createTournamentGenerator(params.shift(), params, this);
-			if (generator) tournament.setGenerator(generator, this);
+			if (generator && tournament.setGenerator(generator, this)) {
+				if (params[2] && parseInt(params[2]) >= 2) {
+					tournament.playerCap = parseInt(params[2]);
+					if (Config.tournamentDefaultPlayerCap && tournament.playerCap > Config.tournamentDefaultPlayerCap) {
+						ResourceMonitor.log('[ResourceMonitor] Room ' + tournament.room.id + ' starting a tour over default cap (' + tournament.playerCap + ')');
+					}
+				}
+				this.sendReply("Tournament set to " + generator.name + (params[2] ? " with a player cap of " + tournament.playerCap : "") + ".");
+			}
 		},
 		begin: 'start',
 		start: function (tournament, user) {
