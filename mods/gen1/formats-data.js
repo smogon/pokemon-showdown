@@ -201,7 +201,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	primeape: {
-		randomBattleMoves: ["submission","rockslide","bodyslam","focusenergy","hyperbeam"],
+		randomBattleMoves: ["submission","rockslide","bodyslam","hyperbeam","megakick"],
 		tier: "UU"
 	},
 	growlithe: {
@@ -365,7 +365,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	exeggutor: {
-		randomBattleMoves: ["sleeppowder","psychic","explosion","doubleedge","megadrain","stunspore"],
+		randomBattleMoves: ["sleeppowder","psychic","explosion","eggbomb","hyperbeam","megadrain","stunspore"],
 		tier: "OU"
 	},
 	cubone: {
@@ -492,7 +492,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	flareon: {
-		randomBattleMoves: ["fireblast","bodyslam","hyperbeam","focusenergy","quickattack"],
+		randomBattleMoves: ["fireblast","bodyslam","hyperbeam","quickattack"],
 		tier: "UU"
 	},
 	porygon: {
