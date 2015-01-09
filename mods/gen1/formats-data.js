@@ -115,8 +115,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	nidorino: {
-		randomBattleMoves: ["earthquake","blizzard","thunder","thunderbolt","bodyslam"],
-		tier: "UU"
+		randomBattleMoves: ["blizzard","thunder","thunderbolt","bodyslam"],
+		tier: "NFE"
 	},
 	nidoking: {
 		randomBattleMoves: ["earthquake","blizzard","thunder","thunderbolt","bodyslam"],
