@@ -170,6 +170,7 @@ exports.BattleScripts = {
 		if (target.hp <= 0) {
 			// We remove recharge
 			if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
+			delete pokemon.volatiles['partialtrappinglock'];
 			// We remove screens
 			target.side.removeSideCondition('reflect');
 			target.side.removeSideCondition('lightscreen');
