@@ -48,6 +48,9 @@ rhcApp.writefilesync( ddir + 'usergroups.csv', 'config/usergroups.csv');
 rhcApp.writefilesync( ddir + 'chatrooms.json', 'config/chatrooms.json');
 rhcApp.writefilesync( ddir + 'config.js', 'config/config.js');
 rhcApp.writefilesync( ddir + 'custom.css', 'config/custom.css');
+fs.readdirSync(ddir + 'avatars').forEach(function (pic) {
+		rhcApp.writefilesync( ddir + 'avatars/' + pic , './config/avatars/' + pic );
+	});
 
 rhcApp.setupwatch( 'config/usergroups.csv', ddir + 'usergroups.csv');
 rhcApp.setupwatch( 'config/chatrooms.json', ddir + 'chatrooms.json');
