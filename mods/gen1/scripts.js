@@ -1178,10 +1178,6 @@ exports.BattleScripts = {
 			gender: false
 		};
 	},
-	faint: function (pokemon, source, effect) {
-		pokemon.faint(source, effect);
-		this.queue = [];
-	},
 	directDamage: function (damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
