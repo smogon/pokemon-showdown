@@ -131,6 +131,17 @@ var commands = exports.commands = {
 			case 'me':
 			case 'announce':
 			case 'invite':
+				var targetRoomid = toId(target.substr(8));
+				if (targetRoomid === 'global') return false;
+
+				var targetRoom = Rooms.search(targetRoomid) || Simulator.battles[targetRoomid];
+				if (!targetRoom) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text The room '" + targetRoomid + "' does not exist.");
+				if (targetRoom.staffRoom && !targetUser.isStaff) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text User '" + this.targetUsername + "' requires global auth to join room '" + targetRoom.id + "'.");
+				if (targetRoom.isPrivate && !((targetRoom.auth && targetRoom.auth[user.userid]) || targetUser.can('bypassall'))) {
+					return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text The room '" + targetRoomid + "' does not exist.");
+				}
+
+				target = '/invite ' + targetRoom.id;
 				break;
 			default:
 				return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text The command '/" + targetCmd + "' was unrecognized or unavailable in private messages. To send a message starting with '/" + targetCmd + "', type '//" + targetCmd + "'.");
@@ -189,8 +200,26 @@ var commands = exports.commands = {
 		return this.sendReply("The room '" + target + "' isn't registered.");
 	},
 
-	privateroom: function (target, room, user) {
-		if (!this.can('privateroom', null, room)) return;
+	hideroom: 'privateroom',
+	hiddenroom: 'privateroom',
+	privateroom: function (target, room, user, connection, cmd) {
+		var setting;
+		switch (cmd) {
+		case 'privateroom':
+			if (!this.can('makeroom')) return;
+			setting = true;
+			break;
+		default:
+			if (!this.can('privateroom', null, room)) return;
+			if (room.isPrivate === true) {
+				if (this.can('makeroom'))
+					this.sendReply("This room is a secret room. Use /privateroom to toggle instead.");
+				return;
+			}
+			setting = 'hidden';
+			break;
+		}
+
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand("" + user.name + " made this room public.");
@@ -199,10 +228,10 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			room.isPrivate = true;
-			this.addModCommand("" + user.name + " made this room private.");
+			room.isPrivate = setting;
+			this.addModCommand("" + user.name + " made this room " + (setting === true ? 'secret' : setting) + ".");
 			if (room.chatRoomData) {
-				room.chatRoomData.isPrivate = true;
+				room.chatRoomData.isPrivate = setting;
 				Rooms.global.writeChatRoomData();
 			}
 		}
@@ -233,7 +262,7 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 			if (!room.modchat) this.parse('/modchat ' + Config.groupsranking[1]);
-			if (!room.isPrivate) this.parse('/privateroom');
+			if (!room.isPrivate) this.parse('/hiddenroom');
 		}
 	},
 
@@ -619,7 +648,10 @@ var commands = exports.commands = {
 			if (targetRoom.modjoin && !user.can('bypassall')) {
 				var userGroup = user.group;
 				if (targetRoom.auth) {
-					userGroup = targetRoom.auth[user.userid] || ' ';
+					if (targetRoom.isPrivate === true) {
+						userGroup = ' ';
+					}
+					userGroup = targetRoom.auth[user.userid] || userGroup;
 				}
 				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(targetRoom.modjoin !== true ? targetRoom.modjoin : targetRoom.modchat)) {
 					return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
@@ -662,7 +694,7 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
-		if (room.isPrivate && room.auth) {
+		if (room.isPrivate === true && room.auth) {
 			return this.sendReply("You can't warn here: This is a privately-owned room not subject to global rules.");
 		}
 		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
@@ -1955,14 +1987,6 @@ var commands = exports.commands = {
 				avatar: targetUser.avatar,
 				rooms: roomList
 			};
-			if (user.can('ip', targetUser)) {
-				var ips = Object.keys(targetUser.ips);
-				if (ips.length === 1) {
-					userdetails.ip = ips[0];
-				} else {
-					userdetails.ips = ips;
-				}
-			}
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
 		} else if (cmd === 'roomlist') {
 			if (!trustable) return false;

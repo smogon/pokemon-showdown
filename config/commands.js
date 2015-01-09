@@ -166,7 +166,8 @@ var commands = exports.commands = {
 	rooms: 'whois',
 	alt: 'whois',
 	alts: 'whois',
-	whois: function (target, room, user) {
+	whoare: 'whois',
+	whois: function (target, room, user, connection, cmd) {
 		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
@@ -212,22 +213,34 @@ var commands = exports.commands = {
 		if (!targetUser.authenticated) {
 			this.sendReply("(Unregistered)");
 		}
-		if (user.can('ip', targetUser) || user === targetUser) {
+		if ((cmd === 'ip' || cmd === 'whoare') && (user.can('ip', targetUser) || user === targetUser)) {
 			var ips = Object.keys(targetUser.ips);
 			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ") +
 					(user.group !== ' ' && targetUser.latestHost ? "\nHost: " + targetUser.latestHost : ""));
 		}
-		var output = "In rooms: ";
+		var publicrooms = "In rooms: ";
+		var hiddenrooms = "In hidden rooms: ";
 		var first = true;
+		var hiddencount = 0;
 		for (var i in targetUser.roomCount) {
 			var targetRoom = Rooms.get(i);
-			if (i === 'global' || targetRoom.isPrivate) continue;
-			if (!first) output += " | ";
-			first = false;
+			if (i === 'global' || targetRoom.isPrivate === true) continue;
 
-			output += (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			var output = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			if (targetRoom.isPrivate) {
+				if (hiddencount > 0) hiddenrooms += " | ";
+				++hiddencount;
+				hiddenrooms += output;
+			} else {
+				if (!first) publicrooms += " | ";
+				first = false;
+				publicrooms += output;
+			}
 		}
-		this.sendReply('|raw|' + output);
+		this.sendReply('|raw|' + publicrooms);
+		if (cmd === 'whoare' && user.can('lock') && hiddencount > 0) {
+			this.sendReply('|raw|' + hiddenrooms);
+		}
 	},
 
 	ipsearch: function (target, room, user) {
@@ -409,7 +422,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help dexsearch');
 		var targets = target.split(',');
 		var searches = {};
-		var allTiers = {'uber':1, 'ou':1, 'uu':1, 'lc':1, 'cap':1, 'bl':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1, 'pu':1, 'nfe':1};
+		var allTiers = {'uber':1, 'ou':1, 'bl':1, 'uu':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1, 'bl4':1, 'pu':1, 'nfe':1, 'lc':1, 'cap':1};
 		var allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 		var showAll = false;
 		var megaSearch = null;
@@ -1024,7 +1037,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'middlecup' || target === 'mc') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3494887/\">Middle Cup</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524287/\">Middle Cup</a><br />";
 		}
 		if (target === 'skybattle') {
 			matched = true;
@@ -1237,7 +1250,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'smogondoubles' || target === 'doubles') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523833/\">np: Doubles Stage 1</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3525739/\">np: Doubles Stage 1.5</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522814/\">Doubles Viability Rankings</a><br />";
 		}
@@ -1455,15 +1468,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to.");
 		}
-		if (target === 'rating' || target === 'ranking' || target === 'rank' || target === 'ladder') {
-			matched = true;
-			this.sendReply("/rating - Get your own rating.");
-			this.sendReply("/rating [username] - Get user's rating.");
-		}
-		if (target === 'nick') {
-			matched = true;
-			this.sendReply("/nick [new username] - Change your username.");
-		}
 		if (target === 'avatar') {
 			matched = true;
 			this.sendReply("/avatar [new avatar number] - Change your trainer sprite.");
@@ -1541,21 +1545,6 @@ var commands = exports.commands = {
 			this.sendReply("/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.");
 			this.sendReply("!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: + % @ & ~");
 		}
-		if (target === 'highlight') {
-			matched = true;
-			this.sendReply("Set up highlights:");
-			this.sendReply("/highlight add, word - add a new word to the highlight list.");
-			this.sendReply("/highlight list - list all words that currently highlight you.");
-			this.sendReply("/highlight delete, word - delete a word from the highlight list.");
-			this.sendReply("/highlight delete - clear the highlight list");
-		}
-		if (target === 'timestamps') {
-			matched = true;
-			this.sendReply("Set your timestamps preference:");
-			this.sendReply("/timestamps [all|lobby|pms], [minutes|seconds|off]");
-			this.sendReply("all - change all timestamps preferences, lobby - change only lobby chat preferences, pms - change only PM preferences");
-			this.sendReply("off - set timestamps off, minutes - show timestamps of the form [hh:mm], seconds - show timestamps of the form [hh:mm:ss]");
-		}
 		if (target === 'effectiveness' || target === 'matchup' || target === 'eff' || target === 'type') {
 			matched = true;
 			this.sendReply("/effectiveness OR /matchup OR /eff OR /type [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.");
@@ -1580,19 +1569,6 @@ var commands = exports.commands = {
 		if (target === 'pick' || target === 'pickrandom') {
 			matched = true;
 			this.sendReply("/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.");
-		}
-		if (target === 'join') {
-			matched = true;
-			this.sendReply("/join [roomname] - Attempts to join the room [roomname].");
-		}
-		if (target === 'ignore') {
-			matched = true;
-			this.sendReply("/ignore [user] - Ignores all messages from the user [user].");
-			this.sendReply("Note that staff messages cannot be ignored.");
-		}
-		if (target === 'unignore') {
-			matched = true;
-			this.sendReply("/unignore [user] - Removes user [user] from your ignore list.");
 		}
 		if (target === 'invite') {
 			matched = true;
@@ -1620,7 +1596,7 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ & ~");
 		}
-		if (target === 'kickbattle ') {
+		if (target === 'kickbattle') {
 			matched = true;
 			this.sendReply("/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ & ~");
 		}
@@ -1764,9 +1740,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/roomdeowner [username] - Removes [username]'s status as a room owner. Requires: ~");
 		}
-		if (target === 'privateroom') {
+		if (target === 'privateroom' || target === 'hiddenroom') {
 			matched = true;
 			this.sendReply("/privateroom [on/off] - Makes or unmakes a room private. Requires: ~");
+			this.sendReply("/hiddenroom [on/off] - Makes or unmakes a room hidden. Hidden rooms will maintain global ranks of users. Requires: \u2605 ~");
 		}
 
 		// overall

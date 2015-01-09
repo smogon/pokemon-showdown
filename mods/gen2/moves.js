@@ -24,7 +24,10 @@ exports.BattleMovedex = {
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			return false;
-		}
+		},
+		beforeTurnCallback: function () {},
+		onTryHit: function () {},
+		effect: {}
 	},
 	encore: {
 		inherit: true,
@@ -73,36 +76,27 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	explosion: {
+		inherit: true,
+		basePower: 250
+	},
 	leechseed: {
 		inherit: true,
-		onHit: function (target, source, move) {
-			if (!source || source.fainted || source.hp <= 0) {
-				// Well this shouldn't happen
-				this.debug('Nothing to leech into');
-				return;
-			}
-			if (target.newlySwitched && target.speed <= source.speed) {
-				var toLeech = this.clampIntRange(target.maxhp / 8, 1);
-				var damage = this.damage(toLeech, target, source, 'move: Leech Seed');
-				if (damage) {
-					this.heal(damage, source, target);
-				}
-			}
-		},
+		onHit: function () {},
 		effect: {
 			onStart: function (target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
 			onAfterMoveSelf: function (pokemon) {
-				var target = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
-				if (!target || target.fainted || target.hp <= 0) {
+				var leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
 				}
 				var toLeech = this.clampIntRange(pokemon.maxhp / 8, 1);
-				var damage = this.damage(toLeech, pokemon, target);
+				var damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) {
-					this.heal(damage, target, pokemon);
+					this.heal(damage, leecher, pokemon);
 				}
 			}
 		}
@@ -216,6 +210,10 @@ exports.BattleMovedex = {
 		},
 		priority: -1
 	},
+	selfdestruct: {
+		inherit: true,
+		basePower: 200
+	},
 	sleeptalk: {
 		inherit: true,
 		onHit: function (pokemon) {
@@ -271,6 +269,10 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
+				if (move.drain) {
+					this.add('-miss', source);
+					return null;
+				}
 				if (move.category === 'Status') {
 					var SubBlocked = {
 						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1, sketch:1
@@ -279,7 +281,7 @@ exports.BattleMovedex = {
 						// this is safe, move is a copy
 						delete move.volatileStatus;
 					}
-					if (move.status || (move.boosts && move.id !== 'swagger') || move.volatileStatus === 'confusion' || SubBlocked[move.id] || move.drain) {
+					if (move.status || (move.boosts && move.id !== 'swagger') || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
 						this.add('-activate', target, 'Substitute', '[block] ' + move.name);
 						return null;
 					}
@@ -314,6 +316,24 @@ exports.BattleMovedex = {
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'Substitute');
+			}
+		}
+	},
+	triattack: {
+		inherit: true,
+		secondary: {
+			chance: 20,
+			onHit: function (target, source) {
+				if (!target.hasType('Normal')) {
+					var result = this.random(3);
+					if (result === 0) {
+						target.trySetStatus('brn', source);
+					} else if (result === 1) {
+						target.trySetStatus('par', source);
+					} else {
+						target.trySetStatus('frz', source);
+					}
+				}
 			}
 		}
 	},
