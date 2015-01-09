@@ -670,7 +670,7 @@ exports.BattleScripts = {
 		if (!target || !target.hp) return 0;
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
-			damage = target.damage(damage, source, effect);
+		damage = target.damage(damage, source, effect);
 		// Now we sent the proper -damage.
 		switch (effect.id) {
 		case 'strugglerecoil':
