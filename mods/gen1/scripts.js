@@ -100,9 +100,6 @@ exports.BattleScripts = {
 				}
 			}
 			if (decision.choice === 'move') {
-				// On gen 1 moves are stored when they are chosen.
-				decision.side.lastMove = decision.move;
-				decision.pokemon.lastMove = decision.move;
 				if (this.getMove(decision.move).beforeTurnCallback) {
 					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc}, true);
 				}
@@ -162,6 +159,9 @@ exports.BattleScripts = {
 		if (lockedMove === true) lockedMove = false;
 		if (!lockedMove && !pokemon.volatiles['partialtrappinglock']) {
 			pokemon.deductPP(move, null, target);
+			// On gen 1 moves are stored when they are chosen and a PP is deducted.
+			pokemon.side.lastMove = move;
+			pokemon.lastMove = move;
 		}
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.runEvent('AfterMove', target, pokemon, move);
