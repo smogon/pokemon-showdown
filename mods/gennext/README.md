@@ -59,8 +59,8 @@ Major changes:
   It doubles its SpA, SpD, and Spe, and changes its type to the type of its
   Hidden Power.
 
-- Weather-inducing abilities now last for only 5 turns (or 8 with the right
-  item). Weather moves have +1 priority.
+- Weather moves, such as Sunny Day, Rain Dance, Hail, and Sandstorm have +1
+  Priority.
 
 - Forecast will make weather moves last forever. Cherrim will make Sunny Day
   last forever. Phione will make Rain Dance last forever. Cryogonal will make
@@ -77,6 +77,8 @@ Major changes:
 - Freezing doesn't have a 20% thaw chance. Instead, thawing happens at the end
   of the second turn. Because this new freeze effect is a nerf, Blizzard now
   has a 30% chance of inflicting freeze.
+
+- Swift Swim, Chlorophyll, and Sand Rush are nerfed to give a 1.5x speed buff instead.
 
 - Every Hidden Ability is released.
 
@@ -137,7 +139,7 @@ Major changes:
 
 - Twister is now a 80 base power Flying move with a 30% confusion chance
 
-- Hoopa and Volcanion are released
+- - Hoopa (both forms), Floette-Eternal-Flower, and Volcanion are released.
 
 New mechanic: Signature Pokemon:
 
@@ -299,7 +301,7 @@ Minor move changes:
 - Cut and Rock Smash are 50 base power and now have a 100% chance of
   lowering foe's Def
 
-- Drill Peck, Needle Arm, Attack Order, Leaf Blade, and Crabhammers's Base
+- Drill Peck, Needle Arm, Attack Order, and Leaf Blade's Base
   Powers are now 100
 
 - Stomp and Steamroller now have 100 Base Power and perfect accuracy to
@@ -371,7 +373,7 @@ Minor learnset changes:
 
 - Virizion gets Horn Leech
 
-- Milotic, Scolipede, and Steelix get Coil
+- Scolipede and Steelix get Coil
 
 - Spinda gets Superpower with no incompatibilities
 
@@ -409,6 +411,9 @@ Minor ability changes:
   Surf over Hydro Pump, other pokemon are recommended not to use
   Justified
 
+- Static, Poison Point, and Cute Charm now always activate on
+  contact.
+
 - Weak Armor reduces incoming move damage by 1/10 of the user's max HP
   and increases the user's Speed for the first hit after switch-in (and
   does not activate again until the next switch-in) instead of its
@@ -424,7 +429,7 @@ Minor ability changes:
 
 - Adaptability is now 1.33x to non-STAB moves instead of to STAB moves.
 
-- Crawdaunt is given Tough Claws to compensate
+- Crawdaunt is given Tough Claws instead of Adaptability to compensate.
 
 - Shadow Tag now lasts only one turn
 
@@ -501,8 +506,8 @@ Bans:
 
 Specifically, differences from regular OU:
 
-- unbanned: Gengarite, Kangaskhanite, Lucarionite, Blaziken, Genesect
+- unbanned: Gengarite, Kangaskhanite, Lucarionite, Blaziken, Genesect, Mawilite, Salamencite
 
-- banned: Kyurem, Kyurem-Black
+- banned: Kyurem, Kyurem-Black, Aegislash
 
 - There is no Moody Clause or Evasion Clause
