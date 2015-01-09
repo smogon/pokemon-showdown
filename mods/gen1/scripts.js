@@ -1140,7 +1140,7 @@ exports.BattleScripts = {
 					break;
 				case 'sharpen':
 				case 'swordsdance':
-					if (counter['Special'] > counter['Physical'] || hasMove['slash']) rejected = true;
+					if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical']) rejected = true;
 					break;
 				case 'doubleedge':
 					if (hasMove['bodyslam']) rejected = true;
