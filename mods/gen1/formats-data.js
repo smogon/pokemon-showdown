@@ -16,7 +16,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	charizard: {
-		randomBattleMoves: ["fireblast","earthquake","swordsdance","bodyslam","hyperbeam"],
+		randomBattleMoves: ["fireblast","earthquake","bodyslam","swordsdance","hyperbeam"],
 		tier: "UU"
 	},
 	squirtle: {
@@ -63,7 +63,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	raticate: {
-		randomBattleMoves: ["superfang","hyperbeam","bodyslam","blizzard","bubblebeam"],
+		randomBattleMoves: ["superfang","bodyslam","hyperbeam","blizzard","bubblebeam"],
 		tier: "UU"
 	},
 	spearow: {
@@ -106,16 +106,17 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	nidorina: {
-		tier: "UU"
+		tier: "NFE"
 	},
 	nidoqueen: {
+		randomBattleMoves: ["earthquake","blizzard","thunder","thunderbolt","bodyslam"],
 		tier: "UU"
 	},
 	nidoranm: {
 		tier: "LC"
 	},
 	nidorino: {
-		randomBattleMoves: ["blizzard","thunder","thunderbolt","bodyslam"],
+		randomBattleMoves: ["blizzard","thunder","thunderbolt","bodyslam","bubblebeam","doubleedge","leer","rest","substitute"],
 		tier: "NFE"
 	},
 	nidoking: {
@@ -140,6 +141,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	wigglytuff: {
+		randomBattleMoves: ["thunderwave","bodyslam","doubleedge","hyperbeam","blizzard","bubblebeam"],
 		tier: "UU"
 	},
 	zubat: {
@@ -333,7 +335,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	gengar: {
-		randomBattleMoves: ["hypnosis","explosion","thunderbolt","megadrain"],
+		randomBattleMoves: ["hypnosis","explosion","thunderbolt","megadrain","counter","psychic"],
 		tier: "OU"
 	},
 	onix: {
@@ -463,6 +465,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	magikarp: {
+		randomBattleMoves: ["splash","dragonrage"],
 		eventPokemon: [
 			{"generation":1,"level":5,"moves":["dragonrage"]}
 		],
@@ -496,7 +499,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	porygon: {
-		randomBattleMoves: ["thunderwave","thunderbolt","blizzard","icebeam","doubleedge","hyperbeam","sharpen","psychic","recover","agility"],
+		randomBattleMoves: ["thunderwave","thunderbolt","blizzard","icebeam","doubleedge","hyperbeam","sharpen","psychic","recover","agility","triattack"],
 		tier: "UU"
 	},
 	omanyte: {

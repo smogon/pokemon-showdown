@@ -1040,6 +1040,8 @@ exports.BattleScripts = {
 		var hasMove = {};
 		var counter = {};
 		var setupType = '';
+		var healingMoves = (moveKeys.indexOf('recover') > -1 || moveKeys.indexOf('softboiled') > -1);
+		var hasHealing = false;
 
 		var j = 0;
 		do {
@@ -1083,6 +1085,9 @@ exports.BattleScripts = {
 				if (MixedSetup[moveid]) {
 					counter['mixedsetup']++;
 				}
+				if (move.heal) {
+					hasHealing = true;
+				}
 			}
 
 			if (counter['mixedsetup']) {
@@ -1104,7 +1109,6 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade':
 					if (setupType) rejected = true;
 					break;
-
 				// bit redundant to have both
 				case 'flamethrower':
 					if (hasMove['fireblast']) rejected = true;
@@ -1134,13 +1138,54 @@ exports.BattleScripts = {
 					if (hasMove['recover']) rejected = true;
 					break;
 				case 'sharpen':
-					if (counter['Special'] > counter['Physical']) rejected = true;
+				case 'swordsdance':
+					if (counter['Special'] > counter['Physical'] || hasMove['slash']) rejected = true;
+					break;
+				case 'doubleedge':
+					if (hasMove['bodyslam']) rejected = true;
+					break;
+				case 'mimic':
+					if (hasMove['mirrormove']) rejected = true;
+					break;
+				case 'superfang':
+					if (hasMove['bodyslam']) rejected = true;
+					break;
+				case 'rockslide':
+					if (hasMove['earthquake'] && hasMove['bodyslam'] && hasMove['hyperbeam']) rejected = true;
+					break;
+				case 'bodyslam':
+					if (hasMove['thunderwave']) rejected = true;
+					break;
+				case 'bubblebeam':
+					if (hasMove['blizzard']) rejected = true;
+					break;
+				case 'screech':
+					if (hasMove['slash']) rejected = true;
+					break;
+				case 'slash':
+					if (setupType === 'Physical') rejected = true;
+					break;
+				case 'megakick':
+					if (hasMove['bodyslam']) rejected = true;
+					break;
+				case 'eggbomb':
+					if (hasMove['hyperbeam']) rejected = true;
+					break;
+				case 'triattack':
+					if (hasMove['doubleedge']) rejected = true;
+					break;
+				case 'growth':
+					if (hasMove['swordsdance'] || hasMove['amnesia']) rejected = true;
 					break;
 				} // End of switch for moveid
 				if (setupType === 'Physical' && move.category !== 'Physical' && counter['Physical'] < 2) {
 					rejected = true;
 				}
 				if (setupType === 'Special' && move.category !== 'Special' && counter['Special'] < 2) {
+					rejected = true;
+				}
+				// Make sure mons with Recover and Softboiled always get it.
+				if (healingMoves && !hasHealing) {
 					rejected = true;
 				}
 
@@ -1154,6 +1199,7 @@ exports.BattleScripts = {
 
 		var levelScale = {
 			LC: 92,
+			NFE: 88,
 			UU: 86,
 			OU: 82,
 			Uber: 78
