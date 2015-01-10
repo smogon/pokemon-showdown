@@ -130,8 +130,9 @@ var commands = exports.commands = {
 			switch (targetCmd) {
 			case 'me':
 			case 'announce':
+				break;
 			case 'invite':
-				var targetRoomid = toId(target.substr(8));
+				var targetRoomid = toId(target.substr(targetCmdIndex + 1));
 				if (targetRoomid === 'global') return false;
 
 				var targetRoom = Rooms.search(targetRoomid) || Simulator.battles[targetRoomid];
