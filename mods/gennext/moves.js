@@ -1427,7 +1427,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'hitmontop') return this.chainModify(1.5);
 		},
-		accuracy: 90
+		accuracy: 100
 	},
 	mudshot: {
 		inherit: true,
