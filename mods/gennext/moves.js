@@ -1013,10 +1013,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: true
 	},
-	triplekick: {
-		inherit: true,
-		accuracy: true
-	},
 	watershuriken: {
 		inherit: true,
 		accuracy: true
@@ -1404,6 +1400,14 @@ exports.BattleMovedex = {
 			if (user.template.id === 'galvantula') return this.chainModify(1.5);
 		},
 		accuracy: 100
+	},
+	triplekick: {
+		inherit: true,
+		basePower: 10,
+		onBasePower: function (power, user) {
+			if (user.template.id === 'hitmontop') return this.chainModify(1.5);
+		},
+		accuracy: true
 	},
 	gigadrain: {
 		inherit: true,

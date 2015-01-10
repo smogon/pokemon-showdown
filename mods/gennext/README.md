@@ -166,6 +166,8 @@ New mechanic: Signature Pokemon:
 
   - Eelektross: Spark
 
+  - Hitmontop: Triple Kick
+
   - Kingdra: BubbleBeam (30% -1 Spe)
 
   - Galvantula: Electroweb (60 base power, 100% accuracy)
@@ -360,6 +362,8 @@ Minor learnset changes:
   Lock-On, Acid Spray, Octazooka, Stockpile
 
 - Masquerain gets Surf
+
+- Pidgeot gets Focus Blast
 
 - Butterfree, Beautifly, Masquerain, and Mothim get Hurricane
 

@@ -18,6 +18,9 @@ exports.BattleScripts = {
 		// Meloetta: Fiery Dance
 		this.modData('Learnsets', 'meloetta').learnset.fierydance = ['5L100'];
 
+		// Pidgeot: Focus Blast
+		this.modData('Learnsets', 'pidgeot').learnset.focusblast = ['5L100'];
+
 		// Galvantula: Zap Cannon
 		this.modData('Learnsets', 'galvantula').learnset.zapcannon = ['5L100'];
 
