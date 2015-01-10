@@ -24,6 +24,9 @@ exports.BattleScripts = {
 		// Virizion: Horn Leech
 		this.modData('Learnsets', 'virizion').learnset.hornleech = ['5L100'];
 
+		// Pidgeot: Focus Blast
+		this.modData('Learnsets', 'pidgeot').learnset.focusblast = ['5L100'];
+
 		// Scolipede, Milotic, Steelix: Coil
 		this.modData('Learnsets', 'milotic').learnset.coil = ['5L100'];
 		this.modData('Learnsets', 'scolipede').learnset.coil = ['5L100'];

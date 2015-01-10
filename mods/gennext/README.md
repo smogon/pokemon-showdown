@@ -186,6 +186,8 @@ New mechanic: Signature Pokemon:
 
   - Weavile: Ice Shard
 
+  - Hitmontop: Triple Kick
+
   - Sharpedo: Aqua Jet
 
   - Hitmonchan: Mach Punch
@@ -368,6 +370,8 @@ Minor learnset changes:
 - Meloetta gets Fiery Dance
 
 - Galvantula gets Zap Cannon
+
+- Pidgeot gets Focus Blast
 
 - Virizion gets Horn Leech
 
