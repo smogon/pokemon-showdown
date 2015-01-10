@@ -126,7 +126,7 @@ exports.BattleScripts = {
 					targets.push(foeActive[i]);
 				}
 			}
-			if (move.selfdestruct && this.gen >= 5) {
+			if (move.selfdestruct) {
 				this.faint(pokemon, pokemon, move);
 			}
 			if (!targets.length) {

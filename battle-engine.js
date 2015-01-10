@@ -314,6 +314,7 @@ BattlePokemon = (function () {
 	BattlePokemon.prototype.maxhp = 100;
 	BattlePokemon.prototype.illusion = null;
 	BattlePokemon.prototype.fainted = false;
+	BattlePokemon.prototype.faintQueued = false;
 	BattlePokemon.prototype.lastItem = '';
 	BattlePokemon.prototype.ateBerry = false;
 	BattlePokemon.prototype.status = '';
@@ -785,11 +786,11 @@ BattlePokemon = (function () {
 		// This function only puts the pokemon in the faint queue;
 		// actually setting of this.fainted comes later when the
 		// faint queue is resolved.
-		if (this.fainted || this.status === 'fnt') return 0;
+		if (this.fainted || this.faintQueued) return 0;
 		var d = this.hp;
 		this.hp = 0;
 		this.switchFlag = false;
-		this.status = 'fnt';
+		this.faintQueued = true;
 		this.battle.faintQueue.push({
 			target: this,
 			source: source,
@@ -3137,6 +3138,7 @@ Battle = (function () {
 		function check(a) {
 			if (!a) return;
 			if (a.fainted) {
+				a.status = 'fnt';
 				a.switchFlag = true;
 			}
 		}
