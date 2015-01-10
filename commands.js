@@ -130,6 +130,7 @@ var commands = exports.commands = {
 			switch (targetCmd) {
 			case 'me':
 			case 'announce':
+				break;
 			case 'invite':
 				var targetRoomid = toId(target.substr(8));
 				if (targetRoomid === 'global') return false;
@@ -137,7 +138,8 @@ var commands = exports.commands = {
 				var targetRoom = Rooms.search(targetRoomid) || Simulator.battles[targetRoomid];
 				if (!targetRoom) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text The room '" + targetRoomid + "' does not exist.");
 				if (targetRoom.staffRoom && !targetUser.isStaff) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text User '" + this.targetUsername + "' requires global auth to join room '" + targetRoom.id + "'.");
-				if (targetRoom.isPrivate && !((targetRoom.auth && targetRoom.auth[user.userid]) || targetUser.can('bypassall'))) {
+				if (targetRoom.isPrivate && targetRoom.modjoin &&
+						Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) || !targetUser.can('bypassall')) {
 					return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text The room '" + targetRoomid + "' does not exist.");
 				}
 
