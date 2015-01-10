@@ -462,10 +462,6 @@ exports.BattleScripts = {
 		// We are done, this is the final damage
 		return damage;
 	},
-	faint: function (pokemon, source, effect) {
-		pokemon.faint(source, effect);
-		this.queue = [];
-	},
 	getResidualStatuses: function (thing, callbackType) {
 		var statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
 		statuses.sort(this.comparePriority);
