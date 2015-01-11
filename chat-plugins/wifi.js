@@ -82,7 +82,7 @@ var QuestionGiveAway = (function () {
 			break;
 		case 'answer':
 			var ans = this.sanitizeAnswers(value);
-			if (Object.keys(ans).length <= 0) return output.sendReply("You must specify atleast one answer. Note: answers can be utmost 3 words long, and cannot contain any special characters.");
+			if (Object.keys(ans).length <= 0) return output.sendReply("You must specify atleast one answer. Note: answers can be utmost 3 words long.");
 
 			this.answers = ans;
 			output.sendReply("The answers have been changed to " + value + ".");
@@ -94,7 +94,7 @@ var QuestionGiveAway = (function () {
 		this.phase = 'started';
 		clearTimeout(this.startTimer); // just in case it was a force start.
 		this.room.addRaw('<div class = "broadcast-blue">Giveaway Question: <b>' + this.question + '</b><br/>' +
-			'use /gag answer to guess.');
+			'use /ga answer to guess.');
 		this.room.update();
 		this.endTimer = setTimeout(this.onEnd.bind(this), 1000 * 60 * 10);
 	};
@@ -129,7 +129,6 @@ var QuestionGiveAway = (function () {
 	QuestionGiveAway.sanitizeAnswers = function (target) {
 		var ret = {};
 		target.split("/").forEach(function (ans) {
-			ans = ans.replace(/[^a-z0-9 ]+/ig, "").trim();
 			if (!toId(ans)) return;
 			if (ans.split(' ').length > 3) return;
 			ret[toId(ans)] = ans;
@@ -387,7 +386,7 @@ var commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			'<strong><em><font size="2" color="red"><center>Wi-Fi Room Giveaway help</center></font></strong></em><br />' +
-			'Note that all commands start with \'/giveaway\', with the exception of /gag.<br /><br />' +
+			'Note that all commands start with \'/giveaway\', with the exception of /ga.<br /><br />' +
 			'<strong>Player commands:</strong><br />' +
 			'- guess <small>or</small> /gag <em>answer</em> - Guesses the answer for a question giveaway<br />' +
 			'- viewanswer <small>or</small> answer - shows the answer in a question giveaway. (only to giveaway host/giver)<br />' +
@@ -407,7 +406,7 @@ var commands = {
 
 exports.commands = {
 	'giveaway': commands,
-	'gag': function (target) {
+	'ga': function (target) {
 		return this.parse('/giveaway guess ' + target);
 	}
 };
