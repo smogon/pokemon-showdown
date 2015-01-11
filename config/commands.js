@@ -955,11 +955,11 @@ var commands = exports.commands = {
 		target = toId(target);
 		var buffer = "";
 		var matched = false;
-		
+
 		if (target === 'all' && this.broadcasting) {
 			return this.sendReplyBox("You cannot broadcast informatiom about all Other Metagames at once.");
 		}
-		
+
 		if (!target || target === 'all') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/forums/206/\">Other Metagames Forum</a><br />";
@@ -1163,26 +1163,22 @@ var commands = exports.commands = {
 		target = target.toLowerCase();
 		var buffer = "";
 		var matched = false;
-		
+
 		if (target === 'all' && this.broadcasting) {
 			return this.sendReplyBox("You cannot broadcast all FAQs at once.");
 		}
-		
+
 		if (!target || target === 'all') {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq\">Frequently Asked Questions</a><br />";
 		}
-		if (target === 'all' || target === 'deviation') {
+		if (target === 'all' || target === 'elo') {
 			matched = true;
-			buffer += "<a href=\"https://www.smogon.com/sim/faq#deviation\">Why did this user gain or lose so many points?</a><br />";
+			buffer += "<a href=\"https://www.smogon.com/sim/faq#elo\">Why did this user gain or lose so many points?</a><br />";
 		}
 		if (target === 'all' || target === 'doubles' || target === 'triples' || target === 'rotation') {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#doubles\">Can I play doubles/triples/rotation battles here?</a><br />";
-		}
-		if (target === 'all' || target === 'randomcap') {
-			matched = true;
-			buffer += "<a href=\"https://www.smogon.com/sim/faq#randomcap\">What is this fakemon and what is it doing in my random battle?</a><br />";
 		}
 		if (target === 'all' || target === 'restarts') {
 			matched = true;
@@ -1204,6 +1200,18 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#customavatar\">How can I get a custom avatar?</a><br />";
 		}
+		if (target === 'all' || target === 'pm') {
+			matched = true;
+			buffer += "<a href=\"https://www.smogon.com/sim/faq#pm\">How can I send a user a private message?</a><br />";
+		}
+		if (target === 'all' || target === 'challenge') {
+			matched = true;
+			buffer += "<a href=\"https://www.smogon.com/sim/faq#challenge\">How can I battle a specific user?</a><br />";
+		}
+		if (target === 'all'  || target === 'gxe') {
+			matched = true;
+			buffer += "<a href=\"https://www.smogon.com/sim/faq#gxe\">What does GXE mean?</a><br />";
+		}
 		if (!matched) {
 			return this.sendReply("The FAQ entry '" + target + "' was not found. Try /faq for general help.");
 		}
@@ -1217,11 +1225,11 @@ var commands = exports.commands = {
 		target = toId(target);
 		var buffer = "";
 		var matched = false;
-		
+
 		if (target === 'all' && this.broadcasting) {
 			return this.sendReplyBox("You cannot broadcast information about all tiers at once.");
 		}
-		
+
 		if (!target || target === 'all') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/tiers/\">Smogon Tiers</a><br />";
