@@ -16,7 +16,7 @@ function checkAllAlts(user, list) {
 	return false;
 }
 
-var giveaways = exports.giveaways = {};
+var giveaway = exports.giveaway = null;
 
 var QuestionGiveAway = (function () {
 	function QuestionGiveAway(host, giver, room, options) {
@@ -82,7 +82,7 @@ var QuestionGiveAway = (function () {
 			break;
 		case 'answer':
 			var ans = this.sanitizeAnswers(value);
-			if (Object.keys(ans).length <= 0) return output.sendReply("You must specify atleast one answer. Note: answers can be utmost 3 words long, and cannot contain any special characters.");
+			if (Object.keys(ans).length <= 0) return output.sendReply("You must specify at least one answer. Note: answers can be utmost 3 words long, and cannot contain any special characters.");
 
 			this.answers = ans;
 			output.sendReply("The answers have been changed to " + value + ".");
@@ -94,7 +94,7 @@ var QuestionGiveAway = (function () {
 		this.phase = 'started';
 		clearTimeout(this.startTimer); // just in case it was a force start.
 		this.room.addRaw('<div class = "broadcast-blue">Giveaway Question: <b>' + this.question + '</b><br/>' +
-			'use /gag answer to guess.');
+			'use /ga to guess.');
 		this.room.update();
 		this.endTimer = setTimeout(this.onEnd.bind(this), 1000 * 60 * 10);
 	};
@@ -105,7 +105,7 @@ var QuestionGiveAway = (function () {
 			clearTimeout(this.endTimer);
 			this.room.addRaw('<b>The giveaway was forcibly ended.</b>');
 			this.room.update();
-			delete giveaways[this.room.id];
+			giveaway = null;
 			return;
 		}
 		this.phase = 'ended';
@@ -118,11 +118,11 @@ var QuestionGiveAway = (function () {
 				ans.push(this.answers[i]);
 			}
 			this.room.addRaw('<div class = "broadcast-blue"><b>' + Tools.escapeHTML(this.winner.name) + '</b> guessed the correct answer.</b> Congratulations!<br/>' +
-				"The correct answers are : " + ans.join(','));
-			if (this.winner.connected) this.winner.send('|popup|You have won the giveaway. PM **' + Tools.escapeHTML(this.giver.name) + '** to claim your reward!');
+				"Correct answer(s) : " + ans.join(','));
+			if (this.winner.connected) this.winner.popup('You have won the giveaway. PM **' + Tools.escapeHTML(this.giver.name) + '** to claim your reward!');
 		}
 		this.room.update();
-		delete giveaways[this.room.id];
+		giveaway = null;
 		return;
 	};
 
@@ -132,7 +132,7 @@ var QuestionGiveAway = (function () {
 			ans = ans.replace(/[^a-z0-9 ]+/ig, "").trim();
 			if (!toId(ans)) return;
 			if (ans.split(' ').length > 3) return;
-			ret[toId(ans)] = ans;
+			ret[toId(ans)] = ans.toLowerCase();
 		});
 		return ret;
 	};
@@ -217,7 +217,7 @@ var LotteryGiveAway = (function () {
 			clearTimeout(this.drawTimer);
 			this.room.addRaw('<b>The giveaway was forcibly ended, as enough users did not participate.</b>');
 			this.room.update();
-			delete giveaways[this.room.id];
+			giveaway = null;
 			return;
 		}
 		this.phase = 'ended';
@@ -238,7 +238,7 @@ var LotteryGiveAway = (function () {
 			this.giver.popup("The following users have won your lottery giveaway:\n" + finallist);
 		}
 
-		delete giveaways[this.room.id];
+		giveaway = null;
 		return;
 	};
 	return LotteryGiveAway;
@@ -249,11 +249,11 @@ var commands = {
 	quiz: 'qg',
 	question: 'qg',
 	qg: function (target, room, user) {
-		if (room.id !== 'wifi') return;
+		if (room.id !== 'wifi') return false;
 		if (!this.can('warn', null, room)) return false;
 		if (!room.auth || !room.auth[user.userid]) return this.sendReply("Only a room auth can start a giveaway.");
 		if (!target || target.indexOf(',') === -1) return false;
-		if (giveaways[room.id]) return this.sendReply('There is already a giveaway going on!');
+		if (giveaway) return this.sendReply('There is already a giveaway going on!');
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -266,25 +266,23 @@ var commands = {
 			question: target[1],
 			answers: QuestionGiveAway.sanitizeAnswers(target[2])
 		};
-		if (Object.keys(options.answers).length <= 0) return this.sendReply("You must specify atleast one answer. Note: answers can be utmost 3 words long, and cannot contain any special characters.");
+		if (Object.keys(options.answers).length <= 0) return this.sendReply("You must specify at least one answer. Note: answers can be utmost 3 words long, and cannot contain any special characters.");
 
-		giveaways[room.id] = new QuestionGiveAway(user, targetUser, room, options);
+		giveaway = new QuestionGiveAway(user, targetUser, room, options);
 		this.privateModCommand("(" + user.name + " has started a question giveaway.)");
 	},
 	changeanswer: 'changequestion',
 	changequestion: function (target, room, user, conn, cmd) {
-		if (room.id !== 'wifi') return;
-		var giveaway = giveaways[room.id];
+		if (room.id !== 'wifi') return false;
 		if (!giveaway) return this.sendReply('There is no giveaway going on at the moment.');
 		if (giveaway.type !== 'question') return this.sendReply('This is not a question giveaway.');
-		if (!target.trim()) return this.sendReply("You must mention a question.");
+		if (!target.trim()) return this.sendReply("You must mention a question/answer.");
 
 		giveaway.change(cmd.substr(6), target.trim(), user, this);
 	},
 	showanswer: 'viewanswer',
 	viewanswer: function (target, room, user) {
-		if (room.id !== 'wifi') return;
-		var giveaway = giveaways[room.id];
+		if (room.id !== 'wifi') return false;
 		if (!giveaway) return this.sendReply('There is no giveaway going on at the moment.');
 		if (giveaway.type !== 'question') return this.sendReply('This is not a question giveaway.');
 		if (user.userid !== giveaway.host.userid || user.userid !== giveaway.giver.userid) return;
@@ -298,8 +296,7 @@ var commands = {
 	},
 	guessanswer: 'guess',
 	guess: function (target, room, user) {
-		if (room.id !== 'wifi') return;
-		var giveaway = giveaways[room.id];
+		if (room.id !== 'wifi') return this.sendReply("This command can only be used in the Wi-Fi room.");
 		if (!giveaway) return this.sendReply('There is no giveaway going on at the moment.');
 		if (giveaway.type !== 'question') return this.sendReply('This is not a question giveaway.');
 
@@ -310,11 +307,11 @@ var commands = {
 	lg: 'lotto',
 	lottery: 'lotto',
 	lotto: function (target, room, user) {
-		if (room.id !== 'wifi') return;
+		if (room.id !== 'wifi') return false;
 		if (!this.can('warn', null, room)) return false;
 		if (!room.auth || !room.auth[user.userid]) return this.sendReply("Only a room auth can start a giveaway.");
 		if (!target || target.indexOf(',') === -1) return false;
-		if (giveaways[room.id]) return this.sendReply('There is already a giveaway going on!');
+		if (giveaway) return this.sendReply('There is already a giveaway going on!');
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -328,15 +325,14 @@ var commands = {
 		};
 		if (options.maxwinners > 5 || options.maxwinners < 1) return this.sendReply("The lottery giveaway can have a minimum of 1 and maximum of 5 winners.");
 
-		giveaways[room.id] = new LotteryGiveAway(user, targetUser, room, options);
+		giveaway = new LotteryGiveAway(user, targetUser, room, options);
 		this.privateModCommand("(" + user.name + " has started a lottery giveaway.)");
 	},
 	leavelottery: 'join',
 	leave: 'join',
 	joinlottery: 'join',
 	join: function (target, room, user, conn, cmd) {
-		if (room.id !== 'wifi') return;
-		var giveaway = giveaways[room.id];
+		if (room.id !== 'wifi') return this.sendReply("This command can only be used in the Wi-Fi room.");
 		if (!giveaway) return this.sendReply('There is no giveaway going on at the moment.');
 		if (giveaway.type !== 'lottery') return this.sendReply('This is not a lottery giveaway.');
 
@@ -354,8 +350,7 @@ var commands = {
 	// general.
 	stop: 'end',
 	end: function (target, room, user) {
-		if (room.id !== 'wifi') return;
-		var giveaway = giveaways[room.id];
+		if (room.id !== 'wifi') return this.sendReply("This command can only be used in the Wi-Fi room.");
 		if (!giveaway) return this.sendReply('There is no giveaway going on at the moment.');
 		if (!this.can('warn', giveaway.host, room) && user.userid !== giveaway.host.userid) return false;
 
@@ -363,8 +358,7 @@ var commands = {
 	},
 	rm: 'remind',
 	remind: function (target, room, user) {
-		if (room.id !== 'wifi') return;
-		var giveaway = giveaways[room.id];
+		if (room.id !== 'wifi') return this.sendReply("This command can only be used in the Wi-Fi room.");
 		if (!giveaway) return this.sendReply('There is no giveaway going on at the moment.');
 
 		switch (giveaway.type) {
@@ -383,31 +377,41 @@ var commands = {
 	},
 	'': 'help',
 	help: function (target, room, user) {
-		if (room.id !== 'wifi') return this.sendReply("This command can be used only in the Wi-Fi room.");
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox(
-			'<strong><em><font size="2" color="red"><center>Wi-Fi Room Giveaway help</center></font></strong></em><br />' +
-			'Note that all commands start with \'/giveaway\', with the exception of /gag.<br /><br />' +
-			'<strong>Player commands:</strong><br />' +
-			'- guess <small>or</small> /gag <em>answer</em> - Guesses the answer for a question giveaway<br />' +
-			'- viewanswer <small>or</small> answer - shows the answer in a question giveaway. (only to giveaway host/giver)<br />' +
-			'- remind - shows the details of a giveaway. (can be broadcast.)<br />' +
-			'- join <small>or</small> joinlottery - Joins a lottery giveaway.<br />' +
-			'- leave <small>or</small> leavelottery - Leaves a lottery giveaway.<br />' +
-			'<br />' +
-			'<strong>Staff commands:</strong><br />' +
-			'- question <small>or</small> qg <em>User, Prize, Question, Answer</em> - Start a new question giveaway (Requires: % @ #).<br />' +
-			'- lottery <small>or</small> lg <em>User, Prize, Number of Winners (optional)</em> - Starts a lotto giveaway. The number of winners is set to 1 by default. (Requires: % @ # & ~)<br />' +
-			'- changequestion - Changes the question of a question giveaway. Can only be done before the giveaway starts. (Requires: % @ #)<br />' +
-			'- changeanswer - Changes the answer of a question giveaway. (Requires: % @ #)<br />' +
-			'- end - Forcibly ends the current giveaway (Requires: % @ #)<br />'
-		);
+		if (room.id !== 'wifi') return this.sendReply("This command can only be used in the Wi-Fi room.");
+
+		var reply = '';
+		switch (target) {
+		case 'staff':
+			if (!this.can('warn', null, room)) return;
+			reply = '<strong>Staff commands:</strong><br />' +
+			        '- question or qg <em>User, Prize, Question, Answer</em> - Start a new question giveaway (Requires: % @ #).<br />' +
+			        '- lottery or lg <em>User, Prize[, Number of Winners]</em> - Starts a lottery giveaway (Requires: % @ #)<br />' +
+			        '- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
+			        '- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
+					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
+			        '- end - Forcibly ends the current giveaway (Requires: % @ #)<br />';
+			break;
+		case 'game':
+		case 'giveaway':
+			if (!this.canBroadcast()) return;
+			reply = '<strong>Giveaway participation commands: </strong> (start with /giveaway, except for /ga) <br />' +
+			        '- guess or /ga <em>answer</em> - Guesses the answer for a question giveaway<br />' +
+			        '- viewanswer - Shows the answer in a question giveaway (only to host/giver)<br />' +
+			        '- remind - Shows the details of the current giveaway (can be broadcast)<br />' +
+			        '- join or joinlottery - Joins a lottery giveaway<br />' +
+			        '- leave or leavelottery - Leaves a lottery giveaway<br />';
+			break;
+		default:
+			if (!this.canBroadcast()) return;
+			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
+			'- help giveaway - shows list of participation commands<br />' +
+			'- help staff - shows giveaway staff commands (Requires: % @ # & ~)';
+		}
+		this.sendReplyBox(reply);
 	}
 };
 
 exports.commands = {
 	'giveaway': commands,
-	'gag': function (target) {
-		return this.parse('/giveaway guess ' + target);
-	}
+	'ga': commands.answer
 };
