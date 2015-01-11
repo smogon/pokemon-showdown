@@ -413,5 +413,5 @@ var commands = {
 
 exports.commands = {
 	'giveaway': commands,
-	'ga': commands.answer
+	'ga': commands.guess
 };
