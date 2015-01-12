@@ -2571,7 +2571,7 @@ exports.BattleMovedex = {
 			},
 			onFaint: function (target, source, effect) {
 				if (!source || !effect) return;
-				if (effect.effectType === 'Move' && !effect.isFutureMove && target.lastMove === 'destinybond') {
+				if (effect.effectType === 'Move' && !effect.isFutureMove) {
 					this.add('-activate', target, 'Destiny Bond');
 					source.faint();
 				}
@@ -5612,9 +5612,8 @@ exports.BattleMovedex = {
 				this.add('-singlemove', pokemon, 'Grudge');
 			},
 			onFaint: function (target, source, effect) {
-				this.debug('Grudge detected fainted pokemon');
 				if (!source || !effect) return;
-				if (effect.effectType === 'Move' && target.lastMove === 'grudge') {
+				if (effect.effectType === 'Move' && !effect.isFutureMove) {
 					for (var i in source.moveset) {
 						if (source.moveset[i].id === source.lastMove) {
 							source.moveset[i].pp = 0;
@@ -5623,7 +5622,7 @@ exports.BattleMovedex = {
 					}
 				}
 			},
-			onBeforeMovePriority: -10,
+			onBeforeMovePriority: 100,
 			onBeforeMove: function (pokemon) {
 				this.debug('removing Grudge before attack');
 				pokemon.removeVolatile('grudge');
