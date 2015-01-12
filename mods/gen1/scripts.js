@@ -142,7 +142,8 @@ exports.BattleScripts = {
 		this.setActiveMove(move, pokemon, target);
 
 		if (pokemon.movedThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
-			this.debug('' + pokemon.id + ' move interrupted; movedThisTurn: ' + pokemon.movedThisTurn);
+			// Prevent invulnerability from persisting until the turn ends
+			pokemon.removeVolatile('twoturnmove');
 			this.clearActiveMove(true);
 			// This is only run for sleep
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -174,6 +175,7 @@ exports.BattleScripts = {
 			// We remove screens
 			target.side.removeSideCondition('reflect');
 			target.side.removeSideCondition('lightscreen');
+			pokemon.removeVolatile('twoturnmove');
 		} else {
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
