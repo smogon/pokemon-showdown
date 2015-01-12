@@ -5212,18 +5212,20 @@ exports.BattleFormatsData = {
 	},
 	hoopa: {
 		isUnreleased: true,
-		randomBattleMoves: ["calmmind","psychic","shadowball","focusblast","thunderwave","energyball","thunderbolt"],
-		randomDoubleBattleMoves: ["hyperspacehole","shadowball","focusblast","protect","thunderwave","energyball","thunderbolt"],
+		randomBattleMoves: ["nastyplot","psyshock","shadowball","focusblast","trick"],
+		randomDoubleBattleMoves: ["hyperspacehole","shadowball","focusblast","protect","psychic"],
 		tier: "Unreleased"
 	},
 	hoopaunbound: {
 		isUnreleased: true,
-		randomBattleMoves: ["calmmind","psychic","shadowball","focusblast","thunderwave","energyball","thunderbolt"],
-		randomDoubleBattleMoves: ["hyperspacehole","shadowball","focusblast","protect","thunderwave","energyball","thunderbolt"],
+		randomBattleMoves: ["nastyplot","psyshock","darkpulse","focusblast","hyperspacefury","zenheadbutt","icepunch","drainpunch","knockoff","trick"],
+		randomDoubleBattleMoves: ["psychic","darkpulse","focusblast","protect","hyperspacefury","zenheadbutt","icepunch","drainpunch"],
 		tier: "Unreleased"
 	},
 	volcanion: {
 		isUnreleased: true,
+		randomBattleMoves: ["substitute","steameruption","fireblast","sludgewave","hiddenpowerice","earthpower","superpower"],
+		randomDoubleBattleMoves: ["substitute","steameruption","heatwave","sludgewave","rockslide","earthquake","protect"],
 		tier: "Unreleased"
 	},
 	missingno: {
