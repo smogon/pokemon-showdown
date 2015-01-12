@@ -713,7 +713,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	farfetchd: {
-		randomBattleMoves: ["bravebird","swordsdance","return","leafblade","roost","knockoff"],
+		randomBattleMoves: ["bravebird","swordsdance","return","leafblade","roost","nightslash"],
 		randomDoubleBattleMoves: ["bravebird","swordsdance","return","leafblade","protect"],
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["yawn","wish"]},
