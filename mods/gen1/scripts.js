@@ -1017,15 +1017,59 @@ exports.BattleScripts = {
 		}
 		keys = keys.randomize();
 
-		var ruleset = this.getFormat().ruleset;
+		// Now let's store what we are getting.
+		var typeCount = {};
+		var uberCount = 0;
+		var nuCount = 0;
+		var hasMagikarp = false;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(keys[i]);
 			if (!template || !template.name || !template.types) continue;
-			var set = this.randomSet(template, i);
 
+			// Bias the tiers so you get less shitmons and only one of the two Ubers.
+			var tier = template.tier;
+			if (tier === 'LC' && nuCount > 1) continue;
+			if ((tier === 'NFE' || tier === 'UU') && nuCount > 2 && Math.random() * 5 > 1) continue;
+			// Unless you have Magikarp, in that case we allow luck to give you Mew and Mewtwo.
+			if (tier === 'Uber' && uberCount >= 1 && !hasMagikarp) continue;
+
+			// Limit 2 of any type. This helps so you don't get a full Surf or Blizzard weak team.
+			var types = template.types;
+			var skip = false;
+			for (var t = 0; t < types.length; t++) {
+				if (typeCount[types[t]] > 1) {
+					skip = true;
+					break;
+				}
+			}
+			if (skip) continue;
+
+			// The set passes the limitations.
+			var set = this.randomSet(template, i);
 			pokemon.push(set);
+
+			// Now let's increase the counters. First, the Pokémon left.
 			pokemonLeft++;
+
+			// Type counter.
+			for (var t = 0; t < types.length; t++) {
+				if (types[t] in typeCount) {
+					typeCount[types[t]]++;
+				} else {
+					typeCount[types[t]] = 1;
+				}
+			}
+
+			// Increment type bias counters.
+			if (tier === 'Uber') {
+				uberCount++;
+			} else if (tier === 'UU' || tier === 'NFE' || tier === 'LC') {
+				nuCount++;
+			}
+
+			// Is it Magikarp?
+			if (keys[i] === 'magikarp') hasMagikarp = true;
 		}
 
 		return pokemon;
