@@ -3,6 +3,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	ivysaur: {
+		randomBattleMoves: ["razorleaf","sleeppowder","swordsdance","bodyslam"],
 		tier: "UU"
 	},
 	venusaur: {
@@ -13,6 +14,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	charmeleon: {
+		randomBattleMoves: ["fireblast","earthquake","bodyslam","swordsdance","hyperbeam"],
 		tier: "UU"
 	},
 	charizard: {
@@ -23,6 +25,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	wartortle: {
+		randomBattleMoves: ["surf","blizzard","bodyslam","mimic"],
 		tier: "UU"
 	},
 	blastoise: {
@@ -67,6 +70,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	spearow: {
+		randomBattleMoves: ["drillpeck","doubleedge","hyperbeam","mirrormove"],
 		tier: "LC"
 	},
 	fearow: {
@@ -84,6 +88,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	pikachu: {
+		randomBattleMoves: ["thunderbolt","thunderwave","surf","bodyslam"],
 		eventPokemon: [
 			{"generation":1,"level":5,"moves":["surf"]},
 			{"generation":1,"level":5,"moves":["fly"]},
@@ -106,6 +111,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	nidorina: {
+		randomBattleMoves: ["blizzard","thunder","thunderbolt","bodyslam","bubblebeam","doubleedge","leer","rest","substitute"],
 		tier: "NFE"
 	},
 	nidoqueen: {
@@ -155,6 +161,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	gloom: {
+		randomBattleMoves: ["sleeppowder","swordsdance","bodyslam","megadrain"],
 		tier: "UU"
 	},
 	vileplume: {
@@ -230,6 +237,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	kadabra: {
+		randomBattleMoves: ["psychic","recover","thunderwave","reflect","seismictoss"],
 		tier: "UU"
 	},
 	alakazam: {
@@ -240,6 +248,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	machoke: {
+		randomBattleMoves: ["bodyslam","earthquake","hyperbeam","submission"],
 		tier: "UU"
 	},
 	machamp: {
@@ -267,6 +276,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	graveler: {
+		randomBattleMoves: ["bodyslam","earthquake","rockslide","explosion"],
 		tier: "UU"
 	},
 	golem: {
@@ -287,6 +297,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	slowbro: {
+		randomBattleMoves: ["amnesia","surf","thunderwave","rest"],
 		tier: "OU"
 	},
 	magnemite: {
