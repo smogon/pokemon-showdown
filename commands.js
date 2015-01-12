@@ -841,7 +841,7 @@ var commands = exports.commands = {
 		} else if (acAccount) {
 			this.privateModCommand("(" + targetUser.name + "'s ac account: " + acAccount + ")");
 		}
-		this.add('|unlink|' + this.getLastIdOf(targetUser));
+		this.add('|unlink|hide|' + this.getLastIdOf(targetUser));
 
 		targetUser.lock();
 	},
@@ -895,7 +895,7 @@ var commands = exports.commands = {
 			this.privateModCommand("(" + targetUser.name + "'s ac account: " + acAccount + ")");
 		}
 
-		this.add('|unlink|' + this.getLastIdOf(targetUser));
+		this.add('|unlink|hide|' + this.getLastIdOf(targetUser));
 		targetUser.ban();
 	},
 
