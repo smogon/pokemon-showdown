@@ -1584,9 +1584,13 @@ exports.BattleMovedex = {
 		isSnatchable: true,
 		onHit: function (target) {
 			var newType = 'Normal';
-			if (this.isTerrain('electricterrain')) newType = 'Electric';
-			else if (this.isTerrain('grassyterrain')) newType = 'Grass';
-			else if (this.isTerrain('mistyterrain')) newType = 'Fairy';
+			if (this.isTerrain('electricterrain')) {
+				newType = 'Electric';
+			} else if (this.isTerrain('grassyterrain')) {
+				newType = 'Grass';
+			} else if (this.isTerrain('mistyterrain')) {
+				newType = 'Fairy';
+			}
 
 			if (!target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
@@ -6041,8 +6045,11 @@ exports.BattleMovedex = {
 		flags: {protect: 1, pulse: 1, reflectable: 1, distance: 1, heal: 1},
 		isBounceable: true,
 		onHit: function (target, source) {
-			if (source.hasAbility('megalauncher')) this.heal(this.modify(target.maxhp, 0.75));
-			else this.heal(Math.ceil(target.maxhp * 0.5));
+			if (source.hasAbility('megalauncher')) {
+				this.heal(this.modify(target.maxhp, 0.75));
+			} else {
+				this.heal(Math.ceil(target.maxhp * 0.5));
+			}
 		},
 		secondary: false,
 		target: "any",
@@ -6732,8 +6739,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, distance: 1},
 		onModifyMove: function (move) {
-			if (this.isWeather(['raindance', 'primordialsea'])) move.accuracy = true;
-			else if (this.isWeather(['sunnyday', 'desolateland'])) move.accuracy = 50;
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				move.accuracy = true;
+			} else if (this.isWeather(['sunnyday', 'desolateland'])) {
+				move.accuracy = 50;
+			}
 		},
 		secondary: {
 			chance: 30,
@@ -9052,9 +9062,13 @@ exports.BattleMovedex = {
 		flags: {snatch: 1, heal: 1},
 		isSnatchable: true,
 		onHit: function (pokemon) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) this.heal(this.modify(pokemon.maxhp, 0.667));
-			else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
-			else this.heal(this.modify(pokemon.maxhp, 0.5));
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(this.modify(pokemon.maxhp, 0.667));
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(this.modify(pokemon.maxhp, 0.25));
+			} else {
+				this.heal(this.modify(pokemon.maxhp, 0.5));
+			}
 		},
 		secondary: false,
 		target: "self",
@@ -9075,9 +9089,13 @@ exports.BattleMovedex = {
 		flags: {snatch: 1, heal: 1},
 		isSnatchable: true,
 		onHit: function (pokemon) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) this.heal(this.modify(pokemon.maxhp, 0.667));
-			else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
-			else this.heal(this.modify(pokemon.maxhp, 0.5));
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(this.modify(pokemon.maxhp, 0.667));
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(this.modify(pokemon.maxhp, 0.25));
+			} else {
+				this.heal(this.modify(pokemon.maxhp, 0.5));
+			}
 		},
 		secondary: false,
 		target: "self",
@@ -9306,9 +9324,13 @@ exports.BattleMovedex = {
 		flags: {},
 		onHit: function (target, source) {
 			var moveToUse = 'triattack';
-			if (this.isTerrain('electricterrain')) moveToUse = 'thunderbolt';
-			else if (this.isTerrain('grassyterrain')) moveToUse = 'energyball';
-			else if (this.isTerrain('mistyterrain')) moveToUse = 'moonblast';
+			if (this.isTerrain('electricterrain')) {
+				moveToUse = 'thunderbolt';
+			} else if (this.isTerrain('grassyterrain')) {
+				moveToUse = 'energyball';
+			} else if (this.isTerrain('mistyterrain')) {
+				moveToUse = 'moonblast';
+			}
 
 			this.useMove(moveToUse, source, target);
 		},
@@ -14132,9 +14154,13 @@ exports.BattleMovedex = {
 		flags: {snatch: 1, heal: 1},
 		isSnatchable: true,
 		onHit: function (pokemon) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) this.heal(this.modify(pokemon.maxhp, 0.667));
-			else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) this.heal(this.modify(pokemon.maxhp, 0.25));
-			else this.heal(this.modify(pokemon.maxhp, 0.5));
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(this.modify(pokemon.maxhp, 0.667));
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(this.modify(pokemon.maxhp, 0.25));
+			} else {
+				this.heal(this.modify(pokemon.maxhp, 0.5));
+			}
 		},
 		secondary: false,
 		target: "self",
@@ -14519,8 +14545,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove: function (move) {
-			if (this.isWeather(['raindance', 'primordialsea'])) move.accuracy = true;
-			else if (this.isWeather(['sunnyday', 'desolateland'])) move.accuracy = 50;
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				move.accuracy = true;
+			} else if (this.isWeather(['sunnyday', 'desolateland'])) {
+				move.accuracy = 50;
+			}
 		},
 		secondary: {
 			chance: 30,
@@ -14980,16 +15009,16 @@ exports.BattleMovedex = {
 		basePowerCallback: function (pokemon) {
 			var move = pokemon.getMoveData(pokemon.lastMove); // Account for calling Trump Card via other moves
 			switch (move.pp) {
-				case 0:
-					return 200;
-				case 1:
-					return 80;
-				case 2:
-					return 60;
-				case 3:
-					return 50;
-				default:
-					return 40;
+			case 0:
+				return 200;
+			case 1:
+				return 80;
+			case 2:
+				return 60;
+			case 3:
+				return 50;
+			default:
+				return 40;
 			}
 		},
 		category: "Special",
