@@ -1234,6 +1234,7 @@ exports.BattleFormatsData = {
 	},
 	ditto: {
 		randomBattleMoves: ["transform"],
+		randomDoubleBattleMoves: ["transform"],
 		tier: "PU"
 	},
 	eevee: {
@@ -1321,6 +1322,7 @@ exports.BattleFormatsData = {
 	},
 	porygon2: {
 		randomBattleMoves: ["triattack","icebeam","recover","toxic","thunderwave","discharge","trick","shadowball","trickroom"],
+		randomDoubleBattleMoves: ["protect","trickroom","icebeam","recover","triattack","thunderbolt"],
 		tier: "UU"
 	},
 	porygonz: {
@@ -2126,6 +2128,7 @@ exports.BattleFormatsData = {
 	},
 	blaziken: {
 		randomBattleMoves: ["flareblitz","highjumpkick","protect","swordsdance","substitute","batonpass","stoneedge","knockoff"],
+		randomDoubleBattleMobes: ["protect","flareblitz","highjumpkick","stoneedge","swordsdance"],
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["blazekick","slash","mirrormove","skyuppercut"]},
 			{"generation":5,"level":50,"isHidden":false,"moves":["flareblitz","highjumpkick","thunderpunch","stoneedge"],"pokeball":"cherishball"}
@@ -2134,6 +2137,7 @@ exports.BattleFormatsData = {
 	},
 	blazikenmega: {
 		randomBattleMoves: ["flareblitz","highjumpkick","protect","swordsdance","substitute","batonpass","stoneedge","knockoff"],
+		randomDoubleBattleMobes: ["protect","flareblitz","highjumpkick","stoneedge","swordsdance"],
 		requiredItem: "Blazikenite"
 	},
 	mudkip: {
@@ -2868,6 +2872,7 @@ exports.BattleFormatsData = {
 	},
 	dusclops: {
 		randomBattleMoves: ["willowisp","shadowsneak","icebeam","painsplit","substitute","seismictoss","toxic","trickroom"],
+		randomDoubleBattleMoves: ["protect","painsplit","willowisp","seismictoss","trickroom","icebeam","toxic"],
 		tier: "NFE"
 	},
 	dusknoir: {
@@ -3036,7 +3041,7 @@ exports.BattleFormatsData = {
 	},
 	metagrossmega: {
 		randomBattleMoves: ["meteormash","earthquake","agility","zenheadbutt","thunderpunch","icepunch"],
-		randomDoubleBattleMoves: ["meteormash","earthquake","protect","zenheadbutt","thunderpunch","icepunch"],
+		randomDoubleBattleMoves: ["meteormash","earthquake","protect","zenheadbutt","thunderpunch","icepunch","hammerarm"],
 		requiredItem: "Metagrossite"
 	},
 	regirock: {
@@ -3093,7 +3098,7 @@ exports.BattleFormatsData = {
 	},
 	latiosmega: {
 		randomBattleMoves: ["dracometeor","dragonpulse","surf","thunderbolt","psyshock","roost","calmmind","defog"],
-		randomDoubleBattleMoves: ["dracometeor","dragonpulse","surf","thunderbolt","psyshock","substitute","trick","tailwind","protect","hiddenpowerfire"],
+		randomDoubleBattleMoves: ["dracometeor","dragonpulse","surf","thunderbolt","psyshock","substitute","trick","tailwind","protect","hiddenpowerfire","calmmind"],
 		requiredItem: "Latiosite"
 	},
 	kyogre: {
@@ -3172,7 +3177,7 @@ exports.BattleFormatsData = {
 	},
 	deoxysattack: {
 		randomBattleMoves: ["psychoboost","superpower","extremespeed","icebeam","thunderbolt","firepunch","spikes","stealthrock","knockoff"],
-		randomDoubleBattleMoves: ["psychoboost","superpower","extremespeed","icebeam","thunderbolt","firepunch","protect","knockoff"],
+		randomDoubleBattleMoves: ["psychoboost","superpower","extremespeed","icebeam","protect","thunderbolt","firepunch","knockoff"],
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["snatch","psychic","spikes","knockoff"]},
 			{"generation":3,"level":30,"moves":["superpower","psychic","pursuit","taunt"]},
@@ -4335,7 +4340,7 @@ exports.BattleFormatsData = {
 	},
 	gothitelle: {
 		randomBattleMoves: ["psychic","thunderbolt","hiddenpowerfighting","shadowball","substitute","calmmind","reflect","lightscreen","trick","psyshock","grassknot","signalbeam"],
-		randomDoubleBattleMoves: ["psychic","thunderbolt","hiddenpowerfighting","shadowball","calmmind","reflect","lightscreen","trick","psyshock","grassknot","signalbeam","trickroom","taunt","helpinghand","healpulse","protect"],
+		randomDoubleBattleMoves: ["protect","psychic","thunderbolt","hiddenpowerfighting","shadowball","calmmind","reflect","lightscreen","trick","psyshock","grassknot","signalbeam","trickroom","taunt","helpinghand","healpulse"],
 		tier: "OU"
 	},
 	solosis: {
@@ -4852,7 +4857,7 @@ exports.BattleFormatsData = {
 	},
 	greninja: {
 		randomBattleMoves: ["hydropump","uturn","surf","icebeam","spikes","taunt","darkpulse","toxicspikes","hiddenpowerfire","gunkshot"],
-		randomDoubleBattleMoves: ["hydropump","uturn","surf","icebeam","matblock","taunt","darkpulse","protect","hiddenpowerfire"],
+		randomDoubleBattleMoves: ["hydropump","uturn","surf","icebeam","matblock","taunt","darkpulse","protect","hiddenpowerfire","blizzard"],
 		eventPokemon: [
 			{"generation":6,"level":36,"isHidden":true,"moves":["watershuriken","shadowsneak","hydropump","substitute"],"pokeball":"cherishball"}
 		],
