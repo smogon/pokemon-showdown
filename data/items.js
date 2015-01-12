@@ -2799,8 +2799,11 @@ exports.BattleItems = {
 					pokemon.removeVolatile('metronome');
 					return;
 				}
-				if (this.effectData.lastMove === move.id) this.effectData.numConsecutive++;
-				else this.effectData.numConsecutive = 0;
+				if (this.effectData.lastMove === move.id) {
+					this.effectData.numConsecutive++;
+				} else {
+					this.effectData.numConsecutive = 0;
+				}
 				this.effectData.lastMove = move.id;
 			},
 			onModifyDamage: function (damage, source, target, move) {
