@@ -9,15 +9,15 @@ exports.BattleTypeChart = {
 	},
 	"Dragon": {
 		inherit: true,
-		HPivs: {"atk":30, "def":28, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":30, "def":28, "spa":30, "spd":30, "spe":30, "hp":22}
 	},
 	"Electric": {
 		inherit: true,
-		HPivs: {"atk":28, "def":30, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":28, "def":30, "spa":30, "spd":30, "spe":30, "hp":14}
 	},
 	"Fighting": {
 		inherit: true,
-		HPivs: {"atk":24, "def":24, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":24, "def":24, "spa":30, "spd":30, "spe":30, "hp":6}
 	},
 	"Fire": {
 		damageTaken: {
@@ -39,23 +39,23 @@ exports.BattleTypeChart = {
 			"Steel": 2,
 			"Water": 1
 		},
-		HPivs: {"atk":28, "def":24, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":28, "def":24, "spa":30, "spd":30, "spe":30, "hp":6}
 	},
 	"Flying": {
 		inherit: true,
-		HPivs: {"atk":24, "def":26, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":24, "def":26, "spa":30, "spd":30, "spe":30, "hp":14}
 	},
 	"Ghost": {
 		inherit: true,
-		HPivs: {"atk":26, "def":28, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":26, "def":28, "spa":30, "spd":30, "spe":30, "hp":22}
 	},
 	"Grass": {
 		inherit: true,
-		HPivs: {"atk":28, "def":28, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":28, "def":28, "spa":30, "spd":30, "spe":30, "hp":6}
 	},
 	"Ground": {
 		inherit: true,
-		HPivs: {"atk":24, "def":30, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":24, "def":30, "spa":30, "spd":30, "spe":30, "hp":14}
 	},
 	"Ice": {
 		damageTaken: {
@@ -81,15 +81,15 @@ exports.BattleTypeChart = {
 	},
 	"Poison": {
 		inherit: true,
-		HPivs: {"atk":24, "def":28, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":24, "def":28, "spa":30, "spd":30, "spe":30, "hp":6}
 	},
 	"Psychic": {
 		inherit: true,
-		HPivs: {"atk":30, "def":24, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":30, "def":24, "spa":30, "spd":30, "spe":30, "hp":22}
 	},
 	"Rock": {
 		inherit: true,
-		HPivs: {"atk":26, "def":24, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":26, "def":24, "spa":30, "spd":30, "spe":30, "hp":22}
 	},
 	"Steel": {
 		inherit: true,
@@ -97,6 +97,6 @@ exports.BattleTypeChart = {
 	},
 	"Water": {
 		inherit: true,
-		HPivs: {"atk":28, "def":26, "spa":30, "spd":30, "spe":30, "hp":30}
+		HPivs: {"atk":28, "def":26, "spa":30, "spd":30, "spe":30, "hp":14}
 	}
 };
