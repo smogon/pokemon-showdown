@@ -71,7 +71,7 @@ exports.BattleAbilities = {
 		onModifyMove: function (move, pokemon) {
 			if (move.type === 'Normal' && move.id !== 'hiddenpower') {
 				move.type = 'Flying';
-				pokemon.addVolatile('aerilate');
+				if (move.category !== 'Status') pokemon.addVolatile('aerilate');
 			}
 		},
 		effect: {
@@ -1920,7 +1920,7 @@ exports.BattleAbilities = {
 		onModifyMove: function (move, pokemon) {
 			if (move.type === 'Normal' && move.id !== 'hiddenpower') {
 				move.type = 'Fairy';
-				pokemon.addVolatile('pixilate');
+				if (move.category !== 'Status') pokemon.addVolatile('pixilate');
 			}
 		},
 		effect: {
@@ -2143,7 +2143,7 @@ exports.BattleAbilities = {
 		onModifyMove: function (move, pokemon) {
 			if (move.type === 'Normal' && move.id !== 'hiddenpower') {
 				move.type = 'Ice';
-				pokemon.addVolatile('refrigerate');
+				if (move.category !== 'Status') pokemon.addVolatile('refrigerate');
 			}
 		},
 		effect: {
