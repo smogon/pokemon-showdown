@@ -13,15 +13,21 @@ exports.BattleStatuses = {
 		onStart: function (target) {
 			this.add('-status', target, 'brn');
 			target.addVolatile('brnattackdrop');
+			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
+			if (!target.volatiles['residualdmg'].counter) target.volatiles['residualdmg'].counter = 0;
+			target.volatiles['residualdmg'].counter++;
 		},
+		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
-			this.damage(pokemon.maxhp / 16);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter);
 		},
 		onSwitchIn: function (pokemon) {
 			pokemon.addVolatile('brnattackdrop');
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 16);
-			}
+			pokemon.addVolatile('residualdmg');
+			pokemon.volatiles['residualdmg'].counter = 1;
+		},
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		}
 	},
 	par: {
@@ -89,35 +95,42 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'psn');
+			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
+			if (!target.volatiles['residualdmg'].counter) target.volatiles['residualdmg'].counter = 0;
+			target.volatiles['residualdmg'].counter++;
 		},
+		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
-			this.damage(pokemon.maxhp / 16);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter);
 		},
 		onSwitchIn: function (pokemon) {
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 16);
-			}
+			pokemon.addVolatile('residualdmg');
+			pokemon.volatiles['residualdmg'].counter = 1;
+		},
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		}
 	},
 	tox: {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'tox');
-			this.effectData.stage = 0;
+			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
+			if (!target.volatiles['residualdmg'].counter) target.volatiles['residualdmg'].counter = 0;
 		},
+		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
-			if (this.effectData.stage < 15) {
-				this.effectData.stage++;
-			}
-			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
+			pokemon.volatiles['residualdmg'].counter++;
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter);
 		},
 		onSwitchIn: function (pokemon) {
-			this.effectData.stage = 0; // probably unnecessary...
+			// Regular poison status and damage after a switchout -> switchin.
 			pokemon.setStatus('psn');
-			// normal poison damage...
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 16);
-			}
+			pokemon.addVolatile('residualdmg');
+			pokemon.volatiles['residualdmg'].counter = 1;
+		},
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		}
 	},
 	confusion: {
@@ -140,15 +153,16 @@ exports.BattleStatuses = {
 			this.add('-activate', pokemon, 'confusion');
 			if (this.random(256) >= 128) {
 				// We check here to implement the substitute bug since otherwise we need to change directDamage to take target.
+				var damage = Math.floor(Math.floor(((Math.floor(2 * pokemon.level / 5) + 2) * pokemon.getStat('atk') * 40) / pokemon.getStat('def', false, false, true)) / 50) + 2;
 				if (pokemon.volatiles['substitute']) {
 					// If there is Substitute, we check for opposing substitute.
 					if (target.volatiles['substitute']) {
 						// Damage that one instead.
-						this.directDamage(this.getDamage(pokemon, pokemon, 40), target);
+						this.directDamage(damage, target);
 					}
 				} else {
 					// No substitute, direct damage to itself.
-					this.directDamage(this.getDamage(pokemon, pokemon, 40));
+					this.directDamage(damage);
 				}
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('lockedmovee');
@@ -337,36 +351,6 @@ exports.BattleStatuses = {
 	ragemiss: {
 		onModifyMove: function (move) {
 			if (move.id === 'rage') move.accuracy = 1 / 255 * 100;
-		}
-	},
-	diginvulnerable: {
-		onAccuracy: function (accuracy, target, source, move) {
-			if (move.id === 'swift') return true;
-			this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-			return null;
-		},
-		onDamage: function (damage, target, source, move) {
-			if (!move || move.effectType !== 'Move') return;
-			if (!source) return;
-			if (move.id === 'earthquake') {
-				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
-				return null;
-			}
-		}
-	},
-	flyinvulnerable: {
-		onAccuracy: function (accuracy, target, source, move) {
-			if (move.id === 'swift') return true;
-			this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-			return null;
-		},
-		onDamage: function (damage, target, source, move) {
-			if (!move || move.effectType !== 'Move') return;
-			if (!source || source.side === target.side) return;
-			if (move.id === 'gust' || move.id === 'thunder') {
-				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
-				return null;
-			}
 		}
 	}
 };

@@ -5,10 +5,26 @@ exports.BattleAbilities = {
 			this.setWeather('raindance', source, null);
 		}
 	},
+	"swiftswim": {
+		inherit: true,
+		onModifySpe: function (speMod, pokemon) {
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				return this.chain(speMod, 1.5);
+			}
+		}
+	},
 	"drought": {
 		inherit: true,
 		onStart: function (source) {
 			this.setWeather('sunnyday', source, null);
+		}
+	},
+	"chlorophyll": {
+		inherit: true,
+		onModifySpe: function (speMod) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				return this.chain(speMod, 1.5);
+			}
 		}
 	},
 	"snowwarning": {
@@ -21,6 +37,14 @@ exports.BattleAbilities = {
 		inherit: true,
 		onStart: function (source) {
 			this.setWeather('sandstorm', source, null);
+		}
+	},
+	"sandrush": {
+		inherit: true,
+		onModifySpe: function (speMod, pokemon) {
+			if (this.isWeather('sandstorm')) {
+				return this.chain(speMod, 1.5);
+			}
 		}
 	},
 	"forecast": {

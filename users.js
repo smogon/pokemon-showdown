@@ -678,14 +678,14 @@ User = (function () {
 		if (authenticated && userid in bannedUsers) {
 			var bannedUnder = '';
 			if (bannedUsers[userid] !== userid) bannedUnder = ' under the username ' + bannedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealUri ? " Or you can appeal at:\n" + Config.appealUri : ""));
 			this.ban(true, userid);
 			return;
 		}
 		if (authenticated && userid in lockedUsers) {
 			var bannedUnder = '';
 			if (lockedUsers[userid] !== userid) bannedUnder = ' under the username ' + lockedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealUri ? " Or you can appeal at:\n" + Config.appealUri : ""));
 			this.lock(true, userid);
 		}
 		if (!this.locked && this.group === Config.groups.default.global) {
