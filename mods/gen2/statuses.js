@@ -86,6 +86,19 @@ exports.BattleStatuses = {
 			this.damage(pokemon.maxhp / 8);
 		}
 	},
+	confusion: {
+		inherit: true,
+		onStart: function (target, source, sourceEffect) {
+			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
+			if (!result) return result;
+			this.add('-start', target, 'confusion');
+			if (sourceEffect && sourceEffect.id === 'berserkgene') {
+				this.effectData.time = 256;
+			} else {
+				this.effectData.time = this.random(2, 6);
+			}
+		}
+	},
 	partiallytrapped: {
 		inherit: true,
 		durationCallback: function (target, source) {
