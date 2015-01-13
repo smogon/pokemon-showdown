@@ -1,5 +1,6 @@
 exports.BattleFormatsData = {
 	bulbasaur: {
+		randomBattleMoves: ["razorleaf","sleeppowder","swordsdance","bodyslam"],
 		tier: "LC"
 	},
 	ivysaur: {
@@ -11,84 +12,111 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	charmander: {
+		randomBattleMoves: ["fireblast","bodyslam","swordsdance","hyperbeam","flamethrower","fire spin"],
 		tier: "LC"
 	},
 	charmeleon: {
-		randomBattleMoves: ["fireblast","earthquake","bodyslam","swordsdance","hyperbeam"],
+		randomBattleMoves: ["fireblast","bodyslam","swordsdance","hyperbeam","flamethrower","fire spin"],
 		tier: "UU"
 	},
 	charizard: {
-		randomBattleMoves: ["fireblast","earthquake","bodyslam","swordsdance","hyperbeam"],
+		randomBattleMoves: ["fireblast","earthquake","bodyslam","swordsdance","hyperbeam","fire spin","flamethrower"],
 		tier: "UU"
 	},
+	//Thoughts on Rest on these? They're pretty bulky and it's not a very hard hitting tier.
 	squirtle: {
+		randomBattleMoves: ["surf","blizzard","bodyslam","mimic","hydro pump","rest"],
 		tier: "LC"
 	},
+	//I think we neeed to make rest+hydro pump an illegal combo maybe? I dunno how bad do you think it would be?
 	wartortle: {
-		randomBattleMoves: ["surf","blizzard","bodyslam","mimic"],
+		randomBattleMoves: ["surf","blizzard","bodyslam","mimic","hydro pump","rest"],
 		tier: "UU"
 	},
+	//Hyper Beam and earthquake are kinda key moves that differentiate it from other mons..
 	blastoise: {
-		randomBattleMoves: ["surf","blizzard","bodyslam","mimic"],
+		randomBattleMoves: ["surf","blizzard","bodyslam","earthquake","hyper beam"],
 		tier: "UU"
 	},
 	caterpie: {
+		randomBattleMoves:["string shot","tackle"]
 		tier: "LC"
 	},
 	metapod: {
+		randomBattleMoves:["string shot","tackle","harden"]
 		tier: "UU"
 	},
+	//Added Hyper Beam as an option since its attack's still pretty good and it makes stuff more interesting.
+	//Code needs to be adjusted to make sure it always gets psychic/sleep powder/stun spore somehow
 	butterfree: {
-		randomBattleMoves: ["psychic","megadrain","sleeppowder","stunspore"],
+		randomBattleMoves: ["psychic","megadrain","sleeppowder","stunspore","hyper beam"],
 		tier: "UU"
 	},
 	weedle: {
+		randomBattleMoves: ["poison sting","string shot"]
 		tier: "LC"
 	},
 	kakuna: {
+		randomBattleMoves: ["poison sting","string shot","harden"]
 		tier: "UU"
 	},
 	beedrill: {
-		randomBattleMoves: ["twineedle","hyperbeam","swordsdance","agility"],
+		randomBattleMoves: ["twineedle","hyperbeam","swordsdance","agility","mega drain",],
 		tier: "UU"
 	},
+	//Basically, this line of pokemon is fairly bulky so imo reflect+rest is a legitimate combo.
+	//Reflect is probably bad without rest on them though. Should probably hold true for all pokemon and be implemented for all.
+	//Sky Attack is good enough considering how bad its movepool is.
+	//Sand Attack might as well be too. Whatever it has is bad tbf.
+	//Just so long as it has at least 1 attack other than Sky Attack and Mirror Move. Aka, Double Edge=Mandatory o.o
 	pidgey: {
+		randomBattleMoves: ["doubleedge","agility","mimic","mirrormove","skyattack","rest","reflect","sandattack"],
 		tier: "LC"
 	},
 	pidgeotto: {
+		randomBattleMoves: ["doubleedge","agility","mimic","mirrormove","skyattack","rest","reflect"],
 		tier: "UU"
 	},
+	//Hyper Beam is also unacceptable on its own, so Double Edge is still mandatory.
 	pidgeot: {
-		randomBattleMoves: ["doubleedge","hyperbeam","agility","mimic","mirrormove"],
+		randomBattleMoves: ["doubleedge","hyperbeam","agility","mimic","mirrormove","skyattack","rest","reflect"],
 		tier: "UU"
 	},
+	//Does not get Hyper Beam like its evolution, so carrying 2/3 of blizz/bubblebeam/tbolt is fine.
+	//Super Fang and Body Slam mandatory on both.
 	rattata: {
+		randomBattleMoves: ["superfang","bodyslam","blizzard","bubblebeam","thunderbolt"],
 		tier: "LC"
 	},
+	//All moves mandatory bar Blizz/Bubble - how to code this in? Maybe make them reject eachother?
 	raticate: {
 		randomBattleMoves: ["superfang","bodyslam","hyperbeam","blizzard","bubblebeam"],
 		tier: "UU"
 	},
+	//Hyper Beam removed, it does not learn it. Agility added to complete the set.
 	spearow: {
-		randomBattleMoves: ["drillpeck","doubleedge","hyperbeam","mirrormove"],
+		randomBattleMoves: ["drillpeck","doubleedge","mirrormove","agility"],
 		tier: "LC"
 	},
 	fearow: {
-		randomBattleMoves: ["drillpeck","doubleedge","hyperbeam","mirrormove"],
+		randomBattleMoves: ["drillpeck","doubleedge","hyperbeam","agility","mirrormove"],
 		eventPokemon: [
 			{"generation":1,"level":20,"moves":["growl","leer","furyattack","payday"]}
 		],
 		tier: "UU"
 	},
+	//Needs to be coded so that it always has wrap+glare+earthquake
 	ekans: {
+		randomBattleMoves: ["wrap","glare","earthquake","bodyslam","rockslide"]
 		tier: "LC"
 	},
+	//Consider allowing Body Slam onto its moveset so long as it's never used alongside hyper beam?
 	arbok: {
 		randomBattleMoves: ["earthquake","wrap","glare","hyperbeam"],
 		tier: "UU"
 	},
 	pikachu: {
-		randomBattleMoves: ["thunderbolt","thunderwave","surf","bodyslam"],
+		randomBattleMoves: ["thunderbolt","thunderwave","surf","bodyslam","agility"],
 		eventPokemon: [
 			{"generation":1,"level":5,"moves":["surf"]},
 			{"generation":1,"level":5,"moves":["fly"]},
@@ -96,8 +124,11 @@ exports.BattleFormatsData = {
 		],
 		tier: "LC"
 	},
+	//I customised this to my personal set that's reasonably viable in OU, since it can beat 30% Chansey/Egg,
+	//but I can see allowing Thunder Wave onto here possibly. It's meant to be a very all-or-nothing pokemon.
+	//Pikachu should probably stay as is though (with agility added)..
 	raichu: {
-		randomBattleMoves: ["thunderbolt","thunderwave","surf","bodyslam"],
+		randomBattleMoves: ["thunderbolt","agility","surf","hyperbeam"],
 		tier: "UU"
 	},
 	sandshrew: {
