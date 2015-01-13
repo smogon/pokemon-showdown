@@ -251,7 +251,6 @@ var commands = {
 	qg: function (target, room, user) {
 		if (room.id !== 'wifi') return false;
 		if (!this.can('warn', null, room)) return false;
-		if (!room.auth || !room.auth[user.userid]) return this.sendReply("Only a room auth can start a giveaway.");
 		if (!target || target.indexOf(',') === -1) return false;
 		if (giveaway) return this.sendReply('There is already a giveaway going on!');
 
@@ -309,7 +308,6 @@ var commands = {
 	lotto: function (target, room, user) {
 		if (room.id !== 'wifi') return false;
 		if (!this.can('warn', null, room)) return false;
-		if (!room.auth || !room.auth[user.userid]) return this.sendReply("Only a room auth can start a giveaway.");
 		if (!target || target.indexOf(',') === -1) return false;
 		if (giveaway) return this.sendReply('There is already a giveaway going on!');
 
@@ -384,15 +382,16 @@ var commands = {
 		case 'staff':
 			if (!this.can('warn', null, room)) return;
 			reply = '<strong>Staff commands:</strong><br />' +
-			        '- question or qg <em>User, Prize, Question, Answer</em> - Start a new question giveaway (Requires: % @ #).<br />' +
-			        '- lottery or lg <em>User, Prize[, Number of Winners]</em> - Starts a lottery giveaway (Requires: % @ #)<br />' +
+			        '- question or qg <em>User, Prize, Question, Answer</em> - Start a new question giveaway (Requires: % @ # & ~)<br />' +
+			        '- lottery or lg <em>User, Prize[, Number of Winners]</em> - Starts a lottery giveaway (Requires: % @ # & ~)<br />' +
 			        '- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
 			        '- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
 					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
-			        '- end - Forcibly ends the current giveaway (Requires: % @ #)<br />';
+			        '- end - Forcibly ends the current giveaway (Requires: % @ # & ~)<br />';
 			break;
 		case 'game':
 		case 'giveaway':
+		case 'user':
 			if (!this.canBroadcast()) return;
 			reply = '<strong>Giveaway participation commands: </strong> (start with /giveaway, except for /ga) <br />' +
 			        '- guess or /ga <em>answer</em> - Guesses the answer for a question giveaway<br />' +
@@ -413,5 +412,6 @@ var commands = {
 
 exports.commands = {
 	'giveaway': commands,
-	'ga': commands.guess
+	'ga': commands.guess,
+	'gh': commands.help
 };
