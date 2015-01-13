@@ -662,6 +662,11 @@ var commands = exports.commands = {
 	learnall: 'learn',
 	learn5: 'learn',
 	g6learn: 'learn',
+	rbylearn: 'learn',
+	gsclearn: 'learn',
+	advlearn: 'learn',
+	dpplearn: 'learn',
+	bw2learn: 'learn',
 	learn: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help learn');
 
@@ -672,6 +677,7 @@ var commands = exports.commands = {
 		var template = Tools.getTemplate(targets[0]);
 		var move = {};
 		var problem;
+		var format = {rby:'gen1ou', gsc:'gen2ou', adv:'gen3oubeta', dpp:'gen4ou', bw2:'gen5ou'}[cmd.substring(0, 3)];
 		var all = (cmd === 'learnall');
 		if (cmd === 'learn5') lsetData.set.level = 5;
 		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
@@ -689,10 +695,11 @@ var commands = exports.commands = {
 			if (!move.exists) {
 				return this.sendReply("Move '" + move.id + "' not found.");
 			}
-			problem = TeamValidator.checkLearnsetSync(null, move, template, lsetData);
+			problem = TeamValidator.checkLearnsetSync(format, move, template.species, lsetData);
 			if (problem) break;
 		}
 		var buffer = template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
+		if (format) buffer += ' on ' + cmd.substring(0, 3).toUpperCase();
 		if (!problem) {
 			var sourceNames = {E:"egg", S:"event", D:"dream world"};
 			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul class=\"message-learn-list\">";
@@ -721,7 +728,13 @@ var commands = exports.commands = {
 					if (source.substr(2)) buffer += ": " + source.substr(2);
 				}
 			}
-			if (lsetData.sourcesBefore) buffer += "<li>any generation before " + (lsetData.sourcesBefore + 1);
+			if (lsetData.sourcesBefore) {
+				if (!(cmd.substring(0, 3) in {'rby':1, 'gsc':1})) {
+					buffer += "<li>any generation before " + (lsetData.sourcesBefore + 1);
+				} else if (!lsetData.sources) {
+					buffer += "<li>gen " + lsetData.sourcesBefore;
+				}
+			}
 			buffer += "</ul>";
 		}
 		this.sendReplyBox(buffer);
