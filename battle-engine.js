@@ -305,6 +305,7 @@ BattlePokemon = (function () {
 	BattlePokemon.prototype.maxhp = 100;
 	BattlePokemon.prototype.illusion = null;
 	BattlePokemon.prototype.fainted = false;
+	BattlePokemon.prototype.faintQueued = false;
 	BattlePokemon.prototype.lastItem = '';
 	BattlePokemon.prototype.ateBerry = false;
 	BattlePokemon.prototype.status = '';
@@ -524,7 +525,7 @@ BattlePokemon = (function () {
 			var moveName = move.move;
 			if (move.id === 'hiddenpower') {
 				moveName = 'Hidden Power ' + this.hpType;
-				if (this.gen < 6) moveName += ' ' + this.hpPower;
+				if (this.battle.gen < 6) moveName += ' ' + this.hpPower;
 			}
 			moves.push({
 				move: moveName,
@@ -776,11 +777,11 @@ BattlePokemon = (function () {
 		// This function only puts the pokemon in the faint queue;
 		// actually setting of this.fainted comes later when the
 		// faint queue is resolved.
-		if (this.fainted || this.status === 'fnt') return 0;
+		if (this.fainted || this.faintQueued) return 0;
 		var d = this.hp;
 		this.hp = 0;
 		this.switchFlag = false;
-		this.status = 'fnt';
+		this.faintQueued = true;
 		this.battle.faintQueue.push({
 			target: this,
 			source: source,
@@ -1618,7 +1619,7 @@ Battle = (function () {
 		if (sourceEffect === undefined && this.effect) sourceEffect = this.effect;
 		if (source === undefined && this.event && this.event.target) source = this.event.target;
 
-		if (this.weather === status.id) return false;
+		if (this.weather === status.id && this.gen > 2) return false;
 		if (this.weather && !status.id) {
 			var oldstatus = this.getWeather();
 			this.singleEvent('End', oldstatus, this.weatherData, this);
@@ -3128,6 +3129,7 @@ Battle = (function () {
 		function check(a) {
 			if (!a) return;
 			if (a.fainted) {
+				a.status = 'fnt';
 				a.switchFlag = true;
 			}
 		}
@@ -3137,7 +3139,8 @@ Battle = (function () {
 	};
 	Battle.prototype.faintMessages = function (lastFirst) {
 		if (this.ended) return;
-		if (lastFirst && this.faintQueue.length) {
+		if (!this.faintQueue.length) return false;
+		if (lastFirst) {
 			this.faintQueue.unshift(this.faintQueue.pop());
 		}
 		var faintData;
@@ -3154,6 +3157,20 @@ Battle = (function () {
 				faintData.target.side.faintedThisTurn = true;
 			}
 		}
+
+		if (this.gen <= 2) {
+			// in gen 1-2, fainting skips the rest of the turn, including residuals
+			this.queue = [];
+		} else if (this.gen <= 3 && this.gameType === 'singles') {
+			// in gen 3 or earlier, fainting in singles skips to residuals
+			for (var i = 0; i < this.p1.active.length; i++) {
+				this.cancelMove(this.p1.active[i]);
+			}
+			for (var i = 0; i < this.p2.active.length; i++) {
+				this.cancelMove(this.p2.active[i]);
+			}
+		}
+
 		if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
 			this.win(faintData && faintData.target.side);
 			return true;
@@ -3491,10 +3508,6 @@ Battle = (function () {
 		}
 
 		if (p1switch || p2switch) {
-			if (this.gen <= 1) {
-				// in gen 1, fainting ends the turn; residuals do not happen
-				this.queue = [];
-			}
 			this.makeRequest('switch');
 			return true;
 		}
