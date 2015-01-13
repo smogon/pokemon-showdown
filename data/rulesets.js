@@ -220,20 +220,20 @@ exports.BattleFormats = {
 			}
 			if (template.num === 649) { // Genesect
 				switch (item.id) {
-					case 'burndrive':
-						set.species = 'Genesect-Burn';
-						break;
-					case 'chilldrive':
-						set.species = 'Genesect-Chill';
-						break;
-					case 'dousedrive':
-						set.species = 'Genesect-Douse';
-						break;
-					case 'shockdrive':
-						set.species = 'Genesect-Shock';
-						break;
-					default:
-						set.species = 'Genesect';
+				case 'burndrive':
+					set.species = 'Genesect-Burn';
+					break;
+				case 'chilldrive':
+					set.species = 'Genesect-Chill';
+					break;
+				case 'dousedrive':
+					set.species = 'Genesect-Douse';
+					break;
+				case 'shockdrive':
+					set.species = 'Genesect-Shock';
+					break;
+				default:
+					set.species = 'Genesect';
 				}
 			}
 			if (template.num === 681) { // Aegislash

@@ -130,7 +130,21 @@ var commands = exports.commands = {
 			switch (targetCmd) {
 			case 'me':
 			case 'announce':
+				break;
 			case 'invite':
+				var targetRoomid = toId(target.substr(8));
+				if (targetRoomid === 'global') return false;
+
+				var targetRoom = Rooms.search(targetRoomid);
+				if (!targetRoom) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|/text The room "' + targetRoomid + '" does not exist.');
+				if (targetRoom.staffRoom && !targetUser.can('staff')) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|/text User "' + this.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
+				if (targetRoom.isPrivate && targetRoom.modjoin && targetRoom.auth) {
+					if (Config.groups.bySymbol[targetRoom.auth[targetUser.userid] || Config.groups.default[targetRoom.type + 'Room']].rank < Config.groups.bySymbol[targetRoom.modjoin].rank || !targetUser.can('bypassall')) {
+						return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|/text The room "' + targetRoomid + '" does not exist.');
+					}
+				}
+
+				target = '/invite ' + targetRoom.id;
 				break;
 			default:
 				return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text The command '/" + targetCmd + "' was unrecognized or unavailable in private messages. To send a message starting with '/" + targetCmd + "', type '//" + targetCmd + "'.");
@@ -192,13 +206,23 @@ var commands = exports.commands = {
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
 	privateroom: function (target, room, user, connection, cmd) {
-		if (!this.can('privateroom', room) || (cmd === 'privateroom' && !this.can('makeroom'))) return;
-		if (cmd !== 'privateroom' && room.isPrivate === true) {
-			if (this.can('makeroom')) {
-				this.sendReply("This room is a secret room. Use /privateroom to toggle instead.");
+		var setting;
+		switch (cmd) {
+		case 'privateroom':
+			if (!this.can('makeroom')) return;
+			setting = true;
+			break;
+		default:
+			if (!this.can('privateroom', room)) return;
+			if (room.isPrivate === true) {
+				if (this.can('makeroom'))
+					this.sendReply("This room is a secret room. Use /privateroom to toggle instead.");
+				return;
 			}
-			return;
+			setting = 'hidden';
+			break;
 		}
+
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand("" + user.name + " made this room public.");
@@ -207,10 +231,10 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			room.isPrivate = (cmd === 'privateroom' ? true : 'hidden');
-			this.addModCommand("" + user.name + " made this room " + (cmd === 'privateroom' ? 'secret' : 'hidden') + ".");
+			room.isPrivate = setting;
+			this.addModCommand("" + user.name + " made this room " + (setting === true ? 'secret' : setting) + ".");
 			if (room.chatRoomData) {
-				room.chatRoomData.isPrivate = true;
+				room.chatRoomData.isPrivate = setting;
 				Rooms.global.writeChatRoomData();
 			}
 		}
@@ -772,7 +796,7 @@ var commands = exports.commands = {
 			return this.privateModCommand("(" + targetUser.name + " would be locked by " + user.name + problem + ".)");
 		}
 
-		targetUser.popup("" + user.name + " has locked you from talking in chats, battles, and PMing regular users." + (target ? "\n\nReason: " + target : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (" + Users.getGroupsThatCan('lock', user).join(", ") + ") to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
+		targetUser.popup("" + user.name + " has locked you from talking in chats, battles, and PMing regular users." + (target ? "\n\nReason: " + target : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (" + Users.getGroupsThatCan('lock', user).join(", ") + ") to discuss it" + (Config.appealUri ? " or you can appeal:\n" + Config.appealUri : ".") + "\n\nYour lock will expire in a few days.");
 
 		this.addModCommand("" + targetUser.name + " was locked from talking by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
@@ -822,7 +846,7 @@ var commands = exports.commands = {
 			return this.privateModCommand("(" + targetUser.name + " would be banned by " + user.name + problem + ".)");
 		}
 
-		targetUser.popup("" + user.name + " has banned you." + (target ? "\n\nReason: " + target : "") + (Config.appealurl ? "\n\nIf you feel that your ban was unjustified, you can appeal:\n" + Config.appealurl : "") + "\n\nYour ban will expire in a few days.");
+		targetUser.popup("" + user.name + " has banned you." + (target ? "\n\nReason: " + target : "") + (Config.appealUri ? "\n\nIf you feel that your ban was unjustified, you can appeal:\n" + Config.appealUri : "") + "\n\nYour ban will expire in a few days.");
 
 		this.addModCommand("" + targetUser.name + " was banned by " + user.name + "." + (target ? " (" + target + ")" : ""), " (" + targetUser.latestIp + ")");
 		var alts = targetUser.getAlts();

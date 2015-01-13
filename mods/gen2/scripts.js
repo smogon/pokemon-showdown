@@ -44,7 +44,7 @@ exports.BattleScripts = {
 			stat = this.battle.clampIntRange(stat, 1, 999);
 
 			// Treat here the items.
-			if ((this.species in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk') || (this.species === 'Pikachu' && this.item === 'lightball' && statName in {'spa':1, 'atk':1})) {
+			if ((this.species in {'Cubone':1, 'Marowak':1} && this.item === 'thickclub' && statName === 'atk') || (this.species === 'Pikachu' && this.item === 'lightball' && statName === 'spa')) {
 				stat *= 2;
 			} else if (this.species === 'Ditto' && this.item === 'metalpowder' && statName in {'def':1, 'spd':1}) {
 				// what. the. fuck. stop playing pokémon
@@ -77,6 +77,8 @@ exports.BattleScripts = {
 			return;
 		}
 		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
+			// Prevent invulnerability from persisting until the turn ends
+			pokemon.removeVolatile('twoturnmove');
 			this.clearActiveMove(true);
 			// This is only run for sleep and fully paralysed.
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -101,7 +103,177 @@ exports.BattleScripts = {
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.runEvent('AfterMove', target, pokemon, move);
-		if (!move.selfSwitch) this.runEvent('AfterMoveSelf', pokemon, target, move);
+		if (!move.selfSwitch && target.hp > 0) this.runEvent('AfterMoveSelf', pokemon, target, move);
+	},
+	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
+		var damage;
+		move = this.getMoveCopy(move);
+
+		if (!moveData) moveData = move;
+		var hitResult = true;
+
+		if (move.target === 'all' && !isSelf) {
+			hitResult = this.singleEvent('TryHitField', moveData, {}, target, pokemon, move);
+		} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
+			hitResult = this.singleEvent('TryHitSide', moveData, {}, target.side, pokemon, move);
+		} else if (target) {
+			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
+		}
+		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
+			return false;
+		}
+
+		if (target && !isSecondary && !isSelf) {
+			hitResult = this.runEvent('TryPrimaryHit', target, pokemon, moveData);
+			if (hitResult === 0) {
+				// special Substitute flag
+				hitResult = true;
+				target = null;
+			}
+		}
+		if (target && isSecondary && !moveData.self) {
+			hitResult = true;
+		}
+		if (!hitResult) {
+			return false;
+		}
+
+		if (target) {
+			var didSomething = false;
+			damage = this.getDamage(pokemon, target, moveData);
+
+			if ((damage || damage === 0) && !target.fainted) {
+				if (move.noFaint && damage >= target.hp) {
+					damage = target.hp - 1;
+				}
+				damage = this.damage(damage, target, pokemon, move);
+				if (!(damage || damage === 0)) {
+					this.debug('damage interrupted');
+					return false;
+				}
+				didSomething = true;
+			}
+			if (damage === false || damage === null) {
+				if (damage === false) {
+					this.add('-fail', target);
+				}
+				this.debug('damage calculation interrupted');
+				return false;
+			}
+
+			if (moveData.boosts && !target.fainted) {
+				hitResult = this.boost(moveData.boosts, target, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.heal && !target.fainted) {
+				var d = target.heal(Math.round(target.maxhp * moveData.heal[0] / moveData.heal[1]));
+				if (!d && d !== 0) {
+					this.add('-fail', target);
+					this.debug('heal interrupted');
+					return false;
+				}
+				this.add('-heal', target, target.getHealth);
+				didSomething = true;
+			}
+			if (moveData.status) {
+				if (!target.status) {
+					hitResult = target.setStatus(moveData.status, pokemon, move);
+					didSomething = didSomething || hitResult;
+				} else if (!isSecondary) {
+					if (target.status === moveData.status) {
+						this.add('-fail', target, target.status);
+					} else {
+						this.add('-fail', target);
+					}
+					return false;
+				}
+			}
+			if (moveData.forceStatus) {
+				hitResult = target.setStatus(moveData.forceStatus, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.volatileStatus) {
+				hitResult = target.addVolatile(moveData.volatileStatus, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.sideCondition) {
+				hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.weather) {
+				hitResult = this.setWeather(moveData.weather, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.pseudoWeather) {
+				hitResult = this.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
+				didSomething = didSomething || hitResult;
+			}
+			if (moveData.forceSwitch) {
+				if (this.canSwitch(target.side)) didSomething = true; // at least defer the fail message to later
+			}
+			if (moveData.selfSwitch) {
+				if (this.canSwitch(pokemon.side)) didSomething = true; // at least defer the fail message to later
+			}
+			// Hit events
+			//   These are like the TryHit events, except we don't need a FieldHit event.
+			//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
+			hitResult = null;
+			if (move.target === 'all' && !isSelf) {
+				if (moveData.onHitField) hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
+			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
+				if (moveData.onHitSide) hitResult = this.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
+			} else {
+				if (moveData.onHit) hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
+				if (!isSelf && !isSecondary) {
+					this.runEvent('Hit', target, pokemon, move);
+				}
+				if (moveData.onAfterHit) hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
+			}
+
+			if (!hitResult && !didSomething && !moveData.self && !moveData.selfdestruct) {
+				if (!isSelf && !isSecondary) {
+					if (hitResult === false || didSomething === false) this.add('-fail', target);
+				}
+				this.debug('move failed because it did nothing');
+				return false;
+			}
+		}
+		if (moveData.self) {
+			var selfRoll;
+			if (!isSecondary && moveData.self.boosts) selfRoll = this.random(100);
+			// This is done solely to mimic in-game RNG behaviour. All self drops have a 100% chance of happening but still grab a random number.
+			if (typeof moveData.self.chance === 'undefined' || selfRoll < moveData.self.chance) {
+				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
+			}
+		}
+		if (moveData.secondaries && this.runEvent('TrySecondaryHit', target, pokemon, moveData)) {
+			for (var i = 0; i < moveData.secondaries.length; i++) {
+				// We check here whether to negate the probable secondary status if it's burn or freeze.
+				// In the game, this is checked and if true, the random number generator is not called.
+				// That means that a move that does not share the type of the target can status it.
+				// This means tri-attack can burn fire-types and freeze ice-types.
+				// Unlike gen 1, though, paralysis works for all unless the target is immune to direct move (ie. ground-types and t-wave).
+				if (!(moveData.secondaries[i].status && moveData.secondaries[i].status in {'brn':1, 'frz':1} && target && target.hasType(move.type))) {
+					var effectChance = Math.floor(moveData.secondaries[i].chance * 255 / 100);
+					if (typeof moveData.secondaries[i].chance === 'undefined' || this.random(256) < effectChance) {
+						this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
+					}
+				}
+			}
+		}
+		if (target && target.hp > 0 && pokemon.hp > 0 && moveData.forceSwitch && this.canSwitch(target.side)) {
+			hitResult = this.runEvent('DragOut', target, pokemon, move);
+			if (hitResult) {
+				target.forceSwitchFlag = true;
+			} else if (hitResult === false) {
+				this.add('-fail', target);
+			}
+		}
+		if (move.selfSwitch && pokemon.hp) {
+			pokemon.switchFlag = move.selfSwitch;
+		}
+		return damage;
 	},
 	getDamage: function (pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
@@ -279,7 +451,7 @@ exports.BattleScripts = {
 		if (damage > 1) {
 			damage *= this.random(217, 256);
 			damage = Math.floor(damage / 255);
-			if (damage > target.hp) damage = target.hp;
+			if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
 		}
 
 		// If damage is less than 1, we return 1
@@ -289,40 +461,6 @@ exports.BattleScripts = {
 
 		// We are done, this is the final damage
 		return damage;
-	},
-	faint: function (pokemon, source, effect) {
-		pokemon.faint(source, effect);
-		this.queue = [];
-	},
-	comparePriority: function (a, b) {
-		a.priority = a.priority || 0;
-		a.subPriority = a.subPriority || 0;
-		a.speed = a.speed || 0;
-		b.priority = b.priority || 0;
-		b.subPriority = b.subPriority || 0;
-		b.speed = b.speed || 0;
-		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
-			if (typeof a.order !== 'number') {
-				return -1;
-			}
-			if (typeof b.order !== 'number') {
-				return 1;
-			}
-			if (b.order - a.order) {
-				return -(b.order - a.order);
-			}
-		}
-		if (b.priority - a.priority) {
-			return b.priority - a.priority;
-		}
-		if (b.speed - a.speed) {
-			if (b.priority === -1 && a.priority === -1) return a.speed - b.speed;
-			return b.speed - a.speed;
-		}
-		if (b.subOrder - a.subOrder) {
-			return -(b.subOrder - a.subOrder);
-		}
-		return Math.random() - 0.5;
 	},
 	getResidualStatuses: function (thing, callbackType) {
 		var statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
@@ -418,5 +556,318 @@ exports.BattleScripts = {
 		if (!noSort) {
 			this.queue.sort(this.comparePriority);
 		}
+	},
+	comparePriority: function (a, b) {
+		a.priority = a.priority || 0;
+		a.subPriority = a.subPriority || 0;
+		a.speed = a.speed || 0;
+		b.priority = b.priority || 0;
+		b.subPriority = b.subPriority || 0;
+		b.speed = b.speed || 0;
+		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
+			if (typeof a.order !== 'number') {
+				return -1;
+			}
+			if (typeof b.order !== 'number') {
+				return 1;
+			}
+			if (b.order - a.order) {
+				return -(b.order - a.order);
+			}
+		}
+		if (b.priority - a.priority) {
+			return b.priority - a.priority;
+		}
+		if (b.speed - a.speed) {
+			return b.speed - a.speed;
+		}
+		if (b.subOrder - a.subOrder) {
+			return -(b.subOrder - a.subOrder);
+		}
+		return Math.random() - 0.5;
+	},
+	runDecision: function (decision) {
+		// We have to declare here the vars we are going to use on the switch outside of blocks due to the let hack on the gulpfile.
+		var pokemon, beginCallback, target, i;
+
+		// returns whether or not we ended in a callback
+		switch (decision.choice) {
+		case 'start':
+			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
+			beginCallback = this.getFormat().onBegin;
+			if (beginCallback) beginCallback.call(this);
+
+			this.add('start');
+			for (var pos = 0; pos < this.p1.active.length; pos++) {
+				this.switchIn(this.p1.pokemon[pos], pos);
+			}
+			for (var pos = 0; pos < this.p2.active.length; pos++) {
+				this.switchIn(this.p2.pokemon[pos], pos);
+			}
+			for (var pos = 0; pos < this.p1.pokemon.length; pos++) {
+				pokemon = this.p1.pokemon[pos];
+				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
+			}
+			for (var pos = 0; pos < this.p2.pokemon.length; pos++) {
+				pokemon = this.p2.pokemon[pos];
+				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
+			}
+			this.midTurn = true;
+			break;
+		case 'move':
+			if (!decision.pokemon.isActive) return false;
+			if (decision.pokemon.fainted) return false;
+			this.runMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
+			break;
+		case 'beforeTurnMove':
+			if (!decision.pokemon.isActive) return false;
+			if (decision.pokemon.fainted) return false;
+			this.debug('before turn callback: ' + decision.move.id);
+			target = this.getTarget(decision);
+			if (!target) return false;
+			decision.move.beforeTurnCallback.call(this, decision.pokemon, target);
+			break;
+		case 'event':
+			this.runEvent(decision.event, decision.pokemon);
+			break;
+		case 'team':
+			i = parseInt(decision.team[0], 10) - 1;
+			if (i >= 6 || i < 0) return;
+
+			if (decision.team[1]) {
+				// validate the choice
+				var len = decision.side.pokemon.length;
+				var newPokemon = [null, null, null, null, null, null].slice(0, len);
+				for (var j = 0; j < len; j++) {
+					var i = parseInt(decision.team[j], 10) - 1;
+					newPokemon[j] = decision.side.pokemon[i];
+				}
+				var reject = false;
+				for (var j = 0; j < len; j++) {
+					if (!newPokemon[j]) reject = true;
+				}
+				if (!reject) {
+					for (var j = 0; j < len; j++) {
+						newPokemon[j].position = j;
+					}
+					decision.side.pokemon = newPokemon;
+					return;
+				}
+			}
+
+			if (i === 0) return;
+			pokemon = decision.side.pokemon[i];
+			if (!pokemon) return;
+			decision.side.pokemon[i] = decision.side.pokemon[0];
+			decision.side.pokemon[0] = pokemon;
+			decision.side.pokemon[i].position = i;
+			decision.side.pokemon[0].position = 0;
+			// we return here because the update event would crash since there are no active pokemon yet
+			return;
+		case 'pass':
+			if (!decision.priority || decision.priority <= 101) return;
+			if (decision.pokemon) {
+				decision.pokemon.switchFlag = false;
+			}
+			break;
+		case 'switch':
+			if (decision.pokemon) {
+				decision.pokemon.beingCalledBack = true;
+				var lastMove = this.getMove(decision.pokemon.lastMove);
+				if (lastMove.selfSwitch !== 'copyvolatile') {
+					this.runEvent('BeforeSwitchOut', decision.pokemon);
+				}
+				if (!this.runEvent('SwitchOut', decision.pokemon)) {
+					break;
+				}
+				this.singleEvent('End', this.getAbility(decision.pokemon.ability), decision.pokemon.abilityData, decision.pokemon);
+			}
+			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
+				// A pokemon fainted from Pursuit before it could switch.
+				// In gen 2, the switch still happens.
+				decision.priority = -101;
+				this.queue.unshift(decision);
+				this.debug('Pursuit target fainted');
+				break;
+			}
+			if (decision.target.isActive) {
+				this.debug('Switch target is already active');
+				break;
+			}
+			this.switchIn(decision.target, decision.pokemon.position);
+			break;
+		case 'runSwitch':
+			this.runEvent('SwitchIn', decision.pokemon);
+			if (!decision.pokemon.side.faintedThisTurn && decision.pokemon.draggedIn !== this.turn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
+			if (!decision.pokemon.hp) break;
+			decision.pokemon.isStarted = true;
+			if (!decision.pokemon.fainted) {
+				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
+				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
+			}
+			delete decision.pokemon.draggedIn;
+			break;
+		case 'beforeTurn':
+			this.eachEvent('BeforeTurn');
+			break;
+		case 'residual':
+			this.add('');
+			this.clearActiveMove(true);
+			this.residualEvent('Residual');
+			break;
+		}
+
+		// phazing (Roar, etc)
+
+		var self = this;
+		function checkForceSwitchFlag(a) {
+			if (!a) return false;
+			if (a.hp && a.forceSwitchFlag) {
+				self.dragIn(a.side, a.position);
+			}
+			delete a.forceSwitchFlag;
+		}
+		this.p1.active.forEach(checkForceSwitchFlag);
+		this.p2.active.forEach(checkForceSwitchFlag);
+
+		this.clearActiveMove();
+
+		// fainting
+
+		this.faintMessages();
+		if (this.ended) return true;
+
+		// switching (fainted pokemon, U-turn, Baton Pass, etc)
+
+		if (!this.queue.length || this.queue[0].choice in {move:1, residual:1}) {
+			// in gen 3 or earlier, switching in fainted pokemon is done after
+			// every move, rather than only at the end of the turn.
+			this.checkFainted();
+		} else if (decision.choice === 'pass') {
+			this.eachEvent('Update');
+			return false;
+		}
+
+		function hasSwitchFlag(a) { return a ? a.switchFlag : false; }
+		function removeSwitchFlag(a) { if (a) a.switchFlag = false; }
+		var p1switch = this.p1.active.any(hasSwitchFlag);
+		var p2switch = this.p2.active.any(hasSwitchFlag);
+
+		if (p1switch && !this.canSwitch(this.p1)) {
+			this.p1.active.forEach(removeSwitchFlag);
+			p1switch = false;
+		}
+		if (p2switch && !this.canSwitch(this.p2)) {
+			this.p2.active.forEach(removeSwitchFlag);
+			p2switch = false;
+		}
+
+		if (p1switch || p2switch) {
+			this.makeRequest('switch');
+			return true;
+		}
+
+		this.eachEvent('Update');
+
+		return false;
+	},
+	dragIn: function (side, pos) {
+		if (pos >= side.active.length) return false;
+		var pokemon = this.getRandomSwitchable(side);
+		if (!pos) pos = 0;
+		if (!pokemon || pokemon.isActive) return false;
+		this.runEvent('BeforeSwitchIn', pokemon);
+		if (side.active[pos]) {
+			var oldActive = side.active[pos];
+			if (!oldActive.hp) {
+				return false;
+			}
+			if (!this.runEvent('DragOut', oldActive)) {
+				return false;
+			}
+			this.runEvent('SwitchOut', oldActive);
+			this.singleEvent('End', this.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
+			oldActive.isActive = false;
+			oldActive.isStarted = false;
+			oldActive.position = pokemon.position;
+			pokemon.position = pos;
+			side.pokemon[pokemon.position] = pokemon;
+			side.pokemon[oldActive.position] = oldActive;
+			this.cancelMove(oldActive);
+			oldActive.clearVolatile();
+		}
+		side.active[pos] = pokemon;
+		pokemon.isActive = true;
+		pokemon.activeTurns = 0;
+		pokemon.draggedIn = this.turn;
+		for (var m in pokemon.moveset) {
+			pokemon.moveset[m].used = false;
+		}
+		this.add('drag', pokemon, pokemon.getDetails);
+		pokemon.update();
+		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
+		return true;
+	},
+	damage: function (damage, target, source, effect) {
+		if (this.event) {
+			if (!target) target = this.event.target;
+			if (!source) source = this.event.source;
+			if (!effect) effect = this.effect;
+		}
+		if (!target || !target.hp) return 0;
+		effect = this.getEffect(effect);
+		if (!(damage || damage === 0)) return damage;
+		if (damage !== 0) damage = this.clampIntRange(damage, 1);
+
+		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
+			if (effect.effectType === 'Weather' && !target.runImmunity(effect.id)) {
+				this.debug('weather immunity');
+				return 0;
+			}
+			damage = this.runEvent('Damage', target, source, effect, damage);
+			if (!(damage || damage === 0)) {
+				this.debug('damage event failed');
+				return damage;
+			}
+			if (target.illusion && effect && effect.effectType === 'Move') {
+				this.debug('illusion cleared');
+				target.illusion = null;
+				this.add('replace', target, target.getDetails);
+			}
+		}
+		if (damage !== 0) damage = this.clampIntRange(damage, 1);
+		damage = target.damage(damage, source, effect);
+		if (source) source.lastDamage = damage;
+		var name = effect.fullname;
+		if (name === 'tox') name = 'psn';
+		switch (effect.id) {
+		case 'partiallytrapped':
+			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
+			break;
+		default:
+			if (effect.effectType === 'Move') {
+				this.add('-damage', target, target.getHealth);
+			} else if (source && source !== target) {
+				this.add('-damage', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
+			} else {
+				this.add('-damage', target, target.getHealth, '[from] ' + name);
+			}
+			break;
+		}
+
+		if (effect.drain && source) {
+			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
+		}
+
+		if (target.fainted || target.hp <= 0) {
+			this.debug('instafaint: ' + this.faintQueue.map('target').map('name'));
+			this.faintMessages(true);
+			target.faint();
+			this.queue = [];
+		} else {
+			damage = this.runEvent('AfterDamage', target, source, effect, damage);
+		}
+
+		return damage;
 	}
 };
