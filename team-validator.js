@@ -536,6 +536,7 @@ Validator = (function () {
 			if (set.forcedLevel) set.level = set.forcedLevel;
 			return false;
 		}
+
 		return problems;
 	};
 
@@ -578,9 +579,9 @@ Validator = (function () {
 		var sources = [];
 		// the equivalent of adding "every source at or before this gen" to sources
 		var sourcesBefore = 0;
-		var noPastGen = format.requirePentagon;
+		var noPastGen = !!format.requirePentagon;
 		// since Gen 3, Pokemon cannot be traded to past generations
-		var noFutureGen = tools.gen >= 3 ? true : format.banlistTable && format.banlistTable['tradeback'];
+		var noFutureGen = tools.gen >= 3 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
 
 		do {
 			alreadyChecked[template.speciesid] = true;
