@@ -1030,7 +1030,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'averagemons') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3495527/\">Averagemons</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a><br />";
 		}
 		if (target === 'all' || target === 'classichackmons' || target === 'hackmons') {
 			matched = true;
