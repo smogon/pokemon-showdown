@@ -121,16 +121,16 @@ global.ResourceMonitor = {
 	 */
 	log: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) {
-			Rooms.rooms.staff.add('||' + text);
-			Rooms.rooms.staff.update();
+		if (Rooms.rooms.resourcemonitor) {
+			Rooms.rooms.resourcemonitor.add('||' + text);
+			Rooms.rooms.resourcemonitor.update();
 		}
 	},
 	logHTML: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) {
-			Rooms.rooms.staff.add('|html|' + text);
-			Rooms.rooms.staff.update();
+		if (Rooms.rooms.resourcemonitor) {
+			Rooms.rooms.resourcemonitor.add('|html|' + text);
+			Rooms.rooms.resourcemonitor.update();
 		}
 	},
 	countConnection: function (ip, name) {
