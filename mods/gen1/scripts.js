@@ -403,11 +403,6 @@ exports.BattleScripts = {
 			this.runEvent('AfterMoveSecondary', target, pokemon, move);
 		}
 
-		// If we used a partial trapping move, we save the damage to repeat it
-		if (pokemon.volatiles['partialtrappinglock']) {
-			pokemon.volatiles['partialtrappinglock'].damage = damage;
-		}
-
 		return damage;
 	},
 	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
@@ -562,10 +557,18 @@ exports.BattleScripts = {
 			}
 		}
 
+		// Here's where self effects are applied.
 		var doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
-		if (moveData.self && doSelf) {
+		if (moveData.self && (doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
+
+		// Now we can save the partial trapping damage.
+		if (pokemon.volatiles['partialtrappinglock']) {
+			pokemon.volatiles['partialtrappinglock'].damage = pokemon.lastDamage;
+		}
+
+		// Apply move secondaries.
 		if (moveData.secondaries) {
 			for (var i = 0; i < moveData.secondaries.length; i++) {
 				// We check here whether to negate the probable secondary status if it's para, burn, or freeze.
@@ -633,7 +636,7 @@ exports.BattleScripts = {
 		}
 
 		// Let's check if we are in middle of a partial trap sequence to return the previous damage.
-		if (pokemon.volatiles['partialtrappinglock'] && (target !== pokemon) && (target === pokemon.volatiles['partialtrappinglock'].locked)) {
+		if (pokemon.volatiles['partialtrappinglock'] && (target === pokemon.volatiles['partialtrappinglock'].locked)) {
 			return pokemon.volatiles['partialtrappinglock'].damage;
 		}
 
@@ -794,9 +797,10 @@ exports.BattleScripts = {
 			damage *= this.random(217, 256);
 			damage = Math.floor(damage / 255);
 			if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
+			if (target.volatiles['substitute'] && damage > target.volatiles['substitute'].hp) damage = target.volatiles['substitute'].hp;
 		}
 
-		// We are done, this is the final damage.
+		// And we are done.
 		return Math.floor(damage);
 	},
 	boost: function (boost, target, source, effect) {
