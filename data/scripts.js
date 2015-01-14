@@ -1662,8 +1662,10 @@ exports.BattleScripts = {
 			if (keys[i].substr(0, 8) === 'genesect' && Math.random() * 5 > 1) continue;
 			// Gourgeist formes have 1/4 the normal rate each (so Gourgeist as a whole has a normal rate)
 			if (keys[i].substr(0, 9) === 'gourgeist' && Math.random() * 4 > 1) continue;
-			// Pikachu formes have 1/6 the normal rate each (so Pikachu as a whole has a normal rate)
-			if (keys[i].substr(0, 7) === 'pikachu' && Math.random() * 6 > 1) continue;
+			// Cosplay Pikachu formes have 20% the normal rate (1/30 the normal rate each)
+			if (keys[i].substr(0, 7) === 'pikachu' && template.species !== 'Pikachu' && Math.random() * 30 > 1) continue;
+			// Regular Pikachu has 80% the normal rate (so Pikachu as a whole has a normal rate)
+			if (template.species === 'Pikachu' && Math.random() * 5 <= 1) continue;
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
@@ -1773,8 +1775,10 @@ exports.BattleScripts = {
 			if (keys[i].substr(0, 8) === 'genesect' && Math.random() * 5 > 1) continue;
 			// Gourgeist formes have 1/4 the normal rate each (so Gourgeist as a whole has a normal rate)
 			if (keys[i].substr(0, 9) === 'gourgeist' && Math.random() * 4 > 1) continue;
-			// Pikachu formes have 1/6 the normal rate each (so Pikachu as a whole has a normal rate)
-			if (keys[i].substr(0, 7) === 'pikachu' && Math.random() * 6 > 1) continue;
+			// Cosplay Pikachu formes have 20% the normal rate (1/30 the normal rate each)
+			if (keys[i].substr(0, 7) === 'pikachu' && template.species !== 'Pikachu' && Math.random() * 30 > 1) continue;
+			// Regular Pikachu has 80% the normal rate (so Pikachu as a whole has a normal rate)
+			if (template.species === 'Pikachu' && Math.random() * 5 <= 1) continue;
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
