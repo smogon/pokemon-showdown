@@ -1426,7 +1426,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	dragonite: {
-		randomBattleMoves: ["dragondance","outrage","firepunch","extremespeed","dragonclaw","earthquake","roost","substitute"],
+		randomBattleMoves: ["dragondance","outrage","firepunch","extremespeed","earthquake","roost"],
 		randomDoubleBattleMoves: ["firepunch","extremespeed","dragonclaw","earthquake","roost","waterfall","substitute","thunderwave","hurricane","superpower","dracometeor","protect","skydrop"],
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["agility","safeguard","wingattack","outrage"]},
