@@ -250,12 +250,12 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			if (target in Config.groups) {
-				room.modjoin = target;
-				this.addModCommand("" + user.name + " set modjoin to " + target + ".");
-			} else if (target === 'on' || target === 'true' || !target) {
+			if ((target === 'on' || target === 'true' || !target) || !user.can('privateroom')) {
 				room.modjoin = true;
 				this.addModCommand("" + user.name + " turned on modjoin.");
+			} else if (target in Config.groups) {
+				room.modjoin = target;
+				this.addModCommand("" + user.name + " set modjoin to " + target + ".");
 			} else {
 				this.sendReply("Unrecognized modjoin setting.");
 				return false;
