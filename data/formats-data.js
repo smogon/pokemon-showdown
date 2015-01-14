@@ -405,7 +405,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	golbat: {
-		randomBattleMoves: ["bravebird","roost","toxic","taunt","nastyplot","gigadrain","sludgebomb","airslash","uturn","whirlwind","heatwave","superfang"],
+		randomBattleMoves: ["bravebird","roost","toxic","taunt","defog","superfang","uturn"],
 		randomDoubleBattleMoves: ["bravebird","taunt","nastyplot","gigadrain","sludgebomb","airslash","uturn","protect","heatwave","superfang"],
 		tier: "RU"
 	},
@@ -710,7 +710,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	magneton: {
-		randomBattleMoves: ["thunderbolt","thunderwave","magnetrise","substitute","flashcannon","hiddenpowerice","voltswitch","chargebeam","hiddenpowerfire"],
+		randomBattleMoves: ["thunderbolt","substitute","flashcannon","hiddenpowerice","voltswitch","chargebeam","hiddenpowerfire"],
 		randomDoubleBattleMoves: ["thunderbolt","thunderwave","magnetrise","substitute","flashcannon","hiddenpowerice","voltswitch","protect","electroweb","discharge","hiddenpowerfire"],
 		eventPokemon: [
 			{"generation":3,"level":30,"moves":["refresh","doubleedge","raindance","thunder"]}
@@ -997,7 +997,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	tangela: {
-		randomBattleMoves: ["gigadrain","sleeppowder","hiddenpowerrock","hiddenpowerice","leechseed","knockoff","leafstorm","stunspore","synthesis"],
+		randomBattleMoves: ["gigadrain","sleeppowder","hiddenpowerfire","hiddenpowerice","leechseed","knockoff","leafstorm","sludgebomb","synthesis"],
 		randomDoubleBattleMoves: ["gigadrain","sleeppowder","hiddenpowerrock","hiddenpowerice","leechseed","knockoff","leafstorm","stunspore","protect","hiddenpowerfire"],
 		eventPokemon: [
 			{"generation":3,"level":30,"abilities":["chlorophyll"],"moves":["morningsun","solarbeam","sunnyday","ingrain"]}
@@ -1790,7 +1790,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	gligar: {
-		randomBattleMoves: ["stealthrock","toxic","roost","taunt","swordsdance","earthquake","uturn","stoneedge","knockoff"],
+		randomBattleMoves: ["stealthrock","toxic","roost","taunt","earthquake","uturn","knockoff"],
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["poisonsting","sandattack"]}
 		],
@@ -1845,7 +1845,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Heracronite"
 	},
 	sneasel: {
-		randomBattleMoves: ["iceshard","icepunch","lowkick","pursuit","swordsdance","knockoff"],
+		randomBattleMoves: ["iceshard","iciclecrash","lowkick","pursuit","swordsdance","knockoff"],
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["scratch","leer","taunt","quickattack"]}
 		],
@@ -4882,7 +4882,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	fletchinder: {
-		randomBattleMoves: ["roost","swordsdance","uturn","return","overheat","flamecharge","tailwind"],
+		randomBattleMoves: ["roost","swordsdance","uturn","return","overheat","flamecharge","tailwind","acrobatics"],
 		tier: "RU"
 	},
 	talonflame: {
@@ -4977,7 +4977,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	doublade: {
-		randomBattleMoves: ["swordsdance","shadowclaw","shadowsneak","ironhead","rockslide","aerialace","destinybond"],
+		randomBattleMoves: ["swordsdance","shadowclaw","shadowsneak","ironhead","sacredsword"],
 		tier: "RU"
 	},
 	aegislash: {
