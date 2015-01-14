@@ -501,6 +501,14 @@ exports.BattleFormats = {
 			this.reportPercentages = true;
 		}
 	},
+	exacthpmod: {
+		effectType: 'Rule',
+		name: 'Exact HP Mod',
+		onStart: function () {
+			this.add('rule', 'Exact HP Mod: exact HP is shown');
+			this.reportExactHP = true;
+		}
+	},
 	sleepclausemod: {
 		effectType: 'Rule',
 		onStart: function () {
