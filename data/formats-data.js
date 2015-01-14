@@ -267,26 +267,36 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	pikachurockstar: {
+		randomBattleMoves: ["meteormash","wildcharge","knockoff","hiddenpowerice"],
+		randomDoubleBattleMoves: ["meteormash","discharge","hiddenpowerice","protect"],
 		gen: 6,
 		unobtainableShiny: true,
 		tier: "PU"
 	},
 	pikachubelle: {
+		randomBattleMoves: ["iciclecrash","wildcharge","knockoff","hiddenpowerfire"],
+		randomDoubleBattleMoves: ["iciclecrash","discharge","protect","feint"],
 		gen: 6,
 		unobtainableShiny: true,
 		tier: "PU"
 	},
 	pikachupopstar: {
+		randomBattleMoves: ["drainingkiss","wildcharge","hiddenpowerice","knockoff"],
+		randomDoubleBattleMoves: ["drainingkiss","discharge","hiddenpowerice","protect"],
 		gen: 6,
 		unobtainableShiny: true,
 		tier: "PU"
 	},
 	pikachuphd: {
+		randomBattleMoves: ["electricterrain","thunder","hiddenpowerice","knockoff"],
+		randomDoubleBattleMoves: ["electricterrain","discharge","hiddenpowerice","protect"],
 		gen: 6,
 		unobtainableShiny: true,
 		tier: "PU"
 	},
 	pikachulibre: {
+		randomBattleMoves: ["flyingpress","wildcharge","knockoff","hiddenpowerice"],
+		randomDoubleBattleMoves: ["flyingpress","discharge","knockoff","protect"],
 		gen: 6,
 		unobtainableShiny: true,
 		tier: "PU"

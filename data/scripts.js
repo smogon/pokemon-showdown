@@ -1423,7 +1423,7 @@ exports.BattleScripts = {
 			item = 'Sitrus Berry';
 		} else if (template.species === 'Cubone' || template.species === 'Marowak') {
 			item = 'Thick Club';
-		} else if (template.species === 'Pikachu') {
+		} else if (template.baseSpecies === 'Pikachu') {
 			item = 'Light Ball';
 		} else if (template.species === 'Clamperl') {
 			item = 'DeepSeaTooth';
@@ -2436,7 +2436,7 @@ exports.BattleScripts = {
 			item = 'Sitrus Berry';
 		} else if (template.species === 'Cubone' || template.species === 'Marowak') {
 			item = 'Thick Club';
-		} else if (template.species === 'Pikachu') {
+		} else if (template.baseSpecies === 'Pikachu') {
 			item = 'Light Ball';
 		} else if (template.species === 'Clamperl') {
 			item = 'DeepSeaTooth';
