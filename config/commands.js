@@ -194,7 +194,7 @@ var commands = exports.commands = {
 					this.sendReply("Locked: IP is in a DNS-based blacklist. ");
 					break;
 				case '#range':
-					this.sendReply("Locked: host is in a temporary range-lock.");
+					this.sendReply("Locked: IP or host is in a temporary range-lock.");
 					break;
 				case '#hostfilter':
 					this.sendReply("Locked: host is permanently locked for being a proxy.");
