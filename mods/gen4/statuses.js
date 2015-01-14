@@ -1,7 +1,6 @@
 exports.BattleStatuses = {
 	par: {
 		inherit: true,
-		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon) {
 			if (pokemon.ability !== 'magicguard' && this.random(4) === 0) {
 				this.add('cant', pokemon, 'par');
@@ -16,7 +15,7 @@ exports.BattleStatuses = {
 			// 1-4 turns
 			this.effectData.time = this.random(2, 6);
 		},
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
 			if (pokemon.getAbility().isHalfSleep) {
 				pokemon.statusData.time--;
