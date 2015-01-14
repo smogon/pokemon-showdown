@@ -243,18 +243,38 @@ var commands = exports.commands = {
 		}
 	},
 
-	ipsearch: function (target, room, user) {
+	ipsearchall: 'ipsearch',
+	ipsearch: function (target, room, user, connection, cmd) {
 		if (!this.can('rangeban')) return;
-		var atLeastOne = false;
+		var results = [];
 		this.sendReply("Users with IP " + target + ":");
-		for (var userid in Users.users) {
-			var curUser = Users.users[userid];
-			if (curUser.latestIp === target) {
-				this.sendReply((curUser.connected ? " + " : "-") + " " + curUser.name);
-				atLeastOne = true;
+
+		var isRange;
+		if (target.slice(-1) === '*') {
+			isRange = true;
+			target = target.slice(0, -1);
+		}
+		var isAll = (cmd === 'ipsearchall');
+
+		if (isRange) {
+			for (var userid in Users.users) {
+				var curUser = Users.users[userid];
+				if (curUser.group === '~') continue;
+				if (!curUser.latestIp.startsWith(target)) continue;
+				if (results.push((curUser.connected ? " + " : "-") + " " + curUser.name) > 100 && !isAll) {
+					return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
+				}
+			}
+		} else {
+			for (var userid in Users.users) {
+				var curUser = Users.users[userid];
+				if (curUser.latestIp === target) {
+					results.push((curUser.connected ? " + " : "-") + " " + curUser.name);
+				}
 			}
 		}
-		if (!atLeastOne) this.sendReply("No results found.");
+		if (!results.length) return this.sendReply("No results found.");
+		return this.sendReply(results.join('; '));
 	},
 
 	/*********************************************************
