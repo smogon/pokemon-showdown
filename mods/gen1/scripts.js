@@ -1143,6 +1143,9 @@ exports.BattleScripts = {
 					case 'flamethrower':
 						if (hasMove['fireblast']) rejected = true;
 						break;
+					case 'fireblast':
+						if (hasMove['flamethrower']) rejected = true;
+						break;
 					case 'icebeam':
 						if (hasMove['blizzard']) rejected = true;
 						break;
@@ -1161,6 +1164,9 @@ exports.BattleScripts = {
 						break;
 					case 'thunder':
 						if (hasMove['thunderbolt']) rejected = true;
+						break;
+					case 'thunderbolt':
+						if (hasMove['thunder']) rejected = true;
 						break;
 					case 'bonemerang':
 						if (hasMove['earthquake']) rejected = true;
