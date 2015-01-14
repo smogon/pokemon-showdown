@@ -752,7 +752,7 @@ Validator = (function () {
 				if (!sources) sources = [];
 				for (var i = 0, len = lsetData.sources.length; i < len; i++) {
 					learned = lsetData.sources[i];
-					if (parseInt(learned.substr(0, 1), 10) <= sourcesBefore) {
+					if (tools.gen <= 2 || parseInt(learned.substr(0, 1), 10) <= sourcesBefore) {
 						sources.push(learned);
 					}
 				}
@@ -762,7 +762,7 @@ Validator = (function () {
 				if (!lsetData.sources) lsetData.sources = [];
 				for (var i = 0, len = sources.length; i < len; i++) {
 					learned = sources[i];
-					if (parseInt(learned.substr(0, 1), 10) <= lsetData.sourcesBefore) {
+					if (tools.gen <= 2 || parseInt(learned.substr(0, 1), 10) <= lsetData.sourcesBefore) {
 						lsetData.sources.push(learned);
 					}
 				}
