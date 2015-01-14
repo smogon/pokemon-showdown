@@ -196,15 +196,19 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Battle Spot Special 7",
+		name: "Battle Spot Special 8",
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Standard GBU', 'Hoenn Pokedex', 'Team Preview VGC'],
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
 		requirePentagon: true,
 		validateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pokémon.'];
+			for (var i = 0; i < team.length; i++) {
+				var item = this.getItem(team[i].item);
+				if (item.id && !item.isBerry) return ['All items other than berries are banned.'];
+			}
 		},
 		onBegin: function () {
 			this.debug('cutting down to 4');
