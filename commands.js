@@ -955,26 +955,27 @@ var commands = exports.commands = {
 
 	rangelock: function (target, room, user) {
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
-		if (!target) return this.sendReply("Please specify a domain to lock.");
+		if (!target) return this.sendReply("Please specify a range to lock.");
 		if (!this.can('rangeban')) return false;
 
-		var domain = Users.shortenHost(target);
-		if (Users.lockedDomains[domain]) return this.sendReply("The domain " + domain + " has already been temporarily locked.");
+		var isIp = (target.slice(-1) === '*' ? true : false);
+		var range = (isIp ? target : Users.shortenHost(target));
+		if (Users.lockedRanges[range]) return this.sendReply("The range " + range + " has already been temporarily locked.");
 
-		Users.lockDomain(domain);
-		this.addModCommand("" + user.name + " temporarily locked the domain " + domain + ".");
+		Users.lockRange(range, isIp);
+		this.addModCommand("" + user.name + " temporarily locked the range " + range + ".");
 	},
 
 	rangeunlock: function (target, room, user) {
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
-		if (!target) return this.sendReply("Please specify a domain to unlock.");
+		if (!target) return this.sendReply("Please specify a range to unlock.");
 		if (!this.can('rangeban')) return false;
 
-		var domain = Users.shortenHost(target);
-		if (!Users.lockedDomains[domain]) return this.sendReply("The domain " + domain + " is not locked.");
+		var range = (target.slice(-1) === '*' ? target : Users.shortenHost(target));
+		if (!Users.lockedRanges[range]) return this.sendReply("The range " + range + " is not locked.");
 
-		Users.unlockDomain(domain);
-		this.addModCommand("" + user.name + " unlocked the domain " + domain + ".");
+		Users.unlockRange(range);
+		this.addModCommand("" + user.name + " unlocked the range " + range + ".");
 	},
 
 	/*********************************************************
