@@ -12603,7 +12603,7 @@ exports.BattleMovedex = {
 				if (defender !== this.effectData.source) return;
 				defender.trapped = true;
 			},
-			onFoeBeforeMovePriority: 11,
+			onFoeBeforeMovePriority: 12,
 			onFoeBeforeMove: function (attacker, defender, move) {
 				if (attacker === this.effectData.source) {
 					this.debug('Sky drop nullifying.');
