@@ -1625,7 +1625,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && template.baseSpecies !== 'Pikachu' && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -1652,11 +1652,9 @@ exports.BattleScripts = {
 			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
 			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
 			if (tier === 'LC' && nuCount > 1) continue;
-			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
+			if ((tier === 'NFE' || tier === 'NU' || tier === 'PU') && nuCount > 1 && Math.random() * 5 > 1) continue;
 			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
 
-			// CAPs have 20% the normal rate
-			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
 			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
 			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 18 > 1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
@@ -1732,7 +1730,7 @@ exports.BattleScripts = {
 			// Increment Uber/NU and mega counter
 			if (tier === 'Uber') {
 				uberCount++;
-			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
+			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC' || tier === 'PU') {
 				nuCount++;
 			}
 			if (isMegaSet) megaCount++;
@@ -1745,7 +1743,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && template.baseSpecies !== 'Pikachu' && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
