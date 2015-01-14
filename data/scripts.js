@@ -1625,7 +1625,13 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
+			// If a template does not have moves defined for random battles, skip them
+			if (!this.data.FormatsData[i].randomBattleMoves) continue;
+			// Add only Pokemon that exist and are fully evolved
+			if (!this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
+				keys.push(i);
+			// Also add some not-fully-evolved Pokemon that are exceptions due to their strength
+			} else if (template.baseSpecies === 'pikachu') {
 				keys.push(i);
 			}
 		}
@@ -1655,8 +1661,6 @@ exports.BattleScripts = {
 			if ((tier === 'NFE' || tier === 'NU') && nuCount > 1 && Math.random() * 5 > 1) continue;
 			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
 
-			// CAPs have 20% the normal rate
-			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
 			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
 			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 18 > 1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
@@ -1665,6 +1669,8 @@ exports.BattleScripts = {
 			if (keys[i].substr(0, 8) === 'genesect' && Math.random() * 5 > 1) continue;
 			// Gourgeist formes have 1/4 the normal rate each (so Gourgeist as a whole has a normal rate)
 			if (keys[i].substr(0, 9) === 'gourgeist' && Math.random() * 4 > 1) continue;
+			// Pikachu formes have 1/6 the normal rate each (so Pikachu as a whole has a normal rate)
+			if (keys[i].substr(0, 8) === 'pikachu' && Math.random() * 6 > 1) continue;
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
@@ -1745,7 +1751,13 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
+			// If a template does not have moves defined for random battles, skip them
+			if (!this.data.FormatsData[i].randomBattleMoves) continue;
+			// Add only Pokemon that exist and are fully evolved
+			if (!this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
+				keys.push(i);
+			// Also add some not-fully-evolved Pokemon that are exceptions due to their strength
+			} else if (template.baseSpecies === 'pikachu') {
 				keys.push(i);
 			}
 		}
@@ -1772,6 +1784,10 @@ exports.BattleScripts = {
 			if (keys[i].substr(0, 8) === 'basculin' && Math.random() * 2 > 1) continue;
 			// Genesect formes have 1/5 the normal rate each (so Genesect as a whole has a normal rate)
 			if (keys[i].substr(0, 8) === 'genesect' && Math.random() * 5 > 1) continue;
+			// Gourgeist formes have 1/4 the normal rate each (so Gourgeist as a whole has a normal rate)
+			if (keys[i].substr(0, 9) === 'gourgeist' && Math.random() * 4 > 1) continue;
+			// Pikachu formes have 1/6 the normal rate each (so Pikachu as a whole has a normal rate)
+			if (keys[i].substr(0, 8) === 'pikachu' && Math.random() * 6 > 1) continue;
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
