@@ -1641,7 +1641,7 @@ exports.BattleScripts = {
 		var typeComboCount = {};
 		var baseFormes = {};
 		var uberCount = 0;
-		var nuCount = 0;
+		var puCount = 0;
 		var megaCount = 0;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
