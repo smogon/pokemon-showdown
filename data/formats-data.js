@@ -3926,40 +3926,36 @@ exports.BattleFormatsData = {
 	},
 	tepig: {
 		randomBattleMoves: ["flamecharge","flareblitz","wildcharge","superpower","headsmash"],
-		unreleasedHidden: true,
 		tier: "LC"
 	},
 	pignite: {
 		randomBattleMoves: ["flamecharge","flareblitz","wildcharge","superpower","headsmash"],
-		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	emboar: {
 		randomBattleMoves: ["flareblitz","superpower","flamecharge","wildcharge","headsmash","suckerpunch","fireblast"],
 		randomDoubleBattleMoves: ["flareblitz","superpower","flamecharge","wildcharge","headsmash","protect","heatwave","rockslide"],
 		eventPokemon: [
-			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["flareblitz","hammerarm","wildcharge","headsmash"],"pokeball":"cherishball"}
+			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["flareblitz","hammerarm","wildcharge","headsmash"],"pokeball":"cherishball"},
+			{"generation":6,"level":50,"gender":"M","isHidden":true,"moves":["flareblitz","holdback","headsmash","takedown"],"pokeball":"cherishball"}
 		],
-		unreleasedHidden: true,
 		tier: "RU"
 	},
 	oshawott: {
 		randomBattleMoves: ["swordsdance","waterfall","aquajet","xscissor"],
-		unreleasedHidden: true,
 		tier: "LC"
 	},
 	dewott: {
 		randomBattleMoves: ["swordsdance","waterfall","aquajet","xscissor"],
-		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	samurott: {
 		randomBattleMoves: ["swordsdance","aquajet","waterfall","megahorn","superpower"],
 		randomDoubleBattleMoves: ["hydropump","aquajet","icebeam","scald","hiddenpowergrass","taunt","helpinghand","protect"],
 		eventPokemon: [
-			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["hydropump","icebeam","megahorn","superpower"],"pokeball":"cherishball"}
+			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["hydropump","icebeam","megahorn","superpower"],"pokeball":"cherishball"},
+			{"generation":6,"level":50,"gender":"M","isHidden":true,"moves":["razorshell","holdback","confide","hydropump"],"pokeball":"cherishball"}
 		],
-		unreleasedHidden: true,
 		tier: "NU"
 	},
 	patrat: {
