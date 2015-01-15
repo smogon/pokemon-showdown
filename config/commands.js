@@ -914,7 +914,8 @@ var commands = exports.commands = {
 			"- Sector (Milena Kunis)<br />" +
 			"- Sweep<br />" +
 			"- Synerjee (Alto Mare, Autumn Reverie)<br />" +
-			"- Vrai"
+			"- Vrai<br /><br />" +
+			"<a href=\"http://www.pokecommunity.com/showthread.php?t=289012#staff\">Click here for more details.</a>"
 		);
 	},
 
