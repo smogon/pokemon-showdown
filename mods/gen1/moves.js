@@ -733,7 +733,8 @@ exports.BattleMovedex = {
 	},
 	skyattack: {
 		inherit: true,
-		critRatio: 1
+		critRatio: 1,
+		secondary: {}
 	},
 	softboiled: {
 		inherit: true,
