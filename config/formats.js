@@ -6,23 +6,12 @@ exports.Formats = [
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
 
-	/*{
-		name: "XY Anniversary Random (BWknd 23)",
-		section: "ORAS Singles",
-
-		team: 'randomXY',
-		ruleset: ['Random (no PotD)']
-	},*/
 	{
-		name: "Snowy OU",
+		name: "OU (BWknd 24)",
 		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Drought', 'Sunny Day', 'Drizzle', 'Rain Dance', 'Sand Stream', 'Sandstorm'],
-		onBegin: function() {
-			this.setWeather('Hail');
-			delete this.weatherData.duration;
-		}
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
 	},
 	{
 		name: "OU",
@@ -147,6 +136,102 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		name: "Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview']
+	},
+	{
+		name: "Unrated Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'random',
+		challengeShow: false,
+		rated: false,
+		ruleset: ['Random']
+	},
+	{
+		name: "Random (no PotD)",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'random',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview']
+	},
+	{
+		name: "1v1 Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'random',
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview 1v1'],
+		onBegin: function() {
+			this.debug('Cutting down to 1');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	{
+		name: "Uber Random",
+		section: "Random Battles (aka Randbats)",
+
+		mod: 'uberrandom',
+		team: 'randomUber',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "High Tier Random",
+		section: "Random Battles (aka Randbats)",
+
+		mod: 'hightierrandom',
+		team: 'randomHighTier',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Low Tier Random",
+		section: "Random Battles (aka Randbats)",
+
+		mod: 'lowtierrandom',
+		team: 'randomLowTier',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "LC Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomLC',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Monotype Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomMonotype',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Hoenn Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomHoenn',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Hoenn Weather Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomHoennWeather',
+		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Super Smash Bros. Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomSmashBros',
+		ruleset: ['Random (no PotD)']
+	},
+	{
 		name: "Winter Wonderland",
 		section: "Random Battles (aka Randbats)",
 
@@ -261,102 +346,6 @@ exports.Formats = [
 				}
 			}
 		},
-		ruleset: ['Random (no PotD)']
-	},
-	{
-		name: "Random",
-		section: "Random Battles (aka Randbats)",
-
-		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview']
-	},
-	{
-		name: "Unrated Random",
-		section: "Random Battles (aka Randbats)",
-
-		team: 'random',
-		challengeShow: false,
-		rated: false,
-		ruleset: ['Random']
-	},
-	{
-		name: "Random (no PotD)",
-		section: "Random Battles (aka Randbats)",
-
-		team: 'random',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview']
-	},
-	{
-		name: "1v1 Random",
-		section: "Random Battles (aka Randbats)",
-
-		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview 1v1'],
-		onBegin: function() {
-			this.debug('Cutting down to 1');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
-	},
-	{
-		name: "Uber Random",
-		section: "Random Battles (aka Randbats)",
-
-		mod: 'uberrandom',
-		team: 'randomUber',
-		ruleset: ['Random (no PotD)']
-	},
-	{
-		name: "High Tier Random",
-		section: "Random Battles (aka Randbats)",
-
-		mod: 'hightierrandom',
-		team: 'randomHighTier',
-		ruleset: ['Random (no PotD)']
-	},
-	{
-		name: "Low Tier Random",
-		section: "Random Battles (aka Randbats)",
-
-		mod: 'lowtierrandom',
-		team: 'randomLowTier',
-		ruleset: ['Random (no PotD)']
-	},
-	{
-		name: "LC Random",
-		section: "Random Battles (aka Randbats)",
-
-		team: 'randomLC',
-		ruleset: ['Random (no PotD)']
-	},
-	{
-		name: "Monotype Random",
-		section: "Random Battles (aka Randbats)",
-
-		team: 'randomMonotype',
-		ruleset: ['Random (no PotD)']
-	},
-	{
-		name: "Hoenn Random",
-		section: "Random Battles (aka Randbats)",
-
-		team: 'randomHoenn',
-		ruleset: ['Random (no PotD)']
-	},
-	{
-		name: "Hoenn Weather Random",
-		section: "Random Battles (aka Randbats)",
-
-		team: 'randomHoennWeather',
-		ruleset: ['Random (no PotD)']
-	},
-	{
-		name: "Super Smash Bros. Random",
-		section: "Random Battles (aka Randbats)",
-
-		team: 'randomSmashBros',
 		ruleset: ['Random (no PotD)']
 	},
 	{
@@ -784,6 +773,17 @@ exports.Formats = [
 					this.boost({spd:1}, pokemon);
 				}
 			}
+		}
+	},
+	{
+		name: "Snowy OU",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite'],
+		onBegin: function() {
+			this.setWeather('Hail');
+			delete this.weatherData.duration;
 		}
 	},
 	{
