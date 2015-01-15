@@ -220,20 +220,20 @@ exports.BattleFormats = {
 			}
 			if (template.num === 649) { // Genesect
 				switch (item.id) {
-					case 'burndrive':
-						set.species = 'Genesect-Burn';
-						break;
-					case 'chilldrive':
-						set.species = 'Genesect-Chill';
-						break;
-					case 'dousedrive':
-						set.species = 'Genesect-Douse';
-						break;
-					case 'shockdrive':
-						set.species = 'Genesect-Shock';
-						break;
-					default:
-						set.species = 'Genesect';
+				case 'burndrive':
+					set.species = 'Genesect-Burn';
+					break;
+				case 'chilldrive':
+					set.species = 'Genesect-Chill';
+					break;
+				case 'dousedrive':
+					set.species = 'Genesect-Douse';
+					break;
+				case 'shockdrive':
+					set.species = 'Genesect-Shock';
+					break;
+				default:
+					set.species = 'Genesect';
 				}
 			}
 			if (template.num === 681) { // Aegislash
@@ -499,6 +499,14 @@ exports.BattleFormats = {
 		onStart: function () {
 			this.add('rule', 'HP Percentage Mod: HP is shown in percentages');
 			this.reportPercentages = true;
+		}
+	},
+	exacthpmod: {
+		effectType: 'Rule',
+		name: 'Exact HP Mod',
+		onStart: function () {
+			this.add('rule', 'Exact HP Mod: exact HP is shown');
+			this.reportExactHP = true;
 		}
 	},
 	sleepclausemod: {

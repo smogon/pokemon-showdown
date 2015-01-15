@@ -12,6 +12,7 @@ exports.BattleFormats = {
 				problems.push(set.species + ' is not a real Pokemon.');
 			}
 			var hasHP = false;
+			var hasSD = false;
 			if (set.item) {
 				var item = this.getItem(set.item);
 				if (item.gen > this.gen) {
@@ -29,6 +30,7 @@ exports.BattleFormats = {
 						problems.push(move.name + ' is not a real move.');
 					}
 					if (move.id === 'hiddenpower') hasHP = true;
+					if (move.id === 'swordsdance') hasSD = true;
 				}
 			}
 			if (set.moves && set.moves.length > 4) {
@@ -62,6 +64,13 @@ exports.BattleFormats = {
 					set.ivs.spd = set.ivs.spa;
 				}
 				// Calculate all the IV oddness on gen 2.
+				// If you use Marowak with Thick Club, we'll be gentle enough to deal with your Attack DVs.
+				// This is only done because the gen 6 Teambuilder is confusing, using IVs and all.
+				var marowakClub = false;
+				if (toId(set.item) === 'thickclub' && set.species === 'Marowak' && hasSD) {
+					set.ivs.atk = 26;
+					marowakClub = true;
+				}
 				// Don't run shinies, they fuck your IVs
 				if (set.shiny) {
 					set.ivs.def = 20;
@@ -70,7 +79,7 @@ exports.BattleFormats = {
 					set.ivs.spd = 20;
 					// Attack can vary, so let's check it
 					if (!(set.ivs.atk in {4:1, 6:1, 12:1, 14:1, 20:1, 22:1, 28:1, 30:1})) {
-						set.ivs.atk = 30;
+						set.ivs.atk = marowakClub ? 22 : 30;
 					}
 				}
 				// Deal with female IVs.

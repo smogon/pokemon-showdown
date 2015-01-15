@@ -7,10 +7,8 @@ exports.BattleStatuses = {
 		onAfterMoveSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 8);
 		},
-		onSwitchIn: function (pokemon) {
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 8);
-			}
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(pokemon.maxhp / 8);
 		}
 	},
 	par: {
@@ -66,10 +64,8 @@ exports.BattleStatuses = {
 		onAfterMoveSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 8);
 		},
-		onSwitchIn: function (pokemon) {
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 8);
-			}
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(pokemon.maxhp / 8);
 		}
 	},
 	tox: {
@@ -84,11 +80,22 @@ exports.BattleStatuses = {
 			}
 			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
 		},
-		onSwitchIn: function (pokemon) {
+		onAfterSwitchInSelf: function (pokemon) {
 			this.effectData.stage = 0;
 			pokemon.setStatus('psn');
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 8);
+			this.damage(pokemon.maxhp / 8);
+		}
+	},
+	confusion: {
+		inherit: true,
+		onStart: function (target, source, sourceEffect) {
+			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
+			if (!result) return result;
+			this.add('-start', target, 'confusion');
+			if (sourceEffect && sourceEffect.id === 'berserkgene') {
+				this.effectData.time = 256;
+			} else {
+				this.effectData.time = this.random(2, 6);
 			}
 		}
 	},
