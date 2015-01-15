@@ -214,6 +214,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 200
 	},
+	skyattack: {
+		inherit: true,
+		secondary: {}
+	},
 	sleeptalk: {
 		inherit: true,
 		onHit: function (pokemon) {
