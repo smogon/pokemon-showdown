@@ -1299,7 +1299,7 @@ User = (function () {
 			}
 		}
 		if (!connection) {
-			for (var i = 0; i < this.connections.length;i++) {
+			for (var i = 0; i < this.connections.length; i++) {
 				// only join full clients, not pop-out single-room
 				// clients
 				if (this.connections[i].rooms['global']) {

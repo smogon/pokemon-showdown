@@ -1319,7 +1319,7 @@ var commands = exports.commands = {
 		var genNumber = 6;
 		// var doublesFormats = {'vgc2012':1, 'vgc2013':1, 'vgc2014':1, 'doubles':1};
 		var doublesFormats = {};
-		var doublesFormat = (!targets[2] && generation in doublesFormats)? generation : (targets[2] || '').trim().toLowerCase();
+		var doublesFormat = (!targets[2] && generation in doublesFormats) ? generation : (targets[2] || '').trim().toLowerCase();
 		var doublesText = '';
 		if (generation === 'xy' || generation === 'xy' || generation === '6' || generation === 'six') {
 			generation = 'xy';
@@ -1433,7 +1433,7 @@ var commands = exports.commands = {
 			return this.sendReplyBox("Random number " + num + "x(1 - " + faces + "): " + rolls.join(", ") + "<br />Total: " + total);
 		}
 		if (target && isNaN(target) || target.length > 21) return this.sendReply("The max roll must be a number under 21 digits.");
-		var maxRoll = (target)? target : 6;
+		var maxRoll = (target) ? target : 6;
 		var rand = Math.floor(maxRoll * Math.random()) + 1;
 		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
 	},
