@@ -2862,7 +2862,7 @@ exports.BattleScripts = {
 						break;
 					}
 				}
-				if (!hasOrcKilling) set.moves[3] = (template.baseStats.atk > template.baseStats.spa)? 'closecombat' : 'aurasphere';
+				if (!hasOrcKilling) set.moves[3] = (template.baseStats.atk > template.baseStats.spa) ? 'closecombat' : 'aurasphere';
 				if (p !== 'hoopa') {
 					set.item = 'Eviolite';
 					set.level = 90;
@@ -3009,7 +3009,7 @@ exports.BattleScripts = {
 					}
 				}
 				if (!hasBotKilling) {
-					set.moves[3] = (template.baseStats.atk > template.baseStats.spa)? ['flareblitz', 'closecombat'][this.random(2)] : ['flamethrower', 'aurasphere'][this.random(2)];
+					set.moves[3] = (template.baseStats.atk > template.baseStats.spa) ? ['flareblitz', 'closecombat'][this.random(2)] : ['flamethrower', 'aurasphere'][this.random(2)];
 					set.level += 5;
 				}
 				if (toId(set.ability) === 'unburden') set.ability = 'Reckless';

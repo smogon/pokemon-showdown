@@ -366,8 +366,8 @@ exports.BattleScripts = {
 		var defender = target;
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
-		var atkType = (move.category === 'Physical')? 'atk' : 'spa';
-		var defType = (move.defensiveCategory === 'Physical')? 'def' : 'spd';
+		var atkType = (move.category === 'Physical') ? 'atk' : 'spa';
+		var defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		var unboosted = false;
 		var noburndrop = false;
 
