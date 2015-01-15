@@ -776,17 +776,6 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Snowy OU",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite'],
-		onBegin: function() {
-			this.setWeather('Hail');
-			delete this.weatherData.duration;
-		}
-	},
-	{
 		name: "CAP",
 		section: "Other Metagames",
 		column: 2,
@@ -829,13 +818,6 @@ exports.Formats = [
 			'Kyogre', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Slowbronite', 'Soul Dew'
 		]
-	},
-	{
-		name: "OU Monotype",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
-		banlist: ['OU']
 	},
 	{
 		name: "Tier Shift",
@@ -1037,6 +1019,17 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
+	},
+	{
+		name: "Snowy OU",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite'],
+		onBegin: function() {
+			this.setWeather('Hail');
+			delete this.weatherData.duration;
+		}
 	},
 
 	// BW2 Singles
