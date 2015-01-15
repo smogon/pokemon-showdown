@@ -418,7 +418,7 @@ exports.BattleScripts = {
 		}
 
 		// We get the sub to the target to see if it existed
-		var targetSub = (target)? target.volatiles['substitute'] : false;
+		var targetSub = (target) ? target.volatiles['substitute'] : false;
 		var targetHadSub = (targetSub !== null && targetSub !== false && (typeof targetSub !== 'undefined'));
 
 		if (target) {
@@ -713,8 +713,8 @@ exports.BattleScripts = {
 		var defender = target;
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
-		var atkType = (move.category === 'Physical')? 'atk' : 'spa';
-		var defType = (move.defensiveCategory === 'Physical')? 'def' : 'spd';
+		var atkType = (move.category === 'Physical') ? 'atk' : 'spa';
+		var defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		var attack = attacker.getStat(atkType);
 		var defense = defender.getStat(defType);
 

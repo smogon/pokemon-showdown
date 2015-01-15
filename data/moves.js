@@ -700,7 +700,7 @@ exports.BattleMovedex = {
 					this.add('-start', pokemon, 'Autotomize');
 				}
 			},
-			onRestart: function (pokemon)		 {
+			onRestart: function (pokemon) {
 				if (pokemon.weightkg !== 0.1) {
 					this.effectData.multiplier++;
 					this.add('-start', pokemon, 'Autotomize');
@@ -8232,7 +8232,7 @@ exports.BattleMovedex = {
 				}
 			}
 			if (!targets.length) return false;
-			for (var i = 0;i < targets.length;i++) this.boost({spd: 1, def: 1}, targets[i], source, 'move: Magnetic Flux');
+			for (var i = 0; i < targets.length; i++) this.boost({spd: 1, def: 1}, targets[i], source, 'move: Magnetic Flux');
 		},
 		secondary: false,
 		target: "allySide",
