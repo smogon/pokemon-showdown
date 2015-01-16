@@ -505,7 +505,7 @@ exports.BattleFormats = {
 		effectType: 'Rule',
 		name: 'Exact HP Mod',
 		onStart: function () {
-			this.add('rule', 'Exact HP Mod: exact HP is shown');
+			this.add('rule', 'Exact HP Mod: Exact HP is shown');
 			this.reportExactHP = true;
 		}
 	},
