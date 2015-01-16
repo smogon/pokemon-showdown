@@ -16,8 +16,6 @@ const ACTION_COOLDOWN = 3*1000;
 const FLOOD_MESSAGE_NUM = 5;
 const FLOOD_PER_MSG_MIN = 500; // this is the minimum time between messages for legitimate spam. It's used to determine what "flooding" is caused by lag
 const FLOOD_MESSAGE_TIME = 6*1000;
-const MIN_CAPS_LENGTH = 18;
-const MIN_CAPS_PROPORTION = 0.8;
 
 settings = {};
 try {
@@ -159,13 +157,13 @@ exports.parse = {
 			case 'c':
 				var by = spl[2];
 				this.processChatData(toId(by), room, connection, spl[4]);
-				if (this.isBlacklisted(toId(by), room)) this.say(connection, room, '/roomban ' + by + ', Blacklisted user');
+				if (this.isBlacklisted(toId(by), room)) this.say(connection, room, '/ban ' + by + ', Blacklisted user');
 				this.chatMessage(spl[3], by, room, connection);
 				break;
 			case 'c:':
 				var by = spl[3];
 				this.processChatData(toId(by), room, connection, spl[4]);
-				if (this.isBlacklisted(toId(by), room)) this.say(connection, room, '/roomban ' + by + ', Blacklisted user');
+				if (this.isBlacklisted(toId(by), room)) this.say(connection, room, '/ban ' + by + ', Blacklisted user');
 				this.chatMessage(spl[4], by, room, connection);
 				break;
 			case 'pm':
@@ -180,7 +178,7 @@ exports.parse = {
 				break;
 			case 'J': case 'j':
 				var by = spl[2];
-				if (this.isBlacklisted(toId(by), room)) this.say(connection, room, '/roomban ' + by + ', Blacklisted user');
+				if (this.isBlacklisted(toId(by), room)) this.say(connection, room, '/ban ' + by + ', Blacklisted user');
 				this.updateSeen(toId(by), spl[1], room);
 				if (toId(by) === toId(config.nick) && ' +%@&#~'.indexOf(by.charAt(0)) > -1) this.ranks[room] = by.charAt(0);
 				break;
@@ -193,7 +191,7 @@ exports.parse = {
 		var cmdrMessage = '["' + room + '|' + by + '|' + message + '"]';
 		message = message.trim();
 		// auto accept invitations to rooms
-		if (room.charAt(0) === ',' && message.substr(0,8) === '/invite ' && this.hasRank(by, '%@&~') && !(config.serverid === 'showdown' && toId(message.substr(8)) === 'lobby')) {
+		if (room.charAt(0) === ',' && message.substr(0,8) === '/invite ' && !(config.serverid === 'showdown' && toId(message.substr(8)) === 'lobby')) {
 			this.say(connection, '', '/join ' + message.substr(8));
 		}
 		if (message.substr(0, config.commandcharacter.length) !== config.commandcharacter || toId(by) === toId(config.nick)) return;
@@ -341,16 +339,8 @@ exports.parse = {
 					muteMessage = ', Automated response: flooding';
 				}
 			}
-			// moderation for caps (over x% of the letters in a line of y characters are capital)
-			var capsMatch = msg.replace(/[^A-Za-z]/g, '').match(/[A-Z]/g);
-			if ((useDefault || !modSettings.caps) && capsMatch && toId(msg).length > MIN_CAPS_LENGTH && (capsMatch.length >= ~~(toId(msg).length * MIN_CAPS_PROPORTION))) {
-				if (pointVal < 1) {
-					pointVal = 1;
-					muteMessage = ', Automated response: caps';
-				}
-			}
 			// moderation for stretching (over x consecutive characters in the message are the same)
-			var stretchMatch = /(.)\1{7,}/gi.test(msg) || /(..+)\1{4,}/gi.test(msg); // matches the same character (or group of characters) 8 (or 5) or more times in a row
+			var stretchMatch = /(.)\1{59,}/gi.test(msg) || /(..+)\1{37,}/gi.test(msg); // matches the same character (or group of characters) 8 (or 5) or more times in a row
 			if ((useDefault || !modSettings.stretching) && stretchMatch) {
 				if (pointVal < 1) {
 					pointVal = 1;
