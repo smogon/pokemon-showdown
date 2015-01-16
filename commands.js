@@ -408,26 +408,26 @@ var commands = exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-
+	
 	roomowner: function (target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
 		}
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
+		var name = this.targetUsername;
+		var userid = toId(name);
 
-		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
-
-		if (!this.can('makeroom', targetUser, room)) return false;
+		if (!this.can('makeroom', null, room)) return false;
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
-		var name = targetUser.name;
-
-		room.auth[targetUser.userid] = '#';
+		room.auth[userid] = '#';
 		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
-		room.onUpdateIdentity(targetUser);
-		Rooms.global.writeChatRoomData();
+		if (targetUser) targetUser.updateIdentity();
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
+		}
 	},
 
 	roomdeowner: 'deroomowner',
