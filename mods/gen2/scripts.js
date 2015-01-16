@@ -256,7 +256,7 @@ exports.BattleScripts = {
 				// Unlike gen 1, though, paralysis works for all unless the target is immune to direct move (ie. ground-types and t-wave).
 				if (!(moveData.secondaries[i].status && moveData.secondaries[i].status in {'brn':1, 'frz':1} && target && target.hasType(move.type))) {
 					var effectChance = Math.floor(moveData.secondaries[i].chance * 255 / 100);
-					if (typeof moveData.secondaries[i].chance === 'undefined' || this.random(256) < effectChance) {
+					if (typeof moveData.secondaries[i].chance === 'undefined' || this.random(256) <= effectChance) {
 						this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
 					}
 				}
@@ -366,8 +366,8 @@ exports.BattleScripts = {
 		var defender = target;
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
-		var atkType = (move.category === 'Physical')? 'atk' : 'spa';
-		var defType = (move.defensiveCategory === 'Physical')? 'def' : 'spd';
+		var atkType = (move.category === 'Physical') ? 'atk' : 'spa';
+		var defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		var unboosted = false;
 		var noburndrop = false;
 
@@ -461,10 +461,6 @@ exports.BattleScripts = {
 
 		// We are done, this is the final damage
 		return damage;
-	},
-	faint: function (pokemon, source, effect) {
-		pokemon.faint(source, effect);
-		this.queue = [];
 	},
 	getResidualStatuses: function (thing, callbackType) {
 		var statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');

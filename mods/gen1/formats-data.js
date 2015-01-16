@@ -1,8 +1,10 @@
 exports.BattleFormatsData = {
 	bulbasaur: {
+		randomBattleMoves: ["razorleaf","sleeppowder","swordsdance","bodyslam"],
 		tier: "LC"
 	},
 	ivysaur: {
+		randomBattleMoves: ["razorleaf","sleeppowder","swordsdance","bodyslam"],
 		tier: "UU"
 	},
 	venusaur: {
@@ -10,29 +12,35 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	charmander: {
+		randomBattleMoves: ["fireblast","bodyslam","swordsdance","submission","substitute","slash","seismictoss","flamethrower"],
 		tier: "LC"
 	},
 	charmeleon: {
+		randomBattleMoves: ["fireblast","bodyslam","swordsdance","submission","substitute","slash","seismictoss","flamethrower"],
 		tier: "UU"
 	},
 	charizard: {
-		randomBattleMoves: ["fireblast","earthquake","swordsdance","bodyslam","hyperbeam"],
+		randomBattleMoves: ["fireblast","earthquake","bodyslam","swordsdance","hyperbeam","flamethrower"],
 		tier: "UU"
 	},
 	squirtle: {
+		randomBattleMoves: ["surf","blizzard","bodyslam","mimic"],
 		tier: "LC"
 	},
 	wartortle: {
+		randomBattleMoves: ["surf","blizzard","bodyslam","mimic","hydropump","rest"],
 		tier: "UU"
 	},
 	blastoise: {
-		randomBattleMoves: ["surf","blizzard","bodyslam","mimic"],
+		randomBattleMoves: ["surf","blizzard","bodyslam","mimic","hydropump","rest","earthquake","hyperbeam"],
 		tier: "UU"
 	},
 	caterpie: {
+		randomBattleMoves:["stringshot","tackle"],
 		tier: "LC"
 	},
 	metapod: {
+		randomBattleMoves:["stringshot","tackle","harden"],
 		tier: "UU"
 	},
 	butterfree: {
@@ -40,9 +48,11 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	weedle: {
+		randomBattleMoves: ["poisonsting","stringshot"],
 		tier: "LC"
 	},
 	kakuna: {
+		randomBattleMoves: ["poisonsting","stringshot","harden"],
 		tier: "UU"
 	},
 	beedrill: {
@@ -50,23 +60,32 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	pidgey: {
+		randomBattleMoves: ["agility","mimic","mirrormove","skyattack","rest","reflect","sandattack"],
+		mandatoryMove: "doubleedge",
 		tier: "LC"
 	},
 	pidgeotto: {
+		randomBattleMoves: ["agility","mimic","mirrormove","skyattack","rest","reflect"],
+		mandatoryMove: "doubleedge",
 		tier: "UU"
 	},
 	pidgeot: {
-		randomBattleMoves: ["doubleedge","hyperbeam","agility","mimic","mirrormove"],
+		randomBattleMoves: ["hyperbeam","agility","mimic","mirrormove","skyattack","rest","reflect"],
+		mandatoryMove: "doubleedge",
 		tier: "UU"
 	},
 	rattata: {
+		randomBattleMoves: ["bodyslam","blizzard","bubblebeam","thunderbolt"],
+		mandatoryMove: "superfang",
 		tier: "LC"
 	},
 	raticate: {
-		randomBattleMoves: ["superfang","hyperbeam","bodyslam","blizzard","bubblebeam"],
+		randomBattleMoves: ["bodyslam","hyperbeam","blizzard","bubblebeam"],
+		mandatoryMove: "superfang",
 		tier: "UU"
 	},
 	spearow: {
+		randomBattleMoves: ["drillpeck","doubleedge","mirrormove","agility"],
 		tier: "LC"
 	},
 	fearow: {
@@ -77,6 +96,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	ekans: {
+		randomBattleMoves: ["wrap","glare","earthquake","bodyslam","rockslide"],
 		tier: "LC"
 	},
 	arbok: {
@@ -84,6 +104,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	pikachu: {
+		randomBattleMoves: ["thunderbolt","thunderwave","surf","bodyslam","agility","thunder"],
 		eventPokemon: [
 			{"generation":1,"level":5,"moves":["surf"]},
 			{"generation":1,"level":5,"moves":["fly"]},
@@ -92,34 +113,39 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	raichu: {
-		randomBattleMoves: ["thunderbolt","thunderwave","surf","bodyslam"],
+		randomBattleMoves: ["thunderbolt","thunderwave","surf","bodyslam","agility","hyperbeam","thunder"],
 		tier: "UU"
 	},
 	sandshrew: {
 		tier: "LC"
 	},
 	sandslash: {
-		randomBattleMoves: ["earthquake","swordsdance","hyperbeam","bodyslam","rockslide","substitute"],
+		randomBattleMoves: ["swordsdance","hyperbeam","bodyslam","rockslide","substitute"],
+		mandatoryMove: "earthquake",
 		tier: "UU"
 	},
 	nidoranf: {
 		tier: "LC"
 	},
 	nidorina: {
-		tier: "UU"
+		randomBattleMoves: ["bodyslam","blizzard","thunder","thunderbolt","bubblebeam","doubleedge","leer","rest","substitute"],
+		tier: "NFE"
 	},
 	nidoqueen: {
+		randomBattleMoves: ["blizzard","thunder","thunderbolt","bodyslam"],
+		mandatoryMove: "earthquake",
 		tier: "UU"
 	},
 	nidoranm: {
 		tier: "LC"
 	},
 	nidorino: {
-		randomBattleMoves: ["earthquake","blizzard","thunder","thunderbolt","bodyslam"],
-		tier: "UU"
+		randomBattleMoves: ["bodyslam","blizzard","thunder","thunderbolt","bubblebeam","doubleedge","leer","rest","substitute"],
+		tier: "NFE"
 	},
 	nidoking: {
-		randomBattleMoves: ["earthquake","blizzard","thunder","thunderbolt","bodyslam"],
+		randomBattleMoves: ["blizzard","thunder","thunderbolt","bodyslam"],
+		mandatoryMove: "earthquake",
 		tier: "UU"
 	},
 	clefairy: {
@@ -140,6 +166,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	wigglytuff: {
+		randomBattleMoves: ["thunderwave","bodyslam","doubleedge","hyperbeam","blizzard","bubblebeam"],
 		tier: "UU"
 	},
 	zubat: {
@@ -153,6 +180,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	gloom: {
+		randomBattleMoves: ["sleeppowder","swordsdance","bodyslam","megadrain"],
 		tier: "UU"
 	},
 	vileplume: {
@@ -163,7 +191,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	parasect: {
-		randomBattleMoves: ["spore","stunspore","swordsdance","bodyslam","slash","megadrain"],
+		randomBattleMoves: ["stunspore","swordsdance","bodyslam","slash","megadrain"],
+		mandatoryMove: "spore",
 		tier: "UU"
 	},
 	venonat: {
@@ -177,14 +206,16 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	dugtrio: {
-		randomBattleMoves: ["earthquake","slash","sandattack","mimic","substitute"],
+		randomBattleMoves: ["slash","sandattack","mimic","substitute"],
+		mandatoryMove: "earthquake",
 		tier: "UU"
 	},
 	meowth: {
 		tier: "LC"
 	},
 	persian: {
-		randomBattleMoves: ["slash","bubblebeam","hyperbeam","bodyslam","screech","thunderbolt"],
+		randomBattleMoves: ["bubblebeam","hyperbeam","bodyslam","screech","thunderbolt"],
+		mandatoryMove: "slash",
 		tier: "OU"
 	},
 	psyduck: {
@@ -194,14 +225,15 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	golduck: {
-		randomBattleMoves: ["amnesia","blizzard","icebeam","surf","bodyslam","rest"],
+		randomBattleMoves: ["blizzard","icebeam","surf","bodyslam","rest"],
+		mandatoryMove: "amnesia",
 		tier: "UU"
 	},
 	mankey: {
 		tier: "LC"
 	},
 	primeape: {
-		randomBattleMoves: ["submission","rockslide","bodyslam","focusenergy","hyperbeam"],
+		randomBattleMoves: ["submission","rockslide","bodyslam","hyperbeam","megakick"],
 		tier: "UU"
 	},
 	growlithe: {
@@ -218,7 +250,8 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	poliwrath: {
-		randomBattleMoves: ["blizzard","hypnosis","amnesia","surf","submission"],
+		randomBattleMoves: ["blizzard","hypnosis","surf","submission"],
+		mandatoryMove: "amnesia",
 		tier: "UU"
 	},
 	politoed: {
@@ -228,16 +261,20 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	kadabra: {
+		randomBattleMoves: ["psychic","thunderwave","reflect","seismictoss"],
+		mandatoryMove: "recover",
 		tier: "UU"
 	},
 	alakazam: {
-		randomBattleMoves: ["psychic","recover","thunderwave","reflect","seismictoss"],
+		randomBattleMoves: ["psychic","thunderwave","reflect","seismictoss"],
+		mandatoryMove: "recover",
 		tier: "OU"
 	},
 	machop: {
 		tier: "LC"
 	},
 	machoke: {
+		randomBattleMoves: ["bodyslam","earthquake","hyperbeam","submission"],
 		tier: "UU"
 	},
 	machamp: {
@@ -251,7 +288,8 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	victreebel: {
-		randomBattleMoves: ["razorleaf","swordsdance","sleeppowder","bodyslam","hyperbeam","stunspore","wrap"],
+		randomBattleMoves: ["razorleaf","swordsdance","bodyslam","hyperbeam","stunspore","wrap"],
+		mandatoryMove: "sleeppowder",
 		tier: "UU"
 	},
 	tentacool: {
@@ -265,10 +303,11 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	graveler: {
+		randomBattleMoves: ["bodyslam","earthquake","rockslide","explosion"],
 		tier: "UU"
 	},
 	golem: {
-		randomBattleMoves: ["bodyslam","earthquake","rockslide","explosion"],
+		randomBattleMoves: ["explosion","bodyslam","earthquake","rockslide"],
 		tier: "OU"
 	},
 	ponyta: {
@@ -285,17 +324,19 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	slowbro: {
+		randomBattleMoves: ["amnesia","surf","thunderwave","rest"],
 		tier: "OU"
 	},
 	magnemite: {
 		tier: "LC"
 	},
 	magneton: {
-		randomBattleMoves: ["thunder","thunderbolt","thunderwave","mimic","doubleedge","hyperbeam"],
+		randomBattleMoves: ["thunderwave","thunder","thunderbolt","mimic","doubleedge","hyperbeam"],
 		tier: "UU"
 	},
 	farfetchd: {
-		randomBattleMoves: ["sandattack","substitute","slash","swordsdance","bodyslam","toxic"],
+		randomBattleMoves: ["sandattack","substitute","swordsdance","bodyslam","toxic"],
+		mandatoryMove: "slash",
 		tier: "UU"
 	},
 	doduo: {
@@ -316,7 +357,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	muk: {
-		randomBattleMoves: ["sludge","bodyslam","megadrain","screech","explosion"],
+		randomBattleMoves: ["sludge","bodyslam","megadrain","screech"],
+		mandatoryMove: "explosion",
 		tier: "UU"
 	},
 	shellder: {
@@ -333,7 +375,8 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	gengar: {
-		randomBattleMoves: ["hypnosis","explosion","thunderbolt","megadrain"],
+		randomBattleMoves: ["explosion","thunderbolt","megadrain","psychic"],
+		mandatoryMove: "hypnosis",
 		tier: "OU"
 	},
 	onix: {
@@ -344,28 +387,31 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	hypno: {
-		randomBattleMoves: ["psychic","thunderwave","hypnosis","counter","rest"],
+		randomBattleMoves: ["hypnosis","psychic","thunderwave","counter","rest"],
 		tier: "UU"
 	},
 	krabby: {
 		tier: "LC"
 	},
 	kingler: {
-		randomBattleMoves: ["bodyslam","hyperbeam","crabhammer","surf","swordsdance"],
+		randomBattleMoves: ["bodyslam","hyperbeam","surf","swordsdance"],
+		mandatoryMove: "crabhammer",
 		tier: "UU"
 	},
 	voltorb: {
 		tier: "LC"
 	},
 	electrode: {
-		randomBattleMoves: ["thunder","thunderbolt","thunderwave","explosion","screech"],
+		randomBattleMoves: ["thunder","thunderbolt","thunderwave","screech","mimic","flash"],
+		mandatoryMove: "explosion",
 		tier: "UU"
 	},
 	exeggcute: {
 		tier: "LC"
 	},
 	exeggutor: {
-		randomBattleMoves: ["sleeppowder","psychic","explosion","doubleedge","megadrain","stunspore"],
+		randomBattleMoves: ["psychic","explosion","eggbomb","hyperbeam","megadrain","stunspore"],
+		mandatoryMove: "sleeppowder",
 		tier: "OU"
 	},
 	cubone: {
@@ -391,7 +437,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	weezing: {
-		randomBattleMoves: ["sludge","explosion","thunder","thunderbolt","fireblast"],
+		randomBattleMoves: ["sludge","thunder","thunderbolt","fireblast"],
+		mandatoryMove: "explosion",
 		tier: "UU"
 	},
 	rhyhorn: {
@@ -402,11 +449,13 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	chansey: {
-		randomBattleMoves: ["icebeam","softboiled","counter","thunderwave","thunderbolt"],
+		randomBattleMoves: ["icebeam","counter","thunderwave","thunderbolt","reflect"],
+		mandatoryMove: "softboiled",
 		tier: "OU"
 	},
 	tangela: {
-		randomBattleMoves: ["bind","hyperbeam","sleeppowder","stunspore","megadrain","growth","swordsdance","bodyslam"],
+		randomBattleMoves: ["bind","hyperbeam","stunspore","megadrain","growth","swordsdance","bodyslam"],
+		mandatoryMove: "sleeppowder",
 		tier: "UU"
 	},
 	kangaskhan: {
@@ -417,7 +466,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	seadra: {
-		randomBattleMoves: ["hydropump","surf","blizzard","smokescreen","mimic"],
+		randomBattleMoves: ["smokescreen","hydropump","surf","blizzard","mimic"],
 		tier: "UU"
 	},
 	goldeen: {
@@ -431,7 +480,8 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	starmie: {
-		randomBattleMoves: ["blizzard","thunderbolt","recover","thunderwave"],
+		randomBattleMoves: ["blizzard","thunderbolt","thunderwave","surf"],
+		mandatoryMove: "recover",
 		tier: "OU"
 	},
 	mrmime: {
@@ -451,7 +501,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	magmar: {
-		randomBattleMoves: ["fireblast","flamethrower","bodyslam","confuseray","hyperbeam","mimic"],
+		randomBattleMoves: ["confuseray","fireblast","flamethrower","bodyslam","hyperbeam","mimic"],
 		tier: "UU"
 	},
 	pinsir: {
@@ -463,6 +513,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	magikarp: {
+		randomBattleMoves: ["splash","dragonrage"],
 		eventPokemon: [
 			{"generation":1,"level":5,"moves":["dragonrage"]}
 		],
@@ -473,7 +524,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	lapras: {
-		randomBattleMoves: ["blizzard","icebeam","rest","thunderbolt","bodyslam","confuseray"],
+		randomBattleMoves: ["confuseray","blizzard","icebeam","rest","thunderbolt","bodyslam"],
 		tier: "OU"
 	},
 	ditto: {
@@ -484,26 +535,29 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	vaporeon: {
-		randomBattleMoves: ["hydropump","surf","blizzard","bodyslam","rest","mimic"],
+		randomBattleMoves: ["rest","hydropump","surf","blizzard","bodyslam","mimic"],
 		tier: "UU"
 	},
 	jolteon: {
-		randomBattleMoves: ["thunderbolt","thunderwave","pinmissile","bodyslam","doublekick","sandattack"],
+		randomBattleMoves: ["thunderwave","pinmissile","bodyslam","doublekick","sandattack"],
+		mandatoryMove: "thunderbolt",
 		tier: "UU"
 	},
 	flareon: {
-		randomBattleMoves: ["fireblast","bodyslam","hyperbeam","focusenergy","quickattack"],
+		randomBattleMoves: ["fireblast","bodyslam","hyperbeam","quickattack"],
 		tier: "UU"
 	},
 	porygon: {
-		randomBattleMoves: ["thunderwave","thunderbolt","blizzard","icebeam","doubleedge","hyperbeam","sharpen","psychic","recover","agility"],
+		randomBattleMoves: ["thunderwave","thunderbolt","blizzard","icebeam","doubleedge","hyperbeam","sharpen","psychic","agility","triattack"],
+		mandatoryMove: "recover",
 		tier: "UU"
 	},
 	omanyte: {
 		tier: "LC"
 	},
 	omastar: {
-		randomBattleMoves: ["hydropump","surf","blizzard","mimic","rest","seismictoss"],
+		randomBattleMoves: ["hydropump","surf","mimic","rest","seismictoss"],
+		mandatoryMove: "blizzard",
 		tier: "UU"
 	},
 	kabuto: {
@@ -518,7 +572,8 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	snorlax: {
-		randomBattleMoves: ["amnesia","blizzard","icebeam","bodyslam","thunderbolt","rest","selfdestruct","hyperbeam","surf","earthquake"],
+		randomBattleMoves: ["blizzard","icebeam","bodyslam","thunderbolt","rest","selfdestruct","hyperbeam","surf","earthquake"],
+		mandatoryMove: "amnesia",
 		tier: "OU"
 	},
 	articuno: {
@@ -544,7 +599,8 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	mewtwo: {
-		randomBattleMoves: ["psychic","blizzard","submission","thunderbolt","recover","amnesia","icebeam","rest","barrier","thunderwave","bodyslam","hyperbeam"],
+		randomBattleMoves: ["recover","blizzard","submission","thunderbolt","amnesia","icebeam","rest","barrier","thunderwave","bodyslam","hyperbeam"],
+		mandatoryMove: "psychic",
 		tier: "Uber"
 	},
 	mew: {

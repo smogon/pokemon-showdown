@@ -142,7 +142,8 @@ exports.BattleScripts = {
 		this.setActiveMove(move, pokemon, target);
 
 		if (pokemon.movedThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
-			this.debug('' + pokemon.id + ' move interrupted; movedThisTurn: ' + pokemon.movedThisTurn);
+			// Prevent invulnerability from persisting until the turn ends
+			pokemon.removeVolatile('twoturnmove');
 			this.clearActiveMove(true);
 			// This is only run for sleep
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -157,7 +158,7 @@ exports.BattleScripts = {
 		pokemon.lastDamage = 0;
 		var lockedMove = this.runEvent('LockMove', pokemon);
 		if (lockedMove === true) lockedMove = false;
-		if (!lockedMove && !pokemon.volatiles['partialtrappinglock']) {
+		if (!lockedMove && (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)) {
 			pokemon.deductPP(move, null, target);
 			// On gen 1 moves are stored when they are chosen and a PP is deducted.
 			pokemon.side.lastMove = move;
@@ -170,9 +171,11 @@ exports.BattleScripts = {
 		if (target.hp <= 0) {
 			// We remove recharge
 			if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
+			delete pokemon.volatiles['partialtrappinglock'];
 			// We remove screens
 			target.side.removeSideCondition('reflect');
 			target.side.removeSideCondition('lightscreen');
+			pokemon.removeVolatile('twoturnmove');
 		} else {
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
@@ -400,11 +403,6 @@ exports.BattleScripts = {
 			this.runEvent('AfterMoveSecondary', target, pokemon, move);
 		}
 
-		// If we used a partial trapping move, we save the damage to repeat it
-		if (pokemon.volatiles['partialtrappinglock']) {
-			pokemon.volatiles['partialtrappinglock'].damage = damage;
-		}
-
 		return damage;
 	},
 	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
@@ -420,7 +418,7 @@ exports.BattleScripts = {
 		}
 
 		// We get the sub to the target to see if it existed
-		var targetSub = (target)? target.volatiles['substitute'] : false;
+		var targetSub = (target) ? target.volatiles['substitute'] : false;
 		var targetHadSub = (targetSub !== null && targetSub !== false && (typeof targetSub !== 'undefined'));
 
 		if (target) {
@@ -559,10 +557,18 @@ exports.BattleScripts = {
 			}
 		}
 
+		// Here's where self effects are applied.
 		var doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
-		if (moveData.self && doSelf) {
+		if (moveData.self && (doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
+
+		// Now we can save the partial trapping damage.
+		if (pokemon.volatiles['partialtrappinglock']) {
+			pokemon.volatiles['partialtrappinglock'].damage = pokemon.lastDamage;
+		}
+
+		// Apply move secondaries.
 		if (moveData.secondaries) {
 			for (var i = 0; i < moveData.secondaries.length; i++) {
 				// We check here whether to negate the probable secondary status if it's para, burn, or freeze.
@@ -630,7 +636,7 @@ exports.BattleScripts = {
 		}
 
 		// Let's check if we are in middle of a partial trap sequence to return the previous damage.
-		if (pokemon.volatiles['partialtrappinglock'] && (target !== pokemon) && (target === pokemon.volatiles['partialtrappinglock'].locked)) {
+		if (pokemon.volatiles['partialtrappinglock'] && (target === pokemon.volatiles['partialtrappinglock'].locked)) {
 			return pokemon.volatiles['partialtrappinglock'].damage;
 		}
 
@@ -707,8 +713,8 @@ exports.BattleScripts = {
 		var defender = target;
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
-		var atkType = (move.category === 'Physical')? 'atk' : 'spa';
-		var defType = (move.defensiveCategory === 'Physical')? 'def' : 'spd';
+		var atkType = (move.category === 'Physical') ? 'atk' : 'spa';
+		var defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		var attack = attacker.getStat(atkType);
 		var defense = defender.getStat(defType);
 
@@ -791,9 +797,10 @@ exports.BattleScripts = {
 			damage *= this.random(217, 256);
 			damage = Math.floor(damage / 255);
 			if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
+			if (target.volatiles['substitute'] && damage > target.volatiles['substitute'].hp) damage = target.volatiles['substitute'].hp;
 		}
 
-		// We are done, this is the final damage.
+		// And we are done.
 		return Math.floor(damage);
 	},
 	boost: function (boost, target, source, effect) {
@@ -1014,15 +1021,59 @@ exports.BattleScripts = {
 		}
 		keys = keys.randomize();
 
-		var ruleset = this.getFormat().ruleset;
+		// Now let's store what we are getting.
+		var typeCount = {};
+		var uberCount = 0;
+		var nuCount = 0;
+		var hasMagikarp = false;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(keys[i]);
 			if (!template || !template.name || !template.types) continue;
-			var set = this.randomSet(template, i);
 
+			// Bias the tiers so you get less shitmons and only one of the two Ubers.
+			var tier = template.tier;
+			if (tier === 'LC' && nuCount > 1) continue;
+			if ((tier === 'NFE' || tier === 'UU') && nuCount > 2 && Math.random() * 5 > 1) continue;
+			// Unless you have Magikarp, in that case we allow luck to give you Mew and Mewtwo.
+			if (tier === 'Uber' && uberCount >= 1 && !hasMagikarp) continue;
+
+			// Limit 2 of any type. This helps so you don't get a full Surf or Blizzard weak team.
+			var types = template.types;
+			var skip = false;
+			for (var t = 0; t < types.length; t++) {
+				if (typeCount[types[t]] > 1) {
+					skip = true;
+					break;
+				}
+			}
+			if (skip) continue;
+
+			// The set passes the limitations.
+			var set = this.randomSet(template, i);
 			pokemon.push(set);
+
+			// Now let's increase the counters. First, the Pokémon left.
 			pokemonLeft++;
+
+			// Type counter.
+			for (var t = 0; t < types.length; t++) {
+				if (types[t] in typeCount) {
+					typeCount[types[t]]++;
+				} else {
+					typeCount[types[t]] = 1;
+				}
+			}
+
+			// Increment type bias counters.
+			if (tier === 'Uber') {
+				uberCount++;
+			} else if (tier === 'UU' || tier === 'NFE' || tier === 'LC') {
+				nuCount++;
+			}
+
+			// Is it Magikarp?
+			if (keys[i] === 'magikarp') hasMagikarp = true;
 		}
 
 		return pokemon;
@@ -1032,7 +1083,8 @@ exports.BattleScripts = {
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1
 
-		var moveKeys = (template.randomBattleMoves || Object.keys(template.learnset)).randomize();
+		var moveKeys = template.randomBattleMoves;
+		moveKeys = moveKeys.randomize();
 		var moves = [];
 		var hasType = {};
 		hasType[template.types[0]] = true;
@@ -1044,116 +1096,149 @@ exports.BattleScripts = {
 		var j = 0;
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.length < 4 && j < moveKeys.length) {
+			var howMany = (template.mandatoryMove) ? 3 : 4;
+			while (moves.length < howMany && j < moveKeys.length) {
 				var moveid = toId(moveKeys[j]);
 				j++;
 				moves.push(moveid);
 			}
 
-			hasMove = {};
-			counter = {
-				Physical: 0, Special: 0, Status: 0, damage: 0,
-				recoil: 0, inaccurate: 0,
-				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
-			};
-			for (var k = 0; k < moves.length; k++) {
-				var move = this.getMove(moves[k]);
-				var moveid = move.id;
-				hasMove[moveid] = true;
-				if (move.damage || move.damageCallback) {
-					counter['damage']++;
-				} else {
+			// Add now the mandatory move
+			if (template.mandatoryMove) {
+				moves.unshift(template.mandatoryMove);
+				j++;
+			}
+
+			// Only do move choosing if we have more than four on the moveset...
+			if (moveKeys.length > howMany) {
+				hasMove = {};
+				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
+				for (var k = 0; k < moves.length; k++) {
+					var move = this.getMove(moves[k]);
+					var moveid = move.id;
+					hasMove[moveid] = true;
+					if (!move.damage && !move.damageCallback) {
+						counter[move.category]++;
+					}
+					if ({swordsdance:1, sharpen:1}[moveid]) {
+						counter['physicalsetup']++;
+					}
+					if ({amnesia:1, growth:1}[moveid]) {
+						counter['specialsetup']++;
+					}
+				}
+
+				if (counter['specialsetup']) {
+					setupType = 'Special';
+				} else if (counter['physicalsetup']) {
+					setupType = 'Physical';
+				}
+
+				for (var k = 0; k < moves.length; k++) {
+					var moveid = moves[k];
+					var move = this.getMove(moveid);
+					var rejected = false;
+					if (hasMove[moveid]) rejected = true;
+					if (!template.mandatoryMove || moveid !== template.mandatoryMove) {
+						var isSetup = false;
+
+						switch (moveid) {
+						// bad after setup
+						case 'seismictoss': case 'nightshade':
+							if (setupType) rejected = true;
+							break;
+						// bit redundant to have both
+						case 'flamethrower':
+							if (hasMove['fireblast']) rejected = true;
+							break;
+						case 'fireblast':
+							if (hasMove['flamethrower']) rejected = true;
+							break;
+						case 'icebeam':
+							if (hasMove['blizzard']) rejected = true;
+							break;
+						// Hydropump and surf are both valid options, just avoid one with eachother.
+						case 'hydropump':
+							if (hasMove['surf']) rejected = true;
+							break;
+						case 'surf':
+							if (hasMove['hydropump']) rejected = true;
+							break;
+						case 'petaldance': case 'solarbeam':
+							if (hasMove['megadrain'] || hasMove['razorleaf']) rejected = true;
+							break;
+						case 'megadrain':
+							if (hasMove['razorleaf']) rejected = true;
+							break;
+						case 'thunder':
+							if (hasMove['thunderbolt']) rejected = true;
+							break;
+						case 'thunderbolt':
+							if (hasMove['thunder']) rejected = true;
+							break;
+						case 'bonemerang':
+							if (hasMove['earthquake']) rejected = true;
+							break;
+						case 'rest':
+							if (hasMove['recover'] || hasMove['softboiled']) rejected = true;
+							break;
+						case 'softboiled':
+							if (hasMove['recover']) rejected = true;
+							break;
+						case 'sharpen':
+						case 'swordsdance':
+							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical']) rejected = true;
+							break;
+						case 'doubleedge':
+							if (hasMove['bodyslam']) rejected = true;
+							break;
+						case 'mimic':
+							if (hasMove['mirrormove']) rejected = true;
+							break;
+						case 'superfang':
+							if (hasMove['bodyslam']) rejected = true;
+							break;
+						case 'rockslide':
+							if (hasMove['earthquake'] && hasMove['bodyslam'] && hasMove['hyperbeam']) rejected = true;
+							break;
+						case 'bodyslam':
+							if (hasMove['thunderwave']) rejected = true;
+							break;
+						case 'bubblebeam':
+							if (hasMove['blizzard']) rejected = true;
+							break;
+						case 'screech':
+							if (hasMove['slash']) rejected = true;
+							break;
+						case 'slash':
+							if (setupType === 'Physical') rejected = true;
+							break;
+						case 'megakick':
+							if (hasMove['bodyslam']) rejected = true;
+							break;
+						case 'eggbomb':
+							if (hasMove['hyperbeam']) rejected = true;
+							break;
+						case 'triattack':
+							if (hasMove['doubleedge']) rejected = true;
+							break;
+						case 'growth':
+							if (hasMove['amnesia']) rejected = true;
+							break;
+						} // End of switch for moveid
+					}
+					if (rejected && j < moveKeys.length) {
+						moves.splice(k, 1);
+						break;
+					}
 					counter[move.category]++;
-				}
-				if (move.recoil) {
-					counter['recoil']++;
-				}
-				if (move.accuracy && move.accuracy !== true && move.accuracy < 90) {
-					counter['inaccurate']++;
-				}
-				var PhysicalSetup = {swordsdance:1, sharpen:1};
-				var SpecialSetup = {amnesia:1};
-				var MixedSetup = {growth:1};
-				if (PhysicalSetup[moveid]) {
-					counter['physicalsetup']++;
-				}
-				if (SpecialSetup[moveid]) {
-					counter['specialsetup']++;
-				}
-				if (MixedSetup[moveid]) {
-					counter['mixedsetup']++;
-				}
-			}
-
-			if (counter['mixedsetup']) {
-				setupType = 'Mixed';
-			} else if (counter['specialsetup']) {
-				setupType = 'Special';
-			} else if (counter['physicalsetup']) {
-				setupType = 'Physical';
-			}
-
-			for (var k = 0; k < moves.length; k++) {
-				var moveid = moves[k];
-				var move = this.getMove(moveid);
-				var rejected = false;
-				var isSetup = false;
-
-				switch (moveid) {
-				// bad after setup
-				case 'seismictoss': case 'nightshade':
-					if (setupType) rejected = true;
-					break;
-
-				// bit redundant to have both
-				case 'flamethrower':
-					if (hasMove['fireblast']) rejected = true;
-					break;
-				case 'icebeam':
-					if (hasMove['blizzard']) rejected = true;
-					break;
-				case 'hydropump':
-					if (hasMove['surf']) rejected = true;
-					break;
-				case 'petaldance': case 'solarbeam':
-					if (hasMove['megadrain'] || hasMove['razorleaf']) rejected = true;
-					break;
-				case 'megadrain':
-					if (hasMove['razorleaf']) rejected = true;
-					break;
-				case 'thunder':
-					if (hasMove['thunderbolt']) rejected = true;
-					break;
-				case 'bonemerang':
-					if (hasMove['earthquake']) rejected = true;
-					break;
-				case 'rest':
-					if (hasMove['recover'] || hasMove['softboiled']) rejected = true;
-					break;
-				case 'softboiled':
-					if (hasMove['recover']) rejected = true;
-					break;
-				case 'sharpen':
-					if (counter['Special'] > counter['Physical']) rejected = true;
-					break;
-				} // End of switch for moveid
-				if (setupType === 'Physical' && move.category !== 'Physical' && counter['Physical'] < 2) {
-					rejected = true;
-				}
-				if (setupType === 'Special' && move.category !== 'Special' && counter['Special'] < 2) {
-					rejected = true;
-				}
-
-				if (rejected && j < moveKeys.length) {
-					moves.splice(k, 1);
-					break;
-				}
-				counter[move.category]++;
-			} // End of for
+				} // End of for
+			} // End of the check for more than 4 moves on moveset.
 		} while (moves.length < 4 && j < moveKeys.length);
 
 		var levelScale = {
 			LC: 92,
+			NFE: 88,
 			UU: 86,
 			OU: 82,
 			Uber: 78
@@ -1161,7 +1246,7 @@ exports.BattleScripts = {
 		// Really bad Pokemon and jokemons and MEWTWO.
 		var customScale = {
 			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99,
-			Clefairy: 95, "Farfetch'd": 95, Jigglypuff: 95, Mewtwo: 65
+			Clefairy: 95, "Farfetch'd": 95, Jigglypuff: 95, Mewtwo: 71
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];

@@ -309,6 +309,7 @@ exports.BattleMovedex = {
 					}
 				}
 			},
+			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
 				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
 				if (disabledMoves[move.id] || move.heal) {

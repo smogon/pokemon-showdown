@@ -535,13 +535,15 @@ exports.BattleMovedex = {
 			if (moveslot === -1) return false;
 			var moves = target.moves;
 			moves = moves.randomize();
+			var move = false;
 			for (var i = 0; i < moves.length; i++) {
 				if (!(moves[i] in disallowedMoves)) {
-					var move = moves[i];
+					move = moves[i];
 					break;
 				}
 			}
-			var move = this.getMove(move);
+			if (!move) return false;
+			move = this.getMove(move);
 			source.moveset[moveslot] = {
 				move: move.name,
 				id: move.id,
@@ -731,7 +733,8 @@ exports.BattleMovedex = {
 	},
 	skyattack: {
 		inherit: true,
-		critRatio: 1
+		critRatio: 1,
+		secondary: {}
 	},
 	softboiled: {
 		inherit: true,
@@ -825,7 +828,6 @@ exports.BattleMovedex = {
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
-					this.debug('Substitute broke');
 					target.removeVolatile('substitute');
 					target.subFainted = true;
 				} else {
