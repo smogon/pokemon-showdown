@@ -161,6 +161,8 @@ exports.customavatars = {
 	'michonne': 'jelli.jpg',
 	'cstfrm': 'jelli.jpg',
 	'sandfrm': 'jelli.jpg',
+	'powalen': 'jelli.jpg',
+	'pwaln': 'jelli.jpg',
 	'novae': 'twilight-sky.png',
 	'saeyru': 'twilight-sky.png',
 	'charis': 'twilight-sky.png',
@@ -329,6 +331,35 @@ exports.customavatars = {
 	'slrloer': 'insane-lover.png',
 	'alliancelver': 'insane-lover.png',
 	'pinkrabbit': 'pink-rabbit.gif',
+	'affinitymssih': 'affinity-mssih.png',
+	'allianceazelea': 'alliance-azelea.jpg',
+	'fromazeleatown': 'alliance-azelea.jpg',
+	'alliancegallade': 'alliance-gallade.png',
+	'gyaradosislove': 'alliance-gallade.png',
+	'allianceghast': 'alliance-ghast.gif',
+	'ghastslegacy': 'alliance-ghast.gif',
+	'allianceguy': 'alliance-guy.png',
+	'shadowguy1': 'alliance-guy.png',
+	'allianceiluvppl': 'alliance-iluvppl.png',
+	'ih8someppl': 'alliance-iluvppl.png',
+	'allianceshz': 'alliance-shz.png',
+	'shz': 'alliance-shz.png',
+	'alliancesoulace': 'alliance-soulace.png',
+	'acesoul': 'alliance-soulace.png',
+	'emperorace': 'alliance-soulace.png',
+	'alliancewalker': 'alliance-walker.gif',
+	'archer99': 'archer99.gif',
+	'lucifr': 'lucifr.gif',
+	'orgen': 'lucifr.gif',
+	'nayslayer': 'nayslayer.png',
+	'alliancejustice': 'nayslayer.png',
+	'dayummmm': 'nightcore4evah.gif',
+	'nightcore4evah': 'nightcore4evah.gif',
+	'lehux': 'terra.png',
+	'theace22': 'theace22.png',
+	'flamingarcanine75': 'theace22.png',
+	'virg099': 'virg099.gif',
+	'wudibou': 'wudi-bou.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
@@ -379,7 +410,7 @@ exports.replsocketmode = 0600;
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
-exports.groupsranking = [' ', '\u2606', '+', '\u2605', '%', '@', '#', '&', '~'];
+exports.groupsranking = [' ', '\u2605', '+', '=', '%', '@', '&', '#', '~'];
 exports.groups = {
 	'~': {
 		id: "admin",
@@ -388,26 +419,22 @@ exports.groups = {
 		globalonly: true,
 		rank: 8
 	},
+	'#': {
+		id: "owner",
+		name: "Room Owner",
+		inherit: '&',
+		jurisdiction: 'u',
+		roomleader: true,
+		rank: 7
+	},
 	'&': {
 		id: "leader",
 		name: "Leader",
 		inherit: '@',
-		jurisdiction: '@u',
-		promote: 'u',
-		forcewin: true,
-		potd: true,
-		disableladder: true,
-		globalonly: true,
-		tournamentsmanagement: true,
-		rank: 7
-	},
-	'#': {
-		id: "owner",
-		name: "Room Owner",
-		inherit: '@',
 		jurisdiction: 'u',
 		roommod: true,
 		roomdriver: true,
+		roomsecondarydriver: true,
 		roomplayer: true,
 		roomonly: true,
 		tournamentsmanagement: true,
@@ -427,12 +454,18 @@ exports.groups = {
 		rangeban: true,
 		gdeclare: true,
 		clearall: true,
-		roomswag: true,
 		rank: 5
 	},
 	'%': {
 		id: "driver",
 		name: "Driver",
+		inherit: '=',
+		jurisdiction: 'u',
+		rank: 4
+	},
+	'=': {
+		id: "secondarydriver",
+		name: "Secondary Driver",
 		inherit: '+',
 		jurisdiction: 'u',
 		warn: true,
@@ -446,12 +479,6 @@ exports.groups = {
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
 		jeopardy: true,
-		rank: 4
-	},
-	'\u2605': {
-		id: "player",
-		name: "Player",
-		inherit: ' ',
 		rank: 3
 	},
 	'+': {
@@ -465,13 +492,10 @@ exports.groups = {
 		poll: true,
 		rank: 2
 	},
-	'\u2606': {
-		id: "swag",
-		name: "Swag",
+	'\u2605': {
+		id: "player",
+		name: "Player",
 		inherit: ' ',
-		roomonly: true,
-		declare: true,
-		announce: true,
 		rank: 1
 	},
 	' ': {
