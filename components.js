@@ -17,6 +17,8 @@ var fs = require("fs");
     http = require("http"),
     request = require('request');
 
+const MAX_REASON_LENGTH = 300;
+
 var components = exports.components = {
 
     regdate: function (target, room, user, connection) {
@@ -194,17 +196,21 @@ var components = exports.components = {
     kick: function (target, room, user) {
         if (!target) return this.parse('/help kick');
 
-        var targetUser = Users.get(target);
+        target = this.splitTarget(target);
+        var targetUser = this.targetUser;
         if (!targetUser) return this.sendReply('User ' + target + ' not found.');
 
         if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
+        
+        if (target.length > MAX_REASON_LENGTH) {
+			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+		}
 
         if (!this.can('kick', targetUser, room)) return false;
 
         targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.');
         targetUser.leaveRoom(room);
-        room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
-        this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.id);
+        this.addModCommand('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.' + (target ? " (" + target + ")" : ""));
     },
 
     masspm: 'pmall',
