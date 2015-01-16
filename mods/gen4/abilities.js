@@ -63,6 +63,15 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 58
 	},
+	"normalize": {
+		inherit: true,
+		onModifyMovePriority: -1,
+		onModifyMove: function (move) {
+			if (move.id !== 'struggle') {
+				move.type = 'Normal';
+			}
+		}
+	},
 	"pickup": {
 		desc: "No in-battle effect.",
 		shortDesc: "No in-battle effect.",

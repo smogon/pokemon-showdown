@@ -3478,6 +3478,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-singleturn', target, 'move: Electrify');
 			},
+			onModifyMovePriority: -2,
 			onModifyMove: function (move) {
 				this.debug('Electrify making move type electric');
 				move.type = 'Electric';
@@ -4526,7 +4527,7 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.effectData.item = pokemon.item;
 			},
-			onModifyMovePriority: -1,
+			onModifyMovePriority: -3,
 			onModifyMove: function (move) {
 				var item = this.getItem(this.effectData.item);
 				move.basePower = item.fling.basePower;
@@ -7297,6 +7298,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-fieldactivate', 'move: Ion Deluge');
 			},
+			onModifyMovePriority: -2,
 			onModifyMove: function (move) {
 				if (move.type === 'Normal') {
 					move.type = 'Electric';
