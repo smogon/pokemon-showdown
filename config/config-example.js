@@ -379,7 +379,7 @@ exports.replsocketmode = 0600;
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
-exports.groupsranking = [' ', '\u2606', '+', '\u2605', '%', '@', '#', '&', '~'];
+exports.groupsranking = [' ', '\u2605', '+', '=', '%', '@', '&', '#', '~'];
 exports.groups = {
 	'~': {
 		id: "admin",
@@ -388,22 +388,16 @@ exports.groups = {
 		globalonly: true,
 		rank: 8
 	},
-	'&': {
-		id: "leader",
-		name: "Leader",
-		inherit: '@',
-		jurisdiction: '@u',
-		promote: 'u',
-		forcewin: true,
-		potd: true,
-		disableladder: true,
-		globalonly: true,
-		tournamentsmanagement: true,
-		rank: 7
-	},
 	'#': {
 		id: "owner",
 		name: "Room Owner",
+		inherit: '&',
+		jurisdiction: 'u',
+		rank: 7
+	},
+	'&': {
+		id: "leader",
+		name: "Leader",
 		inherit: '@',
 		jurisdiction: 'u',
 		roommod: true,
@@ -427,12 +421,18 @@ exports.groups = {
 		rangeban: true,
 		gdeclare: true,
 		clearall: true,
-		roomswag: true,
 		rank: 5
 	},
 	'%': {
 		id: "driver",
 		name: "Driver",
+		inherit: '=',
+		jurisdiction: 'u',
+		rank: 4
+	},
+	'=': {
+		id: "secondarydriver",
+		name: "Secondary Driver",
 		inherit: '+',
 		jurisdiction: 'u',
 		warn: true,
@@ -446,12 +446,6 @@ exports.groups = {
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
 		jeopardy: true,
-		rank: 4
-	},
-	'\u2605': {
-		id: "player",
-		name: "Player",
-		inherit: ' ',
 		rank: 3
 	},
 	'+': {
@@ -465,13 +459,10 @@ exports.groups = {
 		poll: true,
 		rank: 2
 	},
-	'\u2606': {
-		id: "swag",
-		name: "Swag",
+	'\u2605': {
+		id: "player",
+		name: "Player",
 		inherit: ' ',
-		roomonly: true,
-		declare: true,
-		announce: true,
 		rank: 1
 	},
 	' ': {
