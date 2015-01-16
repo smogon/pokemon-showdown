@@ -2844,11 +2844,6 @@ exports.BattleFormatsData = {
 	},
 	shayminsky: {
 		randomBattleMoves: ["seedflare","earthpower","airslash","hiddenpowerice","hiddenpowerfire","substitute","leechseed"],
-		eventPokemon: [
-			{"generation":4,"level":50,"abilities":["naturalcure"],"moves":["seedflare","aromatherapy","substitute","energyball"]},
-			{"generation":4,"level":30,"abilities":["naturalcure"],"moves":["synthesis","leechseed","magicalleaf","growth"]},
-			{"generation":4,"level":30,"abilities":["naturalcure"],"moves":["growth","magicalleaf","leechseed","synthesis"]}
-		],
 		tier: "Uber"
 	},
 	arceus: {
