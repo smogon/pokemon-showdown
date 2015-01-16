@@ -937,11 +937,11 @@ exports.BattleAbilities = {
 		num: 119
 	},
 	"furcoat": {
-		desc: "Halves the damage done to this Pokemon by physical attacks.",
-		shortDesc: "Halves physical damage done to this Pokemon.",
-		onModifyAtkPriority: 6,
-		onSourceModifyAtk: function (atk, attacker, defender, move) {
-			return this.chainModify(0.5);
+		desc: "This Pokemon's Defense is doubled.",
+		shortDesc: "This Pokemon's Defense is doubled.",
+		onModifyDefPriority: 6,
+		onModifyDef: function (def) {
+			return this.chainModify(2);
 		},
 		id: "furcoat",
 		name: "Fur Coat",
