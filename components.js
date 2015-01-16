@@ -203,7 +203,7 @@ var components = exports.components = {
         this.addModCommand("" + targetUser.name + " was " + msg);
         targetUser.popup("You have been " + msg);
         targetUser.leaveRoom(room);
-    }
+    },
 
     masspm: 'pmall',
     pmall: function (target, room, user) {
