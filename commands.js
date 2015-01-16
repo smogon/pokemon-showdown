@@ -20,6 +20,13 @@ if (typeof tells === 'undefined') {
         tells = {};
 }
 
+if (!Users.User.prototype._getIdentity_away) Users.User.prototype._getIdentity_away = Users.User.prototype.getIdentity;
+Users.User.prototype.getIdentity = function (roomid) {
+	var name = this._getIdentity_away(roomid);
+	if (this.isAway) name += " - \u0410\u051d\u0430\u0443";
+	return name;
+};
+
 var commands = exports.commands = {
 
 	version: function (target, room, user) {
@@ -725,6 +732,14 @@ var commands = exports.commands = {
 		tells[targetUser].add(messageToSend);
 
 		return this.sendReply('Message "' + message + '" sent to ' + targetUser + '.');
+	},
+	
+	back: 'away',
+	idle: 'away',
+	away: function (target, room, user) {
+		user.isAway = !user.isAway;
+		user.updateIdentity();
+		this.sendReply("You are " + (user.isAway ? "now" : "no longer") + " away.");
 	},
 
 	/*********************************************************
@@ -1946,15 +1961,12 @@ var commands = exports.commands = {
 		});
 	},
 
-	away: 'blockchallenges',
-	idle: 'blockchallenges',
 	blockchallenges: function (target, room, user) {
 		if (user.blockChallenges) return this.sendReply("You are already blocking challenges!");
 		user.blockChallenges = true;
 		this.sendReply("You are now blocking all incoming challenge requests.");
 	},
 
-	back: 'allowchallenges',
 	allowchallenges: function (target, room, user) {
 		if (!user.blockChallenges) return this.sendReply("You are already available for challenges!");
 		user.blockChallenges = false;
