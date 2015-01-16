@@ -3920,7 +3920,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["leafstorm","hiddenpowerfire","substitute","taunt","dragonpulse","gigadrain","protect"],
 		eventPokemon: [
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["leafstorm","substitute","gigadrain","leechseed"],"pokeball":"cherishball"},
-			{"generation":6,"level":50,"gender":"M","isHidden":true,"moves":["leafstorm","holdback","wringout","gigadrain"],"pokeball":"cherishball"}
+			{"generation":6,"level":50,"isHidden":true,"moves":["leafstorm","holdback","wringout","gigadrain"],"pokeball":"cherishball"}
 		],
 		tier: "BL4"
 	},
@@ -3937,7 +3937,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["flareblitz","superpower","flamecharge","wildcharge","headsmash","protect","heatwave","rockslide"],
 		eventPokemon: [
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["flareblitz","hammerarm","wildcharge","headsmash"],"pokeball":"cherishball"},
-			{"generation":6,"level":50,"gender":"M","isHidden":true,"moves":["flareblitz","holdback","headsmash","takedown"],"pokeball":"cherishball"}
+			{"generation":6,"level":50,"isHidden":true,"moves":["flareblitz","holdback","headsmash","takedown"],"pokeball":"cherishball"}
 		],
 		tier: "RU"
 	},
@@ -3954,7 +3954,7 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["hydropump","aquajet","icebeam","scald","hiddenpowergrass","taunt","helpinghand","protect"],
 		eventPokemon: [
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["hydropump","icebeam","megahorn","superpower"],"pokeball":"cherishball"},
-			{"generation":6,"level":50,"gender":"M","isHidden":true,"moves":["razorshell","holdback","confide","hydropump"],"pokeball":"cherishball"}
+			{"generation":6,"level":50,"isHidden":true,"moves":["razorshell","holdback","confide","hydropump"],"pokeball":"cherishball"}
 		],
 		tier: "NU"
 	},
