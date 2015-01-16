@@ -1,4 +1,4 @@
-/**
+﻿/**
  * This is the file where the bot commands are located
  *
  * @license MIT license
@@ -94,14 +94,24 @@ exports.commands = {
 			joke: 1,
 			choose: 1,
 			usagestats: 1,
+			buzz: 1,
 			helix: 1,
+			survivor: 1,
+			games: 1,
+			wifi: 1,
+			monotype: 1,
+			autoban: 1,
+			happy: 1,
+			guia: 1,
+			studio: 1,
+			'switch': 1,
 			banword: 1
 		};
 		var modOpts = {
 			flooding: 1,
+			caps: 1,
 			stretching: 1,
-			bannedwords: 1,
-			snen: 1
+			bannedwords: 1
 		};
 
 		var opts = arg.split(',');
@@ -195,7 +205,8 @@ exports.commands = {
 	ban: 'autoban',
 	ab: 'autoban',
 	autoban: function(arg, by, room, con) {
-		if (!this.hasRank(by, '~')) return false;
+		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
+		if (!this.hasRank(this.ranks[room] || ' ', '@&#~')) return this.say(con, room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
 
 		arg = arg.split(',');
 		var added = [];
@@ -212,7 +223,7 @@ exports.commands = {
 				alreadyAdded.push(tarUser);
 				continue;
 			}
-			this.say(con, room, '/ban ' + tarUser + ', Blacklisted user');
+			this.say(con, room, '/roomban ' + tarUser + ', Blacklisted user');
 			this.say(con,room, '/modnote ' + tarUser + ' was added to the blacklist by ' + by + '.');
 			added.push(tarUser);
 		}
@@ -230,7 +241,8 @@ exports.commands = {
 	unban: 'unautoban',
 	unab: 'unautoban',
 	unautoban: function(arg, by, room, con) {
-		if (!this.hasRank(by, '~')) return false;
+		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
+		if (!this.hasRank(this.ranks[room] || ' ', '@&#~')) return this.say(con, room, config.nick + ' requires rank of @ or higher to (un)blacklist.');
 
 		arg = arg.split(',');
 		var removed = [];
@@ -246,7 +258,7 @@ exports.commands = {
 				notRemoved.push(tarUser);
 				continue;
 			}
-			this.say(con, room, '/unban ' + tarUser);
+			this.say(con, room, '/roomunban ' + tarUser);
 			removed.push(tarUser);
 		}
 
@@ -262,7 +274,7 @@ exports.commands = {
 	vab: 'viewblacklist',
 	viewautobans: 'viewblacklist',
 	viewblacklist: function(arg, by, room, con) {
-		if (!this.hasRank(by, '%@&#~')) return false;
+		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
 
 		var text = '';
 		if (!this.settings.blacklist || !this.settings.blacklist[room]) {
@@ -403,7 +415,7 @@ exports.commands = {
 		} else {
 			var text = '/pm ' + by + ', ';
 		}
-		text += 'http://sim.smogon.com:8080/Stats/';
+		text += 'http://www.smogon.com/stats/2014-12/';
 		this.say(con, room, text);
 	},
 	seen: function(arg, by, room, con) { // this command is still a bit buggy
@@ -429,7 +441,7 @@ exports.commands = {
 			var text = '/pm ' + by + ', ';
 		}
 
-		var rand = Math.floor(20 * Math.random()) + 1;
+		var rand = ~~(20 * Math.random()) + 1;
 
 		switch (rand) {
 	 		case 1: text += "Signs point to yes."; break;
@@ -454,5 +466,161 @@ exports.commands = {
 			case 20: text += "Don't count on it."; break;
 		}
 		this.say(con, room, text);
+	},
+
+	/**
+	 * Room specific commands
+	 *
+	 * These commands are used in specific rooms on the Smogon server.
+	 */
+	espaol: 'esp',
+	ayuda: 'esp',
+	esp: function(arg, by, room, con) {
+		// links to relevant sites for the Wi-Fi room 
+		if ((room !== 'espaol' && room.charAt(0) !== ',') || config.serverid !== 'showdown') return false;
+		var text = '';
+		if (room.charAt(0) === ',' || !this.canUse('guia', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		var messages = {
+			reglas: 'Recuerda seguir las reglas de nuestra sala en todo momento: http://ps-salaespanol.weebly.com/reglas.html',
+			faq: 'Preguntas frecuentes sobre el funcionamiento del chat: http://ps-salaespanol.weebly.com/faq.html',
+			faqs: 'Preguntas frecuentes sobre el funcionamiento del chat: http://ps-salaespanol.weebly.com/faq.html',
+			foro: '¡Visita nuestro foro para participar en multitud de actividades! http://ps-salaespanol.proboards.com/',
+			guia: 'Desde este índice (http://ps-salaespanol.proboards.com/thread/575/ndice-de-gu) podrás acceder a toda la información importante de la sala. By: Lost Seso',
+			liga: '¿Tienes alguna duda sobre la Liga? ¡Revisa el **índice de la Liga** aquí!: (http://goo.gl/CxH2gi) By: xJoelituh'
+		};
+		text += (toId(arg) ? (messages[toId(arg)] || '¡Bienvenidos a la comunidad de habla hispana! Si eres nuevo o tienes dudas revisa nuestro índice de guías: http://ps-salaespanol.proboards.com/thread/575/ndice-de-gu') : '¡Bienvenidos a la comunidad de habla hispana! Si eres nuevo o tienes dudas revisa nuestro índice de guías: http://ps-salaespanol.proboards.com/thread/575/ndice-de-gu');
+		this.say(con, room, text);
+	},
+	studio: function(arg, by, room, con) {
+		if ((room !== 'thestudio' && room.charAt(0) !== ',') || config.serverid !== 'showdown') return false;
+		var text = '';
+		if (room.charAt(0) === ',' || !this.canUse('studio', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		var messages = {
+			plug: '/announce The Studio\'s plug.dj can be found here: https://plug.dj/the-studio/'
+		};
+		this.say(con, room, text + (messages[toId(arg)] || ('Welcome to The Studio, a music sharing room on PS!. If you have any questions, feel free to PM a room staff member. Available commands for .studio: ' + Object.keys(messages).join(', '))));
+	},
+	'switch': function(arg, by, room, con) {
+		if (room !== 'gamecorner' || config.serverid !== 'showdown' || !this.canUse('switch', room, by)) return false;
+		this.say(con, room, 'Taking over the world. Starting with Game Corner. Room deregistered.');
+		this.say(con, room, '/k ' + (toId(arg) || by) + ', O3O YOU HAVE TOUCHED THE SWITCH');
+	},
+	wifi: function(arg, by, room, con) {
+		// links to relevant sites for the Wi-Fi room 
+		if ((room !== 'wifi' && room.charAt(0) !== ',') || config.serverid !== 'showdown') return false;
+		var text = '';
+		if (room.charAt(0) === ',' || !this.canUse('wifi', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		var messages = {
+			intro: 'Here is an introduction to Wi-Fi: http://tinyurl.com/welcome2wifi',
+			rules: 'The rules for the Wi-Fi room can be found here: http://pstradingroom.weebly.com/rules.html',
+			faq: 'Wi-Fi room FAQs: http://pstradingroom.weebly.com/faqs.html',
+			faqs: 'Wi-Fi room FAQs: http://pstradingroom.weebly.com/faqs.html',
+			scammers: 'List of known scammers: http://tinyurl.com/psscammers',
+			cloners: 'List of approved cloners: http://goo.gl/WO8Mf4',
+			tips: 'Scamming prevention tips: http://pstradingroom.weebly.com/scamming-prevention-tips.html',
+			breeders: 'List of breeders: http://tinyurl.com/WiFIBReedingBrigade',
+			signup: 'Breeders Sign Up: http://tinyurl.com/GetBreeding',
+			bans: 'Ban appeals: http://pstradingroom.weebly.com/ban-appeals.html',
+			banappeals: 'Ban appeals: http://pstradingroom.weebly.com/ban-appeals.html',
+			lists: 'Major and minor list compilation: http://tinyurl.com/WifiSheets',
+			trainers: 'List of EV trainers: http://tinyurl.com/WifiEVtrainingCrew',
+			youtube: 'Wi-Fi room\'s official YouTube channel: http://tinyurl.com/wifiyoutube',
+			league: 'Wi-Fi Room Pokemon League: http://tinyurl.com/wifiroomleague'
+		};
+		text += (toId(arg) ? (messages[toId(arg)] || 'Unknown option. General links can be found here: http://pstradingroom.weebly.com/links.html') : 'Links can be found here: http://pstradingroom.weebly.com/links.html');
+		this.say(con, room, text);
+	},
+	mono: 'monotype',
+	monotype: function(arg, by, room, con) {
+		// links and info for the monotype room
+		if ((room !== 'monotype' && room.charAt(0) !== ',') || config.serverid !== 'showdown') return false;
+		var text = '';
+		if (room.charAt(0) === ',' || !this.canUse('monotype', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		var messages = {
+			forums: 'The monotype room\'s forums can be found here: http://psmonotypeforum.createaforum.com/index.php',
+			plug: 'The monotype room\'s plug can be found here: http://plug.dj/monotype-3-am-club/',
+			rules: 'The monotype room\'s rules can be found here: http://psmonotype.wix.com/psmono#!rules/cnnz',
+			site: 'The monotype room\'s site can be found here: http://www.psmonotype.wix.com/psmono',
+			league: 'Information on the Monotype League can be found here: http://themonotypeleague.weebly.com/'
+		};
+		text += (toId(arg) ? (messages[toId(arg)] || 'Unknown option. General information can be found here: http://www.psmonotype.wix.com/psmono') : 'Welcome to the monotype room! Please visit our site to find more information. The site can be found here: http://www.psmonotype.wix.com/psmono');
+		this.say(con, room, text);
+	},
+	survivor: function(arg, by, room, con) {
+		// contains links and info for survivor in the Survivor room
+		if ((room !== 'survivor' && room.charAt(0) !== ',') || config.serverid !== 'showdown') return false;
+		var text = '';
+		if (room.charAt(0) === ',' || !this.canUse('survivor', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		var gameTypes = {
+			hg: "http://survivor-ps.weebly.com/hunger-games.html",
+			hungergames: "http://survivor-ps.weebly.com/hunger-games.html",
+			classic: "http://survivor-ps.weebly.com/classic.html"
+		};
+		if (arg) {
+			if (!gameTypes[toId(arg)]) return this.say(con, room, "Invalid game type. The game types can be found here: http://survivor-ps.weebly.com/themes.html");
+			text += "The rules for this game type can be found here: " + gameTypes[toId(arg)];
+		} else {
+			text += "The list of game types can be found here: http://survivor-ps.weebly.com/themes.html";
+		}
+		this.say(con, room, text);
+	},
+	games: function(arg, by, room, con) {
+		// lists the games for the games room
+		if ((room !== 'gamecorner' && room.charAt(0) !== ',') || config.serverid !== 'showdown') return false;
+		var text = '';
+		if (room.charAt(0) === ',' || !this.canUse('games', room, by)) {
+			text += '/pm ' + by + ', ';
+		}
+		this.say(con, room, text + 'Game List: 1. Would You Rather, 2. NickGames, 3. Scattegories, 4. Commonyms, 5. Questionnaires, 6. Funarios, 7. Anagrams, 8. Spot the Reference, 9. Pokemath, 10. Liar\'s Dice');
+		this.say(con, room, text + '11. Pun Game, 12. Dice Cup, 13. Who\'s That Pokemon?, 14. Pokemon V Pokemon (BST GAME), 15. Letter Getter, 16. Missing Link, 17. Parameters! More information can be found here: http://psgamecorner.weebly.com/games.html');
+	},
+	happy: function(arg, by, room, con) {
+		// info for The Happy Place
+		if ((room !== 'thehappyplace' && room.charAt(0) !== ',') || config.serverid !== 'showdown') return false;
+		var text = "";
+		if (room.charAt(0) === ',' || !this.canUse('happy', room, by)) text += "/pm " + by + ", ";
+		arg = toId(arg);
+		if (arg === 'askstaff' || arg === 'ask' || arg === 'askannie') {
+			text += "http://thepshappyplace.weebly.com/ask-the-staff.html";
+		} else {
+			text += "The Happy Place, at its core, is a friendly environment for anyone just looking for a place to hang out and relax. We also specialize in taking time to give advice on life problems for users. Need a place to feel at home and unwind? Look no further!";
+		}
+		this.say(con, room, text);
+	},
+
+
+	/**
+	 * Jeopardy commands
+	 *
+	 * The following commands are used for Jeopardy in the Academics room
+	 * on the Smogon server.
+	 */
+
+
+	b: 'buzz',
+	buzz: function(arg, by, room, con) {
+		if (this.buzzed || !this.canUse('buzz', room, by) || room.charAt(0) === ',') return false;
+		this.say(con, room, '**' + by.substr(1) + ' has buzzed in!**');
+		this.buzzed = by;
+		this.buzzer = setTimeout(function(con, room, buzzMessage) {
+			this.say(con, room, buzzMessage);
+			this.buzzed = '';
+		}.bind(this), 7 * 1000, con, room, by + ', your time to answer is up!');
+	},
+	reset: function(arg, by, room, con) {
+		if (!this.buzzed || !this.hasRank(by, '%@&#~') || room.charAt(0) === ',') return false;
+		clearTimeout(this.buzzer);
+		this.buzzed = '';
+		this.say(con, room, 'The buzzer has been reset.');
 	},
 };
