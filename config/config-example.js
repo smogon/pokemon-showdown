@@ -393,6 +393,7 @@ exports.groups = {
 		name: "Room Owner",
 		inherit: '&',
 		jurisdiction: 'u',
+		roomleader: true,
 		rank: 7
 	},
 	'&': {
@@ -402,6 +403,7 @@ exports.groups = {
 		jurisdiction: 'u',
 		roommod: true,
 		roomdriver: true,
+		roomsecondarydriver: true,
 		roomplayer: true,
 		roomonly: true,
 		tournamentsmanagement: true,
