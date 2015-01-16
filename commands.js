@@ -733,7 +733,7 @@ var commands = exports.commands = {
 
 		return this.sendReply('Message "' + message + '" sent to ' + targetUser + '.');
 	},
-	
+
 	back: 'away',
 	idle: 'away',
 	away: function (target, room, user) {
