@@ -360,6 +360,7 @@ exports.customavatars = {
 	'flamingarcanine75': 'theace22.png',
 	'virg099': 'virg099.gif',
 	'wudibou': 'wudi-bou.png',
+	'silverhulkwolf': 'silver-hulkwolf.jpg',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
