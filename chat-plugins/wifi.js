@@ -149,10 +149,10 @@ var LotteryGiveAway = (function () {
 		this.prize = options.prize;
 		this.maxwinners = options.maxwinners;
 		this.joined = {}; // userid: 0
-
+                var firstPart = this.prize[0];
 		this.reminder = '<center><div class = "broadcast-blue"><font size = 3><b>It\'s giveaway time!</b></font><br/>' +
 			'<font size = 1>Giveaway started by ' + Tools.escapeHTML(host.name) + '</font><br/><br/>' +
-			'<b>' + Tools.escapeHTML(giver.name) + '</b> will be giving away a <b>' + Tools.escapeHTML(this.prize) + '</b>!<br/>' +
+			'<b>' + Tools.escapeHTML(giver.name) + '</b> will be giving away ' + (Number(firstPart) && firstPart !== '1' ? '' : 'a') + ' <b>' + Tools.escapeHTML(this.prize) + '</b>!<br/>' +
 			'The lottery drawing will occur in 2 minutes, with ' + this.maxwinners + ' winners!<br/>' +
 			'<button name = "send" value = "/giveaway joinlottery"><font size = 1><b>Join</b></font></button> <button name = "send" value = "/giveaway leavelottery"><font size = 1><b>Leave</b></font></button><br/>' +
 			'<font size = 1><b><u>Note:</u> Please do not join if you don\'t have a 3DS and a copy of Pokemon XY or ORAS';
@@ -224,9 +224,10 @@ var LotteryGiveAway = (function () {
 		for (var id in this.winners) {
 			finallist.push(this.winners[id].name);
 		}
+		var finallength = finallist.length;
 		finallist = finallist.join(', ');
 		this.room.addRaw('<div class = "broadcast-blue"><font size = 2><b>Lottery Draw: </b></font>&nbsp;&nbsp;' + Object.keys(this.joined).length + ' users have joined the lottery.<br/>' +
-			'Our lucky winner(s): <b>' + Tools.escapeHTML(finallist) + ' !</b> Congratulations!');
+			'Our lucky ' + (finallength === 1 ? 'winner' : 'winners') + ': <b>' + Tools.escapeHTML(finallist) + ' !</b> Congratulations!');
 		this.room.update();
 
 		for (var id in this.winners) {
