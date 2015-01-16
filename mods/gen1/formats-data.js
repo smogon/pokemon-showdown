@@ -56,7 +56,8 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	beedrill: {
-		randomBattleMoves: ["twineedle","hyperbeam","swordsdance","agility"],
+		randomBattleMoves: ["twineedle","hyperbeam","swordsdance","agility","megadrain"],
+		mandatoryMove: "swordsdance"
 		tier: "UU"
 	},
 	pidgey: {
@@ -96,7 +97,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	ekans: {
-		randomBattleMoves: ["wrap","glare","earthquake","bodyslam","rockslide"],
+		randomBattleMoves: ["glare","earthquake","bodyslam","rockslide"],
 		tier: "LC"
 	},
 	arbok: {
@@ -117,6 +118,8 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	sandshrew: {
+		randomBattleMoves: ["swordsdance","bodyslam","rockslide","substitute"],
+		mandatoryMove: "earthquake",
 		tier: "LC"
 	},
 	sandslash: {
