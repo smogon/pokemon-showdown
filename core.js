@@ -159,32 +159,37 @@ var core = exports.core = {
     },
 
     emoticons: {
-        ':bidoof:': 'http://i.cubeupload.com/4BDJut.png',
-        ':castform:': 'http://i.cubeupload.com/T5FfCG.png',
-        ':cookie:': 'http://i.cubeupload.com/jg1pGi.gif',
-        ':hamster:': 'http://i.cubeupload.com/mfzNvI.png',
-        ':jigglypuff:': 'http://i.cubeupload.com/YztizI.png',
-        ':jynx:': 'http://i.cubeupload.com/ofwdUJ.png',
-        ':kappa:': 'http://i.cubeupload.com/lpKLpS.png',
-        ':kermit:': 'http://i.cubeupload.com/tcKMod.png',
-        ':ludicolo:': 'http://i.cubeupload.com/ciac6L.png',
-        ':luvdisc:': 'http://i.cubeupload.com/PtSs8M.png',
-        ':magikarp:': 'http://i.cubeupload.com/n6mgll.png',
-        ':meganium:': 'http://i.cubeupload.com/u9Vqhq.png',
-        ':pjsalt:': 'http://i.cubeupload.com/0IQnwo.png',
-        ':psyduck:': 'http://i.cubeupload.com/0WfrRe.png',
-        ':slowpoke:': 'http://i.cubeupload.com/KzRPbu.png',
-        ':snorlax:': 'http://i.cubeupload.com/BVNZNR.png',
-        ':spheal:': 'http://i.cubeupload.com/MbU8MF.png',
-        ':sri:': 'http://i.cubeupload.com/TP8Zut.png',
-        ':suicune:': 'http://i.cubeupload.com/bctlyl.png',
-        ':superman:': 'http://i.cubeupload.com/1211Wf.png',
-        ':sweep:': 'http://i.cubeupload.com/gFmzfa.gif',
-        ':vulpix:': 'http://i.cubeupload.com/QWGl1Y.png',
-        ':wobbuffet:': 'http://i.cubeupload.com/bhIIQe.png',
-        ':wooper:': 'http://i.cubeupload.com/wPfgah.png',
-        ':wynaut:': 'http://i.cubeupload.com/Cgo2WM.png',
-        ':y:': 'http://i.cubeupload.com/91ORMi.png'
+        ':bidoof:': 'https://cdn.mediacru.sh/j/jnU_eKgCLCss.png',
+        ':castform:': 'https://cdn.mediacru.sh/1/1r6cqLIZiWHz.png',
+        ':charizard:': 'https://cdn.mediacru.sh/8/85rBQ55kQYFK.png',
+        ':cookie:': 'https://cdn.mediacru.sh/4/4jw3TFaczSh5.png',
+        ':hamster:': 'https://cdn.mediacru.sh/Y/Yqc3SDwdtPAE.png',
+        ':helix:': 'https://cdn.mediacru.sh/3/3wsPiBzHPMTs.png',
+        ':jigglypuff:': 'https://cdn.mediacru.sh/-/-NtCZ2zp0iPg.png',
+        ':jynx:': 'https://cdn.mediacru.sh/x/xbB59s_y8Li-.png',
+        ':kappa:': 'https://cdn.mediacru.sh/k/kp7cd1ARmEqE.png',
+        ':kermit:': 'https://cdn.mediacru.sh/i/i2ZnBkBB5qh-.png',
+        ':kreygasm:': 'https://cdn.mediacru.sh/g/gfbqOPsxGHFr.png',
+        ':ludicolo:': 'https://cdn.mediacru.sh/4/4Rzxlrn55B2F.png',
+        ':luvdisc:': 'https://cdn.mediacru.sh/N/Nh0J72ksDyvo.png',
+        ':magikarp:': 'https://cdn.mediacru.sh/_/_GwmTtMpH3kN.png',
+        ':meganium:': 'https://cdn.mediacru.sh/7/785di6JAV2V2.png',
+        ':pyoshi:': 'https://cdn.mediacru.sh/L/L342oaJ7eLdU.png',
+        ':pjsalt:': 'https://cdn.mediacru.sh/j/jyfFOZHf-QS0.png',
+        ':psyduck:': 'https://cdn.mediacru.sh/9/97QDgL0hdhWl.png',
+        ':slowpoke:': 'https://cdn.mediacru.sh/i/iOeSEvmm1OJb.png',
+        ':snorlax:': 'https://cdn.mediacru.sh/B/Bd18bN0Rs0o8.png',
+        ':spheal:': 'https://cdn.mediacru.sh/R/RmS-821iojV4.png',
+        ':sri:': 'https://cdn.mediacru.sh/G/GKF38TT9OLp2.png',
+        ':suicune:': 'https://cdn.mediacru.sh/K/K_8I1rhpkY2y.png',
+        ':superman:': 'https://cdn.mediacru.sh/x/xsxF2Mnlu3Rs.png',
+        ':sweep:': 'https://cdn.mediacru.sh/e/elbdDkXD59f0.gif',
+        ':vulpix:': 'https://cdn.mediacru.sh/4/4cGgtc3OX_yL.png',
+        ':wobbuffet:': 'https://cdn.mediacru.sh/v/vHiKBTKel8uU.png',
+        ':wooper:': 'https://cdn.mediacru.sh/P/PoYNa4o1TnxJ.png',
+        ':wynaut:': 'https://cdn.mediacru.sh/z/zr40hyKrmp1L.png',
+        ':y:': 'https://cdn.mediacru.sh/-/-YJb7Me685oV.png',
+        ':yoshi:': 'https://cdn.mediacru.sh/L/LKdD73HYJm8q.png'
     },
 
     processEmoticons: function (text) {
@@ -199,7 +204,7 @@ var core = exports.core = {
         }
 
         return text.replace(new RegExp(patterns.join('|'), 'g'), function (match) {
-            if (match === ':kermit:' || match === ':superman:' || match === ':sweep:') return typeof self.emoticons[match] != 'undefined' ?
+            if (match === ':kermit:' || match === ':superman:' || match === ':sweep:' || match === ':yoshi:') return typeof self.emoticons[match] != 'undefined' ?
                 '<img src="' + self.emoticons[match] + '" title="' + match + '" width="30" height="30"/>' :
                 match;
             return typeof self.emoticons[match] != 'undefined' ?
