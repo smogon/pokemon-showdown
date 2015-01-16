@@ -464,8 +464,8 @@ exports.groups = {
 		rank: 4
 	},
 	'=': {
-		id: "secondarydriver",
-		name: "Secondary Driver",
+		id: "subdriver",
+		name: "Subdriver",
 		inherit: '+',
 		jurisdiction: 'u',
 		warn: true,
