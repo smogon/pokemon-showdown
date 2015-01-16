@@ -1084,12 +1084,7 @@ exports.BattleScripts = {
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1
 
 		var moveKeys = template.randomBattleMoves;
-		// No sense to randomise if the moves are always the same.
-		if (moveKeys.length > 4) {
-			var firstMove = moveKeys.shift();
-			moveKeys = moveKeys.randomize();
-			moveKeys.unshift(firstMove);
-		}
+		moveKeys = moveKeys.randomize();
 		var moves = [];
 		var hasType = {};
 		hasType[template.types[0]] = true;
@@ -1101,14 +1096,21 @@ exports.BattleScripts = {
 		var j = 0;
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.length < 4 && j < moveKeys.length) {
+			var howMany = (template.mandatoryMove) ? 3 : 4;
+			while (moves.length < howMany && j < moveKeys.length) {
 				var moveid = toId(moveKeys[j]);
 				j++;
 				moves.push(moveid);
 			}
 
+			// Add now the mandatory move
+			if (template.mandatoryMove) {
+				moves.unshift(template.mandatoryMove);
+				j++;
+			}
+
 			// Only do move choosing if we have more than four on the moveset...
-			if (moveKeys.length > 4) {
+			if (moveKeys.length > howMany) {
 				hasMove = {};
 				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
 				for (var k = 0; k < moves.length; k++) {
@@ -1136,93 +1138,95 @@ exports.BattleScripts = {
 					var moveid = moves[k];
 					var move = this.getMove(moveid);
 					var rejected = false;
-					var isSetup = false;
+					if (hasMove[moveid]) rejected = true;
+					if (!template.mandatoryMove || moveid !== template.mandatoryMove) {
+						var isSetup = false;
 
-					switch (moveid) {
-					// bad after setup
-					case 'seismictoss': case 'nightshade':
-						if (setupType) rejected = true;
-						break;
-					// bit redundant to have both
-					case 'flamethrower':
-						if (hasMove['fireblast']) rejected = true;
-						break;
-					case 'fireblast':
-						if (hasMove['flamethrower']) rejected = true;
-						break;
-					case 'icebeam':
-						if (hasMove['blizzard']) rejected = true;
-						break;
-					// Hydropump and surf are both valid options, just avoid one with eachother.
-					case 'hydropump':
-						if (hasMove['surf']) rejected = true;
-						break;
-					case 'surf':
-						if (hasMove['hydropump']) rejected = true;
-						break;
-					case 'petaldance': case 'solarbeam':
-						if (hasMove['megadrain'] || hasMove['razorleaf']) rejected = true;
-						break;
-					case 'megadrain':
-						if (hasMove['razorleaf']) rejected = true;
-						break;
-					case 'thunder':
-						if (hasMove['thunderbolt']) rejected = true;
-						break;
-					case 'thunderbolt':
-						if (hasMove['thunder']) rejected = true;
-						break;
-					case 'bonemerang':
-						if (hasMove['earthquake']) rejected = true;
-						break;
-					case 'rest':
-						if (hasMove['recover'] || hasMove['softboiled']) rejected = true;
-						break;
-					case 'softboiled':
-						if (hasMove['recover']) rejected = true;
-						break;
-					case 'sharpen':
-					case 'swordsdance':
-						if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical']) rejected = true;
-						break;
-					case 'doubleedge':
-						if (hasMove['bodyslam']) rejected = true;
-						break;
-					case 'mimic':
-						if (hasMove['mirrormove']) rejected = true;
-						break;
-					case 'superfang':
-						if (hasMove['bodyslam']) rejected = true;
-						break;
-					case 'rockslide':
-						if (hasMove['earthquake'] && hasMove['bodyslam'] && hasMove['hyperbeam']) rejected = true;
-						break;
-					case 'bodyslam':
-						if (hasMove['thunderwave']) rejected = true;
-						break;
-					case 'bubblebeam':
-						if (hasMove['blizzard']) rejected = true;
-						break;
-					case 'screech':
-						if (hasMove['slash']) rejected = true;
-						break;
-					case 'slash':
-						if (setupType === 'Physical') rejected = true;
-						break;
-					case 'megakick':
-						if (hasMove['bodyslam']) rejected = true;
-						break;
-					case 'eggbomb':
-						if (hasMove['hyperbeam']) rejected = true;
-						break;
-					case 'triattack':
-						if (hasMove['doubleedge']) rejected = true;
-						break;
-					case 'growth':
-						if (hasMove['amnesia']) rejected = true;
-						break;
-					} // End of switch for moveid
-
+						switch (moveid) {
+						// bad after setup
+						case 'seismictoss': case 'nightshade':
+							if (setupType) rejected = true;
+							break;
+						// bit redundant to have both
+						case 'flamethrower':
+							if (hasMove['fireblast']) rejected = true;
+							break;
+						case 'fireblast':
+							if (hasMove['flamethrower']) rejected = true;
+							break;
+						case 'icebeam':
+							if (hasMove['blizzard']) rejected = true;
+							break;
+						// Hydropump and surf are both valid options, just avoid one with eachother.
+						case 'hydropump':
+							if (hasMove['surf']) rejected = true;
+							break;
+						case 'surf':
+							if (hasMove['hydropump']) rejected = true;
+							break;
+						case 'petaldance': case 'solarbeam':
+							if (hasMove['megadrain'] || hasMove['razorleaf']) rejected = true;
+							break;
+						case 'megadrain':
+							if (hasMove['razorleaf']) rejected = true;
+							break;
+						case 'thunder':
+							if (hasMove['thunderbolt']) rejected = true;
+							break;
+						case 'thunderbolt':
+							if (hasMove['thunder']) rejected = true;
+							break;
+						case 'bonemerang':
+							if (hasMove['earthquake']) rejected = true;
+							break;
+						case 'rest':
+							if (hasMove['recover'] || hasMove['softboiled']) rejected = true;
+							break;
+						case 'softboiled':
+							if (hasMove['recover']) rejected = true;
+							break;
+						case 'sharpen':
+						case 'swordsdance':
+							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical']) rejected = true;
+							break;
+						case 'doubleedge':
+							if (hasMove['bodyslam']) rejected = true;
+							break;
+						case 'mimic':
+							if (hasMove['mirrormove']) rejected = true;
+							break;
+						case 'superfang':
+							if (hasMove['bodyslam']) rejected = true;
+							break;
+						case 'rockslide':
+							if (hasMove['earthquake'] && hasMove['bodyslam'] && hasMove['hyperbeam']) rejected = true;
+							break;
+						case 'bodyslam':
+							if (hasMove['thunderwave']) rejected = true;
+							break;
+						case 'bubblebeam':
+							if (hasMove['blizzard']) rejected = true;
+							break;
+						case 'screech':
+							if (hasMove['slash']) rejected = true;
+							break;
+						case 'slash':
+							if (setupType === 'Physical') rejected = true;
+							break;
+						case 'megakick':
+							if (hasMove['bodyslam']) rejected = true;
+							break;
+						case 'eggbomb':
+							if (hasMove['hyperbeam']) rejected = true;
+							break;
+						case 'triattack':
+							if (hasMove['doubleedge']) rejected = true;
+							break;
+						case 'growth':
+							if (hasMove['amnesia']) rejected = true;
+							break;
+						} // End of switch for moveid
+					}
 					if (rejected && j < moveKeys.length) {
 						moves.splice(k, 1);
 						break;
