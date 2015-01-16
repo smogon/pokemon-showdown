@@ -426,6 +426,7 @@ exports.groups = {
 		inherit: '&',
 		jurisdiction: 'u',
 		roomleader: true,
+		roomonly: true,
 		rank: 7
 	},
 	'&': {
