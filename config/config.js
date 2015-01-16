@@ -434,7 +434,7 @@ exports.groups = {
 		jurisdiction: 'u',
 		roommod: true,
 		roomdriver: true,
-		roomsecondarydriver: true,
+		roomsubdriver: true,
 		roomplayer: true,
 		roomonly: true,
 		tournamentsmanagement: true,
