@@ -251,16 +251,14 @@ exports.parse = {
 		return canUse;
 	},
 	isBlacklisted: function(user, room) {
-		var blacklist = this.settings.blacklist;
-		return (blacklist && blacklist[room] && blacklist[room][user]);
+		return (this.settings.blacklist && this.settings.blacklist[room] && this.settings.blacklist[room][user]);
 	},
 	blacklistUser: function(user, room) {
-		var blacklist = this.settings.blacklist;
-		if (!blacklist) this.settings.blacklist = {};
-		if (!blacklist[room]) blacklist[room] = {};
+		if (!this.settings['blacklist']) this.settings['blacklist'] = {};
+		if (!this.settings.blacklist[room]) this.settings.blacklist[room] = {};
 
-		if (blacklist[room][user]) return false;
-		blacklist[room][user] = 1;
+		if (this.settings.blacklist[room][user]) return false;
+		this.settings.blacklist[room][user] = 1;
 		return true;
 	},
 	unblacklistUser: function(user, room) {
