@@ -1026,6 +1026,10 @@ var commands = exports.commands = {
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3513882/\">PU</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517353/\">PU Viability Rankings</a><br />";
 		}
+		if (target === 'all' || target === 'fu') {
+			matched = true;
+			buffer += "- <a href=\"www.smogon.com/forums/threads/3519286/\">FU</a><br />";
+		}
 		if (target === 'all' || target === 'inversebattle' || target === 'inverse') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3518146/\">Inverse Battle</a><br />";
