@@ -996,7 +996,8 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">OM of the Month</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">Other Metagame of the Month</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3519286/\">Current OMotM: FU</a><br />";
 		}
 		if (target === 'all' || target === 'seasonal') {
 			matched = true;
