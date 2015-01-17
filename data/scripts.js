@@ -1433,6 +1433,8 @@ exports.BattleScripts = {
 			item = 'Eviolite';
 		} else if (template.species === 'Farfetch\'d') {
 			item = 'Stick';
+		} else if (template.evos.length) {
+			item = 'Eviolite';
 		} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 			item = 'Light Clay';
 		} else if (hasMove['shellsmash']) {
@@ -1548,26 +1550,14 @@ exports.BattleScripts = {
 			Uber: 70
 		};
 		var customScale = {
-			// Really bad Pokemon and jokemons
-			Azurill: 99, Burmy: 99, Cascoon: 99, Caterpie: 99, Cleffa: 99, Combee: 99, Feebas: 99, Igglybuff: 99, Happiny: 99, Hoppip: 99,
-			Kakuna: 99, Kricketot: 99, Ledyba: 99, Magikarp: 99, Metapod: 99, Pichu: 99, Ralts: 99, Sentret: 99, Shedinja: 99, Silcoon: 99,
-			Slakoth: 99, Sunkern: 99, Tynamo: 99, Tyrogue: 99, Unown: 99, Weedle: 99, Wurmple: 99, Zigzagoon: 99,
-			Clefairy: 95, Delibird: 95, "Farfetch'd": 95, Jigglypuff: 95, Kirlia: 95, Ledian: 95, Luvdisc: 95, Marill: 95, Skiploom: 95,
-			Pachirisu: 90,
-
-			// Eviolite
-			Ferroseed: 95, Misdreavus: 95, Munchlax: 95, Murkrow: 95, Natu: 95,
-			Gligar: 90, Metang: 90, Monferno: 90, Roselia: 90, Seadra: 90, Togetic: 90, Wartortle: 90, Whirlipede: 90,
-			Dusclops: 84, Porygon2: 82, Chansey: 78,
-
 			// Banned Mega
-			"Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72, "Rayquaza-Mega": 68, "Salamence-Mega": 72,
+			"Gengar-Mega": 68, "Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72, "Rayquaza-Mega": 68, "Salamence-Mega": 72,
 
 			// Not holding mega stone
 			Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Medicham: 78, Metagross: 78, Pinsir: 82, Sableye: 78, Venusaur: 78,
 
 			// Holistic judgment
-			Articuno: 82, Genesect: 72, "Gengar-Mega": 68, "Rotom-Fan": 88, Sigilyph: 80, Xerneas: 66
+			Articuno: 82, Genesect: 72, Greninja: 72, "Rotom-Fan": 88, Sigilyph: 80, Unown: 90, Xerneas: 66
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
@@ -1670,6 +1660,8 @@ exports.BattleScripts = {
 			if (template.species === 'Pikachu' && Math.random() * 5 <= 1) continue;
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
+			// Only certain NFE Pokemon are allowed
+			if (template.evos.length && !(template.species in {'Chansey':1, 'Doublade':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1})) continue;
 
 			// Limit 2 of any type
 			var types = template.types;
@@ -1783,6 +1775,8 @@ exports.BattleScripts = {
 			if (template.species === 'Pikachu' && Math.random() * 5 <= 1) continue;
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
+			// Only certain NFE Pokemon are allowed
+			if (template.evos.length && !(template.species in {'Chansey':1, 'Doublade':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1})) continue;
 
 			// Limit 2 of any type
 			var types = template.types;

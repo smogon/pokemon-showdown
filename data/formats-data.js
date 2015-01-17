@@ -1330,7 +1330,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	porygon2: {
-		randomBattleMoves: ["triattack","icebeam","recover","toxic","thunderwave","discharge","trick","shadowball","trickroom"],
+		randomBattleMoves: ["triattack","icebeam","recover","toxic","thunderwave","discharge","shadowball","trickroom"],
 		tier: "UU"
 	},
 	porygonz: {
@@ -5075,7 +5075,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	hawlucha: {
-		randomBattleMoves: ["swordsdance","highjumpkick","uturn","stoneedge","roost","batonpass","thunderpunch"],
+		randomBattleMoves: ["swordsdance","highjumpkick","acrobatics","roost","thunderpunch","substitute"],
 		randomDoubleBattleMoves: ["swordsdance","highjumpkick","uturn","stoneedge","skydrop","encore","protect"],
 		tier: "BL"
 	},
