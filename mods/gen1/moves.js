@@ -387,7 +387,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "Eliminates any stat stage changes and status from all active Pokemon.",
 		shortDesc: "Eliminates all stat changes and status.",
-		onHitField: function (target, source) {
+		onHit: function (target, source) {
 			this.add('-clearallboost');
 			for (var i = 0; i < this.sides.length; i++) {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
@@ -409,7 +409,8 @@ exports.BattleMovedex = {
 					}
 				}
 			}
-		}
+		},
+		target: "self"
 	},
 	highjumpkick: {
 		inherit: true,
