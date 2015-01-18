@@ -912,7 +912,7 @@ exports.BattleScripts = {
 		//unreleased are okay. No CAP for now, but maybe at some later date
 		for (var i = 0; i < 6; i++) {
 			while (true) {
-				var x = Math.floor(Math.random() * 150) + 1;
+				var x = Math.floor(Math.random() * 151) + 1;
 				if (teamdexno.indexOf(x) === -1) {
 					teamdexno.push(x);
 					break;
