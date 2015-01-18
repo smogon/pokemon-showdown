@@ -1429,10 +1429,10 @@ exports.BattleScripts = {
 			item = 'DeepSeaTooth';
 		} else if (template.species === 'Spiritomb') {
 			item = 'Leftovers';
-		} else if (template.species === 'Dusclops') {
-			item = 'Eviolite';
 		} else if (template.species === 'Farfetch\'d') {
 			item = 'Stick';
+		} else if (template.species === 'Dedenne') {
+			item = 'Petaya Berry';
 		} else if (template.evos.length) {
 			item = 'Eviolite';
 		} else if (hasMove['reflect'] && hasMove['lightscreen']) {
@@ -2445,14 +2445,16 @@ exports.BattleScripts = {
 			item = 'DeepSeaTooth';
 		} else if (template.species === 'Spiritomb') {
 			item = 'Leftovers';
-		} else if (template.species === 'Dusclops') {
-			item = 'Eviolite';
 		} else if (template.species === 'Scrafty' && counter['Status'] === 0) {
 			item = 'Assault Vest';
 		} else if (template.species === 'Farfetch\'d') {
 			item = 'Stick';
 		} else if (template.species === 'Amoonguss') {
 			item = 'Black Sludge';
+		} else if (template.species === 'Dedenne') {
+			item = 'Petaya Berry';
+		} else if (template.evos.length) {
+			item = 'Eviolite';
 		} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 			item = 'Light Clay';
 		} else if (hasMove['shellsmash']) {
