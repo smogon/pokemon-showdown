@@ -4984,7 +4984,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	aromatisse: {
-		randomBattleMoves: ["calmmind","drainingkiss","moonblast","psychic","aromatherapy","wish","trickroom","thunderbolt"],
+		randomBattleMoves: ["calmmind","moonblast","psychic","aromatherapy","wish","trickroom","thunderbolt"],
 		randomDoubleBattleMoves: ["moonblast","aromatherapy","wish","trickroom","thunderbolt","protect","healpulse"],
 		tier: "RU"
 	},
