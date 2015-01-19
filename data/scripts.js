@@ -991,13 +991,10 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang': case 'foulplay':
 					if (setupType) rejected = true;
 					break;
-				case 'magiccoat': case 'spikes': case 'defog':
-					if (setupType) rejected = true;
-					break;
 				case 'relicsong':
 					if (setupType) rejected = true;
 					break;
-				case 'pursuit': case 'protect': case 'haze': case 'stealthrock':
+				case 'magiccoat': case 'spikes': case 'defog': case 'pursuit': case 'protect': case 'haze': case 'stealthrock':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'trick': case 'switcheroo':
