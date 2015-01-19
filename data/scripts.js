@@ -1077,6 +1077,9 @@ exports.BattleScripts = {
 				case 'superpower':
 					if (setupType && hasMove['drainpunch']) rejected = true;
 					break;
+				case 'machpunch':
+					if (hasMove['focuspunch']) rejected = true;
+					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || hasMove['thunder']) rejected = true;
 					break;
