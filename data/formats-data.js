@@ -2287,7 +2287,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["growl","wish"]},
 			{"generation":3,"level":5,"moves":["growl","charm"]},
-			{"generation":3,"level":20,"moves":["sing","shockwave","reflect","confusion"]}
+			{"generation":3,"level":20,"moves":["sing","shockwave","reflect","confusion"]},
+			{"generation":6,"level":1,"isHidden":true,"moves":["growl","encore"]}
 		],
 		tier: "LC"
 	},
@@ -2593,7 +2594,8 @@ exports.BattleFormatsData = {
 	carvanha: {
 		randomBattleMoves: ["protect","hydropump","surf","icebeam","waterfall","crunch","aquajet","destinybond"],
 		eventPokemon: [
-			{"generation":3,"level":15,"moves":["refresh","waterpulse","bite","scaryface"]}
+			{"generation":3,"level":15,"moves":["refresh","waterpulse","bite","scaryface"]},
+			{"generation":6,"level":1,"isHidden":true,"moves":["leer","bite","hydropump"]}
 		],
 		tier: "LC"
 	},
@@ -2622,7 +2624,8 @@ exports.BattleFormatsData = {
 	numel: {
 		randomBattleMoves: ["curse","earthquake","rockslide","fireblast","flamecharge","rest","sleeptalk","stockpile","hiddenpowerelectric","earthpower","lavaplume"],
 		eventPokemon: [
-			{"generation":3,"level":14,"abilities":["oblivious"],"moves":["charm","takedown","dig","ember"]}
+			{"generation":3,"level":14,"abilities":["oblivious"],"moves":["charm","takedown","dig","ember"]},
+			{"generation":6,"level":1,"isHidden":false,"moves":["growl","tackle","ironhead"]}
 		],
 		tier: "LC"
 	},
@@ -2700,7 +2703,8 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["roost","toxic","cottonguard","pluck","hypervoice","return"],
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["peck","growl","falseswipe"]},
-			{"generation":5,"level":1,"shiny":true,"isHidden":false,"moves":["peck","growl"]}
+			{"generation":5,"level":1,"shiny":true,"isHidden":false,"moves":["peck","growl"]},
+			{"generation":6,"level":1,"isHidden":true,"moves":["peck","growl","hypervoice"]}
 		],
 		tier: "LC"
 	},
@@ -2991,7 +2995,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["rage","bite","wish"]},
 			{"generation":3,"level":5,"moves":["rage","bite","irondefense"]},
-			{"generation":5,"level":1,"shiny":true,"isHidden":false,"moves":["rage"]}
+			{"generation":5,"level":1,"shiny":true,"isHidden":false,"moves":["rage"]},
+			{"generation":6,"level":1,"isHidden":false,"moves":["rage","thrash"]}
 		],
 		tier: "LC"
 	},
@@ -3137,7 +3142,8 @@ exports.BattleFormatsData = {
 		randomDoubleBattleMoves: ["tailwind","vcreate","extremespeed","dragondance","earthquake","dracometeor","dragonclaw","protect"],
 		eventPokemon: [
 			{"generation":5,"level":70,"shiny":true,"moves":["dragonpulse","ancientpower","outrage","dragondance"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["extremespeed","hyperbeam","dragonpulse","vcreate"],"pokeball":"cherishball"}
+			{"generation":5,"level":100,"moves":["extremespeed","hyperbeam","dragonpulse","vcreate"],"pokeball":"cherishball"},
+			{"generation":6,"level":70,"shiny":true,"moves":["dragonpulse","thunder","twister","extremespeed"],"pokeball":"cherishball"}
 		],
 		tier: "Uber"
 	},
