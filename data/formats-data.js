@@ -2513,8 +2513,7 @@ exports.BattleFormatsData = {
 	medichammega: {
 		randomBattleMoves: ["highjumpkick","drainpunch","icepunch","bulletpunch","zenheadbutt","firepunch"],
 		randomDoubleBattleMoves: ["highjumpkick","drainpunch","zenheadbutt","icepunch","bulletpunch","protect","fakeout"],
-		requiredItem: "Medichamite",
-		tier: "BL"
+		requiredItem: "Medichamite"
 	},
 	electrike: {
 		randomBattleMoves: ["voltswitch","thunderbolt","hiddenpowerice","switcheroo","flamethrower","hiddenpowergrass"],
@@ -5215,7 +5214,8 @@ exports.BattleFormatsData = {
 	dianciemega: {
 		randomBattleMoves: ["diamondstorm","moonblast","calmmind","psyshock","earthpower","hiddenpowerfire"],
 		randomDoubleBattleMoves: ["diamondstorm","moonblast","calmmind","psyshock","earthpower","hiddenpowerfire","dazzlinggleam","protect"],
-		requiredItem: "Diancite"
+		requiredItem: "Diancite",
+		tier: "BL"
 	},
 	hoopa: {
 		isUnreleased: true,

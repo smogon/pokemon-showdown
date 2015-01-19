@@ -41,7 +41,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Alakazite', 'Altarianite', 'Heracronite', 'Galladite', 'Gardevoirite', 'Lopunnite', 'Medichamite', 'Metagrossite',
+		banlist: ['OU', 'BL', 'Alakazite', 'Altarianite', 'Diancite', 'Heracronite', 'Galladite', 'Gardevoirite', 'Lopunnite', 'Metagrossite',
 			'Drizzle', 'Drought', 'Shadow Tag'
 		]
 	},
