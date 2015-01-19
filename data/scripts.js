@@ -870,7 +870,7 @@ exports.BattleScripts = {
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
 				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
-				blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
+				blaze: 0, overgrow: 0, swarm: 0, torrent: 0, serenegrace: 0,
 				recoil: 0, inaccurate: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
@@ -920,10 +920,9 @@ exports.BattleScripts = {
 				}
 				// Moves with secondary effects:
 				if (move.secondary) {
-					if (move.secondary.chance < 50) {
-						counter['sheerforce'] -= 5;
-					} else {
-						counter['sheerforce']++;
+					counter['sheerforce']++;
+					if (move.secondary.chance >= 20) {
+						counter['serenegrace']++;
 					}
 				}
 				// Moves with low accuracy:
@@ -1310,8 +1309,10 @@ exports.BattleScripts = {
 				rejectAbility = !!counter['recoil'] && !hasMove['recover'] && !hasMove['roost'];
 			} else if (ability === 'No Guard' || ability === 'Compound Eyes') {
 				rejectAbility = !counter['inaccurate'];
-			} else if ((ability === 'Sheer Force' || ability === 'Serene Grace')) {
+			} else if (ability === 'Sheer Force') {
 				rejectAbility = !counter['sheerforce'];
+			} else if (ability === 'Serene Grace') {
+				rejectAbility = !counter['serenegrace'] && template.species !== 'Blissey' && template.species !== 'Chansey';
 			} else if (ability === 'Simple') {
 				rejectAbility = !setupType && !hasMove['flamecharge'] && !hasMove['stockpile'];
 			} else if (ability === 'Prankster') {
@@ -1936,7 +1937,7 @@ exports.BattleScripts = {
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
 				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
-				blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
+				blaze: 0, overgrow: 0, swarm: 0, torrent: 0, serenegrace: 0,
 				recoil: 0, inaccurate: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
@@ -1986,10 +1987,9 @@ exports.BattleScripts = {
 				}
 				// Moves with secondary effects:
 				if (move.secondary) {
-					if (move.secondary.chance < 50) {
-						counter['sheerforce'] -= 5;
-					} else {
-						counter['sheerforce']++;
+					counter['sheerforce']++;
+					if (move.secondary.chance >= 20) {
+						counter['serenegrace']++;
 					}
 				}
 				// Moves with low accuracy:
@@ -2331,8 +2331,10 @@ exports.BattleScripts = {
 				rejectAbility = !counter['recoil'];
 			} else if (ability === 'No Guard' || ability === 'Compound Eyes') {
 				rejectAbility = !counter['inaccurate'];
-			} else if ((ability === 'Sheer Force' || ability === 'Serene Grace')) {
+			} else if (ability === 'Sheer Force') {
 				rejectAbility = !counter['sheerforce'];
+			} else if (ability === 'Serene Grace') {
+				rejectAbility = !counter['serenegrace'] && template.species !== 'Blissey' && template.species !== 'Chansey';
 			} else if (ability === 'Simple') {
 				rejectAbility = !setupType && !hasMove['flamecharge'] && !hasMove['stockpile'];
 			} else if (ability === 'Prankster') {
