@@ -1647,6 +1647,8 @@ exports.BattleScripts = {
 
 			// CAPs have 20% the normal rate
 			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
+			// Unreleased Pokemon have 20% the normal rate
+			if (tier === 'Unreleased' && Math.random() * 5 > 1) continue;
 			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
 			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 18 > 1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
@@ -1762,6 +1764,8 @@ exports.BattleScripts = {
 			var template = this.getTemplate(keys[i]);
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
+			// Unreleased Pokemon have 20% the normal rate
+			if (tier === 'Unreleased' && Math.random() * 5 > 1) continue;
 			// Arceus formes have 1/18 the normal rate each (so Arceus as a whole has a normal rate)
 			if (keys[i].substr(0, 6) === 'arceus' && Math.random() * 18 > 1) continue;
 			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
