@@ -54,7 +54,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	butterfree: {
-		randomBattleMoves: ["stunspore","sleeppowder","psychic","nightmare","giga drain"],
+		randomBattleMoves: ["stunspore","sleeppowder","psychic","nightmare","gigadrain"],
 		tier: "UU"
 	},
 	weedle: {
@@ -1168,21 +1168,25 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	tyranitar: {
+		randomBattleMoves: ["rockslide","roar","curse","rest","dynamicpunch","fireblast","pursuit","crunch"],
 		tier: "OU"
 	},
 	lugia: {
+		randomBattleMoves: ["curse","aeroblast","earthquake","recover","rest"],
 		eventPokemon: [
 			{"generation":2,"level":40,"shiny":true,"moves":["aeroblast","safeguard","gust","recover"]}
 		],
 		tier: "Uber"
 	},
 	hooh: {
+		randomBattleMoves: ["curse","recover","return","sacredfire","shadowball","whirlwind","thunderbolt","earthquake"],
 		eventPokemon: [
 			{"generation":2,"level":40,"shiny":true,"moves":["sacredfire","safeguard","gust","recover"]}
 		],
 		tier: "Uber"
 	},
 	celebi: {
+		randomBattleMoves: ["healbell","recover","leechseed","psychic"],
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["leechseed","confusion","healbell","recover"]}
 		],
