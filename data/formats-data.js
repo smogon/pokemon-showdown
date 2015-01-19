@@ -4916,6 +4916,8 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	floetteeternalflower: {
+		randomBattleMoves: ["lightofruin","wish","psychic","aromatherapy","protect","calmmind"],
+		randomDoubleBattleMoves: ["lightofruin","dazzlinggleam","wish","psychic","aromatherapy","protect","calmmind"],
 		isUnreleased: true,
 		tier: "Unreleased"
 	},
