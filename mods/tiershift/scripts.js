@@ -1,10 +1,14 @@
 exports.BattleScripts = {
 	init: function () {
 		for (var i in this.data.Pokedex) {
-			var tier = '';
+			if (!this.data.FormatsData[i]) continue;
+			var tier = this.data.FormatsData[i].tier;
 			var adjustment = 0;
-			// mega evolutions get the same stat boost as their base forme
-			if (this.data.FormatsData[i]) tier = this.data.FormatsData[i].tier || this.data.FormatsData[toId(this.getTemplate(i).baseSpecies)].tier;
+
+			if (!tier && this.data.Pokedex[i].baseSpecies) {
+				// mega evolutions get the same stat boost as their base forme
+				tier = this.data.FormatsData[toId(this.data.Pokedex[i].baseSpecies)].tier;
+			}
 			switch (tier) {
 			case 'BL':
 			case 'UU':
