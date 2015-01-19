@@ -25,7 +25,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	charizard: {
-		randomBattleMoves: ["belly drum","fireblast","rockslide","earthquake"],
+		randomBattleMoves: ["bellydrum","fireblast","rockslide","earthquake"],
 		eventPokemon: [
 			{"generation":2,"level":40,"gender":"M","shiny":true,"moves":["rage","scaryface","flamethrower","wingattack"]}
 		],
@@ -54,7 +54,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	butterfree: {
-		randomBattleMoves: ["stun spore","sleeppowder","psychic","nightmare","giga drain"],
+		randomBattleMoves: ["stunspore","sleeppowder","psychic","nightmare","giga drain"],
 		tier: "UU"
 	},
 	weedle: {
@@ -640,7 +640,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	jynx: {
-		randomBattleMoves: ["","","",""],
+		randomBattleMoves: ["meanlook","perishsong","protect","icebeam","substitute","lovelykiss","nightmare","psychic"],
 		tier: "BL"
 	},
 	elekid: {
