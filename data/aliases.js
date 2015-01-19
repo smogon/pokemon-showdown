@@ -120,6 +120,7 @@ exports.BattleAliases = {
 	"deod": "Deoxys-Defense",
 	"deoxyss": "Deoxys-Speed",
 	"deos": "Deoxys-Speed",
+	"eternalfloette": "Floette-Eternal-Flower",
 	"giratinao": "Giratina-Origin",
 	"gourgeisthuge": "Gourgeist-Super",
 	"hoopau": "Hoopa-Unbound",
@@ -146,6 +147,7 @@ exports.BattleAliases = {
 	"wormadams": "Wormadam-Trash",
 	"wormadamsteel": "Wormadam-Trash",
 	"floettee": "Floette-Eternal-Flower",
+	"floetteeternal": "Floette-Eternal-Flower",
 
 	// base formes
 	"nidoranfemale": "Nidoran-F",
