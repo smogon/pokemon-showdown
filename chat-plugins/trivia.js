@@ -6,8 +6,8 @@
 
 var fs = require('fs');
 
-const MODES = ['timer', 'number', 'first'];
-const CATEGORIES = ['animemanga', 'geography', 'history', 'humanities', 'miscellaneous', 'music', 'pokemon', 'rpm', 'science', 'sports', 'tvmovies', 'videogames', 'random'];
+const MODES = {first: 1, timer: 1, number: 1};
+const CATEGORIES = {animemanga: 1, geography: 1, history: 1, humanities: 1, miscellaneous: 1, music: 1, pokemon: 1, rpm: 1, science: 1, sports: 1, tvmovies: 1, videogames: 1, random: 1};
 const CAPS = {short: 20, medium: 35, long: 50};
 
 var triviaData = {};
@@ -54,8 +54,6 @@ var writeTriviaData = (function () {
 var trivia = {};
 
 var Trivia = (function () {
-	var hasExported = false;
-
 	function Trivia(mode, category, cap, room) {
 		this.room = room;
 		this.mode = mode;
@@ -75,12 +73,6 @@ var Trivia = (function () {
 		case 'number':
 			this.responders = {};
 			break;
-		}
-
-		if (!hasExported) {
-			CommandParser.triviaData = triviaData;
-			CommandParser.writeTriviaData = writeTriviaData;
-			hasExported = true;
 		}
 	}
 
@@ -255,9 +247,9 @@ var Trivia = (function () {
 			}
 		}
 		if (winnerid) leaderboard[winnerid][0] += this.prize;
+		writeTriviaData();
 
 		delete trivia[this.room.id];
-		writeTriviaData();
 	};
 
 	// methods used by the trivia commands
@@ -290,7 +282,7 @@ var Trivia = (function () {
 		if (this.participants[userid]) return output.sendReply('You have already signed up for this trivia game.');
 
 		for (var prevName in user.prevNames) {
-			if (this.participants[prevName]) return output.sendReply('You have already signed up for this trivia game under the username "' + prevName + '."');
+			if (this.participants[prevName]) return output.sendReply('You have already signed up for this trivia game under the username "' + user.prevNames[prevName] + '."');
 		}
 
 		this.participants[userid] = [0, 0];
@@ -311,7 +303,7 @@ var Trivia = (function () {
 	};
 	Trivia.prototype.startGame = function (output) {
 		if (this.phase !== 'signup') return output.sendReply('There is no trivia game in its signup phase.');
-		if (Object.keys(this.participants).length < 3) return output.sendReply('Not enough users have signed up yet! Trivia games require at least three participants to run.');
+		//if (Object.keys(this.participants).length < 3) return output.sendReply('Not enough users have signed up yet! Trivia games require at least three participants to run.');
 
 		if (this.category === 'random') {
 			this.curQs = triviaData.questions.randomize();
@@ -356,8 +348,8 @@ var Trivia = (function () {
 			this.sleep = null;
 		}
 
-		delete trivia[this.room.id];
 		this.room.addRaw('<div class="broadcast-blue">' + Tools.escapeHTML(user.name) + ' has forced the game to end.</div>');
+		delete trivia[this.room.id];
 	};
 
 	return Trivia;
@@ -373,10 +365,10 @@ var commands = {
 		if (target.length !== 3) return this.sendReply('Invallid arguments specified. View /trivia help gcommands for more information.');
 
 		var mode = toId(target[0]);
-		if (MODES.indexOf(mode) < 0) return this.sendReply('"' + target[0].trim() + '" is not a valid mode. View /trivia help ginfo for more information.');
+		if (!MODES[mode]) return this.sendReply('"' + target[0].trim() + '" is not a valid mode. View /trivia help ginfo for more information.');
 
 		var category = toId(target[1]);
-		if (CATEGORIES.indexOf(category) < 0) return this.sendReply('"' + target[1].trim() + '" is not a valid category. View /trivia help ginfo for more information.');
+		if (!CATEGORIES[category]) return this.sendReply('"' + target[1].trim() + '" is not a valid category. View /trivia help ginfo for more information.');
 
 		var cap = CAPS[toId(target[2])];
 		if (!cap) return this.sendReply('"' + target[2].trim() + '" is not a valid score cap. View /trivia help ginfo for more information.');
@@ -426,7 +418,7 @@ var commands = {
 
 		var category = toId(target[0]);
 		if (category === 'random') return false;
-		if (CATEGORIES.indexOf(category) < 0) return this.sendReply('"' + target[0].trim() + '" is not a valid category. View /trivia help ginfo for more information.');
+		if (!CATEGORIES[category]) return this.sendReply('"' + target[0].trim() + '" is not a valid category. View /trivia help ginfo for more information.');
 
 		var question = Tools.escapeHTML(target[1]).trim();
 		if (!question) return this.sendReply('"' + target[1].trim() + '" is not a valid question.');
@@ -500,7 +492,7 @@ var commands = {
 		var submissions = triviaData.submissions;
 
 		if (toId(target) === 'all') {
-			if (isAccepting) triviaData.questions = triviaData.questions.concat(submissions);
+			if (isAccepting) Array.prototype.push.apply(triviaData.questions, submissions);
 			triviaData.submissions = [];
 
 			writeTriviaData();
@@ -541,7 +533,7 @@ var commands = {
 					var submission = submissions.splice(indices[i], 1)[0];
 					accepted.unshift(submission);
 				}
-				triviaData.questions = triviaData.questions.concat(accepted);
+				Array.prototype.push.apply(triviaData.questions, accepted);
 
 				this.sendReply('Question numbers ' + target.join(', ') + ' were added to the question database.');
 			} else {
@@ -579,7 +571,7 @@ var commands = {
 
 		var category = toId(target);
 		if (category === 'random') return false;
-		if (CATEGORIES.indexOf(category) < 0) return this.sendReply('"' + target + '" is not a valid option for /trivia qs. View /trivia help ginfo for more information.');
+		if (!CATEGORIES[category]) return this.sendReply('"' + target + '" is not a valid option for /trivia qs. View /trivia help ginfo for more information.');
 
 		var list = triviaData.questions.filter(function (question) {
 			return question.category === category;
@@ -610,14 +602,15 @@ var commands = {
 	},
 
 	// informational commands
+	'': 'status',
 	status: function (target, room, user) {
-		if (room.id !== 'trivia') return false;
+		if (room.id !== 'trivia' || !this.canBroadcast()) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReplyBox('There is no trivia game in progress.');
 		trivium.getStatus(user, this);
 	},
 	players: function (target, room) {
-		if (room.id !== 'trivia') return false;
+		if (room.id !== 'trivia' || !this.canBroadcast()) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReplyBox('There is no trivia game in progress.');
 		trivium.getParticipants(this);
@@ -648,7 +641,12 @@ var commands = {
 		if (!this.canBroadcast()) return false;
 
 		target = toId(target);
-		if (room.id === 'trivia' && target === 'qcommands') target = '';
+		if (room.id === 'trivia') {
+			if (target === 'qcommands') target = '';
+		} else {
+			if (room.id !== 'questionworkshop') return false;
+		}
+
 		switch (target) {
 		case 'ginfo':
 			this.sendReplyBox('<strong>Modes:</strong><br />' +
@@ -699,6 +697,25 @@ var commands = {
 		}
 	}
 };
+
+// Rooms should never be undefined, since the require for rooms.js, during
+// which the rooms list is loaded from disk once rooms.global is constructed,
+// is executed before the require for this plugin in command-parser.js
+var triviaRoom = Rooms.get('trivia');
+if (triviaRoom) {
+	if (triviaRoom.plugin) {
+		triviaData = triviaRoom.plugin.data;
+		if (!Object.isEmpty(triviaRoom.plugin.trivia)) trivia = triviaRoom.plugin.trivia;
+	} else {
+		triviaRoom.plugin = {
+			data: triviaData,
+			write: writeTriviaData,
+			trivia: trivia
+		};
+		var questionWorkshop = Rooms.get('questionworkshop');
+		if (questionWorkshop) questionWorkshop.plugin = triviaRoom.plugin;
+	}
+}
 
 exports.commands = {
 	trivia: commands,
