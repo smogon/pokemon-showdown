@@ -1331,6 +1331,7 @@ exports.BattleFormatsData = {
 	},
 	porygon2: {
 		randomBattleMoves: ["triattack","icebeam","recover","toxic","thunderwave","discharge","shadowball","trickroom"],
+		randomDoubleBattleMoves: ["triattack","icebeam","discharge","shadowball","trickroom","protect","recover"],
 		tier: "UU"
 	},
 	porygonz: {
@@ -4974,6 +4975,7 @@ exports.BattleFormatsData = {
 	},
 	doublade: {
 		randomBattleMoves: ["swordsdance","shadowclaw","shadowsneak","ironhead","sacredsword"],
+		randomDoubleBattleMoves: ["swordsdance","shadowclaw","shadowsneak","ironhead","sacredsword","rockslide","protect"],
 		tier: "RU"
 	},
 	aegislash: {
