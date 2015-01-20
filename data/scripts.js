@@ -1618,7 +1618,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !(template.tier in {'LC':1, 'LC Uber':1, 'NFE':1}) && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -1642,7 +1642,7 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 			var tier = template.tier;
 			// PUs/Ubers are limited to 2 but have a 20% chance of being added anyway.
-			if (tier === 'PU' && puCount > 1 && Math.random() * 5 > 1) continue;
+			if (tier in {'PU':1, 'LC':1, 'LC Uber':1, 'NFE':1} && puCount > 1 && Math.random() * 5 > 1) continue;
 			if (tier === 'Uber' && uberCount > 1 && Math.random() * 5 > 1) continue;
 
 			// CAPs have 20% the normal rate
@@ -1664,7 +1664,7 @@ exports.BattleScripts = {
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 			// Only certain NFE Pokemon are allowed
-			if (template.evos.length && !(template.species in {'Chansey':1, 'Doublade':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1})) continue;
+			if (template.evos.length && !(template.species in {'Chansey':1, 'Doublade':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1, 'Clamperl':1})) continue;
 
 			// Limit 2 of any type
 			var types = template.types;
@@ -1743,7 +1743,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 		for (var i in this.data.FormatsData) {
 			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !(template.tier in {'LC':1, 'LC Uber':1, 'NFE':1}) && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
+			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
 				keys.push(i);
 			}
 		}
@@ -1781,7 +1781,7 @@ exports.BattleScripts = {
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 			// Only certain NFE Pokemon are allowed
-			if (template.evos.length && !(template.species in {'Chansey':1, 'Doublade':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1})) continue;
+			if (template.evos.length && !(template.species in {'Chansey':1, 'Doublade':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1, 'Clamperl':1})) continue;
 
 			// Limit 2 of any type
 			var types = template.types;
@@ -2167,7 +2167,7 @@ exports.BattleScripts = {
 				case 'hiddenpowerice':
 					if (hasMove['icywind']) rejected = true;
 					break;
-				case 'stone edge':
+				case 'stoneedge':
 					if (hasMove['rockblast']) rejected = true;
 					break;
 
