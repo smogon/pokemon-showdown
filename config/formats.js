@@ -803,6 +803,14 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
 	},
+	{
+		name: "Hackmons Challenge Cup",
+		section: "Other Metagames",
+
+		team: 'randomHackmonsCC',
+		searchShow: false,
+		ruleset: ['HP Percentage Mod']
+	},
 
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////

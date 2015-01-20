@@ -769,6 +769,120 @@ exports.BattleScripts = {
 		//console.log(team);
 		return team;
 	},
+	randomHackmonsCCTeam: function (side) {
+		var team = [];
+		var teamdexno = [];
+		var items = Object.keys(this.data.Items).randomize();
+		var abilities = Object.keys(this.data.Abilities).exclude('mountaineer', 'rebound', 'persistent').randomize();
+		var moves = Object.keys(this.data.Movedex).exclude('struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge').randomize();
+
+		// Pick six random unique Pokmeon
+		for (var i = 0; i < 6; i++) {
+			while (true) {
+				var x = Math.floor(Math.random() * 721) + 1;
+				if (teamdexno.indexOf(x) === -1) {
+					teamdexno.push(x);
+					break;
+				}
+			}
+		}
+
+		for (var i = 0; i < 6; i++) {
+			// Choose forme
+			var formes = [];
+			for (var j in this.data.Pokedex) {
+				if (this.data.Pokedex[j].num === teamdexno[i] && this.getTemplate(this.data.Pokedex[j].species).learnset && this.data.Pokedex[j].species !== 'Pichu-Spiky-eared') {
+					formes.push(this.data.Pokedex[j].species);
+				}
+			}
+			var pokemon = formes.sample();
+			var template = this.getTemplate(pokemon);
+
+			// Random unique item
+			var item = items[0];
+			items.shift();
+
+			// Random unique ability
+			var ability = abilities[0];
+			abilities.shift();
+
+			// Random unique moves
+			var m = moves.splice(0, 4);
+
+			// Random EVs
+			var evs = {
+				hp: 0,
+				atk: 0,
+				def: 0,
+				spa: 0,
+				spd: 0,
+				spe: 0
+			};
+			var s = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+			var evpool = 510;
+			do {
+				var x = s.sample();
+				var y = Math.floor(Math.random() * Math.min(256 - evs[x], evpool + 1));
+				evs[x] += y;
+				evpool -= y;
+			} while (evpool > 0);
+
+			// Random IVs
+			var ivs = {
+				hp: Math.floor(Math.random() * 32),
+				atk: Math.floor(Math.random() * 32),
+				def: Math.floor(Math.random() * 32),
+				spa: Math.floor(Math.random() * 32),
+				spd: Math.floor(Math.random() * 32),
+				spe: Math.floor(Math.random() * 32)
+			};
+
+			// Random nature
+			var nature = ['Adamant', 'Bashful', 'Bold', 'Brave', 'Calm', 'Careful', 'Docile', 'Gentle', 'Hardy', 'Hasty', 'Impish', 'Jolly', 'Lax', 'Lonely', 'Mild', 'Modest', 'Naive', 'Naughty', 'Quiet', 'Quirky', 'Rash', 'Relaxed', 'Sassy', 'Serious', 'Timid'].sample();
+
+			// Level balance
+			var mbstmin = 1307;
+			var stats = template.baseStats;
+			var mbst = (stats['hp'] * 2 + 31 + 21 + 100) + 10;
+			mbst += (stats['atk'] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats['def'] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats['spa'] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats['spd'] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats['spe'] * 2 + 31 + 21 + 100) + 5;
+			var level = Math.floor(100 * mbstmin / mbst);
+			while (level < 100) {
+				mbst = Math.floor((stats['hp'] * 2 + 31 + 21 + 100) * level / 100 + 10);
+				mbst += Math.floor(((stats['atk'] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
+				mbst += Math.floor((stats['def'] * 2 + 31 + 21 + 100) * level / 100 + 5);
+				mbst += Math.floor(((stats['spa'] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
+				mbst += Math.floor((stats['spd'] * 2 + 31 + 21 + 100) * level / 100 + 5);
+				mbst += Math.floor((stats['spe'] * 2 + 31 + 21 + 100) * level / 100 + 5);
+				if (mbst >= mbstmin) break;
+				level++;
+			}
+
+			// Random happiness
+			var happiness = Math.floor(Math.random() * 256);
+
+			// Random shininess
+			var shiny = (Math.random() * 1024 <= 1);
+
+			team.push({
+				name: pokemon,
+				item: item,
+				ability: ability,
+				moves: m,
+				evs: evs,
+				ivs: ivs,
+				nature: nature,
+				level: level,
+				happiness: happiness,
+				shiny: shiny
+			});
+		}
+
+		return team;
+	},
 	randomSet: function (template, i, noMega) {
 		if (i === undefined) i = 1;
 		var baseTemplate = (template = this.getTemplate(template));
