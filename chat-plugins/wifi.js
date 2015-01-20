@@ -1,7 +1,7 @@
 /**
 * Wi-Fi chat-plugin. Only works in a room with id 'wifi'
 * Handles giveaways in the formats: question, lottery
-* Credits: DanielCranham, codelegend
+* Credits: Codelegend, SilverTactic, DanielCranham
 **/
 
 // checks whether any alt of the user is present in list.
@@ -16,7 +16,7 @@ function checkAllAlts(user, list) {
 	return false;
 }
 
-var giveaway = exports.giveaway = null;
+var giveaway = null;
 
 var QuestionGiveAway = (function () {
 	function QuestionGiveAway(host, giver, room, options) {
@@ -64,9 +64,9 @@ var QuestionGiveAway = (function () {
 
 		this.answered[userid]++;
 		if (this.answered[userid] >= 3) {
-			output.sendReply("Your guess " + guess + " is wrong. You have used up all your guesses. Better luck next time.");
+			output.sendReply("Your guess " + guess + " is wrong. You have used up all your guesses. Better luck next time!");
 		} else {
-			output.sendReply("Your guess " + guess + " is wrong. Try again.");
+			output.sendReply("Your guess " + guess + " is wrong. Try again!");
 		}
 		return;
 	};
@@ -111,7 +111,7 @@ var QuestionGiveAway = (function () {
 		this.phase = 'ended';
 		clearTimeout(this.endTimer);
 		if (!this.winner) {
-			this.room.addRaw('<b>The giveaway has been forcibly ended, as no one has answered the question</b>');
+			this.room.addRaw('<b>The giveaway has been forcibly ended, as no one has answered the question.	</b>');
 		} else {
 			var ans = [];
 			for (var i in this.answers) {
@@ -152,10 +152,10 @@ var LotteryGiveAway = (function () {
 
 		this.reminder = '<center><div class = "broadcast-blue"><font size = 3><b>It\'s giveaway time!</b></font><br/>' +
 			'<font size = 1>Giveaway started by ' + Tools.escapeHTML(host.name) + '</font><br/><br/>' +
-			'<b>' + Tools.escapeHTML(giver.name) + '</b> will be giving away a <b>' + Tools.escapeHTML(this.prize) + '</b>!<br/>' +
+			'<b>' + Tools.escapeHTML(giver.name) + '</b> will be giving away: <b>' + Tools.escapeHTML(this.prize) + '</b>!<br/>' +
 			'The lottery drawing will occur in 2 minutes, with ' + this.maxwinners + ' winners!<br/>' +
 			'<button name = "send" value = "/giveaway joinlottery"><font size = 1><b>Join</b></font></button> <button name = "send" value = "/giveaway leavelottery"><font size = 1><b>Leave</b></font></button><br/>' +
-			'<font size = 1><b><u>Note:</u> Please do not join if you don\'t have a 3DS and a copy of Pokemon XY or ORAS';
+			'<font size = 1><b><u>Note:</u> Please do not join if you don\'t have a 3DS and a copy of Pokémon XY or ORAS';
 		this.room.addRaw(this.reminder);
 		this.room.update();
 
@@ -289,8 +289,9 @@ var commands = {
 		for (var i in giveaway.answers) {
 			answers.push(giveaway.answers[i]);
 		}
+		var anstext = (answers.length === 1) ? 'answer is' : 'answers are';
 		this.sendReply("The giveaway question is " + giveaway.question + ".\n" +
-			"The answer(s) for the giveaway question are : " + answers.join('/') + ".");
+			"The " + anstext + answers.join('/') + ".");
 	},
 	guessanswer: 'guess',
 	guess: function (target, room, user) {
@@ -402,7 +403,7 @@ var commands = {
 		default:
 			if (!this.canBroadcast()) return;
 			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
-			'- help giveaway - shows list of participation commands<br />' +
+			'- help user - shows list of participation commands<br />' +
 			'- help staff - shows giveaway staff commands (Requires: % @ # & ~)';
 		}
 		this.sendReplyBox(reply);
