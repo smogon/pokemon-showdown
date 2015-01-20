@@ -791,7 +791,7 @@ exports.BattleScripts = {
 			// Choose forme
 			var formes = [];
 			for (var j in this.data.Pokedex) {
-				if (this.data.Pokedex[j].num === teamdexno[i] && this.getTemplate(this.data.Pokedex[j].species).learnset && this.data.Pokedex[j].species !== 'Pichu-Spiky-eared') {
+				if (this.data.Pokedex[j].num === teamdexno[i] && this.data.Pokedex[j].species !== 'Pichu-Spiky-eared') {
 					formes.push(this.data.Pokedex[j].species);
 				}
 			}
@@ -801,6 +801,8 @@ exports.BattleScripts = {
 			// Random unique item
 			var item = items[0];
 			items.shift();
+			// Genesect forms are a sprite difference based on its Drives
+			if (template.species.substr(0, 9) === 'Genesect-' && item !== toId(template.requiredItem)) pokemon = 'Genesect';
 
 			// Random unique ability
 			var ability = abilities[0];
