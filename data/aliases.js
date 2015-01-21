@@ -1,6 +1,7 @@
 exports.BattleAliases = {
 	// formats
 	"randbats": "Random Battle",
+	"randdubs": "Random Doubles Battle",
 	"overused": "OU",
 	"underused": "UU",
 	"rarelyused": "RU",
@@ -48,6 +49,7 @@ exports.BattleAliases = {
 	"megamedicham": "Medicham-Mega",
 	"megamedi": "Medicham-Mega",
 	"megametagross": "Metagross-Mega",
+	"megagross": "Metagross-Mega",
 	"megamewtwo": "Mewtwo-Mega-Y",
 	"megamewtwox": "Mewtwo-Mega-X",
 	"megamewtwoy": "Mewtwo-Mega-Y",
@@ -68,6 +70,7 @@ exports.BattleAliases = {
 	"megattar": "Tyranitar-Mega",
 	"megavenusaur": "Venusaur-Mega",
 	"megavenu": "Venusaur-Mega",
+	"megasaur": "Venusaur-Mega",
 	"megazam": "Alakazam-Mega",
 	"megazardx": "Charizard-Mega-X",
 	"megazardy": "Charizard-Mega-y",
