@@ -759,6 +759,18 @@ var commands = {
 		jeopardy.wager(user, target, this);
 	}
 };
+
+var jeopardyRoom = Rooms.get('academics');
+if (jeopardyRoom) {
+	if (jeopardyRoom.plugin) {
+		jeopardies = jeopardyRoom.plugin.jeopardies;
+	} else {
+		jeopardyRoom.plugin = {
+			'jeopardies': jeopardies
+		};
+	}
+}
+
 exports.commands = {
 	'jp': 'jeopardy',
 	'jeopardy': commands
