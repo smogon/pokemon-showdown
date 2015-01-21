@@ -17,6 +17,17 @@ function checkAllAlts(user, list) {
 }
 
 var giveaway = null;
+var wifiRoom = Rooms.get('wifi');
+
+// import giveaway, if exists:
+if (wifiRoom && wifiRoom.plugin) {
+	giveaway = wifiRoom.plugin;
+}
+
+function clearGiveaway() {
+	giveaway = null;
+	if (wifiRoom) delete wifiRoom.plugin;
+}
 
 var QuestionGiveAway = (function () {
 	function QuestionGiveAway(host, giver, room, options) {
@@ -105,7 +116,7 @@ var QuestionGiveAway = (function () {
 			clearTimeout(this.endTimer);
 			this.room.addRaw('<b>The giveaway was forcibly ended.</b>');
 			this.room.update();
-			giveaway = null;
+			clearGiveaway();
 			return;
 		}
 		this.phase = 'ended';
@@ -122,7 +133,7 @@ var QuestionGiveAway = (function () {
 			if (this.winner.connected) this.winner.popup('You have won the giveaway. PM **' + Tools.escapeHTML(this.giver.name) + '** to claim your reward!');
 		}
 		this.room.update();
-		giveaway = null;
+		clearGiveaway();
 		return;
 	};
 
@@ -216,7 +227,7 @@ var LotteryGiveAway = (function () {
 			clearTimeout(this.drawTimer);
 			this.room.addRaw('<b>The giveaway was forcibly ended, as enough users did not participate.</b>');
 			this.room.update();
-			giveaway = null;
+			clearGiveaway();
 			return;
 		}
 		this.phase = 'ended';
@@ -225,7 +236,7 @@ var LotteryGiveAway = (function () {
 			finallist.push(this.winners[id].name);
 		}
 		finallist = finallist.join(', ');
-		this.room.addRaw('<div class = "broadcast-blue"><font size = 2><b>Lottery Draw: </b></font>&nbsp;&nbsp;' + Object.keys(this.joined).length + ' users have joined the lottery.<br/>' +
+		this.room.addRaw('<div class = "broadcast-blue"><font size = 2><b>Lottery Draw: </b></font>' + Object.keys(this.joined).length + ' users have joined the lottery.<br/>' +
 			'Our lucky winner(s): <b>' + Tools.escapeHTML(finallist) + ' !</b> Congratulations!');
 		this.room.update();
 
@@ -237,11 +248,26 @@ var LotteryGiveAway = (function () {
 			this.giver.popup("The following users have won your lottery giveaway:\n" + finallist);
 		}
 
-		giveaway = null;
+		clearGiveaway();
 		return;
 	};
 	return LotteryGiveAway;
 })();
+
+function spawnGiveaway(type, host, giver, room, options) {
+	switch (type) {
+	case 'question':
+		giveaway = new QuestionGiveAway(host, giver, room, options);
+		break;
+	case 'lottery':
+		giveaway = new LotteryGiveAway(host, giver, room, options);
+		break;
+	default:
+		return false;
+	}
+	if (wifiRoom) wifiRoom.plugin = giveaway;
+	return true;
+}
 
 var commands = {
 	// question giveaway.
@@ -266,7 +292,7 @@ var commands = {
 		};
 		if (Object.keys(options.answers).length <= 0) return this.sendReply("You must specify at least one answer and cannot contain any special characters.");
 
-		giveaway = new QuestionGiveAway(user, targetUser, room, options);
+		spawnGiveaway('question', user, targetUser, room, options);
 		this.privateModCommand("(" + user.name + " has started a question giveaway.)");
 	},
 	changeanswer: 'changequestion',
@@ -323,7 +349,7 @@ var commands = {
 		};
 		if (options.maxwinners > 10 || options.maxwinners < 1) return this.sendReply("The lottery giveaway can have a minimum of 1 and maximum of 10 winners.");
 
-		giveaway = new LotteryGiveAway(user, targetUser, room, options);
+		spawnGiveaway('lottery', user, targetUser, room, options);
 		this.privateModCommand("(" + user.name + " has started a lottery giveaway.)");
 	},
 	leavelottery: 'join',
