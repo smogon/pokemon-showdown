@@ -6,10 +6,10 @@ exports.BattleAliases = {
 	"underused": "UU",
 	"rarelyused": "RU",
 	"neverused": "NU",
-	"vgc": "VGC 2014",
+	"vgc": "VGC 2015",
 	"bh": "Balanced Hackmons",
 	"createapokemon": "CAP",
-	"cc1v1": "Challenge Cup 1vs1",
+	"cc1v1": "Challenge Cup 1-vs-1",
 
 	// mega evos
 	"megaabomasnow": "Abomasnow-Mega",
