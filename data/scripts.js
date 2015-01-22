@@ -774,7 +774,14 @@ exports.BattleScripts = {
 		var teamdexno = [];
 		var items = Object.keys(this.data.Items).randomize();
 		var abilities = Object.keys(this.data.Abilities).exclude('mountaineer', 'rebound', 'persistent').randomize();
-		var moves = Object.keys(this.data.Movedex).exclude('struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge').randomize();
+		var moves = Object.keys(this.data.Movedex).exclude(
+			'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge',
+			// Avoid multiple Hidden Powers, Hidden Power still can be received using 'hiddenpower'
+			'hiddenpowerbug', 'hiddenpowerdark', 'hiddenpowerdragon', 'hiddenpowerelectric',
+			'hiddenpowerfighting', 'hiddenpowerfire', 'hiddenpowerflying', 'hiddenpowerghost',
+			'hiddenpowergrass', 'hiddenpowerground', 'hiddenpowerice', 'hiddenpowerpoison',
+			'hiddenpowerpsychic', 'hiddenpowerrock', 'hiddenpowersteel', 'hiddenpowerwater'
+		).randomize();
 
 		// Pick six random unique Pokmeon
 		for (var i = 0; i < 6; i++) {
