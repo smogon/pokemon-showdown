@@ -774,7 +774,7 @@ exports.BattleScripts = {
 		var teamdexno = [];
 		var items = Object.keys(this.data.Items).randomize();
 		var abilities = Object.keys(this.data.Abilities).exclude('mountaineer', 'rebound', 'persistent').randomize();
-		var moves = Object.keys(this.data.Movedex).exclude('struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge').randomize();
+		var moves = Object.keys(this.data.Movedex).exclude(/hiddenpower./, 'struggle', 'paleowave', 'shadowstrike', 'magikarpsrevenge').randomize();
 
 		// Pick six random unique Pokmeon
 		for (var i = 0; i < 6; i++) {
