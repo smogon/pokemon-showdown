@@ -1402,6 +1402,25 @@ exports.BattleScripts = {
 			moves[3] = toId(template.requiredMove);
 			hasMove[toId(template.requiredMove)] = true;
 		}
+		
+		// all viable aegislash sets should have king's shield
+		if (template.species === 'Aegislash' && !hasMove['kingsshield']) {
+			// replace a non-attacking move if the set has it
+			for (var i = 0; i < moves.length; ++i) {
+				if (moves[i].category === 'Status') {
+					delete hasMove[toId(moves[i])];
+					moves[i] = 'kingsshield';
+					hasMove['kingsshield'] = true;
+					break;
+				}
+			}
+			// otherwise replace an attacking move
+			if (!hasMove['kingsshield']) {
+				delete hasMove[toId(moves[3])];
+				moves[3] = 'kingsshield';
+				hasMove['kingsshield'] = true;
+			}
+		}
 
 		var abilities = Object.values(baseTemplate.abilities).sort(function (a, b) {
 			return this.getAbility(b).rating - this.getAbility(a).rating;
