@@ -3478,6 +3478,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-singleturn', target, 'move: Electrify');
 			},
+			onModifyMovePriority: -2,
 			onModifyMove: function (move) {
 				this.debug('Electrify making move type electric');
 				move.type = 'Electric';
@@ -4526,7 +4527,7 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.effectData.item = pokemon.item;
 			},
-			onModifyMovePriority: -1,
+			onModifyMovePriority: -3,
 			onModifyMove: function (move) {
 				var item = this.getItem(this.effectData.item);
 				move.basePower = item.fling.basePower;
@@ -7297,6 +7298,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-fieldactivate', 'move: Ion Deluge');
 			},
+			onModifyMovePriority: -2,
 			onModifyMove: function (move) {
 				if (move.type === 'Normal') {
 					move.type = 'Electric';
@@ -8781,12 +8783,12 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true,
 			onSourceModifyDamage: function (damage, source, target, move) {
-				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1}) {
+				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1}) {
 					return this.chainModify(2);
 				}
 			},
 			onAccuracy: function (accuracy, target, source, move) {
-				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1}) {
+				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1}) {
 					return true;
 				}
 				return accuracy;

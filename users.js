@@ -694,7 +694,7 @@ User = (function () {
 				this.locked = '#range';
 				this.updateIdentity();
 			}
-		} else if (this.locked && lockedRanges[this.locked]) {
+		} else if (this.locked && (this.locked === '#range' || lockedRanges[this.locked])) {
 			this.locked = false;
 			this.updateIdentity();
 		}
