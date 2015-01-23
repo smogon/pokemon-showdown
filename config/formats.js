@@ -1058,6 +1058,7 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['HP Percentage Mod']
 	},
+	{
 		name: "Snowy OU",
 		section: "Other Metagames",
 
