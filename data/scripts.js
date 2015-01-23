@@ -4789,6 +4789,9 @@ exports.BattleScripts = {
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
+			// Ban Shedinja
+			if (template.species === 'shedinja') continue;
+
 			// Limit 2 of any type
 			var types = template.types;
 			var skip = false;
