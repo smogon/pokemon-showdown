@@ -159,9 +159,9 @@ var components = exports.components = {
                 Core.stdout('money', user.userid, (userMoney - price));
                 if (target.toLowerCase() === 'star') {
                     user.canCustomSymbol = true;
-                    this.sendReply('You have purchased a \u2605. You will have this until you log off for more than an hour. You may now use /star now.');
+                    this.sendReply('You have purchased a \u2606. You will have this until you log off for more than an hour. You may now use /star now.');
                     this.parse('/help customsymbol');
-                    this.sendReply('If you do not want your \u2605 anymore, you may use /removestar to go back to your old symbol.');
+                    this.sendReply('If you do not want your \u2606 anymore, you may use /removestar to go back to your old symbol.');
                 } else {
                     this.sendReply('You have purchased ' + target + '. Please contact the admin "wolf" to get ' + target + '. Use the /tell command if wolf is offline (submit "/help tell" in the chat).');
                     for (var u in Users.users) {
@@ -241,7 +241,7 @@ var components = exports.components = {
 
     star: function (target, room, user) {
         if (!user.canCustomSymbol) return this.sendReply('You need to buy this item from the shop to use.');
-        var star = '\u2605';
+        var star = '\u2606';
         user.getIdentity = function (roomid) {
             if (!roomid) roomid = 'lobby';
             var name = this.name + (this.isAway ? " - \u0410\u051d\u0430\u0443" : "");
