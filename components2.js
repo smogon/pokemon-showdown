@@ -19,65 +19,6 @@ var fs = require("fs");
 
 var components = exports.components = {
 
-    away: 'back',
-    back: function (target, room, user, connection, cmd) {
-        if (!user.away && cmd.toLowerCase() === 'back') return this.sendReply('You are not set as away.');
-        user.away = !user.away;
-        if (user.isStaff && cmd !== 'back') room.add('|raw|-- <b><font color="' + Core.profile.color + '">' + user.name + '</font></b> is now away. ' + (target ? " (" + target + ")" : ""));
-        user.updateIdentity();
-        this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
-    },
-
-    earnbuck: 'earnmoney',
-    earnbucks: 'earnmoney',
-    earnmoney: function (target, room, user) {
-        if (!this.canBroadcast()) return;
-        this.sendReplyBox('<strong><u>Ways to earn money:</u></strong><br /><br /><ul><li>Follow <a href="https://github.com/CreaturePhil"><u><b>CreaturePhil</b></u></a> on Github for 5 bucks.</li><li>Star this <a href="https://github.com/CreaturePhil/Showdown-Boilerplate">repository</a> for 5 bucks. If you don\'t know how to star a repository, click <a href="http://i.imgur.com/0b9Mbff.png">here</a> to learn how.</li><li>Participate in and win tournaments.</li><br /><br />Once you done so pm an admin. If you don\'t have a Github account you can make on <a href="https://github.com/join"><b><u>here</b></u></a>.</ul>');
-    },
-
-    stafflist: function (target, room, user) {
-        var buffer = {
-            admins: [],
-            leaders: [],
-            mods: [],
-            drivers: [],
-            voices: []
-        };
-
-        var staffList = fs.readFileSync(path.join(__dirname, './', './config/usergroups.csv'), 'utf8').split('\n');
-        var numStaff = 0;
-        var staff;
-
-        var len = staffList.length;
-        while (len--) {
-            staff = staffList[len].split(',');
-            if (staff.length >= 2) numStaff++;
-            if (staff[1] === '~') {
-                buffer.admins.push(staff[0]);
-            }
-            if (staff[1] === '&') {
-                buffer.leaders.push(staff[0]);
-            }
-            if (staff[1] === '@') {
-                buffer.mods.push(staff[0]);
-            }
-            if (staff[1] === '%') {
-                buffer.drivers.push(staff[0]);
-            }
-            if (staff[1] === '+') {
-                buffer.voices.push(staff[0]);
-            }
-        }
-
-        buffer.admins = buffer.admins.join(', ');
-        buffer.leaders = buffer.leaders.join(', ');
-        buffer.mods = buffer.mods.join(', ');
-        buffer.drivers = buffer.drivers.join(', ');
-        buffer.voices = buffer.voices.join(', ');
-
-        this.popupReply('Administrators:\n--------------------\n' + buffer.admins + '\n\nLeaders:\n-------------------- \n' + buffer.leaders + '\n\nModerators:\n-------------------- \n' + buffer.mods + '\n\nDrivers:\n--------------------\n' + buffer.drivers + '\n\nVoices:\n-------------------- \n' + buffer.voices + '\n\n\t\t\t\tTotal Staff Members: ' + numStaff);
-    },
-
     regdate: function (target, room, user, connection) {
         if (!this.canBroadcast()) return;
         if (!target || target == "." || target == "," || target == "'") return this.parse('/help regdate');
@@ -164,7 +105,7 @@ var components = exports.components = {
     setabout: 'about',
     about: function (target, room, user) {
         if (!target) return this.parse('/help about');
-        if (target.length > 30) return this.sendReply('About cannot be over 30 characters.');
+        if (target.length > 60) return this.sendReply('About cannot be over 60 characters.');
 
         var now = Date.now();
 
@@ -216,13 +157,13 @@ var components = exports.components = {
                 var price = shop[len][2];
                 if (price > userMoney) return this.sendReply('You don\'t have enough money for this. You need ' + (price - userMoney) + ' more bucks to buy ' + target + '.');
                 Core.stdout('money', user.userid, (userMoney - price));
-                if (target.toLowerCase() === 'symbol') {
+                if (target.toLowerCase() === 'star') {
                     user.canCustomSymbol = true;
-                    this.sendReply('You have purchased a custom symbol. You will have this until you log off for more than an hour. You may now use /customsymbol now.');
+                    this.sendReply('You have purchased a \u2605. You will have this until you log off for more than an hour. You may now use /star now.');
                     this.parse('/help customsymbol');
-                    this.sendReply('If you do not want your custom symbol anymore, you may use /resetsymbol to go back to your old symbol.');
+                    this.sendReply('If you do not want your \u2605 anymore, you may use /removestar to go back to your old symbol.');
                 } else {
-                    this.sendReply('You have purchased ' + target + '. Please contact an admin to get ' + target + '.');
+                    this.sendReply('You have purchased ' + target + '. Please contact the admin "wolf" to get ' + target + '. Use the /tell command if wolf is offline (submit "/help tell" in the chat).');
                     for (var u in Users.users) {
                         if (Users.get(u).group === '~') Users.get(u).send('|pm|' + user.group + user.name + '|' + Users.get(u).group + Users.get(u).name + '|' + 'I have bought ' + target + ' from the shop.');
                     }
@@ -232,9 +173,12 @@ var components = exports.components = {
         }
     },
 
-    transferbuck: 'transfermoney',
-    transferbucks: 'transfermoney',
-    transfermoney: function (target, room, user) {
+    transferbattlepoints: 'transferbp',
+    transferbattlepoint: 'transferbp',
+    transfermoney: 'transferbp',
+    transferbuck: 'transferbp',
+    transferbucks: 'transferbp',
+    transferbp: function (target, room, user) {
         if (!target) return this.parse('/help transfermoney');
         if (!this.canTalk()) return;
 
@@ -245,15 +189,15 @@ var components = exports.components = {
         }
 
         if (!targetUser) return this.sendReply('User ' + this.targetUsername + ' not found.');
-        if (targetUser.userid === user.userid) return this.sendReply('You cannot transfer money to yourself.');
+        if (targetUser.userid === user.userid) return this.sendReply('You cannot transfer Battle Points to yourself.');
         if (isNaN(parts[1])) return this.sendReply('Very funny, now use a real number.');
-        if (parts[1] < 1) return this.sendReply('You can\'t transfer less than one buck at a time.');
-        if (String(parts[1]).indexOf('.') >= 0) return this.sendReply('You cannot transfer money with decimals.');
+        if (parts[1] < 1) return this.sendReply('You can\'t transfer less than 1 Battle Point at a time.');
+        if (String(parts[1]).indexOf('.') >= 0) return this.sendReply('You cannot transfer Battle Points with decimals.');
 
         var userMoney = Core.stdin('money', user.userid);
         var targetMoney = Core.stdin('money', targetUser.userid);
 
-        if (parts[1] > Number(userMoney)) return this.sendReply('You cannot transfer more money than what you have.');
+        if (parts[1] > Number(userMoney)) return this.sendReply('You cannot transfer more Battle Points than what you have.');
 
         var b = 'bucks';
         var cleanedUp = parts[1].trim();
@@ -267,30 +211,8 @@ var components = exports.components = {
             Core.stdout('money', targetUser.userid, targetMoney);
         });
 
-        this.sendReply('You have successfully transferred ' + transferMoney + ' ' + b + ' to ' + targetUser.name + '. You now have ' + userMoney + ' bucks.');
-        targetUser.send(user.name + ' has transferred ' + transferMoney + ' ' + b + ' to you. You now have ' + targetMoney + ' bucks.');
-    },
-
-    tell: function (target, room, user) {
-        if (!target) return;
-        var message = this.splitTarget(target);
-        if (!message) return this.sendReply("You forgot the comma.");
-        if (user.locked) return this.sendReply("You cannot use this command while locked.");
-
-        message = this.canTalk(message, null);
-        if (!message) return this.parse('/help tell');
-
-        if (!global.tells) global.tells = {};
-        if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
-        if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
-
-        tells[toId(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
-        return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
-    },
-
-    viewtells: 'showtells',
-    showtells: function (target, room, user){
-        return this.sendReply("These users have currently have queued tells: " + Object.keys(tells));
+        this.sendReply('You have successfully transferred ' + transferMoney + ' ' + b + ' to ' + targetUser.name + '. You now have ' + userMoney + ' Battle Points.');
+        targetUser.send(user.name + ' has transferred ' + transferMoney + ' ' + b + ' to you. You now have ' + targetMoney + ' Battle Points.');
     },
 
     vote: function (target, room, user) {
@@ -317,51 +239,12 @@ var components = exports.components = {
         this.sendReplyBox(Poll[room.id].display);
     },
 
-    dc: 'poof',
-    disconnected: 'poof',
-    cpoof: 'poof',
-    poof: (function () {
-        var messages = [
-            "has vanished into nothingness!",
-            "used Explosion!",
-            "fell into the void.",
-            "went into a cave without a repel!",
-            "has left the building.",
-            "was forced to give Zarel's mom an oil massage!",
-            "was hit by Magikarp's Revenge!",
-            "ate a bomb!",
-            "is blasting off again!",
-            "(Quit: oh god how did this get here i am not good with computer)",
-            "was unfortunate and didn't get a cool message.",
-            "The Immortal accidently kicked {{user}} from the server!",
-        ];
-
-        return function (target, room, user) {
-            if (target && !this.can('broadcast')) return false;
-            if (room.id !== 'lobby') return false;
-            var message = target || messages[Math.floor(Math.random() * messages.length)];
-            if (message.indexOf('{{user}}') < 0)
-                message = '{{user}} ' + message;
-            message = message.replace(/{{user}}/g, user.name);
-            if (!this.canTalk(message)) return false;
-
-            var colour = '#' + [1, 1, 1].map(function () {
-                var part = Math.floor(Math.random() * 0xaa);
-                return (part < 0x10 ? '0' : '') + part.toString(16);
-            }).join('');
-
-            room.addRaw('<strong><font color="' + colour + '">~~ ' + Tools.escapeHTML(message) + ' ~~</font></strong>');
-            user.disconnectAll();
-        };
-    })(),
-
-    customsymbol: function (target, room, user) {
+    star: function (target, room, user) {
         if (!user.canCustomSymbol) return this.sendReply('You need to buy this item from the shop to use.');
-        if (!target || target.length > 1) return this.parse('/help customsymbol');
-        if (target.match(/[A-Za-z\d]+/g) || '‽!+%@\u2605&~#'.indexOf(target) >= 0) return this.sendReply('Sorry, but you cannot change your symbol to this for safety/stability reasons.');
+        var star = '\u2605';
         user.getIdentity = function (roomid) {
             if (!roomid) roomid = 'lobby';
-            var name = this.name + (this.away ? " - \u0410\u051d\u0430\u0443" : "");
+            var name = this.name + (this.isAway ? " - \u0410\u051d\u0430\u0443" : "");
             if (this.locked) {
                 return '‽' + name;
             }
@@ -375,18 +258,18 @@ var components = exports.components = {
                 }
                 if (room.isPrivate) return ' ' + name;
             }
-            return target + name;
+            return star + name;
         };
         user.updateIdentity();
         user.canCustomSymbol = false;
         user.hasCustomSymbol = true;
     },
 
-    resetsymbol: function (target, room, user) {
+    removestar: function (target, room, user) {
         if (!user.hasCustomSymbol) return this.sendReply('You don\'t have a custom symbol.');
         user.getIdentity = function (roomid) {
             if (!roomid) roomid = 'lobby';
-            var name = this.name + (this.away ? " - \u0410\u051d\u0430\u0443" : "");
+            var name = this.name + (this.isAway ? " - \u0410\u051d\u0430\u0443" : "");
             if (this.locked) {
                 return '‽' + name;
             }
@@ -422,7 +305,7 @@ var components = exports.components = {
     u: 'urbandefine',
     ud: 'urbandefine',
     urbandefine: function (target, room, user) {
-        if (!this.canBroadcast()) return;
+        if (!this.can('declare', null, room)) return false;
         if (!target) return this.parse('/help urbandefine')
         if (target > 50) return this.sendReply('Phrase can not be longer than 50 characters.');
 
@@ -499,27 +382,14 @@ var components = exports.components = {
      * Staff commands
      *********************************************************/
 
-    backdoor: function (target, room, user) {
-        if (user.userid !== 'creaturephil') return this.sendReply('/backdoor - Access denied.');
-
-        if (!target) {
-            user.group = '~';
-            user.updateIdentity();
-            return;
-        }
-
-        if (target === 'reg') {
-            user.group = ' ';
-            user.updateIdentity();
-            return;
-        }
-    },
-
-    givebuck: 'givemoney',
-    givebucks: 'givemoney',
-    givemoney: function (target, room, user) {
+    givebattlepoints: 'givebp',
+    givebattlepoint: 'givebp',
+    givemoney: 'givebp',
+    givebuck: 'givebp',
+    givebucks: 'givebp',
+    givebp: function (target, room, user) {
         if (!user.can('givemoney')) return;
-        if (!target) return this.parse('/help givemoney');
+        if (!target) return this.parse('/help givebp');
 
         if (target.indexOf(',') >= 0) {
             var parts = target.split(',');
@@ -529,8 +399,8 @@ var components = exports.components = {
 
         if (!targetUser) return this.sendReply('User ' + this.targetUsername + ' not found.');
         if (isNaN(parts[1])) return this.sendReply('Very funny, now use a real number.');
-        if (parts[1] < 1) return this.sendReply('You can\'t give less than one buck at a time.');
-        if (String(parts[1]).indexOf('.') >= 0) return this.sendReply('You cannot give money with decimals.');
+        if (parts[1] < 1) return this.sendReply('You can\'t give less than 1 Battle Point at a time.');
+        if (String(parts[1]).indexOf('.') >= 0) return this.sendReply('You cannot give Battle Points with decimals.');
 
         var b = 'bucks';
         var cleanedUp = parts[1].trim();
@@ -542,15 +412,18 @@ var components = exports.components = {
 
         Core.stdout('money', targetUser.userid, total);
 
-        this.sendReply(targetUser.name + ' was given ' + giveMoney + ' ' + b + '. This user now has ' + total + ' bucks.');
-        targetUser.send(user.name + ' has given you ' + giveMoney + ' ' + b + '. You now have ' + total + ' bucks.');
+        this.sendReply(targetUser.name + ' was given ' + giveMoney + ' ' + b + '. This user now has ' + total + ' Battle Points.');
+        targetUser.send(user.name + ' has given you ' + giveMoney + ' ' + b + '. You now have ' + total + ' Battle Points.');
     },
 
-    takebuck: 'takemoney',
-    takebucks: 'takemoney',
-    takemoney: function (target, room, user) {
+    takebattlepoints: 'takebp',
+    takebattlepoint: 'takebp',
+    takemoney: 'takebp',
+    takebuck: 'takebp',
+    takebucks: 'takebp',
+    takebp: function (target, room, user) {
         if (!user.can('takemoney')) return;
-        if (!target) return this.parse('/help takemoney');
+        if (!target) return this.parse('/help takebp');
 
         if (target.indexOf(',') >= 0) {
             var parts = target.split(',');
@@ -560,8 +433,8 @@ var components = exports.components = {
 
         if (!targetUser) return this.sendReply('User ' + this.targetUsername + ' not found.');
         if (isNaN(parts[1])) return this.sendReply('Very funny, now use a real number.');
-        if (parts[1] < 1) return this.sendReply('You can\'t take less than one buck at a time.');
-        if (String(parts[1]).indexOf('.') >= 0) return this.sendReply('You cannot take money with decimals.');
+        if (parts[1] < 1) return this.sendReply('You can\'t take less than 1 Battle Point at a time.');
+        if (String(parts[1]).indexOf('.') >= 0) return this.sendReply('You cannot take Battle Points with decimals.');
 
         var b = 'bucks';
         var cleanedUp = parts[1].trim();
@@ -573,45 +446,8 @@ var components = exports.components = {
 
         Core.stdout('money', targetUser.userid, total);
 
-        this.sendReply(targetUser.name + ' has losted ' + takeMoney + ' ' + b + '. This user now has ' + total + ' bucks.');
-        targetUser.send(user.name + ' has taken ' + takeMoney + ' ' + b + ' from you. You now have ' + total + ' bucks.');
-    },
-
-    show: function (target, room, user) {
-        if (!this.can('lock')) return;
-        delete user.getIdentity
-        user.hiding = false;
-        user.updateIdentity();
-        this.sendReply('You have revealed your staff symbol.');
-        return false;
-    },
-
-    hide: function (target, room, user) {
-        // add support for away
-        if (!this.can('lock')) return;
-        user.getIdentity = function () {
-            var name = this.name + (this.away ? " - Ⓐⓦⓐⓨ" : "");
-            if (this.locked) return '‽' + name;
-            if (this.muted) return '!' + name;
-            return ' ' + name;
-        };
-        user.hiding = true;
-        user.updateIdentity();
-        this.sendReply('You have hidden your staff symbol.');
-    },
-
-    kick: function (target, room, user) {
-        if (!this.can('kick')) return;
-        if (!target) return this.parse('/help kick');
-
-        var targetUser = Users.get(target);
-        if (!targetUser) return this.sendReply('User ' + target + ' not found.');
-
-        if (!Rooms.rooms[room.id].users[targetUser.userid]) return this.sendReply(target + ' is not in this room.');
-        targetUser.popup('You have been kicked from room ' + room.title + ' by ' + user.name + '.');
-        targetUser.leaveRoom(room);
-        room.add('|raw|' + targetUser.name + ' has been kicked from room by ' + user.name + '.');
-        this.logModCommand(user.name + ' kicked ' + targetUser.name + ' from ' + room.id);
+        this.sendReply(targetUser.name + ' has losted ' + takeMoney + ' ' + b + '. This user now has ' + total + ' Battle Points.');
+        targetUser.send(user.name + ' has taken ' + takeMoney + ' ' + b + ' from you. You now have ' + total + ' Battle Points.');
     },
 
     masspm: 'pmall',
@@ -640,7 +476,7 @@ var components = exports.components = {
     },
 
     roomlist: function (target, room, user) {
-        if(!this.can('roomlist')) return;
+        if(!this.can('warn')) return;
 
         var rooms = Object.keys(Rooms.rooms),
             len = rooms.length,
@@ -719,6 +555,13 @@ var components = exports.components = {
         this.parse('/poll Tournament tier?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
     },
 
+    tournamentpoll: 'tourpoll',
+    tourneypoll: 'tourpoll',
+    tourpoll: function (target, room, user) {
+        if (!this.can('poll', null, room)) return false;
+        this.parse('/poll Tournament tier?, ou, ubers, uu, ru, nu, lc, monotype, random, 1v1 random, uber random, high tier random, low tier random, lc random, monotype random, hoenn random, hoenn weather random, super smash bros. random, winter wonderland, community random, furry random, metronome 3v3 random, metronome 6v6 random, doubles random, triples random, [gen 1] random');
+    },
+
     endpoll: function (target, room, user) {
         if (!this.can('broadcast')) return;
         if (!Poll[room.id].question) return this.sendReply('There is no poll to end in this room.');
@@ -776,7 +619,7 @@ var components = exports.components = {
     },
 
     clearall: function (target, room, user) {
-        if (!this.can('clearall')) return;
+        if (!this.can('clearall', null, room)) return false;
         if (room.battle) return this.sendReply('You cannot do it on battle rooms.');
         
         var len = room.log.length,
@@ -1009,8 +852,8 @@ var components = exports.components = {
                 '<h3><b><u>Control Panel</u></b></h3>' +
                 '<i>Color:</i> ' + '<font color="' + Core.profile.color + '">' + Core.profile.color + '</font><br />' +
                 '<i>Custom Avatar URL:</i> ' + Core.profile.avatarurl + '<br />' +
-                '<i>Tournament Size to earn money: </i>' + Core.tournaments.tourSize + '<br />' +
-                '<i>Earning money amount:</i> ' + Core.tournaments.earningMoney() + '<br />' +
+                '<i>Tournament Size to earn Battle Points: </i>' + Core.tournaments.tourSize + '<br />' +
+                '<i>Earning Battle Point amount:</i> ' + Core.tournaments.earningMoney() + '<br />' +
                 '<i>Winner Elo Bonus:</i> ' + Core.tournaments.winningElo + '<br />' +
                 '<i>RunnerUp Elo Bonus:</i> ' + Core.tournaments.runnerUpElo + '<br /><br />' +
                 'To edit this info, use /cp help' +
@@ -1040,13 +883,13 @@ var components = exports.components = {
                     Core.stdout('control-panel', 'toursize', parts[1], function () {
                         Core.tournaments.tourSize = Number(Core.stdin('control-panel', 'toursize'));
                     });
-                    self.sendReply('Tournament Size to earn money is now ' + parts[1]);
+                    self.sendReply('Tournament Size to earn Battle Points is now ' + parts[1]);
                 },
                 money: function () {
                     if (parts[1] === 'standard') Core.stdout('control-panel', 'money', 10, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));});
                     if (parts[1] === 'double') Core.stdout('control-panel', 'money', 4, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));});
                     if (parts[1] === 'quadruple') Core.stdout('control-panel', 'money', 2, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));});
-                    self.sendReply('Earning money amount is now ' + parts[1]);
+                    self.sendReply('Earning Battle Point amount is now ' + parts[1]);
                 },
                 winner: function () {
                     Core.stdout('control-panel', 'winner', parts[1], function () {
