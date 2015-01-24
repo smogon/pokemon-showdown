@@ -203,7 +203,7 @@ var core = exports.core = {
 
     shop: function (showDisplay) {
         var shop = [
-            ['Symbol', 'Buys a \u2605 symbol to go in front of your name and puts you at top of the user list. (Temporary until restart)', 10],
+            ['Star', 'Buys a \u2605 to go in front of your name and puts you at top of the user list. (Temporary until restart)', 10],
             ['Poof', 'Buy a poof message to be added into the pool of possible poofs.', 30],
             ['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 50]
         ];
