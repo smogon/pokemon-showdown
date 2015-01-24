@@ -425,6 +425,14 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Hackmons Challenge Cup",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomHackmonsCC',
+		searchShow: false,
+		ruleset: ['HP Percentage Mod']
+	},
+	{
 		name: "Doubles Challenge Cup",
 		section: 'Random Battles (aka Randbats)',
 
@@ -1049,14 +1057,6 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
-	},
-	{
-		name: "Hackmons Challenge Cup",
-		section: "Other Metagames",
-
-		team: 'randomHackmonsCC',
-		searchShow: false,
-		ruleset: ['HP Percentage Mod']
 	},
 	{
 		name: "Snowy OU",
