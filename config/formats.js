@@ -7,7 +7,7 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 1] Random Battle (BWknd 25)",
+		name: "[Gen 1] Random (BWknd 25)",
 		section: "ORAS Singles",
 
 		mod: 'gen1',
