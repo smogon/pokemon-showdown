@@ -70,62 +70,65 @@ var components = exports.components = {
 
         if (!targetUser) {
             var userId = toId(target);
-            var money = Core.profile.money(userId);
-            var elo = Core.profile.tournamentElo(userId);
-            var about = Core.profile.about(userId);
+            var bp = Core.profile.bp(userId);
+            var tourWins = Core.profile.tournamentTourWins(userId);
+            var title = Core.profile.title(userId);
 
-            if (elo === 1000 && about === 0) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + '<br clear="all">');
+            if (tourWins === 0 && title === 0) {
+                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('bp', bp) + '<br clear="all">');
             }
-            if (elo === 1000) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + '<br clear="all">');
+            if (tourWins === 0) {
+                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + '<br clear="all">');
             }
-            if (about === 0) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
+            if (title === 0) {
+                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins, Core.profile.rank(userId)) + '<br clear="all">');
             }
-            return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('about', about) + Core.profile.lastSeen(false, userId) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(userId)) + '<br clear="all">');
+            return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins, Core.profile.rank(userId)) + '<br clear="all">');
         }
 
-        var money = Core.profile.money(targetUser.userid);
-        var elo = Core.profile.tournamentElo(toId(targetUser.userid));
-        var about = Core.profile.about(targetUser.userid);
+        var bp = Core.profile.bp(targetUser.userid);
+        var tourWins = Core.profile.tournamentTourWins(toId(targetUser.userid));
+        var title = Core.profile.title(targetUser.userid);
 
-        if (elo === 1000 && about === 0) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + '<br clear="all">');
+        if (tourWins === 0 && title === 0) {
+            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('bp', bp) + '<br clear="all">');
         }
-        if (elo === 1000) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + '<br clear="all">');
+        if (tourWins === 0) {
+            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + '<br clear="all">');
         }
-        if (about === 0) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
+        if (title === 0) {
+            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
         }
-        return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('about', about) + Core.profile.lastSeen(true, targetUser) + Core.profile.display('money', money) + Core.profile.display('elo', elo, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
+        return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
     },
 
-    setabout: 'about',
-    about: function (target, room, user) {
-        if (!target) return this.parse('/help about');
-        if (target.length > 60) return this.sendReply('About cannot be over 60 characters.');
+    settitle: 'title',
+    title: function (target, room, user) {
+        if (!target) return this.parse('/help title');
+        if (!user.canTitle) return this.sendReply('You need to buy this item from the shop to use.');
+        if (target.length > 60) return this.sendReply('Title cannot be over 60 characters.');
 
         var now = Date.now();
 
-        if ((now - user.lastAbout) * 0.001 < 30) {
+        if ((now - user.lastTitle) * 0.001 < 30) {
             this.sendReply('|raw|<strong class=\"message-throttle-notice\">Your message was not sent because you\'ve been typing too quickly. You must wait ' + Math.floor(
-                (30 - (now - user.lastAbout) * 0.001)) + ' seconds</strong>');
+                (30 - (now - user.lastTitle) * 0.001)) + ' seconds</strong>');
             return;
         }
 
-        user.lastAbout = now;
+        user.lastTitle = now;
 
         target = Tools.escapeHTML(target);
         target = target.replace(/[^A-Za-z\d ]+/g, '');
 
-        var data = Core.stdin('about', user.userid);
-        if (data === target) return this.sendReply('This about is the same as your current one.');
+        var data = Core.stdin('title', user.userid);
+        if (data === target) return this.sendReply('This title is the same as your current one.');
 
-        Core.stdout('about', user.userid, target);
+        Core.stdout('title', user.userid, target);
 
-        this.sendReply('Your about is now: "' + target + '"');
+        this.sendReply('Your title is now: "' + target + '"');
+
+        user.canTitle = false;
     },
 
     tourladder: 'tournamentladder',
@@ -149,18 +152,22 @@ var components = exports.components = {
 
     buy: function (target, room, user) {
         if (!target) this.parse('/help buy');
-        var userMoney = Number(Core.stdin('money', user.userid));
+        var userBP = Number(Core.stdin('bp', user.userid));
         var shop = Core.shop(false);
         var len = shop.length;
         while (len--) {
             if (target.toLowerCase() === shop[len][0].toLowerCase()) {
                 var price = shop[len][2];
-                if (price > userMoney) return this.sendReply('You don\'t have enough money for this. You need ' + (price - userMoney) + ' more bucks to buy ' + target + '.');
-                Core.stdout('money', user.userid, (userMoney - price));
+                if (price > userBP) return this.sendReply('You don\'t have enough Battle Points for this. You need ' + (price - userBP) + ' more Battle Points to buy ' + target + '.');
+                Core.stdout('bp', user.userid, (userBP - price));
+                if (target.toLowerCase() === 'title') {
+                    user.canTitle = true;
+                    this.sendReply('You have purchased a user title. You may now use /title now.');
+                    this.parse('/help title');
                 if (target.toLowerCase() === 'star') {
-                    user.canCustomSymbol = true;
+                    user.canStar = true;
                     this.sendReply('You have purchased a \u2606. You will have this until you log off for more than an hour. You may now use /star now.');
-                    this.parse('/help customsymbol');
+                    this.parse('/help star');
                     this.sendReply('If you do not want your \u2606 anymore, you may use /removestar to go back to your old symbol.');
                 } else {
                     this.sendReply('You have purchased ' + target + '. Please contact the admin "wolf" to get ' + target + '. Use the /tell command if wolf is offline (submit "/help tell" in the chat).');
@@ -179,7 +186,7 @@ var components = exports.components = {
     transferbuck: 'transferbp',
     transferbucks: 'transferbp',
     transferbp: function (target, room, user) {
-        if (!target) return this.parse('/help transfermoney');
+        if (!target) return this.parse('/help transferbp');
         if (!this.canTalk()) return;
 
         if (target.indexOf(',') >= 0) {
@@ -194,25 +201,25 @@ var components = exports.components = {
         if (parts[1] < 1) return this.sendReply('You can\'t transfer less than 1 Battle Point at a time.');
         if (String(parts[1]).indexOf('.') >= 0) return this.sendReply('You cannot transfer Battle Points with decimals.');
 
-        var userMoney = Core.stdin('money', user.userid);
-        var targetMoney = Core.stdin('money', targetUser.userid);
+        var userBP = Core.stdin('bp', user.userid);
+        var targetBP = Core.stdin('bp', targetUser.userid);
 
-        if (parts[1] > Number(userMoney)) return this.sendReply('You cannot transfer more Battle Points than what you have.');
+        if (parts[1] > Number(userBP)) return this.sendReply('You cannot transfer more Battle Points than what you have.');
 
         var b = 'bucks';
         var cleanedUp = parts[1].trim();
-        var transferMoney = Number(cleanedUp);
-        if (transferMoney === 1) b = 'buck';
+        var transferBP = Number(cleanedUp);
+        if (transferBP === 1) b = 'buck';
 
-        userMoney = Number(userMoney) - transferMoney;
-        targetMoney = Number(targetMoney) + transferMoney;
+        userBP = Number(userBP) - transferBP;
+        targetBP = Number(targetBP) + transferBP;
 
-        Core.stdout('money', user.userid, userMoney, function () {
-            Core.stdout('money', targetUser.userid, targetMoney);
+        Core.stdout('bp', user.userid, userBP, function () {
+            Core.stdout('bp', targetUser.userid, targetBP);
         });
 
-        this.sendReply('You have successfully transferred ' + transferMoney + ' ' + b + ' to ' + targetUser.name + '. You now have ' + userMoney + ' Battle Points.');
-        targetUser.send(user.name + ' has transferred ' + transferMoney + ' ' + b + ' to you. You now have ' + targetMoney + ' Battle Points.');
+        this.sendReply('You have successfully transferred ' + transferBP + ' ' + b + ' to ' + targetUser.name + '. You now have ' + userBP + ' Battle Points.');
+        targetUser.send(user.name + ' has transferred ' + transferBP + ' ' + b + ' to you. You now have ' + targetBP + ' Battle Points.');
     },
 
     vote: function (target, room, user) {
@@ -240,7 +247,7 @@ var components = exports.components = {
     },
 
     star: function (target, room, user) {
-        if (!user.canCustomSymbol) return this.sendReply('You need to buy this item from the shop to use.');
+        if (!user.canStar) return this.sendReply('You need to buy this item from the shop to use.');
         var star = '\u2606';
         user.getIdentity = function (roomid) {
             if (!roomid) roomid = 'lobby';
@@ -261,12 +268,12 @@ var components = exports.components = {
             return star + name;
         };
         user.updateIdentity();
-        user.canCustomSymbol = false;
-        user.hasCustomSymbol = true;
+        user.canStar = false;
+        user.hasStar = true;
     },
 
     removestar: function (target, room, user) {
-        if (!user.hasCustomSymbol) return this.sendReply('You don\'t have a custom symbol.');
+        if (!user.hasStar) return this.sendReply('You don\'t have a \u2606.');
         user.getIdentity = function (roomid) {
             if (!roomid) roomid = 'lobby';
             var name = this.name + (this.isAway ? " - \u0410\u051d\u0430\u0443" : "");
@@ -285,7 +292,7 @@ var components = exports.components = {
             }
             return this.group + name;
         };
-        user.hasCustomSymbol = false;
+        user.hasStar = false;
         user.updateIdentity();
         this.sendReply('Your symbol has been reset.');
     },
@@ -388,7 +395,7 @@ var components = exports.components = {
     givebuck: 'givebp',
     givebucks: 'givebp',
     givebp: function (target, room, user) {
-        if (!user.can('givemoney')) return;
+        if (!user.can('givebp')) return;
         if (!target) return this.parse('/help givebp');
 
         if (target.indexOf(',') >= 0) {
@@ -404,16 +411,16 @@ var components = exports.components = {
 
         var b = 'bucks';
         var cleanedUp = parts[1].trim();
-        var giveMoney = Number(cleanedUp);
-        if (giveMoney === 1) b = 'buck';
+        var giveBP = Number(cleanedUp);
+        if (giveBP === 1) b = 'buck';
 
-        var money = Core.stdin('money', targetUser.userid);
-        var total = Number(money) + Number(giveMoney);
+        var bp = Core.stdin('bp', targetUser.userid);
+        var total = Number(bp) + Number(giveBP);
 
-        Core.stdout('money', targetUser.userid, total);
+        Core.stdout('bp', targetUser.userid, total);
 
-        this.sendReply(targetUser.name + ' was given ' + giveMoney + ' ' + b + '. This user now has ' + total + ' Battle Points.');
-        targetUser.send(user.name + ' has given you ' + giveMoney + ' ' + b + '. You now have ' + total + ' Battle Points.');
+        this.sendReply(targetUser.name + ' was given ' + giveBP + ' ' + b + '. This user now has ' + total + ' Battle Points.');
+        targetUser.send(user.name + ' has given you ' + giveBP + ' ' + b + '. You now have ' + total + ' Battle Points.');
     },
 
     takebattlepoints: 'takebp',
@@ -422,7 +429,7 @@ var components = exports.components = {
     takebuck: 'takebp',
     takebucks: 'takebp',
     takebp: function (target, room, user) {
-        if (!user.can('takemoney')) return;
+        if (!user.can('takebp')) return;
         if (!target) return this.parse('/help takebp');
 
         if (target.indexOf(',') >= 0) {
@@ -438,16 +445,16 @@ var components = exports.components = {
 
         var b = 'bucks';
         var cleanedUp = parts[1].trim();
-        var takeMoney = Number(cleanedUp);
-        if (takeMoney === 1) b = 'buck';
+        var takeBP = Number(cleanedUp);
+        if (takeBP === 1) b = 'buck';
 
-        var money = Core.stdin('money', targetUser.userid);
-        var total = Number(money) - Number(takeMoney);
+        var bp = Core.stdin('bp', targetUser.userid);
+        var total = Number(bp) - Number(takeBP);
 
-        Core.stdout('money', targetUser.userid, total);
+        Core.stdout('bp', targetUser.userid, total);
 
-        this.sendReply(targetUser.name + ' has losted ' + takeMoney + ' ' + b + '. This user now has ' + total + ' Battle Points.');
-        targetUser.send(user.name + ' has taken ' + takeMoney + ' ' + b + ' from you. You now have ' + total + ' Battle Points.');
+        this.sendReply(targetUser.name + ' has losted ' + takeBP + ' ' + b + '. This user now has ' + total + ' Battle Points.');
+        targetUser.send(user.name + ' has taken ' + takeBP + ' ' + b + ' from you. You now have ' + total + ' Battle Points.');
     },
 
     masspm: 'pmall',
@@ -833,19 +840,15 @@ var components = exports.components = {
             return this.sendReplyBox(
                 '/cp color, [COLOR]<br/>' +
                 '/cp avatar, [AVATAR COLOR URL]<br/>' +
-                '/cp toursize, [TOURNAMENT SIZE TO EARN MONEY]<br/>' +
-                '/cp money, [STANDARD/DOUBLE/QUADRUPLE]<br/>' + 
-                '/cp winner, [WINNER ELO BONUS]<br/>' +
-                '/cp runnerup, [RUNNERUP ELO BONUS]<br/>'
+                '/cp toursize, [TOURNAMENT SIZE TO EARN BP]<br/>' +
+                '/cp bp, [STANDARD/DOUBLE/QUADRUPLE]<br/>'
                 );
         }
         var parts = target.split(',');
         Core.profile.color = Core.stdin('control-panel', 'color');
         Core.profile.avatarurl = Core.stdin('control-panel', 'avatar');
         Core.tournaments.tourSize = Number(Core.stdin('control-panel', 'toursize'));
-        Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));
-        Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
-        Core.tournaments.runnerUpElo = Number(Core.stdin('control-panel', 'runnerup'));
+        Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'bp'));
         if (parts.length !== 2) {
             return this.sendReplyBox(
                 '<center>' +
@@ -853,9 +856,7 @@ var components = exports.components = {
                 '<i>Color:</i> ' + '<font color="' + Core.profile.color + '">' + Core.profile.color + '</font><br />' +
                 '<i>Custom Avatar URL:</i> ' + Core.profile.avatarurl + '<br />' +
                 '<i>Tournament Size to earn Battle Points: </i>' + Core.tournaments.tourSize + '<br />' +
-                '<i>Earning Battle Point amount:</i> ' + Core.tournaments.earningMoney() + '<br />' +
-                '<i>Winner Elo Bonus:</i> ' + Core.tournaments.winningElo + '<br />' +
-                '<i>RunnerUp Elo Bonus:</i> ' + Core.tournaments.runnerUpElo + '<br /><br />' +
+                '<i>Earning Battle Point amount:</i> ' + Core.tournaments.earningBP() + '<br />' +
                 'To edit this info, use /cp help' +
                 '</center>' +
                 '<br clear="all">'
@@ -885,23 +886,11 @@ var components = exports.components = {
                     });
                     self.sendReply('Tournament Size to earn Battle Points is now ' + parts[1]);
                 },
-                money: function () {
-                    if (parts[1] === 'standard') Core.stdout('control-panel', 'money', 10, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));});
-                    if (parts[1] === 'double') Core.stdout('control-panel', 'money', 4, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));});
-                    if (parts[1] === 'quadruple') Core.stdout('control-panel', 'money', 2, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'money'));});
+                bp: function () {
+                    if (parts[1] === 'standard') Core.stdout('control-panel', 'bp', 10, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'bp'));});
+                    if (parts[1] === 'double') Core.stdout('control-panel', 'bp', 4, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'bp'));});
+                    if (parts[1] === 'quadruple') Core.stdout('control-panel', 'bp', 2, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'bp'));});
                     self.sendReply('Earning Battle Point amount is now ' + parts[1]);
-                },
-                winner: function () {
-                    Core.stdout('control-panel', 'winner', parts[1], function () {
-                        Core.tournaments.winningElo = Number(Core.stdin('control-panel', 'winner'));
-                    });
-                    self.sendReply('Winner Elo Bonus is now ' + parts[1]);
-                },
-                runnerup: function () {
-                    Core.stdout('control-panel', 'runnerup', parts[1], function () {
-                        Core.tournaments.runnerUpElo = Number(Core.stdin('control-panel', 'runnerup'));
-                    });
-                    self.sendReply('RunnerUp Elo Bonus is now ' + parts[1]);
                 }
             };
 
