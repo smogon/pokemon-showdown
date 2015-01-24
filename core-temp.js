@@ -146,7 +146,7 @@ var core = exports.core = {
             if (limit > len) limit = len;
 
             while (len--) {
-                ladder = ladder + '<tr><td>' + (list.length - len) + '</td><td>' + list[len][0] + '</td><td>' + Math.floor(list[len][1]) + '</td>'</tr>';
+                ladder = ladder + '<tr><td>' + (list.length - len) + '</td><td>' + list[len][0] + '</td><td>' + Math.floor(list[len][1]) + '</td></tr>';
                 if (len === limit) break;
             }
             ladder += '</tbody></table>';
