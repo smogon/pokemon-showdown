@@ -111,13 +111,13 @@ var core = exports.core = {
             return Core.stdin('title', user);
         },
 
-        money: function (user) {
-            return Core.stdin('money', user);
+        bp: function (user) {
+            return Core.stdin('bp', user);
         },
 
         display: function (args, info) {
             if (args === 'title') return '<br>&nbsp;<strong><font color="' + this.color + '">Title:</font></strong>&nbsp;' + info;
-            if (args === 'money') return '<br>&nbsp;<strong><font color="' + this.color + '">Battle Points:</font></strong>&nbsp;' + info;
+            if (args === 'bp') return '<br>&nbsp;<strong><font color="' + this.color + '">Battle Points:</font></strong>&nbsp;' + info;
         },
 
     },
@@ -299,7 +299,7 @@ var core = exports.core = {
     tournaments: {
         tourSize: 8,
         amountEarn: 10,
-        earningMoney: function () {
+        earningBP: function () {
             if (this.amountEarn === 10) return '<u>Standard (8 players = 1 Battle Point)</u> Double (4 players = 1 Battle Point) Quadruple (2 players = 1 Battle Point)';
             if (this.amountEarn === 4) return 'Standard (8 players = 1 Battle Point) <u>Double (4 players = 1 Battle Point)</u> Quadruple (2 players = 1 Battle Point)';
             if (this.amountEarn === 2) return 'Standard (8 players = 1 Battle Point) Double (4 players = 1 Battle Point) <u>Quadruple (2 players = 1 Battle Point)</u>';
