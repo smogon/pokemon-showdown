@@ -68,7 +68,7 @@ var core = exports.core = {
 
         color: '#2ECC40',
 
-        avatarurl: 'http://107.161.19.15:8000',
+        avatarurl: 'http://cbc.pokecommunity.com/config',
 
         avatar: function (online, user, img) {
             if (online === true) {
@@ -105,52 +105,6 @@ var core = exports.core = {
                 return '<br>&nbsp;<strong><font color="' + this.color + '">Group:</font></strong>&nbsp;' + 'Regular User';
             }
             return '<br>&nbsp;<strong><font color="' + this.color + '">Group:</font></strong>&nbsp;' + Config.groups[g].name;
-        },
-
-        lastSeen: function (online, user) {
-            var lastSeen;
-
-            if (online === true) {
-                if (user.connected === true) {
-                    return '<br>&nbsp;<strong><font color="' + this.color + '">Last Seen:</font></strong>&nbsp;<font color="green">Current Online</font>';
-                }
-                lastSeen = Number(Core.stdin('lastSeen', user.userid));
-            } else {
-                lastSeen = Number(Core.stdin('lastSeen', user));
-            }
-
-            if (lastSeen === 0) return '<br>&nbsp;<strong><font color="' + this.color + '">Last Seen:</font></strong>&nbsp;Never';
-
-            var seconds = Math.floor((Date.now() - lastSeen) * 0.001);
-            var minutes = Math.floor((Date.now() - lastSeen) * 1.6667e-5);
-            var hours = Math.floor((Date.now() - lastSeen) * 2.7778e-7);
-            var days = Math.floor(((Date.now() - lastSeen) * 2.7778e-7) / 24);
-
-            var time = days + ' days ago';
-
-            if (seconds < 60) {
-                if (seconds === 1) {
-                    time = seconds + ' second ago';
-                } else {
-                    time = seconds + ' seconds ago';
-                }
-            } else if (minutes < 60) {
-                if (minutes === 1) {
-                    time = minutes + ' minute ago';
-                } else {
-                    time = minutes + ' minutes ago';
-                }
-            } else if (hours < 24) {
-                if (hours === 1) {
-                    time = hours + ' hour ago';
-                } else {
-                    time = hours + ' hours ago';
-                }
-            } else if (days === 1) {
-                time = days + ' day ago';
-            }
-
-            return '<br>&nbsp;<strong><font color="' + this.color + '">Last Seen:</font></strong>&nbsp;' + time;
         },
 
         about: function (user) {
@@ -193,7 +147,7 @@ var core = exports.core = {
 
         display: function (args, info, option) {
             if (args === 'about') return '<br>&nbsp;<strong><font color="' + this.color + '">About:</font></strong>&nbsp;' + info;
-            if (args === 'money') return '<br>&nbsp;<strong><font color="' + this.color + '">Money:</font></strong>&nbsp;' + info;
+            if (args === 'money') return '<br>&nbsp;<strong><font color="' + this.color + '">Battle Points:</font></strong>&nbsp;' + info;
             if (args === 'elo') return '<br>&nbsp;<strong><font color="' + this.color + '">Tournament Elo:</font></strong>&nbsp;' + info + option;
         },
 
@@ -249,13 +203,9 @@ var core = exports.core = {
 
     shop: function (showDisplay) {
         var shop = [
-            ['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
-            ['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
-            ['Poof', 'Buy a poof message to be added into the pool of possible poofs.', 15],
-            ['Who', 'Buys a custom whois bot message for your name.', 25],
-            ['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 30],
-            ['Trainer', 'Buys a trainer card which shows information through a command.', 50],
-            ['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100]
+            ['Symbol', 'Buys a \u2605 symbol to go in front of your name and puts you at top of the user list. (Temporary until restart)', 10],
+            ['Poof', 'Buy a poof message to be added into the pool of possible poofs.', 30],
+            ['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 50]
         ];
 
         if (showDisplay === false) {
@@ -268,7 +218,7 @@ var core = exports.core = {
             s = s + '<tr><td>' + shop[start][0] + '</td><td>' + shop[start][1] + '</td><td>' + shop[start][2] + '</td></tr>';
             start++;
         }
-        s += '</tbody></table><center>To buy an item from the shop, use /buy <em>command</em>.</center>';
+        s += '</tbody></table><center>To buy an item from the shop, use the /buy <em>command</em>.</center>';
         return s;
     },
 
@@ -319,22 +269,40 @@ var core = exports.core = {
     },
 
     emoticons: {
-        'Kappa': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-ddc6e3a8732cb50f-25x28.png',
-        'PogChamp': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-60aa1af305e32d49-23x30.png',
-        'BloodTrail': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-f124d3a96eff228a-41x28.png',
-        'BibleThump': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-f6c13c7fc0a5c93d-36x30.png',
-        'feelsgd': 'http://i.imgur.com/9gj1oPV.png',
-        'feelsbd': 'http://i.imgur.com/Ehfkalz.gif',
-        'crtNova': 'http://static-cdn.jtvnw.net/jtv_user_pictures/emoticon-3227-src-77d12eca2603dde0-28x28.png',
-        'crtSSoH': 'http://static-cdn.jtvnw.net/jtv_user_pictures/emoticon-3228-src-d4b613767d7259c4-28x28.png',
-        'SSSsss': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-5d019b356bd38360-24x24.png',
-        'SwiftRage': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-680b6b3887ef0d17-21x28.png',
-        'ResidentSleeper': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-1ddcc54d77fc4a61-28x28.png',
-        'PJSalt': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-18be1a297459453f-36x30.png',
-        'FailFish': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-c8a77ec0c49976d3-22x30.png',
-        '4Head': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-76292ac622b0fc38-20x30.png',
-        'DansGame': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-ce52b18fccf73b29-25x32.png',
-        'Kreygasm': 'http://static-cdn.jtvnw.net/jtv_user_pictures/chansub-global-emoticon-3a624954918104fe-19x27.png'
+        ':arceus:': 'http://cbc.pokecommunity.com/config/emoticons/arceus.png',
+        ':bidoof:': 'http://cbc.pokecommunity.com/config/emoticons/bidoof.png',
+        ':castform:': 'http://cbc.pokecommunity.com/config/emoticons/castform.png',
+        ':charizard:': 'http://cbc.pokecommunity.com/config/emoticons/charizard.png',
+        ':cookie:': 'http://cbc.pokecommunity.com/config/emoticons/cookie.png',
+        ':gav:': 'http://cbc.pokecommunity.com/config/emoticons/gav.png',
+        ':hamster:': 'http://cbc.pokecommunity.com/config/emoticons/hamster.png',
+        ':helix:': 'http://cbc.pokecommunity.com/config/emoticons/helix.png',
+        ':jigglypuff:': 'http://cbc.pokecommunity.com/config/emoticons/jigglypuff.png',
+        ':jynx:': 'http://cbc.pokecommunity.com/config/emoticons/jynx.png',
+        ':kappa:': 'http://cbc.pokecommunity.com/config/emoticons/kappa.png',
+        ':kermit:': 'http://cbc.pokecommunity.com/config/emoticons/kermit.png',
+        ':kreygasm:': 'http://cbc.pokecommunity.com/config/emoticons/kreygasm.png',
+        ':lapras:': 'http://cbc.pokecommunity.com/config/emoticons/lapras.png',
+        ':ludicolo:': 'http://cbc.pokecommunity.com/config/emoticons/ludicolo.png',
+        ':luvdisc:': 'http://cbc.pokecommunity.com/config/emoticons/luvdisc.png',
+        ':magikarp:': 'http://cbc.pokecommunity.com/config/emoticons/magikarp.png',
+        ':meganium:': 'http://cbc.pokecommunity.com/config/emoticons/meganium.png',
+        ':pyoshi:': 'http://cbc.pokecommunity.com/config/emoticons/pyoshi.png',
+        ':pjsalt:': 'http://cbc.pokecommunity.com/config/emoticons/pjsalt.png',
+        ':psyduck:': 'http://cbc.pokecommunity.com/config/emoticons/psyduck.png',
+        ':slowpoke:': 'http://cbc.pokecommunity.com/config/emoticons/slowpoke.png',
+        ':snorlax:': 'http://cbc.pokecommunity.com/config/emoticons/snorlax.png',
+        ':spheal:': 'http://cbc.pokecommunity.com/config/emoticons/spheal.png',
+        ':sri:': 'http://cbc.pokecommunity.com/config/emoticons/sri.png',
+        ':suicune:': 'http://cbc.pokecommunity.com/config/emoticons/suicune.png',
+        ':superman:': 'http://cbc.pokecommunity.com/config/emoticons/superman.png',
+        ':sweep:': 'http://cbc.pokecommunity.com/config/emoticons/sweep.gif',
+        ':vulpix:': 'http://cbc.pokecommunity.com/config/emoticons/vulpix.png',
+        ':wobbuffet:': 'http://cbc.pokecommunity.com/config/emoticons/wobbuffet.png',
+        ':wooper:': 'http://cbc.pokecommunity.com/config/emoticons/wooper.png',
+        ':wynaut:': 'http://cbc.pokecommunity.com/config/emoticons/wynaut.png',
+        ':y:': 'http://cbc.pokecommunity.com/config/emoticons/y.png',
+        ':yoshi:': 'http://cbc.pokecommunity.com/config/emoticons/yoshi.png'
     },
 
     processEmoticons: function (text) {
@@ -349,7 +317,7 @@ var core = exports.core = {
         }
 
         return text.replace(new RegExp(patterns.join('|'), 'g'), function (match) {
-            if (match === 'feelsbd' || match === 'feelsgd') return typeof self.emoticons[match] != 'undefined' ?
+            if (match === ':gav:' || match === ':kermit:' || match === ':superman:' || match === ':sweep:' || match === ':yoshi:') return typeof self.emoticons[match] != 'undefined' ?
                 '<img src="' + self.emoticons[match] + '" title="' + match + '" width="30" height="30"/>' :
                 match;
             return typeof self.emoticons[match] != 'undefined' ?
@@ -369,7 +337,6 @@ var core = exports.core = {
         if (!match || message.charAt(0) === '!') return true;
         message = Tools.escapeHTML(message);
         message = this.processEmoticons(message);
-        if (user.hiding) return room.add('|raw|<div class="chat"><strong><font color="' + Core.hashColor(user.userid)+'"><small></small><span class="username" data-name="' + user.name + '">' + user.name + '</span>:</font></strong> <em class="mine">' + message + '</em></div>');
         room.add('|raw|<div class="chat"><strong><font color="' + Core.hashColor(user.userid)+'"><small>' + user.group + '</small><span class="username" data-name="' + user.group + user.name + '">' + user.name + '</span>:</font></strong> <em class="mine">' + message + '</em></div>');
         return false;
     },
@@ -380,24 +347,10 @@ var core = exports.core = {
         winningElo: 50,
         runnerUpElo: 25,
         earningMoney: function () {
-            if (this.amountEarn === 10) return '<u>Standard (8 players = 1 buck)</u> Double (4 players = 1 buck) Quadruple (2 players = 1 bucks)';
-            if (this.amountEarn === 4) return 'Standard (8 players = 1 buck) <u>Double (4 players = 1 buck)</u> Quadruple (2 players = 1 bucks)';
-            if (this.amountEarn === 2) return 'Standard (8 players = 1 buck) Double (4 players = 1 buck) <u>Quadruple (2 players = 1 bucks)</u>';
+            if (this.amountEarn === 10) return '<u>Standard (8 players = 1 Battle Point)</u> Double (4 players = 1 Battle Point) Quadruple (2 players = 1 Battle Point)';
+            if (this.amountEarn === 4) return 'Standard (8 players = 1 Battle Point) <u>Double (4 players = 1 Battle Point)</u> Quadruple (2 players = 1 Battle Point)';
+            if (this.amountEarn === 2) return 'Standard (8 players = 1 Battle Point) Double (4 players = 1 Battle Point) <u>Quadruple (2 players = 1 Battle Point)</u>';
         }
     },
-
-};
-
-exports.sysopAccess = function () {
-
-    var systemOperators = ['creaturephil'];
-
-    Users.User.prototype.hasSysopAccess = function () {
-        if (systemOperators.indexOf(this.userid) > -1 && this.authenticated) {
-            return true;
-        } else {
-            return false;
-        }
-    };
 
 };
