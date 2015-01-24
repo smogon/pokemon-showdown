@@ -107,69 +107,23 @@ var core = exports.core = {
             return '<br>&nbsp;<strong><font color="' + this.color + '">Group:</font></strong>&nbsp;' + Config.groups[g].name;
         },
 
-        about: function (user) {
-            return Core.stdin('about', user);
+        title: function (user) {
+            return Core.stdin('title', user);
         },
 
         money: function (user) {
             return Core.stdin('money', user);
         },
 
-        tournamentElo: function (user) {
-            var elo = Core.stdin('elo', user);
-            if (elo === 0) {
-                return 1000;
-            }
-            return Math.floor(Number(elo));
-        },
-
-        rank: function (user) {
-            var data = fs.readFileSync('config/elo.csv', 'utf-8');
-            var row = ('' + data).split("\n");
-
-            var list = [];
-
-            for (var i = row.length; i > -1; i--) {
-                if (!row[i]) continue;
-                var parts = row[i].split(",");
-                list.push([toId(parts[0]), Number(parts[1])]);
-            }
-
-            list.sort(function (a, b) {
-                return a[1] - b[1];
-            });
-            var arr = list.filter(function (el) {
-                return !!~el.indexOf(user);
-            });
-
-            return '&nbsp;(Rank <strong>' + (list.length - list.indexOf(arr[0])) + '</strong> out of ' + list.length + ' players)';
-        },
-
-        display: function (args, info, option) {
-            if (args === 'about') return '<br>&nbsp;<strong><font color="' + this.color + '">About:</font></strong>&nbsp;' + info;
+        display: function (args, info) {
+            if (args === 'title') return '<br>&nbsp;<strong><font color="' + this.color + '">Title:</font></strong>&nbsp;' + info;
             if (args === 'money') return '<br>&nbsp;<strong><font color="' + this.color + '">Battle Points:</font></strong>&nbsp;' + info;
-            if (args === 'elo') return '<br>&nbsp;<strong><font color="' + this.color + '">Tournament Elo:</font></strong>&nbsp;' + info + option;
         },
 
-    },
-
-    calculateElo: function (winner, loser) {
-        if (winner === 0) winner = 1000;
-        if (loser === 0) loser = 1000;
-        var kFactor = 32;
-        var ratingDifference = loser - winner;
-        var expectedScoreWinner = 1 / (1 + Math.pow(10, ratingDifference / 400));
-
-        var e = kFactor * (1 - expectedScoreWinner);
-        winner = winner + e;
-        loser = loser - e;
-
-        var arr = [winner, loser];
-        return arr;
     },
 
     ladder: function (limit) {
-        var data = fs.readFileSync('config/elo.csv', 'utf-8');
+        var data = fs.readFileSync('config/tourWins.csv', 'utf-8');
         var row = ('' + data).split("\n");
 
         var list = [];
@@ -185,14 +139,14 @@ var core = exports.core = {
         });
 
         if (list.length > 1) {
-            var ladder = '<table border="1" cellspacing="0" cellpadding="3"><tbody><tr><th>Rank</th><th>User</th><th>Tournament Elo</th><th>Tournament Wins</th></tr>';
+            var ladder = '<table border="1" cellspacing="0" cellpadding="3"><tbody><tr><th>Rank</th><th>User</th><th>Tournament Wins</th></tr>';
             var len = list.length;
 
             limit = len - limit;
             if (limit > len) limit = len;
 
             while (len--) {
-                ladder = ladder + '<tr><td>' + (list.length - len) + '</td><td>' + list[len][0] + '</td><td>' + Math.floor(list[len][1]) + '</td><td>' + this.stdin('tourWins', list[len][0]) + '</td></tr>';
+                ladder = ladder + '<tr><td>' + (list.length - len) + '</td><td>' + list[len][0] + '</td><td>' + Math.floor(list[len][1]) + '</td>'</tr>';
                 if (len === limit) break;
             }
             ladder += '</tbody></table>';
@@ -203,22 +157,23 @@ var core = exports.core = {
 
     shop: function (showDisplay) {
         var shop = [
-            ['Star', 'Buy a \u2606 to go in front of your name and puts you at the top of the user list. (Temporary until restart)', 10],
+            ['Title', 'Buy a user title for your profile (Can be seen via "/profile username".)', 10],
+            ['Star', 'Buy a \u2606 to go in front of your name and puts you at the top of the user list. (Temporary until server restart.)', 10],
             ['Poof', 'Buy a poof message to be added into the pool of possible poofs.', 30],
-            ['Avatar', 'Buy a custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 50]
+            ['Avatar', 'Buy a custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly.)', 50]
         ];
 
         if (showDisplay === false) {
             return shop;
         }
 
-        var s = '<table border="1" cellspacing="0" cellpadding="5" width="100%"><tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>';
+        var s = '<div class="broadcast-lobby"><table border="1" cellspacing="0" cellpadding="5" width="100%"><tbody><tr><th>Command</th><th>Description</th><th>Cost</th></tr>';
         var start = 0;
         while (start < shop.length) {
             s = s + '<tr><td>' + shop[start][0] + '</td><td>' + shop[start][1] + '</td><td>' + shop[start][2] + '</td></tr>';
             start++;
         }
-        s += '</tbody></table><center>To buy an item from the shop, use the /buy <em>command</em>.</center>';
+        s += '</tbody></table><center>To buy an item from the shop, use the /buy <em>command</em>.</center></div>';
         return s;
     },
 
@@ -344,8 +299,6 @@ var core = exports.core = {
     tournaments: {
         tourSize: 8,
         amountEarn: 10,
-        winningElo: 50,
-        runnerUpElo: 25,
         earningMoney: function () {
             if (this.amountEarn === 10) return '<u>Standard (8 players = 1 Battle Point)</u> Double (4 players = 1 Battle Point) Quadruple (2 players = 1 Battle Point)';
             if (this.amountEarn === 4) return 'Standard (8 players = 1 Battle Point) <u>Double (4 players = 1 Battle Point)</u> Quadruple (2 players = 1 Battle Point)';
