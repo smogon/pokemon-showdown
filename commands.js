@@ -773,7 +773,7 @@ var commands = exports.commands = {
 		if (!this.can('kick', targetUser, room)) return false;
 		var msg = (target ? " " + target + "" : "") + ".";
 		this.add("" + targetUser.name + " was " + msg);
-		this.privateModCommand("" + targetUser.name + " was kicked by " + user.name + ".");
+		this.logModCommand("" + targetUser.name + " was kicked by " + user.name + ".");
 		targetUser.popup("You have been " + msg);
 		targetUser.leaveRoom(room);
 	},
