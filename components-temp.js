@@ -74,12 +74,6 @@ var components = exports.components = {
             var tourWins = Core.profile.tourWins(userId);
             var title = Core.profile.title(userId);
 
-            if (tourWins === 0 && title === 0) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('bp', bp) + '<br clear="all">');
-            }
-            if (tourWins === 0) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + '<br clear="all">');
-            }
             if (title === 0) {
                 return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + '<br clear="all">');
             }
@@ -90,12 +84,6 @@ var components = exports.components = {
         var tourWins = Core.profile.tourWins(toId(targetUser.userid));
         var title = Core.profile.title(targetUser.userid);
 
-        if (tourWins === 0 && title === 0) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('bp', bp) + '<br clear="all">');
-        }
-        if (tourWins === 0) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + '<br clear="all">');
-        }
         if (title === 0) {
             return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + '<br clear="all">');
         }
