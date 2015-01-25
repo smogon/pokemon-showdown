@@ -774,7 +774,7 @@ var commands = exports.commands = {
 		var msg = (target ? " " + target + "" : "") + ".";
 		this.add("" + targetUser.name + " was " + msg);
 		this.logModCommand("" + targetUser.name + " was kicked by " + user.name + ".");
-		targetUser.popup("You have been " + msg);
+		targetUser.popup("You have been" + msg);
 		targetUser.leaveRoom(room);
 	},
 
