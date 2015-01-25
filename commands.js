@@ -771,8 +771,9 @@ var commands = exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 		if (!this.can('kick', targetUser, room)) return false;
-		var msg = target ? " (" + target + ")" : "" + " by " + user.name + ".";
-		this.addModCommand("" + targetUser.name + " was " + msg);
+		var msg = (target ? " " + target + "" : "") + ".";
+		this.add("" + targetUser.name + " was " + msg);
+		this.privateModCommand("" + targetUser.name + " was kicked by " + user.name + ".");
 		targetUser.popup("You have been " + msg);
 		targetUser.leaveRoom(room);
 	},
