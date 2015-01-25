@@ -203,6 +203,14 @@ represented by a space), and the rest of the string being their username.
 
 > Indicates that the game has started.
 
+`|win|USER`
+
+> `USER` has won the battle.
+
+`|tie`
+
+> The battle has ended in a tie.
+
 **Major actions**
 
 In battle, most Pokemon actions come in the form `|ACTION|POKEMON|DETAILS`

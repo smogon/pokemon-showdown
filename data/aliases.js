@@ -1,14 +1,17 @@
 exports.BattleAliases = {
 	// formats
 	"randbats": "Random Battle",
+	"randdubs": "Random Doubles Battle",
+	"randtrips": "Random Triples battle",
 	"overused": "OU",
 	"underused": "UU",
 	"rarelyused": "RU",
 	"neverused": "NU",
-	"vgc": "VGC 2014",
+	"vgc": "VGC 2015",
+	"smogdubs": "Smogon Doubles",
 	"bh": "Balanced Hackmons",
 	"createapokemon": "CAP",
-	"cc1v1": "Challenge Cup 1vs1",
+	"cc1v1": "Challenge Cup 1-vs-1",
 
 	// mega evos
 	"megaabomasnow": "Abomasnow-Mega",
@@ -48,6 +51,7 @@ exports.BattleAliases = {
 	"megamedicham": "Medicham-Mega",
 	"megamedi": "Medicham-Mega",
 	"megametagross": "Metagross-Mega",
+	"megagross": "Metagross-Mega",
 	"megamewtwo": "Mewtwo-Mega-Y",
 	"megamewtwox": "Mewtwo-Mega-X",
 	"megamewtwoy": "Mewtwo-Mega-Y",
@@ -68,6 +72,7 @@ exports.BattleAliases = {
 	"megattar": "Tyranitar-Mega",
 	"megavenusaur": "Venusaur-Mega",
 	"megavenu": "Venusaur-Mega",
+	"megasaur": "Venusaur-Mega",
 	"megazam": "Alakazam-Mega",
 	"megazardx": "Charizard-Mega-X",
 	"megazardy": "Charizard-Mega-y",
@@ -77,8 +82,10 @@ exports.BattleAliases = {
 	// primal reversions
 	"primalgroudon": "Groudon-Primal",
 	"primaldon": "Groudon-Primal",
+	"pgroudon": "Groudon-Primal",
 	"primalkyogre": "Kyogre-Primal",
 	"primalogre": "Kyogre-Primal",
+	"pkyogre": "Kyogre-Primal",
 
 	// formes
 	"bugceus": "Arceus-Bug",
@@ -120,6 +127,7 @@ exports.BattleAliases = {
 	"deod": "Deoxys-Defense",
 	"deoxyss": "Deoxys-Speed",
 	"deos": "Deoxys-Speed",
+	"eternalfloette": "Floette-Eternal-Flower",
 	"giratinao": "Giratina-Origin",
 	"gourgeisthuge": "Gourgeist-Super",
 	"hoopau": "Hoopa-Unbound",
@@ -146,6 +154,7 @@ exports.BattleAliases = {
 	"wormadams": "Wormadam-Trash",
 	"wormadamsteel": "Wormadam-Trash",
 	"floettee": "Floette-Eternal-Flower",
+	"floetteeternal": "Floette-Eternal-Flower",
 
 	// base formes
 	"nidoranfemale": "Nidoran-F",
@@ -212,8 +221,10 @@ exports.BattleAliases = {
 
 	// pokemon
 	"aboma": "Abomasnow",
+	"bliss": "Blissey",
 	"chomp": "Garchomp",
 	"cofag": "Cofagrigus",
+	"cress": "Cresselia",
 	"dnite": "Dragonite",
 	"don": "Groudon",
 	"dogars": "Koffing",
@@ -230,6 +241,7 @@ exports.BattleAliases = {
 	"landoi": "Landorus",
 	"landot": "Landorus-Therian",
 	"luke":  "Lucario",
+	"lurk": "Golurk",
 	"mence": "Salamence",
 	"obama": "Abomasnow",
 	"ogre": "Kyogre",
@@ -239,10 +251,12 @@ exports.BattleAliases = {
 	"poryz": "Porygon-Z",
 	"rank": "Reuniclus",
 	"smogon": "Koffing",
+	"skarm": "Skarmory",
 	"talon": "Talonflame",
 	"terra": "Terrakion",
 	"ttar": "Tyranitar",
 	"zam": "Alakazam",
+	"zard": "Charizard",
 	"ohmagod":"Plasmanta",
 
 	// moves
