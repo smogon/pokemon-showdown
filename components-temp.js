@@ -164,7 +164,7 @@ var components = exports.components = {
                     user.canTitle = true;
                     this.sendReply('You have purchased a user title. You may now use /title now.');
                     this.parse('/help title');
-                if (target.toLowerCase() === 'star') {
+                } else if (target.toLowerCase() === 'star') {
                     user.canStar = true;
                     this.sendReply('You have purchased a \u2606. You will have this until you log off for more than an hour. You may now use /star now.');
                     this.parse('/help star');
