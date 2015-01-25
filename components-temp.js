@@ -71,7 +71,7 @@ var components = exports.components = {
         if (!targetUser) {
             var userId = toId(target);
             var bp = Core.profile.bp(userId);
-            var tourWins = Core.profile.tournamentTourWins(userId);
+            var tourWins = Core.profile.tourWins(userId);
             var title = Core.profile.title(userId);
 
             if (tourWins === 0 && title === 0) {
@@ -87,7 +87,7 @@ var components = exports.components = {
         }
 
         var bp = Core.profile.bp(targetUser.userid);
-        var tourWins = Core.profile.tournamentTourWins(toId(targetUser.userid));
+        var tourWins = Core.profile.tourWins(toId(targetUser.userid));
         var title = Core.profile.title(targetUser.userid);
 
         if (tourWins === 0 && title === 0) {
