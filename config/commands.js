@@ -1035,7 +1035,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'almostanyability' || target === 'aaa') {
 			matched = true;
 			if (target !== 'all') buffer += "Pokémon can use any ability, barring the few that are banned.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3527128/\">Almost Any Ability</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3528058/\">Almost Any Ability</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517258/\">Almost Any Ability Viability Rankings</a><br />";
 		}
 		if (target === 'all' || target === 'stabmons') {
