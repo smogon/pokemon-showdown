@@ -206,10 +206,10 @@ var components = exports.components = {
 
         if (parts[1] > Number(userBP)) return this.sendReply('You cannot transfer more Battle Points than what you have.');
 
-        var b = 'bucks';
+        var b = 'battlepoints';
         var cleanedUp = parts[1].trim();
         var transferBP = Number(cleanedUp);
-        if (transferBP === 1) b = 'buck';
+        if (transferBP === 1) b = 'battlepoint';
 
         userBP = Number(userBP) - transferBP;
         targetBP = Number(targetBP) + transferBP;
@@ -409,10 +409,10 @@ var components = exports.components = {
         if (parts[1] < 1) return this.sendReply('You can\'t give less than 1 Battle Point at a time.');
         if (String(parts[1]).indexOf('.') >= 0) return this.sendReply('You cannot give Battle Points with decimals.');
 
-        var b = 'bucks';
+        var b = 'battlepoints';
         var cleanedUp = parts[1].trim();
         var giveBP = Number(cleanedUp);
-        if (giveBP === 1) b = 'buck';
+        if (giveBP === 1) b = 'battlepoint';
 
         var bp = Core.stdin('bp', targetUser.userid);
         var total = Number(bp) + Number(giveBP);
@@ -443,10 +443,10 @@ var components = exports.components = {
         if (parts[1] < 1) return this.sendReply('You can\'t take less than 1 Battle Point at a time.');
         if (String(parts[1]).indexOf('.') >= 0) return this.sendReply('You cannot take Battle Points with decimals.');
 
-        var b = 'bucks';
+        var b = 'battlepoints';
         var cleanedUp = parts[1].trim();
         var takeBP = Number(cleanedUp);
-        if (takeBP === 1) b = 'buck';
+        if (takeBP === 1) b = 'battlepoint';
 
         var bp = Core.stdin('bp', targetUser.userid);
         var total = Number(bp) - Number(takeBP);
