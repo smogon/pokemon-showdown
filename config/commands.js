@@ -1439,7 +1439,8 @@ var commands = exports.commands = {
 		);
 	},
 
-	roomreq: 'roomrequests',
+	rooms: 'roomrequests',
+	room: 'roomrequests',
 	roomrequest: 'roomrequests',
 	roomrequests: function (target, room, user) {
 		if (!this.canBroadcast()) return;
