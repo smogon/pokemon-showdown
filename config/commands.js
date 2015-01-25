@@ -889,6 +889,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"<b>~ Administrators</b><br />" +
+			"- abnegation (stranger)<br />" +
 			"- Ausaudriel (Audy)<br />" +
 			"- Forever (skylight)<br />" +
 			"- Hiroshi Sotomura (Sotomura, Sotomura606)<br />" +
@@ -896,25 +897,24 @@ var commands = exports.commands = {
 			"- Livewire<br />" +
 			"- Rukario (PPN)<br />" +
 			"- Sheep (Cirnysheep)<br />" +
-			"- stranger (Abnegation)<br />" +
 			"- shenanigans (razor leaf)<br />" +
 			"- wolf (wofl)<br />" +
 			"- Zeffy<br /><br />" +
 			"<b>@ Moderators</b><br />" +
 			"- Altairis (Winry)<br />" +
 			"- Antemortem<br />" +
+			"- apocalypseArisen (Megido, omicron, omicronhuh)<br />" +
 			"- Aslan<br />" +
+			"- Castform (Powalen)<br />" +
 			"- Christos<br />" +
 			"- Dragon (Aura Blackquill, Captain Syrup, Dragii, Iris, Kjelle, Miss Fortune, Mitsuruu, Nabooru, Tharja)<br />" +
 			"- Jin Of The Gale<br />" +
-			"- Omicron (Megido, omicronhuh)<br />" +
 			"- Peitharchia (Adrastia, nymph)<br />" +
-			"- Powalen<br />" +
 			"- Sanguine (Natalya)<br />" +
 			"- Sector (Milena Kunis)<br />" +
 			"- Sweep<br />" +
 			"- Synerjee (Alto Mare, Autumn Reverie)<br />" +
-			"- Vrai<br /><br />" +
+			"- Yoshikko (gloom)<br /><br />" +
 			"<a href=\"http://www.pokecommunity.com/showthread.php?t=289012#staff\">Click here for more details.</a>"
 		);
 	},
