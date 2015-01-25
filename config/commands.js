@@ -1439,6 +1439,15 @@ var commands = exports.commands = {
 		);
 	},
 
+	roomreq: 'roomrequests',
+	roomrequest: 'roomrequests',
+	roomrequests: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox(
+			"- <a href=\"http://www.pokecommunity.com/showthread.php?t=342086\">Room Requests & Guidelines</a>"
+		);
+	},
+
 	/*********************************************************
 	 * Miscellaneous commands
 	 *********************************************************/
