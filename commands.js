@@ -746,6 +746,37 @@ var commands = exports.commands = {
 	 * Moderating: Punishments
 	 *********************************************************/
 
+	k: 'kick',
+	kick: function (target, room, user) {
+		if (!target) return;
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser || !targetUser.connected) {
+			return this.sendReply("User " + this.targetUsername + " not found.");
+		}
+		if (!this.can('kick', targetUser, room)) return false;
+		var msg = "kicked by " + user.name + (target ? " (" + target + ")" : "") + ".";
+		this.addModCommand("" + targetUser.name + " was " + msg);
+		targetUser.popup("You have been " + msg);
+		targetUser.leaveRoom(room);
+	},
+
+	ck: 'customkick',
+	ckick: 'customkick',
+	customkick: function (target, room, user) {
+		if (!target) return;
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser || !targetUser.connected) {
+			return this.sendReply("User " + this.targetUsername + " not found.");
+		}
+		if (!this.can('kick', targetUser, room)) return false;
+		var msg = "(target ? " (" + target + ")" : "") + " by " + user.name + ".";
+		this.addModCommand("" + targetUser.name + " was " + msg);
+		targetUser.popup("You have been " + msg);
+		targetUser.leaveRoom(room);
+	},
+
 	warn: function (target, room, user) {
 		if (!target) return this.parse('/help warn');
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
