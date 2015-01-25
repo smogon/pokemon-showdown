@@ -115,6 +115,10 @@ var core = exports.core = {
             return Core.stdin('bp', user);
         },
 
+        tourWins: function (user) {
+            return Core.stdin('tourWins', user);
+        },
+
         display: function (args, info) {
             if (args === 'title') return '<br>&nbsp;<strong><font color="' + this.color + '">Title:</font></strong>&nbsp;' + info;
             if (args === 'bp') return '<br>&nbsp;<strong><font color="' + this.color + '">Battle Points:</font></strong>&nbsp;' + info;
