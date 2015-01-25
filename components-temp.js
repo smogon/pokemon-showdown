@@ -159,9 +159,6 @@ var components = exports.components = {
                     this.sendReply('If you do not want your \u2606 anymore, you may use /removestar to go back to your old symbol.');
                 } else {
                     this.sendReply('You have purchased ' + target + '. Please contact the admin "wolf" to get ' + target + '. Use the /tell command if wolf is offline (submit "/help tell" in the chat).');
-                    for (var u in Users.users) {
-                        if (Users.get(u).group === '~') Users.get(u).send('|pm|' + user.group + user.name + '|' + Users.get(u).group + Users.get(u).name + '|' + 'I have bought ' + target + ' from the shop.');
-                    }
                 }
                 room.add(user.name + ' has bought ' + target + ' from the shop.');
             }
