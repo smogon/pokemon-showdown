@@ -588,18 +588,20 @@ exports.BattleAbilities = {
 			pokemon.addVolatile('shadowtag');
 		},
 		effect: {
+			duration: 2,
 			onFoeModifyPokemon: function (pokemon) {
 				if (pokemon.ability !== 'shadowtag') {
 					pokemon.tryTrap(true);
 				}
 			}
 		},
+		onBeforeMovePriority: 15,
 		onBeforeMove: function (pokemon) {
 			pokemon.removeVolatile('shadowtag');
 		},
 		onFoeMaybeTrapPokemon: function (pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (pokemon.ability !== 'shadowtag' && !source.lastMove) {
+			if (pokemon.ability !== 'shadowtag' && !source.volatiles.shadowtag) {
 				pokemon.maybeTrapped = true;
 			}
 		}
