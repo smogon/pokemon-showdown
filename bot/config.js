@@ -66,7 +66,7 @@ exports.whitelist = ['PokeCommBot'];
 
 // Add a link to the help for the bot here. When there is a link here, .help and .guide
 // will link to it.
-exports.botguide = 'http://www.pokecommunity.com/showthread.php?t=289012#bot';
+exports.botguide = 'http://www.pokecommunity.com/showthread.php?t=289012#botguide';
 
 // This allows the bot to act as an automated moderator. If enabled, the bot will
 // mute users who send 6 lines or more in 6 or fewer seconds for 7 minutes. NOTE: THIS IS
