@@ -81,9 +81,9 @@ var components = exports.components = {
                 return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + '<br clear="all">');
             }
             if (title === 0) {
-                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins, Core.profile.rank(userId)) + '<br clear="all">');
+                return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + '<br clear="all">');
             }
-            return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins, Core.profile.rank(userId)) + '<br clear="all">');
+            return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + '<br clear="all">');
         }
 
         var bp = Core.profile.bp(targetUser.userid);
@@ -97,9 +97,9 @@ var components = exports.components = {
             return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + '<br clear="all">');
         }
         if (title === 0) {
-            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
+            return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + '<br clear="all">');
         }
-        return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins, Core.profile.rank(targetUser.userid)) + '<br clear="all">');
+        return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('title', title) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + '<br clear="all">');
     },
 
     settitle: 'title',
