@@ -168,7 +168,7 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Battle Spot Doubles",
+		name: "Battle Spot Doubles (VGC 2015)",
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
