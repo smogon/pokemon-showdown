@@ -230,6 +230,7 @@ var core = exports.core = {
 
     emoticons: {
         ':arceus:': 'http://cbc.pokecommunity.com/config/emoticons/arceus.png',
+        ':azelf:': 'http://cbc.pokecommunity.com/config/emoticons/azelf.png',
         ':bidoof:': 'http://cbc.pokecommunity.com/config/emoticons/bidoof.png',
         ':castform:': 'http://cbc.pokecommunity.com/config/emoticons/castform.png',
         ':charizard:': 'http://cbc.pokecommunity.com/config/emoticons/charizard.png',
@@ -237,6 +238,7 @@ var core = exports.core = {
         ':gav:': 'http://cbc.pokecommunity.com/config/emoticons/gav.png',
         ':hamster:': 'http://cbc.pokecommunity.com/config/emoticons/hamster.png',
         ':helix:': 'http://cbc.pokecommunity.com/config/emoticons/helix.png',
+        ':hug:': 'http://cbc.pokecommunity.com/config/emoticons/hug.gif',
         ':jigglypuff:': 'http://cbc.pokecommunity.com/config/emoticons/jigglypuff.png',
         ':jynx:': 'http://cbc.pokecommunity.com/config/emoticons/jynx.png',
         ':kappa:': 'http://cbc.pokecommunity.com/config/emoticons/kappa.png',
@@ -247,9 +249,10 @@ var core = exports.core = {
         ':luvdisc:': 'http://cbc.pokecommunity.com/config/emoticons/luvdisc.png',
         ':magikarp:': 'http://cbc.pokecommunity.com/config/emoticons/magikarp.png',
         ':meganium:': 'http://cbc.pokecommunity.com/config/emoticons/meganium.png',
-        ':pyoshi:': 'http://cbc.pokecommunity.com/config/emoticons/pyoshi.png',
         ':pjsalt:': 'http://cbc.pokecommunity.com/config/emoticons/pjsalt.png',
+        ':potato:': 'http://cbc.pokecommunity.com/config/emoticons/potato.png',
         ':psyduck:': 'http://cbc.pokecommunity.com/config/emoticons/psyduck.png',
+        ':pyoshi:': 'http://cbc.pokecommunity.com/config/emoticons/pyoshi.png',
         ':slowpoke:': 'http://cbc.pokecommunity.com/config/emoticons/slowpoke.png',
         ':snorlax:': 'http://cbc.pokecommunity.com/config/emoticons/snorlax.png',
         ':spheal:': 'http://cbc.pokecommunity.com/config/emoticons/spheal.png',
