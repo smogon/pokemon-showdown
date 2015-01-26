@@ -27,10 +27,6 @@ Users.User.prototype.getIdentity = function (roomid) {
 	return name;
 };
 
-const messages = [
-	"blew up"
-];
-
 var commands = exports.commands = {
 
 	version: function (target, room, user) {
