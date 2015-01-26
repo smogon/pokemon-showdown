@@ -1844,6 +1844,8 @@ var commands = exports.commands = {
 			this.sendReply("/privateroom [on/off] - Makes or unmakes a room private. Requires: ~");
 			this.sendReply("/hiddenroom [on/off] - Makes or unmakes a room hidden. Hidden rooms will maintain global ranks of users. Requires: \u2605 ~");
 		}
+		
+		// other
 		if (target === 'all' || target === 'tell') {
 			matched = true;
 			this.sendReply('/tell [user], [message] - Leaves a message for the specified user that will be received when they next talk.');
@@ -1851,6 +1853,94 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'en' || target === 'eng') {
 			matched = true;
 			this.sendReply('/en - Leaves a warning for foreign speakers.');
+		}
+		if (target === 'all' || target === 'profile') {
+			matched = true;
+			this.sendReply("/profile [username] - Shows infomation about the user.");
+		}
+		if (target === 'all' || target === 'about' || target === 'setabout') {
+			matched = true;
+			this.sendReply("/about [information] - Set a description about you for your profile.");
+		}
+		if (target === 'all' || target === 'transfermoney' || target === 'transferbuck' || target === 'transferbucks') {
+			matched = true;
+			this.sendReply("/transfermoney [username], [amount] - Transfer a certain amount of money to another user.");
+		}
+		if (target === 'all' || target === 'buy') {
+			matched = true;
+			this.sendReply("/buy [command] - Buys something from the shop.");
+		}
+		if (target === 'all' || target === 'poll') {
+			matched = true;
+			this.sendReply("/poll [question], [option], [option], etc. - Creates a poll.");
+		}
+		if (target === 'all' || target === 'vote') {
+			matched = true;
+			this.sendReply("/vote [option] - votes for the specified option in the poll.");
+		}
+		if (target === 'all' || target === 'regdate') {
+			matched = true;
+			this.sendReply("/regdate [username] - Shows registeration date of a user.");
+		}
+		if (target === 'all' || target === 'pmall' || target === 'masspm') {
+			matched = true;
+			this.sendReply("/pmall [message] - Sends a message to all users in the server.");
+		}
+		if (target === 'all' || target === 'rmall') {
+			matched = true;
+			this.sendReply("/rmall [message] - Sends a message to all users in a room.");
+		}
+		if (target === 'all' || target === 'tell') {
+			matched = true;
+			this.sendReply("/tell [username], [message] - Tells a message to a user.");
+		}
+		if (target === 'all' || target === 'customsymbol') {
+			matched = true;
+			this.sendReply("/customsymbol [symbol] - Changes your symbol (usergroup) to the specified symbol. The symbol can only be one character.");
+		}
+		if (target === 'all' || target === 'urbandefine' || target === 'ud') {
+			matched = true;
+			this.sendReply("/urbandefine [phrase] - Looks up this phrase on urbandictionary.com.");
+		}
+		if (target === 'all' || target === 'define' || target === 'def') {
+			matched = true;
+			this.sendReply("/define [word] - Looks up this word on the internet.");
+		}
+		if (target === 'all' || target === 'emoticon' || target === 'emoticons') {
+			matched = true;
+			this.sendReply("/emoticons - Displays all emoticons available.");
+		}
+		if (target === '~' || target === 'givemoney' || target === 'givebuck' || target === 'givebucks') {
+			matched = true;
+			this.sendReply("/givemoney [username], [amount] - Gives money to a user. Requires: ~");
+		}
+		if (target === '~' || target === 'takemoney' || target === 'takebuck' || target === 'takebucks') {
+			matched = true;
+			this.sendReply("/takemoney [username], [amount] - Takes money from a user. Requires: ~");
+		}
+		if (target === '~' || target === 'sudo') {
+			matched = true;
+			this.sendReply("/sudo [username], [message/command] - Makes another player perform a command (or speak) as if they typed it in the chat box themselves. Requires: ~");
+		}
+		if (target === '~' || target === 'kick') {
+			matched = true;
+			this.sendReply("/kick [username] - Kicks a username from the room. Requires: ~");
+		}
+		if (target === '~' || target === 'control') {
+			matched = true;
+			this.sendReply("/control [username], [say/pm], [message/user that you want to pm to], [pm message] - Controls what the user says and pm. Requires: ~");
+		}
+		if (target === '~' || target === 'controlpanel' || target === 'cp') {
+			matched = true;
+			this.sendReply("/controlpanel - Displays settings to be editted by adminstration. Requires: ~");
+		}
+		if (target === '~' || target === 'clearall') {
+			matched = true;
+			this.sendReply("/clearall - Clears all messages in the room. Requires: ~");
+		}
+		if (target === '~' || target === 'roomlist') {
+			matched = true;
+			this.sendReply("/roomlist - Display all rooms. Requires: ~");
 		}
 
 		// overall
