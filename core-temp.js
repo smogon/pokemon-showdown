@@ -120,7 +120,7 @@ var core = exports.core = {
         },
 
         display: function (args, info) {
-            if (args === 'title') return '<br>&nbsp;<strong><font color="' + this.color + '">Title:</font></strong>&nbsp;' + info;
+            if (args === 'title') return '<strong><font size="4">&nbsp;' + info + '</font></strong><br>';
             if (args === 'bp') return '<br>&nbsp;<strong><font color="' + this.color + '">Battle Points:</font></strong>&nbsp;' + info;
             if (args === 'tourWins') return '<br>&nbsp;<strong><font color="' + this.color + '">Tournament Wins:</font></strong>&nbsp;' + info;
         },
