@@ -27,10 +27,6 @@ Users.User.prototype.getIdentity = function (roomid) {
 	return name;
 };
 
-const messages = [
-	"blew up"
-];
-
 var commands = exports.commands = {
 
 	version: function (target, room, user) {
@@ -746,25 +742,25 @@ var commands = exports.commands = {
 		this.sendReply("You are " + (user.isAway ? "now" : "no longer") + " away.");
 	},
 
-	d: 'poof',
+	dc: 'poof',
+	disconnect: 'poof',
+	disconnected: 'poof',
 	cpoof: 'poof',
 	poof: function (target, room, user) {
 		if (Config.poofOff) return this.sendReply("Poof is currently disabled.");
 		if (target && !this.can('broadcast')) return false;
-		if (room.id !== 'lobby') return false;
-		var message = target || messages[Math.floor(Math.random() * messages.length)];
-		if (message.indexOf('{{user}}') < 0)
-			message = '{{user}} ' + message;
-		message = message.replace(/{{user}}/g, user.name);
 		if (!this.canTalk(message)) return false;
+		if (user.name === 'wolf') {
+			var message = "howled to the moon.";
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
 
-		var colour = '#' + [1, 1, 1].map(function () {
-			var part = Math.floor(Math.random() * 0xaa);
-			return (part < 0x10 ? '0' : '') + part.toString(16);
-		}).join('');
-
-		room.addRaw(Tools.escapeHTML(message));
-		user.disconnectAll();
+			room.addRaw(Tools.escapeHTML(message));
+			user.disconnectAll();
+		} else {
+		return false;
+		}
 	},
 
 	poofoff: 'nopoof',

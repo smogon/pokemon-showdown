@@ -544,14 +544,14 @@ var components = exports.components = {
 
     tierpoll: function (target, room, user) {
         if (!this.can('broadcast')) return;
-        this.parse('/poll Tournament tier?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
+        this.parse('/poll Tournament format?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
     },
 
     tournamentpoll: 'tourpoll',
     tourneypoll: 'tourpoll',
     tourpoll: function (target, room, user) {
         if (!this.can('poll', null, room)) return false;
-        this.parse('/poll Tournament tier?, ou, ubers, uu, ru, nu, lc, monotype, random, 1v1 random, uber random, high tier random, low tier random, lc random, monotype random, hoenn random, hoenn weather random, super smash bros. random, winter wonderland, community random, furry random, metronome 3v3 random, metronome 6v6 random, doubles random, triples random, [gen 1] random');
+        this.parse('/poll Tournament format?, ou, ubers, uu, ru, nu, lc, monotype, random, 1v1 random, uber random, high tier random, low tier random, lc random, monotype random, hoenn random, hoenn weather random, super smash bros. random, winter wonderland, community random, furry random, metronome 3v3 random, metronome 6v6 random, doubles random, triples random, [gen 1] random');
     },
 
     endpoll: function (target, room, user) {
