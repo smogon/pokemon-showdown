@@ -366,6 +366,14 @@ exports.customavatars = {
 	'thjoker': 'thjoker.jpg',
 	'clownjoker': 'thjoker.jpg',
 	'asunaxkirito': 'asunaxkirito.png',
+	'allianceazelea': 'allianceazelea.png',
+	'pcho': 'pcho.jpg',
+	'allianceghast': 'allianceghast.jpg',
+	'alliancemystle': 'alliancemystle.png',
+	'mystletaynn': 'alliancemystle.png',
+	'alliancelemon': 'alliancelemon.png',
+	'allianclemn': 'alliancelemon.png',
+	'alliancespook': 'alliancespook.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
