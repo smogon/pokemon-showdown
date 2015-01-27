@@ -27,6 +27,11 @@ Users.User.prototype.getIdentity = function (roomid) {
 	return name;
 };
 
+const wolf = [
+	"howled to the moon."
+	"ran off into a forest."
+];
+
 var commands = exports.commands = {
 
 	version: function (target, room, user) {
@@ -751,7 +756,7 @@ var commands = exports.commands = {
 		if (target && !this.can('broadcast')) return false;
 		if (!this.canTalk(message)) return false;
 		if (user.name === 'wolf') {
-			var message = "howled to the moon.";
+			var message = target || wolf[Math.floor(Math.random() * wolf.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
 			message = message.replace(/{{user}}/g, user.name);
@@ -759,7 +764,7 @@ var commands = exports.commands = {
 			room.addRaw(Tools.escapeHTML(message));
 			user.disconnectAll();
 		} else {
-		return false;
+			user.disconnectAll();
 		}
 	},
 
