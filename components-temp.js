@@ -777,10 +777,6 @@ var components = exports.components = {
 			CommandParser.uncacheTree(path.join(__dirname, './', 'command-parser.js'));
 			CommandParser = require(path.join(__dirname, './', 'command-parser.js'));
 
-			this.sendReply('Reloading Bot...');
-			CommandParser.uncacheTree(path.join(__dirname, './', 'bot.js'));
-			Bot = require(path.join(__dirname, './', 'bot.js'));
-
 			this.sendReply('Reloading Tournaments...');
 			var runningTournaments = Tournaments.tournaments;
 			CommandParser.uncacheTree(path.join(__dirname, './', './tournaments/index.js'));
@@ -794,10 +790,6 @@ var components = exports.components = {
 			this.sendReply('Reloading Components...');
 			CommandParser.uncacheTree(path.join(__dirname, './', './components.js'));
 			Components = require(path.join(__dirname, './', './components.js'));
-
-			this.sendReply('Reloading SysopAccess...');
-			CommandParser.uncacheTree(path.join(__dirname, './', './core.js'));
-			SysopAccess = require(path.join(__dirname, './', './core.js'));
 
 			return this.sendReply('|raw|<font color="green">All files have been reloaded.</font>');
 		} catch (e) {
