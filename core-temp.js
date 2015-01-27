@@ -165,7 +165,7 @@ var core = exports.core = {
 			['Star', 'Buy a \u2606 to go in front of your name and puts you at the top of the user list. (Temporary until server restart.)', 10],
 			['Title', 'Buy a user title for your profile (Can be seen via "/profile username".)', 30],
 			['Poof', 'Buy a poof message to be added into the pool of possible poofs.', 50],
-			['Avatar', 'Buy a custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly.)', 90]
+			['Avatar', 'Buy a custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly.)', 70]
 		];
 
 		if (showDisplay === false) {
