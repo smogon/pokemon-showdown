@@ -181,6 +181,7 @@ var LotteryGiveAway = (function () {
 	LotteryGiveAway.prototype.addUser = function (user, output) {
 		if (this.phase !== 'joining') return output.sendReply("The join phase of the lottery giveaway has not started yet.");
 
+		if (!user.authenticated) return output.sendReply("You need to choose a name before joining a lottery giveaway.");
 		var joinError = checkAllAlts(user, this.joined);
 		if (joinError) return output.sendReply("You have already joined the giveaway under the " + joinError + ". Use that alt/account to continue.");
 		joinError = checkAllAlts(user, this.excluded) || (user.userid in this.excluded);
