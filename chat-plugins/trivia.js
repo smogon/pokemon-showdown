@@ -686,7 +686,7 @@ var commands = {
 			this.sendReplyBox('<strong>/triviahelp topics:</strong><br />' +
 			                  '- /trivia help ginfo - information about trivia game modes, categories, and lengths<br />' +
 			                  '- /trivia help gcommands - information about commands used to participate in trivia games<br />' +
-			                  '- /trivia help qcommands - information about commands used for the question submission system<br />') +
+			                  '- /trivia help qcommands - information about commands used for the question submission system<br />' +
 			                  '- /trivia help icommands - information about informational commands, such as this one');
 			break;
 		}
