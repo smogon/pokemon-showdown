@@ -275,7 +275,11 @@ exports.BattleScripts = {
 		damage = this.tryMoveHit(target, pokemon, move);
 
 		// Store 0 damage for last damage if move failed or dealt 0 damage.
-		if (!damage) pokemon.battle.lastDamage = 0;
+		// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
+		if (!damage && (move.category === 'Status' && !(move.status in {'psn':1, 'tox':1, 'par':1})) &&
+		!(move.id in {'conversion':1, 'haze':1, 'mist':1, 'focusenergy':1, 'confuseray':1, 'transform':1, 'lightscreen':1, 'reflect':1, 'substitute':1, 'mimic':1, 'leechseed':1, 'splash':1, 'softboiled':1, 'recover':1, 'rest':1})) {
+			pokemon.battle.lastDamage = 0;
+		}
 
 		// Go ahead with results of the used move.
 		if (!damage && damage !== 0) {
