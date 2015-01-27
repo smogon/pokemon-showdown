@@ -358,7 +358,7 @@ var Trivia = (function () {
 var commands = {
 	// trivia game commands
 	new: function (target, room) {
-		if (room.id !== 'trivia' || !this.can('broadcast', null, room) || !target) return false;
+		if (room.id !== 'lobby' || !this.can('broadcast', null, room) || !target) return false;
 		if (trivia[room.id]) return this.sendReply('There is already a trivia game in progress.');
 
 		target = target.split(',');
@@ -378,31 +378,31 @@ var commands = {
 			    'Mode: ' + mode + ' | Category: ' + category + ' | Score cap: ' + cap + '</div>');
 	},
 	join: function (target, room, user) {
-		if (room.id !== 'trivia') return false;
+		if (room.id !== 'lobby') return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply('There is no trivia game in progress.');
 		trivium.addParticipant(user, this);
 	},
 	start: function (target, room) {
-		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
+		if (room.id !== 'lobby' || !this.can('broadcast', null, room)) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply('There is no trivia game to start.');
 		trivium.startGame(this);
 	},
 	kick: function (target, room) {
-		if (room.id !== 'trivia' || !this.can('mute', null, room) || !target) return false;
+		if (room.id !== 'lobby' || !this.can('mute', null, room) || !target) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply('There is no trivia game in progress.');
 		trivium.kickParticipant(target, this);
 	},
 	answer: function (target, room, user) {
-		if (room.id !== 'trivia' || !target) return false;
+		if (room.id !== 'lobby' || !target) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply('There is no trivia game in progress.');
 		trivium.answerQuestion(target, user, this);
 	},
 	end: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
+		if (room.id !== 'lobby' || !this.can('broadcast', null, room)) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply('There is no trivia game in progress.');
 		trivium.endGame(user, this);
@@ -411,7 +411,7 @@ var commands = {
 	// question database modifying commands
 	submit: 'add',
 	add: function (target, room, user, connection, cmd) {
-		if (room.id !== 'questionworkshop' || (cmd === 'triviaadd' && !this.can('mute', null, room)) || !target) return false;
+		if (room.id !== 'lobby' || (cmd === 'triviaadd' && !this.can('mute', null, room)) || !target) return false;
 
 		target = target.split('|');
 		if (target.length !== 3) return this.sendReply('Invalid arguments specified. View /trivia help qcommands for more information.');
@@ -464,7 +464,7 @@ var commands = {
 		}
 	},
 	review: function (target, room) {
-		if (room.id !== 'questionworkshop' || !this.can('mute', null, room)) return false;
+		if (room.id !== 'lobby' || !this.can('mute', null, room)) return false;
 
 		var submissions = triviaData.submissions;
 		var submissionsLen = submissions.length;
@@ -486,7 +486,7 @@ var commands = {
 	},
 	reject: 'accept',
 	accept: function (target, room, user, connection, cmd) {
-		if (room.id !== 'questionworkshop' || !this.can('mute', null, room) || !target) return false;
+		if (room.id !== 'lobby' || !this.can('mute', null, room) || !target) return false;
 
 		var isAccepting = cmd === 'accept';
 		var submissions = triviaData.submissions;
@@ -550,7 +550,7 @@ var commands = {
 		this.sendReply('"' + target + '" is an invalid argument. View /trivia help qcommands for more information.');
 	},
 	delete: function (target, room) {
-		if (room.id !== 'questionworkshop' || !this.can('mute', null, room) || !target) return false;
+		if (room.id !== 'lobby' || !this.can('mute', null, room) || !target) return false;
 
 		var question = Tools.escapeHTML(target).trim();
 		if (!question) return this.sendReply('"' + target.trim() + '" is not a valid question.');
@@ -566,7 +566,7 @@ var commands = {
 		this.sendReply('Question "' + target.trim() + '" was not found in the question database.');
 	},
 	qs: function (target, room, user) {
-		if (room.id !== 'questionworkshop' || !this.can('mute', null, room)) return false;
+		if (room.id !== 'lobby' || !this.can('mute', null, room)) return false;
 		if (!target) return this.sendReply('/trivia qs requires a specified category. View /trivia help gamehelp for more information.');
 
 		var category = toId(target);
@@ -604,19 +604,19 @@ var commands = {
 	// informational commands
 	'': 'status',
 	status: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.canBroadcast()) return false;
+		if (room.id !== 'lobby' || !this.canBroadcast()) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReplyBox('There is no trivia game in progress.');
 		trivium.getStatus(user, this);
 	},
 	players: function (target, room) {
-		if (room.id !== 'trivia' || !this.canBroadcast()) return false;
+		if (room.id !== 'lobby' || !this.canBroadcast()) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReplyBox('There is no trivia game in progress.');
 		trivium.getParticipants(this);
 	},
 	rank: function (target, room, user) {
-		if (room.id !== 'trivia') return false;
+		if (room.id !== 'lobby') return false;
 
 		var userid = '';
 		var username = '';
@@ -641,11 +641,6 @@ var commands = {
 		if (!this.canBroadcast()) return false;
 
 		target = toId(target);
-		if (room.id === 'trivia') {
-			if (target === 'qcommands') target = '';
-		} else {
-			if (room.id !== 'questionworkshop') return false;
-		}
 
 		switch (target) {
 		case 'ginfo':
@@ -701,7 +696,7 @@ var commands = {
 // Rooms should never be undefined, since the require for rooms.js, during
 // which the rooms list is loaded from disk once rooms.global is constructed,
 // is executed before the require for this plugin in command-parser.js
-var triviaRoom = Rooms.get('trivia');
+var triviaRoom = Rooms.get('lobby');
 if (triviaRoom) {
 	if (triviaRoom.plugin) {
 		triviaData = triviaRoom.plugin.data;
@@ -712,7 +707,7 @@ if (triviaRoom) {
 			write: writeTriviaData,
 			trivia: trivia
 		};
-		var questionWorkshop = Rooms.get('questionworkshop');
+		var questionWorkshop = Rooms.get('lobby');
 		if (questionWorkshop) questionWorkshop.plugin = triviaRoom.plugin;
 	}
 }
