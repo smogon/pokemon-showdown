@@ -276,7 +276,7 @@ var Trivia = (function () {
 		output.sendReplyBox(buffer);
 	};
 	Trivia.prototype.addParticipant = function (user, output) {
-		if (this.phase !== 'signup') return output.sendReply('There if no trivia game in its signup phase.');
+		if (this.phase !== 'signup') return output.sendReply('There is no trivia game in its signup phase.');
 
 		var userid = user.userid;
 		if (this.participants[userid]) return output.sendReply('You have already signed up for this trivia game.');
@@ -411,7 +411,7 @@ var commands = {
 	// question database modifying commands
 	submit: 'add',
 	add: function (target, room, user, connection, cmd) {
-		if (room.id !== 'questionworkshop' || cmd === 'triviaadd' && !this.can('mute', null, room) || !target) return false;
+		if (room.id !== 'questionworkshop' || (cmd === 'triviaadd' && !this.can('mute', null, room)) || !target) return false;
 
 		target = target.split('|');
 		if (target.length !== 3) return this.sendReply('Invalid arguments specified. View /trivia help qcommands for more information.');
