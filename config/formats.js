@@ -6,14 +6,14 @@ exports.Formats = [
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/*{
 		name: "[Gen 1] Random (BWknd 25)",
 		section: "ORAS Singles",
 
 		mod: 'gen1',
 		team: 'random',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod']
-	},
+	},*/
 	{
 		name: "OU",
 		section: "ORAS Singles",
