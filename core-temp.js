@@ -66,7 +66,7 @@ var core = exports.core = {
 
 	profile: {
 
-		color: '#230d26',
+		color: '#2ECC40',
 
 		avatarurl: 'http://cbc.pokecommunity.com/config',
 
