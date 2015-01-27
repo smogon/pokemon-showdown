@@ -80,10 +80,13 @@ exports.BattleStatuses = {
 			}
 			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
 		},
-		onAfterSwitchInSelf: function (pokemon) {
+		onSwitchIn: function (pokemon) {
+			// Regular poison status and damage after a switchout -> switchin.
 			this.effectData.stage = 0;
 			pokemon.setStatus('psn');
-			this.damage(pokemon.maxhp / 8);
+		},
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		}
 	},
 	confusion: {
