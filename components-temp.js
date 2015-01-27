@@ -94,7 +94,7 @@ var components = exports.components = {
 	title: function (target, room, user) {
 		if (!target) return this.parse('/help title');
 		if (!user.canTitle) return this.sendReply('You need to buy this item from the shop to use.');
-		if (target.length > 60) return this.sendReply('Title cannot be over 60 characters.');
+		if (target.length > 30) return this.sendReply('Title cannot be over 30 characters.');
 
 		var now = Date.now();
 
