@@ -423,3 +423,5 @@ global.Core = require('./core.js').core;
 global.Components = require('./components.js');
 
 global.Poll = require('./core.js').core.poll();
+
+global.Poof = require('./poof.js');
