@@ -391,22 +391,8 @@ Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.TeamValidator = require('./team-validator.js');
 
-// load ipbans at our leisure
-fs.readFile('./config/ipbans.txt', function (err, data) {
-	if (err) return;
-	data = ('' + data).split("\n");
-	var rangebans = [];
-	for (var i = 0; i < data.length; i++) {
-		data[i] = data[i].split('#')[0].trim();
-		if (!data[i]) continue;
-		if (data[i].indexOf('/') >= 0) {
-			rangebans.push(data[i]);
-		} else if (!Users.bannedIps[data[i]]) {
-			Users.bannedIps[data[i]] = '#ipban';
-		}
-	}
-	Users.checkRangeBanned = Cidr.checker(rangebans);
-});
+// load locks and bans at our leisure
+Users.importLocksBans();
 
 /*********************************************************
  * Start up the REPL server
