@@ -760,7 +760,7 @@ var commands = {
 	}
 };
 
-var jeopardyRoom = Rooms.get('academics');
+var jeopardyRoom = Rooms.get('lobby');
 if (jeopardyRoom) {
 	if (jeopardyRoom.plugin) {
 		jeopardies = jeopardyRoom.plugin.jeopardies;
