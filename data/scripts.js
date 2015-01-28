@@ -1155,6 +1155,9 @@ exports.BattleScripts = {
 				case 'shadowforce': case 'phantomforce': case 'shadowsneak':
 					if (hasMove['shadowclaw']) rejected = true;
 					break;
+				case 'shadowclaw':
+					if (hasMove['shadowball']) rejected = true;
+					break;
 				case 'ironhead':
 					if (hasMove['flashcannon']) rejected = true;
 					break;
