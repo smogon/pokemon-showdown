@@ -20,8 +20,9 @@ function fixSingleChildNode(parentNode) {
 	}
 
 	var value = parentNode.getValue();
-	for (var key in value)
+	for (var key in value) {
 		delete value[key];
+	}
 	Object.merge(value, parentNode.removeChildAt(0).getValue());
 	return parentNode;
 }
@@ -29,35 +30,34 @@ function fixSingleChildNode(parentNode) {
 var Elimination = (function () {
 	function Elimination(maxSubtrees) {
 		maxSubtrees = maxSubtrees || 1;
-		if (typeof maxSubtrees === 'string' && maxSubtrees.toLowerCase() === 'infinity')
+		if (typeof maxSubtrees === 'string' && maxSubtrees.toLowerCase() === 'infinity') {
 			maxSubtrees = Infinity;
-		else if (typeof maxSubtrees !== 'number')
+		} else if (typeof maxSubtrees !== 'number') {
 			maxSubtrees = parseInt(maxSubtrees, 10);
-		if (!maxSubtrees || maxSubtrees < 1)
-			maxSubtrees = 1;
+		}
+		if (!maxSubtrees || maxSubtrees < 1) maxSubtrees = 1;
 
 		this.maxSubtrees = maxSubtrees;
 		this.isBracketFrozen = false;
 		this.tree = null;
 		this.users = new Map();
 
-		if (nameMap[maxSubtrees])
+		if (nameMap[maxSubtrees]) {
 			this.name = nameMap[maxSubtrees] + " " + this.name;
-		else if (maxSubtrees === Infinity)
+		} else if (maxSubtrees === Infinity) {
 			this.name = "N-" + this.name;
-		else
+		} else {
 			this.name = maxSubtrees + "-tuple " + this.name;
+		}
 	}
 
 	Elimination.prototype.name = "Elimination";
 	Elimination.prototype.isDrawingSupported = false;
 
 	Elimination.prototype.addUser = function (user) {
-		if (this.isBracketFrozen)
-			return 'BracketFrozen';
+		if (this.isBracketFrozen) return 'BracketFrozen';
 
-		if (this.users.has(user))
-			return 'UserAlreadyAdded';
+		if (this.users.has(user)) return 'UserAlreadyAdded';
 		this.users.set(user, {});
 
 		if (!this.tree) {
@@ -88,23 +88,22 @@ var Elimination = (function () {
 		}
 	};
 	Elimination.prototype.removeUser = function (user) {
-		if (this.isBracketFrozen)
-			return 'BracketFrozen';
+		if (this.isBracketFrozen) return 'BracketFrozen';
 
-		if (!this.users.has(user))
-			return 'UserNotAdded';
+		if (!this.users.has(user)) return 'UserNotAdded';
 		this.users.delete(user);
 
 		var targetNode;
-		for (var n = 0; n < this.tree.currentLayerLeafNodes.length && !targetNode; ++n)
+		for (var n = 0; n < this.tree.currentLayerLeafNodes.length && !targetNode; ++n) {
 			if (this.tree.currentLayerLeafNodes[n].getValue().user === user) {
 				targetNode = this.tree.currentLayerLeafNodes[n];
 				this.tree.currentLayerLeafNodes.splice(n, 1);
 			}
+		}
 		if (targetNode) {
-			if (this.users.size === 0)
+			if (this.users.size === 0) {
 				this.tree = null;
-			else if (this.tree.nextLayerLeafNodes.length === 0) {
+			} else if (this.tree.nextLayerLeafNodes.length === 0) {
 				this.tree.nextLayerLeafNodes = this.tree.currentLayerLeafNodes;
 
 				var parentNode = targetNode.getParent();
@@ -125,33 +124,36 @@ var Elimination = (function () {
 			return;
 		}
 
-		for (var n = 0; n < this.tree.nextLayerLeafNodes.length && !targetNode; ++n)
+		for (var n = 0; n < this.tree.nextLayerLeafNodes.length && !targetNode; ++n) {
 			if (this.tree.nextLayerLeafNodes[n].getValue().user === user) {
 				targetNode = this.tree.nextLayerLeafNodes[n];
 				this.tree.nextLayerLeafNodes.splice(n, 1);
 			}
+		}
 		var parentNode = targetNode.getParent();
 		parentNode.removeChild(targetNode);
 		this.tree.nextLayerLeafNodes.splice(this.tree.nextLayerLeafNodes.indexOf(parentNode.getChildAt(0)), 1);
 		this.tree.currentLayerLeafNodes.push(fixSingleChildNode(parentNode));
 	};
 	Elimination.prototype.replaceUser = function (user, replacementUser) {
-		if (!this.users.has(user))
-			return 'UserNotAdded';
+		if (!this.users.has(user)) return 'UserNotAdded';
 
-		if (this.users.has(replacementUser))
-			return 'UserAlreadyAdded';
+		if (this.users.has(replacementUser)) return 'UserAlreadyAdded';
 
 		this.users.delete(user);
 		this.users.set(user, {});
 
 		var targetNode;
-		for (var n = 0; n < this.tree.currentLayerLeafNodes.length && !targetNode; ++n)
-			if (this.tree.currentLayerLeafNodes[n].getValue().user === user)
+		for (var n = 0; n < this.tree.currentLayerLeafNodes.length && !targetNode; ++n) {
+			if (this.tree.currentLayerLeafNodes[n].getValue().user === user) {
 				targetNode = this.tree.currentLayerLeafNodes[n];
-		for (var n = 0; n < this.tree.nextLayerLeafNodes.length && !targetNode; ++n)
-			if (this.tree.nextLayerLeafNodes[n].getValue().user === user)
+			}
+		}
+		for (var n = 0; n < this.tree.nextLayerLeafNodes.length && !targetNode; ++n) {
+			if (this.tree.nextLayerLeafNodes[n].getValue().user === user) {
 				targetNode = this.tree.nextLayerLeafNodes[n];
+			}
+		}
 		targetNode.getValue().user = replacementUser;
 	};
 	Elimination.prototype.getUsers = function (remaining) {
@@ -174,9 +176,9 @@ var Elimination = (function () {
 				frame.toNode.children.push(node);
 
 				var fromNodeValues = frame.fromNode.getValue();
-				if (frame.fromNode.isLeaf())
+				if (frame.fromNode.isLeaf()) {
 					node.team = fromNodeValues.user || null;
-				else {
+				} else {
 					node.state = fromNodeValues.state || 'unavailable';
 					if (node.state === 'finished') {
 						node.team = fromNodeValues.user;
@@ -210,11 +212,9 @@ var Elimination = (function () {
 			var queue = [{node: this.tree.tree, depth: 0}];
 			while (queue.length > 0) {
 				var frame = queue.shift();
-				if (frame.node.isLeaf() || frame.node.getValue().onLoseNode)
-					continue;
+				if (frame.node.isLeaf() || frame.node.getValue().onLoseNode) continue;
 
-				if (!matchesByDepth[frame.depth])
-					matchesByDepth[frame.depth] = [];
+				if (!matchesByDepth[frame.depth]) matchesByDepth[frame.depth] = [];
 				matchesByDepth[frame.depth].push(frame.node);
 
 				queue.push({node: frame.node.getChildAt(0), depth: frame.depth + 1});
@@ -229,8 +229,7 @@ var Elimination = (function () {
 			newTree.currentLayerLeafNodes.push(newTree.tree);
 
 			for (var m in matchesByDepth) {
-				if (m === '0')
-					continue;
+				if (m === '0') continue;
 				var n = 0;
 				for (; n < matchesByDepth[m].length - 1; n += 2) {
 					// Replace old leaf with:
@@ -294,11 +293,9 @@ var Elimination = (function () {
 	};
 
 	Elimination.prototype.disqualifyUser = function (user) {
-		if (!this.isBracketFrozen)
-			return 'BracketNotFrozen';
+		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		if (!this.users.has(user))
-			return 'UserNotAdded';
+		if (!this.users.has(user)) return 'UserNotAdded';
 
 		this.users.get(user).isDisqualified = true;
 
@@ -306,7 +303,7 @@ var Elimination = (function () {
 		var match = null;
 		var result;
 		this.tree.tree.traverse(function (node) {
-			if (node.getValue().state === 'available')
+			if (node.getValue().state === 'available') {
 				if (node.getChildAt(0).getValue().user === user) {
 					match = [user, node.getChildAt(1).getValue().user];
 					result = 'loss';
@@ -314,43 +311,41 @@ var Elimination = (function () {
 					match = [node.getChildAt(0).getValue().user, user];
 					result = 'win';
 				}
+			}
 
 			return !match;
 		});
 		if (match) {
 			var error = this.setMatchResult(match, result);
-			if (error)
+			if (error) {
 				throw new Error("Unexpected " + error + " from setMatchResult([" + match.join(", ") + "], " + result + ")");
+			}
 		}
 	};
 	Elimination.prototype.getUserBusy = function (user) {
-		if (!this.isBracketFrozen)
-			return 'BracketNotFrozen';
+		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		if (!this.users.has(user))
-			return 'UserNotAdded';
+		if (!this.users.has(user)) return 'UserNotAdded';
 		return this.users.get(user).isBusy;
 	};
 	Elimination.prototype.setUserBusy = function (user, isBusy) {
-		if (!this.isBracketFrozen)
-			return 'BracketNotFrozen';
+		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		if (!this.users.has(user))
-			return 'UserNotAdded';
+		if (!this.users.has(user)) return 'UserNotAdded';
 		this.users.get(user).isBusy = isBusy;
 	};
 
 	Elimination.prototype.getAvailableMatches = function () {
-		if (!this.isBracketFrozen)
-			return 'BracketNotFrozen';
+		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		var matches = [];
 		this.tree.tree.traverse(function (node) {
 			if (node.getValue().state === 'available') {
 				var userA = node.getChildAt(0).getValue().user;
 				var userB = node.getChildAt(1).getValue().user;
-				if (!this.users.get(userA).isBusy && !this.users.get(userB).isBusy)
+				if (!this.users.get(userA).isBusy && !this.users.get(userB).isBusy) {
 					matches.push([userA, userB]);
+				}
 			}
 		}, this);
 		return matches;
@@ -366,8 +361,9 @@ var Elimination = (function () {
 		this.tree.tree.traverse(function (node) {
 			if (node.getValue().state === 'available' &&
 				node.getChildAt(0).getValue().user === match[0] &&
-				node.getChildAt(1).getValue().user === match[1])
+				node.getChildAt(1).getValue().user === match[1]) {
 				targetNode = node;
+			}
 			return !targetNode;
 		});
 		if (!targetNode) return 'InvalidMatch';
@@ -430,8 +426,9 @@ var Elimination = (function () {
 				else if (this.users.get(userB).isDisqualified)
 					error = this.setMatchResult([userA, userB], 'win');
 
-				if (error)
+				if (error) {
 					throw new Error("Unexpected " + error + " from setMatchResult([" + userA + ", " + userB + "], ...)");
+				}
 			}
 		}
 	};
@@ -441,20 +438,19 @@ var Elimination = (function () {
 	};
 
 	Elimination.prototype.getResults = function () {
-		if (!this.isTournamentEnded())
-			return 'TournamentNotEnded';
+		if (!this.isTournamentEnded()) return 'TournamentNotEnded';
 
 		var results = [];
 		var currentNode = this.tree.tree;
 		for (var n = 0; n < this.maxSubtrees; ++n) {
 			results.push([currentNode.getValue().user]);
 			currentNode = currentNode.getChildAt(currentNode.getValue().result === 'loss' ? 0 : 1);
-			if (!currentNode)
-				break;
+			if (!currentNode) break;
 		}
 
-		if (this.users.size - 1 === this.maxSubtrees && currentNode)
+		if (this.users.size - 1 === this.maxSubtrees && currentNode) {
 			results.push([currentNode.getValue().user]);
+		}
 
 		return results;
 	};
