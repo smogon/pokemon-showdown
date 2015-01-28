@@ -1230,6 +1230,12 @@ exports.BattleScripts = {
 						case 'growth':
 							if (hasMove['amnesia']) rejected = true;
 							break;
+						case 'supersonic':
+							if (hasMove['confuseray']) rejected = true;
+							break;
+						case 'poisonpowder':
+							if (hasMove['toxic']) rejected = true;
+							break;
 						} // End of switch for moveid
 					}
 					if (rejected && j < moveKeys.length) {
