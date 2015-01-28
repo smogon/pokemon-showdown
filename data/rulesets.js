@@ -370,7 +370,7 @@ exports.BattleFormats = {
 			var nameTable = {};
 			for (var i = 0; i < team.length; i++) {
 				var name = team[i].name;
-				if (name === team[i].species) continue;
+				if (!name) continue;
 				if (nameTable[name]) {
 					return ["Your Pokémon must have different nicknames.",  "(You have more than one " + name + ")"];
 				}
