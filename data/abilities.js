@@ -2296,21 +2296,14 @@ exports.BattleAbilities = {
 		num: 8
 	},
 	"sapsipper": {
-		desc: "This Pokemon is immune to Grass moves. If hit by a Grass move, its Attack is increased by one stage (once for each hit of Bullet Seed). Does not affect Aromatherapy, but the move will still trigger an Attack increase.",
+		desc: "This Pokemon is immune to Grass moves, including ally Aromatherapy. If hit by a Grass move, its Attack is increased by one stage (once for each hit of Bullet Seed).",
 		shortDesc: "This Pokemon's Attack is boosted by 1 if hit by any Grass move; Grass immunity.",
 		onTryHit: function (target, source, move) {
 			if (target !== source && move.type === 'Grass') {
-				if (!this.boost({atk:1})) {
+				if (target.isActive && !this.boost({atk:1})) {
 					this.add('-immune', target, '[msg]');
 				}
 				return null;
-			}
-		},
-		onAllyTryHitSide: function (target, source, move) {
-			if (target.side !== source.side) return;
-
-			if (move.type === 'Grass') {
-				this.boost({atk:1}, this.effectData.target);
 			}
 		},
 		id: "sapsipper",
@@ -2569,11 +2562,14 @@ exports.BattleAbilities = {
 		num: 116
 	},
 	"soundproof": {
-		desc: "This Pokemon is immune to the effects of sound-based moves, which are: Bug Buzz, Chatter, Echoed Voice, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Relic Song, Roar, Round, Screech, Sing, Snarl, Snore, Supersonic, and Uproar. This ability doesn't affect Heal Bell.",
-		shortDesc: "This Pokemon is immune to sound-based moves, except Heal Bell.",
+		desc: "This Pokemon is immune to the effects of sound-based moves, which are: Bug Buzz, Chatter, Echoed Voice, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Relic Song, Roar, Round, Screech, Sing, Snarl, Snore, Supersonic, and Uproar.",
+		shortDesc: "This Pokemon is immune to sound-based moves.",
 		onTryHit: function (target, source, move) {
-			if (target !== source && move.isSoundBased) {
-				this.add('-immune', target, '[msg]');
+			if (move.isSoundBased) {
+				if (target.isActive) {
+					// this condition should always happen, except for Heal Bell in Gen 4
+					this.add('-immune', target, '[msg]');
+				}
 				return null;
 			}
 		},

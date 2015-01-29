@@ -429,12 +429,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, distance: 1},
 		isSnatchable: true,
-		onHit: function (pokemon, source) {
-			var side = pokemon.side;
-			for (var i = 0; i < side.pokemon.length; i++) {
-				side.pokemon[i].status = '';
-			}
+		onTry: function (source) {
+			// should be replaced by a list of all the cured Pokémon
 			this.add('-cureteam', source, '[from] move: Aromatherapy');
+		},
+		onHit: function (pokemon, source) {
+			//pokemon.cureStatus();
+			pokemon.setStatus('');
 		},
 		target: "allyTeam",
 		type: "Grass"
@@ -5953,13 +5954,14 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, sound: 1, distance: 1, authentic: 1},
 		isSnatchable: true,
-		isSoundBased: true, // though it isn't affected by Soundproof
+		isSoundBased: true,
+		onTry: function (source) {
+			// should be replaced by a list of all the cured Pokémon
+			this.add('-cureteam', source, '[from] move: Heal Bell');
+		},
 		onHit: function (pokemon, source) {
-			var side = pokemon.side;
-			for (var i = 0; i < side.pokemon.length; i++) {
-				side.pokemon[i].status = '';
-			}
-			this.add('-cureteam', source, '[from] move: HealBell');
+			//pokemon.cureStatus()
+			pokemon.setStatus('');
 		},
 		target: "allyTeam",
 		type: "Normal"

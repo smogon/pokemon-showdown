@@ -43,7 +43,13 @@ exports.BattleAbilities = {
 	},
 	"sapsipper": {
 		inherit: true,
-		desc: "This Pokemon is immune to Grass moves. If hit by a Grass move, its Attack is increased by one stage (once for each hit of Bullet Seed). Does not affect Aromatherapy.",
-		onAllyTryHitSide: function () {}
+		desc: "This Pokemon is immune to Grass moves, except for Aromatherapy. If hit by a Grass move, its Attack is increased by one stage (once for each hit of Bullet Seed)."
+		// differences implemented in allyTeam targetting
+	},
+	"soundproof": {
+		inherit: true,
+		desc: "This Pokemon is immune to the effects of sound-based moves, which are: Bug Buzz, Chatter, Echoed Voice, Grasswhistle, Growl, Heal Bell, Hyper Voice, Metal Sound, Perish Song, Relic Song, Roar, Round, Screech, Sing, Snarl, Snore, Supersonic, and Uproar. This ability doesn't affect Heal Bell.",
+		shortDesc: "This Pokemon is immune to sound-based moves, except Heal Bell."
+		// differences implemented in allyTeam targetting
 	}
 };
