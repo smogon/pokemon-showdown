@@ -1755,7 +1755,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's moves all become Normal-typed.",
 		onModifyMovePriority: 1,
 		onModifyMove: function (move) {
-			if (move.id !== 'struggle') {
+			if (move.id !== 'struggle' && move.id.substr(0, 11) !== 'hiddenpower') {
 				move.type = 'Normal';
 			}
 		},
@@ -2027,7 +2027,7 @@ exports.BattleAbilities = {
 		},
 		onSourceDeductPP: function (pp, target, source) {
 			if (target.side === source.side) return;
-			return pp + 1;
+			this.event.modifier++;
 		},
 		id: "pressure",
 		name: "Pressure",
