@@ -2027,7 +2027,7 @@ exports.BattleAbilities = {
 		},
 		onSourceDeductPP: function (pp, target, source) {
 			if (target.side === source.side) return;
-			return pp + 1;
+			this.event.modifier++;
 		},
 		id: "pressure",
 		name: "Pressure",
