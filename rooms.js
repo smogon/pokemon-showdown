@@ -290,6 +290,12 @@ var GlobalRoom = (function () {
 	};
 	GlobalRoom.prototype.getRooms = function () {
 		var roomsData = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
+		if (!Object.isEmpty(aliases)) {
+			roomsData.aliases = {};
+			for (var a in aliases) {
+				roomsData.aliases[a] = aliases[a].id;
+			}
+		}
 		for (var i = 0; i < this.chatRooms.length; i++) {
 			var room = this.chatRooms[i];
 			if (!room) continue;
