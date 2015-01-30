@@ -48,7 +48,7 @@ exports.BattleFormats = {
 	},
 	standard: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
+		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Tradeback',
 			'Kakuna + Poison Sting + Harden', 'Kakuna + String Shot + Harden',
 			'Beedrill + Poison Sting + Harden', 'Beedrill + String Shot + Harden',
