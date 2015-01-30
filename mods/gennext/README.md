@@ -508,6 +508,6 @@ Specifically, differences from regular OU:
 
 - unbanned: Gengarite, Kangaskhanite, Lucarionite, Blaziken, Genesect, Mawilite, Salamencite
 
-- banned: Kyurem, Kyurem-Black, Aegislash
+- banned: Kyurem, Kyurem-Black
 
 - There is no Moody Clause or Evasion Clause
