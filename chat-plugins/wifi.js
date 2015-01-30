@@ -437,17 +437,6 @@ var commands = {
 	}
 };
 
-var giveawayRoom = Rooms.get('wifi');
-if (giveawayRoom) {
-	if (giveawayRoom.plugin) {
-		giveaway = giveawayRoom.plugin.giveaways;
-	} else {
-		giveawayRoom.plugin = {
-			'giveaways': giveaway
-		};
-	}
-}
-
 exports.commands = {
 	'giveaway': commands,
 	'ga': commands.guess,
