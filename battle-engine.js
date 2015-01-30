@@ -1523,6 +1523,7 @@ Battle = (function () {
 	Battle.prototype.rqid = 0;
 	Battle.prototype.lastMoveLine = 0;
 	Battle.prototype.reportPercentages = false;
+	Battle.prototype.supportCancel = false;
 
 	Battle.prototype.toString = function () {
 		return 'Battle: ' + this.format;
@@ -2395,6 +2396,7 @@ Battle = (function () {
 		}
 
 		if (p1request) {
+			if (!this.supportCancel || !p2request) p1request.noCancel = true;
 			this.p1.emitRequest(p1request);
 		} else {
 			this.p1.decision = true;
@@ -2402,6 +2404,7 @@ Battle = (function () {
 		}
 
 		if (p2request) {
+			if (!this.supportCancel || !p1request) p2request.noCancel = true;
 			this.p2.emitRequest(p2request);
 		} else {
 			this.p2.decision = true;
@@ -3900,6 +3903,7 @@ Battle = (function () {
 		}
 		if (freeSwitchCount['switch'] !== 0 || freeSwitchCount['pass'] !== 0) return false;
 
+		if (!this.supportCancel) decisions.finalDecision = true;
 		return decisions;
 	};
 	Battle.prototype.add = function () {
