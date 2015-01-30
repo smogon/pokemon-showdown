@@ -3943,10 +3943,11 @@ exports.BattleMovedex = {
 		priority: 3,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		onTryHit: function (target, pokemon) {
+		onTry: function (pokemon, target) {
 			if (pokemon.activeTurns > 1) {
+				this.add('-fail', pokemon);
 				this.add('-hint', "Fake Out only works on your first turn out.");
-				return false;
+				return null;
 			}
 		},
 		secondary: {
@@ -13068,8 +13069,15 @@ exports.BattleMovedex = {
 					target.removeVolatile('spikyshield');
 					return;
 				}
-				if (move && (move.target === 'self' || move.id === 'suckerpunch')) return;
-				this.add('-activate', target, 'move: Protect');
+				if (move && (move.target === 'self' || move.isNotProtectable)) return;
+				this.add('-activate', target, 'Protect');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
 				if (move.isContact) {
 					this.damage(source.maxhp / 8, source, target);
 				}
@@ -13850,12 +13858,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isNotProtectable: true,
 		isContact: true,
-		onTryHit: function (target) {
+		onTry: function (source, target) {
 			var decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || (decision.move.category === 'Status' && decision.move.id !== 'mefirst') || target.volatiles.mustrecharge) {
-				return false;
+				this.add('-fail', source);
+				return null;
 			}
 		},
 		secondary: false,
