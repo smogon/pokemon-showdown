@@ -931,10 +931,11 @@ exports.BattleMovedex = {
 	},
 	suckerpunch: {
 		inherit: true,
-		onTryHit: function (target) {
+		onTry: function (source, target) {
 			var decision = this.willMove(target);
-			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status') {
-				return false;
+			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status' || target.volatiles.mustrecharge) {
+				this.add('-fail', source);
+				return null;
 			}
 		}
 	},
