@@ -95,9 +95,6 @@ exports.BattleScripts = {
 			return true;
 		}
 
-		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
-			return true;
-		}
 		if (!this.runEvent('TryMove', pokemon, target, move)) {
 			return true;
 		}
@@ -192,6 +189,10 @@ exports.BattleScripts = {
 			return false;
 		}
 		this.runEvent('PrepareHit', pokemon, target, move);
+
+		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
+			return false;
+		}
 
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
 			if (move.target === 'all') {
