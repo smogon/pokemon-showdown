@@ -46,7 +46,7 @@ exports.BattleFormatsData = {
 	},
 	charizard: {
 		randomBattleMoves: ["fireblast","focusblast","airslash","roost","dragondance","flareblitz","dragonclaw","earthquake"],
-		randomDoubleBattleMoves: ["heatwave","fireblast","solarbeam","airslash","dragondance","flareblitz","dragonclaw","earthquake","protect"],
+		randomDoubleBattleMoves: ["heatwave","fireblast","airslash","dragondance","flareblitz","dragonclaw","earthquake","protect"],
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["wingattack","slash","dragonrage","firespin"]},
 			{"generation":6,"level":36,"gender":"M","isHidden":false,"moves":["firefang","flameburst","airslash","inferno"],"pokeball":"cherishball"},
@@ -57,10 +57,12 @@ exports.BattleFormatsData = {
 	},
 	charizardmegax: {
 		randomBattleMoves: ["dragondance","flareblitz","dragonclaw","earthquake","roost","substitute"],
+		randomDoubleBattleMoves: ["dragondance","flareblitz","dragonclaw","earthquake","rockslide","roost","substitute"],
 		requiredItem: "Charizardite X"
 	},
 	charizardmegay: {
-		randomBattleMoves: ["flamethrower","fireblast","airslash","roost","solarbeam"],
+		randomBattleMoves: ["flamethrower","fireblast","airslash","roost","solarbeam","focusblast"],
+		randomDoubleBattleMoves: ["heatwave","fireblast","airslash","roost","solarbeam","focusblast","protect"],
 		requiredItem: "Charizardite Y"
 	},
 	squirtle: {
