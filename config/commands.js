@@ -1449,7 +1449,7 @@ var commands = exports.commands = {
 			} else {
 				this.sendReply("Spammode is already off.");
 			}
-		} else if (!target || target === 'on' || target == 'true') {
+		} else if (!target || target === 'on' || target === 'true') {
 			if (Config.spammode) {
 				this.privateModCommand("(" + user.name + " renewed spammode for half an hour.)");
 			} else {
