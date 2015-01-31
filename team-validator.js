@@ -558,6 +558,7 @@ Validator = (function () {
 
 		var limit1 = true;
 		var sketch = false;
+		var blockedHM = false;
 
 		var sometimesPossible = false; // is this move in the learnset at all?
 
@@ -612,6 +613,8 @@ Validator = (function () {
 							// HMs can't be transferred
 							if (tools.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
 							if (tools.gen >= 5 && learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+							// Defog and Whirlpool can't be transferred together
+							if (tools.gen >= 5 && move in {'defog':1, 'whirlpool':1} && learned.charAt(0) <= 4) blockedHM = true;
 						}
 						if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1}) {
 							// gen 4-6 level-up moves
@@ -734,6 +737,12 @@ Validator = (function () {
 				return {type:'oversketched', maxSketches: 1};
 			}
 			lsetData.sketchMove = move;
+		}
+
+		if (blockedHM) {
+			// Limit one of Defog/Whirlpool to be transferred
+			if (lsetData.hm) return {type:'incompatible'};
+			lsetData.hm = move;
 		}
 
 		// Now that we have our list of possible sources, intersect it with the current list
