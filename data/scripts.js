@@ -2262,7 +2262,7 @@ exports.BattleScripts = {
 					if (hasMove['thunderbolt']) rejected = true;
 					break;
 				case 'stoneedge':
-					if (hasMove['rockslide'] || hasMove['headsmash'] || hasMove['rockslide']) rejected = true;
+					if (hasMove['rockslide'] || hasMove['headsmash'] || hasMove['rockblast']) rejected = true;
 					break;
 				case 'bonemerang': case 'earthpower':
 					if (hasMove['earthquake']) rejected = true;
