@@ -450,7 +450,6 @@ exports.groups = {
 		roommod: true,
 		roomdriver: true,
 		roomsubdriver: true,
-		roomplayer: true,
 		roomonly: true,
 		tournamentsmanagement: true,
 		rmall: true,
@@ -469,6 +468,7 @@ exports.groups = {
 		rangeban: true,
 		gdeclare: true,
 		clearall: true,
+		roomplayer: true,
 		rank: 5
 	},
 	'%': {
