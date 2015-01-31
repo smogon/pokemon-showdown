@@ -1645,11 +1645,11 @@ var commands = exports.commands = {
 			this.sendReply("/calc - Provides a link to a damage calculator");
 			this.sendReply("!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~");
 		}
-		if (target === 'blockchallenges' || target === 'away' || target === 'idle') {
+		if (target === 'blockchallenges' || target === 'allowchall') {
 			matched = true;
 			this.sendReply("/away - Blocks challenges so no one can challenge you. Deactivate it with /back.");
 		}
-		if (target === 'allowchallenges' || target === 'back') {
+		if (target === 'allowchallenges' || target === 'blockchall') {
 			matched = true;
 			this.sendReply("/back - Unlocks challenges so you can be challenged again. Deactivate it with /away.");
 		}
@@ -1874,7 +1874,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'title' || target === 'settitle') {
 			matched = true;
-			this.sendReply("/title [information] - Set a user title for your profile.");
+			this.sendReply("/title [information] - Sets a user title for your profile. Do use any characters other than the alphabet or it will not appear correctly.");
 		}
 		if (target === 'transferbp' || target === 'transferbattlepoints' || target === 'transferbattlepoint' || target === 'transfermoney' || target === 'transferbuck' || target === 'transferbucks') {
 			matched = true;
