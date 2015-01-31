@@ -365,7 +365,7 @@ exports.customavatars = {
 	'thoughts': 'thoughts.png',
 	'thjoker': 'thjoker.jpg',
 	'clownjoker': 'thjoker.jpg',
-	'asunaxkirito': 'asunaxkirito.png',
+	'asunaxkirito': 'asunaxkirito.PNG',
 	'allianceazelea': 'allianceazelea.png',
 	'pcho': 'pcho.jpg',
 	'allianceghast': 'allianceghast.jpg',
@@ -374,6 +374,15 @@ exports.customavatars = {
 	'alliancelemon': 'alliancelemon.png',
 	'allianclemn': 'alliancelemon.png',
 	'alliancespook': 'alliancespook.png',
+	'alliancenidaime': 'alliancenidaime.gif',
+	'thenidaime': 'alliancenidaime.gif',
+	'alliancecarn0x': 'alliancecarn0x.png',
+	'allianceaqua': 'allianceaqua.png',
+	'pmtkred': 'pmtkred.png',
+	'funkycrackudocat': 'funkycrackudocat.png',
+	'dudugoissilva': 'funkycrackudocat.png',
+	'abnegation': 'abnegation.png',
+	'sranger': 'abnegation.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
