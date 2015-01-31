@@ -289,7 +289,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 	dns.reverse(ip, function (err, hosts) {
 		if (hosts && hosts[0]) {
 			user.latestHost = hosts[0];
-			if (Config.hostfilter) Config.hostfilter(hosts[0], user);
+			if (Config.hostfilter) Config.hostfilter(hosts[0], user, connection);
 			if (user.named && !user.locked && user.group === Config.groupsranking[0]) {
 				var shortHost = Users.shortenHost(hosts[0]);
 				if (lockedRanges[shortHost]) {
