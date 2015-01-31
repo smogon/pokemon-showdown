@@ -202,9 +202,6 @@ BattlePokemon = (function () {
 		this.baseAbility = toId(set.ability);
 		this.ability = this.baseAbility;
 		this.item = toId(set.item);
-		var forme;
-		if (this.baseTemplate.otherFormes) forme = this.battle.getTemplate(this.baseTemplate.otherFormes[0]);
-		this.canMegaEvo = ((this.battle.getItem(this.item).megaEvolves === this.baseTemplate.baseSpecies) || (forme && forme.isMega && forme.requiredMove && this.set.moves.indexOf(toId(forme.requiredMove)) > -1));
 		this.abilityData = {id: this.ability};
 		this.itemData = {id: this.item};
 		this.speciesData = {id: this.speciesid};
@@ -242,6 +239,8 @@ BattlePokemon = (function () {
 				this.moves.push(move.id);
 			}
 		}
+
+		this.canMegaEvo = this.battle.canMegaEvo(this);
 
 		if (!this.set.evs) {
 			this.set.evs = {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84};
@@ -1333,7 +1332,7 @@ BattleSide = (function () {
 				baseAbility: pokemon.baseAbility,
 				item: pokemon.item,
 				pokeball: pokemon.pokeball,
-				canMegaEvo: pokemon.canMegaEvo
+				canMegaEvo: !!pokemon.canMegaEvo
 			});
 		}
 		return data;
@@ -3358,7 +3357,7 @@ Battle = (function () {
 			this.runMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
 			break;
 		case 'megaEvo':
-			if (this.runMegaEvo) this.runMegaEvo(decision.pokemon);
+			if (decision.pokemon.canMegaEvo) this.runMegaEvo(decision.pokemon);
 			break;
 		case 'beforeTurnMove':
 			if (!decision.pokemon.isActive) return false;
