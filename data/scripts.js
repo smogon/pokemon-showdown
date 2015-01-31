@@ -2262,10 +2262,7 @@ exports.BattleScripts = {
 					if (hasMove['thunderbolt']) rejected = true;
 					break;
 				case 'stoneedge':
-					if (hasMove['rockslide']) rejected = true;
-					break;
-				case 'stoneedge':
-					if (hasMove['headsmash']) rejected = true;
+					if (hasMove['rockslide'] || hasMove['headsmash'] || hasMove['rockslide']) rejected = true;
 					break;
 				case 'bonemerang': case 'earthpower':
 					if (hasMove['earthquake']) rejected = true;
@@ -2296,9 +2293,6 @@ exports.BattleScripts = {
 					break;
 				case 'hiddenpowerice':
 					if (hasMove['icywind']) rejected = true;
-					break;
-				case 'stone edge':
-					if (hasMove['rockblast']) rejected = true;
 					break;
 
 				// Status:
