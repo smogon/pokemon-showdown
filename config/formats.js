@@ -41,15 +41,6 @@ exports.Formats = [
 		name: "RU",
 		section: "ORAS Singles",
 
-		searchShow: false,
-		ruleset: ['UU'],
-		banlist: ['UU', 'BL2', 'Galladite', 'Houndoominite']
-	},
-	{
-		name: "RU (suspect test)",
-		section: "ORAS Singles",
-
-		challengeShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2', 'Galladite', 'Houndoominite']
 	},
@@ -72,7 +63,7 @@ exports.Formats = [
 		name: "Anything Goes",
 		section: "ORAS Singles",
 
-		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal']
 	},
 	/*{
@@ -112,7 +103,7 @@ exports.Formats = [
 		maxLevel: 9999,
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview']
+		ruleset: ['Team Preview', 'Cancel Mod']
 	},
 
 	// Random Battles
@@ -123,7 +114,7 @@ exports.Formats = [
 		section: "Random Battles (aka Randbats)",
 
 		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
 	},
 	{
 		name: "Unrated Random",
@@ -139,14 +130,14 @@ exports.Formats = [
 		section: "Random Battles (aka Randbats)",
 
 		team: 'random',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview']
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
 	},
 	{
 		name: "1v1 Random",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview 1v1'],
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
 		onBegin: function() {
 			this.debug('Cutting down to 1');
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -352,7 +343,7 @@ exports.Formats = [
 
 		mod: 'metronomerandom',
 		team: 'randomMetronome',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Team Preview GBU'],
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview GBU'],
 		onBegin: function() {
 			this.debug('Cutting down to 3');
 			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
@@ -375,7 +366,7 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		team: 'randomDoubles',
-		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Team Preview']
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
 	},
 	{
 		name: "Triples Random",
@@ -383,21 +374,21 @@ exports.Formats = [
 
 		gameType: 'triples',
 		team: 'randomDoubles',
-		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Team Preview']
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
 	},
 	{
 		name: "Challenge Cup",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomCC',
-		ruleset: ['Pokemon', 'HP Percentage Mod']
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "1v1 Challenge Cup",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomCC',
-		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod'],
+		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
 			this.debug('Cutting down to 1');
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -412,7 +403,7 @@ exports.Formats = [
 
 		team: 'randomHackmonsCC',
 		searchShow: false,
-		ruleset: ['HP Percentage Mod']
+		ruleset: ['HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "Doubles Challenge Cup",
@@ -421,7 +412,7 @@ exports.Formats = [
 		gameType: 'doubles',
 		team: 'randomCC',
 		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "Triples Challenge Cup",
@@ -430,7 +421,7 @@ exports.Formats = [
 		gameType: 'triples',
 		team: 'randomCC',
 		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	},
 
 	// XY Doubles
@@ -451,7 +442,7 @@ exports.Formats = [
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
-		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Dark Void']
 	},
 	{
@@ -518,7 +509,7 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview VGC'],
+		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview VGC', 'Cancel Mod'],
 		banlist: ['Illegal', 'Unreleased', 'Mew', 'Celebi', 'Jirachi', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Phione',
 			'Manaphy', 'Darkrai', 'Shaymin', 'Shaymin-Sky', 'Arceus', 'Victini', 'Keldeo', 'Meloetta', 'Genesect', 'Diancie',
 			'Soul Dew'
@@ -552,7 +543,7 @@ exports.Formats = [
 		defaultLevel: 100,
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview']
+		ruleset: ['Team Preview', 'Cancel Mod']
 	},
 
 	// XY Triples
@@ -563,7 +554,7 @@ exports.Formats = [
 		section: "ORAS Triples",
 
 		gameType: 'triples',
-		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview'],
+		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Illegal', 'Unreleased', 'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
 			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Soul Dew', 'Dark Void', 'Perish Song'
@@ -592,7 +583,7 @@ exports.Formats = [
 		defaultLevel: 100,
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview']
+		ruleset: ['Team Preview', 'Cancel Mod']
 	},
 
 	// Other Metagames
@@ -609,8 +600,8 @@ exports.Formats = [
 			'Floatzel', 'Garbodor', 'Glalie', 'Golem', 'Gourgeist-Super', 'Haunter', 'Kadabra', 'Kecleon', 'Leafeon', 'Lickilicky',
 			'Lopunny', 'Machoke', 'Mantine', 'Marowak', 'Misdreavus', 'Mr. Mime', 'Ninetales', 'Pelipper', 'Pidgeot', 'Piloswine',
 			'Poliwrath', 'Purugly', 'Raichu', 'Regice', 'Relicanth', 'Roselia', 'Rotom-Frost', 'Scyther', 'Serperior', 'Sneasel',
-			'Stoutland', 'Stunfisk', 'Tangela', 'Tauros', 'Throh', 'Togetic', 'Torterra', 'Victreebel', 'Vigoroth', 'Zebstrika',
-			'Sticky Web'
+			'Stoutland', 'Stunfisk', 'Tangela', 'Tauros', 'Throh', 'Togetic', 'Torterra', 'Ursaring', 'Victreebel', 'Vigoroth',
+			'Zebstrika', 'Sticky Web'
 		]
 	},
 	{
@@ -618,7 +609,7 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		team: 'randomSeasonalSFT',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
 			this.add('message', "Dialga and Palkia have distorted space and time!");
 			// This shouldn't happen.
@@ -788,14 +779,14 @@ exports.Formats = [
 		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'Ability Clause', '-ate Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod'],
+		ruleset: ['Pokemon', 'Ability Clause', '-ate Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard']
 	},
 	{
 		name: "1v1",
 		section: 'Other Metagames',
 
-		ruleset: ['Pokemon', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview 1v1'],
+		ruleset: ['Pokemon', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
 		banlist: ['Illegal', 'Unreleased', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky',
 			'Xerneas', 'Yveltal', 'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew'
@@ -932,7 +923,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		searchShow: false,
-		ruleset: ['HP Percentage Mod'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species);
 			var item = this.getItem(set.item);
@@ -1116,7 +1107,7 @@ exports.Formats = [
 		maxLevel: 9999,
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview']
+		ruleset: ['Team Preview', 'Cancel Mod']
 	},
 
 	// BW2 Doubles
@@ -1175,7 +1166,7 @@ exports.Formats = [
 		maxLevel: 9999,
 		defaultLevel: 100,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview']
+		ruleset: ['Team Preview', 'Cancel Mod']
 	},
 
 	// Past Generations
@@ -1226,7 +1217,7 @@ exports.Formats = [
 		maxLevel: 9999,
 		defaultLevel: 100,
 		// no restrictions
-		ruleset: []
+		ruleset: ['Cancel Mod']
 	},
 	{
 		name: "[Gen 3] OU (beta)",
@@ -1251,7 +1242,7 @@ exports.Formats = [
 		mod: 'gen3',
 		searchShow: false,
 		debug: true,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "[Gen 2] OU",
@@ -1268,7 +1259,7 @@ exports.Formats = [
 		mod: 'gen2',
 		searchShow: false,
 		debug: true,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "[Gen 1] OU",
@@ -1284,7 +1275,7 @@ exports.Formats = [
 
 		mod: 'gen1',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod'],
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'OHKO Clause', 'Evasion Moves Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Uber', 'Unreleased', 'Illegal',
 			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
 			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember'
@@ -1296,7 +1287,7 @@ exports.Formats = [
 
 		mod: 'gen1',
 		team: 'random',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod']
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "[Gen 1] Stadium",
@@ -1317,6 +1308,6 @@ exports.Formats = [
 		mod: 'gen1',
 		searchShow: false,
 		debug: true,
-		ruleset: ['Pokemon', 'HP Percentage Mod']
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	}
 ];

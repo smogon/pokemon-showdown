@@ -46,7 +46,7 @@ exports.BattleFormatsData = {
 	},
 	charizard: {
 		randomBattleMoves: ["fireblast","focusblast","airslash","roost","dragondance","flareblitz","dragonclaw","earthquake"],
-		randomDoubleBattleMoves: ["heatwave","fireblast","solarbeam","airslash","dragondance","flareblitz","dragonclaw","earthquake","protect"],
+		randomDoubleBattleMoves: ["heatwave","fireblast","airslash","dragondance","flareblitz","dragonclaw","earthquake","protect"],
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["wingattack","slash","dragonrage","firespin"]},
 			{"generation":6,"level":36,"gender":"M","isHidden":false,"moves":["firefang","flameburst","airslash","inferno"],"pokeball":"cherishball"},
@@ -57,10 +57,12 @@ exports.BattleFormatsData = {
 	},
 	charizardmegax: {
 		randomBattleMoves: ["dragondance","flareblitz","dragonclaw","earthquake","roost","substitute"],
+		randomDoubleBattleMoves: ["dragondance","flareblitz","dragonclaw","earthquake","rockslide","roost","substitute"],
 		requiredItem: "Charizardite X"
 	},
 	charizardmegay: {
-		randomBattleMoves: ["flamethrower","fireblast","airslash","roost","solarbeam"],
+		randomBattleMoves: ["flamethrower","fireblast","airslash","roost","solarbeam","focusblast"],
+		randomDoubleBattleMoves: ["heatwave","fireblast","airslash","roost","solarbeam","focusblast","protect"],
 		requiredItem: "Charizardite Y"
 	},
 	squirtle: {
@@ -2753,7 +2755,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	solrock: {
-		randomBattleMoves: ["stealthrock","explosion","stoneedge","zenheadbutt","willowisp","morningsun","trickroom"],
+		randomBattleMoves: ["stealthrock","explosion","stoneedge","zenheadbutt","willowisp","morningsun","earthquake"],
 		randomDoubleBattleMoves: ["protect","helpinghand","stoneedge","zenheadbutt","willowisp","trickroom","rockslide"],
 		eventPokemon: [
 			{"generation":3,"level":10,"moves":["tackle","harden","confusion"]},
@@ -4979,7 +4981,7 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	aegislash: {
-		randomBattleMoves: ["kingsshield","swordsdance","shadowclaw","sacredsword","ironhead","shadowsneak","autotomize","hiddenpowerice","shadowball","flashcannon"],
+		randomBattleMoves: ["kingsshield","swordsdance","shadowclaw","sacredsword","ironhead","shadowsneak","hiddenpowerice","shadowball","flashcannon"],
 		randomDoubleBattleMoves: ["kingsshield","swordsdance","shadowclaw","sacredsword","ironhead","shadowsneak","wideguard","hiddenpowerice","shadowball","flashcannon"],
 		eventPokemon: [
 			{"generation":6,"level":50,"gender":"F","nature":"Quiet","moves":["wideguard","kingsshield","shadowball","flashcannon"],"pokeball":"cherishball"}

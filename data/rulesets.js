@@ -8,22 +8,22 @@ exports.BattleFormats = {
 
 	standard: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal']
 	},
 	standardnext: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'HP Percentage Mod'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Illegal', 'Soul Dew']
 	},
 	standardubers: {
 		effectType: 'Banlist',
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal']
 	},
 	standardgbu: {
 		effectType: 'Banlist',
-		ruleset: ['Species Clause', 'Item Clause'],
+		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Soul Dew',
 			'Mewtwo',
 			'Mew',
@@ -58,7 +58,7 @@ exports.BattleFormats = {
 	},
 	standarddoubles: {
 		effectType: 'Banlist',
-		ruleset: ['Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod'],
+		ruleset: ['Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal']
 	},
 	pokemon: {
@@ -364,6 +364,24 @@ exports.BattleFormats = {
 			}
 		}
 	},
+	nicknameclause: {
+		effectType: 'Rule',
+		validateTeam: function (team, format) {
+			var nameTable = {};
+			for (var i = 0; i < team.length; i++) {
+				var name = team[i].name;
+				if (name) {
+					if (name === team[i].species) continue;
+					if (nameTable[name]) {
+						return ["Your Pokémon must have different nicknames.",  "(You have more than one " + name + ")"];
+					}
+					nameTable[name] = true;
+				}
+			}
+			// Illegality of impersonation of other species is
+			// hardcoded in team-validator.js, so we are done.
+		}
+	},
 	itemclause: {
 		effectType: 'Rule',
 		onStart: function () {
@@ -507,6 +525,12 @@ exports.BattleFormats = {
 		onStart: function () {
 			this.add('rule', 'Exact HP Mod: Exact HP is shown');
 			this.reportExactHP = true;
+		}
+	},
+	cancelmod: {
+		effectType: 'Rule',
+		onStart: function () {
+			this.supportCancel = true;
 		}
 	},
 	sleepclausemod: {
