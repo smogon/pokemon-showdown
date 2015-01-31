@@ -1429,6 +1429,38 @@ var commands = exports.commands = {
 		}
 	},
 
+	spammode: function (target, room, user) {
+		if (!this.can('ban')) return false;
+
+		// NOTE: by default, spammode does nothing; it's up to you to set stricter filters
+		// in config for chatfilter/hostfilter. Put this above the spammode filters:
+		/*
+		if (!Config.spammode) return;
+		if (Config.spammode < Date.now()) {
+			delete Config.spammode;
+			return;
+		}
+		*/
+
+		if (target === 'off' || target === 'false') {
+			if (Config.spammode) {
+				delete Config.spammode;
+				this.privateModCommand("(" + user.name + " turned spammode OFF.)");
+			} else {
+				this.sendReply("Spammode is already off.");
+			}
+		} else if (!target || target === 'on' || target == 'true') {
+			if (Config.spammode) {
+				this.privateModCommand("(" + user.name + " renewed spammode for half an hour.)");
+			} else {
+				this.privateModCommand("(" + user.name + " turned spammode ON for half an hour.)");
+			}
+			Config.spammode = Date.now() + 30 * 60 * 1000;
+		} else {
+			this.sendReply("Unrecognized spammode setting.");
+		}
+	},
+
 	roll: 'dice',
 	dice: function (target, room, user) {
 		if (!target) return this.parse('/help dice');
