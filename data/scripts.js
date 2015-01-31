@@ -2294,6 +2294,9 @@ exports.BattleScripts = {
 				case 'hiddenpowerice':
 					if (hasMove['icywind']) rejected = true;
 					break;
+				case 'quickattack':
+					if (hasMove['feint']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
