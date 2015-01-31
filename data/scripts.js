@@ -532,25 +532,19 @@ exports.BattleScripts = {
 		return damage;
 	},
 
+	canMegaEvo: function (pokemon) {
+		var altForme = pokemon.baseTemplate.otherFormes && this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
+		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.moves.indexOf(toId(altForme.requiredMove)) > -1) return altForme.species;
+		var item = pokemon.getItem();
+		if (item.megaEvolves !== pokemon.baseTemplate.baseSpecies || item.megaStone === pokemon.species) return false;
+		return item.megaStone;
+	},
+
 	runMegaEvo: function (pokemon) {
-		if (!pokemon.canMegaEvo) return false;
-
-		var otherForme;
-		var template;
-		var item;
-		if (pokemon.baseTemplate.otherFormes) otherForme = this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
-		if (otherForme && otherForme.isMega && otherForme.requiredMove) {
-			if (pokemon.moves.indexOf(toId(otherForme.requiredMove)) < 0) return false;
-			template = otherForme;
-		} else {
-			item = this.getItem(pokemon.item);
-			if (!item.megaStone) return false;
-			template = this.getTemplate(item.megaStone);
-			if (pokemon.baseTemplate.baseSpecies !== template.baseSpecies) return false;
-		}
-		if (!template.isMega) return false;
-
+		var template = this.getTemplate(pokemon.canMegaEvo);
 		var side = pokemon.side;
+
+		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
 		var foeActive = side.foe.active;
 		for (var i = 0; i < foeActive.length; i++) {
 			if (foeActive[i].volatiles['skydrop'] && foeActive[i].volatiles['skydrop'].source === pokemon) {
@@ -558,17 +552,18 @@ exports.BattleScripts = {
 			}
 		}
 
-		// okay, mega evolution is possible
 		pokemon.formeChange(template);
-		pokemon.baseTemplate = template; // mega evolution is permanent :o
+		pokemon.baseTemplate = template; // mega evolution is permanent
 		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 		this.add('detailschange', pokemon, pokemon.details);
-		this.add('-mega', pokemon, template.baseSpecies, item);
-		var oldAbility = pokemon.ability;
+		this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
 		pokemon.setAbility(template.abilities['0']);
 		pokemon.baseAbility = pokemon.ability;
 
-		for (var i = 0; i < side.pokemon.length; i++) side.pokemon[i].canMegaEvo = false;
+		// Limit one mega evolution
+		for (var i = 0; i < side.pokemon.length; i++) {
+			side.pokemon[i].canMegaEvo = false;
+		}
 		return true;
 	},
 
@@ -594,7 +589,7 @@ exports.BattleScripts = {
 		if (!isValid) selectedAbilities.push(selectedAbility);
 		return isValid;
 	},
-	canMegaEvo: function (template) {
+	hasMegaEvo: function (template) {
 		if (template.otherFormes) {
 			var forme = this.getTemplate(template.otherFormes[0]);
 			if (forme.requiredItem) {
@@ -900,7 +895,7 @@ exports.BattleScripts = {
 		}
 
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!noMega && this.canMegaEvo(template)) {
+		if (!noMega && this.hasMegaEvo(template)) {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
@@ -1984,7 +1979,7 @@ exports.BattleScripts = {
 		}
 
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!noMega && this.canMegaEvo(template)) {
+		if (!noMega && this.hasMegaEvo(template)) {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[(template.otherFormes[1]) ? Math.round(Math.random()) : 0]);
 		}
