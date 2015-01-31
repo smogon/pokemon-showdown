@@ -162,7 +162,7 @@ var core = exports.core = {
 
 	shop: function (showDisplay) {
 		var shop = [
-			['Star', 'Buy a \u2606 to go in front of your name and puts you at the top of the user list. (Temporary until you leave for more than one hour or the server restarts.)', 2],
+			['Star', 'Buy a \u2606 to go in front of your name and puts you at the top of the user list. (Goes away if you leave for more than one hour or the server restarts.)', 2],
 			['Fix', 'Buy the ability to alter your current custom avatar. (Don\'t buy if you don\'t have a custom avatar.)', 15],
 			['Title', 'Buy a user title for your profile. (Can be seen via "/profile username". Check "/profile wolf" for an example.)', 20],
 			['Poof', 'Buy a poof message to be added into your pool of possible poofs. Poofs are custom leave messages.', 25],
