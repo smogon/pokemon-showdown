@@ -1874,7 +1874,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'title' || target === 'settitle') {
 			matched = true;
-			this.sendReply("/title [information] - Sets a user title for your profile. Do use any characters other than the alphabet or the title will not appear correctly.");
+			this.sendReply("/title [information] - Sets a user title for your profile. Do use any characters other than the English alphabet or the title will not appear correctly.");
 		}
 		if (target === 'transferbp' || target === 'transferbattlepoints' || target === 'transferbattlepoint' || target === 'transfermoney' || target === 'transferbuck' || target === 'transferbucks') {
 			matched = true;
