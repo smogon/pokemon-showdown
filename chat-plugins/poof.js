@@ -1,5 +1,5 @@
 const christs = [
-	"Christos is everyone's favourite moderator."
+	"is everyone's favourite moderator."
 ];
 
 const wolf = [
