@@ -1437,7 +1437,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Sheer Force') {
 				rejectAbility = !counter['sheerforce'];
 			} else if (ability === 'Serene Grace') {
-				rejectAbility = !counter['serenegrace'] && template.species !== 'Blissey' && template.species !== 'Chansey';
+				rejectAbility = !counter['serenegrace'];
 			} else if (ability === 'Simple') {
 				rejectAbility = !setupType && !hasMove['flamecharge'] && !hasMove['stockpile'];
 			} else if (ability === 'Prankster') {
