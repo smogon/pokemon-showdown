@@ -172,7 +172,7 @@ exports.BattleAbilities = {
 		},
 		id: "arenatrap",
 		name: "Arena Trap",
-		rating: 4,
+		rating: 4.5,
 		num: 71
 	},
 	"aromaveil": {
