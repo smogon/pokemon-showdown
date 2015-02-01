@@ -1445,8 +1445,8 @@ exports.BattleScripts = {
 				rejectAbility = !counter['Status'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
-			} else if (ability === 'Snow Warning') {
-				rejectAbility = hasMove['naturepower'] || !!counter['ate'];
+			} else if (ability === 'Aerilate' || ability === 'Pixilate' || ability === 'Refrigerate') {
+				rejectAbility = !counter['ate'];
 			// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
 			} else if (ability === 'Swift Swim') {
 				rejectAbility = !hasMove['raindance'];
@@ -2480,8 +2480,8 @@ exports.BattleScripts = {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
 			} else if (ability === 'Chlorophyll') {
 				rejectAbility = !hasMove['sunnyday'];
-			} else if (ability === 'Snow Warning') {
-				rejectAbility = !!counter['ate'];
+			} else if (ability === 'Aerilate' || ability === 'Pixilate' || ability === 'Refrigerate') {
+				rejectAbility = !counter['ate'];
 			}
 
 			if (rejectAbility) {
