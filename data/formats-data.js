@@ -347,7 +347,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	nidoking: {
-		randomBattleMoves: ["stealthrock","fireblast","thunderbolt","icebeam","earthpower","sludgewave","focusblast"],
+		randomBattleMoves: ["substitute","fireblast","thunderbolt","icebeam","earthpower","sludgewave","focusblast"],
 		randomDoubleBattleMoves: ["helpinghand","protect","fireblast","thunderbolt","icebeam","earthpower","sludgebomb","focusblast"],
 		tier: "UU"
 	},
