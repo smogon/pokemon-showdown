@@ -1060,7 +1060,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'lcuu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516967/\">LC UU</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523929/\">LC UU</a><br />";
 		}
 		if (target === 'all' || target === '350cup') {
 			matched = true;
