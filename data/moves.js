@@ -14497,11 +14497,15 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		isUnreleased: true,
-		onModifyMovePriority: -5,
 		onModifyMove: function (move) {
 			if (move.type === 'Ground') {
 				move.affectedByImmunities = false;
 			}
+		},
+		onTryHit: function (target) {
+			// only the attack that grounds the target ignores effectiveness
+			if (target.negateImmunity['Ground']) return;
+			target.negateImmunity['Ground'] = 'IgnoreEffectiveness';
 		},
 		volatileStatus: 'smackdown',
 		secondary: false,
