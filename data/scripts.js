@@ -982,7 +982,7 @@ exports.BattleScripts = {
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
 				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
-				blaze: 0, overgrow: 0, swarm: 0, torrent: 0, serenegrace: 0,
+				blaze: 0, overgrow: 0, swarm: 0, torrent: 0, serenegrace: 0, ate: 0,
 				recoil: 0, inaccurate: 0, priority: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
@@ -1024,6 +1024,7 @@ exports.BattleScripts = {
 					if (move.type === 'Grass') counter['overgrow']++;
 					if (move.type === 'Bug') counter['swarm']++;
 					if (move.type === 'Water') counter['torrent']++;
+					if (move.type === 'Normal') counter['ate']++;
 					// Make sure not to count Knock Off, Rapid Spin, etc.
 					if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
 						damagingMoves.push(move);
@@ -1445,7 +1446,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
 			} else if (ability === 'Snow Warning') {
-				rejectAbility = hasMove['naturepower'];
+				rejectAbility = hasMove['naturepower'] || !!counter['ate'];
 			// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
 			} else if (ability === 'Swift Swim') {
 				rejectAbility = !hasMove['raindance'];
@@ -2066,7 +2067,7 @@ exports.BattleScripts = {
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
 				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
-				blaze: 0, overgrow: 0, swarm: 0, torrent: 0, serenegrace: 0,
+				blaze: 0, overgrow: 0, swarm: 0, torrent: 0, serenegrace: 0, ate: 0,
 				recoil: 0, inaccurate: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
@@ -2108,6 +2109,7 @@ exports.BattleScripts = {
 					if (move.type === 'Grass') counter['overgrow']++;
 					if (move.type === 'Bug') counter['swarm']++;
 					if (move.type === 'Water') counter['torrent']++;
+					if (move.type === 'Normal') counter['ate']++;
 					// Make sure not to count Rapid Spin, etc.
 					if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
 						damagingMoves.push(move);
@@ -2478,6 +2480,8 @@ exports.BattleScripts = {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
 			} else if (ability === 'Chlorophyll') {
 				rejectAbility = !hasMove['sunnyday'];
+			} else if (ability === 'Snow Warning') {
+				rejectAbility = !!counter['ate'];
 			}
 
 			if (rejectAbility) {
