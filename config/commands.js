@@ -1780,7 +1780,7 @@ var commands = exports.commands = {
 		} 
 		if (target === 'potd') {
 			matched = true;
-			this.sendReply("/potd [Pokemon] Set the pokemon of the day. Requires: & ~");
+			this.sendReply("/potd [Pokemon] - Set the pokemon of the day. Requires: & ~");
 		}
 
 		// admin commands
