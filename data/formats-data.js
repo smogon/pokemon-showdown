@@ -154,8 +154,7 @@ exports.BattleFormatsData = {
 	pidgeotmega: {
 		randomBattleMoves: ["roost","heatwave","uturn","hurricane","defog"],
 		randomDoubleBattleMoves: ["tailwind","heatwave","uturn","hurricane","protect"],
-		requiredItem: "Pidgeotite",
-		tier: "BL2"
+		requiredItem: "Pidgeotite"
 	},
 	rattata: {
 		randomBattleMoves: ["facade","flamewheel","suckerpunch","uturn","wildcharge","thunderwave","crunch","revenge"],
@@ -262,7 +261,7 @@ exports.BattleFormatsData = {
 			{"generation":6,"level":36,"shiny":true,"isHidden":true,"moves":["thunder","substitute","playnice","holdhands"],"pokeball":"cherishball"},
 			{"generation":6,"level":10,"gender":"F","isHidden":false,"moves":["playnice","charm","nuzzle","sweetkiss"],"pokeball":"cherishball"}
 		],
-		tier: "PU"
+		tier: "NFE"
 	},
 	pikachucosplay: {
 		gen: 6,
@@ -1846,7 +1845,8 @@ exports.BattleFormatsData = {
 	heracrossmega: {
 		randomBattleMoves: ["closecombat","pinmissile","rockblast","swordsdance","bulletseed","knockoff","earthquake"],
 		randomDoubleBattleMoves: ["closecombat","pinmissile","rockblast","swordsdance","bulletseed","knockoff","earthquake","protect"],
-		requiredItem: "Heracronite"
+		requiredItem: "Heracronite",
+		tier: "BL"
 	},
 	sneasel: {
 		randomBattleMoves: ["iceshard","iciclecrash","lowkick","pursuit","swordsdance","knockoff"],
@@ -2944,8 +2944,7 @@ exports.BattleFormatsData = {
 	glaliemega: {
 		randomBattleMoves: ["crunch","iceshard","taunt","earthquake","explosion","return","spikes"],
 		randomDoubleBattleMoves: ["crunch","iceshard","taunt","earthquake","explosion","protect","encore","return"],
-		requiredItem: "Glalitite",
-		tier: "BL3"
+		requiredItem: "Glalitite"
 	},
 	froslass: {
 		randomBattleMoves: ["icebeam","spikes","destinybond","shadowball","taunt","thunderwave"],
@@ -3273,7 +3272,7 @@ exports.BattleFormatsData = {
 	},
 	monferno: {
 		randomBattleMoves: ["stealthrock","overheat","hiddenpowergrass","fakeout","vacuumwave","uturn","gunkshot"],
-		tier: "NFE"
+		tier: "PU"
 	},
 	infernape: {
 		randomBattleMoves: ["stealthrock","fireblast","closecombat","uturn","grassknot","stoneedge","machpunch","swordsdance","nastyplot","flareblitz","hiddenpowerice","thunderpunch"],
@@ -5220,8 +5219,7 @@ exports.BattleFormatsData = {
 	dianciemega: {
 		randomBattleMoves: ["diamondstorm","moonblast","calmmind","psyshock","earthpower","hiddenpowerfire"],
 		randomDoubleBattleMoves: ["diamondstorm","moonblast","calmmind","psyshock","earthpower","hiddenpowerfire","dazzlinggleam","protect"],
-		requiredItem: "Diancite",
-		tier: "BL"
+		requiredItem: "Diancite"
 	},
 	hoopa: {
 		isUnreleased: true,
