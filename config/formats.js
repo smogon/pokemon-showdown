@@ -14,15 +14,6 @@ exports.Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
-		name: "Unrated Random Battle",
-		section: "ORAS Singles",
-
-		team: 'random',
-		challengeShow: false,
-		rated: false,
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
-	},
-	{
 		name: "OU",
 		section: "ORAS Singles",
 
@@ -749,6 +740,88 @@ exports.Formats = [
 		team: 'randomHackmonsCC',
 		searchShow: false,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod']
+	}, 
+	
+	// Unrated Battles
+	///////////////////////////////////////////////////////////////////
+	{
+		name: "Unrated Random Battle",
+		section: "Unrated Battles", 
+		column: 3,
+
+		team: 'random',
+		challengeShow: false,
+		rated: false,
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod']
+	}, 
+	{
+		name: "Unrated OU",
+		section: "Unrated Battles", 
+		column: 3, 
+		
+		rated: false,
+		challengeShow: false,
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
+	}, 
+	{
+		name: "Unrated Uber",
+		section: "Unrated Battles", 
+		column: 3, 
+		
+		rated: false,
+		challengeShow: false,
+
+		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Ban Mod'],
+		banlist: []
+	}, 
+	{
+		name: "Unrated UU",
+		section: "Unrated Battles", 
+		coulmn: 3, 
+		
+		rated: false,
+		challengeShow: false,
+
+		ruleset: ['OU'],
+		banlist: ['OU', 'BL', 'Altarianite', 'Diancite', 'Heracronite', 'Gardevoirite', 'Medichamite', 'Metagrossite',
+			'Drizzle', 'Drought', 'Shadow Tag'
+		]
+	}, 
+	{
+		name: "Unrated RU",
+		section: "Unrated Battles", 
+		column: 3, 
+		
+		rated: false,
+		challengeShow: false,
+
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2', 'Galladite']
+	},
+	{
+		name: "Unrated NU",
+		section: "Unrated Battles", 
+		column: 3, 
+		
+		rated: false,
+		challengeShow: false,
+
+		ruleset: ['RU'],
+		banlist: ['RU', 'BL3']
+	},
+	{
+		name: "Unrated LC", 
+		section: "Unrated Battles", 
+		column: 3, 
+		
+		rated: false,
+		challengeShow: false,
+
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger', 'LC Uber', 'Gligar']
 	},
 
 	// BW2 Singles
