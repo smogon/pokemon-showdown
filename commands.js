@@ -261,7 +261,7 @@ var commands = exports.commands = {
 				return false;
 			}
 			if (room.chatRoomData) {
-				room.chatRoomData.modjoin = true;
+				room.chatRoomData.modjoin = room.modjoin;
 				Rooms.global.writeChatRoomData();
 			}
 			if (!room.modchat) this.parse('/modchat ' + Config.groupsranking[1]);
