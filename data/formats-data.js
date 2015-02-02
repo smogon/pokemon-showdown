@@ -1722,7 +1722,7 @@ exports.BattleFormatsData = {
 	quagsire: {
 		randomBattleMoves: ["recover","earthquake","waterfall","scald","toxic","curse","yawn","icepunch"],
 		randomDoubleBattleMoves: ["icywind","earthquake","waterfall","scald","rockslide","curse","yawn","icepunch","protect"],
-		tier: "UU"
+		tier: "NU"
 	},
 	murkrow: {
 		randomBattleMoves: ["substitute","suckerpunch","bravebird","heatwave","hiddenpowergrass","roost","darkpulse","thunderwave"],
