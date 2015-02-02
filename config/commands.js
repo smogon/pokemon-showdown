@@ -1777,6 +1777,10 @@ var commands = exports.commands = {
 		if (target === 'declare') {
 			matched = true;
 			this.sendReply("/declare [message] - Anonymously announces a message. Requires: & ~");
+		} 
+		if (target === 'potd') {
+			matched = true;
+			this.sendReply("/potd [Pokemon] - Set the pokemon of the day. Requires: & ~");
 		}
 
 		// admin commands
