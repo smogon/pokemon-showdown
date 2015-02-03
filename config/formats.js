@@ -657,7 +657,7 @@ exports.Formats = [
 		'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Fletchling', 'Foongus', 'Gastly', 'Larvesta', 'Magnemite',
 		'Mienfoo', 'Munchlax', 'Onix', 'Pancham', 'Pawniard', 'Ponyta', 'Porygon', 'Pumpkaboo-Super', 'Scraggy',
 		'Slowpoke', 'Snivy', 'Snubbull', 'Spritzee', 'Staryu', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby',
-		'Vulpix','Omanyte'
+		'Vulpix', 'Omanyte'
 		]
 	},
 	{
