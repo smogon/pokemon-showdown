@@ -1041,8 +1041,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'pu') {
 			matched = true;
 			if (target !== 'all') buffer += "The unofficial tier below NU.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3513882/\">PU</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517353/\">PU Viability Rankings</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/forums/pu.327/\">PU</a><br />";
 		}
 		if (target === 'all' || target === 'inversebattle' || target === 'inverse') {
 			matched = true;
