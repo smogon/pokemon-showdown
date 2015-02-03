@@ -2294,6 +2294,9 @@ exports.BattleScripts = {
 				case 'quickattack':
 					if (hasMove['feint']) rejected = true;
 					break;
+				case 'wideguard':
+					if (hasMove['protect']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
