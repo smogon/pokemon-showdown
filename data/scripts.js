@@ -225,14 +225,16 @@ exports.BattleScripts = {
 		// calculate true accuracy
 		var accuracy = move.accuracy;
 		if (accuracy !== true) {
-			if (!move.ignoreAccuracy) {
+			var targetAbilityIgnoreAccuracy = !target.ignore['Ability'] && target.getAbility().ignoreAccuracy;
+			if (!move.ignoreAccuracy && !targetAbilityIgnoreAccuracy) {
 				if (pokemon.boosts.accuracy > 0) {
 					accuracy *= boostTable[pokemon.boosts.accuracy];
 				} else {
 					accuracy /= boostTable[-pokemon.boosts.accuracy];
 				}
 			}
-			if (!move.ignoreEvasion) {
+			var pokemonAbilityIgnoreEvasion = !pokemon.ignore['Ability'] && pokemon.getAbility().ignoreEvasion;
+			if (!move.ignoreEvasion && !pokemonAbilityIgnoreEvasion) {
 				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
 					accuracy /= boostTable[target.boosts.evasion];
 				} else if (target.boosts.evasion < 0) {
