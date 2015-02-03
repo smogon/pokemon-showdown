@@ -1199,7 +1199,8 @@ exports.BattleFormatsData = {
 	pinsirmega: {
 		randomBattleMoves: ["swordsdance","earthquake","closecombat","quickattack","return"],
 		randomDoubleBattleMoves: ["feint","protect","swordsdance","xscissor","earthquake","closecombat","substitute","quickattack","return","rockslide"],
-		requiredItem: "Pinsirite"
+		requiredItem: "Pinsirite",
+		tier: "BL"
 	},
 	tauros: {
 		randomBattleMoves: ["rockclimb","earthquake","zenheadbutt","rockslide","pursuit","doubleedge"],
