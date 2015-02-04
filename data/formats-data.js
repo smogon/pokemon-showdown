@@ -1930,8 +1930,8 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	delibird: {
-		randomBattleMoves: ["rapidspin","iceshard","icepunch","freezedry","aerialace","spikes","destinybond"],
-		randomDoubleBattleMoves: ["fakeout","iceshard","icepunch","freezedry","aerialace","brickbreak","protect"],
+		randomBattleMoves: ["rapidspin","iceshard","icepunch","aerialace","spikes","destinybond"],
+		randomDoubleBattleMoves: ["fakeout","iceshard","icepunch","aerialace","brickbreak","protect"],
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["present"]}
 		],
