@@ -1401,14 +1401,19 @@ exports.BattleScripts = {
 		} while (moves.length < 4 && j < moveKeys.length);
 
 		// any moveset modification goes here
-		//moves[0] = 'Safeguard';
+		//moves[0] = 'safeguard';
 		if (template.requiredItem && template.requiredItem.slice(-5) === 'Drive' && !hasMove['technoblast']) {
-			delete hasMove[toId(moves[3])];
+			delete hasMove[moves[3]];
 			moves[3] = 'technoblast';
 			hasMove['technoblast'] = true;
 		}
+		if (template.id === 'salamencemega' && !counter['ate']) {
+			delete hasMove[moves[3]];
+			moves[3] = 'return';
+			hasMove['return'] = true;
+		}
 		if (template.requiredMove && !hasMove[toId(template.requiredMove)]) {
-			delete hasMove[toId(moves[3])];
+			delete hasMove[moves[3]];
 			moves[3] = toId(template.requiredMove);
 			hasMove[toId(template.requiredMove)] = true;
 		}
