@@ -226,11 +226,10 @@ Users.unlockRange = unlockRange;
 var connections = Users.connections = Object.create(null);
 
 Users.shortenHost = function (host) {
-	var dotIndex = host.lastIndexOf('.');
-	if (host.substr(-6, 4) === '.co.') dotIndex = host.length - 6;
-	if (dotIndex >= 1) dotIndex = host.lastIndexOf('.', dotIndex - 1);
-	var shortHost = (dotIndex >= 1 ? host.substr(dotIndex + 1) : host);
-	return shortHost;
+	var dotLoc = host.lastIndexOf('.');
+	if (host.substr(dotLoc) === '.uk') dotLoc = host.lastIndexOf('.', dotLoc - 1);
+	dotLoc = host.lastIndexOf('.', dotLoc - 1);
+	return host.substr(dotLoc + 1);
 };
 
 Users.socketConnect = function (worker, workerid, socketid, ip) {
@@ -289,7 +288,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 	dns.reverse(ip, function (err, hosts) {
 		if (hosts && hosts[0]) {
 			user.latestHost = hosts[0];
-			if (Config.hostfilter) Config.hostfilter(hosts[0], user);
+			if (Config.hostfilter) Config.hostfilter(hosts[0], user, connection);
 			if (user.named && !user.locked && user.group === Config.groupsranking[0]) {
 				var shortHost = Users.shortenHost(hosts[0]);
 				if (lockedRanges[shortHost]) {
@@ -299,6 +298,8 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 					user.updateIdentity();
 				}
 			}
+		} else {
+			if (Config.hostfilter) Config.hostfilter('', user, connection);
 		}
 	});
 
