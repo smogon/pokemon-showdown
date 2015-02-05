@@ -924,7 +924,6 @@ exports.BattleItems = {
 	"custapberry": {
 		id: "custapberry",
 		name: "Custap Berry",
-		isUnreleased: true,
 		spritenum: 86,
 		isBerry: true,
 		naturalGift: {

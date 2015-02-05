@@ -662,6 +662,11 @@ var commands = exports.commands = {
 	learnall: 'learn',
 	learn5: 'learn',
 	g6learn: 'learn',
+	rbylearn: 'learn',
+	gsclearn: 'learn',
+	advlearn: 'learn',
+	dpplearn: 'learn',
+	bw2learn: 'learn',
 	learn: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help learn');
 
@@ -672,6 +677,7 @@ var commands = exports.commands = {
 		var template = Tools.getTemplate(targets[0]);
 		var move = {};
 		var problem;
+		var format = {rby:'gen1ou', gsc:'gen2ou', adv:'gen3oubeta', dpp:'gen4ou', bw2:'gen5ou'}[cmd.substring(0, 3)];
 		var all = (cmd === 'learnall');
 		if (cmd === 'learn5') lsetData.set.level = 5;
 		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
@@ -689,10 +695,11 @@ var commands = exports.commands = {
 			if (!move.exists) {
 				return this.sendReply("Move '" + move.id + "' not found.");
 			}
-			problem = TeamValidator.checkLearnsetSync(null, move, template, lsetData);
+			problem = TeamValidator.checkLearnsetSync(format, move, template.species, lsetData);
 			if (problem) break;
 		}
 		var buffer = template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 2 ? "these moves" : move.name);
+		if (format) buffer += ' on ' + cmd.substring(0, 3).toUpperCase();
 		if (!problem) {
 			var sourceNames = {E:"egg", S:"event", D:"dream world"};
 			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul class=\"message-learn-list\">";
@@ -721,7 +728,13 @@ var commands = exports.commands = {
 					if (source.substr(2)) buffer += ": " + source.substr(2);
 				}
 			}
-			if (lsetData.sourcesBefore) buffer += "<li>any generation before " + (lsetData.sourcesBefore + 1);
+			if (lsetData.sourcesBefore) {
+				if (!(cmd.substring(0, 3) in {'rby':1, 'gsc':1})) {
+					buffer += "<li>any generation before " + (lsetData.sourcesBefore + 1);
+				} else if (!lsetData.sources) {
+					buffer += "<li>gen " + lsetData.sourcesBefore;
+				}
+			}
 			buffer += "</ul>";
 		}
 		this.sendReplyBox(buffer);
@@ -893,6 +906,16 @@ var commands = exports.commands = {
 		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
 	},
 
+	bofrocket: function (target, room, user) {
+		if (room.id !== 'bof') return this.sendReply("The command '/bofrocket' was unrecognized. To send a message starting with '/bofrocket', type '//bofrocket'.");
+		if (!this.can('modchat', null, room)) return;
+		target = this.splitTarget(target);
+		if (!this.targetUser) return this.sendReply("User not found");
+		if (!room.users[this.targetUser.userid]) return this.sendReply("Not in bof");
+		this.targetUser.avatar = '#bofrocket';
+		room.add("" + user.name + " applied bofrocket to " + this.targetUser.name);
+	},
+
 	showtan: function (target, room, user) {
 		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with '/showtan', type '//showtan'.");
 		if (!this.can('modchat', null, room)) return;
@@ -996,7 +1019,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">Other Metagame of the Month</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3519286/\">Current OMotM: FU</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521887/\">Current OMotM: Classic Hackmons</a><br />";
 		}
 		if (target === 'all' || target === 'seasonal') {
 			matched = true;
@@ -1006,6 +1029,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3489849/\">Balanced Hackmons</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515725/\">Balanced Hackmons Suspect Discussion</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3525676/\">Balanced Hackmons Viability Rankings</a><br />";
 		}
 		if (target === 'all' || target === '1v1') {
 			matched = true;
@@ -1014,18 +1038,20 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'monotype') {
 			matched = true;
+			if (target !== 'all') buffer += "All Pokémon on a team must share a type.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">Monotype</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517737/\">Monotype Viability Rankings</a><br />";
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
 			matched = true;
+			if (target !== 'all') buffer += "Pokémon below OU get all their stats boosted. BL/UU get +5, BL2/RU get +10, and BL3/NU or lower get +15.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3508369/\">Tier Shift</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3514386/\">Tier Shift Viability Rankings</a><br />";
 		}
 		if (target === 'all' || target === 'pu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3513882/\">PU</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517353/\">PU Viability Rankings</a><br />";
+			if (target !== 'all') buffer += "The unofficial tier below NU.<br />";
+			buffer += "- <a href=\"http://www.smogon.com/forums/forums/pu.327/\">PU</a><br />";
 		}
 		if (target === 'all' || target === 'inversebattle' || target === 'inverse') {
 			matched = true;
@@ -1046,7 +1072,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'lcuu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516967/\">LC UU</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523929/\">LC UU</a><br />";
 		}
 		if (target === 'all' || target === '350cup') {
 			matched = true;
@@ -1264,7 +1290,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521201/\">OU Metagame Discussion</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521602/\">OU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526596/\">OU Viability Rankings</a><br />";
 		}
 		if (target === 'all' || target === 'ubers' || target === 'uber') {
 			matched = true;
@@ -1273,7 +1299,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'underused' || target === 'uu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522744/\">np: UU Stage 1</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3528903/\">np: UU Stage 2</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523649/\">UU Viability Rankings</a><br />";
 		}
@@ -1285,9 +1311,9 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'neverused' || target === 'nu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522559/\">np: NU Stage 3</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3528871/\">np: NU Stage 4</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509494/\">NU Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523692/\">NU Viability Rankings</a><br />";
 		}
 		if (target === 'all' || target === 'littlecup' || target === 'lc') {
 			matched = true;
@@ -1412,6 +1438,38 @@ var commands = exports.commands = {
 		} else {
 			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pokemon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
 			this.logModCommand("The Pokemon of the Day was removed by " + user.name + ".");
+		}
+	},
+
+	spammode: function (target, room, user) {
+		if (!this.can('ban')) return false;
+
+		// NOTE: by default, spammode does nothing; it's up to you to set stricter filters
+		// in config for chatfilter/hostfilter. Put this above the spammode filters:
+		/*
+		if (!Config.spammode) return;
+		if (Config.spammode < Date.now()) {
+			delete Config.spammode;
+			return;
+		}
+		*/
+
+		if (target === 'off' || target === 'false') {
+			if (Config.spammode) {
+				delete Config.spammode;
+				this.privateModCommand("(" + user.name + " turned spammode OFF.)");
+			} else {
+				this.sendReply("Spammode is already off.");
+			}
+		} else if (!target || target === 'on' || target === 'true') {
+			if (Config.spammode) {
+				this.privateModCommand("(" + user.name + " renewed spammode for half an hour.)");
+			} else {
+				this.privateModCommand("(" + user.name + " turned spammode ON for half an hour.)");
+			}
+			Config.spammode = Date.now() + 30 * 60 * 1000;
+		} else {
+			this.sendReply("Unrecognized spammode setting.");
 		}
 	},
 

@@ -275,7 +275,11 @@ exports.BattleScripts = {
 		damage = this.tryMoveHit(target, pokemon, move);
 
 		// Store 0 damage for last damage if move failed or dealt 0 damage.
-		if (!damage) pokemon.battle.lastDamage = 0;
+		// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
+		if (!damage && (move.category === 'Status' && !(move.status in {'psn':1, 'tox':1, 'par':1})) &&
+		!(move.id in {'conversion':1, 'haze':1, 'mist':1, 'focusenergy':1, 'confuseray':1, 'transform':1, 'lightscreen':1, 'reflect':1, 'substitute':1, 'mimic':1, 'leechseed':1, 'splash':1, 'softboiled':1, 'recover':1, 'rest':1})) {
+			pokemon.battle.lastDamage = 0;
+		}
 
 		// Go ahead with results of the used move.
 		if (!damage && damage !== 0) {
@@ -1025,7 +1029,7 @@ exports.BattleScripts = {
 		var typeCount = {};
 		var uberCount = 0;
 		var nuCount = 0;
-		var hasMagikarp = false;
+		var hasShitmon = false;
 
 		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(keys[i]);
@@ -1034,15 +1038,16 @@ exports.BattleScripts = {
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			var tier = template.tier;
 			if (tier === 'LC' && nuCount > 1) continue;
-			if ((tier === 'NFE' || tier === 'UU') && nuCount > 2 && Math.random() * 5 > 1) continue;
-			// Unless you have Magikarp, in that case we allow luck to give you Mew and Mewtwo.
-			if (tier === 'Uber' && uberCount >= 1 && !hasMagikarp) continue;
+			if ((tier === 'NFE' || tier === 'UU') && nuCount > 2 && this.random(1)) continue;
+			// Unless you have one of the worst mons, in that case we allow luck to give you Mew and Mewtwo.
+			if (tier === 'Uber' && uberCount >= 1 && !hasShitmon) continue;
 
 			// Limit 2 of any type. This helps so you don't get a full Surf or Blizzard weak team.
+			// The second of a same type has halved chance of being added.
 			var types = template.types;
 			var skip = false;
 			for (var t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1) {
+				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(1))) {
 					skip = true;
 					break;
 				}
@@ -1073,7 +1078,7 @@ exports.BattleScripts = {
 			}
 
 			// Is it Magikarp?
-			if (keys[i] === 'magikarp') hasMagikarp = true;
+			if (keys[i] in {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1, 'ditto':1}) hasShitmon = true;
 		}
 
 		return pokemon;
@@ -1096,7 +1101,7 @@ exports.BattleScripts = {
 		var j = 0;
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			var howMany = (template.mandatoryMove) ? 3 : 4;
+			var howMany = (template.essentialMove) ? 3 : 4;
 			while (moves.length < howMany && j < moveKeys.length) {
 				var moveid = toId(moveKeys[j]);
 				j++;
@@ -1104,8 +1109,8 @@ exports.BattleScripts = {
 			}
 
 			// Add now the mandatory move
-			if (template.mandatoryMove) {
-				moves.unshift(template.mandatoryMove);
+			if (template.essentialMove) {
+				moves.unshift(template.essentialMove);
 				j++;
 			}
 
@@ -1139,7 +1144,7 @@ exports.BattleScripts = {
 					var move = this.getMove(moveid);
 					var rejected = false;
 					if (hasMove[moveid]) rejected = true;
-					if (!template.mandatoryMove || moveid !== template.mandatoryMove) {
+					if (!template.essentialMove || moveid !== template.essentialMove) {
 						var isSetup = false;
 
 						switch (moveid) {
@@ -1211,7 +1216,7 @@ exports.BattleScripts = {
 							if (hasMove['slash']) rejected = true;
 							break;
 						case 'slash':
-							if (setupType === 'Physical') rejected = true;
+							if (hasMove['swordsdance']) rejected = true;
 							break;
 						case 'megakick':
 							if (hasMove['bodyslam']) rejected = true;
@@ -1225,6 +1230,12 @@ exports.BattleScripts = {
 						case 'growth':
 							if (hasMove['amnesia']) rejected = true;
 							break;
+						case 'supersonic':
+							if (hasMove['confuseray']) rejected = true;
+							break;
+						case 'poisonpowder':
+							if (hasMove['toxic']) rejected = true;
+							break;
 						} // End of switch for moveid
 					}
 					if (rejected && j < moveKeys.length) {
@@ -1237,19 +1248,20 @@ exports.BattleScripts = {
 		} while (moves.length < 4 && j < moveKeys.length);
 
 		var levelScale = {
-			LC: 92,
-			NFE: 88,
+			LC: 95,
+			NFE: 92,
 			UU: 86,
-			OU: 82,
-			Uber: 78
+			OU: 80,
+			Uber: 77
 		};
 		// Really bad Pokemon and jokemons and MEWTWO.
 		var customScale = {
 			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99,
-			Clefairy: 95, "Farfetch'd": 95, Jigglypuff: 95, Mewtwo: 71
+			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 71
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
+		if (template.name === 'Mewtwo' && hasMove['amnesia']) level = 68;
 
 		return {
 			name: template.name,
