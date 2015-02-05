@@ -57,5 +57,9 @@ if (!process.send) {
 		});
 	});
 
+	process.on('disconnect', function () {
+		process.exit();
+	});
+
 	require('./repl.js').start('verifier', function (cmd) { return eval(cmd); });
 }
