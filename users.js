@@ -226,11 +226,10 @@ Users.unlockRange = unlockRange;
 var connections = Users.connections = Object.create(null);
 
 Users.shortenHost = function (host) {
-	var dotIndex = host.lastIndexOf('.');
-	if (host.substr(-6, 4) === '.co.') dotIndex = host.length - 6;
-	if (dotIndex >= 1) dotIndex = host.lastIndexOf('.', dotIndex - 1);
-	var shortHost = (dotIndex >= 1 ? host.substr(dotIndex + 1) : host);
-	return shortHost;
+	var dotLoc = host.lastIndexOf('.');
+	if (host.substr(dotLoc) === '.uk') dotLoc = host.lastIndexOf('.', dotLoc - 1);
+	dotLoc = host.lastIndexOf('.', dotLoc - 1);
+	return host.substr(dotLoc + 1);
 };
 
 Users.socketConnect = function (worker, workerid, socketid, ip) {
