@@ -141,6 +141,10 @@ process.on('message', function (message) {
 	}
 });
 
+process.on('disconnect', function () {
+	process.exit();
+});
+
 BattlePokemon = (function () {
 	function BattlePokemon(set, side) {
 		this.side = side;

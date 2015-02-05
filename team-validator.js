@@ -182,6 +182,10 @@ if (!process.send) {
 			respond(id, true, packedTeam);
 		}
 	});
+
+	process.on('disconnect', function () {
+		process.exit();
+	});
 }
 
 Validator = (function () {
