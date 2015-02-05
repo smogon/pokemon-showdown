@@ -2311,11 +2311,11 @@ Battle = (function () {
 		if (typeof id !== 'string') id = id.id;
 		for (var i = 0; i < this.p1.pokemon.length; i++) {
 			var pokemon = this.p1.pokemon[i];
-			if (pokemon.id === id) return pokemon;
+			if (pokemon.id === id) return '' + pokemon;
 		}
 		for (var i = 0; i < this.p2.pokemon.length; i++) {
 			var pokemon = this.p2.pokemon[i];
-			if (pokemon.id === id) return pokemon;
+			if (pokemon.id === id) return '' + pokemon;
 		}
 		return null;
 	};
