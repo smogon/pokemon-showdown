@@ -6,7 +6,7 @@ exports.Formats = [
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/*{
 		name: "1v1 Random (BWknd 26)",
 		section: "ORAS Singles",
 
@@ -19,7 +19,7 @@ exports.Formats = [
 			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		}
-	},
+	},*/
 	{
 		name: "OU",
 		section: "ORAS Singles",
