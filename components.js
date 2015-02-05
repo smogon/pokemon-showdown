@@ -456,7 +456,7 @@ var components = exports.components = {
 	},
 
 	rmall: function (target, room, user) {
-		if(!this.can('declare')) return;
+		if (!this.can('rmall', null, room)) return false;
 		if (!target) return this.parse('/help rmall');
 
 		var pmName = '~Server PM [Do not reply]';
