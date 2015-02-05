@@ -3078,15 +3078,10 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon ignores other Pokemon's stat changes when taking or doing damage.",
 		id: "unaware",
 		name: "Unaware",
-		onModifyMove: function (move, user, target) {
-			move.ignoreEvasion = true;
-			move.ignoreDefensive = true;
-		},
-		onSourceModifyMove: function (move, user, target) {
-			if (user.hasAbility(['moldbreaker', 'turboblaze', 'teravolt'])) return;
-			move.ignoreAccuracy = true;
-			move.ignoreOffensive = true;
-		},
+		ignoreEvasion: true,
+		ignoreDefensive: true,
+		ignoreAccuracy: true,
+		ignoreOffensive: true,
 		rating: 3,
 		num: 109
 	},
