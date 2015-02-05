@@ -298,6 +298,8 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 					user.updateIdentity();
 				}
 			}
+		} else {
+			if (Config.hostfilter) Config.hostfilter('', user, connection);
 		}
 	});
 
