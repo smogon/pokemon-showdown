@@ -1093,7 +1093,7 @@ exports.BattleScripts = {
 					if (setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
 					isSetup = true;
 					break;
-				case 'nastyplot': case 'tailglow': case 'quiverdance': case 'calmmind':
+				case 'nastyplot': case 'tailglow': case 'quiverdance': case 'calmmind': case 'geomancy':
 					if (counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Special' || counter['specialsetup'] > 1) rejected = true;
 					isSetup = true;
@@ -1691,12 +1691,14 @@ exports.BattleScripts = {
 			Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Metagross: 78, Pinsir: 82, Sableye: 78, Venusaur: 78,
 
 			// Holistic judgment
-			Articuno: 82, Genesect: 72, Greninja: 72, "Rotom-Fan": 88, Sigilyph: 80, Unown: 90, Xerneas: 66
+			Articuno: 82, Genesect: 72, Greninja: 72, "Rotom-Fan": 88, Sigilyph: 80, Unown: 90
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 90;
+
+		if (template.name === 'Xerneas' && hasMove['geomancy']) level = 68;
 
 		// Prepare HP for Belly Drum.
 		if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
@@ -2035,7 +2037,7 @@ exports.BattleScripts = {
 		};
 		// Moves which boost Special Attack:
 		var SpecialSetup = {
-			nastyplot:1, tailglow:1, quiverdance:1, calmmind:1, chargebeam:1
+			nastyplot:1, tailglow:1, quiverdance:1, calmmind:1, chargebeam:1, geomancy:1
 		};
 		// Moves which boost Attack AND Special Attack:
 		var MixedSetup = {
@@ -2180,7 +2182,7 @@ exports.BattleScripts = {
 					if (setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
 					isSetup = true;
 					break;
-				case 'nastyplot': case 'tailglow': case 'quiverdance': case 'calmmind':
+				case 'nastyplot': case 'tailglow': case 'quiverdance': case 'calmmind': case 'geomancy':
 					if (counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Special' || counter['specialsetup'] > 1) rejected = true;
 					isSetup = true;
