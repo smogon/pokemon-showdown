@@ -13,9 +13,9 @@ Showdown directly using WebSocket:
 
 Client implementations you might want to look at for reference include:
 
-- pickdenis's chat bot (Ruby) -
+- pickdenis' chat bot (Ruby) -
     https://github.com/pickdenis/ps-chatbot
-- Slayer95 and TTT's chat bot (Node.js) -
+- Quinella and TalkTakesTime's chat bot (Node.js) -
     https://github.com/TalkTakesTime/Pokemon-Showdown-Bot
 - the official client (HTML5 + JavaScript) -
     https://github.com/Zarel/Pokemon-Showdown-Client
