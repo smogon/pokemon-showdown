@@ -9,7 +9,7 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2]
 Introduction
 ------------------------------------------------------------------------
 
-This is the source code for the game server of [Pokémon Showdown][3], a website for Pokémon battling. Pokémon Showdown simulates singles and doubles battles in all the games out so far (Generations 1 through 6).
+This is the source code for the game server of [Pokémon Showdown][3], a website for Pokémon battling. Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 6).
 
 This repository contains the files needed to set up your own Pokémon Showdown server. Note that to set up a server, you'll also need a server computer.
 
