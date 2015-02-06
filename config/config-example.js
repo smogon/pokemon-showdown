@@ -64,9 +64,17 @@ exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
 // report joins and leaves - shows messages like "<USERNAME> joined"
 //   Join and leave messages are small and consolidated, so there will never
 //   be more than one line of messages.
+//   If this setting is set to `true`, it will override the client-side
+//   /hidejoins configuration for users.
 //   This feature can lag larger servers - turn this off if your server is
 //   getting more than 80 or so users.
 exports.reportjoins = true;
+
+// report joins and leaves periodically - sends silent join and leave messages in batches
+//   This setting will only be effective if `reportjoins` is set to false, and users will
+//   only be able to see the messages if they have the /showjoins client-side setting enabled.
+//   Set this to a positive amount of milliseconds if you want to enable this feature.
+exports.reportjoinsperiod = 0;
 
 // report battles - shows messages like "OU battle started" in the lobby
 //   This feature can lag larger servers - turn this off if your server is
@@ -74,7 +82,8 @@ exports.reportjoins = true;
 exports.reportbattles = true;
 
 // report joins and leaves in battle - shows messages like "<USERNAME> joined" in battle
-// Turn this off on large tournament servers where battles get a lot of joins and leaves.
+//   Set this to false on large tournament servers where battles get a lot of joins and leaves.
+//   Note that the feature of turning this off is deprecated.
 exports.reportbattlejoins = true;
 
 // moderated chat - prevent unvoiced users from speaking
@@ -83,6 +92,11 @@ exports.reportbattlejoins = true;
 exports.chatmodchat = false;
 exports.battlemodchat = false;
 exports.pmmodchat = false;
+
+// forced timer - force the timer on for all battles
+//   Players will be unable to turn it off.
+//   This setting can also be turned on with the command /forcetimer.
+exports.forcetimer = false;
 
 // backdoor - allows Pokemon Showdown system operators to provide technical
 //            support for your server
@@ -94,13 +108,13 @@ exports.pmmodchat = false;
 //   disable this feature.
 exports.backdoor = true;
 
-// List of IPs from which the dev console (>> and >>>) can be used.
+// List of IPs and user IDs with dev console (>> and >>>) access.
 // The console is incredibly powerful because it allows the execution of
 // arbitrary commands on the local computer (as the user running the
 // server). If an account with the console permission were compromised,
 // it could possibly be used to take over the server computer. As such,
-// you should only specify a small range of trusted IPs here, or none
-// at all. By default, only localhost can use the dev console.
+// you should only specify a small range of trusted IPs and users here,
+// or none at all. By default, only localhost can use the dev console.
 // In addition to connecting from a valid IP, a user must *also* have
 // the `console` permission in order to use the dev console.
 // Setting this to an empty array ([]) will disable the dev console.
