@@ -1294,7 +1294,7 @@ exports.BattleScripts = {
 					break;
 				case 'thunderwave': case 'stunspore':
 					if (setupType || hasMove['rockpolish'] || hasMove['agility']) rejected = true;
-					if (hasMove['discharge'] || hasMove['trickroom']) rejected = true;
+					if (hasMove['discharge'] || hasMove['trickroom'] || hasMove['gyroball']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder']) rejected = true;
 					break;
@@ -1408,6 +1408,11 @@ exports.BattleScripts = {
 			delete hasMove[moves[3]];
 			moves[3] = 'technoblast';
 			hasMove['technoblast'] = true;
+		}
+		if (template.id === 'gardevoirmega' && !counter['ate']) {
+			delete hasMove[moves[3]];
+			moves[3] = 'hypervoice';
+			hasMove['hypervoice'] = true;
 		}
 		if (template.id === 'salamencemega' && !counter['ate']) {
 			delete hasMove[moves[3]];

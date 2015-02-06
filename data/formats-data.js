@@ -4274,7 +4274,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	cofagrigus: {
-		randomBattleMoves: ["nastyplot","trickroom","shadowball","hiddenpowerfighting","willowisp","haze","rest","sleeptalk","painsplit"],
+		randomBattleMoves: ["nastyplot","trickroom","shadowball","hiddenpowerfighting","willowisp","haze","painsplit"],
 		randomDoubleBattleMoves: ["nastyplot","trickroom","shadowball","hiddenpowerfighting","willowisp","protect","painsplit"],
 		tier: "RU"
 	},
@@ -5193,8 +5193,8 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	xerneas: {
-		randomBattleMoves: ["geomancy","moonblast","thunder","focusblast","thunderbolt","hiddenpowerfire","psyshock","rockslide","closecombat","megahorn","substitute"],
-		randomDoubleBattleMoves: ["geomancy","dazzlinggleam","thunder","focusblast","thunderbolt","hiddenpowerfire","psyshock","rockslide","closecombat","megahorn","protect"],
+		randomBattleMoves: ["geomancy","moonblast","thunder","focusblast","thunderbolt","hiddenpowerfire","psyshock","rockslide","closecombat"],
+		randomDoubleBattleMoves: ["geomancy","dazzlinggleam","thunder","focusblast","thunderbolt","hiddenpowerfire","psyshock","rockslide","closecombat","protect"],
 		unobtainableShiny: true,
 		tier: "Uber"
 	},
