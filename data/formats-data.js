@@ -5193,8 +5193,8 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	xerneas: {
-		randomBattleMoves: ["geomancy","moonblast","thunder","focusblast"],
-		randomDoubleBattleMoves: ["geomancy","dazzlinggleam","thunder","focusblast","protect"],
+		randomBattleMoves: ["geomancy","moonblast","thunder","focusblast","thunderbolt","hiddenpowerfire","psyshock","rockslide","closecombat","megahorn","substitute"],
+		randomDoubleBattleMoves: ["geomancy","dazzlinggleam","thunder","focusblast","thunderbolt","hiddenpowerfire","psyshock","rockslide","closecombat","megahorn","protect"],
 		unobtainableShiny: true,
 		tier: "Uber"
 	},
