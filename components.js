@@ -518,7 +518,7 @@ var components = exports.components = {
 	},
 
 	poll: function (target, room, user) {
-		if (!this.can('broadcast')) return;
+		if (!this.can('poll', null, room)) return false;
 		if (Poll[room.id].question) return this.sendReply('There is currently a poll going on already.');
 		if (!this.canTalk()) return;
 
