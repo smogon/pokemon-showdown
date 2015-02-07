@@ -4813,7 +4813,7 @@ exports.BattleScripts = {
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
 			// Ban Shedinja
-			if (template.species === 'shedinja') continue;
+			if (keys[i].substr(0, 8) === 'shedinja' && Math.random() * 2 > 0) continue;
 
 			// Limit 2 of any type
 			var types = template.types;
