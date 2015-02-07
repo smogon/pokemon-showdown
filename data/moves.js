@@ -8386,7 +8386,7 @@ exports.BattleMovedex = {
 				var move = this.getMove(decision.move);
 				if (move.category !== 'Status' && !noMeFirst[move]) {
 					pokemon.addVolatile('mefirst');
-					this.useMove(move, pokemon);
+					this.useMove(move, pokemon, target);
 					return;
 				}
 			}
@@ -8898,7 +8898,7 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function (target, source) {
-			this.useMove(target.lastMove, source);
+			this.useMove(target.lastMove, source, target);
 		},
 		secondary: false,
 		target: "normal",
