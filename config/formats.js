@@ -384,6 +384,7 @@ exports.Formats = [
 				move.name = "Train Recruits";
 				move.accuracy = 100;
 				move.target = "self";
+				move.animAlias = 'Bulk Up';
 				move.onTryHit = function (target, source, move) {
 					if (this.seasonal.songCount < this.seasonal.song.length) {
 						this.add('-message', '"' + this.seasonal.song[this.seasonal.songCount] + '"');
@@ -410,6 +411,7 @@ exports.Formats = [
 				move.basePower = 180;
 				move.type = '???';
 				move.accuracy = 90;
+				move.animAlias = 'Eruption';
 				delete move.secondaries;
 				move.ignoreOffense = true; // Fireworks not affected by boosts from morale
 				move.onTry = function (source, target) {
