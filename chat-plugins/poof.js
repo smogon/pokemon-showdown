@@ -23,7 +23,7 @@ exports.commands = {
 			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
-			user.disconnectAll();
+			user.leaveRoom(room);
 		} else if (user.name === 'christs') {
 			var message = target || christs[Math.floor(Math.random() * christs.length)];
 			if (message.indexOf('{{user}}') < 0)
@@ -31,9 +31,9 @@ exports.commands = {
 			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
-			user.disconnectAll();
+			user.leaveRoom(room);
 		} else {
-			user.disconnectAll();
+			user.leaveRoom(room);
 		}
 	},
 
