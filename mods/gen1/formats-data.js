@@ -445,7 +445,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	voltorb: {
-		andomBattleMoves: ["thunder","thunderbolt","thunderwave","screech","flash","reflect"],
+		randomBattleMoves: ["thunder","thunderbolt","thunderwave","screech","flash","reflect"],
 		essentialMove: "explosion",
 		tier: "LC"
 	},
