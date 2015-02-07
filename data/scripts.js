@@ -82,6 +82,8 @@ exports.BattleScripts = {
 
 		if (move.isTwoTurnMove && !pokemon.volatiles[move.id]) {
 			attrs = '|[still]'; // suppress the default move animation
+		} else if (move.animAlias) {
+			attrs = '|[animalias]' + this.getMove(move.animAlias);
 		}
 
 		var movename = move.name;
