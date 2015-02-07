@@ -4812,8 +4812,7 @@ exports.BattleScripts = {
 			// Not available on XY
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
-			// Ban Shedinja
-			if (keys[i].substr(0, 8) === 'shedinja' && Math.random() * 2 > 0) continue;
+			if (keys[i].substr(0, 8) === 'ninjask' && Math.random() * 2 > 1) continue;
 
 			// Limit 2 of any type
 			var types = template.types;
@@ -4849,6 +4848,10 @@ exports.BattleScripts = {
 			baseFormes[template.baseSpecies] = 1;
 
 			set.moves = ['metronome'];
+
+			if (template.id === 'shedinja') {
+				set.species = 'ninjask';
+			}
 
 			if (set.item === 'assaultvest') {
 				set.item = 'leftovers';
