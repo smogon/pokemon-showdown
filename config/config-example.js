@@ -324,7 +324,8 @@ exports.customavatars = {
 	'dracomasterbrit': 'pomman.gif',
 	'arguso': 'arguso.png',
 	'duzzy': 'jellicent.gif',
-	'cluricaun': 'cluricaun.gif',
+	'cluricaun': 'allianceclur.jpg',
+	'allianceclur': 'allianceclur.jpg',
 	'insanelover': 'insanelover.png',
 	'slrloer': 'insanelover.png',
 	'alliancelver': 'insanelover.png',
@@ -371,8 +372,8 @@ exports.customavatars = {
 	'allianceghast': 'allianceghast.jpg',
 	'alliancemystle': 'alliancemystle.png',
 	'mystletaynn': 'alliancemystle.png',
-	'alliancelemon': 'alliancelemon.png',
-	'allianclemn': 'alliancelemon.png',
+	'alliancelemon': 'alliancelemon.gif',
+	'allianclemn': 'alliancelemon.gif',
 	'alliancespook': 'alliancespook.png',
 	'alliancenidaime': 'alliancenidaime.gif',
 	'thenidaime': 'alliancenidaime.gif',
@@ -383,6 +384,7 @@ exports.customavatars = {
 	'dudugoissilva': 'funkycrackudocat.png',
 	'abnegation': 'abnegation.png',
 	'sranger': 'abnegation.png',
+	'rabinov': 'rabinov.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
