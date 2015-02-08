@@ -361,7 +361,7 @@ exports.Formats = [
 		team: 'randomSeasonalMulan',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
-			this.add('message', "General Shang! The Huns are marching towards the Imperial City! Train your recruits quickly and make your stand!");
+			this.add('message', "General Li Shang! The Huns are marching towards the Imperial City! Train your recruits quickly and make your stand!");
 			this.seasonal.songCount = 0;
 			this.seasonal.song = [
 				"Let's get down to business, to defeat the Huns!", "Did they send me daughters, when I asked for sons?",
@@ -385,16 +385,14 @@ exports.Formats = [
 				move.accuracy = 100;
 				move.target = "self";
 				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Bulk Up", source);
 					if (this.seasonal.songCount < this.seasonal.song.length) {
 						this.add('-message', '"' + this.seasonal.song[this.seasonal.songCount] + '"');
 						if (this.seasonal.verses[this.seasonal.songCount]) {
 							this.add('-message', "Because of the difficult training, the new recruits are more experienced!");
 							if (this.seasonal.songCount === 27) {
 								this.add('-message', "The recruits are now fully trained!");
-							}
-							if (source.name !== 'Li Shang' && source.name !== 'Mushu') {
-								var boosts = (this.seasonal.morale % 2 ? {def: 1, spd: 1} : {atk: 1, spa: 1});
-								this.boost(boosts, source, source, move);
 							}
 							this.seasonal.morale++;
 						}
@@ -404,20 +402,26 @@ exports.Formats = [
 					}
 					return null;
 				};
-			} else if (move.id === 'octazooka') {
+			} else if (move.id === 'searingshot') {
 				move.name = "Fire Rocket";
 				move.category = 'Physical';
-				move.basePower = 180;
+				move.basePower = 160;
 				move.type = '???';
-				move.accuracy = 90;
+				move.accuracy = 80;
+				move.willCrit = false;
 				delete move.secondaries;
+				delete move.flags.bullet;
 				move.ignoreOffense = true; // Fireworks not affected by boosts from morale
 				move.onTry = function (source, target) {
+					this.attrLastMove('[still]');
 					// If the soldier is inexperienced, the rocket can explode in their face. 50% chance at 0 morale, 33% at 1, 17% at 2, 0% afterwards.
 					if (source.name !== 'Li Shang' && (this.random(6) > (this.seasonal.morale + 2))) {
+						this.add('-anim', source, "Eruption", source);
 						this.add('-message', "But " + source.name + "'s inexperience caused the rocket to backfire!");
 						this.damage(Math.ceil(source.maxhp / 8), source, source, "the explosion", true);
 						return null;
+					} else {
+						this.add('-anim', source, "Eruption", target);
 					}
 				};
 			} else if (move.id === 'sacredfire') {
@@ -429,7 +433,7 @@ exports.Formats = [
 			this.seasonal.morale = this.seasonal.morale || 0;
 			if (pokemon.name in {'Mulan': 1, 'Yao': 1, 'Ling': 1, 'Chien-Po': 1}) {
 				var offense = Math.ceil(this.seasonal.morale / 2) - 1;
-				var defense = Math.floor(this.seasonal.morale / 2);
+				var defense = Math.floor(this.seasonal.morale / 2) - 1;
 				this.boost({atk: offense, spa: offense, def: defense, spd: defense}, pokemon, pokemon, this.getMove('sing'));
 			}
 
