@@ -2760,6 +2760,9 @@ exports.BattleScripts = {
 				pokemon = chinese[i];
 				template = this.getTemplate(pokemon);
 
+				// Li Shang shouldn't be an NFE Pokemon.
+				if (names[pokemonLeft] === "Li Shang" && template.evos.length) continue;
+
 				// We don't want too many Fighting or Flying weaknesses, since those moves will be common
 				// Hard limit it to two, since after factoring in Chien-Po we might have a lot of common weakness
 				var mainWeakness = {};
@@ -2782,8 +2785,10 @@ exports.BattleScripts = {
 				set.species = toId(set.name);
 				set.name = names[pokemonLeft];
 				set.gender = (set.name === "Mulan" ? 'F' : 'M');
-				set.moves[4] = 'sing';
-				set.moves[5] = 'octazooka';
+				set.moves[4] = 'searingshot';
+				if (set.name === "Li Shang") {
+					set.moves[5] = 'sing';
+				}
 				team.push(set);
 				pokemonLeft++;
 			}
@@ -2796,20 +2801,19 @@ exports.BattleScripts = {
 			set.species = toId(set.name);
 			set.name = "Chien-Po";
 			set.gender = 'M';
-			set.moves[4] = 'sing';
-			set.moves[5] = 'octazooka';
+			set.moves[4] = 'searingshot';
 			team.push(set);
 
 			// Add Eddie Murphy-- I mean, Mushu, to the team as a Dragonair.
 			template = this.getTemplate('dragonair');
-			template.randomBattleMoves = ['dragondance', 'outrage', 'aquatail', 'waterfall', 'fusionbolt', 'extremespeed', 'dracometeor', 'dragonascent'];
+			template.randomBattleMoves = ['dragondance', 'aquatail', 'waterfall', 'wildcharge', 'extremespeed', 'dracometeor', 'dragonascent'];
 			set = this.randomSet(template, 5);
 			set.species = toId(set.name);
 			set.name = "Mushu";
 			set.gender = 'M';
 			set.ability = "Turboblaze";
-			set.moves[4] = 'sing';
-			set.moves[5] = 'sacredfire';
+			set.moves[4] = 'sacredfire';
+			set.moves[5] = 'dragonrush';
 			team.push(set);
 		} else {
 			var huns = [
