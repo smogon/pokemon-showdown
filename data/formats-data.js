@@ -3059,7 +3059,7 @@ exports.BattleFormatsData = {
 		requiredItem: "Metagrossite"
 	},
 	regirock: {
-		randomBattleMoves: ["stealthrock","thunderwave","stoneedge","drainpunch","curse","rest","sleeptalk","rockslide","toxic"],
+		randomBattleMoves: ["stealthrock","thunderwave","stoneedge","drainpunch","curse","rest","rockslide","toxic"],
 		randomDoubleBattleMoves: ["stealthrock","thunderwave","stoneedge","drainpunch","curse","rockslide","protect"],
 		eventPokemon: [
 			{"generation":3,"level":40,"moves":["curse","superpower","ancientpower","hyperbeam"]}
