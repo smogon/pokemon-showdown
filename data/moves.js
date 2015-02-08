@@ -11660,7 +11660,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the Attack and Special Attack of all grounded Grass-type Pokemon on the field by 1 stage.",
-		shortDesc: "Raises Attack and Sp. Atk of Grass Pokemon.",
+		shortDesc: "Raises Atk, Sp. Atk of grounded Grass types by 1.",
 		id: "rototiller",
 		name: "Rototiller",
 		pp: 10,
@@ -11668,16 +11668,24 @@ exports.BattleMovedex = {
 		flags: {distance: 1, nonsky: 1},
 		onHitField: function (target, source) {
 			var targets = [];
+			var anyAirborne = false;
 			for (var i = 0; i < this.sides.length; i++) {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j] && this.sides[i].active[j].hasType('Grass')) {
-						// This move affects every Grass-type Pokemon in play.
-						targets.push(this.sides[i].active[j]);
+					if (this.sides[i].active[j]) {
+						if (!this.sides[i].active[j].runImmunity('Ground')) {
+							this.add('-immune', this.sides[i].active[j], '[msg]');
+							anyAirborne = true;
+							continue;
+						}
+						if (this.sides[i].active[j].hasType('Grass')) {
+							// This move affects every grounded Grass-type Pokemon in play.
+							targets.push(this.sides[i].active[j]);
+						}
 					}
 				}
 			}
-			if (!targets.length) return false; // No targets; move fails
-			for (var i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source, 'move: Rototiller');
+			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon
+			for (var i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source);
 		},
 		secondary: false,
 		target: "all",
