@@ -16119,7 +16119,9 @@ exports.BattleMovedex = {
 		},
 		self: {
 			onHit: function (source) {
-				this.setWeather('raindance');
+				if (!this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
+					this.setWeather('raindance');
+				}
 				source.addVolatile('magiccoat');
 				source.addVolatile('aquaring');
 			},
