@@ -1142,6 +1142,9 @@ exports.BattleScripts = {
 				case 'naturepower':
 					if (hasMove['hypervoice']) rejected = true;
 					break;
+				case 'hypervoice':
+					if (hasMove['return']) rejected = true;
+					break;
 				case 'surf':
 					if (hasMove['scald'] || hasMove['hydropump']) rejected = true;
 					break;
@@ -1408,6 +1411,11 @@ exports.BattleScripts = {
 			delete hasMove[moves[3]];
 			moves[3] = 'technoblast';
 			hasMove['technoblast'] = true;
+		}
+		if (template.id === 'altariamega' && !counter['ate']) {
+			delete hasMove[moves[3]];
+			moves[3] = 'return';
+			hasMove['return'] = true;
 		}
 		if (template.id === 'gardevoirmega' && !counter['ate']) {
 			delete hasMove[moves[3]];
