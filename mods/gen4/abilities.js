@@ -3,9 +3,12 @@ exports.BattleAbilities = {
 		inherit: true,
 		desc: "If this Pokemon, or its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
 		shortDesc: "If this Pokemon is hit by a critical hit, its Attack is boosted by 12.",
-		onCriticalHit: function (target) {
-			target.setBoost({atk: 6});
-			this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
+		onAfterSubDamage: function (damage, target, source, move) {
+			if (!target.hp) return;
+			if (move && move.effectType === 'Move' && move.crit) {
+				target.setBoost({atk: 6});
+				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
+			}
 		}
 	},
 	"leafguard": {
