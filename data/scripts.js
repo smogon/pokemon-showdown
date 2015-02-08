@@ -1478,6 +1478,8 @@ exports.BattleScripts = {
 				rejectAbility = template.id === 'stunfisk';
 			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
+			} else if (ability === 'Unburden') {
+				rejectAbility = template.baseStats.spe > 120;
 			} else if (ability === 'Gluttony') {
 				rejectAbility = true;
 			}
