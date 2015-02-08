@@ -2781,6 +2781,13 @@ exports.BattleScripts = {
 				if (set.name === "Li Shang") {
 					set.moves[5] = 'sing';
 				}
+
+				// Baton Pass is not allowed.
+				var batonpass = set.moves.indexOf('batonpass');
+				if (batonpass >= 0) {
+					set.moves[batonpass] = 'secretpower';
+				}
+
 				team.push(set);
 				pokemonLeft++;
 			}
