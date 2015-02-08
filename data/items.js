@@ -3803,7 +3803,13 @@ exports.BattleItems = {
 			basePower: 80
 		},
 		onImmunity: function (type, pokemon) {
-			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
+			if (type === 'sandstorm' || type === 'hail') return false;
+		},
+		onTryHit: function (pokemon, source, move) {
+			if (move.flags && move.flags['powder']) {
+				this.add('-activate', pokemon, 'Safety Goggles', move.name);
+				return null;
+			}
 		},
 		num: -6,
 		gen: 6,
