@@ -2680,7 +2680,7 @@ exports.BattleAbilities = {
 		},
 		id: "stickyhold",
 		name: "Sticky Hold",
-		rating: 1.5,
+		rating: 2,
 		num: 60
 	},
 	"stormdrain": {
