@@ -984,7 +984,7 @@ exports.BattleScripts = {
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
 				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
-				blaze: 0, overgrow: 0, swarm: 0, torrent: 0, serenegrace: 0, ate: 0,
+				blaze: 0, overgrow: 0, swarm: 0, torrent: 0, serenegrace: 0, ate: 0, bite: 0,
 				recoil: 0, inaccurate: 0, priority: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
@@ -1008,8 +1008,6 @@ exports.BattleScripts = {
 				if (move.basePower && move.basePower <= 60) counter['technician']++;
 				// Moves that hit multiple times:
 				if (move.multihit && move.multihit[1] === 5) counter['skilllink']++;
-				// Punching moves:
-				if (move.isPunchAttack) counter['ironfist']++;
 				// Recoil:
 				if (move.recoil) counter['recoil']++;
 				// Moves which have a base power:
@@ -1027,6 +1025,8 @@ exports.BattleScripts = {
 					if (move.type === 'Bug') counter['swarm']++;
 					if (move.type === 'Water') counter['torrent']++;
 					if (move.type === 'Normal') counter['ate']++;
+					if (move.flags['bite']) counter['bite']++;
+					if (move.flags['punch']) counter['ironfist']++;
 					// Make sure not to count Knock Off, Rapid Spin, etc.
 					if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
 						damagingMoves.push(move);
@@ -1209,8 +1209,8 @@ exports.BattleScripts = {
 				case 'rockslide': case 'rockblast':
 					if (hasMove['stoneedge'] || hasMove['headsmash']) rejected = true;
 					break;
-				case 'stoneedge':
-					if (hasMove['headsmash']) rejected = true;
+				case 'headsmash':
+					if (hasMove['stoneedge']) rejected = true;
 					break;
 				case 'bonemerang': case 'earthpower': case 'bulldoze':
 					if (hasMove['earthquake']) rejected = true;
@@ -1455,6 +1455,8 @@ exports.BattleScripts = {
 				rejectAbility = !!counter['recoil'] && !hasMove['recover'] && !hasMove['roost'];
 			} else if (ability === 'No Guard' || ability === 'Compound Eyes') {
 				rejectAbility = !counter['inaccurate'];
+			} else if (ability === 'Strong Jaw') {
+				rejectAbility = !counter['bite'];
 			} else if (ability === 'Sheer Force') {
 				rejectAbility = !counter['sheerforce'];
 			} else if (ability === 'Serene Grace') {

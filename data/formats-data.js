@@ -5064,8 +5064,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	tyrantrum: {
-		randomBattleMoves: ["stealthrock","dragondance","stoneedge","dragonclaw","earthquake","firefang","outrage"],
-		randomDoubleBattleMoves: ["rockslide","dragondance","stoneedge","dragonclaw","earthquake","icefang","firefang","protect"],
+		randomBattleMoves: ["stealthrock","dragondance","stoneedge","dragonclaw","earthquake","firefang","outrage","headsmash"],
+		randomDoubleBattleMoves: ["rockslide","dragondance","headsmash","dragonclaw","earthquake","icefang","firefang","protect"],
 		unreleasedHidden: true,
 		tier: "RU"
 	},
