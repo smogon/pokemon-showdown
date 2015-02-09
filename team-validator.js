@@ -591,7 +591,10 @@ Validator = (function () {
 		do {
 			alreadyChecked[template.speciesid] = true;
 			// STABmons hack to avoid copying all of validateSet to formats
-			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && template.types.indexOf(tools.getMove(move).type) > -1 && move !== 'chatter') return false;
+			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && move !== 'chatter') {
+				if (template.species === 'Shaymin') template.types = tools.getTemplate('shayminsky').types;
+				if (template.types.indexOf(tools.getMove(move).type) > -1) return false;
+			}
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
 					sometimesPossible = true;
