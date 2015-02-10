@@ -2228,13 +2228,9 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
 		sideCondition: 'craftyshield',
 		onTryHitSide: function (side, source) {
-			return !!this.willAct() && this.runEvent('StallMove', source);
-		},
-		onHitSide: function (side, source) {
-			source.addVolatile('stall');
+			return !!this.willAct();
 		},
 		effect: {
 			duration: 1,
