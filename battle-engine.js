@@ -2733,6 +2733,9 @@ Battle = (function () {
 		case 'partiallytrapped':
 			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
 			break;
+		case 'powder':
+			this.add('-damage', target, target.getHealth, '[silent]');
+			break;
 		default:
 			if (effect.effectType === 'Move') {
 				this.add('-damage', target, target.getHealth);
