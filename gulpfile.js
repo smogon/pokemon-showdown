@@ -46,66 +46,49 @@ var jscsOptions = {
 	"excludeFiles": ["./**/pokedex.js", "./**/formats-data.js", "./**/learnsets.js", "./**/learnsets-g6.js", "./config/config.js"],
 	"esnext": "true",
 
-	"preset": "google",
+	"preset": "yandex",
 
 	"requireCurlyBraces": null,
-	"requireParenthesesAroundIIFE": true,
 
-	"requireCamelCaseOrUpperCaseIdentifiers": null,
 	"maximumLineLength": null,
-	"validateIndentation": "\t",
+	"validateIndentation": '\t',
 	"validateQuoteMarks": null,
+	"disallowQuotedKeysInObjects": null,
+	"requireDotNotation": null,
+	"disallowYodaConditions": null,
+
+	"disallowMultipleVarDecl": null,
+	"disallowImplicitTypeConversion": null,
+	"requireSpaceAfterLineComment": null,
+	"validateJSDoc": null,
 
 	"disallowMixedSpacesAndTabs": "smart",
-	"disallowMultipleVarDecl": null,
-
 	"requireSpaceAfterKeywords": true,
-	"requireSpaceAfterBinaryOperators": true,
-	"requireSpaceBeforeBinaryOperators": true,
-	"disallowSpacesInAnonymousFunctionExpression": null,
+
+	"disallowSpacesInFunctionDeclaration": null,
+	"requireSpacesInFunctionDeclaration": {
+		"beforeOpeningCurlyBrace": true
+	},
 	"requireSpacesInAnonymousFunctionExpression": {
 		"beforeOpeningRoundBrace": true,
 		"beforeOpeningCurlyBrace": true
 	},
-    "requireSpacesInFunctionDeclaration": {
-        "beforeOpeningCurlyBrace": true
-    },
-    "requireSpacesInNamedFunctionExpression": {
-        "beforeOpeningCurlyBrace": true
-    },
-
-	"requireSpaceBetweenArguments": true,
-	"disallowSpaceBeforeBinaryOperators": [
-		","
-	],
-
-	"validateJSDoc": null,
+	"disallowSpacesInNamedFunctionExpression": null,
+	"requireSpacesInNamedFunctionExpression": {
+		"beforeOpeningCurlyBrace": true
+	},
+	"validateParameterSeparator": ", ",
 
 	"requireBlocksOnNewline": 1,
 	"disallowPaddingNewlinesInBlocks": true,
-	"disallowEmptyBlocks": true,
 
-	"disallowKeywords": [
-		"with"
-	],
-	"disallowKeywordsOnNewLine": [
-		"else",
-		"catch"
-	],
-
-	"requireCommaBeforeLineBreak": true,
 	"requireOperatorBeforeLineBreak": true,
-	"disallowMultipleLineStrings": true,
-
-	"disallowSpaceAfterObjectKeys": true,
-	"disallowSpaceAfterPrefixUnaryOperators": true,
-	"disallowSpaceBeforePostfixUnaryOperators": true,
-
 	"disallowTrailingComma": true,
-	"validateLineBreaks": 'CI' in process.env ? 'LF' : null,
-	"validateParameterSeparator": ", ",
 
-	"requireCapitalizedConstructors": true
+	"requireCapitalizedConstructors": true,
+
+	"validateLineBreaks": 'CI' in process.env ? 'LF' : null,
+	"disallowMultipleLineBreaks": null
 };
 
 gulp.task('data', function () {
