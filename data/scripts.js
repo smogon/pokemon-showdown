@@ -1698,11 +1698,12 @@ exports.BattleScripts = {
 			OU: 74,
 			CAP: 74,
 			Unreleased: 74,
-			Uber: 70
+			Uber: 70,
+			AG: 68
 		};
 		var customScale = {
 			// Banned Mega
-			"Gengar-Mega": 68, "Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72, "Rayquaza-Mega": 68, "Salamence-Mega": 72,
+			"Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72, "Salamence-Mega": 72,
 
 			// Not holding mega stone
 			Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Metagross: 78, Pinsir: 82, Sableye: 78, Venusaur: 78,
