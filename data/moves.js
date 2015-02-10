@@ -10142,11 +10142,10 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-start', target, 'Powder');
 			},
-			onBeforeMove: function (pokemon, target, move) {
-				var item = pokemon.getItem();
-				if (move.type === 'Fire' || (move.name === 'Hidden Power' && pokemon.hpType === 'Fire') || (move.name === 'Weather Ball' && this.isWeather(['sunnyday', 'desolateland'])) || (item.isBerry && move.name === 'Natural Gift' && item.naturalGift.type === 'Fire') || (move.name === 'Judgment' && item.name === 'Flame Plate')) {
+			onTryMove: function (pokemon, target, move) {
+				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'Powder');
-					this.directDamage(Math.floor(pokemon.maxhp / 4) + 1);
+					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
 					return false;
 				}
 			}
