@@ -13,13 +13,7 @@ var jsHintOptions = {
 	"latedef": 'nofunc',
 
 	"freeze": true,
-	"immed": true,
 	"undef": true,
-
-	// style
-	"smarttabs": true,
-	"trailing": true,
-	"newcap": true,
 
 	"sub": true,
 	"evil": true,
@@ -54,6 +48,8 @@ var jscsOptions = {
 	"preset": "google",
 
 	"requireCurlyBraces": null,
+	"requireParenthesesAroundIIFE": true,
+
 	"requireCamelCaseOrUpperCaseIdentifiers": null,
 	"maximumLineLength": null,
 	"validateIndentation": "\t",
