@@ -4767,8 +4767,8 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	keldeo: {
-		randomBattleMoves: ["hydropump","secretsword","calmmind","hiddenpowerghost","hiddenpowerelectric","substitute","scald","icywind"],
-		randomDoubleBattleMoves: ["hydropump","secretsword","protect","hiddenpowerghost","hiddenpowerelectric","substitute","surf","icywind","taunt"],
+		randomBattleMoves: ["hydropump","secretsword","calmmind","hiddenpowerflying","hiddenpowerelectric","substitute","scald","icywind"],
+		randomDoubleBattleMoves: ["hydropump","secretsword","protect","hiddenpowerflying","hiddenpowerelectric","substitute","surf","icywind","taunt"],
 		eventPokemon: [
 			{"generation":5,"level":15,"moves":["aquajet","leer","doublekick","bubblebeam"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"moves":["sacredsword","hydropump","aquajet","swordsdance"],"pokeball":"cherishball"},
