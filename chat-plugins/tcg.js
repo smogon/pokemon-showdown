@@ -6,61 +6,41 @@
 
 var http = require("http");
 
+var tcgsearch = function (target, room, user, cmd, self) {
+	if (room.id !== 'tcg') return self.sendReply("This command can only be used in the TCG room.");
+	if (!self.canBroadcast()) return;
+
+	var query = Tools.escapeHTML(target);
+	var host = (cmd === 'yugioh' || cmd === 'ygo') ? 'yugioh.wikia.com' : 'mtg.wikia.com';
+
+	var Search = http.get('http://' + host + '/api/v1/Search/List/?query=' + query + '&limit=1', function (a) {
+		var response = '';
+
+		a.on('data', function (data) {
+			response += data;
+		});
+		a.on('end', function () {
+			var result = JSON.parse(response);
+
+			if (result.exception) {
+				self.sendReply("No articles matching your query found.");
+			} else {
+				self.sendReplyBox("<strong>Best result for " + query + ":</strong><br/><a href= " + Tools.escapeHTML(result.items[0].url) + ">" + Tools.escapeHTML(result.items[0].title) + "</a>");
+			}
+
+			room.update();
+		});
+	});
+};
+
 exports.commands = {
 	ygo: 'yugioh',
-	yugioh: function (target, room, user) {
-		if (room.id !== 'tcg') return this.sendReply("This command can only be used in the TCG room.");
-		if (!this.canBroadcast()) return;
-
-		var query = Tools.escapeHTML(target);
-		var self = this;
-
-		var Search = http.get(('http://yugioh.wikia.com/api/v1/Search/List/?query=' + query + '&limit=1'), function (a) {
-			var response = '';
-
-			a.on('data', function (data) {
-				response += data;
-			});
-			a.on('end', function () {
-				var result = JSON.parse(response);
-
-				if (result.exception) {
-					self.sendReply("No articles matching your query found.");
-				} else {
-					self.sendReplyBox("<strong>Best result for " + query + ":</strong><br/><a href= " + Tools.escapeHTML(result.items[0].url) + ">" + Tools.escapeHTML(result.items[0].title) + "</a>");
-				}
-
-				room.update();
-			});
-		});
+	yugioh: function (target, room, user, cmd) {
+		tcgsearch(target, room, user, cmd, this);
 	},
 
 	mtg: 'magic',
-	magic: function (target, room, user) {
-		if (room.id !== 'tcg') return this.sendReply("This command can only be used in the TCG room.");
-		if (!this.canBroadcast()) return;
-
-		var query = Tools.escapeHTML(target);
-
-		var self = this;
-
-		var Search = http.get(('http://mtg.wikia.com/api/v1/Search/List/?query=' + query + '&limit=1'), function (a) {
-			var response = '';
-
-			a.on('data', function (data) {
-				response += data;
-			});
-			a.on('end', function () {
-				var result = JSON.parse(response);
-
-				if (result.exception) {
-					self.sendReply("No articles matching your query found.");
-				} else {
-					self.sendReplyBox("<strong>Best result for " + query + ":</strong><br/><a href= " + Tools.escapeHTML(result.items[0].url) + ">" + Tools.escapeHTML(result.items[0].title) + "</a>");
-				}
-
-				room.update();
-			});
-		});
+	magic: function (target, room, user, cmd) {
+		tcgsearch(target, room, user, cmd, this);
 	}
 };
