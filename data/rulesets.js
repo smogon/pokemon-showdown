@@ -545,9 +545,8 @@ exports.BattleFormats = {
 			if (status.id === 'slp') {
 				for (var i = 0; i < target.side.pokemon.length; i++) {
 					var pokemon = target.side.pokemon[i];
-					if (pokemon.status === 'slp') {
-						if (!pokemon.statusData.source ||
-							pokemon.statusData.source.side !== pokemon.side) {
+					if (pokemon.hp && pokemon.status === 'slp') {
+						if (!pokemon.statusData.source || pokemon.statusData.source.side !== pokemon.side) {
 							this.add('-message', 'Sleep Clause Mod activated.');
 							return false;
 						}
