@@ -358,7 +358,8 @@ Tournament = (function () {
 		}
 
 		this.purgeGhostUsers();
-		if (this.generator.getUsers().length < 2) {
+		var users = this.generator.getUsers();
+		if (users.length < 2) {
 			output.sendReply('|tournament|error|NotEnoughUsers');
 			return false;
 		}
@@ -371,13 +372,8 @@ Tournament = (function () {
 		this.disqualifiedUsers = new Map();
 		this.isAutoDisqualifyWarned = new Map();
 		this.lastActionTimes = new Map();
-		var users = this.generator.getUsers();
 		users.forEach(function (user) {
-			var availableMatches = new Map();
-			users.forEach(function (user) {
-				availableMatches.set(user, false);
-			});
-			this.availableMatches.set(user, availableMatches);
+			this.availableMatches.set(user, new Map());
 			this.inProgressMatches.set(user, null);
 			this.pendingChallenges.set(user, null);
 			this.disqualifiedUsers.set(user, false);
@@ -403,19 +399,19 @@ Tournament = (function () {
 		var users = this.generator.getUsers();
 		var challenges = new Map();
 		var challengeBys = new Map();
-		var oldAvailableMatchCounts = new Map();
+		var oldAvailableMatches = new Map();
 
 		users.forEach(function (user) {
 			challenges.set(user, []);
 			challengeBys.set(user, []);
 
+			var oldAvailableMatch = false;
 			var availableMatches = this.availableMatches.get(user);
-			var oldAvailableMatchCount = 0;
-			availableMatches.forEach(function (isAvailable, user) {
-				oldAvailableMatchCount += isAvailable;
-				availableMatches.set(user, false);
-			});
-			oldAvailableMatchCounts.set(user, oldAvailableMatchCount);
+			if (availableMatches.size) {
+				oldAvailableMatch = true;
+				availableMatches.clear();
+			}
+			oldAvailableMatches.set(user, oldAvailableMatch);
 		}, this);
 
 		matches.forEach(function (match) {
@@ -426,13 +422,9 @@ Tournament = (function () {
 		}, this);
 
 		this.availableMatches.forEach(function (availableMatches, user) {
-			if (oldAvailableMatchCounts.get(user) !== 0) return;
+			if (oldAvailableMatches.get(user)) return;
 
-			var availableMatchCount = 0;
-			availableMatches.forEach(function (isAvailable, user) {
-				availableMatchCount += isAvailable;
-			});
-			if (availableMatchCount > 0) this.lastActionTimes.set(user, Date.now());
+			if (availableMatches.size) this.lastActionTimes.set(user, Date.now());
 		}, this);
 
 		return {
@@ -529,13 +521,11 @@ Tournament = (function () {
 			return false;
 		}
 		this.lastActionTimes.forEach(function (time, user) {
-			var availableMatches = 0;
-			this.availableMatches.get(user).forEach(function (isAvailable) {
-				availableMatches += isAvailable;
-			});
+			var availableMatches = false;
+			if (this.availableMatches.get(user).size) availableMatches = true;
 			var pendingChallenge = this.pendingChallenges.get(user);
 
-			if (availableMatches === 0 && !pendingChallenge) return;
+			if (!availableMatches && !pendingChallenge) return;
 			if (pendingChallenge && pendingChallenge.to) return;
 
 			if (Date.now() > time + this.autoDisqualifyTimeout && this.isAutoDisqualifyWarned.get(user)) {
