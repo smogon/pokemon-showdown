@@ -1656,7 +1656,7 @@ exports.BattleScripts = {
 			item = 'Choice Scarf';
 		} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
 			item = 'Focus Sash';
-		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || ability === 'Moody') {
+		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || hasMove['roar'] || hasMove['whirlwind'] || hasMove['sleeptalk'] || ability === 'Moody') {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
@@ -1664,12 +1664,12 @@ exports.BattleScripts = {
 			item = 'Assault Vest';
 		} else if (counter.Physical + counter.Special >= 4) {
 			item = (hasMove['fakeout'] || hasMove['return']) ? 'Life Orb' : 'Expert Belt';
+		} else if (setupType && hasMove['outrage']) {
+			item = 'Lum Berry';
 		} else if ((counter.Physical + counter.Special >= 3) && ability !== 'Sturdy' && !hasMove['eruption'] && !hasMove['waterspout']) {
 			item = (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['trickroom'] || !!counter['recovery']) ? 'Life Orb' : 'Leftovers';
 		} else if (i === 0 && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
 			item = 'Focus Sash';
-		} else if (hasMove['outrage']) {
-			item = 'Lum Berry';
 
 		// this is the "REALLY can't think of a good item" cutoff
 		// why not always Leftovers? Because it's boring. :P
