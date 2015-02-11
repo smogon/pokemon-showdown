@@ -1711,7 +1711,7 @@ exports.BattleScripts = {
 			"Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72, "Salamence-Mega": 72,
 
 			// Not holding mega stone
-			Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Metagross: 78, Pinsir: 82, Sableye: 78, Venusaur: 78,
+			Altaria: 84, Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Metagross: 78, Pinsir: 82, Sableye: 78, Venusaur: 78,
 
 			// Holistic judgment
 			Articuno: 82, Genesect: 72, Greninja: 72, "Rotom-Fan": 88, Sigilyph: 80, Unown: 90
