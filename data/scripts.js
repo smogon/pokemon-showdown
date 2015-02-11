@@ -935,6 +935,10 @@ exports.BattleScripts = {
 			hasType[template.types[1]] = true;
 		}
 
+		// Moves that heal a fixed amount:
+		var RecoveryMove = {
+			milkdrink: 1, recover: 1, roost: 1, slackoff: 1, softboiled: 1
+		};
 		// Moves which drop stats:
 		var ContraryMove = {
 			leafstorm: 1, overheat: 1, closecombat: 1, superpower: 1, vcreate: 1
@@ -982,10 +986,11 @@ exports.BattleScripts = {
 			damagingMoveIndex = {};
 			hasMove = {};
 			counter = {
-				Physical: 0, Special: 0, Status: 0, damage: 0,
-				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
-				blaze: 0, overgrow: 0, swarm: 0, torrent: 0, serenegrace: 0, ate: 0, bite: 0,
-				recoil: 0, inaccurate: 0, priority: 0,
+				Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0,
+				blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
+				adaptability: 0, ate: 0, bite: 0, contrary: 0, hustle: 0,
+				ironfist: 0, serenegrace: 0, sheerforce: 0, skilllink: 0, technician: 0,
+				inaccurate: 0, priority: 0, recoil: 0,
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
 			setupType = '';
@@ -1046,6 +1051,7 @@ exports.BattleScripts = {
 				if (move.priority !== 0) counter['priority']++;
 
 				// Moves that change stats:
+				if (RecoveryMove[moveid]) counter['recovery']++;
 				if (ContraryMove[moveid]) counter['contrary']++;
 				if (PhysicalSetup[moveid]) counter['physicalsetup']++;
 				if (SpecialSetup[moveid]) counter['specialsetup']++;
@@ -1586,8 +1592,6 @@ exports.BattleScripts = {
 			item = 'Light Ball';
 		} else if (template.species === 'Clamperl') {
 			item = 'DeepSeaTooth';
-		} else if (template.species === 'Spiritomb') {
-			item = 'Leftovers';
 		} else if (template.species === 'Farfetch\'d') {
 			item = 'Stick';
 		} else if (template.species === 'Dedenne') {
@@ -1656,15 +1660,12 @@ exports.BattleScripts = {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
-		} else if ((template.baseStats.hp + 75) * (template.baseStats.def + template.baseStats.spd + 175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
-			// skarmory and forretress get exceptions for their typing
-			item = 'Leftovers';
-		} else if ((counter.Physical + counter.Special >= 3 || counter.Special >= 3) && ability !== 'Sturdy' && !hasMove['eruption'] && !hasMove['waterspout']) {
-			item = 'Life Orb';
 		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179) {
 			item = 'Assault Vest';
 		} else if (counter.Physical + counter.Special >= 4) {
-			item = hasMove['fakeout'] || hasMove['return'] ? 'Life Orb' : 'Expert Belt';
+			item = (hasMove['fakeout'] || hasMove['return']) ? 'Life Orb' : 'Expert Belt';
+		} else if ((counter.Physical + counter.Special >= 3) && ability !== 'Sturdy' && !hasMove['eruption'] && !hasMove['waterspout']) {
+			item = (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['trickroom'] || !!counter['recovery']) ? 'Life Orb' : 'Leftovers';
 		} else if (i === 0 && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
 			item = 'Focus Sash';
 		} else if (hasMove['outrage']) {
