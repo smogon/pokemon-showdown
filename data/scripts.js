@@ -1136,8 +1136,11 @@ exports.BattleScripts = {
 				case 'fireblast':
 					if (hasMove['lavaplume'] || hasMove['overheat']) rejected = true;
 					break;
+				case 'firepunch':
+					if (hasMove['flareblitz']) rejected = true;
+					break;
 				case 'flareblitz':
-					if (hasMove['fireblast']) rejected = true;
+					if (hasMove['fireblast'] || hasMove['sacredfire']) rejected = true;
 					break;
 				case 'overheat':
 					if (setupType === 'Special' || hasMove['lavaplume']) rejected = true;
@@ -1189,12 +1192,6 @@ exports.BattleScripts = {
 					break;
 				case 'weatherball':
 					if (!hasMove['sunnyday'] && !hasMove['raindance']) rejected = true;
-					break;
-				case 'firepunch':
-					if (hasMove['flareblitz']) rejected = true;
-					break;
-				case 'flareblitz':
-					if (hasMove['sacredfire']) rejected = true;
 					break;
 				case 'bugbite':
 					if (hasMove['uturn']) rejected = true;
@@ -1281,7 +1278,7 @@ exports.BattleScripts = {
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['haze'] || hasMove['circlethrow']) rejected = true;
 					break;
 				case 'substitute':
-					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit']) rejected = true;
+					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit'] || hasMove['dracometeor']) rejected = true;
 					break;
 				case 'fakeout':
 					if (setupType || hasMove['trick'] || hasMove['switcheroo']) rejected = true;
