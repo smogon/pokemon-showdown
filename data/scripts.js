@@ -1128,10 +1128,13 @@ exports.BattleScripts = {
 					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast'] || hasMove['blueflare']) rejected = true;
 					break;
 				case 'fireblast':
-					if (hasMove['lavaplume']) rejected = true;
+					if (hasMove['lavaplume'] || hasMove['overheat']) rejected = true;
 					break;
-				case 'overheat': case 'flareblitz':
-					if (setupType === 'Special' || hasMove['fireblast']) rejected = true;
+				case 'flareblitz':
+					if (hasMove['fireblast']) rejected = true;
+					break;
+				case 'overheat':
+					if (setupType === 'Special' || hasMove['lavaplume']) rejected = true;
 					break;
 				case 'flamecharge':
 					if (hasMove['tailwind']) rejected = true;
