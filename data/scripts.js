@@ -1333,6 +1333,11 @@ exports.BattleScripts = {
 					rejected = true;
 				}
 
+				// Hidden Power isn't good enough
+				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] < 2) {
+					rejected = true;
+				}
+
 				// Remove rejected moves from the move list.
 				if (rejected && j < moveKeys.length) {
 					moves.splice(k, 1);
@@ -1383,12 +1388,12 @@ exports.BattleScripts = {
 						if (replace) moves.splice(damagingMoveIndex[damagingid], 1);
 					}
 				} else if (damagingMoves.length === 2) {
-					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric, Ghost/Fighting, or Dark/Fighting, reject one of them at random.
+					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric or Ghost/Fighting, reject one of them at random.
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = !(type1 in hasStab || type2 in hasStab);
 					if (rejectCombo) {
-						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
+						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost') rejectCombo = false;
 					}
 					if (rejectCombo) moves.splice(Math.floor(Math.random() * moves.length), 1);
 				} else {
@@ -2408,6 +2413,11 @@ exports.BattleScripts = {
 					rejected = true;
 				}
 
+				// Hidden Power isn't good enough
+				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] < 2) {
+					rejected = true;
+				}
+
 				// Remove rejected moves from the move list.
 				if (rejected && j < moveKeys.length) {
 					moves.splice(k, 1);
@@ -2458,12 +2468,12 @@ exports.BattleScripts = {
 						if (replace) moves.splice(damagingMoveIndex[damagingid], 1);
 					}
 				} else if (damagingMoves.length === 2) {
-					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric, Ghost/Fighting, or Dark/Fighting, reject one of them at random.
+					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric or Ghost/Fighting, reject one of them at random.
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					var rejectCombo = !(type1 in hasStab || type2 in hasStab);
 					if (rejectCombo) {
-						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
+						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost') rejectCombo = false;
 					}
 					if (rejectCombo) moves.splice(Math.floor(Math.random() * moves.length), 1);
 				} else {
