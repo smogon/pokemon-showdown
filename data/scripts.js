@@ -1340,7 +1340,7 @@ exports.BattleScripts = {
 				}
 
 				// Hidden Power isn't good enough
-				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] < 2 && !hasMove['shadowball']) {
+				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] <= 2 && !hasMove['shadowball']) {
 					rejected = true;
 				}
 
@@ -2415,7 +2415,7 @@ exports.BattleScripts = {
 				}
 
 				// Hidden Power isn't good enough
-				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] < 2) {
+				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] <= 2) {
 					rejected = true;
 				}
 
