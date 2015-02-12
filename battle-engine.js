@@ -1633,6 +1633,19 @@ Battle = (function () {
 		if (source === undefined && this.event && this.event.target) source = this.event.target;
 
 		if (this.weather === status.id && this.gen > 2) return false;
+		if (status.id) {
+			var result = this.runEvent('SetWeather', source, source, status);
+			if (!result) {
+				if (result === false) {
+					if (sourceEffect && sourceEffect.weather) {
+						this.add('-fail', source, sourceEffect, '[from]: ' + this.weather);
+					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+						this.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
+					}
+				}
+				return null;
+			}
+		}
 		if (this.weather && !status.id) {
 			var oldstatus = this.getWeather();
 			this.singleEvent('End', oldstatus, this.weatherData, this);
