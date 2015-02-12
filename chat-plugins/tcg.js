@@ -20,7 +20,13 @@ var tcgsearch = function (target, room, user, cmd, self) {
 			response += data;
 		});
 		a.on('end', function () {
-			var result = JSON.parse(response);
+			var result;
+
+			try {
+				result = JSON.parse(response);
+			} catch (e) {
+				return self.sendReply("ERROR: Could not parse query:" + e);
+			}
 
 			if (result.exception) {
 				self.sendReply("No articles matching your query found.");
@@ -35,12 +41,12 @@ var tcgsearch = function (target, room, user, cmd, self) {
 
 exports.commands = {
 	ygo: 'yugioh',
-	yugioh: function (target, room, user, cmd) {
+	yugioh: function (target, room, user, connection, cmd) {
 		tcgsearch(target, room, user, cmd, this);
 	},
 
 	mtg: 'magic',
-	magic: function (target, room, user, cmd) {
+	magic: function (target, room, user, connection, cmd) {
 		tcgsearch(target, room, user, cmd, this);
 	}
 };
