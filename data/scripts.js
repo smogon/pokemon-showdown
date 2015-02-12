@@ -1340,7 +1340,7 @@ exports.BattleScripts = {
 				}
 
 				// Hidden Power isn't good enough
-				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] < 2) {
+				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] < 2 && !hasMove['shadowball']) {
 					rejected = true;
 				}
 
@@ -1715,7 +1715,7 @@ exports.BattleScripts = {
 			Altaria: 84, Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Manectric: 78, Metagross: 78, Pinsir: 82, Sableye: 78, Venusaur: 78,
 
 			// Holistic judgment
-			Articuno: 82, Genesect: 72, Greninja: 72, "Rotom-Fan": 88, Sigilyph: 80, Unown: 90
+			Articuno: 82, Genesect: 72, Greninja: 72, Regigigas: 86, "Rotom-Fan": 88, Sigilyph: 80, Unown: 90
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
