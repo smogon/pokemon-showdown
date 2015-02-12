@@ -600,10 +600,6 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the battlefield, the weather becomes Rain Dance (for 5 turns normally, or 8 turns while holding Damp Rock).",
 		shortDesc: "On switch-in, the weather becomes Rain Dance.",
 		onStart: function (source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-ability', source, 'Drizzle', '[from] ' + this.effectiveWeather(), '[fail]');
-				return null;
-			}
 			this.setWeather('raindance');
 		},
 		id: "drizzle",
@@ -615,10 +611,6 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the battlefield, the weather becomes Sunny Day (for 5 turns normally, or 8 turns while holding Heat Rock).",
 		shortDesc: "On switch-in, the weather becomes Sunny Day.",
 		onStart: function (source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-ability', source, 'Drought', '[from] ' + this.effectiveWeather(), '[fail]');
-				return null;
-			}
 			this.setWeather('sunnyday');
 		},
 		id: "drought",
@@ -2267,10 +2259,6 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the battlefield, the weather becomes Sandstorm (for 5 turns normally, or 8 turns while holding Smooth Rock).",
 		shortDesc: "On switch-in, the weather becomes Sandstorm.",
 		onStart: function (source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-ability', source, 'Sand Stream', '[from] ' + this.effectiveWeather(), '[fail]');
-				return null;
-			}
 			this.setWeather('sandstorm');
 		},
 		id: "sandstream",
@@ -2525,10 +2513,6 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the battlefield, the weather becomes Hail (for 5 turns normally, or 8 turns while holding Icy Rock).",
 		shortDesc: "On switch-in, the weather becomes Hail.",
 		onStart: function (source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-ability', source, 'Snow Warning', '[from] ' + this.effectiveWeather(), '[fail]');
-				return null;
-			}
 			this.setWeather('hail');
 		},
 		id: "snowwarning",
