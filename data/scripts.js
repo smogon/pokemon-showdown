@@ -1375,8 +1375,8 @@ exports.BattleScripts = {
 						} else if (damagingid === 'focuspunch') {
 							// Focus Punch is a bad idea without a sub:
 							if (!hasMove['substitute']) replace = true;
-						} else if (damagingid.substr(0, 11) === 'hiddenpower' && damagingType === 'Ice') {
-							// Mono-HP-Ice is never acceptable.
+						} else if (damagingid.substr(0, 11) === 'hiddenpower' && !hasStab[damagingType]) {
+							// Hidden Power is only acceptable if it has STAB
 							replace = true;
 						} else {
 							// If you have one attack, and it's not STAB, Ice, Fire, or Ground, reject it.
@@ -2462,8 +2462,8 @@ exports.BattleScripts = {
 						} else if (damagingid === 'focuspunch') {
 							// Focus Punch is a bad idea without a sub:
 							if (!hasMove['substitute']) replace = true;
-						} else if (damagingid.substr(0, 11) === 'hiddenpower' && damagingType === 'Ice') {
-							// Mono-HP-Ice is never acceptable.
+						} else if (damagingid.substr(0, 11) === 'hiddenpower' && !hasStab[damagingType]) {
+							// Hidden Power is only acceptable if it has STAB
 							replace = true;
 						} else {
 							// If you have one attack, and it's not STAB, Ice, Fire, or Ground, reject it.
