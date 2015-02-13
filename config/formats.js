@@ -57,6 +57,15 @@ exports.Formats = [
 		name: "RU",
 		section: "ORAS Singles",
 
+		searchShow: false,
+		ruleset: ['UU'],
+		banlist: ['UU', 'BL2', 'Galladite', 'Houndoominite', 'Pidgeotite']
+	},
+	{
+		name: "RU (suspect test)",
+		section: "ORAS Singles",
+
+		challengeShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2', 'Galladite', 'Houndoominite', 'Pidgeotite']
 	},
