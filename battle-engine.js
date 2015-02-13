@@ -3742,12 +3742,16 @@ Battle = (function () {
 		var len = choices.length;
 		if (side.currentRequest !== 'teampreview') len = side.active.length;
 
+		var isDefault;
+		var choosableTargets = {normal:1, any:1, adjacentAlly:1, adjacentAllyOrSelf:1, adjacentFoe:1};
+
 		var freeSwitchCount = {'switch':0, 'pass':0};
 		if (side.currentRequest === 'switch') {
 			var canSwitch = side.active.filter(function (mon) {return mon && mon.switchFlag;}).length;
 			freeSwitchCount['switch'] = Math.min(canSwitch, side.pokemon.slice(side.active.length).filter(function (mon) {return !mon.fainted;}).length);
 			freeSwitchCount['pass'] = canSwitch - freeSwitchCount['switch'];
 		}
+
 		for (var i = 0; i < len; i++) {
 			var choice = (choices[i] || '').trim();
 
@@ -3779,6 +3783,23 @@ Battle = (function () {
 						pokemon: pokemon,
 						targetLoc: this.runEvent('LockMoveTarget', pokemon) || 0,
 						move: lockedMove
+					});
+					continue;
+				}
+				if (isDefault || choice === 'default') {
+					isDefault = true;
+					var moves = pokemon.getMoves();
+					var moveid = 'struggle';
+					for (var j = 0; j < moves.length; j++) {
+						if (moves[j].disabled) continue;
+						moveid = moves[j].id;
+						break;
+					}
+					decisions.push({
+						choice: 'move',
+						pokemon: pokemon,
+						targetLoc: 0,
+						move: moveid
 					});
 					continue;
 				}
@@ -3917,13 +3938,27 @@ Battle = (function () {
 						return false;
 					}
 					moveid = requestMoves[moveIndex].id;
+					if (!targetLoc && side.active.length > 1 && requestMoves[moveIndex].target in choosableTargets) {
+						this.debug("Can't use the move without a target");
+						return false;
+					}
 				} else {
 					// parse a move name
 					moveid = toId(data);
 					if (moveid.substr(0, 11) === 'hiddenpower') {
 						moveid = 'hiddenpower';
 					}
-					if (!requestMoves.map('id').any(moveid)) {
+					var isValidMove = false;
+					for (var j = 0; j < requestMoves.length; j++) {
+						if (requestMoves[j].id !== moveid) continue;
+						if (!targetLoc && side.active.length > 1 && requestMoves[j].target in choosableTargets) {
+							this.debug("Can't use the move without a target");
+							return false;
+						}
+						isValidMove = true;
+						break;
+					}
+					if (!isValidMove) {
 						this.debug("Can't use an unexpected move");
 						return false;
 					}
@@ -3974,7 +4009,7 @@ Battle = (function () {
 			case 'pass':
 				if (i > side.active.length || i > side.pokemon.length) continue;
 				if (side.currentRequest !== 'switch') {
-					this.debug("No se pudo pasar el turno.");
+					this.debug("Can't pass the turn");
 					return false;
 				}
 				decisions.push({
@@ -3986,7 +4021,7 @@ Battle = (function () {
 		}
 		if (freeSwitchCount['switch'] !== 0 || freeSwitchCount['pass'] !== 0) return false;
 
-		if (!this.supportCancel) decisions.finalDecision = true;
+		if (!this.supportCancel || isDefault) decisions.finalDecision = true;
 		return decisions;
 	};
 	Battle.prototype.add = function () {
