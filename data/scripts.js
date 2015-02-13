@@ -1340,7 +1340,7 @@ exports.BattleScripts = {
 				}
 
 				// Hidden Power isn't good enough
-				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] <= 2 && !hasMove['shadowball']) {
+				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] <= 2 && (!hasMove['shadowball'] || move.type !== 'Fighting')) {
 					rejected = true;
 				}
 
@@ -1442,6 +1442,18 @@ exports.BattleScripts = {
 			delete hasMove[moves[3]];
 			moves[3] = toId(template.requiredMove);
 			hasMove[toId(template.requiredMove)] = true;
+		}
+
+		// If Hidden Power has been removed, reset the IVs
+		if (!hasMove['hiddenpower']) {
+			var ivs = {
+				hp: 31,
+				atk: 31,
+				def: 31,
+				spa: 31,
+				spd: 31,
+				spe: 31
+			};
 		}
 
 		var abilities = Object.values(baseTemplate.abilities).sort(function (a, b) {
@@ -2415,7 +2427,7 @@ exports.BattleScripts = {
 				}
 
 				// Hidden Power isn't good enough
-				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] <= 2) {
+				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] <= 2 && (!hasMove['shadowball'] || move.type !== 'Fighting')) {
 					rejected = true;
 				}
 
@@ -2490,6 +2502,18 @@ exports.BattleScripts = {
 				}
 			}
 		} while (moves.length < 4 && j < moveKeys.length);
+
+		// If Hidden Power has been removed, reset the IVs
+		if (!hasMove['hiddenpower']) {
+			var ivs = {
+				hp: 31,
+				atk: 31,
+				def: 31,
+				spa: 31,
+				spd: 31,
+				spe: 31
+			};
+		}
 
 		var abilities = Object.values(baseTemplate.abilities).sort(function (a, b) {
 			return this.getAbility(b).rating - this.getAbility(a).rating;
