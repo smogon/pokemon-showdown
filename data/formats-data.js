@@ -3606,8 +3606,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	lumineon: {
-		randomBattleMoves: ["surf","uturn","icebeam","hiddenpowerelectric","hiddenpowergrass","raindance"],
-		randomDoubleBattleMoves: ["surf","uturn","icebeam","hiddenpowerelectric","hiddenpowergrass","raindance","tailwind","protect"],
+		randomBattleMoves: ["waterfall","scald","uturn","icebeam","toxic","raindance"],
+		randomDoubleBattleMoves: ["surf","uturn","icebeam","toxic","raindance","tailwind","protect"],
 		tier: "PU"
 	},
 	snover: {
