@@ -44,6 +44,7 @@ var jsHintOptions = {
 
 var jscsOptions = {
 	"excludeFiles": ["./**/pokedex.js", "./**/formats-data.js", "./**/learnsets.js", "./**/learnsets-g6.js", "./config/config.js"],
+	"esnext": "true",
 
 	"preset": "google",
 
@@ -59,28 +60,49 @@ var jscsOptions = {
 	"disallowMultipleVarDecl": null,
 
 	"requireSpaceAfterKeywords": true,
+	"requireSpaceAfterBinaryOperators": true,
 	"requireSpaceBeforeBinaryOperators": true,
 	"disallowSpacesInAnonymousFunctionExpression": null,
 	"requireSpacesInAnonymousFunctionExpression": {
-		"beforeOpeningRoundBrace": true
+		"beforeOpeningRoundBrace": true,
+		"beforeOpeningCurlyBrace": true
 	},
+    "requireSpacesInFunctionDeclaration": {
+        "beforeOpeningCurlyBrace": true
+    },
+    "requireSpacesInNamedFunctionExpression": {
+        "beforeOpeningCurlyBrace": true
+    },
+
+	"requireSpaceBetweenArguments": true,
+	"disallowSpaceBeforeBinaryOperators": [
+		","
+	],
 
 	"validateJSDoc": null,
 
 	"requireBlocksOnNewline": 1,
 	"disallowPaddingNewlinesInBlocks": true,
 	"disallowEmptyBlocks": true,
-	"disallowNewlineBeforeBlockStatements": true,
+
+	"disallowKeywords": [
+		"with"
+	],
+	"disallowKeywordsOnNewLine": [
+		"else",
+		"catch"
+	],
 
 	"requireCommaBeforeLineBreak": true,
 	"requireOperatorBeforeLineBreak": true,
+	"disallowMultipleLineStrings": true,
 
 	"disallowSpaceAfterObjectKeys": true,
 	"disallowSpaceAfterPrefixUnaryOperators": true,
 	"disallowSpaceBeforePostfixUnaryOperators": true,
 
 	"disallowTrailingComma": true,
-	"validateLineBreaks": require('os').EOL.replace(/\r/g, 'CR').replace(/\n/g, 'LF'),
+	"validateLineBreaks": 'CI' in process.env ? 'LF' : null,
 	"validateParameterSeparator": ", ",
 
 	"requireCapitalizedConstructors": true
