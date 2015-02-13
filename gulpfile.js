@@ -2,7 +2,6 @@ var path = require('path');
 var util = require('util');
 
 var gulp = require('gulp');
-var gutil = require('gulp-util'); // Currently unused, but gulp strongly suggested I install...
 var lazypipe = require('lazypipe');
 var merge = require('merge-stream');
 var jscs = require('gulp-jscs');
