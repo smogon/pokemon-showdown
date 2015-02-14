@@ -141,6 +141,10 @@ process.on('message', function (message) {
 	}
 });
 
+process.on('disconnect', function () {
+	process.exit();
+});
+
 BattlePokemon = (function () {
 	function BattlePokemon(set, side) {
 		this.side = side;
@@ -2729,6 +2733,9 @@ Battle = (function () {
 		case 'partiallytrapped':
 			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
 			break;
+		case 'powder':
+			this.add('-damage', target, target.getHealth, '[silent]');
+			break;
 		default:
 			if (effect.effectType === 'Move') {
 				this.add('-damage', target, target.getHealth);
@@ -2952,9 +2959,11 @@ Battle = (function () {
 			ignoreNegativeOffensive = true;
 			ignorePositiveDefensive = true;
 		}
-
-		var ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
-		var ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
+		// Check for abilities to see if defenses or offenses are negated (Unaware, Mold Breaker, etc.)
+		var targetAbilityIgnoreOffensive = !target.ignore['Ability'] && target.getAbility().ignoreOffensive;
+		var pokemonAbilityIgnoreDefensive = !pokemon.ignore['Ability'] && pokemon.getAbility().ignoreDefensive;
+		var ignoreOffensive = !!(move.ignoreOffensive || targetAbilityIgnoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
+		var ignoreDefensive = !!(move.ignoreDefensive || pokemonAbilityIgnoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
 
 		if (ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');

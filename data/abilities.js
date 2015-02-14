@@ -120,8 +120,9 @@ exports.BattleAbilities = {
 	"angerpoint": {
 		desc: "If this Pokemon, and not its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
 		shortDesc: "If this Pokemon is hit by a critical hit, its Attack is boosted by 12.",
-		onCriticalHit: function (target) {
-			if (!target.volatiles['substitute']) {
+		onAfterDamage: function (damage, target, source, move) {
+			if (!target.hp) return;
+			if (move && move.effectType === 'Move' && move.crit) {
 				target.setBoost({atk: 6});
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
@@ -2680,7 +2681,7 @@ exports.BattleAbilities = {
 		},
 		id: "stickyhold",
 		name: "Sticky Hold",
-		rating: 1.5,
+		rating: 2,
 		num: 60
 	},
 	"stormdrain": {
@@ -3078,15 +3079,10 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon ignores other Pokemon's stat changes when taking or doing damage.",
 		id: "unaware",
 		name: "Unaware",
-		onModifyMove: function (move, user, target) {
-			move.ignoreEvasion = true;
-			move.ignoreDefensive = true;
-		},
-		onSourceModifyMove: function (move, user, target) {
-			if (user.hasAbility(['moldbreaker', 'turboblaze', 'teravolt'])) return;
-			move.ignoreAccuracy = true;
-			move.ignoreOffensive = true;
-		},
+		ignoreEvasion: true,
+		ignoreDefensive: true,
+		ignoreAccuracy: true,
+		ignoreOffensive: true,
 		rating: 3,
 		num: 109
 	},

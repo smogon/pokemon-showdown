@@ -2228,13 +2228,9 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
 		sideCondition: 'craftyshield',
 		onTryHitSide: function (side, source) {
-			return !!this.willAct() && this.runEvent('StallMove', source);
-		},
-		onHitSide: function (side, source) {
-			source.addVolatile('stall');
+			return !!this.willAct();
 		},
 		effect: {
 			duration: 1,
@@ -8386,7 +8382,7 @@ exports.BattleMovedex = {
 				var move = this.getMove(decision.move);
 				if (move.category !== 'Status' && !noMeFirst[move]) {
 					pokemon.addVolatile('mefirst');
-					this.useMove(move, pokemon);
+					this.useMove(move, pokemon, target);
 					return;
 				}
 			}
@@ -8898,7 +8894,7 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function (target, source) {
-			this.useMove(target.lastMove, source);
+			this.useMove(target.lastMove, source, target);
 		},
 		secondary: false,
 		target: "normal",
@@ -10142,11 +10138,10 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-start', target, 'Powder');
 			},
-			onBeforeMove: function (pokemon, target, move) {
-				var item = pokemon.getItem();
-				if (move.type === 'Fire' || (move.name === 'Hidden Power' && pokemon.hpType === 'Fire') || (move.name === 'Weather Ball' && this.isWeather(['sunnyday', 'desolateland'])) || (item.isBerry && move.name === 'Natural Gift' && item.naturalGift.type === 'Fire') || (move.name === 'Judgment' && item.name === 'Flame Plate')) {
+			onTryMove: function (pokemon, target, move) {
+				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'Powder');
-					this.directDamage(Math.floor(pokemon.maxhp / 4) + 1);
+					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
 					return false;
 				}
 			}
@@ -11660,7 +11655,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the Attack and Special Attack of all grounded Grass-type Pokemon on the field by 1 stage.",
-		shortDesc: "Raises Attack and Sp. Atk of Grass Pokemon.",
+		shortDesc: "Raises Atk, Sp. Atk of grounded Grass types by 1.",
 		id: "rototiller",
 		name: "Rototiller",
 		pp: 10,
@@ -11668,16 +11663,24 @@ exports.BattleMovedex = {
 		flags: {distance: 1, nonsky: 1},
 		onHitField: function (target, source) {
 			var targets = [];
+			var anyAirborne = false;
 			for (var i = 0; i < this.sides.length; i++) {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j] && this.sides[i].active[j].hasType('Grass')) {
-						// This move affects every Grass-type Pokemon in play.
-						targets.push(this.sides[i].active[j]);
+					if (this.sides[i].active[j]) {
+						if (!this.sides[i].active[j].runImmunity('Ground')) {
+							this.add('-immune', this.sides[i].active[j], '[msg]');
+							anyAirborne = true;
+							continue;
+						}
+						if (this.sides[i].active[j].hasType('Grass')) {
+							// This move affects every grounded Grass-type Pokemon in play.
+							targets.push(this.sides[i].active[j]);
+						}
 					}
 				}
 			}
-			if (!targets.length) return false; // No targets; move fails
-			for (var i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source, 'move: Rototiller');
+			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon
+			for (var i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source);
 		},
 		secondary: false,
 		target: "all",
@@ -12579,7 +12582,7 @@ exports.BattleMovedex = {
 			if (source.removeVolatile(move.id)) {
 				if (target !== source.volatiles['twoturnmove'].source) return false;
 
-				if (target.hasType('Flying') && !target.negateImmunity['Ground']) {
+				if (target.hasType('Flying')) {
 					this.add('-immune', target, '[msg]');
 					this.add('-end', target, 'Sky Drop');
 					return null;
