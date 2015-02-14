@@ -434,6 +434,9 @@ exports.BattleStatuses = {
 				return this.chainModify(1.5);
 			}
 		},
+		onSetWeather: function (target, source, weather) {
+			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
+		},
 		onStart: function () {
 			this.add('-weather', 'PrimordialSea');
 		},
@@ -500,6 +503,9 @@ exports.BattleStatuses = {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
 			}
+		},
+		onSetWeather: function (target, source, weather) {
+			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onStart: function () {
 			this.add('-weather', 'DesolateLand');
@@ -590,6 +596,9 @@ exports.BattleStatuses = {
 				this.add('-activate', '', 'deltastream');
 				return 0;
 			}
+		},
+		onSetWeather: function (target, source, weather) {
+			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onStart: function () {
 			this.add('-weather', 'DeltaStream');
