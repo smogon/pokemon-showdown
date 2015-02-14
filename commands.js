@@ -764,6 +764,7 @@ var commands = exports.commands = {
 	ck: 'customkick',
 	ckick: 'customkick',
 	customkick: function (target, room, user) {
+		if (!this.can('kick', targetUser, room)) return false;
 		if (!target) return;
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -771,7 +772,6 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
-		if (!this.can('kick', targetUser, room)) return false;
 		var msg = (target ? " " + target + "" : "");
 		this.add(targetUser.name + msg);
 		this.logModCommand("" + targetUser.name + " was kicked by " + user.name + ".");
