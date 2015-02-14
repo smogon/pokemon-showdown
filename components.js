@@ -555,7 +555,7 @@ var components = exports.components = {
 	},
 
 	endpoll: function (target, room, user) {
-		if (!this.can('broadcast')) return;
+		if (!this.can('poll', null, room)) return false;
 		if (!Poll[room.id].question) return this.sendReply('There is no poll to end in this room.');
 
 		var votes = Object.keys(Poll[room.id].options).length;
