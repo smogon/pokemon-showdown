@@ -399,6 +399,7 @@ exports.customavatars = {
 	'abnegation': 'abnegation.png',
 	'sranger': 'abnegation.png',
 	'rabinov': 'rabinov.png',
+	'darklight1999': 'darklight1999.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
