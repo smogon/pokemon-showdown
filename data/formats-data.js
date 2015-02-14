@@ -81,7 +81,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	blastoise: {
-		randomBattleMoves: ["icebeam","rapidspin","scald","toxic","rapidspin","dragontail","roar"],
+		randomBattleMoves: ["icebeam","rapidspin","scald","toxic","dragontail","roar"],
 		randomDoubleBattleMoves: ["muddywater","icebeam","hydropump","fakeout","scald","darkpulse","aurasphere","followme","icywind","protect","waterspout"],
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["protect","raindance","skullbash","hydropump"]}
@@ -660,7 +660,7 @@ exports.BattleFormatsData = {
 	},
 	graveler: {
 		randomBattleMoves: ["stealthrock","earthquake","stoneedge","suckerpunch","hammerarm","firepunch","rockblast"],
-		randomDoubleBattleMoves: ["rockslide","earthquake","stoneedge","suckerpunch","hammerarm","firepunch","heavyslam","protect"],
+		randomDoubleBattleMoves: ["rockslide","earthquake","stoneedge","suckerpunch","hammerarm","firepunch","protect"],
 		tier: "NFE"
 	},
 	golem: {
@@ -859,7 +859,7 @@ exports.BattleFormatsData = {
 	},
 	kingler: {
 		randomBattleMoves: ["crabhammer","xscissor","rockslide","swordsdance","agility","superpower","knockoff"],
-		randomDoubleBattleMoves: ["crabhammer","xscissor","rockslide","substitute","xscissor","superpower","knockoff","protect","wideguard"],
+		randomDoubleBattleMoves: ["crabhammer","xscissor","rockslide","substitute","superpower","knockoff","protect","wideguard"],
 		tier: "PU"
 	},
 	voltorb: {
@@ -3096,7 +3096,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	latiasmega: {
-		randomBattleMoves: ["calmmind","dragonpulse","surf","dragonpulse","roost","hiddenpowerfire","substitute"],
+		randomBattleMoves: ["calmmind","dragonpulse","surf","dracometeor","roost","hiddenpowerfire","substitute","psyshock"],
 		randomDoubleBattleMoves: ["dragonpulse","psychic","tailwind","helpinghand","healpulse","lightscreen","reflect","protect"],
 		requiredItem: "Latiasite"
 	},
@@ -3634,7 +3634,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	rotomheat: {
-		randomBattleMoves: ["overheat","thunderbolt","voltswitch","hiddenpowerice","painsplit","hiddenpowerice","willowisp","trick"],
+		randomBattleMoves: ["overheat","thunderbolt","voltswitch","hiddenpowerice","painsplit","willowisp","trick"],
 		randomDoubleBattleMoves: ["overheat","thunderbolt","voltswitch","substitute","painsplit","hiddenpowerice","willowisp","trick","electroweb","protect"],
 		eventPokemon: [
 			{"generation":5,"level":10,"nature":"Naughty","moves":["uproar","astonish","trick","thundershock"],"pokeball":"cherishball"},
@@ -3685,7 +3685,7 @@ exports.BattleFormatsData = {
 	},
 	mesprit: {
 		randomBattleMoves: ["calmmind","psychic","psyshock","energyball","signalbeam","hiddenpowerfire","icebeam","healingwish","stealthrock","uturn"],
-		randomDoubleBattleMoves: ["calmmind","psychic","thunderbolt","icebeam","substitute","uturn","trick","protect","knockoff","psychic","helpinghand"],
+		randomDoubleBattleMoves: ["calmmind","psychic","thunderbolt","icebeam","substitute","uturn","trick","protect","knockoff","helpinghand"],
 		tier: "NU"
 	},
 	azelf: {
