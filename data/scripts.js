@@ -1355,7 +1355,7 @@ exports.BattleScripts = {
 					}
 				}
 			}
-			if (j < moveKeys.length && moves.length === 4) {
+			if (j < moveKeys.length && moves.length === 4 && !hasMove['judgment']) {
 				// Move post-processing:
 				if (damagingMoves.length === 0) {
 					// A set shouldn't have no attacking moves
@@ -2442,7 +2442,7 @@ exports.BattleScripts = {
 					}
 				}
 			}
-			if (j < moveKeys.length && moves.length === 4) {
+			if (j < moveKeys.length && moves.length === 4 && !hasMove['judgment']) {
 				// Move post-processing:
 				if (damagingMoves.length === 0) {
 					// A set shouldn't have no attacking moves
