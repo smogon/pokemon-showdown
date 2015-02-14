@@ -1416,6 +1416,81 @@ BattleSide = (function () {
 	BattleSide.prototype.emitRequest = function (update) {
 		this.battle.send('request', this.id + "\n" + this.battle.rqid + "\n" + JSON.stringify(update));
 	};
+	BattleSide.prototype.resolveDecision = function () {
+		if (this.decision) return this.decision;
+		var decisions = [];
+
+		switch (this.currentRequest) {
+		case 'move':
+			for (var i = 0; i < this.active.length; i++) {
+				var pokemon = this.active[i];
+				if (!pokemon || pokemon.fainted) continue;
+
+				var lockedMove = pokemon.getLockedMove();
+				if (lockedMove) {
+					decisions.push({
+						choice: 'move',
+						pokemon: pokemon,
+						targetLoc: this.battle.runEvent('LockMoveTarget', pokemon) || 0,
+						move: lockedMove
+					});
+					continue;
+				}
+
+				var moveid = 'struggle';
+				var moves = pokemon.getMoves();
+				for (var j = 0; j < moves.length; j++) {
+					if (moves[j].disabled) continue;
+					moveid = moves[j].id;
+					break;
+				}
+				decisions.push({
+					choice: 'move',
+					pokemon: pokemon,
+					targetLoc: 0,
+					move: moveid
+				});
+			}
+			break;
+
+		case 'switch':
+			var canSwitchOut = [];
+			for (var i = 0; i < this.active.length; i++) {
+				if (this.active[i] && this.active[i].switchFlag) canSwitchOut.push(i);
+			}
+
+			var canSwitchIn = [];
+			for (var i = this.active.length; i < this.pokemon.length; i++) {
+				if (this.pokemon[i] && !this.pokemon[i].fainted) canSwitchIn.push(i);
+			}
+
+			var willPass = canSwitchOut.splice(Math.min(canSwitchOut.length, canSwitchIn.length));
+			for (var i = 0; i < canSwitchOut.length; i++) {
+				decisions.push({
+					choice: 'switch',
+					pokemon: this.active[canSwitchOut[i]],
+					priority: 101
+				});
+			}
+			for (var i = 0; i < willPass.length; i++) {
+				decisions.push({
+					choice: 'pass',
+					pokemon: this.active[willPass[i]],
+					priority: 102
+				});
+			}
+			break;
+
+		case 'teampreview':
+			decisions.push({
+				choice: 'team',
+				side: this,
+				team: '123456'.slice(0, this.currentRequestDetails ? parseInt(this.currentRequestDetails, 10) : this.active.length)
+			});
+		}
+
+		return decisions;
+	};
 	BattleSide.prototype.destroy = function () {
 		// deallocate ourself
 
@@ -3619,10 +3694,10 @@ Battle = (function () {
 	};
 	Battle.prototype.commitDecisions = function () {
 		if (this.p1.decision !== true) {
-			this.addQueue(this.p1.decision, true, this.p1);
+			this.addQueue(this.p1.resolveDecision(), true, this.p1);
 		}
 		if (this.p2.decision !== true) {
-			this.addQueue(this.p2.decision, true, this.p2);
+			this.addQueue(this.p2.resolveDecision(), true, this.p2);
 		}
 
 		this.currentRequest = '';
