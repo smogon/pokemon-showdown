@@ -957,9 +957,9 @@ exports.BattleScripts = {
 		};
 		// These moves can be used even if we aren't setting up to use them:
 		var SetupException = {
-			overheat:1, dracometeor:1, leafstorm:1,
-			voltswitch:1, uturn:1,
-			suckerpunch:1, extremespeed:1
+			dracometeor:1, leafstorm:1, overheat:1,
+			extremespeed:1, suckerpunch:1, superpower:1,
+			uturn:1, voltswitch:1
 		};
 		var counterAbilities = {
 			'Blaze':1, 'Overgrow':1, 'Swarm':1, 'Torrent':1, 'Contrary':1,
@@ -1090,7 +1090,7 @@ exports.BattleScripts = {
 					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
 					break;
 				case 'batonpass':
-					if (!setupType && !hasMove['substitute'] && !hasMove['cosmicpower']) rejected = true;
+					if (!setupType && !hasMove['substitute'] && !hasMove['protect'] && !hasMove['cosmicpower']) rejected = true;
 					break;
 
 				// we only need to set up once
@@ -1117,7 +1117,7 @@ exports.BattleScripts = {
 				case 'relicsong':
 					if (setupType) rejected = true;
 					break;
-				case 'magiccoat': case 'spikes': case 'defog': case 'pursuit': case 'protect': case 'haze': case 'stealthrock':
+				case 'magiccoat': case 'spikes': case 'defog': case 'pursuit': case 'protect': case 'haze': case 'stealthrock': case 'healingwish':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'trick': case 'switcheroo':
@@ -1161,9 +1161,9 @@ exports.BattleScripts = {
 					if (hasMove['scald'] || hasMove['hydropump']) rejected = true;
 					break;
 				case 'hydropump': case 'originpulse':
-					if (hasMove['razorshell'] || hasMove['scald']) rejected = true;
+					if (hasMove['razorshell'] || hasMove['scald'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
-				case 'waterfall':
+				case 'waterfall': case 'waterpulse':
 					if (hasMove['aquatail'] || hasMove['scald']) rejected = true;
 					break;
 				case 'shadowforce': case 'phantomforce': case 'shadowsneak':
@@ -1175,11 +1175,8 @@ exports.BattleScripts = {
 				case 'ironhead':
 					if (hasMove['flashcannon']) rejected = true;
 					break;
-				case 'airslash': case 'oblivionwing':
-					if (hasMove['hurricane']) rejected = true;
-					break;
-				case 'acrobatics': case 'pluck': case 'drillpeck':
-					if (hasMove['bravebird']) rejected = true;
+				case 'acrobatics': case 'pluck': case 'drillpeck': case 'airslash': case 'oblivionwing':
+					if (hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
 					break;
 				case 'solarbeam':
 					if ((!hasMove['sunnyday'] && template.species !== 'Ninetales') || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
@@ -1199,12 +1196,12 @@ exports.BattleScripts = {
 				case 'crosschop': case 'highjumpkick':
 					if (hasMove['closecombat']) rejected = true;
 					break;
-				case 'drainpunch':
+				case 'drainpunch': case 'focusblast':
 					if (hasMove['closecombat'] || hasMove['highjumpkick'] || hasMove['crosschop'] || hasMove['focuspunch']) rejected = true;
 					if (!setupType && hasMove['superpower']) rejected = true;
 					break;
 				case 'superpower':
-					if (setupType && hasMove['drainpunch']) rejected = true;
+					if (setupType && (hasMove['drainpunch'] || hasMove['focusblast'])) rejected = true;
 					break;
 				case 'machpunch':
 					if (hasMove['focuspunch']) rejected = true;
@@ -1218,7 +1215,7 @@ exports.BattleScripts = {
 				case 'headsmash':
 					if (hasMove['stoneedge']) rejected = true;
 					break;
-				case 'bonemerang': case 'earthpower': case 'bulldoze':
+				case 'bonemerang': case 'earthpower': case 'bulldoze': case 'precipiceblades':
 					if (hasMove['earthquake']) rejected = true;
 					break;
 				case 'dragonclaw':
@@ -1327,7 +1324,7 @@ exports.BattleScripts = {
 				if (move.category === 'Special' && setupType === 'Physical' && !SetupException[move.id]) {
 					rejected = true;
 				}
-				if (move.category === 'Physical' && setupType === 'Special' && !SetupException[move.id]) {
+				if (move.category === 'Physical' && (setupType === 'Special' || hasMove['acidspray']) && !SetupException[move.id]) {
 					rejected = true;
 				}
 
