@@ -734,7 +734,7 @@ exports.BattleAbilities = {
 		},
 		id: "flareboost",
 		name: "Flare Boost",
-		rating: 3,
+		rating: 2.5,
 		num: 138
 	},
 	"flashfire": {
