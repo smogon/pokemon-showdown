@@ -3620,7 +3620,7 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	abomasnowmega: {
-		randomBattleMoves: ["blizzard","gigadrain","woodhammer","earthquake","iceshard","swordsdance"],
+		randomBattleMoves: ["blizzard","gigadrain","woodhammer","earthquake","iceshard","hiddenpowerfire"],
 		randomDoubleBattleMoves: ["blizzard","iceshard","gigadrain","protect","focusblast","woodhammer","earthquake"],
 		requiredItem: "Abomasite"
 	},
