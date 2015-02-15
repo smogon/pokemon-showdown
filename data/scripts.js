@@ -1427,34 +1427,34 @@ exports.BattleScripts = {
 		// any moveset modification goes here
 		//moves[0] = 'safeguard';
 		if (template.requiredItem && template.requiredItem.slice(-5) === 'Drive' && !hasMove['technoblast']) {
-			delete hasMove[moves[3]];
+			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'technoblast';
 			hasMove['technoblast'] = true;
 		}
 		if (template.id === 'altariamega' && !counter['ate']) {
-			delete hasMove[moves[3]];
+			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'return';
 			hasMove['return'] = true;
 		}
 		if (template.id === 'gardevoirmega' && !counter['ate']) {
-			delete hasMove[moves[3]];
+			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'hypervoice';
 			hasMove['hypervoice'] = true;
 		}
 		if (template.id === 'salamencemega' && !counter['ate']) {
-			delete hasMove[moves[3]];
+			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'return';
 			hasMove['return'] = true;
 		}
 		if (template.requiredMove && !hasMove[toId(template.requiredMove)]) {
-			delete hasMove[moves[3]];
+			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = toId(template.requiredMove);
 			hasMove[toId(template.requiredMove)] = true;
 		}
 
 		// If Hidden Power has been removed, reset the IVs
 		if (!hasMove['hiddenpower']) {
-			var ivs = {
+			ivs = {
 				hp: 31,
 				atk: 31,
 				def: 31,
@@ -2573,7 +2573,7 @@ exports.BattleScripts = {
 
 		// If Hidden Power has been removed, reset the IVs
 		if (!hasMove['hiddenpower']) {
-			var ivs = {
+			ivs = {
 				hp: 31,
 				atk: 31,
 				def: 31,
