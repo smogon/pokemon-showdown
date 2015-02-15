@@ -1132,6 +1132,9 @@ exports.BattleScripts = {
 					if (hasMove['agility'] || hasMove['rockpolish']) rejected = true;
 					if (hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore']) rejected = true;
 					break;
+				case 'explosion':
+					if (hasMove['wish']) rejected = true;
+					break;
 
 				// bit redundant to have both
 				// Attacks:
