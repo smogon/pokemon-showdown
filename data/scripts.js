@@ -890,8 +890,8 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSet: function (template, i, noMega) {
-		if (i === undefined) i = 1;
+	randomSet: function (template, slot, noMega) {
+		if (slot === undefined) slot = 1;
 		var baseTemplate = (template = this.getTemplate(template));
 		var name = template.name;
 
@@ -1679,7 +1679,7 @@ exports.BattleScripts = {
 			item = 'Lum Berry';
 		} else if ((counter.Physical + counter.Special >= 3) && ability !== 'Sturdy' && !hasMove['eruption'] && !hasMove['waterspout']) {
 			item = (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['trickroom'] || !!counter['recovery']) ? 'Life Orb' : 'Leftovers';
-		} else if (i === 0 && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
+		} else if (slot === 0 && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
 			item = 'Focus Sash';
 
 		// this is the "REALLY can't think of a good item" cutoff
@@ -2074,7 +2074,7 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomDoublesSet: function (template, noMega) {
+	randomDoublesSet: function (template, slot, noMega) {
 		var baseTemplate = (template = this.getTemplate(template));
 		var name = template.name;
 
