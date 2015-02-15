@@ -1064,6 +1064,7 @@ exports.BattleScripts = {
 				if (PhysicalSetup[moveid]) counter['physicalsetup']++;
 				if (SpecialSetup[moveid]) counter['specialsetup']++;
 				if (MixedSetup[moveid]) counter['mixedsetup']++;
+				if (SpeedSetup[moveid]) counter['speedsetup']++;
 			}
 
 			// Choose a setup type:
