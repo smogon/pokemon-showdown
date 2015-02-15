@@ -962,6 +962,9 @@ exports.BattleScripts = {
 		var MixedSetup = {
 			growth:1, workup:1, shellsmash:1
 		};
+		var SpeedSetup = {
+			autotomize:1, agility:1, rockpolish:1
+		};
 		// These moves can be used even if we aren't setting up to use them:
 		var SetupException = {
 			dracometeor:1, leafstorm:1, overheat:1,
@@ -996,7 +999,7 @@ exports.BattleScripts = {
 				adaptability: 0, ate: 0, bite: 0, contrary: 0, hustle: 0,
 				ironfist: 0, serenegrace: 0, sheerforce: 0, skilllink: 0, technician: 0,
 				inaccurate: 0, priority: 0, recoil: 0,
-				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
+				physicalsetup: 0, specialsetup: 0, mixedsetup: 0, speedsetup: 0
 			};
 			setupType = '';
 			// Iterate through all moves we've chosen so far and keep track of what they do:
@@ -1129,8 +1132,7 @@ exports.BattleScripts = {
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['batonpass']) rejected = true;
 					break;
 				case 'dragontail': case 'circlethrow':
-					if (hasMove['agility'] || hasMove['rockpolish']) rejected = true;
-					if (hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore']) rejected = true;
+					if (!!counter['speedsetup'] || hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore']) rejected = true;
 					break;
 				case 'explosion':
 					if (hasMove['wish']) rejected = true;
@@ -1258,10 +1260,10 @@ exports.BattleScripts = {
 					break;
 				case 'voltswitch':
 					if (hasMove['uturn']) rejected = true;
-					if (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
+					if (setupType || !!counter['speedsetup'] || hasMove['magnetrise']) rejected = true;
 					break;
 				case 'uturn':
-					if (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
+					if (setupType || !!counter['speedsetup'] || hasMove['magnetrise']) rejected = true;
 					break;
 
 				// Status:
@@ -1307,13 +1309,13 @@ exports.BattleScripts = {
 					if (hasMove['rest'] || hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'thunderwave': case 'stunspore':
-					if (setupType || hasMove['rockpolish'] || hasMove['agility']) rejected = true;
+					if (setupType || !!counter['speedsetup']) rejected = true;
 					if (hasMove['discharge'] || hasMove['trickroom'] || hasMove['gyroball']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder']) rejected = true;
 					break;
 				case 'trickroom':
-					if (hasMove['rockpolish'] || hasMove['agility']) rejected = true;
+					if (!!counter['speedsetup']) rejected = true;
 					break;
 				case 'willowisp':
 					if (hasMove['scald'] || hasMove['lavaplume'] || hasMove['sacredfire'] || hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder'] || hasMove['hypnosis']) rejected = true;
@@ -1325,7 +1327,7 @@ exports.BattleScripts = {
 				}
 
 				// Increased/decreased priority moves unneeded with moves that boost only speed
-				if (move.priority !== 0 && (hasMove['rockpolish'] || hasMove['agility'])) {
+				if (move.priority !== 0 && !!counter['speedsetup']) {
 					rejected = true;
 				}
 
@@ -1674,21 +1676,22 @@ exports.BattleScripts = {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
-		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179) {
+		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 189) {
 			item = 'Assault Vest';
 		} else if (counter.Physical + counter.Special >= 4) {
 			item = (hasMove['fakeout'] || hasMove['return']) ? 'Life Orb' : 'Expert Belt';
 		} else if (setupType && hasMove['outrage']) {
 			item = 'Lum Berry';
+		} else if (counter.Physical + counter.Special >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd > 300) {
+			item = 'Weakness Policy';
 		} else if ((counter.Physical + counter.Special >= 3) && ability !== 'Sturdy' && !hasMove['eruption'] && !hasMove['waterspout']) {
-			item = (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['trickroom'] || !!counter['recovery']) ? 'Life Orb' : 'Leftovers';
+			item = (setupType || !!counter['speedsetup'] || hasMove['trickroom'] || !!counter['recovery']) ? 'Life Orb' : 'Leftovers';
+		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
+			item = 'Lustrous Orb';
 		} else if (slot === 0 && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
 			item = 'Focus Sash';
 
 		// this is the "REALLY can't think of a good item" cutoff
-		// why not always Leftovers? Because it's boring. :P
-		} else if (counter.Physical + counter.Special >= 2 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd > 315) {
-			item = 'Weakness Policy';
 		} else if (hasType['Flying'] || ability === 'Levitate') {
 			item = 'Leftovers';
 		} else if (hasType['Poison']) {
