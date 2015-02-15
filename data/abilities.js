@@ -120,8 +120,9 @@ exports.BattleAbilities = {
 	"angerpoint": {
 		desc: "If this Pokemon, and not its Substitute, is struck by a Critical Hit, its Attack is boosted to six stages.",
 		shortDesc: "If this Pokemon is hit by a critical hit, its Attack is boosted by 12.",
-		onCriticalHit: function (target) {
-			if (!target.volatiles['substitute']) {
+		onAfterDamage: function (damage, target, source, move) {
+			if (!target.hp) return;
+			if (move && move.effectType === 'Move' && move.crit) {
 				target.setBoost({atk: 6});
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
@@ -599,10 +600,6 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the battlefield, the weather becomes Rain Dance (for 5 turns normally, or 8 turns while holding Damp Rock).",
 		shortDesc: "On switch-in, the weather becomes Rain Dance.",
 		onStart: function (source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-ability', source, 'Drizzle', '[from] ' + this.effectiveWeather(), '[fail]');
-				return null;
-			}
 			this.setWeather('raindance');
 		},
 		id: "drizzle",
@@ -614,10 +611,6 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the battlefield, the weather becomes Sunny Day (for 5 turns normally, or 8 turns while holding Heat Rock).",
 		shortDesc: "On switch-in, the weather becomes Sunny Day.",
 		onStart: function (source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-ability', source, 'Drought', '[from] ' + this.effectiveWeather(), '[fail]');
-				return null;
-			}
 			this.setWeather('sunnyday');
 		},
 		id: "drought",
@@ -2266,10 +2259,6 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the battlefield, the weather becomes Sandstorm (for 5 turns normally, or 8 turns while holding Smooth Rock).",
 		shortDesc: "On switch-in, the weather becomes Sandstorm.",
 		onStart: function (source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-ability', source, 'Sand Stream', '[from] ' + this.effectiveWeather(), '[fail]');
-				return null;
-			}
 			this.setWeather('sandstorm');
 		},
 		id: "sandstream",
@@ -2524,10 +2513,6 @@ exports.BattleAbilities = {
 		desc: "When this Pokemon enters the battlefield, the weather becomes Hail (for 5 turns normally, or 8 turns while holding Icy Rock).",
 		shortDesc: "On switch-in, the weather becomes Hail.",
 		onStart: function (source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-ability', source, 'Snow Warning', '[from] ' + this.effectiveWeather(), '[fail]');
-				return null;
-			}
 			this.setWeather('hail');
 		},
 		id: "snowwarning",
@@ -2680,7 +2665,7 @@ exports.BattleAbilities = {
 		},
 		id: "stickyhold",
 		name: "Sticky Hold",
-		rating: 1.5,
+		rating: 2,
 		num: 60
 	},
 	"stormdrain": {
@@ -3078,15 +3063,10 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon ignores other Pokemon's stat changes when taking or doing damage.",
 		id: "unaware",
 		name: "Unaware",
-		onModifyMove: function (move, user, target) {
-			move.ignoreEvasion = true;
-			move.ignoreDefensive = true;
-		},
-		onSourceModifyMove: function (move, user, target) {
-			if (user.hasAbility(['moldbreaker', 'turboblaze', 'teravolt'])) return;
-			move.ignoreAccuracy = true;
-			move.ignoreOffensive = true;
-		},
+		ignoreEvasion: true,
+		ignoreDefensive: true,
+		ignoreAccuracy: true,
+		ignoreOffensive: true,
 		rating: 3,
 		num: 109
 	},
