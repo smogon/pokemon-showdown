@@ -563,7 +563,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	poliwrath: {
-		randomBattleMoves: ["raindance","hydropump","focusblast","icebeam","rest","sleeptalk","scald","circlethrow"],
+		randomBattleMoves: ["hydropump","focusblast","icebeam","rest","sleeptalk","scald","circlethrow"],
 		randomDoubleBattleMoves: ["substitute","helpinghand","icywind","encore","waterfall","protect","icepunch","poisonjab","earthquake","brickbreak"],
 		eventPokemon: [
 			{"generation":3,"level":42,"moves":["helpinghand","hydropump","raindance","brickbreak"]}
@@ -3602,11 +3602,11 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	finneon: {
-		randomBattleMoves: ["surf","uturn","icebeam","hiddenpowerelectric","hiddenpowergrass","raindance"],
+		randomBattleMoves: ["surf","uturn","icebeam","hiddenpowerelectric","hiddenpowergrass"],
 		tier: "LC"
 	},
 	lumineon: {
-		randomBattleMoves: ["waterfall","scald","uturn","icebeam","toxic","raindance"],
+		randomBattleMoves: ["waterfall","scald","uturn","icebeam","toxic"],
 		randomDoubleBattleMoves: ["surf","uturn","icebeam","toxic","raindance","tailwind","protect"],
 		tier: "PU"
 	},
@@ -4140,7 +4140,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	seismitoad: {
-		randomBattleMoves: ["hydropump","scald","sludgewave","earthquake","knockoff","stealthrock","toxic","raindance"],
+		randomBattleMoves: ["hydropump","scald","sludgewave","earthquake","knockoff","stealthrock","toxic"],
 		randomDoubleBattleMoves: ["hydropump","muddywater","sludgebomb","earthquake","hiddenpowerelectric","icywind","protect"],
 		tier: "NU"
 	},
