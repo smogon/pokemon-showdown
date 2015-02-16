@@ -1094,10 +1094,6 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524287/\">Middle Cup</a><br />";
 		}
-		if (target === 'all' || target === 'skybattle') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493601/\">Sky Battle</a><br />";
-		}
 		if (!matched) {
 			return this.sendReply("The Other Metas entry '" + target + "' was not found. Try /othermetas or /om for general help.");
 		}
