@@ -1638,10 +1638,14 @@ exports.BattleScripts = {
 		} else if (ability === 'Unburden') {
 			item = 'Red Card';
 			// Give Unburden mons a Normal Gem if they have a Normal-type attacking move (except Explosion or Rapid Spin)
+			// Alternatively, give them White Herb if they have a move that lowers their stats
 			for (var m in moves) {
 				var move = this.getMove(moves[m]);
 				if (move.type === 'Normal' && (move.basePower || move.basePowerCallback) && move.id !== 'explosion' && move.id !== 'rapidspin') {
 					item = 'Normal Gem';
+					break;
+				} else if (move.id in {superpower:1, leafstorm:1, overheat:1, dracometeor:1}) {
+					item = 'White Herb';
 					break;
 				}
 			}
@@ -1671,7 +1675,7 @@ exports.BattleScripts = {
 			item = 'Air Balloon';
 		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 			item = 'Choice Scarf';
-		} else if ((hasMove['flail'] || hasMove['reversal']) && !hasMove['endure'] && ability !== 'Sturdy') {
+		} else if ((hasMove['flail'] || hasMove['reversal'] || hasMove['endeavor']) && !hasMove['endure'] && ability !== 'Sturdy') {
 			item = 'Focus Sash';
 		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || hasMove['roar'] || hasMove['whirlwind'] || hasMove['sleeptalk'] || ability === 'Moody') {
 			item = 'Leftovers';
@@ -2755,9 +2759,11 @@ exports.BattleScripts = {
 			item = 'Flying Gem';
 		} else if (ability === 'Unburden') {
 			item = 'Red Card';
-			// Give Unburden mons a Normal Gem if they have Fake Out
+			// Give Unburden mons a Normal Gem if they have Fake Out, or White Herb if they have a move that lowers stats
 			if (hasMove['fakeout']) {
 				item = 'Normal Gem';
+			} else if (hasMove['leafstorm'] || hasMove['dracometeor'] || hasMove['overheat'] || hasMove['superpower']) {
+				item = 'White Herb';
 			}
 
 		// medium priority
