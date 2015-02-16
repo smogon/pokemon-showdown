@@ -1210,6 +1210,7 @@ exports.BattleScripts = {
 				case 'drainpunch': case 'focusblast':
 					if (hasMove['closecombat'] || hasMove['highjumpkick'] || hasMove['crosschop'] || hasMove['focuspunch']) rejected = true;
 					if (!setupType && hasMove['superpower']) rejected = true;
+					if (moveid === 'focusblast' && hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'superpower':
 					if (setupType && (hasMove['drainpunch'] || hasMove['focusblast'])) rejected = true;
