@@ -1297,6 +1297,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
 			onSourceBasePower: function (basePower, target, source, move) {
@@ -2674,6 +2675,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
 			onSourceModifyDamage: function (damage, source, target, move) {
@@ -2826,6 +2828,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
 			onSourceModifyDamage: function (damage, source, target, move) {
@@ -4620,6 +4623,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
 			onSourceBasePower: function (basePower, target, source, move) {
@@ -7849,14 +7853,17 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		volatileStatus: 'lockon',
+		onTryHit: function (target, source) {
+			if (source.volatiles['lockon']) return false;
+		},
+		onHit: function (target, source) {
+			source.addVolatile('lockon', target);
+		},
 		effect: {
+			noCopy: true, // doesn't get copied by Baton Pass
 			duration: 2,
-			onFoeModifyMove: function (move, source, target) {
-				if (source === this.effectData.source) {
-					move.accuracy = true;
-					move.alwaysHit = true;
-				}
+			onSourceAccuracy: function (accuracy, target, source, move) {
+				if (move && source === this.effectData.target && target === this.effectData.source) return true;
 			}
 		},
 		secondary: false,
@@ -8762,7 +8769,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		volatileStatus: 'lockon',
+		onTryHit: function (target, source) {
+			if (source.volatiles['lockon']) return false;
+		},
+		onHit: function (target, source) {
+			source.addVolatile('lockon', target);
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -9892,6 +9904,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			}
 		},
@@ -12179,6 +12192,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			}
 		},
@@ -12637,6 +12651,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
 			onAnyBasePower: function (basePower, target, source, move) {
@@ -14421,8 +14436,9 @@ exports.BattleMovedex = {
 				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
 				this.add('-start', target, 'Telekinesis');
 			},
-			onSourceModifyMove: function (move) {
-				move.accuracy = true;
+			onAccuracyPriority: -1,
+			onAccuracy: function (accuracy, target, source, move) {
+				if (move && !move.ohko) return true;
 			},
 			onImmunity: function (type) {
 				if (type === 'Ground') return false;
