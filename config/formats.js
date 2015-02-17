@@ -637,14 +637,6 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Hackmons Challenge Cup",
-		section: "Other Metagames",
-
-		team: 'randomHackmonsCC',
-		searchShow: false,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod']
-	},
-	{
 		name: "350 Cup",
 		section: "Other Metagames",
 
@@ -706,25 +698,12 @@ exports.Formats = [
 		banlist: ['Uber']
 	},
 	{
-		name: "Sky Battle",
+		name: "Hackmons Challenge Cup",
 		section: "Other Metagames",
 
+		team: 'randomHackmonsCC',
 		searchShow: false,
-		validateSet: function (set) {
-			var template = this.getTemplate(set.species || set.name);
-			if (template.types.indexOf('Flying') === -1 && set.ability !== 'Levitate') {
-				return [set.species + " is not Flying-type and does not have the ability Levitate."];
-			}
-		},
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Archen', 'Chatot', 'Delibird', 'Dodrio', 'Doduo', 'Ducklett', "Farfetch'd", 'Fletchling', 'Gengar', 'Hawlucha',
-			'Hoothoot', 'Murkrow', 'Natu', 'Pidgey', 'Pidove', 'Rufflet', 'Shaymin-Sky', 'Spearow', 'Starly', 'Taillow',
-			'Vullaby',
-			'Body Slam', 'Bulldoze', 'Dig', 'Dive', 'Earth Power', 'Earthquake', 'Electric Terrain', 'Fire Pledge', 'Fissure', 'Flying Press',
-			'Frenzy Plant', 'Geomancy', 'Grass Knot', 'Grass Pledge', 'Grassy Terrain', 'Gravity', 'Heavy Slam', 'Ingrain', "Land's Wrath", 'Magnitude',
-			'Mat Block', 'Misty Terrain', 'Mud Sport', 'Muddy Water', 'Rototiller', 'Seismic Toss', 'Slam', 'Smack Down', 'Spikes', 'Stomp',
-			'Substitute', 'Surf', 'Toxic Spikes', 'Water Pledge', 'Water Sport'
-		]
+		ruleset: ['HP Percentage Mod', 'Cancel Mod']
 	},
 
 	// BW2 Singles
