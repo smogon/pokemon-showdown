@@ -1698,6 +1698,8 @@ exports.BattleScripts = {
 			item = 'Focus Sash';
 
 		// this is the "REALLY can't think of a good item" cutoff
+		} else if (ability === 'Super Luck') {
+			item = 'Scope Lens';
 		} else if (hasType['Flying'] || ability === 'Levitate') {
 			item = 'Leftovers';
 		} else if (hasType['Poison']) {
@@ -2820,6 +2822,8 @@ exports.BattleScripts = {
 		// this is the "REALLY can't think of a good item" cutoff
 		} else if (counter.Physical + counter.Special >= 2 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd > 315) {
 			item = 'Weakness Policy';
+		} else if (ability === 'Super Luck') {
+			item = 'Scope Lens';
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
 		} else if (counter.Status <= 1) {
