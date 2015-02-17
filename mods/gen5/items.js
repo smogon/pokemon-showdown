@@ -30,7 +30,7 @@ exports.BattleItems = {
 	belueberry: {
 		inherit: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Electric"
 		}
 	},
