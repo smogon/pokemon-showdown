@@ -5062,7 +5062,7 @@ exports.BattleFormatsData = {
 	tyrunt: {
 		randomBattleMoves: ["stealthrock","dragondance","stoneedge","dragonclaw","earthquake","icefang","firefang"],
 		eventPokemon: [
-			{"generation":6,"level":10,"moves":["tailwhip","tackle","roar","stomp"],"pokeball":"cherishball"}
+			{"generation":6,"level":10,"isHidden":true,"moves":["tailwhip","tackle","roar","stomp"],"pokeball":"cherishball"}
 		],
 		tier: "LC"
 	},
