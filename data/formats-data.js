@@ -5061,13 +5061,14 @@ exports.BattleFormatsData = {
 	},
 	tyrunt: {
 		randomBattleMoves: ["stealthrock","dragondance","stoneedge","dragonclaw","earthquake","icefang","firefang"],
-		unreleasedHidden: true,
+		eventPokemon: [
+			{"generation":6,"level":10,"moves":["tailwhip","tackle","roar","stomp"],"pokeball":"cherishball"}
+		],
 		tier: "LC"
 	},
 	tyrantrum: {
 		randomBattleMoves: ["stealthrock","dragondance","stoneedge","dragonclaw","earthquake","firefang","outrage","headsmash"],
 		randomDoubleBattleMoves: ["rockslide","dragondance","headsmash","dragonclaw","earthquake","icefang","firefang","protect"],
-		unreleasedHidden: true,
 		tier: "RU"
 	},
 	amaura: {
