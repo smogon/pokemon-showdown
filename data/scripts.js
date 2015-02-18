@@ -1541,6 +1541,8 @@ exports.BattleScripts = {
 			} else if (template.id === 'mawilemega') {
 				// Mega Mawile only needs Intimidate for a starting ability
 				ability = 'Intimidate';
+			} else if (template.id === 'unfezant') {
+				ability = 'Super Luck';
 			}
 		}
 
@@ -1609,6 +1611,8 @@ exports.BattleScripts = {
 			item = 'Stick';
 		} else if (template.species === 'Dedenne') {
 			item = 'Petaya Berry';
+		} else if (template.species === 'Unfezant' && counter['Physical'] >= 2) {
+			item = 'Scope Lens';
 		} else if (template.evos.length) {
 			item = 'Eviolite';
 		} else if (hasMove['reflect'] && hasMove['lightscreen']) {
@@ -2646,6 +2650,9 @@ exports.BattleScripts = {
 			if (abilities.indexOf('Intimidate') > -1 || template.id === 'mawilemega') {
 				ability = 'Intimidate';
 			}
+			if (template.id === 'unfezant') {
+				ability = 'Super Luck';
+			}
 		}
 
 		// Make EVs comply with the sets.
@@ -2733,6 +2740,8 @@ exports.BattleScripts = {
 			item = 'Black Sludge';
 		} else if (template.species === 'Dedenne') {
 			item = 'Petaya Berry';
+		} else if (template.species === 'Unfezant' && counter['Physical'] >= 2) {
+			item = 'Scope Lens';
 		} else if (template.evos.length) {
 			item = 'Eviolite';
 		} else if (hasMove['reflect'] && hasMove['lightscreen']) {
