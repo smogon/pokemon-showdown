@@ -1668,7 +1668,7 @@ exports.BattleScripts = {
 		} else if (counter.Special >= 4) {
 			item = template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (hasMove['eruption'] || hasMove['waterspout']) {
-			item = 'Choice Scarf';
+			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
 		} else if ((hasMove['flail'] || hasMove['reversal'] || hasMove['endeavor']) && !hasMove['endure'] && ability !== 'Sturdy') {
 			item = 'Focus Sash';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
