@@ -186,11 +186,11 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	oddish: {
-		randomBattleMoves: ["sleeppowder","swordsdance","bodyslam","megadrain","poisonpowder","toxic"],
+		randomBattleMoves: ["sleeppowder","swordsdance","doubleedge","megadrain","poisonpowder","toxic"],
 		tier: "LC"
 	},
 	gloom: {
-		randomBattleMoves: ["sleeppowder","swordsdance","bodyslam","megadrain"],
+		randomBattleMoves: ["sleeppowder","swordsdance","doubleedge","megadrain"],
 		tier: "UU"
 	},
 	vileplume: {
