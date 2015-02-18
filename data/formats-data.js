@@ -4060,8 +4060,8 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	unfezant: {
-		randomBattleMoves: ["return","pluck","hypnosis","tailwind","uturn","roost"],
-		randomDoubleBattleMoves: ["pluck","uturn","return","protect","tailwind","taunt","wish"],
+		randomBattleMoves: ["return","pluck","hypnosis","tailwind","uturn","roost","nightslash"],
+		randomDoubleBattleMoves: ["pluck","uturn","return","protect","tailwind","taunt","roost","nightslash"],
 		tier: "PU"
 	},
 	blitzle: {
