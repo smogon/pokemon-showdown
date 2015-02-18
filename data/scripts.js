@@ -1127,7 +1127,7 @@ exports.BattleScripts = {
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'trick': case 'switcheroo':
-					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['batonpass']) rejected = true;
+					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen']) rejected = true;
 					break;
 				case 'dragontail': case 'circlethrow':
 					if (!!counter['speedsetup'] || hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore']) rejected = true;
@@ -1304,7 +1304,7 @@ exports.BattleScripts = {
 					if (hasMove['calmmind']) rejected = true;
 					break;
 				case 'rockpolish': case 'agility': case 'autotomize':
-					if (!setupType && !hasMove['batonpass'] && hasMove['thunderwave']) rejected = true;
+					if (counter.Physical + counter.Special < 2 && !hasMove['batonpass'] && !setupType) rejected = true;
 					if ((hasMove['stealthrock'] || hasMove['spikes'] || hasMove['toxicspikes']) && !hasMove['batonpass']) rejected = true;
 					if (hasMove['rest'] || hasMove['sleeptalk']) rejected = true;
 					break;
