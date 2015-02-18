@@ -1120,13 +1120,10 @@ exports.BattleScripts = {
 					break;
 
 				// bad after setup
-				case 'seismictoss': case 'nightshade': case 'superfang': case 'foulplay':
+				case 'foulplay': case 'relicsong': case 'nightshade': case 'seismictoss': case 'superfang':
 					if (setupType) rejected = true;
 					break;
-				case 'relicsong':
-					if (setupType) rejected = true;
-					break;
-				case 'magiccoat': case 'spikes': case 'defog': case 'pursuit': case 'protect': case 'haze': case 'stealthrock': case 'healingwish':
+				case 'pursuit': case 'eruption': case 'waterspout': case 'defog': case 'haze': case 'healingwish': case 'magiccoat': case 'protect': case 'spikes': case 'stealthrock':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'trick': case 'switcheroo':
@@ -1135,8 +1132,8 @@ exports.BattleScripts = {
 				case 'dragontail': case 'circlethrow':
 					if (!!counter['speedsetup'] || hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore']) rejected = true;
 					break;
-				case 'explosion':
-					if (hasMove['wish']) rejected = true;
+				case 'trickroom':
+					if (!!counter['speedsetup']) rejected = true;
 					break;
 
 				// bit redundant to have both
@@ -1168,10 +1165,10 @@ exports.BattleScripts = {
 				case 'hypervoice':
 					if (hasMove['return']) rejected = true;
 					break;
-				case 'surf':
+				case 'surf': case 'originpulse':
 					if (hasMove['scald'] || hasMove['hydropump']) rejected = true;
 					break;
-				case 'hydropump': case 'originpulse':
+				case 'hydropump':
 					if (hasMove['razorshell'] || hasMove['scald'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'waterfall': case 'waterpulse':
@@ -1267,6 +1264,12 @@ exports.BattleScripts = {
 				case 'uturn':
 					if (setupType || !!counter['speedsetup'] || hasMove['magnetrise']) rejected = true;
 					break;
+				case 'explosion':
+					if (hasMove['wish']) rejected = true;
+					break;
+				case 'fakeout':
+					if (setupType || hasMove['trick'] || hasMove['switcheroo']) rejected = true;
+					break;
 
 				// Status:
 				case 'rest':
@@ -1279,18 +1282,13 @@ exports.BattleScripts = {
 					if (hasMove['rest'] || hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis'] || hasMove['morningsun']) rejected = true;
 					break;
 				case 'perishsong':
-					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
-					if (setupType) rejected = true;
+					if (setupType || hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 					break;
 				case 'roar':
-					// Whirlwind outclasses Roar because Soundproof
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['haze'] || hasMove['circlethrow']) rejected = true;
 					break;
 				case 'substitute':
 					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit'] || hasMove['dracometeor']) rejected = true;
-					break;
-				case 'fakeout':
-					if (setupType || hasMove['trick'] || hasMove['switcheroo']) rejected = true;
 					break;
 				case 'encore':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -1315,9 +1313,6 @@ exports.BattleScripts = {
 					if (hasMove['discharge'] || hasMove['trickroom'] || hasMove['gyroball']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder']) rejected = true;
-					break;
-				case 'trickroom':
-					if (!!counter['speedsetup']) rejected = true;
 					break;
 				case 'willowisp':
 					if (hasMove['scald'] || hasMove['lavaplume'] || hasMove['sacredfire'] || hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder'] || hasMove['hypnosis']) rejected = true;
@@ -1509,7 +1504,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Moody') {
 				rejectAbility = template.id !== 'bidoof';
 			} else if (ability === 'Limber') {
-				rejectAbility = template.id === 'stunfisk';
+				rejectAbility = template.types.indexOf('Electric') >= 0;
 			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
 			} else if (ability === 'Unburden') {
@@ -1672,12 +1667,12 @@ exports.BattleScripts = {
 			item = template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Band';
 		} else if (counter.Special >= 4) {
 			item = template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
-		} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
-			item = 'Air Balloon';
-		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
+		} else if (hasMove['eruption'] || hasMove['waterspout']) {
 			item = 'Choice Scarf';
 		} else if ((hasMove['flail'] || hasMove['reversal'] || hasMove['endeavor']) && !hasMove['endure'] && ability !== 'Sturdy') {
 			item = 'Focus Sash';
+		} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
+			item = 'Air Balloon';
 		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || hasMove['roar'] || hasMove['whirlwind'] || hasMove['sleeptalk'] || ability === 'Moody') {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
@@ -1685,12 +1680,12 @@ exports.BattleScripts = {
 		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 189) {
 			item = 'Assault Vest';
 		} else if (counter.Physical + counter.Special >= 4) {
-			item = (hasMove['fakeout'] || hasMove['return']) ? 'Life Orb' : 'Expert Belt';
+			item = (hasMove['fakeout'] || hasMove['return'] || hasMove['extremespeed'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
 		} else if (setupType && hasMove['outrage']) {
 			item = 'Lum Berry';
 		} else if (counter.Physical + counter.Special >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd > 300) {
 			item = 'Weakness Policy';
-		} else if ((counter.Physical + counter.Special >= 3) && ability !== 'Sturdy' && !hasMove['eruption'] && !hasMove['waterspout']) {
+		} else if ((counter.Physical + counter.Special >= 3) && ability !== 'Sturdy' && !hasMove['dragontail']) {
 			item = (setupType || !!counter['speedsetup'] || hasMove['trickroom'] || !!counter['recovery']) ? 'Life Orb' : 'Leftovers';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
@@ -1700,7 +1695,7 @@ exports.BattleScripts = {
 		// this is the "REALLY can't think of a good item" cutoff
 		} else if (ability === 'Super Luck') {
 			item = 'Scope Lens';
-		} else if (hasType['Flying'] || ability === 'Levitate') {
+		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
 			item = 'Leftovers';
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
