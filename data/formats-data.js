@@ -2852,8 +2852,8 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	kecleon: {
-		randomBattleMoves: ["drainpunch","toxic","stealthrock","recover","return","thunderwave","suckerpunch","shadowsneak","knockoff"],
-		randomDoubleBattleMoves: ["knockoff","fakeout","trickroom","recover","return","thunderwave","suckerpunch","shadowsneak","protect","feint"],
+		randomBattleMoves: ["fakeout","knockoff","drainpunch","suckerpunch","shadowsneak","stealthrock","recover"],
+		randomDoubleBattleMoves: ["knockoff","fakeout","trickroom","recover","drainpunch","suckerpunch","shadowsneak","protect","feint"],
 		tier: "PU"
 	},
 	shuppet: {
@@ -5007,7 +5007,7 @@ exports.BattleFormatsData = {
 		tier: "LC Uber"
 	},
 	slurpuff: {
-		randomBattleMoves: ["substitute","bellydrum","playrough","return","calmmind","drainingkiss","flamethrower","surf"],
+		randomBattleMoves: ["substitute","bellydrum","playrough","return","drainpunch","calmmind","drainingkiss","flamethrower","surf"],
 		randomDoubleBattleMoves: ["calmmind","dazzlinggleam","surf","psychic","flamethrower","thunderbolt","protect"],
 		tier: "RU"
 	},
