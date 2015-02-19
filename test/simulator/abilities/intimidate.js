@@ -37,7 +37,7 @@ describe('Intimidate', function () {
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Greninja", ability: 'protean',  moves: ['uturn']},
 			{species: "Mew", ability: 'synchronize',  moves: ['softboiled']},
-			{species: "Gyarados", ability: 'intimidate',  moves: ['splash']},
+			{species: "Gyarados", ability: 'intimidate',  moves: ['splash']}
 		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].boosts['atk'], -1);

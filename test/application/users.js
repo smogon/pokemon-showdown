@@ -63,7 +63,7 @@ describe('Users features', function () {
 						user.disconnectAll();
 						for (var i = 0; i < totalConnections; i++) {
 							assert.strictEqual(Users.connections[connections[i].id], undefined);
-						}			
+						}
 					});
 
 					it('should clear `user` property for all ' + totalConnections + ' connection(s)', function () {
