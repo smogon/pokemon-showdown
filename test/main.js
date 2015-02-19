@@ -4,7 +4,7 @@ before('initialization', function () {
 	this.timeout(0); // Remove timeout limitation
 
 	require('./../app.js');
-	process.listeners('uncaughtException').forEach(function (listener) {	
+	process.listeners('uncaughtException').forEach(function (listener) {
 		process.removeListener('uncaughtException', listener);
 	});
 

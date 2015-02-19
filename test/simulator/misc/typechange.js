@@ -34,7 +34,7 @@ describe('Type addition', function () {
 				battle.join('p1', 'Guest 1', 1, [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name]}]);
 				battle.join('p2', 'Guest 2', 1, [{species: "Arceus", ability: 'multitype', moves: ['extremespeed']}]);
 				battle.commitDecisions();
-				assert.deepEqual(battle.p2.active[0].getTypes(), ['Normal', moveData.type]);			
+				assert.deepEqual(battle.p2.active[0].getTypes(), ['Normal', moveData.type]);
 			});
 
 			adderMoves.forEach(function (moveData2) {
