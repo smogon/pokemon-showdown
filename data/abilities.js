@@ -2977,12 +2977,12 @@ exports.BattleAbilities = {
 		num: 137
 	},
 	"toughclaws": {
-		desc: "This Pokemon's contact attacks do 33% more damage.",
-		shortDesc: "This Pokemon's contact attacks do 1.33x damage.",
+		desc: "This Pokemon's contact attacks do 30% more damage.",
+		shortDesc: "This Pokemon's contact attacks do 1.3x damage.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
 			if (move.isContact) {
-				return this.chainModify(1.33);
+				return this.chainModify([0x14CD, 0x1000]);
 			}
 		},
 		id: "toughclaws",
