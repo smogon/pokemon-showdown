@@ -975,21 +975,31 @@ exports.BattleScripts = {
 
 		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType, hasStab;
 
-		hasMove = {};
 		do {
+			// Keep track of all moves we have:
+			hasMove = {};
+			for (var k = 0; k < moves.length; k++) {
+				if (moves[k].substr(0, 11) === 'hiddenpower') {
+					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moves[k]] = true;
+				}
+			}
+
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && movePool.length) {
 				var moveid = this.sampleNoReplace(movePool);
 				if (moveid.substr(0, 11) === 'hiddenpower') {
 					if (hasMove['hiddenpower']) continue;
 					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moveid] = true;
 				}
 				moves.push(moveid);
 			}
 
 			damagingMoves = [];
 			damagingMoveIndex = {};
-			hasMove = {};
 			hasStab = false;
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0,
@@ -1004,8 +1014,6 @@ exports.BattleScripts = {
 			for (var k = 0; k < moves.length; k++) {
 				var move = this.getMove(moves[k]);
 				var moveid = move.id;
-				// Keep track of all moves we have:
-				hasMove[moveid] = true;
 				if (move.damage || move.damageCallback) {
 					// Moves that do a set amount of damage:
 					counter['damage']++;
@@ -2150,21 +2158,31 @@ exports.BattleScripts = {
 
 		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType, hasStab;
 
-		hasMove = {};
 		do {
+			// Keep track of all moves we have:
+			hasMove = {};
+			for (var k = 0; k < moves.length; k++) {
+				if (moves[k].substr(0, 11) === 'hiddenpower') {
+					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moves[k]] = true;
+				}
+			}
+
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && movePool.length) {
 				var moveid = toId(this.sampleNoReplace(movePool));
 				if (moveid.substr(0, 11) === 'hiddenpower') {
 					if (hasMove['hiddenpower']) continue;
 					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moveid] = true;
 				}
 				moves.push(moveid);
 			}
 
 			damagingMoves = [];
 			damagingMoveIndex = {};
-			hasMove = {};
 			hasStab = false;
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
@@ -2178,8 +2196,6 @@ exports.BattleScripts = {
 			for (var k = 0; k < moves.length; k++) {
 				var move = this.getMove(moves[k]);
 				var moveid = move.id;
-				// Keep track of all moves we have:
-				hasMove[moveid] = true;
 				if (move.damage || move.damageCallback) {
 					// Moves that do a set amount of damage:
 					counter['damage']++;
