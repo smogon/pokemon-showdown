@@ -1621,17 +1621,20 @@ exports.BattleScripts = {
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
 		} else if (ability === 'Unburden') {
-			item = 'Red Card';
-			// Give Unburden mons a Normal Gem if they have a Normal-type attacking move (except Explosion or Rapid Spin)
-			// Alternatively, give them White Herb if they have a move that lowers their stats
-			for (var m in moves) {
-				var move = this.getMove(moves[m]);
-				if (move.type === 'Normal' && (move.basePower || move.basePowerCallback) && move.id !== 'explosion' && move.id !== 'rapidspin') {
-					item = 'Normal Gem';
-					break;
-				} else if (move.id in {superpower:1, leafstorm:1, overheat:1, dracometeor:1}) {
-					item = 'White Herb';
-					break;
+			if (hasMove['fakeout']) {
+				item = 'Normal Gem';
+			} else if (hasMove['dracometeor'] || hasMove['leafstorm'] || hasMove['overheat']) {
+				item = 'White Herb';
+			} else if (hasMove['substitute'] || setupType) {
+				item = 'Sitrus Berry';
+			} else {
+				item = 'Red Card';
+				for (var m in moves) {
+					var move = this.getMove(moves[m]);
+					if (hasType[move.type] && move.basePower >= 90) {
+						item = move.type + ' Gem';
+						break;
+					}
 				}
 			}
 
