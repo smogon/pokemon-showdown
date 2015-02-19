@@ -933,12 +933,9 @@ exports.BattleScripts = {
 			spd: 31,
 			spe: 31
 		};
-		var hasStab = {};
-		hasStab[template.types[0]] = true;
 		var hasType = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) {
-			hasStab[template.types[1]] = true;
 			hasType[template.types[1]] = true;
 		}
 
@@ -976,7 +973,7 @@ exports.BattleScripts = {
 			'Technician':1, 'Skill Link':1, 'Iron Fist':1, 'Adaptability':1, 'Hustle':1
 		};
 
-		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType;
+		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType, hasStab;
 
 		hasMove = {};
 		do {
@@ -993,6 +990,7 @@ exports.BattleScripts = {
 			damagingMoves = [];
 			damagingMoveIndex = {};
 			hasMove = {};
+			hasStab = false;
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0,
 				blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
@@ -1023,14 +1021,14 @@ exports.BattleScripts = {
 				if (move.multihit && move.multihit[1] === 5) counter['skilllink']++;
 				// Recoil:
 				if (move.recoil) counter['recoil']++;
-				// Moves which have a base power:
-				if (move.basePower || move.basePowerCallback) {
+				// Moves which have a base power, but aren't super-weak like Rapid Spin:
+				if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
 						// Bounce, Sky Attack, Flame Charge aren't considered STABs.
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
-						if (moveid === 'skyattack' || moveid === 'bounce' || moveid === 'flamecharge') hasStab[move.type] = false;
+						if (moveid !== 'skyattack' && moveid !== 'bounce' && moveid !== 'flamecharge') hasStab = true;
 					}
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
@@ -1040,11 +1038,8 @@ exports.BattleScripts = {
 					if (move.type === 'Normal') counter['ate']++;
 					if (move.flags['bite']) counter['bite']++;
 					if (move.flags['punch']) counter['ironfist']++;
-					// Make sure not to count Knock Off, Rapid Spin, etc.
-					if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
-						damagingMoves.push(move);
-						damagingMoveIndex[moveid] = k;
-					}
+					damagingMoves.push(move);
+					damagingMoveIndex[moveid] = k;
 				}
 				// Moves with secondary effects:
 				if (move.secondary) {
@@ -1379,15 +1374,15 @@ exports.BattleScripts = {
 						} else if (damagingid === 'focuspunch') {
 							// Focus Punch is a bad idea without a sub:
 							if (!hasMove['substitute']) replace = true;
-						} else if (damagingid.substr(0, 11) === 'hiddenpower' && !hasStab[damagingType]) {
+						} else if (damagingid.substr(0, 11) === 'hiddenpower' && !hasStab) {
 							// Hidden Power is only acceptable if it has STAB
 							replace = true;
 						} else {
 							// If you have one attack, and it's not STAB, Ice, Fire, or Ground, reject it.
 							// Mono-Ice/Ground/Fire is only acceptable if the Pokémon's STABs are one of: Poison, Psychic, Steel, Normal, Grass.
-							if (!hasStab[damagingType]) {
+							if (!hasStab) {
 								if (damagingType === 'Ice' || damagingType === 'Fire' || damagingType === 'Ground') {
-									if (!hasStab['Poison'] && !hasStab['Psychic'] && !hasStab['Steel'] && !hasStab['Normal'] && !hasStab['Grass']) {
+									if (!hasType['Poison'] && !hasType['Psychic'] && !hasType['Steel'] && !hasType['Normal'] && !hasType['Grass']) {
 										replace = true;
 									}
 								} else {
@@ -1401,21 +1396,11 @@ exports.BattleScripts = {
 					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric or Ghost/Fighting, reject one of them at random.
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
-					var rejectCombo = !(type1 in hasStab || type2 in hasStab);
-					if (rejectCombo) {
-						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost') rejectCombo = false;
+					if (!hasStab && typeCombo !== 'Electric/Ice' && typeCombo !== 'Fighting/Ghost') {
+						moves.splice(this.random(moves.length), 1);
 					}
-					if (rejectCombo) moves.splice(this.random(moves.length), 1);
-				} else {
-					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
-					var isStab = false;
-					for (var l = 0; l < damagingMoves.length; l++) {
-						if (hasStab[damagingMoves[l].type]) {
-							isStab = true;
-							break;
-						}
-					}
-					if (!isStab) moves.splice(this.random(moves.length), 1);
+				} else if (!hasStab) {
+					moves.splice(this.random(moves.length), 1);
 				}
 			}
 		} while (moves.length < 4 && movePool.length);
@@ -2130,12 +2115,9 @@ exports.BattleScripts = {
 			spd: 31,
 			spe: 31
 		};
-		var hasStab = {};
-		hasStab[template.types[0]] = true;
 		var hasType = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) {
-			hasStab[template.types[1]] = true;
 			hasType[template.types[1]] = true;
 		}
 
@@ -2166,7 +2148,7 @@ exports.BattleScripts = {
 			'Technician':1, 'Skill Link':1, 'Iron Fist':1, 'Adaptability':1, 'Hustle':1
 		};
 
-		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType;
+		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType, hasStab;
 
 		hasMove = {};
 		do {
@@ -2183,6 +2165,7 @@ exports.BattleScripts = {
 			damagingMoves = [];
 			damagingMoveIndex = {};
 			hasMove = {};
+			hasStab = false;
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
 				technician: 0, skilllink: 0, contrary: 0, sheerforce: 0, ironfist: 0, adaptability: 0, hustle: 0,
@@ -2212,14 +2195,14 @@ exports.BattleScripts = {
 				if (move.multihit && move.multihit[1] === 5) counter['skilllink']++;
 				// Recoil:
 				if (move.recoil) counter['recoil']++;
-				// Moves which have a base power:
-				if (move.basePower || move.basePowerCallback) {
+				// Moves which have a base power and aren't super-weak like Rapid Spin:
+				if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
-						// Bounce, Aeroblast aren't considered STABs.
+						// Bounce, Aeroblast, Flame Charge, Sky Drop aren't considered STABs.
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
-						if (moveid === 'aeroblast' || moveid === 'bounce') hasStab[move.type] = false;
+						if (moveid !== 'aeroblast' && moveid !== 'bounce' && moveid !== 'flamecharge' && moveid !== 'skydrop') hasStab = true;
 					}
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
@@ -2229,11 +2212,8 @@ exports.BattleScripts = {
 					if (move.type === 'Normal') counter['ate']++;
 					if (move.flags['punch']) counter['ironfist']++;
 					if (move.flags['bite']) counter['bite']++;
-					// Make sure not to count Rapid Spin, etc.
-					if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
-						damagingMoves.push(move);
-						damagingMoveIndex[moveid] = k;
-					}
+					damagingMoves.push(move);
+					damagingMoveIndex[moveid] = k;
 				}
 				// Moves with secondary effects:
 				if (move.secondary) {
@@ -2536,15 +2516,15 @@ exports.BattleScripts = {
 						} else if (damagingid === 'focuspunch') {
 							// Focus Punch is a bad idea without a sub:
 							if (!hasMove['substitute']) replace = true;
-						} else if (damagingid.substr(0, 11) === 'hiddenpower' && !hasStab[damagingType]) {
+						} else if (damagingid.substr(0, 11) === 'hiddenpower' && !hasStab) {
 							// Hidden Power is only acceptable if it has STAB
 							replace = true;
 						} else {
 							// If you have one attack, and it's not STAB, Ice, Fire, or Ground, reject it.
 							// Mono-Ice/Ground/Fire is only acceptable if the Pokémon's STABs are one of: Poison, Normal, Grass.
-							if (!hasStab[damagingType]) {
+							if (!hasStab) {
 								if (damagingType === 'Ice' || damagingType === 'Fire' || damagingType === 'Ground') {
-									if (!hasStab['Poison'] && !hasStab['Normal'] && !hasStab['Grass']) {
+									if (!hasType['Poison'] && !hasType['Normal'] && !hasType['Grass']) {
 										replace = true;
 									}
 								} else {
@@ -2558,21 +2538,12 @@ exports.BattleScripts = {
 					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric or Ghost/Fighting, reject one of them at random.
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
-					var rejectCombo = !(type1 in hasStab || type2 in hasStab);
-					if (rejectCombo) {
-						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost') rejectCombo = false;
+					if (!hasStab && typeCombo !== 'Electric/Ice' && typeCombo !== 'Fighting/Ghost') {
+						moves.splice(this.random(moves.length), 1);
 					}
-					if (rejectCombo) moves.splice(this.random(moves.length), 1);
-				} else {
+				} else if (!hasStab) {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
-					var isStab = false;
-					for (var l = 0; l < damagingMoves.length; l++) {
-						if (hasStab[damagingMoves[l].type]) {
-							isStab = true;
-							break;
-						}
-					}
-					if (!isStab) moves.splice(this.random(moves.length), 1);
+					moves.splice(this.random(moves.length), 1);
 				}
 			}
 		} while (moves.length < 4 && movePool.length);
