@@ -1287,65 +1287,73 @@ var commands = exports.commands = {
 
 		this.logEntry(user.name + " used /hotpatch " + target);
 
-		if (target === 'chat' || target === 'commands') {
-			try {
-				CommandParser.uncacheTree('./command-parser.js');
-				global.CommandParser = require('./command-parser.js');
-
-				var runningTournaments = Tournaments.tournaments;
-				CommandParser.uncacheTree('./tournaments');
-				global.Tournaments = require('./tournaments');
-				Tournaments.tournaments = runningTournaments;
-
-				return this.sendReply("Chat commands have been hot-patched.");
-			} catch (e) {
-				return this.sendReply("Something failed while trying to hotpatch chat: \n" + e.stack);
-			}
-		} else if (target === 'tournaments') {
-			try {
-				var runningTournaments = Tournaments.tournaments;
-				CommandParser.uncacheTree('./tournaments');
-				global.Tournaments = require('./tournaments');
-				Tournaments.tournaments = runningTournaments;
-				return this.sendReply("Tournaments have been hot-patched.");
-			} catch (e) {
-				return this.sendReply("Something failed while trying to hotpatch tournaments: \n" + e.stack);
-			}
-		} else if (target === 'battles') {
-			Simulator.SimulatorProcess.respawn();
-			return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
-		} else if (target === 'formats') {
-			try {
-				// uncache the tools.js dependency tree
-				CommandParser.uncacheTree('./tools.js');
-				// reload tools.js
-				global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
-				// rebuild the formats list
-				Rooms.global.formatListText = Rooms.global.getFormatListText();
-				// respawn validator processes
-				TeamValidator.ValidatorProcess.respawn();
-				// respawn simulator processes
+		switch (target) {
+			case 'chat':
+			case 'commands':
+				try {
+					CommandParser.uncacheTree('./command-parser.js');
+					global.CommandParser = require('./command-parser.js');
+	
+					var runningTournaments = Tournaments.tournaments;
+					CommandParser.uncacheTree('./tournaments');
+					global.Tournaments = require('./tournaments');
+					Tournaments.tournaments = runningTournaments;
+	
+					return this.sendReply("Chat commands have been hot-patched.");
+				} catch (e) {
+					return this.sendReply("Something failed while trying to hotpatch chat: \n" + e.stack);
+				}
+				break;
+			case 'tournaments':
+				try {
+					var runningTournaments = Tournaments.tournaments;
+					CommandParser.uncacheTree('./tournaments');
+					global.Tournaments = require('./tournaments');
+					Tournaments.tournaments = runningTournaments;
+					return this.sendReply("Tournaments have been hot-patched.");
+				} catch (e) {
+					return this.sendReply("Something failed while trying to hotpatch tournaments: \n" + e.stack);
+				}
+				break;
+			case 'battles':
 				Simulator.SimulatorProcess.respawn();
-				// broadcast the new formats list to clients
-				Rooms.global.send(Rooms.global.formatListText);
-
-				return this.sendReply("Formats have been hotpatched.");
-			} catch (e) {
-				return this.sendReply("Something failed while trying to hotpatch formats: \n" + e.stack);
-			}
-		} else if (target === 'learnsets') {
-			try {
-				// uncache the tools.js dependency tree
-				CommandParser.uncacheTree('./tools.js');
-				// reload tools.js
-				global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
-
-				return this.sendReply("Learnsets have been hotpatched.");
-			} catch (e) {
-				return this.sendReply("Something failed while trying to hotpatch learnsets: \n" + e.stack);
-			}
+				return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
+				break;
+			case 'formats':
+				try {
+					// uncache the tools.js dependency tree
+					CommandParser.uncacheTree('./tools.js');
+					// reload tools.js
+					global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+					// rebuild the formats list
+					Rooms.global.formatListText = Rooms.global.getFormatListText();
+					// respawn validator processes
+					TeamValidator.ValidatorProcess.respawn();
+					// respawn simulator processes
+					Simulator.SimulatorProcess.respawn();
+					// broadcast the new formats list to clients
+					Rooms.global.send(Rooms.global.formatListText);
+	
+					return this.sendReply("Formats have been hotpatched.");
+				} catch (e) {
+					return this.sendReply("Something failed while trying to hotpatch formats: \n" + e.stack);
+				}
+				break;
+			case 'learnsets':
+				try {
+					// uncache the tools.js dependency tree
+					CommandParser.uncacheTree('./tools.js');
+					// reload tools.js
+					global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+	
+					return this.sendReply("Learnsets have been hotpatched.");
+				} catch (e) {
+					return this.sendReply("Something failed while trying to hotpatch learnsets: \n" + e.stack);
+				}
+				break;
+			default:
+				return this.sendReply("Your hot-patch command was unrecognized.");
 		}
-		this.sendReply("Your hot-patch command was unrecognized.");
 	},
 
 	savelearnsets: function (target, room, user) {
