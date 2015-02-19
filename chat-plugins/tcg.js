@@ -29,7 +29,7 @@ var tcgsearch = function (target, room, user, cmd, self) {
 			}
 
 			if (result.exception) {
-				self.sendReply("No articles matching your query found.");
+				self.sendReply("No articles matching your query were found.");
 			} else {
 				self.sendReplyBox("<strong>Best result for " + query + ":</strong><br/><a href= " + Tools.escapeHTML(result.items[0].url) + ">" + Tools.escapeHTML(result.items[0].title) + "</a>");
 			}
@@ -41,12 +41,9 @@ var tcgsearch = function (target, room, user, cmd, self) {
 
 exports.commands = {
 	ygo: 'yugioh',
+	mtg: 'yugioh',
+	magic: 'yugioh',
 	yugioh: function (target, room, user, connection, cmd) {
-		tcgsearch(target, room, user, cmd, this);
-	},
-
-	mtg: 'magic',
-	magic: function (target, room, user, connection, cmd) {
 		tcgsearch(target, room, user, cmd, this);
 	}
 };
