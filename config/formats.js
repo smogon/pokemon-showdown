@@ -228,25 +228,27 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Generation Showdown",
+		name: "Dragon Cup",
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview VGC', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased', 'Mew', 'Celebi', 'Jirachi', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Phione',
-			'Manaphy', 'Darkrai', 'Shaymin', 'Shaymin-Sky', 'Arceus', 'Victini', 'Keldeo', 'Meloetta', 'Genesect', 'Diancie',
-			'Soul Dew'
-		],
+		banlist: ['Illegal', 'Unreleased', 'Soul Dew'],
 		validateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pokémon.'];
-			var legends = {'Mewtwo':1, 'Lugia':1, 'Ho-Oh':1, 'Kyogre':1, 'Groudon':1, 'Rayquaza':1, 'Dialga':1, 'Palkia':1, 'Giratina':1, 'Reshiram':1, 'Zekrom':1, 'Kyurem':1, 'Xerneas':1, 'Yveltal':1, 'Zygarde':1};
-			var n = 0;
+			var limitedPokemon = {'Mewtwo':1, 'Mew':1, 'Lugia':1, 'Ho-Oh':1, 'Celebi':1, 'Kyogre':1, 'Groudon':1, 'Rayquaza':1, 'Jirachi':1, 'Deoxys':1, 'Dialga':1, 'Palkia':1, 'Giratina':1, 'Phione':1, 'Manaphy':1, 'Darkrai':1, 'Shaymin':1, 'Arceus':1, 'Victini':1, 'Reshiram':1, 'Zekrom':1, 'Kyurem':1, 'Keldeo':1, 'Meloetta':1, 'Genesect':1, 'Xerneas':1, 'Yveltal':1, 'Zygarde':1, 'Diancie':1};
+			var hasDragon = false;
+			var has = [];
 			for (var i = 0; i < team.length; i++) {
-				var template = this.getTemplate(team[i].species).baseSpecies;
-				if (template in legends) n++;
-				if (n > 2) return ["You can only use up to two legendary Pokémon."];
+				var template = this.getTemplate(team[i].species);
+				if (template.types.indexOf('Dragon') > -1) hasDragon = true;
+				if (template.baseSpecies in limitedPokemon) has.push(template.species);
 			}
+			var problems = [];
+			if (!hasDragon) problems.push("You have to use a Dragon-type Pokémon.");
+			if (has.length > 2) problems.push("You can only use up to two of: " + has.join(', ') + ".");
+			return problems;
 		},
 		onBegin: function () {
 			this.debug('cutting down to 4');
