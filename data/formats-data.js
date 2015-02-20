@@ -2697,7 +2697,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	cacturne: {
-		randomBattleMoves: ["swordsdance","spikes","suckerpunch","seedbomb","drainpunch","substitute","destinybond"],
+		randomBattleMoves: ["swordsdance","spikes","suckerpunch","seedbomb","drainpunch","substitute"],
 		randomDoubleBattleMoves: ["darkpulse","spikyshield","suckerpunch","seedbomb","drainpunch","gigadrain"],
 		eventPokemon: [
 			{"generation":3,"level":45,"moves":["ingrain","feintattack","spikes","needlearm"]}
