@@ -1093,7 +1093,7 @@ exports.BattleScripts = {
 
 				switch (moveid) {
 
-				// not very useful without their supporting moves
+				// Not very useful without their supporting moves
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
 					break;
@@ -1110,7 +1110,7 @@ exports.BattleScripts = {
 					if (!setupType && !hasMove['substitute'] && !hasMove['protect'] && !hasMove['cosmicpower']) rejected = true;
 					break;
 
-				// we only need to set up once
+				// We only need to set up once
 				case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup': case 'bellydrum':
 					if (counter.Physical < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
@@ -1127,7 +1127,7 @@ exports.BattleScripts = {
 					isSetup = true;
 					break;
 
-				// bad after setup
+				// Bad after setup
 				case 'foulplay': case 'relicsong': case 'nightshade': case 'seismictoss': case 'superfang':
 					if (setupType) rejected = true;
 					break;
@@ -1144,7 +1144,7 @@ exports.BattleScripts = {
 					if (!!counter['speedsetup']) rejected = true;
 					break;
 
-				// bit redundant to have both
+				// Bit redundant to have both
 				// Attacks:
 				case 'flamethrower': case 'fierydance':
 					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast'] || hasMove['blueflare']) rejected = true;
@@ -1247,6 +1247,9 @@ exports.BattleScripts = {
 				case 'return':
 					if (hasMove['bodyslam'] || hasMove['facade'] || hasMove['doubleedge'] || hasMove['tailslap']) rejected = true;
 					break;
+				case 'bodyslam':
+					if (hasMove['glare']) rejected = true;
+					break;
 				case 'poisonjab':
 					if (hasMove['gunkshot']) rejected = true;
 					break;
@@ -1296,7 +1299,7 @@ exports.BattleScripts = {
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['haze'] || hasMove['circlethrow']) rejected = true;
 					break;
 				case 'substitute':
-					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit'] || hasMove['dracometeor']) rejected = true;
+					if (hasMove['taunt'] || hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit'] || hasMove['dracometeor']) rejected = true;
 					break;
 				case 'encore':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -1321,9 +1324,6 @@ exports.BattleScripts = {
 					if (hasMove['discharge'] || hasMove['trickroom'] || hasMove['gyroball']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder']) rejected = true;
-					break;
-				case 'glare':
-					if (hasMove['bodyslam']) rejected = true;
 					break;
 				case 'willowisp':
 					if (hasMove['scald'] || hasMove['lavaplume'] || hasMove['sacredfire'] || hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder'] || hasMove['hypnosis']) rejected = true;
@@ -1383,24 +1383,25 @@ exports.BattleScripts = {
 					// Night Shade, Seismic Toss, etc. don't count:
 					if (!damagingMoves[0].damage && (movePool.length - availableHP || availableHP && (damagingid === 'hiddenpower' || !hasMove['hiddenpower']))) {
 						var replace = false;
-						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
-							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
-							if (!hasMove['encore'] && this.random(2)) replace = true;
-						} else if (damagingid === 'focuspunch') {
-							// Focus Punch is a bad idea without a sub:
-							if (!hasMove['substitute']) replace = true;
-						} else if (damagingid === 'hiddenpower' && !hasStab) {
-							// Hidden Power is only acceptable if it has STAB
+						if (damagingid in {counter:1, focuspunch:1, mirrorcoat:1, suckerpunch:1} || (damagingid === 'hiddenpower' && !hasStab)) {
+							// Unacceptable as the only attacking move
 							replace = true;
 						} else {
-							// If you have one attack, and it's not STAB, Ice, Fire, or Ground, reject it.
-							// Mono-Ice/Ground/Fire is only acceptable if the Pokémon's STABs are one of: Poison, Psychic, Steel, Normal, Grass.
 							if (!hasStab) {
 								var damagingType = damagingMoves[0].type;
-								if (damagingType === 'Ice' || damagingType === 'Fire' || damagingType === 'Ground') {
-									if (!hasType['Poison'] && !hasType['Psychic'] && !hasType['Steel'] && !hasType['Normal'] && !hasType['Grass']) {
+								if (damagingType === 'Fairy') {
+									// Mono-Fairy is acceptable for Psychic types
+									if (!hasType['Psychic']) replace = true;
+								} else if (damagingType === 'Ice') {
+									if (hasType['Normal'] && template.types.length === 1) {
+										// Mono-Ice is acceptable for special attacking Normal types that lack Boomburst and Hyper Voice
+										if (counter.Physical >= 2 || movePool.indexOf('boomburst') > -1 || movePool.indexOf('hypervoice') > -1) replace = true;
+									} else {
 										replace = true;
 									}
+								} else if (damagingType === 'Normal') {
+									// -ate abilities on Mega Altaria/Gardevoir/Pinsir/Salamence
+									if (template.abilities[0] !== 'Aerilate' && template.abilities[0] !== 'Pixilate') replace = true;
 								} else {
 									replace = true;
 								}
@@ -1409,7 +1410,7 @@ exports.BattleScripts = {
 						if (replace) moves.splice(damagingMoveIndex[damagingid], 1);
 					}
 				} else if (damagingMoves.length === 2) {
-					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric or Ghost/Fighting, reject one of them at random.
+					// If you have two attacks, neither is STAB, and the combo isn't Electric/Ice or Fighting/Ghost, reject one of them at random.
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					if (!hasStab && typeCombo !== 'Electric/Ice' && typeCombo !== 'Fighting/Ghost') {
@@ -1463,6 +1464,11 @@ exports.BattleScripts = {
 			moves[3] = 'return';
 			hasMove['return'] = true;
 		}
+		if (template.id === 'sylveon' && !counter['ate']) {
+			delete hasMove[this.getMove(moves[3]).id];
+			moves[3] = 'hypervoice';
+			hasMove['hypervoice'] = true;
+		}
 		if (template.requiredMove && !hasMove[toId(template.requiredMove)]) {
 			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = toId(template.requiredMove);
@@ -1513,6 +1519,8 @@ exports.BattleScripts = {
 				rejectAbility = !setupType && !hasMove['flamecharge'] && !hasMove['stockpile'];
 			} else if (ability === 'Prankster') {
 				rejectAbility = !counter['Status'];
+			} else if (ability === 'Technician') {
+				rejectAbility = !counter['technician'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
 			} else if (ability === 'Aerilate' || ability === 'Pixilate' || ability === 'Refrigerate') {
