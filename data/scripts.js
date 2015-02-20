@@ -938,6 +938,10 @@ exports.BattleScripts = {
 		if (template.types[1]) {
 			hasType[template.types[1]] = true;
 		}
+		var availableHP = 0;
+		for (var i = 0, len = movePool.length; i < len; i++) {
+			if (movePool[i].substr(0, 11) === 'hiddenpower') availableHP++;
+		}
 
 		// Moves that heal a fixed amount:
 		var RecoveryMove = {
@@ -975,21 +979,32 @@ exports.BattleScripts = {
 
 		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType, hasStab;
 
-		hasMove = {};
 		do {
+			// Keep track of all moves we have:
+			hasMove = {};
+			for (var k = 0; k < moves.length; k++) {
+				if (moves[k].substr(0, 11) === 'hiddenpower') {
+					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moves[k]] = true;
+				}
+			}
+
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && movePool.length) {
 				var moveid = this.sampleNoReplace(movePool);
 				if (moveid.substr(0, 11) === 'hiddenpower') {
+					availableHP--;
 					if (hasMove['hiddenpower']) continue;
 					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moveid] = true;
 				}
 				moves.push(moveid);
 			}
 
 			damagingMoves = [];
 			damagingMoveIndex = {};
-			hasMove = {};
 			hasStab = false;
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0,
@@ -1004,8 +1019,6 @@ exports.BattleScripts = {
 			for (var k = 0; k < moves.length; k++) {
 				var move = this.getMove(moves[k]);
 				var moveid = move.id;
-				// Keep track of all moves we have:
-				hasMove[moveid] = true;
 				if (move.damage || move.damageCallback) {
 					// Moves that do a set amount of damage:
 					counter['damage']++;
@@ -1344,7 +1357,7 @@ exports.BattleScripts = {
 				}
 
 				// Remove rejected moves from the move list.
-				if (rejected && movePool.length) {
+				if (rejected && (movePool.length - availableHP || availableHP && (move.id === 'hiddenpower' || !hasMove['hiddenpower']))) {
 					moves.splice(k, 1);
 					break;
 				}
@@ -1363,10 +1376,9 @@ exports.BattleScripts = {
 					// A set shouldn't have no attacking moves
 					moves.splice(this.random(moves.length), 1);
 				} else if (damagingMoves.length === 1) {
+					var damagingid = damagingMoves[0].id;
 					// Night Shade, Seismic Toss, etc. don't count:
-					if (!damagingMoves[0].damage) {
-						var damagingid = damagingMoves[0].id;
-						var damagingType = damagingMoves[0].type;
+					if (!damagingMoves[0].damage && (movePool.length - availableHP || availableHP && (damagingid === 'hiddenpower' || !hasMove['hiddenpower']))) {
 						var replace = false;
 						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
 							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
@@ -1374,13 +1386,14 @@ exports.BattleScripts = {
 						} else if (damagingid === 'focuspunch') {
 							// Focus Punch is a bad idea without a sub:
 							if (!hasMove['substitute']) replace = true;
-						} else if (damagingid.substr(0, 11) === 'hiddenpower' && !hasStab) {
+						} else if (damagingid === 'hiddenpower' && !hasStab) {
 							// Hidden Power is only acceptable if it has STAB
 							replace = true;
 						} else {
 							// If you have one attack, and it's not STAB, Ice, Fire, or Ground, reject it.
 							// Mono-Ice/Ground/Fire is only acceptable if the Pokémon's STABs are one of: Poison, Psychic, Steel, Normal, Grass.
 							if (!hasStab) {
+								var damagingType = damagingMoves[0].type;
 								if (damagingType === 'Ice' || damagingType === 'Fire' || damagingType === 'Ground') {
 									if (!hasType['Poison'] && !hasType['Psychic'] && !hasType['Steel'] && !hasType['Normal'] && !hasType['Grass']) {
 										replace = true;
@@ -1397,10 +1410,30 @@ exports.BattleScripts = {
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					if (!hasStab && typeCombo !== 'Electric/Ice' && typeCombo !== 'Fighting/Ghost') {
-						moves.splice(this.random(moves.length), 1);
+						var rejectableMoves = [];
+						var baseDiff = movePool.length - availableHP;
+						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || damagingMoves[0].id === 'hiddenpower')) {
+							rejectableMoves.push(damagingMoveIndex[damagingMoves[0].id]);
+						}
+						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || damagingMoves[1].id === 'hiddenpower')) {
+							rejectableMoves.push(damagingMoveIndex[damagingMoves[1].id]);
+						}
+						if (rejectableMoves.length) {
+							moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
+						}
 					}
 				} else if (!hasStab) {
-					moves.splice(this.random(moves.length), 1);
+					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
+					var rejectableMoves = [];
+					var baseDiff = movePool.length - availableHP;
+					for (var l = 0; l < damagingMoves.length; l++) {
+						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || damagingMoves[l].id === 'hiddenpower')) {
+							rejectableMoves.push(damagingMoveIndex[damagingMoves[l].id]);
+						}
+					}
+					if (rejectableMoves.length) {
+						moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
+					}
 				}
 			}
 		} while (moves.length < 4 && movePool.length);
@@ -2123,6 +2156,10 @@ exports.BattleScripts = {
 		if (template.types[1]) {
 			hasType[template.types[1]] = true;
 		}
+		var availableHP = 0;
+		for (var i = 0, len = movePool.length; i < len; i++) {
+			if (movePool[i].substr(0, 11) === 'hiddenpower') availableHP++;
+		}
 
 		// Moves which drop stats:
 		var ContraryMove = {
@@ -2153,21 +2190,32 @@ exports.BattleScripts = {
 
 		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType, hasStab;
 
-		hasMove = {};
 		do {
+			// Keep track of all moves we have:
+			hasMove = {};
+			for (var k = 0; k < moves.length; k++) {
+				if (moves[k].substr(0, 11) === 'hiddenpower') {
+					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moves[k]] = true;
+				}
+			}
+
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && movePool.length) {
 				var moveid = toId(this.sampleNoReplace(movePool));
 				if (moveid.substr(0, 11) === 'hiddenpower') {
+					availableHP--;
 					if (hasMove['hiddenpower']) continue;
 					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moveid] = true;
 				}
 				moves.push(moveid);
 			}
 
 			damagingMoves = [];
 			damagingMoveIndex = {};
-			hasMove = {};
 			hasStab = false;
 			counter = {
 				Physical: 0, Special: 0, Status: 0, damage: 0,
@@ -2181,8 +2229,6 @@ exports.BattleScripts = {
 			for (var k = 0; k < moves.length; k++) {
 				var move = this.getMove(moves[k]);
 				var moveid = move.id;
-				// Keep track of all moves we have:
-				hasMove[moveid] = true;
 				if (move.damage || move.damageCallback) {
 					// Moves that do a set amount of damage:
 					counter['damage']++;
@@ -2489,7 +2535,7 @@ exports.BattleScripts = {
 				}
 
 				// Remove rejected moves from the move list.
-				if (rejected && movePool.length) {
+				if (rejected && (movePool.length - availableHP || availableHP && (move.id === 'hiddenpower' || !hasMove['hiddenpower']))) {
 					moves.splice(k, 1);
 					break;
 				}
@@ -2508,10 +2554,9 @@ exports.BattleScripts = {
 					// A set shouldn't have no attacking moves
 					moves.splice(this.random(moves.length), 1);
 				} else if (damagingMoves.length === 1) {
+					var damagingid = damagingMoves[0].id;
 					// Night Shade, Seismic Toss, etc. don't count:
-					if (!damagingMoves[0].damage) {
-						var damagingid = damagingMoves[0].id;
-						var damagingType = damagingMoves[0].type;
+					if (!damagingMoves[0].damage && (movePool.length - availableHP || availableHP && (damagingid === 'hiddenpower' || !hasMove['hiddenpower']))) {
 						var replace = false;
 						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
 							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
@@ -2519,13 +2564,14 @@ exports.BattleScripts = {
 						} else if (damagingid === 'focuspunch') {
 							// Focus Punch is a bad idea without a sub:
 							if (!hasMove['substitute']) replace = true;
-						} else if (damagingid.substr(0, 11) === 'hiddenpower' && !hasStab) {
+						} else if (damagingid === 'hiddenpower' && !hasStab) {
 							// Hidden Power is only acceptable if it has STAB
 							replace = true;
 						} else {
 							// If you have one attack, and it's not STAB, Ice, Fire, or Ground, reject it.
 							// Mono-Ice/Ground/Fire is only acceptable if the Pokémon's STABs are one of: Poison, Normal, Grass.
 							if (!hasStab) {
+								var damagingType = damagingMoves[0].type;
 								if (damagingType === 'Ice' || damagingType === 'Fire' || damagingType === 'Ground') {
 									if (!hasType['Poison'] && !hasType['Normal'] && !hasType['Grass']) {
 										replace = true;
@@ -2542,11 +2588,30 @@ exports.BattleScripts = {
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
 					if (!hasStab && typeCombo !== 'Electric/Ice' && typeCombo !== 'Fighting/Ghost') {
-						moves.splice(this.random(moves.length), 1);
+						var rejectableMoves = [];
+						var baseDiff = movePool.length - availableHP;
+						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || damagingMoves[0].id === 'hiddenpower')) {
+							rejectableMoves.push(damagingMoveIndex[damagingMoves[0].id]);
+						}
+						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || damagingMoves[1].id === 'hiddenpower')) {
+							rejectableMoves.push(damagingMoveIndex[damagingMoves[1].id]);
+						}
+						if (rejectableMoves.length) {
+							moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
+						}
 					}
 				} else if (!hasStab) {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
-					moves.splice(this.random(moves.length), 1);
+					var rejectableMoves = [];
+					var baseDiff = movePool.length - availableHP;
+					for (var l = 0; l < damagingMoves.length; l++) {
+						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || damagingMoves[l].id === 'hiddenpower')) {
+							rejectableMoves.push(damagingMoveIndex[damagingMoves[l].id]);
+						}
+					}
+					if (rejectableMoves.length) {
+						moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
+					}
 				}
 			}
 		} while (moves.length < 4 && movePool.length);
