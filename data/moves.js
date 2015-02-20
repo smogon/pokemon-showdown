@@ -14708,7 +14708,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The target's positive stat stages become negative and vice versa. Fails if all of the target's stat stages are 0.",
-		shortDesc: "The target's stat stages become + if - and - if +.",
+		shortDesc: "Inverts the target's stat stages.",
 		id: "topsyturvy",
 		name: "Topsy-Turvy",
 		pp: 20,
