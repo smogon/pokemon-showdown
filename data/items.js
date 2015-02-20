@@ -11,7 +11,7 @@ exports.BattleItems = {
 		},
 		num: 674,
 		gen: 6,
-		desc: "Mega-evolves Abomasnow."
+		desc: "If holder is an Abomasnow, this item allows it to Mega Evolve in battle."
 	},
 	"absolite": {
 		id: "absolite",
@@ -25,7 +25,7 @@ exports.BattleItems = {
 		},
 		num: 677,
 		gen: 6,
-		desc: "Mega-evolves Absol."
+		desc: "If holder is an Absol, this item allows it to Mega Evolve in battle."
 	},
 	"absorbbulb": {
 		id: "absorbbulb",
@@ -41,7 +41,7 @@ exports.BattleItems = {
 		},
 		num: 545,
 		gen: 5,
-		desc: "Raises Sp. Atk by 1 if hit by a Water-type attack. Single use."
+		desc: "Raises holder's Sp. Atk by 1 stage if hit by a Water-type attack. Single use."
 	},
 	"adamantorb": {
 		id: "adamantorb",
@@ -72,7 +72,7 @@ exports.BattleItems = {
 		},
 		num: 672,
 		gen: 6,
-		desc: "Mega-evolves Aerodactyl."
+		desc: "If holder is an Aerodactyl, this item allows it to Mega Evolve in battle."
 	},
 	"aggronite": {
 		id: "aggronite",
@@ -86,7 +86,7 @@ exports.BattleItems = {
 		},
 		num: 667,
 		gen: 6,
-		desc: "Mega-evolves Aggron."
+		desc: "If holder is an Aggron, this item allows it to Mega Evolve in battle."
 	},
 	"aguavberry": {
 		id: "aguavberry",
@@ -155,7 +155,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Mega-evolves Alakazam."
+		desc: "If holder is an Alakazam, this item allows it to Mega Evolve in battle."
 	},
 	"altarianite": {
 		id: "altarianite",
@@ -169,7 +169,7 @@ exports.BattleItems = {
 		},
 		num: 755,
 		gen: 6,
-		desc: "Mega-evolves Altaria."
+		desc: "If holder is an Altaria, this item allows it to Mega Evolve in battle."
 	},
 	"ampharosite": {
 		id: "ampharosite",
@@ -183,7 +183,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Mega-evolves Ampharos."
+		desc: "If holder is an Ampharos, this item allows it to Mega Evolve in battle."
 	},
 	"apicotberry": {
 		id: "apicotberry",
@@ -204,7 +204,7 @@ exports.BattleItems = {
 		},
 		num: 205,
 		gen: 3,
-		desc: "Raises Sp. Def by 1 when at 1/4 max HP or less. Single use."
+		desc: "Raises holder's Sp. Def by 1 stage when at 1/4 max HP or less. Single use."
 	},
 	"armorfossil": {
 		id: "armorfossil",
@@ -261,7 +261,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Holder's Sp. Def is 1.5x, but it can only use damaging moves."
+		desc: "Holder's Sp. Def is 1.5x, but it can only select damaging moves."
 	},
 	"audinite": {
 		id: "audinite",
@@ -275,7 +275,7 @@ exports.BattleItems = {
 		},
 		num: 757,
 		gen: 6,
-		desc: "Mega-evolves Audino."
+		desc: "If holder is an Audino, this item allows it to Mega Evolve in battle."
 	},
 	"babiriberry": {
 		id: "babiriberry",
@@ -297,7 +297,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 199,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Steel-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Steel-type attack. Single use."
 	},
 	"banettite": {
 		id: "banettite",
@@ -311,7 +311,7 @@ exports.BattleItems = {
 		},
 		num: 668,
 		gen: 6,
-		desc: "Mega-evolves Banette."
+		desc: "If holder is a Banette, this item allows it to Mega Evolve in battle."
 	},
 	"beedrillite": {
 		id: "beedrillite",
@@ -325,7 +325,7 @@ exports.BattleItems = {
 		},
 		num: 770,
 		gen: 6,
-		desc: "Mega-evolves Beedrill."
+		desc: "If holder is a Beedrill, this item allows it to Mega Evolve in battle."
 	},
 	"belueberry": {
 		id: "belueberry",
@@ -356,7 +356,7 @@ exports.BattleItems = {
 		},
 		num: 43,
 		gen: 2,
-		desc: "Restores 20HP when at 1/2 max HP or less. Single use."
+		desc: "Restores 20 HP when at 1/2 max HP or less. Single use."
 	},
 	"bigroot": {
 		id: "bigroot",
@@ -423,7 +423,7 @@ exports.BattleItems = {
 		},
 		num: 281,
 		gen: 4,
-		desc: "Each turn, if holder is a Poison-type, restores 1/16 max HP; loses 1/8 if not."
+		desc: "Each turn, if holder is a Poison type, restores 1/16 max HP; loses 1/8 if not."
 	},
 	"blackglasses": {
 		id: "blackglasses",
@@ -454,7 +454,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Mega-evolves Blastoise."
+		desc: "If holder is a Blastoise, this item allows it to Mega Evolve in battle."
 	},
 	"blazikenite": {
 		id: "blazikenite",
@@ -468,7 +468,7 @@ exports.BattleItems = {
 		},
 		num: 664,
 		gen: 6,
-		desc: "Mega-evolves Blaziken."
+		desc: "If holder is a Blaziken, this item allows it to Mega Evolve in battle."
 	},
 	"blueorb": {
 		id: "blueorb",
@@ -493,7 +493,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Reverts Kyogre to its Primal form."
+		desc: "If holder is a Kyogre, this item triggers its Primal Reversion in battle."
 	},
 	"blukberry": {
 		id: "blukberry",
@@ -556,7 +556,7 @@ exports.BattleItems = {
 		onDrive: 'Fire',
 		num: 118,
 		gen: 5,
-		desc: "Holder's Techno Blast is Fire-type."
+		desc: "Holder's Techno Blast is Fire type."
 	},
 	"cameruptite": {
 		id: "cameruptite",
@@ -570,7 +570,7 @@ exports.BattleItems = {
 		},
 		num: 767,
 		gen: 6,
-		desc: "Mega-evolves Camerupt."
+		desc: "If holder is a Camerupt, this item allows it to Mega Evolve in battle."
 	},
 	"cellbattery": {
 		id: "cellbattery",
@@ -586,7 +586,7 @@ exports.BattleItems = {
 		},
 		num: 546,
 		gen: 5,
-		desc: "Raises Attack by 1 if hit by an Electric-type attack. Single use."
+		desc: "Raises holder's Attack by 1 if hit by an Electric-type attack. Single use."
 	},
 	"charcoal": {
 		id: "charcoal",
@@ -617,7 +617,7 @@ exports.BattleItems = {
 		},
 		num: 660,
 		gen: 6,
-		desc: "Mega-evolves Charizard into Mega Charizard X."
+		desc: "If holder is a Charizard, this item allows it to Mega Evolve in battle."
 	},
 	"charizarditey": {
 		id: "charizarditey",
@@ -631,7 +631,7 @@ exports.BattleItems = {
 		},
 		num: 678,
 		gen: 6,
-		desc: "Mega-evolves Charizard into Mega Charizard Y."
+		desc: "If holder is a Charizard, this item allows it to Mega Evolve in battle."
 	},
 	"chartiberry": {
 		id: "chartiberry",
@@ -653,7 +653,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 195,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Rock-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Rock-type attack. Single use."
 	},
 	"cheriberry": {
 		id: "cheriberry",
@@ -744,7 +744,7 @@ exports.BattleItems = {
 		onDrive: 'Ice',
 		num: 119,
 		gen: 5,
-		desc: "Holder's Techno Blast is Ice-type."
+		desc: "Holder's Techno Blast is Ice type."
 	},
 	"choiceband": {
 		id: "choiceband",
@@ -769,7 +769,7 @@ exports.BattleItems = {
 		isChoice: true,
 		num: 220,
 		gen: 3,
-		desc: "Holder's Attack is 1.5x, but it can only use the first move it selects."
+		desc: "Holder's Attack is 1.5x, but it can only select the first move it executes."
 	},
 	"choicescarf": {
 		id: "choicescarf",
@@ -793,7 +793,7 @@ exports.BattleItems = {
 		isChoice: true,
 		num: 287,
 		gen: 4,
-		desc: "Holder's Speed is 1.5x, but it can only use the first move it selects."
+		desc: "Holder's Speed is 1.5x, but it can only select the first move it executes."
 	},
 	"choicespecs": {
 		id: "choicespecs",
@@ -818,7 +818,7 @@ exports.BattleItems = {
 		isChoice: true,
 		num: 297,
 		gen: 4,
-		desc: "Holder's Sp. Atk is 1.5x, but it can only use the first move it selects."
+		desc: "Holder's Sp. Atk is 1.5x, but it can only select the first move it executes."
 	},
 	"chopleberry": {
 		id: "chopleberry",
@@ -840,7 +840,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 189,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Fighting-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Fighting-type attack. Single use."
 	},
 	"clawfossil": {
 		id: "clawfossil",
@@ -873,7 +873,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 192,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Flying-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Flying-type attack. Single use."
 	},
 	"colburberry": {
 		id: "colburberry",
@@ -895,7 +895,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 198,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Dark-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Dark-type attack. Single use."
 	},
 	"cornnberry": {
 		id: "cornnberry",
@@ -1036,7 +1036,7 @@ exports.BattleItems = {
 		},
 		num: 764,
 		gen: 6,
-		desc: "Mega-evolves Diancie."
+		desc: "If holder is a Diancie, this item allows it to Mega Evolve in battle."
 	},
 	"diveball": {
 		id: "diveball",
@@ -1070,7 +1070,7 @@ exports.BattleItems = {
 		onDrive: 'Water',
 		num: 116,
 		gen: 5,
-		desc: "Holder's Techno Blast is Water-type."
+		desc: "Holder's Techno Blast is Water type."
 	},
 	"dracoplate": {
 		id: "dracoplate",
@@ -1091,7 +1091,7 @@ exports.BattleItems = {
 		},
 		num: 311,
 		gen: 4,
-		desc: "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon-type."
+		desc: "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon type."
 	},
 	"dragonfang": {
 		id: "dragonfang",
@@ -1148,7 +1148,7 @@ exports.BattleItems = {
 		},
 		num: 312,
 		gen: 4,
-		desc: "Holder's Dark-type attacks have 1.2x power. Judgment is Dark-type."
+		desc: "Holder's Dark-type attacks have 1.2x power. Judgment is Dark type."
 	},
 	"dreamball": {
 		id: "dreamball",
@@ -1198,7 +1198,7 @@ exports.BattleItems = {
 		},
 		num: 305,
 		gen: 4,
-		desc: "Holder's Ground-type attacks have 1.2x power. Judgment is Ground-type."
+		desc: "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type."
 	},
 	"ejectbutton": {
 		id: "ejectbutton",
@@ -1259,7 +1259,7 @@ exports.BattleItems = {
 		},
 		num: 34,
 		gen: 2,
-		desc: "Restores 50HP to one Pokemon but lowers Happiness."
+		desc: "Restores 50 HP to one Pokemon but lowers Happiness."
 	},
 	"enigmaberry": {
 		id: "enigmaberry",
@@ -1288,7 +1288,7 @@ exports.BattleItems = {
 		},
 		num: 208,
 		gen: 3,
-		desc: "Restores 1/4 max HP when holder is hit by a super effective move. Single use."
+		desc: "Restores 1/4 max HP after holder is hit by a supereffective move. Single use."
 	},
 	"eviolite": {
 		id: "eviolite",
@@ -1327,7 +1327,7 @@ exports.BattleItems = {
 		},
 		num: 268,
 		gen: 4,
-		desc: "Holder's super effective attacks against other Pokemon do 1.2x damage."
+		desc: "Holder's attacks that are super effective against the target do 1.2x damage."
 	},
 	"fairygem": {
 		id: "fairygem",
@@ -1437,7 +1437,7 @@ exports.BattleItems = {
 		},
 		num: 303,
 		gen: 4,
-		desc: "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting-type."
+		desc: "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting type."
 	},
 	"flameorb": {
 		id: "flameorb",
@@ -1475,7 +1475,7 @@ exports.BattleItems = {
 		},
 		num: 298,
 		gen: 4,
-		desc: "Holder's Fire-type attacks have 1.2x power. Judgment is Fire-type."
+		desc: "Holder's Fire-type attacks have 1.2x power. Judgment is Fire type."
 	},
 	"floatstone": {
 		id: "floatstone",
@@ -1525,7 +1525,7 @@ exports.BattleItems = {
 		},
 		num: 230,
 		gen: 2,
-		desc: "Holder has a 10% chance to survive an attack that would KO it with 1HP."
+		desc: "Holder has a 10% chance to survive an attack that would KO it with 1 HP."
 	},
 	"focussash": {
 		id: "focussash",
@@ -1543,7 +1543,7 @@ exports.BattleItems = {
 		},
 		num: 275,
 		gen: 4,
-		desc: "If holder's HP is full, will survive an attack that would KO it with 1HP. Single use."
+		desc: "If holder's HP is full, will survive an attack that would KO it with 1 HP. Single use."
 	},
 	"friendball": {
 		id: "friendball",
@@ -1581,7 +1581,7 @@ exports.BattleItems = {
 		},
 		num: 756,
 		gen: 6,
-		desc: "Mega-evolves Gallade."
+		desc: "If holder is a Gallade, this item allows it to Mega Evolve in battle."
 	},
 	"ganlonberry": {
 		id: "ganlonberry",
@@ -1602,7 +1602,7 @@ exports.BattleItems = {
 		},
 		num: 202,
 		gen: 3,
-		desc: "Raises Defense by 1 when at 1/4 max HP or less. Single use."
+		desc: "Raises holder's Defense by 1 stage when at 1/4 max HP or less. Single use."
 	},
 	"garchompite": {
 		id: "garchompite",
@@ -1616,7 +1616,7 @@ exports.BattleItems = {
 		},
 		num: 683,
 		gen: 6,
-		desc: "Mega-evolves Garchomp."
+		desc: "If holder is a Garchomp, this item allows it to Mega Evolve in battle."
 	},
 	"gardevoirite": {
 		id: "gardevoirite",
@@ -1630,7 +1630,7 @@ exports.BattleItems = {
 		},
 		num: 657,
 		gen: 6,
-		desc: "Mega-evolves Gardevoir."
+		desc: "If holder is a Gardevoir, this item allows it to Mega Evolve in battle."
 	},
 	"gengarite": {
 		id: "gengarite",
@@ -1644,7 +1644,7 @@ exports.BattleItems = {
 		},
 		num: 656,
 		gen: 6,
-		desc: "Mega-evolves Gengar."
+		desc: "If holder is a Gengar, this item allows it to Mega Evolve in battle."
 	},
 	"ghostgem": {
 		id: "ghostgem",
@@ -1677,7 +1677,7 @@ exports.BattleItems = {
 		},
 		num: 763,
 		gen: 6,
-		desc: "Mega-evolves Glalie."
+		desc: "If holder is a Glalie, this item allows it to Mega Evolve in battle."
 	},
 	"grassgem": {
 		id: "grassgem",
@@ -1785,7 +1785,7 @@ exports.BattleItems = {
 		},
 		num: 676,
 		gen: 6,
-		desc: "Mega-evolves Gyarados."
+		desc: "If holder is a Gyarados, this item allows it to Mega Evolve in battle."
 	},
 	"habanberry": {
 		id: "habanberry",
@@ -1807,7 +1807,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 197,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Dragon-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Dragon-type attack. Single use."
 	},
 	"hardstone": {
 		id: "hardstone",
@@ -1876,7 +1876,7 @@ exports.BattleItems = {
 		},
 		num: 680,
 		gen: 6,
-		desc: "Mega-evolves Heracross."
+		desc: "If holder is a Heracross, this item allows it to Mega Evolve in battle."
 	},
 	"hondewberry": {
 		id: "hondewberry",
@@ -1903,7 +1903,7 @@ exports.BattleItems = {
 		},
 		num: 666,
 		gen: 6,
-		desc: "Mega-evolves Houndoom."
+		desc: "If holder is a Houndoom, this item allows it to Mega Evolve in battle."
 	},
 	"iapapaberry": {
 		id: "iapapaberry",
@@ -1967,7 +1967,7 @@ exports.BattleItems = {
 		},
 		num: 302,
 		gen: 4,
-		desc: "Holder's Ice-type attacks have 1.2x power. Judgment is Ice-type."
+		desc: "Holder's Ice-type attacks have 1.2x power. Judgment is Ice type."
 	},
 	"icyrock": {
 		id: "icyrock",
@@ -1999,7 +1999,7 @@ exports.BattleItems = {
 		},
 		num: 308,
 		gen: 4,
-		desc: "Holder's Bug-type attacks have 1.2x power. Judgment is Bug-type."
+		desc: "Holder's Bug-type attacks have 1.2x power. Judgment is Bug type."
 	},
 	"ironball": {
 		id: "ironball",
@@ -2017,7 +2017,7 @@ exports.BattleItems = {
 		},
 		num: 278,
 		gen: 4,
-		desc: "Holder's Speed halved, becomes grounded, and takes 1x from Ground."
+		desc: "Holder is grounded, Speed halved. If Flying type, takes neutral Ground damage."
 	},
 	"ironplate": {
 		id: "ironplate",
@@ -2038,7 +2038,7 @@ exports.BattleItems = {
 		},
 		num: 313,
 		gen: 4,
-		desc: "Holder's Steel-type attacks have 1.2x power. Judgment is Steel-type."
+		desc: "Holder's Steel-type attacks have 1.2x power. Judgment is Steel type."
 	},
 	"jabocaberry": {
 		id: "jabocaberry",
@@ -2081,7 +2081,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 196,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Ghost-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Ghost-type attack. Single use."
 	},
 	"kebiaberry": {
 		id: "kebiaberry",
@@ -2103,7 +2103,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 190,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Poison-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Poison-type attack. Single use."
 	},
 	"keeberry": {
 		id: "keeberry",
@@ -2124,7 +2124,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Raises Defense by 1 if hit by a Physical attack. Single use."
+		desc: "Raises holder's Defense by 1 stage if hit by a physical attack. Single use."
 	},
 	"kelpsyberry": {
 		id: "kelpsyberry",
@@ -2151,7 +2151,7 @@ exports.BattleItems = {
 		},
 		num: 675,
 		gen: 6,
-		desc: "Mega-evolves Kangaskhan."
+		desc: "If holder is a Kangaskhan, this item allows it to Mega Evolve in battle."
 	},
 	"kingsrock": {
 		id: "kingsrock",
@@ -2226,7 +2226,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Mega-evolves Latias."
+		desc: "If holder is a Latias, this item allows it to Mega Evolve in battle."
 	},
 	"latiosite": {
 		id: "latiosite",
@@ -2240,7 +2240,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Mega-evolves Latios."
+		desc: "If holder is a Latios, this item allows it to Mega Evolve in battle."
 	},
 	"laxincense": {
 		id: "laxincense",
@@ -2311,7 +2311,7 @@ exports.BattleItems = {
 		},
 		num: 154,
 		gen: 3,
-		desc: "Restores 10PP to the first of the holder's moves to reach 0PP. Single use."
+		desc: "Restores 10 PP to the first of the holder's moves to reach 0 PP. Single use."
 	},
 	"levelball": {
 		id: "levelball",
@@ -2340,7 +2340,7 @@ exports.BattleItems = {
 		},
 		num: 201,
 		gen: 3,
-		desc: "Raises Attack by 1 when at 1/4 max HP or less. Single use."
+		desc: "Raises holder's Attack by 1 stage when at 1/4 max HP or less. Single use."
 	},
 	"lifeorb": {
 		id: "lifeorb",
@@ -2366,7 +2366,7 @@ exports.BattleItems = {
 		},
 		num: 270,
 		gen: 4,
-		desc: "Holder's damaging moves do 1.3x damage; loses 1/10 max HP after the attack."
+		desc: "Holder's attacks do 1.3x damage, and it loses 1/10 its max HP after the attack."
 	},
 	"lightball": {
 		id: "lightball",
@@ -2416,7 +2416,7 @@ exports.BattleItems = {
 		},
 		num: 768,
 		gen: 6,
-		desc: "Mega-evolves Lopunny."
+		desc: "If holder is a Lopunny, this item allows it to Mega Evolve in battle."
 	},
 	"loveball": {
 		id: "loveball",
@@ -2438,7 +2438,7 @@ exports.BattleItems = {
 		},
 		num: 673,
 		gen: 6,
-		desc: "Mega-evolves Lucario."
+		desc: "If holder is a Lucario, this item allows it to Mega Evolve in battle."
 	},
 	"luckypunch": {
 		id: "luckypunch",
@@ -2454,7 +2454,7 @@ exports.BattleItems = {
 		},
 		num: 256,
 		gen: 2,
-		desc: "If holder is a Chansey, its critical hit ratio is boosted by 2."
+		desc: "If holder is a Chansey, its critical hit ratio is raised by 2 stages."
 	},
 	"lumberry": {
 		id: "lumberry",
@@ -2476,7 +2476,7 @@ exports.BattleItems = {
 		},
 		num: 157,
 		gen: 3,
-		desc: "Holder cures itself if it is confused or has a major status problem. Single use."
+		desc: "Holder cures itself if it is confused or has a major status condition. Single use."
 	},
 	"luminousmoss": {
 		id: "luminousmoss",
@@ -2492,7 +2492,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Raises Special Defense by 1 if hit by a Water-type attack. Single use."
+		desc: "Raises holder's Sp. Def by 1 stage if hit by a Water-type attack. Single use."
 	},
 	"lureball": {
 		id: "lureball",
@@ -2616,7 +2616,7 @@ exports.BattleItems = {
 		},
 		num: 682,
 		gen: 6,
-		desc: "Mega-evolves Manectric."
+		desc: "If holder is a Manectric, this item allows it to Mega Evolve in battle."
 	},
 	"marangaberry": {
 		id: "marangaberry",
@@ -2637,7 +2637,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Raises Special Defense by 1 if hit by a Special attack. Single use."
+		desc: "Raises holder's Sp. Def by 1 stage if hit by a special attack. Single use."
 	},
 	"masterball": {
 		id: "masterball",
@@ -2659,7 +2659,7 @@ exports.BattleItems = {
 		},
 		num: 681,
 		gen: 6,
-		desc: "Mega-evolves Mawile."
+		desc: "If holder is a Mawile, this item allows it to Mega Evolve in battle."
 	},
 	"meadowplate": {
 		id: "meadowplate",
@@ -2680,7 +2680,7 @@ exports.BattleItems = {
 		},
 		num: 301,
 		gen: 4,
-		desc: "Holder's Grass-type attacks have 1.2x power. Judgment is Grass-type."
+		desc: "Holder's Grass-type attacks have 1.2x power. Judgment is Grass type."
 	},
 	"medichamite": {
 		id: "medichamite",
@@ -2694,7 +2694,7 @@ exports.BattleItems = {
 		},
 		num: 665,
 		gen: 6,
-		desc: "Mega-evolves Medicham."
+		desc: "If holder is a Medicham, this item allows it to Mega Evolve in battle."
 	},
 	"mentalherb": {
 		id: "mentalherb",
@@ -2742,7 +2742,7 @@ exports.BattleItems = {
 		},
 		num: 758,
 		gen: 6,
-		desc: "Mega-evolves Metagross."
+		desc: "If holder is a Metagross, this item allows it to Mega Evolve in battle."
 	},
 	"metalcoat": {
 		id: "metalcoat",
@@ -2827,7 +2827,7 @@ exports.BattleItems = {
 		},
 		num: 662,
 		gen: 6,
-		desc: "Mega-evolves Mewtwo into Mega Mewtwo X."
+		desc: "If holder is a Mewtwo, this item allows it to Mega Evolve in battle."
 	},
 	"mewtwonitey": {
 		id: "mewtwonitey",
@@ -2841,7 +2841,7 @@ exports.BattleItems = {
 		},
 		num: 663,
 		gen: 6,
-		desc: "Mega-evolves Mewtwo into Mega Mewtwo Y."
+		desc: "If holder is a Mewtwo, this item allows it to Mega Evolve in battle."
 	},
 	"micleberry": {
 		id: "micleberry",
@@ -2893,7 +2893,7 @@ exports.BattleItems = {
 		},
 		num: 307,
 		gen: 4,
-		desc: "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic-type."
+		desc: "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic type."
 	},
 	"miracleseed": {
 		id: "miracleseed",
@@ -3051,7 +3051,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 184,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Fire-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Fire-type attack. Single use."
 	},
 	"oddincense": {
 		id: "oddincense",
@@ -3100,7 +3100,7 @@ exports.BattleItems = {
 		},
 		num: 155,
 		gen: 3,
-		desc: "Restores 10HP when at 1/2 max HP or less. Single use."
+		desc: "Restores 10 HP when at 1/2 max HP or less. Single use."
 	},
 	"pamtreberry": {
 		id: "pamtreberry",
@@ -3143,7 +3143,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 185,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Water-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Water-type attack. Single use."
 	},
 	"payapaberry": {
 		id: "payapaberry",
@@ -3165,7 +3165,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 193,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Psychic-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Psychic-type attack. Single use."
 	},
 	"pechaberry": {
 		id: "pechaberry",
@@ -3230,7 +3230,7 @@ exports.BattleItems = {
 		},
 		num: 204,
 		gen: 3,
-		desc: "Raises Sp. Atk by 1 when at 1/4 max HP or less. Single use."
+		desc: "Raises holder's Sp. Atk by 1 stage when at 1/4 max HP or less. Single use."
 	},
 	"pidgeotite": {
 		id: "pidgeotite",
@@ -3244,7 +3244,7 @@ exports.BattleItems = {
 		},
 		num: 762,
 		gen: 6,
-		desc: "Mega-evolves Pidgeot."
+		desc: "If holder is a Pidgeot, this item allows it to Mega Evolve in battle."
 	},
 	"pinapberry": {
 		id: "pinapberry",
@@ -3271,7 +3271,7 @@ exports.BattleItems = {
 		},
 		num: 671,
 		gen: 6,
-		desc: "Mega-evolves Pinsir."
+		desc: "If holder is a Pinsir, this item allows it to Mega Evolve in battle."
 	},
 	"pixieplate": {
 		id: "pixieplate",
@@ -3292,7 +3292,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy-type."
+		desc: "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy type."
 	},
 	"plumefossil": {
 		id: "plumefossil",
@@ -3520,7 +3520,7 @@ exports.BattleItems = {
 		},
 		num: 326,
 		gen: 4,
-		desc: "Holder's critical hit ratio is boosted by 1."
+		desc: "Holder's critical hit ratio is raised by 1 stage."
 	},
 	"razorfang": {
 		id: "razorfang",
@@ -3603,7 +3603,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Reverts Groudon to its Primal form."
+		desc: "If holder is a Groudon, this item triggers its Primal Reversion in battle."
 	},
 	"repeatball": {
 		id: "repeatball",
@@ -3633,7 +3633,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 187,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Grass-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Grass-type attack. Single use."
 	},
 	"ringtarget": {
 		id: "ringtarget",
@@ -3647,7 +3647,7 @@ exports.BattleItems = {
 		},
 		num: 543,
 		gen: 5,
-		desc: "Holder's type immunities granted by its own typing are negated."
+		desc: "The holder's type immunities granted solely by its typing are negated."
 	},
 	"rockgem": {
 		id: "rockgem",
@@ -3750,7 +3750,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: -6,
 		gen: 6,
-		desc: "Halves damage taken from a super effective Fairy-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Fairy-type attack. Single use."
 	},
 	"rowapberry": {
 		id: "rowapberry",
@@ -3785,7 +3785,7 @@ exports.BattleItems = {
 		},
 		num: 754,
 		gen: 6,
-		desc: "Mega-evolves Sableye."
+		desc: "If holder is a Sableye, this item allows it to Mega Evolve in battle."
 	},
 	"safariball": {
 		id: "safariball",
@@ -3813,7 +3813,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Protects the holder from weather-related damage and powder moves."
+		desc: "Holder is immune to powder moves and damage from Sandstorm or Hail."
 	},
 	"salacberry": {
 		id: "salacberry",
@@ -3834,7 +3834,7 @@ exports.BattleItems = {
 		},
 		num: 203,
 		gen: 3,
-		desc: "Raises Speed by 1 when at 1/4 max HP or less. Single use."
+		desc: "Raises holder's Speed by 1 stage when at 1/4 max HP or less. Single use."
 	},
 	"salamencite": {
 		id: "salamencite",
@@ -3848,7 +3848,7 @@ exports.BattleItems = {
 		},
 		num: 769,
 		gen: 6,
-		desc: "Mega-evolves Salamence."
+		desc: "If holder is a Salamence, this item allows it to Mega Evolve in battle."
 	},
 	"sceptilite": {
 		id: "sceptilite",
@@ -3862,7 +3862,7 @@ exports.BattleItems = {
 		},
 		num: 753,
 		gen: 6,
-		desc: "Mega-evolves Sceptile."
+		desc: "If holder is a Sceptile, this item allows it to Mega Evolve in battle."
 	},
 	"scizorite": {
 		id: "scizorite",
@@ -3876,7 +3876,7 @@ exports.BattleItems = {
 		},
 		num: 670,
 		gen: 6,
-		desc: "Mega-evolves Scizor."
+		desc: "If holder is a Scizor, this item allows it to Mega Evolve in battle."
 	},
 	"scopelens": {
 		id: "scopelens",
@@ -3890,7 +3890,7 @@ exports.BattleItems = {
 		},
 		num: 232,
 		gen: 2,
-		desc: "Holder's critical hit ratio is boosted by 1."
+		desc: "Holder's critical hit ratio is raised by 1 stage."
 	},
 	"seaincense": {
 		id: "seaincense",
@@ -3938,7 +3938,7 @@ exports.BattleItems = {
 		},
 		num: 759,
 		gen: 6,
-		desc: "Mega-evolves Sharpedo."
+		desc: "If holder is a Sharpedo, this item allows it to Mega Evolve in battle."
 	},
 	"shedshell": {
 		id: "shedshell",
@@ -3953,7 +3953,7 @@ exports.BattleItems = {
 		},
 		num: 295,
 		gen: 4,
-		desc: "Holder may switch out even when trapped by another Pokemon."
+		desc: "Holder may switch out even when trapped by another Pokemon, or by Ingrain."
 	},
 	"shellbell": {
 		id: "shellbell",
@@ -3985,7 +3985,7 @@ exports.BattleItems = {
 		onDrive: 'Electric',
 		num: 117,
 		gen: 5,
-		desc: "Holder's Techno Blast is Electric-type."
+		desc: "Holder's Techno Blast is Electric type."
 	},
 	"shucaberry": {
 		id: "shucaberry",
@@ -4007,7 +4007,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 191,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Ground-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Ground-type attack. Single use."
 	},
 	"silkscarf": {
 		id: "silkscarf",
@@ -4094,7 +4094,7 @@ exports.BattleItems = {
 		},
 		num: 306,
 		gen: 4,
-		desc: "Holder's Flying-type attacks have 1.2x power. Judgment is Flying-type."
+		desc: "Holder's Flying-type attacks have 1.2x power. Judgment is Flying type."
 	},
 	"slowbronite": {
 		id: "slowbronite",
@@ -4108,7 +4108,7 @@ exports.BattleItems = {
 		},
 		num: 760,
 		gen: 6,
-		desc: "Mega-evolves Slowbro."
+		desc: "If holder is a Slowbro, this item allows it to Mega Evolve in battle."
 	},
 	"smoothrock": {
 		id: "smoothrock",
@@ -4135,7 +4135,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Raises Attack by 1 if hit by an Ice-type attack. Single use."
+		desc: "Raises holder's Attack by 1 if hit by an Ice-type attack. Single use."
 	},
 	"softsand": {
 		id: "softsand",
@@ -4226,7 +4226,7 @@ exports.BattleItems = {
 		},
 		num: 299,
 		gen: 4,
-		desc: "Holder's Water-type attacks have 1.2x power. Judgment is Water-type."
+		desc: "Holder's Water-type attacks have 1.2x power. Judgment is Water type."
 	},
 	"spookyplate": {
 		id: "spookyplate",
@@ -4247,7 +4247,7 @@ exports.BattleItems = {
 		},
 		num: 310,
 		gen: 4,
-		desc: "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost-type."
+		desc: "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost type."
 	},
 	"sportball": {
 		id: "sportball",
@@ -4301,7 +4301,7 @@ exports.BattleItems = {
 		},
 		num: 761,
 		gen: 6,
-		desc: "Mega-evolves Steelix."
+		desc: "If holder is a Steelix, this item allows it to Mega Evolve in battle."
 	},
 	"steelgem": {
 		id: "steelgem",
@@ -4336,7 +4336,7 @@ exports.BattleItems = {
 		},
 		num: 259,
 		gen: 2,
-		desc: "If holder is a Farfetch'd, its critical hit ratio is boosted by 2."
+		desc: "If holder is a Farfetch'd, its critical hit ratio is raised by 2 stages."
 	},
 	"stickybarb": {
 		id: "stickybarb",
@@ -4380,7 +4380,7 @@ exports.BattleItems = {
 		},
 		num: 309,
 		gen: 4,
-		desc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock-type."
+		desc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock type."
 	},
 	"swampertite": {
 		id: "swampertite",
@@ -4394,7 +4394,7 @@ exports.BattleItems = {
 		},
 		num: 752,
 		gen: 6,
-		desc: "Mega-evolves Swampert."
+		desc: "If holder is a Swampert, this item allows it to Mega Evolve in battle."
 	},
 	"tamatoberry": {
 		id: "tamatoberry",
@@ -4429,7 +4429,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 194,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Bug-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Bug-type attack. Single use."
 	},
 	"thickclub": {
 		id: "thickclub",
@@ -4492,7 +4492,7 @@ exports.BattleItems = {
 		},
 		num: 304,
 		gen: 4,
-		desc: "Holder's Poison-type attacks have 1.2x power. Judgment is Poison-type."
+		desc: "Holder's Poison-type attacks have 1.2x power. Judgment is Poison type."
 	},
 	"twistedspoon": {
 		id: "twistedspoon",
@@ -4523,7 +4523,7 @@ exports.BattleItems = {
 		},
 		num: 669,
 		gen: 6,
-		desc: "Mega-evolves Tyranitar."
+		desc: "If holder is a Tyranitar, this item allows it to Mega Evolve in battle."
 	},
 	"ultraball": {
 		id: "ultraball",
@@ -4545,7 +4545,7 @@ exports.BattleItems = {
 		},
 		num: 659,
 		gen: 6,
-		desc: "Mega-evolves Venusaur."
+		desc: "If holder is a Venusaur, this item allows it to Mega Evolve in battle."
 	},
 	"wacanberry": {
 		id: "wacanberry",
@@ -4567,7 +4567,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 186,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Electric-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Electric-type attack. Single use."
 	},
 	"watergem": {
 		id: "watergem",
@@ -4632,7 +4632,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Attack and Sp. Atk sharply increase when hit super effectively. Single use."
+		desc: "If holder is hit super effectively, raises Attack, Sp. Atk by 2 stages. Single use."
 	},
 	"wepearberry": {
 		id: "wepearberry",
@@ -4762,7 +4762,7 @@ exports.BattleItems = {
 		onEat: function () { },
 		num: 188,
 		gen: 4,
-		desc: "Halves damage taken from a super effective Ice-type attack. Single use."
+		desc: "Halves damage taken from a supereffective Ice-type attack. Single use."
 	},
 	"zapplate": {
 		id: "zapplate",
@@ -4783,7 +4783,7 @@ exports.BattleItems = {
 		},
 		num: 300,
 		gen: 4,
-		desc: "Holder's Electric-type attacks have 1.2x power. Judgment is Electric-type."
+		desc: "Holder's Electric-type attacks have 1.2x power. Judgment is Electric type."
 	},
 	"zoomlens": {
 		id: "zoomlens",
