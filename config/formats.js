@@ -252,7 +252,8 @@ exports.Formats = [
 			var has = [];
 			for (var i = 0; i < team.length; i++) {
 				var template = this.getTemplate(team[i].species);
-				if (template.types.indexOf('Dragon') > -1) hasDragon = true;
+				var types = template.types || [];
+				if (types.indexOf('Dragon') > -1) hasDragon = true;
 				if (template.baseSpecies in limitedPokemon) has.push(template.species);
 			}
 			var problems = [];
