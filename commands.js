@@ -125,29 +125,27 @@ var commands = exports.commands = {
 
 		if (target.charAt(0) === '/' && target.charAt(1) !== '/') {
 			// PM command
-			var targetCmdIndex = target.indexOf(' ');
-			var targetCmd = (targetCmdIndex >= 0 ? target.slice(1, targetCmdIndex) : target.slice(1));
-			switch (targetCmd) {
+			var innerCmdIndex = target.indexOf(' ');
+			var innerCmd = (innerCmdIndex >= 0 ? target.slice(1, innerCmdIndex) : target.slice(1));
+			var innerTarget = (innerCmdIndex >= 0 ? target.slice(innerCmdIndex + 1) : '');
+			switch (innerCmd) {
 			case 'me':
 			case 'announce':
 				break;
 			case 'invite':
-				var targetRoomid = toId(target.substr(8));
-				if (targetRoomid === 'global') return false;
-
-				var targetRoom = Rooms.search(targetRoomid);
-				if (!targetRoom) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|/text The room "' + targetRoomid + '" does not exist.');
+				var targetRoom = Rooms.search(innerTarget);
+				if (!targetRoom || targetRoom === Rooms.global) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|/text The room "' + innerTarget + '" does not exist.');
 				if (targetRoom.staffRoom && !targetUser.isStaff) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|/text User "' + this.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
 				if (targetRoom.isPrivate === true && targetRoom.modjoin && targetRoom.auth) {
 					if (Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) && !targetUser.can('bypassall')) {
-						return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|/text The room "' + targetRoomid + '" does not exist.');
+						return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|/text The room "' + innerTarget + '" does not exist.');
 					}
 				}
 
 				target = '/invite ' + targetRoom.id;
 				break;
 			default:
-				return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text The command '/" + targetCmd + "' was unrecognized or unavailable in private messages. To send a message starting with '/" + targetCmd + "', type '//" + targetCmd + "'.");
+				return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + "|/text The command '/" + innerCmd + "' was unrecognized or unavailable in private messages. To send a message starting with '/" + innerCmd + "', type '//" + innerCmd + "'.");
 			}
 		}
 
