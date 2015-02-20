@@ -1690,7 +1690,7 @@ exports.BattleScripts = {
 			item = 'Light Clay';
 		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
 			item = template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Band';
-		} else if (counter.Special >= 4) {
+		} else if (counter.Special >= 4 && !hasMove['chargebeam']) {
 			item = template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (hasMove['eruption'] || hasMove['waterspout']) {
 			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
@@ -1756,20 +1756,19 @@ exports.BattleScripts = {
 			AG: 68
 		};
 		var customScale = {
-			// Banned Mega
-			"Kangaskhan-Mega": 72, "Lucario-Mega": 72, "Mawile-Mega": 72, "Salamence-Mega": 72,
+			// Between OU and Uber
+			Blaziken: 72, Genesect: 72, 'Genesect-Burn': 72, 'Genesect-Chill': 72, 'Genesect-Douse': 72, 'Genesect-Shock': 72, Greninja: 72, 'Kangaskhan-Mega': 72, 'Lucario-Mega': 72, 'Mawile-Mega': 72, 'Salamence-Mega': 72,
 
 			// Not holding mega stone
 			Altaria: 84, Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Lopunny: 86, Manectric: 78, Metagross: 78, Pinsir: 82, Sableye: 78, Venusaur: 78,
 
 			// Holistic judgment
-			Articuno: 82, Genesect: 72, Greninja: 72, Regigigas: 86, "Rotom-Fan": 88, Sigilyph: 80, Unown: 90
+			Articuno: 82, Regigigas: 86, "Rotom-Fan": 88, Sigilyph: 80, Unown: 90
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		if (template.name === 'Magikarp' && hasMove['magikarpsrevenge']) level = 90;
-
 		if (template.name === 'Xerneas' && hasMove['geomancy']) level = 68;
 
 		// Prepare HP for Belly Drum.
