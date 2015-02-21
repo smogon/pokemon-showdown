@@ -315,9 +315,10 @@ var core = exports.core = {
 		tourSize: 8,
 		amountEarn: 10,
 		earningBP: function () {
-			if (this.amountEarn === 10) return '<u>Standard (8 players = 1 Battle Point)</u> Double (4 players = 1 Battle Point) Quadruple (2 players = 1 Battle Point)';
-			if (this.amountEarn === 4) return 'Standard (8 players = 1 Battle Point) <u>Double (4 players = 1 Battle Point)</u> Quadruple (2 players = 1 Battle Point)';
-			if (this.amountEarn === 2) return 'Standard (8 players = 1 Battle Point) Double (4 players = 1 Battle Point) <u>Quadruple (2 players = 1 Battle Point)</u>';
+			if (this.amountEarn === 10) return '<u>Standard (8 players = 1 Battle Point)</u> Double (4 players = 1 Battle Point) Quadruple (2 players = 1 Battle Point) PC Custom (1 player = 1 Battle Point)';
+			if (this.amountEarn === 4) return 'Standard (8 players = 1 Battle Point) <u>Double (4 players = 1 Battle Point)</u> Quadruple (2 players = 1 Battle Point) PC Custom (1 player = 1 Battle Point)';
+			if (this.amountEarn === 2) return 'Standard (8 players = 1 Battle Point) Double (4 players = 1 Battle Point) <u>Quadruple (2 players = 1 Battle Point)</u> PC Custom (1 player = 1 Battle Point)';
+			if (this.amountEarn === 1.5) return 'Standard (8 players = 1 Battle Point) Double (4 players = 1 Battle Point) Quadruple (2 players = 1 Battle Point) <u>PC Custom (1 player = 1 Battle Point)</u>';
 		}
 	},
 
