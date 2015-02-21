@@ -867,6 +867,7 @@ var components = exports.components = {
 					if (parts[1] === 'standard') Core.stdout('control-panel', 'bp', 10, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'bp'));});
 					if (parts[1] === 'double') Core.stdout('control-panel', 'bp', 4, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'bp'));});
 					if (parts[1] === 'quadruple') Core.stdout('control-panel', 'bp', 2, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'bp'));});
+					if (parts[1] === 'pccustom') Core.stdout('control-panel', 'bp', 1.5, function () {Core.tournaments.amountEarn = Number(Core.stdin('control-panel', 'bp'));});
 					self.sendReply('Earning Battle Point amount is now ' + parts[1]);
 				}
 			};
