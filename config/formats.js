@@ -80,6 +80,16 @@ exports.Formats = [
 		name: "LC",
 		section: "ORAS Singles",
 
+		searchShow: false,
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger']
+	},
+	{
+		name: "LC (suspect test)",
+		section: "ORAS Singles",
+
+		challengeShow: false,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger']
@@ -529,25 +539,28 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Generation Showdown",
+		name: "Dragon Cup",
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview VGC', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased', 'Mew', 'Celebi', 'Jirachi', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Phione',
-			'Manaphy', 'Darkrai', 'Shaymin', 'Shaymin-Sky', 'Arceus', 'Victini', 'Keldeo', 'Meloetta', 'Genesect', 'Diancie',
-			'Soul Dew'
-		],
+		banlist: ['Illegal', 'Unreleased', 'Soul Dew'],
 		validateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pokémon.'];
-			var legends = {'Mewtwo':1, 'Lugia':1, 'Ho-Oh':1, 'Kyogre':1, 'Groudon':1, 'Rayquaza':1, 'Dialga':1, 'Palkia':1, 'Giratina':1, 'Reshiram':1, 'Zekrom':1, 'Kyurem':1, 'Xerneas':1, 'Yveltal':1, 'Zygarde':1};
-			var n = 0;
+			var limitedPokemon = {'Mewtwo':1, 'Mew':1, 'Lugia':1, 'Ho-Oh':1, 'Celebi':1, 'Kyogre':1, 'Groudon':1, 'Rayquaza':1, 'Jirachi':1, 'Deoxys':1, 'Dialga':1, 'Palkia':1, 'Giratina':1, 'Phione':1, 'Manaphy':1, 'Darkrai':1, 'Shaymin':1, 'Arceus':1, 'Victini':1, 'Reshiram':1, 'Zekrom':1, 'Kyurem':1, 'Keldeo':1, 'Meloetta':1, 'Genesect':1, 'Xerneas':1, 'Yveltal':1, 'Zygarde':1, 'Diancie':1};
+			var hasDragon = false;
+			var has = [];
 			for (var i = 0; i < team.length; i++) {
-				var template = this.getTemplate(team[i].species).baseSpecies;
-				if (template in legends) n++;
-				if (n > 2) return ["You can only use up to two legendary Pokémon."];
+				var template = this.getTemplate(team[i].species);
+				var types = template.types || [];
+				if (types.indexOf('Dragon') > -1) hasDragon = true;
+				if (template.baseSpecies in limitedPokemon) has.push(template.species);
 			}
+			var problems = [];
+			if (!hasDragon) problems.push("You have to use a Dragon-type Pokémon.");
+			if (has.length > 2) problems.push("You can only use up to two of: " + has.join(', ') + ".");
+			return problems;
 		},
 		onBegin: function () {
 			this.debug('cutting down to 4');
@@ -831,9 +844,9 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
-			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Snorlax',
-			'Xerneas', 'Yveltal', 'Zekrom', 'Gengarite', 'Kangaskhanite', 'Salamencite', 'Soul Dew'
+		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Diggersby', 'Giratina-Origin', 'Groudon',
+			'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Serperior',
+			'Shaymin-Sky', 'Snorlax', 'Xerneas', 'Yveltal', 'Zekrom', 'Gengarite', 'Kangaskhanite', 'Salamencite', 'Soul Dew'
 		],
 		onModifyPokemon: function (pokemon) {
 			pokemon.negateImmunity['Type'] = true;
@@ -941,27 +954,6 @@ exports.Formats = [
 		},
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Chansey', 'Frogadier', 'Eviolite']
-	},
-	{
-		name: "Sky Battle",
-		section: "Other Metagames",
-
-		searchShow: false,
-		validateSet: function (set) {
-			var template = this.getTemplate(set.species || set.name);
-			if (template.types.indexOf('Flying') === -1 && set.ability !== 'Levitate') {
-				return [set.species + " is not a Flying type and does not have the ability Levitate."];
-			}
-		},
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Archen', 'Chatot', 'Delibird', 'Dodrio', 'Doduo', 'Ducklett', "Farfetch'd", 'Fletchling', 'Gastly',
-			'Gengar', 'Hawlucha', 'Hoothoot', 'Murkrow', 'Natu', 'Pidgey', 'Pidove', 'Rufflet', 'Shaymin-Sky', 'Spearow',
-			'Starly', 'Taillow', 'Vullaby', 'Iron Ball', 'Pinsirite', 'Soul Dew',
-			'Body Slam', 'Bulldoze', 'Dig', 'Dive', 'Earth Power', 'Earthquake', 'Electric Terrain', 'Fire Pledge', 'Fissure', 'Flying Press',
-			'Frenzy Plant', 'Geomancy', 'Grass Knot', 'Grass Pledge', 'Grassy Terrain', 'Gravity', 'Heat Crash', 'Heavy Slam', 'Ingrain', "Land's Wrath",
-			'Magnitude', 'Mat Block', 'Misty Terrain', 'Mud Sport', 'Muddy Water', 'Rototiller', 'Seismic Toss', 'Slam', 'Smack Down', 'Spikes',
-			'Stomp', 'Substitute', 'Surf', 'Toxic Spikes', 'Water Pledge', 'Water Sport'
-		]
 	},
 	{
 		name: "Gen-NEXT OU",

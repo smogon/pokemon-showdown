@@ -368,13 +368,13 @@ exports.BattleStatuses = {
 		duration: 1,
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, user, target, move) {
-			var modifier = 4 / 3;
+			var modifier = 0x1547;
 			this.debug('Aura Boost');
 			if (user.volatiles['aurabreak']) {
-				modifier = 0.75;
+				modifier = 0x0C00;
 				this.debug('Aura Boost reverted by Aura Break');
 			}
-			return this.chainModify(modifier);
+			return this.chainModify([modifier, 0x1000]);
 		}
 	},
 
@@ -433,6 +433,9 @@ exports.BattleStatuses = {
 				this.debug('Rain water boost');
 				return this.chainModify(1.5);
 			}
+		},
+		onSetWeather: function (target, source, weather) {
+			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onStart: function () {
 			this.add('-weather', 'PrimordialSea');
@@ -500,6 +503,9 @@ exports.BattleStatuses = {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
 			}
+		},
+		onSetWeather: function (target, source, weather) {
+			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onStart: function () {
 			this.add('-weather', 'DesolateLand');
@@ -590,6 +596,9 @@ exports.BattleStatuses = {
 				this.add('-activate', '', 'deltastream');
 				return 0;
 			}
+		},
+		onSetWeather: function (target, source, weather) {
+			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onStart: function () {
 			this.add('-weather', 'DeltaStream');
