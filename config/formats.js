@@ -7,11 +7,11 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "LC Random (BWknd 28)",
+		name: "OU (BWknd 29)",
 		section: "ORAS Singles",
 
-		team: 'randomLC',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
 	},
 	{
 		name: "OU",
