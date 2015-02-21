@@ -338,8 +338,9 @@ exports.customavatars = {
 	'dracomasterbrit': 'pomman.gif',
 	'arguso': 'arguso.png',
 	'duzzy': 'jellicent.gif',
-	'cluricaun': 'allianceclur.jpg',
-	'allianceclur': 'allianceclur.jpg',
+	'cluricaun': 'clur.png',
+	'allianceclur': 'clur.png',
+	'clur': 'clur.png',
 	'insanelover': 'insanelover.png',
 	'slrloer': 'insanelover.png',
 	'alliancelver': 'insanelover.png',
@@ -400,6 +401,7 @@ exports.customavatars = {
 	'sranger': 'abnegation.png',
 	'rabinov': 'rabinov.png',
 	'darklight1999': 'darklight1999.png',
+	'alliancedyla': 'alliancedyla.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
