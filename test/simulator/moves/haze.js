@@ -8,6 +8,7 @@ describe('Haze - RBY', function () {
 
 	it('should remove stat changes', function () {
 		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
+		battle.seed = [0, 0, 0, 0];
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['agility', 'haze']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['swordsdance', 'splash']}]);
 
@@ -23,6 +24,7 @@ describe('Haze - RBY', function () {
 
 	it('should remove opponent\'s status', function () {
 		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
+		battle.seed = [0, 0, 0, 0];
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['thunderwave', 'haze']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['splash']}]);
 
@@ -36,6 +38,7 @@ describe('Haze - RBY', function () {
 
 	it('should not remove user\'s status', function () {
 		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
+		battle.seed = [0, 0, 0, 0];
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['thunderwave']}]);
 
 		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['haze']}]);
