@@ -1502,6 +1502,7 @@ exports.BattleScripts = {
 
 			var rejectAbility = false;
 			if (ability in counterAbilities) {
+				// Adaptability, Blaze, Contrary, Hustle, Iron Fist, Overgrow, Skill Link, Swarm, Technician, Torrent
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability === 'Rock Head' || ability === 'Reckless') {
 				rejectAbility = !counter['recoil'];
@@ -1519,8 +1520,6 @@ exports.BattleScripts = {
 				rejectAbility = !setupType && !hasMove['flamecharge'] && !hasMove['stockpile'];
 			} else if (ability === 'Prankster') {
 				rejectAbility = !counter['Status'];
-			} else if (ability === 'Technician') {
-				rejectAbility = !counter['technician'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
 			} else if (ability === 'Aerilate' || ability === 'Pixilate' || ability === 'Refrigerate') {
