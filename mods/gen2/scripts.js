@@ -875,7 +875,6 @@ exports.BattleScripts = {
 			this.debug('instafaint: ' + this.faintQueue.map('target').map('name'));
 			this.faintMessages(true);
 			target.faint();
-			this.queue = [];
 		} else {
 			damage = this.runEvent('AfterDamage', target, source, effect, damage);
 		}
