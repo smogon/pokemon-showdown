@@ -238,35 +238,34 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Dragon Cup",
+		name: "Enter the Dragon Type",
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
-		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview VGC', 'Cancel Mod'],
+		ruleset: ['Pokemon', 'Species Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
 		banlist: ['Illegal', 'Unreleased', 'Soul Dew'],
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four Pokémon.'];
+			if (team.length !== 4) return ['You must use exactly four Pokémon.'];
 			var limitedPokemon = {'Mewtwo':1, 'Mew':1, 'Lugia':1, 'Ho-Oh':1, 'Celebi':1, 'Kyogre':1, 'Groudon':1, 'Rayquaza':1, 'Jirachi':1, 'Deoxys':1, 'Dialga':1, 'Palkia':1, 'Giratina':1, 'Phione':1, 'Manaphy':1, 'Darkrai':1, 'Shaymin':1, 'Arceus':1, 'Victini':1, 'Reshiram':1, 'Zekrom':1, 'Kyurem':1, 'Keldeo':1, 'Meloetta':1, 'Genesect':1, 'Xerneas':1, 'Yveltal':1, 'Zygarde':1, 'Diancie':1};
 			var hasDragon = false;
 			var has = [];
 			for (var i = 0; i < team.length; i++) {
 				var template = this.getTemplate(team[i].species);
-				var types = template.types || [];
-				if (types.indexOf('Dragon') > -1) hasDragon = true;
 				if (template.baseSpecies in limitedPokemon) has.push(template.species);
+				if (hasDragon) continue;
+				var types = template.types || [];
+				if (types.indexOf('Dragon') > -1) {
+					hasDragon = true;
+					continue;
+				}
+				var item = Tools.getItem(team[i].item);
+				if (item.megaEvolves && item.megaEvolves === template.species && Tools.getTemplate(item.megaStone).types.indexOf('Dragon') > -1) hasDragon = true;
 			}
 			var problems = [];
 			if (!hasDragon) problems.push("You have to use a Dragon-type Pokémon.");
 			if (has.length > 2) problems.push("You can only use up to two of: " + has.join(', ') + ".");
 			return problems;
-		},
-		onBegin: function () {
-			this.debug('cutting down to 4');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
 		}
 	},
 	{
