@@ -380,7 +380,9 @@ Validator = (function () {
 					ability.name !== template.abilities['H']) {
 					problems.push(name + " can't have " + set.ability + ".");
 				}
-				if (ability.name === template.abilities['H']) {
+				if (ability.name === template.abilities['H'] &&
+					ability.name !== template.abilities['0'] &&
+					ability.name !== template.abilities['1']) {
 					isHidden = true;
 
 					if (template.unreleasedHidden && banlistTable['illegal']) {
@@ -557,7 +559,12 @@ Validator = (function () {
 		var level = set.level || 100;
 
 		var isHidden = false;
-		if (set.ability && tools.getAbility(set.ability).name === template.abilities['H']) isHidden = true;
+		if (set.ability) {
+			var ability = tools.getAbility(set.ability).name;
+			isHidden = ability === template.abilities['H'] &&
+				ability !== template.abilities['0'] &&
+				ability !== template.abilities['1'];
+		}
 		var incompatibleHidden = false;
 
 		var limit1 = true;

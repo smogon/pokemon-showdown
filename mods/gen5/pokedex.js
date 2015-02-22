@@ -243,7 +243,7 @@ exports.BattlePokedex = {
 	},
 	starly: {
 		inherit: true,
-		abilities: {0:"Keen Eye"}
+		abilities: {0:"Keen Eye",H:"Keen Eye"}
 	},
 	staraptor: {
 		inherit: true,
