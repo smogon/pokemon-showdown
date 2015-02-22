@@ -24,7 +24,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (user.name === 'christs') {
+		} else if (user.name === 'Christοs') {
 			var message = target || christs[Math.floor(Math.random() * christs.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
