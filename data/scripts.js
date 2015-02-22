@@ -1708,7 +1708,7 @@ exports.BattleScripts = {
 			item = 'Focus Sash';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
-		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || hasMove['roar'] || hasMove['whirlwind'] || hasMove['sleeptalk'] || ability === 'Moody') {
+		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || hasMove['clearsmog'] || ability === 'Moody') {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
