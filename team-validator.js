@@ -731,6 +731,7 @@ Validator = (function () {
 			} else if (template.prevo) {
 				template = tools.getTemplate(template.prevo);
 				if (template.gen > Math.max(2, tools.gen)) template = null;
+				if (!template.abilities['H']) isHidden = false;
 			} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem' && template.baseSpecies !== 'Pikachu') {
 				template = tools.getTemplate(template.baseSpecies);
 			} else {
