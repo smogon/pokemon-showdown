@@ -1128,14 +1128,14 @@ exports.BattleScripts = {
 					break;
 
 				// Bad after setup
-				case 'foulplay': case 'relicsong': case 'nightshade': case 'seismictoss': case 'superfang':
+				case 'foulplay': case 'relicsong': case 'nightshade': case 'seismictoss': case 'superfang': case 'rapidspin':
 					if (setupType) rejected = true;
 					break;
 				case 'pursuit': case 'eruption': case 'waterspout': case 'defog': case 'haze': case 'healingwish': case 'magiccoat': case 'protect': case 'spikes': case 'stealthrock':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'trick': case 'switcheroo':
-					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen']) rejected = true;
+					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['acrobatics']) rejected = true;
 					break;
 				case 'dragontail': case 'circlethrow':
 					if (!!counter['speedsetup'] || hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore']) rejected = true;
@@ -2348,7 +2348,7 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
-				case 'knockoff': case 'perishsong': case 'magiccoat': case 'spikes':
+				case 'rapidspin': case 'perishsong': case 'magiccoat': case 'spikes':
 					if (setupType) rejected = true;
 					break;
 				case 'uturn': case 'voltswitch':
