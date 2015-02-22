@@ -1029,7 +1029,7 @@ exports.BattleScripts = {
 					counter[move.category]++;
 				}
 				// Moves that have a low base power:
-				if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60)) counter['technician']++;
+				if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60 && moveid !== 'rapidspin')) counter['technician']++;
 				// Moves that hit multiple times:
 				if (move.multihit && move.multihit[1] === 5) counter['skilllink']++;
 				// Recoil:
@@ -2251,7 +2251,7 @@ exports.BattleScripts = {
 					counter[move.category]++;
 				}
 				// Moves that have a low base power:
-				if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60)) counter['technician']++;
+				if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60 && moveid !== 'rapidspin')) counter['technician']++;
 				// Moves that hit multiple times:
 				if (move.multihit && move.multihit[1] === 5) counter['skilllink']++;
 				// Recoil:
