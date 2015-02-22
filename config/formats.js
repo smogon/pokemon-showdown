@@ -48,9 +48,21 @@ exports.Formats = [
 		name: "UU",
 		section: "ORAS Singles",
 
+		searchShow: false,
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Alakazite', 'Altarianite', 'Diancite', 'Heracronite', 'Galladite', 'Gardevoirite', 'Lopunnite', 'Medichamite',
 			'Metagrossite', 'Pinsirite', 'Drizzle', 'Drought', 'Shadow Tag'
+		]
+	},
+	{
+		name: "UU (suspect test)",
+		section: "ORAS Singles",
+
+		ruleset: ['OU'],
+		banlist: ['OU', 'Venomoth', 'Togekiss', 'Weavile', 'Smeargle', 'Crawdaunt', 'Staraptor', 'Victini', 'Scolipede', 'Volcarona',
+			'Terrakion', 'Tornadus-Therian', 'Thundurus-Therian', 'Diggersby', 'Hawlucha', 'Klefki', 'Zygarde',
+			'Alakazite', 'Altarianite', 'Diancite', 'Heracronite', 'Galladite', 'Gardevoirite', 'Lopunnite', 'Medichamite', 'Metagrossite', 'Pinsirite',
+			'Drizzle', 'Drought', 'Shadow Tag'
 		]
 	},
 	{
