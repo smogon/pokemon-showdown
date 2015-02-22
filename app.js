@@ -59,10 +59,10 @@ function runNpm(command) {
 try {
 	require('sugar');
 } catch (e) {
-	runNpm('install');
+	runNpm('install --production');
 }
 if (!Object.select) {
-	runNpm('update');
+	runNpm('update --production');
 }
 
 // Make sure config.js exists, and copy it over from config-example.js
