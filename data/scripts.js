@@ -1704,7 +1704,7 @@ exports.BattleScripts = {
 			item = template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (hasMove['eruption'] || hasMove['waterspout']) {
 			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
-		} else if ((hasMove['flail'] || hasMove['reversal'] || hasMove['endeavor']) && !hasMove['endure'] && ability !== 'Sturdy' && ability !== 'Multiscale') {
+		} else if ((hasMove['flail'] || hasMove['reversal'] || hasMove['endeavor']) && !hasMove['endure'] && ability !== 'Sturdy') {
 			item = 'Focus Sash';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
@@ -1724,7 +1724,7 @@ exports.BattleScripts = {
 			item = (setupType || !!counter['speedsetup'] || hasMove['trickroom'] || !!counter['recovery']) ? 'Life Orb' : 'Leftovers';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
-		} else if (slot === 0 && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
+		} else if (slot === 0 && ability !== 'Sturdy' && ability !== 'Multiscale' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
 			item = 'Focus Sash';
 
 		// this is the "REALLY can't think of a good item" cutoff
@@ -1732,10 +1732,10 @@ exports.BattleScripts = {
 			item = 'Scope Lens';
 		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
 			item = 'Custap Berry';
-		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
-			item = 'Leftovers';
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
+		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
+			item = 'Leftovers';
 		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if (counter.Status <= 1 && ability !== 'Sturdy') {
