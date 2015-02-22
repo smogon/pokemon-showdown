@@ -36,7 +36,7 @@ This will set your command line's location to Pokémon Showdown's folder. You'll
 
 To install dependencies, run the command:
 
-    npm install
+    npm install --production
 
 Copy `config/config-example.js` into `config/config.js`, and edit as you please.
 
