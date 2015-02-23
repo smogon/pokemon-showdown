@@ -1769,7 +1769,7 @@ exports.BattleScripts = {
 		};
 		var customScale = {
 			// Between OU and Uber
-			Blaziken: 72, Genesect: 72, 'Genesect-Burn': 72, 'Genesect-Chill': 72, 'Genesect-Douse': 72, 'Genesect-Shock': 72, Greninja: 72, 'Kangaskhan-Mega': 72, 'Lucario-Mega': 72, 'Mawile-Mega': 72,
+			Aegislash: 72, Blaziken: 72, Genesect: 72, 'Genesect-Burn': 72, 'Genesect-Chill': 72, 'Genesect-Douse': 72, 'Genesect-Shock': 72, Greninja: 72, 'Kangaskhan-Mega': 72, 'Lucario-Mega': 72, 'Mawile-Mega': 72,
 
 			// Not holding mega stone
 			Altaria: 84, Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Lopunny: 86, Manectric: 78, Metagross: 78, Pinsir: 82, Sableye: 78, Venusaur: 78,
