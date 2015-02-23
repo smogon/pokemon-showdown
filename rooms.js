@@ -1169,7 +1169,7 @@ var BattleRoom = (function () {
 			return false;
 		}
 
-		this.auth[user.userid] = '\u2605';
+		this.auth[user.userid] = '-';
 		this.battle.join(user, slot, team);
 		rooms.global.battleCount += (this.battle.active ? 1 : 0) - (this.active ? 1 : 0);
 		this.active = this.battle.active;
