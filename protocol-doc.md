@@ -11,6 +11,18 @@ Showdown directly using WebSocket:
       or
     wss://sim.smogon.com/showdown/websocket
 
+Client implementations you might want to look at for reference include:
+
+- pickdenis' chat bot (Ruby) -
+    https://github.com/pickdenis/ps-chatbot
+- Quinella and TalkTakesTime's chat bot (Node.js) -
+    https://github.com/TalkTakesTime/Pokemon-Showdown-Bot
+- the official client (HTML5 + JavaScript) -
+    https://github.com/Zarel/Pokemon-Showdown-Client
+
+The official client logs protocol messages in the JavaScript console,
+so opening that (F12 in most browsers) can help tell you what's going
+on.
 
 Client-to-server messages
 -------------------------
@@ -75,8 +87,8 @@ This might be displayed as:
     Some dude left.
     OU battle started between Cool guy and Moderator
 
-For bandwidth reasons, there are five message types: `chat`, `join`, `leave`,
-`name`, and `battle`, which are sometimes abbreviated to `c`, `j`, `l`, `n`,
+For bandwidth reasons, five of the message types - `chat`, `join`, `leave`,
+`name`, and `battle` - are sometimes abbreviated to `c`, `j`, `l`, `n`,
 and `b` respectively. All other message types are written out in full so they
 should be easy to understand.
 
@@ -202,6 +214,14 @@ represented by a space), and the rest of the string being their username.
 `|start`
 
 > Indicates that the game has started.
+
+`|win|USER`
+
+> `USER` has won the battle.
+
+`|tie`
+
+> The battle has ended in a tie.
 
 **Major actions**
 

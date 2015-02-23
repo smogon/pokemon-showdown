@@ -278,6 +278,7 @@ exports.BattleMovedex = {
 			onEnd: function (pokemon) {
 				this.add('-end', pokemon, 'move: Disable');
 			},
+			onBeforeMovePriority: 7,
 			onBeforeMove: function (attacker, defender, move) {
 				if (move.id === this.effectData.move) {
 					this.add('cant', attacker, 'Disable', move);
@@ -745,6 +746,30 @@ exports.BattleMovedex = {
 		inherit: true,
 		isBounceable: false
 	},
+	moonlight: {
+		inherit: true,
+		onHit: function (pokemon) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(pokemon.maxhp * 2 / 3);
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(pokemon.maxhp / 4);
+			} else {
+				this.heal(pokemon.maxhp / 2);
+			}
+		}
+	},
+	morningsun: {
+		inherit: true,
+		onHit: function (pokemon) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(pokemon.maxhp * 2 / 3);
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(pokemon.maxhp / 4);
+			} else {
+				this.heal(pokemon.maxhp / 2);
+			}
+		}
+	},
 	odorsleuth: {
 		inherit: true,
 		isBounceable: false
@@ -906,10 +931,23 @@ exports.BattleMovedex = {
 	},
 	suckerpunch: {
 		inherit: true,
-		onTryHit: function (target) {
+		onTry: function (source, target) {
 			var decision = this.willMove(target);
-			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status') {
-				return false;
+			if (!decision || decision.choice !== 'move' || decision.move.category === 'Status' || target.volatiles.mustrecharge) {
+				this.add('-fail', source);
+				return null;
+			}
+		}
+	},
+	synthesis: {
+		inherit: true,
+		onHit: function (pokemon) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(pokemon.maxhp * 2 / 3);
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(pokemon.maxhp / 4);
+			} else {
+				this.heal(pokemon.maxhp / 2);
 			}
 		}
 	},
