@@ -1,5 +1,3 @@
-require('es6-shim');
-
 var TreeNode = require('./lib/closure-goog.structs.TreeNode-c8e0b2dcd892.min.js').goog.structs.TreeNode;
 
 const nameMap = {
