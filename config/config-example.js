@@ -492,6 +492,7 @@ exports.groups = {
 		modchat: true,
 		roomonly: true,
 		privateroom: true,
+		modchatall: true,
 		rank: 6
 	},
 	'@': {
