@@ -1223,6 +1223,10 @@ exports.BattleScripts = {
 				case 'machpunch':
 					if (hasMove['focuspunch']) rejected = true;
 					break;
+				case 'suckerpunch':
+					if ((hasMove['crunch'] || hasMove['darkpulse']) && hasMove['pursuit']) rejected = true;
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
 				case 'thunderbolt':
 					if (hasMove['discharge'] || hasMove['thunder'] || (hasMove['wildcharge'] && hasMove['voltswitch'])) rejected = true;
 					break;
@@ -1305,7 +1309,7 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['roar'] || hasMove['circlethrow']) rejected = true;
 					break;
-				case 'suckerpunch': case 'lunardance': case 'raindance': case 'sunnyday':
+				case 'lunardance': case 'raindance': case 'sunnyday':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'cottonguard':
@@ -1772,10 +1776,10 @@ exports.BattleScripts = {
 			Aegislash: 72, Blaziken: 72, Genesect: 72, 'Genesect-Burn': 72, 'Genesect-Chill': 72, 'Genesect-Douse': 72, 'Genesect-Shock': 72, Greninja: 72, 'Kangaskhan-Mega': 72, 'Lucario-Mega': 72, 'Mawile-Mega': 72,
 
 			// Not holding mega stone
-			Altaria: 84, Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Lopunny: 86, Manectric: 78, Metagross: 78, Pinsir: 82, Sableye: 78, Venusaur: 78,
+			Altaria: 84, Banette: 86, Beedrill: 86, Charizard: 84, Gardevoir: 80, Heracross: 78, Lopunny: 86, Manectric: 78, Metagross: 78, Pinsir: 84, Sableye: 78, Venusaur: 80,
 
 			// Holistic judgment
-			Articuno: 82, Regigigas: 86, "Rotom-Fan": 88, Sigilyph: 80, Unown: 90
+			Articuno: 82, Regigigas: 86, "Rotom-Fan": 88, Scyther: 84, Sigilyph: 80, Unown: 90
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
