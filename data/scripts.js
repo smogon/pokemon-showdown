@@ -1029,7 +1029,7 @@ exports.BattleScripts = {
 					counter[move.category]++;
 				}
 				// Moves that have a low base power:
-				if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60)) counter['technician']++;
+				if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60 && moveid !== 'rapidspin')) counter['technician']++;
 				// Moves that hit multiple times:
 				if (move.multihit && move.multihit[1] === 5) counter['skilllink']++;
 				// Recoil:
@@ -1039,9 +1039,9 @@ exports.BattleScripts = {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
-						// Bounce, Sky Attack, Flame Charge aren't considered STABs.
+						// Bounce, Flame Charge, Quick Attack and Sky Attack aren't considered STABs.
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
-						if (moveid !== 'skyattack' && moveid !== 'bounce' && moveid !== 'flamecharge') hasStab = true;
+						if (!(moveid in {bounce:1, flamecharge:1, quickattack:1, skyattack:1})) hasStab = true;
 					}
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
@@ -1128,14 +1128,14 @@ exports.BattleScripts = {
 					break;
 
 				// Bad after setup
-				case 'foulplay': case 'relicsong': case 'nightshade': case 'seismictoss': case 'superfang':
+				case 'foulplay': case 'relicsong': case 'nightshade': case 'seismictoss': case 'superfang': case 'rapidspin':
 					if (setupType) rejected = true;
 					break;
 				case 'pursuit': case 'eruption': case 'waterspout': case 'defog': case 'haze': case 'healingwish': case 'magiccoat': case 'protect': case 'spikes': case 'stealthrock':
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'trick': case 'switcheroo':
-					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen']) rejected = true;
+					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['acrobatics']) rejected = true;
 					break;
 				case 'dragontail': case 'circlethrow':
 					if (!!counter['speedsetup'] || hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore']) rejected = true;
@@ -1223,8 +1223,12 @@ exports.BattleScripts = {
 				case 'machpunch':
 					if (hasMove['focuspunch']) rejected = true;
 					break;
+				case 'suckerpunch':
+					if ((hasMove['crunch'] || hasMove['darkpulse']) && hasMove['pursuit']) rejected = true;
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
 				case 'thunderbolt':
-					if (hasMove['discharge'] || hasMove['thunder']) rejected = true;
+					if (hasMove['discharge'] || hasMove['thunder'] || (hasMove['wildcharge'] && hasMove['voltswitch'])) rejected = true;
 					break;
 				case 'rockslide': case 'rockblast':
 					if (hasMove['stoneedge'] || hasMove['headsmash']) rejected = true;
@@ -1305,7 +1309,7 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['roar'] || hasMove['circlethrow']) rejected = true;
 					break;
-				case 'suckerpunch': case 'lunardance': case 'raindance': case 'sunnyday':
+				case 'lunardance': case 'raindance': case 'sunnyday':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'cottonguard':
@@ -1502,6 +1506,7 @@ exports.BattleScripts = {
 
 			var rejectAbility = false;
 			if (ability in counterAbilities) {
+				// Adaptability, Blaze, Contrary, Hustle, Iron Fist, Overgrow, Skill Link, Swarm, Technician, Torrent
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability === 'Rock Head' || ability === 'Reckless') {
 				rejectAbility = !counter['recoil'];
@@ -1519,8 +1524,6 @@ exports.BattleScripts = {
 				rejectAbility = !setupType && !hasMove['flamecharge'] && !hasMove['stockpile'];
 			} else if (ability === 'Prankster') {
 				rejectAbility = !counter['Status'];
-			} else if (ability === 'Technician') {
-				rejectAbility = !counter['technician'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
 			} else if (ability === 'Aerilate' || ability === 'Pixilate' || ability === 'Refrigerate') {
@@ -1709,7 +1712,7 @@ exports.BattleScripts = {
 			item = 'Focus Sash';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
-		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || hasMove['roar'] || hasMove['whirlwind'] || hasMove['sleeptalk'] || ability === 'Moody') {
+		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || hasMove['clearsmog'] || ability === 'Moody') {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
@@ -1717,7 +1720,7 @@ exports.BattleScripts = {
 			item = 'Assault Vest';
 		} else if (counter.Physical + counter.Special >= 4) {
 			item = (hasMove['fakeout'] || hasMove['return'] || hasMove['extremespeed'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
-		} else if (setupType && hasMove['outrage']) {
+		} else if (hasMove['outrage'] && (setupType || ability === 'Multiscale')) {
 			item = 'Lum Berry';
 		} else if (counter.Physical + counter.Special >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd > 300) {
 			item = 'Weakness Policy';
@@ -1725,16 +1728,18 @@ exports.BattleScripts = {
 			item = (setupType || !!counter['speedsetup'] || hasMove['trickroom'] || !!counter['recovery']) ? 'Life Orb' : 'Leftovers';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
-		} else if (slot === 0 && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
+		} else if (slot === 0 && ability !== 'Sturdy' && ability !== 'Multiscale' && !counter['recoil'] && template.baseStats.def + template.baseStats.spd + template.baseStats.hp < 300) {
 			item = 'Focus Sash';
 
 		// this is the "REALLY can't think of a good item" cutoff
 		} else if (ability === 'Super Luck') {
 			item = 'Scope Lens';
-		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
-			item = 'Leftovers';
+		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
+			item = 'Custap Berry';
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
+		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
+			item = 'Leftovers';
 		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if (counter.Status <= 1 && ability !== 'Sturdy') {
@@ -1768,13 +1773,13 @@ exports.BattleScripts = {
 		};
 		var customScale = {
 			// Between OU and Uber
-			Blaziken: 72, Genesect: 72, 'Genesect-Burn': 72, 'Genesect-Chill': 72, 'Genesect-Douse': 72, 'Genesect-Shock': 72, Greninja: 72, 'Kangaskhan-Mega': 72, 'Lucario-Mega': 72, 'Mawile-Mega': 72,
+			Aegislash: 72, Blaziken: 72, Genesect: 72, 'Genesect-Burn': 72, 'Genesect-Chill': 72, 'Genesect-Douse': 72, 'Genesect-Shock': 72, Greninja: 72, 'Kangaskhan-Mega': 72, 'Lucario-Mega': 72, 'Mawile-Mega': 72,
 
 			// Not holding mega stone
-			Altaria: 84, Banette: 86, Beedrill: 86, Charizard: 82, Gardevoir: 78, Heracross: 78, Lopunny: 86, Manectric: 78, Metagross: 78, Pinsir: 82, Sableye: 78, Venusaur: 78,
+			Altaria: 84, Banette: 86, Beedrill: 86, Charizard: 84, Gardevoir: 80, Heracross: 78, Lopunny: 86, Manectric: 78, Metagross: 78, Pinsir: 84, Sableye: 78, Venusaur: 80,
 
 			// Holistic judgment
-			Articuno: 82, Regigigas: 86, "Rotom-Fan": 88, Sigilyph: 80, Unown: 90
+			Articuno: 82, Regigigas: 86, "Rotom-Fan": 88, Scyther: 84, Sigilyph: 80, Unown: 90
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
@@ -2249,7 +2254,7 @@ exports.BattleScripts = {
 					counter[move.category]++;
 				}
 				// Moves that have a low base power:
-				if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60)) counter['technician']++;
+				if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60 && moveid !== 'rapidspin')) counter['technician']++;
 				// Moves that hit multiple times:
 				if (move.multihit && move.multihit[1] === 5) counter['skilllink']++;
 				// Recoil:
@@ -2346,7 +2351,7 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (setupType) rejected = true;
 					break;
-				case 'knockoff': case 'perishsong': case 'magiccoat': case 'spikes':
+				case 'rapidspin': case 'perishsong': case 'magiccoat': case 'spikes':
 					if (setupType) rejected = true;
 					break;
 				case 'uturn': case 'voltswitch':
@@ -2845,9 +2850,9 @@ exports.BattleScripts = {
 			}
 		} else if (ability === 'Marvel Scale' && hasMove['psychoshift']) {
 			item = 'Flame Orb';
-		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
+		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && ability !== 'Sturdy' && ability !== 'Multiscale') {
 			item = 'Life Orb';
-		} else if (counter.Special >= 4 && !hasMove['eruption'] && !hasMove['waterspout']) {
+		} else if (counter.Special >= 4 && !hasMove['eruption'] && !hasMove['waterspout'] && ability !== 'Sturdy') {
 			item = 'Life Orb';
 		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Shuca Berry';
@@ -2864,9 +2869,9 @@ exports.BattleScripts = {
 		} else if ((template.baseStats.hp + 75) * (template.baseStats.def + template.baseStats.spd + 175) > 60000 || template.species === 'Skarmory' || template.species === 'Forretress') {
 			// skarmory and forretress get exceptions for their typing
 			item = 'Sitrus Berry';
-		} else if (counter.Physical + counter.Special >= 3 && setupType) {
+		} else if (counter.Physical + counter.Special >= 3 && setupType && ability !== 'Sturdy' && ability !== 'Multiscale') {
 			item = 'Life Orb';
-		} else if (counter.Special >= 3 && setupType) {
+		} else if (counter.Special >= 3 && setupType && ability !== 'Sturdy') {
 			item = 'Life Orb';
 		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 179) {
 			item = 'Assault Vest';
@@ -2884,11 +2889,13 @@ exports.BattleScripts = {
 		// this is the "REALLY can't think of a good item" cutoff
 		} else if (counter.Physical + counter.Special >= 2 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd > 315) {
 			item = 'Weakness Policy';
+		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
+			item = 'Custap Berry';
 		} else if (ability === 'Super Luck') {
 			item = 'Scope Lens';
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
-		} else if (counter.Status <= 1) {
+		} else if (counter.Status <= 1 && ability !== 'Sturdy' && ability !== 'Multiscale') {
 			item = 'Life Orb';
 		} else {
 			item = 'Sitrus Berry';

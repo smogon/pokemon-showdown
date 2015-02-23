@@ -56,13 +56,16 @@ function runNpm(command) {
 	process.exit(0);
 }
 
+var isLegacyEngine = !global.Map;
+
 try {
 	require('sugar');
+	if (isLegacyEngine) require('es6-shim');
 } catch (e) {
-	runNpm('install');
+	runNpm('install --production');
 }
-if (!Object.select) {
-	runNpm('update');
+if (isLegacyEngine && !new Map().set()) {
+	runNpm('update --production');
 }
 
 // Make sure config.js exists, and copy it over from config-example.js
