@@ -1,11 +1,39 @@
-var gulp = require('gulp');
-var jshintStylish = require('jshint-stylish');
-var gutil = require('gulp-util'); // Currently unused, but gulp strongly suggested I install...
-var jshint = require('gulp-jshint');
-var jscs = require('gulp-jscs');
-var replace = require('gulp-replace');
+var path = require('path');
+var util = require('util');
 
-var jsHintOptions = {
+var gulp = require('gulp');
+var lazypipe = require('lazypipe');
+var merge = require('merge-stream');
+var jscs = require('gulp-jscs');
+var jshint = require('gulp-jshint');
+var replace = require('gulp-replace');
+var jshintStylish = require('./' + path.relative(__dirname, require('jshint-stylish')));
+
+var globals = {};
+var globalList = [
+	'Config', 'ResourceMonitor', 'toId', 'toName', 'string', 'LoginServer',
+	'Users', 'Rooms', 'Verifier', 'CommandParser', 'Simulator', 'Tournaments',
+	'Dnsbl', 'Cidr', 'Sockets', 'Tools', 'TeamValidator'
+];
+globalList.forEach(function (identifier) {globals[identifier] = false;});
+
+function transformLet () {
+	// Replacing `var` with `let` is sort of a hack that stops jsHint from
+	// complaining that I'm using `var` like `let` should be used, but
+	// without having to deal with iffy `let` support.
+
+	return lazypipe()
+		.pipe(replace.bind(null, /\bvar\b/g, 'let'))();
+}
+
+function lint (jsHintOptions, jscsOptions) {
+	return lazypipe()
+		.pipe(jshint.bind(jshint, jsHintOptions, {timeout: 150000}))
+		.pipe(jscs.bind(jscs, jscsOptions))();
+}
+
+var jsHintOptions = {};
+jsHintOptions.base = {
 	"nonbsp": true,
 	"nonew": true,
 	"noarg": true,
@@ -13,13 +41,7 @@ var jsHintOptions = {
 	"latedef": 'nofunc',
 
 	"freeze": true,
-	"immed": true,
 	"undef": true,
-
-	// style
-	"smarttabs": true,
-	"trailing": true,
-	"newcap": true,
 
 	"sub": true,
 	"evil": true,
@@ -27,97 +49,153 @@ var jsHintOptions = {
 	"node": true,
 	"eqeqeq": true,
 
-	"globals": {
-		"Config": false,
-		"ResourceMonitor": false,
-		"toId": false,
-		"toName": false,
-		"string": false,
-		"LoginServer": false,
-		"Users": false,
-		"Rooms": false,
-		"Verifier": false,
-		"CommandParser": false,
-		"Simulator": false,
-		"Tournaments": false,
-		"Dnsbl": false,
-		"Cidr": false,
-		"Sockets": false,
-		"Tools": false,
-		"TeamValidator": false
-	}
+	"globals": globals
 };
+jsHintOptions.legacy = util._extend(util._extend({}, jsHintOptions.base), {
+	"es3": true
+});
+jsHintOptions.test = util._extend(util._extend({}, jsHintOptions.base), {
+	"globals": util._extend(globals, {
+		"BattleEngine": false
+	}),
+	"mocha": true
+});
 
-var jscsOptions = {
-	"excludeFiles": ["./**/pokedex.js", "./**/formats-data.js", "./**/learnsets.js", "./**/learnsets-g6.js", "./config/config.js"],
-
-	"preset": "google",
+var jscsOptions = {};
+jscsOptions.base = {
+	"preset": "yandex",
 
 	"requireCurlyBraces": null,
-	"requireCamelCaseOrUpperCaseIdentifiers": null,
+
 	"maximumLineLength": null,
-	"validateIndentation": "\t",
+	"validateIndentation": '\t',
 	"validateQuoteMarks": null,
+	"disallowYodaConditions": null,
+	"disallowQuotedKeysInObjects": null,
+	"requireDotNotation": null,
+
+	"disallowMultipleVarDecl": null,
+	"disallowImplicitTypeConversion": null,
+	"requireSpaceAfterLineComment": null,
+	"validateJSDoc": null,
 
 	"disallowMixedSpacesAndTabs": "smart",
-	"disallowMultipleVarDecl": null,
-
 	"requireSpaceAfterKeywords": true,
-	"requireSpaceBeforeBinaryOperators": true,
-	"disallowSpacesInAnonymousFunctionExpression": null,
-	"requireSpacesInAnonymousFunctionExpression": {
-		"beforeOpeningRoundBrace": true
-	},
 
-	"validateJSDoc": null,
+	"disallowSpacesInFunctionDeclaration": null,
+	"requireSpacesInFunctionDeclaration": {
+		"beforeOpeningCurlyBrace": true
+	},
+	"requireSpacesInAnonymousFunctionExpression": {
+		"beforeOpeningRoundBrace": true,
+		"beforeOpeningCurlyBrace": true
+	},
+	"disallowSpacesInNamedFunctionExpression": null,
+	"requireSpacesInNamedFunctionExpression": {
+		"beforeOpeningCurlyBrace": true
+	},
+	"validateParameterSeparator": ", ",
 
 	"requireBlocksOnNewline": 1,
 	"disallowPaddingNewlinesInBlocks": true,
-	"disallowEmptyBlocks": true,
-	"disallowNewlineBeforeBlockStatements": true,
 
-	"requireCommaBeforeLineBreak": true,
 	"requireOperatorBeforeLineBreak": true,
+	"disallowTrailingComma": true,
+
+	"requireCapitalizedConstructors": true,
+
+	"validateLineBreaks": 'CI' in process.env ? 'LF' : null,
+	"disallowMultipleLineBreaks": null,
+
+	"esnext": true
+};
+jscsOptions.config = util._extend(util._extend({}, jscsOptions.base), {
+	"disallowTrailingComma": null
+});
+jscsOptions.dataCompactArr = util._extend(util._extend({}, jscsOptions.base), {
+	"requireSpaceAfterBinaryOperators": ["="],
+	"requireSpaceBeforeBinaryOperators": ["="],
+	"disallowSpaceAfterBinaryOperators": [","],
+	"disallowSpaceBeforeBinaryOperators": [","]
+});
+jscsOptions.dataCompactAll = {
+	"disallowTrailingComma": true,
+
+	"validateLineBreaks": 'CI' in process.env ? 'LF' : null,
+	"requireLineFeedAtFileEnd": true,
+	"requireSpaceAfterBinaryOperators": ["="],
+	"requireSpaceBeforeBinaryOperators": ["="],
+
+	"validateQuoteMarks": "\"",
+	"disallowQuotedKeysInObjects": "allButReserved",
 
 	"disallowSpaceAfterObjectKeys": true,
-	"disallowSpaceAfterPrefixUnaryOperators": true,
-	"disallowSpaceBeforePostfixUnaryOperators": true,
-
-	"disallowTrailingComma": true,
-	"validateLineBreaks": require('os').EOL.replace(/\r/g, 'CR').replace(/\n/g, 'LF'),
-	"validateParameterSeparator": ", ",
-
-	"requireCapitalizedConstructors": true
+	"disallowSpaceBeforeObjectValues": true,
+	"disallowSpacesInsideBrackets": true,
+	"disallowSpacesInsideArrayBrackets": true,
+	"disallowSpacesInsideObjectBrackets": true,
+	"disallowSpacesInsideParentheses": true,
+	"disallowSpaceAfterBinaryOperators": [","],
+	"disallowSpaceBeforeBinaryOperators": [","]
 };
-
-gulp.task('data', function () {
-	var directories = ['./data/*.js', './mods/*/*.js'];
-	jsHintOptions['es3'] = true;
-
-	// Replacing `var` with `let` is sort of a hack that stops jsHint from
-	// complaining that I'm using `var` like `let` should be used, but
-	// without having to deal with iffy `let` support.
-
-	return gulp.src(directories)
-		.pipe(jscs(jscsOptions))
-		.pipe(replace(/\bvar\b/g, 'let'))
-		.pipe(jshint(jsHintOptions))
-		.pipe(jshint.reporter(jshintStylish))
-		.pipe(jshint.reporter('fail'))
-		.pipe(jscs(jscsOptions));
+jscsOptions.dataCompactAllIndented = util._extend(util._extend({}, jscsOptions.dataCompactAll), {
+	"validateIndentation": '\t'
 });
 
-gulp.task('fastlint', function () {
-	var directories = ['./*.js', './tournaments/*.js', './chat-plugins/*.js', './config/*.js'];
-	delete jsHintOptions['es3'];
+var lintData = [
+	{
+		dirs: ['./*.js', './tournaments/*.js', './chat-plugins/*.js', './config/!(config).js', './**/scripts.js', './**/rulesets.js', './**/statuses.js'],
+		jsHint: jsHintOptions.base,
+		jscs: jscsOptions.base
+	}, {
+		dirs: ['./config/config*.js'],
+		jsHint: jsHintOptions.base,
+		jscs: jscsOptions.config
+	}, {
+		dirs: ['./**/abilities.js', './**/items.js', './**/moves.js', './**/typechart.js', './**/aliases.js'],
+		jsHint: jsHintOptions.legacy,
+		jscs: jscsOptions.base
+	}, {
+		dirs: ['./data/formats-data.js', './mods/*/formats-data.js', './mods/!(gen1)/pokedex.js'],
+		jsHint: jsHintOptions.legacy,
+		jscs: jscsOptions.dataCompactArr
+	}, {
+		dirs: ['./data/pokedex.js', './mods/gen1/pokedex.js'],
+		jsHint: jsHintOptions.legacy,
+		jscs: jscsOptions.dataCompactAll
+	}, {
+		dirs: ['./data/learnsets*.js', './mods/*/learnsets.js'],
+		jsHint: jsHintOptions.legacy,
+		jscs: jscsOptions.dataCompactAllIndented
+	}, {
+		dirs: ['./test/*.js', './test/application/*.js', './test/simulator/*/*.js'],
+		jsHint: jsHintOptions.test,
+		jscs: jscsOptions.base
+	}
+];
 
-	return gulp.src(directories)
-		.pipe(jscs(jscsOptions))
-		.pipe(replace(/\bvar\b/g, 'let'))
-		.pipe(jshint(jsHintOptions))
+var linter = function () {
+	return (
+		merge.apply(
+			null,
+			lintData.map(function (source) {
+				return gulp.src(source.dirs)
+					.pipe(transformLet())
+					.pipe(lint(source.jsHint, source.jscs));
+			})
+		).pipe(jshint.reporter(jshintStylish))
+		 .pipe(jshint.reporter('fail'))
+	);
+};
+
+gulp.task('fastlint', function () {
+	var source = lintData[0];
+	return gulp.src(source.dirs)
+		.pipe(transformLet())
+		.pipe(lint(source.jsHint, source.jscs))
 		.pipe(jshint.reporter(jshintStylish))
 		.pipe(jshint.reporter('fail'));
 });
 
-gulp.task('default', ['fastlint', 'data']);
-gulp.task('lint', ['fastlint', 'data']);
+gulp.task('lint', linter);
+gulp.task('default', linter);

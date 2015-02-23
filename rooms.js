@@ -573,7 +573,7 @@ var GlobalRoom = (function () {
 		if (Config.reportBattles && rooms.lobby) {
 			rooms.lobby.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
 		}
-		if (Config.logladderip && options.rated) {
+		if (Config.logLadderIp && options.rated) {
 			if (!this.ladderIpLog) {
 				this.ladderIpLog = fs.createWriteStream('logs/ladderip/ladderip.txt', {flags: 'a'});
 			}

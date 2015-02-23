@@ -52,6 +52,18 @@ exports.BattleScripts = {
 			}
 
 			return stat;
+		},
+		cureStatus: function () {
+			if (!this.hp) return false;
+			// unlike clearStatus, gives cure message
+			if (this.status) {
+				this.battle.add('-curestatus', this, this.status);
+				if (this.status === 'slp' && this.volatiles['nightmare']) {
+					// Nightmare status is removed here on gen 2.
+					this.removeVolatile('nightmare');
+				}
+				this.setStatus('');
+			}
 		}
 	},
 	// Battle scripts.
@@ -256,7 +268,7 @@ exports.BattleScripts = {
 				// Unlike gen 1, though, paralysis works for all unless the target is immune to direct move (ie. ground-types and t-wave).
 				if (!(moveData.secondaries[i].status && moveData.secondaries[i].status in {'brn':1, 'frz':1} && target && target.hasType(move.type))) {
 					var effectChance = Math.floor(moveData.secondaries[i].chance * 255 / 100);
-					if (typeof moveData.secondaries[i].chance === 'undefined' || this.random(256) < effectChance) {
+					if (typeof moveData.secondaries[i].chance === 'undefined' || this.random(256) <= effectChance) {
 						this.moveHit(target, pokemon, move, moveData.secondaries[i], true, isSelf);
 					}
 				}
@@ -366,8 +378,8 @@ exports.BattleScripts = {
 		var defender = target;
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
-		var atkType = (move.category === 'Physical')? 'atk' : 'spa';
-		var defType = (move.defensiveCategory === 'Physical')? 'def' : 'spd';
+		var atkType = (move.category === 'Physical') ? 'atk' : 'spa';
+		var defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		var unboosted = false;
 		var noburndrop = false;
 
@@ -863,7 +875,6 @@ exports.BattleScripts = {
 			this.debug('instafaint: ' + this.faintQueue.map('target').map('name'));
 			this.faintMessages(true);
 			target.faint();
-			this.queue = [];
 		} else {
 			damage = this.runEvent('AfterDamage', target, source, effect, damage);
 		}
