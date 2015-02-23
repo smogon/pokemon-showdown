@@ -7525,12 +7525,7 @@ exports.BattleMovedex = {
 		onAfterHit: function (target, source) {
 			if (target.hasAbility('stickyhold')) return;
 			if (source.hp) {
-				var item = target.getItem();
-				if (item.id === 'mail') {
-					target.setItem('');
-				} else {
-					item = target.takeItem();
-				}
+				var item = target.takeItem();
 				if (item) {
 					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
 				}
