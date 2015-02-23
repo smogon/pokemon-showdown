@@ -49,16 +49,14 @@ exports.loginserverpublickey = "-----BEGIN RSA PUBLIC KEY-----\n" +
 	"-----END RSA PUBLIC KEY-----\n";
 
 // crashguardemail - if the server has been running for more than an hour
-// and crashes, send an email using these settings, rather than locking down
-// the server. Uncomment this definition if you want to use this feature;
-// otherwise, all crashes will lock down the server.
+//   and crashes, send an email using these settings, rather than locking down
+//   the server. Uncomment this definition if you want to use this feature;
+//   otherwise, all crashes will lock down the server.
 /**exports.crashguardemail = {
-	transport: 'SMTP',
 	options: {
 		host: 'mail.example.com',
 		port: 465,
-		secureConnection: true,
-		maxConnections: 1,
+		secure: true,
 		auth: {
 			user: 'example@domain.com',
 			pass: 'password'
@@ -290,6 +288,7 @@ exports.customavatars = {
 	'dos': 'kimisumi4.png',
 	'yungblds': 'kimisumi5.jpg',
 	'sphealkimimi': 'kimisumi6.gif',
+	'amiy': 'amiy.gif',
 	'madokakanamee': 'furoichi.jpg',
 	'sirenttamashii': 'sairentotamashii.jpg',
 	'sairenttamashii': 'sairentotamashii.jpg',
@@ -452,14 +451,14 @@ exports.replsocketmode = 0600;
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
-exports.groupsranking = [' ', '\u2605', '+', '=', '%', '@', '&', '#', '~'];
+exports.groupsranking = [' ', '\u2605', '+', '=', '%', '@', '-', '&', '#', '~'];
 exports.groups = {
 	'~': {
 		id: "admin",
 		name: "Administrator",
 		root: true,
 		globalonly: true,
-		rank: 8
+		rank: 9
 	},
 	'#': {
 		id: "owner",
@@ -468,7 +467,7 @@ exports.groups = {
 		jurisdiction: 'u',
 		roomleader: true,
 		roomonly: true,
-		rank: 7
+		rank: 8
 	},
 	'&': {
 		id: "leader",
@@ -481,6 +480,18 @@ exports.groups = {
 		roomonly: true,
 		tournamentsmanagement: true,
 		rmall: true,
+		rank: 7
+	},
+	'-': {
+		id: "battleplayer",
+		name: "Battle Player",
+		inherit: ' ',
+		broadcast: true,
+		joinbattle: true,
+		roomvoice: true,
+		modchat: true,
+		roomonly: true,
+		privateroom: true,
 		rank: 6
 	},
 	'@': {
