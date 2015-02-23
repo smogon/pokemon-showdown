@@ -56,12 +56,15 @@ function runNpm(command) {
 	process.exit(0);
 }
 
+var isLegacyEngine = !global.Map;
+
 try {
 	require('sugar');
+	if (isLegacyEngine) require('es6-shim');
 } catch (e) {
 	runNpm('install --production');
 }
-if (!Object.select) {
+if (isLegacyEngine && !new Map().set()) {
 	runNpm('update --production');
 }
 
