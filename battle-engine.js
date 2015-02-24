@@ -2961,7 +2961,7 @@ Battle = (function () {
 		};
 
 		if (move.affectedByImmunities) {
-			if (!target.runImmunity(move.type, true)) {
+			if (!target.runImmunity(move.type, !suppressMessages)) {
 				return false;
 			}
 		}

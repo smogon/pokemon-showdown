@@ -463,7 +463,6 @@ exports.BattleScripts = {
 		if (damage > 1) {
 			damage *= this.random(217, 256);
 			damage = Math.floor(damage / 255);
-			if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
 		}
 
 		// If damage is less than 1, we return 1

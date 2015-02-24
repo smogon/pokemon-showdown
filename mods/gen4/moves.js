@@ -587,7 +587,8 @@ exports.BattleMovedex = {
 		pp: 20,
 		onMoveFail: function (target, source, move) {
 			var damage = this.getDamage(source, target, move, true);
-			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source);
+			if (!damage) damage = target.maxhp;
+			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'highjumpkick');
 		}
 	},
 	iciclespear: {
@@ -616,7 +617,8 @@ exports.BattleMovedex = {
 		pp: 25,
 		onMoveFail: function (target, source, move) {
 			var damage = this.getDamage(source, target, move, true);
-			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source);
+			if (!damage) damage = target.maxhp;
+			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'jumpkick');
 		}
 	},
 	lastresort: {
