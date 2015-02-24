@@ -281,6 +281,7 @@ var commands = exports.commands = {
 	 * Shortcuts
 	 *********************************************************/
 
+	inv: 'invite',
 	invite: function (target, room, user) {
 		target = this.splitTarget(target);
 		if (!this.targetUser) {
@@ -740,6 +741,7 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
+	weaknesses: 'weakness',
 	weak: 'weakness',
 	resist: 'weakness',
 	weakness: function (target, room, user) {
