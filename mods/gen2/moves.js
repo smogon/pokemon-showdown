@@ -80,6 +80,24 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 250
 	},
+	highjumpkick: {
+		inherit: true,
+		onMoveFail: function (target, source, move) {
+			if (target.runImmunity('Fighting')) {
+				var damage = this.getDamage(source, target, move, true);
+				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'highjumpkick');
+			}
+		}
+	},
+	jumpkick: {
+		inherit: true,
+		onMoveFail: function (target, source, move) {
+			if (target.runImmunity('Fighting')) {
+				var damage = this.getDamage(source, target, move, true);
+				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'jumpkick');
+			}
+		}
+	},
 	leechseed: {
 		inherit: true,
 		onHit: function () {},
