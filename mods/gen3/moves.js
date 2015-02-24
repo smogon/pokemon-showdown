@@ -212,7 +212,7 @@ exports.BattleMovedex = {
 					type: '???'
 				}
 				}
-		};
+		}
 	},
 	dreameater: {
 		inherit: true,
@@ -370,7 +370,7 @@ exports.BattleMovedex = {
 					type: '???'
 				}
 				}
-		};
+		}
 	},
 	gigadrain: {
 		inherit: true,
