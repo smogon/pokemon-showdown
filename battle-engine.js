@@ -2179,8 +2179,6 @@ Battle = (function () {
 					SubDamage: 1,
 					Heal: 1,
 					TakeItem: 1,
-					UseItem: 1,
-					EatItem: 1,
 					SetStatus: 1,
 					CriticalHit: 1,
 					ModifyPokemon: 1,
