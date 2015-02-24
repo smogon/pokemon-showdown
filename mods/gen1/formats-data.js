@@ -186,11 +186,11 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	oddish: {
-		randomBattleMoves: ["sleeppowder","swordsdance","bodyslam","megadrain","poisonpowder","toxic"],
+		randomBattleMoves: ["sleeppowder","swordsdance","doubleedge","megadrain","poisonpowder","toxic"],
 		tier: "LC"
 	},
 	gloom: {
-		randomBattleMoves: ["sleeppowder","swordsdance","bodyslam","megadrain"],
+		randomBattleMoves: ["sleeppowder","swordsdance","doubleedge","megadrain"],
 		tier: "UU"
 	},
 	vileplume: {
@@ -508,7 +508,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	tangela: {
-		randomBattleMoves: ["bind","hyperbeam","stunspore","megadrain","growth","swordsdance","bodyslam"],
+		randomBattleMoves: ["hyperbeam","stunspore","megadrain","growth","swordsdance","bodyslam"],
 		essentialMove: "sleeppowder",
 		tier: "UU"
 	},
@@ -648,7 +648,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	moltres: {
-		randomBattleMoves: ["agility","fireblast","firespin","hyperbeam","reflect","skyattack","substitute","toxic"],
+		randomBattleMoves: ["agility","fireblast","hyperbeam","reflect","skyattack","substitute","toxic"],
 		tier: "UU"
 	},
 	dratini: {
