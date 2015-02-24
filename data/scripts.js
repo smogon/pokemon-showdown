@@ -1663,7 +1663,7 @@ exports.BattleScripts = {
 			item = 'Icy Rock';
 		} else if (ability === 'Magic Guard' && hasMove['psychoshift']) {
 			item = 'Flame Orb';
-		} else if (ability === 'Sheer Force' || ability === 'Magic Guard') {
+		} else if (ability === 'Magic Guard' || ability === 'Sheer Force' || template.species === 'Deoxys-Attack') {
 			item = 'Life Orb';
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
