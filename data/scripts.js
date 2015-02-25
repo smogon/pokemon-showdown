@@ -3428,6 +3428,8 @@ exports.BattleScripts = {
 			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
 			if (isMegaSet && megaCount > 0) continue;
 
+			set.level = 5;
+
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
