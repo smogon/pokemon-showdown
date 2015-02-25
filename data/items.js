@@ -130,6 +130,7 @@ exports.BattleItems = {
 			if (effect.effectType === 'Move') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.setItem('');
+				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
 			}
 		},
 		onAfterSubDamage: function (damage, target, source, effect) {
