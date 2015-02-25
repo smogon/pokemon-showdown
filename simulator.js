@@ -147,6 +147,15 @@ var Battle = (function () {
 				this.room.nextInactive();
 				this.inactiveQueued = false;
 			}
+			if (!this.score) break;
+			for (var i = lines.length; i > 0; i--) {
+				if (!lines[i]) continue;
+				var line = lines[i].split("|");
+				if (line[1] === 'faint') {
+					this.score[parseInt(line[2].substr(1, 2)) - 1]--;
+					break;
+				}
+			}
 			break;
 
 		case 'winupdate':
@@ -194,6 +203,7 @@ var Battle = (function () {
 			break;
 
 		case 'score':
+			if (!this.room.tour) break;
 			this.score = [parseInt(lines[2], 10), parseInt(lines[3], 10)];
 			break;
 		}
