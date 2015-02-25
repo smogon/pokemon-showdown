@@ -8,7 +8,7 @@ exports.BattleFormatsData = {
 			{"generation":6,"level":36,"gender":"M","isHidden":false,"moves":["firefang","airslash","dragonclaw","dragonrage"],"pokeball":"cherishball"},
 			{"generation":6,"level":36,"shiny":true,"gender":"M","isHidden":false,"moves":["overheat","solarbeam","focusblast","holdhands"],"pokeball":"cherishball"}
 		],
-		requiredItem: "Charizardite X", "Charizardite Y",
+		requiredItem: ["Charizardite X","Charizardite Y"],
 		tier: "OU"
 	},
 	beedrill: {
