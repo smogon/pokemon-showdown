@@ -291,7 +291,7 @@ exports.Formats = [
 		section: "Random Battles (aka Randbats)",
 
 		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
 		onBegin: function() {
 			this.debug('Cutting down to 1');
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
