@@ -948,7 +948,8 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		mod: 'tiershift',
-		ruleset: ['OU']
+		ruleset: ['OU'],
+		banlist: ['Chatter']
 	},
 	{
 		name: "PU",
