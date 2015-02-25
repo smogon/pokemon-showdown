@@ -2997,7 +2997,8 @@ exports.BattleAbilities = {
 	"unburden": {
 		desc: "If this Pokemon loses its held item for any reason, its Speed is doubled. This boost is lost if it switches out or gains a new item or Ability.",
 		shortDesc: "Speed is doubled on held item loss; boost is lost if it switches, gets new item/Ability.",
-		onUseItem: function (item, pokemon) {
+		onAfterUseItem: function (item, pokemon) {
+			if (pokemon !== this.effectData.target) return;
 			pokemon.addVolatile('unburden');
 		},
 		onTakeItem: function (item, pokemon) {

@@ -4515,6 +4515,7 @@ exports.BattleMovedex = {
 			if (item.fling && !noFling) {
 				pokemon.addVolatile('fling');
 				pokemon.setItem('');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
 			}
 		},
 		onPrepareHit: function (target, source, move) {
@@ -9295,6 +9296,7 @@ exports.BattleMovedex = {
 				pokemon.volatiles['naturalgift'].basePower = item.naturalGift.basePower;
 				pokemon.volatiles['naturalgift'].type = item.naturalGift.type;
 				pokemon.setItem('');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
 			}
 		},
 		onPrepareHit: function (target, source) {
