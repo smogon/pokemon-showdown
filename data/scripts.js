@@ -3824,8 +3824,6 @@ exports.BattleScripts = {
 	},
 	randomHoennWeatherTeam: function (side) {
 		var pokemonLeft = 0;
-		var pokemon = [];
-
 		var dice = this.random(100);
 		if (dice < 40) {
 			lead = 'groudon';
@@ -3835,6 +3833,7 @@ exports.BattleScripts = {
 			lead = 'rayquaza';
 		}
 		var pokemon = [this.randomSet(this.getTemplate(lead), 0)];
+
 		var groudonList = ['torchic', 'combusken', 'blaziken', 'nincada', 'geodude', 'graveler', 'golem', 'nosepass', 'probopass', 'mawile', 'aron', 'lairon', 'aggron', 'numel', 'camerupt', 'slugma', 'magcargo', 'torkoal', 'sandshrew', 'sandslash', 'skarmory', 'trapinch', 'vibrava', 'flygon', 'lunatone', 'solrock', 'baltoy', 'claydol', 'anorith', 'armaldo', 'castform', 'vulpix', 'ninetales', 'phanpy', 'dolphan', 'rhyhorn', 'rhydon', 'rhyperior', 'beldum', 'metang', 'metagross', 'regirock', 'registeel', 'jirachi'];
 		var kyogreList = ['mudkip', 'marshtomp', 'swampert', 'lotad', 'lombre', 'ludicolo', 'wingull', 'pelipper', 'surskit', 'masquerain', 'goldeen', 'seaking', 'magikarp', 'gyarados', 'marill', 'azumarill', 'tentacool', 'tentacruel', 'carvanha', 'sharpedo', 'wailmer', 'wailord', 'barboach', 'whiscash', 'corphish', 'crawdaunt', 'lileep', 'cradily', 'feebas', 'milotic', 'castform', 'staryu', 'starmie', 'psyduck', 'golduck', 'snorunt', 'glalie', 'spheal', 'sealeo', 'walrein', 'clamperl', 'huntail', 'gorebyss', 'relicanth', 'corsola', 'chinchou', 'lanturn', 'luvdisc', 'horsea', 'seadra', 'kingdra', 'regice'];
 		var rayquazaList = ['beautifly', 'taillow', 'swellow', 'ninjask', 'zubat', 'golbat', 'crobat', 'electrike', 'manectric', 'plusle', 'minun', 'magnemite', 'magneton', 'magnezone', 'voltorb', 'electrode', 'doduo', 'dodrio', 'swablu', 'altaria', 'tropius', 'pichu', 'pikachu', 'raichu', 'natu', 'xatu', 'bagon', 'shelgon', 'salamence', 'latias', 'latios'];
