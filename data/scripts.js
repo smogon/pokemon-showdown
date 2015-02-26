@@ -3328,6 +3328,25 @@ exports.BattleScripts = {
 			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
 			if (isMegaSet && megaCount > 0) continue;
 
+			if (template.id === 'gothorita') {
+				set.species = 'gothorita';
+				var dice = this.random(2);
+				if (dice < 1) {
+					set.ability = 'frisk';
+				} else {
+					set.ability = 'competitive';
+				}
+			} else if (template.id === 'wobbuffet') {
+				set.species = 'wobbuffet';
+				set.ability = 'telepathy';
+			} else if (template.id === 'ninetales') {
+				set.species = 'ninetales';
+				set.ability = 'flashfire';
+			} else if (template.id === 'politoed') {
+				set.species = 'politoed';
+				set.ability = 'waterabsorb';
+			}
+
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
