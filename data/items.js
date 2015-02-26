@@ -129,7 +129,9 @@ exports.BattleItems = {
 			this.debug('effect: ' + effect.id);
 			if (effect.effectType === 'Move') {
 				this.add('-enditem', target, 'Air Balloon');
-				target.setItem('');
+				target.item = '';
+				this.itemData = {id: '', target: this};
+				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
 			}
 		},
 		onAfterSubDamage: function (damage, target, source, effect) {
@@ -2599,7 +2601,9 @@ exports.BattleItems = {
 		id: "mail",
 		name: "Mail",
 		spritenum: 403,
-		onTakeItem: false,
+		onTakeItem: function (item, source) {
+			if (!this.activeMove || this.activeMove.id !== 'knockoff') return false;
+		},
 		isUnreleased: true,
 		gen: 2,
 		desc: "This item cannot be given to or taken from a Pokemon, except by Knock Off."
