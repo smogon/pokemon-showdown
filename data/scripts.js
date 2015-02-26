@@ -3654,17 +3654,6 @@ exports.BattleScripts = {
 				if (template.species !== 'Pikachu' && this.random(30) >= 1) continue;
 			}
 
-			// Limit 2 of any type
-			var types = template.types;
-			var skip = false;
-			for (var t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
-					skip = true;
-					break;
-				}
-			}
-			if (skip) continue;
-
 			var set = this.randomSet(template, pokemon.length, megaCount);
 
 			// Illusion shouldn't be on the last pokemon of the team
@@ -3682,6 +3671,7 @@ exports.BattleScripts = {
 			pokemonLeft++;
 
 			// Increment type counters
+			var types = template.types;
 			for (var t = 0; t < types.length; t++) {
 				if (types[t] in typeCount) {
 					typeCount[types[t]]++;
