@@ -5242,7 +5242,7 @@ exports.BattleFormatsData = {
 	volcanion: {
 		isUnreleased: true,
 		randomBattleMoves: ["substitute","steameruption","fireblast","sludgewave","hiddenpowerice","earthpower","superpower"],
-		randomDoubleBattleMoves: ["substitute","steameruption","heatwave","sludgewave","rockslide","earthquake","protect"],
+		randomDoubleBattleMoves: ["substitute","steameruption","heatwave","sludgebomb","rockslide","earthquake","protect"],
 		tier: "Unreleased"
 	},
 	missingno: {
