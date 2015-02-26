@@ -73,7 +73,7 @@ var ddir = process.env['OPENSHIFT_DATA_DIR'];
 
 rhcApp.writefilesync(ddir + 'usergroups.csv', 'config/usergroups.csv');
 rhcApp.writefilesync(ddir + 'chatrooms.json', 'config/chatrooms.json');
-rhcApp.writefilesync(ddir + 'config.js', 'config/config.js');
+// rhcApp.writefilesync(ddir + 'config.js', 'config/config.js');
 rhcApp.writefilesync(ddir + 'custom.css', 'config/custom.css');
 rhcApp.downloadfile('http://pastebin.com/raw.php?i=ZDDwTH9p', './config/avatars.json', function () { rhcApp.done(); }); // call done: 1
 fs.readdirSync(ddir + 'avatars')
