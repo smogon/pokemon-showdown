@@ -4150,7 +4150,7 @@ exports.BattleScripts = {
 		}
 		return pokemon;
 	},
-	randomTeam: function (side) {
+	randomCommunityTeam: function (side) {
 		var pokemonLeft = 0;
 		var pokemon = [];
 
