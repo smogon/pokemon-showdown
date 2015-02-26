@@ -3993,22 +3993,8 @@ exports.BattleScripts = {
 		}
 		var pokemon = [this.randomSet(this.getTemplate(lead), 0)];
 
-		var pikachuList = ['pichu', 'meowth', 'electrode', 'raikou', 'zapdos', 'dedenne'];
-		var jigglypuffList = ['chansey', 'clefairy', 'snorlax', 'porygon', 'porygon2', 'togepi', 'munchlax', 'eevee', 'arceus', 'meloetta', 'swirlix', 'xerneas'];
-		var mewtwoList = ['mew', 'celebi', 'lugia', 'unown', 'wobbuffet', 'deoxys', 'gardevoir', 'jirachi', 'latias', 'latios', 'victini'];
-		var charizardList = ['charmander', 'cyndaquil', 'entei', 'hooh', 'moltres', 'groudon', 'torchic', 'fennekin', 'fletchling'];
-		var ivysaurList = ['beedrill', 'koffing', 'venusaur', 'bellossom', 'chikorita', 'weezing', 'gulpin', 'abomasnow', 'snivy', 'chespin', 'gogoat', 'spewpa'];
-		var squirtleList = ['blastoise', 'goldeen', 'articuno', 'marill', 'staryu', 'suicune', 'piplup', 'kyogre', 'manaphy', 'palkia', 'oshawott', 'kyurem', 'keldeo'];
-		var lucarioList = ['hitmonlee', 'onix', 'scizor', 'bonsly', 'metagross', 'genesect'];
-		var greninjaList = ['starmie', 'weavile', 'giratina', 'darkrai', 'zoroark', 'inkay'];
-		pikachuList = pikachuList.randomize();
-		jigglypuffList = jigglypuffList.randomize();
-		mewtwoList = mewtwoList.randomize();
-		charizardList = charizardList.randomize();
-		ivysaurList = ivysaurList.randomize();
-		squirtleList = squirtleList.randomize();
-		lucarioList = lucarioList.randomize();
-		greninjaList = greninjaList.randomize();
+		var pokemonList = ['beedrill', 'blastoise', 'chansey', 'charizard', 'clefairy', 'goldeen', 'hitmonlee', 'koffing', 'meowth', 'mew', 'onix', 'snorlax', 'starmie', 'charmander', 'electrode', 'venusaur', 'porygon', 'articuno', 'bellossom', 'celebi', 'chikorita', 'clefairy', 'cyndaquil', 'entei', 'hooh', 'lugia', 'marill', 'moltres', 'porygon2', 'raikou', 'scizor', 'staryu', 'suicune', 'togepi', 'unown', 'weezing', 'wobbuffet', 'zapdos', 'groudon', 'deoxys', 'munchlax', 'piplup', 'bonsly', 'gardevoir', 'kyogre', 'torchic', 'metagross', 'manaphy', 'abomasnow', 'chespin', 'darkrai', 'dedenne', 'eevee', 'fennekin', 'fletchling', 'genesect', 'giratina', 'gogoat', 'inkay', 'keldeo', 'kyurem', 'latias', 'latios', 'meloetta', 'oshawott', 'palkia', 'snivy', 'spewpa', 'swirlix', 'victini', 'xerneas', 'zoroark'];
+		pokemonList = pokemonList.randomize();
 
 		var pokemonPool = [];
 		for (var id in this.data.FormatsData) {
@@ -4025,27 +4011,8 @@ exports.BattleScripts = {
 		var puCount = 0;
 		var megaCount = 0;
 
-		var teamPool = [];
-		if (lead === 'pikachu') {
-			teamPool = pikachuList;
-		} else if (lead === 'jigglypuff') {
-			teamPool = jigglypuffList;
-		} else if (lead === 'mewtwo') {
-			teamPool = mewtwoList;
-		} else if (lead === 'charizard') {
-			teamPool = charizardList;
-		} else if (lead === 'ivysaur') {
-			teamPool = ivysaurList;
-		} else if (lead === 'squirtle') {
-			teamPool = squirtleList;
-		} else if (lead === 'lucario') {
-			teamPool = lucarioList;
-		} else {
-			teamPool = greninjaList;
-		}
-
 		for (var i = 0; i < pokemonPool.length && pokemonLeft < 6; i++) {
-			var template = this.getTemplate(teamPool[i]);
+			var template = this.getTemplate(pokemonList[i]);
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)
