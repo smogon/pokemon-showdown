@@ -129,7 +129,8 @@ exports.BattleItems = {
 			this.debug('effect: ' + effect.id);
 			if (effect.effectType === 'Move') {
 				this.add('-enditem', target, 'Air Balloon');
-				target.setItem('');
+				target.item = '';
+				this.itemData = {id: '', target: this};
 				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
 			}
 		},
