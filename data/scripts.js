@@ -3520,8 +3520,6 @@ exports.BattleScripts = {
 			}
 		}
 
-		var typeCount = {};
-		var typeComboCount = {};
 		var baseFormes = {};
 		var uberCount = 0;
 		var puCount = 0;
@@ -3669,17 +3667,6 @@ exports.BattleScripts = {
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			pokemonLeft++;
-
-			// Increment type counters
-			var types = template.types;
-			for (var t = 0; t < types.length; t++) {
-				if (types[t] in typeCount) {
-					typeCount[types[t]]++;
-				} else {
-					typeCount[types[t]] = 1;
-				}
-			}
-			typeComboCount[typeCombo] = 1;
 
 			// Increment Uber/NU counters
 			if (tier === 'Uber') {
