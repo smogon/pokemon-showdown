@@ -1720,6 +1720,8 @@ exports.BattleScripts = {
 			item = 'Focus Sash';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
+		} else if (ability === 'Speed Boost' && hasMove['protect'] && counter.Physical + counter.Special > 2) {
+			item = 'Life Orb';
 		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || hasMove['clearsmog'] || ability === 'Moody') {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
