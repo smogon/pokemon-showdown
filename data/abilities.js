@@ -1828,15 +1828,28 @@ exports.BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual: function (pokemon) {
-			var foe = pokemon.side.foe.randomActive();
-			if (!foe) return;
-			if (!pokemon.item && foe.lastItem && foe.usedItemThisTurn && foe.lastItem !== 'airballoon' && foe.lastItem !== 'ejectbutton') {
-				pokemon.setItem(foe.lastItem);
-				foe.lastItem = '';
-				var item = pokemon.getItem();
-				this.add('-item', pokemon, item, '[from] Pickup');
-				if (item.isBerry) pokemon.update();
+			if (pokemon.item) return;
+			var pickupTargets = [];
+			var target;
+			for (var i = 0; i < pokemon.side.active.length; i++) {
+				target = pokemon.side.active[i];
+				if (target.lastItem && target.usedItemThisTurn && this.isAdjacent(pokemon, target)) {
+					pickupTargets.push(target);
+				}
 			}
+			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
+				target = pokemon.side.foe.active[i];
+				if (target.lastItem && target.usedItemThisTurn && this.isAdjacent(pokemon, target)) {
+					pickupTargets.push(target);
+				}
+			}
+			if (!pickupTargets.length) return;
+			target = pickupTargets[this.random(pickupTargets.length)];
+			pokemon.setItem(target.lastItem);
+			target.lastItem = '';
+			var item = pokemon.getItem();
+			this.add('-item', pokemon, item, '[from] Pickup');
+			if (item.isBerry) pokemon.update();
 		},
 		id: "pickup",
 		name: "Pickup",

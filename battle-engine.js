@@ -1015,7 +1015,6 @@ BattlePokemon = (function () {
 		if (!source) source = this;
 		var item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
-			this.lastItem = '';
 			this.item = '';
 			this.itemData = {id: '', target: this};
 			return item;
@@ -2563,6 +2562,7 @@ Battle = (function () {
 			var oldActive = side.active[pos];
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
+			oldActive.usedItemThisTurn = false;
 			oldActive.position = pokemon.position;
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
@@ -2621,6 +2621,7 @@ Battle = (function () {
 			this.singleEvent('End', this.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
+			oldActive.usedItemThisTurn = false;
 			oldActive.position = pokemon.position;
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
