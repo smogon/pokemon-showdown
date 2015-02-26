@@ -2738,7 +2738,7 @@ exports.BattleFormatsData = {
 	},
 	seviper: {
 		randomBattleMoves: ["flamethrower","sludgewave","gigadrain","darkpulse","switcheroo","coil","earthquake","poisonjab","suckerpunch"],
-		randomDoubleBattleMoves: ["flamethrower","gigadrain","earthquake","suckerpunch","aquatail","protect","glare","poisonjab","sludgewave"],
+		randomDoubleBattleMoves: ["flamethrower","gigadrain","earthquake","suckerpunch","aquatail","protect","glare","poisonjab","sludgebomb"],
 		eventPokemon: [
 			{"generation":3,"level":18,"moves":["wrap","lick","bite","poisontail"]},
 			{"generation":3,"level":30,"moves":["poisontail","screech","glare","crunch"]},
@@ -3129,7 +3129,7 @@ exports.BattleFormatsData = {
 	},
 	groudon: {
 		randomBattleMoves: ["precipiceblades","earthquake","stealthrock","lavaplume","stoneedge","dragontail","roar","toxic","swordsdance","rockpolish","firepunch"],
-		randomDoubleBattleMoves: ["earthquake","rockslide","protect","stoneedge","swordsdance","rockpolish","dragonclaw","firepunch"],
+		randomDoubleBattleMoves: ["precipiceblades","rockslide","protect","stoneedge","swordsdance","rockpolish","dragonclaw","firepunch"],
 		eventPokemon: [
 			{"generation":5,"level":80,"moves":["earthquake","ancientpower","eruption","solarbeam"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"moves":["eruption","hammerarm","earthpower","solarbeam"],"pokeball":"cherishball"}
@@ -3138,7 +3138,7 @@ exports.BattleFormatsData = {
 	},
 	groudonprimal: {
 		randomBattleMoves: ["stealthrock","precipiceblades","earthquake","lavaplume","stoneedge","overheat","rockpolish","thunderwave"],
-		randomDoubleBattleMoves: ["earthquake","lavaplume","rockslide","stoneedge","swordsdance","overheat","rockpolish","firepunch","protect"],
+		randomDoubleBattleMoves: ["precipiceblades","lavaplume","rockslide","stoneedge","swordsdance","overheat","rockpolish","firepunch","protect"],
 		requiredItem: "Red Orb"
 	},
 	rayquaza: {
@@ -5242,7 +5242,7 @@ exports.BattleFormatsData = {
 	volcanion: {
 		isUnreleased: true,
 		randomBattleMoves: ["substitute","steameruption","fireblast","sludgewave","hiddenpowerice","earthpower","superpower"],
-		randomDoubleBattleMoves: ["substitute","steameruption","heatwave","sludgewave","rockslide","earthquake","protect"],
+		randomDoubleBattleMoves: ["substitute","steameruption","heatwave","sludgebomb","rockslide","earthquake","protect"],
 		tier: "Unreleased"
 	},
 	missingno: {
