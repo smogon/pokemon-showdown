@@ -1309,8 +1309,16 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['roar'] || hasMove['circlethrow']) rejected = true;
 					break;
-				case 'lunardance': case 'raindance': case 'sunnyday':
+				case 'lunardance':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
+				case 'raindance':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['sunnyday']) rejected = true;
+					break;
+				case 'sunnyday':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['raindance']) rejected = true;
 					break;
 				case 'cottonguard':
 					if (hasMove['reflect']) rejected = true;
