@@ -8,7 +8,7 @@ describe('Unburden', function () {
 
 	it('should trigger when an item is consumed', function () {
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Sceptile', ability: 'unburden', item: 'whiteherb', moves: ['leafstorm']}]);
+		battle.join('p1', 'Guest 1', 1, [{species: 'Hitmonlee', ability: 'unburden', item: 'whiteherb', moves: ['closecombat']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Scizor', ability: 'swarm', item: 'focussash', moves: ['swordsdance']}]);
 		var speed = battle.p1.active[0].getStat('spe');
 		battle.commitDecisions();
