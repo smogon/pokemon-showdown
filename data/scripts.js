@@ -3972,7 +3972,6 @@ exports.BattleScripts = {
 		return pokemon;
 	},
 	randomSmashBrosTeam: function (side) {
-		var keys = [];
 		var pokemonLeft = 0;
 		var dice = this.random(8);
 		if (dice < 1) {
@@ -3993,6 +3992,7 @@ exports.BattleScripts = {
 			lead = 'greninja';
 		}
 		var pokemon = [this.randomSet(this.getTemplate(lead), 0)];
+
 		var pikachuList = ['pichu', 'meowth', 'electrode', 'raikou', 'zapdos', 'dedenne'];
 		var jigglypuffList = ['chansey', 'clefairy', 'snorlax', 'porygon', 'porygon2', 'togepi', 'munchlax', 'eevee', 'arceus', 'meloetta', 'swirlix', 'xerneas'];
 		var mewtwoList = ['mew', 'celebi', 'lugia', 'unown', 'wobbuffet', 'deoxys', 'gardevoir', 'jirachi', 'latias', 'latios', 'victini'];
@@ -4009,13 +4009,21 @@ exports.BattleScripts = {
 		squirtleList = squirtleList.randomize();
 		lucarioList = lucarioList.randomize();
 		greninjaList = greninjaList.randomize();
-		for (var i in this.data.FormatsData) {
-			var template = this.getTemplate(i);
-			if (this.data.FormatsData[i].randomBattleMoves && !this.data.FormatsData[i].isNonstandard && !template.evos.length && (template.forme.substr(0, 4) !== 'Mega') && template.forme !== 'Primal') {
-				keys.push(i);
+
+		var pokemonPool = [];
+		for (var id in this.data.FormatsData) {
+			var template = this.getTemplate(id);
+			if (!template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
+				pokemonPool.push(id);
 			}
 		}
-		keys = keys.randomize();
+
+		var typeCount = {};
+		var typeComboCount = {};
+		var baseFormes = {};
+		var uberCount = 0;
+		var puCount = 0;
+		var megaCount = 0;
 
 		var teamPool = [];
 		if (lead === 'pikachu') {
@@ -4036,50 +4044,90 @@ exports.BattleScripts = {
 			teamPool = greninjaList;
 		}
 
-		var typeCount = {};
-		var typeComboCount = {};
-		var baseFormes = {};
-		var uberCount = 0;
-		var nuCount = 0;
-		var megaCount = 0;
-
-		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
+		for (var i = 0; i < pokemonPool.length && pokemonLeft < 6; i++) {
 			var template = this.getTemplate(teamPool[i]);
-			if (!template || !template.name || !template.types) continue;
-			var tier = template.tier;
+			if (!template.exists) continue;
 
-			// CAPs have 20% the normal rate
-			if (tier === 'CAP' && Math.random() * 5 > 1) continue;
-			// Basculin formes have 1/2 the normal rate each (so Basculin as a whole has a normal rate)
-			if (keys[i].substr(0, 8) === 'basculin' && Math.random() * 2 > 1) continue;
-			// Gourgeist formes have 1/4 the normal rate each (so Gourgeist as a whole has a normal rate)
-			if (keys[i].substr(0, 9) === 'gourgeist' && Math.random() * 4 > 1) continue;
-			// Not available on XY
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
+
+			// Not available on ORAS
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
-			var types = template.types;
+			var tier = template.tier;
+			switch (tier) {
+			case 'PU':
+				// PUs are limited to 2 but have a 20% chance of being added anyway.
+				if (puCount > 1 && this.random(5) >= 1) continue;
+				break;
+			case 'Uber':
+				// Ubers are limited to 2 but have a 20% chance of being added anyway.
+				if (uberCount > 1 && this.random(5) >= 1) continue;
+				break;
+			case 'CAP':
+				// CAPs have 20% the normal rate
+				if (this.random(5) >= 1) continue;
+				break;
+			case 'Unreleased':
+				// Unreleased Pokémon have 20% the normal rate
+				if (this.random(5) >= 1) continue;
+			}
 
-			var set = this.randomSet(template, i, megaCount);
+			// Adjust rate for species with multiple formes
+			switch (template.baseSpecies) {
+			case 'Arceus':
+				if (this.random(18) >= 1) continue;
+				break;
+			case 'Basculin':
+				if (this.random(2) >= 1) continue;
+				break;
+			case 'Genesect':
+				if (this.random(5) >= 1) continue;
+				break;
+			case 'Gourgeist':
+				if (this.random(4) >= 1) continue;
+				break;
+			case 'Pikachu':
+				// Cosplay Pikachu formes have 20% the normal rate (1/30 the normal rate each)
+				if (template.species !== 'Pikachu' && this.random(30) >= 1) continue;
+			}
+
+			// Limit 2 of any type
+			var types = template.types;
+			var skip = false;
+			for (var t = 0; t < types.length; t++) {
+				if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
+					skip = true;
+					break;
+				}
+			}
+			if (skip) continue;
+
+			var set = this.randomSet(template, pokemon.length, megaCount);
 
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
 
+			// Limit 1 of any type combination
 			var typeCombo = types.join();
+			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
+				// Drought and Drizzle don't count towards the type combo limit
+				typeCombo = set.ability;
+			}
+			if (typeCombo in typeComboCount) continue;
 
-			// Limit the number of Megas to one, just like in-game
-			var forme = template.otherFormes ? this.getTemplate(template.otherFormes[0]) : 0;
+			// Limit the number of Megas to one
+			var forme = template.otherFormes && this.getTemplate(template.otherFormes[0]);
 			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
 			if (isMegaSet && megaCount > 0) continue;
-
-			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseSpecies]) continue;
-			baseFormes[template.baseSpecies] = 1;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
+			// Now that our Pokemon has passed all checks, we can increment our counters
 			pokemonLeft++;
-			// Now that our Pokemon has passed all checks, we can increment the type counter
+
+			// Increment type counters
 			for (var t = 0; t < types.length; t++) {
 				if (types[t] in typeCount) {
 					typeCount[types[t]]++;
@@ -4089,13 +4137,16 @@ exports.BattleScripts = {
 			}
 			typeComboCount[typeCombo] = 1;
 
-			// Increment Uber/NU and mega counter
+			// Increment Uber/NU counters
 			if (tier === 'Uber') {
 				uberCount++;
-			} else if (tier === 'NU' || tier === 'NFE' || tier === 'LC') {
-				nuCount++;
+			} else if (tier === 'PU') {
+				puCount++;
 			}
+
+			// Increment mega and base species counters
 			if (isMegaSet) megaCount++;
+			baseFormes[template.baseSpecies] = 1;
 		}
 		return pokemon;
 	},
