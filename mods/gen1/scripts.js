@@ -44,7 +44,6 @@ exports.BattleScripts = {
 			if (!unmodified) {
 				var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
 				var statMod = 1;
-				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
 				stat = this.battle.modify(stat, statMod);
 				// Burn attack drop is checked when you get the attack stat upon switch in and used until switch out.
 				if (this.volatiles['brnattackdrop'] && statName === 'atk') {
