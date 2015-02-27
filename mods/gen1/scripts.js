@@ -40,11 +40,8 @@ exports.BattleScripts = {
 				}
 			}
 
-			// Stat modifier effects
+			// Stat modifiers: burn, paralyse.
 			if (!unmodified) {
-				var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-				var statMod = 1;
-				stat = this.battle.modify(stat, statMod);
 				// Burn attack drop is checked when you get the attack stat upon switch in and used until switch out.
 				if (this.volatiles['brnattackdrop'] && statName === 'atk') {
 					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
@@ -728,7 +725,7 @@ exports.BattleScripts = {
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.getStat(atkType, true);
+			attack = attacker.getStat(atkType, true, true);
 		}
 		if (move.ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
