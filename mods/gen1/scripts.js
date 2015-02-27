@@ -695,10 +695,6 @@ exports.BattleScripts = {
 				move.crit = (this.random(256) < critChance);
 			}
 		}
-		// There is a critical hit.
-		if (move.crit) {
-			move.crit = this.runEvent('CriticalHit', target, null, move);
-		}
 
 		// Happens after crit calculation.
 		if (basePower) {
