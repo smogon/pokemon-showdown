@@ -1027,6 +1027,7 @@ exports.BattleScripts = {
 
 		// Now let's store what we are getting.
 		var typeCount = {};
+		var weaknessCount = {'electric':0, 'psychic':0, 'water':0, 'ice':0};
 		var uberCount = 0;
 		var nuCount = 0;
 		var hasShitmon = false;
@@ -1036,16 +1037,28 @@ exports.BattleScripts = {
 			if (!template || !template.name || !template.types) continue;
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
+			// If you have a shitmon, you're covered in OUs and Ubers if possible
 			var tier = template.tier;
-			if (tier === 'LC' && nuCount > 1) continue;
-			if ((tier === 'NFE' || tier === 'UU') && nuCount > 2 && this.random(1)) continue;
-			// Unless you have one of the worst mons, in that case we allow luck to give you Mew and Mewtwo.
+			if (tier === 'LC' && (nuCount > 1 || hasShitmon)) continue;
+			if ((tier === 'NFE' || tier === 'UU') && (hasShitmon || (nuCount > 2 && this.random(1)))) continue;
+			// Unless you have one of the worst mons, in that case we allow luck to give you both Mew and Mewtwo.
 			if (tier === 'Uber' && uberCount >= 1 && !hasShitmon) continue;
 
-			// Limit 2 of any type. This helps so you don't get a full Surf or Blizzard weak team.
+			// We need a weakness count of spammable attacks to avoid being swept by those.
+			// Spammable attacks are: Thunderbolt, Psychic, Surf, Blizzard.
+			var skip = false;
+			Object.keys(weaknessCount).forEach(function (type) {
+				var notImmune = Tools.getImmunity(type, template);
+				if (notImmune && Tools.getEffectiveness(type, template) > 0) {
+					weaknessCount[type]++;
+				}
+				if (weaknessCount[type] > 2) skip = true;
+			});
+			if (skip) continue;
+
+			// Limit 2 of any type as well. Diversity and minor weakness count.
 			// The second of a same type has halved chance of being added.
 			var types = template.types;
-			var skip = false;
 			for (var t = 0; t < types.length; t++) {
 				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(1))) {
 					skip = true;
@@ -1248,16 +1261,16 @@ exports.BattleScripts = {
 		} while (moves.length < 4 && j < moveKeys.length);
 
 		var levelScale = {
-			LC: 95,
-			NFE: 92,
-			UU: 86,
-			OU: 80,
-			Uber: 77
+			LC: 96,
+			NFE: 90,
+			UU: 85,
+			OU: 75,
+			Uber: 72
 		};
 		// Really bad Pokemon and jokemons and MEWTWO.
 		var customScale = {
 			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99,
-			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 71
+			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 68
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
