@@ -3745,7 +3745,7 @@ exports.BattleScripts = {
 		}
 
 		for (var i = 0; i < pokemonPool.length && pokemonLeft < 6; i++) {
-			var template = this.getTemplate(pokemonList[i]);
+			var template = this.getTemplate(teamPool[i]);
 			if (!template.exists) continue;
 
 			// Limit to one of each species (Species Clause)
