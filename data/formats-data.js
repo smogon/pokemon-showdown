@@ -1482,18 +1482,18 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["tackle","growl","razorleaf"]}
 		],
-		unreleasedHidden: true,
 		tier: "LC"
 	},
 	bayleef: {
 		randomBattleMoves: ["reflect","lightscreen","aromatherapy","grasswhistle","leechseed","toxic","gigadrain","synthesis"],
-		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	meganium: {
 		randomBattleMoves: ["reflect","lightscreen","aromatherapy","leechseed","toxic","gigadrain","synthesis","dragontail"],
 		randomDoubleBattleMoves: ["reflect","lightscreen","aromatherapy","leechseed","petalblizzard","gigadrain","synthesis","dragontail","healpulse","toxic","protect"],
-		unreleasedHidden: true,
+		eventPokemon: [
+			{"generation":6,"level":50,"isHidden":true,"moves":["solarbeam","sunnyday","synthesis","bodyslam"]}
+		],
 		tier: "PU"
 	},
 	cyndaquil: {
@@ -1501,21 +1501,19 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["tackle","leer","smokescreen"]}
 		],
-		unreleasedHidden: true,
 		tier: "LC"
 	},
 	quilava: {
 		randomBattleMoves: ["eruption","fireblast","flamethrower","hiddenpowergrass","hiddenpowerice"],
-		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	typhlosion: {
 		randomBattleMoves: ["eruption","fireblast","hiddenpowergrass","extrasensory","focusblast"],
 		randomDoubleBattleMoves: ["eruption","fireblast","hiddenpowergrass","extrasensory","focusblast","heatwave","protect"],
 		eventPokemon: [
-			{"generation":3,"level":70,"moves":["quickattack","flamewheel","swift","flamethrower"]}
+			{"generation":3,"level":70,"moves":["quickattack","flamewheel","swift","flamethrower"]},
+			{"generation":6,"level":50,"isHidden":true,"moves":["overheat","flamewheel","flamecharge","swift"]}
 		],
-		unreleasedHidden: true,
 		tier: "NU"
 	},
 	totodile: {
@@ -1523,18 +1521,18 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["scratch","leer","rage"]}
 		],
-		unreleasedHidden: true,
 		tier: "LC"
 	},
 	croconaw: {
 		randomBattleMoves: ["aquajet","waterfall","crunch","icepunch","superpower","dragondance","swordsdance"],
-		unreleasedHidden: true,
 		tier: "NFE"
 	},
 	feraligatr: {
 		randomBattleMoves: ["aquajet","waterfall","crunch","icepunch","dragondance","swordsdance","earthquake"],
 		randomDoubleBattleMoves: ["aquajet","waterfall","crunch","icepunch","dragondance","swordsdance","earthquake","protect"],
-		unreleasedHidden: true,
+		eventPokemon: [
+			{"generation":6,"level":50,"isHidden":true,"moves":["icepunch","crunch","waterfall","screech"]}
+		],
 		tier: "NU"
 	},
 	sentret: {
@@ -2740,7 +2738,7 @@ exports.BattleFormatsData = {
 	},
 	seviper: {
 		randomBattleMoves: ["flamethrower","sludgewave","gigadrain","darkpulse","switcheroo","coil","earthquake","poisonjab","suckerpunch"],
-		randomDoubleBattleMoves: ["flamethrower","gigadrain","earthquake","suckerpunch","aquatail","protect","glare","poisonjab","sludgewave"],
+		randomDoubleBattleMoves: ["flamethrower","gigadrain","earthquake","suckerpunch","aquatail","protect","glare","poisonjab","sludgebomb"],
 		eventPokemon: [
 			{"generation":3,"level":18,"moves":["wrap","lick","bite","poisontail"]},
 			{"generation":3,"level":30,"moves":["poisontail","screech","glare","crunch"]},
@@ -3131,7 +3129,7 @@ exports.BattleFormatsData = {
 	},
 	groudon: {
 		randomBattleMoves: ["precipiceblades","earthquake","stealthrock","lavaplume","stoneedge","dragontail","roar","toxic","swordsdance","rockpolish","firepunch"],
-		randomDoubleBattleMoves: ["earthquake","rockslide","protect","stoneedge","swordsdance","rockpolish","dragonclaw","firepunch"],
+		randomDoubleBattleMoves: ["precipiceblades","rockslide","protect","stoneedge","swordsdance","rockpolish","dragonclaw","firepunch"],
 		eventPokemon: [
 			{"generation":5,"level":80,"moves":["earthquake","ancientpower","eruption","solarbeam"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"moves":["eruption","hammerarm","earthpower","solarbeam"],"pokeball":"cherishball"}
@@ -3140,7 +3138,7 @@ exports.BattleFormatsData = {
 	},
 	groudonprimal: {
 		randomBattleMoves: ["stealthrock","precipiceblades","earthquake","lavaplume","stoneedge","overheat","rockpolish","thunderwave"],
-		randomDoubleBattleMoves: ["earthquake","lavaplume","rockslide","stoneedge","swordsdance","overheat","rockpolish","firepunch","protect"],
+		randomDoubleBattleMoves: ["precipiceblades","lavaplume","rockslide","stoneedge","swordsdance","overheat","rockpolish","firepunch","protect"],
 		requiredItem: "Red Orb"
 	},
 	rayquaza: {
@@ -4840,6 +4838,9 @@ exports.BattleFormatsData = {
 	},
 	fennekin: {
 		randomBattleMoves: ["fireblast","psychic","psyshock","grassknot","willowisp","hypnosis","hiddenpowerrock","flamecharge"],
+		eventPokemon: [
+			{"generation":6,"level":15,"gender":"F","nature":"Hardy","isHidden":false,"moves":["scratch","flamethrower","hiddenpower"],"pokeball":"cherishball"}
+		],
 		tier: "LC"
 	},
 	braixen: {
@@ -5241,7 +5242,7 @@ exports.BattleFormatsData = {
 	volcanion: {
 		isUnreleased: true,
 		randomBattleMoves: ["substitute","steameruption","fireblast","sludgewave","hiddenpowerice","earthpower","superpower"],
-		randomDoubleBattleMoves: ["substitute","steameruption","heatwave","sludgewave","rockslide","earthquake","protect"],
+		randomDoubleBattleMoves: ["substitute","steameruption","heatwave","sludgebomb","rockslide","earthquake","protect"],
 		tier: "Unreleased"
 	},
 	missingno: {

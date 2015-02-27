@@ -1309,8 +1309,16 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['roar'] || hasMove['circlethrow']) rejected = true;
 					break;
-				case 'lunardance': case 'raindance': case 'sunnyday':
+				case 'lunardance':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
+				case 'raindance':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['sunnyday']) rejected = true;
+					break;
+				case 'sunnyday':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['raindance']) rejected = true;
 					break;
 				case 'cottonguard':
 					if (hasMove['reflect']) rejected = true;
@@ -1712,6 +1720,8 @@ exports.BattleScripts = {
 			item = 'Focus Sash';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
+		} else if (ability === 'Speed Boost' && hasMove['protect'] && counter.Physical + counter.Special > 2) {
+			item = 'Life Orb';
 		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || hasMove['clearsmog'] || ability === 'Moody') {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
