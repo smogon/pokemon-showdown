@@ -829,6 +829,9 @@ exports.BattleScripts = {
 					if (m.push(moveid) >= 4) break;
 				}
 			}
+			
+			// PS overrides your move if you have Struggle in the first slot
+			if (m[0] === 'struggle') m.push(m.shift());
 
 			// Random EVs
 			var evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
@@ -1039,10 +1042,10 @@ exports.BattleScripts = {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
-						// Bounce, Flame Charge, Quick Attack and Sky Attack aren't considered STABs.
-						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
-						if (!(moveid in {bounce:1, flamecharge:1, quickattack:1, skyattack:1})) hasStab = true;
+						// Certain moves aren't acceptable as a Pokemon's only STAB attack
+						if (!(moveid in {bounce:1, fakeout:1, flamecharge:1, quickattack:1, skyattack:1})) hasStab = true;
 					}
+					if (template.abilities['H'] && template.abilities['H'] === 'Protean') hasStab = true;
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
 					if (move.type === 'Grass') counter['overgrow']++;
@@ -1224,7 +1227,7 @@ exports.BattleScripts = {
 					if (hasMove['focuspunch']) rejected = true;
 					break;
 				case 'suckerpunch':
-					if ((hasMove['crunch'] || hasMove['darkpulse']) && hasMove['pursuit']) rejected = true;
+					if ((hasMove['crunch'] || hasMove['darkpulse']) && (hasMove['knockoff'] || hasMove['pursuit'])) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'thunderbolt':
@@ -1602,9 +1605,6 @@ exports.BattleScripts = {
 		} else if (template.species === 'Rotom-Fan') {
 			// this is just to amuse myself
 			item = 'Air Balloon';
-		} else if (template.species === 'Delibird') {
-			// to go along with the Christmas Delibird set
-			item = 'Leftovers';
 
 		// First, the extra high-priority items
 		} else if (ability === 'Imposter') {
@@ -1726,7 +1726,7 @@ exports.BattleScripts = {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
-		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 189) {
+		} else if (counter.Physical + counter.Special >= 4 && (template.baseStats.def + template.baseStats.spd > 189 || hasMove['rapidspin'])) {
 			item = 'Assault Vest';
 		} else if (counter.Physical + counter.Special >= 4) {
 			item = (hasMove['fakeout'] || hasMove['return'] || hasMove['extremespeed'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
