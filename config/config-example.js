@@ -401,6 +401,8 @@ exports.customavatars = {
 	'rabinov': 'rabinov.png',
 	'darklight1999': 'darklight1999.png',
 	'alliancedyla': 'alliancedyla.png',
+	'hanaaa': 'hanaaa.png',
+	'hanalyse': 'hanaaa.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
