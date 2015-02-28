@@ -669,28 +669,21 @@ exports.Formats = [
 			}
 		}
 	},
-    {
-                name: "1% Tier",              
-                section: "OM of the Month",
- 
-               
-                rated: false,
-                maxLevel: 5,
-                ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-                banlist: ['LC Uber', 'LC UU', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Aipom', 'Amaura', 'Archen', 'Anorith', 'Aron', 'Blitzle', 'Bunnelby', 'Cacnea', 'Carvanha', 'Charmander', 'Chimchar', 'Chikorita', 'Clauncher', 'Corphish', 'Cranidos', 'Croagunk', 'Cubchoo', 'Cubone', 'Cyndaquil', 'Darumaka', 'Deerling', 'Doduo', 'Deino', 'Onix', 'Nosepass', 'Noibat', 'Minccino', 'Mienfoo', 'Pancham', 'Pumpkaboo', 'Riolu', 'Scraggy', 'Shellder', 'Shieldon', 'Snover', 'Snubbull', 'Swinub', 'Tyrunt', 'Woobat', 'Ponyta', 'Magnemite', 'Machop', 'Voltorb', 'Trapinch', 'Rhyhorn', 'Hippopotas', 'Growlithe', 'Grimer', 'Houndour', 'Honedge', 'Froakie', 'Dwebble', 'Drilbur', 'Sonic Boom', 'Swagger']
-        
-    }
+    {    name: "1% Tier",              
+         section: "OM of the Month",
+         rated: false,
+         maxLevel: 5,
+         ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+         banlist: ['LC Uber', 'LC UU', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Aipom', 'Amaura', 'Archen', 'Anorith', 'Aron', 'Blitzle', 'Bunnelby', 'Cacnea', 'Carvanha', 'Charmander', 'Chimchar', 'Chikorita', 'Clauncher', 'Corphish', 'Cranidos', 'Croagunk', 'Cubchoo', 'Cubone', 'Cyndaquil', 'Darumaka', 'Deerling', 'Doduo', 'Deino', 'Onix', 'Nosepass', 'Noibat', 'Minccino', 'Mienfoo', 'Pancham', 'Pumpkaboo', 'Riolu', 'Scraggy', 'Shellder', 'Shieldon', 'Snover', 'Snubbull', 'Swinub', 'Tyrunt', 'Woobat', 'Ponyta', 'Magnemite', 'Machop', 'Voltorb', 'Trapinch', 'Rhyhorn', 'Hippopotas', 'Growlithe', 'Grimer', 'Houndour', 'Honedge', 'Froakie', 'Dwebble', 'Drilbur', 'Sonic Boom', 'Swagger']
+    },
 	{
 		name: "Averagemons",
 		section: "Other Metagames",
-
-		mod: 'averagemons',
+        mod: 'averagemons',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Gothita', 'Gothorita', 'Gothitelle', 'Sableye', 'Shedinja', 'Smeargle',
-			'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Gengarite', 'Kangaskhanite', 'Light Ball', 'Mawilite', 'Medichamite', 'Soul Dew', 'Thick Club',
-			'Huge Power', 'Pure Power'
-		]
+			'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Gengarite', 'Kangaskhanite', 'Light Ball', 'Mawilite', 'Medichamite', 'Soul Dew', 'Thick Club', 'Huge Power', 'Pure Power']
 	},
 	{
 		name: "Hidden Type",
