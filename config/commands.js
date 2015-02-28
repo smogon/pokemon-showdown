@@ -1566,6 +1566,8 @@ var commands = exports.commands = {
 	 * Custom commands
 	 *********************************************************/
 
+	concede: 'forefeit',
+	
 	reminders: 'reminder',
 	reminder: function (target, room, user) {
 		if (room.type !== 'chat') return this.sendReply("This command can only be used in chatrooms.");
