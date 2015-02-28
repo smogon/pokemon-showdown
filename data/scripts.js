@@ -829,7 +829,7 @@ exports.BattleScripts = {
 					if (m.push(moveid) >= 4) break;
 				}
 			}
-			
+
 			// PS overrides your move if you have Struggle in the first slot
 			if (m[0] === 'struggle') m.push(m.shift());
 
