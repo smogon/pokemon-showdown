@@ -1148,7 +1148,7 @@ exports.BattleScripts = {
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['acrobatics']) rejected = true;
 					break;
 				case 'dragontail': case 'circlethrow':
-					if (!!counter['speedsetup'] || hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore']) rejected = true;
+					if (!!counter['speedsetup'] || hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore'] || hasMove['raindance']) rejected = true;
 					break;
 				case 'trickroom':
 					if (!!counter['speedsetup']) rejected = true;
