@@ -357,6 +357,10 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		}
 	});
 
+	process.on('disconnect', function () {
+		process.exit();
+	});
+
 	// this is global so it can be hotpatched if necessary
 	var isTrustedProxyIp = Cidr.checker(Config.proxyIps);
 	var socketCounter = 0;

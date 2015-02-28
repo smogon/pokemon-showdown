@@ -80,6 +80,24 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 250
 	},
+	highjumpkick: {
+		inherit: true,
+		onMoveFail: function (target, source, move) {
+			if (target.runImmunity('Fighting')) {
+				var damage = this.getDamage(source, target, move, true);
+				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'highjumpkick');
+			}
+		}
+	},
+	jumpkick: {
+		inherit: true,
+		onMoveFail: function (target, source, move) {
+			if (target.runImmunity('Fighting')) {
+				var damage = this.getDamage(source, target, move, true);
+				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'jumpkick');
+			}
+		}
+	},
 	leechseed: {
 		inherit: true,
 		onHit: function () {},
@@ -160,6 +178,30 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	moonlight: {
+		inherit: true,
+		onHit: function (pokemon) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(pokemon.maxhp);
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(pokemon.maxhp / 4);
+			} else {
+				this.heal(pokemon.maxhp / 2);
+			}
+		}
+	},
+	morningsun: {
+		inherit: true,
+		onHit: function (pokemon) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(pokemon.maxhp);
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(pokemon.maxhp / 4);
+			} else {
+				this.heal(pokemon.maxhp / 2);
+			}
+		}
+	},
 	psywave: {
 		inherit: true,
 		damageCallback: function (pokemon) {
@@ -213,6 +255,10 @@ exports.BattleMovedex = {
 	selfdestruct: {
 		inherit: true,
 		basePower: 200
+	},
+	skyattack: {
+		inherit: true,
+		secondary: {}
 	},
 	sleeptalk: {
 		inherit: true,
@@ -316,6 +362,18 @@ exports.BattleMovedex = {
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'Substitute');
+			}
+		}
+	},
+	synthesis: {
+		inherit: true,
+		onHit: function (pokemon) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(pokemon.maxhp);
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(pokemon.maxhp / 4);
+			} else {
+				this.heal(pokemon.maxhp / 2);
 			}
 		}
 	},

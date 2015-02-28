@@ -6,8 +6,6 @@ function calculatePoints(category, question) {
 	return BASE_POINTS * (question + 1);
 }
 
-require("es6-shim");
-
 var jeopardies = {};
 
 var JeopardyQuestions = (function () {
@@ -520,7 +518,7 @@ var commands = {
 		var questions = null;
 
 		if (!jeopardy) {
-			if (!this.can('jeopardy', null, room)) return;
+			if (!this.can('jeopardy', room)) return;
 			questions = new JeopardyQuestions(room, MAX_CATEGORY_COUNT, MAX_QUESTION_COUNT);
 		} else {
 			if (target && !jeopardy.checkPermission(user, this, 'host')) return;
@@ -560,7 +558,7 @@ var commands = {
 		var questions = null;
 
 		if (!jeopardy) {
-			if (!this.can('jeopardy', null, room)) return;
+			if (!this.can('jeopardy', room)) return;
 			questions = new JeopardyQuestions(room, MAX_CATEGORY_COUNT, MAX_QUESTION_COUNT);
 		} else {
 			if (!jeopardy.checkPermission(user, this, 'notstarted', 'host')) return;
@@ -614,7 +612,7 @@ var commands = {
 		var questions = null;
 
 		if (!jeopardy) {
-			if (!this.can('jeopardy', null, room)) return;
+			if (!this.can('jeopardy', room)) return;
 			questions = new JeopardyQuestions(room, MAX_CATEGORY_COUNT, MAX_QUESTION_COUNT);
 		} else {
 			if (!jeopardy.checkPermission(user, this, 'host')) return;
@@ -639,7 +637,7 @@ var commands = {
 		var questions = null;
 
 		if (!jeopardy) {
-			if (!this.can('jeopardy', null, room)) return;
+			if (!this.can('jeopardy', room)) return;
 			questions = new JeopardyQuestions(room, MAX_CATEGORY_COUNT, MAX_QUESTION_COUNT);
 		} else {
 			if (!jeopardy.checkPermission(user, this, 'notstarted', 'host')) return;
@@ -677,7 +675,7 @@ var commands = {
 		var params = target.split(',');
 
 		if (jeopardies[room.id]) return this.sendReply("There is already a Jeopardy match in this room.");
-		if (!this.can('jeopardy', null, room)) return;
+		if (!this.can('jeopardy', room)) return;
 
 		var categoryCount = parseInt(params[0], 10) || MAX_CATEGORY_COUNT;
 		var questionCount = parseInt(params[1], 10) || MAX_QUESTION_COUNT;
@@ -694,7 +692,7 @@ var commands = {
 	},
 	end: function (target, room, user) {
 		if (!jeopardies[room.id]) return this.sendReply("There is no Jeopardy match currently in this room.");
-		if (!this.can('jeopardy', null, room)) return;
+		if (!this.can('jeopardy', room)) return;
 
 		delete jeopardies[room.id];
 		room.add("The Jeopardy match was forcibly ended by " + user.name);
@@ -759,6 +757,18 @@ var commands = {
 		jeopardy.wager(user, target, this);
 	}
 };
+
+var jeopardyRoom = Rooms.get('academics');
+if (jeopardyRoom) {
+	if (jeopardyRoom.plugin) {
+		jeopardies = jeopardyRoom.plugin.jeopardies;
+	} else {
+		jeopardyRoom.plugin = {
+			'jeopardies': jeopardies
+		};
+	}
+}
+
 exports.commands = {
 	'jp': 'jeopardy',
 	'jeopardy': commands

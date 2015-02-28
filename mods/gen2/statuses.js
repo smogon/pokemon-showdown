@@ -80,10 +80,26 @@ exports.BattleStatuses = {
 			}
 			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
 		},
-		onAfterSwitchInSelf: function (pokemon) {
+		onSwitchIn: function (pokemon) {
+			// Regular poison status and damage after a switchout -> switchin.
 			this.effectData.stage = 0;
 			pokemon.setStatus('psn');
-			this.damage(pokemon.maxhp / 8);
+		},
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+		}
+	},
+	confusion: {
+		inherit: true,
+		onStart: function (target, source, sourceEffect) {
+			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
+			if (!result) return result;
+			this.add('-start', target, 'confusion');
+			if (sourceEffect && sourceEffect.id === 'berserkgene') {
+				this.effectData.time = 256;
+			} else {
+				this.effectData.time = this.random(2, 6);
+			}
 		}
 	},
 	partiallytrapped: {

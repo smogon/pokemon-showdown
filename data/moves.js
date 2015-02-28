@@ -43,7 +43,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Boosts the user's Defense by 2.",
+		shortDesc: "Raises the user's Defense by 2.",
 		id: "acidarmor",
 		isViable: true,
 		name: "Acid Armor",
@@ -111,7 +111,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises a random stat by 2 stages as long as the stat is not already at stage 6. The user can choose to use this move on itself or an adjacent ally. Fails if no stat stage can be raised or if used on an ally with a substitute.",
-		shortDesc: "Boosts a random stat of the user or an ally by 2.",
+		shortDesc: "Raises a random stat of the user or an ally by 2.",
 		id: "acupressure",
 		name: "Acupressure",
 		pp: 30,
@@ -208,7 +208,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Speed by 2 stages.",
-		shortDesc: "Boosts the user's Speed by 2.",
+		shortDesc: "Raises the user's Speed by 2.",
 		id: "agility",
 		isViable: true,
 		name: "Agility",
@@ -292,7 +292,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Defense by 2 stages.",
-		shortDesc: "Boosts the user's Sp. Def by 2.",
+		shortDesc: "Raises the user's Sp. Def by 2.",
 		id: "amnesia",
 		isViable: true,
 		name: "Amnesia",
@@ -313,7 +313,7 @@ exports.BattleMovedex = {
 		basePower: 60,
 		category: "Special",
 		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
-		shortDesc: "10% chance to boost all stats by 1 (not acc/eva).",
+		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
 		id: "ancientpower",
 		name: "Ancient Power",
 		pp: 5,
@@ -445,7 +445,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the target's Special Defense by 1 stage. Fails if there is no ally adjacent to the user.",
-		shortDesc: "Raises an ally's Special Defense by 1.",
+		shortDesc: "Raises an ally's Sp. Def by 1.",
 		id: "aromaticmist",
 		name: "Aromatic Mist",
 		pp: 20,
@@ -465,7 +465,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Belch, Bestow, Bounce, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dig, Dive, Dragon Tail, Endure, Feint, Fly, Focus Punch, Follow Me, Helping Hand, Hold Hands, King's Shield, Mat Block, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Phantom Force, Protect, Rage Powder, Roar, Shadow Force, Sketch, Sleep Talk, Snatch, Spiky Shield, Struggle, Switcheroo, Thief, Transform, Trick, or Whirlwind.",
+		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Belch, Bestow, Bounce, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dig, Dive, Dragon Tail, Endure, Feint, Fly, Focus Punch, Follow Me, Helping Hand, Hold Hands, King's Shield, Mat Block, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Phantom Force, Protect, Rage Powder, Roar, Shadow Force, Sketch, Sky Drop, Sleep Talk, Snatch, Spiky Shield, Struggle, Switcheroo, Thief, Transform, Trick, or Whirlwind.",
 		shortDesc: "Uses a random move known by a team member.",
 		id: "assist",
 		name: "Assist",
@@ -480,7 +480,7 @@ exports.BattleMovedex = {
 				for (var i = 0; i < pokemon.moveset.length; i++) {
 					var move = pokemon.moveset[i].id;
 					var noAssist = {
-						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, kingsshield:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
+						assist:1, belch:1, bestow:1, bounce:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dig:1, dive:1, dragontail:1, endure:1, feint:1, fly:1, focuspunch:1, followme:1, helpinghand:1, kingsshield:1, matblock:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, phantomforce:1, protect:1, ragepowder:1, roar:1, shadowforce:1, sketch:1, skydrop:1, sleeptalk:1, snatch:1, spikyshield:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1, whirlwind:1
 					};
 					if (!noAssist[move]) {
 						moves.push(move);
@@ -612,6 +612,7 @@ exports.BattleMovedex = {
 					this.add('-start', pokemon, 'Attract');
 				}
 			},
+			onBeforeMovePriority: 2,
 			onBeforeMove: function (pokemon, target, move) {
 				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['attract']) {
 					this.debug('Removing Attract volatile on ' + pokemon);
@@ -673,7 +674,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Speed by 2 stages. If the user's Speed was changed, the user's weight is reduced by 100kg as long as it remains active. This effect is stackable but cannot reduce the user's weight to less than 0.1kg.",
-		shortDesc: "Boosts the user's Speed by 2; user loses 100kg.",
+		shortDesc: "Raises the user's Speed by 2; user loses 100 kg.",
 		id: "autotomize",
 		isViable: true,
 		name: "Autotomize",
@@ -699,7 +700,7 @@ exports.BattleMovedex = {
 					this.add('-start', pokemon, 'Autotomize');
 				}
 			},
-			onRestart: function (pokemon)		 {
+			onRestart: function (pokemon) {
 				if (pokemon.weightkg !== 0.1) {
 					this.effectData.multiplier++;
 					this.add('-start', pokemon, 'Autotomize');
@@ -747,7 +748,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Attack by 1 stage.",
-		shortDesc: "Lowers foe's Attack by 1. Priority +1.",
+		shortDesc: "Lowers the target's Attack by 1.",
 		id: "babydolleyes",
 		name: "Baby-Doll Eyes",
 		pp: 30,
@@ -783,7 +784,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Boosts the user's Defense by 2.",
+		shortDesc: "Raises the user's Defense by 2.",
 		id: "barrier",
 		isViable: true,
 		name: "Barrier",
@@ -862,7 +863,7 @@ exports.BattleMovedex = {
 		basePower: 120,
 		category: "Special",
 		desc: "This move cannot be selected until the user eats a Berry, either by eating one that was held, stealing and eating one off another Pokemon with Bug Bite or Pluck, or eating one that was thrown at it with Fling. Once the condition is met, this move can be selected and used for the rest of the battle even if the user gains or uses another item or switches out. Consuming a Berry with Natural Gift does not count for the purposes of eating one.",
-		shortDesc: "User must eat a Berry to use this move.",
+		shortDesc: "Cannot be selected until the user eats a Berry.",
 		id: "belch",
 		name: "Belch",
 		pp: 10,
@@ -1246,7 +1247,7 @@ exports.BattleMovedex = {
 		basePower: 140,
 		category: "Special",
 		desc: "No additional effect.",
-		shortDesc: "Hits adjacent Pokemon, including allies.",
+		shortDesc: "No additional effect. Hits adjacent Pokemon.",
 		id: "boomburst",
 		name: "Boomburst",
 		pp: 10,
@@ -1296,6 +1297,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
 			onSourceBasePower: function (basePower, target, source, move) {
@@ -1473,7 +1475,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and Defense by 1 stage.",
-		shortDesc: "Boosts the user's Attack and Defense by 1.",
+		shortDesc: "Raises the user's Attack and Defense by 1.",
 		id: "bulkup",
 		isViable: true,
 		name: "Bulk Up",
@@ -1553,7 +1555,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack and Special Defense by 1 stage.",
-		shortDesc: "Boosts the user's Sp. Atk and Sp. Def by 1.",
+		shortDesc: "Raises the user's Sp. Atk and Sp. Def by 1.",
 		id: "calmmind",
 		isViable: true,
 		name: "Calm Mind",
@@ -1630,7 +1632,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "It is your birthday.",
-		shortDesc: "No in-game effect.",
+		shortDesc: "No competitive use. Or any use.",
 		id: "celebrate",
 		name: "Celebrate",
 		pp: 40,
@@ -1687,7 +1689,7 @@ exports.BattleMovedex = {
 		basePower: 50,
 		category: "Special",
 		desc: "Has a 70% chance to raise the user's Special Attack by 1 stage.",
-		shortDesc: "70% chance to boost the user's Sp. Atk by 1.",
+		shortDesc: "70% chance to raise the user's Sp. Atk by 1.",
 		id: "chargebeam",
 		isViable: true,
 		name: "Charge Beam",
@@ -1850,7 +1852,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack, Defense, and accuracy by 1 stage.",
-		shortDesc: "Boosts user's Attack, Defense, and accuracy by 1.",
+		shortDesc: "Raises user's Attack, Defense, and accuracy by 1.",
 		id: "coil",
 		isViable: true,
 		name: "Coil",
@@ -2056,7 +2058,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense and Special Defense by 1 stage.",
-		shortDesc: "Boosts the user's Defense and Sp. Def by 1.",
+		shortDesc: "Raises the user's Defense and Sp. Def by 1.",
 		id: "cosmicpower",
 		isViable: true,
 		name: "Cosmic Power",
@@ -2078,7 +2080,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 3 stages.",
-		shortDesc: "Boosts the user's Defense by 3.",
+		shortDesc: "Raises the user's Defense by 3.",
 		id: "cottonguard",
 		isViable: true,
 		name: "Cotton Guard",
@@ -2220,20 +2222,16 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The user and its party members are protected from non-damaging attacks made by other Pokemon, including allies, during this turn. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
-		shortDesc: "Protects allies from status moves this turn.",
+		shortDesc: "Protects allies from Status moves this turn.",
 		id: "craftyshield",
 		isViable: true,
 		name: "Crafty Shield",
 		pp: 10,
 		priority: 3,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
 		sideCondition: 'craftyshield',
 		onTryHitSide: function (side, source) {
-			return !!this.willAct() && this.runEvent('StallMove', source);
-		},
-		onHitSide: function (side, source) {
-			source.addVolatile('stall');
+			return !!this.willAct();
 		},
 		effect: {
 			duration: 1,
@@ -2465,7 +2463,7 @@ exports.BattleMovedex = {
 		basePower: 80,
 		category: "Special",
 		desc: "No additional effect.",
-		shortDesc: "Deals damage to all adjacent foes.",
+		shortDesc: "No additional effect. Hits adjacent foes.",
 		id: "dazzlinggleam",
 		isViable: true,
 		name: "Dazzling Gleam",
@@ -2482,7 +2480,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense and Special Defense by 1 stage.",
-		shortDesc: "Boosts the user's Defense and Sp. Def by 1.",
+		shortDesc: "Raises the user's Defense and Sp. Def by 1.",
 		id: "defendorder",
 		isViable: true,
 		name: "Defend Order",
@@ -2504,7 +2502,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 1 stage. As long as the user remains active, the power of the user's Ice Ball and Rollout will be doubled (this effect is not stackable).",
-		shortDesc: "Boosts the user's Defense by 1.",
+		shortDesc: "Raises the user's Defense by 1.",
 		id: "defensecurl",
 		name: "Defense Curl",
 		pp: 40,
@@ -2617,7 +2615,7 @@ exports.BattleMovedex = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Has a 50% chance to raise the user's Defense by 1 stage.",
-		shortDesc: "Hits all adjacent foes. 50% chance to boost Def by 1.",
+		shortDesc: "50% chance to raise user's Def by 1 for each hit.",
 		id: "diamondstorm",
 		isViable: true,
 		name: "Diamond Storm",
@@ -2673,6 +2671,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
 			onSourceModifyDamage: function (damage, source, target, move) {
@@ -2730,6 +2729,7 @@ exports.BattleMovedex = {
 			onEnd: function (pokemon) {
 				this.add('-end', pokemon, 'Disable');
 			},
+			onBeforeMovePriority: 7,
 			onBeforeMove: function (attacker, defender, move) {
 				if (move.id === this.effectData.move) {
 					this.add('cant', attacker, 'Disable', move);
@@ -2755,7 +2755,7 @@ exports.BattleMovedex = {
 		basePower: 40,
 		category: "Special",
 		desc: "This move does not check accuracy.",
-		shortDesc: "This move does not check accuracy.",
+		shortDesc: "This move does not check accuracy. Hits foes.",
 		id: "disarmingvoice",
 		name: "Disarming Voice",
 		pp: 15,
@@ -2824,6 +2824,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
 			onSourceModifyDamage: function (damage, source, target, move) {
@@ -2974,7 +2975,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's evasiveness by 1 stage.",
-		shortDesc: "Boosts the user's evasion by 1.",
+		shortDesc: "Raises the user's evasiveness by 1.",
 		id: "doubleteam",
 		name: "Double Team",
 		pp: 15,
@@ -3076,7 +3077,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and Speed by 1 stage.",
-		shortDesc: "Boosts the user's Attack and Speed by 1.",
+		shortDesc: "Raises the user's Attack and Speed by 1.",
 		id: "dragondance",
 		isViable: true,
 		name: "Dragon Dance",
@@ -3424,7 +3425,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "For 5 turns, the terrain becomes Electric Terrain. During the effect, the power of Electric-type attacks made by grounded Pokemon is multiplied by 1.5 and grounded Pokemon cannot fall asleep; Pokemon already asleep do not wake up. Camouflage transforms the user into an Electric type, Nature Power becomes Thunderbolt, and Secret Power has a 30% chance to cause paralysis. Fails if the current terrain is Electric Terrain.",
-		shortDesc: "If on ground, can't sleep + Electric moves stronger.",
+		shortDesc: "5 turns. Grounded: +Electric power, can't sleep.",
 		id: "electricterrain",
 		name: "Electric Terrain",
 		pp: 10,
@@ -3464,7 +3465,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Causes the target's move to become Electric type this turn. Fails if the target already moved this turn.",
-		shortDesc: "Changes the target's move to Electric type.",
+		shortDesc: "Changes the target's move to Electric this turn.",
 		id: "electrify",
 		name: "Electrify",
 		pp: 20,
@@ -3476,6 +3477,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-singleturn', target, 'move: Electrify');
 			},
+			onModifyMovePriority: -2,
 			onModifyMove: function (move) {
 				this.debug('Electrify making move type electric');
 				move.type = 'Electric';
@@ -3890,7 +3892,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Prevents all active Pokemon from switching next turn. A Pokemon can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. Fails if this move was used successfully last turn.",
-		shortDesc: "Prevents fleeing for one turn.",
+		shortDesc: "Prevents all Pokemon from switching next turn.",
 		id: "fairylock",
 		name: "Fairy Lock",
 		pp: 10,
@@ -3940,10 +3942,11 @@ exports.BattleMovedex = {
 		priority: 3,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		isContact: true,
-		onTryHit: function (target, pokemon) {
+		onTry: function (pokemon, target) {
 			if (pokemon.activeTurns > 1) {
+				this.add('-fail', pokemon);
 				this.add('-hint', "Fake Out only works on your first turn out.");
-				return false;
+				return null;
 			}
 		},
 		secondary: {
@@ -4041,7 +4044,7 @@ exports.BattleMovedex = {
 		basePower: 30,
 		category: "Physical",
 		desc: "Raises the user's Attack by 2 stages if this move knocks out the target.",
-		shortDesc: "Raises Attack by 2 if knocks out target.",
+		shortDesc: "Raises user's Attack by 2 if this KOes the target.",
 		id: "fellstinger",
 		name: "Fell Stinger",
 		pp: 25,
@@ -4068,7 +4071,7 @@ exports.BattleMovedex = {
 		basePower: 80,
 		category: "Special",
 		desc: "Has a 50% chance to raise the user's Special Attack by 1 stage.",
-		shortDesc: "50% chance to boost the user's Sp. Atk by 1.",
+		shortDesc: "50% chance to raise the user's Sp. Atk by 1.",
 		id: "fierydance",
 		isViable: true,
 		name: "Fiery Dance",
@@ -4349,7 +4352,7 @@ exports.BattleMovedex = {
 		basePower: 50,
 		category: "Physical",
 		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
-		shortDesc: "100% chance to boost the user's Speed by 1.",
+		shortDesc: "100% chance to raise the user's Speed by 1.",
 		id: "flamecharge",
 		isViable: true,
 		name: "Flame Charge",
@@ -4479,7 +4482,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the target's Special Attack by 1 stage and confuses it.",
-		shortDesc: "Boosts the target's Sp. Atk by 1 and confuses it.",
+		shortDesc: "Raises the target's Sp. Atk by 1 and confuses it.",
 		id: "flatter",
 		name: "Flatter",
 		pp: 15,
@@ -4512,6 +4515,7 @@ exports.BattleMovedex = {
 			if (item.fling && !noFling) {
 				pokemon.addVolatile('fling');
 				pokemon.setItem('');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
 			}
 		},
 		onPrepareHit: function (target, source, move) {
@@ -4524,7 +4528,7 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.effectData.item = pokemon.item;
 			},
-			onModifyMovePriority: -1,
+			onModifyMovePriority: -3,
 			onModifyMove: function (move) {
 				var item = this.getItem(this.effectData.item);
 				move.basePower = item.fling.basePower;
@@ -4555,7 +4559,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the Defense of all Grass-type Pokemon on the field by 1 stage.",
-		shortDesc: "Raises Defense by 1 of Grass types in battle.",
+		shortDesc: "Raises Defense by 1 of all active Grass types.",
 		id: "flowershield",
 		name: "Flower Shield",
 		pp: 10,
@@ -4616,6 +4620,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
 			onSourceBasePower: function (basePower, target, source, move) {
@@ -4634,7 +4639,7 @@ exports.BattleMovedex = {
 		basePower: 80,
 		category: "Physical",
 		desc: "This move combines Flying in its type effectiveness against the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "Both Fighting-type and Flying-type simultaneously.",
+		shortDesc: "Combines Flying in its type effectiveness.",
 		id: "flyingpress",
 		name: "Flying Press",
 		pp: 10,
@@ -4676,7 +4681,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's chance for a critical hit by 2 stages. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
-		shortDesc: "Boosts the user's critical hit ratio by 2.",
+		shortDesc: "Raises the user's critical hit ratio by 2.",
 		id: "focusenergy",
 		name: "Focus Energy",
 		pp: 30,
@@ -4858,7 +4863,7 @@ exports.BattleMovedex = {
 		basePower: 70,
 		category: "Special",
 		desc: "Has a 10% chance to freeze the target. This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
-		shortDesc: "Super-effective against Water. 10% freeze chance.",
+		shortDesc: "10% chance to freeze. Super effective on Water.",
 		id: "freezedry",
 		name: "Freeze-Dry",
 		pp: 20,
@@ -5191,7 +5196,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack, Special Defense, and Speed by 2 stages. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Sharply raises SpAtk, SpDef, and Speed on turn 2.",
+		shortDesc: "Charges, then raises SpA, SpD, Spe by 2 turn 2.",
 		id: "geomancy",
 		isViable: true,
 		name: "Geomancy",
@@ -5428,7 +5433,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "For 5 turns, the terrain becomes Grassy Terrain. During the effect, the power of Grass-type attacks used by grounded Pokemon is multiplied by 1.5, the power of Bulldoze, Earthquake, and Magnitude used against grounded Pokemon is multiplied by 0.5, and grounded Pokemon have 1/16 of their maximum HP, rounded down, restored at the end of each turn, including the last turn. Camouflage transforms the user into a Grass type, Nature Power becomes Energy Ball, and Secret Power has a 30% chance to cause sleep. Fails if the current terrain is Grassy Terrain.",
-		shortDesc: "If on ground, restore HP + Grass moves stronger.",
+		shortDesc: "5 turns. Grounded: +Grass power,+1/16 max HP.",
 		id: "grassyterrain",
 		name: "Grassy Terrain",
 		pp: 10,
@@ -5533,6 +5538,7 @@ exports.BattleMovedex = {
 				}
 				if (applies) this.add('-activate', pokemon, 'Gravity');
 			},
+			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
 				var disabledMoves = {bounce:1, fly:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
 				if (disabledMoves[move.id]) {
@@ -5575,7 +5581,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day, raises the user's Attack and Special Attack by 2 stages.",
-		shortDesc: "Boosts the user's Attack and Sp. Atk by 1.",
+		shortDesc: "Raises user's Attack and Sp. Atk by 1; 2 in Sun.",
 		id: "growth",
 		isViable: true,
 		name: "Growth",
@@ -5778,12 +5784,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {},
 		weather: 'hail',
-		onTry: function (target, source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-fail', source, 'move: Hail', '[from]: ' + this.effectiveWeather());
-				return null;
-			}
-		},
 		secondary: false,
 		target: "all",
 		type: "Ice"
@@ -5818,7 +5818,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Money falls from the sky.",
-		shortDesc: "No effect.",
+		shortDesc: "No competitive use.",
 		id: "happyhour",
 		name: "Happy Hour",
 		pp: 30,
@@ -5838,7 +5838,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 1 stage.",
-		shortDesc: "Boosts the user's Defense by 1.",
+		shortDesc: "Raises the user's Defense by 1.",
 		id: "harden",
 		name: "Harden",
 		pp: 30,
@@ -5994,6 +5994,7 @@ exports.BattleMovedex = {
 					}
 				}
 			},
+			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
 				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
 				if (disabledMoves[move.id] || move.heal || move.drain) {
@@ -6614,7 +6615,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Nothing happens... Fails if there is no ally adjacent to the user.",
-		shortDesc: "No in-game effect.",
+		shortDesc: "No competitive use. Or any use.",
 		id: "holdhands",
 		name: "Hold Hands",
 		pp: 40,
@@ -6633,7 +6634,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and accuracy by 1 stage.",
-		shortDesc: "Boosts the user's Attack and accuracy by 1.",
+		shortDesc: "Raises the user's Attack and accuracy by 1.",
 		id: "honeclaws",
 		isViable: true,
 		name: "Hone Claws",
@@ -6709,7 +6710,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack by 1 stage.",
-		shortDesc: "Boosts the user's Attack by 1.",
+		shortDesc: "Raises the user's Attack by 1.",
 		id: "howl",
 		isViable: true,
 		name: "Howl",
@@ -6832,7 +6833,7 @@ exports.BattleMovedex = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Lowers the user's Defense by 1 stage. If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
-		shortDesc: "Breaks protect and lowers user's Def. by 1.",
+		shortDesc: "Lowers user's Defense by 1. Breaks protection.",
 		id: "hyperspacefury",
 		name: "Hyperspace Fury",
 		pp: 5,
@@ -6867,7 +6868,7 @@ exports.BattleMovedex = {
 		basePower: 80,
 		category: "Special",
 		desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally.",
-		shortDesc: "Breaks protection for this turn.",
+		shortDesc: "Breaks the target's protection for this turn.",
 		id: "hyperspacehole",
 		name: "Hyperspace Hole",
 		pp: 5,
@@ -7167,6 +7168,7 @@ exports.BattleMovedex = {
 				}
 				pokemon.maybeDisabled = true;
 			},
+			onFoeBeforeMovePriority: 4,
 			onFoeBeforeMove: function (attacker, defender, move) {
 				if (attacker.disabledMoves[move.id]) {
 					this.add('cant', attacker, 'move: Imprison', move);
@@ -7280,7 +7282,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Causes Normal-type moves to become Electric type this turn.",
-		shortDesc: "Normal moves become Electric type. Priority +1.",
+		shortDesc: "Normal moves become Electric type this turn.",
 		id: "iondeluge",
 		name: "Ion Deluge",
 		pp: 25,
@@ -7292,6 +7294,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-fieldactivate', 'move: Ion Deluge');
 			},
+			onModifyMovePriority: -2,
 			onModifyMove: function (move) {
 				if (move.type === 'Normal') {
 					move.type = 'Electric';
@@ -7309,7 +7312,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Boosts the user's Defense by 2.",
+		shortDesc: "Raises the user's Defense by 2.",
 		id: "irondefense",
 		isViable: true,
 		name: "Iron Defense",
@@ -7453,7 +7456,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user have their Attack lowered by 2 stages. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
-		shortDesc: "Protects user from attacks. Contactors get -Atk.",
+		shortDesc: "Protects from attacks. Contact: lowers Atk by 2.",
 		id: "kingsshield",
 		isViable: true,
 		name: "King's Shield",
@@ -7523,12 +7526,7 @@ exports.BattleMovedex = {
 		onAfterHit: function (target, source) {
 			if (target.hasAbility('stickyhold')) return;
 			if (source.hp) {
-				var item = target.getItem();
-				if (item.id === 'mail') {
-					target.setItem('');
-				} else {
-					item = target.takeItem();
-				}
+				var item = target.takeItem();
 				if (item) {
 					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
 				}
@@ -7544,7 +7542,7 @@ exports.BattleMovedex = {
 		basePower: 90,
 		category: "Physical",
 		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
+		shortDesc: "No additional effect. Hits adjacent foes.",
 		id: "landswrath",
 		isViable: true,
 		name: "Land's Wrath",
@@ -7705,7 +7703,7 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 8,
 			onResidual: function (pokemon) {
-				var target = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				var target = this.effectData.source.side.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!target || target.fainted || target.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
@@ -7841,14 +7839,17 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		volatileStatus: 'lockon',
+		onTryHit: function (target, source) {
+			if (source.volatiles['lockon']) return false;
+		},
+		onHit: function (target, source) {
+			source.addVolatile('lockon', target);
+		},
 		effect: {
+			noCopy: true, // doesn't get copied by Baton Pass
 			duration: 2,
-			onFoeModifyMove: function (move, source, target) {
-				if (source === this.effectData.source) {
-					move.accuracy = true;
-					move.alwaysHit = true;
-				}
+			onSourceAccuracy: function (accuracy, target, source, move) {
+				if (move && source === this.effectData.target && target === this.effectData.source) return true;
 			}
 		},
 		secondary: false,
@@ -8212,7 +8213,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the Defense and Special Defense of Pokemon on the user's side with the Abilities Plus or Minus by 1 stage.",
-		shortDesc: "Raises defenses of ally Pokemon with Plus/Minus.",
+		shortDesc: "Raises Def, Sp. Def of allies with Plus/Minus by 1.",
 		id: "magneticflux",
 		name: "Magnetic Flux",
 		pp: 20,
@@ -8227,7 +8228,7 @@ exports.BattleMovedex = {
 				}
 			}
 			if (!targets.length) return false;
-			for (var i = 0;i < targets.length;i++) this.boost({spd: 1, def: 1}, targets[i], source, 'move: Magnetic Flux');
+			for (var i = 0; i < targets.length; i++) this.boost({spd: 1, def: 1}, targets[i], source, 'move: Magnetic Flux');
 		},
 		secondary: false,
 		target: "allySide",
@@ -8313,7 +8314,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn. Fails unless it is the user's first turn on the field, if the user moves last this turn, or if this move is already in effect for the user's side.",
-		shortDesc: "Protects from damaging moves. First turn out only.",
+		shortDesc: "Protects allies from attacks. First turn out only.",
 		id: "matblock",
 		isViable: true,
 		name: "Mat Block",
@@ -8378,7 +8379,7 @@ exports.BattleMovedex = {
 				var move = this.getMove(decision.move);
 				if (move.category !== 'Status' && !noMeFirst[move]) {
 					pokemon.addVolatile('mefirst');
-					this.useMove(move, pokemon);
+					this.useMove(move, pokemon, target);
 					return;
 				}
 			}
@@ -8425,7 +8426,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack by 1 stage.",
-		shortDesc: "Boosts the user's Attack by 1.",
+		shortDesc: "Raises the user's Attack by 1.",
 		id: "meditate",
 		isViable: true,
 		name: "Meditate",
@@ -8586,7 +8587,7 @@ exports.BattleMovedex = {
 		basePower: 50,
 		category: "Physical",
 		desc: "Has a 10% chance to raise the user's Attack by 1 stage.",
-		shortDesc: "10% chance to boost the user's Attack by 1.",
+		shortDesc: "10% chance to raise the user's Attack by 1.",
 		id: "metalclaw",
 		name: "Metal Claw",
 		pp: 35,
@@ -8630,7 +8631,7 @@ exports.BattleMovedex = {
 		basePower: 90,
 		category: "Physical",
 		desc: "Has a 20% chance to raise the user's Attack by 1 stage.",
-		shortDesc: "20% chance to boost the user's Attack by 1.",
+		shortDesc: "20% chance to raise the user's Attack by 1.",
 		id: "meteormash",
 		isViable: true,
 		name: "Meteor Mash",
@@ -8754,7 +8755,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		volatileStatus: 'lockon',
+		onTryHit: function (target, source) {
+			if (source.volatiles['lockon']) return false;
+		},
+		onHit: function (target, source) {
+			source.addVolatile('lockon', target);
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8765,7 +8771,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Body Slam, Dragon Rush, Flying Press, Heat Crash, Phantom Force, Shadow Force, Steamroller, and Stomp will not check accuracy and have their damage doubled if used against the user while it is active.",
-		shortDesc: "Boosts the user's evasion by 2.",
+		shortDesc: "Raises the user's evasiveness by 2.",
 		id: "minimize",
 		name: "Minimize",
 		pp: 10,
@@ -8776,12 +8782,12 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true,
 			onSourceModifyDamage: function (damage, source, target, move) {
-				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1}) {
+				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1}) {
 					return this.chainModify(2);
 				}
 			},
 			onAccuracy: function (accuracy, target, source, move) {
-				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1}) {
+				if (move.id in {'stomp':1, 'steamroller':1, 'bodyslam':1, 'flyingpress':1, 'dragonrush':1, 'phantomforce':1, 'heatcrash':1, 'shadowforce':1}) {
 					return true;
 				}
 				return accuracy;
@@ -8890,7 +8896,7 @@ exports.BattleMovedex = {
 			}
 		},
 		onHit: function (target, source) {
-			this.useMove(target.lastMove, source);
+			this.useMove(target.lastMove, source, target);
 		},
 		secondary: false,
 		target: "normal",
@@ -8982,7 +8988,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a major status condition. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
-		shortDesc: "Prevents status and weakens Dragon if grounded.",
+		shortDesc: "5 turns. Can't status,-Dragon power vs grounded.",
 		id: "mistyterrain",
 		name: "Misty Terrain",
 		pp: 10,
@@ -9231,7 +9237,7 @@ exports.BattleMovedex = {
 		basePower: 65,
 		category: "Special",
 		desc: "Has a 100% chance to lower the target's Special Attack by 1 stage.",
-		shortDesc: "Lowers the target's Special Attack by 1.",
+		shortDesc: "100% chance to lower the target's Sp. Atk by 1.",
 		id: "mysticalfire",
 		name: "Mystical Fire",
 		pp: 10,
@@ -9252,7 +9258,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack by 2 stages.",
-		shortDesc: "Boosts the user's Sp. Atk by 2.",
+		shortDesc: "Raises the user's Sp. Atk by 2.",
 		id: "nastyplot",
 		isViable: true,
 		name: "Nasty Plot",
@@ -9290,6 +9296,7 @@ exports.BattleMovedex = {
 				pokemon.volatiles['naturalgift'].basePower = item.naturalGift.basePower;
 				pokemon.volatiles['naturalgift'].type = item.naturalGift.type;
 				pokemon.setItem('');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
 			}
 		},
 		onPrepareHit: function (target, source) {
@@ -9455,7 +9462,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Attack and Special Attack by 1 stage.",
-		shortDesc: "Lowers target's Atk and SpAtk by 1.",
+		shortDesc: "Lowers the target's Attack and Sp. Atk by 1.",
 		id: "nobleroar",
 		name: "Noble Roar",
 		pp: 30,
@@ -9476,7 +9483,7 @@ exports.BattleMovedex = {
 		basePower: 20,
 		category: "Physical",
 		desc: "Has a 100% chance to paralyze the target.",
-		shortDesc: "Deals damage and paralyzes the target.",
+		shortDesc: "100% chance to paralyze the target.",
 		id: "nuzzle",
 		name: "Nuzzle",
 		pp: 20,
@@ -9553,7 +9560,7 @@ exports.BattleMovedex = {
 		basePower: 60,
 		category: "Special",
 		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
-		shortDesc: "10% chance to boost all stats by 1 (not acc/eva).",
+		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
 		id: "ominouswind",
 		name: "Ominous Wind",
 		pp: 5,
@@ -9580,7 +9587,7 @@ exports.BattleMovedex = {
 		basePower: 110,
 		category: "Special",
 		desc: "No additional effect.",
-		shortDesc: "Deals damage to all adjacent foes.",
+		shortDesc: "No additional effect. Hits adjacent foes.",
 		id: "originpulse",
 		isViable: true,
 		name: "Origin Pulse",
@@ -9680,7 +9687,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Attack and Special Attack by 1 stage. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
-		shortDesc: "Foe's Atk/SpA -1, then switch out.",
+		shortDesc: "Lowers target's Atk, Sp. Atk by 1. User switches.",
 		id: "partingshot",
 		name: "Parting Shot",
 		pp: 20,
@@ -9817,7 +9824,7 @@ exports.BattleMovedex = {
 		basePower: 90,
 		category: "Physical",
 		desc: "No additional effect.",
-		shortDesc: "Hits all adjacent Pokemon.",
+		shortDesc: "No additional effect. Hits adjacent Pokemon.",
 		id: "petalblizzard",
 		name: "Petal Blizzard",
 		pp: 15,
@@ -9884,6 +9891,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			}
 		},
@@ -9914,7 +9922,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Attack by 1 stage.",
-		shortDesc: "Lowers target's Attack by 1. Ignores Protect.",
+		shortDesc: "Lowers the target's Attack by 1.",
 		id: "playnice",
 		name: "Play Nice",
 		pp: 20,
@@ -10117,7 +10125,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up.",
-		shortDesc: "Foe takes damage when using Fire moves. +1 Priority.",
+		shortDesc: "If using a Fire move, target loses 1/4 max HP.",
 		id: "powder",
 		name: "Powder",
 		pp: 20,
@@ -10134,11 +10142,10 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-start', target, 'Powder');
 			},
-			onBeforeMove: function (pokemon, target, move) {
-				var item = pokemon.getItem();
-				if (move.type === 'Fire' || (move.name === 'Hidden Power' && pokemon.hpType === 'Fire') || (move.name === 'Weather Ball' && this.isWeather(['sunnyday', 'desolateland'])) || (item.isBerry && move.name === 'Natural Gift' && item.naturalGift.type === 'Fire') || (move.name === 'Judgment' && item.name === 'Flame Plate')) {
+			onTryMove: function (pokemon, target, move) {
+				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'Powder');
-					this.directDamage(Math.floor(pokemon.maxhp / 4) + 1);
+					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
 					return false;
 				}
 			}
@@ -10287,7 +10294,7 @@ exports.BattleMovedex = {
 		basePower: 40,
 		category: "Physical",
 		desc: "Has a 100% chance to raise the user's Attack by 1 stage.",
-		shortDesc: "Hitting a target raises Attack by 1.",
+		shortDesc: "100% chance to raise the user's Attack by 1.",
 		id: "poweruppunch",
 		name: "Power-Up Punch",
 		pp: 20,
@@ -10330,7 +10337,7 @@ exports.BattleMovedex = {
 		basePower: 120,
 		category: "Physical",
 		desc: "No additional effect.",
-		shortDesc: "Deals damage to all adjacent foes.",
+		shortDesc: "No additional effect. Hits adjacent Pokemon.",
 		id: "precipiceblades",
 		isViable: true,
 		name: "Precipice Blades",
@@ -10610,7 +10617,7 @@ exports.BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Power is equal to 60+(X*20), where X is the target's total stat stage changes that are greater than 0, but not more than 200 power.",
-		shortDesc: "60 power + 20 for each of the target's stat boosts.",
+		shortDesc: "60 power +20 for each of the target's stat boosts.",
 		id: "punishment",
 		name: "Punishment",
 		pp: 5,
@@ -10665,11 +10672,14 @@ exports.BattleMovedex = {
 					this.cancelMove(sources[i]);
 					// Run through each decision in queue to check if the Pursuit user is supposed to mega evolve this turn.
 					// If it is, then mega evolve before moving.
-					var willMegaEvo = false;
-					for (var j = 0; j < this.queue.length; j++) {
-						if (this.queue[j].pokemon === sources[i] && this.queue[j].choice === 'megaEvo') willMegaEvo = true;
+					if (sources[i].canMegaEvo) {
+						for (var j = 0; j < this.queue.length; j++) {
+							if (this.queue[j].pokemon === sources[i] && this.queue[j].choice === 'megaEvo') {
+								this.runMegaEvo(sources[i]);
+								break;
+							}
+						}
 					}
-					if (willMegaEvo) this.runMegaEvo(sources[i]);
 					this.runMove('pursuit', sources[i], pokemon);
 				}
 			}
@@ -10781,7 +10791,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack, Special Defense, and Speed by 1 stage.",
-		shortDesc: "Boosts the user's Sp. Atk, Sp. Def, Speed by 1.",
+		shortDesc: "Raises the user's Sp. Atk, Sp. Def, Speed by 1.",
 		id: "quiverdance",
 		isViable: true,
 		name: "Quiver Dance",
@@ -10804,7 +10814,7 @@ exports.BattleMovedex = {
 		basePower: 20,
 		category: "Physical",
 		desc: "Once this move is successfuly used, the user's Attack is raised by 1 stage every time it is hit by another Pokemon's attack as long as this move is chosen for use.",
-		shortDesc: "Boosts the user's Attack by 1 if hit during use.",
+		shortDesc: "Raises the user's Attack by 1 if hit during use.",
 		id: "rage",
 		name: "Rage",
 		pp: 20,
@@ -10877,12 +10887,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {},
 		weather: 'RainDance',
-		onTry: function (target, source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-fail', source, 'move: Rain Dance', '[from]: ' + this.effectiveWeather());
-				return null;
-			}
-		},
 		secondary: false,
 		target: "all",
 		type: "Water"
@@ -11380,7 +11384,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Speed by 2 stages.",
-		shortDesc: "Boosts the user's Speed by 2.",
+		shortDesc: "Raises the user's Speed by 2.",
 		id: "rockpolish",
 		isViable: true,
 		name: "Rock Polish",
@@ -11649,7 +11653,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the Attack and Special Attack of all grounded Grass-type Pokemon on the field by 1 stage.",
-		shortDesc: "Raises Attack and Sp. Atk of Grass Pokemon.",
+		shortDesc: "Raises Atk, Sp. Atk of grounded Grass types by 1.",
 		id: "rototiller",
 		name: "Rototiller",
 		pp: 10,
@@ -11657,16 +11661,24 @@ exports.BattleMovedex = {
 		flags: {distance: 1, nonsky: 1},
 		onHitField: function (target, source) {
 			var targets = [];
+			var anyAirborne = false;
 			for (var i = 0; i < this.sides.length; i++) {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j] && this.sides[i].active[j].hasType('Grass')) {
-						// This move affects every Grass-type Pokemon in play.
-						targets.push(this.sides[i].active[j]);
+					if (this.sides[i].active[j]) {
+						if (!this.sides[i].active[j].runImmunity('Ground')) {
+							this.add('-immune', this.sides[i].active[j], '[msg]');
+							anyAirborne = true;
+							continue;
+						}
+						if (this.sides[i].active[j].hasType('Grass')) {
+							// This move affects every grounded Grass-type Pokemon in play.
+							targets.push(this.sides[i].active[j]);
+						}
 					}
 				}
 			}
-			if (!targets.length) return false; // No targets; move fails
-			for (var i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source, 'move: Rototiller');
+			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon
+			for (var i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source);
 		},
 		secondary: false,
 		target: "all",
@@ -11848,12 +11860,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {},
 		weather: 'Sandstorm',
-		onTry: function (target, source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-fail', source, 'move: Sandstorm', '[from]: ' + this.effectiveWeather());
-				return null;
-			}
-		},
 		secondary: false,
 		target: "all",
 		type: "Rock"
@@ -12168,6 +12174,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			}
 		},
@@ -12218,7 +12225,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack by 1 stage.",
-		shortDesc: "Boosts the user's Attack by 1.",
+		shortDesc: "Raises the user's Attack by 1.",
 		id: "sharpen",
 		isViable: true,
 		name: "Sharpen",
@@ -12256,7 +12263,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the user's Defense and Special Defense by 1 stage. Raises the user's Attack, Special Attack, and Speed by 2 stages.",
-		shortDesc: "Boosts Atk, SpA, Spe by 2. Lowers Def, SpD by 1.",
+		shortDesc: "Lowers Def, SpD by 1; raises Atk, SpA, Spe by 2.",
 		id: "shellsmash",
 		isViable: true,
 		name: "Shell Smash",
@@ -12281,7 +12288,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Speed by 2 stages and its Attack by 1 stage.",
-		shortDesc: "Boosts the user's Speed by 2 and Attack by 1.",
+		shortDesc: "Raises the user's Speed by 2 and Attack by 1.",
 		id: "shiftgear",
 		isViable: true,
 		name: "Shift Gear",
@@ -12339,7 +12346,7 @@ exports.BattleMovedex = {
 		basePower: 60,
 		category: "Special",
 		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
-		shortDesc: "10% chance to boost all stats by 1 (not acc/eva).",
+		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
 		id: "silverwind",
 		name: "Silver Wind",
 		pp: 5,
@@ -12491,7 +12498,7 @@ exports.BattleMovedex = {
 		basePower: 130,
 		category: "Physical",
 		desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Boosts user's Defense by 1 on turn 1. Hits turn 2.",
+		shortDesc: "Raises user's Defense by 1 on turn 1. Hits turn 2.",
 		id: "skullbash",
 		name: "Skull Bash",
 		pp: 10,
@@ -12563,12 +12570,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
 		isContact: true,
+		isTwoTurnMove: true,
 		onTryHit: function (target, source, move) {
 			if (target.fainted) return false;
 			if (source.removeVolatile(move.id)) {
 				if (target !== source.volatiles['twoturnmove'].source) return false;
 
-				if (target.hasType('Flying') && !target.negateImmunity['Ground']) {
+				if (target.hasType('Flying')) {
 					this.add('-immune', target, '[msg]');
 					this.add('-end', target, 'Sky Drop');
 					return null;
@@ -12598,7 +12606,7 @@ exports.BattleMovedex = {
 				if (defender !== this.effectData.source) return;
 				defender.trapped = true;
 			},
-			onFoeBeforeMovePriority: 11,
+			onFoeBeforeMovePriority: 12,
 			onFoeBeforeMove: function (attacker, defender, move) {
 				if (attacker === this.effectData.source) {
 					this.debug('Sky drop nullifying.');
@@ -12626,6 +12634,7 @@ exports.BattleMovedex = {
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
 			onAnyBasePower: function (basePower, target, source, move) {
@@ -13035,7 +13044,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user lose 1/8 of their maximum HP, rounded down. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard. Fails if the user moves last this turn.",
-		shortDesc: "Protects user. Damages contactors.",
+		shortDesc: "Protects from moves. Contact: loses 1/8 max HP.",
 		id: "spikyshield",
 		isViable: true,
 		name: "Spiky Shield",
@@ -13061,8 +13070,15 @@ exports.BattleMovedex = {
 					target.removeVolatile('spikyshield');
 					return;
 				}
-				if (move && (move.target === 'self' || move.id === 'suckerpunch')) return;
-				this.add('-activate', target, 'move: Protect');
+				if (move && (move.target === 'self' || move.isNotProtectable)) return;
+				this.add('-activate', target, 'Protect');
+				var lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
 				if (move.isContact) {
 					this.damage(source.maxhp / 8, source, target);
 				}
@@ -13434,7 +13450,7 @@ exports.BattleMovedex = {
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a 10% chance to raise the user's Defense by 1 stage.",
-		shortDesc: "10% chance to boost the user's Defense by 1.",
+		shortDesc: "10% chance to raise the user's Defense by 1.",
 		id: "steelwing",
 		name: "Steel Wing",
 		pp: 25,
@@ -13458,7 +13474,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Sets up a hazard on the foe's side of the field, lowering the Speed by 1 stage of each foe that switches in, unless it is a Flying-type Pokemon or has the Ability Levitate. Can be used only once before failing. Can be removed from the foe's side if any foe uses Rapid Spin or Defog, or is hit by Defog.",
-		shortDesc: "Lowers Speed of opposing Pokemon switched in.",
+		shortDesc: "Lowers Speed of grounded foes by 1 on switch-in.",
 		id: "stickyweb",
 		isViable: true,
 		name: "Sticky Web",
@@ -13488,7 +13504,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense and Special Defense by 1 stage. The user's Stockpile count increases by 1. Fails if the user's Stockpile count is 3.",
-		shortDesc: "Boosts user's Defense, Sp. Def by 1. Max 3 uses.",
+		shortDesc: "Raises user's Defense, Sp. Def by 1. Max 3 uses.",
 		id: "stockpile",
 		isViable: true,
 		name: "Stockpile",
@@ -13843,12 +13859,12 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isNotProtectable: true,
 		isContact: true,
-		onTryHit: function (target) {
+		onTry: function (source, target) {
 			var decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || (decision.move.category === 'Status' && decision.move.id !== 'mefirst') || target.volatiles.mustrecharge) {
-				return false;
+				this.add('-fail', source);
+				return null;
 			}
 		},
 		secondary: false,
@@ -13869,12 +13885,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {},
 		weather: 'sunnyday',
-		onTry: function (target, source) {
-			if (this.isWeather(['desolateland', 'primordialsea', 'deltastream'])) {
-				this.add('-fail', source, 'move: Sunny Day', '[from]: ' + this.effectiveWeather());
-				return null;
-			}
-		},
 		secondary: false,
 		target: "all",
 		type: "Fire"
@@ -13965,7 +13975,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the target's Attack by 2 stages and confuses it.",
-		shortDesc: "Boosts the target's Attack by 2 and confuses it.",
+		shortDesc: "Raises the target's Attack by 2 and confuses it.",
 		id: "swagger",
 		name: "Swagger",
 		pp: 15,
@@ -14104,7 +14114,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack by 2 stages.",
-		shortDesc: "Boosts the user's Attack by 2.",
+		shortDesc: "Raises the user's Attack by 2.",
 		id: "swordsdance",
 		isViable: true,
 		name: "Swords Dance",
@@ -14188,7 +14198,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Special Attack by 3 stages.",
-		shortDesc: "Boosts the user's Sp. Atk by 3.",
+		shortDesc: "Raises the user's Sp. Atk by 3.",
 		id: "tailglow",
 		isViable: true,
 		name: "Tail Glow",
@@ -14333,6 +14343,7 @@ exports.BattleMovedex = {
 					}
 				}
 			},
+			onBeforeMovePriority: 5,
 			onBeforeMove: function (attacker, defender, move) {
 				if (move.category === 'Status') {
 					this.add('cant', attacker, 'move: Taunt', move);
@@ -14402,8 +14413,9 @@ exports.BattleMovedex = {
 				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
 				this.add('-start', target, 'Telekinesis');
 			},
-			onSourceModifyMove: function (move) {
-				move.accuracy = true;
+			onAccuracyPriority: -1,
+			onAccuracy: function (accuracy, target, source, move) {
+				if (move && !move.ohko) return true;
 			},
 			onImmunity: function (type) {
 				if (type === 'Ground') return false;
@@ -14471,18 +14483,22 @@ exports.BattleMovedex = {
 		basePower: 90,
 		category: "Physical",
 		desc: "This move can hit airborne Pokemon, which includes Flying-type Pokemon, Pokemon with the Ability Levitate, Pokemon holding an Air Balloon, and Pokemon under the effect of Magnet Rise or Telekinesis. This move can hit a target using Bounce, Fly, or Sky Drop. If this move hits a target under the effect of Bounce, Fly, Magnet Rise, or Telekinesis, the effect ends. If the target is a Flying type that has not used Roost this turn or a Pokemon with the Ability Levitate, it loses its immunity to Ground-type attacks and the Ability Arena Trap as long as it remains active. During the effect, Magnet Rise fails for the target and Telekinesis fails against the target.",
-		shortDesc: "Hits adjacent foes and removes their Ground immunity.",
+		shortDesc: "Hits adjacent foes, removes Ground immunity.",
 		id: "thousandarrows",
 		name: "Thousand Arrows",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		isUnreleased: true,
-		onModifyMovePriority: -5,
 		onModifyMove: function (move) {
 			if (move.type === 'Ground') {
 				move.affectedByImmunities = false;
 			}
+		},
+		onTryHit: function (target) {
+			// only the attack that grounds the target ignores effectiveness
+			if (target.negateImmunity['Ground']) return;
+			target.negateImmunity['Ground'] = 'IgnoreEffectiveness';
 		},
 		volatileStatus: 'smackdown',
 		secondary: false,
@@ -14495,7 +14511,7 @@ exports.BattleMovedex = {
 		basePower: 90,
 		category: "Physical",
 		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-		shortDesc: "Prevents the target from switching out.",
+		shortDesc: "Hits adjacent foes. Prevents them from switching.",
 		id: "thousandwaves",
 		name: "Thousand Waves",
 		pp: 10,
@@ -14689,7 +14705,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The target's positive stat stages become negative and vice versa. Fails if all of the target's stat stages are 0.",
-		shortDesc: "Inverts target's stat stages.",
+		shortDesc: "Inverts the target's stat stages.",
 		id: "topsyturvy",
 		name: "Topsy-Turvy",
 		pp: 20,
@@ -15200,7 +15216,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Lowers the target's Attack, Special Attack, and Speed by 1 stage if the target is poisoned. Fails if the target is not poisoned.",
-		shortDesc: "Lowers Attack, Sp. Atk, Speed of poisoned target.",
+		shortDesc: "Lowers Atk, Sp. Atk, Speed of poisoned foes by 1.",
 		id: "venomdrench",
 		name: "Venom Drench",
 		pp: 20,
@@ -15544,7 +15560,7 @@ exports.BattleMovedex = {
 		basePower: 15,
 		category: "Physical",
 		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times.",
-		shortDesc: "Hits 2-5 times in one turn. Priority +1.",
+		shortDesc: "Hits 2-5 times in one turn.",
 		id: "watershuriken",
 		name: "Water Shuriken",
 		pp: 20,
@@ -15770,7 +15786,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Defense by 1 stage.",
-		shortDesc: "Boosts the user's Defense by 1.",
+		shortDesc: "Raises the user's Defense by 1.",
 		id: "withdraw",
 		name: "Withdraw",
 		pp: 40,
@@ -15847,7 +15863,7 @@ exports.BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Attack and Special Attack by 1 stage.",
-		shortDesc: "Boosts the user's Attack and Sp. Atk by 1.",
+		shortDesc: "Raises the user's Attack and Sp. Atk by 1.",
 		id: "workup",
 		isViable: true,
 		name: "Work Up",

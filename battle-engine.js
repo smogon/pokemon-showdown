@@ -132,6 +132,10 @@ battleEngineFakeProcess.client.on('message', function (message) {
 	}
 });
 
+process.on('disconnect', function () {
+	process.exit();
+});
+
 BattlePokemon = (function () {
 	function BattlePokemon(set, side) {
 		this.side = side;
@@ -193,9 +197,6 @@ BattlePokemon = (function () {
 		this.baseAbility = toId(set.ability);
 		this.ability = this.baseAbility;
 		this.item = toId(set.item);
-		var forme;
-		if (this.baseTemplate.otherFormes) forme = this.battle.getTemplate(this.baseTemplate.otherFormes[0]);
-		this.canMegaEvo = ((this.battle.getItem(this.item).megaEvolves === this.baseTemplate.baseSpecies) || (forme && forme.isMega && forme.requiredMove && this.set.moves.indexOf(toId(forme.requiredMove)) > -1));
 		this.abilityData = {id: this.ability};
 		this.itemData = {id: this.item};
 		this.speciesData = {id: this.speciesid};
@@ -233,6 +234,8 @@ BattlePokemon = (function () {
 				this.moves.push(move.id);
 			}
 		}
+
+		this.canMegaEvo = this.battle.canMegaEvo(this);
 
 		if (!this.set.evs) {
 			this.set.evs = {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84};
@@ -1003,7 +1006,6 @@ BattlePokemon = (function () {
 		if (!source) source = this;
 		var item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
-			this.lastItem = '';
 			this.item = '';
 			this.itemData = {id: '', target: this};
 			return item;
@@ -1143,7 +1145,7 @@ BattlePokemon = (function () {
 	BattlePokemon.getHealth = function (side) {
 		if (!this.hp) return '0 fnt';
 		var hpstring;
-		if ((side === true) || (this.side === side) || this.battle.getFormat().debug) {
+		if ((side === true) || (this.side === side) || this.battle.getFormat().debug || this.battle.reportExactHP) {
 			hpstring = '' + this.hp + '/' + this.maxhp;
 		} else {
 			var ratio = this.hp / this.maxhp;
@@ -1324,7 +1326,7 @@ BattleSide = (function () {
 				baseAbility: pokemon.baseAbility,
 				item: pokemon.item,
 				pokeball: pokemon.pokeball,
-				canMegaEvo: pokemon.canMegaEvo
+				canMegaEvo: !!pokemon.canMegaEvo
 			});
 		}
 		return data;
@@ -1403,6 +1405,81 @@ BattleSide = (function () {
 	};
 	BattleSide.prototype.emitRequest = function (update) {
 		this.battle.send('request', this.id + "\n" + this.battle.rqid + "\n" + JSON.stringify(update));
+	};
+	BattleSide.prototype.resolveDecision = function () {
+		if (this.decision) return this.decision;
+		var decisions = [];
+
+		switch (this.currentRequest) {
+		case 'move':
+			for (var i = 0; i < this.active.length; i++) {
+				var pokemon = this.active[i];
+				if (!pokemon || pokemon.fainted) continue;
+
+				var lockedMove = pokemon.getLockedMove();
+				if (lockedMove) {
+					decisions.push({
+						choice: 'move',
+						pokemon: pokemon,
+						targetLoc: this.battle.runEvent('LockMoveTarget', pokemon) || 0,
+						move: lockedMove
+					});
+					continue;
+				}
+
+				var moveid = 'struggle';
+				var moves = pokemon.getMoves();
+				for (var j = 0; j < moves.length; j++) {
+					if (moves[j].disabled) continue;
+					moveid = moves[j].id;
+					break;
+				}
+				decisions.push({
+					choice: 'move',
+					pokemon: pokemon,
+					targetLoc: 0,
+					move: moveid
+				});
+			}
+			break;
+
+		case 'switch':
+			var canSwitchOut = [];
+			for (var i = 0; i < this.active.length; i++) {
+				if (this.active[i] && this.active[i].switchFlag) canSwitchOut.push(i);
+			}
+
+			var canSwitchIn = [];
+			for (var i = this.active.length; i < this.pokemon.length; i++) {
+				if (this.pokemon[i] && !this.pokemon[i].fainted) canSwitchIn.push(i);
+			}
+
+			var willPass = canSwitchOut.splice(Math.min(canSwitchOut.length, canSwitchIn.length));
+			for (var i = 0; i < canSwitchOut.length; i++) {
+				decisions.push({
+					choice: 'switch',
+					pokemon: this.active[canSwitchOut[i]],
+					priority: 101
+				});
+			}
+			for (var i = 0; i < willPass.length; i++) {
+				decisions.push({
+					choice: 'pass',
+					pokemon: this.active[willPass[i]],
+					priority: 102
+				});
+			}
+			break;
+
+		case 'teampreview':
+			decisions.push({
+				choice: 'team',
+				side: this,
+				team: '123456'.slice(0, this.currentRequestDetails ? parseInt(this.currentRequestDetails, 10) : this.active.length)
+			});
+		}
+
+		return decisions;
 	};
 	BattleSide.prototype.destroy = function () {
 		// deallocate ourself
@@ -1514,6 +1591,7 @@ Battle = (function () {
 	Battle.prototype.rqid = 0;
 	Battle.prototype.lastMoveLine = 0;
 	Battle.prototype.reportPercentages = false;
+	Battle.prototype.supportCancel = false;
 
 	Battle.prototype.toString = function () {
 		return 'Battle: ' + this.format;
@@ -1620,6 +1698,19 @@ Battle = (function () {
 		if (source === undefined && this.event && this.event.target) source = this.event.target;
 
 		if (this.weather === status.id && this.gen > 2) return false;
+		if (status.id) {
+			var result = this.runEvent('SetWeather', source, source, status);
+			if (!result) {
+				if (result === false) {
+					if (sourceEffect && sourceEffect.weather) {
+						this.add('-fail', source, sourceEffect, '[from]: ' + this.weather);
+					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+						this.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
+					}
+				}
+				return null;
+			}
+		}
 		if (this.weather && !status.id) {
 			var oldstatus = this.getWeather();
 			this.singleEvent('End', oldstatus, this.weatherData, this);
@@ -1835,7 +1926,7 @@ Battle = (function () {
 	Battle.prototype.eachEvent = function (eventid, effect, relayVar) {
 		var actives = [];
 		if (!effect && this.effect) effect = this.effect;
-		for (var i = 0; i < this.sides.length;i++) {
+		for (var i = 0; i < this.sides.length; i++) {
 			var side = this.sides[i];
 			for (var j = 0; j < side.active.length; j++) {
 				if (side.active[j]) actives.push(side.active[j]);
@@ -2078,8 +2169,6 @@ Battle = (function () {
 					SubDamage: 1,
 					Heal: 1,
 					TakeItem: 1,
-					UseItem: 1,
-					EatItem: 1,
 					SetStatus: 1,
 					CriticalHit: 1,
 					ModifyPokemon: 1,
@@ -2219,7 +2308,7 @@ Battle = (function () {
 				statuses = statuses.concat(this.getRelevantEffectsInner(this, callbackType, null, null, true, false, getAll));
 			}
 			if (bubbleDown) {
-				for (var i = 0;i < thing.active.length;i++) {
+				for (var i = 0; i < thing.active.length; i++) {
 					statuses = statuses.concat(this.getRelevantEffectsInner(thing.active[i], callbackType, null, null, false, true, getAll));
 				}
 			}
@@ -2386,6 +2475,7 @@ Battle = (function () {
 		}
 
 		if (p1request) {
+			if (!this.supportCancel || !p2request) p1request.noCancel = true;
 			this.p1.emitRequest(p1request);
 		} else {
 			this.p1.decision = true;
@@ -2393,6 +2483,7 @@ Battle = (function () {
 		}
 
 		if (p2request) {
+			if (!this.supportCancel || !p1request) p2request.noCancel = true;
 			this.p2.emitRequest(p2request);
 		} else {
 			this.p2.decision = true;
@@ -2462,6 +2553,7 @@ Battle = (function () {
 			var oldActive = side.active[pos];
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
+			oldActive.usedItemThisTurn = false;
 			oldActive.position = pokemon.position;
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
@@ -2520,6 +2612,7 @@ Battle = (function () {
 			this.singleEvent('End', this.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
+			oldActive.usedItemThisTurn = false;
 			oldActive.position = pokemon.position;
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
@@ -2718,6 +2811,9 @@ Battle = (function () {
 		case 'partiallytrapped':
 			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
 			break;
+		case 'powder':
+			this.add('-damage', target, target.getHealth, '[silent]');
+			break;
 		default:
 			if (effect.effectType === 'Move') {
 				this.add('-damage', target, target.getHealth);
@@ -2855,7 +2951,7 @@ Battle = (function () {
 		};
 
 		if (move.affectedByImmunities) {
-			if (!target.runImmunity(move.type, true)) {
+			if (!target.runImmunity(move.type, !suppressMessages)) {
 				return false;
 			}
 		}
@@ -2941,9 +3037,11 @@ Battle = (function () {
 			ignoreNegativeOffensive = true;
 			ignorePositiveDefensive = true;
 		}
-
-		var ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
-		var ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
+		// Check for abilities to see if defenses or offenses are negated (Unaware, Mold Breaker, etc.)
+		var targetAbilityIgnoreOffensive = !target.ignore['Ability'] && target.getAbility().ignoreOffensive;
+		var pokemonAbilityIgnoreDefensive = !pokemon.ignore['Ability'] && pokemon.getAbility().ignoreDefensive;
+		var ignoreOffensive = !!(move.ignoreOffensive || targetAbilityIgnoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
+		var ignoreDefensive = !!(move.ignoreDefensive || pokemonAbilityIgnoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
 
 		if (ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
@@ -3158,8 +3256,8 @@ Battle = (function () {
 			}
 		}
 
-		if (this.gen <= 2) {
-			// in gen 1-2, fainting skips the rest of the turn, including residuals
+		if (this.gen <= 1) {
+			// in gen 1, fainting skips the rest of the turn, including residuals
 			this.queue = [];
 		} else if (this.gen <= 3 && this.gameType === 'singles') {
 			// in gen 3 or earlier, fainting in singles skips to residuals
@@ -3346,7 +3444,7 @@ Battle = (function () {
 			this.runMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
 			break;
 		case 'megaEvo':
-			if (this.runMegaEvo) this.runMegaEvo(decision.pokemon);
+			if (decision.pokemon.canMegaEvo) this.runMegaEvo(decision.pokemon);
 			break;
 		case 'beforeTurnMove':
 			if (!decision.pokemon.isActive) return false;
@@ -3599,10 +3697,10 @@ Battle = (function () {
 	};
 	Battle.prototype.commitDecisions = function () {
 		if (this.p1.decision !== true) {
-			this.addQueue(this.p1.decision, true, this.p1);
+			this.addQueue(this.p1.resolveDecision(), true, this.p1);
 		}
 		if (this.p2.decision !== true) {
-			this.addQueue(this.p2.decision, true, this.p2);
+			this.addQueue(this.p2.resolveDecision(), true, this.p2);
 		}
 
 		this.currentRequest = '';
@@ -3647,12 +3745,16 @@ Battle = (function () {
 		var len = choices.length;
 		if (side.currentRequest !== 'teampreview') len = side.active.length;
 
+		var isDefault;
+		var choosableTargets = {normal:1, any:1, adjacentAlly:1, adjacentAllyOrSelf:1, adjacentFoe:1};
+
 		var freeSwitchCount = {'switch':0, 'pass':0};
 		if (side.currentRequest === 'switch') {
 			var canSwitch = side.active.filter(function (mon) {return mon && mon.switchFlag;}).length;
 			freeSwitchCount['switch'] = Math.min(canSwitch, side.pokemon.slice(side.active.length).filter(function (mon) {return !mon.fainted;}).length);
 			freeSwitchCount['pass'] = canSwitch - freeSwitchCount['switch'];
 		}
+
 		for (var i = 0; i < len; i++) {
 			var choice = (choices[i] || '').trim();
 
@@ -3684,6 +3786,23 @@ Battle = (function () {
 						pokemon: pokemon,
 						targetLoc: this.runEvent('LockMoveTarget', pokemon) || 0,
 						move: lockedMove
+					});
+					continue;
+				}
+				if (isDefault || choice === 'default') {
+					isDefault = true;
+					var moves = pokemon.getMoves();
+					var moveid = 'struggle';
+					for (var j = 0; j < moves.length; j++) {
+						if (moves[j].disabled) continue;
+						moveid = moves[j].id;
+						break;
+					}
+					decisions.push({
+						choice: 'move',
+						pokemon: pokemon,
+						targetLoc: 0,
+						move: moveid
 					});
 					continue;
 				}
@@ -3822,13 +3941,27 @@ Battle = (function () {
 						return false;
 					}
 					moveid = requestMoves[moveIndex].id;
+					if (!targetLoc && side.active.length > 1 && requestMoves[moveIndex].target in choosableTargets) {
+						this.debug("Can't use the move without a target");
+						return false;
+					}
 				} else {
 					// parse a move name
 					moveid = toId(data);
 					if (moveid.substr(0, 11) === 'hiddenpower') {
 						moveid = 'hiddenpower';
 					}
-					if (!requestMoves.map('id').any(moveid)) {
+					var isValidMove = false;
+					for (var j = 0; j < requestMoves.length; j++) {
+						if (requestMoves[j].id !== moveid) continue;
+						if (!targetLoc && side.active.length > 1 && requestMoves[j].target in choosableTargets) {
+							this.debug("Can't use the move without a target");
+							return false;
+						}
+						isValidMove = true;
+						break;
+					}
+					if (!isValidMove) {
 						this.debug("Can't use an unexpected move");
 						return false;
 					}
@@ -3879,7 +4012,7 @@ Battle = (function () {
 			case 'pass':
 				if (i > side.active.length || i > side.pokemon.length) continue;
 				if (side.currentRequest !== 'switch') {
-					this.debug("No se pudo pasar el turno.");
+					this.debug("Can't pass the turn");
 					return false;
 				}
 				decisions.push({
@@ -3891,6 +4024,7 @@ Battle = (function () {
 		}
 		if (freeSwitchCount['switch'] !== 0 || freeSwitchCount['pass'] !== 0) return false;
 
+		if (!this.supportCancel || isDefault) decisions.finalDecision = true;
 		return decisions;
 	};
 	Battle.prototype.add = function () {
@@ -4079,6 +4213,7 @@ Battle = (function () {
 			if (alreadyEnded !== undefined && this.ended && !alreadyEnded) {
 				if (this.rated || Config.logChallenges) {
 					var log = {
+						seed: this.startingSeed,
 						turns: this.turn,
 						p1: this.p1.name,
 						p2: this.p2.name,
