@@ -1586,6 +1586,8 @@ exports.BattleScripts = {
 				ability = 'Intimidate';
 			} else if (template.id === 'unfezant') {
 				ability = 'Super Luck';
+			} else if (template.id === 'linoone') {
+				ability = 'Pickup';
 			}
 		}
 
@@ -1694,8 +1696,8 @@ exports.BattleScripts = {
 			}
 
 		// medium priority
-		} else if (ability === 'Guts') {
-			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
+		} else if (ability === 'Guts' || ability === 'Quick Feet') {
+			item = hasMove['drainpunch'] && ability !== 'Quick Feet' ? 'Flame Orb' : 'Toxic Orb';
 			if ((hasMove['return'] || hasMove['hyperfang']) && !hasMove['facade']) {
 				// lol no
 				for (var j = 0; j < moves.length; j++) {
@@ -2726,6 +2728,9 @@ exports.BattleScripts = {
 			if (template.id === 'unfezant') {
 				ability = 'Super Luck';
 			}
+			if (template.id === 'linoone') {
+				ability = 'Pickup';
+			}
 		}
 
 		// Make EVs comply with the sets.
@@ -2856,8 +2861,8 @@ exports.BattleScripts = {
 			}
 
 		// medium priority
-		} else if (ability === 'Guts') {
-			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
+		} else if (ability === 'Guts' || ability === 'Quick Feet') {
+			item = hasMove['drainpunch'] && ability !== 'Quick Feet' ? 'Flame Orb' : 'Toxic Orb';
 			if ((hasMove['return'] || hasMove['hyperfang']) && !hasMove['facade']) {
 				// lol no
 				for (var j = 0; j < moves.length; j++) {
