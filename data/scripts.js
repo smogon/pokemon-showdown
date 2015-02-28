@@ -4896,6 +4896,9 @@ exports.BattleScripts = {
 			// Not available on ORAS
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
+			// Ban Shedinja from Metronome Random
+			if (template.species === 'Shedinja') continue;
+
 			// Only certain NFE Pokemon are allowed
 			if (template.evos.length && !allowedNFE[template.species]) continue;
 
