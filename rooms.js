@@ -578,7 +578,7 @@ var GlobalRoom = (function () {
 		if (Config.reportBattles && rooms.lobby) {
 			rooms.lobby.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
 		}
-		if (Config.logladderip && options.rated) {
+		if (Config.logLadderIp && options.rated) {
 			if (!this.ladderIpLog) {
 				this.ladderIpLog = fs.createWriteStream('logs/ladderip/ladderip.txt', {flags: 'a'});
 			}
@@ -595,7 +595,7 @@ var GlobalRoom = (function () {
 		if (rooms.lobby) return rooms.lobby.chat(user, message, connection);
 		message = CommandParser.parse(message, this, user, connection);
 		if (message) {
-			connection.sendPopup("You can't send messages directly to the server.");
+			connection.popup("You can't send messages directly to the server.");
 		}
 	};
 	return GlobalRoom;

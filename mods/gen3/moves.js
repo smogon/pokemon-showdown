@@ -261,14 +261,6 @@ exports.BattleMovedex = {
 	},
 	explosion: {
 		inherit: true,
-		onAfterMove: function (pokemon) {
-			for (var i = 0; i < pokemon.side.active.length; i++) {
-				this.cancelMove(pokemon.side.active[i]);
-			}
-			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
-				this.cancelMove(pokemon.side.foe.active[i]);
-			}
-		},
 		basePower: 500
 	},
 	extrasensory: {
@@ -398,7 +390,7 @@ exports.BattleMovedex = {
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				var damage = this.getDamage(source, target, move, true);
-				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source);
+				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'highjumpkick');
 			}
 		}
 	},
@@ -417,7 +409,7 @@ exports.BattleMovedex = {
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				var damage = this.getDamage(source, target, move, true);
-				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source);
+				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'jumpkick');
 			}
 		}
 	},
@@ -476,6 +468,30 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Flying"
+	},
+	moonlight: {
+		inherit: true,
+		onHit: function (pokemon) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(pokemon.maxhp * 2 / 3);
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(pokemon.maxhp / 4);
+			} else {
+				this.heal(pokemon.maxhp / 2);
+			}
+		}
+	},
+	morningsun: {
+		inherit: true,
+		onHit: function (pokemon) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(pokemon.maxhp * 2 / 3);
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(pokemon.maxhp / 4);
+			} else {
+				this.heal(pokemon.maxhp / 2);
+			}
+		}
 	},
 	naturepower: {
 		inherit: true,
@@ -545,14 +561,6 @@ exports.BattleMovedex = {
 	},
 	selfdestruct: {
 		inherit: true,
-		onAfterMove: function (pokemon) {
-			for (var i = 0; i < pokemon.side.active.length; i++) {
-				this.cancelMove(pokemon.side.active[i]);
-			}
-			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
-				this.cancelMove(pokemon.side.foe.active[i]);
-			}
-		},
 		basePower: 400
 	},
 	skillswap: {
@@ -607,6 +615,18 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Normal"
+	},
+	synthesis: {
+		inherit: true,
+		onHit: function (pokemon) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				this.heal(pokemon.maxhp * 2 / 3);
+			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+				this.heal(pokemon.maxhp / 4);
+			} else {
+				this.heal(pokemon.maxhp / 2);
+			}
+		}
 	},
 	tackle: {
 		inherit: true,
@@ -694,7 +714,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 2,
-			onResidualOrder: 2,
+			onResidualOrder: 0,
 			onEnd: function (side) {
 				var target = side.active[this.effectData.sourcePosition];
 				if (!target.fainted) {

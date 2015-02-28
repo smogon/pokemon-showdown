@@ -48,19 +48,24 @@
 // aren't
 
 function runNpm(command) {
+	if (require.main !== module) throw new Error("Dependencies unmet");
+
 	command = 'npm ' + command + ' && ' + process.execPath + ' app.js';
 	console.log('Running `' + command + '`...');
 	require('child_process').spawn('sh', ['-c', command], {stdio: 'inherit', detached: true});
 	process.exit(0);
 }
 
+var isLegacyEngine = !global.Map;
+
 try {
 	require('sugar');
+	if (isLegacyEngine) require('es6-shim');
 } catch (e) {
-	runNpm('install');
+	runNpm('install --production');
 }
-if (!Object.select) {
-	runNpm('update');
+if (isLegacyEngine && !new Map().set()) {
+	runNpm('update --production');
 }
 
 // Make sure config.js exists, and copy it over from config-example.js
@@ -98,7 +103,7 @@ var cloudenv = require('cloud-env');
 Config.bindAddress = cloudenv.get('IP', Config.bindAddress || '');
 Config.port = cloudenv.get('PORT', Config.port);
 
-if (process.argv[2] && parseInt(process.argv[2])) {
+if (require.main === module && process.argv[2] && parseInt(process.argv[2])) {
 	Config.port = parseInt(process.argv[2]);
 }
 
