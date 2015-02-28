@@ -6,8 +6,6 @@ function calculatePoints(category, question) {
 	return BASE_POINTS * (question + 1);
 }
 
-require("es6-shim");
-
 var jeopardies = {};
 
 var JeopardyQuestions = (function () {

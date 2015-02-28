@@ -830,6 +830,9 @@ exports.BattleScripts = {
 				}
 			}
 
+			// PS overrides your move if you have Struggle in the first slot
+			if (m[0] === 'struggle') m.push(m.shift());
+
 			// Random EVs
 			var evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 			var s = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
@@ -976,6 +979,10 @@ exports.BattleScripts = {
 			'Blaze':1, 'Overgrow':1, 'Swarm':1, 'Torrent':1, 'Contrary':1,
 			'Technician':1, 'Skill Link':1, 'Iron Fist':1, 'Adaptability':1, 'Hustle':1
 		};
+		// -ate Abilities
+		var ateAbilities = {
+			'Aerilate':1, 'Pixilate':1, 'Refrigerate':1
+		};
 
 		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType, hasStab;
 
@@ -1035,20 +1042,23 @@ exports.BattleScripts = {
 				// Recoil:
 				if (move.recoil) counter['recoil']++;
 				// Moves which have a base power, but aren't super-weak like Rapid Spin:
-				if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
+				if (move.basePower > 20 || move.multihit || move.basePowerCallback || moveid === 'naturepower') {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
-						// Bounce, Flame Charge, Quick Attack and Sky Attack aren't considered STABs.
-						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
-						if (!(moveid in {bounce:1, flamecharge:1, quickattack:1, skyattack:1})) hasStab = true;
+						// Certain moves aren't acceptable as a Pokemon's only STAB attack
+						if (!(moveid in {bounce:1, fakeout:1, flamecharge:1, quickattack:1, skyattack:1})) hasStab = true;
 					}
+					if (template.abilities['H'] && template.abilities['H'] === 'Protean') hasStab = true;
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
 					if (move.type === 'Grass') counter['overgrow']++;
 					if (move.type === 'Bug') counter['swarm']++;
 					if (move.type === 'Water') counter['torrent']++;
-					if (move.type === 'Normal') counter['ate']++;
+					if (move.type === 'Normal') {
+						counter['ate']++;
+						if (template.abilities[0] in ateAbilities || (template.abilities['H'] && template.abilities['H'] in ateAbilities)) hasStab = true;
+					}
 					if (move.flags['bite']) counter['bite']++;
 					if (move.flags['punch']) counter['ironfist']++;
 					damagingMoves.push(move);
@@ -1224,7 +1234,7 @@ exports.BattleScripts = {
 					if (hasMove['focuspunch']) rejected = true;
 					break;
 				case 'suckerpunch':
-					if ((hasMove['crunch'] || hasMove['darkpulse']) && hasMove['pursuit']) rejected = true;
+					if ((hasMove['crunch'] || hasMove['darkpulse']) && (hasMove['knockoff'] || hasMove['pursuit'])) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'thunderbolt':
@@ -1309,8 +1319,16 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (hasMove['whirlwind'] || hasMove['dragontail'] || hasMove['roar'] || hasMove['circlethrow']) rejected = true;
 					break;
-				case 'lunardance': case 'raindance': case 'sunnyday':
+				case 'lunardance':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
+				case 'raindance':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['sunnyday']) rejected = true;
+					break;
+				case 'sunnyday':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['raindance']) rejected = true;
 					break;
 				case 'cottonguard':
 					if (hasMove['reflect']) rejected = true;
@@ -1403,9 +1421,6 @@ exports.BattleScripts = {
 									} else {
 										replace = true;
 									}
-								} else if (damagingType === 'Normal') {
-									// -ate abilities on Mega Altaria/Gardevoir/Pinsir/Salamence
-									if (template.abilities[0] !== 'Aerilate' && template.abilities[0] !== 'Pixilate') replace = true;
 								} else {
 									replace = true;
 								}
@@ -1526,8 +1541,8 @@ exports.BattleScripts = {
 				rejectAbility = !counter['Status'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
-			} else if (ability === 'Aerilate' || ability === 'Pixilate' || ability === 'Refrigerate') {
-				rejectAbility = !counter['ate'] && !hasMove['naturepower'];
+			} else if (ability in ateAbilities) {
+				rejectAbility = !counter['ate'];
 			// below 2 checks should be modified, when it becomes possible, to check if the team contains rain or sun
 			} else if (ability === 'Swift Swim') {
 				rejectAbility = !hasMove['raindance'];
@@ -1594,9 +1609,6 @@ exports.BattleScripts = {
 		} else if (template.species === 'Rotom-Fan') {
 			// this is just to amuse myself
 			item = 'Air Balloon';
-		} else if (template.species === 'Delibird') {
-			// to go along with the Christmas Delibird set
-			item = 'Leftovers';
 
 		// First, the extra high-priority items
 		} else if (ability === 'Imposter') {
@@ -1663,7 +1675,7 @@ exports.BattleScripts = {
 			item = 'Icy Rock';
 		} else if (ability === 'Magic Guard' && hasMove['psychoshift']) {
 			item = 'Flame Orb';
-		} else if (ability === 'Sheer Force' || ability === 'Magic Guard') {
+		} else if (ability === 'Magic Guard' || ability === 'Sheer Force' || template.species === 'Deoxys-Attack') {
 			item = 'Life Orb';
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
@@ -1712,11 +1724,13 @@ exports.BattleScripts = {
 			item = 'Focus Sash';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && !hasType['Poison'] && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
+		} else if (ability === 'Speed Boost' && hasMove['protect'] && counter.Physical + counter.Special > 2) {
+			item = 'Life Orb';
 		} else if (hasMove['substitute'] || hasMove['detect'] || hasMove['protect'] || hasMove['clearsmog'] || ability === 'Moody') {
 			item = 'Leftovers';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
 			item = 'Rocky Helmet';
-		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.def + template.baseStats.spd > 189) {
+		} else if (counter.Physical + counter.Special >= 4 && (template.baseStats.def + template.baseStats.spd > 189 || hasMove['rapidspin'])) {
 			item = 'Assault Vest';
 		} else if (counter.Physical + counter.Special >= 4) {
 			item = (hasMove['fakeout'] || hasMove['return'] || hasMove['extremespeed'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
@@ -2202,6 +2216,10 @@ exports.BattleScripts = {
 			'Blaze':1, 'Overgrow':1, 'Swarm':1, 'Torrent':1, 'Contrary':1,
 			'Technician':1, 'Skill Link':1, 'Iron Fist':1, 'Adaptability':1, 'Hustle':1
 		};
+		// -ate Abilities
+		var ateAbilities = {
+			'Aerilate':1, 'Pixilate':1, 'Refrigerate':1
+		};
 
 		var damagingMoves, damagingMoveIndex, hasMove, counter, setupType, hasStab;
 
@@ -2260,7 +2278,7 @@ exports.BattleScripts = {
 				// Recoil:
 				if (move.recoil) counter['recoil']++;
 				// Moves which have a base power and aren't super-weak like Rapid Spin:
-				if (move.basePower > 20 || move.multihit || move.basePowerCallback) {
+				if (move.basePower > 20 || move.multihit || move.basePowerCallback || moveid === 'naturepower') {
 					if (hasType[move.type]) {
 						counter['adaptability']++;
 						// STAB:
@@ -2268,12 +2286,16 @@ exports.BattleScripts = {
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
 						if (moveid !== 'bounce' && moveid !== 'flamecharge' && moveid !== 'skydrop') hasStab = true;
 					}
+					if (template.abilities['H'] && template.abilities['H'] === 'Protean') hasStab = true;
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
 					if (move.type === 'Grass') counter['overgrow']++;
 					if (move.type === 'Bug') counter['swarm']++;
 					if (move.type === 'Water') counter['torrent']++;
-					if (move.type === 'Normal') counter['ate']++;
+					if (move.type === 'Normal') {
+						counter['ate']++;
+						if (template.abilities[0] in ateAbilities || (template.abilities['H'] && template.abilities['H'] in ateAbilities)) hasStab = true;
+					}
 					if (move.flags['punch']) counter['ironfist']++;
 					if (move.flags['bite']) counter['bite']++;
 					damagingMoves.push(move);
@@ -2690,8 +2712,8 @@ exports.BattleScripts = {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
 			} else if (ability === 'Chlorophyll') {
 				rejectAbility = !hasMove['sunnyday'];
-			} else if (ability === 'Aerilate' || ability === 'Pixilate' || ability === 'Refrigerate') {
-				rejectAbility = !counter['ate'] && !hasMove['naturepower'];
+			} else if (ability in ateAbilities) {
+				rejectAbility = !counter['ate'];
 			}
 
 			if (rejectAbility) {
@@ -2828,12 +2850,21 @@ exports.BattleScripts = {
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
 		} else if (ability === 'Unburden') {
-			item = 'Red Card';
-			// Give Unburden mons a Normal Gem if they have Fake Out, or White Herb if they have a move that lowers stats
 			if (hasMove['fakeout']) {
 				item = 'Normal Gem';
-			} else if (hasMove['leafstorm'] || hasMove['dracometeor'] || hasMove['overheat'] || hasMove['superpower']) {
+			} else if (hasMove['dracometeor'] || hasMove['leafstorm'] || hasMove['overheat']) {
 				item = 'White Herb';
+			} else if (hasMove['substitute'] || setupType) {
+				item = 'Sitrus Berry';
+			} else {
+				item = 'Red Card';
+				for (var m in moves) {
+					var move = this.getMove(moves[m]);
+					if (hasType[move.type] && move.basePower >= 90) {
+						item = move.type + ' Gem';
+						break;
+					}
+				}
 			}
 
 		// medium priority
