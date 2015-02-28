@@ -1575,6 +1575,8 @@ exports.BattleScripts = {
 				ability = 'Intimidate';
 			} else if (template.id === 'unfezant') {
 				ability = 'Super Luck';
+			} else if (template.id === 'linoone') {
+				ability = 'Pickup';
 			}
 		}
 
@@ -1686,8 +1688,8 @@ exports.BattleScripts = {
 			}
 
 		// medium priority
-		} else if (ability === 'Guts') {
-			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
+		} else if (ability === 'Guts' || ability === 'Quick Feet') {
+			item = hasMove['drainpunch'] && ability !== 'Quick Feet' ? 'Flame Orb' : 'Toxic Orb';
 			if ((hasMove['return'] || hasMove['hyperfang']) && !hasMove['facade']) {
 				// lol no
 				for (var j = 0; j < moves.length; j++) {
@@ -2716,6 +2718,9 @@ exports.BattleScripts = {
 			if (template.id === 'unfezant') {
 				ability = 'Super Luck';
 			}
+			if (template.id === 'linoone') {
+				ability = 'Pickup';
+			}
 		}
 
 		// Make EVs comply with the sets.
@@ -2828,17 +2833,26 @@ exports.BattleScripts = {
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
 		} else if (ability === 'Unburden') {
-			item = 'Red Card';
-			// Give Unburden mons a Normal Gem if they have Fake Out, or White Herb if they have a move that lowers stats
 			if (hasMove['fakeout']) {
 				item = 'Normal Gem';
 			} else if (hasMove['leafstorm'] || hasMove['dracometeor'] || hasMove['overheat'] || hasMove['superpower']) {
 				item = 'White Herb';
+			} else if (hasMove['substitute'] || setupType) {
+				item = 'Sitrus Berry';
+			} else {
+				item = 'Red Card';
+				for (var m in moves) {
+					var move = this.getMove(moves[m]);
+					if (hasType[move.type] && move.basePower >= 90) {
+						item = move.type + ' Gem';
+						break;
+					}
+				}
 			}
 
 		// medium priority
-		} else if (ability === 'Guts') {
-			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
+		} else if (ability === 'Guts' || ability === 'Quick Feet') {
+			item = hasMove['drainpunch'] && ability !== 'Quick Feet' ? 'Flame Orb' : 'Toxic Orb';
 			if ((hasMove['return'] || hasMove['hyperfang']) && !hasMove['facade']) {
 				// lol no
 				for (var j = 0; j < moves.length; j++) {
