@@ -1468,21 +1468,25 @@ exports.BattleScripts = {
 			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'return';
 			hasMove['return'] = true;
+			counter['ate']++;
 		}
 		if (template.id === 'gardevoirmega' && !counter['ate']) {
 			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'hypervoice';
 			hasMove['hypervoice'] = true;
+			counter['ate']++;
 		}
 		if (template.id === 'salamencemega' && !counter['ate']) {
 			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'return';
 			hasMove['return'] = true;
+			counter['ate']++;
 		}
 		if (template.id === 'sylveon' && !counter['ate']) {
 			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'hypervoice';
 			hasMove['hypervoice'] = true;
+			counter['ate']++;
 		}
 		if (template.requiredMove && !hasMove[toId(template.requiredMove)]) {
 			delete hasMove[this.getMove(moves[3]).id];
