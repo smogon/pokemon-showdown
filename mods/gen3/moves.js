@@ -196,8 +196,22 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 85,
 		basePower: 120,
-		onModifyMove: function (move) {
-			move.type = '???';
+		onTryHit: function (target, source) {
+				source.side.addSideCondition('futuremove');
+				if (source.side.sideConditions['futuremove'].positions.[source.position]) {
+					return false;
+				}
+				source.side.sideConditions['futuremove'].positions[source.position] = {
+				duration: 3,
+				move: 'doomdesire',
+				targetPosition: target.position,
+				source: source,
+				moveData: {
+					basePower: 120,
+					category: "Physical",
+					type: '???'
+				}
+				}
 		}
 	},
 	dreameater: {
@@ -340,8 +354,22 @@ exports.BattleMovedex = {
 		accuracy: 90,
 		basePower: 80,
 		pp: 15,
-		onModifyMove: function (move) {
-			move.type = '???';
+		onTryHit: function (target, source) {
+				source.side.addSideCondition('futuremove');
+				if (source.side.sideConditions['futuremove'].positions.[source.position]) {
+					return false;
+				}
+				source.side.sideConditions['futuremove'].positions[source.position] = {
+				duration: 3,
+				move: 'futuresight',
+				targetPosition: target.position,
+				source: source,
+				moveData: {
+					basePower: 80,
+					category: 'Special',
+					type: '???'
+				}
+				}
 		}
 	},
 	gigadrain: {
