@@ -4977,6 +4977,10 @@ exports.BattleScripts = {
 
 			set.moves = ['metronome'];
 
+			if (['Assault Vest'].indexOf(set.item) > -1) {
+				set.item = 'Leftovers';
+			}
+
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
