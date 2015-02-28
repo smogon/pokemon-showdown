@@ -403,6 +403,7 @@ exports.customavatars = {
 	'alliancedyla': 'alliancedyla.png',
 	'hanaaa': 'hanaaa.png',
 	'hanalyse': 'hanaaa.png',
+	'connwaer': 'connwaer.jpg',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
