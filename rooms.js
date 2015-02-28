@@ -493,6 +493,18 @@ var GlobalRoom = (function () {
 				user.joinRoom(room.id, connection);
 			}
 		}
+
+		for (var i = 0; i < this.autojoin.length; i++) {
+			var room = Rooms.get(this.autojoin[i]);
+			if (!room) {
+				this.autojoin.splice(i, 1);
+				i--;
+				continue;
+			}
+			if (room.autojoin === true) {
+				user.joinRoom(room.id, connection);
+			}
+		}
 	};
 	GlobalRoom.prototype.onJoinConnection = function (user, connection) {
 		var initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';
