@@ -4515,6 +4515,7 @@ exports.BattleMovedex = {
 			if (item.fling && !noFling) {
 				pokemon.addVolatile('fling');
 				pokemon.setItem('');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
 			}
 		},
 		onPrepareHit: function (target, source, move) {
@@ -7525,12 +7526,7 @@ exports.BattleMovedex = {
 		onAfterHit: function (target, source) {
 			if (target.hasAbility('stickyhold')) return;
 			if (source.hp) {
-				var item = target.getItem();
-				if (item.id === 'mail') {
-					target.setItem('');
-				} else {
-					item = target.takeItem();
-				}
+				var item = target.takeItem();
 				if (item) {
 					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
 				}
@@ -9300,6 +9296,7 @@ exports.BattleMovedex = {
 				pokemon.volatiles['naturalgift'].basePower = item.naturalGift.basePower;
 				pokemon.volatiles['naturalgift'].type = item.naturalGift.type;
 				pokemon.setItem('');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
 			}
 		},
 		onPrepareHit: function (target, source) {
