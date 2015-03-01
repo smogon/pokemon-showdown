@@ -320,6 +320,7 @@ var commands = exports.commands = {
 		}
 	},
 
+	topic: 'roomintro',
 	roomintro: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
