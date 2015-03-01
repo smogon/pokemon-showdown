@@ -834,7 +834,8 @@ exports.BattleFormatsData = {
 	steelixmega: {
 		randomBattleMoves: ["stealthrock","earthquake","heavyslam","roar","toxic","dragontail"],
 		randomDoubleBattleMoves: ["stealthrock","earthquake","heavyslam","rockslide","protect","explosion"],
-		requiredItem: "Steelixite"
+		requiredItem: "Steelixite",
+		tier: "BL3"
 	},
 	drowzee: {
 		randomBattleMoves: ["psychic","seismictoss","thunderwave","wish","protect","toxic","shadowball","trickroom","calmmind","dazzlinggleam"],
@@ -5058,7 +5059,7 @@ exports.BattleFormatsData = {
 	heliolisk: {
 		randomBattleMoves: ["raindance","thunder","hypervoice","surf","darkpulse","hiddenpowerice","voltswitch","thunderbolt"],
 		randomDoubleBattleMoves: ["surf","voltswitch","hiddenpowerice","raindance","thunder","darkpulse","thunderbolt","electricterrain","protect"],
-		tier: "NU"
+		tier: "BL3"
 	},
 	tyrunt: {
 		randomBattleMoves: ["stealthrock","dragondance","stoneedge","dragonclaw","earthquake","icefang","firefang"],
