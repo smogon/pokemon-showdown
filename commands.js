@@ -905,7 +905,6 @@ var commands = exports.commands = {
 		targetUser.ban();
 	}, 
 	
-        ub: 'unban',
 	unban: function (target, room, user) {
 		if (!target) return this.parse('/help unban');
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
@@ -920,7 +919,6 @@ var commands = exports.commands = {
 		}
 	}, 
 	
-        uba: 'unbanall',
 	unbanall: function (target, room, user) {
 		if (!this.can('rangeban')) return false;
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
