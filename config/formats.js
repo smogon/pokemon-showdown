@@ -8,6 +8,7 @@ exports.Formats = [
 	{
 		name: "1% Tier (test)",
 		section: "Regional Metagames (suspect test)",
+		column: 2,
 
 		rated: false,
 		searchShow: false,
