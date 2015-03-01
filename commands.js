@@ -57,7 +57,7 @@ var commands = exports.commands = {
 		}
 	}, 
 	
-        lo: 'logout',
+	lo: 'logout',
 	logout: function (target, room, user) {
 		user.resetName();
 	},
