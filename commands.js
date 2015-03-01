@@ -932,7 +932,6 @@ var commands = exports.commands = {
 		this.addModCommand("All bans and locks have been lifted by " + user.name + ".");
 	}, 
         
-        bi: 'banip',
 	banip: function (target, room, user) {
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		target = target.trim();
@@ -1181,7 +1180,6 @@ var commands = exports.commands = {
 		return '/announce ' + target;
 	},
         
-        fr: 'forcerename', 
 	forcerename: function (target, room, user) {
 		if (!target) return this.parse('/help forcerename');
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
