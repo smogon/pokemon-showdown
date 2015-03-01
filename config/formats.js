@@ -5,18 +5,20 @@ exports.Formats = [
 	// Regional Custom Tiers
 	/////////////////////////////////////
 
-    {
-		name: "1% Tier",
-		section: "Regional Metagames",
+	{
+		name: "1% Tier (test)",
+		section: "Regional Metagames (suspect test)",
 
 		rated: false,
+		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['LC Uber', 'LC UU', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Aipom', 'Amaura', 'Archen', 'Anorith', 'Aron', 'Blitzle',
 			'Bunnelby', 'Cacnea', 'Carvanha', 'Charmander', 'Chimchar', 'Chikorita', 'Clauncher', 'Corphish', 'Cranidos', 'Croagunk', 'Cubchoo', 'Cubone',
 			'Cyndaquil', 'Darumaka', 'Deerling', 'Doduo', 'Deino', 'Onix', 'Nosepass', 'Noibat', 'Minccino', 'Mienfoo', 'Pancham', 'Pumpkaboo', 'Riolu',
 			'Scraggy', 'Shellder', 'Shieldon', 'Snover', 'Snubbull', 'Swinub', 'Tyrunt', 'Woobat', 'Ponyta', 'Magnemite', 'Machop', 'Voltorb', 'Trapinch',
-			'Rhyhorn', 'Hippopotas', 'Growlithe', 'Grimer', 'Houndour', 'Honedge', 'Froakie', 'Dwebble', 'Drilbur', 'Sonic Boom', 'Swagger']
+			'Rhyhorn', 'Hippopotas', 'Growlithe', 'Grimer', 'Houndour', 'Honedge', 'Froakie', 'Dwebble', 'Drilbur', 'Sonic Boom', 'Swagger'
+		]
 	},
 
 	// XY Singles
