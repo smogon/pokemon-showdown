@@ -186,7 +186,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	oddish: {
-		randomBattleMoves: ["sleeppowder","swordsdance","doubleedge","megadrain","poisonpowder","toxic"],
+		randomBattleMoves: ["sleeppowder","swordsdance","doubleedge","megadrain","toxic"],
 		tier: "LC"
 	},
 	gloom: {
@@ -648,7 +648,8 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	moltres: {
-		randomBattleMoves: ["agility","fireblast","hyperbeam","reflect","skyattack","substitute","toxic"],
+		randomBattleMoves: ["agility","hyperbeam","reflect","skyattack","substitute","toxic"],
+		essentialMove: "fireblast",
 		tier: "UU"
 	},
 	dratini: {

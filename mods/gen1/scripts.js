@@ -1256,13 +1256,13 @@ exports.BattleScripts = {
 			LC: 96,
 			NFE: 90,
 			UU: 85,
-			OU: 75,
-			Uber: 72
+			OU: 79,
+			Uber: 74
 		};
 		// Really bad Pokemon and jokemons and MEWTWO.
 		var customScale = {
 			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99,
-			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 68
+			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 70
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
