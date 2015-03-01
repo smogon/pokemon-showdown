@@ -365,6 +365,8 @@ Minor learnset changes:
 
 - Masquerain gets Surf
 
+- Pidgeot gets Focus Blast
+
 - Butterfree, Beautifly, Masquerain, and Mothim get Hurricane
 
 - Roserade gets Sludge
