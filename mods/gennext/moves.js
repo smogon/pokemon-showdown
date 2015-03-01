@@ -1018,10 +1018,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: true
 	},
-	triplekick: {
-		inherit: true,
-		accuracy: true
-	},
 	watershuriken: {
 		inherit: true,
 		accuracy: true
@@ -1389,6 +1385,13 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'eelektross') return this.chainModify(1.5);
 		}
+	},
+	triplekick: {
+		inherit: true,
+		onBasePower: function (power, user) {
+			if (user.template.id === 'hitmontop') return this.chainModify(1.5);
+		},
+		accuracy: true
 	},
 	bubblebeam: {
 		inherit: true,
