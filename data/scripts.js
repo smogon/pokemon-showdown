@@ -1156,6 +1156,9 @@ exports.BattleScripts = {
 
 				// Bit redundant to have both
 				// Attacks:
+				case 'judgment':
+					if (hasStab) rejected = true;
+					break;
 				case 'flamethrower': case 'fierydance':
 					if (hasMove['lavaplume'] || hasMove['overheat'] || hasMove['fireblast'] || hasMove['blueflare']) rejected = true;
 					break;
