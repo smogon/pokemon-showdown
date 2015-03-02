@@ -1418,9 +1418,10 @@ exports.BattleScripts = {
 									if (hasType['Normal'] && template.types.length === 1) {
 										// Mono-Ice is acceptable for special attacking Normal types that lack Boomburst and Hyper Voice
 										if (counter.Physical >= 2 || movePool.indexOf('boomburst') > -1 || movePool.indexOf('hypervoice') > -1) replace = true;
-									} else {
-										replace = true;
 									}
+								} else if (damagingType === 'Fire') {
+									// Mono-Fire is acceptable for pure Poison types that aren't Arceus
+									if (template.baseSpecies === 'Arceus' || !hasType['Poison'] || template.types.length !== 1) replace = true;
 								} else {
 									replace = true;
 								}

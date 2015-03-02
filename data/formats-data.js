@@ -3873,8 +3873,8 @@ exports.BattleFormatsData = {
 		requiredItem: "Icicle Plate"
 	},
 	arceuspoison: {
-		randomBattleMoves: ["calmmind","sludgebomb","fireblast","recover","willowisp","defog","thunderwave"],
-		randomDoubleBattleMoves: ["calmmind","judgment","sludgebomb","heatwave","recover","willowisp","protect","earthpower"],
+		randomBattleMoves: ["calmmind","judgment","fireblast","recover","willowisp","defog","thunderwave"],
+		randomDoubleBattleMoves: ["calmmind","judgment","heatwave","recover","willowisp","protect","earthpower"],
 		requiredItem: "Toxic Plate"
 	},
 	arceuspsychic: {
