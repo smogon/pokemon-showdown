@@ -1043,6 +1043,7 @@ var commands = exports.commands = {
 			if (target !== 'all') buffer += "All Pokémon on a team must share a type.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">Monotype</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517737/\">Monotype Viability Rankings</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/player/issue/monotype-metagame\"></a>Tips for Playing Monotype<br />";
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
 			matched = true;
@@ -1065,6 +1066,7 @@ var commands = exports.commands = {
 			if (target !== 'all') buffer += "Pokémon can use any ability, barring the few that are banned.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3528058/\">Almost Any Ability</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517258/\">Almost Any Ability Viability Rankings</a><br />";
+			buffer += "- <a href=\"http://www.smogon.com/player/issue5/introduction-to-aaa\">Introduction to Almost Any Ability</a>";
 		}
 		if (target === 'all' || target === 'stabmons') {
 			matched = true;
