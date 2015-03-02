@@ -1420,7 +1420,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":50,"moves":["extrasensory","morningsun","willowisp","flamethrower"]}
 		],
 		unreleasedHidden: true,
-		tier: "RU"
+		tier: "BL2"
 	},
 	dratini: {
 		randomBattleMoves: ["dragondance","outrage","waterfall","fireblast","extremespeed","dracometeor","substitute","aquatail"],
@@ -4957,7 +4957,7 @@ exports.BattleFormatsData = {
 	pangoro: {
 		randomBattleMoves: ["knockoff","superpower","gunkshot","icepunch","partingshot","drainpunch"],
 		randomDoubleBattleMoves: ["partingshot","hammerarm","crunch","circlethrow","icepunch","earthquake","poisonjab","protect"],
-		tier: "RU"
+		tier: "BL2"
 	},
 	furfrou: {
 		randomBattleMoves: ["return","cottonguard","thunderwave","substitute","toxic","suckerpunch","uturn","rest"],
