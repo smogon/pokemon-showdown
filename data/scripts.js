@@ -1150,7 +1150,7 @@ exports.BattleScripts = {
 				case 'dragontail': case 'circlethrow':
 					if (!!counter['speedsetup'] || hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore'] || hasMove['raindance']) rejected = true;
 					break;
-				case 'trickroom':
+				case 'healbell': case 'trickroom':
 					if (!!counter['speedsetup']) rejected = true;
 					break;
 
