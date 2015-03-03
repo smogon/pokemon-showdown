@@ -112,11 +112,11 @@ var commands = exports.commands = {
 		if (targetUser.locked && !user.can('lock')) {
 			return this.popupReply("This user is locked and cannot PM.");
 		}
-		if (targetUser.ignorePMs && !user.can('lock')) {
+		if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) {
 			if (!targetUser.can('lock')) {
-				return this.popupReply("This user is blocking Private Messages right now.");
+				return this.popupReply("This user is blocking private messages right now.");
 			} else if (targetUser.can('bypassall')) {
-				return this.popupReply("This admin is too busy to answer Private Messages right now. Please contact a different staff member.");
+				return this.popupReply("This admin is too busy to answer private messages right now. Please contact a different staff member.");
 			}
 		}
 
@@ -163,10 +163,14 @@ var commands = exports.commands = {
 	blockpms: 'ignorepms',
 	ignorepm: 'ignorepms',
 	ignorepms: function (target, room, user) {
-		if (user.ignorePMs) return this.sendReply("You are already blocking Private Messages!");
-		if (user.can('lock') && !user.can('bypassall')) return this.sendReply("You are not allowed to block Private Messages.");
+		if (user.ignorePMs === (target || true)) return this.sendReply("You are already blocking private messages!");
+		if (user.can('lock') && !user.can('bypassall')) return this.sendReply("You are not allowed to block private messages.");
 		user.ignorePMs = true;
-		return this.sendReply("You are now blocking Private Messages.");
+		if (target in Config.groups) {
+			user.ignorePMs = target;
+			return this.sendReply("You are now blocking private messages, except from staff and " + target + ".");
+		}
+		return this.sendReply("You are now blocking private messages, except from staff.");
 	},
 
 	back: 'unignorepms',
@@ -174,9 +178,9 @@ var commands = exports.commands = {
 	unblockpms: 'unignorepms',
 	unignorepm: 'unignorepms',
 	unignorepms: function (target, room, user) {
-		if (!user.ignorePMs) return this.sendReply("You are not blocking Private Messages!");
+		if (!user.ignorePMs) return this.sendReply("You are not blocking private messages!");
 		user.ignorePMs = false;
-		return this.sendReply("You are no longer blocking Private Messages.");
+		return this.sendReply("You are no longer blocking private messages.");
 	},
 
 	makechatroom: function (target, room, user) {
