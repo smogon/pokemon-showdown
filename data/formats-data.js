@@ -829,13 +829,12 @@ exports.BattleFormatsData = {
 	steelix: {
 		randomBattleMoves: ["stealthrock","earthquake","ironhead","roar","toxic","rockslide"],
 		randomDoubleBattleMoves: ["stealthrock","earthquake","ironhead","rockslide","protect","explosion"],
-		tier: "NU"
+		tier: "RU"
 	},
 	steelixmega: {
 		randomBattleMoves: ["stealthrock","earthquake","heavyslam","roar","toxic","dragontail"],
 		randomDoubleBattleMoves: ["stealthrock","earthquake","heavyslam","rockslide","protect","explosion"],
 		requiredItem: "Steelixite",
-		tier: "BL3"
 	},
 	drowzee: {
 		randomBattleMoves: ["psychic","seismictoss","thunderwave","wish","protect","toxic","shadowball","trickroom","calmmind","dazzlinggleam"],
@@ -1195,7 +1194,7 @@ exports.BattleFormatsData = {
 			{"generation":6,"level":50,"gender":"F","nature":"Adamant","isHidden":false,"moves":["xscissor","earthquake","stoneedge","return"],"pokeball":"cherishball"},
 			{"generation":6,"level":50,"nature":"Jolly","isHidden":true,"moves":["earthquake","swordsdance","feint","quickattack"],"pokeball":"cherishball"}
 		],
-		tier: "UU"
+		tier: "RU"
 	},
 	pinsirmega: {
 		randomBattleMoves: ["swordsdance","earthquake","closecombat","quickattack","return"],
@@ -2636,7 +2635,7 @@ exports.BattleFormatsData = {
 	camerupt: {
 		randomBattleMoves: ["rockpolish","fireblast","earthpower","lavaplume","stealthrock","hiddenpowergrass","roar","stoneedge"],
 		randomDoubleBattleMoves: ["rockpolish","fireblast","earthpower","heatwave","eruption","hiddenpowergrass","protect"],
-		tier: "NU"
+		tier: "RU"
 	},
 	cameruptmega: {
 		randomBattleMoves: ["stealthrock","fireblast","earthpower","ancientpower","willowisp","toxic"],
@@ -4687,7 +4686,7 @@ exports.BattleFormatsData = {
 	virizion: {
 		randomBattleMoves: ["swordsdance","closecombat","leafblade","stoneedge","calmmind","focusblast","gigadrain","hiddenpowerice","substitute"],
 		randomDoubleBattleMoves: ["taunt","closecombat","focusblast","hiddenpowerice","stoneedge","leafblade","gigadrain","substitute","synthesis","protect","helpinghand"],
-		tier: "NU"
+		tier: "RU"
 	},
 	tornadus: {
 		randomBattleMoves: ["bulkup","acrobatics","knockoff","substitute","hurricane","heatwave","superpower","uturn","taunt","tailwind"],
