@@ -112,11 +112,11 @@ var commands = exports.commands = {
 		if (targetUser.locked && !user.can('lock')) {
 			return this.popupReply("This user is locked and cannot PM.");
 		}
-		if (targetUser.ignorePMs && !user.can('lock')) {
+		if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) {
 			if (!targetUser.can('lock')) {
-				return this.popupReply("This user is blocking Private Messages right now.");
+				return this.popupReply("This user is blocking private messages right now.");
 			} else if (targetUser.can('bypassall')) {
-				return this.popupReply("This admin is too busy to answer Private Messages right now. Please contact a different staff member.");
+				return this.popupReply("This admin is too busy to answer private messages right now. Please contact a different staff member.");
 			}
 		}
 
@@ -133,6 +133,7 @@ var commands = exports.commands = {
 			case 'announce':
 				break;
 			case 'invite':
+			case 'inv':
 				var targetRoom = Rooms.search(innerTarget);
 				if (!targetRoom || targetRoom === Rooms.global) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|/text The room "' + innerTarget + '" does not exist.');
 				if (targetRoom.staffRoom && !targetUser.isStaff) return connection.send('|pm|' + user.getIdentity() + '|' + targetUser.getIdentity() + '|/text User "' + this.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
@@ -156,23 +157,30 @@ var commands = exports.commands = {
 		user.lastPM = targetUser.userid;
 	},
 
+	away: 'ignorepms',
+	idle: 'ignorepms',
 	blockpm: 'ignorepms',
 	blockpms: 'ignorepms',
 	ignorepm: 'ignorepms',
 	ignorepms: function (target, room, user) {
-		if (user.ignorePMs) return this.sendReply("You are already blocking Private Messages!");
-		if (user.can('lock') && !user.can('bypassall')) return this.sendReply("You are not allowed to block Private Messages.");
+		if (user.ignorePMs === (target || true)) return this.sendReply("You are already blocking private messages!");
+		if (user.can('lock') && !user.can('bypassall')) return this.sendReply("You are not allowed to block private messages.");
 		user.ignorePMs = true;
-		return this.sendReply("You are now blocking Private Messages.");
+		if (target in Config.groups) {
+			user.ignorePMs = target;
+			return this.sendReply("You are now blocking private messages, except from staff and " + target + ".");
+		}
+		return this.sendReply("You are now blocking private messages, except from staff.");
 	},
 
+	back: 'unignorepms',
 	unblockpm: 'unignorepms',
 	unblockpms: 'unignorepms',
 	unignorepm: 'unignorepms',
 	unignorepms: function (target, room, user) {
-		if (!user.ignorePMs) return this.sendReply("You are not blocking Private Messages!");
+		if (!user.ignorePMs) return this.sendReply("You are not blocking private messages!");
 		user.ignorePMs = false;
-		return this.sendReply("You are no longer blocking Private Messages.");
+		return this.sendReply("You are no longer blocking private messages.");
 	},
 
 	makechatroom: function (target, room, user) {
@@ -319,6 +327,7 @@ var commands = exports.commands = {
 		}
 	},
 
+	topic: 'roomintro',
 	roomintro: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
@@ -1764,9 +1773,25 @@ var commands = exports.commands = {
 		room.decision(user, 'choose', 'team ' + target);
 	},
 
+	addplayer: function (target, room, user) {
+		if (!target) return this.parse('/help addplayer');
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) {
+			return this.sendReply("User " + this.targetUsername + " not found.");
+		}
+
+		if (!room.joinBattle) return this.sendReply("You can only do this in battle rooms.");
+		if (!this.can('roomvoice', this.targetUser, room)) return;
+
+		room.auth[targetUser.userid] = '\u2605';
+	},
+
 	joinbattle: function (target, room, user) {
 		if (!room.joinBattle) return this.sendReply("You can only do this in battle rooms.");
-		if (!user.can('joinbattle', null, room)) return this.popupReply("You must be a roomvoice to join a battle you didn't start. Ask a player to use /roomvoice on you to join this battle.");
+		if (!user.can('joinbattle', null, room)) return this.popupReply("You must be a set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.");
 
 		room.joinBattle(user);
 	},
@@ -1885,7 +1910,7 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.popupReply("The user '" + this.targetUsername + "' was not found.");
 		}
-		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
+		if ((targetUser.blockChallenges || targetUser.ignorePMs) && !user.can('bypassblocks', targetUser)) {
 			return this.popupReply("The user '" + this.targetUsername + "' is not accepting challenges right now.");
 		}
 		if (Config.pmmodchat) {
@@ -1901,15 +1926,13 @@ var commands = exports.commands = {
 		});
 	},
 
-	away: 'blockchallenges',
-	idle: 'blockchallenges',
 	blockchallenges: function (target, room, user) {
 		if (user.blockChallenges) return this.sendReply("You are already blocking challenges!");
 		user.blockChallenges = true;
 		this.sendReply("You are now blocking all incoming challenge requests.");
 	},
 
-	back: 'allowchallenges',
+	unblockchallenges: 'allowchallenges',
 	allowchallenges: function (target, room, user) {
 		if (!user.blockChallenges) return this.sendReply("You are already available for challenges!");
 		user.blockChallenges = false;
