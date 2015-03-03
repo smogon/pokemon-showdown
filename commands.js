@@ -157,8 +157,8 @@ var commands = exports.commands = {
 		user.lastPM = targetUser.userid;
 	},
 
-	away: 'blockchallenges',
-	idle: 'blockchallenges',
+	away: 'ignorepms',
+	idle: 'ignorepms',
 	blockpm: 'ignorepms',
 	blockpms: 'ignorepms',
 	ignorepm: 'ignorepms',
@@ -1932,6 +1932,7 @@ var commands = exports.commands = {
 		this.sendReply("You are now blocking all incoming challenge requests.");
 	},
 
+	unblockchallenges: 'allowchallenges',
 	allowchallenges: function (target, room, user) {
 		if (!user.blockChallenges) return this.sendReply("You are already available for challenges!");
 		user.blockChallenges = false;
