@@ -440,6 +440,20 @@ exports.BattleMovedex = {
 			return 20;
 		}
 	},
+	focuspunch: {
+		inherit: true,
+		beforeMoveCallback: function () { },
+		onTry: function (pokemon) {
+			if (!pokemon.removeVolatile('focuspunch')) {
+				return;
+			}
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.damage && pokemon.lastAttackedBy.thisTurn) {
+				this.attrLastMove('[still]');
+				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
+				return false;
+			}
+		}
+	},
 	foresight: {
 		inherit: true,
 		isBounceable: false
