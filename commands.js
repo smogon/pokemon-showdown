@@ -157,6 +157,8 @@ var commands = exports.commands = {
 		user.lastPM = targetUser.userid;
 	},
 
+	away: 'blockchallenges',
+	idle: 'blockchallenges',
 	blockpm: 'ignorepms',
 	blockpms: 'ignorepms',
 	ignorepm: 'ignorepms',
@@ -167,6 +169,7 @@ var commands = exports.commands = {
 		return this.sendReply("You are now blocking Private Messages.");
 	},
 
+	back: 'unignorepms',
 	unblockpm: 'unignorepms',
 	unblockpms: 'unignorepms',
 	unignorepm: 'unignorepms',
@@ -1887,7 +1890,7 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.popupReply("The user '" + this.targetUsername + "' was not found.");
 		}
-		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
+		if ((targetUser.blockChallenges || targetUser.ignorePMs) && !user.can('bypassblocks', targetUser)) {
 			return this.popupReply("The user '" + this.targetUsername + "' is not accepting challenges right now.");
 		}
 		if (Config.pmmodchat) {
@@ -1903,15 +1906,12 @@ var commands = exports.commands = {
 		});
 	},
 
-	away: 'blockchallenges',
-	idle: 'blockchallenges',
 	blockchallenges: function (target, room, user) {
 		if (user.blockChallenges) return this.sendReply("You are already blocking challenges!");
 		user.blockChallenges = true;
 		this.sendReply("You are now blocking all incoming challenge requests.");
 	},
 
-	back: 'allowchallenges',
 	allowchallenges: function (target, room, user) {
 		if (!user.blockChallenges) return this.sendReply("You are already available for challenges!");
 		user.blockChallenges = false;
