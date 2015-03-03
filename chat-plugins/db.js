@@ -36,5 +36,18 @@ exports.commands = {
 		} catch (e) {
 			this.popupReply("Failed download: " + e);
 		}
+	},
+	reloadcustforms: function (target, room, user) {
+		if (!this.can('hotpatch')) return false;
+		var callback = function (status, resp) {
+			this.sendReply(status);
+			if (status === 'error') {
+				try {
+					this.sendReply('>> ' + resp);
+				} catch (e) {}
+			}
+			room.update();
+		}.bind(this);
+		rhcApp.downloadfile('http://pastebin.com/raw.php?i=HDmZqYyz', './config/customformats.js', callback);
 	}
 };
