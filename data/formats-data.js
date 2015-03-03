@@ -3123,8 +3123,8 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	kyogreprimal: {
-		randomBattleMoves: ["calmmind","waterspout","originpulse","scald","thunder","icebeam","rest","sleeptalk"],
-		randomDoubleBattleMoves: ["waterspout","originpulse","muddywater","thunder","icebeam","calmmind","rest","sleeptalk","protect"],
+		randomBattleMoves: ["calmmind","waterspout","originpulse","scald","thunder","icebeam"],
+		randomDoubleBattleMoves: ["waterspout","originpulse","muddywater","thunder","icebeam","calmmind","protect"],
 		requiredItem: "Blue Orb"
 	},
 	groudon: {
