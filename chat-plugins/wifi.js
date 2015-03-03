@@ -7,6 +7,7 @@
 // checks whether any alt of the user is present in list.
 function checkAllAlts(user, list) {
 	for (var prevName in user.prevNames) {
+		if (prevName === user.userid) continue;
 		if (prevName in list) return 'previous name ' + prevName;
 	}
 	var alts = user.getAlts().map(toId);
