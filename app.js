@@ -105,6 +105,8 @@ Config.port = cloudenv.get('PORT', Config.port);
 
 if (require.main === module && process.argv[2] && parseInt(process.argv[2])) {
 	Config.port = parseInt(process.argv[2]);
+} else if (global.overridePort) {
+	Config.port = global.overridePort;
 }
 
 global.ResourceMonitor = {

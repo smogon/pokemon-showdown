@@ -3,6 +3,7 @@ var assert = require('assert');
 before('initialization', function () {
 	this.timeout(0); // Remove timeout limitation
 
+	global.overridePort = 18003;
 	require('./../app.js');
 	process.listeners('uncaughtException').forEach(function (listener) {
 		process.removeListener('uncaughtException', listener);
