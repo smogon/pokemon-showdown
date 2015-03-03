@@ -5,9 +5,9 @@ global.rhcApp = {
 	running: 0,
 	tasksDone: 0,
 	done: function () {
-		// total tasks: 1: #78
+		// total tasks: 1: #78, #79
 		this.tasksDone++;
-		if (this.tasksDone >= 1) return this.runapp();
+		if (this.tasksDone >= 2) return this.runapp();
 		return false;
 	},
 	runapp: function () {
@@ -76,6 +76,8 @@ rhcApp.writefilesync(ddir + 'chatrooms.json', 'config/chatrooms.json');
 // rhcApp.writefilesync(ddir + 'config.js', 'config/config.js');
 rhcApp.writefilesync(ddir + 'custom.css', 'config/custom.css');
 rhcApp.downloadfile('http://pastebin.com/raw.php?i=ZDDwTH9p', './config/avatars.json', function () { rhcApp.done(); }); // call done: 1
+rhcApp.downloadfile('http://pastebin.com/raw.php?i=HDmZqYyz', './config/customformats.js', function () { rhcApp.done(); }); // call done: 2
+
 fs.readdirSync(ddir + 'avatars')
 	.forEach(function (pic) {
 		rhcApp.writefilesync(ddir + 'avatars/' + pic, './config/avatars/' + pic);

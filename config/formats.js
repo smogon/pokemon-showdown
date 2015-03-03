@@ -1027,3 +1027,8 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	}
 ];
+
+try {
+	var custom = require('./customformats.js').Formats;
+	exports.Formats = custom.concat(exports.Formats);
+} catch (e) {}
