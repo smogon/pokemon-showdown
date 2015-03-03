@@ -1111,7 +1111,7 @@ exports.BattleScripts = {
 					if (!hasMove['flail'] && !hasMove['endeavor'] && !hasMove['reversal']) rejected = true;
 					break;
 				case 'focuspunch':
-					if (hasMove['sleeptalk'] || !hasMove['substitute']) rejected = true;
+					if ((hasMove['rest'] && hasMove['sleeptalk']) || !hasMove['substitute']) rejected = true;
 					break;
 				case 'storedpower':
 					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
@@ -1196,7 +1196,7 @@ exports.BattleScripts = {
 					if (hasMove['aquatail'] || hasMove['scald']) rejected = true;
 					break;
 				case 'shadowforce': case 'phantomforce': case 'shadowsneak':
-					if (hasMove['shadowclaw']) rejected = true;
+					if (hasMove['shadowclaw'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'shadowclaw':
 					if (hasMove['shadowball']) rejected = true;
@@ -1235,6 +1235,12 @@ exports.BattleScripts = {
 					break;
 				case 'machpunch':
 					if (hasMove['focuspunch']) rejected = true;
+					break;
+				case 'stormthrow':
+					if (hasMove['circlethrow'] && (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					break;
+				case 'circlethrow':
+					if (hasMove['stormthrow'] && setupType) rejected = true;
 					break;
 				case 'suckerpunch':
 					if ((hasMove['crunch'] || hasMove['darkpulse']) && (hasMove['knockoff'] || hasMove['pursuit'])) rejected = true;
@@ -1301,6 +1307,7 @@ exports.BattleScripts = {
 
 				// Status:
 				case 'rest':
+					if (!hasMove['sleeptalk'] && movePool.indexOf('sleeptalk') > -1) rejected = true;
 					if (hasMove['painsplit'] || hasMove['wish'] || hasMove['recover'] || hasMove['moonlight'] || hasMove['synthesis'] || hasMove['morningsun']) rejected = true;
 					break;
 				case 'softboiled': case 'roost': case 'moonlight': case 'synthesis': case 'morningsun':
@@ -1372,11 +1379,9 @@ exports.BattleScripts = {
 				}
 
 				// This move doesn't satisfy our setup requirements:
-				if (setupType === 'Physical' && move.category !== 'Physical' && counter['Physical'] < 2) {
-					rejected = true;
-				}
-				if (setupType === 'Special' && move.category !== 'Special' && counter['Special'] < 2) {
-					rejected = true;
+				if (setupType && setupType !== 'Mixed' && move.category !== setupType && counter[setupType] < 2) {
+					// Mono-attacking with setup and RestTalk is allowed
+					if (!hasMove['rest'] || !hasMove['sleeptalk']) rejected = true;
 				}
 
 				// Hidden Power isn't good enough
