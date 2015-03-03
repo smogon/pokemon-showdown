@@ -4,6 +4,10 @@
  * Only works in a room with the id 'thestudio'
  */
 
+function toArtistId(artist) { // toId would return '' for foreign/sadistic artists
+	return artist.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
+}
+
 var artistOfTheDay = {
 	pendingNominations: false,
 	nominations: new Map(),
@@ -20,7 +24,18 @@ var commands = {
 		if (room.id !== 'thestudio' || !room.chatRoomData || !this.can('mute', null, room)) return false;
 		if (artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are already in progress.');
 
+		var nominations = artistOfTheDay.nominations;
+		var prenominations = room.chatRoomData.prenominations;
+		if (prenominations && prenominations.length) {
+			for (var i = prenominations.length; i--;) {
+				var prenomination = prenominations[i];
+				nominations.set(Users.get(prenomination[0].userid) || prenomination[0], prenomination[1]);
+			}
+		}
+
 		artistOfTheDay.pendingNominations = true;
+		room.chatRoomData.prenominations = [];
+		Rooms.global.writeChatRoomData();
 		room.addRaw('<div class="broadcast-blue"><strong>Nominations for the Artist of the Day have begun!</strong><br />' +
 		            'Use /aotd nom to nominate an artist.</div>');
 		this.privateModCommand('(' + user.name + ' began nominations for the Artist of the Day.)');
@@ -43,6 +58,40 @@ var commands = {
 		this.privateModCommand('(' + user.name + ' ended nominations for the Artist of the Day.)');
 	},
 
+	prenom: function (target, room, user) {
+		if (room.id !== 'thestudio' || !room.chatRoomData || !target) return false;
+		if (artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are in progress.');
+		if (!room.chatRoomData.prenominations) room.chatRoomData.prenominations = [];
+
+		var userid = user.userid;
+		var ips = user.ips;
+		var prenominationId = toArtistId(target);
+		if (!prenominationId) return this.sendReply('' + target + ' is not a valid artist name.');
+		if (toArtistId(room.chatRoomData.artistOfTheDay) === prenominationId) return this.sendReply('' + target + ' is already the current Artist of the Day.');
+
+		var prenominations = room.chatRoomData.prenominations;
+		var prenominationIndex = -1;
+		var latestIp = user.latestIp;
+		for (var i = prenominations.length; i--;) {
+			if (toArtistId(prenominations[i][1]) === prenominationId) return this.sendReply('' + target + ' has already been prenominated.');
+
+			if (prenominationIndex < 0) {
+				var prenominator = prenominations[i][0];
+				if (prenominator.userid === userid || prenominator.ips[latestIp]) prenominationIndex = i;
+			}
+		}
+
+		if (prenominationIndex > -1) {
+			prenominations[prenominationIndex][1] = target;
+			Rooms.global.writeChatRoomData();
+			return this.sendReply('Your prenomination was changed to ' + target + '.');
+		}
+
+		prenominations.push([{name: user.name, userid: userid, ips: user.ips}, target]);
+		Rooms.global.writeChatRoomData();
+		this.sendReply('' + target + ' was submitted for the next nomination period for the Artist of the Day.');
+	},
+
 	nom: function (target, room, user) {
 		if (room.id !== 'thestudio' || !room.chatRoomData) return false;
 		if (!artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are not in progress.');
@@ -55,22 +104,39 @@ var commands = {
 			if (alts.indexOf(removedNominators[i].name) > -1) return this.sendReply('Since your nomination has been removed, you cannot submit another artist until the next round.');
 		}
 
-		var nominationId = toId(target);
-		if (!nominationId) return this.sendReply('No valid artist was specified.');
-		if (toId(room.chatRoomData.artistOfTheDay) === nominationId) return this.sendReply('' + target + ' was the last Artist of the Day.');
+		var nominationId = toArtistId(target);
+		if (toArtistId(room.chatRoomData.artistOfTheDay) === nominationId) return this.sendReply('' + target + ' was the last Artist of the Day.');
 
+		var userid = user.userid;
+		var latestIp = user.latestIp;
 		for (var data, nominationsIterator = artistOfTheDay.nominations.entries(); !!(data = nominationsIterator.next().value);) { // replace with for-of loop once available
-			if (alts.indexOf(data[0].name) > -1) return this.sendReply('You have already submitted a nomination for the Artist of the Day.');
-			if (nominationId === toId(data[1])) return this.sendReply('' + target + ' has already been nominated.');
+			var nominator = data[0];
+			if (nominator.ips[latestIp] && nominator.userid !== userid || alts.indexOf(nominator.name) > -1) return this.sendReply('You have already submitted a nomination for the Artist of the Day under the name ' + nominator.name + '.');
+			if (toArtistId(data[1]) === nominationId) return this.sendReply('' + target + ' has already been nominated.');
 		}
 
 		artistOfTheDay.nominations.set(user, target);
-		this.sendReply('' + target + ' was nominated for the Artist of the Day.');
+		this.send('' + user.name + ' nominated ' + target + ' for the Artist of the Day.');
 	},
 
 	viewnoms: function (target, room, user) {
-		if (room.id !== 'thestudio' || !room.chatRoomData || !this.can('mute', null, room)) return false;
-		if (!artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are not in progress.');
+		if (room.id !== 'thestudio' || !room.chatRoomData) return false;
+
+		var buffer = '';
+		if (!artistOfTheDay.pendingNominations) {
+			if (!user.can('mute', null, room)) return false;
+
+			var prenominations = room.chatRoomData.prenominations;
+			if (!prenominations || !prenominations.length) return this.sendReplyBox('No prenominations have been submitted yet.');
+
+			var i = prenominations.length;
+			buffer += 'Current prenominations:';
+			while (i--) {
+				buffer += '<br />- ' + Tools.escapeHTML(prenominations[i][1]) + ' (submitted by ' + Tools.escapeHTML(prenominations[i][0].name) + ')';
+			}
+			return this.sendReplyBox(buffer);
+		}
+
 		if (!artistOfTheDay.nominations.size) return this.sendReplyBox('No nominations have been submitted yet.');
 
 		var nominations = Array.from(artistOfTheDay.nominations.entries()).sort(function (a, b) {
@@ -79,20 +145,22 @@ var commands = {
 			return 0;
 		});
 		var i = nominations.length;
-		var buffer = 'Current nomination' + (i === 1 ? ':' : 's:');
+		buffer += 'Current nominations:';
 		while (i--) {
-			buffer += '<br />- ' + nominations[i][1] + ' (submitted by ' + Tools.escapeHTML(nominations[i][0].name) + ')';
+			buffer += '<br />- ' + Tools.escapeHTML(nominations[i][1]) + ' (submitted by ' + Tools.escapeHTML(nominations[i][0].name) + ')';
 		}
 		this.sendReplyBox(buffer);
 	},
 
 	removenom: function (target, room, user) {
-		if (room.id !== 'thestudio' || !room.chatRoomData || !this.can('mute', null, room) || !target) return false;
+		if (room.id !== 'thestudio' || !room.chatRoomData || !target || !this.can('mute', null, room)) return false;
 		if (!artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are not in progress.');
 		if (!artistOfTheDay.nominations.size) return this.sendReply('No nominations have been submitted yet.');
 
-		var userid = toId(target);
-		if (!userid) return this.sendReply('"' + target + '" is not a valid username.');
+		target = this.splitTarget(target);
+		var name = this.targetUsername;
+		var userid = toId(name);
+		if (!userid) return this.sendReply('"' + name + '" is not a valid username.');
 
 		for (var nominator, nominatorsIterator = artistOfTheDay.nominations.keys(); !!(nominator = nominatorsIterator.next().value);) { // replace with for-of loop once available
 			if (nominator.userid === userid) {
@@ -102,8 +170,7 @@ var commands = {
 			}
 		}
 
-		var targetUser = Users.get(userid);
-		this.sendReply('User "' + (targetUser ? targetUser.name : target) + '" has no nomination for the Artist of the Day.');
+		this.sendReply('User "' + name + '" has no nomination for the Artist of the Day.');
 	},
 
 	set: function (target, room, user) {
@@ -113,17 +180,12 @@ var commands = {
 
 		room.chatRoomData.artistOfTheDay = target;
 		Rooms.global.writeChatRoomData();
-		this.sendReply('The Artist of the Day was set to ' + target + '.');
 		this.privateModCommand('(' + user.name + ' set the Artist of the Day to ' + target + '.)');
 	},
 
 	'': function (target, room) {
 		if (room.id !== 'thestudio' || !room.chatRoomData || !this.canBroadcast()) return false;
-
-		var artist = room.chatRoomData.artistOfTheDay;
-		if (!artist) return this.sendReply('No Artist of the Day has been set.');
-
-		this.sendReply('The Artist of the Day is ' + artist + '.');
+		this.sendReplyBox('The Artist of the Day ' + (room.chatRoomData.artistOfTheDay ? 'is ' + room.chatRoomData.artistOfTheDay + '.' : 'has not been set yet.'));
 	},
 
 	help: function (target, room) {
@@ -135,6 +197,7 @@ var commands = {
 				  '- /aotd viewnoms - View the current nominations for the Artist of the Day. Requires: % @ # & ~<br />' +
 				  '- /aotd removenom [username] - Remove a user\'s nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ # & ~<br />' +
 				  '- /aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~<br />' +
+				  '- /aotd prenom - Nominate an artist for the Artist of the Day between nomination periods.<br />' +
 				  '- /aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~');
 	}
 };
