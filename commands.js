@@ -1773,9 +1773,25 @@ var commands = exports.commands = {
 		room.decision(user, 'choose', 'team ' + target);
 	},
 
+	addplayer: function (target, room, user) {
+		if (!target) return this.parse('/help addplayer');
+
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) {
+			return this.sendReply("User " + this.targetUsername + " not found.");
+		}
+
+		if (!room.joinBattle) return this.sendReply("You can only do this in battle rooms.");
+		if (!this.can('roomvoice', this.targetUser, room)) return;
+
+		room.auth[targetUser.userid] = '\u2605';
+	},
+
 	joinbattle: function (target, room, user) {
 		if (!room.joinBattle) return this.sendReply("You can only do this in battle rooms.");
-		if (!user.can('joinbattle', null, room)) return this.popupReply("You must be a roomvoice to join a battle you didn't start. Ask a player to use /roomvoice on you to join this battle.");
+		if (!user.can('joinbattle', null, room)) return this.popupReply("You must be a set as a player to join a battle you didn't start. Ask a player to use /setplayer on you to join this battle.");
 
 		room.joinBattle(user);
 	},

@@ -254,6 +254,7 @@ exports.groups = {
 		modchat: true,
 		roomonly: true,
 		privateroom: true,
+		joinbattle: true,
 		rank: 4
 	},
 	'@': {
@@ -288,6 +289,7 @@ exports.groups = {
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
 		jeopardy: true,
+		joinbattle: true,
 		rank: 2
 	},
 	'+': {
@@ -295,7 +297,6 @@ exports.groups = {
 		name: "Voice",
 		inherit: ' ',
 		broadcast: true,
-		joinbattle: true,
 		rank: 1
 	},
 	' ': {

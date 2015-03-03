@@ -1681,6 +1681,10 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/invite [username], [roomname] - Invites the player [username] to join the room [roomname].");
 		}
+		if (target === 'addplayer') {
+			matched = true;
+			this.sendReply("/addplayer [username] - Allow the specified user to join the battle as a player.");
+		}
 
 		// driver commands
 		if (target === 'lock' || target === 'l') {
