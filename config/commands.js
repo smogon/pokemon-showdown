@@ -1640,13 +1640,29 @@ var commands = exports.commands = {
 			this.sendReply("/calc - Provides a link to a damage calculator");
 			this.sendReply("!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~");
 		}
-		if (target === 'blockchallenges' || target === 'away' || target === 'idle') {
+		if (target === 'away' || target === 'idle') {
 			matched = true;
-			this.sendReply("/away - Blocks challenges so no one can challenge you. Deactivate it with /back.");
+			this.sendReply("/away - Blocks challenges and private messages so no one can challenge you nor PM you. Deactivate it with /back. You can also use /ignorepms and /blockchallenges.");
 		}
-		if (target === 'allowchallenges' || target === 'back') {
+		if (target === 'blockchallenges') {
 			matched = true;
-			this.sendReply("/back - Unlocks challenges so you can be challenged again. Deactivate it with /away.");
+			this.sendReply("/blockchallenges - Blocks challenges so no one can challenge you. Deactivate it with /unblockchallenges.");
+		}
+		if (target === 'ignorepms') {
+			matched = true;
+			this.sendReply("/ignorepms - Blocks private messages so no one can message you. Deactivate it with /unignorepms.");
+		}
+		if (target === 'back') {
+			matched = true;
+			this.sendReply("/back - Unlocks challenges and unignores private messages so you can be challenged and PMed again. Deactivate it with /away. You can also use /unignorepms and /unblockchallenges.");
+		}
+		if (target === 'allowchallenges' || target === 'unblockchallenges') {
+			matched = true;
+			this.sendReply("/unblockchallenges - Unlocks challenges so you can be challenged again. Deactivate it with /blockchallenges.");
+		}
+		if (target === 'unignorepms') {
+			matched = true;
+			this.sendReply("/unignorepms - Unblocks private messages so users can message you. Deactivate it with /ignorepms.");
 		}
 		if (target === 'faq') {
 			matched = true;
