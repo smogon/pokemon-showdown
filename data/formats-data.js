@@ -1317,7 +1317,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	glaceon: {
-		randomBattleMoves: ["icebeam","hiddenpowerground","shadowball","healbell","batonpass","toxic"],
+		randomBattleMoves: ["icebeam","hiddenpowerground","shadowball","healbell","wish","protect","toxic"],
 		randomDoubleBattleMoves: ["icebeam","hiddenpowerground","shadowball","wish","protect","healbell","helpinghand"],
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["tailwhip","tackle","helpinghand","sandattack"]},
@@ -4396,7 +4396,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	emolga: {
-		randomBattleMoves: ["agility","chargebeam","batonpass","substitute","thunderbolt","airslash","roost"],
+		randomBattleMoves: ["encore","chargebeam","batonpass","substitute","thunderbolt","airslash","roost"],
 		randomDoubleBattleMoves: ["helpinghand","tailwind","encore","substitute","thunderbolt","airslash","roost","protect"],
 		tier: "PU"
 	},
