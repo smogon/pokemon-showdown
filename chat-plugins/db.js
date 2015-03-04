@@ -30,13 +30,17 @@ exports.commands = {
 
 		var avFile = userid + '.' + ext;
 		try {
-			require('needle').get(target[0]).pipe(fs.createWriteStream('config/avatars/' + avFile));
-			this.parse('/bash cp config/avatars/' + avFile + ' $OPENSHIFT_DATA_DIR' + avFile);
+			require('needle').get(url)
+			.pipe(fs.createWriteStream('config/avatars/' + avFile))
+			.on('close', function () {
+				this.parse('/bash cp config/avatars/' + avFile + ' $OPENSHIFT_DATA_DIR/avatars' + avFile);
+			}.bind(this));
 			this.sendReply('"' + userid + '": "' + userid + '.' + ext + '"');
 		} catch (e) {
 			this.popupReply("Failed download: " + e);
 		}
 	},
+	getcustomformats: 'reloadcustforms',
 	reloadcustforms: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		var callback = function (status, resp) {
@@ -45,9 +49,18 @@ exports.commands = {
 				try {
 					this.sendReply('>> ' + resp);
 				} catch (e) {}
+			} else if (target === 'hotpatch') {
+				this.parse('/hotpatch formats');
 			}
 			room.update();
 		}.bind(this);
 		rhcApp.downloadfile('http://pastebin.com/raw.php?i=HDmZqYyz', './config/customformats.js', callback);
+	},
+	showavatar: function (target, room, user) {
+		var userid = toId(target), pic = Config.customavatars[userid];
+		if (!pic) return this.sendReply("User " + target + " does not have a custom avatar.");
+		if (!this.canBroadcast()) return false;
+
+		this.sendReplyBox('<img src="' + Config.serverurl + 'avatars/' + pic + '" alt="' + pic + '" />');
 	}
 };

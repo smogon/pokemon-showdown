@@ -6,7 +6,8 @@
     "node-static": "0.7.6",
     "cloud-env": "0.1.0",
     "sockjs": "0.3.12",
-    "es6-shim": "0.25.2"
+    "es6-shim": "0.25.2",
+    "needle": "^0.7.11"
   },
   "optionalDependencies": {
     "nodemailer": "1.3.1",
