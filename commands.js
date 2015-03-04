@@ -1779,17 +1779,7 @@ var commands = exports.commands = {
 	addplayer: function (target, room, user) {
 		if (!target) return this.parse('/help addplayer');
 
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-
-		if (!targetUser) {
-			return this.sendReply("User " + this.targetUsername + " not found.");
-		}
-
-		if (!room.joinBattle) return this.sendReply("You can only do this in battle rooms.");
-		if (!this.can('roomvoice', this.targetUser, room)) return;
-
-		room.auth[targetUser.userid] = '\u2605';
+		return this.parse('/roomplayer ' + target);
 	},
 
 	joinbattle: function (target, room, user) {
