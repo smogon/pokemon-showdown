@@ -1187,10 +1187,10 @@ var commands = exports.commands = {
 		var targetUser, reason;
 		if (commaIndex !== -1) {
 			reason = target.substr(commaIndex + 1).trim();
-			target = target.substr(0, commaIndex);
+			target = target.substr(0, commaIndex).trim();
 		}
 		targetUser = Users.get(target);
-		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' not found.");
+		if (!targetUser) return this.sendReply("User '" + target + "' not found.");
 		if (!this.can('forcerename', targetUser)) return false;
 
 		if (targetUser.userid !== toId(target)) {
