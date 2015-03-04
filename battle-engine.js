@@ -2739,6 +2739,7 @@ Battle = (function () {
 			this.add('message', 'Battle not started: One of you has an empty team.');
 			return;
 		}
+		if (this.gen >= 5) this.send('score', [this.p1.pokemonLeft, this.p2.pokemonLeft]);
 
 		this.residualEvent('TeamPreview');
 

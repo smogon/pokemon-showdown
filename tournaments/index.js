@@ -312,6 +312,7 @@ Tournament = (function () {
 					var inProgressMatch = this.inProgressMatches.get(node.children[0].team);
 					if (inProgressMatch && node.children[1].team === inProgressMatch.to) {
 						node.state = 'inprogress';
+						if (inProgressMatch.room.battle.score) node.score = inProgressMatch.room.battle.score;
 						node.room = inProgressMatch.room.id;
 					}
 				}
