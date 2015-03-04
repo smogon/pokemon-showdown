@@ -1190,7 +1190,7 @@ var commands = exports.commands = {
 			target = target.substr(0, commaIndex);
 		}
 		targetUser = Users.get(target);
-		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' not found.");
+		if (!targetUser) return this.sendReply("User '" + (targetUser ? targetUser.name : target) + "' not found.");
 		if (!this.can('forcerename', targetUser)) return false;
 
 		if (targetUser.userid !== toId(target)) {
