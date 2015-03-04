@@ -972,6 +972,7 @@ var commands = exports.commands = {
 		);
 	},
 
+	capintro: 'cap',
 	cap: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
