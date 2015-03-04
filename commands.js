@@ -165,7 +165,8 @@ var commands = exports.commands = {
 	blockpm: 'ignorepms',
 	blockpms: 'ignorepms',
 	ignorepm: 'ignorepms',
-	ignorepms: function (target, room, user) {
+	ignorepms: function (target, room, user, connection, cmd) {
+		if (cmd === 'away' || cmd === 'idle') this.parse('/blockchallenges');
 		if (user.ignorePMs === (target || true)) return this.sendReply("You are already blocking private messages!");
 		if (user.can('lock') && !user.can('bypassall')) return this.sendReply("You are not allowed to block private messages.");
 		user.ignorePMs = true;
@@ -180,7 +181,8 @@ var commands = exports.commands = {
 	unblockpm: 'unignorepms',
 	unblockpms: 'unignorepms',
 	unignorepm: 'unignorepms',
-	unignorepms: function (target, room, user) {
+	unignorepms: function (target, room, user, connection, cmd) {
+		if (cmd === 'back') this.parse('/unblockchallenges');
 		if (!user.ignorePMs) return this.sendReply("You are not blocking private messages!");
 		user.ignorePMs = false;
 		return this.sendReply("You are no longer blocking private messages.");
