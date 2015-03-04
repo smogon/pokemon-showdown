@@ -1116,7 +1116,7 @@ exports.BattleScripts = {
 					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
 					break;
 				case 'batonpass':
-					if (!setupType && !hasMove['substitute'] && !hasMove['protect'] && !hasMove['cosmicpower']) rejected = true;
+					if (!setupType && !hasMove['substitute'] && !hasMove['cosmicpower'] && !hasMove['wish'] && !counter['speedsetup'] && template.abilities[0] !== 'Speed Boost' && template.abilities['H'] !== 'Speed Boost') rejected = true;
 					break;
 
 				// We only need to set up once
@@ -1380,7 +1380,7 @@ exports.BattleScripts = {
 				// This move doesn't satisfy our setup requirements:
 				if (setupType && setupType !== 'Mixed' && move.category !== setupType && counter[setupType] < 2) {
 					// Mono-attacking with setup and RestTalk is allowed
-					if (!hasMove['rest'] || !hasMove['sleeptalk']) rejected = true;
+					if (!isSetup && moveid !== 'rest' && moveid !== 'sleeptalk') rejected = true;
 				}
 
 				// Hidden Power isn't good enough
@@ -2357,7 +2357,7 @@ exports.BattleScripts = {
 					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
 					break;
 				case 'batonpass':
-					if (!setupType && !hasMove['substitute'] && !hasMove['cosmicpower']) rejected = true;
+					if (!setupType && !hasMove['substitute'] && !hasMove['cosmicpower'] && !counter['speedsetup'] && template.abilities[0] !== 'Speed Boost' && template.abilities['H'] !== 'Speed Boost') rejected = true;
 					break;
 
 				// we only need to set up once
