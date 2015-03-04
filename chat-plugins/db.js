@@ -33,7 +33,7 @@ exports.commands = {
 			require('needle').get(url)
 			.pipe(fs.createWriteStream('config/avatars/' + avFile))
 			.on('close', function () {
-				this.parse('/bash cp config/avatars/' + avFile + ' $OPENSHIFT_DATA_DIR/avatars' + avFile);
+				this.parse('/bash cp config/avatars/' + avFile + ' $OPENSHIFT_DATA_DIR/avatars/' + avFile);
 			}.bind(this));
 			this.sendReply('"' + userid + '": "' + userid + '.' + ext + '"');
 		} catch (e) {
