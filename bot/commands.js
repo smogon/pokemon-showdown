@@ -287,7 +287,7 @@ exports.commands = {
 	},
 	banphrase: 'banword',
 	banword: function(arg, by, room, con) {
-		if (!this.canUse('banword', room, by)) return false;
+		if (!this.hasRank(by, '~')) return false;
 		if (!this.settings.bannedphrases) this.settings.bannedphrases = {};
 		arg = arg.trim().toLowerCase();
 		if (!arg) return false;
@@ -306,7 +306,7 @@ exports.commands = {
 	},
 	unbanphrase: 'unbanword',
 	unbanword: function(arg, by, room, con) {
-		if (!this.canUse('banword', room, by)) return false;
+		if (!this.hasRank(by, '~')) return false;
 		arg = arg.trim().toLowerCase();
 		if (!arg) return false;
 		var tarRoom = room;
@@ -327,7 +327,7 @@ exports.commands = {
 	viewbannedphrases: 'viewbannedwords',
 	vbw: 'viewbannedwords',
 	viewbannedwords: function(arg, by, room, con) {
-		if (!this.canUse('banword', room, by)) return false;
+		if (!this.hasRank(by, '@~')) return false;
 		arg = arg.trim().toLowerCase();
 		var tarRoom = room;
 
