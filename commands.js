@@ -119,6 +119,9 @@ var commands = exports.commands = {
 				return this.popupReply("This admin is too busy to answer private messages right now. Please contact a different staff member.");
 			}
 		}
+		if (user.ignorePMs && user.ignorePMs !== targetUser.group && !targetUser.can('lock')) {
+			return this.popupReply("You are blocking private messages right now.");
+		}
 
 		target = this.canTalk(target, null);
 		if (!target) return false;
