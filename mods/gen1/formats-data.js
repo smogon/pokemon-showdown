@@ -508,8 +508,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	tangela: {
-		randomBattleMoves: ["hyperbeam","stunspore","megadrain","growth","swordsdance","bodyslam"],
-		essentialMove: "sleeppowder",
+		randomBattleMoves: ["sleeppowder","hyperbeam","stunspore","megadrain","growth","swordsdance","bodyslam"],
 		tier: "UU"
 	},
 	kangaskhan: {
