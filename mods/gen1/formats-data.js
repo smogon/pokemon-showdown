@@ -535,7 +535,7 @@ exports.BattleFormatsData = {
 	staryu: {
 		randomBattleMoves: ["blizzard","thunderbolt","thunderwave","surf"],
 		essentialMove: "recover",
-		tier: "UU"
+		tier: "LC"
 	},
 	starmie: {
 		randomBattleMoves: ["blizzard","thunderbolt","thunderwave","surf"],
