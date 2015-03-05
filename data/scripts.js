@@ -1978,6 +1978,22 @@ exports.BattleScripts = {
 			var forme = template.otherFormes && this.getTemplate(template.otherFormes[0]);
 			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
 			if (isMegaSet && megaCount > 0) continue;
+			
+			// Limit to one Baton Pass user
+			var bp = false, bp2 = false;
+			for (var b = 0; b < set.moves.length && !bp; b++) {
+				if (set.moves[b] == 'batonpass') bp = true;
+			}
+			
+			if (bp) {
+				for (var b = 0; b < pokemon.length && !bp2; b++) {
+					for (var m = 0; m < pokemon[b].moves.length && !bp2; m++) {
+						if (pokemon[b].moves[m] == 'batonpass') bp2 = true;
+					}
+				}
+			}
+			
+			if (bp2) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
