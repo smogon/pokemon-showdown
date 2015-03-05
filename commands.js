@@ -1942,18 +1942,24 @@ var commands = exports.commands = {
 	accept: function (target, room, user, connection) {
 		var userid = toId(target);
 		var format = '';
-		if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
-		if (!format) {
-			this.popupReply(target + " cancelled their challenge before you could accept it.");
-			return false;
+		if (userid) {
+			if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
+		} else {
+			userid = Object.keys(user.challengesFrom)[0];
+			format = user.challengesFrom[userid].format;
 		}
+
+		if (!format) return this.popupReply(target + " cancelled their challenge before you could accept it.");
+
 		user.prepBattle(format, 'challenge', connection, function (result) {
 			if (result) user.acceptChallengeFrom(userid);
 		});
 	},
 
 	reject: function (target, room, user) {
-		user.rejectChallengeFrom(toId(target));
+		var userid = toId(target);
+		if (!userid) userid = Object.keys(user.challengesFrom)[0];
+		user.rejectChallengeFrom(userid);
 	},
 
 	saveteam: 'useteam',
