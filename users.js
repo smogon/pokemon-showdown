@@ -673,6 +673,8 @@ User = (function () {
 
 			// also MMR is different for each userid
 			this.mmrCache = {};
+
+			Rooms.global.cancelSearch(this);
 		}
 
 		if (authenticated && userid in bannedUsers) {
