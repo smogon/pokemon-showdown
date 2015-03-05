@@ -886,6 +886,8 @@ var commands = exports.commands = {
 		);
 	},
 
+	repo: 'opensource',
+	repository: 'opensource',
 	git: 'opensource',
 	opensource: function (target, room, user) {
 		if (!this.canBroadcast()) return;
