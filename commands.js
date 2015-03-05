@@ -1941,6 +1941,8 @@ var commands = exports.commands = {
 
 	accept: function (target, room, user, connection) {
 		var userid = toId(target);
+		if (!userid) return false;
+
 		var format = '';
 		if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
 		if (!format) {
