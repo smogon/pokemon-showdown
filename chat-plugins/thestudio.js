@@ -54,7 +54,7 @@ var commands = {
 		room.chatRoomData.artistOfTheDay = artist;
 		Rooms.global.writeChatRoomData();
 		room.addRaw('<div class="broadcast-blue"><strong>Nominations for the Artist of the Day have ended!</strong><br />' +
-		            'Selected artist: ' + Tools.escapeHTML(artist) + '</div>');
+		            'Randomly selected artist: ' + Tools.escapeHTML(artist) + '</div>');
 		this.privateModCommand('(' + user.name + ' ended nominations for the Artist of the Day.)');
 	},
 
@@ -115,8 +115,9 @@ var commands = {
 			if (toArtistId(data[1]) === nominationId) return this.sendReply('' + target + ' has already been nominated.');
 		}
 
+		var response = '' + user.name + (artistOfTheDay.nominations.has(user) ? ' changed their nomination from ' + artistOfTheDay.nominations.get(user) + ' to ' + target + '.' : ' nominated ' + target + ' for the Artist of the Day.');
 		artistOfTheDay.nominations.set(user, target);
-		this.send('' + user.name + ' nominated ' + target + ' for the Artist of the Day.');
+		this.send(response);
 	},
 
 	viewnoms: function (target, room, user) {
@@ -137,6 +138,7 @@ var commands = {
 			return this.sendReplyBox(buffer);
 		}
 
+		if (!this.canBroadcast()) return false;
 		if (!artistOfTheDay.nominations.size) return this.sendReplyBox('No nominations have been submitted yet.');
 
 		var nominations = Array.from(artistOfTheDay.nominations.entries()).sort(function (a, b) {
