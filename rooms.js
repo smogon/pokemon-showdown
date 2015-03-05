@@ -303,27 +303,26 @@ var GlobalRoom = (function () {
 		return roomsData;
 	};
 	GlobalRoom.prototype.cancelSearch = function (user) {
-		var success = false;
 		user.cancelChallengeTo();
+		if (!user.searching) return false;
 		for (var i = 0; i < this.searchers.length; i++) {
 			var search = this.searchers[i];
 			var searchUser = Users.get(search.userid);
 			if (!searchUser.connected) {
 				this.searchers.splice(i, 1);
 				i--;
+				searchUser.searching = 0;
 				continue;
 			}
 			if (searchUser === user) {
 				this.searchers.splice(i, 1);
 				i--;
-				if (!success) {
-					searchUser.send('|updatesearch|' + JSON.stringify({searching: false}));
-					success = true;
-				}
 				continue;
 			}
 		}
-		return success;
+		user.searching = 0;
+		user.send('|updatesearch|' + JSON.stringify({searching: false}));
+		return true;
 	};
 	GlobalRoom.prototype.searchBattle = function (user, formatid) {
 		if (!user.connected) return;
@@ -399,6 +398,7 @@ var GlobalRoom = (function () {
 				return;
 			}
 		}
+		user.searching++;
 		this.searchers.push(newSearch);
 	};
 	GlobalRoom.prototype.send = function (message, user) {

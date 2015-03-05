@@ -479,7 +479,8 @@ User = (function () {
 		this.battles = {};
 		this.roomCount = {};
 
-		// challenges
+		// searches and challenges
+		this.searching = 0;
 		this.challengesFrom = {};
 		this.challengeTo = null;
 		this.lastChallenge = 0;
