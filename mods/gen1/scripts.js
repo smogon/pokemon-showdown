@@ -1197,7 +1197,10 @@ exports.BattleScripts = {
 							break;
 						case 'sharpen':
 						case 'swordsdance':
-							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical']) rejected = true;
+							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical'] || hasMove['growth']) rejected = true;
+							break;
+						case 'growth':
+							if (counter['Special'] < counter['Physical'] || hasMove['swordsdance']) rejected = true;
 							break;
 						case 'doubleedge':
 							if (hasMove['bodyslam']) rejected = true;
@@ -1240,6 +1243,12 @@ exports.BattleScripts = {
 							break;
 						case 'poisonpowder':
 							if (hasMove['toxic']) rejected = true;
+							break;
+						case 'stunspore':
+							if (hasMove['sleeppowder']) rejected = true;
+							break;
+						case 'sleeppowder':
+							if (hasMove['stunspore']) rejected = true;
 							break;
 						} // End of switch for moveid
 					}
