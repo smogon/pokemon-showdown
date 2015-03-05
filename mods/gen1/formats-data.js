@@ -154,7 +154,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	clefairy: {
-		randomBattleMoves: ["bodyslam","thunderwave","thunderbolt","counter","sing","thunder","metronome"],
+		randomBattleMoves: ["blizzard","bodyslam","thunderwave","thunderbolt","counter","sing","thunder","metronome"],
 		tier: "LC"
 	},
 	clefable: {
