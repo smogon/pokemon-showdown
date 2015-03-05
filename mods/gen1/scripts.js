@@ -1259,10 +1259,11 @@ exports.BattleScripts = {
 			OU: 79,
 			Uber: 74
 		};
-		// Really bad Pokemon and jokemons and MEWTWO.
+		// Really bad Pokemon and jokemons, MEWTWO, Pokémon with higher tier in Wrap metas.
 		var customScale = {
 			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99,
-			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 70
+			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 70,
+			Dragonite: 85, Cloyster: 83, Staryu: 90
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
