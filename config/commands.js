@@ -900,12 +900,9 @@ var commands = exports.commands = {
 		);
 	},
 	
-	suggest: 'suggestion',
 	suggestion: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox(
-			"Have an idea for Pokemon Showdown? <a href=\"http://www.smogon.com/forums/threads/suggestions.3469608/\">Post it here</a>!"
-		);
+		this.sendReplyBox("<a href=\"http://www.smogon.com/forums/threads/suggestions.3469608/\">Make a suggestion for Pokemon Showdown</a>");
 	},
 
 	staff: function (target, room, user) {
