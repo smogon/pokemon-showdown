@@ -899,6 +899,11 @@ var commands = exports.commands = {
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a>"
 		);
 	},
+	
+	suggestion: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox("<a href=\"http://www.smogon.com/forums/threads/suggestions.3469608/\">Make a suggestion for Pokemon Showdown</a>");
+	},
 
 	staff: function (target, room, user) {
 		if (!this.canBroadcast()) return;
