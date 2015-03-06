@@ -941,6 +941,14 @@ exports.BattleScripts = {
 		if (template.types[1]) {
 			hasType[template.types[1]] = true;
 		}
+		var hasAbility = {};
+		hasAbility[template.abilities[0]] = true;
+		if (template.abilities[1]) {
+			hasAbility[template.abilities[1]] = true;
+		}
+		if (template.abilities['H']) {
+			hasAbility[template.abilities['H']] = true;
+		}
 		var availableHP = 0;
 		for (var i = 0, len = movePool.length; i < len; i++) {
 			if (movePool[i].substr(0, 11) === 'hiddenpower') availableHP++;
@@ -1048,7 +1056,7 @@ exports.BattleScripts = {
 						// Certain moves aren't acceptable as a Pokemon's only STAB attack
 						if (!(moveid in {bounce:1, fakeout:1, flamecharge:1, quickattack:1, skyattack:1})) hasStab = true;
 					}
-					if (template.abilities['H'] && template.abilities['H'] === 'Protean') hasStab = true;
+					if (hasAbility['Protean']) hasStab = true;
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
 					if (move.type === 'Grass') counter['overgrow']++;
@@ -1056,7 +1064,7 @@ exports.BattleScripts = {
 					if (move.type === 'Water') counter['torrent']++;
 					if (move.type === 'Normal') {
 						counter['ate']++;
-						if (template.abilities[0] in ateAbilities || (template.abilities['H'] && template.abilities['H'] in ateAbilities)) hasStab = true;
+						if (hasAbility['Refrigerate'] || hasAbility['Pixilate'] || hasAbility['Aerilate']) hasStab = true;
 					}
 					if (move.flags['bite']) counter['bite']++;
 					if (move.flags['punch']) counter['ironfist']++;
@@ -1116,7 +1124,7 @@ exports.BattleScripts = {
 					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
 					break;
 				case 'batonpass':
-					if (!setupType && !hasMove['substitute'] && !hasMove['cosmicpower'] && !hasMove['wish'] && !counter['speedsetup'] && template.abilities[0] !== 'Speed Boost' && template.abilities['H'] !== 'Speed Boost') rejected = true;
+					if (!setupType && !hasMove['substitute'] && !hasMove['cosmicpower'] && !hasMove['wish'] && !counter['speedsetup'] && hasAbility['Speed Boost']) rejected = true;
 					break;
 
 				// We only need to set up once
@@ -1207,7 +1215,7 @@ exports.BattleScripts = {
 					if (hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
 					break;
 				case 'solarbeam':
-					if ((!hasMove['sunnyday'] && template.species !== 'Ninetales') || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
+					if ((!hasMove['sunnyday'] && !hasAbility['Drought']) || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
 					break;
 				case 'gigadrain':
 					if ((!setupType && hasMove['leafstorm']) || hasMove['petaldance']) rejected = true;
@@ -2194,6 +2202,14 @@ exports.BattleScripts = {
 		if (template.types[1]) {
 			hasType[template.types[1]] = true;
 		}
+		var hasAbility = {};
+		hasAbility[template.abilities[0]] = true;
+		if (template.abilities[1]) {
+			hasAbility[template.abilities[1]] = true;
+		}
+		if (template.abilities['H']) {
+			hasAbility[template.abilities['H']] = true;
+		}
 		var availableHP = 0;
 		for (var i = 0, len = movePool.length; i < len; i++) {
 			if (movePool[i].substr(0, 11) === 'hiddenpower') availableHP++;
@@ -2294,7 +2310,7 @@ exports.BattleScripts = {
 						// If they're in the Pokémon's movepool and are STAB, consider the Pokémon not to have that type as a STAB.
 						if (moveid !== 'bounce' && moveid !== 'flamecharge' && moveid !== 'skydrop') hasStab = true;
 					}
-					if (template.abilities['H'] && template.abilities['H'] === 'Protean') hasStab = true;
+					if (hasAbility['Protean']) hasStab = true;
 					if (move.category === 'Physical') counter['hustle']++;
 					if (move.type === 'Fire') counter['blaze']++;
 					if (move.type === 'Grass') counter['overgrow']++;
@@ -2302,7 +2318,7 @@ exports.BattleScripts = {
 					if (move.type === 'Water') counter['torrent']++;
 					if (move.type === 'Normal') {
 						counter['ate']++;
-						if (template.abilities[0] in ateAbilities || (template.abilities['H'] && template.abilities['H'] in ateAbilities)) hasStab = true;
+						if (hasAbility['Refrigerate'] || hasAbility['Pixilate'] || hasAbility['Aerilate']) hasStab = true;
 					}
 					if (move.flags['punch']) counter['ironfist']++;
 					if (move.flags['bite']) counter['bite']++;
@@ -2357,7 +2373,7 @@ exports.BattleScripts = {
 					if (!hasMove['cosmicpower'] && !setupType) rejected = true;
 					break;
 				case 'batonpass':
-					if (!setupType && !hasMove['substitute'] && !hasMove['cosmicpower'] && !counter['speedsetup'] && template.abilities[0] !== 'Speed Boost' && template.abilities['H'] !== 'Speed Boost') rejected = true;
+					if (!setupType && !hasMove['substitute'] && !hasMove['cosmicpower'] && !counter['speedsetup'] && hasAbility['Speed Boost']) rejected = true;
 					break;
 
 				// we only need to set up once
@@ -2428,7 +2444,7 @@ exports.BattleScripts = {
 					if (hasMove['bravebird']) rejected = true;
 					break;
 				case 'solarbeam':
-					if ((!hasMove['sunnyday'] && template.species !== 'Ninetales') || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
+					if ((!hasMove['sunnyday'] && !hasAbility['Drought']) || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
 					break;
 				case 'gigadrain':
 					if ((!setupType && hasMove['leafstorm']) || hasMove['petaldance']) rejected = true;
