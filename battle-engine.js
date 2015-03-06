@@ -2753,6 +2753,7 @@ Battle = (function () {
 			if (!effect) effect = this.effect;
 		}
 		if (!target || !target.hp) return 0;
+		if (!target.isActive) return false;
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.clone(boost));
 		var success = false;
@@ -2791,6 +2792,7 @@ Battle = (function () {
 			if (!effect) effect = this.effect;
 		}
 		if (!target || !target.hp) return 0;
+		if (!target.isActive) return false;
 		effect = this.getEffect(effect);
 		if (!(damage || damage === 0)) return damage;
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
@@ -2885,6 +2887,7 @@ Battle = (function () {
 		damage = this.runEvent('TryHeal', target, source, effect, damage);
 		if (!damage) return 0;
 		if (!target || !target.hp) return 0;
+		if (!target.isActive) return false;
 		if (target.hp >= target.maxhp) return 0;
 		damage = target.heal(damage, source, effect);
 		switch (effect.id) {
