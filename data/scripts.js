@@ -1154,7 +1154,8 @@ exports.BattleScripts = {
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'trick': case 'switcheroo':
-					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['acrobatics']) rejected = true;
+					if (setupType || counter.Physical + counter.Special < 2) rejected = true;
+					if ((hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['acrobatics']) rejected = true;
 					break;
 				case 'dragontail': case 'circlethrow':
 					if (!!counter['speedsetup'] || hasMove['whirlwind'] || hasMove['roar'] || hasMove['encore'] || hasMove['raindance']) rejected = true;
@@ -1391,11 +1392,6 @@ exports.BattleScripts = {
 				if (setupType && setupType !== 'Mixed' && move.category !== setupType && counter[setupType] < 2) {
 					// Mono-attacking with setup and RestTalk is allowed
 					if (!isSetup && moveid !== 'rest' && moveid !== 'sleeptalk') rejected = true;
-				}
-
-				// Pokemon with Trick should have at least two attacks:
-				if ((hasMove['trick'] || hasMove['switcheroo']) && damagingMoves.length < 2 && move.category === 'Status' && moveid !== 'trick' && moveid !== 'switcheroo') {
-					rejected = true;
 				}
 
 				// Hidden Power isn't good enough
@@ -2417,7 +2413,8 @@ exports.BattleScripts = {
 					if (setupType || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'trick': case 'switcheroo':
-					if (setupType || (hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['batonpass'] || template.isMega) rejected = true;
+					if (setupType || counter.Physical + counter.Special < 2) rejected = true;
+					if ((hasMove['rest'] && hasMove['sleeptalk']) || hasMove['trickroom'] || hasMove['reflect'] || hasMove['lightscreen'] || hasMove['acrobatics']) rejected = true;
 					break;
 				case 'dragontail': case 'circlethrow':
 					if (hasMove['agility'] || hasMove['rockpolish']) rejected = true;
@@ -2603,11 +2600,6 @@ exports.BattleScripts = {
 					rejected = true;
 				}
 				if (setupType === 'Special' && move.category !== 'Special' && counter['Special'] < 2) {
-					rejected = true;
-				}
-
-				// Pokemon with Trick should have at least two attacks:
-				if ((hasMove['trick'] || hasMove['switcheroo']) && damagingMoves.length < 2 && move.category === 'Status' && moveid !== 'trick' && moveid !== 'switcheroo') {
 					rejected = true;
 				}
 
