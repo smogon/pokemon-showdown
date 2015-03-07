@@ -3618,6 +3618,9 @@ Battle = (function () {
 		}
 
 		if (p1switch || p2switch) {
+			if (this.gen >= 5) {
+				this.eachEvent('Update');
+			}
 			this.makeRequest('switch');
 			return true;
 		}
