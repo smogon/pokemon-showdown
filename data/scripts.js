@@ -1391,6 +1391,11 @@ exports.BattleScripts = {
 					if (!isSetup && moveid !== 'rest' && moveid !== 'sleeptalk') rejected = true;
 				}
 
+				// Pokemon with Trick should have at least two attacks:
+				if ((hasMove['trick'] || hasMove['switcheroo']) && damagingMoves.length < 2 && move.category === 'Status' && moveid !== 'trick' && moveid !== 'switcheroo') {
+					rejected = true;
+				}
+
 				// Hidden Power isn't good enough
 				if (setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] <= 2 && (!hasMove['shadowball'] || move.type !== 'Fighting')) {
 					rejected = true;
@@ -2596,6 +2601,11 @@ exports.BattleScripts = {
 					rejected = true;
 				}
 				if (setupType === 'Special' && move.category !== 'Special' && counter['Special'] < 2) {
+					rejected = true;
+				}
+
+				// Pokemon with Trick should have at least two attacks:
+				if ((hasMove['trick'] || hasMove['switcheroo']) && damagingMoves.length < 2 && move.category === 'Status' && moveid !== 'trick' && moveid !== 'switcheroo') {
 					rejected = true;
 				}
 
