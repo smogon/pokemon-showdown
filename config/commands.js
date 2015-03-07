@@ -919,13 +919,12 @@ var commands = exports.commands = {
 			"- Zeffy<br /><br />" +
 			"<b>@ Moderators</b><br />" +
 			"- Altairis (Winry)<br />" +
-			"- Antemortem<br />" +
+			"- Anti (Crazy Uncle Anti)<br />" +
 			"- apocalypseArisen (Megido, omicron, omicronhuh)<br />" +
 			"- Aslan<br />" +
 			"- Castform (Powalen)<br />" +
 			"- Christos<br />" +
-			"- Dragon (Aura Blackquill, Captain Syrup, Dragii, Iris, Kjelle, Miss Fortune, Mitsuruu, Nabooru, Tharja)<br />" +
-			"- Jin Of The Gale<br />" +
+			"- Dragon (Aura Blackquill, Captain Syrup, Dragii, Erika Senpai, Iris, Kjelle, Miss Fortune, Mitsuruu, Nabooru, Tharja)<br />" +
 			"- Peitharchia (Adrastia, nymph)<br />" +
 			"- Sanguine (Natalya)<br />" +
 			"- Sector (Milena Kunis)<br />" +
