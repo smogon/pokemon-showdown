@@ -10,9 +10,10 @@ function checkAllAlts(user, list) {
 		if (prevName === user.userid) continue;
 		if (prevName in list) return 'previous name ' + prevName;
 	}
-	var alts = user.getAlts().map(toId);
-	for (var i = 0; i < alts.length; i++) {
-		if (alts[i] in list) return 'alt ' + alts[i];
+	var ip = user.latestIp;
+	for (var id in list) {
+		var matchUser = Users.get(id);
+		if (matchUser.latestIp === ip) return 'alt ' + matchUser.name;
 	}
 	return false;
 }
