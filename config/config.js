@@ -410,6 +410,14 @@ exports.customavatars = {
 	'thedressisalie': 'thedressisalie.jpg',
 	'weshbien': 'weshbien.png',
 	'kridaneladd': 'weshbien.png',
+	'kingsyn': 'kingsyn.gif',
+	'syndrome': 'kingsyn.gif',
+	'lonnybreaux': 'kingsyn.gif',
+	'loveonmypiano': 'kingsyn.gif',
+	'fkasyndrome': 'kingsyn.gif',
+	'tahliahbarnett': 'kingsyn.gif',
+	'theservant35': 'kingsyn.gif',
+	'clydedrexler': 'kingsyn.gif',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
