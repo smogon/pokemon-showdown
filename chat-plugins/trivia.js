@@ -357,6 +357,7 @@ var Trivia = (function () {
 
 var commands = {
 	// trivia game commands
+	create: 'new',
 	new: function (target, room) {
 		if (room.id !== 'trivia' || !this.can('broadcast', null, room) || !target) return false;
 		if (trivia[room.id]) return this.sendReply('There is already a trivia game in progress.');
@@ -615,6 +616,7 @@ var commands = {
 		if (!trivium) return this.sendReplyBox('There is no trivia game in progress.');
 		trivium.getParticipants(this);
 	},
+	ranking: 'rank',
 	rank: function (target, room, user) {
 		if (room.id !== 'trivia') return false;
 
