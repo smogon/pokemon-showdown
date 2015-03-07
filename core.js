@@ -270,7 +270,7 @@ var core = exports.core = {
 		':suicune:': 'http://cbc.pokecommunity.com/config/emoticons/suicune.png',
 		':superman:': 'http://cbc.pokecommunity.com/config/emoticons/superman.png',
 		':sweep:': 'http://cbc.pokecommunity.com/config/emoticons/sweep.gif',
-		':taco:': 'http://cbc.pokecommunity.com/config/emoticons/taco.gif',
+		':taco:': 'http://cbc.pokecommunity.com/config/emoticons/taco.png',
 		':vulpix:': 'http://cbc.pokecommunity.com/config/emoticons/vulpix.png',
 		':wobbuffet:': 'http://cbc.pokecommunity.com/config/emoticons/wobbuffet.png',
 		':wooper:': 'http://cbc.pokecommunity.com/config/emoticons/wooper.png',
