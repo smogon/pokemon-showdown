@@ -175,11 +175,13 @@ exports.customavatars = {
 	'sandfrm': 'jelli.jpg',
 	'powalen': 'jelli.jpg',
 	'pwaln': 'jelli.jpg',
+	'ctfrm': 'ctfrm.gif',
 	'novae': 'twilightsky.png',
 	'saeyru': 'twilightsky.png',
 	'charis': 'twilightsky.png',
 	'kjelle': 'doronjo.gif',
 	'captainsyrup': 'doronjo.gif',
+	'nabooru': 'nabooru.png',
 	'altairis': 'altairis.png',
 	'winry': 'altairis.png',
 	'sanguine': 'sanguine.gif',
@@ -404,6 +406,10 @@ exports.customavatars = {
 	'hanaaa': 'hanaaa.png',
 	'hanalyse': 'hanaaa.png',
 	'connwaer': 'connwaer.jpg',
+	'oocyst': 'oocyst.png',
+	'thedressisalie': 'thedressisalie.jpg',
+	'weshbien': 'weshbien.png',
+	'kridaneladd': 'weshbien.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
@@ -492,11 +498,17 @@ exports.groups = {
 		broadcast: true,
 		joinbattle: true,
 		roomvoice: true,
+		roomplayer: true,
 		modchat: true,
 		roomonly: true,
 		privateroom: true,
+<<<<<<< HEAD
 		modchatall: true,
 		rank: 6
+=======
+		joinbattle: true,
+		rank: 4
+>>>>>>> upstream/master
 	},
 	'@': {
 		id: "mod",
@@ -537,12 +549,18 @@ exports.groups = {
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
 		jeopardy: true,
+<<<<<<< HEAD
 		rank: 3
+=======
+		joinbattle: true,
+		rank: 2
+>>>>>>> upstream/master
 	},
 	'+': {
 		id: "voice",
 		name: "Voice",
 		inherit: ' ',
+<<<<<<< HEAD
 		tournaments: true,
 		declare: true,
 		announce: true,
@@ -554,6 +572,9 @@ exports.groups = {
 		id: "player",
 		name: "Player",
 		inherit: ' ',
+=======
+		broadcast: true,
+>>>>>>> upstream/master
 		rank: 1
 	},
 	' ': {
