@@ -175,11 +175,13 @@ exports.customavatars = {
 	'sandfrm': 'jelli.jpg',
 	'powalen': 'jelli.jpg',
 	'pwaln': 'jelli.jpg',
+	'ctfrm': 'ctfrm.gif',
 	'novae': 'twilightsky.png',
 	'saeyru': 'twilightsky.png',
 	'charis': 'twilightsky.png',
 	'kjelle': 'doronjo.gif',
 	'captainsyrup': 'doronjo.gif',
+	'nabooru': 'nabooru.png',
 	'altairis': 'altairis.png',
 	'winry': 'altairis.png',
 	'sanguine': 'sanguine.gif',
@@ -404,6 +406,10 @@ exports.customavatars = {
 	'hanaaa': 'hanaaa.png',
 	'hanalyse': 'hanaaa.png',
 	'connwaer': 'connwaer.jpg',
+	'oocyst': 'oocyst.png',
+	'thedressisalie': 'thedressisalie.jpg',
+	'weshbien': 'weshbien.png',
+	'kridaneladd': 'weshbien.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
