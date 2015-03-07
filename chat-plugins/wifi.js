@@ -354,8 +354,10 @@ var commands = {
 		spawnGiveaway('lottery', user, targetUser, room, options);
 		this.privateModCommand("(" + user.name + " has started a lottery giveaway.)");
 	},
+	leavelotto: 'join',
 	leavelottery: 'join',
 	leave: 'join',
+	joinlotto: 'join',
 	joinlottery: 'join',
 	join: function (target, room, user, conn, cmd) {
 		if (room.id !== 'wifi') return this.sendReply("This command can only be used in the Wi-Fi room.");
@@ -365,10 +367,12 @@ var commands = {
 		switch (cmd) {
 		case 'joinlottery':
 		case 'join':
+		case 'joinlotto':
 			giveaway.addUser(user, this);
 			break;
 		case 'leavelottery':
 		case 'leave':
+		case 'leavelotto':
 			giveaway.removeUser(user, this);
 			break;
 		}
