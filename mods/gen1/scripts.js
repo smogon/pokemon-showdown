@@ -1197,7 +1197,10 @@ exports.BattleScripts = {
 							break;
 						case 'sharpen':
 						case 'swordsdance':
-							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical']) rejected = true;
+							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical'] || hasMove['growth']) rejected = true;
+							break;
+						case 'growth':
+							if (counter['Special'] < counter['Physical'] || hasMove['swordsdance']) rejected = true;
 							break;
 						case 'doubleedge':
 							if (hasMove['bodyslam']) rejected = true;
@@ -1241,6 +1244,12 @@ exports.BattleScripts = {
 						case 'poisonpowder':
 							if (hasMove['toxic']) rejected = true;
 							break;
+						case 'stunspore':
+							if (hasMove['sleeppowder']) rejected = true;
+							break;
+						case 'sleeppowder':
+							if (hasMove['stunspore']) rejected = true;
+							break;
 						} // End of switch for moveid
 					}
 					if (rejected && j < moveKeys.length) {
@@ -1256,13 +1265,14 @@ exports.BattleScripts = {
 			LC: 96,
 			NFE: 90,
 			UU: 85,
-			OU: 75,
-			Uber: 72
+			OU: 79,
+			Uber: 74
 		};
-		// Really bad Pokemon and jokemons and MEWTWO.
+		// Really bad Pokemon and jokemons, MEWTWO, Pokémon with higher tier in Wrap metas.
 		var customScale = {
 			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99,
-			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 68
+			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 70,
+			Dragonite: 85, Cloyster: 83, Staryu: 90
 		};
 		var level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];

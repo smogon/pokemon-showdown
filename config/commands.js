@@ -281,6 +281,7 @@ var commands = exports.commands = {
 	 * Shortcuts
 	 *********************************************************/
 
+	inv: 'invite',
 	invite: function (target, room, user) {
 		target = this.splitTarget(target);
 		if (!this.targetUser) {
@@ -740,6 +741,7 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
+	weaknesses: 'weakness',
 	weak: 'weakness',
 	resist: 'weakness',
 	weakness: function (target, room, user) {
@@ -883,6 +885,8 @@ var commands = exports.commands = {
 		);
 	},
 
+	repo: 'opensource',
+	repository: 'opensource',
 	git: 'opensource',
 	opensource: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1002,6 +1006,7 @@ var commands = exports.commands = {
 		);
 	},
 
+	capintro: 'cap',
 	cap: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
@@ -1051,7 +1056,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">Other Metagame of the Month</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521887/\">Current OMotM: Classic Hackmons</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Current OMotM: Hidden Type</a><br />";
 		}
 		if (target === 'all' || target === 'seasonal') {
 			matched = true;
@@ -1689,13 +1694,25 @@ var commands = exports.commands = {
 			this.sendReply("/calc - Provides a link to a damage calculator");
 			this.sendReply("!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~");
 		}
-		if (target === 'blockchallenges' || target === 'allowchall') {
+		if (target === 'blockchallenges' || target === 'blockchall') {
 			matched = true;
-			this.sendReply("/away - Blocks challenges so no one can challenge you. Deactivate it with /back.");
+			this.sendReply("/blockchallenges - Blocks challenges so no one can challenge you. Deactivate it with /unblockchallenges.");
 		}
-		if (target === 'allowchallenges' || target === 'blockchall') {
+		if (target === 'ignorepms') {
 			matched = true;
-			this.sendReply("/back - Unlocks challenges so you can be challenged again. Deactivate it with /away.");
+			this.sendReply("/ignorepms - Blocks private messages so no one can message you. Deactivate it with /unignorepms.");
+		}
+		if (target === 'back') {
+			matched = true;
+			this.sendReply("/back - Unlocks challenges and unignores private messages so you can be challenged and PMed again. Deactivate it with /away. You can also use /unignorepms and /unblockchallenges.");
+		}
+		if (target === 'allowchallenges' || target === 'allowchall' || target === 'unblockchallenges' || target === 'unblockchall') {
+			matched = true;
+			this.sendReply("/unblockchallenges - Unlocks challenges so you can be challenged again. Deactivate it with /blockchallenges.");
+		}
+		if (target === 'unignorepms') {
+			matched = true;
+			this.sendReply("/unignorepms - Unblocks private messages so users can message you. Deactivate it with /ignorepms.");
 		}
 		if (target === 'faq') {
 			matched = true;
@@ -1730,6 +1747,10 @@ var commands = exports.commands = {
 		if (target === 'invite') {
 			matched = true;
 			this.sendReply("/invite [username], [roomname] - Invites the player [username] to join the room [roomname].");
+		}
+		if (target === 'addplayer') {
+			matched = true;
+			this.sendReply("/addplayer [username] - Allow the specified user to join the battle as a player.");
 		}
 
 		// driver commands

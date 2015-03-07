@@ -858,6 +858,7 @@ exports.BattleMovedex = {
 	},
 	superfang: {
 		inherit: true,
+		affectedByImmunities: false,
 		basePower: 1
 	},
 	thunder: {

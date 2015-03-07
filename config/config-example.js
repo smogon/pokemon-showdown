@@ -492,11 +492,17 @@ exports.groups = {
 		broadcast: true,
 		joinbattle: true,
 		roomvoice: true,
+		roomplayer: true,
 		modchat: true,
 		roomonly: true,
 		privateroom: true,
+<<<<<<< HEAD
 		modchatall: true,
 		rank: 6
+=======
+		joinbattle: true,
+		rank: 4
+>>>>>>> upstream/master
 	},
 	'@': {
 		id: "mod",
@@ -537,12 +543,18 @@ exports.groups = {
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
 		jeopardy: true,
+<<<<<<< HEAD
 		rank: 3
+=======
+		joinbattle: true,
+		rank: 2
+>>>>>>> upstream/master
 	},
 	'+': {
 		id: "voice",
 		name: "Voice",
 		inherit: ' ',
+<<<<<<< HEAD
 		tournaments: true,
 		declare: true,
 		announce: true,
@@ -554,6 +566,9 @@ exports.groups = {
 		id: "player",
 		name: "Player",
 		inherit: ' ',
+=======
+		broadcast: true,
+>>>>>>> upstream/master
 		rank: 1
 	},
 	' ': {

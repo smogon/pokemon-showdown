@@ -479,7 +479,8 @@ User = (function () {
 		this.battles = {};
 		this.roomCount = {};
 
-		// challenges
+		// searches and challenges
+		this.searching = 0;
 		this.challengesFrom = {};
 		this.challengeTo = null;
 		this.lastChallenge = 0;
@@ -672,6 +673,8 @@ User = (function () {
 
 			// also MMR is different for each userid
 			this.mmrCache = {};
+
+			Rooms.global.cancelSearch(this);
 		}
 
 		if (authenticated && userid in bannedUsers) {
