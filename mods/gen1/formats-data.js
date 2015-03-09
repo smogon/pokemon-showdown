@@ -321,7 +321,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	tentacool: {
-		randomBattleMoves: ["confuseray","blizzard","hydropump","surf"],
+		randomBattleMoves: ["swordsdance","doubleedge","blizzard","hydropump","mimic","barrier"],
 		tier: "LC"
 	},
 	tentacruel: {
