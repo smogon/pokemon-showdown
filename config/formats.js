@@ -1896,17 +1896,17 @@ exports.Formats = [
 			if (move.id === 'allyswitch' && name === 'slayer95') {
 				move.name = 'Spell Steal';
 				move.target = 'self';
-				if (!pokemon.illusion) {
-					this.add('-fail', pokemon);
-					this.add('-hint', "Spell Steal only works behind an Illusion!");
-					return null;
-				} else {
-					var lastMove = pokemon.illusion.moveset[pokemon.illusion.moves.length - 1];
-					delete move.onTryHit;
-					move.onHit = function () {
-						this.useMove(lastMove, pokemon);
-					};
-				}
+				move.onTryHit = function (target, source) {
+					if (!source.illusion) {
+						this.add('-fail', pokemon);
+						this.add('-hint', "Spell Steal only works behind an Illusion!");
+						return null;
+					}
+				};
+				move.onHit = function (target, source) {
+					var lastMove = source.illusion.moveset[source.illusion.moves.length - 1];
+					this.useMove(lastMove, source);
+				};
 			}
 			if (move.id === 'kingsshield' && name === 'sweep') {
 				move.name = "Sweep's Shield";
