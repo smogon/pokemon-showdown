@@ -340,8 +340,11 @@ exports.Formats = [
 		team: 'randomSeasonalStaff',
 		ruleset: ['Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
+			// This seasonal gets a bit from Super Smash Bros., that's where the initial message comes from.
 			this.add('message', "GET READY FOR THE NEXT BATTLE!");
+			// This link leads to a post where all signature moves can be found so the user can use this resource while battling.
 			this.add("raw|Seasonal help for moves can be found <a href='https://www.smogon.com/forums/threads/3491902/page-6#post-6093168'>here</a>");
+			// Prepare Steamroll's special lead role.
 			if (toId(this.p1.pokemon[0].name) === 'steamroll') {
 				this.add('c|@Steamroll|I wasn\'t aware we were starting. Allow me...');
 				this.p1.pokemon[0].isLead = true;
@@ -350,8 +353,10 @@ exports.Formats = [
 				this.add('c|@Steamroll|I wasn\'t aware we were starting. Allow me...');
 				this.p2.pokemon[0].isLead = true;
 			}
+			// This variable saves the status of a spammy conversation to be played, so it's only played once.
 			this.convoPlayed = false;
 
+			// This code here is used for the renaming of moves showing properly on client.
 			var globalRenamedMoves = {
 				'defog': "Defrog"
 			};
@@ -392,9 +397,9 @@ exports.Formats = [
 				}
 			}
 		},
-		// Here we add some flavour immunities for the lulz.
+		// Here we add some flavour or design immunities.
 		onImmunity: function (type, pokemon) {
-			// Great Sage is immune to Attract.
+			// Great Sage is naturally immune to Attract.
 			if (type === 'attract' && toId(pokemon.name) === 'greatsage') {
 				this.add('-immune', pokemon, '[from] Irrelevant');
 				return false;
@@ -404,13 +409,14 @@ exports.Formats = [
 				this.add('-immune', pokemon, '[from] Unown aura');
 				return false;
 			}
-			// Somalia's Ban Spree makes it immune to some move types.
+			// Somalia's Ban Spree makes it immune to some move types, since he's too mad to feel pain.
+			// Types have been chosen from types you can be immune against with an ability.
 			if (toId(pokemon.name) === 'somalia' && type in {'Ground':1, 'Water':1, 'Fire':1, 'Grass':1, 'Poison':1, 'Normal':1, 'Electric':1}) {
 				this.add('-message', "You can't stop SOMALIA in middle of his Ban Spree!");
 				return false;
 			}
 		},
-		// Hack for megas changed abilities.
+		// Hacks for megas changed abilities. This allow for their changed abilities.
 		onUpdate: function (pokemon) {
 			var name = toId(pokemon.name);
 
@@ -451,14 +457,16 @@ exports.Formats = [
 				}
 			}
 		},
+		// Here we treat many things, read comments inside for information.
 		onSwitchIn: function (pokemon) {
-			// LGI!
 			var name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
-			// No OP pls. Balance stuff.
+			// No OP pls. Balance stuff, changing them upon switch in. Wonder Guard gets curse to minimise their turns out.
 			if (pokemon.getAbility().id === 'wonderguard') {
 				pokemon.addVolatile('curse', pokemon);
 				this.add('-message', pokemon.name + "'s Wonder Guard has cursed it!");
 			}
+			// Weak Pokémon get a boost so they can fight amongst the other monsters.
+			// Innovamania is just useless, so the boosts are a prank.
 			if (name === 'test2017' && !pokemon.illusion) {
 				this.boost({atk:1}, pokemon, pokemon, 'innate ability');
 			}
@@ -469,7 +477,6 @@ exports.Formats = [
 				this.boost({atk:6, def:6, spa:6, spd:6, spe:6, accuracy:6}, pokemon, pokemon, 'divine grace');
 			}
 			if (name === 'bloobblob' && !pokemon.illusion) {
-				//he's a really normal Cinccino and seems to be a bit weak
 				this.boost({def:1, spd:1, spe:2}, pokemon, pokemon, 'innate ability');
 			}
 			if (name === 'timbuktu' && !pokemon.illusion) {
@@ -478,15 +485,18 @@ exports.Formats = [
 			if (name === 'electrolyte') {
 				pokemon.lastAttackType = 'None';
 			}
+			// Deal with kupo's special transformation ability.
 			if (pokemon.kupoTransformed) {
 				pokemon.name = '@kupo';
 				pokemon.kupoTransformed = false;
 			}
+			// Deal with timbuktu's move (read onModifyMove relevant part).
 			if (name === 'timbuktu') {
 				pokemon.timesGeoblastUsed = 0;
 			}
 
-			// Add here hacky stuff for mega abilities.
+			// Add here more hacky stuff for mega abilities.
+			// This happens when the mega switches in, as opposed to mega-evolving on the turn.
 			var oldAbility = pokemon.ability;
 			if (pokemon.template.isMega) {
 				if (name === 'theimmortal' && pokemon.getAbility().id !== 'cloudnine') {
@@ -534,10 +544,10 @@ exports.Formats = [
 					this.runEvent('EndAbility', pokemon, oldAbility);
 				}
 			} else {
-				pokemon.canMegaEvo = this.canMegaEvo(pokemon); //bypass one mega limit
+				pokemon.canMegaEvo = this.canMegaEvo(pokemon); // Bypass one mega limit.
 			}
 
-			// Add here special typings.
+			// Add here special typings, done for flavour mainly.
 			if (name === 'mikel' && !pokemon.illusion) {
 				this.add('-start', pokemon, 'typechange', 'Normal/Ghost');
 				pokemon.typesData = [
@@ -546,7 +556,7 @@ exports.Formats = [
 				];
 			}
 			if (name === 'qtrx') {
-				this.add('-message', pokemon.name + " is radiating an Unown aura!");	//even if only illusion
+				this.add('-message', pokemon.name + " is radiating an Unown aura!"); // Even if only illusion.
 				if (!pokemon.illusion) {
 					pokemon.addVolatile('unownaura');
 					this.add('-start', pokemon, 'typechange', 'Normal/Psychic');
@@ -563,11 +573,12 @@ exports.Formats = [
 				this.add('-start', pokemon, 'typeadd', 'Bird', '[from] ability: Caw');
 			}
 
-			// Edgy sentences go here.
+			// Edgy switch-in sentences go here.
 			// Sentences vary in style and how they are presented, so each Pokémon has its own way of sending them.
 			var sentences = [];
 			var sentence = '';
-			// Admins
+
+			// Admins.
 			if (name === 'antar') {
 				this.add("c|~Antar|It's my time in the sun.");
 			}
@@ -651,7 +662,8 @@ exports.Formats = [
 			if (name === 'hollywood') {
 				this.add('c|&hollywood|Kappa');
 			}
-			//Leaders
+
+			// Leaders.
 			if (name === 'jdarden') {
 				this.add('c|&jdarden|Did someone call for some BALK?');
 			}
@@ -671,7 +683,8 @@ exports.Formats = [
 			if (name === 'verbatim') {
 				this.add('c|&verbatim|All in');
 			}
-			//Mods
+
+			// Mods.
 			if (name === 'am') {
 				this.add('c|@AM|Lucky and Bad');
 			}
@@ -939,7 +952,7 @@ exports.Formats = [
 			}
 			if (name === 'zebraiken') {
 				pokemon.phraseIndex = this.random(3);
-				//Zeb's faint and entry phrases correspond to each other
+				//  Zeb's faint and entry phrases correspond to each other.
 				if (pokemon.phraseIndex === 2) {
 					this.add('c|@Zebraiken|bzzt n_n');
 				} else if (pokemon.phraseIndex === 1) {
@@ -948,7 +961,8 @@ exports.Formats = [
 					this.add('c|@Zebraiken|bzzt o_o');
 				}
 			}
-			//Drivers
+
+			// Drivers.
 			if (name === 'acedia') {
 				this.add('c|%Acedia|Time for a true display of skill ( ͡° ͜ʖ ͡°)');
 			}
@@ -1011,7 +1025,8 @@ exports.Formats = [
 				sentences = ['huehuehuehue', 'PIZA', 'SPAGUETI', 'RAVIOLI RAVIOLI GIVE ME THE FORMUOLI', 'get ready for PUN-ishment'];
 				this.add('c|%useless trainer|' + sentences[this.random(5)]);
 			}
-			//voices
+
+			// Voices.
 			if (name === 'aldaron') {
 				this.add('c|+Aldaron|indefatigable workhorse');
 			}
@@ -1112,9 +1127,10 @@ exports.Formats = [
 				}
 			}
 		},
+		// Here we deal with some special mechanics due to custom sets and moves.
 		onBeforeMove: function (pokemon, target, move) {
 			var name = toId(pokemon.name);
-			//shaymin forme change
+			// Special Shaymin forme change.
 			if (name === 'shaymin' && !pokemon.illusion) {
 				var targetSpecies = (move.category === 'Status') ? 'Shaymin' : 'Shaymin-Sky';
 
@@ -1130,7 +1146,7 @@ exports.Formats = [
 				}
 			}
 
-			// Break the secondary of Dell's sig if an attack is attempted
+			// Break the secondary of Dell's sig if an attack is attempted.
 			if (target.volatiles['parry'] && move.category !== 'Status') {
 				target.removeVolatile('parry');
 			}
@@ -1155,7 +1171,7 @@ exports.Formats = [
 				];
 			}
 		},
-		// Add here salty tears.
+		// Add here salty tears, that is, custom faint phrases.
 		onFaint: function (pokemon) {
 			if (pokemon.kupoTransformed) {
 				pokemon.name = '@kupo';
@@ -1172,6 +1188,7 @@ exports.Formats = [
 			if (name === 'chaos') {
 				if (name === toId(pokemon.name)) this.add('c|~chaos|//forcewin chaos');
 				if (this.random(1000) === 420) {
+					// Shouldn't happen much, but if this happens it's hilarious.
 					this.add('c|~chaos|actually');
 					this.add('c|~chaos|//forcewin ' + pokemon.side.name);
 					this.win(pokemon.side);
@@ -1184,7 +1201,7 @@ exports.Formats = [
 				this.add('c|~Jasmine|' + ['I meant to do that.', 'God, I\'m the worse digimon.'][this.random(2)]);
 			}
 			if (name === 'joim') {
-				sentences = ['AVENGE ME, KIDS! AVEEEENGEEE MEEEEEE!!', 'This was a triumph, I\'m making a note here: HUGE SUCCESS.', 'Remember when you tried to kill me twice? Oh how we laughed and laughed! Except I wasn\'t laughing.', 'I\'m not even angry, I\'m being so sincere right now, even though you broke my heart and killed me. And tore me to pieces. And threw every piece into a fire.'];
+				sentences = ['AVENGE ME, KIDS! AVEEEENGEEE MEEEEEE!!', '``This was a triumph, I\'m making a note here: HUGE SUCCESS.``', '``Remember when you tried to kill me twice? Oh how we laughed and laughed! Except I wasn\'t laughing.``', '``I\'m not even angry, I\'m being so sincere right now, even though you broke my heart and killed me. And tore me to pieces. And threw every piece into a fire.``'];
 				this.add('c|~Joim|' + sentences[this.random(4)]);
 			}
 			if (name === 'theimmortal') {
@@ -1195,7 +1212,7 @@ exports.Formats = [
 			}
 			if (name === 'zarel') {
 				this.add('c|~Zarel|your mom');
-				// followed by the usual '~Zarel fainted'
+				// Followed by the usual '~Zarel fainted'.
 				this.add('-message', '~Zarel used your mom!');
 			}
 
@@ -1318,7 +1335,7 @@ exports.Formats = [
 				this.add('c|@Electrolyte|just wait till I hit puberty...');
 			}
 			if (name === 'enguarde') {
-				this.add('c|@Enguarde|I let my guard down...');		//temporary
+				this.add('c|@Enguarde|I let my guard down...');
 			}
 			if (name === 'eos') {
 				this.add('c|@EoS|؍༼ಥ_ಥ༽ጋ');
@@ -1481,7 +1498,8 @@ exports.Formats = [
 					this.add('c|@Zebraiken|bzzt u_u');
 				} else if (pokemon.phraseIndex === 1) {
 					this.add('c|@Zebraiken|bzzt ._.');
-				} else { //default faint
+				} else {
+					// Default faint.
 					this.add('c|@Zebraiken|bzzt x_x');
 				}
 			}
@@ -1546,7 +1564,7 @@ exports.Formats = [
 				this.add('c|%useless trainer|' + sentences[this.random(4)]);
 			}
 
-			// Ex-staff voice.
+			// Ex-staff or honorary voice.
 			if (name === 'bmelts') {
 				this.add('c|+bmelts|retired now');
 			}
@@ -1579,6 +1597,7 @@ exports.Formats = [
 				}
 			}
 		},
+		// Special switch-out events for some mons.
 		onSwitchOut: function (pokemon) {
 			if (toId(pokemon.name) === 'hippopotas' && !pokemon.illusion) {
 				this.add('-message', 'The sandstorm subsided.');
@@ -1594,6 +1613,8 @@ exports.Formats = [
 					pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				}
 			}
+
+			// Kupo's special transform.
 			if (pokemon.kupoTransformed) {
 				pokemon.name = '@kupo';
 				pokemon.kupoTransformed = false;
@@ -1633,6 +1654,7 @@ exports.Formats = [
 			}
 		},
 		// Specific residual events for custom moves.
+		// This allows the format to have kind of custom side effects and volatiles.
 		onResidual: function (battle) {
 			for (var s in battle.sides) {
 				var thisSide = battle.sides[s];
@@ -1690,7 +1712,7 @@ exports.Formats = [
 						this.add('c|HappyFunTimes|' + messages[this.random(15)]);
 					}
 					if (pokemon.volatiles['parry']) {
-						//Dell hasn't been attacked
+						// Dell hasn't been attacked.
 						pokemon.removeVolatile('parry');
 						this.add('-message', "Untouched, the Aura Parry grows stronger still!");
 						this.boost({def:1, spd:1}, pokemon, pokemon, 'Aura Parry');
@@ -1698,17 +1720,18 @@ exports.Formats = [
 				}
 			}
 		},
-		// A thousand lines of gibberish. I mean, this is to make the signature moves.
+		// This is where the signature moves are actually done.
 		onModifyMove: function (move, pokemon) {
 			var name = toId(pokemon.illusion && move.sourceEffect === 'allyswitch' ? pokemon.illusion.name : pokemon.name);
 			// Prevent visual glitch with Spell Steal.
 			move.effectType = 'Move';
-			// Kek
+			// Just because it's funny.
 			if (move.id === 'defog') {
 				move.name = 'Defrog';
 				this.attrLastMove('[still]');
 				this.add('-anim', pokemon, "Defog", pokemon);
 			}
+
 			// Admin signature moves.
 			if (move.id === 'spikes' && name === 'antar') {
 				move.name = 'Firebomb';
@@ -1898,7 +1921,7 @@ exports.Formats = [
 				move.target = 'self';
 				move.onTryHit = function (target, source) {
 					if (!source.illusion) {
-						this.add('-fail', pokemon);
+						this.add('-fail', source);
 						this.add('-hint', "Spell Steal only works behind an Illusion!");
 						return null;
 					}
@@ -2154,7 +2177,7 @@ exports.Formats = [
 				};
 			}
 			if (move.id === 'shadowball' && name === 'eos') {
-				move.name = 'Shadow Curse'; //placeholder
+				move.name = 'Shadow Curse';
 				move.power = 60;
 				move.priority = 1;
 				move.volatileStatus = 'curse';
@@ -2233,7 +2256,7 @@ exports.Formats = [
 			}
 			if (move.id === 'rapidspin' && name === 'jinofthegale') {
 				move.name = 'Beyblade';
-				move.category = 'Special';	//smh @ whoever coded it as move.type = 'Special';
+				move.category = 'Special';
 				move.type = 'Electric';
 				move.basePower = 90;
 				// If we use onHit but use source, we don't have to edit self.onHit.
@@ -2454,14 +2477,14 @@ exports.Formats = [
 				move.onPrepareHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Fairy Lock", target);
-					this.add('-anim', pokemon, "Fairy Lock", pokemon);	//DRAMATIC FLASHING
+					this.add('-anim', pokemon, "Fairy Lock", pokemon); // DRAMATIC FLASHING
 				};
 				move.onHit = function (target, source) {
 					var gibberish = '';
 					var hits = 0;
 					var hps = ['hiddenpowerbug', 'hiddenpowerdark', 'hiddenpowerdragon', 'hiddenpowerelectric', 'hiddenpowerfighting', 'hiddenpowerfire', 'hiddenpowerflying', 'hiddenpowerghost', 'hiddenpowergrass', 'hiddenpowerground', 'hiddenpowerice', 'hiddenpowerpoison', 'hiddenpowerpsychic', 'hiddenpowerrock', 'hiddenpowersteel', 'hiddenpowerwater'];
 					this.add('c|@qtrx|/me slams face into keyboard!');
-					source.isDuringAttack = true;	//prevents the user from being kicked out in the middle of using Hidden Powers
+					source.isDuringAttack = true; // Prevents the user from being kicked out in the middle of using Hidden Powers.
 					for (var i = 0; i < move.hitcount; i++) {
 						if (target.hp !== 0) {
 							var len = 16 + this.random(35);
@@ -2550,7 +2573,7 @@ exports.Formats = [
 				}
 			}
 			if (move.id === 'judgment' && name === 'shrang') {
-				move.name = 'Pixilate';	//placeholder
+				move.name = 'Pixilate';
 			}
 			if (move.id === 'storedpower' && name === 'skitty') {
 				move.name = 'Ultimate Dismissal';
@@ -2863,9 +2886,9 @@ exports.Formats = [
 				move.basePower = 80;
 				move.volatileStatus = 'confusion';
 				move.onTryHit = function (target, source) {
-						this.attrLastMove('[still]');
-						this.add('-anim', source, "Teeter Dance", target);
-					};
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Teeter Dance", target);
+				};
 			}
 			if (move.id === 'blazekick' && name === 'ljdarkrai') {
 				move.name = 'Blaze Blade';
@@ -2934,7 +2957,7 @@ exports.Formats = [
 			}
 			if (move.id === 'rockthrow' && name === 'timbuktu') {
 				move.name = 'Geoblast';
-				move.type = 'Fire';	//not the other way round or STAB would be lost
+				move.type = 'Fire';	// Not the other way round or STAB would be lost.
 				move.category = 'Special';
 				move.accuracy = true;
 				move.basePowerCallback = function (source, target) {
