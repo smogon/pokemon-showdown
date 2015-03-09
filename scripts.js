@@ -170,7 +170,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalFFTeam: function (side) {
+	randomSeasonalFFYTeam: function (side) {
 		// Seasonal Pokemon list
 		var seasonalPokemonList = [
 			'missingno', 'koffing', 'weezing', 'slowpoke', 'slowbro', 'slowking', 'psyduck', 'spinda', 'whimsicott', 'liepard', 'sableye',
@@ -543,7 +543,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalTeam: function (side) { // duplicate key.
+	randomSeasonalTTTeam: function (side) {
 		var seasonalPokemonList = [
 			'alakazam', 'machamp', 'hypno', 'hitmonlee', 'hitmonchan', 'mrmime', 'jynx', 'hitmontop', 'hariyama', 'sableye', 'medicham',
 			'toxicroak', 'electivire', 'magmortar', 'conkeldurr', 'throh', 'sawk', 'gothitelle', 'beheeyem', 'bisharp', 'volbeat', 'illumise',

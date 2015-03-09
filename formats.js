@@ -434,7 +434,6 @@ exports.Formats = [
 		name: "[Seasonal] May Mayhem",
 		section: "OM of the Month",
 
-		// section: "Seasonal",
 		team: 'randomSeasonalMM',
 		onBegin: function () {
 			// Shameless plug
@@ -851,7 +850,7 @@ exports.Formats = [
 		name: "[Seasonal] Thankless Thanksgiving",
 		section: "OM of the Month",
 
-		team: 'randomSeasonal',
+		team: 'randomSeasonalTT',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod']
 	},
 	// Christmas Charade, December 2013
@@ -1014,7 +1013,7 @@ exports.Formats = [
 
 		mod: 'inverse',
 		gameType: 'doubles',
-		team: 'randomSeasonalFF',
+		team: 'randomSeasonalFFY',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
 		onBegin: function () {
 			this.add('-message', "新年快乐");
