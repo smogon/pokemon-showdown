@@ -63,7 +63,7 @@ var commands = exports.commands = {
 
 	requesthelp: 'report',
 	report: function (target, room, user) {
-		this.sendReply("Use the Help room.");
+		this.sendReply("If you need help with something relating to PS!, go to the Help room (/join help) and PM a Moderator (@) or higher your question. If you want to know what tier a Pokemon is in or anything that isn't specifically replated to PS!, try to find a different source of help.");
 	},
 
 	r: 'reply',
