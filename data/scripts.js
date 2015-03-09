@@ -3288,7 +3288,7 @@ exports.BattleScripts = {
 			},
 			'@Morfent': {
 				species: 'Dusknoir', ability: 'Fur Coat', item: "Leftovers", gender: 'M',
-				moves: [['Recover', 'Acid Armour', 'Swords Dance', 'Will-O-Wisp', 'Trick Room'][this.random(5)], 'Shadow Claw', ['Earthquake', 'Ice Punch', 'Thunderpunch'][this.random(3)]],
+				moves: [['recover', 'acidarmor', 'swordsdance', 'willowisp', 'trickroom'][this.random(5)], 'shadowclaw', ['earthquake', 'icepunch', 'thunderpunch'][this.random(3)]],
 				baseSignatureMove: 'spikes', signatureMove: "Used Needles",
 				evs: {hp:252, atk:4, def:252}, ivs: {spe:0}, nature: 'Impish'
 			},
