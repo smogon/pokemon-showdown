@@ -389,10 +389,12 @@ exports.Formats = [
 						moveData.move = globalRenamedMoves[moveData.id];
 						pokemon.baseMoveset[j].move = globalRenamedMoves[moveData.id];
 					}
-					if (customRenamedMoves[pokemon.name] && customRenamedMoves[pokemon.name][moveData.id]) {
+
+					var customRenamedSet = customRenamedMoves[toId(pokemon.name)];
+					if (customRenamedSet && customRenamedSet[moveData.id]) {
 						pokemon.moves[j] = toId(pokemon.set.signatureMove);
-						moveData.move = customRenamedMoves[pokemon.name][moveData.id];
-						pokemon.baseMoveset[j].move = customRenamedMoves[pokemon.name][moveData.id];
+						moveData.move = customRenamedSet[moveData.id];
+						pokemon.baseMoveset[j].move = customRenamedSet[moveData.id];
 					}
 				}
 			}
