@@ -3126,7 +3126,7 @@ exports.BattleScripts = {
 			},
 			'@Beowulf': {
 				species: 'Beedrill', ability: 'Download', item: 'Beedrillite', gender: 'M',
-				moves: ['spikyshield', 'sacredfire', 'boltstrike', 'gunkshot', 'diamondstorm'],
+				moves: ['spikyshield', 'gunkshot', ['sacredfire', 'boltstrike', 'diamondstorm'][this.random(3)]],
 				baseSignatureMove: 'bugbuzz', signatureMove: "Buzzing of the Swarm",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Jolly'
 			},
@@ -3193,7 +3193,7 @@ exports.BattleScripts = {
 			'@Goddess Briyella': {
 				species: 'Floette-Eternal-Flower', ability: 'Magic Bounce', item: 'Big Root', gender: 'M',
 				moves: ['cottonguard', 'quiverdance', 'drainingkiss'],
-				baseSignatureMove: 'earthpower', signatureMove: "Soil Recompense",
+				baseSignatureMove: 'earthpower', signatureMove: "Earth Drain",
 				evs: {hp:252, spa:252, def:4}, nature: 'Modest'
 			},
 			'@Hippopotas': {
@@ -3258,7 +3258,7 @@ exports.BattleScripts = {
 			},
 			'@Legitimate Username': {
 				species: 'Shuckle', ability: 'Unaware', item: 'Leftovers', gender: 'M',
-				moves: ['leechseed', 'recover', 'foulplay', 'healbell'],
+				moves: ['leechseed', 'rest', 'foulplay'],
 				baseSignatureMove: 'shellsmash', signatureMove: "Shell Fortress",
 				evs: {hp:252, def:228, spd:28}, nature: 'Calm'
 			},
@@ -3321,6 +3321,12 @@ exports.BattleScripts = {
 				moves: [],
 				baseSignatureMove: 'meditate', signatureMove: "Hidden Power... Normal?",
 				evs: {hp:252, def:4, spa:252}, ivs: {atk:0, spe:0}, nature: 'Quiet'
+			},
+			'@Queez': {
+				species: 'Cubchoo', ability: 'Prankster', item: 'Eviolite', gender: 'M',
+				moves: ['pound', 'fly', 'softboiled', 'thunderwave', 'waterpulse'],
+				baseSignatureMove: 'leer', signatureMove: "Sneeze",
+				evs: {hp:252, def:228, spd:28}, nature: 'Calm'
 			},
 			'@Relados': {
 				species: 'Terrakion', ability: 'Guts', item: 'Flame Orb', gender: 'M',
@@ -3535,12 +3541,6 @@ exports.BattleScripts = {
 				moves: ['moonblast', 'voltswitch', 'discharge', 'focusblast', 'taunt'],
 				baseSignatureMove: 'bulletpunch', signatureMove: "Focus Laser",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Timid'
-			},
-			'%Queez': {
-				species: 'Cubchoo', ability: 'Prankster', item: 'Eviolite', gender: 'M',
-				moves: ['pound', 'fly', 'softboiled', 'thunderwave', 'waterpulse'],
-				baseSignatureMove: 'leer', signatureMove: "Sneeze",
-				evs: {hp:252, def:228, spd:28}, nature: 'Calm'
 			},
 			'%Raseri': {
 				species: 'Prinplup', ability: 'Regenerator', item: 'Eviolite', gender: 'M',

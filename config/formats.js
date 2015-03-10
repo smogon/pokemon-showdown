@@ -1536,7 +1536,7 @@ exports.Formats = [
 				this.add('c|%birkal|//birkal');
 			}
 			if (name === 'bloobblob') {
-				this.add('c|%bloobblob|I won\t die! Even if I\'m killed!');
+				this.add('c|%bloobblob|I won\'t die! Even if I\'m killed!');
 			}
 			if (name === 'feliburn') {
 				this.add('c|%Feliburn|' + ['BHUWUUU!', 'I like shorts! They\'re comfy and easy to wear!'][this.random(2)]);
@@ -1748,6 +1748,7 @@ exports.Formats = [
 			}
 			if (move.id === 'embargo' && name === 'chaos') {
 				move.name = 'Forcewin';
+				move.isBounceable = false;
 				move.onHit = function (pokemon) {
 					pokemon.addVolatile('taunt');
 					pokemon.addVolatile('torment');
@@ -2200,10 +2201,14 @@ exports.Formats = [
 				};
 			}
 			if (move.id === 'earthpower' && name === 'goddessbriyella') {
-				move.name = 'Soil Recompense';
+				move.name = 'Earth Drain';
 				move.basePower = 80;
 				move.drain = [3, 4];
 				move.flags = {heal: 1};
+				move.onTryHit = function (target, source) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Giga Drain", target);
+				};
 				if (move.type === 'Ground') {
 					move.affectedByImmunities = false;
 				}
