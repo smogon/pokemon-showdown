@@ -13,7 +13,7 @@ function checkAllAlts(user, list) {
 	var ip = user.latestIp;
 	for (var id in list) {
 		var matchUser = Users.get(id);
-		if (matchUser.latestIp === ip) return 'alt ' + matchUser.name;
+		if (matchUser.latestIp === ip && matchUser.userid !== user.userid) return 'alt ' + matchUser.name;
 	}
 	return false;
 }
