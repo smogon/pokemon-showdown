@@ -996,7 +996,6 @@ exports.Formats = [
 		name: "[Seasonal] Winter's Wont",
 		section: "OM of the Month",
 
-		mod: 'inverse',
 		gameType: 'doubles',
 		team: 'randomSeasonalWinter',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
@@ -1004,6 +1003,15 @@ exports.Formats = [
 		onBegin: function () {
 			this.setWeather('Hail');
 			delete this.weatherData.duration;
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	// Fabulous February, February 2014
@@ -1011,7 +1019,6 @@ exports.Formats = [
 		name: "[Seasonal] Fabulous February",
 		section: "OM of the Month",
 
-		mod: 'inverse',
 		gameType: 'doubles',
 		team: 'randomSeasonalFFY',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
@@ -1021,6 +1028,15 @@ exports.Formats = [
 		onModifyMove: function (move) {
 			if (move.id === 'explosion') move.name = 'Firecrackers';
 			else if (move.type === 'Fire') move.name = 'Fireworks';
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
