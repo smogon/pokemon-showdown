@@ -423,37 +423,30 @@ exports.Formats = [
 			if (pokemon.template.isMega) {
 				if (name === 'theimmortal' && pokemon.getAbility().id === 'megalauncher') {
 					pokemon.setAbility('cloudnine'); // Announced ability.
-					this.runEvent('EndAbility', pokemon, this.getAbility('megalauncher'));
 				}
 				if (name === 'enguarde' && pokemon.getAbility().id === 'innerfocus') {
 					pokemon.setAbility('superluck');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, this.getAbility('innerfocus'));
 				}
 				if (name === 'shrang' && pokemon.getAbility().id === 'levitate') {
 					pokemon.setAbility('pixilate');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, this.getAbility('levitate'));
 				}
 				if (name === 'skitty' && pokemon.getAbility().id === 'healer') {
 					pokemon.setAbility('shedskin');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, this.getAbility('healer'));
 				}
 				if (name === 'audiosurfer' && pokemon.getAbility().id === 'healer') {
 					pokemon.setAbility('pixilate');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, this.getAbility('healer'));
 				}
 				if (name === 'dtc' && pokemon.getAbility().id === 'toughclaws') {
 					pokemon.setAbility('levitate');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, this.getAbility('toughclaws'));
 				}
 				if (name === 'trinitrotoluene' && pokemon.getAbility().id === 'toughclaws') {
 					pokemon.setAbility('protean');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, this.getAbility('toughclaws'));
 				}
 			}
 		},
@@ -501,47 +494,38 @@ exports.Formats = [
 			if (pokemon.template.isMega) {
 				if (name === 'theimmortal' && pokemon.getAbility().id !== 'cloudnine') {
 					pokemon.setAbility('cloudnine'); // Announced ability.
-					this.runEvent('EndAbility', pokemon, oldAbility);
 				}
 				if (name === 'slayer95' && pokemon.getAbility().id !== 'technician') {
 					pokemon.setAbility('technician');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, oldAbility);
 				}
 				if (name === 'dell' && pokemon.getAbility().id !== 'adaptability') {
 					pokemon.setAbility('adaptability');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, oldAbility);
 				}
 				if (name === 'enguarde' && pokemon.getAbility().id !== 'superluck') {
 					pokemon.setAbility('superluck');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, oldAbility);
 				}
 				if (name === 'skitty' && pokemon.getAbility().id !== 'shedskin') {
 					pokemon.setAbility('shedskin');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, oldAbility);
 				}
 				if (name === 'audiosurfer' && pokemon.getAbility().id !== 'pixilate') {
 					pokemon.setAbility('pixilate');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, oldAbility);
 				}
 				if (name === 'dtc' && pokemon.getAbility().id !== 'levitate') {
 					pokemon.setAbility('levitate');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, oldAbility);
 				}
 				if (name === 'shrang' && pokemon.getAbility().id !== 'pixilate') {
 					pokemon.setAbility('pixilate');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, oldAbility);
 				}
 				if (name === 'trinitrotoluene' && pokemon.getAbility().id !== 'protean') {
 					pokemon.setAbility('protean');
 					this.add('-ability', pokemon, pokemon.ability);
-					this.runEvent('EndAbility', pokemon, oldAbility);
 				}
 			} else {
 				pokemon.canMegaEvo = this.canMegaEvo(pokemon); // Bypass one mega limit.
@@ -1896,7 +1880,6 @@ exports.Formats = [
 					var oldAbility = target.setAbility('solarpower');
 					if (oldAbility) {
 						this.add('-ability', target, target.ability, '[from] move: Blazing Star - Ten Evil Stars');
-						this.runEvent('EndAbility', target, oldAbility);
 					}
 				};
 			}
@@ -2743,7 +2726,6 @@ exports.Formats = [
 					var oldAbility = pokemon.setAbility('slowstart');
 					if (oldAbility) {
 						this.add('-ability', pokemon, 'Slow Start', '[from] move: Procrastination');
-						this.runEvent('EndAbility', pokemon, oldAbility);
 						if (this.random(100) < 10) source.faint();
 						return;
 					}
