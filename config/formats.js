@@ -856,6 +856,9 @@ exports.Formats = [
 				sentences = ["cutie are ex", "q-trix", "quarters", "cute T-rex", "Qatari", "random letters", "spammy letters", "asgdf"];
 				this.add('c|@qtrx|omg DONT call me \'' + sentences[this.random(8)] + '\' pls respect my name its very special!!1!');
 			}
+			if (name === 'queez') {
+				this.add('c|@Queez|B-be gentle');
+			}
 			if (name === 'rekeri') {
 				this.add('c|@rekeri|Get Rekeri\'d :]');
 			}
@@ -996,9 +999,6 @@ exports.Formats = [
 				sentences = ['(ゞ๑⚈ ˳̫⚈๑) ♡', 'If you can\'t win contests as well as battles, your team is bad~ <3', '♡ Dedenne is too cute to KO ♡'];
 				this.add('c|%Majorbling|' + sentences[this.random(3)]);
 			}
-			if (name === 'queez') {
-				this.add('c|%Queez|B-be gentle');
-			}
 			if (name === 'raseri') {
 				this.add('c|%Raseri|ban prinplup');
 			}
@@ -1008,6 +1008,21 @@ exports.Formats = [
 			if (name === 'uselesstrainer') {
 				sentences = ['huehuehuehue', 'PIZA', 'SPAGUETI', 'RAVIOLI RAVIOLI GIVE ME THE FORMUOLI', 'get ready for PUN-ishment'];
 				this.add('c|%useless trainer|' + sentences[this.random(5)]);
+			}
+			if (name === 'xfix') {
+				var hazards = {stealthrock: 1, spikes: 1, toxicspikes: 1, stickyweb: 1};
+				var hasHazards = false;
+				for (var hazard in hazards) {
+					if (pokemon.side.getSideCondition(hazard)) {
+						hasHazards = true;
+						break;
+					}
+				}
+				if (hasHazards) {
+					this.add('c|%xfix|(no haz... too late)');
+				} else {
+					this.add('c|%xfix|(no hazards, attacks only, final destination)');
+				}
 			}
 
 			// Voices.
@@ -1094,21 +1109,6 @@ exports.Formats = [
 			}
 			if (name === 'talktakestime') {
 				this.add('c|+TalkTakesTime|Welcome to BoTTT!');
-			}
-			if (name === 'xfix') {
-				var hazards = {stealthrock: 1, spikes: 1, toxicspikes: 1, stickyweb: 1};
-				var hasHazards = false;
-				for (var hazard in hazards) {
-					if (pokemon.side.getSideCondition(hazard)) {
-						hasHazards = true;
-						break;
-					}
-				}
-				if (hasHazards) {
-					this.add('c|+xfix|(no haz... too late)');
-				} else {
-					this.add('c|+xfix|(no hazards, attacks only, final destination)');
-				}
 			}
 		},
 		// Here we deal with some special mechanics due to custom sets and moves.
@@ -1410,6 +1410,9 @@ exports.Formats = [
 				sentences = ['Keyboard not found; press **Ctrl + W** to continue...', 'hfowurfbiEU;DHBRFEr92he', 'At least my name ain\t asgdf...'];
 				this.add('c|@qtrx|' + sentences[this.random(3)]);
 			}
+			if (name === 'queez') {
+				this.add('c|@Queez|(◕‿◕✿)');
+			}
 			if (name === 'rekeri') {
 				this.add('c|@rekeri|lucky af :[');
 			}
@@ -1534,9 +1537,6 @@ exports.Formats = [
 			if (name === 'majorbling') {
 				this.add('c|%Majorbling|There is literally no way to make this pokemon good...(ゞ๑T  ˳̫T\'๑) ');
 			}
-			if (name === 'queez') {
-				this.add('c|%Queez|(◕‿◕✿)');
-			}
 			if (name === 'raseri') {
 				this.add('c|%Raseri|banned');
 			}
@@ -1546,6 +1546,17 @@ exports.Formats = [
 			if (name === 'uselesstrainer') {
 				sentences = ['MATTERED', 'CAIO', 'ima repr0t', 'one day i\'ll turn into a beautiful butterfly'];
 				this.add('c|%useless trainer|' + sentences[this.random(4)]);
+			}
+			if (name === 'xfix') {
+				var foe = pokemon.side.foe.active[0];
+				if (foe.name === '%xfix') {
+					this.add('c|%xfix|(annoying Dittos...)');
+				} else if (foe.ability === 'magicbounce') {
+					this.add('c|%xfix|(why ' + foe.name + ' has Magic Bounce...)');
+					this.add('c|%xfix|(gg... why...)');
+				} else {
+					this.add('c|%xfix|(gg... I guess)');
+				}
 			}
 
 			// Ex-staff or honorary voice.
@@ -1568,17 +1579,6 @@ exports.Formats = [
 			}
 			if (name === 'talktakestime') {
 				this.add('-message', '(Automated response: Your battle contained a banned outcome.)');
-			}
-			if (name === 'xfix') {
-				var foe = pokemon.side.foe.active[0];
-				if (foe.name === '+xfix') {
-					this.add('c|+xfix|(annoying Dittos...)');
-				} else if (foe.ability === 'magicbounce') {
-					this.add('c|+xfix|(why ' + foe.name + ' has Magic Bounce...)');
-					this.add('c|+xfix|(gg... why...)');
-				} else {
-					this.add('c|+xfix|(gg... I guess)');
-				}
 			}
 		},
 		// Special switch-out events for some mons.
@@ -2488,6 +2488,24 @@ exports.Formats = [
 					source.isDuringAttack = false;
 				};
 			}
+			if (move.id === 'leer' && name === 'queez') {
+				move.name = 'Sneeze';
+				delete move.boosts;
+				move.onTryHit = function (target, source) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Curse", target);
+				};
+				move.onHit = function (target, source) {
+					if (!target.volatiles.curse) {
+						this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1}, source, source);
+						target.addVolatile('curse');
+					} else {
+						this.boost({atk: 1}, source, source);
+						this.boost({def: -1}, target, source);
+						this.useMove('explosion', source, target);
+					}
+				};
+			}
 			if (move.id === 'stockpile' && name === 'relados') {
 				move.name = 'Loyalty';
 				move.type = 'Fire';
@@ -2721,7 +2739,6 @@ exports.Formats = [
 				};
 				move.onHit = function (pokemon) {
 					pokemon.side.premonTimer = 1;
-					this.add('c|@zdrup|WAIT FOR IT... This is gonna be legen... ');
 				};
 			}
 
@@ -2828,7 +2845,7 @@ exports.Formats = [
 				move.recoil = [1, 2];
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
-					this.add('-anim', source, "Giga Impact", target);
+					this.add('-anim', source, "Head Charge", target);
 				};
 			}
 			if (name === 'feliburn') {
@@ -2911,24 +2928,6 @@ exports.Formats = [
 					source.removeVolatile('focuspunch');
 				};
 			}
-			if (move.id === 'leer' && name === 'queez') {
-				move.name = 'Sneeze';
-				delete move.boosts;
-				move.onTryHit = function (target, source) {
-					this.attrLastMove('[still]');
-					this.add('-anim', source, "Curse", target);
-				};
-				move.onHit = function (target, source) {
-					if (!target.volatiles.curse) {
-						this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1}, source, source);
-						target.addVolatile('curse');
-					} else {
-						this.boost({atk: 1}, source, source);
-						this.boost({def: -1}, target, source);
-						this.useMove('explosion', source, target);
-					}
-				};
-			}
 			if (move.id === 'scald' && name === 'raseri') {
 				move.name = 'Ban Scald';
 				move.basePower = 150;
@@ -2981,6 +2980,45 @@ exports.Formats = [
 				move.multihit = [2, 5];
 				move.self = {volatileStatus: 'mustrecharge'};
 				move.accuracy = 95;
+			}
+			if (move.id === 'metronome' && name === 'xfix') {
+				if (pokemon.moveset[3] && pokemon.moveset[3].pp) {
+					pokemon.moveset[3].pp = Math.round(pokemon.moveset[3].pp * 10 + 6) / 10;
+				}
+				move.name = '(Super Glitch)';
+				move.multihit = [2, 5];
+				move.onModifyMove = function (source) {
+					if (this.random(777) !== 42) return;
+					var opponent = pokemon.side.foe.active[0];
+					opponent.setStatus('brn');
+					var possibleStatuses = ['confusion', 'flinch', 'attract', 'focusenergy', 'foresight', 'healblock'];
+					for (var i = 0; i < possibleStatuses.length; i++) {
+						if (this.random(3) === 1) {
+							opponent.addVolatile(possibleStatuses[i]);
+						}
+					}
+
+					function generateNoise() {
+						var noise = '';
+						var random = this.random(40, 81);
+						for (var i = 0; i < random; i++) {
+							if (this.random(4) !== 0) {
+								// Non-breaking space
+								noise += '\u00A0';
+							} else {
+								noise += String.fromCharCode(this.random(0xA0, 0x3040));
+							}
+						}
+						return noise;
+					}
+					this.add('-message', "(Enemy " + generateNoise.call(this) + " TMTRAINER " + opponent.name + " is frozen solid?)");
+					this.add('-message', "(Enemy " + generateNoise.call(this) + " TMTRAINER " + opponent.name + " is hurt by its burn!)");
+					this.damage(opponent.maxhp * this.random(42, 96) * 0.01, opponent, opponent);
+					var exclamation = source.status === 'brn' ? '!' : '?';
+					this.add('-message', "(Enemy " + generateNoise.call(this) + " TMTRAINER %xfix is hurt by its burn" + exclamation + ")");
+					this.damage(source.maxhp * this.random(24, 48) * 0.01, source, source);
+					return null;
+				};
 			}
 
 			// Voices signature moves.
@@ -3165,45 +3203,6 @@ exports.Formats = [
 					target.addVolatile('embargo');
 					target.addVolatile('torment');
 					target.addVolatile('healblock');
-				};
-			}
-			if (move.id === 'metronome' && name === 'xfix') {
-				if (pokemon.moveset[3] && pokemon.moveset[3].pp) {
-					pokemon.moveset[3].pp = Math.round(pokemon.moveset[3].pp * 10 + 6) / 10;
-				}
-				move.name = '(Super Glitch)';
-				move.multihit = [2, 5];
-				move.onModifyMove = function (source) {
-					if (this.random(777) !== 42) return;
-					var opponent = pokemon.side.foe.active[0];
-					opponent.setStatus('brn');
-					var possibleStatuses = ['confusion', 'flinch', 'attract', 'focusenergy', 'foresight', 'healblock'];
-					for (var i = 0; i < possibleStatuses.length; i++) {
-						if (this.random(3) === 1) {
-							opponent.addVolatile(possibleStatuses[i]);
-						}
-					}
-
-					function generateNoise() {
-						var noise = '';
-						var random = this.random(40, 81);
-						for (var i = 0; i < random; i++) {
-							if (this.random(4) !== 0) {
-								// Non-breaking space
-								noise += '\u00A0';
-							} else {
-								noise += String.fromCharCode(this.random(0xA0, 0x3040));
-							}
-						}
-						return noise;
-					}
-					this.add('-message', "(Enemy " + generateNoise.call(this) + " TMTRAINER " + opponent.name + " is frozen solid?)");
-					this.add('-message', "(Enemy " + generateNoise.call(this) + " TMTRAINER " + opponent.name + " is hurt by its burn!)");
-					this.damage(opponent.maxhp * this.random(42, 96) * 0.01, opponent, opponent);
-					var exclamation = source.status === 'brn' ? '!' : '?';
-					this.add('-message', "(Enemy " + generateNoise.call(this) + " TMTRAINER +xfix is hurt by its burn" + exclamation + ")");
-					this.damage(source.maxhp * this.random(24, 48) * 0.01, source, source);
-					return null;
 				};
 			}
 		}
