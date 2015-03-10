@@ -2175,6 +2175,7 @@ exports.Formats = [
 				move.onTryHit = function (target, source) {
 					this.add('c|@Former Hope|/me godmodes');
 				};
+				move.onHit = function () {};
 			}
 			if (move.id === 'geargrind' && name === 'genesect') {
 				move.name = "Grind you're mum";
