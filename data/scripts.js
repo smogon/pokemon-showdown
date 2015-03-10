@@ -3572,6 +3572,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'bulletpunch', signatureMove: "Ranting",
 				evs: {atk:252, def:4, spe:252}, nature: 'Jolly'
 			},
+			'%xfix': {
+				species: 'Xatu', ability: 'Magic Bounce', item: 'Focus Sash', gender: 'M',
+				moves: ['thunderwave', 'substitute', 'roost'],
+				baseSignatureMove: 'metronome', signatureMove: "(Super Glitch)",
+				evs: {hp:252, spd:252, def:4}, nature: 'Calm'
+			},
 			// Voices.
 			'+Aldaron': {
 				species: 'Conkeldurr', ability: 'Speed Boost', item: 'Assault Vest', gender: 'M',
@@ -3626,12 +3632,6 @@ exports.BattleScripts = {
 				moves: ['recover', 'steameruption', 'earthpower', 'leafstorm', 'substitute'],
 				baseSignatureMove: 'energyball', signatureMove: "Ban Everyone",
 				evs: {hp:252, spa:252, spd:4}, nature: 'Modest'
-			},
-			'+xfix': {
-				species: 'Xatu', ability: 'Magic Bounce', item: 'Focus Sash', gender: 'M',
-				moves: ['thunderwave', 'substitute', 'roost'],
-				baseSignatureMove: 'metronome', signatureMove: "(Super Glitch)",
-				evs: {hp:252, spd:252, def:4}, nature: 'Calm'
 			},
 			'+talktakestime': {
 				species: 'Registeel', ability: 'Flash Fire', item: 'Leftovers', gender: 'M',
