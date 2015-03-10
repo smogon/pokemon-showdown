@@ -1566,7 +1566,7 @@ var commands = exports.commands = {
 	 * Custom commands
 	 *********************************************************/
 
-	concede: 'forefeit',
+	concede: 'forfeit',
 	
 	reminders: 'reminder',
 	reminder: function (target, room, user) {
