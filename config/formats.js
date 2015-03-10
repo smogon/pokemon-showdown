@@ -1853,7 +1853,8 @@ exports.Formats = [
 			}
 			if (move.id === 'dragontail' && name === 'jdarden') {
 				move.name = 'Wyvern\'s Wind';
-				move.flags.sound = 1;
+				if (!move.flags) move.flags = {};
+				move.flags['sound'] = 1;
 				move.type = 'Flying';
 				move.category = 'Special';
 				move.basePower = 80;
