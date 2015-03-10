@@ -3761,7 +3761,6 @@ exports.BattleMovedex = {
 			var oldAbility = target.setAbility(source.ability);
 			if (oldAbility) {
 				this.add('-ability', target, target.ability, '[from] move: Entrainment');
-				this.runEvent('EndAbility', target, oldAbility);
 				return;
 			}
 			return false;
@@ -11521,7 +11520,6 @@ exports.BattleMovedex = {
 			var oldAbility = source.setAbility(target.ability);
 			if (oldAbility) {
 				this.add('-ability', source, source.ability, '[from] move: Role Play', '[of] ' + target);
-				this.runEvent('EndAbility', source, oldAbility);
 				return;
 			}
 			return false;
@@ -12391,7 +12389,6 @@ exports.BattleMovedex = {
 			var oldAbility = pokemon.setAbility('simple');
 			if (oldAbility) {
 				this.add('-ability', pokemon, 'Simple', '[from] move: Simple Beam');
-				this.runEvent('EndAbility', pokemon, oldAbility);
 				return;
 			}
 			return false;
@@ -15906,7 +15903,6 @@ exports.BattleMovedex = {
 				if (pokemon.status === 'slp') {
 					pokemon.cureStatus();
 				}
-				this.runEvent('EndAbility', pokemon, oldAbility);
 				return;
 			}
 			return false;

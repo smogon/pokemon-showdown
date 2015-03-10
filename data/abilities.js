@@ -1674,7 +1674,6 @@ exports.BattleAbilities = {
 				if (oldAbility) {
 					this.add('-endability', source, oldAbility, '[from] Mummy');
 					this.add('-ability', source, 'Mummy', '[from] Mummy');
-					this.runEvent('EndAbility', source, oldAbility, 'mummy');
 				}
 			}
 		},
