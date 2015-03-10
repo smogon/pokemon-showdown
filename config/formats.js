@@ -2824,11 +2824,11 @@ exports.Formats = [
 			}
 			if (move.id === 'dragonrush' && name === 'dtc') {
 				move.name = 'Dragon Smash';
-				move.basePower = 200;
-				move.recoil = [3, 4];
+				move.basePower = 150;
+				move.recoil = [1, 2];
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
-					this.add('-anim', source, "Head Charge", target);
+					this.add('-anim', source, "Giga Impact", target);
 				};
 			}
 			if (name === 'feliburn') {
