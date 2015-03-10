@@ -3437,7 +3437,7 @@ exports.BattleScripts = {
 			},
 			'@WaterBomb': {
 				species: 'Poliwrath', ability: 'Unaware', item: 'Leftovers', gender: 'M',
-				moves: ['heartswap', 'softboiled', 'aromatherapy', 'highjumpkick', 'defog'],
+				moves: ['heartswap', 'softboiled', 'aromatherapy', 'highjumpkick'],
 				baseSignatureMove: 'waterfall', signatureMove: "Water Bomb",
 				evs: {hp:252, atk:252, def:4}, nature: 'Adamant'
 			},
@@ -3506,7 +3506,7 @@ exports.BattleScripts = {
 				baseSignatureMove: 'spikecannon', signatureMove: "Lava Whip",
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant'
 			},
-			'%DTC': {
+			'%dtc': {
 				species: 'Charizard', ability: 'Magic Guard', item: 'Charizardite X', gender: 'M',
 				moves: ['shiftgear', 'blazekick', 'roost'],
 				baseSignatureMove: 'dragonrush', signatureMove: "Dragon Smash",
@@ -3515,7 +3515,7 @@ exports.BattleScripts = {
 			'%Feliburn': {
 				species: 'Infernape', ability: 'Adaptability', item: 'Expert Belt', gender: 'M',
 				moves: ['highjumpkick', 'sacredfire', 'taunt', 'fusionbolt', 'machpunch'],
-				baseSignatureMove: 'focuspunch', signatureMove: "Falcon Punch",
+				baseSignatureMove: 'firepunch', signatureMove: "Falcon Punch",
 				evs: {atk:252, def:4, spe:252}, nature: 'Jolly'
 			},
 			'%Hugendugen': {

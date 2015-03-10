@@ -1800,6 +1800,10 @@ exports.Formats = [
 						}
 					}
 					if (activate) pokemon.setBoost(boosts);
+					if (!pokemon.informed) {
+						this.add('c|~The Immortal|I don\'t really sleep walk...');
+						pokemon.informed = true;
+					}
 				};
 			}
 			if (move.id === 'vcreate' && name === 'v4') {
@@ -2843,11 +2847,9 @@ exports.Formats = [
 				};
 			}
 			if (name === 'feliburn') {
-				if (move.id === 'focuspunch') {
+				if (move.id === 'firepunch') {
 					move.name = 'Falcon Punch';
-					delete move.beforeTurnCallback;
-					delete move.beforeMoveCallback;
-					move.type = 'Fire';
+					move.basePower = 150;
 					move.accuracy = 85;
 					move.self = {boosts: {atk:-1, def:-1, spd:-1}};
 					move.onTryHit = function (target, source) {
