@@ -495,10 +495,6 @@ exports.Formats = [
 				if (name === 'theimmortal' && pokemon.getAbility().id !== 'cloudnine') {
 					pokemon.setAbility('cloudnine'); // Announced ability.
 				}
-				if (name === 'slayer95' && pokemon.getAbility().id !== 'technician') {
-					pokemon.setAbility('technician');
-					this.add('-ability', pokemon, pokemon.ability);
-				}
 				if (name === 'dell' && pokemon.getAbility().id !== 'adaptability') {
 					pokemon.setAbility('adaptability');
 					this.add('-ability', pokemon, pokemon.ability);
@@ -1706,6 +1702,14 @@ exports.Formats = [
 		},
 		// This is where the signature moves are actually done.
 		onModifyMove: function (move, pokemon) {
+			// This is to make signature moves work when transformed.
+			if (move.id === 'transform') {
+				move.onHit = function (target, pokemon) {
+					if (!pokemon.transformInto(target, pokemon)) return false;
+					pokemon.name = target.name;
+				};
+			}
+
 			var name = toId(pokemon.illusion && move.sourceEffect === 'allyswitch' ? pokemon.illusion.name : pokemon.name);
 			// Prevent visual glitch with Spell Steal.
 			move.effectType = 'Move';
@@ -1973,7 +1977,7 @@ exports.Formats = [
 				move.name = 'Spectrum Beam';
 				move.affectedByImmunities = false;
 				move.basePower = 8;
-				move.critRatio = 2;
+				move.critRatio = 1;
 				move.accuracy = 95;
 				move.typechart = Object.keys(Tools.data.TypeChart);
 				move.hitcount = 0;
@@ -2034,7 +2038,6 @@ exports.Formats = [
 			if (move.id === 'bugbuzz' && name === 'beowulf') {
 				move.name = 'Buzzing of the Swarm';
 				move.category = 'Physical';
-				move.secondaries = [{chance: 30, volatileStatus: 'flinch'}];
 			}
 			if (move.id === 'dragontail' && name === 'biggie') {
 				move.name = 'Food Rush';
