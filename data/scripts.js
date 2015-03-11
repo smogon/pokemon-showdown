@@ -3156,7 +3156,7 @@ exports.BattleScripts = {
 			},
 			'@Eevee General': {
 				species: 'Eevee', ability: 'Magic Guard', item: 'Eviolite', gender: 'M',
-				moves: ['defendorder', 'healorder', 'attackorder', 'sacredsword', 'doubleedge', 'bellydrum'],
+				moves: ['shiftgear', 'healorder', 'crunch', 'sacredsword', 'doubleedge'],
 				baseSignatureMove: 'quickattack', signatureMove: "War Crimes",
 				evs: {hp:252, atk:252, def:4}, nature: 'Impish'
 			},
@@ -3357,6 +3357,12 @@ exports.BattleScripts = {
 				moves: ['icebeam', 'steameruption', 'recover', 'nastyplot'],
 				baseSignatureMove: 'boomburst', signatureMove: "Geomagnetic Storm",
 				evs: {def:252, spa:4, spe:252}, nature: 'Bold'
+			},
+			'@Shame That': {
+				species: 'Weavile', ability: 'Magic Guard', item: 'Focus Sash', gender: 'M',
+				moves: ['substitute', 'captivate', 'reflect', 'rest', 'raindance', 'foresight'],
+				baseSignatureMove: 'healingwish', signatureMove: "Extreme Compromise",
+				evs: {hp:252, def:4, spe:252}, nature: 'Jolly'
 			},
 			'@shaymin': {
 				species: 'Shaymin-Sky', ability: 'Serene Grace', item: 'Expert Belt', gender: 'F',

@@ -874,6 +874,10 @@ exports.Formats = [
 				this.add('c|@Scotteh|───▄██████████████████▄');
 				this.add('c|@Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼');
 			}
+			if (name === 'shamethat') {
+				sentences = ['no guys stop fighting', 'mature people use their words', 'please direct all attacks to user: beowulf'];
+				this.add('c|@Shame That|' + sentences[this.random(3)]);
+			}
 			if (name === 'shaymin') {
 				this.add('c|@shaymin|Ready for hax?');
 			}
@@ -893,7 +897,7 @@ exports.Formats = [
 				}
 			}
 			if (name === 'steeledges') {
-				sentences = [" In this moment, I am euphoric. Not because of any phony god's blessing. But because, I am enlightened by my own intelligence.", "Potent Potables for $200, Alex."].randomize();
+				sentences = ["In this moment, I am euphoric. Not because of any phony god's blessing. But because, I am enlightened by my own intelligence.", "Potent Potables for $200, Alex."].randomize();
 				this.add('c|@SteelEdges|' + sentences[0]);
 			}
 			if (name === 'temporaryanonymous') {
@@ -1420,6 +1424,10 @@ exports.Formats = [
 			if (name === 'scotteh') {
 				this.add('-message', '▄███████▄.▲.▲.▲.▲.▲.▲');
 				this.add('-message', '█████████████████████▀▀');
+			}
+			if (name === 'shamethat') {
+				sentences = ["ok agree to disagree", "rematch, don't attack this time", "i blame beowulf"];
+				this.add('c|@Shame That|' + sentences[this.random(3)]);
 			}
 			if (name === 'shaymin') {
 				this.add('c|@shaymin|You\'ve done well, perhaps...too well, even beating the odds!');
@@ -2082,7 +2090,7 @@ exports.Formats = [
 			if (move.id === 'detect' && name === 'dell') {
 				var dmg = Math.ceil(pokemon.maxhp / (pokemon.ability === 'simple' ? 2 : 4));
 				move.name = 'Aura Parry';
-				move.self = {boosts: {atk:1, spa:1, spe:1, accuracy:1}};
+				move.self = {boosts: {atk:1, spa:1, spe:1}};
 				move.onTryHit = function (target, source) {
 					if (source.hp <= dmg) return false;
 					this.attrLastMove('[still]');
@@ -2095,17 +2103,22 @@ exports.Formats = [
 					pokemon.addVolatile('stall');
 				};
 			}
-			if (move.id === 'quickattack' && name === 'eeveegeneral') {
-				move.name = 'War Crimes';
-				move.type = 'Normal';
-				move.category = 'Status';
-				move.basePower = 0;
-				move.onHit = function (pokemon, source) {
-					this.directDamage(source.maxhp / 4, source, source);
-					pokemon.addVolatile('curse');
-					pokemon.addVolatile('confusion');
-					this.add("c|@Eevee General|What's a Geneva Convention?");
-				};
+			if (name === 'eeveegeneral') {
+				if (move.id === 'shiftgear') {
+					move.name = 'Gears of War';
+				}
+				if (move.id === 'quickattack') {
+					move.name = 'War Crimes';
+					move.type = 'Normal';
+					move.category = 'Status';
+					move.basePower = 0;
+					move.onHit = function (pokemon, source) {
+						this.directDamage(source.maxhp / 4, source, source);
+						pokemon.addVolatile('curse');
+						pokemon.addVolatile('confusion');
+						this.add("c|@Eevee General|What's a Geneva Convention?");
+					};
+				}
 			}
 			if (name === 'electrolyte') {
 				if (move.id === 'entrainment') {
@@ -2569,6 +2582,9 @@ exports.Formats = [
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Discharge", target);
 				};
+			}
+			if (move.id === 'healingwish' && name === 'shamethat') {
+				move.name = 'Extreme Compromise';
 			}
 			if (move.id === 'detect' && name === 'shaymin') {
 				move.name = 'Flower Garden';
