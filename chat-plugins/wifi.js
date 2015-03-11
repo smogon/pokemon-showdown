@@ -240,7 +240,7 @@ var LotteryGiveAway = (function () {
 		}
 		finallist = finallist.join(', ');
 		this.room.addRaw('<div class = "broadcast-blue"><font size = 2><b>Lottery Draw: </b></font>' + Object.keys(this.joined).length + ' users have joined the lottery.<br/>' +
-			'Our lucky winner(s): <b>' + Tools.escapeHTML(finallist) + ' !</b> Congratulations!');
+			'Our lucky winner(s): <b>' + Tools.escapeHTML(finallist) + '!</b> Congratulations!');
 		this.room.update();
 
 		for (var id in this.winners) {
