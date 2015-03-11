@@ -3042,7 +3042,7 @@ exports.BattleScripts = {
 			'&hollywood': {
 				species: 'Mr. Mime', ability: 'Prankster', item: 'Leftovers', gender: 'M',
 				moves: ['batonpass', ['substitute', 'milkdrink'][this.random(2)], 'encore'],
-				baseSignatureMove: 'geomancy', signatureMove: "Meme Mime",
+				baseSignatureMove: 'gravity', signatureMove: "Meme Mime",
 				evs: {hp:252, def:4, spe:252}, nature: 'Timid'
 			},
 			'&jdarden': {
@@ -3150,7 +3150,7 @@ exports.BattleScripts = {
 			},
 			'@Dell': {
 				species: 'Lucario', ability: 'Simple', item: 'Lucarionite', gender: 'M',
-				moves: ['jumpkick', ['flashcannon', 'bulletpunch'][this.random(2)], 'batonpass'],
+				moves: ['jumpkick', ['flashcannon', 'bulletpunch'][this.random(2)], 'taunt'],
 				baseSignatureMove: 'detect', signatureMove: "Aura Parry",
 				evs: {hp:4, atk:216, spa:36, spe:252}, nature: 'Naive'
 			},
@@ -3317,7 +3317,7 @@ exports.BattleScripts = {
 				evs: {hp:252, spa:252, def:4}, nature: 'Quirky'
 			},
 			'@qtrx': {
-				species: 'Unown', ability: 'Technician', item: 'Focus Sash', gender: 'M',
+				species: 'Unown', ability: 'Levitate', item: 'Focus Sash', gender: 'M',
 				moves: [],
 				baseSignatureMove: 'meditate', signatureMove: "Hidden Power... Normal?",
 				evs: {hp:252, def:4, spa:252}, ivs: {atk:0, spe:0}, nature: 'Quiet'
@@ -3337,7 +3337,7 @@ exports.BattleScripts = {
 			'@Reverb': {
 				species: 'Slaking', ability: 'Scrappy', item: 'Assault Vest', gender: 'M',
 				moves: ['feint', 'stormthrow', 'blazekick'], // Feint as a countermeasure to the abundance of Protect-based set-up moves.
-				baseSignatureMove: 'eggbomb', signatureMove: "fat monkey",
+				baseSignatureMove: 'megakick', signatureMove: "fat monkey",
 				evs: {hp:252, spd:40, spe:216}, nature: 'Jolly' // EV-nerf.
 			},
 			'@RosieTheVenusaur': {
@@ -3630,7 +3630,7 @@ exports.BattleScripts = {
 			'+SOMALIA': {
 				species: 'Gastrodon', ability: 'Anger Point', item: 'Leftovers', gender: 'M',
 				moves: ['recover', 'steameruption', 'earthpower', 'leafstorm', 'substitute'],
-				baseSignatureMove: 'energyball', signatureMove: "Ban Everyone",
+				baseSignatureMove: 'memento', signatureMove: "Ban Everyone",
 				evs: {hp:252, spa:252, spd:4}, nature: 'Modest'
 			},
 			'+talktakestime': {
@@ -3644,9 +3644,19 @@ exports.BattleScripts = {
 		var pool = Object.keys(sets).randomize();
 		var ranks = {'~':'admins', '&':'leaders', '@':'mods', '%':'drivers', '+':'voices'};
 		var levels = {'~':99, '&':97, '@':96, '%':96, '+':95};
-		for (var i = 0; i < 6; i++) {
-			var rank = pool[i].charAt(0);
+		var count = 0;
+		var i = -1;
+		do {
+			i++;
 			var set = sets[pool[i]];
+			for (var otherSet in team) {
+				if (otherSet.species === set.species) {
+					var rejected = true;
+					break;
+				}
+			}
+			if (rejected) continue;
+			var rank = pool[i].charAt(0);
 			set.level = levels[rank];
 			set.name = pool[i];
 			if (!set.ivs) {
@@ -3660,7 +3670,8 @@ exports.BattleScripts = {
 			if (!set.evs) set.evs = {hp:84, atk:84, def:84, spa:84, spd:84, spe:84};
 			set.moves = set.moves.sample(3).concat(set.baseSignatureMove);
 			team.push(set);
-		}
+			count++;
+		} while (count < 6);
 
 		// Check for Illusion.
 		if (team[5].name === '&Slayer95') {
