@@ -468,10 +468,13 @@ exports.Formats = [
 			if (name === 'electrolyte') {
 				pokemon.lastAttackType = 'None';
 			}
-			// Deal with kupo's special transformation ability.
+			// Deal with Transform.
 			if (pokemon.kupoTransformed) {
 				pokemon.name = '@kupo';
 				pokemon.kupoTransformed = false;
+			} else if (pokemon.jasmineTransformed) {
+				pokemon.name = '~Jasmine';
+				pokemon.jasmineTransformed = false;
 			}
 			// Deal with timbuktu's move (read onModifyMove relevant part).
 			if (name === 'timbuktu') {
@@ -1116,11 +1119,6 @@ exports.Formats = [
 				}
 			}
 
-			// Break the secondary of Dell's sig if an attack is attempted.
-			if (target.volatiles['parry'] && move.category !== 'Status') {
-				target.removeVolatile('parry');
-			}
-
 			if (pokemon.volatiles['needles']) {
 				var dice = this.random(3);
 				pokemon.removeVolatile('needles');
@@ -1146,6 +1144,9 @@ exports.Formats = [
 			if (pokemon.kupoTransformed) {
 				pokemon.name = '@kupo';
 				pokemon.kupoTransformed = false;
+			} else if (pokemon.jasmineTransformed) {
+				pokemon.name = '~Jasmine';
+				pokemon.jasmineTransformed = false;
 			}
 			var name = toId(pokemon.name);
 			var sentences = [];
@@ -1457,8 +1458,8 @@ exports.Formats = [
 				this.add('c|@TGMD|rip in pepsi');
 			}
 			if (name === 'trickster') {
-				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', '“This guy\'s team is CRAZY!” ☑ “My team can\'t win against a team like that” ☑ "He NEEDED precisely those two crits to win" ☑ “He led with the only Pokemon that could beat me” ☑ "He got the perfect hax" ☑ “There was nothing I could do” ☑ “I played that perfectly"'];
-				this.add('c|@Trickster|' + sentences[this.random(4)]);
+				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', '“This guy\'s team is CRAZY!” ☑ “My team can\'t win against a team like that” ☑ "He NEEDED precisely those two crits to win" ☑ “He led with the only Pokemon that could beat me” ☑ "He got the perfect hax" ☑ “There was nothing I could do” ☑ “I played that perfectly"', '⊙﹏⊙✿'];
+				this.add('c|@Trickster|' + sentences[this.random(5)]);
 			}
 			if (name === 'waterbomb') {
 				this.add('c|@WaterBomb|brb getting more denture cream');
@@ -1583,11 +1584,13 @@ exports.Formats = [
 					pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				}
 			}
-
-			// Kupo's special transform.
+			// Deal with Transform.
 			if (pokemon.kupoTransformed) {
 				pokemon.name = '@kupo';
 				pokemon.kupoTransformed = false;
+			} else if (pokemon.jasmineTransformed) {
+				pokemon.name = '~Jasmine';
+				pokemon.jasmineTransformed = false;
 			}
 		},
 		onDragOut: function (pokemon) {
@@ -1599,6 +1602,9 @@ exports.Formats = [
 			if (pokemon.kupoTransformed) {
 				pokemon.name = '@kupo';
 				pokemon.kupoTransformed = false;
+			} else if (pokemon.jasmineTransformed) {
+				pokemon.name = '~Jasmine';
+				pokemon.jasmineTransformed = false;
 			}
 		},
 		onAfterMoveSelf: function (source, target, move) {
@@ -1635,71 +1641,55 @@ exports.Formats = [
 					if (thisSide.premonTimer === 4) thisSide.addSideCondition('safeguard');
 					thisSide.premonTimer++;
 				}
-				for (var p in thisSide.active) {
-					var pokemon = thisSide.active[p];
-					var name = toId(pokemon.name);
-
-					if (pokemon.side.premonEffect) {
-						pokemon.side.premonEffect = false;
-						this.add('c|@zdrup|...dary! __**LEGENDARY!**__');
-						this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1}, pokemon, pokemon, 'legendary premonition');
-						pokemon.addVolatile('aquaring');
-						pokemon.addVolatile('focusenergy');
+				var pokemon = thisSide.active[0];
+				var name = toId(pokemon.name);
+				
+				if (pokemon.side.premonEffect) {
+					pokemon.side.premonEffect = false;
+					this.add('c|@zdrup|...dary! __**LEGENDARY!**__');
+					this.add('-message', 'The Premonition came true!');
+					this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1}, pokemon, pokemon, 'legendary premonition');
+					pokemon.addVolatile('aquaring');
+					pokemon.addVolatile('focusenergy');
+				}
+				if (pokemon.volatiles['resilience'] && !pokemon.fainted) {
+					this.heal(pokemon.maxhp / 16, pokemon, pokemon, 'resilience');
+				}
+				if (pokemon.volatiles['unownaura'] && !pokemon.fainted && !pokemon.illusion) {
+					this.add('-message', "Your keyboard is reacting to " + pokemon.name + "'s Unown aura!");
+					if (this.random(2) === 1) {
+						this.useMove('trickroom', pokemon);
+					} else {
+						this.useMove('wonderroom', pokemon);
 					}
-					if (pokemon.volatiles['resilience'] && !pokemon.fainted) {
-						this.heal(pokemon.maxhp / 16, pokemon, pokemon);
-						this.add('-message', pokemon.name + "'s resilience healed itself!");
-					}
-					if (pokemon.volatiles['unownaura'] && !pokemon.fainted && !pokemon.illusion) {
-						this.add('-message', "Your keyboard is reacting to " + pokemon.name + "'s Unown aura!");
-						if (this.random(2) === 1) {
-							this.useMove('trickroom', pokemon);
-						} else {
-							this.useMove('wonderroom', pokemon);
-						}
-					}
-					if (name === 'beowulf' && !pokemon.fainted && !pokemon.illusion) {
-						this.add('c|@Beowulf|/me buzzes loudly!');
-					}
-					if (name === 'cathy' && !pokemon.fainted && !pokemon.illusion) {
-						var messages = [
-							'kicking is hilarious!',
-							'flooding the chat log with kicks makes me lol',
-							'please don\'t stop me from having fun',
-							'having fun is great!',
-							'isn\'t this so much fun?',
-							'let\'s all have fun by spamming the channel!',
-							'FUN FUN FUN',
-							'SO MUCH FUN!',
-							'^_^ fun times ^_^',
-							'/me is having so much fun!',
-							'having fun is great!',
-							'/me thinks spam is fun!',
-							'/me loves spamming this channel, because it\'s completely inconsequential!',
-							'this is just the internet -- nothing matters!',
-							'let\'s have fun ALL NIGHT LONG!!!!!!!!!!!!!!!!!!!!!!'
-						];
-						this.add('c|HappyFunTimes|' + messages[this.random(15)]);
-					}
-					if (pokemon.volatiles['parry']) {
-						// Dell hasn't been attacked.
-						pokemon.removeVolatile('parry');
-						this.add('-message', "Untouched, the Aura Parry grows stronger still!");
-						this.boost({def:1, spd:1}, pokemon, pokemon, 'Aura Parry');
-					}
+				}
+				if (name === 'beowulf' && !pokemon.fainted && !pokemon.illusion) {
+					this.add('c|@Beowulf|/me buzzes loudly!');
+				}
+				if (name === 'cathy' && !pokemon.fainted && !pokemon.illusion) {
+					var messages = [
+						'kicking is hilarious!',
+						'flooding the chat log with kicks makes me lol',
+						'please don\'t stop me from having fun',
+						'having fun is great!',
+						'isn\'t this so much fun?',
+						'let\'s all have fun by spamming the channel!',
+						'FUN FUN FUN',
+						'SO MUCH FUN!',
+						'^_^ fun times ^_^',
+						'/me is having so much fun!',
+						'having fun is great!',
+						'/me thinks spam is fun!',
+						'/me loves spamming this channel, because it\'s completely inconsequential!',
+						'this is just the internet -- nothing matters!',
+						'let\'s have fun ALL NIGHT LONG!!!!!!!!!!!!!!!!!!!!!!'
+					];
+					this.add('c|HappyFunTimes|' + messages[this.random(15)]);
 				}
 			}
 		},
 		// This is where the signature moves are actually done.
 		onModifyMove: function (move, pokemon) {
-			// This is to make signature moves work when transformed.
-			if (move.id === 'transform') {
-				move.onHit = function (target, pokemon) {
-					if (!pokemon.transformInto(target, pokemon)) return false;
-					pokemon.name = target.name;
-				};
-			}
-
 			var name = toId(pokemon.illusion && move.sourceEffect === 'allyswitch' ? pokemon.illusion.name : pokemon.name);
 			// Prevent visual glitch with Spell Steal.
 			move.effectType = 'Move';
@@ -1713,15 +1703,13 @@ exports.Formats = [
 			// Admin signature moves.
 			if (move.id === 'spikes' && name === 'antar') {
 				move.name = 'Firebomb';
-				move.sideCondition = 'spikes';
 				move.isBounceable = false;
 				move.category = 'Special';
 				move.type = 'Fire';
 				move.basePower = 100;
-				move.onTryHit = function (target, source, move) {
+				move.onTryHitSide = function (side, source, move) {
 					this.attrLastMove('[still]');
-					this.add('-anim', source, "Overheat", target);
-					return null;
+					this.add('-anim', source, "Overheat", side.active[0]);
 				};
 			}
 			if (move.id === 'embargo' && name === 'chaos') {
@@ -1745,12 +1733,20 @@ exports.Formats = [
 					pokemon.addVolatile('haunterino');
 				};
 			}
-			if (move.id === 'bellydrum' && name === 'jasmine') {
-				move.name = 'Lockdown';
-				move.onHit = function (target, pokemon) {
-					this.add("raw|<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
-				};
-				move.self = {boosts: {atk:6}};
+			if (name === 'jasmine') {
+				if (move.id === 'bellydrum') {
+					move.name = 'Lockdown';
+					move.onHit = function (target, pokemon) {
+						this.add("raw|<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+					};
+					move.self = {boosts: {atk:6}};
+				} else if (move.id === 'transform') {
+					move.onHit = function (target, pokemon) {
+						if (!pokemon.transformInto(target, pokemon)) return false;
+						pokemon.name = target.name;
+						pokemon.jasmineTransformed = true;
+					};
+				}
 			}
 			if (move.id === 'milkdrink' && name === 'joim') {
 				move.name = 'Red Bull Drink';
@@ -1845,10 +1841,10 @@ exports.Formats = [
 			}
 
 			// Leader signature moves.
-			if (move.id === 'geomancy' && name === 'hollywood') {
+			if (move.id === 'gravity' && name === 'hollywood') {
 				move.name = 'Meme Mime';
-				move.isTwoTurnMove = false;
-				move.onTry = function () {};
+				move.target = 'self';
+				delete move.pseudoWeather;
 				move.boosts = {atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1};
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
@@ -2078,19 +2074,25 @@ exports.Formats = [
 				};
 			}
 			if (move.id === 'detect' && name === 'dell') {
-				var dmg = Math.ceil(pokemon.maxhp / (pokemon.ability === 'simple' ? 2 : 4));
+				var dmg = Math.ceil(pokemon.maxhp / (pokemon.ability === 'simple' ? 2 : 3));
 				move.name = 'Aura Parry';
 				move.self = {boosts: {atk:1, spa:1, spe:1, accuracy:1}};
+				move.sideCondition = 'matblock';
+				move.volatileStatus = 'parry';
 				move.onTryHit = function (target, source) {
-					if (source.hp <= dmg) return false;
+					if (source.volatiles['parry']) {
+						this.add('-hint', "Aura Parry only works once per outing.");
+						return false;
+					}
+					if (source.hp <= dmg) {
+						this.add('-message', "But it's too weak to parry!");
+						return false;
+					}
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Amnesia", source);
-					return !!this.willAct() && this.runEvent('StallMove', target);
 				};
 				move.onHit = function (target) {
 					this.directDamage(dmg, target, target);
-					pokemon.addVolatile('parry');
-					pokemon.addVolatile('stall');
 				};
 			}
 			if (move.id === 'quickattack' && name === 'eeveegeneral') {
@@ -2237,7 +2239,7 @@ exports.Formats = [
 				move.onHit = function (pokemon, source) {
 					var boosts = {};
 					var stats = Object.keys(pokemon.stats).slice(1);
-					boosts[stats[this.random(5)]] = -1;
+					boosts[stats[this.random(4)]] = -1;
 					this.boost(boosts, pokemon, source);
 				};
 			}
@@ -2322,7 +2324,7 @@ exports.Formats = [
 					this.add('-transform', user, pokemon);
 					user.setAbility(pokemon.ability);
 					user.kupoTransformed = true;
-					user.name = toId(pokemon.name);	// So that kupo can use sigs.
+					user.name = pokemon.name;
 					user.update();
 				};
 			}
@@ -2331,7 +2333,7 @@ exports.Formats = [
 				move.type = 'Shadow';
 				move.accuracy = true;
 				move.ignoreScreens = true;
-				move.ignoreDefensive = true;
+				move.ignorePositiveDefensive = true;
 				move.defensiveCategory = 'Physical';
 				move.basePowerCallback = function (pokemon, target) {
 					if (target.volatiles['partiallytrapped']) return 65;
@@ -2389,7 +2391,6 @@ exports.Formats = [
 				move.onHit = function (pokemon) {
 					if (pokemon.volatiles['pixels']) return false;
 					pokemon.addVolatile('pixels');
-					pokemon.addVolatile('stall');
 				};
 			}
 			if (move.id === 'sacredfire' && name === 'marty') {
@@ -2460,7 +2461,7 @@ exports.Formats = [
 				move.name = 'KEYBOARD SMASH';
 				move.target = 'normal';
 				move.boosts = null;
-				move.hitcount = [2, 2, 3, 3, 3, 4, 5][this.random(7)];
+				move.hitcount = [3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 7][this.random(11)];
 				move.onPrepareHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Fairy Lock", target);
@@ -2531,17 +2532,18 @@ exports.Formats = [
 					}
 				};
 			}
-			if (move.id === 'eggbomb' && name === 'reverb') {
+			if (move.id === 'megakick' && name === 'reverb') {
 				move.name = 'fat monkey';
-				move.accuracy = 95;
-				move.flags = {contact: 1, protect: 1};
 				move.self = {boosts: {def:-1, spe:-1}};
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Brave Bird", target);
 				};
 				move.onHit = function (target, source) {
-					this.heal(100, source, source);
+					this.heal(120, source, source);
+				};
+				move.onMoveFail = function (target, source, move) {
+					this.directDamage(120, source, source);
 				};
 			}
 			if (move.id === 'frenzyplant' && name === 'rosiethevenusaur') {
@@ -2571,11 +2573,7 @@ exports.Formats = [
 			if (move.id === 'detect' && name === 'shaymin') {
 				move.name = 'Flower Garden';
 				move.type = 'Grass';
-				if (this.random(2) === 1) {
-					move.self = {boosts: {spa:1, spd:1}};
-				} else {
-					move.self = {boosts: {def:1, spa:1}};
-				}
+				move.self = {boosts: {spa:1, accuracy:1}};
 			}
 			if (move.id === 'judgment' && name === 'shrang') {
 				move.name = 'Pixilate';
@@ -3172,12 +3170,13 @@ exports.Formats = [
 					}
 				};
 			}
-			if (move.id === 'energyball' && name === 'somalia') {
+			if (move.id === 'memento' && name === 'somalia') {
 				move.name = 'Ban Everyone';
-				move.basePower = 0;
-				delete move.secondary;
-				move.category = 'Status';
-				move.accuracy = 50 + 50 * pokemon.hp / pokemon.maxhp;
+				delete move.boosts;
+				delete move.flags;
+				delete move.selfdestruct;
+				move.priority = -6;
+				move.accuracy = 30 + 60 * pokemon.hp / pokemon.maxhp;
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Explosion", target);
