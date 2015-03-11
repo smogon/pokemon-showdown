@@ -1733,20 +1733,18 @@ exports.Formats = [
 					pokemon.addVolatile('haunterino');
 				};
 			}
-			if (name === 'jasmine') {
-				if (move.id === 'bellydrum') {
-					move.name = 'Lockdown';
-					move.onHit = function (target, pokemon) {
-						this.add("raw|<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
-					};
-					move.self = {boosts: {atk:6}};
-				} else if (move.id === 'transform') {
-					move.onHit = function (target, pokemon) {
-						if (!pokemon.transformInto(target, pokemon)) return false;
-						pokemon.name = target.name;
-						pokemon.jasmineTransformed = true;
-					};
-				}
+			if (name === 'jasmine' && move.id === 'bellydrum') {
+				move.name = 'Lockdown';
+				move.onHit = function (target, pokemon) {
+					this.add("raw|<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+				};
+				move.self = {boosts: {atk:6}};
+			} else if (name === 'jasmine' && move.id === 'transform') {
+				move.onHit = function (target, pokemon) {
+					if (!pokemon.transformInto(target, pokemon)) return false;
+					pokemon.name = target.name;
+					pokemon.jasmineTransformed = true;
+				};
 			}
 			if (move.id === 'milkdrink' && name === 'joim') {
 				move.name = 'Red Bull Drink';
