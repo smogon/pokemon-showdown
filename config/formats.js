@@ -741,7 +741,8 @@ exports.Formats = [
 				} else if (pokemon.phraseIndex === 4) {
 					this.add('c|@Genesect|┬┴┬┴┤  ʕ├┬┴┬┴');
 					this.add('c|@Genesect|┬┴┬┴┤ ʕ•├┬┴┬┴');
-					this.add('c|@Genesect|┬┴┬┴┤ʕ•ᴥ├┬┴┬┴shitposting?');
+					this.add('c|@Genesect|┬┴┬┴┤ʕ•ᴥ├┬┴┬┴');
+					this.add('c|@Genesect|Shitposting?');
 				} else if (pokemon.phraseIndex === 3) {
 					this.add('-message', '▄ ▄▄░░░░░░░▄▄▄▄░░░░▌▄▄▄▄▄░░░░░▐▌');
 					this.add('-message', '▒▀█▌░░░▐▀▀▄▄▐▌▒░░▒▀▒▄▒█▄░░░░▐▌');
@@ -1325,7 +1326,8 @@ exports.Formats = [
 					this.add('-message', '░░░░██████░█▄▄▀░█░░█░█░▀█░');
 					this.add('-message', '░░░░░▀▀▀▀░░░░░░░░░░░░░░░░░');
 				} else if (pokemon.phraseIndex === 4) {
-					this.add('c|@Genesect|┬┴┬┴┤ʕ•ᴥ├┬┴┬┴ well, if that\'s what you want');
+					this.add('c|@Genesect|Well, if that\'s what you want');
+					this.add('c|@Genesect|┬┴┬┴┤ʕ•ᴥ├┬┴┬┴');
 					this.add('c|@Genesect|┬┴┬┴┤ ʕ•├┬┴┬┴');
 					this.add('c|@Genesect|┬┴┬┴┤  ʕ├┬┴┬┴');
 				} else {
