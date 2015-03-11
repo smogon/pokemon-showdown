@@ -778,7 +778,7 @@ exports.Formats = [
 				this.add('-message', '@Hippopotas\'s Sand Stream whipped up a sandstorm!');
 			}
 			if (name === 'hydroimpact') {
-				this.add('c|@HYDROIMPACT|Think about the name first and then the Pokemon. Look beyond the "simple" detail.');
+				this.add('c|@HYDRO IMPACT|Think about the name first and then the Pokemon. Look beyond the "simple" detail.');
 			}
 			if (name === 'imanalt') {
 				this.add('c|@imanalt|muh bulk');
@@ -1344,7 +1344,7 @@ exports.Formats = [
 				this.add('-message', 'The sandstorm subsided.');
 			}
 			if (name === 'hydroimpact') {
-				this.add('c|@HYDROIMPACT|Well done, you\'ve gone beyond your limits and have gained my trust. Now go and write your own destiny, don\'t let fate write it for you.');
+				this.add('c|@HYDRO IMPACT|Well done, you\'ve gone beyond your limits and have gained my trust. Now go and write your own destiny, don\'t let fate write it for you.');
 			}
 			if (name === 'imanalt') {
 				this.add('c|@imanalt|bshax imo');
