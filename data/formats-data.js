@@ -4779,8 +4779,8 @@ exports.BattleFormatsData = {
 	},
 	keldeoresolute: {},
 	meloetta: {
-		randomBattleMoves: ["relicsong","closecombat","knockoff","uturn","calmmind","psyshock","hypervoice","shadowball"],
-		randomDoubleBattleMoves: ["relicsong","closecombat","calmmind","psyshock","thunderbolt","hypervoice","uturn","protect"],
+		randomBattleMoves: ["uturn","calmmind","psyshock","hypervoice","shadowball","focusblast"],
+		randomDoubleBattleMoves: ["calmmind","psyshock","thunderbolt","hypervoice","shadowball","focusblast","protect"],
 		eventPokemon: [
 			{"generation":5,"level":15,"moves":["quickattack","confusion","round"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"moves":["round","teeterdance","psychic","closecombat"],"pokeball":"cherishball"}
@@ -4788,6 +4788,10 @@ exports.BattleFormatsData = {
 		dreamWorldPokeball: 'cherishball',
 		unobtainableShiny: true,
 		tier: "RU"
+	},
+	meloettapirouette: {
+		randomBattleMoves: ["relicsong","closecombat","knockoff","return"],
+		randomDoubleBattleMoves: ["relicsong","closecombat","knockoff","return","protect"]
 	},
 	genesect: {
 		randomBattleMoves: ["uturn","bugbuzz","icebeam","flamethrower","thunderbolt","ironhead","shiftgear","extremespeed","blazekick"],
