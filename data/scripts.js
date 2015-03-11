@@ -3328,6 +3328,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'leer', signatureMove: "Sneeze",
 				evs: {hp:252, def:228, spd:28}, nature: 'Calm'
 			},
+			'@rekeri': {
+				species: 'Tyrantrum', ability: 'Tough Claws', item: 'Life Orb', gender: 'M',
+				moves: ['outrage', 'extremespeed', 'stoneedge', 'closecombat'],
+				baseSignatureMove: 'headcharge', signatureMove: "Land Before Time",
+				evs: {hp:252, atk:252, def:4}, nature: 'Adamant'
+			},
 			'@Relados': {
 				species: 'Terrakion', ability: 'Guts', item: 'Flame Orb', gender: 'M',
 				moves: ['facade', 'diamondstorm', 'closecombat', 'iceshard', 'drainpunch'],
@@ -3553,12 +3559,6 @@ exports.BattleScripts = {
 				moves: ['defog', 'stealthrock', 'toxic', 'roar', 'bravebird'],
 				baseSignatureMove: 'scald', signatureMove: "Ban Scald",
 				evs: {hp:252, def:228, spd:28}, nature: 'Bold'
-			},
-			'%rekeri': {
-				species: 'Tyrantrum', ability: 'Tough Claws', item: 'Life Orb', gender: 'M',
-				moves: ['outrage', 'extremespeed', 'stoneedge', 'closecombat'],
-				baseSignatureMove: 'headcharge', signatureMove: "Land Before Time",
-				evs: {hp:252, atk:252, def:4}, nature: 'Adamant'
 			},
 			'%Timbuktu': {
 				species: 'Heatmor', ability: 'Contrary', item: 'Life Orb', gender: 'M',
