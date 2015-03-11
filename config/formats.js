@@ -806,11 +806,11 @@ exports.Formats = [
 				this.add('c|@Layell|Enter stage left');
 			}
 			if (name === 'legitimateusername') {
-				this.add('c|@Legitimate Username|``And believe me I am still alive.``');
-				this.add('c|@Legitimate Username|``I\'m doing Science and I\'m still alive.``');
-				this.add('c|@Legitimate Username|``I feel FANTASTIC and I\'m still alive.``');
-				this.add('c|@Legitimate Username|``While you\'re dying I\'ll be still alive.``');
-				this.add('c|@Legitimate Username|``And when you\'re dead I will be still alive.``');
+				this.add('c|@LegitimateUsername|``And believe me I am still alive.``');
+				this.add('c|@LegitimateUsername|``I\'m doing Science and I\'m still alive.``');
+				this.add('c|@LegitimateUsername|``I feel FANTASTIC and I\'m still alive.``');
+				this.add('c|@LegitimateUsername|``While you\'re dying I\'ll be still alive.``');
+				this.add('c|@LegitimateUsername|``And when you\'re dead I will be still alive.``');
 			}
 			if (name === 'level51') {
 				this.add('c|@Level 51|Happiness and rainbows, hurrah!');
@@ -1369,7 +1369,7 @@ exports.Formats = [
 				this.add('c|@Layell|' + ['Alas poor me', 'Goodnight sweet prince'][this.random(2)]);
 			}
 			if (name === 'legitimateusername') {
-				this.add('c|@Legitimate Username|``This isn\'t brave. It\'s murder. What did I ever do to you?``');
+				this.add('c|@LegitimateUsername|``This isn\'t brave. It\'s murder. What did I ever do to you?``');
 			}
 			if (name === 'level51') {
 				this.add('c|@Level 51|You made me sad. That\'s the opposite of happy.');
