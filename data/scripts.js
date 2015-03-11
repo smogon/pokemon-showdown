@@ -1507,6 +1507,11 @@ exports.BattleScripts = {
 			moves[3] = 'hypervoice';
 			hasMove['hypervoice'] = true;
 		}
+		if (template.id === 'meloettapirouette' && !hasMove['relicsong']) {
+			delete hasMove[this.getMove(moves[3]).id];
+			moves[3] = 'relicsong';
+			hasMove['relicsong'] = true;
+		}
 		if (template.requiredMove && !hasMove[toId(template.requiredMove)]) {
 			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = toId(template.requiredMove);
@@ -1943,6 +1948,9 @@ exports.BattleScripts = {
 			case 'Gourgeist':
 				if (this.random(4) >= 1) continue;
 				break;
+			case 'Meloetta':
+				if (this.random(2) >= 1) continue;
+				break;
 			case 'Pikachu':
 				// Cosplay Pikachu formes have 20% the normal rate (1/30 the normal rate each)
 				if (template.species !== 'Pikachu' && this.random(30) >= 1) continue;
@@ -2085,6 +2093,9 @@ exports.BattleScripts = {
 				break;
 			case 'Gourgeist':
 				if (this.random(4) >= 1) continue;
+				break;
+			case 'Meloetta':
+				if (this.random(2) >= 1) continue;
 				break;
 			case 'Pikachu':
 				// Cosplay Pikachu formes have 20% the normal rate (1/30 the normal rate each)
@@ -2691,6 +2702,44 @@ exports.BattleScripts = {
 				}
 			}
 		} while (moves.length < 4 && movePool.length);
+
+		// any moveset modification goes here
+		//moves[0] = 'safeguard';
+		if (template.requiredItem && template.requiredItem.slice(-5) === 'Drive' && !hasMove['technoblast']) {
+			delete hasMove[this.getMove(moves[3]).id];
+			moves[3] = 'technoblast';
+			hasMove['technoblast'] = true;
+		}
+		if (template.id === 'altariamega' && !counter['ate']) {
+			delete hasMove[this.getMove(moves[3]).id];
+			moves[3] = 'return';
+			hasMove['return'] = true;
+		}
+		if (template.id === 'gardevoirmega' && !counter['ate']) {
+			delete hasMove[this.getMove(moves[3]).id];
+			moves[3] = 'hypervoice';
+			hasMove['hypervoice'] = true;
+		}
+		if (template.id === 'salamencemega' && !counter['ate']) {
+			delete hasMove[this.getMove(moves[3]).id];
+			moves[3] = 'return';
+			hasMove['return'] = true;
+		}
+		if (template.id === 'sylveon' && !counter['ate']) {
+			delete hasMove[this.getMove(moves[3]).id];
+			moves[3] = 'hypervoice';
+			hasMove['hypervoice'] = true;
+		}
+		if (template.id === 'meloettapirouette' && !hasMove['relicsong']) {
+			delete hasMove[this.getMove(moves[3]).id];
+			moves[3] = 'relicsong';
+			hasMove['relicsong'] = true;
+		}
+		if (template.requiredMove && !hasMove[toId(template.requiredMove)]) {
+			delete hasMove[this.getMove(moves[3]).id];
+			moves[3] = toId(template.requiredMove);
+			hasMove[toId(template.requiredMove)] = true;
+		}
 
 		// If Hidden Power has been removed, reset the IVs
 		if (!hasMove['hiddenpower']) {
