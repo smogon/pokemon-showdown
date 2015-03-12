@@ -1596,11 +1596,8 @@ exports.Formats = [
 				}
 			}
 
-			// Kupo's special transform.
-			if (pokemon.kupoTransformed) {
-				pokemon.name = '@kupo';
-				pokemon.kupoTransformed = false;
-			}
+			// Transform
+			if (pokemon.originalName) pokemon.name = pokemon.originalName;
 		},
 		onDragOut: function (pokemon) {
 			// Prevents qtrx from being red carded by chaos while in the middle of using sig move, which causes a visual glitch.
@@ -1708,6 +1705,7 @@ exports.Formats = [
 			if (move.id === 'transform') {
 				move.onHit = function (target, pokemon) {
 					if (!pokemon.transformInto(target, pokemon)) return false;
+					pokemon.originalName = pokemon.name;
 					pokemon.name = target.name;
 				};
 			}
@@ -2338,8 +2336,8 @@ exports.Formats = [
 					}
 					this.add('-transform', user, pokemon);
 					user.setAbility(pokemon.ability);
-					user.kupoTransformed = true;
-					user.name = toId(pokemon.name);	// So that kupo can use sigs.
+					user.originalName = user.name;
+					user.name = pokemon.name;
 					user.update();
 				};
 			}
@@ -2477,7 +2475,7 @@ exports.Formats = [
 				move.name = 'KEYBOARD SMASH';
 				move.target = 'normal';
 				move.boosts = null;
-				move.hitcount = [2, 2, 3, 3, 3, 4, 5][this.random(7)];
+				move.hitcount = [3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 7][this.random(11)];
 				move.onPrepareHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Fairy Lock", target);
