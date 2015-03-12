@@ -2659,11 +2659,10 @@ exports.Formats = [
 					source.addVolatile('truedailydouble');
 				};
 			}
-			if (move.id === 'extremespeed' && name === 'temporaryanonymous') {
+			if (move.id === 'shadowclaw' && name === 'temporaryanonymous') {
 				move.name = 'SPOOPY EDGE CUT';
 				move.basePower = 100;
 				move.accuracy = 90;
-				move.type = 'Ghost';
 				move.self = {boosts: {evasion:-1}};
 				move.onTryHit = function (target, source) {
 					this.add('-message', '*@Temporaryanonymous teleports behind you*');

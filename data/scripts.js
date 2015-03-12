@@ -3414,7 +3414,7 @@ exports.BattleScripts = {
 			'@Temporaryanonymous': {
 				species: 'Doublade', ability: 'Tough Claws', item: 'Eviolite', gender: 'M',
 				moves: ['swordsdance', ['xscissor', 'sacredsword', 'knockoff'][this.random(3)], 'geargrind'],
-				baseSignatureMove: 'extremespeed', signatureMove: "SPOOPY EDGE CUT",
+				baseSignatureMove: 'shadowclaw', signatureMove: "SPOOPY EDGE CUT",
 				evs: {hp:252, atk:252, def:4}, nature: 'Adamant'
 			},
 			'@Test2017': {
