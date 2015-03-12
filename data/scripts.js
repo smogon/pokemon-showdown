@@ -3688,7 +3688,7 @@ exports.BattleScripts = {
 				baseSignatureMove: 'energyball', signatureMove: "Ban Everyone",
 				evs: {hp:252, spa:252, spd:4}, nature: 'Modest'
 			},
-			'+talktakestime': {
+			'+TalkTakesTime': {
 				species: 'Registeel', ability: 'Flash Fire', item: 'Leftovers', gender: 'M',
 				moves: ['recover', 'ironhead', 'bellydrum'],
 				baseSignatureMove: 'taunt', signatureMove: "Bot Mute",
