@@ -2254,7 +2254,7 @@ exports.Formats = [
 				move.onHit = function (pokemon, source) {
 					var boosts = {};
 					var stats = Object.keys(pokemon.stats).slice(1);
-					boosts[stats[this.random(5)]] = -1;
+					boosts[stats[this.random(4)]] = -1;
 					this.boost(boosts, pokemon, source);
 				};
 			}
@@ -2591,11 +2591,16 @@ exports.Formats = [
 			if (move.id === 'detect' && name === 'shaymin') {
 				move.name = 'Flower Garden';
 				move.type = 'Grass';
-				if (this.random(2) === 1) {
-					move.self = {boosts: {spa:1, spd:1}};
-				} else {
-					move.self = {boosts: {def:1, spa:1}};
-				}
+				move.self = {boosts: {def:1, spa:1, spd:1}};
+				move.onTryHit = function (target, source) {
+					if (source.volatiles['flowergarden']) return false;
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Amnesia", source);
+				};
+				move.onHit = function (target, source) {
+					source.addVolatile('stall');
+					source.addVolatile('flowergarden');
+				};
 			}
 			if (move.id === 'judgment' && name === 'shrang') {
 				move.name = 'Pixilate';
@@ -2659,10 +2664,10 @@ exports.Formats = [
 					source.addVolatile('truedailydouble');
 				};
 			}
-			if (move.id === 'shadowclaw' && name === 'temporaryanonymous') {
+			if (move.id === 'shadowsneak' && name === 'temporaryanonymous') {
 				move.name = 'SPOOPY EDGE CUT';
-				move.basePower = 100;
-				move.accuracy = 90;
+				move.basePower = 90;
+				move.accuracy = 100;
 				move.self = {boosts: {evasion:-1}};
 				move.onTryHit = function (target, source) {
 					this.add('-message', '*@Temporaryanonymous teleports behind you*');
