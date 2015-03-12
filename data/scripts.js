@@ -3251,7 +3251,7 @@ exports.BattleScripts = {
 				baseSignatureMove: 'partingshot', signatureMove: "Hazard Pass",
 				evs: {hp:252, def:252, spd:4}, ivs: {atk:0, spa:0}, nature: 'Bold'
 			},
-			'@HYDROIMPACT': {
+			'@HYDRO IMPACT': {
 				species: 'Charizard', ability: 'Rivalry', item: 'Life Orb', gender: 'M',
 				moves: ['airslash', 'flamethrower', 'nobleroar', 'hydropump'],
 				baseSignatureMove: 'hydrocannon', signatureMove: "HYDRO IMPACT",
@@ -3305,7 +3305,7 @@ exports.BattleScripts = {
 				baseSignatureMove: 'protect', signatureMove: "Pixel Protection",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Adamant'
 			},
-			'@Legitimate Username': {
+			'@LegitimateUsername': {
 				species: 'Shuckle', ability: 'Unaware', item: 'Leftovers', gender: 'M',
 				moves: ['leechseed', 'rest', 'foulplay'],
 				baseSignatureMove: 'shellsmash', signatureMove: "Shell Fortress",
