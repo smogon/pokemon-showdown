@@ -3242,7 +3242,7 @@ exports.BattleScripts = {
 				species: 'Lugia', ability: 'Trace', item: "Grip Claw", gender: 'M',
 				moves: ['infestation', 'magmastorm', 'oblivionwing'],
 				baseSignatureMove: 'gust', signatureMove: "Shadow Storm",
-				evs: {hp:248, def:84, spa:92, spd:84}, nature: 'Modest'	//EV spread listed in the pad is illegal
+				evs: {hp:248, def:84, spa:92, spd:84}, nature: 'Modest'
 			},
 			'@Layell': {
 				species: 'Sneasel', ability: 'Technician', item: "King's Rock", gender: 'M',
