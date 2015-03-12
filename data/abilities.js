@@ -1124,7 +1124,7 @@ exports.BattleAbilities = {
 		},
 		id: "icebody",
 		name: "Ice Body",
-		rating: 2,
+		rating: 1.5,
 		num: 115
 	},
 	"illuminate": {
