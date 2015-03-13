@@ -1059,7 +1059,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	seaking: {
-		randomBattleMoves: ["waterfall","scald","megahorn","knockoff","icebeam"],
+		randomBattleMoves: ["waterfall","scald","megahorn","knockoff","icebeam","drillrun","poisonjab"],
 		randomDoubleBattleMoves: ["waterfall","surf","megahorn","knockoff","drillrun","icebeam","icywind","protect"],
 		tier: "PU"
 	},
