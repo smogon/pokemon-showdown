@@ -1308,8 +1308,8 @@ exports.BattleScripts = {
 				case 'originpulse': case 'surf':
 					if (hasMove['hydropump'] || hasMove['scald']) rejected = true;
 					break;
-				case 'waterfall': case 'waterpulse':
-					if (hasMove['aquatail'] || hasMove['scald']) rejected = true;
+				case 'scald':
+					if (hasMove['waterfall'] || hasMove['waterpulse']) rejected = true;
 					break;
 
 				// Status:

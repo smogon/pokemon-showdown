@@ -1059,7 +1059,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	seaking: {
-		randomBattleMoves: ["waterfall","scald","megahorn","knockoff","icebeam"],
+		randomBattleMoves: ["waterfall","megahorn","knockoff","drillrun","scald","icebeam"],
 		randomDoubleBattleMoves: ["waterfall","surf","megahorn","knockoff","drillrun","icebeam","icywind","protect"],
 		tier: "PU"
 	},
@@ -1422,11 +1422,11 @@ exports.BattleFormatsData = {
 		tier: "BL2"
 	},
 	dratini: {
-		randomBattleMoves: ["dragondance","outrage","waterfall","fireblast","extremespeed","dracometeor","substitute","aquatail"],
+		randomBattleMoves: ["dragondance","outrage","waterfall","fireblast","extremespeed","dracometeor","substitute"],
 		tier: "LC"
 	},
 	dragonair: {
-		randomBattleMoves: ["dragondance","outrage","waterfall","fireblast","extremespeed","dracometeor","substitute","aquatail"],
+		randomBattleMoves: ["dragondance","outrage","waterfall","fireblast","extremespeed","dracometeor","substitute"],
 		tier: "NFE"
 	},
 	dragonite: {
@@ -3604,7 +3604,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	lumineon: {
-		randomBattleMoves: ["waterfall","scald","uturn","icebeam","toxic"],
+		randomBattleMoves: ["scald","waterfall","icebeam","uturn","toxic","defog"],
 		randomDoubleBattleMoves: ["surf","uturn","icebeam","toxic","raindance","tailwind","protect"],
 		tier: "PU"
 	},
