@@ -45,15 +45,9 @@ exports.BattleAbilities = {
 		}
 	},
 	"lightningrod": {
-		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment. The user is immune to Electric and its Special Attack is increased one stage when hit by one.",
+		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment.",
 		shortDesc: "This Pokemon draws opposing Electric moves to itself.",
-		onFoeRedirectTargetPriority: 1,
-		onFoeRedirectTarget: function (target, source, source2, move) {
-			if (move.type !== 'Electric') return;
-			if (this.validTarget(this.effectData.target, source, move.target)) {
-				return this.effectData.target;
-			}
-		},
+		onTryHit: function () {},
 		id: "lightningrod",
 		name: "Lightning Rod",
 		rating: 3.5,
