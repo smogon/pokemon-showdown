@@ -1242,13 +1242,16 @@ exports.BattleScripts = {
 							if (hasMove['confuseray']) rejected = true;
 							break;
 						case 'poisonpowder':
-							if (hasMove['toxic']) rejected = true;
+							if (hasMove['toxic'] || counter['Status'] > 1) rejected = true;
 							break;
 						case 'stunspore':
-							if (hasMove['sleeppowder']) rejected = true;
+							if (hasMove['sleeppowder'] || counter['Status'] > 1) rejected = true;
 							break;
 						case 'sleeppowder':
-							if (hasMove['stunspore']) rejected = true;
+							if (hasMove['stunspore'] || counter['Status'] > 2) rejected = true;
+							break;
+						case 'toxic':
+							if (hasMove['sleeppowder'] || hasMove['stunspore'] || counter['Status'] > 1) rejected = true;
 							break;
 						} // End of switch for moveid
 					}
