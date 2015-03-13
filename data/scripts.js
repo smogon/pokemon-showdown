@@ -2962,10 +2962,25 @@ exports.BattleScripts = {
 		}
 
 		// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
-		// Every 10.35 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
-		// To-do: adjust levels of mons with boosting items (Light Ball, Thick Club etc)
+		// Every 10.34 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
 		var bst = template.baseStats.hp + template.baseStats.atk + template.baseStats.def + template.baseStats.spa + template.baseStats.spd + template.baseStats.spe;
-		var level = 70 + Math.floor(((600 - this.clampIntRange(bst, 300, 600)) / 10.35));
+		// Adjust levels of mons based on abilities (Pure Power, Sheer Force, etc.) and also Eviolite
+		// For the stat boosted, treat the Pokemon's base stat as if it were multiplied by the boost. (Actual effective base stats are higher.)
+		var templateAbility = (baseTemplate === template ? ability : template.abilities[0]);
+		if (templateAbility === 'Huge Power' || templateAbility === 'Pure Power') {
+			bst += template.baseStats.atk;
+		} else if (templateAbility === 'Parental Bond') {
+			bst += 0.5 * (evs.atk > evs.spa ? template.baseStats.atk : template.baseStats.spa);
+		} else if (templateAbility === 'Protean') {
+			// Holistic judgment. Don't boost Protean as much as Parental Bond
+			bst += 0.3 * (evs.atk > evs.spa ? template.baseStats.atk : template.baseStats.spa);
+		} else if (templateAbility === 'Fur Coat') {
+			bst += template.baseStats.def ;
+		}
+		if (item === 'Eviolite') {
+			bst += 0.5 * (template.baseStats.def + template.baseStats.spd);
+		}
+		var level = 70 + Math.floor(((600 - this.clampIntRange(bst, 300, 600)) / 10.34));
 
 		return {
 			name: name,
