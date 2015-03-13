@@ -46,6 +46,13 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "UU (no Scald)",
+		section: "ORAS Singles",
+
+		ruleset: ['UU'],
+		banlist: ['Scald']
+	},
+	{
 		name: "RU",
 		section: "ORAS Singles",
 
