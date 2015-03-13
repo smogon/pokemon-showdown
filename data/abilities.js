@@ -303,7 +303,7 @@ exports.BattleAbilities = {
 		},
 		id: "chlorophyll",
 		name: "Chlorophyll",
-		rating: 2,
+		rating: 2.5,
 		num: 34
 	},
 	"clearbody": {
@@ -2216,7 +2216,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandrush",
 		name: "Sand Rush",
-		rating: 2,
+		rating: 2.5,
 		num: 146
 	},
 	"sandstream": {
@@ -2744,7 +2744,7 @@ exports.BattleAbilities = {
 		},
 		id: "swiftswim",
 		name: "Swift Swim",
-		rating: 2,
+		rating: 2.5,
 		num: 33
 	},
 	"symbiosis": {
