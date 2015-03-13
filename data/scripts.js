@@ -909,6 +909,11 @@ exports.BattleScripts = {
 			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
 		}
 
+		// Meloetta-P can be chosen
+		if (template.num === 648) {
+			name = 'Meloetta';
+		}
+
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
 		if (!noMega && this.hasMegaEvo(template)) {
 			// If there's more than one mega evolution, randomly pick one
@@ -1515,7 +1520,7 @@ exports.BattleScripts = {
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability in ateAbilities) {
 				rejectAbility = !counter['ate'];
-			} else if (ability === 'Chlorophyll' && template.id !== 'venusaurmega') {
+			} else if (ability === 'Chlorophyll') {
 				rejectAbility = !hasMove['sunnyday'];
 			} else if (ability === 'Compound Eyes' || ability === 'No Guard') {
 				rejectAbility = !counter['inaccurate'];
