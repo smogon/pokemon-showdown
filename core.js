@@ -297,7 +297,7 @@ var core = exports.core = {
 		}
 
 		return text.replace(new RegExp(patterns.join('|'), 'g'), function (match) {
-			if (match === ':gav:' || match === ':kermit:' || match === ':superman:' || match === ':sweep:' || match === ':yoshi:') return typeof self.emoticons[match] != 'undefined' ?
+			if (match === ':gav:' || match === ':kermit:' || match === ':nw:' || match === ':superman:' || match === ':sweep:' || match === ':yoshi:') return typeof self.emoticons[match] != 'undefined' ?
 				'<img src="' + self.emoticons[match] + '" title="' + match + '" width="30" height="30"/>' :
 				match;
 			if (match === ':hug:') return typeof self.emoticons[match] != 'undefined' ?
