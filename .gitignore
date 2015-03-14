@@ -1,4 +1,4 @@
-/config/config.js
+/config/*
 /logs/*
 /node_modules
 npm-debug.log
@@ -10,6 +10,7 @@ npm-debug.log
 
 # editor temp files
 *~
+.idea/
 
 tmp/**/*
 *.lock
