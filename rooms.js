@@ -308,15 +308,15 @@ var GlobalRoom = (function () {
 		for (var i = 0; i < this.searchers.length; i++) {
 			var search = this.searchers[i];
 			var searchUser = Users.get(search.userid);
+			if (!searchUser || searchUser === user) {
+				this.searchers.splice(i, 1);
+				i--;
+				continue;
+			}
 			if (!searchUser.connected) {
 				this.searchers.splice(i, 1);
 				i--;
 				searchUser.searching = 0;
-				continue;
-			}
-			if (searchUser === user) {
-				this.searchers.splice(i, 1);
-				i--;
 				continue;
 			}
 		}
