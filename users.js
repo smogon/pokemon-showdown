@@ -28,7 +28,6 @@ const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 4;
 
 var fs = require('fs');
-var dns = require('dns');
 
 /* global Users: true */
 var Users = module.exports = getUser;
@@ -285,7 +284,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 		}
 	});
 
-	dns.reverse(ip, function (err, hosts) {
+	Dnsbl.reverse(ip, function (err, hosts) {
 		if (hosts && hosts[0]) {
 			user.latestHost = hosts[0];
 			if (Config.hostfilter) Config.hostfilter(hosts[0], user, connection);
@@ -303,8 +302,6 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 		}
 	});
 
-	user.joinRoom('global', connection);
-
 	Dnsbl.query(connection.ip, function (isBlocked) {
 		if (isBlocked) {
 			connection.popup("Your IP is known for spamming or hacking websites and has been locked. If you're using a proxy, don't.");
@@ -314,6 +311,8 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 			}
 		}
 	});
+
+	user.joinRoom('global', connection);
 };
 
 Users.socketDisconnect = function (worker, workerid, socketid) {
