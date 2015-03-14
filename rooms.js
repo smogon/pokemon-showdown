@@ -288,12 +288,12 @@ var GlobalRoom = (function () {
 		}
 		return roomList;
 	};
-	GlobalRoom.prototype.getRooms = function () {
+	GlobalRoom.prototype.getRooms = function (user) {
 		var roomsData = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
 		for (var i = 0; i < this.chatRooms.length; i++) {
 			var room = this.chatRooms[i];
 			if (!room) continue;
-			if (room.isPrivate) continue;
+			if (room.isPrivate && !(room.isPrivate === 'voice' && user.group !== ' ')) continue;
 			(room.isOfficial ? roomsData.official : roomsData.chat).push({
 				title: room.title,
 				desc: room.desc,
