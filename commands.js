@@ -2017,7 +2017,7 @@ var commands = exports.commands = {
 		} else if (cmd === 'rooms') {
 			if (!trustable) return false;
 			connection.send('|queryresponse|rooms|' + JSON.stringify(
-				Rooms.global.getRooms()
+				Rooms.global.getRooms(user)
 			));
 		}
 	},
