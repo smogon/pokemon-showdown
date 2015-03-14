@@ -418,6 +418,10 @@ exports.customavatars = {
 	'tahliahbarnett': 'kingsyn.gif',
 	'theservant35': 'kingsyn.gif',
 	'clydedrexler': 'kingsyn.gif',
+	'haxnyancat1': 'haxnyancat1.jpg',
+	'koha': 'koha.jpg',
+	'loliable': 'koha.jpg',
+	'marcisaxy': 'marcisaxy.gif',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
