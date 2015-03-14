@@ -30,6 +30,15 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
 	},
 	{
+		name: "OU (no Mega)",
+		section: "ORAS Singles",
+
+		ruleset: ['OU'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.canMegaEvo = false;
+		}
+	},
+	{
 		name: "Ubers",
 		section: "ORAS Singles",
 
