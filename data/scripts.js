@@ -3087,7 +3087,7 @@ exports.BattleScripts = {
 				evs: {atk:252, def:252, spd: 4}, nature: 'Brave'
 			},
 			'&Sweep': {
-				species: 'Omastar', ability: 'Drizzle', item: ['Honey', 'Brick Mail'][this.random(2)], gender: 'M',
+				species: 'Omastar', ability: 'Drizzle', item: ['Honey', 'Mail'][this.random(2)], gender: 'M',
 				moves: ['shellsmash', 'originpulse', ['thunder', 'icebeam'][this.random(2)]],
 				baseSignatureMove: 'kingsshield', signatureMove: "Sweep's Shield",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Modest'
