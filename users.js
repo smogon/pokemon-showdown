@@ -988,6 +988,7 @@ User = (function () {
 				user.isSysop = isSysop;
 				user.forceRenamed = false;
 				if (avatar) user.avatar = avatar;
+				if (user.ignorePMs && user.can('lock') && !user.can('bypassall')) user.ignorePMs = false;
 
 				user.authenticated = authenticated;
 
@@ -1012,6 +1013,7 @@ User = (function () {
 			this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 			this.isSysop = isSysop;
 			if (avatar) this.avatar = avatar;
+			if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
 			if (this.forceRename(name, authenticated)) {
 				Rooms.global.checkAutojoin(this);
 				return true;
