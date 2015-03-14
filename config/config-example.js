@@ -422,6 +422,7 @@ exports.customavatars = {
 	'koha': 'koha.jpg',
 	'loliable': 'koha.jpg',
 	'marcisaxy': 'marcisaxy.gif',
+	'xanaplana': 'xanaplana.gif',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
