@@ -100,6 +100,16 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 57
 	},
+	"simple": {
+		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
+		onModifyBoost: function () {
+			return this.chainModify(2);
+		},
+		id: "simple",
+		name: "Simple",
+		rating: 4,
+		num: 86
+	},
 	"stench": {
 		desc: "No in-battle effect.",
 		shortDesc: "No in-battle effect.",
