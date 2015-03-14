@@ -7,12 +7,12 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "LC (BWknd 31)",
-		section: "ORAS Singles",
+		name: "Low Tier Random (BWknd 32)",
+		section: "Random Battles (aka Randbats)",
 
-		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger']
+		mod: 'lowtierrandom',
+		team: 'randomLowTier',
+		ruleset: ['Random (no PotD)']
 	},
 	{
 		name: "OU",
