@@ -542,7 +542,7 @@ var components = exports.components = {
 		room.add('|raw|<div class="infobox">' + Poll[room.id].display + '</div>');
 	},
 
-	tierpoll: function (target, room, user) {
+	fullpoll: function (target, room, user) {
 		if (!this.can('poll', null, room)) return false;
 		this.parse('/poll Tournament format?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
 	},
@@ -552,6 +552,19 @@ var components = exports.components = {
 	tourpoll: function (target, room, user) {
 		if (!this.can('poll', null, room)) return false;
 		this.parse('/poll Tournament format?, ou, ubers, uu, ru, nu, lc, vgc, monotype, random, 1v1 random, uber random, high tier random, low tier random, lc random, monotype random, generational random, hoenn random, hoenn weather random, super smash bros. random, winter wonderland, community random, furry random, metronome 3v3 random, metronome 6v6 random, doubles random, triples random, [seasonal] random, [gen 1] random');
+	},
+
+	teampoll: function (target, room, user) {
+		if (!this.can('poll', null, room)) return false;
+		this.parse('/poll Tournament format?, ou, ubers, uu, ru, nu, lc, vgc, monotype');
+	},
+
+	randbatpoll: 'randompoll',
+	randbatspoll: 'randompoll',
+	randpoll: 'randompoll',
+	randompoll: function (target, room, user) {
+		if (!this.can('poll', null, room)) return false;
+		this.parse('/poll Tournament format?, random, 1v1 random, uber random, high tier random, low tier random, lc random, monotype random, generational random, hoenn random, hoenn weather random, super smash bros. random, winter wonderland, community random, furry random, doubles random, triples random, [seasonal] random, [gen 1] random');
 	},
 
 	endpoll: function (target, room, user) {
