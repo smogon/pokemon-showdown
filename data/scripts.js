@@ -227,21 +227,26 @@ exports.BattleScripts = {
 
 		// calculate true accuracy
 		var accuracy = move.accuracy;
+		var boost;
 		if (accuracy !== true) {
 			var targetAbilityIgnoreAccuracy = !target.ignore['Ability'] && target.getAbility().ignoreAccuracy;
 			if (!move.ignoreAccuracy && !targetAbilityIgnoreAccuracy) {
-				if (pokemon.boosts.accuracy > 0) {
-					accuracy *= boostTable[pokemon.boosts.accuracy];
+				boost = this.runEvent('ModifyBoost', pokemon, 'accuracy', null, pokemon.boosts.accuracy);
+				boost = this.clampIntRange(boost, -6, 6);
+				if (boost > 0) {
+					accuracy *= boostTable[boost];
 				} else {
-					accuracy /= boostTable[-pokemon.boosts.accuracy];
+					accuracy /= boostTable[-boost];
 				}
 			}
 			var pokemonAbilityIgnoreEvasion = !pokemon.ignore['Ability'] && pokemon.getAbility().ignoreEvasion;
 			if (!move.ignoreEvasion && !pokemonAbilityIgnoreEvasion) {
-				if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-					accuracy /= boostTable[target.boosts.evasion];
-				} else if (target.boosts.evasion < 0) {
-					accuracy *= boostTable[-target.boosts.evasion];
+				boost = this.runEvent('ModifyBoost', pokemon, 'evasion', null, target.boosts.evasion);
+				boost = this.clampIntRange(boost, -6, 6);
+				if (boost > 0 && !move.ignorePositiveEvasion) {
+					accuracy /= boostTable[boost];
+				} else if (boost < 0) {
+					accuracy *= boostTable[-boost];
 				}
 			}
 		}
