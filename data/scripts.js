@@ -1199,6 +1199,9 @@ exports.BattleScripts = {
 				case 'bugbite':
 					if (hasMove['uturn'] && !setupType) rejected = true;
 					break;
+				case 'darkpulse':
+					if (hasMove['crunch'] && setupType !== 'Special') rejected = true;
+					break;
 				case 'suckerpunch':
 					if ((hasMove['crunch'] || hasMove['darkpulse']) && (hasMove['knockoff'] || hasMove['pursuit'])) rejected = true;
 					if (!setupType && hasMove['foulplay'] && (hasMove['darkpulse'] || hasMove['pursuit'])) rejected = true;
@@ -2480,6 +2483,9 @@ exports.BattleScripts = {
 					break;
 				case 'boltstrike':
 					if (!setupType && hasMove['fusionbolt']) rejected = true;
+					break;
+				case 'darkpulse':
+					if (hasMove['crunch'] && setupType !== 'Special') rejected = true;
 					break;
 				case 'hiddenpowerice':
 					if (hasMove['icywind']) rejected = true;
