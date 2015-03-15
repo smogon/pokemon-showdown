@@ -1574,6 +1574,9 @@ exports.BattleScripts = {
 			if (abilities.indexOf('Swift Swim') > -1 && hasMove['raindance']) {
 				ability = 'Swift Swim';
 			}
+			if (abilities.indexOf('Unburden') > -1 && hasMove['acrobatics']) {
+				ability = 'Unburden';
+			}
 			if (template.id === 'combee') {
 				// Combee always gets Hustle but its only physical move is Endeavor, which loses accuracy
 				ability = 'Honey Gather';
