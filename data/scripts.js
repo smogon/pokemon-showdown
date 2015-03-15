@@ -1706,6 +1706,8 @@ exports.BattleScripts = {
 			item = 'Air Balloon';
 		} else if (ability === 'Speed Boost' && hasMove['protect'] && counter.Physical + counter.Special > 2) {
 			item = 'Life Orb';
+		} else if (hasMove['outrage'] && (setupType || ability === 'Multiscale')) {
+			item = 'Lum Berry';
 		} else if (ability === 'Moody' || hasMove['clearsmog'] || hasMove['detect'] || hasMove['protect'] || hasMove['substitute']) {
 			item = 'Leftovers';
 		} else if (hasMove['lightscreen'] || hasMove['reflect']) {
@@ -1716,8 +1718,6 @@ exports.BattleScripts = {
 			item = 'Assault Vest';
 		} else if (counter.Physical + counter.Special >= 4) {
 			item = (hasMove['extremespeed'] || hasMove['fakeout'] || hasMove['return'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
-		} else if (hasMove['outrage'] && (setupType || ability === 'Multiscale')) {
-			item = 'Lum Berry';
 		} else if (counter.Physical + counter.Special >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
 		} else if ((counter.Physical + counter.Special >= 3) && ability !== 'Sturdy' && !hasMove['dragontail']) {
