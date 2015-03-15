@@ -1834,7 +1834,7 @@ exports.Formats = [
 			}
 			if (move.id === 'vcreate' && name === 'v4') {
 				move.name = 'V-Generate';
-				move.self.boosts = {accuracy: -2};
+				move.self = {boosts: {accuracy: -2}};
 				move.accuracy = 85;
 				move.secondaries = [{chance: 50, status: 'brn'}];
 			}
