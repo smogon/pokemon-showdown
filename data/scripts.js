@@ -1717,7 +1717,7 @@ exports.BattleScripts = {
 		} else if (counter.Physical + counter.Special >= 4 && (template.baseStats.def + template.baseStats.spd > 189 || hasMove['rapidspin'])) {
 			item = 'Assault Vest';
 		} else if (counter.Physical + counter.Special >= 4) {
-			item = (hasMove['extremespeed'] || hasMove['fakeout'] || hasMove['return'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
+			item = (!!counter['ate'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
 		} else if (counter.Physical + counter.Special >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
 		} else if ((counter.Physical + counter.Special >= 3) && ability !== 'Sturdy' && !hasMove['dragontail']) {
