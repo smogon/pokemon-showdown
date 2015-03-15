@@ -531,6 +531,7 @@ var commands = exports.commands = {
 		connection.popup(buffer.join("\n\n"));
 	},
 
+	auth: 'userauth',
 	userauth: function (target, room, user, connection) {
 		var targetId = toId(target) || user.userid;
 		var targetUser = Users.getExact(targetId);
