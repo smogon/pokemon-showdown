@@ -34,8 +34,13 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['OU'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.canMegaEvo = false;
+		onStart: function () {
+			for (var i = 0; i < this.sides[0].pokemon.length; i++) {
+				this.sides[0].pokemon[i].canMegaEvo = false;
+			}
+			for (var i = 0; i < this.sides[1].pokemon.length; i++) {
+				this.sides[1].pokemon[i].canMegaEvo = false;
+			}
 		}
 	},
 	{
