@@ -3688,7 +3688,7 @@ exports.Formats = [
 		ruleset: ['Cancel Mod']
 	},
 	{
-		name: "[Gen 3] OU (beta)",
+		name: "[Gen 3] OU",
 		section: "Past Generations",
 
 		mod: 'gen3',
@@ -3696,7 +3696,7 @@ exports.Formats = [
 		banlist: ['Uber', 'Smeargle + Ingrain']
 	},
 	{
-		name: "[Gen 3] Ubers (beta)",
+		name: "[Gen 3] Ubers",
 		section: "Past Generations",
 
 		mod: 'gen3',
