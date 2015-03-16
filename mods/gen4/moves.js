@@ -298,10 +298,7 @@ exports.BattleMovedex = {
 	doomdesire: {
 		inherit: true,
 		accuracy: 85,
-		basePower: 120,
-		onModifyMove: function (move) {
-			move.type = '???';
-		}
+		basePower: 120
 	},
 	drainpunch: {
 		inherit: true,
@@ -466,10 +463,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 90,
 		basePower: 80,
-		pp: 15,
-		onModifyMove: function (move) {
-			move.type = '???';
-		}
+		pp: 15
 	},
 	gigadrain: {
 		inherit: true,
