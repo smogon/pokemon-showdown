@@ -49,7 +49,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			def: 2
 		},
@@ -214,7 +213,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			spe: 2
 		},
@@ -297,7 +295,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			spd: 2
 		},
@@ -363,7 +360,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		volatileStatus: 'aquaring',
 		effect: {
 			onStart: function (pokemon) {
@@ -427,7 +423,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, distance: 1},
-		isSnatchable: true,
 		onHit: function (pokemon, source) {
 			var side = pokemon.side;
 			for (var i = 0; i < side.pokemon.length; i++) {
@@ -680,7 +675,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		onTryHit: function (pokemon) {
 			var hasContrary = pokemon.hasAbility('contrary');
 			if ((!hasContrary && pokemon.boosts.spe === 6) || (hasContrary && pokemon.boosts.spe === -6)) {
@@ -789,7 +783,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			def: 2
 		},
@@ -889,7 +882,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		onHit: function (target) {
 			if (target.hp <= target.maxhp / 2 || target.boosts.atk >= 6 || target.maxhp === 1) { // Shedinja clause
 				return false;
@@ -1478,7 +1470,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			def: 1
@@ -1558,7 +1549,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			spa: 1,
 			spd: 1
@@ -1579,7 +1569,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		onHit: function (target) {
 			var newType = 'Normal';
 			if (this.isTerrain('electricterrain')) {
@@ -1654,7 +1643,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		volatileStatus: 'charge',
 		onHit: function (pokemon) {
 			this.add('-activate', pokemon, 'move: Charge');
@@ -1856,7 +1844,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			def: 1,
@@ -1977,7 +1964,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		onHit: function (target) {
 			var type = this.getMove(target.moveset[0].id).type;
 			if (target.hasType(type) || !target.setType(type)) return false;
@@ -2061,7 +2047,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			def: 1,
 			spd: 1
@@ -2083,7 +2068,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			def: 3
 		},
@@ -2483,7 +2467,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			def: 1,
 			spd: 1
@@ -2504,7 +2487,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			def: 1
 		},
@@ -2978,7 +2960,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			evasion: 1
 		},
@@ -3081,7 +3062,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			spe: 1
@@ -4681,7 +4661,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		volatileStatus: 'focusenergy',
 		effect: {
 			onStart: function (pokemon) {
@@ -5581,7 +5560,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		onModifyMove: function (move) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) move.boosts = {atk: 2, spa: 2};
 		},
@@ -5837,7 +5815,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			def: 1
 		},
@@ -5941,7 +5918,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, sound: 1, distance: 1, authentic: 1},
-		isSnatchable: true,
 		isSoundBased: true, // though it isn't affected by Soundproof
 		onHit: function (pokemon, source) {
 			var side = pokemon.side;
@@ -6018,7 +5994,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		heal: [1, 2],
 		secondary: false,
 		target: "self",
@@ -6061,7 +6036,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		onTryHit: function (pokemon, target, move) {
 			if (!this.canSwitch(pokemon.side)) {
 				delete move.selfdestruct;
@@ -6632,7 +6606,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			accuracy: 1
@@ -6707,7 +6680,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 1
 		},
@@ -7145,7 +7117,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, authentic: 1},
-		isSnatchable: true,
 		volatileStatus: 'imprison',
 		effect: {
 			noCopy: true,
@@ -7243,7 +7214,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
-		isSnatchable: true,
 		volatileStatus: 'ingrain',
 		effect: {
 			onStart: function (pokemon) {
@@ -7308,7 +7278,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			def: 2
 		},
@@ -7782,7 +7751,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		sideCondition: 'lightscreen',
 		effect: {
 			duration: 5,
@@ -7932,7 +7900,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		sideCondition: 'luckychant',
 		effect: {
 			duration: 5,
@@ -7963,7 +7930,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		onTryHit: function (pokemon, target, move) {
 			if (!this.canSwitch(pokemon.side)) {
 				delete move.selfdestruct;
@@ -8205,7 +8171,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1, distance: 1, authentic: 1},
-		isSnatchable: true,
 		onHitSide: function (side, source) {
 			var targets = [];
 			for (var p in side.active) {
@@ -8232,7 +8197,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, gravity: 1},
-		isSnatchable: true,
 		volatileStatus: 'magnetrise',
 		effect: {
 			duration: 5,
@@ -8305,7 +8269,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
-		isSnatchable: true,
 		stallingMove: true, // Note: stallingMove is not used anywhere.
 		volatileStatus: 'matblock',
 		onTryHitSide: function (side, source) {
@@ -8414,7 +8377,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 1
 		},
@@ -8684,7 +8646,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		heal: [1, 2],
 		secondary: false,
 		target: "self",
@@ -8758,7 +8719,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		volatileStatus: 'minimize',
 		effect: {
 			noCopy: true,
@@ -8916,7 +8876,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		sideCondition: 'mist',
 		effect: {
 			duration: 5,
@@ -9046,7 +9005,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		onHit: function (pokemon) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(this.modify(pokemon.maxhp, 0.667));
@@ -9073,7 +9031,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		onHit: function (pokemon) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(this.modify(pokemon.maxhp, 0.667));
@@ -9245,7 +9202,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			spa: 2
 		},
@@ -10240,7 +10196,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		volatileStatus: 'powertrick',
 		effect: {
 			onStart: function (pokemon) {
@@ -10736,7 +10691,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 3,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		sideCondition: 'quickguard',
 		onTryHitSide: function (side, source) {
 			return this.willAct();
@@ -10784,7 +10738,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			spa: 1,
 			spd: 1,
@@ -10995,7 +10948,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		heal: [1, 2],
 		secondary: false,
 		target: "self",
@@ -11013,7 +10965,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		onHit: function (pokemon) {
 			if (!pokemon.item && pokemon.lastItem) {
 				pokemon.setItem(pokemon.lastItem);
@@ -11037,7 +10988,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		sideCondition: 'reflect',
 		effect: {
 			duration: 5,
@@ -11110,7 +11060,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		onHit: function (pokemon) {
 			pokemon.cureStatus();
 		},
@@ -11168,7 +11117,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		onHit: function (target) {
 			if (target.hp >= target.maxhp) return false;
 			if (!target.setStatus('slp')) return false;
@@ -11378,7 +11326,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			spe: 2
 		},
@@ -11597,7 +11544,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		heal: [1, 2],
 		self: {
 			volatileStatus: 'roost'
@@ -11756,7 +11702,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		sideCondition: 'safeguard',
 		effect: {
 			duration: 5,
@@ -12217,7 +12162,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 1
 		},
@@ -12255,7 +12199,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 2,
 			spa: 2,
@@ -12280,7 +12223,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			spe: 2
@@ -12673,7 +12615,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		heal: [1, 2],
 		secondary: false,
 		target: "self",
@@ -12984,7 +12925,7 @@ exports.BattleMovedex = {
 				this.add('-singleturn', pokemon, 'Snatch');
 			},
 			onAnyTryMove: function (source, target, move) {
-				if (move && move.isSnatchable && move.sourceEffect !== 'snatch') {
+				if (move && move.flags['snatch'] && move.sourceEffect !== 'snatch') {
 					var snatchUser = this.effectData.source;
 					snatchUser.removeVolatile('snatch');
 					this.add('-activate', snatchUser, 'Snatch', '[of] ' + source);
@@ -13106,7 +13047,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		heal: [1, 2],
 		secondary: false,
 		target: "self",
@@ -13491,7 +13431,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		onTryHit: function (pokemon) {
 			if (pokemon.volatiles['stockpile'] && pokemon.volatiles['stockpile'].layers >= 3) return false;
 		},
@@ -13752,7 +13691,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
-		isSnatchable: true,
 		volatileStatus: 'Substitute',
 		onTryHit: function (target) {
 			if (target.volatiles['substitute']) {
@@ -13981,7 +13919,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		onTryHit: function (pokemon) {
 			if (!pokemon.volatiles['stockpile'] || !pokemon.volatiles['stockpile'].layers) return false;
 		},
@@ -14101,7 +14038,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 2
 		},
@@ -14141,7 +14077,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		onHit: function (pokemon) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(this.modify(pokemon.maxhp, 0.667));
@@ -14185,7 +14120,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			spa: 3
 		},
@@ -14244,7 +14178,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		sideCondition: 'tailwind',
 		effect: {
 			duration: 4,
@@ -15638,7 +15571,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		sideCondition: 'wideguard',
 		onTryHitSide: function (side, source) {
 			return this.willAct();
@@ -15739,7 +15671,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		isSnatchable: true,
 		sideCondition: 'Wish',
 		effect: {
 			duration: 2,
@@ -15772,7 +15703,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			def: 1
 		},
@@ -15850,7 +15780,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		isSnatchable: true,
 		boosts: {
 			atk: 1,
 			spa: 1
