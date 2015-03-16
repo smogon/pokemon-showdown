@@ -34,12 +34,12 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['OU'],
-		onStart: function () {
-			for (var i = 0; i < this.sides[0].pokemon.length; i++) {
-				this.sides[0].pokemon[i].canMegaEvo = false;
+		onBegin: function () {
+			for (var i = 0; i < this.p1.pokemon.length; i++) {
+				this.p1.pokemon[i].canMegaEvo = false;
 			}
-			for (var i = 0; i < this.sides[1].pokemon.length; i++) {
-				this.sides[1].pokemon[i].canMegaEvo = false;
+			for (var i = 0; i < this.p2.pokemon.length; i++) {
+				this.p2.pokemon[i].canMegaEvo = false;
 			}
 		}
 	},
