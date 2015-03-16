@@ -326,6 +326,15 @@ exports.BattleStatuses = {
 					}
 				}
 
+				// Prior to gen 5, these moves had no STAB and no effectiveness.
+				// This is done here and to moveData's type for two reasons:
+				// - modifyMove event happens before the moveHit function is run.
+				// - moveData here is different from move, as one is generated here and the other by the move itself.
+				// So here we centralise any future hit move getting typeless on hit as it should be.
+				if (this.gen < 5) {
+					posData.moveData.type = '???';
+				}
+
 				this.moveHit(target, posData.source, move, posData.moveData);
 
 				this.effectData.positions[i] = null;
