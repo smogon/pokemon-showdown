@@ -171,9 +171,9 @@ var commands = exports.commands = {
 		user.ignorePMs = true;
 		if (target in Config.groups) {
 			user.ignorePMs = target;
-			return this.sendReply("You are now blocking private messages, except from staff and " + target + ".");
+			return this.sendReply("You are now blocking private messages (including challenges), except from staff and " + target + ".");
 		}
-		return this.sendReply("You are now blocking private messages, except from staff.");
+		return this.sendReply("You are now blocking private messages (including challenges), except from staff.");
 	},
 
 	back: 'unignorepms',
