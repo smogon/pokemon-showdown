@@ -1644,27 +1644,27 @@ var commands = exports.commands = {
 		}
 		if (target === 'away' || target === 'idle') {
 			matched = true;
-			this.sendReply("/away - Blocks challenges and private messages so no one can challenge you nor PM you. Deactivate it with /back. You can also use /ignorepms and /blockchallenges.");
+			this.sendReply("/away - Blocks challenges and private messages separately. Different from /blockpms in that it will still block challenges if you're staff. Unblock them with /back.");
 		}
 		if (target === 'blockchallenges') {
 			matched = true;
-			this.sendReply("/blockchallenges - Blocks challenges so no one can challenge you. Deactivate it with /unblockchallenges.");
+			this.sendReply("/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges.");
 		}
-		if (target === 'ignorepms') {
+		if (target === 'blockpms' || target === 'ignorepms') {
 			matched = true;
-			this.sendReply("/ignorepms - Blocks private messages so no one can message you. Deactivate it with /unignorepms.");
+			this.sendReply("/blockpms - Blocks private messages (including challenges). Unblock them with /unignorepms.");
 		}
 		if (target === 'back') {
 			matched = true;
-			this.sendReply("/back - Unlocks challenges and unignores private messages so you can be challenged and PMed again. Deactivate it with /away. You can also use /unignorepms and /unblockchallenges.");
+			this.sendReply("/back - Unblocks challenges and/or private messages, if either are blocked.");
 		}
-		if (target === 'allowchallenges' || target === 'unblockchallenges') {
+		if (target === 'unblockchallenges' || target === 'allowchallenges') {
 			matched = true;
-			this.sendReply("/unblockchallenges - Unlocks challenges so you can be challenged again. Deactivate it with /blockchallenges.");
+			this.sendReply("/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.");
 		}
-		if (target === 'unignorepms') {
+		if (target === 'unblockpms' || target === 'unignorepms') {
 			matched = true;
-			this.sendReply("/unignorepms - Unblocks private messages so users can message you. Deactivate it with /ignorepms.");
+			this.sendReply("/unblockpms - Unblocks private messages and challenges. Block them with /blockpms.");
 		}
 		if (target === 'faq') {
 			matched = true;

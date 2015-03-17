@@ -160,8 +160,6 @@ var commands = exports.commands = {
 		user.lastPM = targetUser.userid;
 	},
 
-	away: 'ignorepms',
-	idle: 'ignorepms',
 	blockpm: 'ignorepms',
 	blockpms: 'ignorepms',
 	ignorepm: 'ignorepms',
@@ -176,7 +174,6 @@ var commands = exports.commands = {
 		return this.sendReply("You are now blocking private messages (including challenges), except from staff.");
 	},
 
-	back: 'unignorepms',
 	unblockpm: 'unignorepms',
 	unblockpms: 'unignorepms',
 	unignorepm: 'unignorepms',
@@ -184,6 +181,17 @@ var commands = exports.commands = {
 		if (!user.ignorePMs) return this.sendReply("You are not blocking private messages!");
 		user.ignorePMs = false;
 		return this.sendReply("You are no longer blocking private messages.");
+	},
+
+	idle: 'away',
+	away: function (target, room, user) {
+		this.parse('/blockchallenges');
+		this.parse('/blockpms ' + target);
+	},
+
+	back: function () {
+		this.parse('/unblockpms');
+		this.parse('/unblockchallenges');
 	},
 
 	makechatroom: function (target, room, user) {
