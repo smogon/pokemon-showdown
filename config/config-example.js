@@ -171,9 +171,9 @@ exports.replsocketprefix = './logs/repl/';
 exports.replsocketmode = 0600;
 
 // permissions and groups:
-//   Each entry in `groupsranking' specifies the ranking of the groups.
 //   Each entry in `groups' is a seperate group. Some of the members are "special"
 //     while the rest is just a normal permission.
+//   The order of the groups determines their ranking.
 //   The special members are as follows:
 //     - id: Specifies an id for the group.
 //     - name: Specifies the human-readable name for the group.
@@ -208,16 +208,16 @@ exports.replsocketmode = 0600;
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
-exports.groupsranking = [' ', '+', '%', '@', '\u2605', '#', '&', '~'];
-exports.groups = {
-	'~': {
+exports.grouplist = [
+	{
+		symbol: '~',
 		id: "admin",
 		name: "Administrator",
 		root: true,
-		globalonly: true,
-		rank: 7
+		globalonly: true
 	},
-	'&': {
+	{
+		symbol: '&',
 		id: "leader",
 		name: "Leader",
 		inherit: '@',
@@ -230,10 +230,10 @@ exports.groups = {
 		potd: true,
 		disableladder: true,
 		globalonly: true,
-		tournamentsmanagement: true,
-		rank: 6
+		tournamentsmanagement: true
 	},
-	'#': {
+	{
+		symbol: '#',
 		id: "owner",
 		name: "Room Owner",
 		inherit: '@',
@@ -243,10 +243,10 @@ exports.groups = {
 		declare: true,
 		modchatall: true,
 		roomonly: true,
-		tournamentsmanagement: true,
-		rank: 5
+		tournamentsmanagement: true
 	},
-	'\u2605': {
+	{
+		symbol: '\u2605',
 		id: "player",
 		name: "Player",
 		inherit: '+',
@@ -255,10 +255,10 @@ exports.groups = {
 		modchat: true,
 		roomonly: true,
 		privateroom: true,
-		joinbattle: true,
-		rank: 4
+		joinbattle: true
 	},
-	'@': {
+	{
+		symbol: '@',
 		id: "mod",
 		name: "Moderator",
 		inherit: '%',
@@ -269,10 +269,10 @@ exports.groups = {
 		forcerename: true,
 		ip: true,
 		alts: '@u',
-		tournaments: true,
-		rank: 3
+		tournaments: true
 	},
-	'%': {
+	{
+		symbol: '%',
 		id: "driver",
 		name: "Driver",
 		inherit: '+',
@@ -290,19 +290,18 @@ exports.groups = {
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
 		jeopardy: true,
-		joinbattle: true,
-		rank: 2
+		joinbattle: true
 	},
-	'+': {
+	{
+		symbol: '+',
 		id: "voice",
 		name: "Voice",
 		inherit: ' ',
-		broadcast: true,
-		rank: 1
+		broadcast: true
 	},
-	' ': {
+	{
+		symbol: ' ',
 		ip: 's',
-		alts: 's',
-		rank: 0
+		alts: 's'
 	}
-};
+];
