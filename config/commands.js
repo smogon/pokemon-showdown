@@ -1664,7 +1664,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'unblockpms' || target === 'unignorepms') {
 			matched = true;
-			this.sendReply("/unblockpms - Unblocks private messages and challenges. Block them with /blockpms.");
+			this.sendReply("/unblockpms - Unblocks private messages. Block them with /blockpms.");
 		}
 		if (target === 'faq') {
 			matched = true;
