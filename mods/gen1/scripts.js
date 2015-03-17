@@ -1,6 +1,7 @@
 /**
- * Gen 1 mechanics were fairly different, so we need to make a lot of changes to battle.js
- * using this.
+ * Gen 1 mechanics are fairly different to those we know on current gen.
+ * Therefor we need to make a lot of changes to the battle engine for this game simulation.
+ * This generation inherits all the changes from older generations, that must be taken into account when editing code.
  */
 exports.BattleScripts = {
 	inherit: 'gen2',
@@ -11,9 +12,12 @@ exports.BattleScripts = {
 		}
 	},
 	// Gen 1 stores the last damage dealt by a move in the battle.
+	// This is used for the move Counter.
 	lastDamage: 0,
 	// BattleSide scripts.
 	// In gen 1, last move information is stored on the side rather than on the active Pokémon.
+	// This is because there was actually no side, just Battle and active Pokémon effects.
+	// Side's lastMove is used for Counter and Mirror Move.
 	side: {
 		lastMove: ''
 	},
@@ -69,67 +73,10 @@ exports.BattleScripts = {
 		}
 	},
 	// Battle scripts.
-	// We need to override addQueue just to save the last used move.
-	addQueue: function (decision, noSort, side) {
-		if (decision) {
-			if (Array.isArray(decision)) {
-				for (var i = 0; i < decision.length; i++) {
-					this.addQueue(decision[i], noSort);
-				}
-				return;
-			}
-			if (!decision.side && side) decision.side = side;
-			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
-			if (!decision.choice && decision.move) decision.choice = 'move';
-			if (!decision.priority) {
-				var priorities = {
-					'beforeTurn': 100,
-					'beforeTurnMove': 99,
-					'switch': 6,
-					'runSwitch': 6.1,
-					'residual': -100,
-					'team': 102,
-					'start': 101
-				};
-				if (priorities[decision.choice]) {
-					decision.priority = priorities[decision.choice];
-				}
-			}
-			if (decision.choice === 'move') {
-				if (this.getMove(decision.move).beforeTurnCallback) {
-					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc}, true);
-				}
-			} else if (decision.choice === 'switch') {
-				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
-					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
-				}
-				decision.pokemon.switchFlag = false;
-				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.speed;
-			}
-			if (decision.move) {
-				var target;
-
-				if (!decision.targetPosition) {
-					target = this.resolveTarget(decision.pokemon, decision.move);
-					decision.targetSide = target.side;
-					decision.targetPosition = target.position;
-				}
-
-				decision.move = this.getMoveCopy(decision.move);
-				if (!decision.priority) decision.priority = decision.move.priority;
-			}
-			if (!decision.pokemon && !decision.speed) decision.speed = 1;
-			if (!decision.speed && decision.choice === 'switch' && decision.target) decision.speed = decision.target.speed;
-			if (!decision.speed) decision.speed = decision.pokemon.speed;
-
-			if (decision.choice === 'switch' && !decision.side.pokemon[0].isActive) {
-				// if there's no actives, switches happen before activations
-				decision.priority = 6.2;
-			}
-			this.queue.push(decision);
-		}
-		if (!noSort) this.queue.sort(this.comparePriority);
-	},
+	// runMove can be found in scripts.js. This function is the main one when running a move.
+	// It deals with the beforeMove and AfterMoveSelf events.
+	// This leads with partial trapping moves shennanigans after the move has been used.
+	// It also deals with how PP reduction works on gen 1.
 	runMove: function (move, pokemon, target, sourceEffect) {
 		move = this.getMove(move);
 		if (!target) target = this.resolveTarget(pokemon, move);
@@ -138,10 +85,10 @@ exports.BattleScripts = {
 		this.setActiveMove(move, pokemon, target);
 
 		if (pokemon.movedThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
-			// Prevent invulnerability from persisting until the turn ends
+			// Prevent invulnerability from persisting until the turn ends.
 			pokemon.removeVolatile('twoturnmove');
 			this.clearActiveMove(true);
-			// This is only run for sleep
+			// This is only run for sleep.
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
 			return;
 		}
@@ -190,10 +137,10 @@ exports.BattleScripts = {
 						var duration = [2, 2, 2, 3, 3, 3, 4, 5][this.random(8)];
 						pokemon.volatiles['partialtrappinglock'].duration = duration;
 						pokemon.volatiles['partialtrappinglock'].locked = target;
-						// Duration reset thus partially trapped at 2 always
+						// Duration reset thus partially trapped at 2 always.
 						target.volatiles['partiallytrapped'].duration = 2;
-						// We deduct an additional PP that was not deducted earlier
-						// Get the move position
+						// We deduct an additional PP that was not deducted earlier.
+						// Also get the move position for the PP change.
 						var usedMovePos = -1;
 						for (var m in pokemon.moveset) {
 							if (pokemon.moveset[m].id === move.id) usedMovePos = m;
@@ -202,14 +149,17 @@ exports.BattleScripts = {
 							// If we were on the middle of the 0 PP sequence, the PPs get reset to 63.
 							pokemon.moveset[usedMovePos].pp = 63;
 						} else {
-							// Otherwise, plain reduct
+							// Otherwise, plain reduct.
 							pokemon.deductPP(move, null, target);
 						}
 					}
 				}
-			} // If we move to here, the move failed and there's no partial trapping lock
+			} // If we move to here, the move failed and there's no partial trapping lock.
 		}
 	},
+	// useMove can be found on scripts.js
+	// It is the function that actually uses the move, running ModifyMove events.
+	// It uses the move and then deals with the effects after the move.
 	useMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMove(move);
@@ -230,7 +180,7 @@ exports.BattleScripts = {
 		}
 		move = this.runEvent('ModifyMove', pokemon, target, move, move);
 		if (baseMove.target !== move.target) {
-			// Check again
+			// Check again, this shouldn't ever happen on Gen 1.
 			target = this.resolveTarget(pokemon, move);
 		}
 		if (!move) return false;
@@ -238,7 +188,7 @@ exports.BattleScripts = {
 		var attrs = '';
 		var missed = false;
 		if (pokemon.fainted) {
-			// Removing screens upon faint
+			// Removing screens upon faint.
 			pokemon.side.removeSideCondition('reflect');
 			pokemon.side.removeSideCondition('lightscreen');
 			return false;
@@ -289,6 +239,9 @@ exports.BattleScripts = {
 		}
 		return true;
 	},
+	// tryMoveHit can be found on scripts.js
+	// This function attempts a move hit and returns the attempt result before the actual hit happens.
+	// It deals with partial trapping weirdness and accuracy bugs as well.
 	tryMoveHit: function (target, pokemon, move, spreadHit) {
 		var boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		var doSelfDestruct = true;
@@ -405,6 +358,9 @@ exports.BattleScripts = {
 
 		return damage;
 	},
+	// move Hit can be found on scripts.js
+	// It deals with the actual move hit, as the name indicates, dealing damage and/or effects.
+	// This function also deals with the Gen 1 Substitute behaviour on the hitting process.
 	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
 		var damage = 0;
 		move = this.getMoveCopy(move);
@@ -589,6 +545,152 @@ exports.BattleScripts = {
 
 		return damage;
 	},
+	// boost can be found on battle-engine.js on Battle object.
+	// It deals with Pokémon stat boosting, including Gen 1 buggy behaviour with burn and paralyse.
+	boost: function (boost, target, source, effect) {
+		if (this.event) {
+			if (!target) target = this.event.target;
+			if (!source) source = this.event.source;
+			if (!effect) effect = this.effect;
+		}
+		if (!target || !target.hp) return 0;
+		effect = this.getEffect(effect);
+		boost = this.runEvent('Boost', target, source, effect, Object.clone(boost));
+		for (var i in boost) {
+			var currentBoost = {};
+			currentBoost[i] = boost[i];
+			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
+				var msg = '-boost';
+				if (boost[i] < 0) {
+					msg = '-unboost';
+					boost[i] = -boost[i];
+					// Re-add attack and speed drops if not present
+					if (i === 'atk' && target.status === 'brn' && !target.volatiles['brnattackdrop']) {
+						target.addVolatile('brnattackdrop');
+					}
+					if (i === 'spe' && target.status === 'par' && !target.volatiles['parspeeddrop']) {
+						target.addVolatile('parspeeddrop');
+					}
+				} else {
+					// Check for boost increases deleting attack or speed drops
+					if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
+						target.removeVolatile('brnattackdrop');
+					}
+					if (i === 'spe' && target.status === 'par' && target.volatiles['parspeeddrop']) {
+						target.removeVolatile('parspeeddrop');
+					}
+				}
+				if (effect.effectType === 'Move') {
+					this.add(msg, target, i, boost[i]);
+				} else {
+					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
+				}
+				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
+			}
+		}
+		this.runEvent('AfterBoost', target, source, effect, boost);
+	},
+	// damage can be found in battle-engine.js on the Battle object. Not to confuse with BattlePokemon.prototype.damage
+	// It calculates and executes the damage damage from source to target with effect.
+	// It also deals with recoil and drains.
+	damage: function (damage, target, source, effect) {
+		if (this.event) {
+			if (!target) target = this.event.target;
+			if (!source) source = this.event.source;
+			if (!effect) effect = this.effect;
+		}
+		if (!target || !target.hp) return 0;
+		effect = this.getEffect(effect);
+		if (!(damage || damage === 0)) return damage;
+		if (damage !== 0) damage = this.clampIntRange(damage, 1);
+
+		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
+			damage = this.runEvent('Damage', target, source, effect, damage);
+			if (!(damage || damage === 0)) {
+				this.debug('damage event failed');
+				return damage;
+			}
+		}
+		if (damage !== 0) damage = this.clampIntRange(damage, 1);
+		if (!(effect.id in {'recoil':1, 'drain':1})) target.battle.lastDamage = damage;
+		damage = target.damage(damage, source, effect);
+		if (source) source.lastDamage = damage;
+		var name = effect.fullname;
+		if (name === 'tox') name = 'psn';
+		switch (effect.id) {
+		case 'partiallytrapped':
+			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
+			break;
+		default:
+			if (effect.effectType === 'Move') {
+				this.add('-damage', target, target.getHealth);
+			} else if (source && source !== target) {
+				this.add('-damage', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
+			} else {
+				this.add('-damage', target, target.getHealth, '[from] ' + name);
+			}
+			break;
+		}
+
+		if (effect.recoil && source) {
+			this.damage(this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
+		}
+		if (effect.drain && source) {
+			this.heal(this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
+		}
+
+		if (target.fainted || target.hp <= 0) {
+			this.faint(target);
+			this.queue = [];
+		} else {
+			damage = this.runEvent('AfterDamage', target, source, effect, damage);
+		}
+
+		return damage;
+	},
+	// directDamage can be found on battle-engine.js in Battle object
+	// It deals direct damage damage from source to target with effect.
+	// It also deals with Gen 1 weird Substitute behaviour.
+	directDamage: function (damage, target, source, effect) {
+		if (this.event) {
+			if (!target) target = this.event.target;
+			if (!source) source = this.event.source;
+			if (!effect) effect = this.effect;
+		}
+		if (!target || !target.hp) return 0;
+		if (!damage) return 0;
+		damage = this.clampIntRange(damage, 1);
+		// Check here for Substitute on confusion since it's not exactly a move that causes the damage and thus it can't TryMoveHit.
+		// The hi jump kick recoil also hits the sub.
+		if (effect.id in {'confusion': 1, 'highjumpkick': 1} && target.volatiles['substitute']) {
+			target.volatiles['substitute'].hp -= damage;
+			if (target.volatiles['substitute'].hp <= 0) {
+				target.removeVolatile('substitute');
+				target.subFainted = true;
+			} else {
+				this.add('-activate', target, 'Substitute', '[damage]');
+			}
+		} else {
+			damage = target.damage(damage, source, effect);
+			// Now we sent the proper -damage.
+			switch (effect.id) {
+			case 'strugglerecoil':
+				this.add('-damage', target, target.getHealth, '[from] recoil');
+				break;
+			case 'confusion':
+				this.add('-damage', target, target.getHealth, '[from] confusion');
+				break;
+			default:
+				this.add('-damage', target, target.getHealth);
+				break;
+			}
+			if (target.fainted) this.faint(target);
+		}
+
+		return damage;
+	},
+	// getDamage can be found on battle-engine.js on the Battle object.
+	// It calculates the damage pokemon does to target with move.
 	getDamage: function (pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
 		if (typeof move === 'string') move = this.getMove(move);
@@ -799,113 +901,13 @@ exports.BattleScripts = {
 		// And we are done.
 		return Math.floor(damage);
 	},
-	boost: function (boost, target, source, effect) {
-		// Editing boosts to take into account para and burn stat drops glitches
-		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
-		}
-		if (!target || !target.hp) return 0;
-		effect = this.getEffect(effect);
-		boost = this.runEvent('Boost', target, source, effect, Object.clone(boost));
-		for (var i in boost) {
-			var currentBoost = {};
-			currentBoost[i] = boost[i];
-			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
-				var msg = '-boost';
-				if (boost[i] < 0) {
-					msg = '-unboost';
-					boost[i] = -boost[i];
-					// Re-add attack and speed drops if not present
-					if (i === 'atk' && target.status === 'brn' && !target.volatiles['brnattackdrop']) {
-						target.addVolatile('brnattackdrop');
-					}
-					if (i === 'spe' && target.status === 'par' && !target.volatiles['parspeeddrop']) {
-						target.addVolatile('parspeeddrop');
-					}
-				} else {
-					// Check for boost increases deleting attack or speed drops
-					if (i === 'atk' && target.status === 'brn' && target.volatiles['brnattackdrop']) {
-						target.removeVolatile('brnattackdrop');
-					}
-					if (i === 'spe' && target.status === 'par' && target.volatiles['parspeeddrop']) {
-						target.removeVolatile('parspeeddrop');
-					}
-				}
-				if (effect.effectType === 'Move') {
-					this.add(msg, target, i, boost[i]);
-				} else {
-					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
-				}
-				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
-			}
-		}
-		this.runEvent('AfterBoost', target, source, effect, boost);
-	},
-	damage: function (damage, target, source, effect) {
-		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
-		}
-		if (!target || !target.hp) return 0;
-		effect = this.getEffect(effect);
-		if (!(damage || damage === 0)) return damage;
-		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-
-		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
-			damage = this.runEvent('Damage', target, source, effect, damage);
-			if (!(damage || damage === 0)) {
-				this.debug('damage event failed');
-				return damage;
-			}
-		}
-		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-		if (!(effect.id in {'recoil':1, 'drain':1})) target.battle.lastDamage = damage;
-		damage = target.damage(damage, source, effect);
-		if (source) source.lastDamage = damage;
-		var name = effect.fullname;
-		if (name === 'tox') name = 'psn';
-		switch (effect.id) {
-		case 'partiallytrapped':
-			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
-			break;
-		default:
-			if (effect.effectType === 'Move') {
-				this.add('-damage', target, target.getHealth);
-			} else if (source && source !== target) {
-				this.add('-damage', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
-			} else {
-				this.add('-damage', target, target.getHealth, '[from] ' + name);
-			}
-			break;
-		}
-
-		if (effect.recoil && source) {
-			this.damage(this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
-		}
-		if (effect.drain && source) {
-			this.heal(this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
-		}
-
-		if (target.fainted || target.hp <= 0) {
-			this.faint(target);
-			this.queue = [];
-		} else {
-			damage = this.runEvent('AfterDamage', target, source, effect, damage);
-		}
-
-		return damage;
-	},
-	// This is random teams making for gen 1
+	// This is random teams making for gen 1.
+	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam: function (side) {
 		var teamdexno = [];
 		var team = [];
 
-		//pick six random pokmeon--no repeats, even among formes
-		//also need to either normalize for formes or select formes at random
-		//unreleased are okay. No CAP for now, but maybe at some later date
+		// Pick six random Pokémon, no repeats.
 		for (var i = 0; i < 6; i++) {
 			while (true) {
 				var x = Math.floor(Math.random() * 151) + 1;
@@ -917,7 +919,7 @@ exports.BattleScripts = {
 		}
 
 		for (var i = 0; i < 6; i++) {
-			//choose forme
+			// Choose forme.
 			var formes = [];
 			for (var j in this.data.Pokedex) {
 				if (this.data.Pokedex[j].num === teamdexno[i] && this.getTemplate(this.data.Pokedex[j].species).learnset && this.data.Pokedex[j].species !== 'Pichu-Spiky-eared') {
@@ -927,9 +929,8 @@ exports.BattleScripts = {
 			var poke = formes.sample();
 			var template = this.getTemplate(poke);
 
-			//level balance--calculate directly from stats rather than using some silly lookup table
-			var mbstmin = 1307; //sunkern has the lowest modified base stat total, and that total is 807
-
+			// Level balance: calculate directly from stats rather than using some silly lookup table.
+			var mbstmin = 1307; // sunkern has the lowest modified base stat total, and that total is 807
 			var stats = template.baseStats;
 
 			// Modified base stat total assumes 30 IVs, 255 EVs in every stat
@@ -955,14 +956,14 @@ exports.BattleScripts = {
 				level++;
 			}
 
-			// Random IVs
+			// Random DVs
 			var ivs = {
-				hp: Math.floor(Math.random() * 31),
-				atk: Math.floor(Math.random() * 31),
-				def: Math.floor(Math.random() * 31),
-				spa: Math.floor(Math.random() * 31),
-				spd: Math.floor(Math.random() * 31),
-				spe: Math.floor(Math.random() * 31)
+				hp: Math.floor(Math.random() * 30),
+				atk: Math.floor(Math.random() * 30),
+				def: Math.floor(Math.random() * 30),
+				spa: Math.floor(Math.random() * 30),
+				spd: Math.floor(Math.random() * 30),
+				spe: Math.floor(Math.random() * 30)
 			};
 
 			// ALl EVs
@@ -975,7 +976,7 @@ exports.BattleScripts = {
 				spe: 255
 			};
 
-			// Four random unique moves from movepool. don't worry about "attacking" or "viable"
+			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			var moves;
 			var pool = ['struggle'];
 			pool = Object.keys(template.learnset);
@@ -1001,6 +1002,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
+	// Random team generation for Gen 1 Random Battles.
 	randomTeam: function (side) {
 		// Get what we need ready.
 		var keys = [];
@@ -1088,10 +1090,11 @@ exports.BattleScripts = {
 
 		return pokemon;
 	},
+	// Random set generation for Gen 1 Random Battles.
 	randomSet: function (template, i) {
 		if (i === undefined) i = 1;
 		template = this.getTemplate(template);
-		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1
+		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1.
 
 		var moveKeys = template.randomBattleMoves;
 		moveKeys = moveKeys.randomize();
@@ -1292,204 +1295,5 @@ exports.BattleScripts = {
 			shiny: false,
 			gender: false
 		};
-	},
-	directDamage: function (damage, target, source, effect) {
-		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
-		}
-		if (!target || !target.hp) return 0;
-		if (!damage) return 0;
-		damage = this.clampIntRange(damage, 1);
-		// Check here for Substitute on confusion since it's not exactly a move that causes the damage and thus it can't TryMoveHit.
-		// The hi jump kick recoil also hits the sub.
-		if (effect.id in {'confusion': 1, 'highjumpkick': 1} && target.volatiles['substitute']) {
-			target.volatiles['substitute'].hp -= damage;
-			if (target.volatiles['substitute'].hp <= 0) {
-				target.removeVolatile('substitute');
-				target.subFainted = true;
-			} else {
-				this.add('-activate', target, 'Substitute', '[damage]');
-			}
-		} else {
-			damage = target.damage(damage, source, effect);
-			// Now we sent the proper -damage.
-			switch (effect.id) {
-			case 'strugglerecoil':
-				this.add('-damage', target, target.getHealth, '[from] recoil');
-				break;
-			case 'confusion':
-				this.add('-damage', target, target.getHealth, '[from] confusion');
-				break;
-			default:
-				this.add('-damage', target, target.getHealth);
-				break;
-			}
-			if (target.fainted) this.faint(target);
-		}
-
-		return damage;
-	},
-	runDecision: function (decision) {
-		// We have to declare here the vars we are going to use on the switch outside of blocks due to the let hack on the gulpfile.
-		var pokemon, beginCallback, target, i;
-
-		// returns whether or not we ended in a callback
-		switch (decision.choice) {
-		case 'start':
-			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
-			beginCallback = this.getFormat().onBegin;
-			if (beginCallback) beginCallback.call(this);
-
-			this.add('start');
-			for (var pos = 0; pos < this.p1.active.length; pos++) {
-				this.switchIn(this.p1.pokemon[pos], pos);
-			}
-			for (var pos = 0; pos < this.p2.active.length; pos++) {
-				this.switchIn(this.p2.pokemon[pos], pos);
-			}
-			for (var pos = 0; pos < this.p1.pokemon.length; pos++) {
-				pokemon = this.p1.pokemon[pos];
-				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
-			}
-			for (var pos = 0; pos < this.p2.pokemon.length; pos++) {
-				pokemon = this.p2.pokemon[pos];
-				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
-			}
-			this.midTurn = true;
-			break;
-		case 'move':
-			if (!decision.pokemon.isActive) return false;
-			if (decision.pokemon.fainted) return false;
-			this.runMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
-			break;
-		case 'beforeTurnMove':
-			if (!decision.pokemon.isActive) return false;
-			if (decision.pokemon.fainted) return false;
-			this.debug('before turn callback: ' + decision.move.id);
-			target = this.getTarget(decision);
-			if (!target) return false;
-			decision.move.beforeTurnCallback.call(this, decision.pokemon, target);
-			break;
-		case 'event':
-			this.runEvent(decision.event, decision.pokemon);
-			break;
-		case 'team':
-			i = parseInt(decision.team[0], 10) - 1;
-			if (i >= 6 || i < 0) return;
-
-			if (decision.team[1]) {
-				// validate the choice
-				var len = decision.side.pokemon.length;
-				var newPokemon = [null, null, null, null, null, null].slice(0, len);
-				for (var j = 0; j < len; j++) {
-					var i = parseInt(decision.team[j], 10) - 1;
-					newPokemon[j] = decision.side.pokemon[i];
-				}
-				var reject = false;
-				for (var j = 0; j < len; j++) {
-					if (!newPokemon[j]) reject = true;
-				}
-				if (!reject) {
-					for (var j = 0; j < len; j++) {
-						newPokemon[j].position = j;
-					}
-					decision.side.pokemon = newPokemon;
-					return;
-				}
-			}
-
-			if (i === 0) return;
-			pokemon = decision.side.pokemon[i];
-			if (!pokemon) return;
-			decision.side.pokemon[i] = decision.side.pokemon[0];
-			decision.side.pokemon[0] = pokemon;
-			decision.side.pokemon[i].position = i;
-			decision.side.pokemon[0].position = 0;
-			// we return here because the update event would crash since there are no active pokemon yet
-			return;
-		case 'pass':
-			if (!decision.priority || decision.priority <= 101) return;
-			if (decision.pokemon) {
-				decision.pokemon.switchFlag = false;
-			}
-			break;
-		case 'switch':
-			if (decision.pokemon) {
-				decision.pokemon.beingCalledBack = true;
-				var lastMove = this.getMove(decision.pokemon.lastMove);
-				if (lastMove.selfSwitch !== 'copyvolatile') {
-					this.runEvent('BeforeSwitchOut', decision.pokemon);
-				}
-				if (!this.runEvent('SwitchOut', decision.pokemon)) {
-					break;
-				}
-				this.singleEvent('End', this.getAbility(decision.pokemon.ability), decision.pokemon.abilityData, decision.pokemon);
-			}
-			if (decision.target.isActive) {
-				this.debug('Switch target is already active');
-				break;
-			}
-			this.switchIn(decision.target, decision.pokemon.position);
-			break;
-		case 'runSwitch':
-			this.runEvent('SwitchIn', decision.pokemon);
-			if (!decision.pokemon.side.faintedThisTurn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
-			if (!decision.pokemon.hp) break;
-			decision.pokemon.isStarted = true;
-			if (!decision.pokemon.fainted) {
-				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
-				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
-			}
-			break;
-		case 'beforeTurn':
-			this.eachEvent('BeforeTurn');
-			break;
-		case 'residual':
-			this.add('');
-			this.clearActiveMove(true);
-			this.residualEvent('Residual');
-			break;
-		}
-		this.clearActiveMove();
-
-		// fainting
-		this.faintMessages();
-		if (this.ended) return true;
-
-		// switching (fainted pokemon, etc)
-
-		if (!this.queue.length || this.queue[0].choice in {move:1, residual:1}) {
-			// in gen 3 or earlier, switching in fainted pokemon is done after
-			// every move, rather than only at the end of the turn.
-			this.checkFainted();
-		} else if (decision.choice === 'pass') {
-			this.eachEvent('Update');
-			return false;
-		}
-
-		function hasSwitchFlag(a) { return a ? a.switchFlag : false; }
-		function removeSwitchFlag(a) { if (a) a.switchFlag = false; }
-		var p1switch = this.p1.active.any(hasSwitchFlag);
-		var p2switch = this.p2.active.any(hasSwitchFlag);
-
-		if (p1switch && !this.canSwitch(this.p1)) {
-			this.p1.active.forEach(removeSwitchFlag);
-			p1switch = false;
-		}
-		if (p2switch && !this.canSwitch(this.p2)) {
-			this.p2.active.forEach(removeSwitchFlag);
-			p2switch = false;
-		}
-
-		if (p1switch || p2switch) {
-			this.makeRequest('switch');
-			return true;
-		}
-
-		this.eachEvent('Update');
-
-		return false;
 	}
 };
