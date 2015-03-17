@@ -2604,7 +2604,7 @@ exports.BattleFormatsData = {
 	},
 	sharpedo: {
 		randomBattleMoves: ["protect","icebeam","crunch","earthquake","waterfall","destinybond"],
-		randomDoubleBattleMoves: ["protect","hydropump","surf","icebeam","crunch","earthquake","waterfall","darkpulse","destinybond"],
+		randomDoubleBattleMoves: ["protect","icebeam","crunch","earthquake","waterfall","destinybond"],
 		tier: "UU"
 	},
 	sharpedomega: {
