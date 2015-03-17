@@ -761,6 +761,10 @@ var BattleRoom = (function () {
 			this.update();
 			this.logBattle(p1score);
 		}
+		if (Config.autosavereplays) {
+			var winninguser = Users.get(winnerid);
+			CommandParser.parse('/savereplay', this, winninguser, winninguser.connections[0]);
+		}
 		if (this.tour) {
 			var winnerid = toId(winner);
 			winner = Users.get(winner);
