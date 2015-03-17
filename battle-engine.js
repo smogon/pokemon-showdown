@@ -3552,6 +3552,7 @@ Battle = (function () {
 			break;
 		case 'runSwitch':
 			this.runEvent('SwitchIn', decision.pokemon);
+			if (this.gen === 1 && !decision.pokemon.side.faintedThisTurn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
 			if (!decision.pokemon.hp) break;
 			decision.pokemon.isStarted = true;
 			if (!decision.pokemon.fainted) {
