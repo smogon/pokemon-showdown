@@ -1039,6 +1039,12 @@ User = (function () {
 		for (var i in connection.rooms) {
 			var room = connection.rooms[i];
 			if (!this.roomCount[i]) {
+				if (room.bannedUsers && this.userid in room.bannedUsers) {
+					room.bannedIps[connection.ip] = room.bannedUsers[this.userid];
+					connection.sendTo(room.id, '|deinit');
+					connection.leaveRoom(room);
+					continue;
+				}
 				room.onJoin(this, connection, true);
 				this.roomCount[i] = 0;
 			}
