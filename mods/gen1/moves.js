@@ -487,6 +487,11 @@ exports.BattleMovedex = {
 				return false;
 			}
 		},
+		effect: {
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'Light Screen');
+			}
+		},
 		target: "self",
 		type: "Psychic"
 	},
@@ -658,6 +663,11 @@ exports.BattleMovedex = {
 		onTryHit: function (pokemon) {
 			if (pokemon.volatiles['reflect']) {
 				return false;
+			}
+		},
+		effect: {
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'Reflect');
 			}
 		},
 		secondary: false,
