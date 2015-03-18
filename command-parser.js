@@ -244,7 +244,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		var context = {
 			sendReply: function (data) {
 				if (this.broadcasting) {
-					room.add(data, true);
+					room.add(data);
 				} else {
 					connection.sendTo(room, data);
 				}
@@ -256,7 +256,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				connection.popup(message);
 			},
 			add: function (data) {
-				room.add(data, true);
+				room.add(data);
 			},
 			send: function (data) {
 				room.send(data);
