@@ -745,6 +745,7 @@ var commands = exports.commands = {
 	weak: 'weakness',
 	resist: 'weakness',
 	weakness: function (target, room, user) {
+		if (!target) return this.parse('/help weakness');
 		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
 
@@ -1673,8 +1674,15 @@ var commands = exports.commands = {
 		}
 		if (target === 'effectiveness' || target === 'matchup' || target === 'eff' || target === 'type') {
 			matched = true;
-			this.sendReply("/effectiveness OR /matchup OR /eff OR /type [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.");
-			this.sendReply("!effectiveness OR !matchup OR !eff OR !type [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.");
+			this.sendReply("/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.");
+			this.sendReply("!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.");
+		}
+		if (target === 'weakness' || target === 'weaknesses' || target === 'weak' || target === 'resist') {
+			matched = true;
+			this.sendReply("/weakness [pokemon] - Provides a Pokemon's resistances, weaknesses, and immunities, ignoring abilities.");
+			this.sendReply("/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.");
+			this.sendReply("!weakness [pokemon] - Shows everyone a Pokemon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ & ~");
+			this.sendReply("!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ & ~");
 		}
 		if (target === 'dexsearch' || target === 'dsearch' || target === 'ds') {
 			matched = true;
