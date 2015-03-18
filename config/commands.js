@@ -39,6 +39,26 @@
  * return anything or return something falsy, the user won't say
  * anything.
  *
+ * A command can also be an object, in which case is treated like
+ * a namespace:
+ *
+ *   game: {
+ *     play: function (target, room, user) {
+ *       user.isPlaying = true;
+ *       this.sendReply("Playing.");
+ *     },
+ *     stop: function (target, room, user) {
+ *       user.isPlaying = false;
+ *       this.sendReply("Stopped.");
+ *     }
+ *   }
+ *
+ * These commands can be called by '/game play' and '/game stop'.
+ * Namespaces help organise commands, and nest them under
+ * one main command.
+ * Note: Multiple namespaces can be nested, but the final (innermost)
+ *       command must be a function.
+ *
  * Commands have access to the following functions:
  *
  * this.sendReply(message)
@@ -123,12 +143,18 @@
  *     target = this.canTalk(target);
  *     if (!target) return false;
  *
- * this.parse(message)
+ * this.parse(message, inNamespace)
  *   Runs the message as if the user had typed it in.
  *
  *   Mostly useful for giving help messages, like for commands that
  *   require a target:
  *     if (!target) return this.parse('/help msg');
+ *
+ *   If `inNamespace` is true, then the message is parsed in that
+ *   corresponding namespace:
+ *     // command msg is in namespace test. (ie. /test msg)
+ *     this.parse('/help', true); // is parsed as if the user said
+ *                                // '/test help'
  *
  *   After 10 levels of recursion (calling this.parse from a command
  *   called by this.parse from a command called by this.parse etc)
