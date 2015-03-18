@@ -623,9 +623,7 @@ exports.BattleScripts = {
 	},
 	getTeam: function (side, team) {
 		var format = side.battle.getFormat();
-		if (format.team === 'random') {
-			return this.randomTeam(side);
-		} else if (typeof format.team === 'string' && format.team.substr(0, 6) === 'random') {
+		if (typeof format.team === 'string' && format.team.substr(0, 6) === 'random') {
 			return this[format.team + 'Team'](side);
 		} else if (team) {
 			return team;
