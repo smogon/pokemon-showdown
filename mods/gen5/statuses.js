@@ -2,7 +2,7 @@ exports.BattleStatuses = {
 	brn: {
 		inherit: true,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move && move.category === 'Physical' && attacker && attacker.ability !== 'guts') {
+			if (move && move.category === 'Physical' && attacker && !attacker.hasAbility('guts')) {
 				return this.chainModify(0.5); // This should really take place directly in the damage function but it's here for now
 			}
 		}
