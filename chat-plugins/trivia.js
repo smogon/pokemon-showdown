@@ -386,7 +386,7 @@ var Trivia = (function () {
 	return Trivia;
 })();
 
-var triviaRoom = Rooms.get('trivia');
+var triviaRoom = Rooms.get('lobby');
 if (triviaRoom) {
 	if (triviaRoom.plugin) {
 		triviaData = triviaRoom.plugin.data;
@@ -397,7 +397,7 @@ if (triviaRoom) {
 			write: writeTriviaData,
 			trivia: trivia
 		};
-		var questionWorkshop = Rooms.get('questionworkshop');
+		var questionWorkshop = Rooms.get('lobby');
 		if (questionWorkshop) questionWorkshop.plugin = triviaRoom.plugin;
 	}
 }
@@ -711,7 +711,7 @@ var commands = {
 	},
 
 	help: function (target, room) {
-		if ((room.id !== 'trivia' && room.id !== 'questionworkshop') || !this.canBroadcast()) return false;
+		if ((room.id !== 'lobby') || !this.canBroadcast()) return false;
 
 		target = toId(target);
 		switch (target) {
