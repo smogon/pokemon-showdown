@@ -688,21 +688,23 @@ exports.BattleMovedex = {
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function (pokemon) {
-				if (pokemon.weightkg !== 0.1) {
+				if (pokemon.template.weightkg > 0.1) {
 					this.effectData.multiplier = 1;
 					this.add('-start', pokemon, 'Autotomize');
 				}
 			},
 			onRestart: function (pokemon) {
-				if (pokemon.weightkg !== 0.1) {
+				if (pokemon.template.weightkg - (this.effectData.multiplier * 100) > 0.1) {
 					this.effectData.multiplier++;
 					this.add('-start', pokemon, 'Autotomize');
 				}
 			},
-			onModifyPokemon: function (pokemon) {
+			onModifyWeightPriority: 1,
+			onModifyWeight: function (weight, pokemon) {
 				if (this.effectData.multiplier) {
-					pokemon.weightkg -= this.effectData.multiplier * 100;
-					if (pokemon.weightkg < 0.1) pokemon.weightkg = 0.1;
+					weight -= this.effectData.multiplier * 100;
+					if (weight < 0.1) weight = 0.1;
+					return weight;
 				}
 			}
 		},
@@ -5281,23 +5283,24 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function (pokemon, target) {
-			if (target.weightkg >= 200) {
+			var targetWeight = target.getWeight();
+			if (targetWeight >= 200) {
 				this.debug('120 bp');
 				return 120;
 			}
-			if (target.weightkg >= 100) {
+			if (targetWeight >= 100) {
 				this.debug('100 bp');
 				return 100;
 			}
-			if (target.weightkg >= 50) {
+			if (targetWeight >= 50) {
 				this.debug('80 bp');
 				return 80;
 			}
-			if (target.weightkg >= 25) {
+			if (targetWeight >= 25) {
 				this.debug('60 bp');
 				return 60;
 			}
-			if (target.weightkg >= 10) {
+			if (targetWeight >= 10) {
 				this.debug('40 bp');
 				return 40;
 			}
@@ -6132,8 +6135,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function (pokemon, target) {
-			var targetWeight = target.weightkg;
-			var pokemonWeight = pokemon.weightkg;
+			var targetWeight = target.getWeight();
+			var pokemonWeight = pokemon.getWeight();
 			if (pokemonWeight > targetWeight * 5) {
 				return 120;
 			}
@@ -6186,8 +6189,8 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function (pokemon, target) {
-			var targetWeight = target.weightkg;
-			var pokemonWeight = pokemon.weightkg;
+			var targetWeight = target.getWeight();
+			var pokemonWeight = pokemon.getWeight();
 			if (pokemonWeight > targetWeight * 5) {
 				return 120;
 			}
@@ -7834,20 +7837,20 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function (pokemon, target) {
-			var targetWeight = target.weightkg;
-			if (target.weightkg >= 200) {
+			var targetWeight = target.getWeight();
+			if (targetWeight >= 200) {
 				return 120;
 			}
-			if (target.weightkg >= 100) {
+			if (targetWeight >= 100) {
 				return 100;
 			}
-			if (target.weightkg >= 50) {
+			if (targetWeight >= 50) {
 				return 80;
 			}
-			if (target.weightkg >= 25) {
+			if (targetWeight >= 25) {
 				return 60;
 			}
-			if (target.weightkg >= 10) {
+			if (targetWeight >= 10) {
 				return 40;
 			}
 			return 20;
@@ -12511,7 +12514,7 @@ exports.BattleMovedex = {
 				if (target.volatiles['substitute'] || target.side === source.side) {
 					return false;
 				}
-				if (target.weightkg >= 200) {
+				if (target.getWeight() >= 200) {
 					this.add('-fail', target, 'move: Sky Drop', '[heavy]');
 					return null;
 				}
