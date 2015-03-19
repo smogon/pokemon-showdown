@@ -2509,7 +2509,7 @@ exports.BattleAbilities = {
 	"soundproof": {
 		shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
 		onTryHit: function (target, source, move) {
-			if (target !== source && move.isSoundBased) {
+			if (target !== source && move.flags['sound']) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
