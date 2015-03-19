@@ -1486,8 +1486,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
-		onModifyPokemon: function (pokemon) {
-			pokemon.weightkg /= 2;
+		onModifyWeight: function (weight) {
+			return weight / 2;
 		},
 		num: 539,
 		gen: 5,

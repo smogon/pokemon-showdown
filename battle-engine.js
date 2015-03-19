@@ -353,8 +353,6 @@ BattlePokemon = (function () {
 		return this.details + '|' + this.getHealth(side);
 	};
 	BattlePokemon.prototype.update = function (init) {
-		// reset for Light Metal etc
-		this.weightkg = this.template.weightkg;
 		// reset for diabled moves
 		this.disabledMoves = {};
 		this.negateImmunity = {};
@@ -461,6 +459,12 @@ BattlePokemon = (function () {
 			stat = this.battle.getStatCallback(stat, statName, this, unboosted);
 		}
 		return stat;
+	};
+	BattlePokemon.prototype.getWeight = function () {
+		var weight = this.template.weightkg;
+		weight = this.battle.runEvent('ModifyWeight', this, null, null, weight);
+		if (weight < 0.1) weight = 0.1;
+		return weight;
 	};
 	BattlePokemon.prototype.getMoveData = function (move) {
 		move = this.battle.getMove(move);
@@ -2186,6 +2190,7 @@ Battle = (function () {
 					ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1,
 					ModifyBoost: 1,
 					ModifyDamage: 1,
+					ModifyWeight: 1,
 					TryHit: 1,
 					TryHitSide: 1,
 					TrySecondaryHit: 1,
