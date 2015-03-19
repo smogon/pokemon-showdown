@@ -99,7 +99,7 @@ exports.BattleScripts = {
 					counter['skilllink']++;
 				}
 				// Punching moves:
-				if (move.isPunchAttack) {
+				if (move.flags['punch']) {
 					counter['ironfist']++;
 				}
 				// Recoil:

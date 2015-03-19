@@ -1258,7 +1258,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. Sucker Punch is not boosted.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.isPunchAttack) {
+			if (move.flags && move.flags['punch']) {
 				this.debug('Iron Fist boost');
 				return this.chainModify(1.2);
 			}

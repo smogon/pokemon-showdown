@@ -2944,7 +2944,6 @@ exports.Formats = [
 				move.type = 'Electric';
 				move.category = 'Status';
 				move.basePower = 0;
-				delete move.isPunchAttack;
 				delete move.isContact;
 				move.self = {volatileStatus:'torment'};
 				move.onTryHit = function (target, source) {
