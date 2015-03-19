@@ -163,7 +163,7 @@ exports.BattleFormatsData = {
 	},
 	raticate: {
 		randomBattleMoves: ["protect","facade","flamewheel","suckerpunch","uturn","swordsdance"],
-		randomDoubleBattleMoves: ["facade","flamewheel","suckerpunch","uturn","superfang","crunch","protect"],
+		randomDoubleBattleMoves: ["facade","flamewheel","suckerpunch","uturn","crunch","protect"],
 		eventPokemon: [
 			{"generation":3,"level":34,"moves":["refresh","superfang","scaryface","hyperfang"]}
 		],
