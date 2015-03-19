@@ -464,6 +464,7 @@ exports.Formats = [
 			}
 		},
 		// Here we treat many things, read comments inside for information.
+		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
 			var name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			// No OP pls. Balance stuff, changing them upon switch in. Wonder Guard gets curse to minimise their turns out.
@@ -1490,8 +1491,8 @@ exports.Formats = [
 				this.add('c|@TGMD|rip in pepsi');
 			}
 			if (name === 'trickster') {
-				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', '“This guy\'s team is CRAZY!” ☑ “My team can\'t win against a team like that” ☑ "He NEEDED precisely those two crits to win" ☑ “He led with the only Pokemon that could beat me” ☑ "He got the perfect hax" ☑ “There was nothing I could do” ☑ “I played that perfectly”'];
-				this.add('c|@Trickster|' + sentences[this.random(4)]);
+				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', '“This guy\'s team is CRAZY!” ☑ “My team can\'t win against a team like that” ☑ "He NEEDED precisely those two crits to win" ☑ “He led with the only Pokemon that could beat me” ☑ "He got the perfect hax" ☑ “There was nothing I could do” ☑ “I played that perfectly”', '(⊙﹏⊙✿)'];
+				this.add('c|@Trickster|' + sentences[this.random(5)]);
 			}
 			if (name === 'waterbomb') {
 				this.add('c|@WaterBomb|brb getting more denture cream');
@@ -2834,11 +2835,9 @@ exports.Formats = [
 					target.side.addSideCondition('toxicspikes');
 				};
 			}
-			if (move.id === 'lovelykiss' && name === 'astara') {
+			if (move.id === 'psywave' && name === 'astara') {
 				move.name = 'Star Bolt Desperation';
 				move.type = ['Bird', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'][this.random(19)];
-				delete move.status;
-				move.category = 'Special';
 				move.damageCallback = function (pokemon) {
 					return pokemon.hp * 7 / 8;
 				};
