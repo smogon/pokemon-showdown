@@ -2,6 +2,10 @@ const amiy = [
 	"went to find people to flop on."
 ];
 
+const bidoofftw = [
+	"was forced onto bed by Kingdom of Tea."
+];
+
 const ctfrm = [
 	"is better than Christos."
 ];
@@ -10,13 +14,17 @@ const christs = [
 	"is everyone's favourite moderator."
 ];
 
+const darklight1999 = [
+	"returns back to darkness."
+];
+
 const kingdomoftea = [
 	"retreats to get more tea."
 ];
 
 const wolf = [
-	"howled to the moon.",
-	"ran off into a forest."
+	"howls to the moon.",
+	"runs off into a forest."
 ];
 
 exports.commands = {
@@ -44,6 +52,14 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
+		} else if (user.name === 'Bidoof FTW') {
+			var message = target || bidoofftw[Math.floor(Math.random() * bidoofftw.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+
+			room.addRaw(Tools.escapeHTML(message));
+			user.leaveRoom(room);
 		} else if (user.name === 'Cаѕtfоrm') {
 			var message = target || ctfrm[Math.floor(Math.random() * ctfrm.length)];
 			if (message.indexOf('{{user}}') < 0)
@@ -54,6 +70,14 @@ exports.commands = {
 			user.leaveRoom(room);
 		} else if (user.name === 'Christοs') {
 			var message = target || christs[Math.floor(Math.random() * christs.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+
+			room.addRaw(Tools.escapeHTML(message));
+			user.leaveRoom(room);
+		} else if (user.name === 'Dark Light1999') {
+			var message = target || darklight1999[Math.floor(Math.random() * darklight1999.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
 			message = message.replace(/{{user}}/g, user.name);
