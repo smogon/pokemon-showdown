@@ -385,8 +385,8 @@ var commands = exports.commands = {
 				if (move.flags['sound']) details["<font color=black>&#10003; Sound</font>"] = "";
 				if (move.flags['bullet']) details["<font color=black>&#10003; Bullet</font>"] = "";
 				if (move.flags['pulse']) details["<font color=black>&#10003; Pulse</font>"] = "";
-				if (move.flags['protect']) details["<font color=black>&#10003; Blocked by Protect</font>"] = "";
-				if (move.flags['authentic']) details["<font color=black>&#10003; Ignores substitutes</font>"] = "";
+				if (!move.flags['protect'] && !/(ally|self)/i.test(move.target)) details["<font color=black>&#10003; Bypasses Protect</font>"] = "";
+				if (move.flags['authentic']) details["<font color=black>&#10003; Bypasses Substitutes</font>"] = "";
 				if (move.flags['defrost']) details["<font color=black>&#10003; Thaws user</font>"] = "";
 				if (move.flags['bite']) details["<font color=black>&#10003; Bite</font>"] = "";
 				if (move.flags['punch']) details["<font color=black>&#10003; Punch</font>"] = "";
