@@ -46,7 +46,7 @@ exports.BattleTypeChart = {
 	},
 	"Ghost": {
 		damageTaken: {
-			"Bug": 0,
+			"Bug": 2,
 			"Dragon": 0,
 			"Electric": 0,
 			"Fighting": 3,
