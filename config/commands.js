@@ -1704,10 +1704,6 @@ var commands = exports.commands = {
 			matched = true;
 			this.sendReply("/blockpms - Blocks private messages (including challenges). Unblock them with /unignorepms.");
 		}
-		if (target === 'back') {
-			matched = true;
-			this.sendReply("/back - Unblocks challenges and/or private messages, if either are blocked.");
-		}
 		if (target === 'allowchallenges' || target === 'allowchall' || target === 'unblockchallenges' || target === 'unblockchall') {
 			matched = true;
 			this.sendReply("/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.");
