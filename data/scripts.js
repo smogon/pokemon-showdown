@@ -3078,8 +3078,8 @@ exports.BattleScripts = {
 				evs: {hp:252, def:4, spd:252}, nature: 'Calm'
 			},
 			'&Okuu': {
-				species: 'Honchkrow', ability: 'Desolate Land', item: 'Life Orb', gender: 'F',
-				moves: ['sacredfire', ['bravebird', 'punishment', 'flamecharge'][this.random(3)], 'roost'],
+				species: 'Honchkrow', ability: 'Drought', item: 'Life Orb', gender: 'F',
+				moves: [['bravebird', 'sacredfire'][this.random(2)], ['suckerpunch', 'punishment'][this.random(2)], 'roost'],
 				baseSignatureMove: 'firespin', signatureMove: "Blazing Star - Ten Evil Stars",
 				evs: {atk:252, spa:4, spe:252}, nature: 'Quirky'
 			},
@@ -3362,7 +3362,7 @@ exports.BattleScripts = {
 			},
 			'@Relados': {
 				species: 'Terrakion', ability: 'Guts', item: 'Flame Orb', gender: 'M',
-				moves: ['facade', 'diamondstorm', 'closecombat', 'iceshard', 'drainpunch'],
+				moves: ['knockoff', 'diamondstorm', 'closecombat', 'iceshard', 'drainpunch'],
 				baseSignatureMove: 'stockpile', signatureMove: "Loyalty",
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant'
 			},
@@ -3517,7 +3517,7 @@ exports.BattleScripts = {
 			'%Ast☆arA': {
 				species: 'Jirachi', ability: 'Cursed Body', item: ['Leftovers', 'Sitrus Berry'][this.random(2)], gender: 'F',
 				moves: ['psychic', 'moonblast', 'nastyplot', 'recover', 'surf'],
-				baseSignatureMove: 'lovelykiss', signatureMove: "Star Bolt Desperation",
+				baseSignatureMove: 'psywave', signatureMove: "Star Bolt Desperation",
 				evs: {hp:4, spa:252, spd:252}, nature: 'Modest'
 			},
 			'%Astyanax': {
