@@ -2,7 +2,7 @@ exports.BattleMovedex = {
 	acupressure: {
 		inherit: true,
 		desc: "Raises a random stat by 2 stages as long as the stat is not already at stage 6. The user can choose to use this move on itself or an ally. Fails if no stat stage can be raised or if the user or ally has a Substitute. This move ignores Protect and Detect.",
-		isSnatchable: true,
+		flags: {snatch: 1},
 		onHit: function (target) {
 			if (target.volatiles['substitute']) {
 				return false;
@@ -51,7 +51,7 @@ exports.BattleMovedex = {
 	},
 	aquaring: {
 		inherit: true,
-		isSnatchable: false
+		flags: {}
 	},
 	beatup: {
 		inherit: true,
@@ -163,7 +163,7 @@ exports.BattleMovedex = {
 	},
 	conversion: {
 		inherit: true,
-		isSnatchable: false
+		flags: {}
 	},
 	copycat: {
 		inherit: true,
@@ -298,10 +298,7 @@ exports.BattleMovedex = {
 	doomdesire: {
 		inherit: true,
 		accuracy: 85,
-		basePower: 120,
-		onModifyMove: function (move) {
-			move.type = '???';
-		}
+		basePower: 120
 	},
 	drainpunch: {
 		inherit: true,
@@ -466,10 +463,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 90,
 		basePower: 80,
-		pp: 15,
-		onModifyMove: function (move) {
-			move.type = '???';
-		}
+		pp: 15
 	},
 	gigadrain: {
 		inherit: true,
@@ -494,7 +488,7 @@ exports.BattleMovedex = {
 	},
 	healingwish: {
 		inherit: true,
-		isSnatchable: false,
+		flags: {heal: 1},
 		onAfterMove: function (pokemon) {
 			pokemon.switchFlag = true;
 		},
@@ -611,7 +605,7 @@ exports.BattleMovedex = {
 	},
 	imprison: {
 		inherit: true,
-		isSnatchable: false,
+		flags: {authentic: 1},
 		onTryHit: function (pokemon) {
 			var targets = pokemon.side.foe.active;
 			for (var i = 0; i < targets.length; i++) {
@@ -641,11 +635,11 @@ exports.BattleMovedex = {
 	},
 	luckychant: {
 		inherit: true,
-		isSnatchable: false
+		flags: {}
 	},
 	lunardance: {
 		inherit: true,
-		isSnatchable: false
+		flags: {heal: 1}
 	},
 	magiccoat: {
 		inherit: true,
@@ -690,7 +684,7 @@ exports.BattleMovedex = {
 	},
 	magnetrise: {
 		inherit: true,
-		isSnatchable: false,
+		flags: {gravity: 1},
 		volatileStatus: 'magnetrise',
 		effect: {
 			duration: 5,
@@ -815,7 +809,7 @@ exports.BattleMovedex = {
 	},
 	powertrick: {
 		inherit: true,
-		isSnatchable: false
+		flags: {}
 	},
 	protect: {
 		inherit: true,
@@ -847,11 +841,11 @@ exports.BattleMovedex = {
 	},
 	psychup: {
 		inherit: true,
-		isSnatchable: true
+		flags: {snatch:1, authentic: 1}
 	},
 	recycle: {
 		inherit: true,
-		isSnatchable: false
+		flags: {}
 	},
 	reversal: {
 		inherit: true,
@@ -1070,7 +1064,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		//desc: "",
 		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
-		isSnatchable: false,
+		flags: {heal: 1},
 		sideCondition: 'Wish',
 		effect: {
 			duration: 2,

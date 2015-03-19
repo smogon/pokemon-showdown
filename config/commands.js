@@ -1130,6 +1130,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524287/\">Middle Cup</a><br />";
 		}
+		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3532902/\">OU Theorymon</a><br />";
+		}
 		if (!matched) {
 			return this.sendReply("The Other Metas entry '" + target + "' was not found. Try /othermetas or /om for general help.");
 		}
@@ -1693,25 +1697,24 @@ var commands = exports.commands = {
 			this.sendReply("/calc - Provides a link to a damage calculator");
 			this.sendReply("!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~");
 		}
-		if (target === 'blockchallenges' || target === 'blockchall') {
 			matched = true;
-			this.sendReply("/blockchallenges - Blocks challenges so no one can challenge you. Deactivate it with /unblockchallenges.");
+			this.sendReply("/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges.");
 		}
-		if (target === 'ignorepms') {
+		if (target === 'blockpms' || target === 'ignorepms') {
 			matched = true;
-			this.sendReply("/ignorepms - Blocks private messages so no one can message you. Deactivate it with /unignorepms.");
+			this.sendReply("/blockpms - Blocks private messages (including challenges). Unblock them with /unignorepms.");
 		}
 		if (target === 'back') {
 			matched = true;
-			this.sendReply("/back - Unlocks challenges and unignores private messages so you can be challenged and PMed again. Deactivate it with /away. You can also use /unignorepms and /unblockchallenges.");
+			this.sendReply("/back - Unblocks challenges and/or private messages, if either are blocked.");
 		}
 		if (target === 'allowchallenges' || target === 'allowchall' || target === 'unblockchallenges' || target === 'unblockchall') {
 			matched = true;
-			this.sendReply("/unblockchallenges - Unlocks challenges so you can be challenged again. Deactivate it with /blockchallenges.");
+			this.sendReply("/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.");
 		}
-		if (target === 'unignorepms') {
+		if (target === 'unblockpms' || target === 'unignorepms') {
 			matched = true;
-			this.sendReply("/unignorepms - Unblocks private messages so users can message you. Deactivate it with /ignorepms.");
+			this.sendReply("/unblockpms - Unblocks private messages. Block them with /blockpms.");
 		}
 		if (target === 'faq') {
 			matched = true;

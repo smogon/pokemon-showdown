@@ -424,7 +424,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	onix: {
-		randomBattleMoves: ["earthquake","explosion","rockslide","harden","toxic"],
+		randomBattleMoves: ["earthquake","explosion","rockslide","toxic"],
 		tier: "UU"
 	},
 	drowzee: {

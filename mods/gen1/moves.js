@@ -480,12 +480,16 @@ exports.BattleMovedex = {
 		name: "Light Screen",
 		pp: 30,
 		priority: 0,
-		isSnatchable: true,
 		secondary: false,
 		volatileStatus: 'lightscreen',
 		onTryHit: function (pokemon) {
 			if (pokemon.volatiles['lightscreen']) {
 				return false;
+			}
+		},
+		effect: {
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'Light Screen');
 			}
 		},
 		target: "self",
@@ -655,11 +659,15 @@ exports.BattleMovedex = {
 		name: "Reflect",
 		pp: 20,
 		priority: 0,
-		isSnatchable: true,
 		volatileStatus: 'reflect',
 		onTryHit: function (pokemon) {
 			if (pokemon.volatiles['reflect']) {
 				return false;
+			}
+		},
+		effect: {
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'Reflect');
 			}
 		},
 		secondary: false,
@@ -781,7 +789,6 @@ exports.BattleMovedex = {
 		name: "Substitute",
 		pp: 10,
 		priority: 0,
-		isSnatchable: true,
 		volatileStatus: 'Substitute',
 		onTryHit: function (target) {
 			if (target.volatiles['substitute']) {

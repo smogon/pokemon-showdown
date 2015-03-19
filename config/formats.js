@@ -22,6 +22,20 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
 	},
 	{
+		name: "OU (no Mega)",
+		section: "ORAS Singles",
+
+		ruleset: ['OU'],
+		onBegin: function () {
+			for (var i = 0; i < this.p1.pokemon.length; i++) {
+				this.p1.pokemon[i].canMegaEvo = false;
+			}
+			for (var i = 0; i < this.p2.pokemon.length; i++) {
+				this.p2.pokemon[i].canMegaEvo = false;
+			}
+		}
+	},
+	{
 		name: "Ubers",
 		section: "ORAS Singles",
 
@@ -733,6 +747,7 @@ exports.Formats = [
 			}
 		},
 		// Here we treat many things, read comments inside for information.
+		onSwitchInPriority: 1,
 		onSwitchIn: function (pokemon) {
 			var name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			// No OP pls. Balance stuff, changing them upon switch in. Wonder Guard gets curse to minimise their turns out.
@@ -1759,8 +1774,8 @@ exports.Formats = [
 				this.add('c|@TGMD|rip in pepsi');
 			}
 			if (name === 'trickster') {
-				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', '“This guy\'s team is CRAZY!” ☑ “My team can\'t win against a team like that” ☑ "He NEEDED precisely those two crits to win" ☑ “He led with the only Pokemon that could beat me” ☑ "He got the perfect hax" ☑ “There was nothing I could do” ☑ “I played that perfectly"'];
-				this.add('c|@Trickster|' + sentences[this.random(4)]);
+				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', '“This guy\'s team is CRAZY!” ☑ “My team can\'t win against a team like that” ☑ "He NEEDED precisely those two crits to win" ☑ “He led with the only Pokemon that could beat me” ☑ "He got the perfect hax" ☑ “There was nothing I could do” ☑ “I played that perfectly”', '(⊙﹏⊙✿)'];
+				this.add('c|@Trickster|' + sentences[this.random(5)]);
 			}
 			if (name === 'waterbomb') {
 				this.add('c|@WaterBomb|brb getting more denture cream');
@@ -2108,7 +2123,7 @@ exports.Formats = [
 			}
 			if (move.id === 'vcreate' && name === 'v4') {
 				move.name = 'V-Generate';
-				move.self.boosts = {accuracy: -2};
+				move.self = {boosts: {accuracy: -2}};
 				move.accuracy = 85;
 				move.secondaries = [{chance: 50, status: 'brn'}];
 			}
@@ -3103,11 +3118,9 @@ exports.Formats = [
 					target.side.addSideCondition('toxicspikes');
 				};
 			}
-			if (move.id === 'lovelykiss' && name === 'astara') {
+			if (move.id === 'psywave' && name === 'astara') {
 				move.name = 'Star Bolt Desperation';
 				move.type = ['Bird', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'][this.random(19)];
-				delete move.status;
-				move.category = 'Special';
 				move.damageCallback = function (pokemon) {
 					return pokemon.hp * 7 / 8;
 				};
@@ -3751,6 +3764,14 @@ exports.Formats = [
 		banlist: ['Chansey', 'Frogadier', 'Eviolite']
 	},
 	{
+		name: "OU Theorymon",
+		section: "Other Metagames",
+
+		mod: 'theorymon',
+		searchShow: false,
+		ruleset: ['OU']
+	},
+	{
 		name: "Gen-NEXT OU",
 		section: "Other Metagames",
 
@@ -3974,7 +3995,7 @@ exports.Formats = [
 		ruleset: ['Cancel Mod']
 	},
 	{
-		name: "[Gen 3] OU (beta)",
+		name: "[Gen 3] OU",
 		section: "Past Generations",
 
 		mod: 'gen3',
@@ -3982,7 +4003,7 @@ exports.Formats = [
 		banlist: ['Uber', 'Smeargle + Ingrain']
 	},
 	{
-		name: "[Gen 3] Ubers (beta)",
+		name: "[Gen 3] Ubers",
 		section: "Past Generations",
 
 		mod: 'gen3',

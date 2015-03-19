@@ -163,7 +163,7 @@ exports.BattleFormatsData = {
 	},
 	raticate: {
 		randomBattleMoves: ["protect","facade","flamewheel","suckerpunch","uturn","swordsdance"],
-		randomDoubleBattleMoves: ["facade","flamewheel","suckerpunch","uturn","superfang","crunch","protect"],
+		randomDoubleBattleMoves: ["facade","flamewheel","suckerpunch","uturn","crunch","protect"],
 		eventPokemon: [
 			{"generation":3,"level":34,"moves":["refresh","superfang","scaryface","hyperfang"]}
 		],
@@ -2604,7 +2604,7 @@ exports.BattleFormatsData = {
 	},
 	sharpedo: {
 		randomBattleMoves: ["protect","icebeam","crunch","earthquake","waterfall","destinybond"],
-		randomDoubleBattleMoves: ["protect","hydropump","surf","icebeam","crunch","earthquake","waterfall","darkpulse","destinybond"],
+		randomDoubleBattleMoves: ["protect","icebeam","crunch","earthquake","waterfall","destinybond"],
 		tier: "UU"
 	},
 	sharpedomega: {

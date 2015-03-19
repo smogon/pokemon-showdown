@@ -89,6 +89,77 @@ var Room = (function () {
 		this.update();
 	};
 
+	// roomban handling
+	Room.prototype.isRoomBanned = function (user) {
+		if (!user) return;
+		if (this.bannedUsers) {
+			if (user.userid in this.bannedUsers) {
+				return this.bannedUsers[user.userid];
+			}
+			if (user.autoconfirmed in this.bannedUsers) {
+				return this.bannedUsers[user.autoconfirmed];
+			}
+		}
+		if (this.bannedIps) {
+			for (var ip in user.ips) {
+				if (ip in this.bannedIps) return this.bannedIps[ip];
+			}
+		}
+	};
+	Room.prototype.roomBan = function (user, noRecurse, userid) {
+		if (!userid) userid = user.userid;
+		var alts;
+		if (!noRecurse) {
+			alts = [];
+			for (var i in Users.users) {
+				var otherUser = Users.users[i];
+				if (otherUser === user) continue;
+				for (var myIp in user.ips) {
+					if (myIp in otherUser.ips) {
+						alts.push(otherUser.name);
+						this.roomBan(otherUser, true, userid);
+						break;
+					}
+				}
+			}
+		}
+		this.bannedUsers[userid] = userid;
+		for (var ip in user.ips) {
+			this.bannedIps[ip] = userid;
+		}
+		if (!user.can('bypassall')) user.leaveRoom(this.id);
+		return alts;
+	};
+	Room.prototype.unRoomBan = function (userid, noRecurse) {
+		userid = toId(userid);
+		var successUserid = false;
+		for (var i in this.bannedUsers) {
+			var entry = this.bannedUsers[i];
+			if (i === userid || entry === userid) {
+				delete this.bannedUsers[i];
+				successUserid = entry;
+				if (!noRecurse && entry !== userid) {
+					this.unRoomBan(entry, true);
+				}
+			}
+		}
+		for (var i in this.bannedIps) {
+			if (this.bannedIps[i] === userid) {
+				delete this.bannedIps[i];
+				successUserid = userid;
+			}
+		}
+		return successUserid;
+	};
+	Room.prototype.checkBanned = function (user) {
+		var userid = this.isRoomBanned(user);
+		if (userid) {
+			this.roomBan(user, true, userid);
+			return false;
+		}
+		return true;
+	};
+
 	return Room;
 })();
 
@@ -288,12 +359,12 @@ var GlobalRoom = (function () {
 		}
 		return roomList;
 	};
-	GlobalRoom.prototype.getRooms = function () {
+	GlobalRoom.prototype.getRooms = function (user) {
 		var roomsData = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
 		for (var i = 0; i < this.chatRooms.length; i++) {
 			var room = this.chatRooms[i];
 			if (!room) continue;
-			if (room.isPrivate) continue;
+			if (room.isPrivate && !(room.isPrivate === 'voice' && user.group !== ' ')) continue;
 			(room.isOfficial ? roomsData.official : roomsData.chat).push({
 				title: room.title,
 				desc: room.desc,
@@ -308,15 +379,15 @@ var GlobalRoom = (function () {
 		for (var i = 0; i < this.searchers.length; i++) {
 			var search = this.searchers[i];
 			var searchUser = Users.get(search.userid);
+			if (!searchUser || searchUser === user) {
+				this.searchers.splice(i, 1);
+				i--;
+				continue;
+			}
 			if (!searchUser.connected) {
 				this.searchers.splice(i, 1);
 				i--;
 				searchUser.searching = 0;
-				continue;
-			}
-			if (searchUser === user) {
-				this.searchers.splice(i, 1);
-				i--;
 				continue;
 			}
 		}
@@ -772,6 +843,10 @@ var BattleRoom = (function () {
 			}
 			this.update();
 			this.logBattle(p1score);
+		}
+		if (Config.autosavereplays) {
+			var winninguser = Users.get(winnerid);
+			CommandParser.parse('/savereplay', this, winninguser, winninguser.connections[0]);
 		}
 		if (this.tour) {
 			var winnerid = toId(winner);
@@ -1469,15 +1544,7 @@ var ChatRoom = (function () {
 		} else {
 			this.reportJoin(entry);
 		}
-		if (this.bannedUsers && (user.userid in this.bannedUsers || user.autoconfirmed in this.bannedUsers)) {
-			this.bannedUsers[oldid] = true;
-			for (var ip in user.ips) this.bannedIps[ip] = true;
-			user.leaveRoom(this);
-			var alts = user.getAlts();
-			for (var i = 0; i < alts.length; ++i) {
-				this.bannedUsers[toId(alts[i])] = true;
-				Users.getExact(alts[i]).leaveRoom(this);
-			}
+		if (!this.checkBanned(user, oldid)) {
 			return;
 		}
 		if (global.Tournaments && Tournaments.get(this.id)) {
