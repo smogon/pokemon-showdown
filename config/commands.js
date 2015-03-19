@@ -1050,7 +1050,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
 			matched = true;
 			if (target !== 'all') buffer += "Pokémon below OU get all their stats boosted. BL/UU get +5, BL2/RU get +10, and BL3/NU or lower get +15.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3508369/\">Tier Shift</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3532973/\">Tier Shift</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3514386/\">Tier Shift Viability Rankings</a><br />";
 		}
 		if (target === 'all' || target === 'pu') {
