@@ -104,7 +104,7 @@ jscsOptions.base = {
 
 	"requireCapitalizedConstructors": true,
 
-	"validateLineBreaks": 'CI' in process.env ? 'LF' : null,
+	"validateLineBreaks": require('os').EOL === '\n' ? 'LF' : null,
 	"disallowMultipleLineBreaks": null,
 
 	"esnext": true
