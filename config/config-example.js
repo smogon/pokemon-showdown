@@ -364,6 +364,7 @@ exports.customavatars = {
 	'emperorace': 'alliancesoulace.png',
 	'alliancewalker': 'alliancewalker.gif',
 	'archer99': 'archer99.gif',
+	'hannumikkola': 'hannumikkola.gif',
 	'lucifr': 'lucifr.gif',
 	'orgen': 'lucifr.gif',
 	'nayslayer': 'nayslayer.png',
@@ -425,6 +426,12 @@ exports.customavatars = {
 	'xanaplana': 'xanaplana.gif',
 	'valkyriaanna': 'valkyriaanna.png',
 	'yinyanganna': 'valkyriaanna.png',
+	'froginfected': 'froginfected.gif',
+	'choicespecsp2': 'froginfected.gif',
+	'yungfrog420xxxog': 'froginfected.gif',
+	'juudaime103': 'juudaime103.png',
+	'lucy2512': 'lucy2512.gif',
+	'shawott': 'shawott.gif',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
