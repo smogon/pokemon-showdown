@@ -8,7 +8,7 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon, target, move) {
-			if (pokemon.getAbility().isHalfSleep) {
+			if (pokemon.hasAbility('earlybird')) {
 				pokemon.statusData.time--;
 			}
 			pokemon.statusData.time--;

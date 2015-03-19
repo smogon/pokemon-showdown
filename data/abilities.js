@@ -641,7 +641,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's sleep counter drops by 2 instead of 1.",
 		id: "earlybird",
 		name: "Early Bird",
-		isHalfSleep: true,
+		// Implemented in statuses.js
 		rating: 2.5,
 		num: 48
 	},

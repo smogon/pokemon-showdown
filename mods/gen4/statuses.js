@@ -2,7 +2,7 @@ exports.BattleStatuses = {
 	par: {
 		inherit: true,
 		onBeforeMove: function (pokemon) {
-			if (pokemon.ability !== 'magicguard' && this.random(4) === 0) {
+			if (!pokemon.hasAbility('magicguard') && this.random(4) === 0) {
 				this.add('cant', pokemon, 'par');
 				return false;
 			}
@@ -17,7 +17,7 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
-			if (pokemon.getAbility().isHalfSleep) {
+			if (pokemon.hasAbility('earlybird')) {
 				pokemon.statusData.time--;
 			}
 			pokemon.statusData.time--;
