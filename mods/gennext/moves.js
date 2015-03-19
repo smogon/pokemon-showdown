@@ -148,7 +148,7 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.notSubBlocked || move.isSoundBased) {
+				if (move.notSubBlocked || move.flags['sound']) {
 					return;
 				}
 				if (move.category === 'Status') {
@@ -1194,7 +1194,6 @@ exports.BattleMovedex = {
 		category: "Special",
 		isViable: true,
 		priority: 0,
-		isSoundBased: true,
 		affectedByImmunities: false,
 		onHit: function (target, source) {
 			source.side.addSideCondition('futuremove');
@@ -1209,7 +1208,6 @@ exports.BattleMovedex = {
 				moveData: {
 					basePower: 80,
 					category: "Special",
-					isSoundBased: true,
 					isNotProtectable: true,
 					affectedByImmunities: false,
 					type: 'Normal'
