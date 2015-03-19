@@ -1298,15 +1298,8 @@ User = (function () {
 		if (!this.can('bypassall')) {
 			// check if user has permission to join
 			if (room.staffRoom && !this.isStaff) return false;
-			if (room.bannedUsers) {
-				if (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers) {
-					return null;
-				}
-			}
-			if (this.ips && room.bannedIps) {
-				for (var ip in this.ips) {
-					if (ip in room.bannedIps) return null;
-				}
+			if (room.checkBanned && !room.checkBanned(this)) {
+				return null;
 			}
 		}
 		if (!connection) {
