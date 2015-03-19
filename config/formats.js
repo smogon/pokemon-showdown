@@ -3475,6 +3475,14 @@ exports.Formats = [
 		banlist: ['Chansey', 'Frogadier', 'Eviolite']
 	},
 	{
+		name: "OU Theorymon",
+		section: "Other Metagames",
+
+		mod: 'theorymon',
+		searchShow: false,
+		ruleset: ['OU']
+	},
+	{
 		name: "Gen-NEXT OU",
 		section: "Other Metagames",
 
