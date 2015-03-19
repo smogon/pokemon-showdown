@@ -1513,7 +1513,6 @@ exports.BattleMovedex = {
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -1866,7 +1865,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -2830,7 +2828,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion'
@@ -3175,7 +3172,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1, heal: 1},
 		isContact: true,
-		isPunchAttack: true,
 		drain: [1, 2],
 		secondary: false,
 		target: "normal",
@@ -3273,7 +3269,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'confusion'
@@ -4215,7 +4210,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -4688,7 +4682,6 @@ exports.BattleMovedex = {
 		priority: -3,
 		flags: {contact: 1, protect: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		beforeTurnCallback: function (pokemon) {
 			pokemon.addVolatile('focuspunch');
 		},
@@ -5773,7 +5766,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		self: {
 			boosts: {
 				spe: -1
@@ -7021,7 +7013,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 10,
 			status: 'frz'
@@ -8009,7 +8000,6 @@ exports.BattleMovedex = {
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -8431,7 +8421,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8582,7 +8571,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 20,
 			self: {
@@ -10241,7 +10229,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -12127,7 +12114,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -12597,7 +12583,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -14526,7 +14511,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 10,
 			status: 'par'
