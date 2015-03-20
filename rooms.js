@@ -833,8 +833,10 @@ var BattleRoom = (function () {
 			this.logBattle(p1score);
 		}
 		if (Config.autosavereplays) {
-			var winninguser = Users.get(winnerid);
-			CommandParser.parse('/savereplay', this, winninguser, winninguser.connections[0]);
+			var uploader = Users.get(winnerid);
+			if (uploader && uploader.connections[0]) {
+				CommandParser.parse('/savereplay', this, uploader, uploader.connections[0]);
+			}
 		}
 		if (this.tour) {
 			var winnerid = toId(winner);
