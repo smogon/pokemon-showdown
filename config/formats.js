@@ -7,11 +7,11 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Low Tier Random (BWknd 32)",
-		section: "Random Battles (aka Randbats)",
+		name: "High Tier Random (BWknd 33)",
+		section: "ORAS Singles",
 
-		mod: 'lowtierrandom',
-		team: 'randomLowTier',
+		mod: 'hightierrandom',
+		team: 'randomHighTier',
 		ruleset: ['Random (no PotD)']
 	},
 	{
