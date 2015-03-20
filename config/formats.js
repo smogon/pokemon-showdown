@@ -653,11 +653,11 @@ exports.Formats = [
 			if (name === 'zarel') {
 				this.add('c|~Zarel|Your mom');
 			}
+
+			// Leaders.
 			if (name === 'hollywood') {
 				this.add('c|&hollywood|Kappa');
 			}
-
-			// Leaders.
 			if (name === 'jdarden') {
 				this.add('c|&jdarden|Did someone call for some BALK?');
 			}
