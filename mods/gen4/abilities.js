@@ -21,13 +21,11 @@ exports.BattleAbilities = {
 		}
 	},
 	"lightningrod": {
+		inherit: true,
 		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment.",
 		shortDesc: "This Pokemon draws Electric moves to itself.",
-		// drawing not implemented
-		id: "lightningrod",
-		name: "Lightning Rod",
-		rating: 0,
-		num: 32
+		onTryHit: function () {},
+		rating: 0
 	},
 	"magicguard": {
 		//desc: "",
@@ -102,6 +100,16 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 57
 	},
+	"simple": {
+		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
+		onModifyBoost: function () {
+			return this.chainModify(2);
+		},
+		id: "simple",
+		name: "Simple",
+		rating: 4,
+		num: 86
+	},
 	"stench": {
 		desc: "No in-battle effect.",
 		shortDesc: "No in-battle effect.",
@@ -111,13 +119,11 @@ exports.BattleAbilities = {
 		num: 1
 	},
 	"stormdrain": {
+		inherit: true,
 		desc: "During double battles, this Pokemon draws any single-target Water-type attack to itself. If an opponent uses an Water-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Water Hidden Power, Judgment or Weather Ball.",
 		shortDesc: "This Pokemon draws Water moves to itself.",
-		// drawing not implemented
-		id: "stormdrain",
-		name: "Storm Drain",
-		rating: 0,
-		num: 114
+		onTryHit: function () {},
+		rating: 0
 	},
 	"sturdy": {
 		desc: "This Pokemon is immune to OHKO moves.",

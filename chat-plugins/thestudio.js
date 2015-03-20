@@ -1,96 +1,209 @@
 /**
-* The Studio: Artist of the Day Plugin
-* This is a daily activity where users get to nominate an artist to be Artist of the day, and it's randomly selected
-* Only works in a room with the id "thestudio"
-*/
+ * The Studio: Artist of the Day plugin
+ * This is a daily activity where users nominate the featured artist for the day, which is selected randomly once voting has ended.
+ * Only works in a room with the id 'thestudio'
+ */
+
+function toArtistId(artist) { // toId would return '' for foreign/sadistic artists
+	return artist.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
+}
+
+var artistOfTheDay = {
+	pendingNominations: false,
+	nominations: new Map(),
+	removedNominators: []
+};
+
+var theStudio = Rooms.get('thestudio');
+if (theStudio && !theStudio.plugin) {
+	theStudio.plugin = artistOfTheDay;
+}
+
+var commands = {
+	start: function (target, room, user) {
+		if (room.id !== 'thestudio' || !room.chatRoomData || !this.can('aotd', room)) return false;
+		if (artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are already in progress.');
+
+		var nominations = artistOfTheDay.nominations;
+		var prenominations = room.chatRoomData.prenominations;
+		if (prenominations && prenominations.length) {
+			for (var i = prenominations.length; i--;) {
+				var prenomination = prenominations[i];
+				nominations.set(Users.get(prenomination[0].userid) || prenomination[0], prenomination[1]);
+			}
+		}
+
+		artistOfTheDay.pendingNominations = true;
+		room.chatRoomData.prenominations = [];
+		Rooms.global.writeChatRoomData();
+		room.addRaw('<div class="broadcast-blue"><strong>Nominations for the Artist of the Day have begun!</strong><br />' +
+		            'Use /aotd nom to nominate an artist.</div>');
+		this.privateModCommand('(' + user.name + ' began nominations for the Artist of the Day.)');
+	},
+
+	end: function (target, room, user) {
+		if (room.id !== 'thestudio' || !room.chatRoomData || !this.can('aotd', room)) return false;
+		if (!artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are not in progress.');
+		if (!artistOfTheDay.nominations.size) return this.sendReply('No nominations have been submitted yet.');
+
+		var nominations = Array.from(artistOfTheDay.nominations.values());
+		var artist = nominations[~~Math.random(nominations.length)];
+		artistOfTheDay.pendingNominations = false;
+		artistOfTheDay.nominations.clear();
+		artistOfTheDay.removedNominators = [];
+		room.chatRoomData.artistOfTheDay = artist;
+		Rooms.global.writeChatRoomData();
+		room.addRaw('<div class="broadcast-blue"><strong>Nominations for the Artist of the Day have ended!</strong><br />' +
+		            'Randomly selected artist: ' + Tools.escapeHTML(artist) + '</div>');
+		this.privateModCommand('(' + user.name + ' ended nominations for the Artist of the Day.)');
+	},
+
+	prenom: function (target, room, user) {
+		if (room.id !== 'thestudio' || !room.chatRoomData || !target) return false;
+		if (artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are in progress.');
+		if (!room.chatRoomData.prenominations) room.chatRoomData.prenominations = [];
+
+		var userid = user.userid;
+		var ips = user.ips;
+		var prenominationId = toArtistId(target);
+		if (!prenominationId) return this.sendReply('' + target + ' is not a valid artist name.');
+		if (toArtistId(room.chatRoomData.artistOfTheDay) === prenominationId) return this.sendReply('' + target + ' is already the current Artist of the Day.');
+
+		var prenominations = room.chatRoomData.prenominations;
+		var prenominationIndex = -1;
+		var latestIp = user.latestIp;
+		for (var i = prenominations.length; i--;) {
+			if (toArtistId(prenominations[i][1]) === prenominationId) return this.sendReply('' + target + ' has already been prenominated.');
+
+			if (prenominationIndex < 0) {
+				var prenominator = prenominations[i][0];
+				if (prenominator.userid === userid || prenominator.ips[latestIp]) prenominationIndex = i;
+			}
+		}
+
+		if (prenominationIndex > -1) {
+			prenominations[prenominationIndex][1] = target;
+			Rooms.global.writeChatRoomData();
+			return this.sendReply('Your prenomination was changed to ' + target + '.');
+		}
+
+		prenominations.push([{name: user.name, userid: userid, ips: user.ips}, target]);
+		Rooms.global.writeChatRoomData();
+		this.sendReply('' + target + ' was submitted for the next nomination period for the Artist of the Day.');
+	},
+
+	nom: function (target, room, user) {
+		if (room.id !== 'thestudio' || !room.chatRoomData) return false;
+		if (!artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are not in progress.');
+
+		var removedNominators = artistOfTheDay.removedNominators;
+		if (removedNominators.indexOf(user) > -1) return this.sendReply('Since your nomination has been removed, you cannot submit another artist until the next round.');
+
+		var alts = user.getAlts();
+		for (var i = removedNominators.length; i--;) {
+			if (alts.indexOf(removedNominators[i].name) > -1) return this.sendReply('Since your nomination has been removed, you cannot submit another artist until the next round.');
+		}
+
+		var nominationId = toArtistId(target);
+		if (toArtistId(room.chatRoomData.artistOfTheDay) === nominationId) return this.sendReply('' + target + ' was the last Artist of the Day.');
+
+		var userid = user.userid;
+		var latestIp = user.latestIp;
+		for (var data, nominationsIterator = artistOfTheDay.nominations.entries(); !!(data = nominationsIterator.next().value);) { // replace with for-of loop once available
+			var nominator = data[0];
+			if (nominator.ips[latestIp] && nominator.userid !== userid || alts.indexOf(nominator.name) > -1) return this.sendReply('You have already submitted a nomination for the Artist of the Day under the name ' + nominator.name + '.');
+			if (toArtistId(data[1]) === nominationId) return this.sendReply('' + target + ' has already been nominated.');
+		}
+
+		var response = '' + user.name + (artistOfTheDay.nominations.has(user) ? ' changed their nomination from ' + artistOfTheDay.nominations.get(user) + ' to ' + target + '.' : ' nominated ' + target + ' for the Artist of the Day.');
+		artistOfTheDay.nominations.set(user, target);
+		this.send(response);
+	},
+
+	viewnoms: function (target, room, user) {
+		if (room.id !== 'thestudio' || !room.chatRoomData) return false;
+
+		var buffer = '';
+		if (!artistOfTheDay.pendingNominations) {
+			if (!user.can('mute', null, room)) return false;
+
+			var prenominations = room.chatRoomData.prenominations;
+			if (!prenominations || !prenominations.length) return this.sendReplyBox('No prenominations have been submitted yet.');
+
+			var i = prenominations.length;
+			buffer += 'Current prenominations:';
+			while (i--) {
+				buffer += '<br />- ' + Tools.escapeHTML(prenominations[i][1]) + ' (submitted by ' + Tools.escapeHTML(prenominations[i][0].name) + ')';
+			}
+			return this.sendReplyBox(buffer);
+		}
+
+		if (!this.canBroadcast()) return false;
+		if (!artistOfTheDay.nominations.size) return this.sendReplyBox('No nominations have been submitted yet.');
+
+		var nominations = Array.from(artistOfTheDay.nominations.entries()).sort(function (a, b) {
+			if (a[1] < b[1]) return 1;
+			if (a[1] > b[1]) return -1;
+			return 0;
+		});
+		var i = nominations.length;
+		buffer += 'Current nominations:';
+		while (i--) {
+			buffer += '<br />- ' + Tools.escapeHTML(nominations[i][1]) + ' (submitted by ' + Tools.escapeHTML(nominations[i][0].name) + ')';
+		}
+		this.sendReplyBox(buffer);
+	},
+
+	removenom: function (target, room, user) {
+		if (room.id !== 'thestudio' || !room.chatRoomData || !target || !this.can('aotd', room)) return false;
+		if (!artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are not in progress.');
+		if (!artistOfTheDay.nominations.size) return this.sendReply('No nominations have been submitted yet.');
+
+		target = this.splitTarget(target);
+		var name = this.targetUsername;
+		var userid = toId(name);
+		if (!userid) return this.sendReply('"' + name + '" is not a valid username.');
+
+		for (var nominator, nominatorsIterator = artistOfTheDay.nominations.keys(); !!(nominator = nominatorsIterator.next().value);) { // replace with for-of loop once available
+			if (nominator.userid === userid) {
+				artistOfTheDay.nominations.delete(nominator);
+				artistOfTheDay.removedNominators.push(nominator);
+				return this.privateModCommand('(' + user.name + ' removed ' + nominator.name + '\'s nomination for the Artist of the Day.)');
+			}
+		}
+
+		this.sendReply('User "' + name + '" has no nomination for the Artist of the Day.');
+	},
+
+	set: function (target, room, user) {
+		if (room.id !== 'thestudio' || !room.chatRoomData || !this.can('aotd', room)) return false;
+		if (!toId(target)) return this.sendReply('No valid artist was specified.');
+		if (artistOfTheDay.pendingNominations) return this.sendReply('The Artist of the Day cannot be set while nominations are in progress.');
+
+		room.chatRoomData.artistOfTheDay = target;
+		Rooms.global.writeChatRoomData();
+		this.privateModCommand('(' + user.name + ' set the Artist of the Day to ' + target + '.)');
+	},
+
+	'': function (target, room) {
+		if (room.id !== 'thestudio' || !room.chatRoomData || !this.canBroadcast()) return false;
+		this.sendReplyBox('The Artist of the Day ' + (room.chatRoomData.artistOfTheDay ? 'is ' + room.chatRoomData.artistOfTheDay + '.' : 'has not been set yet.'));
+	},
+
+	help: function (target, room) {
+		if (room.id !== 'thestudio' || !room.chatRoomData || !this.canBroadcast()) return false;
+		this.sendReplyBox('The Studio: Artist of the Day plugin commands:<br />' +
+		                  '- /aotd - View the Artist of the Day.<br />' +
+				  '- /aotd start - Start nominations for the Artist of the Day. Requires: % @ # & ~<br />' +
+				  '- /aotd nom - Nominate an artist for the Artist of the Day.<br />' +
+				  '- /aotd viewnoms - View the current nominations for the Artist of the Day. Requires: % @ # & ~<br />' +
+				  '- /aotd removenom [username] - Remove a user\'s nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ # & ~<br />' +
+				  '- /aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~<br />' +
+				  '- /aotd prenom - Nominate an artist for the Artist of the Day between nomination periods.<br />' +
+				  '- /aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~');
+	}
+};
 
 exports.commands = {
-	startaotd: function () {
-		return this.parse('/toggleaotd on');
-	},
-
-	endaotd: function () {
-		return this.parse('/toggleaotd off');
-	},
-
-	taotd: 'toggleaotd',
-	toggleaotd: function (target, room, user) {
-		if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
-		if (!this.canTalk()) return;
-		if (!this.can('aotd', room)) return;
-		if (!target) {
-			return this.sendReply("/toggleaotd [on / off] - If on, this will start AOTD, if off, this will no longer allow people to use /naotd.");
-		}
-		if (target === 'on') {
-			if (room.aotdOn) return this.sendReply("The Artist of the Day has already started.");
-			room.addRaw(
-				'<div class="broadcast-blue"><center>' +
-					'<h3>Artist of the Day has started!</h3>' +
-					"<p>(Started by " + Tools.escapeHTML(user.name) + ")</p>" +
-					"<p>Use <strong>/naotd</strong> [artist] to nominate an artist!</p>" +
-				'</center></div>'
-			);
-			room.aotdOn = true;
-			this.logModCommand("Artist of the Day was started by " + Tools.escapeHTML(user.name) + ".");
-		}
-		if (target === 'off') {
-			if (!room.aotdOn) return this.sendReply("The Artist of the Day has already ended.");
-			room.addRaw("<b>Nominations are over!</b> (Turned off by " + Tools.escapeHTML(user.name) + ")");
-			room.aotdOn = false;
-		}
-	},
-
-	aotdfaq: 'aotdhelp',
-	aotdhelp: function (target, room) {
-		if (!this.canBroadcast()) return;
-		if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
-		this.sendReplyBox(
-			"<h3>Artist of the Day:</h3>" +
-			"<p>This is a room activity for The Studio where users nominate artists for the title of 'Artist of the Day'.</p>" +
-			'<p>' +
-				"Command List:" +
-				'<ul>' +
-					"<li>/naotd (artist) - This will nominate your artist of the day; only do this once, please.</li>" +
-					"<li>/aotd - This allows you to see who the current Artist of the Day is.</li>" +
-					"<li>/aotd (artist) - Sets an artist of the day. (requires %, @, #)</li>" +
-					"<li>/startaotd - Will start AOTD (requires %, @, #)</li>" +
-					"<li>/endaotd - Will turn off the use of /naotd, ending AOTD (requires %, @, #)</li>" +
-				'</ul>' +
-			'</p>' +
-			"<p>More information on <a href=\"http://thepsstudioroom.weebly.com/artist-of-the-day.html\">Artist of the Day</a> and <a href=\"http://thepsstudioroom.weebly.com/commands.html\">these commands</a>.</p>"
-		);
-	},
-
-	nominateartistoftheday: 'naotd',
-	naotd: function (target, room, user) {
-		if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
-		if (!room.aotdOn) return this.sendReply("The Artist of the Day has already been chosen.");
-		if (!target) return this.sendReply("/naotd [artist] - Nominates an artist for Artist of the Day.");
-		if (target.length > 25) return this.sendReply("This Artist's name is too long; it cannot exceed 25 characters.");
-		if (!this.canTalk()) return;
-		room.addRaw(Tools.escapeHTML(user.name) + "'s nomination for Artist of the Day is: <strong><em>" + Tools.escapeHTML(target) + "</em></strong>");
-	},
-
-	artistoftheday: 'aotd',
-	aotd: function (target, room, user) {
-		if (room.id !== 'thestudio') return this.sendReply("This command can only be used in The Studio.");
-		if (!target) {
-			if (!this.canBroadcast()) return;
-			this.sendReplyBox("The current Artist of the Day is: <b>" + Tools.escapeHTML(room.aotd) + "</b>");
-			return;
-		}
-		if (!this.canTalk()) return;
-		if (target.length > 25) return this.sendReply("This Artist\'s name is too long; it cannot exceed 25 characters.");
-		if (!this.can('aotd', room)) return;
-		room.aotd = target;
-		room.addRaw(
-			'<div class="broadcast-green">' +
-				"<h3>The Artist of the Day is now <font color=\"black\">" + Tools.escapeHTML(target) + "</font></h3>" +
-				"<p>(Set by " + Tools.escapeHTML(user.name) + ".)</p>" +
-				"<p>This Artist will be posted on our <a href=\"http://thepsstudioroom.weebly.com/artist-of-the-day.html\">Artist of the Day page</a>.</p>" +
-			'</div>'
-		);
-		room.aotdOn = false;
-		this.logModCommand("The Artist of the Day was changed to " + Tools.escapeHTML(target) + " by " + Tools.escapeHTML(user.name) + ".");
-	}
+	aotd: commands
 };

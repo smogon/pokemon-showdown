@@ -424,6 +424,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		});
 	});
 	server.installHandlers(app, {});
+	if (Config.bindaddress === '0.0.0.0') Config.bindaddress = undefined;
 	app.listen(Config.port, Config.bindAddress || undefined);
 	console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening on ' + (Config.bindAddress || '*') + ':' + Config.port);
 

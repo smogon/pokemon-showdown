@@ -303,7 +303,7 @@ exports.BattleAbilities = {
 		},
 		id: "chlorophyll",
 		name: "Chlorophyll",
-		rating: 2,
+		rating: 2.5,
 		num: 34
 	},
 	"clearbody": {
@@ -641,7 +641,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's sleep counter drops by 2 instead of 1.",
 		id: "earlybird",
 		name: "Early Bird",
-		isHalfSleep: true,
+		// Implemented in statuses.js
 		rating: 2.5,
 		num: 48
 	},
@@ -1124,7 +1124,7 @@ exports.BattleAbilities = {
 		},
 		id: "icebody",
 		name: "Ice Body",
-		rating: 2,
+		rating: 1.5,
 		num: 115
 	},
 	"illuminate": {
@@ -1258,7 +1258,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. Sucker Punch is not boosted.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.isPunchAttack) {
+			if (move.flags && move.flags['punch']) {
 				this.debug('Iron Fist boost');
 				return this.chainModify(1.2);
 			}
@@ -1674,7 +1674,6 @@ exports.BattleAbilities = {
 				if (oldAbility) {
 					this.add('-endability', source, oldAbility, '[from] Mummy');
 					this.add('-ability', source, 'Mummy', '[from] Mummy');
-					this.runEvent('EndAbility', source, oldAbility, 'mummy');
 				}
 			}
 		},
@@ -2217,7 +2216,7 @@ exports.BattleAbilities = {
 		},
 		id: "sandrush",
 		name: "Sand Rush",
-		rating: 2,
+		rating: 2.5,
 		num: 146
 	},
 	"sandstream": {
@@ -2510,7 +2509,7 @@ exports.BattleAbilities = {
 	"soundproof": {
 		shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
 		onTryHit: function (target, source, move) {
-			if (target !== source && move.isSoundBased) {
+			if (target !== source && move.flags['sound']) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
@@ -2745,7 +2744,7 @@ exports.BattleAbilities = {
 		},
 		id: "swiftswim",
 		name: "Swift Swim",
-		rating: 2,
+		rating: 2.5,
 		num: 33
 	},
 	"symbiosis": {

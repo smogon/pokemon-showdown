@@ -148,7 +148,7 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.notSubBlocked || move.isSoundBased) {
+				if (move.notSubBlocked || move.flags['sound']) {
 					return;
 				}
 				if (move.category === 'Status') {
@@ -1018,10 +1018,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: true
 	},
-	triplekick: {
-		inherit: true,
-		accuracy: true
-	},
 	watershuriken: {
 		inherit: true,
 		accuracy: true
@@ -1198,7 +1194,6 @@ exports.BattleMovedex = {
 		category: "Special",
 		isViable: true,
 		priority: 0,
-		isSoundBased: true,
 		affectedByImmunities: false,
 		onHit: function (target, source) {
 			source.side.addSideCondition('futuremove');
@@ -1213,7 +1208,6 @@ exports.BattleMovedex = {
 				moveData: {
 					basePower: 80,
 					category: "Special",
-					isSoundBased: true,
 					isNotProtectable: true,
 					affectedByImmunities: false,
 					type: 'Normal'
@@ -1389,6 +1383,13 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'eelektross') return this.chainModify(1.5);
 		}
+	},
+	triplekick: {
+		inherit: true,
+		onBasePower: function (power, user) {
+			if (user.template.id === 'hitmontop') return this.chainModify(1.5);
+		},
+		accuracy: true
 	},
 	bubblebeam: {
 		inherit: true,
