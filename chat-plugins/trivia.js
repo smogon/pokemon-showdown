@@ -92,7 +92,8 @@ var Trivia = (function () {
 
 		var latestIp = user.latestIp;
 		for (var participant, participantsIterator = this.participants.keys(); !!(participant = participantsIterator.next().value);) { // replace with for-of loop once available
-			if (participant.ips[latestIp]) return output.sendReply('You have already signed up for this trivia game.');
+			var targetUser = Users.get(participant);
+			if (targetUser && targetUser.ips[latestIp]) return output.sendReply('You have already signed up for this trivia game.');
 		}
 
 		var scoreData = {score: 0, correctAnswers: 0};
