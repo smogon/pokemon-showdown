@@ -39,6 +39,26 @@
  * return anything or return something falsy, the user won't say
  * anything.
  *
+ * A command can also be an object, in which case is treated like
+ * a namespace:
+ *
+ *   game: {
+ *     play: function (target, room, user) {
+ *       user.isPlaying = true;
+ *       this.sendReply("Playing.");
+ *     },
+ *     stop: function (target, room, user) {
+ *       user.isPlaying = false;
+ *       this.sendReply("Stopped.");
+ *     }
+ *   }
+ *
+ * These commands can be called by '/game play' and '/game stop'.
+ * Namespaces help organise commands, and nest them under
+ * one main command.
+ * Note: Multiple namespaces can be nested, but the final (innermost)
+ *       command must be a function.
+ *
  * Commands have access to the following functions:
  *
  * this.sendReply(message)
@@ -123,12 +143,18 @@
  *     target = this.canTalk(target);
  *     if (!target) return false;
  *
- * this.parse(message)
+ * this.parse(message, inNamespace)
  *   Runs the message as if the user had typed it in.
  *
  *   Mostly useful for giving help messages, like for commands that
  *   require a target:
  *     if (!target) return this.parse('/help msg');
+ *
+ *   If `inNamespace` is true, then the message is parsed in that
+ *   corresponding namespace:
+ *     // command msg is in namespace test. (ie. /test msg)
+ *     this.parse('/help', true); // is parsed as if the user said
+ *                                // '/test help'
  *
  *   After 10 levels of recursion (calling this.parse from a command
  *   called by this.parse from a command called by this.parse etc)
@@ -282,6 +308,7 @@ var commands = exports.commands = {
 	 * Shortcuts
 	 *********************************************************/
 
+	inv: 'invite',
 	invite: function (target, room, user) {
 		target = this.splitTarget(target);
 		if (!this.targetUser) {
@@ -741,9 +768,11 @@ var commands = exports.commands = {
 		this.sendReplyBox(buffer);
 	},
 
+	weaknesses: 'weakness',
 	weak: 'weakness',
 	resist: 'weakness',
 	weakness: function (target, room, user) {
+		if (!target) return this.parse('/help weakness');
 		if (!this.canBroadcast()) return;
 		var targets = target.split(/[ ,\/]/);
 
@@ -882,6 +911,8 @@ var commands = exports.commands = {
 		}, ""));
 	},
 
+	repo: 'opensource',
+	repository: 'opensource',
 	git: 'opensource',
 	opensource: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -968,6 +999,7 @@ var commands = exports.commands = {
 		);
 	},
 
+	capintro: 'cap',
 	cap: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
@@ -1017,7 +1049,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">Other Metagame of the Month</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521887/\">Current OMotM: Classic Hackmons</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Current OMotM: Hidden Type</a><br />";
 		}
 		if (target === 'all' || target === 'seasonal') {
 			matched = true;
@@ -1042,8 +1074,8 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
 			matched = true;
-			if (target !== 'all') buffer += "Pokémon below OU get all their stats boosted. BL/UU get +5, BL2/RU get +10, and BL3/NU or lower get +15.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3508369/\">Tier Shift</a><br />";
+			if (target !== 'all') buffer += "Pokémon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, and NU or lower get +15.<br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3532973/\">Tier Shift</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3514386/\">Tier Shift Viability Rankings</a><br />";
 		}
 		if (target === 'all' || target === 'pu') {
@@ -1091,6 +1123,10 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'middlecup' || target === 'mc') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524287/\">Middle Cup</a><br />";
+		}
+		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3532902/\">OU Theorymon</a><br />";
 		}
 		if (!matched) {
 			return this.sendReply("The Other Metas entry '" + target + "' was not found. Try /othermetas or /om for general help.");
@@ -1636,13 +1672,29 @@ var commands = exports.commands = {
 			this.sendReply("/calc - Provides a link to a damage calculator");
 			this.sendReply("!calc - Shows everyone a link to a damage calculator. Requires: " + Users.getGroupsThatCan('broadcast', room).join(" "));
 		}
-		if (target === 'blockchallenges' || target === 'away' || target === 'idle') {
+		if (target === 'away' || target === 'idle') {
 			matched = true;
-			this.sendReply("/away - Blocks challenges so no one can challenge you. Deactivate it with /back.");
+			this.sendReply("/away - Blocks challenges and private messages separately. Different from /blockpms in that it will still block challenges if you're staff. Unblock them with /back.");
 		}
-		if (target === 'allowchallenges' || target === 'back') {
+		if (target === 'blockchallenges') {
 			matched = true;
-			this.sendReply("/back - Unlocks challenges so you can be challenged again. Deactivate it with /away.");
+			this.sendReply("/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges.");
+		}
+		if (target === 'blockpms' || target === 'ignorepms') {
+			matched = true;
+			this.sendReply("/blockpms - Blocks private messages (including challenges). Unblock them with /unignorepms.");
+		}
+		if (target === 'back') {
+			matched = true;
+			this.sendReply("/back - Unblocks challenges and/or private messages, if either are blocked.");
+		}
+		if (target === 'unblockchallenges' || target === 'allowchallenges') {
+			matched = true;
+			this.sendReply("/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.");
+		}
+		if (target === 'unblockpms' || target === 'unignorepms') {
+			matched = true;
+			this.sendReply("/unblockpms - Unblocks private messages. Block them with /blockpms.");
 		}
 		if (target === 'faq') {
 			matched = true;
@@ -1651,8 +1703,15 @@ var commands = exports.commands = {
 		}
 		if (target === 'effectiveness' || target === 'matchup' || target === 'eff' || target === 'type') {
 			matched = true;
-			this.sendReply("/effectiveness OR /matchup OR /eff OR /type [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.");
-			this.sendReply("!effectiveness OR !matchup OR !eff OR !type [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.");
+			this.sendReply("/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.");
+			this.sendReply("!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon.");
+		}
+		if (target === 'weakness' || target === 'weaknesses' || target === 'weak' || target === 'resist') {
+			matched = true;
+			this.sendReply("/weakness [pokemon] - Provides a Pokemon's resistances, weaknesses, and immunities, ignoring abilities.");
+			this.sendReply("/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.");
+			this.sendReply("!weakness [pokemon] - Shows everyone a Pokemon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ & ~");
+			this.sendReply("!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ & ~");
 		}
 		if (target === 'dexsearch' || target === 'dsearch' || target === 'ds') {
 			matched = true;
@@ -1677,6 +1736,10 @@ var commands = exports.commands = {
 		if (target === 'invite') {
 			matched = true;
 			this.sendReply("/invite [username], [roomname] - Invites the player [username] to join the room [roomname].");
+		}
+		if (target === 'addplayer') {
+			matched = true;
+			this.sendReply("/addplayer [username] - Allow the specified user to join the battle as a player.");
 		}
 
 		// driver commands

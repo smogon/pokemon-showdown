@@ -195,10 +195,7 @@ exports.BattleMovedex = {
 	doomdesire: {
 		inherit: true,
 		accuracy: 85,
-		basePower: 120,
-		onModifyMove: function (move) {
-			move.type = '???';
-		}
+		basePower: 120
 	},
 	dreameater: {
 		inherit: true,
@@ -327,6 +324,20 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 70
 	},
+	focuspunch: {
+		inherit: true,
+		beforeMoveCallback: function () { },
+		onTry: function (pokemon) {
+			if (!pokemon.removeVolatile('focuspunch')) {
+				return;
+			}
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.damage && pokemon.lastAttackedBy.thisTurn) {
+				this.attrLastMove('[still]');
+				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
+				return false;
+			}
+		}
+	},
 	foresight: {
 		inherit: true,
 		isBounceable: false
@@ -339,10 +350,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 90,
 		basePower: 80,
-		pp: 15,
-		onModifyMove: function (move) {
-			move.type = '???';
-		}
+		pp: 15
 	},
 	gigadrain: {
 		inherit: true,
