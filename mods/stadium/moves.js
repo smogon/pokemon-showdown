@@ -1,7 +1,34 @@
 exports.BattleMovedex = {
+	"acid": {
+		inherit: true,
+		secondary: {
+			chance: 20,
+			boosts: {
+				def: -1
+			}
+		}
+	},
+	aurorabeam: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			boosts: {
+				atk: -1
+			}
+		}
+	},
 	bind: {
 		inherit: true,
 		onBeforeMove: function () {}
+	},
+	bubblebeam: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			boosts: {
+				spe: -1
+			}
+		}
 	},
 	clamp: {
 		inherit: true,
