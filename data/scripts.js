@@ -3118,7 +3118,7 @@ exports.BattleScripts = {
 				baseSignatureMove: 'pursuit', signatureMove: "Predator",
 				evs: {atk:252, def:4, spe: 252}, nature: 'Jolly'
 			},
-			'@Antemortem': {
+			'@antemortem': {
 				species: 'Clefable', ability: (variant === 1 ? 'Sheer Force' : 'Multiscale'), item: (variant === 1 ? 'Life Orb' : 'Leftovers'), gender: 'M',
 				moves: ['earthpower', 'cosmicpower', 'recover', 'gigadrain'],
 				baseSignatureMove: 'drainingkiss', signatureMove: "Postmortem",

@@ -2314,6 +2314,11 @@ Battle = (function () {
 			}
 			if (foeCallbackType) {
 				statuses = statuses.concat(this.getRelevantEffectsInner(thing.foe, foeCallbackType, null, null, false, false, getAll));
+				if (foeCallbackType.substr(0, 5) === 'onFoe') {
+					var eventName = foeCallbackType.substr(5);
+					statuses = statuses.concat(this.getRelevantEffectsInner(thing.foe, 'onAny' + eventName, null, null, false, false, getAll));
+					statuses = statuses.concat(this.getRelevantEffectsInner(thing, 'onAny' + eventName, null, null, false, false, getAll));
+				}
 			}
 			if (bubbleUp) {
 				statuses = statuses.concat(this.getRelevantEffectsInner(this, callbackType, null, null, true, false, getAll));
