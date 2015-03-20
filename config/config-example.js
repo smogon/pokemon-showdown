@@ -293,9 +293,10 @@ exports.groups = {
 			name: "Player",
 			description: "Only in battles, they are the players that are battling",
 			inherit: '+',
+			joinbattle: true,
 			modchat: true,
 			privateroom: true,
-			roompromote: 'u'
+			roompromote: '\u2605u'
 		},
 		'@': {
 			id: 'mod',
@@ -323,6 +324,7 @@ exports.groups = {
 			bypassblocks: 'u%@&~',
 			forcerename: true,
 			jeopardy: true,
+			joinbattle: true,
 			kick: true,
 			lock: true,
 			mute: true,
@@ -337,8 +339,7 @@ exports.groups = {
 			name: "Voice",
 			description: "They can use ! commands like !groups, and talk during moderated chat",
 			inherit: ' ',
-			broadcast: true,
-			joinbattle: true
+			broadcast: true
 		},
 		' ': {
 			alts: 's',
