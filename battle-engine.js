@@ -400,6 +400,7 @@ BattlePokemon = (function () {
 
 		// stat boosts
 		// boost = this.boosts[statName];
+		boost = this.battle.runEvent('ModifyBoost', this, statName, null, boost);
 		var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 		if (boost > 6) boost = 6;
 		if (boost < -6) boost = -6;
@@ -429,6 +430,7 @@ BattlePokemon = (function () {
 		// stat boosts
 		if (!unboosted) {
 			var boost = this.boosts[statName];
+			boost = this.battle.runEvent('ModifyBoost', this, statName, null, boost);
 			var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 			if (boost > 6) boost = 6;
 			if (boost < -6) boost = -6;
@@ -2744,6 +2746,7 @@ Battle = (function () {
 			if (!effect) effect = this.effect;
 		}
 		if (!target || !target.hp) return 0;
+		if (!target.isActive) return false;
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.clone(boost));
 		var success = false;
@@ -2782,6 +2785,7 @@ Battle = (function () {
 			if (!effect) effect = this.effect;
 		}
 		if (!target || !target.hp) return 0;
+		if (!target.isActive) return false;
 		effect = this.getEffect(effect);
 		if (!(damage || damage === 0)) return damage;
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
@@ -2876,6 +2880,7 @@ Battle = (function () {
 		damage = this.runEvent('TryHeal', target, source, effect, damage);
 		if (!damage) return 0;
 		if (!target || !target.hp) return 0;
+		if (!target.isActive) return false;
 		if (target.hp >= target.maxhp) return 0;
 		damage = target.heal(damage, source, effect);
 		switch (effect.id) {
@@ -3081,7 +3086,11 @@ Battle = (function () {
 
 		// randomizer
 		// this is not a modifier
-		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
+		if (this.gen <= 5) {
+			baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
+		} else {
+			baseDamage = Math.floor(baseDamage * (85 + this.random(16)) / 100);
+		}
 
 		// STAB
 		if (move.hasSTAB || type !== '???' && pokemon.hasType(type)) {
@@ -3538,6 +3547,7 @@ Battle = (function () {
 			break;
 		case 'runSwitch':
 			this.runEvent('SwitchIn', decision.pokemon);
+			if (this.gen === 1 && !decision.pokemon.side.faintedThisTurn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
 			if (!decision.pokemon.hp) break;
 			decision.pokemon.isStarted = true;
 			if (!decision.pokemon.fainted) {
@@ -3606,6 +3616,9 @@ Battle = (function () {
 		}
 
 		if (p1switch || p2switch) {
+			if (this.gen >= 5) {
+				this.eachEvent('Update');
+			}
 			this.makeRequest('switch');
 			return true;
 		}

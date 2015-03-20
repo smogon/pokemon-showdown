@@ -7,11 +7,13 @@
 // checks whether any alt of the user is present in list.
 function checkAllAlts(user, list) {
 	for (var prevName in user.prevNames) {
+		if (prevName === user.userid) continue;
 		if (prevName in list) return 'previous name ' + prevName;
 	}
-	var alts = user.getAlts().map(toId);
-	for (var i = 0; i < alts.length; i++) {
-		if (alts[i] in list) return 'alt ' + alts[i];
+	var ip = user.latestIp;
+	for (var id in list) {
+		var matchUser = Users.get(id);
+		if (matchUser.latestIp === ip && matchUser.userid !== user.userid) return 'alt ' + matchUser.name;
 	}
 	return false;
 }
@@ -238,7 +240,7 @@ var LotteryGiveAway = (function () {
 		}
 		finallist = finallist.join(', ');
 		this.room.addRaw('<div class = "broadcast-blue"><font size = 2><b>Lottery Draw: </b></font>' + Object.keys(this.joined).length + ' users have joined the lottery.<br/>' +
-			'Our lucky winner(s): <b>' + Tools.escapeHTML(finallist) + ' !</b> Congratulations!');
+			'Our lucky winner(s): <b>' + Tools.escapeHTML(finallist) + '!</b> Congratulations!');
 		this.room.update();
 
 		for (var id in this.winners) {
@@ -353,8 +355,10 @@ var commands = {
 		spawnGiveaway('lottery', user, targetUser, room, options);
 		this.privateModCommand("(" + user.name + " has started a lottery giveaway.)");
 	},
+	leavelotto: 'join',
 	leavelottery: 'join',
 	leave: 'join',
+	joinlotto: 'join',
 	joinlottery: 'join',
 	join: function (target, room, user, conn, cmd) {
 		if (room.id !== 'wifi') return this.sendReply("This command can only be used in the Wi-Fi room.");
@@ -364,10 +368,12 @@ var commands = {
 		switch (cmd) {
 		case 'joinlottery':
 		case 'join':
+		case 'joinlotto':
 			giveaway.addUser(user, this);
 			break;
 		case 'leavelottery':
 		case 'leave':
+		case 'leavelotto':
 			giveaway.removeUser(user, this);
 			break;
 		}
