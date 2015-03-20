@@ -2081,7 +2081,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		isPowder: true,
 		boosts: {
 			spe: -2
 		},
@@ -9966,7 +9965,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		isPowder: true,
 		onTryHit: function (pokemon) {
 			if (!pokemon.runImmunity('powder')) return false;
 		},
@@ -10044,7 +10042,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 1,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isPowder: true,
 		onTryHit: function (pokemon) {
 			if (!pokemon.runImmunity('powder')) return false;
 		},
@@ -10767,7 +10764,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 2,
 		flags: {powder: 1},
-		isPowder: true,
 		volatileStatus: 'ragepowder',
 		effect: {
 			duration: 1,
@@ -12634,7 +12630,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		isPowder: true,
 		onTryHit: function (pokemon) {
 			if (!pokemon.runImmunity('powder')) return false;
 		},
@@ -13269,7 +13264,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		isPowder: true,
 		onTryHit: function (pokemon) {
 			if (!pokemon.runImmunity('powder')) return false;
 		},
@@ -13615,7 +13609,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		isPowder: true,
 		onTryHit: function (pokemon) {
 			if (!pokemon.runImmunity('powder')) return false;
 		},
