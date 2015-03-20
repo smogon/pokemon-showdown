@@ -683,7 +683,7 @@ exports.Formats = [
 				this.add('c|@AM|Lucky and Bad');
 			}
 			if (name === 'antemortem') {
-				this.add('c|@Antemortem|I Am Here To Oppress Users');
+				this.add('c|@antemortem|I Am Here To Oppress Users');
 			}
 			if (name === 'ascriptmaster') {
 				this.add("c|@Ascriptmaster|Good luck, I'm behind 7 proxies");
@@ -927,7 +927,7 @@ exports.Formats = [
 				sentences = ['Hey, hey, can I gently scramble your insides (just for laughs)? ``hahahaha``', 'check em', 'If you strike me down, I shall become more powerful than you can possibly imagine! I have a strong deathrattle effect and I cannot be silenced!'];
 				this.add('c|@Temporaryanonymous|' + sentences[this.random(3)]);
 			}
-			if (name === 'Test2017') {
+			if (name === 'test2017') {
 				var quacks = '';
 				var count = 0;
 				do {
@@ -1246,7 +1246,7 @@ exports.Formats = [
 				this.add('c|@AM|RIP');
 			}
 			if (name === 'antemortem') {
-				this.add('c|@Antemortem|FUCKING CAMPAIGNERS');
+				this.add('c|@antemortem|FUCKING CAMPAIGNERS');
 			}
 			if (name === 'ascriptmaster') {
 				this.add('c|@Ascriptmaster|Too overpowered. I\'m nerfing you next patch');
