@@ -60,7 +60,7 @@ exports.reverse = function reverseDns(ip, callback) {
 			callback(null, ['ideacellular.nohost']);
 			return;
 		}
-		if (ip.startsWith('172.56.')) {
+		if (ip.startsWith('172.56.') || ip.startsWith('149.254.')) {
 			callback(null, ['tmobile.nohost']);
 			return;
 		}
