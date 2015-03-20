@@ -1242,7 +1242,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		secondary: false,
 		target: "allAdjacent",
 		type: "Normal"
@@ -1447,7 +1446,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -1513,7 +1511,6 @@ exports.BattleMovedex = {
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -1723,7 +1720,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, distance: 1, authentic: 1},
-		isSoundBased: true,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'confusion'
@@ -1866,7 +1862,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -1884,7 +1879,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		isNotProtectable: true,
 		boosts: {
 			spa: -1
@@ -2741,7 +2735,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		secondary: false,
 		target: "allAdjacentFoes",
 		type: "Fairy"
@@ -2830,7 +2823,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion'
@@ -3175,7 +3167,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1, heal: 1},
 		isContact: true,
-		isPunchAttack: true,
 		drain: [1, 2],
 		secondary: false,
 		target: "normal",
@@ -3273,7 +3264,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'confusion'
@@ -3355,7 +3345,6 @@ exports.BattleMovedex = {
 				}
 			}
 		},
-		isSoundBased: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -4215,7 +4204,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -4688,7 +4676,6 @@ exports.BattleMovedex = {
 		priority: -3,
 		flags: {contact: 1, protect: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		beforeTurnCallback: function (pokemon) {
 			pokemon.addVolatile('focuspunch');
 		},
@@ -5394,7 +5381,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		status: 'slp',
 		secondary: false,
 		target: "normal",
@@ -5539,7 +5525,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		boosts: {
 			atk: -1
 		},
@@ -5773,7 +5758,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		self: {
 			boosts: {
 				spe: -1
@@ -5918,7 +5902,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, sound: 1, distance: 1, authentic: 1},
-		isSoundBased: true, // though it isn't affected by Soundproof
 		onHit: function (pokemon, source) {
 			var side = pokemon.side;
 			for (var i = 0; i < side.pokemon.length; i++) {
@@ -6857,7 +6840,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		secondary: false,
 		target: "allAdjacentFoes",
 		type: "Normal"
@@ -7021,7 +7003,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 10,
 			status: 'frz'
@@ -8009,7 +7990,6 @@ exports.BattleMovedex = {
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -8431,7 +8411,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8560,7 +8539,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		boosts: {
 			spd: -2
 		},
@@ -8582,7 +8560,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 20,
 			self: {
@@ -9404,7 +9381,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		boosts: {
 			atk: -1,
 			spa: -1
@@ -9631,7 +9607,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		selfSwitch: true,
 		boosts: {
 			atk: -1,
@@ -9719,7 +9694,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {sound: 1, distance: 1, authentic: 1},
-		isSoundBased: true,
 		onHitField: function (target, source) {
 			var result = true;
 			for (var i = 0; i < this.sides.length; i++) {
@@ -10241,7 +10215,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -11080,7 +11053,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		secondary: {
 			chance: 10,
 			status: 'slp'
@@ -11249,7 +11221,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -6,
 		flags: {reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		isNotProtectable: true,
 		forceSwitch: true,
 		secondary: false,
@@ -11634,7 +11605,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		onTryHit: function (target, source) {
 			for (var i = 0; i < this.queue.length; i++) {
 				var decision = this.queue[i];
@@ -11865,7 +11835,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		boosts: {
 			def: -2
 		},
@@ -12127,7 +12096,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -12337,7 +12305,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		status: 'slp',
 		secondary: false,
 		target: "normal",
@@ -12597,7 +12564,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -12896,7 +12862,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -12950,7 +12915,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		sleepUsable: true,
 		onTryHit: function (target, source) {
 			if (source.status !== 'slp') return false;
@@ -13717,7 +13681,7 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.notSubBlocked || move.isSoundBased && this.gen >= 6) {
+				if (move.notSubBlocked || (move.flags['sound'] && this.gen >= 6)) {
 					return;
 				}
 				if (move.category === 'Status') {
@@ -13864,7 +13828,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		volatileStatus: 'confusion',
 		secondary: false,
 		target: "normal",
@@ -14526,7 +14489,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		isContact: true,
-		isPunchAttack: true,
 		secondary: {
 			chance: 10,
 			status: 'par'
@@ -15033,7 +14995,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
-		isSoundBased: true,
 		self: {
 			volatileStatus: 'uproar'
 		},

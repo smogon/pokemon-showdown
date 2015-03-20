@@ -1258,7 +1258,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. Sucker Punch is not boosted.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.isPunchAttack) {
+			if (move.flags && move.flags['punch']) {
 				this.debug('Iron Fist boost');
 				return this.chainModify(1.2);
 			}
@@ -2509,7 +2509,7 @@ exports.BattleAbilities = {
 	"soundproof": {
 		shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
 		onTryHit: function (target, source, move) {
-			if (target !== source && move.isSoundBased) {
+			if (target !== source && move.flags['sound']) {
 				this.add('-immune', target, '[msg]');
 				return null;
 			}
