@@ -2688,7 +2688,7 @@ Battle = (function () {
 		this.add('turn', this.turn);
 
 		if (this.gameType === 'triples' && this.sides.map('pokemonLeft').count(1) === this.sides.length) {
-			// If both sides have one Pokemon left in triples, they are both moved to the center.
+			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			var center = false;
 			for (var i = 0; i < this.sides.length; i++) {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
