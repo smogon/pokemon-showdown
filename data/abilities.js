@@ -273,7 +273,7 @@ exports.BattleAbilities = {
 	"bulletproof": {
 		shortDesc: "This Pokemon is immune to bullet moves.",
 		onTryHit: function (pokemon, target, move) {
-			if (move.flags && move.flags['bullet']) {
+			if (move.flags['bullet']) {
 				this.add('-immune', pokemon, '[msg]', '[from] Bulletproof');
 				return null;
 			}
@@ -1258,7 +1258,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. Sucker Punch is not boosted.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.flags && move.flags['punch']) {
+			if (move.flags['punch']) {
 				this.debug('Iron Fist boost');
 				return this.chainModify(1.2);
 			}
@@ -1528,7 +1528,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's pulse moves have 1.5x power. Heal Pulse heals 3/4 target's max HP.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.flags && move.flags['pulse']) {
+			if (move.flags['pulse']) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -2644,7 +2644,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's bite-based attacks have 1.5x power. Bug Bite is not boosted.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.flags && move.flags['bite']) {
+			if (move.flags['bite']) {
 				return this.chainModify(1.5);
 			}
 		},

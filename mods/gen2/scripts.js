@@ -293,7 +293,8 @@ exports.BattleScripts = {
 		if (typeof move === 'number') move = {
 			basePower: move,
 			type: '???',
-			category: 'Physical'
+			category: 'Physical',
+			flags: {}
 		};
 
 		// Let's test for immunities.
