@@ -2966,7 +2966,8 @@ Battle = (function () {
 		if (typeof move === 'number') move = {
 			basePower: move,
 			type: '???',
-			category: 'Physical'
+			category: 'Physical',
+			flags: {}
 		};
 
 		if (move.affectedByImmunities) {

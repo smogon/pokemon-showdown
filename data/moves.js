@@ -2882,6 +2882,7 @@ exports.BattleMovedex = {
 				moveData: {
 					basePower: 140,
 					category: "Special",
+					flags: {},
 					type: 'Steel'
 				}
 			};
@@ -5111,6 +5112,7 @@ exports.BattleMovedex = {
 				moveData: {
 					basePower: 120,
 					category: "Special",
+					flags: {},
 					affectedByImmunities: true,
 					type: 'Psychic'
 				}
@@ -13700,7 +13702,7 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.notSubBlocked || (move.flags && move.flags['sound'] && this.gen >= 6)) {
+				if (move.notSubBlocked || (move.flags['sound'] && this.gen >= 6)) {
 					return;
 				}
 				if (move.category === 'Status') {
