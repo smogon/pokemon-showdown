@@ -7766,11 +7766,11 @@ exports.BattleMovedex = {
 				}
 				return 5;
 			},
-			onFoeModifyDamage: function (damage, source, target, move) {
-				if (this.getCategory(move) === 'Special' && target.side === this.effectData.target) {
+			onAnyModifyDamage: function (damage, source, target, move) {
+				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
 					if (!move.crit && !move.ignoreScreens) {
 						this.debug('Light Screen weaken');
-						if (source.side.active.length > 1) return this.chainModify(0.66);
+						if (target.side.active.length > 1) return this.chainModify(0.66);
 						return this.chainModify(0.5);
 					}
 				}
@@ -10992,11 +10992,11 @@ exports.BattleMovedex = {
 				}
 				return 5;
 			},
-			onFoeModifyDamage: function (damage, source, target, move) {
-				if (this.getCategory(move) === 'Physical' && target.side === this.effectData.target) {
+			onAnyModifyDamage: function (damage, source, target, move) {
+				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
 					if (!move.crit && !move.ignoreScreens) {
 						this.debug('Reflect weaken');
-						if (source.side.active.length > 1) return this.chainModify(0.66);
+						if (target.side.active.length > 1) return this.chainModify(0.66);
 						return this.chainModify(0.5);
 					}
 				}
