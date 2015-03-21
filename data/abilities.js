@@ -735,6 +735,9 @@ exports.BattleAbilities = {
 				return null;
 			}
 		},
+		onEnd: function (pokemon) {
+			pokemon.removeVolatile('flashfire');
+		},
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function (target) {
@@ -3016,12 +3019,11 @@ exports.BattleAbilities = {
 		onTakeItem: function (item, pokemon) {
 			pokemon.addVolatile('unburden');
 		},
+		onEnd: function (pokemon) {
+			pokemon.removeVolatile('unburden');
+		},
 		effect: {
 			onModifySpe: function (speMod, pokemon) {
-				if (pokemon.ignore['Ability'] === true || pokemon.ability !== 'unburden') {
-					pokemon.removeVolatile('unburden');
-					return;
-				}
 				if (!pokemon.item) {
 					return this.chain(speMod, 2);
 				}
