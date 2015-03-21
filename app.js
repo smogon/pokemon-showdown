@@ -93,6 +93,7 @@ if (Config.watchconfig) {
 		try {
 			delete require.cache[require.resolve('./config/config.js')];
 			global.Config = require('./config/config.js');
+			if (global.Users) Users.cacheGroupData();
 			console.log('Reloaded config/config.js');
 		} catch (e) {}
 	});
