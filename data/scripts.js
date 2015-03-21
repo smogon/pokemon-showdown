@@ -1162,7 +1162,7 @@ exports.BattleScripts = {
 					if (!!counter['speedsetup'] || hasMove['encore'] || hasMove['raindance'] || hasMove['roar'] || hasMove['whirlwind']) rejected = true;
 					if (setupType && hasMove['stormthrow']) rejected = true;
 					break;
-				case 'defog': case 'pursuit': case 'haze': case 'healingwish': case 'rapidspin': case 'spikes': case 'stealthrock': case 'waterspout':
+				case 'defog': case 'pursuit': case 'haze': case 'healingwish': case 'rapidspin': case 'spikes': case 'waterspout':
 					if (setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'fakeout':
@@ -1180,6 +1180,9 @@ exports.BattleScripts = {
 				case 'protect':
 					if (setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
+				case 'stealthrock':
+					if (setupType || !!counter['speedsetup'] || hasMove['rest']) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
 					if (setupType || counter.Physical + counter.Special < 2) rejected = true;
