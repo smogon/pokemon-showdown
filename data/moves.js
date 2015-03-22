@@ -12397,9 +12397,9 @@ exports.BattleMovedex = {
 			var targetAbility = this.getAbility(target.ability);
 			var sourceAbility = this.getAbility(source.ability);
 			this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
+			source.battle.singleEvent('End', sourceAbility, source.abilityData, source);
+			target.battle.singleEvent('End', targetAbility, target.abilityData, target);
 			if (targetAbility.id !== sourceAbility.id) {
-				source.battle.singleEvent('End', sourceAbility, source.abilityData, source);
-				target.battle.singleEvent('End', targetAbility, target.abilityData, target);
 				source.ability = targetAbility.id;
 				target.ability = sourceAbility.id;
 				source.abilityData = {id: source.ability.id, target: source};
