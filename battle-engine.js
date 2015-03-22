@@ -1474,6 +1474,7 @@ BattleSide = (function () {
 				decisions.push({
 					choice: 'switch',
 					pokemon: this.active[canSwitchOut[i]],
+					target: this.pokemon[canSwitchIn[i]],
 					priority: 101
 				});
 			}
