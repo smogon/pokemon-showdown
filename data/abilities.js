@@ -1040,8 +1040,8 @@ exports.BattleAbilities = {
 	},
 	"heavymetal": {
 		shortDesc: "This Pokemon's weight is doubled.",
-		onModifyPokemon: function (pokemon) {
-			pokemon.weightkg *= 2;
+		onModifyWeight: function (weight) {
+			return weight * 2;
 		},
 		id: "heavymetal",
 		name: "Heavy Metal",
@@ -1345,8 +1345,8 @@ exports.BattleAbilities = {
 	},
 	"lightmetal": {
 		shortDesc: "This Pokemon's weight is halved.",
-		onModifyPokemon: function (pokemon) {
-			pokemon.weightkg /= 2;
+		onModifyWeight: function (weight) {
+			return weight / 2;
 		},
 		id: "lightmetal",
 		name: "Light Metal",
