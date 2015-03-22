@@ -24,5 +24,6 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'rotomfan').learnset.airslash = null;
 		this.modData('Learnsets', 'mantine').learnset.roost = ['6T'];
 		this.modData('Learnsets', 'pidgeot').learnset.focusblast = ['6T'];
+		this.modData('Pokedex', 'granbull').abilities['1'] = 'Fur Coat';
 	}
 };
