@@ -247,6 +247,9 @@ var commands = exports.commands = {
 				delete room.chatRoomData.isPrivate;
 				Rooms.global.writeChatRoomData();
 			}
+			if (Rooms.global.chatRooms.indexOf(room) < 0) {
+				Rooms.global.chatRooms.push(room);
+			}
 		} else {
 			room.isPrivate = setting;
 			this.addModCommand("" + user.name + " made this room " + (setting === true ? 'secret' : setting) + ".");
