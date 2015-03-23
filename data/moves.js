@@ -610,7 +610,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isBounceable: true,
 		volatileStatus: 'attract',
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
@@ -1131,7 +1130,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1},
 		isNotProtectable: true,
-		isBounceable: true,
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
@@ -2529,7 +2527,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isBounceable: true,
 		onHit: function (target, source, move) {
 			if (!target.volatiles['substitute'] || move.notSubBlocked) this.boost({evasion:-1});
 			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
@@ -2697,7 +2694,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isBounceable: true,
 		volatileStatus: 'disable',
 		effect: {
 			duration: 4,
@@ -3546,7 +3542,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		volatileStatus: 'embargo',
 		effect: {
 			duration: 5,
@@ -3599,7 +3594,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isBounceable: true,
 		volatileStatus: 'encore',
 		effect: {
 			duration: 3,
@@ -3740,7 +3734,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		onTryHit: function (target, source) {
 			if (target === source) return false;
 			var bannedTargetAbilities = {multitype:1, stancechange:1, truant:1};
@@ -4784,7 +4777,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isBounceable: true,
 		volatileStatus: 'foresight',
 		effect: {
 			onStart: function (pokemon) {
@@ -4816,7 +4808,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		onHit: function (target) {
 			if (target.hasType('Grass')) return false;
 			if (!target.addType('Grass')) return false;
@@ -5138,7 +5129,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		volatileStatus: 'gastroacid',
 		onTryHit: function (pokemon) {
 			var bannedAbilities = {multitype:1, stancechange:1};
@@ -5954,7 +5944,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		volatileStatus: 'healblock',
 		effect: {
 			duration: 5,
@@ -6024,7 +6013,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, pulse: 1, reflectable: 1, distance: 1, heal: 1},
-		isBounceable: true,
 		onHit: function (target, source) {
 			if (source.hasAbility('megalauncher')) {
 				this.heal(this.modify(target.maxhp, 0.75));
@@ -7662,7 +7650,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		volatileStatus: 'leechseed',
 		effect: {
 			onStart: function (target) {
@@ -8045,30 +8032,22 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 2,
 			onTryHit: function (target, source, move) {
-				if (target === source) return;
-				if (move.hasBounced) return;
-				if (typeof move.isBounceable === 'undefined') {
-					move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+				if (target === source || move.hasBounced || !move.flags['reflectable']) {
+					return;
 				}
-				if (move.isBounceable) {
-					var newMove = this.getMoveCopy(move.id);
-					newMove.hasBounced = true;
-					this.useMove(newMove, target, source);
-					return null;
-				}
+				var newMove = this.getMoveCopy(move.id);
+				newMove.hasBounced = true;
+				this.useMove(newMove, target, source);
+				return null;
 			},
 			onAllyTryHitSide: function (target, source, move) {
-				if (target.side === source.side) return;
-				if (move.hasBounced) return;
-				if (typeof move.isBounceable === 'undefined') {
-					move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+				if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+					return;
 				}
-				if (move.isBounceable) {
-					var newMove = this.getMoveCopy(move.id);
-					newMove.hasBounced = true;
-					this.useMove(newMove, target, source);
-					return null;
-				}
+				var newMove = this.getMoveCopy(move.id);
+				newMove.hasBounced = true;
+				this.useMove(newMove, target, source);
+				return null;
 			}
 		},
 		secondary: false,
@@ -8365,7 +8344,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1},
 		isNotProtectable: true,
-		isBounceable: true,
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
@@ -8476,7 +8454,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		isBounceable: false,
 		boosts: {
 			atk: -2,
 			spa: -2
@@ -8760,7 +8737,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isBounceable: true,
 		volatileStatus: 'miracleeye',
 		effect: {
 			onStart: function (pokemon) {
@@ -9490,7 +9466,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isBounceable: true,
 		volatileStatus: 'foresight',
 		secondary: false,
 		target: "normal",
@@ -10075,7 +10050,6 @@ exports.BattleMovedex = {
 		onTryHit: function (pokemon) {
 			if (!pokemon.runImmunity('powder')) return false;
 		},
-		isBounceable: true,
 		volatileStatus: 'powder',
 		effect: {
 			duration: 1,
@@ -12300,7 +12274,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		onTryHit: function (pokemon) {
 			var bannedAbilities = {multitype:1, simple:1, stancechange:1, truant:1};
 			if (bannedAbilities[pokemon.ability]) {
@@ -13014,7 +12987,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		onHit: function (target) {
 			if (!target.setType('Water')) return false;
 			this.add('-start', target, 'typechange', 'Water');
@@ -13144,7 +13116,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
@@ -13184,7 +13155,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1, nonsky: 1},
-		isBounceable: true,
 		sideCondition: 'spikes',
 		effect: {
 			// this is a side condition
@@ -13249,7 +13219,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isBounceable: true,
 		onHit: function (target) {
 			if (target.deductPP(target.lastMove, 4)) {
 				this.add("-activate", target, 'move: Spite', target.lastMove, 4);
@@ -13315,7 +13284,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1},
-		isBounceable: true,
 		sideCondition: 'stealthrock',
 		effect: {
 			// this is a side condition
@@ -13389,7 +13357,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1},
-		isBounceable: true,
 		sideCondition: 'stickyweb',
 		effect: {
 			onStart: function (side) {
@@ -13704,7 +13671,7 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.notSubBlocked || (move.flags['sound'] && this.gen >= 6)) {
+				if (move.notSubBlocked || (this.gen >= 6 && move.flags['sound'])) {
 					return;
 				}
 				if (move.category === 'Status') {
@@ -14220,7 +14187,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isBounceable: true,
 		volatileStatus: 'taunt',
 		effect: {
 			duration: 3,
@@ -14287,7 +14253,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		isBounceable: false,
 		volatileStatus: 'confusion',
 		secondary: false,
 		target: "allAdjacent",
@@ -14305,7 +14270,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, gravity: 1},
-		isBounceable: true,
 		volatileStatus: 'telekinesis',
 		effect: {
 			duration: 3,
@@ -14609,7 +14573,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		onHit: function (target) {
 			var targetBoosts = {};
 
@@ -14638,7 +14601,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		isBounceable: true,
 		volatileStatus: 'torment',
 		effect: {
 			onStart: function (pokemon) {
@@ -14692,7 +14654,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1, nonsky: 1},
-		isBounceable: true,
 		sideCondition: 'toxicspikes',
 		effect: {
 			// this is a side condition
@@ -14828,7 +14789,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		onHit: function (target) {
 			if (target.hasType('Ghost')) return false;
 			if (!target.addType('Ghost')) return false;
@@ -15784,7 +15744,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		onTryHit: function (pokemon) {
 			var bannedAbilities = {insomnia:1, multitype:1, stancechange:1, truant:1};
 			if (bannedAbilities[pokemon.ability]) {
@@ -15875,7 +15834,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		isBounceable: true,
 		volatileStatus: 'yawn',
 		onTryHit: function (target) {
 			if (target.status || !target.runImmunity('slp')) {

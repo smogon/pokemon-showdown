@@ -1746,7 +1746,6 @@ exports.Formats = [
 			if (move.id === 'spikes' && name === 'antar') {
 				move.name = 'Firebomb';
 				move.sideCondition = 'spikes';
-				move.isBounceable = false;
 				move.category = 'Special';
 				move.type = 'Fire';
 				move.basePower = 100;
@@ -1758,7 +1757,6 @@ exports.Formats = [
 			}
 			if (move.id === 'embargo' && name === 'chaos') {
 				move.name = 'Forcewin';
-				move.isBounceable = false;
 				move.onHit = function (pokemon) {
 					pokemon.addVolatile('taunt');
 					pokemon.addVolatile('torment');
@@ -2146,7 +2144,6 @@ exports.Formats = [
 				if (move.id === 'entrainment') {
 					move.name = 'Study';
 					move.priority = 1;
-					move.isBounceable = false;
 					move.flags = {protect:1};
 					move.notSubBlocked = true;
 					move.onTryHit = function (target, source) {
