@@ -1580,7 +1580,9 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help htmlbox');
 		if (!this.can('declare', null, room)) return;
 		if (!this.canHTML(target)) return;
-		if (!this.canBroadcast('!htmlbox')) return;
+
+		if (room.id !== 'development' && !this.canBroadcast('!htmlbox')) return;
+		this.broadcasting = true;
 
 		this.sendReplyBox(target);
 	},
