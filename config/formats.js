@@ -2771,7 +2771,7 @@ exports.Formats = [
 			}
 			if (move.id === 'wish' && name === 'zdrup') {
 				move.name = 'Premonition';
-				delete move.flags;
+				move.flags = {};
 				move.sideCondition = 'mist';
 				move.onTryHit = function (pokemon) {
 					if (pokemon.side.premonTimer) {
