@@ -114,7 +114,13 @@ if (cluster.isMaster) {
 } else {
 	// is worker
 
-	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
+	var portOverridden = false;
+	if (process.env.PSPORT) {
+		if ((+Config.port || 8000) !== (+process.env.PSPORT)) {
+			portOverridden = true;
+		}
+		Config.port = +process.env.PSPORT;
+	}
 	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
 
 	// ofe is optional
@@ -141,7 +147,10 @@ if (cluster.isMaster) {
 
 	var app = require('http').createServer();
 	var appssl;
-	if (Config.ssl) {
+	if (Config.ssl && !portOverridden) {
+		// If a port is overridden (either through commandline, test framework,
+		// or environment variable), we probably don't want to listen on the
+		// SSL port
 		appssl = require('https').createServer(Config.ssl.options);
 	}
 	try {
