@@ -89,6 +89,10 @@ var Room = (function () {
 		this.update();
 	};
 
+	Room.prototype.toString = function () {
+		return this.id;
+	};
+
 	// roomban handling
 	Room.prototype.isRoomBanned = function (user) {
 		if (!user) return;
@@ -1623,6 +1627,7 @@ Rooms.createChatRoom = function (roomid, title, data) {
 console.log("NEW GLOBAL: global");
 rooms.global = new GlobalRoom('global');
 
+Rooms.Room = Room;
 Rooms.GlobalRoom = GlobalRoom;
 Rooms.BattleRoom = BattleRoom;
 Rooms.ChatRoom = ChatRoom;
