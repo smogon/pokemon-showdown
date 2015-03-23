@@ -1,4 +1,12 @@
 exports.BattleItems = {
+	"adamantorb": {
+		inherit: true,
+		onBasePower: function (basePower, user, target, move) {
+			if (move && user.template.species === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
+				return this.chainModify(1.2);
+			}
+		}
+	},
 	"choiceband": {
 		inherit: true,
 		onStart: function () { }
@@ -52,6 +60,22 @@ exports.BattleItems = {
 		},
 		desc: "Activates at 25% HP. Next move used goes first. One-time use."
 	},
+	"deepseascale": {
+		inherit: true,
+		onModifySpD: function (spd, pokemon) {
+			if (pokemon.template.species === 'Clamperl') {
+				return this.chainModify(2);
+			}
+		}
+	},
+	"deepseatooth": {
+		inherit: true,
+		onModifySpA: function (spa, pokemon) {
+			if (pokemon.template.species === 'Clamperl') {
+				return this.chainModify(2);
+			}
+		}
+	},
 	"focussash": {
 		inherit: true,
 		onDamage: function () { },
@@ -70,6 +94,14 @@ exports.BattleItems = {
 			},
 			onAfterMoveSecondary: function (target, source, move) {
 				target.removeVolatile('focussash');
+			}
+		}
+	},
+	"griseousorb": {
+		inherit: true,
+		onBasePower: function (basePower, user, target, move) {
+			if (user.template.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
+				return this.chainModify(1.2);
 			}
 		}
 	},
@@ -106,6 +138,30 @@ exports.BattleItems = {
 		gen: 4,
 		desc: "Holder's damaging moves do 1.3x damage; loses 1/10 max HP after the attack."
 	},
+	"lightball": {
+		inherit: true,
+		onModifySpA: function (spa, pokemon) {
+			if (pokemon.template.species === 'Pikachu') {
+				return this.chainModify(2);
+			}
+		}
+	},
+	"luckypunch": {
+		inherit: true,
+		onModifyMove: function (move, user) {
+			if (user.template.species === 'Chansey') {
+				move.critRatio += 2;
+			}
+		}
+	},
+	"lustrousorb": {
+		inherit: true,
+		onBasePower: function (basePower, user, target, move) {
+			if (move && user.template.species === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
+				return this.chainModify(1.2);
+			}
+		}
+	},
 	"mentalherb": {
 		id: "mentalherb",
 		name: "Mental Herb",
@@ -138,6 +194,22 @@ exports.BattleItems = {
 					this.effectData.numConsecutive++;
 				}
 				return basePower * (1 + (this.effectData.numConsecutive / 10));
+			}
+		}
+	},
+	"stick": {
+		inherit: true,
+		onModifyMove: function (move, user) {
+			if (user.template.species === 'Farfetch\'d') {
+				move.critRatio += 2;
+			}
+		}
+	},
+	"thickclub": {
+		inherit: true,
+		onModifyAtk: function (atk, pokemon) {
+			if (pokemon.template.species === 'Cubone' || pokemon.template.species === 'Marowak') {
+				return this.chainModify(2);
 			}
 		}
 	}
