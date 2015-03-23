@@ -652,19 +652,19 @@ var commands = exports.commands = {
 		if (!targetRoom) {
 			return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
 		}
-		if (targetRoom.isPrivate) {
-			if (targetRoom.modjoin && !user.can('bypassall')) {
-				var userGroup = user.group;
-				if (targetRoom.auth) {
-					if (targetRoom.isPrivate === true) {
-						userGroup = ' ';
-					}
-					userGroup = targetRoom.auth[user.userid] || userGroup;
+		if (targetRoom.modjoin && !user.can('bypassall')) {
+			var userGroup = user.group;
+			if (targetRoom.auth) {
+				if (targetRoom.isPrivate === true) {
+					userGroup = ' ';
 				}
-				if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(targetRoom.modjoin !== true ? targetRoom.modjoin : targetRoom.modchat)) {
-					return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
-				}
+				userGroup = targetRoom.auth[user.userid] || userGroup;
 			}
+			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(targetRoom.modjoin !== true ? targetRoom.modjoin : targetRoom.modchat)) {
+				return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
+			}
+		}
+		if (targetRoom.isPrivate) {
 			if (!user.named) {
 				return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '" + target + "'.");
 			}
