@@ -1487,6 +1487,7 @@ var commands = exports.commands = {
 			return;
 		}
 		room.destroyLog(function () {
+			Users.exportLocksBans();
 			room.logEntry(user.name + " used /kill");
 		}, function () {
 			process.exit();

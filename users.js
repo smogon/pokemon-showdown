@@ -26,6 +26,8 @@
 const THROTTLE_DELAY = 600;
 const THROTTLE_BUFFER_LIMIT = 6;
 const THROTTLE_MULTILINE_WARN = 4;
+const LOCK_TIME = 36 * 60 * 60 * 1000;
+const BAN_TIME = 3 * 24 * 60 * 60 * 1000;
 
 var fs = require('fs');
 
@@ -94,6 +96,84 @@ var lockedUsers = Object.create(null);
 var lockedRanges = Users.lockedRanges = Object.create(null);
 var rangelockedUsers = Object.create(null);
 
+function importLocksBans() {
+	fs.readFile('config/sanctions.csv', function (err, data) {
+		if (err) return;
+		var now = Date.now();
+		data = ('' + data).split("\n");
+		for (var i = 0; i < data.length; i++) {
+			if (!data[i]) continue;
+			var row = data[i].split(",");
+			var expiration = parseInt(row[2]);
+			if (now > expiration) continue;
+			var entry = [row[1], expiration];
+			if (row[0] === 'banip') {
+				bannedIps[row[3]] = entry;
+			} else if (row[0] === 'ban') {
+				bannedUsers[row[3]] = entry;
+			} else if (row[0] === 'lockip') {
+				lockedIps[row[3]] = entry;
+			} else if (row[0] === 'lock') {
+				lockedUsers[row[3]] = entry;
+			}
+		}
+	});
+
+	fs.readFile('config/ipbans.txt', function (err, data) {
+		if (err) return;
+		data = ('' + data).split("\n");
+		var rangebans = [];
+		for (var i = 0; i < data.length; i++) {
+			data[i] = data[i].split('#')[0].trim();
+			if (!data[i]) continue;
+			if (data[i].indexOf('/') >= 0) {
+				rangebans.push(data[i]);
+			} else if (!Users.bannedIps[data[i]]) {
+				Users.bannedIps[data[i]] = '#ipban';
+			}
+		}
+		Users.checkRangeBanned = Cidr.checker(rangebans);
+	});
+}
+function exportLocksBans() {
+	var buffer = '';
+	var now = Date.now();
+	for (var ip in bannedIps) {
+		if (!Array.isArray(bannedIps[ip])) continue;
+		if (now > bannedIps[ip][1]) {
+			delete bannedIps[ip];
+			continue;
+		}
+		buffer += "banip," + bannedIps[ip][0] + "," + bannedIps[ip][1] + "," + ip + "\n";
+	}
+	for (var user in bannedUsers) {
+		if (now > bannedUsers[user][1]) {
+			delete bannedUsers[user];
+			continue;
+		}
+		buffer += "ban," + bannedUsers[user][0] + "," + bannedUsers[user][1] + "," + user + "\n";
+	}
+	for (var ip in lockedIps) {
+		if (!Array.isArray(lockedIps[ip])) continue;
+		if (now > lockedIps[ip][1]) {
+			delete lockedIps[ip];
+			continue;
+		}
+		buffer += "lockip," + lockedIps[ip][0] + "," + lockedIps[ip][1] + "," + ip + "\n";
+	}
+	for (var user in lockedUsers) {
+		if (now > lockedUsers[user][1]) {
+			delete lockedUsers[user];
+			continue;
+		}
+		buffer += "lock," + lockedUsers[user][0] + "," + lockedUsers[user][1] + "," + user + "\n";
+	}
+	fs.writeFileSync('config/sanctions.csv', buffer);
+}
+Users.importLocksBans = importLocksBans;
+Users.exportLocksBans = exportLocksBans;
+Users.backupLocksBansTimer = setInterval(exportLocksBans, 12 * 60 * 60 * 1000);
+
 /**
  * Searches for IP in table.
  *
@@ -111,10 +191,28 @@ function ipSearch(ip, table) {
 	return false;
 }
 function checkBanned(ip) {
-	return ipSearch(ip, bannedIps);
+	var checkResult = ipSearch(ip, bannedIps);
+	if (!checkResult) return false;
+	if (Array.isArray(checkResult)) {
+		if (Date.now() > checkResult[1]) {
+			delete bannedIps[ip];
+			return false;
+		}
+		return checkResult[0];
+	}
+	return checkResult;
 }
 function checkLocked(ip) {
-	return ipSearch(ip, lockedIps);
+	var checkResult = ipSearch(ip, lockedIps);
+	if (!checkResult) return false;
+	if (Array.isArray(checkResult)) {
+		if (Date.now() > checkResult[1]) {
+			delete lockedIps[ip];
+			return false;
+		}
+		return checkResult[0];
+	}
+	return checkResult;
 }
 Users.checkBanned = checkBanned;
 Users.checkLocked = checkLocked;
@@ -126,13 +224,14 @@ function unban(name) {
 	var success;
 	var userid = toId(name);
 	for (var ip in bannedIps) {
-		if (bannedIps[ip] === userid) {
+		if (!Array.isArray(bannedIps[ip])) continue;
+		if (bannedIps[ip][0] === userid) {
 			delete bannedIps[ip];
 			success = true;
 		}
 	}
 	for (var id in bannedUsers) {
-		if (bannedUsers[id] === userid || id === userid) {
+		if (bannedUsers[id][0] === userid || id === userid) {
 			delete bannedUsers[id];
 			success = true;
 		}
@@ -155,17 +254,18 @@ function unlock(name, unlocked, noRecurse) {
 		if (!noRecurse) userips = user.ips;
 	}
 	for (var ip in lockedIps) {
-		if (userips && (ip in user.ips) && Users.lockedIps[ip] !== userid) {
-			unlocked = unlock(Users.lockedIps[ip], unlocked, true); // avoid infinite recursion
+		if (!Array.isArray(lockedIps[ip])) continue;
+		if (userips && (ip in user.ips) && lockedIps[ip][0] !== userid) {
+			unlocked = unlock(lockedIps[ip][0], unlocked, true); // avoid infinite recursion
 		}
-		if (Users.lockedIps[ip] === userid) {
+		if (lockedIps[ip][0] === userid) {
 			delete Users.lockedIps[ip];
 			unlocked = unlocked || {};
 			unlocked[name] = 1;
 		}
 	}
 	for (var id in lockedUsers) {
-		if (lockedUsers[id] === userid || id === userid) {
+		if (lockedUsers[id][0] === userid || id === userid) {
 			delete lockedUsers[id];
 			unlocked = unlocked || {};
 			unlocked[name] = 1;
@@ -715,17 +815,27 @@ User = (function () {
 		}
 
 		if (authenticated && userid in bannedUsers) {
-			var bannedUnder = '';
-			if (bannedUsers[userid] !== userid) bannedUnder = ' under the username ' + bannedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-			this.ban(true, userid);
-			return;
+			var ban = bannedUsers[userid];
+			if (Date.now() > ban[1]) {
+				delete bannedUsers[userid];
+			} else {
+				var bannedUnder = '';
+				if (ban[0] !== userid) bannedUnder = ' under the username ' + ban[0];
+				this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+				this.ban(true, ban[1], userid);
+				return;
+			}
 		}
 		if (authenticated && userid in lockedUsers) {
-			var bannedUnder = '';
-			if (lockedUsers[userid] !== userid) bannedUnder = ' under the username ' + lockedUsers[userid];
-			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
-			this.lock(true, userid);
+			var lock = lockedUsers[userid];
+			if (Date.now() > lock[1]) {
+				delete lockedUsers[userid];
+			} else {
+				var lockedUnder = '';
+				if (lock[0] !== userid) lockedUnder = ' under the username ' + lock[0];
+				this.send("|popup|Your username (" + name + ") is locked" + lockedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+				this.lock(true, lock[1], userid);
+			}
 		}
 		if (this.group === Config.groupsranking[0]) {
 			var range = this.locked || Users.shortenHost(this.latestHost);
@@ -973,9 +1083,9 @@ User = (function () {
 				} else if (body === '4') {
 					this.autoconfirmed = userid;
 				} else if (body === '5') {
-					this.lock(false, userid);
+					this.lock(false, 0, userid);
 				} else if (body === '6') {
-					this.ban(false, userid);
+					this.ban(false, 0, userid);
 				}
 			}
 			if (users[userid] && users[userid] !== this) {
@@ -1280,52 +1390,56 @@ User = (function () {
 			this.updateIdentity(roomid);
 		}
 	};
-	User.prototype.ban = function (noRecurse, userid) {
+	User.prototype.ban = function (noRecurse, expireTime, userid) {
 		// recurse only once; the root for-loop already bans everything with your IP
+		if (!expireTime) expireTime = BAN_TIME + Date.now();
 		if (!userid) userid = this.userid;
 		if (!noRecurse) {
 			for (var i in users) {
 				if (users[i] === this) continue;
 				for (var myIp in this.ips) {
 					if (myIp in users[i].ips) {
-						users[i].ban(true, userid);
+						users[i].ban(true, expireTime, userid);
 						break;
 					}
 				}
 			}
 		}
 
+		var entry = [userid, expireTime];
 		for (var ip in this.ips) {
-			bannedIps[ip] = userid;
+			bannedIps[ip] = entry;
 		}
-		if (this.autoconfirmed) bannedUsers[this.autoconfirmed] = userid;
+		if (this.autoconfirmed) bannedUsers[this.autoconfirmed] = entry;
 		if (this.authenticated) {
-			bannedUsers[this.userid] = userid;
+			bannedUsers[this.userid] = entry;
 			this.locked = userid; // in case of merging into a recently banned account
 			this.autoconfirmed = '';
 		}
 		this.disconnectAll();
 	};
-	User.prototype.lock = function (noRecurse, userid) {
+	User.prototype.lock = function (noRecurse, expireTime, userid) {
 		// recurse only once; the root for-loop already locks everything with your IP
+		if (!expireTime) expireTime = LOCK_TIME + Date.now();
 		if (!userid) userid = this.userid;
 		if (!noRecurse) {
 			for (var i in users) {
 				if (users[i] === this) continue;
 				for (var myIp in this.ips) {
 					if (myIp in users[i].ips) {
-						users[i].lock(true, userid);
+						users[i].lock(true, expireTime, userid);
 						break;
 					}
 				}
 			}
 		}
 
+		var entry = [userid, expireTime];
 		for (var ip in this.ips) {
-			lockedIps[ip] = userid;
+			lockedIps[ip] = entry;
 		}
-		if (this.autoconfirmed) lockedUsers[this.autoconfirmed] = this.userid;
-		if (this.authenticated) lockedUsers[this.userid] = this.userid;
+		if (this.autoconfirmed) lockedUsers[this.autoconfirmed] = entry;
+		if (this.authenticated) lockedUsers[this.userid] = entry;
 		this.locked = userid;
 		this.autoconfirmed = '';
 		this.updateIdentity();
