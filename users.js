@@ -538,7 +538,6 @@ User = (function () {
 	}
 
 	User.prototype.isSysop = false;
-	User.prototype.forceRenamed = false;
 
 	// for the anti-spamming mechanism
 	User.prototype.lastMessage = '';
@@ -677,7 +676,7 @@ User = (function () {
 		if (whitelist.indexOf(connection.ip) >= 0) {
 			return true; // on the IP whitelist
 		}
-		if (!this.forceRenamed && (whitelist.indexOf(this.userid) >= 0)) {
+		if (whitelist.indexOf(this.userid) >= 0) {
 			return true; // on the userid whitelist
 		}
 
@@ -689,7 +688,7 @@ User = (function () {
 	User.prototype.canPromote = function (sourceGroup, targetGroup) {
 		return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
 	};
-	User.prototype.forceRename = function (name, registered, forcible) {
+	User.prototype.forceRename = function (name, registered) {
 		// skip the login server
 		var userid = toId(name);
 
@@ -746,7 +745,6 @@ User = (function () {
 		this.userid = userid;
 		users[userid] = this;
 		this.registered = !!registered;
-		this.forceRenamed = !!forcible;
 
 		for (var i = 0; i < this.connections.length; i++) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
@@ -848,7 +846,7 @@ User = (function () {
 			return false;
 		} else {
 			if (userid === this.userid && !auth) {
-				return this.forceRename(name, this.registered, this.forceRenamed);
+				return this.forceRename(name, this.registered);
 			}
 		}
 		if (users[userid] && !users[userid].registered && users[userid].connected && !auth) {
@@ -1023,7 +1021,6 @@ User = (function () {
 				user.group = group;
 				user.isStaff = (user.group in {'%':1, '@':1, '&':1, '~':1});
 				user.isSysop = isSysop;
-				user.forceRenamed = false;
 				if (avatar) user.avatar = avatar;
 				if (user.ignorePMs && user.can('lock') && !user.can('bypassall')) user.ignorePMs = false;
 
