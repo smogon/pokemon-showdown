@@ -570,7 +570,7 @@ var commands = {
 			}
 
 			var indicesLen = indices.length;
-			if (!indicesLen) return this.sendReply('"' + target.join(', ') + '" is not a valid argument. View /trivia review and /trivia help qcommands for more information.');
+			if (!indicesLen) return this.sendReply('"' + target.trim() + '" is not a valid argument. View /trivia review and /trivia help qcommands for more information.');
 
 			indices = indices.sort(function (a, b) {
 				return a - b;
@@ -584,14 +584,14 @@ var commands = {
 				}
 				Array.prototype.push.apply(triviaData.questions, accepted);
 				writeTriviaData();
-				return this.privateModCommand('(' + user.name + ' added submission numbers ' + target.join(', ') + ' to the question database.)');
+				return this.privateModCommand('(' + user.name + ' added submission numbers ' + target.trim() + ' to the question database.)');
 			}
 
 			for (var i = indicesLen; i--;) {
 				submissions.splice(indices[i], 1);
 			}
 			writeTriviaData();
-			this.privateModCommand('(' + user.name + ' removed submission numbers ' + target.join(', ') + ' from the submission database.)');
+			this.privateModCommand('(' + user.name + ' removed submission numbers ' + target.trim() + ' from the submission database.)');
 		}
 
 		this.sendReply('"' + target + '" is an invalid argument. View /trivia help qcommands for more information.');
