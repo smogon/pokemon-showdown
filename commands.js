@@ -196,6 +196,14 @@ var commands = exports.commands = {
 
 	makechatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
+
+		// `,` is a delimiter used by a lot of /commands
+		// `|` and `[` are delimiters used by the protocol
+		// `-` has special meaning in roomids
+		if (target.indexOf(',') >= 0 || target.indexOf('|') >= 0 || target.indexOf('[') >= 0 || target.indexOf('-') >= 0) {
+			return this.sendReply("Room titles can't contain any of: ,|[-");
+		}
+
 		var id = toId(target);
 		if (!id) return this.parse('/help makechatroom');
 		if (Rooms.rooms[id]) return this.sendReply("The room '" + target + "' already exists.");
