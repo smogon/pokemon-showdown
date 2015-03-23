@@ -501,7 +501,7 @@ User = (function () {
 		this.name = 'Guest ' + numUsers;
 		this.named = false;
 		this.renamePending = false;
-		this.authenticated = false;
+		this.registered = false;
 		this.userid = toId(this.name);
 		this.group = Config.groupsranking[0];
 
@@ -689,7 +689,7 @@ User = (function () {
 	User.prototype.canPromote = function (sourceGroup, targetGroup) {
 		return this.can('promote', {group:sourceGroup}) && this.can('promote', {group:targetGroup});
 	};
-	User.prototype.forceRename = function (name, authenticated, forcible) {
+	User.prototype.forceRename = function (name, registered, forcible) {
 		// skip the login server
 		var userid = toId(name);
 
@@ -699,8 +699,8 @@ User = (function () {
 
 		if (this.named) this.prevNames[this.userid] = this.name;
 
-		if (authenticated === undefined && userid === this.userid) {
-			authenticated = this.authenticated;
+		if (registered === undefined && userid === this.userid) {
+			registered = this.registered;
 		}
 
 		if (userid !== this.userid) {
@@ -714,14 +714,14 @@ User = (function () {
 			Rooms.global.cancelSearch(this);
 		}
 
-		if (authenticated && userid in bannedUsers) {
+		if (registered && userid in bannedUsers) {
 			var bannedUnder = '';
 			if (bannedUsers[userid] !== userid) bannedUnder = ' under the username ' + bannedUsers[userid];
 			this.send("|popup|Your username (" + name + ") is banned" + bannedUnder + "'. Your ban will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
 			this.ban(true, userid);
 			return;
 		}
-		if (authenticated && userid in lockedUsers) {
+		if (registered && userid in lockedUsers) {
 			var bannedUnder = '';
 			if (lockedUsers[userid] !== userid) bannedUnder = ' under the username ' + lockedUsers[userid];
 			this.send("|popup|Your username (" + name + ") is locked" + bannedUnder + "'. Your lock will expire in a few days." + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
@@ -745,7 +745,7 @@ User = (function () {
 		delete users[oldid];
 		this.userid = userid;
 		users[userid] = this;
-		this.authenticated = !!authenticated;
+		this.registered = !!registered;
 		this.forceRenamed = !!forcible;
 
 		for (var i = 0; i < this.connections.length; i++) {
@@ -782,7 +782,7 @@ User = (function () {
 		delete users[oldid];
 		this.userid = userid;
 		users[this.userid] = this;
-		this.authenticated = false;
+		this.registered = false;
 		this.group = Config.groupsranking[0];
 		this.isStaff = false;
 		this.isSysop = false;
@@ -838,7 +838,7 @@ User = (function () {
 		if (!name) name = '';
 		name = this.filterName(name);
 		var userid = toId(name);
-		if (this.authenticated) auth = false;
+		if (this.registered) auth = false;
 
 		if (!userid) {
 			// technically it's not "taken", but if your client doesn't warn you
@@ -848,10 +848,10 @@ User = (function () {
 			return false;
 		} else {
 			if (userid === this.userid && !auth) {
-				return this.forceRename(name, this.authenticated, this.forceRenamed);
+				return this.forceRename(name, this.registered, this.forceRenamed);
 			}
 		}
-		if (users[userid] && !users[userid].authenticated && users[userid].connected && !auth) {
+		if (users[userid] && !users[userid].registered && users[userid].connected && !auth) {
 			this.send('|nametaken|' + name + "|Someone is already using the name \"" + users[userid].name + "\".");
 			return false;
 		}
@@ -935,7 +935,7 @@ User = (function () {
 		} else if (body) {
 			// console.log('BODY: "' + body + '"');
 
-			if (users[userid] && !users[userid].authenticated && users[userid].connected) {
+			if (users[userid] && !users[userid].registered && users[userid].connected) {
 				if (auth) {
 					if (users[userid] !== this) users[userid].resetName();
 				} else {
@@ -951,13 +951,13 @@ User = (function () {
 			var group = Config.groupsranking[0];
 			var isSysop = false;
 			var avatar = 0;
-			var authenticated = false;
+			var registered = false;
 			// user types (body):
 			//   1: unregistered user
 			//   2: registered user
 			//   3: Pokemon Showdown development staff
 			if (body !== '1') {
-				authenticated = true;
+				registered = true;
 
 				if (Config.customavatars && Config.customavatars[userid]) {
 					avatar = Config.customavatars[userid];
@@ -988,7 +988,7 @@ User = (function () {
 				for (var i in this.roomCount) {
 					Rooms.get(i, 'lobby').onLeave(this);
 				}
-				if (!user.authenticated) {
+				if (!user.registered) {
 					if (Object.isEmpty(Object.select(this.ips, user.ips))) {
 						user.mutedRooms = Object.merge(user.mutedRooms, this.mutedRooms);
 						user.muteDuration = Object.merge(user.muteDuration, this.muteDuration);
@@ -1014,7 +1014,7 @@ User = (function () {
 				this.ips = {};
 				user.latestIp = this.latestIp;
 				this.markInactive();
-				if (!this.authenticated) {
+				if (!this.registered) {
 					this.group = Config.groupsranking[0];
 					this.isStaff = false;
 				}
@@ -1027,7 +1027,7 @@ User = (function () {
 				if (avatar) user.avatar = avatar;
 				if (user.ignorePMs && user.can('lock') && !user.can('bypassall')) user.ignorePMs = false;
 
-				user.authenticated = authenticated;
+				user.registered = registered;
 
 				if (userid !== this.userid) {
 					// doing it this way mathematically ensures no cycles
@@ -1051,7 +1051,7 @@ User = (function () {
 			this.isSysop = isSysop;
 			if (avatar) this.avatar = avatar;
 			if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
-			if (this.forceRename(name, authenticated)) {
+			if (this.forceRename(name, registered)) {
 				Rooms.global.checkAutojoin(this);
 				return true;
 			}
@@ -1129,7 +1129,7 @@ User = (function () {
 				// console.log('DISCONNECT: ' + this.userid);
 				if (this.connections.length <= 1) {
 					this.markInactive();
-					if (!this.authenticated) {
+					if (!this.registered) {
 						this.group = Config.groupsranking[0];
 						this.isStaff = false;
 					}
@@ -1299,7 +1299,7 @@ User = (function () {
 			bannedIps[ip] = userid;
 		}
 		if (this.autoconfirmed) bannedUsers[this.autoconfirmed] = userid;
-		if (this.authenticated) {
+		if (this.registered) {
 			bannedUsers[this.userid] = userid;
 			this.locked = userid; // in case of merging into a recently banned account
 			this.autoconfirmed = '';
@@ -1325,7 +1325,7 @@ User = (function () {
 			lockedIps[ip] = userid;
 		}
 		if (this.autoconfirmed) lockedUsers[this.autoconfirmed] = this.userid;
-		if (this.authenticated) lockedUsers[this.userid] = this.userid;
+		if (this.registered) lockedUsers[this.userid] = this.userid;
 		this.locked = userid;
 		this.autoconfirmed = '';
 		this.updateIdentity();
