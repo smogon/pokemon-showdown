@@ -9363,11 +9363,13 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 9,
 			onResidual: function (pokemon) {
+				this.damage(pokemon.maxhp / 4);
+			},
+			onUpdate: function (pokemon) {
 				if (pokemon.status !== 'slp') {
 					pokemon.removeVolatile('nightmare');
-					return;
+					this.add('-end', pokemon, 'Nightmare', '[silent]');
 				}
-				this.damage(pokemon.maxhp / 4);
 			}
 		},
 		secondary: false,
