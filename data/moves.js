@@ -13705,7 +13705,7 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.notSubBlocked || (this.gen >= 6 && move.flags && move.flags['sound'])) {
+				if (move.notSubBlocked || (move.flags['sound'] && this.gen >= 6)) {
 					return;
 				}
 				if (move.category === 'Status') {
