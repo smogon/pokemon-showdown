@@ -243,11 +243,11 @@ var commands = exports.commands = {
 		if (target === 'off') {
 			delete room.isPrivate;
 			this.addModCommand("" + user.name + " made this room public.");
+			if (room.chatRoomData) {
+				delete room.chatRoomData.isPrivate;
+				Rooms.global.writeChatRoomData();
+			}
 			if (room.type === 'chat') {
-				if (room.chatRoomData) {
-					delete room.chatRoomData.isPrivate;
-					Rooms.global.writeChatRoomData();
-				}
 				if (Rooms.global.chatRooms.indexOf(room) < 0) {
 					Rooms.global.chatRooms.push(room);
 				}
