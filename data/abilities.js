@@ -1413,30 +1413,22 @@ exports.BattleAbilities = {
 		name: "Magic Bounce",
 		onTryHitPriority: 1,
 		onTryHit: function (target, source, move) {
-			if (target === source) return;
-			if (move.hasBounced) return;
-			if (typeof move.isBounceable === 'undefined') {
-				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+				return;
 			}
-			if (move.isBounceable) {
-				var newMove = this.getMoveCopy(move.id);
-				newMove.hasBounced = true;
-				this.useMove(newMove, target, source);
-				return null;
-			}
+			var newMove = this.getMoveCopy(move.id);
+			newMove.hasBounced = true;
+			this.useMove(newMove, target, source);
+			return null;
 		},
 		onAllyTryHitSide: function (target, source, move) {
-			if (target.side === source.side) return;
-			if (move.hasBounced) return;
-			if (typeof move.isBounceable === 'undefined') {
-				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+				return;
 			}
-			if (move.isBounceable) {
-				var newMove = this.getMoveCopy(move.id);
-				newMove.hasBounced = true;
-				this.useMove(newMove, target, source);
-				return null;
-			}
+			var newMove = this.getMoveCopy(move.id);
+			newMove.hasBounced = true;
+			this.useMove(newMove, target, source);
+			return null;
 		},
 		effect: {
 			duration: 1
@@ -3251,32 +3243,24 @@ exports.BattleAbilities = {
 		onTryHit: function (target, source, move) {
 			if (this.effectData.target.activeTurns) return;
 
-			if (target === source) return;
-			if (move.hasBounced) return;
-			if (typeof move.isBounceable === 'undefined') {
-				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+				return;
 			}
-			if (move.isBounceable) {
-				var newMove = this.getMoveCopy(move.id);
-				newMove.hasBounced = true;
-				this.useMove(newMove, target, source);
-				return null;
-			}
+			var newMove = this.getMoveCopy(move.id);
+			newMove.hasBounced = true;
+			this.useMove(newMove, target, source);
+			return null;
 		},
 		onAllyTryHitSide: function (target, source, move) {
 			if (this.effectData.target.activeTurns) return;
 
-			if (target.side === source.side) return;
-			if (move.hasBounced) return;
-			if (typeof move.isBounceable === 'undefined') {
-				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+				return;
 			}
-			if (move.isBounceable) {
-				var newMove = this.getMoveCopy(move.id);
-				newMove.hasBounced = true;
-				this.useMove(newMove, target, source);
-				return null;
-			}
+			var newMove = this.getMoveCopy(move.id);
+			newMove.hasBounced = true;
+			this.useMove(newMove, target, source);
+			return null;
 		},
 		effect: {
 			duration: 1
