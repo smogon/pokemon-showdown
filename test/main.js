@@ -56,6 +56,9 @@ before('initialization', function (done) {
 		config = require('./../config/config.js');
 	}
 
+	// Don't listen at SSL port
+	config.ssl = null;
+
 	// Make sure that there are no net conflicts with an active server
 	if (typeof config.testport !== 'undefined') {
 		config.port = config.testport;
