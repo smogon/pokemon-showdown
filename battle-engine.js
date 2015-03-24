@@ -2684,7 +2684,11 @@ Battle = (function () {
 				pokemon.usedItemThisTurn = false;
 				pokemon.newlySwitched = false;
 				if (pokemon.lastAttackedBy) {
-					pokemon.lastAttackedBy.thisTurn = false;
+					if (pokemon.lastAttackedBy.pokemon.isActive) {
+						pokemon.lastAttackedBy.thisTurn = false;
+					} else {
+						pokemon.lastAttackedBy = null;
+					}
 				}
 				pokemon.activeTurns++;
 			}
