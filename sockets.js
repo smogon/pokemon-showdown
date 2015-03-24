@@ -22,7 +22,7 @@ if (cluster.isMaster) {
 	var workers = exports.workers = {};
 
 	var spawnWorker = exports.spawnWorker = function () {
-		var worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || ''});
+		var worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '', PSNOSSL: Config.ssl ? 0 : 1});
 		var id = worker.id;
 		workers[id] = worker;
 		worker.on('message', function (data) {
@@ -114,14 +114,8 @@ if (cluster.isMaster) {
 } else {
 	// is worker
 
-	var portOverridden = false;
-	if (process.env.PSPORT) {
-		if ((+Config.port || 8000) !== (+process.env.PSPORT)) {
-			portOverridden = true;
-		}
-		Config.port = +process.env.PSPORT;
-	}
 	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
+	if (+process.env.PSNOSSL) Config.ssl = null;
 
 	// ofe is optional
 	// if installed, it will heap dump if the process runs out of memory
@@ -147,10 +141,7 @@ if (cluster.isMaster) {
 
 	var app = require('http').createServer();
 	var appssl;
-	if (Config.ssl && !portOverridden) {
-		// If a port is overridden (either through commandline, test framework,
-		// or environment variable), we probably don't want to listen on the
-		// SSL port
+	if (Config.ssl) {
 		appssl = require('https').createServer(Config.ssl.options);
 	}
 	try {
