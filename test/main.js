@@ -1,9 +1,26 @@
 var assert = require('assert');
+var path = require('path');
+var net = require('net');
+var fs = require('fs');
 
-before('initialization', function () {
-	this.timeout(0); // Remove timeout limitation
+var testPort;
+function getPort (callback) {
+	var port = testPort;
+	var server = net.createServer();
 
-	global.overridePort = 18003;
+	server.listen(port, function (err) {
+		server.once('close', function onclose () {
+			callback(port);
+		});
+		server.close();
+	});
+	server.on('error', function (err) {
+		testPort++;
+		getPort(callback);
+	});
+}
+
+function init (callback) {
 	require('./../app.js');
 	process.listeners('uncaughtException').forEach(function (listener) {
 		process.removeListener('uncaughtException', listener);
@@ -18,6 +35,38 @@ before('initialization', function () {
 	// Turn IPC methods into no-op
 	BattleEngine.Battle.prototype.send = function () {};
 	BattleEngine.Battle.prototype.receive = function () {};
+
+	callback();
+}
+
+before('initialization', function (done) {
+	this.timeout(0); // Remove timeout limitation
+
+	// Load and override configuration before starting the server
+	var config;
+	try {
+		config = require('./../config/config.js');
+	} catch (err) {
+		if (err.code !== 'MODULE_NOT_FOUND') throw err;
+
+		console.log("config.js doesn't exist - creating one with default settings...");
+		fs.writeFileSync(path.resolve(process.cwd(), './config/config.js'),
+			fs.readFileSync(path.resolve(process.cwd(), './config/config-example.js'))
+		);
+		config = require('./../config/config.js');
+	}
+
+	// Make sure that there are no net conflicts with an active server
+	if (typeof config.testport !== 'undefined') {
+		config.port = config.testport;
+		init(done);
+	} else {
+		testPort = config.port;
+		getPort(function (port) {
+			config.port = port;
+			init(done);
+		});
+	}
 });
 
 describe('Native timer/event loop globals', function () {
