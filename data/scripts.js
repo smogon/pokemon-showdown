@@ -315,7 +315,7 @@ exports.BattleScripts = {
 			this.damage(this.clampIntRange(Math.round(totalDamage * move.recoil[0] / move.recoil[1]), 1), pokemon, target, 'recoil');
 		}
 
-		if (target && move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
+		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
 
 		if (!damage && damage !== 0) return damage;
 
