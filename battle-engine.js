@@ -1491,7 +1491,7 @@ BattleSide = (function () {
 			decisions.push({
 				choice: 'team',
 				side: this,
-				team: '123456'.slice(0, this.currentRequestDetails ? parseInt(this.currentRequestDetails, 10) : this.active.length)
+				team: [0, 1, 2, 3, 4, 5].slice(0, this.pokemon.length)
 			});
 		}
 
@@ -3488,37 +3488,15 @@ Battle = (function () {
 			this.runEvent(decision.event, decision.pokemon);
 			break;
 		case 'team':
-			var i = parseInt(decision.team[0], 10) - 1;
-			if (i >= 6 || i < 0) return;
-
-			if (decision.team[1]) {
-				// validate the choice
-				var len = decision.side.pokemon.length;
-				var newPokemon = [null, null, null, null, null, null].slice(0, len);
-				for (var j = 0; j < len; j++) {
-					var i = parseInt(decision.team[j], 10) - 1;
-					newPokemon[j] = decision.side.pokemon[i];
-				}
-				var reject = false;
-				for (var j = 0; j < len; j++) {
-					if (!newPokemon[j]) reject = true;
-				}
-				if (!reject) {
-					for (var j = 0; j < len; j++) {
-						newPokemon[j].position = j;
-					}
-					decision.side.pokemon = newPokemon;
-					return;
-				}
+			var len = decision.side.pokemon.length;
+			var newPokemon = [null, null, null, null, null, null].slice(0, len);
+			for (var j = 0; j < len; j++) {
+				var i = decision.team[j];
+				newPokemon[j] = decision.side.pokemon[i];
+				newPokemon[j].position = j;
 			}
+			decision.side.pokemon = newPokemon;
 
-			if (i === 0) return;
-			pokemon = decision.side.pokemon[i];
-			if (!pokemon) return;
-			decision.side.pokemon[i] = decision.side.pokemon[0];
-			decision.side.pokemon[0] = pokemon;
-			decision.side.pokemon[i].position = i;
-			decision.side.pokemon[0].position = 0;
 			// we return here because the update event would crash since there are no active pokemon yet
 			return;
 		case 'pass':
@@ -3867,10 +3845,34 @@ Battle = (function () {
 
 			switch (choice) {
 			case 'team':
+				var pokemonLength = side.pokemon.length;
+				if (!data || data.length > pokemonLength) return false;
+
+				var dataArr = [0, 1, 2, 3, 4, 5].slice(0, pokemonLength);
+				var slotMap = dataArr.slice(); // Inverse of `dataArr` (slotMap[dataArr[x]] === x)
+				var oldSlot, tempSlot;
+
+				for (var j = 0; j < data.length; j++) {
+					var slot = parseInt(data.charAt(j), 10) - 1;
+					if (slotMap[slot] < j) return false;
+					if (isNaN(slot) || slot < 0 || slot >= pokemonLength) return false;
+
+					// Keep track of team order so far
+					tempSlot = dataArr[j];
+					dataArr[j] = slot;
+					dataArr[slotMap[slot]] = tempSlot;
+
+					// Update its inverse
+					oldSlot = tempSlot;
+					tempSlot = slotMap[slot];
+					slotMap[slot] = j;
+					slotMap[oldSlot] = tempSlot;
+				}
+
 				decisions.push({
 					choice: 'team',
 					side: side,
-					team: data
+					team: dataArr
 				});
 				break;
 
