@@ -1039,6 +1039,10 @@ BattlePokemon = (function () {
 		if (!this.isActive) return false;
 		if (!this.item) return false;
 		if (!source) source = this;
+		if (this.battle.gen === 4) {
+			if (toId(this.ability) === 'multitype') return false;
+			if (source && toId(source.ability) === 'multitype') return false;
+		}
 		var item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 			this.item = '';
