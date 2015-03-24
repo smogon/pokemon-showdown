@@ -1576,13 +1576,17 @@ var commands = exports.commands = {
 		this.sendReply('|raw|<img src="' + Tools.escapeHTML(targets[0]) + '" alt="" width="' + toId(targets[1]) + '" height="' + toId(targets[2]) + '" />');
 	},
 
-	htmlbox: function (target, room, user) {
+	htmlbox: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help htmlbox');
-		if (!this.can('declare', null, room)) return;
 		if (!this.canHTML(target)) return;
 
-		if (room.id !== 'development' && !this.canBroadcast('!htmlbox')) return;
-		this.broadcasting = true;
+		if (room.id === 'development') {
+			if (!this.can('announce', null, room)) return;
+			if (message.charAt(0) === '!') this.broadcasting = true;
+		} else {
+			if (!this.can('declare', null, room)) return;
+			if (!this.canBroadcast('!htmlbox')) return;
+		}
 
 		this.sendReplyBox(target);
 	},
