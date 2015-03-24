@@ -31,21 +31,6 @@ describe('Native timer/event loop globals', function () {
 	});
 });
 
-describe('Custom globals', function () {
-	var globalList = [
-		'Config', 'ResourceMonitor', 'toId', 'toName', 'string', 'LoginServer',
-		'Users', 'Rooms', 'Verifier', 'CommandParser', 'Simulator', 'Tournaments',
-		'Dnsbl', 'Cidr', 'Sockets', 'Tools', 'TeamValidator'
-	];
-	globalList.forEach(function (elem) {
-		describe('`' + elem + '`', function () {
-			it('should be a global', function () {
-				assert.ok(global.hasOwnProperty(elem));
-			});
-		});
-	});
-});
-
 describe('Battle simulation', function () {
 	require('./simulator');
 });
