@@ -633,6 +633,23 @@ exports.BattleMovedex = {
 		inherit: true,
 		flags: {heal: 1}
 	},
+	magiccoat: {
+		inherit: true,
+		effect: {
+			duration: 1,
+			onTryHitPriority: 2,
+			onTryHit: function (target, source, move) {
+				if (target === source || move.hasBounced || !move.flags['reflectable']) {
+					return;
+				}
+				target.removeVolatile('magiccoat');
+				var newMove = this.getMoveCopy(move.id);
+				newMove.hasBounced = true;
+				this.useMove(newMove, target, source);
+				return null;
+			}
+		}
+	},
 	magmastorm: {
 		inherit: true,
 		accuracy: 70
