@@ -104,8 +104,8 @@ exports.BattleScripts = {
 		if (!lockedMove && (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)) {
 			pokemon.deductPP(move, null, target);
 			// On gen 1 moves are stored when they are chosen and a PP is deducted.
-			pokemon.side.lastMove = move;
-			pokemon.lastMove = move;
+			pokemon.side.lastMove = move.id;
+			pokemon.lastMove = move.id;
 		}
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.runEvent('AfterMove', target, pokemon, move);
