@@ -248,10 +248,10 @@ var Trivia = (function () {
 		var innerBuffer = {5:[], 4:[], 3:[], 2:[], 1:[]};
 
 		for (var data, participantsIterator = this.participants.entries(); !!(data = participantsIterator.next().value);) { // replace with for-of loop once available
-			data[1].answered = false;
-			if (data[1].responderIndex < 0) continue;
-
 			var scoreData = data[1];
+			scoreData.answered = false;
+			if (scoreData.responderIndex < 0) continue;
+
 			var participant = Users.get(data[0]);
 			participant = participant ? participant.name : data[0];
 			innerBuffer[scoreData.points].push(participant);
@@ -297,14 +297,14 @@ var Trivia = (function () {
 		var innerBuffer = [];
 
 		for (var data, participantsIterator = this.participants.entries(); !!(data = participantsIterator.next().value);) { // replace with for-of loop once available
-			data[1].answered = false;
-			if (data[1].responderIndex < 0) continue;
+			var scoreData = data[1];
+			scoreData.answered = false;
+			if (scoreData.responderIndex < 0) continue;
 
 			var participant = Users.get(data[0]);
 			participant = participant ? participant.name : data[0];
 			innerBuffer.push(participant);
 
-			var scoreData = data[1];
 			scoreData.score += points;
 			if (scoreData.score > score && scoreData.responderIndex < winnerIndex) {
 				winner = participant;
@@ -550,7 +550,7 @@ var commands = {
 		}
 
 		if (/^\d+(?:-\d+)?(?:, ?\d+(?:-\d+)?)*$/.test(target)) {
-			var indices = target.split(', ');
+			var indices = target.split(',');
 			var submissionsLen = submissions.length;
 
 			for (var i = indices.length; i--;) {
@@ -570,7 +570,7 @@ var commands = {
 			}
 
 			var indicesLen = indices.length;
-			if (!indicesLen) return this.sendReply('"' + target.trim() + '" is not a valid argument. View /trivia review and /trivia help qcommands for more information.');
+			if (!indicesLen) return this.sendReply('"' + target.trim() + '" is not a valid set of submission index numbers. View /trivia review and /trivia help qcommands for more information.');
 
 			indices = indices.sort(function (a, b) {
 				return a - b;
@@ -584,14 +584,14 @@ var commands = {
 				}
 				Array.prototype.push.apply(triviaData.questions, accepted);
 				writeTriviaData();
-				return this.privateModCommand('(' + user.name + ' added submission numbers ' + target.trim() + ' to the question database.)');
+				return this.privateModCommand('(' + user.name + ' added submission numbers ' + indices.join(', ') + ' to the question database.)');
 			}
 
 			for (var i = indicesLen; i--;) {
 				submissions.splice(indices[i], 1);
 			}
 			writeTriviaData();
-			this.privateModCommand('(' + user.name + ' removed submission numbers ' + target.trim() + ' from the submission database.)');
+			this.privateModCommand('(' + user.name + ' removed submission numbers ' + indices.join(', ') + ' from the submission database.)');
 		}
 
 		this.sendReply('"' + target + '" is an invalid argument. View /trivia help qcommands for more information.');
