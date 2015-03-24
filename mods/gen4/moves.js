@@ -710,6 +710,18 @@ exports.BattleMovedex = {
 		inherit: true,
 		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
+	mirrormove: {
+		inherit: true,
+		onTryHit: function () { },
+		onHit: function (pokemon) {
+			var noMirror = {acupressure:1, aromatherapy:1, assist:1, chatter:1, copycat:1, counter:1, curse:1, doomdesire:1, feint:1, focuspunch:1, futuresight:1, gravity:1, hail:1, haze:1, healbell:1, helpinghand:1, lightscreen:1, luckychant:1, magiccoat:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, mist:1, mudsport:1, naturepower:1, perishsong:1, psychup:1, raindance:1, reflect:1, roleplay:1, safeguard:1, sandstorm:1, sketch:1, sleeptalk:1, snatch:1, spikes:1, spitup:1, stealthrock:1, struggle:1, sunnyday:1, tailwind:1, toxicspikes:1, transform:1, watersport:1};
+			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.pokemon.lastMove || noMirror[pokemon.lastAttackedBy.move] || !pokemon.lastAttackedBy.pokemon.hasMove(pokemon.lastAttackedBy.move)) {
+				return false;
+			}
+			this.useMove(pokemon.lastAttackedBy.move, pokemon);
+		},
+		target: "self"
+	},
 	moonlight: {
 		inherit: true,
 		onHit: function (pokemon) {
