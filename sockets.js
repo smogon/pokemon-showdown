@@ -114,6 +114,7 @@ if (cluster.isMaster) {
 } else {
 	// is worker
 
+	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
 	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
 	if (+process.env.PSNOSSL) Config.ssl = null;
 
