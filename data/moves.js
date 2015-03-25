@@ -449,9 +449,10 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, distance: 1},
-		onHit: function (pokemon, source) {
+		onHit: function (pokemon, source, move) {
 			var side = pokemon.side;
 			for (var i = 0; i < side.pokemon.length; i++) {
+				if (side.pokemon[i].volatiles['substitute'] && !move.notSubBlocked) continue;
 				side.pokemon[i].status = '';
 			}
 			this.add('-cureteam', source, '[from] move: Aromatherapy');
