@@ -921,7 +921,7 @@ var commands = exports.commands = {
 		target = toId(target);
 		var buffer = "";
 		var matched = false;
-		
+
 		if (!target || target === 'all') {
 			matched = true;
 			buffer += "- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />";
