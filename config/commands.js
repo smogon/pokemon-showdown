@@ -1681,7 +1681,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'away' || target === 'idle') {
 			matched = true;
-			this.sendReply("/away - Blocks challenges and private messages separately. Different from /blockpms in that it will still block challenges if you're staff. Unblock them with /back.");
+			this.sendReply("/away - Blocks challenges and private messages. Unblock them with /back.");
 		}
 		if (target === 'blockchallenges') {
 			matched = true;
@@ -1689,7 +1689,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'blockpms' || target === 'ignorepms') {
 			matched = true;
-			this.sendReply("/blockpms - Blocks private messages (including challenges). Unblock them with /unignorepms.");
+			this.sendReply("/blockpms - Blocks private messages. Unblock them with /unignorepms.");
 		}
 		if (target === 'back') {
 			matched = true;

@@ -169,9 +169,9 @@ var commands = exports.commands = {
 		user.ignorePMs = true;
 		if (target in Config.groups) {
 			user.ignorePMs = target;
-			return this.sendReply("You are now blocking private messages (including challenges), except from staff and " + target + ".");
+			return this.sendReply("You are now blocking private messages, except from staff and " + target + ".");
 		}
-		return this.sendReply("You are now blocking private messages (including challenges), except from staff.");
+		return this.sendReply("You are now blocking private messages, except from staff.");
 	},
 
 	unblockpm: 'unignorepms',
@@ -1909,7 +1909,7 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			return this.popupReply("The user '" + this.targetUsername + "' was not found.");
 		}
-		if ((targetUser.blockChallenges || targetUser.ignorePMs) && !user.can('bypassblocks', targetUser)) {
+		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			return this.popupReply("The user '" + this.targetUsername + "' is not accepting challenges right now.");
 		}
 		if (Config.pmmodchat) {
