@@ -1103,7 +1103,6 @@ User = (function () {
 			return;
 		}
 		this.registered = true;
-		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 		if (this.userid in usergroups) {
 			this.group = usergroups[this.userid].charAt(0);
 			this.confirmed = this.userid;
@@ -1117,6 +1116,7 @@ User = (function () {
 				}
 			}
 		}
+		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 		if (this.confirmed) {
 			this.autoconfirmed = this.confirmed;
 			this.locked = false;
