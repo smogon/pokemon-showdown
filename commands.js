@@ -519,7 +519,7 @@ var commands = exports.commands = {
 			this.addModCommand("" + name + " was promoted to Room " + groupName + " by " + user.name + ".");
 		}
 
-		if (targetUser) targetUser.updateIdentity();
+		if (targetUser) targetUser.updateIdentity(room.id);
 		if (room.chatRoomData) Rooms.global.writeChatRoomData();
 	},
 
