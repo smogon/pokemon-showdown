@@ -243,7 +243,7 @@ exports.BattleScripts = {
 			if (!move.ignoreEvasion && !pokemonAbilityIgnoreEvasion) {
 				boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.clone(this.boosts));
 				boost = this.clampIntRange(boosts['evasion'], -6, 6);
-				if (boost > 0 && !move.ignorePositiveEvasion) {
+				if (boost > 0) {
 					accuracy /= boostTable[boost];
 				} else if (boost < 0) {
 					accuracy *= boostTable[-boost];
