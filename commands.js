@@ -573,9 +573,9 @@ var commands = exports.commands = {
 		}
 		if (targetId === user.userid || user.can('makeroom')) {
 			innerBuffer = [];
-			for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
-				var curRoom = Rooms.global.chatRooms[i];
-				if (!curRoom.auth) continue;
+			for (var id in Rooms.rooms) {
+				var curRoom = Rooms.rooms[id];
+				if (!curRoom.auth || !curRoom.isPrivate) continue;
 				var auth = curRoom.auth[targetId];
 				if (!auth) continue;
 				innerBuffer.push(auth + curRoom.id);
