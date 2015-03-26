@@ -1272,6 +1272,9 @@ exports.BattleScripts = {
 				case 'leafstorm':
 					if (setupType && hasMove['gigadrain']) rejected = true;
 					break;
+				case 'woodhammer':
+					if (hasMove['gigadrain']) rejected = true;
+					break;
 				case 'bonemerang': case 'precipiceblades':
 					if (hasMove['earthquake']) rejected = true;
 					break;
@@ -2428,6 +2431,9 @@ exports.BattleScripts = {
 				case 'leafstorm':
 					if (setupType && hasMove['gigadrain']) rejected = true;
 					break;
+				case 'woodhammer':
+					if (hasMove['gigadrain']) rejected = true;
+					break;
 				case 'weatherball':
 					if (!hasMove['sunnyday']) rejected = true;
 					break;
@@ -2756,6 +2762,8 @@ exports.BattleScripts = {
 				rejectAbility = !hasMove['sunnyday'];
 			} else if (ability in ateAbilities) {
 				rejectAbility = !counter['ate'];
+			} else if (ability === 'Unburden') {
+				rejectAbility = template.baseStats.spe > 120;
 			}
 
 			if (rejectAbility) {
