@@ -570,7 +570,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		for (var search in {'moves':1, 'recovery':1, 'types':1, 'ability':1, 'tier':1, 'gen':1, 'color':1}) {
+		for (var search in {'gen':1, 'tier':1, 'color':1, 'types':1, 'ability':1, 'moves':1, 'recovery':1}) {
 			if (!searches[search]) continue;
 			switch (search) {
 				case 'types':
