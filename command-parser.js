@@ -310,7 +310,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 					}
 
 					// broadcast cooldown
-					var normalized = toId(message);
+					var normalized = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 					if (room.lastBroadcast === normalized &&
 							room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
 						connection.sendTo(room, "You can't broadcast this because it was just broadcast.");
