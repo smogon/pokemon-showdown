@@ -1887,7 +1887,7 @@ exports.Formats = [
 				};
 				move.onHit = function (target, source) {
 					var lastMove = source.illusion.moveset[source.illusion.moves.length - 1];
-					this.useMove(lastMove, source);
+					this.useMove(lastMove.id, source);
 				};
 			}
 			if (move.id === 'kingsshield' && name === 'sweep') {
