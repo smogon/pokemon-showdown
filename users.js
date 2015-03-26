@@ -1162,7 +1162,7 @@ User = (function () {
 	User.prototype.markInactive = function () {
 		this.connected = false;
 		this.lastConnected = Date.now();
-		if (!this.authenticated) {
+		if (!this.registered) {
 			this.group = Config.groupsranking[0];
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
