@@ -201,8 +201,6 @@ var GlobalRoom = (function () {
 			}];
 		}
 
-		// cached list of chat rooms for the room list
-		// usually does not contain private rooms, but no guarantees
 		this.chatRooms = [];
 
 		this.autojoin = []; // rooms that users autojoin upon connecting
@@ -220,7 +218,7 @@ var GlobalRoom = (function () {
 					aliases[room.aliases[a]] = room;
 				}
 			}
-			if (!room.isPrivate || room.isPrivate === 'voice') this.chatRooms.push(room);
+			this.chatRooms.push(room);
 			if (room.autojoin) this.autojoin.push(id);
 			if (room.staffAutojoin) this.staffAutojoin.push(id);
 		}
