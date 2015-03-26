@@ -52,18 +52,6 @@ exports.BattleScripts = {
 			}
 
 			return stat;
-		},
-		cureStatus: function () {
-			if (!this.hp) return false;
-			// unlike clearStatus, gives cure message
-			if (this.status) {
-				this.battle.add('-curestatus', this, this.status);
-				if (this.status === 'slp' && this.volatiles['nightmare']) {
-					// Nightmare status is removed here on gen 2.
-					this.removeVolatile('nightmare');
-				}
-				this.setStatus('');
-			}
 		}
 	},
 	// Battle scripts.
