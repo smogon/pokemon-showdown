@@ -4780,8 +4780,10 @@ exports.BattleMovedex = {
 					pokemon.negateImmunity['Fighting'] = true;
 				}
 			},
-			onSourceModifyMove: function (move) {
-				move.ignorePositiveEvasion = true;
+			onModifyBoost: function (boosts) {
+				if (boosts.evasion && boosts.evasion > 0) {
+					boosts.evasion = 0;
+				}
 			}
 		},
 		secondary: false,
@@ -8732,8 +8734,10 @@ exports.BattleMovedex = {
 			onModifyPokemon: function (pokemon) {
 				if (pokemon.hasType('Dark')) pokemon.negateImmunity['Psychic'] = true;
 			},
-			onSourceModifyMove: function (move, source, target) {
-				move.ignorePositiveEvasion = true;
+			onModifyBoost: function (boosts) {
+				if (boosts.evasion && boosts.evasion > 0) {
+					boosts.evasion = 0;
+				}
 			}
 		},
 		secondary: false,
