@@ -46,7 +46,7 @@ exports.BattleFormatsData = {
 	},
 	charizard: {
 		randomBattleMoves: ["fireblast","airslash","focusblast","roost","swordsdance","flareblitz","acrobatics","earthquake"],
-		randomDoubleBattleMoves: ["heatwave","fireblast","airslash","dragondance","flareblitz","acrobatics","earthquake","protect"],
+		randomDoubleBattleMoves: ["heatwave","fireblast","airslash","overheat","dragonpulse","roost","tailwind","protect"],
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["wingattack","slash","dragonrage","firespin"]},
 			{"generation":6,"level":36,"gender":"M","isHidden":false,"moves":["firefang","flameburst","airslash","inferno"],"pokeball":"cherishball"},
@@ -144,8 +144,8 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	pidgeot: {
-		randomBattleMoves: ["roost","bravebird","heatwave","return","uturn","hurricane"],
-		randomDoubleBattleMoves: ["bravebird","heatwave","return","uturn","tailwind","protect"],
+		randomBattleMoves: ["roost","bravebird","heatwave","return","doubleedge","uturn","hurricane"],
+		randomDoubleBattleMoves: ["bravebird","heatwave","return","doubleedge","uturn","tailwind","protect"],
 		eventPokemon: [
 			{"generation":5,"level":61,"gender":"M","nature":"Naughty","isHidden":false,"abilities":["keeneye"],"moves":["whirlwind","wingattack","skyattack","mirrormove"],"pokeball":"cherishball"}
 		],
@@ -756,7 +756,7 @@ exports.BattleFormatsData = {
 	},
 	dewgong: {
 		randomBattleMoves: ["surf","icebeam","perishsong","encore","toxic","protect"],
-		randomDoubleBattleMoves: ["surf","icebeam","aquajet","protect","rest","fakeout","encore","toxic"],
+		randomDoubleBattleMoves: ["surf","icebeam","protect","perishsong","fakeout","encore","toxic"],
 		tier: "PU"
 	},
 	grimer: {
