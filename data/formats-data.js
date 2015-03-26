@@ -1852,7 +1852,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["scratch","leer","taunt","quickattack"]}
 		],
-		tier: "PU"
+		tier: "BL4"
 	},
 	weavile: {
 		randomBattleMoves: ["iceshard","iciclecrash","knockoff","pursuit","swordsdance","lowkick"],
@@ -4146,7 +4146,7 @@ exports.BattleFormatsData = {
 	throh: {
 		randomBattleMoves: ["bulkup","circlethrow","icepunch","stormthrow","rest","sleeptalk","knockoff"],
 		randomDoubleBattleMoves: ["helpinghand","circlethrow","icepunch","stormthrow","wideguard","knockoff","protect"],
-		tier: "PU"
+		tier: "BL4"
 	},
 	sawk: {
 		randomBattleMoves: ["closecombat","earthquake","icepunch","poisonjab","bulkup","knockoff"],
