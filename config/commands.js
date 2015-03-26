@@ -918,12 +918,35 @@ var commands = exports.commands = {
 	git: 'opensource',
 	opensource: function (target, room, user) {
 		if (!this.canBroadcast()) return;
+		target = toId(target);
+		var buffer = "";
+		var matched = false;
+
+		if (!target || target === 'all') {
+			matched = true;
+			buffer += "- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />";
+			buffer += "- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Server source code</a><br />";
+			buffer += "- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a>";
+		}
+		if (target === 'all' || target === 'new' || target === 'commits' || target === 'whatsnew' || target === "newcommits") {
+			matched = true;
+			buffer += "- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a>";
+		}
+		if (target === 'all' || target === 'server') {
+			matched = true;
+			buffer += "- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Server source Code</a>";
+		}
+		if (target === 'all' || target === 'client') {
+			matched = true;
+			buffer += "- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Client source code</a>";
+		}
+		if (!matched) {
+			return this.sendReplyBox("The Pokemon Showdown server or client repositories under the name of '" + target + "'. Do /repo, /repository, /git, or /opensource to find what you're looking for.");
+		}
 		this.sendReplyBox(
 			"Pokemon Showdown is open source:<br />" +
 			"- Language: JavaScript (Node.js)<br />" +
-			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />" +
-			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Server source code</a><br />" +
-			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a>"
+			buffer
 		);
 	},
 
