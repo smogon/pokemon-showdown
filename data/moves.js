@@ -15593,7 +15593,7 @@ exports.BattleMovedex = {
 			onResidualOrder: 4,
 			onEnd: function (side) {
 				var target = side.active[this.effectData.sourcePosition];
-				if (!target.fainted) {
+				if (target && !target.fainted) {
 					var source = this.effectData.source;
 					var damage = this.heal(this.effectData.hp, target, target);
 					if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + source.name);
