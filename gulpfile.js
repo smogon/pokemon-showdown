@@ -28,7 +28,7 @@ function transformLet () {
 
 function lint (jsHintOptions, jscsOptions) {
 	return lazypipe()
-		.pipe(jshint.bind(jshint, jsHintOptions, {timeout: 150000}))
+		.pipe(jshint.bind(jshint, jsHintOptions, {timeout: 450000}))
 		.pipe(jscs.bind(jscs, jscsOptions))();
 }
 
