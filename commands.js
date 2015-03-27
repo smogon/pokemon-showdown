@@ -1925,12 +1925,18 @@ var commands = exports.commands = {
 		});
 	},
 
+	bch: 'blockchallenges',
+	blockchall: 'blockchallenges',
+	blockchalls: 'blockchallenges',
 	blockchallenges: function (target, room, user) {
 		if (user.blockChallenges) return this.sendReply("You are already blocking challenges!");
 		user.blockChallenges = true;
 		this.sendReply("You are now blocking all incoming challenge requests.");
 	},
 
+	unbch: 'allowchallenges',
+	unblockchall: 'allowchallenges',
+	unblockchalls: 'allowchallenges',
 	unblockchallenges: 'allowchallenges',
 	allowchallenges: function (target, room, user) {
 		if (!user.blockChallenges) return this.sendReply("You are already available for challenges!");
