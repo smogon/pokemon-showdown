@@ -7,12 +7,18 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "High Tier Random (BWknd 33)",
+		name: "1v1 Random (BWknd 34)",
 		section: "ORAS Singles",
 
-		mod: 'hightierrandom',
-		team: 'randomHighTier',
-		ruleset: ['Random (no PotD)']
+		team: 'random',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
+		onBegin: function() {
+			this.debug('Cutting down to 1');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
 	},
 	{
 		name: "OU",
