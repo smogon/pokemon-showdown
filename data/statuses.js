@@ -387,8 +387,6 @@ exports.BattleStatuses = {
 		}
 	},
 
-		// weather
-
 	// weather is implemented here since it's so important to the game
 
 	raindance: {
