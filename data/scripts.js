@@ -227,23 +227,21 @@ exports.BattleScripts = {
 
 		// calculate true accuracy
 		var accuracy = move.accuracy;
-		var boost;
+		var boosts, boost;
 		if (accuracy !== true) {
-			var targetAbilityIgnoreAccuracy = !target.ignore['Ability'] && target.getAbility().ignoreAccuracy;
-			if (!move.ignoreAccuracy && !targetAbilityIgnoreAccuracy) {
-				boost = this.runEvent('ModifyBoost', pokemon, 'accuracy', null, pokemon.boosts.accuracy);
-				boost = this.clampIntRange(boost, -6, 6);
+			if (!move.ignoreAccuracy) {
+				boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.clone(this.boosts));
+				boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 				if (boost > 0) {
 					accuracy *= boostTable[boost];
 				} else {
 					accuracy /= boostTable[-boost];
 				}
 			}
-			var pokemonAbilityIgnoreEvasion = !pokemon.ignore['Ability'] && pokemon.getAbility().ignoreEvasion;
-			if (!move.ignoreEvasion && !pokemonAbilityIgnoreEvasion) {
-				boost = this.runEvent('ModifyBoost', pokemon, 'evasion', null, target.boosts.evasion);
-				boost = this.clampIntRange(boost, -6, 6);
-				if (boost > 0 && !move.ignorePositiveEvasion) {
+			if (!move.ignoreEvasion) {
+				boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.clone(this.boosts));
+				boost = this.clampIntRange(boosts['evasion'], -6, 6);
+				if (boost > 0) {
 					accuracy /= boostTable[boost];
 				} else if (boost < 0) {
 					accuracy *= boostTable[-boost];
@@ -315,7 +313,7 @@ exports.BattleScripts = {
 			this.damage(this.clampIntRange(Math.round(totalDamage * move.recoil[0] / move.recoil[1]), 1), pokemon, target, 'recoil');
 		}
 
-		if (target && move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
+		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
 
 		if (!damage && damage !== 0) return damage;
 
@@ -1162,7 +1160,7 @@ exports.BattleScripts = {
 					if (!!counter['speedsetup'] || hasMove['encore'] || hasMove['raindance'] || hasMove['roar'] || hasMove['whirlwind']) rejected = true;
 					if (setupType && hasMove['stormthrow']) rejected = true;
 					break;
-				case 'defog': case 'pursuit': case 'haze': case 'healingwish': case 'rapidspin': case 'spikes': case 'stealthrock': case 'waterspout':
+				case 'defog': case 'pursuit': case 'haze': case 'healingwish': case 'rapidspin': case 'spikes': case 'waterspout':
 					if (setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'fakeout':
@@ -1180,6 +1178,9 @@ exports.BattleScripts = {
 				case 'protect':
 					if (setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
+				case 'stealthrock':
+					if (setupType || !!counter['speedsetup'] || hasMove['rest']) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
 					if (setupType || counter.Physical + counter.Special < 2) rejected = true;
@@ -1268,6 +1269,9 @@ exports.BattleScripts = {
 					break;
 				case 'leafstorm':
 					if (setupType && hasMove['gigadrain']) rejected = true;
+					break;
+				case 'woodhammer':
+					if (hasMove['gigadrain']) rejected = true;
 					break;
 				case 'bonemerang': case 'precipiceblades':
 					if (hasMove['earthquake']) rejected = true;
@@ -2425,6 +2429,9 @@ exports.BattleScripts = {
 				case 'leafstorm':
 					if (setupType && hasMove['gigadrain']) rejected = true;
 					break;
+				case 'woodhammer':
+					if (hasMove['gigadrain']) rejected = true;
+					break;
 				case 'weatherball':
 					if (!hasMove['sunnyday']) rejected = true;
 					break;
@@ -2753,6 +2760,8 @@ exports.BattleScripts = {
 				rejectAbility = !hasMove['sunnyday'];
 			} else if (ability in ateAbilities) {
 				rejectAbility = !counter['ate'];
+			} else if (ability === 'Unburden') {
+				rejectAbility = template.baseStats.spe > 120;
 			}
 
 			if (rejectAbility) {

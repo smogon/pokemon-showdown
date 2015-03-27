@@ -268,7 +268,7 @@ Tournament = (function () {
 		user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
 		this.isBracketInvalidated = true;
 		this.update();
-		if (this.playerCap === (users.length + 1)) this.room.add("The tournament is now full");
+		if (this.playerCap === (users.length + 1)) this.room.add("The tournament is now full.");
 	};
 	Tournament.prototype.removeUser = function (user, output) {
 		var error = this.generator.removeUser(user);

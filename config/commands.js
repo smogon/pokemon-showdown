@@ -236,7 +236,7 @@ var commands = exports.commands = {
 		if (targetUser.isSysop) {
 			this.sendReply("(Pok\xE9mon Showdown System Operator)");
 		}
-		if (!targetUser.authenticated) {
+		if (!targetUser.registered) {
 			this.sendReply("(Unregistered)");
 		}
 		if ((user.can('ip', targetUser) || user === targetUser)) {
@@ -411,8 +411,8 @@ var commands = exports.commands = {
 				if (move.flags['sound']) details["<font color=black>&#10003; Sound</font>"] = "";
 				if (move.flags['bullet']) details["<font color=black>&#10003; Bullet</font>"] = "";
 				if (move.flags['pulse']) details["<font color=black>&#10003; Pulse</font>"] = "";
-				if (move.flags['protect']) details["<font color=black>&#10003; Blocked by Protect</font>"] = "";
-				if (move.flags['authentic']) details["<font color=black>&#10003; Ignores substitutes</font>"] = "";
+				if (!move.flags['protect'] && !/(ally|self)/i.test(move.target)) details["<font color=black>&#10003; Bypasses Protect</font>"] = "";
+				if (move.flags['authentic']) details["<font color=black>&#10003; Bypasses Substitutes</font>"] = "";
 				if (move.flags['defrost']) details["<font color=black>&#10003; Thaws user</font>"] = "";
 				if (move.flags['bite']) details["<font color=black>&#10003; Bite</font>"] = "";
 				if (move.flags['punch']) details["<font color=black>&#10003; Punch</font>"] = "";
@@ -570,7 +570,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		for (var search in {'moves':1, 'recovery':1, 'types':1, 'ability':1, 'tier':1, 'gen':1, 'color':1}) {
+		for (var search in {'gen':1, 'tier':1, 'color':1, 'types':1, 'ability':1, 'moves':1, 'recovery':1}) {
 			if (!searches[search]) continue;
 			switch (search) {
 				case 'types':
@@ -681,6 +681,314 @@ var commands = exports.commands = {
 			}
 		} else {
 			resultsStr = "No Pokémon found.";
+		}
+		return this.sendReplyBox(resultsStr);
+	},
+
+	ms: 'movesearch',
+	msearch: 'movesearch',
+	movesearch: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+
+		if (!target) return this.parse('/help movesearch');
+		var targets = target.split(',');
+		var searches = {};
+		var allCategories = {'physical':1, 'special':1, 'status':1};
+		var allProperties = {'basePower':1, 'accuracy':1, 'priority':1, 'pp':1};
+		var allFlags = {'bite':1, 'bullet':1, 'contact':1, 'defrost':1, 'powder':1, 'pulse':1, 'punch':1, 'secondary':1, 'snatch':1, 'sound':1};
+		var allStatus = {'psn':1, 'tox':1, 'brn':1, 'par':1, 'frz':1, 'slp':1};
+		var allVolatileStatus = {'flinch':1, 'confusion':1, 'partiallytrapped':1};
+		var allBoosts = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'accuracy':1, 'evasion':1};
+		var showAll = false;
+		var output = 10;
+
+		for (var i in targets) {
+			var isNotSearch = false;
+			target = targets[i].toLowerCase().trim();
+			if (target.charAt(0) === '!') {
+				isNotSearch = true;
+				target = target.slice(1);
+			}
+
+			if (target.indexOf(' type') > -1) {
+				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
+				if (!(target in Tools.data.TypeChart)) return this.sendReplyBox("Type '" + Tools.escapeHTML(target) + "' not found.");
+				if (!searches['type']) searches['type'] = {};
+				if ((searches['type'][target] && isNotSearch) || (searches['type'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a type.');
+				searches['type'][target] = !isNotSearch;
+				continue;
+			}
+
+			if (target in allCategories) {
+				target = target.charAt(0).toUpperCase() + target.substr(1);
+				if (!searches['category']) searches['category'] = {};
+				if ((searches['category'][target] && isNotSearch) || (searches['category'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a category.');
+				searches['category'][target] = !isNotSearch;
+				continue;
+			}
+
+			if (target in allFlags) {
+				if (!searches['flags']) searches['flags'] = {};
+				if ((searches['flags'][target] && isNotSearch) || (searches['flags'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include \'' + target + '\'.');
+				searches['flags'][target] = !isNotSearch;
+				continue;
+			}
+
+			if (target === 'all') {
+				if (this.broadcasting) {
+					return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
+				}
+				showAll = true;
+				continue;
+			}
+
+			if (target === 'recovery') {
+				if (!searches['recovery']) {
+					searches['recovery'] = !isNotSearch;
+				} else if ((searches['recovery'] && isNotSearch) || (searches['recovery'] === false && !isNotSearch)) {
+					return this.sendReplyBox('A search cannot both exclude and include recovery moves.');
+				}
+				continue;
+			}
+
+			var inequality = target.search(/>|</);
+			if (inequality > -1) {
+				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in quality ranges.");
+				inequality = target.charAt(inequality);
+				var targetParts = target.replace(/\s/g, '').split(inequality);
+				var numSide, propSide, direction;
+				if (!isNaN(targetParts[0])) {
+					numSide = 0;
+					propSide = 1;
+					direction = (inequality === '>' ? 'less' : 'greater');
+				} else if (!isNaN(targetParts[1])) {
+					numSide = 1;
+					propSide = 0;
+					direction = (inequality === '<' ? 'less' : 'greater');
+				} else {
+					return this.sendReplyBox("No value given to compare with '" + Tools.escapeHTML(target) + "'.");
+				}
+				var prop = targetParts[propSide];
+				switch (toId(targetParts[propSide])) {
+					case 'basepower': prop = 'basePower'; break;
+					case 'bp': prop = 'basePower'; break;
+					case 'acc': prop = 'accuracy'; break;
+				}
+				if (!(prop in allProperties)) return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' did not contain a valid property.");
+				if (!searches['property']) searches['property'] = {};
+				if (!searches['property'][prop]) searches['property'][prop] = {};
+				if (searches['property'][prop][direction]) {
+					return this.sendReplyBox("Invalid property range for " + prop + ".");
+				} else {
+					searches['property'][prop][direction] = {};
+					searches['property'][prop][direction].qty = targetParts[numSide];
+				}
+				continue;
+			}
+
+			if (target.substr(0, 8) === 'priority') {
+				var sign = '';
+				if (target.substr(8).trim() === "+") {
+					sign = 'greater';
+				} else if (target.substr(8).trim() === "-") {
+					sign = 'less';
+				} else {
+					return this.sendReplyBox("Priority type '" + target.substr(8).trim() + "' not recognized.");
+				}
+				if (!searches['property']) searches['property'] = {};
+				if (searches['property']['priority']) {
+					return this.sendReplyBox("Priority cannot be set with both shorthand and inequality range.");
+				} else {
+					searches['property']['priority'] = {};
+					searches['property']['priority'][sign] = {};
+					searches['property']['priority'][sign].qty = (sign === 'less' ? -1 : 1);
+				}
+				continue;
+			}
+
+			if (target.substr(0, 7) === 'boosts ') {
+				switch (target.substr(7)) {
+					case 'attack': target = 'atk'; break;
+					case 'defense': target = 'def'; break;
+					case 'specialattack': target = 'spa'; break;
+					case 'spatk': target = 'spa'; break;
+					case 'specialdefense': target = 'spd'; break;
+					case 'spdef': target = 'spd'; break;
+					case 'speed': target = 'spe'; break;
+					case 'acc': target = 'accuracy'; break;
+					case 'evasiveness': target = 'evasion'; break;
+					default: target = target.substr(7);
+				}
+				if (!(target in allBoosts)) return this.sendReplyBox("'" + Tools.escapeHTML(target.substr(7)) + "' is not a recognized stat.");
+				if (!searches['boost']) searches['boost'] = {};
+				if ((searches['boost'][target] && isNotSearch) || (searches['boost'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a stat boost.');
+				searches['boost'][target] = !isNotSearch;
+				continue;
+			}
+
+			var oldTarget = target;
+			if (target.charAt(target.length - 1) === 's') target = target.substr(0, target.length - 1);
+			switch (target) {
+				case 'toxic': target = 'tox'; break;
+				case 'poison': target = 'psn'; break;
+				case 'burn': target = 'brn'; break;
+				case 'paralyze': target = 'par'; break;
+				case 'freeze': target = 'frz'; break;
+				case 'sleep': target = 'slp'; break;
+				case 'confuse': target = 'confusion'; break;
+				case 'trap': target = 'partiallytrapped'; break;
+				case 'flinche': target = 'flinch'; break;
+			}
+
+			if (target in allStatus) {
+				if (!searches['status']) searches['status'] = {};
+				if ((searches['status'][target] && isNotSearch) || (searches['status'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a status.');
+				searches['status'][target] = !isNotSearch;
+				continue;
+			}
+
+			if (target in allVolatileStatus) {
+				if (!searches['volatileStatus']) searches['volatileStatus'] = {};
+				if ((searches['volatileStatus'][target] && isNotSearch) || (searches['volatileStatus'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a volitile status.');
+				searches['volatileStatus'][target] = !isNotSearch;
+				continue;
+			}
+
+			return this.sendReplyBox("'" + Tools.escapeHTML(oldTarget) + "' could not be found in any of the search categories.");
+		}
+
+		if (showAll && Object.size(searches) === 0) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.");
+
+		var dex = {};
+		for (var move in Tools.data.Movedex) {
+			dex[move] = Tools.getMove(move);
+		}
+		delete dex.magikarpsrevenge;
+
+		for (var search in searches) {
+			switch (search) {
+				case 'type':
+				case 'category':
+					for (var move in dex) {
+						if (searches[search][String(dex[move][search])] === false) {
+							delete dex[move];
+						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[move][search])]) delete dex[move];
+					}
+					break;
+
+				case 'flags':
+					for (var flag in searches[search]) {
+						for (var move in dex) {
+							if (flag !== 'secondary') {
+								if ((!dex[move].flags[flag] && searches[search][flag]) || (dex[move].flags[flag] && !searches[search][flag])) delete dex[move];
+							} else {
+								if (searches[search][flag]) {
+									if (!dex[move].secondary && !dex[move].secondaries) delete dex[move];
+								} else {
+									if (dex[move].secondary && dex[move].secondaries) delete dex[move];
+								}
+							}
+						}
+					}
+					break;
+
+				case 'recovery':
+					for (var move in dex) {
+						var hasRecovery = (dex[move].drain || dex[move].flags.heal);
+						if ((!hasRecovery && searches[search]) || (hasRecovery && !searches[search])) delete dex[move];
+					}
+					break;
+
+				case 'property':
+					for (var prop in searches[search]) {
+						for (var move in dex) {
+							for (var ineq in searches[search][prop]) {
+								if (ineq === "less") {
+									if (dex[move][prop] === true) {
+										delete dex[move];
+										break;
+									}
+									if (dex[move][prop] > searches[search][prop][ineq].qty) {
+										delete dex[move];
+										break;
+									}
+								} else {
+									if (dex[move][prop] === true) {
+										if (dex[move].category === "Status") {
+											delete dex[move];
+											break;
+										}
+									}
+									if (dex[move][prop] < searches[search][prop][ineq].qty) {
+										delete dex[move];
+										break;
+									}
+								}
+							}
+						}
+					}
+					break;
+
+				case 'boost':
+					for (var boost in searches[search]) {
+						for (var move in dex) {
+							if (dex[move].boosts) {
+								if ((dex[move].boosts[boost] > 0 && searches[search][boost]) ||
+									(dex[move].boosts[boost] < 1 && !searches[search][boost])) continue;
+							} else if (dex[move].secondary && dex[move].secondary.self && dex[move].secondary.self.boosts) {
+								if ((dex[move].secondary.self.boosts[boost] > 0 && searches[search][boost]) ||
+									(dex[move].secondary.self.boosts[boost] < 1 && !searches[search][boost])) continue;
+							}
+							delete dex[move];
+						}
+					}
+					break;
+
+				case 'status':
+				case 'volatileStatus':
+					for (var searchStatus in searches[search]) {
+						for (var move in dex) {
+							if (dex[move][search] !== searchStatus) {
+								if (!dex[move].secondaries) {
+									if (!dex[move].secondary) {
+										if (searches[search][searchStatus]) delete dex[move];
+									} else {
+										if ((dex[move].secondary[search] !== searchStatus && searches[search][searchStatus]) ||
+											(dex[move].secondary[search] === searchStatus && !searches[search][searchStatus])) delete dex[move];
+									}
+								} else {
+									var hasSecondary = false;
+									for (var i = 0; i < dex[move].secondaries.length; i++) {
+										if (dex[move].secondaries[i][search] === searchStatus) hasSecondary = true;
+									}
+									if ((!hasSecondary && searches[search][searchStatus]) || (hasSecondary && !searches[search][searchStatus])) delete dex[move];
+								}
+							} else {
+								if (!searches[search][searchStatus]) delete dex[move];
+							}
+						}
+					}
+					break;
+
+				default:
+					return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
+			}
+		}
+		var results = [];
+		var resultsStr = "";
+		for (var move in dex) {
+			results.push(dex[move].name);
+		}
+		if (results.length > 0) {
+			if (showAll || results.length <= output) {
+				results.sort();
+				resultsStr = results.join(", ");
+			} else {
+				results.randomize();
+				resultsStr = results.slice(0, 10).join(", ") + ", and " + string(results.length - output) + " more. Redo the search with 'all' as a search parameter to show all results.";
+			}
+		} else {
+			resultsStr = "No moves found.";
 		}
 		return this.sendReplyBox(resultsStr);
 	},
@@ -1368,7 +1676,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'rarelyused' || target === 'ru') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3529590/\">np: RU Stage 7</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3533095/\">np: RU Stage 8</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523627/\">RU Viability Rankings</a><br />";
 		}
@@ -1627,11 +1935,17 @@ var commands = exports.commands = {
 		this.sendReply('|raw|<img src="' + Tools.escapeHTML(targets[0]) + '" alt="" width="' + toId(targets[1]) + '" height="' + toId(targets[2]) + '" />');
 	},
 
-	htmlbox: function (target, room, user) {
+	htmlbox: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help htmlbox');
-		if (!this.can('declare', null, room)) return;
 		if (!this.canHTML(target)) return;
-		if (!this.canBroadcast('!htmlbox')) return;
+
+		if (room.id === 'development') {
+			if (!this.can('announce', null, room)) return;
+			if (message.charAt(0) === '!') this.broadcasting = true;
+		} else {
+			if (!this.can('declare', null, room)) return;
+			if (!this.canBroadcast('!htmlbox')) return;
+		}
 
 		this.sendReplyBox(target);
 	},
@@ -1730,7 +2044,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'blockpms' || target === 'ignorepms') {
 			matched = true;
-			this.sendReply("/blockpms - Blocks private messages (including challenges). Unblock them with /unignorepms.");
+			this.sendReply("/blockpms - Blocks private messages. Unblock them with /unignorepms.");
 		}
 		if (target === 'allowchallenges' || target === 'allowchall' || target === 'unblockchallenges' || target === 'unblockchall') {
 			matched = true;

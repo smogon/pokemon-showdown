@@ -137,7 +137,6 @@ exports.BattleMovedex = {
 	brickbreak: {
 		inherit: true,
 		desc: "Reflect and Light Screen are removed from the target's field even if the attack misses or the target is a Ghost-type.",
-		//shortDesc: "",
 		onTryHit: function (pokemon) {
 			pokemon.side.removeSideCondition('reflect');
 			pokemon.side.removeSideCondition('lightscreen');
@@ -167,7 +166,6 @@ exports.BattleMovedex = {
 	},
 	copycat: {
 		inherit: true,
-		//desc: "",
 		onHit: function (pokemon) {
 			var noCopycat = {assist:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, protect:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, trick:1};
 			if (!this.lastMove || noCopycat[this.lastMove]) {
@@ -212,11 +210,10 @@ exports.BattleMovedex = {
 	},
 	defog: {
 		inherit: true,
-		isBounceable: false
+		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
 	detect: {
 		inherit: true,
-		//desc: "",
 		priority: 3,
 		effect: {
 			duration: 1,
@@ -246,8 +243,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 80,
 		desc: "The target cannot choose its last move for 4-7 turns. Disable only works on one move at a time and fails if the target has not yet used a move or if its move has run out of PP. The target does nothing if it is about to use a move that becomes disabled.",
-		//shortDesc: "",
-		isBounceable: false,
+		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'disable',
 		effect: {
 			durationCallback: function () {
@@ -317,8 +313,7 @@ exports.BattleMovedex = {
 	},
 	embargo: {
 		inherit: true,
-		//desc: "",
-		isBounceable: false,
+		flags: {protect: 1, mirror: 1},
 		onTryHit: function (pokemon) {
 			if (pokemon.ability === 'multitype' || pokemon.item === 'griseousorb') {
 				return false;
@@ -327,9 +322,7 @@ exports.BattleMovedex = {
 	},
 	encore: {
 		inherit: true,
-		//desc: "",
-		//shortDesc: "",
-		isBounceable: false,
+		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'encore',
 		effect: {
 			durationCallback: function () {
@@ -389,7 +382,6 @@ exports.BattleMovedex = {
 	explosion: {
 		inherit: true,
 		basePower: 500
-		//desc: ""
 	},
 	extremespeed: {
 		inherit: true,
@@ -453,7 +445,7 @@ exports.BattleMovedex = {
 	},
 	foresight: {
 		inherit: true,
-		isBounceable: false
+		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
 	furycutter: {
 		inherit: true,
@@ -484,7 +476,7 @@ exports.BattleMovedex = {
 	},
 	healblock: {
 		inherit: true,
-		isBounceable: false
+		flags: {protect: 1, mirror: 1}
 	},
 	healingwish: {
 		inherit: true,
@@ -645,36 +637,16 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 1,
-			onStart: function (target) {
-				this.add('-singleturn', target, 'move: Magic Coat');
-			},
 			onTryHitPriority: 2,
 			onTryHit: function (target, source, move) {
-				if (target === source) return;
-				if (move.hasBounced) return;
-				if (typeof move.isBounceable === 'undefined') {
-					move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+				if (target === source || move.hasBounced || !move.flags['reflectable']) {
+					return;
 				}
-				if (move.isBounceable) {
-					var newMove = this.getMoveCopy(move.id);
-					newMove.hasBounced = true;
-					this.useMove(newMove, target, source);
-					return null;
-				}
-			},
-			onAllyTryHitSide: function (target, source, move) {
-				if (target.side === source.side) return;
-				if (move.hasBounced) return;
-				if (typeof move.isBounceable === 'undefined') {
-					move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
-				}
-				if (move.isBounceable) {
-					target.removeVolatile('MagicCoat');
-					var newMove = this.getMoveCopy(move.id);
-					newMove.hasBounced = true;
-					this.useMove(newMove, target, source);
-					return null;
-				}
+				target.removeVolatile('magiccoat');
+				var newMove = this.getMoveCopy(move.id);
+				newMove.hasBounced = true;
+				this.useMove(newMove, target, source);
+				return null;
 			}
 		}
 	},
@@ -725,7 +697,6 @@ exports.BattleMovedex = {
 	},
 	mimic: {
 		inherit: true,
-		//desc: "",
 		onHit: function (target, source) {
 			var disallowedMoves = {chatter:1, metronome:1, mimic:1, sketch:1, struggle:1, transform:1};
 			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1 || target.volatiles['substitute']) return false;
@@ -754,7 +725,19 @@ exports.BattleMovedex = {
 	},
 	miracleeye: {
 		inherit: true,
-		isBounceable: false
+		flags: {protect: 1, mirror: 1, authentic: 1}
+	},
+	mirrormove: {
+		inherit: true,
+		onTryHit: function () { },
+		onHit: function (pokemon) {
+			var noMirror = {acupressure:1, aromatherapy:1, assist:1, chatter:1, copycat:1, counter:1, curse:1, doomdesire:1, feint:1, focuspunch:1, futuresight:1, gravity:1, hail:1, haze:1, healbell:1, helpinghand:1, lightscreen:1, luckychant:1, magiccoat:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, mist:1, mudsport:1, naturepower:1, perishsong:1, psychup:1, raindance:1, reflect:1, roleplay:1, safeguard:1, sandstorm:1, sketch:1, sleeptalk:1, snatch:1, spikes:1, spitup:1, stealthrock:1, struggle:1, sunnyday:1, tailwind:1, toxicspikes:1, transform:1, watersport:1};
+			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.pokemon.lastMove || noMirror[pokemon.lastAttackedBy.move] || !pokemon.lastAttackedBy.pokemon.hasMove(pokemon.lastAttackedBy.move)) {
+				return false;
+			}
+			this.useMove(pokemon.lastAttackedBy.move, pokemon);
+		},
+		target: "self"
 	},
 	moonlight: {
 		inherit: true,
@@ -782,7 +765,7 @@ exports.BattleMovedex = {
 	},
 	odorsleuth: {
 		inherit: true,
-		isBounceable: false
+		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
 	outrage: {
 		inherit: true,
@@ -813,7 +796,6 @@ exports.BattleMovedex = {
 	},
 	protect: {
 		inherit: true,
-		//desc: "",
 		priority: 3,
 		effect: {
 			duration: 1,
@@ -871,7 +853,7 @@ exports.BattleMovedex = {
 	},
 	roar: {
 		inherit: true,
-		isBounceable: false
+		flags: {mirror: 1, sound: 1, authentic: 1}
 	},
 	rockblast: {
 		inherit: true,
@@ -889,11 +871,9 @@ exports.BattleMovedex = {
 	selfdestruct: {
 		inherit: true,
 		basePower: 400
-		//desc: ""
 	},
 	sketch: {
 		inherit: true,
-		//desc: "",
 		onHit: function (target, source) {
 			var disallowedMoves = {chatter:1, sketch:1, struggle:1};
 			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1 || target.volatiles['substitute']) return false;
@@ -929,15 +909,15 @@ exports.BattleMovedex = {
 	},
 	spikes: {
 		inherit: true,
-		isBounceable: false
+		flags: {}
 	},
 	spite: {
 		inherit: true,
-		isBounceable: false
+		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
 	stealthrock: {
 		inherit: true,
-		isBounceable: false
+		flags: {}
 	},
 	suckerpunch: {
 		inherit: true,
@@ -1001,7 +981,7 @@ exports.BattleMovedex = {
 	},
 	taunt: {
 		inherit: true,
-		isBounceable: false
+		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
 	thrash: {
 		inherit: true,
@@ -1010,7 +990,7 @@ exports.BattleMovedex = {
 	},
 	torment: {
 		inherit: true,
-		isBounceable: false
+		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
 	toxic: {
 		inherit: true,
@@ -1018,7 +998,7 @@ exports.BattleMovedex = {
 	},
 	toxicspikes: {
 		inherit: true,
-		isBounceable: false,
+		flags: {},
 		effect: {
 			// this is a side condition
 			onStart: function (side) {
@@ -1058,11 +1038,10 @@ exports.BattleMovedex = {
 	},
 	whirlwind: {
 		inherit: true,
-		isBounceable: false
+		flags: {mirror: 1, authentic: 1}
 	},
 	wish: {
 		inherit: true,
-		//desc: "",
 		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
 		flags: {heal: 1},
 		sideCondition: 'Wish',
@@ -1081,7 +1060,6 @@ exports.BattleMovedex = {
 	},
 	worryseed: {
 		inherit: true,
-		//desc: "",
 		onTryHit: function (pokemon) {
 			var bannedAbilities = {multitype:1, truant:1};
 			if (bannedAbilities[pokemon.ability]) {

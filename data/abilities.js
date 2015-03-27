@@ -273,7 +273,7 @@ exports.BattleAbilities = {
 	"bulletproof": {
 		shortDesc: "This Pokemon is immune to bullet moves.",
 		onTryHit: function (pokemon, target, move) {
-			if (move.flags && move.flags['bullet']) {
+			if (move.flags['bullet']) {
 				this.add('-immune', pokemon, '[msg]', '[from] Bulletproof');
 				return null;
 			}
@@ -735,6 +735,9 @@ exports.BattleAbilities = {
 				return null;
 			}
 		},
+		onEnd: function (pokemon) {
+			pokemon.removeVolatile('flashfire');
+		},
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function (target) {
@@ -1037,8 +1040,8 @@ exports.BattleAbilities = {
 	},
 	"heavymetal": {
 		shortDesc: "This Pokemon's weight is doubled.",
-		onModifyPokemon: function (pokemon) {
-			pokemon.weightkg *= 2;
+		onModifyWeight: function (weight) {
+			return weight * 2;
 		},
 		id: "heavymetal",
 		name: "Heavy Metal",
@@ -1258,7 +1261,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. Sucker Punch is not boosted.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.flags && move.flags['punch']) {
+			if (move.flags['punch']) {
 				this.debug('Iron Fist boost');
 				return this.chainModify(1.2);
 			}
@@ -1342,8 +1345,8 @@ exports.BattleAbilities = {
 	},
 	"lightmetal": {
 		shortDesc: "This Pokemon's weight is halved.",
-		onModifyPokemon: function (pokemon) {
-			pokemon.weightkg /= 2;
+		onModifyWeight: function (weight) {
+			return weight / 2;
 		},
 		id: "lightmetal",
 		name: "Light Metal",
@@ -1410,30 +1413,22 @@ exports.BattleAbilities = {
 		name: "Magic Bounce",
 		onTryHitPriority: 1,
 		onTryHit: function (target, source, move) {
-			if (target === source) return;
-			if (move.hasBounced) return;
-			if (typeof move.isBounceable === 'undefined') {
-				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+				return;
 			}
-			if (move.isBounceable) {
-				var newMove = this.getMoveCopy(move.id);
-				newMove.hasBounced = true;
-				this.useMove(newMove, target, source);
-				return null;
-			}
+			var newMove = this.getMoveCopy(move.id);
+			newMove.hasBounced = true;
+			this.useMove(newMove, target, source);
+			return null;
 		},
 		onAllyTryHitSide: function (target, source, move) {
-			if (target.side === source.side) return;
-			if (move.hasBounced) return;
-			if (typeof move.isBounceable === 'undefined') {
-				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+				return;
 			}
-			if (move.isBounceable) {
-				var newMove = this.getMoveCopy(move.id);
-				newMove.hasBounced = true;
-				this.useMove(newMove, target, source);
-				return null;
-			}
+			var newMove = this.getMoveCopy(move.id);
+			newMove.hasBounced = true;
+			this.useMove(newMove, target, source);
+			return null;
 		},
 		effect: {
 			duration: 1
@@ -1528,7 +1523,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's pulse moves have 1.5x power. Heal Pulse heals 3/4 target's max HP.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.flags && move.flags['pulse']) {
+			if (move.flags['pulse']) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -2644,7 +2639,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's bite-based attacks have 1.5x power. Bug Bite is not boosted.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.flags && move.flags['bite']) {
+			if (move.flags['bite']) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -2999,10 +2994,20 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
 		id: "unaware",
 		name: "Unaware",
-		ignoreEvasion: true,
-		ignoreDefensive: true,
-		ignoreAccuracy: true,
-		ignoreOffensive: true,
+		onAnyModifyBoost: function (boosts, target) {
+			var source = this.effectData.target;
+			if (source === target) return;
+			if (source === this.activePokemon && target === this.activeTarget) {
+				boosts['def'] = 0;
+				boosts['spd'] = 0;
+				boosts['evasion'] = 0;
+			}
+			if (target === this.activePokemon && source === this.activeTarget) {
+				boosts['atk'] = 0;
+				boosts['spa'] = 0;
+				boosts['accuracy'] = 0;
+			}
+		},
 		rating: 3,
 		num: 109
 	},
@@ -3016,12 +3021,11 @@ exports.BattleAbilities = {
 		onTakeItem: function (item, pokemon) {
 			pokemon.addVolatile('unburden');
 		},
+		onEnd: function (pokemon) {
+			pokemon.removeVolatile('unburden');
+		},
 		effect: {
 			onModifySpe: function (speMod, pokemon) {
-				if (pokemon.ignore['Ability'] === true || pokemon.ability !== 'unburden') {
-					pokemon.removeVolatile('unburden');
-					return;
-				}
 				if (!pokemon.item) {
 					return this.chain(speMod, 2);
 				}
@@ -3249,32 +3253,24 @@ exports.BattleAbilities = {
 		onTryHit: function (target, source, move) {
 			if (this.effectData.target.activeTurns) return;
 
-			if (target === source) return;
-			if (move.hasBounced) return;
-			if (typeof move.isBounceable === 'undefined') {
-				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+				return;
 			}
-			if (move.isBounceable) {
-				var newMove = this.getMoveCopy(move.id);
-				newMove.hasBounced = true;
-				this.useMove(newMove, target, source);
-				return null;
-			}
+			var newMove = this.getMoveCopy(move.id);
+			newMove.hasBounced = true;
+			this.useMove(newMove, target, source);
+			return null;
 		},
 		onAllyTryHitSide: function (target, source, move) {
 			if (this.effectData.target.activeTurns) return;
 
-			if (target.side === source.side) return;
-			if (move.hasBounced) return;
-			if (typeof move.isBounceable === 'undefined') {
-				move.isBounceable = !!(move.category === 'Status' && (move.status || move.boosts || move.volatileStatus === 'confusion' || move.forceSwitch));
+			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+				return;
 			}
-			if (move.isBounceable) {
-				var newMove = this.getMoveCopy(move.id);
-				newMove.hasBounced = true;
-				this.useMove(newMove, target, source);
-				return null;
-			}
+			var newMove = this.getMoveCopy(move.id);
+			newMove.hasBounced = true;
+			this.useMove(newMove, target, source);
+			return null;
 		},
 		effect: {
 			duration: 1

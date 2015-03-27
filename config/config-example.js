@@ -445,10 +445,11 @@ exports.replsocketprefix = './logs/repl/';
 exports.replsocketmode = 0600;
 
 // permissions and groups:
-//   Each entry in `groupsranking' specifies the ranking of the groups.
-//   Each entry in `groups' is a seperate group. Some of the members are "special"
+//   Each entry in `grouplist' is a seperate group. Some of the members are "special"
 //     while the rest is just a normal permission.
+//   The order of the groups determines their ranking.
 //   The special members are as follows:
+//     - symbol: Specifies the symbol of the group (as shown in front of the username)
 //     - id: Specifies an id for the group.
 //     - name: Specifies the human-readable name for the group.
 //     - root: If this is true, the group can do anything.
@@ -461,6 +462,8 @@ exports.replsocketmode = 0600;
 //                       's' is a special group where it means the user itself only
 //                       and 'u' is another special group where it means all groups
 //                       lower in rank than the current group.
+//     - roomonly: forces the group to be a per-room moderation rank only.
+//     - globalonly: forces the group to be a global rank only.
 //   All the possible permissions are as follows:
 //     - console: Developer console (>>).
 //     - lockdown: /lockdown and /endlockdown commands.
@@ -468,13 +471,16 @@ exports.replsocketmode = 0600;
 //     - ignorelimits: Ignore limits such as chat message length.
 //     - promote: Promoting and demoting. Will only work if the target user's current
 //                  group and target group are both in jurisdiction.
+//     - room<rank>: /roompromote to <rank> (eg. roomvoice)
 //     - ban: Banning and unbanning.
 //     - mute: Muting and unmuting.
+//     - lock: locking (ipmute) and unlocking.
 //     - receivemutedpms: Receive PMs from muted users.
 //     - forcerename: /fr command.
 //     - redirect: /redir command.
 //     - ip: IP checking.
 //     - alts: Alt checking.
+//     - modlog: view the moderator logs.
 //     - broadcast: Broadcast informational commands.
 //     - declare: /declare command.
 //     - announce: /announce command.
@@ -482,25 +488,28 @@ exports.replsocketmode = 0600;
 //     - potd: Set PotD.
 //     - forcewin: /forcewin command.
 //     - battlemessage: /a command.
-exports.groupsranking = [' ', '\u2605', '+', '=', '%', '@', '-', '&', '#', '~'];
-exports.groups = {
-	'~': {
+//     - tournaments: creating tournaments (/tour new, settype etc.)
+//     - tournamentsmoderation: /tour dq, autodq, end etc.
+//     - tournamentsmanagement: enable/disable tournaments.
+exports.grouplist = [
+	{
+		symbol: '~',
 		id: "admin",
 		name: "Administrator",
 		root: true,
-		globalonly: true,
-		rank: 9
+		globalonly: true
 	},
-	'#': {
+	{
+		symbol: '#',
 		id: "owner",
 		name: "Room Owner",
 		inherit: '&',
 		jurisdiction: 'u',
 		roomleader: true,
-		roomonly: true,
-		rank: 8
+		roomonly: true
 	},
-	'&': {
+	{
+		symbol: '&',
 		id: "leader",
 		name: "Leader",
 		inherit: '@',
@@ -510,10 +519,10 @@ exports.groups = {
 		roomsubdriver: true,
 		roomonly: true,
 		tournamentsmanagement: true,
-		rmall: true,
-		rank: 7
+		rmall: true
 	},
-	'-': {
+	{
+		symbol: '-',
 		id: "battleplayer",
 		name: "Battle Player",
 		inherit: ' ',
@@ -524,10 +533,10 @@ exports.groups = {
 		modchat: true,
 		roomonly: true,
 		privateroom: true,
-		modchatall: true,
-		rank: 6
+		modchatall: true
 	},
-	'@': {
+	{
+		symbol: '@',
 		id: "mod",
 		name: "Moderator",
 		inherit: '%',
@@ -540,17 +549,17 @@ exports.groups = {
 		rangeban: true,
 		gdeclare: true,
 		clearall: true,
-		roomplayer: true,
-		rank: 5
+		roomplayer: true
 	},
-	'%': {
+	{
+		symbol: '%',
 		id: "driver",
 		name: "Driver",
 		inherit: '=',
-		jurisdiction: 'u',
-		rank: 4
+		jurisdiction: 'u'
 	},
-	'=': {
+	{
+		symbol: '=',
 		id: "subdriver",
 		name: "Subdriver",
 		inherit: '+',
@@ -565,10 +574,10 @@ exports.groups = {
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
-		jeopardy: true,
-		rank: 3
+		jeopardy: true
 	},
-	'+': {
+	{
+		symbol: '+',
 		id: "voice",
 		name: "Voice",
 		inherit: ' ',
@@ -577,19 +586,18 @@ exports.groups = {
 		announce: true,
 		ignorelimits: true,
 		poll: true,
-		joinbattle: true,
-		rank: 2
+		joinbattle: true
 	},
-	'\u2605': {
+	{
+		symbol: '\u2605',
 		id: "player",
 		name: "Player",
-		inherit: ' ',
-		rank: 1
+		inherit: ' '
 	},
-	' ': {
+	{
+		symbol: ' ',
 		ip: 's',
 		alts: '@u',
-		broadcast: true,
-		rank: 0
+		broadcast: true
 	}
 };
