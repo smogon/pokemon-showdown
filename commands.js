@@ -731,9 +731,14 @@ var commands = exports.commands = {
 	back: 'away',
 	idle: 'away',
 	away: function (target, room, user) {
+		if (!user.isAway) {
+			user.blockChallenges = true;
+		} else {
+			user.blockChallenges = false;
+		}
 		user.isAway = !user.isAway;
 		user.updateIdentity();
-		this.sendReply("You are " + (user.isAway ? "now" : "no longer") + " away.");
+		this.sendReply("You are " + (user.isAway ? "now" : "no longer") + " away and blocking challenges.");
 	},
 
 	/*********************************************************
