@@ -1,5 +1,10 @@
+const absol98sk = [
+	"If you're a trainer, talk with Pokemon!!"
+];
+
 const amiy = [
-	"went to find people to flop on."
+	"went to find people to flop on.",
+	"got swallowed whole by a Snorlax."
 ];
 
 const bidoofftw = [
@@ -16,6 +21,10 @@ const christs = [
 
 const darklight1999 = [
 	"returns back to darkness."
+];
+
+const hannumikkola = [
+	"is stealing your food now."
 ];
 
 const kingdomoftea = [
@@ -44,7 +53,15 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (user.name === 'Amiŧy') {
+		} else if (user.name === 'Absol98SK') {
+			var message = target || absol98sk[Math.floor(Math.random() * absol98sk.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+
+			room.addRaw(Tools.escapeHTML(message));
+			user.leaveRoom(room);
+		} else if (user.name === 'Amiŧy' || user.name === 'Kimisumi') {
 			var message = target || amiy[Math.floor(Math.random() * amiy.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -78,6 +95,14 @@ exports.commands = {
 			user.leaveRoom(room);
 		} else if (user.name === 'Dark Light1999') {
 			var message = target || darklight1999[Math.floor(Math.random() * darklight1999.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+
+			room.addRaw(Tools.escapeHTML(message));
+			user.leaveRoom(room);
+		} else if (user.name === 'Hannu Mikkola') {
+			var message = target || hannumikkola[Math.floor(Math.random() * hannumikkola.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
 			message = message.replace(/{{user}}/g, user.name);
