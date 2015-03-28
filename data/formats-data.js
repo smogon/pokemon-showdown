@@ -5188,7 +5188,7 @@ exports.BattleFormatsData = {
 	},
 	avalugg: {
 		randomBattleMoves: ["avalanche","recover","toxic","rapidspin","roar","earthquake"],
-		randomDoubleBattleMoves: ["avalanche","recover","toxic","rapidspin","roar","earthquake","protect"],
+		randomDoubleBattleMoves: ["avalanche","recover","earthquake","protect"],
 		tier: "PU"
 	},
 	noibat: {
