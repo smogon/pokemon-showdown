@@ -133,6 +133,7 @@ var commands = exports.commands = {
 			var innerTarget = (innerCmdIndex >= 0 ? target.slice(innerCmdIndex + 1) : '');
 			switch (innerCmd) {
 			case 'me':
+			case 'mee':
 			case 'announce':
 				break;
 			case 'invite':
