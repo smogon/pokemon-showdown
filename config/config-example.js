@@ -432,6 +432,11 @@ exports.customavatars = {
 	'juudaime103': 'juudaime103.png',
 	'lucy2512': 'lucy2512.gif',
 	'shawott': 'shawott.gif',
+	'absol98sk': 'absol98sk.jpg',
+	'alelobo': 'alelobo.gif',
+	'bisquaza': 'bisquaza.png',
+	'roxierosalinaxl': 'roxierosalinaxl.gif',
+	'spatacus': 'spatacus.png',
 };
 
 // appealurl - specify a URL containing information on how users can appeal
