@@ -542,7 +542,9 @@ var components = exports.components = {
 		room.add('|raw|<div class="infobox">' + Poll[room.id].display + '</div>');
 	},
 
-	fullpoll: function (target, room, user) {
+	tournamentpollall: 'tourpollall',
+	tourneypollall: 'tourpollall',
+	tourpollall: function (target, room, user) {
 		if (!this.can('poll', null, room)) return false;
 		this.parse('/poll Tournament format?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
 	},
