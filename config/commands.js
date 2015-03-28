@@ -1241,7 +1241,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"<b>~ Administrators</b><br />" +
-			"- abnegation (stranger)<br />" +
+			"- abnegation (seeker, stranger)<br />" +
 			"- Ausaudriel (Audy)<br />" +
 			"- Forever (skylight)<br />" +
 			"- Hiroshi Sotomura (Sotomura, Sotomura606)<br />" +
@@ -1257,7 +1257,7 @@ var commands = exports.commands = {
 			"- Anti (Crazy Uncle Anti)<br />" +
 			"- apocalypseArisen (Megido, omicron, omicronhuh)<br />" +
 			"- Aslan<br />" +
-			"- Castform (Powalen)<br />" +
+			"- Castform (orb castform, Powalen)<br />" +
 			"- Christos<br />" +
 			"- Dragon (Aura Blackquill, Captain Syrup, Dragii, Erika Senpai, Iris, Kjelle, Miss Fortune, Mitsuruu, Nabooru, Tharja)<br />" +
 			"- Peitharchia (Adrastia, nymph)<br />" +
@@ -1265,7 +1265,7 @@ var commands = exports.commands = {
 			"- Sector (Milena Kunis)<br />" +
 			"- Sweep<br />" +
 			"- Synerjee (Alto Mare, Autumn Reverie)<br />" +
-			"- Yoshikko (gloom)<br /><br />" +
+			"- Yoshikko (air tangela, gloom)<br /><br />" +
 			"<a href=\"http://www.pokecommunity.com/showthread.php?t=289012#staff\">Click here for more details.</a>"
 		);
 	},
