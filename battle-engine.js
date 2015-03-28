@@ -431,7 +431,9 @@ BattlePokemon = (function () {
 
 		// stat boosts
 		// boost = this.boosts[statName];
-		var boosts = this.battle.runEvent('ModifyBoost', this, null, null, Object.clone(this.boosts));
+		var boosts = {};
+		boosts[statName] = boost;
+		boosts = this.battle.runEvent('ModifyBoost', this, null, null, boosts);
 		boost = boosts[statName];
 		var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 		if (boost > 6) boost = 6;
@@ -3096,7 +3098,6 @@ Battle = (function () {
 			ignoreNegativeOffensive = true;
 			ignorePositiveDefensive = true;
 		}
-		// Check for abilities to see if defenses or offenses are negated (Unaware, Mold Breaker, etc.)
 		var ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
 		var ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
 
