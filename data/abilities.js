@@ -158,7 +158,7 @@ exports.BattleAbilities = {
 		onFoeModifyPokemon: function (pokemon) {
 			if (!this.isAdjacent(pokemon, this.effectData.target)) return;
 			if (!pokemon.runImmunity('Ground', false)) return;
-			if (!pokemon.hasType('Flying') || pokemon.hasType('ironball') || this.getPseudoWeather('gravity') || pokemon.volatiles['ingrain']) {
+			if (!pokemon.hasType('Flying') || (pokemon.item === 'ironball' && !pokemon.ignore['Item']) || this.getPseudoWeather('gravity') || pokemon.volatiles['ingrain']) {
 				pokemon.tryTrap(true);
 			}
 		},
@@ -166,7 +166,7 @@ exports.BattleAbilities = {
 			if (!source) source = this.effectData.target;
 			if (!this.isAdjacent(pokemon, source)) return;
 			if (!pokemon.runImmunity('Ground', false)) return;
-			if (!pokemon.hasType('Flying') || pokemon.hasType('ironball') || this.getPseudoWeather('gravity') || pokemon.volatiles['ingrain']) {
+			if (!pokemon.hasType('Flying') || (pokemon.item === 'ironball' && !pokemon.ignore['Item']) || this.getPseudoWeather('gravity') || pokemon.volatiles['ingrain']) {
 				pokemon.maybeTrapped = true;
 			}
 		},
