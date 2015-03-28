@@ -89,6 +89,81 @@ var Room = (function () {
 		this.update();
 	};
 
+	Room.prototype.toString = function () {
+		return this.id;
+	};
+
+	// roomban handling
+	Room.prototype.isRoomBanned = function (user) {
+		if (!user) return;
+		if (this.bannedUsers) {
+			if (user.userid in this.bannedUsers) {
+				return this.bannedUsers[user.userid];
+			}
+			if (user.autoconfirmed in this.bannedUsers) {
+				return this.bannedUsers[user.autoconfirmed];
+			}
+		}
+		if (this.bannedIps) {
+			for (var ip in user.ips) {
+				if (ip in this.bannedIps) return this.bannedIps[ip];
+			}
+		}
+	};
+	Room.prototype.roomBan = function (user, noRecurse, userid) {
+		if (!userid) userid = user.userid;
+		var alts;
+		if (!noRecurse) {
+			alts = [];
+			for (var i in Users.users) {
+				var otherUser = Users.users[i];
+				if (otherUser === user) continue;
+				for (var myIp in user.ips) {
+					if (myIp in otherUser.ips) {
+						alts.push(otherUser.name);
+						this.roomBan(otherUser, true, userid);
+						break;
+					}
+				}
+			}
+		}
+		this.bannedUsers[userid] = userid;
+		for (var ip in user.ips) {
+			this.bannedIps[ip] = userid;
+		}
+		if (!user.can('bypassall')) user.leaveRoom(this.id);
+		return alts;
+	};
+	Room.prototype.unRoomBan = function (userid, noRecurse) {
+		userid = toId(userid);
+		var successUserid = false;
+		for (var i in this.bannedUsers) {
+			var entry = this.bannedUsers[i];
+			if (i === userid || entry === userid) {
+				delete this.bannedUsers[i];
+				successUserid = entry;
+				if (!noRecurse && entry !== userid) {
+					this.unRoomBan(entry, true);
+				}
+			}
+		}
+		for (var i in this.bannedIps) {
+			if (this.bannedIps[i] === userid) {
+				delete this.bannedIps[i];
+				successUserid = userid;
+			}
+		}
+		return successUserid;
+	};
+	Room.prototype.checkBanned = function (user) {
+		var userid = this.isRoomBanned(user);
+		if (userid) {
+			this.roomBan(user, true, userid);
+			return false;
+		}
+		return true;
+	};
+
 	return Room;
 })();
 
@@ -126,6 +201,8 @@ var GlobalRoom = (function () {
 			}];
 		}
 
+		// cached list of chat rooms for the room list
+		// usually does not contain private rooms, but no guarantees
 		this.chatRooms = [];
 
 		this.autojoin = []; // rooms that users autojoin upon connecting
@@ -143,7 +220,7 @@ var GlobalRoom = (function () {
 					aliases[room.aliases[a]] = room;
 				}
 			}
-			this.chatRooms.push(room);
+			if (!room.isPrivate || room.isPrivate === 'voice') this.chatRooms.push(room);
 			if (room.autojoin) this.autojoin.push(id);
 			if (room.staffAutojoin) this.staffAutojoin.push(id);
 		}
@@ -288,12 +365,12 @@ var GlobalRoom = (function () {
 		}
 		return roomList;
 	};
-	GlobalRoom.prototype.getRooms = function () {
+	GlobalRoom.prototype.getRooms = function (user) {
 		var roomsData = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
 		for (var i = 0; i < this.chatRooms.length; i++) {
 			var room = this.chatRooms[i];
 			if (!room) continue;
-			if (room.isPrivate) continue;
+			if (room.isPrivate && !(room.isPrivate === 'voice' && user.group !== Config.groups.default.chatRoom)) continue;
 			(room.isOfficial ? roomsData.official : roomsData.chat).push({
 				title: room.title,
 				desc: room.desc,
@@ -303,27 +380,26 @@ var GlobalRoom = (function () {
 		return roomsData;
 	};
 	GlobalRoom.prototype.cancelSearch = function (user) {
-		var success = false;
 		user.cancelChallengeTo();
+		if (!user.searching) return false;
 		for (var i = 0; i < this.searchers.length; i++) {
 			var search = this.searchers[i];
 			var searchUser = Users.get(search.userid);
+			if (!searchUser || searchUser === user) {
+				this.searchers.splice(i, 1);
+				i--;
+				continue;
+			}
 			if (!searchUser.connected) {
 				this.searchers.splice(i, 1);
 				i--;
-				continue;
-			}
-			if (searchUser === user) {
-				this.searchers.splice(i, 1);
-				i--;
-				if (!success) {
-					searchUser.send('|updatesearch|' + JSON.stringify({searching: false}));
-					success = true;
-				}
+				searchUser.searching = 0;
 				continue;
 			}
 		}
-		return success;
+		user.searching = 0;
+		user.send('|updatesearch|' + JSON.stringify({searching: false}));
+		return true;
 	};
 	GlobalRoom.prototype.searchBattle = function (user, formatid) {
 		if (!user.connected) return;
@@ -399,6 +475,7 @@ var GlobalRoom = (function () {
 				return;
 			}
 		}
+		user.searching++;
 		this.searchers.push(newSearch);
 	};
 	GlobalRoom.prototype.send = function (message, user) {
@@ -573,7 +650,7 @@ var GlobalRoom = (function () {
 		if (Config.reportBattles && rooms.lobby) {
 			rooms.lobby.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
 		}
-		if (Config.logladderip && options.rated) {
+		if (Config.logLadderIp && options.rated) {
 			if (!this.ladderIpLog) {
 				this.ladderIpLog = fs.createWriteStream('logs/ladderip/ladderip.txt', {flags: 'a'});
 			}
@@ -590,7 +667,7 @@ var GlobalRoom = (function () {
 		if (rooms.lobby) return rooms.lobby.chat(user, message, connection);
 		message = CommandParser.parse(message, this, user, connection);
 		if (message) {
-			connection.sendPopup("You can't send messages directly to the server.");
+			connection.popup("You can't send messages directly to the server.");
 		}
 	};
 	return GlobalRoom;
@@ -643,7 +720,7 @@ var BattleRoom = (function () {
 		this.p2 = p2 || '';
 
 		this.sideTicksLeft = [21, 21];
-		if (!rated) this.sideTicksLeft = [28, 28];
+		if (!rated && !this.tour) this.sideTicksLeft = [28, 28];
 		this.sideTurnTicks = [0, 0];
 		this.disconnectTickDiff = [0, 0];
 
@@ -691,7 +768,7 @@ var BattleRoom = (function () {
 				this.push('|raw|ERROR: Ladder not updated: a player does not exist');
 			} else {
 				winner = Users.get(winnerid);
-				if (winner && !winner.authenticated) {
+				if (winner && !winner.registered) {
 					this.sendUser(winner, '|askreg|' + winner.userid);
 				}
 				var p1rating, p2rating;
@@ -760,6 +837,12 @@ var BattleRoom = (function () {
 			}
 			this.update();
 			this.logBattle(p1score);
+		}
+		if (Config.autosavereplays) {
+			var uploader = Users.get(winnerid);
+			if (uploader && uploader.connections[0]) {
+				CommandParser.parse('/savereplay', this, uploader, uploader.connections[0]);
+			}
 		}
 		if (this.tour) {
 			var winnerid = toId(winner);
@@ -954,7 +1037,7 @@ var BattleRoom = (function () {
 			// if a player has left, don't wait longer than 6 ticks (1 minute)
 			maxTicksLeft = 6;
 		}
-		if (!this.rated) maxTicksLeft = 30;
+		if (!this.rated && !this.tour) maxTicksLeft = 30;
 
 		this.sideTurnTicks = [maxTicksLeft, maxTicksLeft];
 
@@ -999,7 +1082,7 @@ var BattleRoom = (function () {
 		return false;
 	};
 	BattleRoom.prototype.kickInactiveUpdate = function () {
-		if (!this.rated) return false;
+		if (!this.rated && !this.tour) return false;
 		if (this.resetTimer) {
 			var inactiveSide = this.getInactiveSide();
 			var changed = false;
@@ -1457,15 +1540,7 @@ var ChatRoom = (function () {
 		} else {
 			this.reportJoin(entry);
 		}
-		if (this.bannedUsers && (user.userid in this.bannedUsers || user.autoconfirmed in this.bannedUsers)) {
-			this.bannedUsers[oldid] = true;
-			for (var ip in user.ips) this.bannedIps[ip] = true;
-			user.leaveRoom(this);
-			var alts = user.getAlts();
-			for (var i = 0; i < alts.length; ++i) {
-				this.bannedUsers[toId(alts[i])] = true;
-				Users.getExact(alts[i]).leaveRoom(this);
-			}
+		if (!this.checkBanned(user, oldid)) {
 			return;
 		}
 		if (global.Tournaments && Tournaments.get(this.id)) {
@@ -1552,6 +1627,7 @@ Rooms.createChatRoom = function (roomid, title, data) {
 console.log("NEW GLOBAL: global");
 rooms.global = new GlobalRoom('global');
 
+Rooms.Room = Room;
 Rooms.GlobalRoom = GlobalRoom;
 Rooms.BattleRoom = BattleRoom;
 Rooms.ChatRoom = ChatRoom;

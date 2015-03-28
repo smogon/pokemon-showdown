@@ -26,6 +26,22 @@ exports.BattleItems = {
 		},
 		desc: "Holder's Fire-type attacks have 1.1x power."
 	},
+	"deepseascale": {
+		inherit: true,
+		onModifySpD: function (spd, pokemon) {
+			if (pokemon.template.species === 'Clamperl') {
+				return this.chainModify(2);
+			}
+		}
+	},
+	"deepseatooth": {
+		inherit: true,
+		onModifySpA: function (spa, pokemon) {
+			if (pokemon.template.species === 'Clamperl') {
+				return this.chainModify(2);
+			}
+		}
+	},
 	"dragonfang": {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
@@ -46,7 +62,20 @@ exports.BattleItems = {
 	},
 	"lightball": {
 		inherit: true,
-		onModifyAtk: function () { }
+		onModifyAtk: function () {},
+		onModifySpA: function (spa, pokemon) {
+			if (pokemon.template.species === 'Pikachu') {
+				return this.chainModify(2);
+			}
+		}
+	},
+	"luckypunch": {
+		inherit: true,
+		onModifyMove: function (move, user) {
+			if (user.template.species === 'Chansey') {
+				move.critRatio += 2;
+			}
+		}
 	},
 	"magnet": {
 		inherit: true,
@@ -169,6 +198,22 @@ exports.BattleItems = {
 			}
 		},
 		desc: "Holder's Ghost-type attacks have 1.1x power."
+	},
+	"stick": {
+		inherit: true,
+		onModifyMove: function (move, user) {
+			if (user.template.species === 'Farfetch\'d') {
+				move.critRatio += 2;
+			}
+		}
+	},
+	"thickclub": {
+		inherit: true,
+		onModifyAtk: function (atk, pokemon) {
+			if (pokemon.template.species === 'Cubone' || pokemon.template.species === 'Marowak') {
+				return this.chainModify(2);
+			}
+		}
 	},
 	"twistedspoon": {
 		inherit: true,

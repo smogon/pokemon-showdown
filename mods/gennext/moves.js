@@ -148,7 +148,7 @@ exports.BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.notSubBlocked || move.isSoundBased) {
+				if (move.notSubBlocked || move.flags['sound']) {
 					return;
 				}
 				if (move.category === 'Status') {
@@ -694,8 +694,8 @@ exports.BattleMovedex = {
 		affectedByImmunities: false
 	},
 	/******************************************************************
-	Bonemerang, Bone Rush moves:
-	- not affected by immunities
+	Bonemerang, Bone Rush, Bone Club moves:
+	- not affected by Ground immunities
 	- Bone Rush nerfed to 20 base power so it's not viable on Lucario
 
 	Justification:
@@ -711,6 +711,11 @@ exports.BattleMovedex = {
 		basePower: 20,
 		affectedByImmunities: false,
 		accuracy: true
+	},
+	boneclub: {
+		inherit: true,
+		affectedByImmunities: false,
+		accuracy: 90
 	},
 	/******************************************************************
 	Relic Song:
@@ -1013,10 +1018,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: true
 	},
-	triplekick: {
-		inherit: true,
-		accuracy: true
-	},
 	watershuriken: {
 		inherit: true,
 		accuracy: true
@@ -1193,7 +1194,6 @@ exports.BattleMovedex = {
 		category: "Special",
 		isViable: true,
 		priority: 0,
-		isSoundBased: true,
 		affectedByImmunities: false,
 		onHit: function (target, source) {
 			source.side.addSideCondition('futuremove');
@@ -1208,7 +1208,7 @@ exports.BattleMovedex = {
 				moveData: {
 					basePower: 80,
 					category: "Special",
-					isSoundBased: true,
+					flags: {},
 					isNotProtectable: true,
 					affectedByImmunities: false,
 					type: 'Normal'
@@ -1384,6 +1384,13 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'eelektross') return this.chainModify(1.5);
 		}
+	},
+	triplekick: {
+		inherit: true,
+		onBasePower: function (power, user) {
+			if (user.template.id === 'hitmontop') return this.chainModify(1.5);
+		},
+		accuracy: true
 	},
 	bubblebeam: {
 		inherit: true,
@@ -1691,10 +1698,6 @@ exports.BattleMovedex = {
 		accuracy: 90
 	},
 	takedown: {
-		inherit: true,
-		accuracy: 90
-	},
-	boneclub: {
 		inherit: true,
 		accuracy: 90
 	},

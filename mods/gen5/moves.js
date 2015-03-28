@@ -11,6 +11,16 @@ exports.BattleMovedex = {
 		inherit: true,
 		pp: 20
 	},
+	aromatherapy: {
+		inherit: true,
+		onHit: function (pokemon, source) {
+			var side = pokemon.side;
+			for (var i = 0; i < side.pokemon.length; i++) {
+				side.pokemon[i].status = '';
+			}
+			this.add('-cureteam', source, '[from] move: Aromatherapy');
+		}
+	},
 	assist: {
 		inherit: true,
 		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
@@ -256,6 +266,7 @@ exports.BattleMovedex = {
 				moveData: {
 					basePower: 100,
 					category: "Special",
+					flags: {},
 					affectedByImmunities: true,
 					type: 'Psychic'
 				}
@@ -309,6 +320,7 @@ exports.BattleMovedex = {
 					}
 				}
 			},
+			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
 				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
 				if (disabledMoves[move.id] || move.heal) {

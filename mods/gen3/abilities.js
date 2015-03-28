@@ -45,7 +45,7 @@ exports.BattleAbilities = {
 		}
 	},
 	"lightningrod": {
-		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment. The user is immune to Electric and its Special Attack is increased one stage when hit by one.",
+		desc: "During double battles, this Pokemon draws any single-target Electric-type attack to itself. If an opponent uses an Electric-type attack that affects multiple Pokemon, those targets will be hit. This ability does not affect Electric Hidden Power or Judgment.",
 		shortDesc: "This Pokemon draws opposing Electric moves to itself.",
 		onFoeRedirectTargetPriority: 1,
 		onFoeRedirectTarget: function (target, source, source2, move) {
@@ -139,11 +139,10 @@ exports.BattleAbilities = {
 			if (!target || target.fainted) return;
 			var ability = this.getAbility(target.ability);
 			var bannedAbilities = {forecast:1, multitype:1, trace:1};
-			var onStartAbilities = {drizzle:1, drought:1, intimidate:1};
 			if (bannedAbilities[target.ability]) {
 				return;
 			}
-			if (onStartAbilities[target.ability] || pokemon.setAbility(ability)) {
+			if (pokemon.setAbility(ability)) {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		}

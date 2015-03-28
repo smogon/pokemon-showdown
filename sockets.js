@@ -119,6 +119,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
 	if (process.env.PSBINDADDR) Config.bindAddress = process.env.PSBINDADDR;
+	if (+process.env.PSNOSSL) Config.ssl = null;
 
 	// ofe is optional
 	// if installed, it will heap dump if the process runs out of memory
@@ -352,6 +353,10 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		}
 	});
 
+	process.on('disconnect', function () {
+		process.exit();
+	});
+
 	// this is global so it can be hotpatched if necessary
 	var isTrustedProxyIp = Cidr.checker(Config.proxyIps);
 	var socketCounter = 0;
@@ -420,6 +425,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		});
 	});
 	server.installHandlers(app, {});
+	if (Config.bindaddress === '0.0.0.0') Config.bindaddress = undefined;
 	app.listen(Config.port, Config.bindAddress || undefined);
 	console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening on ' + (Config.bindAddress || '*') + ':' + Config.port);
 

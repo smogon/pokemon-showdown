@@ -7,16 +7,8 @@ exports.BattleStatuses = {
 		onAfterMoveSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 8);
 		},
-		onBasePower: function (basePower, attacker, defender, move) {
-			if (move && move.category === 'Physical' && attacker && attacker.ability !== 'guts') {
-				return basePower / 2;
-			}
-		},
-		onSwitchIn: function (pokemon) {
-			pokemon.addVolatile('brnattackdrop');
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 8);
-			}
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(pokemon.maxhp / 8);
 		}
 	},
 	par: {
@@ -50,6 +42,20 @@ exports.BattleStatuses = {
 			return false;
 		}
 	},
+	frz: {
+		inherit: true,
+		onBeforeMove: function (pokemon, target, move) {
+			if (move.thawsUser) return;
+			this.add('cant', pokemon, 'frz');
+			return false;
+		},
+		onAfterMoveSelf: function (pokemon, target, move) {
+			if (move.thawsUser) pokemon.cureStatus();
+		},
+		onResidual: function (pokemon) {
+			if (this.random(256) < 25) pokemon.cureStatus();
+		}
+	},
 	psn: {
 		effectType: 'Status',
 		onStart: function (target) {
@@ -58,10 +64,8 @@ exports.BattleStatuses = {
 		onAfterMoveSelf: function (pokemon) {
 			this.damage(pokemon.maxhp / 8);
 		},
-		onSwitchIn: function (pokemon) {
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 8);
-			}
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(pokemon.maxhp / 8);
 		}
 	},
 	tox: {
@@ -77,10 +81,24 @@ exports.BattleStatuses = {
 			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
 		},
 		onSwitchIn: function (pokemon) {
+			// Regular poison status and damage after a switchout -> switchin.
 			this.effectData.stage = 0;
 			pokemon.setStatus('psn');
-			if (pokemon.side.foe.active[0] && pokemon.speed <= pokemon.side.foe.active[0].speed) {
-				this.damage(pokemon.maxhp / 8);
+		},
+		onAfterSwitchInSelf: function (pokemon) {
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+		}
+	},
+	confusion: {
+		inherit: true,
+		onStart: function (target, source, sourceEffect) {
+			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
+			if (!result) return result;
+			this.add('-start', target, 'confusion');
+			if (sourceEffect && sourceEffect.id === 'berserkgene') {
+				this.effectData.time = 256;
+			} else {
+				this.effectData.time = this.random(2, 6);
 			}
 		}
 	},
@@ -88,6 +106,12 @@ exports.BattleStatuses = {
 		inherit: true,
 		durationCallback: function (target, source) {
 			return this.random(3, 6);
+		}
+	},
+	sandstorm: {
+		inherit: true,
+		onWeather: function (target) {
+			this.damage(target.maxhp / 8);
 		}
 	},
 	stall: {

@@ -5,11 +5,15 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2]
 
   [1]: http://pokemonshowdown.com/
   [2]: https://github.com/Zarel/Pokemon-Showdown-Client
-  
+
+[![Build Status](https://travis-ci.org/Zarel/Pokemon-Showdown.svg)](https://travis-ci.org/Zarel/Pokemon-Showdown)
+[![Dependency Status](https://david-dm.org/zarel/Pokemon-Showdown.svg)](https://david-dm.org/zarel/Pokemon-Showdown)
+[![devDependency Status](https://david-dm.org/zarel/Pokemon-Showdown/dev-status.svg)](https://david-dm.org/zarel/Pokemon-Showdown#info=devDependencies)
+
 Introduction
 ------------------------------------------------------------------------
 
-This is the source code for the game server of [Pokémon Showdown][3], a website for Pokémon battling. Pokémon Showdown simulates singles and doubles battles in all the games out so far (Generations 1 through 6).
+This is the source code for the game server of [Pokémon Showdown][3], a website for Pokémon battling. Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 6).
 
 This repository contains the files needed to set up your own Pokémon Showdown server. Note that to set up a server, you'll also need a server computer.
 
@@ -36,7 +40,7 @@ This will set your command line's location to Pokémon Showdown's folder. You'll
 
 To install dependencies, run the command:
 
-    npm install
+    npm install --production
 
 Copy `config/config-example.js` into `config/config.js`, and edit as you please.
 

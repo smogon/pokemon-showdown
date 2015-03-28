@@ -9,7 +9,7 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'brn');
 		},
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move && move.category === 'Physical' && attacker && attacker.ability !== 'guts' && move.id !== 'facade') {
+			if (move && move.category === 'Physical' && attacker && !attacker.hasAbility('guts') && move.id !== 'facade') {
 				return this.chainModify(0.5); // This should really take place directly in the damage function but it's here for now
 			}
 		},
@@ -24,11 +24,11 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'par');
 		},
 		onModifySpe: function (speMod, pokemon) {
-			if (pokemon.ability !== 'quickfeet') {
+			if (!pokemon.hasAbility('quickfeet')) {
 				return this.chain(speMod, 0.25);
 			}
 		},
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 1,
 		onBeforeMove: function (pokemon) {
 			if (this.random(4) === 0) {
 				this.add('cant', pokemon, 'par');
@@ -44,9 +44,9 @@ exports.BattleStatuses = {
 			this.effectData.startTime = this.random(2, 5);
 			this.effectData.time = this.effectData.startTime;
 		},
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
-			if (pokemon.getAbility().isHalfSleep) {
+			if (pokemon.hasAbility('earlybird')) {
 				pokemon.statusData.time--;
 			}
 			pokemon.statusData.time--;
@@ -76,7 +76,7 @@ exports.BattleStatuses = {
 				this.add('message', target.species + " has reverted to Land Forme! (placeholder)");
 			}
 		},
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
 			if (move.thawsUser || this.random(5) === 0) {
 				pokemon.cureStatus();
@@ -133,6 +133,7 @@ exports.BattleStatuses = {
 		onEnd: function (target) {
 			this.add('-end', target, 'confusion');
 		},
+		onBeforeMovePriority: 3,
 		onBeforeMove: function (pokemon) {
 			pokemon.volatiles.confusion.time--;
 			if (!pokemon.volatiles.confusion.time) {
@@ -149,7 +150,7 @@ exports.BattleStatuses = {
 	},
 	flinch: {
 		duration: 1,
-		onBeforeMovePriority: 1,
+		onBeforeMovePriority: 8,
 		onBeforeMove: function (pokemon) {
 			if (!this.runEvent('Flinch', pokemon)) {
 				return;
@@ -269,6 +270,7 @@ exports.BattleStatuses = {
 	},
 	mustrecharge: {
 		duration: 2,
+		onBeforeMovePriority: 11,
 		onBeforeMove: function (pokemon) {
 			this.add('cant', pokemon, 'recharge');
 			pokemon.removeVolatile('mustrecharge');
@@ -324,6 +326,15 @@ exports.BattleStatuses = {
 					}
 				}
 
+				// Prior to gen 5, these moves had no STAB and no effectiveness.
+				// This is done here and to moveData's type for two reasons:
+				// - modifyMove event happens before the moveHit function is run.
+				// - moveData here is different from move, as one is generated here and the other by the move itself.
+				// So here we centralise any future hit move getting typeless on hit as it should be.
+				if (this.gen < 5) {
+					posData.moveData.type = '???';
+				}
+
 				this.moveHit(target, posData.source, move, posData.moveData);
 
 				this.effectData.positions[i] = null;
@@ -366,17 +377,15 @@ exports.BattleStatuses = {
 		duration: 1,
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, user, target, move) {
-			var modifier = 4 / 3;
+			var modifier = 0x1547;
 			this.debug('Aura Boost');
 			if (user.volatiles['aurabreak']) {
-				modifier = 0.75;
+				modifier = 0x0C00;
 				this.debug('Aura Boost reverted by Aura Break');
 			}
-			return this.chainModify(modifier);
+			return this.chainModify([modifier, 0x1000]);
 		}
 	},
-
-		// weather
 
 	// weather is implemented here since it's so important to the game
 
@@ -431,6 +440,9 @@ exports.BattleStatuses = {
 				this.debug('Rain water boost');
 				return this.chainModify(1.5);
 			}
+		},
+		onSetWeather: function (target, source, weather) {
+			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onStart: function () {
 			this.add('-weather', 'PrimordialSea');
@@ -498,6 +510,9 @@ exports.BattleStatuses = {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
 			}
+		},
+		onSetWeather: function (target, source, weather) {
+			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onStart: function () {
 			this.add('-weather', 'DesolateLand');
@@ -588,6 +603,9 @@ exports.BattleStatuses = {
 				this.add('-activate', '', 'deltastream');
 				return 0;
 			}
+		},
+		onSetWeather: function (target, source, weather) {
+			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onStart: function () {
 			this.add('-weather', 'DeltaStream');

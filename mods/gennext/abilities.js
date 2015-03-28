@@ -5,10 +5,26 @@ exports.BattleAbilities = {
 			this.setWeather('raindance', source, null);
 		}
 	},
+	"swiftswim": {
+		inherit: true,
+		onModifySpe: function (speMod, pokemon) {
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				return this.chain(speMod, 1.5);
+			}
+		}
+	},
 	"drought": {
 		inherit: true,
 		onStart: function (source) {
 			this.setWeather('sunnyday', source, null);
+		}
+	},
+	"chlorophyll": {
+		inherit: true,
+		onModifySpe: function (speMod) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				return this.chain(speMod, 1.5);
+			}
 		}
 	},
 	"snowwarning": {
@@ -21,6 +37,14 @@ exports.BattleAbilities = {
 		inherit: true,
 		onStart: function (source) {
 			this.setWeather('sandstorm', source, null);
+		}
+	},
+	"sandrush": {
+		inherit: true,
+		onModifySpe: function (speMod, pokemon) {
+			if (this.isWeather('sandstorm')) {
+				return this.chain(speMod, 1.5);
+			}
 		}
 	},
 	"forecast": {
@@ -399,7 +423,7 @@ exports.BattleAbilities = {
 	"ironfist": {
 		inherit: true,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.isPunchAttack) {
+			if (move.flags['punch']) {
 				return basePower * 1.33;
 			}
 		}
@@ -564,18 +588,20 @@ exports.BattleAbilities = {
 			pokemon.addVolatile('shadowtag');
 		},
 		effect: {
+			duration: 2,
 			onFoeModifyPokemon: function (pokemon) {
 				if (pokemon.ability !== 'shadowtag') {
 					pokemon.tryTrap(true);
 				}
 			}
 		},
+		onBeforeMovePriority: 15,
 		onBeforeMove: function (pokemon) {
 			pokemon.removeVolatile('shadowtag');
 		},
 		onFoeMaybeTrapPokemon: function (pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (pokemon.ability !== 'shadowtag' && !source.lastMove) {
+			if (pokemon.ability !== 'shadowtag' && !source.volatiles.shadowtag) {
 				pokemon.maybeTrapped = true;
 			}
 		}
