@@ -13,7 +13,8 @@ var globals = {};
 var globalList = [
 	'Config', 'ResourceMonitor', 'toId', 'toName', 'string', 'LoginServer',
 	'Users', 'Rooms', 'Verifier', 'CommandParser', 'Simulator', 'Tournaments',
-	'Dnsbl', 'Cidr', 'Sockets', 'Tools', 'TeamValidator', 'battleEngineFakeProcess', 'battleProtoCache'
+	'Dnsbl', 'Cidr', 'Sockets', 'Tools', 'TeamValidator',
+	'battleEngineFakeProcess', 'battleProtoCache'
 ];
 globalList.forEach(function (identifier) {globals[identifier] = false;});
 
@@ -28,7 +29,7 @@ function transformLet () {
 
 function lint (jsHintOptions, jscsOptions) {
 	return lazypipe()
-		.pipe(jshint.bind(jshint, jsHintOptions, {timeout: 150000}))
+		.pipe(jshint.bind(jshint, jsHintOptions, {timeout: 450000}))
 		.pipe(jscs.bind(jscs, jscsOptions))();
 }
 
@@ -144,7 +145,7 @@ jscsOptions.dataCompactAllIndented = util._extend(util._extend({}, jscsOptions.d
 
 var lintData = [
 	{
-		dirs: ['./*.js', './tournaments/*.js', './chat-plugins/*.js', './config/!(config).js', './**/scripts.js', './**/rulesets.js', './**/statuses.js'],
+		dirs: ['./*.js', './tournaments/*.js', './chat-plugins/*.js', './config/!(config).js', './data/scripts.js', './data/rulesets.js', './data/statuses.js', './mods/*/scripts.js', './mods/*/rulesets.js', './mods/*/statuses.js'],
 		jsHint: jsHintOptions.base,
 		jscs: jscsOptions.base
 	}, {
@@ -152,7 +153,7 @@ var lintData = [
 		jsHint: jsHintOptions.base,
 		jscs: jscsOptions.config
 	}, {
-		dirs: ['./**/abilities.js', './**/items.js', './**/moves.js', './**/typechart.js', './**/aliases.js'],
+		dirs: ['./data/abilities.js', './data/items.js', './data/moves.js', './data/typechart.js', './data/aliases.js', './mods/*/abilities.js', './mods/*/items.js', './mods/*/moves.js', './mods/*/typechart.js'],
 		jsHint: jsHintOptions.legacy,
 		jscs: jscsOptions.base
 	}, {

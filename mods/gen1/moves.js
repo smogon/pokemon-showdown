@@ -564,11 +564,12 @@ exports.BattleMovedex = {
 	},
 	mirrormove: {
 		inherit: true,
-		onTryHit: function (target) {
-			var noMirrorMove = {mirrormove: 1, struggle: 1};
-			if (!target.lastMove || noMirrorMove[target.lastMove]) {
+		onHit: function (pokemon) {
+			var foe = pokemon.side.foe.active[0];
+			if (!foe || !foe.lastMove || foe.lastMove === 'mirrormove') {
 				return false;
 			}
+			this.useMove(foe.lastMove, pokemon);
 		}
 	},
 	nightshade: {

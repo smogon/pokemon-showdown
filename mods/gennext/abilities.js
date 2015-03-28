@@ -423,7 +423,7 @@ exports.BattleAbilities = {
 	"ironfist": {
 		inherit: true,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.flags && move.flags['punch']) {
+			if (move.flags['punch']) {
 				return basePower * 1.33;
 			}
 		}
