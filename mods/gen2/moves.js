@@ -178,6 +178,17 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	mirrormove: {
+		inherit: true,
+		onHit: function (pokemon) {
+			var noMirror = {metronome: 1, mimic: 1, mirrormove: 1, sketch: 1, sleeptalk: 1, transform: 1};
+			var foe = pokemon.side.foe.active[0];
+			if (!foe || !foe.lastMove || (!pokemon.activeTurns && !foe.moveThisTurn) || noMirror[foe.lastMove] || pokemon.moves.indexOf(foe.lastMove) !== -1) {
+				return false;
+			}
+			this.useMove(foe.lastMove, pokemon);
+		}
+	},
 	moonlight: {
 		inherit: true,
 		onHit: function (pokemon) {

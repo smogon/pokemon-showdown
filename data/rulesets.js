@@ -63,6 +63,23 @@ exports.BattleFormats = {
 	},
 	pokemon: {
 		effectType: 'Banlist',
+		validateTeam: function (team, format) {
+			var problems = [];
+			// ----------- legality line ------------------------------------------
+			if (!format || !format.banlistTable || !format.banlistTable['illegal']) return problems;
+			// everything after this line only happens if we're doing legality enforcement
+			var kyurems = 0;
+			for (var i = 0; i < team.length; i++) {
+				if (team[i].species === 'Kyurem-White' || team[i].species === 'Kyurem-Black') {
+					if (kyurems > 0) {
+						problems.push('You cannot have more than one Kyurem-Black/Kyurem-White.');
+						break;
+					}
+					kyurems++;
+				}
+			}
+			return problems;
+		},
 		validateSet: function (set, format) {
 			var item = this.getItem(set.item);
 			var template = this.getTemplate(set.species);
