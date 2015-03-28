@@ -1582,7 +1582,11 @@ exports.BattleScripts = {
 			if (abilities.indexOf('Unburden') > -1 && hasMove['acrobatics']) {
 				ability = 'Unburden';
 			}
-			if (template.id === 'combee') {
+			if (template.id === 'ambipom' && !counter['technician']) {
+				// If it doesn't qualify for Technician, Skill Link is useless on it
+				// Might as well give it Pickup just in case
+				ability = 'Pickup';
+			} else if (template.id === 'combee') {
 				// Combee always gets Hustle but its only physical move is Endeavor, which loses accuracy
 				ability = 'Honey Gather';
 			} else if (template.id === 'lopunny' && hasMove['switcheroo'] && this.random(3)) {
@@ -2783,7 +2787,11 @@ exports.BattleScripts = {
 			if (abilities.indexOf('Intimidate') > -1 || template.id === 'mawilemega') {
 				ability = 'Intimidate';
 			}
-			if (template.id === 'unfezant') {
+			if (template.id === 'ambipom' && !counter['technician']) {
+				// If it doesn't qualify for Technician, Skill Link is useless on it
+				// Might as well give it Pickup just in case
+				ability = 'Pickup';
+			} else if (template.id === 'unfezant') {
 				ability = 'Super Luck';
 			}
 		}
