@@ -259,6 +259,7 @@ var core = exports.core = {
 		':meowstic:': 'http://cbc.pokecommunity.com/config/emoticons/meowstic.png',
 		':meowsticf:': 'http://cbc.pokecommunity.com/config/emoticons/meowsticf.png',
 		':metagross:': 'http://cbc.pokecommunity.com/config/emoticons/metagross.png',
+		':moo:': 'http://cbc.pokecommunity.com/config/emoticons/moo.gif',
 		':nw:': 'http://cbc.pokecommunity.com/config/emoticons/nw.gif',
 		':oddish:': 'http://cbc.pokecommunity.com/config/emoticons/oddish.png',
 		':pear:': 'http://cbc.pokecommunity.com/config/emoticons/pear.png',
