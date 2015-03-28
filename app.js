@@ -58,6 +58,7 @@ function runNpm(command) {
 
 var isLegacyEngine = !global.Map;
 
+var fs = require('fs');
 try {
 	require('sugar');
 	if (isLegacyEngine) require('es6-shim');
@@ -68,24 +69,22 @@ if (isLegacyEngine && !new Map().set()) {
 	runNpm('update --production');
 }
 
-// Make sure config.js exists, and copy it over from config-example.js
-// if it doesn't
-
-var fs = require('fs');
-
-// Synchronously, since it's needed before we can start the server
-if (!fs.existsSync('./config/config.js')) {
-	console.log("config.js doesn't exist - creating one with default settings...");
-	fs.writeFileSync('./config/config.js',
-		fs.readFileSync('./config/config-example.js')
-	);
-}
-
 /*********************************************************
  * Load configuration
  *********************************************************/
 
-global.Config = require('./config/config.js');
+try {
+	global.Config = require('./config/config.js');
+} catch (err) {
+	if (err.code !== 'MODULE_NOT_FOUND') throw err;
+
+	// Copy it over synchronously from config-example.js since it's needed before we can start the server
+	console.log("config.js doesn't exist - creating one with default settings...");
+	fs.writeFileSync('./config/config.js',
+		fs.readFileSync('./config/config-example.js')
+	);
+	global.Config = require('./config/config.js');
+}
 
 if (Config.watchConfig) {
 	fs.watchFile('./config/config.js', function (curr, prev) {
@@ -93,6 +92,7 @@ if (Config.watchConfig) {
 		try {
 			delete require.cache[require.resolve('./config/config.js')];
 			global.Config = require('./config/config.js');
+			if (global.Users) Users.cacheGroupData();
 			console.log('Reloaded config/config.js');
 		} catch (e) {}
 	});
@@ -105,8 +105,7 @@ Config.port = cloudenv.get('PORT', Config.port);
 
 if (require.main === module && process.argv[2] && parseInt(process.argv[2])) {
 	Config.port = parseInt(process.argv[2]);
-} else if (global.overridePort) {
-	Config.port = global.overridePort;
+	Config.ssl = null;
 }
 
 global.ResourceMonitor = {

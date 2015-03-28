@@ -102,8 +102,10 @@ exports.BattleAbilities = {
 	},
 	"simple": {
 		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
-		onModifyBoost: function () {
-			return this.chainModify(2);
+		onModifyBoost: function (boosts) {
+			for (var key in boosts) {
+				boosts[key] *= 2;
+			}
 		},
 		id: "simple",
 		name: "Simple",

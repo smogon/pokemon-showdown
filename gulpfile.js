@@ -13,7 +13,9 @@ var globals = {};
 var globalList = [
 	'Config', 'ResourceMonitor', 'toId', 'toName', 'string', 'LoginServer',
 	'Users', 'Rooms', 'Verifier', 'CommandParser', 'Simulator', 'Tournaments',
-	'Dnsbl', 'Cidr', 'Sockets', 'Tools', 'TeamValidator', 'battleEngineFakeProcess', 'battleProtoCache', 'tells'
+	'Dnsbl', 'Cidr', 'Sockets', 'Tools', 'TeamValidator',
+	'tells',
+	'battleEngineFakeProcess', 'battleProtoCache'
 ];
 globalList.forEach(function (identifier) {globals[identifier] = false;});
 

@@ -284,13 +284,13 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	kadabra: {
-		randomBattleMoves: ["psychic","thunderwave","reflect","seismictoss"],
-		essentialMove: "recover",
+		randomBattleMoves: ["recover","thunderwave","reflect","seismictoss"],
+		essentialMove: "psychic",
 		tier: "UU"
 	},
 	alakazam: {
-		randomBattleMoves: ["psychic","thunderwave","reflect","seismictoss"],
-		essentialMove: "recover",
+		randomBattleMoves: ["recover","thunderwave","reflect","seismictoss"],
+		essentialMove: "psychic",
 		tier: "OU"
 	},
 	machop: {

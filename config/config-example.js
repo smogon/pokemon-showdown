@@ -182,15 +182,15 @@ exports.replSocketMode = 0600;
 //           chatRoom - The default chat room group.
 //           battleRoom - The default battle room group.
 //       }
-//       byRank - All the possible groups arranged in ascending order of rank.
-//       bySymbol - The main defining area for the groups and permissions, which will be outlined below.
+//       list - All the possible groups arranged in descending order of rank.
 //   }
-//   Each entry in `groups.bySymbol` is a separate group. Some of the members are "special"
+//   Each entry in `groups.list` is a separate group. Some of the members are "special"
 //     while the rest are just normal permissions.
 //   The special members are as follows:
-//     - id: Specifies an id for the group.
+//     - symbol: Specifies the symbol for the group
+//     - id: Specifies the id for the group.
 //     - name: Specifies the human-readable name for the group.
-//     - description: Specifies a description for the group.
+//     - description: Specifies the description for the group.
 //     - root: If this is true, the group can do anything.
 //     - inherit: The group uses the group specified's permissions if it cannot
 //                  find the permission in the current group. Never make the graph
@@ -251,15 +251,15 @@ exports.groups = {
 		battleRoom: ' '
 	},
 
-	byRank: [' ', '+', '%', '@', '\u2605', '#', '&', '~'],
-	bySymbol: {
-		'~': {
+	list: [
+		{
+			symbol: '~',
 			id: 'admin',
 			name: "Administrator",
 			description: "They can do anything, like change what this message says",
 			root: true
-		},
-		'&': {
+		}, {
+			symbol: '&',
 			id: 'leader',
 			name: "Leader",
 			description: "They can promote to moderator and force ties",
@@ -274,8 +274,8 @@ exports.groups = {
 			promote: 'u',
 			rangeban: true,
 			tournamentsmanagement: true
-		},
-		'#': {
+		}, {
+			symbol: '#',
 			id: 'owner',
 			name: "Room Owner",
 			description: "They are administrators of the room and can almost totally control it",
@@ -287,8 +287,8 @@ exports.groups = {
 			roomdesc: true,
 			roompromote: 'u',
 			tournamentsmanagement: true
-		},
-		'\u2605': {
+		}, {
+			symbol: '\u2605',
 			id: 'player',
 			name: "Player",
 			description: "Only in battles, they are the players that are battling",
@@ -297,8 +297,8 @@ exports.groups = {
 			modchat: true,
 			privateroom: true,
 			roompromote: '\u2605u'
-		},
-		'@': {
+		}, {
+			symbol: '@',
 			id: 'mod',
 			name: "Moderator",
 			description: "They can ban users and set modchat",
@@ -312,8 +312,8 @@ exports.groups = {
 			roompromote: '+ ',
 			scavengers: true,
 			tournaments: true
-		},
-		'%': {
+		}, {
+			symbol: '%',
 			id: 'driver',
 			name: "Driver",
 			description: "They can mute. Global % can also lock and check users for alts",
@@ -333,21 +333,27 @@ exports.groups = {
 			timer: true,
 			tournamentsmoderation: true,
 			warn: true
-		},
-		'+': {
+		}, {
+			symbol: '+',
 			id: 'voice',
 			name: "Voice",
 			description: "They can use ! commands like !groups, and talk during moderated chat",
 			inherit: ' ',
 			broadcast: true
-		},
-		' ': {
+		}, {
+			symbol: ' ',
 			alts: 's',
 			ip: 's'
 		}
-	}
+	]
 };
 
+exports.groups.byRank = [];
+exports.groups.bySymbol = {};
+exports.groups.list.forEach(function (group) {
+	exports.groups.byRank.unshift(group.symbol);
+	exports.groups.bySymbol[group.symbol] = group;
+});
 exports.groups.globalByRank = exports.groups.byRank.filter(function (a) { return exports.groups.global[a]; });
 exports.groups.chatRoomByRank = exports.groups.byRank.filter(function (a) { return exports.groups.chatRoom[a]; });
 exports.groups.battleRoomByRank = exports.groups.byRank.filter(function (a) { return exports.groups.battleRoom[a]; });
