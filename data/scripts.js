@@ -5231,7 +5231,8 @@ exports.BattleScripts = {
 			} else if (template.id === 'metagross') {
 				set.species = 'metagross';
 				set.name = 'punkysaur';
-				set.moves[0] = ['meteormash', 'bulletpunch'];
+				set.moves[0] = 'meteormash';
+				set.moves[1] = 'bulletpunch';
 			} else if (template.id === 'mew') {
 				set.species = 'mew';
 				set.name = 'Rϵd';
@@ -5283,7 +5284,8 @@ exports.BattleScripts = {
 				set.name = 'Melody';
 				set.gender = 'F';
 				set.shiny = true;
-				set.moves[0] = ['attract', 'nuzzle'];
+				set.moves[0] = 'attract';
+				set.moves[1] = 'nuzzle';
 			} else if (template.id === 'pichu') {
 				set.species = 'pichu';
 				set.name = 'Lost Christmas';
