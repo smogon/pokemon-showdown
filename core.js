@@ -243,7 +243,6 @@ var core = exports.core = {
 		':growlithe:': 'http://cbc.pokecommunity.com/config/emoticons/growlithe.png',
 		':hamster:': 'http://cbc.pokecommunity.com/config/emoticons/hamster.png',
 		':helix:': 'http://cbc.pokecommunity.com/config/emoticons/helix.png',
-		':hug:': 'http://cbc.pokecommunity.com/config/emoticons/hug.gif',
 		':jigglypuff:': 'http://cbc.pokecommunity.com/config/emoticons/jigglypuff.png',
 		':jynx:': 'http://cbc.pokecommunity.com/config/emoticons/jynx.png',
 		':kappa:': 'http://cbc.pokecommunity.com/config/emoticons/kappa.png',
