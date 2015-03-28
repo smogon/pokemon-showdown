@@ -605,4 +605,4 @@ exports.grouplist = [
 		alts: '@u',
 		broadcast: true
 	}
-};
+];
