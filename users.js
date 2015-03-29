@@ -1106,7 +1106,20 @@ User = (function () {
 				}
 			}
 		}
-		if (!this.group || this.group === Config.groups.default.global) {
+		if (this.confirmed) {
+			this.autoconfirmed = this.confirmed;
+			this.locked = false;
+		}
+	};
+	/**
+	 * Set a user's group. Pass (' ', true) to force confirmed
+	 * status without giving the user a group.
+	 */
+	User.prototype.setGroup = function (group, forceConfirmed) {
+		this.group = group.charAt(0);
+		if (forceConfirmed || this.group !== Config.groups.default.global) {
+			usergroups[this.userid] = this.group + this.name;
+		} else {
 			delete usergroups[this.userid];
 		}
 		exportUsergroups();
