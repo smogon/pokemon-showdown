@@ -2696,7 +2696,7 @@ exports.BattleFormatsData = {
 	},
 	cacturne: {
 		randomBattleMoves: ["swordsdance","spikes","suckerpunch","seedbomb","drainpunch","substitute"],
-		randomDoubleBattleMoves: ["darkpulse","spikyshield","suckerpunch","seedbomb","drainpunch","gigadrain"],
+		randomDoubleBattleMoves: ["swordsdance","spikyshield","suckerpunch","seedbomb","drainpunch","substitute"],
 		eventPokemon: [
 			{"generation":3,"level":45,"moves":["ingrain","feintattack","spikes","needlearm"]}
 		],
