@@ -30,6 +30,17 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
 	},
 	{
+		name: "OU (suspect test)",
+		section: "ORAS Singles",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Mewtwo', 'Lugia', 'Ho-Oh', 'Blaziken', 'Kyogre', 'Groudon', 'Rayquaza', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense',
+			'Deoxys-Speed', 'Dialga', 'Palkia', 'Giratina', 'Darkrai', 'Shaymin-Sky', 'Arceus', 'Reshiram', 'Zekrom', 'Kyurem-White',
+			'Genesect', 'Greninja', 'Aegislash', 'Xerneas', 'Yveltal',
+			'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite'
+		]
+	},
+	{
 		name: "OU (no Mega)",
 		section: "ORAS Singles",
 
