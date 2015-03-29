@@ -3,8 +3,7 @@
 Ratings and how they work:
 
 -2: Extremely detrimental
-	  The sort of ability that relegates Pokemon with Uber-level BSTs
-	  into NU.
+	  The sort of ability that relegates Pokemon with Uber-level BSTs into NU.
 	ex. Slow Start, Truant
 
 -1: Detrimental
@@ -12,12 +11,11 @@ Ratings and how they work:
 	ex. Defeatist, Normalize
 
  0: Useless
-	  An ability with no net effect on a Pokemon during a battle.
-	ex. Pickup, Illuminate
+	  An ability with no net effect during a singles battle.
+	ex. Healer, Illuminate
 
  1: Ineffective
-	  An ability that has a minimal effect. Should never be chosen over
-	  any other ability.
+	  An ability that has a minimal effect. Should not be chosen over any other ability.
 	ex. Damp, Shell Armor
 
  2: Situationally useful
@@ -26,12 +24,11 @@ Ratings and how they work:
 
  3: Useful
 	  An ability that is generally useful.
-	ex. Volt Absorb, Iron Fist
+	ex. Infiltrator, Sturdy
 
  4: Very useful
-	  One of the most popular abilities. The difference between 3 and 4
-	  can be ambiguous.
-	ex. Technician, Protean
+	  One of the most popular abilities. The difference between 3 and 4 can be ambiguous.
+	ex. Protean, Regenerator
 
  5: Essential
 	  The sort of ability that defines metagames.
@@ -185,7 +182,7 @@ exports.BattleAbilities = {
 		},
 		id: "aromaveil",
 		name: "Aroma Veil",
-		rating: 2.5,
+		rating: 1.5,
 		num: 165
 	},
 	"aurabreak": {
@@ -245,7 +242,7 @@ exports.BattleAbilities = {
 		},
 		id: "bigpecks",
 		name: "Big Pecks",
-		rating: 1,
+		rating: 0.5,
 		num: 145
 	},
 	"blaze": {
@@ -352,7 +349,7 @@ exports.BattleAbilities = {
 		},
 		id: "colorchange",
 		name: "Color Change",
-		rating: 1.5,
+		rating: 1,
 		num: 16
 	},
 	"competitive": {
@@ -799,7 +796,7 @@ exports.BattleAbilities = {
 		},
 		id: "flowergift",
 		name: "Flower Gift",
-		rating: 3,
+		rating: 2.5,
 		num: 122
 	},
 	"flowerveil": {
@@ -942,7 +939,7 @@ exports.BattleAbilities = {
 		shortDesc: "When this Pokemon has 1/2 or less of its maximum HP, it uses certain Berries early.",
 		id: "gluttony",
 		name: "Gluttony",
-		rating: 1.5,
+		rating: 1,
 		num: 82
 	},
 	"gooey": {
@@ -963,7 +960,7 @@ exports.BattleAbilities = {
 		},
 		id: "grasspelt",
 		name: "Grass Pelt",
-		rating: 1,
+		rating: 0.5,
 		num: 179
 	},
 	"guts": {
@@ -1169,7 +1166,7 @@ exports.BattleAbilities = {
 		},
 		id: "immunity",
 		name: "Immunity",
-		rating: 1.5,
+		rating: 2,
 		num: 17
 	},
 	"imposter": {
@@ -1183,7 +1180,7 @@ exports.BattleAbilities = {
 		},
 		id: "imposter",
 		name: "Imposter",
-		rating: 5,
+		rating: 4.5,
 		num: 150
 	},
 	"infiltrator": {
@@ -1203,7 +1200,7 @@ exports.BattleAbilities = {
 		onFlinch: false,
 		id: "innerfocus",
 		name: "Inner Focus",
-		rating: 1,
+		rating: 1.5,
 		num: 39
 	},
 	"insomnia": {
@@ -1311,7 +1308,7 @@ exports.BattleAbilities = {
 		},
 		id: "klutz",
 		name: "Klutz",
-		rating: 0,
+		rating: -1,
 		num: 103
 	},
 	"leafguard": {
@@ -1388,7 +1385,7 @@ exports.BattleAbilities = {
 		},
 		id: "limber",
 		name: "Limber",
-		rating: 2,
+		rating: 1.5,
 		num: 7
 	},
 	"liquidooze": {
@@ -1433,7 +1430,7 @@ exports.BattleAbilities = {
 		effect: {
 			duration: 1
 		},
-		rating: 5,
+		rating: 4.5,
 		num: 156
 	},
 	"magicguard": {
@@ -1672,7 +1669,7 @@ exports.BattleAbilities = {
 				}
 			}
 		},
-		rating: 1.5,
+		rating: 2,
 		num: 152
 	},
 	"naturalcure": {
@@ -1739,7 +1736,7 @@ exports.BattleAbilities = {
 		},
 		id: "oblivious",
 		name: "Oblivious",
-		rating: 0.5,
+		rating: 1,
 		num: 12
 	},
 	"overcoat": {
@@ -1814,7 +1811,7 @@ exports.BattleAbilities = {
 		},
 		id: "parentalbond",
 		name: "Parental Bond",
-		rating: 4.5,
+		rating: 5,
 		num: 184
 	},
 	"pickup": {
@@ -1847,7 +1844,7 @@ exports.BattleAbilities = {
 		},
 		id: "pickup",
 		name: "Pickup",
-		rating: 0,
+		rating: 0.5,
 		num: 53
 	},
 	"pickpocket": {
@@ -2076,7 +2073,7 @@ exports.BattleAbilities = {
 		},
 		id: "rattled",
 		name: "Rattled",
-		rating: 2,
+		rating: 1.5,
 		num: 155
 	},
 	"reckless": {
@@ -2367,7 +2364,7 @@ exports.BattleAbilities = {
 		},
 		id: "shielddust",
 		name: "Shield Dust",
-		rating: 2,
+		rating: 2.5,
 		num: 19
 	},
 	"simple": {
@@ -2456,7 +2453,7 @@ exports.BattleAbilities = {
 		},
 		id: "snowcloak",
 		name: "Snow Cloak",
-		rating: 1,
+		rating: 1.5,
 		num: 81
 	},
 	"snowwarning": {
@@ -2607,7 +2604,7 @@ exports.BattleAbilities = {
 		},
 		id: "stickyhold",
 		name: "Sticky Hold",
-		rating: 2,
+		rating: 1.5,
 		num: 60
 	},
 	"stormdrain": {
@@ -2727,7 +2724,7 @@ exports.BattleAbilities = {
 				return false;
 			}
 		},
-		rating: 0,
+		rating: 2,
 		num: 175
 	},
 	"swiftswim": {
@@ -3044,7 +3041,7 @@ exports.BattleAbilities = {
 		onFoeEatItem: false,
 		id: "unnerve",
 		name: "Unnerve",
-		rating: 1,
+		rating: 1.5,
 		num: 127
 	},
 	"victorystar": {
@@ -3056,7 +3053,7 @@ exports.BattleAbilities = {
 		},
 		id: "victorystar",
 		name: "Victory Star",
-		rating: 2,
+		rating: 2.5,
 		num: 162
 	},
 	"vitalspirit": {
@@ -3118,7 +3115,7 @@ exports.BattleAbilities = {
 		},
 		id: "waterveil",
 		name: "Water Veil",
-		rating: 1.5,
+		rating: 2,
 		num: 41
 	},
 	"weakarmor": {
@@ -3131,7 +3128,7 @@ exports.BattleAbilities = {
 		},
 		id: "weakarmor",
 		name: "Weak Armor",
-		rating: 0,
+		rating: 0.5,
 		num: 133
 	},
 	"whitesmoke": {
@@ -3179,7 +3176,7 @@ exports.BattleAbilities = {
 		},
 		id: "wonderskin",
 		name: "Wonder Skin",
-		rating: 2.5,
+		rating: 2,
 		num: 147
 	},
 	"zenmode": {
@@ -3284,7 +3281,7 @@ exports.BattleAbilities = {
 		isNonstandard: true,
 		name: "Persistent",
 		// implemented in the corresponding move
-		rating: 4,
+		rating: 3.5,
 		num: -4
 	}
 };
