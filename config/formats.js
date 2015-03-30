@@ -1717,14 +1717,13 @@ exports.Formats = [
 			// Admin signature moves.
 			if (move.id === 'spikes' && name === 'antar') {
 				move.name = 'Firebomb';
-				move.sideCondition = 'spikes';
+				move.isBounceable = false;
 				move.category = 'Special';
 				move.type = 'Fire';
 				move.basePower = 100;
-				move.onTryHit = function (target, source, move) {
+				move.onTryHitSide = function (side, source, move) {
 					this.attrLastMove('[still]');
-					this.add('-anim', source, "Overheat", target);
-					return null;
+					this.add('-anim', source, "Overheat", side.active[0]);
 				};
 			}
 			if (move.id === 'embargo' && name === 'chaos') {
@@ -2547,7 +2546,10 @@ exports.Formats = [
 					this.add('-anim', source, "Brave Bird", target);
 				};
 				move.onHit = function (target, source) {
-					this.heal(100, source, source);
+					this.heal(120, source, source);
+				};
+				move.onMoveFail = function (target, source, move) {
+					this.directDamage(120, source, source);
 				};
 			}
 			if (move.id === 'frenzyplant' && name === 'rosiethevenusaur') {
