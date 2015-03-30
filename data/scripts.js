@@ -3538,6 +3538,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'psychoboost', signatureMove: "Doubles Purism",
 				evs: {hp:252, def:120, spa:56, spd:80}, nature: 'Sassy'
 			},
+			'%Articuno': {
+				species: 'Articuno', ability: 'Magic Guard', item: 'Sitrus Berry', gender: 'F',
+				moves: ['roost', 'calmmind', ['psychic', 'airslash', 'icebeam', 'thunderwave'][this.random(4)]],
+				baseSignatureMove: 'whirlwind', signatureMove: "True Support",
+				evs: {hp:252, def:192, spa:64}, nature: 'Modest'
+			},
 			'%Ast☆arA': {
 				species: 'Jirachi', ability: 'Cursed Body', item: ['Leftovers', 'Sitrus Berry'][this.random(2)], gender: 'F',
 				moves: ['psychic', 'moonblast', 'nastyplot', 'recover', 'surf'],
