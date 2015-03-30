@@ -2726,15 +2726,20 @@ exports.Formats = [
 				move.name = 'Water Bomb';
 				move.basePowerCallback = function (pokemon, target) {
 					if (this.effectiveWeather() === 'raindance' || this.effectiveWeather() === 'primordialsea') return 93;
+					if (this.effectiveWeather() === 'sunnyday' || this.effectiveWeather() === 'desolateland') return 210;
 					return 140;
 				};
 				move.isContact = false;
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Seismic Toss", target);
+					target.ignore['Ability'] = true;
 				};
 				move.accuracy = true;
 				move.affectedByImmunities = false;
+				move.ignoreDefensive = true;
+				move.ignoreEvasion = true;
+				move.ignoreScreens = true;
 			}
 			if (move.id === 'detect' && name === 'zebraiken') {
 				move.name = 'bzzt';
