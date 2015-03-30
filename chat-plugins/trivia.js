@@ -108,9 +108,9 @@ var Trivia = (function () {
 	Trivia.prototype.kickParticipant = function (output, target) {
 		if (this.participants.size < 3) return output.sendReply('The trivia game requires at least three participants in order to run.');
 
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-		var name = this.targetUsername;
+		target = output.splitTarget(target);
+		var targetUser = output.targetUser;
+		var name = output.targetUsername;
 		var userid = toId(name);
 		if (!userid || !targetUser) return output.sendReply('User "' + name + '" does not exist.');
 		if (!this.participants.has(userid)) return output.sendReply('User "' + name + '" is not a participant in this trivia game.');
