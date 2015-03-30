@@ -108,15 +108,12 @@ var Trivia = (function () {
 	Trivia.prototype.kickParticipant = function (output, target) {
 		if (this.participants.size < 3) return output.sendReply('The trivia game requires at least three participants in order to run.');
 
-		target = output.splitTarget(target);
-		var targetUser = output.targetUser;
-		var name = output.targetUsername;
-		var userid = toId(name);
-		if (!userid || !targetUser) return output.sendReply('User "' + name + '" does not exist.');
-		if (!this.participants.has(userid)) return output.sendReply('User "' + name + '" is not a participant in this trivia game.');
+		var userid = toId(target);
+		if (!userid) return output.sendReply('User "' + target + '" does not exist.');
+		if (!this.participants.has(userid)) return output.sendReply('User "' + target + '" is not a participant in this trivia game.');
 
 		this.participants.delete(userid);
-		output.sendReply('User "' + name + '" has been disqualified from the trivia game.');
+		output.sendReply('User "' + target + '" has been disqualified from the trivia game.');
 	};
 
 	Trivia.prototype.startGame = function (output) {
