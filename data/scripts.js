@@ -3568,6 +3568,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'spikecannon', signatureMove: "Lava Whip",
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant'
 			},
+			'%Crestfall': {
+				species: 'Darkrai', ability: 'Parental Bond', item: 'Lum Berry', gender: 'M',
+				moves: ['darkpulse', 'icebeam', 'oblivionwing'],
+				baseSignatureMove: 'protect', signatureMove: "Final",
+				evs: {spa:252, def:4, spe:252}, nature: 'Modest'
+			},
 			'%dtc': {
 				species: 'Charizard', ability: 'Magic Guard', item: 'Charizardite X', gender: 'M',
 				moves: ['shiftgear', 'blazekick', 'roost'],
