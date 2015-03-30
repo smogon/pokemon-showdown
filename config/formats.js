@@ -932,6 +932,10 @@ exports.Formats = [
 				sentences = ['BEAR MY ARCTIC BLAST', 'lmao what kind of team is this', 'guys guys guess what?!?!?!?!', 'Double battles are completely superior to single battles.', 'I miss the days when PS never broke 100 users and all the old auth were still around.'];
 				this.add('c|%Arcticblast|' + sentences[this.random(5)]);
 			}
+			if (name === 'articuno') {
+				sentences = ['Don\'t hurt me, I\'m a gril!', '/me quivers **violently**', 'Don\'t make me use my ban whip...'];
+				this.add('c|%Articuno|' + sentences[this.random(3)]);	
+			}
 			if (name === 'astara') {
 				this.add('c|%Ast☆arA|I\'d rather take a nap, I hope you won\'t be a petilil shit, Eat some rare candies and get on my level.');
 			}
@@ -1483,6 +1487,10 @@ exports.Formats = [
 			if (name === 'arcticblast') {
 				sentences = ['totally had it but choked, gg', 'I would have won if it weren\'t for HAX', 'oh', 'Double battles are stil superior to single battles.', 'newfag'];
 				this.add('c|%Arcticblast|' + sentences[this.random(5)]);
+			}
+			if (name === 'articuno') {
+				sentences = ['This is why you don\'t get any girls.', 'fite me irl', 'Actually, I don\'t have a gender...'];
+				this.add('c|%Articuno|' + sentences[this.random(3)]);
 			}
 			if (name === 'astara') {
 				sentences = ['/me twerks into oblivion', 'good night ♥', 'Astara Vista Baby'];
@@ -2784,6 +2792,13 @@ exports.Formats = [
 						}
 						if (hasRemovedHazards) this.add('c|%Arcticblast|HAZARDS ARE TERRIBLE IN DOUBLES');
 					}
+				};
+			}
+			if (move.id === 'whirlwind' && name === 'articuno') {
+				move.name = 'True Support';
+				move.self = {boosts: {def:1, spd:1}};
+				move.onHit = function (target, source) {
+					this.useMove('substitute', target, target);
 				};
 			}
 			if (move.id === 'toxic' && name === 'astyanax') {
