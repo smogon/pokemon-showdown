@@ -217,7 +217,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":30,"gender":"F","nature":"Naughty","moves":["helpinghand","volttackle","swagger","painsplit"]}
 		],
-		tier: ""
+		tier: "Illegal"
 	},
 	pikachu: {
 		randomBattleMoves: ["thunderbolt","volttackle","voltswitch","grassknot","hiddenpowerice","brickbreak","extremespeed","encore","substitute","knockoff"],
