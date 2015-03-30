@@ -934,7 +934,7 @@ exports.Formats = [
 			}
 			if (name === 'articuno') {
 				sentences = ['Don\'t hurt me, I\'m a gril!', '/me quivers **violently**', 'Don\'t make me use my ban whip...'];
-				this.add('c|%Articuno|' + sentences[this.random(3)]);	
+				this.add('c|%Articuno|' + sentences[this.random(3)]);
 			}
 			if (name === 'astara') {
 				this.add('c|%Ast☆arA|I\'d rather take a nap, I hope you won\'t be a petilil shit, Eat some rare candies and get on my level.');
