@@ -3313,6 +3313,14 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "Monotype Random Battle",
+		section: "Other Metagames",
+
+		searchShow: false,
+		team: 'randomMonotype',
+		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview']
+	},
+	{
 		name: "Tier Shift",
 		section: "Other Metagames",
 
