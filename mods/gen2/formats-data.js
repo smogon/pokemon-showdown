@@ -390,7 +390,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	slowbro: {
-		randomBattleMoves: ["surf","psychic","thunderwvae","rest"],
+		randomBattleMoves: ["surf","psychic","thunderwave","rest"],
 		tier: "UU"
 	},
 	slowking: {
