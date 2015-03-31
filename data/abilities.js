@@ -2396,6 +2396,10 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			pokemon.addVolatile('slowstart');
 		},
+		onEnd: function (pokemon) {
+			delete pokemon.volatiles['slowstart'];
+			this.add('-end', pokemon, 'Slow Start', '[silent]');
+		},
 		effect: {
 			duration: 5,
 			onStart: function (target) {
@@ -2403,17 +2407,9 @@ exports.BattleAbilities = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk: function (atk, pokemon) {
-				if (pokemon.ignore['Ability'] === true || pokemon.ability !== 'slowstart') {
-					pokemon.removeVolatile('slowstart');
-					return;
-				}
 				return this.chainModify(0.5);
 			},
 			onModifySpe: function (speMod, pokemon) {
-				if (pokemon.ignore['Ability'] === true || pokemon.ability !== 'slowstart') {
-					pokemon.removeVolatile('slowstart');
-					return;
-				}
 				return this.chain(speMod, 0.5);
 			},
 			onEnd: function (target) {
