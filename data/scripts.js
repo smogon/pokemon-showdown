@@ -1155,6 +1155,10 @@ exports.BattleScripts = {
 					if (counter.Physical + counter.Special < 2 && !setupType && !hasMove['batonpass']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
+				case 'flamecharge':
+					if (counter.Physical + counter.Special < 3 && !setupType && !hasMove['batonpass']) rejected = true;
+					if (hasMove['dracometeor'] || hasMove['overheat']) rejected = true;
+					break;
 
 				// Bad after setup
 				case 'circlethrow': case 'dragontail':
@@ -1245,7 +1249,7 @@ exports.BattleScripts = {
 					if ((hasMove['flareblitz'] || hasMove['lavaplume']) && !setupType && !counter['speedsetup']) rejected = true;
 					break;
 				case 'firepunch': case 'sacredfire':
-					if (hasMove['flareblitz'] || hasMove['fireblast']) rejected = true;
+					if (hasMove['fireblast'] || hasMove['flareblitz']) rejected = true;
 					break;
 				case 'lavaplume':
 					if (hasMove['fireblast'] && (setupType || !!counter['speedsetup'])) rejected = true;
