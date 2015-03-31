@@ -401,7 +401,63 @@ var commands = exports.commands = {
 		room.chatRoomData.aliases.push(alias);
 		Rooms.aliases[alias] = room;
 		Rooms.global.writeChatRoomData();
+		
 	},
+	
+    hide: 'hideauth',
+    hideauth: function(target, room, user) {
+        if (!user.can('hideauth'))
+            return this.sendReply('/hideauth - access denied.');
+
+        var tar = ' ';
+        if (target) {
+            target = target.trim();
+            if (config.groupsranking.indexOf(target) > -1 && target != '#') {
+                if (config.groupsranking.indexOf(target) <= config.groupsranking.indexOf(user.group)) {
+                    tar = target;
+                } else {
+                    this.sendReply('The group symbol you have tried to use is of a higher authority than you have access to. Defaulting to \' \' instead.');
+                }
+            } else {
+                this.sendReply('You have tried to use an invalid character as your auth symbol. Defaulting to \' \' instead.');
+            }
+        }
+
+        user.getIdentity = function(roomid) {
+            if (!roomid) roomid = 'lobby';
+            if (this.locked) {
+                return '‽' + this.name;
+            }
+            if (this.mutedRooms[roomid]) {
+                return '!' + this.name;
+            }
+            var room = Rooms.rooms[roomid];
+            if (room.auth) {
+                if (room.auth[this.userid]) {
+                    return tar + this.name;
+                }
+                if (this.group !== ' ') return '+' + this.name;
+                return ' ' + this.name;
+            }
+            return tar + this.name;
+        };
+        user.updateIdentity();
+        this.sendReply('You are now hiding your auth symbol as \'' + tar + '\'.');
+        return this.logModCommand(user.name + ' is hiding auth symbol as \'' + tar + '\'');
+    },
+
+    show: 'showauth',
+    showauth: function(target, room, user) {
+        if (!user.can('hideauth'))
+            return this.sendReply('/showauth - access denied.');
+
+        delete user.getIdentity;
+        user.updateIdentity();
+        this.sendReply('You have now revealed your auth symbol.');
+        return this.logModCommand(user.name + ' has revealed their auth symbol.');
+        this.sendReply('Your symbol has been reset.');
+
+    },
 
 	removeroomalias: function (target, room, user) {
 		if (!room.chatRoomData) return this.sendReply("This room isn't designed for aliases.");
@@ -522,34 +578,32 @@ var commands = exports.commands = {
 		if (targetUser) targetUser.updateIdentity(room.id);
 		if (room.chatRoomData) Rooms.global.writeChatRoomData();
 	},
+	
+    masspm: 'pmall',
+    pmall: function (target, room, user) {
+        if (!this.can('pmall')) return;
+        if (!target) return this.parse('/help pmall');
 
-	roomauth: function (target, room, user, connection) {
-		var targetRoom = room;
-		if (target) targetRoom = Rooms.search(target);
-		if (!targetRoom || (targetRoom !== room && targetRoom.modjoin && !user.can('bypassall'))) return this.sendReply("The room '" + target + "' does not exist.");
-		if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list.");
+        var pmName = '~Server PM [Do not reply]';
 
-		var rankLists = {};
-		for (var u in targetRoom.auth) {
-			if (!rankLists[targetRoom.auth[u]]) rankLists[targetRoom.auth[u]] = [];
-			rankLists[targetRoom.auth[u]].push(u);
-		}
+        for (var i in Users.users) {
+            var message = '|pm|' + pmName + '|' + Users.users[i].getIdentity() + '|' + target;
+            Users.users[i].send(message);
+        }
+    },
 
-		var buffer = [];
-		Object.keys(rankLists).sort(function (a, b) {
-			return (Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank;
-		}).forEach(function (r) {
-			buffer.push((Config.groups[r] ? Config.groups[r] .name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
-		});
+    rmall: function (target, room, user) {
+        if(!this.can('declare')) return;
+        if (!target) return this.parse('/help rmall');
 
-		if (!buffer.length) {
-			connection.popup("The room '" + targetRoom.title + "' has no auth.");
-			return;
-		}
-		if (targetRoom !== room) buffer.unshift("" + targetRoom.title + " room auth:");
-		connection.popup(buffer.join("\n\n"));
-	},
+        var pmName = '~Server PM [Do not reply]';
 
+        for (var i in room.users) {
+            var message = '|pm|' + pmName + '|' + room.users[i].getIdentity() + '|' + target;
+            room.users[i].send(message);
+        }
+    },
+    
 	userauth: function (target, room, user, connection) {
 		var targetId = toId(target) || user.userid;
 		var targetUser = Users.getExact(targetId);
@@ -1161,6 +1215,69 @@ var commands = exports.commands = {
 		}
 		this.logModCommand(user.name + " globally declared " + target);
 	},
+	
+		roomfounder: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roomfounder - This room isn't designed for per-room moderation to be added.");
+		}
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply("User '"+this.targetUsername+"' is not online.");
+		if (!this.can('makeroom')) return false;
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+		var name = targetUser.name;
+		room.auth[targetUser.userid] = '#';
+		room.founder = targetUser.userid;
+		this.addModCommand(''+name+' was appointed to Room Founder by '+user.name+'.');
+		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.founder = room.founder;
+		Rooms.global.writeChatRoomData();
+	},
+	
+		roomowner: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
+		}
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
+
+		if (!room.founder) return this.sendReply('The room needs a room founder before it can have a room owner.');
+		if (room.founder !== user.userid && !this.can('makeroom')) return this.sendReply('/roomowner - Access denied.');
+
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+
+		var name = targetUser.name;
+
+		room.auth[targetUser.userid] = '#';
+		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
+		room.onUpdateIdentity(targetUser);
+		Rooms.global.writeChatRoomData();
+		
+	},
+	
+	roomdeowner: 'deroomowner',
+	deroomowner: function (target, room, user) {
+		if (!room.auth) {
+			return this.sendReply("/roomdeowner - This room isn't designed for per-room moderation");
+		}
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		var name = this.targetUsername;
+		var userid = toId(name);
+		if (!userid || userid === '') return this.sendReply("User '" + name + "' does not exist.");
+
+		if (room.auth[userid] !== '#') return this.sendReply("User '"+name+"' is not a room owner.");
+		if (!room.founder || user.userid !== room.founder && !this.can('makeroom', null, room)) return false;
+
+		delete room.auth[userid];
+		this.sendReply("(" + name + " is no longer Room Owner.)");
+		if (targetUser) targetUser.updateIdentity();
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
+		}
+	},
 
 	cdeclare: 'chatdeclare',
 	chatdeclare: function (target, room, user) {
@@ -1183,6 +1300,106 @@ var commands = exports.commands = {
 		if (!target) return;
 
 		return '/announce ' + target;
+	},
+		roomauth: function (target, room, user, connection) {
+		if (!room.auth) return this.sendReply("/roomauth - This room isn't designed for per-room moderation and therefore has no auth list.");
+		var buffer = [];
+		var owners = [];
+		var mods = [];
+		var drivers = [];
+		var voices = [];
+		var founder = '';
+
+		room.owners = ''; room.admins = ''; room.leaders = ''; room.mods = ''; room.drivers = ''; room.voices = '';
+		for (var u in room.auth) {
+			if (room.auth[u] === '#') {
+				room.owners = room.owners + u + ',';
+			}
+			if (room.auth[u] === '@') {
+				room.mods = room.mods + u + ',';
+			}
+			if (room.auth[u] === '%') {
+				room.drivers = room.drivers + u + ',';
+			}
+			if (room.auth[u] === '+') {
+				room.voices = room.voices + u + ',';
+			}
+		}
+
+		if (room.founder) founder = '**Founder:** ' + room.founder + '\n\n';
+
+		room.owners = room.owners.split(',');
+		room.mods = room.mods.split(',');
+		room.drivers = room.drivers.split(',');
+		room.voices = room.voices.split(',');
+
+		for (var u in room.owners) {
+			if (room.owners[u] !== '') owners.push(room.owners[u]);
+		}
+
+		for (var u in room.mods) {
+			if (room.mods[u] !== '') mods.push(room.mods[u]);
+		}
+		for (var u in room.drivers) {
+			if (room.drivers[u] !== '') drivers.push(room.drivers[u]);
+		}
+		for (var u in room.voices) {
+			if (room.voices[u] !== '') voices.push(room.voices[u]);
+		}
+		if (owners.length > 0) {
+			owners = '**Owners:** ' + owners.join(', ') + '\n\n';
+		}
+		if (mods.length > 0) {
+			mods = '**Moderators:** ' + mods.join(', ') + '\n\n';
+		}
+		if (drivers.length > 0) {
+			drivers = '**Drivers:** ' + drivers.join(', ') + '\n\n';
+		}
+		if (voices.length > 0) {
+			voices = '**Voices:** ' + voices.join(', ') + '\n\n';
+		}
+
+		if (room.autorank === '#') owners = owners + 'Autorank is set to #.';
+		if (room.autorank === '@') mods = mods + 'Autorank is set to @.';
+		if (room.autorank === '%') drivers = drivers + 'Autorank is set to %.';
+		if (room.autorank === '+') voices = voices + 'Autorank is set to +.';
+
+		connection.popup(founder + owners + mods + drivers + voices);
+	},
+
+	staff: 'stafflist',
+	auth: 'stafflist',
+	authlist: 'stafflist',
+	stafflist: function (target, room, user, connection) {
+		var stafflist = fs.readFileSync('config/usergroups.csv','utf8').split('\n');
+
+		for (var x in stafflist) {
+			var column = stafflist[x].split(',');
+			for (var group in Config.grouplist) {
+				if (column[1] === Config.grouplist[group].symbol) {
+					if (!Config.grouplist[group].users) Config.grouplist[group].users = [];
+					Config.grouplist[group].users.push(column[0]);
+					break;
+				}
+			}
+		}
+
+		var output = '';
+		var total = 0;
+
+		for (var group in Config.grouplist) {
+			var currentGroup = Config.grouplist[group];
+			if (!currentGroup.users) continue;
+			output += '**' + currentGroup.symbol + currentGroup.name + ': (' + currentGroup.users.length + ')**\n ';
+			output += currentGroup.users.join(', ');
+			output += '\n\n';
+			total += currentGroup.users.length;
+			delete currentGroup.users;
+			delete Config.grouplist[group].users;
+		}
+		output += '**Total:** ' + total;
+		if (total < 1) output = "There's no staff list on this server.";
+		return connection.popup(output);
 	},
 
 	fr: 'forcerename',
