@@ -68,7 +68,7 @@ var core = exports.core = {
 
         color: '#2ECC40',
 
-        avatarurl: 'http://107.161.19.15:8000',
+        avatarurl: 'http://198.27.121.40:8000',
 
         avatar: function (online, user, img) {
             if (online === true) {
