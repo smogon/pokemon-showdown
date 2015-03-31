@@ -980,13 +980,18 @@ exports.BattleScripts = {
 			};
 
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
+			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
 			var moves;
-			var pool = ['struggle'];
-			pool = Object.keys(template.learnset);
-			if (pool.length <= 4) {
+			var pool = [];
+			for (var move in template.learnset) {
+				if (this.getMove(move).gen === 1) pool.push(move);
+			}
+			if (pool.length > 4) {
+				moves = pool.sample(4);
+			} else if (pool.length > 0) {
 				moves = pool;
 			} else {
-				moves = pool.sample(4);
+				moves = ['struggle'];
 			}
 
 			team.push({
