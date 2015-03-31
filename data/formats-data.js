@@ -5079,13 +5079,14 @@ exports.BattleFormatsData = {
 	},
 	amaura: {
 		randomBattleMoves: ["naturepower","hypervoice","ancientpower","thunderbolt","darkpulse","thunderwave","dragontail","flashcannon"],
-		unreleasedHidden: true,
+		eventPokemon: [
+			{"generation":6,"level":10,"isHidden":true,"moves":["growl","powdersnow","thunderwave","rockthrow"],"pokeball":"cherishball"}
+		],
 		tier: "LC"
 	},
 	aurorus: {
 		randomBattleMoves: ["ancientpower","thunderbolt","encore","thunderwave","earthpower","freezedry","hypervoice","stealthrock"],
 		randomDoubleBattleMoves: ["hypervoice","ancientpower","thunderbolt","encore","thunderwave","flashcannon","freezedry","icywind","protect"],
-		unreleasedHidden: true,
 		tier: "PU"
 	},
 	sylveon: {
