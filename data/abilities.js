@@ -753,6 +753,9 @@ exports.BattleAbilities = {
 					this.debug('Flash Fire boost');
 					return this.chainModify(1.5);
 				}
+			},
+			onEnd: function (target) {
+				this.add('-end', target, 'ability: Flash Fire', '[silent]');
 			}
 		},
 		id: "flashfire",
