@@ -101,7 +101,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	arbok: {
-		randomBattleMoves: ["sludgebomb","gigadrain","earthuake","screech","substitute","glare"],
+		randomBattleMoves: ["sludgebomb","gigadrain","earthquake","screech","substitute","glare"],
 		tier: "UU"
 	},
 	pichu: {
@@ -593,7 +593,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	kingdra: {
-		randomBattleMoves: ["rest","sleeptalk","doubledge","surf"],
+		randomBattleMoves: ["rest","sleeptalk","doubleedge","surf"],
 		tier: "BL"
 	},
 	goldeen: {
