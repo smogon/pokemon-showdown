@@ -1218,50 +1218,50 @@ exports.Formats = [
 				var dice = this.random(4);
 				if (dice === 1) {
 					// Fullscreen toucan!
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–„â–„â–„â–€â–€â–€â–„â–„â–ˆâ–ˆâ–ˆâ–„');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–„â–€â–€â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–â–‘â–€â–ˆâ–ˆâ–Œ');
-					this.add('-message', 'â–‘â–‘â–‘â–„â–€â–‘â–‘â–‘â–‘â–„â–„â–ˆâ–ˆâ–ˆâ–‘â–Œâ–€â–€â–‘â–€â–ˆ');
-					this.add('-message', 'â–‘â–‘â–„â–ˆâ–‘â–‘â–„â–€â–€â–’â–’â–’â–’â–’â–„â–â–‘â–‘â–‘â–‘â–ˆâ–Œ');
-					this.add('-message', 'â–‘â–â–ˆâ–€â–„â–€â–„â–„â–„â–„â–€â–€â–€â–€â–Œâ–‘â–‘â–‘â–‘â–‘â–â–ˆâ–„');
-					this.add('-message', 'â–‘â–Œâ–„â–„â–€â–€â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–‘â–‘â–‘â–‘â–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–â–‘â–‘â–‘â–‘â–â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„');
-					this.add('-message', 'â–‘â–‘blessed byâ–‘â–‘â–‘â–‘â–â–‘â–‘â–‘â–‘â–â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„');
-					this.add('-message', 'â–‘â–‘le toucanâ–‘â–‘â–‘â–‘â–‘â–‘â–€â–„â–‘â–‘â–‘â–â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘ of â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–€â–„â–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘luckâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆâ–€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ');
+					this.add('-message', '░░░░░░░░▄▄▄▀▀▀▄▄███▄');
+					this.add('-message', '░░░░░▄▀▀░░░░░░░▐░▀██▌');
+					this.add('-message', '░░░▄▀░░░░▄▄███░▌▀▀░▀█');
+					this.add('-message', '░░▄█░░▄▀▀▒▒▒▒▒▄▐░░░░█▌');
+					this.add('-message', '░▐█▀▄▀▄▄▄▄▀▀▀▀▌░░░░░▐█▄');
+					this.add('-message', '░▌▄▄▀▀░░░░░░░░▌░░░░▄███████▄');
+					this.add('-message', '░░░░░░░░░░░░░▐░░░░▐███████████▄');
+					this.add('-message', '░░blessed by░░░░▐░░░░▐█████████████▄');
+					this.add('-message', '░░le toucan░░░░░░▀▄░░░▐██████████████▄');
+					this.add('-message', '░░░░░░ of ░░░░░░░░▀▄▄████████████████▄');
+					this.add('-message', '░░░░░luck░░░░░░░░░░░░░█▀██████');
 				} else if (dice === 2) {
 					// Too spammy, sends it to chat only.
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–„â–');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–‘â–„â–„â–„â–‘â–‘â–„â–ˆâ–ˆâ–„');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–â–€â–ˆâ–€â–Œâ–‘â–‘â–‘â–‘â–€â–ˆâ–„');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–â–ˆâ–„â–ˆâ–Œâ–‘â–‘â–‘â–‘â–‘â–‘â–€â–ˆâ–„');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–‘â–€â–„â–€â–‘â–‘â–‘â–„â–„â–„â–„â–„â–€â–€');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–„â–„â–„â–ˆâ–ˆâ–€â–€â–€â–€');
-					this.add('c|~Joim|â–‘â–‘â–‘â–ˆâ–€â–„â–„â–„â–ˆâ–‘â–€â–€');
-					this.add('c|~Joim|â–‘â–‘â–‘â–Œâ–‘â–„â–„â–„â–â–Œâ–€â–€â–€');
-					this.add('c|~Joim|â–„â–‘â–â–‘â–‘â–‘â–„â–„â–‘â–ˆâ–‘â–€â–€ U HAVE BEEN SPOOKED');
-					this.add('c|~Joim|â–€â–ˆâ–Œâ–‘â–‘â–‘â–„â–‘â–€â–ˆâ–€â–‘â–€');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–„â–„â–â–Œâ–„â–„ BY THE');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–€â–ˆâ–ˆâ–ˆâ–€â–ˆâ–‘â–„');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–‘â–â–Œâ–€â–„â–€â–„â–€â–â–„ SPOOKY SKILENTON');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–‘â–â–€â–‘â–‘â–‘â–‘â–‘â–‘â–â–Œ');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–‘â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆ');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–â–Œâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆ');
-					this.add('c|~Joim|â–‘â–‘â–‘â–‘â–‘â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–â–ŒSEND THIS TO 7 PPL OR SKELINTONS WILL EAT YOU');
+					this.add('c|~Joim|░░░░░░░░░░░░▄▐');
+					this.add('c|~Joim|░░░░░░▄▄▄░░▄██▄');
+					this.add('c|~Joim|░░░░░▐▀█▀▌░░░░▀█▄');
+					this.add('c|~Joim|░░░░░▐█▄█▌░░░░░░▀█▄');
+					this.add('c|~Joim|░░░░░░▀▄▀░░░▄▄▄▄▄▀▀');
+					this.add('c|~Joim|░░░░▄▄▄██▀▀▀▀');
+					this.add('c|~Joim|░░░█▀▄▄▄█░▀▀');
+					this.add('c|~Joim|░░░▌░▄▄▄▐▌▀▀▀');
+					this.add('c|~Joim|▄░▐░░░▄▄░█░▀▀ U HAVE BEEN SPOOKED');
+					this.add('c|~Joim|▀█▌░░░▄░▀█▀░▀');
+					this.add('c|~Joim|░░░░░░░▄▄▐▌▄▄ BY THE');
+					this.add('c|~Joim|░░░░░░░▀███▀█░▄');
+					this.add('c|~Joim|░░░░░░▐▌▀▄▀▄▀▐▄ SPOOKY SKILENTON');
+					this.add('c|~Joim|░░░░░░▐▀░░░░░░▐▌');
+					this.add('c|~Joim|░░░░░░█░░░░░░░░█');
+					this.add('c|~Joim|░░░░░▐▌░░░░░░░░░█');
+					this.add('c|~Joim|░░░░░█░░░░░░░░░░▐▌SEND THIS TO 7 PPL OR SKELINTONS WILL EAT YOU');
 				} else if (dice === 3) {
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–„â–„â–„â–„â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–„â–„â–„â–„â–„');
-					this.add('-message', 'â–‘â–‘â–‘â–ˆâ–‘â–‘â–‘â–‘â–„â–€â–ˆâ–€â–€â–„â–‘â–‘â–€â–€â–€â–„â–‘â–‘â–‘â–‘â–â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–„â–€â–ˆâ–€â–€â–„â–‘â–‘â–‘â–€â–ˆâ–„');
-					this.add('-message', 'â–‘â–‘â–ˆâ–‘â–‘â–‘â–‘â–€â–‘â–â–Œâ–‘â–‘â–â–Œâ–‘â–‘â–‘â–‘â–‘â–€â–‘â–‘â–‘â–â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–€â–‘â–â–Œâ–‘â–‘â–â–Œâ–‘â–‘â–‘â–‘â–ˆâ–€');
-					this.add('-message', 'â–‘â–â–Œâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–€â–„â–„â–€â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–â–ˆâ–„â–„â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–€â–„â–„â–€â–‘â–‘â–‘â–‘â–‘â–â–Œ');
-					this.add('-message', 'â–‘â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–€â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆ');
-					this.add('-message', 'â–â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆâ–Œâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆ');
-					this.add('-message', 'â–â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆâ–Œâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆ');
-					this.add('-message', 'â–‘â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆâ–„â–‘â–‘â–‘â–„â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆ');
-					this.add('-message', 'â–‘â–â–Œâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–€â–ˆâ–ˆâ–ˆâ–€â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–â–Œ');
-					this.add('-message', 'â–‘â–‘â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–€â–„â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–„â–€â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆ');
-					this.add('-message', 'â–‘â–‘â–‘â–ˆâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–€â–„â–„â–„â–„â–„â–„â–„â–€â–€â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆ');
+					this.add('-message', '░░░░░░░░░░░░▄▄▄▄░░░░░░░░░░░░░░░░░░░░░░░▄▄▄▄▄');
+					this.add('-message', '░░░█░░░░▄▀█▀▀▄░░▀▀▀▄░░░░▐█░░░░░░░░░▄▀█▀▀▄░░░▀█▄');
+					this.add('-message', '░░█░░░░▀░▐▌░░▐▌░░░░░▀░░░▐█░░░░░░░░▀░▐▌░░▐▌░░░░█▀');
+					this.add('-message', '░▐▌░░░░░░░▀▄▄▀░░░░░░░░░░▐█▄▄░░░░░░░░░▀▄▄▀░░░░░▐▌');
+					this.add('-message', '░█░░░░░░░░░░░░░░░░░░░░░░░░░▀█░░░░░░░░░░░░░░░░░░█');
+					this.add('-message', '▐█░░░░░░░░░░░░░░░░░░░░░░░░░░█▌░░░░░░░░░░░░░░░░░█');
+					this.add('-message', '▐█░░░░░░░░░░░░░░░░░░░░░░░░░░█▌░░░░░░░░░░░░░░░░░█');
+					this.add('-message', '░█░░░░░░░░░░░░░░░░░░░░█▄░░░▄█░░░░░░░░░░░░░░░░░░█');
+					this.add('-message', '░▐▌░░░░░░░░░░░░░░░░░░░░▀███▀░░░░░░░░░░░░░░░░░░▐▌');
+					this.add('-message', '░░█░░░░░░░░░░░░░░░░░▀▄░░░░░░░░░░▄▀░░░░░░░░░░░░█');
+					this.add('-message', '░░░█░░░░░░░░░░░░░░░░░░▀▄▄▄▄▄▄▄▀▀░░░░░░░░░░░░░█');
 				} else {
-					sentences = ["Gen 1 OU is a true skill metagame.", "Finally a good reason to punch a teenager in the face!", "So here we are again, it's always such a pleasure.", "( ÍÂ° ÍœÊ–Í¡Â°)"].randomize();
+					sentences = ["Gen 1 OU is a true skill metagame.", "Finally a good reason to punch a teenager in the face!", "So here we are again, it's always such a pleasure.", "( ͝° ͜ʖ͡°)"].randomize();
 					sentence = sentences[0];
 					this.add('c|~Joim|' + sentence);
 				}
@@ -1285,7 +1285,7 @@ exports.Formats = [
 				this.add('c|&jdarden|Did someone call for some BALK?');
 			}
 			if (name === 'okuu') {
-				sentences = ["Current Discussion Topics: Benefits of Nuclear Energy, green raymoo worst raymoo, ...", "Current Discussion Topics: I ate the Sun - AMA, Card Games inside of Fighting Games, ...", "Current Discussion Topics: Our testing process shouldn't include Klaxons, Please remove Orin from keyboard prior to entering chat, ...", "Current Discussion Topics: Please refrain from eating crow, We'll get out of Beta once we handle all of this Alpha Decay, ...", "Current Discussion Topics: Schroedinger's Chen might still be in that box, I'm So Meta Even This Acronym, ...", "Current Discussion Topics: What kind of idiot throws knives into a thermonuclear explosion?, ã‚ã‹ã‚‰ãªã„ ãƒãƒãƒ, ..."].randomize();
+				sentences = ["Current Discussion Topics: Benefits of Nuclear Energy, green raymoo worst raymoo, ...", "Current Discussion Topics: I ate the Sun - AMA, Card Games inside of Fighting Games, ...", "Current Discussion Topics: Our testing process shouldn't include Klaxons, Please remove Orin from keyboard prior to entering chat, ...", "Current Discussion Topics: Please refrain from eating crow, We'll get out of Beta once we handle all of this Alpha Decay, ...", "Current Discussion Topics: Schroedinger's Chen might still be in that box, I'm So Meta Even This Acronym, ...", "Current Discussion Topics: What kind of idiot throws knives into a thermonuclear explosion?, わからない ハハハ, ..."].randomize();
 				this.add("raw|<div class=\"broadcast-blue\"><b>" + sentences[0] + "</b></div>");
 			}
 			if (name === 'sirdonovan') {
@@ -1330,7 +1330,7 @@ exports.Formats = [
 				this.add('c|@BiGGiE|' + sentences[0]);
 			}
 			if (name === 'blitzamirin') {
-				this.add('c|@Blitzamirin|How Can Mirrors Be Real If Our Eyes Aren\'t Real? â•°( ~ â—• á—œ â—• ~ )à©­â”â˜†ï¾Ÿ.*ï½¥ï½¡ï¾Ÿ');
+				this.add('c|@Blitzamirin|How Can Mirrors Be Real If Our Eyes Aren\'t Real? ╰( ~ ◕ ᗜ ◕ ~ )੭━☆ﾟ.*･｡ﾟ');
 			}
 			if (name === 'businesstortoise') {
 				this.add('c|@Business Tortoise|' + ["Another day, another smile :)", "Hello this is steve, how may I help you?"][this.random(2)]);
@@ -1366,7 +1366,7 @@ exports.Formats = [
 				this.add('c|@Electrolyte|Eyyy where the middle school azn girls at??');
 			}
 			if (name === 'eos') {
-				this.add('c|@Eos|á•¦à¼¼àºˆÙ„Íœàºˆà¼½á•¤');
+				this.add('c|@Eos|ᕦ༼ຈل͜ຈ༽ᕤ');
 			}
 			if (name === 'formerhope') {
 				this.add('c|@Former Hope|/me enters battle');
@@ -1374,51 +1374,51 @@ exports.Formats = [
 			if (name === 'genesect') {
 				pokemon.phraseIndex = this.random(6);
 				if (pokemon.phraseIndex === 5) {
-					this.add('-message', 'â–‘â–‘ â–‘â–‘ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–‘â–‘ â–‘â–‘');
-					this.add('-message', 'â–‘â–‘ â–ˆâ–ˆ â–“â–“ â–“â–“ â–“â–“ â–“â–“ â–“â–“ â–ˆâ–ˆ â–‘â–‘');
-					this.add('-message', 'â–ˆâ–ˆ â–“â–“ â–“â–“ â–“â–“ â–“â–“ â–“â–“ â–“â–“ â–“â–“ â–ˆâ–ˆ');
-					this.add('-message', 'â–ˆâ–ˆ â–“â–“ â–“â–“ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–“â–“ â–“â–“ â–ˆâ–ˆ');
-					this.add('-message', 'â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–‘â–‘ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ');
-					this.add('-message', 'â–ˆâ–ˆ â–’â–’ â–’â–’ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–’â–’ â–’â–’ â–ˆâ–ˆ');
-					this.add('-message', 'â–ˆâ–ˆ â–’â–’ â–’â–’ â–’â–’ â–’â–’ â–’â–’ â–’â–’ â–’â–’ â–ˆâ–ˆ');
-					this.add('-message', 'â–‘â–‘ â–ˆâ–ˆ â–’â–’ â–’â–’ â–’â–’ â–’â–’ â–’â–’ â–ˆâ–ˆ â–‘â–‘');
-					this.add('-message', 'â–‘â–‘ â–‘â–‘ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ â–‘â–‘ â–‘â–‘');
+					this.add('-message', '░░ ░░ ██ ██ ██ ██ ██ ░░ ░░');
+					this.add('-message', '░░ ██ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ██ ░░');
+					this.add('-message', '██ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ▓▓ ██');
+					this.add('-message', '██ ▓▓ ▓▓ ██ ██ ██ ▓▓ ▓▓ ██');
+					this.add('-message', '██ ██ ██ ██ ░░ ██ ██ ██ ██');
+					this.add('-message', '██ ▒▒ ▒▒ ██ ██ ██ ▒▒ ▒▒ ██');
+					this.add('-message', '██ ▒▒ ▒▒ ▒▒ ▒▒ ▒▒ ▒▒ ▒▒ ██');
+					this.add('-message', '░░ ██ ▒▒ ▒▒ ▒▒ ▒▒ ▒▒ ██ ░░');
+					this.add('-message', '░░ ░░ ██ ██ ██ ██ ██ ░░ ░░');
 				} else if (pokemon.phraseIndex === 4) {
-					this.add('c|@Genesect|â”¬â”´â”¬â”´â”¤  Ê•â”œâ”¬â”´â”¬â”´');
-					this.add('c|@Genesect|â”¬â”´â”¬â”´â”¤ Ê•â€¢â”œâ”¬â”´â”¬â”´');
-					this.add('c|@Genesect|â”¬â”´â”¬â”´â”¤Ê•â€¢á´¥â”œâ”¬â”´â”¬â”´');
+					this.add('c|@Genesect|┬┴┬┴┤  ʕ├┬┴┬┴');
+					this.add('c|@Genesect|┬┴┬┴┤ ʕ•├┬┴┬┴');
+					this.add('c|@Genesect|┬┴┬┴┤ʕ•ᴥ├┬┴┬┴');
 					this.add('c|@Genesect|Shitposting?');
 				} else if (pokemon.phraseIndex === 3) {
-					this.add('-message', 'â–„ â–„â–„â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–„â–„â–„â–„â–‘â–‘â–‘â–‘â–Œâ–„â–„â–„â–„â–„â–‘â–‘â–‘â–‘â–‘â–â–Œ');
-					this.add('-message', 'â–’â–€â–ˆâ–Œâ–‘â–‘â–‘â–â–€â–€â–„â–„â–â–Œâ–’â–‘â–‘â–’â–€â–’â–„â–’â–ˆâ–„â–‘â–‘â–‘â–‘â–â–Œ');
-					this.add('-message', 'â–‘â–‘â–€â–ˆâ–’â–‘â–‘â–“â–‘â–‘â–ˆâ–â–ˆâ–Œâ–Œâ–‘â–‘â–’â–‘â–â–Œâ–ˆâ–Œâ–â–Œâ–‘â–‘â–â–Œâ–‘');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–“â–€â–‘â–‘â–’â–â–€â–„â–€â–€â–€â–€â–’â–’â–€â–€â–‘â–‘â–€â–Œâ–’â–€â–‘â–‘');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–‘â–‘â–‘â–‘â–‘â–‘â–€â–„â–„â–„â–„â–€â–‘â–‘â–‘â–‘â–‘â–‘â–Œâ–‘â–‘â–‘â–‘');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–„â–Œâ–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–’â–‘â–‘â–‘â–‘');
+					this.add('-message', '▄ ▄▄░░░░░░░▄▄▄▄░░░░▌▄▄▄▄▄░░░░░▐▌');
+					this.add('-message', '▒▀█▌░░░▐▀▀▄▄▐▌▒░░▒▀▒▄▒█▄░░░░▐▌');
+					this.add('-message', '░░▀█▒░░▓░░█▐█▌▌░░▒░▐▌█▌▐▌░░▐▌░');
+					this.add('-message', '░░░░░░▓▀░░▒▐▀▄▀▀▀▀▒▒▀▀░░▀▌▒▀░░');
+					this.add('-message', '░░░░░░▌░░░░░░▀▄▄▄▄▀░░░░░░▌░░░░');
+					this.add('-message', '░░░░░▄▌░░░░░░░░░░░░░░░░░░▒░░░░');
 				} else if (pokemon.phraseIndex === 2) {
 					this.add('c|@Genesect|Born too early to explore the universe');
 					this.add('c|@Genesect|Born too late to explore the world');
-					this.add('c|@Genesect|Born just in time to explore ï¼¤ï¼¡ï¼®ï¼«ï¼­ï¼¥ï¼­ï¼¥ï¼³');
+					this.add('c|@Genesect|Born just in time to explore ＤＡＮＫＭＥＭＥＳ');
 				} else if (pokemon.phraseIndex === 1) {
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–„â–„â–„â–„â–„â–„â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–„â–€â–ˆâ–€â–ˆâ–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„â–„');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–Œ');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–Œ');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–Œ');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„');
-					this.add('-message', 'â–‘â–‘â–‘â–„â–ˆâ–â–ˆâ–„â–ˆâ–€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–€â–ˆâ–„â–ˆâ–â–ˆâ–„');
-					this.add('-message', 'â–‘â–„â–ˆâ–ˆâ–Œâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„â–ˆâ–„â–ˆâ–„â–ˆâ–„â–ˆâ–„â–ˆâ–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–Œâ–ˆâ–ˆâ–Œ');
-					this.add('-message', 'â–ˆâ–ˆâ–ˆâ–ˆâ–„â–€â–€â–€â–€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–€â–€â–€â–€â–„â–ˆâ–ˆâ–ˆ');
-					this.add('-message', 'â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–€');
-					this.add('-message', 'â–‘â–‘â–‘â–€â–€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–€');
+					this.add('-message', '░░░░░░░░░░▄▄▄▄▄▄░░░░░░░░░░');
+					this.add('-message', '░░░░░░░░▄▀█▀█▄██████████▄▄');
+					this.add('-message', '░░░░░░░▐██████████████████▌');
+					this.add('-message', '░░░░░░░███████████████████▌');
+					this.add('-message', '░░░░░░▐███████████████████▌');
+					this.add('-message', '░░░░░░█████████████████████▄');
+					this.add('-message', '░░░▄█▐█▄█▀█████████████▀█▄█▐█▄');
+					this.add('-message', '░▄██▌██████▄█▄█▄█▄█▄█▄█████▌██▌');
+					this.add('-message', '████▄▀▀▀▀████████████▀▀▀▀▄███');
+					this.add('-message', '█████████▄▄▄▄▄▄▄▄▄▄▄▄██████▀');
+					this.add('-message', '░░░▀▀████████████████████▀');
 					this.add('c|@Genesect|/me tips fedora');
 				} else {
-					sentences = ["(à¸‡ Í  Í Â° ÍŸÙ„Íœ Í¡Â°)à¸‡ sá´á´œÉ´á´…s á´…á´É´É¢á´‡Ê€á´á´œs... Éªá´ ÉªÉ´ (à¸‡ Í  Í Â° ÍŸÙ„Íœ Í¡Â°)à¸‡", 'http://pastebin.com/8r0jgDd7 become a mod today!'].randomize();
+					sentences = ["(ง ͠ ͠° ͟ل͜ ͡°)ง sᴏᴜɴᴅs ᴅᴏɴɢᴇʀᴏᴜs... ɪᴍ ɪɴ (ง ͠ ͠° ͟ل͜ ͡°)ง", 'http://pastebin.com/8r0jgDd7 become a mod today!'].randomize();
 					this.add('c|@Genesect|' + sentences[0]);
 				}
 			}
 			if (name === 'goddessbriyella') {
-				this.add('c|@Goddess Briyella|â™¥ ^_^ â™¥');
+				this.add('c|@Goddess Briyella|♥ ^_^ ♥');
 			}
 			if (name === 'hippopotas') {
 				this.add('-message', '@Hippopotas\'s Sand Stream whipped up a sandstorm!');
@@ -1430,7 +1430,7 @@ exports.Formats = [
 				this.add('c|@imanalt|muh bulk');
 			}
 			if (name === 'innovamania') {
-				sentences = ['Don\'t take this seriously', 'These Black Glasses sure look cool', 'Ready for some fun?( Í¡Â° ÍœÊ– Í¡Â°)', '( Í¡Â° ÍœÊ– Í¡Â°'];
+				sentences = ['Don\'t take this seriously', 'These Black Glasses sure look cool', 'Ready for some fun?( ͡° ͜ʖ ͡°)', '( ͡° ͜ʖ ͡°'];
 				this.add('c|@innovamania|' + sentences[this.random(4)]);
 			}
 			if (name === 'jac') {
@@ -1440,7 +1440,7 @@ exports.Formats = [
 				this.add('c|@jin of the gale|' + ['3...2...1... LET IT RIP!', 'My bit-beast is going to eat you alive!'][this.random(2)]);
 			}
 			if (name === 'kostitsynkun') {
-				this.add('c|@Kostitsyn-kun|Kyun â˜… Kyun~');
+				this.add('c|@Kostitsyn-kun|Kyun ★ Kyun~');
 			}
 			if (name === 'kupo') {
 				this.add('c|@kupo|abc!');
@@ -1472,13 +1472,13 @@ exports.Formats = [
 				this.add('c|@MattL|The annoyance I will cause is not well-defined.');
 			}
 			if (name === 'morfent') {
-				this.add('c|@Morfent|``â”€â”€â”€â”€â”€â”€â–€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„â”€â”€â”€â”€â”€â”€â–²``');
-				this.add('c|@Morfent|``â”€â”€â”€â–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„â”€â”€â—€â–ˆâ–¶``');
-				this.add('c|@Morfent|``â”€â”€â”€â”€â”€â–„â–ˆâ–ˆâ–ˆâ–ˆâ–€â–ˆâ–„â”€â”€â”€â”€â”€â”€â–ˆ``');
-				this.add('c|@Morfent|``â”€â”€â”€â–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„  - I``');
-				this.add('c|@Morfent|``â”€â–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆ.â–¼.â–¼.â–¼.â–¼.â–¼.â–¼.â–¼   - cast``');
-				this.add('c|@Morfent|``â–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„.â–².â–².â–².â–².â–².â–²   - magic``');
-				this.add('c|@Morfent|``â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–€â–€ - shitpost``');
+				this.add('c|@Morfent|``──────▀█████▄──────▲``');
+				this.add('c|@Morfent|``───▄███████████▄──◀█▶``');
+				this.add('c|@Morfent|``─────▄████▀█▄──────█``');
+				this.add('c|@Morfent|``───▄█████████████████▄  - I``');
+				this.add('c|@Morfent|``─▄█████.▼.▼.▼.▼.▼.▼.▼   - cast``');
+				this.add('c|@Morfent|``▄███████▄.▲.▲.▲.▲.▲.▲   - magic``');
+				this.add('c|@Morfent|``█████████████████████▀▀ - shitpost``');
 			}
 			if (name === 'naniman') {
 				this.add('c|@Nani Man|rof');
@@ -1516,9 +1516,9 @@ exports.Formats = [
 				this.add('-message', 'sraclrlamtio got prmotd to driier');
 			}
 			if (name === 'scotteh') {
-				this.add('c|@Scotteh|â”€â”€â”€â”€â”€â–„â–„â–ˆâ–ˆâ–ˆâ–ˆâ–€â–ˆâ–„');
-				this.add('c|@Scotteh|â”€â”€â”€â–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„');
-				this.add('c|@Scotteh|â”€â–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆ.â–¼.â–¼.â–¼.â–¼.â–¼.â–¼.â–¼');
+				this.add('c|@Scotteh|─────▄▄████▀█▄');
+				this.add('c|@Scotteh|───▄██████████████████▄');
+				this.add('c|@Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼');
 			}
 			if (name === 'shamethat') {
 				sentences = ['no guys stop fighting', 'mature people use their words', 'please direct all attacks to user: beowulf'];
@@ -1589,7 +1589,7 @@ exports.Formats = [
 
 			// Drivers.
 			if (name === 'acedia') {
-				this.add('c|%Acedia|Time for a true display of skill ( Í¡Â° ÍœÊ– Í¡Â°)');
+				this.add('c|%Acedia|Time for a true display of skill ( ͡° ͜ʖ ͡°)');
 			}
 			if (name === 'aelita') {
 				this.add('c|%Aelita|Transfer: Aelita. Scanner: Aelita. Virtualization!');
@@ -1598,8 +1598,12 @@ exports.Formats = [
 				sentences = ['BEAR MY ARCTIC BLAST', 'lmao what kind of team is this', 'guys guys guess what?!?!?!?!', 'Double battles are completely superior to single battles.', 'I miss the days when PS never broke 100 users and all the old auth were still around.'];
 				this.add('c|%Arcticblast|' + sentences[this.random(5)]);
 			}
+			if (name === 'articuno') {
+				sentences = ['Don\'t hurt me, I\'m a gril!', '/me quivers **violently**', 'Don\'t make me use my ban whip...'];
+				this.add('c|%Articuno|' + sentences[this.random(3)]);
+			}
 			if (name === 'astara') {
-				this.add('c|%Astâ˜†arA|I\'d rather take a nap, I hope you won\'t be a petilil shit, Eat some rare candies and get on my level.');
+				this.add('c|%Ast☆arA|I\'d rather take a nap, I hope you won\'t be a petilil shit, Eat some rare candies and get on my level.');
 			}
 			if (name === 'astyanax') {
 				this.add('c|%Astyanax|:^) Top kek');
@@ -1621,6 +1625,10 @@ exports.Formats = [
 			if (name === 'bloobblob') {
 				this.add('c|%bloobblob|Contract?');
 			}
+			if (name === 'crestfall') {
+				sentences = ['On wings of night.', 'Let us hunt those who have fallen to darkness.'];
+				this.add('c|%Crestfall|' + sentences[this.random(2)]);
+			}
 			if (name === 'feliburn') {
 				this.add('c|%Feliburn|Come on!');
 			}
@@ -1634,7 +1642,7 @@ exports.Formats = [
 				this.add('c|%LJDarkrai|Azideias');
 			}
 			if (name === 'majorbling') {
-				sentences = ['(ã‚žà¹‘âšˆ Ë³Ì«âšˆà¹‘) â™¡', 'If you can\'t win contests as well as battles, your team is bad~ <3', 'â™¡ Dedenne is too cute to KO â™¡'];
+				sentences = ['(ゞ๑⚈ ˳̫⚈๑) ♡', 'If you can\'t win contests as well as battles, your team is bad~ <3', '♡ Dedenne is too cute to KO ♡'];
 				this.add('c|%Majorbling|' + sentences[this.random(3)]);
 			}
 			if (name === 'raseri') {
@@ -1881,18 +1889,18 @@ exports.Formats = [
 				this.add('c|@Barton|' + ['ok', 'haha?'][this.random(2)]);
 			}
 			if (name === 'bean') {
-				sentences = ['that\'s it ur getting banned', 'meow', '(âœ–â•­â•®âœ–)'];
+				sentences = ['that\'s it ur getting banned', 'meow', '(✖╭╮✖)'];
 				this.add('c|@Bean|' + sentences[this.random(3)]);
 			}
 			if (name === 'beowulf') {
 				this.add('c|@Beowulf|There is no need to be mad');
 			}
 			if (name === 'biggie') {
-				sentences = ['It was all a dream', 'It\'s gotta be the shoes', 'ãƒ½à¼¼àºˆÙ„Íœàºˆà¼½ï¾‰ RIOT ãƒ½à¼¼àºˆÙ„Íœàºˆà¼½ï¾‰'];
+				sentences = ['It was all a dream', 'It\'s gotta be the shoes', 'ヽ༼ຈل͜ຈ༽ﾉ RIOT ヽ༼ຈل͜ຈ༽ﾉ'];
 				this.add('c|@BiGGiE|' + sentences[this.random(3)]);
 			}
 			if (name === 'blitzamirin') {
-				this.add('c|@Blitzamirin| The Mirror Can Lie It Doesn\'t Show What\'s Inside! â•°ã€³~ âœ– Ð” âœ– ~ã€µâŠƒâ”â˜†ï¾Ÿ.*ï½¥ï½¡ï¾Ÿ');
+				this.add('c|@Blitzamirin| The Mirror Can Lie It Doesn\'t Show What\'s Inside! ╰〳~ ✖ Д ✖ ~〵⊃━☆ﾟ.*･｡ﾟ');
 			}
 			if (name === 'businesstortoise') {
 				this.add('c|@Business Tortoise|couldn\'t meet my deadline...');
@@ -1918,37 +1926,37 @@ exports.Formats = [
 			}
 			if (name === 'dell') {
 				this.add('c|@Dell|All because I couldn\'t use Yoshi...');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ–ˆâ”€â–ˆâ–ˆâ–ˆâ”€â”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–’â–’â–’â–ˆâ–’â–’â–’â–ˆâ”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–’â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ”€â”€â–ˆâ–ˆâ”€â–ˆâ–ˆâ”€â”€â–ˆâ”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ”€â”€â”€â–ˆâ–ˆâ”€â–ˆâ–ˆâ”€â”€â–ˆâ”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–’â–’â–’â–ˆâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–’â–’â–’â–’â–’â–’â”€â”€â”€â–’â”€â”€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–ˆâ–ˆâ–ˆâ”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–’â–’â–’â–’â”€â”€â”€â”€â”€â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–ˆâ”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–’â–’â–’â”€â”€â”€â”€â”€â”€â”€â–’â–’â–’â–’â–’â–’â–’â–ˆâ–’â–ˆâ–’â–ˆâ–ˆ');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–’â–’â”€â”€â”€â”€â”€â”€â”€â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–ˆ');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–’â–’â”€â”€â”€â”€â”€â–ˆâ–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–ˆ');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ–’â–’â”€â”€â”€â–ˆâ–ˆâ–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–ˆ');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ–’â–’â”€â”€â”€â–ˆâ–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–’â–ˆâ”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–€â–ˆâ–’â–’â”€â”€â”€â”€â–ˆâ–’â–’â–’â–’â–’â–’â–’â–’â–ˆâ–ˆâ”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â”€â”€â–ˆâ–ˆâ–€â–ˆâ–ˆâ–’â–’â–’â”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â–ˆâ–ˆâ–€â–ˆâ–ˆâ–ˆâ–’â–’â–’â–’â”€â”€â”€â”€â–ˆâ–’â–’â–ˆâ–ˆâ”€â”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–’â–’â–’â–’â–’â–ˆâ”€â”€â”€â–ˆâ–ˆâ”€â”€â–ˆâ–ˆâ”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â–ˆâ–’â–’â–’â–’â–’â–’â–ˆâ–’â–’â–’â–’â–’â–ˆâ”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ–ˆâ–’â–’â–ˆâ”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â–ˆâ–’â–’â–’â–’â–’â–’â–ˆâ–’â–’â–’â–’â–’â–’â–ˆâ”€â”€â”€â–ˆâ–ˆâ–ˆâ–’â–’â–’â–ˆâ”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â–ˆâ–’â–’â–’â–’â–’â–’â–ˆâ–’â–’â–’â–’â–’â–ˆâ”€â”€â”€â”€â–ˆâ–’â–’â–’â–’â–’â–ˆâ”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â–ˆâ–ˆâ–’â–’â–’â–’â–’â–ˆâ–’â–’â–’â–’â–’â–’â–ˆâ”€â”€â”€â–ˆâ–’â–’â–’â–ˆâ–ˆâ–ˆâ”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â–ˆâ–ˆâ–’â–’â–’â–’â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ”€â”€â”€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ”€â”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â–ˆâ–ˆâ–’â–’â–’â–’â–’â–ˆâ–ˆâ”€â”€â”€â”€â”€â–ˆâ–ˆâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â–ˆâ–ˆâ–’â–’â–’â–ˆâ–ˆâ”€â”€â”€â”€â”€â–ˆâ–ˆâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ”€â”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â”€â”€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„â”€â”€â”€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â–„â–ˆâ–“â–“â–“â–“â–“â–ˆâ–„â”€â–ˆâ–“â–“â–“â–“â–“â–ˆâ–„â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â–ˆâ–“â–“â–“â–“â–“â–“â–“â–“â–ˆâ–ˆâ–“â–“â–“â–“â–“â–“â–“â–ˆâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â–ˆâ–“â–“â–“â–“â–“â–“â–“â–“â–ˆâ–ˆâ–“â–“â–“â–“â–“â–“â–“â–ˆâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
-				this.add('c|@Dell|â”€â”€â–€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–€â–€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+				this.add('c|@Dell|───────────────████─███────────');
+				this.add('c|@Dell|──────────────██▒▒▒█▒▒▒█───────');
+				this.add('c|@Dell|─────────────██▒────────█──────');
+				this.add('c|@Dell|─────────██████──██─██──█──────');
+				this.add('c|@Dell|────────██████───██─██──█──────');
+				this.add('c|@Dell|────────██▒▒▒█──────────███────');
+				this.add('c|@Dell|────────██▒▒▒▒▒▒───▒──██████───');
+				this.add('c|@Dell|───────██▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒███─');
+				this.add('c|@Dell|──────██▒▒▒▒─────▒▒▒▒▒▒▒▒▒▒▒▒█─');
+				this.add('c|@Dell|──────██▒▒▒───────▒▒▒▒▒▒▒█▒█▒██');
+				this.add('c|@Dell|───────██▒▒───────▒▒▒▒▒▒▒▒▒▒▒▒█');
+				this.add('c|@Dell|────────██▒▒─────█▒▒▒▒▒▒▒▒▒▒▒▒█');
+				this.add('c|@Dell|────────███▒▒───██▒▒▒▒▒▒▒▒▒▒▒▒█');
+				this.add('c|@Dell|─────────███▒▒───█▒▒▒▒▒▒▒▒▒▒▒█─');
+				this.add('c|@Dell|────────██▀█▒▒────█▒▒▒▒▒▒▒▒██──');
+				this.add('c|@Dell|──────██▀██▒▒▒────█████████────');
+				this.add('c|@Dell|────██▀███▒▒▒▒────█▒▒██────────');
+				this.add('c|@Dell|█████████▒▒▒▒▒█───██──██───────');
+				this.add('c|@Dell|█▒▒▒▒▒▒█▒▒▒▒▒█────████▒▒█──────');
+				this.add('c|@Dell|█▒▒▒▒▒▒█▒▒▒▒▒▒█───███▒▒▒█──────');
+				this.add('c|@Dell|█▒▒▒▒▒▒█▒▒▒▒▒█────█▒▒▒▒▒█──────');
+				this.add('c|@Dell|██▒▒▒▒▒█▒▒▒▒▒▒█───█▒▒▒███──────');
+				this.add('c|@Dell|─██▒▒▒▒███████───██████────────');
+				this.add('c|@Dell|──██▒▒▒▒▒██─────██─────────────');
+				this.add('c|@Dell|───██▒▒▒██─────██──────────────');
+				this.add('c|@Dell|────█████─────███──────────────');
+				this.add('c|@Dell|────█████▄───█████▄────────────');
+				this.add('c|@Dell|──▄█▓▓▓▓▓█▄─█▓▓▓▓▓█▄───────────');
+				this.add('c|@Dell|──█▓▓▓▓▓▓▓▓██▓▓▓▓▓▓▓█──────────');
+				this.add('c|@Dell|──█▓▓▓▓▓▓▓▓██▓▓▓▓▓▓▓█──────────');
+				this.add('c|@Dell|──▀████████▀▀███████▀──────────');
 			}
 			if (name === 'eeveegeneral') {
 				this.add('c|@Eevee General|' + ['Retreat!', 'You may have won the battle, but you haven\'t won the war!'][this.random(2)]);
@@ -1960,27 +1968,27 @@ exports.Formats = [
 				this.add('c|@Enguarde|I let my guard down...');
 			}
 			if (name === 'eos') {
-				this.add('c|@EoS|Øà¼¼à²¥_à²¥à¼½áŒ‹');
+				this.add('c|@EoS|؍༼ಥ_ಥ༽ጋ');
 			}
 			if (name === 'formerhope') {
 				this.add('c|@Former Hope|This is why we can\'t have nice things.');
 			}
 			if (name === 'genesect') {
 				if (pokemon.phraseIndex === 5 || pokemon.phraseIndex === 3 || pokemon.phraseIndex === 1) {
-					this.add('-message', 'â–„â–ˆâ–ˆâ–ˆâ–ˆâ–„â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘');
-					this.add('-message', 'â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„â–‘â–‘â–‘â–‘â–‘â–‘â–„â–„â–„â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘');
-					this.add('-message', 'â–‘â–ˆâ–ˆâ–ˆâ–€â–€â–€â–„â–„â–„â–€â–€â–€â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘');
-					this.add('-message', 'â–‘â–‘â–‘â–„â–€â–€â–€â–„â–‘â–‘â–‘â–ˆâ–€â–€â–„â–‘â–„â–€â–€â–„â–‘â–ˆâ–„â–‘â–ˆâ–‘');
-					this.add('-message', 'â–‘â–‘â–‘â–„â–„â–ˆâ–ˆâ–ˆâ–ˆâ–‘â–‘â–ˆâ–€â–€â–„â–‘â–ˆâ–„â–„â–ˆâ–‘â–ˆâ–€â–„â–ˆâ–‘');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–‘â–ˆâ–„â–„â–€â–‘â–ˆâ–‘â–‘â–ˆâ–‘â–ˆâ–‘â–€â–ˆâ–‘');
-					this.add('-message', 'â–‘â–‘â–‘â–‘â–‘â–€â–€â–€â–€â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘');
+					this.add('-message', '▄████▄░░░░░░░░░░░░░░░░░░░░');
+					this.add('-message', '██████▄░░░░░░▄▄▄░░░░░░░░░░');
+					this.add('-message', '░███▀▀▀▄▄▄▀▀▀░░░░░░░░░░░░░');
+					this.add('-message', '░░░▄▀▀▀▄░░░█▀▀▄░▄▀▀▄░█▄░█░');
+					this.add('-message', '░░░▄▄████░░█▀▀▄░█▄▄█░█▀▄█░');
+					this.add('-message', '░░░░██████░█▄▄▀░█░░█░█░▀█░');
+					this.add('-message', '░░░░░▀▀▀▀░░░░░░░░░░░░░░░░░');
 				} else if (pokemon.phraseIndex === 4) {
 					this.add('c|@Genesect|Well, if that\'s what you want');
-					this.add('c|@Genesect|â”¬â”´â”¬â”´â”¤Ê•â€¢á´¥â”œâ”¬â”´â”¬â”´');
-					this.add('c|@Genesect|â”¬â”´â”¬â”´â”¤ Ê•â€¢â”œâ”¬â”´â”¬â”´');
-					this.add('c|@Genesect|â”¬â”´â”¬â”´â”¤  Ê•â”œâ”¬â”´â”¬â”´');
+					this.add('c|@Genesect|┬┴┬┴┤ʕ•ᴥ├┬┴┬┴');
+					this.add('c|@Genesect|┬┴┬┴┤ ʕ•├┬┴┬┴');
+					this.add('c|@Genesect|┬┴┬┴┤  ʕ├┬┴┬┴');
 				} else {
-					sentences = ["The darkside cannot be extinguished, when you fight...", "Øà¼¼à²¥_à²¥à¼½áŒ‹ lament your dongers Øà¼¼à²¥_à²¥à¼½áŒ‹", "Yáµ’áµ˜ Oá¶°Ë¡Ê¸ Lá¶¤áµ›áµ‰ Oá¶°á¶œáµ‰", "ã‚„ã‚Œã‚„ã‚Œã ãœ", " à­§à¼¼à² ç›Šà² à¼½à­¨ MRGLRLRLR à­§à¼¼à² ç›Šà² à¼½à­¨"].randomize();
+					sentences = ["The darkside cannot be extinguished, when you fight...", "؍༼ಥ_ಥ༽ጋ lament your dongers ؍༼ಥ_ಥ༽ጋ", "Yᵒᵘ Oᶰˡʸ Lᶤᵛᵉ Oᶰᶜᵉ", "やれやれだぜ", " ୧༼ಠ益ಠ༽୨ MRGLRLRLR ୧༼ಠ益ಠ༽୨"].randomize();
 					this.add('c|@Genesect|' + sentences[0]);
 				}
 			}
@@ -1997,18 +2005,18 @@ exports.Formats = [
 				this.add('c|@imanalt|bshax imo');
 			}
 			if (name === 'innovamania') {
-				sentences = ['Did you rage quit?', 'How\'d you lose with this set?', 'Pm Nani Man to complain about this set ( Í¡Â° ÍœÊ– Í¡Â°)'];
+				sentences = ['Did you rage quit?', 'How\'d you lose with this set?', 'Pm Nani Man to complain about this set ( ͡° ͜ʖ ͡°)'];
 				this.add('c|@innovamania|' + sentences[this.random(3)]);
 			}
 			if (name === 'jac') {
 				this.add('c|@Jac|bruh');
 			}
 			if (name === 'jinofthegale') {
-				sentences = ['ãƒ½à¼¼àºˆÙ„Íœàºˆà¼½ï¾‰ You\'ve upped your game ãƒ½à¼¼àºˆÙ„Íœàºˆà¼½ï¾‰?', 'Please don\'t steal my bit-beast!', 'Should have used Black'];
+				sentences = ['ヽ༼ຈل͜ຈ༽ﾉ You\'ve upped your game ヽ༼ຈل͜ຈ༽ﾉ?', 'Please don\'t steal my bit-beast!', 'Should have used Black'];
 				this.add('c|@jin of the gale|' + sentences[this.random(3)]);
 			}
 			if (name === 'kostitsynkun') {
-				this.add('c|@Kostitsyn-kun|Kyun â˜… Kyun~');
+				this.add('c|@Kostitsyn-kun|Kyun ★ Kyun~');
 			}
 			if (name === 'kupo') {
 				this.add('c|@kupo|:C');
@@ -2050,7 +2058,7 @@ exports.Formats = [
 				this.add('c|@qtrx|' + sentences[this.random(3)]);
 			}
 			if (name === 'queez') {
-				this.add('c|@Queez|(â—•â€¿â—•âœ¿)');
+				this.add('c|@Queez|(◕‿◕✿)');
 			}
 			if (name === 'rekeri') {
 				this.add('c|@rekeri|lucky af :[');
@@ -2069,8 +2077,8 @@ exports.Formats = [
 				this.add('-message', 'scalarmotion was banned by Nani Man. (spangj)');
 			}
 			if (name === 'scotteh') {
-				this.add('-message', 'â–„â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–„.â–².â–².â–².â–².â–².â–²');
-				this.add('-message', 'â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–€â–€');
+				this.add('-message', '▄███████▄.▲.▲.▲.▲.▲.▲');
+				this.add('-message', '█████████████████████▀▀');
 			}
 			if (name === 'shamethat') {
 				sentences = ["ok agree to disagree", "rematch, don't attack this time", "i blame beowulf"];
@@ -2114,7 +2122,7 @@ exports.Formats = [
 				this.add('c|@TGMD|rip in pepsi');
 			}
 			if (name === 'trickster') {
-				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', 'â€œThis guy\'s team is CRAZY!â€ â˜‘ â€œMy team can\'t win against a team like thatâ€ â˜‘ "He NEEDED precisely those two crits to win" â˜‘ â€œHe led with the only Pokemon that could beat meâ€ â˜‘ "He got the perfect hax" â˜‘ â€œThere was nothing I could doâ€ â˜‘ â€œI played that perfectlyâ€', '(âŠ™ï¹âŠ™âœ¿)'];
+				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', '“This guy\'s team is CRAZY!” ☑ “My team can\'t win against a team like that” ☑ "He NEEDED precisely those two crits to win" ☑ “He led with the only Pokemon that could beat me” ☑ "He got the perfect hax" ☑ “There was nothing I could do” ☑ “I played that perfectly”', '(⊙﹏⊙✿)'];
 				this.add('c|@Trickster|' + sentences[this.random(5)]);
 			}
 			if (name === 'waterbomb') {
@@ -2136,7 +2144,7 @@ exports.Formats = [
 
 			// Drivers.
 			if (name === 'acedia') {
-				this.add('c|%Acedia|My dad smoked his whole life. One day my mom told him "If you want to see your children graduate, you have to stop". 3 years later he died of lung cancer. My mom told me "Dont smoke; dont put your family through this". At 24, I have never touched a cigarette. I must say, I feel a sense of regret, because watching you play Pokemon gave me cancer anyway ( ÍÂ° ÍœÊ–Í¡Â°)');
+				this.add('c|%Acedia|My dad smoked his whole life. One day my mom told him "If you want to see your children graduate, you have to stop". 3 years later he died of lung cancer. My mom told me "Dont smoke; dont put your family through this". At 24, I have never touched a cigarette. I must say, I feel a sense of regret, because watching you play Pokemon gave me cancer anyway ( ͝° ͜ʖ͡°)');
 			}
 			if (name === 'aelita') {
 				sentences = ['Oh no, the Scyphozoa\'s here!', 'Devirtualized...', 'Stones. Aelita Stones. Like the rock group. I\'m Odd\'s cousin from Canada.'];
@@ -2146,9 +2154,13 @@ exports.Formats = [
 				sentences = ['totally had it but choked, gg', 'I would have won if it weren\'t for HAX', 'oh', 'Double battles are stil superior to single battles.', 'newfag'];
 				this.add('c|%Arcticblast|' + sentences[this.random(5)]);
 			}
+			if (name === 'articuno') {
+				sentences = ['This is why you don\'t get any girls.', 'fite me irl', 'Actually, I don\'t have a gender...'];
+				this.add('c|%Articuno|' + sentences[this.random(3)]);
+			}
 			if (name === 'astara') {
-				sentences = ['/me twerks into oblivion', 'good night â™¥', 'Astara Vista Baby'];
-				this.add('c|%Astâ˜†ara|' + sentences[this.random(3)]);
+				sentences = ['/me twerks into oblivion', 'good night ♥', 'Astara Vista Baby'];
+				this.add('c|%Ast☆ara|' + sentences[this.random(3)]);
 			}
 			if (name === 'astyanax') {
 				this.add('c|%Astyanax|:^( Bottom kek');
@@ -2168,6 +2180,9 @@ exports.Formats = [
 			if (name === 'bloobblob') {
 				this.add('c|%bloobblob|I won\'t die! Even if I\'m killed!');
 			}
+			if (name === 'crestfall') {
+				this.add('c|%Crestfall|Vayne [All Chat]: Outplayed me gg no re');
+			}
 			if (name === 'feliburn') {
 				this.add('c|%Feliburn|' + ['BHUWUUU!', 'I like shorts! They\'re comfy and easy to wear!'][this.random(2)]);
 			}
@@ -2178,7 +2193,7 @@ exports.Formats = [
 				this.add('c|%LJDarkrai|:<');
 			}
 			if (name === 'majorbling') {
-				this.add('c|%Majorbling|There is literally no way to make this pokemon good...(ã‚žà¹‘T  Ë³Ì«T\'à¹‘) ');
+				this.add('c|%Majorbling|There is literally no way to make this pokemon good...(ゞ๑T  ˳̫T\'๑) ');
 			}
 			if (name === 'raseri') {
 				this.add('c|%Raseri|banned');
@@ -2210,7 +2225,7 @@ exports.Formats = [
 				this.add('c|+Cathy|I was being facetious');
 			}
 			if (name === 'diatom' && !pokemon.hasBeenThanked) {
-				this.add('c|â˜…' + pokemon.side.foe.name + '|Thanks Diatom...');
+				this.add('c|★' + pokemon.side.foe.name + '|Thanks Diatom...');
 			}
 			if (name === 'redew') {
 				this.add('c|+Redew|i hope u think ur a good player');
@@ -2368,14 +2383,13 @@ exports.Formats = [
 			// Admin signature moves.
 			if (move.id === 'spikes' && name === 'antar') {
 				move.name = 'Firebomb';
-				move.sideCondition = 'spikes';
+				move.isBounceable = false;
 				move.category = 'Special';
 				move.type = 'Fire';
 				move.basePower = 100;
-				move.onTryHit = function (target, source, move) {
+				move.onTryHitSide = function (side, source, move) {
 					this.attrLastMove('[still]');
-					this.add('-anim', source, "Overheat", target);
-					return null;
+					this.add('-anim', source, "Overheat", side.active[0]);
 				};
 			}
 			if (move.id === 'embargo' && name === 'chaos') {
@@ -2686,6 +2700,8 @@ exports.Formats = [
 			if (move.id === 'bugbuzz' && name === 'beowulf') {
 				move.name = 'Buzzing of the Swarm';
 				move.category = 'Physical';
+				move.basePower = 100;
+				move.secondaries = [{chance:10, volatileStatus: 'flinch'}];
 			}
 			if (move.id === 'dragontail' && name === 'biggie') {
 				move.name = 'Food Rush';
@@ -3029,7 +3045,7 @@ exports.Formats = [
 				move.accuracy = 100;
 				delete move.secondary;
 				delete move.secondaries;
-				move.self = {volatileStatus: 'magnetrise', boosts: {evasion:-1, accuracy:-1}};
+				move.self = {volatileStatus: 'magnetrise'};
 			}
 			if (move.id === 'protect' && name === 'layell') {
 				move.name = 'Pixel Protection';
@@ -3198,7 +3214,10 @@ exports.Formats = [
 					this.add('-anim', source, "Brave Bird", target);
 				};
 				move.onHit = function (target, source) {
-					this.heal(100, source, source);
+					this.heal(120, source, source);
+				};
+				move.onMoveFail = function (target, source, move) {
+					this.directDamage(120, source, source);
 				};
 			}
 			if (move.id === 'frenzyplant' && name === 'rosiethevenusaur') {
@@ -3375,15 +3394,20 @@ exports.Formats = [
 				move.name = 'Water Bomb';
 				move.basePowerCallback = function (pokemon, target) {
 					if (this.effectiveWeather() === 'raindance' || this.effectiveWeather() === 'primordialsea') return 93;
+					if (this.effectiveWeather() === 'sunnyday' || this.effectiveWeather() === 'desolateland') return 210;
 					return 140;
 				};
 				move.isContact = false;
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Seismic Toss", target);
+					target.ignore['Ability'] = true;
 				};
 				move.accuracy = true;
 				move.affectedByImmunities = false;
+				move.ignoreDefensive = true;
+				move.ignoreEvasion = true;
+				move.ignoreScreens = true;
 			}
 			if (move.id === 'detect' && name === 'zebraiken') {
 				move.name = 'bzzt';
@@ -3445,6 +3469,13 @@ exports.Formats = [
 					}
 				};
 			}
+			if (move.id === 'whirlwind' && name === 'articuno') {
+				move.name = 'True Support';
+				move.self = {boosts: {def:1, spd:1}};
+				move.onHit = function (target, source) {
+					this.useMove('substitute', target, target);
+				};
+			}
 			if (move.id === 'toxic' && name === 'astyanax') {
 				move.name = 'Amphibian Toxin';
 				move.accuracy = 100;
@@ -3498,6 +3529,21 @@ exports.Formats = [
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Tail Slap", target);
 				};
+			}
+			if (move.id === 'protect' && name === 'crestfall') {
+				move.name = 'Final Hour';
+				move.onTryHit = function (pokemon) {
+					if (pokemon.activeTurns > 1) {
+						this.add('-hint', "Final Hour only works on your first turn out.");
+						return false;
+					}
+					this.attrLastMove('[still]');
+					this.add('-anim', pokemon, "Dark Pulse", pokemon);
+				};
+				move.onHit = function () {
+					this.add('c|%Crestfall|' + ['The die is cast...', 'Time for reckoning.'][this.random(2)]);
+				};
+				move.self = {boosts: {spe:2, evasion:1, def:-2, spd:-2}};
 			}
 			if (move.id === 'dragonrush' && name === 'dtc') {
 				move.name = 'Dragon Smash';
@@ -3865,15 +3911,6 @@ exports.Formats = [
 					target.addVolatile('healblock');
 				};
 			}
-		},
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
 		}
 	},
 	{
