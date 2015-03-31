@@ -91,7 +91,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	fearow: {
-		randomBattleMoves: ["rest","sleeptalk","doubleedge","drillpeck","hiddenpowerground","hiddenpowerfighting","rest","return","triattack"],
+		randomBattleMoves: ["rest","sleeptalk","doubleedge","drillpeck","hiddenpowerground","hiddenpowerfighting","return","triattack"],
 		eventPokemon: [
 			{"generation":1,"level":20,"moves":["growl","leer","furyattack","payday"]}
 		],
@@ -229,7 +229,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	bellossom: {
-		randomBattleMoves: ["sleeppowder","stunspore","razorlead","moonlight","sludgebomb","swordsdance","hiddenpowerground"],
+		randomBattleMoves: ["sleeppowder","stunspore","razorleaf","moonlight","sludgebomb","swordsdance","hiddenpowerground"],
 		tier: "UU"
 	},
 	paras: {
@@ -272,7 +272,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	golduck: {
-		randomBattleMoves: ["crosschop","hypnosis","surf","hydropump","hiddenpowerelectric","hiddenpowergrass","icebeam"],
+		randomBattleMoves: ["crosschop","hypnosis","surf","hydropump","hiddenpowerelectric","icebeam"],
 		tier: "UU"
 	},
 	mankey: {
@@ -333,7 +333,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	machamp: {
-		randomBattleMoves: ["crosschop","curse","rockslide","hiddenpowerbug","hiddenpowerghost","fireblast"],
+		randomBattleMoves: ["crosschop","curse","rockslide","hiddenpowerbug","fireblast"],
 		tier: "OU"
 	},
 	bellsprout: {
@@ -347,7 +347,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	victreebel: {
-		randomBattleMoves: ["sleeppowder","growth","gigadrain","swordsdance","sludgebomb","hiddenpowerfire","hiddenpowerice"],
+		randomBattleMoves: ["sleeppowder","growth","gigadrain","sludgebomb","hiddenpowerice"],
 		tier: "UU"
 	},
 	tentacool: {
@@ -380,7 +380,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	rapidash: {
-		randomBattleMoves: ["fireblast","hypnosis","hiddenpoweground","hiddenpowerrock","irontail","curse","return"],
+		randomBattleMoves: ["fireblast","hypnosis","hiddenpowerground","hiddenpowerrock","irontail","curse","return"],
 		eventPokemon: [
 			{"generation":1,"level":40,"moves":["ember","firespin","stomp","payday"]}
 		],
