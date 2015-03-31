@@ -933,10 +933,10 @@ exports.BattleScripts = {
 			var template = this.getTemplate(poke);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
-			var mbstmin = 1307; // sunkern has the lowest modified base stat total, and that total is 807
+			var mbstmin = 1307;
 			var stats = template.baseStats;
 
-			// Modified base stat total assumes 30 IVs, 255 EVs in every stat
+			// Modified base stat total assumes 15 DVs, 255 EVs in every stat
 			var mbst = (stats["hp"] * 2 + 30 + 63 + 100) + 10;
 			mbst += (stats["atk"] * 2 + 30 + 63 + 100) + 5;
 			mbst += (stats["def"] * 2 + 30 + 63 + 100) + 5;
@@ -959,7 +959,7 @@ exports.BattleScripts = {
 				level++;
 			}
 
-			// Random DVs
+			// Random DVs.
 			var ivs = {
 				hp: Math.floor(Math.random() * 30),
 				atk: Math.floor(Math.random() * 30),
@@ -969,7 +969,7 @@ exports.BattleScripts = {
 				spe: Math.floor(Math.random() * 30)
 			};
 
-			// ALl EVs
+			// All EVs.
 			var evs = {
 				hp: 255,
 				atk: 255,

@@ -3767,6 +3767,15 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
+		name: "[Gen 1] Challenge Cup",
+		section: "Past Generations",
+
+		mod: 'gen1',
+		searchShow: false,
+		team: 'randomCC',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
+	},
+	{
 		name: "[Gen 1] Stadium",
 		section: "Past Generations",
 
