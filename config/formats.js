@@ -3318,7 +3318,7 @@ exports.Formats = [
 
 		searchShow: false,
 		team: 'randomMonotype',
-		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview']
+		ruleset: ['Pokemon', 'Standard', 'Same Type Clause']
 	},
 	{
 		name: "Tier Shift",
