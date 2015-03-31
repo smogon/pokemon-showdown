@@ -3313,14 +3313,6 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Monotype Random Battle",
-		section: "Other Metagames",
-
-		searchShow: false,
-		team: 'randomMonotype',
-		ruleset: ['Pokemon', 'Standard', 'Same Type Clause']
-	},
-	{
 		name: "Tier Shift",
 		section: "Other Metagames",
 
@@ -3499,6 +3491,14 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber']
+	},
+	{
+		name: "Monotype Random Battle",
+		section: "Other Metagames",
+
+		team: 'randomMonotype',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "Hackmons Challenge Cup",
