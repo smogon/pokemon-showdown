@@ -125,8 +125,6 @@ exports.commands = {
 					if (targetUser) targetUser.avatar = Config.customavatars[userid];
 
 					this.sendReply(userid + "'s custom avatar has been set.");
-					Users.messageSeniorStaff(userid+' has received a custom avatar from '+user.name);
-					Rooms.rooms.seniorstaff.add(userid+' has received a custom avatar from '+user.name);
 					room.update();
 				}.bind(this));
 				break;
