@@ -1598,10 +1598,6 @@ exports.Formats = [
 				sentences = ['BEAR MY ARCTIC BLAST', 'lmao what kind of team is this', 'guys guys guess what?!?!?!?!', 'Double battles are completely superior to single battles.', 'I miss the days when PS never broke 100 users and all the old auth were still around.'];
 				this.add('c|%Arcticblast|' + sentences[this.random(5)]);
 			}
-			if (name === 'articuno') {
-				sentences = ['Don\'t hurt me, I\'m a gril!', '/me quivers **violently**', 'Don\'t make me use my ban whip...'];
-				this.add('c|%Articuno|' + sentences[this.random(3)]);
-			}
 			if (name === 'astara') {
 				this.add('c|%Ast☆arA|I\'d rather take a nap, I hope you won\'t be a petilil shit, Eat some rare candies and get on my level.');
 			}
@@ -1624,10 +1620,6 @@ exports.Formats = [
 			}
 			if (name === 'bloobblob') {
 				this.add('c|%bloobblob|Contract?');
-			}
-			if (name === 'crestfall') {
-				sentences = ['On wings of night.', 'Let us hunt those who have fallen to darkness.'];
-				this.add('c|%Crestfall|' + sentences[this.random(2)]);
 			}
 			if (name === 'feliburn') {
 				this.add('c|%Feliburn|Come on!');
@@ -2154,10 +2146,6 @@ exports.Formats = [
 				sentences = ['totally had it but choked, gg', 'I would have won if it weren\'t for HAX', 'oh', 'Double battles are stil superior to single battles.', 'newfag'];
 				this.add('c|%Arcticblast|' + sentences[this.random(5)]);
 			}
-			if (name === 'articuno') {
-				sentences = ['This is why you don\'t get any girls.', 'fite me irl', 'Actually, I don\'t have a gender...'];
-				this.add('c|%Articuno|' + sentences[this.random(3)]);
-			}
 			if (name === 'astara') {
 				sentences = ['/me twerks into oblivion', 'good night ♥', 'Astara Vista Baby'];
 				this.add('c|%Ast☆ara|' + sentences[this.random(3)]);
@@ -2179,9 +2167,6 @@ exports.Formats = [
 			}
 			if (name === 'bloobblob') {
 				this.add('c|%bloobblob|I won\'t die! Even if I\'m killed!');
-			}
-			if (name === 'crestfall') {
-				this.add('c|%Crestfall|Vayne [All Chat]: Outplayed me gg no re');
 			}
 			if (name === 'feliburn') {
 				this.add('c|%Feliburn|' + ['BHUWUUU!', 'I like shorts! They\'re comfy and easy to wear!'][this.random(2)]);
@@ -2383,13 +2368,14 @@ exports.Formats = [
 			// Admin signature moves.
 			if (move.id === 'spikes' && name === 'antar') {
 				move.name = 'Firebomb';
-				move.isBounceable = false;
+				move.sideCondition = 'spikes';
 				move.category = 'Special';
 				move.type = 'Fire';
 				move.basePower = 100;
-				move.onTryHitSide = function (side, source, move) {
+				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
-					this.add('-anim', source, "Overheat", side.active[0]);
+					this.add('-anim', source, "Overheat", target);
+					return null;
 				};
 			}
 			if (move.id === 'embargo' && name === 'chaos') {
@@ -2700,8 +2686,6 @@ exports.Formats = [
 			if (move.id === 'bugbuzz' && name === 'beowulf') {
 				move.name = 'Buzzing of the Swarm';
 				move.category = 'Physical';
-				move.basePower = 100;
-				move.secondaries = [{chance:10, volatileStatus: 'flinch'}];
 			}
 			if (move.id === 'dragontail' && name === 'biggie') {
 				move.name = 'Food Rush';
@@ -3045,7 +3029,7 @@ exports.Formats = [
 				move.accuracy = 100;
 				delete move.secondary;
 				delete move.secondaries;
-				move.self = {volatileStatus: 'magnetrise'};
+				move.self = {volatileStatus: 'magnetrise', boosts: {evasion:-1, accuracy:-1}};
 			}
 			if (move.id === 'protect' && name === 'layell') {
 				move.name = 'Pixel Protection';
@@ -3214,10 +3198,7 @@ exports.Formats = [
 					this.add('-anim', source, "Brave Bird", target);
 				};
 				move.onHit = function (target, source) {
-					this.heal(120, source, source);
-				};
-				move.onMoveFail = function (target, source, move) {
-					this.directDamage(120, source, source);
+					this.heal(100, source, source);
 				};
 			}
 			if (move.id === 'frenzyplant' && name === 'rosiethevenusaur') {
@@ -3394,20 +3375,15 @@ exports.Formats = [
 				move.name = 'Water Bomb';
 				move.basePowerCallback = function (pokemon, target) {
 					if (this.effectiveWeather() === 'raindance' || this.effectiveWeather() === 'primordialsea') return 93;
-					if (this.effectiveWeather() === 'sunnyday' || this.effectiveWeather() === 'desolateland') return 210;
 					return 140;
 				};
 				move.isContact = false;
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Seismic Toss", target);
-					target.ignore['Ability'] = true;
 				};
 				move.accuracy = true;
 				move.affectedByImmunities = false;
-				move.ignoreDefensive = true;
-				move.ignoreEvasion = true;
-				move.ignoreScreens = true;
 			}
 			if (move.id === 'detect' && name === 'zebraiken') {
 				move.name = 'bzzt';
@@ -3469,13 +3445,6 @@ exports.Formats = [
 					}
 				};
 			}
-			if (move.id === 'whirlwind' && name === 'articuno') {
-				move.name = 'True Support';
-				move.self = {boosts: {def:1, spd:1}};
-				move.onHit = function (target, source) {
-					this.useMove('substitute', target, target);
-				};
-			}
 			if (move.id === 'toxic' && name === 'astyanax') {
 				move.name = 'Amphibian Toxin';
 				move.accuracy = 100;
@@ -3529,21 +3498,6 @@ exports.Formats = [
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Tail Slap", target);
 				};
-			}
-			if (move.id === 'protect' && name === 'crestfall') {
-				move.name = 'Final Hour';
-				move.onTryHit = function (pokemon) {
-					if (pokemon.activeTurns > 1) {
-						this.add('-hint', "Final Hour only works on your first turn out.");
-						return false;
-					}
-					this.attrLastMove('[still]');
-					this.add('-anim', pokemon, "Dark Pulse", pokemon);
-				};
-				move.onHit = function () {
-					this.add('c|%Crestfall|' + ['The die is cast...', 'Time for reckoning.'][this.random(2)]);
-				};
-				move.self = {boosts: {spe:2, evasion:1, def:-2, spd:-2}};
 			}
 			if (move.id === 'dragonrush' && name === 'dtc') {
 				move.name = 'Dragon Smash';
@@ -3911,6 +3865,15 @@ exports.Formats = [
 					target.addVolatile('healblock');
 				};
 			}
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
