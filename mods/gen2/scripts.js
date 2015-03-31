@@ -977,152 +977,161 @@ exports.BattleScripts = {
 				moves.push(moveid);
 			}
 
-			// Only do move choosing if we have more than four on the moveset...
-			if (moveKeys.length > 4) {
-				hasMove = {};
-				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
-				for (var k = 0; k < moves.length; k++) {
-					var move = this.getMove(moves[k]);
-					var moveid = move.id;
-					if (!move.damage && !move.damageCallback) {
-						counter[move.category]++;
-					}
-					if ({swordsdance:1, sharpen:1}[moveid]) {
-						counter['physicalsetup']++;
-					}
-					if ({amnesia:1, growth:1}[moveid]) {
-						counter['specialsetup']++;
-					}
-				}
-
-				if (counter['specialsetup']) {
-					setupType = 'Special';
-				} else if (counter['physicalsetup']) {
-					setupType = 'Physical';
-				}
-
-				for (var k = 0; k < moves.length; k++) {
-					var moveid = moves[k];
-					var move = this.getMove(moveid);
-					var rejected = false;
-					if (moveid.substr(0, 11) === 'hiddenpower') moveid = 'hiddenpower';
-					if (hasMove[moveid]) rejected = true;
-					if (!template.essentialMove || moveid !== template.essentialMove) {
-						var isSetup = false;
-
-						switch (moveid) {
-						// bad after setup
-						case 'seismictoss': case 'nightshade':
-							if (setupType) rejected = true;
-							break;
-						// bit redundant to have both
-						case 'flamethrower':
-							if (hasMove['fireblast']) rejected = true;
-							break;
-						case 'fireblast':
-							if (hasMove['flamethrower']) rejected = true;
-							break;
-						case 'icebeam':
-							if (hasMove['blizzard']) rejected = true;
-							break;
-						// Hydropump and surf are both valid options, just avoid one with eachother.
-						case 'hydropump':
-							if (hasMove['surf']) rejected = true;
-							break;
-						case 'surf':
-							if (hasMove['hydropump']) rejected = true;
-							break;
-						case 'petaldance': case 'solarbeam':
-							if (hasMove['megadrain'] || hasMove['razorleaf']) rejected = true;
-							break;
-						case 'megadrain':
-							if (hasMove['razorleaf']) rejected = true;
-							break;
-						case 'thunder':
-							if (hasMove['thunderbolt']) rejected = true;
-							break;
-						case 'thunderbolt':
-							if (hasMove['thunder']) rejected = true;
-							break;
-						case 'bonemerang':
-							if (hasMove['earthquake']) rejected = true;
-							break;
-						case 'rest':
-							if (hasMove['recover'] || hasMove['softboiled']) rejected = true;
-							break;
-						case 'softboiled':
-							if (hasMove['recover']) rejected = true;
-							break;
-						case 'sharpen':
-						case 'swordsdance':
-							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical'] || hasMove['growth']) rejected = true;
-							break;
-						case 'growth':
-							if (counter['Special'] < counter['Physical'] || hasMove['swordsdance']) rejected = true;
-							break;
-						case 'doubleedge':
-							if (hasMove['bodyslam']) rejected = true;
-							break;
-						case 'mimic':
-							if (hasMove['mirrormove']) rejected = true;
-							break;
-						case 'superfang':
-							if (hasMove['bodyslam']) rejected = true;
-							break;
-						case 'rockslide':
-							if (hasMove['earthquake'] && hasMove['bodyslam'] && hasMove['hyperbeam']) rejected = true;
-							break;
-						case 'bodyslam':
-							if (hasMove['thunderwave']) rejected = true;
-							break;
-						case 'megakick':
-							if (hasMove['bodyslam']) rejected = true;
-							break;
-						case 'eggbomb':
-							if (hasMove['hyperbeam']) rejected = true;
-							break;
-						case 'triattack':
-							if (hasMove['doubleedge']) rejected = true;
-							break;
-						case 'growth':
-							if (hasMove['amnesia']) rejected = true;
-							break;
-						case 'supersonic':
-							if (hasMove['confuseray']) rejected = true;
-							break;
-						case 'poisonpowder':
-							if (hasMove['toxic'] || counter['Status'] > 1) rejected = true;
-							break;
-						case 'stunspore':
-							if (hasMove['sleeppowder'] || counter['Status'] > 1) rejected = true;
-							break;
-						case 'sleeppowder':
-							if (hasMove['stunspore'] || counter['Status'] > 2) rejected = true;
-							break;
-						case 'toxic':
-							if (hasMove['sleeppowder'] || hasMove['stunspore'] || counter['Status'] > 1) rejected = true;
-							break;
-						case 'sleeptalk':
-							if (!hasMove['rest']) rejected = true;
-							break;
-						} // End of switch for moveid
-					}
-					if (rejected && j < moveKeys.length) {
-						moves.splice(k, 1);
-						break;
-					}
+			counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
+			for (var k = 0; k < moves.length; k++) {
+				var move = this.getMove(moves[k]);
+				var moveid = move.id;
+				if (!move.damage && !move.damageCallback) {
 					counter[move.category]++;
+				}
+				if ({swordsdance:1, sharpen:1}[moveid]) {
+					counter['physicalsetup']++;
+				}
+				if ({amnesia:1, growth:1}[moveid]) {
+					counter['specialsetup']++;
+				}
+			}
 
+			if (counter['specialsetup']) {
+				setupType = 'Special';
+			} else if (counter['physicalsetup']) {
+				setupType = 'Physical';
+			}
+
+			for (var k = 0; k < moves.length; k++) {
+				var moveid = moves[k];
+				var move = this.getMove(moveid);
+				var rejected = false;
+				if (moveid.substr(0, 11) === 'hiddenpower') {
 					// Check for hidden power DVs
-					if (moveid === 'hiddenpower') {
-						var HPivs = this.getType(move.type).HPivs;
-						for (var iv in HPivs) {
-							ivs[iv] = HPivs[iv];
-						}
+					var HPivs = this.getType(move.type).HPivs;
+					for (var iv in HPivs) {
+						ivs[iv] = HPivs[iv];
 					}
-				} // End of for
-			} // End of the check for more than 4 moves on moveset.
+				}
+				if (hasMove[moveid]) rejected = true;
+				if (!template.essentialMove || moveid !== template.essentialMove) {
+					var isSetup = false;
+
+					switch (moveid) {
+					// bad after setup
+					case 'seismictoss': case 'nightshade':
+						if (setupType) rejected = true;
+						break;
+					// bit redundant to have both
+					case 'flamethrower':
+						if (hasMove['fireblast']) rejected = true;
+						break;
+					case 'fireblast':
+						if (hasMove['flamethrower']) rejected = true;
+						break;
+					case 'icebeam':
+						if (hasMove['blizzard']) rejected = true;
+						break;
+					// Hydropump and surf are both valid options, just avoid one with eachother.
+					case 'hydropump':
+						if (hasMove['surf']) rejected = true;
+						break;
+					case 'surf':
+						if (hasMove['hydropump']) rejected = true;
+						break;
+					case 'petaldance': case 'solarbeam':
+						if (hasMove['megadrain'] || hasMove['razorleaf']) rejected = true;
+						break;
+					case 'megadrain':
+						if (hasMove['razorleaf']) rejected = true;
+						break;
+					case 'thunder':
+						if (hasMove['thunderbolt']) rejected = true;
+						break;
+					case 'thunderbolt':
+						if (hasMove['thunder']) rejected = true;
+						break;
+					case 'bonemerang':
+						if (hasMove['earthquake']) rejected = true;
+						break;
+					case 'rest':
+						if (hasMove['recover'] || hasMove['softboiled']) rejected = true;
+						break;
+					case 'softboiled':
+						if (hasMove['recover']) rejected = true;
+						break;
+					case 'sharpen':
+					case 'swordsdance':
+						if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical'] || hasMove['growth']) rejected = true;
+						break;
+					case 'growth':
+						if (counter['Special'] < counter['Physical'] || hasMove['swordsdance']) rejected = true;
+						break;
+					case 'doubleedge':
+						if (hasMove['bodyslam']) rejected = true;
+						break;
+					case 'mimic':
+						if (hasMove['mirrormove']) rejected = true;
+						break;
+					case 'superfang':
+						if (hasMove['bodyslam']) rejected = true;
+						break;
+					case 'rockslide':
+						if (hasMove['earthquake'] && hasMove['bodyslam'] && hasMove['hyperbeam']) rejected = true;
+						break;
+					case 'bodyslam':
+						if (hasMove['thunderwave']) rejected = true;
+						break;
+					case 'megakick':
+						if (hasMove['bodyslam']) rejected = true;
+						break;
+					case 'eggbomb':
+						if (hasMove['hyperbeam']) rejected = true;
+						break;
+					case 'triattack':
+						if (hasMove['doubleedge']) rejected = true;
+						break;
+					case 'growth':
+						if (hasMove['amnesia']) rejected = true;
+						break;
+					case 'supersonic':
+						if (hasMove['confuseray']) rejected = true;
+						break;
+					case 'poisonpowder':
+						if (hasMove['toxic'] || counter['Status'] > 1) rejected = true;
+						break;
+					case 'stunspore':
+						if (hasMove['sleeppowder'] || counter['Status'] > 1) rejected = true;
+						break;
+					case 'sleeppowder':
+						if (hasMove['stunspore'] || counter['Status'] > 2) rejected = true;
+						break;
+					case 'toxic':
+						if (hasMove['sleeppowder'] || hasMove['stunspore'] || counter['Status'] > 1) rejected = true;
+						break;
+					case 'sleeptalk':
+						if (!hasMove['rest']) rejected = true;
+						break;
+					} // End of switch for moveid
+				}
+				if (rejected && j < moveKeys.length) {
+					moves.splice(k, 1);
+					break;
+				}
+				counter[move.category]++;
+			} // End of for
 		} while (moves.length < 4 && j < moveKeys.length);
+
+		// Add specific items.
+		switch (template.species) {
+		case 'Cubone':
+		case 'Marowak':
+			item = 'thickclub';
+			ivs.atk = 26;
+			break;
+		case 'Pikachu':
+			item = 'lightball';
+			break;
+		case 'Ditto':
+			item = 'metalpowder';
+			break;
+		}
 
 		var levelScale = {
 			LC: 96,
