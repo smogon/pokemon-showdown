@@ -486,7 +486,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	kingler: {
-		randomBattleMoves: ["swordsdance","doubleedge""rest","sleeptalk","substitute","surf","crabhammer","hiddenpowerfighting","hiddenpowerground","hiddenpowerrock"],
+		randomBattleMoves: ["swordsdance","doubleedge","rest","sleeptalk","substitute","surf","crabhammer","hiddenpowerfighting","hiddenpowerground","hiddenpowerrock"],
 		tier: "UU"
 	},
 	voltorb: {
