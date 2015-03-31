@@ -180,7 +180,7 @@ var Trivia = (function () {
 		scoreData.correctAnswers++;
 		if (this.mode === 'timer') {
 			var points = 5 - ~~((Date.now() - this.askedAt) / (3 * 1000));
-			if (points > 0) {
+			if (points > 0 && points < 6) {
 				scoreData.score += points;
 				scoreData.points = points;
 			}
