@@ -968,12 +968,6 @@ exports.BattleScripts = {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && j < moveKeys.length) {
 				var moveid = toId(moveKeys[j]);
-				if (moveid.substr(0, 11) === 'hiddenpower') {
-					if (hasMove['hiddenpower']) continue;
-					hasMove['hiddenpower'] = true;
-				} else {
-					hasMove[moveid] = true;
-				}
 				j++;
 				moves.push(moveid);
 			}
@@ -985,7 +979,12 @@ exports.BattleScripts = {
 				for (var k = 0; k < moves.length; k++) {
 					var move = this.getMove(moves[k]);
 					var moveid = move.id;
-					hasMove[moveid] = true;
+					if (moveid.substr(0, 11) === 'hiddenpower') {
+						if (hasMove['hiddenpower']) continue;
+						hasMove['hiddenpower'] = true;
+					} else {
+						hasMove[moveid] = true;
+					}
 					if (!move.damage && !move.damageCallback) {
 						counter[move.category]++;
 					}
@@ -1135,8 +1134,8 @@ exports.BattleScripts = {
 		};
 		// Hollistic judgment.
 		var customScale = {
-			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99,
-			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 70,
+			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99, Pichu: 99, Smoochum: 99,
+			Clefairy: 95, "Farfetch'd": 99, Igglybuff: 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 70,
 			Dragonite: 85, Cloyster: 83, Staryu: 90
 		};
 		var level = levelScale[template.tier] || 90;
