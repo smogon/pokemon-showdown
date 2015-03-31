@@ -3521,7 +3521,6 @@ exports.Formats = [
 	{
 		name: "[Gen 4] OU (no Inverse)",
 		section: "Other Metagames",
-		column: 3,
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
