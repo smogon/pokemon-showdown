@@ -363,6 +363,7 @@ exports.Formats = [
 		name: "LC Random",
 		section: "Random Battles (aka Randbats)",
 
+		mod: 'inverse',
 		team: 'randomLC',
 		ruleset: ['Random (no PotD)'],
 		onModifyPokemon: function (pokemon) {
@@ -379,6 +380,7 @@ exports.Formats = [
 		name: "Monotype Random",
 		section: "Random Battles (aka Randbats)",
 
+		mod: 'inverse',
 		team: 'randomMonotype',
 		ruleset: ['Random (no PotD)'],
 		onModifyPokemon: function (pokemon) {
@@ -395,6 +397,7 @@ exports.Formats = [
 		name: "Generational Random",
 		section: "Random Battles (aka Randbats)",
 
+		mod: 'inverse',
 		team: 'randomGenerational',
 		ruleset: ['Random (no PotD)'],
 		onModifyPokemon: function (pokemon) {
@@ -411,6 +414,7 @@ exports.Formats = [
 		name: "Hoenn Random",
 		section: "Random Battles (aka Randbats)",
 
+		mod: 'inverse',
 		team: 'randomHoenn',
 		ruleset: ['Random (no PotD)'],
 		onModifyPokemon: function (pokemon) {
@@ -427,6 +431,7 @@ exports.Formats = [
 		name: "Hoenn Weather Random",
 		section: "Random Battles (aka Randbats)",
 
+		mod: 'inverse',
 		team: 'randomHoennWeather',
 		ruleset: ['Random (no PotD)'],
 		onModifyPokemon: function (pokemon) {
@@ -443,6 +448,7 @@ exports.Formats = [
 		name: "Super Smash Bros. Random",
 		section: "Random Battles (aka Randbats)",
 
+		mod: 'inverse',
 		team: 'randomSmashBros',
 		ruleset: ['Random (no PotD)'],
 		onModifyPokemon: function (pokemon) {
@@ -459,6 +465,7 @@ exports.Formats = [
 		name: "Winter Wonderland",
 		section: "Random Battles (aka Randbats)",
 
+		mod: 'inverse',
 		team: 'randomSeasonalWW',
 		onBegin: function() {
 			this.setWeather('Hail');
@@ -585,6 +592,7 @@ exports.Formats = [
 		name: "Community Random",
 		section: "Random Battles (aka Randbats)",
 
+		mod: 'inverse',
 		team: 'randomCommunity',
 		ruleset: ['Random (no PotD)'],
 		onModifyPokemon: function (pokemon) {
