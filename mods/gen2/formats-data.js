@@ -225,7 +225,7 @@ exports.BattleFormatsData = {
 		tier: "NFE"
 	},
 	vileplume: {
-		randomBattleMoves: ["sleeppowder","leechseed","sludgebomb","mooonlight"],
+		randomBattleMoves: ["sleeppowder","leechseed","sludgebomb","moonlight"],
 		tier: "UU"
 	},
 	bellossom: {
