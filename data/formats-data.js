@@ -4724,7 +4724,7 @@ exports.BattleFormatsData = {
 		tier: "BL"
 	},
 	reshiram: {
-		randomBattleMoves: ["blueflare","dracometeor","dragonpulse","toxic","flamecharge","stoneedge","roost"],
+		randomBattleMoves: ["blueflare","dracometeor","dragonpulse","flamecharge","stoneedge","roost"],
 		randomDoubleBattleMoves: ["blueflare","dracometeor","dragonpulse","heatwave","flamecharge","roost","protect","tailwind"],
 		eventPokemon: [
 			{"generation":5,"level":100,"moves":["blueflare","fusionflare","mist","dracometeor"],"pokeball":"cherishball"}
