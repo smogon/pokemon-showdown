@@ -868,5 +868,290 @@ exports.BattleScripts = {
 		}
 
 		return damage;
+	},
+	// Random team generation for Gen 2 Random Battles.
+	randomTeam: function (side) {
+		// Get what we need ready.
+		var keys = [];
+		var pokemonLeft = 0;
+		var pokemon = [];
+		var i = 1;
+
+		// We need to check it's one of the first 251 because formats data are installed onto main format data, not replaced.
+		for (var n in this.data.FormatsData) {
+			if (this.data.FormatsData[n].randomBattleMoves && i < 252) {
+				keys.push(n);
+			}
+			i++;
+		}
+		keys = keys.randomize();
+
+		// Now let's store what we are getting.
+		var typeCount = {};
+		var uberCount = 0;
+		var nuCount = 0;
+		var hasShitmon = false;
+
+		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
+			var template = this.getTemplate(keys[i]);
+			if (!template || !template.name || !template.types) continue;
+
+			// Bias the tiers so you get less shitmons and only one of the two Ubers.
+			// If you have a shitmon, you're covered in OUs and Ubers if possible
+			var tier = template.tier;
+			if (tier === 'LC' && (nuCount > 1 || hasShitmon)) continue;
+			if ((tier === 'NFE' || tier === 'UU' || tier === 'BL') && (hasShitmon || (nuCount > 2 && this.random(1)))) continue;
+			// Unless you have one of the worst mons, in that case we allow luck to give you all Ubers.
+			if (tier === 'Uber' && uberCount >= 1 && !hasShitmon) continue;
+
+			// Limit 2 of any type as well. Diversity and minor weakness count.
+			// The second of a same type has halved chance of being added.
+			var types = template.types;
+			var skip = false;
+			for (var t = 0; t < types.length; t++) {
+				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(1))) {
+					skip = true;
+					break;
+				}
+			}
+			if (skip) continue;
+
+			// The set passes the limitations.
+			var set = this.randomSet(template, i);
+			pokemon.push(set);
+
+			// Now let's increase the counters. First, the Pokémon left.
+			pokemonLeft++;
+
+			// Type counter.
+			for (var t = 0; t < types.length; t++) {
+				if (types[t] in typeCount) {
+					typeCount[types[t]]++;
+				} else {
+					typeCount[types[t]] = 1;
+				}
+			}
+
+			// Increment type bias counters.
+			if (tier === 'Uber') {
+				uberCount++;
+			} else if (tier === 'UU' || tier === 'BL' || tier === 'NFE' || tier === 'LC') {
+				nuCount++;
+			}
+
+			// Is it a shitmon?
+			if (keys[i] in {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1, 'ditto':1}) hasShitmon = true;
+		}
+
+		return pokemon;
+	},
+	// Random set generation for Gen 2 Random Battles.
+	randomSet: function (template, i) {
+		if (i === undefined) i = 1;
+		template = this.getTemplate(template);
+		if (!template.exists) template = this.getTemplate('unown');
+
+		var moveKeys = template.randomBattleMoves;
+		moveKeys = moveKeys.randomize();
+		var moves = [];
+		var hasType = {};
+		hasType[template.types[0]] = true;
+		if (template.types[1]) hasType[template.types[1]] = true;
+		var hasMove = {};
+		var counter = {};
+		var setupType = '';
+		var item = 'leftovers';
+		var ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+
+		var j = 0;
+		do {
+			// Choose next 4 moves from learnset/viable moves and add them to moves list:
+			while (moves.length < 4 && j < moveKeys.length) {
+				var moveid = toId(moveKeys[j]);
+				if (moveid.substr(0, 11) === 'hiddenpower') {
+					if (hasMove['hiddenpower']) continue;
+					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moveid] = true;
+				}
+				j++;
+				moves.push(moveid);
+			}
+
+			// Only do move choosing if we have more than four on the moveset...
+			if (moveKeys.length > 4) {
+				hasMove = {};
+				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
+				for (var k = 0; k < moves.length; k++) {
+					var move = this.getMove(moves[k]);
+					var moveid = move.id;
+					hasMove[moveid] = true;
+					if (!move.damage && !move.damageCallback) {
+						counter[move.category]++;
+					}
+					if ({swordsdance:1, sharpen:1}[moveid]) {
+						counter['physicalsetup']++;
+					}
+					if ({amnesia:1, growth:1}[moveid]) {
+						counter['specialsetup']++;
+					}
+				}
+
+				if (counter['specialsetup']) {
+					setupType = 'Special';
+				} else if (counter['physicalsetup']) {
+					setupType = 'Physical';
+				}
+
+				for (var k = 0; k < moves.length; k++) {
+					var moveid = moves[k];
+					var move = this.getMove(moveid);
+					var rejected = false;
+					if (hasMove[moveid]) rejected = true;
+					if (!template.essentialMove || moveid !== template.essentialMove) {
+						var isSetup = false;
+
+						switch (moveid) {
+						// bad after setup
+						case 'seismictoss': case 'nightshade':
+							if (setupType) rejected = true;
+							break;
+						// bit redundant to have both
+						case 'flamethrower':
+							if (hasMove['fireblast']) rejected = true;
+							break;
+						case 'fireblast':
+							if (hasMove['flamethrower']) rejected = true;
+							break;
+						case 'icebeam':
+							if (hasMove['blizzard']) rejected = true;
+							break;
+						// Hydropump and surf are both valid options, just avoid one with eachother.
+						case 'hydropump':
+							if (hasMove['surf']) rejected = true;
+							break;
+						case 'surf':
+							if (hasMove['hydropump']) rejected = true;
+							break;
+						case 'petaldance': case 'solarbeam':
+							if (hasMove['megadrain'] || hasMove['razorleaf']) rejected = true;
+							break;
+						case 'megadrain':
+							if (hasMove['razorleaf']) rejected = true;
+							break;
+						case 'thunder':
+							if (hasMove['thunderbolt']) rejected = true;
+							break;
+						case 'thunderbolt':
+							if (hasMove['thunder']) rejected = true;
+							break;
+						case 'bonemerang':
+							if (hasMove['earthquake']) rejected = true;
+							break;
+						case 'rest':
+							if (hasMove['recover'] || hasMove['softboiled']) rejected = true;
+							break;
+						case 'softboiled':
+							if (hasMove['recover']) rejected = true;
+							break;
+						case 'sharpen':
+						case 'swordsdance':
+							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical'] || hasMove['growth']) rejected = true;
+							break;
+						case 'growth':
+							if (counter['Special'] < counter['Physical'] || hasMove['swordsdance']) rejected = true;
+							break;
+						case 'doubleedge':
+							if (hasMove['bodyslam']) rejected = true;
+							break;
+						case 'mimic':
+							if (hasMove['mirrormove']) rejected = true;
+							break;
+						case 'superfang':
+							if (hasMove['bodyslam']) rejected = true;
+							break;
+						case 'rockslide':
+							if (hasMove['earthquake'] && hasMove['bodyslam'] && hasMove['hyperbeam']) rejected = true;
+							break;
+						case 'bodyslam':
+							if (hasMove['thunderwave']) rejected = true;
+							break;
+						case 'megakick':
+							if (hasMove['bodyslam']) rejected = true;
+							break;
+						case 'eggbomb':
+							if (hasMove['hyperbeam']) rejected = true;
+							break;
+						case 'triattack':
+							if (hasMove['doubleedge']) rejected = true;
+							break;
+						case 'growth':
+							if (hasMove['amnesia']) rejected = true;
+							break;
+						case 'supersonic':
+							if (hasMove['confuseray']) rejected = true;
+							break;
+						case 'poisonpowder':
+							if (hasMove['toxic'] || counter['Status'] > 1) rejected = true;
+							break;
+						case 'stunspore':
+							if (hasMove['sleeppowder'] || counter['Status'] > 1) rejected = true;
+							break;
+						case 'sleeppowder':
+							if (hasMove['stunspore'] || counter['Status'] > 2) rejected = true;
+							break;
+						case 'toxic':
+							if (hasMove['sleeppowder'] || hasMove['stunspore'] || counter['Status'] > 1) rejected = true;
+							break;
+						case 'sleeptalk':
+							if (!hasMove['rest']) rejected = true;
+							break;
+						} // End of switch for moveid
+					}
+					if (rejected && j < moveKeys.length) {
+						moves.splice(k, 1);
+						break;
+					}
+					counter[move.category]++;
+
+					// Check for hidden power DVs
+					if (move.id === 'hiddenpower') {
+						var HPivs = this.getType(move.type).HPivs;
+						for (var iv in HPivs) {
+							ivs[iv] = HPivs[iv];
+						}
+					}
+				} // End of for
+			} // End of the check for more than 4 moves on moveset.
+		} while (moves.length < 4 && j < moveKeys.length);
+
+		var levelScale = {
+			LC: 96,
+			NFE: 90,
+			UU: 85,
+			BL: 83,
+			OU: 79,
+			Uber: 74
+		};
+		// Hollistic judgment.
+		var customScale = {
+			Caterpie: 99, Kakuna: 99, Magikarp: 99, Metapod: 99, Weedle: 99,
+			Clefairy: 95, "Farfetch'd": 99, Jigglypuff: 99, Ditto: 99, Mewtwo: 70,
+			Dragonite: 85, Cloyster: 83, Staryu: 90
+		};
+		var level = levelScale[template.tier] || 90;
+		if (customScale[template.name]) level = customScale[template.name];
+
+		return {
+			name: template.name,
+			moves: moves,
+			ability: 'None',
+			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
+			ivs: ivs,
+			item: item,
+			level: level,
+			shiny: false,
+			gender: 'M'
+		};
 	}
 };
