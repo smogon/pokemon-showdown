@@ -202,7 +202,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		requirePentagon: true,
 		validateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least three PokÃ©mon.'];
+			if (team.length < 3) return ['You must bring at least three Pokémon.'];
 		},
 		onBegin: function () {
 			this.debug('cutting down to 3');
@@ -856,7 +856,7 @@ exports.Formats = [
 		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
 		requirePentagon: true,
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four PokÃ©mon.'];
+			if (team.length < 4) return ['You must bring at least four Pokémon.'];
 		},
 		onBegin: function () {
 			this.debug('cutting down to 4');
@@ -921,7 +921,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
 		requirePentagon: true,
 		validateTeam: function (team, format) {
-			if (team.length < 6) return ['You must have six PokÃ©mon.'];
+			if (team.length < 6) return ['You must have six Pokémon.'];
 		},
 		onModifyPokemon: function (pokemon) {
 			pokemon.negateImmunity['Type'] = true;
@@ -1095,7 +1095,7 @@ exports.Formats = [
 				pokemon.addVolatile('curse', pokemon);
 				this.add('-message', pokemon.name + "'s Wonder Guard has cursed it!");
 			}
-			// Weak PokÃ©mon get a boost so they can fight amongst the other monsters.
+			// Weak Pokémon get a boost so they can fight amongst the other monsters.
 			// Innovamania is just useless, so the boosts are a prank.
 			if (name === 'test2017' && !pokemon.illusion) {
 				this.boost({atk:1}, pokemon, pokemon, 'innate ability');
@@ -1191,7 +1191,7 @@ exports.Formats = [
 			}
 
 			// Edgy switch-in sentences go here.
-			// Sentences vary in style and how they are presented, so each PokÃ©mon has its own way of sending them.
+			// Sentences vary in style and how they are presented, so each Pokémon has its own way of sending them.
 			var sentences = [];
 			var sentence = '';
 
@@ -1413,7 +1413,7 @@ exports.Formats = [
 					this.add('-message', 'â–‘â–‘â–‘â–€â–€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–€');
 					this.add('c|@Genesect|/me tips fedora');
 				} else {
-					sentences = ["(à¸‡ Í  Í Â° ÍŸÙ„Íœ Í¡Â°)à¸‡ sá´á´œÉ´á´…s á´…á´É´É¢á´‡Ê€á´á´œs... Éªá´ ÉªÉ´ (à¸‡ Í  Í Â° ÍŸÙ„Íœ Í¡Â°)à¸‡", 'http://pastebin.com/8r0jgDd7 become a mod today!'].randomize();
+					sentences = ["(à¸‡ Í  Í Â° ÍŸÙ„Íœ Í¡Â°)à¸‡ sá´á´œÉ´á´…s á´…á´É´É¢á´‡Ê€á´á´œs... Éªá´ ÉªÉ´ (à¸‡ Í  Í Â° ÍŸÙ„Íœ Í¡Â°)à¸‡", 'http://pastebin.com/8r0jgDd7 become a mod today!'].randomize();
 					this.add('c|@Genesect|' + sentences[0]);
 				}
 			}
@@ -1980,7 +1980,7 @@ exports.Formats = [
 					this.add('c|@Genesect|â”¬â”´â”¬â”´â”¤ Ê•â€¢â”œâ”¬â”´â”¬â”´');
 					this.add('c|@Genesect|â”¬â”´â”¬â”´â”¤  Ê•â”œâ”¬â”´â”¬â”´');
 				} else {
-					sentences = ["The darkside cannot be extinguished, when you fight...", "Øà¼¼à²¥_à²¥à¼½áŒ‹ lament your dongers Øà¼¼à²¥_à²¥à¼½áŒ‹", "Yáµ’áµ˜ Oá¶°Ë¡Ê¸ Lá¶¤áµ›áµ‰ Oá¶°á¶œáµ‰", "ã‚„ã‚Œã‚„ã‚Œã ãœ", " à­§à¼¼à² ç›Šà² à¼½à­¨ MRGLRLRLR à­§à¼¼à² ç›Šà² à¼½à­¨"].randomize();
+					sentences = ["The darkside cannot be extinguished, when you fight...", "Øà¼¼à²¥_à²¥à¼½áŒ‹ lament your dongers Øà¼¼à²¥_à²¥à¼½áŒ‹", "Yáµ’áµ˜ Oá¶°Ë¡Ê¸ Lá¶¤áµ›áµ‰ Oá¶°á¶œáµ‰", "ã‚„ã‚Œã‚„ã‚Œã ãœ", " à­§à¼¼à² ç›Šà² à¼½à­¨ MRGLRLRLR à­§à¼¼à² ç›Šà² à¼½à­¨"].randomize();
 					this.add('c|@Genesect|' + sentences[0]);
 				}
 			}
@@ -3935,7 +3935,7 @@ exports.Formats = [
 			'Xerneas', 'Yveltal', 'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew'
 		],
 		validateTeam: function (team, format) {
-			if (team.length > 3) return ['You may only bring up to three PokÃ©mon.'];
+			if (team.length > 3) return ['You may only bring up to three Pokémon.'];
 		},
 		onBegin: function () {
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -4043,7 +4043,7 @@ exports.Formats = [
 			return -typeMod;
 		},
 		validateTeam: function (team, format) {
-			if (team.length > 3) return ['You may only bring up to three PokÃ©mon.'];
+			if (team.length > 3) return ['You may only bring up to three Pokémon.'];
 		},
 		onBegin: function () {
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -4070,7 +4070,7 @@ exports.Formats = [
 				for (var i in template.abilities) {
 					if (set.ability === template.abilities[i]) legalAbility = true;
 				}
-				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on PokÃ©mon that do not naturally have it.'];
+				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pokémon that do not naturally have it.'];
 			}
 		},
 		onModifyPokemon: function (pokemon) {
@@ -4136,7 +4136,7 @@ exports.Formats = [
 			var template = Tools.getTemplate(set.species);
 			var item = this.getItem(set.item);
 			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
-				return ['Eviolite is banned on PokÃ©mon with 350 or lower BST.'];
+				return ['Eviolite is banned on Pokémon with 350 or lower BST.'];
 			}
 		},
 		onModifyPokemon: function (pokemon) {
@@ -4229,7 +4229,7 @@ exports.Formats = [
 		validateSet: function (set) {
 			var template = this.getTemplate(set.species || set.name);
 			if (!template.evos || template.evos.length === 0 || !template.prevo) {
-				return [set.species + " is not the middle PokÃ©mon in an evolution chain."];
+				return [set.species + " is not the middle Pokémon in an evolution chain."];
 			}
 		},
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
