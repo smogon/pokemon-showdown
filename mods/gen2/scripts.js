@@ -968,6 +968,12 @@ exports.BattleScripts = {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && j < moveKeys.length) {
 				var moveid = toId(moveKeys[j]);
+				if (moveid.substr(0, 11) === 'hiddenpower') {
+					if (hasMove['hiddenpower']) continue;
+					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moveid] = true;
+				}
 				j++;
 				moves.push(moveid);
 			}
@@ -979,12 +985,6 @@ exports.BattleScripts = {
 				for (var k = 0; k < moves.length; k++) {
 					var move = this.getMove(moves[k]);
 					var moveid = move.id;
-					if (moveid.substr(0, 11) === 'hiddenpower') {
-						if (hasMove['hiddenpower']) continue;
-						hasMove['hiddenpower'] = true;
-					} else {
-						hasMove[moveid] = true;
-					}
 					if (!move.damage && !move.damageCallback) {
 						counter[move.category]++;
 					}
@@ -1006,6 +1006,7 @@ exports.BattleScripts = {
 					var moveid = moves[k];
 					var move = this.getMove(moveid);
 					var rejected = false;
+					if (moveid.substr(0, 11) === 'hiddenpower') moveid = 'hiddenpower';
 					if (hasMove[moveid]) rejected = true;
 					if (!template.essentialMove || moveid !== template.essentialMove) {
 						var isSetup = false;
