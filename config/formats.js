@@ -18,6 +18,15 @@ exports.Formats = [
 			this.p1.pokemonLeft = this.p1.pokemon.length;
 			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -25,7 +34,16 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "OU (no Mega)",
@@ -39,6 +57,15 @@ exports.Formats = [
 			for (var i = 0; i < this.p2.pokemon.length; i++) {
 				this.p2.pokemon[i].canMegaEvo = false;
 			}
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -46,7 +73,16 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Ban Mod'],
-		banlist: []
+		banlist: [],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "UU",
@@ -55,28 +91,64 @@ exports.Formats = [
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Alakazite', 'Altarianite', 'Diancite', 'Heracronite', 'Galladite', 'Gardevoirite', 'Lopunnite', 'Medichamite',
 			'Metagrossite', 'Pinsirite', 'Drizzle', 'Drought', 'Shadow Tag'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "UU (no Scald)",
 		section: "ORAS Singles",
 
 		ruleset: ['UU'],
-		banlist: ['Scald']
+		banlist: ['Scald'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "RU",
 		section: "ORAS Singles",
 
 		ruleset: ['UU'],
-		banlist: ['UU', 'BL2', 'Galladite', 'Houndoominite', 'Pidgeotite']
+		banlist: ['UU', 'BL2', 'Galladite', 'Houndoominite', 'Pidgeotite'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "NU",
 		section: "ORAS Singles",
 
 		ruleset: ['RU'],
-		banlist: ['RU', 'BL3', 'Glalitite', 'Steelixite']
+		banlist: ['RU', 'BL3', 'Glalitite', 'Steelixite'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "LC",
@@ -84,14 +156,32 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger']
+		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Anything Goes",
 		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal']
+		banlist: ['Unreleased', 'Illegal'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	/*{
 		name: "CAP Plasmanta Playtest",
@@ -118,6 +208,15 @@ exports.Formats = [
 			this.p1.pokemonLeft = this.p1.pokemon.length;
 			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -141,7 +240,16 @@ exports.Formats = [
 		section: "Random Battles (aka Randbats)",
 
 		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Unrated Random",
@@ -150,14 +258,32 @@ exports.Formats = [
 		team: 'random',
 		challengeShow: false,
 		rated: false,
-		ruleset: ['Random']
+		ruleset: ['Random'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Random (no PotD)",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'random',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "1v1 Random",
@@ -171,6 +297,15 @@ exports.Formats = [
 			this.p1.pokemonLeft = this.p1.pokemon.length;
 			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -179,7 +314,16 @@ exports.Formats = [
 
 		mod: 'uberrandom',
 		team: 'randomUber',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "High Tier Random",
@@ -187,7 +331,16 @@ exports.Formats = [
 
 		mod: 'hightierrandom',
 		team: 'randomHighTier',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Low Tier Random",
@@ -195,49 +348,112 @@ exports.Formats = [
 
 		mod: 'lowtierrandom',
 		team: 'randomLowTier',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "LC Random",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomLC',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Monotype Random",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomMonotype',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Generational Random",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomGenerational',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Hoenn Random",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomHoenn',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Hoenn Weather Random",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomHoennWeather',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Super Smash Bros. Random",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomSmashBros',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Winter Wonderland",
@@ -354,14 +570,32 @@ exports.Formats = [
 				}
 			}
 		},
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Community Random",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomCommunity',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Furry Random",
@@ -369,7 +603,16 @@ exports.Formats = [
 
 		mod: 'furryrandom',
 		team: 'randomFurry',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Metronome 3v3 Random",
@@ -384,6 +627,15 @@ exports.Formats = [
 			this.p1.pokemonLeft = this.p1.pokemon.length;
 			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -392,7 +644,16 @@ exports.Formats = [
 
 		mod: 'metronomerandom',
 		team: 'randomMetronome',
-		ruleset: ['Random (no PotD)']
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Doubles Random",
@@ -400,7 +661,16 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		team: 'randomDoubles',
-		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Triples Random",
@@ -408,14 +678,32 @@ exports.Formats = [
 
 		gameType: 'triples',
 		team: 'randomDoubles',
-		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
+		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Challenge Cup",
 		section: "Random Battles (aka Randbats)",
 
 		team: 'randomCC',
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "1v1 Challenge Cup",
@@ -429,6 +717,15 @@ exports.Formats = [
 			this.p1.pokemonLeft = this.p1.pokemon.length;
 			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -437,7 +734,16 @@ exports.Formats = [
 
 		team: 'randomHackmonsCC',
 		searchShow: false,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod']
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Doubles Challenge Cup",
@@ -446,7 +752,16 @@ exports.Formats = [
 		gameType: 'doubles',
 		team: 'randomCC',
 		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Triples Challenge Cup",
@@ -455,7 +770,16 @@ exports.Formats = [
 		gameType: 'triples',
 		team: 'randomCC',
 		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 
 	// XY Doubles
@@ -469,7 +793,16 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
 		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
 			'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal', 'Zekrom', 'Salamencite', 'Soul Dew', 'Dark Void'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Smogon Doubles Ubers",
@@ -477,7 +810,16 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal', 'Dark Void']
+		banlist: ['Unreleased', 'Illegal', 'Dark Void'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Smogon Doubles UU",
@@ -492,7 +834,16 @@ exports.Formats = [
 		'Politoed', 'Porygon2', 'Rotom-Wash', 'Sableye', 'Salamence', 'Scizor', 'Scrafty', 'Shaymin-Sky',
 		'Slowbro', 'Suicune', 'Swampert', 'Sylveon', 'Talonflame', 'Terrakion', 'Thundurus', 'Togekiss',
 		'Tyranitar', 'Venusaur', 'Volcarona', 'Whimsicott', 'Zapdos'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Battle Spot Doubles (VGC 2015)",
@@ -512,6 +863,15 @@ exports.Formats = [
 			this.p1.pokemonLeft = this.p1.pokemon.length;
 			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -540,7 +900,16 @@ exports.Formats = [
 		banlist: ['Illegal', 'Unreleased', 'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
 			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Soul Dew', 'Dark Void', 'Perish Song'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Battle Spot Triples",
@@ -552,6 +921,15 @@ exports.Formats = [
 		requirePentagon: true,
 		validateTeam: function (team, format) {
 			if (team.length < 6) return ['You must have six Pokémon.'];
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -577,7 +955,16 @@ exports.Formats = [
 		column: 2,
 
 		mod: 'hiddentype',
-		ruleset: ['OU']
+		ruleset: ['OU'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Seasonal] Super Staff Bros.",
@@ -3477,6 +3864,15 @@ exports.Formats = [
 					target.addVolatile('healblock');
 				};
 			}
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -3485,14 +3881,32 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['OU'],
-		banlist: ['Allow CAP']
+		banlist: ['Allow CAP'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Ability Clause', '-ate Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter']
+		banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "1v1",
@@ -3511,6 +3925,15 @@ exports.Formats = [
 			this.p1.pokemonLeft = this.p1.pokemon.length;
 			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -3521,7 +3944,16 @@ exports.Formats = [
 		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
 			'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Shaymin-Sky', 'Slowbronite', 'Soul Dew'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Tier Shift",
@@ -3529,14 +3961,32 @@ exports.Formats = [
 
 		mod: 'tiershift',
 		ruleset: ['OU'],
-		banlist: ['Chatter']
+		banlist: ['Chatter'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "PU",
 		section: "Other Metagames",
 
 		ruleset: ['NU'],
-		banlist: ['NU', 'BL4', 'Altarianite', 'Beedrillite', 'Lopunnite', 'Chatter']
+		banlist: ['NU', 'BL4', 'Altarianite', 'Beedrillite', 'Lopunnite', 'Chatter'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Inverse Battle",
@@ -3605,6 +4055,15 @@ exports.Formats = [
 				}
 				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pokémon that do not naturally have it.'];
 			}
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -3616,7 +4075,16 @@ exports.Formats = [
 			'Groudon', 'Ho-Oh', 'Keldeo', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Porygon-Z', 'Rayquaza',
 			'Reshiram', 'Shaymin-Sky', 'Sylveon', 'Xerneas', 'Yveltal', 'Zekrom', 'Altarianite', 'Gengarite', 'Kangaskhanite', "King's Rock",
 			'Lopunnite', 'Lucarionite', 'Mawilite', 'Metagrossite', 'Razor Fang', 'Salamencite', 'Slowbronite', 'Soul Dew'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "LC UU",
@@ -3628,7 +4096,16 @@ exports.Formats = [
 			'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Fletchling', 'Foongus', 'Gastly', 'Larvesta', 'Magnemite', 'Mienfoo',
 			'Munchlax', 'Onix', 'Pancham', 'Pawniard', 'Ponyta', 'Porygon', 'Pumpkaboo-Super', 'Scraggy', 'Slowpoke', 'Snivy',
 			'Snubbull', 'Spritzee', 'Staryu', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby', 'Vulpix', 'Zigzagoon', 'Shell Smash'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "350 Cup",
@@ -3644,6 +4121,15 @@ exports.Formats = [
 			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
 				return ['Eviolite is banned on Pokémon with 350 or lower BST.'];
 			}
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -3656,7 +4142,16 @@ exports.Formats = [
 		banlist: ['Gothita', 'Gothorita', 'Gothitelle', 'Sableye', 'Shedinja', 'Smeargle',
 			'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Gengarite', 'Kangaskhanite', 'Light Ball', 'Mawilite', 'Medichamite', 'Soul Dew', 'Thick Club',
 			'Huge Power', 'Pure Power'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Classic Hackmons",
@@ -3696,6 +4191,15 @@ exports.Formats = [
 				problems.push((set.name || set.species) + ' is higher than level 100.');
 			}
 			return problems;
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 	{
@@ -3712,7 +4216,16 @@ exports.Formats = [
 			}
 		},
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Chansey', 'Frogadier', 'Eviolite']
+		banlist: ['Chansey', 'Frogadier', 'Eviolite'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "OU Theorymon",
@@ -3720,7 +4233,16 @@ exports.Formats = [
 
 		mod: 'theorymon',
 		searchShow: false,
-		ruleset: ['OU']
+		ruleset: ['OU'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Gen-NEXT OU",
@@ -3729,14 +4251,16 @@ exports.Formats = [
 		mod: 'gennext',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
-		banlist: ['Uber']
-	},
-	{
-		name: "OU (No Megas)",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew', 'Abomasite', 'Absolite', 'Aerodactylite', 'Aggronite', 'Alakazite', 'Altarianite', 'Ampharosite', 'Audinite', 'Banettite', 'Beedrillite', 'Blastoisinite', 'Blazikenite', 'Cameruptite', 'Charizardite X', 'Charizardite Y', 'Diancite', 'Galladite', 'Garchompite', 'Gardevoirite', 'Gengarite', 'Glalitite', 'Gyaradosite', 'Heracronite', 'Houndoominite', 'Kangaskhanite', 'Latiasite', 'Latiosite', 'Lopunnite', 'Lucarionite', 'Manectite', 'Mawilite', 'Medichamite', 'Metagrossite', 'Mewtwonite X', 'Mewtwonite Y', 'Pidgeotite', 'Pinsirite', 'Sablenite', 'Salamencite', 'Sceptilite', 'Scizorite', 'Sharpedonite', 'Slowbronite', 'Steelixite', 'Swampertite', 'Tyranitarite', 'Venusaurite']
+		banlist: ['Uber'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Snowy OU",
@@ -3747,6 +4271,15 @@ exports.Formats = [
 		onBegin: function() {
 			this.setWeather('Hail');
 			delete this.weatherData.duration;
+		},
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
 		}
 	},
 
@@ -3760,7 +4293,16 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 5] Ubers",
@@ -3768,7 +4310,16 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
-		banlist: []
+		banlist: [],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 5] UU",
@@ -3776,7 +4327,16 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] OU'],
-		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Snow Warning']
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Snow Warning'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 5] RU",
@@ -3784,7 +4344,16 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] UU'],
-		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Snow Warning']
+		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Snow Warning'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 5] NU",
@@ -3792,7 +4361,16 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] RU'],
-		banlist: ['RU', 'BL3', 'Prankster + Assist']
+		banlist: ['RU', 'BL3', 'Prankster + Assist'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 5] LC",
@@ -3801,7 +4379,16 @@ exports.Formats = [
 		mod: 'gen5',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Gligar', 'Scyther', 'Sneasel', 'Tangela']
+		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Gligar', 'Scyther', 'Sneasel', 'Tangela'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 5] GBU Singles",
@@ -3820,7 +4407,16 @@ exports.Formats = [
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		banlist: ['Sky Drop', 'Dark Void']
+		banlist: ['Sky Drop', 'Dark Void'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 5] Custom Game",
@@ -3861,7 +4457,16 @@ exports.Formats = [
 			'Reshiram',
 			'Zekrom',
 			'Kyurem-White'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 5] GBU Doubles",
@@ -3878,7 +4483,16 @@ exports.Formats = [
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		banlist: ['Sky Drop', 'Dark Void']
+		banlist: ['Sky Drop', 'Dark Void'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 5] Doubles Custom Game",
@@ -3905,7 +4519,16 @@ exports.Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
+		banlist: ['Uber'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 4] Ubers",
@@ -3913,7 +4536,16 @@ exports.Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Arceus']
+		banlist: ['Arceus'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 4] UU",
@@ -3921,7 +4553,16 @@ exports.Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'OU', 'BL']
+		banlist: ['Uber', 'OU', 'BL'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 4] LC",
@@ -3930,7 +4571,16 @@ exports.Formats = [
 		mod: 'gen4',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Little Cup'],
-		banlist: ['Berry Juice', 'DeepSeaTooth', 'Dragon Rage', 'Sonic Boom', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma']
+		banlist: ['Berry Juice', 'DeepSeaTooth', 'Dragon Rage', 'Sonic Boom', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 4] Custom Game",
@@ -3951,7 +4601,16 @@ exports.Formats = [
 
 		mod: 'gen3',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Smeargle + Ingrain']
+		banlist: ['Uber', 'Smeargle + Ingrain'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 3] Ubers",
@@ -3959,7 +4618,16 @@ exports.Formats = [
 
 		mod: 'gen3',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Wobbuffet + Leftovers']
+		banlist: ['Wobbuffet + Leftovers'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 3] Custom Game",
@@ -3976,7 +4644,16 @@ exports.Formats = [
 
 		mod: 'gen2',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
+		banlist: ['Uber'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 2] Custom Game",
@@ -3993,7 +4670,16 @@ exports.Formats = [
 
 		mod: 'gen1',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
+		banlist: ['Uber'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 1] OU (tradeback)",
@@ -4005,7 +4691,16 @@ exports.Formats = [
 		banlist: ['Uber', 'Unreleased', 'Illegal',
 			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
 			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 1] Random Battle",
@@ -4013,7 +4708,16 @@ exports.Formats = [
 
 		mod: 'gen1',
 		team: 'random',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 1] Stadium",
@@ -4025,7 +4729,16 @@ exports.Formats = [
 		banlist: ['Uber',
 			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
 			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember'
-		]
+		],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "[Gen 1] Custom Game",
@@ -4035,5 +4748,21 @@ exports.Formats = [
 		searchShow: false,
 		debug: true,
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
-	}
+	},
+	{
+		name: "OU (No Inverse)",
+		section: "No Inverse",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
+	},
+	{
+		name: "[Gen 4] OU (No Inverse)",
+		section: "No Inverse",
+		column: 3,
+
+		mod: 'gen4',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber']
+	},
 ];
