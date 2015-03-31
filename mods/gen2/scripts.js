@@ -1114,7 +1114,7 @@ exports.BattleScripts = {
 					counter[move.category]++;
 
 					// Check for hidden power DVs
-					if (move.id === 'hiddenpower') {
+					if (moveid === 'hiddenpower') {
 						var HPivs = this.getType(move.type).HPivs;
 						for (var iv in HPivs) {
 							ivs[iv] = HPivs[iv];
