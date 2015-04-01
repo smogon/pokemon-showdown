@@ -644,7 +644,7 @@ exports.BattleFormats = {
 	finaldestinationclause: {
 		effectType: 'Rule',
 		onStart: function () {
-			this.add('rule', 'Final Destination Clause: Final Destination only. No items. Xerneas only. Outrage only.');
+			this.add('rule', 'Final Destination Clause: No items. Xerneas only. Final Destination.');
 		}
 	}
 };
