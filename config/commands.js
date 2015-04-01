@@ -1373,6 +1373,11 @@ var commands = exports.commands = {
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">Other Metagame of the Month</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Current OMotM: Hidden Type</a><br />";
 		}
+		if (target === 'all' || target === 'omofthedecade' || target === 'omotd' || target === 'decade') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3534206/\">Other Metagame of the Decade</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3504246/\">Current OMotD: Final Destination</a><br />";
+		}
 		if (target === 'all' || target === 'seasonal') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a><br />";
