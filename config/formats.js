@@ -357,6 +357,7 @@ exports.Formats = [
 				var abilityMap = Object.create(null);
 				for (var speciesid in Tools.data.Pokedex) {
 					var pokemon = Tools.data.Pokedex[speciesid];
+					if (pokemon.num < 1) continue;
 					for (var key in pokemon.abilities) {
 						var abilityId = toId(pokemon.abilities[key]);
 						if (abilityMap[abilityId]) {
@@ -691,11 +692,8 @@ exports.Formats = [
 			var sketch = false;
 			var blockedHM = false;
 
-			var sometimesPossible = false;
-
 			var sources = [];
 			var sourcesBefore = 0;
-			var noPastGen = !!format.requirePentagon;
 			var noFutureGen = this.gen >= 3 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
 
 			do {
@@ -703,7 +701,6 @@ exports.Formats = [
 				if (lsetData.ignoreMoveType && this.getMove(move).type === lsetData.ignoreMoveType) return false;
 				if (template.learnset) {
 					if (template.learnset[move] || template.learnset['sketch']) {
-						sometimesPossible = true;
 						var lset = template.learnset[move];
 						if (!lset || template.speciesid === 'smeargle') {
 							lset = template.learnset['sketch'];
@@ -714,7 +711,6 @@ exports.Formats = [
 
 						for (var i = 0, len = lset.length; i < len; i++) {
 							var learned = lset[i];
-							if (noPastGen && learned.charAt(0) !== '6') continue;
 							if (noFutureGen && parseInt(learned.charAt(0), 10) > this.gen) continue;
 							if (learned.charAt(0) !== '6' && isHidden && !this.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
 								incompatibleHidden = true;
@@ -800,7 +796,6 @@ exports.Formats = [
 			}
 
 			if (!sourcesBefore && !sources.length) {
-				if (noPastGen && sometimesPossible) return {type:'pokebank'};
 				if (incompatibleHidden) return {type:'incompatible'};
 				return true;
 			}
