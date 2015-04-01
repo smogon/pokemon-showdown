@@ -362,6 +362,9 @@ exports.Formats = [
 				if (!pokemonWithAbility) pokemonWithAbility = createAbilityMap();
 				return pokemonWithAbility[toId(ability)] || [];
 			};
+			var restrictedPokemon = {
+				'Sableye':1, 'Smeargle':1
+			};
 			var restrictedAbilities = {
 				'Huge Power':1, 'Imposter':1, 'Parental Bond':1, 'Pure Power':1, 'Shadow Tag':1, 'Wonder Guard':1
 			};
@@ -500,8 +503,8 @@ exports.Formats = [
 					isIncompatibility = false;
 					template = this.getTemplate(pokemonPool[it]);
 					if (originalTemplate.species !== template.species) {
-						if (template.species === 'Smeargle') {
-							problems.push(name + " can't inherit from Smeargle.");
+						if (template.species in restrictedPokemon) {
+							problems.push(name + " can't inherit from " + template.species + ".");
 						} else if (ability.name in restrictedAbilities &&
 							ability.name !== originalTemplate.abilities['0'] &&
 							ability.name !== originalTemplate.abilities['1'] &&
@@ -546,9 +549,6 @@ exports.Formats = [
 								isIncompatibility = true;
 							} else if (problem.type === 'oversketched') {
 								problemString = problemString.concat(" because it can only sketch " + problem.maxSketches + " move" + (problem.maxSketches > 1 ? "s" : "") + ".");
-								isIncompatibility = true;
-							} else if (problem.type === 'pokebank') {
-								problemString = problemString.concat(" because it's only obtainable from a previous generation.");
 								isIncompatibility = true;
 							} else {
 								problemString = problemString.concat(".");
