@@ -51,13 +51,6 @@ exports.Formats = [
 		banlist: []
 	},
 	{
-		name: "Ubers (suspect test)",
-		section: "ORAS Singles",
-
-		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Ban Mod'],
-		banlist: []
-	},
-	{
 		name: "UU",
 		section: "ORAS Singles",
 
