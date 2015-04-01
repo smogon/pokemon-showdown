@@ -148,7 +148,7 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	nidoranm: {
-		randomBattleMoves: ["earthquake","icebeam","thunder","lovelykiss","fireblast"],
+		randomBattleMoves: ["thunder","lovelykiss","curse","bodyslam"],
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["leer","tackle","lovelykiss"]},
 			{"generation":2,"level":5,"moves":["leer","tackle","morningsun"]},
