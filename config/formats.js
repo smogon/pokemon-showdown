@@ -297,6 +297,7 @@ exports.Formats = [
 	{
 		name: "Inheritance",
 		section: "OM of the Month",
+		column: 2,
 
 		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Sleep Clause Mod', 'Cancel Mod'],
 		banlist: ['Soul Dew', 'Gengarite', 'Kangaskhanite', 'Blazikenite', 'Mawilite', 'Salamencite',
