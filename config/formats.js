@@ -292,7 +292,10 @@ exports.Formats = [
 		column: 2,
 
 		team: 'randomFinalDestination',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Final Destination Clause']
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Final Destination Clause'],
+		onModifyMove: function (move) {
+			move.willCrit = false;
+		}
 	},
 	{
 		name: "Inheritance",

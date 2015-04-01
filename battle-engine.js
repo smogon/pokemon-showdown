@@ -3068,6 +3068,7 @@ Battle = (function () {
 				move.crit = (this.random(critMult[move.critRatio]) === 0);
 			}
 		}
+
 		if (move.crit) {
 			move.crit = this.runEvent('CriticalHit', target, null, move);
 		}
