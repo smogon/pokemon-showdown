@@ -3044,7 +3044,7 @@ exports.BattleScripts = {
 		var excludedTiers = {'LC':1, 'LC Uber':1, 'NFE':1};
 		var allowedNFE = {'Chansey':1, 'Doublade':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1};
 		var typePool = Object.keys(this.data.TypeChart);
-		var type = typePool[this.random(typePool.length))];
+		var type = typePool[this.random(typePool.length)];
 
 		var pokemonPool = [];
 		for (var id in this.data.FormatsData) {
