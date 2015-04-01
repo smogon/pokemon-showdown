@@ -3849,5 +3849,15 @@ exports.BattleScripts = {
 	},
 	randomFinalDestinationTeam: function (side) {
 		return [{species: 'Xerneas', name: 'Fox', ability: 'Fairy Aura', item: '', evs: {hp:4, atk:252, spd:252}, nature: 'Brave', moves: ['Outrage']}];
+	},
+	randomMrBonesWildRideTeam: function (mySides) {
+		return [
+			{species: 'Slowbro', name: 'Funbro #1', ability: 'Harvest', item: 'Leppa Berry', evs: {hp:252, def:128, spd:128}, nature: 'Bold', moves: ['healpulse', 'slackoff', 'recycle', 'block']},
+			{species: 'Slowbro', name: 'Funbro #2', ability: 'Harvest', item: 'Leppa Berry', evs: {hp:252, def:128, spd:128}, nature: 'Bold', moves: ['healpulse', 'slackoff', 'recycle', 'block']},
+			{species: 'Slowbro', name: 'Funbro #3', ability: 'Harvest', item: 'Leppa Berry', evs: {hp:252, def:128, spd:128}, nature: 'Bold', moves: ['healpulse', 'slackoff', 'recycle', 'block']},
+			{species: 'Slowbro', name: 'Funbro #4', ability: 'Harvest', item: 'Leppa Berry', evs: {hp:252, def:128, spd:128}, nature: 'Bold', moves: ['healpulse', 'slackoff', 'recycle', 'block']},
+			{species: 'Slowbro', name: 'Funbro #5', ability: 'Harvest', item: 'Leppa Berry', evs: {hp:252, def:128, spd:128}, nature: 'Bold', moves: ['healpulse', 'slackoff', 'recycle', 'block']},
+			{species: 'Slowbro', name: 'Funbro #6', ability: 'Harvest', item: 'Leppa Berry', evs: {hp:252, def:128, spd:128}, nature: 'Bold', moves: ['healpulse', 'slackoff', 'recycle', 'block']}
+		];
 	}
 };
