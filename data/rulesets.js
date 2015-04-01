@@ -640,5 +640,11 @@ exports.BattleFormats = {
 				if (this.sides[1].pokemon[i].speciesid === 'rayquaza') this.sides[1].pokemon[i].canMegaEvo = false;
 			}
 		}
+	},
+	finaldestinationclause: {
+		effectType: 'Rule',
+		onStart: function () {
+			this.add('rule', 'Final Destination Clause: Final Destination only. No items. Xerneas only. Outrage only.');
+		}
 	}
 };
