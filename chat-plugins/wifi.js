@@ -296,7 +296,7 @@ var commands = {
 		if (Object.keys(options.answers).length <= 0) return this.sendReply("You must specify at least one answer and cannot contain any special characters.");
 
 		spawnGiveaway('question', user, targetUser, room, options);
-		this.privateModCommand("(" + user.name + " has started a question giveaway.)");
+		this.privateModCommand("(" + user.name + " started a question giveaway for " + this.targetUsername + ")");
 	},
 	changeanswer: 'changequestion',
 	changequestion: function (target, room, user, conn, cmd) {
@@ -353,7 +353,7 @@ var commands = {
 		if (options.maxwinners > 10 || options.maxwinners < 1) return this.sendReply("The lottery giveaway can have a minimum of 1 and maximum of 10 winners.");
 
 		spawnGiveaway('lottery', user, targetUser, room, options);
-		this.privateModCommand("(" + user.name + " has started a lottery giveaway.)");
+		this.privateModCommand("(" + user.name + " started a lottery giveaway for " + this.targetUsername + ")");
 	},
 	leavelotto: 'join',
 	leavelottery: 'join',
