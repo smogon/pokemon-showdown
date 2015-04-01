@@ -161,6 +161,16 @@ exports.Formats = [
 		]
 	},
 	{
+		name: "Smogon Doubles (suspect test)",
+		section: "ORAS Doubles",
+
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
+		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
+			'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal', 'Zekrom', 'Salamencite', 'Soul Dew'
+		]
+	},
+	{
 		name: "Smogon Doubles Ubers",
 		section: "ORAS Doubles",
 
