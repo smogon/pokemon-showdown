@@ -287,12 +287,543 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Hidden Type",
+		name: "Inheritance",
 		section: "OM of the Month",
 		column: 2,
 
-		mod: 'hiddentype',
-		ruleset: ['OU']
+		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause', 'Sleep Clause Mod', 'Cancel Mod'],
+		banlist: ['Soul Dew', 'Gengarite', 'Kangaskhanite', 'Blazikenite', 'Mawilite', 'Salamencite',
+			'Gengar-Mega', 'Kangaskhan-Mega', 'Mewtwo', 'Lugia', 'Ho-Oh', 'Mawile-Mega', 'Salamence-Mega',
+			'Kyogre', 'Groudon', 'Rayquaza', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed',
+			'Dialga', 'Palkia', 'Giratina', 'Giratina-Origin', 'Darkrai', 'Shaymin-Sky', 'Arceus', 'Reshiram', 'Zekrom',
+			'Kyurem-White', 'Xerneas', 'Yveltal',
+			'Slaking', 'Regigigas', 'Shedinja', 'Keldeo', 'Archeops', 'Kyurem-Black'
+		],
+		validateSet: (function () {
+			var pokemonWithAbility;
+			var createAbilityMap = function () {
+				var abilityMap = Object.create(null);
+				for (var speciesid in Tools.data.Pokedex) {
+					var pokemon = Tools.data.Pokedex[speciesid];
+					for (var key in pokemon.abilities) {
+						var abilityId = toId(pokemon.abilities[key]);
+						if (abilityMap[abilityId]) {
+							abilityMap[abilityId].push(speciesid);
+						} else {
+							abilityMap[abilityId] = [speciesid];
+						}
+					}
+				}
+				return abilityMap;
+			};
+			var getPokemonWithAbility = function (ability) {
+				if (!pokemonWithAbility) pokemonWithAbility = createAbilityMap();
+				return pokemonWithAbility[toId(ability)] || [];
+			};
+			var restrictedAbilities = {
+				'Wonder Guard':1, 'Pure Power':1, 'Huge Power':1,
+				'Shadow Tag':1, 'Imposter':1, 'Parental Bond':1
+			};
+			return function (set, teamHas) {
+				var format = this.getFormat('inheritance');
+				var problems = [];
+				var inheritFailed = [];
+				var isIncompatibility;
+				var isHidden = false;
+				var lsetData = {set:set, format:format};
+				var name = set.name || set.species;
+
+				var setHas = {};
+
+				if (format.ruleset) {
+					for (var i = 0; i < format.ruleset.length; i++) {
+						var subformat = this.getFormat(format.ruleset[i]);
+						if (subformat.validateSet) {
+							problems = problems.concat(subformat.validateSet.call(this, set, format) || []);
+						}
+					}
+				}
+				var originalTemplate = this.getTemplate(set.species);
+				var template = originalTemplate;
+
+				var item = this.getItem(set.item);
+				var ability = this.getAbility(set.ability);
+
+				if (!ability.name) return [name + " needs to have an ability."];
+
+				var banlistTable = this.getBanlistTable(format);
+
+				var check = template.id;
+				var clause = '';
+				setHas[check] = true;
+				if (banlistTable[check]) {
+					clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
+					problems.push(set.species + ' is banned' + clause + '.');
+				} else if (!this.data.FormatsData[check] || !this.data.FormatsData[check].tier) {
+					check = toId(template.baseSpecies);
+					if (banlistTable[check]) {
+						clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
+						problems.push(template.baseSpecies + ' is banned' + clause + '.');
+					}
+				}
+
+				check = toId(set.ability);
+				setHas[check] = true;
+				if (banlistTable[check]) {
+					clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
+					problems.push(name + "'s ability " + set.ability + " is banned" + clause + ".");
+				}
+				check = toId(set.item);
+				setHas[check] = true;
+				if (banlistTable[check]) {
+					clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
+					problems.push(name + "'s item " + set.item + " is banned" + clause + ".");
+				}
+				if (banlistTable['Unreleased'] && item.isUnreleased) {
+					problems.push(name + "'s item " + set.item + " is unreleased.");
+				}
+
+				for (var i = 0; i < set.moves.length; i++) {
+					var move = this.getMove(string(set.moves[i]));
+					set.moves[i] = move.name;
+					check = move.id;
+					setHas[check] = true;
+					if (banlistTable[check]) {
+						clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
+						problems.push(name + "'s move " + set.moves[i] + " is banned" + clause + ".");
+					}
+
+					if (banlistTable['Unreleased']) {
+						if (move.isUnreleased) problems.push(name + "'s move " + set.moves[i] + " is unreleased.");
+					}
+				}
+
+				if (set.level < template.evoLevel) {
+					// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
+					problems.push(name + " must be at least level " + template.evoLevel + " to be evolved.");
+				}
+
+				if (problems.length) return problems;
+
+				var pokemonPool = getPokemonWithAbility(ability);
+
+				for (var it = 0; it < pokemonPool.length; it++) {
+					problems = [];
+					isIncompatibility = false;
+					template = this.getTemplate(pokemonPool[it]);
+					if (originalTemplate.species !== template.species) {
+						if (template.species === 'Smeargle') {
+							problems.push(name + " can't inherit from Smeargle.");
+						} else if (ability.name in restrictedAbilities &&
+							ability.name !== originalTemplate.abilities['0'] &&
+							ability.name !== originalTemplate.abilities['1'] &&
+							ability.name !== originalTemplate.abilities['H']) {
+							problems.push(name + " can't have " + set.ability + ".");
+						}
+					}
+					var check;
+					var clause = '';
+					if (banlistTable['Unreleased'] && template.isUnreleased) {
+						if (!format.requirePentagon || (template.eggGroups[0] === 'Undiscovered' && !template.evos)) {
+							problems.push(name + " (" + template.species + ") is unreleased.");
+						}
+					}
+
+					if (ability.name === template.abilities['H']) {
+						isHidden = true;
+
+						if (template.unreleasedHidden && banlistTable['illegal']) {
+							problems.push(name + "'s hidden ability is unreleased.");
+						} else if (this.gen === 5 && set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
+							problems.push(name + " must be at least level 10 with its hidden ability.");
+						}
+						if (template.maleOnlyHidden) {
+							set.gender = 'M';
+							lsetData.sources = ['5D'];
+						}
+					}
+
+					for (var i = 0; i < set.moves.length; i++) {
+						var move = this.getMove(set.moves[i]);
+
+						var problem = format.checkLearnset.call(this, move, template, lsetData);
+						if (problem) {
+							var problemString = name + " can't learn " + move.name;
+							if (problem.type === 'incompatible') {
+								if (isHidden) {
+									problemString = problemString.concat(" because it's incompatible with its ability or another move.");
+								} else {
+									problemString = problemString.concat(" because it's incompatible with another move.");
+								}
+								isIncompatibility = true;
+							} else if (problem.type === 'oversketched') {
+								problemString = problemString.concat(" because it can only sketch " + problem.maxSketches + " move" + (problem.maxSketches > 1 ? "s" : "") + ".");
+								isIncompatibility = true;
+							} else if (problem.type === 'pokebank') {
+								problemString = problemString.concat(" because it's only obtainable from a previous generation.");
+								isIncompatibility = true;
+							} else {
+								problemString = problemString.concat(".");
+							}
+							problems.push(problemString);
+						}
+					}
+
+					if (lsetData.sources && lsetData.sources.length === 1 && !lsetData.sourcesBefore) {
+						// we're restricted to a single source
+						var source = lsetData.sources[0];
+						if (source.substr(1, 1) === 'S') {
+							// it's an event
+							var eventData = null;
+							var splitSource = source.substr(2).split(' ');
+							var eventTemplate = this.getTemplate(splitSource[1]);
+							if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0], 10)];
+							if (eventData) {
+								if (eventData.nature && eventData.nature !== set.nature) {
+									problems.push(name + " must have a " + eventData.nature + " nature because it has a move only available from a specific event.");
+								}
+								if (eventData.shiny) {
+									set.shiny = true;
+								}
+								if (eventData.generation < 5) eventData.isHidden = false;
+								if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
+									problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific event.");
+								}
+								if (this.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
+									problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it has a move only available from a specific event.");
+								}
+								if (eventData.gender) {
+									set.gender = eventData.gender;
+								}
+								if (eventData.level && set.level < eventData.level) {
+									problems.push(name + " must be at least level " + eventData.level + " because it has a move only available from a specific event.");
+								}
+							}
+							isHidden = false;
+						}
+					}
+					if (isHidden && lsetData.sourcesBefore) {
+						if (!lsetData.sources && lsetData.sourcesBefore < 5) {
+							problems.push(name + " has a hidden ability - it can't have moves only learned before gen 5.");
+						} else if (lsetData.sources && template.gender && template.gender !== 'F' && !{'Nidoran-M':1, 'Nidorino':1, 'Nidoking':1, 'Volbeat':1}[template.species]) {
+							var compatibleSource = false;
+							for (var i = 0, len = lsetData.sources.length; i < len; i++) {
+								if (lsetData.sources[i].charAt(1) === 'E' || (lsetData.sources[i].substr(0, 2) === '5D' && set.level >= 10)) {
+									compatibleSource = true;
+									break;
+								}
+							}
+							if (!compatibleSource) {
+								problems.push(name + " has moves incompatible with its hidden ability.");
+							}
+						}
+					}
+					if (!lsetData.sources && lsetData.sourcesBefore <= 3 && this.getAbility(set.ability).gen === 4 && !template.prevo && this.gen <= 5) {
+						problems.push(name + " has a gen 4 ability and isn't evolved - it can't use anything from gen 3.");
+					}
+					if (!lsetData.sources && lsetData.sourcesBefore >= 3 && (isHidden || this.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
+						var oldAbilities = this.mod('gen' + lsetData.sourcesBefore).getTemplate(template.species).abilities;
+						if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
+							problems.push(name + " has moves incompatible with its ability.");
+						}
+					}
+
+					setHas[toId(template.tier)] = true;
+					if (banlistTable[template.tier]) {
+						problems.push(name + " is in " + template.tier + ", which is banned.");
+					}
+
+					if (teamHas) {
+						for (var i in setHas) {
+							teamHas[i] = true;
+						}
+					}
+					for (var i = 0; i < format.setBanTable.length; i++) {
+						var bannedCombo = true;
+						for (var j = 0; j < format.setBanTable[i].length; j++) {
+							if (!setHas[format.setBanTable[i][j]]) {
+								bannedCombo = false;
+								break;
+							}
+						}
+						if (bannedCombo) {
+							clause = format.name ? " by " + format.name : '';
+							problems.push(name + " has the combination of " + format.setBanTable[i].join(' + ') + ", which is banned" + clause + ".");
+						}
+					}
+
+					if (!problems.length) {
+						if (set.forcedLevel) set.level = set.forcedLevel;
+						return false;
+					}
+
+					if (isIncompatibility) {
+						inheritFailed.push({
+							species: template.species,
+							problems: problems
+						});
+					}
+				}
+
+				switch (inheritFailed.length) {
+				case 0:
+					return [name + " has an illegal Inheritance set."];
+				case 1:
+					return [name + " has an illegal set (incompatibility) inherited from " + inheritFailed[0].species].concat(inheritFailed[0].problems);
+				case 2:
+					return [name + " has an illegal set (incompatibility) inherited either from " + inheritFailed[0].species + " or " + inheritFailed[1].species];
+				default:
+					return [name + " has an illegal set due to incompatibility."];
+				}
+			};
+		})(),
+		checkLearnset: function (move, template, lsetData) {
+			move = toId(move);
+			template = this.getTemplate(template);
+
+			lsetData = lsetData || {};
+			var set = (lsetData.set || (lsetData.set = {}));
+			var format = (lsetData.format || (lsetData.format = {}));
+			var alreadyChecked = {};
+			var level = set.level || 100;
+
+			var isHidden = false;
+			if (set.ability && this.getAbility(set.ability).name === template.abilities['H']) isHidden = true;
+			var incompatibleHidden = false;
+
+			var limit1 = true;
+			var sketch = false;
+			var blockedHM = false;
+
+			var sometimesPossible = false; // is this move in the learnset at all?
+
+			// This is a pretty complicated algorithm
+
+			// Abstractly, what it does is construct the union of sets of all
+			// possible ways this pokemon could be obtained, and then intersect
+			// it with a the pokemon's existing set of all possible ways it could
+			// be obtained. If this intersection is non-empty, the move is legal.
+
+			// We apply several optimizations to this algorithm. The most
+			// important is that with, for instance, a TM move, that Pokemon
+			// could have been obtained from any gen at or before that TM's gen.
+			// Instead of adding every possible source before or during that gen,
+			// we keep track of a maximum gen variable, intended to mean "any
+			// source at or before this gen is possible."
+
+			// set of possible sources of a pokemon with this move, represented as an array
+			var sources = [];
+			// the equivalent of adding "every source at or before this gen" to sources
+			var sourcesBefore = 0;
+			var noPastGen = !!format.requirePentagon;
+			// since Gen 3, Pokemon cannot be traded to past generations
+			var noFutureGen = this.gen >= 3 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
+
+			do {
+				alreadyChecked[template.speciesid] = true;
+				if (lsetData.ignoreMoveType && this.getMove(move).type === lsetData.ignoreMoveType) return false;
+				if (template.learnset) {
+					if (template.learnset[move] || template.learnset['sketch']) {
+						sometimesPossible = true;
+						var lset = template.learnset[move];
+						if (!lset || template.speciesid === 'smeargle') {
+							lset = template.learnset['sketch'];
+							sketch = true;
+							// Chatter, Struggle and Magikarp's Revenge cannot be sketched
+							if (move in {'chatter':1, 'struggle':1, 'magikarpsrevenge':1}) return true;
+						}
+						if (typeof lset === 'string') lset = [lset];
+
+						for (var i = 0, len = lset.length; i < len; i++) {
+							var learned = lset[i];
+							if (noPastGen && learned.charAt(0) !== '6') continue;
+							if (noFutureGen && parseInt(learned.charAt(0), 10) > this.gen) continue;
+							if (learned.charAt(0) !== '6' && isHidden && !this.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
+								// check if the Pokemon's hidden ability was available
+								incompatibleHidden = true;
+								continue;
+							}
+							if (!template.isNonstandard) {
+								// HMs can't be transferred
+								if (this.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
+								if (this.gen >= 5 && learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+								// Defog and Whirlpool can't be transferred together
+								if (this.gen >= 5 && move in {'defog':1, 'whirlpool':1} && learned.charAt(0) <= 4) blockedHM = true;
+							}
+							if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1}) {
+								// gen 4-6 level-up moves
+								if (level >= parseInt(learned.substr(2), 10)) {
+									// we're past the required level to learn it
+									return false;
+								}
+								if (!template.gender || template.gender === 'F') {
+									// available as egg move
+									learned = learned.charAt(0) + 'Eany';
+								} else {
+									// this move is unavailable, skip it
+									continue;
+								}
+							}
+							if (learned.charAt(1) in {L:1, M:1, T:1}) {
+								if (learned.charAt(0) === '6') {
+									// current-gen TM or tutor moves:
+									// always available
+									return false;
+								}
+								// past-gen level-up, TM, or tutor moves:
+								// available as long as the source gen was or was before this gen
+								limit1 = false;
+								sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
+							} else if (learned.charAt(1) in {E:1, S:1, D:1}) {
+								// egg, event, or DW moves:
+								// only if that was the source
+								if (learned.charAt(1) === 'E') {
+									// it's an egg move, so we add each pokemon that can be bred with to its sources
+									if (learned.charAt(0) === '6') {
+										// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
+										learned = '6E' + (template.prevo ? template.id : '');
+										sources.push(learned);
+										continue;
+									}
+									var eggGroups = template.eggGroups;
+									if (!eggGroups) continue;
+									if (eggGroups[0] === 'Undiscovered') eggGroups = this.getTemplate(template.evos[0]).eggGroups;
+									var atLeastOne = false;
+									var fromSelf = (learned.substr(1) === 'Eany');
+									learned = learned.substr(0, 2);
+									for (var templateid in this.data.Pokedex) {
+										var dexEntry = this.getTemplate(templateid);
+										if (
+											// CAP pokemon can't breed
+											!dexEntry.isNonstandard &&
+											// can't breed mons from future gens
+											dexEntry.gen <= parseInt(learned.charAt(0), 10) &&
+											// genderless pokemon can't pass egg moves
+											(dexEntry.gender !== 'N' || this.gen <= 1 && dexEntry.gen <= 1)) {
+											if (
+												// chainbreeding
+												fromSelf ||
+												// otherwise parent must be able to learn the move
+												!alreadyChecked[dexEntry.speciesid] && dexEntry.learnset && (dexEntry.learnset[move] || dexEntry.learnset['sketch'])) {
+												if (dexEntry.eggGroups.intersect(eggGroups).length) {
+													// we can breed with it
+													atLeastOne = true;
+													sources.push(learned + dexEntry.id);
+												}
+											}
+										}
+									}
+									// chainbreeding with itself from earlier gen
+									if (!atLeastOne) sources.push(learned + template.id);
+									// Egg move tradeback for gens 1 and 2.
+									if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
+								} else if (learned.charAt(1) === 'S') {
+									// Event Pokémon:
+									//	Available as long as the past gen can get the Pokémon and then trade it back.
+									sources.push(learned + ' ' + template.id);
+									if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
+								} else {
+									// DW Pokemon are at level 10 or at the evolution level
+									var minLevel = (template.evoLevel && template.evoLevel > 10) ? template.evoLevel : 10;
+									if (set.level < minLevel) continue;
+									sources.push(learned);
+								}
+							}
+						}
+					}
+					if (format.mimicGlitch && template.gen < 5) {
+						// include the Mimic Glitch when checking this mon's learnset
+						var glitchMoves = {metronome:1, copycat:1, transform:1, mimic:1, assist:1};
+						var getGlitch = false;
+						for (var i in glitchMoves) {
+							if (template.learnset[i]) {
+								if (!(i === 'mimic' && this.getAbility(set.ability).gen === 4 && !template.prevo)) {
+									getGlitch = true;
+									break;
+								}
+							}
+						}
+						if (getGlitch) {
+							sourcesBefore = Math.max(sourcesBefore, 4);
+							if (this.getMove(move).gen < 5) {
+								limit1 = false;
+							}
+						}
+					}
+				}
+				// also check to see if the mon's prevo or freely switchable formes can learn this move
+				if (!template.learnset && template.baseSpecies !== template.species) {
+					// forme takes precedence over prevo only if forme has no learnset
+					template = this.getTemplate(template.baseSpecies);
+				} else if (template.prevo) {
+					template = this.getTemplate(template.prevo);
+					if (template.gen > Math.max(2, this.gen)) template = null;
+					if (template && !template.abilities['H']) isHidden = false;
+				} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem' && template.baseSpecies !== 'Pikachu') {
+					template = this.getTemplate(template.baseSpecies);
+				} else {
+					template = null;
+				}
+			} while (template && template.species && !alreadyChecked[template.speciesid]);
+
+			if (limit1 && sketch) {
+				// limit 1 sketch move
+				if (lsetData.sketchMove) {
+					return {type:'oversketched', maxSketches: 1};
+				}
+				lsetData.sketchMove = move;
+			}
+
+			// Now that we have our list of possible sources, intersect it with the current list
+			if (!sourcesBefore && !sources.length) {
+				if (noPastGen && sometimesPossible) return {type:'pokebank'};
+				if (incompatibleHidden) return {type:'incompatible'};
+				return true;
+			}
+			if (!sources.length) sources = null;
+			if (sourcesBefore || lsetData.sourcesBefore) {
+				// having sourcesBefore is the equivalent of having everything before that gen
+				// in sources, so we fill the other array in preparation for intersection
+				var learned;
+				if (sourcesBefore && lsetData.sources) {
+					if (!sources) sources = [];
+					for (var i = 0, len = lsetData.sources.length; i < len; i++) {
+						learned = lsetData.sources[i];
+						if (parseInt(learned.substr(0, 1), 10) <= sourcesBefore) {
+							sources.push(learned);
+						}
+					}
+					if (!lsetData.sourcesBefore) sourcesBefore = 0;
+				}
+				if (lsetData.sourcesBefore && sources) {
+					if (!lsetData.sources) lsetData.sources = [];
+					for (var i = 0, len = sources.length; i < len; i++) {
+						learned = sources[i];
+						if (parseInt(learned.substr(0, 1), 10) <= lsetData.sourcesBefore) {
+							lsetData.sources.push(learned);
+						}
+					}
+					if (!sourcesBefore) delete lsetData.sourcesBefore;
+				}
+			}
+			if (sources) {
+				if (lsetData.sources) {
+					var intersectSources = lsetData.sources.intersect(sources);
+					if (!intersectSources.length && !(sourcesBefore && lsetData.sourcesBefore)) {
+						return {type:'incompatible'};
+					}
+					lsetData.sources = intersectSources;
+				} else {
+					lsetData.sources = sources.unique();
+				}
+			}
+
+			if (sourcesBefore) {
+				lsetData.sourcesBefore = Math.min(sourcesBefore, lsetData.sourcesBefore || 6);
+			}
+
+			return false;
+		}
 	},
 	{
 		name: "[Seasonal] Super Staff Bros.",
@@ -3451,6 +3982,14 @@ exports.Formats = [
 			}
 			return problems;
 		}
+	},
+	{
+		name: "Hidden Type",
+		section: "Other Metagames",
+
+		searchShow: false,
+		mod: 'hiddentype',
+		ruleset: ['OU']
 	},
 	{
 		name: "Middle Cup",
