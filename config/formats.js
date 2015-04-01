@@ -308,6 +308,30 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Mr Bones Wild Ride",
+		section: "OM of the Decade",
+		column: 2,
+
+		team: 'randomMrBonesWildRide',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		onBegin: function () {
+			this.add('message', "MR BONES SAYS");
+			this.add('message', "THE RIDE NEVER ENDS");
+			this.setWeather('Sunny Day');
+			delete this.weatherData.duration;
+		},
+		onBeforeMove: function (pokemon, target, move) {
+			var dice = this.random(20);
+			if (dice < 10 && dice > 1) {
+				this.add('c|' + pokemon.name + '|I want to get off MR BONES WILD RIDE');
+			} else if (dice === 1) {
+				this.add('c|' + pokemon.name + '|I have the strangest feeling someone is watching me');
+			} else if (dice === 0) {
+				this.add('c|' + pokemon.name + '|I want to go on something more thrilling than MR BONES WILD RIDE');
+			}
+		}
+	},
+	{
 		name: "Inheritance",
 		section: "OM of the Month",
 		column: 2,
