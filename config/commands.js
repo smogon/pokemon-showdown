@@ -1246,11 +1246,11 @@ var commands = exports.commands = {
 	},
 
 	bofrocket: function (target, room, user) {
-		if (room.id !== 'bof') return this.sendReply("The command '/bofrocket' was unrecognized. To send a message starting with '/bofrocket', type '//bofrocket'.");
+		if (room.id !== 'bmf') return this.sendReply("The command '/bofrocket' was unrecognized. To send a message starting with '/bofrocket', type '//bofrocket'.");
 		if (!this.can('modchat', null, room)) return;
 		target = this.splitTarget(target);
 		if (!this.targetUser) return this.sendReply("User not found");
-		if (!room.users[this.targetUser.userid]) return this.sendReply("Not in bof");
+		if (!room.users[this.targetUser.userid]) return this.sendReply("Not in bmf");
 		this.targetUser.avatar = '#bofrocket';
 		room.add("" + user.name + " applied bofrocket to " + this.targetUser.name);
 	},
