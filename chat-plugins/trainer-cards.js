@@ -4,6 +4,54 @@ exports.commands = {
 	* Trainer Cards                        *
 	***************************************/
 
+	ungenericground: function (target, room, user) {
+		if (room.id !== 'lobby') if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src="https://i.imgur.com/44K4iYZ.gif" width=575><br />' +
+			'<img src="http://play.pokemonshowdown.com/sprites/xyani/garchomp-mega.gif" width>' +
+			'<img src="http://play.pokemonshowdown.com/sprites/xyani/landorus.gif">' +
+			'<img src="http://play.pokemonshowdown.com/sprites/xyani/seismitoad.gif"><br />' +
+			'<img src="http://play.pokemonshowdown.com/sprites/xyani/hippowdon.gif">' +
+			'<img src="http://play.pokemonshowdown.com/sprites/xyani/excadrill.gif">' +
+			'<img src="http://play.pokemonshowdown.com/sprites/xyani/mamoswine.gif"><br />' +
+			'<center><b><font color="C9CC00">Aces: </font></b><b><i><font color="C9CC00">Sandman, Suspense, Angel\'s Throne, & Calculu</font></i></b><br />' +
+			'<center><b><i><font color="C29C34">"Git Gud or Git Grounded"</font></i></b></center>'
+		);
+	},
+
+	parents: function (target, room, user) {
+		if (room.id !== 'lobby') if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><a href="http://cooltext.com"><img src="http://images.cooltext.com/4152166.png" width="457" height="88" alt="Fuck Parents" /></a><br />' +
+			'<img src="http://i.imgur.com/ucTCy07.png"><br /><br />' +
+			'<marquee behavior="alternate"><blink><b><font color="FF0099">all parents are fgts except asian and indian ones!!!</blink></marquee><br /><br />' +
+			'<b><font color="black">Ace: </b>Star Ampharos <br />' +
+			'<b><font color="black">Don\'t you just fucking hate your parents because they make you put your PJs on?'
+		);
+	},
+
+	curebs: function (target, room, user) {
+		if (room.id !== 'lobby') if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center><img src=https://i.imgur.com/7G5F65H.png width=400><br />' +
+			'<img src="http://i.imgur.com/wpdYu7t.jpg" width=400><hr>' +
+			'BS, Better known as Balto Syndrome, is a semi-common disorder in Call of Duty players' +
+			' ranging in age from 8-18. This disorder first causes a mutation in your brain, causing' +
+			' the effected to believe themselves to be mature whilst conducting immature behavior,' +
+			' and not being able to realize it. This disorder also causes abnormally large amounts ' +
+			'of Sodium Chloride to course through the body, also known as Haxnova Syndrome. This ' +
+			'can and will cause the effected to be unable to keep an organized group of people ' +
+			'together for a long periods of time, exemplified by not being able to keep Pokemon' +
+			' Leagues open. <br />This disorder mainly occurs when a mutation in the brain, ' +
+			'caused by either extensive CoD Online exposure or prolonged work with Zea Mays' +
+			' (Commonly referred to in the Americas as "Corn").</br> <br>This disorder was ' +
+			'first discovered when a poor child named Balto came onto a Pokemon Showdown server,' +
+			' portrayed these traits, and caught the attention of people willing to help. Please' +
+			' donate one buck to finding a cure for this terrible, terrible disorder, for the' +
+			' benefit of them and those around them (/;~;)/</hr><br><button>' +
+			'<a href = "https://www.youtube.com/watch?v=GmXeJlJFSXs"><font color="orange"><b>' +
+			'May the Arms of an Angel cure BS!</b></a></font></button><button name = "send" value = "/transferbucks AM Professor Jets, 1">' +
+			'<Font Color="WOMBO COMBO"><b>Donate to the Cure!</b></font></button>'
+		);
+	},
+
 	crashferno: function (target, room, user) {
 		if (room.id !== 'lobby') if (!this.canBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://i.imgur.com/oEhQeB9.gif">' +
