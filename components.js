@@ -647,7 +647,7 @@ user.updateIdentity();
     },
 
     poll: function (target, room, user) {
-        if (!this.can('broadcast')) return;
+        if (!this.can('broadcast', null, roomroom)) return;
         if (Poll[room.id].question) return this.sendReply('There is currently a poll going on already.');
         if (!this.canTalk()) return;
 
@@ -672,12 +672,12 @@ user.updateIdentity();
     },
 
     tierpoll: function (target, room, user) {
-        if (!this.can('broadcast')) return;
+        if (!this.can('broadcast', null, room)) return;
         this.parse('/poll Tournament tier?, ' + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
     },
 
     endpoll: function (target, room, user) {
-        if (!this.can('broadcast')) return;
+        if (!this.can('broadcast', null, room)) return;
         if (!Poll[room.id].question) return this.sendReply('There is no poll to end in this room.');
 
         var votes = Object.keys(Poll[room.id].options).length;
