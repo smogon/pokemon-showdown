@@ -1332,7 +1332,7 @@ exports.BattleScripts = {
 					break;
 
 				// Status:
-				case 'raindance':
+				case 'raindance': case 'sunnyday':
 					if ((hasMove['rest'] && hasMove['sleeptalk']) || counter.Physical + counter.Special < 2) rejected = true;
 					break;
 				case 'rest':
@@ -1347,9 +1347,6 @@ exports.BattleScripts = {
 					break;
 				case 'substitute':
 					if (hasMove['dracometeor'] || (hasMove['leafstorm'] && !hasAbility['Contrary']) || hasMove['pursuit'] || hasMove['taunt'] || hasMove['uturn'] || hasMove['voltswitch']) rejected = true;
-					break;
-				case 'sunnyday':
-					if ((hasMove['rest'] && hasMove['sleeptalk']) || counter.Physical + counter.Special < 2) rejected = true;
 					break;
 				case 'stunspore': case 'thunderwave':
 					if (setupType || !!counter['speedsetup']) rejected = true;
