@@ -19,14 +19,114 @@ var fs = require("fs");
 
 var components = exports.components = {
 
-    away: 'back',
-    back: function (target, room, user, connection, cmd) {
-        if (!user.away && cmd.toLowerCase() === 'back') return this.sendReply('You are not set as away.');
-        user.away = !user.away;
-        if (user.isStaff && cmd !== 'back') room.add('|raw|-- <b><font color="' + Core.profile.color + '">' + user.name + '</font></b> is now away. ' + (target ? " (" + target + ")" : ""));
-        user.updateIdentity();
-        this.sendReply("You are " + (user.away ? "now" : "no longer") + " away.");
-    },
+       eating: 'away',
+       gaming: 'away',
+       sleep: 'away',
+       work: 'away',
+       working: 'away',
+       sleeping: 'away',
+       busy: 'away',
+       afk: 'away',
+       fap: 'away',
+       fapping: 'away',
+       nerd: 'away',
+       nerding: 'away',
+       away: function(target, room, user, connection, cmd) {
+            // unicode away message idea by Siiilver
+            var t = 'ⒶⓌⒶⓎ';
+            var t2 = 'Away';
+            switch (cmd) {
+           case 'busy':
+t = 'ⒷⓊⓈⓎ';
+t2 = 'Busy';
+break;
+case 'sleeping':
+t = 'ⓈⓁⒺⒺⓅⒾⓃⒼ';
+t2 = 'Sleeping';
+break;
+case 'nerd':
+t = 'ⓃⒺⓇⒹⒾⓃⒼ';
+t2 = 'Nerding';
+break;
+case 'nerding':
+t = 'ⓃⒺⓇⒹⒾⓃⒼ';
+t2 = 'Nerding';
+break;
+case 'sleep':
+t = 'ⓈⓁⒺⒺⓅⒾⓃⒼ';
+t2 = 'Sleeping';
+break;
+case 'gaming':
+t = 'ⒼⒶⓂⒾⓃⒼ';
+t2 = 'Gaming';
+break;
+case 'working':
+t = 'ⓌⓄⓇⓀⒾⓃⒼ';
+t2 = 'Working';
+break;
+case 'work':
+t = 'ⓌⓄⓇⓀⒾⓃⒼ';
+t2 = 'Working';
+break;
+case 'eating':
+t = 'ⒺⒶⓉⒾⓃⒼ';
+t2 = 'Eating';
+break;
+default:
+t = 'ⒶⓌⒶⓎ'
+t2 = 'Away';
+break;
+}
+
+if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
+
+if (!user.isAway) {
+user.originalName = user.name;
+var awayName = user.name + ' - '+t;
+//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+delete Users.get(awayName);
+user.forceRename(awayName, undefined, true);
+
+if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + user.originalName +'</font color></b> is now '+t2.toLowerCase()+'. '+ (target ? " (" + escapeHTML(target) + ")" : ""));
+
+user.isAway = true;
+}
+else {
+return this.sendReply('You are already set as a form of away, type /back if you are now back.');
+}
+
+user.updateIdentity();
+},
+
+back: function(target, room, user, connection) {
+
+if (user.isAway) {
+if (user.name === user.originalName) {
+user.isAway = false;
+return this.sendReply('Your name has been left unaltered and no longer marked as away.');
+}
+
+var newName = user.originalName;
+
+//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+delete Users.get(newName);
+
+user.forceRename(newName, undefined, true);
+
+//user will be authenticated
+user.authenticated = true;
+
+if (user.can('lock')) this.add('|raw|-- <b><font color="#088cc7">' + newName + '</font color></b> is no longer away.');
+
+user.originalName = '';
+user.isAway = false;
+}
+else {
+return this.sendReply('You are not set as away.');
+}
+
+user.updateIdentity();
+},
 
     earnbuck: 'earnmoney',
     earnbucks: 'earnmoney',
