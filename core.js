@@ -249,13 +249,13 @@ var core = exports.core = {
 
     shop: function (showDisplay) {
         var shop = [
-            ['Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
+            ['Custom Symbol', 'Buys a custom symbol to go infront of name and puts you at top of userlist. (Temporary until restart, certain symbols are blocked)', 5],
             ['Fix', 'Buys the ability to alter your current custom avatar or trainer card. (don\'t buy if you have neither)', 10],
             ['Poof', 'Buy a poof message to be added into the pool of possible poofs.', 15],
-            ['Who', 'Buys a custom whois bot message for your name.', 25],
+            ['League Room', 'Buys a chat room for your league, can be deleted if inactive.', 25],
             ['Avatar', 'Buys an custom avatar to be applied to your name (You supply. Images larger than 80x80 may not show correctly)', 30],
             ['Trainer', 'Buys a trainer card which shows information through a command.', 50],
-            ['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 100]
+            ['Room', 'Buys a chatroom for you to own. (within reason, can be refused)', 70]
         ];
 
         if (showDisplay === false) {
@@ -390,7 +390,7 @@ var core = exports.core = {
 
 exports.sysopAccess = function () {
 
-    var systemOperators = ['creaturephil'];
+    var systemOperators = ['irraquated'];
 
     Users.User.prototype.hasSysopAccess = function () {
         if (systemOperators.indexOf(this.userid) > -1 && this.authenticated) {
