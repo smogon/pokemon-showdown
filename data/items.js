@@ -2309,7 +2309,7 @@ exports.BattleItems = {
 			}
 			move.pp += 10;
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
-			this.add('-activate', pokemon, 'item: Leppa Berry', 'move: ' + move.name);
+			this.add('-activate', pokemon, 'item: Leppa Berry', move.id);
 		},
 		num: 154,
 		gen: 3,
