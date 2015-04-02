@@ -296,7 +296,7 @@ var commands = {
 		if (Object.keys(options.answers).length <= 0) return this.sendReply("You must specify at least one answer and cannot contain any special characters.");
 
 		spawnGiveaway('question', user, targetUser, room, options);
-		this.privateModCommand("(" + user.name + " has started a question giveaway.)");
+		this.privateModCommand("(" + user.name + " started a question giveaway for " + this.targetUsername + ")");
 	},
 	changeanswer: 'changequestion',
 	changequestion: function (target, room, user, conn, cmd) {
@@ -312,13 +312,13 @@ var commands = {
 		if (room.id !== 'wifi') return false;
 		if (!giveaway) return this.sendReply('There is no giveaway going on at the moment.');
 		if (giveaway.type !== 'question') return this.sendReply('This is not a question giveaway.');
-		if (user.userid !== giveaway.host.userid || user.userid !== giveaway.giver.userid) return;
+		if (user.userid !== giveaway.host.userid && user.userid !== giveaway.giver.userid) return;
 
 		var answers = [];
 		for (var i in giveaway.answers) {
 			answers.push(giveaway.answers[i]);
 		}
-		var anstext = (answers.length === 1) ? 'answer is' : 'answers are';
+		var anstext = (answers.length === 1) ? 'answer is ' : 'answers are ';
 		this.sendReply("The giveaway question is " + giveaway.question + ".\n" +
 			"The " + anstext + answers.join('/') + ".");
 	},
@@ -353,7 +353,7 @@ var commands = {
 		if (options.maxwinners > 10 || options.maxwinners < 1) return this.sendReply("The lottery giveaway can have a minimum of 1 and maximum of 10 winners.");
 
 		spawnGiveaway('lottery', user, targetUser, room, options);
-		this.privateModCommand("(" + user.name + " has started a lottery giveaway.)");
+		this.privateModCommand("(" + user.name + " started a lottery giveaway for " + this.targetUsername + ")");
 	},
 	leavelotto: 'join',
 	leavelottery: 'join',

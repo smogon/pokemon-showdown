@@ -615,7 +615,7 @@ User = (function () {
 
 		if (typeof target === 'string') targetGroup = target;
 
-		if (groupData[permission]) {
+		if (groupData && groupData[permission]) {
 			var jurisdiction = groupData[permission];
 			if (!target) {
 				return !!jurisdiction;
