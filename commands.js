@@ -234,7 +234,7 @@ var commands = exports.commands = {
 		var setting;
 		switch (cmd) {
 		case 'privateroom':
-			if (!this.can('makeroom')) return;
+			if (!this.can('roomdriver', null, room)) return;
 			setting = true;
 			break;
 		default:
