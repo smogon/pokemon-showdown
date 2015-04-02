@@ -1053,6 +1053,7 @@ var commands = exports.commands = {
 	 *********************************************************/
 
 	mn: 'modnote',
+	note: 'modnote',
 	modnote: function (target, room, user, connection) {
 		if (!target) return this.parse('/help modnote');
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
