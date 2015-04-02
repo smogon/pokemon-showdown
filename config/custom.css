@@ -1,253 +1,270 @@
- body {
-    background:url("http://i.imgur.com/0W87jDZ.png") !important;
+body {
+    background: url("http://i.imgur.com/vFeCXpU.png");
     background-color: #344B6C;
     color: #FFFFFF;
-  }
-
-  #header {
-    font-family: Verdana,Helvetica,Arial,sans-serif;
-    background:url("http://i.imgur.com/bpXwT97.png");
-  }
-
-  .ps-room.ps-room-light.scrollable {
-    font-family: helvetica,arial,sans-serif;
-    background: rgba(230, 240, 255, 0.8);
-    border-right: -1px;
-  }
-  
-  .pad {
-    border-right: 0px;
-  }
-
-  .mainmenuwrapper {
-    border-right: 0x;    
-  }
-
-  .battle-log {
-    background:url("http://i.imgur.com/OALLyrg.png") repeat;
-  }
-  
-  .pm-log {
-    background:url("http://i.imgur.com/OALLyrg.png") repeat;
-    border: 1px solid #000000;
 }
-  
-  .chat-log.hasuserlist {
-    background:url("http://i.imgur.com/hPMwWSG.png");
-    background-repeat:no-repeat;
-    background-size:auto 75%;
-    background-position: center; 
+#header {
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+    background: url("http://i.imgur.com/kWY9I5O.png");
 }
-  .chat-log-add.hasuserlist {
-    background: #AFAFAF;
+.ps-room.ps-room-light.scrollable {
+    font-family: helvetica, arial, sans-serif;
+    background: rgba(230, 240, 255, 0.7);
+    border-right: 1px solid #575757;
 }
-  
-  .pm-log-add {
-    border-top: 0px solid #000000;
-    border-right: 0px solid #000000;
-    border-bottom: 1px solid #000000;
-    border-left: 0px solid #000000;
+.pad {
+    border-right: 1px solid #575757;
 }
-
-  .ps-overlay {
-     background: rgba(230, 240, 255, 0.5)
-  }
-
-  .button.button {
+.mainmenuwrapper {
+    border-right: 1px solid #575757;
+}
+.battle-log {
+    background: url("http://i.imgur.com/OALLyrg.png") repeat;
+}
+.pm-log {
+    background: url("http://i.imgur.com/jxOe6XC.png") repeat;
+    border: 1px solid #575757;
+}
+.chat-log.hasuserlist {
+    background: url("http://i.imgur.com/5LnBRKr.png");
+    background-repeat: no-repeat;
+    background-size: auto auto;
+    background-position: top right;
+    background-color: #E9F3F3;
+    opacity: 1;
+}
+.chat-log-add.hasuserlist {
+    background-color: -moz-linear-gradient(#E8FAFF, #AFAFAF);
+    background: -webkit-linear-gradient(#E6E6E6, #AFAFAF);
+    background: -o-linear-gradient(#E6E6E6, #AFAFAF);
+    background: -moz-linear-gradient(#E6E6E6, #AFAFAF);
+    background: linear-gradient(#E6E6E6, #AFAFAF);
+    border-top: 1px solid #575757;
+}
+.pm-log-add {
+    border-top: 0px solid #575757;
+    border-right: 1px solid #575757;
+    border-bottom: 1px solid #575757;
+    border-left: 1px solid #575757;
+}
+.ps-overlay {
+    background: rgba(230, 240, 255, 0.5)
+}
+.button.button {
     text-shadow: none;
-  }
-
-  .logo {
+}
+.logo {
     opacity: 0;
-  }
-
-  .battleform label {
-    background: url("http://i.imgur.com/yFWeHx0.png") no-repeat scroll left center transparent !important;
+}
+.battleform label {
+    background: url("http://i.imgur.com/yFWeHx0.png") no-repeat scroll left center transparent;
     padding: 4px;
     opacity: 0.9;
     color: #FFF;
-  }
-
+}
 .menugroup {
     background: rgba(0, 0, 0, 0);
-  }
-
+}
 .menugroup .button {
     background: none repeat scroll 0% 0% #474747;
     color: #FFFFFF;
     box-shadow: 0px 1px 0px 0px #5C5C5C inset, 0px 2px 3px rgba(0, 0, 0, 0.2);
     border-color: #212121;
     width: 230px;
-  }
-  
-  .menugroup .button:hover {
+}
+.menugroup .button:hover {
     background: none repeat scroll 0% 0% #505050;
     color: #FFFFFF;
     box-shadow: 0px 1px 0px 0px #5F5F5F inset, 0px 2px 3px rgba(0, 0, 0, 0.2);
     border-color: #212121;
-  } 
-
-  div.roomlist {
-   font-family: Verdana,Helvetica,Arial,sans-serif;
-  }
-
-  .roomlist a.ilink {
-    font-family: Verdana,Helvetica,Arial,sans-serif;
+}
+div.roomlist {
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+.roomlist a.ilink {
+    font-family: Verdana, Helvetica, Arial, sans-serif;
     border: 1px solid #2E2E2E;
-    color: #000;
-    background: #FFFFFF;
-    text-shadow: 1px 1px #EAEAEA;
-  }
-
-  .roomlist a.ilink:hover {
-    font-family: Verdana,Helvetica,Arial,sans-serif;
-    border: 1px solid #2E2E2E;
-    color: #000;
+    color: #001433;
     background: #EEEEEE;
-  }
-
-  .pm-window h3 {
+    text-shadow: 1px 1px #EAEAEA;
+}
+.roomlist a.ilink:hover {
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+    border: 1px solid #2E2E2E;
+    color: #001433;
+    background: #DFDFDF;
+}
+.pm-window.focused h3,
+.pm-window.focused h3:hover {
     border: 1px solid #212121;
     color: #FFF;
-    background:rgba(0, 0, 0, 0.7);
-    font-family: helvetica,arial,sans-serif;
-  }
-
-  .pm-window h3:hover, .pm-window.focused h3, .pm-window.focused h3:hover {
+    background: url(http://i.imgur.com/aDqox0D.png), rgba(0, 0, 0, 0.8);
+    background-size: auto auto, auto auto;
+    background-position: center right, top right;
+    background-repeat: no-repeat, no-repeat;
+    font-family: verdana,helvetica, arial, sans-serif;
+}
+.pm-window h3 {
     border: 1px solid #212121;
     color: #FFF;
-    background:rgba(0, 0, 0, 0.8);
-    font-family: helvetica,arial,sans-serif;
-  }
-
-  button.astext {  
-   background-color: transparent; border: 0; padding: 0;
-   font-family:Verdana,Helvetica,Arial,sans-serif;
-  }
-
-  button.astext:hover {  
-   background-color: transparent; border: 0; padding: 0;
-   font-family:Verdana,Helvetica,Arial,sans-serif;
-  }
-
-  .maintabbarbottom {
-    background-color: #E8E8E8;
-    border-top: 1px solid #000000;
+    background: rgba(0, 0, 0, 0.7);
+    font-family: verdana,helvetica, arial, sans-serif;
+}
+.pm-window h3:hover {
+    border: 1px solid #212121;
+    color: #FFF;
+    background: rgba(0, 0, 0, 0.8);
+    font-family: verdana,helvetica, arial, sans-serif;
+}
+button.astext {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+button.astext:hover {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+.maintabbarbottom {
+    background-color: #BEBEBE;
+    border-top: 1px solid #575757;
     border-right: 0px solid #000000;
-    border-bottom: 1px solid #000000;
+    border-bottom: 1px solid #575757;
     border-left: 0px solid #000000;
-    box-shadow: none;
-  }
-
-  .tabbar a.button.cur, .tabbar a.button.cur:hover {
+}
+.tabbar a.button.cur,
+.tabbar a.button.cur:hover {
     text-shadow: none;
-    font: 11px Verdana,Helvetica,Arial,sans-serif;
-    color: #000000;
-    background-color: #E8E8E8;
-    border: 1px solid #000;
-  }
-
-  .tabbar a.button {
+    font: 11px Verdana, Helvetica, Arial, sans-serif;
+    color: #000;
+    background-color: -moz-linear-gradient(#DADADA, #BEBEBE);
+    background: -webkit-linear-gradient(#DADADA, #BEBEBE);
+    background: -o-linear-gradient(#DADADA, #BEBEBE);
+    background: -moz-linear-gradient(#DADADA, #BEBEBE);
+    background: linear-gradient(#DADADA, #BEBEBE);
+    border: 1px solid #575757;
+}
+.tabbar a.button {
     text-shadow: none;
-    font: 11px Verdana,Helvetica,Arial,sans-serif;
+    font: 11px Verdana, Helvetica, Arial, sans-serif;
     color: #000;
     background-color: #F2F2F2;
-    border: 1px solid #000;
+    border: 1px solid #575757;
     text-shadow: none;
-  }
-  
-  .tabbar a.button:hover {
+}
+.tabbar a.button:hover {
     text-shadow: none;
-    font: 11px Verdana,Helvetica,Arial,sans-serif;
+    font: 11px Verdana, Helvetica, Arial, sans-serif;
     color: #000;
     background-color: #EBEBEB;
-    border: 1px solid #000;
+    border: 1px solid #575757;
     text-shadow: none;
-  }
-
-  a.button.notifying.closable,  a.button.notifying.closable:hover{
-    border: 1px solid #000;
-  }
-
-  .ps-room.ps-room-opaque {
+}
+a.button.notifying.closable,
+a.button.notifying.closable:hover {
+    border: 1px solid #575757;
+}
+.ps-room.ps-room-opaque {
     background: rgba(240, 240, 240, 0.8);
     color: #FFF;
-  }
-
-  div.trainer > strong {
+}
+div.trainer > strong {
     color: #323841;
-  }
-   
-  .battle-log h2 {
-    background:#808080;
+}
+.battle-log h2 {
+    background: #808080;
     color: #FFF;
     border: 1px solid #000000;
-  }
-  .userlist li button {
-    text-shadow: 1px 1px #C8C8C8;
-  }
- .userlist {
-    background: #EEEEEE;
+}
+.userlist li button {
+    text-shadow: 0px 1px 0px 0px #000000;
+}
+ul.userlist {
+    border-right: 1px solid #575757;
+}
+span.username {
+    text-shadow: 1px 1px #CFCFCF;
+}
+div.pm-log > div {
     border-right: 0px solid #000000;
-  }
-
-  span.username {
-   text-shadow: 1px 1px #C8C8C8;
-  } 
-
-  div.pm-log > div {
-    border-right: 0px solid #000000;
-  }
-
-.icon-user{
-     display:none; 
-    }
-
-  button.select.formatselect:hover,  button.select.teamselect:hover {
+}
+.icon-user {
+    display: none;
+}
+button.select.formatselect:hover,
+button.select.teamselect:hover {
     background: #E3E3E3;
-  } 
-
-  button.select.teamselect.preselected:hover{
+}
+button.select.teamselect.preselected:hover {
     opacity: 0.85;
-  }
-  
-  .infobox{
-    background: #DFE4EB;
-  }
-  
-  span.message-pm{
-    color: #001F2E;
-    text-shadow: 1px 1px #CCD4D8;
-  }
-  
-  div.chat > small {
+}
+.infobox {
+    background: rgba(102, 136, 170, .075);
+}
+span.message-pm {
+    color: #00A0A0;
+}
+div.chat small {
     color: #001F2E;
     text-shadow: 1px 1px #D4D4D5;
-  }
-
-  div.tournament-bracket.tournament-bracket-overflowing {
-    background: url("http://i.imgur.com/WCEwpwL.png");
-    background-repeat:no-repeat;
-    background-size: auto 95%;
-    background-position:center;
+}
+div.tournament-bracket.tournament-bracket-overflowing {
+    background: url("http://i.imgur.com/WCEwpwL.png"),url("http://i.imgur.com/jxOe6XC.png");
+    background-repeat: no-repeat, repeat;
+    background-size: auto 95%, auto auto;
+    background-position: center, center;
     opacity: 1;
-  }
-
-  div.mainmenu, div.mainmenufooter {
-    position: fixed;
-  }
-
-  p > em {
+}
+p > em {
     color: #000000;
-  }
-
-  .highlighted {
+}
+.highlighted {
     background: #B3D3E8;
-  }
-
-  div.ps-popup.tournament-popout-bracket > div.tournament-bracket-tree {
-    background: url("http://i.imgur.com/rAnK3vw.png");
-    background-size: auto 90%;
-    background-repeat: no-repeat;
+}
+div.ps-popup.tournament-popout-bracket > div.tournament-bracket-tree {
+    background: url("http://i.imgur.com/jxOe6XC.png");
+    background-size: auto auto;
+    background-repeat: repeat;
     background-position: top;
-  }
+}
+div.tournament-tools.active {
+    background: #AFAFAF;
+    background: -webkit-linear-gradient(#DDDDDD, #AFAFAF);
+    background: -o-linear-gradient(#DDDDDD, #AFAFAF);
+    background: -moz-linear-gradient(#DDDDDD, #AFAFAF);
+    background: linear-gradient(#DDDDDD, #AFAFAF);
+    border-top: 1px solid #575757;
+    border-bottom: 1px solid #575757;
+    box-shadow: none;
+}
+div.notice > div.infobox > strong > font {
+    color: #007AA3;
+}
+div.notice > div.infobox > font {
+    color: #00B2B2;
+}
+div.notice > b > font {
+    color: #007AA3;
+}
+div.mainmenufooter a:link, div.mainmenufooter a:hover, div.mainmenufooter a:visited {
+    color: #C0C6C9;
+    text-decoration: none;
+}
+.broadcast-blue {
+    color: #FFF;
+    background-color: rgba(102, 136, 170, .9);   
+    border: 1px solid #003380;
+}
+.broadcast-red {
+    color: #FFF;
+    background: rgba(170, 85, 68, .8);   
+    border: 1px solid #7A1414;     
+}
+.broadcast-green {
+    color: #FFF;
+    background-color: rgba(85, 153, 85, .8);   
+    border: 1px solid #003300;     
+}
