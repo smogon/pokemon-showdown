@@ -647,7 +647,7 @@ user.updateIdentity();
     },
 
     poll: function (target, room, user) {
-        if (!this.can('broadcast', null, roomroom)) return;
+        if (!this.can('broadcast', null, room)) return;
         if (Poll[room.id].question) return this.sendReply('There is currently a poll going on already.');
         if (!this.canTalk()) return;
 
