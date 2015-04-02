@@ -679,6 +679,15 @@ Tournament = (function () {
 			return this.room.update();
 		}
 
+		var tourSize = this.generator.users.size;
+		if (tourSize >= Core.tournaments.tourSize) {
+			var wid = toId(winner), // winner's userid
+
+			// file i/o
+			var winnerBP = Number(Core.stdin('bp', wid));
+			Core.stdout('bp', wid, (winnerBP + 1));
+		}
+
 		this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(','));
 
 		this.generator.setUserBusy(from, false);
