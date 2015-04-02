@@ -1245,7 +1245,7 @@ var commands = exports.commands = {
 		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
 	},
 
-	bofrocket: function (target, room, user) {
+	bmfrocket: function (target, room, user) {
 		if (room.id !== 'bmf') return this.sendReply("The command '/bofrocket' was unrecognized. To send a message starting with '/bofrocket', type '//bofrocket'.");
 		if (!this.can('modchat', null, room)) return;
 		target = this.splitTarget(target);
