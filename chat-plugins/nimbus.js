@@ -97,7 +97,8 @@ exports.commands = {
 
         this.logModCommand(user.name + ' mod declared ' + target);
     },
-    
+    rk: 'kick',
+    roomkick: 'kick',
     k: 'kick',
     kick: function(target, room, user) {
         if (!this.can('mute', targetUser, room)) return false;
