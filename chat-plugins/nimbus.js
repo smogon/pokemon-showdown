@@ -100,7 +100,7 @@ exports.commands = {
     
     k: 'kick',
     kick: function(target, room, user) {
-        if (!this.can('lock')) return false;
+        if (!this.can('mute', targetUser, room)) return false;
         if (!target) return this.sendReply('/help kick');
         if (!this.canTalk()) return false;
 
