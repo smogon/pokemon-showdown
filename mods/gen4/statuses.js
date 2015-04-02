@@ -32,6 +32,18 @@ exports.BattleStatuses = {
 			return false;
 		}
 	},
+	frz: {
+		inherit: true,
+		onBeforeMove: function (pokemon, target, move) {
+			if (this.random(5) === 0) {
+				pokemon.cureStatus();
+				return;
+			}
+			if (move.thawsUser) return;
+			this.add('cant', pokemon, 'frz');
+			return false;
+		}
+	},
 	trapped: {
 		inherit: true,
 		noCopy: false
