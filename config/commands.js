@@ -268,44 +268,57 @@ var commands = exports.commands = {
 			this.sendReply('|raw|' + hiddenrooms);
 		}
 	},
+	 /********************************************************
+	 * Additional Commands.
+	 *********************************************************/
+	 	 autovoice: 'autorank',
+	 autodriver: 'autorank',
+	 automod: 'autorank',
+	 autoowner: 'autorank',
+	 autopromote: 'autorank',
+	 autorank: function(target, room, user, connection, cmd) {
+	 	switch (cmd) {
+	 		case 'autovoice':
+	 			target = '+';
+	 			break;
+	 		case 'autodriver':
+	 			target = '%';
+	 			break;
+	 		case 'automod':
+	 			target = '@';
+	 			break;
+	 		case 'autoowner':
+	 			target = '#';
+	 			break;
+	 	}
 
-	ipsearchall: 'ipsearch',
-	ipsearch: function (target, room, user, connection, cmd) {
-		if (!this.can('rangeban')) return;
-		var results = [];
-		this.sendReply("Users with IP " + target + ":");
+	 	if (!target) return this.sendReply("Usage: /autorank [rank] - Automatically promotes user to the specified rank when they join the room.");
+	 	if (!this.can('roommod', null, room)) return false;
+	 	target = target.trim();
 
-		var isRange;
-		if (target.slice(-1) === '*') {
-			isRange = true;
-			target = target.slice(0, -1);
-		}
-		var isAll = (cmd === 'ipsearchall');
+	 	if (target === 'off' && room.autorank) {
+	 		delete room.autorank;
+	 		delete room.chatRoomData.autorank;
+	 		Rooms.global.writeChatRoomData();
+	 		for (var u in room.users) Users.users[u].updateIdentity();
+	 		return this.privateModCommand("(" + user.name + " has disabled autorank in this room.)");
+	 	}
+	 	if (room.autorank && room.autorank === target) return this.sendReply("Autorank is already set to \"" + target + "\".");
 
-		if (isRange) {
-			for (var userid in Users.users) {
-				var curUser = Users.users[userid];
-				if (curUser.group === '~') continue;
-				if (!curUser.latestIp.startsWith(target)) continue;
-				if (results.push((curUser.connected ? " + " : "-") + " " + curUser.name) > 100 && !isAll) {
-					return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
-				}
-			}
-		} else {
-			for (var userid in Users.users) {
-				var curUser = Users.users[userid];
-				if (curUser.latestIp === target) {
-					results.push((curUser.connected ? " + " : "-") + " " + curUser.name);
-				}
-			}
-		}
-		if (!results.length) return this.sendReply("No results found.");
-		return this.sendReply(results.join('; '));
-	},
-
-	/*********************************************************
+	 	if (Config.groups[target] && !Config.groups[target].globalonly) {
+	 		if (target === '#' && user.userid !== room.founder) return this.sendReply("You can't set autorank to # unless you're the room founder.");
+	 		room.autorank = target;
+	 		room.chatRoomData.autorank = target;
+	 		Rooms.global.writeChatRoomData();
+	 		for (var u in room.users) Users.users[u].updateIdentity();
+	 		return this.privateModCommand("(" + user.name + " has set autorank to \"" + target + "\" in this room.)");
+	 	}
+	 	return this.sendReply("Group \"" + target + "\" not found.");
+	 },
+	 /*********************************************************
 	 * Shortcuts
 	 *********************************************************/
+	 
 
 	inv: 'invite',
 	invite: function (target, room, user) {
