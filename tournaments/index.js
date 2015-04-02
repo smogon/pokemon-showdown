@@ -794,6 +794,7 @@ var commands = {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <minutes|off>");
 			}
+			if (params[0].toLowerCase() === 'infinity' || params[0] === '0') params[0] = 'off';
 			var timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0];
 			if (tournament.setAutoDisqualifyTimeout(timeout * 60 * 1000, this)) {
 				this.privateModCommand("(The tournament auto disqualify timeout was set to " + params[0] + " by " + user.name + ")");
