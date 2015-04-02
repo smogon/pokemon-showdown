@@ -78,12 +78,19 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
-			if (move.thawsUser || this.random(5) === 0) {
+			if (move.thawsUser) return;
+			if (this.random(5) === 0) {
 				pokemon.cureStatus();
 				return;
 			}
 			this.add('cant', pokemon, 'frz');
 			return false;
+		},
+		onModifyMove: function (move, pokemon) {
+			if (move.thawsUser) {
+				this.add('-curestatus', pokemon, 'frz', '[from] move: ' + move);
+				pokemon.setStatus('');
+			}
 		},
 		onHit: function (target, source, move) {
 			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status') {
