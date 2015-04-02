@@ -7,20 +7,6 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "1v1 Random (BWknd 34)",
-		section: "ORAS Singles",
-
-		team: 'random',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
-		onBegin: function() {
-			this.debug('Cutting down to 1');
-			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
-		}
-	},
-	{
 		name: "OU",
 		section: "ORAS Singles",
 
@@ -217,6 +203,22 @@ exports.Formats = [
 
 		team: 'randomGenerational',
 		ruleset: ['Random (no PotD)']
+	},
+	{
+		name: "Inverse Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'random',
+		ruleset: ['Random (no PotD)'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
 	},
 	{
 		name: "Hoenn Random",
