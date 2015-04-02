@@ -489,11 +489,19 @@ exports.Formats = [
 
 				if (problems.length) return problems;
 
-				var pokemonPool = getPokemonWithAbility(ability);
+				var gender = set.gender;
+				var shiny = set.shiny;
+				var pokemonPool = getPokemonWithAbility(ability.id);
 
 				for (var it = 0; it < pokemonPool.length; it++) {
 					problems = [];
 					isIncompatibility = false;
+					isHidden = false;
+					lsetData.sources = null;
+					lsetData.sourcesBefore = null;
+					set.gender = gender;
+					set.shiny = shiny;
+
 					template = this.getTemplate(pokemonPool[it]);
 					if (originalTemplate.species !== template.species) {
 						if (template.species in restrictedPokemon) {
@@ -612,11 +620,6 @@ exports.Formats = [
 						problems.push(name + " is in " + template.tier + ", which is banned.");
 					}
 
-					if (teamHas) {
-						for (var i in setHas) {
-							teamHas[i] = true;
-						}
-					}
 					for (var i = 0; i < format.setBanTable.length; i++) {
 						var bannedCombo = true;
 						for (var j = 0; j < format.setBanTable[i].length; j++) {
@@ -633,6 +636,11 @@ exports.Formats = [
 
 					if (!problems.length) {
 						if (set.forcedLevel) set.level = set.forcedLevel;
+						if (teamHas) {
+							for (var i in setHas) {
+								teamHas[i] = true;
+							}
+						}
 						return false;
 					}
 
