@@ -563,8 +563,86 @@ User = (function () {
 			ResourceMonitor.countNetworkUse(data.length);
 		}
 	};
-	User.prototype.popup = function (message) {
+User.prototype.popup = function (message) {
 		this.send('|popup|' + message.replace(/\n/g, '||'));
+	};
+	User.prototype.getIdentity = function (roomid) {
+		if (this.locked) {
+			return '‽' + this.name + (this.awayName || '');
+		}
+		if (roomid) {
+			if (this.mutedRooms[roomid]) {
+				return '!' + this.name + (this.awayName || '');
+			}
+			var room = Rooms.rooms[roomid];
+			if (room && room.auth) {
+				if (room.auth[this.userid]) {
+					return room.auth[this.userid] + this.name + (this.awayName || '');
+				}
+				if (room.autorank) return room.autorank + this.name + (this.awayName || '');
+				if (room.isPrivate === true) return ' ' + this.name + (this.awayName || '');
+			}
+		}
+		return (!this.hiding ? this.group : " ") + this.name + (this.awayName || '');
+	};
+	User.prototype.isStaff = false;
+	User.prototype.can = function (permission, target, room) {
+		if (this.hasSysopAccess()) return true;
+
+		var group = this.group;
+		var targetGroup = '';
+		if (target) {
+			if (target.frostDev) return false;
+			targetGroup = target.group;
+		}
+		var groupData = Config.groups[group];
+
+		if (groupData && groupData['root']) {
+			return true;
+		}
+
+		if (room && room.auth) {
+			if (room.auth[this.userid]) {
+				group = room.auth[this.userid];
+			} else if (room.isPrivate === true) {
+				group = ' ';
+			}
+			if (room.autorank && !room.auth[this.userid]) group = room.autorank;
+			groupData = Config.groups[group];
+			if (target) {
+				if (room.auth[target.userid]) {
+					targetGroup = room.auth[target.userid];
+				} else if (room.isPrivate === true) {
+					targetGroup = ' ';
+				}
+			}
+		}
+
+		if (typeof target === 'string') targetGroup = target;
+
+			if (groupData[permission]) {
+				var jurisdiction = groupData[permission];
+				if (!target) {
+					return !!jurisdiction;
+				}
+				if (jurisdiction === true && permission !== 'jurisdiction') {
+					return this.can('jurisdiction', target, room);
+				}
+				if (typeof jurisdiction !== 'string') {
+					return !!jurisdiction;
+				}
+				if (jurisdiction.indexOf(targetGroup) >= 0) {
+					return true;
+				}
+				if (jurisdiction.indexOf('s') >= 0 && target === this) {
+					return true;
+				}
+				if (jurisdiction.indexOf('u') >= 0 && Config.groupsranking.indexOf(group) > Config.groupsranking.indexOf(targetGroup)) {
+					return true;
+				}
+		}
+		return false;
+	};
 	};
 	User.prototype.getIdentity = function (roomid) {
 		if (this.locked) {
