@@ -431,3 +431,5 @@ global.Components = require('./components.js');
 global.Poll = require('./core.js').core.poll();
 
 global.SysopAccess = require('./core.js').sysopAccess();
+
+global.Spamroom = require('./spamroom.js');
