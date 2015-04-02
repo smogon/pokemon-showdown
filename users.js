@@ -563,7 +563,7 @@ User = (function () {
 			ResourceMonitor.countNetworkUse(data.length);
 		}
 	};
-User.prototype.popup = function (message) {
+	User.prototype.popup = function (message) {
 		this.send('|popup|' + message.replace(/\n/g, '||'));
 	};
 	User.prototype.getIdentity = function (roomid) {
