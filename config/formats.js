@@ -7,10 +7,23 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
+		name: "1v1 Random (BWknd 34)",
+		section: "ORAS Singles",
+
+		team: 'random',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
+		onBegin: function() {
+			this.debug('Cutting down to 1');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	{
 		name: "OU",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
 	},
@@ -18,7 +31,6 @@ exports.Formats = [
 		name: "OU (no Mega)",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		ruleset: ['OU'],
 		onBegin: function () {
 			for (var i = 0; i < this.p1.pokemon.length; i++) {
@@ -33,7 +45,6 @@ exports.Formats = [
 		name: "Ubers",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		ruleset: ['Pokemon', 'Standard Ubers', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Ban Mod'],
 		banlist: []
 	},
@@ -41,7 +52,6 @@ exports.Formats = [
 		name: "UU",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Alakazite', 'Altarianite', 'Diancite', 'Heracronite', 'Galladite', 'Gardevoirite', 'Lopunnite', 'Medichamite',
 			'Metagrossite', 'Pinsirite', 'Drizzle', 'Drought', 'Shadow Tag'
@@ -51,7 +61,6 @@ exports.Formats = [
 		name: "UU (no Scald)",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		ruleset: ['UU'],
 		banlist: ['Scald']
 	},
@@ -59,7 +68,6 @@ exports.Formats = [
 		name: "RU",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2', 'Galladite', 'Houndoominite', 'Pidgeotite']
 	},
@@ -67,7 +75,6 @@ exports.Formats = [
 		name: "NU",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		ruleset: ['RU'],
 		banlist: ['RU', 'BL3', 'Glalitite', 'Steelixite']
 	},
@@ -75,7 +82,6 @@ exports.Formats = [
 		name: "LC",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger']
@@ -84,7 +90,6 @@ exports.Formats = [
 		name: "Anything Goes",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		ruleset: ['Pokemon', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal']
 	},
@@ -92,7 +97,6 @@ exports.Formats = [
 		name: "CAP Plasmanta Playtest",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		ruleset: ['CAP Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Soul Dew',
 			'Tomohawk', 'Necturna', 'Mollux', 'Aurumoth', 'Malaconda', 'Cawmodore', 'Volkraken', 'Syclant', 'Revenankh', 'Pyroak', 'Fidgit', 'Stratagem', 'Arghonaut', 'Kitsunoh', 'Cyclohm', 'Colossoil', 'Krilowatt', 'Voodoom'
@@ -102,7 +106,6 @@ exports.Formats = [
 		name: "Battle Spot Singles",
 		section: "ORAS Singles",
 
-		mod: 'inverse',
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		requirePentagon: true,
@@ -137,7 +140,6 @@ exports.Formats = [
 		name: "Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'random',
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
 	},
@@ -145,7 +147,6 @@ exports.Formats = [
 		name: "Unrated Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'random',
 		challengeShow: false,
 		rated: false,
@@ -155,7 +156,6 @@ exports.Formats = [
 		name: "Random (no PotD)",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'random',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
 	},
@@ -163,7 +163,6 @@ exports.Formats = [
 		name: "1v1 Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'random',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
 		onBegin: function() {
@@ -202,7 +201,6 @@ exports.Formats = [
 		name: "LC Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomLC',
 		ruleset: ['Random (no PotD)']
 	},
@@ -210,7 +208,6 @@ exports.Formats = [
 		name: "Monotype Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomMonotype',
 		ruleset: ['Random (no PotD)']
 	},
@@ -218,7 +215,6 @@ exports.Formats = [
 		name: "Generational Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomGenerational',
 		ruleset: ['Random (no PotD)']
 	},
@@ -226,7 +222,6 @@ exports.Formats = [
 		name: "Hoenn Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomHoenn',
 		ruleset: ['Random (no PotD)']
 	},
@@ -234,7 +229,6 @@ exports.Formats = [
 		name: "Hoenn Weather Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomHoennWeather',
 		ruleset: ['Random (no PotD)']
 	},
@@ -242,7 +236,6 @@ exports.Formats = [
 		name: "Super Smash Bros. Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomSmashBros',
 		ruleset: ['Random (no PotD)']
 	},
@@ -250,7 +243,6 @@ exports.Formats = [
 		name: "Winter Wonderland",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomSeasonalWW',
 		onBegin: function() {
 			this.setWeather('Hail');
@@ -368,7 +360,6 @@ exports.Formats = [
 		name: "Community Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomCommunity',
 		ruleset: ['Random (no PotD)']
 	},
@@ -407,7 +398,6 @@ exports.Formats = [
 		name: "Doubles Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		gameType: 'doubles',
 		team: 'randomDoubles',
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
@@ -416,7 +406,6 @@ exports.Formats = [
 		name: "Triples Random",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		gameType: 'triples',
 		team: 'randomDoubles',
 		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview']
@@ -425,7 +414,6 @@ exports.Formats = [
 		name: "Challenge Cup",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomCC',
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	},
@@ -433,7 +421,6 @@ exports.Formats = [
 		name: "1v1 Challenge Cup",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomCC',
 		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
@@ -448,7 +435,6 @@ exports.Formats = [
 		name: "Hackmons Challenge Cup",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		team: 'randomHackmonsCC',
 		searchShow: false,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod']
@@ -457,7 +443,6 @@ exports.Formats = [
 		name: "Doubles Challenge Cup",
 		section: 'Random Battles (aka Randbats)',
 
-		mod: 'inverse',
 		gameType: 'doubles',
 		team: 'randomCC',
 		searchShow: false,
@@ -467,7 +452,6 @@ exports.Formats = [
 		name: "Triples Challenge Cup",
 		section: "Random Battles (aka Randbats)",
 
-		mod: 'inverse',
 		gameType: 'triples',
 		team: 'randomCC',
 		searchShow: false,
@@ -481,7 +465,6 @@ exports.Formats = [
 		name: "Smogon Doubles",
 		section: "ORAS Doubles",
 
-		mod: 'inverse',
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
 		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
@@ -492,7 +475,6 @@ exports.Formats = [
 		name: "Smogon Doubles Ubers",
 		section: "ORAS Doubles",
 
-		mod: 'inverse',
 		gameType: 'doubles',
 		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Dark Void']
@@ -501,7 +483,6 @@ exports.Formats = [
 		name: "Smogon Doubles UU",
 		section: "ORAS Doubles",
 
-		mod: 'inverse',
 		gameType: 'doubles',
 		ruleset: ['Smogon Doubles'],
 		banlist: ['Aegislash', 'Amoonguss', 'Azumarill', 'Bisharp', 'Breloom', 'Chandelure', 'Charizard', 'Conkeldurr',
@@ -517,7 +498,6 @@ exports.Formats = [
 		name: "Battle Spot Doubles (VGC 2015)",
 		section: "ORAS Doubles",
 
-		mod: 'inverse',
 		gameType: 'doubles',
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
@@ -555,7 +535,6 @@ exports.Formats = [
 		name: "Smogon Triples",
 		section: "ORAS Triples",
 
-		mod: 'inverse',
 		gameType: 'triples',
 		ruleset: ['Pokemon', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Illegal', 'Unreleased', 'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
@@ -567,7 +546,6 @@ exports.Formats = [
 		name: "Battle Spot Triples",
 		section: "ORAS Triples",
 
-		mod: 'inverse',
 		gameType: 'triples',
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
@@ -599,22 +577,12 @@ exports.Formats = [
 		column: 2,
 
 		mod: 'hiddentype',
-		ruleset: ['OU'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		ruleset: ['OU']
 	},
 	{
 		name: "[Seasonal] Super Staff Bros.",
 		section: "OM of the Month",
 
-		mod: 'inverse',
 		team: 'randomSeasonalStaff',
 		ruleset: ['Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
@@ -3512,26 +3480,10 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "OU (no Inverse)",
-		section: "Other Metagames",
-
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
-	},
-	{
-		name: "[Gen 4] OU (no Inverse)",
-		section: "Other Metagames",
-
-		mod: 'gen4',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
-	},
-	{
 		name: "CAP",
 		section: "Other Metagames",
 		column: 2,
 
-		mod: 'inverse',
 		ruleset: ['OU'],
 		banlist: ['Allow CAP']
 	},
@@ -3539,7 +3491,6 @@ exports.Formats = [
 		name: "Balanced Hackmons",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		ruleset: ['Pokemon', 'Ability Clause', '-ate Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Arena Trap', 'Huge Power', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Wonder Guard', 'Assist', 'Chatter']
 	},
@@ -3547,7 +3498,6 @@ exports.Formats = [
 		name: "1v1",
 		section: 'Other Metagames',
 
-		mod: 'inverse',
 		ruleset: ['Pokemon', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
 		banlist: ['Illegal', 'Unreleased', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky',
@@ -3567,7 +3517,6 @@ exports.Formats = [
 		name: "Monotype",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
 		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
 			'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Talonflame', 'Xerneas', 'Yveltal', 'Zekrom',
@@ -3580,22 +3529,12 @@ exports.Formats = [
 
 		mod: 'tiershift',
 		ruleset: ['OU'],
-		banlist: ['Chatter'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Chatter']
 	},
 	{
 		name: "PU",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		ruleset: ['NU'],
 		banlist: ['NU', 'BL4', 'Altarianite', 'Beedrillite', 'Lopunnite', 'Chatter']
 	},
@@ -3650,7 +3589,6 @@ exports.Formats = [
 		name: "Almost Any Ability",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Ignore Illegal Abilities', 'Arceus', 'Archeops', 'Bisharp', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Ho-Oh', 'Keldeo', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mamoswine', 'Mewtwo', 'Palkia',
@@ -3673,7 +3611,6 @@ exports.Formats = [
 		name: "STABmons",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
 		banlist: ['Ignore STAB Moves', 'Arceus', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Diggersby', 'Genesect', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Ho-Oh', 'Keldeo', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Porygon-Z', 'Rayquaza',
@@ -3685,7 +3622,6 @@ exports.Formats = [
 		name: "LC UU",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		maxLevel: 5,
 		ruleset: ['LC'],
 		banlist: ['Abra', 'Aipom', 'Archen', 'Bunnelby', 'Carvanha', 'Chinchou', 'Corphish', 'Cottonee', 'Croagunk', 'Diglett',
@@ -3708,15 +3644,6 @@ exports.Formats = [
 			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
 				return ['Eviolite is banned on Pokémon with 350 or lower BST.'];
 			}
-		},
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
 		}
 	},
 	{
@@ -3729,22 +3656,12 @@ exports.Formats = [
 		banlist: ['Gothita', 'Gothorita', 'Gothitelle', 'Sableye', 'Shedinja', 'Smeargle',
 			'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Gengarite', 'Kangaskhanite', 'Light Ball', 'Mawilite', 'Medichamite', 'Soul Dew', 'Thick Club',
 			'Huge Power', 'Pure Power'
-		],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		]
 	},
 	{
 		name: "Classic Hackmons",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		searchShow: false,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		validateSet: function (set) {
@@ -3785,7 +3702,6 @@ exports.Formats = [
 		name: "Middle Cup",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		searchShow: false,
 		maxLevel: 50,
 		defaultLevel: 50,
@@ -3804,16 +3720,7 @@ exports.Formats = [
 
 		mod: 'theorymon',
 		searchShow: false,
-		ruleset: ['OU'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		ruleset: ['OU']
 	},
 	{
 		name: "Gen-NEXT OU",
@@ -3822,22 +3729,19 @@ exports.Formats = [
 		mod: 'gennext',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
-		banlist: ['Uber'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Uber']
+	},
+	{
+		name: "OU (No Megas)",
+		section: "Other Metagames",
+
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Soul Dew', 'Abomasite', 'Absolite', 'Aerodactylite', 'Aggronite', 'Alakazite', 'Altarianite', 'Ampharosite', 'Audinite', 'Banettite', 'Beedrillite', 'Blastoisinite', 'Blazikenite', 'Cameruptite', 'Charizardite X', 'Charizardite Y', 'Diancite', 'Galladite', 'Garchompite', 'Gardevoirite', 'Gengarite', 'Glalitite', 'Gyaradosite', 'Heracronite', 'Houndoominite', 'Kangaskhanite', 'Latiasite', 'Latiosite', 'Lopunnite', 'Lucarionite', 'Manectite', 'Mawilite', 'Medichamite', 'Metagrossite', 'Mewtwonite X', 'Mewtwonite Y', 'Pidgeotite', 'Pinsirite', 'Sablenite', 'Salamencite', 'Sceptilite', 'Scizorite', 'Sharpedonite', 'Slowbronite', 'Steelixite', 'Swampertite', 'Tyranitarite', 'Venusaurite']
 	},
 	{
 		name: "Snowy OU",
 		section: "Other Metagames",
 
-		mod: 'inverse',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
 		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Drought', 'Sunny Day', 'Drizzle', 'Rain Dance', 'Sand Stream', 'Sandstorm'],
 		onBegin: function() {
@@ -3856,16 +3760,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
 	},
 	{
 		name: "[Gen 5] Ubers",
@@ -3873,16 +3768,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
-		banlist: [],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: []
 	},
 	{
 		name: "[Gen 5] UU",
@@ -3890,16 +3776,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] OU'],
-		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Snow Warning'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['OU', 'BL', 'Drought', 'Sand Stream', 'Snow Warning']
 	},
 	{
 		name: "[Gen 5] RU",
@@ -3907,16 +3784,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] UU'],
-		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Snow Warning'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['UU', 'BL2', 'Shell Smash + Baton Pass', 'Snow Warning']
 	},
 	{
 		name: "[Gen 5] NU",
@@ -3924,16 +3792,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['[Gen 5] RU'],
-		banlist: ['RU', 'BL3', 'Prankster + Assist'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['RU', 'BL3', 'Prankster + Assist']
 	},
 	{
 		name: "[Gen 5] LC",
@@ -3942,16 +3801,7 @@ exports.Formats = [
 		mod: 'gen5',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
-		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Gligar', 'Scyther', 'Sneasel', 'Tangela'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Gligar', 'Scyther', 'Sneasel', 'Tangela']
 	},
 	{
 		name: "[Gen 5] GBU Singles",
@@ -3970,16 +3820,7 @@ exports.Formats = [
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
-		banlist: ['Sky Drop', 'Dark Void'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Sky Drop', 'Dark Void']
 	},
 	{
 		name: "[Gen 5] Custom Game",
@@ -4020,16 +3861,7 @@ exports.Formats = [
 			'Reshiram',
 			'Zekrom',
 			'Kyurem-White'
-		],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		]
 	},
 	{
 		name: "[Gen 5] GBU Doubles",
@@ -4046,16 +3878,7 @@ exports.Formats = [
 		},
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
-		banlist: ['Sky Drop', 'Dark Void'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Sky Drop', 'Dark Void']
 	},
 	{
 		name: "[Gen 5] Doubles Custom Game",
@@ -4082,16 +3905,7 @@ exports.Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Uber']
 	},
 	{
 		name: "[Gen 4] Ubers",
@@ -4099,16 +3913,7 @@ exports.Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Arceus'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Arceus']
 	},
 	{
 		name: "[Gen 4] UU",
@@ -4116,16 +3921,7 @@ exports.Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'OU', 'BL'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Uber', 'OU', 'BL']
 	},
 	{
 		name: "[Gen 4] LC",
@@ -4134,16 +3930,7 @@ exports.Formats = [
 		mod: 'gen4',
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Little Cup'],
-		banlist: ['Berry Juice', 'DeepSeaTooth', 'Dragon Rage', 'Sonic Boom', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Berry Juice', 'DeepSeaTooth', 'Dragon Rage', 'Sonic Boom', 'Meditite', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma']
 	},
 	{
 		name: "[Gen 4] Custom Game",
@@ -4164,16 +3951,7 @@ exports.Formats = [
 
 		mod: 'gen3',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Smeargle + Ingrain'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Uber', 'Smeargle + Ingrain']
 	},
 	{
 		name: "[Gen 3] Ubers",
@@ -4181,16 +3959,7 @@ exports.Formats = [
 
 		mod: 'gen3',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Wobbuffet + Leftovers'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Wobbuffet + Leftovers']
 	},
 	{
 		name: "[Gen 3] Custom Game",
@@ -4207,16 +3976,7 @@ exports.Formats = [
 
 		mod: 'gen2',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Uber']
 	},
 	{
 		name: "[Gen 2] Custom Game",
@@ -4233,16 +3993,7 @@ exports.Formats = [
 
 		mod: 'gen1',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		banlist: ['Uber']
 	},
 	{
 		name: "[Gen 1] OU (tradeback)",
@@ -4254,16 +4005,7 @@ exports.Formats = [
 		banlist: ['Uber', 'Unreleased', 'Illegal',
 			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
 			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember'
-		],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		]
 	},
 	{
 		name: "[Gen 1] Random Battle",
@@ -4271,16 +4013,7 @@ exports.Formats = [
 
 		mod: 'gen1',
 		team: 'random',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "[Gen 1] Stadium",
@@ -4292,16 +4025,7 @@ exports.Formats = [
 		banlist: ['Uber',
 			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
 			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember'
-		],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		]
 	},
 	{
 		name: "[Gen 1] Custom Game",
