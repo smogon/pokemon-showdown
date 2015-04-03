@@ -743,6 +743,7 @@ Tournament = (function () {
 
 			// file i/o
 			var winnerBP = Number(Core.stdin('bp', wid));
+			var pclWin = Number(Core.stdin('pclWins', wid));
 			var tourWin = Number(Core.stdin('tourWins', wid));
 			Core.stdout('bp', wid, (winnerBP + firstBP), function () {
 				if (runnerUp) {
@@ -750,6 +751,8 @@ Tournament = (function () {
 					Core.stdout('bp', rid, (runnerUpBP + secondBP), function () {
 						Core.stdout('tourWins', wid, (tourWin + 1));
 					});
+				} else if (room.id === 'lobby') {
+					Core.stdout('pclWins', wid, (pclWin + 1));
 				} else {
 					Core.stdout('tourWins', wid, (tourWin + 1));
 				}
