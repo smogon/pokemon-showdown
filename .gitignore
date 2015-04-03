@@ -1,6 +1,16 @@
 /logs/*
 /node_modules
 npm-debug.log
+config/avatars/
+config/about.csv
+config/config.js
+config/chatrooms.json
+config/elo.csv
+config/money.csv
+config/tourWins.csv
+config/usergroups.csv
+config/control-panel.csv
+badges.txt
 
 # boilerplate #
 ###############
