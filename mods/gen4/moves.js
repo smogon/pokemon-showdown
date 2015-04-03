@@ -1027,6 +1027,10 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	transform: {
+		inherit: true,
+		flags: {authentic: 1}
+	},
 	uproar: {
 		inherit: true,
 		basePower: 50

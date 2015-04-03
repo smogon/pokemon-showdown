@@ -1190,8 +1190,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's moves ignore substitutes and the opposing side's Reflect, Light Screen, Safeguard, and Mist.",
 		shortDesc: "Moves ignore substitutes and opposing Reflect, Light Screen, Safeguard, and Mist.",
 		onModifyMove: function (move) {
-			move.notSubBlocked = true;
-			move.ignoreScreens = true;
+			move.infiltrates = true;
 		},
 		id: "infiltrator",
 		name: "Infiltrator",

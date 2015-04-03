@@ -669,7 +669,7 @@ exports.BattleMovedex = {
 	},
 	tickle: {
 		inherit: true,
-		notSubBlocked: true
+		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1}
 	},
 	torment: {
 		inherit: true,

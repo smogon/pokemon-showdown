@@ -144,20 +144,7 @@ exports.BattleMovedex = {
 			},
 			onTryPrimaryHitPriority: 2,
 			onTryPrimaryHit: function (target, source, move) {
-				if (target === source) {
-					this.debug('sub bypass: self hit');
-					return;
-				}
-				if (move.notSubBlocked || move.flags['sound']) {
-					return;
-				}
-				if (move.category === 'Status') {
-					var SubBlocked = {
-						block:1, embargo:1, entrainment:1, gastroacid:1, healblock:1, healpulse:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, soak: 1, spiderweb:1, switcheroo:1, topsyturvy:1, trick:1, worryseed:1, yawn:1
-					};
-					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
-						return false;
-					}
+				if (target === source || move.flags['authentic'] || move.infiltrates) {
 					return;
 				}
 				var damage = this.getDamage(source, target, move);

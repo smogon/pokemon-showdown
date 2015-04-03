@@ -2349,7 +2349,6 @@ exports.Formats = [
 				move.type = 'Flying';
 				move.category = 'Special';
 				move.basePower = 80;
-				move.notSubBlocked = true;
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Boomburst", target);
@@ -2604,7 +2603,6 @@ exports.Formats = [
 					move.name = 'Study';
 					move.priority = 1;
 					move.flags = {protect:1};
-					move.notSubBlocked = true;
 					move.onTryHit = function (target, source) {
 						if (source.lastAttackType === 'None') {
 							this.add('-hint', "Study only works when preceded by an attacking move.");
@@ -2765,7 +2763,7 @@ exports.Formats = [
 			}
 			if (move.id === 'transform' && name === 'kupo') {
 				move.name = 'Kupo Nuts';
-				move.notSubBlocked = true;
+				move.flags = {};
 				move.priority = 2;
 				move.onHit = function (pokemon, user) {
 					var template = pokemon.template;
@@ -2823,7 +2821,6 @@ exports.Formats = [
 				move.name = 'Shadow Storm';
 				move.type = 'Shadow';
 				move.accuracy = true;
-				move.ignoreScreens = true;
 				move.ignoreDefensive = true;
 				move.defensiveCategory = 'Physical';
 				move.basePowerCallback = function (pokemon, target) {
@@ -3226,7 +3223,6 @@ exports.Formats = [
 				move.affectedByImmunities = false;
 				move.ignoreDefensive = true;
 				move.ignoreEvasion = true;
-				move.ignoreScreens = true;
 			}
 			if (move.id === 'detect' && name === 'zebraiken') {
 				move.name = 'bzzt';
