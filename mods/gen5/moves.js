@@ -68,8 +68,7 @@ exports.BattleMovedex = {
 	},
 	bestow: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1},
-		notSubBlocked: false
+		flags: {protect: 1, mirror: 1}
 	},
 	bind: {
 		inherit: true,
@@ -769,6 +768,51 @@ exports.BattleMovedex = {
 	stunspore: {
 		inherit: true,
 		onTryHit: function () {}
+	},
+	substitute: {
+		inherit: true,
+		effect: {
+			onStart: function (target) {
+				this.add('-start', target, 'Substitute');
+				this.effectData.hp = Math.floor(target.maxhp / 4);
+				delete target.volatiles['partiallytrapped'];
+			},
+			onTryPrimaryHitPriority: -1,
+			onTryPrimaryHit: function (target, source, move) {
+				if (target === source || move.flags['authentic']) {
+					return;
+				}
+				var damage = this.getDamage(source, target, move);
+				if (!damage) {
+					return null;
+				}
+				damage = this.runEvent('SubDamage', target, source, move, damage);
+				if (!damage) {
+					return damage;
+				}
+				if (damage > target.volatiles['substitute'].hp) {
+					damage = target.volatiles['substitute'].hp;
+				}
+				target.volatiles['substitute'].hp -= damage;
+				source.lastDamage = damage;
+				if (target.volatiles['substitute'].hp <= 0) {
+					target.removeVolatile('substitute');
+				} else {
+					this.add('-activate', target, 'Substitute', '[damage]');
+				}
+				if (move.recoil) {
+					this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+				}
+				if (move.drain) {
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				}
+				this.runEvent('AfterSubDamage', target, source, move, damage);
+				return 0; // hit
+			},
+			onEnd: function (target) {
+				this.add('-end', target, 'Substitute');
+			}
+		}
 	},
 	submission: {
 		inherit: true,

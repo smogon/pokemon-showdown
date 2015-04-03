@@ -445,7 +445,7 @@ exports.BattleMovedex = {
 		onHit: function (pokemon, source, move) {
 			var side = pokemon.side;
 			for (var i = 0; i < side.pokemon.length; i++) {
-				if (side.pokemon[i].volatiles['substitute'] && !move.notSubBlocked) continue;
+				if (side.pokemon[i].volatiles['substitute'] && !move.infiltrates) continue;
 				side.pokemon[i].status = '';
 			}
 			this.add('-cureteam', source, '[from] move: Aromatherapy');
@@ -465,7 +465,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {authentic: 1},
-		notSubBlocked: true,
 		boosts: {
 			spd: 1
 		},
@@ -922,7 +921,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {mirror: 1, authentic: 1},
-		notSubBlocked: true,
 		onHit: function (target, source) {
 			if (target.item) {
 				return false;
@@ -2479,7 +2477,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onHit: function (target, source, move) {
-			if (!target.volatiles['substitute'] || move.notSubBlocked) this.boost({evasion:-1});
+			if (!target.volatiles['substitute'] || move.infiltrates) this.boost({evasion:-1});
 			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
 			var sideEnd = {spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
 			for (var i in sideConditions) {
@@ -6686,7 +6684,6 @@ exports.BattleMovedex = {
 		flags: {mirror: 1, authentic: 1},
 		isUnreleased: true,
 		breaksProtect: true,
-		notSubBlocked: true,
 		onTry: function (pokemon) {
 			if (pokemon.species === 'Hoopa-Unbound' && pokemon.baseTemplate.species === pokemon.species) {
 				return;
@@ -6721,7 +6718,6 @@ exports.BattleMovedex = {
 		flags: {mirror: 1, authentic: 1},
 		isUnreleased: true,
 		breaksProtect: true,
-		notSubBlocked: true,
 		secondary: false,
 		target: "normal",
 		type: "Psychic"
@@ -7626,7 +7622,7 @@ exports.BattleMovedex = {
 			},
 			onAnyModifyDamage: function (damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
-					if (!move.crit && !move.ignoreScreens) {
+					if (!move.crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
 						if (target.side.active.length > 1) return this.chainModify(0.66);
 						return this.chainModify(0.5);
@@ -8718,7 +8714,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onBoost: function (boost, target, source, effect) {
-				if (source && target !== source && (!effect.ignoreScreens || target.side === source.side)) {
+				if (source && target !== source && (!effect.infiltrates || target.side === source.side)) {
 					var showMsg = false;
 					for (var i in boost) {
 						if (boost[i] < 0) {
@@ -10803,7 +10799,7 @@ exports.BattleMovedex = {
 			},
 			onAnyModifyDamage: function (damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
-					if (!move.crit && !move.ignoreScreens) {
+					if (!move.crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
 						if (target.side.active.length > 1) return this.chainModify(0.66);
 						return this.chainModify(0.5);
@@ -11498,19 +11494,19 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onSetStatus: function (status, target, source, effect) {
-				if (source && target !== source && effect && (!effect.ignoreScreens || target.side === source.side)) {
+				if (source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
 					this.debug('interrupting setStatus');
 					return false;
 				}
 			},
 			onTryConfusion: function (target, source, effect) {
-				if (source && target !== source && effect && (!effect.ignoreScreens || target.side === source.side)) {
+				if (source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
 					this.debug('interrupting addVolatile');
 					return false;
 				}
 			},
 			onTryHit: function (target, source, move) {
-				if (move && move.id === 'yawn' && target !== source && (!move.ignoreScreens || target.side === source.side)) {
+				if (move && move.id === 'yawn' && target !== source && (!move.infiltrates || target.side === source.side)) {
 					this.debug('blocking yawn');
 					return false;
 				}
@@ -13457,20 +13453,7 @@ exports.BattleMovedex = {
 			},
 			onTryPrimaryHitPriority: -1,
 			onTryPrimaryHit: function (target, source, move) {
-				if (target === source) {
-					this.debug('sub bypass: self hit');
-					return;
-				}
-				if (move.notSubBlocked || (this.gen >= 6 && move.flags['sound'])) {
-					return;
-				}
-				if (move.category === 'Status') {
-					var SubBlocked = {
-						block:1, embargo:1, entrainment:1, gastroacid:1, healblock:1, healpulse:1, leechseed:1, lockon:1, meanlook:1, mindreader:1, nightmare:1, painsplit:1, psychoshift:1, simplebeam:1, skydrop:1, soak: 1, spiderweb:1, switcheroo:1, topsyturvy:1, trick:1, worryseed:1, yawn:1
-					};
-					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
-						return false;
-					}
+				if (target === source || move.flags['authentic'] || move.infiltrates) {
 					return;
 				}
 				var damage = this.getDamage(source, target, move);
