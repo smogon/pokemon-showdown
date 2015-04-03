@@ -1257,11 +1257,7 @@ exports.commands = {
 
 	kris: function (target, room, user) {
 		if (room.id !== 'lobby') if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/NGYDM45.gif" width="160">' +
-			'<img src="http://i.imgur.com/r40kwkf.gif" width="260">' +
-			'<img src="http://i.imgur.com/5CK9LvN.gif" width="120"><br />' +
-			'<b>Ace:</b> Zero Suit Samus and Greninja<br />' +
-			'"Move fast, hit hard, and don\'t get caught making a mistake."</center>'
+		this.sendReplyBox('<center><img src="http://i.imgur.com/ETOxeb0.png" width="90"><img src="http://i.imgur.com/WxKYYmQ.png" width="330"><img src="http://i.imgur.com/XtzEUCh.png" width="90"><br /><font color="#210B61"><b>Aces:</b> Mega Sableye and Mega Tyranitar<br />"I stopped trying to be the best Dark user, I'd rather be the one that jumps you when you least expect it"</font></center>'
 		);
 	},
 
@@ -3829,11 +3825,7 @@ exports.commands = {
 
 	blake: function (target, room, user) {
 		if (room.id !== 'lobby') if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://31.media.tumblr.com/7339b6afdb94b275f142ebae26668b75/tumblr_mlgw28eK1o1rj8nzio1_400.gif" width="130">' +
-			'<img src="http://i.imgur.com/YkCmgpI.gif" width="340">' +
-			'<img src="http://24.media.tumblr.com/6366ef75eb549cc676338027a7004937/tumblr_mk3d8giUNw1qg1v6ho3_250.gif" width="70"><br />' +
-			'<b>Ace:</b> Espeon<br />' +
-			'It\'s lovely! Almost as lovely as this book... That I will continue to read... As soon as you leave...</center>'
+		this.sendReplyBox('<center><img src="http://i.kinja-img.com/gawker-media/image/upload/s--27cjzANB--/c_fit,fl_progressive,q_80,w_636/az5culsvm3fptg5ircoi.gif" height="131"><img src="http://i.imgur.com/YkCmgpI.gif" width="340"><img src="http://24.media.tumblr.com/6366ef75eb549cc676338027a7004937/tumblr_mk3d8giUNw1qg1v6ho3_250.gif" width="70"><br /><b>Ace:</b> Espeon<br />It's lovely! Almost as lovely as this book... That I will continue to read... As soon as you leave...</center></div>'
 		);
 	},
 
