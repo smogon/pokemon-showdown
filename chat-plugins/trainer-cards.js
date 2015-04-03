@@ -3829,7 +3829,7 @@ exports.commands = {
 
 	blake: function (target, room, user) {
 		if (room.id !== 'lobby') if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.kinja-img.com/gawker-media/image/upload/s--27cjzANB--/c_fit,fl_progressive,q_80,w_636/az5culsvm3fptg5ircoi.gif" height="131"><img src="http://i.imgur.com/YkCmgpI.gif" width="340"><img src="http://24.media.tumblr.com/6366ef75eb549cc676338027a7004937/tumblr_mk3d8giUNw1qg1v6ho3_250.gif" width="70"><br /><b>Ace:</b> Espeon<br />It's lovely! Almost as lovely as this book... That I will continue to read... As soon as you leave...</center></div>'
+		this.sendReplyBox('<center><img src="http://i.kinja-img.com/gawker-media/image/upload/s--27cjzANB--/c_fit,fl_progressive,q_80,w_636/az5culsvm3fptg5ircoi.gif" height="131"><img src="http://i.imgur.com/YkCmgpI.gif" width="340"><img src="http://24.media.tumblr.com/6366ef75eb549cc676338027a7004937/tumblr_mk3d8giUNw1qg1v6ho3_250.gif" width="70"><br /><b>Ace:</b> Espeon<br />It\'s lovely! Almost as lovely as this book... That I will continue to read... As soon as you leave...</center></div>'
 		);
 	},
 
