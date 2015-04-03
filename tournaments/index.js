@@ -653,6 +653,13 @@ Tournament = (function () {
 		var result = 'draw';
 		if (from === winner) {
 			result = 'win';
+			if (this.generator.users.size >= Core.tournaments.tourSize) {
+				var wid = toId(winner), // winner's userid
+
+				// file i/o
+				var winnerBP = Number(Core.stdin('bp', wid));
+				Core.stdout('bp', wid, (winnerBP + 1)););
+			}
 		} else if (to === winner) {
 			result = 'loss';
 		}
@@ -677,15 +684,6 @@ Tournament = (function () {
 			// Should never happen
 			this.room.add("Unexpected " + error + " from setMatchResult([" + from.userid + ", " + to.userid + "], " + result + ", " + room.battle.score + ") in onBattleWin(" + room.id + ", " + winner.userid + "). Please report this to an admin.");
 			return this.room.update();
-		}
-
-		var tourSize = this.generator.users.size;
-		if (tourSize >= Core.tournaments.tourSize) {
-			var wid = toId(winner), // winner's userid
-
-			// file i/o
-			var winnerBP = Number(Core.stdin('bp', wid));
-			Core.stdout('bp', wid, (winnerBP + 1));
 		}
 
 		this.room.add('|tournament|battleend|' + from.name + '|' + to.name + '|' + result + '|' + room.battle.score.join(','));
