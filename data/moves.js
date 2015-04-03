@@ -448,9 +448,8 @@ exports.BattleMovedex = {
 			var side = pokemon.side;
 			for (var i = 0; i < side.pokemon.length; i++) {
 				if (side.pokemon[i].volatiles['substitute'] && !move.notSubBlocked) continue;
-				side.pokemon[i].status = '';
+				side.pokemon[i].cureStatus();
 			}
-			this.add('-cureteam', source, '[from] move: Aromatherapy');
 		},
 		target: "allyTeam",
 		type: "Grass"
