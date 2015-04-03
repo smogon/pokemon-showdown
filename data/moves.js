@@ -8797,7 +8797,7 @@ exports.BattleMovedex = {
 			duration: 5,
 			onSetStatus: function (status, target, source, effect) {
 				if (!target.runImmunity('Ground')) return;
-				if (source && source !== target || (effect && effect.id === 'toxicspikes')) {
+				if (source && source !== target) {
 					this.debug('misty terrain preventing status');
 					return false;
 				}
@@ -11520,20 +11520,19 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onSetStatus: function (status, target, source, effect) {
-				if (!effect || (source && target === source) || (effect.ignoreScreens && target.side === source.side)) return;
-				if (effect.id === 'toxicspikes' || (source && target !== source && !effect.ignoreScreens)) {
+				if (source && target !== source && effect && (!effect.ignoreScreens || target.side === source.side)) {
 					this.debug('interrupting setStatus');
 					return false;
 				}
 			},
 			onTryConfusion: function (target, source, effect) {
-				if (source && source !== target && effect && !effect.ignoreScreens) {
+				if (source && target !== source && effect && (!effect.ignoreScreens || target.side === source.side)) {
 					this.debug('interrupting addVolatile');
 					return false;
 				}
 			},
 			onTryHit: function (target, source, move) {
-				if (move && move.id === 'yawn') {
+				if (move && move.id === 'yawn' && target !== source && (!move.ignoreScreens || target.side === source.side)) {
 					this.debug('blocking yawn');
 					return false;
 				}
@@ -14475,9 +14474,9 @@ exports.BattleMovedex = {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
 				} else if (this.effectData.layers >= 2) {
-					pokemon.trySetStatus('tox');
+					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
 				} else {
-					pokemon.trySetStatus('psn');
+					pokemon.trySetStatus('psn', pokemon.side.foe.active[0]);
 				}
 			}
 		},
