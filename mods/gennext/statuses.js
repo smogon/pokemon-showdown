@@ -7,7 +7,7 @@ exports.BattleStatuses = {
 		duration: 2,
 		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon, target, move) {
-			if (move.thawsUser) {
+			if (move.flags['defrost']) {
 				pokemon.cureStatus();
 				return;
 			}
@@ -15,7 +15,7 @@ exports.BattleStatuses = {
 			return false;
 		},
 		onHit: function (target, source, move) {
-			if (move.type === 'Fire' && move.category !== 'Status' || move.thawsUser) {
+			if (move.type === 'Fire' && move.category !== 'Status' || move.flags['defrost']) {
 				target.cureStatus();
 			}
 		},
