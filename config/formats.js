@@ -2203,10 +2203,10 @@ exports.Formats = [
 			// Admin signature moves.
 			if (move.id === 'spikes' && name === 'antar') {
 				move.name = 'Firebomb';
-				move.isBounceable = false;
-				move.category = 'Special';
-				move.type = 'Fire';
 				move.basePower = 100;
+				move.category = 'Special';
+				move.flags = {};
+				move.type = 'Fire';
 				move.onTryHitSide = function (side, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Overheat", side.active[0]);
@@ -3217,7 +3217,6 @@ exports.Formats = [
 					if (this.effectiveWeather() === 'sunnyday' || this.effectiveWeather() === 'desolateland') return 210;
 					return 140;
 				};
-				move.isContact = false;
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Seismic Toss", target);
@@ -3430,7 +3429,6 @@ exports.Formats = [
 				move.type = 'Electric';
 				move.category = 'Status';
 				move.basePower = 0;
-				delete move.isContact;
 				move.self = {volatileStatus:'torment'};
 				move.onTryHit = function (target, source) {
 					if (pokemon.activeTurns > 1) {

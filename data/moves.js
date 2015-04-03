@@ -124,7 +124,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-		isContact: true,
 		secondary: false,
 		target: "any",
 		type: "Flying"
@@ -175,7 +174,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-		isContact: true,
 		secondary: false,
 		target: "any",
 		type: "Flying"
@@ -369,7 +367,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -413,7 +410,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Water"
@@ -430,7 +426,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -556,7 +551,6 @@ exports.BattleMovedex = {
 				}
 			}
 		},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -573,7 +567,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -758,7 +751,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -4,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Ice"
@@ -965,7 +957,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 1,
 		flags: {contact: 1, protect: 1},
-		isContact: true,
 		volatileStatus: 'bide',
 		affectedByImmunities: false,
 		effect: {
@@ -1027,7 +1018,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -1045,7 +1035,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -1085,7 +1074,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		critRatio: 2,
 		secondary: {
 			chance: 10,
@@ -1172,7 +1160,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -1193,7 +1180,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 20,
 			status: 'par'
@@ -1284,7 +1270,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
-		isContact: true,
 		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
@@ -1339,7 +1324,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-		isContact: true,
 		recoil: [33, 100],
 		secondary: false,
 		target: "any",
@@ -1358,7 +1342,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onTryHit: function (pokemon) {
 			// will shatter screens through sub, before you hit
 			if (pokemon.runImmunity('Fighting')) {
@@ -1446,7 +1429,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onHit: function (target, source) {
 			var item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
@@ -1536,7 +1518,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -1764,7 +1745,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		secondary: false,
@@ -1784,7 +1764,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -6,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		forceSwitch: true,
 		target: "normal",
 		type: "Fighting"
@@ -1801,7 +1780,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -1841,7 +1819,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		self: {
 			boosts: {
 				def: -1,
@@ -1886,7 +1863,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -1960,7 +1936,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -2131,7 +2106,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -5,
 		flags: {contact: 1, protect: 1},
-		isContact: true,
 		beforeTurnCallback: function (pokemon) {
 			pokemon.addVolatile('counter');
 		},
@@ -2174,7 +2148,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onHit: function (target, source) {
 			if (source.item) {
 				return;
@@ -2206,7 +2179,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -2261,7 +2233,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -2279,7 +2250,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 10,
 			status: 'psn'
@@ -2301,7 +2271,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -2323,7 +2292,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -2348,7 +2316,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -2407,7 +2374,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -2636,7 +2602,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1},
-		isContact: true,
 		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
@@ -2788,7 +2753,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1},
-		isContact: true,
 		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
@@ -2839,7 +2803,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion'
@@ -2898,7 +2861,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		recoil: [33, 100],
 		secondary: false,
 		target: "normal",
@@ -2916,7 +2878,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -2934,7 +2895,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -2952,7 +2912,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -3012,7 +2971,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-		isContact: true,
 		self: {
 			boosts: {
 				def: -1,
@@ -3054,7 +3012,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dragon"
@@ -3126,7 +3083,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -3147,7 +3103,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -6,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		forceSwitch: true,
 		target: "normal",
 		type: "Dragon"
@@ -3164,7 +3119,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
-		isContact: true,
 		drain: [3, 4],
 		secondary: false,
 		target: "normal",
@@ -3183,7 +3137,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1, heal: 1},
-		isContact: true,
 		drain: [1, 2],
 		secondary: false,
 		target: "normal",
@@ -3225,7 +3178,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-		isContact: true,
 		secondary: false,
 		target: "any",
 		type: "Flying"
@@ -3243,7 +3195,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -3262,7 +3213,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -3280,7 +3230,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'confusion'
@@ -3652,7 +3601,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3818,7 +3766,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 2,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -3836,7 +3783,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon) {
 			if (pokemon.status && pokemon.status !== 'slp') {
@@ -3859,7 +3805,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -3919,7 +3864,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onTry: function (pokemon, target) {
 			if (pokemon.activeTurns > 1) {
 				this.add('-fail', pokemon);
@@ -3965,7 +3909,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		noFaint: true,
 		secondary: false,
 		target: "normal",
@@ -4028,7 +3971,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onHit: function (target, pokemon) {
 			pokemon.addVolatile('fellstinger');
 		},
@@ -4122,7 +4064,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondaries: [
 			{
 				chance: 10,
@@ -4217,7 +4158,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -4290,7 +4230,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -4335,7 +4274,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -4359,7 +4297,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
-		isContact: true,
 		thawsUser: true,
 		secondary: {
 			chance: 10,
@@ -4401,7 +4338,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
-		isContact: true,
 		thawsUser: true,
 		recoil: [33, 100],
 		secondary: {
@@ -4570,7 +4506,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
-		isContact: true,
 		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
@@ -4620,7 +4555,6 @@ exports.BattleMovedex = {
 		name: "Flying Press",
 		pp: 10,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1},
-		isContact: true,
 		onEffectiveness: function (typeMod, type, move) {
 			return typeMod + this.getEffectiveness('Flying', type);
 		},
@@ -4688,7 +4622,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -3,
 		flags: {contact: 1, protect: 1, punch: 1},
-		isContact: true,
 		beforeTurnCallback: function (pokemon) {
 			pokemon.addVolatile('focuspunch');
 		},
@@ -4749,7 +4682,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -4825,7 +4757,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		useTargetOffensive: true,
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -4937,7 +4868,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -4954,7 +4884,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -4978,7 +4907,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onHit: function (target, source) {
 			source.addVolatile('furycutter');
 		},
@@ -5010,7 +4938,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -5157,7 +5084,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		multihit: 2,
 		secondary: false,
 		target: "normal",
@@ -5229,7 +5155,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, recharge: 1, protect: 1, mirror: 1},
-		isContact: true,
 		self: {
 			volatileStatus: 'mustrecharge'
 		},
@@ -5314,7 +5239,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -5674,7 +5598,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		ohko: true,
 		secondary: false,
 		target: "normal",
@@ -5734,7 +5657,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -5769,7 +5691,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		self: {
 			boosts: {
 				spe: -1
@@ -5856,7 +5777,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		recoil: [1, 4],
 		secondary: false,
 		target: "normal",
@@ -5875,7 +5795,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		recoil: [1, 2],
 		secondary: false,
 		target: "normal",
@@ -5893,7 +5812,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -6082,7 +6000,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -6149,7 +6066,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fire"
@@ -6204,7 +6120,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Steel"
@@ -6537,7 +6452,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
-		isContact: true,
 		hasCustomRecoil: true,
 		onMoveFail: function (target, source, move) {
 			this.damage(source.maxhp / 2, source, source, 'highjumpkick');
@@ -6558,7 +6472,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		noFaint: true,
 		secondary: false,
 		target: "normal",
@@ -6616,7 +6529,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -6633,7 +6545,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		ohko: true,
 		secondary: false,
 		target: "normal",
@@ -6652,7 +6563,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
-		isContact: true,
 		drain: [1, 2],
 		secondary: false,
 		target: "normal",
@@ -6771,7 +6681,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 10,
 			volatileStatus: 'flinch'
@@ -6893,7 +6802,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		effect: {
 			duration: 2,
 			onLockMove: 'iceball',
@@ -6982,7 +6890,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondaries: [
 			{
 				chance: 10,
@@ -7008,7 +6915,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: {
 			chance: 10,
 			status: 'frz'
@@ -7182,7 +7088,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -7284,7 +7189,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -7304,7 +7208,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -7347,7 +7250,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
-		isContact: true,
 		hasCustomRecoil: true,
 		onMoveFail: function (target, source, move) {
 			this.damage(source.maxhp / 2, source, source, 'jumpkick');
@@ -7368,7 +7270,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -7434,7 +7335,7 @@ exports.BattleMovedex = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				if (move.isContact) {
+				if (move.flags['contact']) {
 					this.boost({atk:-2}, source, target, this.getMove("King's Shield"));
 				}
 				return null;
@@ -7457,7 +7358,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon, target) {
 			var item = target.getItem();
@@ -7507,7 +7407,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onTryHit: function (target, source) {
 			if (source.moveset.length === 1) return false; // Last Resort fails unless the user knows at least 2 moves
 			var hasLastResort = false; // User must actually have Last Resort for it to succeed
@@ -7557,7 +7456,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -7618,7 +7516,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
-		isContact: true,
 		drain: [1, 2],
 		secondary: false,
 		target: "normal",
@@ -7696,7 +7593,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -7846,7 +7742,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -7863,7 +7758,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 100,
 			boosts: {
@@ -7993,7 +7887,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -8388,7 +8281,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8405,7 +8297,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -8423,7 +8314,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -8508,7 +8398,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 10,
 			self: {
@@ -8552,7 +8441,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: {
 			chance: 20,
 			self: {
@@ -9261,7 +9149,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -9321,7 +9208,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -9395,7 +9281,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 100,
 			status: 'par'
@@ -9515,7 +9400,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		self: {
 			volatileStatus: 'lockedmove'
 		},
@@ -9650,7 +9534,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -9667,7 +9550,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-		isContact: true,
 		secondary: false,
 		target: "any",
 		type: "Flying"
@@ -9750,7 +9632,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		self: {
 			volatileStatus: 'lockedmove'
 		},
@@ -9770,7 +9651,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, charge: 1, mirror: 1},
-		isContact: true,
 		isTwoTurnMove: true,
 		breaksProtect: true,
 		onTry: function (attacker, defender, move) {
@@ -9852,7 +9732,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -9874,7 +9753,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-		isContact: true,
 		onHit: function (target, source) {
 			var item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
@@ -9899,7 +9777,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 50,
 			status: 'tox'
@@ -9937,7 +9814,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'psn'
@@ -9996,7 +9872,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		critRatio: 2,
 		secondary: {
 			chance: 10,
@@ -10017,7 +9892,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10202,7 +10076,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: {
 			chance: 100,
 			self: {
@@ -10227,7 +10100,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -10523,7 +10395,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -10549,7 +10420,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		beforeTurnCallback: function (pokemon, target) {
 			target.side.addSideCondition('pursuit', pokemon);
 			if (!target.side.sideConditions['pursuit'].sources) {
@@ -10633,7 +10503,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -10718,7 +10587,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		self: {
 			volatileStatus: 'rage'
 		},
@@ -10800,7 +10668,6 @@ exports.BattleMovedex = {
 		pp: 40,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		self: {
 			onHit: function (pokemon) {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
@@ -10852,7 +10719,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -11096,7 +10962,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon) {
 			if (pokemon.side.faintedLastTurn) {
@@ -11124,7 +10989,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -11148,7 +11012,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -4,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -11184,7 +11047,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -11257,7 +11119,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion'
@@ -11317,7 +11178,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -11426,7 +11286,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -11459,7 +11318,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		effect: {
 			duration: 2,
 			onLockMove: 'rollout',
@@ -11634,7 +11492,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		ignoreEvasion: true,
 		ignoreDefensive: true,
 		secondary: false,
@@ -11663,7 +11520,8 @@ exports.BattleMovedex = {
 				return 5;
 			},
 			onSetStatus: function (status, target, source, effect) {
-				if (effect && (effect.id === 'toxicspikes' || source && source !== target && !effect.ignoreScreens)) {
+				if (!effect || (source && target === source) || (effect.ignoreScreens && target.side === source.side)) return;
+				if (effect.id === 'toxicspikes' || (source && target !== source && !effect.ignoreScreens)) {
 					this.debug('interrupting setStatus');
 					return false;
 				}
@@ -11799,7 +11657,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -11954,7 +11811,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -12011,7 +11867,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -12030,7 +11885,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, charge: 1, mirror: 1},
-		isContact: true,
 		isTwoTurnMove: true,
 		breaksProtect: true,
 		onTry: function (attacker, defender, move) {
@@ -12075,7 +11929,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -12093,7 +11946,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Ghost"
@@ -12376,7 +12228,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1},
-		isContact: true,
 		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
@@ -12441,7 +12292,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
-		isContact: true,
 		isTwoTurnMove: true,
 		onTryHit: function (target, source, move) {
 			if (target.fainted) return false;
@@ -12542,7 +12392,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -12577,7 +12426,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -12594,7 +12442,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		critRatio: 2,
 		secondary: false,
 		target: "normal",
@@ -12781,7 +12628,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onHit: function (target) {
 			if (target.status === 'par') target.cureStatus();
 		},
@@ -12944,7 +12790,7 @@ exports.BattleMovedex = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				if (move.isContact) {
+				if (move.flags['contact']) {
 					this.damage(source.maxhp / 8, source, target);
 				}
 				return null;
@@ -13075,7 +12921,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			status: 'par'
@@ -13311,7 +13156,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 10,
 			self: {
@@ -13403,7 +13247,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -13461,7 +13304,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		willCrit: true,
 		secondary: false,
 		target: "normal",
@@ -13479,7 +13321,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch'
@@ -13499,7 +13340,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -13536,7 +13376,6 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {contact: 1, protect: 1},
-		isContact: true,
 		onModifyMove: function (move) {
 			move.type = '???';
 		},
@@ -13602,7 +13441,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		recoil: [1, 4],
 		secondary: false,
 		target: "normal",
@@ -13707,7 +13545,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onTry: function (source, target) {
 			var decision = this.willMove(target);
 			if (!decision || decision.choice !== 'move' || (decision.move.category === 'Status' && decision.move.id !== 'mefirst') || target.volatiles.mustrecharge) {
@@ -13752,7 +13589,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -13770,7 +13606,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		self: {
 			boosts: {
 				atk: -1,
@@ -14030,7 +13865,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -14068,7 +13902,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		multihit: [2, 5],
 		secondary: false,
 		target: "normal",
@@ -14143,7 +13976,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		recoil: [1, 4],
 		secondary: false,
 		target: "normal",
@@ -14296,7 +14128,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onHit: function (target, source) {
 			if (source.item) {
 				return;
@@ -14376,7 +14207,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		self: {
 			volatileStatus: 'lockedmove'
 		},
@@ -14423,7 +14253,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondaries: [
 			{
 				chance: 10,
@@ -14449,7 +14278,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		isContact: true,
 		secondary: {
 			chance: 10,
 			status: 'par'
@@ -14832,7 +14660,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		multihit: [3, 3],
 		effect: {
 			duration: 1,
@@ -14875,7 +14702,6 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -14932,7 +14758,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		selfSwitch: true,
 		secondary: false,
 		target: "normal",
@@ -15010,7 +14835,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		self: {
 			boosts: {
 				def: -1,
@@ -15094,7 +14918,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -15111,7 +14934,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Grass"
@@ -15128,7 +14950,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: -1,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -15164,7 +14985,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		recoil: [33, 100],
 		secondary: {
 			chance: 10,
@@ -15189,7 +15009,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		onHit: function (target) {
 			if (target.status === 'slp') target.cureStatus();
 		},
@@ -15374,7 +15193,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -15531,7 +15349,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		recoil: [1, 4],
 		secondary: false,
 		target: "normal",
@@ -15567,7 +15384,6 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, distance: 1},
-		isContact: true,
 		secondary: false,
 		target: "any",
 		type: "Flying"
@@ -15675,7 +15491,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		recoil: [33, 100],
 		secondary: false,
 		target: "normal",
@@ -15746,7 +15561,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		volatileStatus: 'partiallytrapped',
 		secondary: false,
 		target: "normal",
@@ -15767,7 +15581,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -15785,7 +15598,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Bug"
@@ -15854,7 +15666,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch'
@@ -15897,7 +15708,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		isContact: true,
 		secondary: {
 			chance: 50,
 			boosts: {
@@ -15919,7 +15729,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, recharge: 1, protect: 1, mirror: 1},
-		isContact: true,
 		drain: [1, 2],
 		onTry: function (pokemon) {
 			if (pokemon.template.name !== 'Magikarp') {

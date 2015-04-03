@@ -2,7 +2,7 @@ exports.BattleAbilities = {
 	"cutecharm": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact) {
+			if (move && move.flags['contact']) {
 				if (this.random(3) < 1) {
 					source.addVolatile('attract', target);
 				}
@@ -12,7 +12,7 @@ exports.BattleAbilities = {
 	"effectspore": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact && !source.status) {
+			if (move && move.flags['contact'] && !source.status) {
 				var r = this.random(300);
 				if (r < 10) source.setStatus('slp');
 				else if (r < 20) source.setStatus('par');
@@ -23,7 +23,7 @@ exports.BattleAbilities = {
 	"flamebody": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact) {
+			if (move && move.flags['contact']) {
 				if (this.random(3) < 1) {
 					source.trySetStatus('brn', target, move);
 				}
@@ -68,7 +68,7 @@ exports.BattleAbilities = {
 	"poisonpoint": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact) {
+			if (move && move.flags['contact']) {
 				if (this.random(3) < 1) {
 					source.trySetStatus('psn', target, move);
 				}
@@ -88,7 +88,7 @@ exports.BattleAbilities = {
 	"roughskin": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.isContact) {
+			if (source && source !== target && move && move.flags['contact']) {
 				this.damage(source.maxhp / 16, source, target);
 			}
 		}
@@ -102,7 +102,7 @@ exports.BattleAbilities = {
 	"static": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, effect) {
-			if (effect && effect.isContact) {
+			if (effect && effect.flags['contact']) {
 				if (this.random(3) < 1) {
 					source.trySetStatus('par', target, effect);
 				}

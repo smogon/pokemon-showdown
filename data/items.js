@@ -3698,7 +3698,7 @@ exports.BattleItems = {
 		},
 		onAfterDamageOrder: 2,
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.isContact) {
+			if (source && source !== target && move && move.flags['contact']) {
 				this.damage(source.maxhp / 6, source, target, null, true);
 			}
 		},
@@ -4355,7 +4355,7 @@ exports.BattleItems = {
 			this.damage(pokemon.maxhp / 8);
 		},
 		onHit: function (target, source, move) {
-			if (source && source !== target && !source.item && move && move.isContact) {
+			if (source && source !== target && !source.item && move && move.flags['contact']) {
 				var barb = target.takeItem();
 				source.setItem(barb);
 				// no message for Sticky Barb changing hands
