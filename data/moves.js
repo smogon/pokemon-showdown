@@ -8737,13 +8737,16 @@ exports.BattleMovedex = {
 		sideCondition: 'mist',
 		effect: {
 			duration: 5,
-			onBoost: function (boost, target, source) {
-				if (!source || target === source) return;
-				for (var i in boost) {
-					if (boost[i] < 0) {
-						delete boost[i];
-						this.add('-activate', target, 'Mist');
+			onBoost: function (boost, target, source, effect) {
+				if (source && target !== source && (!effect.ignoreScreens || target.side === source.side)) {
+					var showMsg = false;
+					for (var i in boost) {
+						if (boost[i] < 0) {
+							delete boost[i];
+							showMsg = true;
+						}
 					}
+					if (showMsg && !effect.secondaries) this.add('-activate', target, 'Mist');
 				}
 			},
 			onStart: function (side) {
