@@ -72,22 +72,24 @@ var components = exports.components = {
 			var userId = toId(target);
 			var bp = Core.profile.bp(userId);
 			var tourWins = Core.profile.tourWins(userId);
+			var pclWins = Core.profile.pclWins(userId);
 			var title = Core.profile.title(userId);
 
 			if (title === 0) {
-				return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + '<br clear="all">');
+				return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.name(false, userId) + Core.profile.group(false, userId) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + Core.profile.display('pclWins', pclWins) + '<br clear="all">');
 			}
-			return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.display('title', title) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + '<br clear="all">');
+			return this.sendReplyBox(Core.profile.avatar(false, userId) + Core.profile.display('title', title) + Core.profile.name(false, target) + Core.profile.group(false, userId) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + Core.profile.display('pclWins', pclWins) + '<br clear="all">');
 		}
 
 		var bp = Core.profile.bp(targetUser.userid);
 		var tourWins = Core.profile.tourWins(toId(targetUser.userid));
+		var pclWins = Core.profile.pclWins(toId(targetUser.userid));
 		var title = Core.profile.title(targetUser.userid);
 
 		if (title === 0) {
-			return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + '<br clear="all">');
+			return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + Core.profile.display('pclWins', pclWins) + '<br clear="all">');
 		}
-		return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.display('title', title) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + '<br clear="all">');
+		return this.sendReplyBox(Core.profile.avatar(true, targetUser, targetUser.avatar) + Core.profile.display('title', title) + Core.profile.name(true, targetUser) + Core.profile.group(true, targetUser) + Core.profile.display('bp', bp) + Core.profile.display('tourWins', tourWins) + Core.profile.display('pclWins', pclWins) + '<br clear="all">');
 	},
 
 	settitle: 'title',
