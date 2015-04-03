@@ -596,6 +596,7 @@ exports.grouplist = [
 		name: "Voice",
 		inherit: ' ',
 		tournaments: true,
+		voicetourmoderation: true,
 		declare: true,
 		announce: true,
 		ignorelimits: true,
