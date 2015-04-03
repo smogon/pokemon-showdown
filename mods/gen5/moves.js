@@ -195,7 +195,7 @@ exports.BattleMovedex = {
 	finalgambit: {
 		inherit: true,
 		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints. Makes contact.",
-		isContact: true
+		flags: {contact: 1, protect: 1}
 	},
 	fireblast: {
 		inherit: true,

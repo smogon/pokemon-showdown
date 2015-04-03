@@ -55,7 +55,7 @@ exports.BattleAbilities = {
 		name: "Aftermath",
 		onAfterDamageOrder: 1,
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.isContact && !target.hp) {
+			if (source && source !== target && move && move.flags['contact'] && !target.hp) {
 				this.damage(source.maxhp / 4, source, target, null, true);
 			}
 		},
@@ -418,7 +418,7 @@ exports.BattleAbilities = {
 		desc: "There is a 30% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",
 		shortDesc: "30% chance of infatuating Pokemon of the opposite gender if they make contact.",
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact) {
+			if (move && move.flags['contact']) {
 				if (this.random(10) < 3) {
 					source.addVolatile('attract', target);
 				}
@@ -646,7 +646,7 @@ exports.BattleAbilities = {
 		desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned, paralyzed, or fall asleep.",
 		shortDesc: "30% chance of poison/paralysis/sleep on others making contact with this Pokemon.",
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact && !source.status && source.runImmunity('powder')) {
+			if (move && move.flags['contact'] && !source.status && source.runImmunity('powder')) {
 				var r = this.random(100);
 				if (r < 11) {
 					source.setStatus('slp', target);
@@ -695,7 +695,7 @@ exports.BattleAbilities = {
 	"flamebody": {
 		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned.",
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact) {
+			if (move && move.flags['contact']) {
 				if (this.random(10) < 3) {
 					source.trySetStatus('brn', target, move);
 				}
@@ -948,7 +948,7 @@ exports.BattleAbilities = {
 	"gooey": {
 		shortDesc: "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage.",
 		onAfterDamage: function (damage, target, source, effect) {
-			if (effect && effect.isContact) this.boost({spe: -1}, source, target);
+			if (effect && effect.flags['contact']) this.boost({spe: -1}, source, target);
 		},
 		id: "gooey",
 		name: "Gooey",
@@ -1247,7 +1247,7 @@ exports.BattleAbilities = {
 		shortDesc: "Pokemon making contact with this Pokemon lose 1/8 of their max HP.",
 		onAfterDamageOrder: 1,
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.isContact) {
+			if (source && source !== target && move && move.flags['contact']) {
 				this.damage(source.maxhp / 8, source, target, null, true);
 			}
 		},
@@ -1664,7 +1664,7 @@ exports.BattleAbilities = {
 		id: "mummy",
 		name: "Mummy",
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.isContact) {
+			if (source && source !== target && move && move.flags['contact']) {
 				var oldAbility = source.setAbility('mummy', source, 'mummy', true);
 				if (oldAbility) {
 					this.add('-endability', source, oldAbility, '[from] Mummy');
@@ -1854,7 +1854,7 @@ exports.BattleAbilities = {
 		desc: "If this Pokemon has no item, it steals the item off a Pokemon that makes contact with it.",
 		shortDesc: "If this Pokemon has no item, it steals the item off a Pokemon making contact with it.",
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.isContact) {
+			if (source && source !== target && move && move.flags['contact']) {
 				if (target.item) {
 					return;
 				}
@@ -1933,7 +1933,7 @@ exports.BattleAbilities = {
 	"poisonpoint": {
 		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be poisoned.",
 		onAfterDamage: function (damage, target, source, move) {
-			if (move && move.isContact) {
+			if (move && move.flags['contact']) {
 				if (this.random(10) < 3) {
 					source.trySetStatus('psn', target, move);
 				}
@@ -1948,7 +1948,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's contact moves have a 30% chance of poisoning.",
 		// upokecenter says this is implemented as an added secondary effect
 		onModifyMove: function (move) {
-			if (!move || !move.isContact) return;
+			if (!move || !move.flags['contact']) return;
 			if (!move.secondaries) {
 				move.secondaries = [];
 			}
@@ -2162,7 +2162,7 @@ exports.BattleAbilities = {
 		shortDesc: "Pokemon making contact with this Pokemon lose 1/8 of their max HP.",
 		onAfterDamageOrder: 1,
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.isContact) {
+			if (source && source !== target && move && move.flags['contact']) {
 				this.damage(source.maxhp / 8, source, target, null, true);
 			}
 		},
@@ -2555,7 +2555,7 @@ exports.BattleAbilities = {
 	"static": {
 		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be paralyzed.",
 		onAfterDamage: function (damage, target, source, effect) {
-			if (effect && effect.isContact) {
+			if (effect && effect.flags['contact']) {
 				if (this.random(10) < 3) {
 					source.trySetStatus('par', target, effect);
 				}
@@ -2910,7 +2910,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's contact moves have their power multiplied by 1.3.",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
-			if (move.isContact) {
+			if (move.flags['contact']) {
 				return this.chainModify([0x14CD, 0x1000]);
 			}
 		},

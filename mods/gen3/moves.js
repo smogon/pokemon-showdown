@@ -17,7 +17,7 @@ exports.BattleMovedex = {
 	},
 	ancientpower: {
 		inherit: true,
-		isContact: true
+		flags: {contact: 1, protect: 1, mirror: 1}
 	},
 	assist: {
 		inherit: true,
@@ -110,7 +110,7 @@ exports.BattleMovedex = {
 	covet: {
 		inherit: true,
 		basePower: 40,
-		isContact: false
+		flags: {protect: 1, mirror: 1}
 	},
 	crabhammer: {
 		inherit: true,
@@ -270,14 +270,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		priority: 1
 	},
-	feintattack: {
-		inherit: true,
-		isContact: false
-	},
 	fakeout: {
 		inherit: true,
 		priority: 1,
-		isContact: false
+		flags: {protect: 1, mirror: 1}
+	},
+	feintattack: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1}
 	},
 	firespin: {
 		inherit: true,
@@ -307,10 +307,8 @@ exports.BattleMovedex = {
 			}
 			return 20;
 		},
-		isViable: true,
 		pp: 15,
 		priority: 0,
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -516,7 +514,7 @@ exports.BattleMovedex = {
 	},
 	overheat: {
 		inherit: true,
-		isContact: true
+		flags: {contact: 1, protect: 1, mirror: 1}
 	},
 	petaldance: {
 		inherit: true,
@@ -602,7 +600,6 @@ exports.BattleMovedex = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		isContact: true,
 		beforeMoveCallback: function (pokemon) {
 			this.add('-activate', pokemon.name, 'move: Struggle');
 		},
