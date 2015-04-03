@@ -68,7 +68,7 @@ exports.BattleMovedex = {
 	},
 	bestow: {
 		inherit: true,
-		isNotProtectable: false,
+		flags: {protect: 1, mirror: 1},
 		notSubBlocked: false
 	},
 	bind: {
@@ -81,7 +81,7 @@ exports.BattleMovedex = {
 	},
 	block: {
 		inherit: true,
-		isNotProtectable: false
+		flags: {protect: 1, reflectable: 1, mirror: 1}
 	},
 	bubble: {
 		inherit: true,
@@ -479,7 +479,7 @@ exports.BattleMovedex = {
 	},
 	meanlook: {
 		inherit: true,
-		isNotProtectable: false
+		flags: {protect: 1, reflectable: 1, mirror: 1}
 	},
 	meteormash: {
 		inherit: true,
@@ -655,7 +655,7 @@ exports.BattleMovedex = {
 	roar: {
 		inherit: true,
 		accuracy: 100,
-		isNotProtectable: false
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1}
 	},
 	rocktomb: {
 		inherit: true,
@@ -880,7 +880,7 @@ exports.BattleMovedex = {
 	whirlwind: {
 		inherit: true,
 		accuracy: 100,
-		isNotProtectable: false
+		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1}
 	},
 	wideguard: {
 		inherit: true,

@@ -140,7 +140,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {},
-		isNotProtectable: true,
 		onHit: function (target) {
 			var stats = [];
 			for (var i in target.boosts) {
@@ -208,7 +207,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {authentic: 1},
-		isNotProtectable: true,
 		onHit: function (target) {
 			if (target.side.active.length < 2) return false; // fails in singles
 			var decision = this.willMove(target);
@@ -467,7 +465,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {authentic: 1},
-		isNotProtectable: true,
 		notSubBlocked: true,
 		boosts: {
 			spd: 1
@@ -925,7 +922,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {mirror: 1, authentic: 1},
-		isNotProtectable: true,
 		notSubBlocked: true,
 		onHit: function (target, source) {
 			if (target.item) {
@@ -1117,7 +1113,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1},
-		isNotProtectable: true,
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
@@ -1880,7 +1875,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isNotProtectable: true,
 		boosts: {
 			spa: -1
 		},
@@ -1978,7 +1972,6 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {authentic: 1},
-		isNotProtectable: true,
 		onHit: function (target, source) {
 			if (!target.lastMove) {
 				return false;
@@ -2101,7 +2094,6 @@ exports.BattleMovedex = {
 		desc: "Deals damage to the last foe to hit the user with a physical attack this turn equal to twice the HP lost by the user from that attack. If the user did not lose HP from the attack, this move deals damage with a Base Power of 1 instead. If that foe's position is no longer in use, the damage is done to a random foe in range. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by a foe's physical attack this turn.",
 		shortDesc: "If hit by physical attack, returns double damage.",
 		id: "counter",
-		isViable: true,
 		name: "Counter",
 		pp: 20,
 		priority: -5,
@@ -2332,7 +2324,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1},
-		isNotProtectable: true,
 		volatileStatus: 'curse',
 		onModifyMove: function (move, source, target) {
 			if (!source.hasType('Ghost')) {
@@ -2822,7 +2813,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {},
-		isNotProtectable: true,
 		isFutureMove: true,
 		onTryHit: function (target, source) {
 			source.side.addSideCondition('futuremove');
@@ -3208,7 +3198,6 @@ exports.BattleMovedex = {
 		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
 		shortDesc: "Hits 2 times in one turn.",
 		id: "dualchop",
-		isViable: true,
 		name: "Dual Chop",
 		pp: 15,
 		priority: 0,
@@ -3596,7 +3585,6 @@ exports.BattleMovedex = {
 		desc: "Deals damage to the target equal to (target's current HP - user's current HP). The target is unaffected if its current HP is less than or equal to the user's current HP.",
 		shortDesc: "Lowers the target's HP to the user's HP.",
 		id: "endeavor",
-		isViable: true,
 		name: "Endeavor",
 		pp: 5,
 		priority: 0,
@@ -5010,7 +4998,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		isNotProtectable: true,
 		affectedByImmunities: false,
 		isFutureMove: true,
 		onTryHit: function (target, source) {
@@ -6136,7 +6123,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 5,
 		flags: {authentic: 1},
-		isNotProtectable: true,
 		volatileStatus: 'helpinghand',
 		effect: {
 			duration: 1,
@@ -7322,11 +7308,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
+				if (!move.flags['protect'] || move.category === 'Status') return;
 				if (move.breaksProtect) {
 					target.removeVolatile('kingsshield');
 					return;
 				}
-				if (move && (move.category === 'Status' || move.isNotProtectable)) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -8223,7 +8209,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1},
-		isNotProtectable: true,
 		onHit: function (target, source, move) {
 			if (!target.addVolatile('trapped', source, move, 'trapper')) {
 				this.add('-fail', target);
@@ -8641,7 +8626,6 @@ exports.BattleMovedex = {
 		desc: "Deals damage to the last foe to hit the user with a special attack this turn equal to twice the HP lost by the user from that attack. If the user did not lose HP from the attack, this move deals damage with a Base Power of 1 instead. If that foe's position is no longer in use, the damage is done to a random foe in range. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by a foe's special attack this turn.",
 		shortDesc: "If hit by special attack, returns double damage.",
 		id: "mirrorcoat",
-		isViable: true,
 		name: "Mirror Coat",
 		pp: 20,
 		priority: -5,
@@ -8688,7 +8672,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {},
-		isNotProtectable: true,
 		onTryHit: function (target) {
 			if (!target.lastMove || !this.getMove(target.lastMove).flags['mirror']) {
 				return false;
@@ -9714,7 +9697,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1, authentic: 1},
-		isNotProtectable: true,
 		boosts: {
 			atk: -1
 		},
@@ -10179,11 +10161,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
+				if (!move.flags['protect']) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('Protect');
 					return;
 				}
-				if (move && (move.target === 'self' || move.isNotProtectable)) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -10230,7 +10212,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1},
-		isNotProtectable: true,
 		onHit: function (target, source) {
 			var targetBoosts = {};
 			for (var i in target.boosts) {
@@ -11067,7 +11048,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -6,
 		flags: {reflectable: 1, mirror: 1, sound: 1, authentic: 1},
-		isNotProtectable: true,
 		forceSwitch: true,
 		secondary: false,
 		target: "normal",
@@ -11258,7 +11238,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1},
-		isNotProtectable: true,
 		onTryHit: function (target, source) {
 			var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, trace:1, wonderguard:1, zenmode:1};
 			if (bannedAbilities[target.ability] || source.ability === 'multitype' || target.ability === source.ability) {
@@ -12156,7 +12135,6 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {authentic: 1},
-		isNotProtectable: true,
 		onHit: function (target, source) {
 			var disallowedMoves = {chatter:1, sketch:1, struggle:1};
 			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
@@ -12779,11 +12757,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
+				if (!move.flags['protect']) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('spikyshield');
 					return;
 				}
-				if (move && (move.target === 'self' || move.isNotProtectable)) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -14499,7 +14477,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		isNotProtectable: true,
 		onHit: function (target, pokemon) {
 			if (!pokemon.transformInto(target, pokemon)) {
 				return false;
@@ -15287,7 +15264,6 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -6,
 		flags: {reflectable: 1, mirror: 1, authentic: 1},
-		isNotProtectable: true,
 		forceSwitch: true,
 		secondary: false,
 		target: "normal",
