@@ -961,10 +961,13 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 
 		if (commands.moderation[cmd]) {
-			if (!user.can('tournamentsmoderation', null, room)) {
+			if (user.can('tournamentsmoderation', null, room)) {
+				commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
+			} else if (user.can('voicetourmoderation')) {
+				commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
+			} else {
 				return this.sendReply(cmd + " -  Access denied.");
 			}
-			commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
 		}
 
 		if (!commandHandler) {
