@@ -1257,7 +1257,11 @@ exports.commands = {
 
 	kris: function (target, room, user) {
 		if (room.id !== 'lobby') if (!this.canBroadcast()) return;
-		this.sendReplyBox('<center><img src="http://i.imgur.com/ETOxeb0.png" width="90"><img src="http://i.imgur.com/WxKYYmQ.png" width="330"><img src="http://i.imgur.com/XtzEUCh.png" width="90"><br /><font color="#210B61"><b>Aces:</b> Mega Sableye and Mega Tyranitar<br />"I stopped trying to be the best Dark user, I'd rather be the one that jumps you when you least expect it"</font></center>'
+		this.sendReplyBox('<center><img src="http://i.imgur.com/ETOxeb0.png" width="90">' +
+			'<img src="http://i.imgur.com/WxKYYmQ.png" width="330">' +
+			'<img src="http://i.imgur.com/XtzEUCh.png" width="90"><br />' +
+			'<font color="#210B61"><b>Aces:</b> Mega Sableye and Mega Tyranitar<br />' +
+			'"I stopped trying to be the best Dark user, I\'d rather be the one that jumps you when you least expect it"</font></center>'
 		);
 	},
 
