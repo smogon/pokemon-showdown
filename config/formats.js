@@ -1136,7 +1136,7 @@ exports.Formats = [
 				this.add('c|@asgdf|' + sentences[0]);
 			}
 			if (name === 'barton') {
-				this.add('c|@barton|free passion');
+				this.add('c|@Barton|free passion');
 			}
 			if (name === 'bean') {
 				sentences = ["Everybody wants to be a cat", "if you KO me i'll ban u on PS", "just simply outplay the coin-toss"].randomize();
