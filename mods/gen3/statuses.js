@@ -6,7 +6,7 @@ exports.BattleStatuses = {
 			// 1-4 turns
 			this.effectData.time = this.random(2, 6);
 		},
-		onBeforeMovePriority: 2,
+		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
 			if (pokemon.hasAbility('earlybird')) {
 				pokemon.statusData.time--;
@@ -24,21 +24,18 @@ exports.BattleStatuses = {
 		}
 	},
 	frz: {
-		effectType: 'Status',
-		onStart: function (target) {
-			this.add('-status', target, 'frz');
-		},
-		onBeforeMovePriority: 2,
+		inherit: true,
 		onBeforeMove: function (pokemon, target, move) {
-			if (move.thawsUser || this.random(5) === 0) {
+			if (this.random(5) === 0) {
 				pokemon.cureStatus();
 				return;
 			}
+			if (move.thawsUser) return;
 			this.add('cant', pokemon, 'frz');
 			return false;
 		},
 		onHit: function (target, source, move) {
-			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status' && move.id !== 'hiddenpower') {
+			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status' && move.id !== 'hiddenpower' && move.id !== 'weatherball') {
 				target.cureStatus();
 			}
 		}
