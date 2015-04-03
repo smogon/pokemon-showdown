@@ -30,7 +30,7 @@ exports.BattleStatuses = {
 				pokemon.cureStatus();
 				return;
 			}
-			if (move.thawsUser) return;
+			if (move.flags['defrost']) return;
 			this.add('cant', pokemon, 'frz');
 			return false;
 		},

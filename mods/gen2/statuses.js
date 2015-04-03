@@ -45,13 +45,13 @@ exports.BattleStatuses = {
 	frz: {
 		inherit: true,
 		onBeforeMove: function (pokemon, target, move) {
-			if (move.thawsUser) return;
+			if (move.flags['defrost']) return;
 			this.add('cant', pokemon, 'frz');
 			return false;
 		},
 		onModifyMove: function () {},
 		onAfterMoveSecondarySelf: function (pokemon, target, move) {
-			if (move.thawsUser) pokemon.cureStatus();
+			if (move.flags['defrost']) pokemon.cureStatus();
 		},
 		onResidual: function (pokemon) {
 			if (this.random(256) < 25) pokemon.cureStatus();

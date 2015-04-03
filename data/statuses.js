@@ -78,7 +78,7 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
-			if (move.thawsUser) return;
+			if (move.flags['defrost']) return;
 			if (this.random(5) === 0) {
 				pokemon.cureStatus();
 				return;
@@ -87,7 +87,7 @@ exports.BattleStatuses = {
 			return false;
 		},
 		onModifyMove: function (move, pokemon) {
-			if (move.thawsUser) {
+			if (move.flags['defrost']) {
 				this.add('-curestatus', pokemon, 'frz', '[from] move: ' + move);
 				pokemon.setStatus('');
 			}

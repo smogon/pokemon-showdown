@@ -4285,7 +4285,6 @@ exports.BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
-		thawsUser: true,
 		secondary: {
 			chance: 10,
 			status: 'brn'
@@ -4326,7 +4325,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1},
-		thawsUser: true,
 		recoil: [33, 100],
 		secondary: {
 			chance: 10,
@@ -4971,7 +4969,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
-		thawsUser: true,
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon) {
 			var actives = pokemon.side.active;
@@ -11453,7 +11450,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
-		thawsUser: true,
 		secondary: {
 			chance: 50,
 			status: 'brn'
@@ -11598,7 +11594,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
-		thawsUser: true,
 		thawsTarget: true,
 		secondary: {
 			chance: 30,
@@ -13116,6 +13111,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
+		thawsTarget: true,
 		isUnreleased: true,
 		secondary: {
 			chance: 30,
