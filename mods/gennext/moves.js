@@ -201,12 +201,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (target.volatiles.substitute) return;
+				if (target.volatiles.substitute || !move.flags['protect']) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('Protect');
 					return;
 				}
-				if (move && (move.target === 'self' || move.isNotProtectable)) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -228,12 +227,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (target.volatiles.substitute) return;
+				if (target.volatiles.substitute || !move.flags['protect'] || move.category === 'Status') return;
 				if (move.breaksProtect) {
 					target.removeVolatile('kingsshield');
 					return;
 				}
-				if (move && (move.category === 'Status' || move.isNotProtectable)) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -1209,7 +1207,6 @@ exports.BattleMovedex = {
 					basePower: 80,
 					category: "Special",
 					flags: {},
-					isNotProtectable: true,
 					affectedByImmunities: false,
 					type: 'Normal'
 				}
