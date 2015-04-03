@@ -1286,7 +1286,7 @@ exports.BattleScripts = {
 					if (hasMove['earthquake']) rejected = true;
 					break;
 				case 'icebeam':
-					if (hasMove['blizzard']) rejected = true;
+					if (hasMove['blizzard'] || hasMove['freezedry']) rejected = true;
 					break;
 				case 'bodyslam':
 					if (hasMove['glare']) rejected = true;
@@ -2436,7 +2436,7 @@ exports.BattleScripts = {
 					if (setupType === 'Special' || hasMove['fireblast']) rejected = true;
 					break;
 				case 'icebeam':
-					if (hasMove['blizzard']) rejected = true;
+					if (hasMove['blizzard'] || hasMove['freezedry']) rejected = true;
 					break;
 				case 'surf':
 					if (hasMove['scald'] || hasMove['hydropump'] || hasMove['muddywater']) rejected = true;
