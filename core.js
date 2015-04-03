@@ -165,7 +165,7 @@ var core = exports.core = {
 		return 0;
 	},
 
-	pclladder: function (limit) {
+	pclLadder: function (limit) {
 		var data = fs.readFileSync('config/pclWins.csv', 'utf-8');
 		var row = ('' + data).split("\n");
 
