@@ -747,8 +747,6 @@ var commands = exports.commands = {
 	 * Moderating: Punishments
 	 *********************************************************/
 
-	kick: 'warn',
-	k: 'warn',
 	warn: function (target, room, user) {
 		if (!target) return this.parse('/help warn');
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
