@@ -2343,7 +2343,7 @@ exports.Formats = [
 			// Leader signature moves.
 			if (move.id === 'geomancy' && name === 'hollywood') {
 				move.name = 'Meme Mime';
-				move.isTwoTurnMove = false;
+				move.flags = {};
 				move.onTry = function () {};
 				move.boosts = {atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1};
 				move.onTryHit = function (target, source, move) {
