@@ -3294,7 +3294,7 @@ exports.BattleScripts = {
 				baseSignatureMove: 'bulkup', signatureMove: "MDMA Huff",
 				evs: {hp:252, atk:252, def:4}, nature: 'Adamant'
 			},
-			'@bean': {
+			'@Bean': {
 				species: 'Liepard', ability: 'Prankster', item: 'Leftovers', gender: 'M',
 				moves: ['knockoff', 'encore', 'substitute', 'gastroacid', 'leechseed'],
 				baseSignatureMove: 'glare', signatureMove: "Coin Toss",
