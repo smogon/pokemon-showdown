@@ -789,20 +789,32 @@ var commands = exports.commands = {
 
 			if (target.substr(0, 8) === 'priority') {
 				var sign = '';
-				if (target.substr(8).trim() === "+") {
+				var priorityLevel;
+				target = target.substr(8).trim();
+				if (target === "+") {
 					sign = 'greater';
-				} else if (target.substr(8).trim() === "-") {
+				} else if (target === "-") {
 					sign = 'less';
+				} else if (target === '' + parseInt(target)) {
+					priorityLevel = parseInt(target);
+					if (priorityLevel > 5 || priorityLevel < -7) return this.sendReplyBox("Priority moves only exist between levels -7 and 5.");
 				} else {
-					return this.sendReplyBox("Priority type '" + target.substr(8).trim() + "' not recognized.");
+					return this.sendReplyBox("Priority type '" + target + "' not recognized.");
 				}
 				if (!searches['property']) searches['property'] = {};
 				if (searches['property']['priority']) {
 					return this.sendReplyBox("Priority cannot be set with both shorthand and inequality range.");
 				} else {
 					searches['property']['priority'] = {};
-					searches['property']['priority'][sign] = {};
-					searches['property']['priority'][sign].qty = (sign === 'less' ? -1 : 1);
+					if (priorityLevel) {
+						searches['property']['priority']['less'] = {};
+						searches['property']['priority']['greater'] = {};
+						searches['property']['priority']['less'].qty = priorityLevel;
+						searches['property']['priority']['greater'].qty = priorityLevel;
+					} else {
+						searches['property']['priority'][sign] = {};
+						searches['property']['priority'][sign].qty = (sign === 'less' ? -1 : 1);
+					}
 				}
 				continue;
 			}
@@ -1366,7 +1378,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">Other Metagame of the Month</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Current OMotM: Hidden Type</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3529252/\">Current OMotM: Inheritance</a><br />";
 		}
 		if (target === 'all' || target === 'seasonal') {
 			matched = true;
@@ -2152,6 +2164,16 @@ var commands = exports.commands = {
 			this.sendReply("The parameter 'mega' can be added to search for Mega Evolutions only, and the parameters 'FE' or 'NFE' can be added to search fully or not-fully evolved Pokemon only.");
 			this.sendReply("The order of the parameters does not matter.");
 		}
+		if (target === 'movesearch' || target === 'msearch' || target === 'ms') {
+			matched = true;
+			this.sendReply("/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.");
+			this.sendReply("Search categories are: type, category, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.");
+			this.sendReply("Types must be followed by ' type', e.g., 'dragon type'.");
+			this.sendReply("Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.");
+			this.sendReply("Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.");
+			this.sendReply("Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.");
+			this.sendReply("The order of the parameters does not matter.");
+		}
 		if (target === 'dice' || target === 'roll') {
 			matched = true;
 			this.sendReply("/dice [optional max number] - Randomly picks a number between 1 and 6, or between 1 and the number you choose.");
@@ -2356,7 +2378,7 @@ var commands = exports.commands = {
 		}
 		if (!target) {
 			this.sendReply("COMMANDS: /nick, /avatar, /rating, /whois, /msg, /reply, /ignore, /away, /back, /timestamps, /highlight");
-			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: " + Users.getGroupsThatCan('broadcast', room).join(" ") + ")");
+			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /groups, /opensource, /avatars, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: " + Users.getGroupsThatCan('broadcast', room).join(" ") + ")");
 			if (user.group !== Config.groups.default[roomType]) {
 				this.sendReply("DRIVER COMMANDS: /warn, /mute, /unmute, /alts, /forcerename, /modlog, /lock, /unlock, /announce, /redirect");
 				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip");
