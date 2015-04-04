@@ -2719,7 +2719,6 @@ exports.Formats = [
 						spa: -1
 					},
 					volatileStatus: 'flinch'
-					
 				}];
 				move.onTryHit = function (target, source) {
 					if (source.activeTurns > 1) {
