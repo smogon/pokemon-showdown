@@ -375,11 +375,13 @@ exports.BattleScripts = {
 		}
 
 		if (target && !isSecondary && !isSelf) {
-			hitResult = this.runEvent('TryPrimaryHit', target, pokemon, moveData);
-			if (hitResult === 0) {
-				// special Substitute flag
-				hitResult = true;
-				target = null;
+			if (move.target !== 'all' && move.target !== 'allySide' && move.target !== 'foeSide') {
+				hitResult = this.runEvent('TryPrimaryHit', target, pokemon, moveData);
+				if (hitResult === 0) {
+					// special Substitute flag
+					hitResult = true;
+					target = null;
+				}
 			}
 		}
 		if (target && isSecondary && !moveData.self) {
