@@ -268,6 +268,7 @@ var core = exports.core = {
 	},
 
 	emoticons: {
+		':absol:': 'http://cbc.pokecommunity.com/config/emoticons/absol.png',
 		':arceus:': 'http://cbc.pokecommunity.com/config/emoticons/arceus.png',
 		':azelf:': 'http://cbc.pokecommunity.com/config/emoticons/azelf.png',
 		':bidoof:': 'http://cbc.pokecommunity.com/config/emoticons/bidoof.png',
