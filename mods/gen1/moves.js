@@ -480,7 +480,7 @@ exports.BattleMovedex = {
 		name: "Light Screen",
 		pp: 30,
 		priority: 0,
-		secondary: false,
+		flags: {},
 		volatileStatus: 'lightscreen',
 		onTryHit: function (pokemon) {
 			if (pokemon.volatiles['lightscreen']) {
@@ -660,6 +660,7 @@ exports.BattleMovedex = {
 		name: "Reflect",
 		pp: 20,
 		priority: 0,
+		flags: {},
 		volatileStatus: 'reflect',
 		onTryHit: function (pokemon) {
 			if (pokemon.volatiles['reflect']) {
