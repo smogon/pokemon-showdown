@@ -659,6 +659,10 @@ Tournament = (function () {
 			}
 		} else if (to === winner) {
 			result = 'loss';
+			if (this.generator.users.size >= Core.tournaments.tourSize) {
+				var winnerBP = Number(Core.stdin('bp', toId(to)));
+				Core.stdout('bp', toId(to), (winnerBP + 1));
+			}
 		}
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
