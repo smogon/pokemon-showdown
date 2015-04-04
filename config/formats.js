@@ -70,6 +70,15 @@ exports.Formats = [
 		name: "NU",
 		section: "ORAS Singles",
 
+		searchShow: false,
+		ruleset: ['RU'],
+		banlist: ['RU', 'BL3', 'Glalitite', 'Steelixite']
+	},
+	{
+		name: "NU (suspect test)",
+		section: "ORAS Singles",
+
+		challengeShow: false,
 		ruleset: ['RU'],
 		banlist: ['RU', 'BL3', 'Glalitite', 'Steelixite']
 	},
@@ -1443,7 +1452,7 @@ exports.Formats = [
 				this.add('c|@asgdf|' + sentences[0]);
 			}
 			if (name === 'barton') {
-				this.add('c|@barton|free passion');
+				this.add('c|@Barton|free passion');
 			}
 			if (name === 'bean') {
 				sentences = ["Everybody wants to be a cat", "if you KO me i'll ban u on PS", "just simply outplay the coin-toss"].randomize();
@@ -2086,7 +2095,7 @@ exports.Formats = [
 				this.add('c|@Dell|──▀████████▀▀███████▀──────────');
 			}
 			if (name === 'eeveegeneral') {
-				this.add('c|@Eevee General|' + ['Retreat!', 'You may have won the battle, but you haven\'t won the war!'][this.random(2)]);
+				this.add('c|@Eevee General|' + ['Retreat!', 'You may have won the battle, but you haven\'t won the war!', 'I salute you o7'][this.random(3)]);
 			}
 			if (name === 'electrolyte') {
 				this.add('c|@Electrolyte|just wait till I hit puberty...');
@@ -2510,10 +2519,10 @@ exports.Formats = [
 			// Admin signature moves.
 			if (move.id === 'spikes' && name === 'antar') {
 				move.name = 'Firebomb';
-				move.isBounceable = false;
-				move.category = 'Special';
-				move.type = 'Fire';
 				move.basePower = 100;
+				move.category = 'Special';
+				move.flags = {};
+				move.type = 'Fire';
 				move.onTryHitSide = function (side, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Overheat", side.active[0]);
@@ -2656,7 +2665,6 @@ exports.Formats = [
 				move.type = 'Flying';
 				move.category = 'Special';
 				move.basePower = 80;
-				move.notSubBlocked = true;
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Boomburst", target);
@@ -2911,7 +2919,6 @@ exports.Formats = [
 					move.name = 'Study';
 					move.priority = 1;
 					move.flags = {protect:1};
-					move.notSubBlocked = true;
 					move.onTryHit = function (target, source) {
 						if (source.lastAttackType === 'None') {
 							this.add('-hint', "Study only works when preceded by an attacking move.");
@@ -3072,7 +3079,7 @@ exports.Formats = [
 			}
 			if (move.id === 'transform' && name === 'kupo') {
 				move.name = 'Kupo Nuts';
-				move.notSubBlocked = true;
+				move.flags = {};
 				move.priority = 2;
 				move.onHit = function (pokemon, user) {
 					var template = pokemon.template;
@@ -3130,7 +3137,6 @@ exports.Formats = [
 				move.name = 'Shadow Storm';
 				move.type = 'Shadow';
 				move.accuracy = true;
-				move.ignoreScreens = true;
 				move.ignoreDefensive = true;
 				move.defensiveCategory = 'Physical';
 				move.basePowerCallback = function (pokemon, target) {
@@ -3524,7 +3530,6 @@ exports.Formats = [
 					if (this.effectiveWeather() === 'sunnyday' || this.effectiveWeather() === 'desolateland') return 210;
 					return 140;
 				};
-				move.isContact = false;
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Seismic Toss", target);
@@ -3534,7 +3539,6 @@ exports.Formats = [
 				move.affectedByImmunities = false;
 				move.ignoreDefensive = true;
 				move.ignoreEvasion = true;
-				move.ignoreScreens = true;
 			}
 			if (move.id === 'detect' && name === 'zebraiken') {
 				move.name = 'bzzt';
@@ -3737,7 +3741,6 @@ exports.Formats = [
 				move.type = 'Electric';
 				move.category = 'Status';
 				move.basePower = 0;
-				delete move.isContact;
 				move.self = {volatileStatus:'torment'};
 				move.onTryHit = function (target, source) {
 					if (pokemon.activeTurns > 1) {
