@@ -1263,7 +1263,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -2591,7 +2590,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1},
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -2742,7 +2740,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, nonsky: 1},
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -4490,7 +4487,6 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -4780,7 +4776,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {charge: 1, protect: 1, mirror: 1},
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -5084,7 +5079,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {charge: 1, nonsky: 1},
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -6836,7 +6830,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {charge: 1, protect: 1, mirror: 1},
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -9630,7 +9623,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, charge: 1, mirror: 1},
-		isTwoTurnMove: true,
 		breaksProtect: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
@@ -10717,7 +10709,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {charge: 1, protect: 1, mirror: 1},
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -11857,7 +11848,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, charge: 1, mirror: 1},
-		isTwoTurnMove: true,
 		breaksProtect: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
@@ -12199,7 +12189,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1},
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -12231,7 +12220,6 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {charge: 1, protect: 1, mirror: 1, distance: 1},
 		critRatio: 2,
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -12263,7 +12251,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1},
-		isTwoTurnMove: true,
 		onTryHit: function (target, source, move) {
 			if (target.fainted) return false;
 			if (source.removeVolatile(move.id)) {
@@ -12462,7 +12449,7 @@ exports.BattleMovedex = {
 				var NoSleepTalk = {
 					assist:1, bide:1, chatter:1, copycat:1, focuspunch:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, sketch:1, sleeptalk:1, uproar:1
 				};
-				if (move && !(NoSleepTalk[move] || this.getMove(move).isTwoTurnMove)) {
+				if (move && !(NoSleepTalk[move] || this.getMove(move).flags['charge'])) {
 					moves.push(move);
 				}
 			}
@@ -12821,7 +12808,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {charge: 1, protect: 1, mirror: 1},
-		isTwoTurnMove: true,
 		onTry: function (attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;

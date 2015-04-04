@@ -82,7 +82,7 @@ exports.BattleScripts = {
 			return false;
 		}
 
-		if (move.isTwoTurnMove && !pokemon.volatiles[move.id]) {
+		if (move.flags['charge'] && !pokemon.volatiles[move.id]) {
 			attrs = '|[still]'; // suppress the default move animation
 		}
 
