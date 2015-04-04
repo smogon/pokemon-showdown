@@ -2232,7 +2232,13 @@ exports.Formats = [
 			}
 			if (move.id === 'quiverdance' && name === 'haunter') {
 				move.name = 'Genius Dance';
-				move.boosts = {spd:1, spe:1, accuracy:2, evasion:-1, def:-1};
+				move.boosts = {
+					spd: 1,
+					spe: 1,
+					accuracy: 2,
+					evasion: -1,
+					def: -1
+				};
 				move.onTryHit = function (pokemon) {
 					if (pokemon.volatiles['haunterino']) return false;
 				};
@@ -2246,11 +2252,20 @@ exports.Formats = [
 				move.onHit = function (target, pokemon) {
 					this.add("raw|<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
 				};
-				move.self = {boosts: {atk:6}};
+				move.self = {
+					boosts: {
+						atk: 6
+					}
+				};
 			}
 			if (move.id === 'milkdrink' && name === 'joim') {
 				move.name = 'Red Bull Drink';
-				move.boosts = {spa:1, spe:1, accuracy:1, evasion:-1};
+				move.boosts = {
+					spa: 1,
+					spe: 1,
+					accuracy: 1,
+					evasion: -1
+				};
 				delete move.heal;
 				move.onTryHit = function (pokemon) {
 					if (pokemon.volatiles['redbull']) return false;
@@ -2304,9 +2319,16 @@ exports.Formats = [
 			}
 			if (move.id === 'vcreate' && name === 'v4') {
 				move.name = 'V-Generate';
-				move.self = {boosts: {accuracy: -2}};
+				move.self = {
+					boosts: {
+						accuracy: -2
+					}
+				};
 				move.accuracy = 85;
-				move.secondaries = [{chance: 50, status: 'brn'}];
+				move.secondaries = [{
+					chance: 50,
+					status: 'brn'
+				}];
 			}
 			if (move.id === 'relicsong' && name === 'zarel') {
 				move.name = 'Relic Song Dance';
@@ -2345,7 +2367,14 @@ exports.Formats = [
 				move.name = 'Meme Mime';
 				move.isTwoTurnMove = false;
 				move.onTry = function () {};
-				move.boosts = {atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1};
+				move.boosts = {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+					accuracy: 1
+				};
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', pokemon, "Geomancy", pokemon);
@@ -2370,7 +2399,11 @@ exports.Formats = [
 				move.type = 'Fire';
 				move.priority = 2;
 				move.status = 'brn';
-				move.self = {boosts: {spa:-1}};
+				move.self = {
+					boosts: {
+						spa:-1
+					}
+				};
 				move.onHit = function (target, source) {
 					var oldAbility = target.setAbility('solarpower');
 					if (oldAbility) {
@@ -2384,7 +2417,11 @@ exports.Formats = [
 				move.type = 'Fairy';
 				move.basePower = 120;
 				move.accuracy = 100;
-				move.self = {boosts: {spe:1}};
+				move.self = {
+					boosts: {
+						spe: 1
+					}
+				};
 				move.onHit = function (target, pokemon) {
 					var decision = this.willMove(pokemon);
 					if (decision && target.gender === 'F') {
@@ -2461,7 +2498,11 @@ exports.Formats = [
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Pursuit", target);
 				};
-				move.boosts = {atk:-1, spa:-1, accuracy:-2};
+				move.boosts = {
+					atk: -1,
+					spa: -1,
+					accuracy: -2
+				};
 			}
 			if (move.id === 'triattack' && name === 'ascriptmaster') {
 				move.name = 'Spectrum Beam';
@@ -2494,7 +2535,15 @@ exports.Formats = [
 					move.negateSecondary = true;
 					pokemon.addVolatile('sheerforce');
 				} else {
-					move.secondaries = [{chance: 50, self: {boosts: {spa: 1, spe: 1}}}];
+					move.secondaries = [{
+						chance: 50,
+						self: {
+							boosts: {
+								spa: 1,
+								spe: 1
+							}
+						}
+					}];
 				}
 			}
 			if (move.id === 'futuresight' && name === 'asgdf') {
@@ -2510,7 +2559,11 @@ exports.Formats = [
 			}
 			if (move.id === 'bulkup' && name === 'barton') {
 				move.name = 'MDMA Huff';
-				move.boosts = {atk:2, spe:1, accuracy:-1};
+				move.boosts = {
+					atk: 2,
+					spe: 1,
+					accuracy: -1
+				};
 			}
 			if (move.id === 'glare' && name === 'bean') {
 				move.name = 'Coin Toss';
@@ -2529,13 +2582,20 @@ exports.Formats = [
 				move.name = 'Buzzing of the Swarm';
 				move.category = 'Physical';
 				move.basePower = 100;
-				move.secondaries = [{chance:10, volatileStatus: 'flinch'}];
+				move.secondaries = [{
+					chance: 10,
+					volatileStatus: 'flinch'
+				}];
 			}
 			if (move.id === 'dragontail' && name === 'biggie') {
 				move.name = 'Food Rush';
 				move.basePower = 100;
 				move.type = 'Normal';
-				move.self = {boosts: {evasion:-1}};
+				move.self = {
+					boosts: {
+						evasion: -1
+					}
+				};
 			}
 			if (move.id === 'quickattack' && name === 'birkal') {
 				move.name = 'Caw';
@@ -2577,7 +2637,13 @@ exports.Formats = [
 			if (move.id === 'detect' && name === 'dell') {
 				var dmg = Math.ceil(pokemon.maxhp / (pokemon.ability === 'simple' ? 2 : 4));
 				move.name = 'Aura Parry';
-				move.self = {boosts: {atk:1, spa:1, spe:1}};
+				move.self = {
+					boosts: {
+						atk: 1,
+						spa: 1,
+						spe: 1
+					}
+				};
 				move.onTryHit = function (target, source) {
 					if (source.hp <= dmg) return false;
 					this.attrLastMove('[still]');
@@ -2646,7 +2712,15 @@ exports.Formats = [
 			if (move.id === 'fakeout' && name === 'enguarde') {
 				move.name = 'Ready Stance';
 				move.type = 'Steel';
-				move.secondaries = [{chance:100, boosts:{atk:-1, spa:-1}, volatileStatus: 'flinch'}];
+				move.secondaries = [{
+					chance: 100,
+					boosts: {
+						atk: -1,
+						spa: -1
+					},
+					volatileStatus: 'flinch'
+					
+				}];
 				move.onTryHit = function (target, source) {
 					if (source.activeTurns > 1) {
 						this.add('-hint', "Ready Stance only works on your first turn out.");
@@ -2669,7 +2743,11 @@ exports.Formats = [
 			}
 			if (move.id === 'roleplay' && name === 'formerhope') {
 				move.volatileStatus = 'taunt';
-				move.self = {boosts: {spa:1}};
+				move.self = {
+					boosts: {
+						spa: 1
+					}
+				};
 				move.onTryHit = function (target, source) {
 					this.add('c|@Former Hope|/me godmodes');
 				};
@@ -2849,7 +2927,13 @@ exports.Formats = [
 			}
 			if (move.id === 'shellsmash' && name === 'legitimateusername') {
 				move.name = 'Shell Fortress';
-				move.boosts = {def:2, spd:2, atk:-4, spa:-4, spe:-4};
+				move.boosts = {
+					def: 2,
+					spd: 2,
+					atk: -4,
+					spa: -4,
+					spe: -4
+				};
 			}
 			if (move.id === 'trumpcard' && name === 'level51') {
 				move.name = 'Next Level Strats';
@@ -2871,11 +2955,18 @@ exports.Formats = [
 				move.accuracy = 100;
 				delete move.secondary;
 				delete move.secondaries;
-				move.self = {volatileStatus: 'magnetrise'};
+				move.self = {
+					volatileStatus: 'magnetrise'
+				};
 			}
 			if (move.id === 'protect' && name === 'layell') {
 				move.name = 'Pixel Protection';
-				move.self = {boosts: {def:3, spd:2}};
+				move.self = {
+					boosts: {
+						def: 3,
+						spd: 2
+					}
+				};
 				move.onTryHit = function (pokemon) {
 					if (pokemon.volatiles['pixels']) {
 						this.add('-hint', "Pixel Protection only works once per outing.");
@@ -2902,11 +2993,17 @@ exports.Formats = [
 			}
 			if (move.id === 'toxic' && name === 'mattl') {
 				move.name = 'Topology';
-				move.self = {status: 'tox'};
+				move.self = {
+					status: 'tox'
+				};
 			}
 			if (move.id === 'spikes' && name === 'morfent') {
 				move.name = 'Used Needles';
-				move.self = {boosts: {evasion: -1}};
+				move.self = {
+					boosts: {
+						evasion: -1
+					}
+				};
 				move.target = 'normal';
 				move.onTryHit = function (target, source) {
 					source.addVolatile('needles');
@@ -2916,7 +3013,10 @@ exports.Formats = [
 				if (move.id === 'fireblast') {
 					move.name = 'Tanned';
 					move.accuracy = 100;
-					move.secondaries = [{status:'brn', chance:100}];
+					move.secondaries = [{
+						status:'brn',
+						chance:100
+					}];
 					move.onTryHit = function (target, source, move) {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Eruption", target);
@@ -2930,7 +3030,7 @@ exports.Formats = [
 				move.name = 'Beautiful Disaster';
 				move.type = 'Normal';
 				move.secondaries = [{
-					chance:100,
+					chance: 100,
 					onHit: function (target, source) {
 						var result = this.random(2);
 						if (result < 1) {
@@ -2953,7 +3053,10 @@ exports.Formats = [
 			if (move.id === 'whirlpool' && name === 'phil') {
 				move.name = 'Slug Attack';
 				move.basePower = 50;
-				move.secondaries = [{chance:100, status:'tox'}];
+				move.secondaries = [{
+					chance: 100,
+					status: 'tox'
+				}];
 			}
 			if (move.id === 'meditate' && name === 'qtrx') {
 				move.name = 'KEYBOARD SMASH';
@@ -3034,7 +3137,12 @@ exports.Formats = [
 				move.name = 'fat monkey';
 				move.accuracy = 95;
 				move.flags = {contact: 1, protect: 1};
-				move.self = {boosts: {def:-1, spe:-1}};
+				move.self = {
+					boosts: {
+						def: -1,
+						spe: -1
+					}
+				};
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Brave Bird", target);
@@ -3049,7 +3157,12 @@ exports.Formats = [
 			if (move.id === 'frenzyplant' && name === 'rosiethevenusaur') {
 				move.name = 'Swag Plant';
 				move.volatileStatus = 'confusion';
-				move.self = {boosts: {atk:1, def:1}};
+				move.self = {
+					boosts: {
+						atk: 1,
+						def: 1
+					}
+				};
 			}
 			if (move.id === 'icebeam' && name === 'scalarmotion') {
 				move.name = 'Eroding Frost';
@@ -3076,7 +3189,13 @@ exports.Formats = [
 			if (move.id === 'detect' && name === 'shaymin') {
 				move.name = 'Flower Garden';
 				move.type = 'Grass';
-				move.self = {boosts: {def:1, spa:1, spd:1}};
+				move.self = {
+					boosts: {
+						def: 1,
+						spa: 1,
+						spd: 1
+					}
+				};
 				move.onTryHit = function (target, source) {
 					if (source.volatiles['flowergarden']) return false;
 					this.attrLastMove('[still]');
@@ -3123,7 +3242,15 @@ exports.Formats = [
 						this.attrLastMove('[still]');
 						this.add('-anim', pokemon, "Fire Blast", pokemon);
 					};
-					move.self = {boosts: {atk:2, def:2, spa:2, spd:2, spe:2}};
+					move.self = {
+						boosts: {
+							atk: 2,
+							def: 2,
+							spa: 2,
+							spd: 2,
+							spe: 2
+						}
+					};
 				}
 				move.onHit = function (target, pokemon) {
 					if (target.fainted || target.hp <= 0) pokemon.killedSome = 1;
@@ -3153,7 +3280,11 @@ exports.Formats = [
 				move.name = 'SPOOPY EDGE CUT';
 				move.basePower = 90;
 				move.accuracy = 100;
-				move.self = {boosts: {evasion:-1}};
+				move.self = {
+					boosts: {
+						evasion: -1
+					}
+				};
 				move.onTryHit = function (target, source) {
 					this.add('-message', '*@Temporaryanonymous teleports behind you*');
 					this.attrLastMove('[still]');
@@ -3187,13 +3318,28 @@ exports.Formats = [
 				move.basePower = 150;
 				move.type = 'Water';
 				move.category = 'Special';
-				move.self = {boosts: {spa:-1, spd:-1, def:-1}};
+				move.self = {
+					boosts: {
+						spa: -1,
+						spd: -1,
+						def: -1
+					}
+				};
 			}
 			if (move.id === 'return' && name === 'tgmd') {
 				delete move.basePowerCallback;
 				move.name = 'Canine Carnage';
 				move.basePower = 120;
-				move.secondaries = [{chance:10, volatileStatus:'flinch'}, {chance:100, boosts:{def:-1}}];
+				move.secondaries = [{
+					chance: 10,
+					volatileStatus: 'flinch'
+				},
+				{
+					chance: 100,
+					boosts: {
+						def: -1
+					}
+				}];
 				move.accuracy = 90;
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
@@ -3205,11 +3351,22 @@ exports.Formats = [
 				move.category = 'Special';
 				move.type = 'Fairy';
 				move.basePower = 80;
-				move.secondaries = [{chance:30, status:'brn'}, {chance:30, status:'frz'}];
+				move.secondaries = [{
+					chance: 30,
+					status: 'brn'
+				},
+				{
+					chance: 30,
+					status: 'frz'
+				}];
 				move.onEffectiveness = function (typeMod, type, move) {
 					return typeMod + this.getEffectiveness('Ice', type);
 				};
-				move.self = {boosts: {accuracy:-1}};
+				move.self = {
+					boosts: {
+						accuracy: -1
+					}
+				};
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Simple Beam", target);
@@ -3235,7 +3392,12 @@ exports.Formats = [
 			}
 			if (move.id === 'detect' && name === 'zebraiken') {
 				move.name = 'bzzt';
-				move.self = {boosts: {spa:1, atk:1}};
+				move.self = {
+					boosts: {
+						spa: 1,
+						atk: 1
+					}
+				};
 			}
 			if (move.id === 'wish' && name === 'zdrup') {
 				move.name = 'Premonition';
@@ -3269,8 +3431,17 @@ exports.Formats = [
 				move.name = 'Energy Field';
 				move.accuracy = 100;
 				move.basePower = 150;
-				move.secondaries = [{chance:40, status:'par'}];
-				move.self = {boosts:{spa:-1, spd:-1, spe:-1}};
+				move.secondaries = [{
+					chance: 40,
+					status: 'par'
+				}];
+				move.self = {
+					boosts: {
+						spa: -1,
+						spd: -1,
+						spe: -1
+					}
+				};
 			}
 			if (move.id === 'psychoboost' && name === 'arcticblast') {
 				move.name = 'Doubles Purism';
@@ -3295,7 +3466,12 @@ exports.Formats = [
 			}
 			if (move.id === 'whirlwind' && name === 'articuno') {
 				move.name = 'True Support';
-				move.self = {boosts: {def:1, spd:1}};
+				move.self = {
+					boosts: {
+						def: 1,
+						spd: 1
+					}
+				};
 				move.onHit = function (target, source) {
 					this.useMove('substitute', target, target);
 				};
@@ -3303,8 +3479,16 @@ exports.Formats = [
 			if (move.id === 'toxic' && name === 'astyanax') {
 				move.name = 'Amphibian Toxin';
 				move.accuracy = 100;
-				move.self = {boosts:{atk:-1, spa:-1}};
-				move.boosts = {atk:-1, spa:-1};
+				move.self = {
+					boosts: {
+						atk: -1,
+						spa: -1
+					}
+				};
+				move.boosts = {
+					atk: -1,
+					spa: -1
+				};
 				move.onHit = function (target, source) {
 					target.side.addSideCondition('toxicspikes');
 					target.side.addSideCondition('toxicspikes');
@@ -3330,7 +3514,14 @@ exports.Formats = [
 			}
 			if (move.id === 'detect' && name === 'audiosurfer') {
 				move.name = 'Audioshield';
-				move.secondary = {chance: 50, self: {boosts: {accuracy:-1}}};
+				move.secondary = {
+					chance: 50,
+					self: {
+						boosts: {
+							accuracy: -1
+						}
+					}
+				};
 				move.onTryHit = function (target) {
 					this.add('-anim', target, "Boomburst", target);
 					return !!this.willAct() && this.runEvent('StallMove', target);
@@ -3367,7 +3558,14 @@ exports.Formats = [
 				move.onHit = function () {
 					this.add('c|%Crestfall|' + ['The die is cast...', 'Time for reckoning.'][this.random(2)]);
 				};
-				move.self = {boosts: {spe:2, evasion:1, def:-2, spd:-2}};
+				move.self = {
+					boosts: {
+						spe: 2,
+						evasion: 1,
+						def: -2,
+						spd: -2
+					}
+				};
 			}
 			if (move.id === 'dragonrush' && name === 'dtc') {
 				move.name = 'Dragon Smash';
@@ -3383,7 +3581,13 @@ exports.Formats = [
 					move.name = 'Falcon Punch';
 					move.basePower = 150;
 					move.accuracy = 85;
-					move.self = {boosts: {atk:-1, def:-1, spd:-1}};
+					move.self = {
+						boosts: {
+							atk: -1,
+							def: -1,
+							spd: -1
+						}
+					};
 					move.onTryHit = function (target, source) {
 						this.add('c|%Feliburn|FAALCOOOOOOON');
 						this.attrLastMove('[still]');
@@ -3434,7 +3638,9 @@ exports.Formats = [
 				move.type = 'Electric';
 				move.category = 'Status';
 				move.basePower = 0;
-				move.self = {volatileStatus:'torment'};
+				move.self = {
+					volatileStatus: 'torment'
+				};
 				move.onTryHit = function (target, source) {
 					if (pokemon.activeTurns > 1) {
 						this.add('-hint', "Focus Laser only works on your first turn out.");
@@ -3466,7 +3672,10 @@ exports.Formats = [
 				move.basePower = 125;
 				move.type = 'Rock';
 				move.accuracy = 90;
-				move.secondaries = [{chance:10, volatileStatus:'flinch'}];
+				move.secondaries = [{
+					chance: 10,
+					volatileStatus: 'flinch'
+				}];
 			}
 			if (move.id === 'rockthrow' && name === 'timbuktu') {
 				move.name = 'Geoblast';
@@ -3504,7 +3713,9 @@ exports.Formats = [
 				move.type = 'Bug';
 				move.basePower = 40;
 				move.multihit = [2, 5];
-				move.self = {volatileStatus: 'mustrecharge'};
+				move.self = {
+					volatileStatus: 'mustrecharge'
+				};
 				move.accuracy = 95;
 			}
 			if (move.id === 'metronome' && name === 'xfix') {
@@ -3554,7 +3765,13 @@ exports.Formats = [
 			if (move.id === 'superpower' && name === 'aldaron') {
 				move.name = 'Admin Decision';
 				move.basePower = 80;
-				move.self = {boosts: {def:1, spd:1, spe:-2}};
+				move.self = {
+					boosts: {
+						def: 1,
+						spd: 1,
+						spe: -2
+					}
+				};
 				move.onEffectiveness = function () {
 					return 1;
 				};
@@ -3576,7 +3793,12 @@ exports.Formats = [
 				}
 				if (move.id === 'calmmind') {
 					move.name = 'Surplus of Humour';
-					move.self = {boosts: {spa:1, atk:1}};
+					move.self = {
+						boosts: {
+							spa: 1,
+							atk: 1
+						}
+					};
 					move.onTryHit = function (target, source) {
 						this.attrLastMove('[still]');
 						this.add('-anim', target, "Geomancy", target);
@@ -3605,7 +3827,12 @@ exports.Formats = [
 				}
 				if (move.id === 'flashcannon') {
 					move.name = 'Fun Cannon';
-					move.secondaries = [{chance:60, boosts:{spd:-1}}];
+					move.secondaries = [{
+						chance: 60,
+						boosts: {
+							spd: -1
+						}
+					}];
 					move.onTryHit = function (target, source) {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Hydro Pump", target);
@@ -3626,7 +3853,15 @@ exports.Formats = [
 				}
 				if (move.id === 'memento') {
 					move.name = 'HP Display Policy';
-					move.boosts = {atk: -12, def: -12, spa: -12, spd: -12, spe: -12, accuracy: -12, evasion: -12};
+					move.boosts = {
+						atk: -12,
+						def: -12,
+						spa: -12,
+						spd: -12,
+						spe: -12,
+						accuracy: -12,
+						evasion: -12
+					};
 					move.onTryHit = function (target, source) {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Explosion", target);
