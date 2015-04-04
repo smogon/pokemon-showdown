@@ -653,13 +653,13 @@ Tournament = (function () {
 		var result = 'draw';
 		if (from === winner) {
 			result = 'win';
-			if (this.generator.users.size >= Core.tournaments.tourSize) {
+			if (this.generator.users.size >= Core.tournaments.tourSize && this.format !== '1v1random' && this.format !== '1v1challengecup' && this.format !== '1v1') {
 				var winnerBP = Number(Core.stdin('bp', toId(from)));
 				Core.stdout('bp', toId(from), (winnerBP + 1));
 			}
 		} else if (to === winner) {
 			result = 'loss';
-			if (this.generator.users.size >= Core.tournaments.tourSize) {
+			if (this.generator.users.size >= Core.tournaments.tourSize && this.format !== '1v1random' && this.format !== '1v1challengecup' && this.format !== '1v1') {
 				var winnerBP = Number(Core.stdin('bp', toId(to)));
 				Core.stdout('bp', toId(to), (winnerBP + 1));
 			}
