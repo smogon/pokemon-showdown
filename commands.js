@@ -190,6 +190,7 @@ var commands = exports.commands = {
 		this.parse('/blockpms ' + target);
 	},
 
+	unaway: 'back',
 	back: function () {
 		this.parse('/unblockpms');
 		this.parse('/unblockchallenges');
@@ -978,6 +979,7 @@ var commands = exports.commands = {
 		this.addModCommand("" + user.name + " temporarily locked the range " + range + ".");
 	},
 
+	unrangelock: 'rangeunlock',
 	rangeunlock: function (target, room, user) {
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!target) return this.sendReply("Please specify a range to unlock.");
