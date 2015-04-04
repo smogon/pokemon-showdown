@@ -654,8 +654,8 @@ Tournament = (function () {
 		if (from === winner) {
 			result = 'win';
 			if (this.generator.users.size >= Core.tournaments.tourSize) {
-				var winnerBP = Number(Core.stdin('bp', toId));
-				Core.stdout('bp', toId, (winnerBP + 1));
+				var winnerBP = Number(Core.stdin('bp', toId(winner)));
+				Core.stdout('bp', toId(winner), (winnerBP + 1));
 			}
 		} else if (to === winner) {
 			result = 'loss';
