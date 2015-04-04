@@ -345,8 +345,8 @@ var core = exports.core = {
 			if (match === ':gav:' || match === ':kermit:' || match === ':nw:' || match === ':superman:' || match === ':sweep:' || match === ':yoshi:') return typeof self.emoticons[match] != 'undefined' ?
 				'<img src="' + self.emoticons[match] + '" title="' + match + '" width="30" height="30"/>' :
 				match;
-			if (match === ':hug:') return typeof self.emoticons[match] != 'undefined' ?
-				'<img src="' + self.emoticons[match] + '" title="' + match + '" width="75" height="30"/>' :
+			if (match === ':catflip:') return typeof self.emoticons[match] != 'undefined' ?
+				'<img src="' + self.emoticons[match] + '" title="' + match + '" width="44" height="32"/>' :
 				match;
 			return typeof self.emoticons[match] != 'undefined' ?
 				'<img src="' + self.emoticons[match] + '" title="' + match + '"/>' :
