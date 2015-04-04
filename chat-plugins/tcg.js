@@ -31,7 +31,7 @@ var tcgsearch = function (target, room, user, cmd, self) {
 			if (result.exception) {
 				self.sendReply("No articles matching your query were found.");
 			} else {
-				self.sendReplyBox("<strong>Best result for " + query + ":</strong><br/><a href= " + Tools.escapeHTML(result.items[0].url) + ">" + Tools.escapeHTML(result.items[0].title) + "</a>");
+				self.sendReplyBox("<strong>Best result for " + query + ":</strong><br/><a href=\"" + Tools.escapeHTML(result.items[0].url) + "\">" + Tools.escapeHTML(result.items[0].title) + "</a>");
 			}
 
 			room.update();
