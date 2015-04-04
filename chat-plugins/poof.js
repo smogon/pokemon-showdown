@@ -89,6 +89,22 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
+		} else if (user.name === 'Anrin Das') {
+			var message = target || anrindas[Math.floor(Math.random() * anrindas.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+
+			room.addRaw(Tools.escapeHTML(message));
+			user.leaveRoom(room);
+		} else if (user.name === 'AxTheeFrost' || user.name === 'Andy Venus') {
+			var message = target || axtheefrost[Math.floor(Math.random() * axtheefrost.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+
+			room.addRaw(Tools.escapeHTML(message));
+			user.leaveRoom(room);
 		} else if (user.name === 'Bidoof FTW') {
 			var message = target || bidoofftw[Math.floor(Math.random() * bidoofftw.length)];
 			if (message.indexOf('{{user}}') < 0)
@@ -121,6 +137,14 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
+		} else if (user.name === 'Dark Shadow 6') {
+			var message = target || darkshadow6[Math.floor(Math.random() * darkshadow6.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+
+			room.addRaw(Tools.escapeHTML(message));
+			user.leaveRoom(room);
 		} else if (user.name === 'Hannu Mikkola') {
 			var message = target || hannumikkola[Math.floor(Math.random() * hannumikkola.length)];
 			if (message.indexOf('{{user}}') < 0)
@@ -129,8 +153,24 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
+		} else if (user.name === 'indiancharizard#' || user.name === 'IndianCharizard#' || user.name === 'Astraea') {
+			var message = target || indiancharizard[Math.floor(Math.random() * indiancharizard.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+
+			room.addRaw(Tools.escapeHTML(message));
+			user.leaveRoom(room);
 		} else if (user.name === 'Kingdom of Tea') {
 			var message = target || kingdomoftea[Math.floor(Math.random() * kingdomoftea.length)];
+			if (message.indexOf('{{user}}') < 0)
+				message = '{{user}} ' + message;
+			message = message.replace(/{{user}}/g, user.name);
+
+			room.addRaw(Tools.escapeHTML(message));
+			user.leaveRoom(room);
+		} else if (user.name === 'srinator') {
+			var message = target || srinator[Math.floor(Math.random() * srinator.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
 			message = message.replace(/{{user}}/g, user.name);
