@@ -881,7 +881,13 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 
 		var tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.isTournamentsRated, params, this);
-		if (tour) this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
+		if (tour) {
+			this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
+			if (Config.tourAnnouncements && Config.tourAnnouncements.indexOf(room.id) >= 0) {
+				var tourRoom = Rooms.search(Config.tourRoom || 'tournaments');
+				if (tourRoom) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><b>' + Tools.getFormat(tour.format).name + '</b> tournament created in <b>' + room.title + '</b>.</a></div>');
+			}
+		}
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament) {

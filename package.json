@@ -48,7 +48,9 @@
   ],
   "private": true,
   "devDependencies": {
+    "cache-swap": "~0.2.0",
     "gulp": "~3.8.7",
+    "gulp-cache": "~0.2.8",
     "gulp-jshint": "git://github.com/spalger/gulp-jshint#c18df3a11",
     "gulp-jscs": "~1.4.0",
     "gulp-replace": "~0.5.1",
