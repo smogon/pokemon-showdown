@@ -764,7 +764,7 @@ Tournament = (function () {
 						Core.stdout('tourWins', wid, (tourWin + 1));
 					}
 				});
-			});
+			}
 		}
 		this.isEnded = true;
 		delete exports.tournaments[toId(this.room.id)];
