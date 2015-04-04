@@ -3159,7 +3159,7 @@ Battle = (function () {
 		// types
 		var totalTypeMod = 0;
 
-		if (target.negateImmunity[move.type] !== 'IgnoreEffectiveness' || this.getImmunity(move.type, target)) {
+		if (target.negateImmunity[move.type] !== 'IgnoreEffectiveness' || !this.getImmunity(move.type, target)) {
 			totalTypeMod = target.runEffectiveness(move);
 		}
 
