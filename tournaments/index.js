@@ -748,7 +748,7 @@ Tournament = (function () {
 					Core.stdout('bp', rid, (runnerUpBP + secondBP), function () {
 						Core.stdout('tourWins', wid, (tourWin + 1));
 					});
-				} else if (this.room.title === 'lobby' || this.room.title === 'pcleague') {
+				} else if (this.room.title === 'Lobby' || this.room.title === 'PC League') {
 					Core.stdout('pclWins', wid, (pclWin + 1));
 				} else {
 					Core.stdout('tourWins', wid, (tourWin + 1));
