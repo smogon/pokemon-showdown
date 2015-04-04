@@ -742,17 +742,28 @@ Tournament = (function () {
 			var winnerBP = Number(Core.stdin('bp', wid));
 			var pclWin = Number(Core.stdin('pclWins', wid));
 			var tourWin = Number(Core.stdin('tourWins', wid));
-			Core.stdout('bp', wid, (winnerBP + firstBP), function (room) {
-				if (runnerUp) {
-					var runnerUpBP = Number(Core.stdin('bp', rid));
-					Core.stdout('bp', rid, (runnerUpBP + secondBP), function () {
+			if (this.room.pcl) {
+				Core.stdout('bp', wid, (winnerBP + firstBP), function () {
+					if (runnerUp) {
+						var runnerUpBP = Number(Core.stdin('bp', rid));
+						Core.stdout('bp', rid, (runnerUpBP + secondBP), function () {
+							Core.stdout('pclWins', wid, (pclWin + 1));
+						});
+					} else {
+						Core.stdout('pclWins', wid, (pclWin + 1));
+					}
+				});
+			} else {
+				Core.stdout('bp', wid, (winnerBP + firstBP), function () {
+					if (runnerUp) {
+						var runnerUpBP = Number(Core.stdin('bp', rid));
+						Core.stdout('bp', rid, (runnerUpBP + secondBP), function () {
+							Core.stdout('tourWins', wid, (tourWin + 1));
+						});
+					} else {
 						Core.stdout('tourWins', wid, (tourWin + 1));
-					});
-				} else if (this.room.pcl) {
-					Core.stdout('pclWins', wid, (pclWin + 1));
-				} else {
-					Core.stdout('tourWins', wid, (tourWin + 1));
-				}
+					}
+				});
 			});
 		}
 		this.isEnded = true;
