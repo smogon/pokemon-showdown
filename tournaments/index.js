@@ -700,7 +700,7 @@ Tournament = (function () {
 		}
 		this.room.update();
 	};
-	Tournament.prototype.onTournamentEnd = function () {
+	Tournament.prototype.onTournamentEnd = function (room) {
 		this.room.add('|tournament|end|' + JSON.stringify({
 			results: this.generator.getResults().map(usersToNames),
 			format: this.format,
@@ -748,7 +748,7 @@ Tournament = (function () {
 					Core.stdout('bp', rid, (runnerUpBP + secondBP), function () {
 						Core.stdout('tourWins', wid, (tourWin + 1));
 					});
-				} else if (room.id === 'lobby') {
+				} else if (this.room.id === 'lobby') {
 					Core.stdout('pclWins', wid, (pclWin + 1));
 				} else {
 					Core.stdout('tourWins', wid, (tourWin + 1));
