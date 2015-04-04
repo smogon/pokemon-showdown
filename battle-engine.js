@@ -2879,6 +2879,8 @@ Battle = (function () {
 			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
 		}
 
+		if (!effect.flags) effect.flags = {};
+
 		if (instafaint && !target.hp) {
 			this.debug('instafaint: ' + this.faintQueue.map('target').map('name'));
 			this.faintMessages(true);
@@ -3059,6 +3061,7 @@ Battle = (function () {
 				move.crit = (this.random(critMult[move.critRatio]) === 0);
 			}
 		}
+
 		if (move.crit) {
 			move.crit = this.runEvent('CriticalHit', target, null, move);
 		}

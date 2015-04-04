@@ -1,6 +1,7 @@
 /config/*
 /logs/*
 /node_modules
+/gulp-cache
 npm-debug.log
 
 # boilerplate #

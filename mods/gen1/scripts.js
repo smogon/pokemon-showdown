@@ -933,10 +933,10 @@ exports.BattleScripts = {
 			var template = this.getTemplate(poke);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
-			var mbstmin = 1307; // sunkern has the lowest modified base stat total, and that total is 807
+			var mbstmin = 1307;
 			var stats = template.baseStats;
 
-			// Modified base stat total assumes 30 IVs, 255 EVs in every stat
+			// Modified base stat total assumes 15 DVs, 255 EVs in every stat
 			var mbst = (stats["hp"] * 2 + 30 + 63 + 100) + 10;
 			mbst += (stats["atk"] * 2 + 30 + 63 + 100) + 5;
 			mbst += (stats["def"] * 2 + 30 + 63 + 100) + 5;
@@ -959,7 +959,7 @@ exports.BattleScripts = {
 				level++;
 			}
 
-			// Random DVs
+			// Random DVs.
 			var ivs = {
 				hp: Math.floor(Math.random() * 30),
 				atk: Math.floor(Math.random() * 30),
@@ -969,7 +969,7 @@ exports.BattleScripts = {
 				spe: Math.floor(Math.random() * 30)
 			};
 
-			// ALl EVs
+			// All EVs.
 			var evs = {
 				hp: 255,
 				atk: 255,
@@ -980,13 +980,18 @@ exports.BattleScripts = {
 			};
 
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
+			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
 			var moves;
-			var pool = ['struggle'];
-			pool = Object.keys(template.learnset);
-			if (pool.length <= 4) {
+			var pool = [];
+			for (var move in template.learnset) {
+				if (this.getMove(move).gen === 1) pool.push(move);
+			}
+			if (pool.length > 4) {
+				moves = pool.sample(4);
+			} else if (pool.length > 0) {
 				moves = pool;
 			} else {
-				moves = pool.sample(4);
+				moves = ['struggle'];
 			}
 
 			team.push({

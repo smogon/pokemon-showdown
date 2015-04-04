@@ -789,20 +789,32 @@ var commands = exports.commands = {
 
 			if (target.substr(0, 8) === 'priority') {
 				var sign = '';
-				if (target.substr(8).trim() === "+") {
+				var priorityLevel;
+				target = target.substr(8).trim();
+				if (target === "+") {
 					sign = 'greater';
-				} else if (target.substr(8).trim() === "-") {
+				} else if (target === "-") {
 					sign = 'less';
+				} else if (target === '' + parseInt(target)) {
+					priorityLevel = parseInt(target);
+					if (priorityLevel > 5 || priorityLevel < -7) return this.sendReplyBox("Priority moves only exist between levels -7 and 5.");
 				} else {
-					return this.sendReplyBox("Priority type '" + target.substr(8).trim() + "' not recognized.");
+					return this.sendReplyBox("Priority type '" + target + "' not recognized.");
 				}
 				if (!searches['property']) searches['property'] = {};
 				if (searches['property']['priority']) {
 					return this.sendReplyBox("Priority cannot be set with both shorthand and inequality range.");
 				} else {
 					searches['property']['priority'] = {};
-					searches['property']['priority'][sign] = {};
-					searches['property']['priority'][sign].qty = (sign === 'less' ? -1 : 1);
+					if (priorityLevel) {
+						searches['property']['priority']['less'] = {};
+						searches['property']['priority']['greater'] = {};
+						searches['property']['priority']['less'].qty = priorityLevel;
+						searches['property']['priority']['greater'].qty = priorityLevel;
+					} else {
+						searches['property']['priority'][sign] = {};
+						searches['property']['priority'][sign].qty = (sign === 'less' ? -1 : 1);
+					}
 				}
 				continue;
 			}
@@ -1357,7 +1369,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">Other Metagame of the Month</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Current OMotM: Hidden Type</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3529252/\">Current OMotM: Inheritance</a><br />";
 		}
 		if (target === 'all' || target === 'seasonal') {
 			matched = true;
