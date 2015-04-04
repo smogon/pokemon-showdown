@@ -7,6 +7,14 @@ const amiy = [
 	"got swallowed whole by a Snorlax."
 ];
 
+const anrindas = [
+	"Anrin Das went back to the Dragon's Den."
+];
+
+const axtheefrost = [
+	"AxTheeFrost went to aliment Wobbuffet."
+];
+
 const bidoofftw = [
 	"was forced onto bed by Kingdom of Tea."
 ];
@@ -23,12 +31,24 @@ const darklight1999 = [
 	"returns back to darkness."
 ];
 
+const darkshadow6 = [
+	"Never Give Up"
+];
+
 const hannumikkola = [
 	"is stealing your food now."
 ];
 
+const indiancharizard = [
+	"IndianCharizard# was struck by Dragon Slayer Anrin's dark magic."
+];
+
 const kingdomoftea = [
 	"retreats to get more tea."
+];
+
+const srinator = [
+	"elfs smells too much, ima leave"
 ];
 
 const wolf = [
