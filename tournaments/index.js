@@ -654,8 +654,8 @@ Tournament = (function () {
 		if (from === winner) {
 			result = 'win';
 			if (this.generator.users.size >= Core.tournaments.tourSize) {
-				var winnerBP = Number(Core.stdin('bp', toId(winner)));
-				Core.stdout('bp', toId(winner), (winnerBP + 1));
+				var winnerBP = Number(Core.stdin('bp', toId(from)));
+				Core.stdout('bp', toId(from), (winnerBP + 1));
 			}
 		} else if (to === winner) {
 			result = 'loss';
@@ -700,7 +700,7 @@ Tournament = (function () {
 		}
 		this.room.update();
 	};
-	Tournament.prototype.onTournamentEnd = function (room) {
+	Tournament.prototype.onTournamentEnd = function (roomid) {
 		this.room.add('|tournament|end|' + JSON.stringify({
 			results: this.generator.getResults().map(usersToNames),
 			format: this.format,
@@ -748,7 +748,7 @@ Tournament = (function () {
 					Core.stdout('bp', rid, (runnerUpBP + secondBP), function () {
 						Core.stdout('tourWins', wid, (tourWin + 1));
 					});
-				} else if (this.room.id === 'lobby') {
+				} else if (this.roomid === 'lobby') {
 					Core.stdout('pclWins', wid, (pclWin + 1));
 				} else {
 					Core.stdout('tourWins', wid, (tourWin + 1));
