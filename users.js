@@ -988,6 +988,7 @@ User = (function () {
 						this.locked = false;
 					}
 				}
+				if (this.autoconfirmed) user.autoconfirmed = this.autoconfirmed;
 				if (user.locked === '#dnsbl' && !this.locked) user.locked = false;
 				if (!user.locked && this.locked === '#dnsbl') this.locked = false;
 				for (var i = 0; i < this.connections.length; i++) {
