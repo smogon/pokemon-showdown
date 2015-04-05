@@ -162,11 +162,13 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	vulpix: {
-		randomBattleMoves: ["bodyslam","confuseray","fireblast","reflect","toxic"],
+		randomBattleMoves: ["bodyslam","confuseray","reflect","toxic"],
+		essentialMove: "fireblast",
 		tier: "LC"
 	},
 	ninetales: {
-		randomBattleMoves: ["fireblast","bodyslam","confuseray","doubleedge","hyperbeam","reflect","toxic"],
+		randomBattleMoves: ["bodyslam","confuseray","doubleedge","hyperbeam","reflect","toxic"],
+		essentialMove: "fireblast",
 		tier: "UU"
 	},
 	jigglypuff: {
