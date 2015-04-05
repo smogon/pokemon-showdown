@@ -626,7 +626,7 @@ var commands = exports.commands = {
 				userGroup = targetRoom.auth[user.userid] || userGroup;
 			}
 			var modjoinLevel = targetRoom.modjoin !== true ? targetRoom.modjoin : targetRoom.modchat;
-			if (modjoinLevel && Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[modjoinLevel].rank) {
+			if (modjoinLevel && Config.groups.bySymbol[modjoinLevel] && Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[modjoinLevel].rank) {
 				return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
 			}
 		}
