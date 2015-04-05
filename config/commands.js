@@ -1192,7 +1192,8 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 
 		var factor = 0;
-		if (Tools.getImmunity(source.type || source, defender)) {
+		if (source.category === "Status" && !source.affectedByImmunities) factor = 1;
+		if (Tools.getImmunity(source.type || source, defender) || source.affectedByImmunities === false) {
 			var totalTypeMod = 0;
 			if (source.effectType !== 'Move' || source.basePower || source.basePowerCallback) {
 				for (var i = 0; i < defender.types.length; i++) {
