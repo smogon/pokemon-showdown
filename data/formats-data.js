@@ -1204,7 +1204,7 @@ exports.BattleFormatsData = {
 	},
 	tauros: {
 		randomBattleMoves: ["rockclimb","earthquake","zenheadbutt","rockslide","doubleedge"],
-		randomDoubleBattleMoves: ["rockclimb","earthquake","zenheadbutt","rockslide","protect","doubleedge"],
+		randomDoubleBattleMoves: ["return","earthquake","zenheadbutt","rockslide","stoneedge","protect","doubleedge"],
 		eventPokemon: [
 			{"generation":3,"level":25,"gender":"M","abilities":["intimidate"],"moves":["rage","hornattack","scaryface","pursuit"]},
 			{"generation":3,"level":10,"gender":"M","abilities":["intimidate"],"moves":["tackle","tailwhip","rage","hornattack"]},
