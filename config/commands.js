@@ -1358,7 +1358,8 @@ var commands = exports.commands = {
 		}
 
 		if (!target || target === 'all') {
-			matched = true; buffer += "Below are useful links to help you into Other Metagames. Below we have our OM Hub, which contains helpful information. Below this we have the Other Metagames index, whcih contains all existing Other Metagames. Our OM Submissions subforum is the place where you submit OMs (be sure to read the rules before this!). Finally, Other News is a webzine written by Eevee General and unfixable with information and enterainment in regards to OMs.<br />";
+			matched = true;
+			if (target !== 'all') buffer += "The links below direct you to various resources of the Other Metagames subforum.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/tiers/om/\">Other Metagames Hub</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505031/\">Other Metagames Index</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/forums/289/\">OM Submissions</a><br />";
@@ -1370,6 +1371,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'smogontriples' || target === 'triples') {
 			matched = true;
+			if (target !== 'all') buffer += "Pokémon can use any move of their typing, in addition to the moves they can normally learn.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
 		}
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
