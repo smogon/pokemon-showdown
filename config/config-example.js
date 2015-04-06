@@ -267,7 +267,6 @@ exports.grouplist = [
 		name: "Player",
 		inherit: '+',
 		roomvoice: true,
-		roomplayer: true,
 		modchat: true,
 		roomonly: true,
 		privateroom: true,
