@@ -3824,12 +3824,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'detect', signatureMove: "Flower Garden",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Timid'
 			},
-			'+SOMALIA': {
+			/*'+SOMALIA': {
 				species: 'Gastrodon', ability: 'Anger Point', item: 'Leftovers', gender: 'M',
 				moves: ['recover', 'steameruption', 'earthpower', 'leafstorm', 'substitute'],
 				baseSignatureMove: 'energyball', signatureMove: "Ban Everyone",
 				evs: {hp:252, spa:252, spd:4}, nature: 'Modest'
-			},
+			},*/
 			'+TalkTakesTime': {
 				species: 'Registeel', ability: 'Flash Fire', item: 'Leftovers', gender: 'M',
 				moves: ['recover', 'ironhead', 'bellydrum'],
