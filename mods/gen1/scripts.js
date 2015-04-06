@@ -614,7 +614,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-		if (!(effect.id in {'recoil':1, 'drain':1})) target.battle.lastDamage = damage;
+		if (!(effect.id in {'recoil':1, 'drain':1}) && effect.effectType !== 'Status') target.battle.lastDamage = damage;
 		damage = target.damage(damage, source, effect);
 		if (source) source.lastDamage = damage;
 		var name = effect.fullname;
