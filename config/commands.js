@@ -1502,6 +1502,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'hiddentype') {
 			matched = true;
+			if (target !== 'all') buffer += "Pokémon have an added type determined by their IVs. Same as the Hidden Power type.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Hidden Type</a><br />";
 		}
 		if (target === 'all' || target === 'middlecup' || target === 'mc') {
