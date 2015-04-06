@@ -726,15 +726,18 @@ var commands = {
 				tournament.removeUser(user, this);
 			}
 		},
+		users: 'getusers',
 		getusers: function (tournament) {
 			if (!this.canBroadcast()) return;
 			var users = usersToNames(tournament.generator.getUsers(true).sort());
 			this.sendReplyBox("<strong>" + users.length + " users remain in this tournament:</strong><br />" + Tools.escapeHTML(users.join(", ")));
 		},
+		updatebracket: 'getupdate',
 		getupdate: function (tournament, user) {
 			tournament.updateFor(user);
 			this.sendReply("Your tournament bracket has been updated.");
 		},
+		chall: 'challenge',
 		challenge: function (tournament, user, params, cmd) {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <user>");
@@ -745,14 +748,17 @@ var commands = {
 			}
 			tournament.challenge(user, targetUser, this);
 		},
+		cancelchall: 'cancelchallenge',
 		cancelchallenge: function (tournament, user) {
 			tournament.cancelChallenge(user, this);
 		},
+		acceptchall: 'acceptchallenge',
 		acceptchallenge: function (tournament, user) {
 			tournament.acceptChallenge(user, this);
 		}
 	},
 	creation: {
+		maketype: 'settype',
 		settype: function (tournament, user, params, cmd) {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <type> [, <comma-separated arguments>]");
@@ -789,6 +795,7 @@ var commands = {
 				this.privateModCommand("(" + targetUser.name + " was disqualified from the tournament by " + user.name + ")");
 			}
 		},
+		adq: 'setautodq',
 		autodq: 'setautodq',
 		setautodq: function (tournament, user, params, cmd) {
 			if (params.length < 1) {
@@ -799,6 +806,7 @@ var commands = {
 				this.privateModCommand("(The tournament auto disqualify timeout was set to " + params[0] + " by " + user.name + ")");
 			}
 		},
+		runadq: 'runautodq',
 		runautodq: function (tournament) {
 			tournament.runAutoDisqualify(this);
 		},
@@ -833,14 +841,14 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 	} else if (cmd === 'help') {
 		if (!this.canBroadcast()) return;
 		return this.sendReplyBox(
-			"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
-			"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
+			"- create/new/make &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
+			"- maketype/settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
 			"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
 			"- begin/start: Starts the tournament in the current room.<br />" +
 			"- dq/disqualify &lt;user>: Disqualifies a user.<br />" +
-			"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
-			"- runautodq: Manually run the automatic disqualifier.<br />" +
-			"- getusers: Lists the users in the current tournament.<br />" +
+			"- adq/autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
+			"- runadq/runautodq: Manually run the automatic disqualifier.<br />" +
+			"- users/getusers: Lists the users in the current tournament.<br />" +
 			"- on/off: Enables/disables allowing mods to start tournaments.<br />" +
 			"More detailed help can be found <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\">here</a>"
 		);
@@ -866,7 +874,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			Rooms.global.writeChatRoomData();
 		}
 		return this.sendReply("Tournaments disabled.");
-	} else if (cmd === 'create' || cmd === 'new') {
+	} else if (cmd === 'create' || cmd === 'new' || cmd === 'make') {
 		if (room.toursEnabled) {
 			if (!this.can('tournaments', null, room)) return;
 		} else {
