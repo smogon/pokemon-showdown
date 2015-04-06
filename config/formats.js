@@ -949,7 +949,7 @@ exports.Formats = [
 				pokemon.name = '@kupo';
 				pokemon.kupoTransformed = false;
 			}
-			// Deal with timbuktu's move (read onModifyMove relevant part).
+			// Deal with Timbuktu's move (read onModifyMove relevant part).
 			if (name === 'timbuktu') {
 				pokemon.timesGeoblastUsed = 0;
 			}
@@ -1032,7 +1032,7 @@ exports.Formats = [
 				this.add("c|~chaos|I always win");
 			}
 			if (name === 'haunter') {
-				this.add("c|~Haunter|Dux mea lux");
+				this.add("c|~haunter|Dux mea lux");
 			}
 			if (name === 'jasmine') {
 				if (this[((pokemon.side.id === 'p1') ? 'p2' : 'p1')].active[0].name.charAt(0) === '%') {
@@ -1145,11 +1145,11 @@ exports.Formats = [
 				this.add('c|@asgdf|' + sentences[0]);
 			}
 			if (name === 'barton') {
-				this.add('c|@Barton|free passion');
+				this.add('c|@barton|free passion');
 			}
 			if (name === 'bean') {
 				sentences = ["Everybody wants to be a cat", "if you KO me i'll ban u on PS", "just simply outplay the coin-toss"].randomize();
-				this.add('c|@Bean|' + sentences[0]);
+				this.add('c|@bean|' + sentences[0]);
 			}
 			if (name === 'beowulf') {
 				this.add('c|@Beowulf|Grovel peasant, you are in the presence of the RNGesus');
@@ -1297,9 +1297,6 @@ exports.Formats = [
 			if (name === 'marty') {
 				this.add('c|@Marty|Prepare yourself.');
 			}
-			if (name === 'mattl') {
-				this.add('c|@MattL|The annoyance I will cause is not well-defined.');
-			}
 			if (name === 'morfent') {
 				this.add('c|@Morfent|``──────▀█████▄──────▲``');
 				this.add('c|@Morfent|``───▄███████████▄──◀█▶``');
@@ -1353,9 +1350,6 @@ exports.Formats = [
 				sentences = ['no guys stop fighting', 'mature people use their words', 'please direct all attacks to user: beowulf'];
 				this.add('c|@Shame That|' + sentences[this.random(3)]);
 			}
-			if (name === 'shaymin') {
-				this.add('c|@shaymin|Ready for hax?');
-			}
 			if (name === 'skitty') {
 				this.add('c|@Skitty|\\_$-_-$_/');
 			}
@@ -1394,6 +1388,9 @@ exports.Formats = [
 			}
 			if (name === 'tgmd') {
 				this.add('c|@TGMD|I\'m a dog :]');
+			}
+			if (name === 'timbuktu') {
+				this.add('c|@Timbuktu|plot twist');
 			}
 			if (name === 'trickster') {
 				this.add('c|@Trickster|' + ['I do this for free, you know.', 'Believe in the me that believes in you!'][this.random(2)]);
@@ -1579,6 +1576,12 @@ exports.Formats = [
 			if (name === 'diatom') {
 				this.add('-message', pokemon.side.foe.name + ' was banned by Diatom. (you should be thankful you are banned and not permabanned)');
 			}
+			if (name === 'mattl') {
+				this.add('c|+MattL|The annoyance I will cause is not well-defined.');
+			}
+			if (name === 'shaymin') {
+				this.add('c|+shaymin|Ready for hax?');
+			}
 			if (name === 'somalia') {
 				this.add('c|+SOMALIA|stupidest shit ever');
 			}
@@ -1654,7 +1657,7 @@ exports.Formats = [
 				}
 			}
 			if (name === 'haunter') {
-				this.add('c|~Haunter|you can\'t compare with my powers');
+				this.add('c|~haunter|you can\'t compare with my powers');
 			}
 			if (name === 'jasmine') {
 				this.add('c|~Jasmine|' + ['I meant to do that.', 'God, I\'m the worse digimon.'][this.random(2)]);
@@ -1715,11 +1718,11 @@ exports.Formats = [
 				this.add('c|@asgdf|' + ['Looks like I spoke too hasteely', 'You only won because I couldn\'t think of a penguin pun!'][this.random(2)]);
 			}
 			if (name === 'barton') {
-				this.add('c|@Barton|' + ['ok', 'haha?'][this.random(2)]);
+				this.add('c|@barton|' + ['ok', 'haha?'][this.random(2)]);
 			}
 			if (name === 'bean') {
 				sentences = ['that\'s it ur getting banned', 'meow', '(✖╭╮✖)'];
-				this.add('c|@Bean|' + sentences[this.random(3)]);
+				this.add('c|@bean|' + sentences[this.random(3)]);
 			}
 			if (name === 'beowulf') {
 				this.add('c|@Beowulf|There is no need to be mad');
@@ -1868,9 +1871,6 @@ exports.Formats = [
 			if (name === 'marty') {
 				this.add('c|@Marty|Your fate is sealed');
 			}
-			if (name === 'mattl') {
-				this.add('c|@MattL|Finish him! You used "Finals week!" Fatality!');
-			}
 			if (name === 'morfent') {
 				sentences = ['Hacking claims the lives of over 2,000 registered laddering alts every day.', 'Every 60 seconds in Africa, a minute passes. Together we can stop this. Please spread the word.', 'SOOOOOO $TONED FUCK MAN AW $HIT NIGGA HELLA MOTHER FUCKING 666 ODD FUTURE MAN BRO CHECK THIS OUT MY SWAG WITH THE WHAT WHOLE 666 420 $$$$ HOLLA HOLLA GET DOLLA SWED CASH FUCKING MARIJUANA CIGARETTES GANGSTA GANGSTA EAZY-E C;;R;E;A;M; SO BAKED OFF THE BOBMARLEY GANJA 420 SHIT PURE OG KUUSSHHH LEGALIZE CRYSTAL WEED'];
 				this.add('c|@Morfent|' + sentences[this.random(3)]);
@@ -1913,9 +1913,6 @@ exports.Formats = [
 				sentences = ["ok agree to disagree", "rematch, don't attack this time", "i blame beowulf"];
 				this.add('c|@Shame That|' + sentences[this.random(3)]);
 			}
-			if (name === 'shaymin') {
-				this.add('c|@shaymin|You\'ve done well, perhaps...too well, even beating the odds!');
-			}
 			if (name === 'skitty') {
 				this.add('c|@Skitty|!learn skitty, roleplay');
 				this.add('raw|<div class="infobox">Skitty <span class="message-learn-cannotlearn">can\'t</span> learn Role Play</div>');
@@ -1949,6 +1946,9 @@ exports.Formats = [
 			}
 			if (name === 'tgmd') {
 				this.add('c|@TGMD|rip in pepsi');
+			}
+			if (name === 'timbuktu') {
+				this.add('c|@Timbuktu|' + ['</3', 'broken'][this.random(2)]);
 			}
 			if (name === 'trickster') {
 				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', '“This guy\'s team is CRAZY!” ☑ “My team can\'t win against a team like that” ☑ "He NEEDED precisely those two crits to win" ☑ “He led with the only Pokemon that could beat me” ☑ "He got the perfect hax" ☑ “There was nothing I could do” ☑ “I played that perfectly”', '(⊙﹏⊙✿)'];
@@ -1989,7 +1989,7 @@ exports.Formats = [
 			}
 			if (name === 'astara') {
 				sentences = ['/me twerks into oblivion', 'good night ♥', 'Astara Vista Baby'];
-				this.add('c|%Ast☆ara|' + sentences[this.random(3)]);
+				this.add('c|%Ast☆arA|' + sentences[this.random(3)]);
 			}
 			if (name === 'astyanax') {
 				this.add('c|%Astyanax|:^( Bottom kek');
@@ -2056,10 +2056,16 @@ exports.Formats = [
 			if (name === 'diatom' && !pokemon.hasBeenThanked) {
 				this.add('c|★' + pokemon.side.foe.name + '|Thanks Diatom...');
 			}
+			if (name === 'mattl') {
+				this.add('c|+MattL|Finish him! You used "Finals week!" Fatality!');
+			}
 			if (name === 'redew') {
 				this.add('c|+Redew|i hope u think ur a good player');
 				this.add('c|+Redew|play spl man');
 				this.add('c|+Redew|ud win lots');
+			}
+			if (name === 'shaymin') {
+				this.add('c|+shaymin|You\'ve done well, perhaps...too well, even beating the odds!');
 			}
 			if (name === 'somalia') {
 				this.add('c|+SOMALIA|tired of this shitass game');
@@ -2100,7 +2106,7 @@ exports.Formats = [
 			}
 		},
 		onAfterMoveSelf: function (source, target, move) {
-			// Make Haunter not immune to Life Orb as a means to balance.
+			// Make haunter not immune to Life Orb as a means to balance.
 			if (toId(source.name) === 'haunter') {
 				this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 			}
