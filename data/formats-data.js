@@ -3922,7 +3922,7 @@ exports.BattleFormatsData = {
 	},
 	servine: {
 		randomBattleMoves: ["leafstorm","hiddenpowerfire","substitute","leechseed","hiddenpowerice","gigadrain"],
-		tier: "NFE"
+		tier: "PU"
 	},
 	serperior: {
 		randomBattleMoves: ["leafstorm","dragonpulse","hiddenpowerfire","substitute","leechseed","glare"],
