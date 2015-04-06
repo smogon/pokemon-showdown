@@ -471,6 +471,7 @@ var commands = exports.commands = {
 		var searches = {};
 		var allTiers = {'uber':1, 'ou':1, 'bl':1, 'uu':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1, 'bl4':1, 'pu':1, 'nfe':1, 'lc':1, 'cap':1};
 		var allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
+		var allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1};
 		var showAll = false;
 		var megaSearch = null;
 		var recoverySearch = null;
@@ -556,6 +557,45 @@ var commands = exports.commands = {
 					continue;
 				}
 			}
+
+			var inequality = target.search(/>|</);
+			if (inequality > -1) {
+				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in stat ranges.");
+				inequality = target.charAt(inequality);
+				var targetParts = target.replace(/\s/g, '').split(inequality);
+				var numSide, statSide, direction;
+				if (!isNaN(targetParts[0])) {
+					numSide = 0;
+					statSide = 1;
+					direction = (inequality === '>' ? 'less' : 'greater');
+				} else if (!isNaN(targetParts[1])) {
+					numSide = 1;
+					statSide = 0;
+					direction = (inequality === '<' ? 'less' : 'greater');
+				} else {
+					return this.sendReplyBox("No value given to compare with '" + Tools.escapeHTML(target) + "'.");
+				}
+				var stat = targetParts[statSide];
+				switch (toId(targetParts[statSide])) {
+					case 'attack': stat = 'atk'; break;
+					case 'defense': stat = 'def'; break;
+					case 'specialattack': stat = 'spa'; break;
+					case 'spatk': stat = 'spa'; break;
+					case 'specialdefense': stat = 'spd'; break;
+					case 'spdef': stat = 'spd'; break;
+					case 'speed': stat = 'spe'; break;
+				}
+				if (!(stat in allStats)) return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' did not contain a valid stat.");
+				if (!searches['stats']) searches['stats'] = {};
+				if (!searches['stats'][stat]) searches['stats'][stat] = {};
+				if (searches['stats'][stat][direction]) {
+					return this.sendReplyBox("Invalid stat range for " + stat + ".");
+				} else {
+					searches['stats'][stat][direction] = {};
+					searches['stats'][stat][direction].qty = targetParts[numSide];
+				}
+				continue;
+			}
 			return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' could not be found in any of the search categories.");
 		}
 
@@ -571,7 +611,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		for (var search in {'gen':1, 'tier':1, 'color':1, 'types':1, 'ability':1, 'moves':1, 'recovery':1}) {
+		for (var search in {'gen':1, 'tier':1, 'color':1, 'types':1, 'ability':1, 'stats':1, 'moves':1, 'recovery':1}) {
 			if (!searches[search]) continue;
 			switch (search) {
 				case 'types':
@@ -658,6 +698,26 @@ var commands = exports.commands = {
 							if (canLearn) break;
 						}
 						if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
+					}
+					break;
+
+				case 'stats':
+					for (var stat in searches[search]) {
+						for (var mon in dex) {
+							for (var ineq in searches[search][stat]) {
+								if (ineq === "less") {
+									if (dex[mon].baseStats[stat] > searches[search][stat][ineq].qty) {
+										delete dex[mon];
+										break;
+									}
+								} else {
+									if (dex[mon].baseStats[stat] < searches[search][stat][ineq].qty) {
+										delete dex[mon];
+										break;
+									}
+								}
+							}
+						}
 					}
 					break;
 
