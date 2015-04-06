@@ -3184,7 +3184,7 @@ exports.BattleScripts = {
 				baseSignatureMove: 'embargo', signatureMove: "Forcewin",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Adamant'
 			},
-			'~Haunter': {
+			'~haunter': {
 				species: 'Landorus', ability: 'Sheer Force', item: 'Life Orb', gender: 'M',
 				moves: ['hurricane', 'earthpower', 'fireblast', 'blizzard', 'thunder'],
 				baseSignatureMove: 'quiverdance', signatureMove: "Genius Dance",
@@ -3294,13 +3294,13 @@ exports.BattleScripts = {
 				baseSignatureMove: 'futuresight', signatureMove: "Obscure Pun",
 				evs: {hp:252, spa:252, def:4}, nature: 'Modest'
 			},
-			'@Barton': {
+			'@barton': {
 				species: 'Piloswine', ability: 'Parental Bond', item: 'Eviolite', gender: 'M',
 				moves: ['earthquake', 'iciclecrash', 'taunt'],
 				baseSignatureMove: 'bulkup', signatureMove: "MDMA Huff",
 				evs: {hp:252, atk:252, def:4}, nature: 'Adamant'
 			},
-			'@Bean': {
+			'@bean': {
 				species: 'Liepard', ability: 'Prankster', item: 'Leftovers', gender: 'M',
 				moves: ['knockoff', 'encore', 'substitute', 'gastroacid', 'leechseed'],
 				baseSignatureMove: 'glare', signatureMove: "Coin Toss",
@@ -3462,12 +3462,6 @@ exports.BattleScripts = {
 				baseSignatureMove: 'sacredfire', signatureMove: "Immolate",
 				evs: {spa:252, spd:4, spe:252}, ivs: {atk:0}, nature: 'Timid'
 			},
-			'@MattL': {
-				species: 'Mandibuzz', ability: 'Poison Heal', item: 'Leftovers', gender: 'M',
-				moves: ['oblivionwing', 'leechseed', 'quiverdance', 'topsyturvy', 'substitute'],
-				baseSignatureMove: 'toxic', signatureMove: "Topology",
-				evs: {hp:252, def:252, spd:4}, nature: 'Bold'
-			},
 			'@Morfent': {
 				species: 'Dusknoir', ability: 'Fur Coat', item: "Leftovers", gender: 'M',
 				moves: [['recover', 'acidarmor', 'swordsdance', 'willowisp', 'trickroom'][this.random(5)], 'shadowclaw', ['earthquake', 'icepunch', 'thunderpunch'][this.random(3)]],
@@ -3552,12 +3546,6 @@ exports.BattleScripts = {
 				baseSignatureMove: 'healingwish', signatureMove: "Extreme Compromise",
 				evs: {hp:252, def:4, spe:252}, nature: 'Jolly'
 			},
-			'@shaymin': {
-				species: 'Shaymin-Sky', ability: 'Serene Grace', item: 'Expert Belt', gender: 'F',
-				moves: ['seedflare', 'airslash', ['secretsword', 'earthpower', 'roost'][this.random(3)]],
-				baseSignatureMove: 'detect', signatureMove: "Flower Garden",
-				evs: {hp:4, spa:252, spe:252}, nature: 'Timid'
-			},
 			'@shrang': {
 				species: 'Latias', ability: 'Pixilate', item: ['Latiasite', 'Life Orb', 'Leftovers'][this.random(3)], gender: 'M',
 				moves: ['dracometeor', 'roost', 'nastyplot', 'fireblast', 'aurasphere', 'psystrike'], //not QD again senpai >.<
@@ -3622,6 +3610,12 @@ exports.BattleScripts = {
 				moves: [['extremespeed', 'sacredsword'][this.random(2)], 'knockoff', 'protect'],
 				baseSignatureMove: 'return', signatureMove: "Canine Carnage",
 				evs: {hp:32, atk:252, spe:224}, nature: 'Adamant'
+			},
+			'@Timbuktu': {
+				species: 'Heatmor', ability: 'Contrary', item: 'Life Orb', gender: 'M',
+				moves: ['overheat', ['hammerarm', 'substitute'][this.random(2)], ['glaciate', 'thunderbolt'][this.random(2)]], // Curse didn't make sense at all so it was changed to Hammer Arm
+				baseSignatureMove: 'rockthrow', signatureMove: "Geoblast",
+				evs: {spa:252, spd:4, spe:252}, nature: 'Timid'
 			},
 			'@Trickster': {
 				species: 'Whimsicott', ability: 'Prankster', item: 'Leftovers', gender: 'M',
@@ -3754,12 +3748,6 @@ exports.BattleScripts = {
 				baseSignatureMove: 'scald', signatureMove: "Ban Scald",
 				evs: {hp:252, def:228, spd:28}, nature: 'Bold'
 			},
-			'%Timbuktu': {
-				species: 'Heatmor', ability: 'Contrary', item: 'Life Orb', gender: 'M',
-				moves: ['overheat', ['hammerarm', 'substitute'][this.random(2)], ['glaciate', 'thunderbolt'][this.random(2)]], // Curse didn't make sense at all so it was changed to Hammer Arm
-				baseSignatureMove: 'rockthrow', signatureMove: "Geoblast",
-				evs: {spa:252, spd:4, spe:252}, nature: 'Timid'
-			},
 			'%trinitrotoluene': {
 				species: 'Metagross', ability: 'Levitate', item: 'Metagrossite', gender: 'M',
 				moves: ['meteormash', 'zenheadbutt', 'hammerarm', 'grassknot', 'earthquake', 'thunderpunch', 'icepunch', 'shiftgear'],
@@ -3809,6 +3797,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'growl', signatureMove: "Resilience",
 				evs: {hp:252, atk:252, def:4}, nature: 'Adamant'
 			},
+			'+MattL': {
+				species: 'Mandibuzz', ability: 'Poison Heal', item: 'Leftovers', gender: 'M',
+				moves: ['oblivionwing', 'leechseed', 'quiverdance', 'topsyturvy', 'substitute'],
+				baseSignatureMove: 'toxic', signatureMove: "Topology",
+				evs: {hp:252, def:252, spd:4}, nature: 'Bold'
+			},
 			'+mikel': {
 				species: 'Giratina', ability: 'Prankster', item: 'Lum Berry', gender: 'M',
 				moves: ['rest', 'recycle', ['toxic', 'willowisp'][this.random(2)]],
@@ -3826,6 +3820,12 @@ exports.BattleScripts = {
 				moves: ['nastyplot', 'thunderbolt', 'icebeam'],
 				baseSignatureMove: 'recover', signatureMove: "Recover",
 				evs:{hp:4, spa:252, spe:252}, nature: 'Modest'
+			},
+			'+shaymin': {
+				species: 'Shaymin-Sky', ability: 'Serene Grace', item: 'Expert Belt', gender: 'F',
+				moves: ['seedflare', 'airslash', ['secretsword', 'earthpower', 'roost'][this.random(3)]],
+				baseSignatureMove: 'detect', signatureMove: "Flower Garden",
+				evs: {hp:4, spa:252, spe:252}, nature: 'Timid'
 			},
 			'+SOMALIA': {
 				species: 'Gastrodon', ability: 'Anger Point', item: 'Leftovers', gender: 'M',
