@@ -1617,6 +1617,10 @@ exports.BattleScripts = {
 			}
 		}
 
+		if (hasMove['rockclimb'] && ability !== 'Sheer Force') {
+			moves[moves.indexOf('rockclimb')] = 'doubleedge';
+		}
+
 		if (hasMove['gyroball']) {
 			ivs.spe = 0;
 			evs.atk += evs.spe;
