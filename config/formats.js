@@ -874,12 +874,12 @@ exports.Formats = [
 				this.add('-immune', pokemon, '[from] Unown aura');
 				return false;
 			}
-			// Somalia's Ban Spree makes it immune to some move types, since he's too mad to feel pain.
+			/* Somalia's Ban Spree makes it immune to some move types, since he's too mad to feel pain.
 			// Types have been chosen from types you can be immune against with an ability.
 			if (toId(pokemon.name) === 'somalia' && type in {'Ground':1, 'Water':1, 'Fire':1, 'Grass':1, 'Poison':1, 'Normal':1, 'Electric':1}) {
 				this.add('-message', "You can't stop SOMALIA in middle of his Ban Spree!");
 				return false;
-			}
+			}*/
 		},
 		// Hacks for megas changed abilities. This allow for their changed abilities.
 		onUpdate: function (pokemon) {
@@ -1582,9 +1582,9 @@ exports.Formats = [
 			if (name === 'shaymin') {
 				this.add('c|+shaymin|Ready for hax?');
 			}
-			if (name === 'somalia') {
+			/*if (name === 'somalia') {
 				this.add('c|+SOMALIA|stupidest shit ever');
-			}
+			}*/
 			if (name === 'talktakestime') {
 				this.add('c|+TalkTakesTime|Welcome to BoTTT!');
 			}
@@ -2067,9 +2067,9 @@ exports.Formats = [
 			if (name === 'shaymin') {
 				this.add('c|+shaymin|You\'ve done well, perhaps...too well, even beating the odds!');
 			}
-			if (name === 'somalia') {
+			/*if (name === 'somalia') {
 				this.add('c|+SOMALIA|tired of this shitass game');
-			}
+			}*/
 			if (name === 'talktakestime') {
 				this.add('-message', '(Automated response: Your battle contained a banned outcome.)');
 			}
@@ -3711,7 +3711,7 @@ exports.Formats = [
 					}
 				};
 			}
-			if (move.id === 'energyball' && name === 'somalia') {
+			/*if (move.id === 'energyball' && name === 'somalia') {
 				move.name = 'Ban Everyone';
 				move.basePower = 0;
 				delete move.secondary;
@@ -3731,7 +3731,7 @@ exports.Formats = [
 				move.onMoveFail = function (target, source, move) {
 					source.faint();
 				};
-			}
+			}*/
 			if (move.id === 'taunt' && name === 'talktakestime') {
 				move.name = 'Bot Mute';
 				move.onHit = function (target) {
