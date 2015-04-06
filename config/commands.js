@@ -1419,8 +1419,11 @@ var commands = exports.commands = {
 
 		if (!target || target === 'all') {
 			matched = true;
+			if (target !== 'all') buffer += "The links below direct you to various resources of the Other Metagames subforum.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/tiers/om/\">Other Metagames Hub</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505031/\">Other Metagames Index</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/forums/289/\">OM Submissions</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/tiers/om/othernews/\">Other News</a><br />";
 		}
 		if (target === 'all' || target === 'smogondoublesuu' || target === 'doublesuu') {
 			matched = true;
