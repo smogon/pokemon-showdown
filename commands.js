@@ -1783,7 +1783,20 @@ var commands = exports.commands = {
 	addplayer: function (target, room, user) {
 		if (!target) return this.parse('/help addplayer');
 
-		return this.parse('/roomplayer ' + target);
+		target = this.splitTarget(target, true);
+		var userid = toId(this.targetUsername);
+		var targetUser = this.targetUser;
+		var name = this.targetUsername;
+
+		if (!targetUser) return this.sendReply("User " + name + " not found.");
+		if (!room.joinBattle) return this.sendReply("You can only do this in battle rooms.");
+		if (targetUser.can('joinbattle', null, room)) {
+			return this.sendReply("" + name + " can already join battles as a Player.");
+		}
+		if (!this.can('joinbattle', null, room)) return;
+
+		room.auth[targetUser.userid] = '\u2605';
+		this.addModCommand("" + name  + " was promoted to Player by " + user.name + ".");
 	},
 
 	joinbattle: function (target, room, user) {
