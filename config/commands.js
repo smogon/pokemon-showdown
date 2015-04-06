@@ -1371,7 +1371,6 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'smogontriples' || target === 'triples') {
 			matched = true;
-			if (target !== 'all') buffer += "Pokémon can use any move of their typing, in addition to the moves they can normally learn.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
 		}
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
