@@ -1302,7 +1302,7 @@ exports.BattleScripts = {
 				case 'judgment':
 					if (hasStab) rejected = true;
 					break;
-				case 'return':
+				case 'return': case 'rockclimb':
 					if (hasMove['bodyslam'] || hasMove['doubleedge']) rejected = true;
 					break;
 				case 'weatherball':
