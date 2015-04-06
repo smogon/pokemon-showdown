@@ -2979,7 +2979,7 @@ exports.BattleFormatsData = {
 	},
 	huntail: {
 		randomBattleMoves: ["shellsmash","waterfall","icebeam","batonpass","suckerpunch"],
-		randomDoubleBattleMoves: ["shellsmash","return","hydropump","batonpass","suckerpunch","protect"],
+		randomDoubleBattleMoves: ["shellsmash","waterfall","icefang","batonpass","suckerpunch","protect"],
 		tier: "PU"
 	},
 	gorebyss: {
