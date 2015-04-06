@@ -1424,14 +1424,17 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'smogondoublesuu' || target === 'doublesuu') {
 			matched = true;
+			if (target !== 'all') buffer += "Smogon Doubles in a UU format.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516968/\">Doubles UU</a><br />";
 		}
 		if (target === 'all' || target === 'smogontriples' || target === 'triples') {
 			matched = true;
+			if (target !== 'all') buffer += "Three Pokémon are sent onto the field at one time.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
 		}
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
+			if (target !== 'all') buffer += "Users nominate OMs, then one is voted on.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">Other Metagame of the Month</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3529252/\">Current OMotM: Inheritance</a><br />";
 		}
@@ -1441,6 +1444,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'balancedhackmons' || target === 'bh') {
 			matched = true;
+			if (target !== 'all') buffer += "Pokémon can use nearly move or ability and may be in their Mega / Primal forms to begin with.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3489849/\">Balanced Hackmons</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515725/\">Balanced Hackmons Suspect Discussion</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3525676/\">Balanced Hackmons Viability Rankings</a><br />";
@@ -1486,14 +1490,17 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'lcuu') {
 			matched = true;
+			if (target !== 'all') buffer += "The tier below LC OU that uses usage stats to determine what is banned.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523929/\">LC UU</a><br />";
 		}
 		if (target === 'all' || target === '350cup') {
 			matched = true;
+			if (target !== 'all') buffer += "Pokémon with under 350 BST have all of their stats doubled.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3512945/\">350 Cup</a><br />";
 		}
 		if (target === 'all' || target === 'averagemons') {
 			matched = true;
+			if (target !== 'all') buffer += "Pokémon's stats become a flat base 100.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a><br />";
 		}
 		if (target === 'all' || target === 'classichackmons' || target === 'hackmons') {
@@ -1502,18 +1509,21 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'hiddentype') {
 			matched = true;
+			if (target !== 'all') buffer += "The Pokémon's Hidden Power will add a type to the Pokémon's existing typing.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Hidden Type</a><br />";
 		}
 		if (target === 'all' || target === 'middlecup' || target === 'mc') {
 			matched = true;
+			if (target !== 'all') buffer += "Only Pokémon with a pre-evolution and an evolution are eligble to be used.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524287/\">Middle Cup</a><br />";
 		}
 		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
 			matched = true;
+			if (target !== 'all') buffer += "Pokémon receive buffs to make them usable in the OU metagame.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3532902/\">OU Theorymon</a><br />";
 		}
 		if (!matched) {
-			return this.sendReply("The Other Metas entry '" + target + "' was not found. Try /othermetas or /om for general help.");
+			return this.sendReply("The Other Metas entry '" + target + "' was not found. Try /othermetas or /om for general help. Check the <a href=\"https://www.smogon.com/forums/threads/3505031/\">Other Metagames Index</a> as well.");
 		}
 		this.sendReplyBox(buffer);
 	},
