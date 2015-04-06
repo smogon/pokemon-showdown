@@ -2533,9 +2533,6 @@ exports.BattleScripts = {
 				case 'darkpulse':
 					if (hasMove['crunch'] && setupType !== 'Special') rejected = true;
 					break;
-				case 'hiddenpowerice':
-					if (hasMove['icywind']) rejected = true;
-					break;
 				case 'quickattack':
 					if (hasMove['feint']) rejected = true;
 					break;
