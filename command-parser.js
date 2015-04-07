@@ -412,7 +412,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			}
 		}
 
-		if (message.substr(0, 1) === '/' && fullCmd) {
+		if (message.charAt(0) === '/' && fullCmd) {
 			// To guard against command typos, we now emit an error message
 			return connection.sendTo(room.id, "The command '/" + fullCmd + "' was unrecognized. To send a message starting with '/" + fullCmd + "', type '//" + fullCmd + "'.");
 		}
