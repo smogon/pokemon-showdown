@@ -1324,7 +1324,7 @@ exports.BattleScripts = {
 					if (hasMove['ironhead']) rejected = true;
 					break;
 				case 'hydropump':
-					if (hasMove['razorshell'] || hasMove['waterfall'] || hasMove['scald'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (hasMove['razorshell'] || hasMove['scald'] || hasMove['waterfall'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'originpulse': case 'surf':
 					if (hasMove['hydropump'] || hasMove['scald']) rejected = true;
@@ -1483,6 +1483,11 @@ exports.BattleScripts = {
 			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'hypervoice';
 			hasMove['hypervoice'] = true;
+		}
+		if (template.id === 'glaliemega' && !counter['ate']) {
+			delete hasMove[this.getMove(moves[3]).id];
+			moves[3] = 'return';
+			hasMove['return'] = true;
 		}
 		if (template.id === 'salamencemega' && !counter['ate']) {
 			delete hasMove[this.getMove(moves[3]).id];
@@ -3041,7 +3046,7 @@ exports.BattleScripts = {
 			// Holistic judgment. Don't boost Protean as much as Parental Bond
 			bst += 0.3 * (evs.atk > evs.spa ? template.baseStats.atk : template.baseStats.spa);
 		} else if (templateAbility === 'Fur Coat') {
-			bst += template.baseStats.def ;
+			bst += template.baseStats.def;
 		}
 		if (item === 'Eviolite') {
 			bst += 0.5 * (template.baseStats.def + template.baseStats.spd);
