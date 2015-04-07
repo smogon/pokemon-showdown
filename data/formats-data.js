@@ -1333,8 +1333,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	porygon2: {
-		randomBattleMoves: ["triattack","icebeam","recover","toxic","thunderwave","thunderbolt","shadowball","trickroom"],
-		randomDoubleBattleMoves: ["triattack","icebeam","discharge","shadowball","trickroom","protect","recover"],
+		randomBattleMoves: ["triattack","icebeam","recover","toxic","thunderwave","thunderbolt"],
+		randomDoubleBattleMoves: ["triattack","icebeam","discharge","shadowball","protect","recover"],
 		tier: "UU"
 	},
 	porygonz: {
