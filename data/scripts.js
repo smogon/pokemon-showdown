@@ -3685,7 +3685,7 @@ exports.BattleScripts = {
 				baseSignatureMove: 'detect', signatureMove: "Audioshield",
 				evs: {hp:252, spa:252, spe:4}, nature: 'Modest'
 			},
-			'%birkal': {
+			'%Birkal': {
 				species: 'Rotom-Fan', ability: 'Magic Guard', item: 'Choice Scarf', gender: 'M',
 				moves: ['trick', 'aeroblast', ['discharge', 'partingshot', 'recover', 'tailglow'][this.random(4)]],
 				baseSignatureMove: 'quickattack', signatureMove: "Caw",
@@ -3703,7 +3703,7 @@ exports.BattleScripts = {
 				baseSignatureMove: 'protect', signatureMove: "Final",
 				evs: {spa:252, def:4, spe:252}, nature: 'Modest'
 			},
-			'%dtc': {
+			'%DTC': {
 				species: 'Charizard', ability: 'Magic Guard', item: 'Charizardite X', gender: 'M',
 				moves: ['shiftgear', 'blazekick', 'roost'],
 				baseSignatureMove: 'dragonrush', signatureMove: "Dragon Smash",
@@ -3739,7 +3739,13 @@ exports.BattleScripts = {
 				baseSignatureMove: 'bulletpunch', signatureMove: "Focus Laser",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Timid'
 			},
-			'%Raseri': {
+			'%QuoteCS': {
+				species: 'Skarmory', ability: 'Adaptability', item: 'Life Orb', gender: 'M',
+				moves: ['meteormash', ['bravebird', 'dragonascent'][this.random(2)], 'roost'],
+				baseSignatureMove: 'spikes', signatureMove: "Diversify",
+				evs: {hp:252, atk:252, spe:4}, nature: 'Adamant'
+			},
+			'%raseri': {
 				species: 'Prinplup', ability: 'Regenerator', item: 'Eviolite', gender: 'M',
 				moves: ['defog', 'stealthrock', 'toxic', 'roar', 'bravebird'],
 				baseSignatureMove: 'scald', signatureMove: "Ban Scald",
