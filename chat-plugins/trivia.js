@@ -78,10 +78,13 @@ function updateLadder() {
 	var leaderboard = triviaData.leaderboard;
 	if (Object.isEmpty(leaderboard)) return false;
 
-	if (!ladder) ladder = [];
+	ladder = {};
 	for (var user in leaderboard) {
-		var rank = leaderboard[user][4];
-		if (rank && rank < 16) ladder[rank - 1] = user;
+		var rank = leaderboard[user][3];
+		if (rank && rank < 16) {
+			if (!ladder[rank]) ladder[rank] = [];
+			ladder[rank].push(user);
+		}
 	}
 	return true;
 }
@@ -214,8 +217,16 @@ var Trivia = (function () {
 		var answer = toId(target);
 		if (!answer) return output.sendReply('"' + target.trim() + '" is not a valid answer.');
 
+		var correct = false;
 		scoreData.answered = true;
-		if (this.curA.indexOf(answer) < 0) return output.sendReply('You have selected "' + target.trim() + '" as your answer.');
+		for (var i = this.curA.length; i--;) {
+			var correctAnswer = this.curA[i];
+			if (answer === correctAnswer || correctAnswer.length > 5 && Tools.levenshtein(answer, correctAnswer) < 3) {
+				correct = true;
+				break;
+			}
+		}
+		if (!correct) return output.sendReply('You have selected "' + target.trim() + '" as your answer.');
 		if (this.mode === 'first') return this.firstAnswer(user);
 
 		scoreData.responderIndex = this.correctResponders++;
@@ -401,7 +412,7 @@ var Trivia = (function () {
 		}
 		if (winnerid) leaderboard[winnerid][0] += this.prize;
 
-		for (var i = 3; i--;) {
+		for (var i = 3; i < 6; i++) {
 			var scores = [];
 			for (var user in leaderboard) {
 				scores.push({
@@ -416,16 +427,14 @@ var Trivia = (function () {
 
 			var max = Infinity;
 			var rank = 0;
-			var curRank = 0;
 			for (var j = scores.length; j--;) {
 				var data = scores[j];
 				var score = data.score;
-				curRank++;
 				if (max !== score) {
-					rank = curRank;
+					rank += 1;
 					max = score;
 				}
-				leaderboard[data.user][i + 3] = rank;
+				leaderboard[data.user][i] = rank;
 			}
 		}
 
@@ -815,11 +824,12 @@ var commands = {
 
 		var leaderboard = triviaData.leaderboard;
 		var buffer = '|raw|<div class="ladder"><table><tr><th>Rank</th><th>User</th><th>Leaderboard score</th><th>Total game points</th><th>Total correct answers</th></tr>';
-		var i = 0;
-		var len = ladder.length;
-		while (i < len) {
-			var rank = leaderboard[ladder[i]];
-			buffer += '<tr><td><b>' + (++i) + '</b></td><td>' + ladder[i] + '</td><td>' + rank[0] + '</td><td>' + rank[1] + '</td><td>' + rank[2] + '</td></tr>';
+		for (var i = 1, len = Object.size(ladder) + 1; i < len; i++) {
+			if (!ladder[i].length) break;
+			for (var j = ladder[i].length; j--;) {
+				var rank = leaderboard[ladder[i][j]];
+				buffer += '<tr><td><b>' + i + '</b></td><td>' + ladder[i][j] + '</td><td>' + rank[0] + '</td><td>' + rank[1] + '</td><td>' + rank[2] + '</td></tr>';
+			}
 		}
 		buffer += '</table></div>';
 
