@@ -1446,7 +1446,7 @@ exports.Formats = [
 				}
 			}
 			if (name === 'birkal') {
-				this.add('c|%birkal|caw');
+				this.add('c|%Birkal|caw');
 			}
 			if (name === 'bloobblob') {
 				this.add('c|%bloobblob|Contract?');
@@ -1472,7 +1472,10 @@ exports.Formats = [
 				this.add('c|%Majorbling|' + sentences[this.random(3)]);
 			}
 			if (name === 'raseri') {
-				this.add('c|%Raseri|ban prinplup');
+				this.add('c|%raseri|ban prinplup');
+			}
+			if (name === 'quotecs') {
+				this.add('c|%QuoteCS|Yeah, I know what you mean, but unfortunately I lack good answers to those because of my incredibly dry personality.');
 			}
 			if (name === 'trinitrotoluene') {
 				this.add('c|%trinitrotoluene|pls no hax');
@@ -2004,7 +2007,7 @@ exports.Formats = [
 				}
 			}
 			if (name === 'birkal') {
-				this.add('c|%birkal|//birkal');
+				this.add('c|%Birkal|//birkal');
 			}
 			if (name === 'bloobblob') {
 				this.add('c|%bloobblob|I won\'t die! Even if I\'m killed!');
@@ -2025,7 +2028,10 @@ exports.Formats = [
 				this.add('c|%Majorbling|There is literally no way to make this pokemon good...(ゞ๑T  ˳̫T\'๑) ');
 			}
 			if (name === 'raseri') {
-				this.add('c|%Raseri|banned');
+				this.add('c|%raseri|banned');
+			}
+			if (name === 'quotecs') {
+				this.add('c|%QuoteCS|#StillIrrelevant');
 			}
 			if (name === 'trinitrotoluene') {
 				this.add('c|%trinitrotoluene|why hax @_@');
@@ -3009,6 +3015,13 @@ exports.Formats = [
 					}
 				};
 			}
+			if (move.id === 'headcharge' && name === 'rekeri') {
+				move.name = 'Land Before Time';
+				move.basePower = 125;
+				move.type = 'Rock';
+				move.accuracy = 90;
+				move.secondaries = [{chance:10, volatileStatus:'flinch'}];
+			}
 			if (move.id === 'stockpile' && name === 'relados') {
 				move.name = 'Loyalty';
 				move.type = 'Fire';
@@ -3204,6 +3217,26 @@ exports.Formats = [
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Close Combat", target);
+				};
+			}
+			if (move.id === 'rockthrow' && name === 'timbuktu') {
+				move.name = 'Geoblast';
+				move.type = 'Fire';	// Not the other way round or STAB would be lost.
+				move.category = 'Special';
+				move.accuracy = true;
+				move.basePowerCallback = function (source, target) {
+					return (40 * Math.pow(2, source.timesGeoblastUsed));
+				};
+				move.onEffectiveness = function (typeMod, type, move) {
+					return typeMod + this.getEffectiveness('Rock', type);
+				};
+				move.onTryHit = function (target, source) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Fire Blast", source);
+					this.add('-anim', source, "Power Gem", target);
+				};
+				move.onHit = function (target, source) {
+					source.timesGeoblastUsed++;
 				};
 			}
 			if (move.id === 'naturepower' && name === 'trickster') {
@@ -3435,7 +3468,7 @@ exports.Formats = [
 				move.basePower = 90;
 				move.critRatio = 2;
 			}
-			if (name === 'majorbling' && move.id === 'bulletpunch') {
+			if (move.id === 'bulletpunch' && name === 'majorbling') {
 				move.name = 'Focus Laser';
 				move.type = 'Electric';
 				move.category = 'Status';
@@ -3467,31 +3500,12 @@ exports.Formats = [
 				delete move.secondaries;
 				move.status = 'brn';
 			}
-			if (move.id === 'headcharge' && name === 'rekeri') {
-				move.name = 'Land Before Time';
-				move.basePower = 125;
-				move.type = 'Rock';
-				move.accuracy = 90;
-				move.secondaries = [{chance:10, volatileStatus:'flinch'}];
-			}
-			if (move.id === 'rockthrow' && name === 'timbuktu') {
-				move.name = 'Geoblast';
-				move.type = 'Fire';	// Not the other way round or STAB would be lost.
-				move.category = 'Special';
-				move.accuracy = true;
-				move.basePowerCallback = function (source, target) {
-					return (40 * Math.pow(2, source.timesGeoblastUsed));
-				};
-				move.onEffectiveness = function (typeMod, type, move) {
-					return typeMod + this.getEffectiveness('Rock', type);
-				};
+			if (move.id === 'spikes' && name === 'quotecs') {
+				move.name = 'Diversify';
+				move.boosts = {atk:1, spd:1};
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
-					this.add('-anim', source, "Fire Blast", source);
-					this.add('-anim', source, "Power Gem", target);
-				};
-				move.onHit = function (target, source) {
-					source.timesGeoblastUsed++;
+					this.add('-anim', source, "Eruption", source);
 				};
 			}
 			if (move.id === 'explosion' && name === 'trinitrotoluene') {
