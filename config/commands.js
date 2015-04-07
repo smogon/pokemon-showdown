@@ -476,6 +476,7 @@ var commands = exports.commands = {
 		var megaSearch = null;
 		var recoverySearch = null;
 		var output = 10;
+		var categories = ['gen', 'tier', 'color', 'types', 'ability', 'stats', 'moves', 'recovery'];
 
 		for (var i in targets) {
 			var isNotSearch = false;
@@ -622,7 +623,8 @@ var commands = exports.commands = {
 			}
 		}
 
-		for (var search in {'gen':1, 'tier':1, 'color':1, 'types':1, 'ability':1, 'stats':1, 'moves':1, 'recovery':1}) {
+		for (var cat = 0; cat < categories.length; cat++) {
+			var search = categories[cat];
 			if (!searches[search]) continue;
 			switch (search) {
 				case 'types':
