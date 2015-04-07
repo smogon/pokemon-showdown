@@ -558,7 +558,7 @@ var commands = exports.commands = {
 				}
 			}
 
-			var inequality = target.search(/>|</);
+			var inequality = target.search(/>|<|=/);
 			if (inequality > -1) {
 				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in stat ranges.");
 				inequality = target.charAt(inequality);
@@ -567,11 +567,19 @@ var commands = exports.commands = {
 				if (!isNaN(targetParts[0])) {
 					numSide = 0;
 					statSide = 1;
-					direction = (inequality === '>' ? 'less' : 'greater');
+					switch (inequality) {
+						case '>': direction = 'less'; break;
+						case '<': direction = 'greater'; break;
+						case '=': direction = 'equal'; break;
+					}
 				} else if (!isNaN(targetParts[1])) {
 					numSide = 1;
 					statSide = 0;
-					direction = (inequality === '<' ? 'less' : 'greater');
+					switch (inequality) {
+						case '<': direction = 'less'; break;
+						case '>': direction = 'greater'; break;
+						case '=': direction = 'equal'; break;
+					}
 				} else {
 					return this.sendReplyBox("No value given to compare with '" + Tools.escapeHTML(target) + "'.");
 				}
@@ -587,12 +595,15 @@ var commands = exports.commands = {
 				}
 				if (!(stat in allStats)) return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' did not contain a valid stat.");
 				if (!searches['stats']) searches['stats'] = {};
-				if (!searches['stats'][stat]) searches['stats'][stat] = {};
-				if (searches['stats'][stat][direction]) {
-					return this.sendReplyBox("Invalid stat range for " + stat + ".");
+				if (direction === 'equal') {
+					if (searches['stats'][stat]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
+					searches['stats'][stat] = {};
+					searches['stats'][stat]['less'] = parseFloat(targetParts[numSide]);
+					searches['stats'][stat]['greater'] = parseFloat(targetParts[numSide]);
 				} else {
-					searches['stats'][stat][direction] = {};
-					searches['stats'][stat][direction].qty = targetParts[numSide];
+					if (!searches['stats'][stat]) searches['stats'][stat] = {};
+					if (searches['stats'][stat][direction]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
+					searches['stats'][stat][direction] = parseFloat(targetParts[numSide]);
 				}
 				continue;
 			}
@@ -706,12 +717,12 @@ var commands = exports.commands = {
 						for (var mon in dex) {
 							for (var ineq in searches[search][stat]) {
 								if (ineq === "less") {
-									if (dex[mon].baseStats[stat] > searches[search][stat][ineq].qty) {
+									if (dex[mon].baseStats[stat] > searches[search][stat][ineq]) {
 										delete dex[mon];
 										break;
 									}
 								} else {
-									if (dex[mon].baseStats[stat] < searches[search][stat][ineq].qty) {
+									if (dex[mon].baseStats[stat] < searches[search][stat][ineq]) {
 										delete dex[mon];
 										break;
 									}
@@ -812,7 +823,7 @@ var commands = exports.commands = {
 				continue;
 			}
 
-			var inequality = target.search(/>|</);
+			var inequality = target.search(/>|<|=/);
 			if (inequality > -1) {
 				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in quality ranges.");
 				inequality = target.charAt(inequality);
@@ -821,11 +832,19 @@ var commands = exports.commands = {
 				if (!isNaN(targetParts[0])) {
 					numSide = 0;
 					propSide = 1;
-					direction = (inequality === '>' ? 'less' : 'greater');
+					switch (inequality) {
+						case '>': direction = 'less'; break;
+						case '<': direction = 'greater'; break;
+						case '=': direction = 'equal'; break;
+					}
 				} else if (!isNaN(targetParts[1])) {
 					numSide = 1;
 					propSide = 0;
-					direction = (inequality === '<' ? 'less' : 'greater');
+					switch (inequality) {
+						case '<': direction = 'less'; break;
+						case '>': direction = 'greater'; break;
+						case '=': direction = 'equal'; break;
+					}
 				} else {
 					return this.sendReplyBox("No value given to compare with '" + Tools.escapeHTML(target) + "'.");
 				}
@@ -837,27 +856,29 @@ var commands = exports.commands = {
 				}
 				if (!(prop in allProperties)) return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' did not contain a valid property.");
 				if (!searches['property']) searches['property'] = {};
-				if (!searches['property'][prop]) searches['property'][prop] = {};
-				if (searches['property'][prop][direction]) {
-					return this.sendReplyBox("Invalid property range for " + prop + ".");
+				if (direction === 'equal') {
+					if (searches['property'][prop]) return this.sendReplyBox("Invalid property range for " + prop + ".");
+					searches['property'][prop] = {};
+					searches['property'][prop]['less'] = parseFloat(targetParts[numSide]);
+					searches['property'][prop]['greater'] = parseFloat(targetParts[numSide]);
 				} else {
-					searches['property'][prop][direction] = {};
-					searches['property'][prop][direction].qty = targetParts[numSide];
+					if (!searches['property'][prop]) searches['property'][prop] = {};
+					if (searches['property'][prop][direction]) {
+						return this.sendReplyBox("Invalid property range for " + prop + ".");
+					} else {
+						searches['property'][prop][direction] = parseFloat(targetParts[numSide]);
+					}
 				}
 				continue;
 			}
 
 			if (target.substr(0, 8) === 'priority') {
 				var sign = '';
-				var priorityLevel;
 				target = target.substr(8).trim();
 				if (target === "+") {
 					sign = 'greater';
 				} else if (target === "-") {
 					sign = 'less';
-				} else if (target === '' + parseInt(target)) {
-					priorityLevel = parseInt(target);
-					if (priorityLevel > 5 || priorityLevel < -7) return this.sendReplyBox("Priority moves only exist between levels -7 and 5.");
 				} else {
 					return this.sendReplyBox("Priority type '" + target + "' not recognized.");
 				}
@@ -866,15 +887,7 @@ var commands = exports.commands = {
 					return this.sendReplyBox("Priority cannot be set with both shorthand and inequality range.");
 				} else {
 					searches['property']['priority'] = {};
-					if (priorityLevel) {
-						searches['property']['priority']['less'] = {};
-						searches['property']['priority']['greater'] = {};
-						searches['property']['priority']['less'].qty = priorityLevel;
-						searches['property']['priority']['greater'].qty = priorityLevel;
-					} else {
-						searches['property']['priority'][sign] = {};
-						searches['property']['priority'][sign].qty = (sign === 'less' ? -1 : 1);
-					}
+					searches['property']['priority'][sign] = (sign === 'less' ? -1 : 1);
 				}
 				continue;
 			}
@@ -981,7 +994,7 @@ var commands = exports.commands = {
 										delete dex[move];
 										break;
 									}
-									if (dex[move][prop] > searches[search][prop][ineq].qty) {
+									if (dex[move][prop] > searches[search][prop][ineq]) {
 										delete dex[move];
 										break;
 									}
@@ -992,7 +1005,7 @@ var commands = exports.commands = {
 											break;
 										}
 									}
-									if (dex[move][prop] < searches[search][prop][ineq].qty) {
+									if (dex[move][prop] < searches[search][prop][ineq]) {
 										delete dex[move];
 										break;
 									}
