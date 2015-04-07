@@ -465,7 +465,7 @@ module.exports = (function () {
 	Tools.prototype.getType = function (type) {
 		if (!type || typeof type === 'string') {
 			var id = toId(type);
-			id = id.substr(0, 1).toUpperCase() + id.substr(1);
+			id = id.charAt(0).toUpperCase() + id.substr(1);
 			type = {};
 			if (id && this.data.TypeChart[id]) {
 				type = this.data.TypeChart[id];

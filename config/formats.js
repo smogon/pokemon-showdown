@@ -524,7 +524,7 @@ exports.Formats = [
 
 					if (lsetData.sources && lsetData.sources.length === 1 && !lsetData.sourcesBefore) {
 						var source = lsetData.sources[0];
-						if (source.substr(1, 1) === 'S') {
+						if (source.charAt(1) === 'S') {
 							var eventData = null;
 							var splitSource = source.substr(2).split(' ');
 							var eventTemplate = this.getTemplate(splitSource[1]);
@@ -760,7 +760,7 @@ exports.Formats = [
 					if (!sources) sources = [];
 					for (var i = 0, len = lsetData.sources.length; i < len; i++) {
 						learned = lsetData.sources[i];
-						if (parseInt(learned.substr(0, 1), 10) <= sourcesBefore) {
+						if (parseInt(learned.charAt(0), 10) <= sourcesBefore) {
 							sources.push(learned);
 						}
 					}
@@ -770,7 +770,7 @@ exports.Formats = [
 					if (!lsetData.sources) lsetData.sources = [];
 					for (var i = 0, len = sources.length; i < len; i++) {
 						learned = sources[i];
-						if (parseInt(learned.substr(0, 1), 10) <= lsetData.sourcesBefore) {
+						if (parseInt(learned.charAt(0), 10) <= lsetData.sourcesBefore) {
 							lsetData.sources.push(learned);
 						}
 					}
