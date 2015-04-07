@@ -3749,7 +3749,7 @@ exports.BattleScripts = {
 				species: 'Skarmory', ability: 'Adaptability', item: 'Life Orb', gender: 'M',
 				moves: ['meteormash', ['bravebird', 'dragonascent'][this.random(2)], 'roost'],
 				baseSignatureMove: 'spikes', signatureMove: "Diversify",
-				evs: {hp:252, atk:252, spe:4}, nature: 'Adamant'
+				evs: {hp:248, atk:252, spe:8}, nature: 'Adamant'
 			},
 			'%raseri': {
 				species: 'Prinplup', ability: 'Regenerator', item: 'Eviolite', gender: 'M',
