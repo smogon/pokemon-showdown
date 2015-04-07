@@ -1451,6 +1451,9 @@ exports.Formats = [
 			if (name === 'bloobblob') {
 				this.add('c|%bloobblob|Contract?');
 			}
+			if (name === 'charlescarmichael') {
+				this.add('c|%Charles Carmichael|If Taylor Swift were in a Fast and Furious movie, it’d be called Taylor Drift.');
+			}
 			if (name === 'crestfall') {
 				sentences = ['On wings of night.', 'Let us hunt those who have fallen to darkness.'];
 				this.add('c|%Crestfall|' + sentences[this.random(2)]);
@@ -2011,6 +2014,9 @@ exports.Formats = [
 			}
 			if (name === 'bloobblob') {
 				this.add('c|%bloobblob|I won\'t die! Even if I\'m killed!');
+			}
+			if (name === 'charlescarmichael') {
+				this.add('c|%Charles Carmichael|The Grandmaster of Puns will be back for revenge!');
 			}
 			if (name === 'crestfall') {
 				this.add('c|%Crestfall|Vayne [All Chat]: Outplayed me gg no re');
@@ -3391,6 +3397,12 @@ exports.Formats = [
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Tail Slap", target);
+				};
+			}
+			if (move.id === 'swagger' && name === 'charlescarmichael') {
+				move.name = 'Bad Pun';
+				move.onHit = function (pokemon) {
+					pokemon.addVolatile('taunt');
 				};
 			}
 			if (move.id === 'protect' && name === 'crestfall') {
