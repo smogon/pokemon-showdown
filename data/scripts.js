@@ -3697,6 +3697,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'spikecannon', signatureMove: "Lava Whip",
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant'
 			},
+			'%Charles Carmichael': {
+				species: 'Quagsire', ability: 'Sap Sipper', item: 'Liechi Berry', gender: 'M',
+				moves: ['waterfall', 'earthquake', ['stoneedge', 'rockslide'][this.random(2)], 'icepunch'],
+				baseSignatureMove: 'swagger', signatureMove: 'Bad Pun',
+				evs: {hp:248, atk:252, spe:8}, nature: 'Naughty'
+			},
 			'%Crestfall': {
 				species: 'Darkrai', ability: 'Parental Bond', item: 'Lum Berry', gender: 'M',
 				moves: ['darkpulse', 'icebeam', 'oblivionwing'],
