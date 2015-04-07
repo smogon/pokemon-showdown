@@ -480,9 +480,9 @@ var commands = exports.commands = {
 		for (var i in targets) {
 			var isNotSearch = false;
 			target = targets[i].trim().toLowerCase();
-			if (target.slice(0, 1) === '!') {
+			if (target.charAt(0) === '!') {
 				isNotSearch = true;
-				target = target.slice(1);
+				target = target.substr(1);
 			}
 
 			var targetAbility = Tools.getAbility(targets[i]);
@@ -518,9 +518,7 @@ var commands = exports.commands = {
 			}
 
 			if (target === 'all') {
-				if (this.broadcasting) {
-					return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
-				}
+				if (this.broadcasting) return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
 				showAll = true;
 				continue;
 			}
@@ -548,7 +546,7 @@ var commands = exports.commands = {
 			}
 
 			if (target.indexOf(' type') > -1) {
-				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
+				target = target.charAt(0).toUpperCase() + target.substring(1, target.indexOf(' type'));
 				if (target in Tools.data.TypeChart) {
 					if (!searches['types']) searches['types'] = {};
 					if (Object.count(searches['types'], true) === 2 && !isNotSearch) return this.sendReplyBox("Specify a maximum of two types.");
@@ -733,7 +731,7 @@ var commands = exports.commands = {
 					break;
 
 				default:
-					return this.sendReplyBox("Something broke! PM TalkTakesTime here or on the Smogon forums with the command you tried.");
+					return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
 			}
 		}
 
@@ -779,11 +777,11 @@ var commands = exports.commands = {
 			target = targets[i].toLowerCase().trim();
 			if (target.charAt(0) === '!') {
 				isNotSearch = true;
-				target = target.slice(1);
+				target = target.substr(1);
 			}
 
 			if (target.indexOf(' type') > -1) {
-				target = target.charAt(0).toUpperCase() + target.slice(1, target.indexOf(' type'));
+				target = target.charAt(0).toUpperCase() + target.substring(1, target.indexOf(' type'));
 				if (!(target in Tools.data.TypeChart)) return this.sendReplyBox("Type '" + Tools.escapeHTML(target) + "' not found.");
 				if (!searches['type']) searches['type'] = {};
 				if ((searches['type'][target] && isNotSearch) || (searches['type'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a type.');
@@ -807,9 +805,7 @@ var commands = exports.commands = {
 			}
 
 			if (target === 'all') {
-				if (this.broadcasting) {
-					return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
-				}
+				if (this.broadcasting) return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
 				showAll = true;
 				continue;
 			}
