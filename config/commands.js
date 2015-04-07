@@ -1131,7 +1131,7 @@ var commands = exports.commands = {
 					}
 					prevSourceType = source.substr(0, 2);
 					prevSourceCount = source.substr(2) ? 0 : -1;
-					buffer += "<li>gen " + source.substr(0, 1) + " " + sourceNames[source.substr(1, 1)];
+					buffer += "<li>gen " + source.charAt(0) + " " + sourceNames[source.charAt(1)];
 					if (prevSourceType === '5E' && template.maleOnlyHidden) buffer += " (cannot have hidden ability)";
 					if (source.substr(2)) buffer += ": " + source.substr(2);
 				}

@@ -267,7 +267,7 @@ var Battle = (function () {
 	};
 	Battle.prototype.getPlayer = function (slot) {
 		if (typeof slot === 'string') {
-			if (slot.substr(0, 1) === 'p') {
+			if (slot.charAt(0) === 'p') {
 				slot = parseInt(slot.substr(1), 10) - 1;
 			} else {
 				slot = parseInt(slot, 10);
