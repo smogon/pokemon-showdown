@@ -1767,7 +1767,7 @@ exports.BattleScripts = {
 			item = 'Leftovers';
 		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
-		} else if (counter.Status <= 1 && ability !== 'Sturdy') {
+		} else if (counter.Status <= 1 && ability !== 'Sturdy' && template.baseStats.spe * Math.max(template.baseStats.atk, template.baseStats.spa) >= template.baseStats.hp * Math.max(template.baseStats.def, template.baseStats.spd)) {
 			item = 'Life Orb';
 		} else {
 			item = 'Leftovers';
@@ -3041,7 +3041,7 @@ exports.BattleScripts = {
 			// Holistic judgment. Don't boost Protean as much as Parental Bond
 			bst += 0.3 * (evs.atk > evs.spa ? template.baseStats.atk : template.baseStats.spa);
 		} else if (templateAbility === 'Fur Coat') {
-			bst += template.baseStats.def ;
+			bst += template.baseStats.def;
 		}
 		if (item === 'Eviolite') {
 			bst += 0.5 * (template.baseStats.def + template.baseStats.spd);
