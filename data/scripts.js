@@ -1078,7 +1078,7 @@ exports.BattleScripts = {
 					if (move.type === 'Water') counter['torrent']++;
 					if (move.type === 'Normal') {
 						counter['ate']++;
-						if (hasAbility['Refrigerate'] || hasAbility['Pixilate'] || hasAbility['Aerilate']) hasStab = true;
+						if (hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) hasStab = true;
 					}
 					if (move.flags['bite']) counter['bite']++;
 					if (move.flags['punch']) counter['ironfist']++;
@@ -1434,11 +1434,11 @@ exports.BattleScripts = {
 						}
 						if (replace) moves.splice(damagingMoveIndex[damagingid], 1);
 					}
-				} else if (damagingMoves.length === 2) {
+				} else if (damagingMoves.length === 2 && !hasStab) {
 					// If you have two attacks, neither is STAB, and the combo isn't Electric/Ice or Fighting/Ghost, reject one of them at random.
 					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
-					if (!hasStab && typeCombo !== 'Electric/Ice' && typeCombo !== 'Fighting/Ghost') {
+					if (typeCombo !== 'Electric/Ice' && typeCombo !== 'Fighting/Ghost') {
 						var rejectableMoves = [];
 						var baseDiff = movePool.length - availableHP;
 						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || damagingMoves[0].id === 'hiddenpower')) {
@@ -1451,7 +1451,7 @@ exports.BattleScripts = {
 							moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
 						}
 					}
-				} else if (!hasStab) {
+				} else if (!hasStab || ((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['ate'])) {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
 					var rejectableMoves = [];
 					var baseDiff = movePool.length - availableHP;
@@ -1473,31 +1473,6 @@ exports.BattleScripts = {
 			delete hasMove[this.getMove(moves[3]).id];
 			moves[3] = 'technoblast';
 			hasMove['technoblast'] = true;
-		}
-		if (template.id === 'altariamega' && !counter['ate']) {
-			delete hasMove[this.getMove(moves[3]).id];
-			moves[3] = 'return';
-			hasMove['return'] = true;
-		}
-		if (template.id === 'gardevoirmega' && !counter['ate']) {
-			delete hasMove[this.getMove(moves[3]).id];
-			moves[3] = 'hypervoice';
-			hasMove['hypervoice'] = true;
-		}
-		if (template.id === 'glaliemega' && !counter['ate']) {
-			delete hasMove[this.getMove(moves[3]).id];
-			moves[3] = 'return';
-			hasMove['return'] = true;
-		}
-		if (template.id === 'salamencemega' && !counter['ate']) {
-			delete hasMove[this.getMove(moves[3]).id];
-			moves[3] = 'return';
-			hasMove['return'] = true;
-		}
-		if (template.id === 'sylveon' && !counter['ate']) {
-			delete hasMove[this.getMove(moves[3]).id];
-			moves[3] = 'hypervoice';
-			hasMove['hypervoice'] = true;
 		}
 		if (template.requiredMove && !hasMove[toId(template.requiredMove)]) {
 			delete hasMove[this.getMove(moves[3]).id];
