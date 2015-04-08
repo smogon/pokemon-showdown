@@ -1278,11 +1278,11 @@ exports.BattleScripts = {
 				case 'gigadrain':
 					if ((!setupType && hasMove['leafstorm']) || hasMove['petaldance']) rejected = true;
 					break;
+				case 'leafblade': case 'seedbomb': case 'woodhammer':
+					if (hasMove['gigadrain'] && setupType !== 'Physical') rejected = true;
+					break;
 				case 'leafstorm':
 					if (setupType && hasMove['gigadrain']) rejected = true;
-					break;
-				case 'seedbomb': case 'woodhammer':
-					if (hasMove['gigadrain'] && setupType !== 'Physical') rejected = true;
 					break;
 				case 'bonemerang': case 'precipiceblades':
 					if (hasMove['earthquake']) rejected = true;
