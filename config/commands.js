@@ -1263,8 +1263,8 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 
 		var factor = 0;
-		if (source.category === "Status" && !source.affectedByImmunities) factor = 1;
-		if (Tools.getImmunity(source.type || source, defender) || source.affectedByImmunities === false) {
+		if (source.category === "Status" && (source.ignoreImmunity === true || source.ignoreImmunity[source.type])) factor = 1;
+		if (Tools.getImmunity(source.type || source, defender) || source.ignoreImmunity === true || source.ignoreImmunity[source.type]) {
 			var totalTypeMod = 0;
 			if (source.effectType !== 'Move' || source.basePower || source.basePowerCallback) {
 				for (var i = 0; i < defender.types.length; i++) {

@@ -311,6 +311,7 @@ module.exports = (function () {
 				else move.gen = 0;
 			}
 			if (!move.priority) move.priority = 0;
+			if (!move.ignoreImmunity) move.ignoreImmunity = (move.category === 'Status');
 			if (!move.flags) move.flags = {};
 		}
 		return move;

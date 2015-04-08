@@ -357,7 +357,7 @@ exports.BattleMovedex = {
 	glare: {
 		inherit: true,
 		accuracy: 75,
-		affectedByImmunities: true
+		ignoreImmunity: false
 	},
 	growth: {
 		inherit: true,
