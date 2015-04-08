@@ -89,8 +89,6 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			if (targetUser && !targetUser.connected) {
 				this.popupReply("User " + this.targetUsername + " is offline.");
-			} else if (!target) {
-				this.popupReply("User " + this.targetUsername + " not found. Did you forget a comma?");
 			} else {
 				this.popupReply("User "  + this.targetUsername + " not found. Did you misspell their name?");
 			}
