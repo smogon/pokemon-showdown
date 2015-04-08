@@ -2333,7 +2333,7 @@ exports.Formats = [
 				move.category = 'Special';
 				move.type = 'Psychic';
 				move.negateSecondary = true;
-				move.affectedByImmunities = false;
+				move.ignoreImmunity = true;
 				delete move.secondaries;
 				move.onTryHit = function (target, pokemon) {
 					this.attrLastMove('[still]');
@@ -2483,7 +2483,7 @@ exports.Formats = [
 			}
 			if (move.id === 'triattack' && name === 'ascriptmaster') {
 				move.name = 'Spectrum Beam';
-				move.affectedByImmunities = false;
+				move.ignoreImmunity = true;
 				move.basePower = 8;
 				move.critRatio = 1;
 				move.accuracy = 95;
@@ -2540,7 +2540,7 @@ exports.Formats = [
 				move.onHit = function (pokemon) {
 					pokemon.addVolatile('confusion');
 				};
-				move.affectedByImmunities = false;
+				move.ignoreImmunity = true;
 				move.type = 'Dark';
 			}
 			if (move.id === 'bugbuzz' && name === 'beowulf') {
@@ -2709,9 +2709,7 @@ exports.Formats = [
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Giga Drain", target);
 				};
-				if (move.type === 'Ground') {
-					move.affectedByImmunities = false;
-				}
+				move.ignoreImmunity = {'Ground': true};
 			}
 			if (move.id === 'partingshot' && name === 'hippopotas') {
 				move.name = 'Hazard Pass';
@@ -3274,7 +3272,7 @@ exports.Formats = [
 					target.ignore['Ability'] = true;
 				};
 				move.accuracy = true;
-				move.affectedByImmunities = false;
+				move.ignoreImmunity = true;
 				move.ignoreDefensive = true;
 				move.ignoreEvasion = true;
 			}

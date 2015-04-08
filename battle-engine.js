@@ -3013,7 +3013,7 @@ Battle = (function () {
 			flags: {}
 		};
 
-		if (move.affectedByImmunities) {
+		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
 			if (!target.runImmunity(move.type, !suppressMessages)) {
 				return false;
 			}

@@ -105,7 +105,7 @@ exports.BattleMovedex = {
 	},
 	bind: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock'
@@ -199,7 +199,7 @@ exports.BattleMovedex = {
 	},
 	counter: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		willCrit: false,
 		damageCallback: function (pokemon, target) {
 			// Counter mechanics on gen 1 might be hard to understand.
@@ -368,7 +368,7 @@ exports.BattleMovedex = {
 	},
 	glare: {
 		inherit: true,
-		affectedByImmunities: false
+		ignoreImmunity: true
 	},
 	growth: {
 		inherit: true,
@@ -574,7 +574,7 @@ exports.BattleMovedex = {
 	},
 	nightshade: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		basePower: 1
 	},
 	poisonsting: {
@@ -713,12 +713,12 @@ exports.BattleMovedex = {
 	},
 	sandattack: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		type: "Normal"
 	},
 	seismictoss: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		basePower: 1
 	},
 	selfdestruct: {
@@ -867,7 +867,7 @@ exports.BattleMovedex = {
 	},
 	superfang: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		basePower: 1
 	},
 	thunder: {
@@ -908,7 +908,7 @@ exports.BattleMovedex = {
 	wrap: {
 		inherit: true,
 		accuracy: 85,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock'

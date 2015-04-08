@@ -286,7 +286,7 @@ exports.BattleScripts = {
 		};
 
 		// Let's test for immunities.
-		if (move.affectedByImmunities) {
+		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]) {
 			if (!target.runImmunity(move.type, true)) {
 				return false;
 			}

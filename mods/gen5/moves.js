@@ -266,7 +266,7 @@ exports.BattleMovedex = {
 					basePower: 100,
 					category: "Special",
 					flags: {},
-					affectedByImmunities: true,
+					ignoreImmunity: false,
 					type: 'Psychic'
 				}
 			};

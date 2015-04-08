@@ -101,8 +101,8 @@ exports.BattleScripts = {
 			return true;
 		}
 
-		if (typeof move.affectedByImmunities === 'undefined') {
-			move.affectedByImmunities = (move.category !== 'Status');
+		if (move.ignoreImmunity === undefined) {
+			move.ignoreImmunity = (move.category === 'Status');
 		}
 
 		var damage = false;
@@ -209,12 +209,12 @@ exports.BattleScripts = {
 			return this.moveHit(target, pokemon, move);
 		}
 
-		if (move.affectedByImmunities && !target.runImmunity(move.type, true)) {
-			return false;
+		if (move.ignoreImmunity === undefined) {
+			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		if (typeof move.affectedByImmunities === 'undefined') {
-			move.affectedByImmunities = (move.category !== 'Status');
+		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+			return false;
 		}
 
 		hitResult = this.runEvent('TryHit', target, pokemon, move);
