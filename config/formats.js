@@ -4248,7 +4248,7 @@ exports.Formats = [
 
 		mod: 'gen2',
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber']
+		banlist: ['Uber',  'Cloyster + Explosion + Rapid Spin']
 	},
 	{
 		name: "[Gen 2] Random Battle",
