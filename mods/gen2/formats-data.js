@@ -539,7 +539,8 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	lickitung: {
-		randomBattleMoves: ["thunderbolt","icebeam","rest","sleeptalk","swordsdance","bodyslam"],
+		randomBattleMoves: ["thunderbolt","icebeam","rest","sleeptalk","swordsdance"],
+		essentialMove: "bodyslam",
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["lick","doubleslap"]}
 		],
@@ -571,13 +572,14 @@ exports.BattleFormatsData = {
 	},
 	tangela: {
 		randomBattleMoves: ["sleeppowder","stunspore","sleeptalk","synthesis","reflect"],
+		essentialMove: "gigadrain",
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["constrict","sleeppowder","synthesis"]}
 		],
 		tier: "UU"
 	},
 	kangaskhan: {
-		randomBattleMoves: ["curse","roar","bodyslam","return","attract","substitute","rest"],
+		randomBattleMoves: ["curse","roar","bodyslam","return","earthquake","attract","substitute","rest"],
 		eventPokemon: [
 			{"generation":2,"level":5,"gender":"F","moves":["cometpunch","feintattack"]}
 		],
@@ -1123,6 +1125,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	donphan: {
+		randomBattleMoves: ["bodyslam","hiddenpowerrock","rapidspin","curse","encore","rest","roar"],
+		essentialMove: "earthquake",
 		tier: "BL"
 	},
 	stantler: {
