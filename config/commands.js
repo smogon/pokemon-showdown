@@ -748,7 +748,6 @@ var commands = exports.commands = {
 				results.sort();
 				resultsStr = results.join(", ");
 			} else {
-				results.randomize();
 				resultsStr = results.slice(0, 10).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else {
@@ -1068,7 +1067,6 @@ var commands = exports.commands = {
 				results.sort();
 				resultsStr = results.join(", ");
 			} else {
-				results.randomize();
 				resultsStr = results.slice(0, 10).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else {
