@@ -478,7 +478,7 @@ var commands = exports.commands = {
 		var output = 10;
 		var categories = ['gen', 'tier', 'color', 'types', 'ability', 'stats', 'moves', 'recovery'];
 
-		for (var i in targets) {
+		for (var i = 0; i < targets.length; i++) {
 			var isNotSearch = false;
 			target = targets[i].trim().toLowerCase();
 			if (target.charAt(0) === '!') {
@@ -541,8 +541,8 @@ var commands = exports.commands = {
 			if (targetMove.exists) {
 				if (!searches['moves']) searches['moves'] = {};
 				if (Object.count(searches['moves'], true) === 4 && !isNotSearch) return this.sendReplyBox("Specify a maximum of 4 moves.");
-				if ((searches['moves'][targetMove.name] && isNotSearch) || (searches['moves'][targetMove.name] === false && !isNotSearch)) return this.sendReplyBox("A search cannot both exclude and include a move.");
-				searches['moves'][targetMove.name] = !isNotSearch;
+				if ((searches['moves'][targetMove.id] && isNotSearch) || (searches['moves'][targetMove.id] === false && !isNotSearch)) return this.sendReplyBox("A search cannot both exclude and include a move.");
+				searches['moves'][targetMove.id] = !isNotSearch;
 				continue;
 			}
 
@@ -615,8 +615,7 @@ var commands = exports.commands = {
 		for (var pokemon in Tools.data.Pokedex) {
 			var template = Tools.getTemplate(pokemon);
 			var megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
-			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) &&
-				megaSearchResult) {
+			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) && megaSearchResult) {
 				dex[pokemon] = template;
 			}
 		}
@@ -677,25 +676,23 @@ var commands = exports.commands = {
 
 				case 'moves':
 					for (var mon in dex) {
-						var template = Tools.getTemplate(dex[mon].id);
+						var template = dex[mon];
 						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
 						if (!template.learnset) continue;
-						for (var i in searches[search]) {
-							var move = Tools.getMove(i);
-							if (!move.exists) return this.sendReplyBox("'" + move + "' is not a known move.");
-							var prevoTemp = Tools.getTemplate(template.id);
-							while (prevoTemp.prevo && prevoTemp.learnset && !(prevoTemp.learnset[move.id])) {
+						for (var move in searches[search]) {
+							var prevoTemp = template;
+							while (prevoTemp.prevo && prevoTemp.learnset && !(prevoTemp.learnset[move])) {
 								prevoTemp = Tools.getTemplate(prevoTemp.prevo);
 							}
-							var canLearn = (prevoTemp.learnset.sketch && !(move.id in {'chatter':1, 'struggle':1, 'magikarpsrevenge':1})) || prevoTemp.learnset[move.id];
-							if ((!canLearn && searches[search][i]) || (searches[search][i] === false && canLearn)) delete dex[mon];
+							var canLearn = (prevoTemp.learnset.sketch && ['chatter', 'struggle', 'magikarpsrevenge'].indexOf(move) === -1) || prevoTemp.learnset[move];
+							if ((!canLearn && searches[search][move]) || (searches[search][move] === false && canLearn)) delete dex[mon];
 						}
 					}
 					break;
 
 				case 'recovery':
 					for (var mon in dex) {
-						var template = Tools.getTemplate(dex[mon].id);
+						var template = dex[mon];
 						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
 						if (!template.learnset) continue;
 						var recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder"];
@@ -715,17 +712,16 @@ var commands = exports.commands = {
 				case 'stats':
 					for (var stat in searches[search]) {
 						for (var mon in dex) {
-							for (var ineq in searches[search][stat]) {
-								if (ineq === "less") {
-									if (dex[mon].baseStats[stat] > searches[search][stat][ineq]) {
-										delete dex[mon];
-										break;
-									}
-								} else {
-									if (dex[mon].baseStats[stat] < searches[search][stat][ineq]) {
-										delete dex[mon];
-										break;
-									}
+							if (typeof searches[search][stat].less === 'number') {
+								if (dex[mon].baseStats[stat] > searches[search][stat].less) {
+									delete dex[mon];
+									continue;
+								}
+							}
+							if (typeof searches[search][stat].greater === 'number') {
+								if (dex[mon].baseStats[stat] < searches[search][stat].greater) {
+									delete dex[mon];
+									continue;
 								}
 							}
 						}
@@ -737,22 +733,22 @@ var commands = exports.commands = {
 			}
 		}
 
-		var results = Object.keys(dex).map(function (speciesid) {return dex[speciesid].species;});
-		results = results.filter(function (species) {
-			var template = Tools.getTemplate(species);
-			return !(species !== template.baseSpecies && results.indexOf(template.baseSpecies) > -1);
-		});
+		var results = [];
+		for (var mon in dex) {
+			if (dex[mon].baseSpecies && results.indexOf(dex[mon].baseSpecies) > -1) continue;
+			results.push(dex[mon].species);
+		}
+
 		var resultsStr = "";
 		if (results.length > 0) {
 			if (showAll || results.length <= output + 5) {
 				results.sort();
 				resultsStr = results.join(", ");
 			} else {
-				results.randomize();
-				resultsStr = results.slice(0, 10).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+				resultsStr = results.slice(0, output).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else {
-			resultsStr = "No Pokémon found.";
+			resultsStr = "No Pok&eacute;mon found.";
 		}
 		return this.sendReplyBox(resultsStr);
 	},
@@ -774,7 +770,7 @@ var commands = exports.commands = {
 		var showAll = false;
 		var output = 10;
 
-		for (var i in targets) {
+		for (var i = 0; i < targets.length; i++) {
 			var isNotSearch = false;
 			target = targets[i].toLowerCase().trim();
 			if (target.charAt(0) === '!') {
@@ -986,27 +982,24 @@ var commands = exports.commands = {
 				case 'property':
 					for (var prop in searches[search]) {
 						for (var move in dex) {
-							for (var ineq in searches[search][prop]) {
-								if (ineq === "less") {
-									if (dex[move][prop] === true) {
-										delete dex[move];
-										break;
-									}
-									if (dex[move][prop] > searches[search][prop][ineq]) {
-										delete dex[move];
-										break;
-									}
-								} else {
-									if (dex[move][prop] === true) {
-										if (dex[move].category === "Status") {
-											delete dex[move];
-											break;
-										}
-									}
-									if (dex[move][prop] < searches[search][prop][ineq]) {
-										delete dex[move];
-										break;
-									}
+							if (typeof searches[search][prop].less === "number") {
+								if (dex[move][prop] === true) {
+									delete dex[move];
+									continue;
+								}
+								if (dex[move][prop] > searches[search][prop].less) {
+									delete dex[move];
+									continue;
+								}
+							}
+							if (typeof searches[search][prop].greater === "number") {
+								if (dex[move][prop] === true) {
+									if (dex[move].category === "Status") delete dex[move];
+									continue;
+								}
+								if (dex[move][prop] < searches[search][prop].greater) {
+									delete dex[move];
+									continue;
 								}
 							}
 						}
@@ -1068,8 +1061,7 @@ var commands = exports.commands = {
 				results.sort();
 				resultsStr = results.join(", ");
 			} else {
-				results.randomize();
-				resultsStr = results.slice(0, 10).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+				resultsStr = results.slice(0, output).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else {
 			resultsStr = "No moves found.";
