@@ -432,7 +432,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		return parse(message, room, user, connection, levelsDeep + 1);
 	}
 
-	if (user.authenticated && global.tells) {
+	if (user.registered && global.tells) {
 		var alts = user.getAlts();
 		alts.push(user.name);
 		alts.map(toId).forEach(function (user) {
