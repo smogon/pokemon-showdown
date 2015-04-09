@@ -3157,24 +3157,24 @@ Battle = (function () {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		var totalTypeMod = 0;
+		move.typeMod = 0;
 
 		if (target.negateImmunity[move.type] !== 'IgnoreEffectiveness' || this.getImmunity(move.type, target)) {
-			totalTypeMod = target.runEffectiveness(move);
+			move.typeMod = target.runEffectiveness(move);
 		}
 
-		totalTypeMod = this.clampIntRange(totalTypeMod, -6, 6);
-		if (totalTypeMod > 0) {
+		move.typeMod = this.clampIntRange(move.typeMod, -6, 6);
+		if (move.typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
-			for (var i = 0; i < totalTypeMod; i++) {
+			for (var i = 0; i < move.typeMod; i++) {
 				baseDamage *= 2;
 			}
 		}
-		if (totalTypeMod < 0) {
+		if (move.typeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
 
-			for (var i = 0; i > totalTypeMod; i--) {
+			for (var i = 0; i > move.typeMod; i--) {
 				baseDamage = Math.floor(baseDamage / 2);
 			}
 		}
