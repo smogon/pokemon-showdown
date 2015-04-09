@@ -13333,12 +13333,13 @@ exports.BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {contact: 1, protect: 1},
-		onModifyMove: function (move) {
+		onModifyMove: function (move, pokemon) {
 			move.type = '???';
+			this.add('-activate', pokemon, 'move: Struggle');
 		},
 		self: {
 			onHit: function (source) {
-				this.directDamage(source.maxhp / 4, source, source, 'strugglerecoil');
+				this.directDamage(source.maxhp / 4, source, source, {id: 'strugglerecoil'});
 			}
 		},
 		secondary: false,
