@@ -772,6 +772,8 @@ User = (function () {
 		delete prevUsers[userid];
 		prevUsers[this.userid] = userid;
 
+		Rooms.global.cancelSearch(this);
+
 		this.name = name;
 		var oldid = this.userid;
 		delete users[oldid];
