@@ -586,21 +586,9 @@ exports.BattleMovedex = {
 	},
 	struggle: {
 		inherit: true,
-		accuracy: true,
-		basePower: 50,
-		pp: 1,
-		noPPBoosts: true,
-		priority: 0,
-		beforeMoveCallback: function (pokemon) {
-			this.add('-activate', pokemon.name, 'move: Struggle');
-		},
-		onModifyMove: function (move) {
-			move.type = '???';
-		},
+		accuracy: 100,
 		recoil: [1, 2],
-		secondary: false,
-		target: "normal",
-		type: "Normal"
+		self: false
 	},
 	synthesis: {
 		inherit: true,
