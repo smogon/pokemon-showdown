@@ -853,7 +853,7 @@ exports.BattleMovedex = {
 	},
 	roar: {
 		inherit: true,
-		flags: {mirror: 1, sound: 1, authentic: 1}
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1}
 	},
 	rockblast: {
 		inherit: true,
@@ -1042,7 +1042,7 @@ exports.BattleMovedex = {
 	},
 	whirlwind: {
 		inherit: true,
-		flags: {mirror: 1, authentic: 1}
+		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
 	wish: {
 		inherit: true,
