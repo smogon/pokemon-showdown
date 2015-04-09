@@ -3514,7 +3514,7 @@ exports.Formats = [
 			}
 			if (move.id === 'spikes' && name === 'quotecs') {
 				move.name = 'Diversify';
-				move.boosts = {atk:1, spd:1};
+				move.self = {boosts: {atk:1, spd:1}};
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Eruption", source);
