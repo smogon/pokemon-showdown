@@ -769,6 +769,8 @@ var commands = exports.commands = {
 		var allBoosts = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'accuracy':1, 'evasion':1};
 		var showAll = false;
 		var output = 10;
+		var lsetData = {};
+		var targetMon = '';
 
 		for (var i = 0; i < targets.length; i++) {
 			var isNotSearch = false;
@@ -814,6 +816,15 @@ var commands = exports.commands = {
 				} else if ((searches['recovery'] && isNotSearch) || (searches['recovery'] === false && !isNotSearch)) {
 					return this.sendReplyBox('A search cannot both exclude and include recovery moves.');
 				}
+				continue;
+			}
+
+			var template = Tools.getTemplate(target);
+			if (template.exists) {
+				if (Object.size(lsetData) !== 0) return this.sendReplyBox("A search can only include one Pokemon learnset.");
+				if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+				lsetData = template.learnset;
+				targetMon = template.name;
 				continue;
 			}
 
@@ -937,13 +948,19 @@ var commands = exports.commands = {
 			return this.sendReplyBox("'" + Tools.escapeHTML(oldTarget) + "' could not be found in any of the search categories.");
 		}
 
-		if (showAll && Object.size(searches) === 0) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.");
+		if (showAll && Object.size(searches) === 0 && !targetMon) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.");
 
 		var dex = {};
-		for (var move in Tools.data.Movedex) {
-			dex[move] = Tools.getMove(move);
+		if (targetMon) {
+			for (var move in lsetData) {
+				dex[move] = Tools.getMove(move);
+			}
+		} else {
+			for (var move in Tools.data.Movedex) {
+				dex[move] = Tools.getMove(move);
+			}
+			delete dex.magikarpsrevenge;
 		}
-		delete dex.magikarpsrevenge;
 
 		for (var search in searches) {
 			switch (search) {
@@ -1051,17 +1068,19 @@ var commands = exports.commands = {
 					return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
 			}
 		}
+
 		var results = [];
-		var resultsStr = "";
 		for (var move in dex) {
 			results.push(dex[move].name);
 		}
+
+		var resultsStr = targetMon ? ("<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br>") : "";
 		if (results.length > 0) {
 			if (showAll || results.length <= output + 5) {
 				results.sort();
-				resultsStr = results.join(", ");
+				resultsStr += results.join(", ");
 			} else {
-				resultsStr = results.slice(0, output).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+				resultsStr += results.slice(0, output).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else {
 			resultsStr = "No moves found.";
