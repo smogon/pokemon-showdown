@@ -962,14 +962,16 @@ exports.BattleScripts = {
 		var setupType = '';
 		var item = 'leftovers';
 		var ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+		var hasHP = false;
 
 		var j = 0;
 		do {
+			hasMove = {};
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && moveKeys.length) {
 				var moveid = this.sampleNoReplace(moveKeys);
 				if (moveid.substr(0, 11) === 'hiddenpower') {
-					if (hasMove['hiddenpower']) continue;
+					if (hasHP || hasMove['hiddenpower']) continue;
 					hasMove['hiddenpower'] = true;
 				} else {
 					hasMove[moveid] = true;
@@ -1008,6 +1010,7 @@ exports.BattleScripts = {
 					for (var iv in HPivs) {
 						ivs[iv] = HPivs[iv];
 					}
+					moveid = 'hiddenpower';
 				}
 				if (hasMove[moveid]) rejected = true;
 				if (!template.essentialMove || moveid !== template.essentialMove) {
@@ -1110,10 +1113,11 @@ exports.BattleScripts = {
 						break;
 					} // End of switch for moveid
 				}
-				if (rejected && j < moveKeys.length) {
+				if (rejected && j < moveKeys.length-1) {
 					moves.splice(k, 1);
 					break;
 				}
+				if (moveid === 'hiddenpower') hasHP = true;
 				counter[move.category]++;
 			} // End of for
 		} while (moves.length < 4 && j < moveKeys.length);
