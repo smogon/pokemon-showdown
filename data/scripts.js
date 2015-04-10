@@ -3033,6 +3033,7 @@ exports.BattleScripts = {
 		for (var id in this.data.FormatsData) {
 			var template = this.getTemplate(id);
 			var types = template.types;
+			if (template.baseSpecies === 'Castform') types = ['Normal'];
 			if (template.speciesid === 'meloettapirouette') types = ['Normal', 'Psychic'];
 			if (!excludedTiers[template.tier] && types.indexOf(type) > -1 && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
 				pokemonPool.push(id);
