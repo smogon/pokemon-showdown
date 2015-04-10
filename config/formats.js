@@ -295,7 +295,7 @@ exports.Formats = [
 		banlist: ['Unreleased', 'Arceus', 'Archeops', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Ho-Oh', 'Keldeo', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza',
 			'Regigigas', 'Reshiram', 'Shaymin-Sky', 'Shedinja', 'Slaking', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Salamencite', 'Soul Dew'
+			'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Salamencite', 'Soul Dew', 'Assist'
 		],
 		validateSet: (function () {
 			var pokemonWithAbility;
@@ -487,15 +487,8 @@ exports.Formats = [
 
 					if (ability.name === template.abilities['H']) {
 						isHidden = true;
-
 						if (template.unreleasedHidden && banlistTable['illegal']) {
 							problems.push(name + "'s hidden ability is unreleased.");
-						} else if (this.gen === 5 && set.level < 10 && (template.maleOnlyHidden || template.gender === 'N')) {
-							problems.push(name + " must be at least level 10 with its hidden ability.");
-						}
-						if (template.maleOnlyHidden) {
-							set.gender = 'M';
-							lsetData.sources = ['5D'];
 						}
 					}
 
@@ -540,9 +533,6 @@ exports.Formats = [
 								if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
 									problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific event.");
 								}
-								if (this.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
-									problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it has a move only available from a specific event.");
-								}
 								if (eventData.gender) {
 									set.gender = eventData.gender;
 								}
@@ -567,15 +557,6 @@ exports.Formats = [
 							if (!compatibleSource) {
 								problems.push(name + " has moves incompatible with its hidden ability.");
 							}
-						}
-					}
-					if (!lsetData.sources && lsetData.sourcesBefore <= 3 && this.getAbility(set.ability).gen === 4 && !template.prevo && this.gen <= 5) {
-						problems.push(name + " has a gen 4 ability and isn't evolved - it can't use anything from gen 3.");
-					}
-					if (!lsetData.sources && lsetData.sourcesBefore >= 3 && (isHidden || this.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
-						var oldAbilities = this.mod('gen' + lsetData.sourcesBefore).getTemplate(template.species).abilities;
-						if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
-							problems.push(name + " has moves incompatible with its ability.");
 						}
 					}
 
@@ -648,7 +629,6 @@ exports.Formats = [
 
 			var sources = [];
 			var sourcesBefore = 0;
-			var noFutureGen = this.gen >= 3 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
 
 			do {
 				alreadyChecked[template.speciesid] = true;
@@ -665,15 +645,14 @@ exports.Formats = [
 
 						for (var i = 0, len = lset.length; i < len; i++) {
 							var learned = lset[i];
-							if (noFutureGen && parseInt(learned.charAt(0), 10) > this.gen) continue;
 							if (learned.charAt(0) !== '6' && isHidden && !this.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
 								incompatibleHidden = true;
 								continue;
 							}
 							if (!template.isNonstandard) {
-								if (this.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
-								if (this.gen >= 5 && learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
-								if (this.gen >= 5 && move in {'defog':1, 'whirlpool':1} && learned.charAt(0) <= 4) blockedHM = true;
+								if (learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
+								if (learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+								if (move in {'defog':1, 'whirlpool':1} && learned.charAt(0) <= 4) blockedHM = true;
 							}
 							if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1}) {
 								if (level >= parseInt(learned.substr(2), 10)) {
@@ -716,10 +695,8 @@ exports.Formats = [
 										}
 									}
 									if (!atLeastOne) sources.push(learned + template.id);
-									if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
 								} else if (learned.charAt(1) === 'S') {
 									sources.push(learned + ' ' + template.id);
-									if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
 								} else {
 									var minLevel = (template.evoLevel && template.evoLevel > 10) ? template.evoLevel : 10;
 									if (set.level < minLevel) continue;
@@ -734,7 +711,6 @@ exports.Formats = [
 				} else if (template.prevo) {
 					template = this.getTemplate(template.prevo);
 					if (template.gen > Math.max(2, this.gen)) template = null;
-					if (template && !template.abilities['H']) isHidden = false;
 				} else if (template.baseSpecies !== template.species && template.baseSpecies !== 'Kyurem' && template.baseSpecies !== 'Pikachu') {
 					template = this.getTemplate(template.baseSpecies);
 				} else {
