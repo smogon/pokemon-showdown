@@ -3032,7 +3032,9 @@ exports.BattleScripts = {
 		var pokemonPool = [];
 		for (var id in this.data.FormatsData) {
 			var template = this.getTemplate(id);
-			if (!excludedTiers[template.tier] && template.types.indexOf(type) > -1 && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
+			var types = template.types;
+			if (template.speciesid === 'meloettapirouette') types = ['Normal', 'Psychic'];
+			if (!excludedTiers[template.tier] && types.indexOf(type) > -1 && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
 		}
