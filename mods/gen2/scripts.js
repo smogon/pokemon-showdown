@@ -1111,9 +1111,12 @@ exports.BattleScripts = {
 					case 'sleeptalk':
 						if (!hasMove['rest']) rejected = true;
 						break;
+					case 'rest':
+						if (hasMove['roar']) rejected = true;
+						break;
 					} // End of switch for moveid
 				}
-				if (rejected && j < moveKeys.length-1) {
+				if (rejected && j < moveKeys.length - 1) {
 					moves.splice(k, 1);
 					break;
 				}
