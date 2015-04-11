@@ -320,6 +320,7 @@ var core = exports.core = {
 		':snorlax:': 'http://cbc.pokecommunity.com/config/emoticons/snorlax.png',
 		':spheal:': 'http://cbc.pokecommunity.com/config/emoticons/spheal.png',
 		':sri:': 'http://cbc.pokecommunity.com/config/emoticons/sri.png',
+		':strut:': 'http://cbc.pokecommunity.com/config/emoticons/strut.png',
 		':suicune:': 'http://cbc.pokecommunity.com/config/emoticons/suicune.png',
 		':superman:': 'http://cbc.pokecommunity.com/config/emoticons/superman.png',
 		':sweep:': 'http://cbc.pokecommunity.com/config/emoticons/sweep.gif',
@@ -351,6 +352,9 @@ var core = exports.core = {
 				match;
 			if (match === ':catflip:') return typeof self.emoticons[match] != 'undefined' ?
 				'<img src="' + self.emoticons[match] + '" title="' + match + '" width="44" height="32"/>' :
+				match;
+			if (match === ':strut:') return typeof self.emoticons[match] != 'undefined' ?
+				'<img src="' + self.emoticons[match] + '" title="' + match + '" width="23" height="33"/>' :
 				match;
 			return typeof self.emoticons[match] != 'undefined' ?
 				'<img src="' + self.emoticons[match] + '" title="' + match + '"/>' :
