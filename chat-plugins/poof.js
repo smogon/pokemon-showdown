@@ -86,7 +86,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (user.name === 'Anrin Das') {
+		} else if (user.name === 'Anrin Das' || user.name === 'Anrin N') {
 			var message = target || anrindas[Math.floor(Math.random() * anrindas.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
