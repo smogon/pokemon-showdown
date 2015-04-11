@@ -1969,30 +1969,50 @@ var commands = exports.commands = {
 	dice: function (target, room, user) {
 		if (!target) return this.parse('/help dice');
 		if (!this.canBroadcast()) return;
+
+		var range;
+		var dice = 1;
 		var d = target.indexOf("d");
-		if (d >= 0) {
-			var num = parseInt(target.substring(0, d));
-			var faces;
-			if (target.length > d) faces = parseInt(target.substring(d + 1));
-			if (isNaN(num)) num = 1;
-			if (isNaN(faces)) return this.sendReply("The number of faces must be a valid integer.");
-			if (faces < 1 || faces > 1000) return this.sendReply("The number of faces must be between 1 and 1000");
-			if (num < 1 || num > 20) return this.sendReply("The number of dice must be between 1 and 20");
-			var rolls = [];
-			var total = 0;
-			for (var i = 0; i < num; ++i) {
-				rolls[i] = (Math.floor(faces * Math.random()) + 1);
-				total += rolls[i];
-			}
-			return this.sendReplyBox("Random number " + num + "x(1 - " + faces + "): " + rolls.join(", ") + "<br />Total: " + total);
+
+		if (d === -1) {
+			range = target;
+		} else {
+			dice = parseFloat(target.substr(0, d));
+			range = target.substr(d + 1);
 		}
-		if (target && isNaN(target) || target.length > 21) return this.sendReply("The max roll must be a number under 21 digits.");
-		var maxRoll = (target) ? target : 6;
-		var rand = Math.floor(maxRoll * Math.random()) + 1;
-		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
+		var min = 1;
+		var rangeNum;
+		var rangeSplit = range.indexOf("+");
+		if (rangeSplit === -1) {
+			rangeNum = parseFloat(range);
+		} else {
+			rangeNum = Math.floor(parseFloat(range.substr(0, rangeSplit)));
+			min = parseFloat(range.substr(rangeSplit + 1)) + 1;
+		}
+		var max = (rangeNum + min - 1);
+
+		if (!Number.isInteger(dice) || dice < 1 || dice > 20) return this.sendReply("The number of dice must be an integer between 1 and 20");
+		if (!Number.isInteger(rangeNum) || rangeNum < 1) return this.sendReply("'" + range.substr(0, rangeSplit !== -1 ? rangeSplit : range.length) + "' should be a valid natural number.");
+		if (!Number.isInteger(min) || min <= -1e22) return this.sendReply("'" + range.substr(rangeSplit + 1) + "' should be a valid integer.");
+		if (dice > 1 && (max > 1000 || min < -1000)) return this.sendReply("The max roll must be a number under 1000 for multi-dice rolls.");
+		if (max >= 1e22) return this.sendReply("The max roll must be a number under 21 digits.");
+
+		var total = 0;
+		var rolls = [];
+		for (var i = 0; i < dice; i++) {
+			var randNum = Math.floor(Math.random() * rangeNum) + min;
+			rolls.push(randNum);
+			total += randNum;
+		}
+		if (rolls.length > 1) {
+			return this.sendReplyBox("Random number " + dice + "x(" + min + " - " + max + "): " + rolls.join(", ") + "<br />Total: " + total);
+		} else {
+			return this.sendReplyBox("Random number (" + min + " - " + max + "): " + total);
+		}
 	},
 	dicehelp: ["/dice [max number] - Randomly picks a number between 1 and the number you choose.",
-		"/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice."],
+		"/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.",
+		"/dice [number of sides]+[modifier] - Raises the resulting roll(s) by the value of the modifier, e.g., /dice 6+2 rolls a number between 3 and 8."],
 
 	pr: 'pickrandom',
 	pick: 'pickrandom',
