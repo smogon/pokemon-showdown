@@ -7,20 +7,13 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Inverse Random (BWknd 35)",
+		name: "[Gen 2] Random Battle (BWknd 36)",
 		section: "ORAS Singles",
 
+		mod: 'gen2',
+		searchShow: false,
 		team: 'random',
-		ruleset: ['Random'],
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
-		},
-		onEffectiveness: function (typeMod, target, type, move) {
-			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
-			if (move && !this.getImmunity(move, type)) return 1;
-			return -typeMod;
-		}
+		ruleset: ['Pokemon', 'Standard']
 	},
 	{
 		name: "OU",
