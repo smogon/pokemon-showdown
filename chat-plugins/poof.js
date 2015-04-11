@@ -8,11 +8,11 @@ const amiy = [
 ];
 
 const anrindas = [
-	"Anrin Das went back to the Dragon's Den."
+	"went back to the Dragon's Den."
 ];
 
 const axtheefrost = [
-	"AxTheeFrost went to aliment Wobbuffet."
+	"went to aliment Wobbuffet."
 ];
 
 const bidoofftw = [
@@ -40,7 +40,7 @@ const hannumikkola = [
 ];
 
 const indiancharizard = [
-	"IndianCharizard# was struck by Dragon Slayer Anrin's dark magic."
+	"was struck by Dragon Slayer Anrin's dark magic."
 ];
 
 const kingdomoftea = [
@@ -75,9 +75,6 @@ exports.commands = {
 			user.leaveRoom(room);
 		} else if (user.name === 'Absol98SK') {
 			var message = target || absol98sk[Math.floor(Math.random() * absol98sk.length)];
-			if (message.indexOf('{{user}}') < 0)
-				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -139,9 +136,6 @@ exports.commands = {
 			user.leaveRoom(room);
 		} else if (user.name === 'Dark Shadow 6') {
 			var message = target || darkshadow6[Math.floor(Math.random() * darkshadow6.length)];
-			if (message.indexOf('{{user}}') < 0)
-				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -171,9 +165,6 @@ exports.commands = {
 			user.leaveRoom(room);
 		} else if (user.name === 'srinator') {
 			var message = target || srinator[Math.floor(Math.random() * srinator.length)];
-			if (message.indexOf('{{user}}') < 0)
-				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
