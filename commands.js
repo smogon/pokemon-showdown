@@ -641,6 +641,7 @@ var commands = exports.commands = {
 	},
 
 	joim: 'join',
+	j: 'join',
 	join: function (target, room, user, connection) {
 		if (!target) return false;
 		var targetRoom = Rooms.search(target);
