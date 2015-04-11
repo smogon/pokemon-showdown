@@ -1759,7 +1759,7 @@ var commands = exports.commands = {
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3490462/\">LC Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496013/\">LC Viability Ranking</a><br />";
 		}
-		if (target === 'all' || target === 'smogondoubles' || target === 'doubles') {
+		if (target === 'all' || target === 'smogondoubles' || target === 'doubles' || target === 'doublesou') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3525739/\">np: Doubles Stage 1.5</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles Banlist</a><br />";
