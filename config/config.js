@@ -258,6 +258,7 @@ exports.customavatars = {
 	'sargentwolf': 'wolfmasin.gif',
 	'jrrkein': 'jrrkein.jpg',
 	'anrindas': 'anrindas.jpg',
+	'anrinn': 'anrindas.jpg',
 	'thefattestsnorlax': 'thefattestsnorlax.gif',
 	'sri': 'warpaint.gif',
 	'srinator': 'warpaint.gif',
@@ -456,6 +457,10 @@ exports.customavatars = {
 	'roxyjadhav': 'roxyjadhav.gif',
 	'ryukiry': 'ryukiry.gif',
 	'suraku75': 'suraku75.gif',
+	'destinedjagold': 'destinedjagold.jpg',
+	'megalucariov': 'megalucariov.gif',
+	'shinmei971': 'shinmei971.png',
+	'shinmeitensai': 'shinmei971.png',
 };
 
 // Tournament announcements
@@ -560,7 +565,6 @@ exports.grouplist = [
 		broadcast: true,
 		joinbattle: true,
 		roomvoice: true,
-		roomplayer: true,
 		modchat: true,
 		roomonly: true,
 		privateroom: true,
