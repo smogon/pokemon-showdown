@@ -7,11 +7,10 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 2] Random Battle (BWknd 36)",
+		name: "[Gen 2] Random (BWknd 36)",
 		section: "ORAS Singles",
 
 		mod: 'gen2',
-		searchShow: false,
 		team: 'random',
 		ruleset: ['Pokemon', 'Standard']
 	},
