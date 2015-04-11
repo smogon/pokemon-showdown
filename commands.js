@@ -100,8 +100,6 @@ var commands = exports.commands = {
 		if (!targetUser || !targetUser.connected) {
 			if (targetUser && !targetUser.connected) {
 				this.popupReply("User " + this.targetUsername + " is offline.");
-			} else if (!target) {
-				this.popupReply("User " + this.targetUsername + " not found. Did you forget a comma?");
 			} else {
 				this.popupReply("User "  + this.targetUsername + " not found. Did you misspell their name?");
 			}
@@ -586,7 +584,7 @@ var commands = exports.commands = {
 			innerBuffer = [];
 			for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
 				var curRoom = Rooms.global.chatRooms[i];
-				if (!curRoom.auth) continue;
+				if (!curRoom.auth || !curRoom.isPrivate) continue;
 				var auth = curRoom.auth[targetId];
 				if (!auth) continue;
 				innerBuffer.push(auth + curRoom.id);
@@ -1061,6 +1059,7 @@ var commands = exports.commands = {
 		this.addModCommand("" + user.name + " temporarily locked the range " + range + ".");
 	},
 
+	unrangelock: 'rangeunlock',
 	rangeunlock: function (target, room, user) {
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!target) return this.sendReply("Please specify a range to unlock.");
@@ -1866,7 +1865,20 @@ var commands = exports.commands = {
 	addplayer: function (target, room, user) {
 		if (!target) return this.parse('/help addplayer');
 
-		return this.parse('/roomplayer ' + target);
+		target = this.splitTarget(target, true);
+		var userid = toId(this.targetUsername);
+		var targetUser = this.targetUser;
+		var name = this.targetUsername;
+
+		if (!targetUser) return this.sendReply("User " + name + " not found.");
+		if (!room.joinBattle) return this.sendReply("You can only do this in battle rooms.");
+		if (targetUser.can('joinbattle', null, room)) {
+			return this.sendReply("" + name + " can already join battles as a Player.");
+		}
+		if (!this.can('joinbattle', null, room)) return;
+
+		room.auth[targetUser.userid] = '\u2605';
+		this.addModCommand("" + name  + " was promoted to Player by " + user.name + ".");
 	},
 
 	joinbattle: function (target, room, user) {

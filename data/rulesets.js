@@ -613,9 +613,6 @@ exports.BattleFormats = {
 				// Very complex bans
 				if (typeTable.length > 1) return;
 				switch (typeTable[0]) {
-				case 'Dragon':
-					if (teamHas['kyuremwhite']) return ["Kyurem-White is banned from Dragon monotype teams."];
-					break;
 				case 'Psychic':
 					if (teamHas['galladite']) return ["Galladite is banned from Psychic monotype teams."];
 					break;

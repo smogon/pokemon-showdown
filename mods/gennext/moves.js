@@ -1903,6 +1903,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		isViable: true,
 		priority: 0,
+		flags: {protect: 1, mirror: 1},
 		multihit: [3, 3],
 		secondary: {
 			chance: 10,

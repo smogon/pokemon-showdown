@@ -560,7 +560,6 @@ exports.grouplist = [
 		broadcast: true,
 		joinbattle: true,
 		roomvoice: true,
-		roomplayer: true,
 		modchat: true,
 		roomonly: true,
 		privateroom: true,

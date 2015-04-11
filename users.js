@@ -335,7 +335,7 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	// from propagating out of this function.
 
 	// drop legacy JSON messages
-	if (message.substr(0, 1) === '{') return;
+	if (message.charAt(0) === '{') return;
 
 	// drop invalid messages without a pipe character
 	var pipeIndex = message.indexOf('|');
@@ -392,7 +392,7 @@ function importUsergroups() {
 function exportUsergroups() {
 	var buffer = '';
 	for (var i in usergroups) {
-		buffer += usergroups[i].substr(1).replace(/,/g, '') + ',' + usergroups[i].substr(0, 1) + "\n";
+		buffer += usergroups[i].substr(1).replace(/,/g, '') + ',' + usergroups[i].charAt(0) + "\n";
 	}
 	fs.writeFile('config/usergroups.csv', buffer);
 }
@@ -705,9 +705,8 @@ User = (function () {
 			delete prevUsers[userid];
 			prevUsers[this.userid] = userid;
 
-			// also MMR is different for each userid
+			// MMR is different for each userid
 			this.mmrCache = {};
-
 			Rooms.global.cancelSearch(this);
 
 			delete users[oldid];
@@ -767,6 +766,10 @@ User = (function () {
 			userid = toId(name);
 			if (i > 1000) return false;
 		}
+
+		// MMR is different for each userid
+		this.mmrCache = {};
+		Rooms.global.cancelSearch(this);
 
 		if (this.named) this.prevNames[this.userid] = this.name;
 		delete prevUsers[userid];
@@ -851,7 +854,7 @@ User = (function () {
 			return false;
 		}
 
-		if (token && token.substr(0, 1) !== ';') {
+		if (token && token.charAt(0) !== ';') {
 			var tokenSemicolonPos = token.indexOf(';');
 			var tokenData = token.substr(0, tokenSemicolonPos);
 			var tokenSig = token.substr(tokenSemicolonPos + 1);

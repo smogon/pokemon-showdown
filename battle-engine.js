@@ -710,7 +710,6 @@ BattlePokemon = (function () {
 		this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 		this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 		for (var i = 0; i < pokemon.moveset.length; i++) {
-			var move = this.battle.getMove(this.set.moves[i]);
 			var moveData = pokemon.moveset[i];
 			var moveName = moveData.move;
 			if (moveData.id === 'hiddenpower') {
@@ -719,8 +718,8 @@ BattlePokemon = (function () {
 			this.moveset.push({
 				move: moveName,
 				id: moveData.id,
-				pp: move.noPPBoosts ? moveData.maxpp : 5,
-				maxpp: this.battle.gen >= 5 ? (move.noPPBoosts ? moveData.maxpp : 5) : (this.battle.gen <= 2 ? move.pp : moveData.maxpp),
+				pp: moveData.maxpp === 1 ? 1 : 5,
+				maxpp: this.battle.gen >= 5 ? (moveData.maxpp === 1 ? 1 : 5) : moveData.maxpp,
 				target: moveData.target,
 				disabled: false
 			});
@@ -4046,7 +4045,6 @@ Battle = (function () {
 				var moves = pokemon.getMoves();
 				if (!moves.length || moves[0].id === 'struggle') {
 					// override decision and use Struggle if there are no other valid moves
-					side.send('-activate', pokemon, 'move: Struggle');
 					moveid = 'struggle';
 				} else {
 					// at least a move is valid (other than Struggle)
