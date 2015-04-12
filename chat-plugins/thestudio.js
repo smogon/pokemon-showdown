@@ -4,6 +4,14 @@
  * Only works in a room with the id 'thestudio'
  */
 
+function toArrayOfArrays(map) {
+	var ret = [];
+	map.forEach(function (key, value) {
+		ret.push([key, value]);
+	});
+	return ret;
+}
+
 function toArtistId(artist) { // toId would return '' for foreign/sadistic artists
 	return artist.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
 }
@@ -46,7 +54,7 @@ var commands = {
 		if (!artistOfTheDay.pendingNominations) return this.sendReply('Nominations for the Artist of the Day are not in progress.');
 		if (!artistOfTheDay.nominations.size) return this.sendReply('No nominations have been submitted yet.');
 
-		var nominations = Array.from(artistOfTheDay.nominations.values());
+		var nominations = toArrayOfArrays(artistOfTheDay.nominations);
 		var artist = nominations[~~Math.random(nominations.length)];
 		artistOfTheDay.pendingNominations = false;
 		artistOfTheDay.nominations.clear();
@@ -141,7 +149,7 @@ var commands = {
 		if (!this.canBroadcast()) return false;
 		if (!artistOfTheDay.nominations.size) return this.sendReplyBox('No nominations have been submitted yet.');
 
-		var nominations = Array.from(artistOfTheDay.nominations.entries()).sort(function (a, b) {
+		var nominations = toArrayOfArrays(artistOfTheDay.nominations).sort(function (a, b) {
 			if (a[1] < b[1]) return 1;
 			if (a[1] > b[1]) return -1;
 			return 0;
