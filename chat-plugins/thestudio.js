@@ -55,7 +55,7 @@ var commands = {
 		if (!artistOfTheDay.nominations.size) return this.sendReply('No nominations have been submitted yet.');
 
 		var nominations = toArrayOfArrays(artistOfTheDay.nominations);
-		var artist = nominations[~~Math.random(nominations.length)];
+		var artist = nominations[~~Math.random(nominations.length)][1];
 		artistOfTheDay.pendingNominations = false;
 		artistOfTheDay.nominations.clear();
 		artistOfTheDay.removedNominators = [];
