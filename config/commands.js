@@ -825,6 +825,12 @@ var commands = exports.commands = {
 				if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
 				lsetData = template.learnset;
 				targetMon = template.name;
+				while (template.prevo) {
+					template = Tools.getTemplate(template.prevo);
+					for (var move in template.learnset) {
+						if (!lsetData[move]) lsetData[move] = template.learnset[move];
+					}
+				}
 				continue;
 			}
 
