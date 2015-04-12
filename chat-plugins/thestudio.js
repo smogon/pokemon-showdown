@@ -4,6 +4,8 @@
  * Only works in a room with the id 'thestudio'
  */
 
+if (!Array.from) require('es6-shim');
+
 function toArtistId(artist) { // toId would return '' for foreign/sadistic artists
 	return artist.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
 }
