@@ -2324,14 +2324,17 @@ exports.BattleMovedex = {
 		volatileStatus: 'curse',
 		onModifyMove: function (move, source, target) {
 			if (!source.hasType('Ghost')) {
-				delete move.volatileStatus;
-				delete move.onHit;
-				move.self = {boosts: {atk:1, def:1, spe:-1}};
 				move.target = move.nonGhostTarget;
 			}
 		},
 		onTryHit: function (target, source, move) {
-			if (move.volatileStatus && target.volatiles.curse) return false;
+			if (!source.hasType('Ghost')) {
+				delete move.volatileStatus;
+				delete move.onHit;
+				move.self = {boosts: {atk:1, def:1, spe:-1}};
+			} else if (move.volatileStatus && target.volatiles.curse) {
+				return false;
+			}
 		},
 		onHit: function (target, source) {
 			this.directDamage(source.maxhp / 2, source, source);
