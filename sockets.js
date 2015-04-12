@@ -427,17 +427,17 @@ if (cluster.isMaster) {
 		});
 	});
 	server.installHandlers(app, {});
-	if (Config.bindaddress === '0.0.0.0') Config.bindaddress = undefined;
-	app.listen(Config.port, Config.bindaddress || undefined);
-	console.log('Worker ' + cluster.worker.id + ' now listening on ' + (Config.bindaddress || '*') + ':' + Config.port);
+	if (!Config.bindaddress) Config.bindaddress = '0.0.0.0';
+	app.listen(Config.port, Config.bindaddress);
+	console.log('Worker ' + cluster.worker.id + ' now listening on ' + Config.bindaddress + ':' + Config.port);
 
 	if (appssl) {
 		server.installHandlers(appssl, {});
-		appssl.listen(Config.ssl.port);
+		appssl.listen(Config.ssl.port, Config.bindaddress);
 		console.log('Worker ' + cluster.worker.id + ' now listening for SSL on port ' + Config.ssl.port);
 	}
 
-	console.log('Test your server at http://' + (Config.bindaddress || 'localhost') + ':' + Config.port);
+	console.log('Test your server at http://' + (Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress) + ':' + Config.port);
 
 	require('./repl.js').start('sockets-', cluster.worker.id + '-' + process.pid, function (cmd) { return eval(cmd); });
 }
