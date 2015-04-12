@@ -1231,9 +1231,6 @@ exports.Formats = [
 			if (name === 'hydroimpact') {
 				this.add('c|@HYDRO IMPACT|Think about the name first and then the Pokemon. Look beyond the "simple" detail.');
 			}
-			if (name === 'imanalt') {
-				this.add('c|@imanalt|muh bulk');
-			}
 			if (name === 'innovamania') {
 				sentences = ['Don\'t take this seriously', 'These Black Glasses sure look cool', 'Ready for some fun?( ͡° ͜ʖ ͡°)', '( ͡° ͜ʖ ͡°'];
 				this.add('c|@innovamania|' + sentences[this.random(4)]);
@@ -1558,6 +1555,9 @@ exports.Formats = [
 			if (name === 'diatom') {
 				this.add('-message', pokemon.side.foe.name + ' was banned by Diatom. (you should be thankful you are banned and not permabanned)');
 			}
+			if (name === 'imanalt') {
+				this.add('c|+imanalt|muh bulk');
+			}
 			if (name === 'mattl') {
 				this.add('c|+MattL|The annoyance I will cause is not well-defined.');
 			}
@@ -1815,9 +1815,6 @@ exports.Formats = [
 			if (name === 'hydroimpact') {
 				this.add('c|@HYDRO IMPACT|Well done, you\'ve gone beyond your limits and have gained my trust. Now go and write your own destiny, don\'t let fate write it for you.');
 			}
-			if (name === 'imanalt') {
-				this.add('c|@imanalt|bshax imo');
-			}
 			if (name === 'innovamania') {
 				sentences = ['Did you rage quit?', 'How\'d you lose with this set?', 'Pm Nani Man to complain about this set ( ͡° ͜ʖ ͡°)'];
 				this.add('c|@innovamania|' + sentences[this.random(3)]);
@@ -2043,6 +2040,9 @@ exports.Formats = [
 			}
 			if (name === 'diatom' && !pokemon.hasBeenThanked) {
 				this.add('c|★' + pokemon.side.foe.name + '|Thanks Diatom...');
+			}
+			if (name === 'imanalt') {
+				this.add('c|+imanalt|bshax imo');
 			}
 			if (name === 'mattl') {
 				this.add('c|+MattL|Finish him! You used "Finals week!" Fatality!');
@@ -2707,12 +2707,6 @@ exports.Formats = [
 				delete move.self;
 				move.onHit = function (target, source) {
 					this.directDamage(source.maxhp * 0.35, source, source);
-				};
-			}
-			if (move.id === 'naturepower' && name === 'imanalt') {
-				move.name = 'FREE GENV BH';
-				move.onHit = function (target, source) {
-					this.useMove('earthquake', source, target);
 				};
 			}
 			if (move.id === 'splash' && name === 'innovamania') {
@@ -3666,6 +3660,12 @@ exports.Formats = [
 						this.add('c|@Diatom|you should be thankful my psywave doesn\'t always hit');
 					};
 				}
+			}
+			if (move.id === 'naturepower' && name === 'imanalt') {
+				move.name = 'FREE GENV BH';
+				move.onHit = function (target, source) {
+					this.useMove('earthquake', source, target);
+				};
 			}
 			if (move.id === 'growl' && name === 'limi') {
 				move.name = 'Resilience';
