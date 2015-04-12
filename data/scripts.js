@@ -3352,12 +3352,6 @@ exports.BattleScripts = {
 				baseSignatureMove: 'hydrocannon', signatureMove: "HYDRO IMPACT",
 				evs: {atk:4, spa:252, spe:252}, nature: 'Hasty'
 			},
-			'@imanalt': {
-				species: 'Rhydon', ability: 'Prankster', item: 'Eviolite', gender: 'M',
-				moves: ['heartswap', 'rockblast', 'stealthrock', 'substitute', 'batonpass'],
-				baseSignatureMove: 'naturepower', signatureMove: "FREE GENV BH",
-				evs: {hp:252, atk:252, spd:4}, nature: 'Adamant'
-			},
 			'@innovamania': {
 				species: 'Arceus', ability: 'Pick Up', item: 'Black Glasses', gender: 'M',
 				moves: [['holdhands', 'trickortreat'][this.random(2)], ['swordsdance', 'agility'][this.random(2)], 'celebrate'],
@@ -3764,6 +3758,12 @@ exports.BattleScripts = {
 				moves: ['psywave', ['poisonfang', 'shadowstrike'][this.random(2)], ['uturn', 'rapidspin'][this.random(2)]],
 				baseSignatureMove: 'healingwish', signatureMove: "Be Thankful I Sacrificed Myself",
 				evs: {hp:252, def:136, spd:120}, nature: 'Impish'
+			},
+			'+imanalt': {
+				species: 'Rhydon', ability: 'Prankster', item: 'Eviolite', gender: 'M',
+				moves: ['heartswap', 'rockblast', 'stealthrock', 'substitute', 'batonpass'],
+				baseSignatureMove: 'naturepower', signatureMove: "FREE GENV BH",
+				evs: {hp:252, atk:252, spd:4}, nature: 'Adamant'
 			},
 			'+Limi': {
 				species: 'Primeape', ability: 'Poison Heal', item: 'Leftovers', gender: 'M',
