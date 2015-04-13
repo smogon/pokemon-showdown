@@ -323,7 +323,7 @@ exports.Formats = [
 				'Sableye':1, 'Smeargle':1
 			};
 			var restrictedAbilities = {
-				'Huge Power':1, 'Imposter':1, 'Parental Bond':1, 'Pure Power':1, 'Shadow Tag':1, 'Wonder Guard':1
+				'Arena Trap':1, 'Huge Power':1, 'Imposter':1, 'Parental Bond':1, 'Pure Power':1, 'Shadow Tag':1, 'Wonder Guard':1
 			};
 			return function (set, teamHas) {
 				var format = this.getFormat('inheritance');
