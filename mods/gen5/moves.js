@@ -82,10 +82,6 @@ exports.BattleMovedex = {
 		inherit: true,
 		flags: {protect: 1, reflectable: 1, mirror: 1}
 	},
-	boomburst: {
-		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1}
-	},
 	bubble: {
 		inherit: true,
 		basePower: 20
@@ -930,7 +926,7 @@ exports.BattleMovedex = {
 	},
 	uproar: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1}
+		flags: {protect: 1, mirror: 1, sound: 1}
 	},
 	toxic: {
 		inherit: true,
