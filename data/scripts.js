@@ -3665,7 +3665,7 @@ exports.BattleScripts = {
 			'%Crestfall': {
 				species: 'Darkrai', ability: 'Parental Bond', item: 'Lum Berry', gender: 'M',
 				moves: ['darkpulse', 'icebeam', 'oblivionwing'],
-				baseSignatureMove: 'protect', signatureMove: "Final",
+				baseSignatureMove: 'protect', signatureMove: "Final Hour",
 				evs: {spa:252, def:4, spe:252}, nature: 'Modest'
 			},
 			'%DTC': {
