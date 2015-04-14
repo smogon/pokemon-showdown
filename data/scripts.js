@@ -3680,6 +3680,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'firepunch', signatureMove: "Falcon Punch",
 				evs: {atk:252, def:4, spe:252}, nature: 'Jolly'
 			},
+			'%galbia': {
+				species: 'Cobalion', ability: 'Serene Grace', item: 'Leftovers',
+				moves: ['ironhead', 'taunt', 'swordsdance', 'thunderwave', 'substitute'],
+				baseSignatureMove: 'highjumpkick', signatureMove: 'Kibitz',
+				evs: {atk:252, def:4, spe:252}, nature: 'Jolly'
+			},
 			'%Hugendugen': {
 				species: 'Latios', ability: 'Prankster', item: 'Life Orb', gender: 'M',
 				moves: ['taunt', 'dracometeor', 'surf', 'earthpower', 'recover', 'thunderbolt', 'icebeam'],

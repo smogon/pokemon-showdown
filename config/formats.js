@@ -1434,6 +1434,9 @@ exports.Formats = [
 			if (name === 'feliburn') {
 				this.add('c|%Feliburn|Come on!');
 			}
+			if (name === 'galbia') {
+				this.add('c|%galbia|prepare for my beautiful display of pure italian skill');
+			}
 			if (name === 'jellicent') {
 				this.add('c|%Jellicent|~(^.^)~');
 			}
@@ -1996,6 +1999,9 @@ exports.Formats = [
 			}
 			if (name === 'feliburn') {
 				this.add('c|%Feliburn|' + ['BHUWUUU!', 'I like shorts! They\'re comfy and easy to wear!'][this.random(2)]);
+			}
+			if (name === 'galbia') {
+				this.add('c|%galbia|' + ['azz e mo', 'rip luck :('][this.random(2)]);
 			}
 			if (name === 'jellicent') {
 				this.add('c|%Jellicent|X_X');
@@ -3419,6 +3425,22 @@ exports.Formats = [
 						this.add('c|%Feliburn|Show me your moves!');
 					};
 				}
+			}
+			if (move.id === 'highjumpkick' && name === 'galbia') {
+				move.name = 'Kibitz';
+				move.basePower = 110;
+				move.accuracy = 100;
+				delete move.onMoveFail;
+				move.onHit = function (target, source) {
+					var result = this.random(100);
+					var chance = source.hasAbility('serenegrace') ? 60 : 30;
+					var triggerFlinch = result < chance;
+					if (this.willMove(target) && result < chance) {
+						target.addVolatile('flinch');
+					} else if (target.hp !== 0 && !target.newlySwitched) {
+						this.damage(source.maxhp / 3, source, source, 'Kibitz');
+					}
+				};
 			}
 			if (move.id === 'psychup' && name === 'hugendugen') {
 				move.name = 'Policy Decision';
