@@ -3895,9 +3895,9 @@ exports.Formats = [
 		mod: 'averagemons',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Gothita', 'Gothorita', 'Gothitelle', 'Sableye', 'Shedinja', 'Smeargle',
+		banlist: ['Sableye', 'Shedinja', 'Smeargle',
 			'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Gengarite', 'Kangaskhanite', 'Light Ball', 'Mawilite', 'Medichamite', 'Soul Dew', 'Thick Club',
-			'Huge Power', 'Pure Power'
+			'Huge Power', 'Pure Power', 'Arena Trap', 'Shadow Tag'
 		]
 	},
 	{
