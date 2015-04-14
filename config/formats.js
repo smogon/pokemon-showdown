@@ -2120,6 +2120,16 @@ exports.Formats = [
 					}
 				}
 			}
+			// Enforce taunt disabling custom moves.
+			if (pokemon.volatiles['taunt']) {
+				var moves = pokemon.moveset;
+				for (var i = 0; i < moves.length; i++) {
+					if (this.getMove(moves[i].id).category === 'Status' && !moves[i].disabled) {
+						pokemon.disableMove(moves[i].id, false);
+						moves[i].disabled = true;
+					}
+				}
+			}
 		},
 		// Specific residual events for custom moves.
 		// This allows the format to have kind of custom side effects and volatiles.
