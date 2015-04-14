@@ -398,7 +398,7 @@ exports.BattleScripts = {
 		};
 
 		// Let's see if the target is immune to the move.
-		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]) {
+		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
 			if (!target.runImmunity(move.type, true)) {
 				return false;
 			}
