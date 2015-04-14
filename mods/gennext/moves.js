@@ -652,7 +652,7 @@ exports.BattleMovedex = {
 		onBasePower: function (power, user) {
 			if (user.template.id === 'snorlax') return power * 1.5;
 		},
-		affectedByImmunities: false
+		ignoreImmunity: true
 	},
 	/******************************************************************
 	Sound-based Normal-type moves:
@@ -664,19 +664,19 @@ exports.BattleMovedex = {
 	******************************************************************/
 	boomburst: {
 		inherit: true,
-		affectedByImmunities: false
+		ignoreImmunity: true
 	},
 	hypervoice: {
 		inherit: true,
-		affectedByImmunities: false
+		ignoreImmunity: true
 	},
 	round: {
 		inherit: true,
-		affectedByImmunities: false
+		ignoreImmunity: true
 	},
 	uproar: {
 		inherit: true,
-		affectedByImmunities: false
+		ignoreImmunity: true
 	},
 	/******************************************************************
 	Bonemerang, Bone Rush, Bone Club moves:
@@ -688,18 +688,18 @@ exports.BattleMovedex = {
 	******************************************************************/
 	bonemerang: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		accuracy: true
 	},
 	bonerush: {
 		inherit: true,
 		basePower: 20,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		accuracy: true
 	},
 	boneclub: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		accuracy: 90
 	},
 	/******************************************************************
@@ -712,7 +712,7 @@ exports.BattleMovedex = {
 	relicsong: {
 		inherit: true,
 		basePower: 60,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		onHit: function (target, pokemon) {
 			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
@@ -1179,7 +1179,7 @@ exports.BattleMovedex = {
 		category: "Special",
 		isViable: true,
 		priority: 0,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		onHit: function (target, source) {
 			source.side.addSideCondition('futuremove');
 			if (source.side.sideConditions['futuremove'].positions[source.position]) {
@@ -1194,7 +1194,7 @@ exports.BattleMovedex = {
 					basePower: 80,
 					category: "Special",
 					flags: {},
-					affectedByImmunities: false,
+					ignoreImmunity: true,
 					type: 'Normal'
 				}
 			};
@@ -1875,11 +1875,11 @@ exports.BattleMovedex = {
 	},
 	acid: {
 		inherit: true,
-		affectedByImmunities: false
+		ignoreImmunity: true
 	},
 	acidspray: {
 		inherit: true,
-		affectedByImmunities: false
+		ignoreImmunity: true
 	},
 	eggbomb: {
 		inherit: true,

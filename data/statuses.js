@@ -320,8 +320,8 @@ exports.BattleStatuses = {
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
 
-				if (typeof posData.moveData.affectedByImmunities === 'undefined') {
-					posData.moveData.affectedByImmunities = true;
+				if (posData.moveData.ignoreImmunity === undefined) {
+					posData.moveData.ignoreImmunity = false;
 				}
 
 				if (target.hasAbility('wonderguard') && this.gen > 5) {

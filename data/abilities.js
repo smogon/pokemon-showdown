@@ -682,7 +682,7 @@ exports.BattleAbilities = {
 	"filter": {
 		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
 		onSourceModifyDamage: function (damage, source, target, move) {
-			if (target.runEffectiveness(move) > 0) {
+			if (move.typeMod > 0) {
 				this.debug('Filter neutralize');
 				return this.chainModify(0.75);
 			}
@@ -2268,8 +2268,10 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves.",
 		onModifyMovePriority: -5,
 		onModifyMove: function (move) {
-			if (move.type in {'Fighting':1, 'Normal':1}) {
-				move.affectedByImmunities = false;
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Fighting'] = true;
+				move.ignoreImmunity['Normal'] = true;
 			}
 		},
 		id: "scrappy",
@@ -2486,7 +2488,7 @@ exports.BattleAbilities = {
 	"solidrock": {
 		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
 		onSourceModifyDamage: function (damage, source, target, move) {
-			if (target.runEffectiveness(move) > 0) {
+			if (move.typeMod > 0) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -2860,7 +2862,7 @@ exports.BattleAbilities = {
 	"tintedlens": {
 		shortDesc: "This Pokemon's attacks that are not very effective on a target deal double damage.",
 		onModifyDamage: function (damage, source, target, move) {
-			if (target.runEffectiveness(move) < 0) {
+			if (move.typeMod < 0) {
 				this.debug('Tinted Lens boost');
 				return this.chainModify(2);
 			}
@@ -3153,7 +3155,7 @@ exports.BattleAbilities = {
 		onTryHit: function (target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.isFutureMove) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (target.runEffectiveness(move) <= 0) {
+			if ((target.negateImmunity[move.type] === 'IgnoreEffectiveness' && !this.getImmunity(move.type, target)) || target.runEffectiveness(move) <= 0) {
 				this.add('-activate', target, 'ability: Wonder Guard');
 				return null;
 			}
