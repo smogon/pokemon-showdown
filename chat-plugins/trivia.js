@@ -841,7 +841,7 @@ var commands = {
 			for (var j = leaders.length; j--;) {
 				var rank = leaderboard[leaders[j]];
 				var leader = Users.getExact(leaders[j]);
-				leader = leader ? Tools.excapeHTML(leader.name) : leaders[j];
+				leader = leader ? Tools.escapeHTML(leader.name) : leaders[j];
 				buffer += '<tr><td><b>' + (++i) + '</b></td><td>' + leader + '</td><td>' + rank[0] + '</td><td>' + rank[1] + '</td><td>' + rank[2] + '</td></tr>';
 			}
 		}
