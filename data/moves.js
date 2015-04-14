@@ -952,7 +952,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		flags: {contact: 1, protect: 1},
 		volatileStatus: 'bide',
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		effect: {
 			duration: 3,
 			onLockMove: 'bide',
@@ -4991,7 +4991,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		isFutureMove: true,
 		onTryHit: function (target, source) {
 			source.side.addSideCondition('futuremove');
@@ -5007,7 +5007,7 @@ exports.BattleMovedex = {
 					basePower: 120,
 					category: "Special",
 					flags: {},
-					affectedByImmunities: true,
+					ignoreImmunity: false,
 					type: 'Psychic'
 				}
 			};
@@ -14108,17 +14108,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		isUnreleased: true,
-		onModifyMove: function (move) {
-			if (move.type === 'Ground') {
-				move.affectedByImmunities = false;
-			}
-		},
 		onTryHit: function (target) {
 			// only the attack that grounds the target ignores effectiveness
 			if (target.negateImmunity['Ground']) return;
 			target.negateImmunity['Ground'] = 'IgnoreEffectiveness';
 		},
 		volatileStatus: 'smackdown',
+		ignoreImmunity: {'Ground': true},
 		secondary: false,
 		target: "allAdjacentFoes",
 		type: "Ground"
@@ -14266,7 +14262,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		status: 'par',
-		affectedByImmunities: true,
+		ignoreImmunity: false,
 		secondary: false,
 		target: "normal",
 		type: "Electric"

@@ -161,7 +161,7 @@ exports.BattleScripts = {
 		}
 
 		// Check if the Pokémon is immune to this move.
-		if (move.affectedByImmunities && !target.runImmunity(move.type, true)) {
+		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			damage = false;
 		}
 
@@ -238,8 +238,8 @@ exports.BattleScripts = {
 		var hitResult = true;
 		if (!moveData) moveData = move;
 
-		if (typeof move.affectedByImmunities === 'undefined') {
-			move.affectedByImmunities = (move.category !== 'Status');
+		if (move.ignoreImmunity === undefined) {
+			move.ignoreImmunity = (move.category === 'Status');
 		}
 
 		// We get the sub to the target to see if it existed
@@ -398,7 +398,7 @@ exports.BattleScripts = {
 		};
 
 		// Let's see if the target is immune to the move.
-		if (move.affectedByImmunities) {
+		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type]) {
 			if (!target.runImmunity(move.type, true)) {
 				return false;
 			}
