@@ -1176,8 +1176,11 @@ exports.BattleScripts = {
 							if (hasMove['flamethrower']) rejected = true;
 							break;
 						case 'icebeam':
-							if (hasMove['blizzard']) rejected = true;
+							if (hasMove['blizzard'] && keys[i] !== 'articuno') rejected = true;
 							break;
+						case 'blizzard':
+							if (hasMove['icebeam'] && keys[i] !== 'articuno') rejected = true;
+							break;							
 						// Hydropump and surf are both valid options, just avoid one with eachother.
 						case 'hydropump':
 							if (hasMove['surf']) rejected = true;
@@ -1264,6 +1267,12 @@ exports.BattleScripts = {
 						case 'toxic':
 							if (hasMove['sleeppowder'] || hasMove['stunspore'] || counter['Status'] > 1) rejected = true;
 							break;
+						case 'reflect':
+							if (hasMove['counter']) rejected = true;
+							break;
+						case 'counter':
+							if (hasMove['reflect']) rejected = true;
+							break;							
 						} // End of switch for moveid
 					}
 					if (rejected && j < moveKeys.length) {
