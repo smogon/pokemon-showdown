@@ -15,6 +15,8 @@ var crypto = require('crypto');
 var fs = require('fs');
 
 const MAX_REASON_LENGTH = 300;
+const MUTE_LENGTH = 7 * 60 * 1000;
+const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
 var commands = exports.commands = {
 
@@ -741,8 +743,10 @@ var commands = exports.commands = {
 		targetUser.leaveRoom(room);
 	},
 
+	hm: 'mute',
+	hourmute: 'mute',
 	m: 'mute',
-	mute: function (target, room, user) {
+	mute: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help mute');
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 
@@ -752,8 +756,11 @@ var commands = exports.commands = {
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
+
+		var muteDuration = ((cmd === 'hm' || cmd === 'hourmute') ? HOURMUTE_LENGTH : MUTE_LENGTH);
 		if (!this.can('mute', targetUser, room)) return false;
-		if (targetUser.mutedRooms[room.id] || targetUser.locked || !targetUser.connected) {
+		var canBeMutedFurther = (targetUser.mutedRooms[room.id] && (targetUser.muteDuration[room.id] || 0) <= (muteDuration * 5 / 6));
+		if ((targetUser.mutedRooms[room.id] && !canBeMutedFurther) || targetUser.locked || !targetUser.connected) {
 			var problem = " but was already " + (!targetUser.connected ? "offline" : targetUser.locked ? "locked" : "muted");
 			if (!target) {
 				return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
@@ -761,40 +768,13 @@ var commands = exports.commands = {
 			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		targetUser.popup("" + user.name + " has muted you for 7 minutes. " + (target ? "\n\nReason: " + target : ""));
-		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 7 minutes." + (target ? " (" + target + ")" : ""));
+		targetUser.popup("" + user.name + " has muted you for " + (muteDuration / (60 * 1000)) + " minutes. " + target);
+		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + (muteDuration / (60 * 1000)) + " minutes." + (target ? " (" + target + ")" : ""));
 		var alts = targetUser.getAlts();
 		if (alts.length) this.privateModCommand("(" + targetUser.name + "'s alts were also muted: " + alts.join(", ") + ")");
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 
-		targetUser.mute(room.id, 7 * 60 * 1000);
-	},
-
-	hm: 'hourmute',
-	hourmute: function (target, room, user) {
-		if (!target) return this.parse('/help hourmute');
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
-
-		target = this.splitTarget(target);
-		var targetUser = this.targetUser;
-		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
-		if (target.length > MAX_REASON_LENGTH) {
-			return this.sendReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
-		}
-		if (!this.can('mute', targetUser, room)) return false;
-
-		if (((targetUser.mutedRooms[room.id] && (targetUser.muteDuration[room.id] || 0) >= 50 * 60 * 1000) || targetUser.locked) && !target) {
-			var problem = " but was already " + (!targetUser.connected ? "offline" : targetUser.locked ? "locked" : "muted");
-			return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
-		}
-
-		targetUser.popup("" + user.name + " has muted you for 60 minutes. " + (target ? "\n\nReason: " + target : ""));
-		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for 60 minutes." + (target ? " (" + target + ")" : ""));
-		var alts = targetUser.getAlts();
-		if (alts.length) this.privateModCommand("(" + targetUser.name + "'s alts were also muted: " + alts.join(", ") + ")");
-		this.add('|unlink|' + this.getLastIdOf(targetUser));
-
-		targetUser.mute(room.id, 60 * 60 * 1000, true);
+		targetUser.mute(room.id, muteDuration, true);
 	},
 
 	um: 'unmute',
