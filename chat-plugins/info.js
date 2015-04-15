@@ -92,6 +92,8 @@ var commands = exports.commands = {
 			this.sendReply('|raw|' + hiddenrooms);
 		}
 	},
+	whoishelp: ["/whois - Get details on yourself: alts, group, IP address, and rooms.",
+		"/whois [username] - Get details on a username: alts (Requires: % @ & ~), group, IP address (Requires: @ & ~), and rooms."],
 
 	ipsearchall: 'ipsearch',
 	ipsearch: function (target, room, user, connection, cmd) {
@@ -143,6 +145,7 @@ var commands = exports.commands = {
 		}
 		return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
 	},
+	invitehelp: ["/invite [username], [roomname] - Invites the player [username] to join the room [roomname]."],
 
 	/*********************************************************
 	 * Data Search Tools
@@ -152,8 +155,6 @@ var commands = exports.commands = {
 	stats: 'data',
 	dex: 'data',
 	pokedex: 'data',
-	details: 'data',
-	dt: 'data',
 	data: function (target, room, user, connection, cmd) {
 		if (!this.canBroadcast()) return;
 
@@ -284,6 +285,15 @@ var commands = exports.commands = {
 		}
 		this.sendReply(buffer);
 	},
+	datahelp: ["/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature.",
+		"!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ & ~"],
+
+	dt: 'details',
+	details: function () {
+		CommandParser.commands.data.apply(this, arguments);
+	},
+	detailshelp: ["/details [pokemon] - Get additional details on this pokemon/item/move/ability/nature.",
+		"!details [pokemon] - Show everyone these details. Requires: + % @ & ~"],
 
 	ds: 'dexsearch',
 	dsearch: 'dexsearch',
@@ -608,6 +618,14 @@ var commands = exports.commands = {
 		}
 		return this.sendReplyBox(resultsStr);
 	},
+	dexsearchhelp: ["/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria",
+		"Search categories are: type, tier, color, moves, ability, gen.",
+		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
+		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/PU/NFE/LC/CAP.",
+		"Types must be followed by ' type', e.g., 'dragon type'.",
+		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
+		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameters 'FE' or 'NFE' can be added to search fully or not-fully evolved Pokemon only.",
+		"The order of the parameters does not matter."],
 
 	ms: 'movesearch',
 	msearch: 'movesearch',
@@ -949,6 +967,13 @@ var commands = exports.commands = {
 		}
 		return this.sendReplyBox(resultsStr);
 	},
+	movesearchhelp: ["/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.",
+		"Search categories are: type, category, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.",
+		"Types must be followed by ' type', e.g., 'dragon type'.",
+		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
+		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
+		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
+		"The order of the parameters does not matter."],
 
 	learnset: 'learn',
 	learnall: 'learn',
@@ -1031,6 +1056,8 @@ var commands = exports.commands = {
 		}
 		this.sendReplyBox(buffer);
 	},
+	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.",
+		"!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ & ~"],
 
 	weaknesses: 'weakness',
 	weak: 'weakness',
@@ -1089,6 +1116,10 @@ var commands = exports.commands = {
 		buffer.push('<span class=\"message-effect-immune\">Immunities</span>: ' + (immunities.join(', ') || 'None'));
 		this.sendReplyBox(buffer.join('<br>'));
 	},
+	weaknesshelp: ["/weakness [pokemon] - Provides a Pokemon's resistances, weaknesses, and immunities, ignoring abilities.",
+		"/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.",
+		"!weakness [pokemon] - Shows everyone a Pokemon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ & ~",
+		"!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ & ~"],
 
 	eff: 'effectiveness',
 	type: 'effectiveness',
@@ -1151,6 +1182,8 @@ var commands = exports.commands = {
 
 		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
 	},
+	effectivenesshelp: ["/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.",
+		"!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon."],
 
 	/*********************************************************
 	 * Informational commands
@@ -1182,6 +1215,8 @@ var commands = exports.commands = {
 			"~ <b>Administrator</b> - They can do anything, like change what this message says"
 		);
 	},
+	groupshelp: ["/groups - Explains what the + % @ & next to people's names mean.",
+		"!groups - Show everyone that information. Requires: + % @ & ~"],
 
 	repo: 'opensource',
 	repository: 'opensource',
@@ -1196,6 +1231,8 @@ var commands = exports.commands = {
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown-Client\">Client source code</a>"
 		);
 	},
+	opensourcehelp: ["/opensource - Links to PS's source code repository.",
+		"!opensource - Show everyone that information. Requires: + % @ & ~"],
 
 	staff: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1206,6 +1243,8 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
 	},
+	avatarshelp: ["/avatars - Explains how to change avatars.",
+		"!avatars - Show everyone that information. Requires: + % @ & ~"],
 
 	introduction: 'intro',
 	intro: function (target, room, user) {
@@ -1218,6 +1257,8 @@ var commands = exports.commands = {
 			"- <a href=\"https://www.smogon.com/xyhub/tiers\">What are the rules for each format? What is 'Sleep Clause'?</a>"
 		);
 	},
+	introhelp: ["/intro - Provides an introduction to competitive pokemon.",
+		"!intro - Show everyone that information. Requires: + % @ & ~"],
 
 	mentoring: 'smogintro',
 	smogonintro: 'smogintro',
@@ -1240,6 +1281,8 @@ var commands = exports.commands = {
 			"- <a href=\"https://pokemonshowdown.com/damagecalc/\">Damage Calculator</a>"
 		);
 	},
+	calchelp: ["/calc - Provides a link to a damage calculator",
+		"!calc - Shows everyone a link to a damage calculator. Requires: + % @ & ~"],
 
 	capintro: 'cap',
 	cap: function (target, room, user) {
@@ -1252,6 +1295,8 @@ var commands = exports.commands = {
 			"- <a href=\"https://www.smogon.com/forums/threads/3512318/#post-5594694\">Sample XY CAP teams</a>"
 		);
 	},
+	caphelp: ["/cap - Provides an introduction to the Create-A-Pokemon project.",
+		"!cap - Show everyone that information. Requires: + % @ & ~"],
 
 	gennext: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -1378,6 +1423,8 @@ var commands = exports.commands = {
 		}
 		this.sendReplyBox(buffer);
 	},
+	othermetashelp: ["/om - Provides links to information on the Other Metagames.",
+		"!om - Show everyone that information. Requires: + % @ & ~"],
 
 	/*formats: 'formathelp',
 	formatshelp: 'formathelp',
@@ -1542,6 +1589,8 @@ var commands = exports.commands = {
 		}
 		this.sendReplyBox(buffer);
 	},
+	faqhelp: ["/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.",
+		"!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: + % @ & ~"],
 
 	banlists: 'tiers',
 	tier: 'tiers',
@@ -1697,6 +1746,8 @@ var commands = exports.commands = {
 			return this.sendReplyBox("Pokemon, item, move, or ability not found for generation " + generation.toUpperCase() + ".");
 		}
 	},
+	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pokemon in the given generation.",
+		"!analysis [pokemon], [generation] - Shows everyone this link. Requires: + % @ & ~"],
 
 	register: function () {
 		if (!this.canBroadcast()) return;
@@ -1779,6 +1830,8 @@ var commands = exports.commands = {
 		var rand = Math.floor(maxRoll * Math.random()) + 1;
 		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
 	},
+	dicehelp: ["/dice [max number] - Randomly picks a number between 1 and the number you choose.",
+		"/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice."],
 
 	pr: 'pickrandom',
 	pick: 'pickrandom',
@@ -1788,6 +1841,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return false;
 		return this.sendReplyBox('<em>We randomly picked:</em> ' + Tools.escapeHTML(options.sample().trim()));
 	},
+	pickrandomhelp: ["/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements."],
 
 	showimage: function (target, room, user) {
 		if (!target) return this.parse('/help showimage');
@@ -1801,6 +1855,7 @@ var commands = exports.commands = {
 
 		this.sendReply('|raw|<img src="' + Tools.escapeHTML(targets[0]) + '" alt="" width="' + toId(targets[1]) + '" height="' + toId(targets[2]) + '" />');
 	},
+	showimagehelp: ["/showimage [url], [width], [height] - Show an image. Requires: # & ~"],
 
 	htmlbox: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help htmlbox');
@@ -1816,34 +1871,6 @@ var commands = exports.commands = {
 
 		this.sendReplyBox(target);
 	},
+	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # with global authority"]
 
-	bofrocket: function (target, room, user) {
-		if (room.id !== 'bof') return this.sendReply("The command '/bofrocket' was unrecognized. To send a message starting with '/bofrocket', type '//bofrocket'.");
-		if (!this.can('modchat', null, room)) return;
-		target = this.splitTarget(target);
-		if (!this.targetUser) return this.sendReply("User not found");
-		if (!room.users[this.targetUser.userid]) return this.sendReply("Not in bof");
-		this.targetUser.avatar = '#bofrocket';
-		room.add("" + user.name + " applied bofrocket to " + this.targetUser.name);
-	},
-
-	showtan: function (target, room, user) {
-		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with '/showtan', type '//showtan'.");
-		if (!this.can('modchat', null, room)) return;
-		target = this.splitTarget(target);
-		if (!this.targetUser) return this.sendReply("User not found");
-		if (!room.users[this.targetUser.userid]) return this.sendReply("Not a showderper");
-		this.targetUser.avatar = '#showtan';
-		room.add("" + user.name + " applied showtan to affected area of " + this.targetUser.name);
-	},
-
-	cpgtan: function (target, room, user) {
-		if (room.id !== 'cpg') return this.sendReply("The command '/cpgtan' was unrecognized. To send a message starting with '/cpgtan', type '//cpgtan'.");
-		if (!this.can('modchat', null, room)) return;
-		target = this.splitTarget(target);
-		if (!this.targetUser) return this.sendReply("User not found");
-		if (!room.users[this.targetUser.userid]) return this.sendReply("Not a cpger");
-		this.targetUser.avatar = '#cpgtan';
-		room.add("" + user.name + " applied cpgtan to affected area of " + this.targetUser.name);
-	}
 };
