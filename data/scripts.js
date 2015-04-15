@@ -3579,6 +3579,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'naturepower', signatureMove: "Cometstorm",
 				evs: {hp:252, spa:252, spe:4}
 			},
+			'@trinitrotoluene': {
+				species: 'Metagross', ability: 'Levitate', item: 'Metagrossite', gender: 'M',
+				moves: ['meteormash', 'zenheadbutt', 'hammerarm', 'grassknot', 'earthquake', 'thunderpunch', 'icepunch', 'shiftgear'],
+				baseSignatureMove: 'explosion', signatureMove: "Get Haxed",
+				evs: {atk:252, def:4, spe:252}, nature: 'Jolly'
+			},
 			'@WaterBomb': {
 				species: 'Poliwrath', ability: 'Unaware', item: 'Leftovers', gender: 'M',
 				moves: ['heartswap', 'softboiled', 'aromatherapy', 'highjumpkick'],
@@ -3721,12 +3727,6 @@ exports.BattleScripts = {
 				moves: ['defog', 'stealthrock', 'toxic', 'roar', 'bravebird'],
 				baseSignatureMove: 'scald', signatureMove: "Ban Scald",
 				evs: {hp:252, def:228, spd:28}, nature: 'Bold'
-			},
-			'%trinitrotoluene': {
-				species: 'Metagross', ability: 'Levitate', item: 'Metagrossite', gender: 'M',
-				moves: ['meteormash', 'zenheadbutt', 'hammerarm', 'grassknot', 'earthquake', 'thunderpunch', 'icepunch', 'shiftgear'],
-				baseSignatureMove: 'explosion', signatureMove: "Get Haxed",
-				evs: {atk:252, def:4, spe:252}, nature: 'Jolly'
 			},
 			'%uselesstrainer': {
 				species: 'Scatterbug', ability: 'Skill Link', item: 'Mail', gender: 'M',
