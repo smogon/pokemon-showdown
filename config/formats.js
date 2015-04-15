@@ -1369,6 +1369,9 @@ exports.Formats = [
 			if (name === 'trickster') {
 				this.add('c|@Trickster|' + ['I do this for free, you know.', 'Believe in the me that believes in you!'][this.random(2)]);
 			}
+			if (name === 'trinitrotoluene') {
+				this.add('c|@trinitrotoluene|pls no hax');
+			}
 			if (name === 'waterbomb') {
 				this.add('c|@WaterBomb|Get off my lawn! *shakes cane*');
 			}
@@ -1456,9 +1459,6 @@ exports.Formats = [
 			}
 			if (name === 'quotecs') {
 				this.add('c|%QuoteCS|Yeah, I know what you mean, but unfortunately I lack good answers to those because of my incredibly dry personality.');
-			}
-			if (name === 'trinitrotoluene') {
-				this.add('c|%trinitrotoluene|pls no hax');
 			}
 			if (name === 'uselesstrainer') {
 				sentences = ['huehuehuehue', 'PIZA', 'SPAGUETI', 'RAVIOLI RAVIOLI GIVE ME THE FORMUOLI', 'get ready for PUN-ishment'];
@@ -1937,6 +1937,9 @@ exports.Formats = [
 				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', '“This guy\'s team is CRAZY!” ☑ “My team can\'t win against a team like that” ☑ "He NEEDED precisely those two crits to win" ☑ “He led with the only Pokemon that could beat me” ☑ "He got the perfect hax" ☑ “There was nothing I could do” ☑ “I played that perfectly”', '(⊙﹏⊙✿)'];
 				this.add('c|@Trickster|' + sentences[this.random(5)]);
 			}
+			if (name === 'trinitrotoluene') {
+				this.add('c|@trinitrotoluene|why hax @_@');
+			}
 			if (name === 'waterbomb') {
 				this.add('c|@WaterBomb|brb getting more denture cream');
 			}
@@ -2018,9 +2021,6 @@ exports.Formats = [
 			}
 			if (name === 'quotecs') {
 				this.add('c|%QuoteCS|#StillIrrelevant');
-			}
-			if (name === 'trinitrotoluene') {
-				this.add('c|%trinitrotoluene|why hax @_@');
 			}
 			if (name === 'uselesstrainer') {
 				sentences = ['MATTERED', 'CAIO', 'ima repr0t', 'one day i\'ll turn into a beautiful butterfly'];
@@ -3246,6 +3246,17 @@ exports.Formats = [
 				};
 				delete move.onHit;
 			}
+			if (move.id === 'explosion' && name === 'trinitrotoluene') {
+				move.name = 'Get Haxed';
+				move.basePower = 250;
+				move.onTryHit = function (target, source) {
+					this.boost({def: -1}, target, source);
+				};
+				move.onHit = function (pokemon) {
+					pokemon.side.addSideCondition('spikes');
+					this.add('-message', 'Debris was scattered on ' + pokemon.name + "'s side!");
+				};
+			}
 			if (move.id === 'waterfall' && name === 'waterbomb') {
 				move.name = 'Water Bomb';
 				move.basePowerCallback = function (pokemon, target) {
@@ -3519,17 +3530,6 @@ exports.Formats = [
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Eruption", source);
-				};
-			}
-			if (move.id === 'explosion' && name === 'trinitrotoluene') {
-				move.name = 'Get Haxed';
-				move.basePower = 250;
-				move.onTryHit = function (target, source) {
-					this.boost({def: -1}, target, source);
-				};
-				move.onHit = function (pokemon) {
-					pokemon.side.addSideCondition('spikes');
-					this.add('-message', 'Debris was scattered on ' + pokemon.name + "'s side!");
 				};
 			}
 			if (move.id === 'bulletpunch' && name === 'uselesstrainer') {
