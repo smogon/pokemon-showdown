@@ -3591,6 +3591,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'waterfall', signatureMove: "Water Bomb",
 				evs: {hp:252, atk:252, def:4}, nature: 'Adamant'
 			},
+			'@xfix': {
+				species: 'Xatu', ability: 'Magic Bounce', item: 'Focus Sash', gender: 'M',
+				moves: ['thunderwave', 'substitute', 'roost'],
+				baseSignatureMove: 'metronome', signatureMove: "(Super Glitch)",
+				evs: {hp:252, spd:252, def:4}, nature: 'Calm'
+			},
 			'@zdrup': {
 				species: 'Slowking', ability: 'Slow Start', item: 'Leftovers', gender: 'M',
 				moves: ['psystrike', 'futuresight', 'originpulse', 'slackoff', 'destinybond'],
@@ -3733,12 +3739,6 @@ exports.BattleScripts = {
 				moves: ['explosion', 'stringshot', 'stickyweb', 'spiderweb', 'mist'],
 				baseSignatureMove: 'bulletpunch', signatureMove: "Ranting",
 				evs: {atk:252, def:4, spe:252}, nature: 'Jolly'
-			},
-			'%xfix': {
-				species: 'Xatu', ability: 'Magic Bounce', item: 'Focus Sash', gender: 'M',
-				moves: ['thunderwave', 'substitute', 'roost'],
-				baseSignatureMove: 'metronome', signatureMove: "(Super Glitch)",
-				evs: {hp:252, spd:252, def:4}, nature: 'Calm'
 			},
 			// Voices.
 			'+Aldaron': {
