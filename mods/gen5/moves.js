@@ -591,8 +591,8 @@ exports.BattleMovedex = {
 		desc: "This move calls another move for use depending on the battle terrain. Earthquake in Wi-Fi battles.",
 		shortDesc: "Attack changes based on terrain. (Earthquake)",
 		onTryHit: function () {},
-		onHit: function (target) {
-			this.useMove('earthquake', target);
+		onHit: function (pokemon) {
+			this.useMove('earthquake', pokemon);
 		},
 		target: "self"
 	},
