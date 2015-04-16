@@ -388,6 +388,7 @@ exports.BattleScripts = {
 			hitResult = true;
 		}
 		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
 			return false;
 		}
 

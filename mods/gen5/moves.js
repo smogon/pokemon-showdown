@@ -841,7 +841,8 @@ exports.BattleMovedex = {
 				}
 				var damage = this.getDamage(source, target, move);
 				if (!damage) {
-					return null;
+					if (damage === 0) return null;
+					return false;
 				}
 				damage = this.runEvent('SubDamage', target, source, move, damage);
 				if (!damage) {
