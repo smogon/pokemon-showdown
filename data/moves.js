@@ -9095,17 +9095,17 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {},
-		onHit: function (target, source) {
-			var moveToUse = 'triattack';
+		onTryHit: function (target, pokemon) {
+			var move = 'triattack';
 			if (this.isTerrain('electricterrain')) {
-				moveToUse = 'thunderbolt';
+				move = 'thunderbolt';
 			} else if (this.isTerrain('grassyterrain')) {
-				moveToUse = 'energyball';
+				move = 'energyball';
 			} else if (this.isTerrain('mistyterrain')) {
-				moveToUse = 'moonblast';
+				move = 'moonblast';
 			}
-
-			this.useMove(moveToUse, source, target);
+			this.useMove(move, pokemon, target);
+			return null;
 		},
 		secondary: false,
 		target: "normal",
