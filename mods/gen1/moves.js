@@ -397,15 +397,17 @@ exports.BattleMovedex = {
 						// Clears the status from the opponent
 						this.sides[i].active[j].clearStatus();
 					}
-					this.sides[i].removeSideCondition('lightscreen');
-					this.sides[i].removeSideCondition('reflect');
 					// Turns toxic to poison for user
 					if (hasTox && this.sides[i].active[j].id === source.id) {
 						this.sides[i].active[j].setStatus('psn');
 					}
 					// Clears volatile only from user
 					if (this.sides[i].active[j].id === source.id) {
-						this.sides[i].active[j].clearVolatile();
+						var volatiles = Object.keys(this.sides[i].active[j].volatiles);
+						for (var n = 0; n < volatiles.length; n++) {
+							this.sides[i].active[j].removeVolatile(volatiles[n]);
+							this.add('-end', this.sides[i].active[j], volatiles[n]);
+						}
 					}
 				}
 			}
