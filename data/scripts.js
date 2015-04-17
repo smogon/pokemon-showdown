@@ -3725,7 +3725,7 @@ exports.BattleScripts = {
 			},
 			'%QuoteCS': {
 				species: 'Skarmory', ability: 'Adaptability', item: 'Life Orb', gender: 'M',
-				moves: ['meteormash', ['bravebird', 'dragonascent'][this.random(2)], 'roost'],
+				moves: ['meteormash', 'bravebird', 'roost'],
 				baseSignatureMove: 'spikes', signatureMove: "Diversify",
 				evs: {hp:248, atk:252, spe:8}, nature: 'Adamant'
 			},
