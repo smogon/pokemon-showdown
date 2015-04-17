@@ -686,13 +686,13 @@ var commands = {
 
 			if (isAccepting) {
 				var accepted = [];
-				for (var i = indicesLen; i--;) {
+				for (var i = 0; i < indicesLen; i++) {
 					var submission = submissions.splice(indices[i] - 1, 1)[0];
 					accepted.push(submission);
 				}
 				Array.prototype.push.apply(triviaData.questions, accepted);
 			} else {
-				for (var i = indicesLen; i--;) {
+				for (var i = 0; i < indicesLen; i++) {
 					submissions.splice(indices[i] - 1, 1);
 				}
 			}
