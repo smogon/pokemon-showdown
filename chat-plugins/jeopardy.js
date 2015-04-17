@@ -157,7 +157,6 @@ var Jeopardy = (function () {
 				default:
 					output.sendReply("Unknown check '" + currentCheck + "'.");
 					return false;
-
 			}
 		}
 

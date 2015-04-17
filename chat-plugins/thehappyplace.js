@@ -26,10 +26,8 @@ exports.commands = {
 		}
 		room.chatRoomData.quote = Tools.escapeHTML(target);
 		room.addRaw(
-			'<div class="broadcast-green">' +
-				"<p><strong>The 'Inspirational Quote of the Day' has been updated by " + Tools.escapeHTML(user.name) + ".</strong></p>" +
-				"<p>Quote: " + room.chatRoomData.quote + '</p>' +
-			'</div>'
+			"<div class='broadcast-green'><p><strong>The 'Inspirational Quote of the Day' has been updated by " + Tools.escapeHTML(user.name) + ".</strong></p>" +
+			"<p>Quote: " + room.chatRoomData.quote + "</p></div>"
 		);
 		this.logModCommand(Tools.escapeHTML(user.name) + " has updated the quote of the day to: " + room.chatRoomData.quote);
 		Rooms.global.writeChatRoomData();

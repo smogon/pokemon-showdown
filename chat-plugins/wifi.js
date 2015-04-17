@@ -42,10 +42,12 @@ var QuestionGiveAway = (function () {
 		this.answers = options.answers;
 		this.answered = {}; // userid: number of guesses
 
-		this.room.addRaw("<center><div class='broadcast-blue'><font size='3'><b>It's giveaway time!</b></font><br/>" +
+		this.room.addRaw(
+			"<center><div class='broadcast-blue'><font size='3'><b>It's giveaway time!</b></font><br/>" +
 			"<font size='1'>Question Giveaway started by " + Tools.escapeHTML(host.name) + "</font><br/><br/>" +
 			"<b>" + Tools.escapeHTML(giver.name) + "</b> will be giving away a <b>" + Tools.escapeHTML(this.prize) + "!</b><br/>" +
-			"The question will be displayed in one minute!");
+			"The question will be displayed in one minute!"
+		);
 		this.room.update();
 		this.startTimer = setTimeout(this.start.bind(this), 1000 * 60);
 
@@ -96,8 +98,10 @@ var QuestionGiveAway = (function () {
 	};
 	QuestionGiveAway.prototype.start = function () {
 		this.phase = 'started';
-		this.room.addRaw("<div class='broadcast-blue'>Giveaway Question: <b>" + this.question + "</b><br/>" +
-			"use /ga to guess.");
+		this.room.addRaw(
+			"<div class='broadcast-blue'>Giveaway Question: <b>" + this.question + "</b><br/>" +
+			"use /ga to guess."
+		);
 		this.room.update();
 		this.endTimer = setTimeout(this.onEnd.bind(this), 1000 * 60 * 10);
 	};
@@ -117,8 +121,10 @@ var QuestionGiveAway = (function () {
 				for (var i in this.answers) {
 					ans.push(this.answers[i]);
 				}
-				this.room.addRaw("<div class='broadcast-blue'><b>" + Tools.escapeHTML(this.winner.name) + "</b> guessed the correct answer.</b> Congratulations!<br/>" +
-					"Correct answer(s): " + ans.join(','));
+				this.room.addRaw(
+					"<div class='broadcast-blue'><b>" + Tools.escapeHTML(this.winner.name) + "</b> guessed the correct answer.</b> Congratulations!<br/>" +
+					"Correct answer(s): " + ans.join(',')
+				);
 				if (this.winner.connected) this.winner.popup('You have won the giveaway. PM **' + Tools.escapeHTML(this.giver.name) + '** to claim your prize!');
 			}
 		}
@@ -150,7 +156,8 @@ var LotteryGiveAway = (function () {
 		this.maxwinners = options.maxwinners;
 		this.joined = {}; // userid: 1
 
-		this.reminder = '<center><div class="broadcast-blue"><font size="3"><b>It\'s giveaway time!</b></font><br/>' +
+		this.reminder =
+			'<center><div class="broadcast-blue"><font size="3"><b>It\'s giveaway time!</b></font><br/>' +
 			'<font size="1">Giveaway started by ' + Tools.escapeHTML(host.name) + '</font><br/><br/>' +
 			'<b>' + Tools.escapeHTML(giver.name) + '</b> will be giving away: <b>' + Tools.escapeHTML(this.prize) + '</b>!<br/>' +
 			'The lottery drawing will occur in 2 minutes, and with ' + this.maxwinners + ' winner' + (this.maxwinners > 1 ? 's' : '') + '!<br/>' +
@@ -212,21 +219,23 @@ var LotteryGiveAway = (function () {
 			this.room.update();
 		} else {
 			this.phase = 'ended';
-			var finallist = [];
+			var finalist = [];
 			for (var id in this.winners) {
-				finallist.push(this.winners[id].name);
+				finalist.push(this.winners[id].name);
 			}
-			var multiWin = finallist.length > 1;
-			finallist = finallist.join(', ');
-			this.room.addRaw("<div class='broadcast-blue'><font size='2'><b>Lottery Draw: </b></font>" + this.totalusers + " users have joined the lottery.<br/>" +
-				"Our lucky winner" + (multiWin ? "s" : "") + ": <b>" + Tools.escapeHTML(finallist) + "!</b> Congratulations!");
+			var multiWin = finalist.length > 1;
+			finalist = finalist.join(', ');
+			this.room.addRaw(
+				"<div class='broadcast-blue'><font size='2'><b>Lottery Draw: </b></font>" + this.totalusers + " users have joined the lottery.<br/>" +
+				"Our lucky winner" + (multiWin ? "s" : "") + ": <b>" + Tools.escapeHTML(finalist) + "!</b> Congratulations!"
+			);
 			this.room.update();
 
 			for (var id in this.winners) {
 				var targetUser = this.winners[id];
 				if (targetUser.connected) targetUser.popup("You have won the lottery giveaway! PM **" + this.giver.name + "** to claim your prize!");
 			}
-			if (this.giver.connected) this.giver.popup("The following users have won your lottery giveaway:\n" + finallist);
+			if (this.giver.connected) this.giver.popup("The following users have won your lottery giveaway:\n" + finalist);
 		}
 		delete giveaways[this.room.id];
 	};
@@ -362,9 +371,11 @@ var commands = {
 		if (!this.canBroadcast()) return;
 		if (giveaway.type === 'question') {
 			if (giveaway.phase !== 'started') return this.sendReply("The giveaway has not started yet.");
-			this.sendReply("|html|<div class='broadcast-blue'><font size='1'>Question Giveaway started by " + Tools.escapeHTML(giveaway.host.name) + "</font><br/>" +
+			this.sendReply(
+				"|html|<div class='broadcast-blue'><font size='1'>Question Giveaway started by " + Tools.escapeHTML(giveaway.host.name) + "</font><br/>" +
 				"<b>" + Tools.escapeHTML(giveaway.giver.name) + "</b> will be giving away a <b>" + Tools.escapeHTML(giveaway.prize) + "</b>!<br/>" +
-				"Question: <b>" + Tools.escapeHTML(giveaway.question) + "</b>");
+				"Question: <b>" + Tools.escapeHTML(giveaway.question) + "</b>"
+			);
 		} else {
 			this.sendReply('|raw|' + giveaway.reminder);
 		}
@@ -377,30 +388,33 @@ var commands = {
 		switch (target) {
 		case 'staff':
 			if (!this.can('warn', null, room)) return;
-			reply = '<strong>Staff commands:</strong><br />' +
-			        '- question or qg <em>User, Prize, Question, Answer</em> - Start a new question giveaway (Requires: % @ # & ~)<br />' +
-			        '- lottery or lg <em>User, Prize[, Number of Winners]</em> - Starts a lottery giveaway (Requires: % @ # & ~)<br />' +
-			        '- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
-			        '- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
-					'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
-			        '- end - Forcibly ends the current giveaway (Requires: % @ # & ~)<br />';
+			reply =
+				'<strong>Staff commands:</strong><br />' +
+				'- question or qg <em>User, Prize, Question, Answer</em> - Start a new question giveaway (Requires: % @ # & ~)<br />' +
+				'- lottery or lg <em>User, Prize[, Number of Winners]</em> - Starts a lottery giveaway (Requires: % @ # & ~)<br />' +
+				'- changequestion - Changes the question of a question giveaway (Requires: giveaway host)<br />' +
+				'- changeanswer - Changes the answer of a question giveaway (Requires: giveaway host)<br />' +
+				'- viewanswer - Shows the answer in a question giveaway (only to giveaway host/giver)<br />' +
+				'- end - Forcibly ends the current giveaway (Requires: % @ # & ~)<br />';
 			break;
 		case 'game':
 		case 'giveaway':
 		case 'user':
 			if (!this.canBroadcast()) return;
-			reply = '<strong>Giveaway participation commands: </strong> (start with /giveaway, except for /ga) <br />' +
-			        '- guess or /ga <em>answer</em> - Guesses the answer for a question giveaway<br />' +
-			        '- viewanswer - Shows the answer in a question giveaway (only to host/giver)<br />' +
-			        '- remind - Shows the details of the current giveaway (can be broadcast)<br />' +
-			        '- join or joinlottery - Joins a lottery giveaway<br />' +
-			        '- leave or leavelottery - Leaves a lottery giveaway<br />';
+			reply =
+				'<strong>Giveaway participation commands: </strong> (start with /giveaway, except for /ga) <br />' +
+				'- guess or /ga <em>answer</em> - Guesses the answer for a question giveaway<br />' +
+				'- viewanswer - Shows the answer in a question giveaway (only to host/giver)<br />' +
+				'- remind - Shows the details of the current giveaway (can be broadcast)<br />' +
+				'- join or joinlottery - Joins a lottery giveaway<br />' +
+				'- leave or leavelottery - Leaves a lottery giveaway<br />';
 			break;
 		default:
 			if (!this.canBroadcast()) return;
-			reply = '<b>Wi-Fi room Giveaway help and info</b><br />' +
-			'- help user - shows list of participation commands<br />' +
-			'- help staff - shows giveaway staff commands (Requires: % @ # & ~)';
+			reply =
+				'<b>Wi-Fi room Giveaway help and info</b><br />' +
+				'- help user - shows list of participation commands<br />' +
+				'- help staff - shows giveaway staff commands (Requires: % @ # & ~)';
 		}
 		this.sendReplyBox(reply);
 	}
