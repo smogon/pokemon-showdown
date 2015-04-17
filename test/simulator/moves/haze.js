@@ -40,12 +40,45 @@ describe('Haze - RBY', function () {
 		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
 		battle.seed = [0, 0, 0, 0];
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['thunderwave']}]);
-
 		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['haze']}]);
+
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].status, 'par');
 
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].status, 'par');
+	});
+
+	it('should remove focus energy', function () {
+		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
+		battle.seed = [0, 0, 0, 0];
+		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['splash']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['focusenergy', 'haze']}]);
+
+		battle.commitDecisions();
+		assert.ok(battle.p2.active[0].volatiles['focusenergy']);
+
+		battle.choose('p2', 'move 2');
+		battle.commitDecisions();
+		assert.strictEqual(typeof battle.p2.active[0].volatiles['focusenergy'], 'undefined');
+	});
+
+	it('should remove reflect and light screen', function () {
+		battle = BattleEngine.Battle.construct('battle-haze-rby', 'gen1customgame');
+		battle.seed = [0, 0, 0, 0];
+		battle.join('p1', 'Guest 1', 1, [{species: "Mew", moves: ['reflect', 'lightscreen', 'haze']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", moves: ['splash']}]);
+
+		battle.commitDecisions();
+		assert.ok(battle.p1.active[0].volatiles['reflect']);
+
+		battle.choose('p1', 'move 2');
+		battle.commitDecisions();
+		assert.ok(battle.p1.active[0].volatiles['lightscreen']);
+
+		battle.choose('p1', 'move 3');
+		battle.commitDecisions();
+		assert.strictEqual(typeof battle.p1.active[0].volatiles['reflect'], 'undefined');
+		assert.strictEqual(typeof battle.p1.active[0].volatiles['lightscreen'], 'undefined');
 	});
 });
