@@ -3669,6 +3669,12 @@ exports.BattleScripts = {
 				baseSignatureMove: 'spikecannon', signatureMove: "Lava Whip",
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant'
 			},
+			'%Bumbadadabum': {
+				species: 'Samurott', ability: 'Analytic', item: 'Safety Goggles', gender: 'M',
+				moves: ['calmmind', 'originpulse', 'icebeam'],
+				baseSignatureMove: 'hypervoice', signatureMove: "Open Source Software",
+				evs: {hp:252, spa:252, spd:4}, nature: 'Modest'
+			},
 			'%Charles Carmichael': {
 				species: 'Quagsire', ability: 'Sap Sipper', item: 'Liechi Berry', gender: 'M',
 				moves: ['waterfall', 'earthquake', ['stoneedge', 'rockslide'][this.random(2)], 'icepunch'],
