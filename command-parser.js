@@ -344,6 +344,10 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 						return false;
 					}
 				}
+				if (/>here</i.test(html) || /click here/i.test(html)) {
+					this.sendReply('Do not use "click here"');
+					return false;
+				}
 				return true;
 			},
 			targetUserOrSelf: function (target, exactName) {
