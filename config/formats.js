@@ -3496,7 +3496,7 @@ exports.Formats = [
 				move.onHit = function (target, source) {
 					var result = this.random(100);
 					var chance = source.hasAbility('serenegrace') ? 60 : 30;
-					var triggerFlinch = result < chance;
+					// If the result is less than 60 or 30, then Kibitz will flinch the target.
 					if (this.willMove(target) && result < chance) {
 						target.addVolatile('flinch');
 					} else if (target.hp !== 0 && !target.newlySwitched) {
