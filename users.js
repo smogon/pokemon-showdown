@@ -190,7 +190,7 @@ function lockRange(range, ip) {
 		}
 		rangelockedUsers[range][curUser.userid] = 1;
 		curUser.locked = '#range';
-		curUser.send("|popup|You are in a range that has been temporarily locked from talking in chats and PMing regular users.");
+		curUser.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
 		curUser.updateIdentity();
 	}
 
@@ -291,7 +291,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 			if (user.named && !user.locked && user.group === Config.groupsranking[0]) {
 				var shortHost = Users.shortenHost(hosts[0]);
 				if (lockedRanges[shortHost]) {
-					user.send("|popup|You are in a range that has been temporarily locked from talking in chats and PMing regular users.");
+					user.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
 					rangelockedUsers[shortHost][user.userid] = 1;
 					user.locked = '#range';
 					user.updateIdentity();
@@ -304,7 +304,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 
 	Dnsbl.query(connection.ip, function (isBlocked) {
 		if (isBlocked) {
-			connection.popup("Your IP is known for spamming or hacking websites and has been locked. If you're using a proxy, don't.");
+			connection.popup("You are locked because someone using your IP (" + connection.ip + ") has spammed/hacked other websites. This usually means you're using a proxy, in a country where other people commonly hack, or have a virus on your computer that's spamming websites.");
 			if (connection.user && !connection.user.locked) {
 				connection.user.locked = '#dnsbl';
 				connection.user.updateIdentity();
