@@ -1559,9 +1559,6 @@ exports.Formats = [
 			if (name === 'diatom') {
 				this.add('-message', pokemon.side.foe.name + ' was banned by Diatom. (you should be thankful you are banned and not permabanned)');
 			}
-			if (name === 'imanalt') {
-				this.add('c|+imanalt|muh bulk');
-			}
 			if (name === 'mattl') {
 				this.add('c|+MattL|The annoyance I will cause is not well-defined.');
 			}
@@ -2047,9 +2044,6 @@ exports.Formats = [
 			}
 			if (name === 'diatom' && !pokemon.hasBeenThanked) {
 				this.add('c|★' + pokemon.side.foe.name + '|Thanks Diatom...');
-			}
-			if (name === 'imanalt') {
-				this.add('c|+imanalt|bshax imo');
 			}
 			if (name === 'mattl') {
 				this.add('c|+MattL|Finish him! You used "Finals week!" Fatality!');
@@ -3691,12 +3685,6 @@ exports.Formats = [
 						this.add('c|@Diatom|you should be thankful my psywave doesn\'t always hit');
 					};
 				}
-			}
-			if (move.id === 'naturepower' && name === 'imanalt') {
-				move.name = 'FREE GENV BH';
-				move.onHit = function (target, source) {
-					this.useMove('earthquake', source, target);
-				};
 			}
 			if (move.id === 'growl' && name === 'limi') {
 				move.name = 'Resilience';
