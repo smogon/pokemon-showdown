@@ -1347,36 +1347,6 @@ var commands = exports.commands = {
 		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
 	},
 
-	bofrocket: function (target, room, user) {
-		if (room.id !== 'bof') return this.sendReply("The command '/bofrocket' was unrecognized. To send a message starting with '/bofrocket', type '//bofrocket'.");
-		if (!this.can('modchat', null, room)) return;
-		target = this.splitTarget(target);
-		if (!this.targetUser) return this.sendReply("User not found");
-		if (!room.users[this.targetUser.userid]) return this.sendReply("Not in bof");
-		this.targetUser.avatar = '#bofrocket';
-		room.add("" + user.name + " applied bofrocket to " + this.targetUser.name);
-	},
-
-	showtan: function (target, room, user) {
-		if (room.id !== 'showderp') return this.sendReply("The command '/showtan' was unrecognized. To send a message starting with '/showtan', type '//showtan'.");
-		if (!this.can('modchat', null, room)) return;
-		target = this.splitTarget(target);
-		if (!this.targetUser) return this.sendReply("User not found");
-		if (!room.users[this.targetUser.userid]) return this.sendReply("Not a showderper");
-		this.targetUser.avatar = '#showtan';
-		room.add("" + user.name + " applied showtan to affected area of " + this.targetUser.name);
-	},
-
-	cpgtan: function (target, room, user) {
-		if (room.id !== 'cpg') return this.sendReply("The command '/cpgtan' was unrecognized. To send a message starting with '/cpgtan', type '//cpgtan'.");
-		if (!this.can('modchat', null, room)) return;
-		target = this.splitTarget(target);
-		if (!this.targetUser) return this.sendReply("User not found");
-		if (!room.users[this.targetUser.userid]) return this.sendReply("Not a cpger");
-		this.targetUser.avatar = '#cpgtan';
-		room.add("" + user.name + " applied cpgtan to affected area of " + this.targetUser.name);
-	},
-
 	introduction: 'intro',
 	intro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
