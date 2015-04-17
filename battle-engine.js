@@ -68,7 +68,7 @@ global.Tools = require('./tools.js');
 
 var Battle, BattleSide, BattlePokemon;
 
-var Battles = {};
+var Battles = Object.create(null);
 
 require('./repl.js').start('battle-engine-', process.pid, function (cmd) { return eval(cmd); });
 
@@ -102,7 +102,16 @@ process.on('message', function (message) {
 			}
 		}
 	} else if (data[1] === 'dealloc') {
-		if (Battles[data[0]]) Battles[data[0]].destroy();
+		if (Battles[data[0]] && Battles[data[0]].destroy) {
+			Battles[data[0]].destroy();
+		} else {
+			var stack = '\n\n' +
+					'Additional information:\n' +
+					'message = ' + message;
+			var fakeErr = {stack: stack};
+
+			require('./crashlogger.js')(fakeErr, 'A battle');
+		}
 		delete Battles[data[0]];
 	} else {
 		var battle = Battles[data[0]];
