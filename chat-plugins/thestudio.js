@@ -44,8 +44,10 @@ var commands = {
 		artistOfTheDay.pendingNominations = true;
 		room.chatRoomData.prenominations = [];
 		Rooms.global.writeChatRoomData();
-		room.addRaw('<div class="broadcast-blue"><strong>Nominations for the Artist of the Day have begun!</strong><br />' +
-		            'Use /aotd nom to nominate an artist.</div>');
+		room.addRaw(
+			'<div class="broadcast-blue"><strong>Nominations for the Artist of the Day have begun!</strong><br />' +
+			'Use /aotd nom to nominate an artist.</div>'
+		);
 		this.privateModCommand('(' + user.name + ' began nominations for the Artist of the Day.)');
 	},
 
@@ -61,8 +63,10 @@ var commands = {
 		artistOfTheDay.removedNominators = [];
 		room.chatRoomData.artistOfTheDay = artist;
 		Rooms.global.writeChatRoomData();
-		room.addRaw('<div class="broadcast-blue"><strong>Nominations for the Artist of the Day have ended!</strong><br />' +
-		            'Randomly selected artist: ' + Tools.escapeHTML(artist) + '</div>');
+		room.addRaw(
+			'<div class="broadcast-blue"><strong>Nominations for the Artist of the Day have ended!</strong><br />' +
+			'Randomly selected artist: ' + Tools.escapeHTML(artist) + '</div>'
+		);
 		this.privateModCommand('(' + user.name + ' ended nominations for the Artist of the Day.)');
 	},
 
@@ -200,15 +204,17 @@ var commands = {
 
 	help: function (target, room) {
 		if (room.id !== 'thestudio' || !room.chatRoomData || !this.canBroadcast()) return false;
-		this.sendReplyBox('The Studio: Artist of the Day plugin commands:<br />' +
-		                  '- /aotd - View the Artist of the Day.<br />' +
-				  '- /aotd start - Start nominations for the Artist of the Day. Requires: % @ # & ~<br />' +
-				  '- /aotd nom - Nominate an artist for the Artist of the Day.<br />' +
-				  '- /aotd viewnoms - View the current nominations for the Artist of the Day. Requires: % @ # & ~<br />' +
-				  '- /aotd removenom [username] - Remove a user\'s nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ # & ~<br />' +
-				  '- /aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~<br />' +
-				  '- /aotd prenom - Nominate an artist for the Artist of the Day between nomination periods.<br />' +
-				  '- /aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~');
+		this.sendReplyBox(
+			'The Studio: Artist of the Day plugin commands:<br />' +
+			'- /aotd - View the Artist of the Day.<br />' +
+			'- /aotd start - Start nominations for the Artist of the Day. Requires: % @ # & ~<br />' +
+			'- /aotd nom - Nominate an artist for the Artist of the Day.<br />' +
+			'- /aotd viewnoms - View the current nominations for the Artist of the Day. Requires: % @ # & ~<br />' +
+			'- /aotd removenom [username] - Remove a user\'s nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ # & ~<br />' +
+			'- /aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~<br />' +
+			'- /aotd prenom - Nominate an artist for the Artist of the Day between nomination periods.<br />' +
+			'- /aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~'
+		);
 	}
 };
 
