@@ -3766,12 +3766,6 @@ exports.BattleScripts = {
 				baseSignatureMove: 'healingwish', signatureMove: "Be Thankful I Sacrificed Myself",
 				evs: {hp:252, def:136, spd:120}, nature: 'Impish'
 			},
-			'+imanalt': {
-				species: 'Rhydon', ability: 'Prankster', item: 'Eviolite', gender: 'M',
-				moves: ['heartswap', 'rockblast', 'stealthrock', 'substitute', 'batonpass'],
-				baseSignatureMove: 'naturepower', signatureMove: "FREE GENV BH",
-				evs: {hp:252, atk:252, spd:4}, nature: 'Adamant'
-			},
 			'+Limi': {
 				species: 'Primeape', ability: 'Poison Heal', item: 'Leftovers', gender: 'M',
 				moves: ['ingrain', 'doubleedge', 'leechseed'],
