@@ -7,12 +7,11 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "[Gen 2] Random (BWknd 36)",
+		name: "Monotype Random (BWknd 37)",
 		section: "ORAS Singles",
 
-		mod: 'gen2',
-		team: 'random',
-		ruleset: ['Pokemon', 'Standard']
+		team: 'randomMonotype',
+		ruleset: ['Random (no PotD)']
 	},
 	{
 		name: "OU",
