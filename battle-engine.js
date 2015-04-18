@@ -188,7 +188,7 @@ BattlePokemon = (function () {
 		this.moveset = [];
 		this.baseMoveset = [];
 
-		this.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 1000);
+		this.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
 
 		var genders = {M:'M', F:'F'};
 		this.gender = this.template.gender || genders[set.gender] || (Math.random() * 2 < 1 ? 'M' : 'F');
