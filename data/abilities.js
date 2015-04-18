@@ -89,7 +89,7 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Air Lock');
 		},
-		onAnyModifyPokemon: function (pokemon) {
+		onAnyUpdate: function (pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
 		},
 		onAnyTryWeather: false,
@@ -326,7 +326,7 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Cloud Nine');
 		},
-		onAnyModifyPokemon: function (pokemon) {
+		onAnyUpdate: function (pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
 		},
 		onAnyTryWeather: false,
