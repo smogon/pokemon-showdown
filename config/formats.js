@@ -3276,8 +3276,6 @@ exports.Formats = [
 				move.multihit = [2, 5];
 				move.onTryHit = function (target, source) {
 					if (!source.isActive) return null;
-				};
-				move.onModifyMove = function (source) {
 					if (this.random(777) !== 42) return;
 					var opponent = pokemon.side.foe.active[0];
 					opponent.setStatus('brn');
