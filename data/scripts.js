@@ -3678,7 +3678,7 @@ exports.BattleScripts = {
 			'%Charles Carmichael': {
 				species: 'Quagsire', ability: 'Sap Sipper', item: 'Liechi Berry', gender: 'M',
 				moves: ['waterfall', 'earthquake', ['stoneedge', 'rockslide'][this.random(2)], 'icepunch'],
-				baseSignatureMove: 'swagger', signatureMove: 'Bad Pun',
+				baseSignatureMove: 'swagger', signatureMove: "Bad Pun",
 				evs: {hp:248, atk:252, spe:8}, nature: 'Naughty'
 			},
 			'%Crestfall': {
@@ -3702,7 +3702,7 @@ exports.BattleScripts = {
 			'%galbia': {
 				species: 'Cobalion', ability: 'Serene Grace', item: 'Leftovers',
 				moves: ['ironhead', 'taunt', 'swordsdance', 'thunderwave', 'substitute'],
-				baseSignatureMove: 'highjumpkick', signatureMove: 'Kibitz',
+				baseSignatureMove: 'highjumpkick', signatureMove: "Kibitz",
 				evs: {atk:252, def:4, spe:252}, nature: 'Jolly'
 			},
 			'%Hugendugen': {
