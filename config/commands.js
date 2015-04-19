@@ -474,9 +474,8 @@ var commands = exports.commands = {
 		var allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1};
 		var showAll = false;
 		var megaSearch = null;
-		var recoverySearch = null;
 		var output = 10;
-		var categories = ['gen', 'tier', 'color', 'types', 'ability', 'stats', 'moves', 'recovery'];
+		var categories = ['gen', 'tier', 'color', 'types', 'ability', 'stats', 'compileLearnsets', 'moves', 'recovery', 'priority'];
 
 		for (var i = 0; i < targets.length; i++) {
 			var isNotSearch = false;
@@ -531,9 +530,14 @@ var commands = exports.commands = {
 			}
 
 			if (target === 'recovery') {
-				if ((recoverySearch && isNotSearch) || (recoverySearch === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and recovery moves.');
-				if (!searches['recovery']) searches['recovery'] = {};
-				recoverySearch = !isNotSearch;
+				if ((searches['recovery'] && isNotSearch) || (searches['recovery'] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and recovery moves.');
+				searches['recovery'] = !isNotSearch;
+				continue;
+			}
+
+			if (target === 'priority') {
+				if ((searches['priority'] && isNotSearch) || (searches['priority'] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and recovery moves.');
+				searches['priority'] = !isNotSearch;
 				continue;
 			}
 
@@ -620,6 +624,9 @@ var commands = exports.commands = {
 			}
 		}
 
+		//Only construct full learnsets for Pokemon if learnsets are used in the search
+		if (searches.moves || searches.recovery || searches.priority) searches['compileLearnsets'] = true;
+
 		for (var cat = 0; cat < categories.length; cat++) {
 			var search = categories[cat];
 			if (!searches[search]) continue;
@@ -674,35 +681,60 @@ var commands = exports.commands = {
 					}
 					break;
 
-				case 'moves':
+				case 'compileLearnsets':
 					for (var mon in dex) {
 						var template = dex[mon];
 						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
 						if (!template.learnset) continue;
-						for (var move in searches[search]) {
-							var prevoTemp = template;
-							while (prevoTemp.prevo && prevoTemp.learnset && !(prevoTemp.learnset[move])) {
-								prevoTemp = Tools.getTemplate(prevoTemp.prevo);
+						var fullLearnset = template.learnset;
+						while (template.prevo) {
+							template = Tools.getTemplate(template.prevo);
+							for (var move in template.learnset) {
+								if (!fullLearnset[move]) fullLearnset[move] = template.learnset[move];
 							}
-							var canLearn = (prevoTemp.learnset.sketch && ['chatter', 'struggle', 'magikarpsrevenge'].indexOf(move) === -1) || prevoTemp.learnset[move];
-							if ((!canLearn && searches[search][move]) || (searches[search][move] === false && canLearn)) delete dex[mon];
+						}
+						dex[mon].learnset = fullLearnset;
+					}
+					break;
+
+				case 'moves':
+					for (var mon in dex) {
+						if (!dex[mon].learnset) continue;
+						for (var move in searches[search]) {
+							var canLearn = (dex[mon].learnset.sketch && ['chatter', 'struggle', 'magikarpsrevenge'].indexOf(move) === -1) || dex[mon].learnset[move];
+							if ((!canLearn && searches[search][move]) || (searches[search][move] === false && canLearn)) {
+								delete dex[mon];
+								break;
+							}
 						}
 					}
 					break;
 
 				case 'recovery':
 					for (var mon in dex) {
-						var template = dex[mon];
-						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-						if (!template.learnset) continue;
+						if (!dex[mon].learnset) continue;
 						var recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder"];
 						var canLearn = false;
 						for (var i = 0; i < recoveryMoves.length; i++) {
-							var prevoTemp = Tools.getTemplate(template.id);
-							while (prevoTemp.prevo && prevoTemp.learnset && !(prevoTemp.learnset[recoveryMoves[i]])) {
-								prevoTemp = Tools.getTemplate(prevoTemp.prevo);
-							}
-							canLearn = (prevoTemp.learnset.sketch) || prevoTemp.learnset[recoveryMoves[i]];
+							canLearn = (dex[mon].learnset.sketch) || dex[mon].learnset[recoveryMoves[i]];
+							if (canLearn) break;
+						}
+						if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
+					}
+					break;
+
+				case 'priority':
+					var priorityMoves = [];
+					for (var move in Tools.data.Movedex) {
+						var moveData = Tools.getMove(move);
+						if (moveData.category === "Status") continue;
+						if (moveData.priority > 0) priorityMoves.push(move);
+					}
+					for (var mon in dex) {
+						if (!dex[mon].learnset) continue;
+						var canLearn = false;
+						for (var i = 0; i < priorityMoves.length; i++) {
+							canLearn = (dex[mon].learnset.sketch) || dex[mon].learnset[priorityMoves[i]];
 							if (canLearn) break;
 						}
 						if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
