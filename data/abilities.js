@@ -92,9 +92,6 @@ exports.BattleAbilities = {
 		onAnySwitchIn: function (pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
 		},
-		onAnyModifyPokemon: function (pokemon) {
-			pokemon.ignore['WeatherTarget'] = true;
-		},
 		onAnyTryWeather: false,
 		id: "airlock",
 		name: "Air Lock",
@@ -330,9 +327,6 @@ exports.BattleAbilities = {
 			this.add('-ability', pokemon, 'Cloud Nine');
 		},
 		onAnySwitchIn: function (pokemon) {
-			pokemon.ignore['WeatherTarget'] = true;
-		},
-		onAnyModifyPokemon: function (pokemon) {
 			pokemon.ignore['WeatherTarget'] = true;
 		},
 		onAnyTryWeather: false,
