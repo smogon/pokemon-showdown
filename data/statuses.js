@@ -8,11 +8,7 @@ exports.BattleStatuses = {
 			}
 			this.add('-status', target, 'brn');
 		},
-		onBasePower: function (basePower, attacker, defender, move) {
-			if (move && move.category === 'Physical' && attacker && !attacker.hasAbility('guts') && move.id !== 'facade') {
-				return this.chainModify(0.5); // This should really take place directly in the damage function but it's here for now
-			}
-		},
+		// Damage reduction is handled directly in the battle-engine.js damage function
 		onResidualOrder: 9,
 		onResidual: function (pokemon) {
 			this.damage(pokemon.maxhp / 8);
