@@ -25,6 +25,37 @@ var commands = exports.commands = {
 		this.sendReplyBox("Server version: <b>" + CommandParser.package.version + "</b>");
 	},
 
+	auth: 'authority',
+	authority: function (target, room, user, connection) {
+		var authority = Object.keys(Users.usergroups);
+		var admins = [];
+		var leaders = [];
+		var mods = [];
+		var drivers = [];
+		for (var i = 0; i < authority.length; i++) {
+			var guy = Users.usergroups[authority[i]];
+			switch (guy.charAt(0)) {
+			case '~':
+				admins.push(guy.substr(1));
+				break;
+			case '&':
+				leaders.push(guy.substr(1));
+				break;
+			case '@':
+				mods.push(guy.substr(1));
+				break;
+			case '%':
+				drivers.push(guy.substr(1));
+				break;
+			}
+		}
+		var buff = 'Administrators (~):\n' + (admins.length > 0 ? admins.sort().join(', ') : 'None') + '\n\n' +
+		'Leaders (&):\n' + (leaders.length > 0 ? leaders.sort().join(', ') : 'None') + '\n\n' +
+		'Moderators (@):\n' + (mods.length > 0 ? mods.sort().join(', ') : 'None') + '\n\n' +
+		'Drivers (%):\n' + (drivers.length > 0 ? drivers.sort().join(', ') : 'None');
+		connection.popup(buff);
+	},
+
 	me: function (target, room, user, connection) {
 		// By default, /me allows a blank message
 		if (target) target = this.canTalk(target);
