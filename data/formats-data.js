@@ -1514,7 +1514,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"moves":["quickattack","flamewheel","swift","flamethrower"]},
 			{"generation":6,"level":50,"isHidden":true,"moves":["overheat","flamewheel","flamecharge","swift"]}
 		],
-		tier: "NU"
+		tier: "BL3"
 	},
 	totodile: {
 		randomBattleMoves: ["aquajet","waterfall","crunch","icepunch","superpower","dragondance","swordsdance"],
@@ -2640,7 +2640,8 @@ exports.BattleFormatsData = {
 	cameruptmega: {
 		randomBattleMoves: ["stealthrock","fireblast","earthpower","ancientpower","willowisp","toxic"],
 		randomDoubleBattleMoves: ["fireblast","earthpower","heatwave","eruption","rockslide","protect"],
-		requiredItem: "Cameruptite"
+		requiredItem: "Cameruptite",
+		tier: "BL3"
 	},
 	torkoal: {
 		randomBattleMoves: ["shellsmash","fireblast","earthpower","hiddenpowergrass","stealthrock","rapidspin","yawn","lavaplume"],
