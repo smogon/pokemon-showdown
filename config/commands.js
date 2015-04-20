@@ -683,17 +683,7 @@ var commands = exports.commands = {
 
 				case 'compileLearnsets':
 					for (var mon in dex) {
-						var template = dex[mon];
-						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-						if (!template.learnset) continue;
-						var fullLearnset = template.learnset;
-						while (template.prevo) {
-							template = Tools.getTemplate(template.prevo);
-							for (var move in template.learnset) {
-								if (!fullLearnset[move]) fullLearnset[move] = template.learnset[move];
-							}
-						}
-						dex[mon].learnset = fullLearnset;
+						dex[mon].learnset = Tools.getLearnset(dex[mon]);
 					}
 					break;
 
@@ -854,15 +844,8 @@ var commands = exports.commands = {
 			var template = Tools.getTemplate(target);
 			if (template.exists) {
 				if (Object.size(lsetData) !== 0) return this.sendReplyBox("A search can only include one Pokemon learnset.");
-				if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-				lsetData = template.learnset;
+				lsetData = Tools.getLearnset(template);
 				targetMon = template.name;
-				while (template.prevo) {
-					template = Tools.getTemplate(template.prevo);
-					for (var move in template.learnset) {
-						if (!lsetData[move]) lsetData[move] = template.learnset[move];
-					}
-				}
 				continue;
 			}
 
