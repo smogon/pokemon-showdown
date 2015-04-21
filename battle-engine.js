@@ -3187,12 +3187,23 @@ Battle = (function () {
 			}
 		}
 
-		if (basePower && !Math.floor(baseDamage)) {
-			return 1;
+		if (pokemon.status === 'brn' && basePower && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
+			if (this.gen < 6 || move.id !== 'facade') {
+				baseDamage = this.modify(baseDamage, 0.5);
+			}
+		}
+
+		// Generation 5 sets damage to 1 before the final damage modifiers only
+		if (this.gen === 5 && basePower && !Math.floor(baseDamage)) {
+			baseDamage = 1;
 		}
 
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+
+		if (this.gen !== 5 && basePower && !Math.floor(baseDamage)) {
+			return 1;
+		}
 
 		return Math.floor(baseDamage);
 	};
