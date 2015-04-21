@@ -26,34 +26,29 @@ var commands = exports.commands = {
 	},
 
 	auth: 'authority',
+	authlist: 'authority',
 	authority: function (target, room, user, connection) {
-		var authority = Object.keys(Users.usergroups);
-		var admins = [];
-		var leaders = [];
-		var mods = [];
-		var drivers = [];
-		for (var i = 0; i < authority.length; i++) {
-			var guy = Users.usergroups[authority[i]];
-			switch (guy.charAt(0)) {
-			case '~':
-				admins.push(guy.substr(1));
-				break;
-			case '&':
-				leaders.push(guy.substr(1));
-				break;
-			case '@':
-				mods.push(guy.substr(1));
-				break;
-			case '%':
-				drivers.push(guy.substr(1));
-				break;
+		var rankLists = {};
+		var ranks = Object.keys(Config.groups);
+		for (var u in Users.usergroups) {
+			var rank = Users.usergroups[u].charAt(0);
+			// In case the usergroups.csv file is not proper, we check for the server ranks.
+			if (ranks.indexOf(rank) > -1) {
+				var name = Users.usergroups[u].substr(1);
+				if (!rankLists[rank]) rankLists[rank] = [];
+				if (name) rankLists[rank].push(name);
 			}
 		}
-		var buff = 'Administrators (~):\n' + (admins.length > 0 ? admins.sort().join(', ') : 'None') + '\n\n' +
-		'Leaders (&):\n' + (leaders.length > 0 ? leaders.sort().join(', ') : 'None') + '\n\n' +
-		'Moderators (@):\n' + (mods.length > 0 ? mods.sort().join(', ') : 'None') + '\n\n' +
-		'Drivers (%):\n' + (drivers.length > 0 ? drivers.sort().join(', ') : 'None');
-		connection.popup(buff);
+
+		var buffer = [];
+		Object.keys(rankLists).sort(function (a, b) {
+			return (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank;
+		}).forEach(function (r) {
+			buffer.push((Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
+		});
+
+		if (!buffer.length) buffer = "This server has no auth.";
+		connection.popup(buffer.join("\n\n"));
 	},
 
 	me: function (target, room, user, connection) {
