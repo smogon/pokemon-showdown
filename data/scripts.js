@@ -1197,7 +1197,7 @@ exports.BattleScripts = {
 				case 'foulplay': case 'nightshade': case 'seismictoss': case 'superfang':
 					if (counter.setupType) rejected = true;
 					break;
-				case 'healbell': case 'trickroom':
+				case 'healbell':
 					if (!!counter['speedsetup']) rejected = true;
 					break;
 				case 'memento':
@@ -1212,7 +1212,11 @@ exports.BattleScripts = {
 					break;
 				case 'switcheroo': case 'trick':
 					if (counter.setupType || counter.Physical + counter.Special < 2) rejected = true;
-					if (hasMove['acrobatics'] || hasMove['lightscreen'] || hasMove['reflect'] || hasMove['trickroom'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (hasMove['acrobatics'] || hasMove['lightscreen'] || hasMove['reflect'] || hasMove['trickroom']) rejected = true;
+					break;
+				case 'trickroom':
+					if (counter.setupType || !!counter['speedsetup'] || counter.Physical + counter.Special < 2) rejected = true;
+					if (hasMove['lightscreen'] || hasMove['reflect']) rejected = true;
 					break;
 				case 'uturn':
 					if (counter.setupType || !!counter['speedsetup']) rejected = true;
