@@ -1103,9 +1103,6 @@ exports.Formats = [
 			if (name === 'sweep') {
 				this.add('c|&Sweep|xD');
 			}
-			if (name === 'vacate') {
-				this.add('c|&Vacate|sticky situation');
-			}
 			if (name === 'verbatim') {
 				this.add('c|&verbatim|All in');
 			}
@@ -1482,6 +1479,9 @@ exports.Formats = [
 				sentences = ['huehuehuehue', 'PIZA', 'SPAGUETI', 'RAVIOLI RAVIOLI GIVE ME THE FORMUOLI', 'get ready for PUN-ishment'];
 				this.add('c|%useless trainer|' + sentences[this.random(5)]);
 			}
+			if (name === 'vacate') {
+				this.add('c|%Vacate|sticky situation');
+			}
 
 			// Voices.
 			if (name === 'aldaron') {
@@ -1682,9 +1682,6 @@ exports.Formats = [
 			}
 			if (name === 'sweep') {
 				this.add('c|&Sweep|xD');
-			}
-			if (name === 'vacate') {
-				this.add('c|&Vacate|dam it');
 			}
 			if (name === 'verbatim') {
 				this.add('c|&verbatim|Crash and Burn');
@@ -2036,6 +2033,9 @@ exports.Formats = [
 			if (name === 'uselesstrainer') {
 				sentences = ['MATTERED', 'CAIO', 'ima repr0t', 'one day i\'ll turn into a beautiful butterfly'];
 				this.add('c|%useless trainer|' + sentences[this.random(4)]);
+			}
+			if (name === 'vacate') {
+				this.add('c|%Vacate|dam it');
 			}
 
 			// Ex-staff or honorary voice.

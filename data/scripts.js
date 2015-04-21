@@ -3159,12 +3159,6 @@ exports.BattleScripts = {
 				baseSignatureMove: 'kingsshield', signatureMove: "Sweep's Shield",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Modest'
 			},
-			'&Vacate': {
-				species: 'Bibarel', ability: 'Adaptability', item: 'Leftovers', gender: 'M',
-				moves: ['earthquake', 'smellingsalts', 'stockpile', 'zenheadbutt', 'waterfall'],
-				baseSignatureMove: 'superfang', signatureMove: "Duper Fang",
-				evs: {atk:252, def:4, spd:252}, nature: 'Quiet'
-			},
 			'&verbatim': {
 				species: 'Archeops', ability: 'Reckless', item: 'Life Orb', gender: 'M',
 				moves: ['headsmash', 'highjumpkick', 'flareblitz', 'volttackle', 'woodhammer'],
@@ -3685,6 +3679,12 @@ exports.BattleScripts = {
 				moves: ['explosion', 'stringshot', 'stickyweb', 'spiderweb', 'mist'],
 				baseSignatureMove: 'bulletpunch', signatureMove: "Ranting",
 				evs: {atk:252, def:4, spe:252}, nature: 'Jolly'
+			},
+			'%Vacate': {
+				species: 'Bibarel', ability: 'Adaptability', item: 'Leftovers', gender: 'M',
+				moves: ['earthquake', 'smellingsalts', 'stockpile', 'zenheadbutt', 'waterfall'],
+				baseSignatureMove: 'superfang', signatureMove: "Duper Fang",
+				evs: {atk:252, def:4, spd:252}, nature: 'Quiet'
 			},
 			// Voices.
 			'+Aldaron': {
