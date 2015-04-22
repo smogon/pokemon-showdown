@@ -762,9 +762,7 @@ exports.BattleMovedex = {
 	},
 	struggle: {
 		inherit: true,
-		onModifyMove: function (move, pokemon) {
-			this.add('-activate', pokemon, 'move: Struggle');
-		}
+		onModifyMove: function () {}
 	},
 	substitute: {
 		num: 164,
