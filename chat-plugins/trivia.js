@@ -914,7 +914,7 @@ var commands = {
 		switch (target) {
 		case 'ginfo':
 			this.sendReplyBox('Modes:<br />' +
-			                  '- First: the first correct responder ains 5 points.<br />' +
+			                  '- First: the first correct responder gains 5 points.<br />' +
 			                  '- Timer: each correct responder gains up to 5 points based on how quickly they answer.<br />' +
 			                  '- Number: each correct responder gains up to 5 points based on how many participants are correct<br /><br />' +
 			                  'Categories:<br />' +
@@ -947,14 +947,14 @@ var commands = {
 		case 'icommands':
 			this.sendReplyBox('Informational commands:<br />' +
 			                  '- /trivia status - View information about any ongoing trivia game.<br />' +
-			                  '- /trivia players - View the list of the players in the current trivia game<.br />' +
-			                  '- /trivia rank OR rank [username] - View the rank of the specified user. If none is given, view your own.' +
+			                  '- /trivia players - View the list of the players in the current trivia game.<br />' +
+			                  '- /trivia rank OR rank [username] - View the rank of the specified user. If none is given, view your own.<br />' +
 					  '- /trivia ladder - View information about up to 15 of the users with the greatest leaderboard scores.');
 			break;
 		default:
 			this.sendReplyBox('Help topics:<br />' +
 			                  '- /trivia help ginfo - View trivia game modes, categories, and game lengths.<br />' +
-			                  '- /trivia help gcommands - View commands used to play trivia games./<br />' +
+			                  '- /trivia help gcommands - View commands used to play trivia games.<br />' +
 			                  '- /trivia help qcommands - View commands pertaining to the question database.<br />' +
 			                  '- /trivia help icommands - View informational commands');
 			break;
