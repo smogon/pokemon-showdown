@@ -588,6 +588,9 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 100,
 		recoil: [1, 2],
+		onModifyMove: function (move) {
+			move.type = '???';
+		},
 		self: false
 	},
 	synthesis: {
