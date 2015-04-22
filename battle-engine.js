@@ -2043,7 +2043,7 @@ Battle = (function () {
 			this.debug(eventid + ' handler suppressed by Gastro Acid, Klutz or Magic Room');
 			return relayVar;
 		}
-		if (target.ignore && target.ignore[effect.effectType + 'Target']) {
+		if (status.effectType === 'Weather' && eventid !== 'TryWeather' && !this.runEvent('TryWeather', target)) {
 			this.debug(eventid + ' handler suppressed by Air Lock');
 			return relayVar;
 		}
