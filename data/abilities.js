@@ -931,7 +931,7 @@ exports.BattleAbilities = {
 	"galewings": {
 		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
 		onModifyPriority: function (priority, pokemon, target, move) {
-			if (move && move.type === 'Flying') return priority + 1;
+			if (move && move.type === 'Flying' && !pokemon.volatiles['fly']) return priority + 1;
 		},
 		id: "galewings",
 		name: "Gale Wings",
