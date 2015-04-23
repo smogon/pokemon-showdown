@@ -586,7 +586,7 @@ Validator = (function () {
 		var sourcesBefore = 0;
 		var noPastGen = !!format.requirePentagon;
 		// since Gen 3, Pokemon cannot be traded to past generations
-		var noFutureGen = tools.gen >= 3 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
+		var noFutureGen = tools.gen >= 2 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
 
 		do {
 			alreadyChecked[template.speciesid] = true;
