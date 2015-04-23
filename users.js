@@ -1139,7 +1139,7 @@ User = (function () {
 		}
 		for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
 			var room = Rooms.global.chatRooms[i];
-			if (!room.isPrivate && room.auth && userid in room.auth && Config.groups.bySymbol[room.auth[this.userid]].chatRoomRank > 1) {
+			if (!room.isPrivate && room.auth && userid in room.auth && Config.groups.bySymbol[room.auth[userid]].chatRoomRank > 1) {
 				removed.push(room.auth[userid] + room.id);
 				room.auth[userid] = Config.groups.chatRoomByRank[1];
 			}
