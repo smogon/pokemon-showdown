@@ -26,7 +26,7 @@ You can use your own computer as a server, but for other people to connect to yo
 Installing
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires [node.js][5], v0.10.2 and up. Install `node.js` if you don't have it yet; the latest stable version is a good choice to install.
+Pokémon Showdown requires you to have [io.js][5] installed, any version. (Alternatively, you can install [node.js][6] version 0.10.2 or later.)
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone" button in the bottom of the right sidebar, or if you're really lazy, there's a "ZIP" download button. I recommend the Clone method - it's more time-consuming to set up, but much easier to update.
 
@@ -62,10 +62,11 @@ Yes, you can test even if you are behind a NAT without port forwarding: `http://
 
 You will be redirected to `http://SERVER.psim.us`. The reason your server is visited through `psim.us` is to make it more difficult for servers to see a user's password in any form, by handling logins globally. You can embed this in an `iframe` in your website if the URL is a big deal with you.
 
-If you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][6]. It's not recommended for beginners, though.
+If you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][7]. It's not recommended for beginners, though.
 
-  [5]: http://nodejs.org/
-  [6]: https://github.com/Zarel/Pokemon-Showdown-Client
+  [5]: https://iojs.org/
+  [6]: http://nodejs.org/
+  [7]: https://github.com/Zarel/Pokemon-Showdown-Client
 
 
 Setting up an Administrator account
@@ -107,19 +108,19 @@ As for older browsers (Firefox 3.6), I won't go out of my way to support them, b
 Community
 ------------------------------------------------------------------------
 
-The Pokémon Showdown development IRC channel is `#showdown` at `irc.synirc.net`.
+PS has a built-in chat service. Join our main server to talk to us!
 
-You can also visit the [Pokémon Showdown forums][7] for discussion and help.
+You can also visit the [Pokémon Showdown forums][8] for discussion and help.
 
-  [7]: http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
+  [8]: http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
 
 
 License
 ------------------------------------------------------------------------
 
-Pokémon Showdown's server is distributed under the terms of the [MIT License][8].
+Pokémon Showdown's server is distributed under the terms of the [MIT License][9].
 
-  [8]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
+  [9]: https://github.com/Zarel/Pokemon-Showdown/blob/master/LICENSE
 
 
 Credits
