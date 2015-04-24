@@ -694,6 +694,10 @@ var commands = exports.commands = {
 			}
 		}
 
+		if (toId(target) in Rooms.aliases) {
+			connection.send(">" + toId(target) + "\n|deinit");
+		}
+
 		var joinResult = user.joinRoom(targetRoom, connection);
 		if (!joinResult) {
 			if (joinResult === null) {
