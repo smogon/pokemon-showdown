@@ -350,7 +350,7 @@ exports.BattleStatuses = {
 	stall: {
 		// Protect, Detect, Endure counter
 		duration: 2,
-		counterMax: 256,
+		counterMax: 6,
 		onStart: function () {
 			this.effectData.counter = 3;
 		},
