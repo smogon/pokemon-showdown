@@ -1456,11 +1456,14 @@ exports.Formats = [
 			if (name === 'galbia') {
 				this.add('c|%galbia|prepare for my beautiful display of pure italian skill');
 			}
+			if (name === 'hugendugen') {
+				this.add('c|%Hugendugen|4-1-0 let\'s go for it');
+			}
 			if (name === 'jellicent') {
 				this.add('c|%Jellicent|~(^.^)~');
 			}
-			if (name === 'hugendugen') {
-				this.add("c|%Hugendugen|4-1-0 let's go for it");
+			if (name === 'kayo') {
+				this.add('c|%Kayo|The One and Only Obese Phantom Enthusiast');
 			}
 			if (name === 'ljdarkrai') {
 				this.add('c|%LJDarkrai|Azideias');
@@ -2017,6 +2020,9 @@ exports.Formats = [
 			}
 			if (name === 'jellicent') {
 				this.add('c|%Jellicent|X_X');
+			}
+			if (name === 'kayo') {
+				this.add('c|%Kayo|Fat ShOoOoOoSty!');
 			}
 			if (name === 'ljdarkrai') {
 				this.add('c|%LJDarkrai|:<');
@@ -3535,6 +3541,28 @@ exports.Formats = [
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Teeter Dance", target);
+				};
+			}
+			if (move.id === 'vinewhip' && name === 'kayo') {
+				move.name = 'Beard of Zeus Bomb';
+				move.type = 'Steel';
+				move.basePower = 90;
+				move.secondaries = [{
+					chance:50,
+					self:{boosts:{atk:1, spd:1}},
+					onHit: function (target, source) {
+						if (target.gender === 'F') {
+							target.addVolatile('attract');
+						} else if (target.gender === 'M') {
+							target.addVolatile('confusion');
+						} else {
+							target.trySetStatus('brn');
+						}
+					}
+				}];
+				move.onTryHit = function (target, source, move) {
+					this.attrLastMove('[still]');
+					this.add('-anim', source, "Leaf Storm", target);
 				};
 			}
 			if (move.id === 'blazekick' && name === 'ljdarkrai') {
