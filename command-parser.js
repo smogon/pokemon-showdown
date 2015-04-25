@@ -7,9 +7,9 @@
  *
  * Individual commands are put in:
  *   commands.js - "core" commands that shouldn't be modified
- *   config/commands.js - other commands that can be safely modified
+ *   chat-plugins/ - other commands that can be safely modified
  *
- * The command API is (mostly) documented in config/commands.js
+ * The command API is (mostly) documented in chat-plugins/COMMANDS.md
  *
  * @license MIT license
  */
@@ -37,11 +37,6 @@ var fs = require('fs');
  *********************************************************/
 
 var commands = exports.commands = require('./commands.js').commands;
-
-var customCommands = require('./config/commands.js');
-if (customCommands && customCommands.commands) {
-	Object.merge(commands, customCommands.commands);
-}
 
 // Install plug-in commands
 
