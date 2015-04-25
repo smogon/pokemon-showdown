@@ -573,6 +573,36 @@ module.exports = (function () {
 		return banlistTable;
 	};
 
+	Tools.prototype.getLearnset = function (pokemon) {
+		// This combines the learnsets of a Pokemon with it's baseform and prevos
+		var template;
+		if (typeof pokemon === 'object') {
+			template = pokemon;
+		} else {
+			template = this.getTemplate(pokemon);
+		}
+		if (!template.learnset) template = this.getTemplate(template.baseSpecies);
+		if (!template.learnset) return false;
+
+		var lsetData = template.learnset;
+		if (template.baseSpecies !== template.species) {
+			// This is for Pokemon that have different learnsets for different forms
+			template = this.getTemplate(template.baseSpecies);
+			for (var move in template.learnset) {
+				if (!lsetData[move]) lsetData[move] = template.learnset[move];
+			}
+		}
+		while (template.prevo) {
+			// Add moves carried over from preevos
+			template = this.getTemplate(template.prevo);
+			for (var move in template.learnset) {
+				if (!lsetData[move]) lsetData[move] = template.learnset[move];
+			}
+		}
+
+		return lsetData;
+	};
+
 	Tools.prototype.levenshtein = function (s, t, l) { // s = string 1, t = string 2, l = limit
 		// Original levenshtein distance function by James Westgate, turned out to be the fastest
 		var d = []; // 2d matrix
