@@ -871,17 +871,6 @@ BattlePokemon = (function () {
 		}
 		return false;
 	};
-	BattlePokemon.prototype.getValidMoves = function (lockedMove) {
-		var pMoves = this.getMoves(lockedMove);
-		var moves = [];
-		for (var i = 0; i < pMoves.length; i++) {
-			if (!pMoves[i].disabled) {
-				moves.push(pMoves[i].id);
-			}
-		}
-		if (!moves.length) return ['struggle'];
-		return moves;
-	};
 	BattlePokemon.prototype.disableMove = function (moveid, isHidden, sourceEffect) {
 		if (!sourceEffect && this.battle.event) {
 			sourceEffect = this.battle.effect;
