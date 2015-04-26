@@ -598,17 +598,15 @@ BattlePokemon = (function () {
 		}
 		if (hasValidMove) return moves;
 
-		return [{
-			move: 'Struggle',
-			id: 'struggle'
-		}];
+		return [];
 	};
 	BattlePokemon.prototype.getRequestData = function () {
 		var lockedMove = this.getLockedMove();
 
 		// Information should be restricted for the last active Pokémon
 		var isLastActive = this.isLastActive();
-		var data = {moves: this.getMoves(lockedMove, isLastActive)};
+		var moves = this.getMoves(lockedMove, isLastActive);
+		var data = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle'}]};
 
 		if (isLastActive) {
 			if (this.maybeDisabled) {
