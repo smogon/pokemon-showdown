@@ -1131,11 +1131,8 @@ var commands = exports.commands = {
 		var searchMethods = {'getType':1, 'getMove':1, 'getTemplate':1};
 		var sourceMethods = {'getType':1, 'getMove':1};
 		var targetMethods = {'getType':1, 'getTemplate':1};
-		var source;
-		var defender;
-		var foundData;
-		var atkName;
-		var defName;
+		var source, defender, foundData, atkName, defName;
+
 		for (var i = 0; i < 2; ++i) {
 			var method;
 			for (method in searchMethods) {
@@ -1167,10 +1164,9 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 
 		var factor = 0;
-		if (source.category === "Status" && (source.ignoreImmunity === true || source.ignoreImmunity[source.type])) factor = 1;
-		if (Tools.getImmunity(source.type || source, defender) || source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[source.type])) {
+		if (Tools.getImmunity(source, defender) || source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[source.type])) {
 			var totalTypeMod = 0;
-			if (source.effectType !== 'Move' || source.basePower || source.basePowerCallback) {
+			if (source.effectType !== 'Move' || source.category === 'Status' || source.basePower || source.basePowerCallback) {
 				for (var i = 0; i < defender.types.length; i++) {
 					var baseMod = Tools.getEffectiveness(source, defender.types[i]);
 					var moveMod = source.onEffectiveness && source.onEffectiveness.call(Tools, baseMod, defender.types[i], source);
