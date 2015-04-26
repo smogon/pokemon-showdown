@@ -165,8 +165,8 @@ BattlePokemon = (function () {
 		if (typeof set === 'string') set = {name: set};
 
 		// "pre-bound" functions for nicer syntax (avoids repeated use of `bind`)
-		this.getHealth = this.getHealth || BattlePokemon.getHealth.bind(this);
-		this.getDetails = this.getDetails || BattlePokemon.getDetails.bind(this);
+		this.getHealth = (this.getHealth || BattlePokemon.getHealth).bind(this);
+		this.getDetails = (this.getDetails || BattlePokemon.getDetails).bind(this);
 
 		this.set = set;
 
