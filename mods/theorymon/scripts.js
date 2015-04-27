@@ -26,5 +26,6 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'pidgeot').learnset.focusblast = ['6T'];
 		this.modData('Pokedex', 'granbull').abilities['1'] = 'Fur Coat';
 		this.modData('Pokedex', 'aggronmega').types = ['Steel', 'Dragon'];
+		this.modDate('Learnsets', 'floatzel').learnset.bellydrum = ['6T'];
 	}
 };
