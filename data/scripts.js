@@ -3167,6 +3167,12 @@ exports.BattleScripts = {
 				evs: {hp:4, atk:252, spe:252}, nature: 'Jolly'
 			},
 			// Mods.
+			'@Acedia': {
+				species: 'Slakoth', ability: 'Magic Bounce', item: 'Quick Claw', gender: 'F',
+				moves: ['metronome', 'sketch', 'assist', 'swagger', 'foulplay'],
+				baseSignatureMove: 'worryseed', signatureMove: "Procrastination",
+				evs: {hp:252, atk:252, def:4}, nature: 'Serious'
+			},
 			'@AM': {
 				species: 'Tyranitar', ability: 'Adaptability', item: (variant === 1 ? 'Lum Berry' : 'Choice Scarf'), gender: 'M',
 				moves: (variant === 1 ? ['earthquake', 'diamondstorm', 'swordsdance', 'meanlook'] : ['knockoff', 'diamondstorm', 'earthquake']),
@@ -3190,6 +3196,12 @@ exports.BattleScripts = {
 				moves: ['scald', 'recover', 'calmmind', 'searingshot', 'encore'],
 				baseSignatureMove: 'futuresight', signatureMove: "Obscure Pun",
 				evs: {hp:252, spa:252, def:4}, nature: 'Modest'
+			},
+			'@Audiosurfer': {
+				species: 'Audino', ability: 'Prankster', item: 'Audinite', gender: 'M',
+				moves: ['boomburst', 'slackoff', 'glare'],
+				baseSignatureMove: 'detect', signatureMove: "Audioshield",
+				evs: {hp:252, spa:252, spe:4}, nature: 'Modest'
 			},
 			'@barton': {
 				species: 'Piloswine', ability: 'Parental Bond', item: 'Eviolite', gender: 'M',
@@ -3545,12 +3557,6 @@ exports.BattleScripts = {
 				evs: {atk:4, spa:252, spe:252}, nature: 'Hasty'
 			},
 			// Drivers.
-			'%Acedia': {
-				species: 'Slakoth', ability: 'Magic Bounce', item: 'Quick Claw', gender: 'F',
-				moves: ['metronome', 'sketch', 'assist', 'swagger', 'foulplay'],
-				baseSignatureMove: 'worryseed', signatureMove: "Procrastination",
-				evs: {hp:252, atk:252, def:4}, nature: 'Serious'
-			},
 			'%Aelita': {
 				species: 'Porygon-Z', ability: 'Protean', item: 'Life Orb', gender: 'F',
 				moves: ['boomburst', 'quiverdance', 'chatter', 'blizzard', 'moonblast'],
@@ -3584,12 +3590,6 @@ exports.BattleScripts = {
 				moves: ['earthquake', 'recover', 'icepunch'],
 				baseSignatureMove: 'toxic', signatureMove: "Amphibian Toxin",
 				evs: {atk:252, spd:252, spe:4}, nature: 'Adamant'
-			},
-			'%Audiosurfer': {
-				species: 'Audino', ability: 'Prankster', item: 'Audinite', gender: 'M',
-				moves: ['boomburst', 'slackoff', 'glare'],
-				baseSignatureMove: 'detect', signatureMove: "Audioshield",
-				evs: {hp:252, spa:252, spe:4}, nature: 'Modest'
 			},
 			'%Birkal': {
 				species: 'Rotom-Fan', ability: 'Magic Guard', item: 'Choice Scarf', gender: 'M',
