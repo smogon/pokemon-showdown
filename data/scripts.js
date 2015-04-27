@@ -836,9 +836,6 @@ exports.BattleScripts = {
 				}
 			}
 
-			// PS overrides your move if you have Struggle in the first slot
-			if (m[0] === 'struggle') m.push(m.shift());
-
 			// Random EVs
 			var evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 			var s = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
