@@ -598,17 +598,15 @@ BattlePokemon = (function () {
 		}
 		if (hasValidMove) return moves;
 
-		return [{
-			move: 'Struggle',
-			id: 'struggle'
-		}];
+		return [];
 	};
 	BattlePokemon.prototype.getRequestData = function () {
 		var lockedMove = this.getLockedMove();
 
 		// Information should be restricted for the last active Pokémon
 		var isLastActive = this.isLastActive();
-		var data = {moves: this.getMoves(lockedMove, isLastActive)};
+		var moves = this.getMoves(lockedMove, isLastActive);
+		var data = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle'}]};
 
 		if (isLastActive) {
 			if (this.maybeDisabled) {
@@ -872,17 +870,6 @@ BattlePokemon = (function () {
 			}
 		}
 		return false;
-	};
-	BattlePokemon.prototype.getValidMoves = function (lockedMove) {
-		var pMoves = this.getMoves(lockedMove);
-		var moves = [];
-		for (var i = 0; i < pMoves.length; i++) {
-			if (!pMoves[i].disabled) {
-				moves.push(pMoves[i].id);
-			}
-		}
-		if (!moves.length) return ['struggle'];
-		return moves;
 	};
 	BattlePokemon.prototype.disableMove = function (moveid, isHidden, sourceEffect) {
 		if (!sourceEffect && this.battle.event) {
@@ -4061,13 +4048,13 @@ Battle = (function () {
 				 */
 
 				var moves = pokemon.getMoves();
-				if (!moves.length || moves[0].id === 'struggle') {
-					// override decision and use Struggle if there are no other valid moves
+				if (!moves.length) {
+					// Override decision and use Struggle if there are no enabled moves with PP
 					if (this.gen <= 4) side.send('-activate', pokemon, 'move: Struggle');
 					moveid = 'struggle';
 				} else {
-					// at least a move is valid (other than Struggle)
-					// check if the chosen one is
+					// At least a move is valid. Check if the chosen one is.
+					// This may include Struggle in Hackmons.
 					var isEnabled = false;
 					for (var j = 0; j < moves.length; j++) {
 						if (moves[j].id !== moveid) continue;
