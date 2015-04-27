@@ -1181,6 +1181,171 @@ var commands = exports.commands = {
 	effectivenesshelp: ["/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.",
 		"!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon."],
 
+	cover: 'coverage',
+	coverage: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (!target) return this.parse("/help coverage");
+
+		var targets = target.split(/[,+]/);
+		var sources = [];
+
+		var dispTable = false;
+		var bestCoverage = {};
+		for (var type in Tools.data.TypeChart) {
+			// This command uses -5 to designate immunity
+			bestCoverage[type] = -5;
+		}
+
+		for (var i = 0; i < targets.length; i++) {
+			var move = targets[i].trim().capitalize();
+			if (move === 'Table' || move === 'All') {
+				if (this.broadcasting) return this.sendReplyBox("The full table cannot be broadcast.");
+				dispTable = true;
+				continue;
+			}
+
+			var eff;
+			if (move in Tools.data.TypeChart) {
+				sources.push(move);
+				for (var type in bestCoverage) {
+					if (!Tools.getImmunity(move, type) && !move.ignoreImmunity) continue;
+					eff = Tools.getEffectiveness(move, type);
+					if (eff > bestCoverage[type]) bestCoverage[type] = eff;
+				}
+				continue;
+			}
+			move = Tools.getMove(move);
+			if (move.exists) {
+				sources.push(move);
+				for (var type in bestCoverage) {
+					if (!Tools.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
+					var baseMod = Tools.getEffectiveness(move, type);
+					var moveMod = move.onEffectiveness && move.onEffectiveness.call(Tools, baseMod, type, move);
+					eff = typeof moveMod === 'number' ? moveMod : baseMod;
+					if (eff > bestCoverage[type]) bestCoverage[type] = eff;
+				}
+				continue;
+			}
+
+			return this.sendReply("No type or move '" + targets[i] + "' found.");
+		}
+		if (sources.length > 4) return this.sendReply("Specify a maximum of 4 moves or types.");
+
+		// converts to fractional effectiveness, 0 for immune
+		for (var type in bestCoverage) {
+			if (bestCoverage[type] === -5) {
+				bestCoverage[type] = 0;
+				continue;
+			}
+			bestCoverage[type] = Math.pow(2, bestCoverage[type]);
+		}
+
+		if (!dispTable) {
+			var buffer = [];
+			var superEff = [];
+			var neutral = [];
+			var resists = [];
+			var immune = [];
+
+			for (var type in bestCoverage) {
+				switch (bestCoverage[type]) {
+					case 0:
+						immune.push(type);
+						break;
+					case 0.25:
+					case 0.5:
+						resists.push(type);
+						break;
+					case 1:
+						neutral.push(type);
+						break;
+					case 2:
+					case 4:
+						superEff.push(type);
+						break;
+					default:
+						throw new Error("/coverage effectiveness of " + bestCoverage[type] + " from parameters: " + target);
+				}
+			}
+			buffer.push('Coverage for ' + sources.join(' + ') + ':');
+			buffer.push('<b><font color=#559955>Super Effective</font></b>: ' + (superEff.join(', ') || '<font color=#999999>None</font>'));
+			buffer.push('<span class="message-effect-resist">Neutral</span>: ' + (neutral.join(', ') || '<font color=#999999>None</font>'));
+			buffer.push('<span class="message-effect-weak">Resists</span>: ' + (resists.join(', ') || '<font color=#999999>None</font>'));
+			buffer.push('<span class="message-effect-immune">Immunities</span>: ' + (immune.join(', ') || '<font color=#999999>None</font>'));
+			return this.sendReplyBox(buffer.join('<br>'));
+		} else {
+			var buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
+			var icon = {};
+			for (var type in Tools.data.TypeChart) {
+				icon[type] = '<img src="http://play.pokemonshowdown.com/sprites/types/' + type + '.png" width="32" height="14">';
+				// row of icons at top
+				buffer += '<th>' + icon[type] + '</th>';
+			}
+			buffer += '</tr>';
+			for (var type1 in Tools.data.TypeChart) {
+				// assembles the rest of the rows
+				buffer += '<tr><th>' + icon[type1] + '</th>';
+				for (var type2 in Tools.data.TypeChart) {
+					var typing;
+					var cell = '<th ';
+					var bestEff = -5;
+					if (type1 === type2) {
+						// when types are the same it's considered pure type
+						typing = type1;
+						bestEff = bestCoverage[type1];
+					} else {
+						typing = type1 + "/" + type2;
+						for (var i = 0; i < sources.length; i++) {
+							var move = sources[i];
+
+							var curEff = 0;
+							if ((!Tools.getImmunity((move.type || move), type1) || !Tools.getImmunity((move.type || move), type2)) && !move.ignoreImmunity) continue;
+							var baseMod = Tools.getEffectiveness(move, type1);
+							var moveMod = move.onEffectiveness && move.onEffectiveness.call(Tools, baseMod, type1, move);
+							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
+							baseMod = Tools.getEffectiveness(move, type2);
+							moveMod = move.onEffectiveness && move.onEffectiveness.call(Tools, baseMod, type2, move);
+							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
+
+							if (curEff > bestEff) bestEff = curEff;
+						}
+						if (bestEff === -5) {
+							bestEff = 0;
+						} else {
+							bestEff = Math.pow(2, bestEff);
+						}
+					}
+					switch (bestEff) {
+						case 0:
+							cell += 'bgcolor=#666666 title="' + typing + '"><font color=#000000>' + bestEff + '</font>';
+							break;
+						case 0.25:
+						case 0.5:
+							cell += 'bgcolor=#AA5544 title="' + typing + '"><font color=#660000>' + bestEff + '</font>';
+							break;
+						case 1:
+							cell += 'bgcolor=#6688AA title="' + typing + '"><font color=#000066>' + bestEff + '</font>';
+							break;
+						case 2:
+						case 4:
+							cell += 'bgcolor=#559955 title="' + typing + '"><font color=#003300>' + bestEff + '</font>';
+							break;
+						default:
+							throw new Error("/coverage effectiveness of " + bestEff + " from parameters: " + target);
+					}
+					cell += '</th>';
+					buffer += cell;
+				}
+			}
+			buffer += '</table></div>';
+
+			this.sendReplyBox('Coverage for ' + sources.join(' + ') + ':<br>' + buffer);
+		}
+	},
+	coveragehelp: ["/coverage [move 1], [move 2] ... - Provides the best effectiveness match-up against all defending types for given moves or attacking types",
+		"!coverage [move 1], [move 2] ... - Shows this information to everyone.",
+		"Adding the parameter 'all' or 'table' will display the information with a table of all type combinations."],
+
 	/*********************************************************
 	 * Informational commands
 	 *********************************************************/
