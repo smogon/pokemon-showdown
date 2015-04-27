@@ -196,6 +196,8 @@ var commands = exports.commands = {
 
 		if (showDetails) {
 			var details;
+			var isSnatch = false;
+			var isMirrorMove = false;
 			if (newTargets[0].searchType === 'pokemon') {
 				var pokemon = Tools.getTemplate(newTargets[0].name);
 				var weighthit = 20;
@@ -243,6 +245,10 @@ var commands = exports.commands = {
 				if (move.flags['punch']) details["<font color=black>&#10003; Punch</font>"] = "";
 				if (move.flags['powder']) details["<font color=black>&#10003; Powder</font>"] = "";
 				if (move.flags['reflectable']) details["<font color=black>&#10003; Bounceable</font>"] = "";
+				if (move.flags['gravity']) details["<font color=black>&#10007; Suppressed by Gravity</font>"] = "";
+
+				if (move.id === 'snatch') isSnatch = true;
+				if (move.id === 'mirrormove') isMirrorMove = true;
 
 				details["Target"] = {
 					'normal': "One Adjacent Pokemon",
@@ -282,6 +288,9 @@ var commands = exports.commands = {
 			buffer += '|raw|<font size="1">' + Object.keys(details).map(function (detail) {
 				return '<font color=#585858>' + detail + (details[detail] !== '' ? ':</font> ' + details[detail] : '</font>');
 			}).join("&nbsp;|&ThickSpace;") + '</font>';
+
+			if (isSnatch) buffer += '&nbsp;|&ThickSpace;<a href="http://pokemonshowdown.com/dex/moves/snatch"><font size="1">Snatchable Moves</font></a>';
+			if (isMirrorMove) buffer += '&nbsp;|&ThickSpace;<a href="http://pokemonshowdown.com/dex/moves/mirrormove"><font size="1">Mirrorable Moves</font></a>';
 		}
 		this.sendReply(buffer);
 	},
