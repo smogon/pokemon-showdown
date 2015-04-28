@@ -1120,9 +1120,9 @@ var commands = exports.commands = {
 
 		var buffer = [];
 		buffer.push(pokemon.exists ? "" + target + ' (ignoring abilities):' : '' + target + ':');
-		buffer.push('<span class=\"message-effect-weak\">Weaknesses</span>: ' + (weaknesses.join(', ') || 'None'));
-		buffer.push('<span class=\"message-effect-resist\">Resistances</span>: ' + (resistances.join(', ') || 'None'));
-		buffer.push('<span class=\"message-effect-immune\">Immunities</span>: ' + (immunities.join(', ') || 'None'));
+		buffer.push('<span class="message-effect-weak">Weaknesses</span>: ' + (weaknesses.join(', ') || '<font color=#999999>None</font>'));
+		buffer.push('<span class="message-effect-resist">Resistances</span>: ' + (resistances.join(', ') || '<font color=#999999>None</font>'));
+		buffer.push('<span class="message-effect-immune">Immunities</span>: ' + (immunities.join(', ') || '<font color=#999999>None</font>'));
 		this.sendReplyBox(buffer.join('<br>'));
 	},
 	weaknesshelp: ["/weakness [pokemon] - Provides a Pokemon's resistances, weaknesses, and immunities, ignoring abilities.",
