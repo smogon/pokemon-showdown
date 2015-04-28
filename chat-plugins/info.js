@@ -1225,6 +1225,7 @@ var commands = exports.commands = {
 			}
 			move = Tools.getMove(move);
 			if (move.exists) {
+				if (!move.basePower && !move.basePowerCallback) continue;
 				sources.push(move);
 				for (var type in bestCoverage) {
 					if (!Tools.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
@@ -1238,6 +1239,7 @@ var commands = exports.commands = {
 
 			return this.sendReply("No type or move '" + targets[i] + "' found.");
 		}
+		if (sources.length === 0) return this.sendReply("No moves using a type table for determining damage were specified.");
 		if (sources.length > 4) return this.sendReply("Specify a maximum of 4 moves or types.");
 
 		// converts to fractional effectiveness, 0 for immune
