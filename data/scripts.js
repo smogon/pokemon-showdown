@@ -1021,10 +1021,15 @@ exports.BattleScripts = {
 
 		return counter;
 	},
-	randomSet: function (template, slot, noMega) {
+	randomSet: function (template, slot, teamDetails) {
 		if (slot === undefined) slot = 1;
 		var baseTemplate = (template = this.getTemplate(template));
 		var name = template.name;
+
+		// Legacy / backwards compatability for Seasonals, etc
+		if (typeof teamDetails !== 'object') {
+			teamDetails = {noMega: !!teamDetails};
+		}
 
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
@@ -1045,7 +1050,7 @@ exports.BattleScripts = {
 		}
 
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!noMega && this.hasMegaEvo(template)) {
+		if (!teamDetails.noMega && this.hasMegaEvo(template)) {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[this.random(template.otherFormes.length)]);
 		}
@@ -1356,7 +1361,7 @@ exports.BattleScripts = {
 
 				// Status:
 				case 'raindance': case 'sunnyday':
-					if ((hasMove['rest'] && hasMove['sleeptalk']) || counter.Physical + counter.Special < 2) rejected = true;
+					if ((hasMove['rest'] && hasMove['sleeptalk']) || counter.Physical + counter.Special < 2 || (teamDetails.weather && teamDetails.weather !== moveid)) rejected = true;
 					break;
 				case 'rest':
 					if (!hasMove['sleeptalk'] && movePool.indexOf('sleeptalk') > -1) rejected = true;
@@ -1406,6 +1411,15 @@ exports.BattleScripts = {
 				// Hidden Power isn't good enough for most cases with Special setup
 				if (counter.setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] <= 2 && (!hasMove['shadowball'] || move.type !== 'Fighting') && (!hasType['Electric'] || move.type !== 'Ice') && template.species !== 'Lilligant') {
 					rejected = true;
+				}
+
+				// Team is sun/rain focused
+				if (teamDetails.weather === 'raindance' && move.type === 'Fire' && move.category !== 'Status') {
+					if (!hasType['Fire']) rejected = true;
+					if (template.types.length > 1 && this.random(3) > 0) rejected = true;
+				} else if (teamDetails.weather === 'sunnyday' && move.type === 'Water' && move.category !== 'Status') {
+					if (!hasType['Water']) rejected = true;
+					if (template.types.length > 1 && this.random(3) > 0) rejected = true;
 				}
 
 				// Remove rejected moves from the move list
@@ -1544,7 +1558,7 @@ exports.BattleScripts = {
 			} else if (ability in ateAbilities) {
 				rejectAbility = !counter['ate'];
 			} else if (ability === 'Chlorophyll') {
-				rejectAbility = !hasMove['sunnyday'];
+				rejectAbility = !hasMove['sunnyday'] && (!teamDetails.weather || teamDetails.weather !== 'sunnyday' || this.random(2) > 0);
 			} else if (ability === 'Compound Eyes' || ability === 'No Guard') {
 				rejectAbility = !counter['inaccurate'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
@@ -1569,12 +1583,14 @@ exports.BattleScripts = {
 				rejectAbility = !counter['sheerforce'];
 			} else if (ability === 'Simple') {
 				rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
+			} else if (ability === 'Snow Warning') {
+				rejectAbility = teamDetails.weather && teamDetails.weather !== 'hail';
 			} else if (ability === 'Strong Jaw') {
 				rejectAbility = !counter['bite'];
 			} else if (ability === 'Sturdy') {
 				rejectAbility = !!counter['recoil'] && !counter['recovery'];
 			} else if (ability === 'Swift Swim') {
-				rejectAbility = !hasMove['raindance'];
+				rejectAbility = !hasMove['raindance'] && (!teamDetails.weather || teamDetails.weather !== 'raindance' || this.random(2) > 0);
 			} else if (ability === 'Unburden') {
 				rejectAbility = template.baseStats.spe > 120;
 			}
@@ -1900,7 +1916,10 @@ exports.BattleScripts = {
 		var baseFormes = {};
 		var uberCount = 0;
 		var puCount = 0;
-		var megaCount = 0;
+		var teamDetails = {
+			weather: null,
+			megaCount: 0
+		};
 
 		while (pokemonPool.length && pokemonLeft < 6) {
 			var template = this.getTemplate(this.sampleNoReplace(pokemonPool));
@@ -1952,12 +1971,21 @@ exports.BattleScripts = {
 				if (this.random(2) >= 1) continue;
 				break;
 			case 'Castform':
-				if (this.random(2) >= 1) continue;
+				if (template.species === 'Castform-Sunny' && teamDetails.weather && teamDetails.weather !== 'sunnyday') continue;
+				else if (template.species === 'Castform-Rainy' && teamDetails.weather && teamDetails.weather !== 'raindance') continue;
+				else if (this.random(2) >= 1) continue;
 				break;
 			case 'Pikachu':
 				// Cosplay Pikachu formes have 20% the normal rate (1/30 the normal rate each)
 				if (template.species !== 'Pikachu' && this.random(30) >= 1) continue;
 			}
+
+			// Avoid pure Fire in rain or pure Water in sun
+			if (template.types.length === 1 && template.types[0] === 'Fire' && teamDetails.weather === 'raindance') continue;
+			if (template.types.length === 1 && template.types[0] === 'Water' && teamDetails.weather === 'sunnyday') continue;
+			// Special cases for Pokemon that don't work well in a certain weather
+			if (teamDetails.weather === 'raindance' && template.species in {'Lilligant': 1, 'Pyroar': 1}) continue;
+			if (template.species === 'Shedinja' && (teamDetails.weather === 'sandstorm' || teamDetails.weather === 'hail')) continue;
 
 			// Limit 2 of any type
 			var types = template.types;
@@ -1984,7 +2012,7 @@ exports.BattleScripts = {
 				}
 			}
 
-			var set = this.randomSet(template, pokemon.length, megaCount);
+			var set = this.randomSet(template, pokemon.length, teamDetails);
 
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
@@ -2000,7 +2028,105 @@ exports.BattleScripts = {
 			// Limit the number of Megas to one
 			var forme = template.otherFormes && this.getTemplate(template.otherFormes[0]);
 			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
-			if (isMegaSet && megaCount > 0) continue;
+			if (isMegaSet && teamDetails.megaCount > 0) continue;
+
+			// Set weather if applicable
+			if (set.moves.indexOf('sunnyday') > -1 || (set.ability === 'Drought' && set.item !== 'Red Orb') || set.item === 'Charizardite Y') {
+				if (teamDetails.weather && teamDetails.weather !== 'sunnyday') continue;
+				// Remove pure Water-types and re-build all the other sets to accomodate the weather
+				if (!teamDetails.weather) {
+					var oldForme;
+					var oldItem;
+					teamDetails.weather = 'sunnyday';
+					for (var i = 0; i < pokemon.length; i++) {
+						var oldTemplate = this.getTemplate(pokemon[i].name);
+						if (pokemon[i].name === 'Meloetta' && pokemon[i].moves.indexOf('relicsong') > -1) {
+							// Special case for Meloetta-P
+							oldTemplate = this.getTemplate('meloettapirouette');
+						}
+						if (oldTemplate.types.length === 1 && oldTemplate.types[0] === 'Water') {
+							pokemon.splice(i, 1);
+							pokemonLeft--;
+							i--;
+							continue;
+						}
+						oldForme = oldTemplate.otherFormes && this.getTemplate(oldTemplate.otherFormes[0]);
+						oldItem = this.getItem(pokemon[i].item);
+						if (oldItem.megaStone) {
+							// This is our Mega
+							oldTemplate = this.getTemplate(oldItem.megaStone);
+						} else if (oldForme && oldForme.isMega && oldForme.requiredMove && set.moves.indexOf(toId(oldForme.requiredMove)) >= 0) {
+							oldTemplate = oldForme;
+						} else if (oldItem.id === 'blueorb') {
+							// Maintain Primal Kyogre to prevent conflicting weathers
+							oldTemplate = this.getTemplate('kyogreprimal');
+						}
+						pokemon[i] = this.randomSet(oldTemplate, i, teamDetails);
+					}
+				}
+			}
+			if (set.moves.indexOf('raindance') > -1 || (set.ability === 'Drizzle' && set.item !== 'Blue Orb')) {
+				if (teamDetails.weather && teamDetails.weather !== 'raindance') continue;
+				// Remove pure Fire-types and re-build all the other sets to accomodate the weather
+				if (!teamDetails.weather) {
+					var oldForme;
+					var oldItem;
+					teamDetails.weather = 'raindance';
+					for (var i = 0; i < pokemon.length; i++) {
+						var oldTemplate = this.getTemplate(pokemon[i].name);
+						if (pokemon[i].name === 'Meloetta' && pokemon[i].moves.indexOf('relicsong') > -1) {
+							// Special case for Meloetta-P
+							oldTemplate = this.getTemplate('meloettapirouette');
+						}
+						if ((oldTemplate.types.length === 1 && oldTemplate.types[0] === 'Fire') || (oldTemplate.species in {'Lilligant': 1, 'Pyroar': 1})) {
+							pokemon.splice(i, 1);
+							pokemonLeft--;
+							i--;
+							continue;
+						}
+						oldForme = oldTemplate.otherFormes && this.getTemplate(oldTemplate.otherFormes[0]);
+						oldItem = this.getItem(pokemon[i].item);
+						if (oldItem.megaStone) {
+							// This is our Mega
+							oldTemplate = this.getTemplate(oldItem.megaStone);
+						} else if (oldForme && oldForme.isMega && oldForme.requiredMove && set.moves.indexOf(toId(oldForme.requiredMove)) >= 0) {
+							oldTemplate = oldForme;
+						} else if (oldItem.id === 'redorb') {
+							// Maintain Primal Groudon to prevent conflicting weathers
+							oldTemplate = this.getTemplate('groudonprimal');
+						}
+						pokemon[i] = this.randomSet(oldTemplate, i, teamDetails);
+					}
+				}
+			}
+			if (set.moves.indexOf('sandstorm') > -1 || set.ability === 'Sand Stream') {
+				if (teamDetails.weather && teamDetails.weather !== 'sandstorm') continue;
+				// Remove Shedinjas from the team since we have sand
+				if (!teamDetails.weather) {
+					for (var i = 0; i < pokemon.length; i++) {
+						if (pokemon[i].name === 'Shedinja') {
+							pokemon.splice(i, 1);
+							pokemonLeft--;
+							break;
+						}
+					}
+				}
+				teamDetails.weather = 'sandstorm';
+			}
+			if (set.moves.indexOf('hail') > -1 || set.ability === 'Snow Warning' || set.item === 'Abomasite') {
+				if (teamDetails.weather && teamDetails.weather !== 'hail') continue;
+				// Remove Shedinjas from the team since we have hail
+				if (!teamDetails.weather) {
+					for (var i = 0; i < pokemon.length; i++) {
+						if (pokemon[i].name === 'Shedinja') {
+							pokemon.splice(i, 1);
+							pokemonLeft--;
+							break;
+						}
+					}
+				}
+				teamDetails.weather = 'hail';
+			}
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2026,7 +2152,7 @@ exports.BattleScripts = {
 			}
 
 			// Increment mega and base species counters
-			if (isMegaSet) megaCount++;
+			if (isMegaSet) teamDetails.megaCount++;
 			baseFormes[template.baseSpecies] = 1;
 		}
 		return pokemon;
