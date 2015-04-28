@@ -115,9 +115,10 @@ function findEndOfCategory(category, inSubmissions) {
 		} else if (curCategory > category) {
 			right = i - 1;
 		} else {
-			while (true) {
-				if (++i === questions.length || questions[i].category > category) return i;
+			while (++i < questions.length) {
+				if (questions[i].category !== category) break;
 			}
+			return i;
 		}
 	}
 
@@ -226,13 +227,15 @@ var Trivia = (function () {
 		}
 
 		if (!this.currentQuestions.length) {
-			this.room.addRaw('<div class="broadcast-blue"><strong>There are no questions' + (this.category === 'random' ? '' : ' in the ' + CATEGORIES[this.category] + ' category') + '!</strong><br />' +
-			                 'Questions must be added in the Question Workshop room before a game using this category can be started.</div>');
+			this.room.addRaw(
+				"<div class=\"broadcast-blue\"><strong>There are no questions" + (this.category === 'random' ? "" : " in the " + CATEGORIES[this.category] + " category") + "!</strong><br />" +
+				"Questions must be added in the Question Workshop room before a game using this category can be started.</div>"
+			);
 			delete trivia[this.room.id];
 			return false;
 		}
 
-		this.room.addRaw('<div class="broadcast-blue">Signups have ended and the game has begun!</div>');
+		this.room.addRaw("<div class=\"broadcast-blue\">Signups have ended and the game has begun!</div>");
 		this.askQuestion();
 	};
 
@@ -240,8 +243,10 @@ var Trivia = (function () {
 		var head = this.currentQuestions.pop();
 		this.currentAnswer = head.answers;
 		this.phase = 'question';
-		this.room.addRaw('<div class="broadcast-blue"><strong>Question: ' + head.question + '</strong><br />' +
-		                 'Category: ' + CATEGORIES[head.category] + '</div>');
+		this.room.addRaw(
+			"<div class=\"broadcast-blue\"><strong>Question: " + head.question + "</strong><br />" +
+			"Category: " + CATEGORIES[head.category] + "</div>"
+		);
 		this.room.update();
 
 		switch (this.mode) {
@@ -326,15 +331,17 @@ var Trivia = (function () {
 		if (isActive) {
 			if (this.inactivityCounter) this.inactivityCounter = 0;
 		} else if (++this.inactivityCounter === 7) {
-			this.room.addRaw('<div class="broadcast-blue">The game has forced itself to end due to inactivity.</div>');
+			this.room.addRaw("<div class=\"broadcast-blue\">The game has forced itself to end due to inactivity.</div>");
 			this.room.update();
 			return this.updateLeaderboard();
 		}
 
-		this.room.addRaw('<div class="broadcast-blue"><strong>The answering period has ended!</strong><br />' +
-				 'Correct: no one<br />' +
-				 'Answer' + (this.currentAnswer.length > 1 ? 's: ' : ': ') + this.currentAnswer.join(', ') + '<br />' +
-				 'Nobody gained any points.</div>');
+		this.room.addRaw(
+			"<div class=\"broadcast-blue\"><strong>The answering period has ended!</strong><br />" +
+			"Correct: no one<br />" +
+			"Answer" + (this.currentAnswer.length > 1 ? "s: " : ": ") + this.currentAnswer.join(", ") + "<br />" +
+			"Nobody gained any points.</div>"
+		);
 		this.room.update();
 		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
 	};
@@ -347,12 +354,12 @@ var Trivia = (function () {
 		scoreData.score += 5;
 		scoreData.correctAnswers++;
 
-		var buffer = '<div class="broadcast-blue"><strong>The answering period has ended!</strong><br />' +
-			     'Correct: ' + Tools.escapeHTML(user.name) + '<br />' +
-			     'Answer' + (this.currentAnswer.length > 1 ? 's: ' : ': ') + this.currentAnswer.join(', ') + '<br />';
+		var buffer = "<div class=\"broadcast-blue\"><strong>The answering period has ended!</strong><br />" +
+			"Correct: " + Tools.escapeHTML(user.name) + "<br />" +
+			"Answer" + (this.currentAnswer.length > 1 ? "s: " : ": ") + this.currentAnswer.join(", ") + "<br />";
 
 		if (scoreData.score >= this.scoreCap) {
-			buffer += 'They won the game with a final score of <strong>' + scoreData.score + '</strong>, and their leaderboard score has increased by <strong>' + this.prize + '</strong> points!</div>';
+			buffer += "They won the game with a final score of <strong>" + scoreData.score + "</strong>, and their leaderboard score has increased by <strong>" + this.prize + "</strong> points!</div>";
 			this.room.addRaw(buffer);
 			return this.updateLeaderboard(user.userid);
 		}
@@ -365,7 +372,7 @@ var Trivia = (function () {
 
 		if (this.inactivityCounter) this.inactivityCounter = 0;
 
-		buffer += 'They gained <strong>5</strong> points!</div>';
+		buffer += "They gained <strong>5</strong> points!</div>";
 		this.room.addRaw(buffer);
 		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
 	};
@@ -378,10 +385,11 @@ var Trivia = (function () {
 		var winner = '';
 		var winnerIndex = this.correctResponders;
 		var score = this.scoreCap - 1;
-		var buffer = '<div class="broadcast-blue"><strong>The answering period has ended!</strong><br />' +
-			     'Answer' + (this.currentAnswer.length > 1 ? 's: ' : ': ') + this.currentAnswer.join(', ') + '<br /><br />' +
-			     '<table width="100%" bgcolor="#9CBEDF">' +
-			     '<tr bgcolor="#6688AA"><th width="100px">Points Gained</th><th>Correct</th></tr>';
+		var buffer = "<div class=\"broadcast-blue\"><strong>The answering period has ended!</strong><br />" +
+			"Answer" + (this.currentAnswer.length > 1 ? "s: " : ": ") + this.currentAnswer.join(", ") + "<br />" +
+			"<br />" +
+			"<table width=\"100%\" bgcolor=\"#9CBEDF\">" +
+			"<tr bgcolor=\"#6688AA\"><th width=\"100px\">Points gained</th><th>Correct</th></tr>";
 		var innerBuffer = {5:[], 4:[], 3:[], 2:[], 1:[]};
 
 		for (var data, participantsIterator = this.participants.entries(); !!(data = participantsIterator.next().value);) { // replace with for-of loop once available
@@ -403,12 +411,14 @@ var Trivia = (function () {
 		}
 
 		for (var i = 6; --i;) {
-			if (innerBuffer[i].length) buffer += '<tr bgcolor="#6688AA"><td align="center">' + i + '</td><td>' + Tools.escapeHTML(innerBuffer[i].join(', ')) + '</td></tr>';
+			if (innerBuffer[i].length) {
+				buffer += "<tr bgcolor=\"#6688AA\"><td align=\"center\">" + i + "</td><td>" + Tools.escapeHTML(innerBuffer[i].join(", ")) + "</td></tr>";
+			}
 		}
 
 		if (winner) {
-			buffer += '</table><br />' +
-				  Tools.escapeHTML(winner) + ' won the game with a final score of <strong>' + score + '</strong>, and their leaderboard score has increased by <strong>' + this.prize + '</strong> points!</div>';
+			buffer += "</table><br />" +
+				Tools.escapeHTML(winner) + " won the game with a final score of <strong>" + score + "</strong>, and their leaderboard score has increased by <strong>" + this.prize + "</strong> points!</div>";
 			this.room.addRaw(buffer);
 			this.room.update();
 			return this.updateLeaderboard(toId(winner));
@@ -417,7 +427,7 @@ var Trivia = (function () {
 		if (!this.currentQuestions.length) return this.stalemate();
 		if (this.inactivityCounter) this.inactivityCounter = 0;
 
-		buffer += '</table></div>';
+		buffer += "</table></div>";
 		this.correctResponders = 0;
 		this.room.addRaw(buffer);
 		this.room.update();
@@ -453,12 +463,12 @@ var Trivia = (function () {
 			scoreData.responderIndex = -1;
 		}
 
-		var buffer = '<div class="broadcast-blue"><strong>The answering period has ended!</strong><br />' +
-			     'Correct: ' + Tools.escapeHTML(innerBuffer.join(', ')) + '<br />' +
-			     'Answer' + (this.currentAnswer.length > 1 ? 's: ' : ': ') + this.currentAnswer.join(', ') + '<br />';
+		var buffer = "<div class=\"broadcast-blue\"><strong>The answering period has ended!</strong><br />" +
+			"Correct: " + Tools.escapeHTML(innerBuffer.join(", ")) + "<br />" +
+			"Answer" + (this.currentAnswer.length > 1 ? "s: " : ": ") + this.currentAnswer.join(", ") + "<br />";
 
 		if (winner) {
-			buffer += Tools.escapeHTML(winner) + ' won the game with a final score of <strong>' + score + '</strong>, and their leaderboard score has increased by <strong>' + this.prize + '</strong> points!</div>';
+			buffer += Tools.escapeHTML(winner) + " won the game with a final score of <strong>" + score + "</strong>, and their leaderboard score has increased by <strong>" + this.prize + "</strong> points!</div>";
 			this.room.addRaw(buffer);
 			this.room.update();
 			return this.updateLeaderboard(toId(winner));
@@ -467,7 +477,7 @@ var Trivia = (function () {
 		if (!this.currentQuestions.length) return this.stalemate();
 		if (this.inactivityCounter) this.inactivityCounter = 0;
 
-		buffer += (this.correctResponders > 1 ? 'Each of them' : 'They') + ' gained <strong>' + points + '</strong> point' + (points === 1 ? '!</div>' : 's!</div>');
+		buffer += (this.correctResponders > 1 ? "Each of them" : "They") + " gained <strong>" + points + "</strong> point" + (points === 1 ? "!</div>" : "s!</div>");
 		this.correctResponders = 0;
 		this.room.addRaw(buffer);
 		this.room.update();
@@ -475,8 +485,10 @@ var Trivia = (function () {
 	};
 
 	Trivia.prototype.stalemate = function () {
-		this.room.addRaw('<div class="broadcast-blue">No questions are left!<br />' +
-				 '<strong>Since the game has reached a stalemate, nobody has gained any leaderboard points.</strong></div>');
+		this.room.addRaw(
+			"<div class=\"broadcast-blue\">No questions are left!<br />" +
+			"<strong>Since the game has reached a stalemate, nobody has gained any leaderboard points.</strong></div>"
+		);
 		this.room.update();
 		this.updateLeaderboard();
 	};
@@ -534,11 +546,14 @@ var Trivia = (function () {
 	};
 
 	Trivia.prototype.getStatus = function (output, user) {
-		var buffer = 'There is a trivia game in progress, and it is in its ' + this.phase + ' phase.<br />' +
-			     'Mode: ' + MODES[this.mode] + ' | Category: ' + CATEGORIES[this.category] + ' | Score cap: ' + this.scoreCap;
+		var buffer = "There is a trivia game in progress, and it is in its " + this.phase + " phase.<br />" +
+			"Mode: " + MODES[this.mode] + " | Category: " + CATEGORIES[this.category] + " | Score cap: " + this.scoreCap;
 		if (this.phase !== 'signup' && !output.broadcasting) {
 			var scoreData = this.participants.get(user.userid);
-			if (scoreData) buffer += '<br />Current score: ' + scoreData.score + ' | Correct answers: ' + scoreData.correctAnswers;
+			if (scoreData) {
+				buffer += "<br />" +
+					"Current score: " + scoreData.score + " | Correct answers: " + scoreData.correctAnswers;
+			}
 		}
 
 		output.sendReplyBox(buffer);
@@ -549,19 +564,19 @@ var Trivia = (function () {
 		if (!participantsLen) return output.sendReplyBox("There are no players in this trivia game.");
 
 		var participants = [];
-		var buffer = 'There ' + (participantsLen === 1 ? 'is <strong>' + participantsLen + '</strong> player' : 'are <strong>' + participantsLen + '</strong> players') + ' participating in this trivia game:<br />';
+		var buffer = "There " + (participantsLen === 1 ? "is <strong>" + participantsLen + "</strong> player" : "are <strong>" + participantsLen + "</strong> players") + " participating in this trivia game:<br />";
 		this.participants.forEach(function (scoreData, participant) {
 			var targetUser = Users.get(participant);
 			participants.push(targetUser ? targetUser.name : participant);
 		});
-		buffer += Tools.escapeHTML(participants.join(', '));
+		buffer += Tools.escapeHTML(participants.join(", "));
 
 		output.sendReplyBox(buffer);
 	};
 
 	Trivia.prototype.endGame = function (output, user) {
 		if (this.phase !== 'signup') clearTimeout(this.phaseTimeout);
-		this.room.addRaw('<div class="broadcast-blue">' + Tools.escapeHTML(user.name) + ' has forced the game to end.</div>');
+		this.room.addRaw("<div class=\"broadcast-blue\">" + Tools.escapeHTML(user.name) + " has forced the game to end.</div>");
 		delete trivia[this.room.id];
 	};
 
@@ -570,7 +585,6 @@ var Trivia = (function () {
 
 var commands = {
 	// trivia game commands
-	create: 'new',
 	new: function (target, room) {
 		if (room.id !== 'trivia' || !this.can('broadcast', null, room) || !target) return false;
 		if (trivia[room.id]) return this.sendReply("There is already a trivia game in progress.");
@@ -588,9 +602,12 @@ var commands = {
 		if (!scoreCap) return this.sendReply("'" + target[2].trim() + "' is not a valid score cap. View /trivia help ginfo for more information.");
 
 		trivia[room.id] = new Trivia(mode, category, scoreCap, room);
-		room.addRaw('<div class="broadcast-blue"><strong>Signups for a new trivia game have begun! Enter /trivia join to join.</strong><br />' +
-			    'Mode: ' + MODES[mode] + ' | Category: ' + CATEGORIES[category] + ' | Score cap: ' + scoreCap + '</div>');
+		room.addRaw(
+			"<div class=\"broadcast-blue\"><strong>Signups for a new trivia game have begun! Enter /trivia join to join.</strong><br />" +
+			"Mode: " + MODES[mode] + " | Category: " + CATEGORIES[category] + " | Score cap: " + scoreCap + "</div>"
+		);
 	},
+	newhelp: ["/trivia new OR create [mode], [category], [length] - Begin signups for a new trivia game. Requires: + % @ # & ~"],
 
 	join: function (target, room, user) {
 		if (room.id !== 'trivia') return false;
@@ -598,6 +615,7 @@ var commands = {
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
 		trivium.addParticipant(this, user);
 	},
+	joinhelp: ["/trivia join - Join a trivia game during signups."],
 
 	start: function (target, room) {
 		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
@@ -605,6 +623,7 @@ var commands = {
 		if (!trivium) return this.sendReply("There is no trivia game to start.");
 		trivium.startGame(this);
 	},
+	starthelp: ["/trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~"],
 
 	kick: function (target, room) {
 		if (room.id !== 'trivia' || !this.can('mute', null, room) || !target) return false;
@@ -612,6 +631,7 @@ var commands = {
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
 		trivium.kickParticipant(this, target);
 	},
+	kickhelp: ["/trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~"],
 
 	answer: function (target, room, user) {
 		if (room.id !== 'trivia' || !target) return false;
@@ -619,6 +639,7 @@ var commands = {
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
 		trivium.answerQuestion(this, target, user);
 	},
+	answerhelp: ["/ta [answer] - Answer the current question."],
 
 	end: function (target, room, user) {
 		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
@@ -626,6 +647,7 @@ var commands = {
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
 		trivium.endGame(this, user);
 	},
+	endhelp: ["/trivia end - End a trivia game. Requires: + % @ # ~"],
 
 	// question database modifying commands
 	submit: 'add',
@@ -662,7 +684,7 @@ var commands = {
 		};
 
 		if (cmd === 'add') {
-			triviaData.questions.push(submission);
+			triviaData.questions.splice(findEndOfCategory(category, false), 0, submission);
 			writeTriviaData();
 			return this.privateModCommand("(Question '" + target[1] + "' was added to the question database by " + user.name + ".)");
 		}
@@ -672,6 +694,8 @@ var commands = {
 		if (!user.can('mute', null, room)) this.sendReply("Question '" + target[1] + "' was submitted for review.");
 		this.privateModCommand("(" + user.name + " submitted question '" + target[1] + "' for review.)");
 	},
+	submithelp: ["/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review."],
+	addhelp: ["/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~"],
 
 	review: function (target, room) {
 		if (room.id !== 'questionworkshop' || !this.can('mute', null, room)) return false;
@@ -680,36 +704,45 @@ var commands = {
 		var submissionsLen = submissions.length;
 		if (!submissionsLen) return this.sendReply("No questions await review.");
 
-		var buffer = '|raw|<div class="ladder"><table><tr>' +
-		             '<td colspan="4"><strong>' + submissionsLen + '</strong> questions await review:</td></tr>' +
-		             '<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th></tr>';
-		for (var i = 0; i < submissionsLen;) {
+		var buffer = "|raw|<div class=\"ladder\"><table>" +
+			"<tr><td colspan=\"4\"><strong>" + submissionsLen + "</strong> questions await review:</td></tr>" +
+			"<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th></tr>";
+
+		var i = 0;
+		while (i < submissionsLen) {
 			var entry = submissions[i];
-			buffer += '<tr><td><strong>' + (++i) + '</strong></td><td>' + entry.category + '</td><td>' + entry.question + '</td><td>' + entry.answers.join(', ') + '</td></tr>';
+			buffer += "<tr><td><strong>" + (++i) + "</strong></td><td>" + entry.category + "</td><td>" + entry.question + "</td><td>" + entry.answers.join(", ") + "</td></tr>";
 		}
-		buffer += '</table></div>';
+		buffer += "</table></div>";
 
 		this.sendReply(buffer);
 	},
+	reviewhelp: ["/trivia review - View the list of submitted questions. Requires: % @ # & ~"],
 
 	reject: 'accept',
 	accept: function (target, room, user, connection, cmd) {
 		if (room.id !== 'questionworkshop' || !this.can('mute', null, room) || !target) return false;
 
 		var isAccepting = cmd === 'accept';
+		var questions = triviaData.questions;
 		var submissions = triviaData.submissions;
+		var submissionsLen = submissions.length;
 
 		if (toId(target) === 'all') {
-			if (isAccepting) Array.prototype.push.apply(triviaData.questions, submissions);
-			triviaData.submissions = [];
+			if (isAccepting) {
+				for (var i = 0; i < submissionsLen; i++) {
+					var submission = submissions[i];
+					questions.splice(findEndOfCategory(submission.category, false), 0, submission);
+				}
+			}
 
+			triviaData.submissions = [];
 			writeTriviaData();
 			return this.privateModCommand("(" + user.name + (isAccepting ? " added " : " removed ") + "all questions from the submission database.)");
 		}
 
 		if (/^\d+(?:-\d+)?(?:, ?\d+(?:-\d+)?)*$/.test(target)) {
 			var indices = target.split(',');
-			var submissionsLen = submissions.length;
 
 			// Parse number ranges and add them to the list of indices,
 			// then remove them in addition to entries that aren't valid index numbers
@@ -741,7 +774,7 @@ var commands = {
 			}
 
 			indices = indices.sort(function (a, b) {
-				return b - a;
+				return a - b;
 			}).filter(function (entry, index) {
 				return !index || indices[index - 1] !== entry;
 			});
@@ -750,24 +783,24 @@ var commands = {
 			if (!indicesLen) return this.sendReply("'" + target.trim() + "' is not a valid set of submission index numbers. View /trivia review and /trivia help qcommands for more information.");
 
 			if (isAccepting) {
-				var questions = triviaData.questions;
-				for (var i = 0; i < indicesLen; i++) {
+				for (var i = indicesLen; i--;) {
 					var submission = submissions.splice(indices[i] - 1, 1)[0];
 					questions.splice(findEndOfCategory(submission.category, false), 0, submission);
 				}
 			} else {
-				for (var i = 0; i < indicesLen; i++) {
+				for (var i = indicesLen; i--;) {
 					submissions.splice(indices[i] - 1, 1);
 				}
 			}
 
 			writeTriviaData();
-			return this.privateModCommand("(" + user.name + " " + (isAccepting ? "added " : "removed ") + "submission number" +
-						      (indicesLen > 1 ? "s " : " ") + target + " from the submission database.)");
+			return this.privateModCommand("(" + user.name + " " + (isAccepting ? "added " : "removed ") + "submission number" + (indicesLen > 1 ? "s " : " ") + target + " from the submission database.)");
 		}
 
 		this.sendReply("'" + target + "' is an invalid argument. View /trivia help qcommands for more information.");
 	},
+	accepthelp: ["/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: % @ # & ~"],
+	rejecthelp: ["/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: % @ # & ~"],
 
 	delete: function (target, room, user) {
 		if (room.id !== 'questionworkshop' || !this.can('mute', null, room) || !target) return false;
@@ -777,17 +810,22 @@ var commands = {
 
 		var questions = triviaData.questions;
 		for (var i = 0; i < questions.length; i++) {
-			if (questions[i].question === question) continue;
-			questions.splice(i, 1);
-			writeTriviaData();
-			return this.privateModCommand("(" + user.name + " removed question '" + target.trim() + "' from the question database.)");
+			if (questions[i].question === question) {
+				questions.splice(i, 1);
+				writeTriviaData();
+				return this.privateModCommand("(" + user.name + " removed question '" + target.trim() + "' from the question database.)");
+			}
 		}
 
 		this.sendReply("Question '" + target.trim() + "' was not found in the question database.");
 	},
+	deletehelp: ["/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~"],
 
 	qs: function (target, room, user) {
 		if (room.id !== 'questionworkshop') return false;
+
+		var buffer = "|raw|<div class=\"ladder\"><table>";
+
 		if (!target) {
 			if (!this.canBroadcast()) return false;
 
@@ -798,13 +836,13 @@ var commands = {
 			var categories = Object.keys(CATEGORIES);
 			var categoryTally = {};
 			var lastCategoryIdx = 0;
-			var buffer = '|raw|<div class="ladder"><table><tr><th>Category</th><th>Question Count</th></tr>';
+			buffer += "<tr><th>Category</th><th>Question Count</th></tr>";
 			for (var i = 0; i < 11; i++) {
 				var tally = findEndOfCategory(categories[i], false) - lastCategoryIdx;
 				lastCategoryIdx += tally;
-				buffer += '<tr><td>' + CATEGORIES[categories[i]] + '</td><td>' + tally + ' (' + ((tally * 100) / questionsLen).toFixed(2) + '%)</td></tr>';
+				buffer += "<tr><td>" + CATEGORIES[categories[i]] + "</td><td>" + tally + " (" + ((tally * 100) / questionsLen).toFixed(2) + "%)</td></tr>";
 			}
-			buffer += '<tr><td><strong>Total</strong></td><td><strong>' + questionsLen + '</strong></td></table></div>';
+			buffer += "<tr><td><strong>Total</strong></td><td><strong>" + questionsLen + "</strong></td></table></div>";
 
 			return this.sendReply(buffer);
 		}
@@ -817,29 +855,33 @@ var commands = {
 
 		var list = sliceCategory(category);
 		var listLen = list.length;
-		var buffer = '|raw|<div class="ladder"><table><tr>';
 		if (!listLen) {
-			buffer += '<td>There are no questions in the ' + target + ' category.</td></table></div>';
+			buffer += "<tr><td>There are no questions in the " + target + " category.</td></table></div>";
 			return this.sendReply(buffer);
 		}
 
 		if (user.can('declare', null, room)) {
-			buffer += '<td colspan="3">There are <strong>' + listLen + '</strong> questions in the ' + target + ' category.</td></tr>' +
-				  '<tr><th>#</th><th>Question</th><th>Answer(s)</th></tr>';
+			buffer += "<tr><td colspan=\"3\">There are <strong>" + listLen + "</strong> questions in the " + target + " category.</td></tr>" +
+				"<tr><th>#</th><th>Question</th><th>Answer(s)</th></tr>";
 			for (var i = 0; i < listLen; i++) {
 				var entry = list[i];
-				buffer += '<tr><td><strong>' + (i + 1) + '</strong></td><td>' + entry.question + '</td><td>' + entry.answers.join(', ') + '</td><tr>';
+				buffer += "<tr><td><strong>" + (i + 1) + "</strong></td><td>" + entry.question + "</td><td>" + entry.answers.join(", ") + "</td><tr>";
 			}
 		} else {
-			buffer += '<td colspan="2">There are <strong>' + listLen + '</strong> questions in the ' + target + ' category.</td></tr>' +
-				  '<tr><th>#</th><th>Question</th></tr>';
+			buffer += "<td colspan=\"2\">There are <strong>" + listLen + "</strong> questions in the " + target + " category.</td></tr>" +
+				"<tr><th>#</th><th>Question</th></tr>";
 			for (var i = 0; i < listLen; i++) {
-				buffer += '<tr><td><strong>' + (i + 1) + '</strong></td><td>' + list[i].question + '</td></tr>';
+				buffer += "<tr><td><strong>" + (i + 1) + "</strong></td><td>" + list[i].question + "</td></tr>";
 			}
 		}
-		buffer += '</table></div>';
+		buffer += "</table></div>";
+
 		this.sendReply(buffer);
 	},
+	qshelp: [
+		"/trivia qs - View the distribution of questions in the question database.",
+		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~"
+	],
 
 	// informational commands
 	'': 'status',
@@ -849,6 +891,7 @@ var commands = {
 		if (!trivium) return this.sendReplyBox("There is no trivia game in progress.");
 		trivium.getStatus(this, user);
 	},
+	statushelp: ["/trivia status - View information about any ongoing trivia game."],
 
 	players: function (target, room) {
 		if (room.id !== 'trivia' || !this.canBroadcast()) return false;
@@ -856,8 +899,8 @@ var commands = {
 		if (!trivium) return this.sendReplyBox("There is no trivia game in progress.");
 		trivium.getParticipants(this);
 	},
+	playershelp: ["/trivia players - View the list of the players in the current trivia game."],
 
-	ranking: 'rank',
 	rank: function (target, room, user) {
 		if (room.id !== 'trivia') return false;
 
@@ -875,11 +918,14 @@ var commands = {
 		var score = triviaData.leaderboard[userid];
 		if (!score) return this.sendReplyBox("User '" + name + "' has not played any trivia games yet.");
 
-		this.sendReplyBox('User: <strong>' + name + '</strong><br />' +
-		                  'Leaderboard score: <strong>' + score[0] + '</strong> (' + (score[3] ? '#' + score[3] : 'rank not recorded') + ')<br />' +
-		                  'Total game points: <strong>' + score[1] + '</strong> (' + (score[4] ? '#' + score[4] : 'rank not recorded') + ')<br />' +
-				  'Total correct answers: <strong>' + score[2] + '</strong> (' + (score[5] ? '#' + score[5] : 'rank not recorded') + ')');
+		this.sendReplyBox(
+			"User: <strong>" + name + "</strong><br />" +
+			"Leaderboard score: <strong>" + score[0] + "</strong> (#" + score[3] + ")<br />" +
+			"Total game points: <strong>" + score[1] + "</strong> (#" + score[4] + ")<br />" +
+			"Total correct answers: <strong>" + score[2] + "</strong> (#" + score[5] + ")"
+		);
 	},
+	rankhelp: ["/trivia rank [username] - View the rank of the specified user. If none is given, view your own."],
 
 	ladder: function (target, room) {
 		if (room.id !== 'trivia' || !this.canBroadcast()) return false;
@@ -891,78 +937,63 @@ var commands = {
 			return this.sendReply("Trivia games have been played, but ladder rankings have not been recorded yet. Finish a trivia game to build the ladder.");
 		}
 
-		var buffer = '|raw|<div class="ladder"><table><tr><th>Rank</th><th>User</th><th>Leaderboard score</th><th>Total game points</th><th>Total correct answers</th></tr>';
+		var buffer = "|raw|<div class=\"ladder\"><table>" +
+			"<tr><th>Rank</th><th>User</th><th>Leaderboard score</th><th>Total game points</th><th>Total correct answers</th></tr>";
 
-		for (var i = 0; i < ladder.length;) {
+		for (var i = 0; i < ladder.length; i++) {
 			var leaders = ladder[i];
 			for (var j = 0; j < leaders.length; j++) {
 				var rank = leaderboard[leaders[j]];
 				var leader = Users.getExact(leaders[j]);
 				leader = leader ? Tools.escapeHTML(leader.name) : leaders[j];
-				buffer += '<tr><td><b>' + (++i) + '</b></td><td>' + leader + '</td><td>' + rank[0] + '</td><td>' + rank[1] + '</td><td>' + rank[2] + '</td></tr>';
+				buffer += "<tr><td><strong>" + (i + 1) + "</strong></td><td>" + leader + "</td><td>" + rank[0] + "</td><td>" + rank[1] + "</td><td>" + rank[2] + "</td></tr>";
 			}
 		}
-		buffer += '</table></div>';
+		buffer += "</table></div>";
 
 		return this.sendReply(buffer);
 	},
+	ladderhelp: ["/trivia ladder - View information about the top 15 users on the trivia leaderboard."],
 
 	help: function (target, room) {
 		if ((room.id !== 'trivia' && room.id !== 'questionworkshop') || !this.canBroadcast()) return false;
-
-		target = toId(target);
-		switch (target) {
-		case 'ginfo':
-			this.sendReplyBox('Modes:<br />' +
-			                  '- First: the first correct responder gains 5 points.<br />' +
-			                  '- Timer: each correct responder gains up to 5 points based on how quickly they answer.<br />' +
-			                  '- Number: each correct responder gains up to 5 points based on how many participants are correct<br /><br />' +
-			                  'Categories:<br />' +
-			                  '- Anime/Manga, Geography, History, Humanities, Miscellaneous, Music, Pokemon, RPM (Religion, Philosophy, and Myth), Science, Sports, TV/Movies, Video Games, and Random<br /><br />' +
-			                  'Game lengths:<br />' +
-			                  '- Short: 20 point score cap. The winner gains 3 leaderboard points.<br />' +
-			                  '- Medium: 35 point score cap. The winner gains 4 leaderboard points.<br />' +
-			                  '- Long: 50 point score cap. The winner gains 5 leaderboard points.');
-			break;
-		case 'gcommands':
-			this.sendReplyBox('Game commands:<br />' +
-			                  '- /trivia new OR create [mode], [category], [length] - Begin the signup phase of a new trivia game. Requires: + % @ # & ~<br />' +
-			                  '- /trivia join - Join the game during the signup phase.<br />' +
-			                  '- /trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~<br />' +
-			                  '- /ta [answer] - Answer the current question.<br />' +
-			                  '- /trivia kick [username] - Disqualify a player from the current trivia game. Requires: % @ # & ~<br />' +
-			                  '- /trivia end - End a trivia game. Requires: + % @ # & ~');
-			break;
-		case 'qcommands':
-			this.sendReplyBox('Question modifying commands:<br />' +
-			                  '- /trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review.<br />' +
-			                  '- /trivia review - View the list of submitted questions. Requires: % @ # & ~<br />' +
-			                  '- /trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: % @ # & ~<br />' +
-			                  '- /trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: % @ # & ~<br />' +
-			                  '- /trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~<br />' +
-			                  '- /trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~<br />' +
-					  '- /trivia qs - View the distribution of questions in the question database.<br />' +
-			                  '- /trivia qs [category] - Return the list of questions in the specified category. Viewing their answers requires # & ~. Requires: % @ # & ~');
-			break;
-		case 'icommands':
-			this.sendReplyBox('Informational commands:<br />' +
-			                  '- /trivia status - View information about any ongoing trivia game.<br />' +
-			                  '- /trivia players - View the list of the players in the current trivia game.<br />' +
-			                  '- /trivia rank OR rank [username] - View the rank of the specified user. If none is given, view your own.<br />' +
-					  '- /trivia ladder - View information about up to 15 of the users with the greatest leaderboard scores.');
-			break;
-		default:
-			this.sendReplyBox('Help topics:<br />' +
-			                  '- /trivia help ginfo - View trivia game modes, categories, and game lengths.<br />' +
-			                  '- /trivia help gcommands - View commands used to play trivia games.<br />' +
-			                  '- /trivia help qcommands - View commands pertaining to the question database.<br />' +
-			                  '- /trivia help icommands - View informational commands');
-			break;
-		}
+		this.sendReply("Use /help trivia to view help for all commands, or /help trivia [command] for help on a specific command.");
 	}
 };
 
 exports.commands = {
 	trivia: commands,
-	ta: commands.answer
+	ta: commands.answer,
+	triviahelp: [
+		"Modes:",
+		"- First: the first correct responder gains 5 points.",
+		"- Timer: each correct responder gains up to 5 points based on how quickly they answer.",
+		"- Number: each correct responder gains up to 5 points based on how many participants are correct.",
+		"Categories: Anime/Manga, Geography, History, Humanities, Miscellaneous, Music, Pokemon, RPM (Religion, Philosophy, and Myth), Science, Sports, TV/Movies, Video Games, and Random.",
+		"Game lengths:",
+		"- Short: 20 point score cap. The winner gains 3 leaderboard points.",
+		"- Medium: 35 point score cap. The winner gains 4 leaderboard points.",
+		"- Long: 50 point score cap. The winner gains 5 leaderboard points.",
+		"Game commands:",
+		"- /trivia new OR create [mode], [category], [length] - Begin signups for a new trivia game. Requires: + % @ # & ~",
+		"- /trivia join - Join a trivia game during signups.",
+		"- /trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~",
+		"- /ta [answer] - Answer the current question.",
+		"- /trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~",
+		"- /trivia end - End a trivia game. Requires: + % @ # ~",
+		"Question modifying commands:",
+		"- /trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review.",
+		"- /trivia review - View the list of submitted questions. Requires: % @ # & ~",
+		"- /trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: % @ # & ~",
+		"- /trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: % @ # & ~",
+		"- /trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~",
+		"- /trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~",
+		"- /trivia qs - View the distribution of questions in the question database.",
+		"- /trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~",
+		"Informational commands:",
+		"- /trivia status - View information about any ongoing trivia game.",
+		"- /trivia players - View the list of the players in the current trivia game.",
+		"- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.",
+		"- /trivia ladder - View information about the top 15 users on the trivia leaderboard."
+	]
 };
