@@ -3932,13 +3932,12 @@ exports.BattleMovedex = {
 		priority: 2,
 		flags: {mirror: 1},
 		breaksProtect: true,
-		onHit: function (target, source) {
-			if (target.removeVolatile('protect') || target.removeVolatile('kingsshield') || target.removeVolatile('spikyshield')) {
-				this.add("-activate", target, "move: Feint");
-			}
-			if (target.side !== source.side) {
-				target.side.removeSideCondition('quickguard');
-				target.side.removeSideCondition('wideguard');
+		onHit: function (target) {
+			if (target.removeVolatile('protect') || target.removeVolatile('kingsshield') ||
+					target.removeVolatile('spikyshield') || target.side.removeSideCondition('quickguard') ||
+					target.side.removeSideCondition('wideguard') || target.removeVolatile('matblock') ||
+					target.side.removeSideCondition('craftyshield')) {
+				this.add('-activate', target, 'move: Feint');
 			}
 		},
 		secondary: false,

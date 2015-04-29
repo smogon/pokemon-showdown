@@ -200,6 +200,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		pp: 30
 	},
+	feint: {
+		inherit: true,
+		onHit: function (target, source) {
+			if (target.removeVolatile('protect') || (target.side !== source.side && (target.side.removeSideCondition('quickguard') || target.side.removeSideCondition('wideguard')))) {
+				this.add('-activate', target, 'move: Feint');
+			}
+		}
+	},
 	finalgambit: {
 		inherit: true,
 		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints. Makes contact.",
