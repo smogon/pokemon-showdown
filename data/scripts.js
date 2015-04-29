@@ -3587,7 +3587,7 @@ exports.BattleScripts = {
 				baseSignatureMove: 'psywave', signatureMove: "Star Bolt Desperation",
 				evs: {hp:4, spa:252, spd:252}, nature: 'Modest'
 			},
-			'%Astyanax': {
+			'%Asty': {
 				species: 'Seismitoad', ability: 'Sap Sipper', item: 'Red Card', gender: 'M',
 				moves: ['earthquake', 'recover', 'icepunch'],
 				baseSignatureMove: 'toxic', signatureMove: "Amphibian Toxin",
