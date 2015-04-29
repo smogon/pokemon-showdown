@@ -3281,12 +3281,6 @@ exports.BattleScripts = {
 				baseSignatureMove: 'geargrind', signatureMove: "Grind you're mum",
 				evs: {atk:252, spa:252, spe:4}, nature: 'Quiet'
 			},
-			'@Goddess Briyella': {
-				species: 'Floette-Eternal-Flower', ability: 'Magic Bounce', item: 'Big Root', gender: 'M',
-				moves: ['cottonguard', 'quiverdance', 'drainingkiss'],
-				baseSignatureMove: 'earthpower', signatureMove: "Earth Drain",
-				evs: {hp:252, spa:252, def:4}, nature: 'Modest'
-			},
 			'@Hippopotas': {
 				species: 'Hippopotas', ability: 'Regenerator', item: 'Eviolite', gender: 'M',
 				moves: ['haze', 'stealthrock', 'spikes', 'toxicspikes', 'stickyweb'],
