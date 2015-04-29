@@ -1431,8 +1431,8 @@ exports.Formats = [
 			if (name === 'astara') {
 				this.add('c|%Ast☆arA|I\'d rather take a nap, I hope you won\'t be a petilil shit, Eat some rare candies and get on my level.');
 			}
-			if (name === 'astyanax') {
-				this.add('c|%Astyanax|:^) Top kek');
+			if (name === 'asty') {
+				this.add('c|%Asty|:^) Top kek');
 			}
 			if (name === 'birkal') {
 				this.add('c|%Birkal|caw');
@@ -1991,8 +1991,8 @@ exports.Formats = [
 				sentences = ['/me twerks into oblivion', 'good night ♥', 'Astara Vista Baby'];
 				this.add('c|%Ast☆arA|' + sentences[this.random(3)]);
 			}
-			if (name === 'astyanax') {
-				this.add('c|%Astyanax|:^( Bottom kek');
+			if (name === 'asty') {
+				this.add('c|%Asty|:^( Bottom kek');
 			}
 			if (name === 'birkal') {
 				this.add('c|%Birkal|//birkal');
@@ -3366,7 +3366,7 @@ exports.Formats = [
 					this.useMove('substitute', target, target);
 				};
 			}
-			if (move.id === 'toxic' && name === 'astyanax') {
+			if (move.id === 'toxic' && name === 'asty') {
 				move.name = 'Amphibian Toxin';
 				move.accuracy = 100;
 				move.self = {boosts:{atk:-1, spa:-1}};
