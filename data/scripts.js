@@ -1690,7 +1690,11 @@ exports.BattleScripts = {
 		} else if (template.evos.length) {
 			item = 'Eviolite';
 		} else if (hasMove['shellsmash']) {
-			item = 'White Herb';
+			if (ability === 'Solid Rock' && counter['priority']) {
+				item = 'Weakness Policy';
+			} else {
+				item = 'White Herb';
+			}
 		} else if (ability === 'Magic Guard' || ability === 'Sheer Force') {
 			item = 'Life Orb';
 		} else if (hasMove['bellydrum']) {
@@ -2825,7 +2829,11 @@ exports.BattleScripts = {
 		} else if (hasMove['reflect'] && hasMove['lightscreen']) {
 			item = 'Light Clay';
 		} else if (hasMove['shellsmash']) {
-			item = 'White Herb';
+			if (ability === 'Solid Rock' && counter['priority']) {
+				item = 'Weakness Policy';
+			} else {
+				item = 'White Herb';
+			}
 		} else if (hasMove['facade'] || ability === 'Poison Heal' || ability === 'Toxic Boost') {
 			item = 'Toxic Orb';
 		} else if (hasMove['raindance']) {
