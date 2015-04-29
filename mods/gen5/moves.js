@@ -203,9 +203,13 @@ exports.BattleMovedex = {
 	feint: {
 		inherit: true,
 		onHit: function (target, source) {
-			if (target.removeVolatile('protect') || (target.side !== source.side && (target.side.removeSideCondition('quickguard') || target.side.removeSideCondition('wideguard')))) {
-				this.add('-activate', target, 'move: Feint');
+			var feinted = false;
+			if (target.removeVolatile('protect')) feinted = true;
+			if (target.side !== source.side) {
+				if (target.side.removeSideCondition('quickguard')) feinted = true;
+				if (target.side.removeSideCondition('wideguard')) feinted = true;
 			}
+			if (feinted) this.add('-activate', target, 'move: Feint');
 		}
 	},
 	finalgambit: {
