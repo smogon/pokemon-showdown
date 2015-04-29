@@ -1237,9 +1237,6 @@ exports.Formats = [
 					this.add('c|@Genesect|' + sentences[0]);
 				}
 			}
-			if (name === 'goddessbriyella') {
-				this.add('c|@Goddess Briyella|♥ ^_^ ♥');
-			}
 			if (name === 'hippopotas') {
 				this.add('-message', '@Hippopotas\'s Sand Stream whipped up a sandstorm!');
 			}
@@ -1821,9 +1818,6 @@ exports.Formats = [
 					sentences = ["The darkside cannot be extinguished, when you fight...", "؍༼ಥ_ಥ༽ጋ lament your dongers ؍༼ಥ_ಥ༽ጋ", "Yᵒᵘ Oᶰˡʸ Lᶤᵛᵉ Oᶰᶜᵉ", "やれやれだぜ", " ୧༼ಠ益ಠ༽୨ MRGLRLRLR ୧༼ಠ益ಠ༽୨"].randomize();
 					this.add('c|@Genesect|' + sentences[0]);
 				}
-			}
-			if (name === 'goddessbriyella') {
-				this.add('c|@Goddess Briyella|...........');
 			}
 			if (name === 'hippopotas') {
 				this.add('-message', 'The sandstorm subsided.');
@@ -2724,17 +2718,6 @@ exports.Formats = [
 				move.onHit = function (target, pokemon) {
 					if (target.fainted || target.hp <= 0) this.boost({atk:2, spa:2, spe:1}, pokemon, pokemon, move);
 				};
-			}
-			if (move.id === 'earthpower' && name === 'goddessbriyella') {
-				move.name = 'Earth Drain';
-				move.basePower = 80;
-				move.drain = [3, 4];
-				move.flags = {heal: 1};
-				move.onTryHit = function (target, source) {
-					this.attrLastMove('[still]');
-					this.add('-anim', source, "Giga Drain", target);
-				};
-				move.ignoreImmunity = {'Ground': true};
 			}
 			if (move.id === 'partingshot' && name === 'hippopotas') {
 				move.name = 'Hazard Pass';
