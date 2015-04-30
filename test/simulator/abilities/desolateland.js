@@ -13,20 +13,14 @@ describe('Desolate Land', function () {
 		assert.ok(battle.isWeather('desolateland'));
 	});
 
-	it('should increase the power of Fire-type attacks by 50%', function () {
+	it('should increase the base power of Fire-type attacks by 50%', function () {
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [
-			{species: "Groudon", ability: 'hugepower', moves: ['helpinghand']},
-			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']}
-		]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Charizard", ability: 'blaze', moves: ['firepledge', 'roost']}]);
-		battle.seed = [0, 0, 0, 0];
+		battle.join('p1', 'Guest 1', 1, [{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Charizard", ability: 'blaze', moves: ['firepledge']}]);
 		battle.commitDecisions();
-		var damage = battle.p1.active[0].maxhp - battle.p1.active[0].hp;
-		battle.choose('p1', 'switch 2');
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, battle.modify(damage, 1.5));
+		var move = Tools.getMove('firepledge');
+		var basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
+		assert.strictEqual(basePower, battle.modify(move.basePower, 1.5));
 	});
 
 	it('should cause Water-type attacks to fail', function () {
