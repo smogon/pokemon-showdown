@@ -61,7 +61,7 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'frz');
-			if (target.species === 'Shaymin-Sky' && target.baseTemplate.species === target.species) {
+			if (target.template.species === 'Shaymin-Sky' && target.baseTemplate.baseSpecies === 'Shaymin') {
 				var template = this.getTemplate('Shaymin');
 				target.formeChange(template);
 				target.baseTemplate = template;
@@ -69,7 +69,7 @@ exports.BattleStatuses = {
 				target.baseAbility = target.ability;
 				target.details = template.species + (target.level === 100 ? '' : ', L' + target.level) + (target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
 				this.add('detailschange', target, target.details);
-				this.add('message', target.species + " has reverted to Land Forme! (placeholder)");
+				this.add('-formechange', target, 'Shaymin', '[msg]');
 			}
 		},
 		onBeforeMovePriority: 10,
