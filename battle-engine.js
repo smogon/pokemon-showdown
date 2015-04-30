@@ -3015,9 +3015,6 @@ Battle = (function () {
 		}
 
 		if (move.ohko) {
-			if (target.level > pokemon.level) {
-				return false;
-			}
 			return target.maxhp;
 		}
 

@@ -249,9 +249,14 @@ exports.BattleScripts = {
 			}
 		}
 		if (move.ohko) { // bypasses accuracy modifiers
-			if (!target.volatiles['bounce'] && !target.volatiles['dig'] && !target.volatiles['dive'] && !target.volatiles['fly'] && !target.volatiles['shadowforce'] && !target.volatiles['skydrop']) {
+			if (!target.volatiles['bounce'] && !target.volatiles['dig'] && !target.volatiles['dive'] && !target.volatiles['fly'] && !target.volatiles['phantomforce'] && !target.volatiles['shadowforce'] && !target.volatiles['skydrop']) {
 				accuracy = 30;
-				if (pokemon.level > target.level) accuracy += (pokemon.level - target.level);
+				if (pokemon.level >= target.level) {
+					accuracy += (pokemon.level - target.level);
+				} else {
+					this.add('-immune', target, '[ohko]');
+					return false;
+				}
 			}
 		}
 		if (move.alwaysHit) {
@@ -314,6 +319,8 @@ exports.BattleScripts = {
 		}
 
 		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
+
+		if (move.ohko) this.add('-ohko');
 
 		if (!damage && damage !== 0) return damage;
 

@@ -294,11 +294,6 @@ exports.BattleScripts = {
 
 		// Is it an OHKO move?
 		if (move.ohko) {
-			// If it is, move hits if the Pokémon is more level.
-			if (target.level > pokemon.level) {
-				this.add('-failed', target);
-				return false;
-			}
 			return target.maxhp;
 		}
 
