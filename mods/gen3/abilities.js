@@ -115,12 +115,7 @@ exports.BattleAbilities = {
 	},
 	"sturdy": {
 		inherit: true,
-		onDamage: function (damage, target, source, effect) {
-			if (effect && effect.ohko) {
-				this.add('-activate', target, 'Sturdy');
-				return 0;
-			}
-		}
+		onDamage: function () {}
 	},
 	"synchronize": {
 		inherit: true,
