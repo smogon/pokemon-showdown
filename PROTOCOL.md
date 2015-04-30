@@ -447,7 +447,7 @@ for a full list of message types.
 > You just connected to the server, and we're giving you some information you'll need to log in.
 >
 > If you're already logged in and have session cookies, you can make an HTTP GET request to
-> `http://play.pokemonshowdown.com/action.php?act=upkeep&challengekeyid=KEYID&challenge=CHALLENGE`
+> `http://play.pokemonshowdown.com/action.php?act=getassertion&userid=USERNAME&challengekeyid=KEYID&challenge=CHALLENGE`
 >
 > Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
 > with the data `act=login&name=USERNAME&pass=PASSWORD&challengekeyid=KEYID&challenge=CHALLENGE`
