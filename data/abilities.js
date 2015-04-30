@@ -517,6 +517,9 @@ exports.BattleAbilities = {
 		onStart: function (source) {
 			this.setWeather('deltastream');
 		},
+		onAnySetWeather: function (target, source, weather) {
+			if (this.getWeather().id === 'deltastream' && !(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
+		},
 		onEnd: function (pokemon) {
 			if (this.weatherData.source !== pokemon) return;
 			for (var i = 0; i < this.sides.length; i++) {
@@ -541,6 +544,9 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, extremely harsh sunlight begins until this Ability is not active in battle.",
 		onStart: function (source) {
 			this.setWeather('desolateland');
+		},
+		onAnySetWeather: function (target, source, weather) {
+			if (this.getWeather().id === 'desolateland' && !(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onEnd: function (pokemon) {
 			if (this.weatherData.source !== pokemon) return;
@@ -1993,6 +1999,9 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, heavy rain begins until this Ability is not active in battle.",
 		onStart: function (source) {
 			this.setWeather('primordialsea');
+		},
+		onAnySetWeather: function (target, source, weather) {
+			if (this.getWeather().id === 'primordialsea' && !(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onEnd: function (pokemon) {
 			if (this.weatherData.source !== pokemon) return;
