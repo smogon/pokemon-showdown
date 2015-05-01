@@ -266,15 +266,6 @@ exports.BattleStatuses = {
 			}
 		}
 	},
-	mustrecharge: {
-		duration: 2,
-		onBeforeMove: function (pokemon) {
-			this.add('cant', pokemon, 'recharge');
-			pokemon.removeVolatile('mustrecharge');
-			return false;
-		},
-		onLockMove: 'recharge'
-	},
 	futuremove: {
 		// this is a side condition
 		onStart: function (side) {

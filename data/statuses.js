@@ -279,7 +279,10 @@ exports.BattleStatuses = {
 			pokemon.removeVolatile('mustrecharge');
 			return false;
 		},
-		onLockMove: 'recharge'
+		onLockMove: function (pokemon) {
+			this.add('-mustrecharge', pokemon);
+			return 'recharge';
+		}
 	},
 	futuremove: {
 		// this is a side condition
