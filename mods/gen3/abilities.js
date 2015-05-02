@@ -79,12 +79,6 @@ exports.BattleAbilities = {
 		inherit: true,
 		onStart: function () { }
 	},
-	"rockhead": {
-		inherit: true,
-		onModifyMove: function (move) {
-			if (move.id !== 'struggle') delete move.recoil;
-		}
-	},
 	"roughskin": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
