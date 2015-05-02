@@ -5394,6 +5394,7 @@ exports.BattleMovedex = {
 				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
 					applies = true;
 					this.cancelMove(pokemon);
+					pokemon.removeVolatile('twoturnmove');
 				}
 				if (pokemon.volatiles['skydrop']) {
 					applies = true;
