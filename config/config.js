@@ -153,9 +153,6 @@ exports.simulatorprocesses = 1;
 // from the `users` array. The default is 1 hour.
 exports.inactiveuserthreshold = 1000 * 60 * 60;
 
-// Set this to true if you are using Pokemon Showdown on Heroku.
-exports.herokuhack = false;
-
 // Custom avatars.
 // This allows you to specify custom avatar images for users on your server.
 // Place custom avatar files under the /config/avatars/ directory.
@@ -257,8 +254,9 @@ exports.customavatars = {
 	'wolfmasin': 'wolfmasin.gif',
 	'sargentwolf': 'wolfmasin.gif',
 	'jrrkein': 'jrrkein.jpg',
-	'anrindas': 'anrindas.jpg',
-	'anrinn': 'anrindas.jpg',
+	'anrindas': 'anrindеоaνіs.gif',
+	'anrinn': 'anrindеоaνіs.gif',
+	'anrindеоaνіs': 'anrindеоaνіs.gif',
 	'thefattestsnorlax': 'thefattestsnorlax.gif',
 	'sri': 'warpaint.gif',
 	'srinator': 'warpaint.gif',
@@ -461,6 +459,22 @@ exports.customavatars = {
 	'megalucariov': 'megalucariov.gif',
 	'shinmei971': 'shinmei971.png',
 	'shinmeitensai': 'shinmei971.png',
+	'dariiangamer': 'dariiangamer.gif',
+	'gallamex': 'gallamex.jpg',
+	'holiano': 'holiano.png',
+	'letmeshine': 'holiano.png',
+	'invincibleswampert': 'invincibleswampert.png',
+	'its103': 'its103.gif',
+	'mlanie': 'mlanie.png',
+	'elodie': 'mlanie.png',
+	'rookiedoce': 'rookiedoce.jpg',
+	'situm': 'situm.png',
+	'situmparletmort': 'situm.png',
+	'skyrio': 'skyrio.png',
+	'toto013': 'toto013.jpg',
+	'yanignacio1': 'yanignacio1.jpg',
+	'zincoxide': 'zincoxide.jpg',
+	'ansirent': 'zincoxide.jpg',
 };
 
 // Tournament announcements
