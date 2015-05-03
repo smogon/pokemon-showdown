@@ -68,8 +68,7 @@ exports.BattleMovedex = {
 	},
 	bestow: {
 		inherit: true,
-		isNotProtectable: false,
-		notSubBlocked: false
+		flags: {protect: 1, mirror: 1}
 	},
 	bind: {
 		inherit: true,
@@ -81,11 +80,15 @@ exports.BattleMovedex = {
 	},
 	block: {
 		inherit: true,
-		isNotProtectable: false
+		flags: {protect: 1, reflectable: 1, mirror: 1}
 	},
 	bubble: {
 		inherit: true,
 		basePower: 20
+	},
+	bugbuzz: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1, sound: 1}
 	},
 	camouflage: {
 		inherit: true,
@@ -111,7 +114,8 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 10,
 			volatileStatus: 'confusion'
-		}
+		},
+		flags: {protect: 1, mirror: 1, sound: 1, distance: 1}
 	},
 	clamp: {
 		inherit: true,
@@ -184,6 +188,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 90
 	},
+	echoedvoice: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1, sound: 1}
+	},
 	energyball: {
 		inherit: true,
 		basePower: 80
@@ -192,10 +200,22 @@ exports.BattleMovedex = {
 		inherit: true,
 		pp: 30
 	},
+	feint: {
+		inherit: true,
+		onHit: function (target, source) {
+			var feinted = false;
+			if (target.removeVolatile('protect')) feinted = true;
+			if (target.side !== source.side) {
+				if (target.side.removeSideCondition('quickguard')) feinted = true;
+				if (target.side.removeSideCondition('wideguard')) feinted = true;
+			}
+			if (feinted) this.add('-activate', target, 'move: Feint');
+		}
+	},
 	finalgambit: {
 		inherit: true,
 		desc: "Deals damage to one adjacent target equal to the user's current HP. If this move is successful, the user faints. Makes contact.",
-		isContact: true
+		flags: {contact: 1, protect: 1}
 	},
 	fireblast: {
 		inherit: true,
@@ -267,7 +287,7 @@ exports.BattleMovedex = {
 					basePower: 100,
 					category: "Special",
 					flags: {},
-					affectedByImmunities: true,
+					ignoreImmunity: false,
 					type: 'Psychic'
 				}
 			};
@@ -278,6 +298,10 @@ exports.BattleMovedex = {
 	glare: {
 		inherit: true,
 		accuracy: 90
+	},
+	grasswhistle: {
+		inherit: true,
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
 	},
 	grasspledge: {
 		inherit: true,
@@ -290,6 +314,10 @@ exports.BattleMovedex = {
 			return 50;
 		}
 	},
+	growl: {
+		inherit: true,
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
+	},
 	growth: {
 		inherit: true,
 		pp: 40
@@ -297,6 +325,10 @@ exports.BattleMovedex = {
 	gunkshot: {
 		inherit: true,
 		accuracy: 70
+	},
+	healbell: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1, sound: 1}
 	},
 	healblock: {
 		inherit: true,
@@ -433,6 +465,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 120
 	},
+	hypervoice: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1, sound: 1}
+	},
 	icebeam: {
 		inherit: true,
 		basePower: 95
@@ -479,7 +515,11 @@ exports.BattleMovedex = {
 	},
 	meanlook: {
 		inherit: true,
-		isNotProtectable: false
+		flags: {protect: 1, reflectable: 1, mirror: 1}
+	},
+	metalsound: {
+		inherit: true,
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
 	},
 	meteormash: {
 		inherit: true,
@@ -535,6 +575,7 @@ exports.BattleMovedex = {
 		name: "Mud Sport",
 		pp: 15,
 		priority: 0,
+		flags: {},
 		volatileStatus: 'mudsport',
 		onTryHitField: function (target, source) {
 			if (source.volatiles['mudsport']) return false;
@@ -561,14 +602,19 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "This move calls another move for use depending on the battle terrain. Earthquake in Wi-Fi battles.",
 		shortDesc: "Attack changes based on terrain. (Earthquake)",
-		onHit: function (target) {
-			this.useMove('earthquake', target);
+		onTryHit: function () {},
+		onHit: function (pokemon) {
+			this.useMove('earthquake', pokemon);
 		},
 		target: "self"
 	},
 	overheat: {
 		inherit: true,
 		basePower: 140
+	},
+	perishsong: {
+		inherit: true,
+		flags: {sound: 1, distance: 1}
 	},
 	pinmissile: {
 		inherit: true,
@@ -647,21 +693,30 @@ exports.BattleMovedex = {
 		name: "Rage Powder",
 		pp: 20,
 		priority: 3,
+		flags: {},
 		volatileStatus: 'followme',
 		secondary: false,
 		target: "self",
 		type: "Bug"
 	},
+	relicsong: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1, sound: 1}
+	},
 	roar: {
 		inherit: true,
 		accuracy: 100,
-		isNotProtectable: false
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, authentic: 1}
 	},
 	rocktomb: {
 		inherit: true,
 		accuracy: 80,
 		basePower: 50,
 		pp: 10
+	},
+	round: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1, sound: 1}
 	},
 	sandtomb: {
 		inherit: true,
@@ -675,6 +730,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		thawsTarget: false
 	},
+	screech: {
+		inherit: true,
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
+	},
 	secretpower: {
 		inherit: true,
 		onHit: function () {},
@@ -684,6 +743,10 @@ exports.BattleMovedex = {
 				accuracy: -1
 			}
 		}
+	},
+	sing: {
+		inherit: true,
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
 	},
 	skillswap: {
 		inherit: true,
@@ -742,9 +805,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 20
 	},
+	snarl: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1, sound: 1}
+	},
 	snore: {
 		inherit: true,
-		basePower: 40
+		basePower: 40,
+		flags: {protect: 1, mirror: 1, sound: 1}
 	},
 	spore: {
 		inherit: true,
@@ -770,9 +838,58 @@ exports.BattleMovedex = {
 		inherit: true,
 		onTryHit: function () {}
 	},
+	substitute: {
+		inherit: true,
+		effect: {
+			onStart: function (target) {
+				this.add('-start', target, 'Substitute');
+				this.effectData.hp = Math.floor(target.maxhp / 4);
+				delete target.volatiles['partiallytrapped'];
+			},
+			onTryPrimaryHitPriority: -1,
+			onTryPrimaryHit: function (target, source, move) {
+				if (target === source || move.flags['authentic']) {
+					return;
+				}
+				var damage = this.getDamage(source, target, move);
+				if (!damage) {
+					return null;
+				}
+				damage = this.runEvent('SubDamage', target, source, move, damage);
+				if (!damage) {
+					return damage;
+				}
+				if (damage > target.volatiles['substitute'].hp) {
+					damage = target.volatiles['substitute'].hp;
+				}
+				target.volatiles['substitute'].hp -= damage;
+				source.lastDamage = damage;
+				if (target.volatiles['substitute'].hp <= 0) {
+					target.removeVolatile('substitute');
+				} else {
+					this.add('-activate', target, 'Substitute', '[damage]');
+				}
+				if (move.recoil) {
+					this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+				}
+				if (move.drain) {
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				}
+				this.runEvent('AfterSubDamage', target, source, move, damage);
+				return 0; // hit
+			},
+			onEnd: function (target) {
+				this.add('-end', target, 'Substitute');
+			}
+		}
+	},
 	submission: {
 		inherit: true,
 		pp: 25
+	},
+	supersonic: {
+		inherit: true,
+		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1}
 	},
 	surf: {
 		inherit: true,
@@ -820,6 +937,10 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 95
 	},
+	uproar: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1, sound: 1}
+	},
 	toxic: {
 		inherit: true,
 		onModifyMove: function () {}
@@ -859,6 +980,7 @@ exports.BattleMovedex = {
 		name: "Water Sport",
 		pp: 15,
 		priority: 0,
+		flags: {},
 		volatileStatus: 'watersport',
 		onTryHitField: function (target, source) {
 			if (source.volatiles['watersport']) return false;
@@ -880,7 +1002,7 @@ exports.BattleMovedex = {
 	whirlwind: {
 		inherit: true,
 		accuracy: 100,
-		isNotProtectable: false
+		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1}
 	},
 	wideguard: {
 		inherit: true,

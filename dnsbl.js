@@ -64,6 +64,18 @@ exports.reverse = function reverseDns(ip, callback) {
 			callback(null, ['tmobile.nohost']);
 			return;
 		}
+		if (ip.startsWith('167.114.')) {
+			callback(null, ['ovh.nohost']);
+			return;
+		}
+		if (ip.startsWith('178.62.')) {
+			callback(null, ['digitalocean.nohost']);
+			return;
+		}
+		if (ip.startsWith('216.172.142.')) {
+			callback(null, ['egihosting.nohost']);
+			return;
+		}
 	}
-	return dns.reverse(ip, callback);
+	return require('dns').reverse(ip, callback);
 };

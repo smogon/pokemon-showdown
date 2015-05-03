@@ -17,7 +17,7 @@ exports.BattleMovedex = {
 	},
 	ancientpower: {
 		inherit: true,
-		isContact: true
+		flags: {contact: 1, protect: 1, mirror: 1}
 	},
 	assist: {
 		inherit: true,
@@ -110,7 +110,7 @@ exports.BattleMovedex = {
 	covet: {
 		inherit: true,
 		basePower: 40,
-		isContact: false
+		flags: {protect: 1, mirror: 1}
 	},
 	crabhammer: {
 		inherit: true,
@@ -270,14 +270,14 @@ exports.BattleMovedex = {
 		inherit: true,
 		priority: 1
 	},
-	feintattack: {
-		inherit: true,
-		isContact: false
-	},
 	fakeout: {
 		inherit: true,
 		priority: 1,
-		isContact: false
+		flags: {protect: 1, mirror: 1}
+	},
+	feintattack: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1}
 	},
 	firespin: {
 		inherit: true,
@@ -307,10 +307,8 @@ exports.BattleMovedex = {
 			}
 			return 20;
 		},
-		isViable: true,
 		pp: 15,
 		priority: 0,
-		isContact: true,
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -359,7 +357,7 @@ exports.BattleMovedex = {
 	glare: {
 		inherit: true,
 		accuracy: 75,
-		affectedByImmunities: true
+		ignoreImmunity: false
 	},
 	growth: {
 		inherit: true,
@@ -369,26 +367,17 @@ exports.BattleMovedex = {
 		}
 	},
 	hiddenpower: {
-		num: 237,
-		accuracy: 100,
+		inherit: true,
 		basePower: 0,
 		basePowerCallback: function (pokemon) {
 			return pokemon.hpPower || 70;
 		},
 		category: "Physical",
-		id: "hiddenpower",
-		isViable: true,
-		name: "Hidden Power",
-		pp: 15,
-		priority: 0,
 		onModifyMove: function (move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
 			var specialTypes = {Fire:1, Water:1, Grass:1, Ice:1, Electric:1, Dark:1, Psychic:1, Dragon:1};
 			move.category = specialTypes[move.type] ? 'Special' : 'Physical';
-		},
-		secondary: false,
-		target: "normal",
-		type: "Normal"
+		}
 	},
 	highjumpkick: {
 		inherit: true,
@@ -516,7 +505,7 @@ exports.BattleMovedex = {
 	},
 	overheat: {
 		inherit: true,
-		isContact: true
+		flags: {contact: 1, protect: 1, mirror: 1}
 	},
 	petaldance: {
 		inherit: true,
@@ -538,7 +527,7 @@ exports.BattleMovedex = {
 	},
 	roar: {
 		inherit: true,
-		flags: {mirror: 1, sound: 1, authentic: 1}
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1}
 	},
 	rockblast: {
 		inherit: true,
@@ -597,22 +586,12 @@ exports.BattleMovedex = {
 	},
 	struggle: {
 		inherit: true,
-		accuracy: true,
-		basePower: 50,
-		pp: 1,
-		noPPBoosts: true,
-		priority: 0,
-		isContact: true,
-		beforeMoveCallback: function (pokemon) {
-			this.add('-activate', pokemon.name, 'move: Struggle');
-		},
+		accuracy: 100,
+		recoil: [1, 2],
 		onModifyMove: function (move) {
 			move.type = '???';
 		},
-		recoil: [1, 2],
-		secondary: false,
-		target: "normal",
-		type: "Normal"
+		self: false
 	},
 	synthesis: {
 		inherit: true,
@@ -672,7 +651,7 @@ exports.BattleMovedex = {
 	},
 	tickle: {
 		inherit: true,
-		notSubBlocked: true
+		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1}
 	},
 	torment: {
 		inherit: true,
@@ -706,7 +685,7 @@ exports.BattleMovedex = {
 	},
 	whirlwind: {
 		inherit: true,
-		flags: {mirror: 1, authentic: 1}
+		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
 	wish: {
 		inherit: true,

@@ -162,11 +162,13 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	vulpix: {
-		randomBattleMoves: ["bodyslam","confuseray","fireblast","reflect","toxic"],
+		randomBattleMoves: ["bodyslam","confuseray","reflect","toxic"],
+		essentialMove: "fireblast",
 		tier: "LC"
 	},
 	ninetales: {
-		randomBattleMoves: ["fireblast","bodyslam","confuseray","doubleedge","hyperbeam","reflect","toxic"],
+		randomBattleMoves: ["bodyslam","confuseray","doubleedge","hyperbeam","reflect","toxic"],
+		essentialMove: "fireblast",
 		tier: "UU"
 	},
 	jigglypuff: {
@@ -437,11 +439,11 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	krabby: {
-		randomBattleMoves: ["bodyslam","crabhammer","leer","swordsdance","blizzard"],
+		randomBattleMoves: ["bodyslam","crabhammer","swordsdance","blizzard"],
 		tier: "LC"
 	},
 	kingler: {
-		randomBattleMoves: ["bodyslam","hyperbeam","blizzard","swordsdance"],
+		randomBattleMoves: ["bodyslam","hyperbeam","swordsdance","blizzard"],
 		essentialMove: "crabhammer",
 		tier: "UU"
 	},

@@ -8,11 +8,7 @@ exports.BattleStatuses = {
 			}
 			this.add('-status', target, 'brn');
 		},
-		onBasePower: function (basePower, attacker, defender, move) {
-			if (move && move.category === 'Physical' && attacker && !attacker.hasAbility('guts') && move.id !== 'facade') {
-				return this.chainModify(0.5); // This should really take place directly in the damage function but it's here for now
-			}
-		},
+		// Damage reduction is handled directly in the battle-engine.js damage function
 		onResidualOrder: 9,
 		onResidual: function (pokemon) {
 			this.damage(pokemon.maxhp / 8);
@@ -65,7 +61,7 @@ exports.BattleStatuses = {
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'frz');
-			if (target.species === 'Shaymin-Sky' && target.baseTemplate.species === target.species) {
+			if (target.template.species === 'Shaymin-Sky' && target.baseTemplate.baseSpecies === 'Shaymin') {
 				var template = this.getTemplate('Shaymin');
 				target.formeChange(template);
 				target.baseTemplate = template;
@@ -73,17 +69,24 @@ exports.BattleStatuses = {
 				target.baseAbility = target.ability;
 				target.details = template.species + (target.level === 100 ? '' : ', L' + target.level) + (target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
 				this.add('detailschange', target, target.details);
-				this.add('message', target.species + " has reverted to Land Forme! (placeholder)");
+				this.add('-formechange', target, 'Shaymin', '[msg]');
 			}
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
-			if (move.thawsUser || this.random(5) === 0) {
+			if (move.flags['defrost']) return;
+			if (this.random(5) === 0) {
 				pokemon.cureStatus();
 				return;
 			}
 			this.add('cant', pokemon, 'frz');
 			return false;
+		},
+		onModifyMove: function (move, pokemon) {
+			if (move.flags['defrost']) {
+				this.add('-curestatus', pokemon, 'frz', '[from] move: ' + move);
+				pokemon.setStatus('');
+			}
 		},
 		onHit: function (target, source, move) {
 			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status') {
@@ -276,7 +279,10 @@ exports.BattleStatuses = {
 			pokemon.removeVolatile('mustrecharge');
 			return false;
 		},
-		onLockMove: 'recharge'
+		onLockMove: function (pokemon) {
+			this.add('-mustrecharge', pokemon);
+			return 'recharge';
+		}
 	},
 	futuremove: {
 		// this is a side condition
@@ -313,8 +319,8 @@ exports.BattleStatuses = {
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
 
-				if (typeof posData.moveData.affectedByImmunities === 'undefined') {
-					posData.moveData.affectedByImmunities = true;
+				if (posData.moveData.ignoreImmunity === undefined) {
+					posData.moveData.ignoreImmunity = false;
 				}
 
 				if (target.hasAbility('wonderguard') && this.gen > 5) {
@@ -347,7 +353,7 @@ exports.BattleStatuses = {
 	stall: {
 		// Protect, Detect, Endure counter
 		duration: 2,
-		counterMax: 256,
+		counterMax: 729,
 		onStart: function () {
 			this.effectData.counter = 3;
 		},
@@ -441,9 +447,6 @@ exports.BattleStatuses = {
 				return this.chainModify(1.5);
 			}
 		},
-		onSetWeather: function (target, source, weather) {
-			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
-		},
 		onStart: function () {
 			this.add('-weather', 'PrimordialSea');
 		},
@@ -510,9 +513,6 @@ exports.BattleStatuses = {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
 			}
-		},
-		onSetWeather: function (target, source, weather) {
-			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onStart: function () {
 			this.add('-weather', 'DesolateLand');
@@ -603,9 +603,6 @@ exports.BattleStatuses = {
 				this.add('-activate', '', 'deltastream');
 				return 0;
 			}
-		},
-		onSetWeather: function (target, source, weather) {
-			if (!(weather.id in {desolateland:1, primordialsea:1, deltastream:1})) return false;
 		},
 		onStart: function () {
 			this.add('-weather', 'DeltaStream');

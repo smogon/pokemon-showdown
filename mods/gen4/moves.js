@@ -222,11 +222,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
+				if (!move.flags['protect']) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('Protect');
 					return;
 				}
-				if (move && (move.target === 'self' || move.isNotProtectable)) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -804,11 +804,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
+				if (!move.flags['protect']) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('Protect');
 					return;
 				}
-				if (move && (move.target === 'self' || move.isNotProtectable)) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -853,7 +853,7 @@ exports.BattleMovedex = {
 	},
 	roar: {
 		inherit: true,
-		flags: {mirror: 1, sound: 1, authentic: 1}
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1}
 	},
 	rockblast: {
 		inherit: true,
@@ -918,6 +918,12 @@ exports.BattleMovedex = {
 	stealthrock: {
 		inherit: true,
 		flags: {}
+	},
+	struggle: {
+		inherit: true,
+		onModifyMove: function (move) {
+			move.type = '???';
+		}
 	},
 	suckerpunch: {
 		inherit: true,
@@ -1027,6 +1033,10 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	transform: {
+		inherit: true,
+		flags: {authentic: 1}
+	},
 	uproar: {
 		inherit: true,
 		basePower: 50
@@ -1038,7 +1048,7 @@ exports.BattleMovedex = {
 	},
 	whirlwind: {
 		inherit: true,
-		flags: {mirror: 1, authentic: 1}
+		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
 	wish: {
 		inherit: true,

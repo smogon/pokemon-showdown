@@ -128,24 +128,14 @@ exports.BattleAbilities = {
 		rating: 0
 	},
 	"sturdy": {
-		desc: "This Pokemon is immune to OHKO moves.",
-		shortDesc: "OHKO moves fail on this Pokemon.",
-		onDamagePriority: -100,
-		onDamage: function (damage, target, source, effect) {
-			if (effect && effect.ohko) {
-				this.add('-activate', target, 'Sturdy');
-				return 0;
-			}
-		},
-		id: "sturdy",
-		name: "Sturdy",
-		rating: 0.5,
-		num: 5
+		inherit: true,
+		onDamage: function () {}
 	},
 	"synchronize": {
 		inherit: true,
-		onAfterSetStatus: function (status, target, source) {
+		onAfterSetStatus: function (status, target, source, effect) {
 			if (!source || source === target) return;
+			if (effect && effect.id === 'toxicspikes') return;
 			var id = status.id;
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';

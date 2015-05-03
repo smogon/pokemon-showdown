@@ -226,10 +226,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			}
 		}
 	};
-	var interval;
-	if (!Config.herokuHack) {
-		interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
-	}
+	var interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
 
 	fakeProcess.client.on('message', function (data) {
 		// console.log('worker received: ' + data);
@@ -390,17 +387,6 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 		fakeProcess.client.send('*' + socketid + '\n' + socket.remoteAddress);
 
-		// console.log('CONNECT: ' + socket.remoteAddress + ' [' + socket.id + ']');
-		var interval;
-		if (Config.herokuHack) {
-			// see https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187
-			interval = setInterval(function () {
-				try {
-					socket._session.recv.didClose();
-				} catch (e) {}
-			}, 15000);
-		}
-
 		socket.on('data', function (message) {
 			// drop empty messages (DDoS?)
 			if (!message) return;
@@ -413,11 +399,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		});
 
 		socket.on('close', function () {
-			if (interval) {
-				clearInterval(interval);
-			}
 			fakeProcess.client.send('!' + socketid);
-
 			delete sockets[socketid];
 			for (var channelid in channels) {
 				delete channels[channelid][socketid];
@@ -425,17 +407,17 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		});
 	});
 	server.installHandlers(app, {});
-	if (Config.bindaddress === '0.0.0.0') Config.bindaddress = undefined;
-	app.listen(Config.port, Config.bindAddress || undefined);
-	console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening on ' + (Config.bindAddress || '*') + ':' + Config.port);
+	if (!Config.bindAddress) Config.bindAddress = '0.0.0.0';
+	app.listen(Config.port, Config.bindAddress);
+	console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening on ' + Config.bindAddress + ':' + Config.port);
 
 	if (appssl) {
 		server.installHandlers(appssl, {});
-		appssl.listen(Config.ssl.port);
+		appssl.listen(Config.ssl.port, Config.bindaddress);
 		console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening for SSL on port ' + Config.ssl.port);
 	}
 
-	console.log('Test your server at http://' + (Config.bindAddress || 'localhost') + ':' + Config.port);
+	console.log('Test your server at http://' + (Config.bindAddress === '0.0.0.0' ? 'localhost' : Config.bindAddress) + ':' + Config.port);
 
 	require('./repl.js').start('sockets-', /*cluster.worker.id + '-' +*/ process.pid, function (cmd) { return eval(cmd); });
 //}

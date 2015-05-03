@@ -70,7 +70,7 @@ exports.BattleItems = {
 			}
 			move.pp += 5;
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
-			this.add('-activate', pokemon, 'item: Leppa Berry', move.name);
+			this.add('-activate', pokemon, 'item: Leppa Berry', move.move);
 		},
 		gen: 2,
 		desc: "Restores 5PP to the first of the holder's moves to reach 0PP. Single use."

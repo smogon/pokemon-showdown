@@ -145,9 +145,6 @@ exports.simulatorProcesses = 1;
 // from the `users` array. The default is 1 hour.
 exports.inactiveUserThreshold = 1000 * 60 * 60;
 
-// Set this to true if you are using Pokemon Showdown on Heroku.
-exports.herokuHack = false;
-
 // Custom avatars.
 // This allows you to specify custom avatar images for users on your server.
 // Place custom avatar files under the /config/avatars/ directory.
@@ -159,6 +156,13 @@ exports.herokuHack = false;
 exports.customAvatars = {
 	//'userid': 'customavatar.png'
 };
+
+// Tournament announcements
+// When tournaments are created in rooms listed below, they will be announced in
+// the server's main tournament room (either the specified tourroom or by default
+// the room 'tournaments')
+exports.tourRoom = '';
+exports.tourAnnouncements = [/* roomids */];
 
 // appealUri - specify a URI containing information on how users can appeal
 // disciplinary actions on your section. You can also leave this blank, in

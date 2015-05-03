@@ -757,15 +757,16 @@ var commands = {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <type> [, <comma-separated arguments>]");
 			}
+			var playerCap = parseInt(params.splice(1, 1));
 			var generator = createTournamentGenerator(params.shift(), params, this);
 			if (generator && tournament.setGenerator(generator, this)) {
-				if (params[2] && parseInt(params[2]) >= 2) {
-					tournament.playerCap = parseInt(params[2]);
+				if (playerCap && playerCap >= 2) {
+					tournament.playerCap = playerCap;
 					if (Config.tournamentDefaultPlayerCap && tournament.playerCap > Config.tournamentDefaultPlayerCap) {
 						ResourceMonitor.log('[ResourceMonitor] Room ' + tournament.room.id + ' starting a tour over default cap (' + tournament.playerCap + ')');
 					}
 				}
-				this.sendReply("Tournament set to " + generator.name + (params[2] ? " with a player cap of " + tournament.playerCap : "") + ".");
+				this.sendReply("Tournament set to " + generator.name + (playerCap ? " with a player cap of " + tournament.playerCap : "") + ".");
 			}
 		},
 		begin: 'start',
@@ -794,6 +795,7 @@ var commands = {
 			if (params.length < 1) {
 				return this.sendReply("Usage: " + cmd + " <minutes|off>");
 			}
+			if (params[0].toLowerCase() === 'infinity' || params[0] === '0') params[0] = 'off';
 			var timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0];
 			if (tournament.setAutoDisqualifyTimeout(timeout * 60 * 1000, this)) {
 				this.privateModCommand("(The tournament auto disqualify timeout was set to " + params[0] + " by " + user.name + ")");
@@ -881,7 +883,13 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 
 		var tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.isTournamentsRated, params, this);
-		if (tour) this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
+		if (tour) {
+			this.privateModCommand("(" + user.name + " created a tournament in " + tour.format + " format.)");
+			if (Config.tourAnnouncements && Config.tourAnnouncements.indexOf(room.id) >= 0) {
+				var tourRoom = Rooms.search(Config.tourRoom || 'tournaments');
+				if (tourRoom) tourRoom.addRaw('<div class="infobox"><a href="/' + room.id + '" class="ilink"><b>' + Tools.getFormat(tour.format).name + '</b> tournament created in <b>' + room.title + '</b>.</a></div>');
+			}
+		}
 	} else {
 		var tournament = getTournament(room.title);
 		if (!tournament) {
