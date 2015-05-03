@@ -16,8 +16,6 @@ const ACTION_COOLDOWN = 3 * 1000;
 const FLOOD_MESSAGE_NUM = 5;
 const FLOOD_PER_MSG_MIN = 500; // this is the minimum time between messages for legitimate spam. It's used to determine what "flooding" is caused by lag
 const FLOOD_MESSAGE_TIME = 6 * 1000;
-const MIN_CAPS_LENGTH = 12;
-const MIN_CAPS_PROPORTION = 0.8;
 
 // TODO: move to rooms.js
 // TODO: store settings by room, not command/blacmove to rooms.jsklist/banned phrases
@@ -177,7 +175,7 @@ exports.parse = {
 				let user = Users.get(username);
 				if (!user) return false; // various "chat" responses contain other data
 				if (user.isSelf) return false;
-				if (this.isBlacklisted(user.id, room.id)) return this.say(room.id, '/roomban ' + user.id + ', Blacklisted user');
+				if (this.isBlacklisted(user.id, room.id)) return this.say(room.id, '/ban ' + user.id + ', Blacklisted user');
 
 				spl = spl.slice(3).join('|');
 				if (!user.hasRank(room, '%')) this.processChatData(user.id, room.id, spl);
@@ -188,7 +186,7 @@ exports.parse = {
 				let user = Users.get(username);
 				if (!user) return false; // various "chat" responses contain other data
 				if (user.isSelf) return false;
-				if (this.isBlacklisted(user.id, room.id)) return this.say(room.id, '/roomban ' + user.id + ', Blacklisted user');
+				if (this.isBlacklisted(user.id, room.id)) return this.say(room.id, '/ban ' + user.id + ', Blacklisted user');
 
 				spl = spl.slice(4).join('|');
 				if (!user.hasRank(room, '%')) this.processChatData(user.id, room.id, spl);
@@ -210,14 +208,14 @@ exports.parse = {
 				let username = spl[2];
 				let oldid = spl[3];
 				let user = room.onRename(username, oldid);
-				if (this.isBlacklisted(user, room)) return this.say(room, '/roomban ' + user.id + ', Blacklisted user');
+				if (this.isBlacklisted(user, room)) return this.say(room, '/ban ' + user.id + ', Blacklisted user');
 				this.updateSeen(oldid, spl[1], user.id);
 				break;
 			case 'J': case 'j':
 				let username = spl[2];
 				let user = room.onJoin(username, username.charAt(0));
 				if (user.isSelf) return false;
-				if (this.isBlacklisted(user.id, room.id)) return this.say(room.id, '/roomban ' + user.id + ', Blacklisted user');
+				if (this.isBlacklisted(user.id, room.id)) return this.say(room.id, '/ban ' + user.id + ', Blacklisted user');
 				this.updateSeen(user.id, spl[1], room.id);
 				break;
 			case 'l': case 'L':
@@ -388,16 +386,8 @@ exports.parse = {
 					muteMessage = ', Automated response: flooding';
 				}
 			}
-			// moderation for caps (over x% of the letters in a line of y characters are capital)
-			let capsMatch = msg.replace(/[^A-Za-z]/g, '').match(/[A-Z]/g);
-			if ((useDefault || !('caps' in modSettings)) && capsMatch && toId(msg).length > MIN_CAPS_LENGTH && (capsMatch.length >= ~~(toId(msg).length * MIN_CAPS_PROPORTION))) {
-				if (pointVal < 1) {
-					pointVal = 1;
-					muteMessage = ', Automated response: caps';
-				}
-			}
 			// moderation for stretching (over x consecutive characters in the message are the same)
-			let stretchMatch = /(.)\1{7,}/gi.test(msg) || /(..+)\1{4,}/gi.test(msg); // matches the same character (or group of characters) 8 (or 5) or more times in a row
+			let stretchMatch = /(.)\1{59,}/gi.test(msg) || /(..+)\1{37,}/gi.test(msg); // matches the same character (or group of characters) 8 (or 5) or more times in a row
 			if ((useDefault || !('stretching' in modSettings)) && stretchMatch) {
 				if (pointVal < 1) {
 					pointVal = 1;
