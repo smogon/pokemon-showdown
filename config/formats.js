@@ -128,7 +128,7 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Little Cup [PGL]",
+		name: "[PGL] Little Cup",
 		section: "ORAS Singles",
 
 		maxForcedLevel: 5,
