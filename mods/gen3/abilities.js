@@ -79,12 +79,6 @@ exports.BattleAbilities = {
 		inherit: true,
 		onStart: function () { }
 	},
-	"rockhead": {
-		inherit: true,
-		onModifyMove: function (move) {
-			if (move.id !== 'struggle') delete move.recoil;
-		}
-	},
 	"roughskin": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
@@ -115,12 +109,7 @@ exports.BattleAbilities = {
 	},
 	"sturdy": {
 		inherit: true,
-		onDamage: function (damage, target, source, effect) {
-			if (effect && effect.ohko) {
-				this.add('-activate', target, 'Sturdy');
-				return 0;
-			}
-		}
+		onDamage: function () {}
 	},
 	"synchronize": {
 		inherit: true,
