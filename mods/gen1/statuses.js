@@ -266,15 +266,6 @@ exports.BattleStatuses = {
 			}
 		}
 	},
-	mustrecharge: {
-		duration: 2,
-		onBeforeMove: function (pokemon) {
-			this.add('cant', pokemon, 'recharge');
-			pokemon.removeVolatile('mustrecharge');
-			return false;
-		},
-		onLockMove: 'recharge'
-	},
 	futuremove: {
 		// this is a side condition
 		onStart: function (side) {
@@ -310,8 +301,8 @@ exports.BattleStatuses = {
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
 
-				if (typeof posData.moveData.affectedByImmunities === 'undefined') {
-					posData.moveData.affectedByImmunities = true;
+				if (posData.moveData.ignoreImmunity === undefined) {
+					posData.moveData.ignoreImmunity = false;
 				}
 
 				this.moveHit(target, posData.source, move, posData.moveData);

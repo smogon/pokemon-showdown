@@ -46,40 +46,34 @@ module.exports = (function () {
 			dataTypes.forEach(function (dataType) {
 				try {
 					var path = './data/' + dataFiles[dataType];
-					if (fs.existsSync(path)) {
-						data[dataType] = require(path)['Battle' + dataType];
-					}
+					data[dataType] = require(path)['Battle' + dataType];
 				} catch (e) {
-					console.log('CRASH LOADING DATA: ' + e.stack);
+					if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING DATA: ' + e.stack);
 				}
 				if (!data[dataType]) data[dataType] = {};
 			}, this);
 			try {
 				var path = './config/formats.js';
-				if (fs.existsSync(path)) {
-					var configFormats = require(path).Formats;
-					for (var i = 0; i < configFormats.length; i++) {
-						var format = configFormats[i];
-						var id = toId(format.name);
-						format.effectType = 'Format';
-						if (format.challengeShow === undefined) format.challengeShow = true;
-						if (format.searchShow === undefined) format.searchShow = true;
-						data.Formats[id] = format;
-					}
+				var configFormats = require(path).Formats;
+				for (var i = 0; i < configFormats.length; i++) {
+					var format = configFormats[i];
+					var id = toId(format.name);
+					format.effectType = 'Format';
+					if (format.challengeShow === undefined) format.challengeShow = true;
+					if (format.searchShow === undefined) format.searchShow = true;
+					data.Formats[id] = format;
 				}
 			} catch (e) {
-				console.log('CRASH LOADING FORMATS: ' + e.stack);
+				if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING FORMATS: ' + e.stack);
 			}
 		} else {
 			var parentData = moddedTools[parentMod].data;
 			dataTypes.forEach(function (dataType) {
 				try {
 					var path = './mods/' + mod + '/' + dataFiles[dataType];
-					if (fs.existsSync(path)) {
-						data[dataType] = require(path)['Battle' + dataType];
-					}
+					data[dataType] = require(path)['Battle' + dataType];
 				} catch (e) {
-					console.log('CRASH LOADING MOD DATA: ' + e.stack);
+					if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING MOD DATA: ' + e.stack);
 				}
 				if (!data[dataType]) data[dataType] = {};
 				for (var i in parentData[dataType]) {
@@ -133,19 +127,30 @@ module.exports = (function () {
 	}
 	Tools.loadMods = function () {
 		if (Tools.modsLoaded) return;
-		var parentMods = {};
+		var parentMods = Object.create(null);
+		var mods;
 
 		try {
-			var mods = fs.readdirSync('./mods/');
+			mods = fs.readdirSync('./mods/');
+		} catch (e) {
+			console.error("Error while loading mods: " + e.stack);
+			Tools.modsLoaded = true;
+			return;
+		}
 
-			mods.forEach(function (mod) {
-				if (fs.existsSync('./mods/' + mod + '/scripts.js')) {
-					parentMods[mod] = require('./mods/' + mod + '/scripts.js').BattleScripts.inherit || 'base';
-				} else {
+		mods.forEach(function (mod) {
+			try {
+				parentMods[mod] = require('./mods/' + mod + '/scripts.js').BattleScripts.inherit || 'base';
+			} catch (e) {
+				if (e.code === 'MODULE_NOT_FOUND') {
 					parentMods[mod] = 'base';
+				} else {
+					console.error("Error while loading mods: " + e.stack);
 				}
-			});
+			}
+		});
 
+		try {
 			var didSomething = false;
 			do {
 				didSomething = false;
@@ -157,7 +162,7 @@ module.exports = (function () {
 				}
 			} while (didSomething);
 		} catch (e) {
-			console.log("Error while loading mods: " + e);
+			console.error("Error while loading mods: " + (e.stack || e));
 		}
 		Tools.modsLoaded = true;
 	};
@@ -311,6 +316,7 @@ module.exports = (function () {
 				else move.gen = 0;
 			}
 			if (!move.priority) move.priority = 0;
+			if (move.ignoreImmunity === undefined) move.ignoreImmunity = (move.category === 'Status');
 			if (!move.flags) move.flags = {};
 		}
 		return move;
@@ -465,7 +471,7 @@ module.exports = (function () {
 	Tools.prototype.getType = function (type) {
 		if (!type || typeof type === 'string') {
 			var id = toId(type);
-			id = id.substr(0, 1).toUpperCase() + id.substr(1);
+			id = id.charAt(0).toUpperCase() + id.substr(1);
 			type = {};
 			if (id && this.data.TypeChart[id]) {
 				type = this.data.TypeChart[id];

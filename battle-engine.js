@@ -59,7 +59,7 @@
 
 var Battle, BattleSide, BattlePokemon;
 
-var Battles = {};
+var Battles = Object.create(null);
 
 require('./repl.js').start('battle-engine-', process.pid, function (cmd) { return eval(cmd); });
 
@@ -93,7 +93,16 @@ battleEngineFakeProcess.client.on('message', function (message) {
 			}
 		}
 	} else if (data[1] === 'dealloc') {
-		if (Battles[data[0]]) Battles[data[0]].destroy();
+		if (Battles[data[0]] && Battles[data[0]].destroy) {
+			Battles[data[0]].destroy();
+		} else {
+			var stack = '\n\n' +
+					'Additional information:\n' +
+					'message = ' + message;
+			var fakeErr = {stack: stack};
+
+			require('./crashlogger.js')(fakeErr, 'A battle');
+		}
 		delete Battles[data[0]];
 	} else {
 		var battle = Battles[data[0]];
@@ -147,8 +156,8 @@ BattlePokemon = (function () {
 		if (typeof set === 'string') set = {name: set};
 
 		// "pre-bound" functions for nicer syntax (avoids repeated use of `bind`)
-		this.getHealth = this.getHealth || BattlePokemon.getHealth.bind(this);
-		this.getDetails = this.getDetails || BattlePokemon.getDetails.bind(this);
+		this.getHealth = (this.getHealth || BattlePokemon.getHealth).bind(this);
+		this.getDetails = (this.getDetails || BattlePokemon.getDetails).bind(this);
 
 		this.set = set;
 
@@ -170,7 +179,7 @@ BattlePokemon = (function () {
 		this.moveset = [];
 		this.baseMoveset = [];
 
-		this.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 1000);
+		this.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
 
 		var genders = {M:'M', F:'F'};
 		this.gender = this.template.gender || genders[set.gender] || (Math.random() * 2 < 1 ? 'M' : 'F');
@@ -580,17 +589,15 @@ BattlePokemon = (function () {
 		}
 		if (hasValidMove) return moves;
 
-		return [{
-			move: 'Struggle',
-			id: 'struggle'
-		}];
+		return [];
 	};
 	BattlePokemon.prototype.getRequestData = function () {
 		var lockedMove = this.getLockedMove();
 
 		// Information should be restricted for the last active Pokémon
 		var isLastActive = this.isLastActive();
-		var data = {moves: this.getMoves(lockedMove, isLastActive)};
+		var moves = this.getMoves(lockedMove, isLastActive);
+		var data = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle'}]};
 
 		if (isLastActive) {
 			if (this.maybeDisabled) {
@@ -701,7 +708,6 @@ BattlePokemon = (function () {
 		this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 		this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 		for (var i = 0; i < pokemon.moveset.length; i++) {
-			var move = this.battle.getMove(this.set.moves[i]);
 			var moveData = pokemon.moveset[i];
 			var moveName = moveData.move;
 			if (moveData.id === 'hiddenpower') {
@@ -710,8 +716,8 @@ BattlePokemon = (function () {
 			this.moveset.push({
 				move: moveName,
 				id: moveData.id,
-				pp: move.noPPBoosts ? moveData.maxpp : 5,
-				maxpp: this.battle.gen >= 5 ? (move.noPPBoosts ? moveData.maxpp : 5) : (this.battle.gen <= 2 ? move.pp : moveData.maxpp),
+				pp: moveData.maxpp === 1 ? 1 : 5,
+				maxpp: this.battle.gen >= 5 ? (moveData.maxpp === 1 ? 1 : 5) : moveData.maxpp,
 				target: moveData.target,
 				disabled: false
 			});
@@ -855,17 +861,6 @@ BattlePokemon = (function () {
 			}
 		}
 		return false;
-	};
-	BattlePokemon.prototype.getValidMoves = function (lockedMove) {
-		var pMoves = this.getMoves(lockedMove);
-		var moves = [];
-		for (var i = 0; i < pMoves.length; i++) {
-			if (!pMoves[i].disabled) {
-				moves.push(pMoves[i].id);
-			}
-		}
-		if (!moves.length) return ['struggle'];
-		return moves;
 	};
 	BattlePokemon.prototype.disableMove = function (moveid, isHidden, sourceEffect) {
 		if (!sourceEffect && this.battle.event) {
@@ -3004,16 +2999,13 @@ Battle = (function () {
 			flags: {}
 		};
 
-		if (move.affectedByImmunities) {
+		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
 			if (!target.runImmunity(move.type, !suppressMessages)) {
 				return false;
 			}
 		}
 
 		if (move.ohko) {
-			if (target.level > pokemon.level) {
-				return false;
-			}
 			return target.maxhp;
 		}
 
@@ -3148,34 +3140,45 @@ Battle = (function () {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		var totalTypeMod = 0;
+		move.typeMod = 0;
 
 		if (target.negateImmunity[move.type] !== 'IgnoreEffectiveness' || this.getImmunity(move.type, target)) {
-			totalTypeMod = target.runEffectiveness(move);
+			move.typeMod = target.runEffectiveness(move);
 		}
 
-		totalTypeMod = this.clampIntRange(totalTypeMod, -6, 6);
-		if (totalTypeMod > 0) {
+		move.typeMod = this.clampIntRange(move.typeMod, -6, 6);
+		if (move.typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
-			for (var i = 0; i < totalTypeMod; i++) {
+			for (var i = 0; i < move.typeMod; i++) {
 				baseDamage *= 2;
 			}
 		}
-		if (totalTypeMod < 0) {
+		if (move.typeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
 
-			for (var i = 0; i > totalTypeMod; i--) {
+			for (var i = 0; i > move.typeMod; i--) {
 				baseDamage = Math.floor(baseDamage / 2);
 			}
 		}
 
-		if (basePower && !Math.floor(baseDamage)) {
-			return 1;
+		if (pokemon.status === 'brn' && basePower && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
+			if (this.gen < 6 || move.id !== 'facade') {
+				baseDamage = this.modify(baseDamage, 0.5);
+			}
+		}
+
+		// Generation 5 sets damage to 1 before the final damage modifiers only
+		if (this.gen === 5 && basePower && !Math.floor(baseDamage)) {
+			baseDamage = 1;
 		}
 
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+
+		if (this.gen !== 5 && basePower && !Math.floor(baseDamage)) {
+			return 1;
+		}
 
 		return Math.floor(baseDamage);
 	};
@@ -3876,7 +3879,7 @@ Battle = (function () {
 
 				var dataArr = [0, 1, 2, 3, 4, 5].slice(0, pokemonLength);
 				var slotMap = dataArr.slice(); // Inverse of `dataArr` (slotMap[dataArr[x]] === x)
-				var oldSlot, tempSlot;
+				var tempSlot;
 
 				for (var j = 0; j < data.length; j++) {
 					var slot = parseInt(data.charAt(j), 10) - 1;
@@ -3889,10 +3892,8 @@ Battle = (function () {
 					dataArr[slotMap[slot]] = tempSlot;
 
 					// Update its inverse
-					oldSlot = tempSlot;
-					tempSlot = slotMap[slot];
+					slotMap[tempSlot] = slotMap[slot];
 					slotMap[slot] = j;
-					slotMap[oldSlot] = tempSlot;
 				}
 
 				decisions.push({
@@ -4035,13 +4036,13 @@ Battle = (function () {
 				 */
 
 				var moves = pokemon.getMoves();
-				if (!moves.length || moves[0].id === 'struggle') {
-					// override decision and use Struggle if there are no other valid moves
-					side.send('-activate', pokemon, 'move: Struggle');
+				if (!moves.length) {
+					// Override decision and use Struggle if there are no enabled moves with PP
+					if (this.gen <= 4) side.send('-activate', pokemon, 'move: Struggle');
 					moveid = 'struggle';
 				} else {
-					// at least a move is valid (other than Struggle)
-					// check if the chosen one is
+					// At least a move is valid. Check if the chosen one is.
+					// This may include Struggle in Hackmons.
 					var isEnabled = false;
 					for (var j = 0; j < moves.length; j++) {
 						if (moves[j].id !== moveid) continue;

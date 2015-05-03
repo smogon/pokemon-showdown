@@ -201,8 +201,6 @@ var GlobalRoom = (function () {
 			}];
 		}
 
-		// cached list of chat rooms for the room list
-		// usually does not contain private rooms, but no guarantees
 		this.chatRooms = [];
 
 		this.autojoin = []; // rooms that users autojoin upon connecting
@@ -220,7 +218,7 @@ var GlobalRoom = (function () {
 					aliases[room.aliases[a]] = room;
 				}
 			}
-			if (!room.isPrivate || room.isPrivate === 'voice') this.chatRooms.push(room);
+			this.chatRooms.push(room);
 			if (room.autojoin) this.autojoin.push(id);
 			if (room.staffAutojoin) this.staffAutojoin.push(id);
 		}
@@ -460,7 +458,7 @@ var GlobalRoom = (function () {
 		if (!user.connected) return;
 		for (var i = 0; i < this.searchers.length; i++) {
 			var search = this.searchers[i];
-			var searchUser = Users.get(search.userid);
+			var searchUser = Users.getExact(search.userid);
 			if (!searchUser || !searchUser.connected) {
 				this.searchers.splice(i, 1);
 				i--;
@@ -757,10 +755,10 @@ var BattleRoom = (function () {
 				p1score = 0;
 			}
 
-			var p1 = rated.p1;
-			if (Users.getExact(rated.p1)) p1 = Users.getExact(rated.p1).name;
-			var p2 = rated.p2;
-			if (Users.getExact(rated.p2)) p2 = Users.getExact(rated.p2).name;
+			var p1 = Users.getExact(rated.p1);
+			var p1name = p1 ? p1.name : rated.p1;
+			var p2 = Users.getExact(rated.p2);
+			var p2name = p2 ? p2.name : rated.p2;
 
 			//update.updates.push('[DEBUG] uri: ' + Config.loginServer.uri + 'action.php?act=ladderupdate&serverid=' + Config.serverId + '&p1=' + encodeURIComponent(p1) + '&p2=' + encodeURIComponent(p2) + '&score=' + p1score + '&format=' + toId(rated.format) + '&servertoken=[token]');
 
@@ -776,8 +774,8 @@ var BattleRoom = (function () {
 				this.push('|raw|Ladder updating...');
 				var self = this;
 				LoginServer.request('ladderupdate', {
-					p1: p1,
-					p2: p2,
+					p1: p1name,
+					p2: p2name,
 					score: p1score,
 					format: toId(rated.format)
 				}, function (data, statusCode, error) {
@@ -805,17 +803,17 @@ var BattleRoom = (function () {
 							var oldacre = Math.round(data.p1rating.oldacre);
 							var acre = Math.round(data.p1rating.acre);
 							var reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.99 ? 'winning' : (p1score < 0.01 ? 'losing' : 'tying'));
-							if (reasons.substr(0, 1) !== '-') reasons = '+' + reasons;
-							self.addRaw(Tools.escapeHTML(p1) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
+							if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
+							self.addRaw(Tools.escapeHTML(p1name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
 
 							oldacre = Math.round(data.p2rating.oldacre);
 							acre = Math.round(data.p2rating.acre);
 							reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.99 ? 'losing' : (p1score < 0.01 ? 'winning' : 'tying'));
-							if (reasons.substr(0, 1) !== '-') reasons = '+' + reasons;
-							self.addRaw(Tools.escapeHTML(p2) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
+							if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
+							self.addRaw(Tools.escapeHTML(p2name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
 
-							Users.get(p1).cacheMMR(rated.format, data.p1rating);
-							Users.get(p2).cacheMMR(rated.format, data.p2rating);
+							if (p1 && p1.userid === rated.p1) p1.cacheMMR(rated.format, data.p1rating);
+							if (p2 && p2.userid === rated.p2) p2.cacheMMR(rated.format, data.p2rating);
 							self.update();
 						} catch (e) {
 							self.addRaw('There was an error calculating rating changes.');
@@ -1477,15 +1475,21 @@ var ChatRoom = (function () {
 		this.send(update);
 	};
 	ChatRoom.prototype.getIntroMessage = function () {
-		var html = this.introMessage || '';
-		if (this.modchat) {
-			if (html) html += '<br /><br />';
-			html += '<div class="broadcast-red">';
-			html += 'Must be rank ' + this.modchat + ' or higher to talk right now.';
-			html += '</div>';
+		if (this.modchat && this.introMessage) {
+			return '\n|raw|<div class="infobox"><div' + (!this.isOfficial ? ' class="infobox-limited"' : '') + '>' + this.introMessage + '</div>' +
+				'<br />' +
+				'<div class="broadcast-red">' +
+				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
+				'</div></div>';
 		}
 
-		if (html) return '\n|raw|<div class="infobox">' + html + '</div>';
+		if (this.modchat) {
+			return '\n|raw|<div class="infobox"><div class="broadcast-red">' +
+				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
+				'</div></div>';
+		}
+
+		if (this.introMessage) return '\n|raw|<div class="infobox infobox-limited">' + this.introMessage + '</div>';
 
 		return '';
 	};
