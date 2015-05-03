@@ -446,7 +446,7 @@ Validator = (function () {
 			if (lsetData.sources && lsetData.sources.length === 1 && !lsetData.sourcesBefore) {
 				// we're restricted to a single source
 				var source = lsetData.sources[0];
-				if (source.substr(1, 1) === 'S') {
+				if (source.charAt(1) === 'S') {
 					// it's an event
 					var eventData = null;
 					var splitSource = source.substr(2).split(' ');
@@ -584,7 +584,7 @@ Validator = (function () {
 		var sourcesBefore = 0;
 		var noPastGen = !!format.requirePentagon;
 		// since Gen 3, Pokemon cannot be traded to past generations
-		var noFutureGen = tools.gen >= 3 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
+		var noFutureGen = tools.gen >= 2 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
 
 		do {
 			alreadyChecked[template.speciesid] = true;
@@ -766,7 +766,7 @@ Validator = (function () {
 				if (!sources) sources = [];
 				for (var i = 0, len = lsetData.sources.length; i < len; i++) {
 					learned = lsetData.sources[i];
-					if (parseInt(learned.substr(0, 1), 10) <= sourcesBefore) {
+					if (parseInt(learned.charAt(0), 10) <= sourcesBefore) {
 						sources.push(learned);
 					}
 				}
@@ -776,7 +776,7 @@ Validator = (function () {
 				if (!lsetData.sources) lsetData.sources = [];
 				for (var i = 0, len = sources.length; i < len; i++) {
 					learned = sources[i];
-					if (parseInt(learned.substr(0, 1), 10) <= lsetData.sourcesBefore) {
+					if (parseInt(learned.charAt(0), 10) <= lsetData.sourcesBefore) {
 						lsetData.sources.push(learned);
 					}
 				}

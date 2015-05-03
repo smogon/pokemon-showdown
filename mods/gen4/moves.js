@@ -853,7 +853,7 @@ exports.BattleMovedex = {
 	},
 	roar: {
 		inherit: true,
-		flags: {mirror: 1, sound: 1, authentic: 1}
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1}
 	},
 	rockblast: {
 		inherit: true,
@@ -918,6 +918,12 @@ exports.BattleMovedex = {
 	stealthrock: {
 		inherit: true,
 		flags: {}
+	},
+	struggle: {
+		inherit: true,
+		onModifyMove: function (move) {
+			move.type = '???';
+		}
 	},
 	suckerpunch: {
 		inherit: true,
@@ -1042,7 +1048,7 @@ exports.BattleMovedex = {
 	},
 	whirlwind: {
 		inherit: true,
-		flags: {mirror: 1, authentic: 1}
+		flags: {protect: 1, mirror: 1, authentic: 1}
 	},
 	wish: {
 		inherit: true,
