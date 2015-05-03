@@ -40,7 +40,7 @@ exports.commandcharacter = '.';
 exports.defaultrank = '%';
 
 // The server's usergroups, in order from lowest to highest priority.
-exports.groups = ' \u2605+=%@&#~';
+exports.groups = ' \u2605\u2022+=%@&#~';
 
 // Whether this file should be watched for changes or not.
 // If you change this option, the server has to be restarted in order for it to
