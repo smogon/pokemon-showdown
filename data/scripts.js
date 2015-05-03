@@ -173,7 +173,7 @@ exports.BattleScripts = {
 			this.faint(pokemon, pokemon, move);
 		}
 
-		if (!move.negateSecondary) {
+		if (!move.negateSecondary && !pokemon.hasAbility('sheerforce')) {
 			this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 		}
@@ -324,7 +324,7 @@ exports.BattleScripts = {
 
 		if (!damage && damage !== 0) return damage;
 
-		if (target && !move.negateSecondary) {
+		if (target && !move.negateSecondary && !pokemon.hasAbility('sheerforce')) {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
 			this.runEvent('AfterMoveSecondary', target, pokemon, move);
 		}
@@ -1822,8 +1822,8 @@ exports.BattleScripts = {
 
 			// Not holding Mega Stone
 			Banette: 83, Beedrill: 83, Glalie: 83, Lopunny: 83, Pidgeot: 83,
-			Altaria: 81, Ampharos: 81, Charizard: 81, Pinsir: 81,
-			Aerodactyl: 79, Aggron: 79, Blastoise: 79, Gallade: 79, Gardevoir: 79, Heracross: 79, Manectric: 79, Sceptile: 79, Venusaur: 79,
+			Altaria: 81, Ampharos: 81, Charizard: 81,
+			Aerodactyl: 79, Aggron: 79, Blastoise: 79, Gardevoir: 79, Manectric: 79, Sceptile: 79, Venusaur: 79,
 			Diancie: 77, Metagross: 77, Sableye: 77,
 
 			// Holistic judgment

@@ -105,7 +105,12 @@ var commands = exports.commands = {
 
 	requesthelp: 'report',
 	report: function (target, room, user) {
-		this.sendReply("Use the Help room.");
+		if (room.id === 'help') {
+			this.sendReply("Ask one of the Mods in the Help room.");
+		} else {
+			this.sendReply("Ask a Mod in the Help room.");
+			this.parse('/join help');
+		}
 	},
 
 	r: 'reply',
