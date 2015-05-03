@@ -91,8 +91,8 @@ exports.punishvals = {
 	1: 'warn',
 	2: 'mute',
 	3: 'hourmute',
-	4: 'roomban',
-	5: 'ban'
+	4: 'hourmute',
+	5: 'lock'
 };
 
 //This key is used to deliver requests from Google Spreadsheets. Used by the wifi room.
