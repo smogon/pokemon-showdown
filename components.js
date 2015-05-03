@@ -174,6 +174,8 @@ var components = exports.components = {
 					this.sendReply('You have purchased a \u2606. You will have this until you log off for more than an hour. You may now use /star now.');
 					this.parse('/help star');
 					this.sendReply('If you do not want your \u2606 anymore, you may use /removestar to go back to your old symbol.');
+				} else if (target.toLowerCase() === 'blackstar') {
+					this.sendReply('You have purchased ' + target + '. Please contact an admin (~) to get ' + target + '.');
 				} else {
 					this.sendReply('You have purchased ' + target + '. Please contact the admin "wolf" to get ' + target + '. Use the /tell command if wolf is offline (submit "/help tell" in the chat).');
 				}
