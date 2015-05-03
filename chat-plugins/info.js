@@ -1415,25 +1415,25 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"<b>~ Administrators</b><br />" +
+			"- Anti (Crazy Uncle Anti)<br />" +
 			"- Ausaudriel (Audy)<br />" +
-			"- Forever (skylight)<br />" +
+			"- Castform (Chase, orb castform, Powalen)<br />" +
 			"- Hiroshi Sotomura (Sotomura, Sotomura606)<br />" +
 			"- Lilith (TitanBlade, TwilightBlade)<br />" +
 			"- Livewire<br />" +
+			"- Nolafus<br />" +
 			"- Rukario (PPN)<br />" +
-			"- seeker (abnegation, stranger)<br />" +
 			"- Sheep (Cirnysheep)<br />" +
-			"- shenanigans (razor leaf)<br />" +
+			"- shenanigans (razor leaf, unkempt harold)<br />" +
+			"- Sylphiel<br />" +
 			"- wolf (wofl)<br />" +
 			"- Zeffy<br /><br />" +
 			"<b>@ Moderators</b><br />" +
 			"- Altairis (Winry)<br />" +
-			"- Anti (Crazy Uncle Anti)<br />" +
 			"- apocalypseArisen (Megido, omicron, omicronhuh)<br />" +
 			"- Aslan<br />" +
-			"- Castform (orb castform, Powalen)<br />" +
 			"- Christos<br />" +
-			"- Dragon (Aura Blackquill, Captain Syrup, Dragii, Erika Senpai, Iris, Kjelle, Miss Fortune, Mitsuruu, Nabooru, Tharja)<br />" +
+			"- Dragon (Aura Blackquill, bellossom, Captain Syrup, Dragii, Erika Senpai, Iris, Kjelle, Miss Fortune, Mitsuruu, Nabooru, Tharja)<br />" +
 			"- Peitharchia (Adrastia, nymph)<br />" +
 			"- Sanguine (Natalya)<br />" +
 			"- Sector (Milena Kunis)<br />" +
