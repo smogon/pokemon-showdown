@@ -118,7 +118,12 @@ exports.BattleScripts = {
 		var doSelfDestruct = true;
 		var damage = 0;
 
-		// First, let's calculate the accuracy.
+		// First, check if the Pokémon is immune to this move.
+		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+			return false;
+		}
+
+		// Now, let's calculate the accuracy.
 		var accuracy = move.accuracy;
 
 		// Partial trapping moves: true accuracy while it lasts
@@ -128,6 +133,14 @@ exports.BattleScripts = {
 			} else if (pokemon.volatiles['partialtrappinglock'].locked !== target) {
 				// The target switched, therefor, you fail using wrap.
 				delete pokemon.volatiles['partialtrappinglock'];
+				return false;
+			}
+		}
+
+		// OHKO moves only have a chance to hit if the user is at least as fast as the target
+		if (move.ohko) {
+			if (target.speed > pokemon.speed) {
+				this.add('-immune', target, '[ohko]');
 				return false;
 			}
 		}
@@ -157,11 +170,6 @@ exports.BattleScripts = {
 		if (accuracy !== true && this.random(256) > accuracy) {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
-			damage = false;
-		}
-
-		// Check if the Pokémon is immune to this move.
-		if (move.affectedByImmunities && !target.runImmunity(move.type, true)) {
 			damage = false;
 		}
 
@@ -223,6 +231,8 @@ exports.BattleScripts = {
 			return false;
 		}
 
+		if (move.ohko) this.add('-ohko');
+
 		if (!move.negateSecondary) {
 			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
 			this.runEvent('AfterMoveSecondary', target, pokemon, move);
@@ -238,8 +248,8 @@ exports.BattleScripts = {
 		var hitResult = true;
 		if (!moveData) moveData = move;
 
-		if (typeof move.affectedByImmunities === 'undefined') {
-			move.affectedByImmunities = (move.category !== 'Status');
+		if (move.ignoreImmunity === undefined) {
+			move.ignoreImmunity = (move.category === 'Status');
 		}
 
 		// We get the sub to the target to see if it existed
@@ -398,7 +408,7 @@ exports.BattleScripts = {
 		};
 
 		// Let's see if the target is immune to the move.
-		if (move.affectedByImmunities) {
+		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
 			if (!target.runImmunity(move.type, true)) {
 				return false;
 			}
@@ -406,11 +416,6 @@ exports.BattleScripts = {
 
 		// Is it an OHKO move?
 		if (move.ohko) {
-			// If it is, move hits if the Pokémon is faster.
-			if (target.speed > pokemon.speed) {
-				this.add('-failed', target);
-				return false;
-			}
 			return target.maxhp;
 		}
 

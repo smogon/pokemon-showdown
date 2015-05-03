@@ -286,7 +286,7 @@ exports.BattleScripts = {
 		};
 
 		// Let's test for immunities.
-		if (move.affectedByImmunities) {
+		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
 			if (!target.runImmunity(move.type, true)) {
 				return false;
 			}
@@ -294,11 +294,6 @@ exports.BattleScripts = {
 
 		// Is it an OHKO move?
 		if (move.ohko) {
-			// If it is, move hits if the Pokémon is more level.
-			if (target.level > pokemon.level) {
-				this.add('-failed', target);
-				return false;
-			}
 			return target.maxhp;
 		}
 
@@ -962,16 +957,24 @@ exports.BattleScripts = {
 		var setupType = '';
 		var item = 'leftovers';
 		var ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
-		var hasHP = false;
 
 		var j = 0;
 		do {
+			// Keep track of all moves we have:
 			hasMove = {};
+			for (var k = 0; k < moves.length; k++) {
+				if (moves[k].substr(0, 11) === 'hiddenpower') {
+					hasMove['hiddenpower'] = true;
+				} else {
+					hasMove[moves[k]] = true;
+				}
+			}
+
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && moveKeys.length) {
 				var moveid = this.sampleNoReplace(moveKeys);
 				if (moveid.substr(0, 11) === 'hiddenpower') {
-					if (hasHP || hasMove['hiddenpower']) continue;
+					if (hasMove['hiddenpower']) continue;
 					hasMove['hiddenpower'] = true;
 				} else {
 					hasMove[moveid] = true;
@@ -1012,7 +1015,6 @@ exports.BattleScripts = {
 					}
 					moveid = 'hiddenpower';
 				}
-				if (hasMove[moveid]) rejected = true;
 				if (!template.essentialMove || moveid !== template.essentialMove) {
 					var isSetup = false;
 
@@ -1120,7 +1122,6 @@ exports.BattleScripts = {
 					moves.splice(k, 1);
 					break;
 				}
-				if (moveid === 'hiddenpower') hasHP = true;
 				counter[move.category]++;
 			} // End of for
 		} while (moves.length < 4 && j < moveKeys.length);

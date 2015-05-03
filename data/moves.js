@@ -952,7 +952,7 @@ exports.BattleMovedex = {
 		priority: 1,
 		flags: {contact: 1, protect: 1},
 		volatileStatus: 'bide',
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		effect: {
 			duration: 3,
 			onLockMove: 'bide',
@@ -2324,14 +2324,17 @@ exports.BattleMovedex = {
 		volatileStatus: 'curse',
 		onModifyMove: function (move, source, target) {
 			if (!source.hasType('Ghost')) {
-				delete move.volatileStatus;
-				delete move.onHit;
-				move.self = {boosts: {atk:1, def:1, spe:-1}};
 				move.target = move.nonGhostTarget;
 			}
 		},
 		onTryHit: function (target, source, move) {
-			if (move.volatileStatus && target.volatiles.curse) return false;
+			if (!source.hasType('Ghost')) {
+				delete move.volatileStatus;
+				delete move.onHit;
+				move.self = {boosts: {atk:1, def:1, spe:-1}};
+			} else if (move.volatileStatus && target.volatiles.curse) {
+				return false;
+			}
 		},
 		onHit: function (target, source) {
 			this.directDamage(source.maxhp / 2, source, source);
@@ -3929,14 +3932,16 @@ exports.BattleMovedex = {
 		priority: 2,
 		flags: {mirror: 1},
 		breaksProtect: true,
-		onHit: function (target, source) {
+		onHit: function (target) {
+			var feinted = false;
 			if (target.removeVolatile('protect') || target.removeVolatile('kingsshield') || target.removeVolatile('spikyshield')) {
-				this.add("-activate", target, "move: Feint");
+				feinted = true;
 			}
-			if (target.side !== source.side) {
-				target.side.removeSideCondition('quickguard');
-				target.side.removeSideCondition('wideguard');
-			}
+			if (target.side.removeSideCondition('quickguard')) feinted = true;
+			if (target.side.removeSideCondition('wideguard')) feinted = true;
+			if (target.removeVolatile('matblock')) feinted = true;
+			if (target.side.removeSideCondition('craftyshield')) feinted = true;
+			if (feinted) this.add('-activate', target, 'move: Feint');
 		},
 		secondary: false,
 		target: "normal",
@@ -4988,7 +4993,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		isFutureMove: true,
 		onTryHit: function (target, source) {
 			source.side.addSideCondition('futuremove');
@@ -5004,7 +5009,7 @@ exports.BattleMovedex = {
 					basePower: 120,
 					category: "Special",
 					flags: {},
-					affectedByImmunities: true,
+					ignoreImmunity: false,
 					type: 'Psychic'
 				}
 			};
@@ -7651,6 +7656,7 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			source.addVolatile('lockon', target);
+			this.add('-activate', source, 'move: Lock-On', '[of] ' + target);
 		},
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
@@ -8156,7 +8162,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, authentic: 1},
-		onHit: function (target, pokemon) {
+		onTryHit: function (target, pokemon) {
 			var decision = this.willMove(target);
 			if (decision) {
 				var noMeFirst = {
@@ -8166,7 +8172,7 @@ exports.BattleMovedex = {
 				if (move.category !== 'Status' && !noMeFirst[move]) {
 					pokemon.addVolatile('mefirst');
 					this.useMove(move, pokemon, target);
-					return;
+					return null;
 				}
 			}
 			return false;
@@ -8530,6 +8536,7 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			source.addVolatile('lockon', target);
+			this.add('-activate', source, 'move: Mind Reader', '[of] ' + target);
 		},
 		secondary: false,
 		target: "normal",
@@ -8657,13 +8664,12 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {},
-		onTryHit: function (target) {
+		onTryHit: function (target, pokemon) {
 			if (!target.lastMove || !this.getMove(target.lastMove).flags['mirror']) {
 				return false;
 			}
-		},
-		onHit: function (target, source) {
-			this.useMove(target.lastMove, source, target);
+			this.useMove(target.lastMove, pokemon, target);
+			return null;
 		},
 		secondary: false,
 		target: "normal",
@@ -9092,17 +9098,17 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {},
-		onHit: function (target, source) {
-			var moveToUse = 'triattack';
+		onTryHit: function (target, pokemon) {
+			var move = 'triattack';
 			if (this.isTerrain('electricterrain')) {
-				moveToUse = 'thunderbolt';
+				move = 'thunderbolt';
 			} else if (this.isTerrain('grassyterrain')) {
-				moveToUse = 'energyball';
+				move = 'energyball';
 			} else if (this.isTerrain('mistyterrain')) {
-				moveToUse = 'moonblast';
+				move = 'moonblast';
 			}
-
-			this.useMove(moveToUse, source, target);
+			this.useMove(move, pokemon, target);
+			return null;
 		},
 		secondary: false,
 		target: "normal",
@@ -13443,7 +13449,8 @@ exports.BattleMovedex = {
 					return;
 				}
 				var damage = this.getDamage(source, target, move);
-				if (!damage) {
+				if (!damage && damage !== 0) {
+					this.add('-activate', target, 'Substitute', '[block] ' + move.name);
 					return null;
 				}
 				damage = this.runEvent('SubDamage', target, source, move, damage);
@@ -14105,17 +14112,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		isUnreleased: true,
-		onModifyMove: function (move) {
-			if (move.type === 'Ground') {
-				move.affectedByImmunities = false;
-			}
-		},
 		onTryHit: function (target) {
 			// only the attack that grounds the target ignores effectiveness
 			if (target.negateImmunity['Ground']) return;
 			target.negateImmunity['Ground'] = 'IgnoreEffectiveness';
 		},
 		volatileStatus: 'smackdown',
+		ignoreImmunity: {'Ground': true},
 		secondary: false,
 		target: "allAdjacentFoes",
 		type: "Ground"
@@ -14263,7 +14266,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		status: 'par',
-		affectedByImmunities: true,
+		ignoreImmunity: false,
 		secondary: false,
 		target: "normal",
 		type: "Electric"

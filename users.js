@@ -190,7 +190,7 @@ function lockRange(range, ip) {
 		}
 		rangelockedUsers[range][curUser.userid] = 1;
 		curUser.locked = '#range';
-		curUser.send("|popup|You are in a range that has been temporarily locked from talking in chats and PMing regular users.");
+		curUser.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
 		curUser.updateIdentity();
 	}
 
@@ -291,7 +291,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 			if (user.named && !user.locked && user.group === Config.groupsranking[0]) {
 				var shortHost = Users.shortenHost(hosts[0]);
 				if (lockedRanges[shortHost]) {
-					user.send("|popup|You are in a range that has been temporarily locked from talking in chats and PMing regular users.");
+					user.send("|popup|You are locked because someone on your ISP has spammed, and your ISP does not give us any way to tell you apart from them.");
 					rangelockedUsers[shortHost][user.userid] = 1;
 					user.locked = '#range';
 					user.updateIdentity();
@@ -304,7 +304,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 
 	Dnsbl.query(connection.ip, function (isBlocked) {
 		if (isBlocked) {
-			connection.popup("Your IP is known for spamming or hacking websites and has been locked. If you're using a proxy, don't.");
+			connection.popup("You are locked because someone using your IP (" + connection.ip + ") has spammed/hacked other websites. This usually means you're using a proxy, in a country where other people commonly hack, or have a virus on your computer that's spamming websites.");
 			if (connection.user && !connection.user.locked) {
 				connection.user.locked = '#dnsbl';
 				connection.user.updateIdentity();
@@ -1241,7 +1241,7 @@ User = (function () {
 		for (var i in users) {
 			if (users[i] === this) continue;
 			if (!users[i].named && !users[i].connected) continue;
-			if (!getAll && users[i].group !== ' ' && this.group === ' ') continue;
+			if (!getAll && users[i].confirmed) continue;
 			for (var myIp in this.ips) {
 				if (myIp in users[i].ips) {
 					alts.push(users[i].name);
@@ -1253,6 +1253,7 @@ User = (function () {
 	};
 	User.prototype.doWithMMR = function (formatid, callback) {
 		var self = this;
+		var userid = this.userid;
 		formatid = toId(formatid);
 
 		// this should relieve login server strain
@@ -1264,7 +1265,7 @@ User = (function () {
 		}
 		LoginServer.request('mmr', {
 			format: formatid,
-			user: this.userid
+			user: userid
 		}, function (data, statusCode, error) {
 			var mmr = 1000;
 			error = (error || true);
@@ -1274,7 +1275,7 @@ User = (function () {
 					return;
 				}
 				mmr = parseInt(data, 10);
-				if (!isNaN(mmr)) {
+				if (!isNaN(mmr) && self.userid === userid) {
 					error = false;
 					self.mmrCache[formatid] = mmr;
 				} else {

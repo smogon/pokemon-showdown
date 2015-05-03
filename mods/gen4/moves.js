@@ -919,6 +919,12 @@ exports.BattleMovedex = {
 		inherit: true,
 		flags: {}
 	},
+	struggle: {
+		inherit: true,
+		onModifyMove: function (move) {
+			move.type = '???';
+		}
+	},
 	suckerpunch: {
 		inherit: true,
 		onTry: function (source, target) {

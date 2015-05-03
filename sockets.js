@@ -228,10 +228,7 @@ if (cluster.isMaster) {
 			}
 		}
 	};
-	var interval;
-	if (!Config.herokuhack) {
-		interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
-	}
+	var interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
 
 	process.on('message', function (data) {
 		// console.log('worker received: ' + data);
@@ -392,17 +389,6 @@ if (cluster.isMaster) {
 
 		process.send('*' + socketid + '\n' + socket.remoteAddress);
 
-		// console.log('CONNECT: ' + socket.remoteAddress + ' [' + socket.id + ']');
-		var interval;
-		if (Config.herokuhack) {
-			// see https://github.com/sockjs/sockjs-node/issues/57#issuecomment-5242187
-			interval = setInterval(function () {
-				try {
-					socket._session.recv.didClose();
-				} catch (e) {}
-			}, 15000);
-		}
-
 		socket.on('data', function (message) {
 			// drop empty messages (DDoS?)
 			if (!message) return;
@@ -415,11 +401,7 @@ if (cluster.isMaster) {
 		});
 
 		socket.on('close', function () {
-			if (interval) {
-				clearInterval(interval);
-			}
 			process.send('!' + socketid);
-
 			delete sockets[socketid];
 			for (var channelid in channels) {
 				delete channels[channelid][socketid];
@@ -427,17 +409,17 @@ if (cluster.isMaster) {
 		});
 	});
 	server.installHandlers(app, {});
-	if (Config.bindaddress === '0.0.0.0') Config.bindaddress = undefined;
-	app.listen(Config.port, Config.bindaddress || undefined);
-	console.log('Worker ' + cluster.worker.id + ' now listening on ' + (Config.bindaddress || '*') + ':' + Config.port);
+	if (!Config.bindaddress) Config.bindaddress = '0.0.0.0';
+	app.listen(Config.port, Config.bindaddress);
+	console.log('Worker ' + cluster.worker.id + ' now listening on ' + Config.bindaddress + ':' + Config.port);
 
 	if (appssl) {
 		server.installHandlers(appssl, {});
-		appssl.listen(Config.ssl.port);
+		appssl.listen(Config.ssl.port, Config.bindaddress);
 		console.log('Worker ' + cluster.worker.id + ' now listening for SSL on port ' + Config.ssl.port);
 	}
 
-	console.log('Test your server at http://' + (Config.bindaddress || 'localhost') + ':' + Config.port);
+	console.log('Test your server at http://' + (Config.bindaddress === '0.0.0.0' ? 'localhost' : Config.bindaddress) + ':' + Config.port);
 
 	require('./repl.js').start('sockets-', cluster.worker.id + '-' + process.pid, function (cmd) { return eval(cmd); });
 }

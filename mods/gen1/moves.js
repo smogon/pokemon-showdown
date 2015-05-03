@@ -105,7 +105,7 @@ exports.BattleMovedex = {
 	},
 	bind: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock'
@@ -199,7 +199,7 @@ exports.BattleMovedex = {
 	},
 	counter: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		willCrit: false,
 		damageCallback: function (pokemon, target) {
 			// Counter mechanics on gen 1 might be hard to understand.
@@ -368,7 +368,7 @@ exports.BattleMovedex = {
 	},
 	glare: {
 		inherit: true,
-		affectedByImmunities: false
+		ignoreImmunity: true
 	},
 	growth: {
 		inherit: true,
@@ -397,15 +397,17 @@ exports.BattleMovedex = {
 						// Clears the status from the opponent
 						this.sides[i].active[j].clearStatus();
 					}
-					this.sides[i].removeSideCondition('lightscreen');
-					this.sides[i].removeSideCondition('reflect');
 					// Turns toxic to poison for user
 					if (hasTox && this.sides[i].active[j].id === source.id) {
 						this.sides[i].active[j].setStatus('psn');
 					}
 					// Clears volatile only from user
 					if (this.sides[i].active[j].id === source.id) {
-						this.sides[i].active[j].clearVolatile();
+						var volatiles = Object.keys(this.sides[i].active[j].volatiles);
+						for (var n = 0; n < volatiles.length; n++) {
+							this.sides[i].active[j].removeVolatile(volatiles[n]);
+							this.add('-end', this.sides[i].active[j], volatiles[n]);
+						}
 					}
 				}
 			}
@@ -574,7 +576,7 @@ exports.BattleMovedex = {
 	},
 	nightshade: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		basePower: 1
 	},
 	poisonsting: {
@@ -713,12 +715,12 @@ exports.BattleMovedex = {
 	},
 	sandattack: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		type: "Normal"
 	},
 	seismictoss: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		basePower: 1
 	},
 	selfdestruct: {
@@ -760,9 +762,7 @@ exports.BattleMovedex = {
 	},
 	struggle: {
 		inherit: true,
-		onModifyMove: function (move, pokemon) {
-			this.add('-activate', pokemon, 'move: Struggle');
-		}
+		onModifyMove: function () {}
 	},
 	substitute: {
 		num: 164,
@@ -852,7 +852,7 @@ exports.BattleMovedex = {
 	},
 	superfang: {
 		inherit: true,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		basePower: 1
 	},
 	thunder: {
@@ -893,7 +893,7 @@ exports.BattleMovedex = {
 	wrap: {
 		inherit: true,
 		accuracy: 85,
-		affectedByImmunities: false,
+		ignoreImmunity: true,
 		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock'

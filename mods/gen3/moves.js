@@ -357,7 +357,7 @@ exports.BattleMovedex = {
 	glare: {
 		inherit: true,
 		accuracy: 75,
-		affectedByImmunities: true
+		ignoreImmunity: false
 	},
 	growth: {
 		inherit: true,
@@ -588,6 +588,9 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 100,
 		recoil: [1, 2],
+		onModifyMove: function (move) {
+			move.type = '???';
+		},
 		self: false
 	},
 	synthesis: {
