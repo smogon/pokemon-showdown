@@ -487,7 +487,7 @@ exports.commands = {
 		}
 		this.say(room, text);
 	},
-	'helix': function (arg, user, room) {
+	helix: function (arg, user, room) {
 		var text = this.canUse('helix', room, user) || room === user ? '' : '/pm ' + user.id + ', ';
 		var rand = ~~(20 * Math.random());
 
