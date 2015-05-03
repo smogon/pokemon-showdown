@@ -160,6 +160,7 @@ var commands = exports.commands = {
 
 		var buffer = '';
 		var targetId = toId(target);
+		if (!targetId) return this.parse('/help data');
 		if (targetId === '' + parseInt(targetId)) {
 			for (var p in Tools.data.Pokedex) {
 				var pokemon = Tools.getTemplate(p);
