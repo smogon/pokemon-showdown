@@ -2342,7 +2342,6 @@ exports.BattleAbilities = {
 		onModifyMove: function (move, pokemon) {
 			if (move.secondaries) {
 				delete move.secondaries;
-				move.negateSecondary = true;
 				pokemon.addVolatile('sheerforce');
 			}
 		},
@@ -2353,6 +2352,7 @@ exports.BattleAbilities = {
 				return this.chainModify([0x14CD, 0x1000]); // The Sheer Force modifier is slightly higher than the normal 1.3 (0x14CC)
 			}
 		},
+		// Negation of `AfterMoveSecondary` effects implemented in scripts.js
 		id: "sheerforce",
 		name: "Sheer Force",
 		rating: 4,
