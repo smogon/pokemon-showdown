@@ -126,8 +126,6 @@ info('starting server');
 
 var WebSocketClient = require('websocket').client;
 global.Commands = require('./commands.js').commands;
-global.Users = require('./users.js');
-global.Rooms = require('./rooms.js');
 global.Parse = require('./parser.js').parse;
 
 var connection = null;
