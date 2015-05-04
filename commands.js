@@ -2206,6 +2206,58 @@ var commands = exports.commands = {
 				this.sendReply("Help for the command '" + target + "' was not found. Try /help for general help");
 			}
 		}
-	}
+	},
+
+	aliases: 'alias',
+	alias: function (target, room, user) {
+		if (!target) this.parse('/help alias');
+		target = toId(target);
+
+		if (target in commands) {
+			var targetCommand;
+			if (typeof commands[target] === 'string') {
+				targetCommand = commands[target];
+			} else if (Array.isArray(commands[target])) {
+				return this.sendReply("Command '" + target + "' was not found.");
+			} else {
+				targetCommand = target;
+			}
+			target = '/' + targetCommand;
+
+			var aliases = [];
+			for (var cmd in commands) {
+				if (typeof commands[cmd] !== 'string') continue;
+				if (commands[cmd] === targetCommand) aliases.push('/' + cmd);
+			}
+
+			if (aliases.length > 0) return this.sendReplyBox("Aliases for " + target + ":<br>" + aliases.join(', '));
+		} else {
+			var targetAlias;
+			var id;
+			for (var alias in Tools.data.Aliases) {
+				if (alias === target) {
+					targetAlias = Tools.data.Aliases[alias];
+					id = toId(Tools.data.Aliases[alias]);
+					break;
+				} else if (target === toId(Tools.data.Aliases[alias])) {
+					targetAlias = Tools.data.Aliases[alias];
+					id = target;
+					break;
+				}
+			}
+
+			if (targetAlias) {
+				var aliases = [];
+				for (var alias in Tools.data.Aliases) {
+					if (toId(Tools.data.Aliases[alias]) === id) aliases.push(alias);
+				}
+
+				return this.sendReplyBox("Aliases for " + targetAlias + ":<br>" + aliases.join(', '));
+			}
+		}
+
+		return this.sendReplyBox("'" + target + "' has no aliases.");
+	},
+	aliashelp: ["/alias [command/Pokemon/move/item/ability/metagame] - gives alternate names for entry."]
 
 };
