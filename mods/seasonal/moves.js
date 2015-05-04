@@ -116,12 +116,12 @@ exports.BattleMovedex = {
 		type: "Normal"
 	},
 	// Taunt
-	followe: {
+	followme: {
 		num: -7,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		id: "followe",
+		id: "followme",
 		name: "Follow Me",
 		pp: 20,
 		priority: 3,
