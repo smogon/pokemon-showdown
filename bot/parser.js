@@ -8,67 +8,59 @@
  * @license MIT license
  */
 
-var fs = require('fs');
+var sys = require('sys');
 var https = require('https');
 var url = require('url');
 
-const ACTION_COOLDOWN = 3 * 1000;
+const ACTION_COOLDOWN = 3*1000;
 const FLOOD_MESSAGE_NUM = 5;
 const FLOOD_PER_MSG_MIN = 500; // this is the minimum time between messages for legitimate spam. It's used to determine what "flooding" is caused by lag
-const FLOOD_MESSAGE_TIME = 6 * 1000;
+const FLOOD_MESSAGE_TIME = 6*1000;
 
-var settings;
+settings = {};
 try {
 	settings = JSON.parse(fs.readFileSync('settings.json'));
+	if (!Object.keys(settings).length && settings !== {}) settings = {};
 } catch (e) {} // file doesn't exist [yet]
-if (!Object.isObject(settings)) settings = {};
 
 exports.parse = {
-	actionUrl: url.parse('https://play.pokemonshowdown.com/~~' + Config.serverid + '/action.php'),
+	actionUrl: url.parse('https://play.pokemonshowdown.com/~~' + config.serverid + '/action.php'),
 	room: 'lobby',
 	'settings': settings,
 	chatData: {},
 	ranks: {},
-	blacklistRegexes: {},
+	msgQueue: [],
 
-	data: function (data) {
+	data: function(data, connection) {
 		if (data.substr(0, 1) === 'a') {
 			data = JSON.parse(data.substr(1));
 			if (data instanceof Array) {
 				for (var i = 0, len = data.length; i < len; i++) {
-					this.splitMessage(data[i]);
+					this.splitMessage(data[i], connection);
 				}
 			} else {
-				this.splitMessage(data);
+				this.splitMessage(data, connection);
 			}
 		}
 	},
-	splitMessage: function (message) {
+	splitMessage: function(message, connection) {
 		if (!message) return;
 
 		var room = 'lobby';
-		if (message.indexOf('\n') < 0) return this.message(message, room);
+		if (message.indexOf('\n') < 0) return this.message(message, connection, room);
 
 		var spl = message.split('\n');
 		if (spl[0].charAt(0) === '>') {
+			if (spl[1].substr(1, 4) === 'init') return ok('joined ' + spl[2].substr(7));
 			if (spl[1].substr(1, 10) === 'tournament') return;
 			room = spl.shift().substr(1);
-			if (spl[0].substr(1, 4) === 'init') {
-				var users = spl[2].substr(7).split(',');
-				var nickId = toId(Config.nick);
-				for (var i = users.length; i--;) {
-					if (toId(users[i]) === nickId) this.ranks[room] = users[i].trim().charAt(0);
-					break;
-				}
-				return ok('joined ' + room);
-			}
 		}
 
 		for (var i = 0, len = spl.length; i < len; i++) {
-			this.message(spl[i], room);
+			this.message(spl[i], connection, room);
 		}
 	},
-	message: function (message, room) {
+	message: function(message, connection, room) {
 		var spl = message.split('|');
 		switch (spl[1]) {
 			case 'challstr':
@@ -83,25 +75,25 @@ exports.parse = {
 					agent: false
 				};
 
-				if (!Config.pass) {
+				if (!config.pass) {
 					requestOptions.method = 'GET';
-					requestOptions.path += '?act=getassertion&userid=' + toId(Config.nick) + '&challengekeyid=' + id + '&challenge=' + str;
+					requestOptions.path += '?act=getassertion&userid=' + toId(config.nick) + '&challengekeyid=' + id + '&challenge=' + str;
 				} else {
 					requestOptions.method = 'POST';
-					var data = 'act=login&name=' + Config.nick + '&pass=' + Config.pass + '&challengekeyid=' + id + '&challenge=' + str;
+					var data = 'act=login&name=' + config.nick + '&pass=' + config.pass + '&challengekeyid=' + id + '&challenge=' + str;
 					requestOptions.headers = {
 						'Content-Type': 'application/x-www-form-urlencoded',
 						'Content-Length': data.length
 					};
 				}
 
-				var req = https.request(requestOptions, function (res) {
+				var req = https.request(requestOptions, function(res) {
 					res.setEncoding('utf8');
 					var data = '';
-					res.on('data', function (chunk) {
+					res.on('data', function(chunk) {
 						data += chunk;
 					});
-					res.on('end', function () {
+					res.on('end', function() {
 						if (data === ';') {
 							error('failed to log in; nick is registered - invalid or no password given');
 							process.exit(-1);
@@ -113,15 +105,7 @@ exports.parse = {
 
 						if (data.indexOf('heavy load') !== -1) {
 							error('the login server is under heavy load; trying again in one minute');
-							setTimeout(function () {
-								this.message(message);
-							}.bind(this), 60 * 1000);
-							return;
-						}
-
-						if (data.substr(0, 16) === '<!DOCTYPE html>') {
-							error('Connection error 522; trying agian in one minute');
-							setTimeout(function () {
+							setTimeout(function() {
 								this.message(message);
 							}.bind(this), 60 * 1000);
 							return;
@@ -136,19 +120,19 @@ exports.parse = {
 								process.exit(-1);
 							}
 						} catch (e) {}
-						send('|/trn ' + Config.nick + ',0,' + data);
+						send(connection, '|/trn ' + config.nick + ',0,' + data);
 					}.bind(this));
 				}.bind(this));
 
-				req.on('error', function (err) {
-					error('login error: ' + err.stack);
+				req.on('error', function(err) {
+					error('login error: ' + sys.inspect(err));
 				});
 
 				if (data) req.write(data);
 				req.end();
 				break;
 			case 'updateuser':
-				if (spl[2] !== Config.nick) return;
+				if (spl[2] !== config.nick) return;
 
 				if (spl[3] !== '1') {
 					error('failed to log in, still guest');
@@ -156,72 +140,63 @@ exports.parse = {
 				}
 
 				ok('logged in as ' + spl[2]);
-				send('|/blockchallenges');
 
 				// Now join the rooms
-				for (var i = 0, len = Config.rooms.length; i < len; i++) {
-					var room = toId(Config.rooms[i]);
-					if (room === 'lobby' && Config.serverid === 'showdown') continue;
-					send('|/join ' + room);
+				this.say(connection, '', '/idle');
+				for (var i = 0, len = config.rooms.length; i < len; i++) {
+					var room = toId(config.rooms[i]);
+					if (room === 'lobby' && config.serverid === 'showdown') continue;
+					this.say(connection, '', '/join ' + room);
 				}
-				for (var i = 0, len = Config.privaterooms.length; i < len; i++) {
-					var room = toId(Config.privaterooms[i]);
-					if (room === 'lobby' && Config.serverid === 'showdown') continue;
-					send('|/join ' + room);
+				for (var i = 0, len = config.privaterooms.length; i < len; i++) {
+					var room = toId(config.privaterooms[i]);
+					if (room === 'lobby' && config.serverid === 'showdown') continue;
+					this.say(connection, '', '/join ' + room);
 				}
-				if (this.settings.blacklist) {
-					var blacklist = this.settings.blacklist;
-					for (var room in blacklist) {
-						this.updateBlacklistRegex(room);
-					}
-				}
-				setInterval(this.cleanChatData.bind(this), 30 * 60 * 1000);
 				break;
 			case 'c':
 				var by = spl[2];
-				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/ban ' + by + ', Blacklisted user');
-
-				spl = spl.slice(3).join('|');
-				if ('%@#&~'.indexOf(by.charAt(0)) < 0) this.processChatData(toId(by), room, spl);
-				this.chatMessage(spl, by, room);
+				this.processChatData(toId(by), room, connection, spl[4]);
+				if (this.isBlacklisted(toId(by), room)) this.say(connection, room, '/ban ' + by + ', Blacklisted user');
+				this.chatMessage(spl[3], by, room, connection);
 				break;
 			case 'c:':
 				var by = spl[3];
-				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/ban ' + by + ', Blacklisted user');
-
-				spl = spl.slice(4).join('|');
-				if ('%@#&~'.indexOf(by.charAt(0)) < 0) this.processChatData(toId(by), room, spl);
-				this.chatMessage(spl, by, room);
+				this.processChatData(toId(by), room, connection, spl[4]);
+				if (this.isBlacklisted(toId(by), room)) this.say(connection, room, '/ban ' + by + ', Blacklisted user');
+				this.chatMessage(spl[4], by, room, connection);
 				break;
 			case 'pm':
 				var by = spl[2];
-				this.chatMessage(spl.slice(4).join('|'), by, ',' + by);
+				if (toId(by) === toId(config.nick) && ' +%@&#~'.indexOf(by.charAt(0)) > -1) this.ranks[room] = by.charAt(0);
+				this.chatMessage(spl[4], by, ',' + by, connection);
 				break;
 			case 'N':
 				var by = spl[2];
-				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/ban ' + by + ', Blacklisted user');
 				this.updateSeen(spl[3], spl[1], toId(by));
+				if (toId(by) === toId(config.nick) && ' +%@&#~'.indexOf(by.charAt(0)) > -1) this.ranks[room] = by.charAt(0);
 				break;
 			case 'J': case 'j':
 				var by = spl[2];
-				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/ban ' + by + ', Blacklisted user');
+				if (this.isBlacklisted(toId(by), room)) this.say(connection, room, '/ban ' + by + ', Blacklisted user');
 				this.updateSeen(toId(by), spl[1], room);
+				if (toId(by) === toId(config.nick) && ' +%@&#~'.indexOf(by.charAt(0)) > -1) this.ranks[room] = by.charAt(0);
 				break;
 			case 'l': case 'L':
 				this.updateSeen(toId(spl[2]), spl[1], room);
 				break;
 		}
 	},
-	chatMessage: function (message, by, room) {
+	chatMessage: function(message, by, room, connection) {
 		var cmdrMessage = '["' + room + '|' + by + '|' + message + '"]';
 		message = message.trim();
 		// auto accept invitations to rooms
-		if (room.charAt(0) === ',' && message.substr(0,8) === '/invite ' && this.hasRank(by, '%@&~') && !(Config.serverid === 'showdown' && toId(message.substr(8)) === 'lobby')) {
-			this.say('', '/join ' + message.substr(8));
+		if (room.charAt(0) === ',' && message.substr(0,8) === '/invite ' && !(config.serverid === 'showdown' && toId(message.substr(8)) === 'lobby')) {
+			this.say(connection, '', '/join ' + message.substr(8));
 		}
-		if (message.substr(0, Config.commandcharacter.length) !== Config.commandcharacter || toId(by) === toId(Config.nick)) return;
+		if (message.substr(0, config.commandcharacter.length) !== config.commandcharacter || toId(by) === toId(config.nick)) return;
 
-		message = message.substr(Config.commandcharacter.length);
+		message = message.substr(config.commandcharacter.length);
 		var index = message.indexOf(' ');
 		var arg = '';
 		if (index > -1) {
@@ -231,36 +206,43 @@ exports.parse = {
 			var cmd = message;
 		}
 
-		if (!!Commands[cmd]) {
+		if (Commands[cmd]) {
 			var failsafe = 0;
 			while (typeof Commands[cmd] !== "function" && failsafe++ < 10) {
 				cmd = Commands[cmd];
 			}
 			if (typeof Commands[cmd] === "function") {
 				cmdr(cmdrMessage);
-				Commands[cmd].call(this, arg, by, room);
+				Commands[cmd].call(this, arg, by, room, connection);
 			} else {
 				error("invalid command type for " + cmd + ": " + (typeof Commands[cmd]));
 			}
 		}
 	},
-	say: function (room, text) {
+	say: function(connection, room, text) {
 		if (room.charAt(0) !== ',') {
 			var str = (room !== 'lobby' ? room : '') + '|' + text;
 		} else {
 			room = room.substr(1);
 			var str = '|/pm ' + room + ', ' + text;
 		}
-		send(str);
+		this.msgQueue.push(str);
+		if (this.msgQueue.length === 1) {
+			this.msgDequeue = setInterval(function (con) {
+				if (!this.msgQueue.length) return clearInterval(this.msgDequeue);
+				send(con, this.msgQueue.shift());
+			}.bind(this), 750, connection);
+		}
 	},
-	hasRank: function (user, ranks) {
-		return ranks.indexOf(user.charAt(0)) > -1 || Config.excepts.indexOf(toId(user)) > -1;
+	hasRank: function(user, rank) {
+		var hasRank = (rank.split('').indexOf(user.charAt(0)) !== -1) || (config.excepts.indexOf(toId(user)) !== -1);
+		return hasRank;
 	},
-	canUse: function (cmd, room, user) {
+	canUse: function(cmd, room, user) {
 		var canUse = false;
-		var ranks = ' +%@#&~';
+		var ranks = ' +%@&#~';
 		if (!this.settings[cmd] || !this.settings[cmd][room]) {
-			canUse = this.hasRank(user, ranks.substr(ranks.indexOf((cmd === 'autoban' || cmd === 'banword') ? '#' : Config.defaultrank)));
+			canUse = this.hasRank(user, ranks.substr(ranks.indexOf((cmd === 'autoban' || cmd === 'banword') ? '#' : config.defaultrank)));
 		} else if (this.settings[cmd][room] === true) {
 			canUse = true;
 		} else if (ranks.indexOf(this.settings[cmd][room]) > -1) {
@@ -268,64 +250,41 @@ exports.parse = {
 		}
 		return canUse;
 	},
-	isBlacklisted: function (user, room) {
-		var blacklistRegex = this.blacklistRegexes[room];
-		return blacklistRegex && blacklistRegex.test(user);
+	isBlacklisted: function(user, room) {
+		return (this.settings.blacklist && this.settings.blacklist[room] && this.settings.blacklist[room][user]);
 	},
-	blacklistUser: function (user, room) {
-		var blacklist = this.settings.blacklist || (this.settings.blacklist = {});
-		if (blacklist[room]) {
-			if (blacklist[room][user]) return false;
-		} else {
-			blacklist[room] = {};
-		}
+	blacklistUser: function(user, room) {
+		if (!this.settings['blacklist']) this.settings['blacklist'] = {};
+		if (!this.settings.blacklist[room]) this.settings.blacklist[room] = {};
 
-		blacklist[room][user] = 1;
-		this.updateBlacklistRegex(room);
+		if (this.settings.blacklist[room][user]) return false;
+		this.settings.blacklist[room][user] = 1;
 		return true;
 	},
-	unblacklistUser: function (user, room) {
-		var blacklist = this.settings.blacklist;
-		if (!blacklist || !blacklist[room] || !blacklist[room][user]) return false;
-
-		delete blacklist[room][user];
-		if (Object.isEmpty(blacklist[room])) {
-			delete blacklist[room];
-			delete this.blacklistRegexes[room];
-		} else {
-			this.updateBlacklistRegex(room);
-		}
+	unblacklistUser: function(user, room) {
+		if (!this.isBlacklisted(user, room)) return false;
+		delete this.settings.blacklist[room][user];
 		return true;
 	},
-	updateBlacklistRegex: function (room) {
-		var blacklist = this.settings.blacklist[room];
-		var buffer = [];
-		for (var entry in blacklist) {
-			if (entry.charAt(0) === '/' && entry.substr(-2) === '/i') {
-				buffer.push(entry.slice(1, -2));
-			} else {
-				buffer.push('^' + entry + '$');
-			}
-		}
-		this.blacklistRegexes[room] = new RegExp(buffer.join('|'), 'i');
-	},
-	uploadToHastebin: function (toUpload, callback) {
+	uploadToHastebin: function(con, room, by, toUpload) {
+		var self = this;
+
 		var reqOpts = {
 			hostname: "hastebin.com",
 			method: "POST",
 			path: '/documents'
 		};
 
-		var req = require('http').request(reqOpts, function (res) {
-			res.on('data', function (chunk) {
-				if (callback && typeof callback === "function") callback("hastebin.com/raw/" + JSON.parse(chunk.toString())['key']);
+		var req = require('http').request(reqOpts, function(res) {
+			res.on('data', function(chunk) {
+				self.say(con, room, (room.charAt(0) === ',' ? "" : "/pm " + by + ", ") + "hastebin.com/raw/" + JSON.parse(chunk.toString())['key']);
 			});
 		});
 
 		req.write(toUpload);
 		req.end();
 	},
-	processChatData: function (user, room, msg) {
+	processChatData: function(user, room, connection, msg) {
 		// NOTE: this is still in early stages
 		if (!user || room.charAt(0) === ',') return;
 
@@ -349,7 +308,7 @@ exports.parse = {
 		roomData.times.push(now);
 
 		// this deals with punishing rulebreakers, but note that the bot can't think, so it might make mistakes
-		if (Config.allowmute && this.hasRank(this.ranks[room] || ' ', '%@#&~') && Config.whitelist.indexOf(user) === -1) {
+		if (config.allowmute && this.hasRank(this.ranks[room] || ' ', '%@&#~') && config.whitelist.indexOf(user) === -1) {
 			var useDefault = !(this.settings.modding && this.settings.modding[room]);
 			var pointVal = 0;
 			var muteMessage = '';
@@ -370,17 +329,17 @@ exports.parse = {
 			// moderation for flooding (more than x lines in y seconds)
 			var times = roomData.times;
 			var timesLen = times.length;
-			var isFlooding = (timesLen >= FLOOD_MESSAGE_NUM && (now - times[timesLen - FLOOD_MESSAGE_NUM]) < FLOOD_MESSAGE_TIME &&
-				(now - times[timesLen - FLOOD_MESSAGE_NUM]) > (FLOOD_PER_MSG_MIN * FLOOD_MESSAGE_NUM));
-			if ((useDefault || !('flooding' in modSettings)) && isFlooding) {
+			var isFlooding = (timesLen >= FLOOD_MESSAGE_NUM && (now - times[timesLen - FLOOD_MESSAGE_NUM]) < FLOOD_MESSAGE_TIME
+				&& (now - times[timesLen - FLOOD_MESSAGE_NUM]) > (FLOOD_PER_MSG_MIN * FLOOD_MESSAGE_NUM));
+			if ((useDefault || !modSettings.flooding) && isFlooding) {
 				if (pointVal < 2) {
 					pointVal = 2;
 					muteMessage = ', Automated response: flooding';
 				}
 			}
 			// moderation for stretching (over x consecutive characters in the message are the same)
-			var stretchMatch = /(.)\1{39,}/gi.test(msg) || /(..+)\1{24,}/gi.test(msg); // matches the same character (or group of characters) 8 (or 5) or more times in a row
-			if ((useDefault || !('stretching' in modSettings)) && stretchMatch) {
+			var stretchMatch = /(.)\1{59,}/gi.test(msg) || /(..+)\1{37,}/gi.test(msg); // matches the same character (or group of characters) 8 (or 5) or more times in a row
+			if ((useDefault || !modSettings.stretching) && stretchMatch) {
 				if (pointVal < 1) {
 					pointVal = 1;
 					muteMessage = ', Automated response: stretching';
@@ -389,29 +348,29 @@ exports.parse = {
 
 			if (pointVal > 0 && now - roomData.lastAction >= ACTION_COOLDOWN) {
 				var cmd = 'mute';
-				// defaults to the next punishment in Config.punishVals instead of repeating the same action (so a second warn-worthy
+				// defaults to the next punishment in config.punishVals instead of repeating the same action (so a second warn-worthy
 				// offence would result in a mute instead of a warn, and the third an hourmute, etc)
 				if (roomData.points >= pointVal && pointVal < 4) {
 					roomData.points++;
-					cmd = Config.punishvals[roomData.points] || cmd;
+					cmd = config.punishvals[roomData.points] || cmd;
 				} else { // if the action hasn't been done before (is worth more points) it will be the one picked
-					cmd = Config.punishvals[pointVal] || cmd;
+					cmd = config.punishvals[pointVal] || cmd;
 					roomData.points = pointVal; // next action will be one level higher than this one (in most cases)
 				}
-				if (Config.privaterooms.indexOf(room) > -1 && cmd === 'warn') cmd = 'mute'; // can't warn in private rooms
+				if (config.privaterooms.indexOf(room) > -1 && cmd === 'warn') cmd = 'mute'; // can't warn in private rooms
 				// if the bot has % and not @, it will default to hourmuting as its highest level of punishment instead of roombanning
-				if (roomData.points >= 4 && !this.hasRank(this.ranks[room] || ' ', '@#&~')) cmd = 'hourmute';
+				if (roomData.points >= 4 && !this.hasRank(this.ranks[room] || ' ', '@&#~')) cmd = 'hourmute';
 				if (userData.zeroTol > 4) { // if zero tolerance users break a rule they get an instant roomban or hourmute
 					muteMessage = ', Automated response: zero tolerance user';
-					cmd = this.hasRank(this.ranks[room] || ' ', '@#&~') ? 'roomban' : 'hourmute';
+					cmd = this.hasRank(this.ranks[room] || ' ', '@&#~') ? 'roomban' : 'hourmute';
 				}
 				if (roomData.points > 1) userData.zeroTol++; // getting muted or higher increases your zero tolerance level (warns do not)
 				roomData.lastAction = now;
-				this.say(room, '/' + cmd + ' ' + user + muteMessage);
+				this.say(connection, room, '/' + cmd + ' ' + user + muteMessage);
 			}
 		}
 	},
-	cleanChatData: function () {
+	cleanChatData: function() {
 		var chatData = this.chatData;
 		for (var user in chatData) {
 			for (var room in chatData[user]) {
@@ -437,8 +396,8 @@ exports.parse = {
 		}
 	},
 
-	updateSeen: function (user, type, detail) {
-		if (type !== 'n' && Config.rooms.indexOf(detail) === -1 || Config.privaterooms.indexOf(toId(detail)) > -1) return;
+	updateSeen: function(user, type, detail) {
+		if (type !== 'n' && config.rooms.indexOf(detail) === -1 || config.privaterooms.indexOf(toId(detail)) > -1) return;
 		var now = Date.now();
 		if (!this.chatData[user]) this.chatData[user] = {
 			zeroTol: 0,
@@ -470,7 +429,7 @@ exports.parse = {
 		userData.lastSeen = msg;
 		userData.seenAt = now;
 	},
-	getTimeAgo: function (time) {
+	getTimeAgo: function(time) {
 		time = ~~((Date.now() - time) / 1000);
 
 		var seconds = time % 60;
@@ -493,26 +452,26 @@ exports.parse = {
 		if (!times.length) return '0 seconds';
 		return times.join(', ');
 	},
-	writeSettings: (function () {
+	writeSettings: (function() {
 		var writing = false;
 		var writePending = false; // whether or not a new write is pending
-		var finishWriting = function () {
+		var finishWriting = function() {
 			writing = false;
 			if (writePending) {
 				writePending = false;
 				this.writeSettings();
 			}
 		};
-		return function () {
+		return function() {
 			if (writing) {
 				writePending = true;
 				return;
 			}
 			writing = true;
 			var data = JSON.stringify(this.settings);
-			fs.writeFile('settings.json.0', data, function () {
+			fs.writeFile('settings.json.0', data, function() {
 				// rename is atomic on POSIX, but will throw an error on Windows
-				fs.rename('settings.json.0', 'settings.json', function (err) {
+				fs.rename('settings.json.0', 'settings.json', function(err) {
 					if (err) {
 						// This should only happen on Windows.
 						fs.writeFile('settings.json', data, finishWriting);
@@ -523,14 +482,14 @@ exports.parse = {
 			});
 		};
 	})(),
-	uncacheTree: function (root) {
+	uncacheTree: function(root) {
 		var uncache = [require.resolve(root)];
 		do {
 			var newuncache = [];
 			for (var i = 0; i < uncache.length; ++i) {
 				if (require.cache[uncache[i]]) {
 					newuncache.push.apply(newuncache,
-						require.cache[uncache[i]].children.map(function (module) {
+						require.cache[uncache[i]].children.map(function(module) {
 							return module.filename;
 						})
 					);
@@ -539,32 +498,5 @@ exports.parse = {
 			}
 			uncache = newuncache;
 		} while (uncache.length > 0);
-	},
-	getDocMeta: function (id, callback) {
-		https.get('https://www.googleapis.com/drive/v2/files/' + id + '?key=' + Config.googleapikey, function (res) {
-			var data = '';
-			res.on('data', function (part) {
-				data += part;
-			});
-			res.on('end', function (end) {
-				var json = JSON.parse(data);
-				if (json) {
-					callback(null, json);
-				} else {
-					callback('Invalid response', data);
-				}
-			});
-		});
-	},
-	getDocCsv: function (meta, callback) {
-		https.get('https://docs.google.com/spreadsheet/pub?key=' + meta.id + '&output=csv', function (res) {
-			var data = '';
-			res.on('data', function (part) {
-				data += part;
-			});
-			res.on('end', function (end) {
-				callback(data);
-			});
-		});
 	}
 };

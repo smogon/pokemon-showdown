@@ -64,15 +64,9 @@ exports.excepts = [];
 // Whitelisted users are those who the bot will not enforce moderation for.
 exports.whitelist = ['PokeCommBot'];
 
-// Users in this list can use the regex autoban commands. Only add users who know how to write regular expressions and have your complete trust not to abuse the commands.
-exports.regexautobanwhitelist = [];
-
 // Add a link to the help for the bot here. When there is a link here, .help and .guide
 // will link to it.
 exports.botguide = 'http://www.pokecommunity.com/showthread.php?t=289012#botguide';
-
-// Add a link to the git repository for the bot here for .git to link to.
-exports.fork = 'https://github.com/awolffromspace/PC-Battle-Server/tree/master/bot';
 
 // This allows the bot to act as an automated moderator. If enabled, the bot will
 // mute users who send 6 lines or more in 6 or fewer seconds for 7 minutes. NOTE: THIS IS
@@ -88,9 +82,7 @@ exports.punishvals = {
 	1: 'warn',
 	2: 'mute',
 	3: 'hourmute',
-	4: 'hourmute',
-	5: 'lock'
+	4: 'roomban',
+	5: 'ban'
 };
 
-//This key is used to deliver requests from Google Spreadsheets. Used by the wifi room.
-exports.googleapikey = '';
