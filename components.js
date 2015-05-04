@@ -188,7 +188,7 @@ var components = exports.components = {
 					this.parse('/help star');
 					this.sendReply('If you do not want your \u2606 anymore, you may use /removestar to go back to your old symbol.');
 				} else if (target.toLowerCase() === 'blackstar') {
-					this.sendReply('You have purchased ' + target + '. Please contact an admin (~) to get ' + target + '.');
+					this.sendReply('You have purchased ' + target + '. Please contact an admin (~) to get a \u2605.');
 				} else {
 					this.sendReply('You have purchased ' + target + '. Please contact the admin "wolf" to get ' + target + '. Use the /tell command if wolf is offline (submit "/help tell" in the chat).');
 				}
