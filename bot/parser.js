@@ -16,8 +16,6 @@ const ACTION_COOLDOWN = 3 * 1000;
 const FLOOD_MESSAGE_NUM = 5;
 const FLOOD_PER_MSG_MIN = 500; // this is the minimum time between messages for legitimate spam. It's used to determine what "flooding" is caused by lag
 const FLOOD_MESSAGE_TIME = 6 * 1000;
-const MIN_CAPS_LENGTH = 12;
-const MIN_CAPS_PROPORTION = 0.8;
 
 var settings;
 try {
@@ -181,7 +179,7 @@ exports.parse = {
 				break;
 			case 'c':
 				var by = spl[2];
-				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/roomban ' + by + ', Blacklisted user');
+				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/ban ' + by + ', Blacklisted user');
 
 				spl = spl.slice(3).join('|');
 				if ('%@#&~'.indexOf(by.charAt(0)) < 0) this.processChatData(toId(by), room, spl);
@@ -189,7 +187,7 @@ exports.parse = {
 				break;
 			case 'c:':
 				var by = spl[3];
-				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/roomban ' + by + ', Blacklisted user');
+				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/ban ' + by + ', Blacklisted user');
 
 				spl = spl.slice(4).join('|');
 				if ('%@#&~'.indexOf(by.charAt(0)) < 0) this.processChatData(toId(by), room, spl);
@@ -201,12 +199,12 @@ exports.parse = {
 				break;
 			case 'N':
 				var by = spl[2];
-				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/roomban ' + by + ', Blacklisted user');
+				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/ban ' + by + ', Blacklisted user');
 				this.updateSeen(spl[3], spl[1], toId(by));
 				break;
 			case 'J': case 'j':
 				var by = spl[2];
-				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/roomban ' + by + ', Blacklisted user');
+				if (this.isBlacklisted(toId(by), room)) return this.say(room, '/ban ' + by + ', Blacklisted user');
 				this.updateSeen(toId(by), spl[1], room);
 				break;
 			case 'l': case 'L':
@@ -380,16 +378,8 @@ exports.parse = {
 					muteMessage = ', Automated response: flooding';
 				}
 			}
-			// moderation for caps (over x% of the letters in a line of y characters are capital)
-			var capsMatch = msg.replace(/[^A-Za-z]/g, '').match(/[A-Z]/g);
-			if ((useDefault || !('caps' in modSettings)) && capsMatch && toId(msg).length > MIN_CAPS_LENGTH && (capsMatch.length >= ~~(toId(msg).length * MIN_CAPS_PROPORTION))) {
-				if (pointVal < 1) {
-					pointVal = 1;
-					muteMessage = ', Automated response: caps';
-				}
-			}
 			// moderation for stretching (over x consecutive characters in the message are the same)
-			var stretchMatch = /(.)\1{7,}/gi.test(msg) || /(..+)\1{4,}/gi.test(msg); // matches the same character (or group of characters) 8 (or 5) or more times in a row
+			var stretchMatch = /(.)\1{39,}/gi.test(msg) || /(..+)\1{24,}/gi.test(msg); // matches the same character (or group of characters) 8 (or 5) or more times in a row
 			if ((useDefault || !('stretching' in modSettings)) && stretchMatch) {
 				if (pointVal < 1) {
 					pointVal = 1;
