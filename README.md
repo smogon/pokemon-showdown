@@ -141,15 +141,19 @@ Retired Staff
 
 - Bill Meltsner [bmelts] - Development
 - Cathy J. Fitzpatrick [cathyjf] - Development
-- Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 
 Contributors
 
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
+- [Ascriptmaster] - Development
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
+- Konrad Borowski [xfix] - Development
 - Kyle Dove [Kyle_Dove] - Art (battle backdrops)
+- Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
+- [Morfent] - Development
 - Quinton Lee [sirDonovan] - Development
 - Robin Vandenbrande [Quinella] - Development
 - Samuel Teo [Yilx] - Art (main background)
+- [SolarisFox] - Development
 - Vivian Zou [Vtas] - Art (alternate main background)
