@@ -409,7 +409,7 @@ var commands = exports.commands = {
 		if (!target) {
 			if (!this.canBroadcast()) return;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
-			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage + '</div>');
+			this.sendReplyBox(room.introMessage);
 			if (!this.broadcasting && user.can('declare', null, room)) {
 				this.sendReply('Source:');
 				this.sendReplyBox('<code>' + Tools.escapeHTML(room.introMessage) + '</code>');
@@ -427,7 +427,7 @@ var commands = exports.commands = {
 		if (!target.trim()) target = '';
 		room.introMessage = target;
 		this.sendReply("(The room introduction has been changed to:)");
-		this.sendReply('|raw|<div class="infobox infobox-limited">' + target + '</div>');
+		this.sendReplyBox(target);
 
 		this.privateModCommand("(" + user.name + " changed the roomintro.)");
 
