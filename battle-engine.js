@@ -2030,7 +2030,7 @@ Battle = (function () {
 			this.debug(eventid + ' handler suppressed by Gastro Acid, Klutz or Magic Room');
 			return relayVar;
 		}
-		if (target.ignore && target.ignore[effect.effectType + 'Target']) {
+		if (effect.effectType === 'Weather' && eventid !== 'TryWeather' && !this.runEvent('TryWeather', target)) {
 			this.debug(eventid + ' handler suppressed by Air Lock');
 			return relayVar;
 		}
@@ -2237,7 +2237,7 @@ Battle = (function () {
 				}
 				continue;
 			}
-			if (target.ignore && (target.ignore[status.effectType + 'Target'] || target.ignore[eventid + 'Target'])) {
+			if ((status.effectType === 'Weather' || eventid === 'Weather') && eventid !== 'TryWeather' && !this.runEvent('TryWeather', target)) {
 				this.debug(eventid + ' handler suppressed by Air Lock');
 				continue;
 			}
