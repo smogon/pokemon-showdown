@@ -6,7 +6,7 @@ exports.Formats = [
 	// XY Singles
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/*{
 		name: "OU & Aegislash (BWknd 38)",
 		section: "ORAS Singles",
 
@@ -16,7 +16,7 @@ exports.Formats = [
 			'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White',
 			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom'
 		]
-	},
+	},*/
 	{
 		name: "OU",
 		section: "ORAS Singles",
