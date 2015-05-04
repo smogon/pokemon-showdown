@@ -322,14 +322,14 @@ exports.Formats = [
 		gameType: 'triples',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
-			this.add("raw|<b><font color='red'>IMPORTANT!</font></b> All moves on this seasonal are custom. Use the command /seasonaldata or /sdata to know what they do.");
-			this.add("raw|More information can be found <a href='http://www.smogon.com/forums/threads/3491902/page-12#post-6202283'>here</a>");
+			this.add('raw|<b><font color="red">IMPORTANT!</font></b> All moves on this seasonal are custom. Use the command /seasonaldata or /sdata to know what they do.');
+			this.add('raw|More information can be found <a href="http://www.smogon.com/forums/threads/3491902/page-12#post-6202283">here</a>');
 		},
 		onModifyMove: function (move) {
 			// Shows legit name after use...
 			var legitNames = {
 				recover: "Cura", softboiled: "Curaga", reflect: "Wild Growth", acupressure: "Power Shield",
-				holdhands: "Rejuvenation", luckychant: "Fairy Ward", followe: "Taunt", meditate: "Sacrifice",
+				holdhands: "Rejuvenation", luckychant: "Fairy Ward", followme: "Taunt", meditate: "Sacrifice",
 				helpinghand: "Cooperation", spite: "Slow Down", aromaticmist: "Healing Touch", healbell: "Penance",
 				fakeout: "Stop", endure: "Last Stand", withdraw: "Barkskin", seismictoss: "Punishment",
 				flamethrower: "Flamestrike", fireblast: "Conflagration", thunderbolt: "Moonfire", thunder: "Starfire",
