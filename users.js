@@ -1120,7 +1120,7 @@ User = (function () {
 				}
 			}
 		}
-		this.isStaff = (this.group in {'\u2022':1, '%':1, '@':1, '&':1, '~':1});
+		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 		if (this.confirmed) {
 			this.autoconfirmed = this.confirmed;
 			this.locked = false;
@@ -1132,7 +1132,7 @@ User = (function () {
 	 */
 	User.prototype.setGroup = function (group, forceConfirmed) {
 		this.group = group.charAt(0);
-		this.isStaff = (this.group in {'\u2022':1, '%':1, '@':1, '&':1, '~':1});
+		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 		if (forceConfirmed || this.group !== Config.groupsranking[0]) {
 			usergroups[this.userid] = this.group + this.name;
 		} else {
