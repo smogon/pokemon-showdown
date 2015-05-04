@@ -3810,7 +3810,7 @@ exports.BattleItems = {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
 		onTryHit: function (pokemon, source, move) {
-			if (move.flags['powder']) {
+			if (move.flags['powder'] && move.id !== 'ragepowder') {
 				this.add('-activate', pokemon, 'Safety Goggles', move.name);
 				return null;
 			}
