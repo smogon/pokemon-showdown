@@ -44,9 +44,14 @@
       "name": "Bill Meltsner",
       "email": "bill@meltsner.com",
       "url": "http://www.meltsner.com"
+    },
+    {
+      "name": "Juanma Serrano",
+      "email": "juanmadss@gmail.com"
     }
   ],
   "private": true,
+  "license": "MIT",
   "devDependencies": {
     "cache-swap": "~0.2.0",
     "gulp": "~3.8.7",
