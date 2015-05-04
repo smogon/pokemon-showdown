@@ -2336,9 +2336,7 @@ exports.BattleAbilities = {
 		onModifyMove: function (move, pokemon) {
 			if (move.secondaries) {
 				delete move.secondaries;
-				move.negateSecondary = true;
 				// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
-				// negateSecondary will only happen if the Pokémon keeps having the Sheer Force ability in that step.
 				pokemon.addVolatile('sheerforce');
 			}
 		},
