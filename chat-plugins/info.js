@@ -2049,6 +2049,7 @@ var commands = exports.commands = {
 	},
 	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # with global authority"],
 
+	sdt: 'seasonaldata',
 	sdata: 'seasonaldata',
 	seasonaldata: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -2181,6 +2182,8 @@ var commands = exports.commands = {
 		}
 		if (targetId === 'evasion' || targetId === 'protect') {
 			return this.parse('/data protect');
+		} else if (!targetId) {
+			return this.say("Please specify a valid Pokemon, item, move, ability or nature in this seasonal.");
 		} else {
 			this.sendReply(buffer);
 		}
