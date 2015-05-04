@@ -150,6 +150,19 @@ var components = exports.components = {
 
 	},
 
+	bpladder: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+
+		if (!target) target = 10;
+		if (!/[0-9]/.test(target) && target.toLowerCase() !== 'all') target = -1;
+
+		var ladder = Core.bpLadder(Number(target));
+		if (ladder === 0) return this.sendReply('No one is ranked yet.');
+
+		return this.sendReply('|raw|<center>' + ladder + 'To view the entire ladder use /bpladder <em>all</em> or to view a certain amount of users use /bpladder <em>number</em></center>');
+
+	},
+
 	shop: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		return this.sendReply('|raw|' + Core.shop(true));
