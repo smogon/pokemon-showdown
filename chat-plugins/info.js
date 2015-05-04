@@ -2141,7 +2141,7 @@ var commands = exports.commands = {
 			buffer += '<ul class="utilichart"><li class="result"><a data-name="Corruption"><span class="col movenamecol">Corruption</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Deals 10% damage every turn for 4 turns.</span> </a></li><li style="clear:both"></li></ul>';
 			break;
 		case 'soulleech':
-		case 'leech sheed':
+		case 'leechsheed':
 			buffer += '<ul class="utilichart"><li class="result"><a data-name="Soul Leech"><span class="col movenamecol">Soul Leech</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Drains 8% HP every turn for 4 turns.</span> </a></li><li style="clear:both"></li></ul>';
 			break;
 		case 'icelance':
@@ -2176,13 +2176,14 @@ var commands = exports.commands = {
 		case 'slash':
 			buffer += '<ul class="utilichart"><li class="result"><a data-name="Mutilate"><span class="col movenamecol">Mutilate</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />35%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Increases power by 10% or 20% if target is psn or/and bld.</span> </a></li><li style="clear:both"></li></ul>';
 			break;
-		case 'evasion':
-		case 'protect':
-			break;
 		default:
 			buffer = "No Pokemon, item, move, ability or nature named '" + target + "' was found on this seasonal.";
 		}
-		this.sendReply(buffer);
+		if (targetId === 'evasion' || targetId === 'protect') {
+			return this.parse('/data protect');
+		} else {
+			this.sendReply(buffer);
+		}
 	},
 	seasonaldatahelp: ["/seasonaldata [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature for the current seasonal.",
 		"!seasonaldata [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ & ~"]

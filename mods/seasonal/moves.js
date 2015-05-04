@@ -244,6 +244,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 10,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		ignoreImmunity: true,
 		onHit: function (target, source) {
 			source.addVolatile('disable');
 		},
@@ -307,6 +308,7 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: -1,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
+		ignoreImmunity: true,
 		secondary: false,
 		target: "normal",
 		type: "Fighting"
@@ -509,6 +511,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
+		ignoreImmunity: true,
 		onHit: function (target, source) {
 			source.addVolatile('disable');
 		},
