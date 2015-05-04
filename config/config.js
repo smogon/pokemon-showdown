@@ -184,7 +184,7 @@ exports.customavatars = {
 	'sanguine': 'sanguine.gif',
 	'memro': 'sanguine.gif',
 	'zeffy': 'zeffy.gif',
-	'cheffy': 'zeffy.gif',
+	'zeffyisnothere': 'zeffy.gif',
 	'jinofthegale': 'jin.png',
 	'squirrel': 'ozzy.png',
 	'avogadro': 'ozzy.png',
