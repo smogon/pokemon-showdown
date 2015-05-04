@@ -639,6 +639,18 @@ exports.grouplist = [
 		joinbattle: true
 	},
 	{
+		symbol: '\u2022',
+		id: "bot",
+		name: "Bot",
+		inherit: ' ',
+		jurisdiction: 'u',
+		warn: true,
+		kick: true,
+		mute: true,
+		lock: true,
+		ban: true
+	},
+	{
 		symbol: '\u2605',
 		id: "player",
 		name: "Player",
