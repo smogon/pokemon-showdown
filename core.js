@@ -182,7 +182,40 @@ var core = exports.core = {
 		});
 
 		if (list.length > 1) {
-			var ladder = '<table border="1" cellspacing="0" cellpadding="3"><tbody><tr><th>Rank</th><th>User</th><th>Tournament Wins</th></tr>';
+			var ladder = '<table border="1" cellspacing="0" cellpadding="3"><tbody><tr><th>Rank</th><th>User</th><th>PCL Tournament Wins</th></tr>';
+			var len = list.length;
+
+			limit = len - limit;
+			if (limit > len) limit = len;
+
+			while (len--) {
+				ladder = ladder + '<tr><td>' + (list.length - len) + '</td><td>' + list[len][0] + '</td><td>' + Math.floor(list[len][1]) + '</td></tr>';
+				if (len === limit) break;
+			}
+			ladder += '</tbody></table>';
+			return ladder;
+		}
+		return 0;
+	},
+
+	bpLadder: function (limit) {
+		var data = fs.readFileSync('config/bp.csv', 'utf-8');
+		var row = ('' + data).split("\n");
+
+		var list = [];
+
+		for (var i = row.length; i > -1; i--) {
+			if (!row[i] || row[i].indexOf(',') < 0) continue;
+			var parts = row[i].split(",");
+			list.push([toId(parts[0]), Number(parts[1])]);
+		}
+
+		list.sort(function (a, b) {
+			return a[1] - b[1];
+		});
+
+		if (list.length > 1) {
+			var ladder = '<table border="1" cellspacing="0" cellpadding="3"><tbody><tr><th>Rank</th><th>User</th><th>Battle Points</th></tr>';
 			var len = list.length;
 
 			limit = len - limit;
