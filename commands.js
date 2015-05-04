@@ -718,7 +718,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		if (toId(target) in Rooms.aliases) {
+		if (toId(target) !== targetRoom.id) {
 			connection.send(">" + toId(target) + "\n|deinit");
 		}
 
