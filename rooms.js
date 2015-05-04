@@ -1487,21 +1487,15 @@ var ChatRoom = (function () {
 		this.send(update);
 	};
 	ChatRoom.prototype.getIntroMessage = function () {
-		if (this.modchat && this.introMessage) {
-			return '\n|raw|<div class="infobox"><div' + (!this.isOfficial ? ' class="infobox-limited"' : '') + '>' + this.introMessage + '</div>' +
-				'<br />' +
-				'<div class="broadcast-red">' +
-				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
-				'</div></div>';
-		}
-
+		var html = this.introMessage || '';
 		if (this.modchat) {
-			return '\n|raw|<div class="infobox"><div class="broadcast-red">' +
-				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
-				'</div></div>';
+			if (html) html += '<br /><br />';
+			html += '<div class="broadcast-red">';
+			html += 'Must be rank ' + this.modchat + ' or higher to talk right now.';
+			html += '</div>';
 		}
 
-		if (this.introMessage) return '\n|raw|<div class="infobox infobox-limited">' + this.introMessage + '</div>';
+		if (html) return '\n|raw|<div class="infobox">' + html + '</div>';
 
 		return '';
 	};
