@@ -120,9 +120,9 @@ exports.BattleScripts = {
 				['softboiled', 'icebeam', 'reflect', 'aromaticmist']
 			],
 			'tank': [
-				['followe', 'meditate', 'helpinghand', 'seismictoss'],
-				['followe', 'endure', 'withdraw', 'seismictoss'],
-				['followe', 'meditate', 'endure', 'seismictoss'],
+				['followme', 'meditate', 'helpinghand', 'seismictoss'],
+				['followme', 'endure', 'withdraw', 'seismictoss'],
+				['followme', 'meditate', 'endure', 'seismictoss'],
 				['meditate', 'helpinghand', 'protect', 'seismictoss']
 			],
 			'support': [
