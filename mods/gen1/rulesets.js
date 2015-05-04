@@ -43,7 +43,11 @@ exports.BattleFormats = {
 				set.evs.spa = 255;
 				set.evs.spd = 255;
 				set.evs.spe = 255;
-				if (set.evs.atk < 30) set.evs.atk = 30;
+				if (set.evs.atk < 30) {
+					set.evs.atk = 30;
+				} else {
+					set.evs.atk = 255;
+				}
 			}
 
 			// IVs worked different (DVs, 0 to 15, 2 points each) so we put all IVs to 30
