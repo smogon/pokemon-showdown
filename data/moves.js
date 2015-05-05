@@ -2682,7 +2682,7 @@ exports.BattleMovedex = {
 					return false;
 				}
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
@@ -3553,7 +3553,7 @@ exports.BattleMovedex = {
 			onEnd: function (target) {
 				this.add('-end', target, 'Encore');
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
@@ -5383,17 +5383,20 @@ exports.BattleMovedex = {
 				if (typeof accuracy !== 'number') return;
 				return accuracy * 5 / 3;
 			},
-			onModifyPokemonPriority: 100,
-			onModifyPokemon: function (pokemon) {
-				pokemon.negateImmunity['Ground'] = true;
+			onDisableMove: function (pokemon) {
 				var disabledMoves = {bounce:1, fly:1, flyingpress:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
 				for (var m in disabledMoves) {
 					pokemon.disableMove(m);
 				}
+			},
+			onModifyPokemonPriority: 100,
+			onModifyPokemon: function (pokemon) {
+				pokemon.negateImmunity['Ground'] = true;
 				var applies = false;
 				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
 					applies = true;
 					this.cancelMove(pokemon);
+					pokemon.removeVolatile('twoturnmove');
 				}
 				if (pokemon.volatiles['skydrop']) {
 					applies = true;
@@ -5846,7 +5849,7 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'move: Heal Block');
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
 				var move;
 				for (var i = 0; i < pokemon.moveset.length; i++) {
@@ -6992,7 +6995,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-start', target, 'move: Imprison');
 			},
-			onFoeModifyPokemon: function (pokemon) {
+			onFoeDisableMove: function (pokemon) {
 				var foeMoves = this.effectData.source.moveset;
 				for (var f = 0; f < foeMoves.length; f++) {
 					pokemon.disableMove(foeMoves[f].id, true);
@@ -13959,7 +13962,7 @@ exports.BattleMovedex = {
 			onEnd: function (target) {
 				this.add('-end', target, 'move: Taunt');
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (this.getMove(moves[i].move).category === 'Status') {
@@ -14358,7 +14361,7 @@ exports.BattleMovedex = {
 			onEnd: function (pokemon) {
 				this.add('-end', pokemon, 'Torment');
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				if (pokemon.lastMove !== 'struggle') pokemon.disableMove(pokemon.lastMove);
 			}
 		},

@@ -281,7 +281,7 @@ exports.BattleMovedex = {
 					return false;
 				}
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
@@ -476,7 +476,45 @@ exports.BattleMovedex = {
 	},
 	healblock: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1}
+		flags: {protect: 1, mirror: 1},
+		effect: {
+			duration: 5,
+			durationCallback: function (target, source, effect) {
+				if (source && source.hasAbility('persistent')) {
+					return 7;
+				}
+				return 5;
+			},
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'move: Heal Block');
+			},
+			onDisableMove: function (pokemon) {
+				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
+				var moves = pokemon.moveset;
+				for (var i = 0; i < moves.length; i++) {
+					if (disabledMoves[moves[i].id] || this.getMove(moves[i].id).heal) {
+						pokemon.disableMove(moves[i].id);
+					}
+				}
+			},
+			onBeforeMovePriority: 6,
+			onBeforeMove: function (pokemon, target, move) {
+				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
+				if (disabledMoves[move.id] || move.heal) {
+					this.add('cant', pokemon, 'move: Heal Block', move);
+					return false;
+				}
+			},
+			onResidualOrder: 17,
+			onEnd: function (pokemon) {
+				this.add('-end', pokemon, 'move: Heal Block');
+			},
+			onTryHeal: function (damage, pokemon, source, effect) {
+				if (effect && (effect.id === 'drain' || effect.id === 'leechseed' || effect.id === 'wish')) {
+					return false;
+				}
+			}
+		}
 	},
 	healingwish: {
 		inherit: true,
