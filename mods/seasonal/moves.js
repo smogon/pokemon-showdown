@@ -549,7 +549,7 @@ exports.BattleMovedex = {
 	aircutter: {
 		num: -24,
 		accuracy: 100,
-		basePower: 25,
+		basePower: 20,
 		category: "Special",
 		id: "aircutter",
 		isViable: true,
@@ -564,7 +564,7 @@ exports.BattleMovedex = {
 	muddywater: {
 		num: -25,
 		accuracy: 100,
-		basePower: 25,
+		basePower: 20,
 		category: "Special",
 		id: "muddywater",
 		isViable: true,
@@ -602,6 +602,7 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			source.addVolatile('disable');
+			source.addVolatile('furycharge');
 		},
 		target: "normal",
 		type: "Fighting"
