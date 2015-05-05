@@ -249,7 +249,7 @@ exports.BattleScripts = {
 
 		// First, check if the Pokémon is immune to this move.
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
-			if (move.selfdestruct && !target.volatiles['substitute']) {
+			if (move.selfdestruct) {
 				this.faint(pokemon, pokemon, move);
 			}
 			return false;
