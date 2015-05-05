@@ -235,9 +235,6 @@ exports.BattleScripts = {
 			return 1;
 		}
 
-		// Check for damage
-		baseDamage = this.runEvent('Damage', target, pokemon, move, baseDamage);
-
 		return Math.floor(baseDamage);
 	}
 };
