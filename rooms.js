@@ -33,6 +33,8 @@ var Room = (function () {
 
 		this.bannedUsers = Object.create(null);
 		this.bannedIps = Object.create(null);
+		this.muteQueue = [];
+		this.muteTimer = null;
 	}
 	Room.prototype.title = "";
 	Room.prototype.type = 'chat';
@@ -162,6 +164,113 @@ var Room = (function () {
 			return false;
 		}
 		return true;
+	};
+	//mute handling
+	Room.prototype.runMuteTimer = function () {
+		if (this.muteTimer || this.muteQueue.length === 0) return;
+
+		var timeUntilExpire = this.muteQueue[0].time - Date.now();
+		if (timeUntilExpire <= 0) {
+			this.unmute(this.muteQueue[0].userid, true);
+			//runMuteTimer() is called again in unmute() so this function instance should be closed
+			return;
+		}
+		var self = this;
+		this.muteTimer = setTimeout(function () {
+			self.muteTimer = null;
+			self.runMuteTimer();
+		}, timeUntilExpire);
+	};
+	Room.prototype.isMuted = function (user) {
+		if (!user) return;
+		if (this.muteQueue) {
+			for (var i = 0; i < this.muteQueue.length; i++) {
+				var entry = this.muteQueue[i];
+				if (user.userid === entry.userid ||
+					user.guestNum === entry.guestNum ||
+					(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
+					return entry.userid;
+				}
+			}
+		}
+	};
+	Room.prototype.getMuteTime = function (user) {
+		var userid = this.isMuted(user);
+		if (!userid) return;
+		for (var i = 0; i < this.muteQueue.length; i++) {
+			if (userid === this.muteQueue[i].userid) {
+				return this.muteQueue[i].time - Date.now();
+			}
+		}
+	};
+	Room.prototype.mute = function (user, setTime) {
+		var userid = user.userid;
+
+		if (!setTime) setTime = 7 * 60000; // default time: 7 minutes
+		if (setTime > 90 * 60000) setTime = 90 * 60000; // limit 90 minutes
+
+		// If the user is already muted, the existing queue position for them should be removed
+		if (this.isMuted(user)) this.unmute(userid);
+
+		// Place the user in a queue for the unmute timer
+		for (var i = 0; i <= this.muteQueue.length; i++) {
+			var time = Date.now() + setTime;
+			if (i === this.muteQueue.length || time < this.muteQueue[i].time) {
+				var entry = {
+					userid: userid,
+					time: time,
+					guestNum: user.guestNum,
+					autoconfirmed: user.autoconfirmed
+				};
+				this.muteQueue.splice(i, 0, entry);
+				// The timer needs to be switched to the new entry if it is to be unmuted
+				// before the entry the timer is currently running for
+				if (i === 0 && this.muteTimer) {
+					clearTimeout(this.muteTimer);
+					this.muteTimer = null;
+				}
+				break;
+			}
+		}
+		this.runMuteTimer();
+
+		user.updateIdentity(this.id);
+		return userid;
+	};
+	Room.prototype.unmute = function (userid, sendPopup) {
+		var successUserid = false;
+		var user = Users(userid);
+		if (!user) {
+			// If the user is not found, construct a dummy user object for them.
+			user = {
+				userid: userid,
+				autoconfirmed: userid
+			};
+		}
+
+		for (var i = 0; i < this.muteQueue.length; i++) {
+			var entry = this.muteQueue[i];
+			if (entry.userid === user.userid ||
+				entry.guestNum === user.guestNum ||
+				(user.autoconfirmed && entry.autoconfirmed === user.autoconfirmed)) {
+				if (i === 0) {
+					clearTimeout(this.muteTimer);
+					this.muteTimer = null;
+					this.muteQueue.splice(0, 1);
+					this.runMuteTimer();
+				} else {
+					this.muteQueue.splice(i, 1);
+				}
+				successUserid = entry.userid;
+				break;
+			}
+		}
+
+		if (user.connected && successUserid) {
+			user.updateIdentity(this.id);
+			if (sendPopup) user.popup("Your mute in " + this.title + " has expired.");
+		}
+		return successUserid;
 	};
 
 	return Room;

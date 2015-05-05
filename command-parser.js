@@ -63,7 +63,7 @@ function canTalk(user, room, connection, message) {
 		connection.sendTo(room, "You are locked from talking in chat.");
 		return false;
 	}
-	if (room && user.mutedRooms[room.id]) {
+	if (room && room.isMuted(user)) {
 		connection.sendTo(room, "You are muted and cannot talk in this room.");
 		return false;
 	}
