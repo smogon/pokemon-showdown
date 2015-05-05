@@ -520,8 +520,6 @@ User = (function () {
 		//       the `ips` object, not just the latest IP.
 		this.latestIp = connection.ip;
 
-		this.mutedRooms = {};
-		this.muteDuration = {};
 		this.locked = Users.checkLocked(connection.ip);
 		this.prevNames = {};
 		this.battles = {};
@@ -571,10 +569,10 @@ User = (function () {
 			return '‽' + this.name;
 		}
 		if (roomid) {
-			if (this.mutedRooms[roomid]) {
+			var room = Rooms.rooms[roomid];
+			if (room.isMuted(this)) {
 				return '!' + this.name;
 			}
-			var room = Rooms.rooms[roomid];
 			if (room && room.auth) {
 				if (room.auth[this.userid]) {
 					return room.auth[this.userid] + this.name;
@@ -983,11 +981,7 @@ User = (function () {
 				}
 				if (!user.registered) {
 					if (Object.isEmpty(Object.select(this.ips, user.ips))) {
-						user.mutedRooms = Object.merge(user.mutedRooms, this.mutedRooms);
-						user.muteDuration = Object.merge(user.muteDuration, this.muteDuration);
 						if (this.locked) user.locked = this.locked;
-						this.mutedRooms = {};
-						this.muteDuration = {};
 						this.locked = false;
 					}
 				}
@@ -1209,10 +1203,6 @@ User = (function () {
 	};
 	User.prototype.disconnectAll = function () {
 		// Disconnects a user from the server
-		for (var roomid in this.mutedRooms) {
-			clearTimeout(this.mutedRooms[roomid]);
-			delete this.mutedRooms[roomid];
-		}
 		this.clearChatQueue();
 		var connection = null;
 		this.markInactive();
@@ -1290,42 +1280,6 @@ User = (function () {
 			this.mmrCache[formatid] = mmr;
 		} else {
 			this.mmrCache[formatid] = Number(mmr.acre);
-		}
-	};
-	User.prototype.mute = function (roomid, time, force, noRecurse) {
-		if (!roomid) roomid = 'lobby';
-		if (this.mutedRooms[roomid] && !force) return;
-		if (!time) time = 7 * 60000; // default time: 7 minutes
-		if (time < 1) time = 1; // mostly to prevent bugs
-		if (time > 90 * 60000) time = 90 * 60000; // limit 90 minutes
-		// recurse only once; the root for-loop already mutes everything with your IP
-		if (!noRecurse) {
-			for (var i in users) {
-				if (users[i] === this || users[i].confirmed) continue;
-				for (var myIp in this.ips) {
-					if (myIp in users[i].ips) {
-						users[i].mute(roomid, time, force, true);
-						break;
-					}
-				}
-			}
-		}
-
-		var self = this;
-		if (this.mutedRooms[roomid]) clearTimeout(this.mutedRooms[roomid]);
-		this.mutedRooms[roomid] = setTimeout(function () {
-			self.unmute(roomid, true);
-		}, time);
-		this.muteDuration[roomid] = time;
-		this.updateIdentity(roomid);
-	};
-	User.prototype.unmute = function (roomid, expired) {
-		if (!roomid) roomid = 'lobby';
-		if (this.mutedRooms[roomid]) {
-			clearTimeout(this.mutedRooms[roomid]);
-			delete this.mutedRooms[roomid];
-			if (expired) this.popup("Your mute has expired.");
-			this.updateIdentity(roomid);
 		}
 	};
 	User.prototype.ban = function (noRecurse, userid) {
@@ -1636,10 +1590,6 @@ User = (function () {
 	};
 	User.prototype.destroy = function () {
 		// deallocate user
-		for (var roomid in this.mutedRooms) {
-			clearTimeout(this.mutedRooms[roomid]);
-			delete this.mutedRooms[roomid];
-		}
 		this.clearChatQueue();
 		delete users[this.userid];
 	};
