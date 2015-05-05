@@ -534,7 +534,7 @@ exports.BattleAbilities = {
 		onStart: function (target) {
 			this.add('-start', target, 'move: Imprison');
 		},
-		onFoeModifyPokemon: function (pokemon) {
+		onFoeDisableMove: function (pokemon) {
 			var foeMoves = this.effectData.target.moveset;
 			for (var f = 0; f < foeMoves.length; f++) {
 				pokemon.disableMove(foeMoves[f].id, true);
