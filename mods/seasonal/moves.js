@@ -630,9 +630,9 @@ exports.BattleMovedex = {
 	slash: {
 		num: -28,
 		accuracy: 100,
-		basePower: 35,
+		basePower: 27,
 		basePowerCallback: function (pokemon, target) {
-			var bP = 35;
+			var bP = 27;
 			if (target.volatiles['bleed']) bP += 10;
 			if (target.status === 'psn') bP += 10;
 			return bP;

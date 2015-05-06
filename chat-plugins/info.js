@@ -2175,7 +2175,7 @@ var commands = exports.commands = {
 			break;
 		case 'mutilate':
 		case 'slash':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Mutilate"><span class="col movenamecol">Mutilate</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />35%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Increases power by 10% or 20% if target is psn or/and bld.</span> </a></li><li style="clear:both"></li></ul>';
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Mutilate"><span class="col movenamecol">Mutilate</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />27%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Increases power by 10% or 20% if target is psn or/and bld.</span> </a></li><li style="clear:both"></li></ul>';
 			break;
 		default:
 			buffer = "No Pokemon, item, move, ability or nature named '" + target + "' was found on this seasonal.";
