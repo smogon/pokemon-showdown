@@ -2183,7 +2183,7 @@ var commands = exports.commands = {
 		if (targetId === 'evasion' || targetId === 'protect') {
 			return this.parse('/data protect');
 		} else if (!targetId) {
-			return this.say("Please specify a valid Pokemon, item, move, ability or nature in this seasonal.");
+			return this.sendReply("Please specify a valid Pokemon, item, move, ability or nature in this seasonal.");
 		} else {
 			this.sendReply(buffer);
 		}
