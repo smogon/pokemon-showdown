@@ -585,6 +585,7 @@ User = (function () {
 		return this.group + this.name;
 	};
 	User.prototype.isStaff = false;
+	User.prototype.isClanLeader = false;
 	User.prototype.can = function (permission, target, room) {
 		if (this.hasSysopAccess()) return true;
 
@@ -783,6 +784,7 @@ User = (function () {
 		this.registered = false;
 		this.group = Config.groupsranking[0];
 		this.isStaff = false;
+		this.isClanLeader = false;
 		this.isSysop = false;
 
 		for (var i = 0; i < this.connections.length; i++) {
@@ -1104,6 +1106,7 @@ User = (function () {
 			this.registered = false;
 			this.group = Config.groupsranking[0];
 			this.isStaff = false;
+			this.isClanLeader = false;
 			return;
 		}
 		this.registered = true;
@@ -1121,6 +1124,7 @@ User = (function () {
 			}
 		}
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		this.isClanLeader = (this.name === 'wolf');
 		if (this.confirmed) {
 			this.autoconfirmed = this.confirmed;
 			this.locked = false;
@@ -1133,6 +1137,7 @@ User = (function () {
 	User.prototype.setGroup = function (group, forceConfirmed) {
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		this.isClanLeader = (this.name === 'wolf');
 		if (forceConfirmed || this.group !== Config.groupsranking[0]) {
 			usergroups[this.userid] = this.group + this.name;
 		} else {
@@ -1170,6 +1175,7 @@ User = (function () {
 			this.group = Config.groupsranking[0];
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
+			this.isClanLeader = false;
 			this.autoconfirmed = '';
 			this.confirmed = '';
 		}
@@ -1384,6 +1390,7 @@ User = (function () {
 		if (!this.can('bypassall')) {
 			// check if user has permission to join
 			if (room.staffRoom && !this.isStaff) return false;
+			if (room.clanLeaderRoom && !this.isClanLeader) return false;
 			if (room.checkBanned && !room.checkBanned(this)) {
 				return null;
 			}
