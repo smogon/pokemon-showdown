@@ -268,6 +268,13 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 200
 	},
+	sketch: {
+		inherit: true,
+		onHit: function () {
+			// Sketch always fails in Link Battles
+			this.add('-nothing');
+		}
+	},
 	skyattack: {
 		inherit: true,
 		secondary: {}
