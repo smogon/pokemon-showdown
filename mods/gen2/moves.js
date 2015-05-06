@@ -36,7 +36,7 @@ exports.BattleMovedex = {
 				return this.random(3, 7);
 			},
 			onStart: function (target) {
-				var noEncore = {encore:1, mimic:1, mirrormove:1, sketch:1, transform:1, sleeptalk:1};
+				var noEncore = {encore:1, metronome:1, mimic:1, mirrormove:1, sketch:1, sleeptalk:1, struggle:1, transform:1};
 				var moveIndex = target.moves.indexOf(target.lastMove);
 				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 					// it failed
@@ -64,7 +64,7 @@ exports.BattleMovedex = {
 			onEnd: function (target) {
 				this.add('-end', target, 'Encore');
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
@@ -248,6 +248,7 @@ exports.BattleMovedex = {
 			if (!target.setStatus('slp') && target.status !== 'slp') return false;
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
+			target.statusData.source = target;
 			this.heal(target.maxhp);
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
@@ -266,6 +267,13 @@ exports.BattleMovedex = {
 	selfdestruct: {
 		inherit: true,
 		basePower: 200
+	},
+	sketch: {
+		inherit: true,
+		onHit: function () {
+			// Sketch always fails in Link Battles
+			this.add('-nothing');
+		}
 	},
 	skyattack: {
 		inherit: true,

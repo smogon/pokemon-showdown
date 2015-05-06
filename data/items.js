@@ -102,6 +102,9 @@ exports.BattleItems = {
 				pokemon.eatItem();
 			}
 		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'spd') {
@@ -253,7 +256,7 @@ exports.BattleItems = {
 		onModifySpD: function (spd) {
 			return this.chainModify(1.5);
 		},
-		onModifyPokemon: function (pokemon) {
+		onDisableMove: function (pokemon) {
 			var moves = pokemon.moveset;
 			for (var i = 0; i < moves.length; i++) {
 				if (this.getMove(moves[i].move).category === 'Status') {
@@ -351,7 +354,7 @@ exports.BattleItems = {
 		},
 		onUpdate: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
-				if (pokemon.useItem()) {
+				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
 					this.heal(20);
 				}
 			}
@@ -1285,6 +1288,9 @@ exports.BattleItems = {
 				}
 			}
 		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 4);
 		},
@@ -1390,6 +1396,9 @@ exports.BattleItems = {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
@@ -1920,6 +1929,9 @@ exports.BattleItems = {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
@@ -2574,6 +2586,9 @@ exports.BattleItems = {
 				pokemon.eatItem();
 			}
 		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'spe') {
@@ -3098,6 +3113,9 @@ exports.BattleItems = {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
 			this.heal(10);
@@ -3810,7 +3828,7 @@ exports.BattleItems = {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
 		onTryHit: function (pokemon, source, move) {
-			if (move.flags['powder']) {
+			if (move.flags['powder'] && move.id !== 'ragepowder') {
 				this.add('-activate', pokemon, 'Safety Goggles', move.name);
 				return null;
 			}
@@ -4060,6 +4078,9 @@ exports.BattleItems = {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 4);
@@ -4718,6 +4739,9 @@ exports.BattleItems = {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
