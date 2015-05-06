@@ -205,6 +205,7 @@ var GlobalRoom = (function () {
 
 		this.autojoin = []; // rooms that users autojoin upon connecting
 		this.staffAutojoin = []; // rooms that staff autojoin upon connecting
+		this.clanLeaderAutojoin = [];
 		for (var i = 0; i < this.chatRoomData.length; i++) {
 			if (!this.chatRoomData[i] || !this.chatRoomData[i].title) {
 				console.log('ERROR: Room number ' + i + ' has no data.');
@@ -221,6 +222,7 @@ var GlobalRoom = (function () {
 			this.chatRooms.push(room);
 			if (room.autojoin) this.autojoin.push(id);
 			if (room.staffAutojoin) this.staffAutojoin.push(id);
+			if (room.clanLeaderAutojoin) this.clanLeaderAutojoin.push(id);
 		}
 
 		// this function is complex in order to avoid several race conditions
@@ -565,6 +567,19 @@ var GlobalRoom = (function () {
 					typeof room.staffAutojoin === 'string' && room.staffAutojoin.indexOf(user.group) >= 0) {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
+				user.joinRoom(room.id, connection);
+			}
+		}
+
+		for (var i = 0; i < this.clanLeaderAutojoin.length; i++) {
+			var room = Rooms.get(this.clanLeaderAutojoin[i]);
+			if (!room) {
+				this.clanLeaderAutojoin.splice(i, 1);
+				i--;
+				continue;
+			}
+			if (room.clanLeaderAutojoin === true && user.isClanLeader ||
+					typeof room.clanLeaderAutojoin === 'string' && room.clanLeaderAutojoin.indexOf(user.group) >= 0) {
 				user.joinRoom(room.id, connection);
 			}
 		}
