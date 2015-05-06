@@ -12,7 +12,7 @@ exports.BattleMovedex = {
 		flags: {heal: 1},
 		onTry: function (attacker) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Wish', attacker);
+			this.add('-anim', attacker, "Wish", attacker);
 		},
 		onHitSide: function (side, source) {
 			this.add('-message', source.name + "'s Cura heals its team!");
@@ -42,7 +42,7 @@ exports.BattleMovedex = {
 		flags: {heal: 1},
 		onTry: function (attacker) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Geomancy', attacker);
+			this.add('-anim', attacker, "Geomancy", attacker);
 		},
 		onHitSide: function (side, source) {
 			this.add('-message', source.name + "'s Curaga greatly heals its team!");
@@ -89,7 +89,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'powershield',
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', defender, 'Synthesis', defender);
+			this.add('-anim', defender, "Synthesis", defender);
 		},
 		secondary: false,
 		target: "adjacentAllyOrSelf",
@@ -109,7 +109,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'rejuvenation',
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', defender, 'Bulk Up', defender);
+			this.add('-anim', defender, "Bulk Up", defender);
 		},
 		secondary: false,
 		target: "adjacentAlly",
@@ -129,7 +129,7 @@ exports.BattleMovedex = {
 		sideCondition: 'fairyward',
 		onTry: function (attacker) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Misty Terrain', attacker);
+			this.add('-anim', attacker, "Misty Terrain", attacker);
 		},
 		secondary: false,
 		target: "allySide",
@@ -149,7 +149,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'taunting',
 		onTry: function (attacker) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Follow Me', attacker);
+			this.add('-anim', attacker, "Follow Me", attacker);
 		},
 		secondary: false,
 		target: "self",
@@ -169,7 +169,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'sacrifice',
 		onTry: function (attacker) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Bulk Up', attacker);
+			this.add('-anim', attacker, "Bulk Up", attacker);
 		},
 		secondary: false,
 		target: "self",
@@ -188,7 +188,7 @@ exports.BattleMovedex = {
 		flags: {},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Ally Switch', defender);
+			this.add('-anim', attacker, "Ally Switch", defender);
 		},
 		onTryHit: function (target, source) {
 			if (source.side.active.length === 1) return false;
@@ -241,7 +241,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, distance: 1, heal: 1},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Heal Pulse', defender);
+			this.add('-anim', attacker, "Heal Pulse", defender);
 		},
 		onHit: function (target, source) {
 			this.heal(Math.ceil(target.maxhp * 0.6));
@@ -263,7 +263,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, distance: 1, heal: 1},
 		onTry: function (attacker) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Heal Bell', attacker);
+			this.add('-anim', attacker, "Heal Bell", attacker);
 		},
 		onHit: function (target, source) {
 			this.heal(Math.ceil(target.maxhp * 0.125));
@@ -287,7 +287,7 @@ exports.BattleMovedex = {
 		ignoreImmunity: true,
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', defender, 'Recover', defender);
+			this.add('-anim', defender, "Recover", defender);
 		},
 		onHit: function (target, source) {
 			source.addVolatile('disable');
@@ -335,7 +335,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'barkskin',
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Bulk Up', attacker);
+			this.add('-anim', attacker, "Bulk Up", attacker);
 		},
 		secondary: false,
 		target: "self",
@@ -359,7 +359,7 @@ exports.BattleMovedex = {
 		ignoreImmunity: true,
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Seismic Toss', defender);
+			this.add('-anim', attacker, "Seismic Toss", defender);
 		},
 		secondary: false,
 		target: "normal",
@@ -382,7 +382,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Eruption', defender);
+			this.add('-anim', attacker, "Eruption", defender);
 		},
 		secondary: false,
 		target: "any",
@@ -401,7 +401,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Overheat', defender);
+			this.add('-anim', attacker, "Overheat", defender);
 		},
 		secondary: {chance: 100, status: 'brn'},
 		target: "any",
@@ -420,7 +420,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Moonblast', defender);
+			this.add('-anim', attacker, "Moonblast", defender);
 		},
 		secondary: {chance: 100, volatileStatus: 'moonfire'},
 		target: "any",
@@ -443,7 +443,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Secret Power', defender);
+			this.add('-anim', attacker, "Secret Power", defender);
 		},
 		target: "any",
 		type: "Grass"
@@ -462,7 +462,7 @@ exports.BattleMovedex = {
 		volatileStatus: 'corruption',
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Spore', defender);
+			this.add('-anim', attacker, "Spore", defender);
 		},
 		target: "any",
 		type: "Dark"
@@ -520,7 +520,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Icicle Crash', defender);
+			this.add('-anim', attacker, "Icicle Crash", defender);
 		},
 		secondary: false,
 		target: "normal",
@@ -539,7 +539,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Ice Beam', defender);
+			this.add('-anim', attacker, "Ice Beam", defender);
 		},
 		secondary: {chance: 100, volatileStatus: 'chilled'},
 		target: "normal",
@@ -574,7 +574,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Surf', defender);
+			this.add('-anim', attacker, "Surf", defender);
 		},
 		target: "allAdjacentFoes",
 		type: "Electric"
@@ -598,7 +598,7 @@ exports.BattleMovedex = {
 		ignoreImmunity: true,
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Head Smash', defender);
+			this.add('-anim', attacker, "Head Smash", defender);
 		},
 		onHit: function (target, source) {
 			source.addVolatile('disable');
@@ -620,7 +620,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Slash', defender);
+			this.add('-anim', attacker, "Slash", defender);
 		},
 		secondary: {chance: 100, volatileStatus: 'bleeding'},
 		target: "normal",
@@ -645,7 +645,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTry: function (attacker, defender) {
 			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Return', defender);
+			this.add('-anim', attacker, "Return", defender);
 		},
 		secondary: false,
 		target: "normal",
