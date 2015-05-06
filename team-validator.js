@@ -604,6 +604,8 @@ Validator = (function () {
 						sketch = true;
 						// Chatter, Struggle and Magikarp's Revenge cannot be sketched
 						if (move in {'chatter':1, 'struggle':1, 'magikarpsrevenge':1}) return true;
+						// In Gen 2, there is no way for Sketch to copy these moves
+						if (tools.gen === 2 && move in {'explosion':1, 'metronome':1, 'mimic':1, 'mirrormove':1, 'selfdestruct':1, 'sleeptalk':1, 'transform':1}) return true;
 					}
 					if (typeof lset === 'string') lset = [lset];
 
