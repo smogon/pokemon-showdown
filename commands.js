@@ -372,6 +372,37 @@ var commands = exports.commands = {
 		}
 	},
 
+	clanleaderroom: 'clroom',
+	clroom: function (target, room, user) {
+		if (!this.can('makeroom')) return;
+		if (target === 'off') {
+			delete room.clanLeaderRoom;
+			this.addModCommand("" + user.name + " removed this room from the clan leader autojoin list.");
+			delete room.chatRoomData.clanLeaderRoom;
+			Rooms.global.writeChatRoomData();
+		} else {
+			room.clanLeaderRoom = true;
+			this.addModCommand("" + user.name + " added this room to the clan leader autojoin list.");
+			room.chatRoomData.clanLeaderRoom = true;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
+	clautojoinroom: function (target, room, user) {
+		if (!this.can('makeroom')) return;
+		if (target === 'off') {
+			delete room.clanLeaderAutojoin;
+			this.addModCommand("" + user.name + " removed this room from the clan leader autojoin list.");
+			delete room.chatRoomData.clanLeaderAutojoin;
+			Rooms.global.writeChatRoomData();
+		} else {
+			room.clanLeaderAutojoin = true;
+			this.addModCommand("" + user.name + " added this room to the clan leader autojoin list.");
+			room.chatRoomData.clanLeaderAutojoin = true;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
 	roomdesc: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
