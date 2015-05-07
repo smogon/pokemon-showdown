@@ -478,8 +478,8 @@ exports.commands = {
 		}
 		this.say(room, text);
 	},
-	'8ball': function (arg, by, room) {
-		var text = this.canUse('8ball', room, by) || room.charAt(0) === ',' ? '' : '/pm ' + by + ', ';
+	helix: function (arg, by, room) {
+		var text = this.canUse('helix', room, by) || room.charAt(0) === ',' ? '' : '/pm ' + by + ', ';
 		var rand = ~~(20 * Math.random());
 
 		switch (rand) {
