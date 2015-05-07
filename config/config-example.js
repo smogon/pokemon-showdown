@@ -448,6 +448,7 @@ exports.customavatars = {
 	'lukey': 'lukey.gif',
 	'ppgore': 'ppgore.gif',
 	'prateeksingh': 'prateeksingh.gif',
+	'gleamy': 'prateeksingh.gif',
 	'principebaka': 'principebaka.gif',
 	'punkysaur': 'punkysaur.gif',
 	'quatuorgamer': 'quatuorgamer.png',
