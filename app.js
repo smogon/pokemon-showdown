@@ -429,3 +429,9 @@ global.Core = require('./core.js').core;
 global.Components = require('./components.js');
 
 global.Poll = require('./core.js').core.poll();
+
+try {
+	global.hangman = require('./hangman.js').hangman();
+} catch (e) {
+	console.log('Error loading hangman.js');
+}
