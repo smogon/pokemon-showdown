@@ -586,7 +586,7 @@ var Trivia = (function () {
 var commands = {
 	// trivia game commands
 	new: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.can('broadcast', null, room) || !target) return false;
+		if (room.id !== 'chat' || !this.can('broadcast', null, room) || !target) return false;
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (trivia[room.id]) return this.sendReply("There is already a trivia game in progress.");
 
@@ -611,7 +611,7 @@ var commands = {
 	newhelp: ["/trivia new OR create [mode], [category], [length] - Begin signups for a new trivia game. Requires: + % @ # & ~"],
 
 	join: function (target, room, user) {
-		if (room.id !== 'trivia') return false;
+		if (room.id !== 'chat') return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
 		trivium.addParticipant(this, user);
@@ -619,7 +619,7 @@ var commands = {
 	joinhelp: ["/trivia join - Join a trivia game during signups."],
 
 	start: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
+		if (room.id !== 'chat' || !this.can('broadcast', null, room)) return false;
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game to start.");
@@ -628,7 +628,7 @@ var commands = {
 	starthelp: ["/trivia start - Begin the game once enough users have signed up. Requires: + % @ # & ~"],
 
 	kick: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.can('mute', null, room) || !target) return false;
+		if (room.id !== 'chat' || !this.can('mute', null, room) || !target) return false;
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
@@ -637,7 +637,7 @@ var commands = {
 	kickhelp: ["/trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~"],
 
 	answer: function (target, room, user) {
-		if (room.id !== 'trivia' || !target) return false;
+		if (room.id !== 'chat' || !target) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
 		trivium.answerQuestion(this, target, user);
@@ -645,7 +645,7 @@ var commands = {
 	answerhelp: ["/ta [answer] - Answer the current question."],
 
 	end: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
+		if (room.id !== 'chat' || !this.can('broadcast', null, room)) return false;
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
@@ -893,7 +893,7 @@ var commands = {
 	// informational commands
 	'': 'status',
 	status: function (target, room, user) {
-		if (room.id !== 'trivia' || !this.canBroadcast()) return false;
+		if (room.id !== 'chat' || !this.canBroadcast()) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReplyBox("There is no trivia game in progress.");
 		trivium.getStatus(this, user);
@@ -901,7 +901,7 @@ var commands = {
 	statushelp: ["/trivia status - View information about any ongoing trivia game."],
 
 	players: function (target, room) {
-		if (room.id !== 'trivia' || !this.canBroadcast()) return false;
+		if (room.id !== 'chat' || !this.canBroadcast()) return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReplyBox("There is no trivia game in progress.");
 		trivium.getParticipants(this);
@@ -909,7 +909,7 @@ var commands = {
 	playershelp: ["/trivia players - View the list of the players in the current trivia game."],
 
 	rank: function (target, room, user) {
-		if (room.id !== 'trivia') return false;
+		if (room.id !== 'chat') return false;
 
 		var name = '';
 		var userid = '';
@@ -935,7 +935,7 @@ var commands = {
 	rankhelp: ["/trivia rank [username] - View the rank of the specified user. If none is given, view your own."],
 
 	ladder: function (target, room) {
-		if (room.id !== 'trivia' || !this.canBroadcast()) return false;
+		if (room.id !== 'chat' || !this.canBroadcast()) return false;
 
 		var ladder = triviaData.ladder;
 		var leaderboard = triviaData.leaderboard;
@@ -963,7 +963,7 @@ var commands = {
 	ladderhelp: ["/trivia ladder - View information about the top 15 users on the trivia leaderboard."],
 
 	help: function (target, room) {
-		if ((room.id !== 'trivia' && room.id !== 'questionworkshop') || !this.canBroadcast()) return false;
+		if ((room.id !== 'chat' && room.id !== 'questionworkshop') || !this.canBroadcast()) return false;
 		this.sendReply("Use /help trivia to view help for all commands, or /help trivia [command] for help on a specific command.");
 	}
 };
