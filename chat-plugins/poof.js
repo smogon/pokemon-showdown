@@ -65,7 +65,7 @@ exports.commands = {
 		if (Config.poofOff) return this.sendReply("Poof is currently disabled.");
 		if (target && !this.can('broadcast')) return false;
 		if (!this.canTalk(message)) return false;
-		if (this.name.toUpperCase() === 'WOLF') {
+		if (user.name.toUpperCase() === 'WOLF') {
 			var message = target || wolf[Math.floor(Math.random() * wolf.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -73,12 +73,12 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'ABSOL98SK') {
+		} else if (user.name.toUpperCase() === 'ABSOL98SK') {
 			var message = target || absol98sk[Math.floor(Math.random() * absol98sk.length)];
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'AMIŧY' || this.name.toUpperCase() === 'KIMISUMI') {
+		} else if (user.name.toUpperCase() === 'AMIŧY' || user.name.toUpperCase() === 'KIMISUMI') {
 			var message = target || amiy[Math.floor(Math.random() * amiy.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -86,7 +86,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'ANRIN DAS' || this.name.toUpperCase() === 'ANRIN N') {
+		} else if (user.name.toUpperCase() === 'ANRIN DAS' || user.name.toUpperCase() === 'ANRIN N') {
 			var message = target || anrindas[Math.floor(Math.random() * anrindas.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -94,7 +94,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'AXTHEEFROST' || this.name.toUpperCase() === 'ANDY VENUS') {
+		} else if (user.name.toUpperCase() === 'AXTHEEFROST' || user.name.toUpperCase() === 'ANDY VENUS') {
 			var message = target || axtheefrost[Math.floor(Math.random() * axtheefrost.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -102,7 +102,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'BIDOOF FTW') {
+		} else if (user.name.toUpperCase() === 'BIDOOF FTW') {
 			var message = target || bidoofftw[Math.floor(Math.random() * bidoofftw.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -110,7 +110,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'CаѕTFоRM') {
+		} else if (user.name.toUpperCase() === 'CаѕTFоRM') {
 			var message = target || ctfrm[Math.floor(Math.random() * ctfrm.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -118,7 +118,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'CHRISTοS') {
+		} else if (user.name.toUpperCase() === 'CHRISTοS') {
 			var message = target || christs[Math.floor(Math.random() * christs.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -126,7 +126,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'DARK LIGHT1999') {
+		} else if (user.name.toUpperCase() === 'DARK LIGHT1999') {
 			var message = target || darklight1999[Math.floor(Math.random() * darklight1999.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -134,12 +134,12 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'DARK SHADOW 6') {
+		} else if (user.name.toUpperCase() === 'DARK SHADOW 6') {
 			var message = target || darkshadow6[Math.floor(Math.random() * darkshadow6.length)];
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'HANNU MIKKOLA') {
+		} else if (user.name.toUpperCase() === 'HANNU MIKKOLA') {
 			var message = target || hannumikkola[Math.floor(Math.random() * hannumikkola.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -147,7 +147,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'INDIANCHARIZARD#' || this.name.toUpperCase() === 'ASTRAEA') {
+		} else if (user.name.toUpperCase() === 'INDIANCHARIZARD#' || user.name.toUpperCase() === 'ASTRAEA') {
 			var message = target || indiancharizard[Math.floor(Math.random() * indiancharizard.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -155,7 +155,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'KINGDOM OF TEA') {
+		} else if (user.name.toUpperCase() === 'KINGDOM OF TEA') {
 			var message = target || kingdomoftea[Math.floor(Math.random() * kingdomoftea.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
@@ -163,7 +163,7 @@ exports.commands = {
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
-		} else if (this.name.toUpperCase() === 'SRINATOR') {
+		} else if (user.name.toUpperCase() === 'SRINATOR') {
 			var message = target || srinator[Math.floor(Math.random() * srinator.length)];
 
 			room.addRaw(Tools.escapeHTML(message));
