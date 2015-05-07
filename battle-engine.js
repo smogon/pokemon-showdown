@@ -1737,7 +1737,9 @@ Battle = (function () {
 		if (sourceEffect === undefined && this.effect) sourceEffect = this.effect;
 		if (source === undefined && this.event && this.event.target) source = this.event.target;
 
-		if (this.weather === status.id && this.gen > 2) return false;
+		if (this.weather === status.id && (this.gen > 2 || status.id === 'sandstorm')) {
+			return false;
+		}
 		if (status.id) {
 			var result = this.runEvent('SetWeather', source, source, status);
 			if (!result) {
