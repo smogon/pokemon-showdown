@@ -1124,7 +1124,7 @@ User = (function () {
 			}
 		}
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
-		this.isClanLeader = (this.name === 'wolf');
+		this.isClanLeader = (this.name.toUpperCase() === 'WOLF');
 		if (this.confirmed) {
 			this.autoconfirmed = this.confirmed;
 			this.locked = false;
@@ -1137,7 +1137,7 @@ User = (function () {
 	User.prototype.setGroup = function (group, forceConfirmed) {
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
-		this.isClanLeader = (this.name === 'wolf');
+		this.isClanLeader = (this.name.toUpperCase() === 'WOLF');
 		if (forceConfirmed || this.group !== Config.groupsranking[0]) {
 			usergroups[this.userid] = this.group + this.name;
 		} else {
