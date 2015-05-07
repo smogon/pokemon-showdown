@@ -22,7 +22,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Ban Mod'],
-		banlist: []
+		banlist: ['Unreleased', 'Illegal']
 	},
 	{
 		name: "OU",
