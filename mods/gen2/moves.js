@@ -29,6 +29,27 @@ exports.BattleMovedex = {
 		onTryHit: function () {},
 		effect: {}
 	},
+	dig: {
+		inherit: true,
+		effect: {
+			duration: 2,
+			onImmunity: function (type, pokemon) {
+				if (type === 'sandstorm') return false;
+			},
+			onAccuracy: function (accuracy, target, source, move) {
+				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'fissure') {
+					return;
+				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				return 0;
+			},
+			onSourceBasePower: function (basePower, target, source, move) {
+				if (move.id === 'earthquake' || move.id === 'magnitude') {
+					return this.chainModify(2);
+				}
+			}
+		}
+	},
 	encore: {
 		inherit: true,
 		effect: {
@@ -79,6 +100,24 @@ exports.BattleMovedex = {
 	explosion: {
 		inherit: true,
 		basePower: 250
+	},
+	fly: {
+		inherit: true,
+		effect: {
+			duration: 2,
+			onAccuracy: function (accuracy, target, source, move) {
+				if (move.id === 'gust' || move.id === 'twister' || move.id === 'thunder' || move.id === 'whirlwind') {
+					return;
+				}
+				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				return 0;
+			},
+			onSourceBasePower: function (basePower, target, source, move) {
+				if (move.id === 'gust' || move.id === 'twister') {
+					return this.chainModify(2);
+				}
+			}
+		}
 	},
 	highjumpkick: {
 		inherit: true,
