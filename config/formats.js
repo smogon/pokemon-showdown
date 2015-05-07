@@ -187,7 +187,7 @@ exports.Formats = [
 		ruleset: ['Random (no PotD)']
 	},
 	{
-		name: "Monotype (SLW6)",
+		name: "Moonotype (SLW6)",
 		section: "SUPER LADDER WEEK",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
