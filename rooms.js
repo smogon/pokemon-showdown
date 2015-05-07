@@ -556,6 +556,19 @@ var GlobalRoom = (function () {
 		}
 	};
 	GlobalRoom.prototype.checkAutojoin = function (user, connection) {
+		for (var i = 0; i < this.clanLeaderAutojoin.length; i++) {
+			var room = Rooms.get(this.clanLeaderAutojoin[i]);
+			if (!room) {
+				this.clanLeaderAutojoin.splice(i, 1);
+				i--;
+				continue;
+			}
+			if (room.clanLeaderAutojoin === true && user.isClanLeader ||
+					typeof room.clanLeaderAutojoin === 'string' && room.clanLeaderAutojoin.indexOf(user.group) >= 0) {
+				user.joinRoom(room.id, connection);
+			}
+		}
+
 		for (var i = 0; i < this.staffAutojoin.length; i++) {
 			var room = Rooms.get(this.staffAutojoin[i]);
 			if (!room) {
@@ -567,19 +580,6 @@ var GlobalRoom = (function () {
 					typeof room.staffAutojoin === 'string' && room.staffAutojoin.indexOf(user.group) >= 0) {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
-				user.joinRoom(room.id, connection);
-			}
-		}
-
-		for (var i = 0; i < this.clanLeaderAutojoin.length; i++) {
-			var room = Rooms.get(this.clanLeaderAutojoin[i]);
-			if (!room) {
-				this.clanLeaderAutojoin.splice(i, 1);
-				i--;
-				continue;
-			}
-			if (room.clanLeaderAutojoin === true && user.isClanLeader ||
-					typeof room.clanLeaderAutojoin === 'string' && room.clanLeaderAutojoin.indexOf(user.group) >= 0) {
 				user.joinRoom(room.id, connection);
 			}
 		}
