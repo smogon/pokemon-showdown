@@ -53,7 +53,11 @@ const srinator = [
 
 const wolf = [
 	"howls to the moon.",
-	"runs off into a forest."
+	"runs off to a forest."
+];
+
+const zincoxide = [
+	"reacts with the cosmos and vanishes."
 ];
 
 exports.commands = {
@@ -165,6 +169,11 @@ exports.commands = {
 			user.leaveRoom(room);
 		} else if (user.name.toUpperCase() === 'SRINATOR') {
 			var message = target || srinator[Math.floor(Math.random() * srinator.length)];
+
+			room.addRaw(Tools.escapeHTML(message));
+			user.leaveRoom(room);
+		} else if (user.name.toUpperCase() === 'ZINC OXIDE') {
+			var message = target || zincoxide[Math.floor(Math.random() * zincoxide.length)];
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
