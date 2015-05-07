@@ -459,7 +459,7 @@ exports.commands = {
 	usage: 'usagestats',
 	usagestats: function (arg, by, room) {
 		var text = this.canUse('usagestats', room, by) || room.charAt(0) === ',' ? '' : '/pm ' + by + ', ';
-		text += 'http://www.smogon.com/stats/2015-03/';
+		text += 'http://www.smogon.com/stats/';
 		this.say(room, text);
 	},
 	seen: function (arg, by, room) { // this command is still a bit buggy
