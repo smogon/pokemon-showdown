@@ -126,23 +126,13 @@ exports.commands = {
 		if (!this.hasRank(by, '#&~') || room.charAt(0) === ',') return false;
 
 		var settable = {
-			autoban: 1,
-			banword: 1,
 			say: 1,
 			joke: 1,
 			usagestats: 1,
-			'8ball': 1,
-			guia: 1,
-			studio: 1,
-			wifi: 1,
-			monotype: 1,
-			survivor: 1,
-			happy: 1,
-			buzz: 1
+			helix: 1
 		};
 		var modOpts = {
 			flooding: 1,
-			caps: 1,
 			stretching: 1,
 			bannedwords: 1
 		};
@@ -234,8 +224,8 @@ exports.commands = {
 	ban: 'autoban',
 	ab: 'autoban',
 	autoban: function (arg, by, room) {
-		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-		if (!this.hasRank(this.ranks[room] || ' ', '@#&~')) return this.say(room, Config.nick + ' requires rank of @ or higher to (un)blacklist.');
+		if (room !== 'staff') return this.say(room, 'The blacklist commands must be used in the "Staff" room.');
+		if (!this.hasRank(by, '@~')) return false;
 
 		arg = arg.split(',');
 		var added = [];
@@ -248,11 +238,11 @@ exports.commands = {
 				illegalNick.push(tarUser);
 				continue;
 			}
-			if (!this.blacklistUser(tarUser, room)) {
+			if (!this.blacklistUser(tarUser, 'chat')) {
 				alreadyAdded.push(tarUser);
 				continue;
 			}
-			this.say(room, '/roomban ' + tarUser + ', Blacklisted user');
+			this.say(room, '/ban ' + tarUser + ', Blacklisted user');
 			added.push(tarUser);
 		}
 
@@ -272,8 +262,8 @@ exports.commands = {
 	unban: 'unautoban',
 	unab: 'unautoban',
 	unautoban: function (arg, by, room) {
-		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
-		if (!this.hasRank(this.ranks[room] || ' ', '@#&~')) return this.say(room, Config.nick + ' requires rank of @ or higher to (un)blacklist.');
+		if (room !== 'staff') return this.say(room, 'The blacklist commands must be used in the "Staff" room.');
+		if (!this.hasRank(by, '@~')) return false;
 
 		arg = arg.split(',');
 		var removed = [];
@@ -285,11 +275,11 @@ exports.commands = {
 				notRemoved.push(tarUser);
 				continue;
 			}
-			if (!this.unblacklistUser(tarUser, room)) {
+			if (!this.unblacklistUser(tarUser, 'chat')) {
 				notRemoved.push(tarUser);
 				continue;
 			}
-			this.say(room, '/roomunban ' + tarUser);
+			this.say(room, '/unban ' + tarUser);
 			removed.push(tarUser);
 		}
 
@@ -339,7 +329,8 @@ exports.commands = {
 	vab: 'viewblacklist',
 	viewautobans: 'viewblacklist',
 	viewblacklist: function (arg, by, room) {
-		if (!this.canUse('autoban', room, by) || room.charAt(0) === ',') return false;
+		if (room !== 'staff') return this.say(room, 'The blacklist commands must be used in the "Staff" room.');
+		if (!this.hasRank(by, '@~')) return false;
 
 		var text = '';
 		if (!this.settings.blacklist || !this.settings.blacklist[room]) {
@@ -365,7 +356,7 @@ exports.commands = {
 	},
 	banphrase: 'banword',
 	banword: function (arg, by, room) {
-		if (!this.canUse('banword', room, by)) return false;
+		if (!this.hasRank(by, '~')) return false;
 		if (!this.settings.bannedphrases) this.settings.bannedphrases = {};
 		arg = arg.trim().toLowerCase();
 		if (!arg) return false;
@@ -384,7 +375,7 @@ exports.commands = {
 	},
 	unbanphrase: 'unbanword',
 	unbanword: function (arg, by, room) {
-		if (!this.canUse('banword', room, by)) return false;
+		if (!this.hasRank(by, '~')) return false;
 		arg = arg.trim().toLowerCase();
 		if (!arg) return false;
 		var tarRoom = room;
@@ -405,7 +396,7 @@ exports.commands = {
 	viewbannedphrases: 'viewbannedwords',
 	vbw: 'viewbannedwords',
 	viewbannedwords: function (arg, by, room) {
-		if (!this.canUse('banword', room, by)) return false;
+		if (!this.hasRank(by, '~')) return false;
 		arg = arg.trim().toLowerCase();
 		var tarRoom = room;
 
