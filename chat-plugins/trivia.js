@@ -157,7 +157,7 @@ if (triviaRoom) {
 			write: writeTriviaData,
 			trivia: trivia
 		};
-		var questionWorkshop = Rooms.get('questionworkshop');
+		var questionWorkshop = Rooms.get('chat');
 		if (questionWorkshop) questionWorkshop.plugin = triviaRoom.plugin;
 	}
 }
@@ -656,7 +656,7 @@ var commands = {
 	// question database modifying commands
 	submit: 'add',
 	add: function (target, room, user, connection, cmd) {
-		if (room.id !== 'questionworkshop' || (cmd === 'add' && !this.can('mute', null, room)) || !target) return false;
+		if (room.id !== 'chat' || (cmd === 'add' && !this.can('mute', null, room)) || !target) return false;
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = target.split('|');
@@ -703,7 +703,7 @@ var commands = {
 	addhelp: ["/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~"],
 
 	review: function (target, room) {
-		if (room.id !== 'questionworkshop' || !this.can('mute', null, room)) return false;
+		if (room.id !== 'chat' || !this.can('mute', null, room)) return false;
 
 		var submissions = triviaData.submissions;
 		var submissionsLen = submissions.length;
@@ -726,7 +726,7 @@ var commands = {
 
 	reject: 'accept',
 	accept: function (target, room, user, connection, cmd) {
-		if (room.id !== 'questionworkshop' || !this.can('mute', null, room) || !target) return false;
+		if (room.id !== 'chat' || !this.can('mute', null, room) || !target) return false;
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 
 		var isAccepting = cmd === 'accept';
@@ -809,7 +809,7 @@ var commands = {
 	rejecthelp: ["/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: % @ # & ~"],
 
 	delete: function (target, room, user) {
-		if (room.id !== 'questionworkshop' || !this.can('mute', null, room) || !target) return false;
+		if (room.id !== 'chat' || !this.can('mute', null, room) || !target) return false;
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 
 		var question = Tools.escapeHTML(target).trim();
@@ -829,7 +829,7 @@ var commands = {
 	deletehelp: ["/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~"],
 
 	qs: function (target, room, user) {
-		if (room.id !== 'questionworkshop') return false;
+		if (room.id !== 'chat') return false;
 
 		var buffer = "|raw|<div class=\"ladder\"><table>";
 
@@ -963,7 +963,7 @@ var commands = {
 	ladderhelp: ["/trivia ladder - View information about the top 15 users on the trivia leaderboard."],
 
 	help: function (target, room) {
-		if ((room.id !== 'chat' && room.id !== 'questionworkshop') || !this.canBroadcast()) return false;
+		if ((room.id !== 'chat' && room.id !== 'chat') || !this.canBroadcast()) return false;
 		this.sendReply("Use /help trivia to view help for all commands, or /help trivia [command] for help on a specific command.");
 	}
 };
