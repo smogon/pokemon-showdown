@@ -69,7 +69,7 @@ exports.commands = {
 			var message = target || wolf[Math.floor(Math.random() * wolf.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -82,7 +82,7 @@ exports.commands = {
 			var message = target || amiy[Math.floor(Math.random() * amiy.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -90,7 +90,7 @@ exports.commands = {
 			var message = target || anrindas[Math.floor(Math.random() * anrindas.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -98,7 +98,7 @@ exports.commands = {
 			var message = target || axtheefrost[Math.floor(Math.random() * axtheefrost.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -106,7 +106,7 @@ exports.commands = {
 			var message = target || bidoofftw[Math.floor(Math.random() * bidoofftw.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -114,7 +114,7 @@ exports.commands = {
 			var message = target || ctfrm[Math.floor(Math.random() * ctfrm.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -122,7 +122,7 @@ exports.commands = {
 			var message = target || christs[Math.floor(Math.random() * christs.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -130,7 +130,7 @@ exports.commands = {
 			var message = target || darklight1999[Math.floor(Math.random() * darklight1999.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -143,7 +143,7 @@ exports.commands = {
 			var message = target || hannumikkola[Math.floor(Math.random() * hannumikkola.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -151,7 +151,7 @@ exports.commands = {
 			var message = target || indiancharizard[Math.floor(Math.random() * indiancharizard.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
@@ -159,7 +159,7 @@ exports.commands = {
 			var message = target || kingdomoftea[Math.floor(Math.random() * kingdomoftea.length)];
 			if (message.indexOf('{{user}}') < 0)
 				message = '{{user}} ' + message;
-			message = message.replace(/{{user}}/g, this.name.toUpperCase());
+			message = message.replace(/{{user}}/g, user.name);
 
 			room.addRaw(Tools.escapeHTML(message));
 			user.leaveRoom(room);
