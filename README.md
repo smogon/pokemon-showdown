@@ -145,7 +145,7 @@ Retired Staff
 Contributors
 
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
-- [Ascriptmaster] - Development
+- Kevin Lau [Ascriptmaster] - Development
 - Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
