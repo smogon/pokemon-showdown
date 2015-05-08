@@ -1050,7 +1050,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":50,"abilities":["swiftswim"],"moves":["leer","watergun","twister","agility"]},
 			{"generation":5,"level":50,"gender":"M","nature":"Timid","isHidden":false,"abilities":["swiftswim"],"moves":["dracometeor","muddywater","dragonpulse","protect"],"pokeball":"cherishball"}
 		],
-		tier: "RU"
+		tier: "BL2"
 	},
 	goldeen: {
 		randomBattleMoves: ["waterfall","megahorn","knockoff","drillrun","icebeam"],
