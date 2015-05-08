@@ -3444,6 +3444,9 @@ exports.BattleScripts = {
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
+			case 'Pumpkaboo':
+				if (this.random(4) >= 1) continue;
+				break;
 			case 'Gourgeist':
 				if (this.random(4) >= 1) continue;
 				break;
