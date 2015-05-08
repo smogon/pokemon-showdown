@@ -205,6 +205,7 @@ var GlobalRoom = (function () {
 
 		this.autojoin = []; // rooms that users autojoin upon connecting
 		this.staffAutojoin = []; // rooms that staff autojoin upon connecting
+		this.clanLeaderAutojoin = [];
 		for (var i = 0; i < this.chatRoomData.length; i++) {
 			if (!this.chatRoomData[i] || !this.chatRoomData[i].title) {
 				console.log('ERROR: Room number ' + i + ' has no data.');
@@ -221,6 +222,7 @@ var GlobalRoom = (function () {
 			this.chatRooms.push(room);
 			if (room.autojoin) this.autojoin.push(id);
 			if (room.staffAutojoin) this.staffAutojoin.push(id);
+			if (room.clanLeaderAutojoin) this.clanLeaderAutojoin.push(id);
 		}
 
 		// this function is complex in order to avoid several race conditions
@@ -554,6 +556,19 @@ var GlobalRoom = (function () {
 		}
 	};
 	GlobalRoom.prototype.checkAutojoin = function (user, connection) {
+		for (var i = 0; i < this.clanLeaderAutojoin.length; i++) {
+			var room = Rooms.get(this.clanLeaderAutojoin[i]);
+			if (!room) {
+				this.clanLeaderAutojoin.splice(i, 1);
+				i--;
+				continue;
+			}
+			if (room.clanLeaderAutojoin === true && user.isClanLeader ||
+					typeof room.clanLeaderAutojoin === 'string' && room.clanLeaderAutojoin.indexOf(user.group) >= 0) {
+				user.joinRoom(room.id, connection);
+			}
+		}
+
 		for (var i = 0; i < this.staffAutojoin.length; i++) {
 			var room = Rooms.get(this.staffAutojoin[i]);
 			if (!room) {
@@ -565,6 +580,18 @@ var GlobalRoom = (function () {
 					typeof room.staffAutojoin === 'string' && room.staffAutojoin.indexOf(user.group) >= 0) {
 				// if staffAutojoin is true: autojoin if isStaff
 				// if staffAutojoin is String: autojoin if user.group in staffAutojoin
+				user.joinRoom(room.id, connection);
+			}
+		}
+
+		for (var i = 0; i < this.autojoin.length; i++) {
+			var room = Rooms.get(this.autojoin[i]);
+			if (!room) {
+				this.autojoin.splice(i, 1);
+				i--;
+				continue;
+			}
+			if (room.autojoin === true) {
 				user.joinRoom(room.id, connection);
 			}
 		}
@@ -645,8 +672,8 @@ var GlobalRoom = (function () {
 		newRoom.joinBattle(p2, p2team);
 		this.cancelSearch(p1, true);
 		this.cancelSearch(p2, true);
-		if (Config.reportbattles && rooms.lobby) {
-			rooms.lobby.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
+		if (Config.reportbattles && rooms.chat) {
+			rooms.chat.add('|b|' + newRoom.id + '|' + p1.getIdentity() + '|' + p2.getIdentity());
 		}
 		if (Config.logladderip && options.rated) {
 			if (!this.ladderIpLog) {
@@ -1250,7 +1277,7 @@ var BattleRoom = (function () {
 			return false;
 		}
 
-		this.auth[user.userid] = '\u2605';
+		this.auth[user.userid] = '-';
 		this.battle.join(user, slot, team);
 		rooms.global.battleCount += (this.battle.active ? 1 : 0) - (this.active ? 1 : 0);
 		this.active = this.battle.active;
@@ -1475,21 +1502,15 @@ var ChatRoom = (function () {
 		this.send(update);
 	};
 	ChatRoom.prototype.getIntroMessage = function () {
-		if (this.modchat && this.introMessage) {
-			return '\n|raw|<div class="infobox"><div' + (!this.isOfficial ? ' class="infobox-limited"' : '') + '>' + this.introMessage + '</div>' +
-				'<br />' +
-				'<div class="broadcast-red">' +
-				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
-				'</div></div>';
-		}
-
+		var html = this.introMessage || '';
 		if (this.modchat) {
-			return '\n|raw|<div class="infobox"><div class="broadcast-red">' +
-				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
-				'</div></div>';
+			if (html) html += '<br /><br />';
+			html += '<div class="broadcast-red">';
+			html += 'Must be rank ' + this.modchat + ' or higher to talk right now.';
+			html += '</div>';
 		}
 
-		if (this.introMessage) return '\n|raw|<div class="infobox infobox-limited">' + this.introMessage + '</div>';
+		if (html) return '\n|raw|<div class="infobox">' + html + '</div>';
 
 		return '';
 	};

@@ -653,8 +653,16 @@ Tournament = (function () {
 		var result = 'draw';
 		if (from === winner) {
 			result = 'win';
+			if (this.generator.users.size >= Core.tournaments.tourSize && this.format !== '1v1random' && this.format !== '1v1challengecup' && this.format !== '1v1' && this.format !== '1v1inversebattle') {
+				var winnerBP = Number(Core.stdin('bp', toId(from)));
+				Core.stdout('bp', toId(from), (winnerBP + 1));
+			}
 		} else if (to === winner) {
 			result = 'loss';
+			if (this.generator.users.size >= Core.tournaments.tourSize && this.format !== '1v1random' && this.format !== '1v1challengecup' && this.format !== '1v1' && this.format !== '1v1inversebattle') {
+				var winnerBP = Number(Core.stdin('bp', toId(to)));
+				Core.stdout('bp', toId(to), (winnerBP + 1));
+			}
 		}
 
 		if (result === 'draw' && !this.generator.isDrawingSupported) {
@@ -703,6 +711,65 @@ Tournament = (function () {
 			generator: this.generator.name,
 			bracketData: this.getBracketData()
 		}));
+
+		var data = {
+			results: this.generator.getResults().map(usersToNames),
+			bracketData: this.getBracketData()
+		}, runnerUp = false, winner;
+		data = data['results'].toString();
+
+		if (data.indexOf(',') >= 0) {
+			data = data.split(',');
+			winner = data[0];
+			if (data[1]) runnerUp = data[1];
+		} else {
+			winner = data;
+		}
+
+		var tourSize = this.generator.users.size;
+		if (tourSize >= Core.tournaments.tourSize) {
+			var firstBP = Math.round(tourSize / Core.tournaments.amountEarn),
+			secondBP = Math.round(firstBP / 2),
+			firstBattlePoint = 'Battle Point',
+			secondBattlePoint = 'Battle Point';
+			if (firstBP > 1) firstBattlePoint = 'Battle Points';
+			if (secondBP > 1) secondBattlePoint = 'Battle Points';
+
+			// annouces the winner/runnerUp
+			this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(winner) + '</font> has also won <font color=' + Core.profile.color + '>' + firstBP + '</font> ' + firstBattlePoint + ' for winning the tournament!</strong>');
+			if (runnerUp) this.room.add('|raw|<strong><font color=' + Core.profile.color + '>' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=' + Core.profile.color + '>' + secondBP + '</font> ' + secondBattlePoint + ' for winning the tournament!</strong>');
+
+			var wid = toId(winner), // winner's userid
+				rid = toId(runnerUp); // runnerUp's userid
+
+			// file i/o
+			var winnerBP = Number(Core.stdin('bp', wid));
+			var pclWin = Number(Core.stdin('pclWins', wid));
+			var tourWin = Number(Core.stdin('tourWins', wid));
+			if (this.room.pcl) {
+				Core.stdout('bp', wid, (winnerBP + firstBP), function () {
+					if (runnerUp) {
+						var runnerUpBP = Number(Core.stdin('bp', rid));
+						Core.stdout('bp', rid, (runnerUpBP + secondBP), function () {
+							Core.stdout('pclWins', wid, (pclWin + 1));
+						});
+					} else {
+						Core.stdout('pclWins', wid, (pclWin + 1));
+					}
+				});
+			} else {
+				Core.stdout('bp', wid, (winnerBP + firstBP), function () {
+					if (runnerUp) {
+						var runnerUpBP = Number(Core.stdin('bp', rid));
+						Core.stdout('bp', rid, (runnerUpBP + secondBP), function () {
+							Core.stdout('tourWins', wid, (tourWin + 1));
+						});
+					} else {
+						Core.stdout('tourWins', wid, (tourWin + 1));
+					}
+				});
+			}
+		}
 		this.isEnded = true;
 		delete exports.tournaments[toId(this.room.id)];
 	};
@@ -911,10 +978,13 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 		}
 
 		if (commands.moderation[cmd]) {
-			if (!user.can('tournamentsmoderation', null, room)) {
+			if (user.can('tournamentsmoderation', null, room)) {
+				commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
+			} else if (user.can('voicetourmoderation')) {
+				commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
+			} else {
 				return this.sendReply(cmd + " -  Access denied.");
 			}
-			commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
 		}
 
 		if (!commandHandler) {

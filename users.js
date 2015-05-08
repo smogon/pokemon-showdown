@@ -585,6 +585,7 @@ User = (function () {
 		return this.group + this.name;
 	};
 	User.prototype.isStaff = false;
+	User.prototype.isClanLeader = false;
 	User.prototype.can = function (permission, target, room) {
 		if (this.hasSysopAccess()) return true;
 
@@ -783,6 +784,7 @@ User = (function () {
 		this.registered = false;
 		this.group = Config.groupsranking[0];
 		this.isStaff = false;
+		this.isClanLeader = false;
 		this.isSysop = false;
 
 		for (var i = 0; i < this.connections.length; i++) {
@@ -1104,6 +1106,7 @@ User = (function () {
 			this.registered = false;
 			this.group = Config.groupsranking[0];
 			this.isStaff = false;
+			this.isClanLeader = false;
 			return;
 		}
 		this.registered = true;
@@ -1121,6 +1124,7 @@ User = (function () {
 			}
 		}
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		this.isClanLeader = (this.name.toUpperCase() === 'ANTEMORTEM' || this.name.toUpperCase() === 'BELLоSSоM' || this.name.toUpperCase() === 'CаѕTFоRM' || this.name.toUpperCase() === 'CһаSE' || this.name.toUpperCase() === 'MєGIDO' || this.name.toUpperCase() === 'NABOORU' || this.name.toUpperCase() === 'OMICRοN' || this.name.toUpperCase() === 'OMICRONHUH' || this.name.toUpperCase() === 'PAPA ANTI' || this.name.toUpperCase() === 'PRINCESS BOOTY' || this.name.toUpperCase() === 'RABINATOR' || this.name.toUpperCase() === 'RABINOV' || this.name.toUpperCase() === 'RALLYKNOB' || this.name.toUpperCase() === 'WOLF' || this.name.toUpperCase() === 'ZEKROM52');
 		if (this.confirmed) {
 			this.autoconfirmed = this.confirmed;
 			this.locked = false;
@@ -1133,6 +1137,7 @@ User = (function () {
 	User.prototype.setGroup = function (group, forceConfirmed) {
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		this.isClanLeader = (this.name.toUpperCase() === 'ANTEMORTEM' || this.name.toUpperCase() === 'BELLоSSоM' || this.name.toUpperCase() === 'CаѕTFоRM' || this.name.toUpperCase() === 'CһаSE' || this.name.toUpperCase() === 'MєGIDO' || this.name.toUpperCase() === 'NABOORU' || this.name.toUpperCase() === 'OMICRοN' || this.name.toUpperCase() === 'OMICRONHUH' || this.name.toUpperCase() === 'PAPA ANTI' || this.name.toUpperCase() === 'PRINCESS BOOTY' || this.name.toUpperCase() === 'RABINATOR' || this.name.toUpperCase() === 'RABINOV' || this.name.toUpperCase() === 'RALLYKNOB' || this.name.toUpperCase() === 'WOLF' || this.name.toUpperCase() === 'ZEKROM52');
 		if (forceConfirmed || this.group !== Config.groupsranking[0]) {
 			usergroups[this.userid] = this.group + this.name;
 		} else {
@@ -1170,6 +1175,7 @@ User = (function () {
 			this.group = Config.groupsranking[0];
 			this.isSysop = false; // should never happen
 			this.isStaff = false;
+			this.isClanLeader = false;
 			this.autoconfirmed = '';
 			this.confirmed = '';
 		}
@@ -1384,6 +1390,7 @@ User = (function () {
 		if (!this.can('bypassall')) {
 			// check if user has permission to join
 			if (room.staffRoom && !this.isStaff) return false;
+			if (room.clanLeaderRoom && !this.isClanLeader) return false;
 			if (room.checkBanned && !room.checkBanned(this)) {
 				return null;
 			}
@@ -1674,7 +1681,7 @@ Connection = (function () {
 
 	Connection.prototype.sendTo = function (roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
-		if (roomid && roomid !== 'lobby') data = '>' + roomid + '\n' + data;
+		if (roomid && roomid !== 'pcleague') data = '>' + roomid + '\n' + data;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		ResourceMonitor.countNetworkUse(data.length);
 	};

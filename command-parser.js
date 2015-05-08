@@ -111,11 +111,13 @@ function canTalk(user, room, connection, message) {
 		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u064b-\u065f\u0670\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 
 		if (room && room.id === 'lobby') {
-			var normalized = message.trim();
-			if ((normalized === user.lastMessage) &&
-					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
-				connection.popup("You can't send the same message again so soon.");
-				return false;
+			if (user.group === ' ') {
+				var normalized = message.trim();
+				if ((normalized === user.lastMessage) &&
+						((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
+					connection.popup("You can't send the same message again so soon.");
+					return false;
+				}
 			}
 			user.lastMessage = message;
 			user.lastMessageTime = Date.now();
@@ -451,6 +453,28 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
 		return parse(message, room, user, connection, levelsDeep + 1);
 	}
+
+ 	//tells
+	var alts = user.getAlts();
+	for (var u in alts) {
+		var alt = toId(alts[u]);
+		if (alt in tells) {
+			if (!tells[user.userid]) tells[user.userid] = [];
+			for (var tell in tells[alt]) {
+				tells[user.userid].add(tells[alt][tell]);
+			}
+			delete tells[alt];
+		}
+	}
+
+	if (tells[user.userid] && user.authenticated) {
+		for (var tell in tells[user.userid]) {
+			connection.sendTo(room, tells[user.userid][tell]);
+		};
+		delete tells[user.userid];
+	}
+
+	if (!Core.processChatData(user, room, connection, message)) return false;
 
 	return message;
 };

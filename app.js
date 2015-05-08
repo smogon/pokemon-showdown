@@ -419,3 +419,19 @@ fs.readFile('./config/ipbans.txt', function (err, data) {
  *********************************************************/
 
 require('./repl.js').start('app', function (cmd) { return eval(cmd); });
+
+/*********************************************************
+ * Load custom files
+ *********************************************************/
+
+global.Core = require('./core.js').core;
+
+global.Components = require('./components.js');
+
+global.Poll = require('./core.js').core.poll();
+
+try {
+	global.hangman = require('./hangman.js').hangman();
+} catch (e) {
+	console.log('Error loading hangman.js');
+}
