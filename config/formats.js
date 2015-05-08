@@ -306,6 +306,13 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Orb Random",
+		section: "Random Battles (aka Randbats)",
+
+		team: 'randomOrb',
+		ruleset: ['Random (no PotD)']
+	},
+	{
 		name: "Hoenn Random",
 		section: "Random Battles (aka Randbats)",
 
