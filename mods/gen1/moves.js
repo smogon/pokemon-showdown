@@ -214,6 +214,10 @@ exports.BattleMovedex = {
 			return false;
 		}
 	},
+	crabhammer: {
+		inherit: true,
+		critRatio: 2
+	},
 	dig: {
 		inherit: true,
 		basePower: 100,
@@ -439,6 +443,7 @@ exports.BattleMovedex = {
 	},
 	karatechop: {
 		inherit: true,
+		critRatio: 2,
 		type: "Normal"
 	},
 	leechseed: {
@@ -631,11 +636,11 @@ exports.BattleMovedex = {
 	},
 	razorleaf: {
 		inherit: true,
+		critRatio: 2,
 		target: "normal"
 	},
 	razorwind: {
 		inherit: true,
-		accuracy: 75,
 		critRatio: 1,
 		target: "normal"
 	},
@@ -744,10 +749,9 @@ exports.BattleMovedex = {
 			return null;
 		}
 	},
-	skyattack: {
+	slash: {
 		inherit: true,
-		critRatio: 1,
-		secondary: {}
+		critRatio: 2
 	},
 	softboiled: {
 		inherit: true,
