@@ -31,7 +31,8 @@ exports.BattleMovedex = {
 		},
 		beforeTurnCallback: function () {},
 		onTryHit: function () {},
-		effect: {}
+		effect: {},
+		priority: -1
 	},
 	crabhammer: {
 		inherit: true,
@@ -243,7 +244,8 @@ exports.BattleMovedex = {
 					this.effectData.damage = 2 * damage;
 				}
 			}
-		}
+		},
+		priority: -1
 	},
 	mirrormove: {
 		inherit: true,
