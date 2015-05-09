@@ -413,6 +413,10 @@ exports.BattleMovedex = {
 			},
 			onTryPrimaryHitPriority: -1,
 			onTryPrimaryHit: function (target, source, move) {
+				if (move.stallingMove) {
+					this.add('-fail', source);
+					return null;
+				}
 				if (target === source) {
 					this.debug('sub bypass: self hit');
 					return;

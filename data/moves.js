@@ -2545,7 +2545,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 4,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'protect',
 		onPrepareHit: function (pokemon) {
 			return !!this.willAct() && this.runEvent('StallMove', pokemon);
@@ -3603,7 +3603,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'endure',
 		onTryHit: function (pokemon) {
 			return this.willAct() && this.runEvent('StallMove', pokemon);
@@ -7286,7 +7286,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'kingsshield',
 		onTryHit: function (pokemon) {
 			return !!this.willAct() && this.runEvent('StallMove', pokemon);
@@ -8118,7 +8118,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'matblock',
 		onTryHitSide: function (side, source) {
 			if (source.activeTurns > 1) {
@@ -10139,7 +10139,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'protect',
 		onPrepareHit: function (pokemon) {
 			return !!this.willAct() && this.runEvent('StallMove', pokemon);
@@ -12728,7 +12728,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'spikyshield',
 		onTryHit: function (target, source, move) {
 			return !!this.willAct() && this.runEvent('StallMove', target);
