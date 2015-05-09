@@ -252,6 +252,7 @@ BattlePokemon = (function () {
 				this.moves.push(move.id);
 			}
 		}
+		this.disabledMoves = {};
 
 		this.canMegaEvo = this.battle.canMegaEvo(this);
 
