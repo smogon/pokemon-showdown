@@ -563,6 +563,16 @@ exports.BattleMovedex = {
 			target.setAbility(sourceAbility);
 		}
 	},
+	sleeptalk: {
+		inherit: true,
+		beforeMoveCallback: function (pokemon) {
+			if (pokemon.volatiles['choicelock'] || pokemon.volatiles['encore']) {
+				this.addMove('move', pokemon, 'Sleep Talk');
+				this.add('-fail', pokemon);
+				return true;
+			}
+		}
+	},
 	spikes: {
 		inherit: true,
 		flags: {}
