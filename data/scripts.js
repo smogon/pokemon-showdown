@@ -455,6 +455,10 @@ exports.BattleScripts = {
 			if (moveData.status) {
 				if (!target.status) {
 					hitResult = target.setStatus(moveData.status, pokemon, move);
+					if (!hitResult && move.status) {
+						this.add('-immune', target, '[msg]');
+						return false;
+					}
 					didSomething = didSomething || hitResult;
 				} else if (!isSecondary) {
 					if (target.status === moveData.status) {
