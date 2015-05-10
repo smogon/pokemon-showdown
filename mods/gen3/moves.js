@@ -286,32 +286,25 @@ exports.BattleMovedex = {
 	},
 	flail: {
 		inherit: true,
-		accuracy: 100,
-		basePower: 0,
 		basePowerCallback: function (pokemon, target) {
-			var hpPercent = pokemon.hp * 100 / pokemon.maxhp;
-			if (hpPercent <= 5) {
+			var ratio = pokemon.hp * 48 / pokemon.maxhp;
+			if (ratio < 2) {
 				return 200;
 			}
-			if (hpPercent <= 10) {
+			if (ratio < 5) {
 				return 150;
 			}
-			if (hpPercent <= 20) {
+			if (ratio < 10) {
 				return 100;
 			}
-			if (hpPercent <= 35) {
+			if (ratio < 17) {
 				return 80;
 			}
-			if (hpPercent <= 70) {
+			if (ratio < 33) {
 				return 40;
 			}
 			return 20;
-		},
-		pp: 15,
-		priority: 0,
-		secondary: false,
-		target: "normal",
-		type: "Normal"
+		}
 	},
 	flash: {
 		inherit: true,
@@ -524,6 +517,28 @@ exports.BattleMovedex = {
 	recover: {
 		inherit: true,
 		pp: 20
+	},
+	reversal: {
+		inherit: true,
+		basePowerCallback: function (pokemon, target) {
+			var ratio = pokemon.hp * 48 / pokemon.maxhp;
+			if (ratio < 2) {
+				return 200;
+			}
+			if (ratio < 5) {
+				return 150;
+			}
+			if (ratio < 10) {
+				return 100;
+			}
+			if (ratio < 17) {
+				return 80;
+			}
+			if (ratio < 33) {
+				return 40;
+			}
+			return 20;
+		}
 	},
 	roar: {
 		inherit: true,
