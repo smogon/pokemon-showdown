@@ -1257,6 +1257,9 @@ exports.BattleScripts = {
 						case 'growth':
 							if (hasMove['amnesia']) rejected = true;
 							break;
+						case 'fissure':
+							if (hasMove['horndrill']) rejected = true;
+							break;
 						case 'supersonic':
 							if (hasMove['confuseray']) rejected = true;
 							break;
