@@ -15,7 +15,7 @@ var battles = Object.create(null);
 
 var SimulatorProcess = (function () {
 	function SimulatorProcess() {
-		this.process = require('child_process').fork('battle-engine.js');
+		this.process = require('child_process').fork('battle-engine.js', {cwd: __dirname});
 		this.process.on('message', function (message) {
 			var lines = message.split('\n');
 			var battle = battles[lines[0]];
