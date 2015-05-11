@@ -1737,7 +1737,7 @@ var commands = exports.commands = {
 	},
 
 	bash: function (target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
+		if (!this.can('hotpatch')) {
 			return this.sendReply("/bash - Access denied.");
 		}
 
@@ -1748,7 +1748,7 @@ var commands = exports.commands = {
 	},
 
 	eval: function (target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
+		if (!this.can('hotpatch')) {
 			return this.sendReply("/eval - Access denied.");
 		}
 		if (!this.canBroadcast()) return;
@@ -1766,7 +1766,7 @@ var commands = exports.commands = {
 	},
 
 	evalbattle: function (target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
+		if (!this.can('hotpatch')) {
 			return this.sendReply("/evalbattle - Access denied.");
 		}
 		if (!this.canBroadcast()) return;
