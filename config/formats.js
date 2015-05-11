@@ -323,21 +323,7 @@ exports.Formats = [
 		validateTeam: function (team, format) {
 			if (team.length > 6) return ['You may only bring up to Six Pokémon.'];
 			var limitedPokemon = {'Dragonite':1, 'Tyranitar':1, 'Salamence':1, 'Metagross':1, 'Garchomp':1, 'Hydreigon':1, 'Goodra':1,};
-			if(limitedPokemon !==1) return ['You must use ONE Psudo legendary.'];
-			var hasOU = false;
-			var has = [];
-			for(var i = 0; i < team.length; i++) {
-				var template = this.getTemplate(team[i].tiers)
-				if (hasOU) continue;
-				var types = template.Tiers || [];
-				if(types.indexOf('OU') > -1) {
-					hasOU = true;
-					continue;
-				}
-			}
-			var problems[];
-			if(!hasOU > 4) problems.push("You may only bring 4 OU Pokémon.")
-			return problems;
+			if (limitedPokemon > 1) return ['You may only bring one Psuedo Legendary Pokemon'];
 		},
 			onBegin: function () {
 			this.add('raw|<b><font color="red">IMPORTANT!</font></b> Chessmons is in Beta, Rules may be altered in the future');
