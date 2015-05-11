@@ -374,6 +374,13 @@ exports.Formats = [
 		banlist: ['Allow CAP']
 	},
 	{
+		name: "Battle Factory",
+		section: "Other Metagames",
+
+		team: 'randomFactory',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod']
+	},
+	{
 		name: "Challenge Cup",
 		section: "Other Metagames",
 
