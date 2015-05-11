@@ -326,7 +326,7 @@ exports.Formats = [
 			if (limitedPokemon > 1) return ['You may only bring one Psuedo Legendary Pokemon'];
 		},
 			onBegin: function () {
-			this.add('raw|<b><font color="red">IMPORTANT!</font></b> Chessmons is in Beta, Rules may be altered in the future');
+			this.add('raw|<b><font color="red">IMPORTANT!</font></b> Chessmons is in Beta, Rules may be altered in the future. For the time being if your King has fainted you have to forfeit, if you do not a leader or Admin will do it for you');
 		},
 
 	},
