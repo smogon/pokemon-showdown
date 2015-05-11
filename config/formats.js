@@ -313,10 +313,26 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "2v2 Doubles",
+		name: "Chessmons",
 		section: "OM of the Month",
 		column: 2,
 
+		gameType: 'Singles',
+		ruleset: ['Ubers'],
+		banlist: [],
+		validateTeam: function (team, format) {
+			if (team.length > 6) return ['You may only bring up to Six Pokémon.'];
+			var limitedPokemon = {'Dragonite':1, 'Tyranitar':1, 'Salamence':1, 'Metagross':1, 'Garchomp':1, 'Hydreigon':1, 'Goodra':1,};
+			if (limitedPokemon > 1) return ['You may only bring one Psuedo Legendary Pokemon'];
+		},
+			onBegin: function () {
+			this.add('raw|<b><font color="red">IMPORTANT!</font></b> Chessmons is in Beta, Rules may be altered in the future');
+		},
+
+	},
+	{
+		name: "2v2 Doubles",
+		section: "OM of the Month",
 		gameType: 'doubles',
 		ruleset: ['Doubles OU'],
 		banlist: ['Perish Song'],
