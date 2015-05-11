@@ -323,18 +323,11 @@ exports.Formats = [
 		validateTeam: function (team, format) {
 			if (team.length > 6) return ['You may only bring up to Six Pokémon.'];
 			var limitedPokemon = {'Dragonite':1, 'Tyranitar':1, 'Salamence':1, 'Metagross':1, 'Garchomp':1, 'Hydreigon':1, 'Goodra':1,};
-			if (limitedPokemon !== 1) return ['You must bring one Psuedo Legendary Pokemon'];
--		},
- 	
-			onBegin: function () {
-			this.add('raw|<b><font color="red">IMPORTANT!</font></b> Chessmons is in Beta, Rules may be altered in the future. For the time being if your King dies, you will have to forfeit');
+			if (limitedPokemon > 1) return ['You may only bring one Psuedo Legendary Pokemon'];
 		},
-		onFaint: function (pokemon) {
-			var message = {
-				'Chessmons':
-			}[pokemon.name];
-			this.add('-message', pokemon.name + ': ' + message);
-		}
+			onBegin: function () {
+			this.add('raw|<b><font color="red">IMPORTANT!</font></b> Chessmons is in Beta, Rules may be altered in the future');
+		},
 
 	},
 	{
