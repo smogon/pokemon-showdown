@@ -220,6 +220,7 @@ exports.BattleMovedex = {
 			if (target.deductPP(target.lastMove, 8)) {
 				this.add("-activate", target, 'move: Slow Down', target.lastMove, 8);
 				source.addVolatile('disable');
+				target.addVolatile('slowdown');
 				return;
 			}
 			return false;
@@ -653,7 +654,7 @@ exports.BattleMovedex = {
 	},
 	// Poison Gas
 	smog: {
-		num: 30,
+		num: -29,
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
@@ -666,5 +667,32 @@ exports.BattleMovedex = {
 		secondary: false,
 		target: "normal",
 		type: "Poison"
+	},
+	// Sacred Shield
+	matblock: {
+		num: -30,
+		accuracy: 100,
+		basePower: 0,
+		category: "Special",
+		id: "matblock",
+		name: "Mat Block",
+		pp: 16,
+		priority: 1,
+		flags: {heal: 1},
+		onTryHitSide: function (side, source) {
+			if (source.hp < source.maxhp / 4) {
+				this.add('-hint', "Sacred Shield requires 25% of your HP to work.");
+				return false;
+			}
+		},
+		onHitSide: function (side, source) {
+			this.directDamage(source.maxhp / 4, source, source);
+			for (var p in side.active) {
+				side.active[p].addVolatile('sacredshield');
+			}
+		},
+		secondary: false,
+		target: "allySide",
+		type: "Normal"
 	}
 };

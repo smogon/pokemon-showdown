@@ -123,14 +123,16 @@ exports.BattleScripts = {
 				['followme', 'meditate', 'helpinghand', 'seismictoss'],
 				['followme', 'endure', 'withdraw', 'seismictoss'],
 				['followme', 'meditate', 'endure', 'seismictoss'],
-				['meditate', 'helpinghand', 'protect', 'seismictoss']
+				['meditate', 'helpinghand', 'protect', 'seismictoss'],
+				['meditate', 'withdraw', 'protect', 'endure']
 			],
 			'support': [
 				['recover', 'acupressure', 'healbell', 'withdraw'],
-				['spite', 'fakeout', 'protect', 'withdraw'],
+				['spite', 'fakeout', 'matblock', 'withdraw'],
 				['recover', 'acupressure', 'spite', 'healbell'],
 				['recover', 'acupressure', 'healbell', 'fakeout'],
-				['acupressure', 'spite', 'healbell', 'protect']
+				['acupressure', 'spite', 'healbell', 'matblock'],
+				['acupressure', 'aircutter', 'healbell', 'matblock']
 			],
 			'dps': [
 				['fireblast', 'flamethrower', 'aircutter', 'freezeshock'],
