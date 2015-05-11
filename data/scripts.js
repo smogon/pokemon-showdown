@@ -2977,6 +2977,156 @@ exports.BattleScripts = {
 			shiny: !this.random(template.id === 'missingno' ? 4 : 1024)
 		};
 	},
+	randomFactorySets: require('./factory-sets.json'),
+	randomFactorySet: function (template, slot, teamData, tier) {
+		var speciesId = toId(template.species);
+		var setList = this.randomFactorySets[tier][speciesId];
+		var effectivePool, priorityPool;
+
+		var itemsMax = {'choicespecs':1, 'choiceband':1, 'choicescarf':1};
+		var movesMax = {'rapidspin':1, 'batonpass':1, 'stealthrock':1, 'defog':1, 'spikes':1, 'toxicspikes':1};
+		var requiredMoves = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
+
+		if (!teamData.forceResult) {
+			// Build a pool of eligible sets, given the team partners
+			// Also keep track of sets with moves the team requires
+			effectivePool = [];
+			priorityPool = [];
+			for (var i = 0, l = setList.length; i < l; i++) {
+				var curSet = setList[i];
+				var itemData = this.getItem(curSet.item);
+				if (teamData.megaCount > 0 && itemData.megaStone) continue;
+				if (itemsMax[itemData.id] && teamData.has[itemData.id] >= itemsMax[itemData.id]) continue;
+
+				var reject = false;
+				var hasRequiredMove = false;
+				for (var j = 0, m = curSet.moves.length; j < m; j++) {
+					var moveId = toId(curSet.moves[j]);
+					if (movesMax[moveId] && teamData.has[moveId] >= movesMax[moveId]) {
+						reject = true;
+						break;
+					}
+					if (requiredMoves[moveId] && !teamData.has[requiredMoves[moveId]]) {
+						hasRequiredMove = true;
+					}
+				}
+				if (reject) continue;
+				effectivePool.push(curSet);
+				if (hasRequiredMove) priorityPool.push(curSet);
+			}
+			if (priorityPool.length) effectivePool = priorityPool;
+		} else {
+			effectivePool = setList;
+		}
+
+		if (!effectivePool.length) return false;
+
+		var set = effectivePool[this.random(effectivePool.length)];
+		if (!set.name) set.name = set.species;
+		if (!set.evs) set.evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
+		if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+		if (!set.level) set.level = 100;
+		if (!set.gender) set.gender = template.gender || (this.random() ? 'M' : 'F');
+		if (typeof set.shiny === 'undefined') set.shiny = !this.random(1024);
+		return set;
+	},
+	randomFactoryTeam: function (side, depth) {
+		if (!depth) depth = 0;
+		var forceResult = (depth >= 4);
+
+		var availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU'];
+		var chosenTier;
+
+		var currentSeed = this.seed.slice();
+		this.seed = this.startingSeed.slice();
+		chosenTier = availableTiers[this.random(availableTiers.length)];
+		this.seed = currentSeed;
+
+		var pokemonLeft = 0;
+		var pokemon = [];
+
+		var pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
+
+		var teamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult};
+		var requiredMoveFamilies = {'hazardSet': 1, 'hazardClear':1};
+		var requiredMoves = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
+
+		while (pokemonPool.length && pokemonLeft < 6) {
+			var template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			if (!template.exists) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (teamData.baseFormes[template.baseSpecies]) continue;
+
+			// Limit 2 of any type
+			var types = template.types;
+			var skip = false;
+			for (var t = 0; t < types.length; t++) {
+				if (teamData.typeCount[types[t]] > 1 && this.random(5)) {
+					skip = true;
+					break;
+				}
+			}
+			if (skip) continue;
+
+			var set = this.randomFactorySet(template, pokemon.length, teamData, chosenTier);
+			if (!set) continue;
+
+			// Limit 1 of any type combination
+			var typeCombo = types.slice().sort().join();
+			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
+				// Drought and Drizzle don't count towards the type combo limit
+				typeCombo = set.ability;
+			}
+			if (typeCombo in teamData.typeComboCount) continue;
+
+			// Okay, the set passes, add it to our team
+			pokemon.push(set);
+			pokemonLeft++;
+
+			// Now that our Pokemon has passed all checks, we can update team data:
+			for (var t = 0; t < types.length; t++) {
+				if (types[t] in teamData.typeCount) {
+					teamData.typeCount[types[t]]++;
+				} else {
+					teamData.typeCount[types[t]] = 1;
+				}
+			}
+			teamData.typeComboCount[typeCombo] = 1;
+
+			teamData.baseFormes[template.baseSpecies] = 1;
+
+			var itemData = this.getItem(set.item);
+			if (itemData.megaStone) teamData.megaCount++;
+			if (itemData.id in teamData.has) {
+				teamData.has[itemData.id]++;
+			} else {
+				teamData.has[itemData.id] = 1;
+			}
+
+			for (var m = 0; m < set.moves.length; m++) {
+				var moveId = toId(set.moves[m]);
+				if (moveId in teamData.has) {
+					teamData.has[moveId]++;
+				} else {
+					teamData.has[moveId] = 1;
+				}
+				if (moveId in requiredMoves) {
+					teamData.has[requiredMoves[moveId]] = 1;
+				}
+			}
+		}
+		if (pokemon.length < 6) return this.randomFactoryTeam(side, ++depth);
+
+		// Quality control
+		if (!teamData.forceResult) {
+			for (var requiredFamily in requiredMoveFamilies) {
+				if (!teamData.has[requiredFamily]) return this.randomFactoryTeam(side, ++depth);
+			}
+		}
+
+		return pokemon;
+	},
 	randomMonotypeTeam: function (side) {
 		var pokemonLeft = 0;
 		var pokemon = [];
