@@ -217,5 +217,31 @@ exports.BattleStatuses = {
 			this.damage(pokemon.maxhp * 0.06);
 			this.add('-message', pokemon.name + ' took Moonfire damage!');
 		}
+	},
+	slowdown: {
+		duration: 3,
+		onModifyDamage: function (damage, source, target, move) {
+			if (source.volatiles['slowdown']) {
+				damage = Math.floor(damage * 0.85);
+			}
+			return damage;
+		}
+	},
+	sacredshield: {
+		duration: 4,
+		onStart: function (target) {
+			this.add('-start', target, 'move: Sacred Shield');
+		},
+		onEnd: function (target) {
+			this.add('-end', target, 'move: Sacred Shield');
+		},
+		onDamagePriority: -10,
+		onDamage: function (damage, target, source, effect) {
+			var d = Math.ceil(damage * 0.25);
+			damage -= d;
+			this.add('-message', target.name + "'s Sacred Shield protected it for " + d + "!");
+			target.removeVolatile('sacredshield');
+			return damage;
+		}
 	}
 };
