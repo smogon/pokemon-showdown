@@ -236,7 +236,7 @@ exports.Formats = [
 		gameType: 'doubles',
 		team: 'randomCC',
 		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
+		ruleset: ['HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "Doubles Custom Game",
@@ -293,7 +293,7 @@ exports.Formats = [
 		gameType: 'triples',
 		team: 'randomCC',
 		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
+		ruleset: ['HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "Triples Custom Game",
@@ -402,14 +402,14 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		team: 'randomCC',
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
+		ruleset: ['HP Percentage Mod', 'Cancel Mod']
 	},
 	{
-		name: "Challenge Cup 1-vs-1",
+		name: "Challenge Cup 1v1",
 		section: "Other Metagames",
 
 		team: 'randomCC',
-		ruleset: ['Pokemon', 'Team Preview 1v1', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
 		onBegin: function () {
 			this.debug('Cutting down to 1');
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -633,14 +633,6 @@ exports.Formats = [
 		team: 'randomMonotype',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
-	},
-	{
-		name: "Hackmons Challenge Cup",
-		section: "Other Metagames",
-
-		team: 'randomHackmonsCC',
-		searchShow: false,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod']
 	},
 
 	// BW2 Singles
@@ -917,15 +909,15 @@ exports.Formats = [
 		team: 'random',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
-	{
+	/*{
 		name: "[Gen 1] Challenge Cup",
 		section: "Past Generations",
 
 		mod: 'gen1',
-		searchShow: false,
 		team: 'randomCC',
+		searchShow: false,
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
-	},
+	},*/
 	{
 		name: "[Gen 1] Stadium",
 		section: "Past Generations",
