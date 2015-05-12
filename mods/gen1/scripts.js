@@ -23,53 +23,58 @@ exports.BattleScripts = {
 	},
 	// BattlePokemon scripts.
 	pokemon: {
-		getStat: function (statName, unboosted, unmodified, noscreens) {
+		getStat: function (statName, unmodified) {
 			statName = toId(statName);
 			if (statName === 'hp') return this.maxhp;
-
-			// base stat
-			var stat = this.stats[statName];
-
-			// stat boosts
-			if (!unboosted) {
-				var boost = this.boosts[statName];
-				if (boost > 6) boost = 6;
-				if (boost < -6) boost = -6;
-				if (boost >= 0) {
-					var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
-					stat = Math.floor(stat * boostTable[boost]);
-				} else {
-					var numerators = [100, 66, 50, 40, 33, 28, 25];
-					stat = Math.floor(stat * numerators[-boost] / 100);
+			if (unmodified) return this.stats[statName];
+			return this.modifiedStats[statName];
+		},
+		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
+		// Modified stats are declared in BattlePokemon object in battle-engine.js in about line 303.
+		modifyStat: function (stat, modifier) {
+			if (!(stat in this.stats)) return;
+			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1);
+		},
+		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
+		boostBy: function (boost) {
+			var changed = false;
+			for (var i in boost) {
+				var delta = boost[i];
+				this.boosts[i] += delta;
+				if (this.boosts[i] > 6) {
+					delta -= this.boosts[i] - 6;
+					this.boosts[i] = 6;
+				}
+				if (this.boosts[i] < -6) {
+					delta -= this.boosts[i] - (-6);
+					this.boosts[i] = -6;
+				}
+				if (delta) {
+					changed = true;
+					// Recalculate the modified stat
+					if (this.stats[i]) {
+						if (delta >= 0) {
+							this.modifyStat(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][delta]);
+						} else {
+							this.modifyStat(i, [100, 66, 50, 40, 33, 28, 25][-delta] / 100);
+						}
+					}
 				}
 			}
 
-			// Stat modifiers: burn, paralyse.
-			if (!unmodified) {
-				// Burn attack drop is checked when you get the attack stat upon switch in and used until switch out.
-				if (this.volatiles['brnattackdrop'] && statName === 'atk') {
-					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
+			// Check the status of the Pokémon whose turn is not.
+			if (this.side.foe.active[0] && this.side.foe.active[0].status) {
+				// If it's paralysed, quarter its speed.
+				if (this.side.foe.active[0].status === 'par') {
+					this.side.foe.active[0].modifyStat('spe', 0.25);
 				}
-				if (this.volatiles['parspeeddrop'] && statName === 'spe') {
-					stat = this.battle.clampIntRange(Math.floor(stat / 4), 1);
+				// If it's burned, halve its attack.
+				if (this.side.foe.active[0].status === 'brn') {
+					this.side.foe.active[0].modifyStat('atk', 0.5);
 				}
 			}
-
-			// Hard coded Reflect and Light Screen boosts
-			if (this.volatiles['reflect'] && statName === 'def' && !unboosted && !noscreens) {
-				this.battle.debug('Reflect doubles Defense');
-				stat *= 2;
-				stat = this.battle.clampIntRange(stat, 1, 1998);
-			} else if (this.volatiles['lightscreen'] && statName === 'spd' && !unboosted && !noscreens) {
-				this.battle.debug('Light Screen doubles Special Defense');
-				stat *= 2;
-				stat = this.battle.clampIntRange(stat, 1, 1998);
-			} else {
-				// Gen 1 normally caps stats at 999 and min is 1.
-				stat = this.battle.clampIntRange(stat, 1, 999);
-			}
-
-			return stat;
+			this.update();
+			return changed;
 		}
 	},
 	// Battle scripts.
@@ -481,6 +486,9 @@ exports.BattleScripts = {
 				// This does NOT revert the paralyse speed drop or the burn attack drop.
 				if (!target.status || moveData.status === 'slp' && target.volatiles['mustrecharge']) {
 					target.setStatus(moveData.status, pokemon, move);
+					// Gen 1 mechanics: The burn attack drop and the paralyse speed drop are applied here directly on stat modifiers.
+					if (moveData.status === 'brn') target.modifyStat('atk', 0.5);
+					if (moveData.status === 'par') target.modifyStat('spe', 0.25);
 				} else if (!isSecondary) {
 					if (target.status === moveData.status) {
 						this.add('-fail', target, target.status);
@@ -492,6 +500,8 @@ exports.BattleScripts = {
 			}
 			if (moveData.forceStatus) {
 				if (target.setStatus(moveData.forceStatus, pokemon, move)) {
+					if (moveData.forceStatus === 'brn') target.modifyStat('atk', 0.5);
+					if (moveData.forceStatus === 'par') target.modifyStat('spe', 0.25);
 					didSomething = true;
 				}
 			}
@@ -826,6 +836,12 @@ exports.BattleScripts = {
 		var defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		var attack = attacker.getStat(atkType);
 		var defense = defender.getStat(defType);
+		// In gen 1, screen effect is applied here.
+		if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
+			this.battle.debug('Screen doubling (Sp)Def');
+			defense *= 2;
+			defense = this.battle.clampIntRange(defense, 1, 1998);
+		}
 
 		// In the event of a critical hit, the ofense and defense changes are ignored.
 		// This includes both boosts and screens.
@@ -838,10 +854,11 @@ exports.BattleScripts = {
 		}
 		if (move.ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
-			attack = attacker.getStat(atkType, true, true);
+			attack = attacker.getStat(atkType, true);
 		}
 		if (move.ignoreDefensive) {
 			this.debug('Negating (sp)def boost/penalty.');
+			// No screens
 			defense = target.getStat(defType, true);
 		}
 
