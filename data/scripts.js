@@ -3023,7 +3023,7 @@ exports.BattleScripts = {
 
 		var set = effectivePool[this.random(effectivePool.length)];
 		if (!set.name) set.name = set.species;
-		if (!set.evs) set.evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
+		if (!set.evs) set.evs = {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84};
 		if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		if (!set.level) set.level = 100;
 		if (!set.gender) set.gender = template.gender || (this.random() ? 'M' : 'F');
