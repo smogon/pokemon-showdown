@@ -838,9 +838,9 @@ exports.BattleScripts = {
 		var defense = defender.getStat(defType);
 		// In gen 1, screen effect is applied here.
 		if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
-			this.battle.debug('Screen doubling (Sp)Def');
+			this.debug('Screen doubling (Sp)Def');
 			defense *= 2;
-			defense = this.battle.clampIntRange(defense, 1, 1998);
+			defense = this.clampIntRange(defense, 1, 1998);
 		}
 
 		// In the event of a critical hit, the ofense and defense changes are ignored.
