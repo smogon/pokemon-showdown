@@ -31,6 +31,7 @@ const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 const MAX_PARSE_RECURSION = 10;
 
 var fs = require('fs');
+var path = require('path');
 
 /*********************************************************
  * Load command files
@@ -40,7 +41,7 @@ var commands = exports.commands = require('./commands.js').commands;
 
 // Install plug-in commands
 
-fs.readdirSync('./chat-plugins').forEach(function (file) {
+fs.readdirSync(path.resolve(__dirname, 'chat-plugins')).forEach(function (file) {
 	if (file.substr(-3) === '.js') Object.merge(commands, require('./chat-plugins/' + file).commands);
 });
 
@@ -48,7 +49,7 @@ fs.readdirSync('./chat-plugins').forEach(function (file) {
  * Parser
  *********************************************************/
 
-var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'}), battle: fs.createWriteStream('logs/modlog/modlog_battle.txt', {flags:'a+'})};
+var modlog = exports.modlog = {lobby: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_lobby.txt'), {flags:'a+'}), battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'})};
 
 /**
  * Can this user talk?
@@ -282,7 +283,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 					if (room.battle) {
 						modlog[room.id] = modlog['battle'];
 					} else {
-						modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {flags:'a+'});
+						modlog[room.id] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + room.id + '.txt'), {flags:'a+'});
 					}
 				}
 				modlog[room.id].write('[' + (new Date().toJSON()) + '] (' + room.id + ') ' + result + '\n');
@@ -456,7 +457,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 };
 
 exports.package = {};
-fs.readFile('package.json', function (err, data) {
+fs.readFile(path.resolve(__dirname, 'package.json'), function (err, data) {
 	if (err) return;
 	exports.package = JSON.parse(data);
 });
