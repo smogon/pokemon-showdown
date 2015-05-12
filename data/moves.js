@@ -633,6 +633,9 @@ exports.BattleMovedex = {
 					this.add('cant', pokemon, 'Attract');
 					return false;
 				}
+			},
+			onEnd: function (pokemon) {
+				this.add('-end', pokemon, 'Attract', '[silent]');
 			}
 		},
 		secondary: false,
