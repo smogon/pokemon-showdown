@@ -365,8 +365,14 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 			}
 		});
 	}
+
+	var startTime = Date.now();
 	for (var i = 0; i < lines.length; i++) {
 		if (user.chat(lines[i], room, connection) === false) break;
+	}
+	var deltaTime = Date.now() - startTime;
+	if (deltaTime > 500) {
+		console.log("[slow] " + deltaTime + "ms - " + user.name + " <" + connection.ip + ">: " + message);
 	}
 };
 
@@ -919,6 +925,7 @@ User = (function () {
 				console.log('verification failed; no challenge');
 			} else {
 				console.log('verify failed: ' + token);
+				console.log('challenge was: ' + challenge);
 			}
 		}
 
