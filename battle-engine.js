@@ -300,6 +300,9 @@ BattlePokemon = (function () {
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
 		this.stats = {atk:0, def:0, spa:0, spd:0, spe:0};
 		this.baseStats = {atk:10, def:10, spa:10, spd:10, spe:10};
+		// This is used in gen 1 only, here to avoid code repetition.
+		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
+		if (this.battle.gen === 1) this.modifiedStats = {atk:0, def:0, spa:0, spd:0, spe:0};
 		for (var statName in this.baseStats) {
 			var stat = this.template.baseStats[statName];
 			stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
@@ -765,6 +768,13 @@ BattlePokemon = (function () {
 				if (statName === nature.plus) stat *= 1.1;
 				if (statName === nature.minus) stat *= 0.9;
 				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
+				// If gen 1, we reset modified stats.
+				if (this.battle.gen === 1) {
+					this.modifiedStats[statName] = Math.floor(stat);
+					// ...and here is where the gen 1 games re-apply burn and para drops.
+					if (this.status === 'par') this.modifyStat('spe', 0.25);
+					if (this.status === 'brn') this.modifyStat('atk', 0.5);
+				}
 			}
 			this.speed = this.stats.spe;
 		}
