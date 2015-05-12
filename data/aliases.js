@@ -105,6 +105,7 @@ exports.BattleAliases = {
 	"primalgroudon": "Groudon-Primal",
 	"primaldon": "Groudon-Primal",
 	"pgroudon": "Groudon-Primal",
+	"pdon": "Groudon-Primal",
 	"primalkyogre": "Kyogre-Primal",
 	"primalogre": "Kyogre-Primal",
 	"pkyogre": "Kyogre-Primal",
