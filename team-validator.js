@@ -15,7 +15,7 @@ if (!process.send) {
 
 	var ValidatorProcess = (function () {
 		function ValidatorProcess() {
-			this.process = require('child_process').fork('team-validator.js');
+			this.process = require('child_process').fork('team-validator.js', {cwd: __dirname});
 			var self = this;
 			this.process.on('message', function (message) {
 				// Protocol:

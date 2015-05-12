@@ -11,9 +11,10 @@
 module.exports = (function () {
 	var lastCrashLog = 0;
 	var transport;
+	var logPath = require('path').resolve(__dirname, 'logs/errors.txt');
 	return function (err, description) {
 		console.log("\nCRASH: " + (err.stack || err) + "\n");
-		require('fs').createWriteStream('logs/errors.txt', {'flags': 'a'}).on("open", function (fd) {
+		require('fs').createWriteStream(logPath, {'flags': 'a'}).on("open", function (fd) {
 			this.write("\n" + err.stack + "\n");
 			this.end();
 		}).on("error", function (err) {

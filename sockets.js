@@ -16,7 +16,7 @@ global.Config = require('./config/config');
 
 if (cluster.isMaster) {
 	cluster.setupMaster({
-		exec: 'sockets.js'
+		exec: require('path').resolve(__dirname, 'sockets.js')
 	});
 
 	var workers = exports.workers = {};
