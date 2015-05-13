@@ -9560,24 +9560,25 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {sound: 1, distance: 1, authentic: 1},
 		onHitField: function (target, source) {
-			var result = true;
+			var result = false;
+			var message = false;
 			for (var i = 0; i < this.sides.length; i++) {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
 					if (this.sides[i].active[j]) {
-						if (!this.sides[i].active[j].volatiles['perishsong']) {
-							result = false;
-						}
-						if (!this.sides[i].active[j].hasAbility('soundproof')) {
-							this.sides[i].active[j].addVolatile('perishsong');
-						} else {
+						if (this.sides[i].active[j].hasAbility('soundproof')) {
 							this.add('-immune', this.sides[i].active[j], '[msg]');
-							this.add('-end', this.sides[i].active[j], 'Perish Song');
+							result = true;
+						} else if (!this.sides[i].active[j].volatiles['perishsong']) {
+							this.sides[i].active[j].addVolatile('perishsong');
+							this.add('-start', this.sides[i].active[j], 'perish3', '[silent]');
+							result = true;
+							message = true;
 						}
 					}
 				}
 			}
-			if (result) return false;
-			this.add('-fieldactivate', 'move: Perish Song');
+			if (!result) return false;
+			if (message) this.add('-fieldactivate', 'move: Perish Song');
 		},
 		effect: {
 			duration: 4,
