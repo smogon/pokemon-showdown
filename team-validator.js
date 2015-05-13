@@ -563,8 +563,8 @@ Validator = (function () {
 		var limit1 = true;
 		var sketch = false;
 		var blockedHM = false;
-		var blockedEgg = false;
-		var hasGen2EggMove = false;
+		var blockedGen2Move = false;
+		var hasGen2Move = false;
 
 		var sometimesPossible = false; // is this move in the learnset at all?
 
@@ -651,7 +651,7 @@ Validator = (function () {
 							//   available as long as the source gen was or was before this gen
 							limit1 = false;
 							sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
-							if (tools.gen === 2 && parseInt(learned.charAt(0), 10) === 1 && hasGen2EggMove) blockedEgg = true;
+							if (tools.gen === 2 && parseInt(learned.charAt(0), 10) === 1 && hasGen2Move) blockedGen2Move = true;
 						} else if (learned.charAt(1) in {E:1, S:1, D:1}) {
 							// egg, event, or DW moves:
 							//   only if that was the source
@@ -685,8 +685,8 @@ Validator = (function () {
 											!alreadyChecked[dexEntry.speciesid] && dexEntry.learnset && (dexEntry.learnset[move] || dexEntry.learnset['sketch'])) {
 											if (dexEntry.eggGroups.intersect(eggGroups).length) {
 												// Check if it has a move that needs to come from a prior gen to this egg move.
-												hasGen2EggMove = tools.gen === 2 && tools.getMove(move).gen === 2;
-												blockedEgg = hasGen2EggMove && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
+												hasGen2Move = tools.gen === 2 && tools.getMove(move).gen === 2;
+												blockedGen2Move = hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
 												// we can breed with it
 												atLeastOne = true;
 												sources.push(learned + dexEntry.id);
@@ -703,6 +703,9 @@ Validator = (function () {
 								//	Available as long as the past gen can get the Pokémon and then trade it back.
 								sources.push(learned + ' ' + template.id);
 								if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
+								// Check if it has a move that needs to come from a prior gen to this event move.
+								hasGen2Move = tools.gen === 2 && tools.getMove(move).gen === 2;
+								blockedGen2Move = hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
 							} else {
 								// DW Pokemon are at level 10 or at the evolution level
 								var minLevel = (template.evoLevel && template.evoLevel > 10) ? template.evoLevel : 10;
@@ -761,7 +764,7 @@ Validator = (function () {
 			lsetData.hm = move;
 		}
 
-		if (blockedEgg) {
+		if (blockedGen2Move) {
 			// Limit Gen 2 egg moves on gen 1 when move doesn't exist
 			return {type:'incompatible'};
 		}
