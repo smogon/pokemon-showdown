@@ -262,7 +262,7 @@ exports.grouplist = [
 		symbol: '\u2605',
 		id: "player",
 		name: "Player",
-		inherit: '%',
+		inherit: '@',
 		jurisdiction: 'u',
 		mute: true,
 		ban: true
