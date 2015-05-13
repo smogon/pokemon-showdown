@@ -338,10 +338,5 @@ exports.BattleStatuses = {
 			}
 			this.effectData.duration = 2;
 		}
-	},
-	ragemiss: {
-		onModifyMove: function (move) {
-			if (move.id === 'rage') move.accuracy = 1 / 255 * 100;
-		}
 	}
 };
