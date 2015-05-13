@@ -563,6 +563,8 @@ Validator = (function () {
 		var limit1 = true;
 		var sketch = false;
 		var blockedHM = false;
+		var blockedEgg = false;
+		var hasGen2EggMove = false;
 
 		var sometimesPossible = false; // is this move in the learnset at all?
 
@@ -586,7 +588,7 @@ Validator = (function () {
 		var sourcesBefore = 0;
 		var noPastGen = !!format.requirePentagon;
 		// since Gen 3, Pokemon cannot be traded to past generations
-		var noFutureGen = tools.gen >= 2 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
+		var noFutureGen = tools.gen >= 3 ? true : !!(format.banlistTable && format.banlistTable['tradeback']);
 
 		do {
 			alreadyChecked[template.speciesid] = true;
@@ -649,6 +651,7 @@ Validator = (function () {
 							//   available as long as the source gen was or was before this gen
 							limit1 = false;
 							sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
+							if (tools.gen === 2 && parseInt(learned.charAt(0), 10) === 1 && hasGen2EggMove) blockedEgg = true;
 						} else if (learned.charAt(1) in {E:1, S:1, D:1}) {
 							// egg, event, or DW moves:
 							//   only if that was the source
@@ -681,6 +684,9 @@ Validator = (function () {
 											// otherwise parent must be able to learn the move
 											!alreadyChecked[dexEntry.speciesid] && dexEntry.learnset && (dexEntry.learnset[move] || dexEntry.learnset['sketch'])) {
 											if (dexEntry.eggGroups.intersect(eggGroups).length) {
+												// Check if it has a move that needs to come from a prior gen to this egg move.
+												hasGen2EggMove = tools.gen === 2 && tools.getMove(move).gen === 2;
+												blockedEgg = hasGen2EggMove && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
 												// we can breed with it
 												atLeastOne = true;
 												sources.push(learned + dexEntry.id);
@@ -753,6 +759,11 @@ Validator = (function () {
 			// Limit one of Defog/Whirlpool to be transferred
 			if (lsetData.hm) return {type:'incompatible'};
 			lsetData.hm = move;
+		}
+
+		if (blockedEgg) {
+			// Limit Gen 2 egg moves on gen 1 when move doesn't exist
+			return {type:'incompatible'};
 		}
 
 		// Now that we have our list of possible sources, intersect it with the current list
