@@ -551,6 +551,7 @@ Validator = (function () {
 		template = tools.getTemplate(template);
 
 		lsetData = lsetData || {};
+		lsetData.eggParents = lsetData.eggParents || [];
 		var set = (lsetData.set || (lsetData.set = {}));
 		var format = (lsetData.format || (lsetData.format = {}));
 		var alreadyChecked = {};
@@ -563,8 +564,6 @@ Validator = (function () {
 		var limit1 = true;
 		var sketch = false;
 		var blockedHM = false;
-		var blockedGen2Move = false;
-		var hasGen2Move = false;
 
 		var sometimesPossible = false; // is this move in the learnset at all?
 
@@ -651,7 +650,7 @@ Validator = (function () {
 							//   available as long as the source gen was or was before this gen
 							limit1 = false;
 							sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
-							if (tools.gen === 2 && parseInt(learned.charAt(0), 10) === 1 && hasGen2Move) blockedGen2Move = true;
+							if (tools.gen === 2 && lsetData.hasGen2Move && parseInt(learned.charAt(0), 10) === 1) lsetData.blockedGen2Move = true;
 						} else if (learned.charAt(1) in {E:1, S:1, D:1}) {
 							// egg, event, or DW moves:
 							//   only if that was the source
@@ -684,9 +683,38 @@ Validator = (function () {
 											// otherwise parent must be able to learn the move
 											!alreadyChecked[dexEntry.speciesid] && dexEntry.learnset && (dexEntry.learnset[move] || dexEntry.learnset['sketch'])) {
 											if (dexEntry.eggGroups.intersect(eggGroups).length) {
+												if (tools.gen === 2 && lsetData.hasEggMove && lsetData.hasEggMove !== move) {
+													// If the mon already has an egg move by a father, other different father can't give it another egg move.
+													if (lsetData.eggParents.indexOf(dexEntry.species) > -1) {
+														// We have to test here that the father of both moves doesn't get both by egg breeding
+														var learnsFrom = false;
+														for (var ltype = 0; ltype < dexEntry.learnset[lsetData.hasEggMove].length; ltype++) {
+															// Save first learning type. After that, only save it if we have egg and it's not egg.
+															learnsFrom = !learnsFrom || learnsFrom === 'E' ? dexEntry.learnset[lsetData.hasEggMove][ltype].charAt(1) : learnsFrom;
+														}
+														// If the previous egg move was learnt by the father through an egg as well:
+														if (learnsFrom === 'E') {
+															var secondLearnsFrom = false;
+															for (var ltype = 0; ltype < dexEntry.learnset[move].length; ltype++) {
+																// Save first learning type. After that, only save it if we have egg and it's not egg.
+																secondLearnsFrom = !secondLearnsFrom || secondLearnsFrom === 'E' ? dexEntry.learnset[move][ltype].charAt(1) : secondLearnsFrom;
+															}
+															// Ok, both moves are learnt by father through an egg, therefor, it's impossible.
+															if (secondLearnsFrom === 'E') {
+																lsetData.blockedGen2Move = true;
+																continue;
+															}
+														}
+													} else {
+														lsetData.blockedGen2Move = true;
+														continue;
+													}
+												}
+												lsetData.hasEggMove = move;
+												lsetData.eggParents.push(dexEntry.species);
 												// Check if it has a move that needs to come from a prior gen to this egg move.
-												hasGen2Move = tools.gen === 2 && tools.getMove(move).gen === 2;
-												blockedGen2Move = hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
+												lsetData.hasGen2Move = lsetData.hasGen2Move || (tools.gen === 2 && tools.getMove(move).gen === 2);
+												lsetData.blockedGen2Move = lsetData.hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
 												// we can breed with it
 												atLeastOne = true;
 												sources.push(learned + dexEntry.id);
@@ -704,8 +732,8 @@ Validator = (function () {
 								sources.push(learned + ' ' + template.id);
 								if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
 								// Check if it has a move that needs to come from a prior gen to this event move.
-								hasGen2Move = tools.gen === 2 && tools.getMove(move).gen === 2;
-								blockedGen2Move = hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
+								lsetData.hasGen2Move = lsetData.hasGen2Move || (tools.gen === 2 && tools.getMove(move).gen === 2);
+								lsetData.blockedGen2Move = lsetData.hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
 							} else {
 								// DW Pokemon are at level 10 or at the evolution level
 								var minLevel = (template.evoLevel && template.evoLevel > 10) ? template.evoLevel : 10;
@@ -764,7 +792,7 @@ Validator = (function () {
 			lsetData.hm = move;
 		}
 
-		if (blockedGen2Move) {
+		if (lsetData.blockedGen2Move) {
 			// Limit Gen 2 egg moves on gen 1 when move doesn't exist
 			return {type:'incompatible'};
 		}
