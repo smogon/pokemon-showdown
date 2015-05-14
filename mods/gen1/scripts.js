@@ -53,6 +53,9 @@ exports.BattleScripts = {
 					changed = true;
 					// Recalculate the modified stat
 					if (this.stats[i]) {
+						var stat = this.template.baseStats[i];
+						stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
+						this.modifiedStats[i] = this.stats[i] = Math.floor(stat);
 						if (delta >= 0) {
 							this.modifyStat(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][delta]);
 						} else {
@@ -490,10 +493,11 @@ exports.BattleScripts = {
 				// Gen 1 bug: If the target has just used hyperbeam and must recharge, its status will be ignored and put to sleep.
 				// This does NOT revert the paralyse speed drop or the burn attack drop.
 				if (!target.status || moveData.status === 'slp' && target.volatiles['mustrecharge']) {
-					target.setStatus(moveData.status, pokemon, move);
-					// Gen 1 mechanics: The burn attack drop and the paralyse speed drop are applied here directly on stat modifiers.
-					if (moveData.status === 'brn') target.modifyStat('atk', 0.5);
-					if (moveData.status === 'par') target.modifyStat('spe', 0.25);
+					if (target.setStatus(moveData.status, pokemon, move)) {
+						// Gen 1 mechanics: The burn attack drop and the paralyse speed drop are applied here directly on stat modifiers.
+						if (moveData.status === 'brn') target.modifyStat('atk', 0.5);
+						if (moveData.status === 'par') target.modifyStat('spe', 0.25);
+					}
 				} else if (!isSecondary) {
 					if (target.status === moveData.status) {
 						this.add('-fail', target, target.status);
