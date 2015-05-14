@@ -116,6 +116,21 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Battle Spot Special 10",
+		section: "ORAS Singles",
+
+		ruleset: ['Battle Spot Singles'],
+		onModifyPokemon: function (pokemon) {
+			pokemon.negateImmunity['Type'] = true;
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			// The effectiveness of Freeze Dry on Water isn't reverted
+			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move && !this.getImmunity(move, type)) return 1;
+			return -typeMod;
+		}
+	},
+	{
 		name: "[PGL] Little Cup",
 		section: "ORAS Singles",
 
