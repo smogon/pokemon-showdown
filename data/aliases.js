@@ -13,11 +13,10 @@ exports.BattleAliases = {
 	"vgc2015": "Battle Spot Doubles (VGC 2015)",
 	"battlespotdoubles": "Battle Spot Doubles (VGC 2015)",
 	"createapokemon": "CAP",
-	"cc1v1": "Challenge Cup 1v1",
+	"bc1v1": "Battle Cup 1v1",
 	"bh": "Balanced Hackmons",
 	"aaa": "Almost Any Ability",
 	"monorandom": "Monotype Random Battle",
-	"hackmonscc": "Hackmons Challenge Cup",
 
 	// mega evos
 	"megaabomasnow": "Abomasnow-Mega",

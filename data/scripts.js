@@ -643,6 +643,144 @@ exports.BattleScripts = {
 			return this.randomTeam(side);
 		}
 	},
+	randomBCTeam: function (side) {
+		var team = [];
+
+		var natures = Object.keys(this.data.Natures);
+		var items = Object.keys(this.data.Items);
+
+		var hasDexNumber = {};
+		var formes = [[], [], [], [], [], []];
+
+		// Pick six random pokemon--no repeats, even among formes
+		// Also need to either normalize for formes or select formes at random
+		// Unreleased are okay but no CAP
+
+		var num;
+		for (var i = 0; i < 6; i++) {
+			do {
+				num = this.random(721) + 1;
+			} while (num in hasDexNumber);
+			hasDexNumber[num] = i;
+		}
+
+		for (var id in this.data.Pokedex) {
+			if (!(this.data.Pokedex[id].num in hasDexNumber)) continue;
+			var template = this.getTemplate(id);
+			if (template.learnset && template.species !== 'Pichu-Spiky-eared') {
+				formes[hasDexNumber[template.num]].push(template.species);
+			}
+		}
+
+		for (var i = 0; i < 6; i++) {
+			var poke = formes[i][this.random(formes[i].length)];
+			var template = this.getTemplate(poke);
+
+			// Random item
+			var item = '';
+			if (template.requiredItem) {
+				item = template.requiredItem;
+			} else {
+				item = items[this.random(items.length)];
+			}
+			// Make sure forme/item combo is correct
+			while ((poke === 'Arceus' && item.substr(-5) !== 'plate') || (poke === 'Giratina' && item === 'griseousorb')) {
+				item = items[this.random(items.length)];
+			}
+
+			// Random ability
+			var abilities = [template.abilities['0']];
+			if (template.abilities['1']) {
+				abilities.push(template.abilities['1']);
+			}
+			if (template.abilities['H']) {
+				abilities.push(template.abilities['H']);
+			}
+			var ability = abilities[this.random(abilities.length)];
+
+			// Four random unique moves from the movepool
+			var moves;
+			var pool = ['struggle'];
+			if (poke === 'Smeargle') {
+				pool = Object.keys(this.data.Movedex).exclude('chatter', 'struggle', 'magikarpsrevenge');
+			} else if (template.learnset) {
+				pool = Object.keys(template.learnset);
+			}
+			if (pool.length <= 4) {
+				moves = pool;
+			} else {
+				moves = [this.sampleNoReplace(pool), this.sampleNoReplace(pool), this.sampleNoReplace(pool), this.sampleNoReplace(pool)];
+			}
+
+			// Random EVs
+			var evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+			var s = ["hp", "atk", "def", "spa", "spd", "spe"];
+			var evpool = 510;
+			do {
+				var x = s[this.random(s.length)];
+				var y = this.random(Math.min(256 - evs[x], evpool + 1));
+				evs[x] += y;
+				evpool -= y;
+			} while (evpool > 0);
+
+			// Random IVs
+			var ivs = {hp: this.random(32), atk: this.random(32), def: this.random(32), spa: this.random(32), spd: this.random(32), spe: this.random(32)};
+
+			// Random nature
+			var nature = natures[this.random(natures.length)];
+
+			// Level balance--calculate directly from stats rather than using some silly lookup table
+			var mbstmin = 1307; // Sunkern has the lowest modified base stat total, and that total is 807
+
+			var stats = template.baseStats;
+
+			// Modified base stat total assumes 31 IVs, 85 EVs in every stat
+			var mbst = (stats["hp"] * 2 + 31 + 21 + 100) + 10;
+			mbst += (stats["atk"] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats["def"] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats["spa"] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats["spd"] * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats["spe"] * 2 + 31 + 21 + 100) + 5;
+
+			var level = Math.floor(100 * mbstmin / mbst); // Initial level guess will underestimate
+
+			while (level < 100) {
+				mbst = Math.floor((stats["hp"] * 2 + 31 + 21 + 100) * level / 100 + 10);
+				mbst += Math.floor(((stats["atk"] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100); // Since damage is roughly proportional to level
+				mbst += Math.floor((stats["def"] * 2 + 31 + 21 + 100) * level / 100 + 5);
+				mbst += Math.floor(((stats["spa"] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
+				mbst += Math.floor((stats["spd"] * 2 + 31 + 21 + 100) * level / 100 + 5);
+				mbst += Math.floor((stats["spe"] * 2 + 31 + 21 + 100) * level / 100 + 5);
+
+				if (mbst >= mbstmin)
+					break;
+				level++;
+			}
+
+			// Random gender--already handled by PS
+
+			// Random happiness
+			var happiness = this.random(256);
+
+			// Random shininess
+			var shiny = !this.random(1024);
+
+			team.push({
+				name: poke,
+				item: item,
+				ability: ability,
+				moves: moves,
+				evs: evs,
+				ivs: ivs,
+				nature: nature,
+				level: level,
+				happiness: happiness,
+				shiny: shiny
+			});
+		}
+
+		return team;
+	},
 	randomCCTeam: function (side) {
 		var team = [];
 
@@ -654,9 +792,9 @@ exports.BattleScripts = {
 		var hasDexNumber = {};
 		var formes = [[], [], [], [], [], []];
 
-		// pick six random pokemon--no repeats, even among formes
-		// also need to either normalize for formes or select formes at random
-		// unreleased are okay but no CAP
+		// Pick six random pokemon--no repeats, even among formes
+		// Also need to either normalize for formes or select formes at random
+		// Unreleased are okay but no CAP
 
 		var num;
 		for (var i = 0; i < 6; i++) {
