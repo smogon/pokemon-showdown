@@ -203,6 +203,16 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	lowkick: {
+		inherit: true,
+		accuracy: 90,
+		basePower: 50,
+		basePowerCallback: undefined,
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch'
+		}
+	},
 	metronome: {
 		inherit: true,
 		onHit: function (target) {
