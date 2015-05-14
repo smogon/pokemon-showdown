@@ -2978,46 +2978,57 @@ exports.BattleScripts = {
 	randomFactorySets: require('./factory-sets.json'),
 	randomFactorySet: function (template, slot, teamData, tier) {
 		var speciesId = toId(template.species);
-		var setList = this.randomFactorySets[tier][speciesId];
+		var flags = this.randomFactorySets[tier][speciesId].flags;
+		var setList = this.randomFactorySets[tier][speciesId].sets;
 		var effectivePool, priorityPool;
 
 		var itemsMax = {'choicespecs':1, 'choiceband':1, 'choicescarf':1};
 		var movesMax = {'rapidspin':1, 'batonpass':1, 'stealthrock':1, 'defog':1, 'spikes':1, 'toxicspikes':1};
 		var requiredMoves = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
+		var weatherAbilitiesRequire = {
+				'hydration': 'raindance', 'swiftswim': 'raindance',
+				'leafguard': 'sunnyday', 'solarpower': 'sunnyday', 'chlorophyll': 'sunnyday',
+				'sandforce': 'sandstorm', 'sandrush': 'sandstorm', 'sandveil': 'sandstorm',
+				'snowcloak': 'hail'
+		};
+		var weatherAbilitiesSet = {'drizzle':1, 'drought':1, 'snowwarning':1, 'sandstream':1};
 
-		if (!teamData.forceResult) {
-			// Build a pool of eligible sets, given the team partners
-			// Also keep track of sets with moves the team requires
-			effectivePool = [];
-			priorityPool = [];
-			for (var i = 0, l = setList.length; i < l; i++) {
-				var curSet = setList[i];
-				var itemData = this.getItem(curSet.item);
-				if (teamData.megaCount > 0 && itemData.megaStone) continue;
-				if (itemsMax[itemData.id] && teamData.has[itemData.id] >= itemsMax[itemData.id]) continue;
+		// Build a pool of eligible sets, given the team partners
+		// Also keep track of sets with moves the team requires
+		effectivePool = [];
+		priorityPool = [];
+		for (var i = 0, l = setList.length; i < l; i++) {
+			var curSet = setList[i];
+			var itemData = this.getItem(curSet.item);
+			if (teamData.megaCount > 0 && itemData.megaStone) continue; // reject 2+ mega stones
+			if (itemsMax[itemData.id] && teamData.has[itemData.id] >= itemsMax[itemData.id]) continue;
 
-				var reject = false;
-				var hasRequiredMove = false;
-				for (var j = 0, m = curSet.moves.length; j < m; j++) {
-					var moveId = toId(curSet.moves[j]);
-					if (movesMax[moveId] && teamData.has[moveId] >= movesMax[moveId]) {
-						reject = true;
-						break;
-					}
-					if (requiredMoves[moveId] && !teamData.has[requiredMoves[moveId]]) {
-						hasRequiredMove = true;
-					}
+			var abilityData = this.getAbility(curSet.ability);
+			if (weatherAbilitiesRequire[abilityData.id] && teamData.weather !== weatherAbilitiesRequire[abilityData.id]) continue;
+			if (teamData.weather && weatherAbilitiesSet[abilityData.id]) continue; // reject 2+ weather setters
+
+			var reject = false;
+			var hasRequiredMove = false;
+			for (var j = 0, m = curSet.moves.length; j < m; j++) {
+				var moveId = toId(curSet.moves[j]);
+				if (movesMax[moveId] && teamData.has[moveId] >= movesMax[moveId]) {
+					reject = true;
+					break;
 				}
-				if (reject) continue;
-				effectivePool.push(curSet);
-				if (hasRequiredMove) priorityPool.push(curSet);
+				if (requiredMoves[moveId] && !teamData.has[requiredMoves[moveId]]) {
+					hasRequiredMove = true;
+				}
 			}
-			if (priorityPool.length) effectivePool = priorityPool;
-		} else {
+			if (reject) continue;
+			effectivePool.push(curSet);
+			if (hasRequiredMove) priorityPool.push(curSet);
+		}
+		if (priorityPool.length) effectivePool = priorityPool;
+
+		if (!effectivePool.length) {
+			if (!teamData.forceResult) return false;
 			effectivePool = setList;
 		}
-
-		if (!effectivePool.length) return false;
 
 		var set = effectivePool[this.random(effectivePool.length)];
 		if (!set.name) set.name = set.species;
@@ -3045,16 +3056,30 @@ exports.BattleScripts = {
 
 		var pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
 
-		var teamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult};
+		var teamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
 		var requiredMoveFamilies = {'hazardSet': 1, 'hazardClear':1};
 		var requiredMoves = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
+		var weatherAbilitiesSet = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};
+		var resistanceAbilities = {
+			'dryskin': ['Water'], 'waterabsorb': ['Water'], 'stormdrain': ['Water'],
+			'flashfire': ['Fire'], 'heatproof': ['Fire'],
+			'lightningrod': ['Electric'], 'motordrive': ['Electric'], 'voltabsorb': ['Electric'],
+			'sapsipper': ['Grass'],
+			'thickfat': ['Water', 'Fire'],
+			'levitate': ['Ground']
+		};
 
 		while (pokemonPool.length && pokemonLeft < 6) {
 			var template = this.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
+			var speciesFlags = this.randomFactorySets[chosenTier][template.speciesid].flags;
+
 			// Limit to one of each species (Species Clause)
 			if (teamData.baseFormes[template.baseSpecies]) continue;
+
+			// Limit the number of Megas to one
+			if (teamData.megaCount >= 1 && speciesFlags.megaOnly) continue;
 
 			// Limit 2 of any type
 			var types = template.types;
@@ -3102,6 +3127,11 @@ exports.BattleScripts = {
 				teamData.has[itemData.id] = 1;
 			}
 
+			var abilityData = this.getAbility(set.ability);
+			if (abilityData.id in weatherAbilitiesSet) {
+				teamData.weather = weatherAbilitiesSet[abilityData.id];
+			}
+
 			for (var m = 0; m < set.moves.length; m++) {
 				var moveId = toId(set.moves[m]);
 				if (moveId in teamData.has) {
@@ -3113,6 +3143,24 @@ exports.BattleScripts = {
 					teamData.has[requiredMoves[moveId]] = 1;
 				}
 			}
+
+			for (var typeName in this.data.TypeChart) {
+				// Cover any major weakness (3+) with at least one resistance
+				if (teamData.resistances[typeName] >= 1) continue;
+				if (resistanceAbilities[abilityData.id] && resistanceAbilities[abilityData.id].indexOf(typeName) >= 0 || !this.getImmunity(typeName, types)) {
+					// Heuristic: assume that Pokémon with these abilities don't have (too) negative typing.
+					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
+					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;
+					continue;
+				}
+				var typeMod = this.getEffectiveness(typeName, types);
+				if (typeMod < 0) {
+					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
+					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;
+				} else if (typeMod > 0) {
+					teamData.weaknesses[typeName] = (teamData.weaknesses[typeName] || 0) + 1;
+				}
+			}
 		}
 		if (pokemon.length < 6) return this.randomFactoryTeam(side, ++depth);
 
@@ -3120,6 +3168,9 @@ exports.BattleScripts = {
 		if (!teamData.forceResult) {
 			for (var requiredFamily in requiredMoveFamilies) {
 				if (!teamData.has[requiredFamily]) return this.randomFactoryTeam(side, ++depth);
+			}
+			for (var type in teamData.weaknesses) {
+				if (teamData.weaknesses[type] >= 3) return this.randomFactoryTeam(side, ++depth);
 			}
 		}
 
