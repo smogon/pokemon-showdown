@@ -68,6 +68,10 @@ exports.reverse = function reverseDns(ip, callback) {
 			callback(null, ['ovh.nohost']);
 			return;
 		}
+		if (ip.startsWith('104.131.') || ip.startsWith('104.236.') || ip.startsWith('198.199.') || ip.startsWith('45.55.') || ip.startsWith('192.241.') || ip.startsWith('162.243.') || ip.startsWith('107.170.')) {
+			callback(null, ['digitalocean.nohost']);
+			return;
+		}
 		if (ip.startsWith('178.62.')) {
 			callback(null, ['digitalocean.nohost']);
 			return;
