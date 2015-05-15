@@ -96,38 +96,48 @@ var commands = exports.commands = {
 		"/whois [username] - Get details on a username: alts (Requires: % @ & ~), group, IP address (Requires: @ & ~), and rooms."],
 
 	ipsearchall: 'ipsearch',
+	hostsearch: 'ipsearch',
 	ipsearch: function (target, room, user, connection, cmd) {
+		if (!target.trim()) return this.parse('/help ipsearch');
 		if (!this.can('rangeban')) return;
 		var results = [];
-		this.sendReply("Users with IP " + target + ":");
 
-		var isRange;
-		if (target.slice(-1) === '*') {
-			isRange = true;
-			target = target.slice(0, -1);
-		}
 		var isAll = (cmd === 'ipsearchall');
 
-		if (isRange) {
+		if (/[a-z]/.test(target)) {
+			// host
+			this.sendReply("Users with host " + target + ":");
 			for (var userid in Users.users) {
 				var curUser = Users.users[userid];
-				if (curUser.group === '~') continue;
+				if (!curUser.latestHost || !curUser.latestHost.endsWith(target)) continue;
+				if (results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name) > 100 && !isAll) {
+					return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
+				}
+			}
+		} else if (target.slice(-1) === '*') {
+			// IP range
+			this.sendReply("Users in IP range " + target + ":");
+			target = target.slice(0, -1);
+			for (var userid in Users.users) {
+				var curUser = Users.users[userid];
 				if (!curUser.latestIp.startsWith(target)) continue;
-				if (results.push((curUser.connected ? " + " : "-") + " " + curUser.name) > 100 && !isAll) {
+				if (results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name) > 100 && !isAll) {
 					return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
 				}
 			}
 		} else {
+			this.sendReply("Users with IP " + target + ":");
 			for (var userid in Users.users) {
 				var curUser = Users.users[userid];
 				if (curUser.latestIp === target) {
-					results.push((curUser.connected ? " + " : "-") + " " + curUser.name);
+					results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 				}
 			}
 		}
 		if (!results.length) return this.sendReply("No results found.");
 		return this.sendReply(results.join('; '));
 	},
+	ipsearchhelp: ["/ipsearch [ip|range|host] - Find all users with specified IP, IP range, or host (Requires: & ~)"],
 
 	/*********************************************************
 	 * Shortcuts
