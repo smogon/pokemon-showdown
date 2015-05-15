@@ -96,9 +96,8 @@ var commands = exports.commands = {
 	requesthelp: 'report',
 	report: function (target, room, user) {
 		if (room.id === 'help') {
-			this.sendReply("Ask one of the Mods in the Help room.");
+			this.sendReply("Ask one of the Moderators (@) in the Help room.");
 		} else {
-			this.sendReply("Ask a Mod in the Help room.");
 			this.parse('/join help');
 		}
 	},
