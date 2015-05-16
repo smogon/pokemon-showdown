@@ -3065,7 +3065,7 @@ exports.BattleScripts = {
 			'flashfire': ['Fire'], 'heatproof': ['Fire'],
 			'lightningrod': ['Electric'], 'motordrive': ['Electric'], 'voltabsorb': ['Electric'],
 			'sapsipper': ['Grass'],
-			'thickfat': ['Water', 'Fire'],
+			'thickfat': ['Ice', 'Fire'],
 			'levitate': ['Ground']
 		};
 
