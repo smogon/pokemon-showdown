@@ -535,11 +535,9 @@ module.exports = (function () {
 					banlistTable[subformat.banlist[i]] = subformat.name || true;
 					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
 
-					var plusPos = subformat.banlist[i].indexOf('+');
 					var complexList;
-					if (plusPos && plusPos > 0) {
-						var plusPlusPos = subformat.banlist[i].indexOf('++');
-						if (plusPlusPos && plusPlusPos > 0) {
+					if (subformat.banlist[i].includes('+')) {
+						if (subformat.banlist[i].includes('++')) {
 							complexList = subformat.banlist[i].split('++');
 							for (var j = 0; j < complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
@@ -561,7 +559,7 @@ module.exports = (function () {
 					if (banlistTable['Rule:' + toId(subformat.ruleset[i])]) continue;
 
 					banlistTable['Rule:' + toId(subformat.ruleset[i])] = subformat.ruleset[i];
-					if (format.ruleset.indexOf(subformat.ruleset[i]) === -1) format.ruleset.push(subformat.ruleset[i]);
+					if (format.ruleset.indexOf(subformat.ruleset[i]) < 0) format.ruleset.push(subformat.ruleset[i]);
 
 					var subsubformat = this.getFormat(subformat.ruleset[i]);
 					if (subsubformat.ruleset || subsubformat.banlist) {

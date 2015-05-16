@@ -36,7 +36,7 @@ var commands = exports.commands = {
 			var rank = Users.usergroups[u].charAt(0);
 			if (rank === ' ' || rank === '+') continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
-			if (ranks.indexOf(rank) > -1) {
+			if (ranks.indexOf(rank) >= 0) {
 				var name = Users.usergroups[u].substr(1);
 				if (!rankLists[rank]) rankLists[rank] = [];
 				if (name) rankLists[rank].push(name);
@@ -242,7 +242,7 @@ var commands = exports.commands = {
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
 		// `-` has special meaning in roomids
-		if (target.indexOf(',') >= 0 || target.indexOf('|') >= 0 || target.indexOf('[') >= 0 || target.indexOf('-') >= 0) {
+		if (target.includes(',') || target.includes('|') || target.includes('[') || target.includes('-')) {
 			return this.sendReply("Room titles can't contain any of: ,|[-");
 		}
 
@@ -371,7 +371,7 @@ var commands = exports.commands = {
 		if (target.length > 80) return this.sendReply("Error: Room description is too long (must be at most 80 characters).");
 		var normalizedTarget = ' ' + target.toLowerCase().replace('[^a-zA-Z0-9]+', ' ').trim() + ' ';
 
-		if (normalizedTarget.indexOf(' welcome ') >= 0) {
+		if (normalizedTarget.includes(' welcome ')) {
 			return this.sendReply("Error: Room description must not contain the word 'welcome'.");
 		}
 		if (normalizedTarget.slice(0, 9) === ' discuss ') {
@@ -1248,7 +1248,7 @@ var commands = exports.commands = {
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		var commaIndex = target.indexOf(',');
 		var targetUser, reason;
-		if (commaIndex !== -1) {
+		if (commaIndex >= 0) {
 			reason = target.substr(commaIndex + 1).trim();
 			target = target.substr(0, commaIndex).trim();
 		}
@@ -1278,7 +1278,7 @@ var commands = exports.commands = {
 		var isWin = process.platform === 'win32';
 		var logPath = 'logs/modlog/';
 
-		if (target.indexOf(',') > -1) {
+		if (target.includes(',')) {
 			var targets = target.split(',');
 			target = targets[1].trim();
 			roomId = toId(targets[0]) || room.id;
@@ -1588,7 +1588,7 @@ var commands = exports.commands = {
 			for (var i = 0; i < data.length; ++i) {
 				var line = data[i].split('#')[0].trim();
 				if (!line) continue;
-				if (line.indexOf('/') >= 0) {
+				if (line.includes('/')) {
 					rangebans.push(line);
 				} else if (line && !Users.bannedIps[line]) {
 					Users.bannedIps[line] = '#ipban';

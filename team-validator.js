@@ -594,7 +594,7 @@ Validator = (function () {
 			// STABmons hack to avoid copying all of validateSet to formats
 			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && move !== 'chatter') {
 				if (template.species === 'Shaymin') template.types = tools.getTemplate('shayminsky').types;
-				if (template.types.indexOf(tools.getMove(move).type) > -1) return false;
+				if (template.types.indexOf(tools.getMove(move).type) >= 0) return false;
 			}
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {
@@ -685,7 +685,7 @@ Validator = (function () {
 											if (dexEntry.eggGroups.intersect(eggGroups).length) {
 												if (tools.gen === 2 && lsetData.hasEggMove && lsetData.hasEggMove !== move) {
 													// If the mon already has an egg move by a father, other different father can't give it another egg move.
-													if (lsetData.eggParents.indexOf(dexEntry.species) > -1) {
+													if (lsetData.eggParents.indexOf(dexEntry.species) >= 0) {
 														// We have to test here that the father of both moves doesn't get both by egg breeding
 														var learnsFrom = false;
 														for (var ltype = 0; ltype < dexEntry.learnset[lsetData.hasEggMove].length; ltype++) {

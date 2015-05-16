@@ -534,7 +534,7 @@ exports.BattleMovedex = {
 			var disallowedMoves = {mimic:1, struggle:1, transform:1};
 			if (source.transformed) return false;
 			var moveslot = source.moves.indexOf('mimic');
-			if (moveslot === -1) return false;
+			if (moveslot < 0) return false;
 			var moves = target.moves;
 			moves = moves.randomize();
 			var move = false;
