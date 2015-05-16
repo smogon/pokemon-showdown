@@ -225,6 +225,7 @@ var commands = exports.commands = {
 				}
 				details = {
 					"Dex#": pokemon.num,
+					"Gen": pokemon.gen,
 					"Height": pokemon.heightm + " m",
 					"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
 					"Dex Colour": pokemon.color,
@@ -241,7 +242,8 @@ var commands = exports.commands = {
 			} else if (newTargets[0].searchType === 'move') {
 				var move = Tools.getMove(newTargets[0].name);
 				details = {
-					"Priority": move.priority
+					"Priority": move.priority,
+					"Gen": move.gen
 				};
 
 				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary effect</font>"] = "";
@@ -277,7 +279,10 @@ var commands = exports.commands = {
 				}[move.target] || "Unknown";
 			} else if (newTargets[0].searchType === 'item') {
 				var item = Tools.getItem(newTargets[0].name);
-				details = {};
+				details = {
+					"Gen": item.gen
+				};
+
 				if (item.fling) {
 					details["Fling Base Power"] = item.fling.basePower;
 					if (item.fling.status) details["Fling Effect"] = item.fling.status;
