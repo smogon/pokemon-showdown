@@ -409,8 +409,9 @@ var commands = exports.commands = {
 				continue;
 			}
 
-			if (target.indexOf(' type') > -1) {
-				target = target.charAt(0).toUpperCase() + target.substring(1, target.indexOf(' type'));
+			var typeIndex = target.indexOf(' type');
+			if (typeIndex >= 0) {
+				target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
 				if (target in Tools.data.TypeChart) {
 					if (!searches['types']) searches['types'] = {};
 					if (Object.count(searches['types'], true) === 2 && !isNotSearch) return this.sendReplyBox("Specify a maximum of two types.");
@@ -421,7 +422,7 @@ var commands = exports.commands = {
 			}
 
 			var inequality = target.search(/>|<|=/);
-			if (inequality > -1) {
+			if (inequality >= 0) {
 				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in stat ranges.");
 				inequality = target.charAt(inequality);
 				var targetParts = target.replace(/\s/g, '').split(inequality);
@@ -506,7 +507,7 @@ var commands = exports.commands = {
 						if ('lc' in searches[search]) {
 							// some LC legal Pokemon are stored in other tiers (Ferroseed/Murkrow etc)
 							// this checks for LC legality using the going criteria, instead of dex[mon].tier
-							var isLC = (dex[mon].evos && dex[mon].evos.length > 0) && !dex[mon].prevo && dex[mon].tier !== "LC Uber" && Tools.data.Formats['lc'].banlist.indexOf(dex[mon].species) === -1;
+							var isLC = (dex[mon].evos && dex[mon].evos.length > 0) && !dex[mon].prevo && dex[mon].tier !== "LC Uber" && Tools.data.Formats['lc'].banlist.indexOf(dex[mon].species) < 0;
 							if ((searches[search]['lc'] && !isLC) || (!searches[search]['lc'] && isLC)) {
 								delete dex[mon];
 								continue;
@@ -560,7 +561,7 @@ var commands = exports.commands = {
 					for (var mon in dex) {
 						if (!dex[mon].learnset) continue;
 						for (var move in searches[search]) {
-							var canLearn = (dex[mon].learnset.sketch && ['chatter', 'struggle', 'magikarpsrevenge'].indexOf(move) === -1) || dex[mon].learnset[move];
+							var canLearn = (dex[mon].learnset.sketch && ['chatter', 'struggle', 'magikarpsrevenge'].indexOf(move) < 0) || dex[mon].learnset[move];
 							if ((!canLearn && searches[search][move]) || (searches[search][move] === false && canLearn)) {
 								delete dex[mon];
 								break;
@@ -626,7 +627,7 @@ var commands = exports.commands = {
 
 		var results = [];
 		for (var mon in dex) {
-			if (dex[mon].baseSpecies && results.indexOf(dex[mon].baseSpecies) > -1) continue;
+			if (dex[mon].baseSpecies && results.indexOf(dex[mon].baseSpecies) >= 0) continue;
 			results.push(dex[mon].species);
 		}
 
@@ -680,8 +681,9 @@ var commands = exports.commands = {
 				target = target.substr(1);
 			}
 
-			if (target.indexOf(' type') > -1) {
-				target = target.charAt(0).toUpperCase() + target.substring(1, target.indexOf(' type'));
+			var typeIndex = target.indexOf(' type');
+			if (typeIndex >= 0) {
+				target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
 				if (!(target in Tools.data.TypeChart)) return this.sendReplyBox("Type '" + Tools.escapeHTML(target) + "' not found.");
 				if (!searches['type']) searches['type'] = {};
 				if ((searches['type'][target] && isNotSearch) || (searches['type'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a type.');
@@ -735,7 +737,7 @@ var commands = exports.commands = {
 			}
 
 			var inequality = target.search(/>|<|=/);
-			if (inequality > -1) {
+			if (inequality >= 0) {
 				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in quality ranges.");
 				inequality = target.charAt(inequality);
 				var targetParts = target.replace(/\s/g, '').split(inequality);

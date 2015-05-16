@@ -34,7 +34,7 @@ exports.commands = {
 		if (room.id !== 'scavengers') return this.sendReply('This command can only be used in the Scavengers room.');
 		if (!this.can('mute', null, room)) return false;
 		if (scavengers.status === 'on') return this.sendReply('There is already an active scavenger hunt.');
-		var targets = target.split(target.indexOf('|') > -1 ? '|' : ',');
+		var targets = target.split(target.includes('|') ? '|' : ',');
 		if (!targets[0] || !targets[1] || !targets[2] || !targets[3] || !targets[4] || !targets[5] || targets[6]) {
 			return this.sendReply('You must specify three hints and three answers.');
 		}

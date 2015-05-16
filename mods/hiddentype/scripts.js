@@ -15,7 +15,7 @@ exports.BattleScripts = {
 					isAdded: false
 				});
 			}
-			if (this.types.indexOf(this.baseHpType) === -1) {
+			if (this.types.indexOf(this.baseHpType) < 0) {
 				this.typesData.push({
 					type: this.baseHpType,
 					suppressed: false,

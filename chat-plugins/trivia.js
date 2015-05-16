@@ -738,7 +738,7 @@ var commands = {
 			// Parse number ranges and add them to the list of indices,
 			// then remove them in addition to entries that aren't valid index numbers
 			for (var i = indices.length; i--;) {
-				if (indices[i].indexOf('-') < 0) {
+				if (!indices[i].includes('-')) {
 					var index = Number(indices[i]);
 					if (Number.isInteger(index) && index > 0 && index <= submissionsLen) {
 						indices[i] = index;
