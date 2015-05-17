@@ -3625,6 +3625,7 @@ exports.BattleMovedex = {
 			onDamagePriority: -10,
 			onDamage: function (damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
+					this.add('-activate', target, 'move: Endure');
 					return target.hp - 1;
 				}
 			}
