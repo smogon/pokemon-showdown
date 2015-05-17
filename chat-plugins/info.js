@@ -1997,32 +1997,94 @@ var commands = exports.commands = {
 
 	roll: 'dice',
 	dice: function (target, room, user) {
-		if (!target) return this.parse('/help dice');
+		if (!target || target.match(/[^d\d\s\-\+HL]/i)) return this.parse('/help dice');
 		if (!this.canBroadcast()) return;
-		var d = target.indexOf("d");
-		if (d >= 0) {
-			var num = parseInt(target.substring(0, d));
-			var faces;
-			if (target.length > d) faces = parseInt(target.substring(d + 1));
-			if (isNaN(num)) num = 1;
-			if (isNaN(faces)) return this.sendReply("The number of faces must be a valid integer.");
-			if (faces < 1 || faces > 1000) return this.sendReply("The number of faces must be between 1 and 1000");
-			if (num < 1 || num > 20) return this.sendReply("The number of dice must be between 1 and 20");
-			var rolls = [];
-			var total = 0;
-			for (var i = 0; i < num; ++i) {
-				rolls[i] = (Math.floor(faces * Math.random()) + 1);
-				total += rolls[i];
-			}
-			return this.sendReplyBox("Random number " + num + "x(1 - " + faces + "): " + rolls.join(", ") + "<br />Total: " + total);
+
+		// ~30 is widely regarded as the sample size required for sum to be a Gaussian distribution.
+		// This also sets a computation time constraint for safety.
+		var maxDice = 40;
+
+		var diceQuantity = 1;
+		var diceDataStart = target.indexOf('d');
+		if (diceDataStart >= 0) {
+			diceQuantity = Number(target.slice(0, diceDataStart));
+			target = target.slice(diceDataStart + 1);
+			if (!Number.isInteger(diceQuantity) || diceQuantity <= 0 || diceQuantity > maxDice) return this.sendReply("The amount of dice rolled should be a natural number up to " + maxDice + ".");
 		}
-		if (target && isNaN(target) || target.length > 21) return this.sendReply("The max roll must be a number under 21 digits.");
-		var maxRoll = (target) ? target : 6;
-		var rand = Math.floor(maxRoll * Math.random()) + 1;
-		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
+		var offset = 0;
+		var removeOutlier = 0;
+
+		var modifierData = target.match(/[\-\+]/);
+		if (modifierData) {
+			switch (target.slice(modifierData.index).trim().toLowerCase()) {
+			case '-l':
+				removeOutlier = -1;
+				break;
+			case '-h':
+				removeOutlier = +1;
+				break;
+			default:
+				offset = Number(target.slice(modifierData.index));
+				if (isNaN(offset)) return this.parse('/help dice');
+				if (!Number.isSafeInteger(offset)) return this.sendReply("The specified offset must be an integer up to " + Number.MAX_SAFE_INTEGER + ".");
+			}
+			if (removeOutlier && diceQuantity <= 1) return this.sendReply("More than one dice should be rolled before removing outliers.");
+			target = target.slice(0, modifierData.index);
+		}
+
+		var diceFaces = 6;
+		if (target.length) {
+			diceFaces = Number(target);
+			if (!Number.isSafeInteger(diceFaces) || diceFaces <= 0) {
+				return this.sendReply("Rolled dice must have a natural amount of faces up to " + Number.MAX_SAFE_INTEGER + ".");
+			}
+		}
+
+		if (diceQuantity > 1) {
+			// Make sure that we can deal with high rolls
+			if (!Number.isSafeInteger(offset < 0 ? diceQuantity * diceFaces : diceQuantity * diceFaces + offset)) {
+				return this.sendReply("The maximum sum of rolled dice must be lower or equal than " + Number.MAX_SAFE_INTEGER + ".");
+			}
+		}
+
+		var maxRoll = 0;
+		var minRoll = Number.MAX_SAFE_INTEGER;
+
+		var trackRolls = diceQuantity * (('' + diceFaces).length + 1) <= 60;
+		var rolls = [];
+		var rollSum = 0;
+
+		for (var i = 0; i < diceQuantity; ++i) {
+			var curRoll = Math.floor(Math.random() * diceFaces) + 1;
+			rollSum += curRoll;
+			if (curRoll > maxRoll) maxRoll = curRoll;
+			if (curRoll < minRoll) minRoll = curRoll;
+			if (trackRolls) rolls.push(curRoll);
+		}
+
+		// Apply modifiers
+
+		if (removeOutlier > 0) {
+			rollSum -= maxRoll;
+		} else if (removeOutlier < 0) {
+			rollSum -= minRoll;
+		}
+		if (offset) rollSum += offset;
+
+		// Reply with relevant information
+
+		var offsetFragment = "";
+		if (offset) offsetFragment += (offset > 0 ? "+" + offset : offset);
+
+		if (diceQuantity === 1) return this.sendReplyBox("Roll (1 - " + diceFaces + ")" + offsetFragment + ": " + rollSum);
+
+		var sumFragment = "<br />Sum" + offsetFragment + (removeOutlier ? " except " + (removeOutlier > 0 ? "highest" : "lowest") : "");
+		return this.sendReplyBox("" + diceQuantity + " rolls (1 - " + diceFaces + ")" + (trackRolls ? ": " + rolls.join(", ") : "") + sumFragment + ": " + rollSum);
 	},
 	dicehelp: ["/dice [max number] - Randomly picks a number between 1 and the number you choose.",
-		"/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice."],
+		"/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.",
+		"/dice [number of dice]d[number of sides][+/-][offset] - Simulates rolling a number of dice and adding an offset to the sum, e.g., /dice 2d6+10: two standard dice are rolled; the result lies between 12 and 22.",
+		"/dice [number of dice]d[number of sides]-[H/L] - Simulates rolling a number of dice with removal of extreme values, e.g., /dice 3d8-L: rolls three 8-sided dice; the result ignores the lowest value."],
 
 	pr: 'pickrandom',
 	pick: 'pickrandom',
