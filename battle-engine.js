@@ -1109,6 +1109,7 @@ BattlePokemon = (function () {
 		return this.battle.getAbility(this.ability);
 	};
 	BattlePokemon.prototype.hasAbility = function (ability) {
+		if (!this.isActive && this.battle.gen >= 5) return false;
 		if (this.ignore['Ability']) return false;
 		var ownAbility = this.ability;
 		if (!Array.isArray(ability)) {
