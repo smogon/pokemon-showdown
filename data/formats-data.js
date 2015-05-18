@@ -613,7 +613,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":38,"abilities":["guts"],"moves":["seismictoss","foresight","revenge","vitalthrow"]},
 			{"generation":5,"level":30,"isHidden":false,"moves":["lowsweep","foresight","seismictoss","revenge"],"pokeball":"cherishball"}
 		],
-		tier: "NFE"
+		tier: "PU"
 	},
 	machamp: {
 		randomBattleMoves: ["dynamicpunch","icepunch","stoneedge","bulletpunch","knockoff","substitute"],
@@ -3922,7 +3922,7 @@ exports.BattleFormatsData = {
 	},
 	servine: {
 		randomBattleMoves: ["leafstorm","hiddenpowerfire","substitute","leechseed","hiddenpowerice","gigadrain"],
-		tier: "PU"
+		tier: "NFE"
 	},
 	serperior: {
 		randomBattleMoves: ["leafstorm","dragonpulse","hiddenpowerfire","substitute","leechseed","glare"],
@@ -4176,7 +4176,7 @@ exports.BattleFormatsData = {
 	},
 	whirlipede: {
 		randomBattleMoves: ["toxicspikes","steamroller","spikes","poisonjab"],
-		tier: "PU"
+		tier: "NFE"
 	},
 	scolipede: {
 		randomBattleMoves: ["substitute","spikes","toxicspikes","megahorn","rockslide","earthquake","swordsdance","batonpass","poisonjab"],
