@@ -60,7 +60,7 @@ var commands = {
 		if (!artistOfTheDay.nominations.size) return this.sendReply("No nominations have been submitted yet.");
 
 		var nominations = toArrayOfArrays(artistOfTheDay.nominations);
-		var artist = nominations[~~Math.random(nominations.length)][0];
+		var artist = nominations[~~(Math.random() * nominations.length)][0];
 		artistOfTheDay.pendingNominations = false;
 		artistOfTheDay.nominations.clear();
 		artistOfTheDay.removedNominators = [];
@@ -101,7 +101,7 @@ var commands = {
 			}
 		}
 
-		if (prenominationIndex > -1) {
+		if (prenominationIndex >= 0) {
 			prenominations[prenominationIndex][1] = target;
 			Rooms.global.writeChatRoomData();
 			return this.sendReply("Your prenomination was changed to " + target + ".");
@@ -119,11 +119,11 @@ var commands = {
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
 
 		var removedNominators = artistOfTheDay.removedNominators;
-		if (removedNominators.indexOf(user) > -1) return this.sendReply("Since your nomination has been removed, you cannot submit another artist until the next round.");
+		if (removedNominators.indexOf(user) >= 0) return this.sendReply("Since your nomination has been removed, you cannot submit another artist until the next round.");
 
 		var alts = user.getAlts();
 		for (var i = 0; i < removedNominators.length; i++) {
-			if (alts.indexOf(removedNominators[i].name) > -1) return this.sendReply("Since your nomination has been removed, you cannot submit another artist until the next round.");
+			if (alts.indexOf(removedNominators[i].name) >= 0) return this.sendReply("Since your nomination has been removed, you cannot submit another artist until the next round.");
 		}
 
 		var nominationId = toArtistId(target);
@@ -133,7 +133,7 @@ var commands = {
 		var latestIp = user.latestIp;
 		for (var data, nominationsIterator = artistOfTheDay.nominations.entries(); !!(data = nominationsIterator.next().value);) { // replace with for-of loop once available
 			var nominator = data[0];
-			if (nominator.ips[latestIp] && nominator.userid !== userid || alts.indexOf(nominator.name) > -1) return this.sendReply("You have already submitted a nomination for the Artist of the Day under the name " + nominator.name + ".");
+			if (nominator.ips[latestIp] && nominator.userid !== userid || alts.indexOf(nominator.name) >= 0) return this.sendReply("You have already submitted a nomination for the Artist of the Day under the name " + nominator.name + ".");
 			if (toArtistId(data[1]) === nominationId) return this.sendReply("" + target + " has already been nominated.");
 		}
 
