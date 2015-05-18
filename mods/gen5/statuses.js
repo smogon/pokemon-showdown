@@ -9,7 +9,7 @@ exports.BattleStatuses = {
 		inherit: true,
 		onResidual: function (pokemon) {
 			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0)) {
-				pokemon.removeVolatile('partiallytrapped');
+				delete pokemon.volatiles['partiallytrapped'];
 				return;
 			}
 			if (this.effectData.source.hasItem('bindingband')) {
