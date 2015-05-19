@@ -3483,14 +3483,10 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'Embargo');
 			},
+			// Item suppression implemented in BattlePokemon.ignoringItem() within battle-engine.js
 			onResidualOrder: 18,
 			onEnd: function (pokemon) {
 				this.add('-end', pokemon, 'Embargo');
-			},
-			onModifyPokemonPriority: 1,
-			onModifyPokemon: function (pokemon) {
-				if (pokemon.getItem().megaEvolves) return;
-				pokemon.ignore['Item'] = true;
 			}
 		},
 		secondary: false,
@@ -4414,7 +4410,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		beforeMoveCallback: function (pokemon) {
-			if (pokemon.ignore['Item']) return;
+			if (pokemon.ignoringItem()) return;
 			var item = pokemon.getItem();
 			var noFling = item.onTakeItem && item.onTakeItem(item, pokemon) === false;
 			if (item.fling && !noFling) {
@@ -5050,13 +5046,10 @@ exports.BattleMovedex = {
 			}
 		},
 		effect: {
+			// Ability suppression implemented in BattlePokemon.ignoringAbility() within battle-engine.js
 			onStart: function (pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', this.getAbility(pokemon.ability), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
-			},
-			onModifyPokemonPriority: 2,
-			onModifyPokemon: function (pokemon) {
-				pokemon.ignore['Ability'] = true;
 			}
 		},
 		secondary: false,
@@ -7955,11 +7948,7 @@ exports.BattleMovedex = {
 			onStart: function (target, source) {
 				this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
 			},
-			onModifyPokemonPriority: 1,
-			onModifyPokemon: function (pokemon) {
-				if (pokemon.getItem().megaEvolves) return;
-				pokemon.ignore['Item'] = true;
-			},
+			// Item suppression implemented in BattlePokemon.ignoringItem() within battle-engine.js
 			onResidualOrder: 25,
 			onEnd: function () {
 				this.add('-fieldend', 'move: Magic Room', '[of] ' + this.effectData.source);
