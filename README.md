@@ -127,7 +127,7 @@ Credits
 ------------------------------------------------------------------------
 
 Site Owner
--Austin [Austin] - Developement, Design
+-[Austin] - Developement, Design
 
 Owner
 
