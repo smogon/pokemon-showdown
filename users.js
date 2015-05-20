@@ -903,7 +903,7 @@ User = (function () {
 							Config.tokenhosts.push(address);
 							console.log('Added ' + address + ' to valid tokenhosts');
 						});
-					} else if (Config.tokenhosts.indexOf(host) === -1) {
+					} else if (Config.tokenhosts.indexOf(host) < 0) {
 						invalidHost = true;
 					}
 				}

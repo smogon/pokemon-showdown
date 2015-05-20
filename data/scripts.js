@@ -556,7 +556,7 @@ exports.BattleScripts = {
 
 	canMegaEvo: function (pokemon) {
 		var altForme = pokemon.baseTemplate.otherFormes && this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
-		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.moves.indexOf(toId(altForme.requiredMove)) > -1) return altForme.species;
+		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.moves.indexOf(toId(altForme.requiredMove)) >= 0) return altForme.species;
 		var item = pokemon.getItem();
 		if (item.megaEvolves !== pokemon.baseTemplate.baseSpecies || item.megaStone === pokemon.species) return false;
 		return item.megaStone;
@@ -601,7 +601,7 @@ exports.BattleScripts = {
 		for (var i = 0; i < defaultAbilities.length; i++) {
 			var defaultAbility = defaultAbilities[i];
 			if (!defaultAbility) break;
-			if (defaultAbility.indexOf(selectedAbility) !== -1) {
+			if (defaultAbility.indexOf(selectedAbility) >= 0) {
 				defaultAbilities.splice(i, 1);
 				isValid = this.checkAbilities(selectedAbilities, defaultAbilities);
 				if (isValid) break;
@@ -1360,7 +1360,7 @@ exports.BattleScripts = {
 					if ((hasMove['rest'] && hasMove['sleeptalk']) || counter.Physical + counter.Special < 2) rejected = true;
 					break;
 				case 'rest':
-					if (!hasMove['sleeptalk'] && movePool.indexOf('sleeptalk') > -1) rejected = true;
+					if (!hasMove['sleeptalk'] && movePool.indexOf('sleeptalk') >= 0) rejected = true;
 					if (hasMove['moonlight'] || hasMove['painsplit'] || hasMove['recover'] || hasMove['synthesis']) rejected = true;
 					break;
 				case 'roar':
@@ -1445,7 +1445,7 @@ exports.BattleScripts = {
 								} else if (damagingType === 'Ice') {
 									if (hasType['Normal'] && template.types.length === 1) {
 										// Mono-Ice is acceptable for special attacking Normal types that lack Boomburst and Hyper Voice
-										if (counter.Physical >= 2 || movePool.indexOf('boomburst') > -1 || movePool.indexOf('hypervoice') > -1) replace = true;
+										if (counter.Physical >= 2 || movePool.indexOf('boomburst') >= 0 || movePool.indexOf('hypervoice') >= 0) replace = true;
 									} else {
 										replace = true;
 									}
@@ -1559,7 +1559,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Moody') {
 				rejectAbility = template.id !== 'bidoof';
 			} else if (ability === 'Poison Heal') {
-				rejectAbility = abilities.indexOf('Technician') > -1 && !!counter['technician'];
+				rejectAbility = abilities.indexOf('Technician') >= 0 && !!counter['technician'];
 			} else if (ability === 'Prankster') {
 				rejectAbility = !counter['Status'];
 			} else if (ability === 'Reckless' || ability === 'Rock Head') {
@@ -1587,16 +1587,16 @@ exports.BattleScripts = {
 					ability = ability1.name;
 				}
 			}
-			if (abilities.indexOf('Chlorophyll') > -1 && ability !== 'Solar Power' && hasMove['sunnyday']) {
+			if (abilities.indexOf('Chlorophyll') >= 0 && ability !== 'Solar Power' && hasMove['sunnyday']) {
 				ability = 'Chlorophyll';
 			}
-			if (abilities.indexOf('Guts') > -1 && ability !== 'Quick Feet' && hasMove['facade']) {
+			if (abilities.indexOf('Guts') >= 0 && ability !== 'Quick Feet' && hasMove['facade']) {
 				ability = 'Guts';
 			}
-			if (abilities.indexOf('Swift Swim') > -1 && hasMove['raindance']) {
+			if (abilities.indexOf('Swift Swim') >= 0 && hasMove['raindance']) {
 				ability = 'Swift Swim';
 			}
-			if (abilities.indexOf('Unburden') > -1 && hasMove['acrobatics']) {
+			if (abilities.indexOf('Unburden') >= 0 && hasMove['acrobatics']) {
 				ability = 'Unburden';
 			}
 			if (template.id === 'ambipom' && !counter['technician']) {
@@ -2588,7 +2588,7 @@ exports.BattleScripts = {
 								} else if (damagingType === 'Ice') {
 									if (hasType['Normal'] && template.types.length === 1) {
 										// Mono-Ice is acceptable for special attacking Normal types that lack Boomburst and Hyper Voice
-										if (counter.Physical >= 2 || movePool.indexOf('boomburst') > -1 || movePool.indexOf('hypervoice') > -1) replace = true;
+										if (counter.Physical >= 2 || movePool.indexOf('boomburst') >= 0 || movePool.indexOf('hypervoice') >= 0) replace = true;
 									} else {
 										replace = true;
 									}
@@ -2721,16 +2721,16 @@ exports.BattleScripts = {
 					ability = ability1.name;
 				}
 			}
-			if (abilities.indexOf('Guts') > -1 && ability !== 'Quick Feet' && hasMove['facade']) {
+			if (abilities.indexOf('Guts') >= 0 && ability !== 'Quick Feet' && hasMove['facade']) {
 				ability = 'Guts';
 			}
-			if (abilities.indexOf('Swift Swim') > -1 && hasMove['raindance']) {
+			if (abilities.indexOf('Swift Swim') >= 0 && hasMove['raindance']) {
 				ability = 'Swift Swim';
 			}
-			if (abilities.indexOf('Chlorophyll') > -1 && ability !== 'Solar Power') {
+			if (abilities.indexOf('Chlorophyll') >= 0 && ability !== 'Solar Power') {
 				ability = 'Chlorophyll';
 			}
-			if (abilities.indexOf('Intimidate') > -1 || template.id === 'mawilemega') {
+			if (abilities.indexOf('Intimidate') >= 0 || template.id === 'mawilemega') {
 				ability = 'Intimidate';
 			}
 			if (template.id === 'ambipom' && !counter['technician']) {
@@ -3188,7 +3188,7 @@ exports.BattleScripts = {
 			var types = template.types;
 			if (template.baseSpecies === 'Castform') types = ['Normal'];
 			if (template.speciesid === 'meloettapirouette') types = ['Normal', 'Psychic'];
-			if (!excludedTiers[template.tier] && types.indexOf(type) > -1 && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
+			if (!excludedTiers[template.tier] && types.indexOf(type) >= 0 && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
 				pokemonPool.push(id);
 			}
 		}
