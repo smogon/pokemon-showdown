@@ -856,9 +856,10 @@ var commands = exports.commands = {
 	},
 	unmutehelp: ["/unmute [username] - Removes mute from user. Requires: % @ & ~"],
 
+        forcelock: 'lock',
 	l: 'lock',
 	ipmute: 'lock',
-	lock: function (target, room, user) {
+	lock: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help lock');
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 
@@ -876,9 +877,14 @@ var commands = exports.commands = {
 		}
 
 		if (targetUser.confirmed) {
-			var from = targetUser.deconfirm();
-			ResourceMonitor.log("[CrisisMonitor] " + targetUser.name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
-		}
+		if (cmd === 'forcelock') {
++				var from = targetUser.deconfirm();
++				ResourceMonitor.log("[CrisisMonitor] " + targetUser.name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
++			} else {
++				this.popupReply("" + targetUser.name + " is a confirmed user. If you are sure you would like to lock them use /forcelock.");
++				return;
++			}
+ 		}
 
 		targetUser.popup("" + user.name + " has locked you from talking in chats, battles, and PMing regular users." + (target ? "\n\nReason: " + target : "") + "\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it" + (Config.appealurl ? " or you can appeal:\n" + Config.appealurl : ".") + "\n\nYour lock will expire in a few days.");
 
@@ -914,8 +920,9 @@ var commands = exports.commands = {
 	},
 	unlockhelp: ["/unlock [username] - Unlocks the user. Requires: % @ & ~"],
 
+	forceban: 'ban',
 	b: 'ban',
-	ban: function (target, room, user) {
+        ban: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ban');
 		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 
@@ -933,8 +940,13 @@ var commands = exports.commands = {
 		}
 
 		if (targetUser.confirmed) {
-			var from = targetUser.deconfirm();
-			ResourceMonitor.log("[CrisisMonitor] " + targetUser.name + " was banned by " + user.name + " and demoted from " + from.join(", ") + ".");
+		if (cmd === 'forceban') {
++				var from = targetUser.deconfirm();
++				ResourceMonitor.log("[CrisisMonitor] " + targetUser.name + " was banned by " + user.name + " and demoted from " + from.join(", ") + ".");
++			} else {
++				this.popupReply("" + targetUser.name + " is a confirmed user. If you are sure you would like to ban them use /forceban.");
++				return;
++			}
 		}
 
 		targetUser.popup("" + user.name + " has banned you." + (target ? "\n\nReason: " + target : "") + (Config.appealurl ? "\n\nIf you feel that your ban was unjustified, you can appeal:\n" + Config.appealurl : "") + "\n\nYour ban will expire in a few days.");
@@ -1736,7 +1748,7 @@ var commands = exports.commands = {
 	},
 
 	bash: function (target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
+		if (user.hasConsoleAccess(connection)) {
 			return this.sendReply("/bash - Access denied.");
 		}
 
@@ -1747,7 +1759,7 @@ var commands = exports.commands = {
 	},
 
 	eval: function (target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
+		if (user.hasConsoleAccess(connection)) {
 			return this.sendReply("/eval - Access denied.");
 		}
 		if (!this.canBroadcast()) return;
@@ -1765,7 +1777,7 @@ var commands = exports.commands = {
 	},
 
 	evalbattle: function (target, room, user, connection) {
-		if (!user.hasConsoleAccess(connection)) {
+		if (user.hasConsoleAccess(connection)) {
 			return this.sendReply("/evalbattle - Access denied.");
 		}
 		if (!this.canBroadcast()) return;
@@ -2138,6 +2150,7 @@ var commands = exports.commands = {
 
 	a: function (target, room, user) {
 		if (!this.can('rawpacket')) return false;
+		this.privateModCommand("(" + user.name + " used an admin command)");
 		// secret sysop command
 		room.add(target);
 	},
