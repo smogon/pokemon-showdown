@@ -3356,13 +3356,19 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onSetStatus: function (status, target, source, effect) {
-				if (status.id === 'slp' && target.runImmunity('Ground')) {
+				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
 					this.debug('Interrupting sleep from Electric Terrain');
 					return false;
 				}
 			},
+			onTryHit: function (target, source, move) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (move && move.id === 'yawn') {
+					return false;
+				}
+			},
 			onBasePower: function (basePower, attacker, defender, move) {
-				if (move.type === 'Electric' && attacker.runImmunity('Ground')) {
+				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
 					return this.chainModify(1.5);
 				}
@@ -5332,7 +5338,7 @@ exports.BattleMovedex = {
 					this.debug('move weakened by grassy terrain');
 					return this.chainModify(0.5);
 				}
-				if (move.type === 'Grass' && attacker.runImmunity('Ground')) {
+				if (move.type === 'Grass' && attacker.isGrounded()) {
 					this.debug('grassy terrain boost');
 					return this.chainModify(1.5);
 				}
@@ -5344,11 +5350,13 @@ exports.BattleMovedex = {
 			onResidualSubOrder: 2,
 			onResidual: function (battle) {
 				this.debug('onResidual battle');
+				var pokemon;
 				for (var s in battle.sides) {
 					for (var p in battle.sides[s].active) {
-						if (battle.sides[s].active[p].runImmunity('Ground')) {
+						pokemon = battle.sides[s].active[p];
+						if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 							this.debug('Pokemon is grounded, healing through Grassy Terrain.');
-							this.heal(battle.sides[s].active[p].maxhp / 16, battle.sides[s].active[p], battle.sides[s].active[p]);
+							this.heal(pokemon.maxhp / 16, pokemon, pokemon);
 						}
 					}
 				}
@@ -8785,21 +8793,12 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onSetStatus: function (status, target, source, effect) {
-				if (!target.runImmunity('Ground')) return;
-				if (source && source !== target) {
-					this.debug('misty terrain preventing status');
-					return false;
-				}
-			},
-			onTryHit: function (target, source, move) {
-				if (!target.runImmunity('Ground')) return;
-				if (move && move.id === 'yawn') {
-					this.debug('misty terrain blocking yawn');
-					return false;
-				}
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				this.debug('misty terrain preventing status');
+				return false;
 			},
 			onBasePower: function (basePower, attacker, defender, move) {
-				if (move.type === 'Dragon' && defender.runImmunity('Ground')) {
+				if (move.type === 'Dragon' && defender.isGrounded()) {
 					this.debug('misty terrain weaken');
 					return this.chainModify(0.5);
 				}
@@ -12971,8 +12970,7 @@ exports.BattleMovedex = {
 			},
 			onSwitchIn: function (pokemon) {
 				var side = pokemon.side;
-				if (!pokemon.runImmunity('Ground')) return;
-				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
+				if (!pokemon.isGrounded()) return;
 				var damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			}
@@ -13165,8 +13163,7 @@ exports.BattleMovedex = {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
 			onSwitchIn: function (pokemon) {
-				if (!pokemon.runImmunity('Ground')) return;
-				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
+				if (!pokemon.isGrounded()) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getMove('stickyweb'));
 			}
@@ -14432,9 +14429,8 @@ exports.BattleMovedex = {
 				this.effectData.layers++;
 			},
 			onSwitchIn: function (pokemon) {
-				if (!pokemon.runImmunity('Ground')) return;
+				if (!pokemon.isGrounded()) return;
 				if (!pokemon.runImmunity('Poison')) return;
-				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
