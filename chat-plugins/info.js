@@ -1816,7 +1816,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'underused' || target === 'uu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3537422/\">np: UU Stage 3</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538856/\">np: UU Stage 3.1</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523649/\">UU Viability Ranking</a><br />";
 		}
