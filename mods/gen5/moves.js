@@ -869,7 +869,7 @@ exports.BattleMovedex = {
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
-				if (move.recoil && (!source.hasAbility('rockhead') || move.id === 'struggle')) {
+				if (move.recoil) {
 					this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
 				}
 				if (move.drain) {

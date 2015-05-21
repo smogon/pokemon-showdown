@@ -314,11 +314,8 @@ exports.BattleAbilities = {
 	},
 	"rockhead": {
 		inherit: true,
-		onModifyMove: function (move) {
-			delete move.recoil;
-		},
 		onDamage: function (damage, target, source, effect) {
-			if (effect && effect.id === 'lifeorb') return false;
+			if (effect && effect.id in {lifeorb: 1, recoil: 1}) return false;
 		}
 	},
 	"download": {
