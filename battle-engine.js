@@ -2749,7 +2749,7 @@ Battle = (function () {
 					break;
 				}
 			}
-			if (center) this.add('-message', 'Automatic center!');
+			if (center) this.add('-center');
 		}
 		this.makeRequest('move');
 	};
