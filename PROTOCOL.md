@@ -408,13 +408,16 @@ animation) and `|[silent]` (suppress message).
 > clarify why certain actions, such as Fake Out and Mat Block failing, have occurred,  
 > when there would normally be no in-game messages.
 
+`|-center`
+
+> Appears in Triple Battles when only one Pokemon remains on each side, to indicate
+> that the Pokemon have been automatically centered.
+
 `|-message|MESSAGE`
 
 > Displays a miscellaneous message to the client. These messages are primarily used 
 > for messages from game mods that aren't supported by the client, like rule clauses 
 > such as Sleep Clause, or other metagames with custom messages for specific scenarios. 
-> It is also used in triples battles for the automatic centering of Pokemon when only 
-> one remains on each side.
 
 I'll document all the message types eventually, but for now this should be
 enough to get you started. You can watch the data sent and received from
