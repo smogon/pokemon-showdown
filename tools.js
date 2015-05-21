@@ -536,8 +536,8 @@ module.exports = (function () {
 					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
 
 					var complexList;
-					if (subformat.banlist[i].includes('+')) {
-						if (subformat.banlist[i].includes('++')) {
+					if (subformat.banlist[i].indexOf('++')) {
+						if (subformat.banlist[i].indexOf('++')) {
 							complexList = subformat.banlist[i].split('++');
 							for (var j = 0; j < complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
