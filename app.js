@@ -56,7 +56,7 @@ function runNpm(command) {
 	process.exit(0);
 }
 
-var isLegacyEngine = !global.Map;
+var isLegacyEngine = !(''.includes);
 
 var fs = require('fs');
 var path = require('path');
@@ -66,7 +66,7 @@ try {
 } catch (e) {
 	runNpm('install --production');
 }
-if (isLegacyEngine && !new Map().set()) {
+if (isLegacyEngine && !(''.includes)) {
 	runNpm('update --production');
 }
 
