@@ -39,7 +39,6 @@ exports.BattleStatuses = {
 			}
 		},
 		onEnd: function (target) {
-			this.add('-end', target, 'rampage');
 			target.addVolatile('confusion');
 		},
 		onLockMove: function (pokemon) {
@@ -51,7 +50,11 @@ exports.BattleStatuses = {
 		onStart: function (target, source, sourceEffect) {
 			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
 			if (!result) return result;
-			this.add('-start', target, 'confusion');
+			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+				this.add('-start', target, 'confusion', '[fatigue]');
+			} else {
+				this.add('-start', target, 'confusion');
+			}
 			this.effectData.time = this.random(3, 4);
 		},
 		onEnd: function (target) {
