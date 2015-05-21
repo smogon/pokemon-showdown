@@ -42,7 +42,6 @@ describe('Arena Trap', function () {
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'vaporeon');
 		battle.choose('p1', 'move 2');
 		battle.commitDecisions();
-		assert.ok(battle.p2.active[0].volatiles['telekinesis']);
 		battle.choose('p2', 'switch 2');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'tornadus');

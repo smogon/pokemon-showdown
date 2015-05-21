@@ -249,7 +249,7 @@ exports.BattleScripts = {
 			}
 		}
 		if (move.ohko) { // bypasses accuracy modifiers
-			if (!target.volatiles['bounce'] && !target.volatiles['dig'] && !target.volatiles['dive'] && !target.volatiles['fly'] && !target.volatiles['phantomforce'] && !target.volatiles['shadowforce'] && !target.volatiles['skydrop']) {
+			if (!target.isSemiInvulnerable()) {
 				accuracy = 30;
 				if (pokemon.level >= target.level) {
 					accuracy += (pokemon.level - target.level);
