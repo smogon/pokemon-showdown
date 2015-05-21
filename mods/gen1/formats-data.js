@@ -603,7 +603,7 @@ exports.BattleFormatsData = {
 	jolteon: {
 		randomBattleMoves: ["thunderwave","pinmissile","bodyslam","doublekick","sandattack"],
 		essentialMove: "thunderbolt",
-		tier: "UU"
+		tier: "OU"
 	},
 	flareon: {
 		randomBattleMoves: ["fireblast","bodyslam","hyperbeam","quickattack"],
@@ -643,7 +643,7 @@ exports.BattleFormatsData = {
 	},
 	articuno: {
 		randomBattleMoves: ["blizzard","rest","reflect","icebeam","mimic"],
-		tier: "UU"
+		tier: "OU"
 	},
 	zapdos: {
 		randomBattleMoves: ["thunderbolt","drillpeck","thunderwave","agility"],
