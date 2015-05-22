@@ -292,6 +292,18 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	outrage: {
+		inherit: true,
+		onMoveFail: function (target, source, move) {
+			source.addVolatile('lockedmove');
+		}
+	},
+	petaldance: {
+		inherit: true,
+		onMoveFail: function (target, source, move) {
+			source.addVolatile('lockedmove');
+		}
+	},
 	psywave: {
 		inherit: true,
 		damageCallback: function (pokemon) {
@@ -491,6 +503,12 @@ exports.BattleMovedex = {
 			} else {
 				this.heal(pokemon.maxhp / 2);
 			}
+		}
+	},
+	thrash: {
+		inherit: true,
+		onMoveFail: function (target, source, move) {
+			source.addVolatile('lockedmove');
 		}
 	},
 	triattack: {
