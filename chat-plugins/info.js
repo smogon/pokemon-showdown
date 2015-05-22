@@ -1822,7 +1822,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'rarelyused' || target === 'ru') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3537443/\">np: RU Stage 9</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538971/\">np: RU Stage 10</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538036/\">RU Viability Ranking</a><br />";
 		}
