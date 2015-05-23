@@ -15592,6 +15592,7 @@ exports.BattleMovedex = {
 				this.add('-start', target, 'move: Yawn', '[of] ' + source);
 			},
 			onEnd: function (target) {
+				this.add('-end', target, 'move: Yawn', '[silent]');
 				target.trySetStatus('slp');
 			}
 		},
