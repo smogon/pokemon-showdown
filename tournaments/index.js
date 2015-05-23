@@ -1,5 +1,6 @@
 const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
 const AUTO_DISQUALIFY_WARNING_TIMEOUT = 30 * 1000;
+const AUTO_START_MINIMUM_TIMEOUT = 30 * 1000;
 
 var TournamentGenerators = {
 	roundrobin: require('./generator-round-robin.js').RoundRobin,
@@ -142,6 +143,8 @@ Tournament = (function () {
 					match.room.addRaw("<div class=\"broadcast-red\"><b>The tournament was forcefully ended.</b><br />You can finish playing, but this battle is no longer considered a tournament battle.</div>");
 				}
 			});
+		} else if (this.autoStartTimeout) {
+			clearTimeout(this.autoStartTimeout);
 		}
 		this.isEnded = true;
 		this.room.add('|tournament|forceend');
@@ -381,6 +384,7 @@ Tournament = (function () {
 
 		this.isTournamentStarted = true;
 		this.autoDisqualifyTimeout = Infinity;
+		if (this.autoStartTimeout) clearTimeout(this.autoStartTimeout);
 		this.isBracketInvalidated = true;
 		this.room.add('|tournament|start');
 		this.room.send('|tournament|update|{"isStarted":true}');
@@ -488,6 +492,28 @@ Tournament = (function () {
 			this.onTournamentEnd();
 		} else {
 			this.update();
+		}
+
+		return true;
+	};
+
+	Tournament.prototype.setAutoStartTimeout = function (timeout, output) {
+		if (this.isTournamentStarted) {
+			output.sendReply('|tournament|error|AlreadyStarted');
+			return false;
+		}
+		timeout = parseFloat(timeout);
+		if (timeout < AUTO_START_MINIMUM_TIMEOUT || isNaN(timeout)) {
+			output.sendReply('|tournament|error|InvalidAutoStartTimeout');
+			return false;
+		}
+
+		if (this.autoStartTimeout) clearTimeout(this.autoStartTimeout);
+		if (timeout === Infinity) {
+			this.room.add('|tournament|autostart|off');
+		} else {
+			this.autoStartTimeout = setTimeout(this.startTournament.bind(this, output), timeout);
+			this.room.add('|tournament|autostart|on|' + timeout);
 		}
 
 		return true;
@@ -788,6 +814,17 @@ var commands = {
 			}
 			if (tournament.disqualifyUser(targetUser, this)) {
 				this.privateModCommand("(" + targetUser.name + " was disqualified from the tournament by " + user.name + ")");
+			}
+		},
+		autostart: 'setautostart',
+		setautostart: function (tournament, user, params, cmd) {
+			if (params.length < 1) {
+				return this.sendReply("Usage: " + cmd + " <minutes|off>");
+			}
+			if (params[0].toLowerCase() === 'infinity' || params[0] === '0') params[0] = 'off';
+			var timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0];
+			if (tournament.setAutoStartTimeout(timeout * 60 * 1000, this)) {
+				this.privateModCommand("(The tournament auto start timeout was set to " + params[0] + " by " + user.name + ")");
 			}
 		},
 		autodq: 'setautodq',
