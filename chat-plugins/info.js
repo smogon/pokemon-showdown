@@ -1573,6 +1573,7 @@ var commands = exports.commands = {
 			matched = true;
 			if (target !== 'all') buffer += "Battle with an inverted type chart.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3518146/\">Inverse Battle</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526371/\">Inverse Battle Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'almostanyability' || target === 'aaa') {
 			matched = true;
