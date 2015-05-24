@@ -689,9 +689,10 @@ Validator = (function () {
 													if (lsetData.eggParents.indexOf(dexEntry.species) >= 0) {
 														// We have to test here that the father of both moves doesn't get both by egg breeding
 														var learnsFrom = false;
-														for (var ltype = 0; ltype < dexEntry.learnset[lsetData.hasEggMove].length; ltype++) {
+														var lsetToCheck = (dexEntry.learnset[lsetData.hasEggMove]) ? dexEntry.learnset[lsetData.hasEggMove] : dexEntry.learnset['sketch'];
+														for (var ltype = 0; ltype < lsetToCheck.length; ltype++) {
 															// Save first learning type. After that, only save it if we have egg and it's not egg.
-															learnsFrom = !learnsFrom || learnsFrom === 'E' ? dexEntry.learnset[lsetData.hasEggMove][ltype].charAt(1) : learnsFrom;
+															learnsFrom = !learnsFrom || learnsFrom === 'E' ? lsetToCheck[ltype].charAt(1) : learnsFrom;
 														}
 														// If the previous egg move was learnt by the father through an egg as well:
 														if (learnsFrom === 'E') {
