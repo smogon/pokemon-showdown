@@ -1056,6 +1056,233 @@ var commands = exports.commands = {
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from it's movepool.",
 		"The order of the parameters does not matter."],
 
+	itemsearch: function (target, room, user) {
+		if (!target) return this.parse('/help itemsearch');
+		if (!this.canBroadcast()) return;
+
+		var output = 10;
+		var showAll = false;
+
+		target = target.trim();
+		if (target.substr(target.length - 5) === ', all' || target.substr(target.length - 4) === ',all') {
+			showAll = true;
+			target = target.substr(0, target.length - 5);
+		}
+
+		target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s\/]/g, '');
+		var rawSearch = target.split(' ');
+		var searchedWords = [];
+		var foundItems = [];
+
+		//refine searched words
+		for (var i = 0; i < rawSearch.length; i++) {
+			var newWord = rawSearch[i].trim();
+			if (isNaN(newWord)) newWord = newWord.replace('.', '');
+			switch (newWord) {
+			// words that don't really help identify item removed to speed up search
+			case 'a':
+			case 'an':
+			case 'is':
+			case 'it':
+			case 'its':
+			case 'the':
+			case 'that':
+			case 'which':
+			case 'user':
+			case 'holder':
+			case 'holders':
+				newWord = '';
+				break;
+			// replace variations of common words with standardized versions
+			case 'opponent': newWord = 'attacker'; break;
+			case 'flung': newWord = 'fling'; break;
+			case 'heal': case 'heals':
+			case 'recovers': newWord = 'restores'; break;
+			case 'boost':
+			case 'boosts': newWord = 'raises'; break;
+			case 'weakens': newWord = 'halves'; break;
+			case 'more': newWord = 'increases'; break;
+			case 'super':
+				if (rawSearch[i + 1] === 'effective') {
+					newWord = 'supereffective';
+					rawSearch.splice(i + 1, 1);
+				}
+				break;
+			case 'special': newWord = 'sp'; break;
+			case 'spa':
+				newWord = 'sp';
+				rawSearch.splice(i, 0, 'atk');
+				break;
+			case 'atk':
+			case 'attack':
+				if (rawSearch[i - 1] === 'sp') {
+					newWord = 'atk';
+				} else {
+					newWord = 'attack';
+				}
+				break;
+			case 'spd':
+				newWord = 'sp';
+				rawSearch.splice(i, 0, 'def');
+				break;
+			case 'def':
+			case 'defense':
+				if (rawSearch[i - 1] === 'sp') {
+					newWord = 'def';
+				} else {
+					newWord = 'defense';
+				}
+				break;
+			case 'burns': newWord = 'burn'; break;
+			case 'poisons': newWord = 'poison'; break;
+			default:
+				if (/x[\d\.]+/.test(newWord)) {
+					newWord = newWord.substr(1) + 'x';
+				}
+			}
+			if (!newWord || searchedWords.indexOf(newWord) >= 0) continue;
+			searchedWords.push(newWord);
+		}
+
+		if (searchedWords.length === 0) return this.sendReplyBox("No distinguishing words were used. Try a more specific search.");
+
+		if (searchedWords.indexOf('fling') >= 0) {
+			var basePower = 0;
+			var effect;
+
+			for (var k = 0; k < searchedWords.length; k++) {
+				var wordEff = "";
+				switch (searchedWords[k]) {
+				case 'burn': case 'burns':
+				case 'brn': wordEff = 'brn'; break;
+				case 'paralyze': case 'paralyzes':
+				case 'par': wordEff = 'par'; break;
+				case 'poison': case 'poisons':
+				case 'psn': wordEff = 'psn'; break;
+				case 'toxic':
+				case 'tox': wordEff = 'tox'; break;
+				case 'flinches':
+				case 'flinch': wordEff = 'flinch'; break;
+				case 'badly': wordEff = 'tox'; break;
+				}
+				if (wordEff && effect) {
+					if (!(wordEff === 'psn' && effect === 'tox')) return this.sendReplyBox("Only specify fling effect once.");
+				} else if (wordEff) {
+					effect = wordEff;
+				} else {
+					if (searchedWords[k].substr(searchedWords[k].length - 2) === 'bp' && searchedWords[k].length > 2) searchedWords[k] = searchedWords[k].substr(0, searchedWords[k].length - 2);
+					if (Number.isInteger(Number(searchedWords[k]))) {
+						if (basePower) return this.sendReplyBox("Only specify a number for base power once.");
+						basePower = parseInt(searchedWords[k]);
+					}
+				}
+			}
+
+			for (var n in Tools.data.Items) {
+				var item = Tools.getItem(n);
+				if (!item.fling) continue;
+
+				if (basePower && effect) {
+					if (item.fling.basePower === basePower &&
+					(item.fling.status === effect || item.fling.volatileStatus === effect)) foundItems.push(item.name);
+				} else if (basePower) {
+					if (item.fling.basePower === basePower) foundItems.push(item.name);
+				} else {
+					if (item.fling.status === effect || item.fling.volatileStatus === effect) foundItems.push(item.name);
+				}
+			}
+			if (foundItems.length === 0) return this.sendReplyBox('No items inflict ' + basePower + 'bp damage when used with Fling.');
+		} else if (target.search(/natural ?gift/i) >= 0) {
+			var basePower = 0;
+			var type = "";
+
+			for (var k = 0; k < searchedWords.length; k++) {
+				searchedWords[k] = searchedWords[k].capitalize();
+				if (searchedWords[k] in Tools.data.TypeChart) {
+					if (type) return this.sendReplyBox("Only specify natural gift type once.");
+					type = searchedWords[k];
+				} else {
+					if (searchedWords[k].substr(searchedWords[k].length - 2) === 'bp' && searchedWords[k].length > 2) searchedWords[k] = searchedWords[k].substr(0, searchedWords[k].length - 2);
+					if (Number.isInteger(Number(searchedWords[k]))) {
+						if (basePower) return this.sendReplyBox("Only specify a number for base power once.");
+						basePower = parseInt(searchedWords[k]);
+					}
+				}
+			}
+
+			for (var n in Tools.data.Items) {
+				var item = Tools.getItem(n);
+				if (!item.isBerry) continue;
+
+				if (basePower && type) {
+					if (item.naturalGift.basePower === basePower && item.naturalGift.type === type) foundItems.push(item.name);
+				} else if (basePower) {
+					if (item.naturalGift.basePower === basePower) foundItems.push(item.name);
+				} else {
+					if (item.naturalGift.type === type) foundItems.push(item.name);
+				}
+			}
+			if (foundItems.length === 0) return this.sendReplyBox('No berries inflict ' + basePower + 'bp damage when used with Natural Gift.');
+		} else {
+			var bestMatched = 0;
+			for (var n in Tools.data.Items) {
+				var item = Tools.getItem(n);
+				var matched = 0;
+				// splits words in the description into a toId()-esk format except retaining / and . in numbers
+				var descWords = item.desc;
+				// add more general quantifier words to descriptions
+				if (/[1-9\.]+x/.test(descWords)) descWords += ' increases';
+				if (item.isBerry) descWords += ' berry';
+				descWords = descWords.replace(/super[\-\s]effective/g, 'supereffective');
+				descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s\/]/g, '').replace(/(\D)\./, function (p0, p1) { return p1; }).split(' ');
+
+				for (var k = 0; k < searchedWords.length; k++) {
+					if (descWords.indexOf(searchedWords[k]) >= 0) matched++;
+				}
+
+				if (matched >= bestMatched && matched >= (searchedWords.length * 3 / 5)) foundItems.push(item.name);
+				if (matched > bestMatched) bestMatched = matched;
+			}
+
+			// iterate over found items again to make sure they all are the best match
+			for (var l = 0; l < foundItems.length; l++) {
+				var item = Tools.getItem(foundItems[l]);
+				var matched = 0;
+				var descWords = item.desc;
+				if (/[1-9\.]+x/.test(descWords)) descWords += ' increases';
+				if (item.isBerry) descWords += ' berry';
+				descWords = descWords.replace(/super[\-\s]effective/g, 'supereffective');
+				descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s\/]/g, '').replace(/(\D)\./, function (p0, p1) { return p1; }).split(' ');
+
+				for (var k = 0; k < searchedWords.length; k++) {
+					if (descWords.indexOf(searchedWords[k]) >= 0) matched++;
+				}
+
+				if (matched !== bestMatched) {
+					foundItems.splice(l, 1);
+					l--;
+				}
+			}
+		}
+
+		var resultsStr = "";
+		if (foundItems.length > 0) {
+			if (showAll || foundItems.length <= output + 5) {
+				foundItems.sort();
+				resultsStr += foundItems.join(", ");
+			} else {
+				resultsStr += foundItems.slice(0, output).join(", ") + ", and " + string(foundItems.length - output) + " more. <font color=#999999>Redo the search with ', all' at the end to show all results.</font>";
+			}
+		} else {
+			resultsStr = "No items found. Try a more general search";
+		}
+		return this.sendReplyBox(resultsStr);
+	},
+	itemsearchhelp: ["/itemsearch [move description] - finds items that match the given key words.",
+	"Command accepts natural language. (tip: fewer words tend to work better)",
+	"Searches with \"fling\" in them will find items with the specified Fling behavior.",
+	"Searches with \"natural gift\" in them will find items with the specified Natural Gift behavior."],
+
 	learnset: 'learn',
 	learnall: 'learn',
 	learn5: 'learn',
