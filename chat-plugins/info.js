@@ -1595,10 +1595,6 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a><br />";
 		}
-		if (target === 'all' || target === 'classichackmons' || target === 'hackmons' || target === 'ch') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521887/\">Classic Hackmons</a><br />";
-		}
 		if (target === 'all' || target === 'hiddentype' || target === 'ht') {
 			matched = true;
 			if (target !== 'all') buffer += "Pokémon have an added type determined by their IVs. Same as the Hidden Power type.<br />";
