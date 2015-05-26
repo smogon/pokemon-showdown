@@ -147,20 +147,18 @@ exports.BattleAbilities = {
 		num: 107
 	},
 	"arenatrap": {
-		desc: "Prevents adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or have immunity to Ground.",
-		shortDesc: "Prevents adjacent foes from choosing to switch unless they are immune to Ground.",
+		desc: "Prevents adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or are airborne.",
+		shortDesc: "Prevents adjacent foes from choosing to switch unless they are airborne.",
 		onFoeModifyPokemon: function (pokemon) {
 			if (!this.isAdjacent(pokemon, this.effectData.target)) return;
-			if (!pokemon.runImmunity('Ground', false)) return;
-			if (!pokemon.hasType('Flying') || pokemon.hasItem('ironball') || this.getPseudoWeather('gravity') || pokemon.volatiles['ingrain']) {
+			if (pokemon.isGrounded()) {
 				pokemon.tryTrap(true);
 			}
 		},
 		onFoeMaybeTrapPokemon: function (pokemon, source) {
 			if (!source) source = this.effectData.target;
 			if (!this.isAdjacent(pokemon, source)) return;
-			if (!pokemon.runImmunity('Ground', false)) return;
-			if (!pokemon.hasType('Flying') || pokemon.hasItem('ironball') || this.getPseudoWeather('gravity') || pokemon.volatiles['ingrain']) {
+			if (pokemon.isGrounded()) {
 				pokemon.maybeTrapped = true;
 			}
 		},
