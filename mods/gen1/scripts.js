@@ -33,33 +33,30 @@ exports.BattleScripts = {
 		// Modified stats are declared in BattlePokemon object in battle-engine.js in about line 303.
 		modifyStat: function (stat, modifier) {
 			if (!(stat in this.stats)) return;
-			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1);
+			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1, 999);
 		},
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
 		boostBy: function (boost) {
 			var changed = false;
 			for (var i in boost) {
-				var delta = boost[i];
-				this.boosts[i] += delta;
+				this.boosts[i] += boost[i];
 				if (this.boosts[i] > 6) {
-					delta -= this.boosts[i] - 6;
 					this.boosts[i] = 6;
 				}
 				if (this.boosts[i] < -6) {
-					delta -= this.boosts[i] - (-6);
 					this.boosts[i] = -6;
 				}
-				if (delta) {
+				if (this.boosts[i]) {
 					changed = true;
 					// Recalculate the modified stat
 					if (this.stats[i]) {
 						var stat = this.template.baseStats[i];
 						stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
 						this.modifiedStats[i] = this.stats[i] = Math.floor(stat);
-						if (delta >= 0) {
-							this.modifyStat(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][delta]);
+						if (this.boosts[i] >= 0) {
+							this.modifyStat(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
 						} else {
-							this.modifyStat(i, [100, 66, 50, 40, 33, 28, 25][-delta] / 100);
+							this.modifyStat(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
 						}
 					}
 				}
