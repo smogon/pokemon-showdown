@@ -2151,7 +2151,9 @@ exports.BattleAbilities = {
 	"rockhead": {
 		desc: "This Pokemon does not take recoil damage besides Struggle, Life Orb, and crash damage.",
 		shortDesc: "This Pokemon does not take recoil damage besides Struggle/Life Orb/crash damage.",
-		// Implemented in scripts.js
+		onDamage: function (damage, target, source, effect) {
+			if (effect.id === 'recoil' && this.activeMove.id !== 'struggle') return null;
+		},
 		id: "rockhead",
 		name: "Rock Head",
 		rating: 3,
