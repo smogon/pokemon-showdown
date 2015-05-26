@@ -314,7 +314,7 @@ exports.BattleScripts = {
 			totalDamage = damage;
 		}
 
-		if (move.recoil && (!pokemon.hasAbility('rockhead') || move.id === 'struggle')) {
+		if (move.recoil) {
 			this.damage(this.clampIntRange(Math.round(totalDamage * move.recoil[0] / move.recoil[1]), 1), pokemon, target, 'recoil');
 		}
 
