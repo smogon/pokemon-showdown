@@ -83,9 +83,11 @@ function canTalk(user, room, connection, message) {
 					userGroup = ' ';
 				}
 			}
-			if (!user.autoconfirmed && (room.auth && room.auth[user.userid] || user.group) === ' ' && room.modchat === 'autoconfirmed') {
-				connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
-				return false;
+			if (room.modchat === 'autoconfirmed') {
+				if (!user.autoconfirmed && userGroup === ' ') {
+					connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
+					return false;
+				}
 			} else if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modchat)) {
 				var groupName = Config.groups[room.modchat].name || room.modchat;
 				connection.sendTo(room, "Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
