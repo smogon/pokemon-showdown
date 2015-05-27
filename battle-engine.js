@@ -211,8 +211,6 @@ BattlePokemon = (function () {
 		this.weight = this.template.weight;
 		this.weightkg = this.template.weightkg;
 
-		this.ignore = {};
-
 		this.baseAbility = toId(set.ability);
 		this.ability = this.baseAbility;
 		this.item = toId(set.item);
@@ -370,8 +368,6 @@ BattlePokemon = (function () {
 		this.negateImmunity = {};
 		this.trapped = this.maybeTrapped = false;
 		this.maybeDisabled = false;
-		// reset for ignore settings
-		this.ignore = {};
 		for (var i in this.moveset) {
 			if (this.moveset[i]) this.moveset[i].disabled = false;
 		}
@@ -514,6 +510,12 @@ BattlePokemon = (function () {
 			}
 		}
 		return null;
+	};
+	BattlePokemon.prototype.ignoringAbility = function () {
+		return !!this.volatiles['gastroacid'];
+	};
+	BattlePokemon.prototype.ignoringItem = function () {
+		return !!(this.hasAbility('klutz') || this.volatiles['embargo'] || this.battle.pseudoWeather['magicroom']);
 	};
 	BattlePokemon.prototype.deductPP = function (move, amount, source) {
 		move = this.battle.getMove(move);
@@ -1079,7 +1081,7 @@ BattlePokemon = (function () {
 		return this.battle.getItem(this.item);
 	};
 	BattlePokemon.prototype.hasItem = function (item) {
-		if (this.ignore['Item']) return false;
+		if (this.ignoringItem()) return false;
 		var ownItem = this.item;
 		if (!Array.isArray(item)) {
 			return ownItem === toId(item);
@@ -1111,7 +1113,7 @@ BattlePokemon = (function () {
 	};
 	BattlePokemon.prototype.hasAbility = function (ability) {
 		if (!this.isActive && this.battle.gen >= 5) return false;
-		if (this.ignore['Ability']) return false;
+		if (this.ignoringAbility()) return false;
 		var ownAbility = this.ability;
 		if (!Array.isArray(ability)) {
 			return ownAbility === toId(ability);
@@ -2054,8 +2056,12 @@ Battle = (function () {
 			// it's changed; call it off
 			return relayVar;
 		}
-		if (target.ignore && target.ignore[effect.effectType] && target.ignore[effect.effectType] !== 'A') {
-			this.debug(eventid + ' handler suppressed by Gastro Acid, Klutz or Magic Room');
+		if (eventid !== 'Start' && effect.effectType === 'Item' && (target instanceof BattlePokemon) && target.ignoringItem()) {
+			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
+			return relayVar;
+		}
+		if (eventid !== 'End' && effect.effectType === 'Ability' && (target instanceof BattlePokemon) && target.ignoringAbility()) {
+			this.debug(eventid + ' handler suppressed by Gastro Acid');
 			return relayVar;
 		}
 		if (effect.effectType === 'Weather' && eventid !== 'TryWeather' && !this.runEvent('TryWeather', target)) {
@@ -2227,7 +2233,7 @@ Battle = (function () {
 				// it's changed; call it off
 				continue;
 			}
-			if (thing.ignore && thing.ignore[status.effectType] === 'A') {
+			if (status.effectType === 'Ability' && this.activePokemon && this.activePokemon !== target && !target.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents) {
 				// ignore attacking events
 				var AttackingEvents = {
 					BeforeMove: 1,
@@ -2259,9 +2265,14 @@ Battle = (function () {
 					}
 					continue;
 				}
-			} else if (thing.ignore && thing.ignore[status.effectType]) {
+			} else if (eventid !== 'Start' && status.effectType === 'Item' && (thing instanceof BattlePokemon) && thing.ignoringItem()) {
 				if (eventid !== 'ModifyPokemon' && eventid !== 'Update') {
-					this.debug(eventid + ' handler suppressed by Gastro Acid, Klutz or Magic Room');
+					this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
+				}
+				continue;
+			} else if (eventid !== 'End' && status.effectType === 'Ability' && (thing instanceof BattlePokemon) && thing.ignoringAbility()) {
+				if (eventid !== 'ModifyPokemon' && eventid !== 'Update') {
+					this.debug(eventid + ' handler suppressed by Gastro Acid');
 				}
 				continue;
 			}

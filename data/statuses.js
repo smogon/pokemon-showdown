@@ -263,7 +263,7 @@ exports.BattleStatuses = {
 				pokemon.removeVolatile('choicelock');
 				return;
 			}
-			if (pokemon.ignore['Item']) {
+			if (pokemon.ignoringItem()) {
 				return;
 			}
 			var moves = pokemon.moveset;
@@ -631,7 +631,7 @@ exports.BattleStatuses = {
 		onSwitchIn: function (pokemon) {
 			var type = 'Normal';
 			if (pokemon.ability === 'multitype') {
-				type = this.runEvent('Plate', pokemon);
+				type = pokemon.getItem().onPlate;
 				if (!type || type === true) {
 					type = 'Normal';
 				}

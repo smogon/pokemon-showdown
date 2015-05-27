@@ -518,7 +518,7 @@ exports.BattleAbilities = {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
 					var target = this.sides[i].active[j];
 					if (target === pokemon) continue;
-					if (target && target.hp && target.ability === 'deltastream' && target.ignore['Ability'] !== true) {
+					if (target && target.hp && target.hasAbility('deltastream')) {
 						this.weatherData.source = target;
 						return;
 					}
@@ -546,7 +546,7 @@ exports.BattleAbilities = {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
 					var target = this.sides[i].active[j];
 					if (target === pokemon) continue;
-					if (target && target.hp && target.ability === 'desolateland' && target.ignore['Ability'] !== true) {
+					if (target && target.hp && target.hasAbility('desolateland')) {
 						this.weatherData.source = target;
 						return;
 					}
@@ -1301,11 +1301,7 @@ exports.BattleAbilities = {
 	"klutz": {
 		desc: "This Pokemon's held item has no effect. This Pokemon cannot use Fling successfully. Macho Brace, Power Anklet, Power Band, Power Belt, Power Bracer, Power Lens, and Power Weight still have their effects.",
 		shortDesc: "This Pokemon's held item has no effect, except Macho Brace. Fling cannot be used.",
-		onModifyPokemonPriority: 1,
-		onModifyPokemon: function (pokemon) {
-			if (pokemon.getItem().megaEvolves) return;
-			pokemon.ignore['Item'] = true;
-		},
+		// Item suppression implemented in BattlePokemon.ignoringItem() within battle-engine.js
 		id: "klutz",
 		name: "Klutz",
 		rating: -1,
@@ -1554,18 +1550,7 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Mold Breaker');
 		},
-		onAllyModifyPokemonPriority: 100,
-		onAllyModifyPokemon: function (pokemon) {
-			if (this.activePokemon === this.effectData.target && pokemon !== this.activePokemon) {
-				pokemon.ignore['Ability'] = 'A';
-			}
-		},
-		onFoeModifyPokemonPriority: 100,
-		onFoeModifyPokemon: function (pokemon) {
-			if (this.activePokemon === this.effectData.target) {
-				pokemon.ignore['Ability'] = 'A';
-			}
-		},
+		stopAttackEvents: true,
 		id: "moldbreaker",
 		name: "Mold Breaker",
 		rating: 3.5,
@@ -2001,7 +1986,7 @@ exports.BattleAbilities = {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
 					var target = this.sides[i].active[j];
 					if (target === pokemon) continue;
-					if (target && target.hp && target.ability === 'primordialsea' && target.ignore['Ability'] !== true) {
+					if (target && target.hp && target.hasAbility('primordialsea')) {
 						this.weatherData.source = target;
 						return;
 					}
@@ -2827,16 +2812,7 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Teravolt');
 		},
-		onAllyModifyPokemon: function (pokemon) {
-			if (this.activePokemon === this.effectData.target && pokemon !== this.activePokemon) {
-				pokemon.ignore['Ability'] = 'A';
-			}
-		},
-		onFoeModifyPokemon: function (pokemon) {
-			if (this.activePokemon === this.effectData.target) {
-				pokemon.ignore['Ability'] = 'A';
-			}
-		},
+		stopAttackEvents: true,
 		id: "teravolt",
 		name: "Teravolt",
 		rating: 3.5,
@@ -2977,16 +2953,7 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Turboblaze');
 		},
-		onAllyModifyPokemon: function (pokemon) {
-			if (this.activePokemon === this.effectData.target && pokemon !== this.activePokemon) {
-				pokemon.ignore['Ability'] = 'A';
-			}
-		},
-		onFoeModifyPokemon: function (pokemon) {
-			if (this.activePokemon === this.effectData.target) {
-				pokemon.ignore['Ability'] = 'A';
-			}
-		},
+		stopAttackEvents: true,
 		id: "turboblaze",
 		name: "Turboblaze",
 		rating: 3.5,
