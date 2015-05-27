@@ -525,7 +525,7 @@ var commands = exports.commands = {
 			return this.sendReply("User '" + name + "' is offline and unauthed, and so can't be promoted.");
 		}
 
-		var currentGroup = ((room.auth && room.auth[userid]) || (room.isPrivate !== true && user.group) || ' ');
+		var currentGroup = ((room.auth && room.auth[userid]) || (room.isPrivate !== true && targetUser.group) || ' ');
 		var nextGroup = target || Users.getNextGroupSymbol(currentGroup, cmd === 'roomdemote', true);
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!Config.groups[nextGroup]) {
