@@ -525,7 +525,7 @@ var commands = exports.commands = {
 			return this.sendReply("User '" + name + "' is offline and unauthed, and so can't be promoted.");
 		}
 
-		var currentGroup = ((room.auth && room.auth[userid]) || ' ')[0];
+		var currentGroup = ((room.auth && room.auth[userid]) || (room.isPrivate !== true && user.group) || ' ');
 		var nextGroup = target || Users.getNextGroupSymbol(currentGroup, cmd === 'roomdemote', true);
 		if (target === 'deauth') nextGroup = Config.groupsranking[0];
 		if (!Config.groups[nextGroup]) {
@@ -541,10 +541,10 @@ var commands = exports.commands = {
 			return this.sendReply("User '" + name + "' is already a " + groupName + " in this room.");
 		}
 		if (currentGroup !== ' ' && !user.can('room' + (Config.groups[currentGroup] ? Config.groups[currentGroup].id : 'voice'), null, room)) {
-			return this.sendReply("/" + cmd + " - Access denied for promoting from " + (Config.groups[currentGroup] ? Config.groups[currentGroup].name : "an undefined group") + ".");
+			return this.sendReply("/" + cmd + " - Access denied for promoting/demoting from " + (Config.groups[currentGroup] ? Config.groups[currentGroup].name : "an undefined group") + ".");
 		}
 		if (nextGroup !== ' ' && !user.can('room' + Config.groups[nextGroup].id, null, room)) {
-			return this.sendReply("/" + cmd + " - Access denied for promoting to " + Config.groups[nextGroup].name + ".");
+			return this.sendReply("/" + cmd + " - Access denied for promoting/demoting to " + Config.groups[nextGroup].name + ".");
 		}
 
 		if (nextGroup === ' ') {
