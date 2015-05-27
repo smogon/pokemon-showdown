@@ -135,9 +135,6 @@ if (!process.send) {
 			name = name.substr(1);
 		}
 		if (name.length > 18) name = name.substr(0, 18);
-		if (Config.namefilter) {
-			name = Config.namefilter(name);
-		}
 		return name.trim();
 	};
 
