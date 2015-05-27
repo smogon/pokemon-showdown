@@ -123,7 +123,9 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onStart: function (target) {
-			this.add('-item', target, 'Air Balloon');
+			if (!target.ignoringItem()) {
+				this.add('-item', target, 'Air Balloon');
+			}
 		},
 		onImmunity: function (type) {
 			if (type === 'Ground') return false;
