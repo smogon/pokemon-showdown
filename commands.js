@@ -1218,6 +1218,7 @@ var commands = exports.commands = {
 		this.add('|raw|<div class="broadcast-blue"><b>' + target + '</b></div>');
 		this.logModCommand(user.name + " declared " + target);
 	},
+	htmldeclarehelp: ["/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: ~"],
 
 	gdeclare: 'globaldeclare',
 	globaldeclare: function (target, room, user) {
