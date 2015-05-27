@@ -54,11 +54,12 @@ exports.query = function queryDnsbl(ip, callback) {
 	queryDnsblLoop(ip, callback, reversedIpDot, 0);
 };
 
-var Cidr = require('./cidr.js');
-var rangeLeaseweb = Cidr.checker('207.244.64.0/18');
-var rangeLeaseweb2 = Cidr.checker('209.58.128.0/18');
-var rangeLeaseweb3 = Cidr.checker('103.254.152.0/22');
-var rangeVoxility = Cidr.checker('5.254.64.0/20');
+// require cidr and dns separately for ease of hotpatching
+var cidr = require('./cidr.js');
+var rangeLeaseweb = cidr.checker('207.244.64.0/18');
+var rangeLeaseweb2 = cidr.checker('209.58.128.0/18');
+var rangeLeaseweb3 = cidr.checker('103.254.152.0/22');
+var rangeVoxility = cidr.checker('5.254.64.0/20');
 
 exports.reverse = function reverseDns(ip, callback) {
 	if (ip) {
