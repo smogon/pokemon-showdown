@@ -405,6 +405,14 @@ exports.BattleMovedex = {
 			this.useMove(move, pokemon);
 		}
 	},
+	solarbeam: {
+		inherit: true,
+		onBasePower: function (basePower, pokemon, target) {
+			if (this.isWeather('raindance')) {
+				return this.chainModify(0.5);
+			}
+		}
+	},
 	spikes: {
 		inherit: true,
 		effect: {
