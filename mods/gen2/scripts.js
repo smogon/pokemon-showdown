@@ -350,7 +350,7 @@ exports.BattleScripts = {
 
 		// Happens after crit calculation
 		if (basePower) {
-			basePower = this.runEvent('BasePower', pokemon, target, move, basePower);
+			basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 			if (move.basePowerModifier) {
 				basePower *= move.basePowerModifier;
 			}
