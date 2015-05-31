@@ -370,21 +370,26 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "2v2 Doubles",
+		name: "Linked",
 		section: "OM of the Month",
 		column: 2,
 
-		gameType: 'doubles',
-		ruleset: ['Doubles OU'],
-		banlist: ['Perish Song'],
-		validateTeam: function (team, format) {
-			if (team.length > 4) return ['You may only bring up to four Pokémon.'];
-		},
-		onBegin: function () {
-			this.p1.pokemon = this.p1.pokemon.slice(0, 2);
-			this.p1.pokemonLeft = this.p1.pokemon.length;
-			this.p2.pokemon = this.p2.pokemon.slice(0, 2);
-			this.p2.pokemonLeft = this.p2.pokemon.length;
+		mod: 'linked',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed',
+			'Dialga', 'Genesect', 'Gengar-Mega', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kangaskhan-Mega',
+			'Kyogre', 'Kyurem-White', 'Lucario-Mega', 'Lugia', 'Mawile-Mega', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram',
+			'Salamence-Mega', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite'
+		],
+		validateSet: function (set) {
+			if (set.moves && set.moves.length >= 2) {
+				var moves = [toId(set.moves[0]), toId(set.moves[1])];
+				if (moves.indexOf('superfang') < 0) return;
+				if (moves.indexOf('seismictoss') >= 0 || moves.indexOf('nightshade') >= 0) {
+					return ["Linking Super Fang with Seismic Toss or Night Shade is banned"];
+				}
+			}
 		}
 	},
 	{
