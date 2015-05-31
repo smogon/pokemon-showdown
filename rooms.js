@@ -403,7 +403,7 @@ var GlobalRoom = (function () {
 	GlobalRoom.prototype.searchBattle = function (user, formatid) {
 		if (!user.connected) return;
 
-		formatid = toId(formatid);
+		formatid = Tools.getFormat(formatid).id;
 
 		user.prepBattle(formatid, 'search', null, this.finishSearchBattle.bind(this, user, formatid));
 	};
