@@ -1662,6 +1662,7 @@ Battle = (function () {
 	Battle.prototype.lastMoveLine = 0;
 	Battle.prototype.reportPercentages = false;
 	Battle.prototype.supportCancel = false;
+	Battle.prototype.events = null;
 
 	Battle.prototype.toString = function () {
 		return 'Battle: ' + this.format;
@@ -2368,6 +2369,17 @@ Battle = (function () {
 				statuses.push({status: status, callback: status[callbackType], statusData: this.formatData, end: function () {}, thing: thing, priority: status[callbackType + 'Priority'] || 0});
 				this.resolveLastPriority(statuses, callbackType);
 			}
+			if (this.events && this.events[callbackType] !== undefined) {
+				var handler, statusData;
+				for (var i = 0; i < this.events[callbackType].length; i++) {
+					handler = this.events[callbackType][i];
+					switch (handler.target.effectType) {
+					case 'Format':
+						statusData = this.formatData;
+					}
+					statuses.push({status: handler.target, callback: handler.callback, statusData: statusData, end: function () {}, thing: thing, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
+				}
+			}
 			if (bubbleDown) {
 				statuses = statuses.concat(this.getRelevantEffectsInner(this.p1, callbackType, null, null, false, true, getAll));
 				statuses = statuses.concat(this.getRelevantEffectsInner(this.p2, callbackType, null, null, false, true, getAll));
@@ -2469,6 +2481,61 @@ Battle = (function () {
 			statuses = statuses.concat(this.getRelevantEffectsInner(thing.side, callbackType, foeCallbackType, null, true, false, getAll));
 		}
 		return statuses;
+	};
+	/**
+	 * Use this function to attach custom event handlers to a battle. See Battle#runEvent for
+	 * more information on how to write callbacks for event handlers.
+	 *
+	 * Try to use this sparingly. Most event handlers can be simply placed in a format instead.
+	 *
+	 *     this.on(eventid, target, callback)
+	 * will set the callback as an event handler for the target when eventid is called with the
+	 * default priority. Currently only valid formats are supported as targets but this will
+	 * eventually be expanded to support other target types.
+	 *
+	 *     this.on(eventid, target, priority, callback)
+	 * will set the callback as an event handler for the target when eventid is called with the
+	 * provided priority. Priority can either be a number or an object that contains the priority,
+	 * order, and subOrder for the evend handler as needed (undefined keys will use default values)
+	 */
+	Battle.prototype.on = function (eventid, target /*[, priority], callback*/) {
+		if (!eventid) throw TypeError("Event handlers must have an event to listen to");
+		if (!target) throw TypeError("Event handlers must have a target");
+		if (arguments.length < 3) throw TypeError("Event handlers must have a callback");
+
+		if (target.effectType !== 'Format') {
+			throw TypeError("" + target.effectType + " targets are not supported at this time");
+		}
+
+		var callback, priority, order, subOrder;
+		if (arguments.length === 3) {
+			callback = arguments[2];
+			priority = 0;
+			order = false;
+			subOrder = 0;
+		} else {
+			callback = arguments[3];
+			var data = arguments[2];
+			if (typeof data === 'object') {
+				priority = data['priority'] || 0;
+				order = data['order'] || false;
+				subOrder = data['subOrder'] || 0;
+			} else {
+				priority = data || 0;
+				order = false;
+				subOrder = 0;
+			}
+		}
+
+		var eventHandler = {callback: callback, target: target, priority: priority, order: order, subOrder: subOrder};
+
+		var callbackType = 'on' + eventid;
+		if (!this.events) this.events = {};
+		if (this.events[callbackType] === undefined) {
+			this.events[callbackType] = [eventHandler];
+		} else {
+			this.events[callbackType].push(eventHandler);
+		}
 	};
 	Battle.prototype.getPokemon = function (id) {
 		if (typeof id !== 'string') id = id.id;
