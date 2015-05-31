@@ -20,7 +20,7 @@ describe('Thousand Arrows', function () {
 	it('should ignore type effectiveness on the first hit against Flying-type Pokemon', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Ho-Oh", ability: 'pressure', item: 'weaknesspolicy', moves: ['recover']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Ho-Oh", ability: 'shellarmor', item: 'weaknesspolicy', moves: ['recover']}]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].boosts.atk, 0);
 		assert.strictEqual(battle.p2.active[0].boosts.spa, 0);

@@ -2233,7 +2233,7 @@ Battle = (function () {
 				// it's changed; call it off
 				continue;
 			}
-			if (status.effectType === 'Ability' && this.activePokemon && this.activePokemon !== target && !target.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents) {
+			if (status.effectType === 'Ability' && this.activePokemon && this.activePokemon !== thing && !this.activePokemon.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents) {
 				// ignore attacking events
 				var AttackingEvents = {
 					BeforeMove: 1,

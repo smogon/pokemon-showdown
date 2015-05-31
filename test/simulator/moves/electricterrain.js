@@ -68,7 +68,7 @@ describe('Electric Terrain', function () {
 
 	it('should cause Rest to fail on grounded Pokemon', function () {
 		battle = BattleEngine.Battle.construct();
-		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain', 'rest']}]);
+		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'shellarmor', moves: ['electricterrain', 'rest']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest']}]);
 		battle.commitDecisions();
 		battle.choose('p1', 'move 2');
