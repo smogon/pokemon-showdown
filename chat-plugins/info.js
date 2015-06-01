@@ -1597,6 +1597,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'averagemons') {
 			matched = true;
+			if (target !== 'all') buffer += "Every Pokémon has a stat spread of 100/100/100/100/100/100.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a><br />";
 		}
 		if (target === 'all' || target === 'hiddentype' || target === 'ht') {
