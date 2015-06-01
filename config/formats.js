@@ -368,21 +368,31 @@ exports.Formats = [
 
 		mod: 'linked',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed',
-			'Dialga', 'Genesect', 'Gengar-Mega', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kangaskhan-Mega',
-			'Kyogre', 'Kyurem-White', 'Lucario-Mega', 'Lugia', 'Mawile-Mega', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram',
-			'Salamence-Mega', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite'
+		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Genesect', 'Giratina',
+			'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza',
+			'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew'
 		],
 		validateSet: function (set) {
 			if (set.moves && set.moves.length >= 2) {
 				var moves = [toId(set.moves[0]), toId(set.moves[1])];
 				if (moves.indexOf('superfang') < 0) return;
-				if (moves.indexOf('seismictoss') >= 0 || moves.indexOf('nightshade') >= 0) {
-					return ["Linking Super Fang with Seismic Toss or Night Shade is banned"];
+				if (moves.indexOf('nightshade') >= 0 || moves.indexOf('seismictoss') >= 0) {
+					return ["Linking Super Fang with Night Shade or Seismic Toss is banned."];
 				}
 			}
 		}
+	},
+	{
+		name: "Averagemons",
+		section: "OM of the Month",
+
+		mod: 'averagemons',
+		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview'],
+		banlist: ['Sableye + Prankster', 'Shedinja', 'Smeargle',
+			'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Gengarite', 'Kangaskhanite', 'Light Ball', 'Mawilite', 'Medichamite', 'Soul Dew', 'Thick Club',
+			'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag'
+		]
 	},
 	{
 		name: "[Seasonal] You are (not) prepared",
@@ -437,19 +447,19 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "CAP",
+		name: "Battle Factory",
 		section: "Other Metagames",
 		column: 2,
 
-		ruleset: ['OU'],
-		banlist: ['Allow CAP']
-	},
-	{
-		name: "Battle Factory",
-		section: "Other Metagames",
-
 		team: 'randomFactory',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod']
+	},
+	{
+		name: "CAP",
+		section: "Other Metagames",
+
+		ruleset: ['OU'],
+		banlist: ['Allow CAP']
 	},
 	{
 		name: "Battle Cup 1v1",
@@ -589,16 +599,22 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Averagemons",
+		name: "2v2 Doubles",
 		section: "Other Metagames",
 
-		mod: 'averagemons',
+		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Sableye + Prankster', 'Shedinja', 'Smeargle',
-			'DeepSeaScale', 'DeepSeaTooth', 'Eviolite', 'Gengarite', 'Kangaskhanite', 'Light Ball', 'Mawilite', 'Medichamite', 'Soul Dew', 'Thick Club',
-			'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag'
-		]
+		ruleset: ['Doubles OU'],
+		banlist: ['Perish Song'],
+		validateTeam: function (team, format) {
+			if (team.length > 4) return ['You may only bring up to four Pokémon.'];
+		},
+		onBegin: function () {
+			this.p1.pokemon = this.p1.pokemon.slice(0, 2);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 2);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
 	},
 	{
 		name: "Hidden Type",
@@ -607,22 +623,6 @@ exports.Formats = [
 		searchShow: false,
 		mod: 'hiddentype',
 		ruleset: ['OU']
-	},
-	{
-		name: "Middle Cup",
-		section: "Other Metagames",
-
-		searchShow: false,
-		maxLevel: 50,
-		defaultLevel: 50,
-		validateSet: function (set) {
-			var template = this.getTemplate(set.species || set.name);
-			if (!template.evos || template.evos.length === 0 || !template.prevo) {
-				return [set.species + " is not the middle Pokémon in an evolution chain."];
-			}
-		},
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: ['Chansey', 'Frogadier', 'Eviolite']
 	},
 	{
 		name: "OU Theorymon",
