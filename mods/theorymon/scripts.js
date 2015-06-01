@@ -28,5 +28,6 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'aggronmega').types = ['Steel', 'Dragon'];
 		this.modData('Learnsets', 'floatzel').learnset.bellydrum = ['6T'];
 		this.modData('Pokedex', 'forretress').abilities['1'] = 'Water Absorb';
+		this.modData('Learnsets', 'bronzong').learnset.recover = ['6T'];
 	}
 };
