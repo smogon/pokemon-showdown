@@ -502,6 +502,17 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
+	lowkick: {
+		inherit: true,
+		desc: "Deals damage to the target with a 30% chance to flinch.",
+		shortDesc: "30% chance to flinch the target.",
+		accuracy: 90,
+		basePower: 50,
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch'
+		}
+	},
 	metronome: {
 		inherit: true,
 		onHit: function (target) {
