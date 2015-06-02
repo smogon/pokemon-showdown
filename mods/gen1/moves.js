@@ -502,10 +502,6 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	lowkick: {
-		inherit: true,
-		accuracy: 90
-	},
 	metronome: {
 		inherit: true,
 		onHit: function (target) {
