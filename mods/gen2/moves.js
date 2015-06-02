@@ -205,7 +205,6 @@ exports.BattleMovedex = {
 	},
 	lowkick: {
 		inherit: true,
-		accuracy: 90,
 		basePower: 50,
 		basePowerCallback: undefined,
 		secondary: {
