@@ -1022,7 +1022,7 @@ exports.BattleScripts = {
 
 		return counter;
 	},
-	randomSet: function (template, slot, noMega) {
+	randomSet: function (template, slot, teamDetails) {
 		if (slot === undefined) slot = 1;
 		var baseTemplate = (template = this.getTemplate(template));
 		var name = template.name;
@@ -1036,6 +1036,8 @@ exports.BattleScripts = {
 			require('../crashlogger.js')(fakeErr, 'The randbat set generator');
 		}
 
+		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};
+
 		// Castform-Sunny and Castform-Rainy can be chosen
 		if (template.num === 351) {
 			name = 'Castform';
@@ -1046,7 +1048,7 @@ exports.BattleScripts = {
 		}
 
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!noMega && this.hasMegaEvo(template)) {
+		if (!teamDetails && this.hasMegaEvo(template)) {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[this.random(template.otherFormes.length)]);
 		}
@@ -1209,7 +1211,7 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'stealthrock':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest']) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock > 2) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
 					if (counter.setupType || counter.Physical + counter.Special < 2) rejected = true;
@@ -1905,7 +1907,7 @@ exports.BattleScripts = {
 		var baseFormes = {};
 		var uberCount = 0;
 		var puCount = 0;
-		var megaCount = 0;
+		var teamDetails = {megaCount: 0, stealthRock: 0};
 
 		while (pokemonPool.length && pokemonLeft < 6) {
 			var template = this.getTemplate(this.sampleNoReplace(pokemonPool));
@@ -1989,7 +1991,7 @@ exports.BattleScripts = {
 				}
 			}
 
-			var set = this.randomSet(template, pokemon.length, megaCount);
+			var set = this.randomSet(template, pokemon.length, teamDetails);
 
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
@@ -2005,7 +2007,7 @@ exports.BattleScripts = {
 			// Limit the number of Megas to one
 			var forme = template.otherFormes && this.getTemplate(template.otherFormes[0]);
 			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
-			if (isMegaSet && megaCount > 0) continue;
+			if (isMegaSet && teamDetails.megaCount > 0) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2030,8 +2032,9 @@ exports.BattleScripts = {
 				puCount++;
 			}
 
-			// Increment mega and base species counters
-			if (isMegaSet) megaCount++;
+			// Increment mega, stealthrock, and base species counters
+			if (isMegaSet) teamDetails.megaCount++;
+			if (set.moves.indexOf('stealthrock') >= 0) teamDetails.stealthRock++;
 			baseFormes[template.baseSpecies] = 1;
 		}
 		return pokemon;
