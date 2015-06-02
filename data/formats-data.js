@@ -1882,8 +1882,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	magcargo: {
-		randomBattleMoves: ["recover","lavaplume","toxic","hiddenpowergrass","stealthrock","fireblast","earthpower","shellsmash","ancientpower"],
-		randomDoubleBattleMoves: ["protect","heatwave","willowisp","shellsmash","hiddenpowergrass","ancientpower","stealthrock","fireblast","earthpower"],
+		randomBattleMoves: ["recover","lavaplume","toxic","hiddenpowergrass","stealthrock","fireblast","earthpower","ancientpower"],
+		randomDoubleBattleMoves: ["protect","heatwave","willowisp","hiddenpowergrass","ancientpower","stealthrock","fireblast","earthpower"],
 		eventPokemon: [
 			{"generation":3,"level":38,"moves":["refresh","heatwave","earthquake","flamethrower"]}
 		],
