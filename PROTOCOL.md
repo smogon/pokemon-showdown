@@ -260,6 +260,11 @@ etc). `NAME` is the nickname of the Pokemon performing the action.
 > `switch` means it was intentional, while `drag` means it was unintentional
 > (forced by Whirlwind, Roar, etc).
 
+`|swap|POKEMON|POSITION`
+
+> Moves already active `POKEMON` to active field `POSITION` where the
+> leftmost position is 0 and each position to the right counts up by 1.
+
 `|detailschange|POKEMON|FORME|HP STATUS` or 
 `|detailschange|POKEMON|FORME, GENDER|HP STATUS` or 
 `|-formechange|POKEMON|FORME|HP STATUS`
@@ -423,6 +428,65 @@ I'll document all the message types eventually, but for now this should be
 enough to get you started. You can watch the data sent and received from
 the server on a regular connection, or look at the client source code
 for a full list of message types.
+
+**Action requests**
+
+These are how the client sends the player's decisions to the server. All
+requests except `/undo` can be sent with `|RQID` at the end. `RQID` is
+`REQUEST.rqid` from `|request|`. Each `RQID` is a unique number used to
+identify which action the request was intended for and is used to protect
+against race conditions involving `/undo` (the cancel button).
+
+If an invalid request is sent, the game will replace the missing or
+erroneous request with a valid choice, which is usually the first usable
+move. 
+
+`|/team ORDER`
+
+> Chooses the team order. Numbers not listed are displaced to the back by swapping
+> them with the number that took their place. For example `/team 25` sets the team
+> order from default to 253416.
+
+`|/move NUMBER TARGET`
+
+> Uses your active Pokemon's `NUMBER`th move on `TARGET` Pokemon. `NUMBER` is usually
+> a number ranging from 1 to 4 (although it can range up to 24 in Custom Games where
+> Pokemon can have that many moves).
+>
+> `TARGET` is optional and only needs to be specified for single target moves in
+> doubles/triples formats. Moves with `TARGET` specify which position they are trying
+> to use the move on as a number wherein the opposing Pokemon are positive integers
+> counting up from `1` starting on the right. Ally Pokemon targets are negative
+> integers counting down from `-1` starting on the left. 
+>
+> If `mega` is added as a final parameter, the Pokemon will Mega Evolve if possible.
+
+`|/switch NUMBER`
+
+> Switches the active Pokemon with the `NUMBER`th Pokemon on the team. In cases where
+> a Pokemon is KOed, their replacement is also chosen with `/switch`. This should
+> correspond to a non-active, non-fainted Pokemon, which means `NUMBER` should be
+> between 2 and 6.
+
+`|/choose ACTION,ACTION,ACTION`
+
+> For doubles/triples formats, decisions are sent for all team positions in the same
+> line separated by commas. `ACTION` can be any of the following: `move`, `switch`,
+> `shift`, `pass`.
+>
+> `move` and `switch` use the same syntax as their respective commands explained above
+> except without the `/`. In triples, `/choose shift` requests to `|swap|` the current
+> outside Pokemon to the middle team position. pass is used to indicate that the Pokemon
+> in that slot is not performing an action, for instance, because the Pokemon is fainted
+> and you have no non-fainted Pokemon to replace it with, or because the Pokemon is not
+> fainted while you are switching in replacements for fainted Pokemon. For example,
+> `/choose move 1 2,move 4 -1,pass` will have the leftmost Pokemon attack the opponent's
+> middle Pokemon with its first move, the middle Pokemon will attack its ally to the 
+> left with its fourth move, and the third team slot is empty.
+
+`|/undo`
+
+> Attempts to cancel the last request so a new one can be made.
 
 ####Global messages
 
