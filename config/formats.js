@@ -371,14 +371,19 @@ exports.Formats = [
 		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Genesect', 'Giratina',
 			'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza',
 			'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew'
+			'Gengarite', 'Kangaskhanite', "King's Rock", 'Lucarionite', 'Mawilite', 'Razor Claw', 'Salamencite', 'Soul Dew'
 		],
 		validateSet: function (set) {
 			if (set.moves && set.moves.length >= 2) {
 				var moves = [toId(set.moves[0]), toId(set.moves[1])];
-				if (moves.indexOf('superfang') < 0) return;
-				if (moves.indexOf('nightshade') >= 0 || moves.indexOf('seismictoss') >= 0) {
+				if (moves.indexOf('craftyshield') >= 0 || moves.indexOf('detect') >= 0 || moves.indexOf('kingsshield') >= 0 || moves.indexOf('protect') >= 0 || moves.indexOf('spikyshield') >= 0) {
+					return ["Linking protect moves is banned."];
+				}
+				if (moves.indexOf('superfang') >= 0 && (moves.indexOf('nightshade') >= 0 || moves.indexOf('seismictoss') >= 0)) {
 					return ["Linking Super Fang with Night Shade or Seismic Toss is banned."];
+				}
+				if (this.getMove(moves[0]).flags['charge'] || this.getMove(moves[1]).flags['charge']) {
+					return ["Linking two turn moves is banned."];
 				}
 			}
 		}
