@@ -371,7 +371,7 @@ exports.Formats = [
 		banlist: ['Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Genesect', 'Giratina',
 			'Giratina-Origin', 'Greninja', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza',
 			'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Gengarite', 'Kangaskhanite', "King's Rock", 'Lucarionite', 'Mawilite', 'Razor Claw', 'Salamencite', 'Soul Dew'
+			'Gengarite', 'Kangaskhanite', "King's Rock", 'Lucarionite', 'Mawilite', 'Razor Fang', 'Salamencite', 'Soul Dew'
 		],
 		validateSet: function (set) {
 			if (set.moves && set.moves.length >= 2) {
