@@ -29,5 +29,6 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'floatzel').learnset.bellydrum = ['6T'];
 		this.modData('Pokedex', 'forretress').abilities['1'] = 'Water Absorb';
 		this.modData('Learnsets', 'bronzong').learnset.recover = ['6T'];
+		this.modData('Learnsets', 'sandslash').learnset.thousandarrows = ['6T'];
 	}
 };
