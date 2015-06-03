@@ -1048,7 +1048,7 @@ exports.BattleScripts = {
 		}
 
 		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!teamDetails && this.hasMegaEvo(template)) {
+		if (!teamDetails.megaCount && this.hasMegaEvo(template)) {
 			// If there's more than one mega evolution, randomly pick one
 			template = this.getTemplate(template.otherFormes[this.random(template.otherFormes.length)]);
 		}
