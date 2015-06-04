@@ -2750,6 +2750,7 @@ Battle = (function () {
 				pokemon.newlySwitched = false;
 				pokemon.disabledMoves = {};
 				this.runEvent('DisableMove', pokemon);
+				if (!pokemon.ateBerry) pokemon.disableMove('belch');
 				if (pokemon.lastAttackedBy) {
 					if (pokemon.lastAttackedBy.pokemon.isActive) {
 						pokemon.lastAttackedBy.thisTurn = false;
