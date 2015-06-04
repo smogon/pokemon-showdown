@@ -2162,6 +2162,7 @@ var commands = exports.commands = {
 	 *********************************************************/
 
 	commands: 'help',
+	cmds: 'help',
 	h: 'help',
 	'?': 'help',
 	help: function (target, room, user) {
