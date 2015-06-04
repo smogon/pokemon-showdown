@@ -834,7 +834,8 @@ exports.BattleMovedex = {
 	},
 	outrage: {
 		inherit: true,
-		pp: 15
+		pp: 15,
+		onAfterMove: function () {}
 	},
 	payback: {
 		inherit: true,
@@ -848,7 +849,8 @@ exports.BattleMovedex = {
 	petaldance: {
 		inherit: true,
 		basePower: 90,
-		pp: 20
+		pp: 20,
+		onAfterMove: function () {}
 	},
 	poisongas: {
 		inherit: true,
@@ -1067,7 +1069,8 @@ exports.BattleMovedex = {
 	thrash: {
 		inherit: true,
 		basePower: 90,
-		pp: 20
+		pp: 20,
+		onAfterMove: function () {}
 	},
 	torment: {
 		inherit: true,

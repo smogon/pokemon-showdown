@@ -494,7 +494,8 @@ exports.BattleMovedex = {
 	outrage: {
 		inherit: true,
 		basePower: 90,
-		pp: 15
+		pp: 15,
+		onAfterMove: function () {}
 	},
 	overheat: {
 		inherit: true,
@@ -503,7 +504,8 @@ exports.BattleMovedex = {
 	petaldance: {
 		inherit: true,
 		basePower: 70,
-		pp: 20
+		pp: 20,
+		onAfterMove: function () {}
 	},
 	poisongas: {
 		inherit: true,
@@ -672,7 +674,8 @@ exports.BattleMovedex = {
 	thrash: {
 		inherit: true,
 		basePower: 90,
-		pp: 20
+		pp: 20,
+		onAfterMove: function () {}
 	},
 	tickle: {
 		inherit: true,

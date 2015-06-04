@@ -298,12 +298,22 @@ exports.BattleMovedex = {
 		inherit: true,
 		onMoveFail: function (target, source, move) {
 			source.addVolatile('lockedmove');
+		},
+		onAfterMove: function (pokemon) {
+			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+				pokemon.removeVolatile('lockedmove');
+			}
 		}
 	},
 	petaldance: {
 		inherit: true,
 		onMoveFail: function (target, source, move) {
 			source.addVolatile('lockedmove');
+		},
+		onAfterMove: function (pokemon) {
+			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+				pokemon.removeVolatile('lockedmove');
+			}
 		}
 	},
 	psywave: {
@@ -519,6 +529,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		onMoveFail: function (target, source, move) {
 			source.addVolatile('lockedmove');
+		},
+		onAfterMove: function (pokemon) {
+			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+				pokemon.removeVolatile('lockedmove');
+			}
 		}
 	},
 	triattack: {
