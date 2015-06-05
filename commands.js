@@ -236,7 +236,8 @@ var commands = exports.commands = {
 	},
 	backhelp: ["/back - Unblocks challenges and/or private messages, if either are blocked."],
 
-	makechatroom: function (target, room, user) {
+	makeprivatechatroom: 'makechatroom',
+	makechatroom: function (target, room, user, connection, cmd) {
 		if (!this.can('makeroom')) return;
 
 		// `,` is a delimiter used by a lot of /commands
@@ -250,7 +251,15 @@ var commands = exports.commands = {
 		if (!id) return this.parse('/help makechatroom');
 		if (Rooms.rooms[id]) return this.sendReply("The room '" + target + "' already exists.");
 		if (Rooms.global.addChatRoom(target)) {
-			return this.sendReply("The room '" + target + "' was created.");
+			if (cmd === 'makeprivatechatroom') {
+				var targetRoom = Rooms.search(target);
+				targetRoom.isPrivate = true;
+				targetRoom.chatRoomData.isPrivate = true;
+				Rooms.global.writeChatRoomData();
+				return this.sendReply("The private chat room '" + target + "' was created.");
+			} else {
+				return this.sendReply("The chat room '" + target + "' was created.");
+			}
 		}
 		return this.sendReply("An error occurred while trying to create the room '" + target + "'.");
 	},
