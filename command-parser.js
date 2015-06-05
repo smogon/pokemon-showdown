@@ -55,7 +55,7 @@ var modlog = exports.modlog = {lobby: fs.createWriteStream(path.resolve(__dirnam
  * Can this user talk?
  * Shows an error message if not.
  */
-function canTalk(user, room, connection, message) {
+function canTalk(user, room, connection, message, targetUser) {
 	if (!user.named) {
 		connection.popup("You must choose a name before you can talk.");
 		return false;
@@ -125,7 +125,7 @@ function canTalk(user, room, connection, message) {
 		}
 
 		if (Config.chatfilter) {
-			return Config.chatfilter(message, user, room, connection);
+			return Config.chatfilter(message, user, room, connection, targetUser);
 		}
 		return message;
 	}
@@ -328,9 +328,9 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				}
 				return parse(message, room, user, connection, levelsDeep + 1);
 			},
-			canTalk: function (message, relevantRoom) {
+			canTalk: function (message, relevantRoom, targetUser) {
 				var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
-				return canTalk(user, innerRoom, connection, message);
+				return canTalk(user, innerRoom, connection, message, targetUser);
 			},
 			canHTML: function (html) {
 				html = '' + (html || '');
