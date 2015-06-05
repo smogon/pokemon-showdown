@@ -4750,7 +4750,7 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["calmmind","rockpolish","earthpower","focusblast","psychic","sludgewave","stealthrock","knockoff"],
 		randomDoubleBattleMoves: ["earthpower","focusblast","rockpolish","hiddenpowerice","psychic","sludgebomb","protect"],
 		dreamWorldPokeball: 'dreamball',
-		tier: "OU"
+		tier: "Uber"
 	},
 	landorustherian: {
 		randomBattleMoves: ["swordsdance","rockpolish","earthquake","stoneedge","uturn","superpower","stealthrock"],
