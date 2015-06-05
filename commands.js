@@ -158,7 +158,7 @@ var commands = exports.commands = {
 			return this.popupReply("You are blocking private messages right now.");
 		}
 
-		target = this.canTalk(target, null);
+		target = this.canTalk(target, null, targetUser);
 		if (!target) return false;
 
 		if (target.charAt(0) === '/' && target.charAt(1) !== '/') {
