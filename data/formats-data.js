@@ -5303,6 +5303,11 @@ exports.BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP"
 	},
+	naviathan: {
+		randomBattleMoves: ["dragondance","waterfall","ironhead","iciclecrash"],
+		isNonstandard: true,
+		tier: "CAP"
+	},
 	syclant: {
 		randomBattleMoves: ["bugbuzz","icebeam","blizzard","earthpower","spikes","superpower","tailglow","uturn","focusblast"],
 		isNonstandard: true,
