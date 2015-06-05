@@ -1151,10 +1151,13 @@ var commands = exports.commands = {
 		this.addModCommand("" + name + " was promoted to " + (Config.groups[nextGroup].name || "regular user") + " by " + user.name + ".");
 	},
 
+	devoice: 'deauth',
 	deauth: function (target, room, user) {
 		return this.parse('/demote ' + target + ', deauth');
 	},
 
+	deroomvoice: 'roomdeauth',
+	roomdevoice: 'roomdeauth',
 	deroomauth: 'roomdeauth',
 	roomdeauth: function (target, room, user) {
 		return this.parse('/roomdemote ' + target + ', deauth');
