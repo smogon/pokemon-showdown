@@ -2910,6 +2910,9 @@ Battle = (function () {
 		case 'powder':
 			this.add('-damage', target, target.getHealth, '[silent]');
 			break;
+		case 'confusion':
+			this.add('-damage', target, target.getHealth, '[from] confusion');
+			break;
 		default:
 			if (effect.effectType === 'Move') {
 				this.add('-damage', target, target.getHealth);

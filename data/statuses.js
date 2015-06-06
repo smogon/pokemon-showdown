@@ -151,7 +151,11 @@ exports.BattleStatuses = {
 			if (this.random(2) === 0) {
 				return;
 			}
-			this.directDamage(this.getDamage(pokemon, pokemon, 40));
+			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
+				id: 'confusion',
+				effectType: 'Move',
+				type: '???'
+			});
 			return false;
 		}
 	},
