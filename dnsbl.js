@@ -83,6 +83,10 @@ exports.reverse = function reverseDns(ip, callback) {
 			callback(null, ['digitalocean.nohost']);
 			return;
 		}
+		if (ip.startsWith('46.16.36.')) {
+			callback(null, ['anchorfree.nohost']);
+			return;
+		}
 		if (ip.startsWith('216.172.142.')) {
 			callback(null, ['egihosting.nohost']);
 			return;
