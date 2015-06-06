@@ -7,7 +7,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		beforeTurnCallback: function (pokemon, target) {
 			var linkedMoves = pokemon.getLinkedMoves();
-			if (linkedMoves.length) {
+			if (linkedMoves.length && !linkedMoves.disabled) {
 				if (linkedMoves[0] === 'pursuit' && linkedMoves[1] !== 'pursuit') return;
 				if (linkedMoves[0] !== 'pursuit' && linkedMoves[1] === 'pursuit') return;
 			}
