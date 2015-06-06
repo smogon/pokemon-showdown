@@ -83,7 +83,7 @@ exports.BattleScripts = {
 				}
 
 				var linkedMoves = decision.pokemon.getLinkedMoves();
-				if (linkedMoves.length) {
+				if (linkedMoves.length && !linkedMoves.disabled) {
 					var decisionMove = toId(decision.move);
 					var index = linkedMoves.indexOf(decisionMove);
 					if (index !== -1) {
@@ -118,7 +118,7 @@ exports.BattleScripts = {
 
 					// Linked: if two moves are linked, the effective priority is minimized
 					var linkedMoves = decision.pokemon.getLinkedMoves();
-					if (linkedMoves.length) {
+					if (linkedMoves.length && !linkedMoves.disabled) {
 						var decisionMove = toId(decision.move);
 						var index = linkedMoves.indexOf(decisionMove);
 						if (index !== -1) {
@@ -389,7 +389,9 @@ exports.BattleScripts = {
 		getLinkedMoves: function () {
 			var linkedMoves = this.moveset.slice(0, 2);
 			if (linkedMoves.length !== 2 || linkedMoves[0].pp <= 0 || linkedMoves[1].pp <= 0) return [];
-			return linkedMoves.map('id');
+			var ret = [toId(linkedMoves[0]), toId(linkedMoves[1])];
+			if (this.disabledMoves[linkedMoves[0].id] || this.disabledMoves[linkedMoves[1].id]) ret.disabled = true;
+			return ret;
 		},
 		hasLinkedMove: function (move) {
 			move = toId(move);
