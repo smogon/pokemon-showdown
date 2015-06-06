@@ -711,7 +711,11 @@ var commands = exports.commands = {
 		if (!target) return false;
 		var targetRoom = Rooms.search(target);
 		if (!targetRoom) {
-			return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
+			if (!user.named) {
+				return connection.sendTo(target, "|noinit|namerequired|The room '" + target + "' does not exist.");
+			} else {
+				return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
+			}
 		}
 		if (targetRoom.modjoin && !user.can('bypassall')) {
 			var userGroup = user.group;
@@ -722,7 +726,11 @@ var commands = exports.commands = {
 				userGroup = targetRoom.auth[user.userid] || userGroup;
 			}
 			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(targetRoom.modjoin !== true ? targetRoom.modjoin : targetRoom.modchat)) {
-				return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
+				if (!user.named) {
+					return connection.sendTo(target, "|noinit|namerequired|The room '" + target + "' does not exist.");
+				} else {
+					return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
+				}
 			}
 		}
 		if (targetRoom.isPrivate) {
