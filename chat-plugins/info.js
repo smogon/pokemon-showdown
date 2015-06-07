@@ -1530,6 +1530,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'smogontriples' || target === 'triples') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3540390/\">Smogon Triples Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
