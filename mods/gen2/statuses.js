@@ -105,6 +105,19 @@ exports.BattleStatuses = {
 			} else {
 				this.effectData.time = this.random(2, 6);
 			}
+		},
+		onBeforeMove: function (pokemon) {
+			pokemon.volatiles.confusion.time--;
+			if (!pokemon.volatiles.confusion.time) {
+				pokemon.removeVolatile('confusion');
+				return;
+			}
+			this.add('-activate', pokemon, 'confusion');
+			if (this.random(2) === 0) {
+				return;
+			}
+			this.directDamage(this.getDamage(pokemon, pokemon, 40));
+			return false;
 		}
 	},
 	partiallytrapped: {
