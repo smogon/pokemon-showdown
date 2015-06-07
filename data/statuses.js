@@ -152,7 +152,7 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
-				id: 'confusion',
+				id: 'confused',
 				effectType: 'Move',
 				type: '???'
 			});
