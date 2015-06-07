@@ -75,7 +75,7 @@ var LoginServer = module.exports = (function () {
 				dataString += '&' + i + '=' + encodeURIComponent('' + data[i]);
 			}
 		}
-		var req = http.get(url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + Config.servertoken + '&nocache=' + new Date().getTime() + dataString), function (res) {
+		var req = http.get(url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + dataString), function (res) {
 			var buffer = '';
 			res.setEncoding('utf8');
 
@@ -140,7 +140,7 @@ var LoginServer = module.exports = (function () {
 		}
 
 		this.requestStart(requests.length);
-		var postData = 'serverid=' + Config.serverid + '&servertoken=' + Config.servertoken + '&nocache=' + new Date().getTime() + '&json=' + encodeURIComponent(JSON.stringify(requests)) + '\n';
+		var postData = 'serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + '&json=' + encodeURIComponent(JSON.stringify(requests)) + '\n';
 		var requestOptions = url.parse(this.uri + 'action.php');
 		requestOptions.method = 'post';
 		requestOptions.headers = {
