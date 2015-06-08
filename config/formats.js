@@ -109,7 +109,7 @@ exports.Formats = [
 			'Syclant', 'Revenankh', 'Pyroak', 'Fidgit', 'Stratagem', 'Arghonaut', 'Kitsunoh', 'Cyclohm', 'Colossoil', 'Krilowatt', 'Voodoom',
 			'Tomohawk', 'Necturna', 'Mollux', 'Aurumoth', 'Malaconda', 'Cawmodore', 'Volkraken', 'Plasmanta',
 			'Allow CAP'
- 		]
+		]
 	},
 	{
 		name: "Battle Spot Singles",
