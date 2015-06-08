@@ -1923,6 +1923,9 @@ Battle = (function () {
 		this.update();
 		return true;
 	};
+	Battle.prototype.suppressAttackEvents = function () {
+		return (this.activePokemon && this.activePokemon.isActive && !this.activePokemon.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents);
+	};
 	Battle.prototype.setActiveMove = function (move, pokemon, target) {
 		if (!move) move = null;
 		if (!pokemon) pokemon = null;
@@ -2233,7 +2236,7 @@ Battle = (function () {
 				// it's changed; call it off
 				continue;
 			}
-			if (status.effectType === 'Ability' && this.activePokemon && this.activePokemon !== thing && !this.activePokemon.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents) {
+			if (status.effectType === 'Ability' && this.suppressAttackEvents() && this.activePokemon !== thing) {
 				// ignore attacking events
 				var AttackingEvents = {
 					BeforeMove: 1,
@@ -2241,8 +2244,6 @@ Battle = (function () {
 					Immunity: 1,
 					Accuracy: 1,
 					RedirectTarget: 1,
-					Damage: 1,
-					SubDamage: 1,
 					Heal: 1,
 					TakeItem: 1,
 					SetStatus: 1,
@@ -2264,8 +2265,12 @@ Battle = (function () {
 						this.debug(eventid + ' handler suppressed by Mold Breaker');
 					}
 					continue;
+				} else if (eventid === 'Damage' && effect && effect.effectType === 'Move') {
+					this.debug(eventid + ' handler suppressed by Mold Breaker');
+					continue;
 				}
-			} else if (eventid !== 'Start' && status.effectType === 'Item' && (thing instanceof BattlePokemon) && thing.ignoringItem()) {
+			}
+			if (eventid !== 'Start' && status.effectType === 'Item' && (thing instanceof BattlePokemon) && thing.ignoringItem()) {
 				if (eventid !== 'ModifyPokemon' && eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 				}
@@ -2715,7 +2720,17 @@ Battle = (function () {
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
 		pokemon.update();
-		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
+		if (this.gen >= 5) {
+			this.runEvent('SwitchIn', pokemon);
+			if (!pokemon.hp) return true;
+			pokemon.isStarted = true;
+			if (!pokemon.fainted) {
+				this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityData, pokemon);
+				this.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
+			}
+		} else {
+			this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
+		}
 		return true;
 	};
 	Battle.prototype.swapPosition = function (pokemon, slot, attributes) {
