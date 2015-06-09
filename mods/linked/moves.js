@@ -250,34 +250,54 @@ exports.BattleMovedex = {
 					return false;
 				}
 				if (target.hasLinkedMove(lastMove)) {
+					// TODO: Check instead whether the last executed move was linked
 					var linkedMoves = target.getLinkedMoves();
 					if (noEncore[linkedMoves[0]] || noEncore[linkedMoves[1]] || target.moveset[0].pp <= 0 || target.moveset[1].pp <= 0) {
 						// it failed
 						delete target.volatiles['encore'];
 						return false;
 					}
+					this.effectData.move = linkedMoves;
 				} else {
 					if (noEncore[lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 						// it failed
 						delete target.volatiles['encore'];
 						return false;
 					}
+					this.effectData.move = lastMove;
 				}
-				this.effectData.move = lastMove;
+				this.effectData.turnsActivated = {};
 				this.add('-start', target, 'Encore');
 				if (!this.willMove(target)) {
 					this.effectData.duration++;
 				}
 			},
 			onOverrideDecision: function (pokemon, target, move) {
-				if (this.willMove(pokemon)) return false;
-				if (pokemon.hasLinkedMove(this.effectData.move)) {
-					var linkedMoves = pokemon.getLinkedMoves();
-					// pass a `sourceEffect` argument to prevent infinite recursion at `runMove`
-					this.runMove(linkedMoves[0], pokemon, target, this.effectData);
-					return move.id !== linkedMoves[1] ? linkedMoves[1] : void 0; // are we fine with this targetting method? (Doubles/Triples)
+				if (!this.effectData.turnsActivated[this.turn]) {
+					// Initialize Encore effect for this turn
+					this.effectData.turnsActivated[this.turn] = 0;
+				} else if (this.effectData.turnsActivated[this.turn] >= (Array.isArray(this.effectData.move) ? this.effectData.move.length : 1)) {
+					// Finish Encore effect for this turn
+					return;
 				}
-				if (move.id !== this.effectData.move) return this.effectData.move;
+				this.effectData.turnsActivated[this.turn]++;
+				if (!Array.isArray(this.effectData.move)) {
+					if (this.currentDecision.linkedChild === 0) this.queue.shift();
+					if (move.id !== this.effectData.move) return this.effectData.move;
+					return;
+				}
+
+				switch (this.effectData.turnsActivated[this.turn]) {
+				case 1:
+					this.currentDecision.linkedChild = 0;
+					var pseudoDecision = {choice: 'move', move: this.effectData.move[1], targetLoc: this.currentDecision.targetLoc, pokemon: this.currentDecision.pokemon, targetPosition: this.currentDecision.targetPosition, targetSide: this.currentDecision.targetSide, linkedChild: 1};
+					this.queue.unshift(pseudoDecision);
+					if (this.effectData.move[0] !== move.id) return this.effectData.move[0];
+					return;
+				case 2:
+					if (this.effectData.move[1] !== move.id) return this.effectData.move[1];
+					return;
+				}
 			},
 			onResidualOrder: 13,
 			onResidual: function (target) {
@@ -288,6 +308,7 @@ exports.BattleMovedex = {
 				if (index === -1) return; // no last move
 
 				if (target.hasLinkedMove(lastMove)) {
+					// TODO: Check instead whether the last executed move was linked
 					if (target.moveset[0].pp <= 0 || target.moveset[1].pp <= 0) {
 						delete target.volatiles.encore;
 						this.add('-end', target, 'Encore');
@@ -304,19 +325,20 @@ exports.BattleMovedex = {
 			},
 			onDisableMove: function (pokemon) {
 				if (!this.effectData.move) return; // ??
-				if (!pokemon.hasMove(this.effectData.move)) {
-					return;
-				}
-				if (pokemon.hasLinkedMove(this.effectData.move)) {
-					// taking advantage of the fact that the first two move slots are reserved to linked moves
-					for (var i = 2; i < pokemon.moveset.length; i++) {
-						pokemon.disableMove(pokemon.moveset[i].id);
-					}
-				} else {
+				if (!Array.isArray(this.effectData.move)) {
+					if (!pokemon.hasMove(this.effectData.move)) return;
 					for (var i = 0; i < pokemon.moveset.length; i++) {
 						if (pokemon.moveset[i].id !== this.effectData.move) {
 							pokemon.disableMove(pokemon.moveset[i].id);
 						}
+					}
+				} else {
+					for (var i = 0; i < this.effectData.move.length; i++) {
+						if (!pokemon.hasMove(this.effectData.move[i])) return;
+					}
+					for (var i = this.effectData.move.length; i < pokemon.moveset.length; i++) {
+						if (this.effectData.move.indexOf(pokemon.moveset[i].id) >= 0) continue;
+						pokemon.disableMove(pokemon.moveset[i].id);
 					}
 				}
 			}

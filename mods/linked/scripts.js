@@ -2,7 +2,6 @@ exports.BattleScripts = {
 	runMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && toId(move) !== 'struggle') {
 			var changedMove = this.runEvent('OverrideDecision', pokemon, target, move);
-			if (changedMove === false) return; // Linked: Encore hack
 			if (changedMove && changedMove !== true) {
 				move = changedMove;
 				target = null;
@@ -150,6 +149,8 @@ exports.BattleScripts = {
 		}
 	},
 	runDecision: function (decision) {
+		this.currentDecision = decision;
+
 		var pokemon;
 
 		// returns whether or not we ended in a callback
@@ -182,7 +183,7 @@ exports.BattleScripts = {
 			if (decision.linked) {
 				var linkedMoves = decision.linked;
 				for (var i = linkedMoves.length - 1; i >= 0; i--) {
-					var pseudoDecision = {choice: 'move', move: linkedMoves[i], targetLoc: decision.targetLoc, pokemon: decision.pokemon, targetPosition: decision.targetPosition, targetSide: decision.targetSide};
+					var pseudoDecision = {choice: 'move', move: linkedMoves[i], targetLoc: decision.targetLoc, pokemon: decision.pokemon, targetPosition: decision.targetPosition, targetSide: decision.targetSide, linkedChild: i};
 					this.queue.unshift(pseudoDecision);
 				}
 				return;
@@ -390,7 +391,13 @@ exports.BattleScripts = {
 			var linkedMoves = this.moveset.slice(0, 2);
 			if (linkedMoves.length !== 2 || linkedMoves[0].pp <= 0 || linkedMoves[1].pp <= 0) return [];
 			var ret = [toId(linkedMoves[0]), toId(linkedMoves[1])];
-			if (this.disabledMoves[linkedMoves[0].id] || this.disabledMoves[linkedMoves[1].id]) ret.disabled = true;
+
+			// Disabling effects which won't abort execution of moves already added to battle event loop.
+			if (!this.ateBerry && ret.indexOf('belch') >= 0) {
+				ret.disabled = true;
+			} else if (this.hasItem('assaultvest') && (this.battle.getMove(ret[0]).category === 'Status' || this.battle.getMove(ret[1]).category === 'Status')) {
+				ret.disabled = true;
+			}
 			return ret;
 		},
 		hasLinkedMove: function (move) {
