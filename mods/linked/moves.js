@@ -282,16 +282,19 @@ exports.BattleMovedex = {
 				}
 				this.effectData.turnsActivated[this.turn]++;
 				if (!Array.isArray(this.effectData.move)) {
-					if (this.currentDecision.linkedChild === 0) this.queue.shift();
+					var nextDecision = this.willMove(pokemon);
+					if (nextDecision) this.queue.splice(this.queue.indexOf(nextDecision), 1);
 					if (move.id !== this.effectData.move) return this.effectData.move;
 					return;
 				}
 
+				// Locked into a link
 				switch (this.effectData.turnsActivated[this.turn]) {
 				case 1:
-					this.currentDecision.linkedChild = 0;
-					var pseudoDecision = {choice: 'move', move: this.effectData.move[1], targetLoc: this.currentDecision.targetLoc, pokemon: this.currentDecision.pokemon, targetPosition: this.currentDecision.targetPosition, targetSide: this.currentDecision.targetSide, linkedChild: 1};
-					this.queue.unshift(pseudoDecision);
+					if (!this.willMove(pokemon)) {
+						var pseudoDecision = {choice: 'move', move: this.effectData.move[1], targetLoc: this.currentDecision.targetLoc, pokemon: this.currentDecision.pokemon, targetPosition: this.currentDecision.targetPosition, targetSide: this.currentDecision.targetSide};
+						this.queue.unshift(pseudoDecision);
+					}
 					if (this.effectData.move[0] !== move.id) return this.effectData.move[0];
 					return;
 				case 2:
