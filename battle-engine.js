@@ -2710,6 +2710,7 @@ Battle = (function () {
 		side.active[pos] = pokemon;
 		pokemon.isActive = true;
 		pokemon.activeTurns = 0;
+		if (this.gen === 2) pokemon.draggedIn = this.turn;
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
 		}
@@ -3629,13 +3630,14 @@ Battle = (function () {
 			break;
 		case 'runSwitch':
 			this.runEvent('SwitchIn', decision.pokemon);
-			if (this.gen === 1 && !decision.pokemon.side.faintedThisTurn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
+			if (this.gen <= 2 && !decision.pokemon.side.faintedThisTurn && decision.pokemon.draggedIn !== this.turn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
 			if (!decision.pokemon.hp) break;
 			decision.pokemon.isStarted = true;
 			if (!decision.pokemon.fainted) {
 				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
 				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
 			}
+			delete decision.pokemon.draggedIn;
 			break;
 		case 'shift':
 			if (!decision.pokemon.isActive) return false;
