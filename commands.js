@@ -1491,7 +1491,7 @@ var commands = exports.commands = {
 		this.logModCommand("The ladder was disabled by " + user.name + ".");
 		this.add("|raw|<div class=\"broadcast-red\"><b>Due to high server load, the ladder has been temporarily disabled</b><br />Rated games will no longer update the ladder. It will be back momentarily.</div>");
 	},
-	disableladderhelp: ["Disables the ladder, which will stop rated battles from being played and stop the ladder from updating. Requires: ~"]
+	disableladderhelp: ["Disables the ladder, which will stop rated battles from being played and stop the ladder from updating. Requires: ~"],
 
 	enableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
@@ -1502,7 +1502,7 @@ var commands = exports.commands = {
 		this.logModCommand("The ladder was enabled by " + user.name + ".");
 		this.add("|raw|<div class=\"broadcast-green\"><b>The ladder is now back.</b><br />Rated games will update the ladder now.</div>");
 	},
-	enableladderhelp: ["Enables the ladder, which will allow rated battles to commence and allows the ladder to update. Requires: ~"]
+	enableladderhelp: ["Enables the ladder, which will allow rated battles to commence and allows the ladder to update. Requires: ~"],
 
 	lockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
