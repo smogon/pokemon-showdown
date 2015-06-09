@@ -1078,7 +1078,7 @@ exports.BattleScripts = {
 			// If you have a shitmon, you're covered in OUs and Ubers if possible
 			var tier = template.tier;
 			if (tier === 'LC' && (nuCount > 1 || hasShitmon)) continue;
-			if ((tier === 'NFE' || tier === 'UU') && (hasShitmon || (nuCount > 2 && this.random(1)))) continue;
+			if ((tier === 'NFE' || tier === 'UU' || tier === 'NU') && (hasShitmon || (nuCount > 2 && this.random(1)))) continue;
 			// Unless you have one of the worst mons, in that case we allow luck to give you both Mew and Mewtwo.
 			if (tier === 'Uber' && uberCount >= 1 && !hasShitmon) continue;
 
@@ -1124,7 +1124,7 @@ exports.BattleScripts = {
 			// Increment type bias counters.
 			if (tier === 'Uber') {
 				uberCount++;
-			} else if (tier === 'UU' || tier === 'NFE' || tier === 'LC') {
+			} else if (tier === 'UU' || tier === 'NU' || tier === 'NFE' || tier === 'LC') {
 				nuCount++;
 			}
 
@@ -1317,6 +1317,7 @@ exports.BattleScripts = {
 		var levelScale = {
 			LC: 96,
 			NFE: 90,
+			NU: 90,
 			UU: 85,
 			OU: 79,
 			Uber: 74
