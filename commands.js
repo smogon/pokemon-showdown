@@ -1226,7 +1226,7 @@ var commands = exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	modchathelp: ["/modchat [off/autoconfirmed/+/%/@/&/~] - Set the level of moderated chat. Requires: @ for off/autoconfirmed/+ options, & ~ for all the options"],
+	modchathelp: ["/modchat [off/autoconfirmed/+/%/@/#/&/~] - Set the level of moderated chat. Requires: @ for off/autoconfirmed/+ options, # & ~ for all the options"],
 
 	declare: function (target, room, user) {
 		if (!target) return this.parse('/help declare');
@@ -1285,7 +1285,7 @@ var commands = exports.commands = {
 
 		return '/announce ' + target;
 	},
-	announcehelp: ["/announce OR /wall [message] - Makes an announcement. Requires: % @ & ~"],
+	announcehelp: ["/announce OR /wall [message] - Makes an announcement. Requires: % @ # & ~"],
 
 	fr: 'forcerename',
 	forcerename: function (target, room, user) {
@@ -1397,7 +1397,7 @@ var commands = exports.commands = {
 	},
 	modloghelp: ["/modlog [roomid|all], [n] - Roomid defaults to current room.",
 		"If n is a number or omitted, display the last n lines of the moderator log. Defaults to 15.",
-		"If n is not a number, search the moderator log for 'n' on room's log [roomid]. If you set [all] as [roomid], searches for 'n' on all rooms's logs. Requires: % @ & ~"],
+		"If n is not a number, search the moderator log for 'n' on room's log [roomid]. If you set [all] as [roomid], searches for 'n' on all rooms's logs. Requires: % @ # & ~"],
 
 	/*********************************************************
 	 * Server management commands
@@ -1480,6 +1480,7 @@ var commands = exports.commands = {
 		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(Tools.data.Learnsets) + ";\n");
 		this.sendReply("learnsets.js saved.");
 	},
+	savelearnsetshelp: ["Changes the moveset of a pokémon. Requires: ~"]
 
 	disableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
@@ -1490,6 +1491,7 @@ var commands = exports.commands = {
 		this.logModCommand("The ladder was disabled by " + user.name + ".");
 		this.add("|raw|<div class=\"broadcast-red\"><b>Due to high server load, the ladder has been temporarily disabled</b><br />Rated games will no longer update the ladder. It will be back momentarily.</div>");
 	},
+	disableladderhelp: ["Disables the ladder, which will stop rated battles from being played and stop the ladder from updating. Requires: ~"]
 
 	enableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
@@ -1500,6 +1502,7 @@ var commands = exports.commands = {
 		this.logModCommand("The ladder was enabled by " + user.name + ".");
 		this.add("|raw|<div class=\"broadcast-green\"><b>The ladder is now back.</b><br />Rated games will update the ladder now.</div>");
 	},
+	enableladderhelp: ["Enables the ladder, which will allow rated battles to commence and allows the ladder to update. Requires: ~"]
 
 	lockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
@@ -1588,6 +1591,7 @@ var commands = exports.commands = {
 
 		this.logEntry(user.name + " used /endemergency");
 	},
+	emergencyhelp: ["/emergency - Puts the server into energency mode, making some features limited until a fix. Requires: ~"],
 
 	kill: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
@@ -1650,6 +1654,7 @@ var commands = exports.commands = {
 		Rooms.global.send('|refresh|');
 		this.logEntry(user.name + " used /refreshpage");
 	},
+	refreshpagehelp: ["/refreshpage - Forcefully refreshes the page for all users on the server. Requires: ~"],
 
 	updateserver: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
@@ -1701,6 +1706,7 @@ var commands = exports.commands = {
 			});
 		});
 	},
+	updateserverhelp: ["/updateserver - updates the server to a newer version. Requires: Console Access"],
 
 	crashfixed: function (target, room, user) {
 		if (Rooms.global.lockdown !== true) {
@@ -1715,6 +1721,7 @@ var commands = exports.commands = {
 		}
 		this.logEntry(user.name + " used /crashfixed");
 	},
+	crashfixedhelp: ["/crashfixed - Annoucnes that the server has been fixed without the need of a restart. Requires: ~"],
 
 	'memusage': 'memoryusage',
 	memoryusage: function (target) {
@@ -1779,6 +1786,7 @@ var commands = exports.commands = {
 		}
 		return;
 	},
+	memoryusagehelp: ["/memoryusage - Shows the amount of memory the server is using. Requires: Console Access"],
 
 	bash: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
@@ -2009,7 +2017,8 @@ var commands = exports.commands = {
 			this.logModCommand(user.name + " forced a win for " + target + ".");
 		}
 	},
-	forcewinhelp: ["/forcetie - Forces the current match to tie. Requires: & ~"],
+	forcewinhelp: ["/forcetie - Forces the current match to end in a tie. Requires: & ~",
+	       "/forcewin [user] - Forces the current match to end in a win for a user. Requires: & ~"],
 
 	/*********************************************************
 	 * Challenging and searching commands
