@@ -134,8 +134,7 @@ exports.BattleScripts = {
 						pokemon.volatiles['partialtrappinglock'].locked = target;
 						// Duration reset thus partially trapped at 2 always.
 						target.volatiles['partiallytrapped'].duration = 2;
-						// We deduct an additional PP that was not deducted earlier.
-						// Also get the move position for the PP change.
+						// We get the move position for the PP change.
 						var usedMovePos = -1;
 						for (var m in pokemon.moveset) {
 							if (pokemon.moveset[m].id === move.id) usedMovePos = m;
@@ -143,9 +142,6 @@ exports.BattleScripts = {
 						if (usedMovePos > -1 && pokemon.moveset[usedMovePos].pp === 0) {
 							// If we were on the middle of the 0 PP sequence, the PPs get reset to 63.
 							pokemon.moveset[usedMovePos].pp = 63;
-						} else {
-							// Otherwise, plain reduct.
-							pokemon.deductPP(move, null, target);
 						}
 					}
 				}
