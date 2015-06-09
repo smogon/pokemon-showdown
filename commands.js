@@ -1480,7 +1480,7 @@ var commands = exports.commands = {
 		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(Tools.data.Learnsets) + ";\n");
 		this.sendReply("learnsets.js saved.");
 	},
-	savelearnsetshelp: ["Changes the moveset of a pokémon. Requires: ~"],
+	savelearnsetshelp: ["/savelearnsets - Changes the moveset of a pokémon. Requires: ~"],
 
 	disableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
@@ -1502,7 +1502,7 @@ var commands = exports.commands = {
 		this.logModCommand("The ladder was enabled by " + user.name + ".");
 		this.add("|raw|<div class=\"broadcast-green\"><b>The ladder is now back.</b><br />Rated games will update the ladder now.</div>");
 	},
-	enableladderhelp: ["Enables the ladder, which will allow rated battles to commence and allows the ladder to update. Requires: ~"],
+	enableladderhelp: ["/enableladder - Enables the ladder, which will allow rated battles to commence and allows the ladder to update. Requires: ~"],
 
 	lockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
