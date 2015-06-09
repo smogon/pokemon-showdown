@@ -1480,7 +1480,7 @@ var commands = exports.commands = {
 		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(Tools.data.Learnsets) + ";\n");
 		this.sendReply("learnsets.js saved.");
 	},
-	savelearnsetshelp: ["Changes the moveset of a pokémon. Requires: ~"]
+	savelearnsetshelp: ["Changes the moveset of a pokémon. Requires: ~"],
 
 	disableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
@@ -1491,7 +1491,7 @@ var commands = exports.commands = {
 		this.logModCommand("The ladder was disabled by " + user.name + ".");
 		this.add("|raw|<div class=\"broadcast-red\"><b>Due to high server load, the ladder has been temporarily disabled</b><br />Rated games will no longer update the ladder. It will be back momentarily.</div>");
 	},
-	disableladderhelp: ["Disables the ladder, which will stop rated battles from being played and stop the ladder from updating. Requires: ~"],
+	disableladderhelp: ["/disableladder - Disables the ladder, which will stop rated battles from being played and stop the ladder from updating. Requires: ~"],
 
 	enableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
@@ -1591,7 +1591,7 @@ var commands = exports.commands = {
 
 		this.logEntry(user.name + " used /endemergency");
 	},
-	emergencyhelp: ["/emergency - Puts the server into energency mode, making some features limited until a fix. Requires: ~"],
+	emergencyhelp: ["/emergency - Puts the server into emergency mode, making some features limited until a fix. Requires: ~"],
 
 	kill: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
@@ -1706,7 +1706,7 @@ var commands = exports.commands = {
 			});
 		});
 	},
-	updateserverhelp: ["/updateserver - updates the server to a newer version. Requires: Console Access"],
+	updateserverhelp: ["/updateserver - Updates the server to a newer version. Requires: Console Access"],
 
 	crashfixed: function (target, room, user) {
 		if (Rooms.global.lockdown !== true) {
@@ -1721,7 +1721,7 @@ var commands = exports.commands = {
 		}
 		this.logEntry(user.name + " used /crashfixed");
 	},
-	crashfixedhelp: ["/crashfixed - Annoucnes that the server has been fixed without the need of a restart. Requires: ~"],
+	crashfixedhelp: ["/crashfixed - Announces that the server has been fixed without the need of a restart. Requires: ~"],
 
 	'memusage': 'memoryusage',
 	memoryusage: function (target) {
