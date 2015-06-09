@@ -183,7 +183,7 @@ exports.BattleScripts = {
 			if (decision.linked) {
 				var linkedMoves = decision.linked;
 				for (var i = linkedMoves.length - 1; i >= 0; i--) {
-					var pseudoDecision = {choice: 'move', move: linkedMoves[i], targetLoc: decision.targetLoc, pokemon: decision.pokemon, targetPosition: decision.targetPosition, targetSide: decision.targetSide, linkedChild: i};
+					var pseudoDecision = {choice: 'move', move: linkedMoves[i], targetLoc: decision.targetLoc, pokemon: decision.pokemon, targetPosition: decision.targetPosition, targetSide: decision.targetSide};
 					this.queue.unshift(pseudoDecision);
 				}
 				return;
