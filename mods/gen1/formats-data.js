@@ -45,7 +45,7 @@ exports.BattleFormatsData = {
 	},
 	butterfree: {
 		randomBattleMoves: ["psychic","megadrain","sleeppowder","stunspore"],
-		tier: "UU"
+		tier: "NU"
 	},
 	weedle: {
 		randomBattleMoves: ["poisonsting","stringshot"],
@@ -57,7 +57,7 @@ exports.BattleFormatsData = {
 	},
 	beedrill: {
 		randomBattleMoves: ["twineedle","hyperbeam","swordsdance","agility"],
-		tier: "UU"
+		tier: "NU"
 	},
 	pidgey: {
 		randomBattleMoves: ["agility","mimic","mirrormove","skyattack","rest","reflect","sandattack"],
@@ -67,12 +67,12 @@ exports.BattleFormatsData = {
 	pidgeotto: {
 		randomBattleMoves: ["agility","mimic","mirrormove","skyattack","rest","reflect"],
 		essentialMove: "doubleedge",
-		tier: "UU"
+		tier: "NFE"
 	},
 	pidgeot: {
 		randomBattleMoves: ["hyperbeam","agility","mimic","mirrormove","skyattack","rest","reflect"],
 		essentialMove: "doubleedge",
-		tier: "UU"
+		tier: "NU"
 	},
 	rattata: {
 		randomBattleMoves: ["bodyslam","blizzard","bubblebeam","thunderbolt"],
@@ -93,7 +93,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":1,"level":20,"moves":["growl","leer","furyattack","payday"]}
 		],
-		tier: "UU"
+		tier: "NU"
 	},
 	ekans: {
 		randomBattleMoves: ["glare","earthquake","bodyslam","rockslide"],
@@ -101,7 +101,7 @@ exports.BattleFormatsData = {
 	},
 	arbok: {
 		randomBattleMoves: ["earthquake","glare","hyperbeam","bodyslam","rockslide"],
-		tier: "UU"
+		tier: "NU"
 	},
 	pikachu: {
 		randomBattleMoves: ["thunderbolt","thunderwave","surf","bodyslam","agility","thunder"],
@@ -177,7 +177,7 @@ exports.BattleFormatsData = {
 	},
 	wigglytuff: {
 		randomBattleMoves: ["thunderwave","bodyslam","doubleedge","hyperbeam","blizzard","bubblebeam","sing"],
-		tier: "UU"
+		tier: "NU"
 	},
 	zubat: {
 		randomBattleMoves: ["screech","confuseray","doubleedge","supersonic","megadrain","leechlife","toxic"],
@@ -185,7 +185,7 @@ exports.BattleFormatsData = {
 	},
 	golbat: {
 		randomBattleMoves: ["screech","confuseray","doubleedge","hyperbeam","megadrain"],
-		tier: "UU"
+		tier: "NU"
 	},
 	oddish: {
 		randomBattleMoves: ["sleeppowder","swordsdance","doubleedge","megadrain","toxic"],
@@ -193,11 +193,11 @@ exports.BattleFormatsData = {
 	},
 	gloom: {
 		randomBattleMoves: ["sleeppowder","swordsdance","doubleedge","megadrain"],
-		tier: "UU"
+		tier: "NFE"
 	},
 	vileplume: {
 		randomBattleMoves: ["sleeppowder","swordsdance","bodyslam","megadrain"],
-		tier: "UU"
+		tier: "NU"
 	},
 	paras: {
 		randomBattleMoves: ["stunspore","swordsdance","bodyslam","slash","megadrain","doubleedge","growth","toxic"],
@@ -207,7 +207,7 @@ exports.BattleFormatsData = {
 	parasect: {
 		randomBattleMoves: ["stunspore","swordsdance","bodyslam","slash","megadrain","doubleedge","growth","hyperbeam","toxic"],
 		essentialMove: "spore",
-		tier: "UU"
+		tier: "NU"
 	},
 	venonat: {
 		randomBattleMoves: ["psychic","megadrain","sleeppowder","stunspore","toxic"],
@@ -256,7 +256,7 @@ exports.BattleFormatsData = {
 	},
 	primeape: {
 		randomBattleMoves: ["submission","rockslide","bodyslam","hyperbeam","megakick"],
-		tier: "UU"
+		tier: "NU"
 	},
 	growlithe: {
 		randomBattleMoves: ["fireblast","bodyslam","mimic","reflect"],
@@ -305,7 +305,7 @@ exports.BattleFormatsData = {
 	},
 	machamp: {
 		randomBattleMoves: ["bodyslam","earthquake","hyperbeam","submission","rockslide"],
-		tier: "UU"
+		tier: "NU"
 	},
 	bellsprout: {
 		randomBattleMoves: ["razorleaf","swordsdance","bodyslam","toxic","stunspore"],
@@ -352,7 +352,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":1,"level":40,"moves":["ember","firespin","stomp","payday"]}
 		],
-		tier: "UU"
+		tier: "NU"
 	},
 	slowpoke: {
 		randomBattleMoves: ["amnesia","surf","thunderwave","rest"],
@@ -369,12 +369,12 @@ exports.BattleFormatsData = {
 	magneton: {
 		randomBattleMoves: ["thunderwave","mimic","doubleedge","hyperbeam"],
 		essentialMove: "thunderbolt",
-		tier: "UU"
+		tier: "NU"
 	},
 	farfetchd: {
 		randomBattleMoves: ["sandattack","substitute","swordsdance","bodyslam","toxic"],
 		essentialMove: "slash",
-		tier: "UU"
+		tier: "NU"
 	},
 	doduo: {
 		randomBattleMoves: ["drillpeck","bodyslam","mimic","doubleedge","agility","growl","reflect"],
@@ -400,7 +400,7 @@ exports.BattleFormatsData = {
 	muk: {
 		randomBattleMoves: ["sludge","bodyslam","megadrain","screech"],
 		essentialMove: "explosion",
-		tier: "UU"
+		tier: "NU"
 	},
 	shellder: {
 		randomBattleMoves: ["surf","blizzard","icebeam","explosion","withdraw","toxic","supersonic"],
@@ -427,7 +427,7 @@ exports.BattleFormatsData = {
 	},
 	onix: {
 		randomBattleMoves: ["earthquake","explosion","rockslide","toxic"],
-		tier: "UU"
+		tier: "NU"
 	},
 	drowzee: {
 		randomBattleMoves: ["hypnosis","psychic","thunderwave","counter","rest"],
@@ -455,7 +455,7 @@ exports.BattleFormatsData = {
 	electrode: {
 		randomBattleMoves: ["thunder","thunderbolt","thunderwave","screech","flash","reflect"],
 		essentialMove: "explosion",
-		tier: "UU"
+		tier: "NU"
 	},
 	exeggcute: {
 		randomBattleMoves: ["sleeppowder","explosion","eggbomb","megadrain","stunspore"],
@@ -473,19 +473,19 @@ exports.BattleFormatsData = {
 	},
 	marowak: {
 		randomBattleMoves: ["earthquake","blizzard","bodyslam","seismictoss"],
-		tier: "UU"
+		tier: "NU"
 	},
 	hitmonlee: {
 		randomBattleMoves: ["bodyslam","counter","highjumpkick","mimic","seismictoss","substitute"],
-		tier: "UU"
+		tier: "NU"
 	},
 	hitmonchan: {
 		randomBattleMoves: ["bodyslam","submission","seismictoss","counter"],
-		tier: "UU"
+		tier: "NU"
 	},
 	lickitung: {
 		randomBattleMoves: ["swordsdance","earthquake","hyperbeam","bodyslam"],
-		tier: "UU"
+		tier: "NU"
 	},
 	koffing: {
 		randomBattleMoves: ["sludge","thunder","thunderbolt","fireblast"],
@@ -495,7 +495,7 @@ exports.BattleFormatsData = {
 	weezing: {
 		randomBattleMoves: ["sludge","thunder","thunderbolt","fireblast"],
 		essentialMove: "explosion",
-		tier: "UU"
+		tier: "NU"
 	},
 	rhyhorn: {
 		randomBattleMoves: ["earthquake","rockslide","substitute","bodyslam"],
@@ -524,7 +524,7 @@ exports.BattleFormatsData = {
 	},
 	seadra: {
 		randomBattleMoves: ["smokescreen","hydropump","surf","blizzard","mimic"],
-		tier: "UU"
+		tier: "NU"
 	},
 	goldeen: {
 		randomBattleMoves: ["surf","blizzard","agility","doubleedge","toxic","supersonic"],
@@ -532,7 +532,7 @@ exports.BattleFormatsData = {
 	},
 	seaking: {
 		randomBattleMoves: ["surf","blizzard","hyperbeam","doubleedge"],
-		tier: "UU"
+		tier: "NU"
 	},
 	staryu: {
 		randomBattleMoves: ["blizzard","thunderbolt","thunderwave","surf"],
@@ -550,7 +550,7 @@ exports.BattleFormatsData = {
 	},
 	scyther: {
 		randomBattleMoves: ["slash","swordsdance","agility","hyperbeam"],
-		tier: "UU"
+		tier: "NU"
 	},
 	jynx: {
 		randomBattleMoves: ["lovelykiss","blizzard","psychic","mimic"],
@@ -562,7 +562,7 @@ exports.BattleFormatsData = {
 	},
 	magmar: {
 		randomBattleMoves: ["confuseray","fireblast","bodyslam","hyperbeam","mimic"],
-		tier: "UU"
+		tier: "NU"
 	},
 	pinsir: {
 		randomBattleMoves: ["swordsdance","hyperbeam","bodyslam","submission"],
@@ -589,7 +589,7 @@ exports.BattleFormatsData = {
 	},
 	ditto: {
 		randomBattleMoves: ["transform"],
-		tier: "UU"
+		tier: "NU"
 	},
 	eevee: {
 		randomBattleMoves: ["doubleedge","growl","mimic","reflect","sandattack","tailwhip","toxic"],
@@ -607,7 +607,7 @@ exports.BattleFormatsData = {
 	},
 	flareon: {
 		randomBattleMoves: ["fireblast","bodyslam","hyperbeam","quickattack"],
-		tier: "UU"
+		tier: "NU"
 	},
 	porygon: {
 		randomBattleMoves: ["thunderwave","thunderbolt","blizzard","icebeam","doubleedge","hyperbeam","sharpen","psychic","agility","triattack"],
@@ -622,7 +622,7 @@ exports.BattleFormatsData = {
 	omastar: {
 		randomBattleMoves: ["hydropump","surf","mimic","rest","seismictoss"],
 		essentialMove: "blizzard",
-		tier: "UU"
+		tier: "NU"
 	},
 	kabuto: {
 		randomBattleMoves: ["swordsdance","bodyslam","surf","toxic","harden","slash"],
@@ -634,7 +634,7 @@ exports.BattleFormatsData = {
 	},
 	aerodactyl: {
 		randomBattleMoves: ["skyattack","reflect","doubleedge","hyperbeam"],
-		tier: "UU"
+		tier: "NU"
 	},
 	snorlax: {
 		randomBattleMoves: ["blizzard","icebeam","bodyslam","thunderbolt","rest","selfdestruct","hyperbeam","surf","earthquake"],
