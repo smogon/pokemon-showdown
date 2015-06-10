@@ -1,4 +1,9 @@
 exports.commands = {
+	donate: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox('<center>Like this server and want to help keep the server running?<br /><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4PHAVXW3SHVCG"><img src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_SM.gif" /></a><br />Donations over $5 will get you a custom avatar! The money will go towards paying for the server.<br />After you\'ve donated, PM kupo, pika or kota to receive your avatar</center>');
+	},
+	
 	forum: 'forums',
 	forums: function (target, room, user) {
 		if (!this.canBroadcast()) return;
