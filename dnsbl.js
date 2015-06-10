@@ -1,6 +1,6 @@
 /**
  * DNSBL support [OPTIONAL]
- * Pokemon Showdown - http://pokemonshowdown.com/
+ * Pokémon Showdown - http://pokemonshowdown.com/
  *
  * This file controls support for DNSBLs. It's optional, so it can be
  * removed entirely safely.
