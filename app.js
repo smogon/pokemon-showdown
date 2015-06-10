@@ -1,9 +1,9 @@
 /**
  * Main file
- * Pokemon Showdown - http://pokemonshowdown.com/
+ * Pokémon Showdown - http://pokemonshowdown.com/
  *
- * This is the main Pokemon Showdown app, and the file you should be
- * running to start Pokemon Showdown if you're using it normally.
+ * This is the main Pokémon Showdown app, and the file you should be
+ * running to start Pokémon Showdown if you're using it normally.
  *
  * This file sets up our SockJS server, which handles communication
  * between users and your server, and also sets up globals. You can
@@ -22,7 +22,7 @@
  *
  * Tools - from tools.js
  *
- *   Handles getting data about Pokemon, items, etc. *
+ *   Handles getting data about Pokémon, items, etc. *
  *
  * Simulator - from simulator.js
  *
