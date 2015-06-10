@@ -1,6 +1,6 @@
 /**
  * Command parser
- * Pokemon Showdown - http://pokemonshowdown.com/
+ * Pokémon Showdown - http://pokemonshowdown.com/
  *
  * This is the command parser. Call it with CommandParser.parse
  * (scroll down to its definition for details)
