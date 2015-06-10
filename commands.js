@@ -1,8 +1,8 @@
 /**
  * System commands
- * Pokemon Showdown - http://pokemonshowdown.com/
+ * Pokémon Showdown - http://pokemonshowdown.com/
  *
- * These are system commands - commands required for Pokemon Showdown
+ * These are system commands - commands required for Pokémon Showdown
  * to run. A lot of these are sent by the client.
  *
  * System commands should not be modified, added, or removed. If you'd
@@ -794,7 +794,7 @@ var commands = exports.commands = {
 		targetUser.send('|c|~|/warn ' + target);
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 	},
-	warnhelp: ["/warn OR /k [username], [reason] - Warns a user showing them the Pokemon Showdown Rules and [reason] in an overlay. Requires: % @ & ~"],
+	warnhelp: ["/warn OR /k [username], [reason] - Warns a user showing them the Pokémon Showdown Rules and [reason] in an overlay. Requires: % @ & ~"],
 
 	redirect: 'redir',
 	redir: function (target, room, user, connection) {
