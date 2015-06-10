@@ -1,6 +1,6 @@
 /**
  * Crash logger
- * Pokemon Showdown - http://pokemonshowdown.com/
+ * Pokémon Showdown - http://pokemonshowdown.com/
  *
  * Logs crashes, sends an e-mail notification if you've set up
  * config.js to do that.
