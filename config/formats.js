@@ -254,11 +254,11 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Doubles Challenge Cup",
+		name: "Doubles Hackmons Cup",
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
-		team: 'randomCC',
+		team: 'randomHC',
 		searchShow: false,
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	},
@@ -311,11 +311,11 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Triples Challenge Cup",
+		name: "Triples Hackmons Cup",
 		section: "ORAS Triples",
 
 		gameType: 'triples',
-		team: 'randomCC',
+		team: 'randomHC',
 		searchShow: false,
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	},
@@ -423,26 +423,26 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Battle Factory",
+		name: "CAP",
 		section: "Other Metagames",
 		column: 2,
+
+		searchShow: false,
+		ruleset: ['OU'],
+		banlist: ['Allow CAP']
+	},
+	{
+		name: "Battle Factory",
+		section: "Other Metagames",
 
 		team: 'randomFactory',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
-		name: "CAP",
-		section: "Other Metagames",
-		searchShow: false,
-
-		ruleset: ['OU'],
-		banlist: ['Allow CAP']
-	},
-	{
-		name: "Battle Cup 1v1",
+		name: "Challenge Cup 1v1",
 		section: "Other Metagames",
 
-		team: 'randomBC',
+		team: 'randomCC',
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview 1v1'],
 		onBegin: function () {
 			this.debug('Cutting down to 1');
@@ -451,13 +451,6 @@ exports.Formats = [
 			this.p2.pokemon = this.p2.pokemon.slice(0, 1);
 			this.p2.pokemonLeft = this.p2.pokemon.length;
 		}
-	},
-	{
-		name: "Challenge Cup",
-		section: "Other Metagames",
-
-		team: 'randomCC',
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "Balanced Hackmons",
@@ -577,6 +570,13 @@ exports.Formats = [
 			'Shellder', 'Skrelp', 'Snivy', 'Snubbull', 'Spritzee', 'Staryu', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby',
 			'Vulpix', 'Zigzagoon', 'Shell Smash'
 		]
+	},
+	{
+		name: "Hackmons Cup",
+		section: "Other Metagames",
+
+		team: 'randomHC',
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
 		name: "2v2 Doubles",
@@ -891,7 +891,7 @@ exports.Formats = [
 		team: 'random',
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
-	/*{
+	{
 		name: "[Gen 1] Challenge Cup",
 		section: "Past Generations",
 
@@ -899,7 +899,7 @@ exports.Formats = [
 		team: 'randomCC',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
-	},*/
+	},
 	{
 		name: "[Gen 1] Stadium",
 		section: "Past Generations",
