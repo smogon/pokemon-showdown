@@ -648,7 +648,7 @@ exports.BattleScripts = {
 			return this.randomTeam(side);
 		}
 	},
-	randomBCTeam: function (side) {
+	randomCCTeam: function (side) {
 		var team = [];
 
 		var natures = Object.keys(this.data.Natures);
@@ -786,7 +786,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomCCTeam: function (side) {
+	randomHCTeam: function (side) {
 		var team = [];
 
 		var itemPool = Object.keys(this.data.Items);
