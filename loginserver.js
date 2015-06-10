@@ -1,6 +1,6 @@
 /**
  * Login server abstraction layer
- * Pokemon Showdown - http://pokemonshowdown.com/
+ * Pokémon Showdown - http://pokemonshowdown.com/
  *
  * This file handles communicating with the login server.
  *
