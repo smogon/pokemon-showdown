@@ -5,7 +5,7 @@ Defining a Command
 ------------------------------------------------------------------------
 
 You can define the commands such as 'whois', then use them by typing
-`/whois` into Pokemon Showdown.
+`/whois` into Pokémon Showdown.
 
 A command can be in the form:
 
