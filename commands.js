@@ -1480,7 +1480,6 @@ var commands = exports.commands = {
 		fs.writeFile('data/learnsets.js', 'exports.BattleLearnsets = ' + JSON.stringify(Tools.data.Learnsets) + ";\n");
 		this.sendReply("learnsets.js saved.");
 	},
-	savelearnsetshelp: ["/savelearnsets - Changes the moveset of a pokémon. Requires: ~"],
 
 	disableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
@@ -1491,7 +1490,6 @@ var commands = exports.commands = {
 		this.logModCommand("The ladder was disabled by " + user.name + ".");
 		this.add("|raw|<div class=\"broadcast-red\"><b>Due to high server load, the ladder has been temporarily disabled</b><br />Rated games will no longer update the ladder. It will be back momentarily.</div>");
 	},
-	disableladderhelp: ["/disableladder - Disables the ladder, which will stop rated battles from being played and stop the ladder from updating. Requires: ~"],
 
 	enableladder: function (target, room, user) {
 		if (!this.can('disableladder')) return false;
@@ -1502,7 +1500,6 @@ var commands = exports.commands = {
 		this.logModCommand("The ladder was enabled by " + user.name + ".");
 		this.add("|raw|<div class=\"broadcast-green\"><b>The ladder is now back.</b><br />Rated games will update the ladder now.</div>");
 	},
-	enableladderhelp: ["/enableladder - Enables the ladder, which will allow rated battles to commence and allows the ladder to update. Requires: ~"],
 
 	lockdown: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
@@ -1591,7 +1588,6 @@ var commands = exports.commands = {
 
 		this.logEntry(user.name + " used /endemergency");
 	},
-	emergencyhelp: ["/emergency - Puts the server into emergency mode, making some features limited until a fix. Requires: ~"],
 
 	kill: function (target, room, user) {
 		if (!this.can('lockdown')) return false;
@@ -1654,7 +1650,6 @@ var commands = exports.commands = {
 		Rooms.global.send('|refresh|');
 		this.logEntry(user.name + " used /refreshpage");
 	},
-	refreshpagehelp: ["/refreshpage - Forcefully refreshes the page for all users on the server. Requires: ~"],
 
 	updateserver: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
@@ -1706,7 +1701,6 @@ var commands = exports.commands = {
 			});
 		});
 	},
-	updateserverhelp: ["/updateserver - Updates the server to a newer version. Requires: Console Access"],
 
 	crashfixed: function (target, room, user) {
 		if (Rooms.global.lockdown !== true) {
@@ -1721,7 +1715,7 @@ var commands = exports.commands = {
 		}
 		this.logEntry(user.name + " used /crashfixed");
 	},
-	crashfixedhelp: ["/crashfixed - Announces that the server has been fixed without the need of a restart. Requires: ~"],
+        crashfixedhelp: ["/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: ~"],
 
 	'memusage': 'memoryusage',
 	memoryusage: function (target) {
@@ -1786,7 +1780,6 @@ var commands = exports.commands = {
 		}
 		return;
 	},
-	memoryusagehelp: ["/memoryusage - Shows the amount of memory the server is using. Requires: Console Access"],
 
 	bash: function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
