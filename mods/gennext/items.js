@@ -68,9 +68,7 @@ exports.BattleItems = {
 		inherit: true,
 		onAfterMoveSecondarySelf: function (source, target) {
 			if (source.hasType('Grass')) {
-				if (source.lastDamage > 0) {
-					this.heal(source.lastDamage / 8, source);
-				}
+				this.heal(source.lastDamage / 8, source);
 			}
 		},
 		onResidualOrder: 5,

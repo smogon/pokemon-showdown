@@ -59,6 +59,7 @@ exports.BattleScripts = {
 			target = pokemon;
 		}
 		if (sourceEffect) move.sourceEffect = sourceEffect.id;
+		var moveResult = false;
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -108,6 +109,7 @@ exports.BattleScripts = {
 		var damage = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
 			damage = this.tryMoveHit(target, pokemon, move);
+			if (damage || damage === 0 || damage === undefined) moveResult = true;
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
 			var targets = [];
 			if (move.target === 'allAdjacent') {
@@ -136,7 +138,9 @@ exports.BattleScripts = {
 			if (targets.length > 1) move.spreadHit = true;
 			damage = 0;
 			for (var i = 0; i < targets.length; i++) {
-				damage += (this.tryMoveHit(targets[i], pokemon, move, true) || 0);
+				var hitResult = this.tryMoveHit(targets[i], pokemon, move, true);
+				if (hitResult || hitResult === 0 || hitResult === undefined) moveResult = true;
+				damage += hitResult || 0;
 			}
 			if (!pokemon.hp) pokemon.faint();
 		} else {
@@ -159,12 +163,13 @@ exports.BattleScripts = {
 				target = this.runEvent('RedirectTarget', pokemon, pokemon, move, target);
 			}
 			damage = this.tryMoveHit(target, pokemon, move);
+			if (damage || damage === 0 || damage === undefined) moveResult = true;
 		}
 		if (!pokemon.hp) {
 			this.faint(pokemon, pokemon, move);
 		}
 
-		if (!damage && damage !== 0 && damage !== undefined) {
+		if (!moveResult) {
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			return true;
 		}
