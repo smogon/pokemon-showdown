@@ -712,52 +712,23 @@ var commands = exports.commands = {
 
 	autojoin: function (target, room, user, connection) {
 		Rooms.global.autojoinRooms(user, connection);
+		var targets = target.split(',');
+		var autojoins = [];
+		if (targets.length > 9 || Object.keys(connection.rooms).length > 1) return;
+		for (var i = 0; i < targets.length; i++) {
+			if (user.tryJoinRoom(targets[i], connection) === null) {
+				autojoins.push(targets[i]);
+			}
+		}
+		connection.autojoins = autojoins.join(',');
 	},
 
 	joim: 'join',
 	j: 'join',
 	join: function (target, room, user, connection) {
 		if (!target) return false;
-		var targetRoom = Rooms.search(target);
-		if (!targetRoom) {
-			if (!user.named) {
-				return connection.sendTo(target, "|noinit|namerequired|The room '" + target + "' does not exist.");
-			} else {
-				return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
-			}
-		}
-		if (targetRoom.modjoin && !user.can('bypassall')) {
-			var userGroup = user.group;
-			if (targetRoom.auth) {
-				if (targetRoom.isPrivate === true) {
-					userGroup = ' ';
-				}
-				userGroup = targetRoom.auth[user.userid] || userGroup;
-			}
-			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(targetRoom.modjoin !== true ? targetRoom.modjoin : targetRoom.modchat)) {
-				if (!user.named) {
-					return connection.sendTo(target, "|noinit|namerequired|The room '" + target + "' does not exist.");
-				} else {
-					return connection.sendTo(target, "|noinit|nonexistent|The room '" + target + "' does not exist.");
-				}
-			}
-		}
-		if (targetRoom.isPrivate) {
-			if (!user.named) {
-				return connection.sendTo(target, "|noinit|namerequired|You must have a name in order to join the room '" + target + "'.");
-			}
-		}
-
-		if (toId(target) !== targetRoom.id) {
-			connection.send(">" + toId(target) + "\n|deinit");
-		}
-
-		var joinResult = user.joinRoom(targetRoom, connection);
-		if (!joinResult) {
-			if (joinResult === null) {
-				return connection.sendTo(target, "|noinit|joinfailed|You are banned from the room '" + target + "'.");
-			}
-			return connection.sendTo(target, "|noinit|joinfailed|You do not have permission to join '" + target + "'.");
+		if (user.tryJoinRoom(target, connection) === null) {
+			connection.sendTo(target, "|noinit|namerequired|The room '" + target + "' does not exist.");
 		}
 	},
 
