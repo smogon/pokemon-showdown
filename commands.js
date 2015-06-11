@@ -1937,14 +1937,18 @@ var commands = exports.commands = {
 		target = toId(target);
 		if (room.requestKickInactive) {
 			if (target === 'off' || target === 'false' || target === 'stop') {
-				room.stopKickInactive(user, user.can('timer'));
+				var canForceTimer = user.can('timer', null, room);
+				if (room.resetTimer) {
+					room.stopKickInactive(user, canForceTimer);
+					if (canForceTimer) room.send('|inactiveoff|Timer was turned off by staff. Please do not turn it back on until our staff say it\'s okay');
+				}
 			} else if (target === 'on' || target === 'true' || !target) {
 				room.requestKickInactive(user, user.can('timer'));
 			} else {
 				this.sendReply("'" + target + "' is not a recognized timer state.");
 			}
 		} else {
-			this.sendReply("You can only set the timer from inside a room.");
+			this.sendReply("You can only set the timer from inside a battle room.");
 		}
 	},
 
