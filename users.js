@@ -1401,7 +1401,7 @@ User = (function () {
 			}
 		}
 
-		if (toId(roomid) !== room.id) {
+		if (Rooms.aliases[toId(roomid)] === room) {
 			connection.send(">" + toId(roomid) + "\n|deinit");
 		}
 
