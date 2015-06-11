@@ -534,8 +534,13 @@ var commands = exports.commands = {
 		var name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) return this.parse('/help roompromote');
-		if (!targetUser && (!room.auth || !room.auth[userid])) {
-			return this.sendReply("User '" + name + "' is offline and unauthed, and so can't be promoted.");
+		if (!room.auth || !room.auth[userid]) {
+			if (!targetUser) {
+				return this.sendReply("User '" + name + "' is offline and unauthed, and so can't be promoted.");
+			}
+			if (!targetUser.registered) {
+				return this.sendReply("User '" + name + "' is unregistered, and so can't be promoted.");
+			}
 		}
 
 		var currentGroup = ((room.auth && room.auth[userid]) || (room.isPrivate !== true && targetUser.group) || ' ');
