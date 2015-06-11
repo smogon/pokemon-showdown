@@ -1434,7 +1434,7 @@ var commands = exports.commands = {
 
 	forums: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("<a href=\"http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209\">Pokémon Showdown Forums</a>");
+		this.sendReplyBox("<a href=\"http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209\">Pok&eacute;mon Showdown Forums</a>");
 	},
 
 	avatars: function (target, room, user) {
