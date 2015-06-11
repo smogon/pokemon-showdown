@@ -1367,6 +1367,55 @@ User = (function () {
 		this.autoconfirmed = '';
 		this.updateIdentity();
 	};
+	User.prototype.tryJoinRoom = function (room, connection) {
+		var roomid = (room && room.id ? room.id : room);
+		var room = Rooms.search(room);
+		if (!room) {
+			if (!this.named) {
+				return null;
+			} else {
+				connection.sendTo(roomid, "|noinit|nonexistent|The room '" + roomid + "' does not exist.");
+				return false;
+			}
+		}
+		if (room.modjoin && !this.can('bypassall')) {
+			var userGroup = this.group;
+			if (room.auth) {
+				if (room.isPrivate === true) {
+					userGroup = ' ';
+				}
+				userGroup = room.auth[this.userid] || userGroup;
+			}
+			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modjoin !== true ? room.modjoin : room.modchat)) {
+				if (!this.named) {
+					return null;
+				} else {
+					connection.sendTo(roomid, "|noinit|nonexistent|The room '" + roomid + "' does not exist.");
+					return false;
+				}
+			}
+		}
+		if (room.isPrivate) {
+			if (!this.named) {
+				return connection.sendTo(roomid, "|noinit|namerequired|You must have a name in order to join the room '" + roomid + "'.");
+			}
+		}
+
+		if (toId(roomid) !== room.id) {
+			connection.send(">" + toId(roomid) + "\n|deinit");
+		}
+
+		var joinResult = this.joinRoom(room, connection);
+		if (!joinResult) {
+			if (joinResult === null) {
+				connection.sendTo(roomid, "|noinit|joinfailed|You are banned from the room '" + roomid + "'.");
+				return false;
+			}
+			connection.sendTo(roomid, "|noinit|joinfailed|You do not have permission to join '" + roomid + "'.");
+			return false;
+		}
+		return true;
+	};
 	User.prototype.joinRoom = function (room, connection) {
 		room = Rooms.get(room);
 		if (!room) return false;
