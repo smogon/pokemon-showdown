@@ -1039,7 +1039,7 @@ var commands = exports.commands = {
 		if (Users.lockedRanges[range]) return this.sendReply("The range " + range + " has already been temporarily locked.");
 
 		Users.lockRange(range, isIp);
-		this.addModCommand("" + user.name + " temporarily locked the range " + range + ".");
+		this.addModCommand("" + user.name + " temporarily locked the range: " + range);
 	},
 
 	unrangelock: 'rangeunlock',
