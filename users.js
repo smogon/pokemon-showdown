@@ -1369,7 +1369,7 @@ User = (function () {
 	};
 	User.prototype.tryJoinRoom = function (room, connection) {
 		var roomid = (room && room.id ? room.id : room);
-		var room = Rooms.search(room);
+		room = Rooms.search(room);
 		if (!room) {
 			if (!this.named) {
 				return null;
