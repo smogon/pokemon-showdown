@@ -3262,11 +3262,7 @@ Battle = (function () {
 
 		// randomizer
 		// this is not a modifier
-		if (this.gen <= 5) {
-			baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
-		} else {
-			baseDamage = Math.floor(baseDamage * (85 + this.random(16)) / 100);
-		}
+		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
 
 		// STAB
 		if (move.hasSTAB || type !== '???' && pokemon.hasType(type)) {
