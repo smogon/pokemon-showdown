@@ -235,10 +235,13 @@ global.ResourceMonitor = {
 
 		while (stack.length) {
 			var value = stack.pop();
-			if (typeof value === 'boolean') bytes += 4;
-			else if (typeof value === 'string') bytes += value.length * 2;
-			else if (typeof value === 'number') bytes += 8;
-			else if (typeof value === 'object' && objectList.indexOf(value) < 0) {
+			if (typeof value === 'boolean') {
+				bytes += 4;
+			} else if (typeof value === 'string') {
+				bytes += value.length * 2;
+			} else if (typeof value === 'number') {
+				bytes += 8;
+			} else if (typeof value === 'object' && objectList.indexOf(value) < 0) {
 				objectList.push(value);
 				for (var i in value) stack.push(value[i]);
 			}
@@ -295,8 +298,11 @@ global.ResourceMonitor = {
  * Otherwise, an empty string will be returned.
  */
 global.toId = function (text) {
-	if (text && text.id) text = text.id;
-	else if (text && text.userid) text = text.userid;
+	if (text && text.id) {
+		text = text.id;
+	} else if (text && text.userid) {
+		text = text.userid;
+	}
 
 	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };

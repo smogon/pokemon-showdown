@@ -38,8 +38,11 @@ if (Config.crashguard) {
  * Otherwise, an empty string will be returned.
  */
 global.toId = function (text) {
-	if (text && text.id) text = text.id;
-	else if (text && text.userid) text = text.userid;
+	if (text && text.id) {
+		text = text.id;
+	} else if (text && text.userid) {
+		text = text.userid;
+	}
 
 	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
@@ -3088,10 +3091,17 @@ Battle = (function () {
 	};
 	Battle.prototype.chain = function (previousMod, nextMod) {
 		// previousMod or nextMod can be either a number or an array [numerator, denominator]
-		if (previousMod.length) previousMod = Math.floor(previousMod[0] * 4096 / previousMod[1]);
-		else previousMod = Math.floor(previousMod * 4096);
-		if (nextMod.length) nextMod = Math.floor(nextMod[0] * 4096 / nextMod[1]);
-		else nextMod = Math.floor(nextMod * 4096);
+		if (previousMod.length) {
+			previousMod = Math.floor(previousMod[0] * 4096 / previousMod[1]);
+		} else {
+			previousMod = Math.floor(previousMod * 4096);
+		}
+
+		if (nextMod.length) {
+			nextMod = Math.floor(nextMod[0] * 4096 / nextMod[1]);
+		} else {
+			nextMod = Math.floor(nextMod * 4096);
+		}
 		return ((previousMod * nextMod + 2048) >> 12) / 4096; // M'' = ((M * M') + 0x800) >> 12
 	};
 	Battle.prototype.chainModify = function (numerator, denominator) {
@@ -3233,11 +3243,17 @@ Battle = (function () {
 			defBoosts = 0;
 		}
 
-		if (move.useTargetOffensive) attack = defender.calculateStat(attackStat, atkBoosts);
-		else attack = attacker.calculateStat(attackStat, atkBoosts);
+		if (move.useTargetOffensive) {
+			attack = defender.calculateStat(attackStat, atkBoosts);
+		} else {
+			attack = attacker.calculateStat(attackStat, atkBoosts);
+		}
 
-		if (move.useSourceDefensive) defense = attacker.calculateStat(defenseStat, defBoosts);
-		else defense = defender.calculateStat(defenseStat, defBoosts);
+		if (move.useSourceDefensive) {
+			defense = attacker.calculateStat(defenseStat, defBoosts);
+		} else {
+			defense = defender.calculateStat(defenseStat, defBoosts);
+		}
 
 		// Apply Stat Modifiers
 		attack = this.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
