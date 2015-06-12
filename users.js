@@ -1709,6 +1709,7 @@ Connection = (function () {
 
 		this.ip = ip || '';
 	}
+	Connection.prototype.autojoin = '';
 
 	Connection.prototype.sendTo = function (roomid, data) {
 		if (roomid && roomid.id) roomid = roomid.id;
