@@ -79,9 +79,11 @@ jscsOptions.base = {
 	"preset": "yandex",
 
 	"additionalRules": [
-		new (require('./dev-tools/jscs-custom-rules/validate-conditionals.js'))()
+		new (require('./dev-tools/jscs-custom-rules/validate-conditionals.js'))(),
+		new (require('./dev-tools/jscs-custom-rules/validate-case-indentation.js'))()
 	],
 	"validateConditionals": true,
+	"validateCaseIndentation": true,
 
 	"requireCurlyBraces": null,
 
