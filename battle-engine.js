@@ -1924,7 +1924,7 @@ Battle = (function () {
 		this.update();
 		return true;
 	};
-	Battle.prototype.suppressAttackEvents = function () {
+	Battle.prototype.suppressingAttackEvents = function () {
 		return (this.activePokemon && this.activePokemon.isActive && !this.activePokemon.ignoringAbility() && this.activePokemon.getAbility().stopAttackEvents);
 	};
 	Battle.prototype.setActiveMove = function (move, pokemon, target) {
@@ -2237,7 +2237,7 @@ Battle = (function () {
 				// it's changed; call it off
 				continue;
 			}
-			if (status.effectType === 'Ability' && this.suppressAttackEvents() && this.activePokemon !== thing) {
+			if (status.effectType === 'Ability' && this.suppressingAttackEvents() && this.activePokemon !== thing) {
 				// ignore attacking events
 				var AttackingEvents = {
 					BeforeMove: 1,
