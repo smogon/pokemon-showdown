@@ -1,4 +1,4 @@
-This is a pseudocode overview of how Showdown works - particularly relevant to anyone writing event code.
+This is a pseudocode overview of how Pokémon Showdown works - particularly relevant to anyone writing event code.
 
 (A) = negated by Mold Breaker (and Turboblaze/Teravolt) on abilities only during a move
 (S) = negated by Sheer Force only during a move with a secondary effect
@@ -54,8 +54,6 @@ runDecision() - runs runSwitch, runAfterSwitch, and runMove in priority order, t
 
 		useMove() {
 			[ModifyMove] (A)
-
-			move's [InterruptMove]
 
 			if no targets:
 				display "But there was no target..." and exit useMove()
