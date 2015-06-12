@@ -813,6 +813,20 @@ exports.Formats = [
 		ruleset: ['Cancel Mod']
 	},
 	{
+		name: "[Gen 4] Doubles Custom Game",
+		section: 'Past Generations',
+
+		mod: 'gen4',
+		gameType: 'doubles',
+		searchShow: false,
+		canUseRandomTeam: true,
+		debug: true,
+		maxLevel: 9999,
+		defaultLevel: 100,
+		// no restrictions
+		ruleset: ['Cancel Mod']
+	},
+	{
 		name: "[Gen 3] OU",
 		section: "Past Generations",
 
