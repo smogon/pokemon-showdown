@@ -1784,7 +1784,7 @@ exports.BattleScripts = {
 		// This is the "REALLY can't think of a good item" cutoff
 		} else if (ability === 'Super Luck') {
 			item = 'Scope Lens';
-		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
+		} else if ((ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) || (template.species === 'Wobbuffet' && this.random(2))) {
 			item = 'Custap Berry';
 		} else if (hasType['Poison']) {
 			item = 'Black Sludge';
