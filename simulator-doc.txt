@@ -55,8 +55,6 @@ runDecision() - runs runSwitch, runAfterSwitch, and runMove in priority order, t
 		useMove() {
 			[ModifyMove] (A)
 
-			move's [InterruptMove]
-
 			if no targets:
 				display "But there was no target..." and exit useMove()
 
