@@ -419,10 +419,11 @@ var Elimination = (function () {
 				match.onLoseNode.getParent().getValue().state = 'available';
 
 				var error = '';
-				if (this.users.get(userA).isDisqualified)
+				if (this.users.get(userA).isDisqualified) {
 					error = this.setMatchResult([userA, userB], 'loss');
-				else if (this.users.get(userB).isDisqualified)
+				} else if (this.users.get(userB).isDisqualified) {
 					error = this.setMatchResult([userA, userB], 'win');
+				}
 
 				if (error) {
 					throw new Error("Unexpected " + error + " from setMatchResult([" + userA + ", " + userB + "], ...)");

@@ -118,8 +118,11 @@ if (!process.send) {
 	 * Otherwise, an empty string will be returned.
 	 */
 	global.toId = function (text) {
-		if (text && text.id) text = text.id;
-		else if (text && text.userid) text = text.userid;
+		if (text && text.id) {
+			text = text.id;
+		} else if (text && text.userid) {
+			text = text.userid;
+		}
 
 		return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	};
@@ -211,17 +214,17 @@ Validator = (function () {
 			return ["Your team has more than 6 pokemon."];
 		}
 		switch (format.gameType) {
-			case 'doubles':
-				if (team.length < 2) return ["Your Doubles team needs at least 2 pokemon."];
-				break;
-			case 'triples':
-				if (team.length < 3) return ["Your Triples team needs at least 3 pokemon."];
-				break;
-			case 'rotation':
-				if (team.length < 3) return ["Your Rotation team needs at least 3 pokemon."];
-				break;
-			default:
-				if (team.length < 1) return ["Your team has no pokemon."];
+		case 'doubles':
+			if (team.length < 2) return ["Your Doubles team needs at least 2 pokemon."];
+			break;
+		case 'triples':
+			if (team.length < 3) return ["Your Triples team needs at least 3 pokemon."];
+			break;
+		case 'rotation':
+			if (team.length < 3) return ["Your Rotation team needs at least 3 pokemon."];
+			break;
+		default:
+			if (team.length < 1) return ["Your team has no pokemon."];
 		}
 		var teamHas = {};
 		for (var i = 0; i < team.length; i++) {
