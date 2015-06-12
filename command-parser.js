@@ -280,15 +280,16 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				this.add(text);
 				this.logModCommand(text + (logOnlyText || ""));
 			},
-			logModCommand: function (result) {
-				if (!modlog[room.id]) {
-					if (room.battle) {
-						modlog[room.id] = modlog['battle'];
+			logModCommand: function (result, targetRoom) {
+				if (!targetRoom) targetRoom = room;
+				if (!modlog[targetRoom.id]) {
+					if (targetRoom.battle) {
+						modlog[targetRoom.id] = modlog['battle'];
 					} else {
-						modlog[room.id] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + room.id + '.txt'), {flags:'a+'});
+						modlog[targetRoom.id] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + targetRoom.id + '.txt'), {flags:'a+'});
 					}
 				}
-				modlog[room.id].write('[' + (new Date().toJSON()) + '] (' + room.id + ') ' + result + '\n');
+				modlog[targetRoom.id].write('[' + (new Date().toJSON()) + '] (' + targetRoom.id + ') ' + result + '\n');
 			},
 			can: function (permission, target, room) {
 				if (!user.can(permission, target, room)) {
