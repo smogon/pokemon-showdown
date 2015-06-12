@@ -186,7 +186,7 @@ var commands = exports.commands = {
 		if (newTargets && newTargets.length) {
 			for (var i = 0; i < newTargets.length; ++i) {
 				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
-					buffer = "No Pokemon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
+					buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
 				}
 				if (newTargets[i].searchType === 'nature') {
 					buffer += "" + newTargets[i].name + " nature: ";
@@ -202,7 +202,7 @@ var commands = exports.commands = {
 				}
 			}
 		} else {
-			return this.sendReply("No Pokemon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
+			return this.sendReply("No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
 		}
 
 		if (showDetails) {
@@ -264,18 +264,18 @@ var commands = exports.commands = {
 				if (move.id === 'mirrormove') isMirrorMove = true;
 
 				details["Target"] = {
-					'normal': "One Adjacent Pokemon",
+					'normal': "One Adjacent Pok\u00e9mon",
 					'self': "User",
 					'adjacentAlly': "One Ally",
 					'adjacentAllyOrSelf': "User or Ally",
-					'adjacentFoe': "One Adjacent Opposing Pokemon",
+					'adjacentFoe': "One Adjacent Opposing Pok\u00e9mon",
 					'allAdjacentFoes': "All Adjacent Opponents",
 					'foeSide': "Opposing Side",
 					'allySide': "User's Side",
 					'allyTeam': "User's Side",
-					'allAdjacent': "All Adjacent Pokemon",
-					'any': "Any Pokemon",
-					'all': "All Pokemon"
+					'allAdjacent': "All Adjacent Pok\u00e9mon",
+					'any': "Any Pok\u00e9mon",
+					'all': "All Pok\u00e9mon"
 				}[move.target] || "Unknown";
 			} else if (newTargets[0].searchType === 'item') {
 				var item = Tools.getItem(newTargets[0].name);
@@ -644,7 +644,7 @@ var commands = exports.commands = {
 		}
 		return this.sendReplyBox(resultsStr);
 	},
-	dexsearchhelp: ["/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria",
+	dexsearchhelp: ["/dexsearch [type], [move], [move], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
 		"Search categories are: type, tier, color, moves, ability, gen, recovery, priority, stat.",
 		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
 		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/PU/NFE/LC/CAP.",
@@ -723,7 +723,7 @@ var commands = exports.commands = {
 
 			var template = Tools.getTemplate(target);
 			if (template.exists) {
-				if (Object.size(lsetData) !== 0) return this.sendReplyBox("A search can only include one Pokemon learnset.");
+				if (Object.size(lsetData) !== 0) return this.sendReplyBox("A search can only include one Pok\u00e9mon learnset.");
 				if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
 				lsetData = template.learnset;
 				targetMon = template.name;
@@ -1001,7 +1001,7 @@ var commands = exports.commands = {
 		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
-		"If a Pokemon is included as a parameter, moves will be searched from it's movepool.",
+		"If a Pok\u00e9mon is included as a parameter, moves will be searched from it's movepool.",
 		"The order of the parameters does not matter."],
 
 	learnset: 'learn',
@@ -1029,7 +1029,7 @@ var commands = exports.commands = {
 		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
 
 		if (!template.exists) {
-			return this.sendReply("Pokemon '" + template.id + "' not found.");
+			return this.sendReply("Pok\u00e9mon '" + template.id + "' not found.");
 		}
 
 		if (targets.length < 2) {
@@ -1085,7 +1085,7 @@ var commands = exports.commands = {
 		}
 		this.sendReplyBox(buffer);
 	},
-	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.",
+	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pok\u00e9mon can learn the given moves, if it can at all.",
 		"!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ & ~"],
 
 	weaknesses: 'weakness',
@@ -1146,9 +1146,9 @@ var commands = exports.commands = {
 		buffer.push('<span class="message-effect-immune">Immunities</span>: ' + (immunities.join(', ') || '<font color=#999999>None</font>'));
 		this.sendReplyBox(buffer.join('<br>'));
 	},
-	weaknesshelp: ["/weakness [pokemon] - Provides a Pokemon's resistances, weaknesses, and immunities, ignoring abilities.",
+	weaknesshelp: ["/weakness [pokemon] - Provides a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities.",
 		"/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.",
-		"!weakness [pokemon] - Shows everyone a Pokemon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ & ~",
+		"!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ & ~",
 		"!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ & ~"],
 
 	eff: 'effectiveness',
@@ -1208,8 +1208,8 @@ var commands = exports.commands = {
 
 		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
 	},
-	effectivenesshelp: ["/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.",
-		"!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon."],
+	effectivenesshelp: ["/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pok\u00e9mon.",
+		"!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pok\u00e9mon."],
 
 	cover: 'coverage',
 	coverage: function (target, room, user) {
@@ -1417,7 +1417,7 @@ var commands = exports.commands = {
 	opensource: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"Pokemon Showdown is open source:<br />" +
+			"Pok&eacute;mon Showdown is open source:<br />" +
 			"- Language: JavaScript (Node.js)<br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Server source code</a><br />" +
@@ -1429,7 +1429,7 @@ var commands = exports.commands = {
 
 	staff: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
+		this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pok&eacute;mon Showdown Staff List</a>");
 	},
 
 	forums: function (target, room, user) {
@@ -1449,8 +1449,8 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"New to competitive pokemon?<br />" +
-			"- <a href=\"https://www.smogon.com/sim/ps_guide\">Beginner's Guide to Pokémon Showdown</a><br />" +
-			"- <a href=\"https://www.smogon.com/dp/articles/intro_comp_pokemon\">An introduction to competitive Pokémon</a><br />" +
+			"- <a href=\"https://www.smogon.com/sim/ps_guide\">Beginner's Guide to Pok&eacute;mon Showdown</a><br />" +
+			"- <a href=\"https://www.smogon.com/dp/articles/intro_comp_pokemon\">An introduction to competitive Pok&eacute;mon</a><br />" +
 			"- <a href=\"https://www.smogon.com/bw/articles/bw_tiers\">What do 'OU', 'UU', etc mean?</a><br />" +
 			"- <a href=\"https://www.smogon.com/xyhub/tiers\">What are the rules for each format? What is 'Sleep Clause'?</a>"
 		);
@@ -1475,7 +1475,7 @@ var commands = exports.commands = {
 	calc: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"Pokemon Showdown! damage calculator. (Courtesy of Honko)<br />" +
+			"Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />" +
 			"- <a href=\"https://pokemonshowdown.com/damagecalc/\">Damage Calculator</a>"
 		);
 	},
@@ -1486,14 +1486,14 @@ var commands = exports.commands = {
 	cap: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"An introduction to the Create-A-Pokemon project:<br />" +
+			"An introduction to the Create-A-Pok&eacute;mon project:<br />" +
 			"- <a href=\"https://www.smogon.com/cap/\">CAP project website and description</a><br />" +
-			"- <a href=\"https://www.smogon.com/forums/showthread.php?t=48782\">What Pokemon have been made?</a><br />" +
+			"- <a href=\"https://www.smogon.com/forums/showthread.php?t=48782\">What Pok&eacute;mon have been made?</a><br />" +
 			"- <a href=\"https://www.smogon.com/forums/forums/311\">Talk about the metagame here</a><br />" +
 			"- <a href=\"https://www.smogon.com/forums/threads/3512318/#post-5594694\">Sample XY CAP teams</a>"
 		);
 	},
-	caphelp: ["/cap - Provides an introduction to the Create-A-Pokemon project.",
+	caphelp: ["/cap - Provides an introduction to the Create-A-Pok&eacute;mon project.",
 		"!cap - Show everyone that information. Requires: + % @ & ~"],
 
 	gennext: function (target, room, user) {
@@ -1554,19 +1554,19 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === '1v1') {
 			matched = true;
-			if (target !== 'all') buffer += "Bring three Pokémon to Team Preview and choose one to battle.<br />";
+			if (target !== 'all') buffer += "Bring three Pok\u00e9mon to Team Preview and choose one to battle.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496773/\">1v1</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3536109/\">1v1 Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'monotype') {
 			matched = true;
-			if (target !== 'all') buffer += "All Pokémon on a team must share a type.<br />";
+			if (target !== 'all') buffer += "All Pok\u00e9mon on a team must share a type.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">Monotype</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517737/\">Monotype Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
 			matched = true;
-			if (target !== 'all') buffer += "Pokémon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, and NU or lower get +15.<br />";
+			if (target !== 'all') buffer += "Pok\u00e9mon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, and NU or lower get +15.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3532973/\">Tier Shift</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3536719/\">Tier Shift Viability Ranking</a><br />";
 		}
@@ -1583,13 +1583,13 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'almostanyability' || target === 'aaa') {
 			matched = true;
-			if (target !== 'all') buffer += "Pokémon can use any ability, barring the few that are banned.<br />";
+			if (target !== 'all') buffer += "Pok\u00e9mon can use any ability, barring the few that are banned.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3528058/\">Almost Any Ability</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538917/\">Almost Any Ability Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'stabmons') {
 			matched = true;
-			if (target !== 'all') buffer += "Pokémon can use any move of their typing, in addition to the moves they can normally learn.<br />";
+			if (target !== 'all') buffer += "Pok\u00e9mon can use any move of their typing, in addition to the moves they can normally learn.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493081/\">STABmons</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3512215/\">STABmons Viability Ranking</a><br />";
 		}
@@ -1603,12 +1603,12 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'averagemons') {
 			matched = true;
-			if (target !== 'all') buffer += "Every Pokémon has a stat spread of 100/100/100/100/100/100.<br />";
+			if (target !== 'all') buffer += "Every Pok\u00e9mon has a stat spread of 100/100/100/100/100/100.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a><br />";
 		}
 		if (target === 'all' || target === 'hiddentype' || target === 'ht') {
 			matched = true;
-			if (target !== 'all') buffer += "Pokémon have an added type determined by their IVs. Same as the Hidden Power type.<br />";
+			if (target !== 'all') buffer += "Pok\u00e9mon have an added type determined by their IVs. Same as the Hidden Power type.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Hidden Type</a><br />";
 		}
 		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
@@ -1662,7 +1662,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"Room drivers (%) can use:<br />" +
-			"- /warn OR /k <em>username</em>: warn a user and show the Pokemon Showdown rules<br />" +
+			"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules<br />" +
 			"- /mute OR /m <em>username</em>: 7 minute mute<br />" +
 			"- /hourmute OR /hm <em>username</em>: 60 minute mute<br />" +
 			"- /unmute <em>username</em>: unmute<br />" +
@@ -1700,7 +1700,7 @@ var commands = exports.commands = {
 			"- We wait a few minutes before restarting so people can finish up their battles<br />" +
 			"- The restart itself will take around 0.6 seconds<br />" +
 			"- Your ladder ranking and teams will not change<br />" +
-			"- We are restarting to update Pokémon Showdown to a newer version"
+			"- We are restarting to update Pok&eacute;mon Showdown to a newer version"
 		);
 	},
 
@@ -1967,10 +1967,10 @@ var commands = exports.commands = {
 		}
 
 		if (!atLeastOne) {
-			return this.sendReplyBox("Pokemon, item, move, or ability not found for generation " + generation.toUpperCase() + ".");
+			return this.sendReplyBox("Pok&eacute;mon, item, move, or ability not found for generation " + generation.toUpperCase() + ".");
 		}
 	},
-	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pokemon in the given generation.",
+	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
 		"!analysis [pokemon], [generation] - Shows everyone this link. Requires: + % @ & ~"],
 
 	register: function () {
@@ -2260,12 +2260,12 @@ var commands = exports.commands = {
 			buffer += '<ul class="utilichart"><li class="result"><a data-name="Sacred Shield"><span class="col movenamecol">Sacred Shield</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Shields team greatly, losses HP.</span> </a></li><li></li></ul>';
 			break;
 		default:
-			buffer = "No Pokemon, item, move, ability or nature named '" + target + "' was found on this seasonal.";
+			buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found on this seasonal.";
 		}
 		if (targetId === 'evasion' || targetId === 'protect') {
 			return this.parse('/data protect');
 		} else if (!targetId) {
-			return this.sendReply("Please specify a valid Pokemon, item, move, ability or nature in this seasonal.");
+			return this.sendReply("Please specify a valid Pok\u00e9mon, item, move, ability or nature in this seasonal.");
 		} else {
 			this.sendReply(buffer);
 		}
