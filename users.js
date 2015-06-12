@@ -1397,7 +1397,7 @@ User = (function () {
 		}
 		if (room.isPrivate) {
 			if (!this.named) {
-				return connection.sendTo(roomid, "|noinit|namerequired|You must have a name in order to join the room '" + roomid + "'.");
+				return null;
 			}
 		}
 
