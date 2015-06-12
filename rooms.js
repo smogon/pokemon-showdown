@@ -575,7 +575,7 @@ var GlobalRoom = (function () {
 			if (connection.autojoins) {
 				var autojoins = connection.autojoins.split(',');
 				for (var j = 0; j < autojoins.length; j++) {
-					user.tryJoinRoom(autojoins[i], connection);
+					user.tryJoinRoom(autojoins[j], connection);
 				}
 				connection.autojoins = '';
 			}
