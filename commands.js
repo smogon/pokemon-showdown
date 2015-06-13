@@ -91,6 +91,7 @@ var commands = exports.commands = {
 	},
 	avatarhelp: ["/avatar [new avatar number] - Change your trainer sprite."],
 
+	signout: 'logout',
 	logout: function (target, room, user) {
 		user.resetName();
 	},
