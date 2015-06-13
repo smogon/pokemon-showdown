@@ -57,10 +57,8 @@ var JeopardyQuestions = (function () {
 		var q1 = start;
 		var q2 = 0;
 		for (; q1 < end && typeof data[q2] === 'object'; ++q1, ++q2) {
-			if (typeof data[q2].value === 'string')
-				this.grid[category][q1].value = data[q2].value;
-			if (typeof data[q2].answer === 'string')
-				this.grid[category][q1].answer = data[q2].answer;
+			if (typeof data[q2].value === 'string') this.grid[category][q1].value = data[q2].value;
+			if (typeof data[q2].answer === 'string') this.grid[category][q1].answer = data[q2].answer;
 			this.grid[category][q1].isDailyDouble = !!data[q2].isDailyDouble;
 		}
 		return q1 - start;
@@ -134,30 +132,29 @@ var Jeopardy = (function () {
 		var currentCheck = '';
 		while (!!(currentCheck = checks.pop())) {
 			switch (currentCheck) {
-				case 'started':
-					if (this.isStarted) break;
-					output.sendReply("The Jeopardy match has not started yet.");
-					return false;
+			case 'started':
+				if (this.isStarted) break;
+				output.sendReply("The Jeopardy match has not started yet.");
+				return false;
 
-				case 'notstarted':
-					if (!this.isStarted) break;
-					output.sendReply("The Jeopardy match has already started.");
-					return false;
+			case 'notstarted':
+				if (!this.isStarted) break;
+				output.sendReply("The Jeopardy match has already started.");
+				return false;
 
-				case 'host':
-					if (user === this.host) break;
-					output.sendReply("You are not the host.");
-					return false;
+			case 'host':
+				if (user === this.host) break;
+				output.sendReply("You are not the host.");
+				return false;
 
-				case 'user':
-					if (this.users.has(user)) break;
-					output.sendReply("You are not in the match.");
-					return false;
+			case 'user':
+				if (this.users.has(user)) break;
+				output.sendReply("You are not in the match.");
+				return false;
 
-				default:
-					output.sendReply("Unknown check '" + currentCheck + "'.");
-					return false;
-
+			default:
+				output.sendReply("Unknown check '" + currentCheck + "'.");
+				return false;
 			}
 		}
 
@@ -587,21 +584,21 @@ var commands = {
 
 			var value = params.slice(3).join(',').trim();
 			switch (editType) {
-				case 'question':
-					questions.setQuestion(categoryNumber, questionNumber, value);
-					this.sendReply("The question has been updated.");
-					break;
+			case 'question':
+				questions.setQuestion(categoryNumber, questionNumber, value);
+				this.sendReply("The question has been updated.");
+				break;
 
-				case 'answer':
-					questions.setAnswer(categoryNumber, questionNumber, value);
-					this.sendReply("The answer has been updated.");
-					break;
+			case 'answer':
+				questions.setAnswer(categoryNumber, questionNumber, value);
+				this.sendReply("The answer has been updated.");
+				break;
 
-				case 'dailydouble':
-					var isSet = toId(value) === 'true';
-					questions.setDailyDouble(categoryNumber, questionNumber, isSet);
-					this.sendReply("The daily double has been " + (isSet ? "set." : "unset."));
-					break;
+			case 'dailydouble':
+				var isSet = toId(value) === 'true';
+				questions.setDailyDouble(categoryNumber, questionNumber, isSet);
+				this.sendReply("The daily double has been " + (isSet ? "set." : "unset."));
+				break;
 			}
 		}
 	},

@@ -231,16 +231,16 @@ var Trivia = (function () {
 		this.room.update();
 
 		switch (this.mode) {
-			case 'first':
-				this.phaseTimeout = setTimeout(this.noAnswer.bind(this), QUESTION_PERIOD);
-				break;
-			case 'timer':
-				this.askedAt = Date.now();
-				this.phaseTimeout = setTimeout(this.timerAnswers.bind(this), QUESTION_PERIOD);
-				break;
-			case 'number':
-				this.phaseTimeout = setTimeout(this.numberAnswers.bind(this), QUESTION_PERIOD);
-				break;
+		case 'first':
+			this.phaseTimeout = setTimeout(this.noAnswer.bind(this), QUESTION_PERIOD);
+			break;
+		case 'timer':
+			this.askedAt = Date.now();
+			this.phaseTimeout = setTimeout(this.timerAnswers.bind(this), QUESTION_PERIOD);
+			break;
+		case 'number':
+			this.phaseTimeout = setTimeout(this.numberAnswers.bind(this), QUESTION_PERIOD);
+			break;
 		}
 	};
 
