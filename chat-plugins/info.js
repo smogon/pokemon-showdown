@@ -137,7 +137,7 @@ var commands = exports.commands = {
 		if (!results.length) return this.sendReply("No results found.");
 		return this.sendReply(results.join('; '));
 	},
-	ipsearchhelp: ["/ipsearch [ip|range|host] - Find all users with specified IP, IP range, or host (Requires: & ~)"],
+	ipsearchhelp: ["/ipsearch [ip|range|host] - Find all users with specified IP, IP range, or host. Requires: & ~"],
 
 	/*********************************************************
 	 * Shortcuts
@@ -318,7 +318,7 @@ var commands = exports.commands = {
 		CommandParser.commands.data.apply(this, arguments);
 	},
 	detailshelp: ["/details [pokemon] - Get additional details on this pokemon/item/move/ability/nature.",
-		"!details [pokemon] - Show everyone these details. Requires: + % @ & ~"],
+		"!details [pokemon] - Show everyone these details. Requires: + % @ # & ~"],
 
 	ds: 'dexsearch',
 	dsearch: 'dexsearch',
