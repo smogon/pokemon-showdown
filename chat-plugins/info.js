@@ -651,7 +651,7 @@ var commands = exports.commands = {
 		"Types must be followed by ' type', e.g., 'dragon type'.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'speed > 100' searches for all Pokemon equal to and greater than 100 speed.",
 		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
-		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameters 'FE' or 'NFE' can be added to search fully or not-fully evolved Pokemon only.",
+		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pokemon only.",
 		"The order of the parameters does not matter."],
 
 	ms: 'movesearch',
