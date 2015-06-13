@@ -298,9 +298,7 @@ var commands = exports.commands = {
 		default:
 			if (!this.can('privateroom', null, room)) return;
 			if (room.isPrivate === true) {
-				if (this.can('makeroom'))
-					this.sendReply("This room is a secret room. Use /privateroom to toggle instead.");
-				return;
+				return this.sendReply("This room is a secret room. Use /privateroom to toggle instead.");
 			}
 			setting = 'hidden';
 			break;
@@ -1984,12 +1982,13 @@ var commands = exports.commands = {
 			this.logModCommand(user.name + " forced a tie.");
 			return false;
 		}
-		target = Users.get(target);
-		if (target) target = target.userid;
-		else target = '';
+		var targetUser = Users.getExact(target);
+		if (!targetUser) return this.sendReply("User '" + target + "' not found.");
+
+		target = targetUser ? targetUser.userid : '';
 
 		if (target) {
-			room.battle.win(target);
+			room.battle.win(targetUser);
 			this.logModCommand(user.name + " forced a win for " + target + ".");
 		}
 	},

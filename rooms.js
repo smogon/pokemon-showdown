@@ -332,8 +332,11 @@ var GlobalRoom = (function () {
 				formatListText += '|,' + (format.column || 1) + '|' + section;
 			}
 			formatListText += '|' + format.name;
-			if (!format.challengeShow) formatListText += ',,';
-			else if (!format.searchShow) formatListText += ',';
+			if (!format.challengeShow) {
+				formatListText += ',,';
+			} else if (!format.searchShow) {
+				formatListText += ',';
+			}
 			if (format.team) formatListText += ',#';
 		}
 		return formatListText;
@@ -1019,8 +1022,11 @@ var BattleRoom = (function () {
 		}
 
 		if (inactiveSide < 0) {
-			if (ticksLeft[0]) inactiveSide = 1;
-			else if (ticksLeft[1]) inactiveSide = 0;
+			if (ticksLeft[0]) {
+				inactiveSide = 1;
+			} else if (ticksLeft[1]) {
+				inactiveSide = 0;
+			}
 		}
 
 		this.forfeit(this.battle.getPlayer(inactiveSide), ' lost due to inactivity.', inactiveSide);
