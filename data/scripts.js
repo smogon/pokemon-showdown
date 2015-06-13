@@ -1342,6 +1342,9 @@ exports.BattleScripts = {
 				case 'psychic':
 					if (hasMove['psyshock'] || hasMove['storedpower']) rejected = true;
 					break;
+				case 'zenheadbutt':
+					if (hasMove['psyshock'] && counter.setupType !== 'Physical') rejected = true;
+					break;
 				case 'headsmash':
 					if (hasMove['stoneedge']) rejected = true;
 					break;
