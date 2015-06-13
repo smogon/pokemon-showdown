@@ -287,6 +287,7 @@ exports.BattleAliases = {
 	"ogre": "Kyogre",
 	"pert": "Swampert",
 	"p2": "Porygon2",
+	"pika": "Pikachu",
 	"pory2": "Porygon2",
 	"pz": "Porygon-Z",
 	"poryz": "Porygon-Z",
