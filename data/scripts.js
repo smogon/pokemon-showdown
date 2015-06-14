@@ -3017,8 +3017,10 @@ exports.BattleScripts = {
 
 			var reject = false;
 			var hasRequiredMove = false;
+			var curSetVariants = [];
 			for (var j = 0, m = curSet.moves.length; j < m; j++) {
-				var moveId = toId(curSet.moves[j]);
+				var variantIndex = this.random(curSet.moves[j].length);
+				var moveId = toId(curSet.moves[j][variantIndex]);
 				if (movesMax[moveId] && teamData.has[moveId] >= movesMax[moveId]) {
 					reject = true;
 					break;
@@ -3026,26 +3028,42 @@ exports.BattleScripts = {
 				if (requiredMoves[moveId] && !teamData.has[requiredMoves[moveId]]) {
 					hasRequiredMove = true;
 				}
+				curSetVariants.push(variantIndex);
 			}
 			if (reject) continue;
-			effectivePool.push(curSet);
-			if (hasRequiredMove) priorityPool.push(curSet);
+			effectivePool.push({set: curSet, moveVariants: curSetVariants});
+			if (hasRequiredMove) priorityPool.push({set: curSet, moveVariants: curSetVariants});
 		}
 		if (priorityPool.length) effectivePool = priorityPool;
 
 		if (!effectivePool.length) {
 			if (!teamData.forceResult) return false;
-			effectivePool = setList;
+			for (var i = 0; i < setList.length; i++) {
+				effectivePool.push({set: setList[i]});
+			}
 		}
 
-		var set = effectivePool[this.random(effectivePool.length)];
-		if (!set.name) set.name = set.species;
-		if (!set.evs) set.evs = {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84};
-		if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-		if (!set.level) set.level = 100;
-		if (!set.gender) set.gender = template.gender || (this.random() ? 'M' : 'F');
-		if (typeof set.shiny === 'undefined') set.shiny = !this.random(1024);
-		return set;
+		var setData = effectivePool[this.random(effectivePool.length)];
+		var moves = [];
+		for (var i = 0; i < setData.set.moves.length; i++) {
+			var moveSlot = setData.set.moves[i];
+			moves.push(setData.moveVariants ? moveSlot[setData.moveVariants[i]] : moveSlot[this.random(moveSlot.length)]);
+		}
+
+		return {
+			name: setData.set.name || setData.set.species,
+			species: setData.set.species,
+			gender: setData.set.gender || template.gender || (this.random() ? 'M' : 'F'),
+			item: setData.set.item || '',
+			ability: setData.set.ability || template.abilities['0'],
+			shiny: typeof setData.set.shiny === 'undefined' ? !this.random(1024) : setData.set.shiny,
+			level: 100,
+			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
+			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
+			ivs: setData.set.ivs || {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
+			nature: setData.set.nature || 'Serious',
+			moves: moves
+		};
 	},
 	randomFactoryTeam: function (side, depth) {
 		if (!depth) depth = 0;
