@@ -870,19 +870,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			return {room: tournament.room.title, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
 		})));
 	} else if (cmd === 'help') {
-		if (!this.canBroadcast()) return;
-		return this.sendReplyBox(
-			"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
-			"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
-			"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
-			"- begin/start: Starts the tournament in the current room.<br />" +
-			"- dq/disqualify &lt;user>: Disqualifies a user.<br />" +
-			"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
-			"- runautodq: Manually run the automatic disqualifier.<br />" +
-			"- getusers: Lists the users in the current tournament.<br />" +
-			"- on/off: Enables/disables allowing mods to start tournaments.<br />" +
-			"More detailed help can be found <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\">here</a>"
-		);
+		return this.parse('/help tournament');
 	} else if (cmd === 'on' || cmd === 'enable') {
 		if (!this.can('tournamentsmanagement', null, room)) return;
 		if (room.toursEnabled) {
@@ -960,6 +948,21 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			commandHandler.call(this, tournament, user, params, cmd);
 		}
 	}
+};
+CommandParser.commands.tournamenthelp = function (target, room, user) {
+	if (!this.canBroadcast()) return;
+	return this.sendReplyBox(
+		"- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />" +
+		"- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />" +
+		"- end/stop/delete: Forcibly ends the tournament in the current room.<br />" +
+		"- begin/start: Starts the tournament in the current room.<br />" +
+		"- dq/disqualify &lt;user>: Disqualifies a user.<br />" +
+		"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
+		"- runautodq: Manually run the automatic disqualifier.<br />" +
+		"- getusers: Lists the users in the current tournament.<br />" +
+		"- on/off: Enables/disables allowing mods to start tournaments.<br />" +
+		"More detailed help can be found <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\">here</a>"
+	);
 };
 
 exports.Tournament = Tournament;
