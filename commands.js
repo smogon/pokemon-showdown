@@ -89,7 +89,7 @@ var commands = exports.commands = {
 				'|raw|<img src="//play.pokemonshowdown.com/sprites/trainers/' + avatar + '.png" alt="" width="80" height="80" />');
 		}
 	},
-	avatarhelp: ["/avatar [new avatar number] - Change your trainer sprite."],
+	avatarhelp: ["/avatar [avatar number 1 to 293] - Change your trainer sprite."],
 
 	signout: 'logout',
 	logout: function (target, room, user) {
