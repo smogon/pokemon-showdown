@@ -793,7 +793,7 @@ User = (function () {
 	};
 	User.prototype.filterName = function (name) {
 		if (Config.namefilter) {
-			name = Config.namefilter(name);
+			name = Config.namefilter(name, this);
 		}
 		name = toName(name);
 		name = name.replace(/^[^A-Za-z0-9]+/, "");
