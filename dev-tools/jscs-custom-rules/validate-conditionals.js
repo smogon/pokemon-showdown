@@ -120,7 +120,7 @@ module.exports.prototype = {
 				}
 			}
 
-			// Curly braces iff multiline
+			// Curly braces if multiline
 			var nodesCheck = [consequent];
 			if (node.alternate) nodesCheck.push(node.alternate);
 			for (var i = 0; i < nodesCheck.length; i++) {
