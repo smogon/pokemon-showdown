@@ -49,7 +49,7 @@ var commands = exports.commands = {
 		Object.keys(rankLists).sort(function (a, b) {
 			return (Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank;
 		}).forEach(function (r) {
-			buffer.push((Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
+			buffer.push((Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sortBy(toId).join(", "));
 		});
 
 		if (!buffer.length) buffer = "This server has no auth.";
