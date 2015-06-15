@@ -1466,9 +1466,9 @@ var commands = exports.commands = {
 	smogintro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"Welcome to Smogon's official simulator!<br />" +
-			"- <a href=\"https://www.smogon.com/forums/forums/smogon-info-intro-hub.264\">Smogon Info / Intro Hub</a><br />" +
-			"- <a href=\"http://www.smogon.com/forums/threads/3498332\">Tiering FAQ</a><br />"
+			"Welcome to Smogon's official simulator! The <a href=\"https://www.smogon.com/forums/forums/264\">Smogon Info / Intro Hub</a> can help you get integrated into the community.<br />" +
+			"- <a href=\"https://www.smogon.com/forums/threads/3526346\">Useful Smogon Info</a><br />" +
+			"- <a href=\"https://www.smogon.com/forums/threads/3498332\">Tiering FAQ</a><br />"
 		);
 	},
 
