@@ -1373,6 +1373,10 @@ User = (function () {
 		this.autoconfirmed = '';
 		this.updateIdentity();
 	};
+	User.prototype.exceedMaxBattles = function () {
+		var maxBattleLimit = 20;
+		return Object.keys(this.battles).length >= maxBattleLimit;
+	};
 	User.prototype.tryJoinRoom = function (room, connection) {
 		var roomid = (room && room.id ? room.id : room);
 		room = Rooms.search(room);
@@ -1405,6 +1409,10 @@ User = (function () {
 			if (!this.named) {
 				return null;
 			}
+		}
+		if (this.exceedMaxBattles()) {
+			connection.sendTo(roomid, "|noinit|joinfailed|You have reached the max limit of battles you can be in at the same time.");
+			return false;
 		}
 
 		if (Rooms.aliases[toId(roomid)] === room) {

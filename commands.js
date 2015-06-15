@@ -2010,6 +2010,10 @@ var commands = exports.commands = {
 					return false;
 				}
 			}
+			if (user.exceedMaxBattles()) {
+				this.popupReply("Starting a new battle now will exceed the max limit of battles you are allowed to be in.");
+				return false;
+			}
 			Rooms.global.searchBattle(user, target);
 		} else {
 			Rooms.global.cancelSearch(user);
@@ -2033,6 +2037,10 @@ var commands = exports.commands = {
 				this.popupReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to challenge users.");
 				return false;
 			}
+		}
+		if (user.exceedMaxBattles()) {
+			this.popupReply("Starting a new battle now will exceed the max limit of battles you are allowed to be in.");
+			return false;
 		}
 		user.prepBattle(Tools.getFormat(target).id, 'challenge', connection, function (result) {
 			if (result) user.makeChallenge(targetUser, target);
@@ -2071,6 +2079,10 @@ var commands = exports.commands = {
 		if (user.challengesFrom[userid]) format = user.challengesFrom[userid].format;
 		if (!format) {
 			this.popupReply(target + " cancelled their challenge before you could accept it.");
+			return false;
+		}
+		if (user.exceedMaxBattles()) {
+			this.popupReply("Starting a new battle now will exceed the max limit of battle rooms you are allowed to be in.");
 			return false;
 		}
 		user.prepBattle(Tools.getFormat(format).id, 'challenge', connection, function (result) {
