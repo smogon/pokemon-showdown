@@ -29,6 +29,44 @@ describe('Thousand Arrows', function () {
 		assert.strictEqual(battle.p2.active[0].boosts.spa, 2);
 	});
 
+	it.skip('should not ignore type effectiveness on the first hit against Flying-type Pokemon with Ring Target', function () {
+		battle = BattleEngine.Battle.construct();
+		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", level: 10, ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Ho-Oh", ability: 'wonderguard', item: 'ringtarget', moves: ['recover']}]);
+		battle.commitDecisions();
+		assert.notStrictEqual(battle.p2.active.hp, battle.p2.active.maxhp);
+	});
+
+	it.skip('should have its effects against Flying-type Pokemon rendered null by Iron Ball', function () {
+		battle = BattleEngine.Battle.construct();
+		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", level: 10, ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'mudslap']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Ho-Oh", ability: 'wonderguard', item: 'ironball', moves: ['recover', 'trick']}]);
+		battle.commitDecisions();
+		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		var hp = battle.p2.active[0].hp;
+		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
+		battle.choose('p1', 'move 1');
+		battle.choose('p2', 'move 2');
+		assert.strictEqual(hp, battle.p2.active[0].hp);
+	});
+
+	it.skip('should have its effects against Flying-type Pokemon rendered null by Gravity', function () {
+		battle = BattleEngine.Battle.construct();
+		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", level: 10, ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'mudslap']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Ho-Oh", ability: 'wonderguard', item: 'ironball', moves: ['recover', 'gravity']}]);
+		battle.choose('p1', 'move 2');
+		battle.choose('p2', 'move 2');
+		// During Gravity, Thousand Arrows can be super effective but once it ends has to be neutral for one hit
+		while (battle.getPseudoWeather('gravity')) {
+			battle.commitDecisions();
+			assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		}
+		battle.commitDecisions();
+		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+		battle.commitDecisions();
+		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
+	});
+
 	it('should hit Pokemon with Levitate and remove their Ground immunity', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]);
