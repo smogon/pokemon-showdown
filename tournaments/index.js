@@ -148,7 +148,10 @@ Tournament = (function () {
 		}
 		this.isEnded = true;
 		this.room.add('|tournament|forceend');
-		this.isEnded = true;
+		var tournamentId = this.room.id;
+		this.generator.getUsers().forEach(function (user) {
+			delete user.tournamentCount[tournamentId];
+		});
 	};
 
 	Tournament.prototype.updateFor = function (targetUser, connection) {
@@ -269,6 +272,7 @@ Tournament = (function () {
 
 		this.room.add('|tournament|join|' + user.name);
 		user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
+		user.tournamentCount[this.room.id] = 1;
 		this.isBracketInvalidated = true;
 		this.update();
 		if (this.playerCap === (users.length + 1)) this.room.add("The tournament is now full.");
@@ -282,6 +286,7 @@ Tournament = (function () {
 
 		this.room.add('|tournament|leave|' + user.name);
 		user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
+		delete user.tournamentCount[this.room.id];
 		this.isBracketInvalidated = true;
 		this.update();
 	};
@@ -294,7 +299,9 @@ Tournament = (function () {
 
 		this.room.add('|tournament|replace|' + user.name + '|' + replacementUser.name);
 		user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
+		delete user.tournamentCount[this.room.id];
 		replacementUser.sendTo(this.room, '|tournament|update|{"isJoined":true}');
+		replacementUser.tournamentCount[this.room.id] = 1;
 		this.isBracketInvalidated = true;
 		this.update();
 	};
@@ -438,11 +445,11 @@ Tournament = (function () {
 	Tournament.prototype.disqualifyUser = function (user, output) {
 		var error = this.generator.disqualifyUser(user);
 		if (error) {
-			output.sendReply('|tournament|error|' + error);
+			if (output) output.sendReply('|tournament|error|' + error);
 			return false;
 		}
 		if (this.disqualifiedUsers.get(user)) {
-			output.sendReply('|tournament|error|AlreadyDisqualified');
+			if (output) output.sendReply('|tournament|error|AlreadyDisqualified');
 			return false;
 		}
 
@@ -730,6 +737,12 @@ Tournament = (function () {
 			bracketData: this.getBracketData()
 		}));
 		this.isEnded = true;
+
+		var tournamentId = this.room.id;
+		this.generator.getUsers().forEach(function (user) {
+			delete user.tournamentCount[tournamentId];
+		});
+
 		delete exports.tournaments[toId(this.room.id)];
 	};
 
