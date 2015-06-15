@@ -145,6 +145,7 @@ var commands = exports.commands = {
 
 	inv: 'invite',
 	invite: function (target, room, user) {
+		if (!target) return this.parse('/help invite');
 		target = this.splitTarget(target);
 		if (!this.targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
