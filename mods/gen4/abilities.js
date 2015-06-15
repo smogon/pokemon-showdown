@@ -100,6 +100,21 @@ exports.BattleAbilities = {
 		rating: 0,
 		num: 57
 	},
+	"pressure": {
+		desc: "If this Pokemon is the target of another Pokemon's move, that move loses one additional PP.",
+		shortDesc: "If this Pokemon is the target of a move, that move loses one additional PP.",
+		onStart: function (pokemon) {
+			this.add('-ability', pokemon, 'Pressure');
+		},
+		onSourceDeductPP: function (pp, target, source) {
+			if (target === source) return;
+			return pp + 1;
+		},
+		id: "pressure",
+		name: "Pressure",
+		rating: 1.5,
+		num: 46
+	},
 	"simple": {
 		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
 		onModifyBoost: function (boosts) {
