@@ -64,35 +64,47 @@ var rangeVoxility = cidr.checker('5.254.64.0/20');
 exports.reverse = function reverseDns(ip, callback) {
 	if (ip) {
 		if (ip.startsWith('106.76.') || ip.startsWith('106.77.') || ip.startsWith('106.78.') || ip.startsWith('106.79.') || ip.startsWith('112.110.') || ip.startsWith('27.97.') || ip.startsWith('49.15.') || ip.startsWith('49.14.') || ip.startsWith('1.187.')) {
-			callback(null, ['ideacellular.nohost']);
+			callback(null, ['ideacellular.mobile-nohost']);
 			return;
 		}
 		if (ip.startsWith('172.56.') || ip.startsWith('149.254.')) {
-			callback(null, ['tmobile.nohost']);
+			callback(null, ['tmobile.mobile-nohost']);
 			return;
 		}
 		if (ip.startsWith('167.114.')) {
-			callback(null, ['ovh.nohost']);
+			callback(null, ['ovh.proxy-nohost']);
 			return;
 		}
 		if (ip.startsWith('104.131.') || ip.startsWith('104.236.') || ip.startsWith('198.199.') || ip.startsWith('45.55.') || ip.startsWith('192.241.') || ip.startsWith('162.243.') || ip.startsWith('107.170.')) {
-			callback(null, ['digitalocean.nohost']);
+			callback(null, ['digitalocean.proxy-nohost']);
 			return;
 		}
 		if (ip.startsWith('178.62.')) {
-			callback(null, ['digitalocean.nohost']);
+			callback(null, ['digitalocean.proxy-nohost']);
 			return;
 		}
 		if (ip.startsWith('46.16.36.')) {
-			callback(null, ['anchorfree.nohost']);
+			callback(null, ['anchorfree.proxy-nohost']);
 			return;
 		}
 		if (ip.startsWith('216.172.142.')) {
-			callback(null, ['egihosting.nohost']);
+			callback(null, ['egihosting.proxy-nohost']);
+			return;
+		}
+		if (ip.startsWith('217.78.0.')) {
+			callback(null, ['dediserve.proxy-nohost']);
+			return;
+		}
+		if (ip.startsWith('179.43.147.')) {
+			callback(null, ['privatelayer.proxy-nohost']);
 			return;
 		}
 		if (rangeLeaseweb(ip) || rangeLeaseweb2(ip) || rangeLeaseweb3(ip) || rangeVoxility(ip)) {
-			callback(null, ['zenmate.nohost']);
+			callback(null, ['zenmate.proxy-nohost']);
+			return;
+		}
+		if (ip.startsWith('198.144.104.') || ip.startsWith('198.47.115.') || ip.startsWith('199.255.215.') || ip.startsWith('204.14.76.') || ip.startsWith('204.14.77.') || ip.startsWith('204.14.78.') || ip.startsWith('204.14.79.') || ip.startsWith('205.164.32.') || ip.startsWith('209.73.132.') || ip.startsWith('209.73.151.') || ip.startsWith('216.172.135.') || ip.startsWith('46.16.34.') || ip.startsWith('46.16.35.') || ip.startsWith('50.117.45.') || ip.startsWith('63.141.198.') || ip.startsWith('63.141.199.') || ip.startsWith('74.115.1.') || ip.startsWith('74.115.5.') || ip.startsWith('85.237.197.') || ip.startsWith('85.237.222.')) {
+			callback(null, ['anchorfree.proxy-nohost']);
 			return;
 		}
 	}
