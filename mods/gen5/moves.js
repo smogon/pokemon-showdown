@@ -768,25 +768,25 @@ exports.BattleMovedex = {
 	},
 	skydrop: {
 		inherit: true,
-		onTry: function (attacker, defender, move) {
-			if (defender.fainted) return false;
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			if (defender.volatiles['substitute'] || defender.side === attacker.side) {
-				return false;
-			}
-			if (defender.volatiles['protect']) {
-				this.add('-activate', defender, 'Protect');
+		onTryHit: function (target, source, move) {
+			if (target.fainted) return false;
+			if (source.removeVolatile(move.id)) {
+				if (target !== source.volatiles['twoturnmove'].source) return false;
+
+				if (target.hasType('Flying')) {
+					this.add('-immune', target, '[msg]');
+					this.add('-end', target, 'Sky Drop');
+					return null;
+				}
+			} else {
+				if (target.volatiles['substitute'] || target.side === source.side) {
+					return false;
+				}
+
+				this.add('-prepare', source, move.name, target);
+				source.addVolatile('twoturnmove', target);
 				return null;
 			}
-			if (defender.volatiles['bounce'] || defender.volatiles['dig'] || defender.volatiles['dive'] || defender.volatiles['fly'] || defender.volatiles['shadowforce']) {
-				this.add('-miss', attacker, defender);
-				return null;
-			}
-			this.add('-prepare', attacker, move.name, defender);
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
 		}
 	},
 	sleeppowder: {
