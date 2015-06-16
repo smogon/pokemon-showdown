@@ -267,6 +267,7 @@ exports.BattleAliases = {
 	"forry": "Forretress",
 	"gar": "Gengar",
 	"garde": "Gardevoir",
+	"gatr": "Feraligatr",
 	"hera": "Heracross",
 	"hippo": "Hippowdon",
 	"honch": "Honchkrow",
