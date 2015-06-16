@@ -412,10 +412,11 @@ var commands = exports.commands = {
 			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room)) {
 				this.sendReply('Source:');
-				this.sendReplyBox('<code>' + Tools.escapeHTML(room.introMessage) + '</code>');
+				this.sendReplyBox('<code>/roomintro ' + Tools.escapeHTML(room.introMessage) + '</code>');
 			}
 			return;
 		}
+		target = target.trim();
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canHTML(target)) return;
 		if (!/</.test(target)) {
@@ -423,8 +424,8 @@ var commands = exports.commands = {
 			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
 			target = target.replace(re, '<a href="$1">$1</a>');
 		}
+		if (target.substr(0, 11) === '/roomintro ') target = target.substr(11);
 
-		if (!target.trim()) target = '';
 		room.introMessage = target;
 		this.sendReply("(The room introduction has been changed to:)");
 		this.sendReply('|raw|<div class="infobox infobox-limited">' + target + '</div>');
