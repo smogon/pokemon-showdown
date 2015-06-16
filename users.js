@@ -819,15 +819,20 @@ User = (function () {
 		}
 
 		if (!name) name = '';
+		if (!/[a-zA-Z]/.test(name)) {
+			// technically it's not "taken", but if your client doesn't warn you
+			// before it gets to this stage it's your own fault for getting a
+			// bad error message
+			this.send('|nametaken|' + "|Your name must contain at least one letter.");
+			return false;
+		}
+
 		name = this.filterName(name);
 		var userid = toId(name);
 		if (this.registered) auth = false;
 
 		if (!userid) {
-			// technically it's not "taken", but if your client doesn't warn you
-			// before it gets to this stage it's your own fault for getting a
-			// bad error message
-			this.send('|nametaken|' + "|You did not specify a name or your name was invalid.");
+			this.send('|nametaken|' + "|Your name contains a banned word.");
 			return false;
 		} else {
 			if (userid === this.userid && !auth) {
