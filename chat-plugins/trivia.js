@@ -565,7 +565,7 @@ var commands = {
 	// trivia game commands
 	new: function (target, room, user) {
 		if (room.id !== 'trivia' || !this.can('broadcast', null, room) || !target) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (trivia[room.id]) return this.sendReply("There is already a trivia game in progress.");
 
 		target = target.split(',');
@@ -598,7 +598,7 @@ var commands = {
 
 	start: function (target, room, user) {
 		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game to start.");
 		trivium.startGame(this);
@@ -607,7 +607,7 @@ var commands = {
 
 	kick: function (target, room, user) {
 		if (room.id !== 'trivia' || !this.can('mute', null, room) || !target) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
 		trivium.kickParticipant(this, target);
@@ -628,7 +628,7 @@ var commands = {
 
 	end: function (target, room, user) {
 		if (room.id !== 'trivia' || !this.can('broadcast', null, room)) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
 		trivium.endGame(this, user);
@@ -639,7 +639,7 @@ var commands = {
 	submit: 'add',
 	add: function (target, room, user, connection, cmd) {
 		if (room.id !== 'questionworkshop' || (cmd === 'add' && !this.can('mute', null, room)) || !target) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = target.split('|');
 		if (target.length !== 3) return this.sendReply("Invalid arguments specified. View /help trivia for more information.");
@@ -709,7 +709,7 @@ var commands = {
 	reject: 'accept',
 	accept: function (target, room, user, connection, cmd) {
 		if (room.id !== 'questionworkshop' || !this.can('mute', null, room)) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = target.trim();
 		if (!target) return false;
@@ -795,7 +795,7 @@ var commands = {
 
 	delete: function (target, room, user) {
 		if (room.id !== 'questionworkshop' || !this.can('mute', null, room)) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 
 		target = target.trim();
 		if (!target) return false;
