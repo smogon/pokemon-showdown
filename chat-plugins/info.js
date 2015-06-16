@@ -324,7 +324,8 @@ var commands = exports.commands = {
 		"!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ # & ~"],
 
 	dt: 'details',
-	details: function () {
+	details: function (target) {
+		if (!target) return this.parse('/help details');
 		CommandParser.commands.data.apply(this, arguments);
 	},
 	detailshelp: ["/details [pokemon] - Get additional details on this pokemon/item/move/ability/nature.",
@@ -1499,9 +1500,9 @@ var commands = exports.commands = {
 		this.sendReplyBox(
 			"An introduction to the Create-A-Pok&eacute;mon project:<br />" +
 			"- <a href=\"https://www.smogon.com/cap/\">CAP project website and description</a><br />" +
-			"- <a href=\"https://www.smogon.com/forums/showthread.php?t=48782\">What Pok&eacute;mon have been made?</a><br />" +
+			"- <a href=\"https://www.smogon.com/forums/threads/48782/\">What Pok&eacute;mon have been made?</a><br />" +
 			"- <a href=\"https://www.smogon.com/forums/forums/311\">Talk about the metagame here</a><br />" +
-			"- <a href=\"https://www.smogon.com/forums/threads/3512318/#post-5594694\">Sample XY CAP teams</a>"
+			"- <a href=\"https://www.smogon.com/forums/threads/3512318/\">Sample XY CAP teams</a>"
 		);
 	},
 	caphelp: ["/cap - Provides an introduction to the Create-A-Pok&eacute;mon project.",
