@@ -33,12 +33,12 @@ describe('Iron Ball', function () {
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it.skip('should not deal neutral type effectiveness to Flying-type Pokemon in Gravity', function () {
+	it('should not deal neutral type effectiveness to Flying-type Pokemon in Gravity', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake', 'gravity']}]);
 		battle.join('p2', 'Guest 2', 1, [
-			{species: "Aerodactyl", ability: 'pressure', item: 'ironball', moves: ['stealthrock']},
-			{species: "Tropius", ability: 'harvest', item: 'ironball', moves: ['leechseed']}
+			{species: "Aerodactyl", ability: 'shellarmor', item: 'ironball', moves: ['stealthrock']},
+			{species: "Tropius", ability: 'shellarmor', item: 'ironball', moves: ['leechseed']}
 		]);
 		// Set up Gravity
 		battle.choose('p1', 'move 2');

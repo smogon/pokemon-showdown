@@ -2024,9 +2024,12 @@ exports.BattleItems = {
 		fling: {
 			basePower: 130
 		},
-		onModifyPokemon: function (pokemon) {
-			if (pokemon.negateImmunity['Ground']) return;
-			pokemon.negateImmunity['Ground'] = 'IgnoreEffectiveness';
+		onEffectiveness: function (typeMod, target, type, move) {
+			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.getPseudoWeather('gravity')) return;
+			if (move.type === 'Ground' && !this.getImmunity(move.type, target)) return 0;
+		},
+		onNegateImmunity: function (pokemon, type) {
+			if (type === 'Ground') return false;
 		},
 		onModifySpe: function (speMod) {
 			return this.chain(speMod, 0.5);
@@ -3659,8 +3662,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
+		onNegateImmunity: function (pokemon, type) {
+			if (type in this.data.TypeChart && this.runEvent('Immunity', pokemon, null, null, type)) return false;
 		},
 		num: 543,
 		gen: 5,

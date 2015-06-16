@@ -207,7 +207,6 @@ BattlePokemon = (function () {
 
 		this.statusData = {};
 		this.volatiles = {};
-		this.negateImmunity = {};
 
 		this.height = this.template.height;
 		this.heightm = this.template.heightm;
@@ -368,7 +367,6 @@ BattlePokemon = (function () {
 		return this.details + '|' + this.getHealth(side);
 	};
 	BattlePokemon.prototype.update = function (init) {
-		this.negateImmunity = {};
 		this.trapped = this.maybeTrapped = false;
 		this.maybeDisabled = false;
 		for (var i in this.moveset) {
@@ -1295,16 +1293,13 @@ BattlePokemon = (function () {
 		if (!type || type === '???') {
 			return true;
 		}
-		if (this.negateImmunity[type]) return true;
-		if (!(this.negateImmunity['Type'] && type in this.battle.data.TypeChart)) {
-			// Ring Target not active
-			if (!this.battle.getImmunity(type, this)) {
-				this.battle.debug('natural immunity');
-				if (message) {
-					this.battle.add('-immune', this, '[msg]');
-				}
-				return false;
+		if (!this.battle.runEvent('NegateImmunity', this, type)) return true;
+		if (!this.battle.getImmunity(type, this)) {
+			this.battle.debug('natural immunity');
+			if (message) {
+				this.battle.add('-immune', this, '[msg]');
 			}
+			return false;
 		}
 		var immunity = this.battle.runEvent('Immunity', this, null, null, type);
 		if (!immunity) {
@@ -3289,11 +3284,7 @@ Battle = (function () {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		move.typeMod = 0;
-
-		if (target.negateImmunity[move.type] !== 'IgnoreEffectiveness' || this.getImmunity(move.type, target)) {
-			move.typeMod = target.runEffectiveness(move);
-		}
+		move.typeMod = target.runEffectiveness(move);
 
 		move.typeMod = this.clampIntRange(move.typeMod, -6, 6);
 		if (move.typeMod > 0) {
