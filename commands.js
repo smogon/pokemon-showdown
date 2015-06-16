@@ -440,6 +440,7 @@ var commands = exports.commands = {
 	roomalias: function (target, room, user) {
 		if (!room.chatRoomData) return this.sendReply("This room isn't designed for aliases.");
 		if (!target) {
+			if (!this.canBroadcast()) return;
 			if (!room.chatRoomData.aliases || !room.chatRoomData.aliases.length) return this.sendReplyBox("This room does not have any aliases.");
 			return this.sendReplyBox("This room has the following aliases: " + room.chatRoomData.aliases.join(", ") + "");
 		}
@@ -832,7 +833,8 @@ var commands = exports.commands = {
 	mutehelp: ["/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ # & ~"],
 
 	hm: 'hourmute',
-	hourmute: function () {
+	hourmute: function (target) {
+		if (!target) return this.parse('/help hourmute');
 		CommandParser.commands.mute.apply(this, arguments);
 	},
 	hourmutehelp: ["/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. Requires: % @ # & ~"],
