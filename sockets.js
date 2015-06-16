@@ -396,6 +396,7 @@ if (cluster.isMaster) {
 			var pipeIndex = message.indexOf('|');
 			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
 			// drop legacy JSON messages
+			if (!message.charAt) throw new Error('message: ' + JSON.stringify(message));
 			if (message.charAt(0) === '{') return;
 			process.send('<' + socketid + '\n' + message);
 		});
