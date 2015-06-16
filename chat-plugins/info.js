@@ -98,7 +98,7 @@ var commands = exports.commands = {
 	host: function (target, room, user, connection, cmd) {
 		if (!this.can('rangeban')) return;
 		var self = this;
-		Dnsbl.reverse(target, function(err, hosts) {
+		Dnsbl.reverse(target, function (err, hosts) {
 			self.sendReply('IP ' + target + ': ' + (hosts ? hosts[0] : 'NULL'));
 		});
 	},
