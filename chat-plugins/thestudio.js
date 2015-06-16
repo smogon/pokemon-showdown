@@ -30,7 +30,7 @@ if (theStudio && !theStudio.plugin) {
 var commands = {
 	start: function (target, room, user) {
 		if (room.id !== 'thestudio' || !room.chatRoomData || !this.can('mute', null, room)) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are already in progress.");
 
 		var nominations = artistOfTheDay.nominations;
@@ -55,7 +55,7 @@ var commands = {
 
 	end: function (target, room, user) {
 		if (room.id !== 'thestudio' || !room.chatRoomData || !this.can('mute', null, room)) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
 		if (!artistOfTheDay.nominations.size) return this.sendReply("No nominations have been submitted yet.");
 
@@ -76,7 +76,7 @@ var commands = {
 
 	prenom: function (target, room, user) {
 		if (room.id !== 'thestudio' || !room.chatRoomData || !target) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are in progress.");
 		if (!room.chatRoomData.prenominations) room.chatRoomData.prenominations = [];
 
@@ -115,7 +115,7 @@ var commands = {
 
 	nom: function (target, room, user) {
 		if (room.id !== 'thestudio' || !room.chatRoomData || !target) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
 
 		var removedNominators = artistOfTheDay.removedNominators;
@@ -188,7 +188,7 @@ var commands = {
 
 	removenom: function (target, room, user) {
 		if (room.id !== 'thestudio' || !room.chatRoomData || !target || !this.can('mute', null, room)) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
 		if (!artistOfTheDay.nominations.size) return this.sendReply("No nominations have been submitted yet.");
 
@@ -211,7 +211,7 @@ var commands = {
 
 	set: function (target, room, user) {
 		if (room.id !== 'thestudio' || !room.chatRoomData || !this.can('mute', null, room)) return false;
-		if ((user.locked || user.mutedRooms[room.id]) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!toId(target)) return this.sendReply("No valid artist was specified.");
 		if (artistOfTheDay.pendingNominations) return this.sendReply("The Artist of the Day cannot be set while nominations are in progress.");
 
