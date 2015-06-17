@@ -314,6 +314,7 @@ exports.BattleAliases = {
 	"ohmagod":"Plasmanta",
 
 	// moves
+	"bb": "Brave Bird",
 	"bpass": "Baton Pass",
 	"bp": "Baton Pass",
 	"cc": "Close Combat",
