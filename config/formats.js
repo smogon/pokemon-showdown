@@ -109,7 +109,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		requirePentagon: true,
 		validateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least three Pokémon.'];
+			if (team.length < 3) return ['You must bring at least three Pok\u00e9mon.'];
 		},
 		onBegin: function () {
 			this.debug('cutting down to 3');
@@ -127,7 +127,7 @@ exports.Formats = [
 		ruleset: ['Battle Spot Singles'],
 		requirePentagon: true,
 		validateTeam: function (team, format) {
-			if (team.length < 3) return ['You must bring at least three Pokémon.'];
+			if (team.length < 3) return ['You must bring at least three Pok\u00e9mon.'];
 		},
 		onBegin: function () {
 			this.debug('cutting down to 3');
@@ -231,7 +231,7 @@ exports.Formats = [
 		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
 		requirePentagon: true,
 		validateTeam: function (team, format) {
-			if (team.length < 4) return ['You must bring at least four Pokémon.'];
+			if (team.length < 4) return ['You must bring at least four Pok\u00e9mon.'];
 		},
 		onBegin: function () {
 			this.debug('cutting down to 4');
@@ -457,7 +457,7 @@ exports.Formats = [
 			'Xerneas', 'Yveltal', 'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew'
 		],
 		validateTeam: function (team, format) {
-			if (team.length > 3) return ['You may only bring up to three Pokémon.'];
+			if (team.length > 3) return ['You may only bring up to three Pok\u00e9mon.'];
 		},
 		onBegin: function () {
 			this.p1.pokemon = this.p1.pokemon.slice(0, 1);
@@ -529,7 +529,7 @@ exports.Formats = [
 				for (var i in template.abilities) {
 					if (set.ability === template.abilities[i]) legalAbility = true;
 				}
-				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pokémon that do not naturally have it.'];
+				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
 			}
 		}
 	},
@@ -575,7 +575,7 @@ exports.Formats = [
 		ruleset: ['Doubles OU'],
 		banlist: ['Perish Song'],
 		validateTeam: function (team, format) {
-			if (team.length > 4) return ['You may only bring up to four Pokémon.'];
+			if (team.length > 4) return ['You may only bring up to four Pok\u00e9mon.'];
 		},
 		onBegin: function () {
 			this.p1.pokemon = this.p1.pokemon.slice(0, 2);
