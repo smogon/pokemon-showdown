@@ -316,6 +316,14 @@ exports.BattleMovedex = {
 			}
 		}
 	},
+	poisongas: {
+		inherit: true,
+		ignoreImmunity: false
+	},
+	poisonpowder: {
+		inherit: true,
+		ignoreImmunity: false
+	},
 	psywave: {
 		inherit: true,
 		damageCallback: function (pokemon) {
@@ -535,6 +543,10 @@ exports.BattleMovedex = {
 				pokemon.removeVolatile('lockedmove');
 			}
 		}
+	},
+	toxic: {
+		inherit: true,
+		ignoreImmunity: false
 	},
 	triattack: {
 		inherit: true,

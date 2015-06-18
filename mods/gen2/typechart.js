@@ -92,7 +92,27 @@ exports.BattleTypeChart = {
 		HPivs: {"atk":26, "def":24, "spa":30, "spd":30, "spe":30, "hp":22}
 	},
 	"Steel": {
-		inherit: true,
+		damageTaken: {
+			sandstorm: 3,
+			"Bug": 2,
+			"Dark": 2,
+			"Dragon": 2,
+			"Electric": 0,
+			"Fairy": 2,
+			"Fighting": 1,
+			"Fire": 1,
+			"Flying": 2,
+			"Ghost": 2,
+			"Grass": 2,
+			"Ground": 1,
+			"Ice": 2,
+			"Normal": 2,
+			"Poison": 3,
+			"Psychic": 2,
+			"Rock": 2,
+			"Steel": 2,
+			"Water": 0
+		},
 		HPivs: {"atk":26, "def":30, "spa":30, "spd":30, "spe":30, "hp":30}
 	},
 	"Water": {
