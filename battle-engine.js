@@ -2934,6 +2934,9 @@ Battle = (function () {
 					boost[i] = -boost[i];
 				}
 				switch (effect.id) {
+				case 'bellydrum':
+					// No message
+					break;
 				case 'intimidate': case 'gooey':
 					this.add(msg, target, i, boost[i]);
 					break;
