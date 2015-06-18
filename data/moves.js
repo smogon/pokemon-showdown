@@ -904,9 +904,8 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.directDamage(target.maxhp / 2);
-			var boost = target.hasAbility('contrary') ? -6 : 6;
-			target.setBoost({atk: boost});
-			this.add('-setboost', target, 'atk', boost, '[from] move: Belly Drum');
+			target.setBoost({atk: 6});
+			this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
 		},
 		secondary: false,
 		target: "self",
