@@ -23,4 +23,20 @@ describe('Contrary', function () {
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].boosts['atk'], -1);
 	});
+
+	it('should invert Belly Drum maximizing Attack', function () {
+		battle = BattleEngine.Battle.construct();
+		battle.join('p1', 'Guest 1', 1, [{species: "Spinda", ability: 'contrary', moves: ['bellydrum']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", ability: 'multiscale',  moves: ['dragondance']}]);
+		battle.commitDecisions();
+		assert.strictEqual(battle.p1.active[0].boosts['atk'], -6);
+	});
+
+	it('should be suppressed by Mold Breaker', function () {
+		battle = BattleEngine.Battle.construct();
+		battle.join('p1', 'Guest 1', 1, [{species: "Spinda", ability: 'contrary', moves: ['tackle']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", ability: 'moldbreaker',  moves: ['growl']}]);
+		battle.commitDecisions();
+		assert.strictEqual(battle.p1.active[0].boosts['atk'], -1);
+	});
 });
