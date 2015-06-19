@@ -78,6 +78,7 @@ var commands = {
 
 	prenom: function (target, room, user) {
 		if (room.id !== 'thestudio') return this.sendReply('This command can only be used in The Studio.');
+		if (!target) this.parse('/help aotd prenom');
 		if (!room.chatRoomData || !target) return false;
 		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are in progress.");
@@ -118,6 +119,7 @@ var commands = {
 
 	nom: function (target, room, user) {
 		if (room.id !== 'thestudio') return this.sendReply('This command can only be used in The Studio.');
+		if (!target) this.parse('/help aotd nom');
 		if (!room.chatRoomData || !target) return false;
 		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
@@ -193,6 +195,7 @@ var commands = {
 
 	removenom: function (target, room, user) {
 		if (room.id !== 'thestudio') return this.sendReply('This command can only be used in The Studio.');
+		if (!target) this.parse('/help aotd removenom');
 		if (!room.chatRoomData || !target || !this.can('mute', null, room)) return false;
 		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!artistOfTheDay.pendingNominations) return this.sendReply("Nominations for the Artist of the Day are not in progress.");
@@ -217,6 +220,7 @@ var commands = {
 
 	set: function (target, room, user) {
 		if (room.id !== 'thestudio') return this.sendReply('This command can only be used in The Studio.');
+		if (!target) this.parse('/help aotd set');
 		if (!room.chatRoomData || !this.can('mute', null, room)) return false;
 		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		if (!toId(target)) return this.sendReply("No valid artist was specified.");
