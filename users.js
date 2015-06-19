@@ -1024,9 +1024,9 @@ User = (function () {
 			// rename success
 			this.isSysop = isSysop;
 			if (avatar) this.avatar = avatar;
-			if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
 			if (this.forceRename(name, registered)) {
 				Rooms.global.checkAutojoin(this);
+				if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
 				return true;
 			}
 			return false;
