@@ -127,8 +127,16 @@ module.exports.prototype = {
 				var subNode = nodesCheck[i];
 				if (subNode.type === 'BlockStatement') {
 					var openingBrace = file.getFirstNodeToken(subNode);
-					var nextToken = subNode.body.length ? file.getFirstNodeToken(subNode.body[0]) : file.getNextToken(subNode);
 					var closingBrace = file.getLastNodeToken(subNode);
+					if (!subNode.body.length) {
+						// Empty block
+						errors.assert.differentLine({
+							token: openingBrace,
+							nextToken: closingBrace
+						});
+						continue;
+					}
+					var nextToken = file.getFirstNodeToken(subNode.body[0]);
 					var prevToken = file.getPrevToken(closingBrace);
 
 					errors.assert.differentLine({
