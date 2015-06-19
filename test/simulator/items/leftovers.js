@@ -1,7 +1,7 @@
 var assert = require('assert');
 var battle;
 
-describe('Leftovers - GSC', function () {
+describe('Leftovers [Gen 2]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
