@@ -61,6 +61,14 @@ describe('rules/validate-conditionals', function () {
 			assert(checker.checkString('if (Math.random) {\nMath.random();\n}').isEmpty());
 		});
 
+		it('should report single-line empty blocks', function () {
+			assert(!checker.checkString('if (Math.random) {}').isEmpty());
+		});
+
+		it('should not report braces for empty blocks', function () {
+			assert(checker.checkString('if (Math.random) {\n//This is a comment\n}').isEmpty());
+		});
+
 		it('should not report braces for multiline alternate', function () {
 			assert(checker.checkString('if (Math.random) {\nMath.random();\n} else {\n0;\n}').isEmpty());
 		});
