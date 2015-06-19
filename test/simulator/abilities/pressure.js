@@ -76,7 +76,7 @@ describe('Pressure', function () {
 	});
 });
 
-describe('Pressure (DPPt)', function () {
+describe('Pressure [Gen 4]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});

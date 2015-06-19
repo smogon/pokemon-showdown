@@ -17,7 +17,7 @@ describe('Snarl', function () {
 	});
 });
 
-describe('Snarl - BW', function () {
+describe('Snarl [Gen 5]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});

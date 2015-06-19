@@ -17,7 +17,7 @@ describe('Relic Song', function () {
 	});
 });
 
-describe('Relic Song - BW', function () {
+describe('Relic Song [Gen 5]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});

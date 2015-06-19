@@ -17,7 +17,7 @@ describe('Chatter', function () {
 	});
 });
 
-describe('Chatter - BW', function () {
+describe('Chatter [Gen 5]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});

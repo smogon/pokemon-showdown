@@ -17,7 +17,7 @@ describe('Bug Buzz', function () {
 	});
 });
 
-describe('Bug Buzz - BW', function () {
+describe('Bug Buzz [Gen 5]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
