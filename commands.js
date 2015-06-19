@@ -1111,7 +1111,8 @@ var commands = exports.commands = {
 	promotehelp: ["/promote [username], [group] - Promotes the user to the specified group. Requires: & ~"],
 
 	globaldemote: 'demote',
-	demote: function () {
+	demote: function (target) {
+		if (!target) return this.parse('/help demote');
 		CommandParser.commands.promote.apply(this, arguments);
 	},
 	demotehelp: ["/demote [username], [group] - Demotes the user to the specified group. Requires: & ~"],
