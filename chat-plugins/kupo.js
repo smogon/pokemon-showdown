@@ -43,10 +43,8 @@ exports.commands = {
 	pet: function (target, room, user) {
 		return this.parse("/me pets " + target + ".");
 	},
-	flip: function(target, room, user) {
-            if (!this.canBroadcast()) return;
-                var coinResults = ['heads', 'tails'];
-                var index = Math.floor(Math.random() * coinResults.length);
-                return this.sendReplyBox('<center>The coin landed on <b>' + coinResults[index] +'<b>.</center>')
-        }
+	flip: function () {
+		if (!this.canBroadcast()) return;
+		return this.sendReplyBox("<center>The coin landed on <b>" + ["heads", "tails"].sample() + "</b>.</center>");
+	}
 };
