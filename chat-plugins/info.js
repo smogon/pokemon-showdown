@@ -96,7 +96,9 @@ var commands = exports.commands = {
 		"/whois [username] - Get details on a username: alts (Requires: % @ & ~), group, IP address (Requires: @ & ~), and rooms."],
 
 	host: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help host');
 		if (!this.can('rangeban')) return;
+		if (!/[0-9.]+/.test(target)) return this.sendReply('You must pass a valid IPv4 IP to /host.');
 		var self = this;
 		Dnsbl.reverse(target, function (err, hosts) {
 			self.sendReply('IP ' + target + ': ' + (hosts ? hosts[0] : 'NULL'));
