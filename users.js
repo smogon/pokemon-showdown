@@ -1258,22 +1258,15 @@ User = (function () {
 			format: formatid,
 			user: userid
 		}, function (data, statusCode, error) {
-			var mmr = 1000;
-			error = (error || true);
-			if (data) {
-				if (data.errorip) {
-					self.popup("This server's request IP " + data.errorip + " is not a registered server.");
-					return;
-				}
-				mmr = parseInt(data, 10);
-				if (!isNaN(mmr) && self.userid === userid) {
-					error = false;
-					self.mmrCache[formatid] = mmr;
-				} else {
-					mmr = 1000;
-				}
-			}
-			callback(mmr, error);
+			if (!data) return callback(1000, error || new Error("No data received"));
+			if (data.errorip) return self.popup("This server's request IP " + data.errorip + " is not a registered server.");
+
+			var mmr = parseInt(data, 10);
+			if (isNaN(mmr)) return callback(1000, error || new Error("Invalid rating"));
+			if (self.userid !== userid) return callback(1000, new Error("Expired rating"));
+
+			self.mmrCache[formatid] = mmr;
+			callback(mmr, null);
 		});
 	};
 	User.prototype.cacheMMR = function (formatid, mmr) {
