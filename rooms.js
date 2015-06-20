@@ -564,7 +564,7 @@ var GlobalRoom = (function () {
 	};
 	GlobalRoom.prototype.addSearch = function (newSearch, user, formatid) {
 		// Filter racing conditions
-		if (!user.connected) return;
+		if (!user.connected || user !== Users.getExact(user.userid)) return;
 		if (user.searching[formatid]) return;
 
 		if (!this.searches[formatid]) this.searches[formatid] = [];
@@ -574,12 +574,6 @@ var GlobalRoom = (function () {
 		for (var i = 0; i < formatSearches.length; i++) {
 			var search = formatSearches[i];
 			var searchUser = Users.getExact(search.userid);
-			if (!searchUser || !searchUser.connected) {
-				// Should never happen
-				formatSearches.splice(i, 1);
-				i--;
-				continue;
-			}
 			if (this.matchmakingOK(search, newSearch, searchUser, user, formatid)) {
 				var usersToUpdate = [user, searchUser];
 				for (var j = 0; j < 2; j++) {
