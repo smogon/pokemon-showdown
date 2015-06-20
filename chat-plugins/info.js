@@ -1783,7 +1783,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#customavatar\">How can I get a custom avatar?</a><br />";
 		}
-		if (target === 'all' || target === 'pm') {
+		if (target === 'all' || target === 'pm' || target === 'msg' || target === 'w') {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#pm\">How can I send a user a private message?</a><br />";
 		}
