@@ -1776,8 +1776,8 @@ exports.BattleScripts = {
 			item = (!!counter['ate'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
 		} else if (counter.Physical + counter.Special >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
-		} else if ((counter.Physical + counter.Special >= 3) && ability !== 'Sturdy' && !hasMove['dragontail']) {
-			item = (counter.setupType || !!counter['speedsetup'] || hasMove['trickroom'] || !!counter['recovery']) ? 'Life Orb' : 'Leftovers';
+		} else if (counter.Physical + counter.Special >= 3 && ability !== 'Sturdy' && !hasMove['dragontail']) {
+			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
 		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285) {
