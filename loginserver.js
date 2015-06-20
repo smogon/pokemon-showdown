@@ -42,7 +42,7 @@ var LoginServer = module.exports = (function () {
 			uri = Config.loginserver;
 		}
 		if (!uri) {
-			console.log('ERROR: No login server specified for action: ' + action);
+			console.error("ERROR: No login server specified for action: " + action);
 			return;
 		}
 		return LoginServer.loginServers[uri] || new LoginServer(uri);
@@ -53,10 +53,22 @@ var LoginServer = module.exports = (function () {
 	LoginServer.request = function (action, data, callback) {
 		return getLoginServer(action).request(action, data, callback);
 	};
+	var TimeoutError = LoginServer.TimeoutError = function (message) {
+		this.name = "TimeoutError";
+		this.message = message || "";
+	};
+	TimeoutError.prototype = Object.create(Error.prototype);
+	TimeoutError.prototype.constructor = TimeoutError;
 
 	var parseJSON = function (json) {
 		if (json[0] === ']') json = json.substr(1);
-		return JSON.parse(json);
+		var data = {error: null};
+		try {
+			data.json = JSON.parse(json);
+		} catch (err) {
+			data.error = err;
+		}
+		return data;
 	};
 
 	LoginServer.prototype.instantRequest = function (action, data, callback) {
@@ -65,7 +77,7 @@ var LoginServer = module.exports = (function () {
 			data = null;
 		}
 		if (this.openRequests > 5) {
-			callback(null, null, 'overflow');
+			callback(null, null, new RangeError("Request overflow"));
 			return;
 		}
 		this.openRequests++;
@@ -84,10 +96,7 @@ var LoginServer = module.exports = (function () {
 			});
 
 			res.on('end', function () {
-				var data = null;
-				try {
-					data = parseJSON(buffer);
-				} catch (e) {}
+				var data = parseJSON(buffer).json;
 				callback(data, res.statusCode);
 				this.openRequests--;
 			});
@@ -105,8 +114,9 @@ var LoginServer = module.exports = (function () {
 			callback = data;
 			data = null;
 		}
+		if (typeof callback === 'undefined') callback = function () {};
 		if (LoginServer.disabled) {
-			callback(null, null, 'disabled');
+			callback(null, null, new Error("Ladder disabled"));
 			return;
 		}
 		if (!data) data = {};
@@ -149,7 +159,7 @@ var LoginServer = module.exports = (function () {
 		};
 
 		var req = null;
-		var reqError = function (error) {
+		var onReqError = function onReqError (error) {
 			if (self.requestTimeoutTimer) {
 				clearTimeout(self.requestTimeoutTimer);
 				self.requestTimeoutTimer = null;
@@ -161,11 +171,7 @@ var LoginServer = module.exports = (function () {
 			self.requestEnd();
 		};
 
-		self.requestTimeoutTimer = setTimeout(function () {
-			reqError('timeout');
-		}, LOGIN_SERVER_TIMEOUT);
-
-		req = http.request(requestOptions, function (res) {
+		req = http.request(requestOptions, function onResponse (res) {
 			if (self.requestTimeoutTimer) {
 				clearTimeout(self.requestTimeoutTimer);
 				self.requestTimeoutTimer = null;
@@ -173,25 +179,22 @@ var LoginServer = module.exports = (function () {
 			var buffer = '';
 			res.setEncoding('utf8');
 
-			res.on('data', function (chunk) {
+			res.on('data', function onData (chunk) {
 				buffer += chunk;
 			});
 
-			var endReq = function () {
+			var endReq = function endRequest () {
 				if (self.requestTimeoutTimer) {
 					clearTimeout(self.requestTimeoutTimer);
 					self.requestTimeoutTimer = null;
 				}
 				//console.log('RESPONSE: ' + buffer);
-				var data = null;
-				try {
-					data = parseJSON(buffer);
-				} catch (e) {}
+				var data = parseJSON(buffer).json;
 				for (var i = 0, len = requestCallbacks.length; i < len; i++) {
 					if (data) {
 						requestCallbacks[i](data[i], res.statusCode);
 					} else {
-						requestCallbacks[i](null, res.statusCode, 'corruption');
+						requestCallbacks[i](null, res.statusCode, new Error("Corruption"));
 					}
 				}
 				self.requestEnd();
@@ -199,13 +202,17 @@ var LoginServer = module.exports = (function () {
 			res.on('end', endReq);
 			res.on('close', endReq);
 
-			self.requestTimeoutTimer = setTimeout(function () {
+			self.requestTimeoutTimer = setTimeout(function onDataTimeout () {
 				if (res.connection) res.connection.destroy();
 				endReq();
 			}, LOGIN_SERVER_TIMEOUT);
 		});
 
-		req.on('error', reqError);
+		req.on('error', onReqError);
+
+		req.setTimeout(LOGIN_SERVER_TIMEOUT, function onResponseTimeout () {
+			onReqError(new TimeoutError("Response not received"));
+		});
 
 		req.write(postData);
 		req.end();
