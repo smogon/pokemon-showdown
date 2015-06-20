@@ -491,7 +491,6 @@ var GlobalRoom = (function () {
 		return roomsData;
 	};
 	GlobalRoom.prototype.cancelSearch = function (user) {
-		user.cancelChallengeTo();
 		if (!user.searching) return false;
 		for (var i = 0; i < this.searchers.length; i++) {
 			var search = this.searchers[i];
@@ -727,6 +726,7 @@ var GlobalRoom = (function () {
 		delete this.users[user.userid];
 		--this.userCount;
 		this.cancelSearch(user, true);
+		user.cancelChallengeTo();
 	};
 	GlobalRoom.prototype.startBattle = function (p1, p2, format, p1team, p2team, options) {
 		var newRoom;
