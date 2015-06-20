@@ -1893,7 +1893,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 
 		var excludedTiers = {'LC':1, 'LC Uber':1, 'NFE':1};
-		var allowedNFE = {'Chansey':1, 'Doublade':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1};
+		var allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1};
 
 		var pokemonPool = [];
 		for (var id in this.data.FormatsData) {
@@ -1925,6 +1925,9 @@ exports.BattleScripts = {
 
 			// Not available on ORAS
 			if (template.species === 'Pichu-Spiky-eared') continue;
+
+			// Useless in Random Battle without greatly lowering the levels of everything else
+			if (template.species === 'Unown') continue;
 
 			// Only certain NFE Pokemon are allowed
 			if (template.evos.length && !allowedNFE[template.species]) continue;
