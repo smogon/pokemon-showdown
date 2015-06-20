@@ -531,7 +531,7 @@ exports.BattleMovedex = {
 		desc: "This move is replaced by a random move on target's moveset. The copied move has the maximum PP for that move. Ignores a target's Substitute.",
 		shortDesc: "A random target's move replaces this one.",
 		onHit: function (target, source) {
-			var disallowedMoves = {mimic:1, struggle:1, transform:1};
+			var disallowedMoves = {mimic:1, struggle:1};
 			if (source.transformed) return false;
 			var moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
