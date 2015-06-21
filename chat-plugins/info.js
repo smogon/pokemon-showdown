@@ -1572,7 +1572,7 @@ var commands = exports.commands = {
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496773/\">1v1</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3536109/\">1v1 Viability Ranking</a><br />";
 		}
-		if (target === 'all' || target === 'monotype') {
+		if (target === 'all' || target === 'monotype' || target === 'mono') {
 			matched = true;
 			if (target !== 'all') buffer += "All Pok\u00e9mon on a team must share a type.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">Monotype</a><br />";
