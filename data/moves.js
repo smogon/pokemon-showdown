@@ -14137,7 +14137,7 @@ exports.BattleMovedex = {
 		basePower: 90,
 		category: "Physical",
 		desc: "This move can hit airborne Pokemon, which includes Flying-type Pokemon, Pokemon with the Ability Levitate, Pokemon holding an Air Balloon, and Pokemon under the effect of Magnet Rise or Telekinesis. If the target is a Flying type and is not already grounded, this move deals neutral damage regardless of its other type(s). This move can hit a target using Bounce, Fly, or Sky Drop. If this move hits a target under the effect of Bounce, Fly, Magnet Rise, or Telekinesis, the effect ends. If the target is a Flying type that has not used Roost this turn or a Pokemon with the Ability Levitate, it loses its immunity to Ground-type attacks and the Ability Arena Trap as long as it remains active. During the effect, Magnet Rise fails for the target and Telekinesis fails against the target.",
-		shortDesc: "Hits adjacent foes, removes Ground immunity.",
+		shortDesc: "Grounds adjacent foes. First hit neutral on Flying.",
 		id: "thousandarrows",
 		isViable: true,
 		name: "Thousand Arrows",
@@ -14149,7 +14149,8 @@ exports.BattleMovedex = {
 			if (move.type !== 'Ground') return;
 			var target = this.activeTarget;
 			// only the attack that grounds the target ignores effectiveness
-			if (!this.runEvent('NegateImmunity', target, 'Ground')) return;
+			// if called from a chat plugin, don't ignore effectiveness
+			if (!this.runEvent || !this.runEvent('NegateImmunity', target, 'Ground')) return;
 			if (!this.getImmunity('Ground', target)) return 0;
 		},
 		volatileStatus: 'smackdown',

@@ -1222,7 +1222,10 @@ var commands = exports.commands = {
 			factor = Math.pow(2, totalTypeMod);
 		}
 
-		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
+		var hasThousandArrows = source.id === 'thousandarrows' && defender.types.indexOf('Flying') >= 0;
+		var additionalInfo = hasThousandArrows ? "<br>However, Thousand Arrows will be 1x effective on the first hit." : "";
+
+		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + "." + additionalInfo);
 	},
 	effectivenesshelp: ["/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pok\u00e9mon.",
 		"!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pok\u00e9mon."],
@@ -1237,6 +1240,8 @@ var commands = exports.commands = {
 
 		var dispTable = false;
 		var bestCoverage = {};
+		var hasThousandArrows = false;
+
 		for (var type in Tools.data.TypeChart) {
 			// This command uses -5 to designate immunity
 			bestCoverage[type] = -5;
@@ -1263,6 +1268,7 @@ var commands = exports.commands = {
 			move = Tools.getMove(move);
 			if (move.exists) {
 				if (!move.basePower && !move.basePowerCallback) continue;
+				if (move.id === 'thousandarrows') hasThousandArrows = true;
 				sources.push(move);
 				for (var type in bestCoverage) {
 					if (!Tools.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
@@ -1386,6 +1392,10 @@ var commands = exports.commands = {
 				}
 			}
 			buffer += '</table></div>';
+
+			if (hasThousandArrows) {
+				buffer += "<br><b>Thousand Arrows has neutral type effectiveness on Flying-type Pokemon if not already smacked down.";
+			}
 
 			this.sendReplyBox('Coverage for ' + sources.join(' + ') + ':<br>' + buffer);
 		}
