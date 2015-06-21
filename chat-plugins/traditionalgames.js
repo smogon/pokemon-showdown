@@ -1,5 +1,5 @@
 /**
-* TCG: Yugioh wiki plugin
+* Traditional Games: Yugioh wiki plugin
 * This is a command that allows users to search the yugioh wiki for cards. It will display the closest match with a given query, or a separate message if there isn't anything found.
 * By bumbadadabum with help from ascriptmaster, codelegend and the PS development team.
 */
@@ -7,7 +7,7 @@
 var http = require("http");
 
 var tcgsearch = function (target, room, user, cmd, self) {
-	if (room.id !== 'tcg') return self.sendReply("This command can only be used in the TCG room.");
+	if (room.id !== 'traditionalgames') return self.sendReply("This command can only be used in the Traditional Games room.");
 	if (!self.canBroadcast()) return;
 
 	var query = Tools.escapeHTML(target);
