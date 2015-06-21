@@ -17,6 +17,7 @@ exports.BattleAliases = {
 	"bh": "Balanced Hackmons",
 	"hc": "Hackmons Cup",
 	"aaa": "Almost Any Ability",
+	"mono": "Monotype",
 	"monorandom": "Monotype Random Battle",
 
 	// mega evos
