@@ -14149,7 +14149,8 @@ exports.BattleMovedex = {
 			if (move.type !== 'Ground') return;
 			var target = this.activeTarget;
 			// only the attack that grounds the target ignores effectiveness
-			if (!this.runEvent('NegateImmunity', target, 'Ground')) return;
+			// if called from a chat plugin, don't ignore effectiveness
+			if (!this.runEvent || !this.runEvent('NegateImmunity', target, 'Ground')) return;
 			if (!this.getImmunity('Ground', target)) return 0;
 		},
 		volatileStatus: 'smackdown',
