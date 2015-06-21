@@ -332,6 +332,17 @@ exports.Formats = [
 		mod: 'linked',
 		ruleset: ['OU'],
 		banlist: ["King's Rock", 'Razor Fang'],
+		validateTeam: function (team, format) {
+			var hasChoice = false;
+			for (var i = 0; i < team.length; i++) {
+				var item = toId(team[i].item);
+				if (!item) continue;
+				if (item === 'choiceband' || item === 'choicescarf' || item === 'choicespecs') {
+					if (hasChoice) return ["You are limited to one Choice item."];
+					hasChoice = true;
+				}
+			}
+		},
 		validateSet: function (set) {
 			if (set.moves && set.moves.length >= 2) {
 				var moves = [toId(set.moves[0]), toId(set.moves[1])];
