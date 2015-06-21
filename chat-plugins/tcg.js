@@ -7,7 +7,7 @@
 var http = require("http");
 
 var tcgsearch = function (target, room, user, cmd, self) {
-	if (room.id !== 'tcg') return self.sendReply("This command can only be used in the TCG room.");
+	if (room.id !== 'traditionalgames') return self.sendReply("This command can only be used in the Traditional Games room.");
 	if (!self.canBroadcast()) return;
 
 	var query = Tools.escapeHTML(target);
