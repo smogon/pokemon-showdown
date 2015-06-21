@@ -12,6 +12,7 @@
 const TIMEOUT_EMPTY_DEALLOCATE = 10 * 60 * 1000;
 const TIMEOUT_INACTIVE_DEALLOCATE = 40 * 60 * 1000;
 const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
+const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
 var fs = require('fs');
 
@@ -407,6 +408,11 @@ var GlobalRoom = (function () {
 			this.reportUserStats.bind(this),
 			REPORT_USER_STATS_INTERVAL
 		);
+
+		this.periodicMatchInterval = setInterval(
+			this.periodicMatch.bind(this),
+			PERIODIC_MATCH_INTERVAL
+		);
 	}
 	GlobalRoom.prototype.type = 'global';
 
@@ -588,6 +594,33 @@ var GlobalRoom = (function () {
 		}
 		user.searching[formatid] = 1;
 		formatSearches.push(newSearch);
+	};
+	GlobalRoom.prototype.periodicMatch = function () {
+		for (var formatid in this.searches) {
+			var formatSearches = this.searches[formatid];
+			if (formatSearches.length < 2) continue;
+
+			var longestSearch = formatSearches[0];
+			var longestSearcher = Users.getExact(longestSearch.userid);
+
+			// Prioritize players who have been searching for a match the longest.
+			for (var i = 1; i < formatSearches.length; i++) {
+				var search = formatSearches[i];
+				var searchUser = Users.getExact(search.userid);
+				if (this.matchmakingOK(search, longestSearch, searchUser, longestSearcher, formatid)) {
+					var usersToUpdate = [longestSearcher, searchUser];
+					for (var j = 0; j < 2; j++) {
+						delete usersToUpdate[j].searching[formatid];
+						var searchedFormats = Object.keys(usersToUpdate[j].searching);
+						usersToUpdate[j].send('|updatesearch|' + JSON.stringify({searching: searchedFormats}));
+					}
+					formatSearches.splice(i, 1);
+					formatSearches.splice(0, 1);
+					this.startBattle(searchUser, longestSearcher, formatid, search.team, longestSearch.team, {rated: true});
+					return;
+				}
+			}
+		}
 	};
 	GlobalRoom.prototype.send = function (message, user) {
 		if (user) {
