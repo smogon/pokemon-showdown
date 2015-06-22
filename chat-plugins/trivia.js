@@ -164,7 +164,6 @@ var Trivia = (function () {
 	}
 
 	Trivia.prototype.addParticipant = function (output, user) {
-		if (this.phase !== 'signup') return output.sendReply("There is no trivia game in its signup phase.");
 		if (this.participants.has(user.userid)) return output.sendReply("You have already signed up for this trivia game.");
 
 		var latestIp = user.latestIp;
@@ -183,7 +182,7 @@ var Trivia = (function () {
 			scoreData.responderIndex = -1;
 		}
 		this.participants.set(user.userid, scoreData);
-		output.sendReply("You have signed up for the next trivia game.");
+		output.sendReply("You have signed up for the trivia game.");
 	};
 
 	Trivia.prototype.kickParticipant = function (output, target) {
@@ -198,7 +197,7 @@ var Trivia = (function () {
 	};
 
 	Trivia.prototype.startGame = function (output) {
-		if (this.phase !== 'signup') return output.sendReply("There is no trivia game in its signup phase.");
+		if (this.phase !== 'signup') return output.sendReply("There is no trivia game to start.");
 		if (this.participants.size < 3) return output.sendReply("Not enough users have signed up yet! Trivia games require at least three participants to run.");
 
 		if (this.category === 'random') {
@@ -216,7 +215,7 @@ var Trivia = (function () {
 			return false;
 		}
 
-		this.room.addRaw("<div class=\"broadcast-blue\">Signups have ended and the game has begun!</div>");
+		this.room.addRaw("<div class=\"broadcast-blue\">The game has begun!</div>");
 		this.askQuestion();
 	};
 
@@ -592,6 +591,7 @@ var commands = {
 		if (room.id !== 'trivia') return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
+		if (!this.canTalk()) return;
 		trivium.addParticipant(this, user);
 	},
 	joinhelp: ["/trivia join - Join a trivia game during signups."],
@@ -667,7 +667,8 @@ var commands = {
 		var submission = {
 			category: category,
 			question: question,
-			answers: answers
+			answers: answers, 
+			user: user.userid
 		};
 
 		if (cmd === 'add') {
@@ -693,12 +694,12 @@ var commands = {
 
 		var buffer = "|raw|<div class=\"ladder\"><table>" +
 			"<tr><td colspan=\"4\"><strong>" + submissionsLen + "</strong> questions await review:</td></tr>" +
-			"<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th></tr>";
+			"<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th><th>Submitted By</th></tr>";
 
 		var i = 0;
 		while (i < submissionsLen) {
 			var entry = submissions[i];
-			buffer += "<tr><td><strong>" + (++i) + "</strong></td><td>" + entry.category + "</td><td>" + entry.question + "</td><td>" + entry.answers.join(", ") + "</td></tr>";
+			buffer += "<tr><td><strong>" + (++i) + "</strong></td><td>" + entry.category + "</td><td>" + entry.question + "</td><td>" + entry.answers.join(", ") + "</td><td>" + entry.user + "</td></tr>";
 		}
 		buffer += "</table></div>";
 
