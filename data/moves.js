@@ -12310,8 +12310,9 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onDragOut: false,
-			onSourceDragOut: false,
+			onAnyDragOut: function (pokemon) {
+				if (pokemon === this.effectData.target || pokemon === this.effectData.source) return false;
+			},
 			onFoeModifyPokemon: function (defender) {
 				if (defender !== this.effectData.source) return;
 				defender.trapped = true;
