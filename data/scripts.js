@@ -1628,6 +1628,8 @@ exports.BattleScripts = {
 			} else if (template.id === 'mawilemega') {
 				// Mega Mawile only needs Intimidate for a starting ability
 				ability = 'Intimidate';
+			} else if (template.id === 'rhyperior') {
+				ability = 'Solid Rock';
 			} else if (template.id === 'sigilyph') {
 				ability = 'Magic Guard';
 			} else if (template.id === 'unfezant') {
