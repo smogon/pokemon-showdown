@@ -151,7 +151,7 @@ exports.BattleFormats = {
 
 			// "Undiscovered" egg group Pokemon caught in the wild in gen 6 must have at least 3 perfect IVs
 			if (set.ivs && this.gen >= 6 && ((template.species in {Xerneas:1, Yveltal:1, Zygarde:1}) ||
-				(format.requirePentagon && template.eggGroups.indexOf('Undiscovered') > -1 && !template.evos.length))) {
+				(format.requirePentagon && template.eggGroups.indexOf('Undiscovered') >= 0 && !template.evos.length))) {
 				var perfectIVs = 0;
 				for (var i in set.ivs) {
 					if (set.ivs[i] >= 31) perfectIVs++;
@@ -294,6 +294,7 @@ exports.BattleFormats = {
 		}
 	},
 	teampreviewvgc: {
+		effectType: 'Rule',
 		onStartPriority: -10,
 		onStart: function () {
 			this.add('clearpoke');
@@ -309,6 +310,7 @@ exports.BattleFormats = {
 		}
 	},
 	teampreview1v1: {
+		effectType: 'Rule',
 		onStartPriority: -10,
 		onStart: function () {
 			this.add('clearpoke');
@@ -324,6 +326,7 @@ exports.BattleFormats = {
 		}
 	},
 	teampreview: {
+		effectType: 'Rule',
 		onStartPriority: -10,
 		onStart: function () {
 			this.add('clearpoke');
@@ -339,6 +342,7 @@ exports.BattleFormats = {
 		}
 	},
 	teampreviewgbu: {
+		effectType: 'Rule',
 		onStartPriority: -10,
 		onStart: function () {
 			this.add('clearpoke');
@@ -519,7 +523,7 @@ exports.BattleFormats = {
 			var problems = [];
 			var BPcount = 0;
 			for (var i = 0; i < team.length; i++) {
-				if (team[i].moves.indexOf('Baton Pass') > -1) BPcount++;
+				if (team[i].moves.indexOf('Baton Pass') >= 0) BPcount++;
 				if (BPcount > 1) {
 					problems.push("You are limited to one Pokémon with the move Baton Pass by the Baton Pass Clause.");
 					break;
@@ -629,10 +633,10 @@ exports.BattleFormats = {
 			}
 		}
 	},
-	megarayquazabanmod: {
+	megarayquazaclause: {
 		effectType: 'Rule',
 		onStart: function () {
-			this.add('rule', 'Mega Rayquaza Ban Mod: You cannot mega evolve Rayquaza');
+			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
 			for (var i = 0; i < this.sides[0].pokemon.length; i++) {
 				if (this.sides[0].pokemon[i].speciesid === 'rayquaza') this.sides[0].pokemon[i].canMegaEvo = false;
 			}

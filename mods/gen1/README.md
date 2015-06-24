@@ -6,7 +6,7 @@ Introduction
 Generation 1 includes the original japanese Green and Red, Blue, and Yellow games.
 It was very different than the game we get to know today, and it was, in fact, very different to Gen 2 as well.
 The mechanics were very different, and the game was quite glitched, but most glitches were important parts of the metagame.
-There were only 151 Pokemon plus Missingno, just a handful of moves, no abilities, no items, all stats were
+There were only 151 Pokémon plus Missingno, just a handful of moves, no abilities, no items, all stats were
 EVd to the max and we had some kind of different IVs, which maxed at 15 and every point gave 2 to the stat, so in
 a similar fashion, Pokes used to have 30 IVs on each stat.
 
@@ -21,7 +21,7 @@ Back then, there weren't Special Defense and Special Attack stats. It was just "
 That's why Special walls were so OP in Gen 1.
 
 In order to achieve a similar effect without heavily changing other scripts rather than just the mod, the mod's Pokedex
-and the mod's moves have been edited in order to emulate it, making all Pokemon have the old special stat in both SpA and
+and the mod's moves have been edited in order to emulate it, making all Pokémon have the old special stat in both SpA and
 SpD and making moves raise and lower both SpA and SpD at the same time.
 
 Critical Hits
@@ -31,7 +31,7 @@ This is the regular critical hit formula:
 CH% = BaseSpeed * 100 / 512.
 This is the high critical hit moves formula:
 CH% = BaseSpeed * 100 / 64.
-That means that a Persian with Slash is going to crit. This made the metagame adapt so OU prefers all the faster Pokemon
+That means that a Persian with Slash is going to crit. This made the metagame adapt so OU prefers all the faster Pokémon
 in the game.
 
 However, if you used Focus Energy, your crit rate was ruined instead of increased, so if you were slower than your
@@ -48,7 +48,7 @@ All moves but Swift and Bide (while on duration, not first hit) have a 1/256 cha
 
 Partial Trapping Moves
 ----------------------
-Partial trapping moves let eiher Pokemon switch but target will be unable to move for its duration.
+Partial trapping moves let eiher Pokémon switch but target will be unable to move for its duration.
 
 TODO. Glitches not implemented
 ------------------------------

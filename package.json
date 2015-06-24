@@ -47,6 +47,7 @@
     }
   ],
   "private": true,
+  "license": "MIT",
   "devDependencies": {
     "cache-swap": "~0.2.0",
     "gulp": "~3.8.7",
@@ -57,6 +58,7 @@
     "jshint-stylish": "~1.0.0",
     "mocha": "~2.2.1",
     "lazypipe": "~0.2.2",
-    "merge-stream": "~0.1.7"
+    "merge-stream": "~0.1.7",
+    "jscs": "~1.13.1"
   }
 }

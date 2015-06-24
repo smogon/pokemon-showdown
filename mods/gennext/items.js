@@ -47,18 +47,6 @@ exports.BattleItems = {
 		onDrive: 'Electric',
 		desc: "Changes Genesect to Genesect-Shock."
 	},
-	"lifeorb": {
-		inherit: true,
-		effect: {
-			duration: 1,
-			onAfterMoveSecondarySelf: function (source, target, move) {
-				if (move && move.effectType === 'Move' && move.category !== "Status" && source && source.volatiles['lifeorb']) {
-					this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
-					source.removeVolatile('lifeorb');
-				}
-			}
-		}
-	},
 	"widelens": {
 		inherit: true,
 		onModifyMove: function (move, user, target) {
@@ -80,9 +68,7 @@ exports.BattleItems = {
 		inherit: true,
 		onAfterMoveSecondarySelf: function (source, target) {
 			if (source.hasType('Grass')) {
-				if (source.lastDamage > 0) {
-					this.heal(source.lastDamage / 8, source);
-				}
+				this.heal(source.lastDamage / 8, source);
 			}
 		},
 		onResidualOrder: 5,
