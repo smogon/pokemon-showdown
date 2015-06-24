@@ -225,8 +225,10 @@ Users.unlockRange = unlockRange;
 var connections = Users.connections = Object.create(null);
 
 Users.shortenHost = function (host) {
+	if (host.slice(-7) === '-nohost') return host;
 	var dotLoc = host.lastIndexOf('.');
-	if (host.substr(dotLoc) === '.uk') dotLoc = host.lastIndexOf('.', dotLoc - 1);
+	var tld = host.substr(dotLoc);
+	if (tld === '.uk' || tld === '.au' || tld === '.br') dotLoc = host.lastIndexOf('.', dotLoc - 1);
 	dotLoc = host.lastIndexOf('.', dotLoc - 1);
 	return host.substr(dotLoc + 1);
 };
