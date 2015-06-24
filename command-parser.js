@@ -30,6 +30,10 @@ const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 
 const MAX_PARSE_RECURSION = 10;
 
+const VALID_COMMAND_TOKENS = '/!';
+
+const BROADCAST_TOKEN = '!';
+
 var fs = require('fs');
 var path = require('path');
 
@@ -137,6 +141,7 @@ var Context = exports.Context = (function () {
 	function Context (options) {
 		this.cmd = options.cmd || '';
 		this.fullCmd = options.fullCmd || '';
+		this.cmdToken = options.cmdToken || '';
 
 		this.target = options.target || '';
 		this.message = options.message || '';
@@ -215,7 +220,7 @@ var Context = exports.Context = (function () {
 		return true;
 	};
 	Context.prototype.canBroadcast = function (suppressMessage) {
-		if (this.broadcast) {
+		if (this.cmdToken === BROADCAST_TOKEN) {
 			var message = this.canTalk(this.originalMessage);
 			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
@@ -240,8 +245,8 @@ var Context = exports.Context = (function () {
 		return true;
 	};
 	Context.prototype.parse = function (message, inNamespace) {
-		if (inNamespace && (message[0] === '/' || message[0] === '!')) {
-			message = message[0] + this.namespaces.concat(message.slice(1)).join(" ");
+		if (inNamespace && this.cmdToken) {
+			message = this.cmdToken + this.namespaces.concat(message.slice(1)).join(" ");
 		}
 		return CommandParser.parse(message, this.room, this.user, this.connection, this.levelsDeep + 1);
 	};
@@ -347,7 +352,7 @@ var Context = exports.Context = (function () {
  *     return false.
  */
 var parse = exports.parse = function (message, room, user, connection, levelsDeep) {
-	var cmd = '', target = '';
+	var cmd = '', target = '', cmdToken = '';
 	if (!message || !message.trim().length) return;
 	if (!levelsDeep) {
 		levelsDeep = 0;
@@ -365,30 +370,16 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		message = '/evalbattle ' + message.substr(4);
 	}
 
-	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
+	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0)) {
+		cmdToken = message.charAt(0);
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
-			cmd = message.substr(1, spaceIndex - 1);
+			cmd = message.substr(1, spaceIndex - 1).toLowerCase();
 			target = message.substr(spaceIndex + 1);
 		} else {
-			cmd = message.substr(1);
+			cmd = message.substr(1).toLowerCase();
 			target = '';
 		}
-	} else if (message.charAt(0) === '!') {
-		var spaceIndex = message.indexOf(' ');
-		if (spaceIndex > 0) {
-			cmd = message.substr(0, spaceIndex);
-			target = message.substr(spaceIndex + 1);
-		} else {
-			cmd = message;
-			target = '';
-		}
-	}
-	cmd = cmd.toLowerCase();
-	var broadcast = false;
-	if (cmd.charAt(0) === '!') {
-		broadcast = true;
-		cmd = cmd.substr(1);
 	}
 
 	var namespaces = [];
@@ -431,7 +422,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	if (commandHandler) {
 		var context = new Context({
 			target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
-			levelsDeep: levelsDeep, namespaces: namespaces, broadcast: broadcast
+			levelsDeep: levelsDeep, namespaces: namespaces, cmdToken: cmdToken
 		});
 
 		var result;
@@ -470,18 +461,16 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			}
 		}
 
-		if (message.charAt(0) === '/' && fullCmd) {
+		if (cmdToken && fullCmd) {
 			// To guard against command typos, we now emit an error message
-			return connection.sendTo(room.id, "The command '/" + fullCmd + "' was unrecognized. To send a message starting with '/" + fullCmd + "', type '//" + fullCmd + "'.");
+			return connection.sendTo(room.id, "The command '" + cmdToken + fullCmd + "' was unrecognized. To send a message starting with '" + cmdToken + fullCmd + "', type '" + cmdToken.repeat(2) + fullCmd + "'.");
 		}
 	}
 
-	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
-		message = '/' + message;
-	}
-	message = canTalk(user, room, connection, message);
+	message = canTalk(user, room, connection, cmdToken + message);
 	if (!message) return false;
-	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
+
+	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0)) {
 		return parse(message, room, user, connection, levelsDeep + 1);
 	}
 
