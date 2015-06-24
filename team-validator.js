@@ -173,7 +173,20 @@ if (!process.send) {
 		if (!validators[format]) validators[format] = new Validator(format);
 		var parsedTeam = [];
 		parsedTeam = Tools.fastUnpackTeam(message.substr(pipeIndex2 + 1));
-		var problems = validators[format].validateTeam(parsedTeam);
+
+		var problems;
+		try {
+			problems = validators[format].validateTeam(parsedTeam);
+		} catch (err) {
+			var stack = err.stack + '\n\n' +
+					'Additional information:\n' +
+					'team = ' + message.substr(pipeIndex2 + 1) + '\n';
+			var fakeErr = {stack: stack};
+
+			require('./crashlogger.js')(fakeErr, 'A team validation');
+			problems = ["Your team crashed the team validator. We've been automatically notified and will fix this crash, but you should use a different team for now."];
+		}
+
 		if (problems && problems.length) {
 			respond(id, false, problems.join('\n'));
 		} else {
