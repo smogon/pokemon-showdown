@@ -1450,7 +1450,7 @@ User = (function () {
 		if (!type) type = 'challenge';
 
 		if (Rooms.global.lockdown && Rooms.global.lockdown !== 'pre') {
-			var message = "The server is shutting down. Battles cannot be started at this time.";
+			var message = "The server is restarting. Battles will be available again in a few minutes.";
 			if (Rooms.global.lockdown === 'ddos') {
 				message = "The server is under attack. Battles cannot be started at this time.";
 			}
