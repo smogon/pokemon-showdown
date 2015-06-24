@@ -122,7 +122,7 @@ var Battle = (function () {
 	Battle.prototype.sendFor = function (user, action) {
 		var player = this.playerTable[toId(user)];
 		if (!player) {
-			console.log('SENDFOR FAILED: Player doesn\'t exist: ' + user.name);
+			console.log('SENDFOR FAILED in ' + this.id + ': Player doesn\'t exist: ' + user.name);
 			return;
 		}
 

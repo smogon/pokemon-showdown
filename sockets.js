@@ -18,7 +18,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 /*if (cluster.isMaster) {
 	cluster.setupMaster({
-		exec: 'sockets.js'
+		exec: require('path').resolve(__dirname, 'sockets.js')
 	});*/
 
 	var workers = exports.workers = {};
@@ -394,6 +394,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			var pipeIndex = message.indexOf('|');
 			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
 			// drop legacy JSON messages
+			if (!message.charAt) throw new Error('message: ' + JSON.stringify(message));
 			if (message.charAt(0) === '{') return;
 			fakeProcess.client.send('<' + socketid + '\n' + message);
 		});

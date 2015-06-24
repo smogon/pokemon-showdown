@@ -50,8 +50,8 @@ before('initialization', function (done) {
 		if (err.code !== 'MODULE_NOT_FOUND') throw err;
 
 		console.log("config.js doesn't exist - creating one with default settings...");
-		fs.writeFileSync(path.resolve(process.cwd(), './config/config.js'),
-			fs.readFileSync(path.resolve(process.cwd(), './config/config-example.js'))
+		fs.writeFileSync(path.resolve(__dirname, '../config/config.js'),
+			fs.readFileSync(path.resolve(__dirname, '../config/config-example.js'))
 		);
 		config = require('./../config/config.js');
 	}

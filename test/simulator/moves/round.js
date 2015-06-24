@@ -17,7 +17,7 @@ describe('Round', function () {
 	});
 });
 
-describe('Round - BW', function () {
+describe('Round [Gen 5]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});

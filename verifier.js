@@ -23,7 +23,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	var callbacks = {};
 	var callbackData = {};
 
-	//var child = require('child_process').fork('verifier.js');
+	//var child = require('child_process').fork('verifier.js', {cwd: __dirname});
 	exports.verify = function (data, signature, callback) {
 		var localGuid = guid++;
 		callbacks[localGuid] = callback;

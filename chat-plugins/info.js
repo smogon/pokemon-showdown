@@ -96,39 +96,60 @@ var commands = exports.commands = {
 	whoishelp: ["/whois - Get details on yourself: alts, group, IP address, and rooms.",
 		"/whois [username] - Get details on a username: alts (Requires: " + Users.getGroupsThatCan('alts').join(" ") + "), group, IP address (Requires: " + Users.getGroupsThatCan('ip').join(" ") + "), and rooms."],
 
+	host: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help host');
+		if (!this.can('rangeban')) return;
+		if (!/[0-9.]+/.test(target)) return this.sendReply('You must pass a valid IPv4 IP to /host.');
+		var self = this;
+		Dnsbl.reverse(target, function (err, hosts) {
+			self.sendReply('IP ' + target + ': ' + (hosts ? hosts[0] : 'NULL'));
+		});
+	},
+	hosthelp: ["/host [ip] - Gets the host for a given IP. Requires: " + Users.getGroupsThatCan('rangeban').join(" ")],
+
 	ipsearchall: 'ipsearch',
+	hostsearch: 'ipsearch',
 	ipsearch: function (target, room, user, connection, cmd) {
+		if (!target.trim()) return this.parse('/help ipsearch');
 		if (!this.can('rangeban')) return;
 		var results = [];
-		this.sendReply("Users with IP " + target + ":");
 
-		var isRange;
-		if (target.slice(-1) === '*') {
-			isRange = true;
-			target = target.slice(0, -1);
-		}
 		var isAll = (cmd === 'ipsearchall');
 
-		if (isRange) {
+		if (/[a-z]/.test(target)) {
+			// host
+			this.sendReply("Users with host " + target + ":");
 			for (var userid in Users.users) {
 				var curUser = Users.users[userid];
-				if (curUser === user) continue;
+				if (!curUser.latestHost || !curUser.latestHost.endsWith(target)) continue;
+				if (results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name) > 100 && !isAll) {
+					return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
+				}
+			}
+		} else if (target.slice(-1) === '*') {
+			// IP range
+			this.sendReply("Users in IP range " + target + ":");
+			target = target.slice(0, -1);
+			for (var userid in Users.users) {
+				var curUser = Users.users[userid];
 				if (!curUser.latestIp.startsWith(target)) continue;
-				if (results.push((curUser.connected ? " + " : "-") + " " + curUser.name) > 100 && !isAll) {
+				if (results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name) > 100 && !isAll) {
 					return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
 				}
 			}
 		} else {
+			this.sendReply("Users with IP " + target + ":");
 			for (var userid in Users.users) {
 				var curUser = Users.users[userid];
 				if (curUser.latestIp === target) {
-					results.push((curUser.connected ? " + " : "-") + " " + curUser.name);
+					results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 				}
 			}
 		}
 		if (!results.length) return this.sendReply("No results found.");
 		return this.sendReply(results.join('; '));
 	},
+	ipsearchhelp: ["/ipsearch [ip|range|host] - Find all users with specified IP, IP range, or host. Requires: " + Users.getGroupsThatCan('rangeban').join(" ")],
 
 	/*********************************************************
 	 * Shortcuts
@@ -136,6 +157,7 @@ var commands = exports.commands = {
 
 	inv: 'invite',
 	invite: function (target, room, user) {
+		if (!target) return this.parse('/help invite');
 		target = this.splitTarget(target);
 		if (!this.targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
@@ -161,6 +183,7 @@ var commands = exports.commands = {
 
 		var buffer = '';
 		var targetId = toId(target);
+		if (!targetId) return this.parse('/help data');
 		if (targetId === '' + parseInt(targetId)) {
 			for (var p in Tools.data.Pokedex) {
 				var pokemon = Tools.getTemplate(p);
@@ -176,7 +199,7 @@ var commands = exports.commands = {
 		if (newTargets && newTargets.length) {
 			for (var i = 0; i < newTargets.length; ++i) {
 				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
-					buffer = "No Pokemon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
+					buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
 				}
 				if (newTargets[i].searchType === 'nature') {
 					buffer += "" + newTargets[i].name + " nature: ";
@@ -192,7 +215,7 @@ var commands = exports.commands = {
 				}
 			}
 		} else {
-			return this.sendReply("No Pokemon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
+			return this.sendReply("No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
 		}
 
 		if (showDetails) {
@@ -215,6 +238,7 @@ var commands = exports.commands = {
 				}
 				details = {
 					"Dex#": pokemon.num,
+					"Gen": pokemon.gen,
 					"Height": pokemon.heightm + " m",
 					"Weight": pokemon.weightkg + " kg <em>(" + weighthit + " BP)</em>",
 					"Dex Colour": pokemon.color,
@@ -231,7 +255,8 @@ var commands = exports.commands = {
 			} else if (newTargets[0].searchType === 'move') {
 				var move = Tools.getMove(newTargets[0].name);
 				details = {
-					"Priority": move.priority
+					"Priority": move.priority,
+					"Gen": move.gen
 				};
 
 				if (move.secondary || move.secondaries) details["<font color=black>&#10003; Secondary effect</font>"] = "";
@@ -252,22 +277,25 @@ var commands = exports.commands = {
 				if (move.id === 'mirrormove') isMirrorMove = true;
 
 				details["Target"] = {
-					'normal': "One Adjacent Pokemon",
+					'normal': "One Adjacent Pok\u00e9mon",
 					'self': "User",
 					'adjacentAlly': "One Ally",
 					'adjacentAllyOrSelf': "User or Ally",
-					'adjacentFoe': "One Adjacent Opposing Pokemon",
+					'adjacentFoe': "One Adjacent Opposing Pok\u00e9mon",
 					'allAdjacentFoes': "All Adjacent Opponents",
 					'foeSide': "Opposing Side",
 					'allySide': "User's Side",
 					'allyTeam': "User's Side",
-					'allAdjacent': "All Adjacent Pokemon",
-					'any': "Any Pokemon",
-					'all': "All Pokemon"
+					'allAdjacent': "All Adjacent Pok\u00e9mon",
+					'any': "Any Pok\u00e9mon",
+					'all': "All Pok\u00e9mon"
 				}[move.target] || "Unknown";
 			} else if (newTargets[0].searchType === 'item') {
 				var item = Tools.getItem(newTargets[0].name);
-				details = {};
+				details = {
+					"Gen": item.gen
+				};
+
 				if (item.fling) {
 					details["Fling Base Power"] = item.fling.basePower;
 					if (item.fling.status) details["Fling Effect"] = item.fling.status;
@@ -299,7 +327,8 @@ var commands = exports.commands = {
 		"!data [pokemon/item/move/ability] - Show everyone these details. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
 	dt: 'details',
-	details: function () {
+	details: function (target) {
+		if (!target) return this.parse('/help details');
 		CommandParser.commands.data.apply(this, arguments);
 	},
 	detailshelp: ["/details [pokemon] - Get additional details on this pokemon/item/move/ability/nature.",
@@ -394,8 +423,9 @@ var commands = exports.commands = {
 				continue;
 			}
 
-			if (target.indexOf(' type') > -1) {
-				target = target.charAt(0).toUpperCase() + target.substring(1, target.indexOf(' type'));
+			var typeIndex = target.indexOf(' type');
+			if (typeIndex >= 0) {
+				target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
 				if (target in Tools.data.TypeChart) {
 					if (!searches['types']) searches['types'] = {};
 					if (Object.count(searches['types'], true) === 2 && !isNotSearch) return this.sendReplyBox("Specify a maximum of two types.");
@@ -406,7 +436,7 @@ var commands = exports.commands = {
 			}
 
 			var inequality = target.search(/>|<|=/);
-			if (inequality > -1) {
+			if (inequality >= 0) {
 				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in stat ranges.");
 				inequality = target.charAt(inequality);
 				var targetParts = target.replace(/\s/g, '').split(inequality);
@@ -415,30 +445,30 @@ var commands = exports.commands = {
 					numSide = 0;
 					statSide = 1;
 					switch (inequality) {
-						case '>': direction = 'less'; break;
-						case '<': direction = 'greater'; break;
-						case '=': direction = 'equal'; break;
+					case '>': direction = 'less'; break;
+					case '<': direction = 'greater'; break;
+					case '=': direction = 'equal'; break;
 					}
 				} else if (!isNaN(targetParts[1])) {
 					numSide = 1;
 					statSide = 0;
 					switch (inequality) {
-						case '<': direction = 'less'; break;
-						case '>': direction = 'greater'; break;
-						case '=': direction = 'equal'; break;
+					case '<': direction = 'less'; break;
+					case '>': direction = 'greater'; break;
+					case '=': direction = 'equal'; break;
 					}
 				} else {
 					return this.sendReplyBox("No value given to compare with '" + Tools.escapeHTML(target) + "'.");
 				}
 				var stat = targetParts[statSide];
 				switch (toId(targetParts[statSide])) {
-					case 'attack': stat = 'atk'; break;
-					case 'defense': stat = 'def'; break;
-					case 'specialattack': stat = 'spa'; break;
-					case 'spatk': stat = 'spa'; break;
-					case 'specialdefense': stat = 'spd'; break;
-					case 'spdef': stat = 'spd'; break;
-					case 'speed': stat = 'spe'; break;
+				case 'attack': stat = 'atk'; break;
+				case 'defense': stat = 'def'; break;
+				case 'specialattack': stat = 'spa'; break;
+				case 'spatk': stat = 'spa'; break;
+				case 'specialdefense': stat = 'spd'; break;
+				case 'spdef': stat = 'spd'; break;
+				case 'speed': stat = 'spe'; break;
 				}
 				if (!(stat in allStats)) return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' did not contain a valid stat.");
 				if (!searches['stats']) searches['stats'] = {};
@@ -475,143 +505,145 @@ var commands = exports.commands = {
 			var search = categories[cat];
 			if (!searches[search]) continue;
 			switch (search) {
-				case 'types':
-					for (var mon in dex) {
-						if (Object.count(searches[search], true) === 2) {
-							if (!(searches[search][dex[mon].types[0]]) || !(searches[search][dex[mon].types[1]])) delete dex[mon];
-						} else {
-							if (searches[search][dex[mon].types[0]] === false || searches[search][dex[mon].types[1]] === false || (Object.count(searches[search], true) > 0 &&
-								(!(searches[search][dex[mon].types[0]]) && !(searches[search][dex[mon].types[1]])))) delete dex[mon];
+			case 'types':
+				for (var mon in dex) {
+					if (Object.count(searches[search], true) === 2) {
+						if (!(searches[search][dex[mon].types[0]]) || !(searches[search][dex[mon].types[1]])) delete dex[mon];
+					} else {
+						if (searches[search][dex[mon].types[0]] === false || searches[search][dex[mon].types[1]] === false || (Object.count(searches[search], true) > 0 &&
+							(!(searches[search][dex[mon].types[0]]) && !(searches[search][dex[mon].types[1]])))) delete dex[mon];
+					}
+				}
+				break;
+
+			case 'tier':
+				for (var mon in dex) {
+					if ('lc' in searches[search]) {
+						// some LC legal Pokemon are stored in other tiers (Ferroseed/Murkrow etc)
+						// this checks for LC legality using the going criteria, instead of dex[mon].tier
+						var isLC = (dex[mon].evos && dex[mon].evos.length > 0) && !dex[mon].prevo && dex[mon].tier !== "LC Uber" && Tools.data.Formats['lc'].banlist.indexOf(dex[mon].species) < 0;
+						if ((searches[search]['lc'] && !isLC) || (!searches[search]['lc'] && isLC)) {
+							delete dex[mon];
+							continue;
 						}
 					}
-					break;
+					if (searches[search][String(dex[mon][search]).toLowerCase()] === false ||
+						Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) {
+						delete dex[mon];
+					}
+				}
+				break;
 
-				case 'tier':
+			case 'gen':
+			case 'color':
+				for (var mon in dex) {
+					if (searches[search][String(dex[mon][search]).toLowerCase()] === false ||
+						Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) {
+						delete dex[mon];
+					}
+				}
+				break;
+
+			case 'ability':
+				for (var mon in dex) {
+					for (var ability in searches[search]) {
+						var needsAbility = searches[search][ability];
+						var hasAbility = Object.count(dex[mon].abilities, ability) > 0;
+						if (hasAbility !== needsAbility) {
+							delete dex[mon];
+							break;
+						}
+					}
+				}
+				break;
+
+			case 'compileLearnsets':
+				for (var mon in dex) {
+					var template = dex[mon];
+					if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+					if (!template.learnset) continue;
+					var fullLearnset = template.learnset;
+					while (template.prevo) {
+						template = Tools.getTemplate(template.prevo);
+						for (var move in template.learnset) {
+							if (!fullLearnset[move]) fullLearnset[move] = template.learnset[move];
+						}
+					}
+					dex[mon].learnset = fullLearnset;
+				}
+				break;
+
+			case 'moves':
+				for (var mon in dex) {
+					if (!dex[mon].learnset) continue;
+					for (var move in searches[search]) {
+						var canLearn = (dex[mon].learnset.sketch && ['chatter', 'struggle', 'magikarpsrevenge'].indexOf(move) < 0) || dex[mon].learnset[move];
+						if ((!canLearn && searches[search][move]) || (searches[search][move] === false && canLearn)) {
+							delete dex[mon];
+							break;
+						}
+					}
+				}
+				break;
+
+			case 'recovery':
+				for (var mon in dex) {
+					if (!dex[mon].learnset) continue;
+					var recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder"];
+					var canLearn = false;
+					for (var i = 0; i < recoveryMoves.length; i++) {
+						canLearn = (dex[mon].learnset.sketch) || dex[mon].learnset[recoveryMoves[i]];
+						if (canLearn) break;
+					}
+					if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
+				}
+				break;
+
+			case 'priority':
+				var priorityMoves = [];
+				for (var move in Tools.data.Movedex) {
+					var moveData = Tools.getMove(move);
+					if (moveData.category === "Status") continue;
+					if (moveData.priority > 0) priorityMoves.push(move);
+				}
+				for (var mon in dex) {
+					if (!dex[mon].learnset) continue;
+					var canLearn = false;
+					for (var i = 0; i < priorityMoves.length; i++) {
+						canLearn = (dex[mon].learnset.sketch) || dex[mon].learnset[priorityMoves[i]];
+						if (canLearn) break;
+					}
+					if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
+				}
+				break;
+
+			case 'stats':
+				for (var stat in searches[search]) {
 					for (var mon in dex) {
-						if ('lc' in searches[search]) {
-							// some LC legal Pokemon are stored in other tiers (Ferroseed/Murkrow etc)
-							// this checks for LC legality using the going criteria, instead of dex[mon].tier
-							var isLC = (dex[mon].evos && dex[mon].evos.length > 0) && !dex[mon].prevo && dex[mon].tier !== "LC Uber" && Tools.data.Formats['lc'].banlist.indexOf(dex[mon].species) === -1;
-							if ((searches[search]['lc'] && !isLC) || (!searches[search]['lc'] && isLC)) {
+						if (typeof searches[search][stat].less === 'number') {
+							if (dex[mon].baseStats[stat] > searches[search][stat].less) {
 								delete dex[mon];
 								continue;
 							}
 						}
-						if (searches[search][String(dex[mon][search]).toLowerCase()] === false) {
-							delete dex[mon];
-						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) delete dex[mon];
-					}
-					break;
-
-				case 'gen':
-				case 'color':
-					for (var mon in dex) {
-						if (searches[search][String(dex[mon][search]).toLowerCase()] === false) {
-							delete dex[mon];
-						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) delete dex[mon];
-					}
-					break;
-
-				case 'ability':
-					for (var mon in dex) {
-						for (var ability in searches[search]) {
-							var needsAbility = searches[search][ability];
-							var hasAbility = Object.count(dex[mon].abilities, ability) > 0;
-							if (hasAbility !== needsAbility) {
+						if (typeof searches[search][stat].greater === 'number') {
+							if (dex[mon].baseStats[stat] < searches[search][stat].greater) {
 								delete dex[mon];
-								break;
+								continue;
 							}
 						}
 					}
-					break;
+				}
+				break;
 
-				case 'compileLearnsets':
-					for (var mon in dex) {
-						var template = dex[mon];
-						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-						if (!template.learnset) continue;
-						var fullLearnset = template.learnset;
-						while (template.prevo) {
-							template = Tools.getTemplate(template.prevo);
-							for (var move in template.learnset) {
-								if (!fullLearnset[move]) fullLearnset[move] = template.learnset[move];
-							}
-						}
-						dex[mon].learnset = fullLearnset;
-					}
-					break;
-
-				case 'moves':
-					for (var mon in dex) {
-						if (!dex[mon].learnset) continue;
-						for (var move in searches[search]) {
-							var canLearn = (dex[mon].learnset.sketch && ['chatter', 'struggle', 'magikarpsrevenge'].indexOf(move) === -1) || dex[mon].learnset[move];
-							if ((!canLearn && searches[search][move]) || (searches[search][move] === false && canLearn)) {
-								delete dex[mon];
-								break;
-							}
-						}
-					}
-					break;
-
-				case 'recovery':
-					for (var mon in dex) {
-						if (!dex[mon].learnset) continue;
-						var recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder"];
-						var canLearn = false;
-						for (var i = 0; i < recoveryMoves.length; i++) {
-							canLearn = (dex[mon].learnset.sketch) || dex[mon].learnset[recoveryMoves[i]];
-							if (canLearn) break;
-						}
-						if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
-					}
-					break;
-
-				case 'priority':
-					var priorityMoves = [];
-					for (var move in Tools.data.Movedex) {
-						var moveData = Tools.getMove(move);
-						if (moveData.category === "Status") continue;
-						if (moveData.priority > 0) priorityMoves.push(move);
-					}
-					for (var mon in dex) {
-						if (!dex[mon].learnset) continue;
-						var canLearn = false;
-						for (var i = 0; i < priorityMoves.length; i++) {
-							canLearn = (dex[mon].learnset.sketch) || dex[mon].learnset[priorityMoves[i]];
-							if (canLearn) break;
-						}
-						if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
-					}
-					break;
-
-				case 'stats':
-					for (var stat in searches[search]) {
-						for (var mon in dex) {
-							if (typeof searches[search][stat].less === 'number') {
-								if (dex[mon].baseStats[stat] > searches[search][stat].less) {
-									delete dex[mon];
-									continue;
-								}
-							}
-							if (typeof searches[search][stat].greater === 'number') {
-								if (dex[mon].baseStats[stat] < searches[search][stat].greater) {
-									delete dex[mon];
-									continue;
-								}
-							}
-						}
-					}
-					break;
-
-				default:
-					return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
+			default:
+				return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
 			}
 		}
 
 		var results = [];
 		for (var mon in dex) {
-			if (dex[mon].baseSpecies && results.indexOf(dex[mon].baseSpecies) > -1) continue;
+			if (dex[mon].baseSpecies && results.indexOf(dex[mon].baseSpecies) >= 0) continue;
 			results.push(dex[mon].species);
 		}
 
@@ -628,13 +660,14 @@ var commands = exports.commands = {
 		}
 		return this.sendReplyBox(resultsStr);
 	},
-	dexsearchhelp: ["/dexsearch [type], [move], [move], ... - Searches for Pokemon that fulfill the selected criteria",
-		"Search categories are: type, tier, color, moves, ability, gen.",
+	dexsearchhelp: ["/dexsearch [type], [move], [move], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
+		"Search categories are: type, tier, color, moves, ability, gen, recovery, priority, stat.",
 		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
 		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/PU/NFE/LC/CAP.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
+		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'speed > 100' searches for all Pokemon equal to and greater than 100 speed.",
 		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
-		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameters 'FE' or 'NFE' can be added to search fully or not-fully evolved Pokemon only.",
+		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pokemon only.",
 		"The order of the parameters does not matter."],
 
 	ms: 'movesearch',
@@ -664,8 +697,9 @@ var commands = exports.commands = {
 				target = target.substr(1);
 			}
 
-			if (target.indexOf(' type') > -1) {
-				target = target.charAt(0).toUpperCase() + target.substring(1, target.indexOf(' type'));
+			var typeIndex = target.indexOf(' type');
+			if (typeIndex >= 0) {
+				target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
 				if (!(target in Tools.data.TypeChart)) return this.sendReplyBox("Type '" + Tools.escapeHTML(target) + "' not found.");
 				if (!searches['type']) searches['type'] = {};
 				if ((searches['type'][target] && isNotSearch) || (searches['type'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a type.');
@@ -705,7 +739,7 @@ var commands = exports.commands = {
 
 			var template = Tools.getTemplate(target);
 			if (template.exists) {
-				if (Object.size(lsetData) !== 0) return this.sendReplyBox("A search can only include one Pokemon learnset.");
+				if (Object.size(lsetData) !== 0) return this.sendReplyBox("A search can only include one Pok\u00e9mon learnset.");
 				if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
 				lsetData = template.learnset;
 				targetMon = template.name;
@@ -719,7 +753,7 @@ var commands = exports.commands = {
 			}
 
 			var inequality = target.search(/>|<|=/);
-			if (inequality > -1) {
+			if (inequality >= 0) {
 				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in quality ranges.");
 				inequality = target.charAt(inequality);
 				var targetParts = target.replace(/\s/g, '').split(inequality);
@@ -728,26 +762,26 @@ var commands = exports.commands = {
 					numSide = 0;
 					propSide = 1;
 					switch (inequality) {
-						case '>': direction = 'less'; break;
-						case '<': direction = 'greater'; break;
-						case '=': direction = 'equal'; break;
+					case '>': direction = 'less'; break;
+					case '<': direction = 'greater'; break;
+					case '=': direction = 'equal'; break;
 					}
 				} else if (!isNaN(targetParts[1])) {
 					numSide = 1;
 					propSide = 0;
 					switch (inequality) {
-						case '<': direction = 'less'; break;
-						case '>': direction = 'greater'; break;
-						case '=': direction = 'equal'; break;
+					case '<': direction = 'less'; break;
+					case '>': direction = 'greater'; break;
+					case '=': direction = 'equal'; break;
 					}
 				} else {
 					return this.sendReplyBox("No value given to compare with '" + Tools.escapeHTML(target) + "'.");
 				}
 				var prop = targetParts[propSide];
 				switch (toId(targetParts[propSide])) {
-					case 'basepower': prop = 'basePower'; break;
-					case 'bp': prop = 'basePower'; break;
-					case 'acc': prop = 'accuracy'; break;
+				case 'basepower': prop = 'basePower'; break;
+				case 'bp': prop = 'basePower'; break;
+				case 'acc': prop = 'accuracy'; break;
 				}
 				if (!(prop in allProperties)) return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' did not contain a valid property.");
 				if (!searches['property']) searches['property'] = {};
@@ -789,16 +823,16 @@ var commands = exports.commands = {
 
 			if (target.substr(0, 7) === 'boosts ') {
 				switch (target.substr(7)) {
-					case 'attack': target = 'atk'; break;
-					case 'defense': target = 'def'; break;
-					case 'specialattack': target = 'spa'; break;
-					case 'spatk': target = 'spa'; break;
-					case 'specialdefense': target = 'spd'; break;
-					case 'spdef': target = 'spd'; break;
-					case 'speed': target = 'spe'; break;
-					case 'acc': target = 'accuracy'; break;
-					case 'evasiveness': target = 'evasion'; break;
-					default: target = target.substr(7);
+				case 'attack': target = 'atk'; break;
+				case 'defense': target = 'def'; break;
+				case 'specialattack': target = 'spa'; break;
+				case 'spatk': target = 'spa'; break;
+				case 'specialdefense': target = 'spd'; break;
+				case 'spdef': target = 'spd'; break;
+				case 'speed': target = 'spe'; break;
+				case 'acc': target = 'accuracy'; break;
+				case 'evasiveness': target = 'evasion'; break;
+				default: target = target.substr(7);
 				}
 				if (!(target in allBoosts)) return this.sendReplyBox("'" + Tools.escapeHTML(target.substr(7)) + "' is not a recognized stat.");
 				if (!searches['boost']) searches['boost'] = {};
@@ -810,15 +844,15 @@ var commands = exports.commands = {
 			var oldTarget = target;
 			if (target.charAt(target.length - 1) === 's') target = target.substr(0, target.length - 1);
 			switch (target) {
-				case 'toxic': target = 'tox'; break;
-				case 'poison': target = 'psn'; break;
-				case 'burn': target = 'brn'; break;
-				case 'paralyze': target = 'par'; break;
-				case 'freeze': target = 'frz'; break;
-				case 'sleep': target = 'slp'; break;
-				case 'confuse': target = 'confusion'; break;
-				case 'trap': target = 'partiallytrapped'; break;
-				case 'flinche': target = 'flinch'; break;
+			case 'toxic': target = 'tox'; break;
+			case 'poison': target = 'psn'; break;
+			case 'burn': target = 'brn'; break;
+			case 'paralyze': target = 'par'; break;
+			case 'freeze': target = 'frz'; break;
+			case 'sleep': target = 'slp'; break;
+			case 'confuse': target = 'confusion'; break;
+			case 'trap': target = 'partiallytrapped'; break;
+			case 'flinche': target = 'flinch'; break;
 			}
 
 			if (target in allStatus) {
@@ -854,108 +888,109 @@ var commands = exports.commands = {
 
 		for (var search in searches) {
 			switch (search) {
-				case 'type':
-				case 'category':
-					for (var move in dex) {
-						if (searches[search][String(dex[move][search])] === false) {
-							delete dex[move];
-						} else if (Object.count(searches[search], true) > 0 && !searches[search][String(dex[move][search])]) delete dex[move];
+			case 'type':
+			case 'category':
+				for (var move in dex) {
+					if (searches[search][String(dex[move][search])] === false ||
+						Object.count(searches[search], true) > 0 && !searches[search][String(dex[move][search])]) {
+						delete dex[move];
 					}
-					break;
+				}
+				break;
 
-				case 'flags':
-					for (var flag in searches[search]) {
-						for (var move in dex) {
-							if (flag !== 'secondary') {
-								if ((!dex[move].flags[flag] && searches[search][flag]) || (dex[move].flags[flag] && !searches[search][flag])) delete dex[move];
+			case 'flags':
+				for (var flag in searches[search]) {
+					for (var move in dex) {
+						if (flag !== 'secondary') {
+							if ((!dex[move].flags[flag] && searches[search][flag]) || (dex[move].flags[flag] && !searches[search][flag])) delete dex[move];
+						} else {
+							if (searches[search][flag]) {
+								if (!dex[move].secondary && !dex[move].secondaries) delete dex[move];
 							} else {
-								if (searches[search][flag]) {
-									if (!dex[move].secondary && !dex[move].secondaries) delete dex[move];
-								} else {
-									if (dex[move].secondary && dex[move].secondaries) delete dex[move];
-								}
+								if (dex[move].secondary && dex[move].secondaries) delete dex[move];
 							}
 						}
 					}
-					break;
+				}
+				break;
 
-				case 'recovery':
+			case 'recovery':
+				for (var move in dex) {
+					var hasRecovery = (dex[move].drain || dex[move].flags.heal);
+					if ((!hasRecovery && searches[search]) || (hasRecovery && !searches[search])) delete dex[move];
+				}
+				break;
+
+			case 'property':
+				for (var prop in searches[search]) {
 					for (var move in dex) {
-						var hasRecovery = (dex[move].drain || dex[move].flags.heal);
-						if ((!hasRecovery && searches[search]) || (hasRecovery && !searches[search])) delete dex[move];
-					}
-					break;
-
-				case 'property':
-					for (var prop in searches[search]) {
-						for (var move in dex) {
-							if (typeof searches[search][prop].less === "number") {
-								if (dex[move][prop] === true) {
-									delete dex[move];
-									continue;
-								}
-								if (dex[move][prop] > searches[search][prop].less) {
-									delete dex[move];
-									continue;
-								}
+						if (typeof searches[search][prop].less === "number") {
+							if (dex[move][prop] === true) {
+								delete dex[move];
+								continue;
 							}
-							if (typeof searches[search][prop].greater === "number") {
-								if (dex[move][prop] === true) {
-									if (dex[move].category === "Status") delete dex[move];
-									continue;
-								}
-								if (dex[move][prop] < searches[search][prop].greater) {
-									delete dex[move];
-									continue;
-								}
+							if (dex[move][prop] > searches[search][prop].less) {
+								delete dex[move];
+								continue;
+							}
+						}
+						if (typeof searches[search][prop].greater === "number") {
+							if (dex[move][prop] === true) {
+								if (dex[move].category === "Status") delete dex[move];
+								continue;
+							}
+							if (dex[move][prop] < searches[search][prop].greater) {
+								delete dex[move];
+								continue;
 							}
 						}
 					}
-					break;
+				}
+				break;
 
-				case 'boost':
-					for (var boost in searches[search]) {
-						for (var move in dex) {
-							if (dex[move].boosts) {
-								if ((dex[move].boosts[boost] > 0 && searches[search][boost]) ||
-									(dex[move].boosts[boost] < 1 && !searches[search][boost])) continue;
-							} else if (dex[move].secondary && dex[move].secondary.self && dex[move].secondary.self.boosts) {
-								if ((dex[move].secondary.self.boosts[boost] > 0 && searches[search][boost]) ||
-									(dex[move].secondary.self.boosts[boost] < 1 && !searches[search][boost])) continue;
-							}
-							delete dex[move];
+			case 'boost':
+				for (var boost in searches[search]) {
+					for (var move in dex) {
+						if (dex[move].boosts) {
+							if ((dex[move].boosts[boost] > 0 && searches[search][boost]) ||
+								(dex[move].boosts[boost] < 1 && !searches[search][boost])) continue;
+						} else if (dex[move].secondary && dex[move].secondary.self && dex[move].secondary.self.boosts) {
+							if ((dex[move].secondary.self.boosts[boost] > 0 && searches[search][boost]) ||
+								(dex[move].secondary.self.boosts[boost] < 1 && !searches[search][boost])) continue;
 						}
+						delete dex[move];
 					}
-					break;
+				}
+				break;
 
-				case 'status':
-				case 'volatileStatus':
-					for (var searchStatus in searches[search]) {
-						for (var move in dex) {
-							if (dex[move][search] !== searchStatus) {
-								if (!dex[move].secondaries) {
-									if (!dex[move].secondary) {
-										if (searches[search][searchStatus]) delete dex[move];
-									} else {
-										if ((dex[move].secondary[search] !== searchStatus && searches[search][searchStatus]) ||
-											(dex[move].secondary[search] === searchStatus && !searches[search][searchStatus])) delete dex[move];
-									}
+			case 'status':
+			case 'volatileStatus':
+				for (var searchStatus in searches[search]) {
+					for (var move in dex) {
+						if (dex[move][search] !== searchStatus) {
+							if (!dex[move].secondaries) {
+								if (!dex[move].secondary) {
+									if (searches[search][searchStatus]) delete dex[move];
 								} else {
-									var hasSecondary = false;
-									for (var i = 0; i < dex[move].secondaries.length; i++) {
-										if (dex[move].secondaries[i][search] === searchStatus) hasSecondary = true;
-									}
-									if ((!hasSecondary && searches[search][searchStatus]) || (hasSecondary && !searches[search][searchStatus])) delete dex[move];
+									if ((dex[move].secondary[search] !== searchStatus && searches[search][searchStatus]) ||
+										(dex[move].secondary[search] === searchStatus && !searches[search][searchStatus])) delete dex[move];
 								}
 							} else {
-								if (!searches[search][searchStatus]) delete dex[move];
+								var hasSecondary = false;
+								for (var i = 0; i < dex[move].secondaries.length; i++) {
+									if (dex[move].secondaries[i][search] === searchStatus) hasSecondary = true;
+								}
+								if ((!hasSecondary && searches[search][searchStatus]) || (hasSecondary && !searches[search][searchStatus])) delete dex[move];
 							}
+						} else {
+							if (!searches[search][searchStatus]) delete dex[move];
 						}
 					}
-					break;
+				}
+				break;
 
-				default:
-					return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
+			default:
+				return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
 			}
 		}
 
@@ -983,6 +1018,7 @@ var commands = exports.commands = {
 		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
+		"If a Pok\u00e9mon is included as a parameter, moves will be searched from it's movepool.",
 		"The order of the parameters does not matter."],
 
 	learnset: 'learn',
@@ -1004,13 +1040,13 @@ var commands = exports.commands = {
 		var template = Tools.getTemplate(targets[0]);
 		var move = {};
 		var problem;
-		var format = {rby:'gen1ou', gsc:'gen2ou', adv:'gen3oubeta', dpp:'gen4ou', bw2:'gen5ou'}[cmd.substring(0, 3)];
+		var format = {rby:'gen1ou', gsc:'gen2ou', adv:'gen3ou', dpp:'gen4ou', bw2:'gen5ou'}[cmd.substring(0, 3)];
 		var all = (cmd === 'learnall');
 		if (cmd === 'learn5') lsetData.set.level = 5;
 		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
 
 		if (!template.exists) {
-			return this.sendReply("Pokemon '" + template.id + "' not found.");
+			return this.sendReply("Pok\u00e9mon '" + template.id + "' not found.");
 		}
 
 		if (targets.length < 2) {
@@ -1066,7 +1102,7 @@ var commands = exports.commands = {
 		}
 		this.sendReplyBox(buffer);
 	},
-	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pokemon can learn the given moves, if it can at all.",
+	learnhelp: ["/learn [pokemon], [move, move, ...] - Displays how a Pok\u00e9mon can learn the given moves, if it can at all.",
 		"!learn [pokemon], [move, move, ...] - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
 	weaknesses: 'weakness',
@@ -1127,9 +1163,9 @@ var commands = exports.commands = {
 		buffer.push('<span class="message-effect-immune">Immunities</span>: ' + (immunities.join(', ') || '<font color=#999999>None</font>'));
 		this.sendReplyBox(buffer.join('<br>'));
 	},
-	weaknesshelp: ["/weakness [pokemon] - Provides a Pokemon's resistances, weaknesses, and immunities, ignoring abilities.",
+	weaknesshelp: ["/weakness [pokemon] - Provides a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities.",
 		"/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.",
-		"!weakness [pokemon] - Shows everyone a Pokemon's resistances, weaknesses, and immunities, ignoring abilities. Requires: " + Users.getGroupsThatCan('broadcast').join(" "),
+		"!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: " + Users.getGroupsThatCan('broadcast').join(" "),
 		"!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
 	eff: 'effectiveness',
@@ -1187,10 +1223,13 @@ var commands = exports.commands = {
 			factor = Math.pow(2, totalTypeMod);
 		}
 
-		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + ".");
+		var hasThousandArrows = source.id === 'thousandarrows' && defender.types.indexOf('Flying') >= 0;
+		var additionalInfo = hasThousandArrows ? "<br>However, Thousand Arrows will be 1x effective on the first hit." : "";
+
+		this.sendReplyBox("" + atkName + " is " + factor + "x effective against " + defName + "." + additionalInfo);
 	},
-	effectivenesshelp: ["/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pokémon.",
-		"!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pokémon."],
+	effectivenesshelp: ["/effectiveness [attack], [defender] - Provides the effectiveness of a move or type on another type or a Pok\u00e9mon.",
+		"!effectiveness [attack], [defender] - Shows everyone the effectiveness of a move or type on another type or a Pok\u00e9mon."],
 
 	cover: 'coverage',
 	coverage: function (target, room, user) {
@@ -1202,6 +1241,8 @@ var commands = exports.commands = {
 
 		var dispTable = false;
 		var bestCoverage = {};
+		var hasThousandArrows = false;
+
 		for (var type in Tools.data.TypeChart) {
 			// This command uses -5 to designate immunity
 			bestCoverage[type] = -5;
@@ -1228,6 +1269,7 @@ var commands = exports.commands = {
 			move = Tools.getMove(move);
 			if (move.exists) {
 				if (!move.basePower && !move.basePowerCallback) continue;
+				if (move.id === 'thousandarrows') hasThousandArrows = true;
 				sources.push(move);
 				for (var type in bestCoverage) {
 					if (!Tools.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
@@ -1262,22 +1304,22 @@ var commands = exports.commands = {
 
 			for (var type in bestCoverage) {
 				switch (bestCoverage[type]) {
-					case 0:
-						immune.push(type);
-						break;
-					case 0.25:
-					case 0.5:
-						resists.push(type);
-						break;
-					case 1:
-						neutral.push(type);
-						break;
-					case 2:
-					case 4:
-						superEff.push(type);
-						break;
-					default:
-						throw new Error("/coverage effectiveness of " + bestCoverage[type] + " from parameters: " + target);
+				case 0:
+					immune.push(type);
+					break;
+				case 0.25:
+				case 0.5:
+					resists.push(type);
+					break;
+				case 1:
+					neutral.push(type);
+					break;
+				case 2:
+				case 4:
+					superEff.push(type);
+					break;
+				default:
+					throw new Error("/coverage effectiveness of " + bestCoverage[type] + " from parameters: " + target);
 				}
 			}
 			buffer.push('Coverage for ' + sources.join(' + ') + ':');
@@ -1329,28 +1371,32 @@ var commands = exports.commands = {
 						}
 					}
 					switch (bestEff) {
-						case 0:
-							cell += 'bgcolor=#666666 title="' + typing + '"><font color=#000000>' + bestEff + '</font>';
-							break;
-						case 0.25:
-						case 0.5:
-							cell += 'bgcolor=#AA5544 title="' + typing + '"><font color=#660000>' + bestEff + '</font>';
-							break;
-						case 1:
-							cell += 'bgcolor=#6688AA title="' + typing + '"><font color=#000066>' + bestEff + '</font>';
-							break;
-						case 2:
-						case 4:
-							cell += 'bgcolor=#559955 title="' + typing + '"><font color=#003300>' + bestEff + '</font>';
-							break;
-						default:
-							throw new Error("/coverage effectiveness of " + bestEff + " from parameters: " + target);
+					case 0:
+						cell += 'bgcolor=#666666 title="' + typing + '"><font color=#000000>' + bestEff + '</font>';
+						break;
+					case 0.25:
+					case 0.5:
+						cell += 'bgcolor=#AA5544 title="' + typing + '"><font color=#660000>' + bestEff + '</font>';
+						break;
+					case 1:
+						cell += 'bgcolor=#6688AA title="' + typing + '"><font color=#000066>' + bestEff + '</font>';
+						break;
+					case 2:
+					case 4:
+						cell += 'bgcolor=#559955 title="' + typing + '"><font color=#003300>' + bestEff + '</font>';
+						break;
+					default:
+						throw new Error("/coverage effectiveness of " + bestEff + " from parameters: " + target);
 					}
 					cell += '</th>';
 					buffer += cell;
 				}
 			}
 			buffer += '</table></div>';
+
+			if (hasThousandArrows) {
+				buffer += "<br><b>Thousand Arrows has neutral type effectiveness on Flying-type Pokemon if not already smacked down.";
+			}
 
 			this.sendReplyBox('Coverage for ' + sources.join(' + ') + ':<br>' + buffer);
 		}
@@ -1381,8 +1427,9 @@ var commands = exports.commands = {
 	groups: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(Config.groups.byRank.reduce(function (info, group) {
-			if (!Config.groups.bySymbol[group].name || !Config.groups.bySymbol[group].description)
+			if (!Config.groups.bySymbol[group].name || !Config.groups.bySymbol[group].description) {
 				return info;
+			}
 			return info + (info ? "<br />" : "") + Tools.escapeHTML(group) + " <strong>" + Tools.escapeHTML(Config.groups.bySymbol[group].name) + "</strong> - " + Tools.escapeHTML(Config.groups.bySymbol[group].description);
 		}, ""));
 	},
@@ -1395,7 +1442,7 @@ var commands = exports.commands = {
 	opensource: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"Pokemon Showdown is open source:<br />" +
+			"Pok&eacute;mon Showdown is open source:<br />" +
 			"- Language: JavaScript (Node.js)<br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown\">Server source code</a><br />" +
@@ -1407,7 +1454,12 @@ var commands = exports.commands = {
 
 	staff: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pokemon Showdown Staff List</a>");
+		this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pok&eacute;mon Showdown Staff List</a>");
+	},
+
+	forums: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox("<a href=\"http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209\">Pok&eacute;mon Showdown Forums</a>");
 	},
 
 	avatars: function (target, room, user) {
@@ -1422,8 +1474,8 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"New to competitive pokemon?<br />" +
-			"- <a href=\"https://www.smogon.com/sim/ps_guide\">Beginner's Guide to Pokémon Showdown</a><br />" +
-			"- <a href=\"https://www.smogon.com/dp/articles/intro_comp_pokemon\">An introduction to competitive Pokémon</a><br />" +
+			"- <a href=\"https://www.smogon.com/sim/ps_guide\">Beginner's Guide to Pok&eacute;mon Showdown</a><br />" +
+			"- <a href=\"https://www.smogon.com/dp/articles/intro_comp_pokemon\">An introduction to competitive Pok&eacute;mon</a><br />" +
 			"- <a href=\"https://www.smogon.com/bw/articles/bw_tiers\">What do 'OU', 'UU', etc mean?</a><br />" +
 			"- <a href=\"https://www.smogon.com/xyhub/tiers\">What are the rules for each format? What is 'Sleep Clause'?</a>"
 		);
@@ -1436,11 +1488,9 @@ var commands = exports.commands = {
 	smogintro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"Welcome to Smogon's official simulator! Here are some useful links to <a href=\"https://www.smogon.com/mentorship/\">Smogon\'s Mentorship Program</a> to help you get integrated into the community:<br />" +
-			"- <a href=\"https://www.smogon.com/mentorship/primer\">Smogon Primer: A brief introduction to Smogon's subcommunities</a><br />" +
-			"- <a href=\"https://www.smogon.com/mentorship/introductions\">Introduce yourself to Smogon!</a><br />" +
-			"- <a href=\"https://www.smogon.com/mentorship/profiles\">Profiles of current Smogon Mentors</a><br />" +
-			"- <a href=\"http://mibbit.com/#mentor@irc.synirc.net\">#mentor: the Smogon Mentorship IRC channel</a>"
+			"Welcome to Smogon's official simulator! The <a href=\"https://www.smogon.com/forums/forums/264\">Smogon Info / Intro Hub</a> can help you get integrated into the community.<br />" +
+			"- <a href=\"https://www.smogon.com/forums/threads/3526346\">Useful Smogon Info</a><br />" +
+			"- <a href=\"https://www.smogon.com/forums/threads/3498332\">Tiering FAQ</a><br />"
 		);
 	},
 
@@ -1448,7 +1498,7 @@ var commands = exports.commands = {
 	calc: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"Pokemon Showdown! damage calculator. (Courtesy of Honko)<br />" +
+			"Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />" +
 			"- <a href=\"https://pokemonshowdown.com/damagecalc/\">Damage Calculator</a>"
 		);
 	},
@@ -1459,14 +1509,14 @@ var commands = exports.commands = {
 	cap: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"An introduction to the Create-A-Pokemon project:<br />" +
+			"An introduction to the Create-A-Pok&eacute;mon project:<br />" +
 			"- <a href=\"https://www.smogon.com/cap/\">CAP project website and description</a><br />" +
-			"- <a href=\"https://www.smogon.com/forums/showthread.php?t=48782\">What Pokemon have been made?</a><br />" +
+			"- <a href=\"https://www.smogon.com/forums/threads/48782/\">What Pok&eacute;mon have been made?</a><br />" +
 			"- <a href=\"https://www.smogon.com/forums/forums/311\">Talk about the metagame here</a><br />" +
-			"- <a href=\"https://www.smogon.com/forums/threads/3512318/#post-5594694\">Sample XY CAP teams</a>"
+			"- <a href=\"https://www.smogon.com/forums/threads/3512318/\">Sample XY CAP teams</a>"
 		);
 	},
-	caphelp: ["/cap - Provides an introduction to the Create-A-Pokemon project.",
+	caphelp: ["/cap - Provides an introduction to the Create-A-Pok&eacute;mon project.",
 		"!cap - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
 	gennext: function (target, room, user) {
@@ -1508,11 +1558,13 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'smogontriples' || target === 'triples') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3540390/\">Smogon Triples Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3481155/\">Other Metagame of the Month</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505227/\">Current OMotM: 2v2 Doubles</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3541792/\">Other Metagame of the Month</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524254/\">Linked</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a><br />";
 		}
 		if (target === 'all' || target === 'seasonal') {
 			matched = true;
@@ -1526,19 +1578,19 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === '1v1') {
 			matched = true;
-			if (target !== 'all') buffer += "Bring three Pokémon to Team Preview and choose one to battle.<br />";
+			if (target !== 'all') buffer += "Bring three Pok\u00e9mon to Team Preview and choose one to battle.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496773/\">1v1</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3536109/\">1v1 Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'monotype') {
 			matched = true;
-			if (target !== 'all') buffer += "All Pokémon on a team must share a type.<br />";
+			if (target !== 'all') buffer += "All Pok\u00e9mon on a team must share a type.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">Monotype</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517737/\">Monotype Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
 			matched = true;
-			if (target !== 'all') buffer += "Pokémon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, and NU or lower get +15.<br />";
+			if (target !== 'all') buffer += "Pok\u00e9mon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, and NU or lower get +15.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3532973/\">Tier Shift</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3536719/\">Tier Shift Viability Ranking</a><br />";
 		}
@@ -1551,16 +1603,17 @@ var commands = exports.commands = {
 			matched = true;
 			if (target !== 'all') buffer += "Battle with an inverted type chart.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3518146/\">Inverse Battle</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526371/\">Inverse Battle Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'almostanyability' || target === 'aaa') {
 			matched = true;
-			if (target !== 'all') buffer += "Pokémon can use any ability, barring the few that are banned.<br />";
+			if (target !== 'all') buffer += "Pok\u00e9mon can use any ability, barring the few that are banned.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3528058/\">Almost Any Ability</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517258/\">Almost Any Ability Viability Ranking</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538917/\">Almost Any Ability Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'stabmons') {
 			matched = true;
-			if (target !== 'all') buffer += "Pokémon can use any move of their typing, in addition to the moves they can normally learn.<br />";
+			if (target !== 'all') buffer += "Pok\u00e9mon can use any move of their typing, in addition to the moves they can normally learn.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493081/\">STABmons</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3512215/\">STABmons Viability Ranking</a><br />";
 		}
@@ -1568,22 +1621,19 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523929/\">LC UU</a><br />";
 		}
+		if (target === 'all' || target === '2v2doubles' || target === '2v2') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505227/\">2v2 Doubles</a><br />";
+		}
 		if (target === 'all' || target === 'averagemons') {
 			matched = true;
+			if (target !== 'all') buffer += "Every Pok\u00e9mon has a stat spread of 100/100/100/100/100/100.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a><br />";
-		}
-		if (target === 'all' || target === 'classichackmons' || target === 'hackmons' || target === 'ch') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521887/\">Classic Hackmons</a><br />";
 		}
 		if (target === 'all' || target === 'hiddentype' || target === 'ht') {
 			matched = true;
-			if (target !== 'all') buffer += "Pokémon have an added type determined by their IVs. Same as the Hidden Power type.<br />";
+			if (target !== 'all') buffer += "Pok\u00e9mon have an added type determined by their IVs. Same as the Hidden Power type.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Hidden Type</a><br />";
-		}
-		if (target === 'all' || target === 'middlecup' || target === 'mc') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524287/\">Middle Cup</a><br />";
 		}
 		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
 			matched = true;
@@ -1636,7 +1686,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"Room drivers (%) can use:<br />" +
-			"- /warn OR /k <em>username</em>: warn a user and show the Pokemon Showdown rules<br />" +
+			"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules<br />" +
 			"- /mute OR /m <em>username</em>: 7 minute mute<br />" +
 			"- /hourmute OR /hm <em>username</em>: 60 minute mute<br />" +
 			"- /unmute <em>username</em>: unmute<br />" +
@@ -1674,7 +1724,7 @@ var commands = exports.commands = {
 			"- We wait a few minutes before restarting so people can finish up their battles<br />" +
 			"- The restart itself will take around 0.6 seconds<br />" +
 			"- Your ladder ranking and teams will not change<br />" +
-			"- We are restarting to update Pokémon Showdown to a newer version"
+			"- We are restarting to update Pok&eacute;mon Showdown to a newer version"
 		);
 	},
 
@@ -1743,7 +1793,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#customavatar\">How can I get a custom avatar?</a><br />";
 		}
-		if (target === 'all' || target === 'pm') {
+		if (target === 'all' || target === 'pm' || target === 'msg' || target === 'w') {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#pm\">How can I send a user a private message?</a><br />";
 		}
@@ -1794,19 +1844,19 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'underused' || target === 'uu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3530610/\">np: UU Stage 2.1</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538856/\">np: UU Stage 3.1</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523649/\">UU Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'rarelyused' || target === 'ru') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3533095/\">np: RU Stage 8</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538971/\">np: RU Stage 10</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523627/\">RU Viability Ranking</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538036/\">RU Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'neverused' || target === 'nu') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3534671/\">np: NU Stage 5</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3537418/\">np: NU Stage 6</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523692/\">NU Viability Ranking</a><br />";
 		}
@@ -1818,9 +1868,36 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'doublesou' || target === 'doubles' || target === 'smogondoubles') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3525739/\">np: Doubles OU Stage 1.5</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538960/\">np: Doubles OU Stage 2</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles OU Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522814/\">Doubles OU Viability Ranking</a><br />";
+		}
+		if (target === 'all' || target === 'bw' || target === 'gen5') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522693\">BW Resources</a><br />";
+		}
+		if (target === 'all' || target === 'dpp' || target === 'gen4') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522692\">DPP Resources</a><br />";
+		}
+		if (target === 'all' || target === 'adv' || target === 'gen3') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522690\">ADV Resources</a><br />";
+		}
+		if (target === 'all' || target === 'gsc' || target === 'gen2') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522689\">GSC Resources</a><br />";
+		}
+		if (target === 'all' || target === 'rby' || target === 'gen1') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522688\">RBY Resources</a><br />";
+		}
+		if (target === 'vgc2015' || target === 'vgc' || target === 'vgc15') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524352/\">VGC 2015 Rules</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3530547/\">VGC 2015 Viability Ranking</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3500650/\">VGC Learning Resources</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526666/\">Sample Teams for VGC 2015</a><br />";
 		}
 		if (!matched) {
 			return this.sendReply("The Tiers entry '" + target + "' was not found. Try /tiers for general help.");
@@ -1914,10 +1991,10 @@ var commands = exports.commands = {
 		}
 
 		if (!atLeastOne) {
-			return this.sendReplyBox("Pokemon, item, move, or ability not found for generation " + generation.toUpperCase() + ".");
+			return this.sendReplyBox("Pok&eacute;mon, item, move, or ability not found for generation " + generation.toUpperCase() + ".");
 		}
 	},
-	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pokemon in the given generation.",
+	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
 		"!analysis [pokemon], [generation] - Shows everyone this link. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
 	register: function () {
@@ -1943,66 +2020,96 @@ var commands = exports.commands = {
 		}
 	},
 
-	spammode: function (target, room, user) {
-		if (!this.can('spammode')) return false;
-
-		// NOTE: by default, spammode does nothing; it's up to you to set stricter filters
-		// in config for chatfilter/hostfilter. Put this above the spammode filters:
-		/*
-		if (!Config.spamMode) return;
-		if (Config.spamMode < Date.now()) {
-			delete Config.spamMode;
-			return;
-		}
-		*/
-
-		if (target === 'off' || target === 'false') {
-			if (Config.spamMode) {
-				delete Config.spamMode;
-				this.privateModCommand("(" + user.name + " turned spammode OFF.)");
-			} else {
-				this.sendReply("Spammode is already off.");
-			}
-		} else if (!target || target === 'on' || target === 'true') {
-			if (Config.spamMode) {
-				this.privateModCommand("(" + user.name + " renewed spammode for half an hour.)");
-			} else {
-				this.privateModCommand("(" + user.name + " turned spammode ON for half an hour.)");
-			}
-			Config.spamMode = Date.now() + 30 * 60 * 1000;
-		} else {
-			this.sendReply("Unrecognized spammode setting.");
-		}
-	},
-
 	roll: 'dice',
 	dice: function (target, room, user) {
-		if (!target) return this.parse('/help dice');
+		if (!target || target.match(/[^d\d\s\-\+HL]/i)) return this.parse('/help dice');
 		if (!this.canBroadcast()) return;
-		var d = target.indexOf("d");
-		if (d >= 0) {
-			var num = parseInt(target.substring(0, d));
-			var faces;
-			if (target.length > d) faces = parseInt(target.substring(d + 1));
-			if (isNaN(num)) num = 1;
-			if (isNaN(faces)) return this.sendReply("The number of faces must be a valid integer.");
-			if (faces < 1 || faces > 1000) return this.sendReply("The number of faces must be between 1 and 1000");
-			if (num < 1 || num > 20) return this.sendReply("The number of dice must be between 1 and 20");
-			var rolls = [];
-			var total = 0;
-			for (var i = 0; i < num; ++i) {
-				rolls[i] = (Math.floor(faces * Math.random()) + 1);
-				total += rolls[i];
-			}
-			return this.sendReplyBox("Random number " + num + "x(1 - " + faces + "): " + rolls.join(", ") + "<br />Total: " + total);
+
+		// ~30 is widely regarded as the sample size required for sum to be a Gaussian distribution.
+		// This also sets a computation time constraint for safety.
+		var maxDice = 40;
+
+		var diceQuantity = 1;
+		var diceDataStart = target.indexOf('d');
+		if (diceDataStart >= 0) {
+			diceQuantity = Number(target.slice(0, diceDataStart));
+			target = target.slice(diceDataStart + 1);
+			if (!Number.isInteger(diceQuantity) || diceQuantity <= 0 || diceQuantity > maxDice) return this.sendReply("The amount of dice rolled should be a natural number up to " + maxDice + ".");
 		}
-		if (target && isNaN(target) || target.length > 21) return this.sendReply("The max roll must be a number under 21 digits.");
-		var maxRoll = (target) ? target : 6;
-		var rand = Math.floor(maxRoll * Math.random()) + 1;
-		return this.sendReplyBox("Random number (1 - " + maxRoll + "): " + rand);
+		var offset = 0;
+		var removeOutlier = 0;
+
+		var modifierData = target.match(/[\-\+]/);
+		if (modifierData) {
+			switch (target.slice(modifierData.index).trim().toLowerCase()) {
+			case '-l':
+				removeOutlier = -1;
+				break;
+			case '-h':
+				removeOutlier = +1;
+				break;
+			default:
+				offset = Number(target.slice(modifierData.index));
+				if (isNaN(offset)) return this.parse('/help dice');
+				if (!Number.isSafeInteger(offset)) return this.sendReply("The specified offset must be an integer up to " + Number.MAX_SAFE_INTEGER + ".");
+			}
+			if (removeOutlier && diceQuantity <= 1) return this.sendReply("More than one dice should be rolled before removing outliers.");
+			target = target.slice(0, modifierData.index);
+		}
+
+		var diceFaces = 6;
+		if (target.length) {
+			diceFaces = Number(target);
+			if (!Number.isSafeInteger(diceFaces) || diceFaces <= 0) {
+				return this.sendReply("Rolled dice must have a natural amount of faces up to " + Number.MAX_SAFE_INTEGER + ".");
+			}
+		}
+
+		if (diceQuantity > 1) {
+			// Make sure that we can deal with high rolls
+			if (!Number.isSafeInteger(offset < 0 ? diceQuantity * diceFaces : diceQuantity * diceFaces + offset)) {
+				return this.sendReply("The maximum sum of rolled dice must be lower or equal than " + Number.MAX_SAFE_INTEGER + ".");
+			}
+		}
+
+		var maxRoll = 0;
+		var minRoll = Number.MAX_SAFE_INTEGER;
+
+		var trackRolls = diceQuantity * (('' + diceFaces).length + 1) <= 60;
+		var rolls = [];
+		var rollSum = 0;
+
+		for (var i = 0; i < diceQuantity; ++i) {
+			var curRoll = Math.floor(Math.random() * diceFaces) + 1;
+			rollSum += curRoll;
+			if (curRoll > maxRoll) maxRoll = curRoll;
+			if (curRoll < minRoll) minRoll = curRoll;
+			if (trackRolls) rolls.push(curRoll);
+		}
+
+		// Apply modifiers
+
+		if (removeOutlier > 0) {
+			rollSum -= maxRoll;
+		} else if (removeOutlier < 0) {
+			rollSum -= minRoll;
+		}
+		if (offset) rollSum += offset;
+
+		// Reply with relevant information
+
+		var offsetFragment = "";
+		if (offset) offsetFragment += (offset > 0 ? "+" + offset : offset);
+
+		if (diceQuantity === 1) return this.sendReplyBox("Roll (1 - " + diceFaces + ")" + offsetFragment + ": " + rollSum);
+
+		var sumFragment = "<br />Sum" + offsetFragment + (removeOutlier ? " except " + (removeOutlier > 0 ? "highest" : "lowest") : "");
+		return this.sendReplyBox("" + diceQuantity + " rolls (1 - " + diceFaces + ")" + (trackRolls ? ": " + rolls.join(", ") : "") + sumFragment + ": " + rollSum);
 	},
 	dicehelp: ["/dice [max number] - Randomly picks a number between 1 and the number you choose.",
-		"/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice."],
+		"/dice [number of dice]d[number of sides] - Simulates rolling a number of dice, e.g., /dice 2d4 simulates rolling two 4-sided dice.",
+		"/dice [number of dice]d[number of sides][+/-][offset] - Simulates rolling a number of dice and adding an offset to the sum, e.g., /dice 2d6+10: two standard dice are rolled; the result lies between 12 and 22.",
+		"/dice [number of dice]d[number of sides]-[H/L] - Simulates rolling a number of dice with removal of extreme values, e.g., /dice 3d8-L: rolls three 8-sided dice; the result ignores the lowest value."],
 
 	pr: 'pickrandom',
 	pick: 'pickrandom',
@@ -2036,6 +2143,151 @@ var commands = exports.commands = {
 
 		this.sendReplyBox(target);
 	},
-	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: " + Users.getGroupsThatCan('declare').join(" ") + " with global authority"]
+	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: " + Users.getGroupsThatCan('declare').join(" ") + " with global authority"],
 
+	sdt: 'seasonaldata',
+	sdata: 'seasonaldata',
+	seasonaldata: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+
+		var buffer = '|raw|';
+		var targetId = toId(target);
+		switch (targetId) {
+		case 'cura':
+		case 'recover':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Cura"><span class="col movenamecol">Cura</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Heals the active team by 20%.</span> </a></li><li></li></ul>';
+			break;
+		case 'curaga':
+		case 'softboiled':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Curaga"><span class="col movenamecol">Curaga</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Heals the active team by 33%.</span> </a></li><li></li></ul>';
+			break;
+		case 'wildgrowth':
+		case 'reflect':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Wild Growth"><span class="col movenamecol">Wild Growth</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Heals the team by 12.5% each turn for 5 turns.</span> </a></li><li></li></ul>';
+			break;
+		case 'powershield':
+		case 'acupressure':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Power Shield"><span class="col movenamecol">Power Shield</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">The target will be healed by 25% of the next damage received.</span> </a></li><li></li></ul>';
+			break;
+		case 'rejuvenation':
+		case 'holdhands':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Rejuvenation"><span class="col movenamecol">Rejuvenation</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">The target will be healed by 18% each turn for 3 turns.</span> </a></li><li></li></ul>';
+			break;
+		case 'fairyward':
+		case 'luckychant':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Fairy Ward"><span class="col movenamecol">Fairy Ward</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Prevents status and reduce damage by 5% for all the team for 3 turns.</span> </a></li><li></li></ul>';
+			break;
+		case 'taunt':
+		case 'followme':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Taunt"><span class="col movenamecol">Taunt</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Will redirect all attacks to user for three turns.</span> </a></li><li></li></ul>';
+			break;
+		case 'sacrifice':
+		case 'meditate':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Sacrifice"><span class="col movenamecol">Sacrifice</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Will redirect all team damage to user for 4 turns.</span> </a></li><li></li></ul>';
+			break;
+		case 'cooperation':
+		case 'helpinghand':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Cooperation"><span class="col movenamecol">Cooperation</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Switches positions with target.</span> </a></li><li></li></ul>';
+			break;
+		case 'slowdown':
+		case 'spite':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Slow Down"><span class="col movenamecol">Slow Down</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Removes 8 PP. Lowers damage by 15%. Gets disabled after use.</span> </a></li><li></li></ul>';
+			break;
+		case 'healingtouch':
+		case 'aromaticmist':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Healing Touch"><span class="col movenamecol">Healing Touch</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Heals target by 60% of its max HP.</span> </a></li><li></li></ul>';
+			break;
+		case 'penance':
+		case 'healbell':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Penance"><span class="col movenamecol">Penance</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Heals all team by 12.5% and places a shield that will heal them for 6.15% upon being hit.</span> </a></li><li></li></ul>';
+			break;
+		case 'stop':
+		case 'fakeout':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Stop"><span class="col movenamecol">Stop</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Target won\'t move. Has priority. User is disabled after use.</span> </a></li><li></li></ul>';
+			break;
+		case 'laststand':
+		case 'endure':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Last Stand"><span class="col movenamecol">Last Stand</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">User will survive the next hit. Damage taken is halved for the turn. User is disabled after use.</span> </a></li><li></li></ul>';
+			break;
+		case 'barkskin':
+		case 'withdraw':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Barkskin"><span class="col movenamecol">Barkskin</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Reduces damage taken by 25% by 2 turns.</span> </a></li><li></li></ul>';
+			break;
+		case 'punishment':
+		case 'seismictoss':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Punishment"><span class="col movenamecol">Punishment</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Base damage is 33% of user\'s current HP.</span> </a></li><li></li></ul>';
+			break;
+		case 'flamestrike':
+		case 'flamethrower':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Flamestrike"><span class="col movenamecol">Flamestrike</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />30%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Base damage is 40% if the target is burned.</span> </a></li><li></li></ul>';
+			break;
+		case 'conflagration':
+		case 'fireblast':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Conflagration"><span class="col movenamecol">Conflagration</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Burns target.</span> </a></li><li></li></ul>';
+			break;
+		case 'moonfire':
+		case 'thunderbolt':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Moonfire"><span class="col movenamecol">Moonfire</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Applies Moonfire for 4 turns, it deals 6% damage.</span> </a></li><li></li></ul>';
+			break;
+		case 'starfire':
+		case 'thunder':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Starfire"><span class="col movenamecol">Starfire</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />30%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Base damage is 40% if the target is moonfired.</span> </a></li><li></li></ul>';
+			break;
+		case 'corruption':
+		case 'toxic':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Corruption"><span class="col movenamecol">Corruption</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Deals 10% damage every turn for 4 turns.</span> </a></li><li></li></ul>';
+			break;
+		case 'soulleech':
+		case 'leechseed':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Soul Leech"><span class="col movenamecol">Soul Leech</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Drains 8% HP every turn for 4 turns.</span> </a></li><li></li></ul>';
+			break;
+		case 'icelance':
+		case 'icebeam':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Ice Lance"><span class="col movenamecol">Ice Lance</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />30%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Base damage is 40% if the target is chilled.</span> </a></li><li></li></ul>';
+			break;
+		case 'frostbite':
+		case 'freezeshock':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Frostbite"><span class="col movenamecol">Frostbite</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Chills target. It will be slower.</span> </a></li><li></li></ul>';
+			break;
+		case 'hurricane':
+		case 'aircutter':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Hurricane"><span class="col movenamecol">Hurricane</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Damage all adjacent foes.</span> </a></li><li></li></ul>';
+			break;
+		case 'storm':
+		case 'muddywater':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Storm"><span class="col movenamecol">Storm</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Damage all adjacent foes.</span> </a></li><li></li></ul>';
+			break;
+		case 'fury':
+		case 'furyswipes':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Fury"><span class="col movenamecol">Fury</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />15%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Disables user. Next use will have 100% base power.</span> </a></li><li></li></ul>';
+			break;
+		case 'garrote':
+		case 'scratch':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Garrote"><span class="col movenamecol">Garrote</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Causes bleeding. It deals 6.15% damage for 5 turns.</span> </a></li><li></li></ul>';
+			break;
+		case 'poisongas':
+		case 'smog':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Poison Gas"><span class="col movenamecol">Poison Gas</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Poisons the target.</span> </a></li><li></li></ul>';
+			break;
+		case 'mutilate':
+		case 'slash':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Mutilate"><span class="col movenamecol">Mutilate</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />27%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Increases power by 10% or 20% if target is psn or/and bld.</span> </a></li><li></li></ul>';
+			break;
+		case 'sacredshield':
+		case 'matblock':
+			buffer += '<ul class="utilichart"><li class="result"><a data-name="Sacred Shield"><span class="col movenamecol">Sacred Shield</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Shields team greatly, losses HP.</span> </a></li><li></li></ul>';
+			break;
+		default:
+			buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found on this seasonal.";
+		}
+		if (targetId === 'evasion' || targetId === 'protect') {
+			return this.parse('/data protect');
+		} else if (!targetId) {
+			return this.sendReply("Please specify a valid Pok\u00e9mon, item, move, ability or nature in this seasonal.");
+		} else {
+			this.sendReply(buffer);
+		}
+	},
+	seasonaldatahelp: ["/seasonaldata [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature for the current seasonal.",
+		"!seasonaldata [pokemon/item/move/ability] - Show everyone these details. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")]
 };

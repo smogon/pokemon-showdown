@@ -1,7 +1,7 @@
 var assert = require('assert');
 var battle;
 
-describe('Leftovers - GSC', function () {
+describe('Leftovers [Gen 2]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
@@ -16,12 +16,12 @@ describe('Leftovers - GSC', function () {
 			{species: "Miltank", moves: ['seismictoss']}
 		]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, 614);
+		assert.strictEqual(battle.p1.active[0].hp, 591);
 
 		battle.choose('p1', 'switch 2');
 		battle.commitDecisions();
 
 		battle.choose('p1', 'switch 2');
-		assert.strictEqual(battle.p1.active[0].hp, 656);
+		assert.strictEqual(battle.p1.active[0].hp, 631);
 	});
 });

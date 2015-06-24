@@ -141,11 +141,11 @@ Major changes:
 
 - - Hoopa (both forms), Floette-Eternal-Flower, and Volcanion are released.
 
-New mechanic: Signature Pokemon:
+New mechanic: Signature Pokémon:
 
-- Certain moves have a Signature Pokemon associated with them. A move will
-  deal 1.5x its usual damage when used by its Signature Pokemon. Some of these
-  moves also receive other changes that apply to all Pokemon using the move -
+- Certain moves have a Signature Pokémon associated with them. A move will
+  deal 1.5x its usual damage when used by its Signature Pokémon. Some of these
+  moves also receive other changes that apply to all Pokémon using the move -
   those changes are listed in parentheses.
 
   - Flareon: Fire Fang (20% burn, 30% flinch, 100% accuracy)
@@ -202,12 +202,12 @@ New mechanic: Signature Pokemon:
 
   - Persian: Slash (60 base power 30% -1 Def)
 
-- Again, note that while the Signature Pokemon will get the 1.5x damage boost,
-  all Pokemon will get the other changes to the move listed above.
+- Again, note that while the Signature Pokémon will get the 1.5x damage boost,
+  all Pokémon will get the other changes to the move listed above.
 
 New mechanic: Intrinsics:
 
-- Pokemon that previously get Levitate are now immune to Ground intrinsically.
+- Pokémon that previously get Levitate are now immune to Ground intrinsically.
   Instead, they get new abilities in addition to their Ground immunity:
 
   - Unown: Shadow Tag
@@ -244,7 +244,7 @@ New: Type-specific items:
 
 - Focus Band: always works, but breaks after getting hit once for
   pure Fighting types (so basically it'd be a Sash that stays intact
-  after residual damage); does nothing for other pokemon
+  after residual damage); does nothing for other Pokémon
 
 - Wise Glasses: 1.2x Special damage for pure Psychic types
 
@@ -335,7 +335,7 @@ Minor move changes:
   Drain, Earthquake, Stone Edge, Superpower, X-Scissor
 
 - if Illusion is active, Night Daze now displays as a random non-Status move
-  in the copied pokemon's moveset
+  in the copied Pokémon's moveset
 
 - Selfdestruct and Explosion are now 200 and 250 base power autocrit moves,
   respectively, and they are both perfect-accuracy
@@ -410,7 +410,7 @@ Minor ability changes:
 
 - Justified now caps base power to 100 against non-Dark foes:
   Musketeers are recommended to use Sacred Sword over Close Combat and
-  Surf over Hydro Pump, other pokemon are recommended not to use
+  Surf over Hydro Pump, other Pokémon are recommended not to use
   Justified
 
 - Static, Poison Point, and Cute Charm now always activate on
@@ -472,7 +472,7 @@ Minor ability changes:
 - Cursed Body works like Aftermath now, but instead of dealing damage, it
   causes the foe to be Cursed (like Ghost-type Curse)
 
-- Gluttony allows a Pokemon to use a Berry twice.
+- Gluttony allows a Pokémon to use a Berry twice.
 
 - Guts, Quick Feet, and Toxic Boost take half damage from poisoning
 
@@ -495,8 +495,8 @@ Minor item changes:
 
 Bans:
 
-- The OU banlist (i.e. Pokemon considered Uber) is now:
-  - Every Pokemon with over 600 BST except Slaking and Regigigas
+- The OU banlist (i.e. Pokémon considered Uber) is now:
+  - Every Pokémon with over 600 BST except Slaking and Regigigas
   - Deoxys (all formes)
   - Darkrai
   - Shaymin-Sky
