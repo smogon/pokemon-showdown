@@ -513,9 +513,6 @@ var commands = exports.commands = {
 		}
 
 		var groupName = Config.groups.bySymbol[nextGroup].name || "regular user";
-		if ((room.auth[userid] || Config.groupsranking[0]) === nextGroup) {
-			return this.sendReply("User '" + name + "' is already a " + groupName + " in this room.");
-		}
 		if (!user.can('makeroom')) {
 			if (!user.can('roompromote', currentGroup, room)) {
 				return this.sendReply("/" + cmd + " - Access denied for removing " + ((Config.groups.bySymbol[currentGroup] ? Config.groups.bySymbol[currentGroup].name : "an undefined group") || "regular user") + ".");
@@ -526,6 +523,9 @@ var commands = exports.commands = {
 		}
 
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+		if ((room.auth[userid] || Config.groups.default[room.type + 'Room']) === nextGroup) {
+			return this.sendReply("User '" + name + "' is already a " + groupName + " in this room.");
+		}
 		if (nextGroup === Config.groups.default[room.type + 'Room']) {
 			delete room.auth[userid];
 		} else {
