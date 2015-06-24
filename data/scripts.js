@@ -1268,7 +1268,8 @@ exports.BattleScripts = {
 					if (hasMove['bulkup'] && hasMove['drainpunch']) rejected = true;
 					break;
 				case 'focusblast':
-					if ((!counter.setupType && hasMove['superpower']) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (!counter.setupType && (hasMove['closecombat'] || hasMove['superpower'])) rejected = true;
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'stormthrow':
 					if (hasMove['circlethrow'] && (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
