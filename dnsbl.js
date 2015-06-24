@@ -16,6 +16,9 @@ const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 var dns = require('dns');
 
+/* global Dnsbl: true */
+var Dnsbl = module.exports;
+
 var dnsblCache = exports.cache = {
 	'127.0.0.1': false
 };
@@ -67,7 +70,7 @@ var rangeTelefonica = cidr.checker('181.64.0.0/14');
 var rangeTelstra = cidr.checker('101.160.0.0/11');
 var rangeStarhub = cidr.checker(['27.125.128.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23']);
 
-exports.reverse = function reverseDns(ip, callback) {
+Dnsbl.reverse = function reverseDns(ip, callback) {
 	if (ip) {
 		if (ip.startsWith('106.76.') || ip.startsWith('106.77.') || ip.startsWith('106.78.') || ip.startsWith('106.79.') || ip.startsWith('112.110.') || ip.startsWith('27.97.') || ip.startsWith('49.15.') || ip.startsWith('49.14.') || ip.startsWith('1.187.')) {
 			callback(null, ['ideacellular.mobile-nohost']);
