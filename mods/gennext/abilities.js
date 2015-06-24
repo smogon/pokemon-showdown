@@ -314,11 +314,8 @@ exports.BattleAbilities = {
 	},
 	"rockhead": {
 		inherit: true,
-		onModifyMove: function (move) {
-			delete move.recoil;
-		},
 		onDamage: function (damage, target, source, effect) {
-			if (effect && effect.id === 'lifeorb') return false;
+			if (effect && effect.id in {lifeorb: 1, recoil: 1}) return false;
 		}
 	},
 	"download": {
@@ -534,7 +531,7 @@ exports.BattleAbilities = {
 		onStart: function (target) {
 			this.add('-start', target, 'move: Imprison');
 		},
-		onFoeModifyPokemon: function (pokemon) {
+		onFoeDisableMove: function (pokemon) {
 			var foeMoves = this.effectData.target.moveset;
 			for (var f = 0; f < foeMoves.length; f++) {
 				pokemon.disableMove(foeMoves[f].id, true);

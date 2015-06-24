@@ -102,6 +102,9 @@ exports.BattleItems = {
 				pokemon.eatItem();
 			}
 		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'spd') {
@@ -120,7 +123,9 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onStart: function (target) {
-			this.add('-item', target, 'Air Balloon');
+			if (!target.ignoringItem()) {
+				this.add('-item', target, 'Air Balloon');
+			}
 		},
 		onImmunity: function (type) {
 			if (type === 'Ground') return false;
@@ -253,7 +258,7 @@ exports.BattleItems = {
 		onModifySpD: function (spd) {
 			return this.chainModify(1.5);
 		},
-		onModifyPokemon: function (pokemon) {
+		onDisableMove: function (pokemon) {
 			var moves = pokemon.moveset;
 			for (var i = 0; i < moves.length; i++) {
 				if (this.getMove(moves[i].move).category === 'Status') {
@@ -351,7 +356,7 @@ exports.BattleItems = {
 		},
 		onUpdate: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
-				if (pokemon.useItem()) {
+				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
 					this.heal(20);
 				}
 			}
@@ -1240,7 +1245,7 @@ exports.BattleItems = {
 		spritenum: 120,
 		isGem: true,
 		onSourceTryPrimaryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status') return;
+			if (target === source || move.category === 'Status' || move.id in {firepledge:1, grasspledge:1, waterpledge:1}) return;
 			if (move.type === 'Electric') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Electric Gem', '[from] gem', '[move] ' + move.name);
@@ -1284,6 +1289,9 @@ exports.BattleItems = {
 					target.removeVolatile('enigmaberry');
 				}
 			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 4);
@@ -1391,6 +1399,9 @@ exports.BattleItems = {
 				pokemon.eatItem();
 			}
 		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'atk') {
@@ -1408,7 +1419,7 @@ exports.BattleItems = {
 		spritenum: 141,
 		isGem: true,
 		onSourceTryPrimaryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status') return;
+			if (target === source || move.category === 'Status' || move.id in {firepledge:1, grasspledge:1, waterpledge:1}) return;
 			if (move.type === 'Fire') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Fire Gem', '[from] gem', '[move] ' + move.name);
@@ -1688,7 +1699,7 @@ exports.BattleItems = {
 		spritenum: 172,
 		isGem: true,
 		onSourceTryPrimaryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status') return;
+			if (target === source || move.category === 'Status' || move.id in {firepledge:1, grasspledge:1, waterpledge:1}) return;
 			if (move.type === 'Grass') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Grass Gem', '[from] gem', '[move] ' + move.name);
@@ -1921,6 +1932,9 @@ exports.BattleItems = {
 				pokemon.eatItem();
 			}
 		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'def') {
@@ -2010,9 +2024,12 @@ exports.BattleItems = {
 		fling: {
 			basePower: 130
 		},
-		onModifyPokemon: function (pokemon) {
-			if (pokemon.negateImmunity['Ground']) return;
-			pokemon.negateImmunity['Ground'] = 'IgnoreEffectiveness';
+		onEffectiveness: function (typeMod, target, type, move) {
+			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.getPseudoWeather('gravity')) return;
+			if (move.type === 'Ground' && !this.getImmunity(move.type, target)) return 0;
+		},
+		onNegateImmunity: function (pokemon, type) {
+			if (type === 'Ground') return false;
 		},
 		onModifySpe: function (speMod) {
 			return this.chain(speMod, 0.5);
@@ -2116,7 +2133,7 @@ exports.BattleItems = {
 			basePower: 100,
 			type: "Fairy"
 		},
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterMoveSecondary: function (target, source, move) {
 			if (move.category === 'Physical') {
 				target.eatItem();
 			}
@@ -2126,7 +2143,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Raises holder's Defense by 1 stage if hit by a physical attack. Single use."
+		desc: "Raises holder's Defense by 1 stage after it is hit by a physical attack. Single use."
 	},
 	"kelpsyberry": {
 		id: "kelpsyberry",
@@ -2352,18 +2369,11 @@ exports.BattleItems = {
 			basePower: 30
 		},
 		onModifyDamage: function (damage, source, target, move) {
-			if (source) {
-				source.addVolatile('lifeorb');
-				return this.chainModify(1.3);
-			}
+			return this.chainModify(1.3);
 		},
-		effect: {
-			duration: 1,
-			onAfterMoveSecondarySelf: function (source, target, move) {
-				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb']) {
-					this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
-					source.removeVolatile('lifeorb');
-				}
+		onAfterMoveSecondarySelf: function (source, target, move) {
+			if (source && source !== target && move && move.category !== 'Status' && !move.ohko) {
+				this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 			}
 		},
 		num: 270,
@@ -2574,6 +2584,9 @@ exports.BattleItems = {
 				pokemon.eatItem();
 			}
 		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
+		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);
 			if (pokemon.getNature().minus === 'spe') {
@@ -2631,7 +2644,7 @@ exports.BattleItems = {
 			basePower: 100,
 			type: "Dark"
 		},
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterMoveSecondary: function (target, source, move) {
 			if (move.category === 'Special') {
 				target.eatItem();
 			}
@@ -2641,7 +2654,7 @@ exports.BattleItems = {
 		},
 		num: -6,
 		gen: 6,
-		desc: "Raises holder's Sp. Def by 1 stage if hit by a special attack. Single use."
+		desc: "Raises holder's Sp. Def by 1 stage after it is hit by a special attack. Single use."
 	},
 	"masterball": {
 		id: "masterball",
@@ -3023,7 +3036,7 @@ exports.BattleItems = {
 		spritenum: 307,
 		isGem: true,
 		onSourceTryPrimaryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status') return;
+			if (target === source || move.category === 'Status' || move.id in {firepledge:1, grasspledge:1, waterpledge:1}) return;
 			if (move.type === 'Normal') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Normal Gem', '[from] gem', '[move] ' + move.name);
@@ -3098,6 +3111,9 @@ exports.BattleItems = {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
 			this.heal(10);
@@ -3646,8 +3662,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Type'] = true;
+		onNegateImmunity: function (pokemon, type) {
+			if (type in this.data.TypeChart && this.runEvent('Immunity', pokemon, null, null, type)) return false;
 		},
 		num: 543,
 		gen: 5,
@@ -3810,7 +3826,7 @@ exports.BattleItems = {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
 		onTryHit: function (pokemon, source, move) {
-			if (move.flags['powder']) {
+			if (move.flags['powder'] && move.id !== 'ragepowder') {
 				this.add('-activate', pokemon, 'Safety Goggles', move.name);
 				return null;
 			}
@@ -3968,7 +3984,7 @@ exports.BattleItems = {
 		},
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf: function (pokemon, target, move) {
-			if (move.category !== 'Status' && pokemon.lastDamage > 0) {
+			if (move.category !== 'Status') {
 				this.heal(pokemon.lastDamage / 8, pokemon);
 			}
 		},
@@ -4060,6 +4076,9 @@ exports.BattleItems = {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 4);
@@ -4580,7 +4599,7 @@ exports.BattleItems = {
 		spritenum: 528,
 		isGem: true,
 		onSourceTryPrimaryHit: function (target, source, move) {
-			if (target === source || move.category === 'Status') return;
+			if (target === source || move.category === 'Status' || move.id in {firepledge:1, grasspledge:1, waterpledge:1}) return;
 			if (move.type === 'Water') {
 				if (source.useItem()) {
 					this.add('-enditem', source, 'Water Gem', '[from] gem', '[move] ' + move.name);
@@ -4718,6 +4737,9 @@ exports.BattleItems = {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
 		},
 		onEat: function (pokemon) {
 			this.heal(pokemon.maxhp / 8);

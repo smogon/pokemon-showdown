@@ -26,5 +26,12 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'pidgeot').learnset.focusblast = ['6T'];
 		this.modData('Pokedex', 'granbull').abilities['1'] = 'Fur Coat';
 		this.modData('Pokedex', 'aggronmega').types = ['Steel', 'Dragon'];
+		this.modData('Learnsets', 'floatzel').learnset.bellydrum = ['6T'];
+		this.modData('Pokedex', 'forretress').abilities['1'] = 'Water Absorb';
+		this.modData('Learnsets', 'bronzong').learnset.recover = ['6T'];
+		this.modData('Learnsets', 'sandslash').learnset.thousandarrows = ['6T'];
+		this.modData('Learnsets', 'braviary').learnset.extremespeed = ['6T'];
+		this.modData('Pokedex', 'cacturne').abilities['1'] = 'Sand Rush';
+		this.modData('Pokedex', 'beedrillmega').types = ['Bug', 'Ground'];
 	}
 };

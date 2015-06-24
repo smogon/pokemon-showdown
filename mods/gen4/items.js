@@ -107,9 +107,7 @@ exports.BattleItems = {
 	},
 	"ironball": {
 		inherit: true,
-		onModifyPokemon: function (pokemon) {
-			pokemon.negateImmunity['Ground'] = true;
-		},
+		onEffectiveness: function () {},
 		desc: "Holder's Speed is halved and it becomes grounded."
 	},
 	"lifeorb": {

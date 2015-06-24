@@ -6,58 +6,57 @@ exports.BattleScripts = {
 	gen: 1,
 	// BattlePokemon scripts.
 	pokemon: {
-		// Leaving this one here because I'm going to add the stat calc bug to gen 1 (TODO).
-		getStat: function (statName, unboosted, unmodified, noscreens) {
+		// Stadium shares gen 1 code but it fixes some problems with it.
+		getStat: function (statName, unmodified) {
 			statName = toId(statName);
 			if (statName === 'hp') return this.maxhp;
-
-			// base stat
-			var stat = this.stats[statName];
-
-			// stat boosts
-			if (!unboosted) {
-				var boost = this.boosts[statName];
-				if (boost > 6) boost = 6;
-				if (boost < -6) boost = -6;
-				if (boost >= 0) {
-					var boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
-					stat = Math.floor(stat * boostTable[boost]);
-				} else {
-					var numerators = [100, 66, 50, 40, 33, 28, 25];
-					stat = Math.floor(stat * numerators[-boost] / 100);
+			if (unmodified) return this.stats[statName];
+			return this.modifiedStats[statName];
+		},
+		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
+		// Modified stats are declared in BattlePokemon object in battle-engine.js in about line 303.
+		modifyStat: function (stat, modifier) {
+			if (!(stat in this.stats)) return;
+			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1);
+		},
+		// This is run on Stadium after boosts and status changes.
+		recalculateStats: function () {
+			for (var statName in this.stats) {
+				var stat = this.template.baseStats[statName];
+				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
+				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
+				this.modifiedStats[statName] = Math.floor(stat);
+				// Re-apply drops, if necessary.
+				if (this.status === 'par') this.modifyStat('spe', 0.25);
+				if (this.status === 'brn') this.modifyStat('atk', 0.5);
+				if (this.boosts[statName] !== 0) {
+					if (this.boosts[statName] >= 0) {
+						this.modifyStat(statName, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[statName]]);
+					} else {
+						this.modifyStat(statName, [100, 66, 50, 40, 33, 28, 25][-this.boosts[statName]] / 100);
+					}
 				}
 			}
-
-			// Stat modifier effects
-			if (!unmodified) {
-				var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-				var statMod = 1;
-				statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
-				stat = this.battle.modify(stat, statMod);
-				// Burn attack drop is checked when you get the attack stat upon switch in and used until switch out.
-				if (this.status === 'brn' && statName === 'atk') {
-					stat = this.battle.clampIntRange(Math.floor(stat / 2), 1);
+		},
+		// Stadium's fixed boosting function.
+		boostBy: function (boost) {
+			var changed = false;
+			for (var i in boost) {
+				var delta = boost[i];
+				this.boosts[i] += delta;
+				if (this.boosts[i] > 6) {
+					delta -= this.boosts[i] - 6;
+					this.boosts[i] = 6;
 				}
-				if (this.status === 'par' && statName === 'spe') {
-					stat = this.battle.clampIntRange(Math.floor(stat / 4), 1);
+				if (this.boosts[i] < -6) {
+					delta -= this.boosts[i] - (-6);
+					this.boosts[i] = -6;
 				}
+				if (delta) changed = true;
 			}
-
-			// Hard coded Reflect and Light Screen boosts
-			if (this.volatiles['reflect'] && statName === 'def' && !unboosted && !noscreens) {
-				this.battle.debug('Reflect doubles Defense');
-				stat *= 2;
-				stat = this.battle.clampIntRange(stat, 1, 1998);
-			} else if (this.volatiles['lightscreen'] && statName === 'spd' && !unboosted && !noscreens) {
-				this.battle.debug('Light Screen doubles Special Defense');
-				stat *= 2;
-				stat = this.battle.clampIntRange(stat, 1, 1998);
-			} else {
-				// Gen 1 normally caps stats at 999 and min is 1.
-				stat = this.battle.clampIntRange(stat, 1, 999);
-			}
-
-			return stat;
+			this.recalculateStats();
+			this.update();
+			return changed;
 		}
 	},
 	// Battle scripts.
@@ -88,7 +87,7 @@ exports.BattleScripts = {
 			pokemon.deductPP(move, null, target);
 		}
 		this.useMove(move, pokemon, target, sourceEffect);
-		this.runEvent('AfterMove', target, pokemon, move);
+		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 
 		// If rival fainted
 		if (target.hp <= 0) {
@@ -120,6 +119,9 @@ exports.BattleScripts = {
 
 		// First, check if the Pokémon is immune to this move.
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+			if (move.selfdestruct) {
+				this.faint(pokemon, pokemon, move);
+			}
 			return false;
 		}
 
@@ -326,6 +328,7 @@ exports.BattleScripts = {
 			if (moveData.status) {
 				if (!target.status) {
 					target.setStatus(moveData.status, pokemon, move);
+					target.recalculateStats();
 				} else if (!isSecondary) {
 					if (target.status === moveData.status) {
 						this.add('-fail', target, target.status);
@@ -337,6 +340,7 @@ exports.BattleScripts = {
 			}
 			if (moveData.forceStatus) {
 				if (target.setStatus(moveData.forceStatus, pokemon, move)) {
+					target.recalculateStats();
 					didSomething = true;
 				}
 			}
@@ -529,6 +533,12 @@ exports.BattleScripts = {
 		var defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		var attack = attacker.getStat(atkType);
 		var defense = defender.getStat(defType);
+		// In gen 1, screen effect is applied here.
+		if ((defType === 'def' && defender.volatiles['reflect']) || (defType === 'spd' && defender.volatiles['lightscreen'])) {
+			this.debug('Screen doubling (Sp)Def');
+			defense *= 2;
+			defense = this.clampIntRange(defense, 1, 1998);
+		}
 
 		// In the event of a critical hit, the ofense and defense changes are ignored.
 		// This includes both boosts and screens.

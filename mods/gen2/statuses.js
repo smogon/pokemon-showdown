@@ -95,18 +95,65 @@ exports.BattleStatuses = {
 		onStart: function (target, source, sourceEffect) {
 			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
 			if (!result) return result;
-			this.add('-start', target, 'confusion');
+			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+				this.add('-start', target, 'confusion', '[silent]');
+			} else {
+				this.add('-start', target, 'confusion');
+			}
 			if (sourceEffect && sourceEffect.id === 'berserkgene') {
 				this.effectData.time = 256;
 			} else {
 				this.effectData.time = this.random(2, 6);
 			}
+		},
+		onBeforeMove: function (pokemon) {
+			pokemon.volatiles.confusion.time--;
+			if (!pokemon.volatiles.confusion.time) {
+				pokemon.removeVolatile('confusion');
+				return;
+			}
+			this.add('-activate', pokemon, 'confusion');
+			if (this.random(2) === 0) {
+				return;
+			}
+			this.directDamage(this.getDamage(pokemon, pokemon, 40));
+			return false;
 		}
 	},
 	partiallytrapped: {
 		inherit: true,
 		durationCallback: function (target, source) {
 			return this.random(3, 6);
+		}
+	},
+	lockedmove: {
+		// Outrage, Thrash, Petal Dance...
+		durationCallback: function () {
+			return this.random(2, 4);
+		},
+		onResidual: function (target) {
+			if (target.lastMove === 'struggle' || target.status === 'slp') {
+				// don't lock, and bypass confusion for calming
+				delete target.volatiles['lockedmove'];
+			}
+		},
+		onStart: function (target, source, effect) {
+			this.effectData.move = effect.id;
+		},
+		onEnd: function (target) {
+			// Confusion begins even if already confused
+			delete target.volatiles['confusion'];
+			target.addVolatile('confusion');
+		},
+		onLockMove: function (pokemon) {
+			return this.effectData.move;
+		},
+		onBeforeTurn: function (pokemon) {
+			var move = this.getMove(this.effectData.move);
+			if (move.id) {
+				this.debug('Forcing into ' + move.id);
+				this.changeDecision(pokemon, {move: move.id});
+			}
 		}
 	},
 	sandstorm: {

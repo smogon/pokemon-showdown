@@ -17,7 +17,7 @@ describe('Simple', function () {
 	});
 });
 
-describe('Simple - DPP', function () {
+describe('Simple [Gen 4]', function () {
 	afterEach(function () {
 		battle.destroy();
 	});

@@ -79,6 +79,8 @@ exports.BattleScripts = {
 		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
 			// Prevent invulnerability from persisting until the turn ends
 			pokemon.removeVolatile('twoturnmove');
+			// Rampage moves end without causing confusion
+			delete pokemon.volatiles['lockedmove'];
 			this.clearActiveMove(true);
 			// This is only run for sleep and fully paralysed.
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -102,7 +104,7 @@ exports.BattleScripts = {
 		}
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
-		this.runEvent('AfterMove', target, pokemon, move);
+		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		if (!move.selfSwitch && target.hp > 0) this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
 	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
@@ -155,7 +157,7 @@ exports.BattleScripts = {
 				didSomething = true;
 			}
 			if (damage === false || damage === null) {
-				if (damage === false) {
+				if (damage === false && !isSecondary && !isSelf) {
 					this.add('-fail', target);
 				}
 				this.debug('damage calculation interrupted');
@@ -348,7 +350,7 @@ exports.BattleScripts = {
 
 		// Happens after crit calculation
 		if (basePower) {
-			basePower = this.runEvent('BasePower', pokemon, target, move, basePower);
+			basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 			if (move.basePowerModifier) {
 				basePower *= move.basePowerModifier;
 			}
@@ -456,352 +458,6 @@ exports.BattleScripts = {
 
 		// We are done, this is the final damage
 		return damage;
-	},
-	getResidualStatuses: function (thing, callbackType) {
-		var statuses = this.getRelevantEffectsInner(thing || this, callbackType || 'residualCallback', null, null, false, true, 'duration');
-		statuses.sort(this.comparePriority);
-		return statuses;
-	},
-	residualEvent: function (eventid, relayVar) {
-		var statuses = this.getRelevantEffectsInner(this, 'on' + eventid, null, null, false, true, 'duration');
-		statuses.sort(this.comparePriority);
-		while (statuses.length) {
-			var statusObj = statuses.shift();
-			var status = statusObj.status;
-			if (statusObj.thing.fainted) continue;
-			if (statusObj.statusData && statusObj.statusData.duration) {
-				statusObj.statusData.duration--;
-				if (!statusObj.statusData.duration) {
-					statusObj.end.call(statusObj.thing, status.id);
-					continue;
-				}
-			}
-			this.singleEvent(eventid, status, statusObj.statusData, statusObj.thing, relayVar);
-		}
-	},
-	getRelevantEffects: function (thing, callbackType, foeCallbackType, foeThing, checkChildren) {
-		var statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
-		statuses.sort(this.comparePriority);
-		return statuses;
-	},
-	addQueue: function (decision, noSort, side) {
-		if (decision) {
-			if (Array.isArray(decision)) {
-				for (var i = 0; i < decision.length; i++) {
-					this.addQueue(decision[i], noSort);
-				}
-				return;
-			}
-			if (decision.choice === 'pass') return;
-			if (!decision.side && side) decision.side = side;
-			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
-			if (!decision.choice && decision.move) decision.choice = 'move';
-			if (!decision.priority) {
-				var priorities = {
-					'beforeTurn': 100,
-					'beforeTurnMove': 99,
-					'switch': 6,
-					'runSwitch': 6.1,
-					'residual': -100,
-					'team': 102,
-					'start': 101
-				};
-				if (priorities[decision.choice]) {
-					decision.priority = priorities[decision.choice];
-				}
-			}
-			if (decision.choice === 'move') {
-				if (this.getMove(decision.move).beforeTurnCallback) {
-					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc}, true);
-				}
-			} else if (decision.choice === 'switch') {
-				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
-					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
-				}
-				decision.pokemon.switchFlag = false;
-				if (!decision.speed && decision.pokemon && decision.pokemon.isActive) decision.speed = decision.pokemon.speed;
-			}
-			if (decision.move) {
-				var target;
-
-				if (!decision.targetPosition) {
-					target = this.resolveTarget(decision.pokemon, decision.move);
-					decision.targetSide = target.side;
-					decision.targetPosition = target.position;
-				}
-
-				decision.move = this.getMove(decision.move);
-				if (!decision.priority) {
-					var priority = decision.move.priority;
-					priority = this.runEvent('ModifyPriority', decision.pokemon, target, decision.move, priority);
-					decision.priority = priority;
-				}
-			}
-			if (!decision.pokemon && !decision.speed) decision.speed = 1;
-			if (!decision.speed && decision.choice === 'switch' && decision.target) decision.speed = decision.target.speed;
-			if (!decision.speed) decision.speed = decision.pokemon.speed;
-
-			if (decision.choice === 'switch' && !decision.side.pokemon[0].isActive) {
-				// if there's no actives, switches happen before activations
-				decision.priority = 6.2;
-			}
-
-			this.queue.push(decision);
-		}
-		if (!noSort) {
-			this.queue.sort(this.comparePriority);
-		}
-	},
-	comparePriority: function (a, b) {
-		a.priority = a.priority || 0;
-		a.subPriority = a.subPriority || 0;
-		a.speed = a.speed || 0;
-		b.priority = b.priority || 0;
-		b.subPriority = b.subPriority || 0;
-		b.speed = b.speed || 0;
-		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
-			if (typeof a.order !== 'number') {
-				return -1;
-			}
-			if (typeof b.order !== 'number') {
-				return 1;
-			}
-			if (b.order - a.order) {
-				return -(b.order - a.order);
-			}
-		}
-		if (b.priority - a.priority) {
-			return b.priority - a.priority;
-		}
-		if (b.speed - a.speed) {
-			return b.speed - a.speed;
-		}
-		if (b.subOrder - a.subOrder) {
-			return -(b.subOrder - a.subOrder);
-		}
-		return Math.random() - 0.5;
-	},
-	runDecision: function (decision) {
-		// We have to declare here the vars we are going to use on the switch outside of blocks due to the let hack on the gulpfile.
-		var pokemon, beginCallback, target, i;
-
-		// returns whether or not we ended in a callback
-		switch (decision.choice) {
-		case 'start':
-			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
-			beginCallback = this.getFormat().onBegin;
-			if (beginCallback) beginCallback.call(this);
-
-			this.add('start');
-			for (var pos = 0; pos < this.p1.active.length; pos++) {
-				this.switchIn(this.p1.pokemon[pos], pos);
-			}
-			for (var pos = 0; pos < this.p2.active.length; pos++) {
-				this.switchIn(this.p2.pokemon[pos], pos);
-			}
-			for (var pos = 0; pos < this.p1.pokemon.length; pos++) {
-				pokemon = this.p1.pokemon[pos];
-				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
-			}
-			for (var pos = 0; pos < this.p2.pokemon.length; pos++) {
-				pokemon = this.p2.pokemon[pos];
-				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
-			}
-			this.midTurn = true;
-			break;
-		case 'move':
-			if (!decision.pokemon.isActive) return false;
-			if (decision.pokemon.fainted) return false;
-			this.runMove(decision.move, decision.pokemon, this.getTarget(decision), decision.sourceEffect);
-			break;
-		case 'beforeTurnMove':
-			if (!decision.pokemon.isActive) return false;
-			if (decision.pokemon.fainted) return false;
-			this.debug('before turn callback: ' + decision.move.id);
-			target = this.getTarget(decision);
-			if (!target) return false;
-			decision.move.beforeTurnCallback.call(this, decision.pokemon, target);
-			break;
-		case 'event':
-			this.runEvent(decision.event, decision.pokemon);
-			break;
-		case 'team':
-			i = parseInt(decision.team[0], 10) - 1;
-			if (i >= 6 || i < 0) return;
-
-			if (decision.team[1]) {
-				// validate the choice
-				var len = decision.side.pokemon.length;
-				var newPokemon = [null, null, null, null, null, null].slice(0, len);
-				for (var j = 0; j < len; j++) {
-					var i = parseInt(decision.team[j], 10) - 1;
-					newPokemon[j] = decision.side.pokemon[i];
-				}
-				var reject = false;
-				for (var j = 0; j < len; j++) {
-					if (!newPokemon[j]) reject = true;
-				}
-				if (!reject) {
-					for (var j = 0; j < len; j++) {
-						newPokemon[j].position = j;
-					}
-					decision.side.pokemon = newPokemon;
-					return;
-				}
-			}
-
-			if (i === 0) return;
-			pokemon = decision.side.pokemon[i];
-			if (!pokemon) return;
-			decision.side.pokemon[i] = decision.side.pokemon[0];
-			decision.side.pokemon[0] = pokemon;
-			decision.side.pokemon[i].position = i;
-			decision.side.pokemon[0].position = 0;
-			// we return here because the update event would crash since there are no active pokemon yet
-			return;
-		case 'pass':
-			if (!decision.priority || decision.priority <= 101) return;
-			if (decision.pokemon) {
-				decision.pokemon.switchFlag = false;
-			}
-			break;
-		case 'switch':
-			if (decision.pokemon) {
-				decision.pokemon.beingCalledBack = true;
-				var lastMove = this.getMove(decision.pokemon.lastMove);
-				if (lastMove.selfSwitch !== 'copyvolatile') {
-					this.runEvent('BeforeSwitchOut', decision.pokemon);
-				}
-				if (!this.runEvent('SwitchOut', decision.pokemon)) {
-					break;
-				}
-				this.singleEvent('End', this.getAbility(decision.pokemon.ability), decision.pokemon.abilityData, decision.pokemon);
-			}
-			if (decision.pokemon && !decision.pokemon.hp && !decision.pokemon.fainted) {
-				// A pokemon fainted from Pursuit before it could switch.
-				// In gen 2, the switch still happens.
-				decision.priority = -101;
-				this.queue.unshift(decision);
-				this.debug('Pursuit target fainted');
-				break;
-			}
-			if (decision.target.isActive) {
-				this.debug('Switch target is already active');
-				break;
-			}
-			this.switchIn(decision.target, decision.pokemon.position);
-			break;
-		case 'runSwitch':
-			this.runEvent('SwitchIn', decision.pokemon);
-			if (!decision.pokemon.side.faintedThisTurn && decision.pokemon.draggedIn !== this.turn) this.runEvent('AfterSwitchInSelf', decision.pokemon);
-			if (!decision.pokemon.hp) break;
-			decision.pokemon.isStarted = true;
-			if (!decision.pokemon.fainted) {
-				this.singleEvent('Start', decision.pokemon.getAbility(), decision.pokemon.abilityData, decision.pokemon);
-				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
-			}
-			delete decision.pokemon.draggedIn;
-			break;
-		case 'beforeTurn':
-			this.eachEvent('BeforeTurn');
-			break;
-		case 'residual':
-			this.add('');
-			this.clearActiveMove(true);
-			this.residualEvent('Residual');
-			break;
-		}
-
-		// phazing (Roar, etc)
-
-		var self = this;
-		function checkForceSwitchFlag(a) {
-			if (!a) return false;
-			if (a.hp && a.forceSwitchFlag) {
-				self.dragIn(a.side, a.position);
-			}
-			delete a.forceSwitchFlag;
-		}
-		this.p1.active.forEach(checkForceSwitchFlag);
-		this.p2.active.forEach(checkForceSwitchFlag);
-
-		this.clearActiveMove();
-
-		// fainting
-
-		this.faintMessages();
-		if (this.ended) return true;
-
-		// switching (fainted pokemon, U-turn, Baton Pass, etc)
-
-		if (!this.queue.length || this.queue[0].choice in {move:1, residual:1}) {
-			// in gen 3 or earlier, switching in fainted pokemon is done after
-			// every move, rather than only at the end of the turn.
-			this.checkFainted();
-		} else if (decision.choice === 'pass') {
-			this.eachEvent('Update');
-			return false;
-		}
-
-		function hasSwitchFlag(a) { return a ? a.switchFlag : false; }
-		function removeSwitchFlag(a) { if (a) a.switchFlag = false; }
-		var p1switch = this.p1.active.any(hasSwitchFlag);
-		var p2switch = this.p2.active.any(hasSwitchFlag);
-
-		if (p1switch && !this.canSwitch(this.p1)) {
-			this.p1.active.forEach(removeSwitchFlag);
-			p1switch = false;
-		}
-		if (p2switch && !this.canSwitch(this.p2)) {
-			this.p2.active.forEach(removeSwitchFlag);
-			p2switch = false;
-		}
-
-		if (p1switch || p2switch) {
-			this.makeRequest('switch');
-			return true;
-		}
-
-		this.eachEvent('Update');
-
-		return false;
-	},
-	dragIn: function (side, pos) {
-		if (pos >= side.active.length) return false;
-		var pokemon = this.getRandomSwitchable(side);
-		if (!pos) pos = 0;
-		if (!pokemon || pokemon.isActive) return false;
-		this.runEvent('BeforeSwitchIn', pokemon);
-		if (side.active[pos]) {
-			var oldActive = side.active[pos];
-			if (!oldActive.hp) {
-				return false;
-			}
-			if (!this.runEvent('DragOut', oldActive)) {
-				return false;
-			}
-			this.runEvent('SwitchOut', oldActive);
-			this.singleEvent('End', this.getAbility(oldActive.ability), oldActive.abilityData, oldActive);
-			oldActive.isActive = false;
-			oldActive.isStarted = false;
-			oldActive.position = pokemon.position;
-			pokemon.position = pos;
-			side.pokemon[pokemon.position] = pokemon;
-			side.pokemon[oldActive.position] = oldActive;
-			this.cancelMove(oldActive);
-			oldActive.clearVolatile();
-		}
-		side.active[pos] = pokemon;
-		pokemon.isActive = true;
-		pokemon.activeTurns = 0;
-		pokemon.draggedIn = this.turn;
-		for (var m in pokemon.moveset) {
-			pokemon.moveset[m].used = false;
-		}
-		this.add('drag', pokemon, pokemon.getDetails);
-		pokemon.update();
-		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
-		return true;
 	},
 	damage: function (damage, target, source, effect) {
 		if (this.event) {
