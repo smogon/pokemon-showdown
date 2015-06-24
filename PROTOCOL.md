@@ -223,7 +223,7 @@ represented by a space), and the rest of the string being their username.
 
 > The battle has ended in a tie.
 
-**Major actions**
+######Major actions
 
 In battle, most Pokémon actions come in the form `|ACTION|POKEMON|DETAILS`
 followed by a few messages detailing what happens after the action occurs.
@@ -286,7 +286,7 @@ etc). `NAME` is the nickname of the Pokémon performing the action.
 
 > The Pokémon `POKEMON` has fainted.
 
-**Minor actions**
+######Minor actions
 
 Minor actions are less important than major actions. In the official client,
 they're usually displayed in small font if they have a message. Pretty much
@@ -429,7 +429,7 @@ enough to get you started. You can watch the data sent and received from
 the server on a regular connection, or look at the client source code
 for a full list of message types.
 
-**Action requests**
+######Action requests
 
 These are how the client sends the player's decisions to the server. All
 requests except `/undo` can be sent with `|RQID` at the end. `RQID` is
