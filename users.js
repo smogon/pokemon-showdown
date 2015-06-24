@@ -1020,6 +1020,7 @@ User = (function () {
 				if (this.named) user.prevNames[this.userid] = this.name;
 				this.destroy();
 				Rooms.global.checkAutojoin(user);
+				if (Config.loginfilter) Config.loginfilter(user);
 				return true;
 			}
 
