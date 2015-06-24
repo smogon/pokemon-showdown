@@ -250,6 +250,42 @@ var Context = exports.Context = (function () {
 		}
 		return CommandParser.parse(message, this.room, this.user, this.connection, this.levelsDeep + 1);
 	};
+	Context.prototype.run = function (targetCmd, inNamespace) {
+		var commandHandler;
+		if (typeof targetCmd === 'function') {
+			commandHandler = targetCmd;
+		} else if (inNamespace) {
+			commandHandler = commands;
+			for (var i = 0; i < this.namespaces.length; i++) {
+				commandHandler = commandHandler[this.namespaces[i]];
+			}
+			commandHandler = commandHandler[targetCmd];
+		} else {
+			commandHandler = commands[targetCmd];
+		}
+
+		var result;
+		try {
+			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
+		} catch (err) {
+			var stack = err.stack + '\n\n' +
+					'Additional information:\n' +
+					'user = ' + this.user.name + '\n' +
+					'room = ' + this.room.id + '\n' +
+					'message = ' + this.originalMessage;
+			var fakeErr = {stack: stack};
+
+			if (!require('./crashlogger.js')(fakeErr, 'A chat command')) {
+				var ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+				Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
+			} else {
+				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
+			}
+		}
+		if (result === undefined) result = false;
+
+		return result;
+	};
 	Context.prototype.canTalk = function (message, relevantRoom, targetUser) {
 		var innerRoom = (relevantRoom !== undefined) ? relevantRoom : this.room;
 		return canTalk(this.user, innerRoom, this.connection, message, targetUser);
@@ -386,6 +422,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	var currentCommands = commands;
 	var originalMessage = message;
 	var commandHandler;
+
 	do {
 		commandHandler = currentCommands[cmd];
 		if (typeof commandHandler === 'string') {
@@ -422,30 +459,11 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	if (commandHandler) {
 		var context = new Context({
 			target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
-			levelsDeep: levelsDeep, namespaces: namespaces, cmdToken: cmdToken
+			namespaces: namespaces, originalMessage: originalMessage,
+			cmdToken: cmdToken, levelsDeep: levelsDeep
 		});
 
-		var result;
-		try {
-			result = commandHandler.call(context, target, room, user, connection, cmd, message);
-		} catch (err) {
-			var stack = err.stack + '\n\n' +
-					'Additional information:\n' +
-					'user = ' + user.name + '\n' +
-					'room = ' + room.id + '\n' +
-					'message = ' + originalMessage;
-			var fakeErr = {stack: stack};
-
-			if (!require('./crashlogger.js')(fakeErr, 'A chat command')) {
-				var ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
-				Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
-			} else {
-				context.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
-			}
-		}
-		if (result === undefined) result = false;
-
-		return result;
+		return context.run(commandHandler);
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
 		for (var g in Config.groups) {
