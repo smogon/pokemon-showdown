@@ -78,6 +78,13 @@ var jscsOptions = {};
 jscsOptions.base = {
 	"preset": "yandex",
 
+	"additionalRules": [
+		new (require('./dev-tools/jscs-custom-rules/validate-conditionals.js'))(),
+		new (require('./dev-tools/jscs-custom-rules/validate-case-indentation.js'))()
+	],
+	"validateConditionals": true,
+	"validateCaseIndentation": true,
+
 	"requireCurlyBraces": null,
 
 	"maximumLineLength": null,
@@ -157,7 +164,11 @@ jscsOptions.dataCompactAllIndented = util._extend(util._extend({}, jscsOptions.d
 
 var lintData = [
 	{
-		dirs: ['./*.js', './tournaments/*.js', './chat-plugins/*.js', './config/!(config).js', './data/scripts.js', './data/rulesets.js', './data/statuses.js', './mods/*/scripts.js', './mods/*/rulesets.js', './mods/*/statuses.js'],
+		dirs: ['./*.js', './tournaments/*.js', './chat-plugins/*.js', './config/!(config).js', './data/rulesets.js', './data/statuses.js'],
+		jsHint: jsHintOptions.base,
+		jscs: jscsOptions.base
+	}, {
+		dirs: ['./data/scripts.js', './mods/*/scripts.js', './mods/*/rulesets.js', './mods/*/statuses.js', './dev-tools/**.js'],
 		jsHint: jsHintOptions.base,
 		jscs: jscsOptions.base
 	}, {
@@ -181,7 +192,7 @@ var lintData = [
 		jsHint: jsHintOptions.legacy,
 		jscs: jscsOptions.dataCompactAllIndented
 	}, {
-		dirs: ['./test/*.js', './test/application/*.js', './test/simulator/*/*.js'],
+		dirs: ['./test/*.js', './test/application/*.js', './test/simulator/*/*.js', './test/dev-tools/*/*.js'],
 		jsHint: jsHintOptions.test,
 		jscs: jscsOptions.base
 	}

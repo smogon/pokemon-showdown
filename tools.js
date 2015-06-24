@@ -214,11 +214,11 @@ module.exports = (function () {
 		var typeData = this.data.TypeChart[targetTyping];
 		if (!typeData) return 0;
 		switch (typeData.damageTaken[sourceType]) {
-			case 1: return 1; // super-effective
-			case 2: return -1; // resist
-			// in case of weird situations like Gravity, immunity is
-			// handled elsewhere
-			default: return 0;
+		case 1: return 1; // super-effective
+		case 2: return -1; // resist
+		// in case of weird situations like Gravity, immunity is
+		// handled elsewhere
+		default: return 0;
 		}
 	};
 	Tools.prototype.getTemplate = function (template) {
@@ -268,13 +268,21 @@ module.exports = (function () {
 				} else if (template.forme === 'Primal') {
 					template.gen = 6;
 					template.isPrimal = true;
-				} else if (template.num >= 650) template.gen = 6;
-				else if (template.num >= 494) template.gen = 5;
-				else if (template.num >= 387) template.gen = 4;
-				else if (template.num >= 252) template.gen = 3;
-				else if (template.num >= 152) template.gen = 2;
-				else if (template.num >= 1) template.gen = 1;
-				else template.gen = 0;
+				} else if (template.num >= 650) {
+					template.gen = 6;
+				} else if (template.num >= 494) {
+					template.gen = 5;
+				} else if (template.num >= 387) {
+					template.gen = 4;
+				} else if (template.num >= 252) {
+					template.gen = 3;
+				} else if (template.num >= 152) {
+					template.gen = 2;
+				} else if (template.num >= 1) {
+					template.gen = 1;
+				} else {
+					template.gen = 0;
+				}
 			}
 		}
 		return template;
@@ -307,13 +315,21 @@ module.exports = (function () {
 			if (!move.effectType) move.effectType = 'Move';
 			if (!move.secondaries && move.secondary) move.secondaries = [move.secondary];
 			if (!move.gen) {
-				if (move.num >= 560) move.gen = 6;
-				else if (move.num >= 468) move.gen = 5;
-				else if (move.num >= 355) move.gen = 4;
-				else if (move.num >= 252) move.gen = 3;
-				else if (move.num >= 166) move.gen = 2;
-				else if (move.num >= 1) move.gen = 1;
-				else move.gen = 0;
+				if (move.num >= 560) {
+					move.gen = 6;
+				} else if (move.num >= 468) {
+					move.gen = 5;
+				} else if (move.num >= 355) {
+					move.gen = 4;
+				} else if (move.num >= 252) {
+					move.gen = 3;
+				} else if (move.num >= 166) {
+					move.gen = 2;
+				} else if (move.num >= 1) {
+					move.gen = 1;
+				} else {
+					move.gen = 0;
+				}
 			}
 			if (!move.priority) move.priority = 0;
 			if (move.ignoreImmunity === undefined) move.ignoreImmunity = (move.category === 'Status');
@@ -432,11 +448,16 @@ module.exports = (function () {
 			if (item.onDrive) item.fling = {basePower: 70};
 			if (item.megaStone) item.fling = {basePower: 80};
 			if (!item.gen) {
-				if (item.num >= 577) item.gen = 6;
-				else if (item.num >= 537) item.gen = 5;
-				else if (item.num >= 377) item.gen = 4;
-				// Due to difference in storing items, gen 2 items must be specified specifically
-				else item.gen = 3;
+				if (item.num >= 577) {
+					item.gen = 6;
+				} else if (item.num >= 537) {
+					item.gen = 5;
+				} else if (item.num >= 377) {
+					item.gen = 4;
+				} else {
+					item.gen = 3;
+				}
+				// Due to difference in storing items, gen 2 items must be specified manually
 			}
 		}
 		return item;
@@ -459,11 +480,17 @@ module.exports = (function () {
 			if (!ability.category) ability.category = 'Effect';
 			if (!ability.effectType) ability.effectType = 'Ability';
 			if (!ability.gen) {
-				if (ability.num >= 165) ability.gen = 6;
-				else if (ability.num >= 124) ability.gen = 5;
-				else if (ability.num >= 77) ability.gen = 4;
-				else if (ability.num >= 1) ability.gen = 3;
-				else ability.gen = 0;
+				if (ability.num >= 165) {
+					ability.gen = 6;
+				} else if (ability.num >= 124) {
+					ability.gen = 5;
+				} else if (ability.num >= 77) {
+					ability.gen = 4;
+				} else if (ability.num >= 1) {
+					ability.gen = 3;
+				} else {
+					ability.gen = 0;
+				}
 			}
 		}
 		return ability;
@@ -535,11 +562,9 @@ module.exports = (function () {
 					banlistTable[subformat.banlist[i]] = subformat.name || true;
 					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
 
-					var plusPos = subformat.banlist[i].indexOf('+');
 					var complexList;
-					if (plusPos && plusPos > 0) {
-						var plusPlusPos = subformat.banlist[i].indexOf('++');
-						if (plusPlusPos && plusPlusPos > 0) {
+					if (subformat.banlist[i].includes('+')) {
+						if (subformat.banlist[i].includes('++')) {
 							complexList = subformat.banlist[i].split('++');
 							for (var j = 0; j < complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
@@ -561,7 +586,7 @@ module.exports = (function () {
 					if (banlistTable['Rule:' + toId(subformat.ruleset[i])]) continue;
 
 					banlistTable['Rule:' + toId(subformat.ruleset[i])] = subformat.ruleset[i];
-					if (format.ruleset.indexOf(subformat.ruleset[i]) === -1) format.ruleset.push(subformat.ruleset[i]);
+					if (format.ruleset.indexOf(subformat.ruleset[i]) < 0) format.ruleset.push(subformat.ruleset[i]);
 
 					var subsubformat = this.getFormat(subformat.ruleset[i]);
 					if (subsubformat.ruleset || subsubformat.banlist) {

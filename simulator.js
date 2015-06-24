@@ -15,7 +15,7 @@ var battles = Object.create(null);
 
 var SimulatorProcess = (function () {
 	function SimulatorProcess() {
-		this.process = require('child_process').fork('battle-engine.js');
+		this.process = require('child_process').fork('battle-engine.js', {cwd: __dirname});
 		this.process.on('message', function (message) {
 			var lines = message.split('\n');
 			var battle = battles[lines[0]];
@@ -119,7 +119,7 @@ var Battle = (function () {
 	Battle.prototype.sendFor = function (user, action) {
 		var player = this.playerTable[toId(user)];
 		if (!player) {
-			console.log('SENDFOR FAILED: Player doesn\'t exist: ' + user.name);
+			console.log('SENDFOR FAILED in ' + this.id + ': Player doesn\'t exist: ' + user.name);
 			return;
 		}
 

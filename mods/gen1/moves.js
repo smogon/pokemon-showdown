@@ -89,7 +89,7 @@ exports.BattleMovedex = {
 				this.add('-activate', pokemon, 'Bide');
 				return false;
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				if (!pokemon.hasMove('bide')) {
 					return;
 				}
@@ -214,6 +214,10 @@ exports.BattleMovedex = {
 			return false;
 		}
 	},
+	crabhammer: {
+		inherit: true,
+		critRatio: 2
+	},
 	dig: {
 		inherit: true,
 		basePower: 100,
@@ -265,7 +269,7 @@ exports.BattleMovedex = {
 					return false;
 				}
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
@@ -439,6 +443,7 @@ exports.BattleMovedex = {
 	},
 	karatechop: {
 		inherit: true,
+		critRatio: 2,
 		type: "Normal"
 	},
 	leechseed: {
@@ -497,16 +502,6 @@ exports.BattleMovedex = {
 		target: "self",
 		type: "Psychic"
 	},
-	lowkick: {
-		inherit: true,
-		accuracy: 90,
-		basePower: 50,
-		basePowerCallback: undefined,
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch'
-		}
-	},
 	metronome: {
 		inherit: true,
 		onHit: function (target) {
@@ -536,10 +531,10 @@ exports.BattleMovedex = {
 		desc: "This move is replaced by a random move on target's moveset. The copied move has the maximum PP for that move. Ignores a target's Substitute.",
 		shortDesc: "A random target's move replaces this one.",
 		onHit: function (target, source) {
-			var disallowedMoves = {mimic:1, struggle:1, transform:1};
+			var disallowedMoves = {mimic:1, struggle:1};
 			if (source.transformed) return false;
 			var moveslot = source.moves.indexOf('mimic');
-			if (moveslot === -1) return false;
+			if (moveslot < 0) return false;
 			var moves = target.moves;
 			moves = moves.randomize();
 			var move = false;
@@ -631,11 +626,11 @@ exports.BattleMovedex = {
 	},
 	razorleaf: {
 		inherit: true,
+		critRatio: 2,
 		target: "normal"
 	},
 	razorwind: {
 		inherit: true,
-		accuracy: 75,
 		critRatio: 1,
 		target: "normal"
 	},
@@ -744,10 +739,9 @@ exports.BattleMovedex = {
 			return null;
 		}
 	},
-	skyattack: {
+	slash: {
 		inherit: true,
-		critRatio: 1,
-		secondary: {}
+		critRatio: 2
 	},
 	softboiled: {
 		inherit: true,

@@ -115,7 +115,7 @@ foeSwitchOut(pokemon) [on pokemon's foe's side]
 	prevent the pokemon from switching out.
 
 	NOTE: This event fires for (and overrides) Baton Pass and U-Turn and
-	Pokemon with Shed Shell. DO NOT use it to implement trapping: see the
+	Pokémon with Shed Shell. DO NOT use it to implement trapping: see the
 	trapping flag.
 
 	NOTE: NOTHING in BW or earlier prevents a pokemon from switching out
@@ -242,8 +242,8 @@ residual() [on weather, on field effect]
 
 === DETAILED USAGE NOTES ===
 
-In aesoft's unnamed sim, as well as in Pokemon Lab and DougJustDoug's framework,
-everything in Pokemon is an effect.
+In aesoft's unnamed sim, as well as in Pokémon Lab and DougJustDoug's framework,
+everything in Pokémon is an effect.
 
 There are 8 types of effects
 - move, associated with a pokemon (Grass Knot, Magnitude...)

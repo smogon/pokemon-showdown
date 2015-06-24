@@ -31,6 +31,7 @@ const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 const MAX_PARSE_RECURSION = 10;
 
 var fs = require('fs');
+var path = require('path');
 
 /*********************************************************
  * Load command files
@@ -40,7 +41,7 @@ var commands = exports.commands = require('./commands.js').commands;
 
 // Install plug-in commands
 
-fs.readdirSync('./chat-plugins').forEach(function (file) {
+fs.readdirSync(path.resolve(__dirname, 'chat-plugins')).forEach(function (file) {
 	if (file.substr(-3) === '.js') Object.merge(commands, require('./chat-plugins/' + file).commands);
 });
 
@@ -48,13 +49,13 @@ fs.readdirSync('./chat-plugins').forEach(function (file) {
  * Parser
  *********************************************************/
 
-var modlog = exports.modlog = {lobby: fs.createWriteStream('logs/modlog/modlog_lobby.txt', {flags:'a+'}), battle: fs.createWriteStream('logs/modlog/modlog_battle.txt', {flags:'a+'})};
+var modlog = exports.modlog = {lobby: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_lobby.txt'), {flags:'a+'}), battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'})};
 
 /**
  * Can this user talk?
  * Shows an error message if not.
  */
-function canTalk(user, room, connection, message) {
+function canTalk(user, room, connection, message, targetUser) {
 	if (!user.named) {
 		connection.popup("You must choose a name before you can talk.");
 		return false;
@@ -63,7 +64,7 @@ function canTalk(user, room, connection, message) {
 		connection.sendTo(room, "You are locked from talking in chat.");
 		return false;
 	}
-	if (room && user.mutedRooms[room.id]) {
+	if (room && room.isMuted(user)) {
 		connection.sendTo(room, "You are muted and cannot talk in this room.");
 		return false;
 	}
@@ -279,15 +280,16 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				this.add(text);
 				this.logModCommand(text + (logOnlyText || ""));
 			},
-			logModCommand: function (result) {
-				if (!modlog[room.id]) {
-					if (room.battle) {
-						modlog[room.id] = modlog['battle'];
+			logModCommand: function (result, targetRoom) {
+				if (!targetRoom) targetRoom = room;
+				if (!modlog[targetRoom.id]) {
+					if (targetRoom.battle) {
+						modlog[targetRoom.id] = modlog['battle'];
 					} else {
-						modlog[room.id] = fs.createWriteStream('logs/modlog/modlog_' + room.id + '.txt', {flags:'a+'});
+						modlog[targetRoom.id] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + targetRoom.id + '.txt'), {flags:'a+'});
 					}
 				}
-				modlog[room.id].write('[' + (new Date().toJSON()) + '] (' + room.id + ') ' + result + '\n');
+				modlog[targetRoom.id].write('[' + (new Date().toJSON()) + '] (' + targetRoom.id + ') ' + result + '\n');
 			},
 			can: function (permission, target, room) {
 				if (!user.can(permission, target, room)) {
@@ -327,9 +329,9 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				}
 				return parse(message, room, user, connection, levelsDeep + 1);
 			},
-			canTalk: function (message, relevantRoom) {
+			canTalk: function (message, relevantRoom, targetUser) {
 				var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
-				return canTalk(user, innerRoom, connection, message);
+				return canTalk(user, innerRoom, connection, message, targetUser);
 			},
 			canHTML: function (html) {
 				html = '' + (html || '');
@@ -461,7 +463,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 };
 
 exports.package = {};
-fs.readFile('package.json', function (err, data) {
+fs.readFile(path.resolve(__dirname, 'package.json'), function (err, data) {
 	if (err) return;
 	exports.package = JSON.parse(data);
 });

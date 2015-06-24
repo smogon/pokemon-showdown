@@ -130,7 +130,11 @@ exports.BattleStatuses = {
 		onStart: function (target, source, sourceEffect) {
 			var result = this.runEvent('TryConfusion', target, source, sourceEffect);
 			if (!result) return result;
-			this.add('-start', target, 'confusion');
+			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+				this.add('-start', target, 'confusion', '[fatigue]');
+			} else {
+				this.add('-start', target, 'confusion');
+			}
 			this.effectData.time = this.random(2, 6);
 		},
 		onEnd: function (target) {
@@ -147,7 +151,11 @@ exports.BattleStatuses = {
 			if (this.random(2) === 0) {
 				return;
 			}
-			this.directDamage(this.getDamage(pokemon, pokemon, 40));
+			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
+				id: 'confused',
+				effectType: 'Move',
+				type: '???'
+			});
 			return false;
 		}
 	},
@@ -186,7 +194,7 @@ exports.BattleStatuses = {
 		onResidualOrder: 11,
 		onResidual: function (pokemon) {
 			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0)) {
-				pokemon.removeVolatile('partiallytrapped');
+				delete pokemon.volatiles['partiallytrapped'];
 				return;
 			}
 			if (this.effectData.source.hasItem('bindingband')) {
@@ -223,7 +231,6 @@ exports.BattleStatuses = {
 		},
 		onEnd: function (target) {
 			if (this.effectData.trueDuration > 1) return;
-			this.add('-end', target, 'rampage');
 			target.addVolatile('confusion');
 		},
 		onLockMove: function (pokemon) {
@@ -255,12 +262,12 @@ exports.BattleStatuses = {
 			if (!this.activeMove.id || this.activeMove.sourceEffect && this.activeMove.sourceEffect !== this.activeMove.id) return false;
 			this.effectData.move = this.activeMove.id;
 		},
-		onModifyPokemon: function (pokemon) {
+		onDisableMove: function (pokemon) {
 			if (!pokemon.getItem().isChoice || !pokemon.hasMove(this.effectData.move)) {
 				pokemon.removeVolatile('choicelock');
 				return;
 			}
-			if (pokemon.ignore['Item']) {
+			if (pokemon.ignoringItem()) {
 				return;
 			}
 			var moves = pokemon.moveset;
@@ -628,7 +635,7 @@ exports.BattleStatuses = {
 		onSwitchIn: function (pokemon) {
 			var type = 'Normal';
 			if (pokemon.ability === 'multitype') {
-				type = this.runEvent('Plate', pokemon);
+				type = pokemon.getItem().onPlate;
 				if (!type || type === true) {
 					type = 'Normal';
 				}

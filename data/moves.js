@@ -445,7 +445,10 @@ exports.BattleMovedex = {
 		onHit: function (pokemon, source, move) {
 			var side = pokemon.side;
 			for (var i = 0; i < side.pokemon.length; i++) {
-				if (side.pokemon[i].volatiles['substitute'] && !move.infiltrates) continue;
+				if (side.pokemon[i] !== source && ((side.pokemon[i].hasAbility('sapsipper')) ||
+						(side.pokemon[i].volatiles['substitute'] && !move.infiltrates))) {
+					continue;
+				}
 				side.pokemon[i].status = '';
 			}
 			this.add('-cureteam', source, '[from] move: Aromatherapy');
@@ -633,6 +636,9 @@ exports.BattleMovedex = {
 					this.add('cant', pokemon, 'Attract');
 					return false;
 				}
+			},
+			onEnd: function (pokemon) {
+				this.add('-end', pokemon, 'Attract', '[silent]');
 			}
 		},
 		secondary: false,
@@ -876,11 +882,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
-		onTryHit: function (target, pokemon) {
-			if (!pokemon.ateBerry) {
-				return false;
-			}
-		},
+		// Move disabling implemented in Battle#nextTurn in battle-engine.js
 		secondary: false,
 		target: "normal",
 		type: "Poison"
@@ -902,8 +904,8 @@ exports.BattleMovedex = {
 				return false;
 			}
 			this.directDamage(target.maxhp / 2);
-			target.setBoost({atk: 6});
-			this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
+			this.boost({atk: 12}, target);
+			this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] move: Belly Drum');
 		},
 		secondary: false,
 		target: "self",
@@ -2072,8 +2074,11 @@ exports.BattleMovedex = {
 		boosts: {
 			spe: -2
 		},
-		onTryHit: function (pokemon) {
-			if (!pokemon.runImmunity('powder')) return false;
+		onTryHit: function (target) {
+			if (!target.runImmunity('powder')) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
 		},
 		secondary: false,
 		target: "allAdjacentFoes",
@@ -2545,7 +2550,7 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 4,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'protect',
 		onPrepareHit: function (pokemon) {
 			return !!this.willAct() && this.runEvent('StallMove', pokemon);
@@ -2682,7 +2687,7 @@ exports.BattleMovedex = {
 					return false;
 				}
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
@@ -3353,13 +3358,19 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onSetStatus: function (status, target, source, effect) {
-				if (status.id === 'slp' && target.runImmunity('Ground')) {
+				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
 					this.debug('Interrupting sleep from Electric Terrain');
 					return false;
 				}
 			},
+			onTryHit: function (target, source, move) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (move && move.id === 'yawn') {
+					return false;
+				}
+			},
 			onBasePower: function (basePower, attacker, defender, move) {
-				if (move.type === 'Electric' && attacker.runImmunity('Ground')) {
+				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
 					return this.chainModify(1.5);
 				}
@@ -3477,14 +3488,10 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'Embargo');
 			},
+			// Item suppression implemented in BattlePokemon.ignoringItem() within battle-engine.js
 			onResidualOrder: 18,
 			onEnd: function (pokemon) {
 				this.add('-end', pokemon, 'Embargo');
-			},
-			onModifyPokemonPriority: 1,
-			onModifyPokemon: function (pokemon) {
-				if (pokemon.getItem().megaEvolves) return;
-				pokemon.ignore['Item'] = true;
 			}
 		},
 		secondary: false,
@@ -3553,7 +3560,7 @@ exports.BattleMovedex = {
 			onEnd: function (target) {
 				this.add('-end', target, 'Encore');
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
@@ -3603,7 +3610,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'endure',
 		onTryHit: function (pokemon) {
 			return this.willAct() && this.runEvent('StallMove', pokemon);
@@ -3619,6 +3626,7 @@ exports.BattleMovedex = {
 			onDamagePriority: -10,
 			onDamage: function (damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
+					this.add('-activate', target, 'move: Endure');
 					return target.hp - 1;
 				}
 			}
@@ -4407,7 +4415,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		beforeMoveCallback: function (pokemon) {
-			if (pokemon.ignore['Item']) return;
+			if (pokemon.ignoringItem()) return;
 			var item = pokemon.getItem();
 			var noFling = item.onTakeItem && item.onTakeItem(item, pokemon) === false;
 			if (item.fling && !noFling) {
@@ -4519,7 +4527,7 @@ exports.BattleMovedex = {
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
 				return 0;
 			},
-			onSourceBasePower: function (basePower, target, source, move) {
+			onSourceModifyDamage: function (damage, source, target, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return this.chainModify(2);
 				}
@@ -4679,23 +4687,23 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target to have its positive evasiveness stat stage set to 0 while it is active. Normal- and Fighting-type attacks can hit the target if it is a Ghost type. The effect ends when the target is no longer active. Fails if the target is already affected.",
-		shortDesc: "Blocks evasion mods. Fighting, Normal hit Ghost.",
+		desc: "Causes the target to have its positive evasiveness stat stage ignored while it is active. Normal- and Fighting-type attacks can hit the target if it is a Ghost type. The effect ends when the target is no longer active. Fails if the target is already affected, or affected by Miracle Eye or Odor Sleuth.",
+		shortDesc: "Fighting, Normal hit Ghost. Evasiveness ignored.",
 		id: "foresight",
 		name: "Foresight",
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'foresight',
+		onTryHit: function (target) {
+			if (target.volatiles['miracleeye']) return false;
+		},
 		effect: {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'Foresight');
 			},
-			onModifyPokemon: function (pokemon) {
-				if (pokemon.hasType('Ghost')) {
-					pokemon.negateImmunity['Normal'] = true;
-					pokemon.negateImmunity['Fighting'] = true;
-				}
+			onNegateImmunity: function (pokemon, type) {
+				if (pokemon.hasType('Ghost') && type in {'Normal': 1, 'Fighting': 1}) return false;
 			},
 			onModifyBoost: function (boosts) {
 				if (boosts.evasion && boosts.evasion > 0) {
@@ -5040,13 +5048,10 @@ exports.BattleMovedex = {
 			}
 		},
 		effect: {
+			// Ability suppression implemented in BattlePokemon.ignoringAbility() within battle-engine.js
 			onStart: function (pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', this.getAbility(pokemon.ability), pokemon.abilityData, pokemon, pokemon, 'gastroacid');
-			},
-			onModifyPokemonPriority: 2,
-			onModifyPokemon: function (pokemon) {
-				pokemon.ignore['Ability'] = true;
 			}
 		},
 		secondary: false,
@@ -5326,7 +5331,7 @@ exports.BattleMovedex = {
 					this.debug('move weakened by grassy terrain');
 					return this.chainModify(0.5);
 				}
-				if (move.type === 'Grass' && attacker.runImmunity('Ground')) {
+				if (move.type === 'Grass' && attacker.isGrounded()) {
 					this.debug('grassy terrain boost');
 					return this.chainModify(1.5);
 				}
@@ -5338,11 +5343,13 @@ exports.BattleMovedex = {
 			onResidualSubOrder: 2,
 			onResidual: function (battle) {
 				this.debug('onResidual battle');
+				var pokemon;
 				for (var s in battle.sides) {
 					for (var p in battle.sides[s].active) {
-						if (battle.sides[s].active[p].runImmunity('Ground')) {
+						pokemon = battle.sides[s].active[p];
+						if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 							this.debug('Pokemon is grounded, healing through Grassy Terrain.');
-							this.heal(battle.sides[s].active[p].maxhp / 16, battle.sides[s].active[p], battle.sides[s].active[p]);
+							this.heal(pokemon.maxhp / 16, pokemon, pokemon);
 						}
 					}
 				}
@@ -5383,17 +5390,19 @@ exports.BattleMovedex = {
 				if (typeof accuracy !== 'number') return;
 				return accuracy * 5 / 3;
 			},
-			onModifyPokemonPriority: 100,
-			onModifyPokemon: function (pokemon) {
-				pokemon.negateImmunity['Ground'] = true;
+			onDisableMove: function (pokemon) {
 				var disabledMoves = {bounce:1, fly:1, flyingpress:1, highjumpkick:1, jumpkick:1, magnetrise:1, skydrop:1, splash:1, telekinesis:1};
 				for (var m in disabledMoves) {
 					pokemon.disableMove(m);
 				}
+			},
+			onModifyPokemonPriority: 100,
+			onModifyPokemon: function (pokemon) {
 				var applies = false;
 				if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
 					applies = true;
 					this.cancelMove(pokemon);
+					pokemon.removeVolatile('twoturnmove');
 				}
 				if (pokemon.volatiles['skydrop']) {
 					applies = true;
@@ -5414,6 +5423,9 @@ exports.BattleMovedex = {
 					delete pokemon.volatiles['telekinesis'];
 				}
 				if (applies) this.add('-activate', pokemon, 'Gravity');
+			},
+			onNegateImmunity: function (pokemon, type) {
+				if (type === 'Ground') return false;
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
@@ -5846,7 +5858,7 @@ exports.BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'move: Heal Block');
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
 				var move;
 				for (var i = 0; i < pokemon.moveset.length; i++) {
@@ -6992,7 +7004,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-start', target, 'move: Imprison');
 			},
-			onFoeModifyPokemon: function (pokemon) {
+			onFoeDisableMove: function (pokemon) {
 				var foeMoves = this.effectData.source.moveset;
 				for (var f = 0; f < foeMoves.length; f++) {
 					pokemon.disableMove(foeMoves[f].id, true);
@@ -7001,7 +7013,7 @@ exports.BattleMovedex = {
 			},
 			onFoeBeforeMovePriority: 4,
 			onFoeBeforeMove: function (attacker, defender, move) {
-				if (attacker.disabledMoves[move.id]) {
+				if (this.effectData.source.hasMove(move.id)) {
 					this.add('cant', attacker, 'move: Imprison', move);
 					return false;
 				}
@@ -7091,8 +7103,10 @@ exports.BattleMovedex = {
 				this.heal(pokemon.maxhp / 16);
 			},
 			onModifyPokemon: function (pokemon) {
-				pokemon.negateImmunity['Ground'] = true;
 				pokemon.tryTrap();
+			},
+			onNegateImmunity: function (pokemon, type) {
+				if (type === 'Ground') return false;
 			},
 			onDragOut: function (pokemon) {
 				this.add('-activate', pokemon, 'move: Ingrain');
@@ -7283,7 +7297,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'kingsshield',
 		onTryHit: function (pokemon) {
 			return !!this.willAct() && this.runEvent('StallMove', pokemon);
@@ -7343,9 +7357,8 @@ exports.BattleMovedex = {
 			}
 		},
 		onAfterHit: function (target, source) {
-			if (target.hasAbility('stickyhold')) return;
 			if (source.hp) {
-				var item = target.takeItem();
+				var item = target.takeItem(source);
 				if (item) {
 					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
 				}
@@ -7942,11 +7955,7 @@ exports.BattleMovedex = {
 			onStart: function (target, source) {
 				this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
 			},
-			onModifyPokemonPriority: 1,
-			onModifyPokemon: function (pokemon) {
-				if (pokemon.getItem().megaEvolves) return;
-				pokemon.ignore['Item'] = true;
-			},
+			// Item suppression implemented in BattlePokemon.ignoringItem() within battle-engine.js
 			onResidualOrder: 25,
 			onEnd: function () {
 				this.add('-fieldend', 'move: Magic Room', '[of] ' + this.effectData.source);
@@ -8115,7 +8124,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'matblock',
 		onTryHitSide: function (side, source) {
 			if (source.activeTurns > 1) {
@@ -8499,9 +8508,9 @@ exports.BattleMovedex = {
 		flags: {protect: 1, authentic: 1},
 		onHit: function (target, source) {
 			var disallowedMoves = {chatter:1, mimic:1, sketch:1, struggle:1, transform:1};
-			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
+			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) >= 0) return false;
 			var moveslot = source.moves.indexOf('mimic');
-			if (moveslot === -1) return false;
+			if (moveslot < 0) return false;
 			var move = Tools.getMove(target.lastMove);
 			source.moveset[moveslot] = {
 				move: move.name,
@@ -8581,20 +8590,23 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target to have its positive evasiveness stat stage set to 0 while it is active. Psychic-type attacks can hit the target if it is a Dark type. The effect ends when the target is no longer active. Fails if the target is already affected.",
-		shortDesc: "Blocks evasion mods. Psychic hits Dark.",
+		desc: "Causes the target to have its positive evasiveness stat stage ignored while it is active. Psychic-type attacks can hit the target if it is a Dark type. The effect ends when the target is no longer active. Fails if the target is already affected, or affected by Foresight or Odor Sleuth.",
+		shortDesc: "Psychic hits Dark. Evasiveness ignored.",
 		id: "miracleeye",
 		name: "Miracle Eye",
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'miracleeye',
+		onTryHit: function (target) {
+			if (target.volatiles['foresight']) return false;
+		},
 		effect: {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'Miracle Eye');
 			},
-			onModifyPokemon: function (pokemon) {
-				if (pokemon.hasType('Dark')) pokemon.negateImmunity['Psychic'] = true;
+			onNegateImmunity: function (pokemon, type) {
+				if (pokemon.hasType('Dark') && type === 'Psychic') return false;
 			},
 			onModifyBoost: function (boosts) {
 				if (boosts.evasion && boosts.evasion > 0) {
@@ -8773,21 +8785,12 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 5,
 			onSetStatus: function (status, target, source, effect) {
-				if (!target.runImmunity('Ground')) return;
-				if (source && source !== target) {
-					this.debug('misty terrain preventing status');
-					return false;
-				}
-			},
-			onTryHit: function (target, source, move) {
-				if (!target.runImmunity('Ground')) return;
-				if (move && move.id === 'yawn') {
-					this.debug('misty terrain blocking yawn');
-					return false;
-				}
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				this.debug('misty terrain preventing status');
+				return false;
 			},
 			onBasePower: function (basePower, attacker, defender, move) {
-				if (move.type === 'Dragon' && defender.runImmunity('Ground')) {
+				if (move.type === 'Dragon' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
 					this.debug('misty terrain weaken');
 					return this.chainModify(0.5);
 				}
@@ -9309,14 +9312,17 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target to have its positive evasiveness stat stage set to 0 while it is active. Normal- and Fighting-type attacks can hit the target if it is a Ghost type. The effect ends when the target is no longer active. Fails if the target is already affected.",
-		shortDesc: "Blocks evasion mods. Fighting, Normal hit Ghost.",
+		desc: "Causes the target to have its positive evasiveness stat stage ignored while it is active. Normal- and Fighting-type attacks can hit the target if it is a Ghost type. The effect ends when the target is no longer active. Fails if the target is already affected, or affected by Foresight or Miracle Eye.",
+		shortDesc: "Fighting, Normal hit Ghost. Evasiveness ignored.",
 		id: "odorsleuth",
 		name: "Odor Sleuth",
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'foresight',
+		onTryHit: function (target) {
+			if (target.volatiles['miracleeye']) return false;
+		},
 		secondary: false,
 		target: "normal",
 		type: "Normal"
@@ -9379,6 +9385,11 @@ exports.BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		self: {
 			volatileStatus: 'lockedmove'
+		},
+		onAfterMove: function (pokemon) {
+			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+				pokemon.removeVolatile('lockedmove');
+			}
 		},
 		secondary: false,
 		target: "randomNormal",
@@ -9545,24 +9556,25 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {sound: 1, distance: 1, authentic: 1},
 		onHitField: function (target, source) {
-			var result = true;
+			var result = false;
+			var message = false;
 			for (var i = 0; i < this.sides.length; i++) {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
 					if (this.sides[i].active[j]) {
-						if (!this.sides[i].active[j].volatiles['perishsong']) {
-							result = false;
-						}
-						if (!this.sides[i].active[j].hasAbility('soundproof')) {
-							this.sides[i].active[j].addVolatile('perishsong');
-						} else {
+						if (this.sides[i].active[j].hasAbility('soundproof')) {
 							this.add('-immune', this.sides[i].active[j], '[msg]');
-							this.add('-end', this.sides[i].active[j], 'Perish Song');
+							result = true;
+						} else if (!this.sides[i].active[j].volatiles['perishsong']) {
+							this.sides[i].active[j].addVolatile('perishsong');
+							this.add('-start', this.sides[i].active[j], 'perish3', '[silent]');
+							result = true;
+							message = true;
 						}
 					}
 				}
 			}
-			if (result) return false;
-			this.add('-fieldactivate', 'move: Perish Song');
+			if (!result) return false;
+			if (message) this.add('-fieldactivate', 'move: Perish Song');
 		},
 		effect: {
 			duration: 4,
@@ -9611,6 +9623,11 @@ exports.BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		self: {
 			volatileStatus: 'lockedmove'
+		},
+		onAfterMove: function (pokemon) {
+			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+				pokemon.removeVolatile('lockedmove');
+			}
 		},
 		secondary: false,
 		target: "randomNormal",
@@ -9808,8 +9825,11 @@ exports.BattleMovedex = {
 		pp: 35,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		onTryHit: function (pokemon) {
-			if (!pokemon.runImmunity('powder')) return false;
+		onTryHit: function (target) {
+			if (!target.runImmunity('powder')) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
 		},
 		status: 'psn',
 		secondary: false,
@@ -9883,8 +9903,11 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 1,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		onTryHit: function (pokemon) {
-			if (!pokemon.runImmunity('powder')) return false;
+		onTryHit: function (target) {
+			if (!target.runImmunity('powder')) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
 		},
 		volatileStatus: 'powder',
 		effect: {
@@ -10136,7 +10159,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'protect',
 		onPrepareHit: function (pokemon) {
 			return !!this.willAct() && this.runEvent('StallMove', pokemon);
@@ -10654,8 +10677,7 @@ exports.BattleMovedex = {
 					}
 				}
 				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
-					this.add('-remove', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect.name, '[from] move: Rapid Spin', '[of] ' + pokemon, '[partiallytrapped]');
-					delete pokemon.volatiles['partiallytrapped'];
+					pokemon.removeVolatile('partiallytrapped');
 				}
 			}
 		},
@@ -10715,8 +10737,12 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {charge: 1, protect: 1, mirror: 1},
 		onTry: function (attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
+			if (attacker.volatiles['twoturnmove']) {
+				if (attacker.volatiles['twoturnmove'].duration === 1) {
+					return;
+				} else {
+					return null;
+				}
 			}
 			this.add('-prepare', attacker, move.name, defender);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
@@ -10762,10 +10788,9 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		onHit: function (pokemon) {
-			if (!pokemon.item && pokemon.lastItem) {
-				pokemon.setItem(pokemon.lastItem);
-				this.add("-item", pokemon, pokemon.getItem(), '[from] move: Recycle');
-			} else return false;
+			if (pokemon.item || !pokemon.lastItem) return false;
+			pokemon.setItem(pokemon.lastItem);
+			this.add('-item', pokemon, pokemon.getItem(), '[from] move: Recycle');
 		},
 		secondary: false,
 		target: "self",
@@ -12123,9 +12148,9 @@ exports.BattleMovedex = {
 		flags: {authentic: 1},
 		onHit: function (target, source) {
 			var disallowedMoves = {chatter:1, sketch:1, struggle:1};
-			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) !== -1) return false;
+			if (source.transformed || !target.lastMove || disallowedMoves[target.lastMove] || source.moves.indexOf(target.lastMove) >= 0) return false;
 			var moveslot = source.moves.indexOf('sketch');
-			if (moveslot === -1) return false;
+			if (moveslot < 0) return false;
 			var move = Tools.getMove(target.lastMove);
 			var sketchedMove = {
 				move: move.name,
@@ -12423,8 +12448,11 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		onTryHit: function (pokemon) {
-			if (!pokemon.runImmunity('powder')) return false;
+		onTryHit: function (target) {
+			if (!target.runImmunity('powder')) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
 		},
 		status: 'slp',
 		secondary: false,
@@ -12436,7 +12464,7 @@ exports.BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "One of the user's known moves, besides this move, is selected for use at random. Fails if the user is not asleep. The selected move does not have PP deducted from it, and can currently have 0 PP. This move cannot select Assist, Bide, Chatter, Copycat, Focus Punch, Hold Hands, Me First, Metronome, Mimic, Mirror Move, Nature Power, Sketch, Sleep Talk, Struggle, Uproar, or any two-turn move.",
+		desc: "One of the user's known moves, besides this move, is selected for use at random. Fails if the user is not asleep. The selected move does not have PP deducted from it, and can currently have 0 PP. This move cannot select Assist, Belch, Bide, Chatter, Copycat, Focus Punch, Hold Hands, Me First, Metronome, Mimic, Mirror Move, Nature Power, Sketch, Sleep Talk, Struggle, Uproar, or any two-turn move.",
 		shortDesc: "User must be asleep. Uses another known move.",
 		id: "sleeptalk",
 		name: "Sleep Talk",
@@ -12452,7 +12480,7 @@ exports.BattleMovedex = {
 			for (var i = 0; i < pokemon.moveset.length; i++) {
 				var move = pokemon.moveset[i].id;
 				var NoSleepTalk = {
-					assist:1, bide:1, chatter:1, copycat:1, focuspunch:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, sketch:1, sleeptalk:1, uproar:1
+					assist:1, belch:1, bide:1, chatter:1, copycat:1, focuspunch:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, sketch:1, sleeptalk:1, uproar:1
 				};
 				if (move && !(NoSleepTalk[move] || this.getMove(move).flags['charge'])) {
 					moves.push(move);
@@ -12544,10 +12572,12 @@ exports.BattleMovedex = {
 		effect: {
 			onStart: function (pokemon) {
 				var applies = false;
-				if ((pokemon.hasType('Flying') && !pokemon.volatiles['roost']) || pokemon.hasAbility('levitate')) applies = true;
+				if (pokemon.hasType('Flying') || pokemon.hasAbility('levitate')) applies = true;
+				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] || this.getPseudoWeather('gravity')) applies = false;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					applies = true;
 					this.cancelMove(pokemon);
+					pokemon.removeVolatile('twoturnmove');
 				}
 				if (pokemon.volatiles['magnetrise']) {
 					applies = true;
@@ -12566,9 +12596,8 @@ exports.BattleMovedex = {
 					this.add('-start', pokemon, 'Smack Down');
 				}
 			},
-			onModifyPokemonPriority: 100,
-			onModifyPokemon: function (pokemon) {
-				pokemon.negateImmunity['Ground'] = true;
+			onNegateImmunity: function (pokemon, type) {
+				if (type === 'Ground') return false;
 			}
 		},
 		secondary: false,
@@ -12725,7 +12754,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {},
-		stallingMove: true, // Note: stallingMove is not used anywhere.
+		stallingMove: true,
 		volatileStatus: 'spikyshield',
 		onTryHit: function (target, source, move) {
 			return !!this.willAct() && this.runEvent('StallMove', target);
@@ -12955,8 +12984,7 @@ exports.BattleMovedex = {
 			},
 			onSwitchIn: function (pokemon) {
 				var side = pokemon.side;
-				if (!pokemon.runImmunity('Ground')) return;
-				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
+				if (!pokemon.isGrounded()) return;
 				var damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			}
@@ -13049,8 +13077,11 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		onTryHit: function (pokemon) {
-			if (!pokemon.runImmunity('powder')) return false;
+		onTryHit: function (target) {
+			if (!target.runImmunity('powder')) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
 		},
 		status: 'slp',
 		secondary: false,
@@ -13149,8 +13180,7 @@ exports.BattleMovedex = {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
 			onSwitchIn: function (pokemon) {
-				if (!pokemon.runImmunity('Ground')) return;
-				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
+				if (!pokemon.isGrounded()) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getMove('stickyweb'));
 			}
@@ -13385,8 +13415,11 @@ exports.BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {powder: 1, protect: 1, reflectable: 1, mirror: 1},
-		onTryHit: function (pokemon) {
-			if (!pokemon.runImmunity('powder')) return false;
+		onTryHit: function (target) {
+			if (!target.runImmunity('powder')) {
+				this.add('-immune', target, '[msg]');
+				return null;
+			}
 		},
 		status: 'par',
 		secondary: false,
@@ -13450,7 +13483,7 @@ exports.BattleMovedex = {
 				}
 				var damage = this.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
-					this.add('-activate', target, 'Substitute', '[block] ' + move.name);
+					this.add('-fail', target);
 					return null;
 				}
 				damage = this.runEvent('SubDamage', target, source, move, damage);
@@ -13959,7 +13992,7 @@ exports.BattleMovedex = {
 			onEnd: function (target) {
 				this.add('-end', target, 'move: Taunt');
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (this.getMove(moves[i].move).category === 'Status') {
@@ -14104,7 +14137,7 @@ exports.BattleMovedex = {
 		basePower: 90,
 		category: "Physical",
 		desc: "This move can hit airborne Pokemon, which includes Flying-type Pokemon, Pokemon with the Ability Levitate, Pokemon holding an Air Balloon, and Pokemon under the effect of Magnet Rise or Telekinesis. If the target is a Flying type and is not already grounded, this move deals neutral damage regardless of its other type(s). This move can hit a target using Bounce, Fly, or Sky Drop. If this move hits a target under the effect of Bounce, Fly, Magnet Rise, or Telekinesis, the effect ends. If the target is a Flying type that has not used Roost this turn or a Pokemon with the Ability Levitate, it loses its immunity to Ground-type attacks and the Ability Arena Trap as long as it remains active. During the effect, Magnet Rise fails for the target and Telekinesis fails against the target.",
-		shortDesc: "Hits adjacent foes, removes Ground immunity.",
+		shortDesc: "Grounds adjacent foes. First hit neutral on Flying.",
 		id: "thousandarrows",
 		isViable: true,
 		name: "Thousand Arrows",
@@ -14112,10 +14145,13 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
 		isUnreleased: true,
-		onTryHit: function (target) {
+		onEffectiveness: function (typeMod, type, move) {
+			if (move.type !== 'Ground') return;
+			var target = this.activeTarget;
 			// only the attack that grounds the target ignores effectiveness
-			if (target.negateImmunity['Ground']) return;
-			target.negateImmunity['Ground'] = 'IgnoreEffectiveness';
+			// if called from a chat plugin, don't ignore effectiveness
+			if (!this.runEvent || !this.runEvent('NegateImmunity', target, 'Ground')) return;
+			if (!this.getImmunity('Ground', target)) return 0;
 		},
 		volatileStatus: 'smackdown',
 		ignoreImmunity: {'Ground': true},
@@ -14157,6 +14193,11 @@ exports.BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		self: {
 			volatileStatus: 'lockedmove'
+		},
+		onAfterMove: function (pokemon) {
+			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+				pokemon.removeVolatile('lockedmove');
+			}
 		},
 		secondary: false,
 		target: "randomNormal",
@@ -14358,7 +14399,7 @@ exports.BattleMovedex = {
 			onEnd: function (pokemon) {
 				this.add('-end', pokemon, 'Torment');
 			},
-			onModifyPokemon: function (pokemon) {
+			onDisableMove: function (pokemon) {
 				if (pokemon.lastMove !== 'struggle') pokemon.disableMove(pokemon.lastMove);
 			}
 		},
@@ -14416,9 +14457,8 @@ exports.BattleMovedex = {
 				this.effectData.layers++;
 			},
 			onSwitchIn: function (pokemon) {
-				if (!pokemon.runImmunity('Ground')) return;
+				if (!pokemon.isGrounded()) return;
 				if (!pokemon.runImmunity('Poison')) return;
-				if (pokemon.hasType('Flying') && !pokemon.hasItem('ironball') && !this.pseudoWeather.gravity && !pokemon.volatiles['ingrain']) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
@@ -15573,6 +15613,7 @@ exports.BattleMovedex = {
 				this.add('-start', target, 'move: Yawn', '[of] ' + source);
 			},
 			onEnd: function (target) {
+				this.add('-end', target, 'move: Yawn', '[silent]');
 				target.trySetStatus('slp');
 			}
 		},

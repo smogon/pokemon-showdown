@@ -155,7 +155,7 @@ var LotteryGiveAway = (function () {
 			'<b>' + Tools.escapeHTML(giver.name) + '</b> will be giving away: <b>' + Tools.escapeHTML(this.prize) + '</b>!<br/>' +
 			'The lottery drawing will occur in 2 minutes, and with ' + this.maxwinners + ' winner' + (this.maxwinners > 1 ? 's' : '') + '!<br/>' +
 			'<button name="send" value="/giveaway joinlottery"><font size="1"><b>Join</b></font></button> <button name="send" value="/giveaway leavelottery"><font size="1"><b>Leave</b></font></button><br/>' +
-			'<font size="1"><b><u>Note:</u> Please do not join if you don\'t have a 3DS and a copy of Pokémon XY or ORAS';
+			'<font size="1"><b><u>Note:</u> Please do not join if you don\'t have a 3DS and a copy of Pok&eacute;mon XY or ORAS';
 		this.room.addRaw(this.reminder);
 		this.room.update();
 

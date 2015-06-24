@@ -16,7 +16,7 @@ global.Config = require('./config/config');
 
 if (cluster.isMaster) {
 	cluster.setupMaster({
-		exec: 'sockets.js'
+		exec: require('path').resolve(__dirname, 'sockets.js')
 	});
 
 	var workers = exports.workers = {};
@@ -391,6 +391,7 @@ if (cluster.isMaster) {
 			var pipeIndex = message.indexOf('|');
 			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
 			// drop legacy JSON messages
+			if (!message.charAt) throw new Error('message: ' + JSON.stringify(message));
 			if (message.charAt(0) === '{') return;
 			process.send('<' + socketid + '\n' + message);
 		});
