@@ -2298,5 +2298,117 @@ var commands = exports.commands = {
 		}
 	},
 	seasonaldatahelp: ["/seasonaldata [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature for the current seasonal.",
-		"!seasonaldata [pokemon/item/move/ability] - Show everyone these details. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")]
+		"!seasonaldata [pokemon/item/move/ability] - Show everyone these details. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
+
+	/*********************************************************
+	 * Custom commands
+	 *********************************************************/
+
+	reminders: 'reminder',
+	reminder: function (target, room, user) {
+		if (room.type !== 'chat') return this.sendReply("This command can only be used in chatrooms.");
+
+		var parts = target.split(',');
+		var cmd = parts[0].trim().toLowerCase();
+
+		if (cmd in {'':1, show:1, view:1, display:1}) {
+			if (!this.canBroadcast()) return;
+			var message = "<strong><font size=\"3\">Reminders for " + room.title + ":</font></strong>";
+			if (room.reminders && room.reminders.length > 0) {
+				message += '<ol><li>' + room.reminders.join('</li><li>') + '</li></ol>';
+			} else {
+				message += "<br /><br />There are no reminders to display<br />";
+			}
+			message += "Contact a mod, room owner, leader, or admin if you have a reminder you would like added.";
+			return this.sendReplyBox(message);
+		}
+
+		if (!this.can('reminder', room)) return false;
+		if (!room.reminders) room.reminders = room.chatRoomData.reminders = [];
+
+		var index = parseInt(parts[1], 10) - 1;
+		var message = parts.slice(2).join(',').trim();
+		switch (cmd) {
+		case 'add':
+			index = room.reminders.length;
+			message = parts.slice(1).join(',').trim();
+
+			/* falls through */
+		case 'insert':
+			if (!message) return this.sendReply("Your reminder was empty.");
+			if (message.length > 250) return this.sendReply("Your reminder cannot be greater than 250 characters in length.");
+
+			room.reminders.splice(index, 0, message);
+			Rooms.global.writeChatRoomData();
+			return this.sendReply("Your reminder has been inserted.");
+
+		case 'edit':
+			if (!room.reminders[index]) return this.sendReply("There is no such reminder.");
+			if (!message) return this.sendReply("Your reminder was empty.");
+			if (message.length > 250) return this.sendReply("Your reminder cannot be greater than 250 characters in length.");
+
+			room.reminders[index] = message;
+			Rooms.global.writeChatRoomData();
+			return this.sendReply("The reminder has been modified.");
+
+		case 'delete':
+			if (!room.reminders[index]) return this.sendReply("There is no such reminder.");
+
+			this.sendReply(room.reminders.splice(index, 1)[0]);
+			Rooms.global.writeChatRoomData();
+			return this.sendReply("has been deleted from the reminders.");
+		}
+	},
+
+	tell: function (target, room, user) {
+		if (!target) return false;
+		var message = this.splitTarget(target);
+		if (!message) return this.sendReply("You forgot the comma.");
+		if (user.locked) return this.sendReply("You cannot use this command while locked.");
+
+		message = this.canTalk(message, null);
+		if (!message) return false;
+
+		if (!global.tells) global.tells = {};
+		if (!tells[toId(this.targetUsername)]) tells[toId(this.targetUsername)] = [];
+		if (tells[toId(this.targetUsername)].length > 5) return this.sendReply("User " + this.targetUsername + " has too many tells queued.");
+
+		tells[toId(this.targetUsername)].push(Date().toLocaleString() + " - " + user.getIdentity() + " said: " + message);
+		return this.sendReply("Message \"" + message + "\" sent to " + this.targetUsername + ".");
+	},
+
+	showtells: function (target, room, user) {
+		if (!global.tells) global.tells = {};
+		return this.sendReply("These users have currently have queued tells: " + Object.keys(tells));
+	},
+
+	tellmove: function (target, room, user) {
+		if (!this.can('ban')) return;
+
+		var targets = target.split(',').map(toId);
+		if (targets.length !== 2) this.sendReply("Usage: /tellmove from, to");
+
+		if (!tells[targets[0]]) return this.sendReply(targets[0] + " has no tells queued.");
+
+		if (!tells[targets[1]]) tells[targets[1]] = [];
+		Array.prototype.push.apply(tells[targets[1]], tells[targets[0]]);
+		delete tells[targets[0]];
+
+		this.sendReply("" + targets[0] + "'s tells successfully moved into " + targets[1] + "'s queue.");
+	},
+
+	sk: 'superkick',
+	superkick: function (target, room, user) {
+		if (!target) return;
+		target = this.splitTarget(target);
+		var targetUser = this.targetUser;
+		if (!targetUser || !targetUser.connected) {
+			return this.sendReply("User " + this.targetUsername + " not found.");
+		}
+		if (!this.can('warn', targetUser, room)) return false;
+		var msg = "kicked by " + user.name + (target ? " (" + target + ")" : "") + ".";
+		room.add(targetUser.name + " was " + msg);
+		targetUser.popup("You have been " + msg);
+		targetUser.disconnectAll();
+	}
 };
