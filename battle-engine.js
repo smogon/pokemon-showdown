@@ -2418,7 +2418,7 @@ Battle = (function () {
 		}
 
 		if (!thing.getStatus) {
-			this.debug(JSON.stringify(thing));
+			//this.debug(JSON.stringify(thing));
 			return statuses;
 		}
 		var status = thing.getStatus();
