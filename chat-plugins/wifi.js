@@ -87,7 +87,7 @@ var QuestionGiveAway = (function () {
 			this.question = value;
 			output.sendReply("The question has been changed to " + value + ".");
 		} else {
-			var ans = this.sanitizeAnswers(value);
+			var ans = QuestionGiveAway.sanitizeAnswers(value);
 			var len = Object.keys(ans).length;
 			if (!len) return output.sendReply("You must specify at least one answer and it must not contain any special characters.");
 			this.answers = ans;
