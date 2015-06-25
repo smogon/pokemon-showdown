@@ -140,7 +140,6 @@ function canTalk(user, room, connection, message, targetUser) {
 var Context = exports.Context = (function () {
 	function Context (options) {
 		this.cmd = options.cmd || '';
-		this.fullCmd = options.fullCmd || '';
 		this.cmdToken = options.cmdToken || '';
 
 		this.target = options.target || '';
@@ -214,7 +213,7 @@ var Context = exports.Context = (function () {
 	};
 	Context.prototype.can = function (permission, target, room) {
 		if (!this.user.can(permission, target, room)) {
-			this.sendReply("/" + this.fullCmd + " - Access denied.");
+			this.sendReply(this.cmdToken + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
 			return false;
 		}
 		return true;
@@ -277,7 +276,7 @@ var Context = exports.Context = (function () {
 
 			if (!require('./crashlogger.js')(fakeErr, 'A chat command')) {
 				var ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
-				Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
+				if (Rooms.lobby) Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
 			} else {
 				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
 			}
@@ -469,13 +468,13 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		for (var g in Config.groups) {
 			var groupid = Config.groups[g].id;
 			if (cmd === groupid || cmd === 'global' + groupid) {
-				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection);
+				return parse('/promote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
 			} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
-				return parse('/demote ' + toId(target), room, user, connection);
+				return parse('/demote ' + toId(target), room, user, connection, levelsDeep + 1);
 			} else if (cmd === 'room' + groupid) {
-				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection);
+				return parse('/roompromote ' + toId(target) + ', ' + g, room, user, connection, levelsDeep + 1);
 			} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
-				return parse('/roomdemote ' + toId(target), room, user, connection);
+				return parse('/roomdemote ' + toId(target), room, user, connection, levelsDeep + 1);
 			}
 		}
 
