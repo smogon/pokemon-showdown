@@ -2725,6 +2725,9 @@ exports.BattleItems = {
 					if (pokemon.volatiles[conditions[i]]) {
 						for (var j = 0; j < conditions.length; j++) {
 							pokemon.removeVolatile(conditions[j]);
+							if (conditions[j] === 'attract') {
+								this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
+							}
 						}
 						return;
 					}
@@ -2738,6 +2741,9 @@ exports.BattleItems = {
 					if (!pokemon.useItem()) return;
 					for (var j = 0; j < conditions.length; j++) {
 						pokemon.removeVolatile(conditions[j]);
+						if (conditions[j] === 'attract') {
+							this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
+						}
 					}
 					return;
 				}
