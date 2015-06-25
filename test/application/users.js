@@ -46,7 +46,7 @@ describe('Users features', function () {
 					it('should drop all ' + totalConnections + ' connection(s) and mark as inactive', function () {
 						var user = createUser();
 						var iterations = totalConnections;
-						while (--iterations) user.merge(createConnection());
+						while (--iterations) user.mergeConnection(createConnection());
 
 						user.disconnectAll();
 						assert.strictEqual(user.connections.length, 0);
@@ -56,7 +56,7 @@ describe('Users features', function () {
 					it('should unref all ' + totalConnections + ' connection(s)', function () {
 						var user = createUser();
 						var iterations = totalConnections;
-						while (--iterations) user.merge(createConnection());
+						while (--iterations) user.mergeConnection(createConnection());
 
 						var connections = user.connections.slice();
 
@@ -69,7 +69,7 @@ describe('Users features', function () {
 					it('should clear `user` property for all ' + totalConnections + ' connection(s)', function () {
 						var user = createUser();
 						var iterations = totalConnections;
-						while (--iterations) user.merge(createConnection());
+						while (--iterations) user.mergeConnection(createConnection());
 						var connections = user.connections.slice();
 
 						user.disconnectAll();

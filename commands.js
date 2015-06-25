@@ -2151,19 +2151,19 @@ var commands = exports.commands = {
 	trn: function (target, room, user, connection) {
 		var commaIndex = target.indexOf(',');
 		var targetName = target;
-		var targetAuth = false;
+		var targetRegistered = false;
 		var targetToken = '';
 		if (commaIndex >= 0) {
 			targetName = target.substr(0, commaIndex);
 			target = target.substr(commaIndex + 1);
 			commaIndex = target.indexOf(',');
-			targetAuth = target;
+			targetRegistered = target;
 			if (commaIndex >= 0) {
-				targetAuth = !!parseInt(target.substr(0, commaIndex), 10);
+				targetRegistered = !!parseInt(target.substr(0, commaIndex), 10);
 				targetToken = target.substr(commaIndex + 1);
 			}
 		}
-		user.rename(targetName, targetToken, targetAuth, connection);
+		user.rename(targetName, targetToken, targetRegistered, connection);
 	},
 
 	a: function (target, room, user) {
