@@ -328,7 +328,7 @@ var commands = exports.commands = {
 	dt: 'details',
 	details: function (target) {
 		if (!target) return this.parse('/help details');
-		CommandParser.commands.data.apply(this, arguments);
+		this.run('data');
 	},
 	detailshelp: ["/details [pokemon] - Get additional details on this pokemon/item/move/ability/nature.",
 		"!details [pokemon] - Show everyone these details. Requires: + % @ # & ~"],
