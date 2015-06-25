@@ -838,7 +838,7 @@ var commands = exports.commands = {
 	hm: 'hourmute',
 	hourmute: function (target) {
 		if (!target) return this.parse('/help hourmute');
-		CommandParser.commands.mute.apply(this, arguments);
+		this.run('mute');
 	},
 	hourmutehelp: ["/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. Requires: % @ # & ~"],
 
@@ -1121,7 +1121,7 @@ var commands = exports.commands = {
 	globaldemote: 'demote',
 	demote: function (target) {
 		if (!target) return this.parse('/help demote');
-		CommandParser.commands.promote.apply(this, arguments);
+		this.run('promote');
 	},
 	demotehelp: ["/demote [username], [group] - Demotes the user to the specified group. Requires: & ~"],
 
