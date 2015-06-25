@@ -480,6 +480,9 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 
 		if (cmdToken && fullCmd) {
 			// To guard against command typos, we now emit an error message
+			if (cmdToken === BROADCAST_TOKEN) {
+				return connection.sendTo(room.id, "The command '" + cmdToken + fullCmd + "' was unrecognized.");
+			}
 			return connection.sendTo(room.id, "The command '" + cmdToken + fullCmd + "' was unrecognized. To send a message starting with '" + cmdToken + fullCmd + "', type '" + cmdToken.repeat(2) + fullCmd + "'.");
 		}
 	}
