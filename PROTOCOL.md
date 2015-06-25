@@ -351,6 +351,24 @@ animation) and `|[silent]` (suppress message).
 > turn. Otherwise, it means that the weather has changed due to a move or ability,
 > or has expired, in which case `WEATHER` will be `none`.
 
+`|-fieldstart|CONDITION`
+
+> The field condition `CONDITION` has started. Field conditions are all effects that
+> affect the entire field and aren't a weather.
+
+`|-fieldend|CONDITION`
+
+> Indicates that the field condition `CONDITION` has ended.
+
+`|-sidestart|SIDE|CONDITION`
+
+> A side condition `CONDITION` has started on `SIDE`. Side conditions are all effects
+> that affect one side of the field.
+
+`|-sideend|SIDE|CONDITION`
+
+> Indicates that the side condition `CONDITION` ended for the given `SIDE`.
+
 `|-crit|POKEMON`
 
 > A move has dealt a critical hit against the `POKEMON`.
@@ -399,6 +417,10 @@ animation) and `|[silent]` (suppress message).
 
 > The Pokémon `POKEMON` has transformed into `SPECIES` by the effect of Transform 
 > or the ability Imposter.
+
+`|-mega|POKEMON|MEGASTONE`
+
+> The Pokémon `POKEMON` used `MEGASTONE` to Mega Evolve.
 
 `|-activate|EFFECT`
 
