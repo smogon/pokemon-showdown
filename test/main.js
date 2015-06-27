@@ -36,6 +36,13 @@ function init (callback) {
 	BattleEngine.Battle.prototype.send = function () {};
 	BattleEngine.Battle.prototype.receive = function () {};
 
+	// Deterministic tests
+	BattleEngine.Battle.prototype._init = BattleEngine.Battle.prototype.init;
+	BattleEngine.Battle.prototype.init = function (roomid, formatarg, rated) {
+		this._init(roomid, formatarg, rated);
+		this.seed = this.startingSeed = [0x09d56, 0x08642, 0x13656, 0x03653];
+	};
+
 	callback();
 }
 

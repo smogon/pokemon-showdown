@@ -19,12 +19,11 @@ describe('Burn', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Machamp', ability: 'noguard', moves: ['boneclub']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Sableye', ability: 'prankster', moves: ['splash', 'willowisp']}]);
-		battle.seed = [0, 0, 0, 0];
 		battle.commitDecisions();
 		var pokemon = battle.p2.active[0];
 		var damage = pokemon.maxhp - pokemon.hp;
 		pokemon.hp = pokemon.maxhp;
-		battle.seed = [0, 0, 0, 0];
+		battle.seed = battle.startingSeed.slice();
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, battle.modify(damage, 0.5));

@@ -49,7 +49,6 @@ describe('Simple [Gen 4]', function () {
 		battle = BattleEngine.Battle.construct('battle-simple-dpp-moldbreaker', 'gen4customgame');
 		battle.join('p1', 'Guest 1', 1, [{species: "Bibarel", ability: 'simple', moves: ['defensecurl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Haxorus", ability: 'moldbreaker', item: 'laggingtail', moves: ['earthquake']}]);
-		battle.seed = [0, 0, 0, 0];
 		battle.commitDecisions();
 		var hploss = battle.p1.active[0].maxhp - battle.p1.active[0].hp;
 		assert(hploss >= 102 && hploss <= 120);

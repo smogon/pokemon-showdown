@@ -82,7 +82,6 @@ describe('Thousand Arrows', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'aurabreak', moves: ['thousandarrows', 'earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Eelektross", ability: 'levitate', item: 'weaknesspolicy', moves: ['thunderwave']}]);
-		battle.seed = [0, 0, 0, 0];
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].boosts.atk, 2);
 		assert.strictEqual(battle.p2.active[0].boosts.spa, 2);
