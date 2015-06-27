@@ -1127,13 +1127,15 @@ User = (function () {
 	User.prototype.setGroup = function (group, forceConfirmed) {
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
-		if (forceConfirmed || this.group !== Config.groupsranking[0]) {
-			usergroups[this.userid] = this.group + this.name;
-		} else {
-			delete usergroups[this.userid];
-		}
-		exportUsergroups();
 		Rooms.global.checkAutojoin(this);
+		if (this.registered) {
+			if (forceConfirmed || this.group !== Config.groupsranking[0]) {
+				usergroups[this.userid] = this.group + this.name;
+			} else {
+				delete usergroups[this.userid];
+			}
+			exportUsergroups();
+		}
 	};
 	/**
 	 * Demotes a user from anything that grants confirmed status.
