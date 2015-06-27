@@ -513,10 +513,10 @@ BattlePokemon = (function () {
 		return null;
 	};
 	BattlePokemon.prototype.ignoringAbility = function () {
-		return !!this.volatiles['gastroacid'];
+		return !!((this.battle.gen >= 5 && !this.isActive) || this.volatiles['gastroacid']);
 	};
 	BattlePokemon.prototype.ignoringItem = function () {
-		return !!(this.hasAbility('klutz') || this.volatiles['embargo'] || this.battle.pseudoWeather['magicroom']);
+		return !!((this.battle.gen >= 5 && !this.isActive) || this.hasAbility('klutz') || this.volatiles['embargo'] || this.battle.pseudoWeather['magicroom']);
 	};
 	BattlePokemon.prototype.deductPP = function (move, amount, source) {
 		move = this.battle.getMove(move);
@@ -1113,7 +1113,6 @@ BattlePokemon = (function () {
 		return this.battle.getAbility(this.ability);
 	};
 	BattlePokemon.prototype.hasAbility = function (ability) {
-		if (!this.isActive && this.battle.gen >= 5) return false;
 		if (this.ignoringAbility()) return false;
 		var ownAbility = this.ability;
 		if (!Array.isArray(ability)) {
@@ -2705,6 +2704,7 @@ Battle = (function () {
 				pokemon.copyVolatileFrom(oldActive);
 			}
 		}
+		pokemon.isActive = true;
 		this.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[pos]) {
 			var oldActive = side.active[pos];
@@ -2719,7 +2719,6 @@ Battle = (function () {
 			oldActive.clearVolatile();
 		}
 		side.active[pos] = pokemon;
-		pokemon.isActive = true;
 		pokemon.activeTurns = 0;
 		for (var m in pokemon.moveset) {
 			pokemon.moveset[m].used = false;
