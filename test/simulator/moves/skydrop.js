@@ -30,7 +30,7 @@ describe('Sky Drop', function () {
 	});
 
 	it('should prevent both the user and the target from being forced out when caught by the effect', function () {
-		battle = BattleEngine.Battle.construct('battle-bw-skydrop-gravity', 'gen5doublescustomgame');
+		battle = BattleEngine.Battle.construct('battle-skydrop-forceswitch', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
 			{species: "Machamp", ability: 'noguard', moves: ['circlethrow']},
