@@ -549,7 +549,7 @@ exports.BattleScripts = {
 			hitResult = this.runEvent('DragOut', target, pokemon, move);
 			if (hitResult) {
 				target.forceSwitchFlag = true;
-			} else if (hitResult === false) {
+			} else if (hitResult === false && move.category === 'Status') {
 				this.add('-fail', target);
 			}
 		}
