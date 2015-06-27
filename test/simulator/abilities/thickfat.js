@@ -12,7 +12,6 @@ describe('Thick Fat', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Nidoking", ability: 'sheerforce', moves: ['incinerate', 'icebeam']}]);
 		var damage;
 		var pokemon = battle.p1.active[0];
-		battle.seed = [0, 0, 0, 1];
 		battle.commitDecisions();
 		damage = pokemon.maxhp - pokemon.hp;
 		assert.ok(damage >= 29 && damage <= 35);
@@ -29,7 +28,6 @@ describe('Thick Fat', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Nidoking", ability: 'moldbreaker', moves: ['incinerate', 'icebeam']}]);
 		var damage;
 		var pokemon = battle.p1.active[0];
-		battle.seed = [0, 0, 0, 1];
 		battle.commitDecisions();
 		damage = pokemon.maxhp - pokemon.hp;
 		assert.ok(damage >= 57 && damage <= 68);

@@ -62,7 +62,6 @@ describe('Iron Ball', function () {
 			{species: "Rotom", ability: 'levitate', item: 'ironball', moves: ['rest']},
 			{species: "Parasect", ability: 'levitate', item: 'ironball', moves: ['rest']}
 		]);
-		battle.seed = [0, 0, 0, 1];
 		battle.commitDecisions();
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
