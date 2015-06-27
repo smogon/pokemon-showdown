@@ -642,7 +642,7 @@ var commands = exports.commands = {
 				break;
 
 			default:
-				return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
+				throw new Error("/dexsearch search category '" + search + "' was unrecognised.");
 			}
 		}
 
@@ -1025,7 +1025,7 @@ var commands = exports.commands = {
 				break;
 
 			default:
-				return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
+				throw new Error("/movesearch search category '" + search + "' was unrecognised.");
 			}
 		}
 
