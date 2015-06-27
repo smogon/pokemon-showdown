@@ -42,7 +42,8 @@ describe('Sky Drop', function () {
 			{species: "Omastar", ability: 'swiftswim', moves: ['shellsmash']}
 		]);
 		battle.commitDecisions(); // Team Preview
-		battle.commitDecisions(); // p1: move 1 1, move 1 1; p2: move 1, move 1 1
+		battle.choose('p1', 'move 1 1, move 1 1');
+		battle.choose('p2', 'move 1 1, move 1 1');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'aerodactyl');
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'armaldo');
 	});
