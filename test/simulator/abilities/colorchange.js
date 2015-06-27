@@ -14,7 +14,7 @@ describe('Color Change', function () {
 		assert.ok(battle.p1.active[0].hasType('Grass'));
 	});
 
-	it('should change the user\'s type if it had a Substitute when hit', function () {
+	it('should not change the user\'s type if it had a Substitute when hit', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Kecleon", ability: 'colorchange', moves: ['substitute']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Machamp", ability: 'purepower', item: 'laggingtail', moves: ['closecombat']}]);
