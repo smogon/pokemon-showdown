@@ -1300,7 +1300,7 @@ var commands = exports.commands = {
 		var lines = 0;
 		// Specific case for modlog command. Room can be indicated with a comma, lines go after the comma.
 		// Otherwise, the text is defaulted to text search in current room's modlog.
-		var roomId = room.id;
+		var roomId = (room.id === 'staff' ? 'global' : room.id);
 		var hideIps = !user.can('ban');
 		var path = require('path');
 		var isWin = process.platform === 'win32';
