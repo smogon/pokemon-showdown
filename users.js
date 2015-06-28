@@ -249,11 +249,11 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 	if (checkResult) {
 		if (!Config.quietconsole) console.log('CONNECT BLOCKED - IP BANNED: ' + ip + ' (' + checkResult + ')');
 		if (checkResult === '#ipban') {
-			connection.send("|popup|Your IP (" + ip + ") is not allowed to connect to PS, because it has been used to spam, hack, or otherwise attack our server.||Make sure you are not using any proxies to connect to PS.");
+			connection.send("|popup||modal|Your IP (" + ip + ") is not allowed to connect to PS, because it has been used to spam, hack, or otherwise attack our server.||Make sure you are not using any proxies to connect to PS.");
 		} else if (checkResult === '#cflood') {
-			connection.send("|popup|PS is under heavy load and cannot accommodate your connection right now.");
+			connection.send("|popup||modal|PS is under heavy load and cannot accommodate your connection right now.");
 		} else {
-			connection.send("|popup|Your IP (" + ip + ") used was banned while using the username '" + checkResult + "'. Your ban will expire in a few days.||" + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+			connection.send("|popup||modal|Your IP (" + ip + ") used was banned while using the username '" + checkResult + "'. Your ban will expire in a few days.||" + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
 		}
 		return connection.destroy();
 	}
