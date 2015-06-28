@@ -1367,13 +1367,13 @@ var commands = exports.commands = {
 				if (!stdout) {
 					connection.popup("The modlog is empty. (Weird.)");
 				} else {
-					connection.popup("Displaying the last " + lines + " lines of the Moderator Log of " + roomNames + ":\n\n" + stdout);
+					connection.popup("|wide|The last " + lines + " lines of the Moderator Log of " + roomNames + ":\n\n" + stdout);
 				}
 			} else {
 				if (!stdout) {
 					connection.popup("No moderator actions containing '" + target + "' were found on " + roomNames + ".");
 				} else {
-					connection.popup("Displaying the last " + grepLimit + " logged actions containing '" + target + "' on " + roomNames + ":\n\n" + stdout);
+					connection.popup("|wide|The last " + grepLimit + " logged actions containing '" + target + "' on " + roomNames + ":\n\n" + stdout);
 				}
 			}
 		});
