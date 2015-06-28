@@ -51,10 +51,24 @@ fs.readdirSync(path.resolve(__dirname, 'chat-plugins')).forEach(function (file) 
 });
 
 /*********************************************************
- * Parser
+ * Modlog
  *********************************************************/
 
-var modlog = exports.modlog = {lobby: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_lobby.txt'), {flags:'a+'}), battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'})};
+var modlog = exports.modlog = {
+	lobby: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_lobby.txt'), {flags:'a+'}),
+	battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'})
+};
+
+var writeModlog = exports.writeModlog = function (roomid, text) {
+	if (!modlog[roomid]) {
+		modlog[roomid] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + roomid + '.txt'), {flags:'a+'});
+	}
+	modlog[roomid].write('[' + (new Date().toJSON()) + '] ' + text + '\n');
+};
+
+/*********************************************************
+ * Parser
+ *********************************************************/
 
 /**
  * Can this user talk?
@@ -201,16 +215,21 @@ var Context = exports.Context = (function () {
 		this.add(text);
 		this.logModCommand(text + (logOnlyText || ""));
 	};
-	Context.prototype.logModCommand = function (result, targetRoom) {
-		if (!targetRoom) targetRoom = this.room;
-		if (!modlog[targetRoom.id]) {
-			if (targetRoom.battle) {
-				modlog[targetRoom.id] = modlog['battle'];
-			} else {
-				modlog[targetRoom.id] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + targetRoom.id + '.txt'), {flags:'a+'});
-			}
+	Context.prototype.logModCommand = function (text) {
+		var roomid = (this.room.battle ? 'battle' : this.room.id);
+		writeModlog(roomid, '(' + this.room.id + ') ' + text);
+	};
+	Context.prototype.globalModlog = function (action, user, text) {
+		var buf = "(" + this.room.id + ") " + action + ": ";
+		if (typeof user === string) {
+			buf += "[" + toId(user) + "]";
+		} else {
+			var userid = this.getLastIdOf(user);
+			buf += "[" + userid + "]";
+			if (user.autoconfirmed && user.autoconfirmed !== userid) buf += " ac:[" + user.autoconfirmed + "]";
 		}
-		modlog[targetRoom.id].write('[' + (new Date().toJSON()) + '] (' + targetRoom.id + ') ' + result + '\n');
+		buf += text;
+		writeModlog('global', buf);
 	};
 	Context.prototype.can = function (permission, target, room) {
 		if (!this.user.can(permission, target, room)) {
