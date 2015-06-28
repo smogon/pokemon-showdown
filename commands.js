@@ -900,9 +900,12 @@ var commands = exports.commands = {
 		} else if (acAccount) {
 			this.privateModCommand("(" + targetUser.name + "'s ac account: " + acAccount + ")");
 		}
-		this.add('|unlink|hide|' + this.getLastIdOf(targetUser));
+		var userid = this.getLastIdOf(targetUser);
+		this.add('|unlink|hide|' + userid);
 
-		targetUser.lock();
+		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
+		targetUser.lock(false, userid);
+		return true;
 	},
 	lockhelp: ["/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~"],
 
@@ -914,9 +917,9 @@ var commands = exports.commands = {
 
 		if (unlocked) {
 			var names = Object.keys(unlocked);
-			this.addModCommand(names.join(", ") + " " +
-				((names.length > 1) ? "were" : "was") +
+			this.addModCommand(names.join(", ") + " " + ((names.length > 1) ? "were" : "was") +
 				" unlocked by " + user.name + ".");
+			this.globalModlog("UNLOCK", target, " by " + user.name);
 		} else {
 			this.sendReply("User '" + target + "' is not locked.");
 		}
@@ -972,8 +975,11 @@ var commands = exports.commands = {
 			this.privateModCommand("(" + targetUser.name + "'s ac account: " + acAccount + ")");
 		}
 
-		this.add('|unlink|hide|' + this.getLastIdOf(targetUser));
-		targetUser.ban();
+		var userid = this.getLastIdOf(targetUser);
+		this.add('|unlink|hide|' + userid);
+		targetUser.ban(false, userid);
+		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
+		return true;
 	},
 	banhelp: ["/ban OR /b [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ & ~"],
 
@@ -985,6 +991,7 @@ var commands = exports.commands = {
 
 		if (name) {
 			this.addModCommand("" + name + " was unbanned by " + user.name + ".");
+			this.globalModlog("UNBAN", name, " by " + user.name);
 		} else {
 			this.sendReply("User '" + target + "' is not banned.");
 		}
@@ -1269,25 +1276,23 @@ var commands = exports.commands = {
 	forcerename: function (target, room, user) {
 		if (!target) return this.parse('/help forcerename');
 
-		var commaIndex = target.indexOf(',');
-		var targetUser, reason;
-		if (commaIndex >= 0) {
-			reason = target.substr(commaIndex + 1).trim();
-			target = target.substr(0, commaIndex).trim();
+		var reason = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		if (!targetUser) {
+			this.splitTarget(target);
+			if (this.targetUser) {
+				return this.sendReply("User has already changed their name to '" + this.targetUser.name + "'.");
+			}
+			return this.sendReply("User '" + target + "' not found.");
 		}
-		targetUser = Users.get(target);
-		if (!targetUser) return this.sendReply("User '" + target + "' not found.");
 		if (!this.can('forcerename', targetUser)) return false;
-
-		if (targetUser.userid !== toId(target)) {
-			return this.sendReply("User '" + target + "' had already changed its name to '" + targetUser.name + "'.");
-		}
 
 		var entry = targetUser.name + " was forced to choose a new name by " + user.name + (reason ? ": " + reason : "");
 		this.privateModCommand("(" + entry + ")");
 		Rooms.global.cancelSearch(targetUser);
 		targetUser.resetName();
 		targetUser.send("|nametaken||" + user.name + " considers your name inappropriate" + (reason ? ": " + reason : "."));
+		return true;
 	},
 	forcerenamehelp: ["/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ & ~"],
 
