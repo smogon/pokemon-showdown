@@ -88,11 +88,11 @@ var getExactUser = Users.getExact = function (name) {
  *********************************************************/
 
 var bannedIps = Users.bannedIps = Object.create(null);
-var bannedUsers = Object.create(null);
+var bannedUsers = Users.bannedUsers = Object.create(null);
 var lockedIps = Users.lockedIps = Object.create(null);
-var lockedUsers = Object.create(null);
+var lockedUsers = Users.lockedUsers = Object.create(null);
 var lockedRanges = Users.lockedRanges = Object.create(null);
-var rangelockedUsers = Object.create(null);
+var rangelockedUsers = Users.rangeLockedUsers = Object.create(null);
 
 /**
  * Searches for IP in table.
