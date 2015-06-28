@@ -531,19 +531,20 @@ move.
 > You tried to change your username to `USERNAME` but it failed for the
 > reason described in `MESSAGE`.
 
-`|challstr|KEYID|CHALLENGE`
+`|challstr|CHALLSTR`
 
 > You just connected to the server, and we're giving you some information you'll need to log in.
 >
 > If you're already logged in and have session cookies, you can make an HTTP GET request to
-> `http://play.pokemonshowdown.com/action.php?act=upkeep&challengekeyid=KEYID&challenge=CHALLENGE`
+> `http://play.pokemonshowdown.com/action.php?act=upkeep&challstr=CHALLSTR`
 >
 > Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
-> with the data `act=login&name=USERNAME&pass=PASSWORD&challengekeyid=KEYID&challenge=CHALLENGE`
+> with the data `act=login&name=USERNAME&pass=PASSWORD&challstr=CHALLSTR`
 >
-> `USERNAME` is your username and `PASSWORD` is your password, and `KEYID` and
-> `CHALLENGE` are the values you got from `|challstr|`. (Also feel free to make
-> the request to `https://` if your client supports it.)
+> `USERNAME` is your username and `PASSWORD` is your password, and `CHALLSTR`
+> is the value you got from `|challstr|`. Note that `CHALLSTR` contains `|`
+> characters. (Also feel free to make the request to `https://` if your client
+> supports it.)
 >
 > Either way, the response will start with `]` and be followed by a JSON
 > object which we'll call `data`.
