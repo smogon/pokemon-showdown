@@ -667,7 +667,7 @@ var commands = {
 		var submission = {
 			category: category,
 			question: question,
-			answers: answers, 
+			answers: answers,
 			user: user.userid
 		};
 
