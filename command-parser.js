@@ -221,7 +221,7 @@ var Context = exports.Context = (function () {
 	};
 	Context.prototype.globalModlog = function (action, user, text) {
 		var buf = "(" + this.room.id + ") " + action + ": ";
-		if (typeof user === string) {
+		if (typeof user === 'string') {
 			buf += "[" + toId(user) + "]";
 		} else {
 			var userid = this.getLastIdOf(user);
