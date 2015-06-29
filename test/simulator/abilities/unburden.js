@@ -51,6 +51,15 @@ describe('Unburden', function () {
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), 2 * speed);
 	});
 
+	it('should not be suppressed by Mold Breaker', function () {
+		battle = BattleEngine.Battle.construct();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Sceptile', ability: 'unburden', item: 'whiteherb', moves: ['leechseed']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Scizor', ability: 'moldbreaker', moves: ['knockoff']}]);
+		var speed = battle.p1.active[0].getStat('spe');
+		battle.commitDecisions();
+		assert.strictEqual(battle.p1.active[0].getStat('spe'), 2 * speed);
+	});
+
 	it('should lose the boost when it gains a new item', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Hitmonlee', ability: 'unburden', item: 'fightinggem', moves: ['machpunch']}]);

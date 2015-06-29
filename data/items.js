@@ -2615,7 +2615,8 @@ exports.BattleItems = {
 		name: "Mail",
 		spritenum: 403,
 		onTakeItem: function (item, source) {
-			if (!this.activeMove || this.activeMove.id !== 'knockoff') return false;
+			if (!this.activeMove) return false;
+			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
 		},
 		isUnreleased: true,
 		gen: 2,
