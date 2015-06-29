@@ -3498,9 +3498,9 @@ Battle = (function () {
 				var priorities = {
 					'beforeTurn': 100,
 					'beforeTurnMove': 99,
-					'switch': 6,
-					'runSwitch': 6.1,
-					'megaEvo': 5.9,
+					'switch': 7,
+					'runSwitch': 7.1,
+					'megaEvo': 6.9,
 					'residual': -100,
 					'team': 102,
 					'start': 101
