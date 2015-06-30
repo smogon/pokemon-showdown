@@ -1366,17 +1366,31 @@ var commands = exports.commands = {
 			if (stdout && hideIps) {
 				stdout = stdout.replace(/\([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\)/g, '');
 			}
+			stdout = stdout.split('\n').map(function (line) {
+				var bracketIndex = line.indexOf(']');
+				var parenIndex = line.indexOf(')');
+				if (bracketIndex < 0) return Tools.escapeHTML(line);
+				var time = line.slice(1, bracketIndex);
+				var timestamp = new Date(time).format('{yyyy}-{MM}-{dd} {hh}:{mm}{tt}');
+				var parenIndex = line.indexOf(')');
+				var roomid = line.slice(bracketIndex + 3, parenIndex);
+				if (!hideIps && Config.modloglink) {
+					var url = Config.modloglink(time, roomid);
+					if (url) timestamp = '<a href="' + url + '">' + timestamp + '</a>';
+				}
+				return '<small>[' + timestamp + '] (' + roomid + ')</small>' + Tools.escapeHTML(line.slice(parenIndex + 1));
+			}).join('<br />');
 			if (lines) {
 				if (!stdout) {
 					connection.popup("The modlog is empty. (Weird.)");
 				} else {
-					connection.popup("|wide|The last " + lines + " lines of the Moderator Log of " + roomNames + ":\n\n" + stdout);
+					connection.popup("|wide||html|<p>The last " + lines + " lines of the Moderator Log of " + roomNames + ":</p>" + stdout);
 				}
 			} else {
 				if (!stdout) {
 					connection.popup("No moderator actions containing '" + target + "' were found on " + roomNames + ".");
 				} else {
-					connection.popup("|wide|The last " + grepLimit + " logged actions containing '" + target + "' on " + roomNames + ":\n\n" + stdout);
+					connection.popup("|wide||html|<p>The last " + grepLimit + " logged actions containing '" + target + "' on " + roomNames + ":</p>" + stdout);
 				}
 			}
 		});
