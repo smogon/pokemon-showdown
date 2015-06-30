@@ -179,6 +179,13 @@ var Context = exports.Context = (function () {
 			this.connection.sendTo(this.room, data);
 		}
 	};
+	Context.prototype.errorReply = function (message) {
+		if (this.pmTarget) {
+			this.connection.send('|pm|' + this.user.getIdentity() + '|' + (this.pmTarget.getIdentity ? this.pmTarget.getIdentity() : ' ' + this.pmTarget) + '|/error ' + message);
+		} else {
+			this.connection.sendTo(this.room, '|html|<div class="message-error">' + Tools.escapeHTML(message) + '</div>');
+		}
+	};
 	Context.prototype.sendReplyBox = function (html) {
 		this.sendReply('|raw|<div class="infobox">' + html + '</div>');
 	};
