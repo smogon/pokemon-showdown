@@ -1317,7 +1317,7 @@ var commands = exports.commands = {
 
 		// Let's check the number of lines to retrieve or if it's a word instead
 		if (!target.match('[^0-9]')) {
-			lines = parseInt(target || 15, 10);
+			lines = parseInt(target || 20, 10);
 			if (lines > 100) lines = 100;
 		}
 		var wordSearch = (!lines || lines < 0);
