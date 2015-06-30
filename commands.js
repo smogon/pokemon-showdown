@@ -1398,6 +1398,7 @@ var commands = exports.commands = {
 		if (target === 'chat' || target === 'commands') {
 			try {
 				CommandParser.uncacheTree('./command-parser.js');
+				delete require.cache[require.resolve('./commands.js')];
 				global.CommandParser = require('./command-parser.js');
 
 				var runningTournaments = Tournaments.tournaments;
