@@ -1903,7 +1903,7 @@ var commands = exports.commands = {
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3490462/\">LC Banlist</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496013/\">LC Viability Ranking</a><br />";
 		}
-		if (target === 'all' || target === 'doublesou' || target === 'doubles' || target === 'smogondoubles') {
+		if (target === 'all' || target === 'doublesou' || target === 'dou' || target === 'doubles' || target === 'smogondoubles') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538960/\">np: Doubles OU Stage 2</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles OU Banlist</a><br />";
