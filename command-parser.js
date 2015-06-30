@@ -41,8 +41,8 @@ var path = require('path');
  * Load command files
  *********************************************************/
 
-var commands = exports.commands = require('./commands.js').commands;
-var baseCommands = exports.baseCommands = Object.clone(commands);
+var baseCommands = exports.baseCommands = require('./commands.js').commands;
+var commands = exports.commands = Object.clone(baseCommands);
 
 // Install plug-in commands
 
