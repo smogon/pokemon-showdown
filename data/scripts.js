@@ -1367,7 +1367,7 @@ exports.BattleScripts = {
 
 				// Status:
 				case 'raindance': case 'sunnyday':
-					if ((hasMove['rest'] && hasMove['sleeptalk']) || counter.Physical + counter.Special < 2) rejected = true;
+					if ((hasMove['rest'] && hasMove['sleeptalk']) || counter.Physical + counter.Special < 2 || counter.setupType) rejected = true;
 					break;
 				case 'rest':
 					if (!hasMove['sleeptalk'] && movePool.indexOf('sleeptalk') >= 0) rejected = true;
