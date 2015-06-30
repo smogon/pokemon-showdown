@@ -144,7 +144,7 @@ function canTalk(user, room, connection, message, targetUser) {
 		}
 
 		if (Config.chatfilter) {
-			return Config.chatfilter(message, user, room, connection, targetUser);
+			return Config.chatfilter.call(this, message, user, room, connection, targetUser);
 		}
 		return message;
 	}
@@ -307,7 +307,7 @@ var Context = exports.Context = (function () {
 	};
 	Context.prototype.canTalk = function (message, relevantRoom, targetUser) {
 		var innerRoom = (relevantRoom !== undefined) ? relevantRoom : this.room;
-		return canTalk(this.user, innerRoom, this.connection, message, targetUser);
+		return canTalk.call(this, this.user, innerRoom, this.connection, message, targetUser);
 	};
 	Context.prototype.canHTML = function (html) {
 		html = '' + (html || '');
@@ -475,13 +475,13 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	}
 	var fullCmd = namespaces.concat(cmd).join(' ');
 
-	if (commandHandler) {
-		var context = new Context({
-			target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
-			namespaces: namespaces, originalMessage: originalMessage,
-			cmdToken: cmdToken, levelsDeep: levelsDeep
-		});
+	var context = new Context({
+		target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
+		namespaces: namespaces, originalMessage: originalMessage,
+		cmdToken: cmdToken, levelsDeep: levelsDeep
+	});
 
+	if (commandHandler) {
 		return context.run(commandHandler);
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
@@ -507,7 +507,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		}
 	}
 
-	message = canTalk(user, room, connection, cmdToken + message);
+	message = canTalk.call(context, user, room, connection, cmdToken + message);
 	if (!message) return false;
 
 	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0)) {
