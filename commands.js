@@ -126,6 +126,7 @@ var commands = exports.commands = {
 			this.sendReply("You forgot the comma.");
 			return this.parse('/help msg');
 		}
+		this.pmTarget = (targetUser || this.targetUsername);
 		if (!targetUser || !targetUser.connected) {
 			if (targetUser && !targetUser.connected) {
 				this.popupReply("User " + this.targetUsername + " is offline.");
