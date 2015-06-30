@@ -13,18 +13,10 @@ const MODES = {
 };
 
 const CATEGORIES = {
-	animemanga: 'Anime/Manga',
-	geography: 'Geography',
-	history: 'History',
-	humanities: 'Humanities',
-	miscellaneous: 'Miscellaneous',
-	music: 'Music',
+	ae: 'Arts & Entertainment',
 	pokemon: 'Pok\u00e9mon',
-	rpm: 'Religion, Philosophy, and Myth',
-	science: 'Science',
-	sports: 'Sports',
-	tvmovies: 'TV/Movies',
-	videogames: 'Video Games',
+	sg: 'Science & Geography',
+	sh: 'Society & Humanities',
 	random: 'Random'
 };
 
@@ -185,7 +177,7 @@ var Trivia = (function () {
 		output.sendReply("You have signed up for the trivia game.");
 	};
 
-	Trivia.prototype.kickParticipant = function (output, target) {
+	Trivia.prototype.kickParticipant = function (output, target, user) {
 		if (this.participants.size < 3) return output.sendReply("The trivia game requires at least three participants in order to run.");
 
 		var userid = toId(target);
@@ -193,7 +185,7 @@ var Trivia = (function () {
 		if (!this.participants.has(userid)) return output.sendReply("User '" + target + "' is not a participant in this trivia game.");
 
 		this.participants.delete(userid);
-		output.sendReply("User '" + target + "' has been disqualified from the trivia game.");
+		output.send("User '" + target + "' has been disqualified from the trivia game by " + user + ".");
 	};
 
 	Trivia.prototype.startGame = function (output) {
@@ -610,7 +602,8 @@ var commands = {
 		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
-		trivium.kickParticipant(this, target);
+		this.parse('/m ' + target);
+		trivium.kickParticipant(this, target, user);
 	},
 	kickhelp: ["/trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~"],
 
@@ -957,7 +950,7 @@ exports.commands = {
 		"- First: the first correct responder gains 5 points.",
 		"- Timer: each correct responder gains up to 5 points based on how quickly they answer.",
 		"- Number: each correct responder gains up to 5 points based on how many participants are correct.",
-		"Categories: Anime/Manga, Geography, History, Humanities, Miscellaneous, Music, Pok\u00e9mon, RPM (Religion, Philosophy, and Myth), Science, Sports, TV/Movies, Video Games, and Random.",
+		"Categories: Arts & Entertainment, Pok\u00e9mon, Science & Geography, Society & Humanities, and Random.",
 		"Game lengths:",
 		"- Short: 20 point score cap. The winner gains 3 leaderboard points.",
 		"- Medium: 35 point score cap. The winner gains 4 leaderboard points.",
