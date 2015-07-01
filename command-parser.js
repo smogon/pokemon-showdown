@@ -159,7 +159,6 @@ var Context = exports.Context = (function () {
 
 		this.target = options.target || '';
 		this.message = options.message || '';
-		this.originalMessage = options.originalMessage || '';
 
 		this.levelsDeep = options.levelsDeep || 0;
 		this.namespaces = options.namespaces || null;
@@ -247,7 +246,7 @@ var Context = exports.Context = (function () {
 	};
 	Context.prototype.canBroadcast = function (suppressMessage) {
 		if (this.cmdToken === BROADCAST_TOKEN) {
-			var message = this.canTalk(this.originalMessage);
+			var message = this.canTalk(this.message);
 			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
 				this.connection.sendTo(this.room, "You need to be voiced to broadcast this command's information.");
@@ -298,7 +297,7 @@ var Context = exports.Context = (function () {
 					'Additional information:\n' +
 					'user = ' + this.user.name + '\n' +
 					'room = ' + this.room.id + '\n' +
-					'message = ' + this.originalMessage;
+					'message = ' + this.message;
 			var fakeErr = {stack: stack};
 
 			if (!require('./crashlogger.js')(fakeErr, 'A chat command')) {
@@ -446,7 +445,6 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 
 	var namespaces = [];
 	var currentCommands = commands;
-	var originalMessage = message;
 	var commandHandler;
 
 	do {
@@ -466,11 +464,9 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				newTarget = target.substr(spaceIndex + 1);
 			}
 			newCmd = newCmd.toLowerCase();
-			var newMessage = message.replace(cmd + (target ? ' ' : ''), '');
 
 			cmd = newCmd;
 			target = newTarget;
-			message = newMessage;
 			currentCommands = commandHandler;
 		}
 	} while (commandHandler && typeof commandHandler === 'object');
@@ -484,8 +480,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 
 	var context = new Context({
 		target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
-		namespaces: namespaces, originalMessage: originalMessage,
-		cmdToken: cmdToken, levelsDeep: levelsDeep
+		namespaces: namespaces, cmdToken: cmdToken, levelsDeep: levelsDeep
 	});
 
 	if (commandHandler) {
