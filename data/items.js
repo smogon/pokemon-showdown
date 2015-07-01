@@ -522,7 +522,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onAccuracy: function (accuracy) {
+		onModifyAccuracy: function (accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('brightpowder - decreasing accuracy');
 			return accuracy * 0.9;
@@ -2268,7 +2268,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onAccuracy: function (accuracy) {
+		onModifyAccuracy: function (accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('lax incense - decreasing accuracy');
 			return accuracy * 0.9;
@@ -2886,11 +2886,11 @@ exports.BattleItems = {
 		},
 		effect: {
 			duration: 2,
-			onModifyMove: function (move, pokemon) {
-				this.add('-enditem', pokemon, 'Micle Berry');
-				pokemon.removeVolatile('micleberry');
-				if (typeof move.accuracy === 'number') {
-					move.accuracy *= 1.2;
+			onSourceModifyAccuracy: function (accuracy, target, source) {
+				this.add('-enditem', source, 'Micle Berry');
+				source.removeVolatile('micleberry');
+				if (typeof accuracy === 'number') {
+					return accuracy * 1.2;
 				}
 			}
 		},
@@ -4722,9 +4722,9 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifyMove: function (move) {
-			if (typeof move.accuracy === 'number') {
-				move.accuracy *= 1.1;
+		onSourceModifyAccuracy: function (accuracy) {
+			if (typeof accuracy === 'number') {
+				return accuracy * 1.1;
 			}
 		},
 		num: 265,
@@ -4825,10 +4825,10 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifyMove: function (move, user, target) {
-			if (typeof move.accuracy === 'number' && !this.willMove(target)) {
+		onSourceModifyAccuracy: function (accuracy, target) {
+			if (typeof accuracy === 'number' && !this.willMove(target)) {
 				this.debug('Zoom Lens boosting accuracy');
-				move.accuracy *= 1.2;
+				return accuracy * 1.2;
 			}
 		},
 		num: 276,
