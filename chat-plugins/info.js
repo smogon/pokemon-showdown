@@ -1600,8 +1600,8 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3541792/\">Other Metagame of the Month</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524254/\">Linked</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3540979/\">Mix and Mega</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496299/\">Protean Palace</a><br />";
 		}
 		if (target === 'all' || target === 'seasonal') {
 			matched = true;
