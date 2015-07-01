@@ -1575,7 +1575,7 @@ var commands = exports.commands = {
 		var matched = false;
 
 		if (target === 'all' && this.broadcasting) {
-			return this.sendReplyBox("You cannot broadcast informatiom about all Other Metagames at once.");
+			return this.sendReplyBox("You cannot broadcast information about all Other Metagames at once.");
 		}
 
 		if (!target || target === 'all') {
