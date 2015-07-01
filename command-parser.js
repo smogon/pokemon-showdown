@@ -501,13 +501,16 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		if (cmdToken && fullCmd) {
 			// To guard against command typos, we now emit an error message
 			if (cmdToken === BROADCAST_TOKEN) {
-				return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized.");
+				if (/[a-z0-9]/.test(cmd.charAt(0))) {
+					return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized.");
+				}
+			} else {
+				return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized. To send a message starting with '" + cmdToken + fullCmd + "', type '" + cmdToken.repeat(2) + fullCmd + "'.");
 			}
-			return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized. To send a message starting with '" + cmdToken + fullCmd + "', type '" + cmdToken.repeat(2) + fullCmd + "'.");
 		}
 	}
 
-	message = canTalk.call(context, user, room, connection, cmdToken + message);
+	message = canTalk.call(context, user, room, connection, message);
 
 	return message || false;
 };
