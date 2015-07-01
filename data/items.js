@@ -2620,7 +2620,7 @@ exports.BattleItems = {
 		},
 		isUnreleased: true,
 		gen: 2,
-		desc: "This item cannot be given to or taken from a Pokemon, except by Knock Off."
+		desc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief."
 	},
 	"manectite": {
 		id: "manectite",
@@ -4833,6 +4833,6 @@ exports.BattleItems = {
 		},
 		num: 276,
 		gen: 4,
-		desc: "The accuracy of attacks by the holder is 1.2x if it is the last to move in a turn."
+		desc: "The accuracy of attacks by the holder is 1.2x if it moves after its target."
 	}
 };
