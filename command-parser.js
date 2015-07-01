@@ -432,7 +432,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		message = '/evalbattle ' + message.substr(4);
 	}
 
-	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0)) {
+	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0) && !'._'.includes(message.charAt(1))) {
 		cmdToken = message.charAt(0);
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
@@ -517,7 +517,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	message = canTalk.call(context, user, room, connection, cmdToken + message);
 	if (!message) return false;
 
-	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0)) {
+	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0) && !'._'.includes(message.charAt(1))) {
 		return parse(message, room, user, connection, levelsDeep + 1);
 	}
 
