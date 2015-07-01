@@ -2222,18 +2222,19 @@ var commands = exports.commands = {
 			var altCommandHelp;
 			var helpCmd;
 			var targets = target.split(' ');
-			if (typeof commands[target] === 'string') {
+			var allCommands = CommandParser.commands;
+			if (typeof allCommands[target] === 'string') {
 				// If a function changes with command name, help for that command name will be searched first.
 				altCommandHelp = target + 'help';
-				if (altCommandHelp in commands) {
+				if (altCommandHelp in allCommands) {
 					helpCmd = altCommandHelp;
 				} else {
-					helpCmd = commands[target] + 'help';
+					helpCmd = allCommands[target] + 'help';
 				}
-			} else if (targets.length > 1 && typeof commands[targets[0]] === 'object') {
+			} else if (targets.length > 1 && typeof allCommands[targets[0]] === 'object') {
 				// Handle internal namespace commands
 				var helpCmd = targets[targets.length - 1] + 'help';
-				var namespace = commands[targets[0]];
+				var namespace = allCommands[targets[0]];
 				for (var i = 1; i < targets.length - 1; i++) {
 					if (!namespace[targets[i]]) return this.sendReply("Help for the command '" + target + "' was not found. Try /help for general help");
 					namespace = namespace[targets[i]];
@@ -2248,12 +2249,12 @@ var commands = exports.commands = {
 			} else {
 				helpCmd = target + 'help';
 			}
-			if (helpCmd in commands) {
-				if (typeof commands[helpCmd] === 'function') {
+			if (helpCmd in allCommands) {
+				if (typeof allCommands[helpCmd] === 'function') {
 					// If the help command is a function, parse it instead
 					this.parse('/' + helpCmd);
-				} else if (Array.isArray(commands[helpCmd])) {
-					this.sendReply(commands[helpCmd].join('\n'));
+				} else if (Array.isArray(allCommands[helpCmd])) {
+					this.sendReply(allCommands[helpCmd].join('\n'));
 				}
 			} else {
 				this.sendReply("Help for the command '" + target + "' was not found. Try /help for general help");
