@@ -340,14 +340,451 @@ exports.Formats = [
 
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
-
+	
 	{
 		name: "Mix and Mega",
 		section: "OM of the Month",
 		column: 2,
 
-		ruleset: ['Ubers'],
-		banlist: []
+		mod: 'mixandmega', //Forcibly prevent Knock Off + Trick
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview'],
+		banlist: ['Shadow Tag', 'Gengarite'],
+		validateTeam: function (team, format) {
+			var itemTable = {};
+			for (var i = 0; i < team.length; i++) {
+				var item = this.getItem(team[i].item);
+				if (!item) continue;
+				if (itemTable[item] && item.megaStone) {
+					return ["You are limited to one of each Mega Stone.", "(You have more than one " + this.getItem(item).name + ")"];
+				} else if (itemTable[item] && (item.id === "redorb" || item.name === "blueorb")) {
+					return ["You are limited to one of each Primal Orb.", "(You have more than one " + this.getItem(item).name + ")"];
+				}
+				itemTable[item] = true;
+			}
+		},
+		onBegin: function () {
+			var allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (var i = 0, len = allPokemon.length; i < len; i++) {
+				var pokemon = allPokemon[i];
+				pokemon.baseSpecies = pokemon.baseTemplate.species; //Storage
+			}
+		},
+		//Prepare Mega-Evolutions/Devolutions
+		onSwitchInPriority: -6,
+		onSwitchIn: function (pokemon) {
+			if (!pokemon.template.isMega && !pokemon.template.isPrimal && !pokemon.canMegaEvo) {
+				if (!pokemon.baseStatStorage) pokemon.baseStatStorage = {atk: pokemon.baseTemplate.baseStats.atk, def: pokemon.baseTemplate.baseStats.def, spa: pokemon.baseTemplate.baseStats.spa, spd: pokemon.baseTemplate.baseStats.spd, spe: pokemon.baseTemplate.baseStats.spe};
+				if (!pokemon.typeStorage) pokemon.typeStorage = [pokemon.baseTemplate.types[0]];
+				if (pokemon.baseTemplate.types[1]) pokemon.typeStorage[1] = pokemon.baseTemplate.types[1];
+				if (!pokemon.weightStorage) pokemon.weightStorage = pokemon.baseTemplate.weightkg;
+				var megaEvo = false;
+				var item = (pokemon.item) ? this.getItem(pokemon.item) : false;
+				var spec = pokemon.baseTemplate.species;
+				
+				//Primal Devolution
+				if (item && (item.id === 'redorb' || item.id === 'blueorb')) {
+					//If you're an uber or uber-like Pokemon, don't [Gdon + Ogre will work as normal due to items.js]
+					if (pokemon.baseTemplate.tier !== 'Uber' && spec !== 'Kyurem-Black' && spec !== 'Slaking' && spec !== 'Regigigas' && spec !== 'Cresselia' && !(pokemon.baseTemplate.evos && pokemon.baseTemplate.evos[0])) {
+						var pstr = (item.id === 'redorb') ? 'Groudon-Primal' : 'Kyogre-Primal';
+						var template = this.getTemplate(pstr);
+						pokemon.formeChange(template);
+						pokemon.baseTemplate = template;
+						pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+						this.add('detailschange', pokemon, pokemon.details);
+						this.add('message', pokemon.name + "'s Primal Reversion! It reverted to its primal form!");
+						pokemon.setAbility(template.abilities['0']);
+						pokemon.baseAbility = pokemon.ability;
+					}
+				}
+				
+				//Mega Evolution
+				//If you're an uber, don't.
+				if (pokemon.baseTemplate.tier === 'Uber' && (spec !== 'Mewtwo' || (item.id !== 'mewtwonitex' && item.id !== 'mewtwonitey'))) return pokemon.canMegaEvo = false;
+				//If you don't have a mega stone, you can't mega-evolve, except if you have Dragon Ascent.
+				if ((!item || !item.megaStone) && pokemon.moves.indexOf('dragonascent') === -1) return pokemon.canMegaEvo = false;
+				if (item && item.megaStone) megaEvo = item.megaStone;
+				//Mega stones have priority over Rayquaza-Mega.
+				if (!megaEvo && pokemon.moves.indexOf('dragonascent') > -1 && spec !== 'Rayquaza') megaEvo = 'Rayquaza-Mega'; //Prevent Rayquaza from Mega Evolving, but allow Smeargle to Mega-Evolve
+				//If you aren't fully evolved, due to flavor reasons, you can't mega-evolve regardless.
+				//I feel bad about this too, Mega-Pikachu would've been sick [Albeit Light Ball Pikachu still would be better]
+				if (pokemon.baseTemplate.evos && pokemon.baseTemplate.evos[0]) return pokemon.canMegaEvo = false;
+				var ab = [pokemon.baseTemplate.abilities[0], pokemon.baseTemplate.abilities[1], pokemon.baseTemplate.abilities['H']];
+				
+				//Species-Based Mega-Evolutions
+				if (spec === 'Kyurem-Black' || spec === 'Slaking' || spec === 'Regigigas' || spec === 'Cresselia') return pokemon.canMegaEvo = false;
+				if (item.id === 'beedrillite' && spec !== 'Beedrill') return pokemon.canMegaEvo = false;
+				if (item.id === 'kangaskhanite' && spec !== 'Kangaskhan') return pokemon.canMegaEvo = false;
+				//Ability-Based Mega-Evolutions
+				if (item.id === 'medichamite' && spec !== 'Medicham' && spec !== 'Mawile' && ab.indexOf('Huge Power') === -1 && ab.indexOf('Pure Power') === -1) return pokemon.canMegaEvo = false;
+				if (item.id === 'mawilite' && spec !== 'Mawile' && ab.indexOf('Huge Power') === -1 && ab.indexOf('Pure Power') === -1) return pokemon.canMegaEvo = false;
+				if (item.id === 'gengarite' && spec !== 'Gengar' && ab.indexOf('Shadow Tag') === -1) return pokemon.canMegaEvo = false;
+				if (item.id === 'blazikenite' && spec !== 'Blaziken' && ab.indexOf('Speed Boost') === -1) return pokemon.canMegaEvo = false;
+				//Stat-based Mega-Evolutions
+				if ((item.id === 'ampharosite' || item.id === 'heracronite' || item.id === 'garchompite') && pokemon.baseStatStorage.spe < 10) return pokemon.canMegaEvo = false;
+				if (item.id === 'cameruptite' && pokemon.baseStatStorage.spe < 20) return pokemon.canMegaEvo = false;
+				if ((item.id === 'abomasite' || item.id === 'sablenite') && pokemon.baseStatStorage.spe < 30) return pokemon.canMegaEvo = false;
+				if (item.id === 'beedrillite' && pokemon.baseStatStorage.spa < 30) return pokemon.canMegaEvo = false; //Doesn't matter
+				if (item.id === 'diancite' && (pokemon.baseStatStorage.def < 40 || pokemon.baseStatStorage.spd < 40)) return pokemon.canMegaEvo = false;
+				if (item.id === 'lopunnite' && pokemon.weightStorage < 5) return pokemon.canMegaEvo = false;
+				if (item.id === 'mewtwonitey' && (pokemon.weightStorage < 89 || pokemon.baseStatStorage.def < 20)) return pokemon.canMegaEvo = false;
+				//Overflow Limiter [SHUCKLE, Steelix, Regirock]
+				if (spec === 'Shuckle' && ['abomasite', 'aggronite', 'audinite', 'cameruptite', 'charizarditex', 'charizarditey', 'galladite', 'gyaradosite', 'heracronite', 'houndoominite', 'latiasite', 'mewtwonitey', 'sablenite', 'salamencite', 'scizorite', 'sharpedonite', 'slowbronite', 'steelixite', 'tyranitarite', 'venusaurite'].indexOf(item.id) > -1) return pokemon.canMegaEvo = false;
+				if ((spec === 'Steelix' || spec === 'Regirock') && item.id === 'slowbronite') return pokemon.canMegaEvo = false;
+				
+				return pokemon.canMegaEvo = megaEvo;
+			}
+		},
+		onModifyPokemon: function (pokemon) {
+			for (var q in pokemon.side.pokemon) {
+				var p = pokemon.side.pokemon[q];
+				if ((p.baseTemplate.isMega || p.baseTemplate.isPrimal) && p.baseSpecies !== 'Kyogre' && p.baseSpecies !== 'Groudon') {
+					if (!p.statCalc && !p.newBaseStats) {
+						var spec = p.baseTemplate.species;
+						p.megaBaseStats = {atk: p.baseStatStorage.atk, def: p.baseStatStorage.def, spa: p.baseStatStorage.spa, spd: p.baseStatStorage.spd, spe: p.baseStatStorage.spe};
+						if (!p.megaTypes) p.megaTypes = [p.typeStorage[0]];
+						if (p.typeStorage[1]) p.megaTypes[1] = p.typeStorage[1];
+						p.megaWeight = p.weightStorage;
+						if (spec === 'Abomasnow-Mega') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.def += 30;
+							p.megaBaseStats.spa += 40;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe -= 30;
+							p.megaWeight += 2;
+						} else if (spec === 'Absol-Mega') {
+							p.megaBaseStats.atk += 20;
+							p.megaBaseStats.spa += 40;
+							p.megaBaseStats.spe += 40;
+						} else if (spec === 'Aerodactyl-Mega') {
+							p.megaBaseStats.atk += 30;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 10;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 20;
+							p.megaWeight += 20;
+						} else if (spec === 'Aggron-Mega') {
+							p.megaBaseStats.atk += 30;
+							p.megaBaseStats.def += 50;
+							p.megaBaseStats.spd += 20;
+							p.megaWeight += 35;
+							if (p.megaTypes[0] === 'Steel') p.megaTypes = ['Steel'];
+							else p.megaTypes[1] = 'Steel';
+						} else if (spec === 'Alakazam-Mega') {
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 40;
+							p.megaBaseStats.spe += 30;
+						} else if (spec === 'Altaria-Mega') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 40;
+							if (p.megaTypes[0] === 'Fairy') p.megaTypes = ['Fairy'];
+							else p.megaTypes[1] = 'Fairy';
+						} else if (spec === 'Ampharos-Mega') {
+							p.megaBaseStats.atk += 20;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 50;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe -= 10;
+							if (p.megaTypes[0] === 'Dragon') p.megaTypes = ['Dragon'];
+							else p.megaTypes[1] = 'Dragon';
+						} else if (spec === 'Audino-Mega') {
+							p.megaBaseStats.def += 40;
+							p.megaBaseStats.spa += 20;
+							p.megaBaseStats.spd += 40;
+							p.megaWeight += 1;
+							if (p.megaTypes[0] === 'Fairy') p.megaTypes = ['Fairy'];
+							else p.megaTypes[1] = 'Fairy';
+						} else if (spec === 'Banette-Mega') {
+							p.megaBaseStats.atk += 50;
+							p.megaBaseStats.def += 10;
+							p.megaBaseStats.spa += 10;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 10;
+							p.megaWeight += .5;
+						} else if (spec === 'Beedrill-Mega') { //Doesn't matter, but eehhhhhhhhhhhh
+							p.megaBaseStats.atk += 60;
+							p.megaBaseStats.spa -= 30;
+							p.megaBaseStats.spe += 70;
+						} else if (spec === 'Blastoise-Mega') {
+							p.megaBaseStats.atk += 20;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 50;
+							p.megaBaseStats.spd += 10;
+							p.megaWeight += 15.6;
+						} else if (spec === 'Blaziken-Mega') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.def += 10;
+							p.megaBaseStats.spa += 20;
+							p.megaBaseStats.spd += 10;
+							p.megaBaseStats.spe += 20;
+						} else if (spec === 'Camerupt-Mega') {
+							p.megaBaseStats.atk += 20;
+							p.megaBaseStats.def += 30;
+							p.megaBaseStats.spa += 40;
+							p.megaBaseStats.spd += 30;
+							p.megaBaseStats.spe -= 20;
+							p.megaWeight += 100.5;
+						} else if (spec === 'Charizard-Mega-X') {
+							p.megaBaseStats.atk += 46;
+							p.megaBaseStats.def += 33;
+							p.megaBaseStats.spa += 21;
+							p.megaWeight += 20;
+							if (p.megaTypes[0] === 'Dragon') p.megaTypes = ['Dragon'];
+							else p.megaTypes[1] = 'Dragon';
+						} else if (spec === 'Charizard-Mega-Y') {
+							p.megaBaseStats.atk += 20;
+							p.megaBaseStats.spa += 50;
+							p.megaBaseStats.spd += 30;
+							p.megaWeight += 10;
+						} else if (spec === 'Diancie-Mega') {
+							p.megaBaseStats.atk += 60;
+							p.megaBaseStats.def -= 40;
+							p.megaBaseStats.spa += 60;
+							p.megaBaseStats.spd -= 40;
+							p.megaBaseStats.spe += 60;
+							p.megaWeight += 19;
+						} else if (spec === 'Gallade-Mega') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.def += 30;
+							p.megaBaseStats.spe += 30;
+							p.megaWeight += 4.4;
+						} else if (spec === 'Garchomp-Mega') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 40;
+							p.megaBaseStats.spd += 10;
+							p.megaBaseStats.spe -= 10;
+						} else if (spec === 'Gardevoir-Mega') {
+							p.megaBaseStats.atk += 20;
+							p.megaBaseStats.spa += 40;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 20;
+						} else if (spec === 'Gengar-Mega') {
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 40;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 20;
+						} else if (spec === 'Glalie-Mega') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.spa += 40;
+							p.megaBaseStats.spe += 20;
+							p.megaWeight += 93.7;
+						} else if (spec === 'Groudon-Primal') {
+							p.megaBaseStats.atk += 30;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 50;
+							p.megaWeight += 49.7;
+							if (p.megaTypes[0] === 'Fire') p.megaTypes = ['Fire'];
+							else p.megaTypes[1] = 'Fire';
+						} else if (spec === 'Gyarados-Mega') {
+							p.megaBaseStats.atk += 30;
+							p.megaBaseStats.def += 30;
+							p.megaBaseStats.spa += 10;
+							p.megaBaseStats.spd += 30;
+							p.megaWeight += 70;
+							if (p.megaTypes[0] === 'Dark') p.megaTypes = ['Dark'];
+							else p.megaTypes[1] = 'Dark';
+						} else if (spec === 'Heracross-Mega') {
+							p.megaBaseStats.atk += 60;
+							p.megaBaseStats.def += 40;
+							p.megaBaseStats.spd += 10;
+							p.megaBaseStats.spe -= 10;
+							p.megaWeight += 8.5;
+						} else if (spec === 'Houndoom-Mega') {
+							p.megaBaseStats.def += 40;
+							p.megaBaseStats.spa += 30;
+							p.megaBaseStats.spd += 10;
+							p.megaBaseStats.spe += 20;
+							p.megaWeight += 14.5;
+						} else if (spec === 'Kangaskhan-Mega') { //hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+							p.megaBaseStats.atk += 30;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 20;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 10;
+						} else if (spec === 'Kyogre-Primal') {
+							p.megaBaseStats.atk += 50;
+							p.megaBaseStats.spa += 30;
+							p.megaBaseStats.spd += 20;
+							p.megaWeight += 78;
+						} else if (spec === 'Latias-Mega') {
+							p.megaBaseStats.atk += 20;
+							p.megaBaseStats.def += 30;
+							p.megaBaseStats.spa += 30;
+							p.megaBaseStats.spd += 20;
+							p.megaWeight += 12;
+						} else if (spec === 'Latios-Mega') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 30;
+							p.megaBaseStats.spd += 10;
+							p.megaWeight += 10;
+						} else if (spec === 'Lopunny-Mega') {
+							p.megaBaseStats.atk += 60;
+							p.megaBaseStats.def += 10;
+							p.megaBaseStats.spe += 30;
+							p.megaWeight -= 5;
+							if (p.megaTypes[0] === 'Fighting') p.megaTypes = ['Fighting'];
+							else p.megaTypes[1] = 'Fighting';
+						} else if (spec === 'Lucario-Mega') {
+							p.megaBaseStats.atk += 35;
+							p.megaBaseStats.def += 18;
+							p.megaBaseStats.spa += 25;
+							p.megaBaseStats.spe += 22;
+							p.megaWeight += 3.5;
+						} else if (spec === 'Manectric-Mega') {
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 30;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 30;
+							p.megaWeight += 3.8;
+						} else if (spec === 'Mawile-Mega') {
+							p.megaBaseStats.atk += 20;
+							p.megaBaseStats.def += 40;
+							p.megaBaseStats.spd += 40;
+							p.megaWeight += 12;
+						} else if (spec === 'Medicham-Mega') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.def += 10;
+							p.megaBaseStats.spa += 20;
+							p.megaBaseStats.spd += 10;
+							p.megaBaseStats.spe += 20;
+						} else if (spec === 'Metagross-Mega') {
+							p.megaBaseStats.atk += 10;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 10;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 40;
+							p.megaWeight += 392.9;
+						} else if (spec === 'Mewtwo-Mega-X') {
+							p.megaBaseStats.atk += 80;
+							p.megaBaseStats.def += 10;
+							p.megaBaseStats.spd += 10;
+							p.megaWeight += 5;
+							if (p.megaTypes[0] === 'Fighting') p.megaTypes = ['Fighting'];
+							else p.megaTypes[1] = 'Fighting';
+						} else if (spec === 'Mewtwo-Mega-Y') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.def -= 20;
+							p.megaBaseStats.spa += 40;
+							p.megaBaseStats.spd += 30;
+							p.megaBaseStats.spe += 10;
+							p.megaWeight -= 89;
+						} else if (spec === 'Pidgeot-Mega') {
+							p.megaBaseStats.def += 5;
+							p.megaBaseStats.spa += 65;
+							p.megaBaseStats.spd += 10;
+							p.megaBaseStats.spe += 20;
+							p.megaWeight += 11;
+						} else if (spec === 'Pinsir-Mega') {
+							p.megaBaseStats.atk += 30;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 10;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 20;
+							p.megaWeight += 4;
+							if (p.megaTypes[0] === 'Flying') p.megaTypes = ['Flying'];
+							else p.megaTypes[1] = 'Flying';
+						} else if (spec === 'Rayquaza-Mega') {
+							p.megaBaseStats.atk += 30;
+							p.megaBaseStats.def += 10;
+							p.megaBaseStats.spa += 30;
+							p.megaBaseStats.spd += 10;
+							p.megaBaseStats.spe += 20;
+							p.megaWeight += 185.5;
+						} else if (spec === 'Sableye-Mega') {
+							p.megaBaseStats.atk += 10;
+							p.megaBaseStats.def += 50;
+							p.megaBaseStats.spa += 20;
+							p.megaBaseStats.spd += 50;
+							p.megaBaseStats.spe -= 30;
+							p.megaWeight += 150;
+						} else if (spec === 'Salamence-Mega') {
+							p.megaBaseStats.atk += 10;
+							p.megaBaseStats.def += 50;
+							p.megaBaseStats.spa += 10;
+							p.megaBaseStats.spd += 10;
+							p.megaBaseStats.spe += 20;
+							p.megaWeight += 10;
+						} else if (spec === 'Sceptile-Mega') {
+							p.megaBaseStats.atk += 25;
+							p.megaBaseStats.def += 10;
+							p.megaBaseStats.spa += 40;
+							p.megaBaseStats.spe += 25;
+							p.megaWeight += 3;
+							if (p.megaTypes[0] === 'Dragon') p.megaTypes = ['Dragon'];
+							else p.megaTypes[1] = 'Dragon';
+						} else if (spec === 'Scizor-Mega') {
+							p.megaBaseStats.atk += 20;
+							p.megaBaseStats.def += 40;
+							p.megaBaseStats.spa += 10;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 10;
+							p.megaWeight += 7;
+						} else if (spec === 'Sharpedo-Mega') {
+							p.megaBaseStats.atk += 20;
+							p.megaBaseStats.def += 30;
+							p.megaBaseStats.spa += 15;
+							p.megaBaseStats.spd += 25;
+							p.megaBaseStats.spe += 10;
+							p.megaWeight += 41.5;
+						} else if (spec === 'Slowbro-Mega') {
+							p.megaBaseStats.def += 70;
+							p.megaBaseStats.spa += 30;
+							p.megaWeight += 31.5;
+						} else if (spec === 'Steelix-Mega') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.def += 30;
+							p.megaBaseStats.spd += 30;
+							p.megaWeight += 340;
+						} else if (spec === 'Swampert-Mega') {
+							p.megaBaseStats.atk += 40;
+							p.megaBaseStats.def += 20;
+							p.megaBaseStats.spa += 10;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 10;
+							p.megaWeight += 20.1;
+						} else if (spec === 'Tyranitar-Mega') {
+							p.megaBaseStats.atk += 30;
+							p.megaBaseStats.def += 40;
+							p.megaBaseStats.spd += 20;
+							p.megaBaseStats.spe += 10;
+							p.megaWeight += 53;
+						} else if (spec === 'Venusaur-Mega') {
+							p.megaBaseStats.atk += 18;
+							p.megaBaseStats.def += 40;
+							p.megaBaseStats.spa += 22;
+							p.megaBaseStats.spd += 20;
+							p.megaWeight += 55;
+						}
+						p.statCalc = true;
+					}
+					p.newBaseStats = {};
+					for (var statName in p.megaBaseStats) {
+						var stat = p.megaBaseStats[statName];
+						stat = Math.floor(Math.floor(2 * stat + p.set.ivs[statName] + Math.floor(p.set.evs[statName] / 4)) * p.level / 100 + 5);
+						var nature = p.battle.getNature(p.set.nature);
+						if (statName === nature.plus) stat *= 1.1;
+						if (statName === nature.minus) stat *= 0.9;
+						p.newBaseStats[statName] = Math.floor(stat);
+					}
+					p.baseStats = p.stats = p.newBaseStats;
+					if (!p.typestr) {
+						p.typestr = p.megaTypes[0];
+						if (p.megaTypes[1]) p.typestr += '/' + p.megaTypes[1];
+					}
+					if (!p.typechange && p.isActive) {
+						this.add('-start', pokemon, 'typechange', p.typestr);
+						p.typechange = true;
+						p.typesData = [{type: p.megaTypes[0], suppressed: false,  isAdded: false}];
+						if (p.megaTypes[1]) p.typesData[1] = {type: p.megaTypes[1], suppressed: false,  isAdded: false};
+						this.add('-message', p.name + ' is a ' + p.baseSpecies + '!');
+					} else if (p.typechange && !p.isActive) {
+						p.typechange = false;
+					}
+				}
+			}
+		}
 	},
 	{
 		name: "Protean Palace",
