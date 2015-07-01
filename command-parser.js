@@ -239,7 +239,7 @@ var Context = exports.Context = (function () {
 	};
 	Context.prototype.can = function (permission, target, room) {
 		if (!this.user.can(permission, target, room)) {
-			this.sendReply(this.cmdToken + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
+			this.errorReply(this.cmdToken + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
 			return false;
 		}
 		return true;
@@ -249,8 +249,8 @@ var Context = exports.Context = (function () {
 			var message = this.canTalk(this.message);
 			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
-				this.connection.sendTo(this.room, "You need to be voiced to broadcast this command's information.");
-				this.connection.sendTo(this.room, "To see it for yourself, use: /" + message.substr(1));
+				this.errorReply("You need to be voiced to broadcast this command's information.");
+				this.errorReply("To see it for yourself, use: /" + message.substr(1));
 				return false;
 			}
 
@@ -258,7 +258,7 @@ var Context = exports.Context = (function () {
 			var normalized = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 			if (this.room.lastBroadcast === normalized &&
 					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
-				this.connection.sendTo(this.room, "You can't broadcast this because it was just broadcast.");
+				this.errorReply("You can't broadcast this because it was just broadcast.");
 				return false;
 			}
 			this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || message));
@@ -321,12 +321,12 @@ var Context = exports.Context = (function () {
 		if (!images) return true;
 		for (var i = 0; i < images.length; i++) {
 			if (!/width=([0-9]+|"[0-9]+")/i.test(images[i]) || !/height=([0-9]+|"[0-9]+")/i.test(images[i])) {
-				this.sendReply('All images must have a width and height attribute');
+				this.errorReply('All images must have a width and height attribute');
 				return false;
 			}
 		}
 		if (/>here.?</i.test(html) || /click here/i.test(html)) {
-			this.sendReply('Do not use "click here"');
+			this.errorReply('Do not use "click here"');
 			return false;
 		}
 
@@ -338,11 +338,11 @@ var Context = exports.Context = (function () {
 				var tag = tags[i];
 				if (tag.charAt(1) === '/') {
 					if (!stack.length) {
-						this.sendReply("Extraneous </" + tag.substr(2) + "> without an opening tag.");
+						this.errorReply("Extraneous </" + tag.substr(2) + "> without an opening tag.");
 						return false;
 					}
 					if (tag.substr(2) !== stack.pop()) {
-						this.sendReply("Missing </" + tag.substr(2) + "> or it's in the wrong place.");
+						this.errorReply("Missing </" + tag.substr(2) + "> or it's in the wrong place.");
 						return false;
 					}
 				} else {
@@ -350,7 +350,7 @@ var Context = exports.Context = (function () {
 				}
 			}
 			if (stack.length) {
-				this.sendReply("Missing </" + stack.pop() + ">.");
+				this.errorReply("Missing </" + stack.pop() + ">.");
 				return false;
 			}
 		}
@@ -503,9 +503,9 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		if (cmdToken && fullCmd) {
 			// To guard against command typos, we now emit an error message
 			if (cmdToken === BROADCAST_TOKEN) {
-				return connection.sendTo(room.id, "The command '" + cmdToken + fullCmd + "' was unrecognized.");
+				return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized.");
 			}
-			return connection.sendTo(room.id, "The command '" + cmdToken + fullCmd + "' was unrecognized. To send a message starting with '" + cmdToken + fullCmd + "', type '" + cmdToken.repeat(2) + fullCmd + "'.");
+			return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized. To send a message starting with '" + cmdToken + fullCmd + "', type '" + cmdToken.repeat(2) + fullCmd + "'.");
 		}
 	}
 
