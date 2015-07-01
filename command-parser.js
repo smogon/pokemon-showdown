@@ -456,17 +456,15 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		if (commandHandler && typeof commandHandler === 'object') {
 			namespaces.push(cmd);
 
-			var newCmd = target;
-			var newTarget = '';
 			var spaceIndex = target.indexOf(' ');
 			if (spaceIndex > 0) {
-				newCmd = target.substr(0, spaceIndex);
-				newTarget = target.substr(spaceIndex + 1);
+				cmd = target.substr(0, spaceIndex).toLowerCase();
+				target = target.substr(spaceIndex + 1);
+			} else {
+				cmd = target.toLowerCase();
+				target = '';
 			}
-			newCmd = newCmd.toLowerCase();
 
-			cmd = newCmd;
-			target = newTarget;
 			currentCommands = commandHandler;
 		}
 	} while (commandHandler && typeof commandHandler === 'object');
