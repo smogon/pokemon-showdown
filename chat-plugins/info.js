@@ -1834,7 +1834,7 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#pm\">How can I send a user a private message?</a><br />";
 		}
-		if (target === 'all' || target === 'challenge') {
+		if (target === 'all' || target === 'challenge' || target === 'chall') {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#challenge\">How can I battle a specific user?</a><br />";
 		}
