@@ -242,6 +242,19 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Battle Spot Special 11",
+		section: "ORAS Doubles",
+
+		maxForcedLevel: 50,
+		ruleset: ['Battle Spot Doubles (VGC 2015)'],
+		banlist: ['Charizard', 'Gengar', 'Kangaskhan', 'Tyranitar', 'Gardevoir', 'Mawile', 'Salamence',
+		'Garchomp', 'Rotom', 'Rotom-Heat', 'Rotom-Wash', 'Rotom-Frost', 'Rotom-Fan', 'Rotom-Mow',
+		'Heatran', 'Cresselia', 'Amoonguss', 'Bisharp', 'Terrakion', 'Thundurus', 'Thundurus-Therian',
+		'Landorus', 'Landorus-Therian', 'Greninja', 'Talonflame', 'Aegislash', 'Sylveon'
+		],
+		requirePentagon: true
+	},
+	{
 		name: "Doubles Hackmons Cup",
 		section: "ORAS Doubles",
 
