@@ -2724,7 +2724,7 @@ Battle = (function () {
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
 		pokemon.update();
-		this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
+		this.prioritizeQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
 	Battle.prototype.canSwitch = function (side) {
 		var canSwitchIn = [];
@@ -2793,7 +2793,7 @@ Battle = (function () {
 				this.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
 			}
 		} else {
-			this.addQueue({pokemon: pokemon, choice: 'runSwitch'});
+			this.prioritizeQueue({pokemon: pokemon, choice: 'runSwitch'});
 		}
 		return true;
 	};
