@@ -523,15 +523,12 @@ fs.readFile(path.resolve(__dirname, 'package.json'), function (err, data) {
 
 exports.uncacheTree = function (root) {
 	var uncache = [require.resolve(root)];
-	function getFilename(module) {
-		return module.filename;
-	}
 	do {
 		var newuncache = [];
 		for (var i = 0; i < uncache.length; ++i) {
 			if (require.cache[uncache[i]]) {
 				newuncache.push.apply(newuncache,
-					require.cache[uncache[i]].children.map(getFilename)
+					require.cache[uncache[i]].children.map('id')
 				);
 				delete require.cache[uncache[i]];
 			}
