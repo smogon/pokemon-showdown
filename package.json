@@ -49,16 +49,16 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "cache-swap": "~0.2.0",
-    "gulp": "~3.8.7",
-    "gulp-cache": "~0.2.8",
-    "gulp-jshint": "git://github.com/spalger/gulp-jshint#c18df3a11",
-    "gulp-jscs": "~1.4.0",
-    "gulp-replace": "~0.5.1",
-    "jshint-stylish": "~1.0.0",
-    "mocha": "~2.2.1",
-    "lazypipe": "~0.2.2",
-    "merge-stream": "~0.1.7",
+    "cache-swap": "~0.2.1",
+    "gulp": "~3.9.0",
+    "gulp-cache": "~0.2.10",
+    "gulp-jshint": "~1.11.2",
+    "gulp-jscs": "~1.6.0",
+    "gulp-replace": "~0.5.3",
+    "jshint-stylish": "~2.0.1",
+    "mocha": "~2.2.5",
+    "lazypipe": "~0.2.4",
+    "merge-stream": "~0.1.8",
     "jscs": "~1.13.1"
   }
 }
