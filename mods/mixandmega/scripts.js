@@ -41,7 +41,7 @@ exports.BattleScripts = {
 		pokemon.baseTemplate = template; // mega evolution is permanent
 
 		// Do we have a proper sprite for it?
-		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === (pokemon.originalSpecies || pokemon.species)) {
+		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies) {
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
 			this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
@@ -82,7 +82,6 @@ exports.BattleScripts = {
 		return template;
 	},
 	getMixedTemplate: function (originalSpecies, megaSpecies) {
-		if (this.format !== 'mixandmega') return this.getTemplate(megaSpecies); // This isn't supposed to be needed!
 		var originalTemplate = this.getTemplate(originalSpecies);
 		var megaTemplate = this.getTemplate(megaSpecies);
 		if (originalTemplate.baseSpecies === megaTemplate.baseSpecies) return megaTemplate;
@@ -100,7 +99,7 @@ exports.BattleScripts = {
 		if (megaTemplate.types.length > baseTemplate.types.length) {
 			deltas.types.push(megaTemplate.types[1]);
 		} else if (megaTemplate.types.length < baseTemplate.types.length) {
-			deltas.types[1] = baseTemplate.types[0]; 
+			deltas.types[1] = baseTemplate.types[0];
 		} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
 			deltas.types[1] = megaTemplate.types[1];
 		}
