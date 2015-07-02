@@ -9,7 +9,7 @@ var jscs = require('gulp-jscs');
 var jshint = require('gulp-jshint');
 var replace = require('gulp-replace');
 var FileCache = require('cache-swap');
-var jshintStylish = require('./' + path.relative(__dirname, require('jshint-stylish')));
+var jshintStylish = require('jshint-stylish');
 
 var globals = {};
 var globalList = [
@@ -30,7 +30,7 @@ function transformLet () {
 
 function lint (jsHintOptions, jscsOptions) {
 	function cachedJsHint () {
-		return cache(jshint(jsHintOptions, {timeout: 450000}), {
+		return cache(jshint(jsHintOptions), {
 			success: function (file) {
 				return file.jshint.success;
 			},
