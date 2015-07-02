@@ -1902,7 +1902,7 @@ var commands = exports.commands = {
 		"/editbattle boost [player], [pokemon], [stat], [amount]",
 		"/editbattle volatile [player], [pokemon], [volatile]",
 		"/editbattle sidecondition [player], [sidecondition]",
-		"/editbattle fieldcondition [player], [fieldcondition]",
+		"/editbattle fieldcondition [fieldcondition]",
 		"/editbattle weather [weather]",
 		"/editbattle terrain [terrain]",
 		"Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t",
