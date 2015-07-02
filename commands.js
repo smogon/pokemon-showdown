@@ -1823,6 +1823,77 @@ var commands = exports.commands = {
 		room.battle.send('eval', target.replace(/\n/g, '\f'));
 	},
 
+	editbattle: function (target, room, user) {
+		if (!this.can('forcewin')) return false;
+		if (!target) return this.parse('/help editbattle');
+		if (!room.battle) {
+			this.sendReply("/editbattle - This is not a battle room.");
+			return false;
+		}
+		var cmd;
+		var spaceIndex = target.indexOf(' ');
+		if (spaceIndex > 0) {
+			cmd = target.substr(0, spaceIndex).toLowerCase();
+			target = target.substr(spaceIndex + 1);
+		} else {
+			cmd = target.toLowerCase();
+			target = '';
+		}
+		var targets = target.split(',');
+		function getPlayer(input) {
+			if (room.battle.playerids[0] === toId(input)) return 'p1';
+			if (room.battle.playerids[1] === toId(input)) return 'p2';
+			if (input.includes('1')) return 'p1';
+			if (input.includes('2')) return 'p2';
+			return 'p3';
+		}
+		function getPokemon(input) {
+			if (/^[0-9]+$/.test(input)) {
+				return '.pokemon[' + (Number(input) + 1) + ']';
+			}
+			return ".pokemon.find(function(p){return p.speciesid==='" + toId(targets[1]) + "'})";
+		}
+		switch (cmd) {
+		case 'hp':
+			room.battle.send('eval', "var p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";p.sethp(" + Number(targets[2]) + ");if (p.isActive)battle.add('-damage',p,p.getHealth);");
+			break;
+		case 'status':
+			room.battle.send('eval', "var pl=" + getPlayer(targets[0]) + ";var p=pl" + getPokemon(targets[1]) + ";p.setStatus('" + toId(targets[2]) + "');if (!p.isActive){battle.add('','please ignore the above');battle.add('-status',pl.active[0],pl.active[0].status,'[silent]');}");
+			break;
+		case 'volatile':
+			room.battle.send('eval', "var p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";p.addVolatile('" + toId(targets[2]) + "')");
+			break;
+		case 'volatile':
+			room.battle.send('eval', "var p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";p.addVolatile('" + toId(targets[2]) + "')");
+			break;
+		case 'sidecondition':
+		case 'sidecond':
+			room.battle.send('eval', "var p=" + getPlayer(targets[0]) + ".addSideCondition('" + toId(targets[1]) + "')");
+			break;
+		case 'fieldcondition':
+		case 'fieldcond':
+			room.battle.send('eval', "battle.addPseudoWeather('" + toId(targets[0]) + "')");
+			break;
+		case 'weather':
+			room.battle.send('eval', "battle.setWeather('" + toId(targets[0]) + "')");
+			break;
+		case 'terrain':
+			room.battle.send('eval', "battle.setTerrain('" + toId(targets[0]) + "')");
+			break;
+		default:
+			this.errorReply("Unknown editbattle command: " + cmd);
+			break;
+		}
+	},
+	editbattlehelp: ["/editbattle hp [player], [pokemon], [hp]",
+		"/editbattle status [player], [pokemon], [status]",
+		"/editbattle volatile [player], [pokemon], [volatile]",
+		"/editbattle sidecondition [player], [sidecondition]",
+		"/editbattle fieldcondition [player], [fieldcondition]",
+		"/editbattle weather [weather]",
+		"/editbattle terrain [terrain]",
+		"[player] must be a username or number, [pokemon] must be species name or number (not nickname)"],
+
 	/*********************************************************
 	 * Battle commands
 	 *********************************************************/
