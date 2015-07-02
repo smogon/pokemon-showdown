@@ -1840,7 +1840,7 @@ var commands = exports.commands = {
 			cmd = target.toLowerCase();
 			target = '';
 		}
-		if (cmd.charAt(cmd.length-1) === ',') cmd = cmd.slice(0, -1);
+		if (cmd.charAt(cmd.length - 1) === ',') cmd = cmd.slice(0, -1);
 		var targets = target.split(',');
 		function getPlayer(input) {
 			if (room.battle.playerids[0] === toId(input)) return 'p1';
