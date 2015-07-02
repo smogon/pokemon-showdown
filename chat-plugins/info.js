@@ -1508,7 +1508,7 @@ var commands = exports.commands = {
 	bugs: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"Found a bug on Pok&eacute;mon Showdown that you would like to report?<br />" +
+			"Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />" +
 			"- <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a>"
 		);
 	},
