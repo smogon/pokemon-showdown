@@ -1867,6 +1867,10 @@ var commands = exports.commands = {
 		case 'pp':
 			room.battle.send('eval', "var pl=" + getPlayer(targets[0]) + ";var p=pl" + getPokemon(targets[1]) + ";p.moveset[p.moves.indexOf('" + toId(targets[2]) + "')].pp = " + parseInt(targets[3]));
 			break;
+		case 'boost':
+		case 'b':
+			room.battle.send('eval', "var p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";battle.boost({" + toId(targets[2]) + ":" + parseInt(targets[3]) + "},p)");
+			break;
 		case 'volatile':
 		case 'v':
 			room.battle.send('eval', "var p=" + getPlayer(targets[0]) + getPokemon(targets[1]) + ";p.addVolatile('" + toId(targets[2]) + "')");
@@ -1895,12 +1899,13 @@ var commands = exports.commands = {
 	editbattlehelp: ["/editbattle hp [player], [pokemon], [hp]",
 		"/editbattle status [player], [pokemon], [status]",
 		"/editbattle pp [player], [pokemon], [move], [pp]",
+		"/editbattle boost [player], [pokemon], [stat], [amount]",
 		"/editbattle volatile [player], [pokemon], [volatile]",
 		"/editbattle sidecondition [player], [sidecondition]",
 		"/editbattle fieldcondition [player], [fieldcondition]",
 		"/editbattle weather [weather]",
 		"/editbattle terrain [terrain]",
-		"Short forms: /ebat h OR s OR pp OR v OR sc OR fc OR w OR t",
+		"Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t",
 		"[player] must be a username or number, [pokemon] must be species name or number (not nickname), [move] must be move name"],
 
 	/*********************************************************
