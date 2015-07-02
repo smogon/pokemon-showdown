@@ -1499,6 +1499,25 @@ var commands = exports.commands = {
 		this.sendReplyBox("<a href=\"http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209\">Pok&eacute;mon Showdown Forums</a>");
 	},
 
+	suggestions: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox("<a href=\"https://www.smogon.com/forums/threads/3534365/\">Make a suggestion for Pok&eacute;mon Showdown</a>");
+	},
+
+	bugreport: 'bugs',
+	bugs: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (room.battle) {
+			this.sendReplyBox("<center><button name=\"saveReplay\"><i class=\"icon-upload\"></i> Save Replay</button> &mdash; <a href=\"http://www.smogon.com/forums/threads/3520646/\">Questions</a> &mdash; <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a></center>");
+		} else {
+			this.sendReplyBox(
+				"Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />" +
+				"- <a href=\"http://www.smogon.com/forums/threads/3520646/\">Questions</a><br />" +
+				"- <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a>"
+			);
+		}
+	},
+
 	avatars: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
