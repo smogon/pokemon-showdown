@@ -41,7 +41,7 @@ exports.BattleScripts = {
 		pokemon.baseTemplate = template; // mega evolution is permanent
 
 		// Do we have a proper sprite for it?
-		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies) {
+		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === (pokemon.originalSpecies || pokemon.species)) {
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
 			this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
@@ -70,7 +70,7 @@ exports.BattleScripts = {
 		if (!template || typeof template === 'string') template = this.getTemplate(template);
 		template = Object.clone(template); // shallow is enough
 		template.abilities = {'0': deltas.ability};
-		template.types = Object.merge(template.types.slice(), deltas.types).unique();
+		template.types = Object.merge(template.types.slice(), deltas.types).compact().unique();
 		var baseStats = template.baseStats;
 		template.baseStats = {};
 		for (var statName in baseStats) template.baseStats[statName] = baseStats[statName] + deltas.baseStats[statName];
@@ -82,6 +82,7 @@ exports.BattleScripts = {
 		return template;
 	},
 	getMixedTemplate: function (originalSpecies, megaSpecies) {
+		if (this.format !== 'mixandmega') return this.getTemplate(megaSpecies); // This isn't supposed to be needed!
 		var originalTemplate = this.getTemplate(originalSpecies);
 		var megaTemplate = this.getTemplate(megaSpecies);
 		if (originalTemplate.baseSpecies === megaTemplate.baseSpecies) return megaTemplate;
@@ -98,8 +99,10 @@ exports.BattleScripts = {
 		for (var statId in megaTemplate.baseStats) deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
 		if (megaTemplate.types.length > baseTemplate.types.length) {
 			deltas.types.push(megaTemplate.types[1]);
-		} else if (megaTemplate.types[0] !== baseTemplate.types[0]) {
-			deltas.types[0] = megaTemplate.types[0];
+		} else if (megaTemplate.types.length < baseTemplate.types.length) {
+			deltas.types[1] = baseTemplate.types[0]; 
+		} else if (megaTemplate.types[1] !== baseTemplate.types[1]) {
+			deltas.types[1] = megaTemplate.types[1];
 		}
 		if (megaTemplate.isMega) deltas.isMega = true;
 		if (megaTemplate.isPrimal) deltas.isPrimal = true;
