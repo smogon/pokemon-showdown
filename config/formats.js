@@ -348,7 +348,7 @@ exports.Formats = [
 
 		mod: 'mixandmega',
 		ruleset: ['Ubers'],
-		banlist: ['Shadow Tag'],
+		banlist: ['Shadow Tag', 'Gengarite'],
 		validateTeam: function (team, format) {
 			var itemTable = {};
 			for (var i = 0; i < team.length; i++) {
@@ -369,7 +369,7 @@ exports.Formats = [
 			if (template.species === 'Shuckle' && ['abomasite', 'aggronite', 'audinite', 'cameruptite', 'charizarditex', 'charizarditey', 'galladite', 'gyaradosite', 'heracronite', 'houndoominite', 'latiasite', 'mewtwonitey', 'sablenite', 'salamencite', 'scizorite', 'sharpedonite', 'slowbronite', 'steelixite', 'tyranitarite', 'venusaurite'].indexOf(item.id) >= 0) {
 				return ["" + template.species + " is not allowed to hold " + item.name + "."];
 			}
-			if (template.species === 'Kyurem-Black' || template.species === 'Slaking' || template.species === 'Cresselia') {
+			if (template.species === 'Kyurem-Black' || template.species === 'Slaking' || template.species === 'Cresselia' || template.species === 'Regigigas') {
 				return ["" + template.species + " is not allowed to hold any mega stone."];
 			}
 			if (item.id === 'kangaskhanite' || item.id === 'beedrillite') {
@@ -380,9 +380,6 @@ exports.Formats = [
 				if (template.species === 'Mawile' || template.species === 'Medicham') break;
 				var abilities = Object.values(template.abilities);
 				if (abilities.indexOf('Huge Power') < 0 && abilities.indexOf('Pure Power') < 0) return ["" + template.species + " is not allowed to hold " + item.name + "."];
-				break;
-			case 'gengarite':
-				if (Object.values(template.abilities).indexOf('Shadow Tag') < 0) return ["" + template.species + " is not allowed to hold " + item.name + "."];
 				break;
 			case 'blazikenite':
 				if (Object.values(template.abilities).indexOf('Speed Boost') < 0) return ["" + template.species + " is not allowed to hold " + item.name + "."];
@@ -441,7 +438,7 @@ exports.Formats = [
 						this.add('-formechange', pokemon, originalTemplate.species, template.requiredItem);
 						this.add('-start', pokemon, template.originalMega, '[silent]');
 						if (originalTemplate.types.length !== pokemon.template.types.length || originalTemplate.types[1] !== pokemon.template.types[1]) {
-							this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/')/*, '[silent]'*/);
+							this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 						}
 					}
 					this.add('message', pokemon.name + "'s " + pokemon.getItem().name + " activated!");
@@ -450,13 +447,18 @@ exports.Formats = [
 					pokemon.baseAbility = pokemon.ability;
 					pokemon.canMegaEvo = false;
 				}
-			} else if (pokemon.template.originalMega && pokemon.originalSpecies !== pokemon.template.originalMega) {
+			} else if (pokemon.template.originalMega && pokemon.originalSpecies !== this.getTemplate(pokemon.template.originalMega).baseSpecies) {
 				// Place volatiles on the Pokémon to show its mega-evolved condition
 				this.add('-start', pokemon, pokemon.template.originalMega, '[silent]');
 				var originalTemplate = this.getTemplate(pokemon.originalSpecies);
 				if (originalTemplate.types.length !== pokemon.template.types.length || originalTemplate.types[1] !== pokemon.template.types[1]) {
-					this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/')/*, '[silent]'*/);
+					this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 				}
+			}
+		},
+		onSwitchOut: function (pokemon) {
+			if (pokemon.template.originalMega && pokemon.originalSpecies !== this.getTemplate(pokemon.template.originalMega).baseSpecies) {
+				this.add('-end', pokemon, pokemon.template.originalMega, '[silent]');
 			}
 		}
 	},
