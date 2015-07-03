@@ -1471,7 +1471,7 @@ var commands = exports.commands = {
 		);
 	},
 	groupshelp: ["/groups - Explains what the + % @ # & next to people's names mean.",
-		"!groups - Show everyone that information. Requires: + % @ # & ~"],
+		"!groups - Shows everyone that information. Requires: + % @ # & ~"],
 
 	repo: 'opensource',
 	repository: 'opensource',
