@@ -1529,14 +1529,14 @@ var commands = exports.commands = {
 	intro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"New to competitive pokemon?<br />" +
+			"New to competitive Pok&eacute;mon?<br />" +
 			"- <a href=\"https://www.smogon.com/sim/ps_guide\">Beginner's Guide to Pok&eacute;mon Showdown</a><br />" +
 			"- <a href=\"https://www.smogon.com/dp/articles/intro_comp_pokemon\">An introduction to competitive Pok&eacute;mon</a><br />" +
 			"- <a href=\"https://www.smogon.com/bw/articles/bw_tiers\">What do 'OU', 'UU', etc mean?</a><br />" +
 			"- <a href=\"https://www.smogon.com/xyhub/tiers\">What are the rules for each format? What is 'Sleep Clause'?</a>"
 		);
 	},
-	introhelp: ["/intro - Provides an introduction to competitive pokemon.",
+	introhelp: ["/intro - Provides an introduction to competitive Pok\u00e9mon.",
 		"!intro - Show everyone that information. Requires: + % @ # & ~"],
 
 	mentoring: 'smogintro',
