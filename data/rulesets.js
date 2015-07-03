@@ -379,7 +379,7 @@ exports.BattleFormats = {
 			for (var i = 0; i < team.length; i++) {
 				var template = this.getTemplate(team[i].species);
 				if (speciesTable[template.num]) {
-					return ["You are limited to one of each Pokémon by Species Clause.", "(You have more than one " + template.name + ")"];
+					return ["You are limited to one of each Pokémon by Species Clause.", "(You have more than one " + template.baseSpecies + ")"];
 				}
 				speciesTable[template.num] = true;
 			}
