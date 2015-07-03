@@ -402,11 +402,7 @@ exports.Formats = [
 			case 'diancite':
 				if (template.baseStats.def <= 40 || template.baseStats.spd <= 40) return ["" + template.species + " does not have enough Def. or Sp. Def. to hold " + item.name + "."];
 				break;
-			case 'lopunnite':
-				if (template.weightkg <= 5) return ["" + template.species + "'s weight is too low to hold " + item.name + "."];
-				break;
 			case 'mewtwonitey':
-				if (template.weightkg <= 89) return ["" + template.species + "'s weight is too low to hold " + item.name + "."];
 				if (template.baseStats.def <= 20) return ["" + template.species + " does not have enough Defense to hold " + item.name + "."];
 				break;
 			}
