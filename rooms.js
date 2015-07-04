@@ -68,10 +68,11 @@ var Room = (function () {
 			message = '|c:|' + (~~(Date.now() / 1000)) + '|' + message.substr(3);
 		}
 		this.log.push(message);
+		return this;
 	};
 	Room.prototype.logEntry = function () {};
 	Room.prototype.addRaw = function (message) {
-		this.add('|raw|' + message);
+		return this.add('|raw|' + message);
 	};
 	Room.prototype.getLogSlice = function (amount) {
 		var log = this.log.slice(amount);
@@ -638,10 +639,12 @@ var GlobalRoom = (function () {
 		}
 	};
 	GlobalRoom.prototype.add = function (message) {
-		if (rooms.lobby) rooms.lobby.add(message);
+		if (rooms.lobby) return rooms.lobby.add(message);
+		return this;
 	};
 	GlobalRoom.prototype.addRaw = function (message) {
-		if (rooms.lobby) rooms.lobby.addRaw(message);
+		if (rooms.lobby) return rooms.lobby.addRaw(message);
+		return this;
 	};
 	GlobalRoom.prototype.addChatRoom = function (title) {
 		var id = toId(title);
