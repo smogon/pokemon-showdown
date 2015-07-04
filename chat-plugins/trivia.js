@@ -218,8 +218,7 @@ var Trivia = (function () {
 		this.room.addRaw(
 			"<div class=\"broadcast-blue\"><strong>Question: " + head.question + "</strong><br />" +
 			"Category: " + CATEGORIES[head.category] + "</div>"
-		);
-		this.room.update();
+		).update();
 
 		switch (this.mode) {
 		case 'first':
@@ -300,8 +299,7 @@ var Trivia = (function () {
 		if (isActive) {
 			this.inactivityCounter = 0;
 		} else if (++this.inactivityCounter === 7) {
-			this.room.addRaw("<div class=\"broadcast-blue\">The game has forced itself to end due to inactivity.</div>");
-			this.room.update();
+			this.room.addRaw("<div class=\"broadcast-blue\">The game has forced itself to end due to inactivity.</div>").update();
 			return this.updateLeaderboard();
 		}
 
@@ -310,8 +308,7 @@ var Trivia = (function () {
 			"Correct: no one<br />" +
 			"Answer" + (this.currentAnswer.length > 1 ? "s: " : ": ") + this.currentAnswer.join(", ") + "<br />" +
 			"Nobody gained any points.</div>"
-		);
-		this.room.update();
+		).update();
 		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
 	};
 
@@ -388,8 +385,7 @@ var Trivia = (function () {
 		if (winner) {
 			buffer += "</table><br />" +
 				Tools.escapeHTML(winner) + " won the game with a final score of <strong>" + score + "</strong>, and their leaderboard score has increased by <strong>" + this.prize + "</strong> points!</div>";
-			this.room.addRaw(buffer);
-			this.room.update();
+			this.room.addRaw(buffer).update();
 			return this.updateLeaderboard(toId(winner));
 		}
 
@@ -398,8 +394,7 @@ var Trivia = (function () {
 		this.inactivityCounter = 0;
 
 		buffer += "</table></div>";
-		this.room.addRaw(buffer);
-		this.room.update();
+		this.room.addRaw(buffer).update();
 		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
 	};
 
@@ -438,8 +433,7 @@ var Trivia = (function () {
 
 		if (winner) {
 			buffer += Tools.escapeHTML(winner) + " won the game with a final score of <strong>" + score + "</strong>, and their leaderboard score has increased by <strong>" + this.prize + "</strong> points!</div>";
-			this.room.addRaw(buffer);
-			this.room.update();
+			this.room.addRaw(buffer).update();
 			return this.updateLeaderboard(toId(winner));
 		}
 
@@ -448,8 +442,7 @@ var Trivia = (function () {
 
 		buffer += (this.correctResponders > 1 ? "Each of them" : "They") + " gained <strong>" + points + "</strong> point" + (points > 1 ? "s!</div>" : "!</div>");
 		this.correctResponders = 0;
-		this.room.addRaw(buffer);
-		this.room.update();
+		this.room.addRaw(buffer).update();
 		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
 	};
 
@@ -457,8 +450,7 @@ var Trivia = (function () {
 		this.room.addRaw(
 			"<div class=\"broadcast-blue\">No questions are left!<br />" +
 			"<strong>Since the game has reached a stalemate, nobody has gained any leaderboard points.</strong></div>"
-		);
-		this.room.update();
+		).update();
 		this.updateLeaderboard();
 	};
 
