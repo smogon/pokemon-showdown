@@ -65,7 +65,9 @@ exports.BattleStatuses = {
 		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon, target, move) {
 			pokemon.statusData.time--;
-			this.add('cant', pokemon, 'slp');
+			if (pokemon.statusData.time > 0) {
+				this.add('cant', pokemon, 'slp');
+			}
 			pokemon.lastMove = '';
 			return false;
 		},
