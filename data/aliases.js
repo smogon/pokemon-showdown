@@ -315,9 +315,11 @@ exports.BattleAliases = {
 	"shao": "Mienshao",
 	"skarm": "Skarmory",
 	"smogon": "Koffing",
+	"smogonbird": "Talonflame",
 	"sui": "Suicune",
 	"talon": "Talonflame",
 	"terra": "Terrakion",
+	"tflame": "Talonflame",
 	"tran": "Heatran",
 	"ttar": "Tyranitar",
 	"thundy": "Thundurus",
@@ -330,6 +332,7 @@ exports.BattleAliases = {
 
 	// moves
 	"bb": "Brave Bird",
+	"bd": "Belly Drum",
 	"bpass": "Baton Pass",
 	"bp": "Baton Pass",
 	"cc": "Close Combat",
