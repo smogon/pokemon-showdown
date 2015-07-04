@@ -9,6 +9,8 @@
  *
  * @license MIT license
  */
+ 
+var request = require('request');
 
 var commands = exports.commands = {
 
@@ -168,6 +170,35 @@ var commands = exports.commands = {
 		return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
 	},
 	invitehelp: ["/invite [username], [roomname] - Invites the player [username] to join the room [roomname]."],
+	
+	regdate: function(target, room, user, connection) {
+		if (!this.canBroadcast()) return;
+		if (!target || target == "0") target = user.userid;
+		if (!target || target == ".") return this.sendReply('/regdate - Please specify a valid username.');
+		var username = target;
+		target = target.replace(/\s+/g, '');
+		var request = require("request");
+		var self = this;
+		request('http://pokemonshowdown.com/users/~' + target, function(error, response, content) {
+			if (!(!error && response.statusCode == 200)) return;
+			content = content + '';
+			content = content.split("<em");
+			if (content[1]) {
+				content = content[1].split("</p>");
+				if (content[0]) {
+					content = content[0].split("</em>");
+					if (content[1]) {
+						regdate = content[1].split('</small>')[0] + '.';
+						data = Tools.escapeHTML(username) + ' was registered on' + regdate;
+					}
+				}
+			} else {
+				data = Tools.escapeHTML(username) + ' is not registered.';
+			}
+			self.sendReplyBox(Tools.escapeHTML(data));
+		});
+	},
+	regdatehelp: ["/regdate [username] - Check when a username was registered."],
 
 	/*********************************************************
 	 * Data Search Tools
