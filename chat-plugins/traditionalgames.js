@@ -44,20 +44,16 @@ exports.commands = {
 			if (err) {
 				if (err instanceof SyntaxError || err.message === 'Malformed data') {
 					if (!broadcasting) return connection.sendTo(room, "Error: something went wrong in the request: " + err.message);
-					room.add("Error: Something went wrong in the request: " + err.message);
-					room.update();
+					return room.add("Error: Something went wrong in the request: " + err.message).update();
 				}
 				if (!broadcasting) return connection.sendTo(room, "Error: " + err.message);
-				room.add("Error: " + err.message);
-				room.update();
-				return;
+				return room.add("Error: " + err.message).update();
 			}
 			var entryUrl = string(data.url);
 			var entryTitle = string(data.title);
 			var htmlReply = "<strong>Best result for " + Tools.escapeHTML(query) + ":</strong><br/><a href=\"" + Tools.escapeHTML(entryUrl) + "\">" + Tools.escapeHTML(entryTitle) + "</a>";
 			if (!broadcasting) return connection.sendTo(room, "|raw|<div class=\"infobox\">" + htmlReply + "</div>");
-			room.add("|raw|<div class=\"infobox\">" + htmlReply + "</div>");
-			room.update();
+			room.addRaw("<div class=\"infobox\">" + htmlReply + "</div>").update();
 		});
 	}
 };

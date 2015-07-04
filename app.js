@@ -128,16 +128,14 @@ global.ResourceMonitor = {
 	 */
 	log: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) {
-			Rooms.rooms.staff.add('||' + text);
-			Rooms.rooms.staff.update();
+		if (Rooms.get('staff')) {
+			Rooms.get('staff').add('||' + text).update();
 		}
 	},
 	logHTML: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) {
-			Rooms.rooms.staff.add('|html|' + text);
-			Rooms.rooms.staff.update();
+		if (Rooms.get('staff')) {
+			Rooms.get('staff').add('|html|' + text).update();
 		}
 	},
 	countConnection: function (ip, name) {
