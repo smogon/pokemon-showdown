@@ -1607,9 +1607,13 @@ var commands = exports.commands = {
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523229/\">Anything Goes</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3535064/\">Anything Goes Viability Ranking</a><br />";
 		}
-		if (target === 'all' || target === 'smogondoublesuu' || target === 'doublesuu') {
+		if (target === 'all' || target === 'doublesubers') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516968/\">Doubles UU</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3542746/\">Doubles Ubers</a><br />";
+		}
+		if (target === 'all' || target === 'doublesuu') {
+			matched = true;
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3542755/\">Doubles UU</a><br />";
 		}
 		if (target === 'all' || target === 'smogontriples' || target === 'triples') {
 			matched = true;
