@@ -55,6 +55,21 @@ var commands = exports.commands = {
 		if (!buffer.length) buffer = "This server has no auth.";
 		connection.popup(buffer.join("\n\n"));
 	},
+	
+	staffrank: 'findrank',
+	findrank: function(target, room, user) {
+		if (!target || target == "+" || !Config.groups[target]) return false;
+		if (!this.canBroadcast()) return;
+		var names = [];
+		for (var i in Users.users) {
+			if (!Users.users[i].connected) continue;
+			if (Users.users[i].group === target) {
+				names.push(Users.users[i].name);
+			}
+		}
+		if (names.length < 1) return this.sendReplyBox('There are no users of the rank <font color="#992222"><b>' + Tools.escapeHTML(Config.groups[target].name) + '</b></font> currently online.');
+		return this.sendReplyBox('There ' + (names.length === 1 ? 'is' : 'are') + ' <font color="#992222"><b>' + names.length + '</b></font> ' + (names.length === 1 ? 'user' : 'users') + ' with the rank <font color="#992222"><b>' + Config.groups[target].name + '</b></font> currently online.<br />' + names.join(', '));
+	},
 
 	me: function (target, room, user, connection) {
 		// By default, /me allows a blank message
