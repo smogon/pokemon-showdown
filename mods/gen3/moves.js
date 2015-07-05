@@ -653,7 +653,7 @@ exports.BattleMovedex = {
 			},
 			onResidualOrder: 12,
 			onEnd: function (target) {
-				this.add('-end', target, 'move: Taunt');
+				this.add('-end', target, 'move: Taunt', '[silent]');
 			},
 			onDisableMove: function (pokemon) {
 				var moves = pokemon.moveset;
