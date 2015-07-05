@@ -829,7 +829,7 @@ var commands = exports.commands = {
 			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		targetUser.popup("|modal|" + user.name + " has muted you for " + (muteDuration / (60 * 1000)) + " minutes. " + target);
+		targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + (muteDuration / (60 * 1000)) + " minutes. " + target);
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + (muteDuration / (60 * 1000)) + " minutes." + (target ? " (" + target + ")" : ""));
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
