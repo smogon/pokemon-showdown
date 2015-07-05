@@ -409,5 +409,7 @@ var commands = {
 exports.commands = {
 	'giveaway': commands,
 	'ga': commands.guess,
-	'gh': commands.help
+	'gh': commands.help,
+	'qg': commands.question,
+	'lg': commands.lottery
 };
