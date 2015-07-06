@@ -562,6 +562,21 @@ exports.Formats = [
 		banlist: ['NU', 'BL4', 'Altarianite', 'Beedrillite', 'Lopunnite', 'Chatter', 'Shell Smash + Baton Pass']
 	},
 	{
+		name: "FU",
+		section: "Other Metagames",
+		searchShow: false,
+
+		ruleset: ['PU'],
+		banlist: ['PU', 'Avalugg', 'Togetic', 'Basculin', 'Sawsbuck', 'Gourgeist-Super', 'Leafeon',
+		'Roselia', 'Armaldo', 'Poliwrath', 'Arbok', 'Rapidash', 'Articuno', 'Kadabra', 'Mr. Mime',
+		'Luxray', 'Ninjask', 'Misdreavus', 'Golem', 'Ninetales', 'Meowstic', 'Mightyena',
+		'Rotom-Frost', 'Machoke', 'Torkoal', 'Clefairy', 'Zebstrika', 'Barbaracle', 'Flareon',
+		'Drifblim', 'Volbeat', 'Stoutland', 'Leavanny', 'Pawniard', 'Dusknoir', 'Electrode', 'Grumpig',
+		'Marowak', 'Victreebel', 'Lapras', 'Dodrio', 'Floatzel', 'Gigalith', 'Monferno', 'Tangela',
+		'Beheeyem', 'Pelipper', 'Carracosta', 'Raichu', 'Jumpluff', 'Torterra', 'Ursaring',
+		'Piloswine', 'Simipour', 'Probopass', 'Aurorus', 'Lickilicky', 'Sticky Web']
+	},
+	{
 		name: "Inverse Battle",
 		section: "Other Metagames",
 
