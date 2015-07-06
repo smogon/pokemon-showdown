@@ -221,6 +221,46 @@ module.exports = (function () {
 		default: return 0;
 		}
 	};
+
+	/**
+	 * Safely ensures the passed variable is a string
+	 * Simply doing '' + str can crash if str.toString crashes or isn't a function
+	 * If we're expecting a string and being given anything that isn't a string
+	 * or a number, it's safe to assume it's an error, and return ''
+	 */
+
+	Tools.prototype.getString = function (str) {
+		if (typeof str === 'string' || typeof str === 'number') return '' + str;
+		return '';
+	};
+
+	/**
+	 * Sanitizes a username or Pokemon nickname
+	 *
+	 * Returns the passed name, sanitized for safe use as a name in the PS
+	 * protocol.
+	 *
+	 * Such a string must uphold these guarantees:
+	 * - must not contain any ASCII whitespace character other than a space
+	 * - must not start or end with a space character
+	 * - must not contain any of: | , [ ]
+	 * - must not be the empty string
+	 *
+	 * If no such string can be found, returns the empty string. Calling
+	 * functions are expected to check for that condition and deal with it
+	 * accordingly.
+	 *
+	 * getName also enforces that there are not multiple space characters
+	 * in the name, although this is not strictly necessary for safety.
+	 */
+
+	Tools.prototype.getName = function (name) {
+		if (typeof name !== 'string' && typeof name !== 'number') return '';
+		name = ('' + name).replace(/[\|\s\[\]\,]+/g, ' ').trim();
+		if (name.length > 18) name = name.substr(0, 18).trim();
+		return name;
+	};
+
 	Tools.prototype.getTemplate = function (template) {
 		if (!template || typeof template === 'string') {
 			var name = (template || '').trim();

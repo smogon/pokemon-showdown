@@ -21,7 +21,7 @@ function wikiaSearch (subdomain, query, callback) {
 				return callback(e);
 			}
 			if (!result) return callback(new Error("Malformed data"));
-			if (result.exception) return callback(new Error(string(result.exception.message) || "Not found"));
+			if (result.exception) return callback(new Error(Tools.getString(result.exception.message) || "Not found"));
 			if (!Array.isArray(result.items) || !result.items[0] || typeof result.items[0] !== 'object') return callback(new Error("Malformed data"));
 
 			return callback(null, result.items[0]);
@@ -49,8 +49,8 @@ exports.commands = {
 				if (!broadcasting) return connection.sendTo(room, "Error: " + err.message);
 				return room.add("Error: " + err.message).update();
 			}
-			var entryUrl = string(data.url);
-			var entryTitle = string(data.title);
+			var entryUrl = Tools.getString(data.url);
+			var entryTitle = Tools.getString(data.title);
 			var htmlReply = "<strong>Best result for " + Tools.escapeHTML(query) + ":</strong><br/><a href=\"" + Tools.escapeHTML(entryUrl) + "\">" + Tools.escapeHTML(entryTitle) + "</a>";
 			if (!broadcasting) return connection.sendTo(room, "|raw|<div class=\"infobox\">" + htmlReply + "</div>");
 			room.addRaw("<div class=\"infobox\">" + htmlReply + "</div>").update();
