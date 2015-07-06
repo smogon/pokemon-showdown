@@ -434,10 +434,10 @@ exports.Formats = [
 						pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 						this.add('detailschange', pokemon, pokemon.details);
 					} else {
-						var originalTemplate = this.getTemplate(pokemon.originalSpecies);
-						this.add('-formechange', pokemon, originalTemplate.species, template.requiredItem);
-						this.add('-start', pokemon, template.originalMega, '[silent]');
-						if (originalTemplate.types.length !== pokemon.template.types.length || originalTemplate.types[1] !== pokemon.template.types[1]) {
+						var oTemplate = this.getTemplate(pokemon.originalSpecies);
+						this.add('-formechange', pokemon, oTemplate.species, template.requiredItem);
+						this.add('-start', pokemon, this.getTemplate(template.originalMega).requiredItem, '[silent]');
+						if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
 							this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 						}
 					}
@@ -447,18 +447,22 @@ exports.Formats = [
 					pokemon.baseAbility = pokemon.ability;
 					pokemon.canMegaEvo = false;
 				}
-			} else if (pokemon.template.originalMega && pokemon.originalSpecies !== this.getTemplate(pokemon.template.originalMega).baseSpecies) {
-				// Place volatiles on the Pokémon to show its mega-evolved condition
-				this.add('-start', pokemon, pokemon.template.originalMega, '[silent]');
-				var originalTemplate = this.getTemplate(pokemon.originalSpecies);
-				if (originalTemplate.types.length !== pokemon.template.types.length || originalTemplate.types[1] !== pokemon.template.types[1]) {
-					this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
+			} else {
+				var oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
+				if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
+					// Place volatiles on the Pokémon to show its mega-evolved condition and details
+					this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
+					var oTemplate = this.getTemplate(pokemon.originalSpecies);
+					if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
+						this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
+					}
 				}
 			}
 		},
 		onSwitchOut: function (pokemon) {
-			if (pokemon.template.originalMega && pokemon.originalSpecies !== this.getTemplate(pokemon.template.originalMega).baseSpecies) {
-				this.add('-end', pokemon, pokemon.template.originalMega, '[silent]');
+			var oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
+			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
+				this.add('-end', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
 			}
 		}
 	},
