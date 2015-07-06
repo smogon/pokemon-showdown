@@ -43,16 +43,17 @@ exports.BattleScripts = {
 			this.add('detailschange', pokemon, pokemon.details);
 			this.add('-mega', pokemon, template.baseSpecies, template.requiredItem);
 		} else {
-			var originalTemplate = this.getTemplate(pokemon.originalSpecies);
+			var oTemplate = this.getTemplate(pokemon.originalSpecies);
+			var oMegaTemplate = this.getTemplate(template.originalMega);
 			if (template.originalMega === 'Rayquaza-Mega') {
 				this.add('message', "" + pokemon.side.name + "'s fervent wish has reached " + pokemon.species + "!");
 			} else {
 				this.add('message', "" + pokemon.species + "'s " + pokemon.getItem().name + " is reacting to " + pokemon.side.name + "'s Mega Bracelet!");
 			}
-			this.add('-formechange', pokemon, originalTemplate.species, template.requiredItem);
+			this.add('-formechange', pokemon, oTemplate.species, template.requiredItem);
 			this.add('message', template.baseSpecies + " has Mega Evolved into Mega " + template.baseSpecies + "!");
-			this.add('-start', pokemon, template.originalMega, '[silent]');
-			if (originalTemplate.types.length !== pokemon.template.types.length || originalTemplate.types[1] !== pokemon.template.types[1]) {
+			this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
+			if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
 				this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 			}
 		}
