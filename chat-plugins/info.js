@@ -10,6 +10,8 @@
  * @license MIT license
  */
 
+const RESULTS_MAX_LENGTH = 10;
+
 var commands = exports.commands = {
 
 	ip: 'whois',
@@ -346,7 +348,6 @@ var commands = exports.commands = {
 		var allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1};
 		var showAll = false;
 		var megaSearch = null;
-		var output = 10;
 		var randomOutput = 0;
 		var categories = ['gen', 'tier', 'color', 'types', 'ability', 'stats', 'compileLearnsets', 'moves', 'recovery', 'priority'];
 
@@ -658,11 +659,11 @@ var commands = exports.commands = {
 
 		var resultsStr = "";
 		if (results.length > 0) {
-			if (showAll || results.length <= output + 5) {
+			if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 				results.sort();
 				resultsStr = results.join(", ");
 			} else {
-				resultsStr = results.slice(0, output).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+				resultsStr = results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + string(results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else {
 			resultsStr = "No Pok&eacute;mon found.";
@@ -720,7 +721,6 @@ var commands = exports.commands = {
 		var allVolatileStatus = {'flinch':1, 'confusion':1, 'partiallytrapped':1};
 		var allBoosts = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'accuracy':1, 'evasion':1};
 		var showAll = false;
-		var output = 10;
 		var lsetData = {};
 		var targetMon = '';
 
@@ -1036,11 +1036,11 @@ var commands = exports.commands = {
 
 		var resultsStr = targetMon ? ("<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br>") : "";
 		if (results.length > 0) {
-			if (showAll || results.length <= output + 5) {
+			if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 				results.sort();
 				resultsStr += results.join(", ");
 			} else {
-				resultsStr += results.slice(0, output).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+				resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + string(results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else {
 			resultsStr = "No moves found.";
@@ -1060,7 +1060,6 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help itemsearch');
 		if (!this.canBroadcast()) return;
 
-		var output = 10;
 		var showAll = false;
 
 		target = target.trim();
@@ -1267,11 +1266,11 @@ var commands = exports.commands = {
 
 		var resultsStr = "";
 		if (foundItems.length > 0) {
-			if (showAll || foundItems.length <= output + 5) {
+			if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
 				foundItems.sort();
 				resultsStr += foundItems.join(", ");
 			} else {
-				resultsStr += foundItems.slice(0, output).join(", ") + ", and " + string(foundItems.length - output) + " more. <font color=#999999>Redo the search with ', all' at the end to show all results.</font>";
+				resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + string(foundItems.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with ', all' at the end to show all results.</font>";
 			}
 		} else {
 			resultsStr = "No items found. Try a more general search";
