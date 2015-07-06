@@ -731,7 +731,7 @@ User = (function () {
 		if (Config.namefilter) {
 			name = Config.namefilter(name, this);
 		}
-		name = toName(name);
+		name = Tools.getName(name);
 		name = name.replace(/^[^A-Za-z0-9]+/, "");
 		return name;
 	};
