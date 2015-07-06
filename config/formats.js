@@ -347,7 +347,7 @@ exports.Formats = [
 		column: 2,
 
 		mod: 'mixandmega',
-		ruleset: ['Ubers'],
+		ruleset: ['Ubers', 'Baton Pass Clause'],
 		banlist: ['Gengarite', 'Shadow Tag'],
 		validateTeam: function (team, format) {
 			var itemTable = {};
@@ -369,7 +369,8 @@ exports.Formats = [
 			if (template.species === 'Shuckle' && ['abomasite', 'aggronite', 'audinite', 'cameruptite', 'charizarditex', 'charizarditey', 'galladite', 'gyaradosite', 'heracronite', 'houndoominite', 'latiasite', 'mewtwonitey', 'sablenite', 'salamencite', 'scizorite', 'sharpedonite', 'slowbronite', 'steelixite', 'tyranitarite', 'venusaurite'].indexOf(item.id) >= 0) {
 				return ["" + template.species + " is not allowed to hold " + item.name + "."];
 			}
-			if (template.species === 'Cresselia' || template.species === 'Kyurem-Black' || template.species === 'Slaking' || template.species === 'Regigigas') {
+			var bannedMons = {'Cresselia':1, 'Dragonite':1, 'Kyurem-Black':1, 'Slaking':1, 'Regigigas':1};
+			if (template.species in bannedMons) {
 				return ["" + template.species + " is not allowed to hold a Mega Stone."];
 			}
 			if (item.id === 'beedrillite' || item.id === 'kangaskhanite') {
@@ -380,7 +381,18 @@ exports.Formats = [
 				if (set.ability !== 'Speed Boost') return ["" + template.species + " is not allowed to hold " + item.name + "."];
 				break;
 			case 'mawilite': case 'medichamite':
-				if (set.ability !== 'Huge Power' && set.ability !== 'Pure Power') return ["" + template.species + " is not allowed to hold " + item.name + "."];
+				var powerAbilities = {'Huge Power':1, 'Pure Power':1};
+				if (powerAbilities.hasOwnProperty(set.ability)) break;
+				if (!template.otherFormes) return ["" + template.species + " is not allowed to hold " + item.name + "."];
+				var allowedPower = false;
+				for (var i = 0; i < template.otherFormes.length; i++) {
+					var altTemplate = this.getTemplate(template.otherFormes[i]);
+					if ((altTemplate.isMega || altTemplate.isPrimal) && powerAbilities.hasOwnProperty(altTemplate.abilities['0'])) {
+						allowedPower = true;
+						break;
+					}
+				}
+				if (!allowedPower) return ["" + template.species + " is not allowed to hold " + item.name + "."];
 				break;
 			case 'slowbronite':
 				if (template.species === 'Regirock' || template.species === 'Steelix') return ["" + template.species + " is not allowed to hold " + item.name + "."];
