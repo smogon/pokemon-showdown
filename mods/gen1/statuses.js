@@ -19,7 +19,7 @@ exports.BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon);
 		},
 		onSwitchIn: function (pokemon) {
 			pokemon.addVolatile('brnattackdrop');
@@ -102,7 +102,7 @@ exports.BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon);
 		},
 		onSwitchIn: function (pokemon) {
 			pokemon.addVolatile('residualdmg');
@@ -122,7 +122,7 @@ exports.BattleStatuses = {
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf: function (pokemon) {
 			pokemon.volatiles['residualdmg'].counter++;
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon);
 		},
 		onSwitchIn: function (pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
