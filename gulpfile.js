@@ -15,9 +15,8 @@ var fileCache = new CacheSwap({tmpDir: '', cacheDirName: 'gulp-cache'});
 
 var globals = {};
 var globalList = [
-	'Config', 'ResourceMonitor', 'toId', 'toName', 'string', 'LoginServer',
-	'Users', 'Rooms', 'Verifier', 'CommandParser', 'Simulator', 'Tournaments',
-	'Dnsbl', 'Cidr', 'Sockets', 'Tools', 'TeamValidator'
+	'Config', 'ResourceMonitor', 'toId', 'Tools', 'LoginServer', 'Users', 'Rooms', 'Verifier',
+	'CommandParser', 'Simulator', 'Tournaments', 'Dnsbl', 'Cidr', 'Sockets', 'TeamValidator'
 ];
 globalList.forEach(function (identifier) {globals[identifier] = false;});
 
