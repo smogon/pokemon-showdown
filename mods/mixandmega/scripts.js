@@ -18,7 +18,7 @@ exports.BattleScripts = {
 		} else {
 			// Bans on Mega-Rayquazay megaevos go here.
 			if (pokemon.template.tier === 'Uber') return false;
-			var bannedMons = {'Kyurem-Black':1, 'Slaking':1, 'Regigigas':1, 'Cresselia':1, 'Shuckle':1};
+			var bannedMons = {'Kyurem-Black':1, 'Slaking':1, 'Regigigas':1, 'Cresselia':1, 'Shuckle':1, 'Dragonite':1};
 			if (pokemon.template.species in bannedMons) return false;
 			if (pokemon.set.moves.indexOf('dragonascent') >= 0) return 'Rayquaza-Mega';
 		}
