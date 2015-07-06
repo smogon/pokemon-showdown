@@ -16,7 +16,7 @@ var fs = require('fs');
 module.exports = (function () {
 	var moddedTools = {};
 
-	var dataTypes = ['FormatsData', 'Learnsets', 'Pokedex', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Formats', 'Aliases'];
+	var dataTypes = ['FormatsData', 'Learnsets', 'Pokedex', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
 	var dataFiles = {
 		'Pokedex': 'pokedex.js',
 		'Movedex': 'moves.js',
@@ -30,6 +30,35 @@ module.exports = (function () {
 		'Learnsets': 'learnsets.js',
 		'Aliases': 'aliases.js'
 	};
+
+	var BattleNatures = dataFiles.Natures = {
+		adamant: {name:"Adamant", plus:'atk', minus:'spa'},
+		bashful: {name:"Bashful"},
+		bold: {name:"Bold", plus:'def', minus:'atk'},
+		brave: {name:"Brave", plus:'atk', minus:'spe'},
+		calm: {name:"Calm", plus:'spd', minus:'atk'},
+		careful: {name:"Careful", plus:'spd', minus:'spa'},
+		docile: {name:"Docile"},
+		gentle: {name:"Gentle", plus:'spd', minus:'def'},
+		hardy: {name:"Hardy"},
+		hasty: {name:"Hasty", plus:'spe', minus:'def'},
+		impish: {name:"Impish", plus:'def', minus:'spa'},
+		jolly: {name:"Jolly", plus:'spe', minus:'spa'},
+		lax: {name:"Lax", plus:'def', minus:'spd'},
+		lonely: {name:"Lonely", plus:'atk', minus:'def'},
+		mild: {name:"Mild", plus:'spa', minus:'def'},
+		modest: {name:"Modest", plus:'spa', minus:'atk'},
+		naive: {name:"Naive", plus:'spe', minus:'spd'},
+		naughty: {name:"Naughty", plus:'atk', minus:'spd'},
+		quiet: {name:"Quiet", plus:'spa', minus:'spe'},
+		quirky: {name:"Quirky"},
+		rash: {name:"Rash", plus:'spa', minus:'spd'},
+		relaxed: {name:"Relaxed", plus:'def', minus:'spe'},
+		sassy: {name:"Sassy", plus:'spd', minus:'spe'},
+		serious: {name:"Serious"},
+		timid: {name:"Timid", plus:'spe', minus:'atk'}
+	};
+
 	function Tools(mod, parentMod) {
 		if (!mod) {
 			mod = 'base';
@@ -44,6 +73,7 @@ module.exports = (function () {
 		};
 		if (mod === 'base') {
 			dataTypes.forEach(function (dataType) {
+				if (typeof dataFiles[dataType] !== 'string') return (data[dataType] = dataFiles[dataType]);
 				try {
 					var path = './data/' + dataFiles[dataType];
 					data[dataType] = require(path)['Battle' + dataType];
@@ -69,11 +99,13 @@ module.exports = (function () {
 		} else {
 			var parentData = moddedTools[parentMod].data;
 			dataTypes.forEach(function (dataType) {
-				try {
-					var path = './mods/' + mod + '/' + dataFiles[dataType];
-					data[dataType] = require(path)['Battle' + dataType];
-				} catch (e) {
-					if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING MOD DATA: ' + e.stack);
+				if (typeof dataFiles[dataType] === 'string') {
+					try {
+						var path = './mods/' + mod + '/' + dataFiles[dataType];
+						data[dataType] = require(path)['Battle' + dataType];
+					} catch (e) {
+						if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING MOD DATA: ' + e.stack);
+					}
 				}
 				if (!data[dataType]) data[dataType] = {};
 				for (var i in parentData[dataType]) {
@@ -97,33 +129,6 @@ module.exports = (function () {
 				}
 			});
 		}
-		data['Natures'] = {
-			adamant: {name:"Adamant", plus:'atk', minus:'spa'},
-			bashful: {name:"Bashful"},
-			bold: {name:"Bold", plus:'def', minus:'atk'},
-			brave: {name:"Brave", plus:'atk', minus:'spe'},
-			calm: {name:"Calm", plus:'spd', minus:'atk'},
-			careful: {name:"Careful", plus:'spd', minus:'spa'},
-			docile: {name:"Docile"},
-			gentle: {name:"Gentle", plus:'spd', minus:'def'},
-			hardy: {name:"Hardy"},
-			hasty: {name:"Hasty", plus:'spe', minus:'def'},
-			impish: {name:"Impish", plus:'def', minus:'spa'},
-			jolly: {name:"Jolly", plus:'spe', minus:'spa'},
-			lax: {name:"Lax", plus:'def', minus:'spd'},
-			lonely: {name:"Lonely", plus:'atk', minus:'def'},
-			mild: {name:"Mild", plus:'spa', minus:'def'},
-			modest: {name:"Modest", plus:'spa', minus:'atk'},
-			naive: {name:"Naive", plus:'spe', minus:'spd'},
-			naughty: {name:"Naughty", plus:'atk', minus:'spd'},
-			quiet: {name:"Quiet", plus:'spa', minus:'spe'},
-			quirky: {name:"Quirky"},
-			rash: {name:"Rash", plus:'spa', minus:'spd'},
-			relaxed: {name:"Relaxed", plus:'def', minus:'spe'},
-			sassy: {name:"Sassy", plus:'spd', minus:'spe'},
-			serious: {name:"Serious"},
-			timid: {name:"Timid", plus:'spe', minus:'atk'}
-		};
 	}
 	Tools.loadMods = function () {
 		if (Tools.modsLoaded) return;
