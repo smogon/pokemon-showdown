@@ -337,7 +337,7 @@ var commands = exports.commands = {
 
 	ds: 'dexsearch',
 	dsearch: 'dexsearch',
-	dexsearch: function (target, room, user, connection, cmd) {
+	dexsearch: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 
 		if (!target) return this.parse('/help dexsearch');
@@ -657,16 +657,16 @@ var commands = exports.commands = {
 			results = results.randomize().slice(0, randomOutput);
 		}
 
-		var resultsStr = "";
+		var resultsStr = this.broadcasting ? "" : ("<font color=#999999>" + message + ":</font><br>");
 		if (results.length > 0) {
 			if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 				results.sort();
-				resultsStr = results.join(", ");
+				resultsStr += results.join(", ");
 			} else {
-				resultsStr = results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+				resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else {
-			resultsStr = "No Pok&eacute;mon found.";
+			resultsStr += "No Pok&eacute;mon found.";
 		}
 		return this.sendReplyBox(resultsStr);
 	},
@@ -682,7 +682,7 @@ var commands = exports.commands = {
 
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
-	randompokemon: function (target, room, user, connection, cmd) {
+	randompokemon: function (target, room, user, connection, cmd, message) {
 		var targets = target.split(",");
 		var targetsBuffer = [];
 		var qty;
@@ -700,7 +700,7 @@ var commands = exports.commands = {
 		}
 		if (!qty) targetsBuffer.push("random1");
 
-		CommandParser.commands.dexsearch.call(this, targetsBuffer.join(","), room, user, connection, "randpoke");
+		CommandParser.commands.dexsearch.call(this, targetsBuffer.join(","), room, user, connection, "randpoke", message);
 	},
 	randompokemonhelp: ["/randompokemon - Generates random Pokemon based on given search conditions.",
 		"/randompokemon uses the same parameters as /dexsearch (see '/help ds').",
@@ -708,7 +708,7 @@ var commands = exports.commands = {
 
 	ms: 'movesearch',
 	msearch: 'movesearch',
-	movesearch: function (target, room, user) {
+	movesearch: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 
 		if (!target) return this.parse('/help movesearch');
@@ -1034,7 +1034,12 @@ var commands = exports.commands = {
 			results.push(dex[move].name);
 		}
 
-		var resultsStr = targetMon ? ("<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br>") : "";
+		var resultsStr = "";
+		if (targetMon) {
+			resultsStr += "<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br>";
+		} else {
+			resultsStr += this.broadcasting ? "" : ("<font color=#999999>" + message + ":</font><br>");
+		}
 		if (results.length > 0) {
 			if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 				results.sort();
@@ -1043,7 +1048,7 @@ var commands = exports.commands = {
 				resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else {
-			resultsStr = "No moves found.";
+			resultsStr += "No moves found.";
 		}
 		return this.sendReplyBox(resultsStr);
 	},
@@ -1056,7 +1061,7 @@ var commands = exports.commands = {
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from it's movepool.",
 		"The order of the parameters does not matter."],
 
-	itemsearch: function (target, room, user) {
+	itemsearch: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help itemsearch');
 		if (!this.canBroadcast()) return;
 
@@ -1264,7 +1269,7 @@ var commands = exports.commands = {
 			}
 		}
 
-		var resultsStr = "";
+		var resultsStr = this.broadcasting ? "" : ("<font color=#999999>" + message + ":</font><br>");
 		if (foundItems.length > 0) {
 			if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
 				foundItems.sort();
@@ -1273,7 +1278,7 @@ var commands = exports.commands = {
 				resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (foundItems.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with ', all' at the end to show all results.</font>";
 			}
 		} else {
-			resultsStr = "No items found. Try a more general search";
+			resultsStr += "No items found. Try a more general search";
 		}
 		return this.sendReplyBox(resultsStr);
 	},
