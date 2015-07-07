@@ -301,7 +301,7 @@ global.toId = function (text) {
 	} else if (text && text.userid) {
 		text = text.userid;
 	}
-	if (typeof text !== 'string' && typeof str !== 'number') return '';
+	if (typeof text !== 'string' && typeof text !== 'number') return '';
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
