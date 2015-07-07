@@ -69,6 +69,7 @@ describe('Desolate Land', function () {
 			{species: "Venusaur", ability: 'chlorophyll', moves: ['growth']},
 			{species: "Toxicroak", ability: 'dryskin', moves: ['bulkup']}
 		]);
+		battle.test = true;
 		battle.p1.active[0].damage = function () {
 			if (battle.activeMove.id === 'weatherball') {
 				assert.strictEqual(battle.activeMove.type, 'Fire');

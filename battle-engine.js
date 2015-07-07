@@ -2716,7 +2716,7 @@ Battle = (function () {
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
 		pokemon.update();
-		this.prioritizeQueue({pokemon: pokemon, choice: 'runSwitch'});
+		this.insertQueue({pokemon: pokemon, choice: 'runSwitch'});
 	};
 	Battle.prototype.canSwitch = function (side) {
 		var canSwitchIn = [];
@@ -2785,7 +2785,7 @@ Battle = (function () {
 				this.singleEvent('Start', pokemon.getItem(), pokemon.itemData, pokemon);
 			}
 		} else {
-			this.prioritizeQueue({pokemon: pokemon, choice: 'runSwitch'});
+			this.insertQueue({pokemon: pokemon, choice: 'runSwitch'});
 		}
 		return true;
 	};
@@ -3475,14 +3475,8 @@ Battle = (function () {
 		}
 		return false;
 	};
-	Battle.prototype.addQueue = function (decision, noSort, side) {
+	Battle.prototype.resolvePriority = function (decision, side) {
 		if (decision) {
-			if (Array.isArray(decision)) {
-				for (var i = 0; i < decision.length; i++) {
-					this.addQueue(decision[i], noSort);
-				}
-				return;
-			}
 			if (!decision.side && side) decision.side = side;
 			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
 			if (!decision.choice && decision.move) decision.choice = 'move';
@@ -3538,11 +3532,44 @@ Battle = (function () {
 				// if there's no actives, switches happen before activations
 				decision.priority = 6.2;
 			}
+		}
+	};
+	Battle.prototype.addQueue = function (decision, noSort, side) {
+		if (decision) {
+			if (Array.isArray(decision)) {
+				for (var i = 0; i < decision.length; i++) {
+					this.addQueue(decision[i], noSort);
+				}
+				return;
+			}
+			this.resolvePriority(decision, side);
 
 			this.queue.push(decision);
 		}
 		if (!noSort) {
 			this.queue.sort(Battle.comparePriority);
+		}
+	};
+	Battle.prototype.insertQueue = function (decision, side) {
+		// WARNING: Do not use this function if the queue is not already sorted!
+		if (decision) {
+			if (Array.isArray(decision)) {
+				for (var i = 0; i < decision.length; i++) {
+					this.insertQueue(decision[i], side);
+				}
+				return;
+			}
+			this.resolvePriority(decision, side);
+
+			for (var i = 0; i <= this.queue.length; i++) {
+				if (i === this.queue.length) {
+					this.queue.push(decision);
+					break;
+				} else if (Battle.comparePriority(decision, this.queue[i]) < 0) {
+					this.queue.splice(i, 0, decision);
+					break;
+				}
+			}
 		}
 	};
 	Battle.prototype.prioritizeQueue = function (decision, source, sourceEffect) {

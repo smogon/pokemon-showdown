@@ -44,4 +44,12 @@ describe('Intimidate', function () {
 		assert.strictEqual(battle.p1.active[1].boosts['atk'], -1);
 		assert.strictEqual(battle.p1.active[2].boosts['atk'], 0);
 	});
+
+	it('should wait until all simultaneous switch ins have completed before activating', function () {
+		battle = BattleEngine.Battle.construct();
+		battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']}]);
+		assert.strictEqual(battle.p1.active[0].boosts['atk'], -1);
+		assert.strictEqual(battle.p2.active[0].boosts['atk'], -1);
+	});
 });
