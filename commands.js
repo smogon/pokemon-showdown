@@ -1931,12 +1931,12 @@ var commands = exports.commands = {
 		}
 		var data = room.getLog(logidx).join("\n");
 		var datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
-
+		var players = room.battle.lastPlayers.map(Users.getExact);
 		LoginServer.request('prepreplay', {
 			id: room.id.substr(7),
 			loghash: datahash,
-			p1: room.p1.name,
-			p2: room.p2.name,
+			p1: players[0] ? players[0].name : room.battle.lastPlayers[0],
+			p2: players[1] ? players[1].name : room.battle.lastPlayers[1],
 			format: room.format
 		}, function (success) {
 			if (success && success.errorip) {
