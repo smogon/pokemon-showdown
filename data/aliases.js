@@ -20,6 +20,7 @@ exports.BattleAliases = {
 	"monorandom": "Monotype Random Battle",
 
 	// mega evos
+	"maero": "Aerodactyl-Mega",
 	"megaabomasnow": "Abomasnow-Mega",
 	"megaabsol": "Absol-Mega",
 	"megaaerodactyl": "Aerodactyl-Mega",
@@ -101,6 +102,7 @@ exports.BattleAliases = {
 	"megazardy": "Charizard-Mega-y",
 	"mmx": "Mewtwo-Mega-X",
 	"mmy": "Mewtwo-Mega-Y",
+	"mray": "Rayquaza-Mega",
 
 	// primal reversions
 	"primalgroudon": "Groudon-Primal",
