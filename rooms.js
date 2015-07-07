@@ -872,11 +872,11 @@ var BattleRoom = (function () {
 			this.tour = false;
 		}
 
+		this.p1 = p1 || null;
+		this.p2 = p2 || null;
+
 		this.rated = rated;
 		this.battle = Simulator.create(this.id, format, rated, this);
-
-		this.p1 = p1 || '';
-		this.p2 = p2 || '';
 
 		this.sideTicksLeft = [21, 21];
 		if (!rated && !this.tour) this.sideTicksLeft = [28, 28];
@@ -1387,24 +1387,10 @@ var BattleRoom = (function () {
 	};
 	BattleRoom.prototype.joinBattle = function (user, team) {
 		var slot;
-		if (this.rated) {
-			if (this.rated.p1 === user.userid) {
-				slot = 0;
-			} else if (this.rated.p2 === user.userid) {
-				slot = 1;
-			} else {
-				user.popup("This is a rated battle; your username must be " + this.rated.p1 + " or " + this.rated.p2 + " to join.");
-				return false;
-			}
-		}
-
-		if (this.tour) {
-			if (this.tour.p1 === user.userid) {
-				slot = 0;
-			} else if (this.tour.p2 === user.userid) {
-				slot = 1;
-			} else {
-				user.popup("This is a tournament battle; your username must be " + this.tour.p1 + " or " + this.tour.p2 + " to join.");
+		if (this.rated || this.tour) {
+			slot = this.battle.lastPlayers.indexOf(user.userid);
+			if (slot < 0) {
+				user.popup("This is a " + (this.tour ? "tournament" : "rated") + " battle; you must be either " + this.battle.lastPlayers.join(" or ") + " to join.");
 				return false;
 			}
 		}
