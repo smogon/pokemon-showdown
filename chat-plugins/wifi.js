@@ -45,8 +45,8 @@ var QuestionGiveAway = (function () {
 		this.room.addRaw("<center><div class='broadcast-blue'><font size='3'><b>It's giveaway time!</b></font><br/>" +
 			"<font size='1'>Question Giveaway started by " + Tools.escapeHTML(host.name) + "</font><br/><br/>" +
 			"<b>" + Tools.escapeHTML(giver.name) + "</b> will be giving away a <b>" + Tools.escapeHTML(this.prize) + "!</b><br/>" +
-			"The question will be displayed in one minute!");
-		this.room.update();
+			"The question will be displayed in one minute!"
+		).update();
 		this.startTimer = setTimeout(this.start.bind(this), 1000 * 60);
 
 		this.excluded = {};
@@ -87,7 +87,7 @@ var QuestionGiveAway = (function () {
 			this.question = value;
 			output.sendReply("The question has been changed to " + value + ".");
 		} else {
-			var ans = this.sanitizeAnswers(value);
+			var ans = QuestionGiveAway.sanitizeAnswers(value);
 			var len = Object.keys(ans).length;
 			if (!len) return output.sendReply("You must specify at least one answer and it must not contain any special characters.");
 			this.answers = ans;
@@ -96,9 +96,10 @@ var QuestionGiveAway = (function () {
 	};
 	QuestionGiveAway.prototype.start = function () {
 		this.phase = 'started';
-		this.room.addRaw("<div class='broadcast-blue'>Giveaway Question: <b>" + this.question + "</b><br/>" +
-			"use /ga to guess.");
-		this.room.update();
+		this.room.addRaw(
+			"<div class='broadcast-blue'>Giveaway Question: <b>" + this.question + "</b><br/>" +
+			"use /ga to guess."
+		).update();
 		this.endTimer = setTimeout(this.onEnd.bind(this), 1000 * 60 * 10);
 	};
 	QuestionGiveAway.prototype.onEnd = function (force) {
@@ -156,8 +157,7 @@ var LotteryGiveAway = (function () {
 			'The lottery drawing will occur in 2 minutes, and with ' + this.maxwinners + ' winner' + (this.maxwinners > 1 ? 's' : '') + '!<br/>' +
 			'<button name="send" value="/giveaway joinlottery"><font size="1"><b>Join</b></font></button> <button name="send" value="/giveaway leavelottery"><font size="1"><b>Leave</b></font></button><br/>' +
 			'<font size="1"><b><u>Note:</u> Please do not join if you don\'t have a 3DS and a copy of Pok&eacute;mon XY or ORAS';
-		this.room.addRaw(this.reminder);
-		this.room.update();
+		this.room.addRaw(this.reminder).update();
 
 		this.drawTimer = setTimeout(this.drawLottery.bind(this), 1000 * 60 * 2);
 
@@ -208,8 +208,7 @@ var LotteryGiveAway = (function () {
 		if (force) {
 			if (this.phase === 'ended') return;
 			clearTimeout(this.drawTimer);
-			this.room.addRaw("<b>The giveaway was forcibly ended as not enough users participated.</b>");
-			this.room.update();
+			this.room.addRaw("<b>The giveaway was forcibly ended as not enough users participated.</b>").update();
 		} else {
 			this.phase = 'ended';
 			var finallist = [];
@@ -218,9 +217,10 @@ var LotteryGiveAway = (function () {
 			}
 			var multiWin = finallist.length > 1;
 			finallist = finallist.join(', ');
-			this.room.addRaw("<div class='broadcast-blue'><font size='2'><b>Lottery Draw: </b></font>" + this.totalusers + " users have joined the lottery.<br/>" +
-				"Our lucky winner" + (multiWin ? "s" : "") + ": <b>" + Tools.escapeHTML(finallist) + "!</b> Congratulations!");
-			this.room.update();
+			this.room.addRaw(
+				"<div class='broadcast-blue'><font size='2'><b>Lottery Draw: </b></font>" + this.totalusers + " users have joined the lottery.<br/>" +
+				"Our lucky winner" + (multiWin ? "s" : "") + ": <b>" + Tools.escapeHTML(finallist) + "!</b> Congratulations!"
+			).update();
 
 			for (var id in this.winners) {
 				var targetUser = this.winners[id];
@@ -409,5 +409,7 @@ var commands = {
 exports.commands = {
 	'giveaway': commands,
 	'ga': commands.guess,
-	'gh': commands.help
+	'gh': commands.help,
+	'qg': commands.question,
+	'lg': commands.lottery
 };

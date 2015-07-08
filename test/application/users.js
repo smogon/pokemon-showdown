@@ -1,24 +1,8 @@
 var assert = require('assert');
-function createConnection (ip, workerid, socketid) {
-	if (!workerid || !socketid) {
-		workerid = Object.keys(Sockets.workers)[0];
-		socketid = 1;
-		while (Users.connections[workerid + '-' + socketid]) {
-			socketid++;
-		}
-	}
-	var connectionid = workerid + '-' + socketid;
-	var connection = Users.connections[connectionid] = new Users.Connection(connectionid, Sockets.workers[workerid], socketid, null, ip || '127.0.0.1');
-	return connection;
-}
 
-function createUser (connection) {
-	if (!connection) connection = createConnection();
-	var user = new Users.User(connection);
-	connection.user = user;
-	user.joinRoom('global', connection);
-	return user;
-}
+var userUtils = require('./../../dev-tools/users-utils.js');
+var Connection = userUtils.Connection;
+var User = userUtils.User;
 
 describe('Users features', function () {
 	describe('Users', function () {
@@ -44,9 +28,9 @@ describe('Users features', function () {
 			describe('#disconnectAll', function () {
 				[1, 2].forEach(function (totalConnections) {
 					it('should drop all ' + totalConnections + ' connection(s) and mark as inactive', function () {
-						var user = createUser();
+						var user = new User();
 						var iterations = totalConnections;
-						while (--iterations) user.merge(createConnection());
+						while (--iterations) user.mergeConnection(new Connection());
 
 						user.disconnectAll();
 						assert.strictEqual(user.connections.length, 0);
@@ -54,9 +38,9 @@ describe('Users features', function () {
 					});
 
 					it('should unref all ' + totalConnections + ' connection(s)', function () {
-						var user = createUser();
+						var user = new User();
 						var iterations = totalConnections;
-						while (--iterations) user.merge(createConnection());
+						while (--iterations) user.mergeConnection(new Connection());
 
 						var connections = user.connections.slice();
 
@@ -67,9 +51,9 @@ describe('Users features', function () {
 					});
 
 					it('should clear `user` property for all ' + totalConnections + ' connection(s)', function () {
-						var user = createUser();
+						var user = new User();
 						var iterations = totalConnections;
-						while (--iterations) user.merge(createConnection());
+						while (--iterations) user.mergeConnection(new Connection());
 						var connections = user.connections.slice();
 
 						user.disconnectAll();
@@ -87,20 +71,20 @@ describe('Users features', function () {
 				});
 
 				it('should disconnect every user at that IP', function () {
-					var users = ['127.0.0.1', '127.0.0.1'].map(function (ip) {return createUser(createConnection(ip));});
+					var users = ['127.0.0.1', '127.0.0.1'].map(function (ip) {return new User(new Connection(ip));});
 					users[0].ban();
 					assert.strictEqual(users[0].connected, false);
 					assert.strictEqual(users[1].connected, false);
 				});
 
 				it('should not disconnect users at other IPs', function () {
-					var users = ['127.0.0.1', '127.0.0.2'].map(function (ip) {return createUser(createConnection(ip));});
+					var users = ['127.0.0.1', '127.0.0.2'].map(function (ip) {return new User(new Connection(ip));});
 					users[0].ban();
 					assert.strictEqual(users[1].connected, true);
 				});
 
 				it('should update IP count properly', function () {
-					var user = createUser();
+					var user = new User();
 					user.ban();
 					for (var ip in user.ips) {
 						assert.strictEqual(user.ips[ip], 0);

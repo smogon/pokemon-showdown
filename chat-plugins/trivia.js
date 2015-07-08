@@ -13,18 +13,10 @@ const MODES = {
 };
 
 const CATEGORIES = {
-	animemanga: 'Anime/Manga',
-	geography: 'Geography',
-	history: 'History',
-	humanities: 'Humanities',
-	miscellaneous: 'Miscellaneous',
-	music: 'Music',
+	ae: 'Arts & Entertainment',
 	pokemon: 'Pok\u00e9mon',
-	rpm: 'Religion, Philosophy, and Myth',
-	science: 'Science',
-	sports: 'Sports',
-	tvmovies: 'TV/Movies',
-	videogames: 'Video Games',
+	sg: 'Science & Geography',
+	sh: 'Society & Humanities',
 	random: 'Random'
 };
 
@@ -164,7 +156,6 @@ var Trivia = (function () {
 	}
 
 	Trivia.prototype.addParticipant = function (output, user) {
-		if (this.phase !== 'signup') return output.sendReply("There is no trivia game in its signup phase.");
 		if (this.participants.has(user.userid)) return output.sendReply("You have already signed up for this trivia game.");
 
 		var latestIp = user.latestIp;
@@ -183,10 +174,10 @@ var Trivia = (function () {
 			scoreData.responderIndex = -1;
 		}
 		this.participants.set(user.userid, scoreData);
-		output.sendReply("You have signed up for the next trivia game.");
+		output.sendReply("You have signed up for the trivia game.");
 	};
 
-	Trivia.prototype.kickParticipant = function (output, target) {
+	Trivia.prototype.kickParticipant = function (output, target, user) {
 		if (this.participants.size < 3) return output.sendReply("The trivia game requires at least three participants in order to run.");
 
 		var userid = toId(target);
@@ -194,11 +185,11 @@ var Trivia = (function () {
 		if (!this.participants.has(userid)) return output.sendReply("User '" + target + "' is not a participant in this trivia game.");
 
 		this.participants.delete(userid);
-		output.sendReply("User '" + target + "' has been disqualified from the trivia game.");
+		output.send("User '" + target + "' has been disqualified from the trivia game by " + user + ".");
 	};
 
 	Trivia.prototype.startGame = function (output) {
-		if (this.phase !== 'signup') return output.sendReply("There is no trivia game in its signup phase.");
+		if (this.phase !== 'signup') return output.sendReply("There is no trivia game to start.");
 		if (this.participants.size < 3) return output.sendReply("Not enough users have signed up yet! Trivia games require at least three participants to run.");
 
 		if (this.category === 'random') {
@@ -216,7 +207,7 @@ var Trivia = (function () {
 			return false;
 		}
 
-		this.room.addRaw("<div class=\"broadcast-blue\">Signups have ended and the game has begun!</div>");
+		this.room.addRaw("<div class=\"broadcast-blue\">The game has begun!</div>");
 		this.askQuestion();
 	};
 
@@ -227,8 +218,7 @@ var Trivia = (function () {
 		this.room.addRaw(
 			"<div class=\"broadcast-blue\"><strong>Question: " + head.question + "</strong><br />" +
 			"Category: " + CATEGORIES[head.category] + "</div>"
-		);
-		this.room.update();
+		).update();
 
 		switch (this.mode) {
 		case 'first':
@@ -309,8 +299,7 @@ var Trivia = (function () {
 		if (isActive) {
 			this.inactivityCounter = 0;
 		} else if (++this.inactivityCounter === 7) {
-			this.room.addRaw("<div class=\"broadcast-blue\">The game has forced itself to end due to inactivity.</div>");
-			this.room.update();
+			this.room.addRaw("<div class=\"broadcast-blue\">The game has forced itself to end due to inactivity.</div>").update();
 			return this.updateLeaderboard();
 		}
 
@@ -319,8 +308,7 @@ var Trivia = (function () {
 			"Correct: no one<br />" +
 			"Answer" + (this.currentAnswer.length > 1 ? "s: " : ": ") + this.currentAnswer.join(", ") + "<br />" +
 			"Nobody gained any points.</div>"
-		);
-		this.room.update();
+		).update();
 		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
 	};
 
@@ -397,8 +385,7 @@ var Trivia = (function () {
 		if (winner) {
 			buffer += "</table><br />" +
 				Tools.escapeHTML(winner) + " won the game with a final score of <strong>" + score + "</strong>, and their leaderboard score has increased by <strong>" + this.prize + "</strong> points!</div>";
-			this.room.addRaw(buffer);
-			this.room.update();
+			this.room.addRaw(buffer).update();
 			return this.updateLeaderboard(toId(winner));
 		}
 
@@ -407,8 +394,7 @@ var Trivia = (function () {
 		this.inactivityCounter = 0;
 
 		buffer += "</table></div>";
-		this.room.addRaw(buffer);
-		this.room.update();
+		this.room.addRaw(buffer).update();
 		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
 	};
 
@@ -447,8 +433,7 @@ var Trivia = (function () {
 
 		if (winner) {
 			buffer += Tools.escapeHTML(winner) + " won the game with a final score of <strong>" + score + "</strong>, and their leaderboard score has increased by <strong>" + this.prize + "</strong> points!</div>";
-			this.room.addRaw(buffer);
-			this.room.update();
+			this.room.addRaw(buffer).update();
 			return this.updateLeaderboard(toId(winner));
 		}
 
@@ -457,8 +442,7 @@ var Trivia = (function () {
 
 		buffer += (this.correctResponders > 1 ? "Each of them" : "They") + " gained <strong>" + points + "</strong> point" + (points > 1 ? "s!</div>" : "!</div>");
 		this.correctResponders = 0;
-		this.room.addRaw(buffer);
-		this.room.update();
+		this.room.addRaw(buffer).update();
 		this.phaseTimeout = setTimeout(this.askQuestion.bind(this), INTERMISSION_PERIOD);
 	};
 
@@ -466,8 +450,7 @@ var Trivia = (function () {
 		this.room.addRaw(
 			"<div class=\"broadcast-blue\">No questions are left!<br />" +
 			"<strong>Since the game has reached a stalemate, nobody has gained any leaderboard points.</strong></div>"
-		);
-		this.room.update();
+		).update();
 		this.updateLeaderboard();
 	};
 
@@ -592,6 +575,7 @@ var commands = {
 		if (room.id !== 'trivia') return false;
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
+		if (!this.canTalk()) return;
 		trivium.addParticipant(this, user);
 	},
 	joinhelp: ["/trivia join - Join a trivia game during signups."],
@@ -610,7 +594,8 @@ var commands = {
 		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 		var trivium = trivia[room.id];
 		if (!trivium) return this.sendReply("There is no trivia game in progress.");
-		trivium.kickParticipant(this, target);
+		this.parse('/m ' + target);
+		trivium.kickParticipant(this, target, user);
 	},
 	kickhelp: ["/trivia kick [username] - Disqualify a participant from the current trivia game. Requires: % @ # & ~"],
 
@@ -667,7 +652,8 @@ var commands = {
 		var submission = {
 			category: category,
 			question: question,
-			answers: answers
+			answers: answers,
+			user: user.userid
 		};
 
 		if (cmd === 'add') {
@@ -693,12 +679,12 @@ var commands = {
 
 		var buffer = "|raw|<div class=\"ladder\"><table>" +
 			"<tr><td colspan=\"4\"><strong>" + submissionsLen + "</strong> questions await review:</td></tr>" +
-			"<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th></tr>";
+			"<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th><th>Submitted By</th></tr>";
 
 		var i = 0;
 		while (i < submissionsLen) {
 			var entry = submissions[i];
-			buffer += "<tr><td><strong>" + (++i) + "</strong></td><td>" + entry.category + "</td><td>" + entry.question + "</td><td>" + entry.answers.join(", ") + "</td></tr>";
+			buffer += "<tr><td><strong>" + (++i) + "</strong></td><td>" + entry.category + "</td><td>" + entry.question + "</td><td>" + entry.answers.join(", ") + "</td><td>" + entry.user + "</td></tr>";
 		}
 		buffer += "</table></div>";
 
@@ -956,7 +942,7 @@ exports.commands = {
 		"- First: the first correct responder gains 5 points.",
 		"- Timer: each correct responder gains up to 5 points based on how quickly they answer.",
 		"- Number: each correct responder gains up to 5 points based on how many participants are correct.",
-		"Categories: Anime/Manga, Geography, History, Humanities, Miscellaneous, Music, Pok\u00e9mon, RPM (Religion, Philosophy, and Myth), Science, Sports, TV/Movies, Video Games, and Random.",
+		"Categories: Arts & Entertainment, Pok\u00e9mon, Science & Geography, Society & Humanities, and Random.",
 		"Game lengths:",
 		"- Short: 20 point score cap. The winner gains 3 leaderboard points.",
 		"- Medium: 35 point score cap. The winner gains 4 leaderboard points.",

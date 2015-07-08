@@ -223,7 +223,7 @@ represented by a space), and the rest of the string being their username.
 
 > The battle has ended in a tie.
 
-**Major actions**
+######Major actions
 
 In battle, most Pokémon actions come in the form `|ACTION|POKEMON|DETAILS`
 followed by a few messages detailing what happens after the action occurs.
@@ -286,7 +286,7 @@ etc). `NAME` is the nickname of the Pokémon performing the action.
 
 > The Pokémon `POKEMON` has fainted.
 
-**Minor actions**
+######Minor actions
 
 Minor actions are less important than major actions. In the official client,
 they're usually displayed in small font if they have a message. Pretty much
@@ -351,6 +351,24 @@ animation) and `|[silent]` (suppress message).
 > turn. Otherwise, it means that the weather has changed due to a move or ability,
 > or has expired, in which case `WEATHER` will be `none`.
 
+`|-fieldstart|CONDITION`
+
+> The field condition `CONDITION` has started. Field conditions are all effects that
+> affect the entire field and aren't a weather.
+
+`|-fieldend|CONDITION`
+
+> Indicates that the field condition `CONDITION` has ended.
+
+`|-sidestart|SIDE|CONDITION`
+
+> A side condition `CONDITION` has started on `SIDE`. Side conditions are all effects
+> that affect one side of the field.
+
+`|-sideend|SIDE|CONDITION`
+
+> Indicates that the side condition `CONDITION` ended for the given `SIDE`.
+
 `|-crit|POKEMON`
 
 > A move has dealt a critical hit against the `POKEMON`.
@@ -400,6 +418,10 @@ animation) and `|[silent]` (suppress message).
 > The Pokémon `POKEMON` has transformed into `SPECIES` by the effect of Transform 
 > or the ability Imposter.
 
+`|-mega|POKEMON|MEGASTONE`
+
+> The Pokémon `POKEMON` used `MEGASTONE` to Mega Evolve.
+
 `|-activate|EFFECT`
 
 > A miscellaneous effect has activated. This is triggered whenever an effect could 
@@ -429,7 +451,7 @@ enough to get you started. You can watch the data sent and received from
 the server on a regular connection, or look at the client source code
 for a full list of message types.
 
-**Action requests**
+######Action requests
 
 These are how the client sends the player's decisions to the server. All
 requests except `/undo` can be sent with `|RQID` at the end. `RQID` is
@@ -509,19 +531,20 @@ move.
 > You tried to change your username to `USERNAME` but it failed for the
 > reason described in `MESSAGE`.
 
-`|challstr|KEYID|CHALLENGE`
+`|challstr|CHALLSTR`
 
 > You just connected to the server, and we're giving you some information you'll need to log in.
 >
 > If you're already logged in and have session cookies, you can make an HTTP GET request to
-> `http://play.pokemonshowdown.com/action.php?act=upkeep&challengekeyid=KEYID&challenge=CHALLENGE`
+> `http://play.pokemonshowdown.com/action.php?act=upkeep&challstr=CHALLSTR`
 >
 > Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
-> with the data `act=login&name=USERNAME&pass=PASSWORD&challengekeyid=KEYID&challenge=CHALLENGE`
+> with the data `act=login&name=USERNAME&pass=PASSWORD&challstr=CHALLSTR`
 >
-> `USERNAME` is your username and `PASSWORD` is your password, and `KEYID` and
-> `CHALLENGE` are the values you got from `|challstr|`. (Also feel free to make
-> the request to `https://` if your client supports it.)
+> `USERNAME` is your username and `PASSWORD` is your password, and `CHALLSTR`
+> is the value you got from `|challstr|`. Note that `CHALLSTR` contains `|`
+> characters. (Also feel free to make the request to `https://` if your client
+> supports it.)
 >
 > Either way, the response will start with `]` and be followed by a JSON
 > object which we'll call `data`.

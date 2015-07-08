@@ -263,6 +263,8 @@ exports.BattleScripts = {
 					return false;
 				}
 			}
+		} else {
+			accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 		}
 		if (move.alwaysHit) {
 			accuracy = true; // bypasses ohko accuracy modifiers
@@ -549,7 +551,7 @@ exports.BattleScripts = {
 			hitResult = this.runEvent('DragOut', target, pokemon, move);
 			if (hitResult) {
 				target.forceSwitchFlag = true;
-			} else if (hitResult === false) {
+			} else if (hitResult === false && move.category === 'Status') {
 				this.add('-fail', target);
 			}
 		}
@@ -1896,7 +1898,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 
 		var excludedTiers = {'LC':1, 'LC Uber':1, 'NFE':1};
-		var allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1};
+		var allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1};
 
 		var pokemonPool = [];
 		for (var id in this.data.FormatsData) {
@@ -1975,8 +1977,8 @@ exports.BattleScripts = {
 				if (this.random(2) >= 1) continue;
 				break;
 			case 'Pikachu':
-				// Cosplay Pikachu formes have 20% the normal rate (1/30 the normal rate each)
-				if (template.species !== 'Pikachu' && this.random(30) >= 1) continue;
+				// Pikachu is not a viable NFE Pokemon
+				continue;
 			}
 
 			// Limit 2 of any type
@@ -2057,7 +2059,7 @@ exports.BattleScripts = {
 		var pokemon = [];
 
 		var excludedTiers = {'LC':1, 'LC Uber':1, 'NFE':1};
-		var allowedNFE = {'Chansey':1, 'Doublade':1, 'Pikachu':1, 'Porygon2':1, 'Scyther':1};
+		var allowedNFE = {'Chansey':1, 'Doublade':1, 'Porygon2':1, 'Scyther':1};
 
 		var pokemonPool = [];
 		for (var id in this.data.FormatsData) {
@@ -2125,8 +2127,8 @@ exports.BattleScripts = {
 				if (this.random(2) >= 1) continue;
 				break;
 			case 'Pikachu':
-				// Cosplay Pikachu formes have 20% the normal rate (1/30 the normal rate each)
-				if (template.species !== 'Pikachu' && this.random(30) >= 1) continue;
+				// Pikachu is not a viable NFE Pokemon
+				continue;
 			}
 
 			// Limit 2 of any type
