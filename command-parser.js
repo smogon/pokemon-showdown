@@ -30,6 +30,10 @@ const MESSAGE_COOLDOWN = 5 * 60 * 1000;
 
 const MAX_PARSE_RECURSION = 10;
 
+const VALID_COMMAND_TOKENS = '/!';
+
+const BROADCAST_TOKEN = '!';
+
 var fs = require('fs');
 var path = require('path');
 
@@ -37,7 +41,8 @@ var path = require('path');
  * Load command files
  *********************************************************/
 
-var commands = exports.commands = require('./commands.js').commands;
+var baseCommands = exports.baseCommands = require('./commands.js').commands;
+var commands = exports.commands = Object.clone(baseCommands);
 
 // Install plug-in commands
 
@@ -46,10 +51,24 @@ fs.readdirSync(path.resolve(__dirname, 'chat-plugins')).forEach(function (file) 
 });
 
 /*********************************************************
- * Parser
+ * Modlog
  *********************************************************/
 
-var modlog = exports.modlog = {lobby: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_lobby.txt'), {flags:'a+'}), battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'})};
+var modlog = exports.modlog = {
+	lobby: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_lobby.txt'), {flags:'a+'}),
+	battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'})
+};
+
+var writeModlog = exports.writeModlog = function (roomid, text) {
+	if (!modlog[roomid]) {
+		modlog[roomid] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + roomid + '.txt'), {flags:'a+'});
+	}
+	modlog[roomid].write('[' + (new Date().toJSON()) + '] ' + text + '\n');
+};
+
+/*********************************************************
+ * Parser
+ *********************************************************/
 
 /**
  * Can this user talk?
@@ -126,13 +145,249 @@ function canTalk(user, room, connection, message, targetUser) {
 		}
 
 		if (Config.chatFilter) {
-			return Config.chatFilter(message, user, room, connection);
+			return Config.chatFilter.call(this, message, user, room, connection, targetUser);
 		}
 		return message;
 	}
 
 	return true;
 }
+
+var Context = exports.Context = (function () {
+	function Context (options) {
+		this.cmd = options.cmd || '';
+		this.cmdToken = options.cmdToken || '';
+
+		this.target = options.target || '';
+		this.message = options.message || '';
+
+		this.levelsDeep = options.levelsDeep || 0;
+		this.namespaces = options.namespaces || null;
+
+		this.room = options.room || null;
+		this.user = options.user || null;
+		this.connection = options.connection || null;
+
+		this.targetUserName = '';
+		this.targetUser = null;
+	}
+
+	Context.prototype.sendReply = function (data) {
+		if (this.broadcasting) {
+			this.room.add(data);
+		} else {
+			this.connection.sendTo(this.room, data);
+		}
+	};
+	Context.prototype.errorReply = function (message) {
+		if (this.pmTarget) {
+			this.connection.send('|pm|' + this.user.getIdentity() + '|' + (this.pmTarget.getIdentity ? this.pmTarget.getIdentity() : ' ' + this.pmTarget) + '|/error ' + message);
+		} else {
+			this.connection.sendTo(this.room, '|html|<div class="message-error">' + Tools.escapeHTML(message) + '</div>');
+		}
+	};
+	Context.prototype.sendReplyBox = function (html) {
+		this.sendReply('|raw|<div class="infobox">' + html + '</div>');
+	};
+	Context.prototype.popupReply = function (message) {
+		this.connection.popup(message);
+	};
+	Context.prototype.add = function (data) {
+		this.room.add(data);
+	};
+	Context.prototype.send = function (data) {
+		this.room.send(data);
+	};
+	Context.prototype.privateModCommand = function (data, noLog) {
+		this.sendModCommand(data);
+		this.logEntry(data);
+		this.logModCommand(data);
+	};
+	Context.prototype.sendModCommand = function (data) {
+		var users = this.room.users;
+		var auth = this.room.auth;
+
+		for (var i in users) {
+			var user = users[i];
+			if (user.can('staff') || user.can('staff', this.room)) {
+				user.sendTo(this.room, data);
+			}
+		}
+	};
+	Context.prototype.logEntry = function (data) {
+		this.room.logEntry(data);
+	};
+	Context.prototype.addModCommand = function (text, logOnlyText) {
+		this.add(text);
+		this.logModCommand(text + (logOnlyText || ""));
+	};
+	Context.prototype.logModCommand = function (text) {
+		var roomid = (this.room.battle ? 'battle' : this.room.id);
+		writeModlog(roomid, '(' + this.room.id + ') ' + text);
+	};
+	Context.prototype.globalModlog = function (action, user, text) {
+		var buf = "(" + this.room.id + ") " + action + ": ";
+		if (typeof user === 'string') {
+			buf += "[" + toId(user) + "]";
+		} else {
+			var userid = this.getLastIdOf(user);
+			buf += "[" + userid + "]";
+			if (user.autoconfirmed && user.autoconfirmed !== userid) buf += " ac:[" + user.autoconfirmed + "]";
+		}
+		buf += text;
+		writeModlog('global', buf);
+	};
+	Context.prototype.can = function (permission, target, room) {
+		if (!this.user.can(permission, target, room)) {
+			this.errorReply(this.cmdToken + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
+			return false;
+		}
+		return true;
+	};
+	Context.prototype.canBroadcast = function (suppressMessage) {
+		if (this.cmdToken === BROADCAST_TOKEN) {
+			var message = this.canTalk(this.message);
+			if (!message) return false;
+			if (!this.user.can('broadcast', null, this.room)) {
+				this.errorReply("You need to be voiced to broadcast this command's information.");
+				this.errorReply("To see it for yourself, use: /" + message.substr(1));
+				return false;
+			}
+
+			// broadcast cooldown
+			var normalized = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+			if (this.room.lastBroadcast === normalized &&
+					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
+				this.errorReply("You can't broadcast this because it was just broadcast.");
+				return false;
+			}
+			this.add('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || message));
+			this.room.lastBroadcast = normalized;
+			this.room.lastBroadcastTime = Date.now();
+
+			this.broadcasting = true;
+		}
+		return true;
+	};
+	Context.prototype.parse = function (message, inNamespace) {
+		if (inNamespace && this.cmdToken) {
+			message = this.cmdToken + this.namespaces.concat(message.slice(1)).join(" ");
+		}
+		return CommandParser.parse(message, this.room, this.user, this.connection, this.levelsDeep + 1);
+	};
+	Context.prototype.run = function (targetCmd, inNamespace) {
+		var commandHandler;
+		if (typeof targetCmd === 'function') {
+			commandHandler = targetCmd;
+		} else if (inNamespace) {
+			commandHandler = commands;
+			for (var i = 0; i < this.namespaces.length; i++) {
+				commandHandler = commandHandler[this.namespaces[i]];
+			}
+			commandHandler = commandHandler[targetCmd];
+		} else {
+			commandHandler = commands[targetCmd];
+		}
+
+		var result;
+		try {
+			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
+		} catch (err) {
+			var stack = err.stack + '\n\n' +
+					'Additional information:\n' +
+					'user = ' + this.user.name + '\n' +
+					'room = ' + this.room.id + '\n' +
+					'message = ' + this.message;
+			var fakeErr = {stack: stack};
+
+			if (!require('./crashlogger.js')(fakeErr, 'A chat command')) {
+				var ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+				if (Rooms.lobby) Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
+			} else {
+				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
+			}
+		}
+		if (result === undefined) result = false;
+
+		return result;
+	};
+	Context.prototype.canTalk = function (message, relevantRoom, targetUser) {
+		var innerRoom = (relevantRoom !== undefined) ? relevantRoom : this.room;
+		return canTalk.call(this, this.user, innerRoom, this.connection, message, targetUser);
+	};
+	Context.prototype.canHTML = function (html) {
+		html = '' + (html || '');
+		var images = html.match(/<img\b[^<>]*/ig);
+		if (!images) return true;
+		for (var i = 0; i < images.length; i++) {
+			if (!/width=([0-9]+|"[0-9]+")/i.test(images[i]) || !/height=([0-9]+|"[0-9]+")/i.test(images[i])) {
+				this.errorReply('All images must have a width and height attribute');
+				return false;
+			}
+		}
+		if (/>here.?</i.test(html) || /click here/i.test(html)) {
+			this.errorReply('Do not use "click here"');
+			return false;
+		}
+
+		// check for mismatched tags
+		var tags = html.toLowerCase().match(/<\/?(div|a|button|b|i|u|center|font)\b/g);
+		if (tags) {
+			var stack = [];
+			for (var i = 0; i < tags.length; i++) {
+				var tag = tags[i];
+				if (tag.charAt(1) === '/') {
+					if (!stack.length) {
+						this.errorReply("Extraneous </" + tag.substr(2) + "> without an opening tag.");
+						return false;
+					}
+					if (tag.substr(2) !== stack.pop()) {
+						this.errorReply("Missing </" + tag.substr(2) + "> or it's in the wrong place.");
+						return false;
+					}
+				} else {
+					stack.push(tag.substr(1));
+				}
+			}
+			if (stack.length) {
+				this.errorReply("Missing </" + stack.pop() + ">.");
+				return false;
+			}
+		}
+
+		return true;
+	};
+	Context.prototype.targetUserOrSelf = function (target, exactName) {
+		if (!target) {
+			this.targetUsername = this.user.name;
+			return this.user;
+		}
+		this.splitTarget(target, exactName);
+		return this.targetUser;
+	};
+	Context.prototype.getLastIdOf = function (user) {
+		if (typeof user === 'string') user = Users.get(user);
+		return (user.named ? user.userid : (Object.keys(user.prevNames).last() || user.userid));
+	};
+	Context.prototype.splitTarget = function (target, exactName) {
+		var commaIndex = target.indexOf(',');
+		if (commaIndex < 0) {
+			var targetUser = Users.get(target, exactName);
+			this.targetUser = targetUser;
+			this.targetUsername = targetUser ? targetUser.name : target;
+			return '';
+		}
+		var targetUser = Users.get(target.substr(0, commaIndex), exactName);
+		if (!targetUser) {
+			targetUser = null;
+		}
+		this.targetUser = targetUser;
+		this.targetUsername = targetUser ? targetUser.name : target.substr(0, commaIndex);
+		return target.substr(commaIndex + 1).trim();
+	};
+
+	return Context;
+})();
 
 /**
  * Command parser
@@ -158,7 +413,7 @@ function canTalk(user, room, connection, message, targetUser) {
  *     return false.
  */
 var parse = exports.parse = function (message, room, user, connection, levelsDeep) {
-	var cmd = '', target = '';
+	var cmd = '', target = '', cmdToken = '';
 	if (!message || !message.trim().length) return;
 	if (!levelsDeep) {
 		levelsDeep = 0;
@@ -176,36 +431,22 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		message = '/evalbattle ' + message.substr(4);
 	}
 
-	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
+	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0)) {
+		cmdToken = message.charAt(0);
 		var spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
-			cmd = message.substr(1, spaceIndex - 1);
+			cmd = message.substr(1, spaceIndex - 1).toLowerCase();
 			target = message.substr(spaceIndex + 1);
 		} else {
-			cmd = message.substr(1);
+			cmd = message.substr(1).toLowerCase();
 			target = '';
 		}
-	} else if (message.charAt(0) === '!') {
-		var spaceIndex = message.indexOf(' ');
-		if (spaceIndex > 0) {
-			cmd = message.substr(0, spaceIndex);
-			target = message.substr(spaceIndex + 1);
-		} else {
-			cmd = message;
-			target = '';
-		}
-	}
-	cmd = cmd.toLowerCase();
-	var broadcast = false;
-	if (cmd.charAt(0) === '!') {
-		broadcast = true;
-		cmd = cmd.substr(1);
 	}
 
 	var namespaces = [];
 	var currentCommands = commands;
-	var originalMessage = message;
 	var commandHandler;
+
 	do {
 		commandHandler = currentCommands[cmd];
 		if (typeof commandHandler === 'string') {
@@ -215,19 +456,15 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		if (commandHandler && typeof commandHandler === 'object') {
 			namespaces.push(cmd);
 
-			var newCmd = target;
-			var newTarget = '';
 			var spaceIndex = target.indexOf(' ');
 			if (spaceIndex > 0) {
-				newCmd = target.substr(0, spaceIndex);
-				newTarget = target.substr(spaceIndex + 1);
+				cmd = target.substr(0, spaceIndex).toLowerCase();
+				target = target.substr(spaceIndex + 1);
+			} else {
+				cmd = target.toLowerCase();
+				target = '';
 			}
-			newCmd = newCmd.toLowerCase();
-			var newMessage = message.replace(cmd + (target ? ' ' : ''), '');
 
-			cmd = newCmd;
-			target = newTarget;
-			message = newMessage;
 			currentCommands = commandHandler;
 		}
 	} while (commandHandler && typeof commandHandler === 'object');
@@ -239,193 +476,13 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	}
 	var fullCmd = namespaces.concat(cmd).join(' ');
 
+	var context = new Context({
+		target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
+		namespaces: namespaces, cmdToken: cmdToken, levelsDeep: levelsDeep
+	});
+
 	if (commandHandler) {
-		var context = {
-			sendReply: function (data) {
-				if (this.broadcasting) {
-					room.add(data);
-				} else {
-					connection.sendTo(room, data);
-				}
-			},
-			sendReplyBox: function (html) {
-				this.sendReply('|raw|<div class="infobox">' + html + '</div>');
-			},
-			popupReply: function (message) {
-				connection.popup(message);
-			},
-			add: function (data) {
-				room.add(data);
-			},
-			send: function (data) {
-				room.send(data);
-			},
-			privateModCommand: function (data, noLog) {
-				this.sendModCommand(data);
-				this.logEntry(data);
-				this.logModCommand(data);
-			},
-			sendModCommand: function (data) {
-				for (var i in room.users) {
-					var user = room.users[i];
-					if (user.can('staff') || user.can('staff', room)) {
-						user.sendTo(room, data);
-					}
-				}
-			},
-			logEntry: function (data) {
-				room.logEntry(data);
-			},
-			addModCommand: function (text, logOnlyText) {
-				this.add(text);
-				this.logModCommand(text + (logOnlyText || ""));
-			},
-			logModCommand: function (result, targetRoom) {
-				if (!targetRoom) targetRoom = room;
-				if (!modlog[targetRoom.id]) {
-					if (targetRoom.battle) {
-						modlog[targetRoom.id] = modlog['battle'];
-					} else {
-						modlog[targetRoom.id] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + targetRoom.id + '.txt'), {flags:'a+'});
-					}
-				}
-				modlog[targetRoom.id].write('[' + (new Date().toJSON()) + '] (' + targetRoom.id + ') ' + result + '\n');
-			},
-			can: function (permission, target, room) {
-				if (!user.can(permission, target, room)) {
-					this.sendReply("/" + fullCmd + " - Access denied.");
-					return false;
-				}
-				return true;
-			},
-			canBroadcast: function (suppressMessage) {
-				if (broadcast) {
-					var message = this.canTalk(originalMessage);
-					if (!message) return false;
-					if (!user.can('broadcast', room)) {
-						connection.sendTo(room, "You need to be voiced to broadcast this command's information.");
-						connection.sendTo(room, "To see it for yourself, use: /" + message.substr(1));
-						return false;
-					}
-
-					// broadcast cooldown
-					var normalized = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
-					if (room.lastBroadcast === normalized &&
-							room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
-						connection.sendTo(room, "You can't broadcast this because it was just broadcast.");
-						return false;
-					}
-					this.add('|c|' + user.getIdentity(room.id) + '|' + (suppressMessage || message));
-					room.lastBroadcast = normalized;
-					room.lastBroadcastTime = Date.now();
-
-					this.broadcasting = true;
-				}
-				return true;
-			},
-			parse: function (message, inNamespace) {
-				if (inNamespace && (message[0] === '/' || message[0] === '!')) {
-					message = message[0] + namespaces.concat(message.slice(1)).join(" ");
-				}
-				return parse(message, room, user, connection, levelsDeep + 1);
-			},
-			canTalk: function (message, relevantRoom, targetUser) {
-				var innerRoom = (relevantRoom !== undefined) ? relevantRoom : room;
-				return canTalk(user, innerRoom, connection, message, targetUser);
-			},
-			canHTML: function (html) {
-				html = '' + (html || '');
-				var images = html.match(/<img\b[^<>]*/ig);
-				if (!images) return true;
-				for (var i = 0; i < images.length; i++) {
-					if (!/width=([0-9]+|"[0-9]+")/i.test(images[i]) || !/height=([0-9]+|"[0-9]+")/i.test(images[i])) {
-						this.sendReply("All images must have a width and height attribute");
-						return false;
-					}
-				}
-				if (/>here.?</i.test(html) || /click here/i.test(html)) {
-					this.sendReply('Do not use "click here"');
-					return false;
-				}
-
-				// check for mismatched tags
-				var tags = html.toLowerCase().match(/<\/?(div|a|button|b|i|u|center|font)\b/g);
-				if (tags) {
-					var stack = [];
-					for (var i = 0; i < tags.length; i++) {
-						var tag = tags[i];
-						if (tag.charAt(1) === '/') {
-							if (!stack.length) {
-								this.sendReply("Extraneous </" + tag.substr(2) + "> without an opening tag.");
-								return false;
-							}
-							if (tag.substr(2) !== stack.pop()) {
-								this.sendReply("Missing </" + tag.substr(2) + "> or it's in the wrong place.");
-								return false;
-							}
-						} else {
-							stack.push(tag.substr(1));
-						}
-					}
-					if (stack.length) {
-						this.sendReply("Missing </" + stack.pop() + ">.");
-						return false;
-					}
-				}
-
-				return true;
-			},
-			targetUserOrSelf: function (target, exactName) {
-				if (!target) {
-					this.targetUsername = user.name;
-					return user;
-				}
-				this.splitTarget(target, exactName);
-				return this.targetUser;
-			},
-			getLastIdOf: function (user) {
-				if (typeof user === 'string') user = Users.get(user);
-				return (user.named ? user.userid : (Object.keys(user.prevNames).last() || user.userid));
-			},
-			splitTarget: function (target, exactName) {
-				var commaIndex = target.indexOf(',');
-				if (commaIndex < 0) {
-					var targetUser = Users.get(target, exactName);
-					this.targetUser = targetUser;
-					this.targetUsername = targetUser ? targetUser.name : target;
-					return '';
-				}
-				var targetUser = Users.get(target.substr(0, commaIndex), exactName);
-				if (!targetUser) {
-					targetUser = null;
-				}
-				this.targetUser = targetUser;
-				this.targetUsername = targetUser ? targetUser.name : target.substr(0, commaIndex);
-				return target.substr(commaIndex + 1).trim();
-			}
-		};
-
-		var result;
-		try {
-			result = commandHandler.call(context, target, room, user, connection, cmd, message);
-		} catch (err) {
-			var stack = err.stack + '\n\n' +
-					'Additional information:\n' +
-					'user = ' + user.name + '\n' +
-					'room = ' + room.id + '\n' +
-					'message = ' + originalMessage;
-			var fakeErr = {stack: stack};
-
-			if (!require('./crashlogger.js')(fakeErr, 'A chat command')) {
-				var ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
-				Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
-			} else {
-				context.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
-			}
-		}
-		if (result === undefined) result = false;
-
-		return result;
+		return context.run(commandHandler);
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
 		var isRoom = false;
@@ -440,26 +497,25 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			var groupId = Config.groups.bySymbol[g].id;
 			var isDemote = promoteCmd === 'de' + groupId || promoteCmd === 'un' + groupId;
 			if (promoteCmd === groupId || isDemote) {
-				return parse('/' + (isRoom ? 'room' : '') + (isDemote ? 'demote' : 'promote') + ' ' + toId(target) + (isDemote ? '' : ',' + g), room, user, connection);
+				return parse('/' + (isRoom ? 'room' : '') + (isDemote ? 'demote' : 'promote') + ' ' + toId(target) + (isDemote ? '' : ',' + g), room, user, connection, levelsDeep + 1);
 			}
 		}
 
-		if (message.charAt(0) === '/' && fullCmd) {
+		if (cmdToken && fullCmd) {
 			// To guard against command typos, we now emit an error message
-			return connection.sendTo(room.id, "The command '/" + fullCmd + "' was unrecognized. To send a message starting with '/" + fullCmd + "', type '//" + fullCmd + "'.");
+			if (cmdToken === BROADCAST_TOKEN) {
+				if (/[a-z0-9]/.test(cmd.charAt(0))) {
+					return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized.");
+				}
+			} else {
+				return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized. To send a message starting with '" + cmdToken + fullCmd + "', type '" + cmdToken.repeat(2) + fullCmd + "'.");
+			}
 		}
 	}
 
-	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
-		message = '/' + message;
-	}
-	message = canTalk(user, room, connection, message);
-	if (!message) return false;
-	if (message.charAt(0) === '/' && message.charAt(1) !== '/') {
-		return parse(message, room, user, connection, levelsDeep + 1);
-	}
+	message = canTalk.call(context, user, room, connection, message);
 
-	return message;
+	return message || false;
 };
 
 exports.package = {};
@@ -470,15 +526,12 @@ fs.readFile(path.resolve(__dirname, 'package.json'), function (err, data) {
 
 exports.uncacheTree = function (root) {
 	var uncache = [require.resolve(root)];
-	function getFilename(module) {
-		return module.filename;
-	}
 	do {
 		var newuncache = [];
 		for (var i = 0; i < uncache.length; ++i) {
 			if (require.cache[uncache[i]]) {
 				newuncache.push.apply(newuncache,
-					require.cache[uncache[i]].children.map(getFilename)
+					require.cache[uncache[i]].children.map('id')
 				);
 				delete require.cache[uncache[i]];
 			}

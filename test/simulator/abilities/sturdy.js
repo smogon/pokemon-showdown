@@ -26,7 +26,6 @@ describe('Sturdy', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'sturdy', moves: ['absorb']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]);
-		battle.seed = [1, 2, 3, 4];
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].hp, 1);
 	});

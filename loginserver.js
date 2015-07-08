@@ -54,11 +54,16 @@ var LoginServer = module.exports = (function () {
 		return getLoginServer(action).request(action, data, callback);
 	};
 	var TimeoutError = LoginServer.TimeoutError = function (message) {
+		Error.captureStackTrace(this, TimeoutError);
 		this.name = "TimeoutError";
 		this.message = message || "";
 	};
 	TimeoutError.prototype = Object.create(Error.prototype);
 	TimeoutError.prototype.constructor = TimeoutError;
+	TimeoutError.prototype.toString = function () {
+		if (!this.message) return this.name;
+		return this.name + ": " + this.message;
+	};
 
 	var parseJSON = function (json) {
 		if (json[0] === ']') json = json.substr(1);
