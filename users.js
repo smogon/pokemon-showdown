@@ -1005,13 +1005,14 @@ User = (function () {
 		if (this.locked === '#dnsbl' && !oldUser.locked) this.locked = false;
 		if (!this.locked && oldUser.locked === '#dnsbl') oldUser.locked = false;
 		if (oldUser.locked) this.locked = oldUser.locked;
+		if (oldUser.autoconfirmed) this.autoconfirmed = oldUser.autoconfirmed;
+
 		for (var i = 0; i < oldUser.connections.length; i++) {
 			this.mergeConnection(oldUser.connections[i]);
 		}
 		oldUser.roomCount = {};
 		oldUser.connections = [];
 
-		if (oldUser.autoconfirmed) this.autoconfirmed = oldUser.autoconfirmed;
 		this.s1 = oldUser.s1;
 		this.s2 = oldUser.s2;
 		this.s3 = oldUser.s3;
@@ -1046,7 +1047,7 @@ User = (function () {
 		for (var i in connection.rooms) {
 			var room = connection.rooms[i];
 			if (!this.roomCount[i]) {
-				if (room.bannedUsers && this.userid in room.bannedUsers) {
+				if (room.bannedUsers && (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers)) {
 					room.bannedIps[connection.ip] = room.bannedUsers[this.userid];
 					connection.sendTo(room.id, '|deinit');
 					connection.leaveRoom(room);
