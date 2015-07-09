@@ -916,13 +916,19 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help unlock');
 		if (!this.can('lock')) return false;
 
+		var targetUser = Users.get(target);
+		var reason = '';
+		if (targetUser && targetUser.locked && targetUser.locked.charAt(0) === '#') {
+			reason = ' (' + targetUser.locked + ')';
+		}
+
 		var unlocked = Users.unlock(target);
 
 		if (unlocked) {
 			var names = Object.keys(unlocked);
 			this.addModCommand(names.join(", ") + " " + ((names.length > 1) ? "were" : "was") +
-				" unlocked by " + user.name + ".");
-			this.globalModlog("UNLOCK", target, " by " + user.name);
+				" unlocked by " + user.name + "." + reason);
+			if (!reason) this.globalModlog("UNLOCK", target, " by " + user.name);
 		} else {
 			this.sendReply("User '" + target + "' is not locked.");
 		}
