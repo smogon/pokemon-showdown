@@ -1566,16 +1566,15 @@ Battle = (function () {
 					return battleProtoCache[formatarg];
 				}
 
-				// Scripts overrides Battle overrides Scripts overrides Tools
+				// Scripts overrides Battle overrides Tools
 				var tools = Tools.mod(formatarg);
 				var proto = Object.create(tools);
 				for (var i in Battle.prototype) {
 					proto[i] = Battle.prototype[i];
 				}
 				var battle = Object.create(proto);
-				var ret = Object.create(battle);
-				tools.install(ret);
-				return (battleProtoCache[formatarg] = ret);
+				tools.install(battle);
+				return (battleProtoCache[formatarg] = battle);
 			})());
 			Battle.prototype.init.call(battle, roomid, formatarg, rated);
 			return battle;
