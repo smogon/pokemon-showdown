@@ -986,7 +986,7 @@ module.exports = (function () {
 	};
 
 	/**
-	 * Install our Tools functions into the battle object
+	 * Install our Scripts functions into the battle object
 	 */
 	Tools.prototype.install = function (battle) {
 		for (var i in this.data.Scripts) {
@@ -996,18 +996,15 @@ module.exports = (function () {
 
 	Tools.construct = function (mod, parentMod) {
 		var tools = new Tools(mod, parentMod);
-		// Scripts override Tools.
-		var ret = Object.create(tools);
-		tools.install(ret);
-		if (ret.init) {
-			if (parentMod && ret.init === moddedTools[parentMod].data.Scripts.init) {
+		if (tools.init) {
+			if (parentMod && tools.init === moddedTools[parentMod].data.Scripts.init) {
 				// don't inherit init
-				delete ret.init;
+				delete tools.init;
 			} else {
-				ret.init();
+				tools.init();
 			}
 		}
-		return ret;
+		return tools;
 	};
 
 	moddedTools.base = Tools.construct();
