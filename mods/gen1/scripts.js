@@ -957,7 +957,7 @@ exports.BattleScripts = {
 			// Choose forme.
 			var formes = [];
 			for (var j in this.data.Pokedex) {
-				if (this.data.Pokedex[j].num === teamdexno[i] && this.getTemplate(this.data.Pokedex[j].species).learnset && this.data.Pokedex[j].species !== 'Pichu-Spiky-eared') {
+				if (this.data.Pokedex[j].num === teamdexno[i] && this.getTemplate(this.data.Pokedex[j].species).learnset && this.data.Pokedex[j].species.substr(0, 8) !== 'Pikachu-') {
 					formes.push(this.data.Pokedex[j].species);
 				}
 			}
