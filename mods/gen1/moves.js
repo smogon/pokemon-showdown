@@ -401,9 +401,7 @@ exports.BattleMovedex = {
 					if (pokemon !== source) {
 						// Clears the status from the opponent
 						pokemon.clearStatus();
-						continue;
 					}
-					// Only for user: Toxic becomes normal Poison; clear volatiles.
 					if (pokemon.status === 'tox') {
 						pokemon.setStatus('psn');
 					}
