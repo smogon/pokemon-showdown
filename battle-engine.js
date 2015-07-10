@@ -1573,7 +1573,7 @@ Battle = (function () {
 					return battleProtoCache[formatarg];
 				}
 
-				// Scripts overrides Battle overrides Tools
+				// Scripts overrides Battle overrides Scripts overrides Tools
 				var tools = Tools.mod(formatarg);
 				var proto = Object.create(tools);
 				for (var i in Battle.prototype) {
