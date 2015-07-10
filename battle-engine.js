@@ -775,7 +775,14 @@ BattlePokemon = (function () {
 			evasion: 0
 		};
 
-		this.moveset = this.baseMoveset.slice();
+		if (this.battle.gen === 1 && this.baseMoves.indexOf('mimic') >= 0 && !this.transformed) {
+			var moveslot = this.baseMoves.indexOf('mimic');
+			var mimicPP = this.moveset[moveslot] ? this.moveset[moveslot].pp : 16;
+			this.moveset = this.baseMoveset.slice();
+			this.moveset[moveslot].pp = mimicPP;
+		} else {
+			this.moveset = this.baseMoveset.slice();
+		}
 		this.moves = this.moveset.map(function (move) {
 			return toId(move.move);
 		});
