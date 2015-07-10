@@ -1727,65 +1727,14 @@ var commands = exports.commands = {
 	'memusage': 'memoryusage',
 	memoryusage: function (target) {
 		if (!this.can('hotpatch')) return false;
-		target = toId(target) || 'all';
-		if (target === 'all') {
-			this.sendReply("Loading memory usage, this might take a while.");
+		var memUsage = process.memoryUsage();
+		var results = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
+		var units = ["B", "KiB", "MiB", "GiB", "TiB"];
+		for (var i = 0; i < results.length; i++) {
+			var unitIndex = Math.floor(Math.log2(results[i]) / 10); // 2^10 base log
+			results[i] = "" + (results[i] / Math.pow(2, 10 * unitIndex)).toFixed(2) + " " + units[unitIndex];
 		}
-		var roomSize, configSize, rmSize, cpSize, simSize, usersSize, toolsSize;
-		if (target === 'all' || target === 'rooms' || target === 'room') {
-			this.sendReply("Calculating Room size...");
-			roomSize = ResourceMonitor.sizeOfObject(Rooms);
-			this.sendReply("Rooms are using " + roomSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'config') {
-			this.sendReply("Calculating config size...");
-			configSize = ResourceMonitor.sizeOfObject(Config);
-			this.sendReply("Config is using " + configSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'resourcemonitor' || target === 'rm') {
-			this.sendReply("Calculating Resource Monitor size...");
-			rmSize = ResourceMonitor.sizeOfObject(ResourceMonitor);
-			this.sendReply("The Resource Monitor is using " + rmSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'cmdp' || target === 'cp' || target === 'commandparser') {
-			this.sendReply("Calculating Command Parser size...");
-			cpSize = ResourceMonitor.sizeOfObject(CommandParser);
-			this.sendReply("Command Parser is using " + cpSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'sim' || target === 'simulator') {
-			this.sendReply("Calculating Simulator size...");
-			simSize = ResourceMonitor.sizeOfObject(Simulator);
-			this.sendReply("Simulator is using " + simSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'users') {
-			this.sendReply("Calculating Users size...");
-			usersSize = ResourceMonitor.sizeOfObject(Users);
-			this.sendReply("Users is using " + usersSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'tools') {
-			this.sendReply("Calculating Tools size...");
-			toolsSize = ResourceMonitor.sizeOfObject(Tools);
-			this.sendReply("Tools are using " + toolsSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'v8') {
-			this.sendReply("Retrieving V8 memory usage...");
-			var o = process.memoryUsage();
-			this.sendReply("Resident set size: " + o.rss + ", " + o.heapUsed + " heap used of " + o.heapTotal  + " total heap. " + (o.heapTotal - o.heapUsed) + " heap left.");
-		}
-		if (target === 'all') {
-			this.sendReply("Calculating Total size...");
-			var total = (roomSize + configSize + rmSize + cpSize + simSize + usersSize + toolsSize) || 0;
-			var units = ["bytes", "K", "M", "G"];
-			var converted = total;
-			var unit = 0;
-			while (converted > 1024) {
-				converted /= 1024;
-				++unit;
-			}
-			converted = Math.round(converted);
-			this.sendReply("Total memory used: " + converted + units[unit] + " (" + total + " bytes).");
-		}
-		return;
+		this.sendReply("Main process. RSS: " + results[0] + ". Heap: " + results[1] + " / " + results[2] + ".");
 	},
 
 	bash: function (target, room, user, connection) {
