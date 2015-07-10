@@ -128,16 +128,14 @@ global.ResourceMonitor = {
 	 */
 	log: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) {
-			Rooms.rooms.staff.add('||' + text);
-			Rooms.rooms.staff.update();
+		if (Rooms.get('staff')) {
+			Rooms.get('staff').add('||' + text).update();
 		}
 	},
 	logHTML: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) {
-			Rooms.rooms.staff.add('|html|' + text);
-			Rooms.rooms.staff.update();
+		if (Rooms.get('staff')) {
+			Rooms.get('staff').add('|html|' + text).update();
 		}
 	},
 	countConnection: function (ip, name) {
@@ -303,45 +301,8 @@ global.toId = function (text) {
 	} else if (text && text.userid) {
 		text = text.userid;
 	}
-
-	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-};
-
-/**
- * Sanitizes a username or Pokemon nickname
- *
- * Returns the passed name, sanitized for safe use as a name in the PS
- * protocol.
- *
- * Such a string must uphold these guarantees:
- * - must not contain any ASCII whitespace character other than a space
- * - must not start or end with a space character
- * - must not contain any of: | , [ ]
- * - must not be the empty string
- *
- * If no such string can be found, returns the empty string. Calling
- * functions are expected to check for that condition and deal with it
- * accordingly.
- *
- * toName also enforces that there are not multiple space characters
- * in the name, although this is not strictly necessary for safety.
- */
-global.toName = function (name) {
-	name = string(name);
-	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
-	if (name.length > 18) name = name.substr(0, 18).trim();
-	return name;
-};
-
-/**
- * Safely ensures the passed variable is a string
- * Simply doing '' + str can crash if str.toString crashes or isn't a function
- * If we're expecting a string and being given anything that isn't a string
- * or a number, it's safe to assume it's an error, and return ''
- */
-global.string = function (str) {
-	if (typeof str === 'string' || typeof str === 'number') return '' + str;
-	return '';
+	if (typeof text !== 'string' && typeof text !== 'number') return '';
+	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
 global.LoginServer = require('./loginserver.js');

@@ -472,6 +472,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move.drain) {
+					this.add('-hint', "In Gold/Silver/Crystal, draining moves always miss against Substitute.");
 					this.add('-miss', source);
 					return null;
 				}

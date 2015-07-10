@@ -49,18 +49,18 @@ exports.BattleItems = {
 	},
 	"widelens": {
 		inherit: true,
-		onModifyMove: function (move, user, target) {
-			if (typeof move.accuracy === 'number') {
-				move.accuracy *= 1.3;
+		onSourceModifyAccuracy: function (accuracy) {
+			if (typeof accuracy === 'number') {
+				return accuracy * 1.3;
 			}
 		}
 	},
 	"zoomlens": {
 		inherit: true,
-		onModifyMove: function (move, user, target) {
-			if (typeof move.accuracy === 'number' && !this.willMove(target)) {
+		onSourceModifyAccuracy: function (accuracy, target) {
+			if (typeof accuracy === 'number' && !this.willMove(target)) {
 				this.debug('Zoom Lens boosting accuracy');
-				move.accuracy *= 1.6;
+				return accuracy * 1.6;
 			}
 		}
 	},

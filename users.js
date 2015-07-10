@@ -88,11 +88,11 @@ var getExactUser = Users.getExact = function (name) {
  *********************************************************/
 
 var bannedIps = Users.bannedIps = Object.create(null);
-var bannedUsers = Object.create(null);
+var bannedUsers = Users.bannedUsers = Object.create(null);
 var lockedIps = Users.lockedIps = Object.create(null);
-var lockedUsers = Object.create(null);
+var lockedUsers = Users.lockedUsers = Object.create(null);
 var lockedRanges = Users.lockedRanges = Object.create(null);
-var rangelockedUsers = Object.create(null);
+var rangelockedUsers = Users.rangeLockedUsers = Object.create(null);
 
 /**
  * Searches for IP in table.
@@ -249,11 +249,11 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 	if (checkResult) {
 		if (!Config.quietconsole) console.log('CONNECT BLOCKED - IP BANNED: ' + ip + ' (' + checkResult + ')');
 		if (checkResult === '#ipban') {
-			connection.send("|popup|Your IP (" + ip + ") is not allowed to connect to PS, because it has been used to spam, hack, or otherwise attack our server.||Make sure you are not using any proxies to connect to PS.");
+			connection.send("|popup||modal|Your IP (" + ip + ") is not allowed to connect to PS, because it has been used to spam, hack, or otherwise attack our server.||Make sure you are not using any proxies to connect to PS.");
 		} else if (checkResult === '#cflood') {
-			connection.send("|popup|PS is under heavy load and cannot accommodate your connection right now.");
+			connection.send("|popup||modal|PS is under heavy load and cannot accommodate your connection right now.");
 		} else {
-			connection.send("|popup|Your IP (" + ip + ") used was banned while using the username '" + checkResult + "'. Your ban will expire in a few days.||" + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
+			connection.send("|popup||modal|Your IP (" + ip + ") used was banned while using the username '" + checkResult + "'. Your ban will expire in a few days.||" + (Config.appealurl ? " Or you can appeal at:\n" + Config.appealurl : ""));
 		}
 		return connection.destroy();
 	}
@@ -514,7 +514,7 @@ User = (function () {
 		this.roomCount = {};
 
 		// searches and challenges
-		this.searching = 0;
+		this.searching = Object.create(null);
 		this.challengesFrom = {};
 		this.challengeTo = null;
 		this.lastChallenge = 0;
@@ -731,7 +731,7 @@ User = (function () {
 		if (Config.namefilter) {
 			name = Config.namefilter(name, this);
 		}
-		name = toName(name);
+		name = Tools.getName(name);
 		name = name.replace(/^[^A-Za-z0-9]+/, "");
 		return name;
 	};
@@ -919,7 +919,7 @@ User = (function () {
 			if (this.named) user.prevNames[this.userid] = this.name;
 			this.destroy();
 			Rooms.global.checkAutojoin(user);
-			if (Config.loginfilter) Config.loginfilter(user);
+			if (Config.loginfilter) Config.loginfilter(user, this);
 			return true;
 		}
 
@@ -1005,13 +1005,14 @@ User = (function () {
 		if (this.locked === '#dnsbl' && !oldUser.locked) this.locked = false;
 		if (!this.locked && oldUser.locked === '#dnsbl') oldUser.locked = false;
 		if (oldUser.locked) this.locked = oldUser.locked;
+		if (oldUser.autoconfirmed) this.autoconfirmed = oldUser.autoconfirmed;
+
 		for (var i = 0; i < oldUser.connections.length; i++) {
 			this.mergeConnection(oldUser.connections[i]);
 		}
 		oldUser.roomCount = {};
 		oldUser.connections = [];
 
-		if (oldUser.autoconfirmed) this.autoconfirmed = oldUser.autoconfirmed;
 		this.s1 = oldUser.s1;
 		this.s2 = oldUser.s2;
 		this.s3 = oldUser.s3;
@@ -1046,7 +1047,7 @@ User = (function () {
 		for (var i in connection.rooms) {
 			var room = connection.rooms[i];
 			if (!this.roomCount[i]) {
-				if (room.bannedUsers && this.userid in room.bannedUsers) {
+				if (room.bannedUsers && (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers)) {
 					room.bannedIps[connection.ip] = room.bannedUsers[this.userid];
 					connection.sendTo(room.id, '|deinit');
 					connection.leaveRoom(room);
@@ -1127,13 +1128,15 @@ User = (function () {
 	User.prototype.setGroup = function (group, forceConfirmed) {
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
-		if (forceConfirmed || this.group !== Config.groupsranking[0]) {
-			usergroups[this.userid] = this.group + this.name;
-		} else {
-			delete usergroups[this.userid];
-		}
-		exportUsergroups();
 		Rooms.global.checkAutojoin(this);
+		if (this.registered) {
+			if (forceConfirmed || this.group !== Config.groupsranking[0]) {
+				usergroups[this.userid] = this.group + this.name;
+			} else {
+				delete usergroups[this.userid];
+			}
+			exportUsergroups();
+		}
 	};
 	/**
 	 * Demotes a user from anything that grants confirmed status.
@@ -1467,6 +1470,11 @@ User = (function () {
 		var format = Tools.getFormat(formatid);
 		if (!format['' + type + 'Show']) {
 			connection.popup("That format is not available.");
+			setImmediate(callback.bind(null, false));
+			return;
+		}
+		if (type === 'search' && this.searching[formatid]) {
+			connection.popup("You are already searching a battle in that format.");
 			setImmediate(callback.bind(null, false));
 			return;
 		}

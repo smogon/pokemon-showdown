@@ -866,6 +866,9 @@ exports.BattleMovedex = {
 				} while (!pokemon.side.pokemon[this.effectData.index] || pokemon.side.pokemon[this.effectData.index].fainted || pokemon.side.pokemon[this.effectData.index].status);
 			}
 		},
+		onAfterMove: function (pokemon) {
+			pokemon.removeVolatile('beatup');
+		},
 		secondary: false,
 		target: "normal",
 		type: "Dark"
@@ -5386,7 +5389,7 @@ exports.BattleMovedex = {
 			onStart: function () {
 				this.add('-fieldstart', 'move: Gravity');
 			},
-			onAccuracy: function (accuracy) {
+			onModifyAccuracy: function (accuracy) {
 				if (typeof accuracy !== 'number') return;
 				return accuracy * 5 / 3;
 			},
@@ -7358,7 +7361,7 @@ exports.BattleMovedex = {
 		},
 		onAfterHit: function (target, source) {
 			if (source.hp) {
-				var item = target.takeItem(source);
+				var item = target.takeItem();
 				if (item) {
 					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
 				}
@@ -10472,6 +10475,7 @@ exports.BattleMovedex = {
 			if (target.side.active.length < 2) return false; // fails in singles
 			var decision = this.willMove(target);
 			if (decision) {
+				decision.priority = -7.1;
 				this.cancelMove(target);
 				for (var i = this.queue.length - 1; i >= 0; i--) {
 					if (this.queue[i].choice === 'residual') {
@@ -12107,6 +12111,7 @@ exports.BattleMovedex = {
 		onHit: function (pokemon) {
 			var oldAbility = pokemon.setAbility('simple');
 			if (oldAbility) {
+				this.add('-endability', pokemon, oldAbility, '[from] move: Simple Beam');
 				this.add('-ability', pokemon, 'Simple', '[from] move: Simple Beam');
 				return;
 			}
@@ -13984,7 +13989,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 3,
 			onStart: function (target) {
-				if (!this.willMove(target)) {
+				if (target.activeTurns && !this.willMove(target)) {
 					this.effectData.duration++;
 				}
 				this.add('-start', target, 'move: Taunt');
@@ -14657,6 +14662,9 @@ exports.BattleMovedex = {
 			onRestart: function () {
 				this.effectData.hit++;
 			}
+		},
+		onAfterMove: function (pokemon) {
+			pokemon.removeVolatile('triplekick');
 		},
 		secondary: false,
 		target: "normal",
@@ -15524,6 +15532,7 @@ exports.BattleMovedex = {
 		onHit: function (pokemon) {
 			var oldAbility = pokemon.setAbility('insomnia');
 			if (oldAbility) {
+				this.add('-endability', pokemon, oldAbility, '[from] move: Worry Seed');
 				this.add('-ability', pokemon, 'Insomnia', '[from] move: Worry Seed');
 				if (pokemon.status === 'slp') {
 					pokemon.cureStatus();

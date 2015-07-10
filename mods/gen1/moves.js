@@ -395,22 +395,24 @@ exports.BattleMovedex = {
 			this.add('-clearallboost');
 			for (var i = 0; i < this.sides.length; i++) {
 				for (var j = 0; j < this.sides[i].active.length; j++) {
-					var hasTox = (this.sides[i].active[j].status === 'tox');
-					this.sides[i].active[j].clearBoosts();
-					if (this.sides[i].active[j].id !== source.id) {
+					var pokemon = this.sides[i].active[j];
+					pokemon.clearBoosts();
+
+					if (pokemon !== source) {
 						// Clears the status from the opponent
-						this.sides[i].active[j].clearStatus();
+						pokemon.clearStatus();
 					}
-					// Turns toxic to poison for user
-					if (hasTox && this.sides[i].active[j].id === source.id) {
-						this.sides[i].active[j].setStatus('psn');
+					if (pokemon.status === 'tox') {
+						pokemon.setStatus('psn');
 					}
-					// Clears volatile only from user
-					if (this.sides[i].active[j].id === source.id) {
-						var volatiles = Object.keys(this.sides[i].active[j].volatiles);
-						for (var n = 0; n < volatiles.length; n++) {
-							this.sides[i].active[j].removeVolatile(volatiles[n]);
-							this.add('-end', this.sides[i].active[j], volatiles[n]);
+					var volatiles = Object.keys(pokemon.volatiles);
+					for (var n = 0; n < volatiles.length; n++) {
+						var id = volatiles[n];
+						if (id === 'residualdmg') {
+							pokemon.volatiles[id].counter = 0;
+						} else {
+							pokemon.removeVolatile(id);
+							this.add('-end', pokemon, id);
 						}
 					}
 				}

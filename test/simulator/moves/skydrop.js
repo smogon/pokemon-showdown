@@ -30,7 +30,7 @@ describe('Sky Drop', function () {
 	});
 
 	it('should prevent both the user and the target from being forced out when caught by the effect', function () {
-		battle = BattleEngine.Battle.construct('battle-bw-skydrop-gravity', 'gen5doublescustomgame');
+		battle = BattleEngine.Battle.construct('battle-skydrop-forceswitch', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
 			{species: "Machamp", ability: 'noguard', moves: ['circlethrow']},
@@ -42,7 +42,8 @@ describe('Sky Drop', function () {
 			{species: "Omastar", ability: 'swiftswim', moves: ['shellsmash']}
 		]);
 		battle.commitDecisions(); // Team Preview
-		battle.commitDecisions(); // p1: move 1 1, move 1 1; p2: move 1, move 1 1
+		battle.choose('p1', 'move 1 1, move 1 1');
+		battle.choose('p2', 'move 1 1, move 1 1');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'aerodactyl');
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'armaldo');
 	});
