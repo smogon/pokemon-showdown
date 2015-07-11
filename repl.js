@@ -18,7 +18,12 @@ exports.start = function (prefix, suffix, evalFunction) {
 		var directory = path.dirname(prefix);
 		var basename = path.basename(prefix);
 		fs.readdirSync(directory).forEach(function (file) {
-			if (file.indexOf(basename) === 0) fs.unlinkSync(directory + '/' + file);
+			if (file.indexOf(basename) !== 0) return;
+			try {
+				fs.unlinkSync(directory + '/' + file);
+			} catch (e) {
+				require('./crashlogger.js')(e, 'REPL: ' + prefix);
+			}
 		});
 		clearedPrefixes[prefix] = true;
 	}
