@@ -2904,7 +2904,7 @@ Battle = (function () {
 
 		this.residualEvent('TeamPreview');
 
-		this.addQueue({choice:'start'});
+		this.addQueue({choice: 'start'});
 		this.midTurn = true;
 		if (!this.currentRequest) this.go();
 	};
@@ -3481,9 +3481,8 @@ Battle = (function () {
 		}
 		return false;
 	};
-	Battle.prototype.resolvePriority = function (decision, side) {
+	Battle.prototype.resolvePriority = function (decision) {
 		if (decision) {
-			if (!decision.side && side) decision.side = side;
 			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
 			if (!decision.choice && decision.move) decision.choice = 'move';
 			if (!decision.priority) {
@@ -3503,7 +3502,7 @@ Battle = (function () {
 			}
 			if (decision.choice === 'move') {
 				if (this.getMove(decision.move).beforeTurnCallback) {
-					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc}, true);
+					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc});
 				}
 			} else if (decision.choice === 'switch') {
 				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
@@ -3540,41 +3539,37 @@ Battle = (function () {
 			}
 		}
 	};
-	Battle.prototype.addQueue = function (decision, noSort, side) {
-		if (decision) {
-			if (Array.isArray(decision)) {
-				for (var i = 0; i < decision.length; i++) {
-					this.addQueue(decision[i], noSort);
-				}
-				return;
+	Battle.prototype.addQueue = function (decision) {
+		if (Array.isArray(decision)) {
+			for (var i = 0; i < decision.length; i++) {
+				this.addQueue(decision[i]);
 			}
-			this.resolvePriority(decision, side);
+			return;
+		}
 
-			this.queue.push(decision);
-		}
-		if (!noSort) {
-			this.queue.sort(Battle.comparePriority);
-		}
+		this.resolvePriority(decision);
+		this.queue.push(decision);
 	};
-	Battle.prototype.insertQueue = function (decision, side) {
+	Battle.prototype.sortQueue = function () {
+		this.queue.sort(Battle.comparePriority);
+	};
+	Battle.prototype.insertQueue = function (decision) {
 		// WARNING: Do not use this function if the queue is not already sorted!
-		if (decision) {
-			if (Array.isArray(decision)) {
-				for (var i = 0; i < decision.length; i++) {
-					this.insertQueue(decision[i], side);
-				}
-				return;
+		if (Array.isArray(decision)) {
+			for (var i = 0; i < decision.length; i++) {
+				this.insertQueue(decision[i]);
 			}
-			this.resolvePriority(decision, side);
+			return;
+		}
 
-			for (var i = 0; i <= this.queue.length; i++) {
-				if (i === this.queue.length) {
-					this.queue.push(decision);
-					break;
-				} else if (Battle.comparePriority(decision, this.queue[i]) < 0) {
-					this.queue.splice(i, 0, decision);
-					break;
-				}
+		this.resolvePriority(decision);
+		for (var i = 0; i <= this.queue.length; i++) {
+			if (i === this.queue.length) {
+				this.queue.push(decision);
+				break;
+			} else if (Battle.comparePriority(decision, this.queue[i]) < 0) {
+				this.queue.splice(i, 0, decision);
+				break;
 			}
 		}
 	};
@@ -3631,7 +3626,7 @@ Battle = (function () {
 	Battle.prototype.willSwitch = function (pokemon) {
 		for (var i = 0; i < this.queue.length; i++) {
 			if (this.queue[i].choice === 'switch' && this.queue[i].pokemon === pokemon) {
-				return true;
+				return this.queue[i];
 			}
 		}
 		return false;
@@ -3830,11 +3825,10 @@ Battle = (function () {
 		}
 
 		if (!this.midTurn) {
-			this.queue.push({choice:'residual', priority: -100});
-			this.queue.push({choice:'beforeTurn', priority: 100});
+			this.queue.push({choice: 'residual', priority: -100});
+			this.queue.unshift({choice: 'beforeTurn', priority: 100});
 			this.midTurn = true;
 		}
-		this.addQueue(null);
 
 		while (this.queue.length) {
 			var decision = this.queue.shift();
@@ -3853,10 +3847,10 @@ Battle = (function () {
 		this.queue = [];
 	};
 	/**
-	 * Changes a pokemon's decision.
+	 * Changes a pokemon's decision, and inserts its new decision
+	 * in priority order.
 	 *
-	 * The un-modded game should not use this function for anything,
-	 * since it rerolls speed ties (which messes up RNG state).
+	 * The un-modded game should not use this function for anything.
 	 *
 	 * You probably want the OverrideDecision event (which doesn't
 	 * change priority order).
@@ -3864,7 +3858,7 @@ Battle = (function () {
 	Battle.prototype.changeDecision = function (pokemon, decision) {
 		this.cancelDecision(pokemon);
 		if (!decision.pokemon) decision.pokemon = pokemon;
-		this.addQueue(decision);
+		this.insertQueue(decision);
 	};
 	/**
 	 * Takes a choice string passed from the client. Starts the next
@@ -3904,12 +3898,16 @@ Battle = (function () {
 		}
 	};
 	Battle.prototype.commitDecisions = function () {
+		var oldQueue = this.queue;
+		this.queue = [];
 		if (this.p1.decision !== true) {
-			this.addQueue(this.p1.resolveDecision(), true, this.p1);
+			this.addQueue(this.p1.resolveDecision());
 		}
 		if (this.p2.decision !== true) {
-			this.addQueue(this.p2.resolveDecision(), true, this.p2);
+			this.addQueue(this.p2.resolveDecision());
 		}
+		this.sortQueue();
+		Array.prototype.push.apply(this.queue, oldQueue);
 
 		this.currentRequest = '';
 		this.currentRequestDetails = '';
