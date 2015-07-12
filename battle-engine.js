@@ -3554,7 +3554,6 @@ Battle = (function () {
 		this.queue.sort(Battle.comparePriority);
 	};
 	Battle.prototype.insertQueue = function (decision) {
-		// WARNING: Do not use this function if the queue is not already sorted!
 		if (Array.isArray(decision)) {
 			for (var i = 0; i < decision.length; i++) {
 				this.insertQueue(decision[i]);
@@ -3850,9 +3849,7 @@ Battle = (function () {
 	 * Changes a pokemon's decision, and inserts its new decision
 	 * in priority order.
 	 *
-	 * The un-modded game should not use this function for anything.
-	 *
-	 * You probably want the OverrideDecision event (which doesn't
+	 * You'd normally want the OverrideDecision event (which doesn't
 	 * change priority order).
 	 */
 	Battle.prototype.changeDecision = function (pokemon, decision) {
