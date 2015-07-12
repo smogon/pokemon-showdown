@@ -22,7 +22,7 @@ describe('Thick Fat', function () {
 		assert.ok(damage >= 56 && damage <= 66);
 	});
 
-	it('should be ignored by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Hariyama", ability: 'thickfat', moves: ['splash']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Nidoking", ability: 'moldbreaker', moves: ['incinerate', 'icebeam']}]);

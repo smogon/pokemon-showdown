@@ -35,7 +35,7 @@ describe('Wonder Guard', function () {
 		assert.ok(!battle.p1.active[0].hasAbility('wonderguard'));
 	});
 
-	it('should be bypassed by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zekrom", ability: 'wonderguard', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Reshiram", ability: 'turboblaze', moves: ['fusionflare']}]);
