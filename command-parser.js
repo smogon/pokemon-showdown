@@ -507,7 +507,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			} else {
 				return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized. To send a message starting with '" + cmdToken + fullCmd + "', type '" + cmdToken.repeat(2) + fullCmd + "'.");
 			}
-		} else if (VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
+		} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) && VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
 			message = message.trim();
 			if (message.charAt(0) !== BROADCAST_TOKEN) {
 				message = message.charAt(0) + message;
