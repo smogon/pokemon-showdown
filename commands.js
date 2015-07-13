@@ -573,6 +573,9 @@ var commands = exports.commands = {
 		if (nextGroup !== ' ' && !user.can('room' + Config.groups[nextGroup].id, null, room)) {
 			return this.sendReply("/" + cmd + " - Access denied for promoting/demoting to " + Config.groups[nextGroup].name + ".");
 		}
+		if (nextGroup === ' ' && room.isPrivate !== true && targetUser.group && !user.can('room' + Config.groups[targetUser.group].id, null, room)) {
+			return this.sendReply("/" + cmd + " - Access denied for promoting/demoting to " + Config.groups[targetUser.group].name + ".");
+		}
 
 		if (nextGroup === ' ') {
 			delete room.auth[userid];
