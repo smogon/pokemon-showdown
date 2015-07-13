@@ -1383,6 +1383,9 @@ exports.BattleFormatsData = {
 	},
 	munchlax: {
 		randomBattleMoves: ["rest","curse","sleeptalk","bodyslam","earthquake","return","firepunch","icepunch","whirlwind","toxic"],
+		eventPokemon: [
+			{"generation":4,"level":5,"moves":["metronome","tackle","defensecurl","selfdestruct"]}
+		],
 		tier: "LC"
 	},
 	snorlax: {
