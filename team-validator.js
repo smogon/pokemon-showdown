@@ -309,10 +309,13 @@ Validator = (function () {
 		if (format.ruleset) {
 			for (var i = 0; i < format.ruleset.length; i++) {
 				var subformat = tools.getFormat(format.ruleset[i]);
-				if (subformat.validateSet) {
-					problems = problems.concat(subformat.validateSet.call(tools, set, format) || []);
+				if (subformat.changeSet) {
+					problems = problems.concat(subformat.changeSet.call(tools, set, format) || []);
 				}
 			}
+		}
+		if (format.changeSet) {
+			problems = problems.concat(format.changeSet.call(tools, set, format, setHas, teamHas) || []);
 		}
 		template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
@@ -522,8 +525,16 @@ Validator = (function () {
 			}
 		}
 
+		if (format.ruleset) {
+			for (var i = 0; i < format.ruleset.length; i++) {
+				var subformat = tools.getFormat(format.ruleset[i]);
+				if (subformat.validateSet) {
+					problems = problems.concat(subformat.validateSet.call(tools, set, format, setHas, teamHas) || []);
+				}
+			}
+		}
 		if (format.validateSet) {
-			problems = problems.concat(format.validateSet.call(tools, set, format) || []);
+			problems = problems.concat(format.validateSet.call(tools, set, format, setHas, teamHas) || []);
 		}
 
 		if (!problems.length) {
