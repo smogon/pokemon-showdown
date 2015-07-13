@@ -531,6 +531,8 @@ exports.BattleFormats = {
 			}
 		},
 		validateSet: function (set, format, setHas) {
+			if (!('batonpass' in setHas)) return;
+
 			// check if Speed is boosted
 			var speedBoosted = false;
 			for (var i = 0; i < set.moves.length; i++) {
@@ -541,10 +543,12 @@ exports.BattleFormats = {
 				}
 			}
 			var boostSpeed = ['flamecharge', 'acupressure', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'salacberry', 'starfberry'];
-			if (!speedBoosted) for (var i = 0; i < boostSpeed.length; i++) {
-				if (boostSpeed[i] in setHas) {
-					speedBoosted = true;
-					break;
+			if (!speedBoosted) {
+				for (var i = 0; i < boostSpeed.length; i++) {
+					if (boostSpeed[i] in setHas) {
+						speedBoosted = true;
+						break;
+					}
 				}
 			}
 			if (!speedBoosted) return;
@@ -558,11 +562,13 @@ exports.BattleFormats = {
 					break;
 				}
 			}
-			var boostNonSpeed = ['curse', 'metalclaw', 'meteormash', 'poweruppunch', 'rage', 'rototiller', 'fellstinger', 'bellydrum', 'download', 'justified', 'moxie', 'sapsipper', 'download', 'justified', 'moxie', 'sapsipper', 'defiant', 'angerpoint', 'cellbattery', 'liechiberry', 'snowball', 'starfberry', 'weaknesspolicy', 'diamondstorm', 'flowershield', 'skullbash', 'steelwing', 'stockpile', 'cottonguard', 'ganlonberry', 'keeberry', 'chargebeam', 'fierydance', 'geomancy', 'lightningrod', 'stormdrain', 'competitive', 'absorbbulb', 'petayaberry', 'charge', 'apicotberry', 'luminousmoss', 'marangaberry'];
-			if (!nonSpeedBoosted) for (var i = 0; i < boostNonSpeed.length; i++) {
-				if (boostNonSpeed[i] in setHas) {
-					nonSpeedBoosted = true;
-					break;
+			var boostNonSpeed = ['curse', 'metalclaw', 'meteormash', 'poweruppunch', 'rage', 'rototiller', 'fellstinger', 'bellydrum', 'download', 'justified', 'moxie', 'sapsipper', 'defiant', 'angerpoint', 'cellbattery', 'liechiberry', 'snowball', 'starfberry', 'weaknesspolicy', 'diamondstorm', 'flowershield', 'skullbash', 'steelwing', 'stockpile', 'cottonguard', 'ganlonberry', 'keeberry', 'chargebeam', 'fierydance', 'geomancy', 'lightningrod', 'stormdrain', 'competitive', 'absorbbulb', 'petayaberry', 'charge', 'apicotberry', 'luminousmoss', 'marangaberry'];
+			if (!nonSpeedBoosted) {
+				for (var i = 0; i < boostNonSpeed.length; i++) {
+					if (boostNonSpeed[i] in setHas) {
+						nonSpeedBoosted = true;
+						break;
+					}
 				}
 			}
 			if (!nonSpeedBoosted) return;
