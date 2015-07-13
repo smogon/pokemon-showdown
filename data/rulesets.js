@@ -80,7 +80,7 @@ exports.BattleFormats = {
 			}
 			return problems;
 		},
-		validateSet: function (set, format) {
+		changeSet: function (set, format) {
 			var item = this.getItem(set.item);
 			var template = this.getTemplate(set.species);
 			var problems = [];
@@ -517,19 +517,57 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		name: 'Baton Pass Clause',
 		onStart: function () {
-			this.add('rule', 'Baton Pass Clause: Limit one Pokémon knowing Baton Pass');
+			this.add('rule', 'Baton Pass Clause: Limit one Baton Passer, can\'t pass Spe and other stats simultaneously');
 		},
 		validateTeam: function (team, format) {
-			var problems = [];
 			var BPcount = 0;
 			for (var i = 0; i < team.length; i++) {
-				if (team[i].moves.indexOf('Baton Pass') >= 0) BPcount++;
+				if (team[i].moves.indexOf('Baton Pass') >= 0) {
+					BPcount++;
+				}
 				if (BPcount > 1) {
-					problems.push("You are limited to one Pokémon with the move Baton Pass by the Baton Pass Clause.");
+					return ["You are limited to one Pokémon with the move Baton Pass by the Baton Pass Clause."];
+				}
+			}
+		},
+		validateSet: function (set, format, setHas) {
+			// check if Speed is boosted
+			var speedBoosted = false;
+			for (var i = 0; i < set.moves.length; i++) {
+				var move = this.getMove(set.moves[i]);
+				if (move.boosts && move.boosts.spe > 0) {
+					speedBoosted = true;
 					break;
 				}
 			}
-			return problems;
+			var boostSpeed = ['flamecharge', 'acupressure', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'salacberry', 'starfberry'];
+			if (!speedBoosted) for (var i = 0; i < boostSpeed.length; i++) {
+				if (boostSpeed[i] in setHas) {
+					speedBoosted = true;
+					break;
+				}
+			}
+			if (!speedBoosted) return;
+
+			// check if non-Speed boosted
+			var nonSpeedBoosted = false;
+			for (var i = 0; i < set.moves.length; i++) {
+				var move = this.getMove(set.moves[i]);
+				if (move.boosts && (move.boosts.atk > 0 || move.boosts.def > 0 || move.boosts.spa > 0 || move.boosts.spd > 0)) {
+					nonSpeedBoosted = true;
+					break;
+				}
+			}
+			var boostNonSpeed = ['curse', 'metalclaw', 'meteormash', 'poweruppunch', 'rage', 'rototiller', 'fellstinger', 'bellydrum', 'download', 'justified', 'moxie', 'sapsipper', 'download', 'justified', 'moxie', 'sapsipper', 'defiant', 'angerpoint', 'cellbattery', 'liechiberry', 'snowball', 'starfberry', 'weaknesspolicy', 'diamondstorm', 'flowershield', 'skullbash', 'steelwing', 'stockpile', 'cottonguard', 'ganlonberry', 'keeberry', 'chargebeam', 'fierydance', 'geomancy', 'lightningrod', 'stormdrain', 'competitive', 'absorbbulb', 'petayaberry', 'charge', 'apicotberry', 'luminousmoss', 'marangaberry'];
+			if (!nonSpeedBoosted) for (var i = 0; i < boostNonSpeed.length; i++) {
+				if (boostNonSpeed[i] in setHas) {
+					nonSpeedBoosted = true;
+					break;
+				}
+			}
+			if (!nonSpeedBoosted) return;
+
+			return ["You can't boost both Speed and a different stat on the same set because of Baton Pass Clause."];
 		}
 	},
 	hppercentagemod: {
