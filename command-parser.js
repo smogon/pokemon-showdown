@@ -245,7 +245,7 @@ var Context = exports.Context = (function () {
 		return true;
 	};
 	Context.prototype.canBroadcast = function (suppressMessage) {
-		if (this.cmdToken === BROADCAST_TOKEN) {
+		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
 			var message = this.canTalk(this.message);
 			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
