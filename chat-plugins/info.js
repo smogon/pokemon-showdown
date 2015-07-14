@@ -25,7 +25,7 @@ var commands = exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 
-		this.sendReply("|raw|User: " + targetUser.name + (!targetUser.connected ? ' <font color="gray"><em>(offline)</em></font>' : ''));
+		this.sendReply("|raw|User: " + Tools.escapeHTML(targetUser.name) + (!targetUser.connected ? " <em style=\"color:gray\">(offline)</em>" : ""));
 		if (user.can('alts', targetUser)) {
 			var alts = targetUser.getAlts(true);
 			var output = Object.keys(targetUser.prevNames).join(", ");
@@ -36,7 +36,7 @@ var commands = exports.commands = {
 				if (!targetAlt.named && !targetAlt.connected) continue;
 				if (targetAlt.group === '~' && user.group !== '~') continue;
 
-				this.sendReply("|raw|Alt: " + targetAlt.name + (!targetAlt.connected ? ' <font color="gray"><em>(offline)</em></font>' : ''));
+				this.sendReply("|raw|Alt: " + Tools.escapeHTML(targetAlt.name) + (!targetAlt.connected ? " <em style=\"color:gray\">(offline)</em>" : ""));
 				output = Object.keys(targetAlt.prevNames).join(", ");
 				if (output) this.sendReply("Previous names: " + output);
 			}
