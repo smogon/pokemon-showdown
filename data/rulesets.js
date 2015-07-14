@@ -53,7 +53,8 @@ exports.BattleFormats = {
 			'Xerneas',
 			'Yveltal',
 			'Zygarde',
-			'Diancie'
+			'Diancie',
+			'Hoopa', 'Hoopa-Unbound'
 		]
 	},
 	standarddoubles: {
