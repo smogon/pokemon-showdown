@@ -59,6 +59,16 @@ module.exports = (function () {
 		timid: {name:"Timid", plus:'spe', minus:'atk'}
 	};
 
+	function tryRequire(path) {
+		var ret = {error: null, result: {}};
+		try {
+			ret.result = require(path);
+		} catch (e) {
+			ret.error = e;
+		}
+		return ret;
+	}
+
 	function Tools(mod, parentMod) {
 		if (!mod) {
 			mod = 'base';
@@ -74,38 +84,42 @@ module.exports = (function () {
 		if (mod === 'base') {
 			dataTypes.forEach(function (dataType) {
 				if (typeof dataFiles[dataType] !== 'string') return (data[dataType] = dataFiles[dataType]);
-				try {
-					var path = './data/' + dataFiles[dataType];
-					data[dataType] = require(path)['Battle' + dataType];
-				} catch (e) {
-					if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING DATA: ' + e.stack);
+				var maybeData = tryRequire('./data/' + dataFiles[dataType]);
+				if (maybeData.error) {
+					maybeData.result['Battle' + dataType] = {};
+					if (maybeData.error.code !== 'MODULE_NOT_FOUND') console.error("CRASH LOADING " + data.mod.toUpperCase() + " DATA:\n" + maybeData.error.stack);
 				}
-				if (!data[dataType]) data[dataType] = {};
+				var BattleData = maybeData.result['Battle' + dataType];
+				if (!BattleData || typeof BattleData !== 'object') throw new Error("Corrupted data file: `" + './data/' + dataFiles[dataType] + "`");
+				data[dataType] = BattleData;
 			}, this);
-			try {
-				var path = './config/formats.js';
-				var configFormats = require(path).Formats;
-				for (var i = 0; i < configFormats.length; i++) {
-					var format = configFormats[i];
-					var id = toId(format.name);
-					format.effectType = 'Format';
-					if (format.challengeShow === undefined) format.challengeShow = true;
-					if (format.searchShow === undefined) format.searchShow = true;
-					data.Formats[id] = format;
-				}
-			} catch (e) {
-				if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING FORMATS: ' + e.stack);
+
+			var maybeFormats = tryRequire('./config/formats.js');
+			if (maybeFormats.error) {
+				if (maybeFormats.error.code !== 'MODULE_NOT_FOUND') console.error("CRASH LOADING FORMATS:" + maybeFormats.error.stack);
+			}
+			var BattleFormats = maybeFormats.result.Formats;
+			if (!Array.isArray(BattleFormats)) throw new Error ("Corrupted formats file: `" + './config/formats.js' + "`");
+			for (var i = 0; i < BattleFormats.length; i++) {
+				var format = BattleFormats[i];
+				var id = toId(format.name);
+				format.effectType = 'Format';
+				if (format.challengeShow === undefined) format.challengeShow = true;
+				if (format.searchShow === undefined) format.searchShow = true;
+				data.Formats[id] = format;
 			}
 		} else {
 			var parentData = moddedTools[parentMod].data;
 			dataTypes.forEach(function (dataType) {
 				if (typeof dataFiles[dataType] === 'string') {
-					try {
-						var path = './mods/' + mod + '/' + dataFiles[dataType];
-						data[dataType] = require(path)['Battle' + dataType];
-					} catch (e) {
-						if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING MOD DATA: ' + e.stack);
+					var maybeData = tryRequire('./mods/' + mod + '/' + dataFiles[dataType]);
+					if (maybeData.error) {
+						maybeData.result['Battle' + dataType] = {};
+						if (maybeData.error.code !== 'MODULE_NOT_FOUND') console.error("CRASH LOADING " + data.mod.toUpperCase() + " DATA:\n" + maybeData.error.stack);
 					}
+					var BattleData = maybeData.result['Battle' + dataType];
+					if (!BattleData || typeof BattleData !== 'object') throw new Error("Corrupted data file: `" + './mods/' + mod + '/' + dataFiles[dataType] + "`");
+					data[dataType] = BattleData;
 				}
 				if (!data[dataType]) data[dataType] = {};
 				for (var i in parentData[dataType]) {
