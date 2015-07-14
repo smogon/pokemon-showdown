@@ -46,10 +46,25 @@ describe('Intimidate', function () {
 	});
 
 	it('should wait until all simultaneous switch ins have completed before activating', function () {
-		battle = BattleEngine.Battle.construct('battle-intimidate-order', 'customgame');
+		battle = BattleEngine.Battle.construct('battle-intimidate-order1', 'customgame');
 		battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']}]);
 		var intimidateCount = 0;
+		battle.on('Boost', battle.getFormat(), function (boost, target, source) {
+			assert.strictEqual(source.template.speciesid, intimidateCount === 0 ? 'arcanine' : 'gyarados');
+			intimidateCount++;
+		});
+		battle.commitDecisions(); // Finish Team Preview, switch both Pokemon in
+		assert.strictEqual(intimidateCount, 2);
+		assert.strictEqual(battle.p1.active[0].boosts['atk'], -1);
+		assert.strictEqual(battle.p2.active[0].boosts['atk'], -1);
+
+		// Do it again with the Pokemon in reverse order
+		battle.destroy();
+		battle = BattleEngine.Battle.construct('battle-intimidate-order2', 'customgame');
+		battle.join('p1', 'Guest 1', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]);
+		intimidateCount = 0;
 		battle.on('Boost', battle.getFormat(), function (boost, target, source) {
 			assert.strictEqual(source.template.speciesid, intimidateCount === 0 ? 'arcanine' : 'gyarados');
 			intimidateCount++;
