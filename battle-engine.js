@@ -2063,7 +2063,7 @@ Battle = (function () {
 			this.debug(eventid + ' handler suppressed by Gastro Acid');
 			return relayVar;
 		}
-		if (effect.effectType === 'Weather' && eventid !== 'TryWeather' && this.suppressingWeather()) {
+		if (effect.effectType === 'Weather' && eventid !== 'Residual' && eventid !== 'End' && this.suppressingWeather()) {
 			this.debug(eventid + ' handler suppressed by Air Lock');
 			return relayVar;
 		}
@@ -2276,7 +2276,7 @@ Battle = (function () {
 				}
 				continue;
 			}
-			if ((status.effectType === 'Weather' || eventid === 'Weather') && eventid !== 'TryWeather' && this.suppressingWeather()) {
+			if ((status.effectType === 'Weather' || eventid === 'Weather') && eventid !== 'Residual' && eventid !== 'End' && this.suppressingWeather()) {
 				this.debug(eventid + ' handler suppressed by Air Lock');
 				continue;
 			}
