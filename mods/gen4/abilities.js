@@ -106,9 +106,9 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Pressure');
 		},
-		onSourceDeductPP: function (pp, target, source) {
+		onDeductPP: function (target, source) {
 			if (target === source) return;
-			return pp + 1;
+			return 1;
 		},
 		id: "pressure",
 		name: "Pressure",
