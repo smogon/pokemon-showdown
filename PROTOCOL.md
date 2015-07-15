@@ -237,6 +237,12 @@ In doubles and triples battles, `a` will refer to the leftmost Pokémon
 on one team and the rightmost Pokémon on the other (so `p1a` faces `p2c`,
 etc). `NAME` is the nickname of the Pokémon performing the action.
 
+Battle actions (especially minor actions) often come with tags such as
+`|[from] EFFECT|[of] SOURCE`. `EFFECT` will be an effect (move, ability,
+item, status, etc), and `SOURCE` will be a Pokémon. These can affect the
+message or animation displayed, but do not affect anything else. Other 
+tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
+
 `|move|POKEMON|MOVE|TARGET`
 
 > The specified Pokémon has used move `MOVE` at `TARGET`. If a move has
@@ -244,7 +250,10 @@ etc). `NAME` is the nickname of the Pokémon performing the action.
 > targets a side, `TARGET` will be a (possibly fainted) Pokémon on that
 > side.
 >
-> `move` can be tagged with `|[miss]` to indicate that the move missed.
+> If `|[miss]` is present, the move missed.
+>
+> `|[anim] MOVE2` tells the client to use the animation of `MOVE2` instead
+> of `MOVE` when displaying to the client.
 
 `|switch|POKEMON|SPECIES|HP STATUS` or `|drag|POKEMON|SPECIES|HP STATUS`
 
@@ -293,12 +302,6 @@ they're usually displayed in small font if they have a message. Pretty much
 anything that happens in a battle other than a switch or the fact that a move
 was used is a minor action. So yes, the effects of a move such as damage or
 stat boosts are minor actions.
-
-Minor actions often come with tags such as `|[from] EFFECT|[of] SOURCE`.
-`EFFECT` will be an effect (move, ability, item, status, etc), and `SOURCE`
-will be a Pokémon. These can affect the message or animation displayed, but
-do not affect anything else. Other tags include `|[still]` (suppress
-animation) and `|[silent]` (suppress message).
 
 `|-fail|POKEMON|ACTION`
 
