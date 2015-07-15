@@ -493,7 +493,7 @@ exports.BattleFormats = {
 	endlessbattleclause: {
 		effectType: 'Banlist',
 		name: 'Endless Battle Clause',
-		banlist: ['Leppa Berry + Recycle', 'Harvest + Leppa Berry', 'Shadow Tag + Leppa Berry + Trick'],
+		banlist: ['Leppa Berry + Recycle', 'Harvest + Leppa Berry', 'Leppa Berry + Trick', 'Leppa Berry + Switcheroo', 'Heal Pulse'],
 		onStart: function () {
 			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned');
 		}
