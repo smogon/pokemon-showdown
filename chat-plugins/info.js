@@ -2430,7 +2430,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help htmlbox');
 		if (!this.canHTML(target)) return;
 
-		if (room.id === 'development') {
+		if (user.userid === 'github') {
 			if (!this.can('announce', null, room)) return;
 			if (message.charAt(0) === '!') this.broadcasting = true;
 		} else {
