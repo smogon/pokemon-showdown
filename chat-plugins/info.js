@@ -1928,7 +1928,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
 			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3536615/\">OU Theorymon</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3541537/\">OU Theorymon</a><br />";
 		}
 		if (!matched) {
 			return this.sendReply("The Other Metas entry '" + target + "' was not found. Try /othermetas or /om for general help.");
