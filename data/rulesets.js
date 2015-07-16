@@ -493,7 +493,7 @@ exports.BattleFormats = {
 	endlessbattleclause: {
 		effectType: 'Banlist',
 		name: 'Endless Battle Clause',
-		banlist: ['Leppa Berry + Recycle', 'Harvest + Leppa Berry', 'Leppa Berry + Trick', 'Leppa Berry + Switcheroo'],
+		banlist: ['Leppa Berry + Recycle', 'Harvest + Leppa Berry', 'Leppa Berry + Trick', 'Leppa Berry + Switcheroo', 'Leppa Berry + Bestow'],
 		validateSet: function (set, format, setHas) {
 			if (format.gameType === 'singles' && 'healpulse' in setHas) {
 				return [set.name + " has Heal Pulse, which is banned in Singles by Endless Battle Clause."];
