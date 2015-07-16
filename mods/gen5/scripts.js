@@ -419,7 +419,7 @@ exports.BattleScripts = {
 				// Move post-processing:
 				if (damagingMoves.length === 0) {
 					// Have a 60% chance of rejecting one move at random:
-					if (Math.random() * 1.66 < 1) moves.splice(Math.floor(Math.random() * moves.length), 1);
+					if (this.random(5) <= 2) this.sampleNoReplace(moves);
 				} else if (damagingMoves.length === 1) {
 					// Night Shade, Seismic Toss, etc. don't count:
 					if (!damagingMoves[0].damage) {
@@ -428,7 +428,7 @@ exports.BattleScripts = {
 						var replace = false;
 						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
 							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
-							if (!hasMove['encore'] && Math.random() * 2 > 1) replace = true;
+							if (!hasMove['encore'] && this.random(2)) replace = true;
 						} else if (damagingid === 'focuspunch') {
 							// Focus Punch is a bad idea without a sub:
 							if (!hasMove['substitute']) replace = true;
@@ -460,7 +460,7 @@ exports.BattleScripts = {
 					} else {
 						rejectCombo = false;
 					}
-					if (rejectCombo) moves.splice(Math.floor(Math.random() * moves.length), 1);
+					if (rejectCombo) this.sampleNoReplace(moves);
 				} else {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
 					var isStab = false;
@@ -470,7 +470,7 @@ exports.BattleScripts = {
 							break;
 						}
 					}
-					if (!isStab) moves.splice(Math.floor(Math.random() * moves.length), 1);
+					if (!isStab) this.sampleNoReplace(moves);
 				}
 			}
 		} while (moves.length < 4 && movePool.length);
@@ -492,11 +492,11 @@ exports.BattleScripts = {
 		var ability = ability0.name;
 		if (abilities[1]) {
 			if (ability0.rating <= ability1.rating) {
-				if (Math.random() * 2 < 1) {
+				if (this.random(2)) {
 					ability = ability1.name;
 				}
 			} else if (ability0.rating - 0.6 <= ability1.rating) {
-				if (Math.random() * 3 < 1) {
+				if (!this.random(3)) {
 					ability = ability1.name;
 				}
 			}
@@ -615,17 +615,17 @@ exports.BattleScripts = {
 			item = 'Focus Sash';
 		} else if (template.species === 'Unown') {
 			item = 'Choice Specs';
-		} else if ((template.species === 'Wynaut' || template.species === 'Wobbuffet') && hasMove['destinybond'] && Math.random() * 2 > 1) {
+		} else if ((template.species === 'Wynaut' || template.species === 'Wobbuffet') && hasMove['destinybond'] && this.random(2)) {
 			item = 'Custap Berry';
 		} else if (hasMove['trick'] && hasMove['gyroball'] && (ability === 'Levitate' || hasType['Flying'])) {
 			item = 'Macho Brace';
 		} else if (hasMove['trick'] && hasMove['gyroball']) {
 			item = 'Iron Ball';
 		} else if (hasMove['trick'] || hasMove['switcheroo']) {
-			var randomNum = Math.random() * 2;
-			if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum > 1)) {
+			var randomNum = this.random(2);
+			if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
 				item = 'Choice Band';
-			} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum > 1)) {
+			} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
 				item = 'Choice Specs';
 			} else {
 				item = 'Choice Scarf';
@@ -692,17 +692,9 @@ exports.BattleScripts = {
 			// less priority than if you'd had both
 			item = 'Light Clay';
 		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
-			if (Math.random() * 3 > 1) {
-				item = 'Choice Band';
-			} else {
-				item = 'Expert Belt';
-			}
+			item = this.random(3) ? 'Choice Band' : 'Expert Belt';
 		} else if (counter.Special >= 4) {
-			if (Math.random() * 3 > 1) {
-				item = 'Choice Specs';
-			} else {
-				item = 'Expert Belt';
-			}
+			item = this.random(3) ? 'Choice Specs' : 'Expert Belt';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
@@ -805,7 +797,7 @@ exports.BattleScripts = {
 			ivs: ivs,
 			item: item,
 			level: level,
-			shiny: (Math.random() * 1024 <= 1)
+			shiny: !this.random(1024)
 		};
 	},
 	randomTeam: function (side) {
