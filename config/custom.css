@@ -1,14 +1,5 @@
-.userbar:before{
-        background: url(http://i.imgur.com/3tRYvEC.png);
- }
 
-
-
-a{
- color: #3498db;  
-}
-
-body{
+.body{
 	background: url(http://embed.gyazo.com/702b535d24ad22879cccd9e849dc14ea.jpg);
   	background-size: cover;
 }
