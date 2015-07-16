@@ -39,9 +39,9 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 		return;
 	}
 	format = Tools.getFormat(format);
-	if (format.effectType !== 'Format') {
-		output.sendReply(format.id + " is not a valid format.");
-		output.sendReply("Valid formats: " + Object.keys(Tools.data.Formats).filter(function (f) { return Tools.data.Formats[f].effectType === 'Format'; }).join(", "));
+	if (format.effectType !== 'Format' || !format.tournamentShow) {
+		output.sendReply(format.id + " is not a valid tournament format.");
+		output.sendReply("Valid formats: " + Object.values(Tools.data.Formats).filter(function (f) { return f.effectType === 'Format' && f.tournamentShow; }).map('name').join(", "));
 		return;
 	}
 	if (!TournamentGenerators[toId(generator)]) {
@@ -593,7 +593,7 @@ Tournament = (function () {
 		this.purgeGhostUsers();
 		this.update();
 
-		from.prepBattle(this.format, 'challenge', from, this.finishChallenge.bind(this, from, to, output));
+		from.prepBattle(this.format, 'tournament', from, this.finishChallenge.bind(this, from, to, output));
 	};
 	Tournament.prototype.finishChallenge = function (from, to, output, result) {
 		if (!result) {
@@ -644,7 +644,7 @@ Tournament = (function () {
 		var challenge = this.pendingChallenges.get(user);
 		if (!challenge || !challenge.from) return;
 
-		user.prepBattle(this.format, 'challenge', user, this.finishAcceptChallenge.bind(this, user, challenge));
+		user.prepBattle(this.format, 'tournament', user, this.finishAcceptChallenge.bind(this, user, challenge));
 	};
 	Tournament.prototype.finishAcceptChallenge = function (user, challenge, result) {
 		if (!result) return;
