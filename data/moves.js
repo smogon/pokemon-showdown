@@ -12329,6 +12329,7 @@ exports.BattleMovedex = {
 					return null;
 				}
 			},
+			onRedirectTargetPriority: -99,
 			onRedirectTarget: function (target, source, source2) {
 				if (source !== this.effectData.target) return;
 				if (this.effectData.source.fainted) return;
