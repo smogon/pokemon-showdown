@@ -1876,7 +1876,7 @@ var commands = exports.commands = {
 		if (target === 'all' || target === 'monotype') {
 			matched = true;
 			if (target !== 'all') buffer += "All Pok\u00e9mon on a team must share a type.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">Monotype</a><br />";
+			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3544507/\">Monotype</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517737/\">Monotype Viability Ranking</a><br />";
 		}
 		if (target === 'all' || target === 'tiershift' || target === 'ts') {
@@ -1914,6 +1914,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === '2v2doubles' || target === '2v2') {
 			matched = true;
+			if (target !== 'all') buffer += "Double battle where you bring four Pok\u00e9mon to Team Preview and choose only two.<br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505227/\">2v2 Doubles</a><br />";
 		}
 		if (target === 'all' || target === 'averagemons') {
