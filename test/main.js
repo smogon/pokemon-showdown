@@ -44,6 +44,8 @@ function init (callback) {
 		process.process.on('error', function () {});
 	});
 
+	global.TeamValidator = require('./../team-validator.js');
+
 	// Deterministic tests
 	BattleEngine.Battle.prototype._init = BattleEngine.Battle.prototype.init;
 	BattleEngine.Battle.prototype.init = function (roomid, formatarg, rated) {
