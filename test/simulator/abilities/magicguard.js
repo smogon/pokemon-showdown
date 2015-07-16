@@ -22,7 +22,7 @@ describe('Magic Guard', function () {
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should not be bypassed by Mold Breaker', function () {
+	it('should not be suppressed by Mold Breaker', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
