@@ -3485,7 +3485,7 @@ Battle = (function () {
 		if (decision) {
 			if (!decision.side && decision.pokemon) decision.side = decision.pokemon.side;
 			if (!decision.choice && decision.move) decision.choice = 'move';
-			if (!decision.priority) {
+			if (!decision.priority && decision.priority !== 0) {
 				var priorities = {
 					'beforeTurn': 100,
 					'beforeTurnMove': 99,
@@ -3496,7 +3496,7 @@ Battle = (function () {
 					'team': 102,
 					'start': 101
 				};
-				if (priorities[decision.choice]) {
+				if (decision.choice in priorities) {
 					decision.priority = priorities[decision.choice];
 				}
 			}
