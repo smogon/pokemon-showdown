@@ -1852,7 +1852,8 @@ exports.BattleMovedex = {
 				var illusionMoves = user.illusion.moves.filter(function (move) {
 					return this.getMove(move).category !== 'Status';
 				}, this);
-				if (illusionMoves.length) move.name = this.getMove(illusionMoves.sample()).name;
+				if (!illusionMoves.length) return;
+				move.name = this.getMove(illusionMoves[this.random(illusionMoves.length)]).name;
 			}
 		}
 	},
