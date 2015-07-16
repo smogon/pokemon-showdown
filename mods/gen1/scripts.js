@@ -1053,9 +1053,8 @@ exports.BattleScripts = {
 		var pokemonPool = [];
 		for (var id in this.data.FormatsData) {
 			// FIXME: Not ES-compliant
-			if (n > 151 || !this.data.FormatsData[id].randomBattleMoves) continue;
+			if (n++ > 151 || !this.data.FormatsData[id].randomBattleMoves) continue;
 			pokemonPool.push(id);
-			n++;
 		}
 
 		// Now let's store what we are getting.

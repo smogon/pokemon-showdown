@@ -532,9 +532,8 @@ exports.BattleScripts = {
 		var pokemonPool = [];
 		for (var id in this.data.FormatsData) {
 			// FIXME: Not ES-compliant
-			if (n > 251 || !this.data.FormatsData[id].randomBattleMoves) continue;
+			if (n++ > 251 || !this.data.FormatsData[id].randomBattleMoves) continue;
 			pokemonPool.push(id);
-			n++;
 		}
 
 		// Setup storage.
