@@ -109,6 +109,7 @@ module.exports = (function () {
 				format.effectType = 'Format';
 				if (format.challengeShow === undefined) format.challengeShow = true;
 				if (format.searchShow === undefined) format.searchShow = true;
+				if (format.tournamentShow === undefined) format.tournamentShow = true;
 				data.Formats[id] = format;
 			}
 		} else {
