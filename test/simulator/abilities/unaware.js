@@ -61,7 +61,7 @@ describe('Unaware', function () {
 		assert.notStrictEqual(pokemon.maxhp - pokemon.hp, damage);
 	});
 
-	it('should be negated by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Clefable', ability: 'unaware', moves: ['splash']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['shadowsneak']}]);
