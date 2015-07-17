@@ -2203,19 +2203,17 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 
 		var targets = target.split(',');
-		if (toId(targets[0]) === 'previews') return this.sendReplyBox("<a href=\"https://www.smogon.com/forums/threads/sixth-generation-pokemon-analyses-index.3494918/\">Generation 6 Analyses Index</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		var pokemon = Tools.getTemplate(targets[0]);
 		var item = Tools.getItem(targets[0]);
 		var move = Tools.getMove(targets[0]);
 		var ability = Tools.getAbility(targets[0]);
+		var format = Tools.getFormat(targets[0]);
 		var atLeastOne = false;
 		var generation = (targets[1] || 'xy').trim().toLowerCase();
 		var genNumber = 6;
-		// var doublesFormats = {'vgc2012':1, 'vgc2013':1, 'vgc2014':1, 'doubles':1};
-		var doublesFormats = {};
-		var doublesFormat = (!targets[2] && generation in doublesFormats) ? generation : (targets[2] || '').trim().toLowerCase();
-		var doublesText = '';
-		if (generation === 'xy' || generation === 'xy' || generation === '6' || generation === 'six') {
+		var extraFormat = Tools.getFormat(targets[2]);
+
+		if (generation === 'xy' || generation === 'oras' || generation === '6' || generation === 'six') {
 			generation = 'xy';
 		} else if (generation === 'bw' || generation === 'bw2' || generation === '5' || generation === 'five') {
 			generation = 'bw';
@@ -2235,15 +2233,6 @@ var commands = exports.commands = {
 		} else {
 			generation = 'xy';
 		}
-		if (doublesFormat !== '') {
-			// Smogon only has doubles formats analysis from gen 5 onwards.
-			if (!(generation in {'bw':1, 'xy':1}) || !(doublesFormat in doublesFormats)) {
-				doublesFormat = '';
-			} else {
-				doublesText = {'vgc2012':"VGC 2012", 'vgc2013':"VGC 2013", 'vgc2014':"VGC 2014", 'doubles':"Doubles"}[doublesFormat];
-				doublesFormat = '/' + doublesFormat;
-			}
-		}
 
 		// Pokemon
 		if (pokemon.exists) {
@@ -2256,9 +2245,19 @@ var commands = exports.commands = {
 
 			var illegalStartNums = {'351':1, '421':1, '487':1, '555':1, '647':1, '648':1, '649':1, '681':1};
 			if (pokemon.isMega || pokemon.num in illegalStartNums) pokemon = Tools.getTemplate(pokemon.baseSpecies);
-			var poke = pokemon.name.toLowerCase().replace(/\ /g, '_').replace(/[^a-z0-9\-\_]+/g, '');
+			var poke = pokemon.name.toLowerCase().replace(' ', '_').replace(/[^a-z0-9\-\_]+/g, '');
 
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/pokemon/" + poke + doublesFormat + "\">" + generation.toUpperCase() + " " + doublesText + " " + pokemon.name + " analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			var formatName = extraFormat.name;
+			var formatId = formatName.toLowerCase().replace(' ', '_').replace(/[^a-z0-9\-\_]+/g, '');
+			if (formatId === 'doubles_ou') {
+				formatId = 'doubles';
+			} else if (formatId.includes('vgc')) {
+				formatId = 'vgc' + formatId.slice(-2);
+				formatName = 'VGC20' + formatId.slice(-2);
+			} else if (extraFormat.effectType !== 'Format') {
+				formatName = formatId = '';
+			}
+			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/pokemon/" + poke + (formatId ? '/' + formatId : '') + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " " + pokemon.name + " analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		}
 
 		// Item
@@ -2282,8 +2281,26 @@ var commands = exports.commands = {
 			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/moves/" + moveName + "\">" + generation.toUpperCase() + " " + move.name + " move analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		}
 
+		// Format
+		if (format.id) {
+			var formatName = format.name;
+			var formatId = formatName.toLowerCase().replace(' ', '_').replace(/[^a-z0-9\-\_]+/g, '');
+			if (formatId === 'doubles_ou') {
+				formatId = 'doubles';
+			} else if (formatId.includes('vgc')) {
+				formatId = 'vgc' + formatId.slice(-2);
+				formatName = 'VGC20' + formatId.slice(-2);
+			} else if (format.effectType !== 'Format') {
+				formatName = formatId = '';
+			}
+			if (formatName) {
+				atLeastOne = true;
+				this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/formats/" + formatId + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " format analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			}
+		}
+
 		if (!atLeastOne) {
-			return this.sendReplyBox("Pok&eacute;mon, item, move, or ability not found for generation " + generation.toUpperCase() + ".");
+			return this.sendReplyBox("Pok&eacute;mon, item, move, ability, or format not found for generation " + generation.toUpperCase() + ".");
 		}
 	},
 	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
