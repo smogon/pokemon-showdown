@@ -345,7 +345,7 @@ var commands = exports.commands = {
 		var searches = {};
 		var allTiers = {'uber':1, 'ou':1, 'bl':1, 'uu':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1, 'bl4':1, 'pu':1, 'nfe':1, 'lc uber':1, 'lc':1, 'cap':1};
 		var allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
-		var allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1};
+		var allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1};
 		var showAll = false;
 		var megaSearch = null;
 		var randomOutput = 0;
@@ -626,14 +626,22 @@ var commands = exports.commands = {
 			case 'stats':
 				for (var stat in searches[search]) {
 					for (var mon in dex) {
+						var monStat = 0;
+						if (stat === 'bst') {
+							for (var monStats in dex[mon].baseStats) {
+								monStat += dex[mon].baseStats[monStats];
+							}
+						} else {
+							monStat = dex[mon].baseStats[stat];
+						}
 						if (typeof searches[search][stat].less === 'number') {
-							if (dex[mon].baseStats[stat] > searches[search][stat].less) {
+							if (monStat > searches[search][stat].less) {
 								delete dex[mon];
 								continue;
 							}
 						}
 						if (typeof searches[search][stat].greater === 'number') {
-							if (dex[mon].baseStats[stat] < searches[search][stat].greater) {
+							if (monStat < searches[search][stat].greater) {
 								delete dex[mon];
 								continue;
 							}
