@@ -1,220 +1,185 @@
 
-.body{
-	background: url(http://embed.gyazo.com/702b535d24ad22879cccd9e849dc14ea.jpg);
-  	background-size: cover;
+body {
+    background: url("http://embed.gyazo.com/702b535d24ad22879cccd9e849dc14ea.jpg") no-repeat;
+    background-size: cover;
+  }
+  
+  .ps-room.ps-room-opaque {
+    background:#FFA347;
+  }
+
+  .mainmenufooter small:after{
+    content:"Rust CSS Made By: BT Cant Get Burns"; 
+    font-size:9pt; 
+    color:black; 
+    text-shadow:0 1px black; 
+    position:absolute; 
+    size:6px; 
+    left:230px; 
+    top:21px; 
+    width: 300px;
+  }
+  
+  .rightbar, .leftbar {
+    background: #FFA347;
+  }
+  
+    .header .logo {
+    opacity: 0; 
+  }
+  
+  .battleform label {
+    background: url("http://i.imgur.com/yFWeHx0.png") no-repeat scroll left center transparent !important;
+    padding: 4px;
+    opacity:0.9;
+    color: #FFF;
+  }
+  
+  .menugroup {
+    background: orange;
+  }
+
+  .select {
+    border-top-left-radius:0px;
+  }
+  
+  .maintabbarbottom {
+    background: black;
+    border: 1px black;
+    box-shadow: none;
+  }
+  
+  .tabbar a.button.cur, .tabbar a.button.cur:hover {
+    color: black;
+    background: #FFA347;
+    border: 1px solid #000;
+    font-family: helvetica,arial,sans-serif;
+    text-shadow: none;
+  }
+  
+  .tabbar a.button {
+    color: white;
+    background:#FFa347;
+    border: 1px solid #000;
+    font-family: Roman Times;
+    text-shadow: none;
+  }
+  
+  .tabbar a.button:hover {
+    color: #FFF;
+    background: black;
+    border: 1px solid #000;
+    font-family: helvetica,arial,sans-serif;
+    text-shadow: none;
+  }
+  
+  #header {
+    background: #FFA347;
+  }
+  
+  .mainmenu .menugroup:nth-child(1) .button, .mainmenu .menugroup:nth-child(2) p:nth-child(1) .button, .mainmenu .menugroup:nth-child(2) p:nth-child(2) .button, .mainmenu .menugroup:nth-child(2) p:nth-child(3) .button, .mainmenu .menugroup:nth-child(3) p:nth-child(1) .button, .mainmenu .menugroup:nth-child(3) p:nth-child(2) .button {
+    border:2px solid #383839;
+    background: #FFA347;
+    color: black;
+    text-shadow:none;
+  }
+  
+  .mainmenu .menugroup:nth-child(1) .button:hover, .mainmenu .menugroup:nth-child(2) p:nth-child(1) .button:hover, .mainmenu .menugroup:nth-child(2) p:nth-child(2) .button:hover, .mainmenu .menugroup:nth-child(2) p:nth-child(3) .button:hover, .mainmenu .menugroup:nth-child(3) p:nth-child(1) .button:hover, .mainmenu .menugroup:nth-child(3) p:nth-child(2) .button:hover {
+    border:2px solid #000;
+    background:#FFF;
+    color:#000;
+    font-family: helvetica,arial,sans-serif;
+    text-shadow:none;
+  }
+  
+  .roomlist a.ilink {
+    font-size:9px;
+    color: black;  
+    text-transform: uppercase;
+    text-align:left;
+    text-shadow: none;
+    background: #FFA347;
+    box-shadow:none; 
+    border-radius:0px; 
+    border-width:0; 
+    width:642px;
+    padding-left:20px;
+    padding-top:10px;
+    padding-bottom:12px;
+  }
+  
+  .roomlist a.ilink:hover{  
+    font-size:14px;
+    opacity:0.9;
+    font-family: Tahoma, Verdana, Segoe, sans-serif;
+    font-weight:bold;
+    color: #FFA347;  
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px #4d4d4d,
+    1px 0px 1px #4d4d4d;
+    background: black;
+    box-shadow:none; 
+    border-radius:0px; 
+    border-width:0; 
+    width:642px;
+    padding-left:20px;
+    padding-top:10px;
+    padding-bottom:12px;
+  } 
+  
+  .userlist {
+    border-right:none;
+    background: #FFA347;
+  }
+  
+  
+  .chat-log {
+    border:1px solid #CECECE;
+    background: #FFA347;
+  }
+  
+  .pm-log, .battle-log {
+    background: #FFA347;
+    color: Black;
+  }
+  
+  .pm-window h3 {
+   border: 2px solid #383839;
+    color: #383839;
+    background:rgba(134, 195, 227, 0.8);
+  }
+  
+  .pm-window h3:hover, .pm-window.focused h3, .pm-window.focused h3:hover  {
+   border: 2px solid #000;
+    color: #000;
+  }
+  
+  .mainmenufooter a {
+    color:#6853A0;
+    text-shadow: none;
+    text-decoration: none;
+    font-weight:bold;
+  }
+  
+  .mainmenufooter a:hover {
+    color:black;
+    text-shadow: none;
+    text-decoration: none;
+    font-weight:bold;
+  }
+  
+  
+  .ps-popup {
+    background: #FFA347;
+  }
+
+.chatlog {
+    background: #FFA347;
 }
 
 .highlighted, .message-announce {
 background: #3399FF;
 }
-
-.chat.timer {
-color: white;
-}
-
-#lobby-userlist-users small{
- color: #ecf0f1; 
-}
-
-.ladder strong, .ladder em{
-  color: #131313 !important;
-}
-
-.mainmenufooter small:after {
-	  content: "Rust Server Skin Made By BT Cant Get Burns";
-      text-shadow: 0 1px black;
-      position: absolute;
-      left: 0px;
-      top: -40px;
-      width: 200px;
-}
-
-
-
-
-.tabbar{
-  bottom: 0;
-  }
-.userbar{
-  top: 18px;
-  }
-
-  .userbar .username {
-        text-shadow: none;
-        text-shadow: none
-}
-  
-.userbar:before{
-  display: block;
-  content:"";
-        width:32px;
-        height: 32px;
-        float: left;
-        position: relative;
-        top: -9px;
-      }
-  
-.icon-user{
-     display:none; 
-    }
-
-.siderooms{
-background: #FFA347;
-      height: 56px;
-    }
-    
-.maintabbarbottom {
-background: linear-gradient(to bottom, rgba(0,0,0,.6) 0%, rgba(0,0,0,0) 100%);
-border: none;
-  box-shadow: none;
-  z-index:2;
-}
-
-.header {
-height: 56px;
-  background: #FFA347;
-}
-
-.header .logo {
-float: left;
-margin: 7px 0px 0 2px;
-}
-
-.tabbar .closebutton, .tabbar a.cur+.closebutton {
-top: 19px;
-}
-.closebutton:hover {
-color: black;
-}
-.closebutton {
-color: #FFA347;
-}
-
-.tabbar a.button.notifying {
-background: #FF9933;
-}
-
-.maintabbar .inner {
-  	padding-top:0px;
-    height: 56px;
-    background: #FFA347;
-}
-    
-.tabbar.maintabbar {
-margin-left: 170px;
-margin-right: 0px;
-overflow: hidden;
-  height: 60px;
-  background-position: right;
-  background-repeat: no-repeat;
-}
-
-.tabbar a.button.cur, .tabbar a.button.cur:hover, .tabbar a.button{
-color: #FFa347;
-background: #333333;
-box-shadow: none;
-  border: none;
-cursor: default;
-top: 0px;
-  border-radius: 5px;
-text-shadow: none;
-  margin-left: 5px;
-  margin-top:15px;
-}
-
-.tabbar a.button:hover, .tabbar a.button.cur{
-  	background: black;
-    }
-
-.tabbar a.button {
-cursor: pointer;
-text-align: center;
-white-space: nowrap;
-text-shadow: none;
-font-size: 11px;
-}
-
-
-.ps-popup {
-    position: absolute;
-    top: auto;
-    right: auto;
-    left: auto;
-    bottom: auto;
-    text-align: left;
-    padding: 2px 10px;
-    z-index: 20;
-	border: 1px solid #181818;
-  	border-radius: 2px;
-	box-shadow: inset 0px 0px 0px 1px rgba(0,0,0,.2);
-  	background: #e8e8e8;
-}
-
-
-
-.battle-log-add, .chat-log-add{
-  	border-color: #333;
-    background: #FFA347;
-    text-shadow: 1px 1px black;
-  }
-
-.message-pm {
-color: black;
-}
-
-.userlist{
-	background: #FFAD5C;  
-}
-
-.userlist li button:hover {
-background: black;
-}
-
-.userlist li{
-border-bottom: 1px solid #1b1b1b;
-}
-
-
-.battle-log, .chat-log{
-	background: #FFAD5C;
-    color: black;
-  	border-width: 0;
-}
-
-.username{
-  	text-shadow: none;
-}
-
-.battle-log h2 {
-  	position: relative;
-    border: 0px solid #AAAAAA;
-    background: #161616;
-    color: #FFa347;
-}
-  
-.battle-log h2:after {
-	display: block;
-	content: "";
-    background: url(http://i.imgur.com/1dbPeSk.png);
-    width: 31px;
-    height: 18px;
-    position: absolute;
-    right: 5px;
-    top: 5px;
-}
-
-
-.battle-log .chat em {
-padding: 1px 4px 1px 3px;
-    color: black;
-font-style: normal;
-}
-
-.battle-log .chat strong {
-    color: white;
-}
-
-
 
 .challenge {
 background: orange;
@@ -223,910 +188,15 @@ color: rgba(0,0,0,.6);
 padding: 1px 5px;
 }
 
-.pm-log em{
-	color: black;
-}
-
-.pm-box .focused{
-    background: #1b1b1b;
-}
-
-.pm-window.focused h3:hover{
-    background: #3498db;
-      }
-
-.pm-window h3, .pm-window.focused h3 {
-	color: #ecf0f1;
-    background: #1b1b1b;
-    margin: 0;
-    padding: 2px 5px;
-    font-size: 11pt;
-    border-width: 0;
-    cursor: pointer;
-  	border-radius: 0px;
-}
-
-.pm-log{
-	background: #FFAD5C;
-    border-width: 0;
-}
-
-.pm-log-add {
-    border-width: 0;
-    background: #1b1b1b;
-  	border-radius: 0px;
-}
-
-.ladder table{
-    background-color: #FF0347;
-}
-
-.infobox, .ladder, .pm-window{
+infobox, .ladder, .pm-window{
 	position: relative;;
     margin-top: 5px;
     color: black;
     background-color: #FFFFFF;
 }
 
-.utilichart{
-	position: relative;
-	border: 1px solid #181818;
-  	border-radius: 2px;
-	box-shadow: inset 0px 0px 0px 1px rgba(0,0,0,.2);
-  	background: url(http://i.imgur.com/SHCpB0w.png);
-    margin-top: 5px;
-    min-height: 33px;
-    width: 270px;
-  	height: 96px;
-}
-
-.utilichart:after, .infobox:after, .ladder:after, .pm-window:after, .ps-popup:after, #tooltipwrapper .tooltip:after{
-	display: block;
-	content: "";
-    background: url(http://i.imgur.com/GCuRjnR.png);
-    width: 45px;
-    height: 7px;
-    position: absolute;
-    left: -1px;
-    top: -7px;
-}
-
-.utilichart .numcol, .utilichart .movenamecol, .utilichart .namecol{
-    padding: 0;
-    margin: 0;
-  	text-align: left;
-    font-weight: bold;
-    color: #1b1b1b;
-  	position: absolute;
-  	left: 10px;
-  	top: 2px;
-  	font-size: 8pt;
-  }
-    
-.utilichart .pokemonnamecol{
-    padding: 0;
-    margin: 0;
-    font-weight: bold;
-    color: #1b1b1b;
-  	position: absolute;
-  	left: 40px;
-  	top: 2px;
-  	font-size: 8pt;
-}
-
-.utilichart .typecol{
-  	width: 100px;
-  	height: 0;
-    padding: 0;
-    margin: 0;
-  	position: absolute;
-    left: 10px;
-    top: 18px;
-}
-    
-.utilichart .typecol img{
-	opacity: 1;
-  	margin-right: 10px;
-}
-
-.utilichart .iconcol, .utilichart .itemiconcol{
- 	position: absolute;
-  	right: 5px;
-  	top: 3px;
-}
-
-.utilichart .abilitycol, .utilichart .twoabilitycol{
-  	float: left;
-  	color: #1b1b1b;
-    margin: 34px 40px 0 0px;
-    width: 85px;
-	font-size: 8pt;
-}
-
-.utilichart .abilitycol em, .utilichart .statcol em, .utilichart .bstcol em, .utilichart .twoabilitycol, .utilichart .labelcol em, .utilichart .widelabelcol em, .utilichart .pplabelcol em{
-  	color: #1b1b1b;
-}
-
-.utilichart .statcol, .utilichart .bstcol{
-  	position: relative;
-    left: -5px;
-  	top: 3px;
-  	text-align: center;
-  	margin-right: 12px;
-}
-
-.utilichart .itemdesccol, .utilichart .abilitydesccol, .utilichart .movedesccol {
-    white-space: normal;
-    padding-top: 7px;
-    font-size: 8pt;
-    width: 250px;
-    height: 50px;
-    overflow: visible;
-    color: #777777;
-    position: absolute;
-	top: 28px;
-  	left: 10px;
-}
-
-.utilichart .labelcol, .utilichart .widelabelcol, .utilichart .pplabelcol {
-    padding-top: 0;
-    height: 28px;
-    width: 24px;
-    text-align: center;
-    font-size: 8pt;
-    margin: 65px 45px 0 0;
-}
-
-
-.ps-room.ps-room-opaque {
-    background: #FFAD5C;
-    color: black;
-}
-
-.ps-room {
-    position: absolute;
-    display: block;
-    top: 56px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 1px solid #333;
-  	border-top: none;
-}
-
-.ps-room .battle{
-	top: 60px;
-	border-width: 0px;
-}
-  
-.foehint{    
-position: relative;
-top: 45px;
-}        
-        
-.battle {
-    border: 0px solid #AAAAAA;
-    width: 640px;
-    height: 360px;
-    overflow: visible;
-    font-family: Verdana, sans-serif;
-    font-size: 10pt;
-}
-    
-.backdrop {
-    width: 640px;
-    height: 360px;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    overflow: hidden;
-    background: -50px -90px;
-    opacity: 1 !important;
-}
-
-.backdrop:after{
-	display: block;
-	content: "";
-	background: url(http://i.imgur.com/zQ6bUvr.png);
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 640px;
-    height: 360px;
-}
-
-.ps-room .battle-controls {
-top: 430px;
-}
-
-.turn {
-    position: absolute;
-    top: -42px;
-    left: 270px !important;
-    width: 101px;
-    height: 17px;
-    font-size: 8pt;
-    font-weight: bold;
-    margin: 0px;
-    padding: 0px;
-    padding-top:35px;
-    border: 0;
-    border-radius: 0;
-    opacity: 1 !important;
-    background: url(http://i.imgur.com/Ng0wOlV.png);
-    text-align: center;
-    color: #FFA347;
-}
-
-
-  
-  
-
-
-.rightbar {
-position: absolute;
-top: -60px;
-right: 0;
-height: 100px;
-width: 320px;
-background-color: rgba(255,255,255,0);
-border: 0px solid rgba(215,215,215,0.5);
-color: #777777;
-background-image: url(http://i.imgur.com/WEdUzyR.png);
-background-position: 0px -35px;
-}
-
-.rightbar .trainer {
-margin-top: 0px;
-text-align: right;
-}
-
-.rightbar .trainersprite{
-position: absolute;
-top: 5px;
-left: 40px;
-opacity: 1 !important;
-}
-
-.trainer strong {
-display: block;
-font-size: 8pt;
-overflow: hidden;
-padding-top: 45px;
-padding-right: 10px;
-color: #111;
-}
-  
-  
-.rightbar .trainer .teamicons {
-float:left;
-position: relative;
-top: -42px;
-left: 108px;
-}
-
-
-
-
-
-
-
-
-
-
-.leftbar {
-position: absolute;
-top: -60px;
-left: 0;
-height: 100px;
-width: 320px;
-background-color: rgba(255,255,255,0);
-border: 0px solid rgba(215,215,215,0.5);
-color: #777777;
-background-image: url(http://i.imgur.com/Y68Rmc5.png);
-background-position: 0px -35px;
-}
-
-.leftbar .trainer {
-margin-top: 0px;
-text-align: left;
-}
-
-.leftbar .trainersprite{
-position: absolute;
-top: 5px;
-right: 40px;
-opacity: 1 !important;
-}
-
-.leftbar .trainer strong {
-display: block;
-font-size: 8pt;
-overflow: hidden;
-padding-top: 45px;
-padding-left: 10px;
-}
-  
-  
-.leftbar .trainer .teamicons {
-float:right;
-position: relative;
-top: -42px;
-right: 108px;
-}
-
-
-
-.weather {
-	text-shadow:none;
-    color: rgba(0,0,0,0);
-}
-
-.weather em small {
-	font-size: 7pt;
-    color: white;
+.battle-log-add, .chat-log-add{
+  	border-color: #333;
+    background: #FFA347;
     text-shadow: 1px 1px black;
-    position: absolute;
-    left:0;
-    top: 85px;
-    width: 95px;
-    text-align:center;
   }
-  
-.sunweather, .sunnydayweather {
-background: url(http://i.imgur.com/Acqm3wY.png) no-repeat scroll left top;
-}
-
-.rainweather, .raindanceweather {
-background: url(http://i.imgur.com/6oeWUQ3.png) no-repeat scroll left top;
-  }
-  
-.hailweather {
-background: url(http://i.imgur.com/T2mCkYF.png) no-repeat scroll left top;
-  }
-
-.sandstormweather {
-background: url(http://i.imgur.com/loxBPOI.png) no-repeat scroll left top;
-}
-
-.pseudoweather{
-background: url(http://i.imgur.com/diinudq.png) no-repeat scroll left top;
-}
-    
-
-
-.switchmenu button, .switchmenu button:disabled{
-	background: url(http://i.imgur.com/qYAMtSx.png) !important;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-  	font-size: 8pt;
-}
-
-.switchmenu button{
-	color: white;            
-    text-shadow: 1px 1px black;
-}
-
-.switchmenu button:disabled{
-    opacity: .5;
-    }
-
-.movemenu button{
-	width: 150px;      
-	height: 50px;
-    border-radius: 0;
-    border-width: 0;
-    box-shadow: none;
-    color: white;
-    text-shadow: 1px 1px black;
-    font-size: 10pt;
-    padding-top: 10px;
-}
-
-.movemenu button small{
-text-align: center;
-width: 62px;
-margin-top:2px;
-}
-
-.movemenu button small.type, .movemenu button small.pp {
-padding-top: 8px;
-color: white;
-//margin:6px 15px 0 10px;
-}
-
-.movemenu button.type-Normal{
-    background: #8a8a59 url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Normal:hover{
-    background: #79794e url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Fire{
-    background: #dd6610 url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Fire:hover{
-    background: #b4530d url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Water{
-    background: #386ceb url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Water:hover{
-    background: #1753e3 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Electric{
-    background: #f0c108 url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Electric:hover{
-    background: #c19b07 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Grass{
-    background: #5ca935 url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Grass:hover{
-    background: #4a892b url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Ice{
-    background: #69c6c6 url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Ice:hover{
-    background: #45b6b6 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Fighting{
-    background: #9d2721 url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Fighting:hover{
-    background: #82211b url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Poison{
-    background: #803380 url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Poison:hover{
-    background: #662966 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Ground{
-    background: #d4a82f url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Ground:hover{
-    background: #aa8623 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Flying{
-    background: #9180c4 url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Flying:hover{
-    background: #7762b6 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Psychic{
-    background: #f61c5d url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Psychic:hover{
-    background: #d60945 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Bug{
-    background: #8d9a1b url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Bug:hover{
-    background: #616b13 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Rock{
-    background: #93802d url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Rock:hover{
-    background: #746523 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Ghost{
-    background: #554374 url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Ghost:hover{
-    background: #413359 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Dragon{
-    background: #4c08ef url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Dragon:hover{
-    background: #3d07c0 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Dark{
-    background: #513f34 url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Dark:hover{
-    background: #362a23 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-Steel{
-    background: #9797ba url(http://i.imgur.com/ee2HfDF.png);
-}
-.movemenu button.type-Steel:hover{
-    background: #7a7aa7 url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button.type-undefined, .movemenu button.type-undefined:hover{
-    background: url(http://i.imgur.com/ee2HfDF.png);
-}
-
-.movemenu button:disabled{
-    background: rgba(0,0,0,0) url(http://i.imgur.com/ee2HfDF.png) !important;
-    opacity: .5;
-}
-
-
-
-#tooltipwrapper {
-	position: absolute;
-	top: 400px;
-	left: 100px;
-	text-align: left;
-	color: #FFa347;
-}
-#tooltipwrapper .tooltipinner {
-	position: relative;
-}
-#tooltipwrapper .tooltip {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 300px;
-	border: 1px solid #161616;
-	background: url(http://i.imgur.com/rFSFXGg.png);
-	border-radius: 2px;
-}
-#tooltipwrapper .tooltip h2 {
-	padding: 2px 4px;
-	margin: 0;
-	border-bottom: 1px solid #161616;
-	font-size: 10pt;
-}
-#tooltipwrapper .tooltip h2 small {
-	font-weight: normal;
-}
-#tooltipwrapper .tooltip p {
-	padding: 2px 4px;
-	margin: 0;
-	font-size: 8pt;
-}
-#tooltipwrapper .tooltip p.section {
-	border-top: 1px solid #161616;
-}
-
-
-
-.teambuilder-results .utilichart, .teambuilder-results .utilichart li {
-     border: none; 
-     width: 100%;
-     height: none;
-     background: none;
-     box-shadow: none; 
-    }
-    
-.teambuilder-results .utilichart:after{
-     display:none;
-     background: black;
-          }
-
-.teambuilder-results .utilichart .col {
-float: left;
-        position: relative;
-        top:0;
-        left:0;
-padding-top: 6px;
-height: 22px;
-font-size: 9pt;
-color: black;
-  font-weight: normal;
- font-size: 8pt;
- background: wihte;
-}
-      
-.teambuilder-results .utilichart .numcol {
-width: 24px;
-padding-right: 5px;
-text-align: right;
-color: #FF9933;
-padding-top: 7px;
-font-size: 8pt;
-}
-
-.teambuilder-results .utilichart .pokemonnamecol {
-padding-top: 5px;
-height: 23px;
-width: 127px;
-color: #000000;
-font-size: 10pt;
-}
-      
-.teambuilder-results .utilichart .twoabilitycol {
-padding-top: 0;
-height: 28px;
-font-size: 8pt;
-width: 90px;
-}
-
-.teambuilder-results .utilichart .typecol {
-width: 70px;
-}
-                  
-.teambuilder-results .utilichart .typecol img{
-margin-right:1px;
-                        }
-                        
-.teambuilder-results .utilichart .twoabilitycol {
-padding-top: 0;
-height: 28px;
-font-size: 8pt;
-width: 90px;
-}
-                              
-.teambuilder-results .utilichart .abilitycol, .teambuilder-results .utilichart .twoabilitycol {
-margin:0px;                                      
-                                    }
-                                    
-.teambuilder-results .utilichart .statcol, .teambuilder-results .utilichart .bstcol {
-margin:0px; padding-top:0px; font-size: 8pt; text-align: right;                                            
-                                          }
-                                          
-.teambuilder-results .utilichart .iconcol, .teambuilder-results .utilichart .itemiconcol{ padding-top: 2px; padding-right: 2px;  }
-
-.teambuilder-results .utilichart .itemdesccol, .teambuilder-results .utilichart .abilitydesccol {
-width: 464px;
-}
-
-.teambuilder-results .utilichart .labelcol, .teambuilder-results .utilichart .widelabelcol, .teambuilder-results .utilichart .pplabelcol {      
-             margin: 0px 8px; padding: 0px; text-align:right;
-    background : black ;
-            }
-            
-.teambuilder-results .utilichart .movedesccol {
-width: 284px;
-}            
-
-
-
-.statbar
-{
-	position: absolute;
-	display: none;
-	width: 186px;
-	background: url(http://i.imgur.com/IKIMzZJ.png);
-	background-repeat: no-repeat;
-	background-position: 0px 1px;
-	min-height: 40px;
-	padding: 2px 4px 2px 26px;
-}
-.statbar strong
-{
-	position: absolute;
-	left: 30px;
-	top: 6px;
-	font-size: 9px;
-	font-weight: normal;
-	display: block;
-	text-align: center;
-	color: #FFF;
-	text-shadow: #000 1px 1px 0, #000 1px -1px 0, #000 -1px 1px 0, #000 -1px -1px 0;
-}
-.statbar strong small
-{
-  	font-size: 9px;
-	font-weight: normal;
-}
-.statbar .hpbar
-{
-	position: relative;
-	border: 1px solid #131313;
-	background: #FF9933;
-	height: 6px;
-	margin: 0 0 0 0;
-	width: 151px;
-	border-radius: 0px;
-  	padding: 0;
-  	top: -2px;
-}
-.hptextborder{
-	display:none !important;
-}
-
-
-
-.statbar .hpbar .hp
-{
-	height: 3px;
-	border-top: 1px solid #007734;
-	background: #00FF99;
-	border-bottom: 2px solid #007734;
-	border-radius: 0px;
-}
-.statbar .hpbar .hp-yellow
-{
-	background-color: #f5d538;
-	border-color: #be9f0a;
-}
-.statbar .hpbar .hp-red
-{
-	background-color: #ee4928;
-	border-color: #a3260d;
-}
-
-
-
-.statbar .hpbar .prevhp
-{
-	background: #BBEECC;
-	height: 6px;
-	border-radius: 0px;
-}
-.statbar .hpbar .prevhp-yellow
-{
-	background-color: #fcf4ca;
-}
-.statbar .hpbar .prevhp-red
-{
-	background-color: #facec5;
-}
-
-
-
-.hptext{
-	margin-top: 2px;  
-}
-  
-.statbar .hpbar .hptext
-{
-	position: absolute;
-	color: #FFFFFF;
-	text-shadow: 1px 0 black, -1px 0 black, 0 1px black, 0 -1px black;
-	font-size: 9px;
-	width: 32px;
-	height: 12px;
-	top: -1px;
-	text-align: center;
-}
-.rstatbar .hpbar .hptext
-{
-	width: 40px;
-	height: 15px;
-	background:url(http://i.imgur.com/ZZ6x4Xp.png);
-	right: -42px;
-	border-radius: 0 4px 4px 0;
-}
-.lstatbar .hpbar .hptext
-{
-	width: 35px;
-	height: 15px;
-	background:url(http://i.imgur.com/G56gNPf.png);
-	left: -55px;
-	border-radius: 4px 0 0 4px;
-	padding-left: 2px;
-}
-
-
-.statbar .status
-{
-  	margin-top:15px;
-	min-height: 10px;
-	font-size: 7pt;
-}
-
-.statbar span.brn,
-.statbar span.psn,
-.statbar span.slp,
-.statbar span.par,
-.statbar span.frz
-{
-  	position: absolute;
-  	left: -21px;
-  	top: 10px;
-  	font-size: 8px;
-	padding: 1px 2px;
-	border: 0;
-	border-radius: 3px;
-}
-.statbar span.bad
-{
-	background: #e74c3c;
-	color: #ecf0f1;
-	border-color: #c0392b;
-}
-.statbar span.good
-{
-	background: #27ae60;
-	color: #ecf0f1;
-	border-color: #067A37;
-}
-.statbar span.neutral
-{
-	background: #7f8c8d;
-	color: #ecf0f1;
-	border: 1 solid #2c3e50;
-}
-
-
-
-
-.pfx-panel{
-   background: #FFF999; 
-  }
-  
-.pfx-topbar{
-  background: #131313;
-      border-bottom-color: #131313;
-    }
-  
-.replay-wrapper .battle-log{
-      height: 410px;
-      top: -35px;
-}      
-
-.replay-wrapper{
-	top: 40px;          
-}
-
-.ladder table{
-
-    background-color:#FF9933;
-}
-
-.ladder{
-    background: #FF9933;
-    color: black;                                        
-
-}
-
-.roomlist a.ilink{
-     
-font-size:9px;
-color:black;  
-text-transform: uppercase;
-text-align:left;
-background: white;
-box-shadow:none; 
-border-radius:4px; 
-border-width:0; 
-width:544px;
-padding-left:20px;
-padding-top:10px;
-padding-bottom:12px;
-} 
-
-.ps-room.ps-room-light{
-
-background: white;
-opacity:0.9;
-position:absolute;
-}
-
-    
-
-    
-    
-.roomlist a.ilink:hover{
-      
-font-size:14px;
-font-family: Tahoma, Verdana, Segoe, sans-serif;
-font-weight:bold;
-color:#fbfbfb;  
-text-transform: uppercase;
-text-shadow: 1px 1px 1px #4d4d4d,
-1px 0px 1px #4d4d4d;
-box-shadow:none; 
-border-radius:0px; 
-border-width:0; 
-width:544px;
-padding-left:20px;
-padding-top:10px;
-padding-bottom:12px;
-}  
