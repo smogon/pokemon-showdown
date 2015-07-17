@@ -670,6 +670,9 @@ exports.BattleFormats = {
 				case 'Flying':
 					if (teamHas['zapdos']) return ["Zapdos is banned from Flying monotype teams."];
 					break;
+				case 'Ground':
+					if (teamHas['smoothrock']) return ["Smooth Rock is banned from Ground monotype teams."];
+					break;
 				case 'Psychic':
 					if (teamHas['galladite']) return ["Galladite is banned from Psychic monotype teams."];
 					break;
