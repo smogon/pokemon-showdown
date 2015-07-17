@@ -350,7 +350,7 @@ exports.Formats = [
 			if (template.species === 'Shuckle' && ['abomasite', 'aggronite', 'audinite', 'cameruptite', 'charizarditex', 'charizarditey', 'galladite', 'gyaradosite', 'heracronite', 'houndoominite', 'latiasite', 'mewtwonitey', 'sablenite', 'salamencite', 'scizorite', 'sharpedonite', 'slowbronite', 'steelixite', 'tyranitarite', 'venusaurite'].indexOf(item.id) >= 0) {
 				return ["" + template.species + " is not allowed to hold " + item.name + "."];
 			}
-			var bannedMons = {'Cresselia':1, 'Dragonite':1, 'Kyurem-Black':1, 'Slaking':1, 'Regigigas':1};
+			var bannedMons = {'Cresselia':1, 'Dragonite':1, 'Kyurem-Black':1, 'Slaking':1, 'Smeargle':1, 'Regigigas':1};
 			if (template.species in bannedMons) {
 				return ["" + template.species + " is not allowed to hold a Mega Stone."];
 			}
@@ -404,7 +404,7 @@ exports.Formats = [
 			var item = pokemon.getItem();
 			if (pokemon.isActive && !pokemon.template.isMega && !pokemon.template.isPrimal && (item.id === 'redorb' || item.id === 'blueorb') && pokemon.baseTemplate.tier !== 'Uber' && !pokemon.template.evos.length) {
 				// Primal Reversion
-				var bannedMons = {'Kyurem-Black':1, 'Slaking':1, 'Regigigas':1, 'Cresselia':1, 'Shuckle':1};
+				var bannedMons = {'Cresselia':1, 'Dragonite':1, 'Kyurem-Black':1, 'Regigigas':1, 'Slaking':1, 'Smeargle':1};
 				if (!(pokemon.baseTemplate.baseSpecies in bannedMons)) {
 					var template = this.getMixedTemplate(pokemon.originalSpecies, item.id === 'redorb' ? 'Groudon-Primal' : 'Kyogre-Primal');
 					pokemon.formeChange(template);
