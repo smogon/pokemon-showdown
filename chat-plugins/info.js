@@ -2349,7 +2349,7 @@ var commands = exports.commands = {
 		var diceQuantity = 1;
 		var diceDataStart = target.indexOf('d');
 		if (diceDataStart >= 0) {
-			diceQuantity = Number(target.slice(0, diceDataStart));
+			if (diceDataStart) diceQuantity = Number(target.slice(0, diceDataStart));
 			target = target.slice(diceDataStart + 1);
 			if (!Number.isInteger(diceQuantity) || diceQuantity <= 0 || diceQuantity > maxDice) return this.sendReply("The amount of dice rolled should be a natural number up to " + maxDice + ".");
 		}
