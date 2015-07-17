@@ -128,19 +128,21 @@ Credits
 
 Owner
 
-- Guangcong Luo [Zarel] - Development, Design
+- Guangcong Luo [Zarel] - Development, Design, Sysadmin
 
 Staff
 
+- Chris Monsanto [chaos] - Sysadmin
 - Hugh Gordon [V4] - Research (game mechanics), Development
-- Juanma Serrano [Joim] - Development
 - Leonardo Julca [Slayer95] - Development
+- Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 - [The Immortal] - Development
 
 Retired Staff
 
-- Bill Meltsner [bmelts] - Development
-- Cathy J. Fitzpatrick [cathyjf] - Development
+- Bill Meltsner [bmelts] - Development, Sysadmin
+- Cathy J. Fitzpatrick [cathyjf] - Development, Sysadmin
+- Juanma Serrano [Joim] - Development, Sysadmin
 
 Contributors
 
@@ -149,11 +151,11 @@ Contributors
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
 - Jacob Zimmer [SolarisFox] - Development
-- Kevin Lau [Ascriptmaster] - Development
+- Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
 - Konrad Borowski [xfix] - Development
-- Kyle Dove [Kyle_Dove] - Art (battle backdrops)
-- Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 - Quinton Lee [sirDonovan] - Development
 - Robin Vandenbrande [Quinella] - Development
-- Samuel Teo [Yilx] - Art (main background)
-- Vivian Zou [Vtas] - Art (alternate main background)
+
+Special thanks
+
+- See http://pokemonshowdown.com/credits
