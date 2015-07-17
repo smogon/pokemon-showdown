@@ -1,0 +1,202 @@
+
+body {
+    background: url("http://embed.gyazo.com/702b535d24ad22879cccd9e849dc14ea.jpg") no-repeat;
+    background-size: cover;
+  }
+  
+  .ps-room.ps-room-opaque {
+    background:#FFA347;
+  }
+
+  .mainmenufooter small:after{
+    content:"Rust CSS Made By: BT Cant Get Burns"; 
+    font-size:9pt; 
+    color:black; 
+    text-shadow:0 1px black; 
+    position:absolute; 
+    size:6px; 
+    left:230px; 
+    top:21px; 
+    width: 300px;
+  }
+  
+  .rightbar, .leftbar {
+    background: #FFA347;
+  }
+  
+    .header .logo {
+    opacity: 0; 
+  }
+  
+  .battleform label {
+    background: url("http://i.imgur.com/yFWeHx0.png") no-repeat scroll left center transparent !important;
+    padding: 4px;
+    opacity:0.9;
+    color: #FFF;
+  }
+  
+  .menugroup {
+    background: orange;
+  }
+
+  .select {
+    border-top-left-radius:0px;
+  }
+  
+  .maintabbarbottom {
+    background: black;
+    border: 1px black;
+    box-shadow: none;
+  }
+  
+  .tabbar a.button.cur, .tabbar a.button.cur:hover {
+    color: black;
+    background: #FFA347;
+    border: 1px solid #000;
+    font-family: helvetica,arial,sans-serif;
+    text-shadow: none;
+  }
+  
+  .tabbar a.button {
+    color: white;
+    background:#FFa347;
+    border: 1px solid #000;
+    font-family: Roman Times;
+    text-shadow: none;
+  }
+  
+  .tabbar a.button:hover {
+    color: #FFF;
+    background: black;
+    border: 1px solid #000;
+    font-family: helvetica,arial,sans-serif;
+    text-shadow: none;
+  }
+  
+  #header {
+    background: #FFA347;
+  }
+  
+  .mainmenu .menugroup:nth-child(1) .button, .mainmenu .menugroup:nth-child(2) p:nth-child(1) .button, .mainmenu .menugroup:nth-child(2) p:nth-child(2) .button, .mainmenu .menugroup:nth-child(2) p:nth-child(3) .button, .mainmenu .menugroup:nth-child(3) p:nth-child(1) .button, .mainmenu .menugroup:nth-child(3) p:nth-child(2) .button {
+    border:2px solid #383839;
+    background: #FFA347;
+    color: black;
+    text-shadow:none;
+  }
+  
+  .mainmenu .menugroup:nth-child(1) .button:hover, .mainmenu .menugroup:nth-child(2) p:nth-child(1) .button:hover, .mainmenu .menugroup:nth-child(2) p:nth-child(2) .button:hover, .mainmenu .menugroup:nth-child(2) p:nth-child(3) .button:hover, .mainmenu .menugroup:nth-child(3) p:nth-child(1) .button:hover, .mainmenu .menugroup:nth-child(3) p:nth-child(2) .button:hover {
+    border:2px solid #000;
+    background:#FFF;
+    color:#000;
+    font-family: helvetica,arial,sans-serif;
+    text-shadow:none;
+  }
+  
+  .roomlist a.ilink {
+    font-size:9px;
+    color: black;  
+    text-transform: uppercase;
+    text-align:left;
+    text-shadow: none;
+    background: #FFA347;
+    box-shadow:none; 
+    border-radius:0px; 
+    border-width:0; 
+    width:642px;
+    padding-left:20px;
+    padding-top:10px;
+    padding-bottom:12px;
+  }
+  
+  .roomlist a.ilink:hover{  
+    font-size:14px;
+    opacity:0.9;
+    font-family: Tahoma, Verdana, Segoe, sans-serif;
+    font-weight:bold;
+    color: #FFA347;  
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px #4d4d4d,
+    1px 0px 1px #4d4d4d;
+    background: black;
+    box-shadow:none; 
+    border-radius:0px; 
+    border-width:0; 
+    width:642px;
+    padding-left:20px;
+    padding-top:10px;
+    padding-bottom:12px;
+  } 
+  
+  .userlist {
+    border-right:none;
+    background: #FFA347;
+  }
+  
+  
+  .chat-log {
+    border:1px solid #CECECE;
+    background: #FFA347;
+  }
+  
+  .pm-log, .battle-log {
+    background: #FFA347;
+    color: Black;
+  }
+  
+  .pm-window h3 {
+   border: 2px solid #383839;
+    color: #383839;
+    background:rgba(134, 195, 227, 0.8);
+  }
+  
+  .pm-window h3:hover, .pm-window.focused h3, .pm-window.focused h3:hover  {
+   border: 2px solid #000;
+    color: #000;
+  }
+  
+  .mainmenufooter a {
+    color:#6853A0;
+    text-shadow: none;
+    text-decoration: none;
+    font-weight:bold;
+  }
+  
+  .mainmenufooter a:hover {
+    color:black;
+    text-shadow: none;
+    text-decoration: none;
+    font-weight:bold;
+  }
+  
+  
+  .ps-popup {
+    background: #FFA347;
+  }
+
+.chatlog {
+    background: #FFA347;
+}
+
+.highlighted, .message-announce {
+background: #3399FF;
+}
+
+.challenge {
+background: orange;
+border: 1px solid #2980b9;
+color: rgba(0,0,0,.6);
+padding: 1px 5px;
+}
+
+infobox, .ladder, .pm-window{
+	position: relative;;
+    margin-top: 5px;
+    color: black;
+    background-color: #FFFFFF;
+}
+
+.battle-log-add, .chat-log-add{
+  	border-color: #333;
+    background: #FFA347;
+    text-shadow: 1px 1px black;
+  }
