@@ -532,7 +532,7 @@ exports.Formats = [
 
 		mod: 'tiershift',
 		ruleset: ['OU'],
-		banlist: ['Shadow Tag', 'Chatter']
+		banlist: ['Shadow Tag', 'Swift Swim', 'Chatter']
 	},
 	{
 		name: "PU",
