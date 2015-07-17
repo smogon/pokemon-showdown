@@ -8,6 +8,7 @@ exports.BattleAliases = {
 	"rarelyused": "RU",
 	"neverused": "NU",
 	"dubs": "Doubles OU",
+	"dou": "Doubles OU",
 	"doubles": "Doubles OU",
 	"smogdubs": "Doubles OU",
 	"smogtrips": "Smogon Triples",
