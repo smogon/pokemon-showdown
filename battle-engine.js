@@ -532,7 +532,7 @@ BattlePokemon = (function () {
 		default:
 			if (!target || (target.fainted && target.side !== this.side)) {
 				// If a targeted foe faints, the move is retargeted
-				target = this.resolveTarget(this, move);
+				target = this.battle.resolveTarget(this, move);
 			}
 			if (target.side.active.length > 1) {
 				target = this.battle.runEvent('RedirectTarget', this, this, move, target);
