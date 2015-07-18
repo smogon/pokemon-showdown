@@ -909,6 +909,7 @@ var commands = exports.commands = {
 		}
 		var userid = this.getLastIdOf(targetUser);
 		this.add('|unlink|hide|' + userid);
+		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		targetUser.lock(false, userid);
@@ -990,6 +991,7 @@ var commands = exports.commands = {
 
 		var userid = this.getLastIdOf(targetUser);
 		this.add('|unlink|hide|' + userid);
+		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 		targetUser.ban(false, userid);
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
