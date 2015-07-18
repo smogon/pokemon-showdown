@@ -1546,10 +1546,14 @@ var commands = exports.commands = {
 				if (move.id === 'thousandarrows') hasThousandArrows = true;
 				sources.push(move);
 				for (var type in bestCoverage) {
-					if (!Tools.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
-					var baseMod = Tools.getEffectiveness(move, type);
-					var moveMod = move.onEffectiveness && move.onEffectiveness.call(Tools, baseMod, type, move);
-					eff = typeof moveMod === 'number' ? moveMod : baseMod;
+					if (move.id === "struggle") {
+						eff = 0;
+					} else {
+						if (!Tools.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
+						var baseMod = Tools.getEffectiveness(move, type);
+						var moveMod = move.onEffectiveness && move.onEffectiveness.call(Tools, baseMod, type, move);
+						eff = typeof moveMod === 'number' ? moveMod : baseMod;
+					}
 					if (eff > bestCoverage[type]) bestCoverage[type] = eff;
 				}
 				continue;
