@@ -782,15 +782,13 @@ exports.BattleAbilities = {
 		},
 		onModifyAtkPriority: 3,
 		onAllyModifyAtk: function (atk) {
-			if (this.effectData.target.template.speciesid !== 'cherrim') return;
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.effectData.target.template.speciesid === 'cherrimsunshine') {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 4,
 		onAllyModifySpD: function (spd) {
-			if (this.effectData.target.template.speciesid !== 'cherrim') return;
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.effectData.target.template.speciesid === 'cherrimsunshine') {
 				return this.chainModify(1.5);
 			}
 		},
