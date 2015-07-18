@@ -626,7 +626,7 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help roomban');
 		if (room.isMuted(user) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
 
-		target = this.splitTarget(target, true);
+		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
 		var userid = toId(name);
@@ -637,14 +637,22 @@ var commands = exports.commands = {
 			return this.sendReply("Room bans are not meant to be used in room " + room.id + ".");
 		}
 		if (room.bannedUsers[userid] && room.bannedIps[targetUser.latestIp]) return this.sendReply("User " + targetUser.name + " is already banned from room " + room.id + ".");
-		targetUser.popup("" + user.name + " has banned you from the room " + room.id + "." + (target ? "\n\nReason: " + target + ""  : "") + "\n\nTo appeal the ban, PM the staff member that banned you or a room owner. If you are unsure who the room owners are, type this into any room: /roomauth " + room.id);
+		if (targetUser in room.users) {
+			targetUser.popup(
+				"|html|<p>" + Tools.escapeHTML(user.name) + " has banned you from the room " + room.id + ".</p>" + (target ? "<p>Reason: " + Tools.escapeHTML(target) + "</p>"  : "") +
+				"<p>To appeal the ban, PM the staff member that banned you" + (room.auth ? " or a room owner. </p><p><button name=\"send\" value=\"/roomauth " + room.id + "\">List Room Staff</button></p>" : ".</p>")
+			);
+		}
 		this.addModCommand("" + targetUser.name + " was banned from room " + room.id + " by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		var acAccount = (targetUser.autoconfirmed !== targetUser.userid && targetUser.autoconfirmed);
 		var alts = room.roomBan(targetUser);
 		if (alts.length) {
-			this.privateModCommand("(" + targetUser.name + "'s alts were also banned from room " + room.id + ": " + alts.join(", ") + ")");
+			this.privateModCommand("(" + targetUser.name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "roombanned alts: " + alts.join(", ") + ")");
 			for (var i = 0; i < alts.length; ++i) {
 				this.add('|unlink|' + toId(alts[i]));
 			}
+		} else if (acAccount) {
+			this.privateModCommand("(" + targetUser.name + "'s ac account: " + acAccount + ")");
 		}
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 	},
@@ -663,11 +671,10 @@ var commands = exports.commands = {
 		var userid = room.isRoomBanned(targetUser) || toId(target);
 
 		if (!userid) return this.sendReply("User '" + target + "' is an invalid username.");
-		if (!this.can('ban', targetUser, room)) return false;
+		if (targetUser && !this.can('ban', targetUser, room)) return false;
 		var unbannedUserid = room.unRoomBan(userid);
 		if (!unbannedUserid) return this.sendReply("User " + userid + " is not banned from room " + room.id + ".");
 
-		if (targetUser) targetUser.popup("" + user.name + " has unbanned you from the room " + room.id + ".");
 		this.addModCommand("" + unbannedUserid + " was unbanned from room " + room.id + " by " + user.name + ".");
 	},
 	roomunbanhelp: ["/roomunban [username] - Unbans the user from the room you are in. Requires: " + Users.getGroupsThatCan('ban').join(" ")],
@@ -717,10 +724,7 @@ var commands = exports.commands = {
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.sendReply("User '" + this.targetUsername + "' does not exist.");
-		if (room.isPrivate === true && room.auth) {
-			return this.sendReply("You can't warn here: This is a privately-owned room not subject to global rules.");
-		}
-		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
+		if (!(targetUser in room.users)) {
 			return this.sendReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
 		if (target.length > MAX_REASON_LENGTH) {
@@ -784,8 +788,8 @@ var commands = exports.commands = {
 			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + (muteDuration / (60 * 1000)) + " minutes. " + target);
-		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + (muteDuration / (60 * 1000)) + " minutes." + (target ? " (" + target + ")" : ""));
+		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + muteDuration.duration() + ". " + target);
+		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + muteDuration.duration() + "." + (target ? " (" + target + ")" : ""));
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 
@@ -860,6 +864,7 @@ var commands = exports.commands = {
 		}
 		var userid = this.getLastIdOf(targetUser);
 		this.add('|unlink|hide|' + userid);
+		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 
 		this.globalModlog("LOCK", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		targetUser.lock(false, userid);
@@ -871,13 +876,20 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help unlock');
 		if (!this.can('lock')) return false;
 
+		var targetUser = Users.get(target);
+		var reason = '';
+		if (targetUser && targetUser.locked && targetUser.locked.charAt(0) === '#') {
+			reason = ' (' + targetUser.locked + ')';
+		}
+
 		var unlocked = Users.unlock(target);
 
 		if (unlocked) {
 			var names = Object.keys(unlocked);
 			this.addModCommand(names.join(", ") + " " + ((names.length > 1) ? "were" : "was") +
-				" unlocked by " + user.name + ".");
-			this.globalModlog("UNLOCK", target, " by " + user.name);
+				" unlocked by " + user.name + "." + reason);
+			if (!reason) this.globalModlog("UNLOCK", target, " by " + user.name);
+			if (targetUser) targetUser.popup("" + user.name + " has unlocked you.");
 		} else {
 			this.sendReply("User '" + target + "' is not locked.");
 		}
@@ -935,6 +947,7 @@ var commands = exports.commands = {
 
 		var userid = this.getLastIdOf(targetUser);
 		this.add('|unlink|hide|' + userid);
+		if (userid !== toId(this.inputUsername)) this.add('|unlink|hide|' + toId(this.inputUsername));
 		targetUser.ban(false, userid);
 		this.globalModlog("BAN", targetUser, " by " + user.name + (target ? ": " + target : ""));
 		return true;
@@ -1688,65 +1701,14 @@ var commands = exports.commands = {
 	'memusage': 'memoryusage',
 	memoryusage: function (target) {
 		if (!this.can('hotpatch')) return false;
-		target = toId(target) || 'all';
-		if (target === 'all') {
-			this.sendReply("Loading memory usage, this might take a while.");
+		var memUsage = process.memoryUsage();
+		var results = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
+		var units = ["B", "KiB", "MiB", "GiB", "TiB"];
+		for (var i = 0; i < results.length; i++) {
+			var unitIndex = Math.floor(Math.log2(results[i]) / 10); // 2^10 base log
+			results[i] = "" + (results[i] / Math.pow(2, 10 * unitIndex)).toFixed(2) + " " + units[unitIndex];
 		}
-		var roomSize, configSize, rmSize, cpSize, simSize, usersSize, toolsSize;
-		if (target === 'all' || target === 'rooms' || target === 'room') {
-			this.sendReply("Calculating Room size...");
-			roomSize = ResourceMonitor.sizeOfObject(Rooms);
-			this.sendReply("Rooms are using " + roomSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'config') {
-			this.sendReply("Calculating config size...");
-			configSize = ResourceMonitor.sizeOfObject(Config);
-			this.sendReply("Config is using " + configSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'resourcemonitor' || target === 'rm') {
-			this.sendReply("Calculating Resource Monitor size...");
-			rmSize = ResourceMonitor.sizeOfObject(ResourceMonitor);
-			this.sendReply("The Resource Monitor is using " + rmSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'cmdp' || target === 'cp' || target === 'commandparser') {
-			this.sendReply("Calculating Command Parser size...");
-			cpSize = ResourceMonitor.sizeOfObject(CommandParser);
-			this.sendReply("Command Parser is using " + cpSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'sim' || target === 'simulator') {
-			this.sendReply("Calculating Simulator size...");
-			simSize = ResourceMonitor.sizeOfObject(Simulator);
-			this.sendReply("Simulator is using " + simSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'users') {
-			this.sendReply("Calculating Users size...");
-			usersSize = ResourceMonitor.sizeOfObject(Users);
-			this.sendReply("Users is using " + usersSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'tools') {
-			this.sendReply("Calculating Tools size...");
-			toolsSize = ResourceMonitor.sizeOfObject(Tools);
-			this.sendReply("Tools are using " + toolsSize + " bytes of memory.");
-		}
-		if (target === 'all' || target === 'v8') {
-			this.sendReply("Retrieving V8 memory usage...");
-			var o = process.memoryUsage();
-			this.sendReply("Resident set size: " + o.rss + ", " + o.heapUsed + " heap used of " + o.heapTotal  + " total heap. " + (o.heapTotal - o.heapUsed) + " heap left.");
-		}
-		if (target === 'all') {
-			this.sendReply("Calculating Total size...");
-			var total = (roomSize + configSize + rmSize + cpSize + simSize + usersSize + toolsSize) || 0;
-			var units = ["bytes", "K", "M", "G"];
-			var converted = total;
-			var unit = 0;
-			while (converted > 1024) {
-				converted /= 1024;
-				++unit;
-			}
-			converted = Math.round(converted);
-			this.sendReply("Total memory used: " + converted + units[unit] + " (" + total + " bytes).");
-		}
-		return;
+		this.sendReply("Main process. RSS: " + results[0] + ". Heap: " + results[1] + " / " + results[2] + ".");
 	},
 
 	bash: function (target, room, user, connection) {
@@ -2266,7 +2228,7 @@ var commands = exports.commands = {
 			this.sendReply("/help OR /h OR /? - Gives you help.");
 		} else if (!target) {
 			this.sendReply("COMMANDS: /nick, /avatar, /rating, /whois, /msg, /reply, /ignore, /away, /back, /timestamps, /highlight");
-			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /groups, /faq, /rules, /intro, /tiers, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: " + Users.getGroupsThatCan('broadcast', room).join(" ") + ")");
+			this.sendReply("INFORMATIONAL COMMANDS: /data, /dexsearch, /movesearch, /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /learn, /analysis, /calc (replace / with ! to broadcast. Broadcasting requires: " + Users.getGroupsThatCan('broadcast', room).join(" ") + ")");
 			if (user.group !== Config.groups.default[room.auth ? room.type + 'Room' : 'global']) {
 				this.sendReply("DRIVER COMMANDS: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /unlock, /announce, /redirect");
 				this.sendReply("MODERATOR COMMANDS: /ban, /unban, /ip, /modchat");

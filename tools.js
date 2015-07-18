@@ -59,6 +59,16 @@ module.exports = (function () {
 		timid: {name:"Timid", plus:'spe', minus:'atk'}
 	};
 
+	function tryRequire(filePath) {
+		try {
+			var ret = require(filePath);
+			if (!ret || typeof ret !== 'object') return new TypeError("" + filePath + " must export an object except `null`, or it should be removed");
+			return ret;
+		} catch (e) {
+			return e;
+		}
+	}
+
 	function Tools(mod, parentMod) {
 		if (!mod) {
 			mod = 'base';
@@ -74,38 +84,46 @@ module.exports = (function () {
 		if (mod === 'base') {
 			dataTypes.forEach(function (dataType) {
 				if (typeof dataFiles[dataType] !== 'string') return (data[dataType] = dataFiles[dataType]);
-				try {
-					var path = './data/' + dataFiles[dataType];
-					data[dataType] = require(path)['Battle' + dataType];
-				} catch (e) {
-					if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING DATA: ' + e.stack);
+				var maybeData = tryRequire('./data/' + dataFiles[dataType]);
+				if (maybeData instanceof Error) {
+					if (maybeData.code !== 'MODULE_NOT_FOUND') throw new Error("CRASH LOADING " + data.mod.toUpperCase() + " DATA:\n" + maybeData.stack);
+					maybeData['Battle' + dataType] = {}; // Fall back to an empty object
 				}
-				if (!data[dataType]) data[dataType] = {};
+				var BattleData = maybeData['Battle' + dataType];
+				if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "`from `" + './data/' + dataFiles[dataType] + "` must be an object except `null`.");
+				data[dataType] = BattleData;
 			}, this);
-			try {
-				var path = './config/formats.js';
-				var configFormats = require(path).Formats;
-				for (var i = 0; i < configFormats.length; i++) {
-					var format = configFormats[i];
-					var id = toId(format.name);
-					format.effectType = 'Format';
-					if (format.challengeShow === undefined) format.challengeShow = true;
-					if (format.searchShow === undefined) format.searchShow = true;
-					data.Formats[id] = format;
-				}
-			} catch (e) {
-				if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING FORMATS: ' + e.stack);
+
+			var maybeFormats = tryRequire('./config/formats.js');
+			if (maybeFormats instanceof Error) {
+				if (maybeFormats.code !== 'MODULE_NOT_FOUND') throw new Error("CRASH LOADING FORMATS:" + maybeFormats.stack);
+				maybeFormats.Formats = []; // Fall back to an empty formats list
+			}
+			var BattleFormats = maybeFormats.Formats;
+			if (!Array.isArray(BattleFormats)) throw new TypeError("Exported property `Formats` from `" + './config/formats.js' + "` must be an array`.");
+			for (var i = 0; i < BattleFormats.length; i++) {
+				var format = BattleFormats[i];
+				var id = toId(format.name);
+				if (!id) throw new RangeError("Format #" + (i + 1) + " must have a name with alphanumeric characters");
+				if (data.Formats[id]) throw new Error("Format #" + (i + 1) + " has a duplicate ID: `" + id + "`");
+				format.effectType = 'Format';
+				if (format.challengeShow === undefined) format.challengeShow = true;
+				if (format.searchShow === undefined) format.searchShow = true;
+				if (format.tournamentShow === undefined) format.tournamentShow = true;
+				data.Formats[id] = format;
 			}
 		} else {
 			var parentData = moddedTools[parentMod].data;
 			dataTypes.forEach(function (dataType) {
 				if (typeof dataFiles[dataType] === 'string') {
-					try {
-						var path = './mods/' + mod + '/' + dataFiles[dataType];
-						data[dataType] = require(path)['Battle' + dataType];
-					} catch (e) {
-						if (e.code !== 'MODULE_NOT_FOUND') console.error('CRASH LOADING MOD DATA: ' + e.stack);
+					var maybeData = tryRequire('./mods/' + mod + '/' + dataFiles[dataType]);
+					if (maybeData instanceof Error) {
+						if (maybeData.code !== 'MODULE_NOT_FOUND') throw new Error("CRASH LOADING " + data.mod.toUpperCase() + " DATA:\n" + maybeData.stack);
+						maybeData['Battle' + dataType] = {}; // Fallback to an empty object
 					}
+					var BattleData = maybeData['Battle' + dataType];
+					if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "` from `" + './mods/' + mod + '/' + dataFiles[dataType] + "` must be an object except `null`.");
+					data[dataType] = BattleData;
 				}
 				if (!data[dataType]) data[dataType] = {};
 				for (var i in parentData[dataType]) {
@@ -147,11 +165,8 @@ module.exports = (function () {
 			try {
 				parentMods[mod] = require('./mods/' + mod + '/scripts.js').BattleScripts.inherit || 'base';
 			} catch (e) {
-				if (e.code === 'MODULE_NOT_FOUND') {
-					parentMods[mod] = 'base';
-				} else {
-					console.error("Error while loading mods: " + e.stack);
-				}
+				if (e.code !== 'MODULE_NOT_FOUND') return console.error("Error while loading mods: " + e.stack);
+				parentMods[mod] = 'base';
 			}
 		});
 
@@ -167,7 +182,7 @@ module.exports = (function () {
 				}
 			} while (didSomething);
 		} catch (e) {
-			console.error("Error while loading mods: " + (e.stack || e));
+			require('./crashlogger.js')(e, "Mods loader");
 		}
 		Tools.modsLoaded = true;
 	};
@@ -995,10 +1010,9 @@ module.exports = (function () {
 	};
 
 	Tools.construct = function (mod, parentMod) {
-		var tools = new Tools(mod, parentMod);
 		// Scripts override Tools.
-		var ret = Object.create(tools);
-		tools.install(ret);
+		var ret = new Tools(mod, parentMod);
+		ret.install(ret);
 		if (ret.init) {
 			if (parentMod && ret.init === moddedTools[parentMod].data.Scripts.init) {
 				// don't inherit init

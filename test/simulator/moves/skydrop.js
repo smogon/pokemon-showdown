@@ -154,6 +154,25 @@ describe('Sky Drop', function () {
 		assert.notStrictEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
+	it('should hit its target even if Follow Me is used that turn', function () {
+		battle = BattleEngine.Battle.construct('battle-skydrop-followme', 'doublescustomgame');
+		battle.join('p1', 'Guest 1', 1, [
+			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
+			{species: "Smeargle", ability: 'owntempo', moves: ['splash']}
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
+			{species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'followme']}
+		]);
+		battle.commitDecisions(); // Team Preview
+		battle.choose('p1', 'move 1 1, move 1 2');
+		battle.commitDecisions();
+		battle.choose('p2', 'move 1, move 2');
+		battle.commitDecisions();
+		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.strictEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
+	});
+
 	it('should cause most moves aimed at the user or target to miss', function () {
 		battle = BattleEngine.Battle.construct('battle-skydrop-miss', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
