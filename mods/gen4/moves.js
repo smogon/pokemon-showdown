@@ -375,7 +375,6 @@ exports.BattleMovedex = {
 			if (target.hp > pokemon.hp) {
 				return target.hp - pokemon.hp;
 			}
-			this.add('-fail', pokemon);
 			return false;
 		}
 	},
