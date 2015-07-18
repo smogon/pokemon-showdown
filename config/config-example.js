@@ -256,7 +256,8 @@ exports.grouplist = [
 		declare: true,
 		modchatall: true,
 		roomonly: true,
-		tournamentsmanagement: true
+		tournamentsmanagement: true,
+		privateroom: true
 	},
 	{
 		symbol: '\u2605',
