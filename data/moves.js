@@ -6695,7 +6695,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, authentic: 1},
-		isUnreleased: true,
 		breaksProtect: true,
 		onTry: function (pokemon) {
 			if (pokemon.species === 'Hoopa-Unbound' && pokemon.baseTemplate.species === pokemon.species) {
@@ -6729,7 +6728,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, authentic: 1},
-		isUnreleased: true,
 		breaksProtect: true,
 		secondary: false,
 		target: "normal",
