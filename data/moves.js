@@ -3587,7 +3587,7 @@ exports.BattleMovedex = {
 				return target.hp - pokemon.hp;
 			}
 			this.add('-immune', target, '[msg]');
-			return false;
+			return null;
 		},
 		category: "Physical",
 		desc: "Deals damage to the target equal to (target's current HP - user's current HP). The target is unaffected if its current HP is less than or equal to the user's current HP.",
@@ -6695,7 +6695,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, authentic: 1},
-		isUnreleased: true,
 		breaksProtect: true,
 		onTry: function (pokemon) {
 			if (pokemon.species === 'Hoopa-Unbound' && pokemon.baseTemplate.species === pokemon.species) {
@@ -6729,7 +6728,6 @@ exports.BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, authentic: 1},
-		isUnreleased: true,
 		breaksProtect: true,
 		secondary: false,
 		target: "normal",
@@ -12329,6 +12327,7 @@ exports.BattleMovedex = {
 					return null;
 				}
 			},
+			onRedirectTargetPriority: -99,
 			onRedirectTarget: function (target, source, source2) {
 				if (source !== this.effectData.target) return;
 				if (this.effectData.source.fainted) return;

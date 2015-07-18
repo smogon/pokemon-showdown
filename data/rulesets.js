@@ -53,7 +53,8 @@ exports.BattleFormats = {
 			'Xerneas',
 			'Yveltal',
 			'Zygarde',
-			'Diancie'
+			'Diancie',
+			'Hoopa', 'Hoopa-Unbound'
 		]
 	},
 	standarddoubles: {
@@ -80,7 +81,7 @@ exports.BattleFormats = {
 			}
 			return problems;
 		},
-		validateSet: function (set, format) {
+		changeSet: function (set, format) {
 			var item = this.getItem(set.item);
 			var template = this.getTemplate(set.species);
 			var problems = [];
@@ -451,7 +452,7 @@ exports.BattleFormats = {
 			for (var i = 0; i < team.length; i++) {
 				var ability = toId(team[i].ability);
 				if (ability === 'refrigerate' || ability === 'pixilate' || ability === 'aerilate') {
-					if (ateAbility) return ["You have more than one of Aerilate/Refrigerate/Pixilate, which is banned by -ate Clause."];
+					if (ateAbility) return [team[i].name + " has more than one of Aerilate/Refrigerate/Pixilate, which is banned by -ate Clause."];
 					ateAbility = true;
 				}
 			}
@@ -492,7 +493,12 @@ exports.BattleFormats = {
 	endlessbattleclause: {
 		effectType: 'Banlist',
 		name: 'Endless Battle Clause',
-		banlist: ['Leppa Berry + Recycle', 'Harvest + Leppa Berry', 'Shadow Tag + Leppa Berry + Trick'],
+		banlist: ['Leppa Berry + Recycle', 'Harvest + Leppa Berry', 'Leppa Berry + Trick', 'Leppa Berry + Switcheroo', 'Leppa Berry + Bestow'],
+		validateSet: function (set, format, setHas) {
+			if (format.gameType === 'singles' && 'healpulse' in setHas) {
+				return [set.name + " has Heal Pulse, which is banned in Singles by Endless Battle Clause."];
+			}
+		},
 		onStart: function () {
 			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned');
 		}
@@ -517,19 +523,63 @@ exports.BattleFormats = {
 		effectType: 'Banlist',
 		name: 'Baton Pass Clause',
 		onStart: function () {
-			this.add('rule', 'Baton Pass Clause: Limit one Pokémon knowing Baton Pass');
+			this.add('rule', 'Baton Pass Clause: Limit one Baton Passer, can\'t pass Spe and other stats simultaneously');
 		},
 		validateTeam: function (team, format) {
-			var problems = [];
 			var BPcount = 0;
 			for (var i = 0; i < team.length; i++) {
-				if (team[i].moves.indexOf('Baton Pass') >= 0) BPcount++;
+				if (team[i].moves.indexOf('Baton Pass') >= 0) {
+					BPcount++;
+				}
 				if (BPcount > 1) {
-					problems.push("You are limited to one Pokémon with the move Baton Pass by the Baton Pass Clause.");
+					return [team[i].name + " has Baton Pass, but you are limited to one Baton Pass user by Baton Pass Clause."];
+				}
+			}
+		},
+		validateSet: function (set, format, setHas) {
+			if (!('batonpass' in setHas)) return;
+
+			// check if Speed is boosted
+			var speedBoosted = false;
+			for (var i = 0; i < set.moves.length; i++) {
+				var move = this.getMove(set.moves[i]);
+				if (move.boosts && move.boosts.spe > 0) {
+					speedBoosted = true;
 					break;
 				}
 			}
-			return problems;
+			var boostSpeed = ['flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'salacberry', 'starfberry'];
+			if (!speedBoosted) {
+				for (var i = 0; i < boostSpeed.length; i++) {
+					if (boostSpeed[i] in setHas) {
+						speedBoosted = true;
+						break;
+					}
+				}
+			}
+			if (!speedBoosted) return;
+
+			// check if non-Speed boosted
+			var nonSpeedBoosted = false;
+			for (var i = 0; i < set.moves.length; i++) {
+				var move = this.getMove(set.moves[i]);
+				if (move.boosts && (move.boosts.atk > 0 || move.boosts.def > 0 || move.boosts.spa > 0 || move.boosts.spd > 0)) {
+					nonSpeedBoosted = true;
+					break;
+				}
+			}
+			var boostNonSpeed = ['acupressure', 'curse', 'metalclaw', 'meteormash', 'poweruppunch', 'rage', 'rototiller', 'fellstinger', 'bellydrum', 'download', 'justified', 'moxie', 'sapsipper', 'defiant', 'angerpoint', 'cellbattery', 'liechiberry', 'snowball', 'starfberry', 'weaknesspolicy', 'diamondstorm', 'flowershield', 'skullbash', 'steelwing', 'stockpile', 'cottonguard', 'ganlonberry', 'keeberry', 'chargebeam', 'fierydance', 'geomancy', 'lightningrod', 'stormdrain', 'competitive', 'absorbbulb', 'petayaberry', 'charge', 'apicotberry', 'luminousmoss', 'marangaberry'];
+			if (!nonSpeedBoosted) {
+				for (var i = 0; i < boostNonSpeed.length; i++) {
+					if (boostNonSpeed[i] in setHas) {
+						nonSpeedBoosted = true;
+						break;
+					}
+				}
+			}
+			if (!nonSpeedBoosted) return;
+
+			return [set.name + " can Baton Pass both Speed and a different stat, which is banned by Baton Pass Clause."];
 		}
 	},
 	hppercentagemod: {
@@ -619,6 +669,9 @@ exports.BattleFormats = {
 				switch (typeTable[0]) {
 				case 'Flying':
 					if (teamHas['zapdos']) return ["Zapdos is banned from Flying monotype teams."];
+					break;
+				case 'Ground':
+					if (teamHas['smoothrock']) return ["Smooth Rock is banned from Ground monotype teams."];
 					break;
 				case 'Psychic':
 					if (teamHas['galladite']) return ["Galladite is banned from Psychic monotype teams."];

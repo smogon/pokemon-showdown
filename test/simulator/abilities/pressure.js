@@ -13,7 +13,7 @@ describe('Pressure', function () {
 			{species: "Talonflame", ability: 'galewings', moves: ['peck']}
 		]);
 		battle.join('p2', 'Guest 2', 1, [
-			{species: "Giratina", ability: 'pressure', moves: ['rest']},
+			{species: "Giratina", ability: 'defiant', moves: ['rest']},
 			{species: "Talonflame", ability: 'galewings', moves: ['peck']}
 		]);
 		battle.commitDecisions(); // Team Preview
@@ -24,7 +24,7 @@ describe('Pressure', function () {
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
 
-	it.skip('should deduct PP if moves are redirected to the user', function () {
+	it('should deduct PP if moves are redirected to the user', function () {
 		battle = BattleEngine.Battle.construct('battle-pressure-redirect', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Giratina", ability: 'pressure', moves: ['followme']},
@@ -45,7 +45,7 @@ describe('Pressure', function () {
 	it('should deduct PP even if the move fails or misses', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Giratina", ability: 'pressure', item: 'laggingtail', moves: ['mistyterrain', 'shadowforce']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['doubleedge', 'spore', 'moonblast']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'desolateland', moves: ['doubleedge', 'spore', 'moonblast', 'surf']}]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('doubleedge')).pp, 22);
 		battle.choose('p1', 'move 2');
@@ -54,9 +54,12 @@ describe('Pressure', function () {
 		battle.choose('p2', 'move 3');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('moonblast')).pp, 22);
+		battle.choose('p2', 'move 4');
+		battle.commitDecisions();
+		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('surf')).pp, 22);
 	});
 
-	it.skip('should deduct PP for each Pressure Pokemon targetted', function () {
+	it('should deduct PP for each Pressure Pokemon targetted', function () {
 		battle = BattleEngine.Battle.construct('battle-pressure-multi', 'triplescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
@@ -71,7 +74,7 @@ describe('Pressure', function () {
 		battle.commitDecisions(); // Team Preview
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('hail')).pp, 12);
-		assert.strictEqual(battle.p2.active[1].getMoveData(Tools.getMove('spikes')).pp, 12);
+		assert.strictEqual(battle.p2.active[1].getMoveData(Tools.getMove('spikes')).pp, 28);
 		assert.strictEqual(battle.p2.active[2].getMoveData(Tools.getMove('rockslide')).pp, 13);
 	});
 });
@@ -98,7 +101,7 @@ describe('Pressure [Gen 4]', function () {
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
 
-	it.skip('should deduct PP if moves are redirected to the user', function () {
+	it('should deduct PP if moves are redirected to the user', function () {
 		battle = BattleEngine.Battle.construct('battle-dpp-pressure-redirect', 'gen4doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Giratina", ability: 'pressure', moves: ['followme']},
@@ -108,7 +111,6 @@ describe('Pressure [Gen 4]', function () {
 			{species: "Clefable", ability: 'magicguard', moves: ['followme']},
 			{species: "Ho-Oh", ability: 'pressure', moves: ['peck']}
 		]);
-		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1, move 1 2');
 		battle.choose('p2', 'move 1, move 1 2');
 		var move = Tools.getMove('peck');
@@ -127,7 +129,7 @@ describe('Pressure [Gen 4]', function () {
 		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('dragonpulse')).pp, 14);
 	});
 
-	it.skip('should deduct PP for each Pressure Pokemon targetted', function () {
+	it('should deduct PP for each Pressure Pokemon targetted', function () {
 		battle = BattleEngine.Battle.construct('battle-dpp-pressure-multi', 'gen4doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Palkia", ability: 'pressure', moves: ['rest']},
