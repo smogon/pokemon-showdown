@@ -114,7 +114,7 @@ function canTalk(user, room, connection, message, targetUser) {
 			}
 		}
 	}
-	if (room && !(user.userid in room.users)) {
+	if (room && !(user.userid in room.users) && !(user.userid in room.hiddenUsers)) {
 		connection.popup("You can't send a message to this room without being in it.");
 		return false;
 	}
