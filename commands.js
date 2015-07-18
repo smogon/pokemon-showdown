@@ -934,6 +934,7 @@ var commands = exports.commands = {
 			this.addModCommand(names.join(", ") + " " + ((names.length > 1) ? "were" : "was") +
 				" unlocked by " + user.name + "." + reason);
 			if (!reason) this.globalModlog("UNLOCK", target, " by " + user.name);
+			if (targetUser) targetUser.popup("" + user.name + " has unlocked you.");
 		} else {
 			this.sendReply("User '" + target + "' is not locked.");
 		}
