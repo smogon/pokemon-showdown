@@ -6,7 +6,8 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":70,"moves":["sweetscent","growth","solarbeam","synthesis"]},
 			{"generation":3,"level":10,"gender":"M","moves":["tackle","growl","leechseed","vinewhip"]},
 			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["tackle","growl","leechseed","vinewhip"]},
-			{"generation":5,"level":1,"isHidden":false,"moves":["falseswipe","block","frenzyplant","weatherball"]}
+			{"generation":5,"level":1,"isHidden":false,"moves":["falseswipe","block","frenzyplant","weatherball"]},
+			{"generation":6,"level":5,"isHidden":false,"moves":["growl","leechseed","vinewhip","poisonpowder"],"pokeball":"cherishball"}
 		],
 		tier: "LC"
 	},
@@ -35,7 +36,8 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":40,"gender":"M","nature":"Naughty","moves":["return","hiddenpower","quickattack","howl"]},
 			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["scratch","growl","ember","smokescreen"]},
 			{"generation":4,"level":40,"gender":"M","nature":"Hardy","moves":["return","hiddenpower","quickattack","howl"],"pokeball":"cherishball"},
-			{"generation":5,"level":1,"isHidden":false,"moves":["falseswipe","block","blastburn","acrobatics"]}
+			{"generation":5,"level":1,"isHidden":false,"moves":["falseswipe","block","blastburn","acrobatics"]},
+			{"generation":6,"level":5,"isHidden":false,"moves":["growl","ember","smokescreen","dragonrage"],"pokeball":"cherishball"}
 		],
 		tier: "LC"
 	},
@@ -71,7 +73,8 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":10,"gender":"M","moves":["tackle","tailwhip","bubble","withdraw"]},
 			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["tackle","tailwhip","bubble","withdraw"]},
-			{"generation":5,"level":1,"isHidden":false,"moves":["falseswipe","block","hydrocannon","followme"]}
+			{"generation":5,"level":1,"isHidden":false,"moves":["falseswipe","block","hydrocannon","followme"]},
+			{"generation":6,"level":5,"isHidden":false,"moves":["tailwhip","watergun","withdraw","bubble"],"pokeball":"cherishball"}
 		],
 		tier: "LC"
 	},
@@ -3186,7 +3189,8 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"moves":["wish","healingwish","cosmicpower","meteormash"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"moves":["wish","healingwish","swift","return"],"pokeball":"cherishball"},
 			{"generation":6,"level":10,"shiny":true,"moves":["wish","swift","healingwish","moonblast"],"pokeball":"cherishball"},
-			{"generation":6,"level":15,"shiny":true,"moves":["wish","confusion","helpinghand","return"],"pokeball":"cherishball"}
+			{"generation":6,"level":15,"shiny":true,"moves":["wish","confusion","helpinghand","return"],"pokeball":"cherishball"},
+			{"generation":6,"level":100,"moves":["heartstamp","playrough","wish","cosmicpower"],"pokeball":"cherishball"}
 		],
 		tier: "OU"
 	},
@@ -5256,16 +5260,17 @@ exports.BattleFormatsData = {
 		requiredItem: "Diancite"
 	},
 	hoopa: {
-		isUnreleased: true,
 		randomBattleMoves: ["nastyplot","psyshock","shadowball","focusblast","trick"],
 		randomDoubleBattleMoves: ["hyperspacehole","shadowball","focusblast","protect","psychic"],
-		tier: "Unreleased"
+		eventPokemon: [
+			{"generation":6,"level":50,"moves":["hyperspacehole","nastyplot","psychic","astonish"],"pokeball":"cherishball"}
+		],
+		tier: "OU"
 	},
 	hoopaunbound: {
-		isUnreleased: true,
 		randomBattleMoves: ["nastyplot","psyshock","darkpulse","focusblast","hyperspacefury","zenheadbutt","icepunch","drainpunch","knockoff","trick"],
 		randomDoubleBattleMoves: ["psychic","darkpulse","focusblast","protect","hyperspacefury","zenheadbutt","icepunch","drainpunch"],
-		tier: "Unreleased"
+		tier: "OU"
 	},
 	volcanion: {
 		isUnreleased: true,
