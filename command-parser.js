@@ -360,6 +360,7 @@ var Context = exports.Context = (function () {
 	Context.prototype.targetUserOrSelf = function (target, exactName) {
 		if (!target) {
 			this.targetUsername = this.user.name;
+			this.inputUsername = this.user.name;
 			return this.user;
 		}
 		this.splitTarget(target, exactName);
@@ -377,12 +378,15 @@ var Context = exports.Context = (function () {
 			this.targetUsername = targetUser ? targetUser.name : target;
 			return '';
 		}
-		var targetUser = Users.get(target.substr(0, commaIndex), exactName);
-		if (!targetUser) {
-			targetUser = null;
+		this.inputUsername = target.substr(0, commaIndex);
+		var targetUser = Users.get(this.inputUsername, exactName);
+		if (targetUser) {
+			this.targetUser = targetUser;
+			this.targetUsername = this.inputUsername = targetUser.name;
+		} else {
+			this.targetUser = null;
+			this.targetUsername = this.inputUsername;
 		}
-		this.targetUser = targetUser;
-		this.targetUsername = targetUser ? targetUser.name : target.substr(0, commaIndex);
 		return target.substr(commaIndex + 1).trim();
 	};
 
