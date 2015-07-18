@@ -29,6 +29,7 @@ var Room = (function () {
 		this.title = (title || roomid);
 
 		this.users = Object.create(null);
+		this.hiddenUsers = Object.create(null);
 
 		this.log = [];
 
@@ -1310,7 +1311,7 @@ var BattleRoom = (function () {
 		// the battle
 		this.battle.resendRequest(connection);
 	};
-	BattleRoom.prototype.onJoin = function (user, connection) {
+	BattleRoom.prototype.onJoin = function (user, connection, merging, shadowjoin) {
 		if (!user) return false;
 		if (this.users[user.userid]) return user;
 
@@ -1318,7 +1319,7 @@ var BattleRoom = (function () {
 		this.userCount++;
 
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
-		if (user.named) {
+		if (user.named && !shadowjoin) {
 			if (Config.reportbattlejoins) {
 				this.add('|join|' + user.name);
 			} else {
@@ -1650,23 +1651,29 @@ var ChatRoom = (function () {
 			Tournaments.get(this.id).updateFor(user, connection);
 		}
 	};
-	ChatRoom.prototype.onJoin = function (user, connection, merging) {
+	ChatRoom.prototype.onJoin = function (user, connection, merging, shadowjoin) {
 		if (!user) return false; // ???
 		if (this.users[user.userid]) return user;
 
-		this.users[user.userid] = user;
-		this.userCount++;
+		if (!shadowjoin) {
+			this.users[user.userid] = user;
+			this.userCount++;
+		} else {
+			this.hiddenUsers[user.userid] = user;
+		}
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
 			this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage());
 		}
-		if (user.named && Config.reportjoins) {
-			this.add('|j|' + user.getIdentity(this.id));
-			this.update();
-		} else if (user.named) {
-			var entry = '|J|' + user.getIdentity(this.id);
-			this.reportJoin(entry);
+		if (!shadowjoin) {
+			if (user.named && Config.reportjoins) {
+				this.add('|j|' + user.getIdentity(this.id));
+				this.update();
+			} else if (user.named) {
+				var entry = '|J|' + user.getIdentity(this.id);
+				this.reportJoin(entry);
+			}
 		}
 		if (global.Tournaments && Tournaments.get(this.id)) {
 			Tournaments.get(this.id).updateFor(user, connection);
@@ -1715,8 +1722,12 @@ var ChatRoom = (function () {
 	ChatRoom.prototype.onLeave = function (user) {
 		if (!user) return; // ...
 
-		delete this.users[user.userid];
-		this.userCount--;
+		if (this.users[user.userid]) {
+			delete this.users[user.userid];
+			this.userCount--;
+		} else {
+			delete this.hiddenUsers[user.userid];
+		}
 
 		if (user.named && Config.reportjoins) {
 			this.add('|l|' + user.getIdentity(this.id));

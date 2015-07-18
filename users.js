@@ -1329,7 +1329,7 @@ User = (function () {
 		this.autoconfirmed = '';
 		this.updateIdentity();
 	};
-	User.prototype.tryJoinRoom = function (room, connection) {
+	User.prototype.tryJoinRoom = function (room, connection, shadowjoin) {
 		var roomid = (room && room.id ? room.id : room);
 		room = Rooms.search(room);
 		if (!room) {
@@ -1367,7 +1367,7 @@ User = (function () {
 			connection.send(">" + toId(roomid) + "\n|deinit");
 		}
 
-		var joinResult = this.joinRoom(room, connection);
+		var joinResult = this.joinRoom(room, connection, shadowjoin);
 		if (!joinResult) {
 			if (joinResult === null) {
 				connection.sendTo(roomid, "|noinit|joinfailed|You are banned from the room '" + roomid + "'.");
@@ -1378,7 +1378,7 @@ User = (function () {
 		}
 		return true;
 	};
-	User.prototype.joinRoom = function (room, connection) {
+	User.prototype.joinRoom = function (room, connection, shadowjoin) {
 		room = Rooms.get(room);
 		if (!room) return false;
 		if (!this.can('bypassall')) {
@@ -1393,7 +1393,7 @@ User = (function () {
 				// only join full clients, not pop-out single-room
 				// clients
 				if (this.connections[i].rooms['global']) {
-					this.joinRoom(room, this.connections[i]);
+					this.joinRoom(room, this.connections[i], false, shadowjoin);
 				}
 			}
 			return true;
@@ -1402,7 +1402,7 @@ User = (function () {
 			connection.joinRoom(room);
 			if (!this.roomCount[room.id]) {
 				this.roomCount[room.id] = 1;
-				room.onJoin(this, connection);
+				room.onJoin(this, connection, false, shadowjoin);
 			} else {
 				this.roomCount[room.id]++;
 				room.onJoinConnection(this, connection);

@@ -739,9 +739,15 @@ var commands = exports.commands = {
 
 	joim: 'join',
 	j: 'join',
-	join: function (target, room, user, connection) {
+	shadowjoin: 'join',
+	join: function (target, room, user, connection, cmd) {
 		if (!target) return false;
-		if (user.tryJoinRoom(target, connection) === null) {
+		var hidden = false;
+		if (cmd === "shadowjoin") {
+			if (!user.can('lock')) return this.sendReply("/" + cmd + " - Access denied.");
+			hidden = true;
+		}
+		if (user.tryJoinRoom(target, connection, hidden) === null) {
 			connection.sendTo(target, "|noinit|namerequired|The room '" + target + "' does not exist or requires a login to join.");
 		}
 	},
