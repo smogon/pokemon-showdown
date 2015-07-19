@@ -1924,6 +1924,7 @@ var commands = exports.commands = {
 		if (!totalMatches) return this.sendReply("No " + (target ? "matched " : "") + "formats found.");
 		if (totalMatches === 1) {
 			var format = Tools.getFormat(Object.values(sections)[0].formats[0]);
+			if (!format.desc) return this.sendReplyBox("No description found for this " + (format.gameType || "singles").capitalize() + " " + format.section + " format.");
 			return this.sendReplyBox(format.desc.join("<br />"));
 		}
 
