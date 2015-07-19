@@ -1191,6 +1191,7 @@ exports.BattleMovedex = {
 				targetPosition: target.position,
 				source: source,
 				moveData: {
+					name: "Future Sight",
 					basePower: 80,
 					category: "Special",
 					flags: {},
