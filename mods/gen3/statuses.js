@@ -10,6 +10,7 @@ exports.BattleStatuses = {
 		},
 		onSwitchIn: function (target) {
 			this.effectData.time += this.effectData.skippedTime;
+			this.effectData.skippedTime = 0;
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
