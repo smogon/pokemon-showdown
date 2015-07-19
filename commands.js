@@ -116,6 +116,7 @@ var commands = exports.commands = {
 	replyhelp: ["/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to."],
 
 	pm: 'msg',
+	tell: 'msg',
 	whisper: 'msg',
 	w: 'msg',
 	msg: function (target, room, user, connection) {
@@ -373,7 +374,8 @@ var commands = exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-
+	
+	roomd: 'roomdesc',
 	roomdesc: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
@@ -478,7 +480,8 @@ var commands = exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
-
+	
+	ro: 'roomowner',
 	roomowner: function (target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
@@ -503,6 +506,7 @@ var commands = exports.commands = {
 	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: ~"],
 
 	roomdeowner: 'deroomowner',
+	dero: 'deroomowner',
 	deroomowner: function (target, room, user) {
 		if (!room.auth) {
 			return this.sendReply("/roomdeowner - This room isn't designed for per-room moderation");
@@ -527,6 +531,7 @@ var commands = exports.commands = {
 	deroomownerhelp: ["/roomdeowner [username] - Removes [username]'s status as a room owner. Requires: ~"],
 
 	roomdemote: 'roompromote',
+	roomsetrank: 'roompromote'
 	roompromote: function (target, room, user, connection, cmd) {
 		if (!room.auth) {
 			this.sendReply("/roompromote - This room isn't designed for per-room moderation");
@@ -739,6 +744,9 @@ var commands = exports.commands = {
 
 	joim: 'join',
 	j: 'join',
+	enter: 'join',
+	roomenter: 'join',
+	roomjoin: 'join',
 	join: function (target, room, user, connection) {
 		if (!target) return false;
 		if (user.tryJoinRoom(target, connection) === null) {
@@ -747,6 +755,9 @@ var commands = exports.commands = {
 	},
 
 	leave: 'part',
+	roomleave: 'part',
+	roomexit:'part',
+	exit: 'part',
 	part: function (target, room, user, connection) {
 		if (room.id === 'global') return false;
 		var targetRoom = Rooms.search(target);
@@ -811,6 +822,7 @@ var commands = exports.commands = {
 	redirhelp: ["/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~"],
 
 	m: 'mute',
+	7m: 'mute',
 	mute: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help mute');
 		if (room.isMuted(user) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
@@ -843,6 +855,7 @@ var commands = exports.commands = {
 	mutehelp: ["/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ # & ~"],
 
 	hm: 'hourmute',
+	60m: 'hourmute',
 	hourmute: function (target) {
 		if (!target) return this.parse('/help hourmute');
 		this.run('mute');
@@ -1873,7 +1886,7 @@ var commands = exports.commands = {
 	/*********************************************************
 	 * Battle commands
 	 *********************************************************/
-
+ 
 	forfeit: function (target, room, user) {
 		if (!room.battle) {
 			return this.sendReply("There's nothing to forfeit here.");
@@ -2132,6 +2145,7 @@ var commands = exports.commands = {
 	allowchallengeshelp: ["/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges."],
 
 	cchall: 'cancelChallenge',
+	stopchall: 'cancelchallenge',
 	cancelchallenge: function (target, room, user) {
 		user.cancelChallengeTo(target);
 	},
