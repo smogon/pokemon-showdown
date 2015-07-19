@@ -822,7 +822,6 @@ var commands = exports.commands = {
 	redirhelp: ["/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~"],
 
 	m: 'mute',
-	7m: 'mute',
 	mute: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help mute');
 		if (room.isMuted(user) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
@@ -855,7 +854,6 @@ var commands = exports.commands = {
 	mutehelp: ["/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ # & ~"],
 
 	hm: 'hourmute',
-	60m: 'hourmute',
 	hourmute: function (target) {
 		if (!target) return this.parse('/help hourmute');
 		this.run('mute');
