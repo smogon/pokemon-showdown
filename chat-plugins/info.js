@@ -2123,11 +2123,10 @@ var commands = exports.commands = {
 
 			var illegalStartNums = {'351':1, '421':1, '487':1, '555':1, '647':1, '648':1, '649':1, '681':1};
 			if (pokemon.isMega || pokemon.num in illegalStartNums) pokemon = Tools.getTemplate(pokemon.baseSpecies);
-			var poke = pokemon.name.toLowerCase().replace(' ', '_').replace(/[^a-z0-9\-\_]+/g, '');
 
 			var formatName = extraFormat.name;
-			var formatId = formatName.toLowerCase().replace(' ', '_').replace(/[^a-z0-9\-\_]+/g, '');
-			if (formatId === 'doubles_ou') {
+			var formatId = extraFormat.id;
+			if (formatId === 'doublesou') {
 				formatId = 'doubles';
 			} else if (formatId.includes('vgc')) {
 				formatId = 'vgc' + formatId.slice(-2);
@@ -2135,35 +2134,32 @@ var commands = exports.commands = {
 			} else if (extraFormat.effectType !== 'Format') {
 				formatName = formatId = '';
 			}
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/pokemon/" + poke + (formatId ? '/' + formatId : '') + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " " + pokemon.name + " analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/pokemon/" + pokemon.speciesid + (formatId ? '/' + formatId : '') + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " " + pokemon.name + " analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		}
 
 		// Item
 		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
-			var itemName = item.name.toLowerCase().replace(' ', '_');
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/items/" + itemName + "\">" + generation.toUpperCase() + " " + item.name + " item analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/items/" + item.id + "\">" + generation.toUpperCase() + " " + item.name + " item analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		}
 
 		// Ability
 		if (ability.exists && genNumber > 2 && ability.gen <= genNumber) {
 			atLeastOne = true;
-			var abilityName = ability.name.toLowerCase().replace(' ', '_');
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/abilities/" + abilityName + "\">" + generation.toUpperCase() + " " + ability.name + " ability analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/abilities/" + ability.id + "\">" + generation.toUpperCase() + " " + ability.name + " ability analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		}
 
 		// Move
 		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
-			var moveName = move.name.toLowerCase().replace(' ', '_');
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/moves/" + moveName + "\">" + generation.toUpperCase() + " " + move.name + " move analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/moves/" + toId(move.name) + "\">" + generation.toUpperCase() + " " + move.name + " move analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		}
 
 		// Format
 		if (format.id) {
 			var formatName = format.name;
-			var formatId = formatName.toLowerCase().replace(' ', '_').replace(/[^a-z0-9\-\_]+/g, '');
-			if (formatId === 'doubles_ou') {
+			var formatId = format.id;
+			if (formatId === 'doublesou') {
 				formatId = 'doubles';
 			} else if (formatId.includes('vgc')) {
 				formatId = 'vgc' + formatId.slice(-2);
