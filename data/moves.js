@@ -2831,6 +2831,7 @@ exports.BattleMovedex = {
 				targetPosition: target.position,
 				source: source,
 				moveData: {
+					name: "Doom Desire",
 					basePower: 140,
 					category: "Special",
 					flags: {},
@@ -5017,6 +5018,7 @@ exports.BattleMovedex = {
 				targetPosition: target.position,
 				source: source,
 				moveData: {
+					name: "Future Sight",
 					basePower: 120,
 					category: "Special",
 					flags: {},
