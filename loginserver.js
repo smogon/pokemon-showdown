@@ -174,7 +174,7 @@ var LoginServer = module.exports = (function () {
 				setImmediate(requestCallbacks[i], null, null, error);
 			}
 			self.requestEnd();
-		};
+		}.once();
 
 		req = http.request(requestOptions, function onResponse (res) {
 			if (self.requestTimeoutTimer) {
