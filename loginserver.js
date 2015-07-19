@@ -82,7 +82,7 @@ var LoginServer = module.exports = (function () {
 			data = null;
 		}
 		if (this.openRequests > 5) {
-			callback(null, null, new RangeError("Request overflow"));
+			setImmediate(callback, null, null, new RangeError("Request overflow"));
 			return;
 		}
 		this.openRequests++;
@@ -102,13 +102,13 @@ var LoginServer = module.exports = (function () {
 
 			res.on('end', function () {
 				var data = parseJSON(buffer).json;
-				callback(data, res.statusCode);
+				setImmediate(callback, data, res.statusCode);
 				this.openRequests--;
 			});
 		});
 
 		req.on('error', function (error) {
-			callback(null, null, error);
+			setImmediate(callback, null, null, error);
 			this.openRequests--;
 		});
 
@@ -121,7 +121,7 @@ var LoginServer = module.exports = (function () {
 		}
 		if (typeof callback === 'undefined') callback = function () {};
 		if (LoginServer.disabled) {
-			callback(null, null, new Error("Ladder disabled"));
+			setImmediate(callback, null, null, new Error("Ladder disabled"));
 			return;
 		}
 		if (!data) data = {};
@@ -171,7 +171,7 @@ var LoginServer = module.exports = (function () {
 			}
 			req.abort();
 			for (var i = 0, len = requestCallbacks.length; i < len; i++) {
-				requestCallbacks[i](null, null, error);
+				setImmediate(requestCallbacks[i], null, null, error);
 			}
 			self.requestEnd();
 		};
@@ -197,9 +197,9 @@ var LoginServer = module.exports = (function () {
 				var data = parseJSON(buffer).json;
 				for (var i = 0, len = requestCallbacks.length; i < len; i++) {
 					if (data) {
-						requestCallbacks[i](data[i], res.statusCode);
+						setImmediate(requestCallbacks[i], data[i], res.statusCode);
 					} else {
-						requestCallbacks[i](null, res.statusCode, new Error("Corruption"));
+						setImmediate(requestCallbacks[i], null, res.statusCode, new Error("Corruption"));
 					}
 				}
 				self.requestEnd();
