@@ -531,7 +531,7 @@ var commands = exports.commands = {
 	deroomownerhelp: ["/roomdeowner [username] - Removes [username]'s status as a room owner. Requires: ~"],
 
 	roomdemote: 'roompromote',
-	roomsetrank: 'roompromote'
+	roomsetrank: 'roompromote',
 	roompromote: function (target, room, user, connection, cmd) {
 		if (!room.auth) {
 			this.sendReply("/roompromote - This room isn't designed for per-room moderation");
