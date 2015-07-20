@@ -1899,7 +1899,7 @@ var commands = exports.commands = {
 
 		var formatList;
 		var format = Tools.getFormat(targetId);
-		if (format.effectType === 'Format') formatList = [format.id];
+		if (format.effectType === 'Format') formatList = [targetId];
 		if (!formatList) {
 			if (this.broadcasting && (room.id === 'lobby' || room.battle)) return this.sendReply("This command is too spammy to broadcast in lobby/battles");
 			formatList = Object.keys(Tools.data.Formats).filter(function (formatid) {return Tools.data.Formats[formatid].effectType === 'Format';});
@@ -1912,7 +1912,7 @@ var commands = exports.commands = {
 		for (var i = 0; i < formatList.length; i++) {
 			var format = Tools.getFormat(formatList[i]);
 			var sectionId = toId(format.section);
-			if (targetId && !format[targetId + 'Show'] && sectionId !== targetId && !format.id.startsWith(targetId)) continue;
+			if (targetId && !format[targetId + 'Show'] && sectionId !== targetId && format.id === formatList[i] && !format.id.startsWith(targetId)) continue;
 			totalMatches++;
 			if (!sections[sectionId]) sections[sectionId] = {name: format.section, formats: []};
 			sections[sectionId].formats.push(format.id);
