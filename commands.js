@@ -1885,7 +1885,7 @@ var commands = exports.commands = {
 
 	savereplay: function (target, room, user, connection) {
 		if (!room || !room.battle) return;
-		var logidx = 2; // spectator log (no exact HP)
+		var logidx = 0; // spectator log (no exact HP)
 		if (room.battle.ended) {
 			// If the battle is finished when /savereplay is used, include
 			// exact HP in the replay log.
