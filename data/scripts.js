@@ -1243,6 +1243,9 @@ exports.BattleScripts = {
 				case 'dragonpulse': case 'spacialrend':
 					if (hasMove['dracometeor']) rejected = true;
 					break;
+				case 'outrage':
+					if (hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
+					break;
 				case 'thunder':
 					if (hasMove['thunderbolt'] && !hasMove['raindance']) rejected = true;
 					break;
