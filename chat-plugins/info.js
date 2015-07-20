@@ -1898,7 +1898,7 @@ var commands = exports.commands = {
 		if (targetId === 'all') targetId = '';
 
 		var formatList;
-		var format = Tools.getFormat(format);
+		var format = Tools.getFormat(targetId);
 		if (format.effectType === 'Format') formatList = [format.id];
 		if (!formatList) {
 			if (this.broadcasting && (room.id === 'lobby' || room.battle)) return this.sendReply("This command is too spammy to broadcast in lobby/battles");
