@@ -1559,10 +1559,9 @@ BattleSide = (function () {
 			var willPass = canSwitchOut.splice(Math.min(canSwitchOut.length, canSwitchIn.length));
 			for (var i = 0; i < canSwitchOut.length; i++) {
 				decisions.push({
-					choice: 'switch',
+					choice: 'instaswitch',
 					pokemon: this.active[canSwitchOut[i]],
-					target: this.pokemon[canSwitchIn[i]],
-					priority: 101
+					target: this.pokemon[canSwitchIn[i]]
 				});
 			}
 			for (var i = 0; i < willPass.length; i++) {
@@ -3541,6 +3540,7 @@ Battle = (function () {
 					'beforeTurnMove': 99,
 					'switch': 7,
 					'runSwitch': 7.1,
+					'instaswitch': 101,
 					'megaEvo': 6.9,
 					'residual': -100,
 					'team': 102,
@@ -3554,7 +3554,7 @@ Battle = (function () {
 				if (this.getMove(decision.move).beforeTurnCallback) {
 					this.addQueue({choice: 'beforeTurnMove', pokemon: decision.pokemon, move: decision.move, targetLoc: decision.targetLoc});
 				}
-			} else if (decision.choice === 'switch') {
+			} else if (decision.choice === 'switch' || decision.choice === 'instaswitch') {
 				if (decision.pokemon.switchFlag && decision.pokemon.switchFlag !== true) {
 					decision.pokemon.switchCopyFlag = decision.pokemon.switchFlag;
 				}
@@ -3580,13 +3580,8 @@ Battle = (function () {
 				}
 			}
 			if (!decision.pokemon && !decision.speed) decision.speed = 1;
-			if (!decision.speed && decision.choice === 'switch' && decision.target) decision.speed = decision.target.speed;
+			if (!decision.speed && (decision.choice === 'switch' || decision.choice === 'instaswitch') && decision.target) decision.speed = decision.target.speed;
 			if (!decision.speed) decision.speed = decision.pokemon.speed;
-
-			if (decision.choice === 'switch' && !decision.side.pokemon[0].isActive) {
-				// if there's no actives, switches happen before activations
-				decision.priority = 6.2;
-			}
 		}
 	};
 	Battle.prototype.addQueue = function (decision) {
@@ -3638,7 +3633,7 @@ Battle = (function () {
 	};
 	Battle.prototype.willAct = function () {
 		for (var i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'shift') {
+			if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch' || this.queue[i].choice === 'instaswitch' || this.queue[i].choice === 'shift') {
 				return this.queue[i];
 			}
 		}
@@ -3674,7 +3669,7 @@ Battle = (function () {
 	};
 	Battle.prototype.willSwitch = function (pokemon) {
 		for (var i = 0; i < this.queue.length; i++) {
-			if (this.queue[i].choice === 'switch' && this.queue[i].pokemon === pokemon) {
+			if ((this.queue[i].choice === 'switch' || this.queue[i].choice === 'instaswitch') && this.queue[i].pokemon === pokemon) {
 				return this.queue[i];
 			}
 		}
@@ -3744,6 +3739,7 @@ Battle = (function () {
 				decision.pokemon.switchFlag = false;
 			}
 			break;
+		case 'instaswitch':
 		case 'switch':
 			if (decision.pokemon) {
 				decision.pokemon.beingCalledBack = true;
@@ -4156,8 +4152,7 @@ Battle = (function () {
 				}
 
 				decisions.push({
-					choice: 'switch',
-					priority: (side.currentRequest === 'switch' ? 101 : undefined),
+					choice: (side.currentRequest === 'switch' ? 'instaswitch' : 'switch'),
 					pokemon: side.pokemon[i],
 					target: side.pokemon[data]
 				});
