@@ -1060,6 +1060,9 @@ User = (function () {
 			if (room.battle) {
 				room.battle.resendRequest(connection);
 			}
+			if (global.Tournaments && Tournaments.get(room.id)) {
+				Tournaments.get(room.id).updateFor(this, connection);
+			}
 		}
 	};
 	User.prototype.debugData = function () {
