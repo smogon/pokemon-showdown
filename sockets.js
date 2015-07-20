@@ -152,6 +152,7 @@ if (cluster.isMaster) {
 			var avatarserver = new nodestatic.Server('./config/avatars');
 			var staticserver = new nodestatic.Server('./static');
 			var staticRequestHandler = function (request, response) {
+				// console.log("static rq: " + request.socket.remoteAddress + ":" + request.socket.remotePort + " -> " + request.socket.localAddress + ":" + request.socket.localPort + " - " + request.method + " " + request.url + " " + request.httpVersion + " - " + request.rawHeaders.join('|'));
 				request.resume();
 				request.addListener('end', function () {
 					if (Config.customhttpresponse &&
