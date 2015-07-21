@@ -21,6 +21,7 @@ exports.BattleStatuses = {
 		onBeforeMove: function (pokemon) {
 			if (this.random(256) < 63) {
 				this.add('cant', pokemon, 'par');
+				pokemon.isStaleHP++;
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('lockedmovee');
 				pokemon.removeVolatile('twoturnmove');
