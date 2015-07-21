@@ -297,6 +297,10 @@ BattlePokemon = (function () {
 		if (this.template.baseStats['hp'] === 1) this.maxhp = 1; // shedinja
 		this.hp = this.hp || this.maxhp;
 
+		this.isStale = false;
+		this.isNearlyStale = false;
+		this.isStaleHP = this.maxhp;
+
 		this.baseIvs = this.set.ivs;
 		this.baseHpType = this.hpType;
 		this.baseHpPower = this.hpPower;
@@ -606,7 +610,7 @@ BattlePokemon = (function () {
 				}
 				continue;
 			}
-			if (this.disabledMoves[move.id] && (!restrictData || !this.disabledMoves[move.id].isHidden) || !move.pp && (this.battle.gen !== 1 || !this.volatiles['partialtrappinglock'])) {
+			if (this.disabledMoves[move.id] && (!restrictData || !this.disabledMoves[move.id].isHidden) || move.pp <= 0 && (this.battle.gen !== 1 || !this.volatiles['partialtrappinglock'])) {
 				move.disabled = !restrictData && this.disabledMoves[move.id] && this.disabledMoves[move.id].isHidden ? 'hidden' : true;
 			} else if (!move.disabled || move.disabled === 'hidden' && restrictData) {
 				hasValidMove = true;
@@ -751,6 +755,7 @@ BattlePokemon = (function () {
 		this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
 		this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 		this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
+		if (pokemon.isStale) this.isStale = true;
 		for (var i = 0; i < pokemon.moveset.length; i++) {
 			var moveData = pokemon.moveset[i];
 			var moveName = moveData.move;
@@ -1105,6 +1110,7 @@ BattlePokemon = (function () {
 	BattlePokemon.prototype.setItem = function (item, source, effect) {
 		if (!this.hp || !this.isActive) return false;
 		item = this.battle.getItem(item);
+		if (item.id === 'leppaberry') this.isStale = true;
 		this.lastItem = this.item;
 		this.item = item.id;
 		this.itemData = {id: item.id, target: this};
@@ -2761,7 +2767,13 @@ Battle = (function () {
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
-			this.cancelMove(oldActive);
+			if (this.cancelMove(oldActive)) {
+				for (var i = 0; i < side.foe.active.length; i++) {
+					if (side.foe.active[i].isStale) {
+						oldActive.isNearlyStale = true;
+					}
+				}
+			}
 			oldActive.clearVolatile();
 		}
 		side.active[pos] = pokemon;
@@ -2867,6 +2879,8 @@ Battle = (function () {
 	};
 	Battle.prototype.nextTurn = function () {
 		this.turn++;
+		var allStale = true;
+		var oneStale = false;
 		for (var i = 0; i < this.sides.length; i++) {
 			for (var j = 0; j < this.sides[i].active.length; j++) {
 				var pokemon = this.sides[i].active[j];
@@ -2884,12 +2898,48 @@ Battle = (function () {
 						pokemon.lastAttackedBy = null;
 					}
 				}
+
+				if (pokemon.hp >= pokemon.isStaleHP) {
+					if (pokemon.isNearlyStale) {
+						pokemon.isStale = true;
+					}
+				}
+				pokemon.isStaleHP = pokemon.hp;
+				pokemon.isNearlyStale = (pokemon.getMoves().length === 0);
+				if (!pokemon.isStale && !pokemon.fainted) {
+					allStale = false;
+				} else if (pokemon.isStale) {
+					oneStale = pokemon;
+				}
 				pokemon.activeTurns++;
 			}
 			this.sides[i].faintedLastTurn = this.sides[i].faintedThisTurn;
 			this.sides[i].faintedThisTurn = false;
 		}
 		this.add('turn', this.turn);
+		var banlistTable = this.getFormat().banlistTable;
+		if (allStale && banlistTable && 'Rule:endlessbattleclause' in banlistTable) {
+			var nonLeppaSide = null;
+			for (var i = 0; i < this.sides.length; i++) {
+				for (var j = 0; j < this.sides[i].active.length; j++) {
+					var pokemon = this.sides[i].active[j];
+					if (toId(pokemon.set.item) === 'leppaberry') {
+						if (nonLeppaSide) {
+							nonLeppaSide = null; // both sides have Leppa
+						} else {
+							nonLeppaSide = pokemon.side.foe;
+						}
+						break;
+					}
+				}
+			}
+			if (!nonLeppaSide && this.staleWarned) nonLeppaSide = this.staleWarned.side;
+			this.add('message', "All active Pok\u00e9mon are in an endless loop. Endless Battle Clause activated!");
+			this.win(nonLeppaSide);
+		} else if (oneStale && !this.staleWarned) {
+			this.add('html', '<div class="broadcast-red">' + this.escapeHTML(oneStale.name) + ' is in an endless loop. If all active Pok&eacute;mon go in an endless loop, Endless Battle Clause will activate.</div>');
+			this.staleWarned = oneStale;
+		}
 
 		if (this.gameType === 'triples' && this.sides.map('pokemonLeft').count(1) === this.sides.length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.

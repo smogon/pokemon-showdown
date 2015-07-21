@@ -4,6 +4,7 @@ exports.BattleStatuses = {
 		onBeforeMove: function (pokemon) {
 			if (!pokemon.hasAbility('magicguard') && this.random(4) === 0) {
 				this.add('cant', pokemon, 'par');
+				pokemon.isStaleHP++;
 				return false;
 			}
 		}
