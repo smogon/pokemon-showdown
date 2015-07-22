@@ -634,7 +634,6 @@ exports.BattleMovedex = {
 				this.add('-activate', pokemon, 'Attract', '[of] ' + this.effectData.source);
 				if (this.random(2) === 0) {
 					this.add('cant', pokemon, 'Attract');
-					pokemon.isStaleHP++;
 					return false;
 				}
 			},
@@ -4446,7 +4445,6 @@ exports.BattleMovedex = {
 				if (item.isBerry && item.id !== 'enigmaberry') {
 					move.onHit = function (foe) {
 						this.singleEvent('Eat', item, null, foe, null, null);
-						if (item.id === 'leppaberry') foe.isStale = true;
 						foe.ateBerry = true;
 					};
 				} else if (item.fling.effect) {
@@ -8524,7 +8522,8 @@ exports.BattleMovedex = {
 				maxpp: move.pp,
 				target: move.target,
 				disabled: false,
-				used: false
+				used: false,
+				virtual: true
 			};
 			source.moves[moveslot] = toId(move.name);
 			this.add('-start', source, 'Mimic', move.name);
@@ -13381,7 +13380,6 @@ exports.BattleMovedex = {
 		onModifyMove: function (move, pokemon, target) {
 			move.type = '???';
 			this.add('-activate', pokemon, 'move: Struggle');
-			if (pokemon.isStale && target.activeTurns === 0) target.isNearlyStale = true;
 		},
 		self: {
 			onHit: function (source) {

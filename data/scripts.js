@@ -95,6 +95,7 @@ exports.BattleScripts = {
 		if (target === false) {
 			this.attrLastMove('[notarget]');
 			this.add('-notarget');
+			if (move.target === 'normal') pokemon.isStaleCon = 0;
 			return true;
 		}
 
@@ -150,6 +151,7 @@ exports.BattleScripts = {
 			if (lacksTarget) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
+				if (move.target === 'normal') pokemon.isStaleCon = 0;
 				return true;
 			}
 			damage = this.tryMoveHit(target, pokemon, move);
