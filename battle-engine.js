@@ -567,6 +567,7 @@ BattlePokemon = (function () {
 			var foeActive = this.side.foe.active;
 			for (var i = 0; i < foeActive.length; i++) {
 				if (foeActive[i].isStale >= 2) {
+					if (move.selfSwitch) this.isStalePPTurns++;
 					return true;
 				}
 			}
