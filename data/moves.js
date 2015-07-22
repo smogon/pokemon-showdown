@@ -13044,7 +13044,7 @@ exports.BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onHit: function (target) {
 			if (target.deductPP(target.lastMove, 4)) {
-				this.add("-activate", target, 'move: Spite', target.lastMove, 4);
+				this.add("-activate", target, 'move: Spite', this.getMove(target.lastMove).name, 4);
 				return;
 			}
 			return false;
