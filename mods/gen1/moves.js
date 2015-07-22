@@ -545,7 +545,8 @@ exports.BattleMovedex = {
 				maxpp: move.pp * 8 / 5,
 				target: move.target,
 				disabled: false,
-				used: false
+				used: false,
+				virtual: true
 			};
 			source.moves[moveslot] = toId(move.name);
 			this.add('-start', source, 'Mimic', move.name);
