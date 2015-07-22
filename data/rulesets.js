@@ -507,10 +507,10 @@ exports.BattleFormats = {
 		//   count only if no foe is stale)
 		// confinement reset to 0 whenever:
 		// - it uses PP while not Transformed/Impostered
-		// - if it has at least 2 confinement, and begins a turn with as much
-		//   HP than it had the last time its confinement counter was 0 - user
-		//   also becomes half-stale if not already half-stale, or stale if
-		//   already half-stale
+		// - if it has at least 2 confinement, and begins a turn without losing
+		//   at least 1% of its max HP from the last time its confinement counter
+		//   was 0 - user also becomes half-stale if not already half-stale, or
+		//   stale if already half-stale
 
 		// A Pokémon is also considered stale if:
 		// - it has gained a Leppa berry through any means besides starting

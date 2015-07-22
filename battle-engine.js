@@ -2911,13 +2911,13 @@ Battle = (function () {
 				if (pokemon.fainted) continue;
 				if (pokemon.isStale < 2) {
 					if (pokemon.isStaleCon >= 2) {
-						if (pokemon.hp >= pokemon.isStaleHP) pokemon.isStale++;
+						if (pokemon.hp >= pokemon.isStaleHP - pokemon.maxhp / 100) pokemon.isStale++;
 						pokemon.isStaleCon = 0;
 						pokemon.isStalePPTurns = 0;
 						pokemon.isStaleHP = pokemon.hp;
 					}
 					if (pokemon.isStalePPTurns >= 5) {
-						if (pokemon.hp >= pokemon.isStaleHP) pokemon.isStale++;
+						if (pokemon.hp >= pokemon.isStaleHP - pokemon.maxhp / 100) pokemon.isStale++;
 						pokemon.isStaleCon = 0;
 						pokemon.isStalePPTurns = 0;
 						pokemon.isStaleHP = pokemon.hp;
