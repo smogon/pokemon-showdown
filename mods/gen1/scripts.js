@@ -142,6 +142,8 @@ exports.BattleScripts = {
 						if (usedMovePos > -1 && pokemon.moveset[usedMovePos].pp === 0) {
 							// If we were on the middle of the 0 PP sequence, the PPs get reset to 63.
 							pokemon.moveset[usedMovePos].pp = 63;
+							pokemon.isStale = 2;
+							pokemon.isStaleSource = 'ppoverflow';
 						}
 					}
 				}

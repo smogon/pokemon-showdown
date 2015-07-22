@@ -2327,7 +2327,10 @@ exports.BattleItems = {
 			move.pp += 10;
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', move.move);
-			if (pokemon.item === 'leppaberry') pokemon.isStale = 2;
+			if (pokemon.item === 'leppaberry') {
+				pokemon.isStale = 2;
+				pokemon.isStaleSource = 'useleppa';
+			}
 		},
 		num: 154,
 		gen: 3,
