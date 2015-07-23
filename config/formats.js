@@ -70,7 +70,7 @@ exports.Formats = [
 
 		ruleset: ['OU'],
 		banlist: ['OU', 'BL', 'Alakazite', 'Altarianite', 'Diancite', 'Heracronite', 'Galladite', 'Gardevoirite', 'Lopunnite', 'Medichamite',
-			'Metagrossite', 'Pinsirite', 'Drizzle', 'Drought', 'Shadow Tag'
+			'Metagrossite', 'Pidgeotite', 'Pinsirite', 'Drizzle', 'Drought', 'Shadow Tag'
 		]
 	},
 	{
