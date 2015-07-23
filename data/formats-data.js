@@ -157,7 +157,8 @@ exports.BattleFormatsData = {
 	pidgeotmega: {
 		randomBattleMoves: ["roost","heatwave","uturn","hurricane","defog"],
 		randomDoubleBattleMoves: ["tailwind","heatwave","uturn","hurricane","protect"],
-		requiredItem: "Pidgeotite"
+		requiredItem: "Pidgeotite",
+		tier: "BL"
 	},
 	rattata: {
 		randomBattleMoves: ["facade","flamewheel","suckerpunch","uturn","wildcharge","thunderwave","crunch","revenge"],
