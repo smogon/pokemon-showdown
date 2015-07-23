@@ -200,13 +200,13 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	paras: {
-		randomBattleMoves: ["stunspore","swordsdance","bodyslam","slash","megadrain","doubleedge","growth","toxic"],
-		essentialMove: "spore",
+		randomBattleMoves: ["stunspore","swordsdance","spore","slash","megadrain","doubleedge","growth","toxic"],
+		essentialMove: "bodyslam",
 		tier: "LC"
 	},
 	parasect: {
-		randomBattleMoves: ["stunspore","swordsdance","bodyslam","slash","megadrain","doubleedge","growth","hyperbeam","toxic"],
-		essentialMove: "spore",
+		randomBattleMoves: ["stunspore","swordsdance","spore","slash","megadrain","doubleedge","growth","hyperbeam","toxic"],
+		essentialMove: "bodyslam",
 		tier: "NU"
 	},
 	venonat: {
