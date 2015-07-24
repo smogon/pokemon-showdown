@@ -441,6 +441,9 @@ exports.Formats = [
 			case 'ampharosite': case 'garchompite': case 'heracronite':
 				if (template.baseStats.spe <= 10) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
 				break;
+			case 'cameruptite':
+				if (template.baseStats.spe <= 20) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
+				break;
 			case 'abomasite': case 'sablenite':
 				if (template.baseStats.spe <= 30) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
 				break;
