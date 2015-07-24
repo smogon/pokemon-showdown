@@ -472,9 +472,7 @@ BattlePokemon = (function () {
 		// stat modifier effects
 		if (!unmodified) {
 			var statTable = {atk:'Atk', def:'Def', spa:'SpA', spd:'SpD', spe:'Spe'};
-			var statMod = 1;
-			statMod = this.battle.runEvent('Modify' + statTable[statName], this, null, null, statMod);
-			stat = this.battle.modify(stat, statMod);
+			stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
 		}
 		if (this.battle.getStatCallback) {
 			stat = this.battle.getStatCallback(stat, statName, this, unboosted);
