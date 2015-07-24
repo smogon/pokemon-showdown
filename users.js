@@ -1431,6 +1431,9 @@ User = (function () {
 							room.onLeave(this);
 							delete this.roomCount[room.id];
 						}
+					} else {
+						// should never happen
+						console.log('!! room miscount');
 					}
 					if (!this.connections[i]) {
 						// race condition? This should never happen, but it does.
@@ -1449,6 +1452,8 @@ User = (function () {
 			}
 		}
 		if (!connection && this.roomCount[room.id]) {
+			// should also never happen
+			console.log('!! room miscount: ' + room.id + ' not left for ' + this.userid);
 			room.onLeave(this);
 			delete this.roomCount[room.id];
 		}
