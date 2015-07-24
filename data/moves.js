@@ -11997,11 +11997,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		boosts: {
+			def: -1,
+			spd: -1,
 			atk: 2,
 			spa: 2,
-			spe: 2,
-			def: -1,
-			spd: -1
+			spe: 2
 		},
 		secondary: false,
 		target: "self",
