@@ -438,7 +438,7 @@ var GlobalRoom = (function () {
 		var curSection = '';
 		for (var i in Tools.data.Formats) {
 			var format = Tools.data.Formats[i];
-			if (!format.challengeShow && !format.searchShow) continue;
+			if (!format.challengeShow && !format.searchShow && !format.tournamentShow) continue;
 
 			var section = format.section;
 			if (section === undefined) section = format.mod;
@@ -448,12 +448,12 @@ var GlobalRoom = (function () {
 				formatListText += '|,' + (format.column || 1) + '|' + section;
 			}
 			formatListText += '|' + format.name;
-			if (!format.challengeShow) {
-				formatListText += ',,';
-			} else if (!format.searchShow) {
-				formatListText += ',';
-			}
-			if (format.team) formatListText += ',#';
+			var displayCode = 0;
+			if (format.team) displayCode |= 1;
+			if (format.searchShow) displayCode |= 2;
+			if (format.challengeShow) displayCode |= 4;
+			if (format.tournamentShow) displayCode |= 8;
+			formatListText += ',' + displayCode.toString(16);
 		}
 		return formatListText;
 	};
