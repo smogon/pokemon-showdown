@@ -2339,7 +2339,7 @@ exports.BattleMovedex = {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
 				delete move.onHit;
-				move.self = {boosts: {atk:1, def:1, spe:-1}};
+				move.self = {boosts: {spe:-1, atk:1, def:1}};
 			} else if (move.volatileStatus && target.volatiles.curse) {
 				return false;
 			}
@@ -14835,9 +14835,9 @@ exports.BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		self: {
 			boosts: {
+				spe: -1,
 				def: -1,
-				spd: -1,
-				spe: -1
+				spd: -1
 			}
 		},
 		secondary: false,
