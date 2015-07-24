@@ -5290,8 +5290,8 @@ exports.BattleMovedex = {
 			onEnd: function (targetSide) {
 				this.add('-sideend', targetSide, 'Grass Pledge');
 			},
-			onModifySpe: function (speMod, pokemon) {
-				return this.chain(speMod, 0.25);
+			onModifySpe: function (spe, pokemon) {
+				return this.chainModify(0.25);
 			}
 		},
 		secondary: false,
@@ -13944,8 +13944,8 @@ exports.BattleMovedex = {
 			onStart: function (side) {
 				this.add('-sidestart', side, 'move: Tailwind');
 			},
-			onModifySpe: function (speMod, pokemon) {
-				return this.chain(speMod, 2);
+			onModifySpe: function (spe, pokemon) {
+				return this.chainModify(2);
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 4,

@@ -7,9 +7,9 @@ exports.BattleAbilities = {
 	},
 	"swiftswim": {
 		inherit: true,
-		onModifySpe: function (speMod, pokemon) {
+		onModifySpe: function (spe, pokemon) {
 			if (this.isWeather(['raindance', 'primordialsea'])) {
-				return this.chain(speMod, 1.5);
+				return this.chainModify(1.5);
 			}
 		}
 	},
@@ -21,9 +21,9 @@ exports.BattleAbilities = {
 	},
 	"chlorophyll": {
 		inherit: true,
-		onModifySpe: function (speMod) {
+		onModifySpe: function (spe) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
-				return this.chain(speMod, 1.5);
+				return this.chainModify(1.5);
 			}
 		}
 	},
@@ -41,9 +41,9 @@ exports.BattleAbilities = {
 	},
 	"sandrush": {
 		inherit: true,
-		onModifySpe: function (speMod, pokemon) {
+		onModifySpe: function (spe, pokemon) {
 			if (this.isWeather('sandstorm')) {
-				return this.chain(speMod, 1.5);
+				return this.chainModify(1.5);
 			}
 		}
 	},
