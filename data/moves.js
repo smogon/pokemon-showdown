@@ -11703,7 +11703,7 @@ exports.BattleMovedex = {
 		basePower: 70,
 		category: "Physical",
 		desc: "Has a 30% chance to cause a secondary effect on the target based on the battle terrain. Causes paralysis on the regular Wi-Fi terrain, causes paralysis during Electric Terrain, lowers Special Attack by 1 stage during Misty Terrain, and causes sleep during Grassy Terrain. The secondary effect chance is not affected by the Ability Serene Grace.",
-		shortDesc: "Effect varies with terrain. (30% accuracy lower 1.)",
+		shortDesc: "Effect varies with terrain. (30% paralysis chance)",
 		id: "secretpower",
 		name: "Secret Power",
 		pp: 20,
