@@ -1,6 +1,6 @@
 {
   "name": "Pokemon-Showdown",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "dependencies": {
     "sugar": "1.4.1",
     "node-static": "0.7.6",
