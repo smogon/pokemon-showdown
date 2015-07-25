@@ -25,6 +25,7 @@ exports.BattleAbilities = {
 		}
 	},
 	"leafguard": {
+		inherit: true,
 		onSetStatus: function (status, target, source, effect) {
 			if (effect && effect.id === 'rest') {
 				return;
