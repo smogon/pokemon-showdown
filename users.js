@@ -111,9 +111,11 @@ function ipSearch(ip, table) {
 	return false;
 }
 function checkBanned(ip) {
+	if (!ip) return false;
 	return ipSearch(ip, bannedIps);
 }
 function checkLocked(ip) {
+	if (!ip) return false;
 	return ipSearch(ip, lockedIps);
 }
 Users.checkBanned = checkBanned;
