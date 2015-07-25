@@ -5,7 +5,7 @@ describe('Flower Gift', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
-	
+
 	it('should boost allies\' Attack and Special Defense stats', function () {
 		battle = BattleEngine.Battle.construct('battle-flowergift-boost', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
@@ -29,7 +29,7 @@ describe('Flower Gift', function () {
 		assert.strictEqual(battle.p1.active[1].getStat('atk'), battle.modify(baseAtk, 1.5));
 		assert.strictEqual(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
-	
+
 	it('should still work if Cherrim transforms into something with Flower Gift without originally having it', function () {
 		battle = BattleEngine.Battle.construct('battle-flowergift-boost', 'doublescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
