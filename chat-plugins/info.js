@@ -1883,7 +1883,7 @@ var commands = exports.commands = {
 	formats: 'formathelp',
 	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
-	formathelp: function (target, room, user) {
+	formathelp: function (target, room, user, connection, cmd) {
 		if (!this.canBroadcast()) return;
 		if (!target) {
 			return this.sendReplyBox(
@@ -1901,7 +1901,7 @@ var commands = exports.commands = {
 		var format = Tools.getFormat(targetId);
 		if (format.effectType === 'Format') formatList = [targetId];
 		if (!formatList) {
-			if (this.broadcasting && (room.id === 'lobby' || room.battle)) return this.sendReply("This command is too spammy to broadcast in lobby/battles");
+			if (this.broadcasting && (cmd !== 'om' && cmd !== 'othermetas')) return this.sendReply("'" + target + "' is not a format. This command's search mode is too spammy to broadcast.");
 			formatList = Object.keys(Tools.data.Formats).filter(function (formatid) {return Tools.data.Formats[formatid].effectType === 'Format';});
 		}
 
@@ -1933,11 +1933,11 @@ var commands = exports.commands = {
 		for (var sectionId in sections) {
 			if (exactMatch && sectionId !== exactMatch) continue;
 			buf.push("<h3>" + Tools.escapeHTML(sections[sectionId].name) + "</h3>");
-			buf.push("<table style=\"border:1px solid gray; border-collapse:collapse\" cellspacing=\"0\" cellpadding=\"5\"><thead><th style=\"border:1px solid gray\" >Name</th><th style=\"border:1px solid gray\" >Mode</th><th style=\"border:1px solid gray\" >Description</th></thead><tbody>");
+			buf.push("<table class=\"scrollable\" style=\"display:inline-block; max-height:200px; border:1px solid gray; border-collapse:collapse\" cellspacing=\"0\" cellpadding=\"5\"><thead><th style=\"border:1px solid gray\" >Name</th><th style=\"border:1px solid gray\" >Description</th></thead><tbody>");
 			for (var i = 0; i < sections[sectionId].formats.length; i++) {
 				var format = Tools.getFormat(sections[sectionId].formats[i]);
 				var mod = format.mod && format.mod !== 'base' ? " - " + Tools.escapeHTML(format.mod === format.id ? format.name : format.mod).capitalize() : "";
-				buf.push("<tr><td style=\"border:1px solid gray\">" + Tools.escapeHTML(format.name) + "</td><td style=\"border:1px solid gray\" align=\"center\">" + (format.gameType || "singles").capitalize() + mod + "</td><td style=\"border: 1px solid gray; margin-left:10px\">" + (format.desc ? format.desc.join("<br />") : "&mdash;") + "</td></tr>");
+				buf.push("<tr><td style=\"border:1px solid gray\">" + Tools.escapeHTML(format.name) + "</td><td style=\"border: 1px solid gray; margin-left:10px\">" + (format.desc ? format.desc.join("<br />") : "&mdash;") + "</td></tr>");
 			}
 			buf.push("</tbody></table>");
 		}
