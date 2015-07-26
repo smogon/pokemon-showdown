@@ -44,6 +44,8 @@ exports.BattleScripts = {
 				this.clearActiveMove(true);
 				return;
 			}
+		} else {
+			sourceEffect = this.getEffect('lockedmove');
 		}
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
