@@ -624,13 +624,14 @@ exports.BattleMovedex = {
 					this.add('-start', pokemon, 'Attract');
 				}
 			},
-			onBeforeMovePriority: 2,
-			onBeforeMove: function (pokemon, target, move) {
+			onUpdate: function (pokemon) {
 				if (this.effectData.source && !this.effectData.source.isActive && pokemon.volatiles['attract']) {
 					this.debug('Removing Attract volatile on ' + pokemon);
 					pokemon.removeVolatile('attract');
-					return;
 				}
+			},
+			onBeforeMovePriority: 2,
+			onBeforeMove: function (pokemon, target, move) {
 				this.add('-activate', pokemon, 'Attract', '[of] ' + this.effectData.source);
 				if (this.random(2) === 0) {
 					this.add('cant', pokemon, 'Attract');
