@@ -609,7 +609,7 @@ var commands = exports.commands = {
 				var priorityMoves = [];
 				for (var move in Tools.data.Movedex) {
 					var moveData = Tools.getMove(move);
-					if (moveData.category === "Status") continue;
+					if (moveData.category === "Status" || moveData.id === "bide") continue;
 					if (moveData.priority > 0) priorityMoves.push(move);
 				}
 				for (var mon in dex) {
