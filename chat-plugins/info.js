@@ -672,13 +672,15 @@ var commands = exports.commands = {
 		}
 
 		var resultsStr = this.broadcasting ? "" : ("<font color=#999999>" + message + ":</font><br>");
-		if (results.length > 0) {
+		if (results.length > 1) {
 			if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 				results.sort();
 				resultsStr += results.join(", ");
 			} else {
 				resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
+		} else if (results.length === 1) {
+			return CommandParser.commands.data.call(this, results[0], room, user, connection, 'dt');
 		} else {
 			resultsStr += "No Pok&eacute;mon found.";
 		}
