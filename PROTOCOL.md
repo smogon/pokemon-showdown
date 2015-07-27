@@ -405,11 +405,14 @@ stat boosts are minor actions.
 
 `|-ability|POKEMON|ABILITY`
 
-> The `ABILITY` of the `POKEMON` has been changed or revealed due to a move or ability.
-> This also includes abilities that reveal themselves upon switch-in, like Mold Breaker. 
-> The only move tha does not trigger this message is Skill Swap, so that if you use Skill 
-> Swap between teammates in a doubles or triples battle, the abilities of the two Pokémon 
-> are not revealed to the opponent, similar to its behavior in game.
+> The `ABILITY` of the `POKEMON` has been changed due to a move/ability, or it has
+> activated in a way that could not be better described by one of the other minor
+> messages. For example, Clear Body sends `-fail` when it blocks stat drops, while
+> Mold Breaker sends this message to reveal itself upon switch-in.
+>
+> Note that Skill Swap does not send this message despite it changing abilities,
+> because it does not reveal abilities when used between allies in a Double or
+> Triple Battle.
 
 `|-endability|POKEMON`
 
