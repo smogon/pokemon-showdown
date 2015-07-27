@@ -6778,7 +6778,7 @@ exports.BattleMovedex = {
 			var bp = 30;
 			var bpTable = [30, 60, 120, 240, 480];
 			if (pokemon.volatiles.iceball && pokemon.volatiles.iceball.hitCount) {
-				bp = (bpTable[pokemon.volatiles.iceball.hitCount] || 480);
+				bp = (bpTable[pokemon.volatiles.iceball.hitCount] || 30);
 			}
 			pokemon.addVolatile('iceball');
 			if (pokemon.volatiles.defensecurl) {
@@ -11303,7 +11303,7 @@ exports.BattleMovedex = {
 			var bp = 30;
 			var bpTable = [30, 60, 120, 240, 480];
 			if (pokemon.volatiles.rollout && pokemon.volatiles.rollout.hitCount) {
-				bp = (bpTable[pokemon.volatiles.rollout.hitCount] || 480);
+				bp = (bpTable[pokemon.volatiles.rollout.hitCount] || 30);
 			}
 			pokemon.addVolatile('rollout');
 			if (pokemon.volatiles.defensecurl) {
