@@ -445,7 +445,11 @@ var commands = exports.commands = {
 			if (inequality >= 0) {
 				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in stat ranges.");
 				inequality = target.charAt(inequality);
-				var targetParts = target.replace(/\s/g, '').split(inequality);
+				var includeEqual;
+				var targetParts = target.replace(/(<|>)=/, function (match) {
+					includeEqual = true;
+					return match.slice(0, -1);
+				}).replace(/\s/g, '').split(inequality);
 				var numSide, statSide, direction;
 				if (!isNaN(targetParts[0])) {
 					numSide = 0;
@@ -478,6 +482,7 @@ var commands = exports.commands = {
 				}
 				if (!(stat in allStats)) return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' did not contain a valid stat.");
 				if (!searches['stats']) searches['stats'] = {};
+
 				if (direction === 'equal') {
 					if (searches['stats'][stat]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
 					searches['stats'][stat] = {};
@@ -487,6 +492,13 @@ var commands = exports.commands = {
 					if (!searches['stats'][stat]) searches['stats'][stat] = {};
 					if (searches['stats'][stat][direction]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
 					searches['stats'][stat][direction] = parseFloat(targetParts[numSide]);
+					if (!includeEqual) {
+						if (direction === 'less') {
+							searches['stats'][stat][direction]--;
+						} else {
+							searches['stats'][stat][direction]++;
+						}
+					}
 				}
 				continue;
 			}
@@ -683,7 +695,7 @@ var commands = exports.commands = {
 		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
 		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/PU/NFE/LC/CAP.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
-		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'speed > 100' searches for all Pokemon equal to and greater than 100 speed.",
+		"Inequality ranges use the characters '>' and '<', with '>=' and '<=' behaving as '≥' and '≤' respectively, e.g., 'speed > 100' searches for all Pokémon with more than 100 speed, while 'atk <= 50' searches for all Pokémon with less than or equal to 50 base attack.",
 		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
 		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pokemon only.",
 		"The order of the parameters does not matter."],
