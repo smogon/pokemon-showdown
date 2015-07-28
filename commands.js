@@ -35,7 +35,6 @@ var commands = exports.commands = {
 		var rankLists = {};
 		for (var u in Users.usergroups) {
 			var rank = Users.usergroups[u].charAt(0);
-			if (rank === ' ' || rank === '+') continue;
 			// In case the usergroups.csv file is not proper, we check for the server ranks.
 			if (Config.groups.bySymbol[rank]) {
 				var name = Users.usergroups[u].substr(1);
