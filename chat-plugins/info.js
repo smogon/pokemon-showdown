@@ -1977,6 +1977,7 @@ var commands = exports.commands = {
 			"- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />" +
 			"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />" +
 			"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />" +
+			"- /roomdeauth <em>username</em>: remove all room auth from a user<br />" +
 			"- /modchat <em>[%/@/#]</em>: set modchat level<br />" +
 			"- /declare <em>message</em>: make a large blue declaration to the room<br />" +
 			"- !htmlbox <em>HTML code</em>: broadcasts a box of HTML code to the room<br />" +
