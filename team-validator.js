@@ -594,7 +594,9 @@ Validator = (function () {
 			alreadyChecked[template.speciesid] = true;
 			// STABmons hack to avoid copying all of validateSet to formats
 			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && move !== 'chatter') {
-				var types = (template.species === 'Shaymin' ? tools.getTemplate('shayminsky').types : template.types);
+				var types = template.types;
+				if (template.species === 'Shaymin') types = types.concat('Grass');
+				if (template.species === 'Hoopa') types = types.concat('Dark');
 				if (types.indexOf(tools.getMove(move).type) >= 0) return false;
 			}
 			if (template.learnset) {
