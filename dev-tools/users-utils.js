@@ -1,4 +1,4 @@
-function createConnection (ip, workerid, socketid) {
+function createConnection(ip, workerid, socketid) {
 	if (!workerid || !socketid) {
 		workerid = Object.keys(Sockets.workers)[0];
 		socketid = 1;
@@ -11,7 +11,7 @@ function createConnection (ip, workerid, socketid) {
 	return connection;
 }
 
-function createUser (connection) {
+function createUser(connection) {
 	if (!connection) connection = createConnection();
 	var user = new Users.User(connection);
 	connection.user = user;
