@@ -4,12 +4,12 @@ var net = require('net');
 var fs = require('fs');
 
 var testPort;
-function getPort (callback) {
+function getPort(callback) {
 	var port = testPort;
 	var server = net.createServer();
 
 	server.listen(port, function (err) {
-		server.once('close', function onclose () {
+		server.once('close', function onclose() {
 			callback(port);
 		});
 		server.close();
@@ -20,7 +20,7 @@ function getPort (callback) {
 	});
 }
 
-function init (callback) {
+function init(callback) {
 	require('./../app.js');
 	process.listeners('uncaughtException').forEach(function (listener) {
 		process.removeListener('uncaughtException', listener);
