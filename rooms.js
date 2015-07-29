@@ -1339,13 +1339,10 @@ var BattleRoom = (function () {
 		}
 		var resend = joining || !this.battle.playerTable[oldid];
 		if (this.battle.playerTable[oldid]) {
+			this.battle.rename();
 			if (this.rated) {
-				this.add('|message|' + user.name + ' forfeited by changing their name.');
-				this.battle.lose(oldid);
-				this.battle.leave(oldid);
+				this.forfeit(user, " forfeited by changing their name.");
 				resend = false;
-			} else {
-				this.battle.rename();
 			}
 		}
 		delete this.users[oldid];
