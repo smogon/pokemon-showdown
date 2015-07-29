@@ -98,7 +98,6 @@ jscsOptions.base = {
 	"disallowMultipleVarDecl": null,
 	"disallowImplicitTypeConversion": null,
 	"requireSpaceAfterLineComment": null,
-	"validateJSDoc": null,
 
 	"disallowMixedSpacesAndTabs": "smart",
 	"requireSpaceAfterKeywords": true,
@@ -126,9 +125,7 @@ jscsOptions.base = {
 	"requireCapitalizedConstructors": true,
 
 	"validateLineBreaks": require('os').EOL === '\n' ? 'LF' : null,
-	"disallowMultipleLineBreaks": null,
-
-	"esnext": true
+	"disallowMultipleLineBreaks": null
 };
 jscsOptions.config = util._extend(util._extend({}, jscsOptions.base), {
 	"disallowTrailingComma": null
