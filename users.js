@@ -424,7 +424,7 @@ function cacheGroupData() {
 	var groups = Config.groups;
 	var cachedGroups = {};
 
-	function cacheGroup (sym, groupData) {
+	function cacheGroup(sym, groupData) {
 		if (cachedGroups[sym] === 'processing') return false; // cyclic inheritance.
 
 		if (cachedGroups[sym] !== true && groupData['inherit']) {

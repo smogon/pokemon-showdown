@@ -6,7 +6,7 @@
 
 var http = require('http');
 
-function wikiaSearch (subdomain, query, callback) {
+function wikiaSearch(subdomain, query, callback) {
 	http.get('http://' + subdomain + '.wikia.com/api/v1/Search/List/?query=' + encodeURIComponent(query) + '&limit=1', function (res) {
 		var buffer = '';
 		res.setEncoding('utf8');

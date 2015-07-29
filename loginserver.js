@@ -164,7 +164,7 @@ var LoginServer = module.exports = (function () {
 		};
 
 		var req = null;
-		var onReqError = function onReqError (error) {
+		var onReqError = function onReqError(error) {
 			if (self.requestTimeoutTimer) {
 				clearTimeout(self.requestTimeoutTimer);
 				self.requestTimeoutTimer = null;
@@ -176,7 +176,7 @@ var LoginServer = module.exports = (function () {
 			self.requestEnd();
 		}.once();
 
-		req = http.request(requestOptions, function onResponse (res) {
+		req = http.request(requestOptions, function onResponse(res) {
 			if (self.requestTimeoutTimer) {
 				clearTimeout(self.requestTimeoutTimer);
 				self.requestTimeoutTimer = null;
@@ -184,11 +184,11 @@ var LoginServer = module.exports = (function () {
 			var buffer = '';
 			res.setEncoding('utf8');
 
-			res.on('data', function onData (chunk) {
+			res.on('data', function onData(chunk) {
 				buffer += chunk;
 			});
 
-			var endReq = function endRequest () {
+			var endReq = function endRequest() {
 				if (self.requestTimeoutTimer) {
 					clearTimeout(self.requestTimeoutTimer);
 					self.requestTimeoutTimer = null;
@@ -207,7 +207,7 @@ var LoginServer = module.exports = (function () {
 			res.on('end', endReq);
 			res.on('close', endReq);
 
-			self.requestTimeoutTimer = setTimeout(function onDataTimeout () {
+			self.requestTimeoutTimer = setTimeout(function onDataTimeout() {
 				if (res.connection) res.connection.destroy();
 				endReq();
 			}, LOGIN_SERVER_TIMEOUT);
@@ -215,7 +215,7 @@ var LoginServer = module.exports = (function () {
 
 		req.on('error', onReqError);
 
-		req.setTimeout(LOGIN_SERVER_TIMEOUT, function onResponseTimeout () {
+		req.setTimeout(LOGIN_SERVER_TIMEOUT, function onResponseTimeout() {
 			onReqError(new TimeoutError("Response not received"));
 		});
 
