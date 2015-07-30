@@ -175,6 +175,7 @@ exports.BattleAliases = {
 	"landorust": "Landorus-Therian",
 	"meloettap": "Meloetta-Pirouette",
 	"meloettas": "Meloetta-Pirouette",
+	"meowsticfemale": "Meowstic-F",
 	"pumpkaboohuge": "Pumpkaboo-Super",
 	"rotomc": "Rotom-Mow",
 	"rotomf": "Rotom-Frost",
@@ -216,6 +217,8 @@ exports.BattleAliases = {
 	"gourgeistaverage": "Gourgeist",
 	"hoopac": "Hoopa",
 	"hoopaconfined": "Hoopa",
+	"meowsticm": "Meowstic",
+	"meowsticmale": "Meowstic",
 
 	// cosmetic formes
 	"gastrodone": "Gastrodon",
