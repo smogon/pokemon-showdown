@@ -1,9 +1,12 @@
+const REPL_ENABLED = false;
+
 var fs = require('fs');
 var path = require('path');
 
 var clearedPrefixes = {};
 // The eval function is passed in because there is no other way to access a file's non-global context
 exports.start = function (prefix, suffix, evalFunction) {
+	if (!REPL_ENABLED) return;
 	if (process.platform === 'win32') return; // Windows doesn't support sockets mounted in the filesystem
 
 	prefix = path.resolve(__dirname, Config.replsocketprefix || 'logs/repl', prefix);
