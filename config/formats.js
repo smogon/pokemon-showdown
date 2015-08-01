@@ -405,147 +405,42 @@ exports.Formats = [
 	///////////////////////////////////////////////////////////////////
 
 	{
-		name: "Mix and Mega",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3540979/\">Mix and Mega</a>"],
+		name: "No Status",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3540979/\">No Status</a>"],
 		section: "OM of the Month",
 		column: 2,
 
-		mod: 'mixandmega',
-		ruleset: ['Ubers', 'Baton Pass Clause'],
-		banlist: ['Gengarite', 'Shadow Tag', 'Dynamic Punch', 'Zap Cannon'],
-		validateTeam: function (team, format) {
-			var itemTable = {};
-			for (var i = 0; i < team.length; i++) {
-				var item = this.getItem(team[i].item);
-				if (!item) continue;
-				if (itemTable[item] && item.megaStone) return ["You are limited to one of each Mega Stone.", "(You have more than one " + this.getItem(item).name + ")"];
-				if (itemTable[item] && (item.id === 'redorb' || item.id === 'blueorb')) return ["You are limited to one of each Primal Orb.", "(You have more than one " + this.getItem(item).name + ")"];
-				itemTable[item] = true;
-			}
-		},
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Aegislash', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja', 'Groudon',
+			'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Landorus', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew'
+		],
 		validateSet: function (set) {
-			var template = this.getTemplate(set.species || set.name);
-			var item = this.getItem(set.item);
-			if (!item.megaEvolves && item.id !== 'blueorb' && item.id !== 'redorb') return;
-			if (template.baseSpecies === item.megaEvolves || (item.id === 'redorb' && template.baseSpecies === 'Groudon') || (item.id === 'blueorb' && template.baseSpecies === 'Kyogre')) return;
-			if (template.evos.length) return ["" + template.species + " is not allowed to hold " + item.name + " because it's not fully evolved."];
-			if (template.tier === 'Uber') return ["" + template.species + " is not allowed to hold " + item.name + " because it's in the Uber tier."];
-			if (template.species === 'Shuckle' && ['abomasite', 'aggronite', 'audinite', 'cameruptite', 'charizarditex', 'charizarditey', 'galladite', 'gyaradosite', 'heracronite', 'houndoominite', 'latiasite', 'mewtwonitey', 'sablenite', 'salamencite', 'scizorite', 'sharpedonite', 'slowbronite', 'steelixite', 'tyranitarite', 'venusaurite'].indexOf(item.id) >= 0) {
-				return ["" + template.species + " is not allowed to hold " + item.name + "."];
-			}
-			var bannedMons = {'Cresselia':1, 'Dragonite':1, 'Kyurem-Black':1, 'Lucario':1, 'Slaking':1, 'Smeargle':1, 'Regigigas':1};
-			if (template.species in bannedMons) {
-				return ["" + template.species + " is not allowed to hold a Mega Stone."];
-			}
-			if (item.id === 'beedrillite' || item.id === 'kangaskhanite') {
-				return ["" + item.name + " can only allowed be held by " + item.megaEvolves + "."];
-			}
-			switch (item.id) {
-			case 'blazikenite':
-				if (set.ability !== 'Speed Boost') return ["" + template.species + " is not allowed to hold " + item.name + "."];
-				break;
-			case 'mawilite': case 'medichamite':
-				var powerAbilities = {'Huge Power':1, 'Pure Power':1};
-				if (powerAbilities.hasOwnProperty(set.ability)) break;
-				if (!template.otherFormes) return ["" + template.species + " is not allowed to hold " + item.name + "."];
-				var allowedPower = false;
-				for (var i = 0; i < template.otherFormes.length; i++) {
-					var altTemplate = this.getTemplate(template.otherFormes[i]);
-					if ((altTemplate.isMega || altTemplate.isPrimal) && powerAbilities.hasOwnProperty(altTemplate.abilities['0'])) {
-						allowedPower = true;
-						break;
-					}
-				}
-				if (!allowedPower) return ["" + template.species + " is not allowed to hold " + item.name + "."];
-				break;
-			case 'slowbronite':
-				if (template.species === 'Regirock' || template.species === 'Steelix') return ["" + template.species + " is not allowed to hold " + item.name + "."];
-				break;
-			case 'mewtwonitey':
-				if (template.baseStats.def <= 20) return ["" + template.species + " does not have enough Defense to hold " + item.name + "."];
-				break;
-			case 'diancite':
-				if (template.baseStats.def <= 40 || template.baseStats.spd <= 40) return ["" + template.species + " does not have enough Def. or Sp. Def. to hold " + item.name + "."];
-				break;
-			case 'ampharosite': case 'garchompite': case 'heracronite':
-				if (template.baseStats.spe <= 10) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
-				break;
-			case 'cameruptite':
-				if (template.baseStats.spe <= 20) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
-				break;
-			case 'abomasite': case 'sablenite':
-				if (template.baseStats.spe <= 30) return ["" + template.species + " does not have enough Speed to hold " + item.name + "."];
-				break;
-			}
-		},
-		onBegin: function () {
-			var allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (var i = 0, len = allPokemon.length; i < len; i++) {
-				var pokemon = allPokemon[i];
-				pokemon.originalSpecies = pokemon.baseTemplate.species;
-			}
-		},
-		onSwitchInPriority: -6,
-		onSwitchIn: function (pokemon) {
-			var item = pokemon.getItem();
-			if (pokemon.isActive && !pokemon.template.isMega && !pokemon.template.isPrimal && (item.id === 'redorb' || item.id === 'blueorb') && pokemon.baseTemplate.tier !== 'Uber' && !pokemon.template.evos.length) {
-				// Primal Reversion
-				var bannedMons = {'Cresselia':1, 'Dragonite':1, 'Kyurem-Black':1, 'Lucario':1, 'Regigigas':1, 'Slaking':1, 'Smeargle':1};
-				if (!(pokemon.baseTemplate.baseSpecies in bannedMons)) {
-					var template = this.getMixedTemplate(pokemon.originalSpecies, item.id === 'redorb' ? 'Groudon-Primal' : 'Kyogre-Primal');
-					pokemon.formeChange(template);
-					pokemon.baseTemplate = template;
-
-					// Do we have a proper sprite for it?
-					if (pokemon.originalSpecies === (item.id === 'redorb' ? 'Groudon' : 'Kyogre')) {
-						pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-						this.add('detailschange', pokemon, pokemon.details);
-					} else {
-						var oTemplate = this.getTemplate(pokemon.originalSpecies);
-						this.add('-formechange', pokemon, oTemplate.species, template.requiredItem);
-						this.add('-start', pokemon, this.getTemplate(template.originalMega).requiredItem, '[silent]');
-						if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
-							this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
-						}
-					}
-					this.add('message', pokemon.name + "'s " + pokemon.getItem().name + " activated!");
-					this.add('message', pokemon.name + "'s Primal Reversion! It reverted to its primal form!");
-					pokemon.setAbility(template.abilities['0']);
-					pokemon.baseAbility = pokemon.ability;
-					pokemon.canMegaEvo = false;
-				}
-			} else {
-				var oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
-				if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
-					// Place volatiles on the Pokémon to show its mega-evolved condition and details
-					this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
-					var oTemplate = this.getTemplate(pokemon.originalSpecies);
-					if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
-						this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
-					}
+			var problems = [];
+			if (set.moves) {
+				for (var i in set.moves) {
+					var move = this.getMove(set.moves[i]);
+					if (move.category === 'Status') problems.push(set.species + "'s move " + move.name + " is banned by No Status.");
 				}
 			}
-		},
-		onSwitchOut: function (pokemon) {
-			var oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
-			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
-				this.add('-end', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
-			}
+			return problems;
 		}
 	},
 	{
-		name: "Protean Palace",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3496299/\">Protean Palace</a>"],
+		name: "MonsJustMons",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3514696/\">MonsJustMons</a>"],
 		section: "OM of the Month",
 
-		ruleset: ['OU'],
-		banlist: [],
-		onPrepareHit: function (source, target, move) {
-			var type = move.type;
-			if (type && type !== '???' && source.getTypes().join() !== type) {
-				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] Protean');
-			}
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
+		banlist: ['Arceus', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
+			'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Xerneas', 'Yveltal', 'Zekrom'
+		],
+		validateSet: function (set) {
+			set.item = '';
+			set.ability = 'None';
+			set.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+			set.ivs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+			set.nature = '';
 		}
 	},
 	{
