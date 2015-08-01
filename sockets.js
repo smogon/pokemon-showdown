@@ -238,6 +238,10 @@ if (cluster.isMaster) {
 		var socketid = null;
 		var channelid = null;
 		switch (data.charAt(0)) {
+		case '$': // $code
+			eval(data.substr(1));
+			break;
+
 		case '!': // !socketid
 			// destroy
 			socketid = data.substr(1);
