@@ -179,18 +179,28 @@ exports.Formats = [
 	{
 		name: "Doubles OU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3538960/\">np: Doubles OU Stage 2</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545903/\">np: Doubles OU Stage 3</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles OU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3535930/\">Doubles OU Viability Ranking</a>"
 		],
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Pokemon', 'Standard Doubles', 'Team Preview'],
 		banlist: ['Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
 			'Palkia', 'Rayquaza', 'Reshiram', 'Xerneas', 'Yveltal', 'Zekrom', 'Salamencite', 'Soul Dew', 'Dark Void',
 			'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder', 'Gravity ++ Spore'
 		]
+	},
+	{
+		name: "Doubles OU (suspect test)",
+		section: "ORAS Doubles",
+
+		gameType: 'doubles',
+		challengeShow: false,
+		ruleset: ['Doubles OU'],
+		banlist: []
 	},
 	{
 		name: "Doubles Ubers",
@@ -212,13 +222,11 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		ruleset: ['Doubles OU'],
-		banlist: ['Aegislash', 'Amoonguss', 'Azumarill', 'Bisharp', 'Breloom', 'Camerupt', 'Chandelure', 'Charizard', 'Conkeldurr',
-		'Cresselia', 'Diancie', 'Dragonite', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Gardevoir',
-		'Gengar', 'Greninja', 'Gyarados', 'Heatran', 'Hitmontop', 'Hydreigon', 'Kangaskhan', 'Keldeo',
-		'Kyurem-Black', 'Landorus', 'Landorus-Therian', 'Latios', 'Ludicolo', 'Mamoswine', 'Mawile', 'Metagross', 'Mew',
-		'Politoed', 'Rotom-Wash', 'Sableye', 'Scizor', 'Scrafty', 'Shaymin-Sky',
-		'Suicune', 'Sylveon', 'Talonflame', 'Terrakion', 'Thundurus', 'Togekiss',
-		'Tyranitar', 'Venusaur', 'Weavile', 'Whimsicott', 'Zapdos'
+		banlist: ['Aegislash', 'Amoonguss', 'Azumarill', 'Bisharp', 'Breloom', 'Camerupt', 'Chandelure', 'Charizard', 'Conkeldurr', 'Cresselia',
+			'Diancie', 'Dragonite', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Gardevoir', 'Gengar', 'Greninja', 'Gyarados', 'Heatran',
+			'Hitmontop', 'Hydreigon', 'Kangaskhan', 'Keldeo', 'Kyurem-Black', 'Landorus', 'Landorus-Therian', 'Latios', 'Ludicolo', 'Mamoswine',
+			'Mawile', 'Metagross', 'Mew', 'Politoed', 'Rotom-Wash', 'Sableye', 'Scizor', 'Scrafty', 'Shaymin-Sky', 'Suicune',
+			'Sylveon', 'Talonflame', 'Terrakion', 'Thundurus', 'Togekiss', 'Tyranitar', 'Venusaur', 'Weavile', 'Whimsicott', 'Zapdos'
 		]
 	},
 	{
@@ -228,14 +236,12 @@ exports.Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Doubles UU'],
-		banlist: ['Snorlax', 'Machamp', 'Lopunny', 'Galvantula', 'Mienshao', 'Infernape', 'Aromatisse',
-		'Clawitzer', 'Kyurem', 'Flygon', 'Lucario', 'Alakazam', 'Gastrodon', 'Bronzong', 'Chandelure',
-		'Dragalge', 'Mamoswine', 'Genesect', 'Arcanine', 'Volcarona', 'Aggron', 'Manectric', 'Salamence',
-		'Tornadus', 'Porygon2', 'Latias', 'Meowstic', 'Ninetales', 'Crobat', 'Blastoise', 'Darmanitan',
-		'Sceptile', 'Jirachi', 'Goodra', 'Deoxys-Attack', 'Milotic', 'Victini', 'Hariyama', 'Crawdaunt',
-		'Aerodactyl', 'Abomasnow', 'Krookodile', 'Cofagrigus', 'Druddigon', 'Escavalier', 'Dusclops',
-		'Slowbro', 'Slowking', 'Eelektross', 'Spinda', 'Cloyster', 'Raikou', 'Thundurus-Therian', 'Swampert',
-		'Nidoking', 'Aurorus', 'Granbull', 'Braviary'
+		banlist: ['Snorlax', 'Machamp', 'Lopunny', 'Galvantula', 'Mienshao', 'Infernape', 'Aromatisse', 'Clawitzer', 'Kyurem', 'Flygon',
+			'Lucario', 'Alakazam', 'Gastrodon', 'Bronzong', 'Chandelure', 'Dragalge', 'Mamoswine', 'Genesect', 'Arcanine', 'Volcarona',
+			'Aggron', 'Manectric', 'Salamence', 'Tornadus', 'Porygon2', 'Latias', 'Meowstic', 'Ninetales', 'Crobat', 'Blastoise',
+			'Darmanitan', 'Sceptile', 'Jirachi', 'Goodra', 'Deoxys-Attack', 'Milotic', 'Victini', 'Hariyama', 'Crawdaunt', 'Aerodactyl',
+			'Abomasnow', 'Krookodile', 'Cofagrigus', 'Druddigon', 'Escavalier', 'Dusclops', 'Slowbro', 'Slowking', 'Eelektross', 'Spinda',
+			'Cloyster', 'Raikou', 'Thundurus-Therian', 'Swampert', 'Nidoking', 'Aurorus', 'Granbull', 'Braviary'
 		]
 	},
 	{
