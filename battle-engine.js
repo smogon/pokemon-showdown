@@ -2759,8 +2759,15 @@ Battle = (function () {
 		}
 		if (side.active[pos]) {
 			var oldActive = side.active[pos];
-			var lastMove = null;
-			lastMove = this.getMove(oldActive.lastMove);
+			if (this.cancelMove(oldActive)) {
+				for (var i = 0; i < side.foe.active.length; i++) {
+					if (side.foe.active[i].isStale >= 2) {
+						oldActive.isStaleCon++;
+						oldActive.isStaleSource = 'drag';
+						break;
+					}
+				}
+			}
 			if (oldActive.switchCopyFlag === 'copyvolatile') {
 				delete oldActive.switchCopyFlag;
 				pokemon.copyVolatileFrom(oldActive);
