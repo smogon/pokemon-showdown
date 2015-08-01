@@ -728,7 +728,7 @@ exports.Formats = [
 				if (side.sideConditions['goldenmushroom'] && side.sideConditions['goldenmushroom'].duration === 1) {
 					this.add('-message', "The effect of " + side.name + "'s Golden Mushroom wore off.");
 					this.add('-end', side.active[0], 'goldenmushroom', '[silent]');
-					this.removeSideCondition('goldenmushroom');
+					side.removeSideCondition('goldenmushroom');
 				}
 				switch (side.item) {
 				case 'lightning':
