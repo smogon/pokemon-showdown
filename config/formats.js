@@ -288,6 +288,29 @@ exports.Formats = [
 		}
 	},
 	{
+		name: "Pikachu Cup",
+		section: "ORAS Doubles",
+
+		gameType: 'doubles',
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		banlist: ['Arceus', 'Raikou', 'Thundurus', 'Thundurus-Therian', 'Zapdos', 'Zekrom'],
+		validateTeam: function (team, format) {
+			if (team.length < 4) return ['You must bring at least four Pok\u00e9mon.'];
+			for (var i = 0; i < team.length; i++) {
+				var template = this.getTemplate(team[i].species);
+				if (!template.types || template.types.indexOf('Electric') < 0) return ["Only Electric-type Pok\u00e9mon are allowed."];
+			}
+		},
+		onBegin: function () {
+			this.debug('cutting down to 4');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 4);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 4);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	{
 		name: "Doubles Hackmons Cup",
 		section: "ORAS Doubles",
 
