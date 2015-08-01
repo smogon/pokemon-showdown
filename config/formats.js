@@ -690,7 +690,7 @@ exports.Formats = [
 				var moves = pokemon.moveset;
 				for (var i = 0; i < moves.length; i++) {
 					if (moves[i].id !== 'swift') {
-						this.disableMove(pokemon.disableMove(moves[i].id, false));
+						pokemon.disableMove(moves[i].id, false);
 					}
 				}
 			}
