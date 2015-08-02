@@ -445,6 +445,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] Rainbow Road",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "OM of the Month",
 
 		team: "randomRainbow",
