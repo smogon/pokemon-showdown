@@ -406,7 +406,7 @@ exports.Formats = [
 
 	{
 		name: "No Status",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3540979/\">No Status</a>"],
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3542555/\">No Status</a>"],
 		section: "OM of the Month",
 		column: 2,
 
