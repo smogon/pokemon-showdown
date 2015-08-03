@@ -363,7 +363,7 @@ exports.BattleFormatsData = {
 	clefairy: {
 		randomBattleMoves: ["healingwish","reflect","thunderwave","lightscreen","toxic","fireblast","encore","wish","protect","aromatherapy","stealthrock","moonblast","knockoff","moonlight"],
 		randomDoubleBattleMoves: ["reflect","thunderwave","lightscreen","safeguard","fireblast","followme","protect","moonblast"],
-		tier: "NFE"
+		tier: "PU"
 	},
 	clefable: {
 		randomBattleMoves: ["calmmind","softboiled","fireblast","moonblast","stealthrock","thunderwave"],
