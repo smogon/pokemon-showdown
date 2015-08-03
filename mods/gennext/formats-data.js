@@ -1,4 +1,8 @@
 exports.BattleFormatsData = {
+	aegislash: {
+		inherit: true,
+		tier: 'OU'
+	},
 	blaziken: {
 		inherit: true,
 		tier: 'OU'
