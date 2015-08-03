@@ -261,6 +261,7 @@ var commands = exports.commands = {
 		var id = toId(target);
 		if (!id) return this.parse('/help makechatroom');
 		if (Rooms.rooms[id]) return this.sendReply("The room '" + target + "' already exists.");
+		if (Rooms.get(id) || Rooms.aliases[id]) return this.sendReply("The room you are trying to make is currently set as an alias for an existing room. (" + Rooms.aliases[id].title + ")");
 		if (Rooms.global.addChatRoom(target)) {
 			if (cmd === 'makeprivatechatroom') {
 				var targetRoom = Rooms.search(target);
