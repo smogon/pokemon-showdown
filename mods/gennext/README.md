@@ -508,7 +508,7 @@ Bans:
 
 Specifically, differences from regular OU:
 
-- unbanned: Gengarite, Kangaskhanite, Lucarionite, Blaziken, Genesect, Mawilite, Salamencite
+- unbanned: Gengarite, Kangaskhanite, Lucarionite, Aegislash, Blaziken, Genesect, Mawilite, Salamencite
 
 - banned: Kyurem, Kyurem-Black
 
