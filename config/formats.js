@@ -375,7 +375,7 @@ exports.Formats = [
 		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
 		requirePentagon: true,
 		validateTeam: function (team, format) {
-			if (team.length < 6) return ['You must have six Pokémon.'];
+			if (team.length < 6) return ['You must have six Pok\u00e9mon.'];
 		}
 	},
 	{
@@ -451,10 +451,10 @@ exports.Formats = [
 		team: "randomRainbow",
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
-			this.add('message', "The last attack on each Pokémon is based on their Pokédex color.");
+			this.add('message', "The last attack on each Pok\u00e9mon is based on their Pok\u00e9dex color.");
 			this.add('-message', "Red/Pink beats Yellow/Green, which beats Blue/Purple, which beats Red/Pink.");
-			this.add('-message', "Using a color move on a Pokemon in the same color group is a neutral hit.");
-			this.add('-message', "Use /details [POKEMON] to check its Pokédex color.");
+			this.add('-message', "Using a color move on a Pok\u00e9mon in the same color group is a neutral hit.");
+			this.add('-message', "Use /details [POKEMON] to check its Pok\u00e9dex color.");
 
 			var allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			var physicalnames = {
@@ -492,7 +492,7 @@ exports.Formats = [
 			case 0:
 				side.item = 'lightning';
 				side.hadItem = true;
-				this.add('message', "Lightning suddenly struck " + side.name + " and shrank their Pokémon!");
+				this.add('message', "Lightning suddenly struck " + side.name + " and shrank their Pok\u00e9mon!");
 				this.add('-start', pokemon, 'shrunken', '[silent]');
 				break;
 			case 1:
