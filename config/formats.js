@@ -591,6 +591,7 @@ exports.Formats = [
 				}
 			}
 		},
+		onEffectivenessPriority: -5,
 		onEffectiveness: function (typeMod, target, type, move) {
 			if (move.id !== 'swift') return;
 			// Only calculate color effectiveness once
