@@ -222,11 +222,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (!move.flags['protect']) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('Protect');
 					return;
 				}
+				if (!move.flags['protect']) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -871,11 +871,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (!move.flags['protect']) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('Protect');
 					return;
 				}
+				if (!move.flags['protect']) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {

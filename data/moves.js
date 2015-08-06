@@ -3944,7 +3944,6 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 2,
 		flags: {mirror: 1},
-		breaksProtect: true,
 		onHit: function (target) {
 			var feinted = false;
 			if (target.removeVolatile('protect') || target.removeVolatile('kingsshield') || target.removeVolatile('spikyshield')) {
@@ -7316,11 +7315,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (!move.flags['protect'] || move.category === 'Status') return;
 				if (move.breaksProtect) {
 					target.removeVolatile('kingsshield');
 					return;
 				}
+				if (!move.flags['protect'] || move.category === 'Status') return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -10179,11 +10178,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (!move.flags['protect']) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('Protect');
 					return;
 				}
+				if (!move.flags['protect']) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -10536,6 +10535,10 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 4,
 			onTryHit: function (target, source, effect) {
+				if (effect.breaksProtect) {
+					target.side.removeSideCondition('quickguard');
+					return;
+				}
 				// Quick Guard blocks moves with positive priority, even those given increased priority by Prankster or Gale Wings.
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings)
 				if (effect && (effect.id === 'feint' || effect.priority <= 0 || effect.target === 'self')) {
@@ -12778,11 +12781,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (!move.flags['protect']) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('spikyshield');
 					return;
 				}
+				if (!move.flags['protect']) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -15315,6 +15318,10 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 4,
 			onTryHit: function (target, source, effect) {
+				if (effect.breaksProtect) {
+					target.side.removeSideCondition('wideguard');
+					return;
+				}
 				// Wide Guard blocks damaging spread moves
 				if (effect && (effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes'))) {
 					return;

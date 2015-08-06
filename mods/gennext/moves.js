@@ -188,11 +188,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (target.volatiles.substitute || !move.flags['protect']) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('Protect');
 					return;
 				}
+				if (target.volatiles.substitute || !move.flags['protect']) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -214,11 +214,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (target.volatiles.substitute || !move.flags['protect'] || move.category === 'Status') return;
 				if (move.breaksProtect) {
 					target.removeVolatile('kingsshield');
 					return;
 				}
+				if (target.volatiles.substitute || !move.flags['protect'] || move.category === 'Status') return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -243,11 +243,11 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (target.volatiles.substitute) return;
 				if (move.breaksProtect) {
 					target.removeVolatile('spikyshield');
 					return;
 				}
+				if (target.volatiles.substitute) return;
 				if (move && (move.target === 'self' || move.id === 'suckerpunch')) return;
 				this.add('-activate', target, 'move: Protect');
 				if (move.flags['contact']) {
