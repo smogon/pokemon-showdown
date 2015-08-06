@@ -48,7 +48,7 @@ global.toId = function (text) {
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
-global.Tools = require('./tools.js');
+global.Tools = require('./tools.js').includeData();
 
 var Battle, BattleSide, BattlePokemon;
 

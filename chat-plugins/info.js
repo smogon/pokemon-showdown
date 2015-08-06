@@ -12,7 +12,7 @@
 
 const RESULTS_MAX_LENGTH = 10;
 
-var commands = exports.commands = {
+var commands = {
 
 	ip: 'whois',
 	rooms: 'whois',
@@ -2360,3 +2360,14 @@ var commands = exports.commands = {
 	},
 	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: ~ # with global authority"]
 };
+
+process.nextTick(function () {
+	// This slow operation is done *after* we start listening for connections
+	// to the server. Anybody who connects while data is loading will
+	// have to wait a couple seconds before they are able to join the server, but
+	// at least they probably won't receive a connection error message.
+
+	Tools.includeData();
+	exports.commands = commands;
+	Object.merge(CommandParser.commands, commands);
+});
