@@ -363,7 +363,7 @@ global.Sockets = require('./sockets.js');
 // to the server. Anybody who connects while this require() is running will
 // have to wait a couple seconds before they are able to join the server, but
 // at least they probably won't receive a connection error message.
-global.Tools = require('./tools.js');
+global.Tools = require('./tools.js').includeData();
 
 // After loading tools, generate and cache the format list.
 Rooms.global.formatListText = Rooms.global.getFormatListText();
