@@ -1456,10 +1456,11 @@ var commands = exports.commands = {
 			return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
 		} else if (target === 'formats') {
 			try {
+				var toolsLoaded = !!Tools.isLoaded;
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
-				global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+				global.Tools = require('./tools.js')[toolsLoaded ? 'includeData' : 'includeFormats'](); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				Rooms.global.formatListText = Rooms.global.getFormatListText();
 				// respawn validator processes
@@ -1475,10 +1476,11 @@ var commands = exports.commands = {
 			}
 		} else if (target === 'learnsets') {
 			try {
+				var toolsLoaded = !!Tools.isLoaded;
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
-				global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+				global.Tools = require('./tools.js')[toolsLoaded ? 'includeData' : 'includeFormats'](); // note: this will lock up the server for a few seconds
 
 				return this.sendReply("Learnsets have been hotpatched.");
 			} catch (e) {
