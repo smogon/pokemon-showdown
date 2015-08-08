@@ -84,6 +84,7 @@ var Battle = (function () {
 		this.format = toId(format);
 		this.players = [null, null];
 		this.playerids = [null, null];
+		this.lastPlayers = [room.p1.userid, room.p2.userid];
 		this.playerTable = {};
 		this.requests = {};
 
@@ -101,6 +102,7 @@ var Battle = (function () {
 	Battle.prototype.active = false;
 	Battle.prototype.players = null;
 	Battle.prototype.playerids = null;
+	Battle.prototype.lastPlayers = null;
 	Battle.prototype.playerTable = null;
 	Battle.prototype.format = null;
 	Battle.prototype.room = null;
@@ -267,6 +269,7 @@ var Battle = (function () {
 			}
 			this.playerTable[player.userid] = 'p' + (i + 1);
 		}
+		if (this.active) this.lastPlayers = this.playerids.slice();
 	};
 	Battle.prototype.getPlayer = function (slot) {
 		if (typeof slot === 'string') {

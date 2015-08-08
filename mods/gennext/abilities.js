@@ -7,9 +7,9 @@ exports.BattleAbilities = {
 	},
 	"swiftswim": {
 		inherit: true,
-		onModifySpe: function (speMod, pokemon) {
+		onModifySpe: function (spe, pokemon) {
 			if (this.isWeather(['raindance', 'primordialsea'])) {
-				return this.chain(speMod, 1.5);
+				return this.chainModify(1.5);
 			}
 		}
 	},
@@ -21,9 +21,9 @@ exports.BattleAbilities = {
 	},
 	"chlorophyll": {
 		inherit: true,
-		onModifySpe: function (speMod) {
+		onModifySpe: function (spe) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
-				return this.chain(speMod, 1.5);
+				return this.chainModify(1.5);
 			}
 		}
 	},
@@ -41,9 +41,9 @@ exports.BattleAbilities = {
 	},
 	"sandrush": {
 		inherit: true,
-		onModifySpe: function (speMod, pokemon) {
+		onModifySpe: function (spe, pokemon) {
 			if (this.isWeather('sandstorm')) {
-				return this.chain(speMod, 1.5);
+				return this.chainModify(1.5);
 			}
 		}
 	},
@@ -96,7 +96,7 @@ exports.BattleAbilities = {
 			}
 			return basePower * 7 / 8;
 		},
-		onAccuracy: function () {}
+		onModifyAccuracy: function () {}
 	},
 	"sandveil": {
 		inherit: true,
@@ -108,7 +108,7 @@ exports.BattleAbilities = {
 				return basePower * 4 / 5;
 			}
 		},
-		onAccuracy: function () {}
+		onModifyAccuracy: function () {}
 	},
 	"waterveil": {
 		inherit: true,
@@ -231,7 +231,7 @@ exports.BattleAbilities = {
 	"compoundeyes": {
 		desc: "The accuracy of this Pokemon's moves receives a 60% increase; for example, a 50% accurate move becomes 80% accurate.",
 		shortDesc: "This Pokemon's moves have their Accuracy boosted to 1.6x.",
-		onSourceAccuracy: function (accuracy) {
+		onSourceModifyAccuracy: function (accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('compoundeyes - enhancing accuracy');
 			return accuracy * 1.6;

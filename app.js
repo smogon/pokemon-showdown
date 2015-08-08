@@ -100,9 +100,11 @@ if (Config.watchConfig) {
 }
 
 // Autoconfigure the app when running in cloud hosting environments:
-var cloudenv = require('cloud-env');
-Config.bindAddress = cloudenv.get('IP', Config.bindAddress || '');
-Config.port = cloudenv.get('PORT', Config.port);
+try {
+	var cloudenv = require('cloud-env');
+	Config.bindaddress = cloudenv.get('IP', Config.bindaddress || '');
+	Config.port = cloudenv.get('PORT', Config.port);
+} catch (e) {}
 
 if (require.main === module && process.argv[2] && parseInt(process.argv[2])) {
 	Config.port = parseInt(process.argv[2]);
@@ -128,16 +130,14 @@ global.ResourceMonitor = {
 	 */
 	log: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) {
-			Rooms.rooms.staff.add('||' + text);
-			Rooms.rooms.staff.update();
+		if (Rooms.get('staff')) {
+			Rooms.get('staff').add('||' + text).update();
 		}
 	},
 	logHTML: function (text) {
 		console.log(text);
-		if (Rooms.rooms.staff) {
-			Rooms.rooms.staff.add('|html|' + text);
-			Rooms.rooms.staff.update();
+		if (Rooms.get('staff')) {
+			Rooms.get('staff').add('|html|' + text).update();
 		}
 	},
 	countConnection: function (ip, name) {
@@ -303,52 +303,21 @@ global.toId = function (text) {
 	} else if (text && text.userid) {
 		text = text.userid;
 	}
-
-	return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
+	if (typeof text !== 'string' && typeof text !== 'number') return '';
+	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
-/**
- * Sanitizes a username or Pokemon nickname
- *
- * Returns the passed name, sanitized for safe use as a name in the PS
- * protocol.
- *
- * Such a string must uphold these guarantees:
- * - must not contain any ASCII whitespace character other than a space
- * - must not start or end with a space character
- * - must not contain any of: | , [ ]
- * - must not be the empty string
- *
- * If no such string can be found, returns the empty string. Calling
- * functions are expected to check for that condition and deal with it
- * accordingly.
- *
- * toName also enforces that there are not multiple space characters
- * in the name, although this is not strictly necessary for safety.
- */
-global.toName = function (name) {
-	name = string(name);
-	name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
-	if (name.length > 18) name = name.substr(0, 18).trim();
-	return name;
-};
-
-/**
- * Safely ensures the passed variable is a string
- * Simply doing '' + str can crash if str.toString crashes or isn't a function
- * If we're expecting a string and being given anything that isn't a string
- * or a number, it's safe to assume it's an error, and return ''
- */
-global.string = function (str) {
-	if (typeof str === 'string' || typeof str === 'number') return '' + str;
-	return '';
-};
+global.Tools = require('./tools.js').includeFormats();
 
 global.LoginServer = require('./loginserver.js');
 
 global.Users = require('./users.js');
 
 global.Rooms = require('./rooms.js');
+
+// Generate and cache the format list.
+Rooms.global.formatListText = Rooms.global.getFormatListText();
+
 
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier.js');
@@ -393,15 +362,6 @@ global.Sockets = require('./sockets.js');
 /*********************************************************
  * Set up our last global
  *********************************************************/
-
-// This slow operation is done *after* we start listening for connections
-// to the server. Anybody who connects while this require() is running will
-// have to wait a couple seconds before they are able to join the server, but
-// at least they probably won't receive a connection error message.
-global.Tools = require('./tools.js');
-
-// After loading tools, generate and cache the format list.
-Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.TeamValidator = require('./team-validator.js');
 

@@ -345,7 +345,7 @@ exports.BattleItems = {
 		},
 		num: 183,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"berryjuice": {
 		id: "berryjuice",
@@ -513,7 +513,7 @@ exports.BattleItems = {
 		},
 		num: 165,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"brightpowder": {
 		id: "brightpowder",
@@ -522,7 +522,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onAccuracy: function (accuracy) {
+		onModifyAccuracy: function (accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('brightpowder - decreasing accuracy');
 			return accuracy * 0.9;
@@ -794,8 +794,8 @@ exports.BattleItems = {
 		onModifyMove: function (move, pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
-		onModifySpe: function (speMod) {
-			return this.chain(speMod, 1.5);
+		onModifySpe: function (spe) {
+			return this.chainModify(1.5);
 		},
 		isChoice: true,
 		num: 287,
@@ -915,7 +915,7 @@ exports.BattleItems = {
 		},
 		num: 175,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"coverfossil": {
 		id: "coverfossil",
@@ -1176,7 +1176,7 @@ exports.BattleItems = {
 		},
 		num: 182,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"duskball": {
 		id: "duskball",
@@ -1730,7 +1730,7 @@ exports.BattleItems = {
 		},
 		num: 173,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"gripclaw": {
 		id: "gripclaw",
@@ -1902,7 +1902,7 @@ exports.BattleItems = {
 		},
 		num: 172,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"houndoominite": {
 		id: "houndoominite",
@@ -2031,8 +2031,8 @@ exports.BattleItems = {
 		onNegateImmunity: function (pokemon, type) {
 			if (type === 'Ground') return false;
 		},
-		onModifySpe: function (speMod) {
-			return this.chain(speMod, 0.5);
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
 		},
 		num: 278,
 		gen: 4,
@@ -2156,7 +2156,7 @@ exports.BattleItems = {
 		},
 		num: 170,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"kangaskhanite": {
 		id: "kangaskhanite",
@@ -2268,7 +2268,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onAccuracy: function (accuracy) {
+		onModifyAccuracy: function (accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('lax incense - decreasing accuracy');
 			return accuracy * 0.9;
@@ -2327,6 +2327,19 @@ exports.BattleItems = {
 			move.pp += 10;
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', move.move);
+			if (pokemon.item !== 'leppaberry') {
+				var foeActive = pokemon.side.foe.active;
+				var foeIsStale = false;
+				for (var i = 0; i < 1; i++) {
+					if (foeActive.isStale >= 2) {
+						foeIsStale = true;
+						break;
+					}
+				}
+				if (!foeIsStale) return;
+			}
+			pokemon.isStale = 2;
+			pokemon.isStaleSource = 'useleppa';
 		},
 		num: 154,
 		gen: 3,
@@ -2546,8 +2559,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 60
 		},
-		onModifySpe: function (speMod) {
-			return this.chain(speMod, 0.5);
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
 		},
 		num: 215,
 		gen: 3,
@@ -2608,18 +2621,19 @@ exports.BattleItems = {
 		},
 		num: 176,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"mail": {
 		id: "mail",
 		name: "Mail",
 		spritenum: 403,
 		onTakeItem: function (item, source) {
-			if (!this.activeMove || this.activeMove.id !== 'knockoff') return false;
+			if (!this.activeMove) return false;
+			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
 		},
 		isUnreleased: true,
 		gen: 2,
-		desc: "This item cannot be given to or taken from a Pokemon, except by Knock Off."
+		desc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief."
 	},
 	"manectite": {
 		id: "manectite",
@@ -2725,6 +2739,9 @@ exports.BattleItems = {
 					if (pokemon.volatiles[conditions[i]]) {
 						for (var j = 0; j < conditions.length; j++) {
 							pokemon.removeVolatile(conditions[j]);
+							if (conditions[j] === 'attract') {
+								this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
+							}
 						}
 						return;
 					}
@@ -2738,6 +2755,9 @@ exports.BattleItems = {
 					if (!pokemon.useItem()) return;
 					for (var j = 0; j < conditions.length; j++) {
 						pokemon.removeVolatile(conditions[j]);
+						if (conditions[j] === 'attract') {
+							this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
+						}
 					}
 					return;
 				}
@@ -2787,7 +2807,7 @@ exports.BattleItems = {
 		spritenum: 287,
 		onModifyDefPriority: 2,
 		onModifyDef: function (def, pokemon) {
-			if (pokemon.template.species === 'Ditto') {
+			if (pokemon.template.species === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
 			}
 		},
@@ -2879,11 +2899,11 @@ exports.BattleItems = {
 		},
 		effect: {
 			duration: 2,
-			onModifyMove: function (move, pokemon) {
-				this.add('-enditem', pokemon, 'Micle Berry');
-				pokemon.removeVolatile('micleberry');
-				if (typeof move.accuracy === 'number') {
-					move.accuracy *= 1.2;
+			onSourceModifyAccuracy: function (accuracy, target, source) {
+				this.add('-enditem', source, 'Micle Berry');
+				source.removeVolatile('micleberry');
+				if (typeof accuracy === 'number') {
+					return accuracy * 1.2;
 				}
 			}
 		},
@@ -2982,7 +3002,7 @@ exports.BattleItems = {
 		},
 		num: 166,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"nestball": {
 		id: "nestball",
@@ -3028,7 +3048,7 @@ exports.BattleItems = {
 		},
 		num: 178,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"normalgem": {
 		id: "normalgem",
@@ -3133,7 +3153,7 @@ exports.BattleItems = {
 		},
 		num: 180,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"parkball": {
 		id: "parkball",
@@ -3277,7 +3297,7 @@ exports.BattleItems = {
 		},
 		num: 168,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"pinsirite": {
 		id: "pinsirite",
@@ -3381,7 +3401,7 @@ exports.BattleItems = {
 		},
 		num: 169,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"powerherb": {
 		id: "powerherb",
@@ -3438,7 +3458,7 @@ exports.BattleItems = {
 		},
 		num: 171,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"quickball": {
 		id: "quickball",
@@ -3472,9 +3492,9 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifySpe: function (speMod, pokemon) {
-			if (pokemon.template.species === 'Ditto') {
-				return this.chain(speMod, 2);
+		onModifySpe: function (spe, pokemon) {
+			if (pokemon.template.species === 'Ditto' && !pokemon.transformed) {
+				return this.chainModify(2);
 			}
 		},
 		num: 274,
@@ -3492,7 +3512,7 @@ exports.BattleItems = {
 		},
 		num: 177,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"rarebone": {
 		id: "rarebone",
@@ -3503,7 +3523,7 @@ exports.BattleItems = {
 		},
 		num: 106,
 		gen: 4,
-		desc: "No competitive use."
+		desc: "No competitive use other than when used with Fling."
 	},
 	"rawstberry": {
 		id: "rawstberry",
@@ -3577,7 +3597,7 @@ exports.BattleItems = {
 		},
 		num: 164,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"redcard": {
 		id: "redcard",
@@ -4228,7 +4248,7 @@ exports.BattleItems = {
 		},
 		num: 179,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"splashplate": {
 		id: "splashplate",
@@ -4430,7 +4450,7 @@ exports.BattleItems = {
 		},
 		num: 174,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"tangaberry": {
 		id: "tangaberry",
@@ -4622,7 +4642,7 @@ exports.BattleItems = {
 		},
 		num: 181,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"waveincense": {
 		id: "waveincense",
@@ -4668,7 +4688,7 @@ exports.BattleItems = {
 		},
 		num: 167,
 		gen: 3,
-		desc: "No competitive use."
+		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck."
 	},
 	"whiteherb": {
 		id: "whiteherb",
@@ -4715,9 +4735,9 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifyMove: function (move) {
-			if (typeof move.accuracy === 'number') {
-				move.accuracy *= 1.1;
+		onSourceModifyAccuracy: function (accuracy) {
+			if (typeof accuracy === 'number') {
+				return accuracy * 1.1;
 			}
 		},
 		num: 265,
@@ -4818,14 +4838,14 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifyMove: function (move, user, target) {
-			if (typeof move.accuracy === 'number' && !this.willMove(target)) {
+		onSourceModifyAccuracy: function (accuracy, target) {
+			if (typeof accuracy === 'number' && !this.willMove(target)) {
 				this.debug('Zoom Lens boosting accuracy');
-				move.accuracy *= 1.2;
+				return accuracy * 1.2;
 			}
 		},
 		num: 276,
 		gen: 4,
-		desc: "The accuracy of attacks by the holder is 1.2x if it is the last to move in a turn."
+		desc: "The accuracy of attacks by the holder is 1.2x if it moves after its target."
 	}
 };

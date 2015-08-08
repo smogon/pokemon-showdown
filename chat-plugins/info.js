@@ -10,7 +10,9 @@
  * @license MIT license
  */
 
-var commands = exports.commands = {
+const RESULTS_MAX_LENGTH = 10;
+
+var commands = {
 
 	ip: 'whois',
 	rooms: 'whois',
@@ -18,16 +20,55 @@ var commands = exports.commands = {
 	alts: 'whois',
 	whoare: 'whois',
 	whois: function (target, room, user, connection, cmd) {
+		if (room.id === 'staff' && !this.canBroadcast()) return;
 		var targetUser = this.targetUserOrSelf(target, user.group === Config.groups.default.global);
 		if (!targetUser) {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
+		var showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
+		if (showAll && !user.can('lock') && targetUser !== user) {
+			return this.errorReply("/alts - Access denied.");
+		}
 
-		this.sendReply("|raw|User: " + targetUser.name + (!targetUser.connected ? ' <font color="gray"><em>(offline)</em></font>' : ''));
-		if (user.can('alts', targetUser)) {
+		var buf = '<strong class="username"><small style="display:none">' + targetUser.group + '</small>' + Tools.escapeHTML(targetUser.name) + '</strong> ' + (!targetUser.connected ? ' <em style="color:gray">(offline)</em>' : '');
+		if (Config.groups.bySymbol[targetUser.group] && Config.groups.bySymbol[targetUser.group].name) {
+			buf += "<br />" + Config.groups.bySymbol[targetUser.group].name + " (" + targetUser.group + ")";
+		}
+		if (targetUser.isSysop) {
+			buf += "<br />(Pok&eacute;mon Showdown System Operator)";
+		}
+		if (!targetUser.registered) {
+			buf += "<br />(Unregistered)";
+		}
+		var publicrooms = "";
+		var hiddenrooms = "";
+		var privaterooms = "";
+		for (var i in targetUser.roomCount) {
+			if (i === 'global') continue;
+			var targetRoom = Rooms.get(i);
+
+			var output = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			if (targetRoom.isPrivate === true) {
+				if (privaterooms) privaterooms += " | ";
+				privaterooms += output;
+			} else if (targetRoom.isPrivate) {
+				if (hiddenrooms) hiddenrooms += " | ";
+				hiddenrooms += output;
+			} else {
+				if (publicrooms) publicrooms += " | ";
+				publicrooms += output;
+			}
+		}
+		buf += '<br />Rooms: ' + (publicrooms || '<em>(no public rooms)</em>');
+
+		if (!showAll) {
+			return this.sendReplyBox(buf);
+		}
+		buf += '<br />';
+		if (user.can('alts', targetUser) || user.can('alts') && user === targetUser) {
 			var alts = targetUser.getAlts(true);
 			var output = Object.keys(targetUser.prevNames).join(", ");
-			if (output) this.sendReply("Previous names: " + output);
+			if (output) buf += "<br />Previous names: " + Tools.escapeHTML(output);
 
 			for (var j = 0; j < alts.length; ++j) {
 				var targetAlt = Users.get(alts[j]);
@@ -35,63 +76,40 @@ var commands = exports.commands = {
 				if (Config.groups.bySymbol[targetAlt.group] && Config.groups.bySymbol[user.group] &&
 					Config.groups.bySymbol[targetAlt.group].rank > Config.groups.bySymbol[user.group].rank) continue;
 
-				this.sendReply("|raw|Alt: " + targetAlt.name + (!targetAlt.connected ? ' <font color="gray"><em>(offline)</em></font>' : ''));
+				buf += '<br />Alt: <span class="username">' + Tools.escapeHTML(targetAlt.name) + '</span>' + (!targetAlt.connected ? " <em style=\"color:gray\">(offline)</em>" : "");
 				output = Object.keys(targetAlt.prevNames).join(", ");
-				if (output) this.sendReply("Previous names: " + output);
+				if (output) buf += "<br />Previous names: " + output;
 			}
 			if (targetUser.locked) {
+				buf += '<br />Locked: ' + targetUser.locked;
 				switch (targetUser.locked) {
 				case '#dnsbl':
-					this.sendReply("Locked: IP is in a DNS-based blacklist. ");
+					buf += " - IP is in a DNS-based blacklist";
 					break;
 				case '#range':
-					this.sendReply("Locked: IP or host is in a temporary range-lock.");
+					buf += " - IP or host is in a temporary range-lock";
 					break;
 				case '#hostfilter':
-					this.sendReply("Locked: host is permanently locked for being a proxy.");
+					buf += " - host is permanently locked for being a proxy";
 					break;
-				default:
-					this.sendReply("Locked under the username: " + targetUser.locked);
 				}
 			}
-		}
-		if (Config.groups.bySymbol[targetUser.group] && Config.groups.bySymbol[targetUser.group].name) {
-			this.sendReply("Group: " + Config.groups.bySymbol[targetUser.group].name + " (" + targetUser.group + ")");
-		}
-		if (targetUser.isSysop) {
-			this.sendReply("(Pok\xE9mon Showdown System Operator)");
-		}
-		if (!targetUser.registered) {
-			this.sendReply("(Unregistered)");
-		}
-		if ((cmd === 'ip' || cmd === 'whoare') && (user.can('ip', targetUser) || user === targetUser)) {
-			var ips = Object.keys(targetUser.ips);
-			this.sendReply("IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", "));
-			this.sendReply("Host: " + targetUser.latestHost);
-		}
-		var publicrooms = "In rooms: ";
-		var hiddenrooms = "In hidden rooms: ";
-		var first = true;
-		var hiddencount = 0;
-		for (var i in targetUser.roomCount) {
-			var targetRoom = Rooms.get(i);
-			if (i === 'global' || targetRoom.isPrivate === true) continue;
-
-			var output = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
-			if (targetRoom.isPrivate) {
-				if (hiddencount > 0) hiddenrooms += " | ";
-				++hiddencount;
-				hiddenrooms += output;
-			} else {
-				if (!first) publicrooms += " | ";
-				first = false;
-				publicrooms += output;
+			if (targetUser.semilocked) {
+				buf += '<br />Semilocked: ' + targetUser.semilocked;
 			}
 		}
-		this.sendReply('|raw|' + publicrooms);
-		if (cmd === 'whoare' && user.can('lock') && hiddencount > 0) {
-			this.sendReply('|raw|' + hiddenrooms);
+		if ((user.can('ip', targetUser) || user === targetUser)) {
+			var ips = Object.keys(targetUser.ips);
+			buf += "<br /> IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ");
+			buf += "<br />Host: " + targetUser.latestHost;
 		}
+		if ((user === targetUser || user.can('alts')) && hiddenrooms) {
+			buf += '<br />Hidden rooms: ' + hiddenrooms;
+		}
+		if ((user === targetUser || user.hasConsoleAccess(connection)) && privaterooms) {
+			buf += '<br />Private rooms: ' + privaterooms;
+		}
+		this.sendReplyBox(buf);
 	},
 	whoishelp: ["/whois - Get details on yourself: alts, group, IP address, and rooms.",
 		"/whois [username] - Get details on a username: alts (Requires: " + Users.getGroupsThatCan('alts').join(" ") + "), group, IP address (Requires: " + Users.getGroupsThatCan('ip').join(" ") + "), and rooms."],
@@ -318,8 +336,8 @@ var commands = exports.commands = {
 				return '<font color=#585858>' + detail + (details[detail] !== '' ? ':</font> ' + details[detail] : '</font>');
 			}).join("&nbsp;|&ThickSpace;") + '</font>';
 
-			if (isSnatch) buffer += '&nbsp;|&ThickSpace;<a href="http://pokemonshowdown.com/dex/moves/snatch"><font size="1">Snatchable Moves</font></a>';
-			if (isMirrorMove) buffer += '&nbsp;|&ThickSpace;<a href="http://pokemonshowdown.com/dex/moves/mirrormove"><font size="1">Mirrorable Moves</font></a>';
+			if (isSnatch) buffer += '&nbsp;|&ThickSpace;<a href="https://pokemonshowdown.com/dex/moves/snatch"><font size="1">Snatchable Moves</font></a>';
+			if (isMirrorMove) buffer += '&nbsp;|&ThickSpace;<a href="https://pokemonshowdown.com/dex/moves/mirrormove"><font size="1">Mirrorable Moves</font></a>';
 		}
 		this.sendReply(buffer);
 	},
@@ -329,14 +347,14 @@ var commands = exports.commands = {
 	dt: 'details',
 	details: function (target) {
 		if (!target) return this.parse('/help details');
-		CommandParser.commands.data.apply(this, arguments);
+		this.run('data');
 	},
 	detailshelp: ["/details [pokemon] - Get additional details on this pokemon/item/move/ability/nature.",
 		"!details [pokemon] - Show everyone these details. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
 	ds: 'dexsearch',
 	dsearch: 'dexsearch',
-	dexsearch: function (target, room, user) {
+	dexsearch: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 
 		if (!target) return this.parse('/help dexsearch');
@@ -344,10 +362,10 @@ var commands = exports.commands = {
 		var searches = {};
 		var allTiers = {'uber':1, 'ou':1, 'bl':1, 'uu':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1, 'bl4':1, 'pu':1, 'nfe':1, 'lc uber':1, 'lc':1, 'cap':1};
 		var allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
-		var allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1};
+		var allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1};
 		var showAll = false;
 		var megaSearch = null;
-		var output = 10;
+		var randomOutput = 0;
 		var categories = ['gen', 'tier', 'color', 'types', 'ability', 'stats', 'compileLearnsets', 'moves', 'recovery', 'priority'];
 
 		for (var i = 0; i < targets.length; i++) {
@@ -396,6 +414,11 @@ var commands = exports.commands = {
 				continue;
 			}
 
+			if (target.substr(0, 6) === 'random' && cmd === 'randpoke') {
+				randomOutput = parseInt(target.substr(6));
+				continue;
+			}
+
 			if (target === 'megas' || target === 'mega') {
 				if ((megaSearch && isNotSearch) || (megaSearch === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include Mega Evolutions.');
 				megaSearch = !isNotSearch;
@@ -438,30 +461,36 @@ var commands = exports.commands = {
 			var inequality = target.search(/>|<|=/);
 			if (inequality >= 0) {
 				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in stat ranges.");
-				inequality = target.charAt(inequality);
+				if (target.charAt(inequality + 1) === '=') {
+					inequality = target.substr(inequality, 2);
+				} else {
+					inequality = target.charAt(inequality);
+				}
+				var inequalityOffset = (inequality.charAt(1) === '=' ? 0 : -1);
 				var targetParts = target.replace(/\s/g, '').split(inequality);
-				var numSide, statSide, direction;
+				var num, stat, direction;
 				if (!isNaN(targetParts[0])) {
-					numSide = 0;
-					statSide = 1;
-					switch (inequality) {
-					case '>': direction = 'less'; break;
-					case '<': direction = 'greater'; break;
+					// e.g. 100 < spe
+					num = parseFloat(targetParts[0]);
+					stat = targetParts[1];
+					switch (inequality.charAt(0)) {
+					case '>': direction = 'less'; num += inequalityOffset; break;
+					case '<': direction = 'greater'; num -= inequalityOffset; break;
 					case '=': direction = 'equal'; break;
 					}
 				} else if (!isNaN(targetParts[1])) {
-					numSide = 1;
-					statSide = 0;
-					switch (inequality) {
-					case '<': direction = 'less'; break;
-					case '>': direction = 'greater'; break;
+					// e.g. spe > 100
+					num = parseFloat(targetParts[1]);
+					stat = targetParts[0];
+					switch (inequality.charAt(0)) {
+					case '<': direction = 'less'; num += inequalityOffset; break;
+					case '>': direction = 'greater'; num -= inequalityOffset; break;
 					case '=': direction = 'equal'; break;
 					}
 				} else {
 					return this.sendReplyBox("No value given to compare with '" + Tools.escapeHTML(target) + "'.");
 				}
-				var stat = targetParts[statSide];
-				switch (toId(targetParts[statSide])) {
+				switch (toId(stat)) {
 				case 'attack': stat = 'atk'; break;
 				case 'defense': stat = 'def'; break;
 				case 'specialattack': stat = 'spa'; break;
@@ -475,12 +504,12 @@ var commands = exports.commands = {
 				if (direction === 'equal') {
 					if (searches['stats'][stat]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
 					searches['stats'][stat] = {};
-					searches['stats'][stat]['less'] = parseFloat(targetParts[numSide]);
-					searches['stats'][stat]['greater'] = parseFloat(targetParts[numSide]);
+					searches['stats'][stat]['less'] = num;
+					searches['stats'][stat]['greater'] = num;
 				} else {
 					if (!searches['stats'][stat]) searches['stats'][stat] = {};
 					if (searches['stats'][stat][direction]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
-					searches['stats'][stat][direction] = parseFloat(targetParts[numSide]);
+					searches['stats'][stat][direction] = num;
 				}
 				continue;
 			}
@@ -603,7 +632,7 @@ var commands = exports.commands = {
 				var priorityMoves = [];
 				for (var move in Tools.data.Movedex) {
 					var moveData = Tools.getMove(move);
-					if (moveData.category === "Status") continue;
+					if (moveData.category === "Status" || moveData.id === "bide") continue;
 					if (moveData.priority > 0) priorityMoves.push(move);
 				}
 				for (var mon in dex) {
@@ -620,14 +649,22 @@ var commands = exports.commands = {
 			case 'stats':
 				for (var stat in searches[search]) {
 					for (var mon in dex) {
+						var monStat = 0;
+						if (stat === 'bst') {
+							for (var monStats in dex[mon].baseStats) {
+								monStat += dex[mon].baseStats[monStats];
+							}
+						} else {
+							monStat = dex[mon].baseStats[stat];
+						}
 						if (typeof searches[search][stat].less === 'number') {
-							if (dex[mon].baseStats[stat] > searches[search][stat].less) {
+							if (monStat > searches[search][stat].less) {
 								delete dex[mon];
 								continue;
 							}
 						}
 						if (typeof searches[search][stat].greater === 'number') {
-							if (dex[mon].baseStats[stat] < searches[search][stat].greater) {
+							if (monStat < searches[search][stat].greater) {
 								delete dex[mon];
 								continue;
 							}
@@ -637,7 +674,7 @@ var commands = exports.commands = {
 				break;
 
 			default:
-				return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
+				throw new Error("/dexsearch search category '" + search + "' was unrecognised.");
 			}
 		}
 
@@ -647,16 +684,22 @@ var commands = exports.commands = {
 			results.push(dex[mon].species);
 		}
 
-		var resultsStr = "";
-		if (results.length > 0) {
-			if (showAll || results.length <= output + 5) {
+		if (randomOutput && randomOutput < results.length) {
+			results = results.randomize().slice(0, randomOutput);
+		}
+
+		var resultsStr = this.broadcasting ? "" : ("<font color=#999999>" + message + ":</font><br>");
+		if (results.length > 1) {
+			if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 				results.sort();
-				resultsStr = results.join(", ");
+				resultsStr += results.join(", ");
 			} else {
-				resultsStr = results.slice(0, output).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+				resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
+		} else if (results.length === 1) {
+			return CommandParser.commands.data.call(this, results[0], room, user, connection, 'dt');
 		} else {
-			resultsStr = "No Pok&eacute;mon found.";
+			resultsStr += "No Pok&eacute;mon found.";
 		}
 		return this.sendReplyBox(resultsStr);
 	},
@@ -670,9 +713,35 @@ var commands = exports.commands = {
 		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pokemon only.",
 		"The order of the parameters does not matter."],
 
+	rollpokemon: 'randompokemon',
+	randpoke: 'randompokemon',
+	randompokemon: function (target, room, user, connection, cmd, message) {
+		var targets = target.split(",");
+		var targetsBuffer = [];
+		var qty;
+		for (var i = 0; i < targets.length; i++) {
+			if (!targets[i]) continue;
+			var num = Number(targets[i]);
+			if (Number.isInteger(num)) {
+				if (qty) return this.sendReply("Only specify the number of Pokemon once.");
+				qty = num;
+				if (qty < 1 || 15 < qty) return this.sendReply("Number of random Pokemon must be between 1 and 15.");
+				targetsBuffer.push("random" + qty);
+			} else {
+				targetsBuffer.push(targets[i]);
+			}
+		}
+		if (!qty) targetsBuffer.push("random1");
+
+		CommandParser.commands.dexsearch.call(this, targetsBuffer.join(","), room, user, connection, "randpoke", message);
+	},
+	randompokemonhelp: ["/randompokemon - Generates random Pokemon based on given search conditions.",
+		"/randompokemon uses the same parameters as /dexsearch (see '/help ds').",
+		"Adding a number as a parameter returns that many random Pokemon, e.g., '/randpoke 6' returns 6 random Pokemon."],
+
 	ms: 'movesearch',
 	msearch: 'movesearch',
-	movesearch: function (target, room, user) {
+	movesearch: function (target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 
 		if (!target) return this.parse('/help movesearch');
@@ -680,12 +749,11 @@ var commands = exports.commands = {
 		var searches = {};
 		var allCategories = {'physical':1, 'special':1, 'status':1};
 		var allProperties = {'basePower':1, 'accuracy':1, 'priority':1, 'pp':1};
-		var allFlags = {'bite':1, 'bullet':1, 'contact':1, 'defrost':1, 'powder':1, 'pulse':1, 'punch':1, 'secondary':1, 'snatch':1, 'sound':1};
+		var allFlags = {'authentic':1, 'bite':1, 'bullet':1, 'contact':1, 'defrost':1, 'powder':1, 'pulse':1, 'punch':1, 'secondary':1, 'snatch':1, 'sound':1};
 		var allStatus = {'psn':1, 'tox':1, 'brn':1, 'par':1, 'frz':1, 'slp':1};
 		var allVolatileStatus = {'flinch':1, 'confusion':1, 'partiallytrapped':1};
 		var allBoosts = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'accuracy':1, 'evasion':1};
 		var showAll = false;
-		var output = 10;
 		var lsetData = {};
 		var targetMon = '';
 
@@ -715,6 +783,7 @@ var commands = exports.commands = {
 				continue;
 			}
 
+			if (target === 'bypassessubstitute') target = 'authentic';
 			if (target in allFlags) {
 				if (!searches['flags']) searches['flags'] = {};
 				if ((searches['flags'][target] && isNotSearch) || (searches['flags'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include \'' + target + '\'.');
@@ -990,7 +1059,7 @@ var commands = exports.commands = {
 				break;
 
 			default:
-				return this.sendReplyBox("Something broke! PM SolarisFox here or on the Smogon forums with the command you tried.");
+				throw new Error("/movesearch search category '" + search + "' was unrecognised.");
 			}
 		}
 
@@ -999,16 +1068,21 @@ var commands = exports.commands = {
 			results.push(dex[move].name);
 		}
 
-		var resultsStr = targetMon ? ("<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br>") : "";
+		var resultsStr = "";
+		if (targetMon) {
+			resultsStr += "<font color=#999999>Matching moves found in learnset for</font> " + targetMon + ":<br>";
+		} else {
+			resultsStr += this.broadcasting ? "" : ("<font color=#999999>" + message + ":</font><br>");
+		}
 		if (results.length > 0) {
-			if (showAll || results.length <= output + 5) {
+			if (showAll || results.length <= RESULTS_MAX_LENGTH + 5) {
 				results.sort();
 				resultsStr += results.join(", ");
 			} else {
-				resultsStr += results.slice(0, output).join(", ") + ", and " + string(results.length - output) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
+				resultsStr += results.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (results.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with 'all' as a search parameter to show all results.</font>";
 			}
 		} else {
-			resultsStr = "No moves found.";
+			resultsStr += "No moves found.";
 		}
 		return this.sendReplyBox(resultsStr);
 	},
@@ -1018,8 +1092,235 @@ var commands = exports.commands = {
 		"Stat boosts must be preceded with 'boosts ', e.g., 'boosts attack' searches for moves that boost the attack stat.",
 		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.",
 		"Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.",
+		"Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, pulse, punch, secondary, snatch, sound",
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from it's movepool.",
 		"The order of the parameters does not matter."],
+
+	itemsearch: function (target, room, user, connection, cmd, message) {
+		if (!target) return this.parse('/help itemsearch');
+		if (!this.canBroadcast()) return;
+
+		var showAll = false;
+
+		target = target.trim();
+		if (target.substr(target.length - 5) === ', all' || target.substr(target.length - 4) === ',all') {
+			showAll = true;
+			target = target.substr(0, target.length - 5);
+		}
+
+		target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s\/]/g, '');
+		var rawSearch = target.split(' ');
+		var searchedWords = [];
+		var foundItems = [];
+
+		//refine searched words
+		for (var i = 0; i < rawSearch.length; i++) {
+			var newWord = rawSearch[i].trim();
+			if (isNaN(newWord)) newWord = newWord.replace('.', '');
+			switch (newWord) {
+			// words that don't really help identify item removed to speed up search
+			case 'a':
+			case 'an':
+			case 'is':
+			case 'it':
+			case 'its':
+			case 'the':
+			case 'that':
+			case 'which':
+			case 'user':
+			case 'holder':
+			case 'holders':
+				newWord = '';
+				break;
+			// replace variations of common words with standardized versions
+			case 'opponent': newWord = 'attacker'; break;
+			case 'flung': newWord = 'fling'; break;
+			case 'heal': case 'heals':
+			case 'recovers': newWord = 'restores'; break;
+			case 'boost':
+			case 'boosts': newWord = 'raises'; break;
+			case 'weakens': newWord = 'halves'; break;
+			case 'more': newWord = 'increases'; break;
+			case 'super':
+				if (rawSearch[i + 1] === 'effective') {
+					newWord = 'supereffective';
+					rawSearch.splice(i + 1, 1);
+				}
+				break;
+			case 'special': newWord = 'sp'; break;
+			case 'spa':
+				newWord = 'sp';
+				rawSearch.splice(i, 0, 'atk');
+				break;
+			case 'atk':
+			case 'attack':
+				if (rawSearch[i - 1] === 'sp') {
+					newWord = 'atk';
+				} else {
+					newWord = 'attack';
+				}
+				break;
+			case 'spd':
+				newWord = 'sp';
+				rawSearch.splice(i, 0, 'def');
+				break;
+			case 'def':
+			case 'defense':
+				if (rawSearch[i - 1] === 'sp') {
+					newWord = 'def';
+				} else {
+					newWord = 'defense';
+				}
+				break;
+			case 'burns': newWord = 'burn'; break;
+			case 'poisons': newWord = 'poison'; break;
+			default:
+				if (/x[\d\.]+/.test(newWord)) {
+					newWord = newWord.substr(1) + 'x';
+				}
+			}
+			if (!newWord || searchedWords.indexOf(newWord) >= 0) continue;
+			searchedWords.push(newWord);
+		}
+
+		if (searchedWords.length === 0) return this.sendReplyBox("No distinguishing words were used. Try a more specific search.");
+
+		if (searchedWords.indexOf('fling') >= 0) {
+			var basePower = 0;
+			var effect;
+
+			for (var k = 0; k < searchedWords.length; k++) {
+				var wordEff = "";
+				switch (searchedWords[k]) {
+				case 'burn': case 'burns':
+				case 'brn': wordEff = 'brn'; break;
+				case 'paralyze': case 'paralyzes':
+				case 'par': wordEff = 'par'; break;
+				case 'poison': case 'poisons':
+				case 'psn': wordEff = 'psn'; break;
+				case 'toxic':
+				case 'tox': wordEff = 'tox'; break;
+				case 'flinches':
+				case 'flinch': wordEff = 'flinch'; break;
+				case 'badly': wordEff = 'tox'; break;
+				}
+				if (wordEff && effect) {
+					if (!(wordEff === 'psn' && effect === 'tox')) return this.sendReplyBox("Only specify fling effect once.");
+				} else if (wordEff) {
+					effect = wordEff;
+				} else {
+					if (searchedWords[k].substr(searchedWords[k].length - 2) === 'bp' && searchedWords[k].length > 2) searchedWords[k] = searchedWords[k].substr(0, searchedWords[k].length - 2);
+					if (Number.isInteger(Number(searchedWords[k]))) {
+						if (basePower) return this.sendReplyBox("Only specify a number for base power once.");
+						basePower = parseInt(searchedWords[k]);
+					}
+				}
+			}
+
+			for (var n in Tools.data.Items) {
+				var item = Tools.getItem(n);
+				if (!item.fling) continue;
+
+				if (basePower && effect) {
+					if (item.fling.basePower === basePower &&
+					(item.fling.status === effect || item.fling.volatileStatus === effect)) foundItems.push(item.name);
+				} else if (basePower) {
+					if (item.fling.basePower === basePower) foundItems.push(item.name);
+				} else {
+					if (item.fling.status === effect || item.fling.volatileStatus === effect) foundItems.push(item.name);
+				}
+			}
+			if (foundItems.length === 0) return this.sendReplyBox('No items inflict ' + basePower + 'bp damage when used with Fling.');
+		} else if (target.search(/natural ?gift/i) >= 0) {
+			var basePower = 0;
+			var type = "";
+
+			for (var k = 0; k < searchedWords.length; k++) {
+				searchedWords[k] = searchedWords[k].capitalize();
+				if (searchedWords[k] in Tools.data.TypeChart) {
+					if (type) return this.sendReplyBox("Only specify natural gift type once.");
+					type = searchedWords[k];
+				} else {
+					if (searchedWords[k].substr(searchedWords[k].length - 2) === 'bp' && searchedWords[k].length > 2) searchedWords[k] = searchedWords[k].substr(0, searchedWords[k].length - 2);
+					if (Number.isInteger(Number(searchedWords[k]))) {
+						if (basePower) return this.sendReplyBox("Only specify a number for base power once.");
+						basePower = parseInt(searchedWords[k]);
+					}
+				}
+			}
+
+			for (var n in Tools.data.Items) {
+				var item = Tools.getItem(n);
+				if (!item.isBerry) continue;
+
+				if (basePower && type) {
+					if (item.naturalGift.basePower === basePower && item.naturalGift.type === type) foundItems.push(item.name);
+				} else if (basePower) {
+					if (item.naturalGift.basePower === basePower) foundItems.push(item.name);
+				} else {
+					if (item.naturalGift.type === type) foundItems.push(item.name);
+				}
+			}
+			if (foundItems.length === 0) return this.sendReplyBox('No berries inflict ' + basePower + 'bp damage when used with Natural Gift.');
+		} else {
+			var bestMatched = 0;
+			for (var n in Tools.data.Items) {
+				var item = Tools.getItem(n);
+				var matched = 0;
+				// splits words in the description into a toId()-esk format except retaining / and . in numbers
+				var descWords = item.desc;
+				// add more general quantifier words to descriptions
+				if (/[1-9\.]+x/.test(descWords)) descWords += ' increases';
+				if (item.isBerry) descWords += ' berry';
+				descWords = descWords.replace(/super[\-\s]effective/g, 'supereffective');
+				descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s\/]/g, '').replace(/(\D)\./, function (p0, p1) { return p1; }).split(' ');
+
+				for (var k = 0; k < searchedWords.length; k++) {
+					if (descWords.indexOf(searchedWords[k]) >= 0) matched++;
+				}
+
+				if (matched >= bestMatched && matched >= (searchedWords.length * 3 / 5)) foundItems.push(item.name);
+				if (matched > bestMatched) bestMatched = matched;
+			}
+
+			// iterate over found items again to make sure they all are the best match
+			for (var l = 0; l < foundItems.length; l++) {
+				var item = Tools.getItem(foundItems[l]);
+				var matched = 0;
+				var descWords = item.desc;
+				if (/[1-9\.]+x/.test(descWords)) descWords += ' increases';
+				if (item.isBerry) descWords += ' berry';
+				descWords = descWords.replace(/super[\-\s]effective/g, 'supereffective');
+				descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s\/]/g, '').replace(/(\D)\./, function (p0, p1) { return p1; }).split(' ');
+
+				for (var k = 0; k < searchedWords.length; k++) {
+					if (descWords.indexOf(searchedWords[k]) >= 0) matched++;
+				}
+
+				if (matched !== bestMatched) {
+					foundItems.splice(l, 1);
+					l--;
+				}
+			}
+		}
+
+		var resultsStr = this.broadcasting ? "" : ("<font color=#999999>" + message + ":</font><br>");
+		if (foundItems.length > 0) {
+			if (showAll || foundItems.length <= RESULTS_MAX_LENGTH + 5) {
+				foundItems.sort();
+				resultsStr += foundItems.join(", ");
+			} else {
+				resultsStr += foundItems.slice(0, RESULTS_MAX_LENGTH).join(", ") + ", and " + (foundItems.length - RESULTS_MAX_LENGTH) + " more. <font color=#999999>Redo the search with ', all' at the end to show all results.</font>";
+			}
+		} else {
+			resultsStr += "No items found. Try a more general search";
+		}
+		return this.sendReplyBox(resultsStr);
+	},
+	itemsearchhelp: ["/itemsearch [move description] - finds items that match the given key words.",
+	"Command accepts natural language. (tip: fewer words tend to work better)",
+	"Searches with \"fling\" in them will find items with the specified Fling behavior.",
+	"Searches with \"natural gift\" in them will find items with the specified Natural Gift behavior."],
 
 	learnset: 'learn',
 	learnall: 'learn',
@@ -1213,7 +1514,7 @@ var commands = exports.commands = {
 		var factor = 0;
 		if (Tools.getImmunity(source, defender) || source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[source.type])) {
 			var totalTypeMod = 0;
-			if (source.effectType !== 'Move' || source.category === 'Status' || source.basePower || source.basePowerCallback) {
+			if (source.effectType !== 'Move' || source.category !== 'Status' && (source.basePower || source.basePowerCallback)) {
 				for (var i = 0; i < defender.types.length; i++) {
 					var baseMod = Tools.getEffectiveness(source, defender.types[i]);
 					var moveMod = source.onEffectiveness && source.onEffectiveness.call(Tools, baseMod, defender.types[i], source);
@@ -1272,10 +1573,14 @@ var commands = exports.commands = {
 				if (move.id === 'thousandarrows') hasThousandArrows = true;
 				sources.push(move);
 				for (var type in bestCoverage) {
-					if (!Tools.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
-					var baseMod = Tools.getEffectiveness(move, type);
-					var moveMod = move.onEffectiveness && move.onEffectiveness.call(Tools, baseMod, type, move);
-					eff = typeof moveMod === 'number' ? moveMod : baseMod;
+					if (move.id === "struggle") {
+						eff = 0;
+					} else {
+						if (!Tools.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
+						var baseMod = Tools.getEffectiveness(move, type);
+						var moveMod = move.onEffectiveness && move.onEffectiveness.call(Tools, baseMod, type, move);
+						eff = typeof moveMod === 'number' ? moveMod : baseMod;
+					}
 					if (eff > bestCoverage[type]) bestCoverage[type] = eff;
 				}
 				continue;
@@ -1332,7 +1637,7 @@ var commands = exports.commands = {
 			var buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
 			var icon = {};
 			for (var type in Tools.data.TypeChart) {
-				icon[type] = '<img src="http://play.pokemonshowdown.com/sprites/types/' + type + '.png" width="32" height="14">';
+				icon[type] = '<img src="https://play.pokemonshowdown.com/sprites/types/' + type + '.png" width="32" height="14">';
 				// row of icons at top
 				buffer += '<th>' + icon[type] + '</th>';
 			}
@@ -1441,7 +1746,7 @@ var commands = exports.commands = {
 		}, ""));
 	},
 	groupshelp: ["/groups - Explains what the " + Users.getGroupsThatCan('description').join(" ") + " next to people's names mean.",
-		"!groups - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
+		"!groups - Shows everyone that information. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
 	repo: 'opensource',
 	repository: 'opensource',
@@ -1450,7 +1755,7 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
 			"Pok&eacute;mon Showdown is open source:<br />" +
-			"- Language: JavaScript (Node.js)<br />" +
+			"- Language: JavaScript (Node.js or io.js)<br />" +
 			"- <a href=\"https://github.com/kupochu/Pokemon-Showdown\">TBT's Source Code</a><br />" +
 			"- <a href=\"https://github.com/kupochu/Pokemon-Showdown/commits/master\">TBT's latest updates</a><br />" +
 			"- <a href=\"https://github.com/Zarel/Pokemon-Showdown/commits/master\">What's new?</a><br />" +
@@ -1468,12 +1773,31 @@ var commands = exports.commands = {
 
 	forums: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("<a href=\"http://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209\">Pok&eacute;mon Showdown Forums</a>");
+		this.sendReplyBox("<a href=\"https://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209\">Pok&eacute;mon Showdown Forums</a>");
+	},
+
+	suggestions: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox("<a href=\"https://www.smogon.com/forums/threads/3534365/\">Make a suggestion for Pok&eacute;mon Showdown</a>");
+	},
+
+	bugreport: 'bugs',
+	bugs: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		if (room.battle) {
+			this.sendReplyBox("<center><button name=\"saveReplay\"><i class=\"icon-upload\"></i> Save Replay</button> &mdash; <a href=\"https://www.smogon.com/forums/threads/3520646/\">Questions</a> &mdash; <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a></center>");
+		} else {
+			this.sendReplyBox(
+				"Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />" +
+				"- <a href=\"https://www.smogon.com/forums/threads/3520646/\">Questions</a><br />" +
+				"- <a href=\"https://www.smogon.com/forums/threads/3469932/\">Bug Reports</a>"
+			);
+		}
 	},
 
 	avatars: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox('You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.');
+		this.sendReplyBox("You can <button name=\"avatars\">change your avatar</button> by clicking on it in the <button name=\"openOptions\"><i class=\"icon-cog\"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.");
 	},
 	avatarshelp: ["/avatars - Explains how to change avatars.",
 		"!avatars - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
@@ -1482,14 +1806,14 @@ var commands = exports.commands = {
 	intro: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox(
-			"New to competitive pokemon?<br />" +
+			"New to competitive Pok&eacute;mon?<br />" +
 			"- <a href=\"https://www.smogon.com/sim/ps_guide\">Beginner's Guide to Pok&eacute;mon Showdown</a><br />" +
 			"- <a href=\"https://www.smogon.com/dp/articles/intro_comp_pokemon\">An introduction to competitive Pok&eacute;mon</a><br />" +
 			"- <a href=\"https://www.smogon.com/bw/articles/bw_tiers\">What do 'OU', 'UU', etc mean?</a><br />" +
 			"- <a href=\"https://www.smogon.com/xyhub/tiers\">What are the rules for each format? What is 'Sleep Clause'?</a>"
 		);
 	},
-	introhelp: ["/intro - Provides an introduction to competitive pokemon.",
+	introhelp: ["/intro - Provides an introduction to competitive Pok\u00e9mon.",
 		"!intro - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
 	mentoring: 'smogintro',
@@ -1547,148 +1871,104 @@ var commands = exports.commands = {
 		var matched = false;
 
 		if (target === 'all' && this.broadcasting) {
-			return this.sendReplyBox("You cannot broadcast informatiom about all Other Metagames at once.");
+			return this.sendReplyBox("You cannot broadcast information about all Other Metagames at once.");
 		}
 
 		if (!target || target === 'all') {
 			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/tiers/om/\">Other Metagames Hub</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505031/\">Other Metagames Index</a><br />";
+			if (!target) return this.sendReplyBox(buffer);
 		}
-		if (target === 'all' || target === 'anythinggoes' || target === 'ag') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523229/\">Anything Goes</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3535064/\">Anything Goes Viability Ranking</a><br />";
+		var showMonthly = (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month');
+		var monthBuffer = "- <a href=\"https://www.smogon.com/forums/threads/3541792/\">Other Metagame of the Month</a>";
+
+		if (target === 'all') {
+			// Display OMotM formats, with forum thread links as caption
+			this.parse('/formathelp omofthemonth');
+			if (showMonthly) this.sendReply('|raw|<center>' + monthBuffer + '</center>');
+
+			// Display the rest of OM formats, with OM hub/index forum links as caption
+			this.parse('/formathelp othermetagames');
+			return this.sendReply('|raw|<center>' + buffer + '</center>');
 		}
-		if (target === 'all' || target === 'smogondoublesuu' || target === 'doublesuu') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516968/\">Doubles UU</a><br />";
+		if (showMonthly) {
+			this.target = 'omofthemonth';
+			this.run('formathelp');
+			this.sendReply('|raw|<center>' + monthBuffer + '</center>');
+		} else {
+			this.run('formathelp');
 		}
-		if (target === 'all' || target === 'smogontriples' || target === 'triples') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3540390/\">Smogon Triples Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'omofthemonth' || target === 'omotm' || target === 'month') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3541792/\">Other Metagame of the Month</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524254/\">Linked</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a><br />";
-		}
-		if (target === 'all' || target === 'seasonal') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a><br />";
-		}
-		if (target === 'all' || target === 'balancedhackmons' || target === 'bh') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3489849/\">Balanced Hackmons</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3515725/\">Balanced Hackmons Suspect Discussion</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3525676/\">Balanced Hackmons Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === '1v1') {
-			matched = true;
-			if (target !== 'all') buffer += "Bring three Pok\u00e9mon to Team Preview and choose one to battle.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496773/\">1v1</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3536109/\">1v1 Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'monotype') {
-			matched = true;
-			if (target !== 'all') buffer += "All Pok\u00e9mon on a team must share a type.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493087/\">Monotype</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3517737/\">Monotype Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'tiershift' || target === 'ts') {
-			matched = true;
-			if (target !== 'all') buffer += "Pok\u00e9mon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, and NU or lower get +15.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3532973/\">Tier Shift</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3536719/\">Tier Shift Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'pu') {
-			matched = true;
-			if (target !== 'all') buffer += "The unofficial tier below NU.<br />";
-			buffer += "- <a href=\"http://www.smogon.com/forums/forums/pu.327/\">PU</a><br />";
-		}
-		if (target === 'all' || target === 'inversebattle' || target === 'inverse') {
-			matched = true;
-			if (target !== 'all') buffer += "Battle with an inverted type chart.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3518146/\">Inverse Battle</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526371/\">Inverse Battle Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'almostanyability' || target === 'aaa') {
-			matched = true;
-			if (target !== 'all') buffer += "Pok\u00e9mon can use any ability, barring the few that are banned.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3528058/\">Almost Any Ability</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538917/\">Almost Any Ability Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'stabmons') {
-			matched = true;
-			if (target !== 'all') buffer += "Pok\u00e9mon can use any move of their typing, in addition to the moves they can normally learn.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3493081/\">STABmons</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3512215/\">STABmons Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'lcuu') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523929/\">LC UU</a><br />";
-		}
-		if (target === 'all' || target === '2v2doubles' || target === '2v2') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505227/\">2v2 Doubles</a><br />";
-		}
-		if (target === 'all' || target === 'averagemons') {
-			matched = true;
-			if (target !== 'all') buffer += "Every Pok\u00e9mon has a stat spread of 100/100/100/100/100/100.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526481/\">Averagemons</a><br />";
-		}
-		if (target === 'all' || target === 'hiddentype' || target === 'ht') {
-			matched = true;
-			if (target !== 'all') buffer += "Pok\u00e9mon have an added type determined by their IVs. Same as the Hidden Power type.<br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3516349/\">Hidden Type</a><br />";
-		}
-		if (target === 'all' || target === 'outheorymon' || target === 'theorymon') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3536615/\">OU Theorymon</a><br />";
-		}
-		if (!matched) {
-			return this.sendReply("The Other Metas entry '" + target + "' was not found. Try /othermetas or /om for general help.");
-		}
-		this.sendReplyBox(buffer);
 	},
 	othermetashelp: ["/om - Provides links to information on the Other Metagames.",
 		"!om - Show everyone that information. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
-	/*formats: 'formathelp',
+	banlists: 'formathelp',
+	tier: 'formathelp',
+	tiers: 'formathelp',
+	formats: 'formathelp',
+	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
-	formathelp: function (target, room, user) {
+	formathelp: function (target, room, user, connection, cmd) {
 		if (!this.canBroadcast()) return;
-		if (this.broadcasting && (room.id === 'lobby' || room.battle)) return this.sendReply("This command is too spammy to broadcast in lobby/battles");
-		var buf = [];
-		var showAll = (target === 'all');
-		for (var id in Tools.data.Formats) {
-			var format = Tools.data.Formats[id];
-			if (!format) continue;
-			if (format.effectType !== 'Format') continue;
-			if (!format.challengeShow) continue;
-			if (!showAll && !format.searchShow) continue;
-			buf.push({
-				name: format.name,
-				gameType: format.gameType || 'singles',
-				mod: format.mod,
-				searchShow: format.searchShow,
-				desc: format.desc || 'No description.'
-			});
+		if (!target) {
+			return this.sendReplyBox(
+				"- <a href=\"https://www.smogon.com/tiers/\">Smogon Tiers</a><br />" +
+				"- <a href=\"https://www.smogon.com/forums/threads/3498332/\">Tiering FAQ</a><br />" +
+				"- <a href=\"https://www.smogon.com/xyhub/tiers\">The banlists for each tier</a><br />" +
+				"<br /><em>Type /formatshelp <strong>[format|section]</strong> to get details about an available format or group of formats.</em>"
+			);
 		}
-		this.sendReplyBox(
-			"Available Formats: (<strong>Bold</strong> formats are on ladder.)<br />" +
-			buf.map(function (data) {
-				var str = "";
-				// Bold = Ladderable.
-				str += (data.searchShow ? "<strong>" + data.name + "</strong>" : data.name) + ": ";
-				str += "(" + (!data.mod || data.mod === 'base' ? "" : data.mod + " ") + data.gameType + " format) ";
-				str += data.desc;
-				return str;
-			}).join("<br />")
-		);
-	},*/
+		var targetId = toId(target);
+		if (targetId === 'ladder') targetId = 'search';
+		if (targetId === 'all') targetId = '';
+
+		var formatList;
+		var format = Tools.getFormat(targetId);
+		if (format.effectType === 'Format') formatList = [targetId];
+		if (!formatList) {
+			if (this.broadcasting && (cmd !== 'om' && cmd !== 'othermetas')) return this.sendReply("'" + target + "' is not a format. This command's search mode is too spammy to broadcast.");
+			formatList = Object.keys(Tools.data.Formats).filter(function (formatid) {return Tools.data.Formats[formatid].effectType === 'Format';});
+		}
+
+		// Filter formats and group by section
+		var exactMatch = '';
+		var sections = {};
+		var totalMatches = 0;
+		for (var i = 0; i < formatList.length; i++) {
+			var format = Tools.getFormat(formatList[i]);
+			var sectionId = toId(format.section);
+			if (targetId && !format[targetId + 'Show'] && sectionId !== targetId && format.id === formatList[i] && !format.id.startsWith(targetId)) continue;
+			totalMatches++;
+			if (!sections[sectionId]) sections[sectionId] = {name: format.section, formats: []};
+			sections[sectionId].formats.push(format.id);
+			if (format.id !== targetId) continue;
+			exactMatch = sectionId;
+			break;
+		}
+
+		if (!totalMatches) return this.sendReply("No " + (target ? "matched " : "") + "formats found.");
+		if (totalMatches === 1) {
+			var format = Tools.getFormat(Object.values(sections)[0].formats[0]);
+			if (!format.desc) return this.sendReplyBox("No description found for this " + (format.gameType || "singles").capitalize() + " " + format.section + " format.");
+			return this.sendReplyBox(format.desc.join("<br />"));
+		}
+
+		// Build tables
+		var buf = [];
+		for (var sectionId in sections) {
+			if (exactMatch && sectionId !== exactMatch) continue;
+			buf.push("<h3>" + Tools.escapeHTML(sections[sectionId].name) + "</h3>");
+			buf.push("<table class=\"scrollable\" style=\"display:inline-block; max-height:200px; border:1px solid gray; border-collapse:collapse\" cellspacing=\"0\" cellpadding=\"5\"><thead><th style=\"border:1px solid gray\" >Name</th><th style=\"border:1px solid gray\" >Description</th></thead><tbody>");
+			for (var i = 0; i < sections[sectionId].formats.length; i++) {
+				var format = Tools.getFormat(sections[sectionId].formats[i]);
+				var mod = format.mod && format.mod !== 'base' ? " - " + Tools.escapeHTML(format.mod === format.id ? format.name : format.mod).capitalize() : "";
+				buf.push("<tr><td style=\"border:1px solid gray\">" + Tools.escapeHTML(format.name) + "</td><td style=\"border: 1px solid gray; margin-left:10px\">" + (format.desc ? format.desc.join("<br />") : "&mdash;") + "</td></tr>");
+			}
+			buf.push("</tbody></table>");
+		}
+		return this.sendReply("|raw|<center>" + buf.join("") + "</center>");
+	},
 
 	roomhelp: function (target, room, user) {
 		if (room.id === 'lobby' || room.battle) return this.sendReply("This command is too spammy for lobby/battles.");
@@ -1788,7 +2068,7 @@ var commands = exports.commands = {
 		}
 		if (target === 'all' || target === 'star' || target === 'player') {
 			matched = true;
-			buffer += '<a href="http://www.smogon.com/sim/faq#star">Why is there this star (&starf;) in front of my username?</a><br />';
+			buffer += '<a href="https://www.smogon.com/sim/faq#star">Why is there this star (&starf;) in front of my username?</a><br />';
 		}
 		if (target === 'all' || target === 'staff') {
 			matched = true;
@@ -1806,13 +2086,17 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#pm\">How can I send a user a private message?</a><br />";
 		}
-		if (target === 'all' || target === 'challenge') {
+		if (target === 'all' || target === 'challenge' || target === 'chall') {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#challenge\">How can I battle a specific user?</a><br />";
 		}
 		if (target === 'all'  || target === 'gxe') {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#gxe\">What does GXE mean?</a><br />";
+		}
+		if (target === 'all'  || target === 'coil') {
+			matched = true;
+			buffer += "<a href=\"http://www.smogon.com/forums/threads/coil-explained.3508013\">What is COIL?</a><br />";
 		}
 		if (!matched) {
 			return this.sendReply("The FAQ entry '" + target + "' was not found. Try /faq for general help.");
@@ -1822,117 +2106,23 @@ var commands = exports.commands = {
 	faqhelp: ["/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.",
 		"!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
-	banlists: 'tiers',
-	tier: 'tiers',
-	tiers: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-		target = toId(target);
-		var buffer = "";
-		var matched = false;
-
-		if (target === 'all' && this.broadcasting) {
-			return this.sendReplyBox("You cannot broadcast information about all tiers at once.");
-		}
-
-		if (!target || target === 'all') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/tiers/\">Smogon Tiers</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/tiering-faq.3498332/\">Tiering FAQ</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/xyhub/tiers\">The banlists for each tier</a><br />";
-		}
-		if (target === 'all' || target === 'overused' || target === 'ou') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3521201/\">OU Metagame Discussion</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ou/\">OU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526596/\">OU Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'ubers' || target === 'uber') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522911/\">Ubers Metagame Discussion</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523419/\">Ubers Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'underused' || target === 'uu') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538856/\">np: UU Stage 3.1</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523649/\">UU Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'rarelyused' || target === 'ru') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538971/\">np: RU Stage 10</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/ru/\">RU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538036/\">RU Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'neverused' || target === 'nu') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3537418/\">np: NU Stage 6</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3523692/\">NU Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'littlecup' || target === 'lc') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505710/\">LC Metagame Discussion</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3490462/\">LC Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3496013/\">LC Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'doublesou' || target === 'doubles' || target === 'smogondoubles') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3538960/\">np: Doubles OU Stage 2</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3498688/\">Doubles OU Banlist</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3522814/\">Doubles OU Viability Ranking</a><br />";
-		}
-		if (target === 'all' || target === 'bw' || target === 'gen5') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522693\">BW Resources</a><br />";
-		}
-		if (target === 'all' || target === 'dpp' || target === 'gen4') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522692\">DPP Resources</a><br />";
-		}
-		if (target === 'all' || target === 'adv' || target === 'gen3') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522690\">ADV Resources</a><br />";
-		}
-		if (target === 'all' || target === 'gsc' || target === 'gen2') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522689\">GSC Resources</a><br />";
-		}
-		if (target === 'all' || target === 'rby' || target === 'gen1') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522688\">RBY Resources</a><br />";
-		}
-		if (target === 'vgc2015' || target === 'vgc' || target === 'vgc15') {
-			matched = true;
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3524352/\">VGC 2015 Rules</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3530547/\">VGC 2015 Viability Ranking</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3500650/\">VGC Learning Resources</a><br />";
-			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3526666/\">Sample Teams for VGC 2015</a><br />";
-		}
-		if (!matched) {
-			return this.sendReply("The Tiers entry '" + target + "' was not found. Try /tiers for general help.");
-		}
-		this.sendReplyBox(buffer);
-	},
-
 	analysis: 'smogdex',
 	strategy: 'smogdex',
 	smogdex: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 
 		var targets = target.split(',');
-		if (toId(targets[0]) === 'previews') return this.sendReplyBox("<a href=\"https://www.smogon.com/forums/threads/sixth-generation-pokemon-analyses-index.3494918/\">Generation 6 Analyses Index</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		var pokemon = Tools.getTemplate(targets[0]);
 		var item = Tools.getItem(targets[0]);
 		var move = Tools.getMove(targets[0]);
 		var ability = Tools.getAbility(targets[0]);
+		var format = Tools.getFormat(targets[0]);
 		var atLeastOne = false;
 		var generation = (targets[1] || 'xy').trim().toLowerCase();
 		var genNumber = 6;
-		// var doublesFormats = {'vgc2012':1, 'vgc2013':1, 'vgc2014':1, 'doubles':1};
-		var doublesFormats = {};
-		var doublesFormat = (!targets[2] && generation in doublesFormats) ? generation : (targets[2] || '').trim().toLowerCase();
-		var doublesText = '';
-		if (generation === 'xy' || generation === 'xy' || generation === '6' || generation === 'six') {
+		var extraFormat = Tools.getFormat(targets[2]);
+
+		if (generation === 'xy' || generation === 'oras' || generation === '6' || generation === 'six') {
 			generation = 'xy';
 		} else if (generation === 'bw' || generation === 'bw2' || generation === '5' || generation === 'five') {
 			generation = 'bw';
@@ -1952,15 +2142,6 @@ var commands = exports.commands = {
 		} else {
 			generation = 'xy';
 		}
-		if (doublesFormat !== '') {
-			// Smogon only has doubles formats analysis from gen 5 onwards.
-			if (!(generation in {'bw':1, 'xy':1}) || !(doublesFormat in doublesFormats)) {
-				doublesFormat = '';
-			} else {
-				doublesText = {'vgc2012':"VGC 2012", 'vgc2013':"VGC 2013", 'vgc2014':"VGC 2014", 'doubles':"Doubles"}[doublesFormat];
-				doublesFormat = '/' + doublesFormat;
-			}
-		}
 
 		// Pokemon
 		if (pokemon.exists) {
@@ -1971,36 +2152,63 @@ var commands = exports.commands = {
 			// if (pokemon.tier === 'CAP') generation = 'cap';
 			if (pokemon.tier === 'CAP') return this.sendReply("CAP is not currently supported by Smogon Strategic Pokedex.");
 
-			var illegalStartNums = {'351':1, '421':1, '487':1, '493':1, '555':1, '647':1, '648':1, '649':1, '681':1};
+			var illegalStartNums = {'351':1, '421':1, '487':1, '555':1, '647':1, '648':1, '649':1, '681':1};
 			if (pokemon.isMega || pokemon.num in illegalStartNums) pokemon = Tools.getTemplate(pokemon.baseSpecies);
-			var poke = pokemon.name.toLowerCase().replace(/\ /g, '_').replace(/[^a-z0-9\-\_]+/g, '');
 
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/pokemon/" + poke + doublesFormat + "\">" + generation.toUpperCase() + " " + doublesText + " " + pokemon.name + " analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			var formatName = extraFormat.name;
+			var formatId = extraFormat.id;
+			if (formatId === 'doublesou') {
+				formatId = 'doubles';
+			} else if (formatId.includes('vgc')) {
+				formatId = 'vgc' + formatId.slice(-2);
+				formatName = 'VGC20' + formatId.slice(-2);
+			} else if (extraFormat.effectType !== 'Format') {
+				formatName = formatId = '';
+			}
+			var speciesid = pokemon.speciesid;
+			// Special case for Meowstic-M
+			if (speciesid === 'meowstic') speciesid = 'meowsticm';
+			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/pokemon/" + speciesid + (formatId ? '/' + formatId : '') + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " " + pokemon.name + " analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		}
 
 		// Item
 		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
-			var itemName = item.name.toLowerCase().replace(' ', '_');
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/items/" + itemName + "\">" + generation.toUpperCase() + " " + item.name + " item analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/items/" + item.id + "\">" + generation.toUpperCase() + " " + item.name + " item analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		}
 
 		// Ability
 		if (ability.exists && genNumber > 2 && ability.gen <= genNumber) {
 			atLeastOne = true;
-			var abilityName = ability.name.toLowerCase().replace(' ', '_');
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/abilities/" + abilityName + "\">" + generation.toUpperCase() + " " + ability.name + " ability analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/abilities/" + ability.id + "\">" + generation.toUpperCase() + " " + ability.name + " ability analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
 		}
 
 		// Move
 		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
-			var moveName = move.name.toLowerCase().replace(' ', '_');
-			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/moves/" + moveName + "\">" + generation.toUpperCase() + " " + move.name + " move analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/moves/" + toId(move.name) + "\">" + generation.toUpperCase() + " " + move.name + " move analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+		}
+
+		// Format
+		if (format.id) {
+			var formatName = format.name;
+			var formatId = format.id;
+			if (formatId === 'doublesou') {
+				formatId = 'doubles';
+			} else if (formatId.includes('vgc')) {
+				formatId = 'vgc' + formatId.slice(-2);
+				formatName = 'VGC20' + formatId.slice(-2);
+			} else if (format.effectType !== 'Format') {
+				formatName = formatId = '';
+			}
+			if (formatName) {
+				atLeastOne = true;
+				this.sendReplyBox("<a href=\"https://www.smogon.com/dex/" + generation + "/formats/" + formatId + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " format analysis</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a>");
+			}
 		}
 
 		if (!atLeastOne) {
-			return this.sendReplyBox("Pok&eacute;mon, item, move, or ability not found for generation " + generation.toUpperCase() + ".");
+			return this.sendReplyBox("Pok&eacute;mon, item, move, ability, or format not found for generation " + generation.toUpperCase() + ".");
 		}
 	},
 	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
@@ -2041,7 +2249,7 @@ var commands = exports.commands = {
 		var diceQuantity = 1;
 		var diceDataStart = target.indexOf('d');
 		if (diceDataStart >= 0) {
-			diceQuantity = Number(target.slice(0, diceDataStart));
+			if (diceDataStart) diceQuantity = Number(target.slice(0, diceDataStart));
 			target = target.slice(diceDataStart + 1);
 			if (!Number.isInteger(diceQuantity) || diceQuantity <= 0 || diceQuantity > maxDice) return this.sendReply("The amount of dice rolled should be a natural number up to " + maxDice + ".");
 		}
@@ -2153,152 +2361,6 @@ var commands = exports.commands = {
 		this.sendReplyBox(target);
 	},
 	htmlboxhelp: ["/htmlbox [message] - Displays a message, parsing HTML code contained. Requires: " + Users.getGroupsThatCan('declare').join(" ") + " with global authority"],
-
-	sdt: 'seasonaldata',
-	sdata: 'seasonaldata',
-	seasonaldata: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-
-		var buffer = '|raw|';
-		var targetId = toId(target);
-		switch (targetId) {
-		case 'cura':
-		case 'recover':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Cura"><span class="col movenamecol">Cura</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Heals the active team by 20%.</span> </a></li><li></li></ul>';
-			break;
-		case 'curaga':
-		case 'softboiled':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Curaga"><span class="col movenamecol">Curaga</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Heals the active team by 33%.</span> </a></li><li></li></ul>';
-			break;
-		case 'wildgrowth':
-		case 'reflect':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Wild Growth"><span class="col movenamecol">Wild Growth</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Heals the team by 12.5% each turn for 5 turns.</span> </a></li><li></li></ul>';
-			break;
-		case 'powershield':
-		case 'acupressure':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Power Shield"><span class="col movenamecol">Power Shield</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">The target will be healed by 25% of the next damage received.</span> </a></li><li></li></ul>';
-			break;
-		case 'rejuvenation':
-		case 'holdhands':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Rejuvenation"><span class="col movenamecol">Rejuvenation</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">The target will be healed by 18% each turn for 3 turns.</span> </a></li><li></li></ul>';
-			break;
-		case 'fairyward':
-		case 'luckychant':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Fairy Ward"><span class="col movenamecol">Fairy Ward</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Prevents status and reduce damage by 5% for all the team for 3 turns.</span> </a></li><li></li></ul>';
-			break;
-		case 'taunt':
-		case 'followme':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Taunt"><span class="col movenamecol">Taunt</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Will redirect all attacks to user for three turns.</span> </a></li><li></li></ul>';
-			break;
-		case 'sacrifice':
-		case 'meditate':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Sacrifice"><span class="col movenamecol">Sacrifice</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Will redirect all team damage to user for 4 turns.</span> </a></li><li></li></ul>';
-			break;
-		case 'cooperation':
-		case 'helpinghand':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Cooperation"><span class="col movenamecol">Cooperation</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Switches positions with target.</span> </a></li><li></li></ul>';
-			break;
-		case 'slowdown':
-		case 'spite':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Slow Down"><span class="col movenamecol">Slow Down</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Removes 8 PP. Lowers damage by 15%. Gets disabled after use.</span> </a></li><li></li></ul>';
-			break;
-		case 'healingtouch':
-		case 'aromaticmist':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Healing Touch"><span class="col movenamecol">Healing Touch</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Heals target by 60% of its max HP.</span> </a></li><li></li></ul>';
-			break;
-		case 'penance':
-		case 'healbell':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Penance"><span class="col movenamecol">Penance</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Heals all team by 12.5% and places a shield that will heal them for 6.15% upon being hit.</span> </a></li><li></li></ul>';
-			break;
-		case 'stop':
-		case 'fakeout':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Stop"><span class="col movenamecol">Stop</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Target won\'t move. Has priority. User is disabled after use.</span> </a></li><li></li></ul>';
-			break;
-		case 'laststand':
-		case 'endure':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Last Stand"><span class="col movenamecol">Last Stand</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">User will survive the next hit. Damage taken is halved for the turn. User is disabled after use.</span> </a></li><li></li></ul>';
-			break;
-		case 'barkskin':
-		case 'withdraw':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Barkskin"><span class="col movenamecol">Barkskin</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Reduces damage taken by 25% by 2 turns.</span> </a></li><li></li></ul>';
-			break;
-		case 'punishment':
-		case 'seismictoss':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Punishment"><span class="col movenamecol">Punishment</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Base damage is 33% of user\'s current HP.</span> </a></li><li></li></ul>';
-			break;
-		case 'flamestrike':
-		case 'flamethrower':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Flamestrike"><span class="col movenamecol">Flamestrike</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />30%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Base damage is 40% if the target is burned.</span> </a></li><li></li></ul>';
-			break;
-		case 'conflagration':
-		case 'fireblast':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Conflagration"><span class="col movenamecol">Conflagration</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Burns target.</span> </a></li><li></li></ul>';
-			break;
-		case 'moonfire':
-		case 'thunderbolt':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Moonfire"><span class="col movenamecol">Moonfire</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Applies Moonfire for 4 turns, it deals 6% damage.</span> </a></li><li></li></ul>';
-			break;
-		case 'starfire':
-		case 'thunder':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Starfire"><span class="col movenamecol">Starfire</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />30%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Base damage is 40% if the target is moonfired.</span> </a></li><li></li></ul>';
-			break;
-		case 'corruption':
-		case 'toxic':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Corruption"><span class="col movenamecol">Corruption</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Deals 10% damage every turn for 4 turns.</span> </a></li><li></li></ul>';
-			break;
-		case 'soulleech':
-		case 'leechseed':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Soul Leech"><span class="col movenamecol">Soul Leech</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Drains 8% HP every turn for 4 turns.</span> </a></li><li></li></ul>';
-			break;
-		case 'icelance':
-		case 'icebeam':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Ice Lance"><span class="col movenamecol">Ice Lance</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />30%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Base damage is 40% if the target is chilled.</span> </a></li><li></li></ul>';
-			break;
-		case 'frostbite':
-		case 'freezeshock':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Frostbite"><span class="col movenamecol">Frostbite</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Chills target. It will be slower.</span> </a></li><li></li></ul>';
-			break;
-		case 'hurricane':
-		case 'aircutter':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Hurricane"><span class="col movenamecol">Hurricane</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Damage all adjacent foes.</span> </a></li><li></li></ul>';
-			break;
-		case 'storm':
-		case 'muddywater':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Storm"><span class="col movenamecol">Storm</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Damage all adjacent foes.</span> </a></li><li></li></ul>';
-			break;
-		case 'fury':
-		case 'furyswipes':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Fury"><span class="col movenamecol">Fury</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />15%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Disables user. Next use will have 100% base power.</span> </a></li><li></li></ul>';
-			break;
-		case 'garrote':
-		case 'scratch':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Garrote"><span class="col movenamecol">Garrote</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />20%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Causes bleeding. It deals 6.15% damage for 5 turns.</span> </a></li><li></li></ul>';
-			break;
-		case 'poisongas':
-		case 'smog':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Poison Gas"><span class="col movenamecol">Poison Gas</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Poisons the target.</span> </a></li><li></li></ul>';
-			break;
-		case 'mutilate':
-		case 'slash':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Mutilate"><span class="col movenamecol">Mutilate</span> <span class="col typecol"></span> <span class="col labelcol"><em>Power</em><br />27%</span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Increases power by 10% or 20% if target is psn or/and bld.</span> </a></li><li></li></ul>';
-			break;
-		case 'sacredshield':
-		case 'matblock':
-			buffer += '<ul class="utilichart"><li class="result"><a data-name="Sacred Shield"><span class="col movenamecol">Sacred Shield</span> <span class="col typecol"></span> <span class="col labelcol"></span> <span class="col widelabelcol"></span> <span class="col pplabelcol"></span> <span class="col movedesccol">Shields team greatly, losses HP.</span> </a></li><li></li></ul>';
-			break;
-		default:
-			buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found on this seasonal.";
-		}
-		if (targetId === 'evasion' || targetId === 'protect') {
-			return this.parse('/data protect');
-		} else if (!targetId) {
-			return this.sendReply("Please specify a valid Pok\u00e9mon, item, move, ability or nature in this seasonal.");
-		} else {
-			this.sendReply(buffer);
-		}
-	},
-	seasonaldatahelp: ["/seasonaldata [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature for the current seasonal.",
-		"!seasonaldata [pokemon/item/move/ability] - Show everyone these details. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
 	/*********************************************************
 	 * Custom commands
@@ -2412,3 +2474,14 @@ var commands = exports.commands = {
 		targetUser.disconnectAll();
 	}
 };
+
+process.nextTick(function () {
+	// This slow operation is done *after* we start listening for connections
+	// to the server. Anybody who connects while data is loading will
+	// have to wait a couple seconds before they are able to join the server, but
+	// at least they probably won't receive a connection error message.
+
+	Tools.includeData();
+	exports.commands = commands;
+	Object.merge(CommandParser.commands, commands);
+});

@@ -284,6 +284,7 @@ exports.BattleMovedex = {
 				targetPosition: target.position,
 				source: source,
 				moveData: {
+					name: "Future Sight",
 					basePower: 100,
 					category: "Special",
 					flags: {},
@@ -756,7 +757,7 @@ exports.BattleMovedex = {
 			if (targetAbility === sourceAbility) {
 				return false;
 			}
-			this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
+			this.add('-activate', source, 'move: Skill Swap', this.getAbility(targetAbility), this.getAbility(sourceAbility), '[of] ' + target);
 			source.setAbility(targetAbility);
 			target.setAbility(sourceAbility);
 		}

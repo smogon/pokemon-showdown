@@ -11,7 +11,48 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"flowergift": {
+		inherit: true,
+		onAllyModifyAtk: function (atk) {
+			if (this.isWeather('sunnyday')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onAllyModifySpD: function (spd) {
+			if (this.isWeather('sunnyday')) {
+				return this.chainModify(1.5);
+			}
+		}
+	},
+	"forewarn": {
+		inherit: true,
+		onStart: function (pokemon) {
+			var targets = pokemon.side.foe.active;
+			var warnMoves = [];
+			var warnBp = 1;
+			for (var i = 0; i < targets.length; i++) {
+				if (targets[i].fainted) continue;
+				for (var j = 0; j < targets[i].moveset.length; j++) {
+					var move = this.getMove(targets[i].moveset[j].move);
+					var bp = move.basePower;
+					if (move.ohko) bp = 160;
+					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
+					if (!bp && move.category !== 'Status') bp = 80;
+					if (bp > warnBp) {
+						warnMoves = [move];
+						warnBp = bp;
+					} else if (bp === warnBp) {
+						warnMoves.push(move);
+					}
+				}
+			}
+			if (!warnMoves.length) return;
+			var warnMove = warnMoves[this.random(warnMoves.length)];
+			this.add('-activate', pokemon, 'ability: Forewarn', '[from] ' + warnMove);
+		}
+	},
 	"leafguard": {
+		inherit: true,
 		onSetStatus: function (status, target, source, effect) {
 			if (effect && effect.id === 'rest') {
 				return;
@@ -106,9 +147,9 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Pressure');
 		},
-		onSourceDeductPP: function (pp, target, source) {
+		onDeductPP: function (target, source) {
 			if (target === source) return;
-			return pp + 1;
+			return 1;
 		},
 		id: "pressure",
 		name: "Pressure",

@@ -5,6 +5,12 @@ exports.BattleStatuses = {
 			this.add('-status', target, 'slp');
 			// 1-4 turns
 			this.effectData.time = this.random(2, 6);
+			// Turns spent using Sleep Talk/Snore immediately before switching out while asleep
+			this.effectData.skippedTime = 0;
+		},
+		onSwitchIn: function (target) {
+			this.effectData.time += this.effectData.skippedTime;
+			this.effectData.skippedTime = 0;
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
@@ -18,8 +24,10 @@ exports.BattleStatuses = {
 			}
 			this.add('cant', pokemon, 'slp');
 			if (move.sleepUsable) {
+				this.effectData.skippedTime++;
 				return;
 			}
+			this.effectData.skippedTime = 0;
 			return false;
 		}
 	},

@@ -130,35 +130,11 @@ var Validator;
 			text = text.userid;
 		}
 
-		return string(text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-	};*/
-
-	/**
-	 * Validates a username or Pokemon nickname
-	 */
-	/*var bannedNameStartChars = {'~':1, '&':1, '@':1, '%':1, '+':1, '-':1, '!':1, '?':1, '#':1, ' ':1};
-	global.toName = function (name) {
-		name = string(name);
-		name = name.replace(/[\|\s\[\]\,]+/g, ' ').trim();
-		while (bannedNameStartChars[name.charAt(0)]) {
-			name = name.substr(1);
-		}
-		if (name.length > 18) name = name.substr(0, 18);
-		return name.trim();
-	};*/
-
-	/**
-	 * Safely ensures the passed variable is a string
-	 * Simply doing '' + str can crash if str.toString crashes or isn't a function
-	 * If we're expecting a string and being given anything that isn't a string
-	 * or a number, it's safe to assume it's an error, and return ''
-	 */
-	/*global.string = function (str) {
-		if (typeof str === 'string' || typeof str === 'number') return '' + str;
-		return '';
+		if (typeof text !== 'string' && typeof text !== 'number') return '';
+		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	};
 
-	global.Tools = require('./tools.js');
+	global.Tools = require('./tools.js').includeData();
 
 	require('./repl.js').start('team-validator-', process.pid, function (cmd) { return eval(cmd); });
 
@@ -292,16 +268,16 @@ Validator = (function () {
 			return ["This is not a Pokemon."];
 		}
 
-		var template = tools.getTemplate(string(set.species));
+		var template = tools.getTemplate(Tools.getString(set.species));
 		if (!template.exists) {
 			return ["The Pokemon '" + set.species + "' does not exist."];
 		}
 		set.species = template.species;
 
-		set.name = toName(set.name);
-		var item = tools.getItem(string(set.item));
+		set.name = tools.getName(set.name);
+		var item = tools.getItem(Tools.getString(set.item));
 		set.item = item.name;
-		var ability = tools.getAbility(string(set.ability));
+		var ability = tools.getAbility(Tools.getString(set.ability));
 		set.ability = ability.name;
 		if (!Array.isArray(set.moves)) set.moves = [];
 
@@ -338,10 +314,13 @@ Validator = (function () {
 		if (format.ruleset) {
 			for (var i = 0; i < format.ruleset.length; i++) {
 				var subformat = tools.getFormat(format.ruleset[i]);
-				if (subformat.validateSet) {
-					problems = problems.concat(subformat.validateSet.call(tools, set, format) || []);
+				if (subformat.changeSet) {
+					problems = problems.concat(subformat.changeSet.call(tools, set, format) || []);
 				}
 			}
+		}
+		if (format.changeSet) {
+			problems = problems.concat(format.changeSet.call(tools, set, format, setHas, teamHas) || []);
 		}
 		template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
@@ -429,7 +408,7 @@ Validator = (function () {
 
 			for (var i = 0; i < set.moves.length; i++) {
 				if (!set.moves[i]) continue;
-				var move = tools.getMove(string(set.moves[i]));
+				var move = tools.getMove(Tools.getString(set.moves[i]));
 				set.moves[i] = move.name;
 				check = move.id;
 				setHas[check] = true;
@@ -484,7 +463,7 @@ Validator = (function () {
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
 							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific event.");
 						}
-						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
+						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0 && (template.species === eventTemplate.species || tools.getAbility(set.ability).gen <= eventData.generation)) {
 							problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it has a move only available from a specific event.");
 						}
 						if (eventData.gender) {
@@ -551,8 +530,16 @@ Validator = (function () {
 			}
 		}
 
+		if (format.ruleset) {
+			for (var i = 0; i < format.ruleset.length; i++) {
+				var subformat = tools.getFormat(format.ruleset[i]);
+				if (subformat.validateSet) {
+					problems = problems.concat(subformat.validateSet.call(tools, set, format, setHas, teamHas) || []);
+				}
+			}
+		}
 		if (format.validateSet) {
-			problems = problems.concat(format.validateSet.call(tools, set, format) || []);
+			problems = problems.concat(format.validateSet.call(tools, set, format, setHas, teamHas) || []);
 		}
 
 		if (!problems.length) {
@@ -612,8 +599,10 @@ Validator = (function () {
 			alreadyChecked[template.speciesid] = true;
 			// STABmons hack to avoid copying all of validateSet to formats
 			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && move !== 'chatter') {
-				if (template.species === 'Shaymin') template.types = tools.getTemplate('shayminsky').types;
-				if (template.types.indexOf(tools.getMove(move).type) >= 0) return false;
+				var types = template.types;
+				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
+				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
+				if (types.indexOf(tools.getMove(move).type) >= 0) return false;
 			}
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {

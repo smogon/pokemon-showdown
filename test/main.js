@@ -4,12 +4,12 @@ var net = require('net');
 var fs = require('fs');
 
 var testPort;
-function getPort (callback) {
+function getPort(callback) {
 	var port = testPort;
 	var server = net.createServer();
 
 	server.listen(port, function (err) {
-		server.once('close', function onclose () {
+		server.once('close', function onclose() {
 			callback(port);
 		});
 		server.close();
@@ -20,7 +20,7 @@ function getPort (callback) {
 	});
 }
 
-function init (callback) {
+function init(callback) {
 	require('./../app.js');
 	process.listeners('uncaughtException').forEach(function (listener) {
 		process.removeListener('uncaughtException', listener);
@@ -35,6 +35,23 @@ function init (callback) {
 	// Turn IPC methods into no-op
 	BattleEngine.Battle.prototype.send = function () {};
 	BattleEngine.Battle.prototype.receive = function () {};
+
+	var Simulator = global.Simulator;
+	Simulator.Battle.prototype.send = function () {};
+	Simulator.Battle.prototype.receive = function () {};
+	Simulator.SimulatorProcess.processes.forEach(function (process) {
+		// Don't crash -we don't care of battle child processes.
+		process.process.on('error', function () {});
+	});
+
+	LoginServer.disabled = true;
+
+	// Deterministic tests
+	BattleEngine.Battle.prototype._init = BattleEngine.Battle.prototype.init;
+	BattleEngine.Battle.prototype.init = function (roomid, formatarg, rated) {
+		this._init(roomid, formatarg, rated);
+		this.seed = this.startingSeed = [0x09d56, 0x08642, 0x13656, 0x03653];
+	};
 
 	callback();
 }

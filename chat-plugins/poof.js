@@ -56,8 +56,9 @@ exports.commands = {
 		if (target && !this.can('broadcast')) return false;
 		if (room.id !== 'lobby') return false;
 		var message = target || messages[Math.floor(Math.random() * messages.length)];
-		if (message.indexOf('{{user}}') < 0)
+		if (message.indexOf('{{user}}') < 0) {
 			message = '{{user}} ' + message;
+		}
 		message = message.replace(/{{user}}/g, user.name);
 		if (!this.canTalk(message)) return false;
 

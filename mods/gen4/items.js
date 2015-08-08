@@ -32,7 +32,7 @@ exports.BattleItems = {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
 				var decision = this.willMove(pokemon);
 				if (!decision) return;
-				this.addQueue({
+				this.insertQueue({
 					choice: 'event',
 					event: 'Custap',
 					priority: decision.priority + 0.1,
@@ -167,12 +167,15 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10,
 			effect: function (pokemon) {
-				pokemon.removeVolatile('attract');
+				if (pokemon.removeVolatile('attract')) {
+					this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
+				}
 			}
 		},
 		onUpdate: function (pokemon) {
 			if (pokemon.volatiles.attract && pokemon.useItem()) {
 				pokemon.removeVolatile('attract');
+				this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
 			}
 		},
 		desc: "Cures infatuation. One-time use."

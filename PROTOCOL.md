@@ -223,7 +223,7 @@ represented by a space), and the rest of the string being their username.
 
 > The battle has ended in a tie.
 
-**Major actions**
+######Major actions
 
 In battle, most Pokémon actions come in the form `|ACTION|POKEMON|DETAILS`
 followed by a few messages detailing what happens after the action occurs.
@@ -237,6 +237,12 @@ In doubles and triples battles, `a` will refer to the leftmost Pokémon
 on one team and the rightmost Pokémon on the other (so `p1a` faces `p2c`,
 etc). `NAME` is the nickname of the Pokémon performing the action.
 
+Battle actions (especially minor actions) often come with tags such as
+`|[from] EFFECT|[of] SOURCE`. `EFFECT` will be an effect (move, ability,
+item, status, etc), and `SOURCE` will be a Pokémon. These can affect the
+message or animation displayed, but do not affect anything else. Other 
+tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
+
 `|move|POKEMON|MOVE|TARGET`
 
 > The specified Pokémon has used move `MOVE` at `TARGET`. If a move has
@@ -244,7 +250,10 @@ etc). `NAME` is the nickname of the Pokémon performing the action.
 > targets a side, `TARGET` will be a (possibly fainted) Pokémon on that
 > side.
 >
-> `move` can be tagged with `|[miss]` to indicate that the move missed.
+> If `|[miss]` is present, the move missed.
+>
+> `|[anim] MOVE2` tells the client to use the animation of `MOVE2` instead
+> of `MOVE` when displaying to the client.
 
 `|switch|POKEMON|SPECIES|HP STATUS` or `|drag|POKEMON|SPECIES|HP STATUS`
 
@@ -286,19 +295,13 @@ etc). `NAME` is the nickname of the Pokémon performing the action.
 
 > The Pokémon `POKEMON` has fainted.
 
-**Minor actions**
+######Minor actions
 
 Minor actions are less important than major actions. In the official client,
 they're usually displayed in small font if they have a message. Pretty much
 anything that happens in a battle other than a switch or the fact that a move
 was used is a minor action. So yes, the effects of a move such as damage or
 stat boosts are minor actions.
-
-Minor actions often come with tags such as `|[from] EFFECT|[of] SOURCE`.
-`EFFECT` will be an effect (move, ability, item, status, etc), and `SOURCE`
-will be a Pokémon. These can affect the message or animation displayed, but
-do not affect anything else. Other tags include `|[still]` (suppress
-animation) and `|[silent]` (suppress message).
 
 `|-fail|POKEMON|ACTION`
 
@@ -351,6 +354,24 @@ animation) and `|[silent]` (suppress message).
 > turn. Otherwise, it means that the weather has changed due to a move or ability,
 > or has expired, in which case `WEATHER` will be `none`.
 
+`|-fieldstart|CONDITION`
+
+> The field condition `CONDITION` has started. Field conditions are all effects that
+> affect the entire field and aren't a weather.
+
+`|-fieldend|CONDITION`
+
+> Indicates that the field condition `CONDITION` has ended.
+
+`|-sidestart|SIDE|CONDITION`
+
+> A side condition `CONDITION` has started on `SIDE`. Side conditions are all effects
+> that affect one side of the field.
+
+`|-sideend|SIDE|CONDITION`
+
+> Indicates that the side condition `CONDITION` ended for the given `SIDE`.
+
 `|-crit|POKEMON`
 
 > A move has dealt a critical hit against the `POKEMON`.
@@ -384,11 +405,14 @@ animation) and `|[silent]` (suppress message).
 
 `|-ability|POKEMON|ABILITY`
 
-> The `ABILITY` of the `POKEMON` has been changed or revealed due to a move or ability.
-> This also includes abilities that reveal themselves upon switch-in, like Mold Breaker. 
-> The only move tha does not trigger this message is Skill Swap, so that if you use Skill 
-> Swap between teammates in a doubles or triples battle, the abilities of the two Pokémon 
-> are not revealed to the opponent, similar to its behavior in game.
+> The `ABILITY` of the `POKEMON` has been changed due to a move/ability, or it has
+> activated in a way that could not be better described by one of the other minor
+> messages. For example, Clear Body sends `-fail` when it blocks stat drops, while
+> Mold Breaker sends this message to reveal itself upon switch-in.
+>
+> Note that Skill Swap does not send this message despite it changing abilities,
+> because it does not reveal abilities when used between allies in a Double or
+> Triple Battle.
 
 `|-endability|POKEMON`
 
@@ -399,6 +423,10 @@ animation) and `|[silent]` (suppress message).
 
 > The Pokémon `POKEMON` has transformed into `SPECIES` by the effect of Transform 
 > or the ability Imposter.
+
+`|-mega|POKEMON|MEGASTONE`
+
+> The Pokémon `POKEMON` used `MEGASTONE` to Mega Evolve.
 
 `|-activate|EFFECT`
 
@@ -429,7 +457,7 @@ enough to get you started. You can watch the data sent and received from
 the server on a regular connection, or look at the client source code
 for a full list of message types.
 
-**Action requests**
+######Action requests
 
 These are how the client sends the player's decisions to the server. All
 requests except `/undo` can be sent with `|RQID` at the end. `RQID` is
@@ -509,19 +537,20 @@ move.
 > You tried to change your username to `USERNAME` but it failed for the
 > reason described in `MESSAGE`.
 
-`|challstr|KEYID|CHALLENGE`
+`|challstr|CHALLSTR`
 
 > You just connected to the server, and we're giving you some information you'll need to log in.
 >
 > If you're already logged in and have session cookies, you can make an HTTP GET request to
-> `http://play.pokemonshowdown.com/action.php?act=upkeep&challengekeyid=KEYID&challenge=CHALLENGE`
+> `http://play.pokemonshowdown.com/action.php?act=upkeep&challstr=CHALLSTR`
 >
 > Otherwise, you'll need to make an HTTP POST request to `http://play.pokemonshowdown.com/action.php`
-> with the data `act=login&name=USERNAME&pass=PASSWORD&challengekeyid=KEYID&challenge=CHALLENGE`
+> with the data `act=login&name=USERNAME&pass=PASSWORD&challstr=CHALLSTR`
 >
-> `USERNAME` is your username and `PASSWORD` is your password, and `KEYID` and
-> `CHALLENGE` are the values you got from `|challstr|`. (Also feel free to make
-> the request to `https://` if your client supports it.)
+> `USERNAME` is your username and `PASSWORD` is your password, and `CHALLSTR`
+> is the value you got from `|challstr|`. Note that `CHALLSTR` contains `|`
+> characters. (Also feel free to make the request to `https://` if your client
+> supports it.)
 >
 > Either way, the response will start with `]` and be followed by a JSON
 > object which we'll call `data`.

@@ -33,5 +33,9 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'braviary').learnset.extremespeed = ['6T'];
 		this.modData('Pokedex', 'cacturne').abilities['1'] = 'Sand Rush';
 		this.modData('Pokedex', 'beedrillmega').types = ['Bug', 'Ground'];
+		this.modData('Pokedex', 'swanna').abilities['1'] = 'Gale Wings';
+		this.modData('Pokedex', 'kyurem').abilities['1'] = 'Sheer Force';
+		this.modData('Pokedex', 'donphan').types = ['Ground', 'Fairy'];
+		this.modData('Pokedex', 'hydreigon').abilities['1'] = 'Protean';
 	}
 };

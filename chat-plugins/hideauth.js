@@ -12,8 +12,9 @@ exports.commands = {
 
 		user.getIdentity = function (roomid) {
 			var identity = Object.getPrototypeOf(this).getIdentity.call(this, roomid);
-			if (identity[0] === this.group)
+			if (identity[0] === this.group) {
 				return target + identity.slice(1);
+			}
 			return identity;
 		};
 		user.updateIdentity();

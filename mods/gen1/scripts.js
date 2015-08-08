@@ -142,6 +142,8 @@ exports.BattleScripts = {
 						if (usedMovePos > -1 && pokemon.moveset[usedMovePos].pp === 0) {
 							// If we were on the middle of the 0 PP sequence, the PPs get reset to 63.
 							pokemon.moveset[usedMovePos].pp = 63;
+							pokemon.isStale = 2;
+							pokemon.isStaleSource = 'ppoverflow';
 						}
 					}
 				}
@@ -942,26 +944,33 @@ exports.BattleScripts = {
 		var teamdexno = [];
 		var team = [];
 
+		var hasDexNumber = {};
+		var formes = [[], [], [], [], [], []];
+
 		// Pick six random Pokémon, no repeats.
+		var num;
 		for (var i = 0; i < 6; i++) {
-			while (true) {
-				var x = Math.floor(Math.random() * 151) + 1;
-				if (teamdexno.indexOf(x) < 0) {
-					teamdexno.push(x);
-					break;
-				}
+			do {
+				num = this.random(151) + 1;
+			} while (num in hasDexNumber);
+			hasDexNumber[num] = i;
+		}
+
+		var formeCounter = 0;
+		for (var id in this.data.Pokedex) {
+			if (!(this.data.Pokedex[id].num in hasDexNumber)) continue;
+			var template = this.getTemplate(id);
+			if (!template.learnset || template.forme) continue;
+			formes[hasDexNumber[template.num]].push(template.species);
+			if (++formeCounter >= 6) {
+				// Gen 1 had no alternate formes, so we can break out of the loop already.
+				break;
 			}
 		}
 
 		for (var i = 0; i < 6; i++) {
 			// Choose forme.
-			var formes = [];
-			for (var j in this.data.Pokedex) {
-				if (this.data.Pokedex[j].num === teamdexno[i] && this.getTemplate(this.data.Pokedex[j].species).learnset && this.data.Pokedex[j].species !== 'Pichu-Spiky-eared') {
-					formes.push(this.data.Pokedex[j].species);
-				}
-			}
-			var poke = formes.sample();
+			var poke = formes[i][this.random(formes[i].length)];
 			var template = this.getTemplate(poke);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
@@ -992,23 +1001,16 @@ exports.BattleScripts = {
 
 			// Random DVs.
 			var ivs = {
-				hp: Math.floor(Math.random() * 30),
-				atk: Math.floor(Math.random() * 30),
-				def: Math.floor(Math.random() * 30),
-				spa: Math.floor(Math.random() * 30),
-				spd: Math.floor(Math.random() * 30),
-				spe: Math.floor(Math.random() * 30)
+				hp: this.random(30),
+				atk: this.random(30),
+				def: this.random(30),
+				spa: this.random(30),
+				spd: this.random(30),
+				spe: this.random(30)
 			};
 
-			// All EVs.
-			var evs = {
-				hp: 255,
-				atk: 255,
-				def: 255,
-				spa: 255,
-				spd: 255,
-				spe: 255
-			};
+			// Maxed EVs.
+			var evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255,	spe: 255};
 
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
@@ -1017,12 +1019,10 @@ exports.BattleScripts = {
 			for (var move in template.learnset) {
 				if (this.getMove(move).gen === 1) pool.push(move);
 			}
-			if (pool.length > 4) {
-				moves = pool.sample(4);
-			} else if (pool.length > 0) {
+			if (pool.length <= 4) {
 				moves = pool;
 			} else {
-				moves = ['struggle'];
+				moves = [this.sampleNoReplace(pool), this.sampleNoReplace(pool), this.sampleNoReplace(pool), this.sampleNoReplace(pool)];
 			}
 
 			team.push({
@@ -1044,64 +1044,77 @@ exports.BattleScripts = {
 	// Random team generation for Gen 1 Random Battles.
 	randomTeam: function (side) {
 		// Get what we need ready.
-		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
-		var i = 1;
 
-		// We need to check it's one of the first 151 because formats data are installed onto main format data, not replaced.
-		for (var n in this.data.FormatsData) {
-			if (this.data.FormatsData[n].randomBattleMoves && i < 152) {
-				keys.push(n);
-			}
-			i++;
+		var handicapMons = {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1, 'ditto':1};
+		var nuTiers = {'UU':1, 'BL':1, 'NFE':1, 'LC':1};
+		var uuTiers = {'NFE':1, 'UU':1, 'BL':1};
+
+		var n = 1;
+		var pokemonPool = [];
+		for (var id in this.data.FormatsData) {
+			// FIXME: Not ES-compliant
+			if (n++ > 151 || !this.data.FormatsData[id].randomBattleMoves) continue;
+			pokemonPool.push(id);
 		}
-		keys = keys.randomize();
 
 		// Now let's store what we are getting.
 		var typeCount = {};
-		var weaknessCount = {'electric':0, 'psychic':0, 'water':0, 'ice':0};
+		var weaknessCount = {'Electric':0, 'Psychic':0, 'Water':0, 'Ice':0};
 		var uberCount = 0;
 		var nuCount = 0;
 		var hasShitmon = false;
 
-		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
-			var template = this.getTemplate(keys[i]);
-			if (!template || !template.name || !template.types) continue;
+		while (pokemonPool.length && pokemonLeft < 6) {
+			var template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			if (!template.exists) continue;
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, you're covered in OUs and Ubers if possible
 			var tier = template.tier;
-			if (tier === 'LC' && (nuCount > 1 || hasShitmon)) continue;
-			if ((tier === 'NFE' || tier === 'UU' || tier === 'NU') && (hasShitmon || (nuCount > 2 && this.random(1)))) continue;
-			// Unless you have one of the worst mons, in that case we allow luck to give you both Mew and Mewtwo.
-			if (tier === 'Uber' && uberCount >= 1 && !hasShitmon) continue;
+			switch (tier) {
+			case 'LC':
+				if (nuCount > 1 || hasShitmon) continue;
+				break;
+			case 'Uber':
+				// Unless you have one of the worst mons, in that case we allow luck to give you all Ubers.
+				if (uberCount >= 1 && !hasShitmon) continue;
+				break;
+			default:
+				if (uuTiers[tier] && (hasShitmon || (nuCount > 2 && this.random(2) >= 1))) continue;
+			}
 
-			// We need a weakness count of spammable attacks to avoid being swept by those.
-			// Spammable attacks are: Thunderbolt, Psychic, Surf, Blizzard.
 			var skip = false;
-			Object.keys(weaknessCount).forEach(function (type) {
-				var notImmune = Tools.getImmunity(type, template);
-				if (notImmune && Tools.getEffectiveness(type, template) > 0) {
-					weaknessCount[type]++;
-				}
-				if (weaknessCount[type] > 2) skip = true;
-			});
-			if (skip) continue;
 
 			// Limit 2 of any type as well. Diversity and minor weakness count.
 			// The second of a same type has halved chance of being added.
 			var types = template.types;
 			for (var t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(1))) {
+				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(2))) {
 					skip = true;
 					break;
 				}
 			}
 			if (skip) continue;
 
+			// We need a weakness count of spammable attacks to avoid being swept by those.
+			// Spammable attacks are: Thunderbolt, Psychic, Surf, Blizzard.
+			var pokemonWeaknesses = [];
+			for (var type in weaknessCount) {
+				var increaseCount = Tools.getImmunity(type, template) && Tools.getEffectiveness(type, template) > 0;
+				if (!increaseCount) continue;
+				if (weaknessCount[type] >= 2) {
+					skip = true;
+					break;
+				}
+				pokemonWeaknesses.push(type);
+			}
+
+			if (skip) continue;
+
 			// The set passes the limitations.
-			var set = this.randomSet(template, i);
+			var set = this.randomSet(template, pokemon.length);
 			pokemon.push(set);
 
 			// Now let's increase the counters. First, the Pokémon left.
@@ -1109,34 +1122,38 @@ exports.BattleScripts = {
 
 			// Type counter.
 			for (var t = 0; t < types.length; t++) {
-				if (types[t] in typeCount) {
+				if (typeCount[types[t]]) {
 					typeCount[types[t]]++;
 				} else {
 					typeCount[types[t]] = 1;
 				}
 			}
 
-			// Increment type bias counters.
+			// Weakness counter.
+			for (var t = 0; t < pokemonWeaknesses.length; t++) {
+				weaknessCount[pokemonWeaknesses[t]]++;
+			}
+
+			// Increment tier bias counters.
 			if (tier === 'Uber') {
 				uberCount++;
-			} else if (tier === 'UU' || tier === 'NU' || tier === 'NFE' || tier === 'LC') {
+			} else if (nuTiers[tier]) {
 				nuCount++;
 			}
 
 			// Is it Magikarp?
-			if (keys[i] in {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1, 'ditto':1}) hasShitmon = true;
+			if (template.speciesid in handicapMons) hasShitmon = true;
 		}
 
 		return pokemon;
 	},
 	// Random set generation for Gen 1 Random Battles.
-	randomSet: function (template, i) {
-		if (i === undefined) i = 1;
+	randomSet: function (template, slot) {
+		if (slot === undefined) slot = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1.
 
-		var moveKeys = template.randomBattleMoves;
-		moveKeys = moveKeys.randomize();
+		var movePool = template.randomBattleMoves.slice();
 		var moves = [];
 		var hasType = {};
 		hasType[template.types[0]] = true;
@@ -1145,24 +1162,28 @@ exports.BattleScripts = {
 		var counter = {};
 		var setupType = '';
 
-		var j = 0;
+		// Moves that boost Attack:
+		var PhysicalSetup = {
+			swordsdance:1, sharpen:1
+		};
+		// Moves which boost Special Attack:
+		var SpecialSetup = {
+			amnesia:1, growth:1
+		};
+
+		// Add the mandatory move
+		if (template.essentialMove) {
+			moves.push(template.essentialMove);
+		}
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			var howMany = (template.essentialMove) ? 3 : 4;
-			while (moves.length < howMany && j < moveKeys.length) {
-				var moveid = toId(moveKeys[j]);
-				j++;
+			while (moves.length < 4 && movePool.length) {
+				var moveid = this.sampleNoReplace(movePool);
 				moves.push(moveid);
 			}
 
-			// Add now the mandatory move
-			if (template.essentialMove) {
-				moves.unshift(template.essentialMove);
-				j++;
-			}
-
-			// Only do move choosing if we have more than four on the moveset...
-			if (moveKeys.length > howMany) {
+			// Only do move choosing if we have backup moves in the pool...
+			if (movePool.length) {
 				hasMove = {};
 				counter = {Physical: 0, Special: 0, Status: 0, physicalsetup: 0, specialsetup: 0};
 				for (var k = 0; k < moves.length; k++) {
@@ -1172,10 +1193,10 @@ exports.BattleScripts = {
 					if (!move.damage && !move.damageCallback) {
 						counter[move.category]++;
 					}
-					if ({swordsdance:1, sharpen:1}[moveid]) {
+					if (PhysicalSetup[moveid]) {
 						counter['physicalsetup']++;
 					}
-					if ({amnesia:1, growth:1}[moveid]) {
+					if (SpecialSetup[moveid]) {
 						counter['specialsetup']++;
 					}
 				}
@@ -1188,6 +1209,7 @@ exports.BattleScripts = {
 
 				for (var k = 0; k < moves.length; k++) {
 					var moveid = moves[k];
+					if (moveid === template.essentialMove) continue;
 					var move = this.getMove(moveid);
 					var rejected = false;
 					if (hasMove[moveid]) rejected = true;
@@ -1300,14 +1322,14 @@ exports.BattleScripts = {
 							break;
 						} // End of switch for moveid
 					}
-					if (rejected && j < moveKeys.length) {
+					if (rejected) {
 						moves.splice(k, 1);
 						break;
 					}
 					counter[move.category]++;
 				} // End of for
 			} // End of the check for more than 4 moves on moveset.
-		} while (moves.length < 4 && j < moveKeys.length);
+		} while (moves.length < 4 && movePool.length);
 
 		var levelScale = {
 			LC: 96,
