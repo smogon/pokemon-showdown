@@ -1800,7 +1800,7 @@ exports.BattleScripts = {
 			item = 'Black Sludge';
 		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
 			item = 'Leftovers';
-		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise']) {
+		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise'] && !hasMove['sleeptalk']) {
 			item = 'Air Balloon';
 		} else if (counter.Status <= 1 && ability !== 'Sturdy') {
 			item = 'Life Orb';
