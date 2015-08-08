@@ -83,4 +83,17 @@ describe('Cloud Nine', function () {
 		battle.commitDecisions();
 		assert.ok(battle.weather, 'deltastream');
 	});
+
+	it('should still display status of the weather', function () {
+		battle = BattleEngine.Battle.construct();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['calmmind']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Sunkern', ability: 'solarpower', moves: ['sunnyday']}]);
+		battle.commitDecisions();
+		assert.strictEqual(battle.log[battle.lastMoveLine + 1], '|-weather|SunnyDay');
+		for (var i = 0; i < 4; i++) {
+			assert.strictEqual(battle.log[battle.lastMoveLine + 3], '|-weather|SunnyDay|[upkeep]');
+			battle.commitDecisions();
+		}
+		assert.strictEqual(battle.log[battle.lastMoveLine + 3], '|-weather|none');
+	});
 });

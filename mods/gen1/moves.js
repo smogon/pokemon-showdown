@@ -253,8 +253,7 @@ exports.BattleMovedex = {
 					this.effectData.duration++;
 				}
 				var moves = pokemon.moves;
-				moves = moves.randomize();
-				var move = this.getMove(moves[0]);
+				var move = this.getMove(moves[this.random(moves.length)]);
 				this.add('-start', pokemon, 'Disable', move.name);
 				this.effectData.move = move.id;
 				return;
@@ -401,9 +400,7 @@ exports.BattleMovedex = {
 					if (pokemon !== source) {
 						// Clears the status from the opponent
 						pokemon.clearStatus();
-						continue;
 					}
-					// Only for user: Toxic becomes normal Poison; clear volatiles.
 					if (pokemon.status === 'tox') {
 						pokemon.setStatus('psn');
 					}
@@ -535,29 +532,21 @@ exports.BattleMovedex = {
 		desc: "This move is replaced by a random move on target's moveset. The copied move has the maximum PP for that move. Ignores a target's Substitute.",
 		shortDesc: "A random target's move replaces this one.",
 		onHit: function (target, source) {
-			var disallowedMoves = {mimic:1, struggle:1};
-			if (source.transformed) return false;
 			var moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
 			var moves = target.moves;
-			moves = moves.randomize();
-			var move = false;
-			for (var i = 0; i < moves.length; i++) {
-				if (!(moves[i] in disallowedMoves)) {
-					move = moves[i];
-					break;
-				}
-			}
+			var move = moves[this.random(moves.length)];
 			if (!move) return false;
 			move = this.getMove(move);
 			source.moveset[moveslot] = {
 				move: move.name,
 				id: move.id,
-				pp: move.pp,
-				maxpp: move.pp,
+				pp: source.moveset[moveslot].pp,
+				maxpp: move.pp * 8 / 5,
 				target: move.target,
 				disabled: false,
-				used: false
+				used: false,
+				virtual: true
 			};
 			source.moves[moveslot] = toId(move.name);
 			this.add('-start', source, 'Mimic', move.name);

@@ -134,7 +134,7 @@ var Validator;
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	};
 
-	global.Tools = require('./tools.js');
+	global.Tools = require('./tools.js').includeData();
 
 	require('./repl.js').start('team-validator-', process.pid, function (cmd) { return eval(cmd); });
 
@@ -314,10 +314,13 @@ Validator = (function () {
 		if (format.ruleset) {
 			for (var i = 0; i < format.ruleset.length; i++) {
 				var subformat = tools.getFormat(format.ruleset[i]);
-				if (subformat.validateSet) {
-					problems = problems.concat(subformat.validateSet.call(tools, set, format) || []);
+				if (subformat.changeSet) {
+					problems = problems.concat(subformat.changeSet.call(tools, set, format) || []);
 				}
 			}
+		}
+		if (format.changeSet) {
+			problems = problems.concat(format.changeSet.call(tools, set, format, setHas, teamHas) || []);
 		}
 		template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
@@ -460,7 +463,7 @@ Validator = (function () {
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
 							problems.push(name + (isHidden ? " can't have" : " must have") + " its hidden ability because it has a move only available from a specific event.");
 						}
-						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0) {
+						if (tools.gen <= 5 && eventData.abilities && eventData.abilities.indexOf(ability.id) < 0 && (template.species === eventTemplate.species || tools.getAbility(set.ability).gen <= eventData.generation)) {
 							problems.push(name + " must have " + eventData.abilities.join(" or ") + " because it has a move only available from a specific event.");
 						}
 						if (eventData.gender) {
@@ -527,8 +530,16 @@ Validator = (function () {
 			}
 		}
 
+		if (format.ruleset) {
+			for (var i = 0; i < format.ruleset.length; i++) {
+				var subformat = tools.getFormat(format.ruleset[i]);
+				if (subformat.validateSet) {
+					problems = problems.concat(subformat.validateSet.call(tools, set, format, setHas, teamHas) || []);
+				}
+			}
+		}
 		if (format.validateSet) {
-			problems = problems.concat(format.validateSet.call(tools, set, format) || []);
+			problems = problems.concat(format.validateSet.call(tools, set, format, setHas, teamHas) || []);
 		}
 
 		if (!problems.length) {
@@ -588,8 +599,10 @@ Validator = (function () {
 			alreadyChecked[template.speciesid] = true;
 			// STABmons hack to avoid copying all of validateSet to formats
 			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && move !== 'chatter') {
-				if (template.species === 'Shaymin') template.types = tools.getTemplate('shayminsky').types;
-				if (template.types.indexOf(tools.getMove(move).type) >= 0) return false;
+				var types = template.types;
+				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
+				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
+				if (types.indexOf(tools.getMove(move).type) >= 0) return false;
 			}
 			if (template.learnset) {
 				if (template.learnset[move] || template.learnset['sketch']) {

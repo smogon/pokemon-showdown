@@ -108,7 +108,7 @@ function canTalk(user, room, connection, message, targetUser) {
 					connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
 					return false;
 				}
-			} else if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[room.modchat].rank) {
+			} else if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[room.modchat].rank && !user.can('bypassall')) {
 				var groupName = Config.groups.bySymbol[room.modchat].name || room.modchat;
 				connection.sendTo(room, "Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
 				return false;
@@ -154,7 +154,7 @@ function canTalk(user, room, connection, message, targetUser) {
 }
 
 var Context = exports.Context = (function () {
-	function Context (options) {
+	function Context(options) {
 		this.cmd = options.cmd || '';
 		this.cmdToken = options.cmdToken || '';
 
@@ -245,7 +245,7 @@ var Context = exports.Context = (function () {
 		return true;
 	};
 	Context.prototype.canBroadcast = function (suppressMessage) {
-		if (this.cmdToken === BROADCAST_TOKEN) {
+		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
 			var message = this.canTalk(this.message);
 			if (!message) return false;
 			if (!this.user.can('broadcast', null, this.room)) {
@@ -360,6 +360,7 @@ var Context = exports.Context = (function () {
 	Context.prototype.targetUserOrSelf = function (target, exactName) {
 		if (!target) {
 			this.targetUsername = this.user.name;
+			this.inputUsername = this.user.name;
 			return this.user;
 		}
 		this.splitTarget(target, exactName);
@@ -374,15 +375,19 @@ var Context = exports.Context = (function () {
 		if (commaIndex < 0) {
 			var targetUser = Users.get(target, exactName);
 			this.targetUser = targetUser;
+			this.inputUsername = target.trim();
 			this.targetUsername = targetUser ? targetUser.name : target;
 			return '';
 		}
-		var targetUser = Users.get(target.substr(0, commaIndex), exactName);
-		if (!targetUser) {
-			targetUser = null;
+		this.inputUsername = target.substr(0, commaIndex);
+		var targetUser = Users.get(this.inputUsername, exactName);
+		if (targetUser) {
+			this.targetUser = targetUser;
+			this.targetUsername = this.inputUsername = targetUser.name;
+		} else {
+			this.targetUser = null;
+			this.targetUsername = this.inputUsername;
 		}
-		this.targetUser = targetUser;
-		this.targetUsername = targetUser ? targetUser.name : target.substr(0, commaIndex);
 		return target.substr(commaIndex + 1).trim();
 	};
 
@@ -509,6 +514,11 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 				}
 			} else {
 				return context.errorReply("The command '" + cmdToken + fullCmd + "' was unrecognized. To send a message starting with '" + cmdToken + fullCmd + "', type '" + cmdToken.repeat(2) + fullCmd + "'.");
+			}
+		} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) && VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
+			message = message.trim();
+			if (message.charAt(0) !== BROADCAST_TOKEN) {
+				message = message.charAt(0) + message;
 			}
 		}
 	}

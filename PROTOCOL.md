@@ -237,6 +237,12 @@ In doubles and triples battles, `a` will refer to the leftmost Pokémon
 on one team and the rightmost Pokémon on the other (so `p1a` faces `p2c`,
 etc). `NAME` is the nickname of the Pokémon performing the action.
 
+Battle actions (especially minor actions) often come with tags such as
+`|[from] EFFECT|[of] SOURCE`. `EFFECT` will be an effect (move, ability,
+item, status, etc), and `SOURCE` will be a Pokémon. These can affect the
+message or animation displayed, but do not affect anything else. Other 
+tags include `|[still]` (suppress animation) and `|[silent]` (suppress message).
+
 `|move|POKEMON|MOVE|TARGET`
 
 > The specified Pokémon has used move `MOVE` at `TARGET`. If a move has
@@ -244,7 +250,10 @@ etc). `NAME` is the nickname of the Pokémon performing the action.
 > targets a side, `TARGET` will be a (possibly fainted) Pokémon on that
 > side.
 >
-> `move` can be tagged with `|[miss]` to indicate that the move missed.
+> If `|[miss]` is present, the move missed.
+>
+> `|[anim] MOVE2` tells the client to use the animation of `MOVE2` instead
+> of `MOVE` when displaying to the client.
 
 `|switch|POKEMON|SPECIES|HP STATUS` or `|drag|POKEMON|SPECIES|HP STATUS`
 
@@ -293,12 +302,6 @@ they're usually displayed in small font if they have a message. Pretty much
 anything that happens in a battle other than a switch or the fact that a move
 was used is a minor action. So yes, the effects of a move such as damage or
 stat boosts are minor actions.
-
-Minor actions often come with tags such as `|[from] EFFECT|[of] SOURCE`.
-`EFFECT` will be an effect (move, ability, item, status, etc), and `SOURCE`
-will be a Pokémon. These can affect the message or animation displayed, but
-do not affect anything else. Other tags include `|[still]` (suppress
-animation) and `|[silent]` (suppress message).
 
 `|-fail|POKEMON|ACTION`
 
@@ -402,11 +405,14 @@ animation) and `|[silent]` (suppress message).
 
 `|-ability|POKEMON|ABILITY`
 
-> The `ABILITY` of the `POKEMON` has been changed or revealed due to a move or ability.
-> This also includes abilities that reveal themselves upon switch-in, like Mold Breaker. 
-> The only move tha does not trigger this message is Skill Swap, so that if you use Skill 
-> Swap between teammates in a doubles or triples battle, the abilities of the two Pokémon 
-> are not revealed to the opponent, similar to its behavior in game.
+> The `ABILITY` of the `POKEMON` has been changed due to a move/ability, or it has
+> activated in a way that could not be better described by one of the other minor
+> messages. For example, Clear Body sends `-fail` when it blocks stat drops, while
+> Mold Breaker sends this message to reveal itself upon switch-in.
+>
+> Note that Skill Swap does not send this message despite it changing abilities,
+> because it does not reveal abilities when used between allies in a Double or
+> Triple Battle.
 
 `|-endability|POKEMON`
 

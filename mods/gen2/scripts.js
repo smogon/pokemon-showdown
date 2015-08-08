@@ -520,47 +520,53 @@ exports.BattleScripts = {
 
 		return damage;
 	},
-	// Random team generation for Gen 2 Random Battles.
 	randomTeam: function (side) {
-		// Get what we need ready.
-		var keys = [];
 		var pokemonLeft = 0;
 		var pokemon = [];
-		var i = 1;
 
-		// We need to check it's one of the first 251 because formats data are installed onto main format data, not replaced.
-		for (var n in this.data.FormatsData) {
-			if (this.data.FormatsData[n].randomBattleMoves && i < 252) {
-				keys.push(n);
-			}
-			i++;
+		var handicapMons = {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1, 'ditto':1};
+		var nuTiers = {'UU':1, 'BL':1, 'NFE':1, 'LC':1};
+		var uuTiers = {'NFE':1, 'UU':1, 'BL':1};
+
+		var n = 1;
+		var pokemonPool = [];
+		for (var id in this.data.FormatsData) {
+			// FIXME: Not ES-compliant
+			if (n++ > 251 || !this.data.FormatsData[id].randomBattleMoves) continue;
+			pokemonPool.push(id);
 		}
-		keys = keys.randomize();
 
-		// Now let's store what we are getting.
+		// Setup storage.
 		var typeCount = {};
 		var uberCount = 0;
 		var nuCount = 0;
 		var hasShitmon = false;
 
-		for (var i = 0; i < keys.length && pokemonLeft < 6; i++) {
-			var template = this.getTemplate(keys[i]);
-			if (!template || !template.name || !template.types) continue;
+		while (pokemonPool.length && pokemonLeft < 6) {
+			var template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			if (!template.exists) continue;
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, you're covered in OUs and Ubers if possible
 			var tier = template.tier;
-			if (tier === 'LC' && (nuCount > 1 || hasShitmon)) continue;
-			if ((tier === 'NFE' || tier === 'UU' || tier === 'BL') && (hasShitmon || (nuCount > 2 && this.random(1)))) continue;
-			// Unless you have one of the worst mons, in that case we allow luck to give you all Ubers.
-			if (tier === 'Uber' && uberCount >= 1 && !hasShitmon) continue;
+			switch (tier) {
+			case 'LC':
+				if (nuCount > 1 || hasShitmon) continue;
+				break;
+			case 'Uber':
+				// Unless you have one of the worst mons, in that case we allow luck to give you all Ubers.
+				if (uberCount >= 1 && !hasShitmon) continue;
+				break;
+			default:
+				if (uuTiers[tier] && (hasShitmon || (nuCount > 2 && this.random(2) >= 1))) continue;
+			}
 
-			// Limit 2 of any type as well. Diversity and minor weakness count.
+			// Limit 2 of any type. Diversity and minor weakness count.
 			// The second of a same type has halved chance of being added.
 			var types = template.types;
 			var skip = false;
 			for (var t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(1))) {
+				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(2) >= 1)) {
 					skip = true;
 					break;
 				}
@@ -568,7 +574,7 @@ exports.BattleScripts = {
 			if (skip) continue;
 
 			// The set passes the limitations.
-			var set = this.randomSet(template, i);
+			var set = this.randomSet(template, pokemon.length);
 			pokemon.push(set);
 
 			// Now let's increase the counters. First, the Pokémon left.
@@ -576,7 +582,7 @@ exports.BattleScripts = {
 
 			// Type counter.
 			for (var t = 0; t < types.length; t++) {
-				if (types[t] in typeCount) {
+				if (typeCount[types[t]]) {
 					typeCount[types[t]]++;
 				} else {
 					typeCount[types[t]] = 1;
@@ -586,24 +592,23 @@ exports.BattleScripts = {
 			// Increment type bias counters.
 			if (tier === 'Uber') {
 				uberCount++;
-			} else if (tier === 'UU' || tier === 'BL' || tier === 'NFE' || tier === 'LC') {
+			} else if (nuTiers[tier]) {
 				nuCount++;
 			}
 
 			// Is it a shitmon?
-			if (keys[i] in {'magikarp':1, 'weedle':1, 'kakuna':1, 'caterpie':1, 'metapod':1, 'ditto':1}) hasShitmon = true;
+			if (handicapMons[template.speciesid]) hasShitmon = true;
 		}
 
 		return pokemon;
 	},
 	// Random set generation for Gen 2 Random Battles.
-	randomSet: function (template, i) {
-		if (i === undefined) i = 1;
+	randomSet: function (template, slot) {
+		if (slot === undefined) slot = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('unown');
 
-		var moveKeys = template.randomBattleMoves;
-		moveKeys = moveKeys.randomize();
+		var movePool = template.randomBattleMoves.slice();
 		var moves = [];
 		var hasType = {};
 		hasType[template.types[0]] = true;
@@ -614,7 +619,15 @@ exports.BattleScripts = {
 		var item = 'leftovers';
 		var ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
 
-		var j = 0;
+		// Moves that boost Attack:
+		var PhysicalSetup = {
+			swordsdance:1, sharpen:1
+		};
+		// Moves which boost Special Attack:
+		var SpecialSetup = {
+			amnesia:1, growth:1
+		};
+
 		do {
 			// Keep track of all moves we have:
 			hasMove = {};
@@ -627,8 +640,8 @@ exports.BattleScripts = {
 			}
 
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
-			while (moves.length < 4 && moveKeys.length) {
-				var moveid = this.sampleNoReplace(moveKeys);
+			while (moves.length < 4 && movePool.length) {
+				var moveid = this.sampleNoReplace(movePool);
 				if (moveid.substr(0, 11) === 'hiddenpower') {
 					if (hasMove['hiddenpower']) continue;
 					hasMove['hiddenpower'] = true;
@@ -645,10 +658,10 @@ exports.BattleScripts = {
 				if (!move.damage && !move.damageCallback) {
 					counter[move.category]++;
 				}
-				if ({swordsdance:1, sharpen:1}[moveid]) {
+				if (PhysicalSetup[moveid]) {
 					counter['physicalsetup']++;
 				}
-				if ({amnesia:1, growth:1}[moveid]) {
+				if (SpecialSetup[moveid]) {
 					counter['specialsetup']++;
 				}
 			}
@@ -774,13 +787,13 @@ exports.BattleScripts = {
 						break;
 					} // End of switch for moveid
 				}
-				if (rejected && j < moveKeys.length - 1) {
+				if (rejected && movePool.length) {
 					moves.splice(k, 1);
 					break;
 				}
 				counter[move.category]++;
 			} // End of for
-		} while (moves.length < 4 && j < moveKeys.length);
+		} while (moves.length < 4 && movePool.length);
 
 		// Add specific items.
 		switch (template.species) {
