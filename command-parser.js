@@ -154,7 +154,7 @@ function canTalk(user, room, connection, message, targetUser) {
 }
 
 var Context = exports.Context = (function () {
-	function Context (options) {
+	function Context(options) {
 		this.cmd = options.cmd || '';
 		this.cmdToken = options.cmdToken || '';
 
@@ -375,6 +375,7 @@ var Context = exports.Context = (function () {
 		if (commaIndex < 0) {
 			var targetUser = Users.get(target, exactName);
 			this.targetUser = targetUser;
+			this.inputUsername = target.trim();
 			this.targetUsername = targetUser ? targetUser.name : target;
 			return '';
 		}

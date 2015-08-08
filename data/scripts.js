@@ -44,6 +44,8 @@ exports.BattleScripts = {
 				this.clearActiveMove(true);
 				return;
 			}
+		} else {
+			sourceEffect = this.getEffect('lockedmove');
 		}
 		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
@@ -95,6 +97,7 @@ exports.BattleScripts = {
 		if (target === false) {
 			this.attrLastMove('[notarget]');
 			this.add('-notarget');
+			if (move.target === 'normal') pokemon.isStaleCon = 0;
 			return true;
 		}
 
@@ -150,6 +153,7 @@ exports.BattleScripts = {
 			if (lacksTarget) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
+				if (move.target === 'normal') pokemon.isStaleCon = 0;
 				return true;
 			}
 			damage = this.tryMoveHit(target, pokemon, move);
@@ -1243,6 +1247,9 @@ exports.BattleScripts = {
 				case 'dragonpulse': case 'spacialrend':
 					if (hasMove['dracometeor']) rejected = true;
 					break;
+				case 'outrage':
+					if (hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
+					break;
 				case 'thunder':
 					if (hasMove['thunderbolt'] && !hasMove['raindance']) rejected = true;
 					break;
@@ -1793,7 +1800,7 @@ exports.BattleScripts = {
 			item = 'Black Sludge';
 		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
 			item = 'Leftovers';
-		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise']) {
+		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise'] && !hasMove['sleeptalk']) {
 			item = 'Air Balloon';
 		} else if (counter.Status <= 1 && ability !== 'Sturdy') {
 			item = 'Life Orb';
@@ -1829,7 +1836,7 @@ exports.BattleScripts = {
 			Aegislash: 74, Blaziken: 74, 'Blaziken-Mega': 74, Genesect: 74, 'Genesect-Burn': 74, 'Genesect-Chill': 74, 'Genesect-Douse': 74, 'Genesect-Shock': 74, Greninja: 74, 'Kangaskhan-Mega': 74, 'Lucario-Mega': 74, 'Mawile-Mega': 74,
 
 			// Not holding Mega Stone
-			Banette: 83, Beedrill: 83, Glalie: 83, Lopunny: 83, Pidgeot: 83,
+			Banette: 83, Beedrill: 83, Glalie: 83, Lopunny: 83,
 			Altaria: 81, Ampharos: 81, Charizard: 81,
 			Aerodactyl: 79, Aggron: 79, Blastoise: 79, Gardevoir: 79, Manectric: 79, Sceptile: 79, Venusaur: 79,
 			Diancie: 77, Metagross: 77, Sableye: 77,
@@ -2531,7 +2538,7 @@ exports.BattleScripts = {
 					if (hasMove['willowisp']) rejected = true;
 					break;
 				case 'trickroom':
-					if (hasMove['rockpolish'] || hasMove['agility']) rejected = true;
+					if (hasMove['rockpolish'] || hasMove['agility'] || hasMove['icywind']) rejected = true;
 					break;
 				case 'willowisp':
 					if (hasMove['scald'] || hasMove['yawn'] || hasMove['spore'] || hasMove['sleeppowder']) rejected = true;
@@ -2986,6 +2993,160 @@ exports.BattleScripts = {
 			level: level,
 			shiny: !this.random(template.id === 'missingno' ? 4 : 1024)
 		};
+	},
+	randomRainbowTeam: function () {
+		var pokemonLeft = 0;
+		var pokemon = [];
+
+		var excludedTiers = {'LC':1, 'LC Uber':1, 'NFE':1};
+		var allowedNFE = {'Chansey':1, 'Doublade':1, 'Gligar':1, 'Porygon2':1, 'Scyther':1};
+		var excludedColors = {'Black':1, 'Brown':1, 'Gray':1, 'White':1};
+
+		var pokemonPool = [];
+		for (var id in this.data.FormatsData) {
+			var template = this.getTemplate(id);
+			if (!excludedTiers[template.tier] && !excludedColors[template.color] && !template.isMega && !template.isPrimal && !template.isNonstandard && template.randomBattleMoves) {
+				pokemonPool.push(id);
+			}
+		}
+
+		var typeCount = {};
+		var typeComboCount = {};
+		var colorCount = {};
+		var baseFormes = {};
+		var uberCount = 0;
+		var puCount = 0;
+		var teamDetails = {megaCount: 0, stealthRock: 0};
+
+		while (pokemonPool.length && pokemonLeft < 6) {
+			var template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			if (!template.exists) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
+
+			// Not available on ORAS
+			if (template.species === 'Pichu-Spiky-eared') continue;
+
+			// Useless in Random Battle without greatly lowering the levels of everything else
+			if (template.species === 'Unown') continue;
+
+			// Only certain NFE Pokemon are allowed
+			if (template.evos.length && !allowedNFE[template.species]) continue;
+
+			var tier = template.tier;
+			switch (tier) {
+			case 'PU':
+				// PUs are limited to 2 but have a 20% chance of being added anyway.
+				if (puCount > 1 && this.random(5) >= 1) continue;
+				break;
+			case 'Uber':
+				// Ubers are limited to 2 but have a 20% chance of being added anyway.
+				if (uberCount > 1 && this.random(5) >= 1) continue;
+				break;
+			case 'CAP':
+				// CAPs have 20% the normal rate
+				if (this.random(5) >= 1) continue;
+				break;
+			case 'Unreleased':
+				// Unreleased Pokémon have 20% the normal rate
+				if (this.random(5) >= 1) continue;
+			}
+
+			// Adjust rate for species with multiple formes
+			switch (template.baseSpecies) {
+			case 'Arceus':
+				if (this.random(18) >= 1) continue;
+				break;
+			case 'Basculin':
+				if (this.random(2) >= 1) continue;
+				break;
+			case 'Genesect':
+				if (this.random(5) >= 1) continue;
+				break;
+			case 'Gourgeist':
+				if (this.random(4) >= 1) continue;
+				break;
+			case 'Meloetta':
+				if (this.random(2) >= 1) continue;
+				break;
+			case 'Castform':
+				if (this.random(2) >= 1) continue;
+				break;
+			case 'Pikachu':
+				// Pikachu is not a viable NFE Pokemon
+				continue;
+			}
+
+			// Limit 2 of any type, 1 of any color
+			var types = template.types;
+			var colorGroups = {'Red': 'R', 'Pink': 'R', 'Yellow': 'G', 'Green': 'G', 'Blue': 'B', 'Purple': 'B'};
+			var color = colorGroups[template.color];
+			var skip = false;
+			for (var t = 0; t < types.length; t++) {
+				if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
+					skip = true;
+					break;
+				}
+			}
+			if (colorCount[color] > 1 && this.random(8) >= 1) {
+				skip = true;
+			}
+			if (skip) continue;
+
+			var set = this.randomSet(template, pokemon.length, teamDetails);
+
+			// Illusion shouldn't be on the last pokemon of the team
+			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
+
+			// Limit 1 of any type combination
+			var typeCombo = types.join();
+			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
+				// Drought and Drizzle don't count towards the type combo limit
+				typeCombo = set.ability;
+			}
+			if (typeCombo in typeComboCount) continue;
+
+			// Limit the number of Megas to one
+			var forme = template.otherFormes && this.getTemplate(template.otherFormes[0]);
+			var isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
+			if (isMegaSet && teamDetails.megaCount > 0) continue;
+
+			// Okay, the set passes, add it to our team
+			if (template.species !== 'Ditto') set.moves.push('swift');
+			pokemon.push(set);
+
+			// Now that our Pokemon has passed all checks, we can increment our counters
+			pokemonLeft++;
+
+			// Increment type and color counters
+			for (var t = 0; t < types.length; t++) {
+				if (types[t] in typeCount) {
+					typeCount[types[t]]++;
+				} else {
+					typeCount[types[t]] = 1;
+				}
+			}
+			typeComboCount[typeCombo] = 1;
+			if (color in colorCount) {
+				colorCount[color]++;
+			} else {
+				colorCount[color] = 1;
+			}
+
+			// Increment Uber/NU counters
+			if (tier === 'Uber') {
+				uberCount++;
+			} else if (tier === 'PU') {
+				puCount++;
+			}
+
+			// Increment mega, stealthrock, and base species counters
+			if (isMegaSet) teamDetails.megaCount++;
+			if (set.moves.indexOf('stealthrock') >= 0) teamDetails.stealthRock++;
+			baseFormes[template.baseSpecies] = 1;
+		}
+		return pokemon;
 	},
 	randomFactorySets: require('./factory-sets.json'),
 	randomFactorySet: function (template, slot, teamData, tier) {

@@ -493,12 +493,30 @@ exports.BattleFormats = {
 	endlessbattleclause: {
 		effectType: 'Banlist',
 		name: 'Endless Battle Clause',
-		banlist: ['Leppa Berry + Recycle', 'Harvest + Leppa Berry', 'Leppa Berry + Trick', 'Leppa Berry + Switcheroo', 'Leppa Berry + Bestow'],
-		validateSet: function (set, format, setHas) {
-			if (format.gameType === 'singles' && 'healpulse' in setHas) {
-				return [set.name + " has Heal Pulse, which is banned in Singles by Endless Battle Clause."];
-			}
-		},
+		// implemented in battle-engine.js
+
+		// A Pokémon has a confinement counter, which starts at 0:
+		// +1 confinement whenever:
+		// - it has no available moves other than Struggle
+		// - it was forced to switch by a stale opponent before it could do its
+		//   action for the turn
+		// - it intentionally switched out the turn after it switched in against
+		//   a stale Pokémon
+		// - it shifts in Triples against a stale Pokémon
+		// - it has gone 5 turns without losing PP (mimiced/transformed moves
+		//   count only if no foe is stale)
+		// confinement reset to 0 whenever:
+		// - it uses PP while not Transformed/Impostered
+		// - if it has at least 2 confinement, and begins a turn without losing
+		//   at least 1% of its max HP from the last time its confinement counter
+		//   was 0 - user also becomes half-stale if not already half-stale, or
+		//   stale if already half-stale
+
+		// A Pokémon is also considered stale if:
+		// - it has gained a Leppa berry through any means besides starting
+		//   with one
+		// - OR it has eaten a Leppa berry it isn't holding
+
 		onStart: function () {
 			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned');
 		}

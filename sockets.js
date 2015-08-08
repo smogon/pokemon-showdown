@@ -150,6 +150,7 @@ if (cluster.isMaster) {
 			var avatarserver = new nodestatic.Server('./config/avatars');
 			var staticserver = new nodestatic.Server('./static');
 			var staticRequestHandler = function (request, response) {
+				// console.log("static rq: " + request.socket.remoteAddress + ":" + request.socket.remotePort + " -> " + request.socket.localAddress + ":" + request.socket.localPort + " - " + request.method + " " + request.url + " " + request.httpVersion + " - " + request.rawHeaders.join('|'));
 				request.resume();
 				request.addListener('end', function () {
 					if (Config.customHttpResponse && Config.customHttpResponse(request, response)) return;
@@ -232,6 +233,10 @@ if (cluster.isMaster) {
 		var socketid = null;
 		var channelid = null;
 		switch (data.charAt(0)) {
+		case '$': // $code
+			eval(data.substr(1));
+			break;
+
 		case '!': // !socketid
 			// destroy
 			socketid = data.substr(1);

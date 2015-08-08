@@ -2,6 +2,7 @@
 /logs/*
 /node_modules
 /gulp-cache
+/chat-plugins/private.js
 npm-debug.log
 
 # boilerplate #

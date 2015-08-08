@@ -100,9 +100,11 @@ if (Config.watchConfig) {
 }
 
 // Autoconfigure the app when running in cloud hosting environments:
-var cloudenv = require('cloud-env');
-Config.bindAddress = cloudenv.get('IP', Config.bindAddress || '');
-Config.port = cloudenv.get('PORT', Config.port);
+try {
+	var cloudenv = require('cloud-env');
+	Config.bindaddress = cloudenv.get('IP', Config.bindaddress || '');
+	Config.port = cloudenv.get('PORT', Config.port);
+} catch (e) {}
 
 if (require.main === module && process.argv[2] && parseInt(process.argv[2])) {
 	Config.port = parseInt(process.argv[2]);
@@ -305,11 +307,17 @@ global.toId = function (text) {
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
+global.Tools = require('./tools.js').includeFormats();
+
 global.LoginServer = require('./loginserver.js');
 
 global.Users = require('./users.js');
 
 global.Rooms = require('./rooms.js');
+
+// Generate and cache the format list.
+Rooms.global.formatListText = Rooms.global.getFormatListText();
+
 
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier.js');
@@ -354,15 +362,6 @@ global.Sockets = require('./sockets.js');
 /*********************************************************
  * Set up our last global
  *********************************************************/
-
-// This slow operation is done *after* we start listening for connections
-// to the server. Anybody who connects while this require() is running will
-// have to wait a couple seconds before they are able to join the server, but
-// at least they probably won't receive a connection error message.
-global.Tools = require('./tools.js');
-
-// After loading tools, generate and cache the format list.
-Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 global.TeamValidator = require('./team-validator.js');
 
