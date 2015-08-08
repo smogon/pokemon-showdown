@@ -307,8 +307,8 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 	Dnsbl.query(connection.ip, function (isBlocked) {
 		if (isBlocked) {
 			connection.popup("You are locked because someone using your IP (" + connection.ip + ") has spammed/hacked other websites. This usually means you're using a proxy, in a country where other people commonly hack, or have a virus on your computer that's spamming websites.");
-			if (connection.user && !connection.user.locked) {
-				connection.user.locked = '#dnsbl';
+			if (connection.user && !connection.user.locked && !connection.user.autoconfirmed) {
+				connection.user.semilocked = '#dnsbl';
 				connection.user.updateIdentity();
 			}
 		}
@@ -410,7 +410,7 @@ function cacheGroupData() {
 	var groups = Config.groups.bySymbol;
 	var cachedGroups = {};
 
-	function cacheGroup (sym, groupData) {
+	function cacheGroup(sym, groupData) {
 		if (cachedGroups[sym] === 'processing') return false; // cyclic inheritance.
 
 		if (cachedGroups[sym] !== true && groupData['inherit']) {
@@ -900,7 +900,7 @@ User = (function () {
 			} else if (userType === '4') {
 				this.autoconfirmed = userid;
 			} else if (userType === '5') {
-				this.lock(false, userid);
+				this.lock(false, userid + '#permalock');
 			} else if (userType === '6') {
 				this.ban(false, userid);
 			}
@@ -929,14 +929,14 @@ User = (function () {
 			if (this.named) user.prevNames[this.userid] = this.name;
 			this.destroy();
 			Rooms.global.checkAutojoin(user);
-			if (Config.loginFilter) Config.loginFilter(user, this);
+			if (Config.loginFilter) Config.loginFilter(user, this, userType);
 			return true;
 		}
 
 		// rename success
 		if (this.forceRename(name, registered)) {
 			Rooms.global.checkAutojoin(this);
-			if (Config.loginFilter) Config.loginFilter(this);
+			if (Config.loginFilter) Config.loginFilter(this, null, userType);
 			return true;
 		}
 		return false;
@@ -1070,6 +1070,9 @@ User = (function () {
 			if (room.battle) {
 				room.battle.resendRequest(connection);
 			}
+			if (global.Tournaments && Tournaments.get(room.id)) {
+				Tournaments.get(room.id).updateFor(this, connection);
+			}
 		}
 	};
 	User.prototype.debugData = function () {
@@ -1108,12 +1111,14 @@ User = (function () {
 		if (this.userid in usergroups) {
 			this.group = usergroups[this.userid].charAt(0);
 			this.confirmed = this.userid;
+			this.autoconfirmed = this.userid;
 		} else {
 			this.group = Config.groups.default.global;
 			for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
 				var room = Rooms.global.chatRooms[i];
 				if (!room.isPrivate && room.auth && this.userid in room.auth && Config.groups.bySymbol[room.auth[this.userid]].chatRoomRank > 1) {
 					this.confirmed = this.userid;
+					this.autoconfirmed = this.userid;
 					break;
 				}
 			}
@@ -1435,6 +1440,9 @@ User = (function () {
 							room.onLeave(this);
 							delete this.roomCount[room.id];
 						}
+					} else {
+						// should never happen
+						console.log('!! room miscount');
 					}
 					if (!this.connections[i]) {
 						// race condition? This should never happen, but it does.
@@ -1453,6 +1461,8 @@ User = (function () {
 			}
 		}
 		if (!connection && this.roomCount[room.id]) {
+			// should also never happen
+			console.log('!! room miscount: ' + room.id + ' not left for ' + this.userid);
 			room.onLeave(this);
 			delete this.roomCount[room.id];
 		}

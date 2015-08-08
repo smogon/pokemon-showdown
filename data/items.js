@@ -794,8 +794,8 @@ exports.BattleItems = {
 		onModifyMove: function (move, pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
-		onModifySpe: function (speMod) {
-			return this.chain(speMod, 1.5);
+		onModifySpe: function (spe) {
+			return this.chainModify(1.5);
 		},
 		isChoice: true,
 		num: 287,
@@ -2031,8 +2031,8 @@ exports.BattleItems = {
 		onNegateImmunity: function (pokemon, type) {
 			if (type === 'Ground') return false;
 		},
-		onModifySpe: function (speMod) {
-			return this.chain(speMod, 0.5);
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
 		},
 		num: 278,
 		gen: 4,
@@ -2327,6 +2327,19 @@ exports.BattleItems = {
 			move.pp += 10;
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', move.move);
+			if (pokemon.item !== 'leppaberry') {
+				var foeActive = pokemon.side.foe.active;
+				var foeIsStale = false;
+				for (var i = 0; i < 1; i++) {
+					if (foeActive.isStale >= 2) {
+						foeIsStale = true;
+						break;
+					}
+				}
+				if (!foeIsStale) return;
+			}
+			pokemon.isStale = 2;
+			pokemon.isStaleSource = 'useleppa';
 		},
 		num: 154,
 		gen: 3,
@@ -2546,8 +2559,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 60
 		},
-		onModifySpe: function (speMod) {
-			return this.chain(speMod, 0.5);
+		onModifySpe: function (spe) {
+			return this.chainModify(0.5);
 		},
 		num: 215,
 		gen: 3,
@@ -3479,9 +3492,9 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifySpe: function (speMod, pokemon) {
+		onModifySpe: function (spe, pokemon) {
 			if (pokemon.template.species === 'Ditto' && !pokemon.transformed) {
-				return this.chain(speMod, 2);
+				return this.chainModify(2);
 			}
 		},
 		num: 274,

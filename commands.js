@@ -50,7 +50,7 @@ var commands = exports.commands = {
 			buffer.push((Config.groups.bySymbol[r] ? Config.groups.bySymbol[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sortBy(toId).join(", "));
 		});
 
-		if (!buffer.length) buffer = "This server has no auth.";
+		if (!buffer.length) buffer = "This server has no global authority.";
 		connection.popup(buffer.join("\n\n"));
 	},
 
@@ -74,7 +74,10 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/avatars');
 		var parts = target.split(',');
 		var avatar = parseInt(parts[0]);
-		if (!avatar || avatar > 294 || avatar < 1) {
+		if (parts[0] === '#bw2elesa') {
+			avatar = parts[0];
+		}
+		if (typeof avatar === 'number' && (!avatar || avatar > 294 || avatar < 1)) {
 			if (!parts[1]) {
 				this.sendReply("Invalid avatar.");
 			}
@@ -84,7 +87,7 @@ var commands = exports.commands = {
 		user.avatar = avatar;
 		if (!parts[1]) {
 			this.sendReply("Avatar changed to:\n" +
-				'|raw|<img src="//play.pokemonshowdown.com/sprites/trainers/' + avatar + '.png" alt="" width="80" height="80" />');
+				'|raw|<img src="//play.pokemonshowdown.com/sprites/trainers/' + (typeof avatar === 'string' ? avatar.substr(1) : avatar) + '.png" alt="" width="80" height="80" />');
 		}
 	},
 	avatarhelp: ["/avatar [avatar number 1 to 293] - Change your trainer sprite."],
@@ -255,7 +258,8 @@ var commands = exports.commands = {
 
 		var id = toId(target);
 		if (!id) return this.parse('/help makechatroom');
-		if (Rooms.rooms[id]) return this.sendReply("The room '" + target + "' already exists.");
+		// Check if the name already exists as a room or alias
+		if (Rooms.rooms[id] || Rooms.get(id) || Rooms.aliases[id]) return this.sendReply("The room '" + target + "' already exists.");
 		if (Rooms.global.addChatRoom(target)) {
 			if (cmd === 'makeprivatechatroom') {
 				var targetRoom = Rooms.search(target);
@@ -1417,10 +1421,11 @@ var commands = exports.commands = {
 			return this.sendReply("Battle hotpatching is not supported with the single process hack.");
 		} else if (target === 'formats') {
 			try {
+				var toolsLoaded = !!Tools.isLoaded;
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
-				global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+				global.Tools = require('./tools.js')[toolsLoaded ? 'includeData' : 'includeFormats'](); // note: this will lock up the server for a few seconds
 				// rebuild the formats list
 				Rooms.global.formatListText = Rooms.global.getFormatListText();
 				// respawn validator processes
@@ -1437,10 +1442,11 @@ var commands = exports.commands = {
 			}
 		} else if (target === 'learnsets') {
 			try {
+				var toolsLoaded = !!Tools.isLoaded;
 				// uncache the tools.js dependency tree
 				CommandParser.uncacheTree('./tools.js');
 				// reload tools.js
-				global.Tools = require('./tools.js'); // note: this will lock up the server for a few seconds
+				global.Tools = require('./tools.js')[toolsLoaded ? 'includeData' : 'includeFormats'](); // note: this will lock up the server for a few seconds
 
 				return this.sendReply("Learnsets have been hotpatched.");
 			} catch (e) {
@@ -1851,7 +1857,7 @@ var commands = exports.commands = {
 
 	savereplay: function (target, room, user, connection) {
 		if (!room || !room.battle) return;
-		var logidx = 2; // spectator log (no exact HP)
+		var logidx = 0; // spectator log (no exact HP)
 		if (room.battle.ended) {
 			// If the battle is finished when /savereplay is used, include
 			// exact HP in the replay log.

@@ -17,6 +17,7 @@ exports.BattleAliases = {
 	"vgc15": "Battle Spot Doubles (VGC 2015)",
 	"vgc2015": "Battle Spot Doubles (VGC 2015)",
 	"battlespotdoubles": "Battle Spot Doubles (VGC 2015)",
+	"seasonal": "[Seasonal] Rainbow Road",
 	"createapokemon": "CAP",
 	"2v2": "2v2 Doubles",
 	"cc1v1": "Challenge Cup 1v1",
@@ -175,6 +176,7 @@ exports.BattleAliases = {
 	"landorust": "Landorus-Therian",
 	"meloettap": "Meloetta-Pirouette",
 	"meloettas": "Meloetta-Pirouette",
+	"meowsticfemale": "Meowstic-F",
 	"pumpkaboohuge": "Pumpkaboo-Super",
 	"rotomc": "Rotom-Mow",
 	"rotomf": "Rotom-Frost",
@@ -216,6 +218,8 @@ exports.BattleAliases = {
 	"gourgeistaverage": "Gourgeist",
 	"hoopac": "Hoopa",
 	"hoopaconfined": "Hoopa",
+	"meowsticm": "Meowstic",
+	"meowsticmale": "Meowstic",
 
 	// cosmetic formes
 	"gastrodone": "Gastrodon",

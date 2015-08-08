@@ -1,34 +1,58 @@
 var fs = require('fs');
 var path = require('path');
+var net = require('net');
 
-var clearedPrefixes = {};
+var sockets = [];
+
+function cleanup() {
+	for (var s = 0; s < sockets.length; ++s) {
+		try {
+			fs.unlinkSync(sockets[s]);
+		} catch (e) {}
+	}
+}
+process.on("exit", cleanup);
+
+// exit handlers aren't called by the default handler
+if (process.listeners('SIGHUP').length === 0) {
+	process.on('SIGHUP', process.exit.bind(process, 128 + 1));
+}
+if (process.listeners('SIGINT').length === 0) {
+	process.on('SIGINT', process.exit.bind(process, 128 + 2));
+}
+
 // The eval function is passed in because there is no other way to access a file's non-global context
 exports.start = function (prefix, suffix, evalFunction) {
 	if (process.platform === 'win32') return; // Windows doesn't support sockets mounted in the filesystem
 
-	prefix = path.resolve(__dirname, Config.replSocketPrefix || 'logs/repl', prefix);
+	var resolvedPrefix = path.resolve(__dirname, Config.replSocketPrefix || 'logs/repl', prefix);
 	if (!evalFunction) {
 		evalFunction = suffix;
 		suffix = "";
 	}
-	var name = prefix + suffix;
+	var name = resolvedPrefix + suffix;
 
-	if (!clearedPrefixes[prefix]) {
+	if (prefix === 'app') {
 		// Clear out any old sockets
-		var directory = path.dirname(prefix);
-		var basename = path.basename(prefix);
+		var directory = path.dirname(resolvedPrefix);
 		fs.readdirSync(directory).forEach(function (file) {
-			if (file.indexOf(basename) !== 0) return;
-			try {
-				fs.unlinkSync(directory + '/' + file);
-			} catch (e) {
-				require('./crashlogger.js')(e, 'REPL: ' + prefix);
+			var stat = fs.statSync(directory + '/' + file);
+			if (!stat.isSocket()) {
+				return;
 			}
+
+			var socket = net.connect(directory + '/' + file, function () {
+				socket.end();
+				socket.destroy();
+			}).on('error', function () {
+				try {
+					fs.unlinkSync(directory + '/' + file);
+				} catch (e) {}
+			});
 		});
-		clearedPrefixes[prefix] = true;
 	}
 
-	require('net').createServer(function (socket) {
+	net.createServer(function (socket) {
 		require('repl').start({
 			input: socket,
 			output: socket,
@@ -40,5 +64,17 @@ exports.start = function (prefix, suffix, evalFunction) {
 				}
 			}
 		}).on('exit', socket.end.bind(socket));
-	}).listen(name, fs.chmodSync.bind(fs, name, Config.replSocketMode || 0600));
+		socket.on('error', socket.destroy.bind(socket));
+	}).listen(name, function () {
+		fs.chmodSync(name, Config.replSocketMode || 0600);
+		sockets.push(name);
+	}).on('error', function (e) {
+		if (e.code === "EADDRINUSE") {
+			fs.unlinkSync(name);
+			exports.start(prefix, suffix, evalFunction);
+			return;
+		}
+
+		require('./crashlogger.js')(e, 'REPL: ' + name);
+	});
 };

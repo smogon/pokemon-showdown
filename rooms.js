@@ -438,7 +438,7 @@ var GlobalRoom = (function () {
 		var curSection = '';
 		for (var i in Tools.data.Formats) {
 			var format = Tools.data.Formats[i];
-			if (!format.challengeShow && !format.searchShow) continue;
+			if (!format.challengeShow && !format.searchShow && !format.tournamentShow) continue;
 
 			var section = format.section;
 			if (section === undefined) section = format.mod;
@@ -448,12 +448,12 @@ var GlobalRoom = (function () {
 				formatListText += '|,' + (format.column || 1) + '|' + section;
 			}
 			formatListText += '|' + format.name;
-			if (!format.challengeShow) {
-				formatListText += ',,';
-			} else if (!format.searchShow) {
-				formatListText += ',';
-			}
-			if (format.team) formatListText += ',#';
+			var displayCode = 0;
+			if (format.team) displayCode |= 1;
+			if (format.searchShow) displayCode |= 2;
+			if (format.challengeShow) displayCode |= 4;
+			if (format.tournamentShow) displayCode |= 8;
+			formatListText += ',' + displayCode.toString(16);
 		}
 		return formatListText;
 	};
@@ -1339,13 +1339,10 @@ var BattleRoom = (function () {
 		}
 		var resend = joining || !this.battle.playerTable[oldid];
 		if (this.battle.playerTable[oldid]) {
+			this.battle.rename();
 			if (this.rated) {
-				this.add('|message|' + user.name + ' forfeited by changing their name.');
-				this.battle.lose(oldid);
-				this.battle.leave(oldid);
+				this.forfeit(user, " forfeited by changing their name.");
 				resend = false;
-			} else {
-				this.battle.rename();
 			}
 		}
 		delete this.users[oldid];
@@ -1660,6 +1657,10 @@ var ChatRoom = (function () {
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
 			this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage());
+
+			if (global.Tournaments && Tournaments.get(this.id)) {
+				Tournaments.get(this.id).updateFor(user, connection);
+			}
 		}
 		if (user.named && Config.reportJoins) {
 			this.add('|j|' + user.getIdentity(this.id));
@@ -1667,9 +1668,6 @@ var ChatRoom = (function () {
 		} else if (user.named) {
 			var entry = '|J|' + user.getIdentity(this.id);
 			this.reportJoin(entry);
-		}
-		if (global.Tournaments && Tournaments.get(this.id)) {
-			Tournaments.get(this.id).updateFor(user, connection);
 		}
 
 		return user;
