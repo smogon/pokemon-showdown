@@ -5262,7 +5262,7 @@ exports.BattleFormatsData = {
 	},
 	hoopa: {
 		randomBattleMoves: ["nastyplot","psyshock","shadowball","focusblast","trick"],
-		randomDoubleBattleMoves: ["hyperspacehole","shadowball","focusblast","protect","psychic"],
+		randomDoubleBattleMoves: ["hyperspacehole","shadowball","focusblast","protect","psychic","trickroom"],
 		eventPokemon: [
 			{"generation":6,"level":50,"moves":["hyperspacehole","nastyplot","psychic","astonish"],"pokeball":"cherishball"}
 		],
@@ -5270,8 +5270,8 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	hoopaunbound: {
-		randomBattleMoves: ["nastyplot","psyshock","darkpulse","focusblast","hyperspacefury","zenheadbutt","icepunch","drainpunch","knockoff","trick"],
-		randomDoubleBattleMoves: ["psychic","darkpulse","focusblast","protect","hyperspacefury","zenheadbutt","icepunch","drainpunch"],
+		randomBattleMoves: ["nastyplot","substitute","psyshock","psychic","darkpulse","focusblast","hyperspacefury","zenheadbutt","icepunch","drainpunch","gunkshot","knockoff","trick"],
+		randomDoubleBattleMoves: ["psychic","darkpulse","focusblast","protect","hyperspacefury","zenheadbutt","icepunch","drainpunch","gunkshot"],
 		unobtainableShiny: true,
 		tier: "OU"
 	},
