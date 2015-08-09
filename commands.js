@@ -1021,11 +1021,10 @@ var commands = exports.commands = {
 	unbanall: function (target, room, user) {
 		if (!this.can('rangeban')) return false;
 		// we have to do this the hard way since it's no longer a global
-		for (var i in Users.bannedIps) {
-			delete Users.bannedIps[i];
-		}
-		for (var i in Users.lockedIps) {
-			delete Users.lockedIps[i];
+		var punishKeys = ['bannedIps', 'bannedUsers', 'lockedIps', 'lockedUsers', 'lockedRanges', 'rangeLockedUsers'];
+		for (var i = 0; i < punishKeys.length; i++) {
+			var dict = Users[punishKeys[i]];
+			for (var entry in dict) delete dict[entry];
 		}
 		this.addModCommand("All bans and locks have been lifted by " + user.name + ".");
 	},
