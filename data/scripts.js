@@ -1967,16 +1967,19 @@ exports.BattleScripts = {
 			case 'Basculin':
 				if (this.random(2) >= 1) continue;
 				break;
+			case 'Castform':
+				if (this.random(2) >= 1) continue;
+				break;
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
 			case 'Gourgeist':
 				if (this.random(4) >= 1) continue;
 				break;
-			case 'Meloetta':
+			case 'Hoopa':
 				if (this.random(2) >= 1) continue;
 				break;
-			case 'Castform':
+			case 'Meloetta':
 				if (this.random(2) >= 1) continue;
 				break;
 			case 'Pikachu':
@@ -2117,16 +2120,19 @@ exports.BattleScripts = {
 			case 'Basculin':
 				if (this.random(2) >= 1) continue;
 				break;
+			case 'Castform':
+				if (this.random(2) >= 1) continue;
+				break;
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
 			case 'Gourgeist':
 				if (this.random(4) >= 1) continue;
 				break;
-			case 'Meloetta':
+			case 'Hoopa':
 				if (this.random(2) >= 1) continue;
 				break;
-			case 'Castform':
+			case 'Meloetta':
 				if (this.random(2) >= 1) continue;
 				break;
 			case 'Pikachu':
@@ -2467,7 +2473,7 @@ exports.BattleScripts = {
 					if (hasMove['gunkshot']) rejected = true;
 					break;
 				case 'psychic':
-					if (hasMove['psyshock']) rejected = true;
+					if (hasMove['psyshock'] || hasMove['hyperspacehole']) rejected = true;
 					break;
 				case 'fusionbolt':
 					if (counter.setupType && hasMove['boltstrike']) rejected = true;
