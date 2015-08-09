@@ -128,7 +128,7 @@ if (!process.send) {
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	};
 
-	global.Tools = require('./tools.js').includeData();
+	global.Tools = require('./tools.js').includeMods();
 
 	require('./repl.js').start('team-validator-', process.pid, function (cmd) { return eval(cmd); });
 

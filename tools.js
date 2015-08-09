@@ -906,6 +906,18 @@ module.exports = (function () {
 		return team;
 	};
 
+	Tools.prototype.includeMods = function () {
+		if (this.modsLoaded) return this;
+		if (!this.isLoaded) this.includeData();
+
+		for (var id in moddedTools) {
+			if (moddedTools[id].isLoaded) continue;
+			moddedTools[id].includeData();
+		}
+
+		return this;
+	};
+
 	Tools.prototype.includeData = function () {
 		if (this.isLoaded) return this;
 		if (!this.data) this.data = {mod: this.currentMod};
