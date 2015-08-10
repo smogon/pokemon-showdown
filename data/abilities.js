@@ -1651,8 +1651,7 @@ exports.BattleAbilities = {
 			if (source && source !== target && move && move.flags['contact']) {
 				var oldAbility = source.setAbility('mummy', source, 'mummy', true);
 				if (oldAbility) {
-					this.add('-endability', source, oldAbility, '[from] Mummy');
-					this.add('-ability', source, 'Mummy', '[from] Mummy');
+					this.add('-activate', target, 'ability: Mummy', oldAbility, '[of] ' + source);
 				}
 			}
 		},
