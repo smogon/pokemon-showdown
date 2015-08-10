@@ -817,8 +817,8 @@ BattlePokemon = (function () {
 				if (this.battle.gen === 1) {
 					this.modifiedStats[statName] = Math.floor(stat);
 					// ...and here is where the gen 1 games re-apply burn and para drops.
-					if (this.status === 'par') this.modifyStat('spe', 0.25);
-					if (this.status === 'brn') this.modifyStat('atk', 0.5);
+					if (this.status === 'par' && statName === 'spe') this.modifyStat('spe', 0.25);
+					if (this.status === 'brn' && statName === 'atk') this.modifyStat('atk', 0.5);
 				}
 			}
 			this.speed = this.stats.spe;
