@@ -222,10 +222,6 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (move.breaksProtect) {
-					target.removeVolatile('Protect');
-					return;
-				}
 				if (!move.flags['protect']) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');
@@ -395,9 +391,10 @@ exports.BattleMovedex = {
 	feint: {
 		inherit: true,
 		basePower: 50,
-		onTryHit: function (target) {
+		onTry: function (source, target) {
 			if (!target.volatiles['protect']) {
-				return false;
+				this.add('-fail', source);
+				return null;
 			}
 		}
 	},
@@ -871,10 +868,6 @@ exports.BattleMovedex = {
 			},
 			onTryHitPriority: 3,
 			onTryHit: function (target, source, move) {
-				if (move.breaksProtect) {
-					target.removeVolatile('Protect');
-					return;
-				}
 				if (!move.flags['protect']) return;
 				this.add('-activate', target, 'Protect');
 				var lockedmove = source.getVolatile('lockedmove');

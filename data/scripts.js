@@ -271,6 +271,25 @@ exports.BattleScripts = {
 			return false;
 		}
 
+		if (move.breaksProtect) {
+			var broke = false;
+			for (var i in {kingsshield:1, protect:1, spikyshield:1}) {
+				if (target.removeVolatile(i)) broke = true;
+			}
+			if (this.gen >= 6 || target.side !== pokemon.side) {
+				for (var i in {craftyshield:1, matblock:1, quickguard:1, wideguard:1}) {
+					if (target.side.removeSideCondition(i)) broke = true;
+				}
+			}
+			if (broke) {
+				if (move.id === 'feint') {
+					this.add('-activate', target, 'move: Feint');
+				} else {
+					this.add('-activate', target, 'move: ' + move.name, '[broken]');
+				}
+			}
+		}
+
 		var totalDamage = 0;
 		var damage = 0;
 		pokemon.lastDamage = 0;
@@ -1967,16 +1986,19 @@ exports.BattleScripts = {
 			case 'Basculin':
 				if (this.random(2) >= 1) continue;
 				break;
+			case 'Castform':
+				if (this.random(2) >= 1) continue;
+				break;
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
 			case 'Gourgeist':
 				if (this.random(4) >= 1) continue;
 				break;
-			case 'Meloetta':
+			case 'Hoopa':
 				if (this.random(2) >= 1) continue;
 				break;
-			case 'Castform':
+			case 'Meloetta':
 				if (this.random(2) >= 1) continue;
 				break;
 			case 'Pikachu':
@@ -2117,16 +2139,19 @@ exports.BattleScripts = {
 			case 'Basculin':
 				if (this.random(2) >= 1) continue;
 				break;
+			case 'Castform':
+				if (this.random(2) >= 1) continue;
+				break;
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
 			case 'Gourgeist':
 				if (this.random(4) >= 1) continue;
 				break;
-			case 'Meloetta':
+			case 'Hoopa':
 				if (this.random(2) >= 1) continue;
 				break;
-			case 'Castform':
+			case 'Meloetta':
 				if (this.random(2) >= 1) continue;
 				break;
 			case 'Pikachu':
@@ -2467,7 +2492,7 @@ exports.BattleScripts = {
 					if (hasMove['gunkshot']) rejected = true;
 					break;
 				case 'psychic':
-					if (hasMove['psyshock']) rejected = true;
+					if (hasMove['psyshock'] || hasMove['hyperspacehole']) rejected = true;
 					break;
 				case 'fusionbolt':
 					if (counter.setupType && hasMove['boltstrike']) rejected = true;
