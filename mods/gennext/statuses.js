@@ -247,6 +247,114 @@ exports.BattleStatuses = {
 			}
 		}
 	},
+	latias: {
+		// Latias: Pressure
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'pressure';
+				pokemon.baseAbility = 'pressure';
+			}
+		}
+	},
+	latios: {
+		// Latios: Pressure
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'pressure';
+				pokemon.baseAbility = 'pressure';
+			}
+		}
+	},
+	cresselia: {
+		// Cresselia: Natural Cure
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'naturalcure';
+				pokemon.baseAbility = 'naturalcure';
+			}
+		}
+	},
+	rotom: {
+		// Rotom formes: Motor Drive
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'motordrive';
+				pokemon.baseAbility = 'motordrive';
+			}
+		}
+	},
+	rotomheat: {
+		// Rotom formes: Motor Drive
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'motordrive';
+				pokemon.baseAbility = 'motordrive';
+			}
+		}
+	},
+	rotomwash: {
+		// Rotom formes: Motor Drive
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'motordrive';
+				pokemon.baseAbility = 'motordrive';
+			}
+		}
+	},
+	rotommow: {
+		// Rotom formes: Motor Drive
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'motordrive';
+				pokemon.baseAbility = 'motordrive';
+			}
+		}
+	},
+	rotomfrost: {
+		// Rotom formes: Motor Drive
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'motordrive';
+				pokemon.baseAbility = 'motordrive';
+			}
+		}
+	},
+	rotomfan: {
+		// Rotom formes: Motor Drive
+		onImmunity: function (type, pokemon) {
+			if (type === 'Ground' && (!this.suppressingAttackEvents() || this.activePokemon === pokemon)) return false;
+		},
+		onStart: function (pokemon) {
+			if (pokemon.ability === 'levitate') {
+				pokemon.ability = 'motordrive';
+				pokemon.baseAbility = 'motordrive';
+			}
+		}
+	},
 	hydreigon: {
 		// Hydreigon: Sheer Force
 		onImmunity: function (type, pokemon) {
