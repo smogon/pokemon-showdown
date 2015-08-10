@@ -12,7 +12,7 @@
 
 const RESULTS_MAX_LENGTH = 10;
 
-var commands = {
+var commands = exports.commands = {
 
 	ip: 'whois',
 	rooms: 'whois',
@@ -2361,6 +2361,4 @@ process.nextTick(function () {
 	// at least they probably won't receive a connection error message.
 
 	Tools.includeData();
-	exports.commands = commands;
-	Object.merge(CommandParser.commands, commands);
 });
