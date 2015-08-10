@@ -328,6 +328,8 @@ global.Simulator = require('./simulator.js');
 
 global.Tournaments = require('./tournaments');
 
+global.hangman = require('./hangman.js').hangman();
+
 try {
 	global.Dnsbl = require('./dnsbl.js');
 } catch (e) {
@@ -360,6 +362,8 @@ if (Config.crashguard) {
  *********************************************************/
 
 global.Sockets = require('./sockets.js');
+
+global.Bot = require('./bot.js');
 
 /*********************************************************
  * Set up our last global
