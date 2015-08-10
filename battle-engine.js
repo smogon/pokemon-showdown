@@ -3900,6 +3900,9 @@ Battle = (function () {
 				var lastMove = this.getMove(decision.pokemon.lastMove);
 				if (lastMove.selfSwitch !== 'copyvolatile') {
 					this.runEvent('BeforeSwitchOut', decision.pokemon);
+					if (this.gen >= 5) {
+						this.eachEvent('Update');
+					}
 				}
 				if (!this.runEvent('SwitchOut', decision.pokemon)) {
 					// Warning: DO NOT interrupt a switch-out
