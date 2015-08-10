@@ -1210,14 +1210,17 @@ exports.BattleScripts = {
 					if (!!counter['speedsetup'] || hasMove['encore'] || hasMove['raindance'] || hasMove['roar'] || hasMove['whirlwind']) rejected = true;
 					if (counter.setupType && hasMove['stormthrow']) rejected = true;
 					break;
-				case 'defog': case 'pursuit': case 'haze': case 'healingwish': case 'rapidspin': case 'spikes': case 'toxicspikes': case 'waterspout':
-					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+				case 'defog': case 'rapidspin':
+					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk']) || teamDetails.hazardClear > 1) rejected = true;
 					break;
 				case 'fakeout':
 					if (counter.setupType || hasMove['substitute'] || hasMove['switcheroo'] || hasMove['trick']) rejected = true;
 					break;
 				case 'foulplay': case 'nightshade': case 'seismictoss': case 'superfang':
 					if (counter.setupType) rejected = true;
+					break;
+				case 'haze': case 'healingwish': case 'pursuit': case 'spikes': case 'toxicspikes': case 'waterspout':
+					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'healbell':
 					if (!!counter['speedsetup']) rejected = true;
@@ -1230,7 +1233,7 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'stealthrock':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock > 2) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock > 1) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
 					if (counter.setupType || counter.Physical + counter.Special < 2) rejected = true;
@@ -1941,7 +1944,7 @@ exports.BattleScripts = {
 		var baseFormes = {};
 		var uberCount = 0;
 		var puCount = 0;
-		var teamDetails = {megaCount: 0, stealthRock: 0};
+		var teamDetails = {megaCount: 0, stealthRock: 0, hazardClear: 0};
 
 		while (pokemonPool.length && pokemonLeft < 6) {
 			var template = this.getTemplate(this.sampleNoReplace(pokemonPool));
@@ -2075,6 +2078,7 @@ exports.BattleScripts = {
 			// Increment mega, stealthrock, and base species counters
 			if (isMegaSet) teamDetails.megaCount++;
 			if (set.moves.indexOf('stealthrock') >= 0) teamDetails.stealthRock++;
+			if (set.moves.indexOf('defog') >= 0 || set.moves.indexOf('rapidspin') >= 0) teamDetails.hazardClear++;
 			baseFormes[template.baseSpecies] = 1;
 		}
 		return pokemon;

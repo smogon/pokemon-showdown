@@ -4649,7 +4649,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	mandibuzz: {
-		randomBattleMoves: ["knockoff","roost","taunt","whirlwind","toxic","uturn","bravebird","defog"],
+		randomBattleMoves: ["foulplay","knockoff","roost","taunt","whirlwind","toxic","uturn","bravebird","defog"],
 		randomDoubleBattleMoves: ["knockoff","roost","taunt","tailwind","snarl","uturn","bravebird","protect"],
 		eventPokemon: [
 			{"generation":5,"level":25,"gender":"F","isHidden":true,"moves":["pluck","nastyplot","flatter","feintattack"]}
