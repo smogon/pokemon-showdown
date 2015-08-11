@@ -750,6 +750,7 @@ var GlobalRoom = (function () {
 			if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 		}
 
+		user.updateIdentity();
 		return user;
 	};
 	GlobalRoom.prototype.onRename = function (user, oldid, joining) {
