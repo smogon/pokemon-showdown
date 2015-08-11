@@ -1122,6 +1122,10 @@ User = (function () {
 		}
 
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		if (!this.isStaff) {
+			var staffRoom = Rooms.get('staff');
+			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
+		}
 		if (this.confirmed) {
 			this.autoconfirmed = this.confirmed;
 			this.locked = false;
@@ -1135,6 +1139,10 @@ User = (function () {
 	User.prototype.setGroup = function (group, forceConfirmed) {
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
+		if (!this.isStaff) {
+			var staffRoom = Rooms.get('staff');
+			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
+		}
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
 			if (forceConfirmed || this.group !== Config.groupsranking[0]) {
