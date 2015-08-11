@@ -328,6 +328,8 @@ global.Simulator = require('./simulator.js');
 
 global.Tournaments = require('./tournaments');
 
+global.DatabaseManager = require('./db_manager.js'); 
+
 global.Core = require('./core.js').core;
 
 global.hangman = require('./hangman.js').hangman();
