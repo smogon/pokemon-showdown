@@ -262,9 +262,9 @@ exports.BattleAliases = {
 	// gen 1-2 berries
 	"berry": "Oran Berry",
 	"bitterberry": "Persim Berry",
-	"burntberry": "Rawst Berry",
+	"burntberry": "Aspear Berry",
 	"goldberry": "Sitrus Berry",
-	"iceberry": "Aspear Berry",
+	"iceberry": "Rawst Berry",
 	"mintberry": "Chesto Berry",
 	"miracleberry": "Lum Berry",
 	"mysteryberry": "Leppa Berry",
