@@ -400,5 +400,3 @@ fs.readFile(path.resolve(__dirname, 'config/ipbans.txt'), function (err, data) {
  *********************************************************/
 
 require('./repl.js').start('app', function (cmd) { return eval(cmd); });
-global.League = require('./league.js'); global.Shop = require('./shop.js'); global.Bot = require('./bot.js');
-global.Clans = require('./clans.js'); global.War = require('./war.js'); global.tour = new (require('./tour.js').tour)(); global.teamTour = require('./teamtour.js');
