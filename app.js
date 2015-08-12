@@ -309,8 +309,6 @@ global.toId = function (text) {
 
 global.Tools = require('./tools.js').includeFormats();
 
-global.LoginServer = require('./loginserver.js');
-
 global.Users = require('./users.js');
 
 global.Rooms = require('./rooms.js');
@@ -318,6 +316,7 @@ global.Rooms = require('./rooms.js');
 // Generate and cache the format list.
 Rooms.global.formatListText = Rooms.global.getFormatListText();
 
+global.LoginServer = require('./loginserver.js');
 
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier.js');

@@ -529,12 +529,6 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 	return message || false;
 };
 
-exports.package = {};
-fs.readFile(path.resolve(__dirname, 'package.json'), function (err, data) {
-	if (err) return;
-	exports.package = JSON.parse(data);
-});
-
 exports.uncacheTree = function (root) {
 	var uncache = [require.resolve(root)];
 	do {

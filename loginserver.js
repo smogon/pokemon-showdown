@@ -244,3 +244,5 @@ require('fs').watchFile('./config/custom.css', function (curr, prev) {
 	LoginServer.request('invalidatecss', {}, function () {});
 });
 LoginServer.request('invalidatecss', {}, function () {});
+
+LoginServer.request('updateversion', {version: Rooms.global.version}, function () {});
