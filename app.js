@@ -320,8 +320,6 @@ global.Users = require('./users.js');
 
 global.Rooms = require('./rooms.js');
 
-global.Database = require('./database.js')(Config.database)
-
 // Generate and cache the format list.
 Rooms.global.formatListText = Rooms.global.getFormatListText();
 
