@@ -132,7 +132,7 @@ exports.BattleItems = {
 		},
 		onAfterDamage: function (damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
-			if (effect.effectType === 'Move') {
+			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				this.itemData = {id: '', target: this};
@@ -141,7 +141,7 @@ exports.BattleItems = {
 		},
 		onAfterSubDamage: function (damage, target, source, effect) {
 			this.debug('effect: ' + effect.id);
-			if (effect.effectType === 'Move') {
+			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.setItem('');
 			}
