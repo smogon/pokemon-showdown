@@ -145,6 +145,9 @@ exports.simulatorprocesses = 1;
 // from the `users` array. The default is 1 hour.
 exports.inactiveuserthreshold = 1000 * 60 * 60;
 
+// database use to store user's money, tickets, etc.
+exports.database = 'lowdb';
+
 // Custom avatars.
 // This allows you to specify custom avatar images for users on your server.
 // Place custom avatar files under the /config/avatars/ directory.
