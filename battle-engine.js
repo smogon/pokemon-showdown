@@ -3469,7 +3469,6 @@ Battle = (function () {
 		// weather modifier (TODO: relocate here)
 		// crit
 		if (move.crit) {
-			if (!suppressMessages) this.add('-crit', target);
 			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
 		}
 
@@ -3503,6 +3502,8 @@ Battle = (function () {
 				baseDamage = Math.floor(baseDamage / 2);
 			}
 		}
+
+		if (move.crit && !suppressMessages) this.add('-crit', target);
 
 		if (pokemon.status === 'brn' && basePower && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
 			if (this.gen < 6 || move.id !== 'facade') {
