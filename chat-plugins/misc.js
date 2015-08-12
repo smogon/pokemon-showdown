@@ -41,7 +41,8 @@ exports.commands = {
 		delete user.getIdentity;
 		user.updateIdentity();
 		return this.sendReply("You are now showing your authority!");
-	}
+	},
+	
 	masspm: 'pmall',
 	pmall: function (target, room, user) {
 		if (!this.can('pmall')) return false;
