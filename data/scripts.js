@@ -1784,6 +1784,8 @@ exports.BattleScripts = {
 			item = template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Band';
 		} else if (counter.Special >= 4 && ability !== 'Speed Boost' && !hasMove['acidspray'] && !hasMove['chargebeam'] && !hasMove['fierydance']) {
 			item = template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3) ? 'Choice Scarf' : 'Choice Specs';
+		} else if (counter.Special >= 3 && hasMove['uturn'] && template.baseStats.spe > 82 && template.baseStats.spe < 109 && !counter['priority'] && this.random(3)) {
+			item = 'Choice Scarf';
 		} else if (hasMove['eruption'] || hasMove['waterspout']) {
 			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
 		} else if ((hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']) && ability !== 'Sturdy') {
