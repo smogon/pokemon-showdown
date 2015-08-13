@@ -47,6 +47,11 @@
 // Make sure our dependencies are available, and install them if they
 // aren't
 
+/* ----------------Data-Directory------------*/
+global.DATA_DIR = (process.env.OPENSHIFT_DATA_DIR) ? process.env.OPENSHIFT_DATA_DIR : './config/';
+global.LOGS_DIR = (process.env.OPENSHIFT_DATA_DIR) ? (process.env.OPENSHIFT_DATA_DIR + 'logs/') : './logs/';
+/* ------------------------------------------*/
+
 function runNpm(command) {
 	if (require.main !== module) throw new Error("Dependencies unmet");
 
@@ -328,6 +333,10 @@ global.Simulator = require('./simulator.js');
 
 global.Tournaments = require('./tournaments');
 
+global.Core = require('./core.js').core;
+
+global.hangman = require('./hangman.js').hangman();
+
 try {
 	global.Dnsbl = require('./dnsbl.js');
 } catch (e) {
@@ -360,6 +369,8 @@ if (Config.crashguard) {
  *********************************************************/
 
 global.Sockets = require('./sockets.js');
+
+global.Bot = require('./bot.js');
 
 /*********************************************************
  * Set up our last global
