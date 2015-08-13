@@ -1773,7 +1773,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	wobbuffet: {
-		randomBattleMoves: ["destinybond","counter","mirrorcoat","encore"],
+		randomBattleMoves: ["counter","mirrorcoat","encore","destinybond","safeguard"],
 		eventPokemon: [
 			{"generation":3,"level":5,"moves":["counter","mirrorcoat","safeguard","destinybond"]},
 			{"generation":3,"level":10,"gender":"M","moves":["counter","mirrorcoat","safeguard","destinybond"]},
