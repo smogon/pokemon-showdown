@@ -3961,6 +3961,7 @@ Battle = (function () {
 		case 'shift':
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
+			decision.pokemon.activeTurns--;
 			this.swapPosition(decision.pokemon, 1);
 			var foeActive = decision.pokemon.side.foe.active;
 			for (var i = 0; i < foeActive.length; i++) {
