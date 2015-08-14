@@ -687,7 +687,7 @@ exports.BattleScripts = {
 		for (var id in this.data.Pokedex) {
 			if (!(this.data.Pokedex[id].num in hasDexNumber)) continue;
 			var template = this.getTemplate(id);
-			if (template.learnset && template.species !== 'Pichu-Spiky-eared') {
+			if (template.species !== 'Pichu-Spiky-eared') {
 				formes[hasDexNumber[template.num]].push(template.species);
 			}
 		}
@@ -703,8 +703,17 @@ exports.BattleScripts = {
 			} else {
 				item = items[this.random(items.length)];
 			}
+
+			// Make sure forme is legal
+			if (template.species.indexOf('-Mega') >= 0 || template.species.indexOf('-Primal') >= 0 ||
+					template.num === 351 || template.num === 421 || template.num === 555 ||
+					template.num === 648 || template.num === 681) {
+				template = this.getTemplate(template.baseSpecies);
+				poke = template.name;
+			}
+
 			// Make sure forme/item combo is correct
-			while ((poke === 'Arceus' && item.substr(-5) !== 'plate') || (poke === 'Giratina' && item === 'griseousorb')) {
+			while ((poke === 'Arceus' && item.substr(-5) === 'plate') || (poke === 'Giratina' && item === 'griseousorb') || (poke === 'Genesect' && item.substr(-5) === 'drive')) {
 				item = items[this.random(items.length)];
 			}
 
@@ -725,6 +734,8 @@ exports.BattleScripts = {
 				pool = Object.keys(this.data.Movedex).exclude('chatter', 'struggle', 'magikarpsrevenge');
 			} else if (template.learnset) {
 				pool = Object.keys(template.learnset);
+			} else {
+				pool = Object.keys(this.getTemplate(template.baseSpecies).learnset);
 			}
 			if (pool.length <= 4) {
 				moves = pool;
