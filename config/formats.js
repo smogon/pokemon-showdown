@@ -888,7 +888,7 @@ exports.Formats = [
 		name: "2v2 Doubles",
 		desc: [
 			"Double battle where you bring four Pok&eacute;mon to Team Preview and choose only two.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3505227/\">2v2 Doubles</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547040/\">2v2 Doubles</a>"
 		],
 		section: "Other Metagames",
 
