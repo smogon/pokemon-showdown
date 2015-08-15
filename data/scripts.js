@@ -2744,8 +2744,12 @@ exports.BattleScripts = {
 		}.bind(this));
 		var ability0 = this.getAbility(abilities[0]);
 		var ability1 = this.getAbility(abilities[1]);
+		var ability2 = this.getAbility(abilities[2]);
 		var ability = ability0.name;
 		if (abilities[1]) {
+			if (abilities[2] && ability2.rating === ability1.rating) {
+				if (this.random(2)) ability1 = ability2;
+			}
 			if (ability0.rating <= ability1.rating) {
 				if (this.random(2)) ability = ability1.name;
 			} else if (ability0.rating - 0.6 <= ability1.rating) {
@@ -2755,30 +2759,40 @@ exports.BattleScripts = {
 			var rejectAbility = false;
 			if (ability in counterAbilities) {
 				rejectAbility = !counter[toId(ability)];
-			} else if (ability === 'Rock Head' || ability === 'Reckless') {
-				rejectAbility = !counter['recoil'];
-			} else if (ability === 'No Guard' || ability === 'Compound Eyes') {
-				rejectAbility = !counter['inaccurate'];
-			} else if (ability === 'Strong Jaw') {
-				rejectAbility = !counter['bite'];
-			} else if (ability === 'Sheer Force') {
-				rejectAbility = !counter['sheerforce'];
-			} else if (ability === 'Serene Grace') {
-				rejectAbility = !counter['serenegrace'] && template.species !== 'Blissey' && template.species !== 'Chansey';
-			} else if (ability === 'Simple') {
-				rejectAbility = !counter.setupType && !hasMove['flamecharge'] && !hasMove['stockpile'];
-			} else if (ability === 'Prankster') {
-				rejectAbility = !counter['Status'];
-			} else if (ability === 'Defiant') {
-				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
-			} else if (ability === 'Moody') {
-				rejectAbility = template.id !== 'bidoof';
-			} else if (ability === 'Lightning Rod') {
-				rejectAbility = template.types.indexOf('Ground') >= 0;
-			} else if (ability === 'Chlorophyll') {
-				rejectAbility = !hasMove['sunnyday'];
 			} else if (ability in ateAbilities) {
 				rejectAbility = !counter['ate'];
+			} else if (ability === 'Chlorophyll') {
+				rejectAbility = !hasMove['sunnyday'];
+			} else if (ability === 'Compound Eyes' || ability === 'No Guard') {
+				rejectAbility = !counter['inaccurate'];
+			} else if (ability === 'Defiant' || ability === 'Moxie') {
+				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
+			} else if (ability === 'Gluttony') {
+				rejectAbility = true;
+			} else if (ability === 'Limber') {
+				rejectAbility = template.types.indexOf('Electric') >= 0;
+			} else if (ability === 'Lightning Rod') {
+				rejectAbility = template.types.indexOf('Ground') >= 0;
+			} else if (ability === 'Moody') {
+				rejectAbility = template.id !== 'bidoof';
+			} else if (ability === 'Poison Heal') {
+				rejectAbility = abilities.indexOf('Technician') >= 0 && !!counter['technician'];
+			} else if (ability === 'Prankster') {
+				rejectAbility = !counter['Status'];
+			} else if (ability === 'Reckless' || ability === 'Rock Head') {
+				rejectAbility = !counter['recoil'];
+			} else if (ability === 'Serene Grace') {
+				rejectAbility = !counter['serenegrace'] || template.id === 'chansey' || template.id === 'blissey';
+			} else if (ability === 'Sheer Force') {
+				rejectAbility = !counter['sheerforce'];
+			} else if (ability === 'Simple') {
+				rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
+			} else if (ability === 'Strong Jaw') {
+				rejectAbility = !counter['bite'];
+			} else if (ability === 'Sturdy') {
+				rejectAbility = !!counter['recoil'] && !counter['recovery'];
+			} else if (ability === 'Swift Swim') {
+				rejectAbility = !hasMove['raindance'];
 			} else if (ability === 'Unburden') {
 				rejectAbility = template.baseStats.spe > 120;
 			}
@@ -2790,22 +2804,37 @@ exports.BattleScripts = {
 					ability = ability1.name;
 				}
 			}
-			if (abilities.indexOf('Guts') >= 0 && ability !== 'Quick Feet' && hasMove['facade']) {
-				ability = 'Guts';
-			}
-			if (abilities.indexOf('Swift Swim') >= 0 && hasMove['raindance']) {
-				ability = 'Swift Swim';
-			}
 			if (abilities.indexOf('Chlorophyll') >= 0 && ability !== 'Solar Power') {
 				ability = 'Chlorophyll';
+			}
+			if (abilities.indexOf('Guts') >= 0 && ability !== 'Quick Feet' && hasMove['facade']) {
+				ability = 'Guts';
 			}
 			if (abilities.indexOf('Intimidate') >= 0 || template.id === 'mawilemega') {
 				ability = 'Intimidate';
 			}
+			if (abilities.indexOf('Swift Swim') >= 0 && hasMove['raindance']) {
+				ability = 'Swift Swim';
+			}
+
 			if (template.id === 'ambipom' && !counter['technician']) {
 				// If it doesn't qualify for Technician, Skill Link is useless on it
 				// Might as well give it Pickup just in case
 				ability = 'Pickup';
+			} else if (template.id === 'aurorus' && ability === 'Snow Warning' && hasMove['hypervoice']) {
+				for (var i = 0; i < moves.length; i++) {
+					if (moves[i] === 'hypervoice') {
+						moves[i] = 'blizzard';
+						counter['ate'] = 0;
+						break;
+					}
+				}
+			} else if (template.baseSpecies === 'Basculin') {
+				ability = 'Adaptability';
+			} else if (template.id === 'lilligant' && hasMove['petaldance']) {
+				ability = 'Own Tempo';
+			} else if (template.id === 'rhyperior') {
+				ability = 'Solid Rock';
 			} else if (template.id === 'unfezant') {
 				ability = 'Super Luck';
 			}
