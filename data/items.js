@@ -2180,6 +2180,7 @@ exports.BattleItems = {
 			basePower: 30,
 			volatileStatus: 'flinch'
 		},
+		onModifyMovePriority: -1,
 		onModifyMove: function (move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
@@ -3570,6 +3571,7 @@ exports.BattleItems = {
 			basePower: 30,
 			volatileStatus: 'flinch'
 		},
+		onModifyMovePriority: -1,
 		onModifyMove: function (move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
