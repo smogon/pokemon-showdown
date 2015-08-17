@@ -596,7 +596,7 @@ exports.Formats = [
 		onEffectiveness: function (typeMod, target, type, move) {
 			if (move.id !== 'swift') return;
 			// Only calculate color effectiveness once
-			if (target.types[0] !== type) return 0;
+			if (target.getTypes()[0] !== type) return 0;
 			var targetColor = target.template.color;
 			var sourceColor = this.activePokemon.template.color;
 			var effectiveness = {
