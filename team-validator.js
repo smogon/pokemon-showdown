@@ -501,9 +501,16 @@ Validator = (function () {
 				}
 			}
 		}
-		setHas[toId(template.tier)] = true;
-		if (banlistTable[template.tier]) {
-			problems.push(name + " is in " + template.tier + ", which is banned.");
+		if (item.megaEvolves === template.species) {
+			template = tools.getTemplate(item.megaStone);
+		}
+		if (template.tier) {
+			var tier = template.tier;
+			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+			setHas[toId(tier)] = true;
+			if (banlistTable[tier]) {
+				problems.push(template.species + " is in " + tier + ", which is banned.");
+			}
 		}
 
 		if (teamHas) {
