@@ -100,8 +100,6 @@ jscsOptions.base = {
 
 	"disallowMixedSpacesAndTabs": "smart",
 	"requireSpaceAfterKeywords": true,
-	"disallowSpacesInsideArrayBrackets": true,
-	"disallowSpacesInsideObjectBrackets": true,
 
 	"disallowSpacesInCallExpression": true,
 	"validateParameterSeparator": ", ",
