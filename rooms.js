@@ -282,6 +282,7 @@ var Room = (function () {
 var GlobalRoom = (function () {
 	function GlobalRoom(roomid) {
 		this.id = roomid;
+		this.version = require('./package.json').version;
 
 		// init battle rooms
 		this.battleCount = 0;
@@ -418,6 +419,8 @@ var GlobalRoom = (function () {
 	GlobalRoom.prototype.type = 'global';
 
 	GlobalRoom.prototype.formatListText = '|formats';
+
+	GlobalRoom.prototype.configText = '|config|{}';
 
 	GlobalRoom.prototype.reportUserStats = function () {
 		if (this.maxUsersDate) {
@@ -731,7 +734,7 @@ var GlobalRoom = (function () {
 	};
 	GlobalRoom.prototype.onJoinConnection = function (user, connection) {
 		var initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';
-		connection.send(initdata + this.formatListText);
+		connection.send(initdata + this.formatListText + '\n|version|' + this.version + '\n' + this.configText);
 		if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 	};
 	GlobalRoom.prototype.onJoin = function (user, connection, merging) {
@@ -746,7 +749,7 @@ var GlobalRoom = (function () {
 
 		if (!merging) {
 			var initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';
-			connection.send(initdata + this.formatListText);
+			connection.send(initdata + this.formatListText + '\n|version|' + this.version + '\n' + this.configText);
 			if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 		}
 
@@ -877,6 +880,7 @@ var BattleRoom = (function () {
 
 		this.rated = rated;
 		this.battle = Simulator.create(this.id, format, rated, this);
+		this.add('|version|' + rooms.global.version);
 
 		this.sideTicksLeft = [21, 21];
 		if (!rated && !this.tour) this.sideTicksLeft = [28, 28];

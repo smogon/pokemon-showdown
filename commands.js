@@ -24,7 +24,7 @@ var commands = exports.commands = {
 
 	version: function (target, room, user) {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("Server version: <b>" + CommandParser.package.version + "</b>");
+		this.sendReplyBox("Server version: <b>" + Rooms.global.version + "</b>");
 	},
 
 	auth: 'authority',
