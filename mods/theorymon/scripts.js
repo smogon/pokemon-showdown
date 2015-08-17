@@ -30,6 +30,7 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'forretress').abilities['1'] = 'Water Absorb';
 		this.modData('Learnsets', 'bronzong').learnset.recover = ['6T'];
 		this.modData('Learnsets', 'sandslash').learnset.thousandarrows = ['6T'];
+		this.modData('Movedex', 'thousandarrows').isUnreleased = false;
 		this.modData('Learnsets', 'braviary').learnset.extremespeed = ['6T'];
 		this.modData('Pokedex', 'cacturne').abilities['1'] = 'Sand Rush';
 		this.modData('Pokedex', 'beedrillmega').types = ['Bug', 'Ground'];
