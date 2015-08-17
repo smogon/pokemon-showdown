@@ -32,7 +32,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite']
+		banlist: ['Uber', 'Soul Dew']
 	},
 	{
 		name: "OU (no Mega)",
@@ -69,9 +69,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Alakazite', 'Altarianite', 'Diancite', 'Heracronite', 'Galladite', 'Gardevoirite', 'Lopunnite', 'Medichamite',
-			'Metagrossite', 'Pidgeotite', 'Pinsirite', 'Drizzle', 'Drought', 'Shadow Tag'
-		]
+		banlist: ['OU', 'BL', 'Drizzle', 'Drought', 'Shadow Tag']
 	},
 	{
 		name: "RU",
@@ -83,7 +81,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['UU'],
-		banlist: ['UU', 'BL2', 'Galladite', 'Houndoominite', 'Pidgeotite']
+		banlist: ['UU', 'BL2']
 	},
 	{
 		name: "NU",
@@ -95,7 +93,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['RU'],
-		banlist: ['RU', 'BL3', 'Cameruptite', 'Glalitite', 'Steelixite']
+		banlist: ['RU', 'BL3']
 	},
 	{
 		name: "LC",
@@ -785,7 +783,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['NU'],
-		banlist: ['NU', 'BL4', 'Altarianite', 'Beedrillite', 'Lopunnite', 'Chatter', 'Shell Smash + Baton Pass']
+		banlist: ['NU', 'BL4', 'Chatter', 'Shell Smash + Baton Pass']
 	},
 	{
 		name: "Inverse Battle",
