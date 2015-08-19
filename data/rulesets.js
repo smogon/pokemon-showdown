@@ -685,21 +685,9 @@ exports.BattleFormats = {
 				// Very complex bans
 				if (typeTable.length > 1) return;
 				switch (typeTable[0]) {
-				case 'Flying':
-					if (teamHas['zapdos']) return ["Zapdos is banned from Flying monotype teams."];
-					break;
-				case 'Ground':
-					if (teamHas['smoothrock']) return ["Smooth Rock is banned from Ground monotype teams."];
-					break;
-				case 'Psychic':
-					if (teamHas['galladite']) return ["Galladite is banned from Psychic monotype teams."];
-					break;
 				case 'Steel':
 					if (teamHas['aegislash']) return ["Aegislash is banned from Steel monotype teams."];
-					if (teamHas['genesect'] || teamHas['genesectdouse'] || teamHas['genesectshock'] || teamHas['genesectburn'] || teamHas['genesectchill']) return ["Genesect is banned from Steel monotype teams."];
 					break;
-				case 'Water':
-					if (teamHas['damprock']) return ["Damp Rock is banned from Water monotype teams."];
 				}
 			}
 		}
