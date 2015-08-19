@@ -1287,7 +1287,7 @@ exports.BattleScripts = {
 					if (hasMove['discharge'] || (hasMove['thunder'] && hasMove['raindance']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
 					break;
 				case 'drainingkiss':
-					if (hasMove['dazzlinggleam']) rejected = true;
+					if (hasMove['dazzlinggleam'] || counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'aurasphere': case 'drainpunch':
 					if (!hasMove['bulkup'] && (hasMove['closecombat'] || hasMove['highjumpkick'])) rejected = true;
@@ -1622,7 +1622,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Swift Swim') {
 				rejectAbility = !hasMove['raindance'];
 			} else if (ability === 'Unburden') {
-				rejectAbility = template.baseStats.spe > 120;
+				rejectAbility = template.baseStats.spe > 120 || (template.id === 'slurpuff' && !counter.setupType);
 			}
 
 			if (rejectAbility) {
@@ -2791,7 +2791,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Swift Swim') {
 				rejectAbility = !hasMove['raindance'];
 			} else if (ability === 'Unburden') {
-				rejectAbility = template.baseStats.spe > 120;
+				rejectAbility = template.baseStats.spe > 120 || (template.id === 'slurpuff' && !counter.setupType);
 			}
 
 			if (rejectAbility) {
