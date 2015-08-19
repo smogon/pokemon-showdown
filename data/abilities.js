@@ -3170,25 +3170,26 @@ exports.BattleAbilities = {
 				pokemon.removeVolatile('zenmode');
 			}
 		},
+		onEnd: function (pokemon) {
+			pokemon.transformed = false;
+			delete pokemon.volatiles['zenmode'];
+			if (pokemon.formeChange('Darmanitan')) {
+				this.add('-formechange', pokemon, 'Darmanitan', '[silent]');
+			}
+		},
 		effect: {
 			onStart: function (pokemon) {
 				if (pokemon.formeChange('Darmanitan-Zen')) {
-					this.add('-formechange', pokemon, 'Darmanitan-Zen');
+					this.add('-formechange', pokemon, 'Darmanitan-Zen', '[from] ability: Zen Mode');
 				} else {
 					return false;
 				}
 			},
 			onEnd: function (pokemon) {
 				if (pokemon.formeChange('Darmanitan')) {
-					this.add('-formechange', pokemon, 'Darmanitan');
+					this.add('-formechange', pokemon, 'Darmanitan', '[from] ability: Zen Mode');
 				} else {
 					return false;
-				}
-			},
-			onUpdate: function (pokemon) {
-				if (!pokemon.hasAbility('zenmode')) {
-					pokemon.transformed = false;
-					pokemon.removeVolatile('zenmode');
 				}
 			}
 		},
