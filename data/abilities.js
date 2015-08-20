@@ -3171,6 +3171,7 @@ exports.BattleAbilities = {
 			}
 		},
 		onEnd: function (pokemon) {
+			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
 			pokemon.transformed = false;
 			delete pokemon.volatiles['zenmode'];
 			if (pokemon.formeChange('Darmanitan')) {
