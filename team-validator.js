@@ -241,13 +241,13 @@ Validator = (function () {
 		if (format.ruleset) {
 			for (var i = 0; i < format.ruleset.length; i++) {
 				var subformat = tools.getFormat(format.ruleset[i]);
-				if (subformat.validateTeam) {
-					problems = problems.concat(subformat.validateTeam.call(tools, team, format, teamHas) || []);
+				if (subformat.onValidateTeam) {
+					problems = problems.concat(subformat.onValidateTeam.call(tools, team, format, teamHas) || []);
 				}
 			}
 		}
-		if (format.validateTeam) {
-			problems = problems.concat(format.validateTeam.call(tools, team, format, teamHas) || []);
+		if (format.onValidateTeam) {
+			problems = problems.concat(format.onValidateTeam.call(tools, team, format, teamHas) || []);
 		}
 
 		if (!problems.length) return false;
@@ -309,13 +309,13 @@ Validator = (function () {
 		if (format.ruleset) {
 			for (var i = 0; i < format.ruleset.length; i++) {
 				var subformat = tools.getFormat(format.ruleset[i]);
-				if (subformat.changeSet) {
-					problems = problems.concat(subformat.changeSet.call(tools, set, format) || []);
+				if (subformat.onChangeSet) {
+					problems = problems.concat(subformat.onChangeSet.call(tools, set, format) || []);
 				}
 			}
 		}
-		if (format.changeSet) {
-			problems = problems.concat(format.changeSet.call(tools, set, format, setHas, teamHas) || []);
+		if (format.onChangeSet) {
+			problems = problems.concat(format.onChangeSet.call(tools, set, format, setHas, teamHas) || []);
 		}
 		template = tools.getTemplate(set.species);
 		item = tools.getItem(set.item);
@@ -535,13 +535,13 @@ Validator = (function () {
 		if (format.ruleset) {
 			for (var i = 0; i < format.ruleset.length; i++) {
 				var subformat = tools.getFormat(format.ruleset[i]);
-				if (subformat.validateSet) {
-					problems = problems.concat(subformat.validateSet.call(tools, set, format, setHas, teamHas) || []);
+				if (subformat.onValidateSet) {
+					problems = problems.concat(subformat.onValidateSet.call(tools, set, format, setHas, teamHas) || []);
 				}
 			}
 		}
-		if (format.validateSet) {
-			problems = problems.concat(format.validateSet.call(tools, set, format, setHas, teamHas) || []);
+		if (format.onValidateSet) {
+			problems = problems.concat(format.onValidateSet.call(tools, set, format, setHas, teamHas) || []);
 		}
 
 		if (!problems.length) {

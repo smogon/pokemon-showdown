@@ -1,7 +1,7 @@
 exports.BattleFormats = {
 	pokemon: {
 		effectType: 'Banlist',
-		validateSet: function (set, format) {
+		onValidateSet: function (set, format) {
 			var template = this.getTemplate(set.species);
 			var problems = [];
 			if (set.species === set.name) delete set.name;
@@ -128,7 +128,7 @@ exports.BattleFormats = {
 			'Spore + Perish Song + Mean Look',
 			'Spore + Perish Song + Spider Web'
 		],
-		validateSet: function (set) {
+		onValidateSet: function (set) {
 			// limit one of each move in Standard
 			var moves = [];
 			if (set.moves) {
