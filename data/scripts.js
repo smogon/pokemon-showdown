@@ -1882,7 +1882,11 @@ exports.BattleScripts = {
 			// Holistic judgment
 			Ninetales: 79, Politoed: 79, Unown: 85, Wobbuffet: 79
 		};
-		var level = levelScale[template.tier] || 90;
+		var tier = template.tier;
+		if (tier.charAt(0) === '(') {
+			tier = tier.slice(1, -1);
+		}
+		var level = levelScale[tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
