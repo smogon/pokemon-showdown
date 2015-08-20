@@ -185,6 +185,12 @@ Validator = (function () {
 	}
 
 	Validator.prototype.validateTeam = function (team) {
+		var format = Tools.getFormat(this.format);
+		if (format.validateTeam) return format.validateTeam.call(this, team);
+		return this.baseValidateTeam(team);
+	};
+
+	Validator.prototype.baseValidateTeam = function (team) {
 		var format = this.format;
 		var tools = this.tools;
 
@@ -218,7 +224,7 @@ Validator = (function () {
 		var teamHas = {};
 		for (var i = 0; i < team.length; i++) {
 			if (!team[i]) return ["You sent invalid team data. If you're not using a custom client, please report this as a bug."];
-			var setProblems = this.validateSet(team[i], teamHas);
+			var setProblems = (format.validateSet || this.validateSet).call(this, team[i], teamHas);
 			if (setProblems) {
 				problems = problems.concat(setProblems);
 			}
