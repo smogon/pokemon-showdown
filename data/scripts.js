@@ -1181,6 +1181,9 @@ exports.BattleScripts = {
 				case 'perishsong':
 					if (!hasMove['protect']) rejected = true;
 					break;
+				case 'rest':
+					if (!hasMove['sleeptalk'] && movePool.indexOf('sleeptalk') >= 0) rejected = true;
+					break;
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
 					break;
@@ -1414,12 +1417,8 @@ exports.BattleScripts = {
 				case 'willowisp':
 					if (hasMove['lavaplume'] || hasMove['sacredfire'] || hasMove['scald'] || hasMove['spore']) rejected = true;
 					break;
-				case 'rest':
-					if (!hasMove['sleeptalk'] && movePool.indexOf('sleeptalk') >= 0) rejected = true;
-					if (hasMove['moonlight'] || hasMove['painsplit'] || hasMove['recover'] || hasMove['synthesis']) rejected = true;
-					break;
-				case 'roost': case 'softboiled': case 'synthesis':
-					if (hasMove['wish']) rejected = true;
+				case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
+					if (hasMove['rest'] || hasMove['wish']) rejected = true;
 					break;
 				case 'roar':
 					if (hasMove['dragontail']) rejected = true;
