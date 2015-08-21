@@ -1,7 +1,7 @@
 exports.BattleFormats = {
 	pokemon: {
 		effectType: 'Banlist',
-		validateSet: function (set, format) {
+		onValidateSet: function (set, format) {
 			var template = this.getTemplate(set.species);
 			var problems = [];
 			if (set.species === set.name) delete set.name;
@@ -90,7 +90,7 @@ exports.BattleFormats = {
 			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
 			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember'
 		],
-		validateSet: function (set) {
+		onValidateSet: function (set) {
 			// limit one of each move in Standard
 			var moves = [];
 			if (set.moves) {

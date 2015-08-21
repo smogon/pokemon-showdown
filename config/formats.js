@@ -140,7 +140,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
 		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
 		requirePentagon: true,
-		validateTeam: function (team, format) {
+		onValidateTeam: function (team, format) {
 			if (team.length < 3) return ['You must bring at least three Pok\u00e9mon.'];
 		},
 		onBegin: function () {
@@ -248,7 +248,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
 		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
 		requirePentagon: true,
-		validateTeam: function (team, format) {
+		onValidateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pok\u00e9mon.'];
 		},
 		onBegin: function () {
@@ -271,7 +271,7 @@ exports.Formats = [
 			'Terrakion', 'Thundurus', 'Thundurus-Therian', 'Landorus', 'Landorus-Therian', 'Greninja', 'Talonflame', 'Aegislash', 'Sylveon'
 		],
 		requirePentagon: true,
-		validateTeam: function (team, format) {
+		onValidateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pok\u00e9mon.'];
 		},
 		onBegin: function () {
@@ -290,7 +290,7 @@ exports.Formats = [
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
 		banlist: ['Arceus', 'Raikou', 'Thundurus', 'Thundurus-Therian', 'Zapdos', 'Zekrom'],
-		validateTeam: function (team, format) {
+		onValidateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pok\u00e9mon.'];
 			for (var i = 0; i < team.length; i++) {
 				var template = this.getTemplate(team[i].species);
@@ -363,7 +363,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
 		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
 		requirePentagon: true,
-		validateTeam: function (team, format) {
+		onValidateTeam: function (team, format) {
 			if (team.length < 6) return ['You must have six Pok\u00e9mon.'];
 		}
 	},
@@ -404,7 +404,7 @@ exports.Formats = [
 			'Kyogre', 'Kyurem-White', 'Landorus', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Blazikenite', 'Gengarite', 'Griseous Orb', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew'
 		],
-		validateSet: function (set) {
+		onValidateSet: function (set) {
 			var problems = [];
 			if (set.moves) {
 				for (var i in set.moves) {
@@ -424,7 +424,7 @@ exports.Formats = [
 		banlist: ['Arceus', 'Archeops', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh',
 			'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Xerneas', 'Yveltal', 'Zekrom'
 		],
-		validateSet: function (set) {
+		onValidateSet: function (set) {
 			set.item = '';
 			set.ability = 'None';
 			set.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
@@ -736,7 +736,7 @@ exports.Formats = [
 			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Shaymin-Sky',
 			'Xerneas', 'Yveltal', 'Zekrom', 'Focus Sash', 'Kangaskhanite', 'Soul Dew', 'Perish Song'
 		],
-		validateTeam: function (team, format) {
+		onValidateTeam: function (team, format) {
 			if (team.length > 3) return ['You may only bring up to three Pok\u00e9mon.'];
 		},
 		onBegin: function () {
@@ -826,7 +826,7 @@ exports.Formats = [
 			'Zekrom',
 			'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Lucarionite', 'Mawilite', 'Salamencite', 'Soul Dew', 'Chatter'
 		],
-		validateSet: function (set) {
+		onValidateSet: function (set) {
 			var bannedAbilities = {'Aerilate': 1, 'Arena Trap': 1, 'Contrary': 1, 'Fur Coat': 1, 'Huge Power': 1, 'Imposter': 1, 'Parental Bond': 1, 'Protean': 1, 'Pure Power': 1, 'Shadow Tag': 1, 'Simple':1, 'Speed Boost': 1, 'Wonder Guard': 1};
 			if (set.ability in bannedAbilities) {
 				var template = this.getTemplate(set.species || set.name);
@@ -841,20 +841,34 @@ exports.Formats = [
 	{
 		name: "STABmons",
 		desc: [
-			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
+			"Pok&eacute;mon gain access to either Attacking moves or Status moves of their typing, but not both at the same time.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547279/\">STABmons</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3512215/\">STABmons Viability Ranking</a>"
 		],
 		section: "Other Metagames",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Ignore STAB Moves',
-			'Arceus', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Diggersby', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja',
+		banlist: ['Arceus', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Diggersby', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja',
 			'Groudon', 'Ho-Oh', 'Keldeo', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus', 'Lugia', 'Mewtwo', 'Palkia',
 			'Porygon-Z', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Sylveon', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Aerodactylite', 'Altarianite', 'Gengarite', 'Kangaskhanite', "King's Rock", 'Lopunnite', 'Lucarionite', 'Mawilite', 'Metagrossite', 'Razor Fang',
 			'Salamencite', 'Slowbronite', 'Soul Dew'
-		]
+		],
+		validateSet: function (set, teamHas) {
+			var statusProblems = this.validateSet(set, teamHas, {ignorestabmoves: {'Status':1}});
+			if (!statusProblems.length) return;
+			var attackProblems = this.validateSet(set, teamHas, {ignorestabmoves: {'Physical':1, 'Special':1}});
+			if (!attackProblems.length) return;
+
+			var problems = [];
+			for (var i = 0; i < statusProblems.length; i++) {
+				problems.push('(Status) ' + statusProblems[i]);
+			}
+			for (var i = 0; i < attackProblems.length; i++) {
+				problems.push('(Attack) ' + attackProblems[i]);
+			}
+			return problems;
+		}
 	},
 	{
 		name: "LC UU",
@@ -889,7 +903,7 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Doubles OU'],
 		banlist: ['Perish Song'],
-		validateTeam: function (team, format) {
+		onValidateTeam: function (team, format) {
 			if (team.length > 4) return ['You may only bring up to four Pok\u00e9mon.'];
 		},
 		onBegin: function () {
