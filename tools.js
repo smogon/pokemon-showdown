@@ -12,6 +12,7 @@
  */
 
 var fs = require('fs');
+var path = require('path');
 
 module.exports = (function () {
 	var moddedTools = {};
@@ -89,7 +90,7 @@ module.exports = (function () {
 
 	Tools.preloadMods = function () {
 		if (Tools.preloadedMods) return;
-		var modList = fs.readdirSync('./mods/');
+		var modList = fs.readdirSync(path.resolve(__dirname, 'mods'));
 		for (var i = 0; i < modList.length; i++) {
 			moddedTools[modList[i]] = new Tools(modList[i]);
 		}
