@@ -38,5 +38,8 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'kyurem').abilities['1'] = 'Sheer Force';
 		this.modData('Pokedex', 'donphan').types = ['Ground', 'Fairy'];
 		this.modData('Pokedex', 'hydreigon').abilities['1'] = 'Protean';
+		this.modData('Pokedex', 'virizion').abilities['1'] = 'Trace';
+		this.modData('Pokedex', 'gastrodon').abilities['H'] = 'Poison Heal';
+		this.modData('Learnsets', 'krookodile').learnset.dragondance = ['6T'];
 	}
 };
