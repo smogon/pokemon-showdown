@@ -847,13 +847,8 @@ exports.Formats = [
 		],
 		section: "Other Metagames",
 
-		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Arceus', 'Blaziken', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Diggersby', 'Genesect', 'Giratina', 'Giratina-Origin', 'Greninja',
-			'Groudon', 'Ho-Oh', 'Keldeo', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus', 'Lugia', 'Mewtwo', 'Palkia',
-			'Porygon-Z', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Sylveon', 'Xerneas', 'Yveltal', 'Zekrom',
-			'Aerodactylite', 'Altarianite', 'Gengarite', 'Kangaskhanite', "King's Rock", 'Lopunnite', 'Lucarionite', 'Mawilite', 'Metagrossite', 'Razor Fang',
-			'Salamencite', 'Slowbronite', 'Soul Dew'
-		],
+		ruleset: ['OU'],
+		banlist: ['Diggersby', 'Keldeo', 'Porygon-Z', 'Sylveon', 'Aerodactylite', 'Altarianite', "King's Rock", 'Lopunnite', 'Metagrossite', 'Razor Fang'],
 		validateSet: function (set, teamHas) {
 			var statusProblems = this.validateSet(set, teamHas, {ignorestabmoves: {'Status':1}});
 			if (!statusProblems.length) return;
