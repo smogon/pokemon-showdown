@@ -36,7 +36,7 @@ Ladder.prototype.getRating = function (userid) {
 
 			var mmr = parseInt(data, 10);
 			if (isNaN(mmr)) return resolve(1000);
-			if (user.userid !== userid) return reject("Expired rating");
+			if (user.userid !== userid) return reject(new Error("Expired rating"));
 
 			user.mmrCache[formatid] = mmr;
 			resolve(mmr);
