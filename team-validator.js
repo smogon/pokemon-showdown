@@ -260,7 +260,7 @@ Validator = (function () {
 		return problems;
 	};
 
-	Validator.prototype.validateSet = function (set, teamHas) {
+	Validator.prototype.validateSet = function (set, teamHas, flags) {
 		var format = this.format;
 		var tools = this.tools;
 
@@ -304,6 +304,7 @@ Validator = (function () {
 		if (set.species !== set.name) name = set.name + " (" + set.species + ")";
 		var isHidden = false;
 		var lsetData = {set:set, format:format};
+		if (flags) Object.merge(lsetData, flags);
 
 		var setHas = {};
 
@@ -606,7 +607,7 @@ Validator = (function () {
 		do {
 			alreadyChecked[template.speciesid] = true;
 			// STABmons hack to avoid copying all of validateSet to formats
-			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && move !== 'chatter') {
+			if (move !== 'chatter' && lsetData['ignorestabmoves'] && lsetData['ignorestabmoves'][this.tools.getMove(move).category]) {
 				var types = template.types;
 				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
