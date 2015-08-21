@@ -77,6 +77,24 @@ describe('Pressure', function () {
 		assert.strictEqual(battle.p2.active[1].getMoveData(Tools.getMove('spikes')).pp, 28);
 		assert.strictEqual(battle.p2.active[2].getMoveData(Tools.getMove('rockslide')).pp, 13);
 	});
+
+	it('should deduct PP for each opposing Pressure Pokemon when Snatch of Imprison are used', function () {
+		battle = BattleEngine.Battle.construct('battle-pressure-snatch', 'triplescustomgame');
+		battle.join('p1', 'Guest 1', 1, [
+			{species: "Giratina", ability: 'pressure', moves: ['rest']},
+			{species: "Palkia", ability: 'pressure', moves: ['rest']},
+			{species: "Dialga", ability: 'pressure', moves: ['rest']}
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: "Kyurem", ability: 'pressure', moves: ['snatch']},
+			{species: "Zekrom", ability: 'teravolt', moves: ['imprison']},
+			{species: "Reshiram", ability: 'turboblaze', moves: ['rest']}
+		]);
+		battle.commitDecisions(); // Team Preview
+		battle.commitDecisions();
+		assert.strictEqual(battle.p2.active[0].getMoveData(Tools.getMove('snatch')).pp, 12);
+		assert.strictEqual(battle.p2.active[1].getMoveData(Tools.getMove('imprison')).pp, 12);
+	});
 });
 
 describe('Pressure [Gen 4]', function () {
