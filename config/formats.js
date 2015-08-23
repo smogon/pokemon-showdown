@@ -1206,6 +1206,14 @@ exports.Formats = [
 		banlist: ['Uber']
 	},
 	{
+		name: "[Gen 2] Ubers",
+		section: "Past Generations",
+
+		mod: 'gen2',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard']
+	},
+	{
 		name: "[Gen 2] Random Battle",
 		section: "Past Generations",
 
@@ -1234,7 +1242,6 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 1] Ubers",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3509218/#post-5522688\">RBY Resources</a>"],
 		section: "Past Generations",
 
 		mod: 'gen1',
