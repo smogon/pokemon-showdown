@@ -2249,6 +2249,7 @@ var commands = exports.commands = {
 		// Ability
 		if (ability.exists) {
 			atLeastOne = true;
+			if (ability.isNonstandard) return this.sendReply(ability.name + ' is not a real ability.');
 			var link = baseLink + 'abilities/' + ability.name.toLowerCase();
 			this.sendReplyBox("<a href=\"" + link + "\">" + ability.name + " ability description</a> by Veekun");
 		}
@@ -2256,6 +2257,7 @@ var commands = exports.commands = {
 		// Move
 		if (move.exists) {
 			atLeastOne = true;
+			if (move.isNonstandard) return this.sendReply(move.name + ' is not a real move.');
 			var link = baseLink + 'moves/' + move.name.toLowerCase();
 			this.sendReplyBox("<a href=\"" + link + "\">" + move.name + " move description</a> by Veekun");
 		}
