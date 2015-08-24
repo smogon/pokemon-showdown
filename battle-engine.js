@@ -541,6 +541,18 @@ BattlePokemon = (function () {
 				target = this.battle.runEvent('RedirectTarget', this, this, move, target);
 			}
 			targets = [target];
+
+			// Resolve apparent targets for Pressure.
+			if (move.pressureTarget) {
+				// At the moment, this is the only supported target.
+				if (move.pressureTarget === 'foeSide') {
+					for (var i = 0; i < this.side.foe.active.length; i++) {
+						if (this.side.foe.active[i] && !this.side.foe.active[i].fainted) {
+							targets.push(this.side.foe.active[i]);
+						}
+					}
+				}
+			}
 		}
 		return targets;
 	};
