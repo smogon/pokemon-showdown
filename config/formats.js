@@ -104,9 +104,19 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
+		searchShow: false,
 		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger']
+	},
+	{
+		name: "LC (suspect test)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3547829/\">LC Suspect</a>"],
+		section: "ORAS Singles",
+
+		challengeShow: false,
+		maxLevel: 5,
+		ruleset: ['LC']
 	},
 	{
 		name: "Anything Goes",
