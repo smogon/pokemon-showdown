@@ -3781,7 +3781,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	regigigas: {
-		randomBattleMoves: ["thunderwave","substitute","return","drainpunch","earthquake","confuseray"],
+		randomBattleMoves: ["thunderwave","confuseray","substitute","return","knockoff","drainpunch"],
 		randomDoubleBattleMoves: ["thunderwave","substitute","return","icywind","rockslide","earthquake","knockoff","wideguard"],
 		eventPokemon: [
 			{"generation":4,"level":100,"moves":["ironhead","rockslide","icywind","crushgrip"],"pokeball":"cherishball"}
