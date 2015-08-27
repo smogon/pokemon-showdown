@@ -1357,6 +1357,9 @@ exports.BattleScripts = {
 				case 'explosion':
 					if (counter.setupType || hasMove['wish']) rejected = true;
 					break;
+				case 'hiddenpower':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
 				case 'hypervoice':
 					if (hasMove['naturepower'] || hasMove['return']) rejected = true;
 					break;
@@ -1411,6 +1414,7 @@ exports.BattleScripts = {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'toxic':
+					if (hasMove['flamecharge']) rejected = true;
 					if (hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['stunspore'] || hasMove['thunderwave'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
