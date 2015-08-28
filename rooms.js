@@ -543,7 +543,8 @@ var GlobalRoom = (function () {
 			newSearch.rating = rating;
 			self.addSearch(newSearch, user, formatid);
 		}, function (error) {
-			user.popup("Connection to ladder server failed with error: " + error.message + "; please try again later");
+			// The promise only rejects if the user changed names before the search
+			// could start; the search simply doesn't happen in this case.
 		});
 	};
 	GlobalRoom.prototype.matchmakingOK = function (search1, search2, user1, user2, formatid) {
