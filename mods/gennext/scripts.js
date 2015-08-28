@@ -24,6 +24,12 @@ exports.BattleScripts = {
 		// Virizion: Horn Leech
 		this.modData('Learnsets', 'virizion').learnset.hornleech = ['5L100'];
 
+		// Carnivine: Poison Fang
+		this.modData('Learnsets', 'carnivine').learnset.poisonfang = ['5L100'];
+
+		// Solrock: Flame Wheel
+		this.modData('Learnsets', 'solrock').learnset.flamewheel = ['5L100'];
+
 		// Scolipede, Milotic, Steelix: Coil
 		this.modData('Learnsets', 'milotic').learnset.coil = ['5L100'];
 		this.modData('Learnsets', 'scolipede').learnset.coil = ['5L100'];
@@ -104,15 +110,47 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'flygon').abilities['1'] = 'Compound Eyes';
 		this.modData('Pokedex', 'flygon').abilities['H'] = 'Sand Rush';
 		this.modData('Pokedex', 'weezing').abilities['1'] = 'Aftermath';
+		this.modData('Pokedex', 'weezing').abilities['H'] = 'Stench';
 		this.modData('Pokedex', 'eelektross').abilities['1'] = 'Poison Heal';
+		this.modData('Pokedex', 'eelektross').abilities['H'] = 'Static';
 		this.modData('Pokedex', 'claydol').abilities['1'] = 'Filter';
+		this.modData('Pokedex', 'claydol').abilities['H'] = 'Keen Eye';
 		this.modData('Pokedex', 'gengar').abilities['1'] = 'Cursed Body';
+		this.modData('Pokedex', 'gengar').abilities['H'] = 'Unnerve';
 		this.modData('Pokedex', 'mismagius').abilities['1'] = 'Cursed Body';
+		this.modData('Pokedex', 'mismagius').abilities['H'] = 'Serene Grace';
 		this.modData('Pokedex', 'cryogonal').abilities['1'] = 'Ice Body';
+		this.modData('Pokedex', 'cryogonal').abilities['H'] = 'Snow Cloak';
 		this.modData('Pokedex', 'mesprit').abilities['1'] = 'Serene Grace';
 		this.modData('Pokedex', 'uxie').abilities['1'] = 'Synchronize';
 		this.modData('Pokedex', 'azelf').abilities['1'] = 'Steadfast';
 		this.modData('Pokedex', 'hydreigon').abilities['1'] = 'Sheer Force';
+		this.modData('Pokedex', 'hydreigon').abilities['H'] = 'Unnerve';
+		this.modData('Pokedex', 'latias').abilities['1'] = 'Pressure';
+		this.modData('Pokedex', 'latios').abilities['1'] = 'Pressure';
+		this.modData('Pokedex', 'cresselia').abilities['1'] = 'Natural Cure';
+		this.modData('Pokedex', 'lunatone').abilities['1'] = 'Sturdy';
+		this.modData('Pokedex', 'lunatone').abilities['H'] = 'Magic Guard';
+		this.modData('Pokedex', 'solrock').abilities['1'] = 'Sturdy';
+		this.modData('Pokedex', 'solrock').abilities['H'] = 'Magic Guard';
+		this.modData('Pokedex', 'chimecho').abilities['1'] = 'Soundproof';
+		this.modData('Pokedex', 'chimecho').abilities['H'] = 'Magic Bounce';
+		this.modData('Pokedex', 'carnivine').abilities['1'] = 'Strong Jaw';
+		this.modData('Pokedex', 'carnivine').abilities['H'] = 'Dry Skin';
+
+		// Rotoms
+		this.modData('Pokedex', 'rotom').abilities['1'] = 'Motor Drive';
+		this.modData('Pokedex', 'rotom').abilities['H'] = 'Adaptability';
+		this.modData('Pokedex', 'rotomwash').abilities['1'] = 'Motor Drive';
+		this.modData('Pokedex', 'rotomwash').abilities['H'] = 'Storm Drain';
+		this.modData('Pokedex', 'rotomheat').abilities['1'] = 'Motor Drive';
+		this.modData('Pokedex', 'rotomheat').abilities['H'] = 'Flash Fire';
+		this.modData('Pokedex', 'rotommow').abilities['1'] = 'Motor Drive';
+		this.modData('Pokedex', 'rotommow').abilities['H'] = 'Sap Sipper';
+		this.modData('Pokedex', 'rotomfrost').abilities['1'] = 'Motor Drive';
+		this.modData('Pokedex', 'rotomfrost').abilities['H'] = 'Snow Warning';
+		this.modData('Pokedex', 'rotomfan').abilities['1'] = 'Motor Drive';
+		this.modData('Pokedex', 'rotomfan').abilities['H'] = 'Cloud Nine';
 
 		// Adaptability change
 		this.modData('Pokedex', 'crawdaunt').abilities['H'] = 'Tough Claws';

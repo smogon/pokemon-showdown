@@ -210,31 +210,53 @@ New mechanic: Intrinsics:
 - Pokémon that previously get Levitate are now immune to Ground intrinsically.
   Instead, they get new abilities in addition to their Ground immunity:
 
-  - Unown: Shadow Tag
+  - Azelf: Steadfast
 
-  - Bronzong: Heatproof
+  - Bronzong: None (its other two abilities remain available)
+
+  - Carnivine: Strong Jaw, Dry Skin
+
+  - Chimecho: Soundproof, Magic Bounce
+
+  - Claydol: Filter, Keen Eye
+
+  - Cresselia: Natural Cure
+
+  - Cryogonal: Ice Body, Snow Cloak
+
+  - Eelektross: Poison Heal, Static
 
   - Flygon: Compoundeyes, Sand Rush
 
-  - Weezing: Aftermath
+  - Gengar: Cursed Body, Unnerve
 
-  - Eelektross: Poison Heal
+  - Hydreigon: Sheer Force, Unnerve
 
-  - Claydol: Filter
+  - Latias: Pressure
 
-  - Cryogonal: Ice Body
+  - Latios: Pressure
 
-  - Gengar: Cursed Body
-
-  - Mismagius: Cursed Body
+  - Lunatone: Sturdy, Magic Guard
 
   - Mesprit: Serene Grace
 
+  - Mismagius: Cursed Body, Serene Grace
+
+  - Rotom: Motor Drive, plus a hidden ability based on forme:
+    - Rotom: Adaptability
+    - Rotom-Heat: Flash Fire
+    - Rotom-Wash: Storm Drain
+    - Rotom-Mow: Sap Sipper
+    - Rotom-Frost: Snow Warning
+    - Rotom-Fan: Cloud Nine
+
+  - Solrock: Sturdy, Magic Guard
+
+  - Unown: Shadow Tag
+
   - Uxie: Synchronize
 
-  - Azelf: Steadfast
-
-  - Hydreigon: Sheer Force
+  - Weezing: Aftermath, Stench
 
 New: Type-specific items:
 
@@ -376,6 +398,10 @@ Minor learnset changes:
 - Virizion gets Horn Leech
 
 - Scolipede and Steelix get Coil
+
+- Carnivine gets Poison Fang
+
+- Solrock gets Flame Wheel
 
 - Spinda gets Superpower with no incompatibilities
 
