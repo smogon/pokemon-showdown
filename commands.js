@@ -22,11 +22,6 @@ const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
 var commands = exports.commands = {
 
-	version: function (target, room, user) {
-		if (!this.canBroadcast()) return;
-		this.sendReplyBox("Server version: <b>" + CommandParser.package.version + "</b>");
-	},
-
 	auth: 'authority',
 	stafflist: 'authority',
 	globalauth: 'authority',
