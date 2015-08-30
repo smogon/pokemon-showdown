@@ -325,8 +325,8 @@ var Context = exports.Context = (function () {
 		var images = html.match(/<img\b[^<>]*/ig);
 		if (images) {
 			for (var i = 0; i < images.length; i++) {
-				if (!/width=([0-9]+|"[0-9]+")/i.test(images[i]) || !/height=([0-9]+|"[0-9]+")/i.test(images[i])) {
-					this.errorReply('All images must have a width and height attribute');
+				if (!/(?:width|height)=(?:[0-9]+|"[0-9]+")/i.test(images[i])) {
+					this.errorReply('All images must have a width or height attribute');
 					return false;
 				}
 			}
