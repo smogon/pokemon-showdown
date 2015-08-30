@@ -1758,6 +1758,11 @@ var commands = exports.commands = {
 	opensourcehelp: ["/opensource - Links to PS's source code repository.",
 		"!opensource - Show everyone that information. Requires: + % @ # & ~"],
 
+	version: function (target, room, user) {
+		if (!this.canBroadcast()) return;
+		this.sendReplyBox("Server version: <b>" + CommandParser.package.version + "</b>");
+	},
+
 	staff: function (target, room, user) {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox("<a href=\"https://www.smogon.com/sim/staff_list\">Pok&eacute;mon Showdown Staff List</a>");
