@@ -2,7 +2,7 @@ exports.BattleFormats = {
 	standard: {
 		effectType: 'Banlist',
 		inherit: true,
-		validateSet: function (set) {
+		onValidateSet: function (set) {
 			// limit one of each move in Standard
 			var template = this.getTemplate(set.species);
 			var item = this.getItem(set.item);
