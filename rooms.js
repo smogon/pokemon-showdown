@@ -539,13 +539,12 @@ var GlobalRoom = (function () {
 			time: new Date().getTime()
 		};
 		var self = this;
-		user.doWithMMR(formatid, function (mmr, error) {
-			if (error) {
-				user.popup("Connection to ladder server failed with error: " + error.message + "; please try again later");
-				return;
-			}
-			newSearch.rating = mmr;
+		Ladders(formatid).getRating(user.userid).then(function (rating) {
+			newSearch.rating = rating;
 			self.addSearch(newSearch, user, formatid);
+		}, function (error) {
+			// The promise only rejects if the user changed names before the search
+			// could start; the search simply doesn't happen in this case.
 		});
 	};
 	GlobalRoom.prototype.matchmakingOK = function (search1, search2, user1, user2, formatid) {
@@ -930,62 +929,8 @@ var BattleRoom = (function () {
 				if (winner && !winner.registered) {
 					this.sendUser(winner, '|askreg|' + winner.userid);
 				}
-				var p1rating, p2rating;
 				// update rankings
-				this.push('|raw|Ladder updating...');
-				var self = this;
-				LoginServer.request('ladderupdate', {
-					p1: p1name,
-					p2: p2name,
-					score: p1score,
-					format: toId(rated.format)
-				}, function (data, statusCode, error) {
-					if (!self.battle) {
-						console.log('room expired before ladder update was received');
-						return;
-					}
-					if (!data) {
-						self.addRaw('Ladder (probably) updated, but score could not be retrieved (' + error.message + ').');
-						// log the battle anyway
-						if (!Tools.getFormat(self.format).noLog) {
-							self.logBattle(p1score);
-						}
-						return;
-					} else if (data.errorip) {
-						self.addRaw("This server's request IP " + data.errorip + " is not a registered server.");
-						return;
-					} else {
-						try {
-							p1rating = data.p1rating;
-							p2rating = data.p2rating;
-
-							//self.add("Ladder updated.");
-
-							var oldacre = Math.round(data.p1rating.oldacre);
-							var acre = Math.round(data.p1rating.acre);
-							var reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.99 ? 'winning' : (p1score < 0.01 ? 'losing' : 'tying'));
-							if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-							self.addRaw(Tools.escapeHTML(p1name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
-
-							oldacre = Math.round(data.p2rating.oldacre);
-							acre = Math.round(data.p2rating.acre);
-							reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.99 ? 'losing' : (p1score < 0.01 ? 'winning' : 'tying'));
-							if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-							self.addRaw(Tools.escapeHTML(p2name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
-
-							if (p1 && p1.userid === rated.p1) p1.cacheMMR(rated.format, data.p1rating);
-							if (p2 && p2.userid === rated.p2) p2.cacheMMR(rated.format, data.p2rating);
-							self.update();
-						} catch (e) {
-							self.addRaw('There was an error calculating rating changes.');
-							self.update();
-						}
-
-						if (!Tools.getFormat(self.format).noLog) {
-							self.logBattle(p1score, p1rating, p2rating);
-						}
-					}
-				});
+				Ladders(rated.format).updateRating(p1name, p2name, p1score, this);
 			}
 		} else if (Config.logChallenges) {
 			// Log challenges if the challenge logging config is enabled.

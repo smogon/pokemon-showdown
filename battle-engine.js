@@ -531,6 +531,18 @@ BattlePokemon = (function () {
 				target = this.battle.runEvent('RedirectTarget', this, this, move, target);
 			}
 			targets = [target];
+
+			// Resolve apparent targets for Pressure.
+			if (move.pressureTarget) {
+				// At the moment, this is the only supported target.
+				if (move.pressureTarget === 'foeSide') {
+					for (var i = 0; i < this.side.foe.active.length; i++) {
+						if (this.side.foe.active[i] && !this.side.foe.active[i].fainted) {
+							targets.push(this.side.foe.active[i]);
+						}
+					}
+				}
+			}
 		}
 		return targets;
 	};
@@ -807,8 +819,8 @@ BattlePokemon = (function () {
 				if (this.battle.gen === 1) {
 					this.modifiedStats[statName] = Math.floor(stat);
 					// ...and here is where the gen 1 games re-apply burn and para drops.
-					if (this.status === 'par') this.modifyStat('spe', 0.25);
-					if (this.status === 'brn') this.modifyStat('atk', 0.5);
+					if (this.status === 'par' && statName === 'spe') this.modifyStat('spe', 0.25);
+					if (this.status === 'brn' && statName === 'atk') this.modifyStat('atk', 0.5);
 				}
 			}
 			this.speed = this.stats.spe;
@@ -3459,7 +3471,6 @@ Battle = (function () {
 		// weather modifier (TODO: relocate here)
 		// crit
 		if (move.crit) {
-			if (!suppressMessages) this.add('-crit', target);
 			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
 		}
 
@@ -3493,6 +3504,8 @@ Battle = (function () {
 				baseDamage = Math.floor(baseDamage / 2);
 			}
 		}
+
+		if (move.crit && !suppressMessages) this.add('-crit', target);
 
 		if (pokemon.status === 'brn' && basePower && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
 			if (this.gen < 6 || move.id !== 'facade') {
@@ -3890,6 +3903,9 @@ Battle = (function () {
 				var lastMove = this.getMove(decision.pokemon.lastMove);
 				if (lastMove.selfSwitch !== 'copyvolatile') {
 					this.runEvent('BeforeSwitchOut', decision.pokemon);
+					if (this.gen >= 5) {
+						this.eachEvent('Update');
+					}
 				}
 				if (!this.runEvent('SwitchOut', decision.pokemon)) {
 					// Warning: DO NOT interrupt a switch-out
@@ -3947,6 +3963,7 @@ Battle = (function () {
 		case 'shift':
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
+			decision.pokemon.activeTurns--;
 			this.swapPosition(decision.pokemon, 1);
 			var foeActive = decision.pokemon.side.foe.active;
 			for (var i = 0; i < foeActive.length; i++) {
