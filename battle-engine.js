@@ -2323,11 +2323,11 @@ Battle = (function () {
 					ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1,
 					ModifyBoost: 1,
 					ModifyDamage: 1,
+					ModifySecondaries: 1,
 					ModifyWeight: 1,
 					TryHit: 1,
 					TryHitSide: 1,
 					TryMove: 1,
-					TrySecondaryHit: 1,
 					Hit: 1,
 					Boost: 1,
 					DragOut: 1
