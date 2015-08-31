@@ -17,8 +17,9 @@ var globals = {};
 var globalList = [
 	'Config', 'ResourceMonitor', 'toId', 'Tools', 'LoginServer', 'Users', 'Rooms', 'Verifier',
 	'CommandParser', 'Simulator', 'Tournaments', 'Dnsbl', 'Cidr', 'Sockets', 'TeamValidator',
-	'tells',
-	'battleEngineFakeProcess', 'battleProtoCache'
+	'Ladders',
+	'battleEngineFakeProcess', 'battleProtoCache',
+	'tells'
 ];
 globalList.forEach(function (identifier) {globals[identifier] = false;});
 
@@ -102,8 +103,16 @@ jscsOptions.base = {
 
 	"disallowMixedSpacesAndTabs": "smart",
 	"requireSpaceAfterKeywords": true,
-	"disallowSpacesInsideArrayBrackets": true,
-	"disallowSpacesInsideObjectBrackets": true,
+	"requireSpaceAfterBinaryOperators": [
+		'=', '+=', '-=', '*=', '/=', '%=', '<<=', '>>=', '>>>=',
+		'&=', '|=', '^=',
+
+		'+', '-', '*', '/', '%', '<<', '>>', '>>>', '&',
+		'|', '^', '&&', '||', '===', '==', '>=',
+		'<=', '<', '>', '!=', '!==',
+
+		','
+	],
 
 	"disallowSpacesInCallExpression": true,
 	"validateParameterSeparator": ", ",
