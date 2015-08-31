@@ -1256,40 +1256,6 @@ User = (function () {
 		}
 		return alts;
 	};
-	User.prototype.doWithMMR = function (formatid, callback) {
-		var self = this;
-		var userid = this.userid;
-		formatid = toId(formatid);
-
-		// this should relieve login server strain
-		// this.mmrCache[formatid] = 1000;
-
-		if (this.mmrCache[formatid]) {
-			callback(this.mmrCache[formatid]);
-			return;
-		}
-		LoginServer.request('mmr', {
-			format: formatid,
-			user: userid
-		}, function (data, statusCode, error) {
-			if (!data) return callback(1000, error || new Error("No data received"));
-			if (data.errorip) return self.popup("This server's request IP " + data.errorip + " is not a registered server.");
-
-			var mmr = parseInt(data, 10);
-			if (isNaN(mmr)) return callback(1000, error || new Error("Invalid rating"));
-			if (self.userid !== userid) return callback(1000, new Error("Expired rating"));
-
-			self.mmrCache[formatid] = mmr;
-			callback(mmr, null);
-		});
-	};
-	User.prototype.cacheMMR = function (formatid, mmr) {
-		if (typeof mmr === 'number') {
-			this.mmrCache[formatid] = mmr;
-		} else {
-			this.mmrCache[formatid] = Number(mmr.acre);
-		}
-	};
 	User.prototype.ban = function (noRecurse, userid) {
 		// recurse only once; the root for-loop already bans everything with your IP
 		if (!userid) userid = this.userid;

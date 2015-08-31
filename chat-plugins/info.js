@@ -2205,6 +2205,76 @@ var commands = exports.commands = {
 	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
 		"!analysis [pokemon], [generation] - Shows everyone this link. Requires: " + Users.getGroupsThatCan('broadcast').join(" ")],
 
+	veekun: function (target, broadcast, user) {
+		if (!this.canBroadcast()) return;
+
+		var baseLink = 'http://veekun.com/dex/';
+
+		var pokemon = Tools.getTemplate(target);
+		var item = Tools.getItem(target);
+		var move = Tools.getMove(target);
+		var ability = Tools.getAbility(target);
+		var nature = Tools.getNature(target);
+		var atLeastOne = false;
+
+		// Pokemon
+		if (pokemon.exists) {
+			atLeastOne = true;
+			if (pokemon.isNonstandard) return this.sendReply(pokemon.species + ' is not a real Pokemon.');
+
+			var baseSpecies = pokemon.baseSpecies || pokemon.species;
+			var forme = pokemon.forme;
+
+			// Showdown and Veekun have different naming for this gender difference forme of Meowstic.
+			if (baseSpecies === 'Meowstic' && forme === 'F') {
+				forme = 'Female';
+			}
+
+			var link = baseLink + 'pokemon/' + baseSpecies.toLowerCase();
+			if (forme) {
+				link += '?form=' + forme.toLowerCase();
+			}
+
+			this.sendReplyBox("<a href=\"" + link + "\">" + pokemon.species + " description</a> by Veekun");
+		}
+
+		// Item
+		if (item.exists) {
+			atLeastOne = true;
+			var link = baseLink + 'items/' + item.name.toLowerCase();
+			this.sendReplyBox("<a href=\"" + link + "\">" + item.name + " item description</a> by Veekun");
+		}
+
+		// Ability
+		if (ability.exists) {
+			atLeastOne = true;
+			if (ability.isNonstandard) return this.sendReply(ability.name + ' is not a real ability.');
+			var link = baseLink + 'abilities/' + ability.name.toLowerCase();
+			this.sendReplyBox("<a href=\"" + link + "\">" + ability.name + " ability description</a> by Veekun");
+		}
+
+		// Move
+		if (move.exists) {
+			atLeastOne = true;
+			if (move.isNonstandard) return this.sendReply(move.name + ' is not a real move.');
+			var link = baseLink + 'moves/' + move.name.toLowerCase();
+			this.sendReplyBox("<a href=\"" + link + "\">" + move.name + " move description</a> by Veekun");
+		}
+
+		// Nature
+		if (nature.exists) {
+			atLeastOne = true;
+			var link = baseLink + 'natures/' + nature.name.toLowerCase();
+			this.sendReplyBox("<a href=\"" + link + "\">" + nature.name + " nature description</a> by Veekun");
+		}
+
+		if (!atLeastOne) {
+			return this.sendReplyBox("Pok&eacute;mon, item, move, ability, or nature not found.");
+		}
+	},
+	veekunhelp: ["/veekun [pokemon] - Links to Veekun website for this pokemon/item/move/ability/nature.",
+		"!veekun [pokemon] - Shows everyone this link. Requires: + % @ # & ~"],
+
 	register: function () {
 		if (!this.canBroadcast()) return;
 		this.sendReplyBox('You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="icon-cog"></i> Options</button> menu in the upper right.');
