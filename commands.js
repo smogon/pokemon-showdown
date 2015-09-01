@@ -295,17 +295,19 @@ var commands = exports.commands = {
 
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
+	secretroom: 'privateroom',
 	privateroom: function (target, room, user, connection, cmd) {
 		var setting;
 		switch (cmd) {
 		case 'privateroom':
+		case 'secretroom':
 			if (!this.can('makeroom')) return;
 			setting = true;
 			break;
 		default:
 			if (!this.can('privateroom', null, room)) return;
-			if (room.isPrivate === true) {
-				return this.sendReply("This room is a secret room. Use /privateroom to toggle instead.");
+			if (room.isPrivate === true && target !== 'force') {
+				return this.sendReply("This room is a secret room. Use /privateroom to toggle, or /hiddenroom force to force hidden.");
 			}
 			setting = 'hidden';
 			break;
