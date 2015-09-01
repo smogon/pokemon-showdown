@@ -562,7 +562,7 @@ var GlobalRoom = (function () {
 		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
 
 		// search must be within range
-		var searchRange = 100, elapsed = Math.abs(search1.time - search2.time);
+		var searchRange = 100, elapsed = Date.now() - Math.min(search1.time, search2.time);
 		if (formatid === 'ou' || formatid === 'oucurrent' || formatid === 'randombattle') searchRange = 50;
 		searchRange += elapsed / 300; // +1 every .3 seconds
 		if (searchRange > 300) searchRange = 300;
