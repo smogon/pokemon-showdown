@@ -459,12 +459,15 @@ var commands = exports.commands = {
 		if (!alias.length) return this.sendReply("Only alphanumeric characters are valid in an alias.");
 		if (Rooms.get(alias) || Rooms.aliases[alias]) return this.sendReply("You cannot set an alias to an existing room or alias.");
 
+		Rooms.aliases[alias] = room;
 		this.privateModCommand("(" + user.name + " added the room alias '" + target + "'.)");
 
-		if (!room.chatRoomData.aliases) room.chatRoomData.aliases = [];
-		room.chatRoomData.aliases.push(alias);
-		Rooms.aliases[alias] = room;
-		Rooms.global.writeChatRoomData();
+		if (!room.aliases) room.aliases = room.chatRoomData.aliases || [];
+		room.aliases.push(alias);
+		if (room.chatRoomData) {
+			room.chatRoomData.aliases = room.aliases;
+			Rooms.global.writeChatRoomData();
+		}
 	},
 
 	removeroomalias: function (target, room, user) {
@@ -477,9 +480,10 @@ var commands = exports.commands = {
 
 		this.privateModCommand("(" + user.name + " removed the room alias '" + target + "'.)");
 
-		var aliasIndex = room.chatRoomData.aliases.indexOf(alias);
+		var aliases = room.aliases || room.chatRoomData.aliases;
+		var aliasIndex = aliases.indexOf(alias);
 		if (aliasIndex >= 0) {
-			room.chatRoomData.aliases.splice(aliasIndex, 1);
+			aliases.splice(aliasIndex, 1);
 			delete Rooms.aliases[alias];
 			Rooms.global.writeChatRoomData();
 		}
