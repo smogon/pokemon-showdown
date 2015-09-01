@@ -1351,8 +1351,8 @@ User = (function () {
 			}
 		}
 
-		if (Rooms.aliases[toId(roomid)] === room) {
-			connection.send(">" + toId(roomid) + "\n|deinit");
+		if (toId(Rooms.aliases[roomid]) === room.id) {
+			connection.send(">" + roomid + "\n|deinit");
 		}
 
 		var joinResult = this.joinRoom(room, connection);
