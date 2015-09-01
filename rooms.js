@@ -1685,6 +1685,12 @@ var ChatRoom = (function () {
 		rooms.global.deregisterChatRoom(this.id);
 		rooms.global.delistChatRoom(this.id);
 
+		if (this.aliases) {
+			for (var i = 0; i < this.aliases.length; i++) {
+				delete aliases[this.aliases[i]];
+			}
+		}
+
 		// get rid of some possibly-circular references
 		delete rooms[this.id];
 	};
