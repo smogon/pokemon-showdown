@@ -308,10 +308,8 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 
 	Dnsbl.query(connection.ip, function (isBlocked) {
 		if (isBlocked) {
-			connection.popup("You are locked because someone using your IP (" + connection.ip + ") has spammed/hacked other websites. This usually means you're using a proxy, in a country where other people commonly hack, or have a virus on your computer that's spamming websites.");
 			if (connection.user && !connection.user.locked && !connection.user.autoconfirmed) {
 				connection.user.semilocked = '#dnsbl';
-				connection.user.updateIdentity();
 			}
 		}
 	});
@@ -1129,6 +1127,12 @@ User = (function () {
 		if (this.confirmed) {
 			this.autoconfirmed = this.confirmed;
 			this.locked = false;
+		}
+		if (this.autoconfirmed && this.semilocked) {
+			if (this.semilocked === '#dnsbl') {
+				this.popup("You are locked because someone using your IP has spammed/hacked other websites. This usually means you're using a proxy, in a country where other people commonly hack, or have a virus on your computer that's spamming websites.");
+				this.semilocked = '#dnsbl.';
+			}
 		}
 		if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
 	};
