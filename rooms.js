@@ -548,6 +548,10 @@ var GlobalRoom = (function () {
 		});
 	};
 	GlobalRoom.prototype.matchmakingOK = function (search1, search2, user1, user2, formatid) {
+		// users must exist
+		// TODO: ACTUALLY REMOVE THESE USERS FROM THE SEARCH LIST
+		if (!user1 || !user2) return false;
+
 		// users must be different
 		if (user1 === user2) return false;
 
