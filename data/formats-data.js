@@ -269,7 +269,9 @@ exports.BattleFormatsData = {
 			{"generation":6,"level":10,"gender":"F","isHidden":false,"moves":["thunderbolt","quickattack","heartstamp","holdhands"],"pokeball":"healball"},
 			{"generation":6,"level":36,"shiny":true,"isHidden":true,"moves":["thunder","substitute","playnice","holdhands"],"pokeball":"cherishball"},
 			{"generation":6,"level":10,"gender":"F","isHidden":false,"moves":["playnice","charm","nuzzle","sweetkiss"],"pokeball":"cherishball"},
-			{"generation":6,"level":50,"gender":"M","nature":"Naughty","isHidden":false,"moves":["thunderbolt","quickattack","irontail","electroball"],"pokeball":"cherishball"}
+			{"generation":6,"level":50,"gender":"M","nature":"Naughty","isHidden":false,"moves":["thunderbolt","quickattack","irontail","electroball"],"pokeball":"cherishball"},
+			{"generation":6,"level":10,"shiny":true,"isHidden":false,"moves":["teeterdance","playnice","tailwhip","nuzzle"],"pokeball":"cherishball"},
+			{"generation":6,"level":10,"isHidden":true,"moves":["fakeout","encore","volttackle","endeavor"],"pokeball":"cherishball"}
 		],
 		tier: "NFE"
 	},
@@ -2644,6 +2646,9 @@ exports.BattleFormatsData = {
 	sharpedo: {
 		randomBattleMoves: ["protect","icebeam","crunch","earthquake","waterfall","destinybond"],
 		randomDoubleBattleMoves: ["protect","icebeam","crunch","earthquake","waterfall","destinybond"],
+		eventPokemon: [
+			{"generation":6,"level":50,"nature":"Adamant","isHidden":true,"moves":["aquajet","crunch","icefang","destinybond"],"pokeball":"cherishball"}
+		],
 		tier: "(UU)"
 	},
 	sharpedomega: {
