@@ -84,11 +84,19 @@ exports.reportbattles = true;
 //   Note that the feature of turning this off is deprecated.
 exports.reportbattlejoins = true;
 
-// moderated chat - prevent unvoiced users from speaking
-//   This should only be enabled in special situations, such as temporarily
-//   when you're dealing with huge influxes of spammy users.
+// whitelist - prevent users below a certain group from doing things
+//   For the modchat settings, false will allow any user to participate, while a string
+//   with a group symbol will restrict it to that group and above. The string
+//   'autoconfirmed' is also supported for chatmodchat and battlemodchat, to restrict
+//   chat to autoconfirmed users.
+//   This is usually intended to be used as a whitelist feature - set these to '+' and
+//   voice every user you want whitelisted on the server.
+
+// chat modchat - default minimum group for speaking in chatrooms; changeable with /modchat
 exports.chatmodchat = false;
+// battle modchat - default minimum group for speaking in battles; changeable with /modchat
 exports.battlemodchat = false;
+// pm modchat - minimum group for PMing other users, challenging other users, and laddering
 exports.pmmodchat = false;
 
 // forced timer - force the timer on for all battles
