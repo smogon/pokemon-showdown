@@ -951,7 +951,7 @@ exports.Formats = [
 
 		mod: 'gen5',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Team Preview'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew']
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew']
 	},
 	{
 		name: "[Gen 5] Ubers",
