@@ -1041,10 +1041,16 @@ exports.BattleScripts = {
 		// Choose a setup type:
 		if (counter['mixedsetup']) {
 			counter.setupType = 'Mixed';
-		} else if (counter['specialsetup']) {
-			counter.setupType = 'Special';
+		} else if (counter['physicalsetup'] && counter['specialsetup']) {
+			if (counter.Physical === counter.Special) {
+				counter.setupType = ['Physical', 'Special'][this.random(2)];
+			} else {
+				counter.setupType = (counter.Physical > counter.Special) ? 'Physical' : 'Special';
+			}
 		} else if (counter['physicalsetup']) {
 			counter.setupType = 'Physical';
+		} else if (counter['specialsetup']) {
+			counter.setupType = 'Special';
 		}
 
 		return counter;
@@ -1268,6 +1274,9 @@ exports.BattleScripts = {
 					break;
 				case 'darkpulse':
 					if (hasMove['crunch'] && counter.setupType !== 'Special') rejected = true;
+					break;
+				case 'foulplay':
+					if (hasMove['darkpulse'] || hasMove['knockoff']) rejected = true;
 					break;
 				case 'suckerpunch':
 					if ((hasMove['crunch'] || hasMove['darkpulse']) && (hasMove['knockoff'] || hasMove['pursuit'])) rejected = true;
