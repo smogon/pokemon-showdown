@@ -390,7 +390,7 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['OU'],
-		banlist: ['Allow One Sketch']
+		banlist: ['Allow One Sketch', 'Gothitelle']
 	},
 	{
 		name: "Hackmons 1v1",
