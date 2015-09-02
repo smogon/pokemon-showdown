@@ -429,7 +429,7 @@ Validator = (function () {
 				if (banlistTable['illegal']) {
 					var problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
-						if (banlistTable['allowonesketch'] && !sketched) {
+						if (banlistTable['allowonesketch'] && !sketched && move.id !== 'chatter' && !move.isUnreleased) {
 							sketched = true;
 							continue;
 						}
