@@ -132,13 +132,13 @@ var Validator;
 
 		if (typeof text !== 'string' && typeof text !== 'number') return '';
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-	};
+	};*/
 
 	global.Tools = require('./tools.js').includeMods();
 
 	require('./repl.js').start('team-validator-', process.pid, function (cmd) { return eval(cmd); });
 
-	var validators = {};
+	/*var validators = {};
 
 	var respond = function respond(id, success, details) {
 		process.send(id + (success ? '|1' : '|0') + details);
