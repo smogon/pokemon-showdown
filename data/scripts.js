@@ -1032,25 +1032,24 @@ exports.BattleScripts = {
 			// Moves that change stats:
 			if (RecoveryMove[moveid]) counter['recovery']++;
 			if (ContraryMove[moveid]) counter['contrary']++;
-			if (PhysicalSetup[moveid]) counter['physicalsetup']++;
-			if (SpecialSetup[moveid]) counter['specialsetup']++;
-			if (MixedSetup[moveid]) counter['mixedsetup']++;
+			if (PhysicalSetup[moveid]) {
+				counter['physicalsetup']++;
+				if (!counter.setupType) counter.setupType = 'Physical';
+			}
+			if (SpecialSetup[moveid]) {
+				counter['specialsetup']++;
+				if (!counter.setupType) counter.setupType = 'Special';
+			}
+			if (MixedSetup[moveid]) {
+				counter['mixedsetup']++;
+				counter.setupType = 'Mixed';
+			}
 			if (SpeedSetup[moveid]) counter['speedsetup']++;
 		}
 
 		// Choose a setup type:
-		if (counter['mixedsetup']) {
-			counter.setupType = 'Mixed';
-		} else if (counter['physicalsetup'] && counter['specialsetup']) {
-			if (counter.Physical === counter.Special) {
-				counter.setupType = ['Physical', 'Special'][this.random(2)];
-			} else {
-				counter.setupType = (counter.Physical > counter.Special) ? 'Physical' : 'Special';
-			}
-		} else if (counter['physicalsetup']) {
-			counter.setupType = 'Physical';
-		} else if (counter['specialsetup']) {
-			counter.setupType = 'Special';
+		if (!counter['mixedsetup'] && counter['physicalsetup'] && counter['specialsetup'] && counter.Physical !== counter.Special) {
+			counter.setupType = (counter.Physical > counter.Special) ? 'Physical' : 'Special';
 		}
 
 		return counter;
