@@ -402,6 +402,13 @@ exports.BattleItems = {
 			type: "Poison"
 		}
 	},
+	rabutaberry: {
+		inherit: true,
+		naturalGift: {
+			basePower: 70,
+			type: "Ghost"
+		}
+	},
 	rawstberry: {
 		inherit: true,
 		naturalGift: {

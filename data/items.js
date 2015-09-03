@@ -94,7 +94,7 @@ exports.BattleItems = {
 		spritenum: 5,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Dragon"
 		},
 		onUpdate: function (pokemon) {
@@ -3397,7 +3397,7 @@ exports.BattleItems = {
 		spritenum: 351,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 90,
 			type: "Ice"
 		},
 		num: 169,
@@ -3454,7 +3454,7 @@ exports.BattleItems = {
 		spritenum: 371,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 90,
 			type: "Poison"
 		},
 		num: 171,
