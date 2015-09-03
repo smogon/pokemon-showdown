@@ -397,8 +397,8 @@ exports.Formats = [
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/oras-1v1-3v3-team-preview.3496773/#post-5121864\">Hackmons 1v1</a>"],
 		section: "OM of the Month",
 
-		ruleset: ['Pokemon', 'OHKO Clause', 'Team Preview 1v1', 'HP Percentage Mod', 'Cancel Mod'],
-		banlist: ['Wonder Guard'],
+		ruleset: ['Pokemon', 'OHKO Clause', 'Endless Battle Clause', 'Team Preview 1v1', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Wonder Guard', 'Heal Pulse'],
 		onValidateTeam: function (team, format) {
 			if (team.length > 3) return ['You may only bring up to three Pok\u00e9mon.'];
 		},
