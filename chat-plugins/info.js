@@ -722,9 +722,9 @@ var commands = exports.commands = {
 			if (!targets[i]) continue;
 			var num = Number(targets[i]);
 			if (Number.isInteger(num)) {
-				if (qty) return this.sendReply("Only specify the number of Pokemon once.");
+				if (qty) return this.sendReply("Only specify the number of Pok\u00e9mon once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) return this.sendReply("Number of random Pokemon must be between 1 and 15.");
+				if (qty < 1 || 15 < qty) return this.sendReply("Number of random Pok\u00e9mon must be between 1 and 15.");
 				targetsBuffer.push("random" + qty);
 			} else {
 				targetsBuffer.push(targets[i]);
@@ -734,9 +734,9 @@ var commands = exports.commands = {
 
 		CommandParser.commands.dexsearch.call(this, targetsBuffer.join(","), room, user, connection, "randpoke", message);
 	},
-	randompokemonhelp: ["/randompokemon - Generates random Pokemon based on given search conditions.",
+	randompokemonhelp: ["/randompokemon - Generates random Pok\u00e9mon based on given search conditions.",
 		"/randompokemon uses the same parameters as /dexsearch (see '/help ds').",
-		"Adding a number as a parameter returns that many random Pokemon, e.g., '/randpoke 6' returns 6 random Pokemon."],
+		"Adding a number as a parameter returns that many random Pok\u00e9mon, e.g., '/randpoke 6' returns 6 random Pok\u00e9mon."],
 
 	ms: 'movesearch',
 	msearch: 'movesearch',
@@ -1699,7 +1699,7 @@ var commands = exports.commands = {
 			buffer += '</table></div>';
 
 			if (hasThousandArrows) {
-				buffer += "<br><b>Thousand Arrows has neutral type effectiveness on Flying-type Pokemon if not already smacked down.";
+				buffer += "<br><b>Thousand Arrows has neutral type effectiveness on Flying-type Pok\u00e9mon if not already smacked down.";
 			}
 
 			this.sendReplyBox('Coverage for ' + sources.join(' + ') + ':<br>' + buffer);
@@ -2221,7 +2221,7 @@ var commands = exports.commands = {
 		// Pokemon
 		if (pokemon.exists) {
 			atLeastOne = true;
-			if (pokemon.isNonstandard) return this.sendReply(pokemon.species + ' is not a real Pokemon.');
+			if (pokemon.isNonstandard) return this.sendReply(pokemon.species + ' is not a real Pok\u00e9mon.');
 
 			var baseSpecies = pokemon.baseSpecies || pokemon.species;
 			var forme = pokemon.forme;
@@ -2291,11 +2291,11 @@ var commands = exports.commands = {
 		Config.potd = target;
 		Simulator.SimulatorProcess.eval('Config.potd = \'' + toId(target) + '\'');
 		if (target) {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pokemon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
-			this.logModCommand("The Pokemon of the Day was changed to " + target + " by " + user.name + ".");
+			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day is now " + target + "!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>");
+			this.logModCommand("The Pok\u00e9mon of the Day was changed to " + target + " by " + user.name + ".");
 		} else {
-			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pokemon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
-			this.logModCommand("The Pokemon of the Day was removed by " + user.name + ".");
+			if (Rooms.lobby) Rooms.lobby.addRaw("<div class=\"broadcast-blue\"><b>The Pok&eacute;mon of the Day was removed!</b><br />No pokemon will be guaranteed in random battles.</div>");
+			this.logModCommand("The Pok\u00e9mon of the Day was removed by " + user.name + ".");
 		}
 	},
 
