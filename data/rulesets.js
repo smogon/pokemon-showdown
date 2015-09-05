@@ -597,7 +597,7 @@ exports.BattleFormats = {
 			}
 			if (!nonSpeedBoosted) return;
 
-			return [set.name + " can Baton Pass both Speed and a different stat, which is banned by Baton Pass Clause."];
+			return [(set.name || set.species) + " can Baton Pass both Speed and a different stat, which is banned by Baton Pass Clause."];
 		}
 	},
 	hppercentagemod: {
