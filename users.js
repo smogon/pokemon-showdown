@@ -728,6 +728,7 @@ User = (function () {
 		}
 	};
 	User.prototype.filterName = function (name) {
+		name = name.substr(0, 30);
 		if (Config.namefilter) {
 			name = Config.namefilter(name, this);
 		}
