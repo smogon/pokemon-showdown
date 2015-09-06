@@ -330,6 +330,9 @@ Validator = (function () {
 			return ['"' + set.item + "' is an invalid item."];
 		}
 		ability = tools.getAbility(set.ability);
+		if (tools.gen >= 3 && !ability.exists) {
+			return ['"' + set.ability + "' is an invalid ability."];
+		}
 
 		var banlistTable = tools.getBanlistTable(format);
 
@@ -414,6 +417,7 @@ Validator = (function () {
 			for (var i = 0; i < set.moves.length; i++) {
 				if (!set.moves[i]) continue;
 				var move = tools.getMove(Tools.getString(set.moves[i]));
+				if (!move.exists) return ['"' + move.name + '" is an invalid move.'];
 				set.moves[i] = move.name;
 				check = move.id;
 				setHas[check] = true;
