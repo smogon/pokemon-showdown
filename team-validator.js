@@ -330,8 +330,14 @@ Validator = (function () {
 			return ['"' + set.item + "' is an invalid item."];
 		}
 		ability = tools.getAbility(set.ability);
-		if (tools.gen >= 3 && !ability.exists) {
-			return ['"' + set.ability + "' is an invalid ability."];
+		if (ability.id && !ability.exists) {
+			if (tools.gen < 3) {
+				// gen 1-2 don't have abilities, just silently remove
+				ability = tools.getAbility('');
+				set.ability = '';
+			} else {
+				return ['"' + set.ability + "' is an invalid ability."];
+			}
 		}
 
 		var banlistTable = tools.getBanlistTable(format);
