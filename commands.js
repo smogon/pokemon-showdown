@@ -330,6 +330,9 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
+			if (room.isPrivate === setting) {
+				return this.errorReply("This room is already " + (setting === true ? 'secret' : setting) + ".");
+			}
 			room.isPrivate = setting;
 			this.addModCommand("" + user.name + " made this room " + (setting === true ? 'secret' : setting) + ".");
 			if (room.chatRoomData) {
