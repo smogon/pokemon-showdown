@@ -289,6 +289,7 @@ exports.groups = {
 			modchatall: true,
 			privateroom: true,
 			roomdesc: true,
+			roomintro: true,
 			roompromote: 'u',
 			tournamentsmanagement: true
 		}, {
