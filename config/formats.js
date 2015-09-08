@@ -424,7 +424,7 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['OU'],
-		banlist: ['Allow One Sketch', 'Shadow Tag']
+		banlist: ['Allow One Sketch', "King's Rock", 'Razor Fang', 'Shadow Tag']
 	},
 	{
 		name: "Hackmons 1v1",
