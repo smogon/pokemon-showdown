@@ -1970,6 +1970,8 @@ var commands = exports.commands = {
 
 	addplayer: function (target, room, user) {
 		if (!target) return this.parse('/help addplayer');
+		if (!room.battle) return this.sendReply("You can only do this in battle rooms.");
+		if (room.rated) return this.sendReply("You can only add a Player to unrated battles.");
 
 		target = this.splitTarget(target, true);
 		var userid = toId(this.targetUsername);
@@ -1977,7 +1979,6 @@ var commands = exports.commands = {
 		var name = this.targetUsername;
 
 		if (!targetUser) return this.sendReply("User " + name + " not found.");
-		if (!room.joinBattle) return this.sendReply("You can only do this in battle rooms.");
 		if (targetUser.can('joinbattle', null, room)) {
 			return this.sendReply("" + name + " can already join battles as a Player.");
 		}
