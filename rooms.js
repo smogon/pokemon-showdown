@@ -1516,7 +1516,11 @@ var ChatRoom = (function () {
 			if (!user.named) {
 				++guests;
 			}
-			++groups[user.group];
+			if (this.auth && this.auth[user.userid] && this.auth[user.userid] in groups) {
+				++groups[this.auth[user.userid]];
+			} else {
+				++groups[user.group];
+			}
 		}
 		var entry = '|userstats|total:' + total + '|guests:' + guests;
 		for (var i in groups) {
