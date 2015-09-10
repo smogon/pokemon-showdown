@@ -414,7 +414,16 @@ exports.Formats = [
 		column: 2,
 
 		ruleset: ['OU'],
-		banlist: ['Allow One Sketch', "King's Rock", 'Pinsirite', 'Razor Fang', 'Shadow Tag']
+		banlist: ['Allow One Sketch', "King's Rock", 'Pinsirite', 'Razor Fang', 'Shadow Tag'],
+		onValidateTeam: function (team) {
+			var sketchedMoves = {};
+			for (var i = 0; i < team.length; i++) {
+				var move = team[i].sketchmonsMove;
+				if (!move) continue;
+				if (move in sketchedMoves) return ["You are limited to sketching one of each move by Move Clause.", "(You have sketched " + this.getMove(move).name + " more than once)"];
+				sketchedMoves[move] = (team[i].name || team[i].species);
+			}
+		}
 	},
 	{
 		name: "Hackmons 1v1",
