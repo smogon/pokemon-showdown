@@ -437,7 +437,7 @@ Validator = (function () {
 					var problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
 						// Sketchmons hack
-						if (banlistTable['allowonesketch'] && !set.sketchmonsMove && move.id !== 'chatter') {
+						if (banlistTable['allowonesketch'] && !set.sketchmonsMove && !move.noSketch) {
 							set.sketchmonsMove = move.id;
 							continue;
 						}
@@ -633,12 +633,9 @@ Validator = (function () {
 					sometimesPossible = true;
 					var lset = template.learnset[move];
 					if (!lset || template.speciesid === 'smeargle') {
+						if (tools.getMove(move).noSketch) return true;
 						lset = template.learnset['sketch'];
 						sketch = true;
-						// Chatter, Struggle and Magikarp's Revenge cannot be sketched
-						if (move in {'chatter':1, 'struggle':1, 'magikarpsrevenge':1}) return true;
-						// In Gen 2, there is no way for Sketch to copy these moves
-						if (tools.gen === 2 && move in {'explosion':1, 'metronome':1, 'mimic':1, 'mirrormove':1, 'selfdestruct':1, 'sleeptalk':1, 'transform':1}) return true;
 					}
 					if (typeof lset === 'string') lset = [lset];
 
