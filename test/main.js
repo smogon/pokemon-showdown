@@ -74,6 +74,10 @@ before('initialization', function (done) {
 		);
 		config = require('./../config/config.js');
 	}
+	try {
+		var chatRoomsPath = require.resolve('./../config/chatrooms.json');
+		require.cache[chatRoomsPath] = [];
+	} catch (e) {}
 
 	// Don't listen at SSL port
 	config.ssl = null;
