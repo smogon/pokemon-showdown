@@ -3,6 +3,8 @@ var path = require('path');
 var net = require('net');
 var fs = require('fs');
 
+var noop = function () {};
+
 var testPort;
 function getPort(callback) {
 	var port = testPort;
@@ -33,15 +35,15 @@ function init(callback) {
 	});
 
 	// Turn IPC methods into no-op
-	BattleEngine.Battle.prototype.send = function () {};
-	BattleEngine.Battle.prototype.receive = function () {};
+	BattleEngine.Battle.prototype.send = noop;
+	BattleEngine.Battle.prototype.receive = noop;
 
 	var Simulator = global.Simulator;
-	Simulator.Battle.prototype.send = function () {};
-	Simulator.Battle.prototype.receive = function () {};
+	Simulator.Battle.prototype.send = noop;
+	Simulator.Battle.prototype.receive = noop;
 	Simulator.SimulatorProcess.processes.forEach(function (process) {
 		// Don't crash -we don't care of battle child processes.
-		process.process.on('error', function () {});
+		process.process.on('error', noop);
 	});
 
 	LoginServer.disabled = true;
@@ -78,6 +80,22 @@ before('initialization', function (done) {
 
 	// Actually, don't listen at any port for now
 	config.workers = 0;
+
+	// Don't write to file system
+	config.logladderip = false;
+	config.logchallenges = false;
+	config.logchat = false;
+
+	// TODO: Use a proper fs sandbox
+	var fsMethodsNullify = ['chmod', 'rename', 'rmdir', 'symlink', 'unlink', 'writeFile'];
+	for (var i = 0; i < fsMethodsNullify.length; i++) {
+		fs[fsMethodsNullify[i]] = noop;
+		fs[fsMethodsNullify[i] + 'Sync'] = noop;
+	}
+	fs.createWriteStream = function () {
+		return new require('stream').Writable();
+	};
+
 	// Make sure that there are no net conflicts with an active server
 	if (typeof config.testport !== 'undefined' || config.workers === 0) {
 		config.port = config.testport;
