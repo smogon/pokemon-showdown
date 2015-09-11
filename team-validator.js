@@ -105,7 +105,7 @@ if (!process.send) {
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', function (err) {
-			require('./crashlogger.js')(err, 'A team validator process');
+			require('./crashlogger.js')(err, 'A team validator process', true);
 		});
 	}
 
