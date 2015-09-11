@@ -1,5 +1,7 @@
+var EventEmitter = require('events').EventEmitter;
+
 function createWorker() {
-	var fakeWorker = Object.create(require('child_process').ChildProcess.prototype);
+	var fakeWorker = new EventEmitter();
 	fakeWorker.send = function () {};
 	Sockets.workers[fakeWorker.id] = fakeWorker;
 	return fakeWorker;
