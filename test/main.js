@@ -1,8 +1,8 @@
 var assert = require('assert');
+var stream = require('stream');
 var path = require('path');
 var net = require('net');
 var fs = require('fs');
-
 var noop = function () {};
 
 var testPort;
@@ -97,7 +97,7 @@ before('initialization', function (done) {
 		fs[fsMethodsNullify[i] + 'Sync'] = noop;
 	}
 	fs.createWriteStream = function () {
-		return new require('stream').Writable();
+		return new stream.Writable();
 	};
 
 	// Make sure that there are no net conflicts with an active server
