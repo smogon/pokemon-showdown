@@ -76,8 +76,10 @@ before('initialization', function (done) {
 	// Don't listen at SSL port
 	config.ssl = null;
 
+	// Actually, don't listen at any port for now
+	config.workers = 0;
 	// Make sure that there are no net conflicts with an active server
-	if (typeof config.testport !== 'undefined') {
+	if (typeof config.testport !== 'undefined' || config.workers === 0) {
 		config.port = config.testport;
 		init(done);
 	} else {
