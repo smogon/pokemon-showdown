@@ -548,9 +548,8 @@ var GlobalRoom = (function () {
 		});
 	};
 	GlobalRoom.prototype.matchmakingOK = function (search1, search2, user1, user2, formatid) {
-		// users must exist
-		// TODO: ACTUALLY REMOVE THESE USERS FROM THE SEARCH LIST
-		if (!user1 || !user2) return false;
+		// This should never happen. TODO: cover any edge cases that could make this happen.
+		if (!user1 || !user2) return void require('./crashlogger.js')(new Error("Matched user " + (user1 ? search2.userid : search1.userid) + " not found"), "The main process");
 
 		// users must be different
 		if (user1 === user2) return false;
