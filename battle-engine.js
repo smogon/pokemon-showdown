@@ -3477,15 +3477,16 @@ Battle = (function () {
 			baseDamage = this.modify(baseDamage, spreadModifier);
 		}
 
-		// weather modifier (TODO: relocate here)
+		// weather modifier
+		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+
 		// crit
 		if (move.crit) {
 			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
 		}
 
-		// randomizer
 		// this is not a modifier
-		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
+		baseDamage = this.randomizer(baseDamage);
 
 		// STAB
 		if (move.hasSTAB || type !== '???' && pokemon.hasType(type)) {
@@ -3535,6 +3536,9 @@ Battle = (function () {
 		}
 
 		return Math.floor(baseDamage);
+	};
+	Battle.prototype.randomizer = function (baseDamage) {
+		return Math.floor(baseDamage * (100 - this.random(16)) / 100);
 	};
 	/**
 	 * Returns whether a proposed target for a move is valid.
