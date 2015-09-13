@@ -3477,7 +3477,9 @@ Battle = (function () {
 			baseDamage = this.modify(baseDamage, spreadModifier);
 		}
 
-		// weather modifier (TODO: relocate here)
+		// weather modifier
+		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+
 		// crit
 		if (move.crit) {
 			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
