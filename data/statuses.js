@@ -411,7 +411,7 @@ exports.BattleStatuses = {
 			}
 			return 5;
 		},
-		onBasePower: function (basePower, attacker, defender, move) {
+		onWeatherModifyDamage: function (damage, attacker, defender, move) {
 			if (move.type === 'Water') {
 				this.debug('rain water boost');
 				return this.chainModify(1.5);
@@ -448,7 +448,7 @@ exports.BattleStatuses = {
 				return null;
 			}
 		},
-		onBasePower: function (basePower, attacker, defender, move) {
+		onWeatherModifyDamage: function (damage, attacker, defender, move) {
 			if (move.type === 'Water') {
 				this.debug('Rain water boost');
 				return this.chainModify(1.5);
@@ -475,7 +475,7 @@ exports.BattleStatuses = {
 			}
 			return 5;
 		},
-		onBasePower: function (basePower, attacker, defender, move) {
+		onWeatherModifyDamage: function (damage, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
@@ -515,7 +515,7 @@ exports.BattleStatuses = {
 				return null;
 			}
 		},
-		onBasePower: function (basePower, attacker, defender, move) {
+		onWeatherModifyDamage: function (damage, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
