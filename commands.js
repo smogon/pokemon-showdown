@@ -818,6 +818,9 @@ var commands = exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 		if (targetRoom.id === "global") return this.sendReply("Users cannot be redirected to the global room.");
+		if (targetRoom.isPrivate) {
+			return this.errorReply("Do not redirect users to private rooms. Use /invite if you must, but honestly, the room probably wants to be kept private.");
+		}
 		if (Rooms.rooms[targetRoom.id].users[targetUser.userid]) {
 			return this.sendReply("User " + targetUser.name + " is already in the room " + targetRoom.title + "!");
 		}
@@ -825,8 +828,7 @@ var commands = exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
 		if (targetUser.joinRoom(targetRoom.id) === false) return this.sendReply("User " + targetUser.name + " could not be joined to room " + targetRoom.title + ". They could be banned from the room.");
-		var roomName = (targetRoom.isPrivate) ? "a private room" : "room " + targetRoom.title;
-		this.addModCommand("" + targetUser.name + " was redirected to " + roomName + " by " + user.name + ".");
+		this.addModCommand("" + targetUser.name + " was redirected to room " + targetRoom.title + " by " + user.name + ".");
 		targetUser.leaveRoom(room);
 	},
 	redirhelp: ["/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~"],
