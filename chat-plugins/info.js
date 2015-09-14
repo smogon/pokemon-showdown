@@ -49,6 +49,7 @@ var commands = exports.commands = {
 
 			var output = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
 			if (targetRoom.isPrivate === true) {
+				if (targetRoom.modjoin === '~') continue;
 				if (privaterooms) privaterooms += " | ";
 				privaterooms += output;
 			} else if (targetRoom.isPrivate) {
@@ -105,7 +106,7 @@ var commands = exports.commands = {
 		if ((user === targetUser || user.can('alts')) && hiddenrooms) {
 			buf += '<br />Hidden rooms: ' + hiddenrooms;
 		}
-		if ((user === targetUser || user.hasConsoleAccess(connection)) && privaterooms) {
+		if ((user === targetUser || user.can('makeroom')) && privaterooms) {
 			buf += '<br />Private rooms: ' + privaterooms;
 		}
 		this.sendReplyBox(buf);
