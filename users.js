@@ -1329,7 +1329,16 @@ User = (function () {
 				return false;
 			}
 		}
-		if (room.modjoin && !this.can('bypassall')) {
+		var bypassAll = this.can('bypassall');
+		if (room.tour && !bypassAll) {
+			var tour = room.tour.tour;
+			var errorMessage = tour.onBattleJoin(room, this);
+			if (errorMessage) {
+				connection.sendTo(roomid, "|noinit|joinfailed|" + errorMessage);
+				return false;
+			}
+		}
+		if (room.modjoin && !bypassAll) {
 			var userGroup = this.group;
 			if (room.auth) {
 				if (room.isPrivate === true) {
