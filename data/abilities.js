@@ -1175,6 +1175,7 @@ exports.BattleAbilities = {
 		onStart: function (pokemon) {
 			var target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target) {
+				this.add('-ability', pokemon, 'Imposter');
 				pokemon.transformInto(target, pokemon);
 			}
 		},
