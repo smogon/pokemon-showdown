@@ -1298,6 +1298,9 @@ exports.BattleScripts = {
 				case 'thunderbolt':
 					if (hasMove['discharge'] || (hasMove['thunder'] && hasMove['raindance']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
 					break;
+				case 'dazzlinggleam':
+					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
+					break;
 				case 'drainingkiss':
 					if (hasMove['dazzlinggleam'] || counter.setupType !== 'Special') rejected = true;
 					break;
