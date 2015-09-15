@@ -1590,7 +1590,7 @@ BattleSide = (function () {
 			var willPass = canSwitchOut.splice(Math.min(canSwitchOut.length, canSwitchIn.length));
 			for (var i = 0; i < canSwitchOut.length; i++) {
 				decisions.push({
-					choice: 'instaswitch',
+					choice: this.side.foe.currentRequest === 'switch' ? 'instaswitch' : 'switch',
 					pokemon: this.active[canSwitchOut[i]],
 					target: this.pokemon[canSwitchIn[i]]
 				});
