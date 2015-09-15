@@ -143,6 +143,28 @@ exports.Formats = [
 	},*/
 	{
 		name: "Battle Spot Singles",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3527960/\">Battle Spot Singles Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528947/\">Battle Spot Singles Viability Ranking</a>"
+		],
+		section: "ORAS Singles",
+
+		maxForcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview GBU'],
+		banlist: [],
+		onValidateTeam: function (team, format) {
+			if (team.length < 3) return ['You must bring at least three Pok\u00e9mon.'];
+		},
+		onBegin: function () {
+			this.debug('cutting down to 3');
+			this.p1.pokemon = this.p1.pokemon.slice(0, 3);
+			this.p1.pokemonLeft = this.p1.pokemon.length;
+			this.p2.pokemon = this.p2.pokemon.slice(0, 3);
+			this.p2.pokemonLeft = this.p2.pokemon.length;
+		}
+	},
+	{
+		name: "Battle Spot Special 12",
 		section: "ORAS Singles",
 
 		maxForcedLevel: 50,
@@ -243,7 +265,7 @@ exports.Formats = [
 		]
 	},
 	{
-		name: "Battle Spot Doubles (VGC 2015)",
+		name: "VGC 2015",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3524352/\">VGC 2015 Rules</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3530547/\">VGC 2015 Viability Ranking</a>",
@@ -269,17 +291,13 @@ exports.Formats = [
 		}
 	},
 	{
-		name: "Battle Spot Special 11",
+		name: "Battle Spot Doubles",
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
 		maxForcedLevel: 50,
-		ruleset: ['Battle Spot Doubles (VGC 2015)'],
-		banlist: ['Charizard', 'Gengar', 'Kangaskhan', 'Tyranitar', 'Gardevoir', 'Mawile', 'Salamence', 'Garchomp', 'Rotom',
-			'Rotom-Heat', 'Rotom-Wash', 'Rotom-Frost', 'Rotom-Fan', 'Rotom-Mow', 'Heatran', 'Cresselia', 'Amoonguss', 'Bisharp',
-			'Terrakion', 'Thundurus', 'Thundurus-Therian', 'Landorus', 'Landorus-Therian', 'Greninja', 'Talonflame', 'Aegislash', 'Sylveon'
-		],
-		requirePentagon: true,
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview VGC'],
+		banlist: [],
 		onValidateTeam: function (team, format) {
 			if (team.length < 4) return ['You must bring at least four Pok\u00e9mon.'];
 		},
@@ -344,10 +362,6 @@ exports.Formats = [
 
 	{
 		name: "Random Triples Battle",
-		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3540390/\">Smogon Triples Viability Ranking</a>"
-		],
 		section: "ORAS Triples",
 
 		gameType: 'triples',
@@ -356,6 +370,10 @@ exports.Formats = [
 	},
 	{
 		name: "Smogon Triples",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3511522/\">Smogon Triples</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3540390/\">Smogon Triples Viability Ranking</a>"
+		],
 		section: "ORAS Triples",
 
 		gameType: 'triples',
@@ -367,13 +385,16 @@ exports.Formats = [
 	},
 	{
 		name: "Battle Spot Triples",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3533914/\">Battle Spot Triples Metagame Discussion</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3549201/\">Battle Spot Triples Viability Ranking</a>"
+		],
 		section: "ORAS Triples",
 
 		gameType: 'triples',
 		maxForcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
-		requirePentagon: true,
+		banlist: [],
 		onValidateTeam: function (team, format) {
 			if (team.length < 6) return ['You must have six Pok\u00e9mon.'];
 		}
