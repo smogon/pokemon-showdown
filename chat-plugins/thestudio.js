@@ -232,6 +232,39 @@ var commands = {
 	},
 	sethelp: ["/aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~"],
 
+	quote: function (target, room, user) {
+		if (room.id !== 'thestudio') return this.sendReply('This command can only be used in The Studio.');
+		if (!room.chatRoomData) return false;
+		if (!target) {
+			if (!this.canBroadcast()) return;
+			if (!room.chatRoomData.artistQuoteOfTheDay) return this.sendReplyBox("The Artist Quote of the Day has not been set.");
+			return this.sendReplyBox(
+				"The current <strong>Artist Quote of the Day</strong> is:<br />" +
+				"\"" + room.chatRoomData.artistQuoteOfTheDay + "\""
+			);
+		}
+		if (!this.can('declare', null, room)) return false;
+		if (target === 'off' || target === 'disable' || target === 'reset') {
+			if (!room.chatRoomData.artistQuoteOfTheDay) return this.sendReply("The Artist Quote of the Day has already been reset.");
+			delete room.chatRoomData.artistQuoteOfTheDay;
+			this.sendReply("The Artist Quote of the Day was reset by " + Tools.escapeHTML(user.name) + ".");
+			this.logModCommand(user.name + " reset the Artist Quote of the Day.");
+			Rooms.global.writeChatRoomData();
+			return;
+		}
+		room.chatRoomData.artistQuoteOfTheDay = Tools.escapeHTML(target);
+		Rooms.global.writeChatRoomData();
+		room.addRaw(
+			"<div class=\"broadcast-blue\"><strong>The Artist Quote of the Day has been updated by " + Tools.escapeHTML(user.name) + ".</strong><br />" +
+			"Quote: " + room.chatRoomData.artistQuoteOfTheDay + "</div>"
+		);
+		this.logModCommand(Tools.escapeHTML(user.name) + " updated the artist quote of the day to \"" + room.chatRoomData.artistQuoteOfTheDay + "\".");
+	},
+	quotehelp:  [
+		"/aotd quote - View the current Artist Quote of the Day.",
+		"/aotd quote [quote] - Set the Artist Quote of the Day. Requires: # & ~"
+	],
+
 	'': function (target, room) {
 		if (room.id !== 'thestudio') return this.sendReply('This command can only be used in The Studio.');
 		if (!room.chatRoomData || !this.canBroadcast()) return false;
