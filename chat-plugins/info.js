@@ -2207,7 +2207,8 @@ var commands = exports.commands = {
 	},
 	smogdexhelp: ["/analysis [pokemon], [generation] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.",
 		"!analysis [pokemon], [generation] - Shows everyone this link. Requires: + % @ # & ~"],
-
+	
+	vkun: 'veekun',
 	veekun: function (target, broadcast, user) {
 		if (!this.canBroadcast()) return;
 
