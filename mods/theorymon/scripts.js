@@ -39,5 +39,8 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'virizion').abilities['1'] = 'Trace';
 		this.modData('Pokedex', 'gastrodon').abilities['H'] = 'Poison Heal';
 		this.modData('Learnsets', 'krookodile').learnset.dragondance = ['6T'];
+		this.modData('Pokedex', 'torterra').abilities['1'] = 'Drought';
+		this.modData('Pokedex', 'banettemega').types = ['Ghost', 'Fighting'];
+		this.modData('Learnsets', 'banette').learnset.drainpunch = ['6T'];
 	}
 };
