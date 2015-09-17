@@ -532,7 +532,7 @@ var commands = exports.commands = {
 
 		for (var cat = 0; cat < categories.length; cat++) {
 			var search = categories[cat];
-			if (!searches[search]) continue;
+			if (!(search in searches)) continue;
 			switch (search) {
 			case 'types':
 				for (var mon in dex) {
