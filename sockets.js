@@ -50,7 +50,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		});
 	};
 
-	//var workerCount = Config.workers || 1;
+	//var workerCount = typeof Config.workers !== 'undefined' ? Config.workers : 1;
 	//for (var i = 0; i < workerCount; i++) {
 		spawnWorker();
 	//}
@@ -138,7 +138,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 	// graceful crash
 	/*process.on('uncaughtException', function (err) {
-		require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')');
+		require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')', true);
 	});*/
 
 	var app = require('http').createServer();

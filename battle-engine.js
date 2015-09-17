@@ -17,7 +17,7 @@
 
 // graceful crash - allow current battles to finish before restarting
 /*process.on('uncaughtException', function (err) {
-	require('./crashlogger.js')(err, 'A simulator process');
+	require('./crashlogger.js')(err, 'A simulator process', true);
 });*/
 
 /**
@@ -735,7 +735,7 @@ BattlePokemon = (function () {
 			this.battle.singleEvent('Copy', this.getVolatile(i), this.volatiles[i], this);
 		}
 	};
-	BattlePokemon.prototype.transformInto = function (pokemon, user) {
+	BattlePokemon.prototype.transformInto = function (pokemon, user, effect) {
 		var template = pokemon.template;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 			return false;
@@ -784,7 +784,11 @@ BattlePokemon = (function () {
 		for (var j in pokemon.boosts) {
 			this.boosts[j] = pokemon.boosts[j];
 		}
-		this.battle.add('-transform', this, pokemon);
+		if (effect) {
+			this.battle.add('-transform', this, pokemon, '[from] ' + effect);
+		} else {
+			this.battle.add('-transform', this, pokemon);
+		}
 		this.setAbility(pokemon.ability);
 		this.update();
 		return true;
@@ -1577,7 +1581,7 @@ BattleSide = (function () {
 			var willPass = canSwitchOut.splice(Math.min(canSwitchOut.length, canSwitchIn.length));
 			for (var i = 0; i < canSwitchOut.length; i++) {
 				decisions.push({
-					choice: 'instaswitch',
+					choice: this.foe.currentRequest === 'switch' ? 'instaswitch' : 'switch',
 					pokemon: this.active[canSwitchOut[i]],
 					target: this.pokemon[canSwitchIn[i]]
 				});
@@ -2313,11 +2317,11 @@ Battle = (function () {
 					ModifyAtk: 1, ModifyDef: 1, ModifySpA: 1, ModifySpD: 1, ModifySpe: 1,
 					ModifyBoost: 1,
 					ModifyDamage: 1,
+					ModifySecondaries: 1,
 					ModifyWeight: 1,
 					TryHit: 1,
 					TryHitSide: 1,
 					TryMove: 1,
-					TrySecondaryHit: 1,
 					Hit: 1,
 					Boost: 1,
 					DragOut: 1
@@ -3468,15 +3472,16 @@ Battle = (function () {
 			baseDamage = this.modify(baseDamage, spreadModifier);
 		}
 
-		// weather modifier (TODO: relocate here)
+		// weather modifier
+		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+
 		// crit
 		if (move.crit) {
 			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
 		}
 
-		// randomizer
 		// this is not a modifier
-		baseDamage = Math.floor(baseDamage * (100 - this.random(16)) / 100);
+		baseDamage = this.randomizer(baseDamage);
 
 		// STAB
 		if (move.hasSTAB || type !== '???' && pokemon.hasType(type)) {
@@ -3526,6 +3531,9 @@ Battle = (function () {
 		}
 
 		return Math.floor(baseDamage);
+	};
+	Battle.prototype.randomizer = function (baseDamage) {
+		return Math.floor(baseDamage * (100 - this.random(16)) / 100);
 	};
 	/**
 	 * Returns whether a proposed target for a move is valid.
