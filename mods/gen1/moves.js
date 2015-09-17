@@ -611,9 +611,6 @@ exports.BattleMovedex = {
 				if (target.boosts.atk < 6 && move.category !== 'Status') {
 					this.boost({atk:1});
 				}
-			},
-			onMoveFail: function (target, source, move) {
-				source.addVolatile('ragemiss');
 			}
 		}
 	},
