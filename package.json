@@ -51,14 +51,14 @@
   "devDependencies": {
     "cache-swap": "~0.2.1",
     "gulp": "~3.9.0",
-    "gulp-cache": "~0.2.10",
+    "gulp-cache": "~0.3.0",
     "gulp-jshint": "~1.11.2",
     "gulp-jscs": "~2.0.0",
     "gulp-replace": "~0.5.3",
     "jshint-stylish": "~2.0.1",
-    "mocha": "~2.2.5",
+    "mocha": "~2.3.2",
     "lazypipe": "~1.0.1",
-    "merge-stream": "~0.1.8",
-    "jscs": "~2.0.0"
+    "merge-stream": "~1.0.0",
+    "jscs": "~2.1.1"
   }
 }

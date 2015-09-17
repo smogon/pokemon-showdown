@@ -94,7 +94,7 @@ exports.BattleItems = {
 		spritenum: 5,
 		isBerry: true,
 		naturalGift: {
-			basePower: 60,
+			basePower: 80,
 			type: "Dragon"
 		},
 		onUpdate: function (pokemon) {
@@ -1277,17 +1277,9 @@ exports.BattleItems = {
 			basePower: 100,
 			type: "Bug"
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
+		onHit: function (target, source, move) {
 			if (move && move.typeMod > 0) {
-				target.addVolatile('enigmaberry');
-			}
-		},
-		effect: {
-			duration: 1,
-			onUpdate: function (target) {
-				if (target.eatItem()) {
-					target.removeVolatile('enigmaberry');
-				}
+				target.eatItem();
 			}
 		},
 		onEatItem: function (item, pokemon) {
@@ -3397,7 +3389,7 @@ exports.BattleItems = {
 		spritenum: 351,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 90,
 			type: "Ice"
 		},
 		num: 169,
@@ -3454,7 +3446,7 @@ exports.BattleItems = {
 		spritenum: 371,
 		isBerry: true,
 		naturalGift: {
-			basePower: 80,
+			basePower: 90,
 			type: "Poison"
 		},
 		num: 171,
