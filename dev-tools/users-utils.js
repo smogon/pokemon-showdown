@@ -1,6 +1,16 @@
+var EventEmitter = require('events').EventEmitter;
+
+function createWorker() {
+	var fakeWorker = new EventEmitter();
+	fakeWorker.send = function () {};
+	Sockets.workers[fakeWorker.id] = fakeWorker;
+	return fakeWorker;
+}
+
 function createConnection(ip, workerid, socketid) {
 	if (!workerid || !socketid) {
 		workerid = Object.keys(Sockets.workers)[0];
+		if (!workerid) workerid = createWorker().id;
 		socketid = 1;
 		while (Users.connections[workerid + '-' + socketid]) {
 			socketid++;
