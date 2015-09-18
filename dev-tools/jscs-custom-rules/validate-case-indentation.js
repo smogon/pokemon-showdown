@@ -5,7 +5,7 @@
  *
  * Value: `true`
  *
- * #### Example
+ * #### Example..
  *
  * ```js
  * "validateCaseIndentation": true
