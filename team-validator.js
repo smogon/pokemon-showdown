@@ -1,6 +1,6 @@
 /**
  * Team Validator
- * Pokemon Showdown - http://pokemonshowdown.com/
+ * Pokemon Battle Simulator - http://connect.pokemonbattlesimulator.co.uk/
  *
  * Handles team validation, and specifically learnset checking.
  *
