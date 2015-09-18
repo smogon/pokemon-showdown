@@ -3,7 +3,7 @@ Pokémon Showdown Command API
 
 Defining a Command
 ------------------------------------------------------------------------
-
+fgfg
 You can define the commands such as 'whois', then use them by typing
 `/whois` into Pokémon Showdown.
 
