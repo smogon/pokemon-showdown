@@ -10,6 +10,7 @@ You can define the commands such as 'whois', then use them by typing
 A command can be in the form:
 
 	ip: 'whois',
+	SLAYER SUCKS DICK
 
 This is called an alias: it makes it so `/ip` does the same thing as
 `/whois`.
