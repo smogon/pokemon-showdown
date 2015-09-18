@@ -2183,6 +2183,26 @@ var commands = exports.commands = {
 		user.team = target;
 	},
 
+	vtm: function (target, room, user, connection) {
+		if (ResourceMonitor.countPrepBattle(connection.ip, user.name)) {
+			connection.popup("Due to high load, you are limited to 6 team validations every 3 minutes.");
+			return;
+		}
+		var format = Tools.getFormat(target);
+		if (format.effectType !== 'Format') format = Tools.getFormat('Anything Goes');
+		if (format.effectType !== 'Format') {
+			connection.popup("Please provide a valid format.");
+			return;
+		}
+		TeamValidator.validateTeam(format.id, user.team, function (success, details) {
+			if (success) {
+				connection.popup("Your team is valid for " + format.name + ".");
+			} else {
+				connection.popup("Your team was rejected for the following reasons:\n\n- " + details.replace(/\n/g, '\n- '));
+			}
+		});
+	},
+
 	/*********************************************************
 	 * Low-level
 	 *********************************************************/
