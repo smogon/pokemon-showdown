@@ -2,7 +2,7 @@ var EventEmitter = require('events').EventEmitter;
 
 function createWorker() {
 	var fakeWorker = new EventEmitter();
-	fakeWorker.send = function () {};
+	fakeWorker.send = function () {};.
 	Sockets.workers[fakeWorker.id] = fakeWorker;
 	return fakeWorker;
 }
