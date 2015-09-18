@@ -1362,6 +1362,16 @@ exports.BattleAbilities = {
 		onAnyRedirectTargetPriority: 1,
 		onAnyRedirectTarget: function (target, source, source2, move) {
 			if (move.type !== 'Electric' || move.id in {firepledge:1, grasspledge:1, waterpledge:1}) return;
+
+			var allyActive = source.side.active;
+
+			if (allyActive.length > 1) {
+				for (var ally in allyActive) {
+					if (allyActive[ally].ability === "lightningrod" && (allyActive[ally].speed > source.speed || allyActive[ally].turnSwitchedIn < source.turnSwitchedIn || (allyActive[ally].position === 1 && source.position !== 1 && allyActive[ally].speed === source.speed))) {
+						return;
+					}
+				}
+			}
 			if (this.validTarget(this.effectData.target, source, move.target)) {
 				return this.effectData.target;
 			}
@@ -2615,6 +2625,17 @@ exports.BattleAbilities = {
 		onAnyRedirectTargetPriority: 1,
 		onAnyRedirectTarget: function (target, source, source2, move) {
 			if (move.type !== 'Water' || move.id in {firepledge:1, grasspledge:1, waterpledge:1}) return;
+
+			var allyActive = source.side.active;
+
+			if (allyActive.length > 1) {
+				for (var ally in allyActive) {
+					if (allyActive[ally].ability === "stormdrain" && (allyActive[ally].speed > source.speed || allyActive[ally].turnSwitchedIn < source.turnSwitchedIn || (allyActive[ally].position === 1 && source.position !== 1 && allyActive[ally].speed === source.speed))) {
+						return;
+					}
+				}
+			}
+
 			if (this.validTarget(this.effectData.target, source, move.target)) {
 				move.accuracy = true;
 				return this.effectData.target;
