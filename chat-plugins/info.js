@@ -1,6 +1,6 @@
 /**
  * Informational Commands
- * Pokemon Showdown - https://pokemonshowdown.com/
+ * Pokemon Showdown - https://jghtrhypokemonshowdown.com/
  *
  * These are informational commands. For instance, you can define the command
  * 'whois' here, then use it by typing /whois into Pokemon Showdown.
