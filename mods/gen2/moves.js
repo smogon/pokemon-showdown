@@ -12,13 +12,17 @@ exports.BattleMovedex = {
 			if (target.boosts.atk >= 6) {
 				return false;
 			}
+
+			var boost = 0;
+
 			if (target.hp <= target.maxhp / 2) {
-				this.boost({atk: 2});
-				return false;
+				boost = (target.boost ? target.boost.atk : 0) + 2;
+			} else {
+				boost = 6;
+				this.directDamage(target.maxhp / 2);
 			}
-			this.directDamage(target.maxhp / 2);
-			target.setBoost({atk: 6});
-			this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
+			target.setBoost({atk: boost});
+			this.add('-setboost', target, 'atk', boost, '[from] move: Belly Drum');
 		}
 	},
 	counter: {
