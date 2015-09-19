@@ -289,6 +289,8 @@ exports.commands = {
 		"- /aotd removenom [username] - Remove a user's nomination for the Artist of the Day and prevent them from voting again until the next round. Requires: % @ # & ~",
 		"- /aotd end - End nominations for the Artist of the Day and set it to a randomly selected artist. Requires: % @ # & ~",
 		"- /aotd prenom [artist] - Nominate an artist for the Artist of the Day between nomination periods.",
-		"- /aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~"
+		"- /aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~",
+		"- /aotd quote - View the current Artist Quote of the Day.",
+		"- /aotd quote [quote] - Set the Artist Quote of the Day. Requires: # & ~"
 	]
 };
