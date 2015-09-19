@@ -434,7 +434,7 @@ var GlobalRoom = (function () {
 	};
 
 	GlobalRoom.prototype.getFormatListText = function () {
-		var formatListText = '|formats';
+		var formatListText = '|formats' + (Ladders.formatsListPrefix || '');
 		var curSection = '';
 		for (var i in Tools.data.Formats) {
 			var format = Tools.data.Formats[i];
