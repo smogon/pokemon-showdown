@@ -2261,6 +2261,11 @@ var commands = exports.commands = {
 			connection.send('|queryresponse|rooms|' + JSON.stringify(
 				Rooms.global.getRooms(user)
 			));
+		} else if (cmd === 'laddertop') {
+			if (!trustable) return false;
+			Ladders(target).getTop().then(function (result) {
+				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
+			});
 		} else {
 			// default to sending undefined
 			if (!trustable) return false;

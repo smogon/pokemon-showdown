@@ -18,6 +18,10 @@ function Ladder(formatid) {
 	this.formatid = toId(formatid);
 }
 
+Ladder.prototype.getTop = function () {
+	return Promise.resolve(undefined);
+};
+
 Ladder.prototype.getRating = function (userid) {
 	var formatid = this.formatid;
 	var user = Users.getExact(userid);
