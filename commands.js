@@ -2261,6 +2261,10 @@ var commands = exports.commands = {
 			connection.send('|queryresponse|rooms|' + JSON.stringify(
 				Rooms.global.getRooms(user)
 			));
+		} else {
+			// default to sending undefined
+			if (!trustable) return false;
+			connection.send('|queryresponse|' + cmd + '|undefined');
 		}
 	},
 
