@@ -106,7 +106,7 @@ var commands = exports.commands = {
 		if ((user === targetUser || user.can('alts')) && hiddenrooms) {
 			buf += '<br />Hidden rooms: ' + hiddenrooms;
 		}
-		if ((user === targetUser || user.hasConsoleAccess(connection)) && privaterooms) {
+		if ((user === targetUser || user.can('makeroom')) && privaterooms) {
 			buf += '<br />Private rooms: ' + privaterooms;
 		}
 		this.sendReplyBox(buf);
@@ -533,7 +533,7 @@ var commands = exports.commands = {
 
 		for (var cat = 0; cat < categories.length; cat++) {
 			var search = categories[cat];
-			if (!searches[search]) continue;
+			if (!(search in searches)) continue;
 			switch (search) {
 			case 'types':
 				for (var mon in dex) {
