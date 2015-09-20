@@ -577,7 +577,7 @@ var commands = exports.commands = {
 			return this.sendReply("Group '" + nextGroup + "' does not exist.");
 		}
 
-		if (Config.groups[nextGroup].globalonly) {
+		if (Config.groups[nextGroup].globalonly || (!room.battle && Config.groups[nextGroup].joinbattle)) {
 			return this.sendReply("Group 'room" + Config.groups[nextGroup].id + "' does not exist as a room rank.");
 		}
 
