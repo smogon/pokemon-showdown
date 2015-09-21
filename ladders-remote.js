@@ -19,7 +19,7 @@ function Ladder(formatid) {
 }
 
 Ladder.prototype.getTop = function () {
-	return Promise.resolve(undefined);
+	return Promise.resolve(null);
 };
 
 Ladder.prototype.getRating = function (userid) {

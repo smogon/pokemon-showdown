@@ -2266,9 +2266,9 @@ var commands = exports.commands = {
 				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
 			});
 		} else {
-			// default to sending undefined
+			// default to sending null
 			if (!trustable) return false;
-			connection.send('|queryresponse|' + cmd + '|undefined');
+			connection.send('|queryresponse|' + cmd + '|null');
 		}
 	},
 
