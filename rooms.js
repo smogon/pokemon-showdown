@@ -531,24 +531,26 @@ var GlobalRoom = (function () {
 		// tell the user they've started searching
 		user.send('|updatesearch|' + JSON.stringify({searching: Object.keys(user.searching).concat(formatid)}));
 
-		// get the user's rating before actually starting to search
 		var newSearch = {
-			userid: user.userid,
+			userid: '',
 			team: user.team,
 			rating: 1000,
 			time: new Date().getTime()
 		};
 		var self = this;
+
+		// Get the user's rating before actually starting to search.
 		Ladders(formatid).getRating(user.userid).then(function (rating) {
 			newSearch.rating = rating;
+			newSearch.userid = user.userid;
 			self.addSearch(newSearch, user, formatid);
 		}, function (error) {
-			// The promise only rejects if the user changed names before the search
-			// could start; the search simply doesn't happen in this case.
+			// Rejects iff we retrieved the rating but the user had changed their name;
+			// the search simply doesn't happen in this case.
 		});
 	};
 	GlobalRoom.prototype.matchmakingOK = function (search1, search2, user1, user2, formatid) {
-		// This should never happen. TODO: cover any edge cases that could make this happen.
+		// This should never happen.
 		if (!user1 || !user2) return void require('./crashlogger.js')(new Error("Matched user " + (user1 ? search2.userid : search1.userid) + " not found"), "The main process");
 
 		// users must be different
