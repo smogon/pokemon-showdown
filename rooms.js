@@ -650,15 +650,17 @@ var GlobalRoom = (function () {
 		if (rooms.lobby) return rooms.lobby.addRaw(message);
 		return this;
 	};
-	GlobalRoom.prototype.addChatRoom = function (title) {
+	GlobalRoom.prototype.addChatRoom = function (title, isPersonal) {
 		var id = toId(title);
 		if (rooms[id]) return false;
 
 		var chatRoomData = {
 			title: title
 		};
+		if (isPersonal) chatRoomData.isPersonal = true;
 		var room = Rooms.createChatRoom(id, title, chatRoomData);
-		this.chatRoomData.push(chatRoomData);
+		// Only add room to chatRoomData if it is not a personal room, those aren't saved.
+		if (!isPersonal) this.chatRoomData.push(chatRoomData);
 		this.chatRooms.push(room);
 		this.writeChatRoomData();
 		return true;
@@ -1411,8 +1413,8 @@ var ChatRoom = (function () {
 	function ChatRoom(roomid, title, options) {
 		Room.call(this, roomid, title);
 		if (options) {
-			this.chatRoomData = options;
 			Object.merge(this, options);
+			if (!this.isPersonal) this.chatRoomData = options;
 		}
 
 		this.logTimes = true;
@@ -1573,7 +1575,16 @@ var ChatRoom = (function () {
 		}
 		this.lastUpdate = this.log.length;
 
+		// Set up expire timer to clean up inactive personal rooms.
+		if (this.isPersonal) {
+			if (this.expireTimer) clearTimeout(this.expireTimer);
+			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_INACTIVE_DEALLOCATE);
+		}
+
 		this.send(update);
+	};
+	ChatRoom.prototype.tryExpire = function () {
+		this.destroy();
 	};
 	ChatRoom.prototype.getIntroMessage = function () {
 		if (this.modchat && this.introMessage) {
@@ -1675,6 +1686,11 @@ var ChatRoom = (function () {
 		} else if (user.named) {
 			var entry = '|L|' + user.getIdentity(this.id);
 			this.reportJoin(entry);
+		}
+
+		// If it's a personal room, it gets destroyed when there are 0 users on it.
+		if (this.isPersonal && this.userCount === 0) {
+			this.destroy();
 		}
 	};
 	ChatRoom.prototype.destroy = function () {
