@@ -6998,13 +6998,14 @@ exports.BattleMovedex = {
 			onFoeDisableMove: function (pokemon) {
 				var foeMoves = this.effectData.source.moveset;
 				for (var f = 0; f < foeMoves.length; f++) {
+					if (foeMoves[f].id === 'struggle') continue;
 					pokemon.disableMove(foeMoves[f].id, true);
 				}
 				pokemon.maybeDisabled = true;
 			},
 			onFoeBeforeMovePriority: 4,
 			onFoeBeforeMove: function (attacker, defender, move) {
-				if (this.effectData.source.hasMove(move.id)) {
+				if (move.id !== 'struggle' && this.effectData.source.hasMove(move.id)) {
 					this.add('cant', attacker, 'move: Imprison', move);
 					return false;
 				}
