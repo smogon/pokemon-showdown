@@ -313,7 +313,7 @@ global.Tools = require('./tools.js').includeFormats();
 
 global.LoginServer = require('./loginserver.js');
 
-global.Ladders = require('./ladders-remote.js');
+global.Ladders = require(Config.remoteladder ? './ladders-remote.js' : './ladders.js');
 
 global.Users = require('./users.js');
 
