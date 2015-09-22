@@ -105,10 +105,6 @@ Ladder.prototype.updateRating = function (p1name, p2name, p1score, room) {
 			if (!Tools.getFormat(formatid).noLog) {
 				room.logBattle(p1score, p1rating, p2rating);
 			}
-
-			if (!Tools.getFormat(formatid).noLog) {
-				room.logBattle(p1score, p1rating, p2rating);
-			}
 		}
 	});
 };
