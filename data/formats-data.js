@@ -482,7 +482,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":32,"abilities":["shielddust"],"moves":["refresh","silverwind","substitute","psychic"]}
 		],
-		tier: "RU"
+		tier: "BL2"
 	},
 	diglett: {
 		randomBattleMoves: ["earthquake","rockslide","stealthrock","suckerpunch","reversal","substitute","shadowclaw"],
