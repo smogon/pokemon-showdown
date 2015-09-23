@@ -13,12 +13,11 @@ exports.BattleMovedex = {
 				return false;
 			}
 			if (target.hp <= target.maxhp / 2) {
-				this.boost({atk: 2});
+				this.boost({atk: 2}, null, null, this.getEffect('bellydrum2'));
 				return false;
 			}
 			this.directDamage(target.maxhp / 2);
-			target.setBoost({atk: 6});
-			this.add('-setboost', target, 'atk', '6', '[from] move: Belly Drum');
+			this.boost({atk: 12});
 		}
 	},
 	counter: {

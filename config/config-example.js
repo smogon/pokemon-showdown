@@ -275,7 +275,8 @@ exports.grouplist = [
 		modchat: true,
 		roomonly: true,
 		privateroom: true,
-		joinbattle: true
+		joinbattle: true,
+		battleonly: true
 	},
 	{
 		symbol: '@',

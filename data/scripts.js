@@ -117,6 +117,8 @@ exports.BattleScripts = {
 			return true;
 		}
 
+		this.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
+
 		if (move.ignoreImmunity === undefined) {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
@@ -973,7 +975,7 @@ exports.BattleScripts = {
 		};
 		// Moves that shouldn't be the only STAB moves:
 		var NoStab = {
-			aquajet:1, bounce:1, fakeout:1, flamecharge:1, quickattack:1, skyattack:1
+			aquajet:1, bounce:1, eruption:1, fakeout:1, flamecharge:1, quickattack:1, skyattack:1, waterspout:1
 		};
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
@@ -1253,7 +1255,7 @@ exports.BattleScripts = {
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock >= 1) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
-					if (counter.setupType || counter.Physical + counter.Special < 2) rejected = true;
+					if (counter.Physical + counter.Special < 3) rejected = true;
 					if (hasMove['acrobatics'] || hasMove['lightscreen'] || hasMove['reflect'] || hasMove['trickroom']) rejected = true;
 					break;
 				case 'trickroom':

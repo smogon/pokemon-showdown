@@ -909,7 +909,6 @@ exports.BattleMovedex = {
 			}
 			this.directDamage(target.maxhp / 2);
 			this.boost({atk: 12}, target);
-			this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] move: Belly Drum');
 		},
 		secondary: false,
 		target: "self",
@@ -6998,13 +6997,14 @@ exports.BattleMovedex = {
 			onFoeDisableMove: function (pokemon) {
 				var foeMoves = this.effectData.source.moveset;
 				for (var f = 0; f < foeMoves.length; f++) {
+					if (foeMoves[f].id === 'struggle') continue;
 					pokemon.disableMove(foeMoves[f].id, true);
 				}
 				pokemon.maybeDisabled = true;
 			},
 			onFoeBeforeMovePriority: 4,
 			onFoeBeforeMove: function (attacker, defender, move) {
-				if (this.effectData.source.hasMove(move.id)) {
+				if (move.id !== 'struggle' && this.effectData.source.hasMove(move.id)) {
 					this.add('cant', attacker, 'move: Imprison', move);
 					return false;
 				}
@@ -8074,27 +8074,30 @@ exports.BattleMovedex = {
 		onModifyMove: function (move, pokemon) {
 			var i = this.random(100);
 			if (i < 5) {
-				this.add('-activate', pokemon, 'move: Magnitude', 4);
+				move.magnitude = 4;
 				move.basePower = 10;
 			} else if (i < 15) {
-				this.add('-activate', pokemon, 'move: Magnitude', 5);
+				move.magnitude = 5;
 				move.basePower = 30;
 			} else if (i < 35) {
-				this.add('-activate', pokemon, 'move: Magnitude', 6);
+				move.magnitude = 6;
 				move.basePower = 50;
 			} else if (i < 65) {
-				this.add('-activate', pokemon, 'move: Magnitude', 7);
+				move.magnitude = 7;
 				move.basePower = 70;
 			} else if (i < 85) {
-				this.add('-activate', pokemon, 'move: Magnitude', 8);
+				move.magnitude = 8;
 				move.basePower = 90;
 			} else if (i < 95) {
-				this.add('-activate', pokemon, 'move: Magnitude', 9);
+				move.magnitude = 9;
 				move.basePower = 110;
 			} else {
-				this.add('-activate', pokemon, 'move: Magnitude', 10);
+				move.magnitude = 10;
 				move.basePower = 150;
 			}
+		},
+		onUseMoveMessage: function (pokemon, target, move) {
+			this.add('-activate', pokemon, 'move: Magnitude', move.magnitude);
 		},
 		secondary: false,
 		target: "allAdjacent",

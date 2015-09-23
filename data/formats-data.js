@@ -482,7 +482,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":32,"abilities":["shielddust"],"moves":["refresh","silverwind","substitute","psychic"]}
 		],
-		tier: "RU"
+		tier: "BL2"
 	},
 	diglett: {
 		randomBattleMoves: ["earthquake","rockslide","stealthrock","suckerpunch","reversal","substitute","shadowclaw"],
@@ -1950,8 +1950,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	octillery: {
-		randomBattleMoves: ["hydropump","fireblast","icebeam","energyball","rockblast","waterspout"],
-		randomDoubleBattleMoves: ["hydropump","surf","fireblast","icebeam","energyball","chargebeam","waterspout","protect"],
+		randomBattleMoves: ["hydropump","fireblast","icebeam","energyball","rockblast","gunkshot","scald"],
+		randomDoubleBattleMoves: ["hydropump","surf","fireblast","icebeam","energyball","chargebeam","protect"],
 		eventPokemon: [
 			{"generation":4,"level":50,"gender":"F","nature":"Serious","abilities":["suctioncups"],"moves":["octazooka","icebeam","signalbeam","hyperbeam"],"pokeball":"cherishball"}
 		],
@@ -3167,7 +3167,7 @@ exports.BattleFormatsData = {
 	},
 	latiosmega: {
 		randomBattleMoves: ["calmmind","dracometeor","hiddenpowerfire","psyshock","roost","memento","defog"],
-		randomDoubleBattleMoves: ["dracometeor","dragonpulse","surf","thunderbolt","psyshock","substitute","trick","tailwind","protect","hiddenpowerfire"],
+		randomDoubleBattleMoves: ["dracometeor","dragonpulse","surf","thunderbolt","psyshock","substitute","tailwind","protect","hiddenpowerfire"],
 		requiredItem: "Latiosite",
 		tier: "(OU)"
 	},

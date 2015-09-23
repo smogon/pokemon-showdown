@@ -118,6 +118,8 @@ global.ResourceMonitor = {
 	battleTimes: {},
 	battlePreps: {},
 	battlePrepTimes: {},
+	groupChats: {},
+	groupChatTimes: {},
 	networkUse: {},
 	networkCount: {},
 	cmds: {},
@@ -202,6 +204,22 @@ global.ResourceMonitor = {
 		} else {
 			this.battlePreps[ip] = 1;
 			this.battlePrepTimes[ip] = now;
+		}
+	},
+	/**
+	 * Counts group chat creation. Returns true if too much.
+	 */
+	countGroupChat: function (ip) {
+		var now = Date.now();
+		var duration = now - this.groupChatTimes[ip];
+		if (ip in this.groupChats && duration < 60 * 60 * 1000) {
+			this.groupChats[ip]++;
+			if (this.groupChats[ip] > 4) {
+				return true;
+			}
+		} else {
+			this.groupChats[ip] = 1;
+			this.groupChatTimes[ip] = now;
 		}
 	},
 	/**
@@ -313,7 +331,7 @@ global.Tools = require('./tools.js').includeFormats();
 
 global.LoginServer = require('./loginserver.js');
 
-global.Ladders = require('./ladders-remote.js');
+global.Ladders = require(Config.remoteladder ? './ladders-remote.js' : './ladders.js');
 
 global.Users = require('./users.js');
 
