@@ -3149,7 +3149,11 @@ Battle = (function () {
 				}
 				switch (effect.id) {
 				case 'bellydrum':
-					// No message
+					this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] move: Belly Drum');
+					break;
+				case 'bellydrum2':
+					this.add(msg, target, i, boost[i], '[silent]');
+					this.add('-hint', "In Gen 2, Belly Drum boosts by 2 when it fails.");
 					break;
 				case 'intimidate': case 'gooey':
 					this.add(msg, target, i, boost[i]);
