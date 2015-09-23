@@ -56,19 +56,17 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 	}
 	return (exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), playerCap, isRated));
 }
-function deleteTournament(name, output) {
-	var id = toId(name);
+function deleteTournament(id, output) {
 	var tournament = exports.tournaments[id];
 	if (!tournament) {
-		output.sendReply(name + " doesn't exist.");
+		output.sendReply(id + " doesn't exist.");
 		return false;
 	}
 	tournament.forceEnd(output);
 	delete exports.tournaments[id];
 	return true;
 }
-function getTournament(name, output) {
-	var id = toId(name);
+function getTournament(id, output) {
 	if (exports.tournaments[id]) {
 		return exports.tournaments[id];
 	}
@@ -885,7 +883,7 @@ var commands = {
 		end: 'delete',
 		stop: 'delete',
 		delete: function (tournament, user) {
-			if (deleteTournament(tournament.room.title, this)) {
+			if (deleteTournament(tournament.room.id, this)) {
 				this.privateModCommand("(" + user.name + " forcibly ended a tournament.)");
 			}
 		}
@@ -955,7 +953,7 @@ CommandParser.commands.tournament = function (paramString, room, user) {
 			}
 		}
 	} else {
-		var tournament = getTournament(room.title);
+		var tournament = getTournament(room.id);
 		if (!tournament) {
 			return this.sendReply("There is currently no tournament running in this room.");
 		}
