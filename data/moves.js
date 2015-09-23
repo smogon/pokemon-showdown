@@ -909,7 +909,6 @@ exports.BattleMovedex = {
 			}
 			this.directDamage(target.maxhp / 2);
 			this.boost({atk: 12}, target);
-			this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] move: Belly Drum');
 		},
 		secondary: false,
 		target: "self",
