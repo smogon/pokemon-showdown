@@ -295,12 +295,6 @@ var commands = exports.commands = {
 	makechatroomhelp: ["/makechatroom [roomname] - Creates a new room named [roomname]. Requires: ~"],
 
 	makegroupchat: function (target, room, user, connection, cmd) {
-		// First and foremost, check Resource Monitor's rate limit
-		if (ResourceMonitor.countGroupChat(connection.ip)) {
-			connection.popup("Due to high load, you are limited to creating 4 group chats every hour.");
-			return;
-		}
-
 		var targets = target.split(',');
 
 		// Title defaults to a random 8-digit number.
@@ -323,6 +317,11 @@ var commands = exports.commands = {
 		// Tab title is prefixed with '[G]' to distinguish groupchats from
 		// registered chatrooms
 		title = '[G] ' + title;
+
+		if (ResourceMonitor.countGroupChat(connection.ip)) {
+			connection.popup("Due to high load, you are limited to creating 4 group chats every hour.");
+			return;
+		}
 
 		// Privacy settings, default to private.
 		var privacy = toId(targets[1]) || 'private';
