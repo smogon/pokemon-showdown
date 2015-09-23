@@ -650,17 +650,15 @@ var GlobalRoom = (function () {
 		if (rooms.lobby) return rooms.lobby.addRaw(message);
 		return this;
 	};
-	GlobalRoom.prototype.addChatRoom = function (title, isPersonal) {
+	GlobalRoom.prototype.addChatRoom = function (title) {
 		var id = toId(title);
 		if (rooms[id]) return false;
 
 		var chatRoomData = {
 			title: title
 		};
-		if (isPersonal) chatRoomData.isPersonal = true;
 		var room = Rooms.createChatRoom(id, title, chatRoomData);
 		// Only add room to chatRoomData if it is not a personal room, those aren't saved.
-		if (!isPersonal) this.chatRoomData.push(chatRoomData);
 		this.chatRooms.push(room);
 		this.writeChatRoomData();
 		return true;
