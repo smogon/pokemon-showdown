@@ -294,7 +294,6 @@ var commands = exports.commands = {
 	},
 	makechatroomhelp: ["/makechatroom [roomname] - Creates a new room named [roomname]. Requires: ~"],
 
-	personalroom: 'makegroupchat',
 	makegroupchat: function (target, room, user, connection, cmd) {
 		// First and foremost, check Resource Monitor's rate limit
 		if (ResourceMonitor.countGroupChat(connection.ip)) {
@@ -303,38 +302,49 @@ var commands = exports.commands = {
 		}
 
 		var targets = target.split(',');
-		// Check if the custom part of the room title is empty. It needs a title.
-		var roomName = targets[0] || Math.floor(Math.random() * 100000000);
-		// Chosen name have the same limitations as regular rooms.
-		if (roomName.includes(',') || roomName.includes('|') || roomName.includes('[') || roomName.includes('-')) {
+
+		// Title defaults to a random 8-digit number.
+		var title = targets[0] || ('' + Math.floor(Math.random() * 100000000));
+		// `,` is a delimiter used by a lot of /commands
+		// `|` and `[` are delimiters used by the protocol
+		// `-` has special meaning in roomids
+		if (title.includes(',') || title.includes('|') || title.includes('[') || title.includes('-')) {
 			return this.sendReply("Room titles can't contain any of: ,|[-");
 		}
-		// Create the name of the room using the chosen, approved name plus the groupchat- namespace.
-		roomName = "groupchat-" + roomName;
-		var id = toId(roomName);
-		// Check which room type to apply, default to private.
-		var roomType = toId(targets[1]) || 'private';
-		if (!(roomType in {'private':1, 'hidden':1, 'public':1})) roomType = 'private';
 
-		// Personal rooms can always be created, but the name must still be unique.
-		if (Rooms.search(id)) return this.sendReply("The room '" + roomName + "' already exists.");
-		if (Rooms.global.addChatRoom(roomName, true)) {
-			var targetRoom = Rooms.search(roomName);
-			// Deal with room type.
-			if (roomType !== 'public') targetRoom.isPrivate = (roomType === 'private' ? true : roomType);
-			// The room is modjoin by default. This shouldn't be changed.
-			targetRoom.modjoin = true;
-			targetRoom.modchat = '+';
-			// Make the personal room creator its owner.
-			targetRoom.auth = {};
+		// Even though they're different namespaces, to cut down on confusion, you
+		// can't share names with registered chatrooms.
+		if (Rooms.search(toId(title))) return this.sendReply("The room '" + title + "' already exists.");
+		// Room IDs for groupchats are groupchat-TITLEID
+		var roomid = "groupchat-" + toId(title);
+		// Titles must be unique.
+		if (Rooms.search(roomid)) return this.sendReply("A group chat named '" + title + "' already exists.");
+		// Tab title is prefixed with '[G]' to distinguish groupchats from
+		// registered chatrooms
+		title = '[G] ' + title;
+
+		// Privacy settings, default to private.
+		var privacy = toId(targets[1]) || 'private';
+		var privacySettings = {private: true, hidden: 'hidden', public: false};
+		if (!(privacy in privacySettings)) privacy = 'private';
+
+		var targetRoom = Rooms.createChatRoom(roomid, title, {
+			isPersonal: true,
+			isPrivate: privacySettings[privacy],
+			modjoin: true,
+			modchat: '+',
+			auth: {}
+		});
+		if (targetRoom) {
+			// The creator is RO.
 			targetRoom.auth[user.userid] = '#';
-			// Finally, make the user join the room instantly.
+			// Join after creating room. No other response is given.
 			user.joinRoom(targetRoom.id);
-			return this.sendReply("The personal chat room '" + roomName + "' was created.");
+			return;
 		}
-		return this.sendReply("An error occurred while trying to create the room '" + roomName + "'.");
+		return this.sendReply("An unknown error occurred while trying to create the room '" + title + "'.");
 	},
-	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat, which is a personal room, named [roomname], optionally of the specified type. Private and invite-only by default."],
+	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat named [roomname]. Leave off privacy to default to private. Invite-only by default."],
 
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
