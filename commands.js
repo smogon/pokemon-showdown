@@ -331,8 +331,6 @@ var commands = exports.commands = {
 		var targetRoom = Rooms.createChatRoom(roomid, title, {
 			isPersonal: true,
 			isPrivate: privacySettings[privacy],
-			modjoin: true,
-			modchat: '+',
 			auth: {}
 		});
 		if (targetRoom) {
@@ -344,7 +342,7 @@ var commands = exports.commands = {
 		}
 		return this.sendReply("An unknown error occurred while trying to create the room '" + title + "'.");
 	},
-	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat named [roomname]. Leave off privacy to default to private. Invite-only by default."],
+	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat named [roomname]. Leave off privacy to default to private."],
 
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
