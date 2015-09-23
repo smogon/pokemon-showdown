@@ -117,6 +117,8 @@ exports.BattleScripts = {
 			return true;
 		}
 
+		this.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
+
 		if (move.ignoreImmunity === undefined) {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
