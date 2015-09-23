@@ -190,6 +190,14 @@ var commands = exports.commands = {
 						return this.errorReply('The room "' + innerTarget + '" does not exist.');
 					}
 				}
+				if (targetRoom.modjoin) {
+					if (targetRoom.auth && (targetRoom.isPrivate === true || targetUser.group === ' ') && !(targetUser.userid in targetRoom.auth)) {
+						this.parse('/roomvoice ' + targetUser.name, false, targetRoom);
+						if (!(targetUser.userid in targetRoom.auth)) {
+							return;
+						}
+					}
+				}
 
 				target = '/invite ' + targetRoom.id;
 				break;
