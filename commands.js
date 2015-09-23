@@ -314,7 +314,8 @@ var commands = exports.commands = {
 
 		// Even though they're different namespaces, to cut down on confusion, you
 		// can't share names with registered chatrooms.
-		if (Rooms.search(toId(title))) return this.sendReply("The room '" + title + "' already exists.");
+		var existingRoom = Rooms.search(toId(title));
+		if (existingRoom && !existingRoom.modjoin) return this.sendReply("The room '" + title + "' already exists.");
 		// Room IDs for groupchats are groupchat-TITLEID
 		var roomid = "groupchat-" + toId(title);
 		// Titles must be unique.
