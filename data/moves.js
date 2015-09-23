@@ -8075,27 +8075,30 @@ exports.BattleMovedex = {
 		onModifyMove: function (move, pokemon) {
 			var i = this.random(100);
 			if (i < 5) {
-				this.add('-activate', pokemon, 'move: Magnitude', 4);
+				move.magnitude = 4;
 				move.basePower = 10;
 			} else if (i < 15) {
-				this.add('-activate', pokemon, 'move: Magnitude', 5);
+				move.magnitude = 5;
 				move.basePower = 30;
 			} else if (i < 35) {
-				this.add('-activate', pokemon, 'move: Magnitude', 6);
+				move.magnitude = 6;
 				move.basePower = 50;
 			} else if (i < 65) {
-				this.add('-activate', pokemon, 'move: Magnitude', 7);
+				move.magnitude = 7;
 				move.basePower = 70;
 			} else if (i < 85) {
-				this.add('-activate', pokemon, 'move: Magnitude', 8);
+				move.magnitude = 8;
 				move.basePower = 90;
 			} else if (i < 95) {
-				this.add('-activate', pokemon, 'move: Magnitude', 9);
+				move.magnitude = 9;
 				move.basePower = 110;
 			} else {
-				this.add('-activate', pokemon, 'move: Magnitude', 10);
+				move.magnitude = 10;
 				move.basePower = 150;
 			}
+		},
+		onUseMoveMessage: function (pokemon, target, move) {
+			this.add('-activate', pokemon, 'move: Magnitude', move.magnitude);
 		},
 		secondary: false,
 		target: "allAdjacent",
