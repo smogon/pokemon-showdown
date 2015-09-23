@@ -294,6 +294,48 @@ var commands = exports.commands = {
 	},
 	makechatroomhelp: ["/makechatroom [roomname] - Creates a new room named [roomname]. Requires: ~"],
 
+	personalroom: 'makegroupchat',
+	makegroupchat: function (target, room, user, connection, cmd) {
+		// First and foremost, check Resource Monitor's rate limit
+		if (ResourceMonitor.countGroupChat(connection.ip)) {
+			connection.popup("Due to high load, you are limited to creating 4 group chats every hour.");
+			return;
+		}
+
+		var targets = target.split(',');
+		// Check if the custom part of the room title is empty. It needs a title.
+		var roomName = targets[0] || Math.floor(Math.random() * 100000000);
+		// Chosen name have the same limitations as regular rooms.
+		if (roomName.includes(',') || roomName.includes('|') || roomName.includes('[') || roomName.includes('-')) {
+			return this.sendReply("Room titles can't contain any of: ,|[-");
+		}
+		// Create the name of the room using the chosen, approved name plus the groupchat- namespace.
+		roomName = "groupchat-" + roomName;
+		var id = toId(roomName);
+		// Check which room type to apply, default to private.
+		var roomType = toId(targets[1]) || 'private';
+		if (!(roomType in {'private':1, 'hidden':1, 'public':1})) roomType = 'private';
+
+		// Personal rooms can always be created, but the name must still be unique.
+		if (Rooms.search(id)) return this.sendReply("The room '" + roomName + "' already exists.");
+		if (Rooms.global.addChatRoom(roomName, true)) {
+			var targetRoom = Rooms.search(roomName);
+			// Deal with room type.
+			if (roomType !== 'public') targetRoom.isPrivate = (roomType === 'private' ? true : roomType);
+			// The room is modjoin by default. This shouldn't be changed.
+			targetRoom.modjoin = true;
+			targetRoom.modchat = '+';
+			// Make the personal room creator its owner.
+			targetRoom.auth = {};
+			targetRoom.auth[user.userid] = '#';
+			// Finally, make the user join the room instantly.
+			user.joinRoom(targetRoom.id);
+			return this.sendReply("The personal chat room '" + roomName + "' was created.");
+		}
+		return this.sendReply("An error occurred while trying to create the room '" + roomName + "'.");
+	},
+	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat, which is a personal room, named [roomname], optionally of the specified type. Private and invite-only by default."],
+
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
@@ -476,6 +518,7 @@ var commands = exports.commands = {
 		var alias = toId(target);
 		if (!alias.length) return this.sendReply("Only alphanumeric characters are valid in an alias.");
 		if (Rooms.get(alias) || Rooms.aliases[alias]) return this.sendReply("You cannot set an alias to an existing room or alias.");
+		if (room.isPersonal) return this.sendReply("Personal rooms can't have aliases.");
 
 		Rooms.aliases[alias] = room.id;
 		this.privateModCommand("(" + user.name + " added the room alias '" + target + "'.)");
