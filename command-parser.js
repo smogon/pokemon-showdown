@@ -220,6 +220,7 @@ var Context = exports.Context = (function () {
 	};
 	Context.prototype.logModCommand = function (text) {
 		var roomid = (this.room.battle ? 'battle' : this.room.id);
+		if (this.room.isPersonal) roomid = 'groupchat';
 		writeModlog(roomid, '(' + this.room.id + ') ' + text);
 	};
 	Context.prototype.globalModlog = function (action, user, text) {
