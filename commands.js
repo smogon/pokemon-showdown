@@ -323,10 +323,10 @@ var commands = exports.commands = {
 			return;
 		}
 
-		// Privacy settings, default to private.
-		var privacy = toId(targets[1]) || 'private';
+		// Privacy settings, default to hidden.
+		var privacy = toId(targets[1]) || 'hidden';
 		var privacySettings = {private: true, hidden: 'hidden', public: false};
-		if (!(privacy in privacySettings)) privacy = 'private';
+		if (!(privacy in privacySettings)) privacy = 'hidden';
 
 		var groupChatLink = '<code>&lt;&lt;' + roomid + '>></code>';
 		var groupChatURL = '';
@@ -355,7 +355,7 @@ var commands = exports.commands = {
 		}
 		return this.sendReply("An unknown error occurred while trying to create the room '" + title + "'.");
 	},
-	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat named [roomname]. Leave off privacy to default to private."],
+	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat named [roomname]. Leave off privacy to default to hidden."],
 
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
