@@ -295,35 +295,49 @@ var commands = exports.commands = {
 	makechatroomhelp: ["/makechatroom [roomname] - Creates a new room named [roomname]. Requires: ~"],
 
 	makegroupchat: function (target, room, user, connection, cmd) {
-		if (target.length > 512) this.errorReply("Message too long");
-		var targets = target.split(',');
+		if (!user.autoconfirmed) {
+			return this.errorReply("You don't have permission to make a group chat right now.");
+		}
+		if (target.length > 64) return this.errorReply("Title must be under 32 characters long.");
+		var targets = target.split(',', 2);
 
 		// Title defaults to a random 8-digit number.
-		var title = targets[0].trim() || ('' + Math.floor(Math.random() * 100000000));
+		var title = targets[0].trim();
 		if (title.length >= 32) {
 			return this.errorReply("Title must be under 32 characters long.");
+		} else if (!title) {
+			title = ('' + Math.floor(Math.random() * 100000000));
+		} else if (Config.chatfilter) {
+			var filterResult = Config.chatfilter.call(this, title, user, null, connection);
+			if (!filterResult) return;
+			if (title !== filterResult) {
+				return this.errorReply("Invalid title.");
+			}
 		}
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
 		// `-` has special meaning in roomids
 		if (title.includes(',') || title.includes('|') || title.includes('[') || title.includes('-')) {
-			return this.sendReply("Room titles can't contain any of: ,|[-");
+			return this.errorReply("Room titles can't contain any of: ,|[-");
 		}
 
 		// Even though they're different namespaces, to cut down on confusion, you
 		// can't share names with registered chatrooms.
 		var existingRoom = Rooms.search(toId(title));
-		if (existingRoom && !existingRoom.modjoin) return this.sendReply("The room '" + title + "' already exists.");
+		if (existingRoom && !existingRoom.modjoin) return this.errorReply("The room '" + title + "' already exists.");
 		// Room IDs for groupchats are groupchat-TITLEID
-		var roomid = "groupchat-" + toId(title);
+		var roomid = 'groupchat-' + toId(title);
+		if (!toId(title)) {
+			roomid = 'groupchat-' + Math.floor(Math.random() * 100000000);
+		}
 		// Titles must be unique.
-		if (Rooms.search(roomid)) return this.sendReply("A group chat named '" + title + "' already exists.");
+		if (Rooms.search(roomid)) return this.errorReply("A group chat named '" + title + "' already exists.");
 		// Tab title is prefixed with '[G]' to distinguish groupchats from
 		// registered chatrooms
 		title = title;
 
 		if (ResourceMonitor.countGroupChat(connection.ip)) {
-			connection.popup("Due to high load, you are limited to creating 4 group chats every hour.");
+			this.errorReply("Due to high load, you are limited to creating 4 group chats every hour.");
 			return;
 		}
 
@@ -357,7 +371,7 @@ var commands = exports.commands = {
 			user.joinRoom(targetRoom.id);
 			return;
 		}
-		return this.sendReply("An unknown error occurred while trying to create the room '" + title + "'.");
+		return this.errorReply("An unknown error occurred while trying to create the room '" + title + "'.");
 	},
 	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat named [roomname]. Leave off privacy to default to hidden."],
 
