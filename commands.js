@@ -876,6 +876,7 @@ var commands = exports.commands = {
 	warn: function (target, room, user) {
 		if (!target) return this.parse('/help warn');
 		if (room.isMuted(user) && !user.can('bypassall')) return this.sendReply("You cannot do this while unable to talk.");
+		if (room.isPersonal && !user.can('warn')) return this.sendReply("Warning is unavailable in group chats.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
