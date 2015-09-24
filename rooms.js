@@ -1685,11 +1685,6 @@ var ChatRoom = (function () {
 			var entry = '|L|' + user.getIdentity(this.id);
 			this.reportJoin(entry);
 		}
-
-		// If it's a personal room, it gets destroyed when there are 0 users on it.
-		if (this.isPersonal && this.userCount === 0) {
-			this.destroy();
-		}
 	};
 	ChatRoom.prototype.destroy = function () {
 		// deallocate ourself
