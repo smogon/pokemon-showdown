@@ -295,10 +295,14 @@ var commands = exports.commands = {
 	makechatroomhelp: ["/makechatroom [roomname] - Creates a new room named [roomname]. Requires: ~"],
 
 	makegroupchat: function (target, room, user, connection, cmd) {
+		if (target.length > 512) this.errorReply("Message too long");
 		var targets = target.split(',');
 
 		// Title defaults to a random 8-digit number.
 		var title = targets[0].trim() || ('' + Math.floor(Math.random() * 100000000));
+		if (title.length >= 32) {
+			return this.errorReply("Title must be under 32 characters long.");
+		}
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
 		// `-` has special meaning in roomids
