@@ -298,7 +298,7 @@ var commands = exports.commands = {
 		var targets = target.split(',');
 
 		// Title defaults to a random 8-digit number.
-		var title = targets[0] || ('' + Math.floor(Math.random() * 100000000));
+		var title = targets[0].trim() || ('' + Math.floor(Math.random() * 100000000));
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
 		// `-` has special meaning in roomids
