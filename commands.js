@@ -375,6 +375,19 @@ var commands = exports.commands = {
 	},
 	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat named [roomname]. Leave off privacy to default to hidden."],
 
+	deletegroupchat: function (target, room, user) {
+		var id = toId(target);
+		if (!id) return this.parse('/help deletegroupchat');
+		var targetRoom = Rooms.search(id);
+		target = targetRoom.title || targetRoom.id;
+		if (!targetRoom) return this.sendReply("The room '" + target + "' doesn't exist.");
+		if (!targetRoom.isPersonal) return this.sendReply("The room '" + target + "' is not a group chat.");
+		if (targetRoom.auth[user.userid] !== '#' && !this.can('makeroom')) return;
+		targetRoom.destroy();
+		return this.sendReply("The room '" + target + "' has been deleted.");
+	},
+	deletegroupchathelp: ["/deletegroupchat [roomname] - Deletes the group chat [roomname]. Requires: # ~"],
+	
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
