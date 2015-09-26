@@ -1462,6 +1462,10 @@ var commands = exports.commands = {
 			roomId = toId(targets[0]) || room.id;
 		}
 
+		if (room.id.startsWith('battle-') || room.id.startsWith('groupchat-')) {
+			return this.errorReply("Battles and groupchats do not have modlogs.");
+		}
+
 		// Let's check the number of lines to retrieve or if it's a word instead
 		if (!target.match('[^0-9]')) {
 			lines = parseInt(target || 20, 10);
