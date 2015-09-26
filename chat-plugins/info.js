@@ -2196,6 +2196,14 @@ var commands = exports.commands = {
 			"- !showimage <em>[url], [width], [height]</em>: shows an image to the room<br />" +
 			"<br />" +
 			"More detailed help can be found in the <a href=\"https://www.smogon.com/sim/roomauth_guide\">roomauth guide</a><br />" +
+			"<br />" +
+			"Tournament Help:<br />" +
+			"- /tour create <em>format</em>, elimination: Creates a new single elimination tournament in the current room.<br />" +
+			"- /tour create <em>format</em>, roundrobin: Creates a new round robin tournament in the current room.<br />" +
+			"- /tour end: Forcibly ends the tournament in the current room<br />" +
+			"- /tour start: Starts the tournament in the current room<br />" +
+			"<br />" +
+			"More detailed help can be found <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\">here</a><br />" +
 			"</div>"
 		);
 	},
