@@ -739,7 +739,7 @@ Tournament = (function () {
 			bracketData: this.getBracketData()
 		}));
 		this.isEnded = true;
-		delete exports.tournaments[toId(this.room.id)];
+		delete exports.tournaments[this.room.id];
 	};
 
 	return Tournament;
