@@ -377,11 +377,10 @@ var commands = exports.commands = {
 
 	deletegroupchat: function (target, room, user) {
 		var id = toId(target);
+		var sameRoom = false;
 		if (!id) {
 			id = toId(room);
 			var sameRoom = true;
-		} else {
-			var sameRoom = false;
 		}
 		var targetRoom = Rooms.search(id);
 		target = targetRoom.title || targetRoom.id;
