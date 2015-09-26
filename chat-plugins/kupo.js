@@ -14,7 +14,7 @@ exports.commands = {
 	forum: 'forums',
 	forums: function () {
 		if (!this.canBroadcast()) return;
-		this.sendReplyBox("TBT's forums are located <a href=\"http://http://s15.zetaboards.com/The_Battle_Tower/index/\">here</a>.");
+		this.sendReplyBox("TBT's forums are located <a href=\"http://s15.zetaboards.com/The_Battle_Tower/index/\">here</a>.");
 	},
 
 	league: function () {
