@@ -395,24 +395,39 @@ var commands = exports.commands = {
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
 	secretroom: 'privateroom',
+	publicroom: 'publicroom',
 	privateroom: function (target, room, user, connection, cmd) {
+		if (room.battle || room.isPersonal) {
+			if (!this.can('editroom', null, room)) return;
+		} else {
+			// registered chatrooms show up on the room list and so require
+			// higher permissions to modify privacy settings
+			if (!this.can('makeroom')) return;
+		}
 		var setting;
 		switch (cmd) {
 		case 'privateroom':
+			return this.parse('/help privateroom');
+			break;
+		case 'publicroom':
+			setting = false;
+			break;
 		case 'secretroom':
-			if (!this.can('makeroom')) return;
 			setting = true;
 			break;
 		default:
-			if (!this.can('privateroom', null, room)) return;
 			if (room.isPrivate === true && target !== 'force') {
-				return this.sendReply("This room is a secret room. Use /privateroom to toggle, or /hiddenroom force to force hidden.");
+				return this.sendReply("This room is a secret room. Use `/publicroom` to make it public, or `/hiddenroom force` to force hidden.");
 			}
 			setting = 'hidden';
 			break;
 		}
 
-		if (target === 'off') {
+		if ((setting === true || room.isPrivate === true) && !room.isPersonal) {
+			if (!this.can('makeroom')) return;
+		}
+
+		if (target === 'off' || !setting) {
 			delete room.isPrivate;
 			this.addModCommand("" + user.name + " made this room public.");
 			if (room.chatRoomData) {
@@ -431,11 +446,16 @@ var commands = exports.commands = {
 			}
 		}
 	},
-	privateroomhelp: ["/privateroom [on/off] - Makes or unmakes a room private. Requires: ~",
-		"/hiddenroom [on/off] - Makes or unmakes a room hidden. Hidden rooms will maintain global ranks of users. Requires: \u2605 ~"],
+	privateroomhelp: ["/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: & ~",
+		"/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2605 & ~",
+		"/publicroom - Makes a room public. Requires: \u2605 & ~"],
 
 	modjoin: function (target, room, user) {
-		if (!this.can('privateroom', null, room)) return;
+		if (room.battle || room.isPersonal) {
+			if (!this.can('editroom', null, room)) return;
+		} else {
+			if (!this.can('makeroom')) return;
+		}
 		if (target === 'off' || target === 'false') {
 			delete room.modjoin;
 			this.addModCommand("" + user.name + " turned off modjoin.");
@@ -444,7 +464,7 @@ var commands = exports.commands = {
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			if ((target === 'on' || target === 'true' || !target) || !user.can('privateroom')) {
+			if ((target === 'on' || target === 'true' || !target) || !user.can('editroom')) {
 				room.modjoin = true;
 				this.addModCommand("" + user.name + " turned on modjoin.");
 			} else if (target in Config.groups) {
