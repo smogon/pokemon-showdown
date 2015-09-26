@@ -377,14 +377,17 @@ var commands = exports.commands = {
 
 	deletegroupchat: function (target, room, user) {
 		var id = toId(target);
-		if (!id) id = toId(room);
+		if (!id) {
+			id = toId(room);
+			var sameRoom = true;
+		}
 		var targetRoom = Rooms.search(id);
 		target = targetRoom.title || targetRoom.id;
 		if (!targetRoom) return this.sendReply("The room '" + target + "' doesn't exist.");
 		if (!targetRoom.isPersonal) return this.sendReply("The room '" + target + "' is not a group chat.");
 		if (targetRoom.auth[user.userid] !== '#' && !this.can('makeroom')) return;
 		targetRoom.destroy();
-		return this.sendReply("The room '" + target + "' has been deleted.");
+		if (!sameRoom) return this.sendReply("The room '" + target + "' has been deleted.");
 	},
 	deletegroupchathelp: ["/deletegroupchat [roomname] - Deletes the group chat [roomname]. Requires: # ~"],
 
