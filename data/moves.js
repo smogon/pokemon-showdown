@@ -5233,7 +5233,7 @@ exports.BattleMovedex = {
 			return 80;
 		},
 		category: "Special",
-		desc: "If one of the user's allies chose to use Fire Pledge or Water Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Fire Pledge, the ally uses Fire Pledge with 150 Base Power and a sea of fire appears on the target's side for 4 turns, which causes damage to non-Fire types equal to 1/8 of their maximum HP, rounded down, at the end of each turn during effect. If combined with Water Pledge, the ally uses Grass Pledge with 150 Base Power and a swamp appears on the target's side for 4 turns, which halves the Speed of each Pokemon on that side. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Grass Gem.",
+		desc: "If one of the user's allies chose to use Fire Pledge or Water Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Fire Pledge, the ally uses Fire Pledge with 150 Base Power and a sea of fire appears on the target's side for 4 turns, which causes damage to non-Fire types equal to 1/8 of their maximum HP, rounded down, at the end of each turn during effect. If combined with Water Pledge, the ally uses Grass Pledge with 150 Base Power and a swamp appears on the target's side for 4 turns, which quarters the Speed of each Pokemon on that side. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Grass Gem.",
 		shortDesc: "Use with Fire or Water Pledge for added effect.",
 		id: "grasspledge",
 		name: "Grass Pledge",
@@ -15026,7 +15026,7 @@ exports.BattleMovedex = {
 			return 80;
 		},
 		category: "Special",
-		desc: "If one of the user's allies chose to use Fire Pledge or Grass Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Fire Pledge, the ally uses Water Pledge with 150 Base Power and a rainbow appears on the user's side for 4 turns, which doubles secondary effect chances but does not stack with the Ability Serene Grace. If combined with Grass Pledge, the ally uses Grass Pledge with 150 Base Power and a swamp appears on the target's side for 4 turns, which halves the Speed of each Pokemon on that side. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Water Gem, and cannot be redirected by the Ability Storm Drain.",
+		desc: "If one of the user's allies chose to use Fire Pledge or Grass Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Fire Pledge, the ally uses Water Pledge with 150 Base Power and a rainbow appears on the user's side for 4 turns, which doubles secondary effect chances but does not stack with the Ability Serene Grace. If combined with Grass Pledge, the ally uses Grass Pledge with 150 Base Power and a swamp appears on the target's side for 4 turns, which quarters the Speed of each Pokemon on that side. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Water Gem, and cannot be redirected by the Ability Storm Drain.",
 		shortDesc: "Use with Grass or Fire Pledge for added effect.",
 		id: "waterpledge",
 		name: "Water Pledge",
