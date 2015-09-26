@@ -387,7 +387,7 @@ var commands = exports.commands = {
 		return this.sendReply("The room '" + target + "' has been deleted.");
 	},
 	deletegroupchathelp: ["/deletegroupchat [roomname] - Deletes the group chat [roomname]. Requires: # ~"],
-	
+
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
