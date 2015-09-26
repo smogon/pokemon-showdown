@@ -377,7 +377,7 @@ var commands = exports.commands = {
 
 	deletegroupchat: function (target, room, user) {
 		var id = toId(target);
-		if (!id) return this.parse('/help deletegroupchat');
+		if (!id) id = toId(room);
 		var targetRoom = Rooms.search(id);
 		target = targetRoom.title || targetRoom.id;
 		if (!targetRoom) return this.sendReply("The room '" + target + "' doesn't exist.");
