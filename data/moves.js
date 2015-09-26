@@ -5278,7 +5278,7 @@ exports.BattleMovedex = {
 				this.add('-sideend', targetSide, 'Grass Pledge');
 			},
 			onModifySpe: function (spe, pokemon) {
-				return this.chainModify(0.25);
+				return this.chainModify(0.5);
 			}
 		},
 		secondary: false,
