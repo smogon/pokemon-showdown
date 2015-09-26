@@ -395,7 +395,7 @@ var commands = exports.commands = {
 	hideroom: 'privateroom',
 	hiddenroom: 'privateroom',
 	secretroom: 'privateroom',
-	publicroom: 'publicroom',
+	publicroom: 'privateroom',
 	privateroom: function (target, room, user, connection, cmd) {
 		if (room.battle || room.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
@@ -408,7 +408,6 @@ var commands = exports.commands = {
 		switch (cmd) {
 		case 'privateroom':
 			return this.parse('/help privateroom');
-			break;
 		case 'publicroom':
 			setting = false;
 			break;
