@@ -9,7 +9,7 @@
 exports.commands = {
 	quoteoftheday: 'qotd',
 	qotd: function (target, room, user) {
-		if (room.id !== 'thehappyplace') return this.sendReply("This command can only be used in The Happy Place.");
+		if (room.id !== 'thehappyplace') return this.errorReply("This command can only be used in The Happy Place.");
 		if (!room.chatRoomData) return;
 		if (!target) {
 			if (!this.canBroadcast()) return;
