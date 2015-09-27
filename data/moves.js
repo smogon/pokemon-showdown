@@ -10368,7 +10368,9 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback: function (pokemon, target) {
-			return 60 + 20 * target.positiveBoosts();
+			var power = 60 + 20 * target.positiveBoosts();
+			if (power > 200) power = 200;
+			return power;
 		},
 		category: "Physical",
 		desc: "Power is equal to 60+(X*20), where X is the target's total stat stage changes that are greater than 0, but not more than 200 power.",
