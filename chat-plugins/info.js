@@ -23,7 +23,7 @@ var commands = exports.commands = {
 		if (room.id === 'staff' && !this.canBroadcast()) return;
 		var targetUser = this.targetUserOrSelf(target, user.group === ' ');
 		if (!targetUser) {
-			return this.sendReply("User " + this.targetUsername + " not found.");
+			return this.errorReply("User " + this.targetUsername + " not found.");
 		}
 		var showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
 		if (showAll && !user.can('lock') && targetUser !== user) {
@@ -117,7 +117,7 @@ var commands = exports.commands = {
 	host: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
 		if (!this.can('rangeban')) return;
-		if (!/[0-9.]+/.test(target)) return this.sendReply('You must pass a valid IPv4 IP to /host.');
+		if (!/[0-9.]+/.test(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
 		var self = this;
 		Dnsbl.reverse(target, function (err, hosts) {
 			self.sendReply('IP ' + target + ': ' + (hosts ? hosts[0] : 'NULL'));
@@ -165,7 +165,7 @@ var commands = exports.commands = {
 				}
 			}
 		}
-		if (!results.length) return this.sendReply("No results found.");
+		if (!results.length) return this.errorReply("No results found.");
 		return this.sendReply(results.join('; '));
 	},
 	ipsearchhelp: ["/ipsearch [ip|range|host] - Find all users with specified IP, IP range, or host. Requires: & ~"],
@@ -179,11 +179,11 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help invite');
 		target = this.splitTarget(target);
 		if (!this.targetUser) {
-			return this.sendReply("User " + this.targetUsername + " not found.");
+			return this.errorReply("User " + this.targetUsername + " not found.");
 		}
 		var targetRoom = (target ? Rooms.search(target) : room);
 		if (!targetRoom) {
-			return this.sendReply("Room " + target + " not found.");
+			return this.errorReply("Room " + target + " not found.");
 		}
 		return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
 	},
@@ -234,7 +234,7 @@ var commands = exports.commands = {
 				}
 			}
 		} else {
-			return this.sendReply("No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
+			return this.errorReply("No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. (Check your spelling?)");
 		}
 
 		if (showDetails) {
@@ -724,9 +724,9 @@ var commands = exports.commands = {
 			if (!targets[i]) continue;
 			var num = Number(targets[i]);
 			if (Number.isInteger(num)) {
-				if (qty) return this.sendReply("Only specify the number of Pok\u00e9mon once.");
+				if (qty) return this.errorReply("Only specify the number of Pok\u00e9mon once.");
 				qty = num;
-				if (qty < 1 || 15 < qty) return this.sendReply("Number of random Pok\u00e9mon must be between 1 and 15.");
+				if (qty < 1 || 15 < qty) return this.errorReply("Number of random Pok\u00e9mon must be between 1 and 15.");
 				targetsBuffer.push("random" + qty);
 			} else {
 				targetsBuffer.push(targets[i]);
@@ -1348,17 +1348,17 @@ var commands = exports.commands = {
 		if (cmd === 'g6learn') lsetData.format = {noPokebank: true};
 
 		if (!template.exists) {
-			return this.sendReply("Pok\u00e9mon '" + template.id + "' not found.");
+			return this.errorReply("Pok\u00e9mon '" + template.id + "' not found.");
 		}
 
 		if (targets.length < 2) {
-			return this.sendReply("You must specify at least one move.");
+			return this.errorReply("You must specify at least one move.");
 		}
 
 		for (var i = 1, len = targets.length; i < len; ++i) {
 			move = Tools.getMove(targets[i]);
 			if (!move.exists) {
-				return this.sendReply("Move '" + move.id + "' not found.");
+				return this.errorReply("Move '" + move.id + "' not found.");
 			}
 			problem = TeamValidator.checkLearnsetSync(format, move, template.species, lsetData);
 			if (problem) break;
@@ -1475,7 +1475,7 @@ var commands = exports.commands = {
 	matchup: 'effectiveness',
 	effectiveness: function (target, room, user) {
 		var targets = target.split(/[,/]/).slice(0, 2);
-		if (targets.length !== 2) return this.sendReply("Attacker and defender must be separated with a comma.");
+		if (targets.length !== 2) return this.errorReply("Attacker and defender must be separated with a comma.");
 
 		var searchMethods = {'getType':1, 'getMove':1, 'getTemplate':1};
 		var sourceMethods = {'getType':1, 'getMove':1};
@@ -1589,8 +1589,8 @@ var commands = exports.commands = {
 
 			return this.sendReply("No type or move '" + targets[i] + "' found.");
 		}
-		if (sources.length === 0) return this.sendReply("No moves using a type table for determining damage were specified.");
-		if (sources.length > 4) return this.sendReply("Specify a maximum of 4 moves or types.");
+		if (sources.length === 0) return this.errorReply("No moves using a type table for determining damage were specified.");
+		if (sources.length > 4) return this.errorReply("Specify a maximum of 4 moves or types.");
 
 		// converts to fractional effectiveness, 0 for immune
 		for (var type in bestCoverage) {
@@ -2231,7 +2231,7 @@ var commands = exports.commands = {
 		}
 		if (!this.can('roommod', null, room)) return;
 		if (target.length > 100) {
-			return this.sendReply("Error: Room rules link is too long (must be under 100 characters). You can use a URL shortener to shorten the link.");
+			return this.errorReply("Error: Room rules link is too long (must be under 100 characters). You can use a URL shortener to shorten the link.");
 		}
 
 		room.rulesLink = target.trim();
@@ -2541,9 +2541,9 @@ var commands = exports.commands = {
 			default:
 				offset = Number(target.slice(modifierData.index));
 				if (isNaN(offset)) return this.parse('/help dice');
-				if (!Number.isSafeInteger(offset)) return this.sendReply("The specified offset must be an integer up to " + Number.MAX_SAFE_INTEGER + ".");
+				if (!Number.isSafeInteger(offset)) return this.errorReply("The specified offset must be an integer up to " + Number.MAX_SAFE_INTEGER + ".");
 			}
-			if (removeOutlier && diceQuantity <= 1) return this.sendReply("More than one dice should be rolled before removing outliers.");
+			if (removeOutlier && diceQuantity <= 1) return this.errorReply("More than one dice should be rolled before removing outliers.");
 			target = target.slice(0, modifierData.index);
 		}
 
@@ -2551,14 +2551,14 @@ var commands = exports.commands = {
 		if (target.length) {
 			diceFaces = Number(target);
 			if (!Number.isSafeInteger(diceFaces) || diceFaces <= 0) {
-				return this.sendReply("Rolled dice must have a natural amount of faces up to " + Number.MAX_SAFE_INTEGER + ".");
+				return this.errorReply("Rolled dice must have a natural amount of faces up to " + Number.MAX_SAFE_INTEGER + ".");
 			}
 		}
 
 		if (diceQuantity > 1) {
 			// Make sure that we can deal with high rolls
 			if (!Number.isSafeInteger(offset < 0 ? diceQuantity * diceFaces : diceQuantity * diceFaces + offset)) {
-				return this.sendReply("The maximum sum of rolled dice must be lower or equal than " + Number.MAX_SAFE_INTEGER + ".");
+				return this.errorReply("The maximum sum of rolled dice must be lower or equal than " + Number.MAX_SAFE_INTEGER + ".");
 			}
 		}
 
