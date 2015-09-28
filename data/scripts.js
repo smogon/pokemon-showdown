@@ -1037,11 +1037,11 @@ exports.BattleScripts = {
 			if (ContraryMove[moveid]) counter['contrary']++;
 			if (PhysicalSetup[moveid]) {
 				counter['physicalsetup']++;
-				if (!counter.setupType) counter.setupType = 'Physical';
+				if (!counter.setupType && (counter.Special < 2 || counter.Physical)) counter.setupType = 'Physical';
 			}
 			if (SpecialSetup[moveid]) {
 				counter['specialsetup']++;
-				if (!counter.setupType) counter.setupType = 'Special';
+				if (!counter.setupType && (counter.Physical < 2 || counter.Special)) counter.setupType = 'Special';
 			}
 			if (MixedSetup[moveid]) {
 				counter['mixedsetup']++;
@@ -1634,6 +1634,8 @@ exports.BattleScripts = {
 				rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
 			} else if (ability === 'Snow Cloak') {
 				rejectAbility = !teamDetails['hail'];
+			} else if (ability === 'Solar Power') {
+				rejectAbility = !counter['Special'];
 			} else if (ability === 'Strong Jaw') {
 				rejectAbility = !counter['bite'];
 			} else if (ability === 'Sturdy') {
@@ -1687,6 +1689,8 @@ exports.BattleScripts = {
 			} else if (template.id === 'mawilemega') {
 				// Mega Mawile only needs Intimidate for a starting ability
 				ability = 'Intimidate';
+			} else if (template.id === 'rampardos' && !hasMove['headsmash']) {
+				ability = 'Sheer Force';
 			} else if (template.id === 'rhyperior') {
 				ability = 'Solid Rock';
 			} else if (template.id === 'sigilyph') {
@@ -2813,6 +2817,8 @@ exports.BattleScripts = {
 				rejectAbility = !counter['sheerforce'];
 			} else if (ability === 'Simple') {
 				rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
+			} else if (ability === 'Solar Power') {
+				rejectAbility = !counter['Special'];
 			} else if (ability === 'Strong Jaw') {
 				rejectAbility = !counter['bite'];
 			} else if (ability === 'Sturdy') {
@@ -2859,6 +2865,8 @@ exports.BattleScripts = {
 				ability = 'Adaptability';
 			} else if (template.id === 'lilligant' && hasMove['petaldance']) {
 				ability = 'Own Tempo';
+			} else if (template.id === 'rampardos' && !hasMove['headsmash']) {
+				ability = 'Sheer Force';
 			} else if (template.id === 'rhyperior') {
 				ability = 'Solid Rock';
 			} else if (template.id === 'unfezant') {
