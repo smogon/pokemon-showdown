@@ -1705,6 +1705,9 @@ var ChatRoom = (function () {
 			}
 		}
 
+		// remove active mute timer if any
+		if (this.muteTimer) clearTimeout(this.muteTimer);
+
 		// get rid of some possibly-circular references
 		delete rooms[this.id];
 	};
