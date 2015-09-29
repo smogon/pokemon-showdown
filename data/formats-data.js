@@ -4397,8 +4397,8 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	cinccino: {
-		randomBattleMoves: ["tailslap","wakeupslap","uturn","knockoff","bulletseed","rockblast"],
-		randomDoubleBattleMoves: ["tailslap","wakeupslap","uturn","knockoff","bulletseed","rockblast","protect"],
+		randomBattleMoves: ["tailslap","aquatail","uturn","knockoff","bulletseed","rockblast"],
+		randomDoubleBattleMoves: ["tailslap","aquatail","uturn","knockoff","bulletseed","rockblast","protect"],
 		tier: "RU"
 	},
 	gothita: {

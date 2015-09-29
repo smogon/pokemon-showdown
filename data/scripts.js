@@ -1136,7 +1136,7 @@ exports.BattleScripts = {
 		};
 		var counterAbilities = {
 			'Adaptability':1, 'Blaze':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1,
-			'Overgrow':1, 'Skill Link':1, 'Swarm':1, 'Technician':1, 'Torrent':1
+			'Overgrow':1, 'Sheer Force':1, 'Skill Link':1, 'Swarm':1, 'Torrent':1
 		};
 		var ateAbilities = {
 			'Aerilate':1, 'Pixilate':1, 'Refrigerate':1
@@ -1628,8 +1628,6 @@ exports.BattleScripts = {
 				rejectAbility = !counter['recoil'];
 			} else if (ability === 'Serene Grace') {
 				rejectAbility = !counter['serenegrace'] || template.id === 'chansey' || template.id === 'blissey';
-			} else if (ability === 'Sheer Force') {
-				rejectAbility = !counter['sheerforce'];
 			} else if (ability === 'Simple') {
 				rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
 			} else if (ability === 'Snow Cloak') {
@@ -1642,6 +1640,8 @@ exports.BattleScripts = {
 				rejectAbility = !!counter['recoil'] && !counter['recovery'];
 			} else if (ability === 'Swift Swim') {
 				rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
+			} else if (ability === 'Technician') {
+				rejectAbility = !counter['technician'] || (abilities.indexOf('Skill Link') >= 0 && counter['skilllink'] >= counter['technician']);
 			} else if (ability === 'Unburden') {
 				rejectAbility = template.baseStats.spe > 120 || (template.id === 'slurpuff' && !counter.setupType);
 			}
@@ -2355,8 +2355,8 @@ exports.BattleScripts = {
 			extremespeed:1, suckerpunch:1, superpower:1
 		};
 		var counterAbilities = {
-			'Blaze':1, 'Overgrow':1, 'Swarm':1, 'Torrent':1, 'Contrary':1,
-			'Technician':1, 'Skill Link':1, 'Iron Fist':1, 'Adaptability':1, 'Hustle':1
+			'Adaptability':1, 'Blaze':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Overgrow':1,
+			'Sheer Force':1, 'Skill Link':1, 'Swarm':1, 'Torrent':1
 		};
 		// -ate Abilities
 		var ateAbilities = {
@@ -2813,8 +2813,6 @@ exports.BattleScripts = {
 				rejectAbility = !counter['recoil'];
 			} else if (ability === 'Serene Grace') {
 				rejectAbility = !counter['serenegrace'] || template.id === 'chansey' || template.id === 'blissey';
-			} else if (ability === 'Sheer Force') {
-				rejectAbility = !counter['sheerforce'];
 			} else if (ability === 'Simple') {
 				rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
 			} else if (ability === 'Solar Power') {
@@ -2825,6 +2823,8 @@ exports.BattleScripts = {
 				rejectAbility = !!counter['recoil'] && !counter['recovery'];
 			} else if (ability === 'Swift Swim') {
 				rejectAbility = !hasMove['raindance'];
+			} else if (ability === 'Technician') {
+				rejectAbility = !counter['technician'] || (abilities.indexOf('Skill Link') >= 0 && counter['skilllink'] >= counter['technician']);
 			} else if (ability === 'Unburden') {
 				rejectAbility = template.baseStats.spe > 120 || (template.id === 'slurpuff' && !counter.setupType);
 			}
