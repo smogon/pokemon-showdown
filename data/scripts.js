@@ -975,7 +975,7 @@ exports.BattleScripts = {
 		};
 		// Moves that shouldn't be the only STAB moves:
 		var NoStab = {
-			aquajet:1, bounce:1, eruption:1, fakeout:1, flamecharge:1, quickattack:1, shadowsneak:1, skyattack:1, waterspout:1
+			aquajet:1, bounce:1, eruption:1, fakeout:1, flamecharge:1, quickattack:1, skyattack:1, waterspout:1
 		};
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
@@ -1235,7 +1235,7 @@ exports.BattleScripts = {
 				case 'fakeout':
 					if (counter.setupType || hasMove['substitute'] || hasMove['switcheroo'] || hasMove['trick']) rejected = true;
 					break;
-				case 'foulplay': case 'nightshade': case 'seismictoss': case 'superfang':
+				case 'foulplay': case 'superfang':
 					if (counter.setupType) rejected = true;
 					break;
 				case 'haze': case 'healingwish': case 'pursuit': case 'spikes': case 'toxicspikes': case 'waterspout':
@@ -1246,6 +1246,9 @@ exports.BattleScripts = {
 					break;
 				case 'memento':
 					if (counter.setupType || !!counter['recovery'] || hasMove['substitute']) rejected = true;
+					break;
+				case 'nightshade': case 'seismictoss':
+					if (counter.stab || counter.setupType) rejected = true;
 					break;
 				case 'protect':
 					if (counter.setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
@@ -1341,11 +1344,12 @@ exports.BattleScripts = {
 				case 'acrobatics': case 'airslash': case 'oblivionwing':
 					if (hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
 					break;
-				case 'phantomforce': case 'shadowforce': case 'shadowsneak':
-					if (hasMove['shadowclaw'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
-					break;
 				case 'shadowclaw':
-					if (hasMove['shadowball']) rejected = true;
+					if (hasMove['phantomforce'] || hasMove['shadowball'] || hasMove['shadowsneak']) rejected = true;
+					break;
+				case 'shadowsneak':
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasType['Ghost'] && counter.stab < 2 && Object.keys(hasType).length > 1) rejected = true;
 					break;
 				case 'solarbeam':
 					if ((!hasAbility['Drought'] && !hasMove['sunnyday']) || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
@@ -1423,14 +1427,12 @@ exports.BattleScripts = {
 					if ((hasMove['rest'] && hasMove['sleeptalk']) || counter.Physical + counter.Special < 2) rejected = true;
 					break;
 				case 'stunspore': case 'thunderwave':
-					if (counter.setupType || !!counter['speedsetup']) rejected = true;
-					if (hasMove['discharge'] || hasMove['gyroball'] || hasMove['sleeppowder'] || hasMove['spore'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (hasMove['discharge'] || hasMove['gyroball'] || hasMove['spore'] || hasMove['toxic'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'toxic':
-					if (hasMove['flamecharge']) rejected = true;
-					if (hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['stunspore'] || hasMove['thunderwave'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['flamecharge'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'willowisp':
 					if (hasMove['lavaplume'] || hasMove['sacredfire'] || hasMove['scald'] || hasMove['spore']) rejected = true;

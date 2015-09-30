@@ -3130,7 +3130,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	registeel: {
-		randomBattleMoves: ["stealthrock","ironhead","curse","rest","thunderwave","toxic","seismictoss"],
+		randomBattleMoves: ["stealthrock","thunderwave","toxic","protect","seismictoss","curse","ironhead","rest","sleeptalk"],
 		randomDoubleBattleMoves: ["stealthrock","ironhead","curse","rest","thunderwave","protect","seismictoss"],
 		eventPokemon: [
 			{"generation":3,"level":40,"moves":["curse","superpower","ancientpower","hyperbeam"]}
