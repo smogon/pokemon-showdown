@@ -1731,7 +1731,7 @@ var commands = exports.commands = {
 		var modifier = 0;
 		var positiveMod = true;
 
-		for (var i in targets) {
+		for (var i = 0; i < targets.length; i++) {
 			var lowercase = targets[i].toLowerCase();
 
 			if (!lvlSet) {
@@ -1759,28 +1759,27 @@ var commands = exports.commands = {
 				case 'hitpoints':
 					calcHP = true;
 					useStat = 'hp';
-					break;
+					continue;
 				case 'atk':
 				case 'attack':
 					useStat = 'atk';
-					break;
+					continue;
 				case 'def':
 				case 'defense':
 					useStat = 'def';
-					break;
+					continue;
 				case 'spa':
 					useStat = 'spa';
-					break;
+					continue;
 				case 'spd':
 				case 'sdef':
 					useStat = 'spd';
-					break;
+					continue;
 				case 'spe':
 				case 'speed':
 					useStat = 'spe';
-					break;
+					continue;
 				}
-				continue;
 			}
 
 			if (!natureSet) {
@@ -1876,8 +1875,6 @@ var commands = exports.commands = {
 				statValue = tempStat;
 				baseSet = true;
 			}
-
-			var pokemon = Tools.getTemplate(targets[i]);
 		}
 
 		if (pokemon) {
