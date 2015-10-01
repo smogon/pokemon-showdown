@@ -436,11 +436,6 @@ Validator = (function () {
 				if (banlistTable['illegal']) {
 					var problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
-						// Sketchmons hack
-						if (banlistTable['allowonesketch'] && !set.sketchmonsMove && !move.noSketch) {
-							set.sketchmonsMove = move.id;
-							continue;
-						}
 						var problemString = name + " can't learn " + move.name;
 						if (problem.type === 'incompatible') {
 							if (isHidden) {
