@@ -2612,6 +2612,10 @@ var commands = exports.commands = {
 		if (!target) return this.parse('/help showimage');
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canBroadcast()) return;
+		if (this.room.isPersonal && !this.user.can('announce')) {
+			this.errorReply("Images are not allowed in personal rooms.");
+			return false;
+		}
 
 		var targets = target.split(',');
 		if (targets.length !== 3) {
