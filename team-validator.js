@@ -156,6 +156,7 @@ if (!process.send) {
 		} catch (err) {
 			var stack = err.stack + '\n\n' +
 					'Additional information:\n' +
+					'format = ' + format + '\n' +
 					'team = ' + message.substr(pipeIndex2 + 1) + '\n';
 			var fakeErr = {stack: stack};
 
