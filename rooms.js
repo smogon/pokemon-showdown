@@ -658,7 +658,7 @@ var GlobalRoom = (function () {
 			title: title
 		};
 		var room = Rooms.createChatRoom(id, title, chatRoomData);
-		// Only add room to chatRoomData if it is not a personal room, those aren't saved.
+		this.chatRoomData.push(chatRoomData);
 		this.chatRooms.push(room);
 		this.writeChatRoomData();
 		return true;
