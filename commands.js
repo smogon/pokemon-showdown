@@ -296,8 +296,9 @@ var commands = exports.commands = {
 
 	makegroupchat: function (target, room, user, connection, cmd) {
 		if (!user.autoconfirmed) {
-			return this.errorReply("You don't have permission to make a group chat right now.");
+			return this.errorReply("You must be autoconfirmed to make a groupchat.");
 		}
+		if (!this.can('makegroupchat')) return false;
 		if (target.length > 64) return this.errorReply("Title must be under 32 characters long.");
 		var targets = target.split(',', 2);
 
