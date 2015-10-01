@@ -841,7 +841,7 @@ var commands = exports.commands = {
 		this.addModCommand("" + targetUser.name + " was banned from room " + room.id + " by " + user.name + "." + (target ? " (" + target + ")" : ""));
 		var acAccount = (targetUser.autoconfirmed !== targetUser.userid && targetUser.autoconfirmed);
 		var alts = room.roomBan(targetUser);
-		if ((room.isPersonal || room.isPrivate === true) && user.can('alts', targetUser)) {
+		if (!(room.isPersonal || room.isPrivate === true) || user.can('alts', targetUser)) {
 			if (alts.length) {
 				this.privateModCommand("(" + targetUser.name + "'s " + (acAccount ? " ac account: " + acAccount + ", " : "") + "roombanned alts: " + alts.join(", ") + ")");
 				for (var i = 0; i < alts.length; ++i) {
