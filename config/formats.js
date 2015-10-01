@@ -433,11 +433,8 @@ exports.Formats = [
 
 		ruleset: ['OU'],
 		banlist: [],
-		onAnyAccuracy: function (accuracy, target, source, move) {
-			if (move && (source === this.effectData.target || target === this.effectData.target)) {
-				return true;
-			}
-			return accuracy;
+		onAccuracy: function (accuracy, target, source, move) {
+			return true;
 		}
 	},
 	/*{
