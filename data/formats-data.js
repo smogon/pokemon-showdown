@@ -1926,7 +1926,7 @@ exports.BattleFormatsData = {
 	},
 	piloswine: {
 		randomBattleMoves: ["earthquake","iciclecrash","iceshard","superpower","endeavor","stealthrock"],
-		tier: "PU"
+		tier: "NU"
 	},
 	mamoswine: {
 		randomBattleMoves: ["iceshard","earthquake","endeavor","iciclecrash","stealthrock","superpower","knockoff"],
@@ -4416,7 +4416,7 @@ exports.BattleFormatsData = {
 	gothitelle: {
 		randomBattleMoves: ["psychic","thunderbolt","shadowball","hiddenpowerfire","hiddenpowerfighting","substitute","calmmind","trick","psyshock"],
 		randomDoubleBattleMoves: ["psychic","thunderbolt","shadowball","hiddenpowerfighting","reflect","lightscreen","psyshock","energyball","trickroom","taunt","healpulse","protect"],
-		tier: "RU"
+		tier: "NU"
 	},
 	solosis: {
 		randomBattleMoves: ["calmmind","recover","psychic","hiddenpowerfighting","shadowball","trickroom","psyshock"],
