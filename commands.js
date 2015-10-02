@@ -1502,10 +1502,6 @@ var commands = exports.commands = {
 			roomId = toId(targets[0]) || room.id;
 		}
 
-		if (room.id.startsWith('battle-') || room.id.startsWith('groupchat-')) {
-			return this.errorReply("Battles and groupchats do not have modlogs.");
-		}
-
 		// Let's check the number of lines to retrieve or if it's a word instead
 		if (!target.match('[^0-9]')) {
 			lines = parseInt(target || 20, 10);
@@ -1525,6 +1521,8 @@ var commands = exports.commands = {
 			for (var i = 0; i < fileList.length; ++i) {
 				filename += path.normalize(__dirname + '/' + logPath + fileList[i]) + ' ';
 			}
+		} else if (roomId.startsWith('battle-') || roomId.startsWith('groupchat-')) {
+			return this.errorReply("Battles and groupchats do not have modlogs.");
 		} else {
 			if (!this.can('modlog', null, Rooms.get(roomId))) return;
 			roomNames = "the room " + roomId;
