@@ -568,6 +568,40 @@ var commands = exports.commands = {
 		}
 	},
 
+	stafftopic: 'staffintro',
+	staffintro: function (target, room, user) {
+		if (!target) {
+			if (!this.can('mute', null, room)) return false;
+			if (!room.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
+			this.sendReply('|raw|<div class="infobox">' + room.staffMessage + '</div>');
+			if (user.can('ban', null, room)) {
+				this.sendReply('Source:');
+				this.sendReplyBox('<code>/staffintro ' + Tools.escapeHTML(room.staffMessage) + '</code>');
+			}
+			return;
+		}
+		if (!this.can('ban', null, room)) return false;
+		target = target.trim();
+		if (!this.canHTML(target)) return;
+		if (!/</.test(target)) {
+			// not HTML, do some simple URL linking
+			var re = /(https?:\/\/(([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?))/g;
+			target = target.replace(re, '<a href="$1">$1</a>');
+		}
+		if (target.substr(0, 12) === '/staffintro ') target = target.substr(12);
+
+		room.staffMessage = target;
+		this.sendReply("(The staff introduction has been changed to:)");
+		this.sendReply('|raw|<div class="infobox">' + target + '</div>');
+
+		this.privateModCommand("(" + user.name + " changed the staffintro.)");
+
+		if (room.chatRoomData) {
+			room.chatRoomData.staffMessage = room.staffMessage;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
 	roomalias: function (target, room, user) {
 		if (!target) {
 			if (!this.canBroadcast()) return;
