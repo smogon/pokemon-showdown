@@ -1908,8 +1908,11 @@ exports.BattleScripts = {
 			Aerodactyl: 79, Aggron: 79, Blastoise: 79, Gardevoir: 79, Manectric: 79, Sceptile: 79, Venusaur: 79,
 			Diancie: 77, Metagross: 77, Sableye: 77,
 
-			// Holistic judgment
-			Ninetales: 79, Politoed: 79, Unown: 85, Wobbuffet: 79
+			// Banned Ability
+			Gothitelle: 77, Ninetales: 77, Politoed: 77, Wobbuffet: 77,
+
+			// Holistic judgement
+			Unown: 85
 		};
 		var tier = template.tier;
 		if (tier.charAt(0) === '(') {
