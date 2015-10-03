@@ -1584,28 +1584,21 @@ var ChatRoom = (function () {
 	ChatRoom.prototype.tryExpire = function () {
 		this.destroy();
 	};
-	ChatRoom.prototype.getIntroMessage = function () {
-		if (this.modchat && this.introMessage) {
-			return '\n|raw|<div class="infobox"><div' + (!this.isOfficial ? ' class="infobox-limited"' : '') + '>' + this.introMessage + '</div>' +
-				'<br />' +
-				'<div class="broadcast-red">' +
-				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
-				'</div></div>';
-		}
-
+	ChatRoom.prototype.getIntroMessage = function (user) {
+		var message = '';
+		if (this.introMessage) message += '\n|raw|<div class="infobox"><div' + (!this.isOfficial ? ' class="infobox-limited"' : '') + '>' + this.introMessage + '</div>';
+		if (this.staffMessage && user.can('mute', null, this)) message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '(Staff intro:)<br /><div>' + this.staffMessage + '</div>';
 		if (this.modchat) {
-			return '\n|raw|<div class="infobox"><div class="broadcast-red">' +
+			message += (message ? '<br />' : '\n|raw|<div class="infobox">') + '<div class="broadcast-red">' +
 				'Must be rank ' + this.modchat + ' or higher to talk right now.' +
-				'</div></div>';
+				'</div>';
 		}
-
-		if (this.introMessage) return '\n|raw|<div class="infobox"><div' + (!this.isOfficial ? ' class="infobox-limited"' : '') + '>' + this.introMessage + '</div></div>';
-
-		return '';
+		if (message) message += '</div>';
+		return message;
 	};
 	ChatRoom.prototype.onJoinConnection = function (user, connection) {
 		var userList = this.userList ? this.userList : this.getUserList();
-		this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-25).join('\n') + this.getIntroMessage());
+		this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-25).join('\n') + this.getIntroMessage(user));
 		if (global.Tournaments && Tournaments.get(this.id)) {
 			Tournaments.get(this.id).updateFor(user, connection);
 		}
@@ -1619,7 +1612,7 @@ var ChatRoom = (function () {
 
 		if (!merging) {
 			var userList = this.userList ? this.userList : this.getUserList();
-			this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage());
+			this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage(user));
 
 			if (global.Tournaments && Tournaments.get(this.id)) {
 				Tournaments.get(this.id).updateFor(user, connection);
