@@ -139,7 +139,7 @@ global.ResourceMonitor = {
 	adminlog: function (text) {
 		console.log(text);
 		if (Rooms.get('upperstaff')) {
-			Rooms.get('upperstaff').add('|c|~|' + text).update();
+			Rooms.get('upperstaff').add('|c|~|' + text + (Config.adminloghighlights ? ". Notifying: " + Config.adminloghighlights.join(", ") : "")).update();
 		}
 	},
 	logHTML: function (text) {
