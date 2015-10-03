@@ -320,7 +320,7 @@ exports.BattleScripts = {
 
 				moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) break;
-				if (nullDamage && (moveDamage || moveDamage === 0)) nullDamage = false;
+				if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
 				damage = (moveDamage || 0);
