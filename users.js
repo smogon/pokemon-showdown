@@ -184,7 +184,7 @@ function lockRange(range, ip) {
 	}
 	for (var i in users) {
 		var curUser = users[i];
-		if (!curUser.named || curUser.locked || curUser.group !== Config.groupsranking[0]) continue;
+		if (!curUser.named || curUser.locked || curUser.confirmed) continue;
 		if (ip) {
 			if (!curUser.latestIp.startsWith(ip)) continue;
 		} else {
