@@ -338,7 +338,7 @@ var commands = exports.commands = {
 		// registered chatrooms
 		title = title;
 
-		if (ResourceMonitor.countGroupChat(connection.ip)) {
+		if (Monitor.countGroupChat(connection.ip)) {
 			this.errorReply("Due to high load, you are limited to creating 4 group chats every hour.");
 			return;
 		}
@@ -1080,7 +1080,7 @@ var commands = exports.commands = {
 		if (targetUser.confirmed) {
 			if (cmd === 'forcelock') {
 				var from = targetUser.deconfirm();
-				ResourceMonitor.log("[CrisisMonitor] " + targetUser.name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
+				Monitor.log("[CrisisMonitor] " + targetUser.name + " was locked by " + user.name + " and demoted from " + from.join(", ") + ".");
 			} else {
 				return this.sendReply("" + targetUser.name + " is a confirmed user. If you are sure you would like to lock them use /forcelock.");
 			}
@@ -1162,7 +1162,7 @@ var commands = exports.commands = {
 		if (targetUser.confirmed) {
 			if (cmd === 'forceban') {
 				var from = targetUser.deconfirm();
-				ResourceMonitor.log("[CrisisMonitor] " + targetUser.name + " was banned by " + user.name + " and demoted from " + from.join(", ") + ".");
+				Monitor.log("[CrisisMonitor] " + targetUser.name + " was banned by " + user.name + " and demoted from " + from.join(", ") + ".");
 			} else {
 				return this.sendReply("" + targetUser.name + " is a confirmed user. If you are sure you would like to ban them use /forceban.");
 			}
@@ -2402,7 +2402,7 @@ var commands = exports.commands = {
 	},
 
 	vtm: function (target, room, user, connection) {
-		if (ResourceMonitor.countPrepBattle(connection.ip, user.name)) {
+		if (Monitor.countPrepBattle(connection.ip, user.name)) {
 			connection.popup("Due to high load, you are limited to 6 team validations every 3 minutes.");
 			return;
 		}
@@ -2429,7 +2429,7 @@ var commands = exports.commands = {
 	query: function (target, room, user, connection) {
 		// Avoid guest users to use the cmd errors to ease the app-layer attacks in emergency mode
 		var trustable = (!Config.emergency || (user.named && user.registered));
-		if (Config.emergency && ResourceMonitor.countCmd(connection.ip, user.name)) return false;
+		if (Config.emergency && Monitor.countCmd(connection.ip, user.name)) return false;
 		var spaceIndex = target.indexOf(' ');
 		var cmd = target;
 		if (spaceIndex > 0) {
