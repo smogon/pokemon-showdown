@@ -86,3 +86,22 @@ describe('Toxic Poison', function () {
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
 	});
 });
+
+describe('Toxic Poison [Gen 1]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('should affect Leech Seed damage counter', function () {
+		battle = BattleEngine.Battle.construct('battle-rby-toxic-leechseed', 'gen1customgame');
+		battle.join('p1', 'Guest 1', 1, [{species: 'Venusaur', moves: ['toxic', 'leechseed']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Chansey', moves: ['splash']}]);
+		battle.commitDecisions();
+		var pokemon = battle.p2.active[0];
+		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+		battle.choose('p1', 'move 2');
+		battle.commitDecisions();
+		// (1/16) + (2/16) + (3/16) = (6/16)
+		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 6);
+	});
+});
