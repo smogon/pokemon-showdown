@@ -975,7 +975,7 @@ exports.BattleScripts = {
 		};
 		// Moves that shouldn't be the only STAB moves:
 		var NoStab = {
-			aquajet:1, bounce:1, eruption:1, fakeout:1, flamecharge:1, quickattack:1, skyattack:1, waterspout:1
+			aquajet:1, bounce:1, chargebeam:1, eruption:1, fakeout:1, flamecharge:1, quickattack:1, skyattack:1, waterspout:1
 		};
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
@@ -1076,6 +1076,10 @@ exports.BattleScripts = {
 		// Castform-Sunny and Castform-Rainy can be chosen
 		if (template.num === 351) {
 			name = 'Castform';
+		}
+		// Cherrim-Sunshine can be chosen
+		if (template.num === 421) {
+			name = 'Cherrim';
 		}
 		// Meloetta-P can be chosen
 		if (template.num === 648) {
@@ -1297,6 +1301,9 @@ exports.BattleScripts = {
 				case 'outrage':
 					if (hasMove['dracometeor'] && counter.damagingMoves.length < 3) rejected = true;
 					break;
+				case 'chargebeam':
+					if (hasMove['thunderbolt'] && counter.Special < 3) rejected = true;
+					break;
 				case 'thunder':
 					if (hasMove['thunderbolt'] && !hasMove['raindance']) rejected = true;
 					break;
@@ -1319,6 +1326,9 @@ exports.BattleScripts = {
 				case 'focusblast':
 					if (!counter.setupType && (hasMove['closecombat'] || hasMove['superpower'])) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					break;
+				case 'machpunch':
+					if (hasType['Fighting'] && counter.stab < 2 && !hasAbility['Technician']) rejected = true;
 					break;
 				case 'stormthrow':
 					if (hasMove['circlethrow'] && (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
@@ -1369,6 +1379,9 @@ exports.BattleScripts = {
 				case 'icebeam':
 					if (hasMove['blizzard'] || hasMove['freezedry']) rejected = true;
 					break;
+				case 'iceshard':
+					if (hasMove['freezedry']) rejected = true;
+					break;
 				case 'bodyslam':
 					if (hasMove['glare']) rejected = true;
 					break;
@@ -1404,6 +1417,9 @@ exports.BattleScripts = {
 					break;
 				case 'rockblast': case 'rockslide':
 					if (hasMove['headsmash'] || hasMove['stoneedge']) rejected = true;
+					break;
+				case 'bulletpunch':
+					if (hasType['Steel'] && counter.stab < 2 && !hasAbility['Technician']) rejected = true;
 					break;
 				case 'flashcannon':
 					if (hasMove['ironhead']) rejected = true;
@@ -2044,6 +2060,9 @@ exports.BattleScripts = {
 			case 'Castform':
 				if (this.random(2) >= 1) continue;
 				break;
+			case 'Cherrim':
+				if (this.random(2) >= 1) continue;
+				break;
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
@@ -2200,6 +2219,9 @@ exports.BattleScripts = {
 			case 'Castform':
 				if (this.random(2) >= 1) continue;
 				break;
+			case 'Cherrim':
+				if (this.random(2) >= 1) continue;
+				break;
 			case 'Genesect':
 				if (this.random(5) >= 1) continue;
 				break;
@@ -2300,6 +2322,10 @@ exports.BattleScripts = {
 		if (template.num === 351) {
 			name = 'Castform';
 		}
+		// Cherrim-Sunshine can be chosen
+		if (template.num === 421) {
+			name = 'Cherrim';
+		}
 		// Meloetta-P can be chosen
 		if (template.num === 648) {
 			name = 'Meloetta';
@@ -2361,7 +2387,7 @@ exports.BattleScripts = {
 		};
 		var counterAbilities = {
 			'Adaptability':1, 'Blaze':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Overgrow':1,
-			'Sheer Force':1, 'Skill Link':1, 'Swarm':1, 'Torrent':1
+			'Skill Link':1, 'Swarm':1, 'Torrent':1
 		};
 		// -ate Abilities
 		var ateAbilities = {
@@ -2474,6 +2500,9 @@ exports.BattleScripts = {
 				case 'icebeam':
 					if (hasMove['blizzard'] || hasMove['freezedry']) rejected = true;
 					break;
+				case 'iceshard':
+					if (hasMove['freezedry']) rejected = true;
+					break;
 				case 'surf':
 					if (hasMove['scald'] || hasMove['hydropump'] || hasMove['muddywater']) rejected = true;
 					break;
@@ -2512,6 +2541,9 @@ exports.BattleScripts = {
 					break;
 				case 'drainpunch':
 					if (hasMove['closecombat'] || hasMove['crosschop']) rejected = true;
+					break;
+				case 'machpunch':
+					if (hasType['Fighting'] && counter.stab < 2 && !hasAbility['Technician']) rejected = true;
 					break;
 				case 'thunder':
 					if (hasMove['thunderbolt']) rejected = true;
@@ -2564,6 +2596,12 @@ exports.BattleScripts = {
 				case 'quickattack':
 					if (hasMove['feint']) rejected = true;
 					break;
+				case 'bulletpunch':
+					if (hasType['Steel'] && counter.stab < 2 && !hasAbility['Technician']) rejected = true;
+					break;
+				case 'flashcannon':
+					if (hasMove['ironhead']) rejected = true;
+					break;
 				case 'wideguard':
 					if (hasMove['protect']) rejected = true;
 					break;
@@ -2589,7 +2627,7 @@ exports.BattleScripts = {
 					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit']) rejected = true;
 					break;
 				case 'fakeout':
-					if (hasMove['trick'] || hasMove['switcheroo'] || ability === 'Sheer Force')  rejected = true;
+					if (hasMove['trick'] || hasMove['switcheroo'])  rejected = true;
 					break;
 				case 'feint':
 					if (hasMove['fakeout']) rejected = true;
@@ -2818,6 +2856,8 @@ exports.BattleScripts = {
 				rejectAbility = !counter['recoil'];
 			} else if (ability === 'Serene Grace') {
 				rejectAbility = !counter['serenegrace'] || template.id === 'chansey' || template.id === 'blissey';
+			} else if (ability === 'Sheer Force') {
+				rejectAbility = !counter['sheerforce'] || hasMove['fakeout'];
 			} else if (ability === 'Simple') {
 				rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
 			} else if (ability === 'Solar Power') {
