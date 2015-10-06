@@ -2748,10 +2748,10 @@ exports.BattleScripts = {
 					if (typeCombo !== 'Electric/Ice' && typeCombo !== 'Fighting/Ghost') {
 						var rejectableMoves = [];
 						var baseDiff = movePool.length - availableHP;
-						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || counter.damagingMoves[0].id === 'hiddenpower')) {
+						if (baseDiff && counter.damagingMoves[0].id !== 'seismictoss' || availableHP && (!hasMove['hiddenpower'] || counter.damagingMoves[0].id === 'hiddenpower')) {
 							rejectableMoves.push(counter.damagingMoveIndex[counter.damagingMoves[0].id]);
 						}
-						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || counter.damagingMoves[1].id === 'hiddenpower')) {
+						if (baseDiff && counter.damagingMoves[1].id !== 'seismictoss' || availableHP && (!hasMove['hiddenpower'] || counter.damagingMoves[1].id === 'hiddenpower')) {
 							rejectableMoves.push(counter.damagingMoveIndex[counter.damagingMoves[1].id]);
 						}
 						if (rejectableMoves.length) {
