@@ -462,7 +462,7 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		ruleset: ['OU'],
-		banlist: [],
+		banlist: ['Dynamic Punch'],
 		onAccuracy: function (accuracy, target, source, move) {
 			return true;
 		}
