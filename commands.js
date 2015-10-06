@@ -1526,9 +1526,9 @@ var commands = exports.commands = {
 		var reason = this.splitTarget(target);
 		var targetUser = this.targetUser;
 		var name = this.targetUsername;
+		if (!targetUser) return this.errorReply("User '" + name + "' does not exist.");
 		var userid = this.getLastIdOf(targetUser);
 		var hidetype = '';
-		if (!targetUser) return this.errorReply("User '" + name + "' does not exist.");
 		if (!user.can('lock', targetUser) && !user.can('ban', targetUser, room)) {
 			this.errorReply('/hidetext' + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
 			return false;
