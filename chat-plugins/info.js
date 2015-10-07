@@ -2620,6 +2620,10 @@ var commands = exports.commands = {
 
 		var targets = target.split(',');
 		if (targets.length !== 3) {
+			// Width and height are required because most browsers insert the
+			// <img> element before width and height are known, and when the
+			// image is loaded, this changes the height of the chat area, which
+			// messes up autoscrolling.
 			return this.parse('/help showimage');
 		}
 
