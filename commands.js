@@ -185,17 +185,20 @@ var commands = exports.commands = {
 				var targetRoom = Rooms.search(innerTarget);
 				if (!targetRoom || targetRoom === Rooms.global) return this.errorReply('The room "' + innerTarget + '" does not exist.');
 				if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply('User "' + this.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
-				if (targetRoom.isPrivate === true && targetRoom.modjoin && targetRoom.auth) {
-					if (Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) && !targetUser.can('bypassall')) {
-						return this.errorReply('The room "' + innerTarget + '" does not exist.');
-					}
-				}
 				if (targetRoom.modjoin) {
 					if (targetRoom.auth && (targetRoom.isPrivate === true || targetUser.group === ' ') && !(targetUser.userid in targetRoom.auth)) {
 						this.parse('/roomvoice ' + targetUser.name, false, targetRoom);
 						if (!(targetUser.userid in targetRoom.auth)) {
 							return;
 						}
+					}
+				}
+				if (targetRoom.isPrivate === true && targetRoom.modjoin && targetRoom.auth) {
+					if (!(user.userid in targetRoom.auth)) {
+						return this.errorReply('The room "' + innerTarget + '" does not exist.');
+					}
+					if (Config.groupsranking.indexOf(targetRoom.auth[targetUser.userid] || ' ') < Config.groupsranking.indexOf(targetRoom.modjoin) && !targetUser.can('bypassall')) {
+						return this.errorReply('The user "' + targetUser.name + '" does not have permission to join "' + innerTarget + '".');
 					}
 				}
 
