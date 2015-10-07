@@ -1247,6 +1247,35 @@ var commands = exports.commands = {
 	},
 	unbanallhelp: ["/unbanall - Unban all IP addresses. Requires: & ~"],
 
+	deroomvoiceall: function (target, room, user) {
+		if (!this.can('editroom', null, room)) return false;
+		if (!room.auth) return this.errorReply("Room does not have roomauth.");
+		if (!target) {
+			user.lastCommand = '/deroomvoiceall';
+			this.errorReply("THIS WILL DEROOMVOICE ALL ROOMVOICED USERS.");
+			this.errorReply("To confirm, use: /deroomvoiceall confirm");
+			return;
+		}
+		if (user.lastCommand !== '/deroomvoiceall' || target !== 'confirm') {
+			return this.parse('/help deroomvoiceall');
+		}
+		var count = 0;
+		for (var userid in room.auth) {
+			if (room.auth[userid] === '+') {
+				delete room.auth[userid];
+				count++;
+			}
+		}
+		if (!count) {
+			return this.sendReply("(This room has zero roomvoices)");
+		}
+		if (room.chatRoomData) {
+			Rooms.global.writeChatRoomData();
+		}
+		this.addModCommand("All " + count + " roomvoices have been cleared by " + user.name + ".");
+	},
+	deroomvoiceallhelp: ["/deroomvoiceall - Devoice all roomvoiced users. Requires: # & ~"],
+
 	banip: function (target, room, user) {
 		target = target.trim();
 		if (!target) {
