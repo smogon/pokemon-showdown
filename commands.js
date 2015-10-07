@@ -1228,6 +1228,15 @@ var commands = exports.commands = {
 
 	unbanall: function (target, room, user) {
 		if (!this.can('rangeban')) return false;
+		if (!target) {
+			user.lastCommand = '/unbanall';
+			this.errorReply("THIS WILL UNBAN AND UNLOCK ALL USERS.");
+			this.errorReply("To confirm, use: /unbanall confirm");
+			return;
+		}
+		if (user.lastCommand !== '/unbanall' || target !== 'confirm') {
+			return this.parse('/help unbanall');
+		}
 		// we have to do this the hard way since it's no longer a global
 		var punishKeys = ['bannedIps', 'bannedUsers', 'lockedIps', 'lockedUsers', 'lockedRanges', 'rangeLockedUsers'];
 		for (var i = 0; i < punishKeys.length; i++) {
