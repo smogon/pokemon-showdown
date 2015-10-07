@@ -2614,8 +2614,7 @@ var commands = exports.commands = {
 		if (!this.can('declare', null, room)) return false;
 		if (!this.canBroadcast()) return;
 		if (this.room.isPersonal && !this.user.can('announce')) {
-			this.errorReply("Images are not allowed in personal rooms.");
-			return false;
+			return this.errorReply("Images are not allowed in personal rooms.");
 		}
 
 		var targets = target.split(',');
@@ -2627,9 +2626,31 @@ var commands = exports.commands = {
 			return this.parse('/help showimage');
 		}
 
-		this.sendReply('|raw|<img src="' + Tools.escapeHTML(targets[0]) + '" alt="" width="' + toId(targets[1]) + '" height="' + toId(targets[2]) + '" />');
+		var image = targets[0].trim();
+		if (!image) return this.errorReply('No image URL was provided!');
+		if (!/^https?:\/\//.test(image)) image = '//' + image;
+
+		var width = targets[1].trim();
+		if (!width) return this.errorReply('No width for the image was provided!');
+		if (!isNaN(width)) width += 'px';
+
+		var height = targets[2].trim();
+		if (!height) return this.errorReply('No height for the image was provided!');
+		if (!isNaN(height)) height += 'px';
+
+		var unitRegex = /^\d+(?:p[xtc]|%|[ecm]m|ex|in)$/;
+		if (!unitRegex.test(width)) {
+			return this.errorReply('"' + width + '" is not a valid width value!');
+		}
+		if (!unitRegex.test(height)) {
+			return this.errorReply('"' + height + '" is not a valid height value!');
+		}
+
+		this.sendReply('|raw|<img src="' + Tools.escapeHTML(image) + '" ' + 'style="width: ' + Tools.escapeHTML(width) + '; height: ' + Tools.escapeHTML(height) + '" />');
 	},
-	showimagehelp: ["/showimage [url], [width], [height] - Show an image. Requires: # & ~"],
+	showimagehelp: ["/showimage [url], [width], [height] - Show an image. " +
+		"Any CSS units may be used for the width or height (default: px)." +
+		"Requires: # & ~"],
 
 	htmlbox: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help htmlbox');
