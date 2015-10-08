@@ -1571,7 +1571,7 @@ var commands = exports.commands = {
 		var userid = this.getLastIdOf(targetUser);
 		var hidetype = '';
 		if (!user.can('lock', targetUser) && !user.can('ban', targetUser, room)) {
-			this.errorReply('/hidetext' + this.namespaces.concat(this.cmd).join(" ") + " - Access denied.");
+			this.errorReply("/hidetext - Access denied.");
 			return false;
 		}
 
