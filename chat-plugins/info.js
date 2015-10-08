@@ -2299,6 +2299,10 @@ var commands = exports.commands = {
 			matched = true;
 			buffer += "<a href=\"http://www.smogon.com/forums/threads/coil-explained.3508013\">What is COIL?</a><br />";
 		}
+		if (target === 'all' || target === 'tiering' || target === 'tiers' || target === 'tier') {
+			matched = true;
+			buffer += "<a href=\"https://www.smogon.com/ingame/battle/tiering-faq\">Tiering FAQ</a><br />";
+		}
 		if (!matched) {
 			return this.sendReply("The FAQ entry '" + target + "' was not found. Try /faq for general help.");
 		}
