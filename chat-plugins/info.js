@@ -359,165 +359,200 @@ var commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 
 		if (!target) return this.parse('/help dexsearch');
-		var targets = target.split(',');
-		var searches = {};
+		var searches = [];
 		var allTiers = {'uber':1, 'ou':1, 'bl':1, 'uu':1, 'bl2':1, 'ru':1, 'bl3':1, 'nu':1, 'bl4':1, 'pu':1, 'nfe':1, 'lc uber':1, 'lc':1, 'cap':1};
 		var allColours = {'green':1, 'red':1, 'blue':1, 'white':1, 'brown':1, 'yellow':1, 'purple':1, 'pink':1, 'gray':1, 'black':1};
 		var allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1};
 		var showAll = false;
 		var megaSearch = null;
 		var randomOutput = 0;
-		var categories = ['gen', 'tier', 'color', 'types', 'ability', 'stats', 'compileLearnsets', 'moves', 'recovery', 'priority'];
 
-		for (var i = 0; i < targets.length; i++) {
-			var isNotSearch = false;
-			target = targets[i].trim().toLowerCase();
-			if (target.charAt(0) === '!') {
-				isNotSearch = true;
-				target = target.substr(1);
+		var self = this;
+		var validParameter = function (cat, param, isNotSearch) {
+			var catCount = 0;
+			for (var h = 0; h < searches.length; h++) {
+				var group = searches[h];
+				if (group[cat][param] === undefined) continue;
+				if (group[cat][param] === isNotSearch) {
+					self.sendReplyBox("A search cannot both include and exclude '" + param + "'.");
+				} else {
+					self.sendReplyBox("The search included '" + (isNotSearch ? "!" : "") + param + "' more than once.");
+				}
+				return false;
 			}
+			return true;
+		};
 
-			var targetAbility = Tools.getAbility(targets[i]);
-			if (targetAbility.exists) {
-				if (!searches['ability']) searches['ability'] = {};
-				if (Object.count(searches['ability'], true) === 1 && !isNotSearch) return this.sendReplyBox("Specify only one ability.");
-				if ((searches['ability'][targetAbility.name] && isNotSearch) || (searches['ability'][targetAbility.name] === false && !isNotSearch)) return this.sendReplyBox("A search cannot both exclude and include an ability.");
-				searches['ability'][targetAbility.name] = !isNotSearch;
-				continue;
-			}
+		var andGroups = target.split(',');
+		for (var i = 0; i < andGroups.length; i++) {
+			var orGroup = {abilities: {}, tiers: {}, colors: {}, gens: {}, moves: {}, types: {}, stats: {}, skip: false};
+			var parameters = andGroups[i].split("|");
+			if (parameters.length > 4) return this.sendReply("No more than 3 alternatives for each parameter may be used.");
+			for (var j = 0; j < parameters.length; j++) {
+				var isNotSearch = false;
+				target = parameters[j].trim().toLowerCase();
+				if (target.charAt(0) === '!') {
+					isNotSearch = true;
+					target = target.substr(1);
+				}
 
-			if (target in allTiers) {
-				if (!searches['tier']) searches['tier'] = {};
-				if ((searches['tier'][target] && isNotSearch) || (searches['tier'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a tier.');
-				searches['tier'][target] = !isNotSearch;
-				continue;
-			}
-
-			if (target in allColours) {
-				if (!searches['color']) searches['color'] = {};
-				if ((searches['color'][target] && isNotSearch) || (searches['color'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a color.');
-				searches['color'][target] = !isNotSearch;
-				continue;
-			}
-
-			if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) target = target.substr(3).trim();
-			var targetInt = parseInt(target);
-			if (0 < targetInt && targetInt < 7) {
-				if (!searches['gen']) searches['gen'] = {};
-				if ((searches['gen'][target] && isNotSearch) || (searches['gen'][target] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include a generation.');
-				searches['gen'][target] = !isNotSearch;
-				continue;
-			}
-
-			if (target === 'all') {
-				if (this.broadcasting) return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
-				showAll = true;
-				continue;
-			}
-
-			if (target.substr(0, 6) === 'random' && cmd === 'randpoke') {
-				randomOutput = parseInt(target.substr(6));
-				continue;
-			}
-
-			if (target === 'megas' || target === 'mega') {
-				if ((megaSearch && isNotSearch) || (megaSearch === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and include Mega Evolutions.');
-				megaSearch = !isNotSearch;
-				continue;
-			}
-
-			if (target === 'recovery') {
-				if ((searches['recovery'] && isNotSearch) || (searches['recovery'] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and recovery moves.');
-				searches['recovery'] = !isNotSearch;
-				continue;
-			}
-
-			if (target === 'priority') {
-				if ((searches['priority'] && isNotSearch) || (searches['priority'] === false && !isNotSearch)) return this.sendReplyBox('A search cannot both exclude and recovery moves.');
-				searches['priority'] = !isNotSearch;
-				continue;
-			}
-
-			var targetMove = Tools.getMove(target);
-			if (targetMove.exists) {
-				if (!searches['moves']) searches['moves'] = {};
-				if (Object.count(searches['moves'], true) === 4 && !isNotSearch) return this.sendReplyBox("Specify a maximum of 4 moves.");
-				if ((searches['moves'][targetMove.id] && isNotSearch) || (searches['moves'][targetMove.id] === false && !isNotSearch)) return this.sendReplyBox("A search cannot both exclude and include a move.");
-				searches['moves'][targetMove.id] = !isNotSearch;
-				continue;
-			}
-
-			var typeIndex = target.indexOf(' type');
-			if (typeIndex >= 0) {
-				target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
-				if (target in Tools.data.TypeChart) {
-					if (!searches['types']) searches['types'] = {};
-					if (Object.count(searches['types'], true) === 2 && !isNotSearch) return this.sendReplyBox("Specify a maximum of two types.");
-					if ((searches['types'][target] && isNotSearch) || (searches['types'][target] === false && !isNotSearch)) return this.sendReplyBox("A search cannot both exclude and include a type.");
-					searches['types'][target] = !isNotSearch;
+				var targetAbility = Tools.getAbility(target);
+				if (targetAbility.exists) {
+					if (!validParameter("abilities", targetAbility, isNotSearch)) return;
+					orGroup.abilities[targetAbility] = !isNotSearch;
 					continue;
 				}
-			}
 
-			var inequality = target.search(/>|<|=/);
-			if (inequality >= 0) {
-				if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in stat ranges.");
-				if (target.charAt(inequality + 1) === '=') {
-					inequality = target.substr(inequality, 2);
-				} else {
-					inequality = target.charAt(inequality);
+				if (target in allTiers) {
+					if (!validParameter("tiers", target, isNotSearch)) return;
+					orGroup.tiers[target] = !isNotSearch;
+					continue;
 				}
-				var inequalityOffset = (inequality.charAt(1) === '=' ? 0 : -1);
-				var targetParts = target.replace(/\s/g, '').split(inequality);
-				var num, stat, direction;
-				if (!isNaN(targetParts[0])) {
-					// e.g. 100 < spe
-					num = parseFloat(targetParts[0]);
-					stat = targetParts[1];
-					switch (inequality.charAt(0)) {
-					case '>': direction = 'less'; num += inequalityOffset; break;
-					case '<': direction = 'greater'; num -= inequalityOffset; break;
-					case '=': direction = 'equal'; break;
+
+				if (target in allColours) {
+					target = target.capitalize();
+					if (!validParameter("colors", target, isNotSearch)) return;
+					orGroup.colors[target] = !isNotSearch;
+					continue;
+				}
+
+				if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) target = target.substr(3).trim();
+				var targetInt = parseInt(target);
+				if (0 < targetInt && targetInt < 7) {
+					if (!validParameter("gens", target, isNotSearch)) return;
+					orGroup.gens[target] = !isNotSearch;
+					continue;
+				}
+
+				if (target === 'all') {
+					if (this.broadcasting) return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
+					if (parameters.length > 1) return this.sendReplyBox("The parameter 'all' cannot have alternative parameters");
+					showAll = true;
+					orGroup.skip = true;
+					break;
+				}
+
+				if (target.substr(0, 6) === 'random' && cmd === 'randpoke') {
+					//validation for this is in the /randpoke command
+					randomOutput = parseInt(target.substr(6));
+					orGroup.skip = true;
+					continue;
+				}
+
+				if (target === 'megas' || target === 'mega') {
+					if (parameters.length > 1) return this.sendReplyBox("The parameter 'mega' cannot have alternative parameters");
+					megaSearch = !isNotSearch;
+					orGroup.skip = true;
+					break;
+				}
+
+				if (target === 'recovery') {
+					if (parameters.length > 1) return this.sendReplyBox("The parameter 'recovery' cannot have alternative parameters");
+					var recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder"];
+					for (var k = 0; k < recoveryMoves.length; k++) {
+						if (!validParameter("moves", recoveryMoves[k], isNotSearch)) return;
+						if (isNotSearch) {
+							var bufferObj = {moves: {}};
+							bufferObj.moves[recoveryMoves[k]] = false;
+							searches.push(bufferObj);
+						} else {
+							orGroup.moves[recoveryMoves[k]] = true;
+						}
 					}
-				} else if (!isNaN(targetParts[1])) {
-					// e.g. spe > 100
-					num = parseFloat(targetParts[1]);
-					stat = targetParts[0];
-					switch (inequality.charAt(0)) {
-					case '<': direction = 'less'; num += inequalityOffset; break;
-					case '>': direction = 'greater'; num -= inequalityOffset; break;
-					case '=': direction = 'equal'; break;
+					if (isNotSearch) orGroup.skip = true;
+					break;
+				}
+
+				if (target === 'priority') {
+					if (parameters.length > 1) return this.sendReplyBox("The parameter 'priority' cannot have alternative parameters");
+					for (var move in Tools.data.Movedex) {
+						var moveData = Tools.getMove(move);
+						if (moveData.category === "Status" || moveData.id === "bide") continue;
+						if (moveData.priority > 0) {
+							if (!validParameter("moves", move, isNotSearch)) return;
+							if (isNotSearch) {
+								var bufferObj = {moves: {}};
+								bufferObj.moves[move] = false;
+								searches.push(bufferObj);
+							} else {
+								orGroup.moves[move] = true;
+							}
+						}
 					}
-				} else {
-					return this.sendReplyBox("No value given to compare with '" + Tools.escapeHTML(target) + "'.");
+					if (isNotSearch) orGroup.skip = true;
+					break;
 				}
-				switch (toId(stat)) {
-				case 'attack': stat = 'atk'; break;
-				case 'defense': stat = 'def'; break;
-				case 'specialattack': stat = 'spa'; break;
-				case 'spatk': stat = 'spa'; break;
-				case 'specialdefense': stat = 'spd'; break;
-				case 'spdef': stat = 'spd'; break;
-				case 'speed': stat = 'spe'; break;
+
+				var targetMove = Tools.getMove(target);
+				if (targetMove.exists) {
+					if (!validParameter("moves", targetMove.id, isNotSearch)) return;
+					orGroup.moves[targetMove.id] = !isNotSearch;
+					continue;
 				}
-				if (!(stat in allStats)) return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' did not contain a valid stat.");
-				if (!searches['stats']) searches['stats'] = {};
-				if (direction === 'equal') {
-					if (searches['stats'][stat]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
-					searches['stats'][stat] = {};
-					searches['stats'][stat]['less'] = num;
-					searches['stats'][stat]['greater'] = num;
-				} else {
-					if (!searches['stats'][stat]) searches['stats'][stat] = {};
-					if (searches['stats'][stat][direction]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
-					searches['stats'][stat][direction] = num;
+
+				var typeIndex = target.indexOf(' type');
+				if (typeIndex >= 0) {
+					target = target.charAt(0).toUpperCase() + target.substring(1, typeIndex);
+					if (target in Tools.data.TypeChart) {
+						if (!validParameter("types", target, isNotSearch)) return;
+						orGroup.types[target] = !isNotSearch;
+						continue;
+					}
 				}
-				continue;
+
+				var inequality = target.search(/>|<|=/);
+				if (inequality >= 0) {
+					if (isNotSearch) return this.sendReplyBox("You cannot use the negation symbol '!' in stat ranges.");
+					if (target.charAt(inequality + 1) === '=') {
+						inequality = target.substr(inequality, 2);
+					} else {
+						inequality = target.charAt(inequality);
+					}
+					var inequalityOffset = (inequality.charAt(1) === '=' ? 0 : -1);
+					var targetParts = target.replace(/\s/g, '').split(inequality);
+					var num, stat, direction;
+					if (!isNaN(targetParts[0])) {
+						// e.g. 100 < spe
+						num = parseFloat(targetParts[0]);
+						stat = targetParts[1];
+						switch (inequality.charAt(0)) {
+						case '>': direction = 'less'; num += inequalityOffset; break;
+						case '<': direction = 'greater'; num -= inequalityOffset; break;
+						case '=': direction = 'equal'; break;
+						}
+					} else if (!isNaN(targetParts[1])) {
+						// e.g. spe > 100
+						num = parseFloat(targetParts[1]);
+						stat = targetParts[0];
+						switch (inequality.charAt(0)) {
+						case '<': direction = 'less'; num += inequalityOffset; break;
+						case '>': direction = 'greater'; num -= inequalityOffset; break;
+						case '=': direction = 'equal'; break;
+						}
+					} else {
+						return this.sendReplyBox("No value given to compare with '" + Tools.escapeHTML(target) + "'.");
+					}
+					switch (toId(stat)) {
+					case 'attack': stat = 'atk'; break;
+					case 'defense': stat = 'def'; break;
+					case 'specialattack': stat = 'spa'; break;
+					case 'spatk': stat = 'spa'; break;
+					case 'specialdefense': stat = 'spd'; break;
+					case 'spdef': stat = 'spd'; break;
+					case 'speed': stat = 'spe'; break;
+					}
+					if (!(stat in allStats)) return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' did not contain a valid stat.");
+					if (!orGroup.stats[stat]) orGroup.stats[stat] = {};
+					if (orGroup.stats[stat][direction]) return this.sendReplyBox("Invalid stat range for " + stat + ".");
+					orGroup.stats[stat][direction] = num;
+					continue;
+				}
+				return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' could not be found in any of the search categories.");
 			}
-			return this.sendReplyBox("'" + Tools.escapeHTML(target) + "' could not be found in any of the search categories.");
+			searches.push(orGroup);
 		}
 
-		if (showAll && Object.size(searches) === 0 && megaSearch === null) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.");
+		if (showAll && searches.length === 0 && megaSearch === null) return this.sendReplyBox("No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.");
 
 		var dex = {};
 		for (var pokemon in Tools.data.Pokedex) {
@@ -528,154 +563,112 @@ var commands = exports.commands = {
 			}
 		}
 
-		//Only construct full learnsets for Pokemon if learnsets are used in the search
-		if (searches.moves || searches.recovery || searches.priority) searches['compileLearnsets'] = true;
+		var learnSetsCompiled = false;
+		//ensure searches with the least alternatives are run first
+		searches.sort(function (a, b) {
+			var aCount = 0, bCount = 0;
+			for (var cat in a) {
+				if (typeof a[cat] === "object") aCount += Object.size(a[cat]);
+			}
+			for (var cat in b) {
+				if (typeof b[cat] === "object") bCount += Object.size(b[cat]);
+			}
+			return aCount - bCount;
+		});
 
-		for (var cat = 0; cat < categories.length; cat++) {
-			var search = categories[cat];
-			if (!(search in searches)) continue;
-			switch (search) {
-			case 'types':
-				for (var mon in dex) {
-					if (Object.count(searches[search], true) === 2) {
-						if (!(searches[search][dex[mon].types[0]]) || !(searches[search][dex[mon].types[1]])) delete dex[mon];
+		for (var group = 0; group < searches.length; group++) {
+			var alts = searches[group];
+			if (alts.skip) continue;
+			for (var mon in dex) {
+				var matched = false;
+				if (Object.size(alts.gens) > 0) {
+					if (alts.gens[dex[mon].gen] || (Object.count(alts.gens, false) > 0 &&
+						alts.gens[dex[mon].gen] !== false)) continue;
+				}
+
+				if (Object.size(alts.colors) > 0) {
+					if (alts.colors[dex[mon].color] || (Object.count(alts.colors, false) > 0 &&
+						alts.colors[dex[mon].color] !== false)) continue;
+				}
+
+				if (Object.size(alts.tiers) > 0) {
+					if (alts.tiers[dex[mon].tier.toLowerCase()] || (Object.count(alts.tiers, false) > 0 &&
+						alts.tiers[dex[mon].tier.toLowerCase()] !== false)) continue;
+				}
+
+				for (var type in alts.types) {
+					if (dex[mon].types.indexOf(type) >= 0 === alts.types[type]) {
+						matched = true;
+						break;
+					}
+				}
+				if (matched) continue;
+
+				for (var ability in alts.abilities) {
+					if (alts.abilities[ability] === (Object.count(dex[mon].abilities, ability) > 0)) {
+						matched = true;
+						break;
+					}
+				}
+				if (matched) continue;
+
+				for (var stat in alts.stats) {
+					var monStat = 0;
+					if (stat === 'bst') {
+						for (var monStats in dex[mon].baseStats) {
+							monStat += dex[mon].baseStats[monStats];
+						}
 					} else {
-						if (searches[search][dex[mon].types[0]] === false || searches[search][dex[mon].types[1]] === false || (Object.count(searches[search], true) > 0 &&
-							(!(searches[search][dex[mon].types[0]]) && !(searches[search][dex[mon].types[1]])))) delete dex[mon];
+						monStat = dex[mon].baseStats[stat];
 					}
-				}
-				break;
-
-			case 'tier':
-				for (var mon in dex) {
-					if ('lc' in searches[search]) {
-						// some LC legal Pokemon are stored in other tiers (Ferroseed/Murkrow etc)
-						// this checks for LC legality using the going criteria, instead of dex[mon].tier
-						var isLC = (dex[mon].evos && dex[mon].evos.length > 0) && !dex[mon].prevo && dex[mon].tier !== "LC Uber" && Tools.data.Formats['lc'].banlist.indexOf(dex[mon].species) < 0;
-						if ((searches[search]['lc'] && !isLC) || (!searches[search]['lc'] && isLC)) {
-							delete dex[mon];
-							continue;
+					if (typeof alts.stats[stat].less === 'number') {
+						if (monStat <= alts.stats[stat].less) {
+							matched = true;
+							break;
 						}
 					}
-					if (searches[search][String(dex[mon][search]).toLowerCase()] === false ||
-						Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) {
-						delete dex[mon];
+					if (typeof alts.stats[stat].greater === 'number') {
+						if (monStat >= alts.stats[stat].greater) {
+							matched = true;
+							break;
+						}
 					}
-				}
-				break;
-
-			case 'gen':
-			case 'color':
-				for (var mon in dex) {
-					if (searches[search][String(dex[mon][search]).toLowerCase()] === false ||
-						Object.count(searches[search], true) > 0 && !searches[search][String(dex[mon][search]).toLowerCase()]) {
-						delete dex[mon];
-					}
-				}
-				break;
-
-			case 'ability':
-				for (var mon in dex) {
-					for (var ability in searches[search]) {
-						var needsAbility = searches[search][ability];
-						var hasAbility = Object.count(dex[mon].abilities, ability) > 0;
-						if (hasAbility !== needsAbility) {
-							delete dex[mon];
+					if (typeof alts.stats[stat].equal === 'number') {
+						if (monStat === alts.stats[stat].equal) {
+							matched = true;
 							break;
 						}
 					}
 				}
-				break;
+				if (matched) continue;
 
-			case 'compileLearnsets':
-				for (var mon in dex) {
-					var template = dex[mon];
-					if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
-					if (!template.learnset) continue;
-					var fullLearnset = template.learnset;
-					while (template.prevo) {
-						template = Tools.getTemplate(template.prevo);
-						for (var move in template.learnset) {
-							if (!fullLearnset[move]) fullLearnset[move] = template.learnset[move];
-						}
-					}
-					dex[mon].learnset = fullLearnset;
-				}
-				break;
-
-			case 'moves':
-				for (var mon in dex) {
-					if (!dex[mon].learnset) continue;
-					for (var move in searches[search]) {
-						var canLearn = (dex[mon].learnset.sketch && ['chatter', 'struggle', 'magikarpsrevenge'].indexOf(move) < 0) || dex[mon].learnset[move];
-						if ((!canLearn && searches[search][move]) || (searches[search][move] === false && canLearn)) {
-							delete dex[mon];
-							break;
-						}
-					}
-				}
-				break;
-
-			case 'recovery':
-				for (var mon in dex) {
-					if (!dex[mon].learnset) continue;
-					var recoveryMoves = ["recover", "roost", "moonlight", "morningsun", "synthesis", "milkdrink", "slackoff", "softboiled", "wish", "healorder"];
-					var canLearn = false;
-					for (var i = 0; i < recoveryMoves.length; i++) {
-						canLearn = (dex[mon].learnset.sketch) || dex[mon].learnset[recoveryMoves[i]];
-						if (canLearn) break;
-					}
-					if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
-				}
-				break;
-
-			case 'priority':
-				var priorityMoves = [];
-				for (var move in Tools.data.Movedex) {
-					var moveData = Tools.getMove(move);
-					if (moveData.category === "Status" || moveData.id === "bide") continue;
-					if (moveData.priority > 0) priorityMoves.push(move);
-				}
-				for (var mon in dex) {
-					if (!dex[mon].learnset) continue;
-					var canLearn = false;
-					for (var i = 0; i < priorityMoves.length; i++) {
-						canLearn = (dex[mon].learnset.sketch) || dex[mon].learnset[priorityMoves[i]];
-						if (canLearn) break;
-					}
-					if ((!canLearn && searches[search]) || (searches[search] === false && canLearn)) delete dex[mon];
-				}
-				break;
-
-			case 'stats':
-				for (var stat in searches[search]) {
-					for (var mon in dex) {
-						var monStat = 0;
-						if (stat === 'bst') {
-							for (var monStats in dex[mon].baseStats) {
-								monStat += dex[mon].baseStats[monStats];
-							}
-						} else {
-							monStat = dex[mon].baseStats[stat];
-						}
-						if (typeof searches[search][stat].less === 'number') {
-							if (monStat > searches[search][stat].less) {
-								delete dex[mon];
-								continue;
+				if (!learnSetsCompiled) {
+					for (var mon2 in dex) {
+						var template = dex[mon2];
+						if (!template.learnset) template = Tools.getTemplate(template.baseSpecies);
+						if (!template.learnset) continue;
+						var fullLearnset = template.learnset;
+						while (template.prevo) {
+							template = Tools.getTemplate(template.prevo);
+							for (var move in template.learnset) {
+								if (!fullLearnset[move]) fullLearnset[move] = template.learnset[move];
 							}
 						}
-						if (typeof searches[search][stat].greater === 'number') {
-							if (monStat < searches[search][stat].greater) {
-								delete dex[mon];
-								continue;
-							}
-						}
+						dex[mon2].learnset = fullLearnset;
+					}
+					learnSetsCompiled = true;
+				}
+
+				for (var move in alts.moves) {
+					var canLearn = (dex[mon].learnset.sketch && ['chatter', 'struggle', 'magikarpsrevenge'].indexOf(move) < 0) || dex[mon].learnset[move];
+					if ((canLearn && alts.moves[move]) || (alts.moves[move] === false && !canLearn)) {
+						matched = true;
+						break;
 					}
 				}
-				break;
+				if (matched) continue;
 
-			default:
-				throw new Error("/dexsearch search category '" + search + "' was unrecognised.");
+				delete dex[mon];
 			}
 		}
 
