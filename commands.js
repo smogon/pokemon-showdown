@@ -1577,7 +1577,7 @@ var commands = exports.commands = {
 
 		if (targetUser.locked || Users.checkBanned(targetUser.latestIp)) {
 			hidetype = 'hide|';
-		} else if ((room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) || user.can('bypassall')) {
+		} else if ((room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) || user.can('makeroom')) {
 			hidetype = 'roomhide|';
 		} else {
 			return this.errorReply("User '" + name + "' is not banned from this room or locked.");
