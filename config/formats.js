@@ -480,6 +480,13 @@ exports.Formats = [
 			}
 		},
 		onModifyMove: function (move) {
+			if (move.id === 'aquaring') {
+				move.volatileStatus = 'wonderring';
+				move.onHit = function (pokemon) {
+					this.add('-start', pokemon, 'Aqua Ring');
+					this.add('-message', "7.8/10, too much water - IGN");
+				};
+			}
 			if (move.id === 'hyperbeam') {
 				move.type = 'Water';
 				move.accuracy = true;
@@ -545,7 +552,7 @@ exports.Formats = [
 						this.add('-message', "Ultimate Super Hiper Mega Awesome Beam destroyer of worlds!");
 					};
 					move.onHit = function (target, source) {
-						this.add('-message', source.name + " caught himself in the explosion!");
+						this.add('-message', source.name + " was caught in the explosion!");
 						source.setStatus('brn');
 						source.addVolatile('disabled');
 						source.addVolatile('confusion');
@@ -559,6 +566,16 @@ exports.Formats = [
 						target.addVolatile('aquaring');
 					};
 					break;
+				}
+			}
+		},
+		onResidual: function () {
+			var allpokes = this.p1.active.concat(this.p2.active);
+			var pokemon;
+			for (var i = 0; i < allpokes.length; i++) {
+				pokemon = allpokes[i];
+				if (pokemon.hp && pokemon.volatiles['wonderring']) {
+					this.heal(pokemon.maxhp / 8, pokemon, pokemon, 'dank memes');
 				}
 			}
 		}

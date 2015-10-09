@@ -3175,16 +3175,16 @@ exports.BattleScripts = {
 				set.name = 'ayy lmao';
 				set.item = 'powerherb';
 				set.ability = 'primordialsea';
-				set.moves = ['hyperbeam', 'geomancy', 'originpulse', 'trickortreat'];
+				set.moves = ['hyperbeam', 'geomancy', 'originpulse', 'aquaring', 'trickortreat'];
 			} else {
 				if (mon === 'golurk') {
 					set.name = 'Spoopy Skilenton';
 				} else if (mon === 'farfetchd') {
-					set.name = 'Le Toucan of luck';
+					set.name = 'Le Toucan of Luck';
 				} else if (mon === 'machamp') {
 					set.name = 'John Cena';
 				}
-				set.moves[this.random(4)] = 'trickortreat';
+				set.moves[4] = 'trickortreat';
 			}
 			team.push(set);
 		}
