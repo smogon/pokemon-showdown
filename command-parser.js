@@ -332,6 +332,10 @@ var Context = exports.Context = (function () {
 				}
 			}
 		}
+		if (this.room.isPersonal && !this.user.can('lock') && html.match(/<button /)) {
+			this.errorReply('You do not have permission to use buttons in HTML.');
+			return false;
+		}
 		if (/>here.?</i.test(html) || /click here/i.test(html)) {
 			this.errorReply('Do not use "click here"');
 			return false;
