@@ -3150,6 +3150,47 @@ exports.BattleScripts = {
 			shiny: !this.random(template.id === 'missingno' ? 4 : 1024)
 		};
 	},
+	randomSpoopyTeam: function () {
+		var pool = [
+			'ekans', 'arbok', 'golbat', 'parasect', 'muk', 'gengar', 'marowak', 'weezing', 'tangela', 'mr. mime', 'ditto',
+			'kabutops', 'noctowl', 'ariados', 'crobat', 'umbreon', 'murkrow', 'misdreavus', 'gligar', 'granbull', 'sneasel',
+			'houndoom', 'mightyena', 'dustox', 'shiftry', 'shedinja', 'exploud', 'sableye', 'mawile', 'swalot', 'carvanha',
+			'sharpedo', 'cacturne', 'seviper', 'lunatone', 'claydol', 'shuppet', 'banette', 'duskull', 'dusclops', 'absol',
+			'snorunt', 'glalie', 'drifloon', 'drifblim', 'mismagius', 'honchkrow', 'skuntank', 'spiritomb', 'drapion',
+			'toxicroak', 'weavile', 'tangrowth', 'gliscor', 'dusknoir', 'froslass', 'rotom', 'rotom-wash', 'rotom-heat',
+			'rotom-mow', 'purrloin', 'liepard', 'swoobat', 'whirlipede', 'scolipede', 'basculin', 'krookodile', 'sigilyph',
+			'yamask', 'cofagrigus', 'garbodor', 'zorua', 'zoroark', 'gothita', 'gothorita', 'gothitelle', 'frillish',
+			'jellicent', 'joltik', 'galvantula', 'elgyem', 'beheeyem', 'litwick', 'lampent', 'chandelure', 'golurk',
+			'zweilous', 'hydreigon', 'volcarona', 'espurr', 'meowstic', 'honedge', 'doublade', 'aegislash', 'malamar',
+			'phantump', 'trevenant', 'pumpkaboo', 'gourgeist', 'noibat', 'noivern', 'magikarp', 'farfetchd', 'machamp'
+		];
+		var team = [];
+
+		for (var i = 0; i < 6; i++) {
+			var mon = this.sampleNoReplace(pool);
+			var template = this.getTemplate(mon);
+			var set = this.randomSet(template, i, {megaCount: 1});
+			set.species = mon;
+			if (mon === 'magikarp') {
+				set.name = 'ayy lmao';
+				set.item = 'powerherb';
+				set.ability = 'primordialsea';
+				set.moves = ['hyperbeam', 'geomancy', 'originpulse', 'trickortreat'];
+			} else {
+				if (mon === 'golurk') {
+					set.name = 'Spoopy Skilenton';
+				} else if (mon === 'farfetchd') {
+					set.name = 'Le Toucan of luck';
+				} else if (mon === 'machamp') {
+					set.name = 'John Cena';
+				}
+				set.moves[this.random(4)] = 'trickortreat';
+			}
+			team.push(set);
+		}
+
+		return team;
+	},
 	randomFactorySets: require('./factory-sets.json'),
 	randomFactorySet: function (template, slot, teamData, tier) {
 		var speciesId = toId(template.species);
