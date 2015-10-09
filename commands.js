@@ -1577,7 +1577,7 @@ var commands = exports.commands = {
 
 		if (targetUser.locked || Users.checkBanned(targetUser.latestIp)) {
 			hidetype = 'hide|';
-		} else if ((room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) || user.can('makeroom')) {
+		} else if ((room.bannedUsers[toId(name)] && room.bannedIps[targetUser.latestIp]) || user.can('rangeban')) {
 			hidetype = 'roomhide|';
 		} else {
 			return this.errorReply("User '" + name + "' is not banned from this room or locked.");
@@ -1587,7 +1587,7 @@ var commands = exports.commands = {
 		this.add('|unlink|' + hidetype + userid);
 		if (userid !== toId(this.inputUsername)) this.add('|unlink|' + hidetype + toId(this.inputUsername));
 	},
-	hidetexthelp: ["/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ & ~"],
+	hidetexthelp: ["/hidetext [username] - Removes a locked or banned user's messages from chat (includes users banned from the room). Requires: % (global only), @ # & ~"],
 
 	modlog: function (target, room, user, connection) {
 		var lines = 0;
