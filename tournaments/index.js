@@ -19,8 +19,8 @@ function usersToNames(users) {
 function createTournamentGenerator(generator, args, output) {
 	var Generator = TournamentGenerators[toId(generator)];
 	if (!Generator) {
-		output.sendReply(generator + " is not a valid type.");
-		output.sendReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
+		output.errorReply(generator + " is not a valid type.");
+		output.errorReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
 		return;
 	}
 	args.unshift(null);
@@ -28,30 +28,30 @@ function createTournamentGenerator(generator, args, output) {
 }
 function createTournament(room, format, generator, playerCap, isRated, args, output) {
 	if (room.type !== 'chat') {
-		output.sendReply("Tournaments can only be created in chat rooms.");
+		output.errorReply("Tournaments can only be created in chat rooms.");
 		return;
 	}
 	if (exports.tournaments[room.id]) {
-		output.sendReply("A tournament is already running in the room.");
+		output.errorReply("A tournament is already running in the room.");
 		return;
 	}
 	if (Rooms.global.lockdown) {
-		output.sendReply("The server is restarting soon, so a tournament cannot be created.");
+		output.errorReply("The server is restarting soon, so a tournament cannot be created.");
 		return;
 	}
 	format = Tools.getFormat(format);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
-		output.sendReply(format.id + " is not a valid tournament format.");
-		output.sendReply("Valid formats: " + Object.values(Tools.data.Formats).filter(function (f) { return f.effectType === 'Format' && f.tournamentShow; }).map('name').join(", "));
+		output.errorReply(format.id + " is not a valid tournament format.");
+		output.errorReply("Valid formats: " + Object.values(Tools.data.Formats).filter(function (f) { return f.effectType === 'Format' && f.tournamentShow; }).map('name').join(", "));
 		return;
 	}
 	if (!TournamentGenerators[toId(generator)]) {
-		output.sendReply(generator + " is not a valid type.");
-		output.sendReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
+		output.errorReply(generator + " is not a valid type.");
+		output.errorReply("Valid types: " + Object.keys(TournamentGenerators).join(", "));
 		return;
 	}
 	if (playerCap && playerCap < 2) {
-		output.sendReply("You cannot have a player cap that is less than 2.");
+		output.errorReply("You cannot have a player cap that is less than 2.");
 		return;
 	}
 	return (exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), playerCap, isRated));
@@ -59,7 +59,7 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 function deleteTournament(id, output) {
 	var tournament = exports.tournaments[id];
 	if (!tournament) {
-		output.sendReply(id + " doesn't exist.");
+		output.errorReply(id + " doesn't exist.");
 		return false;
 	}
 	tournament.forceEnd(output);
