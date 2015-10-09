@@ -378,7 +378,6 @@ var Context = exports.Context = (function () {
 		return this.targetUser;
 	};
 	Context.prototype.getLastIdOf = function (user) {
-		if (typeof user === 'string') user = Users.get(user);
 		return (user.named ? user.userid : (Object.keys(user.prevNames).last() || user.userid));
 	};
 	Context.prototype.splitTarget = function (target, exactName) {
