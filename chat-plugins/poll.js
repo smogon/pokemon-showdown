@@ -110,6 +110,7 @@ var Poll = (function () {
 exports.commands = {
 	poll: {
 		new: function (target, room, user) {
+			if (target.length > 1024) return this.errorReply("Poll too long.");
 			var params = target.split(target.includes('|') ? '|' : ',').map(function (param) { return param.trim(); });
 
 			if (!this.can(permission, null, room)) return false;
