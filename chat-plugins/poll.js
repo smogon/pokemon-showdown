@@ -109,6 +109,7 @@ var Poll = (function () {
 
 exports.commands = {
 	poll: {
+		create: 'new',
 		new: function (target, room, user) {
 			if (target.length > 1024) return this.errorReply("Poll too long.");
 			var params = target.split(target.includes('|') ? '|' : ',').map(function (param) { return param.trim(); });
@@ -149,6 +150,8 @@ exports.commands = {
 		},
 		votehelp: ["/poll vote [number] - Votes for option [number] in the poll. This can also be done by clicking the option in the poll itself."],
 
+		close: 'end',
+		stop: 'end',
 		end: function (target, room, user) {
 			if (!this.can(permission, null, room)) return false;
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
