@@ -467,14 +467,102 @@ exports.Formats = [
 			return true;
 		}
 	},
-	/*{
-		name: "[Seasonal] Placeholder",
+	{
+		name: "[Seasonal] Spoopy Party",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "OM of the Month",
 
-		team: 'random',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod']
-	},*/
+		team: 'randomSpoopy',
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
+		onSwitchIn: function (pokemon) {
+			if (pokemon.species === 'Magikarp') {
+				this.boost({spe:4, spd:2, def:2}, pokemon, pokemon, 'the power of dank');
+			}
+		},
+		onModifyMove: function (move) {
+			if (move.id === 'hyperbeam') {
+				move.type = 'Water';
+				move.accuracy = true;
+				delete move.self;
+				move.onTryHit = function (target, source) {
+					this.add('-message', target.name + "'s fuel cannot melt " + source.name + " beams!");
+				};
+			}
+			if (move.id === 'trickortreat') {
+				switch (this.random(7)) {
+				case 0:
+					move.category = 'Special';
+					move.type = 'Fire';
+					move.basePower = 200;
+					move.onTryHit = function () {
+						this.add('-message', "Pumpkin bomb!");
+					};
+					move.onHit = function () {};
+					break;
+				case 1:
+					move.category = 'Physical';
+					move.type = 'Poison';
+					move.basePower = 25;
+					move.multihit = 4;
+					move.onTryHit = function () {
+						this.add('-message', "Toilet paper missile attack!");
+					};
+					move.onHit = function () {};
+					break;
+				case 2:
+					move.onTryHit = function () {
+						this.add('-message', "Yum! Chocolate!");
+					};
+					move.onHit = function (target, source) {
+						this.heal(Math.ceil(target.maxhp * 0.5));
+					};
+					break;
+				case 3:
+					move.onTryHit = function () {
+						this.add('-message', "This is a rather bland candy.");
+					};
+					move.onHit = function (target, source) {
+						this.heal(Math.ceil(target.maxhp * 0.25));
+						target.setStatus('par');
+						target.addVolatile('confusion');
+					};
+					break;
+				case 4:
+					move.onTryHit = function () {
+						this.add('-message', "You are about to be rotten-egged on!");
+					};
+					move.onHit = function (target, source) {
+						target.setStatus('tox');
+						target.addVolatile('torment');
+					};
+					break;
+				case 5:
+					move.category = 'Special';
+					move.type = 'Dark';
+					move.basePower = 500;
+					move.self = {volatileStatus: 'mustrecharge'};
+					move.onTryHit = function () {
+						this.add('-message', "Ultimate Super Hiper Mega Awesome Beam destroyer of worlds!");
+					};
+					move.onHit = function (target, source) {
+						this.add('-message', source.name + " caught himself in the explosion!");
+						source.setStatus('brn');
+						source.addVolatile('disabled');
+						source.addVolatile('confusion');
+					};
+					break;
+				case 6:
+					move.onTryHit = function () {
+						this.add('-message', "Have some refreshment, my fellow.");
+					};
+					move.onHit = function (target, source) {
+						target.addVolatile('aquaring');
+					};
+					break;
+				}
+			}
+		}
+	},
 	{
 		name: "CAP",
 		desc: [
