@@ -59,7 +59,7 @@ var Poll = (function () {
 		var colors = ['#79A', '#8A8', '#88B'];
 		while (!i.done) {
 			var percentage = Math.round((i.value[1].votes * 100) / (this.totalVotes || 1));
-			output += '<div style="margin-top: 3px">' + i.value[0] + '. <strong>' + Tools.escapeHTML(i.value[1].name) + '</strong> <small>(' + i.value[1].votes + ' vote' + (i.value[1].votes == 1 ? '' : 's') + ')</small><br /><span style="font-size:7pt;background:' + colors[c % 3] + ';padding-right:' + (percentage * 3) + 'px"></span><small>&nbsp;' + percentage + '%</small></div>';
+			output += '<div style="margin-top: 3px">' + i.value[0] + '. <strong>' + Tools.escapeHTML(i.value[1].name) + '</strong> <small>(' + i.value[1].votes + ' vote' + (i.value[1].votes === 1 ? '' : 's') + ')</small><br /><span style="font-size:7pt;background:' + colors[c % 3] + ';padding-right:' + (percentage * 3) + 'px"></span><small>&nbsp;' + percentage + '%</small></div>';
 			i = iter.next();
 			c++;
 		}
