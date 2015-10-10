@@ -332,7 +332,7 @@ var Context = exports.Context = (function () {
 				}
 			}
 		}
-		if (this.room.isPersonal && !this.user.can('lock') && html.match(/<button /)) {
+		if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock') && html.match(/<button /)) {
 			this.errorReply('You do not have permission to use buttons in HTML.');
 			return false;
 		}
