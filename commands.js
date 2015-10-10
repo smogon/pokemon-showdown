@@ -748,7 +748,7 @@ var commands = exports.commands = {
 			room.auth[userid] = nextGroup;
 		}
 
-		if (Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
+		if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
 			if (targetUser && Rooms.rooms[room.id].users[targetUser.userid]) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
 		} else if (nextGroup === '#') {
