@@ -26,7 +26,7 @@ var commands = exports.commands = {
 			return this.errorReply("User " + this.targetUsername + " not found.");
 		}
 		var showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts');
-		if (showAll && !user.can('lock') && targetUser !== user) {
+		if (showAll && !user.confirmed && targetUser !== user) {
 			return this.errorReply("/alts - Access denied.");
 		}
 
@@ -108,6 +108,19 @@ var commands = exports.commands = {
 		}
 		if ((user === targetUser || user.can('makeroom')) && privaterooms) {
 			buf += '<br />Private rooms: ' + privaterooms;
+		}
+
+		if (user.can('lock') || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
+			var bannedFrom = "";
+			for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
+				var thisRoom = Rooms.global.chatRooms[i];
+				if (!thisRoom || room.isPrivate === true) continue;
+				if (thisRoom.bannedIps && (targetUser.latestIp in thisRoom.bannedIps || targetUser.userid in thisRoom.bannedUsers)) {
+					if (bannedFrom) bannedFrom += ", ";
+					bannedFrom += '<a href="/' + thisRoom + '" room="' + thisRoom + '">' + thisRoom + '</a>';
+				}
+			}
+			if (bannedFrom) buf += '<br />Banned from: ' + bannedFrom;
 		}
 		this.sendReplyBox(buf);
 	},
