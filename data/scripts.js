@@ -3157,8 +3157,8 @@ exports.BattleScripts = {
 			'houndoom', 'mightyena', 'dustox', 'shiftry', 'shedinja', 'exploud', 'sableye', 'mawile', 'swalot', 'carvanha',
 			'sharpedo', 'cacturne', 'seviper', 'lunatone', 'claydol', 'shuppet', 'banette', 'duskull', 'dusclops', 'absol',
 			'snorunt', 'glalie', 'drifloon', 'drifblim', 'mismagius', 'honchkrow', 'skuntank', 'spiritomb', 'drapion',
-			'toxicroak', 'weavile', 'tangrowth', 'gliscor', 'dusknoir', 'froslass', 'rotom', 'rotom-wash', 'rotom-heat',
-			'rotom-mow', 'purrloin', 'liepard', 'swoobat', 'whirlipede', 'scolipede', 'basculin', 'krookodile', 'sigilyph',
+			'toxicroak', 'weavile', 'tangrowth', 'gliscor', 'dusknoir', 'froslass', 'rotom', 'rotomwash', 'rotomheat',
+			'rotommow', 'purrloin', 'liepard', 'swoobat', 'whirlipede', 'scolipede', 'basculin', 'krookodile', 'sigilyph',
 			'yamask', 'cofagrigus', 'garbodor', 'zorua', 'zoroark', 'gothita', 'gothorita', 'gothitelle', 'frillish',
 			'jellicent', 'joltik', 'galvantula', 'elgyem', 'beheeyem', 'litwick', 'lampent', 'chandelure', 'golurk',
 			'zweilous', 'hydreigon', 'volcarona', 'espurr', 'meowstic', 'honedge', 'doublade', 'aegislash', 'malamar',
@@ -3169,6 +3169,13 @@ exports.BattleScripts = {
 		for (var i = 0; i < 6; i++) {
 			var mon = this.sampleNoReplace(pool);
 			var template = this.getTemplate(mon);
+			if (mon === 'pumpkaboo' || mon === 'gourgeist') {
+				var forme = this.random(4);
+				if (forme > 0) {
+					mon = template.otherFormes[forme - 1];
+					template = this.getTemplate(mon);
+				}
+			}
 			var set = this.randomSet(template, i, {megaCount: 1});
 			set.species = mon;
 			if (mon === 'magikarp') {
@@ -3183,6 +3190,8 @@ exports.BattleScripts = {
 					set.name = 'Le Toucan of Luck';
 				} else if (mon === 'machamp') {
 					set.name = 'John Cena';
+				} else if (mon === 'espurr') {
+					set.name = 'Devourer of Souls';
 				}
 				set.moves[4] = 'trickortreat';
 			}
