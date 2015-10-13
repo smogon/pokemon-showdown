@@ -178,6 +178,7 @@ exports.commands = {
 		},
 		endhelp: ["/poll end - Ends a poll and displays the results. Requires: % @ # & ~"],
 
+		show: 'display',
 		display: function (target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 			if (!this.canBroadcast()) return;
