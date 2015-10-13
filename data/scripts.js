@@ -1552,7 +1552,7 @@ exports.BattleScripts = {
 					// If you have two attacks, neither is STAB, and the combo isn't Electric/Ice or Fighting/Ghost, reject one of them at random.
 					var type1 = counter.damagingMoves[0].type, type2 = counter.damagingMoves[1].type;
 					var typeCombo = [type1, type2].sort().join('/');
-					if (typeCombo !== 'Electric/Ice' && typeCombo !== 'Fighting/Ghost') {
+					if ((typeCombo !== 'Electric/Ice' || !hasType['Normal'] || counter.Physical >= 2) && typeCombo !== 'Fighting/Ghost' && !counter.damagingMoves[0].damage && !counter.damagingMoves[1].damage) {
 						var rejectableMoves = [];
 						var baseDiff = movePool.length - availableHP;
 						if (baseDiff || availableHP && (!hasMove['hiddenpower'] || counter.damagingMoves[0].id === 'hiddenpower')) {
