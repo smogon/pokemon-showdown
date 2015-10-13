@@ -1606,7 +1606,6 @@ var ChatRoom = (function () {
 		if (this.reminders && this.reminders.length > 0) {
 			CommandParser.parse('/reminder', this, user, connection);
 		}
-		CommandParser.parse('/donate', this, user, connection);
 	};
 	ChatRoom.prototype.onJoin = function (user, connection, merging) {
 		if (!user) return false; // ???
@@ -1626,7 +1625,6 @@ var ChatRoom = (function () {
 			if (this.reminders && this.reminders.length > 0) {
 				CommandParser.parse('/reminder', this, user, connection);
 			}
-			CommandParser.parse('/donate', this, user, connection);
 		}
 		if (user.named && Config.reportJoins) {
 			this.add('|j|' + user.getIdentity(this.id));
