@@ -1548,7 +1548,7 @@ var commands = exports.commands = {
 			if (this.targetUser) {
 				return this.errorReply("User has already changed their name to '" + this.targetUser.name + "'.");
 			}
-			return this.sendReply("User '" + target + "' not found.");
+			return this.errorReply("User '" + target + "' not found.");
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 
