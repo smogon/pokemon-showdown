@@ -1385,6 +1385,9 @@ exports.BattleScripts = {
 				case 'bodyslam':
 					if (hasMove['glare']) rejected = true;
 					break;
+				case 'endeavor':
+					if (hasMove['quickattack']) rejected = true;
+					break;
 				case 'explosion':
 					if (counter.setupType || hasMove['wish']) rejected = true;
 					break;
@@ -1487,6 +1490,11 @@ exports.BattleScripts = {
 
 				// Hidden Power isn't good enough for most cases with Special setup
 				if (counter.setupType === 'Special' && move.id === 'hiddenpower' && counter['Special'] <= 2 && (!hasMove['shadowball'] || move.type !== 'Fighting') && (!hasType['Electric'] || move.type !== 'Ice') && template.species !== 'Lilligant') {
+					rejected = true;
+				}
+
+				// Pokemon with Contrary should have a move that benefits, except Shuckle
+				if (hasAbility['Contrary'] && !counter['contrary'] && (move.category === 'Status' || !hasType[move.type]) && template.species !== 'Shuckle') {
 					rejected = true;
 				}
 

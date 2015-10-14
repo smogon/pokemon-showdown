@@ -2304,7 +2304,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	swellow: {
-		randomBattleMoves: ["bravebird","facade","quickattack","uturn","endeavor"],
+		randomBattleMoves: ["protect","facade","bravebird","uturn","quickattack","endeavor"],
 		randomDoubleBattleMoves: ["bravebird","facade","quickattack","uturn","protect"],
 		eventPokemon: [
 			{"generation":3,"level":43,"moves":["batonpass","skyattack","agility","facade"]}
