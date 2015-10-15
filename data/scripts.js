@@ -3214,6 +3214,12 @@ exports.BattleScripts = {
 					set.name = 'Devourer of Souls';
 				}
 				set.moves[4] = 'trickortreat';
+				if (set.item === 'Assault Vest') {
+					set.item = 'Leftovers';
+				}
+				if (set.item === 'Choice Band' || set.item === 'Choice Specs') {
+					set.item = 'Life Orb';
+				}
 			}
 			team.push(set);
 		}
