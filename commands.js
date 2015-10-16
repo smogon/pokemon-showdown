@@ -2492,7 +2492,8 @@ var commands = exports.commands = {
 			for (var i in targetUser.roomCount) {
 				if (i === 'global') continue;
 				var targetRoom = Rooms.get(i);
-				if (!targetRoom || targetRoom.isPrivate) continue;
+				if (!targetRoom) continue; // shouldn't happen
+				if (targetRoom.isPrivate && (!targetRoom.battle || targetRoom.battle.lastPlayers.indexOf(user.userid) < 0)) continue;
 				var roomData = {};
 				if (targetRoom.battle) {
 					var battle = targetRoom.battle;
