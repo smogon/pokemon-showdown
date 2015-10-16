@@ -259,6 +259,7 @@ var commands = exports.commands = {
 	backhelp: ["/back - Unblocks challenges and/or private messages, if either are blocked."],
 
 	makeprivatechatroom: 'makechatroom',
+	registerchatroom: 'makechatroom',
 	makechatroom: function (target, room, user, connection, cmd) {
 		if (!this.can('makeroom')) return;
 
@@ -380,6 +381,7 @@ var commands = exports.commands = {
 	},
 	makegroupchathelp: ["/makegroupchat [roomname], [private|hidden|public] - Creates a group chat named [roomname]. Leave off privacy to default to hidden."],
 
+	deletechatroom: 'deregisterchatroom',
 	deregisterchatroom: function (target, room, user) {
 		if (!this.can('makeroom')) return;
 		var id = toId(target);
