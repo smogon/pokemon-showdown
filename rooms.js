@@ -1644,6 +1644,7 @@ var ChatRoom = (function () {
 			} else {
 				entry = '|J|' + user.getIdentity(this.id);
 			}
+			if (this.staffMessage && user.can('mute', null, this)) this.sendUser(user, '|raw|<div class="infobox">(Staff intro:)<br /><div>' + this.staffMessage + '</div></div>');
 		} else if (!user.named) {
 			entry = '|L| ' + oldid;
 		} else {
