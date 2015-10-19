@@ -715,14 +715,15 @@ var commands = exports.commands = {
 		}
 		return this.sendReplyBox(resultsStr);
 	},
-	dexsearchhelp: ["/dexsearch [type], [move], [move], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
+	dexsearchhelp: ["/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria",
 		"Search categories are: type, tier, color, moves, ability, gen, recovery, priority, stat.",
 		"Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.",
-		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/PU/NFE/LC/CAP.",
+		"Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/BL4/PU/NFE/LC/CAP.",
 		"Types must be followed by ' type', e.g., 'dragon type'.",
-		"Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'speed > 100' searches for all Pokemon equal to and greater than 100 speed.",
+		"Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP equal to or greater than 95.",
 		"Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.",
-		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pokemon only.",
+		"The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.",
+		"Parameters separated with '|' will be searched as alternatives for each other, e.g., 'trick | switcheroo' searches for all Pok\u00e9mon that learn either Trick or Switcheroo.",
 		"The order of the parameters does not matter."],
 
 	rollpokemon: 'randompokemon',
