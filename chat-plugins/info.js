@@ -378,6 +378,7 @@ var commands = exports.commands = {
 		var allStats = {'hp':1, 'atk':1, 'def':1, 'spa':1, 'spd':1, 'spe':1, 'bst':1};
 		var showAll = false;
 		var megaSearch = null;
+		var capSearch = null;
 		var randomOutput = 0;
 
 		var self = this;
@@ -417,6 +418,10 @@ var commands = exports.commands = {
 				}
 
 				if (target in allTiers) {
+					if (target === "cap") {
+						if (parameters.length > 1) return this.sendReplyBox("The parameter 'cap' cannot have alternative parameters");
+						capSearch = !isNotSearch;
+					}
 					if (!validParameter("tiers", target, isNotSearch)) return;
 					orGroup.tiers[target] = !isNotSearch;
 					continue;
@@ -571,7 +576,7 @@ var commands = exports.commands = {
 		for (var pokemon in Tools.data.Pokedex) {
 			var template = Tools.getTemplate(pokemon);
 			var megaSearchResult = (megaSearch === null || (megaSearch === true && template.isMega) || (megaSearch === false && !template.isMega));
-			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || (searches['tier'] && searches['tier']['cap'])) && megaSearchResult) {
+			if (template.tier !== 'Unreleased' && template.tier !== 'Illegal' && (template.tier !== 'CAP' || capSearch) && megaSearchResult) {
 				dex[pokemon] = template;
 			}
 		}
