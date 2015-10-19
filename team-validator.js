@@ -206,22 +206,16 @@ Validator = (function () {
 			}
 			return ["You sent invalid team data. If you're not using a custom client, please report this as a bug."];
 		}
-		if (team.length > 6) {
-			return ["Your team has more than 6 pokemon."];
+
+		var lengthRange = format.teamLength && format.teamLength.validate;
+		if (!lengthRange) {
+			lengthRange = [1, 6];
+			if (format.gameType === 'doubles') lengthRange[0] = 2;
+			if (format.gameType === 'triples' || format.gameType === 'rotation') lengthRange[0] = 3;
 		}
-		switch (format.gameType) {
-		case 'doubles':
-			if (team.length < 2) return ["Your Doubles team needs at least 2 pokemon."];
-			break;
-		case 'triples':
-			if (team.length < 3) return ["Your Triples team needs at least 3 pokemon."];
-			break;
-		case 'rotation':
-			if (team.length < 3) return ["Your Rotation team needs at least 3 pokemon."];
-			break;
-		default:
-			if (team.length < 1) return ["Your team has no pokemon."];
-		}
+		if (team.length < lengthRange[0]) return ["You must bring at least " + lengthRange[0] + " Pok\u00E9mon."];
+		if (team.length > lengthRange[1]) return ["You may only bring up to " + lengthRange[1] + " Pok\u00E9mon."];
+
 		var teamHas = {};
 		for (var i = 0; i < team.length; i++) {
 			if (!team[i]) return ["You sent invalid team data. If you're not using a custom client, please report this as a bug."];
