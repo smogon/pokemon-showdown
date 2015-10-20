@@ -1194,7 +1194,11 @@ exports.BattleScripts = {
 					if (!hasMove['protect']) rejected = true;
 					break;
 				case 'rest':
-					if (movePool.indexOf('sleeptalk') >= 0) rejected = true;
+					var sleepTalk = movePool.indexOf('sleeptalk');
+					if (sleepTalk >= 0) {
+						movePool.splice(sleepTalk, 1);
+						rejected = true;
+					}
 					break;
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
@@ -1859,7 +1863,7 @@ exports.BattleScripts = {
 			}
 
 		// Medium priority
-		} else if (ability === 'Guts') {
+		} else if (ability === 'Guts' && !hasMove['sleeptalk']) {
 			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
 		} else if (((ability === 'Speed Boost' && !hasMove['substitute']) || (ability === 'Stance Change')) && counter.Physical + counter.Special > 2) {
 			item = 'Life Orb';
