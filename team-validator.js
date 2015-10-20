@@ -463,8 +463,8 @@ Validator = (function () {
 						if (eventData.nature && eventData.nature !== set.nature) {
 							problems.push(name + " must have a " + eventData.nature + " nature because it has a move only available from a specific event.");
 						}
-						if (eventData.shiny) {
-							set.shiny = true;
+						if (eventData.shiny && !set.shiny) {
+							problems.push(name + " must be shiny because it has a move only available from a specific event.");
 						}
 						if (eventData.generation < 5) eventData.isHidden = false;
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
