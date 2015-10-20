@@ -103,18 +103,18 @@ var commands = exports.commands = {
 			buf += "<br /> IP" + ((ips.length > 1) ? "s" : "") + ": " + ips.join(", ") +
 					(user.group !== ' ' && targetUser.latestHost ? "<br />Host: " + Tools.escapeHTML(targetUser.latestHost) : "");
 		}
-		if ((user === targetUser || user.can('alts')) && hiddenrooms) {
+		if ((user === targetUser || user.can('alts', targetUser)) && hiddenrooms) {
 			buf += '<br />Hidden rooms: ' + hiddenrooms;
 		}
 		if ((user === targetUser || user.can('makeroom')) && privaterooms) {
 			buf += '<br />Private rooms: ' + privaterooms;
 		}
 
-		if (user.can('lock') || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
+		if (user.can('alts', targetUser) || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
 			var bannedFrom = "";
 			for (var i = 0; i < Rooms.global.chatRooms.length; i++) {
 				var thisRoom = Rooms.global.chatRooms[i];
-				if (!thisRoom || room.isPrivate === true) continue;
+				if (!thisRoom || thisRoom.isPrivate === true) continue;
 				if (thisRoom.bannedIps && (targetUser.latestIp in thisRoom.bannedIps || targetUser.userid in thisRoom.bannedUsers)) {
 					if (bannedFrom) bannedFrom += ", ";
 					bannedFrom += '<a href="/' + thisRoom + '" room="' + thisRoom + '">' + thisRoom + '</a>';
