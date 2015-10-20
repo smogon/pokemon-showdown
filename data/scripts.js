@@ -1340,11 +1340,14 @@ exports.BattleScripts = {
 				case 'superpower':
 					if (counter.setupType && (hasMove['drainpunch'] || hasMove['focusblast'])) rejected = true;
 					break;
-				case 'fierydance': case 'firefang': case 'flamethrower':
-					if ((hasMove['fireblast'] && counter.setupType !== 'Physical') || hasMove['overheat']) rejected = true;
+				case 'fierydance': case 'flamethrower':
+					if (hasMove['fireblast'] || hasMove['overheat']) rejected = true;
 					break;
 				case 'fireblast':
 					if ((hasMove['flareblitz'] || hasMove['lavaplume']) && !counter.setupType && !counter['speedsetup']) rejected = true;
+					break;
+				case 'firefang':
+					if (counter.setupType !== 'Physical' && (hasMove['fireblast'] || movePool.indexOf('fireblast') >= 0)) rejected = true;
 					break;
 				case 'firepunch': case 'sacredfire':
 					if (hasMove['fireblast'] || hasMove['flareblitz']) rejected = true;
