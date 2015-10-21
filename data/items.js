@@ -561,6 +561,7 @@ exports.BattleItems = {
 			return true;
 		},
 		onDrive: 'Fire',
+		forcedForme: "Genesect-Burn",
 		num: 118,
 		gen: 5,
 		desc: "Holder's Techno Blast is Fire type."
@@ -749,6 +750,7 @@ exports.BattleItems = {
 			return true;
 		},
 		onDrive: 'Ice',
+		forcedForme: "Genesect-Chill",
 		num: 119,
 		gen: 5,
 		desc: "Holder's Techno Blast is Ice type."
@@ -1075,6 +1077,7 @@ exports.BattleItems = {
 			return true;
 		},
 		onDrive: 'Water',
+		forcedForme: "Genesect-Douse",
 		num: 116,
 		gen: 5,
 		desc: "Holder's Techno Blast is Water type."
@@ -1096,6 +1099,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Dragon",
 		num: 311,
 		gen: 4,
 		desc: "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon type."
@@ -1153,6 +1157,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Dark",
 		num: 312,
 		gen: 4,
 		desc: "Holder's Dark-type attacks have 1.2x power. Judgment is Dark type."
@@ -1203,6 +1208,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Ground",
 		num: 305,
 		gen: 4,
 		desc: "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type."
@@ -1440,6 +1446,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Fighting",
 		num: 303,
 		gen: 4,
 		desc: "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting type."
@@ -1478,6 +1485,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Fire",
 		num: 298,
 		gen: 4,
 		desc: "Holder's Fire-type attacks have 1.2x power. Judgment is Fire type."
@@ -1755,6 +1763,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Giratina-Origin",
 		num: 112,
 		gen: 4,
 		desc: "If holder is a Giratina, its Ghost- and Dragon-type attacks have 1.2x power."
@@ -1973,6 +1982,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Ice",
 		num: 302,
 		gen: 4,
 		desc: "Holder's Ice-type attacks have 1.2x power. Judgment is Ice type."
@@ -2005,6 +2015,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Bug",
 		num: 308,
 		gen: 4,
 		desc: "Holder's Bug-type attacks have 1.2x power. Judgment is Bug type."
@@ -2047,6 +2058,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Steel",
 		num: 313,
 		gen: 4,
 		desc: "Holder's Steel-type attacks have 1.2x power. Judgment is Steel type."
@@ -2702,6 +2714,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Grass",
 		num: 301,
 		gen: 4,
 		desc: "Holder's Grass-type attacks have 1.2x power. Judgment is Grass type."
@@ -2921,6 +2934,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Psychic",
 		num: 307,
 		gen: 4,
 		desc: "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic type."
@@ -3323,6 +3337,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Fairy",
 		num: -6,
 		gen: 6,
 		desc: "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy type."
@@ -4017,6 +4032,7 @@ exports.BattleItems = {
 			return true;
 		},
 		onDrive: 'Electric',
+		forcedForme: "Genesect-Shock",
 		num: 117,
 		gen: 5,
 		desc: "Holder's Techno Blast is Electric type."
@@ -4129,6 +4145,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Flying",
 		num: 306,
 		gen: 4,
 		desc: "Holder's Flying-type attacks have 1.2x power. Judgment is Flying type."
@@ -4261,6 +4278,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Water",
 		num: 299,
 		gen: 4,
 		desc: "Holder's Water-type attacks have 1.2x power. Judgment is Water type."
@@ -4282,6 +4300,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Ghost",
 		num: 310,
 		gen: 4,
 		desc: "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost type."
@@ -4415,6 +4434,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Rock",
 		num: 309,
 		gen: 4,
 		desc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock type."
@@ -4527,6 +4547,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Poison",
 		num: 304,
 		gen: 4,
 		desc: "Holder's Poison-type attacks have 1.2x power. Judgment is Poison type."
@@ -4821,6 +4842,7 @@ exports.BattleItems = {
 			}
 			return true;
 		},
+		forcedForme: "Arceus-Electric",
 		num: 300,
 		gen: 4,
 		desc: "Holder's Electric-type attacks have 1.2x power. Judgment is Electric type."
