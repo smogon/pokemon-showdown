@@ -160,10 +160,6 @@ exports.BattleFormats = {
 				if (perfectIVs < 3) problems.push((set.name || set.species) + " has less than three perfect IVs.");
 			}
 
-			if (set.shiny && template.unobtainableShiny) {
-				problems.push((set.name || set.species) + " may not be shiny.");
-			}
-
 			// limit one of each move
 			var moves = [];
 			if (set.moves) {
@@ -222,6 +218,10 @@ exports.BattleFormats = {
 				if (!legalAbility) { // Default to first ability.
 					set.ability = template.abilities['0'];
 				}
+			}
+
+			if (set.shiny && template.unobtainableShiny) {
+				problems.push("Shiny " + template.species + " is not released.");
 			}
 
 			return problems;
