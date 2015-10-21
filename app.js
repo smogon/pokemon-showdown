@@ -161,7 +161,7 @@ global.Tournaments = require('./tournaments');
 try {
 	global.Dnsbl = require('./dnsbl.js');
 } catch (e) {
-	global.Dnsbl = {query:function () {}};
+	global.Dnsbl = {query:function () {}, reverse: require('dns').reverse};
 }
 
 global.Cidr = require('./cidr.js');
