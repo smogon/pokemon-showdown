@@ -3224,7 +3224,7 @@ Battle = (function () {
 		default:
 			if (effect.effectType === 'Move') {
 				this.add('-damage', target, target.getHealth);
-			} else if (source && source !== target) {
+			} else if (source && (source !== target || effect.effectType === 'Ability')) {
 				this.add('-damage', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
 			} else {
 				this.add('-damage', target, target.getHealth, '[from] ' + name);
