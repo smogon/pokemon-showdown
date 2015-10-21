@@ -3058,8 +3058,6 @@ Battle = (function () {
 			}
 		}
 
-		this.add('turn', this.turn);
-
 		if (this.gameType === 'triples' && this.sides.map('pokemonLeft').count(1) === this.sides.length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
 			var center = false;
@@ -3074,6 +3072,9 @@ Battle = (function () {
 			}
 			if (center) this.add('-center');
 		}
+
+		this.add('turn', this.turn);
+
 		this.makeRequest('move');
 	};
 	Battle.prototype.start = function () {
