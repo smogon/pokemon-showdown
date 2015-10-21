@@ -3138,6 +3138,7 @@ Battle = (function () {
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.clone(boost));
 		var success = false;
+		var boosted = false;
 		for (var i in boost) {
 			var currentBoost = {};
 			currentBoost[i] = boost[i];
@@ -3163,6 +3164,10 @@ Battle = (function () {
 					if (effect.effectType === 'Move') {
 						this.add(msg, target, i, boost[i]);
 					} else {
+						if (effect.effectType === 'Ability' && !boosted) {
+							this.add('-activate', target, effect.fullname);
+							boosted = true;
+						}
 						this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 					}
 					break;
