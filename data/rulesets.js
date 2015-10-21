@@ -178,88 +178,50 @@ exports.BattleFormats = {
 			}
 			set.moves = moves;
 
-			if (template.isMega) {
-				// Mega evolutions evolve in-battle
-				set.species = template.baseSpecies;
-				var baseAbilities = Tools.getTemplate(set.species).abilities;
-				var niceAbility = false;
-				for (var i in baseAbilities) {
-					if (baseAbilities[i] === set.ability) {
-						niceAbility = true;
-						break;
-					}
+			var battleForme = template.battleOnly && template.species;
+			if (battleForme) {
+				if (template.requiredAbility && set.ability !== template.requiredAbility) {
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen
 				}
-				if (!niceAbility) set.ability = baseAbilities['0'];
-			} else if (template.isPrimal) {
-				// Primal Reversion happens in-battle
-				set.species = template.baseSpecies;
-				set.ability = Tools.getTemplate(set.species).abilities['0'];
-			}
-			if (template.requiredItem && item.name !== template.requiredItem) {
-				problems.push((set.name || set.species) + ' needs to hold ' + template.requiredItem + '.');
-			}
-			if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
-				problems.push((set.name || set.species) + ' needs to have the move ' + template.requiredMove + '.');
-			}
-			if (template.num === 351) { // Castform
-				set.species = 'Castform';
-			}
-			if (template.num === 421) { // Cherrim
-				set.species = 'Cherrim';
-			}
-			if (template.num === 493) { // Arceus
-				if (set.ability === 'Multitype' && item.onPlate) {
-					set.species = 'Arceus-' + item.onPlate;
-				} else {
-					set.species = 'Arceus';
+				if (template.requiredItem && item.name !== template.requiredItem) {
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredItem + '.'); // Mega or Primal
+				}
+				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredMove + "."); // Meloetta-Pirouette, Rayquaza-Mega
+				}
+				set.species = template.baseSpecies; // Fix forme for Aegislash, Castform, etc.
+			} else {
+				if (template.requiredAbility && set.ability !== template.requiredAbility) {
+					problems.push("" + (set.name || set.species) + " needs the ability " + template.requiredAbility + "."); // No cases currently.
+				}
+				if (template.requiredItem && item.name !== template.requiredItem) {
+					problems.push("" + (set.name || set.species) + " needs to hold " + template.requiredItem + '.'); // Plate/Drive/Griseous Orb - Forme mismatch
+				}
+				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+					problems.push("" + (set.name || set.species) + " needs to have the move " + template.requiredMove + "."); // Keldeo-Resolute
+				}
+
+				// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
+				// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina).
+				if (item.forcedForme && template.species === this.getTemplate(item.forcedForme).baseSpecies) {
+					set.species = item.forcedForme;
 				}
 			}
-			if (template.num === 555) { // Darmanitan
-				if (set.species === 'Darmanitan-Zen' && ability.id !== 'zenmode') {
-					problems.push('Darmanitan-Zen transforms in-battle with Zen Mode.');
-				}
-				set.species = 'Darmanitan';
-			}
-			if (template.num === 487) { // Giratina
-				if (item.id === 'griseousorb') {
-					set.species = 'Giratina-Origin';
-					set.ability = 'Levitate';
-				} else {
-					set.species = 'Giratina';
-					set.ability = 'Pressure';
-				}
-			}
-			if (template.num === 647) { // Keldeo
-				if (set.moves.indexOf('secretsword') < 0) {
-					set.species = 'Keldeo';
-				}
-			}
-			if (template.num === 648) { // Meloetta
-				if (set.species === 'Meloetta-Pirouette' && set.moves.indexOf('relicsong') < 0) {
-					problems.push('Meloetta-Pirouette transforms in-battle with Relic Song.');
-				}
-				set.species = 'Meloetta';
-			}
-			if (template.num === 649) { // Genesect
-				switch (item.id) {
-				case 'burndrive':
-					set.species = 'Genesect-Burn';
+
+			if (set.species !== template.species) {
+				// Autofixed forme.
+				template = this.getTemplate(set.species);
+
+				// Ensure that the ability is (still) legal.
+				var legalAbility = false;
+				for (var i in template.abilities) {
+					if (template.abilities[i] !== set.ability) continue;
+					legalAbility = true;
 					break;
-				case 'chilldrive':
-					set.species = 'Genesect-Chill';
-					break;
-				case 'dousedrive':
-					set.species = 'Genesect-Douse';
-					break;
-				case 'shockdrive':
-					set.species = 'Genesect-Shock';
-					break;
-				default:
-					set.species = 'Genesect';
 				}
-			}
-			if (template.num === 681) { // Aegislash
-				set.species = 'Aegislash';
+				if (!legalAbility) { // Default to first ability.
+					set.ability = template.abilities['0'];
+				}
 			}
 
 			return problems;

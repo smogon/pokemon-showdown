@@ -232,9 +232,11 @@ module.exports = (function () {
 				if (template.forme && template.forme in {'Mega':1, 'Mega-X':1, 'Mega-Y':1}) {
 					template.gen = 6;
 					template.isMega = true;
+					template.battleOnly = true;
 				} else if (template.forme === 'Primal') {
 					template.gen = 6;
 					template.isPrimal = true;
+					template.battleOnly = true;
 				} else if (template.num >= 650) {
 					template.gen = 6;
 				} else if (template.num >= 494) {
