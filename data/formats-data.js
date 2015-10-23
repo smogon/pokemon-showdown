@@ -661,7 +661,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	tentacruel: {
-		randomBattleMoves: ["toxicspikes","rapidspin","scald","sludgebomb","protect","knockoff"],
+		randomBattleMoves: ["toxicspikes","rapidspin","scald","sludgebomb","acidspray","knockoff"],
 		randomDoubleBattleMoves: ["muddywater","scald","sludgebomb","acidspray","icebeam","knockoff","gigadrain","protect","dazzlinggleam"],
 		tier: "UU"
 	},

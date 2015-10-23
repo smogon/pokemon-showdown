@@ -1135,8 +1135,8 @@ exports.BattleScripts = {
 
 		// These moves can be used even if we aren't setting up to use them:
 		var SetupException = {
-			dracometeor:1, leafstorm:1, overheat:1,
-			extremespeed:1, suckerpunch:1, superpower:1
+			extremespeed:1, suckerpunch:1, superpower:1,
+			dracometeor:1, leafstorm:1, overheat:1, technoblast:1
 		};
 		var counterAbilities = {
 			'Adaptability':1, 'Blaze':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1,
@@ -1409,6 +1409,9 @@ exports.BattleScripts = {
 					break;
 				case 'weatherball':
 					if (!hasMove['raindance'] && !hasMove['sunnyday']) rejected = true;
+					break;
+				case 'acidspray':
+					if (hasMove['sludgebomb']) rejected = true;
 					break;
 				case 'poisonjab':
 					if (hasMove['gunkshot']) rejected = true;
