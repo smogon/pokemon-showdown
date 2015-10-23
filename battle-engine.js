@@ -1391,6 +1391,8 @@ BattleSide = (function () {
 		var sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.merge(this, sideScripts);
 
+		this.getChoice = (this.getChoice || BattleSide.getChoice).bind(this);
+
 		this.battle = battle;
 		this.n = n;
 		this.name = name;
@@ -1419,6 +1421,11 @@ BattleSide = (function () {
 			this.pokemon[i].position = i;
 		}
 	}
+
+	BattleSide.getChoice = function (side) {
+		if (side !== this && side !== true) return '';
+		return this.choice;
+	};
 
 	BattleSide.prototype.isActive = false;
 	BattleSide.prototype.pokemonLeft = 0;
@@ -1540,7 +1547,11 @@ BattleSide = (function () {
 		this.battle.send('request', this.id + "\n" + this.battle.rqid + "\n" + JSON.stringify(update));
 	};
 	BattleSide.prototype.resolveDecision = function () {
-		if (this.decision) return this.decision;
+		if (this.decision) {
+			if (this.decision === true) this.choice = '';
+			return;
+		}
+
 		var decisions = [];
 
 		switch (this.currentRequest) {
@@ -1612,7 +1623,8 @@ BattleSide = (function () {
 			});
 		}
 
-		return decisions;
+		this.choice = '';
+		this.decision = decisions;
 	};
 	BattleSide.prototype.destroy = function () {
 		// deallocate ourself
@@ -4138,17 +4150,13 @@ Battle = (function () {
 			return;
 		}
 
-		// It should be impossible for choice not to be a string. Choice comes
-		// from splitting the string sent by our forked process, not from the
-		// client. However, just in case, we maintain this check for now.
-		if (typeof choice === 'string') choice = choice.split(',');
-
 		if (side.decision && side.decision.finalDecision) {
 			this.debug("Can't override decision: the last pokemon could have been trapped or disabled");
 			return;
 		}
 
-		side.decision = this.parseChoice(choice, side);
+		side.decision = this.parseChoice(choice.split(','), side);
+		side.choice = choice;
 
 		if (this.p1.decision && this.p2.decision) {
 			this.commitDecisions();
@@ -4157,12 +4165,13 @@ Battle = (function () {
 	Battle.prototype.commitDecisions = function () {
 		var oldQueue = this.queue;
 		this.queue = [];
-		if (this.p1.decision !== true) {
-			this.addQueue(this.p1.resolveDecision());
+		for (var i = 0; i < this.sides.length; i++) {
+			this.sides[i].resolveDecision();
+			if (this.sides[i].decision === true) continue;
+			this.addQueue(this.sides[i].decision);
 		}
-		if (this.p2.decision !== true) {
-			this.addQueue(this.p2.resolveDecision());
-		}
+		this.add('choice', this.p1.getChoice, this.p2.getChoice);
+
 		this.sortQueue();
 		Array.prototype.push.apply(this.queue, oldQueue);
 
