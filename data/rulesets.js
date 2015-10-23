@@ -215,7 +215,7 @@ exports.BattleFormats = {
 						if (template.abilities[i] !== set.ability) continue;
 						legalAbility = true;
 						break;
-					}	
+					}
 					if (!legalAbility) { // Default to first ability.
 						set.ability = template.abilities['0'];
 					}
@@ -223,7 +223,7 @@ exports.BattleFormats = {
 			}
 
 			if (set.shiny && template.unobtainableShiny) {
-				problems.push("Shiny " + template.species + " is not released.");
+				problems.push("It's currently not possible to get a shiny " + template.species + ".");
 			}
 
 			return problems;
