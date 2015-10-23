@@ -208,15 +208,17 @@ exports.BattleFormats = {
 				// Autofixed forme.
 				template = this.getTemplate(set.species);
 
-				// Ensure that the ability is (still) legal.
-				var legalAbility = false;
-				for (var i in template.abilities) {
-					if (template.abilities[i] !== set.ability) continue;
-					legalAbility = true;
-					break;
-				}
-				if (!legalAbility) { // Default to first ability.
-					set.ability = template.abilities['0'];
+				if (!format.banlistTable['ignoreillegalabilities']) {
+					// Ensure that the ability is (still) legal.
+					var legalAbility = false;
+					for (var i in template.abilities) {
+						if (template.abilities[i] !== set.ability) continue;
+						legalAbility = true;
+						break;
+					}	
+					if (!legalAbility) { // Default to first ability.
+						set.ability = template.abilities['0'];
+					}
 				}
 			}
 
