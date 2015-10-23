@@ -1679,6 +1679,11 @@ Battle = (function () {
 		};
 	})();
 
+	Battle.logReplay = function (data, isReplay) {
+		if (isReplay === true) return data;
+		return '';
+	};
+
 	Battle.prototype = {};
 
 	Battle.prototype.init = function (roomid, formatarg, rated) {
@@ -3121,6 +3126,7 @@ Battle = (function () {
 		if (this.rated) {
 			this.add('rated');
 		}
+		this.add('seed', Battle.logReplay.bind(this, this.startingSeed.join(',')));
 		if (format && format.ruleset) {
 			for (var i = 0; i < format.ruleset.length; i++) {
 				this.addPseudoWeather(format.ruleset[i]);
