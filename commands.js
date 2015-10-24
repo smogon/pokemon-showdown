@@ -707,6 +707,7 @@ var commands = exports.commands = {
 		this.addModCommand("" + name + " was appointed Room Kohai by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
+	},
 	
 	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: ~"],
 
