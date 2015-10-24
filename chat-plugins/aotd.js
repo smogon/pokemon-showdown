@@ -5,8 +5,7 @@ exports.commands = {
 		if (!this.canTalk()) return false;
 		this.add(
 			'|raw|<div class="broadcast-blue"><b>AOTD has begun in Lux Music! ' +
-			'<button name="joinRoom" value="goldenrodradiotower" target="_blank">Join now</button> to nominate your favorite artist for AOTD to be featured on the ' +
-			'official page next to your name for a chance to win the monthly prize at the end of the month!</b></div>'
+			'<button name="joinRoom" value="luxmusic" target="_blank">Join now</button> to nominate your favorite artist for AOTD '</b></div>'
 		);
 		this.logModCommand(user.name + " used declareaotd.");
 	}
