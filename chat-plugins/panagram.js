@@ -66,8 +66,6 @@ exports.commands = {
 		while (panagram == poke) {
 			panagram = mixer(poke);
 		}
-		this.add('|html|<b><font color='(toId(user.name)) + '>' + Tools.escapeHTML(user.name) + '</font> has started a session of Panagrams!</b>');
-		this.add('|html|<div class = "broadcast"><center><b>A game of Panagram has been started!</b> (' + session + ' remaining)<br/>' + 'The scrambled Pokémon is: <b>' + panagram + '</b><br/>' + '<font size = 1>Type in <b>/gp [Pokémon]</b> to guess the Pokémon!');
 		room.panagram.guessed = [];
 		room.panagram.chances = 2;
 		room.panagram.answer = toId(poke);
@@ -138,7 +136,6 @@ exports.commands = {
 		if (!this.can('broadcast', null, room)) return this.errorReply('You must be ranked + or higher to be able to end a game of Panagram in this room.');
 		if (!room.panagram) return this.errorReply('There is no Panagram game going on in this room.');
 		if (!this.canTalk()) return;
-		this.add("|html|<b>The game of Panagram has been ended by <font color="(toId(user.name)) + ">" + Tools.escapeHTML(user.name) + "</font>.</b>");
 		delete room.panagram;
 	},
 	ph: 'panagramhint',
