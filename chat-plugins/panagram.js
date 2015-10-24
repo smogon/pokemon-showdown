@@ -31,7 +31,7 @@ exports.commands = {
 		if (target < 0) return this.errorReply("Number cannot be negitive.");
 		if (String(target).indexOf('.') >= 0) return this.errorReply("Number must be an integer.");
 		if (!target) return this.errorReply("Usage: /panagram [number of games]");
-		var msg = "<div class=\"broadcast-gold\"><center>A session of <b>Panagrams</b> in <button name=\"joinRoom\" value=" + room.id +">" + room.title + "</button> has commenced for " + target + " games!</center></div>";
+		var msg = "<div class=\"broadcast\"><center>A session of <b>Panagrams</b> in <button name=\"joinRoom\" value=" + room.id +">" + room.title + "</button> has commenced for " + target + " games!</center></div>";
 		try {
 			Rooms.rooms.lobby.add('|raw|' + msg);
 			room.update();
@@ -67,7 +67,7 @@ exports.commands = {
 			panagram = mixer(poke);
 		}
 		this.add('|html|<b><font color=' + Gold.hashColor(toId(user.name)) + '>' + Tools.escapeHTML(user.name) + '</font> has started a session of Panagrams!</b>');
-		this.add('|html|<div class = "broadcast-gold"><center><b>A game of Panagram has been started!</b> (' + session + ' remaining)<br/>' + 'The scrambled Pokémon is: <b>' + panagram + '</b><br/>' + '<font size = 1>Type in <b>/gp [Pokémon]</b> to guess the Pokémon!');
+		this.add('|html|<div class = "broadcast"><center><b>A game of Panagram has been started!</b> (' + session + ' remaining)<br/>' + 'The scrambled Pokémon is: <b>' + panagram + '</b><br/>' + '<font size = 1>Type in <b>/gp [Pokémon]</b> to guess the Pokémon!');
 		room.panagram.guessed = [];
 		room.panagram.chances = 2;
 		room.panagram.answer = toId(poke);
@@ -76,7 +76,7 @@ exports.commands = {
 	gp: 'guessp',
 	guesspoke: 'guessp',
 	guessp: function(target, room, user, cmd) {
-		if (room.id !== 'gamechamber') return this.errorReply("This command can only be used in the 'Game Chamber' room.");
+		if (room.id !== 'gamescorner') return this.errorReply("This command can only be used in the 'Games Corner' room.");
 		if (!room.panagram) return this.errorReply('There is no game of Panagram going on in this room.');
 		if (!this.canTalk()) return;
 		//if (room.panagram[user.userid]) return this.errorReply("You've already guessed once!");
@@ -119,7 +119,7 @@ exports.commands = {
 				while (panagram == poke) {
 					panagram = mixer(poke);
 				}
-				this.add('|html|<div class = "broadcast-gold"><center><b>A game of Panagram has been started!</b> (' + session + ' remaining)<br/>' + 'The scrambled Pokémon is: <b>' + panagram + '</b><br/>' + '<font size = 1>Type in <b>/gp [Pokémon]</b> to guess the Pokémon!');
+				this.add('|html|<div class = "broadcast"><center><b>A game of Panagram has been started!</b> (' + session + ' remaining)<br/>' + 'The scrambled Pokémon is: <b>' + panagram + '</b><br/>' + '<font size = 1>Type in <b>/gp [Pokémon]</b> to guess the Pokémon!');
 				room.panagram = {};
 				room.panagram.guessed = [];
 				room.panagram.chances = 2;
