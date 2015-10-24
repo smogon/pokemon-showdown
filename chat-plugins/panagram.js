@@ -66,7 +66,7 @@ exports.commands = {
 		while (panagram == poke) {
 			panagram = mixer(poke);
 		}
-		this.add('|html|<b><font color=' + Gold.hashColor(toId(user.name)) + '>' + Tools.escapeHTML(user.name) + '</font> has started a session of Panagrams!</b>');
+		this.add('|html|<b><font color='(toId(user.name)) + '>' + Tools.escapeHTML(user.name) + '</font> has started a session of Panagrams!</b>');
 		this.add('|html|<div class = "broadcast"><center><b>A game of Panagram has been started!</b> (' + session + ' remaining)<br/>' + 'The scrambled Pokémon is: <b>' + panagram + '</b><br/>' + '<font size = 1>Type in <b>/gp [Pokémon]</b> to guess the Pokémon!');
 		room.panagram.guessed = [];
 		room.panagram.chances = 2;
@@ -86,7 +86,7 @@ exports.commands = {
 		//if (Tools.data.Pokedex[toId(target)].baseSpecies) target = toId(Tools.data.Pokedex[toId(target)].baseSpecies);
 		if (room.panagram.guessed.indexOf(toId(target)) > -1) return this.errorReply("That has already been guessed!");
 		if (room.panagram.answer == toId(target)) {
-			this.add('|html|<b><font color=' + Gold.hashColor(toId(user.name)) + '>' + Tools.escapeHTML(user.name) + '</b> guessed <b>' + Tools.data.Pokedex[toId(target)].species + '</b>, which was the correct answer!  They have also won 1 buck!');
+			this.add('|html|<b><font color='(toId(user.name)) + '>' + Tools.escapeHTML(user.name) + '</b> guessed <b>' + Tools.data.Pokedex[toId(target)].species + '</b>, which was the correct answer!  They have also won 1 buck!');
 			economy.writeMoney('money', toId(user.name), +1);
 			delete room.panagram;
 			if (session > 1) {
@@ -127,7 +127,7 @@ exports.commands = {
 				room.panagram.scrambled = panagram;
 			}
 		} else {
-			this.add('|html|<b><font color=' + Gold.hashColor(user.name) + '>' + Tools.escapeHTML(user.name) + '</b> guessed <b>' + Tools.escapeHTML(target) + '</b>, but was not the correct answer...');
+			this.add('|html|<b><font color='(user.name) + '>' + Tools.escapeHTML(user.name) + '</b> guessed <b>' + Tools.escapeHTML(target) + '</b>, but was not the correct answer...');
 			room.panagram[user.userid] = toId(target);
 			room.panagram.guessed.push(toId(target));
 		}
@@ -138,7 +138,7 @@ exports.commands = {
 		if (!this.can('broadcast', null, room)) return this.errorReply('You must be ranked + or higher to be able to end a game of Panagram in this room.');
 		if (!room.panagram) return this.errorReply('There is no Panagram game going on in this room.');
 		if (!this.canTalk()) return;
-		this.add("|html|<b>The game of Panagram has been ended by <font color=" + Gold.hashColor(toId(user.name)) + ">" + Tools.escapeHTML(user.name) + "</font>.</b>");
+		this.add("|html|<b>The game of Panagram has been ended by <font color="(toId(user.name)) + ">" + Tools.escapeHTML(user.name) + "</font>.</b>");
 		delete room.panagram;
 	},
 	ph: 'panagramhint',
