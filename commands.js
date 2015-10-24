@@ -667,26 +667,6 @@ var commands = exports.commands = {
 		Rooms.global.writeChatRoomData();
 	},
 	
-	roomkohai: function (target, room, user) {
-		if (!room.chatRoomData) {
-			return this.sendReply("/roomkohai - Senpai hasn't noticed you");
-		}
-		target = this.splitTarget(target, true);
-		var targetUser = this.targetUser;
-
-		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' is not online.");
-
-		if (!this.can('makeroom')) return false;
-
-		if (!room.auth) room.auth = room.chatRoomData.auth = {%};
-
-		var name = targetUser.name;
-
-		room.auth[targetUser.userid] = '$';
-		this.addModCommand("" + name + " was appointed Room Kohai by " + user.name + ".");
-		room.onUpdateIdentity(targetUser);
-		Rooms.global.writeChatRoomData();
-	
 	roomleader: function (target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomleader - This room isn't designed for per-room moderation to be added");
@@ -707,6 +687,26 @@ var commands = exports.commands = {
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
+	
+		roomkohai: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roomkohai - Senpai hasn't noticed you");
+		}
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' is not online.");
+
+		if (!this.can('makeroom')) return false;
+
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+
+		var name = targetUser.name;
+
+		room.auth[targetUser.userid] = '$';
+		this.addModCommand("" + name + " was appointed Room Kohai by " + user.name + ".");
+		room.onUpdateIdentity(targetUser);
+		Rooms.global.writeChatRoomData();
 	
 	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: ~"],
 
