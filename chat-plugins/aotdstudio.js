@@ -233,7 +233,7 @@ var commands = {
 	sethelp: ["/aotd set [artist] - Set the Artist of the Day. Requires: % @ # & ~"],
 
 	quote: function (target, room, user) {
-		if (room.id !== 'thestudio') return this.sendReply('This command can only be used in The Studio.');
+		if (room.id !== 'luxmusic') return this.sendReply('This command can only be used in Lux Music.');
 		if (!room.chatRoomData) return false;
 		if (!target) {
 			if (!this.canBroadcast()) return;
