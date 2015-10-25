@@ -18,7 +18,7 @@ exports.commands = {
 if (!Users.User.prototype._getIdentity_Coding) Users.User.prototype._getIdentity_Coding = Users.User.prototype.getIdentity;
 Users.User.prototype.getIdentity = function (roomid) {
 	var name = this._getIdentity_Coding(roomid);
-	if (this.isCoding) name += " - \u0410\u051d\u0430\u0443";
+	if (this.isCoding) name += " - \u24B8\u24DE\u24D3\u24D8\u24DD\u24D6";
 	return name;
 };
 
