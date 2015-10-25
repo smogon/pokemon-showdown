@@ -104,24 +104,4 @@ exports.commands = {
 	coding: function(target, room, user) {
 	    this.parse('/away CODING');
 	}
-        },
-	dead: function(target, room, user) {
-	    this.parse('/away DEAD');
-	}
-	},
-	drunk: function(target, room, user) {
-	    this.parse('/away DRUNK');
-	}
-	},
-	salty: function(target, room, user) {
-	    this.parse('/away SALTY');
-	}
-	},
-	stoned: function(target, room, user) {
-	    this.parse('/away STONED');
-	}
-	},
-	dancing: function(target, room, user) {
-	    this.parse('/away DANCING');
-	}
 };
