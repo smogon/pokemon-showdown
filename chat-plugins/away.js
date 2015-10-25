@@ -23,8 +23,8 @@ Users.User.prototype.getIdentity = function (roomid) {
 };
 
 exports.commands = {
-	back: 'Coding',
-	idle: 'Coding',
+	back: 'coding',
+	idle: 'coding',
 	away: function (target, room, user) {
 		user.isCoding = !user.isCoding;
 		user.updateIdentity();
@@ -40,8 +40,8 @@ Users.User.prototype.getIdentity = function (roomid) {
 };
 
 exports.commands = {
-	back: 'Dead',
-	idle: 'Dead',
+	back: 'dead',
+	idle: 'dead',
 	away: function (target, room, user) {
 		user.isDead = !user.isDead;
 		user.updateIdentity();
@@ -57,8 +57,8 @@ Users.User.prototype.getIdentity = function (roomid) {
 };
 
 exports.commands = {
-	back: 'Drunk',
-	idle: 'Drunk',
+	back: 'drunk',
+	idle: 'drunk',
 	away: function (target, room, user) {
 		user.isDrunk = !user.isDrunk;
 		user.updateIdentity();
