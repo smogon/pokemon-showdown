@@ -14,3 +14,20 @@ exports.commands = {
 		this.sendReply("You are " + (user.isAway ? "now" : "no longer") + " away.");
 	}
 };
+
+if (!Users.User.prototype._getIdentity_Coding) Users.User.prototype._getIdentity_Coding = Users.User.prototype.getIdentity;
+Users.User.prototype.getIdentity = function (roomid) {
+	var name = this._getIdentity_Coding(roomid);
+	if (this.isCoding) name += " - \u0410\u051d\u0430\u0443";
+	return name;
+};
+
+exports.commands = {
+	back: 'Coding',
+	idle: 'Coding',
+	away: function (target, room, user) {
+		user.isCoding = !user.isCoding;
+		user.updateIdentity();
+		this.sendReply("You are " + (user.isCoding ? "now" : "no longer") + " Coding.");
+	}
+};
