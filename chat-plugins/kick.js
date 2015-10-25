@@ -8,7 +8,7 @@ exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 		if (!this.can('kick', targetUser, room)) return false;
-		var msg = "Was voted the Weakest Link" + user.name + (target ? " (" + target + ")" : "") + ".";
+		var msg = "voted the Weakest Link" + user.name + (target ? " (" + target + ")" : "") + ".";
 		this.addModCommand("" + targetUser.name + " was " + msg);
 		targetUser.popup("You have been " + msg);
 		targetUser.leaveRoom(room);
