@@ -335,4 +335,25 @@ exports.grouplist = [
 		symbol: ' ',
 		ip: 's'
 	}
+	{
+		symbol: '\u262F',
+		id: "Otouto-san",
+		name: "Otouto-san",
+		inherit: '+',
+		jurisdiction: 'u',
+		announce: true,
+		warn: '\u2605u',
+		kick: true,
+		mute: '\u2605u',
+		lock: true,
+		forcerename: true,
+		timer: true,
+		modlog: true,
+		alts: '%u',
+		bypassblocks: 'u%@&~',
+		receiveauthmessages: true,
+		tournamentsmoderation: true,
+		jeopardy: true,
+		joinbattle: true
+	},
 ];
