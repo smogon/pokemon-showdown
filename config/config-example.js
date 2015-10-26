@@ -332,13 +332,9 @@ exports.grouplist = [
 		broadcast: true
 	},
 	{
-		symbol: ' ',
-		ip: 's'
-	}
-	{
 		symbol: '\u262F',
-		id: "Otouto-san",
-		name: "Otouto-san",
+		id: "Otoutosan",
+		name: "Otoutosan",
 		inherit: '+',
 		jurisdiction: 'u',
 		announce: true,
