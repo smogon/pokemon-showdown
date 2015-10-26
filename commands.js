@@ -978,7 +978,6 @@ away: 'afk',
 		"/room[group] [username] - Promotes/demotes the user to the specified room rank. Requires: @ # & ~",
 		"/roomdeauth [username] - Removes all room rank from the user. Requires: @ # & ~"],
 
-	exports.commands = {
 	stafflist: 'authlist',
 	authlist: function (target, room, user, connection) {
 		var rankLists = {};
