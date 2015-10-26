@@ -978,29 +978,38 @@ away: 'afk',
 		"/room[group] [username] - Promotes/demotes the user to the specified room rank. Requires: @ # & ~",
 		"/roomdeauth [username] - Removes all room rank from the user. Requires: @ # & ~"],
 
-	stafflist: 'authlist',
-	authlist: function (target, room, user, connection) {
-		var rankLists = {};
-		for (var u in Users.usergroups) {
-			var rank = Users.usergroups[u][0];
-			var name = Users.usergroups[u].slice(1);
-			if (!rankLists[rank]) rankLists[rank] = [];
-			rankLists[rank].push(name);
-		}
-
-		var buffer = [];
-		Object.keys(rankLists).sort(function (a, b) {
-			return (Config.groups.bySymbol[b] || {rank: 0}).rank - (Config.groups.bySymbol[a] || {rank: 0}).rank;
-		}).forEach(function (r) {
-			buffer.push((Config.groups.bySymbol[r] ? Config.groups.bySymbol[r].name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
-		});
-
-		if (!buffer.length) {
-			buffer = "This server has no auth.";
-		}
-		connection.popup(buffer.join("\n\n"));
-	}
-};
+roomstaff: 'roomauth',
+        roomauth: function (target, room, user, connection) {
+                var targetRoom = room;
+                if (target) targetRoom = Rooms.search(target);
+                var unavailableRoom = targetRoom && (targetRoom !== room && (targetRoom.modjoin || targetRoom.staffRoom) && !user.can('makeroom'));
+                if (!targetRoom || unavailableRoom) return this.errorReply("The room '" + target + "' does not exist.");
+                if (!targetRoom.auth) return this.sendReply("/roomauth - The room '" + (targetRoom.title ? targetRoom.title : target) + "' isn't designed for per-room moderation and therefore has no auth list.");
+ 
+                var rankLists = {};
+                for (var u in targetRoom.auth) {
+                        if (!rankLists[targetRoom.auth[u]]) rankLists[targetRoom.auth[u]] = [];
+                        rankLists[targetRoom.auth[u]].push(u);
+                }
+ 
+                var buffer = [];
+                if (room.boss) buffer.push('Room BO$$:\n' + room.boss);
+                if (room.senpai) buffer.push('Room Senpai:\n' + room.senpai);
+                if (room.founder) buffer.push('Room Founder:\n' + room.founder);
+                if (room.oniisan) buffer.push('Room Oniisan:\n' + room.oniisan);
+                Object.keys(rankLists).sort(function (a, b) {
+                        return (Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank;
+                }).forEach(function (r) {
+                        buffer.push((Config.groups[r] ? Config.groups[r] .name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
+                });
+ 
+                if (!buffer.length) {
+                        connection.popup("The room '" + targetRoom.title + "' has no auth.");
+                        return;
+                }
+                if (targetRoom !== room) buffer.unshift("" + targetRoom.title + " room auth:");
+                connection.popup(buffer.join("\n\n"));
+        },
 
 	userauth: function (target, room, user, connection) {
 		var targetId = toId(target) || user.userid;
