@@ -699,7 +699,7 @@ var commands = exports.commands = {
 
 		if (!this.can('makeroom')) return false;
 
-		if (!room.auth) room.auth = room.chatRoomData.auth = {driver};
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
 		var name = targetUser.name;
 
@@ -720,7 +720,7 @@ var commands = exports.commands = {
 
 		if (!this.can('makeroom')) return false;
 
-		if (!room.auth) room.auth = room.chatRoomData.auth = {leader};
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 
 		var name = targetUser.name;
 
