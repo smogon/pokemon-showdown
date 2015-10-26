@@ -720,7 +720,7 @@ away: 'afk',
 		}
 	},
 	
-	roomSenpai: function (target, room, user) {
+	roomsenpai: function (target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomsenpai - This room isn't designed for per-room moderation to be added.");
 		}
@@ -733,11 +733,11 @@ away: 'afk',
 		room.founder = targetUser.userid;
 		this.addModCommand(targetUser.name + ' was evoved into Room Senpai by ' + user.name + '.');
 		room.onUpdateIdentity(targetUser);
-		room.chatRoomData.founder = room.Senpai;
+		room.chatRoomData.founder = room.senpai;
 		Rooms.global.writeChatRoomData();
 	},
 	
-	roomBOSS: function (target, room, user) {
+	roomboss: function (target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomboss - This room isn't designed for per-room moderation to be added.");
 		}
@@ -750,7 +750,7 @@ away: 'afk',
 		room.founder = targetUser.userid;
 		this.addModCommand(targetUser.name + ' was evoved into Room BO$$ by ' + user.name + '.');
 		room.onUpdateIdentity(targetUser);
-		room.chatRoomData.founder = room.BOSS;
+		room.chatRoomData.founder = room.boss;
 		Rooms.global.writeChatRoomData();
 	},
 	
@@ -993,8 +993,8 @@ away: 'afk',
 		}
 
 		var buffer = [];
-		if (room.BOSS) buffer.push('Room BO$$:\n' + room.BOSS);
-		if (room.Senpai) buffer.push('Room Senpai:\n' + room.Senpai);
+		if (room.BOSS) buffer.push('Room BO$$:\n' + room.boss);
+		if (room.Senpai) buffer.push('Room Senpai:\n' + room.senpai);
 		if (room.founder) buffer.push('Room Founder:\n' + room.founder);
 		if (room.oniisan) buffer.push('Room Onii-san:\n' + room.oniisan);
 		Object.keys(rankLists).sort(function (a, b) {
