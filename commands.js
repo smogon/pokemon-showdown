@@ -993,10 +993,10 @@ away: 'afk',
 		}
 
 		var buffer = [];
-		if (room.BOSS) buffer.push('Room BO$$:\n' + room.boss);
-		if (room.Senpai) buffer.push('Room Senpai:\n' + room.senpai);
+		if (room.boss) buffer.push('Room BO$$:\n' + room.boss);
+		if (room.senpai) buffer.push('Room Senpai:\n' + room.senpai);
 		if (room.founder) buffer.push('Room Founder:\n' + room.founder);
-		if (room.oniisan) buffer.push('Room Onii-san:\n' + room.oniisan);
+		if (room.oniisan) buffer.push('Room Oniisan:\n' + room.oniisan);
 		Object.keys(rankLists).sort(function (a, b) {
 			return (Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank;
 		}).forEach(function (r) {
