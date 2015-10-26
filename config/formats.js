@@ -273,8 +273,8 @@ exports.Formats = [
 		banlist: []
 	},
 	{
-		name: "Spooky Cup",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3551484/\">Spooky Cup</a>"],
+		name: "Scrappy Skirmish",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3552712/\">Scrappy Skirmish</a>"],
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
@@ -283,22 +283,16 @@ exports.Formats = [
 			validate: [4, 6],
 			battle: 4
 		},
-		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Unreleased'],
-		requirePentagon: true,
-		onValidateSet: function (set) {
-			var allowedPokemon = {
-				"Rattata":1, "Raticate":1, "Ekans":1, "Arbok":1, "Pikachu":1, "Zubat":1, "Golbat":1, "Paras":1, "Parasect":1, "Grimer":1, "Muk":1, "Gastly":1, "Haunter":1, "Gengar":1, "Cubone":1, "Marowak":1, "Koffing":1, "Weezing":1, "Tangela":1, "Mr. Mime":1, "Ditto":1, "Kabuto":1, "Kabutops":1, "Hoothoot":1, "Noctowl":1, "Spinarak":1, "Ariados":1, "Crobat":1, "Umbreon":1, "Murkrow":1, "Misdreavus":1, "Unown":1, "Gligar":1, "Granbull":1, "Sneasel":1, "Houndour":1, "Houndoom":1, "Mightyena":1, "Dustox":1, "Shiftry":1, "Shedinja":1, "Whismur":1, "Loudred":1, "Exploud":1, "Sableye":1, "Mawile":1, "Gulpin":1, "Swalot":1, "Carvanha":1, "Sharpedo":1, "Cacnea":1, "Cacturne":1, "Seviper":1, "Lunatone":1, "Baltoy":1, "Claydol":1, "Shuppet":1, "Banette":1, "Duskull":1, "Dusclops":1, "Absol":1, "Snorunt":1, "Glalie":1, "Drifloon":1, "Drifblim":1, "Mismagius":1, "Honchkrow":1, "Stunky":1, "Skuntank":1, "Spiritomb":1, "Skorupi":1, "Drapion":1, "Croagunk":1, "Toxicroak":1, "Weavile":1, "Tangrowth":1, "Gliscor":1, "Dusknoir":1, "Froslass":1, "Rotom":1, "Purrloin":1, "Liepard":1, "Woobat":1, "Swoobat":1, "Venipede":1, "Whirlipede":1, "Scolipede":1, "Basculin":1, "Krokorok":1, "Krookodile":1, "Sigilyph":1, "Yamask":1, "Cofagrigus":1, "Garbodor":1, "Zorua":1, "Zoroark":1, "Gothita":1, "Gothorita":1, "Gothitelle":1, "Frillish":1, "Jellicent":1, "Joltik":1, "Galvantula":1, "Elgyem":1, "Beheeyem":1, "Litwick":1, "Lampent":1, "Chandelure":1, "Golurk":1, "Zweilous":1, "Hydreigon":1, "Volcarona":1, "Espurr":1, "Meowstic":1, "Honedge":1, "Doublade":1, "Aegislash":1, "Malamar":1, "Phantump":1, "Trevenant":1, "Pumpkaboo":1, "Gourgeist":1, "Noibat":1, "Noivern":1
-			};
-			var pokemon = Tools.getTemplate(set.species).baseSpecies;
-			if (!(pokemon in allowedPokemon)) {
-				return [pokemon + " is not usable in Spooky Cup."];
-			}
-			var item = Tools.getItem(set.item);
-			if (item.megaStone) {
-				return ["Mega Stones are not permitted in Spooky Cup."];
-			}
-		}
+		ruleset: ['VGC 2015'],
+		banlist: ['Venusaur', 'Charizard', 'Pikachu', 'Pikachu-Cosplay', 'Pikachu-Rock-Star', 'Pikachu-Belle', 'Pikachu-Pop-Star',
+			'Pikachu-PhD', 'Pikachu-Libre', 'Gengar', 'Kangaskhan', 'Jolteon', 'Lanturn', 'Ampharos',
+			'Suicune', 'Tyranitar', 'Ludicolo', 'Gardevoir', 'Mawile', 'Manectric', 'Salamence',
+			'Luxray', 'Garchomp', 'Electivire', 'Rotom', 'Rotom-Heat', 'Rotom-Wash', 'Rotom-Frost',
+			'Rotom-Fan', 'Rotom-Mow', 'Heatran', 'Cresselia', 'Emolga', 'Amoonguss', 'Galvantula',
+			'Eelektross', 'Stunfisk', 'Bisharp', 'Hydreigon', 'Terrakion', 'Thundurus', 'Thundurus-Therian',
+			'Landorus', 'Landorus-Therian', 'Greninja', 'Talonflame', 'Aegislash', 'Heliolisk', 'Sylveon'
+		],
+		requirePentagon: true
 	},
 	{
 		name: "Doubles Hackmons Cup",
