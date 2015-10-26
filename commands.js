@@ -662,7 +662,7 @@ var commands = exports.commands = {
 		var name = targetUser.name;
 
 		room.auth[targetUser.userid] = '#';
-		this.addModCommand("" + name + " was appointed Room Owner by " + user.name + ".");
+		this.addModCommand("" + name + " was evolved in to Room Owner by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
@@ -683,7 +683,7 @@ var commands = exports.commands = {
 		var name = targetUser.name;
 
 		room.auth[targetUser.userid] = '&';
-		this.addModCommand("" + name + " was appointed Room Leader by " + user.name + ".");
+		this.addModCommand("" + name + " was evolved in to Room Leader by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
@@ -704,7 +704,7 @@ var commands = exports.commands = {
 		var name = targetUser.name;
 
 		room.auth[targetUser.userid] = '$';
-		this.addModCommand("" + name + " was appointed Room Kohai by " + user.name + ".");
+		this.addModCommand("" + name + " was evolved in to Room Kohai by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
@@ -727,7 +727,7 @@ var commands = exports.commands = {
 		if (!this.can('makeroom')) return false;
 
 		delete room.auth[userid];
-		this.sendReply("(" + name + " is no longer Room Owner.)");
+		this.sendReply("(" + name + " devolved from Room Owner.)");
 		if (targetUser) targetUser.updateIdentity();
 		if (room.chatRoomData) {
 			Rooms.global.writeChatRoomData();
@@ -792,12 +792,12 @@ var commands = exports.commands = {
 		}
 
 		if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
-			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
+			this.privateModCommand("(" + name + " was devolved to Room " + groupName + " by " + user.name + ".)");
 			if (targetUser && Rooms.rooms[room.id].users[targetUser.userid]) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
 		} else if (nextGroup === '#') {
-			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
+			this.addModCommand("" + name + " was evolved in to " + groupName + " by " + user.name + ".");
 		} else {
-			this.addModCommand("" + name + " was promoted to Room " + groupName + " by " + user.name + ".");
+			this.addModCommand("" + name + " was evolved in to Room " + groupName + " by " + user.name + ".");
 		}
 
 		if (targetUser) targetUser.updateIdentity(room.id);
