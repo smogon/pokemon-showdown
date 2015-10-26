@@ -709,23 +709,6 @@ var commands = exports.commands = {
 		Rooms.global.writeChatRoomData();
 	},
 	
-	otoutosan: function (target, user) {
-		if (!target) return this.parse('/help roomowner');
-		target = this.splitTarget(target, true);
-		var targetUser = this.targetUser;
-		
-		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' is not online.");
-
-		if (!this.can('makeroom')) return false;
-
-		var name = targetUser.name;
-
-		room.auth[targetUser.userid] = '%';
-		this.addModCommand("" + name + " was evolved in to otoutosan " + user.name + ".");
-		room.onUpdateIdentity(targetUser);
-		Rooms.global.writeChatRoomData();
-	},
-	
 	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: ~"],
 
 	roomdeowner: 'deroomowner',
