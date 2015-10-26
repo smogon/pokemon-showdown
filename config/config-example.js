@@ -239,6 +239,20 @@ exports.grouplist = [
 		root: true,
 		globalonly: true
 	},
+		{
+		symbol: '#',
+		id: "owner",
+		name: "Room Owner",
+		inherit: '@',
+		jurisdiction: 'u',
+		roommod: true,
+		roomdriver: true,
+		editroom: true,
+		declare: true,
+		modchatall: true,
+		roomonly: true,
+		tournamentsmanagement: true
+	},
 	{
 		symbol: '&',
 		id: "leader",
@@ -257,21 +271,10 @@ exports.grouplist = [
 		editroom: true,
 		potd: true,
 		disableladder: true,
-		globalonly: true,
-		tournamentsmanagement: true
-	},
-	{
-		symbol: '#',
-		id: "owner",
-		name: "Room Owner",
-		inherit: '@',
-		jurisdiction: 'u',
-		roommod: true,
-		roomdriver: true,
-		editroom: true,
-		declare: true,
-		modchatall: true,
-		roomonly: true,
+		globalonly: false,
+		roommod:true,
+		roomdriver:true,
+		roomvoice:true,
 		tournamentsmanagement: true
 	},
 	{
