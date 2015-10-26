@@ -37,6 +37,16 @@ var Poll = (function () {
 		this.update();
 	};
 
+	Poll.prototype.blankvote = function (user, option) {
+		if (this.voters.has(user.latestIp)) {
+			return user.sendTo(this.room, "You're already looking at the results.");
+		} else {
+			this.voters.add(user.latestIp);
+		}
+
+		this.update();
+	};
+
 	Poll.prototype.generateVotes = function () {
 		var output = '<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> Poll</span> <strong style="font-size:11pt">' + Tools.escapeHTML(this.question) + '</strong></p>';
 		this.options.forEach(function (option, number) {
@@ -141,6 +151,11 @@ exports.commands = {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 			if (!target) return this.errorReply("Please specify an option.");
 
+			if (target === 'blank') {
+				room.poll.blankvote(user);
+				return;
+			}
+
 			var parsed = parseInt(target);
 			if (isNaN(parsed)) return this.errorReply("To vote, specify the number of the option.");
 
@@ -164,6 +179,13 @@ exports.commands = {
 			return this.privateModCommand("(The poll timeout was set to " + timeout + " minutes by " + user.name + ".)");
 		},
 		timerhelp: ["/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~"],
+
+		results: function (target, room, user) {
+			if (!room.poll) return this.errorReply("There is no poll running in this room.");
+
+			return room.poll.blankvote(user);
+		},
+		resultshelp: ["/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this."],
 
 		close: 'end',
 		stop: 'end',
@@ -197,6 +219,7 @@ exports.commands = {
 				"/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~",
 				"/poll vote [number] - Votes for option [number].",
 				"/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # & ~",
+				"/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.",
 				"/poll display - Displays the poll",
 				"/poll end - Ends a poll and displays the results. Requires: % @ # & ~"]
 };
