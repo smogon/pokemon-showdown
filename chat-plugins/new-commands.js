@@ -213,21 +213,18 @@ var cmds = {
 
 	stafflist: function(target, room, user, connection) {
         var buffer = [];
-        var senpais = [];
+        
         var admins = [];
         var leaders = [];
         var mods = [];
         var drivers = [];
         var voices = [];
         
-        senpais2 = '';admins2 = ''; leaders2 = ''; mods2 = ''; drivers2 = ''; voices2 = ''; 
+        admins2 = ''; leaders2 = ''; mods2 = ''; drivers2 = ''; voices2 = ''; 
         stafflist = fs.readFileSync('config/usergroups.csv','utf8');
         stafflist = stafflist.split('\n');
         for (var u in stafflist) {
             line = stafflist[u].split(',');
-			if (line[1] == ☯') { 
-                senpais2 = senpais2 +line[0]+',';
-            } 
             if (line[1] == '~') { 
                 admins2 = admins2 +line[0]+',';
             }
@@ -244,15 +241,11 @@ var cmds = {
                 voices2 = voices2 +line[0]+',';
             } 
         }
-        senpais2 = senpais2.split(',');
         admins2 = admins2.split(',');
         leaders2 = leaders2.split(',');
         mods2 = mods2.split(',');
         drivers2 = drivers2.split(',');
         voices2 = voices2.split(',');
-        for (var u in senpais2) {
-            if (senpais2[u] != '') senpais.push(senpais2[u]);
-        }
         for (var u in admins2) {
             if (admins2[u] != '') admins.push(admins2[u]);
         }
@@ -267,9 +260,6 @@ var cmds = {
         }
         for (var u in voices2) {
             if (voices2[u] != '') voices.push(voices2[u]);
-        }
-        if (senpai.length > 0) {
-            senpais = senpais.join(', ');
         }
         if (admins.length > 0) {
             admins = admins.join(', ');
@@ -286,7 +276,7 @@ var cmds = {
         if (voices.length > 0) {
             voices = voices.join(', ');
         }
-        connection.popup('Senpais: \n--------------------\n'+senpais+'\n\nAdministrators: \n--------------------\n'+admins+'\n\nLeaders:\n-------------------- \n'+leaders+'\n\nModerators:\n-------------------- \n'+mods+'\n\nDrivers: \n--------------------\n'+drivers+'\n\nVoices:\n-------------------- \n'+voices);
+        connection.popup('Administrators: \n--------------------\n'+admins+'\n\nLeaders:\n-------------------- \n'+leaders+'\n\nModerators:\n-------------------- \n'+mods+'\n\nDrivers: \n--------------------\n'+drivers+'\n\nVoices:\n-------------------- \n'+voices);
     },
 	
 	suggestion: 'complain',
@@ -600,12 +590,12 @@ var cmds = {
 	stc: function(target, room, user) {
 		if (!this.can('lock')) return false;
 		this.sendReplyBox('<b><u>Staff Commands:</u></b><br/>' +
-			'/hide - Hides your symbol <i>REQUIRES: [% @ & ~ ☯]</i><br/>'+
-			'/show - Shows your symbol <i>REQUIRES: [% @ & ~ ☯]</i><br/>'+
-			'/away OR /afk - Displays that you are away <i>REQUIRES: [% @ & ~ ☯]</i><br/>'+
-			'/back - Displays that you are back <i>REQUIRES: [% @ & ~ ☯]</i><br/>'+
-			'/bh OR /banhammer <i>username</i> - Bans a user <i>REQUIRES: [@ & ~ ☯]</i><br/>'+
-			'/kick <i>username</i> - Kicks the user from the room <i>REQUIRES: [& ~ ☯]</i><br/>'+
+			'/hide - Hides your symbol <i>REQUIRES: [% @ & ~ ]</i><br/>'+
+			'/show - Shows your symbol <i>REQUIRES: [% @ & ~ ]</i><br/>'+
+			'/away OR /afk - Displays that you are away <i>REQUIRES: [% @ & ~ ]</i><br/>'+
+			'/back - Displays that you are back <i>REQUIRES: [% @ & ~ ]</i><br/>'+
+			'/bh OR /banhammer <i>username</i> - Bans a user <i>REQUIRES: [@ & ~ ]</i><br/>'+
+			'/kick <i>username</i> - Kicks the user from the room <i>REQUIRES: [& ~ ]</i><br/>'+
 			'/givepd <i>username</i>, <i>amount</i> - Gives the user a certain amount of PokeDollars. <i>REQUIRES: [~]</i><br/>'+
 			'/takepd <i>username</i>, <i>amount</i> - Takes a ceratin amount of PokeDollars away from a user. <i>REQUIRES: [~]</i><br/>');
 	},
