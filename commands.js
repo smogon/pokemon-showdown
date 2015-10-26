@@ -21,6 +21,34 @@ const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
 var commands = exports.commands = {
+	
+	regdate: function(target, room, user, connection) {
+		if (!this.canBroadcast()) return;
+		if (!target || target === "0") target = toId(user.userid);
+		if (!target || target === "." || target === "," || target === "'") return this.sendReply('/regdate - Please specify a valid username.'); //temp fix for symbols that break the command
+		var username = toId(target);
+		target = target.replace(/\s+/g, '');
+		var request = require("request");
+		var self = this;
+		request('http://pokemonshowdown.com/users/~' + target, function(error, response, content) {
+			if (!(!error && response.statusCode == 200)) return;
+			content = content + '';
+			content = content.split("<em");
+			if (content[1]) {
+				content = content[1].split("</p>");
+				if (content[0]) {
+					content = content[0].split("</em>");
+					if (content[1]) {
+						regdate = content[1].split('</small>')[0] + '.';
+						data = Tools.escapeHTML(username) + ' was registered on' + regdate;
+					}
+				}
+			} else {
+				data = Tools.escapeHTML(username) + ' is not registered.';
+			}
+			self.sendReplyBox(Tools.escapeHTML(data));
+		});
+	},
 
 	version: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -241,22 +269,69 @@ var commands = exports.commands = {
 		return this.sendReply("You are no longer blocking private messages.");
 	},
 	unignorepmshelp: ["/unblockpms - Unblocks private messages. Block them with /blockpms."],
-
-	idle: 'away',
-	afk: 'away',
-	away: function (target, room, user) {
-		this.parse('/blockchallenges');
-		this.parse('/blockpms ' + target);
+away: 'afk',
+	busy: 'afk',
+	sleep: 'afk',
+	asleep: 'afk',
+	eating: 'afk',
+	gaming: 'afk',
+	sleeping: 'afk',
+	afk: function(target, room, user, connection, cmd) {
+		if (!this.canTalk()) return;
+		if (user.name.length > 18) return this.sendReply('Your username exceeds the length limit.');
+		if (!user.isAway) {
+			user.originalName = user.name;
+			switch (cmd) {
+			    case 'asleep':
+                case 'sleepting':
+				case 'sleep':
+					awayName = user.name + ' - Ⓢⓛⓔⓔⓟ';
+					break;
+				case 'gaming':
+					awayName = user.name + ' - ⒼⒶⓂⒾⓃⒼ';
+					break;
+				case 'busy':
+					awayName = user.name + ' - Ⓑⓤⓢⓨ';
+					break;
+				case 'eating':
+					awayName = user.name + ' - Ⓔⓐⓣⓘⓝⓖ';
+					break;
+				case 'afk':
+					awayName = user.name + ' - ⒶⒻⓀ';
+					break;
+				default:
+					awayName = user.name + ' - Ⓐⓦⓐⓨ';
+			}
+			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+			delete Users.get(awayName);
+			user.forceRename(awayName, undefined, true);
+			user.isAway = true;
+			this.parse('/blockchallenges');
+		} else {
+			return this.sendReply('You are already set as away, type /back if you are now back.');
+		}
 	},
-	awayhelp: ["/away - Blocks challenges and private messages. Unblock them with /back."],
-
-	unaway: 'back',
-	unafk: 'back',
-	back: function () {
-		this.parse('/unblockpms');
-		this.parse('/unblockchallenges');
+	
+	back: function(target, room, user, connection) {
+		if (!this.canTalk()) return;
+		if (user.isAway) {
+			if (user.name === user.originalName) {
+				user.isAway = false;
+				return this.sendReply('Your name has been left unaltered and no longer marked as away.');
+			}
+			var newName = user.originalName;
+			//delete the user object with the new name in case it exists - if it does it can cause issues with forceRename
+			delete Users.get(newName);
+			user.forceRename(newName, undefined, true);
+			//user will be authenticated
+			user.authenticated = true;
+			user.isAway = false;
+			this.parse('/unblockchallenges');
+		} else {
+			return this.sendReply('You are not set as away.');
+		}
+		user.updateIdentity();
 	},
-	backhelp: ["/back - Unblocks challenges and/or private messages, if either are blocked."],
 
 	makeprivatechatroom: 'makechatroom',
 	makechatroom: function (target, room, user, connection, cmd) {
@@ -644,6 +719,23 @@ var commands = exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+	
+	roomfounder: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roomfounder - This room isn't designed for per-room moderation to be added.");
+		}
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
+		if (!this.can('makeroom')) return false;
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+		room.auth[targetUser.userid] = '#';
+		room.founder = targetUser.userid;
+		this.addModCommand(targetUser.name + ' was appointed to Room Founder by ' + user.name + '.');
+		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.founder = room.founder;
+		Rooms.global.writeChatRoomData();
+	},
 
 	roomowner: function (target, room, user) {
 		if (!room.chatRoomData) {
@@ -706,6 +798,7 @@ var commands = exports.commands = {
 		room.auth[targetUser.userid] = '$';
 		this.addModCommand("" + name + " was evolved in to Room Kohai by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.kohai = room.kohai;
 		Rooms.global.writeChatRoomData();
 	},
 	
@@ -727,6 +820,7 @@ var commands = exports.commands = {
 		room.auth[targetUser.userid] = '\u262F';
 		this.addModCommand("" + name + " was evolved in to Room oniisan by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.oniisan = room.oniisan;
 		Rooms.global.writeChatRoomData();
 	},
 	
@@ -748,6 +842,7 @@ var commands = exports.commands = {
 		room.auth[targetUser.userid] = '\u2606';
 		this.addModCommand("" + name + " was evolved in to Room Coffee by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.starbucks = room.starbucks;
 		Rooms.global.writeChatRoomData();
 	},
 	
@@ -864,6 +959,8 @@ var commands = exports.commands = {
 		}
 
 		var buffer = [];
+		if (room.founder) buffer.push('Room Founder:\n' + room.founder);
+		if (room.oniisan) buffer.push('Room Onii-san:\n' + room.oniisan);
 		Object.keys(rankLists).sort(function (a, b) {
 			return (Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank;
 		}).forEach(function (r) {
