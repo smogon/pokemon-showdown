@@ -699,12 +699,54 @@ var commands = exports.commands = {
 
 		if (!this.can('makeroom')) return false;
 
-		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+		if (!room.auth) room.auth = room.chatRoomData.auth = {driver};
 
 		var name = targetUser.name;
 
 		room.auth[targetUser.userid] = '$';
 		this.addModCommand("" + name + " was evolved in to Room Kohai by " + user.name + ".");
+		room.onUpdateIdentity(targetUser);
+		Rooms.global.writeChatRoomData();
+	},
+	
+		roomoniisan: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roomoniisan - looking after imoutosan");
+		}
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' is not online.");
+
+		if (!this.can('makeroom')) return false;
+
+		if (!room.auth) room.auth = room.chatRoomData.auth = {leader};
+
+		var name = targetUser.name;
+
+		room.auth[targetUser.userid] = '\u262F';
+		this.addModCommand("" + name + " was evolved in to Room oniisan by " + user.name + ".");
+		room.onUpdateIdentity(targetUser);
+		Rooms.global.writeChatRoomData();
+	},
+	
+	roomstarbucks: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roomstarbucks - decafe");
+		}
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.errorReply("User '" + this.targetUsername + "' is not online.");
+
+		if (!this.can('makeroom')) return false;
+
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+
+		var name = targetUser.name;
+
+		room.auth[targetUser.userid] = 'U+2606';
+		this.addModCommand("" + name + " was evolved in to Room Coffee by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
 	},
