@@ -730,7 +730,7 @@ away: 'afk',
 		if (!this.can('makeroom')) return false;
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 		room.auth[targetUser.userid] = '#';
-		room.founder = targetUser.userid;
+		room.senpai = targetUser.userid;
 		this.addModCommand(targetUser.name + ' was evoved into Room Senpai by ' + user.name + '.');
 		room.onUpdateIdentity(targetUser);
 		room.chatRoomData.founder = room.senpai;
@@ -747,7 +747,7 @@ away: 'afk',
 		if (!this.can('makeroom')) return false;
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 		room.auth[targetUser.userid] = '#';
-		room.founder = targetUser.userid;
+		room.boss = targetUser.userid;
 		this.addModCommand(targetUser.name + ' was evoved into Room BO$$ by ' + user.name + '.');
 		room.onUpdateIdentity(targetUser);
 		room.chatRoomData.founder = room.boss;
