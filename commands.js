@@ -745,7 +745,7 @@ var commands = exports.commands = {
 
 		var name = targetUser.name;
 
-		room.auth[targetUser.userid] = '/U2606';
+		room.auth[targetUser.userid] = '\u2606';
 		this.addModCommand("" + name + " was evolved in to Room Coffee by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
 		Rooms.global.writeChatRoomData();
