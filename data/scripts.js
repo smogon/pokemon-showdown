@@ -1035,24 +1035,21 @@ exports.BattleScripts = {
 			// Moves that change stats:
 			if (RecoveryMove[moveid]) counter['recovery']++;
 			if (ContraryMove[moveid]) counter['contrary']++;
-			if (PhysicalSetup[moveid]) {
-				counter['physicalsetup']++;
-				if (!counter.setupType && (counter.Special < 2 || counter.Physical)) counter.setupType = 'Physical';
-			}
-			if (SpecialSetup[moveid]) {
-				counter['specialsetup']++;
-				if (!counter.setupType && (counter.Physical < 2 || counter.Special)) counter.setupType = 'Special';
-			}
-			if (MixedSetup[moveid]) {
-				counter['mixedsetup']++;
-				counter.setupType = 'Mixed';
-			}
+			if (PhysicalSetup[moveid]) counter['physicalsetup']++;
+			if (SpecialSetup[moveid]) counter['specialsetup']++;
+			if (MixedSetup[moveid]) counter['mixedsetup']++;
 			if (SpeedSetup[moveid]) counter['speedsetup']++;
 		}
 
 		// Choose a setup type:
-		if (!counter['mixedsetup'] && counter['physicalsetup'] && counter['specialsetup'] && counter.Physical !== counter.Special) {
+		if (counter['mixedsetup']) {
+			counter.setupType = 'Mixed';
+		} else if (counter['physicalsetup'] && counter['specialsetup']) {
 			counter.setupType = (counter.Physical > counter.Special) ? 'Physical' : 'Special';
+		} else if (counter['physicalsetup'] && (counter.Special < 2 || counter.Physical)) {
+			counter.setupType = 'Physical';
+		} else if (counter['specialsetup'] && (counter.Physical < 2 || counter.Special)) {
+			counter.setupType = 'Special';
 		}
 
 		return counter;
@@ -1297,6 +1294,7 @@ exports.BattleScripts = {
 				case 'suckerpunch':
 					if ((hasMove['crunch'] || hasMove['darkpulse']) && (hasMove['knockoff'] || hasMove['pursuit'])) rejected = true;
 					if (!counter.setupType && hasMove['foulplay'] && (hasMove['darkpulse'] || hasMove['pursuit'])) rejected = true;
+					if (counter.setupType === 'Special' && hasType['Dark'] && counter.stab < 2) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'dragonclaw':
