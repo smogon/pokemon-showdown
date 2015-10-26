@@ -352,4 +352,9 @@ exports.grouplist = [
 		jeopardy: true,
 		joinbattle: true
 	},
+	{
+		symbol: ' ',
+		ip: 's',
+		alts: 's'
+	}
 ];
