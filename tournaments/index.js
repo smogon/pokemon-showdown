@@ -365,6 +365,7 @@ Tournament = (function () {
 			return false;
 		}
 
+		if (this.generator.generateBracket) this.generator.generateBracket();
 		this.generator.freezeBracket();
 
 		this.availableMatches = new Map();
