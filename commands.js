@@ -720,6 +720,40 @@ away: 'afk',
 		}
 	},
 	
+	roomSenpai: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roomsenpai - This room isn't designed for per-room moderation to be added.");
+		}
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
+		if (!this.can('makeroom')) return false;
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+		room.auth[targetUser.userid] = '#';
+		room.founder = targetUser.userid;
+		this.addModCommand(targetUser.name + ' was evoved into Room Senpai by ' + user.name + '.');
+		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.founder = room.Senpai;
+		Rooms.global.writeChatRoomData();
+	},
+	
+	roomBOSS: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roomboss - This room isn't designed for per-room moderation to be added.");
+		}
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
+		if (!this.can('makeroom')) return false;
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+		room.auth[targetUser.userid] = '#';
+		room.founder = targetUser.userid;
+		this.addModCommand(targetUser.name + ' was evoved into Room BO$$ by ' + user.name + '.');
+		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.founder = room.BOSS;
+		Rooms.global.writeChatRoomData();
+	},
+	
 	roomfounder: function (target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomfounder - This room isn't designed for per-room moderation to be added.");
@@ -959,6 +993,8 @@ away: 'afk',
 		}
 
 		var buffer = [];
+		if (room.BOSS) buffer.push('Room BO$$:\n' + room.BOSS);
+		if (room.Senpai) buffer.push('Room Senpai:\n' + room.Senpai);
 		if (room.founder) buffer.push('Room Founder:\n' + room.founder);
 		if (room.oniisan) buffer.push('Room Onii-san:\n' + room.oniisan);
 		Object.keys(rankLists).sort(function (a, b) {
