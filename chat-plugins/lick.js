@@ -8,6 +8,7 @@ exports.commands = {
 			return this.sendReply("User " + this.targetUsername + " not found.");
 		}
 		if (!this.can('lick', targetUser, room)) return false;
+		this.addModCommand("" + targetUser.name + " was " + msg);
 		targetUser.popup("You have been " + msg);
 	}
 };
