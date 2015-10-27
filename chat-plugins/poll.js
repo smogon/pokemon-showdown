@@ -171,6 +171,16 @@ exports.commands = {
 
 			if (target) {
 				if (!this.can(permission, null, room)) return false;
+				if (target === 'clear') {
+					if (room.poll.timeout) {
+						clearTimeout(room.poll.timeout);
+						room.poll.timeout = null;
+						room.poll.timeoutMins = 0;
+						return room.add("The timeout for the poll was cleared.");
+					} else {
+						return this.errorReply("No timer to clear.");
+					}
+				}
 				var timeout = parseFloat(target);
 				if (isNaN(timeout) || timeout <= 0) return this.errorReply("Invalid time given.");
 				if (room.poll.timeout) clearTimeout(room.poll.timeout);
@@ -186,7 +196,7 @@ exports.commands = {
 				if (room.poll.timeout) return this.sendReply("The timeout for the poll is " + room.poll.timeoutMins + " minutes.");
 			}
 		},
-		timerhelp: ["/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~"],
+		timerhelp: ["/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~", "/poll timer clear - Clears the poll's timer. Requires: % @ # & ~"],
 
 		results: function (target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
