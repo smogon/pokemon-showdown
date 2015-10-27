@@ -172,7 +172,7 @@ exports.commands = {
 			if (target) {
 				if (!this.can(permission, null, room)) return false;
 				var timeout = parseFloat(target);
-				if (isNaN(timeout)) return this.errorReply("No time given.");
+				if (isNaN(timeout) || timeout <= 0) return this.errorReply("Invalid time given.");
 				if (room.poll.timeout) clearTimeout(room.poll.timeout);
 				room.poll.timeoutMins = timeout;
 				room.poll.timeout = setTimeout((function () {
