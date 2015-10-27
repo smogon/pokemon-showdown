@@ -1,4 +1,6 @@
-  lick: function (target, room, user) {
+exports.commands = {
+	k: 'kick',
+        lick: function (target, room, user) {
 		if (!target) return;
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
