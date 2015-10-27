@@ -193,7 +193,11 @@ exports.commands = {
 				return this.privateModCommand("(The poll timeout was set to " + timeout + " minutes by " + user.name + ".)");
 			} else {
 				if (!this.canBroadcast()) return;
-				if (room.poll.timeout) return this.sendReply("The timeout for the poll is " + room.poll.timeoutMins + " minutes.");
+				if (room.poll.timeout) {
+					return this.sendReply("The timeout for the poll is " + room.poll.timeoutMins + " minutes.");
+				} else {
+					return this.sendReply("There's no timer for this poll.");
+				}
 			}
 		},
 		timerhelp: ["/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~", "/poll timer clear - Clears the poll's timer. Requires: % @ # & ~"],
