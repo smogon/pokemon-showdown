@@ -15,11 +15,13 @@ var prices = {
 	"fix": 10,
 	"declare": 15,
 	"poof": 20,
-	"customavatar": 25,
-	"animatedavatar": 35,
-	"infobox": 40,
+	"customavatar": 35,
+	"animatedavatar": 40,
+	"TrainerCard": 40,
 	"leagueshop": 55,
 	"chatroom": 70,
+	"Roomintro": 30,
+	"TrainerCardDesign": 20,
 };
 
 function readMoney(userid, callback) {
@@ -303,14 +305,16 @@ exports.commands = {
 	 	this.sendReplyBox('<center><h4><b><u>' + shopTitle + '</u></b></h4><table border="1" cellspacing ="0" cellpadding="3"><tr><th>Item</th><th>Description</th><th>Price</th></tr>' +
 	 		'<tr><td>Custom Symbol</td><td>Buys a custom symbol to go in front of your name. (Temporary until restart)</td><td>5</td></tr>' +
 	 		'<tr><td>League Room</td><td>Purchases a room for your league. May be deleted if league becomes inactive.</td><td>5</td></tr>' +
-	 		'<tr><td>Fix</td><td>Buys the ability to alter your current custom avatar or infobox (don\'t buy if you have neither)!</td><td>10</td></tr>' +
+	 		'<tr><td>Fix</td><td>Buys the ability to alter your current custom avatar or infobox (don\'t buy if you have neither)</td><td>10</td></tr>' +
 	 		'<tr><td>Declare</td><td>You get the ability to have a message declared in the lobby. This can be used for league advertisement (not server)</td><td>15</td></tr>' +
 			'<tr><td>Poof</td><td>Buy a poof message to be added into the pool of possible poofs</td><td>20</td></tr>' +
-	 		'<tr><td>Custom Avatar</td><td>Buys a custom avatar to be applied to your name (You supply, must be .png format. Images larger than 80x80 may not show correctly.)</td><td>25</td></tr>' +
-	 		'<tr><td>Animated Avatar</td><td>Buys an animated avatar to be applied to your name (You supply, must be .gif format. Images larger than 80x80 may not show correctly.)</td><td>35</td></tr>' +
-	 		'<tr><td>Infobox</td><td>Buys an infobox that will be viewable with a command such as /tailz.</td><td>40</td></tr>' +
+	 		'<tr><td>Custom Avatar</td><td>Buys a custom avatar to be applied to your name (You supply, must be .png format. Images larger than 80x80 may not show correctly.)</td><td>35</td></tr>' +
+	 		'<tr><td>Animated Avatar</td><td>Buys an animated avatar to be applied to your name (You supply, must be .gif format. Images larger than 80x80 may not show correctly.)</td><td>40</td></tr>' +
+	 		'<tr><td>Trainer Card</td><td>Buys an infobox that will be viewable with a command such as /tailz.</td><td>40</td></tr>' +
 	 		'<tr><td>League Shop</td><td>Buys a fully customizable shop for your league room. The bucks earned from purchases go to the room founder or room bank.</td><td>55</td></tr>' +
 	 		'<tr><td>Chat Room</td><td>Buys a chatroom for you to own (comes with a free welcome message)</td><td>70</td></tr>' +
+	 		'<tr><td>Room intro</td><td>Buys a roomintro design from The Laboratory</td><td>30</td></tr>' +
+	 		'<tr><td>Trainer Card Design</td><td>Buys a Trainer Card design from The Laboratory</td><td>20</td></tr>' +
 	 		'</table><br />To buy an item from the shop, use /buy [item]. <br />Use /currencyhelp to view money-based commands.<br />All sales final, no refunds will be provided.</center>'
 	 	);
 	},
