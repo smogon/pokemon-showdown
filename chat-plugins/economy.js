@@ -337,7 +337,6 @@ exports.commands = {
 
 	roomshop: 'leagueshop',
 	leagueshop: function(target, room, user) {
-	 	if (!room.isLeague) return this.sendReply('/leagueshop - This room is not a league.');
 	 	if (!room.shop) return this.sendReply('/leagueshop - This room does not have a shop, purchase one with /buy leagueshop, ' + room.title);
 	 	if (!room.founder) return this.sendReply('/leagueshop - league shops require a room founder.');
 	 	if (!room.shopList) room.shopList = [];
