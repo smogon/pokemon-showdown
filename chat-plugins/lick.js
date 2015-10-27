@@ -1,5 +1,5 @@
 exports.commands = {
-	k: 'kick',
+	l: 'lick',
         lick: function (target, room, user) {
 		if (!target) return;
 		target = this.splitTarget(target);
