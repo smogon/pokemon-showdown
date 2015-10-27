@@ -276,7 +276,7 @@ exports.commands = {
 					matched = true;
 					break;
 				case 'leagueshop':
-					if (userMoney < prices[itemid]) return self.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a fix.");
+					if (userMoney < prices[itemid]) return self.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a league shop");
 					if (!targetSplit[1]) return self.sendReply("Please specify the room you would like to buy a league shop for with /buy leagueshop, room.");
 					if (!Rooms(toId(targetSplit[1]))) return self.sendReply("That room doesn't exist.");
 	 				var targetRoom = Rooms(targetSplit[1]);
