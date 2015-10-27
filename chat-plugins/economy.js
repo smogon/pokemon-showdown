@@ -17,11 +17,11 @@ var prices = {
 	"poof": 20,
 	"customavatar": 35,
 	"animatedavatar": 40,
-	"TrainerCard": 40,
+	"rainercard": 40,
 	"leagueshop": 55,
 	"chatroom": 70,
-	"Roomintro": 30,
-	"TrainerCardDesign": 20,
+	"roomintro": 30,
+	"trainercarddesign": 20,
 };
 
 function readMoney(userid, callback) {
@@ -251,7 +251,7 @@ exports.commands = {
 	 				self.sendReply("You've purchased a poof message. It will be added shortly.");
 	 				matched = true;
 	 				break;
-				case 'infobox':
+				case 'trainercard':
 					if (userMoney < prices[itemid]) return self.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase an infobox.");
 					writeMoney(user.userid, prices[itemid] * -1);
 					logTransaction(user.name + " has purchased an infobox for " + prices[itemid] + " bucks.");
@@ -293,6 +293,22 @@ exports.commands = {
 					targetRoom.chatRoomData.shop = targetRoom.shop;
 					targetRoom.chatRoomData.shopList = targetRoom.shopList;
 					Rooms.global.writeChatRoomData();
+					break;
+				case 'roomintro':
+					if (userMoney < prices[itemid]) return self.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a room intro.");
+					writeMoney(user.userid, prices[itemid] * -1);
+					logTransaction(user.name + " has purchased a room intro for " + prices[itemid] + " bucks.");
+					messageSeniorStaff(user.name + " has purchased a room intro.");
+					self.sendReply("You have purchased a roomintro. Please put everything you want on it in a pastebin including the command then send it to an Administrator, if you have any questions about what you can add pm an Admin. Please note that it will not be made instantly.");
+					matched = true;
+					break;
+				case 'trainercarddesign':
+					if (userMoney < prices[itemid]) return self.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a trainer card design.");
+					writeMoney(user.userid, prices[itemid] * -1);
+					logTransaction(user.name + " has purchased a trainer card design for " + prices[itemid] + " bucks.");
+					messageSeniorStaff(user.name + " has purchased a trainer card design.");
+					self.sendReply("You have purchased a trainer card design. Please put everything you want on it in a pastebin including the command then send it to an Administrator, if you have any questions about what you can add pm an Admin. Please note that it will not be made instantly.");
+					matched = true;
 					break;
 	 		}
 
