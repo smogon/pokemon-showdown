@@ -17,6 +17,7 @@ var Poll = (function () {
 		this.voters = new Set();
 		this.totalVotes = 0;
 		this.timeout = null;
+		this.timeoutMins = 0;
 
 		this.options = new Map();
 		for (var i = 0; i < options.length; i++) {
@@ -166,17 +167,24 @@ exports.commands = {
 		votehelp: ["/poll vote [number] - Votes for option [number]."],
 
 		timer: function (target, room, user) {
-			if (!this.can(permission, null, room)) return false;
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 
-			var timeout = parseFloat(target);
-			if (isNaN(timeout)) return this.errorReply("No time given.");
-			if (room.poll.timeout) clearTimeout(room.poll.timeout);
-			room.poll.timeout = setTimeout((function () {
-				room.poll.end();
-				delete room.poll;
-			}), (timeout * 60000));
-			return this.privateModCommand("(The poll timeout was set to " + timeout + " minutes by " + user.name + ".)");
+			if (target) {
+				if (!this.can(permission, null, room)) return false;
+				var timeout = parseFloat(target);
+				if (isNaN(timeout)) return this.errorReply("No time given.");
+				if (room.poll.timeout) clearTimeout(room.poll.timeout);
+				room.poll.timeoutMins = timeout;
+				room.poll.timeout = setTimeout((function () {
+					room.poll.end();
+					delete room.poll;
+				}), (timeout * 60000));
+				room.add("The timeout for the poll was set to " + timeout + " minutes.");
+				return this.privateModCommand("(The poll timeout was set to " + timeout + " minutes by " + user.name + ".)");
+			} else {
+				if (!this.canBroadcast()) return;
+				if (room.poll.timeout) return this.sendReply("The timeout for the poll is " + room.poll.timeoutMins + " minutes.");
+			}
 		},
 		timerhelp: ["/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~"],
 
