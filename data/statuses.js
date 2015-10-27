@@ -422,8 +422,8 @@ exports.BattleStatuses = {
 			}
 		},
 		onStart: function (battle, source, effect) {
-			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
-				this.effectData.duration = 0;
+			if (effect && effect.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'RainDance');
@@ -454,8 +454,8 @@ exports.BattleStatuses = {
 				return this.chainModify(1.5);
 			}
 		},
-		onStart: function () {
-			this.add('-weather', 'PrimordialSea');
+		onStart: function (battle, source, effect) {
+			this.add('-weather', 'PrimordialSea', '[from] ability: ' + effect, '[of] ' + source);
 		},
 		onResidualOrder: 1,
 		onResidual: function () {
@@ -486,8 +486,8 @@ exports.BattleStatuses = {
 			}
 		},
 		onStart: function (battle, source, effect) {
-			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
-				this.effectData.duration = 0;
+			if (effect && effect.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'SunnyDay');
@@ -521,8 +521,8 @@ exports.BattleStatuses = {
 				return this.chainModify(1.5);
 			}
 		},
-		onStart: function () {
-			this.add('-weather', 'DesolateLand');
+		onStart: function (battle, source, effect) {
+			this.add('-weather', 'DesolateLand', '[from] ability: ' + effect, '[of] ' + source);
 		},
 		onImmunity: function (type) {
 			if (type === 'frz') return false;
@@ -554,8 +554,8 @@ exports.BattleStatuses = {
 			}
 		},
 		onStart: function (battle, source, effect) {
-			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
-				this.effectData.duration = 0;
+			if (effect && effect.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'Sandstorm', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Sandstorm');
@@ -583,8 +583,8 @@ exports.BattleStatuses = {
 			return 5;
 		},
 		onStart: function (battle, source, effect) {
-			if (effect && effect.effectType === 'Ability' && this.gen <= 5) {
-				this.effectData.duration = 0;
+			if (effect && effect.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectData.duration = 0;
 				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Hail');
@@ -611,8 +611,8 @@ exports.BattleStatuses = {
 				return 0;
 			}
 		},
-		onStart: function () {
-			this.add('-weather', 'DeltaStream');
+		onStart: function (battle, source, effect) {
+			this.add('-weather', 'DeltaStream', '[from] ability: ' + effect, '[of] ' + source);
 		},
 		onResidualOrder: 1,
 		onResidual: function () {
