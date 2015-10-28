@@ -1167,12 +1167,12 @@ roomstaff: 'roomauth',
 	 * Moderating: Punishments
 	 *********************************************************/
 
-	kick: 'warn',
-	k: 'warn',
-	warn: function (target, room, user) {
-		if (!target) return this.parse('/help warn');
+	lick: 'lick',
+	l: 'lick',
+	lick: function (target, room, user) {
+		if (!target) return this.parse('/help lick');
 		if (room.isMuted(user) && !user.can('bypassall')) return this.errorReply("You cannot do this while unable to talk.");
-		if (room.isPersonal && !user.can('warn')) return this.errorReply("Warning is unavailable in group chats.");
+		if (room.isPersonal && !user.can('lick')) return this.errorReply("licking is unavailable in group chats.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -1183,13 +1183,13 @@ roomstaff: 'roomauth',
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
 		}
-		if (!this.can('warn', targetUser, room)) return false;
+		if (!this.can('lick', targetUser, room)) return false;
 
-		this.addModCommand("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
-		targetUser.send('|c|~|/warn ' + target);
+		this.addModCommand("" + targetUser.name + " was licked by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		targetUser.send('|c|~|/lick ' + target);
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 	},
-	warnhelp: ["/warn OR /k [username], [reason] - Warns a user showing them the Pok\u00e9mon Showdown Rules and [reason] in an overlay. Requires: % @ # & ~"],
+	warnhelp: ["/lick OR /k [username], [reason] - Warns a user showing them the Pok\u00e9mon Showdown Rules and [reason] in an overlay. Requires: % @ # & ~"],
 
 	redirect: 'redir',
 	redir: function (target, room, user, connection) {
