@@ -2022,7 +2022,7 @@ roomstaff: 'roomauth',
 		for (var id in Rooms.rooms) {
 			if (id === 'global') continue;
 			var curRoom = Rooms.rooms[id];
-			curRoom.addRaw("<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+			curRoom.addRaw("<div class=\"broadcast-red\"><b>Sophie is pissed off with Wando</b><br />Please finish your battles quickly. No new battles can be started until Wando has apologised in a few minutes.</div>");
 			if (curRoom.requestKickInactive && !curRoom.battle.ended) {
 				curRoom.requestKickInactive(user, true);
 				if (curRoom.modchat !== '+') {
@@ -2065,7 +2065,7 @@ roomstaff: 'roomauth',
 		}
 		if (Rooms.global.lockdown === true) {
 			for (var id in Rooms.rooms) {
-				if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-green\"><b>The server shutdown was canceled.</b></div>");
+				if (id !== 'global') Rooms.rooms[id].addRaw("<div class=\"broadcast-green\"><b>Don't worry<br>They hugged and made up</b></div>");
 			}
 		} else {
 			this.sendReply("Preparation for the server shutdown was canceled.");
