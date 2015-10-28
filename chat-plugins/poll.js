@@ -17,6 +17,7 @@ var Poll = (function () {
 		this.voters = new Set();
 		this.totalVotes = 0;
 		this.timeout = null;
+		this.timeoutMins = 0;
 
 		this.options = new Map();
 		for (var i = 0; i < options.length; i++) {
@@ -33,6 +34,16 @@ var Poll = (function () {
 
 		this.options.get(option).votes++;
 		this.totalVotes++;
+
+		this.update();
+	};
+
+	Poll.prototype.blankvote = function (user, option) {
+		if (this.voters.has(user.latestIp)) {
+			return user.sendTo(this.room, "You're already looking at the results.");
+		} else {
+			this.voters.add(user.latestIp);
+		}
 
 		this.update();
 	};
@@ -141,6 +152,11 @@ exports.commands = {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 			if (!target) return this.errorReply("Please specify an option.");
 
+			if (target === 'blank') {
+				room.poll.blankvote(user);
+				return;
+			}
+
 			var parsed = parseInt(target);
 			if (isNaN(parsed)) return this.errorReply("To vote, specify the number of the option.");
 
@@ -151,19 +167,47 @@ exports.commands = {
 		votehelp: ["/poll vote [number] - Votes for option [number]."],
 
 		timer: function (target, room, user) {
-			if (!this.can(permission, null, room)) return false;
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 
-			var timeout = parseFloat(target);
-			if (isNaN(timeout)) return this.errorReply("No time given.");
-			if (room.poll.timeout) clearTimeout(room.poll.timeout);
-			room.poll.timeout = setTimeout((function () {
-				room.poll.end();
-				delete room.poll;
-			}), (timeout * 60000));
-			return this.privateModCommand("(The poll timeout was set to " + timeout + " minutes by " + user.name + ".)");
+			if (target) {
+				if (!this.can(permission, null, room)) return false;
+				if (target === 'clear') {
+					if (room.poll.timeout) {
+						clearTimeout(room.poll.timeout);
+						room.poll.timeout = null;
+						room.poll.timeoutMins = 0;
+						return room.add("The timeout for the poll was cleared.");
+					} else {
+						return this.errorReply("No timer to clear.");
+					}
+				}
+				var timeout = parseFloat(target);
+				if (isNaN(timeout) || timeout <= 0) return this.errorReply("Invalid time given.");
+				if (room.poll.timeout) clearTimeout(room.poll.timeout);
+				room.poll.timeoutMins = timeout;
+				room.poll.timeout = setTimeout((function () {
+					room.poll.end();
+					delete room.poll;
+				}), (timeout * 60000));
+				room.add("The timeout for the poll was set to " + timeout + " minutes.");
+				return this.privateModCommand("(The poll timeout was set to " + timeout + " minutes by " + user.name + ".)");
+			} else {
+				if (!this.canBroadcast()) return;
+				if (room.poll.timeout) {
+					return this.sendReply("The timeout for the poll is " + room.poll.timeoutMins + " minutes.");
+				} else {
+					return this.sendReply("There's no timer for this poll.");
+				}
+			}
 		},
-		timerhelp: ["/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~"],
+		timerhelp: ["/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~", "/poll timer clear - Clears the poll's timer. Requires: % @ # & ~"],
+
+		results: function (target, room, user) {
+			if (!room.poll) return this.errorReply("There is no poll running in this room.");
+
+			return room.poll.blankvote(user);
+		},
+		resultshelp: ["/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this."],
 
 		close: 'end',
 		stop: 'end',
@@ -197,6 +241,7 @@ exports.commands = {
 				"/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~",
 				"/poll vote [number] - Votes for option [number].",
 				"/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # & ~",
+				"/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.",
 				"/poll display - Displays the poll",
 				"/poll end - Ends a poll and displays the results. Requires: % @ # & ~"]
 };
