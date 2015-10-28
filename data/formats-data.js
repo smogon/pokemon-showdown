@@ -1298,7 +1298,7 @@ exports.BattleFormatsData = {
 		tier: "RU"
 	},
 	flareon: {
-		randomBattleMoves: ["flamecharge","facade","flareblitz","superpower","wish","protect","toxic"],
+		randomBattleMoves: ["flamecharge","facade","flareblitz","superpower","rest","sleeptalk"],
 		randomDoubleBattleMoves: ["flamecharge","facade","flareblitz","superpower","wish","protect","helpinghand"],
 		eventPokemon: [
 			{"generation":5,"level":10,"gender":"M","isHidden":true,"moves":["tailwhip","tackle","helpinghand","sandattack"]},
@@ -2304,7 +2304,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	swellow: {
-		randomBattleMoves: ["protect","facade","bravebird","uturn","quickattack","endeavor"],
+		randomBattleMoves: ["protect","facade","bravebird","uturn","quickattack"],
 		randomDoubleBattleMoves: ["bravebird","facade","quickattack","uturn","protect"],
 		eventPokemon: [
 			{"generation":3,"level":43,"moves":["batonpass","skyattack","agility","facade"]}

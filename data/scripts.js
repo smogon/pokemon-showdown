@@ -1700,7 +1700,7 @@ exports.BattleScripts = {
 			if (abilities.indexOf('Chlorophyll') >= 0 && ability !== 'Solar Power' && hasMove['sunnyday']) {
 				ability = 'Chlorophyll';
 			}
-			if (abilities.indexOf('Guts') >= 0 && ability !== 'Quick Feet' && (hasMove['facade'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
+			if (abilities.indexOf('Guts') >= 0 && ability !== 'Quick Feet' && (hasMove['facade'] || hasMove['protect'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
 				ability = 'Guts';
 			}
 			if (abilities.indexOf('Marvel Scale') >= 0 && hasMove['rest'] && hasMove['sleeptalk']) {
