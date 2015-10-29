@@ -5306,7 +5306,9 @@ exports.BattleFormatsData = {
 	xerneas: {
 		randomBattleMoves: ["geomancy","moonblast","thunder","focusblast","thunderbolt","hiddenpowerfire","psyshock","rockslide","closecombat"],
 		randomDoubleBattleMoves: ["geomancy","dazzlinggleam","thunder","focusblast","thunderbolt","hiddenpowerfire","psyshock","rockslide","closecombat","protect"],
-		unobtainableShiny: true,
+		eventPokemon: [
+			{"generation":6,"level":100,"shiny":true,"moves":["geomancy","moonblast","aromatherapy","focusblast"],"pokeball":"cherishball"}
+		],
 		tier: "Uber"
 	},
 	yveltal: {
