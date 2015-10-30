@@ -300,7 +300,7 @@ exports.grouplist = [
 		forcerename: true,
 		ip: true,
 		alts: '@u',
-		tournaments: true
+		tournamentsmanagement: true
 	},
 	{
 		symbol: '%',
@@ -320,6 +320,7 @@ exports.grouplist = [
 		bypassblocks: 'u%@&~',
 		receiveauthmessages: true,
 		tournamentsmoderation: true,
+		tournamentsmanagement: true
 		jeopardy: true,
 		joinbattle: true
 	},
@@ -330,6 +331,7 @@ exports.grouplist = [
 		inherit: ' ',
 		alts: 's',
 		broadcast: true
+		tournamentsmanagement: true
 	},
 	{
 		symbol: '\u262F',
