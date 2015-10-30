@@ -794,7 +794,7 @@ BattlePokemon = (function () {
 			this.boosts[j] = pokemon.boosts[j];
 		}
 		if (effect) {
-			this.battle.add('-transform', this, pokemon, '[from] ' + effect);
+			this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
 		} else {
 			this.battle.add('-transform', this, pokemon);
 		}
