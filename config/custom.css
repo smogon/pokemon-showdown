@@ -1,0 +1,163 @@
+#lobby-userlist-user-wandonoesan, #thelaboratory-userlist-user-wandonoesan, #umbraleague-userlist-user-wandonoesan {
+    background:url("http://pokedream.com/pokedex/images/mini/007.gif") no-repeat right
+}
+
+#lobby-userlist-user-kokonoesan, #theadl-userlist-user-kokonoesan, #umbraleague-userlist-user-kokonoesan {
+    background:url("http://i.imgur.com/Rzmor3T.png") no-repeat right
+}
+
+body {
+    background: url(http://i.imgur.com/M72aRlL.gif?1) no-repeat;
+    background-color: #A9ABBD;
+  }
+
+.header .logo {
+    opacity: 0;
+  }
+
+.header{
+    background:#FFCC66;
+}
+
+.userlist{
+    background:#FFCC66;
+}
+
+
+.pm-log{
+    background:#ffcc66;
+}
+
+.pm-window h3{
+    background:url("http://www.psypokes.com/forums/images/smilies/180.gif") no-repeat center;
+    color:#000000;
+}
+
+.pm-window h3:hover {
+    color:#000000;
+    background:url("http://www.psypokes.com/forums/images/smilies/180.gif") no-repeat center;
+  }
+
+.pm-window.focused h3, .pm-window.focused h3:hover {
+	background:url("http://www.psypokes.com/forums/images/smilies/180.gif") no-repeat center;
+	color:#000000;
+    border: 3px solid #000000;
+}
+
+.pm-log-add{
+    background:#ffcc66;
+}
+
+.tabbar a.button.cur, .tabbar a.button.cur:hover {
+    background: #FFCC66;
+      border-color:#000;
+    color: #fff;
+  }
+
+.tabbar a.button {
+    background:#FFCC66;
+    color:#000;
+    border-color:#000000;
+}
+
+.maintabbarbottom {
+    background: #000000;
+    border-color:#FFCC66;
+  }
+
+.teamlist{
+    background:#FFCC66;
+}
+
+.pad{
+    background:#FFCC66;
+}
+
+.team{
+    background:black;
+    color:#FFCC66;
+}
+
+.teamchart{
+    background:#FFCC66;
+}
+
+.teamchart, .teamchart li{
+    background:#FFCC66;
+}
+
+.battle-log{
+    background:#FFCC66;
+}
+
+.ps-room{
+     background:url("http://i.imgur.com/M72aRlL.gif?1");
+}
+
+.ps-room.ps-room-opaque{
+    background:url("http://i.imgur.com/TQ2VsWy.png");
+}
+
+.ps-room .battle-controls{
+    background:#FFCC66;
+}
+
+.battle-log h2{
+    background:black;
+    color:#FFCC66;
+}
+
+.ps-room .battle-log-add{
+    background:#FFCC66;
+}
+
+.rightbar, .leftbar{
+    background:#FFCC66;
+    color:black;
+}
+
+.ps-popup{
+    background:#FFCC66;
+}
+
+ .backdrop:before{
+    display: block;
+    background: url("http://orig10.deviantart.net/5d2f/f/2014/293/4/5/pokemon_x_and_y_battle_background_electric_terrain_by_phoenixoflight92-d83l7ou.png");
+    background-size: cover;
+  }
+
+.mainmenufooter a {
+    color: #000000;
+    text-shadow: 0px 0px 1px #474747, 0px 0px 1px #474747, 0px 0px 1px #474747;
+}
+
+.mainmenufooter a:hover {
+    color: #FFCC66;
+}
+
+.menugroup .button {
+    background: #FFCC66;
+        box-sizing: border-box;
+    font-size: 10pt;
+    font-family: Verdana,Helvetica,Arial,sans-serif;
+    display: inline-block;
+    padding: 5px 7px 3px;
+    width: 200px;
+    outline: medium none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0px -1px 0px #0F1923;
+    border-radius: 5px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(255, 255, 255, 0.8) inset;
+    color: #474747;
+    border: 3px solid #474747;
+}
+  
+.menugroup button.big {
+    font-size: 12pt;
+  }
+  
+.menugroup .button:hover {
+    background: #FFCC66;
+  }
