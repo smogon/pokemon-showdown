@@ -22,6 +22,8 @@ var prices = {
 	"chatroom": 70,
 	"roomintro": 30,
 	"trainercarddesign": 20,
+	"globalvoice": 1000,
+	"userlisticon": 750,
 };
 
 function readMoney(userid, callback) {
@@ -310,6 +312,21 @@ exports.commands = {
 					self.sendReply("You have purchased a trainer card design. Please put everything you want on it in a pastebin including the command then send it to an Administrator, if you have any questions about what you can add pm an Admin. Please note that it will not be made instantly.");
 					matched = true;
 					break;
+				case 'globalvoice':
+					if (userMoney < prices[itemid]) return self.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase global voice.");
+					writeMoney(user.userid, prices[itemid] * -1);
+					logTransaction(user.name + " has purchased global voice for " + prices[itemid] + " bucks.");
+					messageSeniorStaff(user.name + " has purchased global voice.");
+					matched = true;
+					break;
+				case 'userlisticon':
+					if (userMoney < prices[itemid]) return self.sendReply("You need " + (prices[itemid] - userMoney) + " more bucks to purchase a userlist icon.");
+					writeMoney(user.userid, prices[itemid] * -1);
+					logTransaction(user.name + " has purchased a userlist icon for " + prices[itemid] + " bucks.");
+					messageSeniorStaff(user.name + " has purchased a userlist icon design.");
+					self.sendReply("You have purchased a userlist icon design. Please get a 32x32 link of this icon and send it to an Administrator, if you have any questions about what you can add pm an Admin. Please note that it will not be made instantly.");
+					matched = true;
+					break;
 	 		}
 
 	 		if (matched) return self.sendReply("You now have " + (userMoney - prices[itemid]) + " bucks left.");
@@ -324,13 +341,17 @@ exports.commands = {
 	 		'<tr><td>Fix</td><td>Buys the ability to alter your current custom avatar or infobox (don\'t buy if you have neither)</td><td>10</td></tr>' +
 	 		'<tr><td>Declare</td><td>You get the ability to have a message declared in the lobby. This can be used for league advertisement (not server)</td><td>15</td></tr>' +
 			'<tr><td>Poof</td><td>Buy a poof message to be added into the pool of possible poofs</td><td>20</td></tr>' +
+			'<tr><td>Trainer Card Design</td><td>Buys a Trainer Card design from The Laboratory</td><td>20</td></tr>' +
+			'<tr><td>Room intro</td><td>Buys a roomintro design from The Laboratory</td><td>30</td></tr>' +
 	 		'<tr><td>Custom Avatar</td><td>Buys a custom avatar to be applied to your name (You supply, must be .png format. Images larger than 80x80 may not show correctly.)</td><td>35</td></tr>' +
 	 		'<tr><td>Animated Avatar</td><td>Buys an animated avatar to be applied to your name (You supply, must be .gif format. Images larger than 80x80 may not show correctly.)</td><td>40</td></tr>' +
 	 		'<tr><td>Trainer Card</td><td>Buys an infobox that will be viewable with a command such as /tailz.</td><td>40</td></tr>' +
 	 		'<tr><td>League Shop</td><td>Buys a fully customizable shop for your league room. The bucks earned from purchases go to the room founder or room bank.</td><td>55</td></tr>' +
 	 		'<tr><td>Chat Room</td><td>Buys a chatroom for you to own (comes with a free welcome message)</td><td>70</td></tr>' +
-	 		'<tr><td>Room intro</td><td>Buys a roomintro design from The Laboratory</td><td>30</td></tr>' +
-	 		'<tr><td>Trainer Card Design</td><td>Buys a Trainer Card design from The Laboratory</td><td>20</td></tr>' +
+	 		'<tr><td>Userlist Icon</td><td>Buys a userlist icon next to your name in 3 different rooms</td><td>750</td></tr>' +
+	 		'<tr><td>Chat Room</td><td>Buys global voice (+)</td><td>1000</td></tr>' +
+	 		
+	 		
 	 		'</table><br />To buy an item from the shop, use /buy [item]. <br />Use /currencyhelp to view money-based commands.<br />All sales final, no refunds will be provided.</center>'
 	 	);
 	},
