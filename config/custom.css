@@ -6,6 +6,10 @@
     background:url("http://i.imgur.com/Rzmor3T.png") no-repeat right
 }
 
+#lobby-userlist-user-opvictreebel, #luxmusic-userlist-user-opvictreebel, #umbraleague-userlist-user-opvictreebel {
+    background:url("http://i.imgur.com/wzTMGNT.png") no-repeat right
+}
+
 body {
     background: url(http://i.imgur.com/M72aRlL.gif?1) no-repeat;
     background-color: #A9ABBD;
