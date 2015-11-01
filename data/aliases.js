@@ -17,7 +17,7 @@ exports.BattleAliases = {
 	"vgc": "VGC 2015",
 	"bsdoubles": "Battle Spot Doubles",
 	"bstriples": "Battle Spot Triples",
-	"seasonal": "[Seasonal] Rainbow Road",
+	"seasonal": "[Seasonal] Spoopy Party",
 	"createapokemon": "CAP",
 	"2v2": "2v2 Doubles",
 	"cc1v1": "Challenge Cup 1v1",

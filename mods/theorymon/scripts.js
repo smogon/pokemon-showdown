@@ -42,5 +42,12 @@ exports.BattleScripts = {
 		this.modData('Pokedex', 'torterra').abilities['1'] = 'Drought';
 		this.modData('Pokedex', 'banettemega').types = ['Ghost', 'Fighting'];
 		this.modData('Learnsets', 'banette').learnset.drainpunch = ['6T'];
+		this.modData('Pokedex', 'muk').types = ['Poison', 'Dark'];
+		this.modData('Pokedex', 'muk').abilities['0'] = 'Regenerator';
+		this.modData('Pokedex', 'cameruptmega').abilities['0'] = 'Desolate Land';
+		this.modData('Pokedex', 'zoroark').types = ['Dark', 'Fighting'];
+		this.modData('Learnsets', 'zoroark').learnset.vacuumwave = ['6T'];
+		this.modData('Learnsets', 'jolteon').learnset.spikes = ['6T'];
+		this.modData('Pokedex', 'cobalion').abilities['1'] = 'Magnet Pull';
 	}
 };
