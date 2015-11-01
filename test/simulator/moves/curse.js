@@ -88,6 +88,10 @@ describe('Curse', function () {
 });
 
 describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
 	var doublesTeams = [[
 		{species: "Kecleon", ability: 'colorchange', item: 'laggingtail', moves: ['curse', 'calmmind']},
 		{species: "Greninja", ability: 'torrent', item: '', moves: ['growl', 'mudsport']}
@@ -98,10 +102,11 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 
 	var triplesTeams = [
 		doublesTeams[0].concat({species: "Metapod", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']}),
-		doublesTeams[1].concat({species: "Kakuna", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']}),
+		doublesTeams[1].concat({species: "Kakuna", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']})
 	];
 
-	function runDoublesTest (battle, curseUser) {var p1active = battle.p1.active;
+	function runDoublesTest(battle, curseUser) {
+		var p1active = battle.p1.active;
 		var p2active = battle.p2.active;
 		var cursePartner = curseUser.side.active[1 - curseUser.position];
 
@@ -127,7 +132,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		}
 	}
 
-	function runTriplesTest (battle, curseUser) {
+	function runTriplesTest(battle, curseUser) {
 		var p1active = battle.p1.active;
 		var p2active = battle.p2.active;
 
