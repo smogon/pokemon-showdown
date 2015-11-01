@@ -14550,6 +14550,9 @@ exports.BattleMovedex = {
 			if (myItem) {
 				target.setItem(myItem);
 				this.add('-item', target, myItem, '[from] move: Trick');
+			}else {
+				target.setItem(myItem);
+				this.add('-enditem', target, 'Air Balloon');
 			}
 			if (yourItem) {
 				source.setItem(yourItem);
