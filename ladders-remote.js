@@ -18,6 +18,10 @@ function Ladder(formatid) {
 	this.formatid = toId(formatid);
 }
 
+Ladder.prototype.getTop = function () {
+	return Promise.resolve(null);
+};
+
 Ladder.prototype.getRating = function (userid) {
 	var formatid = this.formatid;
 	var user = Users.getExact(userid);
@@ -78,32 +82,24 @@ Ladder.prototype.updateRating = function (p1name, p2name, p1score, room) {
 
 				var oldacre = Math.round(p1rating.oldacre);
 				var acre = Math.round(p1rating.acre);
-				var reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.99 ? 'winning' : (p1score < 0.01 ? 'losing' : 'tying'));
+				var reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 				room.addRaw(Tools.escapeHTML(p1name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
 
 				oldacre = Math.round(p2rating.oldacre);
 				acre = Math.round(p2rating.acre);
-				reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.99 ? 'losing' : (p1score < 0.01 ? 'winning' : 'tying'));
+				reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.9 ? 'losing' : (p1score < 0.1 ? 'winning' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 				room.addRaw(Tools.escapeHTML(p2name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
 
 				var p1 = Users.getExact(p1name);
-				if (p1) {
-					Users.getExact(p1name).mmrCache[formatid] = +p1rating.acre;
-				}
+				if (p1) p1.mmrCache[formatid] = +p1rating.acre;
 				var p2 = Users.getExact(p2name);
-				if (p2) {
-					Users.getExact(p2name).mmrCache[formatid] = +p2rating.acre;
-				}
+				if (p2) p2.mmrCache[formatid] = +p2rating.acre;
 				room.update();
 			} catch (e) {
 				room.addRaw('There was an error calculating rating changes.');
 				room.update();
-			}
-
-			if (!Tools.getFormat(formatid).noLog) {
-				room.logBattle(p1score, p1rating, p2rating);
 			}
 
 			if (!Tools.getFormat(formatid).noLog) {

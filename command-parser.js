@@ -180,7 +180,7 @@ var Context = exports.Context = (function () {
 		if (this.pmTarget) {
 			this.connection.send('|pm|' + this.user.getIdentity() + '|' + (this.pmTarget.getIdentity ? this.pmTarget.getIdentity() : ' ' + this.pmTarget) + '|/error ' + message);
 		} else {
-			this.connection.sendTo(this.room, '|html|<div class="message-error">' + Tools.escapeHTML(message) + '</div>');
+			this.sendReply('|html|<div class="message-error">' + Tools.escapeHTML(message) + '</div>');
 		}
 	};
 	Context.prototype.sendReplyBox = function (html) {
@@ -220,6 +220,7 @@ var Context = exports.Context = (function () {
 	};
 	Context.prototype.logModCommand = function (text) {
 		var roomid = (this.room.battle ? 'battle' : this.room.id);
+		if (this.room.isPersonal) roomid = 'groupchat';
 		writeModlog(roomid, '(' + this.room.id + ') ' + text);
 	};
 	Context.prototype.globalModlog = function (action, user, text) {
@@ -245,7 +246,7 @@ var Context = exports.Context = (function () {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
 			var message = this.canTalk(this.message);
 			if (!message) return false;
-			if (!this.user.can('broadcast', null, this.room)) {
+			if (!this.user.can('broadcast', this.room)) {
 				this.errorReply("You need to be voiced to broadcast this command's information.");
 				this.errorReply("To see it for yourself, use: /" + message.substr(1));
 				return false;
@@ -266,11 +267,11 @@ var Context = exports.Context = (function () {
 		}
 		return true;
 	};
-	Context.prototype.parse = function (message, inNamespace) {
+	Context.prototype.parse = function (message, inNamespace, room) {
 		if (inNamespace && this.cmdToken) {
 			message = this.cmdToken + this.namespaces.concat(message.slice(1)).join(" ");
 		}
-		return CommandParser.parse(message, this.room, this.user, this.connection, this.levelsDeep + 1);
+		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.levelsDeep + 1);
 	};
 	Context.prototype.run = function (targetCmd, inNamespace) {
 		var commandHandler;
@@ -314,18 +315,10 @@ var Context = exports.Context = (function () {
 	};
 	Context.prototype.canHTML = function (html) {
 		html = '' + (html || '');
-
-		var images = html.match(/<img\b[^<>]*/ig);
-		if (images) {
-			for (var i = 0; i < images.length; i++) {
-				if (!/(?:width|height)=(?:[0-9]+|"[0-9]+")/i.test(images[i]) &&
-					!/style=(?:(?:[^\s]+;)?(?:width|height):[0-9]+|"(?:.+;)?\s*(?:width|height)\s*:\s*[0-9]+.*")/i.test(images[i])) {
-					this.errorReply('All images must have a width or height attribute');
-					return false;
-				}
-			}
+		if (html.match(/<img\b[^<>]*/ig) && this.room.isPersonal && !this.user.can('announce')) {
+			this.errorReply("Images are not allowed in personal rooms.");
+			return false;
 		}
-
 		if (/>here.?</i.test(html) || /click here/i.test(html)) {
 			this.errorReply('Do not use "click here"');
 			return false;
@@ -368,7 +361,6 @@ var Context = exports.Context = (function () {
 		return this.targetUser;
 	};
 	Context.prototype.getLastIdOf = function (user) {
-		if (typeof user === 'string') user = Users.get(user);
 		return (user.named ? user.userid : (Object.keys(user.prevNames).last() || user.userid));
 	};
 	Context.prototype.splitTarget = function (target, exactName) {

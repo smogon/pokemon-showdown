@@ -182,7 +182,7 @@ function lockRange(range, ip) {
 	}
 	for (var i in users) {
 		var curUser = users[i];
-		if (!curUser.named || curUser.locked || curUser.group !== Config.groups.default.global) continue;
+		if (!curUser.named || curUser.locked || curUser.confirmed) continue;
 		if (ip) {
 			if (!curUser.latestIp.startsWith(ip)) continue;
 		} else {
@@ -237,7 +237,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 	var id = '' + workerid + '-' + socketid;
 	var connection = connections[id] = new Connection(id, worker, socketid, null, ip);
 
-	if (ResourceMonitor.countConnection(ip)) {
+	if (Monitor.countConnection(ip)) {
 		connection.destroy();
 		bannedIps[ip] = '#cflood';
 		return;
@@ -253,7 +253,7 @@ Users.socketConnect = function (worker, workerid, socketid, ip) {
 		} else if (checkResult === '#cflood') {
 			connection.send("|popup||modal|PS is under heavy load and cannot accommodate your connection right now.");
 		} else {
-			connection.send("|popup||modal|Your IP (" + ip + ") used was banned while using the username '" + checkResult + "'. Your ban will expire in a few days.||" + (Config.appealUri ? " Or you can appeal at:\n" + Config.appealUri : ""));
+			connection.send("|popup||modal|Your IP (" + ip + ") was banned while using the username '" + checkResult + "'. Your ban will expire in a few days.||" + (Config.appealUri ? " Or you can appeal at:\n" + Config.appealUri : ""));
 		}
 		return connection.destroy();
 	}
@@ -372,7 +372,7 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 	}
 	var deltaTime = Date.now() - startTime;
 	if (deltaTime > 500) {
-		console.log("[slow] " + deltaTime + "ms - " + user.name + " <" + connection.ip + ">: " + message);
+		Monitor.warn("[slow] " + deltaTime + "ms - " + user.name + " <" + connection.ip + ">: " + message);
 	}
 };
 
@@ -576,13 +576,13 @@ User = (function () {
 		for (var i = 0; i < this.connections.length; i++) {
 			if (roomid && !this.connections[i].rooms[roomid]) continue;
 			this.connections[i].send(data);
-			ResourceMonitor.countNetworkUse(data.length);
+			Monitor.countNetworkUse(data.length);
 		}
 	};
 	User.prototype.send = function (data) {
 		for (var i = 0; i < this.connections.length; i++) {
 			this.connections[i].send(data);
-			ResourceMonitor.countNetworkUse(data.length);
+			Monitor.countNetworkUse(data.length);
 		}
 	};
 	User.prototype.popup = function (message) {
@@ -834,7 +834,7 @@ User = (function () {
 		if (tokenDataSplit[0] !== challenge) {
 			// a user sent an invalid token
 			if (tokenDataSplit[0] !== challenge) {
-				console.log('verify token challenge mismatch: ' + tokenDataSplit[0] + ' <=> ' + challenge);
+				Monitor.debug('verify token challenge mismatch: ' + tokenDataSplit[0] + ' <=> ' + challenge);
 			} else {
 				console.log('verify token mismatch: ' + tokenData);
 			}
@@ -1208,7 +1208,7 @@ User = (function () {
 			for (var i in this.roomCount) {
 				if (this.roomCount[i] > 0) {
 					// should never happen.
-					console.log('!! room miscount: ' + i + ' not left');
+					Monitor.debug('!! room miscount: ' + i + ' not left');
 					Rooms.get(i, 'lobby').onLeave(this);
 				}
 			}
@@ -1325,8 +1325,8 @@ User = (function () {
 				return false;
 			}
 		}
-		var bypassAll = this.can('bypassall');
-		if (room.tour && !bypassAll) {
+		var makeRoom = this.can('makeroom');
+		if (room.tour && !makeRoom) {
 			var tour = room.tour.tour;
 			var errorMessage = tour.onBattleJoin(room, this);
 			if (errorMessage) {
@@ -1334,7 +1334,7 @@ User = (function () {
 				return false;
 			}
 		}
-		if (room.modjoin && !bypassAll) {
+		if (room.modjoin && !makeRoom) {
 			var userGroup = this.group;
 			if (room.auth) {
 				if (room.isPrivate === true) {
@@ -1461,11 +1461,6 @@ User = (function () {
 			setImmediate(callback.bind(null, false));
 			return;
 		}
-		/*if (ResourceMonitor.countPrepBattle(connection.ip || connection.latestIp, this.name)) {
-			connection.popup("Due to high load, you are limited to 6 battles every 3 minutes.");
-			setImmediate(callback.bind(null, false));
-			return;
-		}*/
 
 		var format = Tools.getFormat(formatid);
 		if (!format['' + type + 'Show']) {
@@ -1487,9 +1482,9 @@ User = (function () {
 		} else {
 			if (details) {
 				this.team = details;
-				ResourceMonitor.teamValidatorChanged++;
+				Monitor.teamValidatorChanged++;
 			} else {
-				ResourceMonitor.teamValidatorUnchanged++;
+				Monitor.teamValidatorUnchanged++;
 			}
 			callback(true);
 		}
@@ -1588,9 +1583,9 @@ User = (function () {
 
 		if (message.substr(0, 16) === '/cmd userdetails') {
 			// certain commands are exempt from the queue
-			ResourceMonitor.activeIp = connection.ip;
+			Monitor.activeIp = connection.ip;
 			room.chat(this, message, connection);
-			ResourceMonitor.activeIp = null;
+			Monitor.activeIp = null;
 			return false; // but end the loop here
 		}
 
@@ -1611,9 +1606,9 @@ User = (function () {
 				THROTTLE_DELAY - (now - this.lastChatMessage));
 		} else {
 			this.lastChatMessage = now;
-			ResourceMonitor.activeIp = connection.ip;
+			Monitor.activeIp = connection.ip;
 			room.chat(this, message, connection);
-			ResourceMonitor.activeIp = null;
+			Monitor.activeIp = null;
 		}
 	};
 	User.prototype.clearChatQueue = function () {
@@ -1627,9 +1622,9 @@ User = (function () {
 		if (!this.chatQueue) return; // this should never happen
 		var toChat = this.chatQueue.shift();
 
-		ResourceMonitor.activeIp = toChat[2].ip;
+		Monitor.activeIp = toChat[2].ip;
 		toChat[1].chat(this, toChat[0], toChat[2]);
-		ResourceMonitor.activeIp = null;
+		Monitor.activeIp = null;
 
 		if (this.chatQueue && this.chatQueue.length) {
 			this.chatQueueTimeout = setTimeout(
@@ -1678,12 +1673,12 @@ Connection = (function () {
 		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'lobby') data = '>' + roomid + '\n' + data;
 		Sockets.socketSend(this.worker, this.socketid, data);
-		ResourceMonitor.countNetworkUse(data.length);
+		Monitor.countNetworkUse(data.length);
 	};
 
 	Connection.prototype.send = function (data) {
 		Sockets.socketSend(this.worker, this.socketid, data);
-		ResourceMonitor.countNetworkUse(data.length);
+		Monitor.countNetworkUse(data.length);
 	};
 
 	Connection.prototype.destroy = function () {

@@ -222,6 +222,7 @@ exports.replSocketMode = 0600;
 //     - console: Developer console (also requires IP or userid in the `consoleIps` array).
 //     - declare: /declare command.
 //     - disableladder: /disableladder and /enable ladder commands.
+//     - editroom: Set modjoin/privacy only for battles/groupchats
 //     - forcepromote: Ability to promote a user even if they're offline and unauthed.
 //     - forcerename: /forcerename command.
 //     - forcewin: /forcewin command.
@@ -279,7 +280,9 @@ exports.groups = {
 			banword: true,
 			declare: true,
 			disableladder: true,
+			editroom: true,
 			forcewin: true,
+			makeroom: true,
 			modchatall: true,
 			potd: true,
 			promote: 'u',
@@ -293,6 +296,7 @@ exports.groups = {
 			inherit: '@',
 			jurisdiction: 'u',
 			declare: true,
+			editroom: true,
 			modchatall: true,
 			privateroom: true,
 			roomdesc: true,
