@@ -174,93 +174,58 @@ exports.BattleFormats = {
 			}
 			set.moves = moves;
 
-			if (template.isMega) {
-				// Mega evolutions evolve in-battle
-				set.species = template.baseSpecies;
-				var baseAbilities = Tools.getTemplate(set.species).abilities;
-				var niceAbility = false;
-				for (var i in baseAbilities) {
-					if (baseAbilities[i] === set.ability) {
-						niceAbility = true;
-						break;
-					}
+			var battleForme = template.battleOnly && template.species;
+			if (battleForme) {
+				if (template.requiredAbility && set.ability !== template.requiredAbility) {
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredAbility + "."); // Darmanitan-Zen
 				}
-				if (!niceAbility) set.ability = baseAbilities['0'];
-			} else if (template.isPrimal) {
-				// Primal Reversion happens in-battle
-				set.species = template.baseSpecies;
-				set.ability = Tools.getTemplate(set.species).abilities['0'];
-			}
-			if (template.requiredItem && item.name !== template.requiredItem) {
-				problems.push((set.name || set.species) + ' needs to hold ' + template.requiredItem + '.');
-			}
-			if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
-				problems.push((set.name || set.species) + ' needs to have the move ' + template.requiredMove + '.');
-			}
-			if (template.num === 351) { // Castform
-				set.species = 'Castform';
-			}
-			if (template.num === 421) { // Cherrim
-				set.species = 'Cherrim';
-			}
-			if (template.num === 493) { // Arceus
-				if (set.ability === 'Multitype' && item.onPlate) {
-					set.species = 'Arceus-' + item.onPlate;
-				} else {
-					set.species = 'Arceus';
+				if (template.requiredItem && item.name !== template.requiredItem) {
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredItem + '.'); // Mega or Primal
 				}
-			}
-			if (template.num === 555) { // Darmanitan
-				if (set.species === 'Darmanitan-Zen' && ability.id !== 'zenmode') {
-					problems.push('Darmanitan-Zen transforms in-battle with Zen Mode.');
+				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+					problems.push("" + template.species + " transforms in-battle with " + template.requiredMove + "."); // Meloetta-Pirouette, Rayquaza-Mega
 				}
-				set.species = 'Darmanitan';
-			}
-			if (template.num === 487) { // Giratina
-				if (item.id === 'griseousorb') {
-					set.species = 'Giratina-Origin';
-					set.ability = 'Levitate';
-				} else {
-					set.species = 'Giratina';
-					set.ability = 'Pressure';
+				set.species = template.baseSpecies; // Fix forme for Aegislash, Castform, etc.
+			} else {
+				if (template.requiredAbility && set.ability !== template.requiredAbility) {
+					problems.push("" + (set.name || set.species) + " needs the ability " + template.requiredAbility + "."); // No cases currently.
 				}
-			}
-			if (template.num === 647) { // Keldeo
-				if (set.moves.indexOf('secretsword') < 0) {
-					set.species = 'Keldeo';
+				if (template.requiredItem && item.name !== template.requiredItem) {
+					problems.push("" + (set.name || set.species) + " needs to hold " + template.requiredItem + '.'); // Plate/Drive/Griseous Orb - Forme mismatch
 				}
-			}
-			if (template.num === 648) { // Meloetta
-				if (set.species === 'Meloetta-Pirouette' && set.moves.indexOf('relicsong') < 0) {
-					problems.push('Meloetta-Pirouette transforms in-battle with Relic Song.');
+				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+					problems.push("" + (set.name || set.species) + " needs to have the move " + template.requiredMove + "."); // Keldeo-Resolute
 				}
-				set.species = 'Meloetta';
-			}
-			if (template.num === 649) { // Genesect
-				switch (item.id) {
-				case 'burndrive':
-					set.species = 'Genesect-Burn';
-					break;
-				case 'chilldrive':
-					set.species = 'Genesect-Chill';
-					break;
-				case 'dousedrive':
-					set.species = 'Genesect-Douse';
-					break;
-				case 'shockdrive':
-					set.species = 'Genesect-Shock';
-					break;
-				default:
-					set.species = 'Genesect';
+
+				// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
+				// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina).
+				if (item.forcedForme && template.species === this.getTemplate(item.forcedForme).baseSpecies) {
+					set.species = item.forcedForme;
 				}
-			}
-			if (template.num === 681) { // Aegislash
-				set.species = 'Aegislash';
 			}
 
-			if (template.unobtainableShiny) {
-				set.shiny = false;
+			if (set.species !== template.species) {
+				// Autofixed forme.
+				template = this.getTemplate(set.species);
+
+				if (!format.banlistTable['ignoreillegalabilities']) {
+					// Ensure that the ability is (still) legal.
+					var legalAbility = false;
+					for (var i in template.abilities) {
+						if (template.abilities[i] !== set.ability) continue;
+						legalAbility = true;
+						break;
+					}
+					if (!legalAbility) { // Default to first ability.
+						set.ability = template.abilities['0'];
+					}
+				}
 			}
+
+			if (set.shiny && template.unobtainableShiny) {
+				problems.push("It's currently not possible to get a shiny " + template.species + ".");
+			}
+
 			return problems;
 		}
 	},
@@ -294,38 +259,6 @@ exports.BattleFormats = {
 			}
 		}
 	},
-	teampreviewvgc: {
-		effectType: 'Rule',
-		onStartPriority: -10,
-		onStart: function () {
-			this.add('clearpoke');
-			for (var i = 0; i < this.sides[0].pokemon.length; i++) {
-				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*'));
-			}
-			for (var i = 0; i < this.sides[1].pokemon.length; i++) {
-				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*'));
-			}
-		},
-		onTeamPreview: function () {
-			this.makeRequest('teampreview', 4);
-		}
-	},
-	teampreview1v1: {
-		effectType: 'Rule',
-		onStartPriority: -10,
-		onStart: function () {
-			this.add('clearpoke');
-			for (var i = 0; i < this.sides[0].pokemon.length; i++) {
-				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*'));
-			}
-			for (var i = 0; i < this.sides[1].pokemon.length; i++) {
-				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*'));
-			}
-		},
-		onTeamPreview: function () {
-			this.makeRequest('teampreview', 1);
-		}
-	},
 	teampreview: {
 		effectType: 'Rule',
 		onStartPriority: -10,
@@ -339,23 +272,8 @@ exports.BattleFormats = {
 			}
 		},
 		onTeamPreview: function () {
-			this.makeRequest('teampreview');
-		}
-	},
-	teampreviewgbu: {
-		effectType: 'Rule',
-		onStartPriority: -10,
-		onStart: function () {
-			this.add('clearpoke');
-			for (var i = 0; i < this.sides[0].pokemon.length; i++) {
-				this.add('poke', this.sides[0].pokemon[i].side.id, this.sides[0].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*'));
-			}
-			for (var i = 0; i < this.sides[1].pokemon.length; i++) {
-				this.add('poke', this.sides[1].pokemon[i].side.id, this.sides[1].pokemon[i].details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo)(-[a-zA-Z?]+)?/g, '$1-*'));
-			}
-		},
-		onTeamPreview: function () {
-			this.makeRequest('teampreview', 3);
+			var lengthData = this.getFormat().teamLength;
+			this.makeRequest('teampreview', lengthData && lengthData.battle || '');
 		}
 	},
 	littlecup: {
@@ -566,7 +484,7 @@ exports.BattleFormats = {
 					break;
 				}
 			}
-			var boostSpeed = ['flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'salacberry', 'starfberry'];
+			var boostSpeed = ['flamecharge', 'geomancy', 'motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor', 'salacberry'];
 			if (!speedBoosted) {
 				for (var i = 0; i < boostSpeed.length; i++) {
 					if (boostSpeed[i] in setHas) {
@@ -586,7 +504,7 @@ exports.BattleFormats = {
 					break;
 				}
 			}
-			var boostNonSpeed = ['acupressure', 'curse', 'metalclaw', 'meteormash', 'poweruppunch', 'rage', 'rototiller', 'fellstinger', 'bellydrum', 'download', 'justified', 'moxie', 'sapsipper', 'defiant', 'angerpoint', 'cellbattery', 'liechiberry', 'snowball', 'starfberry', 'weaknesspolicy', 'diamondstorm', 'flowershield', 'skullbash', 'steelwing', 'stockpile', 'cottonguard', 'ganlonberry', 'keeberry', 'chargebeam', 'fierydance', 'geomancy', 'lightningrod', 'stormdrain', 'competitive', 'absorbbulb', 'petayaberry', 'charge', 'apicotberry', 'luminousmoss', 'marangaberry'];
+			var boostNonSpeed = ['acupressure', 'starfberry', 'curse', 'metalclaw', 'meteormash', 'poweruppunch', 'rage', 'rototiller', 'fellstinger', 'bellydrum', 'download', 'justified', 'moxie', 'sapsipper', 'defiant', 'angerpoint', 'cellbattery', 'liechiberry', 'snowball', 'weaknesspolicy', 'diamondstorm', 'flowershield', 'skullbash', 'steelwing', 'stockpile', 'cottonguard', 'ganlonberry', 'keeberry', 'chargebeam', 'fierydance', 'geomancy', 'lightningrod', 'stormdrain', 'competitive', 'absorbbulb', 'petayaberry', 'charge', 'apicotberry', 'luminousmoss', 'marangaberry'];
 			if (!nonSpeedBoosted) {
 				for (var i = 0; i < boostNonSpeed.length; i++) {
 					if (boostNonSpeed[i] in setHas) {

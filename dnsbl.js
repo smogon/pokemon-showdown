@@ -69,6 +69,7 @@ var rangeCathednet = cidr.checker('180.95.40.0/21');
 var rangeTelefonica = cidr.checker('181.64.0.0/14');
 var rangeTelstra = cidr.checker('101.160.0.0/11');
 var rangeStarhub = cidr.checker(['27.125.128.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23']);
+var rangeUltrasurf = cidr.checker('65.49.0.0/17');
 
 Dnsbl.reverse = function reverseDns(ip, callback) {
 	if (ip) {
@@ -170,6 +171,10 @@ Dnsbl.reverse = function reverseDns(ip, callback) {
 		}
 		if (ip.startsWith('198.144.104.') || ip.startsWith('198.47.115.') || ip.startsWith('199.255.215.') || ip.startsWith('204.14.76.') || ip.startsWith('204.14.77.') || ip.startsWith('204.14.78.') || ip.startsWith('204.14.79.') || ip.startsWith('205.164.32.') || ip.startsWith('209.73.132.') || ip.startsWith('209.73.151.') || ip.startsWith('216.172.135.') || ip.startsWith('46.16.34.') || ip.startsWith('46.16.35.') || ip.startsWith('50.117.45.') || ip.startsWith('63.141.198.') || ip.startsWith('63.141.199.') || ip.startsWith('74.115.1.') || ip.startsWith('74.115.5.') || ip.startsWith('85.237.197.') || ip.startsWith('85.237.222.')) {
 			callback(null, ['anchorfree.proxy-nohost']);
+			return;
+		}
+		if (rangeUltrasurf(ip)) {
+			callback(null, ['ultrasurf.proxy-nohost']);
 			return;
 		}
 	}

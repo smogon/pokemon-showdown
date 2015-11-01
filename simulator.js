@@ -115,13 +115,13 @@ var Battle = (function () {
 	};
 	Battle.prototype.lastIp = null;
 	Battle.prototype.send = function () {
-		this.activeIp = ResourceMonitor.activeIp;
+		this.activeIp = Monitor.activeIp;
 		this.process.send('' + this.id + '|' + slice.call(arguments).join('|'));
 	};
 	Battle.prototype.sendFor = function (user, action) {
 		var player = this.playerTable[toId(user)];
 		if (!player) {
-			console.log('SENDFOR FAILED in ' + this.id + ': Player doesn\'t exist: ' + user.name);
+			Monitor.debug('SENDFOR FAILED in ' + this.id + ': Player doesn\'t exist: ' + user.name);
 			return;
 		}
 
@@ -139,7 +139,7 @@ var Battle = (function () {
 	Battle.prototype.inactiveQueued = false;
 	Battle.prototype.receive = function (lines) {
 		var player;
-		ResourceMonitor.activeIp = this.activeIp;
+		Monitor.activeIp = this.activeIp;
 		switch (lines[1]) {
 		case 'update':
 			this.active = !this.ended && this.p1 && this.p2;
@@ -199,7 +199,7 @@ var Battle = (function () {
 			this.score = [parseInt(lines[2], 10), parseInt(lines[3], 10)];
 			break;
 		}
-		ResourceMonitor.activeIp = null;
+		Monitor.activeIp = null;
 	};
 
 	Battle.prototype.resendRequest = function (connection) {

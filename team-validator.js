@@ -154,6 +154,7 @@ if (!process.send) {
 		} catch (err) {
 			var stack = err.stack + '\n\n' +
 					'Additional information:\n' +
+					'format = ' + format + '\n' +
 					'team = ' + message.substr(pipeIndex2 + 1) + '\n';
 			var fakeErr = {stack: stack};
 
@@ -203,22 +204,16 @@ Validator = (function () {
 			}
 			return ["You sent invalid team data. If you're not using a custom client, please report this as a bug."];
 		}
-		if (team.length > 6) {
-			return ["Your team has more than 6 pokemon."];
+
+		var lengthRange = format.teamLength && format.teamLength.validate;
+		if (!lengthRange) {
+			lengthRange = [1, 6];
+			if (format.gameType === 'doubles') lengthRange[0] = 2;
+			if (format.gameType === 'triples' || format.gameType === 'rotation') lengthRange[0] = 3;
 		}
-		switch (format.gameType) {
-		case 'doubles':
-			if (team.length < 2) return ["Your Doubles team needs at least 2 pokemon."];
-			break;
-		case 'triples':
-			if (team.length < 3) return ["Your Triples team needs at least 3 pokemon."];
-			break;
-		case 'rotation':
-			if (team.length < 3) return ["Your Rotation team needs at least 3 pokemon."];
-			break;
-		default:
-			if (team.length < 1) return ["Your team has no pokemon."];
-		}
+		if (team.length < lengthRange[0]) return ["You must bring at least " + lengthRange[0] + " Pok\u00E9mon."];
+		if (team.length > lengthRange[1]) return ["You may only bring up to " + lengthRange[1] + " Pok\u00E9mon."];
+
 		var teamHas = {};
 		for (var i = 0; i < team.length; i++) {
 			if (!team[i]) return ["You sent invalid team data. If you're not using a custom client, please report this as a bug."];
@@ -434,11 +429,6 @@ Validator = (function () {
 				if (banlistTable['illegal']) {
 					var problem = this.checkLearnset(move, template, lsetData);
 					if (problem) {
-						// Sketchmons hack
-						if (banlistTable['allowonesketch'] && !set.sketchmonsMove && !move.noSketch) {
-							set.sketchmonsMove = move.id;
-							continue;
-						}
 						var problemString = name + " can't learn " + move.name;
 						if (problem.type === 'incompatible') {
 							if (isHidden) {
@@ -471,8 +461,8 @@ Validator = (function () {
 						if (eventData.nature && eventData.nature !== set.nature) {
 							problems.push(name + " must have a " + eventData.nature + " nature because it has a move only available from a specific event.");
 						}
-						if (eventData.shiny) {
-							set.shiny = true;
+						if (eventData.shiny && !set.shiny) {
+							problems.push(name + " must be shiny because it has a move only available from a specific event.");
 						}
 						if (eventData.generation < 5) eventData.isHidden = false;
 						if (eventData.isHidden !== undefined && eventData.isHidden !== isHidden) {
