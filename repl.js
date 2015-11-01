@@ -48,9 +48,7 @@ exports.start = function (prefix, suffix, evalFunction) {
 				socket.end();
 				socket.destroy();
 			}).on('error', function () {
-				try {
-					fs.unlinkSync(directory + '/' + file);
-				} catch (e) {}
+				fs.unlink(directory + '/' + file, function () {});
 			});
 		});
 	}
@@ -73,8 +71,14 @@ exports.start = function (prefix, suffix, evalFunction) {
 		sockets.push(name);
 	}).on('error', function (e) {
 		if (e.code === "EADDRINUSE") {
-			fs.unlinkSync(name);
-			exports.start(prefix, suffix, evalFunction);
+			fs.unlink(name, function (e) {
+				if (e && e.code !== "ENOENT") {
+					require('./crashlogger.js')(e, 'REPL: ' + name);
+					return;
+				}
+
+				exports.start(prefix, suffix, evalFunction);
+			});
 			return;
 		}
 
