@@ -470,7 +470,7 @@ exports.Formats = [
 
 			var isBaseAbility = Object.values(template.abilities).map(toId).indexOf(abilityId) >= 0;
 
-			var problems;
+			var problems = [];
 			var legalPokemon = set.abilitySources = [];
 			for (var i = 0; i < pokemonWithAbility.length; i++) {
 				var donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
