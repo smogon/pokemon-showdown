@@ -26,7 +26,7 @@ var Poll = (function () {
 	}
 	
 	tierpoll: 'tpoll',
-	tpoll: function(target, room, user) {
+	function tpoll(target, room, user) {
 		var tiers = ['Anything Goes', 'Challenge Cup 1v1', 'Monotype', 'OU', 'Random Battle', 'Random Monotype Battle', 'Tier Shift', 'UU'];
 		this.parse('/poll new Next tournament tier?, ' + tiers.sort());
 	},
