@@ -269,7 +269,7 @@ var Room = (function () {
 			}
 		}
 
-		if (successUserid && user in this.users) {
+		if (successUserid && user.userid in this.users) {
 			user.updateIdentity(this.id);
 			if (notifyText) user.popup(notifyText);
 		}
