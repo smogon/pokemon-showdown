@@ -482,7 +482,7 @@ exports.Formats = [
 				}
 				problems = this.validateSet(setCopy, teamHas);
 				if (!problems.length) legalPokemon.push(setCopy.species);
-				if (legalPokemon.length) break; // Remove if the FIXME? above gets fixed.
+				if (legalPokemon.length > 1) break; // Remove if the FIXME? above gets fixed.
 			}
 
 			if (problems.length && pokemonWithAbility.length > 1) {
