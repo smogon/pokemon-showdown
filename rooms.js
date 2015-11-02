@@ -1566,7 +1566,7 @@ var ChatRoom = (function () {
 		if (this.log.length <= this.lastUpdate) return;
 		var entries = this.log.slice(this.lastUpdate);
 		if (this.reportJoinsQueue && this.reportJoinsQueue.length) {
-			clearTimeout(this.reportJoinsInterval);
+			clearInterval(this.reportJoinsInterval);
 			delete this.reportJoinsInterval;
 			Array.prototype.unshift.apply(entries, this.reportJoinsQueue);
 			this.reportJoinsQueue.length = 0;
@@ -1711,11 +1711,11 @@ var ChatRoom = (function () {
 		}
 		this.muteTimer = null;
 		if (this.reportJoinsInterval) {
-			clearTimeout(this.reportJoinsInterval);
+			clearInterval(this.reportJoinsInterval);
 		}
 		this.reportJoinsInterval = null;
 		if (this.logUserStatsInterval) {
-			clearTimeout(this.logUserStatsInterval);
+			clearInterval(this.logUserStatsInterval);
 		}
 		this.logUserStatsInterval = null;
 
