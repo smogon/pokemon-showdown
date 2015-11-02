@@ -3250,9 +3250,10 @@ exports.BattleScripts = {
 			hero = this.sampleNoReplace(heroes);
 			heroTemplate = mons[hero];
 
-			template = this.getTemplate(heroTemplate.species);
+			var template = {};
 			if (heroTemplate.moves) template.randomBattleMoves = heroTemplate.moves;
 			if (heroTemplate.required) template.requiredMove = heroTemplate.required;
+			Object.merge(template, this.getTemplate(heroTemplate.species), false);
 
 			pokemon = this.randomSet(template, i, teamDetails);
 
