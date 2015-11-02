@@ -485,13 +485,13 @@ exports.Formats = [
 				if (legalPokemon.length > 1) break; // Remove if the FIXME? above gets fixed.
 			}
 
-			if (problems.length && pokemonWithAbility.length > 1) {
+			if (!legalPokemon.length && pokemonWithAbility.length > 1) {
 				return ["" + (set.name || set.species) + " has an illegal set with an ability from any of " + pokemonWithAbility.map(this.format.getPokemonName).join(", ")];
 			}
-			if (problems.length) {
+			if (!legalPokemon.length) {
 				problems.unshift("" + (set.name || set.species) + " has an illegal set with an ability from " + this.format.getPokemonName(pokemonWithAbility[0]));
+				return problems;
 			}
-			return problems;
 		}
 	},
 	{
