@@ -24,6 +24,7 @@ exports.BattleAliases = {
 	"bh": "Balanced Hackmons",
 	"hc": "Hackmons Cup",
 	"ht": "Hidden Type",
+	"stsr": "Same Type Stealth Rock",
 	"ts": "Tier Shift",
 	"theorymon": "OU Theorymon",
 	"inverse": "Inverse Battle",
