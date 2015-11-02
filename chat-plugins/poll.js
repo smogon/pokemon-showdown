@@ -25,23 +25,6 @@ var Poll = (function () {
 		}
 	}
 
-	Poll.prototype.vote = function (user, option) {
-		if (this.voters.has(user.latestIp)) {
-			return user.sendTo(this.room, "You have already voted for this poll.");
-		} else {
-			this.voters.add(user.latestIp);
-			if (this.room.id === 'lobby' && user.named) {
-				economy.writeMoney('money', user.userid, +1);
-				user.sendTo(this.room, "Thank you for voting for this Lobby poll.  You have received 1 buck as a result!");
-			}
-		}
-
-		this.options.get(option).votes++;
-		this.totalVotes++;
-
-		this.update();
-	};
-
 	Poll.prototype.blankvote = function (user, option) {
 		if (this.voters.has(user.latestIp)) {
 			return user.sendTo(this.room, "You're already looking at the results.");
