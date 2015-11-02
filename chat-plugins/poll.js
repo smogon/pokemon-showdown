@@ -24,6 +24,12 @@ var Poll = (function () {
 			this.options.set(i + 1, {name: options[i], votes: 0});
 		}
 	}
+	
+	tierpoll: 'tpoll',
+	        tpoll: function(target, room, user) {
+		var tiers = ['Anything Goes', 'Challenge Cup 1v1', 'Monotype', 'OU', 'Random Battle', 'Random Monotype Battle', 'Tier Shift', 'UU'];
+		this.parse('/poll new Next tournament tier?, ' + tiers.sort());
+	},
 
 	Poll.prototype.vote = function (user, option) {
 		if (this.voters.has(user.latestIp)) {
@@ -244,11 +250,5 @@ exports.commands = {
 				"/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.",
 				"/poll display - Displays the poll",
 				"/poll end - Ends a poll and displays the results. Requires: % @ # & ~"]
-
-	        'tpoll',
-	        tpoll: function(target, room, user) {
-		var tiers = ['Anything Goes', 'Challenge Cup 1v1', 'Monotype', 'OU', 'Random Battle', 'Random Monotype Battle', 'Tier Shift', 'UU'];
-		this.parse('/poll new Next tournament tier?, ' + tiers.sort());
-	},
 
 };
