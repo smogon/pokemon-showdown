@@ -388,7 +388,7 @@ exports.Formats = [
 	{
 		name: "Inheritance",
 		desc: [
-			"Pok&eacute;mon may use the ability and moves of another one, as long as they forfeit their own learnset.",
+			"Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3529252/\">Inheritance</a>"
 		],
 		section: "OM of the Month",
