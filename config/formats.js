@@ -98,8 +98,8 @@ exports.Formats = [
 	{
 		name: "PU",
 		desc: [
-			"The official tier below NU.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/forums/pu.327/\">PU</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554725/\">np: PU Stage 4</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528743/\">PU Viability Ranking</a>"
 		],
 		section: "ORAS Singles",
 
@@ -228,11 +228,12 @@ exports.Formats = [
 
 		gameType: 'doubles',
 		ruleset: ['Doubles OU'],
-		banlist: ['Abomasnow', 'Aegislash', 'Amoonguss', 'Azumarill', 'Bisharp', 'Breloom', 'Charizard', 'Conkeldurr', 'Cresselia',
-			'Diancie', 'Dragonite', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Gardevoir', 'Gengar', 'Greninja', 'Gyarados', 'Heatran',
-			'Hitmontop', 'Hoopa', 'Hoopa-Unbound', 'Hydreigon', 'Jirachi', 'Kangaskhan', 'Keldeo', 'Kyurem-Black', 'Landorus', 'Landorus-Therian', 'Latios', 'Ludicolo',
-			'Metagross', 'Mew', 'Milotic', 'Ninetales', 'Politoed', 'Rotom-Wash', 'Sableye', 'Scizor', 'Scrafty', 'Serperior', 'Shaymin-Sky', 'Suicune',
-			'Sylveon', 'Talonflame', 'Terrakion', 'Thundurus', 'Thundurus-Therian', 'Togekiss', 'Tyranitar', 'Venusaur', 'Volcarona', 'Weavile', 'Whimsicott', 'Zapdos'
+		banlist: ['Aegislash', 'Amoonguss', 'Azumarill', 'Bisharp', 'Blaziken', 'Breloom', 'Chandelure', 'Charizard', 'Conkeldurr',
+			'Cresselia', 'Diancie', 'Dragonite', 'Excadrill', 'Ferrothorn', 'Garchomp', 'Gardevoir', 'Gengar', 'Greninja',
+			'Gyarados', 'Heatran', 'Hoopa-Unbound', 'Hydreigon', 'Jellicent', 'Jirachi', 'Kangaskhan', 'Keldeo', 'Kyurem-Black',
+			'Landorus', 'Landorus-Therian', 'Latios', 'Ludicolo', 'Mawile', 'Metagross', 'Politoed', 'Rotom-Wash', 'Sableye',
+			'Scizor', 'Scrafty', 'Serperior', 'Shaymin-Sky', 'Suicune', 'Swampert', 'Sylveon', 'Talonflame', 'Terrakion',
+			'Thundurus', 'Togekiss', 'Tyranitar', 'Venusaur', 'Volcarona', 'Weavile', 'Whimsicott', 'Zapdos'
 		]
 	},
 	{
@@ -242,12 +243,14 @@ exports.Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Doubles UU'],
-		banlist: ['Snorlax', 'Machamp', 'Lopunny', 'Galvantula', 'Mienshao', 'Infernape', 'Aromatisse', 'Clawitzer', 'Kyurem', 'Flygon',
-			'Lucario', 'Alakazam', 'Gastrodon', 'Bronzong', 'Chandelure', 'Dragalge', 'Mamoswine', 'Genesect', 'Arcanine', 'Volcarona',
-			'Aggron', 'Manectric', 'Salamence', 'Tornadus', 'Porygon2', 'Latias', 'Meowstic', 'Ninetales', 'Crobat', 'Blastoise',
-			'Darmanitan', 'Sceptile', 'Jirachi', 'Goodra', 'Deoxys-Attack', 'Milotic', 'Victini', 'Hariyama', 'Crawdaunt', 'Aerodactyl',
-			'Abomasnow', 'Krookodile', 'Cofagrigus', 'Druddigon', 'Escavalier', 'Dusclops', 'Slowbro', 'Slowking', 'Eelektross', 'Spinda',
-			'Cloyster', 'Raikou', 'Thundurus-Therian', 'Swampert', 'Nidoking', 'Aurorus', 'Granbull', 'Braviary'
+		banlist: ['Abomasnow', 'Aerodactyl', 'Altaria', 'Ampharos', 'Arcanine', 'Aromatisse', 'Aurorus', 'Banette', 'Blastoise',
+			'Bronzong', 'Camerupt', 'Clawitzer', 'Cobalion', 'Cofagrigus', 'Cradily', 'Crawdaunt', 'Crobat', 'Doublade',
+			'Dusclops', 'Electivire', 'Empoleon', 'Espeon', 'Florges', 'Forretress', 'Galvantula', 'Gastrodon', 'Genesect',
+			'Hariyama', 'Hitmontop', 'Honchkrow', 'Hoopa', 'Infernape', 'Jolteon', 'Kingdra', 'Kingler', 'Klefki',
+			'Krookodile', 'Kyurem', 'Liepard', 'Lopunny', 'Lucario', 'Machamp', 'Mamoswine', 'Manaphy', 'Medicham',
+			'Mew', 'Mienshao', 'Milotic', 'Murkrow', 'Nidoking', 'Ninetales', 'Noivern', 'Pachirisu', 'Pangoro',
+			'Porygon2', 'Reuniclus', 'Rhyperior', 'Roserade', 'Rotom-Heat', 'Salamence', 'Sceptile', 'Serperior', 'Slowking',
+			'Snorlax', 'Thundurus-Therian', 'Togetic', 'Tornadus', 'Vaporeon'
 		]
 	},
 	{
@@ -761,11 +764,12 @@ exports.Formats = [
 
 		maxLevel: 5,
 		ruleset: ['LC'],
-		banlist: ['Abra', 'Aipom', 'Archen', 'Bunnelby', 'Carvanha', 'Chinchou', 'Cottonee', 'Croagunk', 'Diglett',
-			'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Fletchling', 'Foongus', 'Gastly', 'Gothita', 'Honedge', 'Larvesta',
-			'Lileep', 'Magnemite', 'Mienfoo', 'Munchlax', 'Omanyte', 'Onix', 'Pawniard', 'Ponyta', 'Porygon', 'Scraggy',
-			'Shellder', 'Snivy', 'Snubbull', 'Spritzee', 'Staryu', 'Stunky', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby',
-			'Shell Smash', 'Corphish', 'Pancham', 'Vulpix', 'Zigzagoon'
+		banlist: ['Abra', 'Aipom', 'Anorith', 'Archen', 'Bunnelby', 'Carvanha', 'Chinchou', 'Corphish', 'Cottonee',
+			'Croagunk', 'Diglett', 'Drifloon', 'Drilbur', 'Dwebble', 'Elekid', 'Ferroseed', 'Fletchling', 'Foongus',
+			'Gastly', 'Gothita', 'Larvesta', 'Magnemite', 'Mienfoo', 'Munchlax', 'Omanyte', 'Onix', 'Pancham',
+			'Pawniard', 'Ponyta', 'Porygon', 'Pumpkaboo-Super', 'Scraggy', 'Shellder', 'Skrelp', 'Snivy', 'Snubbull',
+			'Spritzee', 'Staryu', 'Stunky', 'Surskit', 'Timburr', 'Tirtouga', 'Vullaby', 'Vulpix', 'Zigzagoon',
+			'Shell Smash'
 		]
 	},
 	{
