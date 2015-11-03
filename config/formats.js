@@ -488,7 +488,7 @@ exports.Formats = [
 					// Bypass forme validation
 					setCopy.item = donorTemplate.requiredItem;
 				}
-				problems = this.validateSet(setCopy, teamHas);
+				problems = this.validateSet(setCopy, teamHas) || [];
 				if (!problems.length && (setCopy.species === donorTemplate.species || donorTemplate.species !== set.species)) {
 					legalPokemon.push(setCopy.species);
 				}
