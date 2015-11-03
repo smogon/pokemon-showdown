@@ -401,7 +401,7 @@ exports.Formats = [
 		customBans: {
 			receiver: {
 				arceus:1, archeops:1, darkrai:1, deoxys:1, deoxysattack:1, deoxysspeed:1, dialga:1, giratina:1, giratinaorigin:1,
-				groudon:1, groudonprimal:1, hooh:1, keldeo:1, kyogre:1, kyogreprimal:1, kyuremblack:1, kyuremwhite:1, lugia:1, mewtwo:1, palkia:1, rayquaza:1,
+				groudon:1, hooh:1, keldeo:1, kyogre:1, kyuremblack:1, kyuremwhite:1, lugia:1, mewtwo:1, palkia:1, rayquaza:1,
 				regigigas:1, reshiram:1, shayminsky:1, shedinja:1, slaking:1, xerneas:1, yveltal:1, zekrom:1
 			},
 			donor: {masquerain:1, sableye:1, smeargle:1},
@@ -435,21 +435,21 @@ exports.Formats = [
 		},
 		onValidateTeam: function (team, format, teamHas) {
 			// Donor Clause
-			var evoFamilies = [];
+			var evoFamilyLists = [];
 			for (var i = 0; i < team.length; i++) {
 				var set = team[i];
 				if (!set.abilitySources) continue;
-				evoFamilies.push(set.abilitySources.map(format.getEvoFamily).unique());
+				evoFamilyLists.push(set.abilitySources.map(format.getEvoFamily).unique());
 			}
 
 			// Checking actual full incompatibility would require expensive algebra.
 			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
 			var requiredFamilies = Object.create(null);
-			for (var i = 0; i < evoFamilies.length; i++) {
-				var family = evoFamilies[i];
-				if (family.length !== 1) continue;
-				if (requiredFamilies[family]) return ["You are limited to one inheritance from each family by the Donor Clause.", "(You inherit more than once from " + this.getTemplate(family[0]).species + "'s.)"];
-				requiredFamilies[family] = 1;
+			for (var i = 0; i < evoFamilyLists.length; i++) {
+				var evoFamilies = evoFamilyLists[i];
+				if (evoFamilies.length !== 1) continue;
+				if (requiredFamilies[evoFamilies[0]]) return ["You are limited to one inheritance from each family by the Donor Clause.", "(You inherit more than once from " + this.getTemplate(evoFamilies[0]).species + "'s.)"];
+				requiredFamilies[evoFamilies[0]] = 1;
 			}
 		},
 		validateSet: function (set, teamHas) {
@@ -461,19 +461,39 @@ exports.Formats = [
 			if (!template.exists) return ["" + set.species + " is not a real Pok\u00E9mon."];
 			if (template.speciesid in this.format.customBans.receiver) {
 				return ["" + set.species + " is banned."];
+			} else if (!this.tools.data.FormatsData[species] || !this.tools.data.FormatsData[species].tier) {
+				if (toId(template.baseSpecies) in this.format.customBans.receiver) {
+					return ["" + template.baseSpecies + " is banned."];
+				}
 			}
 
 			var abilityId = toId(set.ability);
 			if (!abilityId) return ["" + (set.name || set.species) + " must have an ability."];
 			var pokemonWithAbility = this.format.abilityMap[abilityId];
 			if (!pokemonWithAbility) return ["" + set.ability + " is an invalid ability."];
-
 			var isBaseAbility = Object.values(template.abilities).map(toId).indexOf(abilityId) >= 0;
 
+			// Items must be fully validated here since we may pass a different item to the base set validator.
+			var item = this.tools.getItem(set.item);
+			if (item.id) {
+				if (!item.exists) return ["" + set.item + " is an invalid item."];
+				if (item.isUnreleased) return ["" + (set.name || set.species) + "'s item " + item.name + " is unreleased."];
+				if (item.name in this.format.banlistTable) return ["" + set.item + " is banned."];
+			}
+
 			var problems = [];
-			var legalPokemon = set.abilitySources = [];
+			var validSources = set.abilitySources = []; // evolutionary families
 			for (var i = 0; i < pokemonWithAbility.length; i++) {
 				var donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
+				var evoFamily = this.format.getEvoFamily(donorTemplate);
+
+				if (validSources.indexOf(evoFamily) >= 0) {
+					// The existence of a legal set has already been established.
+					// We only keep iterating to find all legal donor families (Donor Clause).
+					// Skip this redundant iteration.
+					continue;
+				}
+
 				var setCopy = Object.clone(set);
 				if (setCopy.name === setCopy.species) delete setCopy.name;
 				if (donorTemplate.species !== set.species && toId(donorTemplate.species) in this.format.customBans.donor) {
@@ -489,16 +509,20 @@ exports.Formats = [
 					setCopy.item = donorTemplate.requiredItem;
 				}
 				problems = this.validateSet(setCopy, teamHas) || [];
-				if (!problems.length && (setCopy.species === donorTemplate.species || donorTemplate.species !== set.species)) {
-					legalPokemon.push(setCopy.species);
+				if ((!problems || !problems.length) && (setCopy.species === donorTemplate.species || donorTemplate.species !== set.species)) {
+					validSources.push(evoFamily);
 				}
-				if (legalPokemon.length > 1) break; // Remove if the FIXME? above gets fixed.
+				if (validSources.length > 1) {
+					// This is an optimization only valid for the current basic implementation of Donor Clause.
+					// Remove if the FIXME? above actually gets fixed.
+					break;
+				}
 			}
 
-			if (!legalPokemon.length && pokemonWithAbility.length > 1) {
+			if (!validSources.length && pokemonWithAbility.length > 1) {
 				return ["" + (set.name || set.species) + " set is illegal."];
 			}
-			if (!legalPokemon.length) {
+			if (!validSources.length) {
 				problems.unshift("" + (set.name || set.species) + " has an illegal set with an ability from " + this.tools.getTemplate(pokemonWithAbility[0]).name);
 				return problems;
 			}
