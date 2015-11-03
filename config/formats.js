@@ -455,7 +455,9 @@ exports.Formats = [
 		validateSet: function (set, teamHas) {
 			if (!this.format.abilityMap) return this.validateSet(set, teamHas); // shouldn't happen
 
-			if (!set.species) set.species = set.name;
+			var problems = this.tools.getFormat('Pokemon').onChangeSet.call(this.tools, set, this.format) || [];
+			if (problems.length) return problems;
+
 			var species = toId(set.species);
 			var template = this.tools.getTemplate(species);
 			if (!template.exists) return ["" + set.species + " is not a real Pok\u00E9mon."];
@@ -481,7 +483,6 @@ exports.Formats = [
 				if (item.name in this.format.banlistTable) return ["" + set.item + " is banned."];
 			}
 
-			var problems = [];
 			var validSources = set.abilitySources = []; // evolutionary families
 			for (var i = 0; i < pokemonWithAbility.length; i++) {
 				var donorTemplate = this.tools.getTemplate(pokemonWithAbility[i]);
@@ -509,7 +510,7 @@ exports.Formats = [
 					setCopy.item = donorTemplate.requiredItem;
 				}
 				problems = this.validateSet(setCopy, teamHas) || [];
-				if ((!problems || !problems.length) && (setCopy.species === donorTemplate.species || donorTemplate.species !== set.species)) {
+				if (!problems.length && (setCopy.species === donorTemplate.species || donorTemplate.species !== set.species)) {
 					validSources.push(evoFamily);
 				}
 				if (validSources.length > 1) {
