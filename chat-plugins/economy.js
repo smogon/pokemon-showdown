@@ -871,7 +871,7 @@ hashColor = function (name) {
     colorCache[name] = "#" + rgbToHex(rgb.r, rgb.g, rgb.b);
     return colorCache[name];
 }
-
+global.hashColor = hashColor;
 function hslToRgb(h, s, l) {
     var r, g, b, m, c, x
 
