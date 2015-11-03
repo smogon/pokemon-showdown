@@ -746,6 +746,7 @@ Tournament = (function () {
 		this.isEnded = true;
 
 		data = {results: this.generator.getResults().map(usersToNames), bracketData: this.getBracketData()};
+		var data2 = data;
 		data = data['results'].toString();
 
 		if (data.indexOf(',') >= 0) {
@@ -756,15 +757,49 @@ Tournament = (function () {
 			winner = data;
 		}
 
-		var tourSize = this.generator.users.size;
-		if (this.room.isOfficial && tourSize >= 3) {
-			var money = (tourSize < 50 ? tourSize : 50);
-			var buck = "bucks";
+		try {
+			var runnerUp = false;
+			if (data2['bracketData']['rootNode']) {
+				if (data2['bracketData']['rootNode']['children']) {
+					if (data2['bracketData']['rootNode']['children'][0]['team'] !== winner) runnerUp = data2['bracketData']['rootNode']['children'][0]['team'];
+					if (data2['bracketData']['rootNode']['children'][1]['team'] !== winner) runnerUp = data2['bracketData']['rootNode']['children'][1]['team'];
+				}
+			}
 
-			try {
-				this.room.add('|raw|<b><font color=' + Gold.hashColor(toId(winner)) + '>' + Tools.escapeHTML(winner) + '</font> has won <font color=#24678d>'+money+'</font> '+buck+' for winning the tournament!</b>');
-				economy.writeMoney(toId(winner), money);
-			} catch (e) {}
+			var firstMoney = false;
+			var secondMoney = false;
+			var firstBuck;
+			var secondBuck;
+
+			if (this.room.isOfficial && tourSize >= 5) {
+				firstMoney = Math.round(tourSize/10);
+				secondMoney = Math.round(firstMoney/2);
+				firstBuck = 'buck';
+				secondBuck = 'buck';
+			} 
+			
+			var self = this;
+
+			if (firstMoney) {
+				if (firstMoney > 1) firstBuck = 'bucks';
+				if (secondMoney > 1) secondBuck = 'bucks';
+				this.room.add('|raw|<b><font color="' + hashColor(winner)+'">' + Tools.escapeHTML(winner) + '</font> has also won <font color=#24678d>' + firstMoney + '</font> ' + firstBuck + ' for winning the tournament!</b>');
+				if (runnerUp) this.room.add('|raw|<b><font color="' + hashColor(runnerUp) + '">' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=#24678d>' + secondMoney + '</font> ' + secondBuck + ' for coming in second!</b>');
+				writeMoney(toId(winner), firstMoney, function() {
+					readMoney(toId(winner), function(newMoney) {
+						logTransaction(winner + ' has won ' + firstMoney + ' ' + firstBuck + ' from a tournament in ' + self.room.title + '. They now have ' + newMoney);
+						if (runnerUp) {
+							writeMoney(toId(runnerUp), secondMoney, function() {
+								readMoney(toId(runnerUp), function(newMoney2) {
+									logTransaction(runnerUp + ' has won ' + secondMoney + ' ' + secondBuck + ' from a tournament in ' + self.room.title + '. They now have ' + newMoney2);
+								});
+							});
+						}
+					});
+				});
+			}
+		} catch (e) {
+			console.log('Error giving bucks for tournaments: '+e.stack);
 		}
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		delete exports.tournaments[this.room.id];
