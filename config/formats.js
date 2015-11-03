@@ -96,6 +96,17 @@ exports.Formats = [
 		banlist: ['RU', 'BL3']
 	},
 	{
+		name: "PU",
+		desc: [
+			"The official tier below NU.",
+			"&bullet; <a href=\"https://www.smogon.com/forums/forums/pu.327/\">PU</a>"
+		],
+		section: "ORAS Singles",
+
+		ruleset: ['NU'],
+		banlist: ['NU', 'BL4', 'Chatter', 'Shell Smash + Baton Pass']
+	},
+	{
 		name: "LC",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3505710/\">LC Metagame Discussion</a>",
@@ -662,17 +673,6 @@ exports.Formats = [
 		mod: 'tiershift',
 		ruleset: ['OU'],
 		banlist: ['Shadow Tag', 'Swift Swim', 'Chatter']
-	},
-	{
-		name: "PU",
-		desc: [
-			"The unofficial tier below NU.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/forums/pu.327/\">PU</a>"
-		],
-		section: "Other Metagames",
-
-		ruleset: ['NU'],
-		banlist: ['NU', 'BL4', 'Chatter', 'Shell Smash + Baton Pass']
 	},
 	{
 		name: "Inverse Battle",
