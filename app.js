@@ -151,7 +151,7 @@ Rooms.global.formatListText = Rooms.global.getFormatListText();
 
 delete process.send; // in case we're a child process
 global.Verifier = require('./verifier.js');
-
+global.sqlite3 = require('sqlite3');
 global.CommandParser = require('./command-parser.js');
 
 global.Simulator = require('./simulator.js');
