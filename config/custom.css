@@ -36,23 +36,28 @@ body {
     background:#FFCC66;
 }
 
+.chat-log {
+    background: #ffffff url("http://vignette2.wikia.nocookie.net/pokemon/images/a/a5/181Ampharos_Mega_Dream.png/revision/latest?cb=20140311082150") top right no-repeat;
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
+}
 
 .pm-log{
-    background:#ffcc66;
+    background:#ffcc66 url("http://www.serebii.net/xy/pokemon/179.png") top right no-repeat;
 }
 
 .pm-window h3{
-    background:url("http://www.psypokes.com/forums/images/smilies/180.gif") no-repeat center;
+    background: #ffcc66 url("http://www.psypokes.com/forums/images/smilies/180.gif") no-repeat center;
     color:#000000;
 }
 
 .pm-window h3:hover {
     color:#000000;
-    background:url("http://www.psypokes.com/forums/images/smilies/180.gif") no-repeat center;
+    background: #ffcc66 url("http://www.psypokes.com/forums/images/smilies/180.gif") no-repeat center;
   }
 
 .pm-window.focused h3, .pm-window.focused h3:hover {
-	background:url("http://www.psypokes.com/forums/images/smilies/180.gif") no-repeat center;
+	background: #ffcc66 url("http://www.psypokes.com/forums/images/smilies/180.gif") no-repeat center;
 	color:#000000;
     border: 3px solid #000000;
 }
