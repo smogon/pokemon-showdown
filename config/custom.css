@@ -23,9 +23,9 @@ body {
     background: url(http://img2.wikia.nocookie.net/__cb20140211170946/fantendo/images/8/88/HC_Ampharos_Icon.png) no-repeat;
   }
 
-.header{
-    background:#FFCC66;
-}
+.header .logo {
+    opacity: 0;
+  }
 
 .nightclub {
 	background:#000000;
