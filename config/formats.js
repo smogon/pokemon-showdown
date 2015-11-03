@@ -397,7 +397,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause',
 			'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'
 		],
-		banlist: ['Unreleased', 'Illegal', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Salamencite', 'Soul Dew', 'Assist'],
+		banlist: ['Unreleased', 'Illegal', 'Assist'],
 		customBans: {
 			receiver: {
 				arceus:1, archeops:1, darkrai:1, deoxys:1, deoxysattack:1, deoxysspeed:1, dialga:1, giratina:1, giratinaorigin:1,
@@ -405,7 +405,8 @@ exports.Formats = [
 				regigigas:1, reshiram:1, shayminsky:1, shedinja:1, slaking:1, xerneas:1, yveltal:1, zekrom:1
 			},
 			donor: {masquerain:1, sableye:1, smeargle:1},
-			inheritedAbilities: {arenatrap:1, galewings:1, hugepower:1, imposter:1, parentalbond:1, purepower:1, shadowtag:1, wonderguard:1}
+			inheritedAbilities: {arenatrap:1, galewings:1, hugepower:1, imposter:1, parentalbond:1, purepower:1, shadowtag:1, wonderguard:1},
+			items: {blazikenite:1, gengarite:1, kangaskhanite:1, mawilite:1, salamencite:1, souldew:1}
 		},
 		noChangeForme: true,
 		noChangeAbility: true,
@@ -487,7 +488,7 @@ exports.Formats = [
 			if (item.id) {
 				if (!item.exists) return ["" + set.item + " is an invalid item."];
 				if (item.isUnreleased) return ["" + (set.name || set.species) + "'s item " + item.name + " is unreleased."];
-				if (item.name in this.format.banlistTable) return ["" + set.item + " is banned."];
+				if (item.id in this.format.customBans.items) return ["" + item.name + " is banned."];
 			}
 
 			var validSources = set.abilitySources = []; // evolutionary families
