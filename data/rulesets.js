@@ -185,7 +185,7 @@ exports.BattleFormats = {
 				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
 					problems.push("" + template.species + " transforms in-battle with " + template.requiredMove + "."); // Meloetta-Pirouette, Rayquaza-Mega
 				}
-				set.species = template.baseSpecies; // Fix forme for Aegislash, Castform, etc.
+				if (!format.noChangeForme) set.species = template.baseSpecies; // Fix forme for Aegislash, Castform, etc.
 			} else {
 				if (template.requiredAbility && set.ability !== template.requiredAbility) {
 					problems.push("" + (set.name || set.species) + " needs the ability " + template.requiredAbility + "."); // No cases currently.
@@ -199,7 +199,7 @@ exports.BattleFormats = {
 
 				// Mismatches between the set forme (if not base) and the item signature forme will have been rejected already.
 				// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina).
-				if (item.forcedForme && template.species === this.getTemplate(item.forcedForme).baseSpecies) {
+				if (item.forcedForme && template.species === this.getTemplate(item.forcedForme).baseSpecies && !format.noChangeForme) {
 					set.species = item.forcedForme;
 				}
 			}
@@ -208,7 +208,7 @@ exports.BattleFormats = {
 				// Autofixed forme.
 				template = this.getTemplate(set.species);
 
-				if (!format.banlistTable['ignoreillegalabilities']) {
+				if (!format.banlistTable['ignoreillegalabilities'] && !format.noChangeAbility) {
 					// Ensure that the ability is (still) legal.
 					var legalAbility = false;
 					for (var i in template.abilities) {

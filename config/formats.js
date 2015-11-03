@@ -397,7 +397,7 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Species Clause', 'Moody Clause', 'Baton Pass Clause', 'Evasion Moves Clause', 'OHKO Clause',
 			'Swagger Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'
 		],
-		banlist: ['Unreleased', 'Illegal', 'Ignore Illegal Abilities', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Salamencite', 'Soul Dew', 'Assist'],
+		banlist: ['Unreleased', 'Illegal', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Salamencite', 'Soul Dew', 'Assist'],
 		customBans: {
 			receiver: {
 				arceus:1, archeops:1, darkrai:1, deoxys:1, deoxysattack:1, deoxysspeed:1, dialga:1, giratina:1, giratinaorigin:1,
@@ -407,6 +407,8 @@ exports.Formats = [
 			donor: {masquerain:1, sableye:1, smeargle:1},
 			inheritedAbilities: {arenatrap:1, galewings:1, hugepower:1, imposter:1, parentalbond:1, purepower:1, shadowtag:1, wonderguard:1}
 		},
+		noChangeForme: true,
+		noChangeAbility: true,
 		abilityMap: (function () {
 			var Pokedex = require('./../tools.js').data.Pokedex;
 			if (!Pokedex) return null; // Process is data-unaware
@@ -455,7 +457,10 @@ exports.Formats = [
 		validateSet: function (set, teamHas) {
 			if (!this.format.abilityMap) return this.validateSet(set, teamHas); // shouldn't happen
 
+			this.format.noChangeForme = false;
 			var problems = this.tools.getFormat('Pokemon').onChangeSet.call(this.tools, set, this.format) || [];
+			this.format.noChangeForme = true;
+
 			if (problems.length) return problems;
 
 			var species = toId(set.species);
@@ -468,6 +473,8 @@ exports.Formats = [
 					return ["" + template.baseSpecies + " is banned."];
 				}
 			}
+
+			var name = set.name;
 
 			var abilityId = toId(set.ability);
 			if (!abilityId) return ["" + (set.name || set.species) + " must have an ability."];
@@ -495,8 +502,7 @@ exports.Formats = [
 					continue;
 				}
 
-				var setCopy = Object.clone(set);
-				if (setCopy.name === setCopy.species) delete setCopy.name;
+				if (set.name === set.species) delete set.name;
 				if (donorTemplate.species !== set.species && toId(donorTemplate.species) in this.format.customBans.donor) {
 					problems = ["" + donorTemplate.species + " is banned from passing abilities down."];
 					continue;
@@ -504,13 +510,13 @@ exports.Formats = [
 					problems = ["The ability " + this.tools.getAbility(abilityId).name + " is banned from being passed down."];
 					continue;
 				}
-				setCopy.species = donorTemplate.species;
-				if (donorTemplate.species !== set.species && (donorTemplate.isPrimal || donorTemplate.isMega)) {
-					// Bypass forme validation
-					setCopy.item = donorTemplate.requiredItem;
+				set.species = donorTemplate.species;
+				if (donorTemplate.species !== template.species && donorTemplate.requiredItem) {
+					// Bypass forme validation. Relevant to inherit from Giratina-O, and Mega/Primal formes.
+					set.item = donorTemplate.requiredItem;
 				}
-				problems = this.validateSet(setCopy, teamHas) || [];
-				if (!problems.length && (setCopy.species === donorTemplate.species || donorTemplate.species !== set.species)) {
+				problems = this.validateSet(set, teamHas) || [];
+				if (!problems.length) {
 					validSources.push(evoFamily);
 				}
 				if (validSources.length > 1) {
@@ -519,6 +525,10 @@ exports.Formats = [
 					break;
 				}
 			}
+
+			// Restore the intended species and name.
+			set.species = template.species;
+			set.name = (name === set.species ? "" : name);
 
 			if (!validSources.length && pokemonWithAbility.length > 1) {
 				return ["" + (set.name || set.species) + " set is illegal."];
