@@ -1,4 +1,4 @@
-var sqlite3 = require('sqlite3');
+//var sqlite3 = require('sqlite3');
 var db = new sqlite3.Database('config/users.db', function() {
 	db.run("CREATE TABLE if not exists users (userid TEXT, name TEXT, bucks INTEGER)");
 });
