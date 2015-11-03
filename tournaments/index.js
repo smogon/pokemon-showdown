@@ -763,7 +763,7 @@ Tournament = (function () {
 
 			try {
 				this.room.add('|raw|<b><font color=' + Gold.hashColor(toId(winner)) + '>' + Tools.escapeHTML(winner) + '</font> has won <font color=#24678d>'+money+'</font> '+buck+' for winning the tournament!</b>');
-				economy.writeMoney('money', toId(winner), money);
+				writeMoney(toId(winner), money);
 			} catch (e) {}
 		}
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
