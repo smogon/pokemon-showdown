@@ -526,9 +526,10 @@ exports.Formats = [
 				}
 			}
 
-			// Restore the intended species and name.
+			// Restore the intended species, name and item.
 			set.species = template.species;
 			set.name = (name === set.species ? "" : name);
+			set.item = item.name;
 
 			if (!validSources.length && pokemonWithAbility.length > 1) {
 				return ["" + (set.name || set.species) + " set is illegal."];
