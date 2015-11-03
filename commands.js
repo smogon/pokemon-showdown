@@ -1167,12 +1167,12 @@ roomstaff: 'roomauth',
 	 * Moderating: Punishments
 	 *********************************************************/
 
-	lick: 'lick',
-	w: 'lick',
-	lick: function (target, room, user) {
-		if (!target) return this.parse('/help lick');
+	warn: 'warn',
+	k: 'warn',
+	warn: function (target, room, user) {
+		if (!target) return this.parse('/help warn');
 		if (room.isMuted(user) && !user.can('bypassall')) return this.errorReply("You cannot do this while unable to talk.");
-		if (room.isPersonal && !user.can('lick')) return this.errorReply("licking is unavailable in group chats.");
+		if (room.isPersonal && !user.can('warn')) return this.errorReply("licking is unavailable in group chats.");
 
 		target = this.splitTarget(target);
 		var targetUser = this.targetUser;
@@ -1185,11 +1185,11 @@ roomstaff: 'roomauth',
 		}
 		if (!this.can('lick', targetUser, room)) return false;
 
-		this.addModCommand("" + targetUser.name + " was licked by " + user.name + "." + (target ? " (" + target + ")" : ""));
-		targetUser.send('|c|~|/lick ' + target);
+		this.addModCommand("" + targetUser.name + " was warned by " + user.name + "." + (target ? " (" + target + ")" : ""));
+		targetUser.send('|c|~|/warn ' + target);
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 	},
-	warnhelp: ["/lick OR /k [username], [reason] - Warns a user showing them the Pok\u00e9mon Showdown Rules and [reason] in an overlay. Requires: % @ # & ~"],
+	warnhelp: ["/warn OR /k [username], [reason] - Warns a user showing them the Pok\u00e9mon Showdown Rules and [reason] in an overlay. Requires: % @ # & ~"],
 
 	redirect: 'redir',
 	redir: function (target, room, user, connection) {
@@ -1240,13 +1240,13 @@ roomstaff: 'roomauth',
 		if ((room.isMuted(targetUser) && !canBeMutedFurther) || targetUser.locked || !targetUser.connected) {
 			var problem = " but was already " + (!targetUser.connected ? "offline" : targetUser.locked ? "locked" : "licked");
 			if (!target) {
-				return this.privateModCommand("(" + targetUser.name + " would be licked by " + user.name + problem + ".)");
+				return this.privateModCommand("(" + targetUser.name + " would be muted by " + user.name + problem + ".)");
 			}
-			return this.addModCommand("" + targetUser.name + " would be licked by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
+			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has licked you in " + room.id + " for " + muteDuration.duration() + ". " + target);
-		this.addModCommand("" + targetUser.name + " was licked by " + user.name + " for " + muteDuration.duration() + "." + (target ? " (" + target + ")" : ""));
+		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + muteDuration.duration() + ". " + target);
+		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + muteDuration.duration() + "." + (target ? " (" + target + ")" : ""));
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
 		this.add('|unlink|' + this.getLastIdOf(targetUser));
 
