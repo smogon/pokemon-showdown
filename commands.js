@@ -814,6 +814,29 @@ away: 'afk',
 		Rooms.global.writeChatRoomData();
 	},
 	
+	roombae: function (target, room, user) {
+		if (!room.chatRoomData) {
+			return this.sendReply("/roombae - This room isn't designed for per-room moderation to be added");
+		}
+		target = this.splitTarget(target, true);
+		var targetUser = this.targetUser;
+
+		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
+
+		if (room.founder !== user.userid && !this.can('makeroom')) return this.sendReply('/roombae - Access denied.');
+
+		if (!room.auth) room.auth = room.chatRoomData.auth = {};
+
+		var name = targetUser.name;
+
+		room.auth[targetUser.userid] = '\u2661';
+		room.bae = targetUser.userid;
+		this.addModCommand("" + name + " was evolved in to Room Bae by " + user.name + ".");
+		room.onUpdateIdentity(targetUser);
+		room.chatRoomData.leader = room.bae;
+		Rooms.global.writeChatRoomData();
+	},
+	
 		roomkohai: function (target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomkohai - Senpai hasn't noticed you");
@@ -996,7 +1019,7 @@ roomstaff: 'roomauth',
                 if (room.boss) buffer.push('Room BO$$:\n' + room.boss);
                 if (room.senpai) buffer.push('Room Senpai:\n' + room.senpai);
                 if (room.founder) buffer.push('Room Founder:\n' + room.founder);
-                if (room.oniisan) buffer.push('Room Oniisan:\n' + room.oniisan);
+                if (room.bae) buffer.push('Room Bae:\n' + room.bae);
                 Object.keys(rankLists).sort(function (a, b) {
                         return (Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank;
                 }).forEach(function (r) {
