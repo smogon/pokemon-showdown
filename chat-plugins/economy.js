@@ -59,7 +59,7 @@ function logTransaction (message) {
 	if (!message) return false;
 	fs.appendFile('logs/transactions.log','['+new Date().toUTCString()+'] '+message+'\n');
 }
-
+global.logTransaction = logTransaction;
 function logDice (message) {
 	if (!message) return false;
 	fs.appendFile('logs/dice.log','['+new Date().toUTCString()+'] '+message+'\n');
