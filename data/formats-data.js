@@ -4399,7 +4399,8 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["suckerpunch","darkpulse","focusblast","flamethrower","uturn","nastyplot","knockoff","trick"],
 		randomDoubleBattleMoves: ["suckerpunch","darkpulse","focusblast","flamethrower","uturn","nastyplot","knockoff","protect"],
 		eventPokemon: [
-			{"generation":5,"level":50,"gender":"M","nature":"Quirky","moves":["agility","embargo","punishment","snarl"],"pokeball":"cherishball"}
+			{"generation":5,"level":50,"gender":"M","nature":"Quirky","moves":["agility","embargo","punishment","snarl"],"pokeball":"cherishball"},
+			{"generation":6,"level":50,"moves":["sludgebomb","darkpulse","flamethrower","suckerpunch"],"pokeball":"ultraball"}
 		],
 		tier: "BL2"
 	},
