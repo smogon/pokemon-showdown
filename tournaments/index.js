@@ -758,6 +758,7 @@ Tournament = (function () {
 		}
 
 		try {
+			var tourSize = this.generator.users.size;
 			var runnerUp = false;
 			if (data2['bracketData']['rootNode']) {
 				if (data2['bracketData']['rootNode']['children']) {
