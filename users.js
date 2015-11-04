@@ -1339,9 +1339,9 @@ User = (function () {
 				return false;
 			}
 		}
-		if (room.modjoin && !makeRoom) {
+		if (room.modjoin) {
 			var userGroup = this.group;
-			if (room.auth) {
+			if (room.auth && !makeRoom) {
 				if (room.isPrivate === true) {
 					userGroup = ' ';
 				}
