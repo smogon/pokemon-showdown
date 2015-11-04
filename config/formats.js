@@ -481,6 +481,7 @@ exports.Formats = [
 			var species = toId(set.species);
 			var template = this.tools.getTemplate(species);
 			if (!template.exists) return ["" + set.species + " is not a real Pok\u00E9mon."];
+			if (template.isUnreleased) return ["" + set.species + " is unreleased."];
 			if (template.speciesid in this.format.customBans.receiver) {
 				return ["" + set.species + " is banned."];
 			} else if (!this.tools.data.FormatsData[species] || !this.tools.data.FormatsData[species].tier) {
