@@ -702,7 +702,7 @@ Validator = (function () {
 											// otherwise parent must be able to learn the move
 											!alreadyChecked[dexEntry.speciesid] && dexEntry.learnset && (dexEntry.learnset[move] || dexEntry.learnset['sketch'])) {
 											if (dexEntry.eggGroups.intersect(eggGroups).length) {
-												if (tools.gen === 2 && lsetData.hasEggMove && lsetData.hasEggMove !== move) {
+												if (tools.gen === 2 && dexEntry.gen <= 2 && lsetData.hasEggMove && lsetData.hasEggMove !== move) {
 													// If the mon already has an egg move by a father, other different father can't give it another egg move.
 													if (lsetData.eggParents.indexOf(dexEntry.species) >= 0) {
 														// We have to test here that the father of both moves doesn't get both by egg breeding
