@@ -542,10 +542,11 @@ away: 'afk',
 				Rooms.global.writeChatRoomData();
 			}
 		} else {
-			if ((target === 'on' || target === 'true' || !target) || !user.can('editroom')) {
+			if (target === 'on' || target === 'true' || !target) {
 				room.modjoin = true;
 				this.addModCommand("" + user.name + " turned on modjoin.");
 			} else if (target in Config.groups) {
+				if (room.battle && !this.can('makeroom')) return;
 				room.modjoin = target;
 				this.addModCommand("" + user.name + " set modjoin to " + target + ".");
 			} else {
@@ -903,8 +904,7 @@ away: 'afk',
 		Rooms.global.writeChatRoomData();
 	},
 	
-	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: ~"],
-
+	roomownerhelp: ["/roomowner [username] - Appoints [username] as a room owner. Removes official status. Requires: & ~"],
 	roomdeowner: 'deroomowner',
 	deroomowner: function (target, room, user) {
 		if (!room.auth) {
@@ -927,7 +927,7 @@ away: 'afk',
 			Rooms.global.writeChatRoomData();
 		}
 	},
-	deroomownerhelp: ["/roomdeowner [username] - Removes [username]'s status as a room owner. Requires: ~"],
+	deroomownerhelp: ["/roomdeowner [username] - Removes [username]'s status as a room owner. Requires: & ~"],
 
 	roomdemote: 'roompromote',
 	roompromote: function (target, room, user, connection, cmd) {

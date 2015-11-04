@@ -14550,10 +14550,14 @@ exports.BattleMovedex = {
 			if (myItem) {
 				target.setItem(myItem);
 				this.add('-item', target, myItem, '[from] move: Trick');
+			} else {
+				this.add('-enditem', target, yourItem, '[silent]');
 			}
 			if (yourItem) {
 				source.setItem(yourItem);
 				this.add('-item', source, yourItem, '[from] move: Trick');
+			} else {
+				this.add('-enditem', source, myItem, '[silent]');
 			}
 		},
 		secondary: false,

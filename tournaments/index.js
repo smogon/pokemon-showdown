@@ -801,6 +801,7 @@ Tournament = (function () {
 		} catch (e) {
 			console.log('Error giving bucks for tournaments: '+e.stack);
 		}
+
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		delete exports.tournaments[this.room.id];
 	};

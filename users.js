@@ -878,7 +878,7 @@ User = (function () {
 		// user types:
 		//   1: unregistered user
 		//   2: registered user
-		//   3: Pokemon Showdown development staff
+		//   3: Pokemon Showdown system operator
 		//   4: autoconfirmed
 		//   5: permalocked
 		//   6: permabanned
@@ -887,6 +887,7 @@ User = (function () {
 
 			if (userType === '3') {
 				this.isSysop = true;
+				this.confirmed = userid;
 				this.autoconfirmed = userid;
 			} else if (userType === '4') {
 				this.autoconfirmed = userid;
@@ -1338,9 +1339,9 @@ User = (function () {
 				return false;
 			}
 		}
-		if (room.modjoin && !makeRoom) {
+		if (room.modjoin) {
 			var userGroup = this.group;
-			if (room.auth) {
+			if (room.auth && !makeRoom) {
 				if (room.isPrivate === true) {
 					userGroup = ' ';
 				}
