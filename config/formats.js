@@ -570,7 +570,7 @@ exports.Formats = [
 		name: "[Seasonal] Super Squad Smackdown",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
 		section: "OM of the Month",
-		team: 'randomHero',
+		team: 'randomSeasonalHero',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onEffectiveness: function (typeMod, target, move, type) {
 			if (this.activePokemon && this.activePokemon.name === 'Magneto' && move.id === 'flashcannon' && type === 'Steel') return 1;

@@ -3179,7 +3179,7 @@ exports.BattleScripts = {
 			shiny: !this.random(template.id === 'missingno' ? 4 : 1024)
 		};
 	},
-	randomHeroTeam: function () {
+	randomSeasonalHeroTeam: function () {
 		var teams = [
 			['Wolverine', 'Professor X', 'Cyclops', 'Nightcrawler', 'Phoenix', 'Emma Frost', 'Storm', 'Iceman'],
 			['Magneto', 'Mystique', 'Quicksilver', 'Scarlet Witch', 'Blob', 'Pyro', 'Sabretooth', 'Juggernaut', 'Toad'],
