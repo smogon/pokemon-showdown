@@ -5315,7 +5315,9 @@ exports.BattleFormatsData = {
 	yveltal: {
 		randomBattleMoves: ["darkpulse","hurricane","foulplay","oblivionwing","uturn","suckerpunch","taunt","toxic","roost"],
 		randomDoubleBattleMoves: ["darkpulse","oblivionwing","taunt","focusblast","hurricane","roost","suckerpunch","snarl","skydrop","protect"],
-		unobtainableShiny: true,
+		eventPokemon: [
+			{"generation":6,"level":100,"shiny":true,"moves":["oblivionwing","suckerpunch","darkpulse","foulplay"],"pokeball":"cherishball"}
+		],
 		tier: "Uber"
 	},
 	zygarde: {
