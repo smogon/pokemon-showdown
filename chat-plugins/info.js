@@ -47,7 +47,7 @@ var commands = exports.commands = {
 			if (i === 'global') continue;
 			var targetRoom = Rooms.get(i);
 
-			var output = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '" room="' + i + '">' + i + '</a>';
+			var output = (targetRoom.auth && targetRoom.auth[targetUser.userid] ? targetRoom.auth[targetUser.userid] : '') + '<a href="/' + i + '">' + i + '</a>';
 			if (targetRoom.isPrivate === true) {
 				if (targetRoom.modjoin === '~') continue;
 				if (privaterooms) privaterooms += " | ";
@@ -117,7 +117,7 @@ var commands = exports.commands = {
 				if (!thisRoom || thisRoom.isPrivate === true) continue;
 				if (thisRoom.bannedIps && (targetUser.latestIp in thisRoom.bannedIps || targetUser.userid in thisRoom.bannedUsers)) {
 					if (bannedFrom) bannedFrom += ", ";
-					bannedFrom += '<a href="/' + thisRoom + '" room="' + thisRoom + '">' + thisRoom + '</a>';
+					bannedFrom += '<a href="/' + thisRoom + '">' + thisRoom + '</a>';
 				}
 			}
 			if (bannedFrom) buf += '<br />Banned from: ' + bannedFrom;
