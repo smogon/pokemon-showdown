@@ -772,7 +772,7 @@ Tournament = (function () {
 			var firstBuck;
 			var secondBuck;
 
-			if (this.room.isOfficial && tourSize >= 5) {
+			if (this.room.isOfficial && tourSize >= 3) {
 				firstMoney = Math.round(tourSize/10);
 				secondMoney = Math.round(firstMoney/2);
 				firstBuck = 'buck';
