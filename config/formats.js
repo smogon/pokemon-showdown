@@ -670,7 +670,7 @@ exports.Formats = [
 		desc: [
 			"Pok&eacute;mon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, and NU or lower get +15.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3532973/\">Tier Shift</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3536719/\">Tier Shift Viability Ranking</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554765/\">Tier Shift Viability Ranking</a>"
 		],
 		section: "Other Metagames",
 
