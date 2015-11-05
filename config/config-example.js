@@ -303,6 +303,28 @@ exports.grouplist = [
 		tournamentsmanagement: true
 	},
 	{
+		symbol: '☮',
+		id: "otoutosan",
+		name: "Otoutosan",
+		inherit: '+',
+		jurisdiction: 'u',
+		announce: true,
+		warn: '\u2605u',
+		kick: true,
+		mute: '\u2605u',
+		lock: true,
+		forcerename: true,
+		timer: true,
+		modlog: true,
+		alts: '%u',
+		bypassblocks: 'u%@&~',
+		receiveauthmessages: true,
+		tournamentsmoderation: true,
+		tournamentsmanagement: true,
+		jeopardy: true,
+		joinbattle: true
+	},
+	{
 		symbol: '%',
 		id: "driver",
 		name: "Driver",
@@ -333,27 +355,7 @@ exports.grouplist = [
 		broadcast: true,
 		tournamentsmanagement: true
 	},
-	{
-		symbol: '\u262F',
-		id: "Otoutosan",
-		name: "Otoutosan",
-		inherit: '+',
-		jurisdiction: 'u',
-		announce: true,
-		warn: '\u2605u',
-		kick: true,
-		mute: '\u2605u',
-		lock: true,
-		forcerename: true,
-		timer: true,
-		modlog: true,
-		alts: '%u',
-		bypassblocks: 'u%@&~',
-		receiveauthmessages: true,
-		tournamentsmoderation: true,
-		jeopardy: true,
-		joinbattle: true
-	},
+	
 	{
 		symbol: ' ',
 		ip: 's',
