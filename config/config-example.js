@@ -303,15 +303,15 @@ exports.grouplist = [
 		tournamentsmanagement: true
 	},
 	{
-		symbol: '☮',
+		symbol: '^',
 		id: "otoutosan",
 		name: "Otoutosan",
 		inherit: '+',
 		jurisdiction: 'u',
 		announce: true,
-		warn: '☮',
+		warn: '^',
 		kick: true,
-		mute: '☮',
+		mute: '^',
 		lock: true,
 		forcerename: true,
 		timer: true,
