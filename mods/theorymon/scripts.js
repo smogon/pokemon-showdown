@@ -49,5 +49,7 @@ exports.BattleScripts = {
 		this.modData('Learnsets', 'zoroark').learnset.vacuumwave = ['6T'];
 		this.modData('Learnsets', 'jolteon').learnset.spikes = ['6T'];
 		this.modData('Pokedex', 'cobalion').abilities['1'] = 'Magnet Pull';
+		this.modData('Learnsets', 'sceptile').learnset.seedflare = ['6T'];
+		this.modData('Pokedex', 'gogoat').abilities['1'] = 'Thick Fat';
 	}
 };
