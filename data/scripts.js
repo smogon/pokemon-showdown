@@ -3360,7 +3360,7 @@ exports.BattleScripts = {
 		if (!depth) depth = 0;
 		var forceResult = (depth >= 4);
 
-		var availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU'];
+		var availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU'];
 		var chosenTier;
 
 		var currentSeed = this.seed.slice();
