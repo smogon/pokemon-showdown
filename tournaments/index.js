@@ -773,8 +773,8 @@ Tournament = (function () {
 			var secondBuck;
 
 			if (this.room.isOfficial && tourSize >= 3) {
-				firstMoney = Math.round(tourSize/10);
-				secondMoney = Math.round(firstMoney/2);
+				firstMoney = Math.round(tourSize/9);
+				secondMoney = Math.round(firstMoney/3);
 				firstBuck = 'buck';
 				secondBuck = 'buck';
 			} 
@@ -784,7 +784,7 @@ Tournament = (function () {
 			if (firstMoney) {
 				if (firstMoney > 1) firstBuck = 'bucks';
 				if (secondMoney > 1) secondBuck = 'bucks';
-				this.room.add('|raw|<b><font color="' + hashColor(winner)+'">' + Tools.escapeHTML(winner) + '</font> has also won <font color=#24678d>' + firstMoney + '</font> ' + firstBuck + ' for winning the tournament!</b>');
+				this.room.add('|raw|<b><font color="' + hashColor(winner)+'">' + Tools.escapeHTML(winner) + '</font> has won <font color=#24678d>' + firstMoney + '</font> ' + firstBuck + ' for winning the tournament!</b>');
 				if (runnerUp) this.room.add('|raw|<b><font color="' + hashColor(runnerUp) + '">' + Tools.escapeHTML(runnerUp) + '</font> has also won <font color=#24678d>' + secondMoney + '</font> ' + secondBuck + ' for coming in second!</b>');
 				writeMoney(toId(winner), firstMoney, function() {
 					readMoney(toId(winner), function(newMoney) {
