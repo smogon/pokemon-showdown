@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleAbilities = {
 	"swiftswim": {
 		inherit: true,
@@ -27,7 +29,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onModifyMove: function (move) {
 			if (move.weather) {
-				var weather = move.weather;
+				let weather = move.weather;
 				move.weather = null;
 				move.onHit = function (target, source) {
 					this.setWeather(weather, source, this.getAbility('forecast'));
@@ -146,7 +148,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onModifyMove: function (move) {
 			if (move.id === 'sunnyday') {
-				var weather = move.weather;
+				let weather = move.weather;
 				move.weather = null;
 				move.onHit = function (target, source) {
 					this.setWeather(weather, source, this.getAbility('flowergift'));
@@ -269,7 +271,7 @@ exports.BattleAbilities = {
 	"clearbody": {
 		inherit: true,
 		onBoost: function (boost, target, source) {
-			for (var i in boost) {
+			for (let i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
 					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
@@ -280,7 +282,7 @@ exports.BattleAbilities = {
 	"whitesmoke": {
 		inherit: true,
 		onBoost: function (boost, target, source) {
-			for (var i in boost) {
+			for (let i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
 					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
@@ -300,10 +302,10 @@ exports.BattleAbilities = {
 			if (pokemon.template.baseSpecies === 'Genesect') {
 				if (!pokemon.getItem().onDrive) return;
 			}
-			var foeactive = pokemon.side.foe.active;
-			var totaldef = 0;
-			var totalspd = 0;
-			for (var i = 0; i < foeactive.length; i++) {
+			let foeactive = pokemon.side.foe.active;
+			let totaldef = 0;
+			let totalspd = 0;
+			for (let i = 0; i < foeactive.length; i++) {
 				if (!foeactive[i] || foeactive[i].fainted) continue;
 				totaldef += foeactive[i].stats.def;
 				totalspd += foeactive[i].stats.spd;
@@ -407,7 +409,7 @@ exports.BattleAbilities = {
 			if (move.category !== "Status") {
 				this.debug('Adding Stench flinch');
 				if (!move.secondaries) move.secondaries = [];
-				for (var i = 0; i < move.secondaries.length; i++) {
+				for (let i = 0; i < move.secondaries.length; i++) {
 					if (move.secondaries[i].volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
@@ -508,8 +510,8 @@ exports.BattleAbilities = {
 			this.add('-start', target, 'move: Imprison');
 		},
 		onFoeDisableMove: function (pokemon) {
-			var foeMoves = this.effectData.target.moveset;
-			for (var f = 0; f < foeMoves.length; f++) {
+			let foeMoves = this.effectData.target.moveset;
+			for (let f = 0; f < foeMoves.length; f++) {
 				pokemon.disableMove(foeMoves[f].id, true);
 			}
 			pokemon.maybeDisabled = true;

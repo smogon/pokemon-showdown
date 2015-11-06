@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Curse', function () {
 	afterEach(function () {
@@ -60,7 +62,7 @@ describe('Curse', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
 
 		battle.commitDecisions();
-		var hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
+		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
 		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down + residual damage
 		assert.strictEqual(hps[1], battle.p2.active[0].maxhp); // Foe unaffected
 
@@ -76,7 +78,7 @@ describe('Curse', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
 
 		battle.commitDecisions();
-		var hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
+		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
 		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down
 		assert.notStrictEqual(hps[1], battle.p2.active[0].maxhp); // Curse residual damage
 
@@ -92,7 +94,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		battle.destroy();
 	});
 
-	var doublesTeams = [[
+	let doublesTeams = [[
 		{species: "Kecleon", ability: 'colorchange', item: 'laggingtail', moves: ['curse', 'calmmind']},
 		{species: "Greninja", ability: 'torrent', item: '', moves: ['growl', 'mudsport']}
 	], [
@@ -100,15 +102,15 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		{species: "Gastly", ability: 'levitate', item: '', moves: ['lick', 'calmmind']}
 	]];
 
-	var triplesTeams = [
+	let triplesTeams = [
 		doublesTeams[0].concat({species: "Metapod", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']}),
 		doublesTeams[1].concat({species: "Kakuna", ability: 'shedskin', item: '', moves: ['harden', 'stringshot']})
 	];
 
 	function runDoublesTest(battle, curseUser) {
-		var p1active = battle.p1.active;
-		var p2active = battle.p2.active;
-		var cursePartner = curseUser.side.active[1 - curseUser.position];
+		let p1active = battle.p1.active;
+		let p2active = battle.p2.active;
+		let cursePartner = curseUser.side.active[1 - curseUser.position];
 
 		battle.choose('p1', 'move 1, move 1'); // Kecleon uses Curse last in the turn.
 		battle.choose('p2', 'move 1 ' + (curseUser.position + 1) + ', move 1 ' + (curseUser.position + 1)); // Electric attack on Kecleon, then Ghost.
@@ -116,7 +118,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
 
-		var foeHP = [p2active[0].hp, p2active[1].hp];
+		let foeHP = [p2active[0].hp, p2active[1].hp];
 		battle.choose('p1', 'move 2 1, move 2 1');
 		battle.choose('p2', 'move 2, move 2');
 
@@ -133,8 +135,8 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 	}
 
 	function runTriplesTest(battle, curseUser) {
-		var p1active = battle.p1.active;
-		var p2active = battle.p2.active;
+		let p1active = battle.p1.active;
+		let p2active = battle.p2.active;
 
 		battle.choose('p1', 'move 1, move 1, move 1'); // Kecleon uses Curse last in the turn.
 		battle.choose('p2', 'move 1 ' + (curseUser.position + 1) + ', move 1 ' + (curseUser.position + 1) + ', move 1'); // Electric attack on Kecleon, then Ghost.
@@ -142,20 +144,20 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
 
-		var foeHP = [p2active[0].hp, p2active[1].hp];
+		let foeHP = [p2active[0].hp, p2active[1].hp];
 		battle.choose('p1', 'move 2 1, move 2 1');
 		battle.choose('p2', 'move 2, move 2');
 
-		var cursedFoe = false;
-		for (var i = 0; i < 3; i++) {
-			var allyPokemon = p1active[i];
+		let cursedFoe = false;
+		for (let i = 0; i < 3; i++) {
+			let allyPokemon = p1active[i];
 			if (allyPokemon === curseUser) {
 				assert.notStrictEqual(allyPokemon.hp, allyPokemon.maxhp); // Curse user cut its HP down
 			} else {
 				assert.strictEqual(allyPokemon.hp, allyPokemon.maxhp); // Partners unaffected by Curse
 			}
 
-			var foePokemon = p2active[i];
+			let foePokemon = p2active[i];
 			if (foePokemon.hp !== foePokemon.maxhp) {
 				cursedFoe = true;
 			}
@@ -184,9 +186,9 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 	[0, 1, 2].forEach(function (cursePos) {
 		it('should target an opponent in Triples even if the user is on position ' + cursePos, function () {
 			battle = BattleEngine.Battle.construct('battle-cursetest-' + (3 + cursePos), 'triplescustomgame');
-			var p1team = triplesTeams[0].slice(1);
+			let p1team = triplesTeams[0].slice(1);
 			p1team.splice(cursePos, 0, triplesTeams[0][0]);
-			var p2team = triplesTeams[1].slice();
+			let p2team = triplesTeams[1].slice();
 
 			battle.join('p1', 'Guest 1', 1, p1team);
 			battle.join('p2', 'Guest 2', 1, p2team);
