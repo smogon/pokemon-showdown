@@ -1,9 +1,8 @@
 exports.BattleFormats = {
-	standard: {
-		effectType: 'Banlist',
+	pokemon: {
 		inherit: true,
+		effectType: 'Banlist',
 		onValidateSet: function (set) {
-			// limit one of each move in Standard
 			var template = this.getTemplate(set.species);
 			var item = this.getItem(set.item);
 			if (item && item.id === 'griseousorb' && template.num !== 487) {
