@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Flower Gift', function () {
 	afterEach(function () {
@@ -17,10 +19,10 @@ describe('Flower Gift', function () {
 			{species: "Blissey", ability: 'serenegrace', moves: ['healbell']}
 		]);
 		battle.commitDecisions();
-		var cherAtk = battle.p1.active[0].getStat('atk');
-		var cherSpd = battle.p1.active[0].getStat('spd');
-		var baseAtk = battle.p1.active[1].getStat('atk');
-		var baseSpd = battle.p1.active[1].getStat('spd');
+		let cherAtk = battle.p1.active[0].getStat('atk');
+		let cherSpd = battle.p1.active[0].getStat('spd');
+		let baseAtk = battle.p1.active[1].getStat('atk');
+		let baseSpd = battle.p1.active[1].getStat('spd');
 
 		// Set the weather to sun and re-check
 		battle.setWeather('sunnyday');
@@ -43,10 +45,10 @@ describe('Flower Gift', function () {
 		battle.commitDecisions();
 		battle.choose('p1', 'move 1 1, move 1');
 		battle.choose('p2', 'move 1, move 1');
-		var cherAtk = battle.p1.active[0].getStat('atk');
-		var cherSpd = battle.p1.active[0].getStat('spd');
-		var baseAtk = battle.p1.active[1].getStat('atk');
-		var baseSpd = battle.p1.active[1].getStat('spd');
+		let cherAtk = battle.p1.active[0].getStat('atk');
+		let cherSpd = battle.p1.active[0].getStat('spd');
+		let baseAtk = battle.p1.active[1].getStat('atk');
+		let baseSpd = battle.p1.active[1].getStat('spd');
 
 		// Set the weather to sun and re-check
 		battle.setWeather('sunnyday');

@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Weather damage calculation', function () {
 	afterEach(function () {
@@ -12,7 +14,7 @@ describe('Weather damage calculation', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ninetales', ability: 'drought', moves: ['incinerate']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Cryogonal', ability: 'levitate', moves: ['splash']}]);
 		battle.commitDecisions();
-		var pokemon = battle.p2.active[0];
+		let pokemon = battle.p2.active[0];
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, 152);
 	});
 
@@ -22,7 +24,7 @@ describe('Weather damage calculation', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ninetales', ability: 'drizzle', moves: ['incinerate']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Cryogonal', ability: 'levitate', moves: ['splash']}]);
 		battle.commitDecisions();
-		var pokemon = battle.p2.active[0];
+		let pokemon = battle.p2.active[0];
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, 50);
 	});
 });

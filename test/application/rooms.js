@@ -1,8 +1,10 @@
-var assert = require('assert');
-var room;
+'use strict';
 
-var userUtils = require('./../../dev-tools/users-utils.js');
-var User = userUtils.User;
+const assert = require('assert');
+let room;
+
+let userUtils = require('./../../dev-tools/users-utils.js');
+let User = userUtils.User;
 
 describe('Rooms features', function () {
 	describe('Rooms', function () {
@@ -27,16 +29,16 @@ describe('Rooms features', function () {
 	});
 
 	describe('BattleRoom', function () {
-		var room;
+		let room;
 		afterEach(function () {
 			if (room) room.expire();
 		});
 
 		it('should allow two users to join the battle', function () {
-			var p1 = new User();
-			var p2 = new User();
-			var packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
-			var options = [{rated: false, tour: false}, {rated: false, tour: true}, {rated: true, tour: false}, {rated: true, tour: true}];
+			let p1 = new User();
+			let p2 = new User();
+			let packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
+			let options = [{rated: false, tour: false}, {rated: false, tour: true}, {rated: true, tour: false}, {rated: true, tour: true}];
 			options.forEach(function (option) {
 				room = Rooms.global.startBattle(p1, p2, 'customgame', packedTeam, packedTeam, option);
 				if (room.active) return assert.ok(room.battle.players.none(null)); // Automatically joined

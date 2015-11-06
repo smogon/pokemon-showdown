@@ -1,34 +1,27 @@
-var path = require('path');
-var util = require('util');
+'use strict';
 
-var gulp = require('gulp');
-var lazypipe = require('lazypipe');
-var merge = require('merge-stream');
-var cache = require('gulp-cache');
-var jscs = require('gulp-jscs');
-var jshint = require('gulp-jshint');
-var replace = require('gulp-replace');
-var CacheSwap = require('cache-swap');
-var jshintStylish = require('jshint-stylish');
+const path = require('path');
+const util = require('util');
 
-var fileCache = new CacheSwap({tmpDir: '', cacheDirName: 'gulp-cache'});
+const gulp = require('gulp');
+const lazypipe = require('lazypipe');
+const merge = require('merge-stream');
+const cache = require('gulp-cache');
+const jscs = require('gulp-jscs');
+const jshint = require('gulp-jshint');
+const replace = require('gulp-replace');
+const CacheSwap = require('cache-swap');
+const jshintStylish = require('jshint-stylish');
 
-var globals = {};
-var globalList = [
+const fileCache = new CacheSwap({tmpDir: '', cacheDirName: 'gulp-cache'});
+
+let globals = {};
+let globalList = [
 	'Config', 'Monitor', 'toId', 'Tools', 'LoginServer', 'Users', 'Rooms', 'Verifier',
 	'CommandParser', 'Simulator', 'Tournaments', 'Dnsbl', 'Cidr', 'Sockets', 'TeamValidator',
 	'Ladders'
 ];
 globalList.forEach(function (identifier) {globals[identifier] = false;});
-
-function transformLet() {
-	// Replacing `var` with `let` is sort of a hack that stops jsHint from
-	// complaining that I'm using `var` like `let` should be used, but
-	// without having to deal with iffy `let` support.
-
-	return lazypipe()
-		.pipe(replace.bind(null, /\bvar\b/g, 'let'))();
-}
 
 function lint(jsHintOptions, jscsOptions) {
 	function cachedJsHint() {
@@ -47,7 +40,7 @@ function lint(jsHintOptions, jscsOptions) {
 		.pipe(jscs.bind(jscs, jscsOptions))();
 }
 
-var jsHintOptions = {};
+let jsHintOptions = {};
 jsHintOptions.base = {
 	"nonbsp": true,
 	"nonew": true,
@@ -76,7 +69,7 @@ jsHintOptions.test = util._extend(util._extend({}, jsHintOptions.base), {
 	"mocha": true
 });
 
-var jscsOptions = {};
+let jscsOptions = {};
 jscsOptions.base = {
 	"preset": "yandex",
 
@@ -160,7 +153,7 @@ jscsOptions.dataCompactAllIndented = util._extend(util._extend({}, jscsOptions.d
 	"validateIndentation": '\t'
 });
 
-var lintData = [
+let lintData = [
 	{
 		dirs: ['./*.js', './tournaments/*.js', './chat-plugins/*.js', './config/!(config).js', './data/rulesets.js', './data/statuses.js'],
 		jsHint: jsHintOptions.base,
@@ -200,13 +193,12 @@ lintData.extra = {
 	}
 };
 
-var linter = function () {
+let linter = function () {
 	return (
 		merge.apply(
 			null,
 			lintData.map(function (source) {
 				return gulp.src(source.dirs)
-					.pipe(transformLet())
 					.pipe(lint(source.jsHint, source.jscs));
 			})
 		).pipe(jshint.reporter(jshintStylish))
@@ -214,11 +206,10 @@ var linter = function () {
 	);
 };
 
-for (var taskName in lintData.extra) {
+for (let taskName in lintData.extra) {
 	gulp.task(taskName, (function (task) {
 		return function () {
 			return gulp.src(task.dirs)
-				.pipe(transformLet())
 				.pipe(lint(task.jsHint, task.jscs))
 				.pipe(jshint.reporter(jshintStylish))
 				.pipe(jshint.reporter('fail'));

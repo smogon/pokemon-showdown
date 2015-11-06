@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Heavy Metal', function () {
 	afterEach(function () {
@@ -11,7 +13,7 @@ describe('Heavy Metal', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Simisear", ability: 'heavymetal', moves: ['nastyplot']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Simisage", ability: 'gluttony', moves: ['grassknot']}]);
 		battle.commitDecisions(); // Team Preview
-		var basePower = 0;
+		let basePower = 0;
 		battle.on('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
@@ -26,7 +28,7 @@ describe('Heavy Metal', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Simisear", ability: 'heavymetal', moves: ['nastyplot']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Simisage", ability: 'moldbreaker', moves: ['grassknot']}]);
 		battle.commitDecisions(); // Team Preview
-		var basePower = 0;
+		let basePower = 0;
 		battle.on('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
@@ -47,7 +49,7 @@ describe('Light Metal', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Registeel", ability: 'lightmetal', moves: ['curse']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Simisage", ability: 'gluttony', moves: ['grassknot']}]);
 		battle.commitDecisions(); // Team Preview
-		var basePower = 0;
+		let basePower = 0;
 		battle.on('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
@@ -62,7 +64,7 @@ describe('Light Metal', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Registeel", ability: 'lightmetal', moves: ['splash']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Simisage", ability: 'moldbreaker', moves: ['grassknot']}]);
 		battle.commitDecisions(); // Team Preview
-		var basePower = 0;
+		let basePower = 0;
 		battle.on('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
@@ -83,7 +85,7 @@ describe('Float Stone', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Registeel", ability: 'clearbody', item: 'floatstone', moves: ['curse']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Simisage", ability: 'gluttony', moves: ['grassknot']}]);
 		battle.commitDecisions(); // Team Preview
-		var basePower = 0;
+		let basePower = 0;
 		battle.on('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
@@ -104,7 +106,7 @@ describe('Autotomize', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Registeel", ability: 'clearbody', moves: ['autotomize']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot']}]);
 		battle.commitDecisions(); // Team Preview
-		var basePower = 0;
+		let basePower = 0;
 		battle.on('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;
@@ -121,7 +123,7 @@ describe('Autotomize', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Lairon", ability: 'heavymetal', moves: ['autotomize']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot']}]);
 		battle.commitDecisions(); // Team Preview
-		var basePower = 0;
+		let basePower = 0;
 		battle.on('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
 			if (move.id === 'grassknot') {
 				basePower = bp;

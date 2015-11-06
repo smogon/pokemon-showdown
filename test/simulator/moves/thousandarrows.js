@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Thousand Arrows', function () {
 	afterEach(function () {
@@ -43,7 +45,7 @@ describe('Thousand Arrows', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Ho-Oh", ability: 'shellarmor', item: 'ironball', moves: ['recover', 'trick']}]);
 		battle.commitDecisions();
 		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
-		var hp = battle.p2.active[0].hp;
+		let hp = battle.p2.active[0].hp;
 		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
 		battle.choose('p1', 'move 2');
 		battle.choose('p2', 'move 2');

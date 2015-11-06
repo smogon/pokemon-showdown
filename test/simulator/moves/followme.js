@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Follow Me', function () {
 	afterEach(function () {
@@ -19,7 +21,7 @@ describe('Follow Me', function () {
 			{species: 'Alakazam', ability: 'synchronize', moves: ['lowkick']}
 		]);
 		battle.commitDecisions(); // Team Preview
-		var hitCount = 0;
+		let hitCount = 0;
 		battle.on('Damage', battle.getFormat(), function (damage, pokemon) {
 			if (pokemon.template.speciesid === 'clefable') {
 				hitCount++;

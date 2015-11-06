@@ -44,7 +44,9 @@
  * ```
  */
 
-var assert = require('assert');
+'use strict';
+
+const assert = require('assert');
 
 module.exports = function () {};
 
@@ -63,10 +65,10 @@ module.exports.prototype = {
 
 	check: function (file, errors) {
 		file.iterateNodesByType('SwitchStatement', function (node) {
-			var column = node.loc.start.column;
-			var currentLine = 0;
-			for (var i = 0; i < node.cases.length; i++) {
-				var currentCase = node.cases[i];
+			let column = node.loc.start.column;
+			let currentLine = 0;
+			for (let i = 0; i < node.cases.length; i++) {
+				let currentCase = node.cases[i];
 				if (currentCase.loc.line === currentLine) continue;
 				currentLine = currentCase.loc.line;
 				if (currentCase.loc.start.column === column) continue;
