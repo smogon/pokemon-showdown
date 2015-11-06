@@ -1,8 +1,10 @@
-var Checker = require('jscs');
-var assert = require('assert');
+'use strict';
+
+const Checker = require('jscs');
+const assert = require('assert');
 
 describe('rules/validate-case-indentation', function () {
-	var checker;
+	let checker;
 
 	before(function () {
 		checker = new Checker();
@@ -14,7 +16,7 @@ describe('rules/validate-case-indentation', function () {
 
 	describe('option value true', function () {
 		it('should report cases not aligned with switch keyword', function () {
-			var src = 'switch (Number.isFinite) {\n';
+			let src = 'switch (Number.isFinite) {\n';
 			src += '\tcase isFinite:\n';
 			src += '\t\tbreak;\n';
 			src += '}';
@@ -22,7 +24,7 @@ describe('rules/validate-case-indentation', function () {
 		});
 
 		it('should not report cases aligned with switch keyword', function () {
-			var src = 'switch (Number.isFinite) {\n';
+			let src = 'switch (Number.isFinite) {\n';
 			src += 'case isFinite:\n';
 			src += '\tbreak;\n';
 			src += '}';
@@ -30,14 +32,14 @@ describe('rules/validate-case-indentation', function () {
 		});
 
 		it('should report default case not aligned with switch keyword', function () {
-			var src = 'switch (Number.isFinite) {\n';
+			let src = 'switch (Number.isFinite) {\n';
 			src += '\tdefault:\n';
 			src += '}';
 			assert(!checker.checkString(src).isEmpty());
 		});
 
 		it('should not report default case aligned with switch keyword', function () {
-			var src = 'switch (Number.isFinite) {\n';
+			let src = 'switch (Number.isFinite) {\n';
 			src += 'default:\n';
 			src += '}';
 			assert(checker.checkString(src).isEmpty());
