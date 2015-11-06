@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleStatuses = {
 	slp: {
 		inherit: true,
@@ -29,7 +31,7 @@ exports.BattleStatuses = {
 		onStallMove: function () {
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
-			var counter = this.effectData.counter || 1;
+			let counter = this.effectData.counter || 1;
 			if (counter >= 256) {
 				// 2^32 - special-cased because Battle.random(n) can't handle n > 2^16 - 1
 				return (this.random() * 4294967296 < 1);

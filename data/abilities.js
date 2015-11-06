@@ -36,6 +36,8 @@ Ratings and how they work:
 
 */
 
+'use strict';
+
 exports.BattleAbilities = {
 	"adaptability": {
 		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus (STAB) of 2 instead of 1.5.",
@@ -129,11 +131,11 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective on this Pokemon, or an OHKO move. Counter, Metal Burst, and Mirror Coat count as attacking moves of their respective types, while Hidden Power, Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
 		shortDesc: "On switch-in, this Pokemon shudders if any foe has a supereffective or OHKO move.",
 		onStart: function (pokemon) {
-			var targets = pokemon.side.foe.active;
-			for (var i = 0; i < targets.length; i++) {
+			let targets = pokemon.side.foe.active;
+			for (let i = 0; i < targets.length; i++) {
 				if (!targets[i] || targets[i].fainted) continue;
-				for (var j = 0; j < targets[i].moveset.length; j++) {
-					var move = this.getMove(targets[i].moveset[j].move);
+				for (let j = 0; j < targets[i].moveset.length; j++) {
+					let move = this.getMove(targets[i].moveset[j].move);
 					if (move.category !== 'Status' && (this.getImmunity(move.type, pokemon) && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
 						this.add('-ability', pokemon, 'Anticipation');
 						return;
@@ -206,8 +208,8 @@ exports.BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual: function (pokemon) {
 			if (!pokemon.hp) return;
-			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
-				var target = pokemon.side.foe.active[i];
+			for (let i = 0; i < pokemon.side.foe.active.length; i++) {
+				let target = pokemon.side.foe.active[i];
 				if (!target || !target.hp) continue;
 				if (target.status === 'slp') {
 					this.damage(target.maxhp / 8, target, pokemon);
@@ -303,8 +305,8 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's stat stages.",
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
-			var showMsg = false;
-			for (var i in boost) {
+			let showMsg = false;
+			for (let i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
 					showMsg = true;
@@ -332,7 +334,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's type changes to match the type of the last move that hit it, unless that type is already one of its types. This effect applies after all hits from a multi-hit move; Sheer Force prevents it from activating if the move has a secondary effect.",
 		shortDesc: "This Pokemon's type changes to the type of a move it's hit by, unless it has the type.",
 		onAfterMoveSecondary: function (target, source, move) {
-			var type = move.type;
+			let type = move.type;
 			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
 				this.add('-start', target, 'typechange', type, '[from] Color Change');
@@ -351,8 +353,8 @@ exports.BattleAbilities = {
 			if (!source || target.side === source.side) {
 				return;
 			}
-			var statsLowered = false;
-			for (var i in boost) {
+			let statsLowered = false;
+			for (let i in boost) {
 				if (boost[i] < 0) {
 					statsLowered = true;
 				}
@@ -381,7 +383,7 @@ exports.BattleAbilities = {
 	"contrary": {
 		shortDesc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
 		onBoost: function (boost) {
-			for (var i in boost) {
+			for (let i in boost) {
 				boost[i] *= -1;
 			}
 		},
@@ -488,8 +490,8 @@ exports.BattleAbilities = {
 			if (!source || target.side === source.side) {
 				return;
 			}
-			var statsLowered = false;
-			for (var i in boost) {
+			let statsLowered = false;
+			for (let i in boost) {
 				if (boost[i] < 0) {
 					statsLowered = true;
 				}
@@ -514,9 +516,9 @@ exports.BattleAbilities = {
 		},
 		onEnd: function (pokemon) {
 			if (this.weatherData.source !== pokemon) return;
-			for (var i = 0; i < this.sides.length; i++) {
-				for (var j = 0; j < this.sides[i].active.length; j++) {
-					var target = this.sides[i].active[j];
+			for (let i = 0; i < this.sides.length; i++) {
+				for (let j = 0; j < this.sides[i].active.length; j++) {
+					let target = this.sides[i].active[j];
 					if (target === pokemon) continue;
 					if (target && target.hp && target.hasAbility('deltastream')) {
 						this.weatherData.source = target;
@@ -542,9 +544,9 @@ exports.BattleAbilities = {
 		},
 		onEnd: function (pokemon) {
 			if (this.weatherData.source !== pokemon) return;
-			for (var i = 0; i < this.sides.length; i++) {
-				for (var j = 0; j < this.sides[i].active.length; j++) {
-					var target = this.sides[i].active[j];
+			for (let i = 0; i < this.sides.length; i++) {
+				for (let j = 0; j < this.sides[i].active.length; j++) {
+					let target = this.sides[i].active[j];
 					if (target === pokemon) continue;
 					if (target && target.hp && target.hasAbility('desolateland')) {
 						this.weatherData.source = target;
@@ -563,10 +565,10 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon's Attack or Special Attack is raised by 1 stage based on the weaker combined defensive stat of all opposing Pokemon. Attack is raised if their Defense is lower, and Special Attack is raised if their Special Defense is the same or lower.",
 		shortDesc: "On switch-in, Attack or Sp. Atk is raised 1 stage based on the foes' weaker Defense.",
 		onStart: function (pokemon) {
-			var foeactive = pokemon.side.foe.active;
-			var totaldef = 0;
-			var totalspd = 0;
-			for (var i = 0; i < foeactive.length; i++) {
+			let foeactive = pokemon.side.foe.active;
+			let totaldef = 0;
+			let totalspd = 0;
+			for (let i = 0; i < foeactive.length; i++) {
 				if (!foeactive[i] || foeactive[i].fainted) continue;
 				totaldef += foeactive[i].getStat('def', false, true);
 				totalspd += foeactive[i].getStat('spd', false, true);
@@ -645,7 +647,7 @@ exports.BattleAbilities = {
 		shortDesc: "30% chance of poison/paralysis/sleep on others making contact with this Pokemon.",
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact'] && !source.status && source.runImmunity('powder')) {
-				var r = this.random(100);
+				let r = this.random(100);
 				if (r < 11) {
 					source.setStatus('slp', target);
 				} else if (r < 21) {
@@ -805,8 +807,8 @@ exports.BattleAbilities = {
 		shortDesc: "This side's Grass types can't have stats lowered or status inflicted by other Pokemon.",
 		onAllyBoost: function (boost, target, source, effect) {
 			if ((source && target === source) || !target.hasType('Grass')) return;
-			var showMsg = false;
-			for (var i in boost) {
+			let showMsg = false;
+			for (let i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
 					showMsg = true;
@@ -830,7 +832,7 @@ exports.BattleAbilities = {
 		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
 		onUpdate: function (pokemon) {
 			if (pokemon.baseTemplate.species !== 'Castform' || pokemon.transformed) return;
-			var forme = null;
+			let forme = null;
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
@@ -861,14 +863,14 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon is alerted to the move with the highest power, at random, known by an opposing Pokemon.",
 		shortDesc: "On switch-in, this Pokemon is alerted to the foes' move with the highest power.",
 		onStart: function (pokemon) {
-			var targets = pokemon.side.foe.active;
-			var warnMoves = [];
-			var warnBp = 1;
-			for (var i = 0; i < targets.length; i++) {
+			let targets = pokemon.side.foe.active;
+			let warnMoves = [];
+			let warnBp = 1;
+			for (let i = 0; i < targets.length; i++) {
 				if (targets[i].fainted) continue;
-				for (var j = 0; j < targets[i].moveset.length; j++) {
-					var move = this.getMove(targets[i].moveset[j].move);
-					var bp = move.basePower;
+				for (let j = 0; j < targets[i].moveset.length; j++) {
+					let move = this.getMove(targets[i].moveset[j].move);
+					let bp = move.basePower;
 					if (move.ohko) bp = 160;
 					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
 					if (!bp && move.category !== 'Status') bp = 80;
@@ -881,7 +883,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (!warnMoves.length) return;
-			var warnMove = warnMoves[this.random(warnMoves.length)];
+			let warnMove = warnMoves[this.random(warnMoves.length)];
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove[0], '[of] ' + warnMove[1]);
 		},
 		id: "forewarn",
@@ -905,8 +907,8 @@ exports.BattleAbilities = {
 	"frisk": {
 		shortDesc: "On switch-in, this Pokemon identifies the held items of all opposing Pokemon.",
 		onStart: function (pokemon) {
-			var foeactive = pokemon.side.foe.active;
-			for (var i = 0; i < foeactive.length; i++) {
+			let foeactive = pokemon.side.foe.active;
+			for (let i = 0; i < foeactive.length; i++) {
 				if (!foeactive[i] || foeactive[i].fainted) continue;
 				if (foeactive[i].item) {
 					this.add('-item', foeactive[i], foeactive[i].getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
@@ -1007,11 +1009,11 @@ exports.BattleAbilities = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,
 		onResidual: function (pokemon) {
-			var allyActive = pokemon.side.active;
+			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (var i = 0; i < allyActive.length; i++) {
+			for (let i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && this.isAdjacent(pokemon, allyActive[i]) && allyActive[i].status && this.random(10) < 3) {
 					allyActive[i].cureStatus();
 				}
@@ -1144,7 +1146,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon appears as the last Pokemon in the party until it takes direct damage.",
 		onBeforeSwitchIn: function (pokemon) {
 			pokemon.illusion = null;
-			var i;
+			let i;
 			for (i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
 				if (!pokemon.side.pokemon[i]) continue;
 				if (!pokemon.side.pokemon[i].fainted) break;
@@ -1179,7 +1181,7 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it. If there is no Pokemon at that position, this Pokemon does not Transform.",
 		shortDesc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it.",
 		onStart: function (pokemon) {
-			var target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			let target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target) {
 				pokemon.transformInto(target, pokemon, this.getAbility('imposter'));
 			}
@@ -1228,9 +1230,9 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon lowers the Attack of adjacent opposing Pokemon by 1 stage. Pokemon behind a substitute are immune.",
 		shortDesc: "On switch-in, this Pokemon lowers the Attack of adjacent opponents by 1 stage.",
 		onStart: function (pokemon) {
-			var foeactive = pokemon.side.foe.active;
-			var activated = false;
-			for (var i = 0; i < foeactive.length; i++) {
+			let foeactive = pokemon.side.foe.active;
+			let activated = false;
+			for (let i = 0; i < foeactive.length; i++) {
 				if (!foeactive[i] || !this.isAdjacent(foeactive[i], pokemon)) continue;
 				if (!activated) {
 					this.add('-ability', pokemon, 'Intimidate');
@@ -1399,7 +1401,7 @@ exports.BattleAbilities = {
 		id: "liquidooze",
 		onSourceTryHeal: function (damage, target, source, effect) {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
-			var canOoze = {drain: 1, leechseed: 1};
+			let canOoze = {drain: 1, leechseed: 1};
 			if (canOoze[effect.id]) {
 				this.damage(damage, null, null, null, true);
 				return 0;
@@ -1419,7 +1421,7 @@ exports.BattleAbilities = {
 			if (target === source || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
-			var newMove = this.getMoveCopy(move.id);
+			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
 			this.useMove(newMove, target, source);
 			return null;
@@ -1428,7 +1430,7 @@ exports.BattleAbilities = {
 			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
-			var newMove = this.getMoveCopy(move.id);
+			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
 			this.useMove(newMove, target, source);
 			return null;
@@ -1459,7 +1461,7 @@ exports.BattleAbilities = {
 			if (!move || !target) return;
 			if (target !== source && move.category !== 'Status') {
 				if (source.item) return;
-				var yourItem = target.takeItem(source);
+				let yourItem = target.takeItem(source);
 				if (!yourItem) return;
 				if (!source.setItem(yourItem)) {
 					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
@@ -1541,11 +1543,11 @@ exports.BattleAbilities = {
 		shortDesc: "If an active ally has this Ability or the Ability Plus, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpAPriority: 5,
 		onModifySpA: function (spa, pokemon) {
-			var allyActive = pokemon.side.active;
+			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (var i = 0; i < allyActive.length; i++) {
+			for (let i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].hasAbility(['minus', 'plus'])) {
 					return this.chainModify(1.5);
 				}
@@ -1573,9 +1575,9 @@ exports.BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual: function (pokemon) {
-			var stats = [], i = '';
-			var boost = {};
-			for (var i in pokemon.boosts) {
+			let stats = [], i = '';
+			let boost = {};
+			for (let i in pokemon.boosts) {
 				if (pokemon.boosts[i] < 6) {
 					stats.push(i);
 				}
@@ -1585,7 +1587,7 @@ exports.BattleAbilities = {
 				boost[i] = 2;
 			}
 			stats = [];
-			for (var j in pokemon.boosts) {
+			for (let j in pokemon.boosts) {
 				if (pokemon.boosts[j] > -6 && j !== i) {
 					stats.push(j);
 				}
@@ -1658,7 +1660,7 @@ exports.BattleAbilities = {
 		name: "Mummy",
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
-				var oldAbility = source.setAbility('mummy', source, 'mummy', true);
+				let oldAbility = source.setAbility('mummy', source, 'mummy', true);
 				if (oldAbility) {
 					this.add('-activate', target, 'ability: Mummy', oldAbility, '[of] ' + source);
 				}
@@ -1818,15 +1820,15 @@ exports.BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual: function (pokemon) {
 			if (pokemon.item) return;
-			var pickupTargets = [];
-			var target;
-			for (var i = 0; i < pokemon.side.active.length; i++) {
+			let pickupTargets = [];
+			let target;
+			for (let i = 0; i < pokemon.side.active.length; i++) {
 				target = pokemon.side.active[i];
 				if (target.lastItem && target.usedItemThisTurn && this.isAdjacent(pokemon, target)) {
 					pickupTargets.push(target);
 				}
 			}
-			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
+			for (let i = 0; i < pokemon.side.foe.active.length; i++) {
 				target = pokemon.side.foe.active[i];
 				if (target.lastItem && target.usedItemThisTurn && this.isAdjacent(pokemon, target)) {
 					pickupTargets.push(target);
@@ -1836,7 +1838,7 @@ exports.BattleAbilities = {
 			target = pickupTargets[this.random(pickupTargets.length)];
 			pokemon.setItem(target.lastItem);
 			target.lastItem = '';
-			var item = pokemon.getItem();
+			let item = pokemon.getItem();
 			this.add('-item', pokemon, item, '[from] Pickup');
 			if (item.isBerry) pokemon.update();
 		},
@@ -1853,7 +1855,7 @@ exports.BattleAbilities = {
 				if (target.item) {
 					return;
 				}
-				var yourItem = source.takeItem(target);
+				let yourItem = source.takeItem(target);
 				if (!yourItem) {
 					return;
 				}
@@ -1896,11 +1898,11 @@ exports.BattleAbilities = {
 		shortDesc: "If an active ally has this Ability or the Ability Minus, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpAPriority: 5,
 		onModifySpA: function (spa, pokemon) {
-			var allyActive = pokemon.side.active;
+			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (var i = 0; i < allyActive.length; i++) {
+			for (let i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].hasAbility(['minus', 'plus'])) {
 					return this.chainModify(1.5);
 				}
@@ -1995,9 +1997,9 @@ exports.BattleAbilities = {
 		},
 		onEnd: function (pokemon) {
 			if (this.weatherData.source !== pokemon) return;
-			for (var i = 0; i < this.sides.length; i++) {
-				for (var j = 0; j < this.sides[i].active.length; j++) {
-					var target = this.sides[i].active[j];
+			for (let i = 0; i < this.sides.length; i++) {
+				for (let j = 0; j < this.sides[i].active.length; j++) {
+					let target = this.sides[i].active[j];
 					if (target === pokemon) continue;
 					if (target && target.hp && target.hasAbility('primordialsea')) {
 						this.weatherData.source = target;
@@ -2016,7 +2018,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
 		shortDesc: "This Pokemon's type changes to match the type of the move it is about to use.",
 		onPrepareHit: function (source, target, move) {
-			var type = move.type;
+			let type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
 				this.add('-start', source, 'typechange', type, '[from] Protean');
@@ -2283,7 +2285,7 @@ exports.BattleAbilities = {
 		onModifyMove: function (move) {
 			if (move.secondaries && move.id !== 'secretpower') {
 				this.debug('doubling secondary chance');
-				for (var i = 0; i < move.secondaries.length; i++) {
+				for (let i = 0; i < move.secondaries.length; i++) {
 					move.secondaries[i].chance *= 2;
 				}
 			}
@@ -2375,7 +2377,7 @@ exports.BattleAbilities = {
 	"simple": {
 		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
 		onBoost: function (boost) {
-			for (var i in boost) {
+			for (let i in boost) {
 				boost[i] *= 2;
 			}
 		},
@@ -2544,7 +2546,7 @@ exports.BattleAbilities = {
 		onBeforeMove: function (attacker, defender, move) {
 			if (attacker.template.baseSpecies !== 'Aegislash') return;
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
-			var targetSpecies = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
+			let targetSpecies = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.template.species !== targetSpecies && attacker.formeChange(targetSpecies)) {
 				this.add('-formechange', attacker, targetSpecies);
 			}
@@ -2584,7 +2586,7 @@ exports.BattleAbilities = {
 			if (move.category !== "Status") {
 				this.debug('Adding Stench flinch');
 				if (!move.secondaries) move.secondaries = [];
-				for (var i = 0; i < move.secondaries.length; i++) {
+				for (let i = 0; i < move.secondaries.length; i++) {
 					if (move.secondaries[i].volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
@@ -2752,8 +2754,8 @@ exports.BattleAbilities = {
 		desc: "If an ally uses its item, this Pokemon gives its item to that ally immediately. Does not activate if the ally's item was stolen or knocked off.",
 		shortDesc: "If an ally uses its item, this Pokemon gives its item to that ally immediately.",
 		onAllyAfterUseItem: function (item, pokemon) {
-			var sourceItem = this.effectData.target.getItem();
-			var noSharing = sourceItem.onTakeItem && sourceItem.onTakeItem(sourceItem, pokemon) === false;
+			let sourceItem = this.effectData.target.getItem();
+			let noSharing = sourceItem.onTakeItem && sourceItem.onTakeItem(sourceItem, pokemon) === false;
 			if (!sourceItem || noSharing) {
 				return;
 			}
@@ -2925,16 +2927,16 @@ exports.BattleAbilities = {
 		desc: "On switch-in, this Pokemon copies a random adjacent opposing Pokemon's Ability. If there is no Ability that can be copied at that time, this Ability will activate as soon as an Ability can be copied. Abilities that cannot be copied are Flower Gift, Forecast, Illusion, Imposter, Multitype, Stance Change, Trace, and Zen Mode.",
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 		onUpdate: function (pokemon) {
-			var possibleTargets = [];
-			for (var i = 0; i < pokemon.side.foe.active.length; i++) {
+			let possibleTargets = [];
+			for (let i = 0; i < pokemon.side.foe.active.length; i++) {
 				if (pokemon.side.foe.active[i] && !pokemon.side.foe.active[i].fainted) possibleTargets.push(pokemon.side.foe.active[i]);
 			}
 			while (possibleTargets.length) {
-				var rand = 0;
+				let rand = 0;
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
-				var target = possibleTargets[rand];
-				var ability = this.getAbility(target.ability);
-				var bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
+				let target = possibleTargets[rand];
+				let ability = this.getAbility(target.ability);
+				let bannedAbilities = {flowergift:1, forecast:1, illusion:1, imposter:1, multitype:1, stancechange:1, trace:1, zenmode:1};
 				if (bannedAbilities[target.ability]) {
 					possibleTargets.splice(rand, 1);
 					continue;
@@ -2984,7 +2986,7 @@ exports.BattleAbilities = {
 		id: "unaware",
 		name: "Unaware",
 		onAnyModifyBoost: function (boosts, target) {
-			var source = this.effectData.target;
+			let source = this.effectData.target;
 			if (source === target) return;
 			if (source === this.activePokemon && target === this.activeTarget) {
 				boosts['def'] = 0;
@@ -3129,8 +3131,8 @@ exports.BattleAbilities = {
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's stat stages.",
 		onBoost: function (boost, target, source, effect) {
 			if (source && target === source) return;
-			var showMsg = false;
-			for (var i in boost) {
+			let showMsg = false;
+			for (let i in boost) {
 				if (boost[i] < 0) {
 					delete boost[i];
 					showMsg = true;
@@ -3249,7 +3251,7 @@ exports.BattleAbilities = {
 			if (target === source || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
-			var newMove = this.getMoveCopy(move.id);
+			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
 			this.useMove(newMove, target, source);
 			return null;
@@ -3260,7 +3262,7 @@ exports.BattleAbilities = {
 			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
-			var newMove = this.getMoveCopy(move.id);
+			let newMove = this.getMoveCopy(move.id);
 			newMove.hasBounced = true;
 			this.useMove(newMove, target, source);
 			return null;

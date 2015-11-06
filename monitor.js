@@ -6,12 +6,13 @@
  *
  * @license MIT license
  */
+'use strict';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 /* global Monitor: true */
-var Monitor = module.exports = {
+const Monitor = module.exports = {
 
 	/*********************************************************
 	 * Logging
@@ -68,8 +69,8 @@ var Monitor = module.exports = {
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
 	 */
 	countConnection: function (ip, name) {
-		var now = Date.now();
-		var duration = now - this.connectionTimes[ip];
+		let now = Date.now();
+		let duration = now - this.connectionTimes[ip];
 		name = (name ? ': ' + name : '');
 		if (ip in this.connections && duration < 30 * 60 * 1000) {
 			this.connections[ip]++;
@@ -78,7 +79,7 @@ var Monitor = module.exports = {
 				return true;
 			} else if (this.connections[ip] > 500) {
 				if (this.connections[ip] % 500 === 0) {
-					var c = this.connections[ip] / 500;
+					let c = this.connections[ip] / 500;
 					if (c < 5 || c % 2 === 0 && c < 10 || c % 5 === 0) {
 						this.adminlog('[ResourceMonitor] Banned IP ' + ip + ' has connected ' + this.connections[ip] + ' times in the last ' + duration.duration() + name);
 					}
@@ -94,8 +95,8 @@ var Monitor = module.exports = {
 	 * Counts a battle. Returns true if the connection should be terminated for abuse.
 	 */
 	countBattle: function (ip, name) {
-		var now = Date.now();
-		var duration = now - this.battleTimes[ip];
+		let now = Date.now();
+		let duration = now - this.battleTimes[ip];
 		name = (name ? ': ' + name : '');
 		if (ip in this.battles && duration < 30 * 60 * 1000) {
 			this.battles[ip]++;
@@ -113,8 +114,8 @@ var Monitor = module.exports = {
 	 * Counts battle prep. Returns true if too much
 	 */
 	countPrepBattle: function (ip) {
-		var now = Date.now();
-		var duration = now - this.battlePrepTimes[ip];
+		let now = Date.now();
+		let duration = now - this.battlePrepTimes[ip];
 		if (ip in this.battlePreps && duration < 3 * 60 * 1000) {
 			this.battlePreps[ip]++;
 			if (this.battlePreps[ip] > 6) {
@@ -129,8 +130,8 @@ var Monitor = module.exports = {
 	 * Counts group chat creation. Returns true if too much.
 	 */
 	countGroupChat: function (ip) {
-		var now = Date.now();
-		var duration = now - this.groupChatTimes[ip];
+		let now = Date.now();
+		let duration = now - this.groupChatTimes[ip];
 		if (ip in this.groupChats && duration < 60 * 60 * 1000) {
 			this.groupChats[ip]++;
 			if (this.groupChats[ip] > 4) {
@@ -154,8 +155,8 @@ var Monitor = module.exports = {
 		}
 	},
 	writeNetworkUse: function () {
-		var buf = '';
-		for (var i in this.networkUse) {
+		let buf = '';
+		for (let i in this.networkUse) {
 			buf += '' + this.networkUse[i] + '\t' + this.networkCount[i] + '\t' + i + '\n';
 		}
 		fs.writeFile(path.resolve(__dirname, 'logs/networkuse.tsv'), buf);
@@ -168,12 +169,12 @@ var Monitor = module.exports = {
 	 * Counts roughly the size of an object to have an idea of the server load.
 	 */
 	sizeOfObject: function (object) {
-		var objectList = [];
-		var stack = [object];
-		var bytes = 0;
+		let objectList = [];
+		let stack = [object];
+		let bytes = 0;
 
 		while (stack.length) {
-			var value = stack.pop();
+			let value = stack.pop();
 			if (typeof value === 'boolean') {
 				bytes += 4;
 			} else if (typeof value === 'string') {
@@ -182,7 +183,7 @@ var Monitor = module.exports = {
 				bytes += 8;
 			} else if (typeof value === 'object' && objectList.indexOf(value) < 0) {
 				objectList.push(value);
-				for (var i in value) stack.push(value[i]);
+				for (let i in value) stack.push(value[i]);
 			}
 		}
 
@@ -192,8 +193,8 @@ var Monitor = module.exports = {
 	 * Controls the amount of times a cmd command is used
 	 */
 	countCmd: function (ip, name) {
-		var now = Date.now();
-		var duration = now - this.cmdsTimes[ip];
+		let now = Date.now();
+		let duration = now - this.cmdsTimes[ip];
 		name = (name ? ': ' + name : '');
 		if (!this.cmdsTotal) this.cmdsTotal = {lastCleanup: 0, count: 0};
 		if (now - this.cmdsTotal.lastCleanup > 60 * 1000) {

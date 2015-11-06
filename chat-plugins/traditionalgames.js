@@ -4,17 +4,19 @@
 * By bumbadadabum with help from ascriptmaster, codelegend and the PS development team.
 */
 
-var http = require('http');
+'use strict';
+
+const http = require('http');
 
 function wikiaSearch(subdomain, query, callback) {
 	http.get('http://' + subdomain + '.wikia.com/api/v1/Search/List/?query=' + encodeURIComponent(query) + '&limit=1', function (res) {
-		var buffer = '';
+		let buffer = '';
 		res.setEncoding('utf8');
 		res.on('data', function (data) {
 			buffer += data;
 		});
 		res.on('end', function () {
-			var result;
+			let result;
 			try {
 				result = JSON.parse(buffer);
 			} catch (e) {
@@ -36,9 +38,9 @@ exports.commands = {
 	yugioh: function (target, room, user, connection, cmd) {
 		if (room.id !== 'traditionalgames') return this.errorReply("This command can only be used in the Traditional Games room.");
 		if (!this.canBroadcast()) return;
-		var broadcasting = this.broadcasting;
-		var subdomain = (cmd === 'yugioh' || cmd === 'ygo') ? 'yugioh' : 'mtg';
-		var query = target.trim();
+		let broadcasting = this.broadcasting;
+		let subdomain = (cmd === 'yugioh' || cmd === 'ygo') ? 'yugioh' : 'mtg';
+		let query = target.trim();
 
 		wikiaSearch(subdomain, query, function (err, data) {
 			if (err) {
@@ -49,9 +51,9 @@ exports.commands = {
 				if (!broadcasting) return connection.sendTo(room, "Error: " + err.message);
 				return room.add("Error: " + err.message).update();
 			}
-			var entryUrl = Tools.getString(data.url);
-			var entryTitle = Tools.getString(data.title);
-			var htmlReply = "<strong>Best result for " + Tools.escapeHTML(query) + ":</strong><br/><a href=\"" + Tools.escapeHTML(entryUrl) + "\">" + Tools.escapeHTML(entryTitle) + "</a>";
+			let entryUrl = Tools.getString(data.url);
+			let entryTitle = Tools.getString(data.title);
+			let htmlReply = "<strong>Best result for " + Tools.escapeHTML(query) + ":</strong><br/><a href=\"" + Tools.escapeHTML(entryUrl) + "\">" + Tools.escapeHTML(entryTitle) + "</a>";
 			if (!broadcasting) return connection.sendTo(room, "|raw|<div class=\"infobox\">" + htmlReply + "</div>");
 			room.addRaw("<div class=\"infobox\">" + htmlReply + "</div>").update();
 		});

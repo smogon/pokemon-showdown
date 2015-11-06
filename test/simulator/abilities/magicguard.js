@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Magic Guard', function () {
 	afterEach(function () {

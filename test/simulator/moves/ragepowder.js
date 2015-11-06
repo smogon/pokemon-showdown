@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Rage Powder', function () {
 	afterEach(function () {
@@ -19,7 +21,7 @@ describe('Rage Powder', function () {
 			{species: 'Alakazam', ability: 'synchronize', moves: ['absorb']}
 		]);
 		battle.commitDecisions();
-		var hitCount = [0, 0, 0];
+		let hitCount = [0, 0, 0];
 		battle.p1.active[0].damage = function () {
 			hitCount[0]++;
 			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
@@ -52,7 +54,7 @@ describe('Rage Powder', function () {
 			{species: 'Alakazam', ability: 'synchronize', item: 'safetygoggles', moves: ['absorb']}
 		]);
 		battle.commitDecisions();
-		var hitCount = [0, 0, 0];
+		let hitCount = [0, 0, 0];
 		battle.p1.active[0].damage = function () {
 			hitCount[0]++;
 			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
