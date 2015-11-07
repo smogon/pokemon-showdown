@@ -8,7 +8,7 @@
  */
 
 /* global Ladders: true */
-var Ladders = module.exports = getLadder;
+let Ladders = Ladders.get = module.exports = getLadder;
 
 function getLadder(formatid) {
 	return new Ladder(formatid);
@@ -23,8 +23,8 @@ Ladder.prototype.getTop = function () {
 };
 
 Ladder.prototype.getRating = function (userid) {
-	var formatid = this.formatid;
-	var user = Users.getExact(userid);
+	let formatid = this.formatid;
+	let user = Users.getExact(userid);
 	if (user && user.mmrCache[formatid]) {
 		return Promise.resolve(user.mmrCache[formatid]);
 	}
@@ -38,7 +38,7 @@ Ladder.prototype.getRating = function (userid) {
 				return resolve(1000);
 			}
 
-			var mmr = parseInt(data, 10);
+			let mmr = parseInt(data, 10);
 			if (isNaN(mmr)) return resolve(1000);
 			if (user.userid !== userid) return reject(new Error("Expired rating"));
 
@@ -49,8 +49,8 @@ Ladder.prototype.getRating = function (userid) {
 };
 
 Ladder.prototype.updateRating = function (p1name, p2name, p1score, room) {
-	var formatid = this.formatid;
-	var p1rating, p2rating;
+	let formatid = this.formatid;
+	let p1rating, p2rating;
 	room.update();
 	room.send('||Ladder updating...');
 	LoginServer.request('ladderupdate', {
@@ -80,9 +80,9 @@ Ladder.prototype.updateRating = function (p1name, p2name, p1score, room) {
 				p1rating = data.p1rating;
 				p2rating = data.p2rating;
 
-				var oldacre = Math.round(p1rating.oldacre);
-				var acre = Math.round(p1rating.acre);
-				var reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
+				let oldacre = Math.round(p1rating.oldacre);
+				let acre = Math.round(p1rating.acre);
+				let reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 				room.addRaw(Tools.escapeHTML(p1name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
 
@@ -92,9 +92,9 @@ Ladder.prototype.updateRating = function (p1name, p2name, p1score, room) {
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
 				room.addRaw(Tools.escapeHTML(p2name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
 
-				var p1 = Users.getExact(p1name);
+				let p1 = Users.getExact(p1name);
 				if (p1) p1.mmrCache[formatid] = +p1rating.acre;
-				var p2 = Users.getExact(p2name);
+				let p2 = Users.getExact(p2name);
 				if (p2) p2.mmrCache[formatid] = +p2rating.acre;
 				room.update();
 			} catch (e) {

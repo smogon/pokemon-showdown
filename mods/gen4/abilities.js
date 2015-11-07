@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleAbilities = {
 	"angerpoint": {
 		inherit: true,
@@ -27,14 +29,14 @@ exports.BattleAbilities = {
 	"forewarn": {
 		inherit: true,
 		onStart: function (pokemon) {
-			var targets = pokemon.side.foe.active;
-			var warnMoves = [];
-			var warnBp = 1;
-			for (var i = 0; i < targets.length; i++) {
+			let targets = pokemon.side.foe.active;
+			let warnMoves = [];
+			let warnBp = 1;
+			for (let i = 0; i < targets.length; i++) {
 				if (targets[i].fainted) continue;
-				for (var j = 0; j < targets[i].moveset.length; j++) {
-					var move = this.getMove(targets[i].moveset[j].move);
-					var bp = move.basePower;
+				for (let j = 0; j < targets[i].moveset.length; j++) {
+					let move = this.getMove(targets[i].moveset[j].move);
+					let bp = move.basePower;
 					if (move.ohko) bp = 160;
 					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
 					if (!bp && move.category !== 'Status') bp = 80;
@@ -47,7 +49,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (!warnMoves.length) return;
-			var warnMove = warnMoves[this.random(warnMoves.length)];
+			let warnMove = warnMoves[this.random(warnMoves.length)];
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
 		}
 	},
@@ -90,11 +92,11 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Plus ability.",
 		shortDesc: "If an ally has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
-			var allyActive = pokemon.side.active;
+			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (var i = 0; i < allyActive.length; i++) {
+			for (let i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].ability === 'plus') {
 					return spa * 1.5;
 				}
@@ -126,11 +128,11 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's Special Attack receives a 50% boost in double battles if its partner has the Minus ability.",
 		shortDesc: "If an ally has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
-			var allyActive = pokemon.side.active;
+			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
 				return;
 			}
-			for (var i = 0; i < allyActive.length; i++) {
+			for (let i = 0; i < allyActive.length; i++) {
 				if (allyActive[i] && allyActive[i].position !== pokemon.position && !allyActive[i].fainted && allyActive[i].ability === 'minus') {
 					return spa * 1.5;
 				}
@@ -159,7 +161,7 @@ exports.BattleAbilities = {
 	"simple": {
 		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
 		onModifyBoost: function (boosts) {
-			for (var key in boosts) {
+			for (let key in boosts) {
 				boosts[key] *= 2;
 			}
 		},
@@ -192,7 +194,7 @@ exports.BattleAbilities = {
 		onAfterSetStatus: function (status, target, source, effect) {
 			if (!source || source === target) return;
 			if (effect && effect.id === 'toxicspikes') return;
-			var id = status.id;
+			let id = status.id;
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';
 			source.trySetStatus(id);
@@ -201,10 +203,10 @@ exports.BattleAbilities = {
 	"trace": {
 		inherit: true,
 		onUpdate: function (pokemon) {
-			var target = pokemon.side.foe.randomActive();
+			let target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
-			var ability = this.getAbility(target.ability);
-			var bannedAbilities = {forecast:1, multitype:1, trace:1};
+			let ability = this.getAbility(target.ability);
+			let bannedAbilities = {forecast:1, multitype:1, trace:1};
 			if (bannedAbilities[target.ability]) {
 				return;
 			}

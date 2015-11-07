@@ -1,8 +1,10 @@
-var Checker = require('jscs');
-var assert = require('assert');
+'use strict';
+
+const Checker = require('jscs');
+const assert = require('assert');
 
 describe('rules/validate-conditionals', function () {
-	var checker;
+	let checker;
 
 	before(function () {
 		checker = new Checker();

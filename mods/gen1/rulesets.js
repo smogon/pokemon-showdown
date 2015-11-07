@@ -1,9 +1,11 @@
+'use strict';
+
 exports.BattleFormats = {
 	pokemon: {
 		effectType: 'Banlist',
 		onValidateSet: function (set, format) {
-			var template = this.getTemplate(set.species);
-			var problems = [];
+			let template = this.getTemplate(set.species);
+			let problems = [];
 			if (set.species === set.name) delete set.name;
 
 			if (template.gen > this.gen) {
@@ -12,8 +14,8 @@ exports.BattleFormats = {
 				problems.push(set.species + ' is not a real Pokemon.');
 			}
 			if (set.moves) {
-				for (var i = 0; i < set.moves.length; i++) {
-					var move = this.getMove(set.moves[i]);
+				for (let i = 0; i < set.moves.length; i++) {
+					let move = this.getMove(set.moves[i]);
 					if (move.gen > this.gen) {
 						problems.push(move.name + ' does not exist in gen ' + this.gen + '.');
 					} else if (move.isNonstandard) {
@@ -92,12 +94,12 @@ exports.BattleFormats = {
 		],
 		onValidateSet: function (set) {
 			// limit one of each move in Standard
-			var moves = [];
+			let moves = [];
 			if (set.moves) {
-				var hasMove = {};
-				for (var i = 0; i < set.moves.length; i++) {
-					var move = this.getMove(set.moves[i]);
-					var moveid = move.id;
+				let hasMove = {};
+				for (let i = 0; i < set.moves.length; i++) {
+					let move = this.getMove(set.moves[i]);
+					let moveid = move.id;
 					if (hasMove[moveid]) continue;
 					hasMove[moveid] = true;
 					moves.push(set.moves[i]);

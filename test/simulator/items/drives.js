@@ -1,11 +1,13 @@
-var assert = require('assert');
-var battle;
-var drives = ['Burn Drive', 'Chill Drive', 'Douse Drive', 'Shock Drive'];
+'use strict';
+
+const assert = require('assert');
+let battle;
+let drives = ['Burn Drive', 'Chill Drive', 'Douse Drive', 'Shock Drive'];
 
 describe('Drives', function () {
-	for (var i = 0; i < drives.length; i++) {
+	for (let i = 0; i < drives.length; i++) {
 		describe(drives[i], function () {
-			var id = drives[i].replace(/\W+/g, '').toLowerCase();
+			let id = drives[i].replace(/\W+/g, '').toLowerCase();
 
 			afterEach(function () {
 				battle.destroy();

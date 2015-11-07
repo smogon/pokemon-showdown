@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Dry Skin', function () {
 	afterEach(function () {
@@ -35,7 +37,7 @@ describe('Dry Skin', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Toxicroak', ability: 'dryskin', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'unnerve', moves: ['incinerate']}]);
 		battle.commitDecisions();
-		var damage = battle.p1.active[0].maxhp - battle.p1.active[0].hp;
+		let damage = battle.p1.active[0].maxhp - battle.p1.active[0].hp;
 		assert.ok(damage >= 51 && damage <= 61);
 	});
 
@@ -44,8 +46,8 @@ describe('Dry Skin', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Toxicroak', ability: 'dryskin', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['incinerate', 'surf']}]);
 		battle.commitDecisions();
-		var pokemon = battle.p1.active[0];
-		var damage = pokemon.maxhp - pokemon.hp;
+		let pokemon = battle.p1.active[0];
+		let damage = pokemon.maxhp - pokemon.hp;
 		assert.ok(damage >= 41 && damage <= 49);
 		pokemon.hp = pokemon.maxhp;
 		battle.choose('p2', 'move 2');

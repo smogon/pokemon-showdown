@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Electric Terrain', function () {
 	afterEach(function () {
@@ -28,8 +30,8 @@ describe('Electric Terrain', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Thundurus", ability: 'defiant', moves: ['thunderwave']}]);
 		battle.commitDecisions();
-		var basePower;
-		var move = Tools.getMove('thunderbolt');
+		let basePower;
+		let move = Tools.getMove('thunderbolt');
 		basePower = battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], move, move.basePower, true);
 		assert.strictEqual(basePower, battle.modify(move.basePower, 1.5));
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
@@ -93,7 +95,7 @@ describe('Electric Terrain', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]);
 		battle.commitDecisions();
-		var resultMove = toId(battle.log[battle.lastMoveLine].split('|')[3]);
+		let resultMove = toId(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.strictEqual(resultMove, 'thunderbolt');
 	});
 });

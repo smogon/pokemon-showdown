@@ -2,6 +2,9 @@
  * A lot of Gen 1 moves have to be updated due to different mechanics.
  * Some moves have had major changes, such as Bite's typing.
  */
+
+'use strict';
+
 exports.BattleMovedex = {
 	acid: {
 		inherit: true,
@@ -42,7 +45,7 @@ exports.BattleMovedex = {
 			},
 			onHit: function (target, source, move) {
 				if (source && source !== target && move.category !== 'Physical' && move.category !== 'Special') {
-					var damage = this.effectData.totalDamage;
+					let damage = this.effectData.totalDamage;
 					this.effectData.totalDamage += damage;
 					this.effectData.lastDamage = damage;
 					this.effectData.sourcePosition = source.position;
@@ -82,7 +85,7 @@ exports.BattleMovedex = {
 						return false;
 					}
 					this.add('-end', pokemon, 'Bide');
-					var target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					let target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
 					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage * 2});
 					return false;
 				}
@@ -93,8 +96,8 @@ exports.BattleMovedex = {
 				if (!pokemon.hasMove('bide')) {
 					return;
 				}
-				var moves = pokemon.moveset;
-				for (var i = 0; i < moves.length; i++) {
+				let moves = pokemon.moveset;
+				for (let i = 0; i < moves.length; i++) {
 					if (moves[i].id !== 'bide') {
 						pokemon.disableMove(moves[i].id);
 					}
@@ -180,14 +183,14 @@ exports.BattleMovedex = {
 			noCopy: true,
 			onStart: function (target, source) {
 				this.effectData.typesData = [];
-				for (var i = 0, l = target.typesData.length; i < l; i++) {
+				for (let i = 0, l = target.typesData.length; i < l; i++) {
 					this.effectData.typesData.push(Object.clone(target.typesData[i]));
 				}
 				this.add('-start', source, 'typechange', target.getTypes(true).join(', '), '[from] move: Conversion', '[of] ' + target);
 			},
 			onRestart: function (target, source) {
 				this.effectData.typesData = [];
-				for (var i = 0, l = target.typesData.length; i < l; i++) {
+				for (let i = 0, l = target.typesData.length; i < l; i++) {
 					this.effectData.typesData.push(Object.clone(target.typesData[i]));
 				}
 				this.add('-start', source, 'typechange', target.getTypes(true).join(', '), '[from] move: Conversion', '[of] ' + target);
@@ -206,7 +209,7 @@ exports.BattleMovedex = {
 			// It will fail if the last move selected by the opponent has base power 0 or is not Normal or Fighting Type.
 			// If both are true, counter will deal twice the last damage dealt in battle, no matter what was the move.
 			// That means that, if opponent switches, counter will use last counter damage * 2.
-			var lastUsedMove = this.getMove(target.side.lastMove);
+			let lastUsedMove = this.getMove(target.side.lastMove);
 			if (lastUsedMove && lastUsedMove.basePower > 0 && lastUsedMove.type in {'Normal': 1, 'Fighting': 1} && target.battle.lastDamage > 0) {
 				return 2 * target.battle.lastDamage;
 			}
@@ -245,15 +248,15 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 4,
 			durationCallback: function (target, source, effect) {
-				var duration = this.random(1, 7);
+				let duration = this.random(1, 7);
 				return duration;
 			},
 			onStart: function (pokemon) {
 				if (!this.willMove(pokemon)) {
 					this.effectData.duration++;
 				}
-				var moves = pokemon.moves;
-				var move = this.getMove(moves[this.random(moves.length)]);
+				let moves = pokemon.moves;
+				let move = this.getMove(moves[this.random(moves.length)]);
 				this.add('-start', pokemon, 'Disable', move.name);
 				this.effectData.move = move.id;
 				return;
@@ -269,8 +272,8 @@ exports.BattleMovedex = {
 				}
 			},
 			onDisableMove: function (pokemon) {
-				var moves = pokemon.moveset;
-				for (var i = 0; i < moves.length; i++) {
+				let moves = pokemon.moveset;
+				for (let i = 0; i < moves.length; i++) {
 					if (moves[i].id === this.effectData.move) {
 						pokemon.disableMove(moves[i].id);
 					}
@@ -392,9 +395,9 @@ exports.BattleMovedex = {
 		shortDesc: "Eliminates all stat changes and status.",
 		onHit: function (target, source) {
 			this.add('-clearallboost');
-			for (var i = 0; i < this.sides.length; i++) {
-				for (var j = 0; j < this.sides[i].active.length; j++) {
-					var pokemon = this.sides[i].active[j];
+			for (let i = 0; i < this.sides.length; i++) {
+				for (let j = 0; j < this.sides[i].active.length; j++) {
+					let pokemon = this.sides[i].active[j];
 					pokemon.clearBoosts();
 
 					if (pokemon !== source) {
@@ -404,9 +407,9 @@ exports.BattleMovedex = {
 					if (pokemon.status === 'tox') {
 						pokemon.setStatus('psn');
 					}
-					var volatiles = Object.keys(pokemon.volatiles);
-					for (var n = 0; n < volatiles.length; n++) {
-						var id = volatiles[n];
+					let volatiles = Object.keys(pokemon.volatiles);
+					for (let n = 0; n < volatiles.length; n++) {
+						let id = volatiles[n];
 						if (id === 'residualdmg') {
 							pokemon.volatiles[id].counter = 0;
 						} else {
@@ -456,19 +459,19 @@ exports.BattleMovedex = {
 			},
 			onAfterMoveSelfPriority: 1,
 			onAfterMoveSelf: function (pokemon) {
-				var leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				let leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
 				}
 				// We check if leeched Pokémon has Toxic to increase leeched damage.
-				var toxicCounter = 1;
+				let toxicCounter = 1;
 				if (pokemon.volatiles['residualdmg']) {
 					pokemon.volatiles['residualdmg'].counter++;
 					toxicCounter = pokemon.volatiles['residualdmg'].counter;
 				}
-				var toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
-				var damage = this.damage(toLeech, pokemon, leecher);
+				let toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
+				let damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) this.heal(damage, leecher, pokemon);
 			}
 		}
@@ -503,19 +506,19 @@ exports.BattleMovedex = {
 	metronome: {
 		inherit: true,
 		onHit: function (target) {
-			var moves = [];
-			for (var i in exports.BattleMovedex) {
-				var move = exports.BattleMovedex[i];
+			let moves = [];
+			for (let i in exports.BattleMovedex) {
+				let move = exports.BattleMovedex[i];
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
-				var noMetronome = {
+				let noMetronome = {
 					metronome:1, struggle:1
 				};
 				if (!noMetronome[move.id] && move.num <= 165) {
 					moves.push(move.id);
 				}
 			}
-			var move = '';
+			let move = '';
 			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) return false;
 			this.useMove(move, target);
@@ -529,10 +532,10 @@ exports.BattleMovedex = {
 		desc: "This move is replaced by a random move on target's moveset. The copied move has the maximum PP for that move. Ignores a target's Substitute.",
 		shortDesc: "A random target's move replaces this one.",
 		onHit: function (target, source) {
-			var moveslot = source.moves.indexOf('mimic');
+			let moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
-			var moves = target.moves;
-			var move = moves[this.random(moves.length)];
+			let moves = target.moves;
+			let move = moves[this.random(moves.length)];
 			if (!move) return false;
 			move = this.getMove(move);
 			source.moveset[moveslot] = {
@@ -552,7 +555,7 @@ exports.BattleMovedex = {
 	mirrormove: {
 		inherit: true,
 		onHit: function (pokemon) {
-			var foe = pokemon.side.foe.active[0];
+			let foe = pokemon.side.foe.active[0];
 			if (!foe || !foe.lastMove || foe.lastMove === 'mirrormove') {
 				return false;
 			}
@@ -788,7 +791,7 @@ exports.BattleMovedex = {
 				if (move.category === 'Status') {
 					// In gen 1 it only blocks:
 					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
-					var SubBlocked = {
+					let SubBlocked = {
 						lockon:1, meanlook:1, mindreader:1, nightmare:1
 					};
 					if (move.status === 'psn' || move.status === 'tox' || (move.boosts && target !== source) || move.volatileStatus === 'confusion' || SubBlocked[move.id]) {
@@ -797,7 +800,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (move.volatileStatus && target === source) return;
-				var damage = this.getDamage(source, target, move);
+				let damage = this.getDamage(source, target, move);
 				if (!damage) return null;
 				damage = this.runEvent('SubDamage', target, source, move, damage);
 				if (!damage) return damage;
