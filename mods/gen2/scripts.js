@@ -727,7 +727,7 @@ exports.BattleScripts = {
 						if (hasMove['earthquake']) rejected = true;
 						break;
 					case 'rest':
-						if (hasMove['recover'] || hasMove['softboiled']) rejected = true;
+						if (hasMove['recover'] || hasMove['softboiled'] || hasMove['roar']) rejected = true;
 						break;
 					case 'softboiled':
 						if (hasMove['recover']) rejected = true;
@@ -737,7 +737,7 @@ exports.BattleScripts = {
 						if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical'] || hasMove['growth']) rejected = true;
 						break;
 					case 'growth':
-						if (counter['Special'] < counter['Physical'] || hasMove['swordsdance']) rejected = true;
+						if (counter['Special'] < counter['Physical'] || hasMove['swordsdance'] || hasMove['amnesia']) rejected = true;
 						break;
 					case 'doubleedge':
 						if (hasMove['bodyslam']) rejected = true;
@@ -763,9 +763,6 @@ exports.BattleScripts = {
 					case 'triattack':
 						if (hasMove['doubleedge']) rejected = true;
 						break;
-					case 'growth':
-						if (hasMove['amnesia']) rejected = true;
-						break;
 					case 'supersonic':
 						if (hasMove['confuseray']) rejected = true;
 						break;
@@ -780,9 +777,6 @@ exports.BattleScripts = {
 						break;
 					case 'toxic':
 						if (hasMove['sleeppowder'] || hasMove['stunspore'] || counter['Status'] > 1) rejected = true;
-						break;
-					case 'sleeptalk':
-						if (!hasMove['rest']) rejected = true;
 						break;
 					case 'rest':
 						if (hasMove['roar']) rejected = true;
