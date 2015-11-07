@@ -181,7 +181,6 @@ exports.BattleScripts = {
 		if (!move) return false;
 
 		let attrs = '';
-		let missed = false;
 		if (pokemon.fainted) {
 			// Removing screens upon faint.
 			pokemon.side.removeSideCondition('reflect');
@@ -940,7 +939,6 @@ exports.BattleScripts = {
 	// This is random teams making for gen 1.
 	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam: function (side) {
-		let teamdexno = [];
 		let team = [];
 
 		let hasDexNumber = {};
@@ -1213,8 +1211,6 @@ exports.BattleScripts = {
 					let rejected = false;
 					if (hasMove[moveid]) rejected = true;
 					if (!template.essentialMove || moveid !== template.essentialMove) {
-						let isSetup = false;
-
 						switch (moveid) {
 						// bad after setup
 						case 'seismictoss': case 'nightshade':

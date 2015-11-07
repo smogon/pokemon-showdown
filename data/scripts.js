@@ -82,7 +82,6 @@ exports.BattleScripts = {
 		if (!move) return false;
 
 		let attrs = '';
-		let missed = false;
 		if (pokemon.fainted) {
 			return false;
 		}
@@ -3249,18 +3248,17 @@ exports.BattleScripts = {
 
 		let heroes = teams[side];
 		let pokemonTeam = [];
-		let hero, heroTemplate, template, pokemon;
 
 		for (let i = 0; i < 6; i++) {
-			hero = this.sampleNoReplace(heroes);
-			heroTemplate = mons[hero];
+			let hero = this.sampleNoReplace(heroes);
+			let heroTemplate = mons[hero];
 
 			let template = {};
 			if (heroTemplate.moves) template.randomBattleMoves = heroTemplate.moves;
 			if (heroTemplate.required) template.requiredMove = heroTemplate.required;
 			Object.merge(template, this.getTemplate(heroTemplate.species), false);
 
-			pokemon = this.randomSet(template, i, teamDetails);
+			let pokemon = this.randomSet(template, i, teamDetails);
 
 			if (heroTemplate.ability) pokemon.ability = heroTemplate.ability;
 			if (heroTemplate.gender) pokemon.gender = heroTemplate.gender;

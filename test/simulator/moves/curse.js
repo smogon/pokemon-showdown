@@ -108,7 +108,6 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 	];
 
 	function runDoublesTest(battle, curseUser) {
-		let p1active = battle.p1.active;
 		let p2active = battle.p2.active;
 		let cursePartner = curseUser.side.active[1 - curseUser.position];
 
@@ -143,10 +142,6 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
-
-		let foeHP = [p2active[0].hp, p2active[1].hp];
-		battle.choose('p1', 'move 2 1, move 2 1');
-		battle.choose('p2', 'move 2, move 2');
 
 		let cursedFoe = false;
 		for (let i = 0; i < 3; i++) {
