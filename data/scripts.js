@@ -1179,7 +1179,6 @@ exports.BattleScripts = {
 				let move = this.getMove(moveid);
 				let rejected = false;
 				let isSetup = false;
-				let sleepTalk = false;
 
 				switch (moveid) {
 
@@ -1193,14 +1192,14 @@ exports.BattleScripts = {
 				case 'perishsong':
 					if (!hasMove['protect']) rejected = true;
 					break;
-				case 'rest':
-					
-					sleepTalk = movePool.indexOf('sleeptalk');
+				case 'rest': {
+					let sleepTalk = movePool.indexOf('sleeptalk');
 					if (sleepTalk >= 0) {
 						movePool.splice(sleepTalk, 1);
 						rejected = true;
 					}
 					break;
+				}
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
 					break;

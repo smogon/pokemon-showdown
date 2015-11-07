@@ -1555,9 +1555,6 @@ BattleSide = (function () {
 		}
 
 		let decisions = [];
-		let canSwitchOut;
-		let canSwitchIn;
-		let willPass;
 
 		switch (this.currentRequest) {
 		case 'move':
@@ -1592,18 +1589,18 @@ BattleSide = (function () {
 			}
 			break;
 
-		case 'switch':
-			canSwitchOut = [];
+		case 'switch': {
+			let canSwitchOut = [];
 			for (let i = 0; i < this.active.length; i++) {
 				if (this.active[i] && this.active[i].switchFlag) canSwitchOut.push(i);
 			}
 
-			canSwitchIn = [];
+			let canSwitchIn = [];
 			for (let i = this.active.length; i < this.pokemon.length; i++) {
 				if (this.pokemon[i] && !this.pokemon[i].fainted) canSwitchIn.push(i);
 			}
 
-			willPass = canSwitchOut.splice(Math.min(canSwitchOut.length, canSwitchIn.length));
+			let willPass = canSwitchOut.splice(Math.min(canSwitchOut.length, canSwitchIn.length));
 			for (let i = 0; i < canSwitchOut.length; i++) {
 				decisions.push({
 					choice: this.foe.currentRequest === 'switch' ? 'instaswitch' : 'switch',
@@ -1619,6 +1616,7 @@ BattleSide = (function () {
 				});
 			}
 			break;
+		}
 
 		case 'teampreview':
 			decisions.push({
@@ -2470,9 +2468,9 @@ Battle = (function () {
 				this.resolveLastPriority(statuses, callbackType);
 			}
 			if (this.events && this.events[callbackType] !== undefined) {
-				let handler, statusData;
 				for (let i = 0; i < this.events[callbackType].length; i++) {
-					handler = this.events[callbackType][i];
+					let handler = this.events[callbackType][i];
+					let statusData;
 					switch (handler.target.effectType) {
 					case 'Format':
 						statusData = this.formatData;
@@ -2668,13 +2666,11 @@ Battle = (function () {
 		this.p1.currentRequest = '';
 		this.p2.currentRequest = '';
 		let switchTable = [];
-		let active;
-		let activeData;
 
 		switch (type) {
-		case 'switch':
+		case 'switch': {
 			for (let i = 0, l = this.p1.active.length; i < l; i++) {
-				active = this.p1.active[i];
+				let active = this.p1.active[i];
 				switchTable.push(!!(active && active.switchFlag));
 			}
 			if (switchTable.any(true)) {
@@ -2683,7 +2679,7 @@ Battle = (function () {
 			}
 			switchTable = [];
 			for (let i = 0, l = this.p2.active.length; i < l; i++) {
-				active = this.p2.active[i];
+				let active = this.p2.active[i];
 				switchTable.push(!!(active && active.switchFlag));
 			}
 			if (switchTable.any(true)) {
@@ -2691,6 +2687,7 @@ Battle = (function () {
 				p2request = {forceSwitch: switchTable, side: this.p2.getData(), rqid: this.rqid};
 			}
 			break;
+		}
 
 		case 'teampreview':
 			this.add('teampreview' + (requestDetails ? '|' + requestDetails : ''));
@@ -2700,9 +2697,9 @@ Battle = (function () {
 			p2request = {teamPreview: true, side: this.p2.getData(), rqid: this.rqid};
 			break;
 
-		default:
+		default: {
 			this.p1.currentRequest = 'move';
-			activeData = this.p1.active.map(function (pokemon) {
+			let activeData = this.p1.active.map(function (pokemon) {
 				if (pokemon) return pokemon.getRequestData();
 			});
 			p1request = {active: activeData, side: this.p1.getData(), rqid: this.rqid};
@@ -2713,6 +2710,8 @@ Battle = (function () {
 			});
 			p2request = {active: activeData, side: this.p2.getData(), rqid: this.rqid};
 			break;
+		}
+
 		}
 
 		if (this.p1 && this.p2) {
@@ -3882,18 +3881,11 @@ Battle = (function () {
 		return false;
 	};
 	Battle.prototype.runDecision = function (decision) {
-		let pokemon;
-		let format;
-		let target;
-		let len;
-		let newPokemon;
-		let foeActive
-
 		// returns whether or not we ended in a callback
 		switch (decision.choice) {
-		case 'start':
+		case 'start': {
 			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
-			format = this.getFormat();
+			let format = this.getFormat();
 
 			if (format.onBegin) format.onBegin.call(this);
 
@@ -3913,15 +3905,17 @@ Battle = (function () {
 				this.switchIn(this.p2.pokemon[pos], pos);
 			}
 			for (let pos = 0; pos < this.p1.pokemon.length; pos++) {
-				pokemon = this.p1.pokemon[pos];
+				let pokemon = this.p1.pokemon[pos];
 				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
 			}
 			for (let pos = 0; pos < this.p2.pokemon.length; pos++) {
-				pokemon = this.p2.pokemon[pos];
+				let pokemon = this.p2.pokemon[pos];
 				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
+		}
+
 		case 'move':
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
@@ -3930,20 +3924,22 @@ Battle = (function () {
 		case 'megaEvo':
 			if (decision.pokemon.canMegaEvo) this.runMegaEvo(decision.pokemon);
 			break;
-		case 'beforeTurnMove':
+		case 'beforeTurnMove': {
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + decision.move.id);
-			target = this.getTarget(decision);
+			let target = this.getTarget(decision);
 			if (!target) return false;
 			decision.move.beforeTurnCallback.call(this, decision.pokemon, target);
 			break;
+		}
+
 		case 'event':
 			this.runEvent(decision.event, decision.pokemon);
 			break;
-		case 'team':
-			len = decision.side.pokemon.length;
-			newPokemon = [null, null, null, null, null, null].slice(0, len);
+		case 'team': {
+			let len = decision.side.pokemon.length;
+			let newPokemon = [null, null, null, null, null, null].slice(0, len);
 			for (let j = 0; j < len; j++) {
 				let i = decision.team[j];
 				newPokemon[j] = decision.side.pokemon[i];
@@ -3953,6 +3949,8 @@ Battle = (function () {
 
 			// we return here because the update event would crash since there are no active pokemon yet
 			return;
+		}
+
 		case 'pass':
 			if (!decision.priority || decision.priority <= 101) return;
 			if (decision.pokemon) {
@@ -4023,12 +4021,12 @@ Battle = (function () {
 			}
 			delete decision.pokemon.draggedIn;
 			break;
-		case 'shift':
+		case 'shift': {
 			if (!decision.pokemon.isActive) return false;
 			if (decision.pokemon.fainted) return false;
 			decision.pokemon.activeTurns--;
 			this.swapPosition(decision.pokemon, 1);
-			foeActive = decision.pokemon.side.foe.active;
+			let foeActive = decision.pokemon.side.foe.active;
 			for (let i = 0; i < foeActive.length; i++) {
 				if (foeActive[i].isStale >= 2) {
 					decision.pokemon.isStaleCon++;
@@ -4037,6 +4035,8 @@ Battle = (function () {
 				}
 			}
 			break;
+		}
+
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');
 			break;
@@ -4254,13 +4254,12 @@ Battle = (function () {
 			}
 
 			let pokemon = side.pokemon[i];
-			let lockedMove = false;
 
 			switch (side.currentRequest) {
 			case 'teampreview':
 				if (choice !== 'team' || i > 0) return false;
 				break;
-			case 'move':
+			case 'move': {
 				if (i >= side.active.length) return false;
 				if (!pokemon || pokemon.fainted) {
 					decisions.push({
@@ -4268,7 +4267,7 @@ Battle = (function () {
 					});
 					continue;
 				}
-				lockedMove = pokemon.getLockedMove();
+				let lockedMove = pokemon.getLockedMove();
 				if (lockedMove) {
 					decisions.push({
 						choice: 'move',
@@ -4302,6 +4301,8 @@ Battle = (function () {
 					data = '1';
 				}
 				break;
+			}
+
 			case 'switch':
 				if (i >= side.active.length) return false;
 				if (!side.active[i] || !side.active[i].switchFlag) {
@@ -4320,22 +4321,13 @@ Battle = (function () {
 				return false;
 			}
 
-			let pokemonLength;
-			let dataArr;
-			let slotMap;
-			let tempSlot;
-			let moveid;
-			let targetLoc;
-			let requestMoves;
-			let moves;
-
 			switch (choice) {
-			case 'team':
-				pokemonLength = side.pokemon.length;
+			case 'team': {
+				let pokemonLength = side.pokemon.length;
 				if (!data || data.length > pokemonLength) return false;
 
-				dataArr = [0, 1, 2, 3, 4, 5].slice(0, pokemonLength);
-				slotMap = dataArr.slice(); // Inverse of `dataArr` (slotMap[dataArr[x]] === x)
+				let dataArr = [0, 1, 2, 3, 4, 5].slice(0, pokemonLength);
+				let slotMap = dataArr.slice(); // Inverse of `dataArr` (slotMap[dataArr[x]] === x)
 
 				for (let j = 0; j < data.length; j++) {
 					let slot = parseInt(data.charAt(j), 10) - 1;
@@ -4343,7 +4335,7 @@ Battle = (function () {
 					if (isNaN(slot) || slot < 0 || slot >= pokemonLength) return false;
 
 					// Keep track of team order so far
-					tempSlot = dataArr[j];
+					let tempSlot = dataArr[j];
 					dataArr[j] = slot;
 					dataArr[slotMap[slot]] = tempSlot;
 
@@ -4358,6 +4350,7 @@ Battle = (function () {
 					team: dataArr
 				});
 				break;
+			}
 
 			case 'switch':
 				if (i > side.active.length || i > side.pokemon.length) continue;
@@ -4423,9 +4416,9 @@ Battle = (function () {
 				});
 				break;
 
-			case 'move':
-				moveid = '';
-				targetLoc = 0;
+			case 'move': {
+				let moveid = '';
+				let targetLoc = 0;
 				pokemon = side.pokemon[i];
 
 				if (data.substr(-2) === ' 1') targetLoc = 1;
@@ -4450,7 +4443,7 @@ Battle = (function () {
 				 *	If the move is not found, the decision is invalid without requiring further inspection.
 				 */
 
-				requestMoves = pokemon.getRequestData().moves;
+				let requestMoves = pokemon.getRequestData().moves;
 				if (data.search(/^[0-9]+$/) >= 0) {
 					// parse a one-based move index
 					let moveIndex = parseInt(data, 10) - 1;
@@ -4490,7 +4483,7 @@ Battle = (function () {
 				 *	which could be unknown for the client.
 				 */
 
-				moves = pokemon.getMoves();
+				let moves = pokemon.getMoves();
 				if (!moves.length) {
 					// Override decision and use Struggle if there are no enabled moves with PP
 					if (this.gen <= 4) side.send('-activate', pokemon, 'move: Struggle');
@@ -4526,6 +4519,7 @@ Battle = (function () {
 					move: moveid
 				});
 				break;
+			}
 
 			case 'pass':
 				if (i > side.active.length || i > side.pokemon.length) continue;
@@ -4654,15 +4648,9 @@ Battle = (function () {
 		this.messageLog.push(data.join(' '));
 		let logPos = this.log.length;
 		let alreadyEnded = this.ended;
-		let team = null;
-		let battle = null;
-		let p1 = null;
-		let p2 = null;
-		let p1active = null;
-		let p2active = null;
-		let target = null;
 		switch (data[1]) {
-		case 'join':
+		case 'join': {
+			let team = '';
 			try {
 				if (more) team = Tools.fastUnpackTeam(more);
 			} catch (e) {
@@ -4671,6 +4659,7 @@ Battle = (function () {
 			}
 			this.join(data[2], data[3], data[4], team);
 			break;
+		}
 
 		case 'rename':
 			this.rename(data[2], data[3], data[4]);
@@ -4697,13 +4686,13 @@ Battle = (function () {
 			this.undoChoice(data[2]);
 			break;
 
-		case 'eval':
-			battle = this;
-			p1 = this.p1;
-			p2 = this.p2;
-			p1active = p1 ? p1.active[0] : null;
-			p2active = p2 ? p2.active[0] : null;
-			target = data.slice(2).join('|').replace(/\f/g, '\n');
+		case 'eval': {
+			let battle = this;
+			let p1 = this.p1;
+			let p2 = this.p2;
+			let p1active = p1 ? p1.active[0] : null;
+			let p2active = p2 ? p2.active[0] : null;
+			let target = data.slice(2).join('|').replace(/\f/g, '\n');
 			this.add('', '>>> ' + target);
 			try {
 				this.add('', '<<< ' + eval(target));
@@ -4711,6 +4700,10 @@ Battle = (function () {
 				this.add('', '<<< error: ' + e.message);
 			}
 			break;
+		}
+
+		default:
+		// unhandled
 		}
 
 		this.sendUpdates(logPos, alreadyEnded);
