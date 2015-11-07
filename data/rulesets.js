@@ -315,7 +315,7 @@ exports.BattleFormats = {
 				if (name) {
 					if (name === team[i].species) continue;
 					if (nameTable[name]) {
-						return ["Your Pokémon must have different nicknames.",  "(You have more than one " + name + ")"];
+						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
 					}
 					nameTable[name] = true;
 				}

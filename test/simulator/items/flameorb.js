@@ -30,4 +30,3 @@ describe('Flame Orb', function () {
 		assert.strictEqual(battle.p1.active[0].status, 'brn');
 	});
 });
-

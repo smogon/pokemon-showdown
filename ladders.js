@@ -262,4 +262,3 @@ Ladder.prototype.updateRating = function (p1name, p2name, p1score, room) {
 		}
 	});
 };
-

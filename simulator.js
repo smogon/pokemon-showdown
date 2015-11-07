@@ -263,7 +263,7 @@ let Battle = (function () {
 		this.active = !this.ended;
 		for (let i = 0, len = this.players.length; i < len; i++) {
 			let player = this.players[i];
-			this['p' + (i + 1)] = player ? player.name :    '';
+			this['p' + (i + 1)] = player ? player.name : '';
 			if (!player) {
 				this.active = false;
 				continue;
