@@ -531,8 +531,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (target.hp > 0) {
-					let source = this.effectData.source;
-					let damage = target.heal(target.maxhp);
+					target.heal(target.maxhp);
 					target.setStatus('');
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
 					target.side.removeSideCondition('healingwish');
@@ -682,8 +681,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				if (target.hp > 0) {
-					let source = this.effectData.source;
-					let damage = target.heal(target.maxhp);
+					target.heal(target.maxhp);
 					target.setStatus('');
 					for (let m in target.moveset) {
 						target.moveset[m].pp = target.moveset[m].maxpp;

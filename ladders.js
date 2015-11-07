@@ -14,7 +14,6 @@
 let Ladders = module.exports = getLadder;
 
 const fs = require('fs');
-const readline = require('readline');
 
 function getLadder(formatid) {
 	return new Ladder(formatid);
@@ -192,11 +191,9 @@ Ladder.prototype.updateRating = function (p1name, p2name, p1score, room) {
 		}
 		let p1newElo, p2newElo;
 		try {
-			let p1id = toId(p1name);
 			let p1index = self.indexOfUser(p1name, true);
 			let p1elo = self.loadedLadder[p1index][1];
 
-			let p2id = toId(p2name);
 			let p2index = self.indexOfUser(p2name, true);
 			let p2elo = self.loadedLadder[p2index][1];
 

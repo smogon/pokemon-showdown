@@ -4389,7 +4389,6 @@ Battle = (function () {
 						side.emitCallback('trapped', i);
 						return false;
 					} else if (side.pokemon[i].maybeTrapped) {
-						let finalDecision = true;
 						decisions.finalDecision = decisions.finalDecision || side.pokemon[i].isLastActive();
 					}
 				}

@@ -778,7 +778,7 @@ exports.BattleMovedex = {
 			onSwitchIn: function (pokemon) {
 				let factor = 2;
 				if (pokemon.hasType('Flying')) factor = 4;
-				let damage = this.damage(pokemon.maxhp * factor / 16);
+				this.damage(pokemon.maxhp * factor / 16);
 			}
 		}
 	},
