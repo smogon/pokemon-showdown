@@ -11,14 +11,16 @@
  * @license MIT license
  */
 
-var fs = require('fs');
-var path = require('path');
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
 
 module.exports = (function () {
-	var moddedTools = {};
+	let moddedTools = {};
 
-	var dataTypes = ['FormatsData', 'Learnsets', 'Pokedex', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
-	var dataFiles = {
+	let dataTypes = ['FormatsData', 'Learnsets', 'Pokedex', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
+	let dataFiles = {
 		'Pokedex': 'pokedex.js',
 		'Movedex': 'moves.js',
 		'Statuses': 'statuses.js',
@@ -32,7 +34,7 @@ module.exports = (function () {
 		'Aliases': 'aliases.js'
 	};
 
-	var BattleNatures = dataFiles.Natures = {
+	let BattleNatures = dataFiles.Natures = {
 		adamant: {name:"Adamant", plus:'atk', minus:'spa'},
 		bashful: {name:"Bashful"},
 		bold: {name:"Bold", plus:'def', minus:'atk'},
@@ -62,7 +64,7 @@ module.exports = (function () {
 
 	function tryRequire(filePath) {
 		try {
-			var ret = require(filePath);
+			let ret = require(filePath);
 			if (!ret || typeof ret !== 'object') return new TypeError("" + filePath + " must export an object except `null`, or it should be removed");
 			return ret;
 		} catch (e) {
@@ -74,12 +76,12 @@ module.exports = (function () {
 		if (!mod) mod = 'base';
 		this.isBase = (mod === 'base');
 
-		var path = (this.isBase ? './data/' : './mods/' + mod + '/') + dataFiles.Scripts;
-		var maybeScripts = tryRequire(path);
+		let path = (this.isBase ? './data/' : './mods/' + mod + '/') + dataFiles.Scripts;
+		let maybeScripts = tryRequire(path);
 		if (maybeScripts instanceof Error) {
-			if (maybeScripts.code !== 'MODULE_NOT_FOUND') throw new Error("CRASH LOADING DATA: " + maybeScripts.stack);
+			if (maybeScripts.code !== 'MODULE_NOT_FOUND') throw new Error("CRASH LOADING DATA IN " + path + ": " + maybeScripts.stack);
 		} else {
-			var BattleScripts = maybeScripts.BattleScripts;
+			let BattleScripts = maybeScripts.BattleScripts;
 			if (!BattleScripts || typeof BattleScripts !== 'object') throw new TypeError("Exported property `BattleScripts`from `./data/scripts.js` must be an object except `null`.");
 			if (BattleScripts.init) Object.defineProperty(this, 'initMod', {value: BattleScripts.init, enumerable: false, writable: true, configurable: true});
 			if (BattleScripts.inherit) Object.defineProperty(this, 'inheritMod', {value: BattleScripts.inherit, enumerable: false, writable: true, configurable: true});
@@ -90,8 +92,8 @@ module.exports = (function () {
 
 	Tools.preloadMods = function () {
 		if (Tools.preloadedMods) return;
-		var modList = fs.readdirSync(path.resolve(__dirname, 'mods'));
-		for (var i = 0; i < modList.length; i++) {
+		let modList = fs.readdirSync(path.resolve(__dirname, 'mods'));
+		for (let i = 0; i < modList.length; i++) {
 			moddedTools[modList[i]] = new Tools(modList[i]);
 		}
 		Tools.preloadedMods = true;
@@ -116,29 +118,29 @@ module.exports = (function () {
 	Tools.prototype.getImmunity = function (source, target) {
 		// returns false if the target is immune; true otherwise
 		// also checks immunity to some statuses
-		var sourceType = source.type || source;
-		var targetTyping = target.getTypes && target.getTypes() || target.types || target;
+		let sourceType = source.type || source;
+		let targetTyping = target.getTypes && target.getTypes() || target.types || target;
 		if (Array.isArray(targetTyping)) {
-			for (var i = 0; i < targetTyping.length; i++) {
+			for (let i = 0; i < targetTyping.length; i++) {
 				if (!this.getImmunity(sourceType, targetTyping[i])) return false;
 			}
 			return true;
 		}
-		var typeData = this.data.TypeChart[targetTyping];
+		let typeData = this.data.TypeChart[targetTyping];
 		if (typeData && typeData.damageTaken[sourceType] === 3) return false;
 		return true;
 	};
 	Tools.prototype.getEffectiveness = function (source, target) {
-		var sourceType = source.type || source;
-		var totalTypeMod = 0;
-		var targetTyping = target.getTypes && target.getTypes() || target.types || target;
+		let sourceType = source.type || source;
+		let totalTypeMod = 0;
+		let targetTyping = target.getTypes && target.getTypes() || target.types || target;
 		if (Array.isArray(targetTyping)) {
-			for (var i = 0; i < targetTyping.length; i++) {
+			for (let i = 0; i < targetTyping.length; i++) {
 				totalTypeMod += this.getEffectiveness(sourceType, targetTyping[i]);
 			}
 			return totalTypeMod;
 		}
-		var typeData = this.data.TypeChart[targetTyping];
+		let typeData = this.data.TypeChart[targetTyping];
 		if (!typeData) return 0;
 		switch (typeData.damageTaken[sourceType]) {
 		case 1: return 1; // super-effective
@@ -190,8 +192,8 @@ module.exports = (function () {
 
 	Tools.prototype.getTemplate = function (template) {
 		if (!template || typeof template === 'string') {
-			var name = (template || '').trim();
-			var id = toId(name);
+			let name = (template || '').trim();
+			let id = toId(name);
 			if (this.data.Aliases[id]) {
 				name = this.data.Aliases[id];
 				id = toId(name);
@@ -258,15 +260,15 @@ module.exports = (function () {
 	};
 	Tools.prototype.getMove = function (move) {
 		if (!move || typeof move === 'string') {
-			var name = (move || '').trim();
-			var id = toId(name);
+			let name = (move || '').trim();
+			let id = toId(name);
 			if (this.data.Aliases[id]) {
 				name = this.data.Aliases[id];
 				id = toId(name);
 			}
 			move = {};
 			if (id.substr(0, 11) === 'hiddenpower') {
-				var matches = /([a-z]*)([0-9]*)/.exec(id);
+				let matches = /([a-z]*)([0-9]*)/.exec(id);
 				id = matches[1];
 			}
 			if (id && this.data.Movedex[id]) {
@@ -321,14 +323,14 @@ module.exports = (function () {
 	Tools.prototype.getMoveCopy = function (move) {
 		if (move && move.isCopy) return move;
 		move = this.getMove(move);
-		var moveCopy = Object.clone(move, true);
+		let moveCopy = Object.clone(move, true);
 		moveCopy.isCopy = true;
 		return moveCopy;
 	};
 	Tools.prototype.getEffect = function (effect) {
 		if (!effect || typeof effect === 'string') {
-			var name = (effect || '').trim();
-			var id = toId(name);
+			let name = (effect || '').trim();
+			let id = toId(name);
 			effect = {};
 			if (id && this.data.Statuses[id]) {
 				effect = this.data.Statuses[id];
@@ -367,8 +369,8 @@ module.exports = (function () {
 	};
 	Tools.prototype.getFormat = function (effect) {
 		if (!effect || typeof effect === 'string') {
-			var name = (effect || '').trim();
-			var id = toId(name);
+			let name = (effect || '').trim();
+			let id = toId(name);
 			if (this.data.Aliases[id]) {
 				name = this.data.Aliases[id];
 				id = toId(name);
@@ -393,8 +395,8 @@ module.exports = (function () {
 	};
 	Tools.prototype.getItem = function (item) {
 		if (!item || typeof item === 'string') {
-			var name = (item || '').trim();
-			var id = toId(name);
+			let name = (item || '').trim();
+			let id = toId(name);
 			if (this.data.Aliases[id]) {
 				name = this.data.Aliases[id];
 				id = toId(name);
@@ -433,8 +435,8 @@ module.exports = (function () {
 	};
 	Tools.prototype.getAbility = function (ability) {
 		if (!ability || typeof ability === 'string') {
-			var name = (ability || '').trim();
-			var id = toId(name);
+			let name = (ability || '').trim();
+			let id = toId(name);
 			ability = {};
 			if (id && this.data.Abilities[id]) {
 				ability = this.data.Abilities[id];
@@ -466,7 +468,7 @@ module.exports = (function () {
 	};
 	Tools.prototype.getType = function (type) {
 		if (!type || typeof type === 'string') {
-			var id = toId(type);
+			let id = toId(type);
 			id = id.charAt(0).toUpperCase() + id.substr(1);
 			type = {};
 			if (id && this.data.TypeChart[id]) {
@@ -487,8 +489,8 @@ module.exports = (function () {
 	};
 	Tools.prototype.getNature = function (nature) {
 		if (!nature || typeof nature === 'string') {
-			var name = (nature || '').trim();
-			var id = toId(name);
+			let name = (nature || '').trim();
+			let id = toId(name);
 			nature = {};
 			if (id && this.data.Natures[id]) {
 				nature = this.data.Natures[id];
@@ -511,7 +513,7 @@ module.exports = (function () {
 	};
 
 	Tools.prototype.getBanlistTable = function (format, subformat, depth) {
-		var banlistTable;
+		let banlistTable;
 		if (!depth) depth = 0;
 		if (depth > 8) return; // avoid infinite recursion
 		if (format.banlistTable && !subformat) {
@@ -524,24 +526,24 @@ module.exports = (function () {
 			banlistTable = format.banlistTable;
 			if (!subformat) subformat = format;
 			if (subformat.banlist) {
-				for (var i = 0; i < subformat.banlist.length; i++) {
+				for (let i = 0; i < subformat.banlist.length; i++) {
 					// don't revalidate what we already validate
 					if (banlistTable[toId(subformat.banlist[i])]) continue;
 
 					banlistTable[subformat.banlist[i]] = subformat.name || true;
 					banlistTable[toId(subformat.banlist[i])] = subformat.name || true;
 
-					var complexList;
+					let complexList;
 					if (subformat.banlist[i].includes('+')) {
 						if (subformat.banlist[i].includes('++')) {
 							complexList = subformat.banlist[i].split('++');
-							for (var j = 0; j < complexList.length; j++) {
+							for (let j = 0; j < complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
 							}
 							format.teamBanTable.push(complexList);
 						} else {
 							complexList = subformat.banlist[i].split('+');
-							for (var j = 0; j < complexList.length; j++) {
+							for (let j = 0; j < complexList.length; j++) {
 								complexList[j] = toId(complexList[j]);
 							}
 							format.setBanTable.push(complexList);
@@ -550,14 +552,14 @@ module.exports = (function () {
 				}
 			}
 			if (subformat.ruleset) {
-				for (var i = 0; i < subformat.ruleset.length; i++) {
+				for (let i = 0; i < subformat.ruleset.length; i++) {
 					// don't revalidate what we already validate
 					if (banlistTable['Rule:' + toId(subformat.ruleset[i])]) continue;
 
 					banlistTable['Rule:' + toId(subformat.ruleset[i])] = subformat.ruleset[i];
 					if (format.ruleset.indexOf(subformat.ruleset[i]) < 0) format.ruleset.push(subformat.ruleset[i]);
 
-					var subsubformat = this.getFormat(subformat.ruleset[i]);
+					let subsubformat = this.getFormat(subformat.ruleset[i]);
 					if (subsubformat.ruleset || subsubformat.banlist) {
 						this.getBanlistTable(format, subsubformat, depth + 1);
 					}
@@ -569,39 +571,39 @@ module.exports = (function () {
 
 	Tools.prototype.levenshtein = function (s, t, l) { // s = string 1, t = string 2, l = limit
 		// Original levenshtein distance function by James Westgate, turned out to be the fastest
-		var d = []; // 2d matrix
+		let d = []; // 2d matrix
 
 		// Step 1
-		var n = s.length;
-		var m = t.length;
+		let n = s.length;
+		let m = t.length;
 
 		if (n === 0) return m;
 		if (m === 0) return n;
 		if (l && Math.abs(m - n) > l) return Math.abs(m - n);
 
 		// Create an array of arrays in javascript (a descending loop is quicker)
-		for (var i = n; i >= 0; i--) d[i] = [];
+		for (let i = n; i >= 0; i--) d[i] = [];
 
 		// Step 2
-		for (var i = n; i >= 0; i--) d[i][0] = i;
-		for (var j = m; j >= 0; j--) d[0][j] = j;
+		for (let i = n; i >= 0; i--) d[i][0] = i;
+		for (let j = m; j >= 0; j--) d[0][j] = j;
 
 		// Step 3
-		for (var i = 1; i <= n; i++) {
-			var s_i = s.charAt(i - 1);
+		for (let i = 1; i <= n; i++) {
+			let s_i = s.charAt(i - 1);
 
 			// Step 4
-			for (var j = 1; j <= m; j++) {
+			for (let j = 1; j <= m; j++) {
 				// Check the jagged ld total so far
 				if (i === j && d[i][j] > 4) return n;
 
-				var t_j = t.charAt(j - 1);
-				var cost = (s_i === t_j) ? 0 : 1; // Step 5
+				let t_j = t.charAt(j - 1);
+				let cost = (s_i === t_j) ? 0 : 1; // Step 5
 
 				// Calculate the minimum
-				var mi = d[i - 1][j] + 1;
-				var b = d[i][j - 1] + 1;
-				var c = d[i - 1][j - 1] + cost;
+				let mi = d[i - 1][j] + 1;
+				let b = d[i][j - 1] + 1;
+				let c = d[i - 1][j - 1] + cost;
 
 				if (b < mi) mi = b;
 				if (c < mi) mi = c;
@@ -634,11 +636,11 @@ module.exports = (function () {
 
 		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items', 'Natures'];
 
-		var searchFunctions = {Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature'};
-		var searchTypes = {Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature'};
-		var searchResults = [];
-		for (var i = 0; i < searchIn.length; i++) {
-			var res = this[searchFunctions[searchIn[i]]](target);
+		let searchFunctions = {Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature'};
+		let searchTypes = {Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature'};
+		let searchResults = [];
+		for (let i = 0; i < searchIn.length; i++) {
+			let res = this[searchFunctions[searchIn[i]]](target);
 			if (res.exists) {
 				res.searchType = searchTypes[searchIn[i]];
 				searchResults.push(res);
@@ -648,8 +650,8 @@ module.exports = (function () {
 			return searchResults;
 		}
 
-		var cmpTarget = target.toLowerCase();
-		var maxLd = 3;
+		let cmpTarget = target.toLowerCase();
+		let maxLd = 3;
 		if (cmpTarget.length <= 1) {
 			return false;
 		} else if (cmpTarget.length <= 4) {
@@ -657,14 +659,14 @@ module.exports = (function () {
 		} else if (cmpTarget.length <= 6) {
 			maxLd = 2;
 		}
-		for (var i = 0; i < searchIn.length; i++) {
-			var searchObj = this.data[searchIn[i]];
+		for (let i = 0; i < searchIn.length; i++) {
+			let searchObj = this.data[searchIn[i]];
 			if (!searchObj) {
 				continue;
 			}
 
-			for (var j in searchObj) {
-				var word = searchObj[j];
+			for (let j in searchObj) {
+				let word = searchObj[j];
 				if (typeof word === "object") {
 					word = word.name || word.species;
 				}
@@ -672,7 +674,7 @@ module.exports = (function () {
 					continue;
 				}
 
-				var ld = this.levenshtein(cmpTarget, word.toLowerCase(), maxLd);
+				let ld = this.levenshtein(cmpTarget, word.toLowerCase(), maxLd);
 				if (ld <= maxLd) {
 					searchResults.push({word: word, ld: ld});
 				}
@@ -680,9 +682,9 @@ module.exports = (function () {
 		}
 
 		if (searchResults.length) {
-			var newTarget = "";
-			var newLD = 10;
-			for (var i = 0, l = searchResults.length; i < l; i++) {
+			let newTarget = "";
+			let newLD = 10;
+			for (let i = 0, l = searchResults.length; i < l; i++) {
 				if (searchResults[i].ld < newLD) {
 					newTarget = searchResults[i];
 					newLD = searchResults[i].ld;
@@ -701,25 +703,25 @@ module.exports = (function () {
 	Tools.prototype.packTeam = function (team) {
 		if (!team) return '';
 
-		var buf = '';
+		let buf = '';
 
-		for (var i = 0; i < team.length; i++) {
-			var set = team[i];
+		for (let i = 0; i < team.length; i++) {
+			let set = team[i];
 			if (buf) buf += ']';
 
 			// name
 			buf += (set.name || set.species);
 
 			// species
-			var id = toId(set.species || set.name);
+			let id = toId(set.species || set.name);
 			buf += '|' + (toId(set.name || set.species) === id ? '' : id);
 
 			// item
 			buf += '|' + toId(set.item);
 
 			// ability
-			var template = moddedTools.base.getTemplate(set.species || set.name);
-			var abilities = template.abilities;
+			let template = moddedTools.base.getTemplate(set.species || set.name);
+			let abilities = template.abilities;
 			id = toId(set.ability);
 			if (abilities) {
 				if (id === toId(abilities['0'])) {
@@ -742,7 +744,7 @@ module.exports = (function () {
 			buf += '|' + set.nature;
 
 			// evs
-			var evs = '|';
+			let evs = '|';
 			if (set.evs) {
 				evs = '|' + (set.evs['hp'] || '') + ',' + (set.evs['atk'] || '') + ',' + (set.evs['def'] || '') + ',' + (set.evs['spa'] || '') + ',' + (set.evs['spd'] || '') + ',' + (set.evs['spe'] || '');
 			}
@@ -760,7 +762,7 @@ module.exports = (function () {
 			}
 
 			// ivs
-			var ivs = '|';
+			let ivs = '|';
 			if (set.ivs) {
 				ivs = '|' + (set.ivs['hp'] === 31 || set.ivs['hp'] === undefined ? '' : set.ivs['hp']) + ',' + (set.ivs['atk'] === 31 || set.ivs['atk'] === undefined ? '' : set.ivs['atk']) + ',' + (set.ivs['def'] === 31 || set.ivs['def'] === undefined ? '' : set.ivs['def']) + ',' + (set.ivs['spa'] === 31 || set.ivs['spa'] === undefined ? '' : set.ivs['spa']) + ',' + (set.ivs['spd'] === 31 || set.ivs['spd'] === undefined ? '' : set.ivs['spd']) + ',' + (set.ivs['spe'] === 31 || set.ivs['spe'] === undefined ? '' : set.ivs['spe']);
 			}
@@ -798,12 +800,12 @@ module.exports = (function () {
 	Tools.prototype.fastUnpackTeam = function (buf) {
 		if (!buf) return null;
 
-		var team = [];
-		var i = 0, j = 0;
+		let team = [];
+		let i = 0, j = 0;
 
 		// limit to 24
-		for (var count = 0; count < 24; count++) {
-			var set = {};
+		for (let count = 0; count < 24; count++) {
+			let set = {};
 			team.push(set);
 
 			// name
@@ -827,8 +829,8 @@ module.exports = (function () {
 			// ability
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
-			var ability = buf.substring(i, j);
-			var template = moddedTools.base.getTemplate(set.species);
+			let ability = buf.substring(i, j);
+			let template = moddedTools.base.getTemplate(set.species);
 			set.ability = (template.abilities && ability in {'':1, 0:1, 1:1, H:1} ? template.abilities[ability || '0'] : ability);
 			i = j + 1;
 
@@ -848,7 +850,7 @@ module.exports = (function () {
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
 			if (j !== i) {
-				var evs = buf.substring(i, j).split(',');
+				let evs = buf.substring(i, j).split(',');
 				set.evs = {
 					hp: Number(evs[0]) || 0,
 					atk: Number(evs[1]) || 0,
@@ -870,7 +872,7 @@ module.exports = (function () {
 			j = buf.indexOf('|', i);
 			if (j < 0) return;
 			if (j !== i) {
-				var ivs = buf.substring(i, j).split(',');
+				let ivs = buf.substring(i, j).split(',');
 				set.ivs = {
 					hp: ivs[0] === '' ? 31 : Number(ivs[0]) || 0,
 					atk: ivs[1] === '' ? 31 : Number(ivs[1]) || 0,
@@ -913,7 +915,7 @@ module.exports = (function () {
 		if (this.modsLoaded) return this;
 		if (!this.isLoaded) this.includeData();
 
-		for (var id in moddedTools) {
+		for (let id in moddedTools) {
 			if (moddedTools[id].isLoaded) continue;
 			moddedTools[id].includeData();
 		}
@@ -924,10 +926,10 @@ module.exports = (function () {
 	Tools.prototype.includeData = function () {
 		if (this.isLoaded) return this;
 		if (!this.data) this.data = {mod: this.currentMod};
-		var data = this.data;
+		let data = this.data;
 
-		var basePath = './data/';
-		var parentTools;
+		let basePath = './data/';
+		let parentTools;
 		if (this.parentMod) {
 			parentTools = moddedTools[this.parentMod];
 			if (!parentTools || parentTools === this) throw new Error("Unable to load " + this.currentMod + ". `inherit` should specify a parent mod from which to inherit data, or must be not specified.");
@@ -941,12 +943,12 @@ module.exports = (function () {
 				if (data.mod === 'base') return (data[dataType] = BattleNatures);
 				return;
 			}
-			var maybeData = tryRequire(basePath + dataFiles[dataType]);
+			let maybeData = tryRequire(basePath + dataFiles[dataType]);
 			if (maybeData instanceof Error) {
-				if (maybeData.code !== 'MODULE_NOT_FOUND') throw new Error("CRASH LOADING " + data.mod.toUpperCase() + " DATA:\n" + maybeData.stack);
+				if (maybeData.code !== 'MODULE_NOT_FOUND') throw new Error("CRASH LOADING " + data.mod.toUpperCase() + " DATA in " + basePath + dataFiles[dataType] + ":\n" + maybeData.stack);
 				maybeData['Battle' + dataType] = {}; // Fall back to an empty object
 			}
-			var BattleData = maybeData['Battle' + dataType];
+			let BattleData = maybeData['Battle' + dataType];
 			if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "`from `" + './data/' + dataFiles[dataType] + "` must be an object except `null`.");
 			if (BattleData !== data[dataType]) data[dataType] = Object.merge(BattleData, data[dataType]);
 		});
@@ -955,9 +957,9 @@ module.exports = (function () {
 			this.includeFormats();
 		} else {
 			dataTypes.forEach(function (dataType) {
-				var parentTypedData = parentTools.data[dataType];
+				let parentTypedData = parentTools.data[dataType];
 				if (!data[dataType]) data[dataType] = {};
-				for (var key in parentTypedData) {
+				for (let key in parentTypedData) {
 					if (data[dataType][key] === null) {
 						// null means don't inherit
 						delete data[dataType][key];
@@ -997,26 +999,26 @@ module.exports = (function () {
 		if (!this.data.Formats) this.data.Formats = {};
 
 		// Load [formats] aliases
-		var maybeAliases = tryRequire('./data/' + dataFiles.Aliases);
+		let maybeAliases = tryRequire('./data/' + dataFiles.Aliases);
 		if (maybeAliases instanceof Error) {
 			if (maybeAliases.code !== 'MODULE_NOT_FOUND') throw new Error("CRASH LOADING ALIASES:\n" + maybeAliases.stack);
 			maybeAliases.BattleAliases = {}; // Fall back to an empty object
 		}
-		var BattleAliases = maybeAliases.BattleAliases;
+		let BattleAliases = maybeAliases.BattleAliases;
 		if (!BattleAliases || typeof BattleAliases !== 'object') throw new TypeError("Exported property `BattleAliases`from `" + "./data/aliases.js` must be an object except `null`.");
 		this.data.Aliases = BattleAliases;
 
 		// Load formats
-		var maybeFormats = tryRequire('./config/formats.js');
+		let maybeFormats = tryRequire('./config/formats.js');
 		if (maybeFormats instanceof Error) {
 			if (maybeFormats.code !== 'MODULE_NOT_FOUND') throw new Error("CRASH LOADING FORMATS:\n" + maybeFormats.stack);
 		}
-		var BattleFormats = maybeFormats.Formats;
+		let BattleFormats = maybeFormats.Formats;
 		if (!Array.isArray(BattleFormats)) throw new TypeError("Exported property `Formats`from `" + "./config/formats.js" + "` must be an array.");
 
-		for (var i = 0; i < BattleFormats.length; i++) {
-			var format = BattleFormats[i];
-			var id = toId(format.name);
+		for (let i = 0; i < BattleFormats.length; i++) {
+			let format = BattleFormats[i];
+			let id = toId(format.name);
 			if (!id) throw new RangeError("Format #" + (i + 1) + " must have a name with alphanumeric characters");
 			if (this.data.Formats[id]) throw new Error("Format #" + (i + 1) + " has a duplicate ID: `" + id + "`");
 			format.effectType = 'Format';
@@ -1036,7 +1038,7 @@ module.exports = (function () {
 	 * Install our Tools functions into the battle object
 	 */
 	Tools.prototype.install = function (battle) {
-		for (var i in this.data.Scripts) {
+		for (let i in this.data.Scripts) {
 			battle[i] = this.data.Scripts[i];
 		}
 	};

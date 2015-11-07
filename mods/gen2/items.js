@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleItems = {
 	amuletcoin: {
 		id: "amuletcoin",
@@ -55,13 +57,13 @@ exports.BattleItems = {
 	leppaberry: {
 		inherit: true,
 		onEat: function (pokemon) {
-			var move;
+			let move;
 			if (pokemon.volatiles['leppaberry']) {
 				move = pokemon.volatiles['leppaberry'].move;
 				pokemon.removeVolatile('leppaberry');
 			} else {
-				var pp = 99;
-				for (var i in pokemon.moveset) {
+				let pp = 99;
+				for (let i in pokemon.moveset) {
 					if (pokemon.moveset[i].pp < pp) {
 						move = pokemon.moveset[i];
 						pp = move.pp;

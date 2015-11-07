@@ -76,7 +76,9 @@
  * ```
  */
 
-var assert = require('assert');
+'use strict';
+
+const assert = require('assert');
 
 module.exports = function () {};
 
@@ -95,11 +97,11 @@ module.exports.prototype = {
 
 	check: function (file, errors) {
 		file.iterateNodesByType('IfStatement', function (node) {
-			var consequent = node.consequent;
-			var statementType = consequent.type;
+			let consequent = node.consequent;
+			let statementType = consequent.type;
 
 			// Either all `BlockStatement` or none.
-			var subNode = node;
+			let subNode = node;
 			while (subNode.alternate) {
 				subNode = subNode.alternate;
 				if (subNode.type === 'IfStatement') {
@@ -121,13 +123,13 @@ module.exports.prototype = {
 			}
 
 			// Curly braces iff multiline
-			var nodesCheck = [consequent];
+			let nodesCheck = [consequent];
 			if (node.alternate) nodesCheck.push(node.alternate);
-			for (var i = 0; i < nodesCheck.length; i++) {
-				var subNode = nodesCheck[i];
+			for (let i = 0; i < nodesCheck.length; i++) {
+				let subNode = nodesCheck[i];
 				if (subNode.type === 'BlockStatement') {
-					var openingBrace = file.getFirstNodeToken(subNode);
-					var closingBrace = file.getLastNodeToken(subNode);
+					let openingBrace = file.getFirstNodeToken(subNode);
+					let closingBrace = file.getLastNodeToken(subNode);
 					if (!subNode.body.length) {
 						// Empty block
 						errors.assert.differentLine({
@@ -136,8 +138,8 @@ module.exports.prototype = {
 						});
 						continue;
 					}
-					var nextToken = file.getFirstNodeToken(subNode.body[0]);
-					var prevToken = file.getPrevToken(closingBrace);
+					let nextToken = file.getFirstNodeToken(subNode.body[0]);
+					let prevToken = file.getPrevToken(closingBrace);
 
 					errors.assert.differentLine({
 						token: openingBrace,
@@ -151,7 +153,7 @@ module.exports.prototype = {
 					});
 				} else if (subNode.type !== 'IfStatement') {
 					if (subNode === consequent) {
-						var token = file.getFirstNodeToken(subNode);
+						let token = file.getFirstNodeToken(subNode);
 						errors.assert.sameLine({
 							token: node.test,
 							nextToken: token,

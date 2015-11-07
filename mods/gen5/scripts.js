@@ -1,24 +1,26 @@
+'use strict';
+
 exports.BattleScripts = {
 	gen: 5,
 	randomSet: function (template, slot) {
 		if (slot === undefined) slot = 1;
 		template = this.getTemplate(template);
-		var name = template.name;
+		let name = template.name;
 
 		if (!template.exists || (!template.randomBattleMoves && !template.learnset)) {
 			// GET IT? UNOWN? BECAUSE WE CAN'T TELL WHAT THE POKEMON IS
 			template = this.getTemplate('unown');
 
-			var stack = 'Template incompatible with random battles: ' + name;
-			var fakeErr = {stack: stack};
+			let stack = 'Template incompatible with random battles: ' + name;
+			let fakeErr = {stack: stack};
 			require('./../../crashlogger.js')(fakeErr, 'The randbat set generator');
 		}
 
-		var movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
-		var moves = [];
-		var ability = '';
-		var item = '';
-		var evs = {
+		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
+		let moves = [];
+		let ability = '';
+		let item = '';
+		let evs = {
 			hp: 85,
 			atk: 85,
 			def: 85,
@@ -26,7 +28,7 @@ exports.BattleScripts = {
 			spd: 85,
 			spe: 85
 		};
-		var ivs = {
+		let ivs = {
 			hp: 31,
 			atk: 31,
 			def: 31,
@@ -34,25 +36,25 @@ exports.BattleScripts = {
 			spd: 31,
 			spe: 31
 		};
-		var hasStab = {};
+		let hasStab = {};
 		hasStab[template.types[0]] = true;
-		var hasType = {};
+		let hasType = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) {
 			hasStab[template.types[1]] = true;
 			hasType[template.types[1]] = true;
 		}
 
-		var damagingMoves = [];
-		var damagingMoveIndex = {};
-		var hasMove = {};
-		var counter = {};
-		var setupType = '';
+		let damagingMoves = [];
+		let damagingMoveIndex = {};
+		let hasMove = {};
+		let counter = {};
+		let setupType = '';
 
 		do {
 			// Choose next 4 moves from learnset/viable moves and add them to moves list:
 			while (moves.length < 4 && movePool.length) {
-				var moveid = this.sampleNoReplace(movePool);
+				let moveid = this.sampleNoReplace(movePool);
 				if (moveid.substr(0, 11) === 'hiddenpower') {
 					if (!hasMove['hiddenpower']) {
 						hasMove['hiddenpower'] = true;
@@ -74,9 +76,9 @@ exports.BattleScripts = {
 				physicalsetup: 0, specialsetup: 0, mixedsetup: 0
 			};
 			// Iterate through all moves we've chosen so far and keep track of what they do:
-			for (var k = 0; k < moves.length; k++) {
-				var move = this.getMove(moves[k]);
-				var moveid = move.id;
+			for (let k = 0; k < moves.length; k++) {
+				let move = this.getMove(moves[k]);
+				let moveid = move.id;
 				// Keep track of all moves we have:
 				hasMove[moveid] = true;
 				if (move.damage || move.damageCallback) {
@@ -137,22 +139,22 @@ exports.BattleScripts = {
 					counter['inaccurate']++;
 				}
 				// Moves which drop stats:
-				var ContraryMove = {
+				let ContraryMove = {
 					leafstorm: 1, overheat: 1, closecombat: 1, superpower: 1, vcreate: 1
 				};
 				if (ContraryMove[moveid]) {
 					counter['contrary']++;
 				}
 				// Moves that boost Attack:
-				var PhysicalSetup = {
+				let PhysicalSetup = {
 					swordsdance:1, dragondance:1, coil:1, bulkup:1, curse:1, bellydrum:1, shiftgear:1, honeclaws:1, howl:1
 				};
 				// Moves which boost Special Attack:
-				var SpecialSetup = {
+				let SpecialSetup = {
 					nastyplot:1, tailglow:1, quiverdance:1, calmmind:1, chargebeam:1
 				};
 				// Moves which boost Attack AND Special Attack:
-				var MixedSetup = {
+				let MixedSetup = {
 					growth:1, workup:1, shellsmash:1
 				};
 
@@ -177,11 +179,11 @@ exports.BattleScripts = {
 			}
 
 			// Iterate through the moves again, this time to cull them:
-			for (var k = 0; k < moves.length; k++) {
-				var moveid = moves[k];
-				var move = this.getMove(moveid);
-				var rejected = false;
-				var isSetup = false;
+			for (let k = 0; k < moves.length; k++) {
+				let moveid = moves[k];
+				let move = this.getMove(moveid);
+				let rejected = false;
+				let isSetup = false;
 
 				switch (moveid) {
 
@@ -381,7 +383,7 @@ exports.BattleScripts = {
 				}
 
 				// These moves can be used even if we aren't setting up to use them:
-				var SetupException = {
+				let SetupException = {
 					overheat:1, dracometeor:1, leafstorm:1,
 					voltswitch:1, uturn:1,
 					suckerpunch:1, extremespeed:1
@@ -409,8 +411,8 @@ exports.BattleScripts = {
 
 				// handle HP IVs
 				if (move.id === 'hiddenpower') {
-					var HPivs = this.getType(move.type).HPivs;
-					for (var iv in HPivs) {
+					let HPivs = this.getType(move.type).HPivs;
+					for (let iv in HPivs) {
 						ivs[iv] = HPivs[iv];
 					}
 				}
@@ -423,9 +425,9 @@ exports.BattleScripts = {
 				} else if (damagingMoves.length === 1) {
 					// Night Shade, Seismic Toss, etc. don't count:
 					if (!damagingMoves[0].damage) {
-						var damagingid = damagingMoves[0].id;
-						var damagingType = damagingMoves[0].type;
-						var replace = false;
+						let damagingid = damagingMoves[0].id;
+						let damagingType = damagingMoves[0].type;
+						let replace = false;
 						if (damagingid === 'suckerpunch' || damagingid === 'counter' || damagingid === 'mirrorcoat') {
 							// A player shouldn't be forced to rely upon the opponent attacking them to do damage.
 							if (!hasMove['encore'] && this.random(2)) replace = true;
@@ -452,9 +454,9 @@ exports.BattleScripts = {
 					}
 				} else if (damagingMoves.length === 2) {
 					// If you have two attacks, neither is STAB, and the combo isn't Ice/Electric, Ghost/Fighting, or Dark/Fighting, reject one of them at random.
-					var type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
-					var typeCombo = [type1, type2].sort().join('/');
-					var rejectCombo = true;
+					let type1 = damagingMoves[0].type, type2 = damagingMoves[1].type;
+					let typeCombo = [type1, type2].sort().join('/');
+					let rejectCombo = true;
 					if (!(type1 in hasStab) && !(type2 in hasStab)) {
 						if (typeCombo === 'Electric/Ice' || typeCombo === 'Fighting/Ghost' || typeCombo === 'Dark/Fighting') rejectCombo = false;
 					} else {
@@ -463,8 +465,8 @@ exports.BattleScripts = {
 					if (rejectCombo) this.sampleNoReplace(moves);
 				} else {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
-					var isStab = false;
-					for (var l = 0; l < damagingMoves.length; l++) {
+					let isStab = false;
+					for (let l = 0; l < damagingMoves.length; l++) {
 						if (hasStab[damagingMoves[l].type]) {
 							isStab = true;
 							break;
@@ -477,7 +479,7 @@ exports.BattleScripts = {
 
 		// any moveset modification goes here
 		//moves[0] = 'Safeguard';
-		var abilities = [template.abilities['0']];
+		let abilities = [template.abilities['0']];
 		if (template.abilities['1']) {
 			abilities.push(template.abilities['1']);
 		}
@@ -487,9 +489,9 @@ exports.BattleScripts = {
 		abilities.sort(function (a, b) {
 			return this.getAbility(b).rating - this.getAbility(a).rating;
 		}.bind(this));
-		var ability0 = this.getAbility(abilities[0]);
-		var ability1 = this.getAbility(abilities[1]);
-		var ability = ability0.name;
+		let ability0 = this.getAbility(abilities[0]);
+		let ability1 = this.getAbility(abilities[1]);
+		ability = ability0.name;
 		if (abilities[1]) {
 			if (ability0.rating <= ability1.rating) {
 				if (this.random(2)) {
@@ -501,7 +503,7 @@ exports.BattleScripts = {
 				}
 			}
 
-			var rejectAbility = false;
+			let rejectAbility = false;
 			if (ability === 'Blaze' && !counter['blaze']) {
 				rejectAbility = true;
 			}
@@ -622,7 +624,7 @@ exports.BattleScripts = {
 		} else if (hasMove['trick'] && hasMove['gyroball']) {
 			item = 'Iron Ball';
 		} else if (hasMove['trick'] || hasMove['switcheroo']) {
-			var randomNum = this.random(2);
+			let randomNum = this.random(2);
 			if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
 				item = 'Choice Band';
 			} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
@@ -664,9 +666,9 @@ exports.BattleScripts = {
 			item = 'Life Orb';
 		} else if (ability === 'Unburden' && (counter['Physical'] || counter['Special'])) {
 			// Give Unburden mons a random Gem of the type of one of their damaging moves
-			var eligibleTypes = [];
-			for (var i = 0; i < moves.length; i++) {
-				var move = this.getMove(moves[i]);
+			let eligibleTypes = [];
+			for (let i = 0; i < moves.length; i++) {
+				let move = this.getMove(moves[i]);
 				if (!move.basePower && !move.basePowerCallback) continue;
 				eligibleTypes.push(move.type);
 			}
@@ -679,7 +681,7 @@ exports.BattleScripts = {
 			}
 			if ((hasMove['return'] || hasMove['hyperfang']) && !hasMove['facade']) {
 				// lol no
-				for (var j = 0; j < moves.length; j++) {
+				for (let j = 0; j < moves.length; j++) {
 					if (moves[j] === 'Return' || moves[j] === 'HyperFang') {
 						moves[j] = 'Facade';
 						break;
@@ -700,9 +702,9 @@ exports.BattleScripts = {
 		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 			item = 'Choice Scarf';
 		} else if (hasMove['substitute'] && hasMove['reversal']) {
-			var eligibleTypes = [];
-			for (var i = 0; i < moves.length; i++) {
-				var move = this.getMove(moves[i]);
+			let eligibleTypes = [];
+			for (let i = 0; i < moves.length; i++) {
+				let move = this.getMove(moves[i]);
 				if (!move.basePower && !move.basePowerCallback) continue;
 				eligibleTypes.push(move.type);
 			}
@@ -747,7 +749,7 @@ exports.BattleScripts = {
 		}
 
 		// 95-86-82-78-74-70
-		var levelScale = {
+		let levelScale = {
 			LC: 95,
 			NFE: 90,
 			'LC Uber': 86,
@@ -762,7 +764,7 @@ exports.BattleScripts = {
 			Unreleased: 74,
 			Uber: 70
 		};
-		var customScale = {
+		let customScale = {
 			// Really bad Pokemon and jokemons
 			Azurill: 99, Burmy: 99, Cascoon: 99, Caterpie: 99, Cleffa: 99, Combee: 99, Feebas: 99, Igglybuff: 99, Happiny: 99, Hoppip: 99,
 			Kakuna: 99, Kricketot: 99, Ledyba: 99, Magikarp: 99, Metapod: 99, Pichu: 99, Ralts: 99, Sentret: 99, Shedinja: 99,
@@ -781,7 +783,7 @@ exports.BattleScripts = {
 			// Holistic judgment
 			Carvanha: 90, Blaziken: 74, "Deoxys-Defense": 74, "Deoxys-Speed": 74, Garchomp: 74, Thundurus: 74
 		};
-		var level = levelScale[template.tier] || 90;
+		let level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		if (template.name === 'Chandelure' && ability === 'Shadow Tag') level = 70;
@@ -801,35 +803,35 @@ exports.BattleScripts = {
 		};
 	},
 	randomTeam: function (side) {
-		var pokemonLeft = 0;
-		var pokemon = [];
+		let pokemonLeft = 0;
+		let pokemon = [];
 
-		var pokemonPool = [];
-		for (var id in this.data.FormatsData) {
-			var template = this.getTemplate(id);
+		let pokemonPool = [];
+		for (let id in this.data.FormatsData) {
+			let template = this.getTemplate(id);
 			if (template.gen >= this.gen || !template.randomBattleMoves) continue;
 			pokemonPool.push(id);
 		}
 
 		// PotD stuff
-		var potd;
+		let potd;
 		if (Config.potd && 'Rule:potd' in this.getBanlistTable(this.getFormat())) {
 			potd = this.getTemplate(Config.potd);
 		}
 
-		var typeCount = {};
-		var typeComboCount = {};
-		var uberCount = 0;
-		var nuCount = 0;
+		let typeCount = {};
+		let typeComboCount = {};
+		let uberCount = 0;
+		let nuCount = 0;
 
 		while (pokemonPool.length && pokemonLeft < 6) {
-			var template = this.getTemplate(this.sampleNoReplace(pokemonPool));
+			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
 			// Not available on BW
 			if (template.species === 'Pichu-Spiky-eared') continue;
 
-			var tier = template.tier;
+			let tier = template.tier;
 			// This tries to limit the amount of Ubers and NUs on one team to promote "fun":
 			// LC Pokemon have a hard limit in place at 2; NFEs/NUs/Ubers are also limited to 2 but have a 20% chance of being added anyway.
 			// LC/NFE/NU Pokemon all share a counter (so having one of each would make the counter 3), while Ubers have a counter of their own.
@@ -859,9 +861,9 @@ exports.BattleScripts = {
 			}
 
 			// Limit 2 of any type
-			var types = template.types;
-			var skip = false;
-			for (var t = 0; t < types.length; t++) {
+			let types = template.types;
+			let skip = false;
+			for (let t = 0; t < types.length; t++) {
 				if (typeCount[types[t]] > 1 && this.random(5) >= 1) {
 					skip = true;
 					break;
@@ -883,10 +885,10 @@ exports.BattleScripts = {
 				}
 			}
 
-			var set = this.randomSet(template, pokemon.length);
+			let set = this.randomSet(template, pokemon.length);
 
 			// Limit 1 of any type combination
-			var typeCombo = types.join();
+			let typeCombo = types.join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle') {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
@@ -900,7 +902,7 @@ exports.BattleScripts = {
 			pokemonLeft++;
 
 			// Increment type counters
-			for (var t = 0; t < types.length; t++) {
+			for (let t = 0; t < types.length; t++) {
 				if (types[t] in typeCount) {
 					typeCount[types[t]]++;
 				} else {

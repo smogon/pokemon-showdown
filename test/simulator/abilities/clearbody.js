@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Clear Body', function () {
 	afterEach(function () {
@@ -10,11 +12,11 @@ describe('Clear Body', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Tentacruel', ability: 'clearbody', moves: ['recover']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arbok', ability: 'intimidate', moves: ['acidspray', 'leer', 'icywind', 'charm', 'confide']}]);
-		var stats = Object.keys(battle.p1.active[0].boosts);
-		for (var i = 1; i <= 5; i++) {
+		let stats = Object.keys(battle.p1.active[0].boosts);
+		for (let i = 1; i <= 5; i++) {
 			battle.choose('p2', 'move ' + i);
 			battle.commitDecisions();
-			for (var j = 0; j < stats.length; j++) {
+			for (let j = 0; j < stats.length; j++) {
 				assert.strictEqual(battle.p1.active[0].boosts[stats[j]], 0);
 			}
 		}
