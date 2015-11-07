@@ -140,8 +140,6 @@ let Battle = (function () {
 	Battle.prototype.rqid = '';
 	Battle.prototype.inactiveQueued = false;
 	Battle.prototype.receive = function (lines) {
-		let player;
-		let rqid;
 		Monitor.activeIp = this.activeIp;
 		switch (lines[1]) {
 		case 'update':
@@ -163,23 +161,25 @@ let Battle = (function () {
 			this.inactiveSide = -1;
 			break;
 
-		case 'sideupdate':
-			player = this.getPlayer(lines[2]);
+		case 'sideupdate': {
+			let player = this.getPlayer(lines[2]);
 			if (player) {
 				player.sendTo(this.id, lines[3]);
 			}
 			break;
+		}
 
-		case 'callback':
-			player = this.getPlayer(lines[2]);
+		case 'callback': {
+			let player = this.getPlayer(lines[2]);
 			if (player) {
 				player.sendTo(this.id, '|callback|' + lines[3]);
 			}
 			break;
+		}
 
-		case 'request':
-			player = this.getPlayer(lines[2]);
-			rqid = lines[3];
+		case 'request': {
+			let player = this.getPlayer(lines[2]);
+			let rqid = lines[3];
 			if (player) {
 				this.requests[player.userid] = lines[4];
 				player.sendTo(this.id, '|request|' + lines[4]);
@@ -189,6 +189,7 @@ let Battle = (function () {
 				this.inactiveQueued = true;
 			}
 			break;
+		}
 
 		case 'log':
 			this.logData = JSON.parse(lines[2]);

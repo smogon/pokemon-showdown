@@ -177,15 +177,14 @@ let commands = exports.commands = {
 			let innerCmdIndex = target.indexOf(' ');
 			let innerCmd = (innerCmdIndex >= 0 ? target.slice(1, innerCmdIndex) : target.slice(1));
 			let innerTarget = (innerCmdIndex >= 0 ? target.slice(innerCmdIndex + 1) : '');
-			let targetRoom = false;
 			switch (innerCmd) {
 			case 'me':
 			case 'mee':
 			case 'announce':
 				break;
 			case 'invite':
-			case 'inv':
-				targetRoom = Rooms.search(innerTarget);
+			case 'inv': {
+				let targetRoom = Rooms.search(innerTarget);
 				if (!targetRoom || targetRoom === Rooms.global) return this.errorReply('The room "' + innerTarget + '" does not exist.');
 				if (targetRoom.staffRoom && !targetUser.isStaff) return this.errorReply('User "' + this.targetUsername + '" requires global auth to join room "' + targetRoom.id + '".');
 				if (targetRoom.modjoin) {
@@ -207,6 +206,7 @@ let commands = exports.commands = {
 
 				target = '/invite ' + targetRoom.id;
 				break;
+			}
 			default:
 				return this.errorReply("The command '/" + innerCmd + "' was unrecognized or unavailable in private messages. To send a message starting with '/" + innerCmd + "', type '//" + innerCmd + "'.");
 			}

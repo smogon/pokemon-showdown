@@ -27,26 +27,34 @@ if (cluster.isMaster) {
 		let worker = cluster.fork({PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '', PSNOSSL: Config.ssl ? 0 : 1});
 		let id = worker.id;
 		workers[id] = worker;
-		let nlPos = 0;
 		worker.on('message', function (data) {
 			// console.log('master received: ' + data);
 			switch (data.charAt(0)) {
-			case '*': // *socketid, ip
+			case '*': {
+				// *socketid, ip
 				// connect
-				nlPos = data.indexOf('\n');
+				let nlPos = data.indexOf('\n');
 				Users.socketConnect(worker, id, data.substr(1, nlPos - 1), data.substr(nlPos + 1));
 				break;
+			}
 
-			case '!': // !socketid
+			case '!': {
+				// !socketid
 				// disconnect
 				Users.socketDisconnect(worker, id, data.substr(1));
 				break;
+			}
 
-			case '<': // <socketid, message
+			case '<': {
+				// <socketid, message
 				// message
-				nlPos = data.indexOf('\n');
+				let nlPos = data.indexOf('\n');
 				Users.socketReceive(worker, id, data.substr(1, nlPos - 1), data.substr(nlPos + 1));
 				break;
+			}
+
+			default:
+			// unhandled
 			}
 		});
 	};
@@ -236,17 +244,10 @@ if (cluster.isMaster) {
 
 	process.on('message', function (data) {
 		// console.log('worker received: ' + data);
-		let socket = null;
-		let channel = null;
-		let socketid = null;
-		let channelid = null;
-		let subchannel = null;
-		let subchannelid = null;
-		let nlLoc = null;
-		let nlLoc2 = null;
-		let message = '';
-		let isEmpty = false;
-		let messages = [null, null, null];
+		let socket = null, socketid = '';
+		let channel = null, channelid = '';
+		let subchannel = null, subchannelid = '';
+
 		switch (data.charAt(0)) {
 		case '$': // $code
 			eval(data.substr(1));
@@ -266,27 +267,32 @@ if (cluster.isMaster) {
 			}
 			break;
 
-		case '>': // >socketid, message
+		case '>': {
+			// >socketid, message
 			// message
-			nlLoc = data.indexOf('\n');
+			let nlLoc = data.indexOf('\n');
 			socket = sockets[data.substr(1, nlLoc - 1)];
 			if (!socket) return;
 			socket.write(data.substr(nlLoc + 1));
 			break;
+		}
 
-		case '#': // #channelid, message
+		case '#': {
+			// #channelid, message
 			// message to channel
-			nlLoc = data.indexOf('\n');
+			let nlLoc = data.indexOf('\n');
 			channel = channels[data.substr(1, nlLoc - 1)];
-			message = data.substr(nlLoc + 1);
+			let message = data.substr(nlLoc + 1);
 			for (socketid in channel) {
 				channel[socketid].write(message);
 			}
 			break;
+		}
 
-		case '+': // +channelid, socketid
+		case '+': {
+			// +channelid, socketid
 			// add to channel
-			nlLoc = data.indexOf('\n');
+			let nlLoc = data.indexOf('\n');
 			socketid = data.substr(nlLoc + 1);
 			socket = sockets[socketid];
 			if (!socket) return;
@@ -295,17 +301,19 @@ if (cluster.isMaster) {
 			if (!channel) channel = channels[channelid] = Object.create(null);
 			channel[socketid] = socket;
 			break;
+		}
 
-		case '-': // -channelid, socketid
+		case '-': {
+			// -channelid, socketid
 			// remove from channel
-			nlLoc = data.indexOf('\n');
+			let nlLoc = data.indexOf('\n');
 			channelid = data.slice(1, nlLoc);
 			channel = channels[channelid];
 			if (!channel) return;
 			socketid = data.slice(nlLoc + 1);
 			delete channel[socketid];
 			if (subchannels[channelid]) delete subchannels[channelid][socketid];
-			isEmpty = true;
+			let isEmpty = true;
 			for (let socketid in channel) {
 				isEmpty = false;
 				break;
@@ -315,12 +323,14 @@ if (cluster.isMaster) {
 				delete subchannels[channelid];
 			}
 			break;
+		}
 
-		case '.': // .channelid, subchannelid, socketid
+		case '.': {
+			// .channelid, subchannelid, socketid
 			// move subchannel
-			nlLoc = data.indexOf('\n');
+			let nlLoc = data.indexOf('\n');
 			channelid = data.slice(1, nlLoc);
-			nlLoc2 = data.indexOf('\n', nlLoc + 1);
+			let nlLoc2 = data.indexOf('\n', nlLoc + 1);
 			subchannelid = data.slice(nlLoc + 1, nlLoc2);
 			socketid = data.slice(nlLoc2 + 1);
 
@@ -332,15 +342,17 @@ if (cluster.isMaster) {
 				subchannel[socketid] = subchannelid;
 			}
 			break;
+		}
 
-		case ':': // :channelid, message
+		case ':': {
+			// :channelid, message
 			// message to subchannel
-			nlLoc = data.indexOf('\n');
+			let nlLoc = data.indexOf('\n');
 			channelid = data.slice(1, nlLoc);
 			channel = channels[channelid];
 			subchannel = subchannels[channelid];
-			message = data.substr(nlLoc + 1);
-			messages = [null, null, null];
+			let message = data.substr(nlLoc + 1);
+			let messages = [null, null, null];
 			for (socketid in channel) {
 				switch (subchannel ? subchannel[socketid] : '0') {
 				case '1':
@@ -364,6 +376,9 @@ if (cluster.isMaster) {
 				}
 			}
 			break;
+		}
+
+		default:
 		}
 	});
 
