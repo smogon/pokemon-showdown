@@ -2322,9 +2322,9 @@ exports.BattleItems = {
 				pokemon.removeVolatile('leppaberry');
 			} else {
 				var pp = 99;
-				for (var i in pokemon.moveset) {
-					if (pokemon.moveset[i].pp < pp) {
-						move = pokemon.moveset[i];
+				for (var moveid in pokemon.moveset) {
+					if (pokemon.moveset[moveid].pp < pp) {
+						move = pokemon.moveset[moveid];
 						pp = move.pp;
 					}
 				}
@@ -4329,15 +4329,15 @@ exports.BattleItems = {
 		},
 		onEat: function (pokemon) {
 			var stats = [];
-			for (var i in pokemon.boosts) {
-				if (i !== 'accuracy' && i !== 'evasion' && pokemon.boosts[i] < 6) {
-					stats.push(i);
+			for (var stat in pokemon.boosts) {
+				if (stat !== 'accuracy' && stat !== 'evasion' && pokemon.boosts[stat] < 6) {
+					stats.push(stat);
 				}
 			}
 			if (stats.length) {
-				var i = stats[this.random(stats.length)];
+				var randomStat = stats[this.random(stats.length)];
 				var boost = {};
-				boost[i] = 2;
+				boost[randomStat] = 2;
 				this.boost(boost);
 			}
 		},
