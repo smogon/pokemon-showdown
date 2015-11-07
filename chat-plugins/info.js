@@ -445,7 +445,7 @@ let commands = exports.commands = {
 				}
 
 				if (target === 'all') {
-					if (this.broadcasting) return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
+					if (this.broadcasting && !room.isPersonal) return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
 					if (parameters.length > 1) return this.sendReplyBox("The parameter 'all' cannot have alternative parameters");
 					showAll = true;
 					orGroup.skip = true;
@@ -807,7 +807,7 @@ let commands = exports.commands = {
 			}
 
 			if (target === 'all') {
-				if (this.broadcasting) return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
+				if (this.broadcasting && !room.isPersonal) return this.sendReplyBox("A search with the parameter 'all' cannot be broadcast.");
 				showAll = true;
 				continue;
 			}
