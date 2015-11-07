@@ -1245,7 +1245,8 @@ exports.BattleScripts = {
 					break;
 				case 'foulplay': case 'superfang':
 					if (counter.setupType) rejected = true;
-					break;
+					if (moveid !== 'foulplay') break;
+					/* falls through */
 				case 'haze': case 'healingwish': case 'pursuit': case 'spikes': case 'toxicspikes': case 'waterspout':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
@@ -2502,7 +2503,8 @@ exports.BattleScripts = {
 					break;
 				case 'rapidspin': case 'perishsong': case 'magiccoat': case 'spikes': case 'toxicspikes':
 					if (counter.setupType) rejected = true;
-					break;
+					if (moveid !== 'perishsong') break;
+					/* falls through */
 				case 'uturn': case 'voltswitch':
 					if (counter.setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
 					break;
@@ -2659,7 +2661,7 @@ exports.BattleScripts = {
 					if (hasMove['uturn'] || hasMove['voltswitch'] || hasMove['pursuit']) rejected = true;
 					break;
 				case 'fakeout':
-					if (hasMove['trick'] || hasMove['switcheroo'])  rejected = true;
+					if (hasMove['trick'] || hasMove['switcheroo']) rejected = true;
 					break;
 				case 'feint':
 					if (hasMove['fakeout']) rejected = true;

@@ -227,7 +227,8 @@ exports.BattleScripts = {
 					break;
 				case 'knockoff': case 'perishsong': case 'magiccoat': case 'spikes':
 					if (setupType) rejected = true;
-					break;
+					if (moveid !== 'perishsong') break;
+					/* falls through */
 				case 'uturn': case 'voltswitch':
 					if (setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
 					break;

@@ -1261,7 +1261,7 @@ exports.BattleScripts = {
 							if (counter['Special'] > counter['Physical'] || hasMove['slash'] || !counter['Physical'] || hasMove['growth']) rejected = true;
 							break;
 						case 'growth':
-							if (counter['Special'] < counter['Physical'] || hasMove['swordsdance']) rejected = true;
+							if (counter['Special'] < counter['Physical'] || hasMove['swordsdance'] || hasMove['amnesia']) rejected = true;
 							break;
 						case 'doubleedge':
 							if (hasMove['bodyslam']) rejected = true;
@@ -1295,9 +1295,6 @@ exports.BattleScripts = {
 							break;
 						case 'triattack':
 							if (hasMove['doubleedge']) rejected = true;
-							break;
-						case 'growth':
-							if (hasMove['amnesia']) rejected = true;
 							break;
 						case 'fissure':
 							if (hasMove['horndrill']) rejected = true;
