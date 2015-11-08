@@ -123,7 +123,7 @@ module.exports = {
 		"linebreak-style": os.EOL === '\n' ? [2, "unix"] : 0,
 		"lines-around-comment": 0,
 		"max-nested-callbacks": 0,
-		"new-cap": 2,
+		"new-cap": [2, {"newIsCap": true, "capIsNew": false}],
 		"new-parens": 2,
 		"newline-after-var": 0,
 		"no-array-constructor": 2,
