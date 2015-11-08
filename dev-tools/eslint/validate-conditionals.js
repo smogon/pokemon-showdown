@@ -69,6 +69,8 @@
  * ```
  */
 
+'use strict';
+
 module.exports = function (context) {
 	return {
 		"IfStatement": function (node) {
