@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleAliases = {
 	// formats
 	"randbats": "Random Battle",

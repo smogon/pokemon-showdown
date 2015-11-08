@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattlePokedex = {
 missingno:{num:0,species:"Missingno.",types:["Bird","Normal"],gender:"N",baseStats:{hp:33,atk:136,def:0,spa:6,spd:6,spe:29},abilities:{},heightm:3,weightkg:1590.8,color:"Gray",eggGroups:["Undiscovered"]},
 bulbasaur:{num:1,species:"Bulbasaur",types:["Grass","Poison"],gender:"N",baseStats:{hp:45,atk:49,def:49,spa:65,spd:65,spe:45},abilities:{},heightm:0.7,weightkg:6.9,color:"Green",evos:["ivysaur"],eggGroups:["Monster","Grass"]},
