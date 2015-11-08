@@ -258,7 +258,7 @@ exports.BattleScripts = {
 
 		// We get the sub to the target to see if it existed
 		let targetSub = (target) ? target.volatiles['substitute'] : false;
-		let targetHadSub = (targetSub !== null && targetSub !== false && (typeof targetSub !== 'undefined'));
+		let targetHadSub = (targetSub !== null && targetSub !== false && (typeof targetSub !== 'undefined')); // eslint-disable-line no-unused-vars
 
 		if (target) {
 			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);

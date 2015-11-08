@@ -51,8 +51,9 @@ let JeopardyQuestions = (function () {
 
 	JeopardyQuestions.prototype.export = function (category, start, end) {
 		let data = [];
-		for (let q = start; q < end; ++q)
+		for (let q = start; q < end; ++q) {
 			data.push(this.grid[category][q]);
+		}
 		return data;
 	};
 	JeopardyQuestions.prototype.import = function (category, start, end, data) {
