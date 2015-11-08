@@ -17,6 +17,8 @@ function getLadder(formatid) {
 	return new Ladder(formatid);
 }
 
+Ladders.get = Ladders;
+
 // tells the client to ask the server for format information
 Ladders.formatsListPrefix = '|,LL';
 
