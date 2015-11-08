@@ -13,7 +13,6 @@
 'use strict';
 
 require('sugar');
-if (!''.includes) require('es6-shim');
 
 global.Config = require('./config/config.js');
 

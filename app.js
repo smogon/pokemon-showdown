@@ -58,18 +58,12 @@ function runNpm(command) {
 	process.exit(0);
 }
 
-const isLegacyEngine = !(''.includes);
-
 const fs = require('fs');
 const path = require('path');
 try {
 	require('sugar');
-	if (isLegacyEngine) require('es6-shim');
 } catch (e) {
 	runNpm('install --production');
-}
-if (isLegacyEngine && !(''.includes)) {
-	runNpm('update --production');
 }
 
 /*********************************************************

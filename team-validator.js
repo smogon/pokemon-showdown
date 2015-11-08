@@ -102,7 +102,6 @@ if (!process.send) {
 	};
 } else {
 	require('sugar');
-	if (!''.includes) require('es6-shim');
 	global.Config = require('./config/config.js');
 
 	if (Config.crashguard) {
