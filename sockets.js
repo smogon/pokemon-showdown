@@ -81,7 +81,7 @@ if (cluster.isMaster) {
 		return count;
 	};
 
-	let killPid = exports.killPid = function (pid) {
+	let killPid = exports.killPid = function (pid) { // eslint-disable-line no-unused-vars
 		pid = '' + pid;
 		for (let id in workers) {
 			let worker = workers[id];
@@ -240,7 +240,7 @@ if (cluster.isMaster) {
 			}
 		}
 	};
-	let interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
+	let interval = setInterval(sweepClosedSockets, 1000 * 60 * 10); // eslint-disable-line no-unused-vars
 
 	process.on('message', function (data) {
 		// console.log('worker received: ' + data);
@@ -314,7 +314,7 @@ if (cluster.isMaster) {
 			delete channel[socketid];
 			if (subchannels[channelid]) delete subchannels[channelid][socketid];
 			let isEmpty = true;
-			for (let socketid in channel) {
+			for (let socketid in channel) { // eslint-disable-line no-unused-vars
 				isEmpty = false;
 				break;
 			}

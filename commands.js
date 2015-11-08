@@ -22,7 +22,7 @@ const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
-let commands = exports.commands = {
+let commands = exports.commands = { // eslint-disable-line no-unused-vars
 
 	version: function (target, room, user) {
 		if (!this.canBroadcast()) return;
@@ -2048,9 +2048,11 @@ let commands = exports.commands = {
 
 		if (!this.broadcasting) this.sendReply('||>> ' + target);
 		try {
+			/* eslint-disable no-unused-vars */
 			let battle = room.battle;
 			let me = user;
 			this.sendReply('||<< ' + eval(target));
+			/* eslint-enable no-unused-vars */
 		} catch (e) {
 			this.sendReply('||<< error: ' + e.message);
 			let stack = '||' + ('' + e.stack).replace(/\n/g, '\n||');
