@@ -780,9 +780,6 @@ exports.BattleScripts = {
 					case 'toxic':
 						if (hasMove['sleeppowder'] || hasMove['stunspore'] || counter['Status'] > 1) rejected = true;
 						break;
-					case 'rest':
-						if (hasMove['roar']) rejected = true;
-						break;
 					} // End of switch for moveid
 				}
 				if (rejected && movePool.length) {
