@@ -22,7 +22,7 @@ const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
-let commands = exports.commands = { // eslint-disable-line no-unused-vars
+exports.commands = {
 
 	version: function (target, room, user) {
 		if (!this.canBroadcast()) return;
