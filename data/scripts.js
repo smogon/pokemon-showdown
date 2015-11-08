@@ -1242,12 +1242,15 @@ exports.BattleScripts = {
 				case 'fakeout':
 					if (counter.setupType || hasMove['substitute'] || hasMove['switcheroo'] || hasMove['trick']) rejected = true;
 					break;
-				case 'foulplay': case 'superfang':
+				case 'superfang':
 					if (counter.setupType) rejected = true;
-					if (moveid !== 'foulplay') break;
-					/* falls through */
+					break;
 				case 'haze': case 'healingwish': case 'pursuit': case 'spikes': case 'toxicspikes': case 'waterspout':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					break;
+				case 'foulplay':
+					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (hasMove['darkpulse'] || hasMove['knockoff']) rejected = true;
 					break;
 				case 'healbell':
 					if (!!counter['speedsetup']) rejected = true;
@@ -1290,9 +1293,6 @@ exports.BattleScripts = {
 					break;
 				case 'darkpulse':
 					if (hasMove['crunch'] && counter.setupType !== 'Special') rejected = true;
-					break;
-				case 'foulplay':
-					if (hasMove['darkpulse'] || hasMove['knockoff']) rejected = true;
 					break;
 				case 'suckerpunch':
 					if ((hasMove['crunch'] || hasMove['darkpulse']) && (hasMove['knockoff'] || hasMove['pursuit'])) rejected = true;
@@ -2500,11 +2500,14 @@ exports.BattleScripts = {
 				case 'seismictoss': case 'nightshade': case 'superfang':
 					if (counter.setupType) rejected = true;
 					break;
-				case 'rapidspin': case 'perishsong': case 'magiccoat': case 'spikes': case 'toxicspikes':
+				case 'rapidspin': case 'magiccoat': case 'spikes': case 'toxicspikes':
 					if (counter.setupType) rejected = true;
-					if (moveid !== 'perishsong') break;
-					/* falls through */
+					break;
 				case 'uturn': case 'voltswitch':
+					if (counter.setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
+					break;
+				case 'perishsong':
+					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 					if (counter.setupType || hasMove['agility'] || hasMove['rockpolish'] || hasMove['magnetrise']) rejected = true;
 					break;
 				case 'relicsong':
@@ -2648,9 +2651,6 @@ exports.BattleScripts = {
 					break;
 				case 'softboiled': case 'roost':
 					if (hasMove['wish'] || hasMove['recover']) rejected = true;
-					break;
-				case 'perishsong':
-					if (hasMove['roar'] || hasMove['whirlwind'] || hasMove['haze']) rejected = true;
 					break;
 				case 'roar':
 					// Whirlwind outclasses Roar because Soundproof
