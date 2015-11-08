@@ -721,20 +721,20 @@ away: 'afk',
 		}
 	},
 	
-	roomsenpai: function (target, room, user) {
+	roommother: function (target, room, user) {
 		if (!room.chatRoomData) {
-			return this.sendReply("/roomsenpai - This room isn't designed for per-room moderation to be added.");
+			return this.sendReply("/roommother - This room isn't designed for per-room moderation to be added.");
 		}
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
 		if (!this.can('makeroom')) return false;
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
-		room.auth[targetUser.userid] = '#';
+		room.auth[targetUser.userid] = '♕';
 		room.senpai = targetUser.userid;
-		this.addModCommand(targetUser.name + ' was evoved into Room Senpai by ' + user.name + '.');
+		this.addModCommand(targetUser.name + ' was evolved into Room Mother by ' + user.name + '.');
 		room.onUpdateIdentity(targetUser);
-		room.chatRoomData.founder = room.senpai;
+		room.chatRoomData.founder = room.mother;
 		Rooms.global.writeChatRoomData();
 	},
 	
@@ -749,7 +749,7 @@ away: 'afk',
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
 		room.auth[targetUser.userid] = '¥';
 		room.boss = targetUser.userid;
-		this.addModCommand(targetUser.name + ' was evoved into Room BO$$ by ' + user.name + '.');
+		this.addModCommand(targetUser.name + ' was evolved into Room BO$$ by ' + user.name + '.');
 		room.onUpdateIdentity(targetUser);
 		room.chatRoomData.founder = room.boss;
 		Rooms.global.writeChatRoomData();
@@ -1017,7 +1017,7 @@ roomstaff: 'roomauth',
  
                 var buffer = [];
                 if (room.boss) buffer.push('Room BO$$:\n' + room.boss);
-                if (room.senpai) buffer.push('Room Senpai:\n' + room.senpai);
+                if (room.mother) buffer.push('Room Mother:\n' + room.mother);
                 if (room.founder) buffer.push('Room Founder:\n' + room.founder);
                 if (room.bae) buffer.push('Room Bae:\n' + room.bae);
                 Object.keys(rankLists).sort(function (a, b) {
