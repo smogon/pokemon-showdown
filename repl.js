@@ -69,7 +69,7 @@ exports.start = function (prefix, suffix, evalFunction) {
 		}).on('exit', socket.end.bind(socket));
 		socket.on('error', socket.destroy.bind(socket));
 	}).listen(name, function () {
-		fs.chmodSync(name, Config.replsocketmode || '0600');
+		fs.chmodSync(name, Config.replsocketmode || 0o600);
 		sockets.push(name);
 	}).on('error', function (e) {
 		if (e.code === "EADDRINUSE") {
