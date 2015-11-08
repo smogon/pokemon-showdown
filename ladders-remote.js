@@ -9,11 +9,14 @@
 
 'use strict';
 
-let Ladders = Ladders.get = module.exports = getLadder;
+let Ladders = module.exports = getLadder;
 
 function getLadder(formatid) {
 	return new Ladder(formatid);
 }
+
+Ladders.get = Ladders;
+Ladders.formatsListPrefix = '';
 
 function Ladder(formatid) {
 	this.formatid = toId(formatid);
