@@ -18,7 +18,6 @@ const PERIODIC_MATCH_INTERVAL = 60 * 1000;
 
 const fs = require('fs');
 
-/* global Rooms: true */
 let Rooms = module.exports = getRoom;
 
 let rooms = Rooms.rooms = Object.create(null);
@@ -994,7 +993,7 @@ let BattleRoom = (function () {
 
 		// empty rooms time out after ten minutes
 		let hasUsers = false;
-		for (let i in this.users) {
+		for (let i in this.users) { // eslint-disable-line no-unused-vars
 			hasUsers = true;
 			break;
 		}

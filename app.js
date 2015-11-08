@@ -108,9 +108,12 @@ try {
 	Config.port = cloudenv.get('PORT', Config.port);
 } catch (e) {}
 
-if (require.main === module && process.argv[2] && parseInt(process.argv[2])) {
-	Config.port = parseInt(process.argv[2]);
-	Config.ssl = null;
+if (require.main === module && process.argv[2]) {
+	let port = parseInt(process.argv[2]); // eslint-disable-line radix
+	if (port) {
+		Config.port = port;
+		Config.ssl = null;
+	}
 }
 
 /*********************************************************

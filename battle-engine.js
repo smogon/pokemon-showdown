@@ -55,7 +55,7 @@ let Battle, BattleSide, BattlePokemon;
 
 let Battles = Object.create(null);
 
-require('./repl.js').start('battle-engine-', process.pid, function (cmd) { return eval(cmd); }); // eslint-disable-line no-eval
+require('./repl.js').start('battle-engine-', process.pid, function (cmd) { return eval(cmd); });
 
 // Receive and process a message sent using Simulator.prototype.send in
 // another process.
@@ -129,7 +129,7 @@ process.on('message', function (message) {
 			}
 		} else if (data[1] === 'eval') {
 			try {
-				eval(data[2]); // eslint-disable-line no-eval
+				eval(data[2]);
 			} catch (e) {}
 		}
 	}

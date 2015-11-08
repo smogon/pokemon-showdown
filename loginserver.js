@@ -15,7 +15,6 @@ const LOGIN_SERVER_BATCH_TIME = 1000;
 const http = require("http");
 const url = require('url');
 
-/* global LoginServer: true */
 let LoginServer = module.exports = (function () {
 	function LoginServer(uri) {
 		console.log('Creating LoginServer object for ' + uri + '...');
