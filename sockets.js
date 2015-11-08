@@ -64,7 +64,7 @@ if (cluster.isMaster) {
 		spawnWorker();
 	}
 
-	let killWorker = exports.killWorker = function (worker) {
+	exports.killWorker = function (worker) {
 		let idd = worker.id + '-';
 		let count = 0;
 		for (let connectionid in Users.connections) {
@@ -81,12 +81,12 @@ if (cluster.isMaster) {
 		return count;
 	};
 
-	let killPid = exports.killPid = function (pid) { // eslint-disable-line no-unused-vars
+	exports.killPid = function (pid) {
 		pid = '' + pid;
 		for (let id in workers) {
 			let worker = workers[id];
 			if (pid === '' + worker.process.pid) {
-				return killWorker(worker);
+				return this.killWorker(worker);
 			}
 		}
 		return false;

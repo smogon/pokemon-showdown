@@ -65,6 +65,6 @@ let checker = exports.checker = function (cidr) {
 	};
 };
 
-let check = exports.check = function (cidr, ip) { // eslint-disable-line no-unused-vars
+exports.check = function (cidr, ip) {
 	return checker(cidr)(ip);
 };
