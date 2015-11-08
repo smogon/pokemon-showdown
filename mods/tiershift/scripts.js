@@ -37,7 +37,7 @@ exports.BattleScripts = {
 					let boost = (template.tier in boosts) ? boosts[template.tier] : 0;
 					if (this.set.ability in {'Drizzle': 1, 'Drought': 1, 'Shadow Tag': 1}) {
 						boost = 0;
-					} else if (this.set.moves.indexOf('chatter') >= 0 || (boost > 15 && this.set.moves.indexOf('shellsmash') >= 0 && this.set.moves.indexOf('batonpass') >= 0)) {
+					} else if (this.set.moves.indexOf('chatter') >= 0) {
 						boost = 15;
 					}
 					stat = this.battle.clampIntRange(stat + boost, 1, 255);
