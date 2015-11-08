@@ -747,7 +747,7 @@ away: 'afk',
 		if (!targetUser) return this.sendReply("User '" + this.targetUsername + "' is not online.");
 		if (!this.can('makeroom')) return false;
 		if (!room.auth) room.auth = room.chatRoomData.auth = {};
-		room.auth[targetUser.userid] = '#';
+		room.auth[targetUser.userid] = '¥';
 		room.boss = targetUser.userid;
 		this.addModCommand(targetUser.name + ' was evoved into Room BO$$ by ' + user.name + '.');
 		room.onUpdateIdentity(targetUser);
