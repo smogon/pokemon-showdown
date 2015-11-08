@@ -14,7 +14,7 @@
 
 const RESULTS_MAX_LENGTH = 10;
 
-let commands = exports.commands = {
+let commands = exports.commands = { // eslint-disable-line no-unused-vars
 
 	ip: 'whois',
 	rooms: 'whois',

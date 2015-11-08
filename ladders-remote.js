@@ -7,7 +7,6 @@
  * @license MIT license
  */
 
-/* global Ladders: true */
 let Ladders = Ladders.get = module.exports = getLadder;
 
 function getLadder(formatid) {

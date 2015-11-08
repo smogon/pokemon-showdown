@@ -11,8 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 
-/* global Monitor: true */
-const Monitor = module.exports = {
+const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 
 	/*********************************************************
 	 * Logging

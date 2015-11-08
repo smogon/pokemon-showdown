@@ -1,10 +1,9 @@
 /config/*
 /logs/*
 /node_modules
-/gulp-cache
+/eslint-cache
 /chat-plugins/private.js
 npm-debug.log
-.eslintcache*
 
 # boilerplate #
 ###############

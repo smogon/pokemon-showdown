@@ -7,8 +7,6 @@
  * @license MIT license
  */
 
-/* global Ladders: true */
-
 'use strict';
 
 let Ladders = module.exports = getLadder;
