@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
 	"extends": "./config-base.js",
 	"env": {
@@ -5,5 +7,5 @@ module.exports = {
 	},
 	"globals": {
 		"BattleEngine": false
-	},
+	}
 };
