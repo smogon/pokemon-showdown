@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleStatuses = {
 	slp: {
 		effectType: 'Status',

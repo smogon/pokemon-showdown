@@ -5,6 +5,9 @@
  * and I want the mod to work with no Client changes and the least possible
  * non-mod changes.
  */
+
+'use strict';
+
 exports.BattleAbilities = {
 	"None": {
 		desc: "This Pokemon has no ability.",

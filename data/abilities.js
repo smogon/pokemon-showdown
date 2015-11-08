@@ -36,6 +36,8 @@ Ratings and how they work:
 
 */
 
+'use strict';
+
 exports.BattleAbilities = {
 	"adaptability": {
 		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus (STAB) of 2 instead of 1.5.",

@@ -91,7 +91,7 @@ module.exports = {
 		"vars-on-top": 0,
 		"wrap-iife": [2, "inside"],
 		"yoda": 0,
-		"strict": 0,
+		"strict": [2, "global"],
 		"init-declarations": 0,
 		"no-delete-var": 2,
 		"no-label-var": 2,

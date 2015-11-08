@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleFormatsData = {
 	missingno: {
 		isNonstandard: true,

@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleItems = {
 	aguavberry: {
 		inherit: true,

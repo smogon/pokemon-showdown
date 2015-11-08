@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleScripts = {
 	init: function () {
 		this.modData('Pokedex', 'archeops').abilities['1'] = 'Vital Spirit';

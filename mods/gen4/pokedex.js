@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattlePokedex = {
 	rotomheat: {
 		inherit: true,

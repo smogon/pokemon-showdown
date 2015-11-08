@@ -12,6 +12,8 @@
  * @license MIT license
  */
 
+'use strict';
+
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 let dns = require('dns');

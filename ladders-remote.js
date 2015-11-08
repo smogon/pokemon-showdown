@@ -7,6 +7,8 @@
  * @license MIT license
  */
 
+'use strict';
+
 let Ladders = Ladders.get = module.exports = getLadder;
 
 function getLadder(formatid) {

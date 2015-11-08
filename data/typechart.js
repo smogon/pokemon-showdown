@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleTypeChart = {
 	"Bug": {
 		damageTaken: {

@@ -6,6 +6,8 @@
 * Credits: panpawn, TalkTakesTime, Morfent, and sirDonovan
 */
 
+'use strict';
+
 exports.commands = {
 	quoteoftheday: 'qotd',
 	qotd: function (target, room, user) {
