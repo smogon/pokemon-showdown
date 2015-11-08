@@ -218,10 +218,11 @@ let commands = exports.commands = {
 		let buffer = '';
 		let targetId = toId(target);
 		if (!targetId) return this.parse('/help data');
-		if (targetId === '' + parseInt(targetId)) {
+		let targetNum = parseInt(targetId, 10);
+		if (!isNaN(targetNum)) {
 			for (let p in Tools.data.Pokedex) {
 				let pokemon = Tools.getTemplate(p);
-				if (pokemon.num === parseInt(target)) {
+				if (pokemon.num === targetNum) {
 					target = pokemon.species;
 					targetId = pokemon.id;
 					break;
@@ -385,7 +386,6 @@ let commands = exports.commands = {
 
 		let self = this;
 		let validParameter = function (cat, param, isNotSearch) {
-			let catCount = 0;
 			for (let h = 0; h < searches.length; h++) {
 				let group = searches[h];
 				if (group[cat][param] === undefined) continue;
@@ -437,7 +437,7 @@ let commands = exports.commands = {
 				}
 
 				if (target.substr(0, 3) === 'gen' && Number.isInteger(parseFloat(target.substr(3)))) target = target.substr(3).trim();
-				let targetInt = parseInt(target);
+				let targetInt = parseInt(target, 10);
 				if (0 < targetInt && targetInt < 7) {
 					if (!validParameter("gens", target, isNotSearch)) return;
 					orGroup.gens[target] = !isNotSearch;
@@ -454,7 +454,7 @@ let commands = exports.commands = {
 
 				if (target.substr(0, 6) === 'random' && cmd === 'randpoke') {
 					//validation for this is in the /randpoke command
-					randomOutput = parseInt(target.substr(6));
+					randomOutput = parseInt(target.substr(6), 10);
 					orGroup.skip = true;
 					continue;
 				}
@@ -1227,7 +1227,7 @@ let commands = exports.commands = {
 					if (searchedWords[k].substr(searchedWords[k].length - 2) === 'bp' && searchedWords[k].length > 2) searchedWords[k] = searchedWords[k].substr(0, searchedWords[k].length - 2);
 					if (Number.isInteger(Number(searchedWords[k]))) {
 						if (basePower) return this.sendReplyBox("Only specify a number for base power once.");
-						basePower = parseInt(searchedWords[k]);
+						basePower = parseInt(searchedWords[k], 10);
 					}
 				}
 			}
@@ -1259,7 +1259,7 @@ let commands = exports.commands = {
 					if (searchedWords[k].substr(searchedWords[k].length - 2) === 'bp' && searchedWords[k].length > 2) searchedWords[k] = searchedWords[k].substr(0, searchedWords[k].length - 2);
 					if (Number.isInteger(Number(searchedWords[k]))) {
 						if (basePower) return this.sendReplyBox("Only specify a number for base power once.");
-						basePower = parseInt(searchedWords[k]);
+						basePower = parseInt(searchedWords[k], 10);
 					}
 				}
 			}
@@ -1384,7 +1384,6 @@ let commands = exports.commands = {
 			if (lsetData.sources || lsetData.sourcesBefore) buffer += " only when obtained from:<ul class=\"message-learn-list\">";
 			if (lsetData.sources) {
 				let sources = lsetData.sources.sort();
-				let prevSource;
 				let prevSourceType;
 				let prevSourceCount = 0;
 				for (let i = 0, len = sources.length; i < len; ++i) {
@@ -1812,7 +1811,7 @@ let commands = exports.commands = {
 
 			if (!ivSet) {
 				if (lowercase.endsWith('iv') || lowercase.endsWith('ivs')) {
-					iv = parseInt(targets[i]);
+					iv = parseInt(targets[i], 10);
 					ivSet = true;
 
 					if (isNaN(iv)) {
@@ -1830,7 +1829,7 @@ let commands = exports.commands = {
 					ev = 0;
 					evSet = true;
 				} else if (lowercase.endsWith('ev') || lowercase.endsWith('evs')) {
-					ev = parseInt(targets[i]);
+					ev = parseInt(targets[i], 10);
 					evSet = true;
 
 					if (isNaN(ev)) {
@@ -1859,11 +1858,11 @@ let commands = exports.commands = {
 					modifier = 1;
 					modSet = true;
 				} else if (targets[i].charAt(0) === '+') {
-					modifier = parseInt(targets[i].charAt(1));
+					modifier = parseInt(targets[i].charAt(1), 10);
 					modSet = true;
 				} else if (targets[i].charAt(0) === '-') {
 					positiveMod = false;
-					modifier = parseInt(targets[i].charAt(1));
+					modifier = parseInt(targets[i].charAt(1), 10);
 					modSet = true;
 				}
 				if (isNaN(modifier)) {
@@ -1883,7 +1882,7 @@ let commands = exports.commands = {
 				}
 			}
 
-			let tempStat = parseInt(targets[i]);
+			let tempStat = parseInt(targets[i], 10);
 
 			if (!isNaN(tempStat) && !baseSet && tempStat > 0 && tempStat < 256) {
 				statValue = tempStat;
@@ -2073,14 +2072,12 @@ let commands = exports.commands = {
 		if (!this.canBroadcast()) return;
 		target = toId(target);
 		let buffer = "";
-		let matched = false;
 
 		if (target === 'all' && this.broadcasting) {
 			return this.sendReplyBox("You cannot broadcast information about all Other Metagames at once.");
 		}
 
 		if (!target || target === 'all') {
-			matched = true;
 			buffer += "- <a href=\"https://www.smogon.com/tiers/om/\">Other Metagames Hub</a><br />";
 			buffer += "- <a href=\"https://www.smogon.com/forums/threads/3505031/\">Other Metagames Index</a><br />";
 			if (!target) return this.sendReplyBox(buffer);
@@ -2167,7 +2164,6 @@ let commands = exports.commands = {
 			buf.push("<table class=\"scrollable\" style=\"display:inline-block; max-height:200px; border:1px solid gray; border-collapse:collapse\" cellspacing=\"0\" cellpadding=\"5\"><thead><th style=\"border:1px solid gray\" >Name</th><th style=\"border:1px solid gray\" >Description</th></thead><tbody>");
 			for (let i = 0; i < sections[sectionId].formats.length; i++) {
 				let format = Tools.getFormat(sections[sectionId].formats[i]);
-				let mod = format.mod && format.mod !== 'base' ? " - " + Tools.escapeHTML(format.mod === format.id ? format.name : format.mod).capitalize() : "";
 				buf.push("<tr><td style=\"border:1px solid gray\">" + Tools.escapeHTML(format.name) + "</td><td style=\"border: 1px solid gray; margin-left:10px\">" + (format.desc ? format.desc.join("<br />") : "&mdash;") + "</td></tr>");
 			}
 			buf.push("</tbody></table>");
@@ -2305,11 +2301,11 @@ let commands = exports.commands = {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#challenge\">How can I battle a specific user?</a><br />";
 		}
-		if (target === 'all'  || target === 'gxe') {
+		if (target === 'all' || target === 'gxe') {
 			matched = true;
 			buffer += "<a href=\"https://www.smogon.com/sim/faq#gxe\">What does GXE mean?</a><br />";
 		}
-		if (target === 'all'  || target === 'coil') {
+		if (target === 'all' || target === 'coil') {
 			matched = true;
 			buffer += "<a href=\"http://www.smogon.com/forums/threads/coil-explained.3508013\">What is COIL?</a><br />";
 		}

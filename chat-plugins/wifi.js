@@ -316,7 +316,7 @@ let commands = {
 		if (target.length !== 2) return this.sendReply("Invalid arguments specified - /lottery giver, prize, max winners");
 		let options = {
 			prize: target[0],
-			maxwinners: parseInt(target[1])
+			maxwinners: parseInt(target[1], 10)
 		};
 		if (options.maxwinners > 10 || options.maxwinners < 1 || isNaN(options.maxwinners)) return this.sendReply("The lottery giveaway can have a minimum of 1 and a maximum of 10 winners.");
 
