@@ -106,7 +106,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['NU'],
-		banlist: ['NU', 'BL4', 'Chatter', 'Shell Smash + Baton Pass']
+		banlist: ['NU', 'BL4', 'Chatter']
 	},
 	{
 		name: "LC",
