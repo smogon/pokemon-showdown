@@ -55,7 +55,7 @@ let Battle, BattleSide, BattlePokemon;
 
 let Battles = Object.create(null);
 
-require('./repl.js').start('battle-engine-', process.pid, function (cmd) { return eval(cmd); });
+require('./repl.js').start('battle-engine-', process.pid, function (cmd) { return eval(cmd); }); // eslint-disable-line no-eval
 
 // Receive and process a message sent using Simulator.prototype.send in
 // another process.
@@ -129,7 +129,7 @@ process.on('message', function (message) {
 			}
 		} else if (data[1] === 'eval') {
 			try {
-				eval(data[2]);
+				eval(data[2]); // eslint-disable-line no-eval
 			} catch (e) {}
 		}
 	}
@@ -4688,6 +4688,7 @@ Battle = (function () {
 			break;
 
 		case 'eval': {
+			/* eslint-disable no-eval, no-unused-vars */
 			let battle = this;
 			let p1 = this.p1;
 			let p2 = this.p2;
@@ -4700,6 +4701,7 @@ Battle = (function () {
 			} catch (e) {
 				this.add('', '<<< error: ' + e.message);
 			}
+			/* eslint-enable no-eval, no-unused-vars */
 			break;
 		}
 

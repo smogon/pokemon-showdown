@@ -50,7 +50,7 @@ let commands = {
 		Rooms.global.writeChatRoomData();
 		room.addRaw(
 			"<div class=\"broadcast-blue\"><strong>Nominations for the Artist of the Day have begun!</strong><br />" +
-		        "Use /aotd nom to nominate an artist.</div>"
+			"Use /aotd nom to nominate an artist.</div>"
 		);
 		this.privateModCommand("(" + user.name + " began nominations for the Artist of the Day.)");
 	},
@@ -72,7 +72,7 @@ let commands = {
 		Rooms.global.writeChatRoomData();
 		room.addRaw(
 			"<div class=\"broadcast-blue\"><strong>Nominations for the Artist of the Day have ended!</strong><br />" +
-		        "Randomly selected artist: " + Tools.escapeHTML(artist) + "</div>"
+			"Randomly selected artist: " + Tools.escapeHTML(artist) + "</div>"
 		);
 		this.privateModCommand("(" + user.name + " ended nominations for the Artist of the Day.)");
 	},
@@ -87,7 +87,6 @@ let commands = {
 		if (!room.chatRoomData.prenominations) room.chatRoomData.prenominations = [];
 
 		let userid = user.userid;
-		let ips = user.ips;
 		let prenominationId = toArtistId(target);
 		if (!prenominationId) return this.sendReply("" + target + " is not a valid artist name.");
 		if (room.chatRoomData.artistOfTheDay && toArtistId(room.chatRoomData.artistOfTheDay) === prenominationId) return this.sendReply("" + target + " is already the current Artist of the Day.");

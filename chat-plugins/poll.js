@@ -86,7 +86,7 @@ let Poll = (function () {
 		for (let i in this.room.users) {
 			let user = this.room.users[i];
 			if (this.voters.has(user.latestIp)) {
-				user.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber +  '|' + results);
+				user.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results);
 			}
 		}
 	};
@@ -106,9 +106,9 @@ let Poll = (function () {
 		for (let i in target) {
 			let thisUser = target[i];
 			if (this.voters.has(thisUser.latestIp)) {
-				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber +  '|' + results);
+				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + results);
 			} else {
-				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber +  '|' + votes);
+				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + votes);
 			}
 		}
 	};
@@ -116,7 +116,7 @@ let Poll = (function () {
 	Poll.prototype.end = function () {
 		let results = this.generateResults(true);
 
-		this.room.send('|uhtmlchange|poll' + this.room.pollNumber +  '|<div class="infobox">(The poll has ended &ndash; scroll down to see the results)</div>');
+		this.room.send('|uhtmlchange|poll' + this.room.pollNumber + '|<div class="infobox">(The poll has ended &ndash; scroll down to see the results)</div>');
 		this.room.send('|html|' + results);
 	};
 
@@ -161,7 +161,7 @@ exports.commands = {
 				return;
 			}
 
-			let parsed = parseInt(target);
+			let parsed = parseInt(target, 10);
 			if (isNaN(parsed)) return this.errorReply("To vote, specify the number of the option.");
 
 			if (!room.poll.options.has(parsed)) return this.sendReply("Option not in poll.");

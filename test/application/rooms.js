@@ -1,7 +1,6 @@
 'use strict';
 
 const assert = require('assert');
-let room;
 
 let userUtils = require('./../../dev-tools/users-utils.js');
 let User = userUtils.User;

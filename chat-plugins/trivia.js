@@ -825,7 +825,6 @@ let commands = {
 			if (!questionsLen) return this.sendReplyBox("No questions have been submitted yet.");
 
 			let categories = Object.keys(CATEGORIES);
-			let categoryTally = {};
 			let lastCategoryIdx = 0;
 			buffer += "<tr><th>Category</th><th>Question Count</th></tr>";
 			for (let i = 0; i <= 11; i++) {
