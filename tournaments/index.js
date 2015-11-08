@@ -773,8 +773,8 @@ Tournament = (function () {
 			var secondBuck;
 
 			if (this.room.isOfficial && tourSize >= 3) {
-				firstMoney = Math.round(tourSize/9);
-				secondMoney = Math.round(firstMoney/3);
+				firstMoney = Math.round(tourSize/3);
+				secondMoney = Math.round(firstMoney/2);
 				firstBuck = 'buck';
 				secondBuck = 'buck';
 			} 
