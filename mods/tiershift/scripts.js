@@ -34,7 +34,9 @@ exports.BattleScripts = {
 				for (let statName in this.stats) {
 					let stat = this.template.baseStats[statName];
 
-					let boost = (template.tier in boosts) ? boosts[template.tier] : 0;
+					let tier = template.tier;
+					if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+					let boost = (tier in boosts) ? boosts[tier] : 0;
 					if (this.set.ability in {'Drizzle': 1, 'Drought': 1, 'Shadow Tag': 1}) {
 						boost = 0;
 					} else if (this.set.moves.indexOf('chatter') >= 0) {
