@@ -388,6 +388,7 @@ exports.commands = {
 		let validParameter = function (cat, param, isNotSearch) {
 			for (let h = 0; h < searches.length; h++) {
 				let group = searches[h];
+				if (group[cat] === undefined) continue;
 				if (group[cat][param] === undefined) continue;
 				if (group[cat][param] === isNotSearch) {
 					self.sendReplyBox("A search cannot both include and exclude '" + param + "'.");
