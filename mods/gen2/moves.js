@@ -431,7 +431,6 @@ exports.BattleMovedex = {
 			let move = '';
 			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) return false;
-			move.isSleepTalk = true;
 			this.useMove(move, pokemon);
 		},
 		noSketch: true
