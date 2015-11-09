@@ -425,6 +425,13 @@ exports.BattleScripts = {
 		damage = this.clampIntRange(Math.floor(damage / 50), 1, 997);
 		damage += 2;
 
+		// Weather modifiers
+		if ((this.isWeather('raindance') && type === 'Water') || (this.isWeather('sunnyday') && type === 'Fire')) {
+			damage = Math.floor(damage * 1.5);
+		} else if ((this.isWeather('raindance') && (type === 'Fire' || move.id === 'solarbeam')) || (this.isWeather('sunnyday') && type === 'Water')) {
+			damage = Math.floor(damage / 2);
+		}
+
 		// STAB damage bonus, the "???" type never gets STAB
 		if (type !== '???' && pokemon.hasType(type)) {
 			damage += Math.floor(damage / 2);

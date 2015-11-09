@@ -437,11 +437,8 @@ exports.BattleMovedex = {
 	},
 	solarbeam: {
 		inherit: true,
-		onBasePower: function (basePower, pokemon, target) {
-			if (this.isWeather('raindance')) {
-				return this.chainModify(0.5);
-			}
-		}
+		// Rain weakening done directly in the damage formula
+		onBasePower: function () {}
 	},
 	spikes: {
 		inherit: true,
