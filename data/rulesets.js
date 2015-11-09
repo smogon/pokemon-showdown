@@ -386,7 +386,7 @@ exports.BattleFormats = {
 		onValidateSet: function (set) {
 			let problems = [];
 			if (set.moves) {
-				for (let i in set.moves) {
+				for (let i = 0; i < set.moves.length; i++) {
 					let move = this.getMove(set.moves[i]);
 					if (move.ohko) problems.push(move.name + ' is banned by OHKO Clause.');
 				}
