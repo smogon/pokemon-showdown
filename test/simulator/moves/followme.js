@@ -9,6 +9,8 @@ describe('Follow Me', function () {
 	});
 
 	it('should redirect single-target moves towards it if it is a valid target', function () {
+		this.timeout(5000);
+
 		battle = BattleEngine.Battle.construct('battle-followme', 'triplescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
