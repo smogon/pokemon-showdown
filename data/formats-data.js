@@ -5008,6 +5008,10 @@ exports.BattleFormatsData = {
 		],
 		tier: "NU"
 	},
+	vivillonpokeball: {
+		randomBattleMoves: ["sleeppowder","quiverdance","hurricane","bugbuzz","substitute"],
+		tier: "NU"
+	},
 	litleo: {
 		randomBattleMoves: ["hypervoice","fireblast","willowisp","bulldoze","yawn"],
 		tier: "LC"
