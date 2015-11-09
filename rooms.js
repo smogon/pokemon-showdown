@@ -544,7 +544,7 @@ let GlobalRoom = (function () {
 		let self = this;
 
 		// Get the user's rating before actually starting to search.
-		Ladders.get(formatid).getRating(user.userid).then(function (rating) {
+		Ladders(formatid).getRating(user.userid).then(function (rating) {
 			newSearch.rating = rating;
 			newSearch.userid = user.userid;
 			self.addSearch(newSearch, user, formatid);
@@ -940,7 +940,7 @@ let BattleRoom = (function () {
 					this.sendUser(winner, '|askreg|' + winner.userid);
 				}
 				// update rankings
-				Ladders.get(rated.format).updateRating(p1name, p2name, p1score, this);
+				Ladders(rated.format).updateRating(p1name, p2name, p1score, this);
 			}
 		} else if (Config.logchallenges) {
 			// Log challenges if the challenge logging config is enabled.

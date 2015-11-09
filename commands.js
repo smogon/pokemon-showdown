@@ -2550,7 +2550,7 @@ exports.commands = {
 			));
 		} else if (cmd === 'laddertop') {
 			if (!trustable) return false;
-			Ladders.get(target).getTop().then(function (result) {
+			Ladders(target).getTop().then(function (result) {
 				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
 			});
 		} else {
