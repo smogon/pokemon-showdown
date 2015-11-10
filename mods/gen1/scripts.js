@@ -1209,7 +1209,6 @@ exports.BattleScripts = {
 					if (moveid === template.essentialMove) continue;
 					let move = this.getMove(moveid);
 					let rejected = false;
-					if (hasMove[moveid]) rejected = true;
 					if (!template.essentialMove || moveid !== template.essentialMove) {
 						switch (moveid) {
 						// bad after setup
