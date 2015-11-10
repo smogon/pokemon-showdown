@@ -1568,6 +1568,7 @@ exports.commands = {
 	hidetext: function (target, room, user) {
 		if (!target) return this.parse('/help hidetext');
 
+		this.splitTarget(target);
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
 		if (!targetUser) return this.errorReply("User '" + name + "' does not exist.");
