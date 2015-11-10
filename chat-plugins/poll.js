@@ -5,7 +5,7 @@
 
 'use strict';
 
-let permission = 'announce';
+const permission = 'announce';
 
 let Poll = (function () {
 	function Poll(room, question, options) {
@@ -16,7 +16,8 @@ let Poll = (function () {
 		}
 		this.room = room;
 		this.question = question;
-		this.voters = new Set();
+		this.voters = {};
+		this.voterIps = {};
 		this.totalVotes = 0;
 		this.timeout = null;
 		this.timeoutMins = 0;
@@ -28,12 +29,15 @@ let Poll = (function () {
 	}
 
 	Poll.prototype.vote = function (user, option) {
-		if (this.voters.has(user.latestIp)) {
+		let ip = user.latestIp;
+		let userid = user.userid;
+
+		if (userid in this.voters || ip in this.voterIps) {
 			return user.sendTo(this.room, "You have already voted for this poll.");
-		} else {
-			this.voters.add(user.latestIp);
 		}
 
+		this.voters[userid] = option;
+		this.voterIps[ip] = option;
 		this.options.get(option).votes++;
 		this.totalVotes++;
 
@@ -41,10 +45,14 @@ let Poll = (function () {
 	};
 
 	Poll.prototype.blankvote = function (user, option) {
-		if (this.voters.has(user.latestIp)) {
+		let ip = user.latestIp;
+		let userid = user.userid;
+
+		if (userid in this.voters || ip in this.voterIps) {
 			return user.sendTo(this.room, "You're already looking at the results.");
 		} else {
-			this.voters.add(user.latestIp);
+			this.voters[userid] = 0;
+			this.voterIps[ip] = 0;
 		}
 
 		this.update();
@@ -60,7 +68,7 @@ let Poll = (function () {
 		return output;
 	};
 
-	Poll.prototype.generateResults = function (ended) {
+	Poll.prototype.generateResults = function (ended, option) {
 		let icon = '<span style="border:1px solid #' + (ended ? '777;color:#555' : '6A6;color:#484') + ';border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> ' + (ended ? "Poll ended" : "Poll") + '</span>';
 		let output = '<div class="infobox"><p style="margin: 2px 0 5px 0">' + icon + ' <strong style="font-size:11pt">' + Tools.escapeHTML(this.question) + '</strong></p>';
 		let iter = this.options.entries();
@@ -70,7 +78,7 @@ let Poll = (function () {
 		let colors = ['#79A', '#8A8', '#88B'];
 		while (!i.done) {
 			let percentage = Math.round((i.value[1].votes * 100) / (this.totalVotes || 1));
-			output += '<div style="margin-top: 3px">' + i.value[0] + '. <strong>' + Tools.escapeHTML(i.value[1].name) + '</strong> <small>(' + i.value[1].votes + ' vote' + (i.value[1].votes === 1 ? '' : 's') + ')</small><br /><span style="font-size:7pt;background:' + colors[c % 3] + ';padding-right:' + (percentage * 3) + 'px"></span><small>&nbsp;' + percentage + '%</small></div>';
+			output += '<div style="margin-top: 3px">' + i.value[0] + '. <strong>' + (i.value[0] === option ? '<em>' : '') + Tools.escapeHTML(i.value[1].name) + (i.value[0] === option ? '</em>' : '') + '</strong> <small>(' + i.value[1].votes + ' vote' + (i.value[1].votes === 1 ? '' : 's') + ')</small><br /><span style="font-size:7pt;background:' + colors[c % 3] + ';padding-right:' + (percentage * 3) + 'px"></span><small>&nbsp;' + percentage + '%</small></div>';
 			i = iter.next();
 			c++;
 		}
@@ -80,20 +88,31 @@ let Poll = (function () {
 	};
 
 	Poll.prototype.update = function () {
-		let results = this.generateResults();
+		let results = [];
+
+		for (let i = 0; i <= this.options.size; i++) {
+			results.push(this.generateResults(false, i));
+		}
 
 		// Update the poll results for everyone that has voted
 		for (let i in this.room.users) {
 			let user = this.room.users[i];
-			if (this.voters.has(user.latestIp)) {
-				user.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results);
+			if (user.userid in this.voters) {
+				user.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results[this.voters[user.userid]]);
+			} else if (user.latestIp in this.voterIps) {
+				user.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results[this.voterIps[user.latestIp]]);
 			}
 		}
 	};
 
 	Poll.prototype.display = function (user, broadcast) {
 		let votes = this.generateVotes();
-		let results = this.generateResults();
+
+		let results = [];
+
+		for (let i = 0; i <= this.options.size; i++) {
+			results.push(this.generateResults(false, i));
+		}
 
 		let target = {};
 
@@ -105,8 +124,10 @@ let Poll = (function () {
 
 		for (let i in target) {
 			let thisUser = target[i];
-			if (this.voters.has(thisUser.latestIp)) {
-				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + results);
+			if (thisUser.userid in this.voters) {
+				thisUser.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results[this.voters[thisUser.userid]]);
+			} else if (thisUser.latestIp in this.voterIps) {
+				thisUser.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results[this.voterIps[thisUser.latestIp]]);
 			} else {
 				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + votes);
 			}
