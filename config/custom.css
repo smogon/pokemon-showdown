@@ -22,6 +22,11 @@ body {
 .header .logo {
     opacity: 0;
   }
+  
+.header .logo {
+    background:url("http://r76.cooltext.com/rendered/cooltext147679896904434.png");
+    float:left;
+}
 
 .header{
     background:#FFCC66;
