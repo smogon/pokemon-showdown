@@ -24,11 +24,10 @@ body {
     margin: 8px 0px 0px -148px;
     padding-right: 200px;
     padding-bottom: 5px;
-    background: url("http://r52.cooltext.com/rendered/cooltext147773269203387.png") repeat-x 0% 0% transparent;
   }
 
 .header{
-    background:#FFCC66;
+    background:#FFCC66 url("http://r52.cooltext.com/rendered/cooltext147773269203387.png") no-repeat;
 }
 
 .nightclub {
