@@ -1451,9 +1451,10 @@ exports.BattleScripts = {
 				// Status:
 				case 'raindance':
 					if ((hasMove['rest'] && hasMove['sleeptalk']) || counter.Physical + counter.Special < 2) rejected = true;
+					if (!hasType['Water'] && !hasMove['thunder']) rejected = true;
 					break;
 				case 'sunnyday':
-					if (!hasAbility['Chlorophyll'] && !hasAbility['Flower Gift'] && !hasAbility['Forecast'] && !hasMove['solarbeam']) rejected = true;
+					if (!hasAbility['Chlorophyll'] && !hasAbility['Flower Gift'] && !hasMove['solarbeam']) rejected = true;
 					if ((hasMove['rest'] && hasMove['sleeptalk']) || counter.Physical + counter.Special < 2) rejected = true;
 					break;
 				case 'stunspore': case 'thunderwave':
