@@ -308,7 +308,7 @@ Tournament = (function () {
 		let data = this.generator.getBracketData();
 		if (data.type === 'tree') {
 			if (!data.rootNode) {
-				data.users = usersToNames(this.generator.getUsers()).sort();
+				data.users = usersToNames(this.generator.getUsers().sort());
 				return data;
 			}
 			let queue = [data.rootNode];
