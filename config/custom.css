@@ -21,11 +21,13 @@ body {
 
 .header .logo {
     float: left;
-    background: url("http://r52.cooltext.com/rendered/cooltext147773269203387.png") repeat-x scroll 0% 0% transparent;
-  }
+    margin: 8px 0px 0px -148px;
+    padding-right: 151px;
+    padding-bottom: 0px;
+    background: url("") repeat-x scroll 0% 0% transparent;
 
 .header{
-    background:#FFCC66;
+    background:#FFCC66 url("http://r52.cooltext.com/rendered/cooltext147773269203387.png") no-repeat left;
 }
 
 .nightclub {
