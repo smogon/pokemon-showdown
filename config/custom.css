@@ -20,13 +20,12 @@ body {
   }
 
 .header .logo {
-    opacity: 0;
+    float: left;
+    margin: 8px 0px 0px -148px;
+    padding-right: 151px;
+    padding-bottom: 0px;
+    background: url("http://r75.cooltext.com/rendered/cooltext147772729188259.png") repeat-x scroll 0% 0% transparent;
   }
-  
-.header .logo {
-    background:url("http://r76.cooltext.com/rendered/cooltext147679896904434.png");
-    float:left;
-}
 
 .header{
     background:#FFCC66;
