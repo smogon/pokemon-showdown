@@ -4045,7 +4045,7 @@ exports.BattleFormatsData = {
 		tier: "LC"
 	},
 	watchog: {
-		randomBattleMoves: ["swordsdance","batonpass","substitute","hypnosis","return","superfang"],
+		randomBattleMoves: ["hypnosis","substitute","batonpass","superfang","swordsdance","return","knockoff"],
 		randomDoubleBattleMoves: ["swordsdance","knockoff","substitute","hypnosis","return","superfang","protect"],
 		tier: "PU"
 	},
