@@ -3104,9 +3104,6 @@ Battle = (function () {
 			return;
 		}
 
-		this.p2.emitRequest({side: this.p2.getData()});
-		this.p1.emitRequest({side: this.p1.getData()});
-
 		if (this.started) {
 			this.makeRequest();
 			this.isActive = true;
