@@ -1931,7 +1931,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	mamoswine: {
-		randomBattleMoves: ["iceshard","earthquake","endeavor","iciclecrash","stealthrock","superpower","knockoff"],
+		randomBattleMoves: ["iceshard","earthquake","iciclecrash","stealthrock","superpower","knockoff"],
 		randomDoubleBattleMoves: ["iceshard","earthquake","rockslide","iciclecrash","protect","superpower","knockoff"],
 		eventPokemon: [
 			{"generation":5,"level":34,"gender":"M","isHidden":true,"moves":["hail","icefang","takedown","doublehit"]},
