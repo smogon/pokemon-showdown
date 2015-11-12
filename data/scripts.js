@@ -645,17 +645,19 @@ exports.BattleScripts = {
 		list.pop();
 		return element;
 	},
+	checkBattleForme: function (template) {
+		// If the Pokémon has a Mega or Primal alt forme, that's its preferred battle forme.
+		// No randomization, no choice. We are just checking its existence.
+		// Returns a Pokémon template for further details.
+		if (!template.otherFormes) return null;
+		let firstForme = this.getTemplate(template.otherFormes[0]);
+		if (firstForme.isMega || firstForme.isPrimal) return firstForme;
+		return null;
+	},
 	hasMegaEvo: function (template) {
-		if (template.otherFormes) {
-			let forme = this.getTemplate(template.otherFormes[0]);
-			if (forme.requiredItem) {
-				let item = this.getItem(forme.requiredItem);
-				if (item.megaStone) return true;
-			} else if (forme.requiredMove && forme.isMega) {
-				return true;
-			}
-		}
-		return false;
+		if (!template.otherFormes) return false;
+		let firstForme = this.getTemplate(template.otherFormes[0]);
+		return !!firstForme.isMega;
 	},
 	getTeam: function (side, team) {
 		let format = side.battle.getFormat();
@@ -704,9 +706,7 @@ exports.BattleScripts = {
 			let item = items[this.random(items.length)];
 
 			// Make sure forme is legal
-			if ((template.requiredItem && item !== template.requiredItem) || template.num === 351 ||
-					template.num === 421 || template.num === 555 || template.num === 648 || template.num === 681 ||
-					template.species.indexOf('-Mega') >= 0 || template.species.indexOf('-Primal') >= 0) {
+			if (template.battleOnly || template.requiredItem && item !== template.requiredItem) {
 				template = this.getTemplate(template.baseSpecies);
 				poke = template.name;
 			}
@@ -1071,26 +1071,13 @@ exports.BattleScripts = {
 
 		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};
 
-		// Castform-Sunny and Castform-Rainy can be chosen
-		if (template.num === 351) {
-			name = 'Castform';
+		if (template.battleOnly) {
+			// Only change the species. The template has custom moves, and may have different typing and requirements.
+			name = template.baseSpecies;
 		}
-		// Cherrim-Sunshine can be chosen
-		if (template.num === 421) {
-			name = 'Cherrim';
-		}
-		// Meloetta-Pirouette can be chosen
-		if (template.num === 648) {
-			name = 'Meloetta';
-		}
-
-		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!teamDetails.megaCount && this.hasMegaEvo(template)) {
-			// If there's more than one mega evolution, randomly pick one
-			template = this.getTemplate(template.otherFormes[this.random(template.otherFormes.length)]);
-		}
-		if (template.otherFormes && this.getTemplate(template.otherFormes[0]).isPrimal && this.random(2)) {
-			template = this.getTemplate(template.otherFormes[0]);
+		let battleForme = this.checkBattleForme(template);
+		if (battleForme && (battleForme.isMega ? !teamDetails.megaCount : this.random(2))) {
+			template = this.getTemplate(template.otherFormes.length >= 2 ? template.otherFormes[this.random(template.otherFormes.length)] : template.otherFormes[0]);
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
@@ -2352,26 +2339,13 @@ exports.BattleScripts = {
 			require('../crashlogger.js')(fakeErr, 'The doubles randbat set generator');
 		}
 
-		// Castform-Sunny and Castform-Rainy can be chosen
-		if (template.num === 351) {
-			name = 'Castform';
+		if (template.battleOnly) {
+			// Only change the species. The template has custom moves, and may have different typing and requirements.
+			name = template.baseSpecies;
 		}
-		// Cherrim-Sunshine can be chosen
-		if (template.num === 421) {
-			name = 'Cherrim';
-		}
-		// Meloetta-P can be chosen
-		if (template.num === 648) {
-			name = 'Meloetta';
-		}
-
-		// Decide if the Pokemon can mega evolve early, so viable moves for the mega can be generated
-		if (!noMega && this.hasMegaEvo(template)) {
-			// If there's more than one mega evolution, randomly pick one
-			template = this.getTemplate(template.otherFormes[this.random(template.otherFormes.length)]);
-		}
-		if (template.otherFormes && this.getTemplate(template.otherFormes[0]).isPrimal && this.random(2)) {
-			template = this.getTemplate(template.otherFormes[0]);
+		let battleForme = this.checkBattleForme(template);
+		if (battleForme && (battleForme.isMega ? !noMega : this.random(2))) {
+			template = this.getTemplate(template.otherFormes.length >= 2 ? template.otherFormes[this.random(template.otherFormes.length)] : template.otherFormes[0]);
 		}
 
 		let movePool = (template.randomDoubleBattleMoves || template.randomBattleMoves);
