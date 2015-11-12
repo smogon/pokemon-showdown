@@ -882,9 +882,9 @@ away: 'afk',
 		Rooms.global.writeChatRoomData();
 	},
 	
-	roomstarbucks: function (target, room, user) {
+	roomnaughtystep: function (target, room, user) {
 		if (!room.chatRoomData) {
-			return this.sendReply("/roomstarbucks - decafe");
+			return this.sendReply("/roomnaughtystep - bleh");
 		}
 		target = this.splitTarget(target, true);
 		var targetUser = this.targetUser;
@@ -897,10 +897,10 @@ away: 'afk',
 
 		var name = targetUser.name;
 
-		room.auth[targetUser.userid] = '\u2606';
-		this.addModCommand("" + name + " was evolved in to Room Coffee by " + user.name + ".");
+		room.auth[targetUser.userid] = '\uDC4E';
+		this.addModCommand("" + name + " was put on the naughty step by " + user.name + ".");
 		room.onUpdateIdentity(targetUser);
-		room.chatRoomData.starbucks = room.starbucks;
+		room.chatRoomData.voice = room.naughtystep;
 		Rooms.global.writeChatRoomData();
 	},
 	
@@ -1020,6 +1020,7 @@ roomstaff: 'roomauth',
                 if (room.mother) buffer.push('Room Mother:\n' + room.mother);
                 if (room.founder) buffer.push('Room Founder:\n' + room.founder);
                 if (room.bae) buffer.push('Room Bae:\n' + room.bae);
+                if (room.naughtystep) buffer.push('Naughty Step:\n' + room.naughtystep);
                 Object.keys(rankLists).sort(function (a, b) {
                         return (Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank;
                 }).forEach(function (r) {
