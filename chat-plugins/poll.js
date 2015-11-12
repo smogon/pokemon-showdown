@@ -125,9 +125,9 @@ let Poll = (function () {
 		for (let i in target) {
 			let thisUser = target[i];
 			if (thisUser.userid in this.voters) {
-				thisUser.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results[this.voters[thisUser.userid]]);
+				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + results[this.voters[thisUser.userid]]);
 			} else if (thisUser.latestIp in this.voterIps) {
-				thisUser.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results[this.voterIps[thisUser.latestIp]]);
+				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + results[this.voterIps[thisUser.latestIp]]);
 			} else {
 				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + votes);
 			}
