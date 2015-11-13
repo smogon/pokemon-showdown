@@ -1331,6 +1331,9 @@ exports.BattleScripts = {
 					if (counter.setupType && (hasMove['drainpunch'] || hasMove['focusblast'])) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
+				case 'blazekick':
+					if (hasMove['flamethrower'] && counter.setupType !== 'Physical') rejected = true;
+					break;
 				case 'fierydance': case 'firefang': case 'flamethrower':
 					if ((hasMove['fireblast'] && counter.setupType !== 'Physical') || hasMove['overheat']) rejected = true;
 					break;
@@ -1405,7 +1408,7 @@ exports.BattleScripts = {
 					if (hasMove['sludgebomb']) rejected = true;
 					break;
 				case 'poisonjab':
-					if (hasMove['gunkshot']) rejected = true;
+					if (hasMove['gunkshot'] || (hasMove['sludgewave'] && counter.setupType !== 'Physical')) rejected = true;
 					break;
 				case 'psychic':
 					if (hasMove['psyshock'] || hasMove['storedpower']) rejected = true;
