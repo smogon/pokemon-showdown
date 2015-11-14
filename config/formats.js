@@ -508,6 +508,7 @@ exports.Formats = [
 			let pokemonWithAbility = this.format.abilityMap[abilityId];
 			if (!pokemonWithAbility) return ["" + set.ability + " is an invalid ability."];
 			let isBaseAbility = Object.values(template.abilities).map(toId).indexOf(abilityId) >= 0;
+			if (!isBaseAbility && abilityId in this.format.customBans.inheritedAbilities) return ["" + set.ability + " is banned from being passed down."];
 
 			// Items must be fully validated here since we may pass a different item to the base set validator.
 			let item = this.tools.getItem(set.item);
@@ -533,7 +534,7 @@ exports.Formats = [
 				if (donorTemplate.species !== set.species && toId(donorTemplate.species) in this.format.customBans.donor) {
 					problems = ["" + donorTemplate.species + " is banned from passing abilities down."];
 					continue;
-				} else if (donorTemplate.species !== set.species && !isBaseAbility && abilityId in this.format.customBans.inheritedAbilities) {
+				} else if (donorTemplate.species !== set.species && abilityId in this.format.customBans.inheritedAbilities) {
 					problems = ["The ability " + this.tools.getAbility(abilityId).name + " is banned from being passed down."];
 					continue;
 				}
