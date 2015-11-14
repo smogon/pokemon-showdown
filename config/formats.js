@@ -446,7 +446,7 @@ exports.Formats = [
 				for (let key in pokemon.abilities) {
 					let abilityId = toId(pokemon.abilities[key]);
 					if (abilityMap[abilityId]) {
-						abilityMap[abilityId].push(speciesid);
+						abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](speciesid);
 					} else {
 						abilityMap[abilityId] = [speciesid];
 					}
