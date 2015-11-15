@@ -1040,7 +1040,7 @@ exports.commands = {
 		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + muteDuration.duration() + ". " + target);
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + muteDuration.duration() + "." + (target ? " (" + target + ")" : ""));
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
-				for (let k in targetUser.prevNames) {
+		for (let k in targetUser.prevNames) {
 			this.add('|unlink|' + targetUser.prevNames[k]);
 		}
 		if (Object.keys(targetUser.prevNames).length === 0) this.add('|unlink|' + this.getLastIdOf(targetUser));
