@@ -2087,7 +2087,8 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["fireblast","icebeam","stoneedge","crunch"],"pokeball":"cherishball"},
 			{"generation":5,"level":55,"gender":"M","isHidden":true,"moves":["payback","crunch","earthquake","seismictoss"]},
 			{"generation":6,"level":50,"isHidden":false,"moves":["stoneedge","crunch","earthquake","icepunch"],"pokeball":"cherishball"},
-			{"generation":6,"level":50,"nature":"Jolly","isHidden":false,"moves":["rockslide","earthquake","crunch","stoneedge"],"pokeball":"cherishball"}
+			{"generation":6,"level":50,"nature":"Jolly","isHidden":false,"moves":["rockslide","earthquake","crunch","stoneedge"],"pokeball":"cherishball"},
+			{"generation":6,"level":55,"shiny":true,"nature":"Adamant","isHidden":false,"moves":["crunch","rockslide","lowkick","protect"],"pokeball":"cherishball"}
 		],
 		tier: "OU"
 	},
@@ -5325,6 +5326,9 @@ exports.BattleFormatsData = {
 	zygarde: {
 		randomBattleMoves: ["dragondance","earthquake","outrage","extremespeed","stoneedge"],
 		randomDoubleBattleMoves: ["dragondance","landswrath","extremespeed","rockslide","coil","stoneedge","glare","protect"],
+		eventPokemon: [
+			{"generation":6,"level":100,"moves":["landswrath","extremespeed","glare","outrage"],"pokeball":"cherishball"}
+		],
 		unobtainableShiny: true,
 		tier: "BL"
 	},
