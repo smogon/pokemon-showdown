@@ -1351,7 +1351,7 @@ User = (function () {
 			if (Config.groupsranking.indexOf(userGroup) < Config.groupsranking.indexOf(room.modjoin !== true ? room.modjoin : room.modchat)) {
 				if (!this.named) {
 					return null;
-				} else {
+				} else if (!this.can('bypassall')) {
 					connection.sendTo(roomid, "|noinit|nonexistent|The room '" + roomid + "' does not exist.");
 					return false;
 				}
