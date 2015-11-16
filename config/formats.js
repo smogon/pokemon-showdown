@@ -853,8 +853,18 @@ exports.Formats = [
 	},
 	{
 		name: "Netflix & Chill",
-		section: "Other Metagames",
-		
+		section: 'Other Metagames',
+
+		ruleset: ['Team Preview 1v1'],
+		],
+		validateTeam: function (team, format) {
+			var template = this.getTemplate(team.species);
+			var problems = [];
+			if (team.length > 1) problems.push('You may only bring one Pokémon.');
+			if (team[0].level && team[0].level > 100) problems.push((team[0].name || team[0].species) + ' is higher than level 100.');
+			if (team[0].level && team[0].level < 100) problems.push((team[0].name || team[0].species) + ' is lower than level 100.');
+			return problems;
+		},
 		validateSet: function (set, format) {
 			var template = this.getTemplate(set.species);
 			var problems = [];
@@ -863,11 +873,9 @@ exports.Formats = [
 				baseStats += template.baseStats[i];
 			}
 			if (baseStats > 600) problems.push('You are limited to Pokémon with a BST of 600 or lower by BST Clause.');
-			set.moves = ['pound', 'harden', 'flash', 'lovely kiss', 'explosion'];
+			set.moves = ['pound', 'flash', 'lovely kiss', 'harden', 'explosion'];
 			return problems;
 		},
-
-		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Pokemon', 'Standard']
 	},
 	{
 		name: "Metronome",
