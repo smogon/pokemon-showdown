@@ -855,13 +855,53 @@ exports.Formats = [
 		name: "Netflix & Chill",
 		section: "Other Metagames",
 		
-		onValidateSet: function(set) {
-			var template = this.getTemplate(set.species || set.name);
-			if (template.moves !== 'Pound') return [set.species + " does not want to Netflix & Chill."];
+		validateSet: function (set, format) {
+			var template = this.getTemplate(set.species);
+			var problems = [];
+			var baseStats = 0;
+			for (var i in template.baseStats) {
+				baseStats += template.baseStats[i];
+			}
+			if (baseStats > 600) problems.push('You are limited to Pokémon with a BST of 600 or lower by BST Clause.');
+			set.moves = ['pound', 'harden', 'flash', 'lovely kiss', 'explosion'];
+			return problems;
 		},
 
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Pokemon', 'Standard']
 	},
+	{
+		name: "Metronome",
+		section: 'Other Metagames',
+
+		ruleset: ['Team Preview 1v1'],
+		banlist: ['Huge Power', 'Pure Power', 'Sturdy', 'Sand Stream', 'Snow Warning', 'Poison Heal', 'Wonder Guard', 'Harvest', 'Flame Body',
+			'Cursed Body', 'Pressure', 'Poison Point', 'Poison Touch', 'Magic Bounce', 'Magic Guard', 'Iron Barbs', 'Rough Skin', 'Fur Coat',
+			'Sitrus Berry', 'Leftovers', 'Rocky Helmet', 'Berry Juice', 'Black Sludge', 'Focus Sash', 'Big Root', 'Oran Berry', 'Figy Berry',
+			'Mago Berry', 'Wiki Berry', 'Mago Berry', 'Aguav Berry', 'Iapapa Berry', 'Enigma Berry', 'Soul Dew', 'BrightPowder', 'Thick Club',
+			'Lucky Punch', 'Stick', 'Shell Bell', 'Moody', 'Cheek Pouch', 'Parental Bond', 'Imposter', 'Effect Spore', 'Static', 'Aftermath',
+			'Assault Vest','Shell Bell', 'Lax Incense', 'Oran Berry', 'Aerodactylite', 'Aggronite', 'Ampharosite', 'Blastiosite', 'Blazikenite',
+			'Charizardite X', 'Charizardite Y', 'Garchompite', 'Gardevoirite', 'Gyaradosite', 'Latiasite', 'Latiosite', 'Lucarionite',
+			'Tyranitarite', 'Venusaurite'
+		],
+		validateTeam: function (team, format) {
+			var template = this.getTemplate(team.species);
+			var problems = [];
+			if (team.length > 1) problems.push('You may only bring one Pokémon.');
+			if (team[0].level && team[0].level > 100) problems.push((team[0].name || team[0].species) + ' is higher than level 100.');
+			if (team[0].level && team[0].level < 100) problems.push((team[0].name || team[0].species) + ' is lower than level 100.');
+			return problems;
+		},
+		validateSet: function (set, format) {
+			var template = this.getTemplate(set.species);
+			var problems = [];
+			var baseStats = 0;
+			for (var i in template.baseStats) {
+				baseStats += template.baseStats[i];
+			}
+			if (baseStats > 600) problems.push('You are limited to Pokémon with a BST of 600 or lower by BST Clause.');
+			set.moves = ['metronome'];
+			return problems;
+		},
 
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
