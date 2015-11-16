@@ -859,8 +859,6 @@ exports.Formats = [
 			var template = this.getTemplate(set.species || set.name);
 			set.moves = ['pound'];
 		}
-
-		ruleset: ['Team Preview']
 	},
 	{
 		name: "Metronome",
