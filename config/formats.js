@@ -856,7 +856,7 @@ exports.Formats = [
 		section: 'Other Metagames',
 
 		ruleset: ['Team Preview 1v1'],
-		],
+
 		validateTeam: function (team, format) {
 			var template = this.getTemplate(team.species);
 			var problems = [];
