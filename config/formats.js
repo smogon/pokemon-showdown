@@ -855,9 +855,11 @@ exports.Formats = [
 		name: "Netflix & Chill",
 		section: "Other Metagames",
 		
+		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
+		
 		onValidateSet: function(set) {
 			var template = this.getTemplate(set.species || set.name);
-			set.moves = ['pound'];
+			set.moves = ['Pound'];
 		}
 	},
 	{
