@@ -951,7 +951,10 @@ exports.BattleAbilities = {
 	"gooey": {
 		shortDesc: "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage.",
 		onAfterDamage: function (damage, target, source, effect) {
-			if (effect && effect.flags['contact']) this.boost({spe: -1}, source, target);
+			if (effect && effect.flags['contact']) {
+				this.add('-ability', target, 'Gooey');
+				this.boost({spe: -1}, source, target);
+			}
 		},
 		id: "gooey",
 		name: "Gooey",
