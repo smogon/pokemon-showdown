@@ -857,14 +857,6 @@ exports.Formats = [
 
 		ruleset: ['Team Preview 1v1'],
 
-		validateTeam: function (team, format) {
-			var template = this.getTemplate(team.species);
-			var problems = [];
-			if (team.length > 1) problems.push('You may only bring one Pokémon.');
-			if (team[0].level && team[0].level > 100) problems.push((team[0].name || team[0].species) + ' is higher than level 100.');
-			if (team[0].level && team[0].level < 100) problems.push((team[0].name || team[0].species) + ' is lower than level 100.');
-			return problems;
-		},
 		validateSet: function (set, format) {
 			var template = this.getTemplate(set.species);
 			var problems = [];
