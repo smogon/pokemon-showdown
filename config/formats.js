@@ -902,6 +902,7 @@ exports.Formats = [
 			set.moves = ['metronome'];
 			return problems;
 		},
+	},
 
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
