@@ -168,7 +168,8 @@ exports.Formats = [
 			battle: 3
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: []
+		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
+		requirePentagon: true
 	},
 	{
 		name: "Battle Spot Special 12",
@@ -285,7 +286,8 @@ exports.Formats = [
 		requirePentagon: true
 	},
 	{
-		name: "Battle Spot Doubles",
+		name: "Battle Spot Special 13",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3555571/\">Battle Spot Special Season 13</a>"],
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
@@ -295,29 +297,14 @@ exports.Formats = [
 			battle: 4
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: []
-	},
-	{
-		name: "Scrappy Skirmish",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3552712/\">Scrappy Skirmish</a>"],
-		section: "ORAS Doubles",
-
-		gameType: 'doubles',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4
-		},
-		ruleset: ['VGC 2015'],
-		banlist: ['Venusaur', 'Charizard', 'Pikachu', 'Pikachu-Cosplay', 'Pikachu-Rock-Star', 'Pikachu-Belle', 'Pikachu-Pop-Star',
-			'Pikachu-PhD', 'Pikachu-Libre', 'Gengar', 'Kangaskhan', 'Jolteon', 'Lanturn', 'Ampharos',
-			'Suicune', 'Tyranitar', 'Ludicolo', 'Gardevoir', 'Mawile', 'Manectric', 'Salamence',
-			'Luxray', 'Garchomp', 'Electivire', 'Rotom', 'Rotom-Heat', 'Rotom-Wash', 'Rotom-Frost',
-			'Rotom-Fan', 'Rotom-Mow', 'Heatran', 'Cresselia', 'Emolga', 'Amoonguss', 'Galvantula',
-			'Eelektross', 'Stunfisk', 'Bisharp', 'Hydreigon', 'Terrakion', 'Thundurus', 'Thundurus-Therian',
-			'Landorus', 'Landorus-Therian', 'Greninja', 'Talonflame', 'Aegislash', 'Heliolisk', 'Sylveon'
-		],
-		requirePentagon: true
+		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
+		requirePentagon: true,
+		onValidateSet: function (set) {
+			if (set.item) {
+				var item = this.getItem(set.item);
+				if (item.megaStone) return ["Mega Stones are not permitted."];
+			}
+		}
 	},
 	{
 		name: "Doubles Hackmons Cup",
