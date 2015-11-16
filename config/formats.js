@@ -873,7 +873,7 @@ exports.Formats = [
 				baseStats += template.baseStats[i];
 			}
 			if (baseStats > 600) problems.push('You are limited to Pokémon with a BST of 600 or lower by BST Clause.');
-			set.moves = ['pound', 'flash', 'lovely kiss', 'harden', 'explosion'];
+			set.moves = ['pound', 'harden'];
 			return problems;
 		},
 	},
