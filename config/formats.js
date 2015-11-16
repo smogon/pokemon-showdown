@@ -853,9 +853,14 @@ exports.Formats = [
 	},
 	{
 		name: "Netflix & Chill",
-		section: 'Other Metagames',
+		section: "Other Metagames",
+		
+		onValidateSet: function(set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (template.moves !== 'pound') return [set.species + " does not want to pound."];
+		},
 
-		ruleset: ['Team Preview', 'pound', 'harden', 'explosion', 'flash'],
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Pokemon', 'Standard']
 	},
 	{
 		name: "Metronome",
