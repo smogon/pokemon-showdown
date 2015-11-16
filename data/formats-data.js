@@ -4225,7 +4225,7 @@ exports.BattleFormatsData = {
 	throh: {
 		randomBattleMoves: ["bulkup","circlethrow","icepunch","stormthrow","rest","sleeptalk","knockoff"],
 		randomDoubleBattleMoves: ["helpinghand","circlethrow","icepunch","stormthrow","wideguard","knockoff","protect"],
-		tier: "BL4"
+		tier: "PU"
 	},
 	sawk: {
 		randomBattleMoves: ["closecombat","earthquake","icepunch","poisonjab","bulkup","knockoff"],

@@ -107,7 +107,7 @@ exports.Formats = [
 		banlist: ['RU', 'BL3']
 	},
 	{
-		name: "PU",
+		name: "PU (suspect test)",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554725/\">np: PU Stage 4</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528743/\">PU Viability Ranking</a>"
