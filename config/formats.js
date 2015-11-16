@@ -172,19 +172,6 @@ exports.Formats = [
 		requirePentagon: true
 	},
 	{
-		name: "Battle Spot Special 12",
-		section: "ORAS Singles",
-
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [3, 6],
-			battle: 3
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
-		requirePentagon: true
-	},
-	{
 		name: "Custom Game",
 		section: "ORAS Singles",
 
