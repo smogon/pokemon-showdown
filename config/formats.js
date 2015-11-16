@@ -855,19 +855,7 @@ exports.Formats = [
 		name: "Netflix & Chill",
 		section: 'Other Metagames',
 
-		ruleset: ['Team Preview 1v1'],
-
-		validateSet: function (set, format) {
-			var template = this.getTemplate(set.species);
-			var problems = [];
-			var baseStats = 0;
-			for (var i in template.baseStats) {
-				baseStats += template.baseStats[i];
-			}
-			if (baseStats > 600) problems.push('You are limited to Pokémon with a BST of 600 or lower by BST Clause.');
-			set.moves = ['pound', 'harden'];
-			return problems;
-		},
+		ruleset: ['Team Preview', 'pound', 'harden', 'explosion', 'flash'],
 	},
 	{
 		name: "Metronome",
