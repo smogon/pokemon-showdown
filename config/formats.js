@@ -857,8 +857,8 @@ exports.Formats = [
 		
 		onValidateSet: function(set) {
 			var template = this.getTemplate(set.species || set.name);
-			if (set.moves = ['metronome'] return [set.species + " does not want to pound."];
-		},
+			set.moves = ['pound'];
+		}
 
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Pokemon', 'Standard']
 	},
