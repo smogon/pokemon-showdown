@@ -3689,7 +3689,7 @@ exports.BattleFormatsData = {
 	abomasnow: {
 		randomBattleMoves: ["woodhammer","iceshard","blizzard","gigadrain","leechseed","substitute","focuspunch","earthquake"],
 		randomDoubleBattleMoves: ["blizzard","iceshard","gigadrain","protect","focusblast","woodhammer","earthquake"],
-		tier: "(RU)"
+		tier: "RU"
 	},
 	abomasnowmega: {
 		randomBattleMoves: ["blizzard","gigadrain","woodhammer","earthquake","iceshard","hiddenpowerfire"],
