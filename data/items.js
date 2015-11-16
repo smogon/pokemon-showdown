@@ -4,6 +4,7 @@ exports.BattleItems = {
 	"abomasite": {
 		id: "abomasite",
 		name: "Abomasite",
+		isViable: "Conditional",
 		spritenum: 575,
 		megaStone: "Abomasnow-Mega",
 		megaEvolves: "Abomasnow",
@@ -18,6 +19,7 @@ exports.BattleItems = {
 	"absolite": {
 		id: "absolite",
 		name: "Absolite",
+		isViable: "Conditional",
 		spritenum: 576,
 		megaStone: "Absol-Mega",
 		megaEvolves: "Absol",
@@ -48,6 +50,7 @@ exports.BattleItems = {
 	"adamantorb": {
 		id: "adamantorb",
 		name: "Adamant Orb",
+		isViable: "Conditional",
 		spritenum: 4,
 		fling: {
 			basePower: 60
@@ -65,6 +68,7 @@ exports.BattleItems = {
 	"aerodactylite": {
 		id: "aerodactylite",
 		name: "Aerodactylite",
+		isViable: "Conditional",
 		spritenum: 577,
 		megaStone: "Aerodactyl-Mega",
 		megaEvolves: "Aerodactyl",
@@ -79,6 +83,7 @@ exports.BattleItems = {
 	"aggronite": {
 		id: "aggronite",
 		name: "Aggronite",
+		isViable: "Conditional",
 		spritenum: 578,
 		megaStone: "Aggron-Mega",
 		megaEvolves: "Aggron",
@@ -120,6 +125,7 @@ exports.BattleItems = {
 	"airballoon": {
 		id: "airballoon",
 		name: "Air Balloon",
+		isViable: "Conditional",
 		spritenum: 6,
 		fling: {
 			basePower: 10
@@ -155,6 +161,7 @@ exports.BattleItems = {
 	"alakazite": {
 		id: "alakazite",
 		name: "Alakazite",
+		isViable: "Conditional",
 		spritenum: 579,
 		megaStone: "Alakazam-Mega",
 		megaEvolves: "Alakazam",
@@ -169,6 +176,7 @@ exports.BattleItems = {
 	"altarianite": {
 		id: "altarianite",
 		name: "Altarianite",
+		isViable: "Conditional",
 		spritenum: 615,
 		megaStone: "Altaria-Mega",
 		megaEvolves: "Altaria",
@@ -252,6 +260,7 @@ exports.BattleItems = {
 	"assaultvest": {
 		id: "assaultvest",
 		name: "Assault Vest",
+		isViable: "Conditional",
 		spritenum: 581,
 		fling: {
 			basePower: 80
@@ -275,6 +284,7 @@ exports.BattleItems = {
 	"audinite": {
 		id: "audinite",
 		name: "Audinite",
+		isViable: "Conditional",
 		spritenum: 617,
 		megaStone: "Audino-Mega",
 		megaEvolves: "Audino",
@@ -289,6 +299,7 @@ exports.BattleItems = {
 	"babiriberry": {
 		id: "babiriberry",
 		name: "Babiri Berry",
+		isViable: "Conditional",
 		spritenum: 17,
 		isBerry: true,
 		naturalGift: {
@@ -311,6 +322,7 @@ exports.BattleItems = {
 	"banettite": {
 		id: "banettite",
 		name: "Banettite",
+		isViable: "Conditional",
 		spritenum: 582,
 		megaStone: "Banette-Mega",
 		megaEvolves: "Banette",
@@ -325,6 +337,7 @@ exports.BattleItems = {
 	"beedrillite": {
 		id: "beedrillite",
 		name: "Beedrillite",
+		isViable: "Conditional",
 		spritenum: 628,
 		megaStone: "Beedrill-Mega",
 		megaEvolves: "Beedrill",
@@ -417,6 +430,7 @@ exports.BattleItems = {
 	"blacksludge": {
 		id: "blacksludge",
 		name: "Black Sludge",
+		isViable: "Conditional",
 		spritenum: 34,
 		fling: {
 			basePower: 30
@@ -454,6 +468,7 @@ exports.BattleItems = {
 	"blastoisinite": {
 		id: "blastoisinite",
 		name: "Blastoisinite",
+		isViable: "Conditional",
 		spritenum: 583,
 		megaStone: "Blastoise-Mega",
 		megaEvolves: "Blastoise",
@@ -468,6 +483,7 @@ exports.BattleItems = {
 	"blazikenite": {
 		id: "blazikenite",
 		name: "Blazikenite",
+		isViable: "Conditional",
 		spritenum: 584,
 		megaStone: "Blaziken-Mega",
 		megaEvolves: "Blaziken",
@@ -482,6 +498,7 @@ exports.BattleItems = {
 	"blueorb": {
 		id: "blueorb",
 		name: "Blue Orb",
+		isViable: "Conditional",
 		spritenum: 41,
 		onSwitchInPriority: -6,
 		onSwitchIn: function (pokemon) {
@@ -571,6 +588,7 @@ exports.BattleItems = {
 	"cameruptite": {
 		id: "cameruptite",
 		name: "Cameruptite",
+		isViable: "Conditional",
 		spritenum: 625,
 		megaStone: "Camerupt-Mega",
 		megaEvolves: "Camerupt",
@@ -618,6 +636,7 @@ exports.BattleItems = {
 	"charizarditex": {
 		id: "charizarditex",
 		name: "Charizardite X",
+		isViable: "Conditional",
 		spritenum: 585,
 		megaStone: "Charizard-Mega-X",
 		megaEvolves: "Charizard",
@@ -632,6 +651,7 @@ exports.BattleItems = {
 	"charizarditey": {
 		id: "charizarditey",
 		name: "Charizardite Y",
+		isViable: "Conditional",
 		spritenum: 586,
 		megaStone: "Charizard-Mega-Y",
 		megaEvolves: "Charizard",
@@ -646,6 +666,7 @@ exports.BattleItems = {
 	"chartiberry": {
 		id: "chartiberry",
 		name: "Charti Berry",
+		isViable: "Conditional",
 		spritenum: 62,
 		isBerry: true,
 		naturalGift: {
@@ -699,6 +720,7 @@ exports.BattleItems = {
 	"chestoberry": {
 		id: "chestoberry",
 		name: "Chesto Berry",
+		isViable: true,
 		spritenum: 65,
 		isBerry: true,
 		naturalGift: {
@@ -722,6 +744,7 @@ exports.BattleItems = {
 	"chilanberry": {
 		id: "chilanberry",
 		name: "Chilan Berry",
+		isViable: "Conditional",
 		spritenum: 66,
 		isBerry: true,
 		naturalGift: {
@@ -760,6 +783,7 @@ exports.BattleItems = {
 	"choiceband": {
 		id: "choiceband",
 		name: "Choice Band",
+		isViable: true,
 		spritenum: 68,
 		fling: {
 			basePower: 10
@@ -785,6 +809,7 @@ exports.BattleItems = {
 	"choicescarf": {
 		id: "choicescarf",
 		name: "Choice Scarf",
+		isViable: true,
 		spritenum: 69,
 		fling: {
 			basePower: 10
@@ -809,6 +834,7 @@ exports.BattleItems = {
 	"choicespecs": {
 		id: "choicespecs",
 		name: "Choice Specs",
+		isViable: true,
 		spritenum: 70,
 		fling: {
 			basePower: 10
@@ -834,6 +860,7 @@ exports.BattleItems = {
 	"chopleberry": {
 		id: "chopleberry",
 		name: "Chople Berry",
+		isViable: "Conditional",
 		spritenum: 71,
 		isBerry: true,
 		naturalGift: {
@@ -867,6 +894,7 @@ exports.BattleItems = {
 	"cobaberry": {
 		id: "cobaberry",
 		name: "Coba Berry",
+		isViable: "Conditional",
 		spritenum: 76,
 		isBerry: true,
 		naturalGift: {
@@ -889,6 +917,7 @@ exports.BattleItems = {
 	"colburberry": {
 		id: "colburberry",
 		name: "Colbur Berry",
+		isViable: "Conditional",
 		spritenum: 78,
 		isBerry: true,
 		naturalGift: {
@@ -935,6 +964,7 @@ exports.BattleItems = {
 	"custapberry": {
 		id: "custapberry",
 		name: "Custap Berry",
+		isViable: "Conditional",
 		spritenum: 86,
 		isBerry: true,
 		naturalGift: {
@@ -957,6 +987,7 @@ exports.BattleItems = {
 	"damprock": {
 		id: "damprock",
 		name: "Damp Rock",
+		isViable: "Conditional",
 		spritenum: 88,
 		fling: {
 			basePower: 60
@@ -1004,6 +1035,7 @@ exports.BattleItems = {
 	"deepseatooth": {
 		id: "deepseatooth",
 		name: "DeepSeaTooth",
+		isViable: "Conditional",
 		spritenum: 94,
 		fling: {
 			basePower: 90
@@ -1038,6 +1070,7 @@ exports.BattleItems = {
 	"diancite": {
 		id: "diancite",
 		name: "Diancite",
+		isViable: "Conditional",
 		spritenum: 624,
 		megaStone: "Diancie-Mega",
 		megaEvolves: "Diancie",
@@ -1087,6 +1120,7 @@ exports.BattleItems = {
 	"dracoplate": {
 		id: "dracoplate",
 		name: "Draco Plate",
+		isViable: "Conditional",
 		spritenum: 105,
 		onPlate: 'Dragon',
 		onBasePowerPriority: 6,
@@ -1145,6 +1179,7 @@ exports.BattleItems = {
 	"dreadplate": {
 		id: "dreadplate",
 		name: "Dread Plate",
+		isViable: "Conditional",
 		spritenum: 110,
 		onPlate: 'Dark',
 		onBasePowerPriority: 6,
@@ -1196,6 +1231,7 @@ exports.BattleItems = {
 	"earthplate": {
 		id: "earthplate",
 		name: "Earth Plate",
+		isViable: "Conditional",
 		spritenum: 117,
 		onPlate: 'Ground',
 		onBasePowerPriority: 6,
@@ -1303,6 +1339,7 @@ exports.BattleItems = {
 	"eviolite": {
 		id: "eviolite",
 		name: "Eviolite",
+		isViable: "Conditional",
 		spritenum: 130,
 		fling: {
 			basePower: 40
@@ -1326,6 +1363,7 @@ exports.BattleItems = {
 	"expertbelt": {
 		id: "expertbelt",
 		name: "Expert Belt",
+		isViable: true,
 		spritenum: 132,
 		fling: {
 			basePower: 10
@@ -1434,6 +1472,7 @@ exports.BattleItems = {
 	"fistplate": {
 		id: "fistplate",
 		name: "Fist Plate",
+		isViable: "Conditional",
 		spritenum: 143,
 		onPlate: 'Fighting',
 		onBasePowerPriority: 6,
@@ -1473,6 +1512,7 @@ exports.BattleItems = {
 	"flameplate": {
 		id: "flameplate",
 		name: "Flame Plate",
+		isViable: "Conditional",
 		spritenum: 146,
 		onPlate: 'Fire',
 		onBasePowerPriority: 6,
@@ -1545,6 +1585,7 @@ exports.BattleItems = {
 	"focussash": {
 		id: "focussash",
 		name: "Focus Sash",
+		isViable: true,
 		spritenum: 151,
 		fling: {
 			basePower: 10
@@ -1587,6 +1628,7 @@ exports.BattleItems = {
 	"galladite": {
 		id: "galladite",
 		name: "Galladite",
+		isViable: "Conditional",
 		spritenum: 616,
 		megaStone: "Gallade-Mega",
 		megaEvolves: "Gallade",
@@ -1622,6 +1664,7 @@ exports.BattleItems = {
 	"garchompite": {
 		id: "garchompite",
 		name: "Garchompite",
+		isViable: "Conditional",
 		spritenum: 589,
 		megaStone: "Garchomp-Mega",
 		megaEvolves: "Garchomp",
@@ -1636,6 +1679,7 @@ exports.BattleItems = {
 	"gardevoirite": {
 		id: "gardevoirite",
 		name: "Gardevoirite",
+		isViable: "Conditional",
 		spritenum: 587,
 		megaStone: "Gardevoir-Mega",
 		megaEvolves: "Gardevoir",
@@ -1650,6 +1694,7 @@ exports.BattleItems = {
 	"gengarite": {
 		id: "gengarite",
 		name: "Gengarite",
+		isViable: "Conditional",
 		spritenum: 588,
 		megaStone: "Gengar-Mega",
 		megaEvolves: "Gengar",
@@ -1683,6 +1728,7 @@ exports.BattleItems = {
 	"glalitite": {
 		id: "glalitite",
 		name: "Glalitite",
+		isViable: "Conditional",
 		spritenum: 623,
 		megaStone: "Glalie-Mega",
 		megaEvolves: "Glalie",
@@ -1749,6 +1795,7 @@ exports.BattleItems = {
 	"griseousorb": {
 		id: "griseousorb",
 		name: "Griseous Orb",
+		isViable: "Conditional",
 		spritenum: 180,
 		fling: {
 			basePower: 60
@@ -1792,6 +1839,7 @@ exports.BattleItems = {
 	"gyaradosite": {
 		id: "gyaradosite",
 		name: "Gyaradosite",
+		isViable: "Conditional",
 		spritenum: 589,
 		megaStone: "Gyarados-Mega",
 		megaEvolves: "Gyarados",
@@ -1806,6 +1854,7 @@ exports.BattleItems = {
 	"habanberry": {
 		id: "habanberry",
 		name: "Haban Berry",
+		isViable: "Conditional",
 		spritenum: 185,
 		isBerry: true,
 		naturalGift: {
@@ -1853,6 +1902,7 @@ exports.BattleItems = {
 	"heatrock": {
 		id: "heatrock",
 		name: "Heat Rock",
+		isViable: "Conditional",
 		spritenum: 193,
 		fling: {
 			basePower: 60
@@ -1883,6 +1933,7 @@ exports.BattleItems = {
 	"heracronite": {
 		id: "heracronite",
 		name: "Heracronite",
+		isViable: "Conditional",
 		spritenum: 590,
 		megaStone: "Heracross-Mega",
 		megaEvolves: "Heracross",
@@ -1910,6 +1961,7 @@ exports.BattleItems = {
 	"houndoominite": {
 		id: "houndoominite",
 		name: "Houndoominite",
+		isViable: "Conditional",
 		spritenum: 591,
 		megaStone: "Houndoom-Mega",
 		megaEvolves: "Houndoom",
@@ -1970,6 +2022,7 @@ exports.BattleItems = {
 	"icicleplate": {
 		id: "icicleplate",
 		name: "Icicle Plate",
+		isViable: "Conditional",
 		spritenum: 220,
 		onPlate: 'Ice',
 		onBasePowerPriority: 6,
@@ -1992,6 +2045,7 @@ exports.BattleItems = {
 	"icyrock": {
 		id: "icyrock",
 		name: "Icy Rock",
+		isViable: "Conditional",
 		spritenum: 221,
 		fling: {
 			basePower: 40
@@ -2003,6 +2057,7 @@ exports.BattleItems = {
 	"insectplate": {
 		id: "insectplate",
 		name: "Insect Plate",
+		isViable: "Conditional",
 		spritenum: 223,
 		onPlate: 'Bug',
 		onBasePowerPriority: 6,
@@ -2046,6 +2101,7 @@ exports.BattleItems = {
 	"ironplate": {
 		id: "ironplate",
 		name: "Iron Plate",
+		isViable: "Conditional",
 		spritenum: 225,
 		onPlate: 'Steel',
 		onBasePowerPriority: 6,
@@ -2089,6 +2145,7 @@ exports.BattleItems = {
 	"kasibberry": {
 		id: "kasibberry",
 		name: "Kasib Berry",
+		isViable: "Conditional",
 		spritenum: 233,
 		isBerry: true,
 		naturalGift: {
@@ -2111,6 +2168,7 @@ exports.BattleItems = {
 	"kebiaberry": {
 		id: "kebiaberry",
 		name: "Kebia Berry",
+		isViable: "Conditional",
 		spritenum: 234,
 		isBerry: true,
 		naturalGift: {
@@ -2167,6 +2225,7 @@ exports.BattleItems = {
 	"kangaskhanite": {
 		id: "kangaskhanite",
 		name: "Kangaskhanite",
+		isViable: "Conditional",
 		spritenum: 592,
 		megaStone: "Kangaskhan-Mega",
 		megaEvolves: "Kangaskhan",
@@ -2243,6 +2302,7 @@ exports.BattleItems = {
 	"latiasite": {
 		id: "latiasite",
 		name: "Latiasite",
+		isViable: "Conditional",
 		spritenum: 629,
 		megaStone: "Latias-Mega",
 		megaEvolves: "Latias",
@@ -2287,6 +2347,7 @@ exports.BattleItems = {
 	"leftovers": {
 		id: "leftovers",
 		name: "Leftovers",
+		isViable: true,
 		spritenum: 242,
 		fling: {
 			basePower: 10
@@ -2363,6 +2424,7 @@ exports.BattleItems = {
 	"liechiberry": {
 		id: "liechiberry",
 		name: "Liechi Berry",
+		isViable: true,
 		spritenum: 248,
 		isBerry: true,
 		naturalGift: {
@@ -2384,6 +2446,7 @@ exports.BattleItems = {
 	"lifeorb": {
 		id: "lifeorb",
 		name: "Life Orb",
+		isViable: true,
 		spritenum: 249,
 		fling: {
 			basePower: 30
@@ -2403,6 +2466,7 @@ exports.BattleItems = {
 	"lightball": {
 		id: "lightball",
 		name: "Light Ball",
+		isViable: "Conditional",
 		spritenum: 251,
 		fling: {
 			basePower: 30,
@@ -2427,6 +2491,7 @@ exports.BattleItems = {
 	"lightclay": {
 		id: "lightclay",
 		name: "Light Clay",
+		isViable: "Conditional",
 		spritenum: 252,
 		fling: {
 			basePower: 30
@@ -2439,6 +2504,7 @@ exports.BattleItems = {
 	"lopunnite": {
 		id: "lopunnite",
 		name: "Lopunnite",
+		isViable: "Conditional",
 		spritenum: 626,
 		megaStone: "Lopunny-Mega",
 		megaEvolves: "Lopunny",
@@ -2461,6 +2527,7 @@ exports.BattleItems = {
 	"lucarionite": {
 		id: "lucarionite",
 		name: "Lucarionite",
+		isViable: "Conditional",
 		spritenum: 594,
 		megaStone: "Lucario-Mega",
 		megaEvolves: "Lucario",
@@ -2491,6 +2558,7 @@ exports.BattleItems = {
 	"lumberry": {
 		id: "lumberry",
 		name: "Lum Berry",
+		isViable: true,
 		spritenum: 262,
 		isBerry: true,
 		naturalGift: {
@@ -2537,6 +2605,7 @@ exports.BattleItems = {
 	"lustrousorb": {
 		id: "lustrousorb",
 		name: "Lustrous Orb",
+		isViable: "Conditional",
 		spritenum: 265,
 		fling: {
 			basePower: 60
@@ -2645,6 +2714,7 @@ exports.BattleItems = {
 	"manectite": {
 		id: "manectite",
 		name: "Manectite",
+		isViable: "Conditional",
 		spritenum: 596,
 		megaStone: "Manectric-Mega",
 		megaEvolves: "Manectric",
@@ -2688,6 +2758,7 @@ exports.BattleItems = {
 	"mawilite": {
 		id: "mawilite",
 		name: "Mawilite",
+		isViable: "Conditional",
 		spritenum: 598,
 		megaStone: "Mawile-Mega",
 		megaEvolves: "Mawile",
@@ -2702,6 +2773,7 @@ exports.BattleItems = {
 	"meadowplate": {
 		id: "meadowplate",
 		name: "Meadow Plate",
+		isViable: "Conditional",
 		spritenum: 282,
 		onPlate: 'Grass',
 		onBasePowerPriority: 6,
@@ -2724,6 +2796,7 @@ exports.BattleItems = {
 	"medichamite": {
 		id: "medichamite",
 		name: "Medichamite",
+		isViable: "Conditional",
 		spritenum: 599,
 		megaStone: "Medicham-Mega",
 		megaEvolves: "Medicham",
@@ -2738,6 +2811,7 @@ exports.BattleItems = {
 	"mentalherb": {
 		id: "mentalherb",
 		name: "Mental Herb",
+		isViable: "Conditional",
 		spritenum: 285,
 		fling: {
 			basePower: 10,
@@ -2778,6 +2852,7 @@ exports.BattleItems = {
 	"metagrossite": {
 		id: "metagrossite",
 		name: "Metagrossite",
+		isViable: "Conditional",
 		spritenum: 618,
 		megaStone: "Metagross-Mega",
 		megaEvolves: "Metagross",
@@ -2863,6 +2938,7 @@ exports.BattleItems = {
 	"mewtwonitex": {
 		id: "mewtwonitex",
 		name: "Mewtwonite X",
+		isViable: "Conditional",
 		spritenum: 600,
 		megaStone: "Mewtwo-Mega-X",
 		megaEvolves: "Mewtwo",
@@ -2877,6 +2953,7 @@ exports.BattleItems = {
 	"mewtwonitey": {
 		id: "mewtwonitey",
 		name: "Mewtwonite Y",
+		isViable: "Conditional",
 		spritenum: 601,
 		megaStone: "Mewtwo-Mega-Y",
 		megaEvolves: "Mewtwo",
@@ -2922,6 +2999,7 @@ exports.BattleItems = {
 	"mindplate": {
 		id: "mindplate",
 		name: "Mind Plate",
+		isViable: "Conditional",
 		spritenum: 291,
 		onPlate: 'Psychic',
 		onBasePowerPriority: 6,
@@ -3080,6 +3158,7 @@ exports.BattleItems = {
 	"occaberry": {
 		id: "occaberry",
 		name: "Occa Berry",
+		isViable: "Conditional",
 		spritenum: 311,
 		isBerry: true,
 		naturalGift: {
@@ -3175,6 +3254,7 @@ exports.BattleItems = {
 	"passhoberry": {
 		id: "passhoberry",
 		name: "Passho Berry",
+		isViable: "Conditional",
 		spritenum: 329,
 		isBerry: true,
 		naturalGift: {
@@ -3197,6 +3277,7 @@ exports.BattleItems = {
 	"payapaberry": {
 		id: "payapaberry",
 		name: "Payapa Berry",
+		isViable: "Conditional",
 		spritenum: 330,
 		isBerry: true,
 		naturalGift: {
@@ -3263,6 +3344,7 @@ exports.BattleItems = {
 	"petayaberry": {
 		id: "petayaberry",
 		name: "Petaya Berry",
+		isViable: true,
 		spritenum: 335,
 		isBerry: true,
 		naturalGift: {
@@ -3284,6 +3366,7 @@ exports.BattleItems = {
 	"pidgeotite": {
 		id: "pidgeotite",
 		name: "Pidgeotite",
+		isViable: "Conditional",
 		spritenum: 622,
 		megaStone: "Pidgeot-Mega",
 		megaEvolves: "Pidgeot",
@@ -3311,6 +3394,7 @@ exports.BattleItems = {
 	"pinsirite": {
 		id: "pinsirite",
 		name: "Pinsirite",
+		isViable: "Conditional",
 		spritenum: 602,
 		megaStone: "Pinsir-Mega",
 		megaEvolves: "Pinsir",
@@ -3325,6 +3409,7 @@ exports.BattleItems = {
 	"pixieplate": {
 		id: "pixieplate",
 		name: "Pixie Plate",
+		isViable: "Conditional",
 		spritenum: 610,
 		onPlate: 'Fairy',
 		onBasePowerPriority: 6,
@@ -3634,6 +3719,7 @@ exports.BattleItems = {
 	"redorb": {
 		id: "redorb",
 		name: "Red Orb",
+		isViable: "Conditional",
 		spritenum: 390,
 		onSwitchInPriority: -6,
 		onSwitchIn: function (pokemon) {
@@ -3667,6 +3753,7 @@ exports.BattleItems = {
 	"rindoberry": {
 		id: "rindoberry",
 		name: "Rindo Berry",
+		isViable: "Conditional",
 		spritenum: 409,
 		isBerry: true,
 		naturalGift: {
@@ -3739,6 +3826,7 @@ exports.BattleItems = {
 	"rockyhelmet": {
 		id: "rockyhelmet",
 		name: "Rocky Helmet",
+		isViable: true,
 		spritenum: 417,
 		fling: {
 			basePower: 60
@@ -3784,6 +3872,7 @@ exports.BattleItems = {
 	"roseliberry": {
 		id: "roseliberry",
 		name: "Roseli Berry",
+		isViable: "Conditional",
 		spritenum: 603,
 		isBerry: true,
 		naturalGift: {
@@ -3827,6 +3916,7 @@ exports.BattleItems = {
 	"sablenite": {
 		id: "sablenite",
 		name: "Sablenite",
+		isViable: "Conditional",
 		spritenum: 614,
 		megaStone: "Sableye-Mega",
 		megaEvolves: "Sableye",
@@ -3849,6 +3939,7 @@ exports.BattleItems = {
 	"safetygoggles": {
 		id: "safetygoggles",
 		name: "Safety Goggles",
+		isViable: "Conditional",
 		spritenum: 604,
 		fling: {
 			basePower: 80
@@ -3869,6 +3960,7 @@ exports.BattleItems = {
 	"salacberry": {
 		id: "salacberry",
 		name: "Salac Berry",
+		isViable: true,
 		spritenum: 426,
 		isBerry: true,
 		naturalGift: {
@@ -3890,6 +3982,7 @@ exports.BattleItems = {
 	"salamencite": {
 		id: "salamencite",
 		name: "Salamencite",
+		isViable: "Conditional",
 		spritenum: 627,
 		megaStone: "Salamence-Mega",
 		megaEvolves: "Salamence",
@@ -3904,6 +3997,7 @@ exports.BattleItems = {
 	"sceptilite": {
 		id: "sceptilite",
 		name: "Sceptilite",
+		isViable: "Conditional",
 		spritenum: 613,
 		megaStone: "Sceptile-Mega",
 		megaEvolves: "Sceptile",
@@ -3918,6 +4012,7 @@ exports.BattleItems = {
 	"scizorite": {
 		id: "scizorite",
 		name: "Scizorite",
+		isViable: "Conditional",
 		spritenum: 605,
 		megaStone: "Scizor-Mega",
 		megaEvolves: "Scizor",
@@ -3980,6 +4075,7 @@ exports.BattleItems = {
 	"sharpedonite": {
 		id: "sharpedonite",
 		name: "Sharpedonite",
+		isViable: "Conditional",
 		spritenum: 619,
 		megaStone: "Sharpedo-Mega",
 		megaEvolves: "Sharpedo",
@@ -3994,6 +4090,7 @@ exports.BattleItems = {
 	"shedshell": {
 		id: "shedshell",
 		name: "Shed Shell",
+		isViable: true,
 		spritenum: 437,
 		fling: {
 			basePower: 10
@@ -4042,6 +4139,7 @@ exports.BattleItems = {
 	"shucaberry": {
 		id: "shucaberry",
 		name: "Shuca Berry",
+		isViable: "Conditional",
 		spritenum: 443,
 		isBerry: true,
 		naturalGift: {
@@ -4098,6 +4196,7 @@ exports.BattleItems = {
 	"sitrusberry": {
 		id: "sitrusberry",
 		name: "Sitrus Berry",
+		isViable: true,
 		spritenum: 448,
 		isBerry: true,
 		naturalGift: {
@@ -4133,6 +4232,7 @@ exports.BattleItems = {
 	"skyplate": {
 		id: "skyplate",
 		name: "Sky Plate",
+		isViable: "Conditional",
 		spritenum: 450,
 		onPlate: 'Flying',
 		onBasePowerPriority: 6,
@@ -4155,6 +4255,7 @@ exports.BattleItems = {
 	"slowbronite": {
 		id: "slowbronite",
 		name: "Slowbronite",
+		isViable: "Conditional",
 		spritenum: 620,
 		megaStone: "Slowbro-Mega",
 		megaEvolves: "Slowbro",
@@ -4169,6 +4270,7 @@ exports.BattleItems = {
 	"smoothrock": {
 		id: "smoothrock",
 		name: "Smooth Rock",
+		isViable: "Conditional",
 		spritenum: 453,
 		fling: {
 			basePower: 10
@@ -4213,6 +4315,7 @@ exports.BattleItems = {
 	"souldew": {
 		id: "souldew",
 		name: "Soul Dew",
+		isViable: "Conditional",
 		spritenum: 459,
 		fling: {
 			basePower: 30
@@ -4266,6 +4369,7 @@ exports.BattleItems = {
 	"splashplate": {
 		id: "splashplate",
 		name: "Splash Plate",
+		isViable: "Conditional",
 		spritenum: 463,
 		onPlate: 'Water',
 		onBasePowerPriority: 6,
@@ -4288,6 +4392,7 @@ exports.BattleItems = {
 	"spookyplate": {
 		id: "spookyplate",
 		name: "Spooky Plate",
+		isViable: "Conditional",
 		spritenum: 464,
 		onPlate: 'Ghost',
 		onBasePowerPriority: 6,
@@ -4350,6 +4455,7 @@ exports.BattleItems = {
 	"steelixite": {
 		id: "steelixite",
 		name: "Steelixite",
+		isViable: "Conditional",
 		spritenum: 621,
 		megaStone: "Steelix-Mega",
 		megaEvolves: "Steelix",
@@ -4383,6 +4489,7 @@ exports.BattleItems = {
 	"stick": {
 		id: "stick",
 		name: "Stick",
+		isViable: "Conditional",
 		fling: {
 			basePower: 60
 		},
@@ -4422,6 +4529,7 @@ exports.BattleItems = {
 	"stoneplate": {
 		id: "stoneplate",
 		name: "Stone Plate",
+		isViable: "Conditional",
 		spritenum: 477,
 		onPlate: 'Rock',
 		onBasePowerPriority: 6,
@@ -4444,6 +4552,7 @@ exports.BattleItems = {
 	"swampertite": {
 		id: "swampertite",
 		name: "Swampertite",
+		isViable: "Conditional",
 		spritenum: 612,
 		megaStone: "Swampert-Mega",
 		megaEvolves: "Swampert",
@@ -4471,6 +4580,7 @@ exports.BattleItems = {
 	"tangaberry": {
 		id: "tangaberry",
 		name: "Tanga Berry",
+		isViable: "Conditional",
 		spritenum: 487,
 		isBerry: true,
 		naturalGift: {
@@ -4493,6 +4603,7 @@ exports.BattleItems = {
 	"thickclub": {
 		id: "thickclub",
 		name: "Thick Club",
+		isViable: "Conditional",
 		spritenum: 491,
 		fling: {
 			basePower: 90
@@ -4535,6 +4646,7 @@ exports.BattleItems = {
 	"toxicplate": {
 		id: "toxicplate",
 		name: "Toxic Plate",
+		isViable: "Conditional",
 		spritenum: 516,
 		onPlate: 'Poison',
 		onBasePowerPriority: 6,
@@ -4574,6 +4686,7 @@ exports.BattleItems = {
 	"tyranitarite": {
 		id: "tyranitarite",
 		name: "Tyranitarite",
+		isViable: "Conditional",
 		spritenum: 607,
 		megaStone: "Tyranitar-Mega",
 		megaEvolves: "Tyranitar",
@@ -4596,6 +4709,7 @@ exports.BattleItems = {
 	"venusaurite": {
 		id: "venusaurite",
 		name: "Venusaurite",
+		isViable: "Conditional",
 		spritenum: 608,
 		megaStone: "Venusaur-Mega",
 		megaEvolves: "Venusaur",
@@ -4610,6 +4724,7 @@ exports.BattleItems = {
 	"wacanberry": {
 		id: "wacanberry",
 		name: "Wacan Berry",
+		isViable: "Conditional",
 		spritenum: 526,
 		isBerry: true,
 		naturalGift: {
@@ -4681,6 +4796,7 @@ exports.BattleItems = {
 	"weaknesspolicy": {
 		id: "weaknesspolicy",
 		name: "Weakness Policy",
+		isViable: true,
 		spritenum: 609,
 		fling: {
 			basePower: 80
@@ -4710,6 +4826,7 @@ exports.BattleItems = {
 	"whiteherb": {
 		id: "whiteherb",
 		name: "White Herb",
+		isViable: "Conditional",
 		spritenum: 535,
 		fling: {
 			basePower: 10,
@@ -4808,6 +4925,7 @@ exports.BattleItems = {
 	"yacheberry": {
 		id: "yacheberry",
 		name: "Yache Berry",
+		isViable: "Conditional",
 		spritenum: 567,
 		isBerry: true,
 		naturalGift: {
@@ -4830,6 +4948,7 @@ exports.BattleItems = {
 	"zapplate": {
 		id: "zapplate",
 		name: "Zap Plate",
+		isViable: "Conditional",
 		spritenum: 572,
 		onPlate: 'Electric',
 		onBasePowerPriority: 6,
