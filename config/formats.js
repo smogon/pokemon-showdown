@@ -852,18 +852,6 @@ exports.Formats = [
 		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
 	{
-		name: "Netflix & Chill",
-		section: "Other Metagames",
-		
-		onValidateSet: function(set) {
-			var template = this.getTemplate(set.species || set.name);
-			if (template.color !== 'Yellow') return [set.species + " is not a yellow / gold Pokémon."];
-			if (set.shiny) return [set.species + " is not allowed to be shiny... This is called Gold Battle, duh."];
-		},
-
-		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Pokemon', 'Standard']
-	},
-	{
 		name: "Metronome",
 		section: 'Other Metagames',
 
