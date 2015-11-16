@@ -851,6 +851,17 @@ exports.Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
 	},
+	{
+		name: "Netflix & Chill",
+		section: "Other Metagames",
+		
+		onValidateSet: function(set) {
+			var template = this.getTemplate(set.species || set.name);
+			if (template.learn !== 'Pound', 'Harden') return [set.species + " does not want to Netflix & Chill."];
+		},
+
+		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Pokemon', 'Standard']
+	},
 
 	// BW2 Singles
 	///////////////////////////////////////////////////////////////////
