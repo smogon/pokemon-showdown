@@ -3225,6 +3225,7 @@ Battle = (function () {
 				this.debug('illusion cleared');
 				target.illusion = null;
 				this.add('replace', target, target.getDetails);
+				this.add('-end', target, 'Illusion');
 			}
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
