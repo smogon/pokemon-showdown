@@ -857,7 +857,7 @@ exports.Formats = [
 		
 		onValidateSet: function(set) {
 			var template = this.getTemplate(set.species || set.name);
-			if (template.learn !== 'Pound', 'Harden') return [set.species + " does not want to Netflix & Chill."];
+			if (template.moves !== 'Pound', 'Harden') return [set.species + " does not want to Netflix & Chill."];
 		},
 
 		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Pokemon', 'Standard']
