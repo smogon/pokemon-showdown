@@ -856,6 +856,7 @@ exports.Formats = [
 		section: "Other Metagames",
 		
 		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
+		],
 		
 		onValidateSet: function(set) {
 			var template = this.getTemplate(set.species || set.name);
