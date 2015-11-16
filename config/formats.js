@@ -860,7 +860,7 @@ exports.Formats = [
 			set.moves = ['pound'];
 		}
 
-		ruleset: ['Team Preview', 'Sleep Clause Mod', 'Pokemon', 'Standard']
+		ruleset: ['Team Preview']
 	},
 	{
 		name: "Metronome",
