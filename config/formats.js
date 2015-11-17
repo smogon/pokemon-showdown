@@ -356,7 +356,32 @@ exports.Formats = [
 			validate: [6, 6]
 		},
 		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
-		banlist: []
+		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
+		requirePentagon: true
+	},
+	{
+		name: "Festive Feud",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3556178/\">Festive Feud</a>"],
+		section: "ORAS Triples",
+
+		gameType: 'triples',
+		maxForcedLevel: 50,
+		teamLength: {
+			validate: [6, 6]
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Team Preview'],
+		banlist: ['Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force'],
+		requirePentagon: true,
+		onValidateTeam: function (team) {
+			var problems = [];
+			for (let i = 0; i < team.length; i++) {
+				var template = this.getTemplate(team[i].species);
+				if (template.color !== 'Red' && template.color !== 'Green' && template.color !== 'White') {
+					problems.push(template.species);
+				}
+			}
+			if (problems.length) return ["Only red, green and white Pok\u00E9mon are permitted.", "(You have " + problems.join(', ') + ")"];
+		}
 	},
 	{
 		name: "Triples Hackmons Cup",
