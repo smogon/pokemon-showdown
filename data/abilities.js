@@ -1242,7 +1242,7 @@ exports.BattleAbilities = {
 					activated = true;
 				}
 				if (foeactive[i].volatiles['substitute']) {
-					this.add('-activate', foeactive[i], 'Substitute', 'ability: Intimidate', '[of] ' + pokemon);
+					this.add('-immune', foeactive[i], '[msg]');
 				} else {
 					this.boost({atk: -1}, foeactive[i], pokemon);
 				}
