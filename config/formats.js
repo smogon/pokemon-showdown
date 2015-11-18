@@ -64,7 +64,7 @@ exports.Formats = [
 	{
 		name: "UU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3546077/\">np: UU Stage 4</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554801/\">np: UU Stage 5</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3541343/\">UU Viability Ranking</a>"
 		],
@@ -679,7 +679,7 @@ exports.Formats = [
 	{
 		name: "Tier Shift",
 		desc: [
-			"Pok&eacute;mon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, NU/Bl4 get +15, and PU or lower get +20.",
+			"Pok&eacute;mon below OU/BL get all their stats boosted. UU/BL2 get +5, RU/BL3 get +10, NU/BL4 get +15, and PU or lower get +20.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554765/\">Tier Shift</a>"
 		],
 		section: "Other Metagames",
