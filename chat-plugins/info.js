@@ -1112,6 +1112,7 @@ exports.commands = {
 		"If a Pok\u00e9mon is included as a parameter, moves will be searched from it's movepool.",
 		"The order of the parameters does not matter."],
 
+	isearch: 'itemsearch',
 	itemsearch: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help itemsearch');
 		if (!this.canBroadcast()) return;
