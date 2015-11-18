@@ -1069,6 +1069,8 @@ exports.BattleScripts = {
 
 			// Bias the tiers so you get less shitmons and only one of the two Ubers.
 			// If you have a shitmon, you're covered in OUs and Ubers if possible
+			if ((template.speciesid in handicapMons) && nuCount > 1) continue;
+
 			let tier = template.tier;
 			switch (tier) {
 			case 'LC':
