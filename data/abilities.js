@@ -1342,11 +1342,8 @@ exports.BattleAbilities = {
 	"levitate": {
 		desc: "This Pokemon is immune to Ground. Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity.",
 		shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it.",
-		onImmunity: function (type, pokemon) {
-			if (type === 'Ground') {
-				this.add('-immune', pokemon, '[msg]', '[from] ability: Levitate');
-				return null;
-			}
+		onImmunity: function (type) {
+			if (type === 'Ground') return false;
 		},
 		id: "levitate",
 		name: "Levitate",
