@@ -3258,7 +3258,7 @@ exports.BattleScripts = {
 	randomFactorySets: require('./factory-sets.json'),
 	randomFactorySet: function (template, slot, teamData, tier) {
 		let speciesId = toId(template.species);
-		let flags = this.randomFactorySets[tier][speciesId].flags;
+		// let flags = this.randomFactorySets[tier][speciesId].flags;
 		let setList = this.randomFactorySets[tier][speciesId].sets;
 		let effectivePool, priorityPool;
 
