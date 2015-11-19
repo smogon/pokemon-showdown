@@ -134,6 +134,9 @@ let Room = (function () {
 		}
 		this.bannedUsers[userid] = userid;
 		if (user.autoconfirmed) this.bannedUsers[user.autoconfirmed] = userid;
+		if (global.Tournaments && Tournaments.get(this.id)) {
+			Tournaments.get(this.id).removeBannedUser(user);
+		}
 		for (let ip in user.ips) {
 			this.bannedIps[ip] = userid;
 		}
