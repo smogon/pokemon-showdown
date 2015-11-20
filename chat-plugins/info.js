@@ -1161,13 +1161,11 @@ exports.commands = {
 			case 'super':
 				if (rawSearch[i + 1] === 'effective') {
 					newWord = 'supereffective';
-					rawSearch.splice(i + 1, 1);
 				}
 				break;
 			case 'special': newWord = 'sp'; break;
 			case 'spa':
 				newWord = 'sp';
-				rawSearch.splice(i, 0, 'atk');
 				break;
 			case 'atk':
 			case 'attack':
@@ -1179,7 +1177,6 @@ exports.commands = {
 				break;
 			case 'spd':
 				newWord = 'sp';
-				rawSearch.splice(i, 0, 'def');
 				break;
 			case 'def':
 			case 'defense':
@@ -1201,7 +1198,6 @@ exports.commands = {
 		}
 
 		if (searchedWords.length === 0) return this.sendReplyBox("No distinguishing words were used. Try a more specific search.");
-
 		if (searchedWords.indexOf('fling') >= 0) {
 			let basePower = 0;
 			let effect;
