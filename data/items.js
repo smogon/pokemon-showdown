@@ -125,7 +125,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onStart: function (target) {
-			if (!target.ignoringItem()) {
+			if (!target.ignoringItem() && !this.getPseudoWeather('gravity')) {
 				this.add('-item', target, 'Air Balloon');
 			}
 		},
