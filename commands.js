@@ -1279,6 +1279,7 @@ exports.commands = {
 		for (let userid in room.auth) {
 			if (room.auth[userid] === '+') {
 				delete room.auth[userid];
+				if (userid in room.users) room.users[userid].updateIdentity(room.id);
 				count++;
 			}
 		}
