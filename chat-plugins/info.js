@@ -233,14 +233,15 @@ exports.commands = {
 		let showDetails = (cmd === 'dt' || cmd === 'details');
 		if (newTargets && newTargets.length) {
 			for (let i = 0; i < newTargets.length; ++i) {
-				if (newTargets[i].id !== targetId && !Tools.data.Aliases[targetId] && !i) {
+				if (!newTargets[i].exactMatch && !i) {
 					buffer = "No Pok\u00e9mon, item, move, ability or nature named '" + target + "' was found. Showing the data of '" + newTargets[0].name + "' instead.\n";
 				}
 				if (newTargets[i].searchType === 'nature') {
-					buffer += "" + newTargets[i].name + " nature: ";
-					if (newTargets[i].plus) {
+					let nature = Tools.getNature(newTargets[i]);
+					buffer += "" + nature.name + " nature: ";
+					if (nature.plus) {
 						let statNames = {'atk': "Attack", 'def': "Defense", 'spa': "Special Attack", 'spd': "Special Defense", 'spe': "Speed"};
-						buffer += "+10% " + statNames[newTargets[i].plus] + ", -10% " + statNames[newTargets[i].minus] + ".";
+						buffer += "+10% " + statNames[nature.plus] + ", -10% " + statNames[nature.minus] + ".";
 					} else {
 						buffer += "No effect.";
 					}
