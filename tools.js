@@ -198,6 +198,17 @@ module.exports = (function () {
 				name = this.data.Aliases[id];
 				id = toId(name);
 			}
+			if (!this.data.Pokedex[id]) {
+				if (id.startsWith('mega') && this.data.Pokedex[id.slice(4) + 'mega']) {
+					id = id.slice(4) + 'mega';
+				} else if (id.startsWith('m') && this.data.Pokedex[id.slice(1) + 'mega'])  {
+					id = id.slice(1) + 'mega';
+				} else if (id.startsWith('primal') && this.data.Pokedex[id.slice(6) + 'primal']) {
+					id = id.slice(6) + 'primal';
+				} else if (id.startsWith('p') && this.data.Pokedex[id.slice(1) + 'primal']) {
+					id = id.slice(1) + 'primal';
+				}
+			}
 			template = {};
 			if (id && this.data.Pokedex[id]) {
 				template = this.data.Pokedex[id];
