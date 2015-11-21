@@ -629,7 +629,7 @@ module.exports = (function () {
 		return ('' + str).escapeHTML();
 	};
 
-	Tools.prototype.dataSearch = function (target, searchIn) {
+	Tools.prototype.dataSearch = function (target, searchIn, isInexact) {
 		if (!target) {
 			return false;
 		}
@@ -642,8 +642,11 @@ module.exports = (function () {
 		for (let i = 0; i < searchIn.length; i++) {
 			let res = this[searchFunctions[searchIn[i]]](target);
 			if (res.exists) {
-				res.searchType = searchTypes[searchIn[i]];
-				searchResults.push(res);
+				searchResults.push({
+					exactMatch: !isInexact,
+					searchType: searchTypes[searchIn[i]],
+					name: res.name
+				});
 			}
 		}
 		if (searchResults.length) {
@@ -693,7 +696,7 @@ module.exports = (function () {
 
 			// To make sure we aren't in an infinite loop...
 			if (cmpTarget !== newTarget.word) {
-				return this.dataSearch(newTarget.word);
+				return this.dataSearch(newTarget.word, null, true);
 			}
 		}
 
