@@ -197,17 +197,14 @@ exports.commands = {
 			if (target) {
 				if (!this.can(permission, null, room)) return false;
 				if (target === 'clear') {
-					if (room.poll.timeout) {
-						clearTimeout(room.poll.timeout);
-						room.poll.timeout = null;
-						room.poll.timeoutMins = 0;
-						return room.add("The timeout for the poll was cleared.");
-					} else {
-						return this.errorReply("No timer to clear.");
-					}
+					if (!room.poll.timeout) return this.errorReply("There is no timer to clear.");
+					clearTimeout(room.poll.timeout);
+					room.poll.timeout = null;
+					room.poll.timeoutMins = 0;
+					return this.add("The timeout for the poll was cleared.");
 				}
 				let timeout = parseFloat(target);
-				if (isNaN(timeout) || timeout <= 0) return this.errorReply("Invalid time given.");
+				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply("Invalid time given.");
 				if (room.poll.timeout) clearTimeout(room.poll.timeout);
 				room.poll.timeoutMins = timeout;
 				room.poll.timeout = setTimeout((function () {
