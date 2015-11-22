@@ -497,11 +497,13 @@ exports.commands = {
 			return this.errorReply("/officialroom - This room can't be made official");
 		}
 		if (target === 'off') {
+			if (!room.isOfficial) return this.errorReply("This chat room is already unofficial.");
 			delete room.isOfficial;
 			this.addModCommand("" + user.name + " made this chat room unofficial.");
 			delete room.chatRoomData.isOfficial;
 			Rooms.global.writeChatRoomData();
 		} else {
+			if (room.isOfficial) return this.errorReply("This chat room is already official.");
 			room.isOfficial = true;
 			this.addModCommand("" + user.name + " made this chat room official.");
 			room.chatRoomData.isOfficial = true;
