@@ -422,12 +422,12 @@ if (cluster.isMaster) {
 		socket.on('data', function (message) {
 			// drop empty messages (DDoS?)
 			if (!message) return;
+			// drop legacy JSON messages
+			if (typeof message !== 'string' || message.charAt(0) === '{') return;
 			// drop blank messages (DDoS?)
 			let pipeIndex = message.indexOf('|');
 			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
-			// drop legacy JSON messages
-			if (!message.charAt) throw new Error('message: ' + JSON.stringify(message));
-			if (message.charAt(0) === '{') return;
+
 			process.send('<' + socketid + '\n' + message);
 		});
 
