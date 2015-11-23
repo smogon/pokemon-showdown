@@ -156,6 +156,7 @@ exports.commands = {
 			let params = target.split(',');
 
 			if (!this.can(permission, null, room)) return false;
+			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
 			if (!params) return this.errorReply("No word entered.");
@@ -200,6 +201,7 @@ exports.commands = {
 		stop: 'end',
 		end: function (target, room, user) {
 			if (!this.can(permission, null, room)) return false;
+			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 			if (!room.game || room.game.gameType !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 
 			room.game.end();
