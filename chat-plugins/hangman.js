@@ -148,6 +148,7 @@ let Hangman = (function () {
 	};
 
 	Hangman.prototype.finish = function () {
+		this.room.add('|uhtmlchange|hangman' + this.room.gameNumber + '|<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>');
 		this.room.send('|html|' + this.generateWindow());
 		delete this.room.game;
 	};
