@@ -55,7 +55,7 @@ let Hangman = (function () {
 	};
 
 	Hangman.prototype.guessWord = function (word) {
-		if (this.word.toLowerCase().replace(/\s/g, '') === word.toLowerCase().replace(/\s/g, '')) {
+		if (this.word.toLowerCase().replace(/ /g, '') === word.toLowerCase().replace(/ /g, '')) {
 			for (let i = 0; i < this.word.length; i++) {
 				if (!(this.word[i] === ' ')) {
 					this.wordSoFar[i] = this.word[i];
@@ -164,8 +164,8 @@ exports.commands = {
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
 			if (!params) return this.errorReply("No word entered.");
-			let word = params[0].replace(/[^A-Za-z\s]/g, '');
-			if (word.replace(/\s/g, '').length < 1) return this.errorReply("Enter a valid word");
+			let word = params[0].replace(/[^A-Za-z ]/g, '');
+			if (word.replace(/ /g, '').length < 1) return this.errorReply("Enter a valid word");
 			if (word.length > 24) return this.errorReply("Word too long.");
 
 			let hint;
@@ -186,8 +186,8 @@ exports.commands = {
 
 			if (!target) return this.errorReply("No guess given.");
 
-			let parsed = target.replace(/[^A-Za-z\s]/g, '');
-			if (parsed.replace(/\s/g, '').length < 1) return this.errorReply("Guess too short.");
+			let parsed = target.replace(/[^A-Za-z ]/g, '');
+			if (parsed.replace(/ /g, '').length < 1) return this.errorReply("Guess too short.");
 			if (parsed.length > 24) return this.errorReply("Guess too long.");
 
 			if (room.game.guesses.indexOf(parsed) > -1) return this.errorReply("Your guess has already been guessed.");
