@@ -117,6 +117,11 @@ exports.BattleMovedex = {
 		basePower: 250,
 		noSketch: true
 	},
+	flail: {
+		inherit: true,
+		noDamageVariance: true,
+		willCrit: false
+	},
 	fly: {
 		inherit: true,
 		effect: {
@@ -378,6 +383,11 @@ exports.BattleMovedex = {
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
 		secondary: false
+	},
+	reversal: {
+		inherit: true,
+		noDamageVariance: true,
+		willCrit: false
 	},
 	roar: {
 		inherit: true,
