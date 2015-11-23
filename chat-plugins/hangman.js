@@ -43,6 +43,7 @@ let Hangman = (function () {
 			}
 
 			if (this.wordSoFar.indexOf('_') < 0) {
+				this.guesses.push(letter);
 				this.finish();
 				return;
 			}
@@ -61,6 +62,7 @@ let Hangman = (function () {
 					this.wordSoFar[i] = this.word[i];
 				}
 			}
+			this.guesses.push(word);
 			this.finish();
 		} else {
 			this.incorrectGuesses++;
