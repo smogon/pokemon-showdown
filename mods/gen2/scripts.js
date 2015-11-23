@@ -459,8 +459,8 @@ exports.BattleScripts = {
 			}
 		}
 
-		// Apply random factor is damage is greater than 1
-		if (damage > 1) {
+		// Apply random factor is damage is greater than 1, except for Flail and Reversal
+		if (!move.noDamageVariance && damage > 1) {
 			damage *= this.random(217, 256);
 			damage = Math.floor(damage / 255);
 		}
