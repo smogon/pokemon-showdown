@@ -165,7 +165,7 @@ exports.commands = {
 
 			if (!params) return this.errorReply("No word entered.");
 			let word = params[0].replace(/[^A-Za-z\s]/g, '');
-			if (word.length < 1) return this.errorReply("Enter a valid word");
+			if (word.replace(/\s/g, '').length < 1) return this.errorReply("Enter a valid word");
 			if (word.length > 24) return this.errorReply("Word too long.");
 
 			let hint;
@@ -187,6 +187,7 @@ exports.commands = {
 			if (!target) return this.errorReply("No guess given.");
 
 			let parsed = target.replace(/[^A-Za-z\s]/g, '');
+			if (parsed.replace(/\s/g, '').length < 1) return this.errorReply("Guess too short.");
 			if (parsed.length > 24) return this.errorReply("Guess too long.");
 
 			if (room.game.guesses.indexOf(parsed) > -1) return this.errorReply("Your guess has already been guessed.");
