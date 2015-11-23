@@ -174,6 +174,7 @@ exports.commands = {
 
 			return this.privateModCommand("(A game of hangman was started by " + user.name + ".)");
 		},
+		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # & ~"],
 
 		guess: function (target, room, user) {
 			if (!room.game || room.game.gameType !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
@@ -193,6 +194,8 @@ exports.commands = {
 				room.game.guessLetter(parsed);
 			}
 		},
+		guesshelp: ["/hangman guess [letter] - Makes a guess for the letter entered.",
+					"/hangman guess [word] - Same as a letter, but guesses an entire word."],
 
 		stop: 'end',
 		end: function (target, room, user) {
@@ -202,6 +205,7 @@ exports.commands = {
 			room.game.end();
 			return this.privateModCommand("(The game of hangman was ended by " + user.name + ".)");
 		},
+		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # & ~"],
 
 		'': function (target, room, user) {
 			if (!room.game || room.game.gameType !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
@@ -209,13 +213,19 @@ exports.commands = {
 			room.update();
 
 			room.game.display(user, this.broadcasting);
-		},
-		hangmanhelp: ["/hangman allows users to play the popular game hangman in PS rooms.",
-					"Accepts the following commands:",
-					"/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # & ~",
-					"/hangman guess [letter] - Makes a guess for the letter entered.",
-					"/hangman guess [word] - Same as a letter, but guesses an entire word.",
-					"/hangman - Displays the game.",
-					"/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # & ~"]
-	}
+		}
+	},
+
+	hangmanhelp: ["/hangman allows users to play the popular game hangman in PS rooms.",
+				"Accepts the following commands:",
+				"/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # & ~",
+				"/hangman guess [letter] - Makes a guess for the letter entered.",
+				"/hangman guess [word] - Same as a letter, but guesses an entire word.",
+				"/hangman - Displays the game.",
+				"/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # & ~"],
+
+	guess: function (target, room, user) {
+		return this.parse('/hangman guess ' + target);
+	},
+	guesshelp: ["/guess - Shortcut for /hangman guess."]
 };
