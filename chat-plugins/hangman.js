@@ -124,7 +124,11 @@ let Hangman = (function () {
 	};
 
 	Hangman.prototype.display = function (user, broadcast) {
-		this.room.add('|uhtml|hangman' + this.room.gameNumber + '|' + this.generateWindow());
+		if (broadcast) {
+			this.room.add('|uhtml|hangman' + this.room.gameNumber + '|' + this.generateWindow());
+		} else {
+			user.sendTo(this.room, '|uhtml|hangman' + this.room.gameNumber + '|' + this.generateWindow());
+		}
 	};
 
 	Hangman.prototype.update = function () {
