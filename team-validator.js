@@ -619,181 +619,193 @@ Validator = (function () {
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
 				if (types.indexOf(tools.getMove(move).type) >= 0) return false;
 			}
-			if (template.learnset) {
-				if (template.learnset[move] || template.learnset['sketch']) {
-					sometimesPossible = true;
-					let lset = template.learnset[move];
-					if (!lset || template.speciesid === 'smeargle') {
-						if (tools.getMove(move).noSketch) return true;
-						lset = template.learnset['sketch'];
-						sketch = true;
-					}
-					if (typeof lset === 'string') lset = [lset];
+			if (!template.learnset) {
+				if (template.baseSpecies !== template.species) {
+					// forme without its own learnset
+					template = tools.getTemplate(template.baseSpecies);
+					// warning: formes with their own learnset, like Wormadam, should NOT
+					// inherit from their base forme unless they're freely switchable
+					continue;
+				}
+				// should never happen
+				break;
+			}
 
-					for (let i = 0, len = lset.length; i < len; i++) {
-						let learned = lset[i];
-						if (noPastGen && learned.charAt(0) !== '6') continue;
-						if (noFutureGen && parseInt(learned.charAt(0), 10) > tools.gen) continue;
-						if (learned.charAt(0) !== '6' && isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
-							// check if the Pokemon's hidden ability was available
-							incompatibleHidden = true;
+			if (template.learnset[move] || template.learnset['sketch']) {
+				sometimesPossible = true;
+				let lset = template.learnset[move];
+				if (!lset || template.speciesid === 'smeargle') {
+					if (tools.getMove(move).noSketch) return true;
+					lset = template.learnset['sketch'];
+					sketch = true;
+				}
+				if (typeof lset === 'string') lset = [lset];
+
+				for (let i = 0, len = lset.length; i < len; i++) {
+					let learned = lset[i];
+					if (noPastGen && learned.charAt(0) !== '6') continue;
+					if (noFutureGen && parseInt(learned.charAt(0), 10) > tools.gen) continue;
+					if (learned.charAt(0) !== '6' && isHidden && !tools.mod('gen' + learned.charAt(0)).getTemplate(template.species).abilities['H']) {
+						// check if the Pokemon's hidden ability was available
+						incompatibleHidden = true;
+						continue;
+					}
+					if (!template.isNonstandard) {
+						// HMs can't be transferred
+						if (tools.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
+						if (tools.gen >= 5 && learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
+						// Defog and Whirlpool can't be transferred together
+						if (tools.gen >= 5 && move in {'defog':1, 'whirlpool':1} && learned.charAt(0) <= 4) blockedHM = true;
+					}
+					if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1}) {
+						// gen 4-6 level-up moves
+						if (level >= parseInt(learned.substr(2), 10)) {
+							// we're past the required level to learn it
+							return false;
+						}
+						if (!template.gender || template.gender === 'F') {
+							// available as egg move
+							learned = learned.charAt(0) + 'Eany';
+						} else {
+							// this move is unavailable, skip it
 							continue;
 						}
-						if (!template.isNonstandard) {
-							// HMs can't be transferred
-							if (tools.gen >= 4 && learned.charAt(0) <= 3 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'flash':1, 'rocksmash':1, 'waterfall':1, 'dive':1}) continue;
-							if (tools.gen >= 5 && learned.charAt(0) <= 4 && move in {'cut':1, 'fly':1, 'surf':1, 'strength':1, 'rocksmash':1, 'waterfall':1, 'rockclimb':1}) continue;
-							// Defog and Whirlpool can't be transferred together
-							if (tools.gen >= 5 && move in {'defog':1, 'whirlpool':1} && learned.charAt(0) <= 4) blockedHM = true;
+					}
+					if (learned.charAt(1) in {L:1, M:1, T:1}) {
+						if (learned.charAt(0) === '6') {
+							// current-gen TM or tutor moves:
+							//   always available
+							return false;
 						}
-						if (learned.substr(0, 2) in {'4L':1, '5L':1, '6L':1}) {
-							// gen 4-6 level-up moves
-							if (level >= parseInt(learned.substr(2), 10)) {
-								// we're past the required level to learn it
-								return false;
-							}
-							if (!template.gender || template.gender === 'F') {
-								// available as egg move
-								learned = learned.charAt(0) + 'Eany';
-							} else {
-								// this move is unavailable, skip it
-								continue;
-							}
+						// past-gen level-up, TM, or tutor moves:
+						//   available as long as the source gen was or was before this gen
+						limit1 = false;
+						sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
+						if (tools.gen === 2 && lsetData.hasGen2Move && parseInt(learned.charAt(0), 10) === 1) lsetData.blockedGen2Move = true;
+					} else if (learned.charAt(1) === 'E') {
+						// egg moves:
+						//   only if that was the source
+						if (learned.charAt(0) === '6') {
+							// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
+							learned = '6E' + (template.prevo ? template.id : '');
+							sources.push(learned);
+							continue;
 						}
-						if (learned.charAt(1) in {L:1, M:1, T:1}) {
-							if (learned.charAt(0) === '6') {
-								// current-gen TM or tutor moves:
-								//   always available
-								return false;
-							}
-							// past-gen level-up, TM, or tutor moves:
-							//   available as long as the source gen was or was before this gen
-							limit1 = false;
-							sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
-							if (tools.gen === 2 && lsetData.hasGen2Move && parseInt(learned.charAt(0), 10) === 1) lsetData.blockedGen2Move = true;
-						} else if (learned.charAt(1) in {E:1, S:1, D:1}) {
-							// egg, event, or DW moves:
-							//   only if that was the source
-							if (learned.charAt(1) === 'E') {
-								// it's an egg move, so we add each pokemon that can be bred with to its sources
-								if (learned.charAt(0) === '6') {
-									// gen 6 doesn't have egg move incompatibilities except for certain cases with baby Pokemon
-									learned = '6E' + (template.prevo ? template.id : '');
-									sources.push(learned);
-									continue;
-								}
-								let eggGroups = template.eggGroups;
-								if (!eggGroups) continue;
-								if (eggGroups[0] === 'Undiscovered') eggGroups = tools.getTemplate(template.evos[0]).eggGroups;
-								let atLeastOne = false;
-								let fromSelf = (learned.substr(1) === 'Eany');
-								learned = learned.substr(0, 2);
-								for (let templateid in tools.data.Pokedex) {
-									let dexEntry = tools.getTemplate(templateid);
-									if (
-										// CAP pokemon can't breed
-										!dexEntry.isNonstandard &&
-										// can't breed mons from future gens
-										dexEntry.gen <= parseInt(learned.charAt(0), 10) &&
-										// genderless pokemon can't pass egg moves
-										(dexEntry.gender !== 'N' || tools.gen <= 1 && dexEntry.gen <= 1)) {
-										if (
-											// chainbreeding
-											fromSelf ||
-											// otherwise parent must be able to learn the move
-											!alreadyChecked[dexEntry.speciesid] && dexEntry.learnset && (dexEntry.learnset[move] || dexEntry.learnset['sketch'])) {
-											if (dexEntry.eggGroups.intersect(eggGroups).length) {
-												if (tools.gen === 2 && dexEntry.gen <= 2 && lsetData.hasEggMove && lsetData.hasEggMove !== move) {
-													// If the mon already has an egg move by a father, other different father can't give it another egg move.
-													if (lsetData.eggParents.indexOf(dexEntry.species) >= 0) {
-														// We have to test here that the father of both moves doesn't get both by egg breeding
-														let learnsFrom = false;
-														let lsetToCheck = (dexEntry.learnset[lsetData.hasEggMove]) ? dexEntry.learnset[lsetData.hasEggMove] : dexEntry.learnset['sketch'];
-														if (!lsetToCheck || !lsetToCheck.length) continue;
-														for (let ltype = 0; ltype < lsetToCheck.length; ltype++) {
-															// Save first learning type. After that, only save it if we have egg and it's not egg.
-															learnsFrom = !learnsFrom || learnsFrom === 'E' ? lsetToCheck[ltype].charAt(1) : learnsFrom;
-														}
-														// If the previous egg move was learnt by the father through an egg as well:
-														if (learnsFrom === 'E') {
-															let secondLearnsFrom = false;
-															let lsetToCheck = (dexEntry.learnset[move]) ? dexEntry.learnset[move] : dexEntry.learnset['sketch'];
-															// Have here either the move learnset or sketch learnset for Smeargle.
-															if (lsetToCheck) {
-																for (let ltype = 0; ltype < lsetToCheck.length; ltype++) {
-																	// Save first learning type. After that, only save it if we have egg and it's not egg.
-																	secondLearnsFrom = !secondLearnsFrom || secondLearnsFrom === 'E' ? dexEntry.learnset[move][ltype].charAt(1) : secondLearnsFrom;
-																}
-																// Ok, both moves are learnt by father through an egg, therefor, it's impossible.
-																if (secondLearnsFrom === 'E') {
-																	lsetData.blockedGen2Move = true;
-																	continue;
-																}
-															}
-														}
-													} else {
-														lsetData.blockedGen2Move = true;
-														continue;
-													}
-												}
-												lsetData.hasEggMove = move;
-												lsetData.eggParents.push(dexEntry.species);
-												// Check if it has a move that needs to come from a prior gen to this egg move.
-												lsetData.hasGen2Move = lsetData.hasGen2Move || (tools.gen === 2 && tools.getMove(move).gen === 2);
-												lsetData.blockedGen2Move = lsetData.hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
-												// we can breed with it
-												atLeastOne = true;
-												sources.push(learned + dexEntry.id);
+						// it's a past gen; egg moves can only be inherited from the father
+						// we'll add each possible father separately to the source list
+						let eggGroups = template.eggGroups;
+						if (!eggGroups) continue;
+						if (eggGroups[0] === 'Undiscovered') eggGroups = tools.getTemplate(template.evos[0]).eggGroups;
+						let atLeastOne = false;
+						let fromSelf = (learned.substr(1) === 'Eany');
+						learned = learned.substr(0, 2);
+						// loop through pokemon for possible fathers to inherit the egg move from
+						for (let templateid in tools.data.Pokedex) {
+							let dexEntry = tools.getTemplate(templateid);
+							// CAP pokemon can't breed
+							if (dexEntry.isNonstandard) continue;
+							// can't breed mons from future gens
+							if (dexEntry.gen > parseInt(learned.charAt(0), 10)) continue;
+							// father must be male
+							if (dexEntry.gender === 'N' || dexEntry.gender === 'F') continue;
+							// unless it's supposed to be self-breedable, can't inherit from self, prevos, etc
+							if (!fromSelf && !alreadyChecked[dexEntry.speciesid]) continue;
+							// can't inherit from dex entries with no learnsets
+							if (dexEntry.learnset) continue;
+							// father must be able to learn the move
+							if (!fromSelf && !dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
+
+							// must be able to breed with father
+							if (!dexEntry.eggGroups.intersect(eggGroups).length) continue;
+
+							if (tools.gen === 2 && dexEntry.gen <= 2 && lsetData.hasEggMove && lsetData.hasEggMove !== move) {
+								// If the mon already has an egg move by a father, other different father can't give it another egg move.
+								if (lsetData.eggParents.indexOf(dexEntry.species) >= 0) {
+									// We have to test here that the father of both moves doesn't get both by egg breeding
+									let learnsFrom = false;
+									let lsetToCheck = (dexEntry.learnset[lsetData.hasEggMove]) ? dexEntry.learnset[lsetData.hasEggMove] : dexEntry.learnset['sketch'];
+									if (!lsetToCheck || !lsetToCheck.length) continue;
+									for (let ltype = 0; ltype < lsetToCheck.length; ltype++) {
+										// Save first learning type. After that, only save it if we have egg and it's not egg.
+										learnsFrom = !learnsFrom || learnsFrom === 'E' ? lsetToCheck[ltype].charAt(1) : learnsFrom;
+									}
+									// If the previous egg move was learnt by the father through an egg as well:
+									if (learnsFrom === 'E') {
+										let secondLearnsFrom = false;
+										let lsetToCheck = (dexEntry.learnset[move]) ? dexEntry.learnset[move] : dexEntry.learnset['sketch'];
+										// Have here either the move learnset or sketch learnset for Smeargle.
+										if (lsetToCheck) {
+											for (let ltype = 0; ltype < lsetToCheck.length; ltype++) {
+												// Save first learning type. After that, only save it if we have egg and it's not egg.
+												secondLearnsFrom = !secondLearnsFrom || secondLearnsFrom === 'E' ? dexEntry.learnset[move][ltype].charAt(1) : secondLearnsFrom;
+											}
+											// Ok, both moves are learnt by father through an egg, therefor, it's impossible.
+											if (secondLearnsFrom === 'E') {
+												lsetData.blockedGen2Move = true;
+												continue;
 											}
 										}
 									}
+								} else {
+									lsetData.blockedGen2Move = true;
+									continue;
 								}
-								// chainbreeding with itself from earlier gen
-								if (!atLeastOne) sources.push(learned + template.id);
-								// Egg move tradeback for gens 1 and 2.
-								if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
-							} else if (learned.charAt(1) === 'S') {
-								// Event Pokémon:
-								//	Available as long as the past gen can get the Pokémon and then trade it back.
-								sources.push(learned + ' ' + template.id);
-								if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
-								// Check if it has a move that needs to come from a prior gen to this event move.
-								lsetData.hasGen2Move = lsetData.hasGen2Move || (tools.gen === 2 && tools.getMove(move).gen === 2);
-								lsetData.blockedGen2Move = lsetData.hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
-							} else {
-								// DW Pokemon are at level 10 or at the evolution level
-								let minLevel = (template.evoLevel && template.evoLevel > 10) ? template.evoLevel : 10;
-								if (set.level < minLevel) continue;
-								sources.push(learned);
 							}
+							lsetData.hasEggMove = move;
+							lsetData.eggParents.push(dexEntry.species);
+							// Check if it has a move that needs to come from a prior gen to this egg move.
+							lsetData.hasGen2Move = lsetData.hasGen2Move || (tools.gen === 2 && tools.getMove(move).gen === 2);
+							lsetData.blockedGen2Move = lsetData.hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
+							// we can breed with it
+							atLeastOne = true;
+							sources.push(learned + dexEntry.id);
 						}
-					}
-				}
-				if (format.mimicGlitch && template.gen < 5) {
-					// include the Mimic Glitch when checking this mon's learnset
-					let glitchMoves = {metronome:1, copycat:1, transform:1, mimic:1, assist:1};
-					let getGlitch = false;
-					for (let i in glitchMoves) {
-						if (template.learnset[i]) {
-							if (!(i === 'mimic' && tools.getAbility(set.ability).gen === 4 && !template.prevo)) {
-								getGlitch = true;
-								break;
-							}
-						}
-					}
-					if (getGlitch) {
-						sourcesBefore = Math.max(sourcesBefore, 4);
-						if (tools.getMove(move).gen < 5) {
-							limit1 = false;
-						}
+						// chainbreeding with itself from earlier gen
+						if (!atLeastOne) sources.push(learned + template.id);
+						// Egg move tradeback for gens 1 and 2.
+						if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
+					} else if (learned.charAt(1) === 'S') {
+						// event moves:
+						//   only if that was the source
+						// Event Pokémon:
+						//	Available as long as the past gen can get the Pokémon and then trade it back.
+						sources.push(learned + ' ' + template.id);
+						if (!noFutureGen) sourcesBefore = Math.max(sourcesBefore, parseInt(learned.charAt(0), 10));
+						// Check if it has a move that needs to come from a prior gen to this event move.
+						lsetData.hasGen2Move = lsetData.hasGen2Move || (tools.gen === 2 && tools.getMove(move).gen === 2);
+						lsetData.blockedGen2Move = lsetData.hasGen2Move && tools.gen === 2 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) > 0 && (lsetData.sourcesBefore ? lsetData.sourcesBefore : sourcesBefore) < parseInt(learned.charAt(0), 10);
+					} else if (learned.charAt(1) === 'D') {
+						// DW moves:
+						//   only if that was the source
+						// DW Pokemon are at level 10 or at the evolution level
+						let minLevel = (template.evoLevel && template.evoLevel > 10) ? template.evoLevel : 10;
+						if (set.level < minLevel) continue;
+						sources.push(learned);
 					}
 				}
 			}
+			if (format.mimicGlitch && template.gen < 5) {
+				// include the Mimic Glitch when checking this mon's learnset
+				let glitchMoves = {metronome:1, copycat:1, transform:1, mimic:1, assist:1};
+				let getGlitch = false;
+				for (let i in glitchMoves) {
+					if (template.learnset[i]) {
+						if (!(i === 'mimic' && tools.getAbility(set.ability).gen === 4 && !template.prevo)) {
+							getGlitch = true;
+							break;
+						}
+					}
+				}
+				if (getGlitch) {
+					sourcesBefore = Math.max(sourcesBefore, 4);
+					if (tools.getMove(move).gen < 5) {
+						limit1 = false;
+					}
+				}
+			}
+
 			// also check to see if the mon's prevo or freely switchable formes can learn this move
-			if (!template.learnset && template.baseSpecies !== template.species) {
-				// forme takes precedence over prevo only if forme has no learnset
-				template = tools.getTemplate(template.baseSpecies);
-			} else if (template.prevo) {
+			if (template.prevo) {
 				template = tools.getTemplate(template.prevo);
 				if (template.gen > Math.max(2, tools.gen)) template = null;
 				if (template && !template.abilities['H']) isHidden = false;
