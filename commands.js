@@ -1352,8 +1352,11 @@ exports.commands = {
 
 	mn: 'modnote',
 	modnote: function (target, room, user, connection) {
+		var groupName = Config.groups[room.modchat].name || room.modchat;
+		
 		if (!target) return this.parse('/help modnote');
 		if ((user.locked || room.isMuted(user)) && !user.can('bypassall')) return this.errorReply("You cannot do this while unable to talk.");
+		if (Config.groupsranking.indexOf(user.group) < Config.groupsranking.indexOf(room.modchat) && !user.can('bypassall')) return this.sendReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to modnote in this room.");
 
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply("The note is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
