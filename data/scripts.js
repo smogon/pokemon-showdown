@@ -3234,7 +3234,7 @@ exports.BattleScripts = {
 			let template = {};
 			if (heroTemplate.moves) template.randomBattleMoves = heroTemplate.moves;
 			if (heroTemplate.required) template.requiredMove = heroTemplate.required;
-			Object.merge(template, this.getTemplate(heroTemplate.species), false);
+			Object.merge(template, this.getTemplate(heroTemplate.species), false, false);
 
 			let pokemon = this.randomSet(template, i, teamDetails);
 
