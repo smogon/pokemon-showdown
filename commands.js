@@ -2472,17 +2472,17 @@ exports.commands = {
 			connection.popup("Due to high load, you are limited to 6 team validations every 3 minutes.");
 			return;
 		}
-		let format = Tools.getFormat(target);
-		if (format.effectType !== 'Format') format = Tools.getFormat('Anything Goes');
-		if (format.effectType !== 'Format') {
-			connection.popup("Please provide a valid format.");
-			return;
-		}
+		if (!target) return this.errorReply("Provide a valid format.");
+		let originalFormat = Tools.getFormat(target);
+		let format = originalFormat.effectType === 'Format' ? originalFormat : Tools.getFormat('Anything Goes');
+		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
+
 		TeamValidator.validateTeam(format.id, user.team, function (success, details) {
+			let matchMessage = (originalFormat === format ? "" : "The format '" + originalFormat.name + "' was not found.");
 			if (success) {
-				connection.popup("Your team is valid for " + format.name + ".");
+				connection.popup("" + (matchMessage ? matchMessage + "\n\n" : "") + "Your team is valid for " + format.name + ".");
 			} else {
-				connection.popup("Your team was rejected for the following reasons:\n\n- " + details.replace(/\n/g, '\n- '));
+				connection.popup("" + (matchMessage ? matchMessage + "\n\n" : "") + "Your team was rejected for the following reasons:\n\n- " + details.replace(/\n/g, '\n- '));
 			}
 		});
 	},
