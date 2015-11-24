@@ -165,6 +165,7 @@ exports.commands = {
 			let params = target.split(',');
 
 			if (!this.can(permission, null, room)) return false;
+			if (room.hangmanDisabled) return this.errorReply("Hangman is disabled for this room.");
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
@@ -218,6 +219,32 @@ exports.commands = {
 			return this.privateModCommand("(The game of hangman was ended by " + user.name + ".)");
 		},
 		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # & ~"],
+
+		disable: function (target, room, user) {
+			if (!this.can('tournamentsmanagement', null, room)) return;
+			if (room.hangmanDisabled) {
+				return this.errorReply("Hangman is already disabled.");
+			}
+			room.hangmanDisabled = true;
+			if (room.chatRoomData) {
+				room.chatRoomData.hangmanDisabled = true;
+				Rooms.global.writeChatRoomData();
+			}
+			return this.sendReply("Hangman has been disabled for this room.");
+		},
+
+		enable: function (target, room, user) {
+			if (!this.can('tournamentsmanagement', null, room)) return;
+			if (!room.hangmanDisabled) {
+				return this.errorReply("Hangman is already enabled.");
+			}
+			delete room.hangmanDisabled;
+			if (room.chatRoomData) {
+				delete room.chatRoomData.hangmanDisabled;
+				Rooms.global.writeChatRoomData();
+			}
+			return this.sendReply("Hangman has been enabled for this room.");
+		},
 
 		'': function (target, room, user) {
 			if (!room.game || room.game.gameType !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
