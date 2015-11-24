@@ -1490,8 +1490,8 @@ exports.BattleScripts = {
 					rejected = true;
 				}
 
-				// Adaptability and Contrary should have moves that benefit
-				if ((hasAbility['Adaptability'] && counter.stab < template.types.length) || (hasAbility['Contrary'] && !counter.contrary && template.species !== 'Shuckle')) {
+				// Adaptability, Contrary, and Drought should have moves that benefit
+				if ((hasAbility['Adaptability'] && counter.stab < template.types.length) || (hasAbility['Contrary'] && !counter.contrary && template.species !== 'Shuckle') || ((hasAbility['Drought'] || hasMove['sunnyday']) && hasType['Fire'] && !counter['Fire'] && move.id !== 'solarbeam')) {
 					// Reject Status or non-STAB
 					if (move.category === 'Status' || !hasType[move.type]) rejected = true;
 				}
@@ -1673,7 +1673,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Snow Cloak') {
 				rejectAbility = !teamDetails['hail'];
 			} else if (ability === 'Solar Power') {
-				rejectAbility = !counter['Special'];
+				rejectAbility = !counter['Special'] || template.isMega;
 			} else if (ability === 'Strong Jaw') {
 				rejectAbility = !counter['bite'];
 			} else if (ability === 'Sturdy') {
@@ -1729,6 +1729,8 @@ exports.BattleScripts = {
 			} else if (template.id === 'combee') {
 				// Combee always gets Hustle but its only physical move is Endeavor, which loses accuracy
 				ability = 'Honey Gather';
+			} else if (template.id === 'gligar') {
+				ability = 'Immunity';
 			} else if (template.id === 'lilligant' && hasMove['petaldance']) {
 				ability = 'Own Tempo';
 			} else if (template.id === 'lopunny' && hasMove['switcheroo'] && this.random(3)) {
@@ -2716,6 +2718,12 @@ exports.BattleScripts = {
 					rejected = true;
 				}
 
+				// Adaptability, Contrary, and Drought should have moves that benefit
+				if ((hasAbility['Adaptability'] && counter.stab < template.types.length) || (hasAbility['Contrary'] && !counter.contrary && template.species !== 'Shuckle') || ((hasAbility['Drought'] || hasMove['sunnyday']) && hasType['Fire'] && !counter['Fire'] && move.id !== 'solarbeam')) {
+					// Reject Status or non-STAB
+					if (move.category === 'Status' || !hasType[move.type]) rejected = true;
+				}
+
 				// Remove rejected moves from the move list.
 				if (rejected && (movePool.length - availableHP || availableHP && (move.id === 'hiddenpower' || !hasMove['hiddenpower']))) {
 					moves.splice(k, 1);
@@ -2889,7 +2897,7 @@ exports.BattleScripts = {
 			} else if (ability === 'Snow Cloak') {
 				rejectAbility = !teamDetails['hail'];
 			} else if (ability === 'Solar Power') {
-				rejectAbility = !counter['Special'];
+				rejectAbility = !counter['Special'] || template.isMega;
 			} else if (ability === 'Strong Jaw') {
 				rejectAbility = !counter['bite'];
 			} else if (ability === 'Sturdy') {
@@ -2940,6 +2948,8 @@ exports.BattleScripts = {
 				}
 			} else if (template.baseSpecies === 'Basculin') {
 				ability = 'Adaptability';
+			} else if (template.id === 'gligar') {
+				ability = 'Immunity';
 			} else if (template.id === 'lilligant' && hasMove['petaldance']) {
 				ability = 'Own Tempo';
 			} else if (template.id === 'rampardos' && !hasMove['headsmash']) {
@@ -2948,6 +2958,8 @@ exports.BattleScripts = {
 				ability = 'Solid Rock';
 			} else if (template.id === 'unfezant') {
 				ability = 'Super Luck';
+			} else if (template.id === 'venusaurmega') {
+				ability = 'Chlorophyll';
 			}
 		}
 
