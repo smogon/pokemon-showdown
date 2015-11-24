@@ -1571,7 +1571,7 @@ exports.BattleScripts = {
 							moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
 						}
 					}
-				} else if (!counter.stab || ((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['ate'])) {
+				} else if (!counter.stab || ((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal'])) {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
 					// Alternatively, if you have an -ate ability and no Normal moves, reject an attack move at random.
 					let rejectableMoves = [];
@@ -1720,7 +1720,7 @@ exports.BattleScripts = {
 				for (let i = 0; i < moves.length; i++) {
 					if (moves[i] === 'hypervoice') {
 						moves[i] = 'blizzard';
-						counter['ate'] = 0;
+						counter['Normal'] = 0;
 						break;
 					}
 				}
@@ -1893,7 +1893,7 @@ exports.BattleScripts = {
 		} else if (counter.Physical + counter.Special >= 4 && (template.baseStats.def + template.baseStats.spd > 189 || hasMove['rapidspin'])) {
 			item = 'Assault Vest';
 		} else if (counter.damagingMoves.length >= 4) {
-			item = (!!counter['ate'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
+			item = (!!counter['Normal'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
 		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
 		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['dragontail'] && !hasMove['superfang']) {
@@ -2788,7 +2788,7 @@ exports.BattleScripts = {
 							moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
 						}
 					}
-				} else if (!counter.stab || ((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['ate'])) {
+				} else if (!counter.stab || ((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal'])) {
 					// If you have three or more attacks, and none of them are STAB, reject one of them at random.
 					// Alternatively, if you have an -ate ability and no Normal moves, reject an attack move at random.
 					let rejectableMoves = [];
@@ -2942,7 +2942,7 @@ exports.BattleScripts = {
 				for (let i = 0; i < moves.length; i++) {
 					if (moves[i] === 'hypervoice') {
 						moves[i] = 'blizzard';
-						counter['ate'] = 0;
+						counter['Normal'] = 0;
 						break;
 					}
 				}
