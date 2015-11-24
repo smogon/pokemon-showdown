@@ -1480,7 +1480,7 @@ exports.commands = {
 			if (Config.groupsranking.indexOf(target) > 1 && !user.can('modchatall', null, room)) {
 				return this.errorReply("/modchat - Access denied for setting higher than " + Config.groupsranking[1] + ".");
 			}
-			if (Config.groupsranking.indexOf(target) > Config.groupsranking.indexOf(room.auth[user.userid]) && !user.can('makeroom')) {
+			if (Config.groupsranking.indexOf(target) > Math.max(1, Config.groupsranking.indexOf(room.auth[user.userid])) && !user.can('makeroom')) {
 				return this.errorReply("/modchat - Access denied for setting higher than " + Config.groupsranking[1] + ".");
 			}
 			room.modchat = target;
