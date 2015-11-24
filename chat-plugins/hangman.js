@@ -56,7 +56,9 @@ let Hangman = (function () {
 	};
 
 	Hangman.prototype.guessWord = function (word) {
-		if (this.word.toLowerCase().replace(/ /g, '') === word.toLowerCase().replace(/ /g, '')) {
+		let ourWord = this.word.toLowerCase().replace(/ /g, '');
+		let guessedWord = word.toLowerCase().replace(/ /g, '');
+		if (ourWord === guessedWord) {
 			for (let i = 0; i < this.word.length; i++) {
 				if (!(this.word[i] === ' ')) {
 					this.wordSoFar[i] = this.word[i];
@@ -64,7 +66,7 @@ let Hangman = (function () {
 			}
 			this.guesses.push(word);
 			this.finish();
-		} else {
+		} else if (ourWord.length === guessedWord.length) {
 			this.incorrectGuesses++;
 			this.guesses.push(word);
 			this.update();
@@ -100,7 +102,7 @@ let Hangman = (function () {
 		}
 
 		let output = '<div class="broadcast-' + (result === 1 ? 'red' : (result === 2 ? 'green' : 'blue')) + '">';
-		output += '<p style="text-align:center;font-weight:bold;font-size:14pt;">' + (result === 1 ? 'Too bad! The man has been hanged.' : (result === 2 ? 'The word has been guessed. Congratulations!' : 'A game of hangman is in progress!')) + '</p>';
+		output += '<p style="text-align:center;font-weight:bold;font-size:14pt;margin:5px 0">' + (result === 1 ? 'Too bad! The man has been hanged.' : (result === 2 ? 'The word has been guessed. Congratulations!' : 'Hangman')) + '</p>';
 		output += '<table><tr><td style="text-align:center;">' + this.hangingMan() + '</td><td style="text-align:center;width:100%;">';
 
 		let wordString = '';
@@ -169,7 +171,7 @@ exports.commands = {
 			if (!params) return this.errorReply("No word entered.");
 			let word = params[0].replace(/[^A-Za-z ]/g, '');
 			if (word.replace(/ /g, '').length < 1) return this.errorReply("Enter a valid word");
-			if (word.length > 24) return this.errorReply("Word too long.");
+			if (word.length > 30) return this.errorReply("Word too long.");
 
 			let hint;
 			if (params.length > 1) {
@@ -185,13 +187,13 @@ exports.commands = {
 		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # & ~"],
 
 		guess: function (target, room, user) {
+			if (!target) return this.parse('/help guess');
 			if (!room.game || room.game.gameType !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
-
-			if (!target) return this.errorReply("No guess given.");
+			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 
 			let parsed = target.replace(/[^A-Za-z ]/g, '');
 			if (parsed.replace(/ /g, '').length < 1) return this.errorReply("Guess too short.");
-			if (parsed.length > 24) return this.errorReply("Guess too long.");
+			if (parsed.length > 30) return this.errorReply("Guess too long.");
 
 			if (room.game.guesses.indexOf(parsed) > -1) return this.errorReply("Your guess has already been guessed.");
 
@@ -237,5 +239,6 @@ exports.commands = {
 	guess: function (target, room, user) {
 		return this.parse('/hangman guess ' + target);
 	},
-	guesshelp: ["/guess - Shortcut for /hangman guess."]
+	guesshelp: ["/guess - Shortcut for /hangman guess.", "/hangman guess [letter] - Makes a guess for the letter entered.",
+					"/hangman guess [word] - Same as a letter, but guesses an entire word."]
 };
