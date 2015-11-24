@@ -1,6 +1,6 @@
 /*
 * Hangman chat plugin
-* By bumbadadabum.
+* By bumbadadabum and Zarel. Art by crobat.
 */
 
 'use strict';
