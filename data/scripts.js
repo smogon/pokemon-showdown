@@ -1059,11 +1059,11 @@ exports.BattleScripts = {
 					counter.setupType = physical > special ? 'Physical' : 'Special';
 				}
 			} else if (counter['physicalsetup'] && physical >= 1) {
-				if (physical >= 2 || 'rest' in counter.damagingMoveIndex && 'sleeptalk' in counter.damagingMoveIndex) {
+				if (physical >= 2 || moves.indexOf('rest') >= 0 && moves.indexOf('sleeptalk') >= 0) {
 					counter.setupType = 'Physical';
 				}
 			} else if (counter['specialsetup'] && special >= 1) {
-				if (special >= 2 || 'rest' in counter.damagingMoveIndex && 'sleeptalk' in counter.damagingMoveIndex) {
+				if (special >= 2 || moves.indexOf('rest') >= 0 && moves.indexOf('sleeptalk') >= 0) {
 					counter.setupType = 'Special';
 				}
 			}
