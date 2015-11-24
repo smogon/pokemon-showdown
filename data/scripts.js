@@ -1490,7 +1490,7 @@ exports.BattleScripts = {
 				}
 
 				// Increased/decreased priority moves are unneeded with moves that boost only speed
-				if (move.priority !== 0 && !!counter['speedsetup']) {
+				if (move.priority !== 0 && (!!counter['speedsetup'] || hasMove['copycat'])) {
 					rejected = true;
 				}
 
