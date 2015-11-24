@@ -26,10 +26,10 @@ let Hangman = (function () {
 		this.wordSoFar = [];
 
 		for (let i = 0; i < word.length; i++) {
-			if (word[i] === ' ') {
-				this.wordSoFar.push('&nbsp;');
-			} else {
+			if (/[a-zA-Z]/.test(word[i])) {
 				this.wordSoFar.push('_');
+			} else {
+				this.wordSoFar.push(word[i]);
 			}
 		}
 	}
@@ -61,8 +61,8 @@ let Hangman = (function () {
 		let ourWord = this.word.toLowerCase().replace(/ /g, '');
 		let guessedWord = word.toLowerCase().replace(/ /g, '');
 		if (ourWord === guessedWord) {
-			for (let i = 0; i < this.word.length; i++) {
-				if (!(this.word[i] === ' ')) {
+			for (let i = 0; i < this.wordSoFar.length; i++) {
+				if (this.wordSoFar[i] === '_') {
 					this.wordSoFar[i] = this.word[i];
 				}
 			}
@@ -116,11 +116,11 @@ let Hangman = (function () {
 				if (this.wordSoFar[i] === '_') {
 					wordString += '<font color="#7af87a">' + this.word[i] + '</font> ';
 				} else {
-					wordString += this.wordSoFar[i] + ' ';
+					wordString += (this.wordSoFar[i] === ' ' ? '&nbsp;' : this.wordSoFar[i]) + ' ';
 				}
 			}
 		} else {
-			wordString = this.wordSoFar.join(' ');
+			wordString = this.wordSoFar.map(letter => (letter === ' ' ? '&nbsp;' : letter)).join(' ');
 		}
 
 		output += '<p style="font-weight:bold;">' + wordString + '</p>';
@@ -175,7 +175,7 @@ exports.commands = {
 			if (room.game) return this.errorReply("There is already a game in progress in this room.");
 
 			if (!params) return this.errorReply("No word entered.");
-			let word = params[0].replace(/[^A-Za-z ]/g, '');
+			let word = params[0].replace(/[^A-Za-z '-]/g, '');
 			if (word.replace(/ /g, '').length < 1) return this.errorReply("Enter a valid word");
 			if (word.length > 30) return this.errorReply("Word too long.");
 
