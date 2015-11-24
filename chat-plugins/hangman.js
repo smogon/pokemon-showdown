@@ -9,7 +9,7 @@ const permission = 'announce';
 const maxMistakes = 6;
 
 let Hangman = (function () {
-	function Hangman(room, word, hint) {
+	function Hangman(room, user, word, hint) {
 		if (room.gameNumber) {
 			room.gameNumber++;
 		} else {
@@ -17,6 +17,7 @@ let Hangman = (function () {
 		}
 		this.gameType = 'hangman';
 		this.room = room;
+		this.creator = user.userid;
 		this.word = word;
 		this.hint = hint;
 		this.incorrectGuesses = 0;
@@ -184,7 +185,7 @@ exports.commands = {
 				if (hint.length > 150) return this.errorReply("Hint too long.");
 			}
 
-			room.game = new Hangman(room, word, hint);
+			room.game = new Hangman(room, user, word, hint);
 			room.game.display(user, true);
 
 			return this.privateModCommand("(A game of hangman was started by " + user.name + ".)");
@@ -195,6 +196,7 @@ exports.commands = {
 			if (!target) return this.parse('/help guess');
 			if (!room.game || room.game.gameType !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+			if (user.userid === room.game.creator) return this.errorReply("You can't guess in your own hangman game.");
 
 			let parsed = target.replace(/[^A-Za-z ]/g, '');
 			if (parsed.replace(/ /g, '').length < 1) return this.errorReply("Guess too short.");
