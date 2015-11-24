@@ -936,8 +936,7 @@ exports.BattleScripts = {
 		// This is primarily a helper function for random setbuilder functions.
 		let counter = {
 			Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0, stab: 0,
-			blaze: 0, overgrow: 0, swarm: 0, torrent: 0,
-			adaptability: 0, ate: 0, bite: 0, contrary: 0, hustle: 0,
+			adaptability: 0, bite: 0, contrary: 0, hustle: 0,
 			ironfist: 0, serenegrace: 0, sheerforce: 0, skilllink: 0, technician: 0,
 			inaccurate: 0, priority: 0, recoil: 0,
 			physicalsetup: 0, specialsetup: 0, mixedsetup: 0, speedsetup: 0,
@@ -945,6 +944,10 @@ exports.BattleScripts = {
 			damagingMoveIndex: {},
 			setupType: ''
 		};
+
+		for (let type in Tools.data.TypeChart) {
+			counter[type] = 0;
+		}
 
 		if (!moves || !moves.length) return counter;
 		if (!hasType) hasType = {};
@@ -1001,6 +1004,7 @@ exports.BattleScripts = {
 			if (move.recoil) counter['recoil']++;
 			// Moves which have a base power, but aren't super-weak like Rapid Spin:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback || moveid === 'naturepower') {
+				counter[move.type]++;
 				if (hasType[move.type]) {
 					counter['adaptability']++;
 					// STAB:
@@ -1009,12 +1013,7 @@ exports.BattleScripts = {
 				}
 				if (hasAbility['Protean']) counter['stab']++;
 				if (move.category === 'Physical') counter['hustle']++;
-				if (move.type === 'Fire') counter['blaze']++;
-				if (move.type === 'Grass') counter['overgrow']++;
-				if (move.type === 'Bug') counter['swarm']++;
-				if (move.type === 'Water') counter['torrent']++;
 				if (move.type === 'Normal') {
-					counter['ate']++;
 					if ((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !(moveid in NoStab)) counter['stab']++;
 				}
 				if (move.flags['bite']) counter['bite']++;
@@ -1125,8 +1124,7 @@ exports.BattleScripts = {
 			dracometeor:1, leafstorm:1, overheat:1, technoblast:1
 		};
 		let counterAbilities = {
-			'Adaptability':1, 'Blaze':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1,
-			'Overgrow':1, 'Sheer Force':1, 'Skill Link':1, 'Swarm':1, 'Torrent':1
+			'Adaptability':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Sheer Force':1, 'Skill Link':1
 		};
 		let ateAbilities = {
 			'Aerilate':1, 'Pixilate':1, 'Refrigerate':1
@@ -1492,8 +1490,8 @@ exports.BattleScripts = {
 					rejected = true;
 				}
 
-				// Adaptability and Contrary should have moves that benefit
-				if ((hasAbility['Adaptability'] && counter.stab < template.types.length) || (hasAbility['Contrary'] && !counter.contrary && template.species !== 'Shuckle')) {
+				// Adaptability, Contrary, and Drought should have moves that benefit
+				if ((hasAbility['Adaptability'] && counter.stab < template.types.length) || (hasAbility['Contrary'] && !counter.contrary && template.species !== 'Shuckle') || ((hasAbility['Drought'] || hasMove['sunnyday']) && hasType['Fire'] && !counter['Fire'] && move.id !== 'solarbeam')) {
 					// Reject Status or non-STAB
 					if (move.category === 'Status' || !hasType[move.type]) rejected = true;
 				}
@@ -1640,10 +1638,12 @@ exports.BattleScripts = {
 
 			let rejectAbility = false;
 			if (ability in counterAbilities) {
-				// Adaptability, Blaze, Contrary, Hustle, Iron Fist, Overgrow, Skill Link, Swarm, Technician, Torrent
+				// Adaptability, Contrary, Hustle, Iron Fist, Sheer Force, Skill Link
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability in ateAbilities) {
-				rejectAbility = !counter['ate'];
+				rejectAbility = !counter['Normal'];
+			} else if (ability === 'Blaze') {
+				rejectAbility = !counter['Fire'];
 			} else if (ability === 'Chlorophyll') {
 				rejectAbility = !hasMove['sunnyday'];
 			} else if (ability === 'Compound Eyes' || ability === 'No Guard') {
@@ -1658,6 +1658,8 @@ exports.BattleScripts = {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
 			} else if (ability === 'Moody') {
 				rejectAbility = template.id !== 'bidoof';
+			} else if (ability === 'Overgrow') {
+				rejectAbility = !counter['Grass'];
 			} else if (ability === 'Poison Heal') {
 				rejectAbility = abilities.indexOf('Technician') >= 0 && !!counter['technician'];
 			} else if (ability === 'Prankster') {
@@ -1671,15 +1673,19 @@ exports.BattleScripts = {
 			} else if (ability === 'Snow Cloak') {
 				rejectAbility = !teamDetails['hail'];
 			} else if (ability === 'Solar Power') {
-				rejectAbility = !counter['Special'];
+				rejectAbility = !counter['Special'] || template.isMega;
 			} else if (ability === 'Strong Jaw') {
 				rejectAbility = !counter['bite'];
 			} else if (ability === 'Sturdy') {
 				rejectAbility = !!counter['recoil'] && !counter['recovery'];
 			} else if (ability === 'Swift Swim') {
 				rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
+			} else if (ability === 'Swarm') {
+				rejectAbility = !counter['Bug'];
 			} else if (ability === 'Technician') {
 				rejectAbility = !counter['technician'] || (abilities.indexOf('Skill Link') >= 0 && counter['skilllink'] >= counter['technician']);
+			} else if (ability === 'Torrent') {
+				rejectAbility = !counter['Water'];
 			} else if (ability === 'Unburden') {
 				rejectAbility = template.baseStats.spe > 120 || (template.id === 'slurpuff' && !counter.setupType);
 			}
@@ -1723,6 +1729,8 @@ exports.BattleScripts = {
 			} else if (template.id === 'combee') {
 				// Combee always gets Hustle but its only physical move is Endeavor, which loses accuracy
 				ability = 'Honey Gather';
+			} else if (template.id === 'gligar') {
+				ability = 'Immunity';
 			} else if (template.id === 'lilligant' && hasMove['petaldance']) {
 				ability = 'Own Tempo';
 			} else if (template.id === 'lopunny' && hasMove['switcheroo'] && this.random(3)) {
@@ -2169,7 +2177,7 @@ exports.BattleScripts = {
 				puCount++;
 			}
 
-			// Increment mega, stealthrock, and base species counters
+			// Increment mega, stealthrock, weather, and base species counters
 			if (isMegaSet) teamDetails.megaCount++;
 			if (set.ability === 'Snow Warning') teamDetails['hail'] = 1;
 			if (set.ability === 'Drizzle' || set.moves.indexOf('raindance') >= 0) teamDetails['rain'] = 1;
@@ -2205,7 +2213,7 @@ exports.BattleScripts = {
 		let baseFormes = {};
 		let uberCount = 0;
 		let puCount = 0;
-		let megaCount = 0;
+		let teamDetails = {megaCount: 0, stealthRock: 0, hazardClear: 0};
 
 		while (pokemonPool.length && pokemonLeft < 6) {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
@@ -2282,7 +2290,7 @@ exports.BattleScripts = {
 				}
 			}
 
-			let set = this.randomDoublesSet(template, pokemon.length, megaCount);
+			let set = this.randomDoublesSet(template, pokemon.length, teamDetails);
 
 			// Illusion shouldn't be on the last pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
@@ -2298,7 +2306,7 @@ exports.BattleScripts = {
 			// Limit the number of Megas to one
 			let forme = template.otherFormes && this.getTemplate(template.otherFormes[0]);
 			let isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
-			if (isMegaSet && megaCount > 0) continue;
+			if (isMegaSet && teamDetails.megaCount > 0) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2323,13 +2331,17 @@ exports.BattleScripts = {
 				puCount++;
 			}
 
-			// Increment mega and base species counters
-			if (isMegaSet) megaCount++;
+			// Increment mega, stealthrock, weather, and base species counters
+			if (isMegaSet) teamDetails.megaCount++;
+			if (set.ability === 'Snow Warning') teamDetails['hail'] = 1;
+			if (set.ability === 'Drizzle' || set.moves.indexOf('raindance') >= 0) teamDetails['rain'] = 1;
+			if (set.moves.indexOf('stealthrock') >= 0) teamDetails.stealthRock++;
+			if (set.moves.indexOf('defog') >= 0 || set.moves.indexOf('rapidspin') >= 0) teamDetails.hazardClear++;
 			baseFormes[template.baseSpecies] = 1;
 		}
 		return pokemon;
 	},
-	randomDoublesSet: function (template, slot, noMega) {
+	randomDoublesSet: function (template, slot, teamDetails) {
 		let baseTemplate = (template = this.getTemplate(template));
 		let name = template.name;
 
@@ -2341,12 +2353,14 @@ exports.BattleScripts = {
 			require('../crashlogger.js')(fakeErr, 'The doubles randbat set generator');
 		}
 
+		if (typeof teamDetails !== 'object') teamDetails = {megaCount: teamDetails};
+
 		if (template.battleOnly) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.
 			name = template.baseSpecies;
 		}
 		let battleForme = this.checkBattleForme(template);
-		if (battleForme && (battleForme.isMega ? !noMega : this.random(2))) {
+		if (battleForme && (battleForme.isMega ? !teamDetails.megaCount : this.random(2))) {
 			template = this.getTemplate(template.otherFormes.length >= 2 ? template.otherFormes[this.random(template.otherFormes.length)] : template.otherFormes[0]);
 		}
 
@@ -2396,8 +2410,7 @@ exports.BattleScripts = {
 			extremespeed:1, suckerpunch:1, superpower:1
 		};
 		let counterAbilities = {
-			'Adaptability':1, 'Blaze':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Overgrow':1,
-			'Skill Link':1, 'Swarm':1, 'Torrent':1
+			'Adaptability':1, 'Contrary':1, 'Hustle':1, 'Iron Fist':1, 'Skill Link':1
 		};
 		// -ate Abilities
 		let ateAbilities = {
@@ -2705,6 +2718,12 @@ exports.BattleScripts = {
 					rejected = true;
 				}
 
+				// Adaptability, Contrary, and Drought should have moves that benefit
+				if ((hasAbility['Adaptability'] && counter.stab < template.types.length) || (hasAbility['Contrary'] && !counter.contrary && template.species !== 'Shuckle') || ((hasAbility['Drought'] || hasMove['sunnyday']) && hasType['Fire'] && !counter['Fire'] && move.id !== 'solarbeam')) {
+					// Reject Status or non-STAB
+					if (move.category === 'Status' || !hasType[move.type]) rejected = true;
+				}
+
 				// Remove rejected moves from the move list.
 				if (rejected && (movePool.length - availableHP || availableHP && (move.id === 'hiddenpower' || !hasMove['hiddenpower']))) {
 					moves.splice(k, 1);
@@ -2844,7 +2863,9 @@ exports.BattleScripts = {
 			if (ability in counterAbilities) {
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability in ateAbilities) {
-				rejectAbility = !counter['ate'];
+				rejectAbility = !counter['Normal'];
+			} else if (ability === 'Blaze') {
+				rejectAbility = !counter['Fire'];
 			} else if (ability === 'Chlorophyll') {
 				rejectAbility = !hasMove['sunnyday'];
 			} else if (ability === 'Compound Eyes' || ability === 'No Guard') {
@@ -2859,6 +2880,8 @@ exports.BattleScripts = {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
 			} else if (ability === 'Moody') {
 				rejectAbility = template.id !== 'bidoof';
+			} else if (ability === 'Overgrow') {
+				rejectAbility = !counter['Grass'];
 			} else if (ability === 'Poison Heal') {
 				rejectAbility = abilities.indexOf('Technician') >= 0 && !!counter['technician'];
 			} else if (ability === 'Prankster') {
@@ -2871,16 +2894,22 @@ exports.BattleScripts = {
 				rejectAbility = !counter['sheerforce'] || hasMove['fakeout'];
 			} else if (ability === 'Simple') {
 				rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
+			} else if (ability === 'Snow Cloak') {
+				rejectAbility = !teamDetails['hail'];
 			} else if (ability === 'Solar Power') {
-				rejectAbility = !counter['Special'];
+				rejectAbility = !counter['Special'] || template.isMega;
 			} else if (ability === 'Strong Jaw') {
 				rejectAbility = !counter['bite'];
 			} else if (ability === 'Sturdy') {
 				rejectAbility = !!counter['recoil'] && !counter['recovery'];
 			} else if (ability === 'Swift Swim') {
-				rejectAbility = !hasMove['raindance'];
+				rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
+			} else if (ability === 'Swarm') {
+				rejectAbility = !counter['Bug'];
 			} else if (ability === 'Technician') {
 				rejectAbility = !counter['technician'] || (abilities.indexOf('Skill Link') >= 0 && counter['skilllink'] >= counter['technician']);
+			} else if (ability === 'Torrent') {
+				rejectAbility = !counter['Water'];
 			} else if (ability === 'Unburden') {
 				rejectAbility = template.baseStats.spe > 120 || (template.id === 'slurpuff' && !counter.setupType);
 			}
@@ -2919,6 +2948,8 @@ exports.BattleScripts = {
 				}
 			} else if (template.baseSpecies === 'Basculin') {
 				ability = 'Adaptability';
+			} else if (template.id === 'gligar') {
+				ability = 'Immunity';
 			} else if (template.id === 'lilligant' && hasMove['petaldance']) {
 				ability = 'Own Tempo';
 			} else if (template.id === 'rampardos' && !hasMove['headsmash']) {
@@ -2927,6 +2958,8 @@ exports.BattleScripts = {
 				ability = 'Solid Rock';
 			} else if (template.id === 'unfezant') {
 				ability = 'Super Luck';
+			} else if (template.id === 'venusaurmega') {
+				ability = 'Chlorophyll';
 			}
 		}
 
