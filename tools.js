@@ -19,7 +19,7 @@ const path = require('path');
 module.exports = (function () {
 	let moddedTools = {};
 
-	let dataTypes = ['FormatsData', 'Learnsets', 'Pokedex', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
+	let dataTypes = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats', 'Aliases'];
 	let dataFiles = {
 		'Pokedex': 'pokedex.js',
 		'Movedex': 'moves.js',
