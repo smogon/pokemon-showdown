@@ -46,20 +46,6 @@ exports.Formats = [
 		banlist: ['Uber', 'Soul Dew', 'Sablenite']
 	},
 	{
-		name: "OU (no Mega)",
-		section: "ORAS Singles",
-
-		ruleset: ['OU'],
-		onBegin: function () {
-			for (let i = 0; i < this.p1.pokemon.length; i++) {
-				this.p1.pokemon[i].canMegaEvo = false;
-			}
-			for (let i = 0; i < this.p2.pokemon.length; i++) {
-				this.p2.pokemon[i].canMegaEvo = false;
-			}
-		}
-	},
-	{
 		name: "Ubers",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3522911/\">Ubers Metagame Discussion</a>",
@@ -696,6 +682,21 @@ exports.Formats = [
 		mod: 'tiershift',
 		ruleset: ['OU'],
 		banlist: ['Swift Swim']
+	},
+	{
+		name: "OU (no Mega)",
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3536150/\">OU (no Mega) Viability Ranking</a>"],
+		section: "Other Metagames",
+
+		ruleset: ['OU'],
+		onBegin: function () {
+			for (let i = 0; i < this.p1.pokemon.length; i++) {
+				this.p1.pokemon[i].canMegaEvo = false;
+			}
+			for (let i = 0; i < this.p2.pokemon.length; i++) {
+				this.p2.pokemon[i].canMegaEvo = false;
+			}
+		}
 	},
 	{
 		name: "Inverse Battle",
