@@ -1045,7 +1045,7 @@ CommandParser.commands.tournamenthelp = function (target, room, user) {
 		"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
 		"- runautodq: Manually run the automatic disqualifier.<br />" +
 		"- scouting: Specifies whether joining tournament matches while in a tournament is allowed.<br />" +
-		"- modjoin: Specifies whether players can modjoin their battles. <br />" +
+		"- modjoin: Specifies whether players can modjoin their battles.<br />" +
 		"- getusers: Lists the users in the current tournament.<br />" +
 		"- on/off: Enables/disables allowing mods to start tournaments.<br />" +
 		"More detailed help can be found <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\">here</a>"
