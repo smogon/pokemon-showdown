@@ -462,6 +462,7 @@ exports.commands = {
 		} else {
 			if (!this.can('makeroom')) return;
 		}
+		if (room.tour && !room.tour.tour.modjoin) return this.errorReply("You can't do this in tournaments where modjoin is prohibited.");
 		if (target === 'off' || target === 'false') {
 			delete room.modjoin;
 			this.addModCommand("" + user.name + " turned off modjoin.");
