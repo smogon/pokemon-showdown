@@ -1445,6 +1445,7 @@ let ChatRoom = (function () {
 			this.rollLogFile(true);
 			this.logEntry = function (entry, date) {
 				let timestamp = (new Date()).format('{HH}:{mm}:{ss} ');
+				entry = entry.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
 				this.logFile.write(timestamp + entry + '\n');
 			};
 			this.logEntry('NEW CHATROOM: ' + this.id);
