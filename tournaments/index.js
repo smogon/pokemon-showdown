@@ -82,6 +82,7 @@ Tournament = (function () {
 		this.isRated = isRated;
 		this.playerCap = parseInt(playerCap, 10) || Config.tournamentDefaultPlayerCap || 0;
 		this.scouting = true;
+		this.modjoin = false;
 		if (Config.tournamentDefaultPlayerCap && this.playerCap > Config.tournamentDefaultPlayerCap) {
 			Monitor.log('[TourMonitor] Room ' + room.id + ' starting a tour over default cap (' + this.playerCap + ')');
 		}
@@ -890,12 +891,37 @@ let commands = {
 			let option = params[0].toLowerCase();
 			if (option === 'on' || option === 'true' || option === 'allow' || option === 'allowed') {
 				tournament.scouting = true;
+				tournament.modjoin = false;
 				this.room.add('|tournament|scouting|allow');
 				this.privateModCommand("(The tournament was set to allow scouting by " + user.name + ")");
 			} else if (option === 'off' || option === 'false' || option === 'disallow' || option === 'disallowed') {
 				tournament.scouting = false;
+				tournament.modjoin = true;
 				this.room.add('|tournament|scouting|disallow');
 				this.privateModCommand("(The tournament was set to disallow scouting by " + user.name + ")");
+			} else {
+				return this.sendReply("Usage: " + cmd + " <allow|disallow>");
+			}
+		},
+		modjoin: 'setmodjoin',
+		setmodjoin: function (tournament, user, params, cmd) {
+			if (params.length < 1) {
+				if (tournament.modjoin) {
+					return this.sendReply("This tournament allows players to modjoin their battles.");
+				} else {
+					return this.sendReply("This tournament does not allow players to modjoin their battles.");
+				}
+			}
+
+			let option = params[0].toLowerCase();
+			if (option === 'on' || option === 'true' || option === 'allow' || option === 'allowed') {
+				tournament.modjoin = true;
+				this.room.add('Modjoining is now allowed (Players can modjoin their tournament battles).');
+				this.privateModCommand("(The tournament was set to allow modjoin by " + user.name + ")");
+			} else if (option === 'off' || option === 'false' || option === 'disallow' || option === 'disallowed') {
+				tournament.modjoin = false;
+				this.room.add('Modjoining is now banned (Players cannot modjoin their tournament battles).');
+				this.privateModCommand("(The tournament was set to disallow modjoin by " + user.name + ")");
 			} else {
 				return this.sendReply("Usage: " + cmd + " <allow|disallow>");
 			}
@@ -1019,6 +1045,7 @@ CommandParser.commands.tournamenthelp = function (target, room, user) {
 		"- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />" +
 		"- runautodq: Manually run the automatic disqualifier.<br />" +
 		"- scouting: Specifies whether joining tournament matches while in a tournament is allowed.<br />" +
+		"- modjoin: Specifies whether players can modjoin their battles. <br />" +
 		"- getusers: Lists the users in the current tournament.<br />" +
 		"- on/off: Enables/disables allowing mods to start tournaments.<br />" +
 		"More detailed help can be found <a href=\"https://gist.github.com/verbiage/0846a552595349032fbe\">here</a>"
