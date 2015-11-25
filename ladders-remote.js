@@ -84,22 +84,22 @@ Ladder.prototype.updateRating = function (p1name, p2name, p1score, room) {
 				p1rating = data.p1rating;
 				p2rating = data.p2rating;
 
-				let oldacre = Math.round(p1rating.oldacre);
-				let acre = Math.round(p1rating.acre);
-				let reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
+				let oldelo = Math.round(p1rating.oldelo);
+				let elo = Math.round(p1rating.elo);
+				let reasons = '' + (elo - oldelo) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-				room.addRaw(Tools.escapeHTML(p1name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
+				room.addRaw(Tools.escapeHTML(p1name) + '\'s rating: ' + oldelo + ' &rarr; <strong>' + elo + '</strong><br />(' + reasons + ')');
 
-				oldacre = Math.round(p2rating.oldacre);
-				acre = Math.round(p2rating.acre);
-				reasons = '' + (acre - oldacre) + ' for ' + (p1score > 0.9 ? 'losing' : (p1score < 0.1 ? 'winning' : 'tying'));
+				oldelo = Math.round(p2rating.oldelo);
+				elo = Math.round(p2rating.elo);
+				reasons = '' + (elo - oldelo) + ' for ' + (p1score > 0.9 ? 'losing' : (p1score < 0.1 ? 'winning' : 'tying'));
 				if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-				room.addRaw(Tools.escapeHTML(p2name) + '\'s rating: ' + oldacre + ' &rarr; <strong>' + acre + '</strong><br />(' + reasons + ')');
+				room.addRaw(Tools.escapeHTML(p2name) + '\'s rating: ' + oldelo + ' &rarr; <strong>' + elo + '</strong><br />(' + reasons + ')');
 
 				let p1 = Users.getExact(p1name);
-				if (p1) p1.mmrCache[formatid] = +p1rating.acre;
+				if (p1) p1.mmrCache[formatid] = +p1rating.elo;
 				let p2 = Users.getExact(p2name);
-				if (p2) p2.mmrCache[formatid] = +p2rating.acre;
+				if (p2) p2.mmrCache[formatid] = +p2rating.elo;
 				room.update();
 			} catch (e) {
 				room.addRaw('There was an error calculating rating changes.');
