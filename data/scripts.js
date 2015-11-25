@@ -1248,7 +1248,7 @@ exports.BattleScripts = {
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					if (hasMove['darkpulse'] || hasMove['knockoff']) rejected = true;
 					break;
-				case 'haze': case 'healingwish': case 'pursuit': case 'spikes': case 'toxicspikes': case 'waterspout':
+				case 'haze': case 'healingwish': case 'pursuit': case 'spikes': case 'waterspout':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'healbell':
@@ -1273,6 +1273,9 @@ exports.BattleScripts = {
 				case 'switcheroo': case 'trick':
 					if (counter.Physical + counter.Special < 3) rejected = true;
 					if (hasMove['acrobatics'] || hasMove['lightscreen'] || hasMove['reflect'] || hasMove['trickroom']) rejected = true;
+					break;
+				case 'toxicspikes':
+					if (counter.setupType || teamDetails.toxicSpikes >= 1) rejected = true;
 					break;
 				case 'trickroom':
 					if (counter.setupType || !!counter['speedsetup'] || counter.damagingMoves < 2) rejected = true;
@@ -1655,6 +1658,8 @@ exports.BattleScripts = {
 				rejectAbility = !counter['Status'];
 			} else if (ability === 'Reckless' || ability === 'Rock Head') {
 				rejectAbility = !counter['recoil'];
+			} else if (ability === 'Sand Veil') {
+				rejectAbility = !teamDetails['sand'];
 			} else if (ability === 'Serene Grace') {
 				rejectAbility = !counter['serenegrace'] || template.id === 'chansey' || template.id === 'blissey';
 			} else if (ability === 'Simple') {
@@ -1718,8 +1723,6 @@ exports.BattleScripts = {
 			} else if (template.id === 'combee') {
 				// Combee always gets Hustle but its only physical move is Endeavor, which loses accuracy
 				ability = 'Honey Gather';
-			} else if (template.id === 'gligar') {
-				ability = 'Immunity';
 			} else if (template.id === 'lilligant' && hasMove['petaldance']) {
 				ability = 'Own Tempo';
 			} else if (template.id === 'lopunny' && hasMove['switcheroo'] && this.random(3)) {
@@ -2032,7 +2035,7 @@ exports.BattleScripts = {
 		let baseFormes = {};
 		let uberCount = 0;
 		let puCount = 0;
-		let teamDetails = {megaCount: 0, stealthRock: 0, hazardClear: 0};
+		let teamDetails = {megaCount: 0, stealthRock: 0, toxicSpikes: 0, hazardClear: 0};
 
 		while (pokemonPool.length && pokemonLeft < 6) {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
@@ -2166,11 +2169,13 @@ exports.BattleScripts = {
 				puCount++;
 			}
 
-			// Increment mega, stealthrock, weather, and base species counters
+			// Increment Mega, weather, hazards, and base species counters
 			if (isMegaSet) teamDetails.megaCount++;
 			if (set.ability === 'Snow Warning') teamDetails['hail'] = 1;
 			if (set.ability === 'Drizzle' || set.moves.indexOf('raindance') >= 0) teamDetails['rain'] = 1;
+			if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
 			if (set.moves.indexOf('stealthrock') >= 0) teamDetails.stealthRock++;
+			if (set.moves.indexOf('toxicspikes') >= 0) teamDetails.toxicSpikes++;
 			if (set.moves.indexOf('defog') >= 0 || set.moves.indexOf('rapidspin') >= 0) teamDetails.hazardClear++;
 			baseFormes[template.baseSpecies] = 1;
 		}
