@@ -711,7 +711,7 @@ Validator = (function () {
 							// unless it's supposed to be self-breedable, can't inherit from self, prevos, etc
 							if (!fromSelf && !alreadyChecked[dexEntry.speciesid]) continue;
 							// can't inherit from dex entries with no learnsets
-							if (dexEntry.learnset) continue;
+							if (!dexEntry.learnset) continue;
 							// father must be able to learn the move
 							if (!fromSelf && !dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
 
