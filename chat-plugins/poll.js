@@ -148,6 +148,7 @@ exports.commands = {
 	poll: {
 		create: 'new',
 		new: function (target, room, user, connection, cmd, message) {
+			if (!target) return this.parse('/help poll new');
 			if (target.length > 1024) return this.errorReply("Poll too long.");
 			let params = target.split(target.includes('|') ? '|' : ',').map(function (param) { return param.trim(); });
 
@@ -176,7 +177,7 @@ exports.commands = {
 
 		vote: function (target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
-			if (!target) return this.errorReply("Please specify an option.");
+			if (!target) return this.parse('/help poll vote');
 
 			if (target === 'blank') {
 				room.poll.blankvote(user);
