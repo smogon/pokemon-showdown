@@ -2278,7 +2278,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's moves have their secondary effect chance doubled.",
 		onModifyMovePriority: -2,
 		onModifyMove: function (move) {
-			if (move.secondaries && move.id !== 'secretpower') {
+			if (move.secondaries) {
 				this.debug('doubling secondary chance');
 				for (var i = 0; i < move.secondaries.length; i++) {
 					move.secondaries[i].chance *= 2;
