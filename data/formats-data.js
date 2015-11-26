@@ -3344,7 +3344,7 @@ exports.BattleFormatsData = {
 		tier: "PU"
 	},
 	infernape: {
-		randomBattleMoves: ["closecombat","fireblast","grassknot","machpunch","flareblitz","uturn","stealthrock","hiddenpowerice","thunderpunch","nastyplot","swordsdance"],
+		randomBattleMoves: ["stealthrock","uturn","swordsdance","closecombat","flareblitz","thunderpunch","machpunch","nastyplot","fireblast","vacuumwave","grassknot","hiddenpowerice"],
 		randomDoubleBattleMoves: ["fakeout","heatwave","closecombat","uturn","grassknot","stoneedge","machpunch","feint","taunt","flareblitz","hiddenpowerice","thunderpunch","protect"],
 		eventPokemon: [
 			{"generation":5,"level":100,"gender":"M","isHidden":false,"moves":["fireblast","closecombat","uturn","grassknot"],"pokeball":"cherishball"}
@@ -5205,7 +5205,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	hawlucha: {
-		randomBattleMoves: ["swordsdance","highjumpkick","acrobatics","roost","thunderpunch","substitute"],
+		randomBattleMoves: ["substitute","swordsdance","highjumpkick","acrobatics","roost","stoneedge"],
 		randomDoubleBattleMoves: ["swordsdance","highjumpkick","uturn","stoneedge","skydrop","encore","protect"],
 		tier: "BL"
 	},

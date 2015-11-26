@@ -979,7 +979,7 @@ exports.BattleScripts = {
 		// Moves that shouldn't be the only STAB moves:
 		let NoStab = {
 			aquajet:1, bounce:1, fakeout:1, flamecharge:1, iceshard:1, pursuit:1, quickattack:1, skyattack:1,
-			chargebeam:1, clearsmog:1, eruption:1, waterspout:1
+			chargebeam:1, clearsmog:1, eruption:1, vacuumwave:1, waterspout:1
 		};
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
@@ -1351,6 +1351,9 @@ exports.BattleScripts = {
 					if (counter.setupType && (hasMove['drainpunch'] || hasMove['focusblast'])) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
+				case 'vacuumwave':
+					if (counter.setupType !== 'Special' && (hasMove['closecombat'] || hasMove['machpunch'])) rejected = true;
+					break;
 				case 'blazekick':
 					if (hasMove['flamethrower'] && counter.setupType !== 'Physical') rejected = true;
 					break;
@@ -1519,7 +1522,9 @@ exports.BattleScripts = {
 
 				// Abilities should have moves that benefit
 				if ((hasAbility['Adaptability'] && !counter.setupType && counter.stab < template.types.length) ||
+					(hasAbility['Bad Dreams'] && !hasMove['darkvoid']) ||
 					(hasAbility['Contrary'] && !counter.contrary && template.species !== 'Shuckle') ||
+					(hasAbility['Dark Aura'] && !counter['Dark']) ||
 					((hasAbility['Drought'] || hasMove['sunnyday']) && hasType['Fire'] && !counter['Fire'] && move.id !== 'solarbeam' && move.id !== 'sunnyday') ||
 					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal']) ||
 					(hasAbility['Gale Wings'] && !counter['Flying'])) {
