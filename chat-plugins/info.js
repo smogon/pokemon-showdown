@@ -2383,8 +2383,9 @@ exports.commands = {
 				formatName = formatId = '';
 			}
 			let speciesid = pokemon.speciesid;
-			// Special case for Meowstic-M
+			// Special case for Meowstic-M and Hoopa-Unbound
 			if (speciesid === 'meowstic') speciesid = 'meowsticm';
+			if (speciesid === 'hoopaunbound') speciesid = 'hoopa-alt';
 			if (pokemon.tier === 'CAP') {
 				this.sendReplyBox("<a href=\"https://www.smogon.com/cap/pokemon/strategies/" + speciesid + "\">" + generation.toUpperCase() + " " + Tools.escapeHTML(formatName) + " " + pokemon.name + " analysis preview</a>, brought to you by <a href=\"https://www.smogon.com\">Smogon University</a> <a href=\"https://smogon.com/cap/\">CAP Project</a>");
 			} else {
