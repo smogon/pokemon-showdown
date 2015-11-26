@@ -158,6 +158,17 @@ exports.BattleAbilities = {
 		rating: 1.5,
 		num: 46
 	},
+	"serenegrace": {
+		inherit: true,
+		onModifyMove: function (move) {
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (var i = 0; i < move.secondaries.length; i++) {
+					move.secondaries[i].chance *= 2;
+				}
+			}
+		}
+	},
 	"simple": {
 		shortDesc: "If this Pokemon's stat stages are raised or lowered, the effect is doubled instead.",
 		onModifyBoost: function (boosts) {
