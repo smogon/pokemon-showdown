@@ -702,18 +702,19 @@ Validator = (function () {
 						// loop through pokemon for possible fathers to inherit the egg move from
 						for (let templateid in tools.data.Pokedex) {
 							let dexEntry = tools.getTemplate(templateid);
-							// CAP pokemon can't breed
+							// can't inherit from CAP pokemon
 							if (dexEntry.isNonstandard) continue;
 							// can't breed mons from future gens
 							if (dexEntry.gen > parseInt(learned.charAt(0), 10)) continue;
 							// father must be male
 							if (dexEntry.gender === 'N' || dexEntry.gender === 'F') continue;
-							// unless it's supposed to be self-breedable, can't inherit from self, prevos, etc
-							if (!fromSelf && !alreadyChecked[dexEntry.speciesid]) continue;
 							// can't inherit from dex entries with no learnsets
 							if (!dexEntry.learnset) continue;
+							// unless it's supposed to be self-breedable, can't inherit from self, prevos, etc
+							// only basic pokemon have egg moves, so by now all evolutions should be in alreadyChecked
+							if (!fromSelf && alreadyChecked[dexEntry.speciesid]) continue;
 							// father must be able to learn the move
-							if (!fromSelf && !dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
+							if (!dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
 
 							// must be able to breed with father
 							if (!dexEntry.eggGroups.intersect(eggGroups).length) continue;
