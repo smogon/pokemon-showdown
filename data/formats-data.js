@@ -4899,26 +4899,26 @@ exports.BattleFormatsData = {
 		tier: "Uber"
 	},
 	genesectburn: {
-		randomBattleMoves: ["uturn","bugbuzz","icebeam","technoblast","thunderbolt","ironhead","shiftgear","extremespeed"],
-		randomDoubleBattleMoves: ["uturn","bugbuzz","icebeam","technoblast","thunderbolt","ironhead","shiftgear","extremespeed","blazekick","protect"],
+		randomBattleMoves: ["uturn","bugbuzz","icebeam","technoblast","thunderbolt","ironhead","extremespeed"],
+		randomDoubleBattleMoves: ["uturn","bugbuzz","icebeam","technoblast","thunderbolt","ironhead","extremespeed","protect"],
 		dreamWorldPokeball: 'cherishball',
 		requiredItem: "Burn Drive"
 	},
 	genesectchill: {
-		randomBattleMoves: ["uturn","bugbuzz","technoblast","flamethrower","thunderbolt","ironhead","shiftgear","extremespeed","blazekick"],
-		randomDoubleBattleMoves: ["uturn","bugbuzz","icebeam","technoblast","thunderbolt","ironhead","shiftgear","extremespeed","blazekick","protect"],
+		randomBattleMoves: ["uturn","bugbuzz","technoblast","flamethrower","thunderbolt","ironhead","extremespeed"],
+		randomDoubleBattleMoves: ["uturn","bugbuzz","technoblast","flamethrower","thunderbolt","ironhead","extremespeed","protect"],
 		dreamWorldPokeball: 'cherishball',
 		requiredItem: "Chill Drive"
 	},
 	genesectdouse: {
-		randomBattleMoves: ["uturn","bugbuzz","icebeam","flamethrower","thunderbolt","technoblast","ironhead","shiftgear","extremespeed","blazekick"],
-		randomDoubleBattleMoves: ["uturn","bugbuzz","icebeam","technoblast","thunderbolt","ironhead","shiftgear","extremespeed","blazekick","protect"],
+		randomBattleMoves: ["uturn","bugbuzz","icebeam","flamethrower","thunderbolt","technoblast","ironhead","extremespeed"],
+		randomDoubleBattleMoves: ["uturn","bugbuzz","icebeam","flamethrower","thunderbolt","technoblast","ironhead","extremespeed","protect"],
 		dreamWorldPokeball: 'cherishball',
 		requiredItem: "Douse Drive"
 	},
 	genesectshock: {
-		randomBattleMoves: ["uturn","bugbuzz","icebeam","flamethrower","technoblast","ironhead","shiftgear","extremespeed","blazekick"],
-		randomDoubleBattleMoves: ["uturn","bugbuzz","icebeam","technoblast","thunderbolt","ironhead","shiftgear","extremespeed","blazekick","protect"],
+		randomBattleMoves: ["uturn","bugbuzz","icebeam","flamethrower","technoblast","ironhead","extremespeed"],
+		randomDoubleBattleMoves: ["uturn","bugbuzz","icebeam","flamethrower","technoblast","ironhead","extremespeed","protect"],
 		dreamWorldPokeball: 'cherishball',
 		requiredItem: "Shock Drive"
 	},
