@@ -1227,6 +1227,7 @@ exports.BattleScripts = {
 				case 'agility': case 'autotomize': case 'rockpolish':
 					if (counter.damagingMoves < 2 && !counter.setupType && !hasMove['batonpass']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					isSetup = true;
 					break;
 				case 'flamecharge':
 					if (counter.damagingMoves < 3 && !counter.setupType && !hasMove['batonpass']) rejected = true;
@@ -1520,14 +1521,16 @@ exports.BattleScripts = {
 					if ((!hasType['Ghost'] || !counter['Ghost'] || move.type !== 'Fighting') && (!hasType['Electric'] || move.type !== 'Ice')) rejected = true;
 				}
 
-				// Abilities should have moves that benefit
+				// Pokemon should have moves that benefit their Ability/Type/Weather
 				if ((hasAbility['Adaptability'] && !counter.setupType && counter.stab < template.types.length) ||
 					(hasAbility['Bad Dreams'] && !hasMove['darkvoid']) ||
-					(hasAbility['Contrary'] && !counter.contrary && template.species !== 'Shuckle') ||
+					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Dark Aura'] && !counter['Dark']) ||
-					((hasAbility['Drought'] || hasMove['sunnyday']) && hasType['Fire'] && !counter['Fire'] && move.id !== 'solarbeam' && move.id !== 'sunnyday') ||
 					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal']) ||
-					(hasAbility['Gale Wings'] && !counter['Flying'])) {
+					(hasAbility['Gale Wings'] && !counter['Flying']) ||
+					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'])) ||
+					(hasMove['raindance'] && hasType['Water'] && !counter['Water'] && move.id !== 'raindance') ||
+					(hasMove['sunnyday'] && hasType['Fire'] && !counter['Fire'] && move.id !== 'solarbeam' && move.id !== 'sunnyday')) {
 					// Reject Status or non-STAB
 					if (!isSetup && (move.category === 'Status' || !hasType[move.type])) rejected = true;
 				}
