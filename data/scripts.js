@@ -1010,7 +1010,7 @@ exports.BattleScripts = {
 					// Certain moves aren't acceptable as a Pokemon's only STAB attack
 					if (!(moveid in NoStab) && (moveid !== 'hiddenpower' || Object.keys(hasType).length === 1)) counter['stab']++;
 				}
-				if (hasAbility['Protean'] && !(moveid in NoStab)) counter['stab']++;
+				if (move.priority === 0 && hasAbility['Protean'] && !(moveid in NoStab)) counter['stab']++;
 				if (move.category === 'Physical') counter['hustle']++;
 				if (move.type === 'Normal') {
 					if ((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !(moveid in NoStab)) counter['stab']++;
