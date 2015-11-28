@@ -1590,6 +1590,18 @@ exports.BattleScripts = {
 			}
 		} while (moves.length < 4 && movePool.length);
 
+		// If Hidden Power has been removed, reset the IVs
+		if (!hasMove['hiddenpower']) {
+			ivs = {
+				hp: 31,
+				atk: 31,
+				def: 31,
+				spa: 31,
+				spd: 31,
+				spe: 31
+			};
+		}
+
 		let abilities = Object.values(baseTemplate.abilities).sort(function (a, b) {
 			return this.getAbility(b).rating - this.getAbility(a).rating;
 		}.bind(this));
