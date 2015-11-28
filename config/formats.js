@@ -10,6 +10,7 @@ exports.Formats = [
 
 	{
 		name: "Random Battle",
+		desc: ["Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable."],
 		section: "ORAS Singles",
 
 		team: 'random',
@@ -795,6 +796,7 @@ exports.Formats = [
 	},
 	{
 		name: "Hackmons Cup",
+		desc: ["Randomized teams of level-balanced Pok&eacute;mon with absolutely any ability, moves, and item."],
 		section: "Other Metagames",
 
 		team: 'randomHC',
