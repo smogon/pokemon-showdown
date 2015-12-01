@@ -417,7 +417,7 @@ exports.Formats = [
 		mod: '350cup',
 		ruleset: ['Ubers', 'Evasion Moves Clause'],
 		banlist: ['Abra', 'Cranidos', 'Darumaka', 'Gastly', 'Pawniard', 'Spritzee', 'DeepSeaScale', 'DeepSeaTooth', 'Light Ball', 'Thick Club'],
-		validateSet: function (set) {
+		onValidateSet: function (set) {
 			var template = Tools.getTemplate(set.species);
 			var item = this.getItem(set.item);
 			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
@@ -434,7 +434,8 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		mod: 'lce',
-		ruleset: ['LC']
+		ruleset: ['LC'],
+		banlist: ['Fletchling']
 	},*/
 	/*{
 		name: "[Seasonal] Super Squad Smackdown",
