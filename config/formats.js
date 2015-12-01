@@ -425,18 +425,41 @@ exports.Formats = [
 			}
 		}
 	},
-	/*{
-		name: "Little Cup Extra",
+	{
+		name: "LC Extended",
 		desc: [
 			"LC but with Pok&eacute;mon being able to learn all moves from their evolutions.",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3516429/\">Little Cup Extra</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3557568/\">LC Extended</a>"
 		],
 		section: "OM of the Month",
 
-		mod: 'lce',
-		ruleset: ['LC'],
-		banlist: ['Fletchling']
-	},*/
+		maxLevel: 5,
+		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Team Preview'],
+		banlist: ['LC Uber', 'Fletchling', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
+		validateSet: function (set, teamHas) {
+			var species = set.species || set.name;
+			var ability = set.ability;
+			let template = Tools.getTemplate(species);
+			if (template.prevo) {
+				return [species + " isn't the first in its evolution family."];
+			}
+			if (!template.nfe) {
+				return [species + " doesn't have an evolution family."];
+			}
+			if (Object.values(template.abilities).indexOf(ability) < 0 || ability === 'Moody') {
+				return [species + " doesn't have a legal ability."];
+			}
+			while (template.evos.length) {
+				template = Tools.getTemplate(template.evos[0]);
+			}
+			set.species = template.species;
+			set.ability = template.abilities[0];
+			let problems = this.validateSet(set, teamHas) || [];
+			set.species = species;
+			set.ability = ability;
+			return problems;
+		}
+	},
 	/*{
 		name: "[Seasonal] Super Squad Smackdown",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
