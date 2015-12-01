@@ -433,7 +433,6 @@ exports.Formats = [
 		],
 		section: "OM of the Month",
 
-		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Team Preview'],
 		banlist: ['LC Uber', 'Fletchling', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
 		validateSet: function (set, teamHas) {
@@ -452,11 +451,14 @@ exports.Formats = [
 			while (template.evos.length) {
 				template = Tools.getTemplate(template.evos[0]);
 			}
+			var level = set.level;
 			set.species = template.species;
 			set.ability = template.abilities[0];
+			set.level = template.evoLevel;
 			let problems = this.validateSet(set, teamHas) || [];
 			set.species = species;
 			set.ability = ability;
+			set.level = Tools.clampIntRange(level, 1, 5);
 			return problems;
 		}
 	},
