@@ -434,7 +434,7 @@ exports.Formats = [
 		section: "OM of the Month",
 
 		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause', 'Team Preview'],
-		banlist: ['LC Uber', 'Fletchling', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
+		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger'],
 		validateSet: function (set, teamHas) {
 			var species = set.species || set.name;
 			var ability = set.ability;
@@ -444,6 +444,9 @@ exports.Formats = [
 			}
 			if (!template.nfe) {
 				return [species + " doesn't have an evolution family."];
+			}
+			if (template.tier === 'LC Uber' || template.species in {'Fletchling':1, 'Gligar':1, 'Misdreavus':1, 'Scyther':1, 'Sneasel':1, 'Tangela':1}) {
+				return [species + " is banned from LC Extended."];
 			}
 			if (Object.values(template.abilities).indexOf(ability) < 0 || ability === 'Moody') {
 				return [species + " doesn't have a legal ability."];
