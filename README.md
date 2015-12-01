@@ -144,6 +144,12 @@ Retired Staff
 - Bill Meltsner [bmelts] - Development, Sysadmin
 - Cathy J. Fitzpatrick [cathyjf] - Development, Sysadmin
 
+Major Contributors
+
+- Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
+- Konrad Borowski [xfix] - Development
+- Quinton Lee [sirDonovan] - Development
+
 Contributors
 
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
@@ -151,10 +157,9 @@ Contributors
 - Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
+- Ian Clail [Layell] - Art (battle graphics, sprites)
 - Jacob Zimmer [SolarisFox] - Development
-- Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
-- Konrad Borowski [xfix] - Development
-- Quinton Lee [sirDonovan] - Development
+- Neil Rashbrook [urkerab] - Development
 - Robin Vandenbrande [Quinella] - Development
 
 Special thanks
