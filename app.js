@@ -22,7 +22,11 @@
  *
  * Tools - from tools.js
  *
- *   Handles getting data about Pokemon, items, etc. *
+ *   Handles getting data about Pokemon, items, etc.
+ *
+ * Ladders - from ladders.js and ladders-remote.js
+ *
+ *   Handles Elo rating tracking for players.
  *
  * Simulator - from simulator.js
  *

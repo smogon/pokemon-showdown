@@ -1,8 +1,13 @@
 /**
- * Ladder library
+ * Main server ladder library
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This file handles ladder rating retrieval.
+ * This file handles ladders for the main server on
+ * play.pokemonshowdown.com.
+ *
+ * Ladders for all other servers is handled by ladders.js.
+ *
+ * Matchmaking is currently still implemented in rooms.js.
  *
  * @license MIT license
  */
