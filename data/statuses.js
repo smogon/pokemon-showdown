@@ -316,7 +316,7 @@ exports.BattleStatuses = {
 				}
 
 				// time's up; time to hit! :D
-				let target = side.foe.active[posData.targetPosition];
+				let target = side.active[i];
 				let move = this.getMove(posData.move);
 				if (target.fainted) {
 					this.add('-hint', '' + move.name + ' did not hit because the target is fainted.');
@@ -328,10 +328,6 @@ exports.BattleStatuses = {
 				target.removeVolatile('Protect');
 				target.removeVolatile('Endure');
 
-				if (posData.moveData.ignoreImmunity === undefined) {
-					posData.moveData.ignoreImmunity = false;
-				}
-
 				if (target.hasAbility('wonderguard') && this.gen > 5) {
 					this.debug('Wonder Guard immunity: ' + move.id);
 					if (target.runEffectiveness(move) <= 0) {
@@ -341,16 +337,7 @@ exports.BattleStatuses = {
 					}
 				}
 
-				// Prior to gen 5, these moves had no STAB and no effectiveness.
-				// This is done here and to moveData's type for two reasons:
-				// - modifyMove event happens before the moveHit function is run.
-				// - moveData here is different from move, as one is generated here and the other by the move itself.
-				// So here we centralise any future hit move getting typeless on hit as it should be.
-				if (this.gen < 5) {
-					posData.moveData.type = '???';
-				}
-
-				this.moveHit(target, posData.source, move, posData.moveData);
+				this.tryMoveHit(target, posData.source, posData.moveData);
 
 				this.effectData.positions[i] = null;
 			}

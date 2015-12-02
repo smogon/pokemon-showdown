@@ -292,7 +292,38 @@ exports.BattleMovedex = {
 	doomdesire: {
 		inherit: true,
 		accuracy: 85,
-		basePower: 120
+		basePower: 120,
+		onTry: function (source, target) {
+			target.side.addSideCondition('futuremove');
+			if (target.side.sideConditions['futuremove'].positions[target.position]) {
+				return false;
+			}
+			let damage = this.getDamage(source, target, {
+				name: "Doom Desire",
+				basePower: 120,
+				category: "Special",
+				flags: {},
+				willCrit: false,
+				type: '???'
+			}, true);
+			target.side.sideConditions['futuremove'].positions[target.position] = {
+				duration: 3,
+				move: 'doomdesire',
+				source: source,
+				moveData: {
+					id: 'doomdesire',
+					name: "Doom Desire",
+					accuracy: 85,
+					basePower: 0,
+					damage: damage,
+					category: "Special",
+					flags: {},
+					type: '???'
+				}
+			};
+			this.add('-start', source, 'Doom Desire');
+			return null;
+		}
 	},
 	drainpunch: {
 		inherit: true,
@@ -453,7 +484,38 @@ exports.BattleMovedex = {
 		inherit: true,
 		accuracy: 90,
 		basePower: 80,
-		pp: 15
+		pp: 15,
+		onTry: function (source, target) {
+			target.side.addSideCondition('futuremove');
+			if (target.side.sideConditions['futuremove'].positions[target.position]) {
+				return false;
+			}
+			let damage = this.getDamage(source, target, {
+				name: "Future Sight",
+				basePower: 80,
+				category: "Special",
+				flags: {},
+				willCrit: false,
+				type: '???'
+			}, true);
+			target.side.sideConditions['futuremove'].positions[target.position] = {
+				duration: 3,
+				move: 'futuresight',
+				source: source,
+				moveData: {
+					id: 'futuresight',
+					name: "Future Sight",
+					accuracy: 90,
+					basePower: 0,
+					damage: damage,
+					category: "Special",
+					flags: {},
+					type: '???'
+				}
+			};
+			this.add('-start', source, 'Future Sight');
+			return null;
+		}
 	},
 	gigadrain: {
 		inherit: true,

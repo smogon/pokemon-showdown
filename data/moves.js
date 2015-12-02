@@ -2820,18 +2820,19 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isFutureMove: true,
-		onTryHit: function (target, source) {
-			source.side.addSideCondition('futuremove');
-			if (source.side.sideConditions['futuremove'].positions[source.position]) {
+		onTry: function (source, target) {
+			target.side.addSideCondition('futuremove');
+			if (target.side.sideConditions['futuremove'].positions[target.position]) {
 				return false;
 			}
-			source.side.sideConditions['futuremove'].positions[source.position] = {
+			target.side.sideConditions['futuremove'].positions[target.position] = {
 				duration: 3,
 				move: 'doomdesire',
-				targetPosition: target.position,
 				source: source,
 				moveData: {
+					id: 'doomdesire',
 					name: "Doom Desire",
+					accuracy: 100,
 					basePower: 140,
 					category: "Special",
 					flags: {},
@@ -5000,18 +5001,19 @@ exports.BattleMovedex = {
 		flags: {},
 		ignoreImmunity: true,
 		isFutureMove: true,
-		onTryHit: function (target, source) {
-			source.side.addSideCondition('futuremove');
-			if (source.side.sideConditions['futuremove'].positions[source.position]) {
+		onTry: function (source, target) {
+			target.side.addSideCondition('futuremove');
+			if (target.side.sideConditions['futuremove'].positions[target.position]) {
 				return false;
 			}
-			source.side.sideConditions['futuremove'].positions[source.position] = {
+			target.side.sideConditions['futuremove'].positions[target.position] = {
 				duration: 3,
 				move: 'futuresight',
-				targetPosition: target.position,
 				source: source,
 				moveData: {
+					id: 'futuresight',
 					name: "Future Sight",
+					accuracy: 100,
 					basePower: 120,
 					category: "Special",
 					flags: {},
