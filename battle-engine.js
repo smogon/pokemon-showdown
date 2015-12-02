@@ -3244,10 +3244,10 @@ Battle = (function () {
 			this.add('-damage', target, target.getHealth, '[from] confusion');
 			break;
 		default:
-			if (effect.effectType === 'Move') {
+			if (effect.effectType === 'Move' || !name) {
 				this.add('-damage', target, target.getHealth);
 			} else if (source && (source !== target || effect.effectType === 'Ability')) {
-				this.add('-damage', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
+				this.add('-damage', target, target.getHealth, '[from] ' + name, '[of] ' + source);
 			} else {
 				this.add('-damage', target, target.getHealth, '[from] ' + name);
 			}
