@@ -2,7 +2,13 @@
  * Ladder library
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * This file handles ladders.
+ * This file handles ladders for all servers other than
+ * play.pokemonshowdown.com.
+ *
+ * Specifically, this is the file that handles calculating and keeping
+ * track of players' Elo ratings for all formats.
+ *
+ * Matchmaking is currently still implemented in rooms.js.
  *
  * @license MIT license
  */
