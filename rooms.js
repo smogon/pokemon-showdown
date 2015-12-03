@@ -28,6 +28,7 @@ let Room = (function () {
 	function Room(roomid, title) {
 		this.id = roomid;
 		this.title = (title || roomid);
+		this.reportJoins = Config.reportjoins;
 
 		this.users = Object.create(null);
 
@@ -739,7 +740,7 @@ let GlobalRoom = (function () {
 			}
 		}
 	};
-	GlobalRoom.prototype.onJoinConnection = function (user, connection) {
+	GlobalRoom.prototype.onConnect = function (user, connection) {
 		let initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';
 		connection.send(initdata + this.formatListText);
 		if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
@@ -752,12 +753,6 @@ let GlobalRoom = (function () {
 		if (++this.userCount > this.maxUsers) {
 			this.maxUsers = this.userCount;
 			this.maxUsersDate = Date.now();
-		}
-
-		if (!merging) {
-			let initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';
-			connection.send(initdata + this.formatListText);
-			if (this.chatRooms.length > 2) connection.send('|queryresponse|rooms|null'); // should display room list
 		}
 
 		return user;
@@ -846,6 +841,7 @@ let BattleRoom = (function () {
 	function BattleRoom(roomid, format, p1, p2, options) {
 		Room.call(this, roomid, "" + p1.name + " vs. " + p2.name);
 		this.modchat = (Config.battlemodchat || false);
+		this.reportJoins = Config.reportbattlejoins;
 
 		format = '' + (format || '');
 
@@ -1270,7 +1266,7 @@ let BattleRoom = (function () {
 	};
 	// This function is only called when the user is already in the room (with another connection).
 	// First-time join calls this.onJoin() below instead.
-	BattleRoom.prototype.onJoinConnection = function (user, connection) {
+	BattleRoom.prototype.onConnect = function (user, connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
@@ -1281,18 +1277,13 @@ let BattleRoom = (function () {
 		if (!user) return false;
 		if (this.users[user.userid]) return user;
 
-		this.users[user.userid] = user;
-		this.userCount++;
-
-		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		if (user.named) {
-			if (Config.reportbattlejoins) {
-				this.add('|join|' + user.name);
-			} else {
-				this.add('|J|' + user.name);
-			}
+			this.add((this.reportJoins ? '|j|' : '|J|') + user.name);
 			this.update();
 		}
+
+		this.users[user.userid] = user;
+		this.userCount++;
 
 		return user;
 	};
@@ -1619,36 +1610,28 @@ let ChatRoom = (function () {
 		if (message) message += '</div>';
 		return message;
 	};
-	ChatRoom.prototype.onJoinConnection = function (user, connection) {
+	ChatRoom.prototype.onConnect = function (user, connection) {
 		let userList = this.userList ? this.userList : this.getUserList();
-		this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-25).join('\n') + this.getIntroMessage(user));
+		this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage(user));
 		if (this.poll) this.poll.display(user, false);
 		if (global.Tournaments && Tournaments.get(this.id)) {
 			Tournaments.get(this.id).updateFor(user, connection);
 		}
 	};
-	ChatRoom.prototype.onJoin = function (user, connection, merging) {
+	ChatRoom.prototype.onJoin = function (user, connection) {
 		if (!user) return false; // ???
 		if (this.users[user.userid]) return user;
 
-		this.users[user.userid] = user;
-		this.userCount++;
-
-		if (!merging) {
-			let userList = this.userList ? this.userList : this.getUserList();
-			this.sendUser(connection, '|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.getLogSlice(-100).join('\n') + this.getIntroMessage(user));
-			if (this.poll) this.poll.display(user, false);
-			if (global.Tournaments && Tournaments.get(this.id)) {
-				Tournaments.get(this.id).updateFor(user, connection);
-			}
-		}
-		if (user.named && Config.reportjoins) {
+		if (user.named && this.reportJoins) {
 			this.add('|j|' + user.getIdentity(this.id));
 			this.update();
 		} else if (user.named) {
 			let entry = '|J|' + user.getIdentity(this.id);
 			this.reportJoin(entry);
 		}
+
+		this.users[user.userid] = user;
+		this.userCount++;
 
 		return user;
 	};
