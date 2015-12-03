@@ -80,6 +80,7 @@ let Battle = (function () {
 
 		this.id = id;
 		this.room = room;
+		this.title = "Battle";
 		this.format = toId(format);
 		this.players = [null, null];
 		this.playerids = [null, null];
@@ -242,13 +243,13 @@ let Battle = (function () {
 
 	Battle.prototype.setPlayer = function (user, slot) {
 		if (this.players[slot]) {
-			delete this.players[slot].battles[this.id];
+			delete this.players[slot].games[this.id];
 		}
 		if (user) {
-			if (user.battles[this.id]) {
+			if (user.games[this.id]) {
 				return false;
 			}
-			user.battles[this.id] = true;
+			user.games[this.id] = this;
 		}
 		this.players[slot] = (user || null);
 		let oldplayerid = this.playerids[slot];

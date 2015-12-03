@@ -486,7 +486,7 @@ Users.cacheGroupData = cacheGroupData;
 User = (function () {
 	function User(connection) {
 		numUsers++;
-		this.mmrCache = {};
+		this.mmrCache = Object.create(null);
 		this.guestNum = numUsers;
 		this.name = 'Guest ' + numUsers;
 		this.named = false;
@@ -502,7 +502,7 @@ User = (function () {
 		if (connection.user) connection.user = this;
 		this.connections = [connection];
 		this.latestHost = '';
-		this.ips = {};
+		this.ips = Object.create(null);
 		this.ips[connection.ip] = 1;
 		// Note: Using the user's latest IP for anything will usually be
 		//       wrong. Most code should use all of the IPs contained in
@@ -510,9 +510,11 @@ User = (function () {
 		this.latestIp = connection.ip;
 
 		this.locked = Users.checkLocked(connection.ip);
-		this.prevNames = {};
-		this.battles = {};
-		this.roomCount = {};
+		this.prevNames = Object.create(null);
+		this.roomCount = Object.create(null);
+
+		// Table of roomid:game
+		this.games = Object.create(null);
 
 		// searches and challenges
 		this.searching = Object.create(null);
