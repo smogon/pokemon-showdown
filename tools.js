@@ -174,6 +174,7 @@ module.exports = (function () {
 	 * - must not start or end with a space character
 	 * - must not contain any of: | , [ ]
 	 * - must not be the empty string
+	 * - must not contain Unicode RTL control characters
 	 *
 	 * If no such string can be found, returns the empty string. Calling
 	 * functions are expected to check for that condition and deal with it
@@ -185,7 +186,7 @@ module.exports = (function () {
 
 	Tools.prototype.getName = function (name) {
 		if (typeof name !== 'string' && typeof name !== 'number') return '';
-		name = ('' + name).replace(/[\|\s\[\]\,]+/g, ' ').trim();
+		name = ('' + name).replace(/[\|\s\[\]\,\u202e]+/g, ' ').trim();
 		if (name.length > 18) name = name.substr(0, 18).trim();
 		return name;
 	};
