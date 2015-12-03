@@ -883,6 +883,7 @@ let BattleRoom = (function () {
 
 		this.rated = rated;
 		this.battle = Simulator.create(this.id, format, rated, this);
+		this.game = this.battle;
 
 		this.sideTicksLeft = [21, 21];
 		if (!rated && !this.tour) this.sideTicksLeft = [28, 28];
@@ -1316,7 +1317,7 @@ let BattleRoom = (function () {
 	BattleRoom.prototype.onUpdateIdentity = function () {};
 	BattleRoom.prototype.onLeave = function (user) {
 		if (!user) return; // ...
-		if (user.battles[this.id]) {
+		if (this.id in user.games) {
 			this.battle.leave(user);
 			rooms.global.battleCount += (this.battle.active ? 1 : 0) - (this.active ? 1 : 0);
 			this.active = this.battle.active;
@@ -1368,7 +1369,7 @@ let BattleRoom = (function () {
 	};
 	BattleRoom.prototype.leaveBattle = function (user) {
 		if (!user) return false; // ...
-		if (user.battles[this.id]) {
+		if (this.id in user.games) {
 			this.battle.leave(user);
 		} else {
 			return false;
