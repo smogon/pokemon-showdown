@@ -1265,8 +1265,6 @@ let BattleRoom = (function () {
 		}
 		this.update();
 	};
-	// This function is only called when the user is already in the room (with another connection).
-	// First-time join calls this.onJoin() below instead.
 	BattleRoom.prototype.onConnect = function (user, connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user).join('\n'));
 		// this handles joining a battle in which a user is a participant,
@@ -1279,8 +1277,7 @@ let BattleRoom = (function () {
 		if (this.users[user.userid]) return user;
 
 		if (user.named) {
-			this.add((this.reportJoins ? '|j|' : '|J|') + user.name);
-			this.update();
+			this.add((this.reportJoins ? '|j|' : '|J|') + user.name).update();
 		}
 
 		this.users[user.userid] = user;
@@ -1290,11 +1287,7 @@ let BattleRoom = (function () {
 	};
 	BattleRoom.prototype.onRename = function (user, oldid, joining) {
 		if (joining) {
-			if (Config.reportbattlejoins) {
-				this.add('|join|' + user.name);
-			} else {
-				this.add('|J|' + user.name);
-			}
+			this.add((this.reportJoins ? '|j|' : '|J|') + user.name);
 		}
 		let resend = joining || !this.battle.playerTable[oldid];
 		if (this.battle.playerTable[oldid]) {
@@ -1327,11 +1320,7 @@ let BattleRoom = (function () {
 		}
 		delete this.users[user.userid];
 		this.userCount--;
-		if (Config.reportbattlejoins) {
-			this.add('|leave|' + user.name);
-		} else {
-			this.add('|L|' + user.name);
-		}
+		this.add((this.reportJoins ? 'l' : '|L|') + user.name);
 
 		if (Object.isEmpty(this.users)) {
 			rooms.global.battleCount += 0 - (this.active ? 1 : 0);
@@ -1458,13 +1447,11 @@ let ChatRoom = (function () {
 
 	ChatRoom.prototype.reportRecentJoins = function () {
 		delete this.reportJoinsInterval;
-		if (this.reportJoinsQueue.length === 0) {
+		if (!this.reportJoinsQueue || this.reportJoinsQueue.length === 0) {
 			// nothing to report
 			return;
 		}
-		if (Config.reportjoinsperiod) {
-			this.userList = this.getUserList();
-		}
+		this.userList = this.getUserList();
 		this.send(this.reportJoinsQueue.join('\n'));
 		this.reportJoinsQueue.length = 0;
 	};
@@ -1558,8 +1545,13 @@ let ChatRoom = (function () {
 		let msg = '|users|' + counter + buffer;
 		return msg;
 	};
-	ChatRoom.prototype.reportJoin = function (entry) {
-		if (Config.reportjoinsperiod) {
+	ChatRoom.prototype.reportJoin = function (type, entry) {
+		if (this.reportJoins) {
+			this.add('|' + type + '|' + entry).update();
+			return;
+		}
+		entry = '|' + type.toUpperCase() + '|' + entry;
+		if (this.reportJoinsQueue) {
 			if (!this.reportJoinsInterval) {
 				this.reportJoinsInterval = setTimeout(
 					this.reportRecentJoins.bind(this), Config.reportjoinsperiod
@@ -1623,12 +1615,8 @@ let ChatRoom = (function () {
 		if (!user) return false; // ???
 		if (this.users[user.userid]) return user;
 
-		if (user.named && this.reportJoins) {
-			this.add('|j|' + user.getIdentity(this.id));
-			this.update();
-		} else if (user.named) {
-			let entry = '|J|' + user.getIdentity(this.id);
-			this.reportJoin(entry);
+		if (user.named) {
+			this.reportJoin('j', user.getIdentity(this.id));
 		}
 
 		this.users[user.userid] = user;
@@ -1639,23 +1627,13 @@ let ChatRoom = (function () {
 	ChatRoom.prototype.onRename = function (user, oldid, joining) {
 		delete this.users[oldid];
 		this.users[user.userid] = user;
-		let entry;
 		if (joining) {
-			if (Config.reportjoins) {
-				entry = '|j|' + user.getIdentity(this.id);
-			} else {
-				entry = '|J|' + user.getIdentity(this.id);
-			}
+			this.reportJoin('j', user.getIdentity(this.id));
 			if (this.staffMessage && user.can('mute', null, this)) this.sendUser(user, '|raw|<div class="infobox">(Staff intro:)<br /><div>' + this.staffMessage + '</div></div>');
 		} else if (!user.named) {
-			entry = '|L| ' + oldid;
+			this.reportJoin('l', oldid);
 		} else {
-			entry = '|N|' + user.getIdentity(this.id) + '|' + oldid;
-		}
-		if (Config.reportjoins) {
-			this.add(entry);
-		} else {
-			this.reportJoin(entry);
+			this.reportJoin('n', user.getIdentity(this.id) + '|' + oldid);
 		}
 		if (!this.checkBanned(user, oldid)) {
 			return;
@@ -1671,8 +1649,7 @@ let ChatRoom = (function () {
 	ChatRoom.prototype.onUpdateIdentity = function (user) {
 		if (user && user.connected && user.named) {
 			if (!this.users[user.userid]) return false;
-			let entry = '|N|' + user.getIdentity(this.id) + '|' + user.userid;
-			this.reportJoin(entry);
+			this.reportJoin('n', user.getIdentity(this.id) + '|' + user.userid);
 		}
 	};
 	ChatRoom.prototype.onLeave = function (user) {
@@ -1681,11 +1658,8 @@ let ChatRoom = (function () {
 		delete this.users[user.userid];
 		this.userCount--;
 
-		if (user.named && Config.reportjoins) {
-			this.add('|l|' + user.getIdentity(this.id));
-		} else if (user.named) {
-			let entry = '|L|' + user.getIdentity(this.id);
-			this.reportJoin(entry);
+		if (user.named) {
+			this.reportJoin('l', user.getIdentity(this.id));
 		}
 	};
 	ChatRoom.prototype.destroy = function () {
