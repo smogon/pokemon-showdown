@@ -1,10 +1,10 @@
 "use strict";
 
 describe("eslint-rules/validate-conditionals", function () {
-	var rule = require('./../../../dev-tools/eslint/validate-conditionals.js');
-	var RuleTester = require('eslint/lib/testers/rule-tester');
+	const rule = require('./../../../dev-tools/eslint/validate-conditionals.js');
+	const RuleTester = require('eslint/lib/testers/rule-tester');
 
-	var ruleTester = new RuleTester();
+	const ruleTester = new RuleTester();
 	ruleTester.run("validate-conditionals", rule, {
 		valid: [
 			'if (Math.random) {\nMath.random();\n}',
