@@ -1043,6 +1043,8 @@ User = (function () {
 		oldUser.markInactive();
 	};
 	User.prototype.mergeConnection = function (connection) {
+		// the connection has changed name to this user's username, and so is
+		// being merged into this account
 		this.connected = true;
 		this.connections.push(connection);
 		//console.log('' + this.name + ' merging: connection ' + connection.socket.id);
@@ -1053,6 +1055,7 @@ User = (function () {
 			let room = connection.rooms[i];
 			if (!this.roomCount[i]) {
 				if (room.bannedUsers && (this.userid in room.bannedUsers || this.autoconfirmed in room.bannedUsers)) {
+					// the connection was in a room that this user is banned from
 					room.bannedIps[connection.ip] = room.bannedUsers[this.userid];
 					connection.sendTo(room.id, '|deinit');
 					connection.leaveRoom(room);
@@ -1062,8 +1065,8 @@ User = (function () {
 				this.roomCount[i] = 0;
 			}
 			this.roomCount[i]++;
-			if (room.game && room.game.onConnect) {
-				room.game.onConnect(this, connection);
+			if (room.game && room.game.onUpdateConnection) {
+				room.game.onUpdateConnection(this, connection);
 			}
 			if (global.Tournaments && Tournaments.get(room.id)) {
 				Tournaments.get(room.id).updateFor(this, connection);

@@ -86,10 +86,45 @@ class RoomGame {
 		return true;
 	}
 
-	// onConnect(user, connection)
-	// onRename(user, oldid, joining)
+	// Events:
+
+	// Note:
+	// A user can have multiple connections. For instance, if you have
+	// two tabs open and connected to PS, those tabs represent two
+	// connections, but a single PS user. Each tab can be in separate
+	// rooms.
+
 	// onJoin(user)
+	//   Called when a user joins a room. (i.e. when the user's first
+	//   connection joins)
+
+	// onRename(user, oldUserid, isJoining)
+	//   Called when a user in the room is renamed. NOT called when a
+	//   player outside the room is renamed. `isJoining` is true if the
+	//   user was previously a guest, but now has a username. Check
+	//   `!user.named` for the case where a user previously had a
+	//   username but is now a guest.
+
 	// onLeave(user)
+	//   Called when a user leaves the room. (i.e. when the user's last
+	//   connection leaves)
+
+	// onConnect(user, connection)
+	//   Called each time a connection joins a room (after onJoin if
+	//   applicable).
+
+	// onUpdateConnection(user, connection)
+	//   Called for each connection in a room that changes users by
+	//   merging into a different user. By default, runs the onConnect
+	//   handler.
+
+	// Player updates and an up-to-date report of what's going on in
+	// the game should be sent during `onConnect`. You should rarely
+	// need to handle the other events.
+
+	onUpdateConnection(user, connection) {
+		this.onConnect(user, connection);
+	}
 }
 
 // these exports are traditionally attached to rooms.js

@@ -245,22 +245,27 @@ class Battle {
 			(connection || user).sendTo(this.id, '|request|' + request);
 		}
 	}
-	onRename(user, oldid, joining) {
+	onUpdateConnection(user, connection) {
+		this.onConnect(user, connection);
+	}
+	onRename(user, oldid) {
 		let player = this.players[oldid];
 		if (player && user.userid !== oldid) {
 			if (!this.allowRenames && user.userid !== oldid) {
 				this.room.forfeit(user, " forfeited by changing their name.");
 				return;
 			}
-			this.players[user] = player;
-			player.userid = user.userid;
-			player.name = user.name;
-			delete this.players[oldid];
-			player.simSend('rename', user.name, user.avatar);
+			if (!this.players[user]) {
+				this.players[user] = player;
+				player.userid = user.userid;
+				player.name = user.name;
+				delete this.players[oldid];
+				player.simSend('rename', user.name, user.avatar);
+			}
 		}
-		if (joining && user in this.players) {
-			// this handles a named user renaming themselves into a user in the
-			// battle (i.e. by using /nick)
+		if (user in this.players) {
+			// this handles a user renaming themselves into a user in the
+			// battle (e.g. by using /nick)
 			this.onConnect(user);
 		}
 	}
