@@ -75,15 +75,16 @@ try {
  *********************************************************/
 
 try {
-	global.Config = require('./config/config.js');
+	require.resolve('./config/config.js');
 } catch (err) {
-	if (err.code !== 'MODULE_NOT_FOUND') throw err;
+	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
 
 	// Copy it over synchronously from config-example.js since it's needed before we can start the server
 	console.log("config.js doesn't exist - creating one with default settings...");
 	fs.writeFileSync(path.resolve(__dirname, 'config/config.js'),
 		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
 	);
+} finally {
 	global.Config = require('./config/config.js');
 }
 
