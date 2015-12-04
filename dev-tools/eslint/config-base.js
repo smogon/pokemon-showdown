@@ -164,6 +164,8 @@ module.exports = {
 		"spaced-comment": 0,
 		"wrap-regex": 0,
 
+		"no-var": 2,
+
 		"validate-conditionals": 2
 	}
 };
