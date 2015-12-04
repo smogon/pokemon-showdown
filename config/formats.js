@@ -78,22 +78,13 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
-		searchShow: false,
-		ruleset: ['UU'],
-		banlist: ['UU', 'BL2']
-	},
-	{
-		name: "RU (suspect test)",
-		section: "ORAS Singles",
-
-		challengeShow: false,
 		ruleset: ['UU'],
 		banlist: ['UU', 'BL2']
 	},
 	{
 		name: "NU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545983/\">np: NU Stage 8</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3557854/\">np: NU Stage 10</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/nu/\">NU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3545276/\">NU Viability Ranking</a>"
 		],
@@ -105,7 +96,7 @@ exports.Formats = [
 	{
 		name: "PU",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554725/\">np: PU Stage 4</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3557849/\">np: PU Stage 5</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3528743/\">PU Viability Ranking</a>"
 		],
 		section: "ORAS Singles",
