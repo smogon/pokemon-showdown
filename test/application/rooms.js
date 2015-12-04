@@ -40,9 +40,9 @@ describe('Rooms features', function () {
 			let options = [{rated: false, tour: false}, {rated: false, tour: true}, {rated: true, tour: false}, {rated: true, tour: true}];
 			options.forEach(function (option) {
 				room = Rooms.global.startBattle(p1, p2, 'customgame', packedTeam, packedTeam, option);
-				if (room.active) return assert.ok(room.battle.players.none(null)); // Automatically joined
-				assert.ok(room.joinBattle(p1, packedTeam));
-				assert.ok(room.joinBattle(p2, packedTeam));
+				assert.ok(room.battle.p1 && room.battle.p2); // Automatically joined
+				// assert.ok(room.joinBattle(p1, packedTeam));
+				// assert.ok(room.joinBattle(p2, packedTeam));
 			});
 		});
 	});

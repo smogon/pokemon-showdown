@@ -2119,8 +2119,8 @@ exports.commands = {
 		if (cmd.charAt(cmd.length - 1) === ',') cmd = cmd.slice(0, -1);
 		let targets = target.split(',');
 		function getPlayer(input) {
-			if (room.battle.playerids[0] === toId(input)) return 'p1';
-			if (room.battle.playerids[1] === toId(input)) return 'p2';
+			var player = room.battle.players[toId(input)];
+			if (player) return player.slot;
 			if (input.includes('1')) return 'p1';
 			if (input.includes('2')) return 'p2';
 			return 'p3';
@@ -2207,12 +2207,12 @@ exports.commands = {
 		}
 		let data = room.getLog(logidx).join("\n");
 		let datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
-		let players = room.battle.lastPlayers.map(Users.getExact);
+		let players = room.battle.playerNames;
 		LoginServer.request('prepreplay', {
 			id: room.id.substr(7),
 			loghash: datahash,
-			p1: players[0] ? players[0].name : room.battle.lastPlayers[0],
-			p2: players[1] ? players[1].name : room.battle.lastPlayers[1],
+			p1: players[0],
+			p2: players[1],
 			format: room.format
 		}, function (success) {
 			if (success && success.errorip) {
@@ -2524,12 +2524,12 @@ exports.commands = {
 				if (i === 'global') continue;
 				let targetRoom = Rooms.get(i);
 				if (!targetRoom) continue; // shouldn't happen
-				if (targetRoom.isPrivate && (!targetRoom.battle || targetRoom.battle.lastPlayers.indexOf(user.userid) < 0)) continue;
+				if (targetRoom.isPrivate && (!targetRoom.game || !targetRoom.game.players[user])) continue;
 				let roomData = {};
 				if (targetRoom.battle) {
 					let battle = targetRoom.battle;
-					roomData.p1 = battle.p1 ? ' ' + battle.p1 : '';
-					roomData.p2 = battle.p2 ? ' ' + battle.p2 : '';
+					roomData.p1 = battle.p1 ? ' ' + battle.p1.name : '';
+					roomData.p2 = battle.p2 ? ' ' + battle.p2.name : '';
 				}
 				roomList[i] = roomData;
 			}

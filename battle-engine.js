@@ -1541,7 +1541,7 @@ BattleSide = (function () {
 		this.battle.send('sideupdate', this.id + "\n" + sideUpdate);
 	};
 	BattleSide.prototype.emitCallback = function () {
-		this.battle.send('callback', this.id + "\n" +
+		this.battle.send('sideupdate', this.id + "\n|callback|" +
 			Array.prototype.slice.call(arguments).join('|'));
 	};
 	BattleSide.prototype.emitRequest = function (update) {
