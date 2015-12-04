@@ -437,7 +437,6 @@ exports.Formats = [
 		banlist: ['Dragon Rage', 'Sonic Boom', 'Swagger'],
 		validateSet: function (set, teamHas) {
 			const species = set.species || set.name;
-			const ability = set.ability;
 			let template = Tools.getTemplate(species);
 			if (template.prevo) {
 				return [species + " isn't the first in its evolution family."];
@@ -448,20 +447,31 @@ exports.Formats = [
 			if (template.tier === 'LC Uber' || template.species in {'Fletchling':1, 'Gligar':1, 'Misdreavus':1, 'Scyther':1, 'Sneasel':1, 'Tangela':1}) {
 				return [species + " is banned from LC Extended."];
 			}
+			const ability = set.ability;
 			if (Object.values(template.abilities).indexOf(ability) < 0 || ability === 'Moody') {
 				return [species + " doesn't have a legal ability."];
 			}
-			while (template.evos.length) {
-				template = Tools.getTemplate(template.evos[0]);
-			}
 			const level = set.level;
-			set.species = template.species;
-			set.ability = template.abilities[0];
-			set.level = template.evoLevel;
-			let problems = this.validateSet(set, teamHas) || [];
-			set.species = species;
-			set.ability = ability;
-			set.level = Tools.clampIntRange(level, 1, 5);
+			let problems;
+			while (template.evos.length) {
+				let evos = template.evos;
+				for (let i = 0; i < evos.length; i++) {
+					template = Tools.getTemplate(evos[i]);
+					set.species = template.species;
+					set.ability = template.abilities[0];
+					set.level = template.evoLevel;
+					problems = this.validateSet(set, teamHas) || [];
+					if (!problems.length) {
+						set.species = species;
+						set.ability = ability;
+						set.level = Tools.clampIntRange(level, 1, 5);
+						return;
+					}
+				}
+			}
+			for (let i = 0; i < problems.length; i++) {
+				problems[i] = problems[i].replace(template.species, species);
+			}
 			return problems;
 		}
 	},
