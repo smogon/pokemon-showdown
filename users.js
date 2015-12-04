@@ -1062,8 +1062,8 @@ User = (function () {
 				this.roomCount[i] = 0;
 			}
 			this.roomCount[i]++;
-			if (room.battle) {
-				room.battle.resendRequest(connection);
+			if (room.game && room.game.onConnect) {
+				room.game.onConnect(this, connection);
 			}
 			if (global.Tournaments && Tournaments.get(room.id)) {
 				Tournaments.get(room.id).updateFor(this, connection);
