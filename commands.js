@@ -1474,7 +1474,7 @@ exports.commands = {
 		case 'player':
 			target = '\u2605';
 			/* falls through */
-		default:
+		default: {
 			if (!Config.groups[target]) {
 				return this.parse('/help modchat');
 			}
@@ -1488,7 +1488,7 @@ exports.commands = {
 			}
 			room.modchat = target;
 			break;
-		}
+		}}
 		if (currentModchat === room.modchat) {
 			return this.errorReply("Modchat is already set to " + currentModchat + ".");
 		}
