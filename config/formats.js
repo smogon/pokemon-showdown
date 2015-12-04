@@ -421,7 +421,7 @@ exports.Formats = [
 			const template = Tools.getTemplate(set.species);
 			const item = this.getItem(set.item);
 			if (item.name === 'Eviolite' && Object.values(template.baseStats).sum() <= 350) {
-				return ['Eviolite is banned on Pok&eacute;mon with 350 or lower BST.'];
+				return ['Eviolite is banned on Pok\u00E9mon with 350 or lower BST.'];
 			}
 		}
 	},
