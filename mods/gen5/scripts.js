@@ -183,7 +183,6 @@ exports.BattleScripts = {
 				let moveid = moves[k];
 				let move = this.getMove(moveid);
 				let rejected = false;
-				let isSetup = false;
 
 				switch (moveid) {
 
@@ -208,17 +207,14 @@ exports.BattleScripts = {
 				case 'swordsdance': case 'dragondance': case 'coil': case 'curse': case 'bulkup': case 'bellydrum':
 					if (counter.Physical < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Physical' || counter['physicalsetup'] > 1) rejected = true;
-					isSetup = true;
 					break;
 				case 'nastyplot': case 'tailglow': case 'quiverdance': case 'calmmind':
 					if (counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Special' || counter['specialsetup'] > 1) rejected = true;
-					isSetup = true;
 					break;
 				case 'shellsmash': case 'growth': case 'workup':
 					if (counter.Physical + counter.Special < 2 && !hasMove['batonpass']) rejected = true;
 					if (setupType !== 'Mixed' || counter['mixedsetup'] > 1) rejected = true;
-					isSetup = true;
 					break;
 
 				// bad after setup

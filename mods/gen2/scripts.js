@@ -699,8 +699,6 @@ exports.BattleScripts = {
 					moveid = 'hiddenpower';
 				}
 				if (!template.essentialMove || moveid !== template.essentialMove) {
-					let isSetup = false;
-
 					switch (moveid) {
 					// bad after setup
 					case 'seismictoss': case 'nightshade':
