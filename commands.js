@@ -2295,6 +2295,7 @@ exports.commands = {
 
 	kickbattle: function (target, room, user) {
 		if (!room.leaveBattle) return this.errorReply("You can only do this in battle rooms.");
+		if (room.battle.tour || room.battle.rated) return this.errorReply("You can only do this in unrated non-tour battles.");
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
