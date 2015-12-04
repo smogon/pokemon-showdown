@@ -1732,6 +1732,7 @@ exports.commands = {
 		this.logEntry(user.name + " used /hotpatch " + target);
 
 		if (target === 'chat' || target === 'commands') {
+			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
 			try {
 				CommandParser.uncacheTree('./command-parser.js');
 				delete require.cache[require.resolve('./commands.js')];
@@ -1748,6 +1749,7 @@ exports.commands = {
 				return this.errorReply("Something failed while trying to hotpatch chat: \n" + e.stack);
 			}
 		} else if (target === 'tournaments') {
+			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
 			try {
 				let runningTournaments = Tournaments.tournaments;
 				CommandParser.uncacheTree('./tournaments');
@@ -1758,9 +1760,11 @@ exports.commands = {
 				return this.errorReply("Something failed while trying to hotpatch tournaments: \n" + e.stack);
 			}
 		} else if (target === 'battles') {
+			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
 			Simulator.SimulatorProcess.respawn();
 			return this.sendReply("Battles have been hotpatched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
 		} else if (target === 'formats') {
+			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
 			try {
 				let toolsLoaded = !!Tools.isLoaded;
 				// uncache the tools.js dependency tree
@@ -1781,6 +1785,7 @@ exports.commands = {
 				return this.errorReply("Something failed while trying to hotpatch formats: \n" + e.stack);
 			}
 		} else if (target === 'learnsets') {
+			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
 			try {
 				let toolsLoaded = !!Tools.isLoaded;
 				// uncache the tools.js dependency tree
@@ -1792,6 +1797,12 @@ exports.commands = {
 			} catch (e) {
 				return this.errorReply("Something failed while trying to hotpatch learnsets: \n" + e.stack);
 			}
+		} else if (target.startsWith('disable')) {
+			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch is already disabled.");
+			let reason = target.split(', ')[1];
+			if (!reason) return this.errorReply("Usage: /hotpatch disable, [reason]");
+			Monitor.hotpatchLock = reason;
+			return this.sendReply("You have disabled hotpatch until the next server restart.");
 		}
 		this.errorReply("Your hot-patch command was unrecognized.");
 	},
@@ -1799,7 +1810,8 @@ exports.commands = {
 		"Hot-patching has greater memory requirements than restarting.",
 		"/hotpatch chat - reload commands.js and the chat-plugins",
 		"/hotpatch battles - spawn new simulator processes",
-		"/hotpatch formats - reload the tools.js tree, rebuild and rebroad the formats list, and also spawn new simulator processes"],
+		"/hotpatch formats - reload the tools.js tree, rebuild and rebroad the formats list, and also spawn new simulator processes",
+		"/hotpatch disable, [reason] - disables the use of hotpatch until the next server restart"],
 
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
