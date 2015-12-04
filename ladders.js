@@ -301,3 +301,5 @@ class Ladder {
 function getLadder(formatid) {
 	return new Ladder(formatid);
 }
+
+Ladders.Ladder = Ladder;
