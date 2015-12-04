@@ -325,6 +325,15 @@ class Battle {
 		return player;
 	}
 
+	removePlayer(user) {
+		if (!this.allowRenames) return false;
+		if (!(user.userid in this.players)) return false;
+		this.players[user.userid].destroy();
+		delete this.players[user.userid];
+		this.playerCount--;
+		return true;
+	}
+
 	destroy() {
 		this.send('dealloc');
 
