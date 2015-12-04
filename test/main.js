@@ -66,14 +66,15 @@ before('initialization', function (done) {
 	// Load and override configuration before starting the server
 	let config;
 	try {
-		config = require('./../config/config.js');
+		require.resolve('./../config/config.js');
 	} catch (err) {
-		if (err.code !== 'MODULE_NOT_FOUND') throw err;
+		if (err.code !== 'MODULE_NOT_FOUND') throw err; // Should never happen
 
 		console.log("config.js doesn't exist - creating one with default settings...");
 		fs.writeFileSync(path.resolve(__dirname, '../config/config.js'),
 			fs.readFileSync(path.resolve(__dirname, '../config/config-example.js'))
 		);
+	} finally {
 		config = require('./../config/config.js');
 	}
 	try {
