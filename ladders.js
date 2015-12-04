@@ -61,7 +61,7 @@ class Ladder {
 			fs.readFile('config/ladders/' + self.formatid + '.tsv', function (err, data) {
 				if (err) {
 					self.loadedLadder = ladderCaches[self.formatid] = [];
-					console.log('Ladders(' + self.formatid + ') err loading tsv: ' + JSON.stringify(self.loadedLadder));
+					// console.log('Ladders(' + self.formatid + ') err loading tsv: ' + JSON.stringify(self.loadedLadder));
 					resolve(self.loadedLadder);
 					return;
 				}
