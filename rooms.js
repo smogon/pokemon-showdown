@@ -1071,7 +1071,7 @@ let BattleRoom = (function () {
 	BattleRoom.prototype.sendPlayer = function (num, message) {
 		let player = this.getPlayer(num);
 		if (!player) return false;
-		this.sendUser(player, message);
+		player.sendRoom(message);
 	};
 	BattleRoom.prototype.getPlayer = function (num) {
 		return this.battle['p' + (num + 1)];
