@@ -3186,10 +3186,10 @@ Battle = (function () {
 						this.add(msg, target, i, boost[i]);
 					} else {
 						if (effect.effectType === 'Ability' && !boosted) {
-							this.add('-activate', target, effect.fullname);
+							this.add('-ability', target, effect.name, 'boost');
 							boosted = true;
 						}
-						this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
+						this.add(msg, target, i, boost[i]);
 					}
 					break;
 				}
