@@ -1957,14 +1957,38 @@ exports.BattleScripts = {
 				evs.hp -= 4;
 				evs.atk += 4;
 			}
+		} else if (hasMove['substitute'] && ability === 'Unburden' && item === 'Sitrus Berry') {
+			// Prepare HP for Unburden Substitute.
+			let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+			while (hp % 4 > 0) {
+				evs.hp -= 4;
+				if (evs.atk > evs.spa) {
+					evs.spa += 4;
+				} else if (evs.spa > evs.atk) {
+					evs.spa += 4;
+				} else if (counter.Physical > counter.Special) {
+					evs.atk += 4;
+				} else {
+					evs.spa += 4;
+				}
+
+				hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+			}
 		} else {
-			// Prepare HP for double Stealth Rock weaknesses. Those are mutually exclusive with Belly Drum HP check.
+			// Prepare HP for double Stealth Rock weaknesses. Those are mutually exclusive with Belly Drum and Substitute HP checks.
 			// First, 25% damage.
 			if (this.getEffectiveness('Rock', template) === 1) {
 				let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 				if (hp % 4 === 0) {
 					evs.hp -= 4;
-					if (counter.Physical > counter.Special) {
+
+					// Check again just in case
+					hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+					if (hp % 4 === 0) { // the HP hasn't gone down yet
+						evs.hp -= 4;
+						evs.atk += 4;
+						evs.spa += 4;
+					} else if (counter.Physical > counter.Special) {
 						evs.atk += 4;
 					} else {
 						evs.spa += 4;
@@ -1977,7 +2001,14 @@ exports.BattleScripts = {
 				let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 				if (hp % 2 === 0) {
 					evs.hp -= 4;
-					if (counter.Physical > counter.Special) {
+
+					// Check again just in case
+					hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+					if (hp % 4 === 0) { // the HP hasn't gone down yet
+						evs.hp -= 4;
+						evs.atk += 4;
+						evs.spa += 4;
+					} else if (counter.Physical > counter.Special) {
 						evs.atk += 4;
 					} else {
 						evs.spa += 4;
