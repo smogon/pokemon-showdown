@@ -1450,7 +1450,7 @@ User = (function () {
 				}
 			}
 		}
-		if (!connection && this.roomCount[room.id]) {
+		if (!connection && room.id in this.roomCount) {
 			// should also never happen
 			console.log('!! room miscount: ' + room.id + ' not left for ' + this.userid);
 			room.onLeave(this);
