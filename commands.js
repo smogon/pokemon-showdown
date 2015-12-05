@@ -2537,7 +2537,7 @@ exports.commands = {
 				if (i === 'global') continue;
 				let targetRoom = Rooms.get(i);
 				if (!targetRoom) continue; // shouldn't happen
-				if (targetRoom.isPrivate && (!targetRoom.game || !targetRoom.game.players[user])) continue;
+				if (targetRoom.isPrivate && !(i in user.games)) continue;
 				let roomData = {};
 				if (targetRoom.battle) {
 					let battle = targetRoom.battle;
