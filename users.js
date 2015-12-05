@@ -564,6 +564,9 @@ User = (function () {
 		}
 		if (roomid) {
 			let room = Rooms.rooms[roomid];
+			if (!room) {
+				throw new Error("Room doesn't exist: " + roomid);
+			}
 			if (room.isMuted(this)) {
 				return '!' + this.name;
 			}
