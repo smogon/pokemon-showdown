@@ -1530,7 +1530,7 @@ exports.BattleScripts = {
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Dark Aura'] && !counter['Dark']) ||
 					(hasAbility['Gale Wings'] && !counter['Flying']) ||
-					(hasType['Dark'] && template.types.length > 1 && counter.stab < 2 && hasMove['suckerpunch']) ||
+					(hasType['Dark'] && hasMove['suckerpunch'] && counter.stab < template.types.length) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'])) ||
@@ -1741,19 +1741,9 @@ exports.BattleScripts = {
 			moves[moves.indexOf('rockclimb')] = 'doubleedge';
 		}
 
-		if (hasMove['gyroball']) {
+		if (hasMove['gyroball'] || hasMove['trickroom']) {
 			ivs.spe = 0;
-			evs.atk += evs.spe;
 			evs.spe = 0;
-		} else if (hasMove['trickroom']) {
-			ivs.spe = 0;
-			evs.hp += evs.spe;
-			evs.spe = 0;
-		} else if (template.species === 'Shedinja') {
-			evs.atk = 252;
-			evs.hp = 0;
-			evs.def = 0;
-			evs.spd = 0;
 		}
 
 		item = 'Leftovers';
@@ -1950,39 +1940,19 @@ exports.BattleScripts = {
 
 		if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
 
-		// Prepare HP for Belly Drum.
 		if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
+			// Prepare HP for Belly Drum to activate Sitrus Berry
 			let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			if (hp % 2 > 0) {
-				evs.hp -= 4;
-				evs.atk += 4;
-			}
+			if (hp % 2 > 0) evs.hp -= 4;
 		} else {
-			// Prepare HP for double Stealth Rock weaknesses. Those are mutually exclusive with Belly Drum HP check.
-			// First, 25% damage.
+			// Prepare HP for Stealth Rock weakness
 			if (this.getEffectiveness('Rock', template) === 1) {
 				let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-				if (hp % 4 === 0) {
-					evs.hp -= 4;
-					if (counter.Physical > counter.Special) {
-						evs.atk += 4;
-					} else {
-						evs.spa += 4;
-					}
-				}
+				if (hp % 4 === 0) evs.hp -= 4;
 			}
-
-			// Then, prepare it for 50% damage.
 			if (this.getEffectiveness('Rock', template) === 2) {
 				let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-				if (hp % 2 === 0) {
-					evs.hp -= 4;
-					if (counter.Physical > counter.Special) {
-						evs.atk += 4;
-					} else {
-						evs.spa += 4;
-					}
-				}
+				if (hp % 2 === 0) evs.hp -= 4;
 			}
 		}
 
