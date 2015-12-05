@@ -11,15 +11,17 @@
  * @license MIT license
  */
 
-var battles = Object.create(null);
+'use strict';
 
-var SimulatorProcess = (function () {
+let battles = Object.create(null);
+
+let SimulatorProcess = (function () {
 	function SimulatorProcess() {
 		global.battleEngineFakeProcess = new (require('./fake-process').FakeProcess)();
 		this.process = battleEngineFakeProcess.server;
 		this.process.on('message', function (message) {
-			var lines = message.split('\n');
-			var battle = battles[lines[0]];
+			let lines = message.split('\n');
+			let battle = battles[lines[0]];
 			if (battle) {
 				battle.receive(lines);
 			}
@@ -32,7 +34,7 @@ var SimulatorProcess = (function () {
 	SimulatorProcess.processes = [];
 	SimulatorProcess.spawn = function (num) {
 		/*if (!num) num = Config.simulatorProcesses || 1;
-		for (var i = this.processes.length; i < num; ++i) {
+		for (let i = this.processes.length; i < num; ++i) {
 			this.processes.push(new SimulatorProcess());
 		}*/
 	};
@@ -44,8 +46,8 @@ var SimulatorProcess = (function () {
 		this.spawn();*/
 	};
 	SimulatorProcess.acquire = function () {
-		var process = this.processes[0];
-		for (var i = 1; i < this.processes.length; ++i) {
+		let process = this.processes[0];
+		for (let i = 1; i < this.processes.length; ++i) {
 			if (this.processes[i].load < process.load) {
 				process = this.processes[i];
 			}
@@ -71,81 +73,114 @@ var SimulatorProcess = (function () {
 //SimulatorProcess.spawn();
 SimulatorProcess.processes.push(new SimulatorProcess());
 
-var slice = Array.prototype.slice;
+let slice = Array.prototype.slice;
 
-var Battle = (function () {
-	function Battle(id, format, rated, room) {
-		if (battles[id]) {
-			throw new Error("Battle with ID " + id + " already exists.");
+class BattlePlayer {
+	constructor(user, game, slot) {
+		this.userid = user.userid;
+		this.name = user.name;
+		this.game = game;
+		user.games[this.game.id] = this.game;
+
+		this.slot = slot;
+		this.slotNum = Number(slot.charAt(1)) - 1;
+		this.active = true;
+
+		for (let i = 0; i < user.connections.length; i++) {
+			let connection = user.connections[i];
+			Sockets.subchannelMove(connection.worker, this.id, this.slotNum + 1, connection.socketid);
 		}
-
-		this.id = id;
-		this.room = room;
-		this.format = toId(format);
-		this.players = [null, null];
-		this.playerids = [null, null];
-		this.lastPlayers = [room.p1.userid, room.p2.userid];
-		this.playerTable = {};
-		this.requests = {};
-
-		this.process = SimulatorProcess.acquire();
-
-		battles[id] = this;
-
-		this.send('init', this.format, rated ? '1' : '');
+	}
+	destroy() {
+		if (this.active) this.simSend('leave');
+		let user = Users(this.userid);
+		if (user) {
+			delete user.games[this.game.id];
+			for (let j = 0; j < user.connections.length; j++) {
+				let connection = user.connections[j];
+				Sockets.subchannelMove(connection.worker, this.id, '0', connection.socketid);
+			}
+		}
+		this.game[this.slot] = null;
 	}
 
-	Battle.prototype.id = '';
+	toString() {
+		return this.userid;
+	}
+	send(data) {
+		let user = Users(this.userid);
+		if (user) user.send(data);
+	}
+	sendRoom(data) {
+		let user = Users(this.userid);
+		if (user) user.sendTo(this.game.id, data);
+	}
+	simSend(action) {
+		this.game.send.apply(this.game, [action, this.slot].concat(slice.call(arguments, 1)));
+	}
+}
 
-	Battle.prototype.started = false;
-	Battle.prototype.ended = false;
-	Battle.prototype.active = false;
-	Battle.prototype.players = null;
-	Battle.prototype.playerids = null;
-	Battle.prototype.lastPlayers = null;
-	Battle.prototype.playerTable = null;
-	Battle.prototype.format = null;
-	Battle.prototype.room = null;
-
-	Battle.prototype.requests = null;
-
-	// log information
-	Battle.prototype.logData = null;
-	Battle.prototype.endType = 'normal';
-
-	Battle.prototype.getFormat = function () {
-		return Tools.getFormat(this.format);
-	};
-	Battle.prototype.lastIp = null;
-	Battle.prototype.send = function () {
-		this.activeIp = Monitor.activeIp;
-		this.process.send('' + this.id + '|' + slice.call(arguments).join('|'));
-	};
-	Battle.prototype.sendFor = function (user, action) {
-		var player = this.playerTable[toId(user)];
-		if (!player) {
-			Monitor.debug('SENDFOR FAILED in ' + this.id + ': Player doesn\'t exist: ' + user.name);
-			return;
+class Battle {
+	constructor(room, format, rated) {
+		if (battles[room.id]) {
+			throw new Error("Battle with ID " + room.id + " already exists.");
 		}
 
-		this.send.apply(this, [action, player].concat(slice.call(arguments, 2)));
-	};
-	Battle.prototype.sendForOther = function (user, action) {
-		var opposite = {'p1':'p2', 'p2':'p1'};
-		var player = this.playerTable[toId(user)];
+		this.id = room.id;
+		this.room = room;
+		this.title = "Battle";
+		this.allowRenames = !rated;
+
+		this.format = toId(format);
+		this.rated = rated;
+		this.started = false;
+		this.ended = false;
+		this.active = false;
+
+		this.players = Object.create(null);
+		this.playerCount = 0;
+		this.playerCap = 2;
+		this.p1 = null;
+		this.p2 = null;
+
+		this.playerNames = [room.p1.name, room.p2.name];
+		this.requests = {};
+
+		// log information
+		this.logData = null;
+		this.endType = 'normal';
+
+		this.rqid = '';
+		this.inactiveQueued = false;
+
+		this.process = SimulatorProcess.acquire();
+		this.send('init', this.format, rated ? '1' : '');
+
+		battles[room.id] = this;
+	}
+
+	send() {
+		this.activeIp = Monitor.activeIp;
+		this.process.send('' + this.id + '|' + slice.call(arguments).join('|'));
+	}
+	sendFor(user, action) {
+		let player = this.players[user];
 		if (!player) return;
 
-		this.send.apply(this, [action, opposite[player]].concat(slice.call(arguments, 2)));
-	};
+		this.send.apply(this, [action, player.slot].concat(slice.call(arguments, 2)));
+	}
+	checkActive() {
+		if (this.ended || !this.started) return false;
+		if (!this.p1 || !this.p1.active) return false;
+		if (!this.p2 || !this.p2.active) return false;
+		return true;
+	}
 
-	Battle.prototype.rqid = '';
-	Battle.prototype.inactiveQueued = false;
-	Battle.prototype.receive = function (lines) {
-		var player;
+	receive(lines) {
 		Monitor.activeIp = this.activeIp;
 		switch (lines[1]) {
 		case 'update':
-			this.active = !this.ended && this.p1 && this.p2;
+			this.active = this.checkActive();
 			this.room.push(lines.slice(2));
 			this.room.update();
 			if (this.inactiveQueued) {
@@ -155,40 +190,37 @@ var Battle = (function () {
 			break;
 
 		case 'winupdate':
-			this.started = true;
-			this.ended = true;
-			this.active = false;
 			this.room.push(lines.slice(3));
-			this.room.win(lines[2]);
+			this.started = true;
+			this.active = false;
 			this.inactiveSide = -1;
-			break;
-
-		case 'sideupdate':
-			player = this.getPlayer(lines[2]);
-			if (player) {
-				player.sendTo(this.id, lines[3]);
+			if (!this.ended) {
+				this.ended = true;
+				this.room.win(lines[2]);
 			}
 			break;
 
-		case 'callback':
-			player = this.getPlayer(lines[2]);
+		case 'sideupdate': {
+			let player = this[lines[2]];
 			if (player) {
-				player.sendTo(this.id, '|callback|' + lines[3]);
+				player.sendRoom(lines[3]);
 			}
 			break;
+		}
 
-		case 'request':
-			player = this.getPlayer(lines[2]);
-			var rqid = lines[3];
+		case 'request': {
+			let player = this[lines[2]];
+			let rqid = lines[3];
 			if (player) {
-				this.requests[player.userid] = lines[4];
-				player.sendTo(this.id, '|request|' + lines[4]);
+				this.requests[player.slot] = lines[4];
+				player.sendRoom('|request|' + lines[4]);
 			}
 			if (rqid !== this.rqid) {
 				this.rqid = rqid;
 				this.inactiveQueued = true;
 			}
 			break;
+		}
 
 		case 'log':
 			this.logData = JSON.parse(lines[2]);
@@ -203,158 +235,128 @@ var Battle = (function () {
 			break;
 		}
 		Monitor.activeIp = null;
-	};
+	}
 
-	Battle.prototype.resendRequest = function (connection) {
-		var request = this.requests[connection.user];
+	onConnect(user, connection) {
+		// this handles joining a battle in which a user is a participant,
+		// where the user has already identified before attempting to join
+		// the battle
+		let player = this.players[user];
+		if (!player) return;
+		let request = this.requests[player.slot];
 		if (request) {
-			connection.sendTo(this.id, '|request|' + request);
+			(connection || user).sendTo(this.id, '|request|' + request);
 		}
-	};
-	Battle.prototype.win = function (user) {
+	}
+	onUpdateConnection(user, connection) {
+		this.onConnect(user, connection);
+	}
+	onRename(user, oldid) {
+		let player = this.players[oldid];
+		if (player && user.userid !== oldid) {
+			if (!this.allowRenames && user.userid !== oldid) {
+				this.room.forfeit(user, " forfeited by changing their name.");
+				return;
+			}
+			if (!this.players[user]) {
+				this.players[user] = player;
+				player.userid = user.userid;
+				player.name = user.name;
+				delete this.players[oldid];
+				player.simSend('rename', user.name, user.avatar);
+			}
+		}
+		if (user in this.players) {
+			// this handles a user renaming themselves into a user in the
+			// battle (e.g. by using /nick)
+			this.onConnect(user);
+		}
+	}
+	onJoin(user) {
+		let player = this.players[user];
+		if (player && !player.active) {
+			player.active = true;
+			player.simSend('join', user.name);
+		}
+	}
+	onLeave(user) {
+		let player = this.players[user];
+		if (player && player.active) {
+			player.active = false;
+			player.simSend('leave');
+		}
+	}
+
+	win(user) {
 		if (!user) {
 			this.tie();
-			return;
+			return true;
 		}
-		this.sendFor(user, 'win');
-	};
-	Battle.prototype.lose = function (user) {
-		this.sendForOther(user, 'win');
-	};
-	Battle.prototype.tie = function () {
+		let player = this.players[user];
+		if (!player) return false;
+		player.simSend('win');
+	}
+	tie() {
 		this.send('tie');
-	};
-	Battle.prototype.chat = function (user, message) {
-		this.send('chat', user.name + "\n" + message);
-	};
+	}
 
-	Battle.prototype.isEmpty = function () {
-		if (this.p1) return false;
-		if (this.p2) return false;
+	addPlayer(user) {
+		if (user.userid in this.players) return false;
+		if (this.playerCount >= this.playerCap) return false;
+		let player = this.makePlayer.apply(this, arguments);
+		if (!player) return false;
+		this.players[user.userid] = player;
+		this.playerCount++;
 		return true;
-	};
+	}
 
-	Battle.prototype.isFull = function () {
-		if (this.p1 && this.p2) return true;
-		return false;
-	};
-
-	Battle.prototype.setPlayer = function (user, slot) {
-		if (this.players[slot]) {
-			delete this.players[slot].battles[this.id];
-		}
-		if (user) {
-			if (user.battles[this.id]) {
-				return false;
-			}
-			user.battles[this.id] = true;
-		}
-		this.players[slot] = (user || null);
-		var oldplayerid = this.playerids[slot];
-		if (oldplayerid) {
-			if (user) {
-				this.requests[user.userid] = this.requests[oldplayerid];
-			}
-			delete this.requests[oldplayerid];
-		}
-		this.playerids[slot] = (user ? user.userid : null);
-		this.playerTable = {};
-		this.active = !this.ended;
-		for (var i = 0, len = this.players.length; i < len; i++) {
-			var player = this.players[i];
-			this['p' + (i + 1)] = player ? player.name :    '';
-			if (!player) {
-				this.active = false;
-				continue;
-			}
-			this.playerTable[player.userid] = 'p' + (i + 1);
-		}
-		if (this.active) this.lastPlayers = this.playerids.slice();
-	};
-	Battle.prototype.getPlayer = function (slot) {
-		if (typeof slot === 'string') {
-			if (slot.charAt(0) === 'p') {
-				slot = parseInt(slot.substr(1), 10) - 1;
-			} else {
-				slot = parseInt(slot, 10);
-			}
-		}
-		return this.players[slot];
-	};
-	Battle.prototype.getSlot = function (player) {
-		return this.players.indexOf(player);
-	};
-
-	Battle.prototype.join = function (user, slot, team) {
-		if (slot === undefined) {
-			slot = 0;
-			while (this.players[slot]) slot++;
-		}
+	makePlayer(user, team) {
+		let slotNum = 0;
+		while (this['p' + (slotNum + 1)]) slotNum++;
+		let slot = 'p' + (slotNum + 1);
 		// console.log('joining: ' + user.name + ' ' + slot);
-		if (this.players[slot] || slot >= this.players.length) return false;
-		if (user === this.players[0] || user === this.players[1]) return false;
 
-		for (var i = 0; i < user.connections.length; i++) {
-			var connection = user.connections[i];
-			Sockets.subchannelMove(connection.worker, this.id, slot + 1, connection.socketid);
-		}
-		this.setPlayer(user, slot);
+		let player = new BattlePlayer(user, this, slot);
+		this[slot] = player;
 
-		var message = '' + user.avatar;
+		let message = '' + user.avatar;
 		if (!this.started) {
 			message += "\n" + team;
 		}
+		player.simSend('join', user.name, message);
 		if (this.p1 && this.p2) this.started = true;
-		this.sendFor(user, 'join', user.name, message);
+		return player;
+	}
+
+	removePlayer(user) {
+		if (!this.allowRenames) return false;
+		if (!(user.userid in this.players)) return false;
+		this.players[user.userid].destroy();
+		delete this.players[user.userid];
+		this.playerCount--;
 		return true;
-	};
+	}
 
-	Battle.prototype.rename = function () {
-		for (var i = 0, len = this.players.length; i < len; i++) {
-			var player = this.players[i];
-			var playerid = this.playerids[i];
-			if (!player) continue;
-			if (player.userid !== playerid) {
-				this.setPlayer(player, i);
-				this.sendFor(player, 'rename', player.name, player.avatar);
-			}
-		}
-	};
-
-	Battle.prototype.leave = function (user) {
-		for (var i = 0, len = this.players.length; i < len; i++) {
-			var player = this.players[i];
-			if (player === user) {
-				this.sendFor(user, 'leave');
-				for (var j = 0; j < user.connections.length; j++) {
-					var connection = user.connections[j];
-					Sockets.subchannelMove(connection.worker, this.id, '0', connection.socketid);
-				}
-				this.setPlayer(null, i);
-				return true;
-			}
-		}
-		return false;
-	};
-
-	Battle.prototype.destroy = function () {
+	destroy() {
 		this.send('dealloc');
 
+		for (let i in this.players) {
+			this.players[i].destroy();
+		}
 		this.players = null;
 		this.room = null;
 		SimulatorProcess.release(this.process);
 		this.process = null;
 		delete battles[this.id];
-	};
+	}
+}
 
-	return Battle;
-})();
-
+exports.BattlePlayer = BattlePlayer;
 exports.Battle = Battle;
 exports.battles = battles;
 exports.SimulatorProcess = SimulatorProcess;
 
 exports.create = function (id, format, rated, room) {
 	if (battles[id]) return battles[id];
-	return new Battle(id, format, rated, room);
+	return new Battle(room, format, rated);
 };

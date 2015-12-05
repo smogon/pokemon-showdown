@@ -7,7 +7,6 @@
   },
   "optionalDependencies": {
     "cloud-env": "0.1.1",
-    "es6-shim": "0.32.2",
     "http-proxy": "0.10.0",
     "nodemailer": "1.4.0",
     "node-static": "0.7.7"
@@ -16,12 +15,12 @@
     "ofe": "0.1.2"
   },
   "engines": {
-    "node": "> 0.10.1"
+    "node": "> 4.0.0"
   },
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "gulp && mocha"
+    "test": "eslint --config=dev-tools/eslint/config-base.js --rulesdir=dev-tools/eslint --cache --cache-file=eslint-cache/base *.js config/formats.js chat-plugins/*.js tournaments/*.js dev-tools/**/*.js data/rulesets.js data/scripts.js data/statuses.js mods/**/abilities.js mods/**/items.js mods/**/moves.js mods/**/rulesets.js mods/**/scripts.js mods/**/statuses.js && eslint --config=dev-tools/eslint/config-config.js --rulesdir=dev-tools/eslint --cache --cache-file=eslint-cache/config config/config*.js && eslint --config=dev-tools/eslint/config-compat.js --rulesdir=dev-tools/eslint --cache --cache-file=eslint-cache/compat data/abilities.js data/items.js data/moves.js data/typechart.js data/aliases.js mods/*/abilities.js mods/*/items.js mods/*/moves.js mods/*/typechart.js && eslint --config=dev-tools/eslint/config-data.js --rulesdir=dev-tools/eslint --cache --cache-file=eslint-cache/data data/formats-data.js mods/*/formats-data.js mods/gen4/pokedex.js mods/gen5/pokedex.js && eslint --config=dev-tools/eslint/config-data-compact.js --rulesdir=dev-tools/eslint --cache --cache-file=eslint-cache/data-compact data/pokedex.js mods/gen1/pokedex.js && eslint --config=dev-tools/eslint/config-test.js --rulesdir=dev-tools/eslint --cache --cache-file=eslint-cache/test test/*.js test/application/*.js test/simulator/*/*.js test/dev-tools/*/*.js && mocha"
   },
   "bin": "./app.js",
   "homepage": "http://play.pokemonshowdown.com",
@@ -49,16 +48,7 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "cache-swap": "~0.2.1",
-    "gulp": "~3.9.0",
-    "gulp-cache": "~0.3.0",
-    "gulp-jshint": "~1.11.2",
-    "gulp-jscs": "~2.0.0",
-    "gulp-replace": "~0.5.3",
-    "jshint-stylish": "~2.0.1",
-    "mocha": "~2.3.2",
-    "lazypipe": "~1.0.1",
-    "merge-stream": "~1.0.0",
-    "jscs": "~2.1.1"
+    "eslint": "~1.9.0",
+    "mocha": "~2.3.2"
   }
 }

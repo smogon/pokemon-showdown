@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Flame Orb', function () {
 	afterEach(function () {
@@ -28,4 +30,3 @@ describe('Flame Orb', function () {
 		assert.strictEqual(battle.p1.active[0].status, 'brn');
 	});
 });
-

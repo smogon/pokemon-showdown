@@ -11,21 +11,23 @@
  *
  * @license MIT license
  */
-/* jscs:disable validateIndentation */
+/* eslint indent: 0 */
+
+'use strict';
 
 // Because I don't want two files, we're going to fork ourselves.
 
-var fakeProcess = new (require('./fake-process').FakeProcess)();
+let fakeProcess = new (require('./fake-process').FakeProcess)();
 //if (!process.send) {
 	// This is the parent
 
-	var guid = 1;
-	var callbacks = {};
-	var callbackData = {};
+	let guid = 1;
+	let callbacks = {};
+	let callbackData = {};
 
-	//var child = require('child_process').fork('verifier.js', {cwd: __dirname});
+	//let child = require('child_process').fork('verifier.js', {cwd: __dirname});
 	exports.verify = function (data, signature, callback) {
-		var localGuid = guid++;
+		let localGuid = guid++;
 		callbacks[localGuid] = callback;
 		callbackData[localGuid] = data;
 		fakeProcess.server.send({data: data, sig: signature, guid: localGuid});
@@ -41,15 +43,15 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	// This is the child
 
 	global.Config = require('./config/config.js');
-	var crypto = require('crypto');
+	let crypto = require('crypto');
 
-	var keyalgo = Config.loginServer.keyAlgorithm;
-	var pkey = Config.loginServer.publicKey;
+	let keyalgo = Config.loginServer.keyAlgorithm;
+	let pkey = Config.loginServer.publicKey;
 
 	fakeProcess.client.on('message', function (message) {
-		var verifier = crypto.createVerify(keyalgo);
+		let verifier = crypto.createVerify(keyalgo);
 		verifier.update(message.data);
-		var success = false;
+		let success = false;
 		try {
 			success = verifier.verify(pkey, message.sig, 'hex');
 		} catch (e) {}

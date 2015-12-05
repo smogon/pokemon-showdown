@@ -1,21 +1,23 @@
-var fs = require('fs');
+'use strict';
+
+let fs = require('fs');
 
 function reloadCustomAvatars() {
-	var path = require('path');
-	var newCustomAvatars = {};
+	let path = require('path');
+	let newCustomAvatars = {};
 	fs.readdirSync('./config/avatars').forEach(function (file) {
-		var ext = path.extname(file);
+		let ext = path.extname(file);
 		if (ext !== '.png' && ext !== '.gif') {
 			return;
 		}
 
-		var user = toId(path.basename(file, ext));
+		let user = toId(path.basename(file, ext));
 		newCustomAvatars[user] = file;
 		delete Config.customAvatars[user];
 	});
 
 	// Make sure the manually entered avatars exist
-	for (var a in Config.customAvatars) {
+	for (let a in Config.customAvatars) {
 		if (typeof Config.customAvatars[a] === 'number') {
 			newCustomAvatars[a] = Config.customAvatars[a];
 		} else {
@@ -60,17 +62,17 @@ const script = function () {/*
 */
 }.toString().match(/[^]*\/\*([^]*)\*\//)[1];
 
-var pendingAdds = {};
+let pendingAdds = {};
 
 exports.commands = {
 	customavatars: 'customavatar',
 	customavatar: function (target) {
-		var parts = target.split(',');
-		var cmd = parts[0].trim().toLowerCase();
+		let parts = target.split(',');
+		let cmd = parts[0].trim().toLowerCase();
 
 		if (cmd in {'':1, show:1, view:1, display:1}) {
-			var message = "";
-			for (var a in Config.customAvatars)
+			let message = "";
+			for (let a in Config.customAvatars)
 				message += "<strong>" + Tools.escapeHTML(a) + ":</strong> " + Tools.escapeHTML(Config.customAvatars[a]) + "<br />";
 			return this.sendReplyBox(message);
 		}
@@ -78,15 +80,15 @@ exports.commands = {
 		if (!this.can('customavatar')) return false;
 
 		switch (cmd) {
-		case 'set':
-			var userid = toId(parts[1]);
-			var user = Users.getExact(userid);
-			var avatar = parts.slice(2).join(',').trim();
+		case 'set': {
+			let userid = toId(parts[1]);
+			let user = Users.getExact(userid);
+			let avatar = parts.slice(2).join(',').trim();
 
 			if (!userid) return this.sendReply("You didn't specify a user.");
 			if (Config.customAvatars[userid]) return this.sendReply(userid + " already has a custom avatar.");
 
-			var hash = require('crypto').createHash('sha512').update(userid + '\u0000' + avatar).digest('hex').slice(0, 8);
+			let hash = require('crypto').createHash('sha512').update(userid + '\u0000' + avatar).digest('hex').slice(0, 8);
 			pendingAdds[hash] = {userid: userid, avatar: avatar};
 			parts[1] = hash;
 
@@ -95,14 +97,15 @@ exports.commands = {
 				this.sendReply("If you want to continue, use: /customavatar forceset, " + hash);
 				return;
 			}
+		}
 
 			/* falls through */
-		case 'forceset':
-			var hash = parts[1].trim();
+		case 'forceset': {
+			let hash = parts[1].trim();
 			if (!pendingAdds[hash]) return this.sendReply("Invalid hash.");
 
-			var userid = pendingAdds[hash].userid;
-			var avatar = pendingAdds[hash].avatar;
+			let userid = pendingAdds[hash].userid;
+			let avatar = pendingAdds[hash].avatar;
 			delete pendingAdds[hash];
 
 			require('child_process').execFile('bash', ['-c', script, '-', avatar, './config/avatars/' + userid], function (e, out, err) {
@@ -114,22 +117,23 @@ exports.commands = {
 
 				reloadCustomAvatars();
 
-				var user = Users.getExact(userid);
+				let user = Users.getExact(userid);
 				if (user) user.avatar = Config.customAvatars[userid];
 
 				this.sendReply(userid + "'s custom avatar has been set.");
 			}.bind(this));
 			break;
+		}
 
-		case 'delete':
-			var userid = toId(parts[1]);
+		case 'delete': {
+			let userid = toId(parts[1]);
 			if (!Config.customAvatars[userid]) return this.sendReply(userid + " does not have a custom avatar.");
 
 			if (Config.customAvatars[userid].toString().split('.').slice(0, -1).join('.') !== userid) {
 				return this.sendReply(userid + "'s custom avatar (" + Config.customAvatars[userid] + ") cannot be removed with this script.");
 			}
 
-			var user = Users.getExact(userid);
+			let user = Users.getExact(userid);
 			if (user) user.avatar = 1;
 
 			fs.unlink('./config/avatars/' + Config.customAvatars[userid], function (e) {
@@ -139,6 +143,7 @@ exports.commands = {
 				this.sendReply(userid + "'s custom avatar removed successfully");
 			}.bind(this));
 			break;
+		}
 
 		default:
 			return this.sendReply("Invalid command. Valid commands are `/customavatar set, user, avatar` and `/customavatar delete, user`.");
