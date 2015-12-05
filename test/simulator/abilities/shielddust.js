@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Shield Dust', function () {
 	afterEach(function () {
@@ -36,7 +38,7 @@ describe('Shield Dust', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Clefable', ability: 'shielddust', moves: ['cottonguard']}]);
 		battle.on('ModifyMove', battle.getFormat(), function (move) {
 			if (move.secondaries) {
-				for (var i = 0; i < move.secondaries.length; i++) {
+				for (let i = 0; i < move.secondaries.length; i++) {
 					move.secondaries[i].chance = 100;
 				}
 			}

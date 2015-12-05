@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Heal Block', function () {
 	afterEach(function () {
@@ -45,7 +47,7 @@ describe('Heal Block', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', moves: ['healblock', 'surf']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Quagsire', ability: 'waterabsorb', moves: ['bellydrum', 'calmmind']}]);
 		battle.commitDecisions();
-		var hp = battle.p2.active[0].hp;
+		let hp = battle.p2.active[0].hp;
 		battle.choose('p1', 'move 2');
 		battle.choose('p2', 'move 2');
 		assert.strictEqual(battle.p2.active[0].hp, hp);
@@ -56,7 +58,7 @@ describe('Heal Block', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Starmie', ability: 'noguard', moves: ['healblock']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'leechseed']}]);
 		battle.commitDecisions();
-		var hp = battle.p2.active[0].hp;
+		let hp = battle.p2.active[0].hp;
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].hp, hp);
@@ -104,7 +106,7 @@ describe('Heal Block [Gen 5]', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Quagsire', ability: 'waterabsorb', moves: ['bellydrum', 'calmmind']}]);
 		battle.commitDecisions();
 		battle.commitDecisions();
-		var hp = battle.p2.active[0].hp;
+		let hp = battle.p2.active[0].hp;
 		battle.choose('p1', 'move 2');
 		battle.choose('p2', 'move 2');
 		assert.strictEqual(battle.p2.active[0].hp, hp);
@@ -116,7 +118,7 @@ describe('Heal Block [Gen 5]', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'gigadrain']}]);
 		battle.commitDecisions();
 		battle.commitDecisions();
-		var hp = battle.p2.active[0].hp;
+		let hp = battle.p2.active[0].hp;
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].hp, hp);
@@ -128,7 +130,7 @@ describe('Heal Block [Gen 5]', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Starmie', ability: 'noguard', moves: ['healblock']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'leechseed']}]);
 		battle.commitDecisions();
-		var hp = battle.p2.active[0].hp;
+		let hp = battle.p2.active[0].hp;
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].hp, hp);
@@ -164,7 +166,7 @@ describe('Heal Block [Gen 4]', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', moves: ['healblock']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'gigadrain']}]);
 		battle.commitDecisions();
-		var hp = battle.p2.active[0].hp;
+		let hp = battle.p2.active[0].hp;
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].hp, hp);
@@ -195,7 +197,7 @@ describe('Heal Block [Gen 4]', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'keeneye', moves: ['healblock', 'surf']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Quagsire', ability: 'waterabsorb', moves: ['bellydrum', 'calmmind']}]);
 		battle.commitDecisions();
-		var hp = battle.p2.active[0].hp;
+		let hp = battle.p2.active[0].hp;
 		battle.choose('p1', 'move 2');
 		battle.choose('p2', 'move 2');
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
@@ -206,7 +208,7 @@ describe('Heal Block [Gen 4]', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Starmie', ability: 'noguard', moves: ['healblock']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'leechseed']}]);
 		battle.commitDecisions();
-		var hp = battle.p2.active[0].hp;
+		let hp = battle.p2.active[0].hp;
 		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p2.active[0].hp, hp);

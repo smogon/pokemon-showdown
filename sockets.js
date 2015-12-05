@@ -10,57 +10,68 @@
  *
  * @license MIT license
  */
-/* jscs:disable validateIndentation */
+/* eslint indent: 0 */
 
-//var cluster = require('cluster');
+'use strict';
+
+//const cluster = require('cluster');
 global.Config = require('./config/config');
-var fakeProcess = new (require('./fake-process').FakeProcess)();
+let fakeProcess = new (require('./fake-process').FakeProcess)();
 
 /*if (cluster.isMaster) {
 	cluster.setupMaster({
 		exec: require('path').resolve(__dirname, 'sockets.js')
 	});*/
 
-	var workers = exports.workers = {};
+	let workers = exports.workers = {};
 
-	var spawnWorker = exports.spawnWorker = function () {
-		var worker = fakeProcess.server;
-		var id = worker.id;
+	let spawnWorker = exports.spawnWorker = function () {
+		let worker = fakeProcess.server;
+		let id = worker.id;
 		workers[id] = worker;
 		worker.on('message', function (data) {
 			// console.log('master received: ' + data);
 			switch (data.charAt(0)) {
-			case '*': // *socketid, ip
+			case '*': {
+				// *socketid, ip
 				// connect
-				var nlPos = data.indexOf('\n');
+				let nlPos = data.indexOf('\n');
 				Users.socketConnect(worker, id, data.substr(1, nlPos - 1), data.substr(nlPos + 1));
 				break;
+			}
 
-			case '!': // !socketid
+			case '!': {
+				// !socketid
 				// disconnect
 				Users.socketDisconnect(worker, id, data.substr(1));
 				break;
+			}
 
-			case '<': // <socketid, message
+			case '<': {
+				// <socketid, message
 				// message
-				var nlPos = data.indexOf('\n');
+				let nlPos = data.indexOf('\n');
 				Users.socketReceive(worker, id, data.substr(1, nlPos - 1), data.substr(nlPos + 1));
 				break;
+			}
+
+			default:
+			// unhandled
 			}
 		});
 	};
 
-	//var workerCount = typeof Config.workers !== 'undefined' ? Config.workers : 1;
-	//for (var i = 0; i < workerCount; i++) {
+	//let workerCount = typeof Config.workers !== 'undefined' ? Config.workers : 1;
+	//for (let i = 0; i < workerCount; i++) {
 		spawnWorker();
 	//}
 
-	var killWorker = exports.killWorker = function (worker) {
-		/*var idd = worker.id + '-';
-		var count = 0;
-		for (var connectionid in Users.connections) {
+	exports.killWorker = function (worker) {
+		/*let idd = worker.id + '-';
+		let count = 0;
+		for (let connectionid in Users.connections) {
 			if (connectionid.substr(idd.length) === idd) {
-				var connection = Users.connections[connectionid];
+				let connection = Users.connections[connectionid];
 				Users.socketDisconnect(worker, worker.id, connection.socketid);
 				count++;
 			}
@@ -73,12 +84,12 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		return 0;
 	};
 
-	var killPid = exports.killPid = function (pid) {
+	exports.killPid = function (pid) {
 		/*pid = '' + pid;
-		for (var id in workers) {
-			var worker = workers[id];
+		for (let id in workers) {
+			let worker = workers[id];
 			if (pid === '' + worker.process.pid) {
-				return killWorker(worker);
+				return this.killWorker(worker);
 			}
 		}*/
 		return false;
@@ -92,7 +103,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	};
 
 	exports.channelBroadcast = function (channelid, message) {
-		for (var workerid in workers) {
+		for (let workerid in workers) {
 			workers[workerid].send('#' + channelid + '\n' + message);
 		}
 	};
@@ -107,7 +118,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	};
 
 	exports.subchannelBroadcast = function (channelid, message) {
-		for (var workerid in workers) {
+		for (let workerid in workers) {
 			workers[workerid].send(':' + channelid + '\n' + message);
 		}
 	};
@@ -141,23 +152,23 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		require('./crashlogger.js')(err, 'Socket process ' + cluster.worker.id + ' (' + process.pid + ')', true);
 	});*/
 
-	var app = require('http').createServer();
-	var appssl;
+	let app = require('http').createServer();
+	let appssl;
 	if (Config.ssl) {
 		appssl = require('https').createServer(Config.ssl.options);
 	}
 	try {
 		(function () {
-			var nodestatic = require('node-static');
-			var cssserver = new nodestatic.Server('./config');
-			var avatarserver = new nodestatic.Server('./config/avatars');
-			var staticserver = new nodestatic.Server('./static');
-			var staticRequestHandler = function (request, response) {
+			let nodestatic = require('node-static');
+			let cssserver = new nodestatic.Server('./config');
+			let avatarserver = new nodestatic.Server('./config/avatars');
+			let staticserver = new nodestatic.Server('./static');
+			let staticRequestHandler = function (request, response) {
 				// console.log("static rq: " + request.socket.remoteAddress + ":" + request.socket.remotePort + " -> " + request.socket.localAddress + ":" + request.socket.localPort + " - " + request.method + " " + request.url + " " + request.httpVersion + " - " + request.rawHeaders.join('|'));
 				request.resume();
 				request.addListener('end', function () {
 					if (Config.customHttpResponse && Config.customHttpResponse(request, response)) return;
-					var server;
+					let server;
 					if (request.url === '/custom.css') {
 						server = cssserver;
 					} else if (request.url.substr(0, 9) === '/avatars/') {
@@ -190,9 +201,9 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	// This is the main server that handles users connecting to our server
 	// and doing things on our server.
 
-	var sockjs = require('sockjs');
+	let sockjs = require('sockjs');
 
-	var server = sockjs.createServer({
+	let server = sockjs.createServer({
 		sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-0.3.min.js",
 		log: function (severity, message) {
 			if (severity === 'error') console.log('ERROR: ' + message);
@@ -201,13 +212,13 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		websocket: !Config.disableWebsocket
 	});
 
-	var sockets = {};
-	var channels = {};
-	var subchannels = {};
+	let sockets = {};
+	let channels = {};
+	let subchannels = {};
 
 	// Deal with phantom connections.
-	var sweepClosedSockets = function () {
-		for (var s in sockets) {
+	let sweepClosedSockets = function () {
+		for (let s in sockets) {
 			if (sockets[s].protocol === 'xhr-streaming' &&
 				sockets[s]._session &&
 				sockets[s]._session.recv) {
@@ -227,14 +238,14 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			}
 		}
 	};
-	var interval = setInterval(sweepClosedSockets, 1000 * 60 * 10);
+	let interval = setInterval(sweepClosedSockets, 1000 * 60 * 10); // eslint-disable-line no-unused-vars
 
 	fakeProcess.client.on('message', function (data) {
 		// console.log('worker received: ' + data);
-		var socket = null;
-		var channel = null;
-		var socketid = null;
-		var channelid = null;
+		let socket = null, socketid = '';
+		let channel = null, channelid = '';
+		let subchannel = null, subchannelid = '';
+
 		switch (data.charAt(0)) {
 		case '$': // $code
 			eval(data.substr(1));
@@ -254,27 +265,32 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			}
 			break;
 
-		case '>': // >socketid, message
+		case '>': {
+			// >socketid, message
 			// message
-			var nlLoc = data.indexOf('\n');
+			let nlLoc = data.indexOf('\n');
 			socket = sockets[data.substr(1, nlLoc - 1)];
 			if (!socket) return;
 			socket.write(data.substr(nlLoc + 1));
 			break;
+		}
 
-		case '#': // #channelid, message
+		case '#': {
+			// #channelid, message
 			// message to channel
-			var nlLoc = data.indexOf('\n');
+			let nlLoc = data.indexOf('\n');
 			channel = channels[data.substr(1, nlLoc - 1)];
-			var message = data.substr(nlLoc + 1);
+			let message = data.substr(nlLoc + 1);
 			for (socketid in channel) {
 				channel[socketid].write(message);
 			}
 			break;
+		}
 
-		case '+': // +channelid, socketid
+		case '+': {
+			// +channelid, socketid
 			// add to channel
-			var nlLoc = data.indexOf('\n');
+			let nlLoc = data.indexOf('\n');
 			socketid = data.substr(nlLoc + 1);
 			socket = sockets[socketid];
 			if (!socket) return;
@@ -283,18 +299,20 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			if (!channel) channel = channels[channelid] = Object.create(null);
 			channel[socketid] = socket;
 			break;
+		}
 
-		case '-': // -channelid, socketid
+		case '-': {
+			// -channelid, socketid
 			// remove from channel
-			var nlLoc = data.indexOf('\n');
-			var channelid = data.slice(1, nlLoc);
+			let nlLoc = data.indexOf('\n');
+			channelid = data.slice(1, nlLoc);
 			channel = channels[channelid];
 			if (!channel) return;
-			var socketid = data.slice(nlLoc + 1);
+			socketid = data.slice(nlLoc + 1);
 			delete channel[socketid];
 			if (subchannels[channelid]) delete subchannels[channelid][socketid];
-			var isEmpty = true;
-			for (var socketid in channel) {
+			let isEmpty = true;
+			for (let socketid in channel) { // eslint-disable-line no-unused-vars
 				isEmpty = false;
 				break;
 			}
@@ -303,16 +321,18 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 				delete subchannels[channelid];
 			}
 			break;
+		}
 
-		case '.': // .channelid, subchannelid, socketid
+		case '.': {
+			// .channelid, subchannelid, socketid
 			// move subchannel
-			var nlLoc = data.indexOf('\n');
-			var channelid = data.slice(1, nlLoc);
-			var nlLoc2 = data.indexOf('\n', nlLoc + 1);
-			var subchannelid = data.slice(nlLoc + 1, nlLoc2);
-			var socketid = data.slice(nlLoc2 + 1);
+			let nlLoc = data.indexOf('\n');
+			channelid = data.slice(1, nlLoc);
+			let nlLoc2 = data.indexOf('\n', nlLoc + 1);
+			subchannelid = data.slice(nlLoc + 1, nlLoc2);
+			socketid = data.slice(nlLoc2 + 1);
 
-			var subchannel = subchannels[channelid];
+			subchannel = subchannels[channelid];
 			if (!subchannel) subchannel = subchannels[channelid] = Object.create(null);
 			if (subchannelid === '0') {
 				delete subchannel[socketid];
@@ -320,15 +340,17 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 				subchannel[socketid] = subchannelid;
 			}
 			break;
+		}
 
-		case ':': // :channelid, message
+		case ':': {
+			// :channelid, message
 			// message to subchannel
-			var nlLoc = data.indexOf('\n');
-			var channelid = data.slice(1, nlLoc);
-			var channel = channels[channelid];
-			var subchannel = subchannels[channelid];
-			var message = data.substr(nlLoc + 1);
-			var messages = [null, null, null];
+			let nlLoc = data.indexOf('\n');
+			channelid = data.slice(1, nlLoc);
+			channel = channels[channelid];
+			subchannel = subchannels[channelid];
+			let message = data.substr(nlLoc + 1);
+			let messages = [null, null, null];
 			for (socketid in channel) {
 				switch (subchannel ? subchannel[socketid] : '0') {
 				case '1':
@@ -353,6 +375,9 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			}
 			break;
 		}
+
+		default:
+		}
 	});
 
 	process.on('disconnect', function () {
@@ -360,8 +385,8 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 	});
 
 	// this is global so it can be hotpatched if necessary
-	var isTrustedProxyIp = Cidr.checker(Config.proxyIps);
-	var socketCounter = 0;
+	let isTrustedProxyIp = Cidr.checker(Config.proxyIps);
+	let socketCounter = 0;
 	server.on('connection', function (socket) {
 		if (!socket) {
 			// For reasons that are not entirely clear, SockJS sometimes triggers
@@ -374,13 +399,13 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 			} catch (e) {}
 			return;
 		}
-		var socketid = socket.id = (++socketCounter);
+		let socketid = socket.id = (++socketCounter);
 
 		sockets[socket.id] = socket;
 
 		if (isTrustedProxyIp(socket.remoteAddress)) {
-			var ips = (socket.headers['x-forwarded-for'] || '').split(',');
-			var ip;
+			let ips = (socket.headers['x-forwarded-for'] || '').split(',');
+			let ip;
 			while ((ip = ips.pop())) {
 				ip = ip.trim();
 				if (!isTrustedProxyIp(ip)) {
@@ -395,19 +420,19 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 		socket.on('data', function (message) {
 			// drop empty messages (DDoS?)
 			if (!message) return;
-			// drop blank messages (DDoS?)
-			var pipeIndex = message.indexOf('|');
-			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
 			// drop legacy JSON messages
-			if (!message.charAt) throw new Error('message: ' + JSON.stringify(message));
-			if (message.charAt(0) === '{') return;
+			if (typeof message !== 'string' || message.charAt(0) === '{') return;
+			// drop blank messages (DDoS?)
+			let pipeIndex = message.indexOf('|');
+			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
+
 			fakeProcess.client.send('<' + socketid + '\n' + message);
 		});
 
 		socket.on('close', function () {
 			fakeProcess.client.send('!' + socketid);
 			delete sockets[socketid];
-			for (var channelid in channels) {
+			for (let channelid in channels) {
 				delete channels[channelid][socketid];
 			}
 		});
@@ -419,7 +444,7 @@ var fakeProcess = new (require('./fake-process').FakeProcess)();
 
 	if (appssl) {
 		server.installHandlers(appssl, {});
-		appssl.listen(Config.ssl.port, Config.bindaddress);
+		appssl.listen(Config.ssl.port, Config.bindAddress);
 		console.log('Worker ' /*+ cluster.worker.id*/ + ' now listening for SSL on port ' + Config.ssl.port);
 	}
 

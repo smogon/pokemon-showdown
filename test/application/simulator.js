@@ -1,11 +1,13 @@
-var assert = require('assert');
-var userUtils = require('./../../dev-tools/users-utils.js');
-var User = userUtils.User;
+'use strict';
+
+const assert = require('assert');
+let userUtils = require('./../../dev-tools/users-utils.js');
+let User = userUtils.User;
 
 describe('Simulator abstraction layer features', function () {
 	describe('Battle', function () {
 		describe('player identifiers', function () {
-			var p1, p2, room;
+			let p1, p2, room;
 			afterEach(function () {
 				if (p1) {
 					p1.disconnectAll();
@@ -18,8 +20,10 @@ describe('Simulator abstraction layer features', function () {
 				if (room) room.expire();
 			});
 
-			it('should not get out of sync in rated battles on rename', function () {
-				var packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
+			it('should not get players out of sync in rated battles on rename', function () {
+				// Regression test for 47263c8749
+				// Since updated to new API used by room battles.
+				let packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
 				p1 = new User();
 				p2 = new User();
 				p1.forceRename("Missingno."); // Don't do this at home
@@ -29,14 +33,11 @@ describe('Simulator abstraction layer features', function () {
 					room.joinBattle(p2, packedTeam);
 				}
 				p1.resetName();
-				for (var i = 0; i < room.battle.playerids.length; i++) {
-					var curId = room.battle.playerids[i];
-					assert.strictEqual(room.battle.playerTable[curId], 'p' + (i + 1));
-					if (!curId) {
-						assert.ok(!room.battle.players[i]);
-					} else {
-						assert.strictEqual(curId, room.battle.players[i].userid);
-					}
+				for (let i = 0; i < room.battle.playerNames.length; i++) {
+					let playerName = room.battle.playerNames[i];
+					let playerData = room.battle['p' + (i + 1)];
+					assert.strictEqual(playerData.name, playerName);
+					assert.strictEqual(playerData, room.battle.players[toId(playerName)]);
 				}
 			});
 		});

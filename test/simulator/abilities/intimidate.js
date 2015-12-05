@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Intimidate', function () {
 	afterEach(function () {
@@ -9,7 +11,7 @@ describe('Intimidate', function () {
 	it('should decrease Atk by 1 level', function () {
 		battle = BattleEngine.Battle.construct();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['sketch']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'intimidate',  moves: ['splash']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['splash']}]);
 		assert.strictEqual(battle.p1.active[0].boosts['atk'], -1);
 	});
 
@@ -19,8 +21,8 @@ describe('Intimidate', function () {
 			{species: "Escavalier", item: 'leftovers', ability: 'shellarmor', moves: ['substitute']}
 		]);
 		battle.join('p2', 'Guest 2', 1, [
-			{species: "Greninja", item: 'laggingtail', ability: 'protean',  moves: ['uturn']},
-			{species: "Gyarados", item: 'leftovers', ability: 'intimidate',  moves: ['splash']}
+			{species: "Greninja", item: 'laggingtail', ability: 'protean', moves: ['uturn']},
+			{species: "Gyarados", item: 'leftovers', ability: 'intimidate', moves: ['splash']}
 		]);
 		battle.commitDecisions();
 		battle.choose('p2', 'switch 2');
@@ -35,9 +37,9 @@ describe('Intimidate', function () {
 			{species: "Squirtle", item: 'leftovers', ability: 'torrent', moves: ['bubble']}
 		]);
 		battle.join('p2', 'Guest 2', 1, [
-			{species: "Greninja", ability: 'protean',  moves: ['uturn']},
-			{species: "Mew", ability: 'synchronize',  moves: ['softboiled']},
-			{species: "Gyarados", ability: 'intimidate',  moves: ['splash']}
+			{species: "Greninja", ability: 'protean', moves: ['uturn']},
+			{species: "Mew", ability: 'synchronize', moves: ['softboiled']},
+			{species: "Gyarados", ability: 'intimidate', moves: ['splash']}
 		]);
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].boosts['atk'], -1);
@@ -49,7 +51,7 @@ describe('Intimidate', function () {
 		battle = BattleEngine.Battle.construct('battle-intimidate-order1', 'customgame');
 		battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']}]);
-		var intimidateCount = 0;
+		let intimidateCount = 0;
 		battle.on('Boost', battle.getFormat(), function (boost, target, source) {
 			assert.strictEqual(source.template.speciesid, intimidateCount === 0 ? 'arcanine' : 'gyarados');
 			intimidateCount++;
@@ -87,7 +89,7 @@ describe('Intimidate', function () {
 			{species: "Gyarados", ability: 'intimidate', moves: ['healingwish']},
 			{species: "Arcanine", ability: 'intimidate', moves: ['healingwish']}
 		]);
-		var intimidateCount = 0;
+		let intimidateCount = 0;
 		battle.on('Boost', battle.getFormat(), function (boost, target, source) {
 			assert.strictEqual(source.template.speciesid, intimidateCount % 2 === 0 ? 'arcanine' : 'gyarados');
 			intimidateCount++;

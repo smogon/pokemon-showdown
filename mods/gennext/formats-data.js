@@ -1,3 +1,5 @@
+'use strict';
+
 exports.BattleFormatsData = {
 	aegislash: {
 		inherit: true,
@@ -11,11 +13,19 @@ exports.BattleFormatsData = {
 		inherit: true,
 		tier: 'OU'
 	},
+	landorus: {
+		inherit: true,
+		tier: 'OU'
+	},
 	deoxysdefense: {
 		inherit: true,
 		tier: 'Uber'
 	},
 	deoxysspeed: {
+		inherit: true,
+		tier: 'Uber'
+	},
+	hoopaunbound: {
 		inherit: true,
 		tier: 'Uber'
 	},

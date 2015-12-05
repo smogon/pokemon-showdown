@@ -1,3 +1,5 @@
+'use strict';
+
 // The server port - the port to run Pokemon Showdown under
 exports.port = 8000;
 
@@ -179,7 +181,7 @@ exports.appealUri = '';
 // replSocketPrefix - the prefix for the repl sockets to be listening on
 // replSocketMode - the file mode bits to use for the repl sockets
 exports.replSocketPrefix = './logs/repl/';
-exports.replSocketMode = 0600;
+exports.replSocketMode = 0o600;
 
 // Symbols, Groups and Permissions
 //   mutedSymbol - The symbol representing a muted user.
@@ -222,6 +224,7 @@ exports.replSocketMode = 0600;
 //     - console: Developer console (also requires IP or userid in the `consoleIps` array).
 //     - declare: /declare command.
 //     - disableladder: /disableladder and /enable ladder commands.
+//     - editroom: Set modjoin/privacy only for battles/groupchats
 //     - forcepromote: Ability to promote a user even if they're offline and unauthed.
 //     - forcerename: /forcerename command.
 //     - forcewin: /forcewin command.
@@ -279,7 +282,9 @@ exports.groups = {
 			banword: true,
 			declare: true,
 			disableladder: true,
+			editroom: true,
 			forcewin: true,
+			makeroom: true,
 			modchatall: true,
 			potd: true,
 			promote: 'u',
@@ -293,6 +298,7 @@ exports.groups = {
 			inherit: '@',
 			jurisdiction: 'u',
 			declare: true,
+			editroom: true,
 			modchatall: true,
 			privateroom: true,
 			roomdesc: true,
@@ -371,7 +377,7 @@ exports.groups.chatRoomByRank = exports.groups.byRank.filter(function (a) { retu
 exports.groups.battleRoomByRank = exports.groups.byRank.filter(function (a) { return exports.groups.battleRoom[a]; });
 exports.groups.byId = {};
 exports.groups.byRank.forEach(function (group, rank) {
-	var groupData = exports.groups.bySymbol[group];
+	let groupData = exports.groups.bySymbol[group];
 	if (groupData.id) exports.groups.byId[groupData.id] = group;
 	groupData.rank = rank;
 });
