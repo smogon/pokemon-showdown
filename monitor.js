@@ -64,6 +64,7 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 	cmdsTotal: {lastCleanup: Date.now(), count: 0},
 	teamValidatorChanged: 0,
 	teamValidatorUnchanged: 0,
+	hotpatchLock: false,
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
 	 */
