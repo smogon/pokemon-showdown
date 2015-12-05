@@ -58,9 +58,9 @@ exports.Formats = [
 		banlist: []
 	},
 	{
-		name: "UU",
+		name: "UU (suspect test)",
 		desc: [
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3554801/\">np: UU Stage 5</a>",
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3557948/\">np: UU Stage 6</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3541343/\">UU Viability Ranking</a>"
 		],
@@ -78,7 +78,7 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
-		ruleset: ['UU'],
+		ruleset: ['UU (suspect test)'],
 		banlist: ['UU', 'BL2']
 	},
 	{
