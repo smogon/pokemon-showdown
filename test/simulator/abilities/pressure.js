@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Pressure', function () {
 	afterEach(function () {
@@ -19,7 +21,7 @@ describe('Pressure', function () {
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1, move 1 -1');
 		battle.choose('p2', 'move 1, move 1 1');
-		var move = Tools.getMove('peck');
+		let move = Tools.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -37,7 +39,7 @@ describe('Pressure', function () {
 		battle.commitDecisions(); // Team Preview
 		battle.choose('p1', 'move 1, move 1 2');
 		battle.choose('p2', 'move 1, move 1 2');
-		var move = Tools.getMove('peck');
+		let move = Tools.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -114,7 +116,7 @@ describe('Pressure [Gen 4]', function () {
 		]);
 		battle.choose('p1', 'move 1, move 1 -1');
 		battle.choose('p2', 'move 1, move 1 1');
-		var move = Tools.getMove('peck');
+		let move = Tools.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 54);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -131,7 +133,7 @@ describe('Pressure [Gen 4]', function () {
 		]);
 		battle.choose('p1', 'move 1, move 1 2');
 		battle.choose('p2', 'move 1, move 1 2');
-		var move = Tools.getMove('peck');
+		let move = Tools.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
 	});
@@ -167,7 +169,7 @@ describe('Pressure [Gen 4]', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Palkia", ability: 'pressure', moves: ['calmmind']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dialga", ability: 'pressure', moves: ['calmmind']}]);
 		battle.commitDecisions();
-		var move = Tools.getMove('calmmind');
+		let move = Tools.getMove('calmmind');
 		assert.strictEqual(battle.p1.active[0].getMoveData(move).pp, 31);
 		assert.strictEqual(battle.p1.active[0].getMoveData(move).pp, 31);
 	});

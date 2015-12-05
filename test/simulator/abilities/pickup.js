@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Pickup', function () {
 	afterEach(function () {
@@ -105,7 +107,7 @@ describe('Pickup', function () {
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Arcanine', ability: 'flashfire', item: 'firegem', moves: ['flamecharge']},
 			{species: 'Aggron', ability: 'sturdy', moves: ['rest']},
-			{species: 'Magikarp', ability: 'swiftswim',  moves: ['splash']}
+			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']}
 		]);
 		battle.commitDecisions();
 		battle.commitDecisions();

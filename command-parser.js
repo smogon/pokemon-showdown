@@ -22,6 +22,8 @@ To reload chat commands:
 
 */
 
+'use strict';
+
 const MAX_MESSAGE_LENGTH = 300;
 
 const BROADCAST_COOLDOWN = 20 * 1000;
@@ -34,15 +36,15 @@ const VALID_COMMAND_TOKENS = '/!';
 
 const BROADCAST_TOKEN = '!';
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 /*********************************************************
  * Load command files
  *********************************************************/
 
-var baseCommands = exports.baseCommands = require('./commands.js').commands;
-var commands = exports.commands = Object.clone(baseCommands);
+let baseCommands = exports.baseCommands = require('./commands.js').commands;
+let commands = exports.commands = Object.clone(baseCommands);
 
 // Install plug-in commands
 
@@ -58,12 +60,12 @@ fs.readdirSync(path.resolve(__dirname, 'chat-plugins')).forEach(function (file) 
  * Modlog
  *********************************************************/
 
-var modlog = exports.modlog = {
+let modlog = exports.modlog = {
 	lobby: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_lobby.txt'), {flags:'a+'}),
 	battle: fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_battle.txt'), {flags:'a+'})
 };
 
-var writeModlog = exports.writeModlog = function (roomid, text) {
+let writeModlog = exports.writeModlog = function (roomid, text) {
 	if (!modlog[roomid]) {
 		modlog[roomid] = fs.createWriteStream(path.resolve(__dirname, 'logs/modlog/modlog_' + roomid + '.txt'), {flags:'a+'});
 	}
@@ -83,38 +85,40 @@ function canTalk(user, room, connection, message, targetUser) {
 		connection.popup("You must choose a name before you can talk.");
 		return false;
 	}
-	if (room && user.locked) {
-		connection.sendTo(room, "You are locked from talking in chat.");
-		return false;
-	}
-	if (room && room.isMuted(user)) {
-		connection.sendTo(room, "You are muted and cannot talk in this room.");
-		return false;
-	}
-	var roomType = room && room.auth ? room.type + 'Room' : 'global';
-	if (room && room.modchat) {
-		var userGroup = user.group;
-		if (room.auth) {
-			if (room.auth[user.userid]) {
-				userGroup = room.auth[user.userid];
-			} else if (room.isPrivate === true) {
-				userGroup = ' ';
-			}
-		}
-		if (room.modchat === 'autoconfirmed') {
-			if (!user.autoconfirmed && userGroup === Config.groups.default[roomType]) {
-				connection.sendTo(room, "Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
-				return false;
-			}
-		} else if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[room.modchat].rank && !user.can('bypassall')) {
-			var groupName = Config.groups.bySymbol[room.modchat].name || room.modchat;
-			connection.sendTo(room, "Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
+	if (!user.can('bypassall')) {
+		if (room && user.locked) {
+			this.errorReply("You are locked from talking in chat.");
 			return false;
 		}
-	}
-	if (room && !(user.userid in room.users)) {
-		connection.popup("You can't send a message to this room without being in it.");
-		return false;
+		if (room && room.isMuted(user)) {
+			this.errorReply("You are muted and cannot talk in this room.");
+			return false;
+		}
+		let roomType = room && room.auth ? room.type + 'Room' : 'global';
+		if (room && room.modchat) {
+			let userGroup = user.group;
+			if (room.auth) {
+				if (room.auth[user.userid]) {
+					userGroup = room.auth[user.userid];
+				} else if (room.isPrivate === true) {
+					userGroup = Config.groups.default[roomType];
+				}
+			}
+			if (room.modchat === 'autoconfirmed') {
+				if (!user.autoconfirmed && userGroup === Config.groups.default[roomType]) {
+					this.errorReply("Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.");
+					return false;
+				}
+			} else if (Config.groups.bySymbol[userGroup].rank < Config.groups.bySymbol[room.modchat].rank && !user.can('makeroom')) {
+				let groupName = Config.groups[room.modchat].name || room.modchat;
+				this.errorReply("Because moderated chat is set, you must be of rank " + groupName + " or higher to speak in this room.");
+				return false;
+			}
+		}
+		if (room && !(user.userid in room.users)) {
+			connection.popup("You can't send a message to this room without being in it.");
+			return false;
+		}
 	}
 
 	if (typeof message === 'string') {
@@ -123,7 +127,7 @@ function canTalk(user, room, connection, message, targetUser) {
 			return false;
 		}
 		if (message.length > MAX_MESSAGE_LENGTH && !user.can('ignorelimits')) {
-			connection.popup("Your message is too long:\n\n" + message);
+			this.errorReply("Your message is too long: " + message);
 			return false;
 		}
 
@@ -131,10 +135,10 @@ function canTalk(user, room, connection, message, targetUser) {
 		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u064b-\u065f\u0670\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
 
 		if (room && room.id === 'lobby') {
-			var normalized = message.trim();
+			let normalized = message.trim();
 			if ((normalized === user.lastMessage) &&
 					((Date.now() - user.lastMessageTime) < MESSAGE_COOLDOWN)) {
-				connection.popup("You can't send the same message again so soon.");
+				this.errorReply("You can't send the same message again so soon.");
 				return false;
 			}
 			user.lastMessage = message;
@@ -142,6 +146,7 @@ function canTalk(user, room, connection, message, targetUser) {
 		}
 
 		if (Config.chatFilter) {
+			/*jshint validthis:true */
 			return Config.chatFilter.call(this, message, user, room, connection, targetUser);
 		}
 		return message;
@@ -150,7 +155,7 @@ function canTalk(user, room, connection, message, targetUser) {
 	return true;
 }
 
-var Context = exports.Context = (function () {
+let Context = exports.Context = (function () {
 	function Context(options) {
 		this.cmd = options.cmd || '';
 		this.cmdToken = options.cmdToken || '';
@@ -201,11 +206,10 @@ var Context = exports.Context = (function () {
 		this.logModCommand(data);
 	};
 	Context.prototype.sendModCommand = function (data) {
-		var users = this.room.users;
-		var auth = this.room.auth;
+		let users = this.room.users;
 
-		for (var i in users) {
-			var user = users[i];
+		for (let i in users) {
+			let user = users[i];
 			if (user.can('staff') || user.can('staff', this.room)) {
 				user.sendTo(this.room, data);
 			}
@@ -219,16 +223,16 @@ var Context = exports.Context = (function () {
 		this.logModCommand(text + (logOnlyText || ""));
 	};
 	Context.prototype.logModCommand = function (text) {
-		var roomid = (this.room.battle ? 'battle' : this.room.id);
+		let roomid = (this.room.battle ? 'battle' : this.room.id);
 		if (this.room.isPersonal) roomid = 'groupchat';
 		writeModlog(roomid, '(' + this.room.id + ') ' + text);
 	};
 	Context.prototype.globalModlog = function (action, user, text) {
-		var buf = "(" + this.room.id + ") " + action + ": ";
+		let buf = "(" + this.room.id + ") " + action + ": ";
 		if (typeof user === 'string') {
 			buf += "[" + toId(user) + "]";
 		} else {
-			var userid = this.getLastIdOf(user);
+			let userid = this.getLastIdOf(user);
 			buf += "[" + userid + "]";
 			if (user.autoconfirmed && user.autoconfirmed !== userid) buf += " ac:[" + user.autoconfirmed + "]";
 		}
@@ -244,7 +248,7 @@ var Context = exports.Context = (function () {
 	};
 	Context.prototype.canBroadcast = function (suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
-			var message = this.canTalk(this.message);
+			let message = this.canTalk(this.message);
 			if (!message) return false;
 			if (!this.user.can('broadcast', this.room)) {
 				this.errorReply("You need to be voiced to broadcast this command's information.");
@@ -253,7 +257,7 @@ var Context = exports.Context = (function () {
 			}
 
 			// broadcast cooldown
-			var normalized = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+			let normalized = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 			if (this.room.lastBroadcast === normalized &&
 					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
 				this.errorReply("You can't broadcast this because it was just broadcast.");
@@ -274,12 +278,12 @@ var Context = exports.Context = (function () {
 		return CommandParser.parse(message, room || this.room, this.user, this.connection, this.levelsDeep + 1);
 	};
 	Context.prototype.run = function (targetCmd, inNamespace) {
-		var commandHandler;
+		let commandHandler;
 		if (typeof targetCmd === 'function') {
 			commandHandler = targetCmd;
 		} else if (inNamespace) {
 			commandHandler = commands;
-			for (var i = 0; i < this.namespaces.length; i++) {
+			for (let i = 0; i < this.namespaces.length; i++) {
 				commandHandler = commandHandler[this.namespaces[i]];
 			}
 			commandHandler = commandHandler[targetCmd];
@@ -287,19 +291,19 @@ var Context = exports.Context = (function () {
 			commandHandler = commands[targetCmd];
 		}
 
-		var result;
+		let result;
 		try {
 			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
 		} catch (err) {
-			var stack = err.stack + '\n\n' +
+			let stack = err.stack + '\n\n' +
 					'Additional information:\n' +
 					'user = ' + this.user.name + '\n' +
 					'room = ' + this.room.id + '\n' +
 					'message = ' + this.message;
-			var fakeErr = {stack: stack};
+			let fakeErr = {stack: stack};
 
 			if (!require('./crashlogger.js')(fakeErr, 'A chat command')) {
-				var ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
+				let ministack = ("" + err.stack).escapeHTML().split("\n").slice(0, 2).join("<br />");
 				if (Rooms.lobby) Rooms.lobby.send('|html|<div class="broadcast-red"><b>POKEMON SHOWDOWN HAS CRASHED:</b> ' + ministack + '</div>');
 			} else {
 				this.sendReply('|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don\'t worry, we\'re working on fixing it.</div>');
@@ -310,7 +314,7 @@ var Context = exports.Context = (function () {
 		return result;
 	};
 	Context.prototype.canTalk = function (message, relevantRoom, targetUser) {
-		var innerRoom = (relevantRoom !== undefined) ? relevantRoom : this.room;
+		let innerRoom = (relevantRoom !== undefined) ? relevantRoom : this.room;
 		return canTalk.call(this, this.user, innerRoom, this.connection, message, targetUser);
 	};
 	Context.prototype.canHTML = function (html) {
@@ -325,11 +329,11 @@ var Context = exports.Context = (function () {
 		}
 
 		// check for mismatched tags
-		var tags = html.toLowerCase().match(/<\/?(div|a|button|b|i|u|center|font)\b/g);
+		let tags = html.toLowerCase().match(/<\/?(div|a|button|b|i|u|center|font)\b/g);
 		if (tags) {
-			var stack = [];
-			for (var i = 0; i < tags.length; i++) {
-				var tag = tags[i];
+			let stack = [];
+			for (let i = 0; i < tags.length; i++) {
+				let tag = tags[i];
 				if (tag.charAt(1) === '/') {
 					if (!stack.length) {
 						this.errorReply("Extraneous </" + tag.substr(2) + "> without an opening tag.");
@@ -364,16 +368,16 @@ var Context = exports.Context = (function () {
 		return (user.named ? user.userid : (Object.keys(user.prevNames).last() || user.userid));
 	};
 	Context.prototype.splitTarget = function (target, exactName) {
-		var commaIndex = target.indexOf(',');
+		let commaIndex = target.indexOf(',');
 		if (commaIndex < 0) {
-			var targetUser = Users.get(target, exactName);
+			let targetUser = Users.get(target, exactName);
 			this.targetUser = targetUser;
 			this.inputUsername = target.trim();
 			this.targetUsername = targetUser ? targetUser.name : target;
 			return '';
 		}
 		this.inputUsername = target.substr(0, commaIndex);
-		var targetUser = Users.get(this.inputUsername, exactName);
+		let targetUser = Users.get(this.inputUsername, exactName);
 		if (targetUser) {
 			this.targetUser = targetUser;
 			this.targetUsername = this.inputUsername = targetUser.name;
@@ -410,8 +414,8 @@ var Context = exports.Context = (function () {
  *     if he's muted, will warn him that he's muted, and
  *     return false.
  */
-var parse = exports.parse = function (message, room, user, connection, levelsDeep) {
-	var cmd = '', target = '', cmdToken = '';
+let parse = exports.parse = function (message, room, user, connection, levelsDeep) {
+	let cmd = '', target = '', cmdToken = '';
 	if (!message || !message.trim().length) return;
 	if (!levelsDeep) {
 		levelsDeep = 0;
@@ -431,7 +435,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 
 	if (VALID_COMMAND_TOKENS.includes(message.charAt(0)) && message.charAt(1) !== message.charAt(0)) {
 		cmdToken = message.charAt(0);
-		var spaceIndex = message.indexOf(' ');
+		let spaceIndex = message.indexOf(' ');
 		if (spaceIndex > 0) {
 			cmd = message.substr(1, spaceIndex - 1).toLowerCase();
 			target = message.substr(spaceIndex + 1);
@@ -441,9 +445,9 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		}
 	}
 
-	var namespaces = [];
-	var currentCommands = commands;
-	var commandHandler;
+	let namespaces = [];
+	let currentCommands = commands;
+	let commandHandler;
 
 	do {
 		commandHandler = currentCommands[cmd];
@@ -454,7 +458,7 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		if (commandHandler && typeof commandHandler === 'object') {
 			namespaces.push(cmd);
 
-			var spaceIndex = target.indexOf(' ');
+			let spaceIndex = target.indexOf(' ');
 			if (spaceIndex > 0) {
 				cmd = target.substr(0, spaceIndex).toLowerCase();
 				target = target.substr(spaceIndex + 1);
@@ -472,9 +476,9 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 			commandHandler = currentCommands[commandHandler];
 		}
 	}
-	var fullCmd = namespaces.concat(cmd).join(' ');
+	let fullCmd = namespaces.concat(cmd).join(' ');
 
-	var context = new Context({
+	let context = new Context({
 		target: target, room: room, user: user, connection: connection, cmd: cmd, message: message,
 		namespaces: namespaces, cmdToken: cmdToken, levelsDeep: levelsDeep
 	});
@@ -483,17 +487,17 @@ var parse = exports.parse = function (message, room, user, connection, levelsDee
 		return context.run(commandHandler);
 	} else {
 		// Check for mod/demod/admin/deadmin/etc depending on the group ids
-		var isRoom = false;
-		var promoteCmd = cmd;
+		let isRoom = false;
+		let promoteCmd = cmd;
 		if (promoteCmd.substr(0, 6) === 'global') {
 			promoteCmd = promoteCmd.slice(6);
 		} else if (promoteCmd.substr(0, 4) === 'room') {
 			isRoom = true;
 			promoteCmd = promoteCmd.slice(4);
 		}
-		for (var g in Config.groups[isRoom ? room.type + 'Room' : 'global']) {
-			var groupId = Config.groups.bySymbol[g].id;
-			var isDemote = promoteCmd === 'de' + groupId || promoteCmd === 'un' + groupId;
+		for (let g in Config.groups[isRoom ? room.type + 'Room' : 'global']) {
+			let groupId = Config.groups.bySymbol[g].id;
+			let isDemote = promoteCmd === 'de' + groupId || promoteCmd === 'un' + groupId;
 			if (promoteCmd === groupId || isDemote) {
 				return parse('/' + (isRoom ? 'room' : '') + (isDemote ? 'demote' : 'promote') + ' ' + toId(target) + (isDemote ? '' : ',' + g), room, user, connection, levelsDeep + 1);
 			}
@@ -528,10 +532,10 @@ fs.readFile(path.resolve(__dirname, 'package.json'), function (err, data) {
 });
 
 exports.uncacheTree = function (root) {
-	var uncache = [require.resolve(root)];
+	let uncache = [require.resolve(root)];
 	do {
-		var newuncache = [];
-		for (var i = 0; i < uncache.length; ++i) {
+		let newuncache = [];
+		for (let i = 0; i < uncache.length; ++i) {
 			if (require.cache[uncache[i]]) {
 				newuncache.push.apply(newuncache,
 					require.cache[uncache[i]].children.map('id')

@@ -24,6 +24,8 @@ sound: Has no effect on Pokemon with the Ability Soundproof.
 
 */
 
+'use strict';
+
 exports.BattleMovedex = {
 	"absorb": {
 		num: 71,
@@ -142,15 +144,15 @@ exports.BattleMovedex = {
 		flags: {},
 		onHit: function (target) {
 			var stats = [];
-			for (var i in target.boosts) {
-				if (target.boosts[i] < 6) {
-					stats.push(i);
+			for (var stat in target.boosts) {
+				if (target.boosts[stat] < 6) {
+					stats.push(stat);
 				}
 			}
 			if (stats.length) {
-				var i = stats[this.random(stats.length)];
+				var randomStat = stats[this.random(stats.length)];
 				var boost = {};
-				boost[i] = 2;
+				boost[randomStat] = 2;
 				this.boost(boost);
 			} else {
 				return false;
@@ -502,12 +504,12 @@ exports.BattleMovedex = {
 					}
 				}
 			}
-			var move = '';
-			if (moves.length) move = moves[this.random(moves.length)];
-			if (!move) {
+			var randomMove = '';
+			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (!randomMove) {
 				return false;
 			}
-			this.useMove(move, target);
+			this.useMove(randomMove, target);
 		},
 		secondary: false,
 		target: "self",
@@ -1991,10 +1993,10 @@ exports.BattleMovedex = {
 			if (!possibleTypes.length) {
 				return false;
 			}
-			var type = possibleTypes[this.random(possibleTypes.length)];
+			var randomType = possibleTypes[this.random(possibleTypes.length)];
 
-			if (!source.setType(type)) return false;
-			this.add('-start', source, 'typechange', type);
+			if (!source.setType(randomType)) return false;
+			this.add('-start', source, 'typechange', randomType);
 		},
 		secondary: false,
 		target: "normal",
@@ -2485,16 +2487,17 @@ exports.BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onHit: function (target, source, move) {
 			if (!target.volatiles['substitute'] || move.infiltrates) this.boost({evasion:-1});
-			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
-			var sideEnd = {spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
-			for (var i in sideConditions) {
-				if (target.side.removeSideCondition(i)) {
-					if (sideEnd[i]) this.add('-sideend', target.side, this.getEffect(i).name, '[from] move: Defog', '[of] ' + target);
+			var removeTarget = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
+			var removeAll = {spikes:1, toxicspikes:1, stealthrock:1, stickyweb:1};
+			for (var targetCondition in removeTarget) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll[targetCondition]) continue;
+					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + target);
 				}
 			}
-			for (var i in sideEnd) {
-				if (source.side.removeSideCondition(i)) {
-					this.add('-sideend', source.side, this.getEffect(i).name, '[from] move: Defog', '[of] ' + source);
+			for (var sideCondition in removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
 				}
 			}
 		},
@@ -2817,18 +2820,19 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isFutureMove: true,
-		onTryHit: function (target, source) {
-			source.side.addSideCondition('futuremove');
-			if (source.side.sideConditions['futuremove'].positions[source.position]) {
+		onTry: function (source, target) {
+			target.side.addSideCondition('futuremove');
+			if (target.side.sideConditions['futuremove'].positions[target.position]) {
 				return false;
 			}
-			source.side.sideConditions['futuremove'].positions[source.position] = {
+			target.side.sideConditions['futuremove'].positions[target.position] = {
 				duration: 3,
 				move: 'doomdesire',
-				targetPosition: target.position,
 				source: source,
 				moveData: {
+					id: 'doomdesire',
 					name: "Doom Desire",
+					accuracy: 100,
 					basePower: 140,
 					category: "Special",
 					flags: {},
@@ -4464,16 +4468,19 @@ exports.BattleMovedex = {
 		flags: {distance: 1},
 		onHitField: function (target, source) {
 			var targets = [];
-			for (var i = 0; i < this.sides.length; i++) {
-				for (var j = 0; j < this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j] && this.sides[i].active[j].hasType('Grass')) {
+			for (var sideSlot = 0; sideSlot < this.sides.length; sideSlot++) {
+				var sideActive = this.sides[sideSlot].active;
+				for (var activeSlot = 0; activeSlot < sideActive.length; activeSlot++) {
+					if (sideActive[activeSlot] && sideActive[activeSlot].hasType('Grass')) {
 						// This move affects every Grass-type Pokemon in play.
-						targets.push(this.sides[i].active[j]);
+						targets.push(sideActive[activeSlot]);
 					}
 				}
 			}
 			if (!targets.length) return false; // No targets; move fails
-			for (var i = 0; i < targets.length; i++) this.boost({def: 1}, targets[i], source, this.getMove('Flower Shield'));
+			for (var i = 0; i < targets.length; i++) {
+				this.boost({def: 1}, targets[i], source, this.getMove('Flower Shield'));
+			}
 		},
 		secondary: false,
 		target: "all",
@@ -4994,18 +5001,19 @@ exports.BattleMovedex = {
 		flags: {},
 		ignoreImmunity: true,
 		isFutureMove: true,
-		onTryHit: function (target, source) {
-			source.side.addSideCondition('futuremove');
-			if (source.side.sideConditions['futuremove'].positions[source.position]) {
+		onTry: function (source, target) {
+			target.side.addSideCondition('futuremove');
+			if (target.side.sideConditions['futuremove'].positions[target.position]) {
 				return false;
 			}
-			source.side.sideConditions['futuremove'].positions[source.position] = {
+			target.side.sideConditions['futuremove'].positions[target.position] = {
 				duration: 3,
 				move: 'futuresight',
-				targetPosition: target.position,
 				source: source,
 				moveData: {
+					id: 'futuresight',
 					name: "Future Sight",
+					accuracy: 100,
 					basePower: 120,
 					category: "Special",
 					flags: {},
@@ -8451,15 +8459,15 @@ exports.BattleMovedex = {
 					moves.push(move);
 				}
 			}
-			var move = '';
+			var randomMove = '';
 			if (moves.length) {
 				moves.sort(function (a, b) {return a.num - b.num;});
-				move = moves[this.random(moves.length)].id;
+				randomMove = moves[this.random(moves.length)].id;
 			}
-			if (!move) {
+			if (!randomMove) {
 				return false;
 			}
-			this.useMove(move, target);
+			this.useMove(randomMove, target);
 		},
 		secondary: false,
 		target: "self",
@@ -10425,7 +10433,7 @@ exports.BattleMovedex = {
 				this.debug('Pursuit start');
 				var sources = this.effectData.sources;
 				for (var i = 0; i < sources.length; i++) {
-					if (sources[i].moveThisTurn) continue;
+					if (sources[i].moveThisTurn || sources[i].fainted) continue;
 					this.cancelMove(sources[i]);
 					// Run through each decision in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 					// If it is, then Mega Evolve before moving.
@@ -11390,18 +11398,18 @@ exports.BattleMovedex = {
 		onHitField: function (target, source) {
 			var targets = [];
 			var anyAirborne = false;
-			for (var i = 0; i < this.sides.length; i++) {
-				for (var j = 0; j < this.sides[i].active.length; j++) {
-					if (this.sides[i].active[j]) {
-						if (!this.sides[i].active[j].runImmunity('Ground')) {
-							this.add('-immune', this.sides[i].active[j], '[msg]');
-							anyAirborne = true;
-							continue;
-						}
-						if (this.sides[i].active[j].hasType('Grass')) {
-							// This move affects every grounded Grass-type Pokemon in play.
-							targets.push(this.sides[i].active[j]);
-						}
+			for (var sideSlot = 0; sideSlot < this.sides.length; sideSlot++) {
+				var sideActive = this.sides[sideSlot].active;
+				for (var activeSlot = 0; activeSlot < sideActive.length; activeSlot++) {
+					if (!sideActive[activeSlot]) continue;
+					if (!sideActive[activeSlot].runImmunity('Ground')) {
+						this.add('-immune', sideActive[activeSlot], '[msg]');
+						anyAirborne = true;
+						continue;
+					}
+					if (sideActive[activeSlot].hasType('Grass')) {
+						// This move affects every grounded Grass-type Pokemon in play.
+						targets.push(sideActive[activeSlot]);
 					}
 				}
 			}
@@ -12483,12 +12491,12 @@ exports.BattleMovedex = {
 					moves.push(move);
 				}
 			}
-			var move = '';
-			if (moves.length) move = moves[this.random(moves.length)];
-			if (!move) {
+			var randomMove = '';
+			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (!randomMove) {
 				return false;
 			}
-			this.useMove(move, pokemon);
+			this.useMove(randomMove, pokemon);
 		},
 		secondary: false,
 		target: "self",
@@ -12977,7 +12985,6 @@ exports.BattleMovedex = {
 				this.effectData.layers++;
 			},
 			onSwitchIn: function (pokemon) {
-				var side = pokemon.side;
 				if (!pokemon.isGrounded()) return;
 				var damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
@@ -14550,10 +14557,14 @@ exports.BattleMovedex = {
 			if (myItem) {
 				target.setItem(myItem);
 				this.add('-item', target, myItem, '[from] move: Trick');
+			} else {
+				this.add('-enditem', target, yourItem, '[silent]');
 			}
 			if (yourItem) {
 				source.setItem(yourItem);
 				this.add('-item', source, yourItem, '[from] move: Trick');
+			} else {
+				this.add('-enditem', source, myItem, '[silent]');
 			}
 		},
 		secondary: false,

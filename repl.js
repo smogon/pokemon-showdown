@@ -1,11 +1,13 @@
-var fs = require('fs');
-var path = require('path');
-var net = require('net');
+'use strict';
 
-var sockets = [];
+const fs = require('fs');
+const path = require('path');
+const net = require('net');
+
+let sockets = [];
 
 function cleanup() {
-	for (var s = 0; s < sockets.length; ++s) {
+	for (let s = 0; s < sockets.length; ++s) {
 		try {
 			fs.unlinkSync(sockets[s]);
 		} catch (e) {}
@@ -25,23 +27,23 @@ if (process.listeners('SIGINT').length === 0) {
 exports.start = function (prefix, suffix, evalFunction) {
 	if (process.platform === 'win32') return; // Windows doesn't support sockets mounted in the filesystem
 
-	var resolvedPrefix = path.resolve(__dirname, Config.replSocketPrefix || 'logs/repl', prefix);
+	let resolvedPrefix = path.resolve(__dirname, Config.replSocketPrefix || 'logs/repl', prefix);
 	if (!evalFunction) {
 		evalFunction = suffix;
 		suffix = "";
 	}
-	var name = resolvedPrefix + suffix;
+	let name = resolvedPrefix + suffix;
 
 	if (prefix === 'app') {
 		// Clear out any old sockets
-		var directory = path.dirname(resolvedPrefix);
+		let directory = path.dirname(resolvedPrefix);
 		fs.readdirSync(directory).forEach(function (file) {
-			var stat = fs.statSync(directory + '/' + file);
+			let stat = fs.statSync(directory + '/' + file);
 			if (!stat.isSocket()) {
 				return;
 			}
 
-			var socket = net.connect(directory + '/' + file, function () {
+			let socket = net.connect(directory + '/' + file, function () {
 				socket.end();
 				socket.destroy();
 			}).on('error', function () {
@@ -64,7 +66,7 @@ exports.start = function (prefix, suffix, evalFunction) {
 		}).on('exit', socket.end.bind(socket));
 		socket.on('error', socket.destroy.bind(socket));
 	}).listen(name, function () {
-		fs.chmodSync(name, Config.replSocketMode || 0600);
+		fs.chmodSync(name, Config.replSocketMode || 0o600);
 		sockets.push(name);
 	}).on('error', function (e) {
 		if (e.code === "EADDRINUSE") {
