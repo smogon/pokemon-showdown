@@ -1673,6 +1673,10 @@ let ChatRoom = (function () {
 			clearTimeout(this.muteTimer);
 		}
 		this.muteTimer = null;
+		if (this.expireTimer) {
+			clearTimeout(this.expireTimer);
+		}
+		this.expireTimer = null;
 		if (this.reportJoinsInterval) {
 			clearInterval(this.reportJoinsInterval);
 		}
