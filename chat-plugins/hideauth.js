@@ -1,3 +1,5 @@
+'use strict';
+
 exports.commands = {
 	hide: 'hideauth',
 	hideauth: function (target, room, user) {
@@ -11,7 +13,7 @@ exports.commands = {
 		}
 
 		user.getIdentity = function (roomid) {
-			var identity = Object.getPrototypeOf(this).getIdentity.call(this, roomid);
+			let identity = Object.getPrototypeOf(this).getIdentity.call(this, roomid);
 			if (identity[0] === this.group) {
 				return target + identity.slice(1);
 			}

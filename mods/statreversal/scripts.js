@@ -1,6 +1,8 @@
+'use strict';
+
 exports.BattleScripts = {
 	init: function () {
-		for (var i in this.data.Pokedex) {
+		for (let i in this.data.Pokedex) {
 			this.modData('Pokedex', i).baseStats = {
 				hp: this.data.Pokedex[i].baseStats.spe,
 				atk: this.data.Pokedex[i].baseStats.def,

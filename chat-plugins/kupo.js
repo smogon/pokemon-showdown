@@ -1,3 +1,5 @@
+'use strict';
+
 exports.commands = {
 	donate: function () {
 		if (!this.canBroadcast()) return;

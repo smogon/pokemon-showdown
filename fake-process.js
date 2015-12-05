@@ -1,4 +1,6 @@
-var EventEmitter = require("events").EventEmitter;
+'use strict';
+
+let EventEmitter = require("events").EventEmitter;
 
 function FakeProcessHelper(input, output) {
 	this.input = input;

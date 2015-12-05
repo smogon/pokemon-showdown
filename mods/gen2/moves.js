@@ -1,6 +1,9 @@
 /**
  * Gen 2 moves
  */
+
+'use strict';
+
 exports.BattleMovedex = {
 	aeroblast: {
 		inherit: true,
@@ -69,8 +72,8 @@ exports.BattleMovedex = {
 				return this.random(3, 7);
 			},
 			onStart: function (target) {
-				var noEncore = {encore:1, metronome:1, mimic:1, mirrormove:1, sketch:1, sleeptalk:1, struggle:1, transform:1};
-				var moveIndex = target.moves.indexOf(target.lastMove);
+				let noEncore = {encore:1, metronome:1, mimic:1, mirrormove:1, sketch:1, sleeptalk:1, struggle:1, transform:1};
+				let moveIndex = target.moves.indexOf(target.lastMove);
 				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 					// it failed
 					this.add('-fail', target);
@@ -101,7 +104,7 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (var i = 0; i < pokemon.moveset.length; i++) {
+				for (let i = 0; i < pokemon.moveset.length; i++) {
 					if (pokemon.moveset[i].id !== this.effectData.move) {
 						pokemon.disableMove(pokemon.moveset[i].id);
 					}
@@ -113,6 +116,11 @@ exports.BattleMovedex = {
 		inherit: true,
 		basePower: 250,
 		noSketch: true
+	},
+	flail: {
+		inherit: true,
+		noDamageVariance: true,
+		willCrit: false
 	},
 	fly: {
 		inherit: true,
@@ -148,7 +156,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
-				var damage = this.getDamage(source, target, move, true);
+				let damage = this.getDamage(source, target, move, true);
 				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'highjumpkick');
 			}
 		}
@@ -157,7 +165,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
-				var damage = this.getDamage(source, target, move, true);
+				let damage = this.getDamage(source, target, move, true);
 				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'jumpkick');
 			}
 		}
@@ -174,13 +182,13 @@ exports.BattleMovedex = {
 				this.add('-start', target, 'move: Leech Seed');
 			},
 			onAfterMoveSelf: function (pokemon) {
-				var leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				let leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				var toLeech = this.clampIntRange(pokemon.maxhp / 8, 1);
-				var damage = this.damage(toLeech, pokemon, leecher);
+				let toLeech = this.clampIntRange(pokemon.maxhp / 8, 1);
+				let damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) {
 					this.heal(damage, leecher, pokemon);
 				}
@@ -191,9 +199,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			onModifySpD: function (spd) {
-				return spd * 2;
-			},
+			// Sp. Def boost applied directly in stat calculation
 			onStart: function (side) {
 				this.add('-sidestart', side, 'move: Light Screen');
 			},
@@ -218,19 +224,19 @@ exports.BattleMovedex = {
 	metronome: {
 		inherit: true,
 		onHit: function (target) {
-			var moves = [];
-			for (var i in exports.BattleMovedex) {
-				var move = exports.BattleMovedex[i];
+			let moves = [];
+			for (let i in exports.BattleMovedex) {
+				let move = exports.BattleMovedex[i];
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
-				var noMetronome = {
+				let noMetronome = {
 					counter:1, destinybond:1, detect:1, endure:1, metronome:1, mimic:1, mirrorcoat:1, protect:1, sketch:1, sleeptalk:1, struggle:1, thief:1
 				};
 				if (!noMetronome[move.id] && move.num < 252) {
 					moves.push(move.id);
 				}
 			}
-			var move = '';
+			let move = '';
 			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) return false;
 			this.useMove(move, target);
@@ -267,8 +273,8 @@ exports.BattleMovedex = {
 	mirrormove: {
 		inherit: true,
 		onHit: function (pokemon) {
-			var noMirror = {metronome: 1, mimic: 1, mirrormove: 1, sketch: 1, sleeptalk: 1, transform: 1};
-			var foe = pokemon.side.foe.active[0];
+			let noMirror = {metronome: 1, mimic: 1, mirrormove: 1, sketch: 1, sleeptalk: 1, transform: 1};
+			let foe = pokemon.side.foe.active[0];
 			if (!foe || !foe.lastMove || (!pokemon.activeTurns && !foe.moveThisTurn) || noMirror[foe.lastMove] || pokemon.moves.indexOf(foe.lastMove) >= 0) {
 				return false;
 			}
@@ -355,9 +361,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		effect: {
 			duration: 5,
-			onModifyDef: function (def) {
-				return def * 2;
-			},
+			// Defense boost applied directly in stat calculation
 			onStart: function (side) {
 				this.add('-sidestart', side, 'Reflect');
 			},
@@ -380,10 +384,15 @@ exports.BattleMovedex = {
 		},
 		secondary: false
 	},
+	reversal: {
+		inherit: true,
+		noDamageVariance: true,
+		willCrit: false
+	},
 	roar: {
 		inherit: true,
 		onTryHit: function () {
-			for (var i = 0; i < this.queue.length; i++) {
+			for (let i = 0; i < this.queue.length; i++) {
 				// Roar only works if it is the last action in a turn, including when it's called by Sleep Talk
 				if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') return false;
 			}
@@ -414,10 +423,10 @@ exports.BattleMovedex = {
 	sleeptalk: {
 		inherit: true,
 		onHit: function (pokemon) {
-			var moves = [];
-			for (var i = 0; i < pokemon.moveset.length; i++) {
-				var move = pokemon.moveset[i].id;
-				var NoSleepTalk = {
+			let moves = [];
+			for (let i = 0; i < pokemon.moveset.length; i++) {
+				let move = pokemon.moveset[i].id;
+				let NoSleepTalk = {
 					bide:1, dig:1, fly:1, metronome:1, mirrormove:1,
 					skullbash:1, skyattack:1, sleeptalk:1, solarbeam:1, razorwind:1
 				};
@@ -425,21 +434,17 @@ exports.BattleMovedex = {
 					moves.push(move);
 				}
 			}
-			var move = '';
+			let move = '';
 			if (moves.length) move = moves[this.random(moves.length)];
 			if (!move) return false;
-			move.isSleepTalk = true;
 			this.useMove(move, pokemon);
 		},
 		noSketch: true
 	},
 	solarbeam: {
 		inherit: true,
-		onBasePower: function (basePower, pokemon, target) {
-			if (this.isWeather('raindance')) {
-				return this.chainModify(0.5);
-			}
-		}
+		// Rain weakening done directly in the damage formula
+		onBasePower: function () {}
 	},
 	spikes: {
 		inherit: true,
@@ -454,10 +459,9 @@ exports.BattleMovedex = {
 				}
 			},
 			onSwitchIn: function (pokemon) {
-				var side = pokemon.side;
 				if (!pokemon.runImmunity('Ground')) return;
-				var damageAmounts = [0, 3];
-				var damage = this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
+				let damageAmounts = [0, 3];
+				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			}
 		}
 	},
@@ -485,7 +489,7 @@ exports.BattleMovedex = {
 					return null;
 				}
 				if (move.category === 'Status') {
-					var SubBlocked = {
+					let SubBlocked = {
 						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1, sketch:1
 					};
 					if (move.id === 'swagger') {
@@ -498,7 +502,7 @@ exports.BattleMovedex = {
 					}
 					return;
 				}
-				var damage = this.getDamage(source, target, move);
+				let damage = this.getDamage(source, target, move);
 				if (!damage) {
 					return null;
 				}
@@ -567,7 +571,7 @@ exports.BattleMovedex = {
 			chance: 20,
 			onHit: function (target, source) {
 				if (!target.hasType('Normal')) {
-					var result = this.random(3);
+					let result = this.random(3);
 					if (result === 0) {
 						target.trySetStatus('brn', source);
 					} else if (result === 1) {
@@ -582,7 +586,7 @@ exports.BattleMovedex = {
 	whirlwind: {
 		inherit: true,
 		onTryHit: function () {
-			for (var i = 0; i < this.queue.length; i++) {
+			for (let i = 0; i < this.queue.length; i++) {
 				// Whirlwind only works if it is the last action in a turn, including when it's called by Sleep Talk
 				if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') return false;
 			}

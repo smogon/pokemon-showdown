@@ -26,9 +26,9 @@ You can use your own computer as a server, but for other people to connect to yo
 Installing
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires you to have [io.js][5] installed, any version. (Alternatively, you can install [node.js][6] version 0.10.2 or later.)
+Pokémon Showdown requires you to have [Node.js][5] installed, 4.x or later. (Alternatively, most versions of [io.js][6] also work, but is not recommended.)
 
-Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone" button in the bottom of the right sidebar, or if you're really lazy, there's a "ZIP" download button. I recommend the Clone method - it's more time-consuming to set up, but much easier to update.
+Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Save" icon button near the top right (next to "Download ZIP"), or if you're really lazy, you can use the "Download ZIP" button. I recommend the Save method - it's more time-consuming to set up, but much easier to update.
 
 Pokémon Showdown is installed and run using a command line. In Mac OS X, open `Terminal` (it's in Utilities). In Windows, open `Command Prompt` (type `cmd` into the Start menu and it should be the first result). Type this into the command line:
 
@@ -64,8 +64,8 @@ You will be redirected to `http://SERVER.psim.us`. The reason your server is vis
 
 If you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][7]. It's not recommended for beginners, though.
 
-  [5]: https://iojs.org/
-  [6]: http://nodejs.org/
+  [5]: http://nodejs.org/
+  [6]: https://iojs.org/
   [7]: https://github.com/Zarel/Pokemon-Showdown-Client
 
 
@@ -144,16 +144,22 @@ Retired Staff
 - Bill Meltsner [bmelts] - Development, Sysadmin
 - Cathy J. Fitzpatrick [cathyjf] - Development, Sysadmin
 
-Contributors
+Major Contributors
 
-- Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
-- Ben Davies [Morfent] - Development
-- Ben Frengley [TalkTakesTime] - Development
-- Cody Thompson [Rising_Dusk] - Development
-- Jacob Zimmer [SolarisFox] - Development
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
 - Konrad Borowski [xfix] - Development
 - Quinton Lee [sirDonovan] - Development
+
+Contributors
+
+- Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
+- Bär Halberkamp [bumbadadabum] - Development
+- Ben Davies [Morfent] - Development
+- Ben Frengley [TalkTakesTime] - Development
+- Cody Thompson [Rising_Dusk] - Development
+- Ian Clail [Layell] - Art (battle graphics, sprites)
+- Jacob Zimmer [SolarisFox] - Development
+- Neil Rashbrook [urkerab] - Development
 - Robin Vandenbrande [Quinella] - Development
 
 Special thanks

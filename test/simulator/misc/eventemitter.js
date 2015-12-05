@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Battle#on', function () {
 	afterEach(function () {
@@ -11,8 +13,8 @@ describe('Battle#on', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['peck']}]);
 		battle.commitDecisions(); // Team Preview
-		var eventCount = 0;
-		var eventCount2 = 0;
+		let eventCount = 0;
+		let eventCount2 = 0;
 		battle.on('Hit', battle.getFormat(), function () {
 			eventCount++;
 		});
@@ -34,14 +36,14 @@ describe('Battle#on', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pidgeot', ability: 'keeneye', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['peck']}]);
 		battle.commitDecisions(); // Team Preview
-		var eventCount = 0;
-		var callback = function (count) {
+		let eventCount = 0;
+		let callback = function (count) {
 			return function () {
 				assert.strictEqual(eventCount, count);
 				eventCount++;
 			};
 		};
-		for (var i = 0; i < 9; i++) {
+		for (let i = 0; i < 9; i++) {
 			battle.on('ModifyDamage', battle.getFormat(), -i, callback(i));
 		}
 		battle.commitDecisions();

@@ -1,5 +1,7 @@
-var assert = require('assert');
-var battle;
+'use strict';
+
+const assert = require('assert');
+let battle;
 
 describe('Rage Powder', function () {
 	afterEach(function () {
@@ -7,6 +9,8 @@ describe('Rage Powder', function () {
 	});
 
 	it('should redirect single-target moves towards it if it is a valid target', function () {
+		this.timeout(5000);
+
 		battle = BattleEngine.Battle.construct('battle-followme', 'triplescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Amoonguss', ability: 'overcoat', item: 'safetygoggles', moves: ['ragepowder']},
@@ -19,7 +23,7 @@ describe('Rage Powder', function () {
 			{species: 'Alakazam', ability: 'synchronize', moves: ['absorb']}
 		]);
 		battle.commitDecisions();
-		var hitCount = [0, 0, 0];
+		let hitCount = [0, 0, 0];
 		battle.p1.active[0].damage = function () {
 			hitCount[0]++;
 			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
@@ -52,7 +56,7 @@ describe('Rage Powder', function () {
 			{species: 'Alakazam', ability: 'synchronize', item: 'safetygoggles', moves: ['absorb']}
 		]);
 		battle.commitDecisions();
-		var hitCount = [0, 0, 0];
+		let hitCount = [0, 0, 0];
 		battle.p1.active[0].damage = function () {
 			hitCount[0]++;
 			return BattleEngine.BattlePokemon.prototype.damage.apply(this, arguments);
