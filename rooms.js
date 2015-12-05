@@ -1364,7 +1364,7 @@ let BattleRoom = (function () {
 
 		// remove references to ourself
 		for (let i in this.users) {
-			this.users[i].leaveRoom(this);
+			this.users[i].leaveRoom(this, null, true);
 			delete this.users[i];
 		}
 		this.users = null;
@@ -1654,7 +1654,7 @@ let ChatRoom = (function () {
 
 		// remove references to ourself
 		for (let i in this.users) {
-			this.users[i].leaveRoom(this);
+			this.users[i].leaveRoom(this, null, true);
 			delete this.users[i];
 		}
 		this.users = null;
