@@ -634,7 +634,7 @@ exports.Formats = [
 		desc: [
 			"Pok&eacute;mon gain access to either Attacking moves or Status moves of their typing, but not both at the same time.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547279/\">STABmons</a>",
-			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3548559/\">STABmons Viability Ranking</a>"
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558034/\">STABmons Viability Ranking</a>"
 		],
 		section: "Other Metagames",
 
