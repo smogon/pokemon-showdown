@@ -1043,15 +1043,17 @@ exports.BattleScripts = {
 			if (SpeedSetup[moveid]) counter['speedsetup']++;
 		}
 
+		// Keep track of the available moves
+		for (let i = 0; i < movePool.length; i++) {
+			let move = this.getMove(movePool[i]);
+			if (move.category === 'Physical') counter['physicalpool']++;
+			if (move.category === 'Special') counter['specialpool']++;
+		}
+
 		// Choose a setup type:
 		if (counter['mixedsetup']) {
 			counter.setupType = 'Mixed';
 		} else if (counter['physicalsetup'] || counter['specialsetup']) {
-			for (let i = 0; i < movePool.length; i++) {
-				let move = this.getMove(movePool[i]);
-				if (move.category === 'Physical') counter['physicalpool']++;
-				if (move.category === 'Special') counter['specialpool']++;
-			}
 			let physical = counter.Physical + counter['physicalpool'];
 			let special = counter.Special + counter['specialpool'];
 			if (counter['physicalsetup'] && counter['specialsetup']) {
