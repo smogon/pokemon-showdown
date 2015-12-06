@@ -274,7 +274,7 @@ class Battle {
 		let player = this.players[user];
 		if (player && !player.active) {
 			player.active = true;
-			player.simSend('join', user.name);
+			player.simSend('join', user.name, user.avatar);
 		}
 	}
 	onLeave(user) {
