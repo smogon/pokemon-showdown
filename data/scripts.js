@@ -1557,7 +1557,7 @@ exports.BattleScripts = {
 					}
 				}
 			}
-			if (movePool.length && moves.length === 4 && !counter.stab && !hasMove['metalburst'] && !hasMove['mirrorcoat']) {
+			if (moves.length === 4 && !counter.stab && !hasMove['metalburst'] && (counter['physicalpool'] || counter['specialpool'])) {
 				// Move post-processing:
 				if (counter.damagingMoves.length === 0) {
 					// A set shouldn't have no attacking moves
@@ -1941,19 +1941,30 @@ exports.BattleScripts = {
 
 		if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
 
-		if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
-			// Prepare HP for Belly Drum to activate Sitrus Berry
-			let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+		// Prepare optimal HP
+		let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+		if (hasMove['substitute'] && item === 'Sitrus Berry') {
+			// Two substitutes should activate Sitrus Berry
+			while (hp % 4 > 0) {
+				evs.hp -= 4;
+				hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+			}
+		} else if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
+			// Belly Drum should activate Sitrus Berry
 			if (hp % 2 > 0) evs.hp -= 4;
 		} else {
-			// Prepare HP for Stealth Rock weakness
+			// Maximize number of Stealth Rock switch-ins
 			if (this.getEffectiveness('Rock', template) === 1) {
-				let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-				if (hp % 4 === 0) evs.hp -= 4;
+				while (hp % 4 === 0) {
+					evs.hp -= 4;
+					hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+				}
 			}
 			if (this.getEffectiveness('Rock', template) === 2) {
-				let hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-				if (hp % 2 === 0) evs.hp -= 4;
+				while (hp % 2 === 0) {
+					evs.hp -= 4;
+					hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+				}
 			}
 		}
 
