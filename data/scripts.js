@@ -1224,12 +1224,13 @@ exports.BattleScripts = {
 				case 'growth': case 'shellsmash': case 'workup':
 					if (counter.setupType !== 'Mixed' || counter['mixedsetup'] > 1) rejected = true;
 					if (counter.damagingMoves + counter['physicalpool'] + counter['specialpool'] < 2 && !hasMove['batonpass']) rejected = true;
+					if (moveid === 'growth' && !hasMove['sunnyday']) rejected = true;
 					isSetup = true;
 					break;
 				case 'agility': case 'autotomize': case 'rockpolish':
 					if (counter.damagingMoves < 2 && !counter.setupType && !hasMove['batonpass']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
-					isSetup = true;
+					if (!counter.setupType) isSetup = true;
 					break;
 				case 'flamecharge':
 					if (counter.damagingMoves < 3 && !counter.setupType && !hasMove['batonpass']) rejected = true;
