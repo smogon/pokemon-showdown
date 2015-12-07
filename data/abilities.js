@@ -2543,7 +2543,7 @@ exports.BattleAbilities = {
 			if (move.category === 'Status' && move.id !== 'kingsshield') return;
 			var targetSpecies = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.template.species !== targetSpecies && attacker.formeChange(targetSpecies)) {
-				this.add('-formechange', attacker, targetSpecies);
+				this.add('-formechange', attacker, targetSpecies, '[from] ability: Stance Change');
 			}
 		},
 		id: "stancechange",
