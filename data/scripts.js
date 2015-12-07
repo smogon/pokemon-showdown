@@ -1192,7 +1192,7 @@ exports.BattleScripts = {
 					if (!counter.setupType && !counter['speedsetup'] && !hasMove['substitute'] && !hasMove['wish'] && !hasAbility['Speed Boost']) rejected = true;
 					break;
 				case 'focuspunch':
-					if (!hasMove['substitute'] || counter.damagingMoves < 2) rejected = true;
+					if (!hasMove['substitute'] || counter.damagingMoves.length < 2) rejected = true;
 					break;
 				case 'perishsong':
 					if (!hasMove['protect']) rejected = true;
@@ -1225,17 +1225,17 @@ exports.BattleScripts = {
 					break;
 				case 'growth': case 'shellsmash': case 'workup':
 					if (counter.setupType !== 'Mixed' || counter['mixedsetup'] > 1) rejected = true;
-					if (counter.damagingMoves + counter['physicalpool'] + counter['specialpool'] < 2 && !hasMove['batonpass']) rejected = true;
+					if (counter.damagingMoves.length + counter['physicalpool'] + counter['specialpool'] < 2 && !hasMove['batonpass']) rejected = true;
 					if (moveid === 'growth' && !hasMove['sunnyday']) rejected = true;
 					isSetup = true;
 					break;
 				case 'agility': case 'autotomize': case 'rockpolish':
-					if (counter.damagingMoves < 2 && !counter.setupType && !hasMove['batonpass']) rejected = true;
+					if (counter.damagingMoves.length < 2 && !counter.setupType && !hasMove['batonpass']) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (!counter.setupType) isSetup = true;
 					break;
 				case 'flamecharge':
-					if (counter.damagingMoves < 3 && !counter.setupType && !hasMove['batonpass']) rejected = true;
+					if (counter.damagingMoves.length < 3 && !counter.setupType && !hasMove['batonpass']) rejected = true;
 					if (hasMove['dracometeor'] || hasMove['overheat']) rejected = true;
 					break;
 
@@ -1263,7 +1263,7 @@ exports.BattleScripts = {
 					if (counter.setupType || !!counter['recovery'] || hasMove['substitute']) rejected = true;
 					break;
 				case 'nightshade': case 'seismictoss':
-					if (counter.stab || counter.setupType) rejected = true;
+					if (counter.stab || counter.setupType || counter.damagingMoves.length > 2) rejected = true;
 					break;
 				case 'protect':
 					if (counter.setupType && (hasAbility['Guts'] || hasAbility['Speed Boost']) && !hasMove['batonpass']) rejected = true;
@@ -1283,12 +1283,12 @@ exports.BattleScripts = {
 					if (counter.setupType || teamDetails.toxicSpikes >= 1) rejected = true;
 					break;
 				case 'trickroom':
-					if (counter.setupType || !!counter['speedsetup'] || counter.damagingMoves < 2) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || counter.damagingMoves.length < 2) rejected = true;
 					if (hasMove['lightscreen'] || hasMove['reflect']) rejected = true;
 					break;
 				case 'uturn':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['batonpass']) rejected = true;
-					if (hasType['Bug'] && counter.stab < 2 && counter.damagingMoves > 2 && !hasMove['technoblast']) rejected = true;
+					if (hasType['Bug'] && counter.stab < 2 && counter.damagingMoves.length > 2 && !hasMove['technoblast']) rejected = true;
 					break;
 				case 'voltswitch':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['batonpass'] || hasMove['magnetrise'] || hasMove['uturn']) rejected = true;
@@ -1304,7 +1304,7 @@ exports.BattleScripts = {
 					break;
 				case 'suckerpunch':
 					if (counter['Dark'] > 2 || (counter.setupType === 'Special' && hasType['Dark'] && counter.stab < 2)) rejected = true;
-					if (counter.damagingMoves < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (counter.damagingMoves.length < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'dragonclaw':
 					if (hasMove['outrage'] || hasMove['dragontail']) rejected = true;
@@ -1422,7 +1422,7 @@ exports.BattleScripts = {
 					if (counter.setupType || (hasAbility['Refrigerate'] && hasMove['freezedry']) || hasMove['wish']) rejected = true;
 					break;
 				case 'hiddenpower':
-					if ((counter.damagingMoves < 2 && !counter.stab) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if ((counter.damagingMoves.length < 2 && !counter.stab) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
 				case 'hypervoice':
 					if (hasMove['naturepower'] || hasMove['return']) rejected = true;
