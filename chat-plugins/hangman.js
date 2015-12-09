@@ -8,15 +8,18 @@
 const permission = 'announce';
 const maxMistakes = 6;
 
-let Hangman = (function () {
-	function Hangman(room, user, word, hint) {
+class Hangman extends Rooms.RoomGame {
+	constructor(room, user, word, hint) {
+		super(room);
+
 		if (room.gameNumber) {
 			room.gameNumber++;
 		} else {
 			room.gameNumber = 1;
 		}
-		this.gameType = 'hangman';
-		this.room = room;
+
+		this.gameid = 'hangman';
+		this.title = 'Hangman';
 		this.creator = user.userid;
 		this.word = word;
 		this.hint = hint;
@@ -36,7 +39,32 @@ let Hangman = (function () {
 		}
 	}
 
-	Hangman.prototype.guessLetter = function (letter, guesser) {
+	guess(word, user) {
+		if (user.userid === this.room.game.creator) return user.sendTo(this.room, "You can't guess in your own hangman game.");
+
+		let sanitized = word.replace(/[^A-Za-z ]/g, '');
+		let normalized = toId(sanitized);
+		if (normalized.length < 1) return user.sendTo(this.room, "Guess too short.");
+		if (sanitized.length > 30) return user.sendTo(this.room, "Guess too long.");
+
+		for (let i = 0; i < this.guesses.length; i++) {
+			if (normalized === toId(this.guesses[i])) return user.sendTo(this.room, "Your guess has already been guessed.");
+		}
+
+		if (sanitized.length > 1) {
+			if (!this.guessWord(sanitized, user.name)) {
+				user.sendTo(this.room, "Invalid guess");
+			} else {
+				this.room.send(user.name + " guessed \"" + sanitized + "\"!");
+			}
+		} else {
+			if (!this.guessLetter(sanitized, user.name)) {
+				user.sendTo(this.room, "Invalid guess");
+			}
+		}
+	}
+
+	guessLetter(letter, guesser) {
 		letter = letter.toUpperCase();
 		if (this.guesses.indexOf(letter) >= 0) return false;
 		if (this.word.toUpperCase().indexOf(letter) > -1) {
@@ -64,9 +92,9 @@ let Hangman = (function () {
 		this.lastGuesser = guesser;
 		this.update();
 		return true;
-	};
+	}
 
-	Hangman.prototype.guessWord = function (word, guesser) {
+	guessWord(word, guesser) {
 		let ourWord = toId(this.word);
 		let guessedWord = toId(word);
 		if (ourWord === guessedWord) {
@@ -88,9 +116,9 @@ let Hangman = (function () {
 			return true;
 		}
 		return false;
-	};
+	}
 
-	Hangman.prototype.hangingMan = function () {
+	hangingMan() {
 		switch (this.incorrectGuesses) {
 		case 0:
 			return '<img width="120" height="120" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7CAAAOwgEVKEqAAAAAB3RJTUUH3wsYBiYi3/L0SQAAANRJREFUeNrt1EEKwCAQBMGdkP9/efKFgAdRqu6i2K4zAAAAAAAAC7Jr47Y9+uKSnHDOxxu/m8CXe313JhiBERiBERiBEVhgBEZgBEZgBEZggREYgREYgREYgRFYYARGYARGYARGYIERGIERGIERGIEFRmAERmAERmAERmCBERiBERiBERiBBUZgBEZgBEZgBBYYgREYgREYgREYgQVGYARGYARGYAQWGIERGIERGIH5JSuL29YVziSJCUZgBEZgBBYYgREYgREYgRFYYARGYAAAAIBtPqaZCMtmU2/iAAAAAElFTkSuQmCC" />';
@@ -109,9 +137,9 @@ let Hangman = (function () {
 		default:
 			return '<img width="120" height="120" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAA7CAAAOwgEVKEqAAAAAB3RJTUUH3wsYBx0ayoDJ2AAAA4tJREFUeNrtnd1yozAMRmOS2+1M3v8ld6a93dIrZlwv/sMSWOJ8dy0BHB9LsmRDHg+EEEIIIYQQQgghhBBCCKEBhatuvK7rarrjQggW2rkwxn0LwM71wt0BGA3OK0IIYTu2Debc3+mgL51XuyYueuKBITUJxYIVQs2eJbWAy1nz9r9SKMvdE8AGXHzteGlA4aIvsHKtSeXeAACwEfilQRGfl0IGsMEY33XODPGGPFhPWDCAkWWRJjWEkdEQckYVCwsWzkk17yN5bwA3dPoZsLXyYwBHELVAxi5Wyu0DWMEdjwyCGKgE3FaLfwG3H5iGFZbaUYrTTLIm1x6g7X+lY6RJwhAk4vPROnPvOVhwv2s2W0p9eYfXu+ieiXffRyxohnr74g1sLYeVcLXv9/tZm1Xv3feKveAuVpNqHRdff6cs+Gdd18/RmJx+h542AVgglpb2O0nPhnvbhItWTks8yzTgHmvUjH9HrFe7TRQ6/of0N4TwlTn2L4TwTZo0bx7bUrj4KMxJnprfQzNsLE6tMRzsizBRe+5twVLlw8iSDh0bhacN36wF51zbaO1Wy1pzbdWeaC1W4caQe4sMZ7vevaJIDFd1hm+10NFTScpdf7RjWx4Gq7VN27u4qmT1Xic5txZrfx0/2uazFyDMp0kjcSxxk49Sf0vAzd1bE7T55ULJPDIHWRKudk3cBeCeTXK1zk49QGtKJLmgoFnscL/g39KxleXEcPT6aSih0CFU8OhxgxvkHAiJGW+ujWe46ZdHa92DJeXWpeItMVghFTtzy8zZ98vJZCWrx03GMfbqcqXU529hwUc7RdOy0jbNsHvklgv+6XNCvbPiPZCzbgW67ZMNo5bM64Qdu3lL77pmT5Zj6721i7YKDAtGWLBETGWS5RiupYnWAtzrzgfwxHCtQF6A6xvyAlyZ9GpWyMudwNYW73tfhqL9XBGAB9IaqVWl3OZ7AE8AmRjsFPLIWvKZAwfAglZXg1T6VTNisBF33eJq4+0/FsqVrAc/5tpD5S5tsfpD0VbazeuEd0CNPs2Ai0YAvmtODeCbggIwAjCAEYARgBGAEYARgDVy4ZY1XxYbGjTTYkPyGqX16GemHLwzdOqVFtGykG91sR8XTQz2HyZqx3p/JQ0XPZmLdj+B1LKAu87CcdEIwAjACMAIwABGAEYARgBGAEYARgAGMAIwAjBCCCGEEEIIIYTQ6foBqfbkL/zU5o4AAAAASUVORK5CYII=" />';
 		}
-	};
+	}
 
-	Hangman.prototype.generateWindow = function () {
+	generateWindow() {
 		let result = 0;
 
 		if (this.incorrectGuesses === maxMistakes) {
@@ -159,38 +187,36 @@ let Hangman = (function () {
 		output += '</td></tr></table></div>';
 
 		return output;
-	};
+	}
 
-	Hangman.prototype.display = function (user, broadcast) {
+	display(user, broadcast) {
 		if (broadcast) {
 			this.room.add('|uhtml|hangman' + this.room.gameNumber + '|' + this.generateWindow());
 		} else {
 			user.sendTo(this.room, '|uhtml|hangman' + this.room.gameNumber + '|' + this.generateWindow());
 		}
-	};
+	}
 
-	Hangman.prototype.update = function () {
+	update() {
 		this.room.add('|uhtmlchange|hangman' + this.room.gameNumber + '|' + this.generateWindow());
 
 		if (this.incorrectGuesses === maxMistakes) {
 			this.finish();
 		}
-	};
+	}
 
-	Hangman.prototype.end = function () {
+	end() {
 		this.room.add('|uhtmlchange|hangman' + this.room.gameNumber + '|<div class="infobox">(The game of hangman was ended.)</div>');
 		this.room.add("The game of hangman was ended.");
 		delete this.room.game;
-	};
+	}
 
-	Hangman.prototype.finish = function () {
+	finish() {
 		this.room.add('|uhtmlchange|hangman' + this.room.gameNumber + '|<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>');
 		this.room.add('|html|' + this.generateWindow());
 		delete this.room.game;
-	};
-
-	return Hangman;
-})();
+	}
+}
 
 exports.commands = {
 	hangman: {
@@ -225,27 +251,10 @@ exports.commands = {
 
 		guess: function (target, room, user) {
 			if (!target) return this.parse('/help guess');
-			if (!room.game || room.game.gameType !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
+			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-			if (user.userid === room.game.creator) return this.errorReply("You can't guess in your own hangman game.");
 
-			let parsed = target.replace(/[^A-Za-z ]/g, '');
-			if (parsed.replace(/ /g, '').length < 1) return this.errorReply("Guess too short.");
-			if (parsed.length > 30) return this.errorReply("Guess too long.");
-
-			if (room.game.guesses.indexOf(parsed) > -1) return this.errorReply("Your guess has already been guessed.");
-
-			if (target.length > 1) {
-				if (!room.game.guessWord(parsed, user.name)) {
-					this.errorReply("Invalid guess");
-				} else {
-					room.send(user.name + " guessed \"" + parsed + "\"!");
-				}
-			} else {
-				if (!room.game.guessLetter(parsed, user.name)) {
-					this.errorReply("Invalid guess");
-				}
-			}
+			room.game.guess(target, user);
 		},
 		guesshelp: ["/hangman guess [letter] - Makes a guess for the letter entered.",
 					"/hangman guess [word] - Same as a letter, but guesses an entire word."],
@@ -254,7 +263,7 @@ exports.commands = {
 		end: function (target, room, user) {
 			if (!this.can(permission, null, room)) return false;
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-			if (!room.game || room.game.gameType !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
+			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 
 			room.game.end();
 			return this.privateModCommand("(The game of hangman was ended by " + user.name + ".)");
@@ -288,7 +297,7 @@ exports.commands = {
 		},
 
 		display: function (target, room, user) {
-			if (!room.game || room.game.gameType !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
+			if (!room.game || room.game.title !== 'Hangman') return this.errorReply("There is no game of hangman running in this room.");
 			if (!this.canBroadcast()) return;
 			room.update();
 
@@ -310,7 +319,11 @@ exports.commands = {
 				"/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # & ~"],
 
 	guess: function (target, room, user) {
-		return this.parse('/hangman guess ' + target);
+		if (!room.game) return this.errorReply("There is no game running in this room.");
+		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+		if (!room.game.guess) return this.errorReply("You can't guess anything in this game.");
+
+		room.game.guess(target, user);
 	},
 	guesshelp: ["/guess - Shortcut for /hangman guess.", "/hangman guess [letter] - Makes a guess for the letter entered.",
 					"/hangman guess [word] - Same as a letter, but guesses an entire word."]
