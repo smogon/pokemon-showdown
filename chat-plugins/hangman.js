@@ -18,6 +18,7 @@ class Hangman extends Rooms.RoomGame {
 			room.gameNumber = 1;
 		}
 
+		this.gameid = 'hangman';
 		this.title = 'Hangman';
 		this.creator = user.userid;
 		this.word = word;
@@ -250,7 +251,7 @@ exports.commands = {
 
 		guess: function (target, room, user) {
 			if (!target) return this.parse('/help guess');
-			if (!room.game || room.game.title !== 'Hangman') return this.errorReply("There is no game of hangman running in this room.");
+			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 
 			room.game.guess(target, user);
@@ -262,7 +263,7 @@ exports.commands = {
 		end: function (target, room, user) {
 			if (!this.can(permission, null, room)) return false;
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
-			if (!room.game || room.game.title !== 'Hangman') return this.errorReply("There is no game of hangman running in this room.");
+			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 
 			room.game.end();
 			return this.privateModCommand("(The game of hangman was ended by " + user.name + ".)");

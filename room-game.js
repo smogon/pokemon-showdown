@@ -49,6 +49,7 @@ class RoomGame {
 	constructor(room) {
 		this.id = room.id;
 		this.room = room;
+		this.gameid = 'game';
 		this.title = 'Game';
 		this.allowRenames = false;
 		this.players = Object.create(null);
