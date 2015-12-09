@@ -258,7 +258,7 @@ exports.Formats = [
 			'Tornadus + Defiant', 'Thundurus + Defiant', 'Landorus + Sheer Force', 'Soul Dew'
 		],
 		requirePentagon: true,
-		validateTeam: function (team, format) {
+		onValidateTeam: function (team) {
 			const legends = {'Mewtwo':1, 'Lugia':1, 'Ho-Oh':1, 'Kyogre':1, 'Groudon':1, 'Rayquaza':1, 'Dialga':1, 'Palkia':1, 'Giratina':1, 'Reshiram':1, 'Zekrom':1, 'Kyurem':1, 'Xerneas':1, 'Yveltal':1, 'Zygarde':1};
 			let n = 0;
 			for (let i = 0; i < team.length; i++) {
