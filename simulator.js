@@ -100,6 +100,17 @@ class BattlePlayer {
 		}
 		this.game[this.slot] = null;
 	}
+	updateSubchannel(user) {
+		if (!user.connections) {
+			// "user" is actually a connection
+			Sockets.subchannelMove(user.worker, this.id, this.slotNum + 1, user.socketid);
+			return;
+		}
+		for (let i = 0; i < user.connections.length; i++) {
+			let connection = user.connections[i];
+			Sockets.subchannelMove(connection.worker, this.id, this.slotNum + 1, connection.socketid);
+		}
+	}
 
 	toString() {
 		return this.userid;
@@ -240,6 +251,7 @@ class Battle {
 		// the battle
 		let player = this.players[user];
 		if (!player) return;
+		player.updateSubchannel(connection || user);
 		let request = this.requests[player.slot];
 		if (request) {
 			(connection || user).sendTo(this.id, '|request|' + request);
