@@ -16,7 +16,7 @@ exports.BattleAliases = {
 	"smogdubs": "Doubles OU",
 	"smogtrips": "Smogon Triples",
 	"triples": "Smogon Triples",
-	"vgc": "VGC 2015",
+	"vgc": "VGC 2016",
 	"bsdoubles": "Battle Spot Doubles",
 	"bstriples": "Battle Spot Triples",
 	"seasonal": "[Seasonal] Super Squad Smackdown",
