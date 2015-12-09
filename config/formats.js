@@ -241,6 +241,9 @@ exports.Formats = [
 	},
 	{
 		name: "VGC 2016",
+		desc: [
+			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3500650/\">VGC Learning Resources</a>"
+		],
 		section: "ORAS Doubles",
 
 		gameType: 'doubles',
