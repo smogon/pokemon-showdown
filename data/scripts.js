@@ -1304,6 +1304,7 @@ exports.BattleScripts = {
 					break;
 				case 'suckerpunch':
 					if (counter['Dark'] > 2 || (counter.setupType === 'Special' && hasType['Dark'] && counter.stab < 2)) rejected = true;
+					if (counter['Dark'] > 1 && !hasType['Dark']) rejected = true;
 					if (counter.damagingMoves.length < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'dragonclaw':
@@ -1527,7 +1528,7 @@ exports.BattleScripts = {
 				}
 
 				// Pokemon should have moves that benefit their Ability/Type/Weather, as well as moves required by its forme
-				if (((hasAbility['Adaptability'] && counter.stab < template.types.length) ||
+				if (((hasAbility['Adaptability'] && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
 					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal']) ||
 					(hasAbility['Bad Dreams'] && movePool.indexOf('darkvoid') >= 0) ||
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
