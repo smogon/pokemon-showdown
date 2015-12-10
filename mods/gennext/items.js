@@ -101,7 +101,7 @@ exports.BattleItems = {
 			basePower: 10
 		},
 		onDamage: function (damage, target, source, effect) {
-			let types = target.getTypes();
+			var types = target.getTypes();
 			if (types.length === 1 && types[0] === 'Fighting' &&
 					effect && effect.effectType === 'Move' &&
 					target.useItem()) {
@@ -121,7 +121,7 @@ exports.BattleItems = {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.category === 'Special') {
-				let types = user.getTypes();
+				var types = user.getTypes();
 				if (types.length === 1 && types[0] === 'Psychic') {
 					return basePower * 1.2;
 				}
@@ -133,7 +133,7 @@ exports.BattleItems = {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.category === 'Physical') {
-				let types = user.getTypes();
+				var types = user.getTypes();
 				if (types.length === 1 && types[0] === 'Fighting') {
 					return basePower * 1.2;
 				}
@@ -179,7 +179,7 @@ exports.BattleItems = {
 			}
 		},
 		onFoeBasePower: function (basePower, attacker, defender, move) {
-			let GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
 			if (GossamerWingUsers[defender.template.species]) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
 					this.add('-message', "The attack was weakened by GoassamerWing!");
@@ -188,7 +188,7 @@ exports.BattleItems = {
 			}
 		},
 		onDamage: function (damage, defender, attacker, effect) {
-			let GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1};
 			if (GossamerWingUsers[defender.template.species]) {
 				if (effect && effect.id === 'stealthrock') {
 					return damage / 2;
@@ -196,7 +196,7 @@ exports.BattleItems = {
 			}
 		},
 		onAfterMoveSecondarySelf: function (source, target, move) {
-			let GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1, "Venomoth":1, "Volcarona":1, "Dustox": 1, "Lilligant":1};
+			var GossamerWingUsers = {"Butterfree":1, "Masquerain":1, "Beautifly":1, "Mothim":1, "Vivillon":1, "Venomoth":1, "Volcarona":1, "Dustox": 1, "Lilligant":1};
 			if (move && move.effectType === 'Move' && move.category === 'Status' && GossamerWingUsers[source.template.species]) {
 				this.heal(source.maxhp / 16);
 			}
