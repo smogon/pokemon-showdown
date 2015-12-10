@@ -1538,12 +1538,13 @@ exports.BattleScripts = {
 					(hasType['Electric'] && !counter['Electric']) ||
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'])) ||
+					(hasType['Ice'] && !counter['Ice']) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
 					(hasMove['raindance'] && hasType['Water'] && !counter['Water']) ||
 					(movePool.indexOf('technoblast') >= 0 || template.requiredMove && movePool.indexOf(toId(template.requiredMove)) >= 0)) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && (move.category === 'Status' || !hasType[move.type]) && (counter['physicalpool'] || counter['specialpool'])) rejected = true;
+					if (!isSetup && !move.weather && (move.category === 'Status' || !hasType[move.type])) rejected = true;
 				}
 
 				// Remove rejected moves from the move list
