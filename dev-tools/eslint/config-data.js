@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	"extends": "./config-base.js",
+	"extends": "./config-es6.js",
 	"rules": {
 		"comma-dangle": [2, "never"],
 		"comma-spacing": [2, {"before": false, "after": false}],
