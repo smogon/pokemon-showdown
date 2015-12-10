@@ -14621,16 +14621,11 @@ exports.BattleMovedex = {
 			},
 			onStart: function (target, source) {
 				this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
-				this.getStatCallback = function (stat, statName) {
-					// If stat is speed and does not overflow (Trick Room Glitch) return negative speed.
-					if (statName === 'spe' && stat <= 1809) return -stat;
-					return stat;
-				};
 			},
+			// Speed modification is changed in BattlePokemon.getDecisionSpeed() in battle-engine.js
 			onResidualOrder: 23,
 			onEnd: function () {
 				this.add('-fieldend', 'move: Trick Room');
-				this.getStatCallback = null;
 			}
 		},
 		secondary: false,
