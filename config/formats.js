@@ -652,29 +652,14 @@ exports.Formats = [
 	{
 		name: "STABmons",
 		desc: [
-			"Pok&eacute;mon gain access to either Attacking moves or Status moves of their typing, but not both at the same time.",
+			"Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3547279/\">STABmons</a>",
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3558034/\">STABmons Viability Ranking</a>"
 		],
 		section: "Other Metagames",
 
 		ruleset: ['OU'],
-		banlist: ['Diggersby', 'Keldeo', 'Porygon-Z', 'Sylveon', 'Aerodactylite', 'Altarianite', "King's Rock", 'Lopunnite', 'Metagrossite', 'Razor Fang'],
-		validateSet: function (set, teamHas) {
-			let statusProblems = this.validateSet(set, teamHas, {ignorestabmoves: {'Status':1}});
-			if (!statusProblems.length) return;
-			let attackProblems = this.validateSet(set, teamHas, {ignorestabmoves: {'Physical':1, 'Special':1}});
-			if (!attackProblems.length) return;
-
-			let problems = [];
-			for (let i = 0; i < statusProblems.length; i++) {
-				problems.push('(Status) ' + statusProblems[i]);
-			}
-			for (let i = 0; i < attackProblems.length; i++) {
-				problems.push('(Attack) ' + attackProblems[i]);
-			}
-			return problems;
-		}
+		banlist: ['Ignore STAB Moves']
 	},
 	{
 		name: "LC UU",
