@@ -121,17 +121,16 @@ let Room = (function () {
 		let alts;
 		if (!noRecurse) {
 			alts = [];
-			for (let i in Users.users) {
-				let otherUser = Users.users[i];
-				if (otherUser === user) continue;
+			Users.users.forEach(function (otherUser) {
+				if (otherUser === user) return;
 				for (let myIp in user.ips) {
 					if (myIp in otherUser.ips) {
 						alts.push(otherUser.name);
 						this.roomBan(otherUser, true, userid);
-						break;
+						return;
 					}
 				}
-			}
+			}, this);
 		}
 		this.bannedUsers[userid] = userid;
 		if (user.autoconfirmed) this.bannedUsers[user.autoconfirmed] = userid;

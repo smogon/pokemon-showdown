@@ -14,12 +14,13 @@ function createConnection(ip, workerid, socketid) {
 		workerid = Object.keys(Sockets.workers)[0];
 		if (!workerid) workerid = createWorker().id;
 		socketid = 1;
-		while (Users.connections[workerid + '-' + socketid]) {
+		while (Users.connections.has(workerid + '-' + socketid)) {
 			socketid++;
 		}
 	}
 	let connectionid = workerid + '-' + socketid;
-	let connection = Users.connections[connectionid] = new Users.Connection(connectionid, Sockets.workers[workerid], socketid, null, ip || '127.0.0.1');
+	let connection = new Users.Connection(connectionid, Sockets.workers[workerid], socketid, null, ip || '127.0.0.1');
+	Users.connections.set(connectionid, connection);
 	return connection;
 }
 

@@ -153,32 +153,33 @@ exports.commands = {
 		if (/[a-z]/.test(target)) {
 			// host
 			this.sendReply("Users with host " + target + ":");
-			for (let userid in Users.users) {
-				let curUser = Users.users[userid];
-				if (!curUser.latestHost || !curUser.latestHost.endsWith(target)) continue;
-				if (results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name) > 100 && !isAll) {
-					return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
-				}
+			Users.users.forEach(function (curUser) {
+				if (results.length > 100 && !isAll) return;
+				if (!curUser.latestHost || !curUser.latestHost.endsWith(target)) return;
+				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
+			});
+			if (results.length > 100 && !isAll) {
+				return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
 			}
 		} else if (target.slice(-1) === '*') {
 			// IP range
 			this.sendReply("Users in IP range " + target + ":");
 			target = target.slice(0, -1);
-			for (let userid in Users.users) {
-				let curUser = Users.users[userid];
-				if (!curUser.latestIp.startsWith(target)) continue;
-				if (results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name) > 100 && !isAll) {
-					return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
-				}
+			Users.users.forEach(function (curUser) {
+				if (results.length > 100 && !isAll) return;
+				if (!curUser.latestIp.startsWith(target)) return;
+				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
+			});
+			if (results.length > 100 && !isAll) {
+				return this.sendReply("More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.");
 			}
 		} else {
 			this.sendReply("Users with IP " + target + ":");
-			for (let userid in Users.users) {
-				let curUser = Users.users[userid];
+			Users.users.forEach(function (curUser) {
 				if (curUser.latestIp === target) {
 					results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 				}
-			}
+			});
 		}
 		if (!results.length) return this.errorReply("No results found.");
 		return this.sendReply(results.join('; '));

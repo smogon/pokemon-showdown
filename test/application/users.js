@@ -18,12 +18,8 @@ describe('Users features', function () {
 			});
 		});
 		describe('users', function () {
-			it('should have null prototype', function () {
-				assert.strictEqual(Object.getPrototypeOf(Users.users), null);
-			});
-
-			it('should not have a native `constructor`', function () {
-				assert.ok(Users.users.constructor === undefined || Users.users.constructor instanceof Users.User);
+			it('should be a Map', function () {
+				assert.ok(Users.users instanceof Map);
 			});
 		});
 		describe('User', function () {
@@ -48,7 +44,7 @@ describe('Users features', function () {
 
 						user.disconnectAll();
 						for (let i = 0; i < totalConnections; i++) {
-							assert.strictEqual(Users.connections[connections[i].id], undefined);
+							assert.ok(!Users.connections.has(connections[i].id));
 						}
 					});
 
