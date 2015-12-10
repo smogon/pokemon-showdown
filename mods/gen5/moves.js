@@ -16,8 +16,8 @@ exports.BattleMovedex = {
 	aromatherapy: {
 		inherit: true,
 		onHit: function (pokemon, source) {
-			let side = pokemon.side;
-			for (let i = 0; i < side.pokemon.length; i++) {
+			var side = pokemon.side;
+			for (var i = 0; i < side.pokemon.length; i++) {
 				side.pokemon[i].status = '';
 			}
 			this.add('-cureteam', source, '[from] move: Aromatherapy');
@@ -27,13 +27,13 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "A random move among those known by the user's party members is selected for use. Does not select Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
 		onHit: function (target) {
-			let moves = [];
-			for (let j = 0; j < target.side.pokemon.length; j++) {
-				let pokemon = target.side.pokemon[j];
+			var moves = [];
+			for (var j = 0; j < target.side.pokemon.length; j++) {
+				var pokemon = target.side.pokemon[j];
 				if (pokemon === target) continue;
-				for (let i = 0; i < pokemon.moves.length; i++) {
-					let move = pokemon.moves[i];
-					let noAssist = {
+				for (var i = 0; i < pokemon.moves.length; i++) {
+					var move = pokemon.moves[i];
+					var noAssist = {
 						assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1
 					};
 					if (move && !noAssist[move]) {
@@ -41,12 +41,12 @@ exports.BattleMovedex = {
 					}
 				}
 			}
-			let move = '';
-			if (moves.length) move = moves[this.random(moves.length)];
-			if (!move) {
+			var randomMove = '';
+			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (!randomMove) {
 				return false;
 			}
-			this.useMove(move, target);
+			this.useMove(randomMove, target);
 		}
 	},
 	assurance: {
@@ -128,8 +128,8 @@ exports.BattleMovedex = {
 		desc: "The user's type changes to match the original type of one of its four moves besides this move, at random, but not either of its current types. Fails if the user cannot change its type, or if this move would only be able to select one of the user's current types.",
 		shortDesc: "Changes user's type to match a known move.",
 		onHit: function (target) {
-			let possibleTypes = target.moveset.map(function (val) {
-				let move = this.getMove(val.id);
+			var possibleTypes = target.moveset.map(function (val) {
+				var move = this.getMove(val.id);
 				if (move.id !== 'conversion' && !target.hasType(move.type)) {
 					return move.type;
 				}
@@ -137,7 +137,7 @@ exports.BattleMovedex = {
 			if (!possibleTypes.length) {
 				return false;
 			}
-			let type = possibleTypes[this.random(possibleTypes.length)];
+			var type = possibleTypes[this.random(possibleTypes.length)];
 
 			if (!target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
@@ -148,7 +148,7 @@ exports.BattleMovedex = {
 		desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Bestow, Chatter, Circle Throw, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Me First, Metronome, Mimic, Mirror Coat, Mirror Move, Nature Power, Protect, Rage Powder, Sketch, Sleep Talk, Snatch, Struggle, Switcheroo, Thief, Transform, or Trick.",
 		shortDesc: "Uses the last move used in the battle.",
 		onHit: function (pokemon) {
-			let noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1};
+			var noCopycat = {assist:1, bestow:1, chatter:1, circlethrow:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, dragontail:1, endure:1, feint:1, focuspunch:1, followme:1, helpinghand:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, ragepowder:1, sketch:1, sleeptalk:1, snatch:1, struggle:1, switcheroo:1, thief:1, transform:1, trick:1};
 			if (!this.lastMove || noCopycat[this.lastMove]) {
 				return false;
 			}
@@ -174,8 +174,8 @@ exports.BattleMovedex = {
 		shortDesc: "Removes target's hazards, lowers evasion by 1.",
 		onHit: function (pokemon) {
 			if (!pokemon.volatiles['substitute']) this.boost({evasion:-1});
-			let sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1};
-			for (let i in sideConditions) {
+			var sideConditions = {reflect:1, lightscreen:1, safeguard:1, mist:1, spikes:1, toxicspikes:1, stealthrock:1};
+			for (var i in sideConditions) {
 				if (pokemon.side.removeSideCondition(i)) {
 					this.add('-sideend', pokemon.side, this.getEffect(i).name, '[from] move: Defog', '[of] ' + pokemon);
 				}
@@ -335,9 +335,9 @@ exports.BattleMovedex = {
 				this.add('-start', pokemon, 'move: Heal Block');
 			},
 			onDisableMove: function (pokemon) {
-				let disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
-				let moves = pokemon.moveset;
-				for (let i = 0; i < moves.length; i++) {
+				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
+				var moves = pokemon.moveset;
+				for (var i = 0; i < moves.length; i++) {
 					if (disabledMoves[moves[i].id] || this.getMove(moves[i].id).heal) {
 						pokemon.disableMove(moves[i].id);
 					}
@@ -345,7 +345,7 @@ exports.BattleMovedex = {
 			},
 			onBeforeMovePriority: 6,
 			onBeforeMove: function (pokemon, target, move) {
-				let disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
+				var disabledMoves = {healingwish:1, lunardance:1, rest:1, swallow:1, wish:1};
 				if (disabledMoves[move.id] || move.heal) {
 					this.add('cant', pokemon, 'move: Heal Block', move);
 					return false;
@@ -470,7 +470,7 @@ exports.BattleMovedex = {
 		desc: "Deals damage to all adjacent foes and destroys any Berry they may be holding.",
 		shortDesc: "Destroys the foe(s) Berry.",
 		onHit: function (pokemon, source) {
-			let item = pokemon.getItem();
+			var item = pokemon.getItem();
 			if (item.isBerry && pokemon.takeItem(source)) {
 				this.add('-enditem', pokemon, item.name, '[from] move: Incinerate');
 			}
@@ -520,22 +520,22 @@ exports.BattleMovedex = {
 	metronome: {
 		inherit: true,
 		onHit: function (target) {
-			let moves = [];
-			for (let i in exports.BattleMovedex) {
-				let move = exports.BattleMovedex[i];
+			var moves = [];
+			for (var i in exports.BattleMovedex) {
+				var move = exports.BattleMovedex[i];
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
-				let noMetronome = {
+				var noMetronome = {
 					afteryou:1, assist:1, bestow:1, chatter:1, copycat:1, counter:1, covet:1, destinybond:1, detect:1, endure:1, feint:1, focuspunch:1, followme:1, freezeschok:1, helpinghand:1, iceburn:1, mefirst:1, metronome:1, mimic:1, mirrorcoat:1, mirrormove:1, naturepower:1, protect:1, quash:1, quickguard:1, ragepowder:1, relicsong:1, secretsword:1, sketch:1, sleeptalk:1, snarl:1, snatch:1, snore:1, struggle:1, switcheroo:1, technoblast:1, thief:1, transform:1, trick:1, vcreate:1, wideguard:1
 				};
 				if (!noMetronome[move.id] && move.num < 560) {
 					moves.push(move.id);
 				}
 			}
-			let move = '';
-			if (moves.length) move = moves[this.random(moves.length)];
-			if (!move) return false;
-			this.useMove(move, target);
+			var randomMove = '';
+			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (!randomMove) return false;
+			this.useMove(randomMove, target);
 		}
 	},
 	minimize: {
@@ -662,7 +662,7 @@ exports.BattleMovedex = {
 					return;
 				}
 				this.add('-activate', target, 'Quick Guard');
-				let lockedmove = source.getVolatile('lockedmove');
+				var lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
 					if (source.volatiles['lockedmove'].duration === 2) {
@@ -742,8 +742,8 @@ exports.BattleMovedex = {
 	skillswap: {
 		inherit: true,
 		onHit: function (target, source) {
-			let targetAbility = target.ability;
-			let sourceAbility = source.ability;
+			var targetAbility = target.ability;
+			var sourceAbility = source.ability;
 			if (targetAbility === sourceAbility) {
 				return false;
 			}
@@ -842,7 +842,7 @@ exports.BattleMovedex = {
 				if (target === source || move.flags['authentic']) {
 					return;
 				}
-				let damage = this.getDamage(source, target, move);
+				var damage = this.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
 					this.add('-fail', target);
 					return null;

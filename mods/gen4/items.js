@@ -32,7 +32,7 @@ exports.BattleItems = {
 		},
 		onBeforeTurn: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
-				let decision = this.willMove(pokemon);
+				var decision = this.willMove(pokemon);
 				if (!decision) return;
 				this.insertQueue({
 					choice: 'event',
@@ -45,14 +45,14 @@ exports.BattleItems = {
 			}
 		},
 		onCustap: function (pokemon) {
-			let decision = this.willMove(pokemon);
+			var decision = this.willMove(pokemon);
 			this.debug('custap decision: ' + decision);
 			if (decision) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function (pokemon) {
-			let decision = this.willMove(pokemon);
+			var decision = this.willMove(pokemon);
 			this.debug('custap eaten: ' + decision);
 			if (decision) {
 				this.cancelDecision(pokemon);
