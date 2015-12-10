@@ -20,21 +20,22 @@ let dns = require('dns');
 
 let Dnsbl = module.exports;
 
-let dnsblCache = exports.cache = {
-	'127.0.0.1': false
-};
+let dnsblCache = exports.cache = new Map();
+dnsblCache.set('127.0.0.1', false);
 
 function queryDnsblLoop(ip, callback, reversedIpDot, index) {
 	if (index >= BLOCKLISTS.length) {
 		// not in any blocklist
-		callback(dnsblCache[ip] = false);
+		dnsblCache.set(ip, false);
+		callback(false);
 		return;
 	}
 	let blocklist = BLOCKLISTS[index];
 	dns.resolve4(reversedIpDot + blocklist, function (err, addresses) {
 		if (!err) {
 			// blocked
-			callback(dnsblCache[ip] = blocklist);
+			dnsblCache.set(ip, blocklist);
+			callback(blocklist);
 		} else {
 			// not blocked, try next blocklist
 			queryDnsblLoop(ip, callback, reversedIpDot, index + 1);
@@ -50,8 +51,8 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
  * not in any blocklist.
  */
 exports.query = function queryDnsbl(ip, callback) {
-	if (ip in dnsblCache) {
-		callback(dnsblCache[ip]);
+	if (dnsblCache.has(ip)) {
+		callback(dnsblCache.get(ip));
 		return;
 	}
 	let reversedIpDot = ip.split('.').reverse().join('.') + '.';
