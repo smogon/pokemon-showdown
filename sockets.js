@@ -67,13 +67,12 @@ if (cluster.isMaster) {
 	exports.killWorker = function (worker) {
 		let idd = worker.id + '-';
 		let count = 0;
-		for (let connectionid in Users.connections) {
+		Users.connections.forEach(function (connection, connectionid) {
 			if (connectionid.substr(idd.length) === idd) {
-				let connection = Users.connections[connectionid];
 				Users.socketDisconnect(worker, worker.id, connection.socketid);
 				count++;
 			}
-		}
+		});
 		try {
 			worker.kill();
 		} catch (e) {}
