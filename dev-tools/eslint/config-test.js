@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	"extends": "./config-base.js",
+	"extends": "./config-es6.js",
 	"env": {
 		"mocha": true
 	},
