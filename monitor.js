@@ -49,6 +49,17 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 	 * Resource Monitor
 	 *********************************************************/
 
+	clean: function () {
+		Monitor.networkCount = {};
+		Monitor.networkUse = {};
+		Monitor.battlePrepTimes = {};
+		Monitor.battlePreps = {};
+		Monitor.battleTimes = {};
+		Monitor.battles = {};
+		Monitor.connectionTimes = {};
+		Monitor.connections = {};
+		Dnsbl.cache.clear();
+	},
 	connections: {},
 	connectionTimes: {},
 	battles: {},
@@ -224,3 +235,5 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 		}
 	}
 };
+
+Monitor.cleanInterval = setInterval(Monitor.clean, 6 * 60 * 60 * 1000);
