@@ -15,7 +15,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact'] && !source.status) {
-				let r = this.random(300);
+				var r = this.random(300);
 				if (r < 10) {
 					source.setStatus('slp');
 				} else if (r < 20) {
@@ -98,7 +98,7 @@ exports.BattleAbilities = {
 		onModifyMove: function (move) {
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
-				for (let i = 0; i < move.secondaries.length; i++) {
+				for (var i = 0; i < move.secondaries.length; i++) {
 					move.secondaries[i].chance *= 2;
 				}
 			}
@@ -132,7 +132,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onAfterSetStatus: function (status, target, source) {
 			if (!source || source === target) return;
-			let id = status.id;
+			var id = status.id;
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';
 			source.trySetStatus(id);
@@ -141,10 +141,10 @@ exports.BattleAbilities = {
 	"trace": {
 		inherit: true,
 		onUpdate: function (pokemon) {
-			let target = pokemon.side.foe.randomActive();
+			var target = pokemon.side.foe.randomActive();
 			if (!target || target.fainted) return;
-			let ability = this.getAbility(target.ability);
-			let bannedAbilities = {forecast:1, multitype:1, trace:1};
+			var ability = this.getAbility(target.ability);
+			var bannedAbilities = {forecast:1, multitype:1, trace:1};
 			if (bannedAbilities[target.ability]) {
 				return;
 			}

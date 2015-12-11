@@ -72,8 +72,8 @@ exports.BattleMovedex = {
 				return this.random(3, 7);
 			},
 			onStart: function (target) {
-				let noEncore = {encore:1, metronome:1, mimic:1, mirrormove:1, sketch:1, sleeptalk:1, struggle:1, transform:1};
-				let moveIndex = target.moves.indexOf(target.lastMove);
+				var noEncore = {encore:1, metronome:1, mimic:1, mirrormove:1, sketch:1, sleeptalk:1, struggle:1, transform:1};
+				var moveIndex = target.moves.indexOf(target.lastMove);
 				if (!target.lastMove || noEncore[target.lastMove] || (target.moveset[moveIndex] && target.moveset[moveIndex].pp <= 0)) {
 					// it failed
 					this.add('-fail', target);
@@ -104,7 +104,7 @@ exports.BattleMovedex = {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
-				for (let i = 0; i < pokemon.moveset.length; i++) {
+				for (var i = 0; i < pokemon.moveset.length; i++) {
 					if (pokemon.moveset[i].id !== this.effectData.move) {
 						pokemon.disableMove(pokemon.moveset[i].id);
 					}
@@ -156,7 +156,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
-				let damage = this.getDamage(source, target, move, true);
+				var damage = this.getDamage(source, target, move, true);
 				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'highjumpkick');
 			}
 		}
@@ -165,7 +165,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
-				let damage = this.getDamage(source, target, move, true);
+				var damage = this.getDamage(source, target, move, true);
 				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'jumpkick');
 			}
 		}
@@ -182,13 +182,13 @@ exports.BattleMovedex = {
 				this.add('-start', target, 'move: Leech Seed');
 			},
 			onAfterMoveSelf: function (pokemon) {
-				let leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
+				var leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				let toLeech = this.clampIntRange(pokemon.maxhp / 8, 1);
-				let damage = this.damage(toLeech, pokemon, leecher);
+				var toLeech = this.clampIntRange(pokemon.maxhp / 8, 1);
+				var damage = this.damage(toLeech, pokemon, leecher);
 				if (damage) {
 					this.heal(damage, leecher, pokemon);
 				}
@@ -224,22 +224,22 @@ exports.BattleMovedex = {
 	metronome: {
 		inherit: true,
 		onHit: function (target) {
-			let moves = [];
-			for (let i in exports.BattleMovedex) {
-				let move = exports.BattleMovedex[i];
+			var moves = [];
+			for (var i in exports.BattleMovedex) {
+				var move = exports.BattleMovedex[i];
 				if (i !== move.id) continue;
 				if (move.isNonstandard) continue;
-				let noMetronome = {
+				var noMetronome = {
 					counter:1, destinybond:1, detect:1, endure:1, metronome:1, mimic:1, mirrorcoat:1, protect:1, sketch:1, sleeptalk:1, struggle:1, thief:1
 				};
 				if (!noMetronome[move.id] && move.num < 252) {
 					moves.push(move.id);
 				}
 			}
-			let move = '';
-			if (moves.length) move = moves[this.random(moves.length)];
-			if (!move) return false;
-			this.useMove(move, target);
+			var randomMove = '';
+			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (!randomMove) return false;
+			this.useMove(randomMove, target);
 		},
 		noSketch: true
 	},
@@ -273,8 +273,8 @@ exports.BattleMovedex = {
 	mirrormove: {
 		inherit: true,
 		onHit: function (pokemon) {
-			let noMirror = {metronome: 1, mimic: 1, mirrormove: 1, sketch: 1, sleeptalk: 1, transform: 1};
-			let foe = pokemon.side.foe.active[0];
+			var noMirror = {metronome: 1, mimic: 1, mirrormove: 1, sketch: 1, sleeptalk: 1, transform: 1};
+			var foe = pokemon.side.foe.active[0];
 			if (!foe || !foe.lastMove || (!pokemon.activeTurns && !foe.moveThisTurn) || noMirror[foe.lastMove] || pokemon.moves.indexOf(foe.lastMove) >= 0) {
 				return false;
 			}
@@ -392,7 +392,7 @@ exports.BattleMovedex = {
 	roar: {
 		inherit: true,
 		onTryHit: function () {
-			for (let i = 0; i < this.queue.length; i++) {
+			for (var i = 0; i < this.queue.length; i++) {
 				// Roar only works if it is the last action in a turn, including when it's called by Sleep Talk
 				if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') return false;
 			}
@@ -423,10 +423,10 @@ exports.BattleMovedex = {
 	sleeptalk: {
 		inherit: true,
 		onHit: function (pokemon) {
-			let moves = [];
-			for (let i = 0; i < pokemon.moveset.length; i++) {
-				let move = pokemon.moveset[i].id;
-				let NoSleepTalk = {
+			var moves = [];
+			for (var i = 0; i < pokemon.moveset.length; i++) {
+				var move = pokemon.moveset[i].id;
+				var NoSleepTalk = {
 					bide:1, dig:1, fly:1, metronome:1, mirrormove:1,
 					skullbash:1, skyattack:1, sleeptalk:1, solarbeam:1, razorwind:1
 				};
@@ -434,10 +434,10 @@ exports.BattleMovedex = {
 					moves.push(move);
 				}
 			}
-			let move = '';
-			if (moves.length) move = moves[this.random(moves.length)];
-			if (!move) return false;
-			this.useMove(move, pokemon);
+			var randomMove = '';
+			if (moves.length) randomMove = moves[this.random(moves.length)];
+			if (!randomMove) return false;
+			this.useMove(randomMove, pokemon);
 		},
 		noSketch: true
 	},
@@ -460,7 +460,7 @@ exports.BattleMovedex = {
 			},
 			onSwitchIn: function (pokemon) {
 				if (!pokemon.runImmunity('Ground')) return;
-				let damageAmounts = [0, 3];
+				var damageAmounts = [0, 3];
 				this.damage(damageAmounts[this.effectData.layers] * pokemon.maxhp / 24);
 			}
 		}
@@ -489,7 +489,7 @@ exports.BattleMovedex = {
 					return null;
 				}
 				if (move.category === 'Status') {
-					let SubBlocked = {
+					var SubBlocked = {
 						leechseed:1, lockon:1, mindreader:1, nightmare:1, painsplit:1, sketch:1
 					};
 					if (move.id === 'swagger') {
@@ -502,7 +502,7 @@ exports.BattleMovedex = {
 					}
 					return;
 				}
-				let damage = this.getDamage(source, target, move);
+				var damage = this.getDamage(source, target, move);
 				if (!damage) {
 					return null;
 				}
@@ -571,7 +571,7 @@ exports.BattleMovedex = {
 			chance: 20,
 			onHit: function (target, source) {
 				if (!target.hasType('Normal')) {
-					let result = this.random(3);
+					var result = this.random(3);
 					if (result === 0) {
 						target.trySetStatus('brn', source);
 					} else if (result === 1) {
@@ -586,7 +586,7 @@ exports.BattleMovedex = {
 	whirlwind: {
 		inherit: true,
 		onTryHit: function () {
-			for (let i = 0; i < this.queue.length; i++) {
+			for (var i = 0; i < this.queue.length; i++) {
 				// Whirlwind only works if it is the last action in a turn, including when it's called by Sleep Talk
 				if (this.queue[i].choice === 'move' || this.queue[i].choice === 'switch') return false;
 			}
