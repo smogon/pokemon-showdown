@@ -114,7 +114,7 @@ function canTalk(user, room, connection, message, targetUser) {
 				return false;
 			}
 		}
-		if (room && !(user.userid in room.users)) {
+		if (room && !room.users.has(user.userid)) {
 			connection.popup("You can't send a message to this room without being in it.");
 			return false;
 		}
@@ -208,13 +208,12 @@ let Context = exports.Context = (function () {
 		let users = this.room.users;
 		let auth = this.room.auth;
 
-		for (let i in users) {
-			let user = users[i];
+		users.forEach(function (user) {
 			// hardcoded for performance reasons (this is an inner loop)
 			if (user.isStaff || (auth && (auth[user.userid] || '+') !== '+')) {
 				user.sendTo(this.room, data);
 			}
-		}
+		}, this);
 	};
 	Context.prototype.logEntry = function (data) {
 		this.room.logEntry(data);

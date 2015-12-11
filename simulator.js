@@ -172,7 +172,7 @@ class Battle {
 		this.process.send('' + this.id + '|' + slice.call(arguments).join('|'));
 	}
 	sendFor(user, action) {
-		let player = this.players[user];
+		let player = this.players[user.userid];
 		if (!player) return;
 
 		this.send.apply(this, [action, player.slot].concat(slice.call(arguments, 2)));
@@ -249,7 +249,7 @@ class Battle {
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
-		let player = this.players[user];
+		let player = this.players[user.userid];
 		if (!player) return;
 		player.updateSubchannel(connection || user);
 		let request = this.requests[player.slot];
@@ -268,8 +268,8 @@ class Battle {
 				this.room.forfeit(user, " forfeited by changing their name.");
 				return;
 			}
-			if (!this.players[user]) {
-				this.players[user] = player;
+			if (!this.players[user.userid]) {
+				this.players[user.userid] = player;
 				player.userid = user.userid;
 				player.name = user.name;
 				delete this.players[oldid];
@@ -283,14 +283,14 @@ class Battle {
 		}
 	}
 	onJoin(user) {
-		let player = this.players[user];
+		let player = this.players[user.userid];
 		if (player && !player.active) {
 			player.active = true;
 			player.simSend('join', user.name, user.avatar);
 		}
 	}
 	onLeave(user) {
-		let player = this.players[user];
+		let player = this.players[user.userid];
 		if (player && player.active) {
 			player.active = false;
 			player.simSend('leave');
@@ -302,7 +302,7 @@ class Battle {
 			this.tie();
 			return true;
 		}
-		let player = this.players[user];
+		let player = this.players[user.userid];
 		if (!player) return false;
 		player.simSend('win');
 	}

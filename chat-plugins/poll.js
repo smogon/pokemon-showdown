@@ -96,14 +96,13 @@ class Poll {
 		}
 
 		// Update the poll results for everyone that has voted
-		for (let i in this.room.users) {
-			let user = this.room.users[i];
+		this.room.users.forEach(function (user) {
 			if (user.userid in this.voters) {
 				user.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results[this.voters[user.userid]]);
 			} else if (user.latestIp in this.voterIps) {
 				user.sendTo(this.room, '|uhtmlchange|poll' + this.room.pollNumber + '|' + results[this.voterIps[user.latestIp]]);
 			}
-		}
+		}, this);
 	}
 
 	display(user, broadcast) {
@@ -115,16 +114,15 @@ class Poll {
 			results.push(this.generateResults(false, i));
 		}
 
-		let target = {};
+		let target;
 
 		if (broadcast) {
 			target = this.room.users;
 		} else {
-			target[0] = user;
+			target = new Map([[0, user]]);
 		}
 
-		for (let i in target) {
-			let thisUser = target[i];
+		target.forEach(function (thisUser) {
 			if (thisUser.userid in this.voters) {
 				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + results[this.voters[thisUser.userid]]);
 			} else if (thisUser.latestIp in this.voterIps) {
@@ -132,7 +130,7 @@ class Poll {
 			} else {
 				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + votes);
 			}
-		}
+		}, this);
 	}
 
 	end() {

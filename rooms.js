@@ -30,7 +30,7 @@ let Room = (function () {
 		this.title = (title || roomid);
 		this.reportJoins = Config.reportjoins;
 
-		this.users = Object.create(null);
+		this.users = new Map();
 
 		this.log = [];
 
@@ -45,7 +45,6 @@ let Room = (function () {
 	Room.prototype.lastUpdate = 0;
 	Room.prototype.log = null;
 	Room.prototype.users = null;
-	Room.prototype.userCount = 0;
 
 	Room.prototype.send = function (message, errorArgument) {
 		if (errorArgument) throw new Error("Use Room#sendUser");
@@ -53,12 +52,11 @@ let Room = (function () {
 		Sockets.channelBroadcast(this.id, message);
 	};
 	Room.prototype.sendAuth = function (message) {
-		for (let i in this.users) {
-			let user = this.users[i];
+		this.users.forEach(function (user) {
 			if (user.connected && user.can('receiveauthmessages', null, this)) {
 				user.sendTo(this, message);
 			}
-		}
+		}, this);
 	};
 	Room.prototype.sendUser = function (user, message) {
 		user.sendTo(this, message);
@@ -275,7 +273,7 @@ let Room = (function () {
 			}
 		}
 
-		if (successUserid && user.userid in this.users) {
+		if (successUserid && this.users.has(user.userid)) {
 			user.updateIdentity(this.id);
 			if (notifyText) user.popup(notifyText);
 		}
@@ -406,8 +404,7 @@ let GlobalRoom = (function () {
 		})();
 
 		// init users
-		this.users = {};
-		this.userCount = 0; // cache of `Object.size(this.users)`
+		this.users = new Map();
 		this.maxUsers = 0;
 		this.maxUsersDate = 0;
 
@@ -435,7 +432,7 @@ let GlobalRoom = (function () {
 		}
 		LoginServer.request('updateuserstats', {
 			date: Date.now(),
-			users: this.userCount
+			users: this.users.size
 		}, function () {});
 	};
 
@@ -490,7 +487,7 @@ let GlobalRoom = (function () {
 		return roomList;
 	};
 	GlobalRoom.prototype.getRooms = function (user) {
-		let roomsData = {official:[], chat:[], userCount: this.userCount, battleCount: this.battleCount};
+		let roomsData = {official:[], chat:[], userCount: this.users.size, battleCount: this.battleCount};
 		for (let i = 0; i < this.chatRooms.length; i++) {
 			let room = this.chatRooms[i];
 			if (!room) continue;
@@ -498,7 +495,7 @@ let GlobalRoom = (function () {
 			(room.isOfficial ? roomsData.official : roomsData.chat).push({
 				title: room.title,
 				desc: room.desc,
-				userCount: room.userCount
+				userCount: room.users.size
 			});
 		}
 		return roomsData;
@@ -641,12 +638,11 @@ let GlobalRoom = (function () {
 		}
 	};
 	GlobalRoom.prototype.sendAuth = function (message) {
-		for (let i in this.users) {
-			let user = this.users[i];
+		this.users.forEach(function (user) {
 			if (user.connected && user.can('receiveauthmessages', null, this)) {
 				user.sendTo(this, message);
 			}
-		}
+		}, this);
 	};
 	GlobalRoom.prototype.add = function (message) {
 		if (rooms.lobby) return rooms.lobby.add(message);
@@ -746,26 +742,25 @@ let GlobalRoom = (function () {
 	};
 	GlobalRoom.prototype.onJoin = function (user, connection, merging) {
 		if (!user) return false; // ???
-		if (this.users[user.userid]) return user;
 
-		this.users[user.userid] = user;
-		if (++this.userCount > this.maxUsers) {
-			this.maxUsers = this.userCount;
+		this.users.set(user.userid, user);
+		let count = this.users.size;
+		if (count > this.maxUsers) {
+			this.maxUsers = count;
 			this.maxUsersDate = Date.now();
 		}
 
 		return user;
 	};
 	GlobalRoom.prototype.onRename = function (user, oldid, joining) {
-		delete this.users[oldid];
-		this.users[user.userid] = user;
+		this.users.delete(oldid);
+		this.users.set(user.userid, user);
 		return user;
 	};
 	GlobalRoom.prototype.onUpdateIdentity = function () {};
 	GlobalRoom.prototype.onLeave = function (user) {
 		if (!user) return; // ...
-		delete this.users[user.userid];
-		--this.userCount;
+		this.users.delete(user.userid);
 		user.cancelChallengeTo();
 		this.cancelSearch(user);
 	};
@@ -983,8 +978,8 @@ let BattleRoom = (function () {
 	};
 	BattleRoom.prototype.getLogForUser = function (user) {
 		if (this.game.ended) return this.getLog(3);
-		if (!(user in this.game.players)) return this.getLog(0);
-		return this.getLog(this.game.players[user].slotNum);
+		if (!(user.userid in this.game.players)) return this.getLog(0);
+		return this.getLog(this.game.players[user.userid].slotNum);
 	};
 	BattleRoom.prototype.update = function (excludeUser) {
 		if (this.log.length <= this.lastUpdate) return;
@@ -994,12 +989,7 @@ let BattleRoom = (function () {
 		this.lastUpdate = this.log.length;
 
 		// empty rooms time out after ten minutes
-		let hasUsers = false;
-		for (let i in this.users) { // eslint-disable-line no-unused-vars
-			hasUsers = true;
-			break;
-		}
-		if (!hasUsers) {
+		if (this.users.size === 0) {
 			if (this.expireTimer) clearTimeout(this.expireTimer);
 			this.expireTimer = setTimeout(this.tryExpire.bind(this), TIMEOUT_EMPTY_DEALLOCATE);
 		} else {
@@ -1278,14 +1268,13 @@ let BattleRoom = (function () {
 	};
 	BattleRoom.prototype.onJoin = function (user, connection) {
 		if (!user) return false;
-		if (this.users[user.userid]) return user;
+		if (this.users.has(user.userid)) return user;
 
 		if (user.named) {
 			this.add((this.reportJoins ? '|j|' : '|J|') + user.name).update();
 		}
 
-		this.users[user.userid] = user;
-		this.userCount++;
+		this.users.set(user.userid, user);
 
 		if (this.game && this.game.onJoin) {
 			this.game.onJoin(user, connection);
@@ -1298,8 +1287,8 @@ let BattleRoom = (function () {
 		if (joining) {
 			this.add((this.reportJoins ? '|j|' : '|J|') + user.name);
 		}
-		delete this.users[oldid];
-		this.users[user.userid] = user;
+		this.users.delete(oldid);
+		this.users.set(user.userid, user);
 		if (this.game && this.game.onRename) this.game.onRename(user, oldid, joining);
 		this.update();
 		return user;
@@ -1308,11 +1297,10 @@ let BattleRoom = (function () {
 	BattleRoom.prototype.onLeave = function (user) {
 		if (!user) return; // ...
 		if (!user.named) {
-			delete this.users[user.userid];
+			this.users.delete(user.userid);
 			return;
 		}
-		delete this.users[user.userid];
-		this.userCount--;
+		this.users.delete(user.userid);
 		this.add((this.reportJoins ? '|l|' : '|L|') + user.name);
 
 		if (this.game && this.game.onLeave) {
@@ -1368,10 +1356,10 @@ let BattleRoom = (function () {
 		// deallocate ourself
 
 		// remove references to ourself
-		for (let i in this.users) {
-			this.users[i].leaveRoom(this, null, true);
-			delete this.users[i];
-		}
+		this.users.forEach(function (user) {
+			user.leaveRoom(this, null, true);
+		}, this);
+		this.users.clear();
 		this.users = null;
 
 		// deallocate children and get rid of references to them
@@ -1507,8 +1495,7 @@ let ChatRoom = (function () {
 		Config.groupsranking.forEach(function (group) {
 			groups[group] = 0;
 		});
-		for (let i in this.users) {
-			let user = this.users[i];
+		this.users.forEach(function (user) {
 			++total;
 			if (!user.named) {
 				++guests;
@@ -1518,7 +1505,7 @@ let ChatRoom = (function () {
 			} else {
 				++groups[user.group];
 			}
-		}
+		}, this);
 		let entry = '|userstats|total:' + total + '|guests:' + guests;
 		for (let i in groups) {
 			entry += '|' + i + ':' + groups[i];
@@ -1529,13 +1516,13 @@ let ChatRoom = (function () {
 	ChatRoom.prototype.getUserList = function () {
 		let buffer = '';
 		let counter = 0;
-		for (let i in this.users) {
-			if (!this.users[i].named) {
-				continue;
+		this.users.forEach(function (user) {
+			if (!user.named) {
+				return;
 			}
 			counter++;
-			buffer += ',' + this.users[i].getIdentity(this.id);
-		}
+			buffer += ',' + user.getIdentity(this.id);
+		}, this);
 		let msg = '|users|' + counter + buffer;
 		return msg;
 	};
@@ -1605,21 +1592,20 @@ let ChatRoom = (function () {
 	};
 	ChatRoom.prototype.onJoin = function (user, connection) {
 		if (!user) return false; // ???
-		if (this.users[user.userid]) return user;
+		if (this.users.has(user.userid)) return user;
 
 		if (user.named) {
 			this.reportJoin('j', user.getIdentity(this.id));
 		}
 
-		this.users[user.userid] = user;
-		this.userCount++;
+		this.users.set(user.userid, user);
 
 		if (this.game && this.game.onJoin) this.game.onJoin(user, connection);
 		return user;
 	};
 	ChatRoom.prototype.onRename = function (user, oldid, joining) {
-		delete this.users[oldid];
-		this.users[user.userid] = user;
+		this.users.delete(oldid);
+		this.users.set(user.userid, user);
 		if (joining) {
 			this.reportJoin('j', user.getIdentity(this.id));
 			if (this.staffMessage && user.can('mute', null, this)) this.sendUser(user, '|raw|<div class="infobox">(Staff intro:)<br /><div>' + this.staffMessage + '</div></div>');
@@ -1639,15 +1625,14 @@ let ChatRoom = (function () {
 	 */
 	ChatRoom.prototype.onUpdateIdentity = function (user) {
 		if (user && user.connected && user.named) {
-			if (!this.users[user.userid]) return false;
+			if (!this.users.has(user.userid)) return false;
 			this.reportJoin('n', user.getIdentity(this.id) + '|' + user.userid);
 		}
 	};
 	ChatRoom.prototype.onLeave = function (user) {
 		if (!user) return; // ...
 
-		delete this.users[user.userid];
-		this.userCount--;
+		this.users.delete(user.userid);
 
 		if (user.named) {
 			this.reportJoin('l', user.getIdentity(this.id));
@@ -1658,10 +1643,10 @@ let ChatRoom = (function () {
 		// deallocate ourself
 
 		// remove references to ourself
-		for (let i in this.users) {
-			this.users[i].leaveRoom(this, null, true);
-			delete this.users[i];
-		}
+		this.users.forEach(function (user) {
+			user.leaveRoom(this, null, true);
+		}, this);
+		this.users.clear();
 		this.users = null;
 
 		rooms.global.deregisterChatRoom(this.id);
