@@ -76,7 +76,7 @@ let Room = (function () {
 	Room.prototype.uhtmlchange = function (message) {
 		let thirdPipe = message.indexOf('|', 13);
 		let originalStart = '|uhtml|' + message.slice(13, thirdPipe + 1);
-		for (var i = 0; i < this.log.length; i++) {
+		for (let i = 0; i < this.log.length; i++) {
 			if (this.log[i].startsWith(originalStart)) {
 				this.log[i] = originalStart + message.slice(thirdPipe + 1);
 				break;
