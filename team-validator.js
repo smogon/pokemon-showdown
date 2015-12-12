@@ -483,6 +483,20 @@ Validator = (function () {
 					}
 					isHidden = false;
 				}
+			} else if (template.eventOnly || template.eventOnlyHidden && isHidden) {
+				let eventPokemon = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies).eventPokemon : template.eventPokemon;
+				let legal = false;
+				for (let i = 0; i < eventPokemon.length; i++) {
+					let eventData = eventPokemon[i];
+					if (format.requirePentagon && eventData.generation < 6) continue;
+					if (eventData.level && set.level < eventData.level) continue;
+					if ((eventData.shiny && !set.shiny) || (!eventData.shiny && set.shiny)) continue;
+					if (eventData.nature && set.nature !== eventData.nature) continue;
+					if (eventData.isHidden !== undefined && isHidden !== eventData.isHidden) continue;
+					legal = true;
+					if (eventData.gender) set.gender = eventData.gender;
+				}
+				if (!legal) problems.push(template.species + " is only obtainable via event - it needs to match one of its events.");
 			}
 			if (isHidden && lsetData.sourcesBefore) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
