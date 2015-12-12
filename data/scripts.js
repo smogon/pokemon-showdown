@@ -935,7 +935,7 @@ exports.BattleScripts = {
 	queryMoves: function (moves, hasType, hasAbility, movePool) {
 		// This is primarily a helper function for random setbuilder functions.
 		let counter = {
-			Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0, stab: 0, inaccurate: 0, priority: 0, recoil: 0,
+			Physical: 0, Special: 0, Status: 0, damage: 0, recovery: 0, stab: 0, inaccurate: 0, priority: 0, recoil: 0, drain: 0,
 			adaptability: 0, bite: 0, contrary: 0, hustle: 0, ironfist: 0, serenegrace: 0, sheerforce: 0, skilllink: 0, technician: 0,
 			physicalsetup: 0, specialsetup: 0, mixedsetup: 0, speedsetup: 0, physicalpool: 0, specialpool: 0,
 			damagingMoves: [],
@@ -999,10 +999,10 @@ exports.BattleScripts = {
 			}
 			// Moves that have a low base power:
 			if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60 && moveid !== 'rapidspin')) counter['technician']++;
-			// Moves that hit multiple times:
+			// Moves that hit up to 5 times:
 			if (move.multihit && move.multihit[1] === 5) counter['skilllink']++;
-			// Recoil:
 			if (move.recoil) counter['recoil']++;
+			if (move.drain) counter['drain']++;
 			// Moves which have a base power, but aren't super-weak like Rapid Spin:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback || moveid === 'naturepower') {
 				counter[movetype]++;
@@ -1288,7 +1288,7 @@ exports.BattleScripts = {
 					break;
 				case 'uturn':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['batonpass']) rejected = true;
-					if (hasType['Bug'] && counter.stab < 2 && counter.damagingMoves.length > 2 && !hasMove['technoblast']) rejected = true;
+					if (hasType['Bug'] && counter.stab < 2 && counter.damagingMoves.length > 2 && !hasAbility['Adaptability'] && !hasMove['technoblast']) rejected = true;
 					break;
 				case 'voltswitch':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['batonpass'] || hasMove['magnetrise'] || hasMove['uturn']) rejected = true;
@@ -1866,8 +1866,10 @@ exports.BattleScripts = {
 			item = 'Air Balloon';
 		} else if (hasMove['outrage'] && (counter.setupType || ability === 'Multiscale')) {
 			item = 'Lum Berry';
-		} else if (ability === 'Moody' || hasMove['clearsmog'] || hasMove['detect'] || hasMove['protect'] || hasMove['sleeptalk'] || hasMove['substitute']) {
+		} else if (ability === 'Moody' || hasMove['clearsmog'] || hasMove['detect'] || hasMove['protect'] || hasMove['sleeptalk']) {
 			item = 'Leftovers';
+		} else if (hasMove['substitute']) {
+			item = !counter['drain'] ? 'Leftovers' : 'Life Orb';
 		} else if (hasMove['lightscreen'] || hasMove['reflect']) {
 			item = 'Light Clay';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
@@ -1882,7 +1884,7 @@ exports.BattleScripts = {
 			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
-		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285) {
+		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285) {
 			item = 'Focus Sash';
 
 		// This is the "REALLY can't think of a good item" cutoff
@@ -1944,6 +1946,7 @@ exports.BattleScripts = {
 		let level = levelScale[tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
 
+		if (template.name === 'Slurpuff' && !counter.setupType) level = 79;
 		if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
 
 		// Prepare optimal HP
@@ -2030,20 +2033,22 @@ exports.BattleScripts = {
 
 			let tier = template.tier;
 			switch (tier) {
+			case 'AG':
+				continue;
+			case 'Uber':
+				// Ubers are limited to 2 but have a 20% chance of being added anyway.
+				if (uberCount > 1 && this.random(5) >= 1) continue;
+				break;
 			case 'PU':
 				// PUs are limited to 2 but have a 20% chance of being added anyway.
 				if (puCount > 1 && this.random(5) >= 1) continue;
 				break;
-			case 'Uber': case 'AG':
-				// Ubers are limited to 2 but have a 20% chance of being added anyway.
-				if (uberCount > 1 && this.random(5) >= 1) continue;
+			case 'Unreleased':
+				// Unreleased Pokémon have 20% the normal rate
+				if (this.random(5) >= 1) continue;
 				break;
 			case 'CAP':
 				// CAPs have 20% the normal rate
-				if (this.random(5) >= 1) continue;
-				break;
-			case 'Unreleased':
-				// Unreleased Pokémon have 20% the normal rate
 				if (this.random(5) >= 1) continue;
 			}
 
