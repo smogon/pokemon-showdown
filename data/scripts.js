@@ -1932,7 +1932,7 @@ exports.BattleScripts = {
 			Aegislash: 74, Blaziken: 74, 'Blaziken-Mega': 74, Genesect: 74, 'Genesect-Burn': 74, 'Genesect-Chill': 74, 'Genesect-Douse': 74, 'Genesect-Shock': 74, Greninja: 74, 'Kangaskhan-Mega': 74, 'Lucario-Mega': 74, 'Mawile-Mega': 74,
 
 			// Banned Ability
-			Gothitelle: 77, Ninetales: 77, Politoed: 77, Wobbuffet: 77,
+			Gothitelle: 74, Ninetales: 77, Politoed: 77, Wobbuffet: 74,
 
 			// Holistic judgement
 			Unown: 85

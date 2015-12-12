@@ -35,7 +35,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew']
+		banlist: ['Uber', 'Shadow Tag', 'Soul Dew']
 	},
 	{
 		name: "Ubers",
@@ -58,7 +58,7 @@ exports.Formats = [
 		section: "ORAS Singles",
 
 		ruleset: ['OU'],
-		banlist: ['OU', 'BL', 'Drizzle', 'Drought', 'Shadow Tag']
+		banlist: ['OU', 'BL', 'Drizzle', 'Drought']
 	},
 	{
 		name: "RU",
