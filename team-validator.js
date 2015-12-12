@@ -493,7 +493,7 @@ Validator = (function () {
 					}
 					isHidden = false;
 				}
-			} else if (template.eventOnly || template.eventOnlyHidden && isHidden) {
+			} else if (banlistTable['illegal'] && (template.eventOnly || template.eventOnlyHidden && isHidden)) {
 				let eventPokemon = !template.learnset && template.baseSpecies !== template.species ? tools.getTemplate(template.baseSpecies).eventPokemon : template.eventPokemon;
 				let legal = false;
 				for (let i = 0; i < eventPokemon.length; i++) {
