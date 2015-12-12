@@ -2177,13 +2177,13 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	castformsunny: {
-		tier: "Illegal"
+		battleOnly: true
 	},
 	castformrainy: {
-		tier: "Illegal"
+		battleOnly: true
 	},
 	castformsnowy: {
-		tier: "Illegal"
+		battleOnly: true
 	},
 	kecleon: {
 		randomBattleMoves: ["stealthrock","recover","return","thunderwave","suckerpunch"],
@@ -2578,6 +2578,9 @@ exports.BattleFormatsData = {
 	cherrim: {
 		randomBattleMoves: ["sunnyday","solarbeam","weatherball","hiddenpowerice"],
 		tier: "NU"
+	},
+	cherrimsunshine: {
+		battleOnly: true
 	},
 	shellos: {
 		randomBattleMoves: ["scald","clearsmog","recover","toxic","icebeam"],
