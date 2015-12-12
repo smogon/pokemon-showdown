@@ -2329,6 +2329,15 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["sunnyday","raindance","fireblast","hydropump","thunder","icebeam","solarbeam"],
 		tier: "NU"
 	},
+	castformsunny: {
+		battleOnly: true
+	},
+	castformrainy: {
+		battleOnly: true
+	},
+	castformsnowy: {
+		battleOnly: true
+	},
 	kecleon: {
 		randomBattleMoves: ["stealthrock","recover","return","thunderwave","suckerpunch"],
 		tier: "NU"
@@ -2787,6 +2796,9 @@ exports.BattleFormatsData = {
 	cherrim: {
 		randomBattleMoves: ["sunnyday","solarbeam","weatherball","hiddenpowerice"],
 		tier: "NU"
+	},
+	cherrimsunshine: {
+		battleOnly: true
 	},
 	shellos: {
 		randomBattleMoves: ["scald","clearsmog","recover","toxic","icebeam"],
@@ -3488,6 +3500,10 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":35,"isHidden":true,"moves":["thrash","bellydrum","flareblitz","hammerarm"]}
 		],
 		tier: "UU"
+	},
+	darmanitanzen: {
+		requiredAbility: "Zen Mode",
+		battleOnly: true
 	},
 	maractus: {
 		randomBattleMoves: ["spikes","gigadrain","leechseed","hiddenpowerfire","toxic"],
