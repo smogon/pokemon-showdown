@@ -2652,6 +2652,8 @@ exports.commands = {
 		if (!image) return this.errorReply('No image URL was provided!');
 		if (!/^https?:\/\//.test(image)) image = '//' + image;
 
+		if (Config.ssl && image.startsWith('http://')) return this.errorReply("Images must be served from a site with HTTPS.");
+
 		let width = targets[1].trim();
 		if (!width) return this.errorReply('No width for the image was provided!');
 		if (!isNaN(width)) width += 'px';

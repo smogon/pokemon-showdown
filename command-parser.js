@@ -335,6 +335,10 @@ let Context = exports.Context = (function () {
 					this.errorReply('All images must have a width and height attribute');
 					return false;
 				}
+				if (/src=(\"|\')?http\:/i.test(images[i])) {
+					this.errorReply("All images must have a src attribute with HTTPS protocol.");
+					return false;
+				}
 			}
 		}
 		if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock') && html.match(/<button /)) {
@@ -371,7 +375,7 @@ let Context = exports.Context = (function () {
 			}
 		}
 
-		return true;
+		return html;
 	};
 	Context.prototype.targetUserOrSelf = function (target, exactName) {
 		if (!target) {
