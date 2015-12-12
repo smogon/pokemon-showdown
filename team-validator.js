@@ -637,7 +637,7 @@ Validator = (function () {
 		do {
 			alreadyChecked[template.speciesid] = true;
 			// STABmons hack to avoid copying all of validateSet to formats
-			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && move !== 'chatter') {
+			if (format.banlistTable && format.banlistTable['ignorestabmoves'] && !(move in {'bellydrum':1, 'chatter':1, 'shellsmash':1})) {
 				let types = template.types;
 				if (template.species === 'Shaymin') types = ['Grass', 'Flying'];
 				if (template.baseSpecies === 'Hoopa') types = ['Psychic', 'Ghost', 'Dark'];
