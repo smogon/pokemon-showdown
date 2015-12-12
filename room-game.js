@@ -124,7 +124,7 @@ class RoomGame {
 	// need to handle the other events.
 
 	onUpdateConnection(user, connection) {
-		this.onConnect(user, connection);
+		if (this.onConnect) this.onConnect(user, connection);
 	}
 }
 
