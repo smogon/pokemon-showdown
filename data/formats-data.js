@@ -5330,10 +5330,10 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["reflect","lightscreen","stealthrock","diamondstorm","moonblast","hiddenpowerfire"],
 		randomDoubleBattleMoves: ["diamondstorm","moonblast","reflect","lightscreen","safeguard","substitute","calmmind","psychic","dazzlinggleam","protect"],
 		eventPokemon: [
-			{"generation":6,"level":50,"moves":["diamondstorm","reflect","return","moonblast"],"pokeball":"cherishball"}
+			{"generation":6,"level":50,"moves":["diamondstorm","reflect","return","moonblast"],"pokeball":"cherishball"},
+			{"generation":6,"level":50,"shiny":true,"moves":["diamondstorm","moonblast","reflect","return"],"pokeball":"cherishball"}
 		],
 		eventOnly: true,
-		unobtainableShiny: true,
 		tier: "UU"
 	},
 	dianciemega: {
