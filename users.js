@@ -721,16 +721,16 @@ User = (function () {
 		}
 		this.named = false;
 		for (let i in this.roomCount) {
-			Rooms.get(i, 'lobby').onRename(this, oldid, false);
+			Rooms(i).onRename(this, oldid, false);
 		}
 		return true;
 	};
 	User.prototype.updateIdentity = function (roomid) {
 		if (roomid) {
-			return Rooms.get(roomid, 'lobby').onUpdateIdentity(this);
+			return Rooms(roomid).onUpdateIdentity(this);
 		}
 		for (let i in this.roomCount) {
-			Rooms.get(i, 'lobby').onUpdateIdentity(this);
+			Rooms(i).onUpdateIdentity(this);
 		}
 	};
 	User.prototype.filterName = function (name) {
@@ -1003,13 +1003,13 @@ User = (function () {
 		let joining = !this.named;
 		this.named = (this.userid.substr(0, 5) !== 'guest');
 		for (let i in this.roomCount) {
-			Rooms.get(i, 'lobby').onRename(this, oldid, joining);
+			Rooms(i).onRename(this, oldid, joining);
 		}
 		return true;
 	};
 	User.prototype.merge = function (oldUser) {
 		for (let i in oldUser.roomCount) {
-			Rooms.get(i, 'lobby').onLeave(oldUser);
+			Rooms(i).onLeave(oldUser);
 		}
 
 		if (this.locked === '#dnsbl' && !oldUser.locked) this.locked = false;
@@ -1222,7 +1222,7 @@ User = (function () {
 				if (this.roomCount[i] > 0) {
 					// should never happen.
 					Monitor.debug('!! room miscount: ' + i + ' not left');
-					Rooms.get(i, 'lobby').onLeave(this);
+					Rooms(i).onLeave(this);
 				}
 			}
 			this.roomCount = {};
