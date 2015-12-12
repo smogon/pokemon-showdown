@@ -174,6 +174,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":30,"gender":"F","nature":"Naughty","moves":["helpinghand","volttackle","swagger","painsplit"]}
 		],
+		eventOnly: true,
 		tier: "Illegal"
 	},
 	pikachu: {
@@ -1668,18 +1669,20 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["swift","raindance","hydropump","recover"]},
 			{"generation":3,"level":70,"moves":["recover","hydropump","raindance","swift"]},
-			{"generation":3,"level":50,"moves":["psychoboost","earthquake","hydropump","featherdance"]}
+			{"generation":3,"level":50,"moves":["psychoboost","earthquake","hydropump","featherdance"]},
+			{"generation":5,"level":5,"isHidden":true,"moves":["whirlwind","weatherball"],"pokeball":"dreamball"}
 		],
-		dreamWorldPokeball: 'dreamball',
+		eventOnlyHidden: true,
 		tier: "Uber"
 	},
 	hooh: {
 		randomBattleMoves: ["substitute","sacredfire","bravebird","earthquake","roost"],
 		eventPokemon: [
 			{"generation":3,"level":70,"moves":["swift","sunnyday","fireblast","recover"]},
-			{"generation":3,"level":70,"moves":["recover","fireblast","sunnyday","swift"]}
+			{"generation":3,"level":70,"moves":["recover","fireblast","sunnyday","swift"]},
+			{"generation":5,"level":5,"isHidden":true,"moves":["whirlwind","weatherball"],"pokeball":"dreamball"}
 		],
-		dreamWorldPokeball: 'dreamball',
+		eventOnlyHidden: true,
 		tier: "Uber"
 	},
 	celebi: {
@@ -2564,6 +2567,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"moves":["wish","healingwish","cosmicpower","meteormash"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"moves":["wish","healingwish","swift","return"],"pokeball":"cherishball"}
 		],
+		eventOnly: true,
 		tier: "OU"
 	},
 	deoxys: {
@@ -2580,54 +2584,22 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]},
 			{"generation":5,"level":100,"moves":["nastyplot","darkpulse","recover","psychoboost"],"pokeball":"duskball"}
 		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	deoxysattack: {
 		randomBattleMoves: ["psychoboost","superpower","extremespeed","icebeam","thunderbolt","firepunch","spikes","stealthrock"],
-		eventPokemon: [
-			{"generation":3,"level":30,"moves":["snatch","psychic","spikes","knockoff"]},
-			{"generation":3,"level":30,"moves":["superpower","psychic","pursuit","taunt"]},
-			{"generation":3,"level":30,"moves":["swift","psychic","pursuit","knockoff"]},
-			{"generation":3,"level":70,"moves":["cosmicpower","recover","psychoboost","hyperbeam"]},
-			{"generation":4,"level":50,"moves":["psychoboost","zapcannon","irondefense","extremespeed"],"pokeball":"cherishball"},
-			{"generation":4,"level":50,"moves":["psychoboost","swift","doubleteam","extremespeed"]},
-			{"generation":4,"level":50,"moves":["psychoboost","detect","counter","mirrorcoat"]},
-			{"generation":4,"level":50,"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
-			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]},
-			{"generation":5,"level":100,"moves":["nastyplot","darkpulse","recover","psychoboost"],"pokeball":"duskball"}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	deoxysdefense: {
 		randomBattleMoves: ["spikes","stealthrock","recover","taunt","toxic","agility","seismictoss","magiccoat"],
-		eventPokemon: [
-			{"generation":3,"level":30,"moves":["snatch","psychic","spikes","knockoff"]},
-			{"generation":3,"level":30,"moves":["superpower","psychic","pursuit","taunt"]},
-			{"generation":3,"level":30,"moves":["swift","psychic","pursuit","knockoff"]},
-			{"generation":3,"level":70,"moves":["cosmicpower","recover","psychoboost","hyperbeam"]},
-			{"generation":4,"level":50,"moves":["psychoboost","zapcannon","irondefense","extremespeed"],"pokeball":"cherishball"},
-			{"generation":4,"level":50,"moves":["psychoboost","swift","doubleteam","extremespeed"]},
-			{"generation":4,"level":50,"moves":["psychoboost","detect","counter","mirrorcoat"]},
-			{"generation":4,"level":50,"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
-			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]},
-			{"generation":5,"level":100,"moves":["nastyplot","darkpulse","recover","psychoboost"],"pokeball":"duskball"}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	deoxysspeed: {
 		randomBattleMoves: ["spikes","stealthrock","superpower","icebeam","psychoboost","taunt","lightscreen","reflect","magiccoat","trick"],
-		eventPokemon: [
-			{"generation":3,"level":30,"moves":["snatch","psychic","spikes","knockoff"]},
-			{"generation":3,"level":30,"moves":["superpower","psychic","pursuit","taunt"]},
-			{"generation":3,"level":30,"moves":["swift","psychic","pursuit","knockoff"]},
-			{"generation":3,"level":70,"moves":["cosmicpower","recover","psychoboost","hyperbeam"]},
-			{"generation":4,"level":50,"moves":["psychoboost","zapcannon","irondefense","extremespeed"],"pokeball":"cherishball"},
-			{"generation":4,"level":50,"moves":["psychoboost","swift","doubleteam","extremespeed"]},
-			{"generation":4,"level":50,"moves":["psychoboost","detect","counter","mirrorcoat"]},
-			{"generation":4,"level":50,"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
-			{"generation":4,"level":50,"moves":["psychoboost","leer","wrap","nightshade"]},
-			{"generation":5,"level":100,"moves":["nastyplot","darkpulse","recover","psychoboost"],"pokeball":"duskball"}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	turtwig: {
@@ -3016,17 +2988,19 @@ exports.BattleFormatsData = {
 	dialga: {
 		randomBattleMoves: ["stealthrock","dracometeor","dragonpulse","roar","dragontail","thunderbolt","outrage","bulkup","fireblast","aurasphere","rest","sleeptalk","dragonclaw"],
 		eventPokemon: [
+			{"generation":5,"level":5,"isHidden":true,"moves":["dragonbreath","scaryface"],"pokeball":"dreamball"},
 			{"generation":5,"level":100,"shiny":true,"isHidden":false,"moves":["dragonpulse","dracometeor","aurasphere","roaroftime"],"pokeball":"cherishball"}
 		],
-		dreamWorldPokeball: 'dreamball',
+		eventOnlyHidden: true,
 		tier: "Uber"
 	},
 	palkia: {
 		randomBattleMoves: ["spacialrend","dracometeor","surf","hydropump","thunderbolt","outrage","fireblast"],
 		eventPokemon: [
+			{"generation":5,"level":5,"isHidden":true,"moves":["dragonbreath","scaryface"],"pokeball":"dreamball"},
 			{"generation":5,"level":100,"shiny":true,"isHidden":false,"moves":["hydropump","dracometeor","spacialrend","aurasphere"],"pokeball":"cherishball"}
 		],
-		dreamWorldPokeball: 'dreamball',
+		eventOnlyHidden: true,
 		tier: "Uber"
 	},
 	heatran: {
@@ -3046,9 +3020,10 @@ exports.BattleFormatsData = {
 	giratina: {
 		randomBattleMoves: ["rest","sleeptalk","dragontail","roar","willowisp","calmmind","dragonpulse","shadowball"],
 		eventPokemon: [
+			{"generation":5,"level":5,"isHidden":true,"moves":["dragonbreath","scaryface"],"pokeball":"dreamball"},
 			{"generation":5,"level":100,"shiny":true,"isHidden":false,"moves":["dragonpulse","dragonclaw","aurasphere","shadowforce"],"pokeball":"cherishball"}
 		],
-		dreamWorldPokeball: 'dreamball',
+		eventOnlyHidden: true,
 		tier: "Uber"
 	},
 	giratinaorigin: {
@@ -3091,20 +3066,22 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"moves":["doubleteam","nightmare","feintattack","hypnosis"]},
 			{"generation":5,"level":50,"moves":["darkvoid","ominouswind","feintattack","nightmare"],"pokeball":"cherishball"}
 		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	shaymin: {
 		randomBattleMoves: ["seedflare","earthpower","airslash","hiddenpowerfire","rest","substitute","leechseed"],
 		eventPokemon: [
 			{"generation":4,"level":50,"moves":["seedflare","aromatherapy","substitute","energyball"],"pokeball":"cherishball"},
-			{"generation":4,"level":30,"moves":["synthesis","leechseed","magicalleaf","growth"]},
 			{"generation":4,"level":30,"moves":["growth","magicalleaf","leechseed","synthesis"]},
 			{"generation":5,"level":50,"moves":["seedflare","leechseed","synthesis","sweetscent"],"pokeball":"cherishball"}
 		],
+		eventOnly: true,
 		tier: "UU"
 	},
 	shayminsky: {
 		randomBattleMoves: ["seedflare","earthpower","airslash","hiddenpowerice","hiddenpowerfire","substitute","leechseed"],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceus: {
@@ -3113,151 +3090,103 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
 		],
-		unobtainableShiny: true,
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusbug: {
 		randomBattleMoves: ["swordsdance","xscissor","stoneedge","recover","calmmind","judgment","icebeam","fireblast"],
 		requiredItem: "Insect Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusdark: {
 		randomBattleMoves: ["calmmind","judgment","recover","refresh"],
 		requiredItem: "Dread Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusdragon: {
 		randomBattleMoves: ["swordsdance","outrage","extremespeed","earthquake","recover"],
 		requiredItem: "Draco Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceuselectric: {
 		randomBattleMoves: ["calmmind","judgment","recover","icebeam"],
 		requiredItem: "Zap Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusfighting: {
 		randomBattleMoves: ["calmmind","judgment","icebeam","darkpulse","recover","toxic"],
 		requiredItem: "Fist Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusfire: {
 		randomBattleMoves: ["calmmind","flamethrower","fireblast","thunderbolt","recover"],
 		requiredItem: "Flame Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusflying: {
 		randomBattleMoves: ["calmmind","judgment","refresh","recover"],
 		requiredItem: "Sky Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusghost: {
 		randomBattleMoves: ["calmmind","judgment","focusblast","flamethrower","recover","swordsdance","shadowclaw","brickbreak","willowisp","roar"],
 		requiredItem: "Spooky Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusgrass: {
 		randomBattleMoves: ["calmmind","icebeam","judgment","earthpower","recover","stealthrock","thunderwave"],
 		requiredItem: "Meadow Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusground: {
 		randomBattleMoves: ["swordsdance","earthquake","stoneedge","recover","calmmind","judgment","icebeam","stealthrock"],
 		requiredItem: "Earth Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusice: {
 		randomBattleMoves: ["calmmind","judgment","icebeam","thunderbolt","focusblast","recover"],
 		requiredItem: "Icicle Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceuspoison: {
 		randomBattleMoves: ["calmmind","judgment","sludgebomb","focusblast","fireblast","recover","willowisp","icebeam","stealthrock"],
 		requiredItem: "Toxic Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceuspsychic: {
 		randomBattleMoves: ["calmmind","psyshock","focusblast","recover","willowisp","judgment"],
 		requiredItem: "Mind Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusrock: {
 		randomBattleMoves: ["calmmind","judgment","recover","willowisp","swordsdance","stoneedge","earthquake","refresh"],
 		requiredItem: "Stone Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceussteel: {
 		randomBattleMoves: ["calmmind","judgment","recover","roar","willowisp","swordsdance","ironhead"],
 		requiredItem: "Iron Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceuswater: {
 		randomBattleMoves: ["swordsdance","waterfall","extremespeed","dragonclaw","recover","calmmind","judgment","icebeam","fireblast"],
 		requiredItem: "Splash Plate",
-		eventPokemon: [
-			{"generation":4,"level":100,"moves":["judgment","roaroftime","spacialrend","shadowforce"],"pokeball":"cherishball"},
-			{"generation":5,"level":100,"moves":["recover","hyperbeam","perishsong","judgment"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	victini: {
@@ -3267,7 +3196,7 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":50,"moves":["vcreate","fusionflare","fusionbolt","searingshot"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"moves":["vcreate","blueflare","boltstrike","glaciate"],"pokeball":"cherishball"}
 		],
-		unobtainableShiny: true,
+		eventOnly: true,
 		tier: "UU"
 	},
 	snivy: {
@@ -3974,31 +3903,27 @@ exports.BattleFormatsData = {
 	tornadus: {
 		randomBattleMoves: ["hurricane","airslash","uturn","bulkup","acrobatics","superpower","focusblast","taunt","substitute","heatwave"],
 		eventPokemon: [
+			{"generation":5,"level":5,"isHidden":true,"moves":["uproar","astonish","gust"],"pokeball":"dreamball"},
 			{"generation":5,"level":70,"gender":"M","isHidden":false,"moves":["hurricane","hammerarm","airslash","hiddenpower"],"pokeball":"cherishball"}
 		],
-		dreamWorldPokeball: 'dreamball',
+		eventOnlyHidden: true,
 		tier: "UU"
 	},
 	tornadustherian: {
 		randomBattleMoves: ["hurricane","airslash","focusblast","uturn","heatwave"],
-		eventPokemon: [
-			{"generation":5,"level":70,"gender":"M","isHidden":false,"moves":["hurricane","hammerarm","airslash","hiddenpower"],"pokeball":"cherishball"}
-		],
 		tier: "Uber"
 	},
 	thundurus: {
 		randomBattleMoves: ["thunderwave","nastyplot","thunderbolt","hiddenpowerice","focusblast","grassknot","substitute"],
 		eventPokemon: [
+			{"generation":5,"level":5,"isHidden":true,"moves":["uproar","astonish","thundershock"],"pokeball":"dreamball"},
 			{"generation":5,"level":70,"gender":"M","isHidden":false,"moves":["thunder","hammerarm","focusblast","wildcharge"],"pokeball":"cherishball"}
 		],
-		dreamWorldPokeball: 'dreamball',
+		eventOnlyHidden: true,
 		tier: "Uber"
 	},
 	thundurustherian: {
 		randomBattleMoves: ["nastyplot","agility","thunderbolt","hiddenpowerice","focusblast","grassknot"],
-		eventPokemon: [
-			{"generation":5,"level":70,"gender":"M","isHidden":false,"moves":["thunder","hammerarm","focusblast","wildcharge"],"pokeball":"cherishball"}
-		],
 		tier: "OU"
 	},
 	reshiram: {
@@ -4019,7 +3944,10 @@ exports.BattleFormatsData = {
 	},
 	landorus: {
 		randomBattleMoves: ["earthpower","focusblast","rockpolish","hiddenpowerice","psychic"],
-		dreamWorldPokeball: 'dreamball',
+		eventPokemon: [
+			{"generation":5,"level":5,"gender":"M","isHidden":true,"moves":["block","mudshot","rocktomb"],"pokeball":"dreamball"}
+		],
+		eventOnlyHidden: true,
 		tier: "Uber"
 	},
 	landorustherian: {
@@ -4044,9 +3972,12 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":15,"moves":["aquajet","leer","doublekick","bubblebeam"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"moves":["sacredsword","hydropump","aquajet","swordsdance"],"pokeball":"cherishball"}
 		],
-		dreamWorldPokeball: 'cherishball',
-		unobtainableShiny: true,
+		eventOnly: true,
 		tier: "OU"
+	},
+	keldeoresolute: {
+		eventOnly: true,
+		requiredMove: "Secret Sword"
 	},
 	meloetta: {
 		randomBattleMoves: ["relicsong","closecombat","calmmind","psychic","thunderbolt","hypervoice","uturn"],
@@ -4054,9 +3985,12 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":15,"moves":["quickattack","confusion","round"],"pokeball":"cherishball"},
 			{"generation":5,"level":50,"moves":["round","teeterdance","psychic","closecombat"],"pokeball":"cherishball"}
 		],
-		dreamWorldPokeball: 'cherishball',
-		unobtainableShiny: true,
+		eventOnly: true,
 		tier: "UU"
+	},
+	meloettapirouette: {
+		requiredMove: "Relic Song",
+		battleOnly: true
 	},
 	genesect: {
 		randomBattleMoves: ["uturn","bugbuzz","icebeam","flamethrower","thunderbolt"],
@@ -4065,8 +3999,24 @@ exports.BattleFormatsData = {
 			{"generation":5,"level":15,"moves":["technoblast","magnetbomb","solarbeam","signalbeam"],"pokeball":"cherishball"},
 			{"generation":5,"level":100,"shiny":true,"nature":"Hasty","moves":["extremespeed","technoblast","blazekick","shiftgear"],"pokeball":"cherishball"}
 		],
-		dreamWorldPokeball: 'cherishball',
+		eventOnly: true,
 		tier: "Uber"
+	},
+	genesectburn: {
+		eventOnly: true,
+		requiredItem: "Burn Drive"
+	},
+	genesectchill: {
+		eventOnly: true,
+		requiredItem: "Chill Drive"
+	},
+	genesectdouse: {
+		eventOnly: true,
+		requiredItem: "Douse Drive"
+	},
+	genesectshock: {
+		eventOnly: true,
+		requiredItem: "Shock Drive"
 	},
 	missingno: {
 		isNonstandard: true,

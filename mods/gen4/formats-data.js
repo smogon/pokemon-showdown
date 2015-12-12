@@ -154,14 +154,9 @@ exports.BattleFormatsData = {
 	},
 	pichuspikyeared: {
 		eventPokemon: [
-			{"generation":3,"level":5,"abilities":["static"],"moves":["thundershock","charm","surf"]},
-			{"generation":3,"level":5,"abilities":["static"],"moves":["thundershock","charm","wish"]},
-			{"generation":3,"level":5,"abilities":["static"],"moves":["thundershock","charm","teeterdance"]},
-			{"generation":3,"level":5,"abilities":["static"],"moves":["thundershock","charm","followme"]},
-			{"generation":4,"level":1,"abilities":["static"],"moves":["volttackle","thunderbolt","grassknot","return"]},
-			{"generation":4,"level":30,"gender":"M","nature":"Jolly","abilities":["static"],"moves":["charge","volttackle","endeavor","endure"]},
-			{"generation":4,"level":30,"gender":"M","nature":"Jolly","abilities":["static"],"moves":["volttackle","charge","endeavor","endure"]}
+			{"generation":4,"level":30,"gender":"F","nature":"Naughty","moves":["helpinghand","volttackle","swagger","painsplit"]}
 		],
+		eventOnly: true,
 		tier: "NU"
 	},
 	pikachu: {
@@ -1069,6 +1064,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"moves":["synthesis","return","hypnosis","teleport"]},
 			{"generation":4,"level":5,"moves":["pound"]}
 		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	chikorita: {
@@ -1585,7 +1581,7 @@ exports.BattleFormatsData = {
 			{"generation":3,"level":30,"abilities":["naturalcure"],"moves":["healbell","safeguard","ancientpower","futuresight"]},
 			{"generation":4,"level":50,"abilities":["naturalcure"],"moves":["leafstorm","recover","nastyplot","healingwish"]}
 		],
-		unobtainableShiny: true,
+		eventOnly: true,
 		tier: "OU"
 	},
 	treecko: {
@@ -2399,6 +2395,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":5,"abilities":["serenegrace"],"moves":["wish","confusion","rest"]},
 			{"generation":4,"level":5,"abilities":["serenegrace"],"moves":["wish","confusion","rest","dracometeor"]}
 		],
+		eventOnly: true,
 		tier: "OU"
 	},
 	deoxys: {
@@ -2414,51 +2411,22 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
 			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","leer","wrap","nightshade"]}
 		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	deoxysattack: {
 		randomBattleMoves: ["psychoboost","superpower","extremespeed","icebeam","thunderbolt","firepunch","spikes","stealthrock"],
-		eventPokemon: [
-			{"generation":3,"level":30,"abilities":["pressure"],"moves":["snatch","psychic","spikes","knockoff"]},
-			{"generation":3,"level":30,"abilities":["pressure"],"moves":["superpower","psychic","pursuit","taunt"]},
-			{"generation":3,"level":30,"abilities":["pressure"],"moves":["swift","psychic","pursuit","knockoff"]},
-			{"generation":3,"level":70,"abilities":["pressure"],"moves":["cosmicpower","recover","psychoboost","hyperbeam"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","zapcannon","irondefense","extremespeed"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","swift","doubleteam","extremespeed"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","detect","counter","mirrorcoat"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","leer","wrap","nightshade"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	deoxysdefense: {
 		randomBattleMoves: ["spikes","stealthrock","recover","taunt","toxic","agility","seismictoss","magiccoat"],
-		eventPokemon: [
-			{"generation":3,"level":30,"abilities":["pressure"],"moves":["snatch","psychic","spikes","knockoff"]},
-			{"generation":3,"level":30,"abilities":["pressure"],"moves":["superpower","psychic","pursuit","taunt"]},
-			{"generation":3,"level":30,"abilities":["pressure"],"moves":["swift","psychic","pursuit","knockoff"]},
-			{"generation":3,"level":70,"abilities":["pressure"],"moves":["cosmicpower","recover","psychoboost","hyperbeam"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","zapcannon","irondefense","extremespeed"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","swift","doubleteam","extremespeed"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","detect","counter","mirrorcoat"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","leer","wrap","nightshade"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	deoxysspeed: {
 		randomBattleMoves: ["spikes","stealthrock","superpower","icebeam","psychoboost","taunt","lightscreen","reflect","magiccoat","trick"],
-		eventPokemon: [
-			{"generation":3,"level":30,"abilities":["pressure"],"moves":["snatch","psychic","spikes","knockoff"]},
-			{"generation":3,"level":30,"abilities":["pressure"],"moves":["superpower","psychic","pursuit","taunt"]},
-			{"generation":3,"level":30,"abilities":["pressure"],"moves":["swift","psychic","pursuit","knockoff"]},
-			{"generation":3,"level":70,"abilities":["pressure"],"moves":["cosmicpower","recover","psychoboost","hyperbeam"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","zapcannon","irondefense","extremespeed"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","swift","doubleteam","extremespeed"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","detect","counter","mirrorcoat"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","meteormash","superpower","hyperbeam"]},
-			{"generation":4,"level":50,"abilities":["pressure"],"moves":["psychoboost","leer","wrap","nightshade"]}
-		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	turtwig: {
@@ -2817,6 +2785,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":50,"abilities":["hydration"],"moves":["grassknot","raindance","rest","surf"]}
 		],
+		eventOnly: true,
 		tier: "NU"
 	},
 	manaphy: {
@@ -2829,6 +2798,7 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"abilities":["hydration"],"moves":["heartswap","whirlpool","waterpulse","acidarmor"]},
 			{"generation":4,"level":50,"nature":"Impish","abilities":["hydration"],"moves":["aquaring","waterpulse","watersport","heartswap"]}
 		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	darkrai: {
@@ -2839,19 +2809,21 @@ exports.BattleFormatsData = {
 			{"generation":4,"level":50,"abilities":["baddreams"],"moves":["nightmare","hypnosis","roaroftime","spacialrend"]},
 			{"generation":4,"level":50,"abilities":["baddreams"],"moves":["doubleteam","nightmare","feintattack","hypnosis"]}
 		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	shaymin: {
 		randomBattleMoves: ["seedflare","earthpower","airslash","hiddenpowerfire","rest","substitute","leechseed"],
 		eventPokemon: [
 			{"generation":4,"level":50,"abilities":["naturalcure"],"moves":["seedflare","aromatherapy","substitute","energyball"]},
-			{"generation":4,"level":30,"abilities":["naturalcure"],"moves":["synthesis","leechseed","magicalleaf","growth"]},
 			{"generation":4,"level":30,"abilities":["naturalcure"],"moves":["growth","magicalleaf","leechseed","synthesis"]}
 		],
+		eventOnly: true,
 		tier: "OU"
 	},
 	shayminsky: {
 		randomBattleMoves: ["seedflare","earthpower","airslash","hiddenpowerice","hiddenpowerfire","substitute","leechseed"],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceus: {
@@ -2859,71 +2831,87 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":100,"abilities":["multitype"],"moves":["judgment","roaroftime","spacialrend","shadowforce"]}
 		],
-		unobtainableShiny: true,
+		eventOnly: true,
 		tier: "Uber"
 	},
 	arceusbug: {
 		randomBattleMoves: ["swordsdance","xscissor","stoneedge","recover","calmmind","judgment","icebeam","fireblast"],
+		eventOnly: true,
 		requiredItem: "Insect Plate"
 	},
 	arceusdark: {
 		randomBattleMoves: ["calmmind","judgment","recover","refresh"],
+		eventOnly: true,
 		requiredItem: "Dread Plate"
 	},
 	arceusdragon: {
 		randomBattleMoves: ["swordsdance","outrage","extremespeed","earthquake","recover"],
+		eventOnly: true,
 		requiredItem: "Draco Plate"
 	},
 	arceuselectric: {
 		randomBattleMoves: ["calmmind","judgment","recover","icebeam"],
+		eventOnly: true,
 		requiredItem: "Zap Plate"
 	},
 	arceusfighting: {
 		randomBattleMoves: ["calmmind","judgment","icebeam","darkpulse","recover","toxic"],
+		eventOnly: true,
 		requiredItem: "Fist Plate"
 	},
 	arceusfire: {
 		randomBattleMoves: ["calmmind","flamethrower","fireblast","thunderbolt","recover"],
+		eventOnly: true,
 		requiredItem: "Flame Plate"
 	},
 	arceusflying: {
 		randomBattleMoves: ["calmmind","judgment","refresh","recover"],
+		eventOnly: true,
 		requiredItem: "Sky Plate"
 	},
 	arceusghost: {
 		randomBattleMoves: ["calmmind","judgment","focusblast","flamethrower","recover","swordsdance","shadowclaw","brickbreak","willowisp","roar"],
+		eventOnly: true,
 		requiredItem: "Spooky Plate"
 	},
 	arceusgrass: {
 		randomBattleMoves: ["calmmind","icebeam","judgment","earthpower","recover","stealthrock","thunderwave"],
+		eventOnly: true,
 		requiredItem: "Meadow Plate"
 	},
 	arceusground: {
 		randomBattleMoves: ["swordsdance","earthquake","stoneedge","recover","calmmind","judgment","icebeam","stealthrock"],
+		eventOnly: true,
 		requiredItem: "Earth Plate"
 	},
 	arceusice: {
 		randomBattleMoves: ["calmmind","judgment","icebeam","thunderbolt","focusblast","recover"],
+		eventOnly: true,
 		requiredItem: "Icicle Plate"
 	},
 	arceuspoison: {
 		randomBattleMoves: ["calmmind","judgment","sludgebomb","focusblast","fireblast","recover","willowisp","icebeam","stealthrock"],
+		eventOnly: true,
 		requiredItem: "Toxic Plate"
 	},
 	arceuspsychic: {
 		randomBattleMoves: ["calmmind","psyshock","focusblast","recover","willowisp","judgment"],
+		eventOnly: true,
 		requiredItem: "Mind Plate"
 	},
 	arceusrock: {
 		randomBattleMoves: ["calmmind","judgment","recover","willowisp","swordsdance","stoneedge","earthquake","refresh"],
+		eventOnly: true,
 		requiredItem: "Stone Plate"
 	},
 	arceussteel: {
 		randomBattleMoves: ["calmmind","judgment","recover","roar","willowisp","swordsdance","ironhead"],
+		eventOnly: true,
 		requiredItem: "Iron Plate"
 	},
 	arceuswater: {
 		randomBattleMoves: ["swordsdance","waterfall","extremespeed","dragonclaw","recover","calmmind","judgment","icebeam","fireblast"],
+		eventOnly: true,
 		requiredItem: "Splash Plate"
 	},
 	missingno: {

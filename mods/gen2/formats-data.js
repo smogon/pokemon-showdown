@@ -802,6 +802,7 @@ exports.BattleFormatsData = {
 			{"generation":1,"level":5,"moves":["pound"]},
 			{"generation":2,"level":5,"moves":["pound"]}
 		],
+		eventOnly: true,
 		tier: "Uber"
 	},
 	chikorita: {
@@ -1193,7 +1194,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":2,"level":5,"moves":["leechseed","confusion","healbell","recover"]}
 		],
-		unobtainableShiny: true,
+		eventOnly: true,
 		tier: "Uber"
 	}
 };
