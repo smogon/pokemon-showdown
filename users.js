@@ -346,7 +346,7 @@ Users.socketReceive = function (worker, workerid, socketid, message) {
 
 	let roomid = message.substr(0, pipeIndex);
 	let lines = message.substr(pipeIndex + 1);
-	let room = Rooms.get(roomid);
+	let room = Rooms(roomid);
 	if (!room) room = Rooms.lobby || Rooms.global;
 	let user = connection.user;
 	if (!user) return;
@@ -751,7 +751,7 @@ User = (function () {
 	 */
 	User.prototype.rename = function (name, token, newlyRegistered, connection) {
 		for (let i in this.roomCount) {
-			let room = Rooms.get(i);
+			let room = Rooms(i);
 			if (room && room.rated && (this.userid === room.rated.p1 || this.userid === room.rated.p2)) {
 				this.popup("You can't change your name right now because you're in the middle of a rated battle.");
 				return false;
@@ -1131,7 +1131,7 @@ User = (function () {
 
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 		if (!this.isStaff) {
-			let staffRoom = Rooms.get('staff');
+			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
 		}
 		if (this.confirmed) {
@@ -1154,7 +1154,7 @@ User = (function () {
 		this.group = group.charAt(0);
 		this.isStaff = (this.group in {'%':1, '@':1, '&':1, '~':1});
 		if (!this.isStaff) {
-			let staffRoom = Rooms.get('staff');
+			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
 		}
 		Rooms.global.checkAutojoin(this);
@@ -1386,7 +1386,7 @@ User = (function () {
 		return true;
 	};
 	User.prototype.joinRoom = function (room, connection) {
-		room = Rooms.get(room);
+		room = Rooms(room);
 		if (!room) return false;
 		if (!this.can('bypassall')) {
 			// check if user has permission to join
@@ -1418,7 +1418,7 @@ User = (function () {
 		return true;
 	};
 	User.prototype.leaveRoom = function (room, connection, force) {
-		room = Rooms.get(room);
+		room = Rooms(room);
 		if (room.id === 'global' && !force) {
 			// you can't leave the global room except while disconnecting
 			return false;

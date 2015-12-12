@@ -728,7 +728,7 @@ let GlobalRoom = (function () {
 	GlobalRoom.prototype.checkAutojoin = function (user, connection) {
 		if (!user.named) return;
 		for (let i = 0; i < this.staffAutojoin.length; i++) {
-			let room = Rooms.get(this.staffAutojoin[i]);
+			let room = Rooms(this.staffAutojoin[i]);
 			if (!room) {
 				this.staffAutojoin.splice(i, 1);
 				i--;

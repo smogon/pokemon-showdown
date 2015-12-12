@@ -19,20 +19,20 @@ const Monitor = module.exports = { // eslint-disable-line no-unused-vars
 
 	log: function (text) {
 		this.notice(text);
-		if (Rooms.get('staff')) {
-			Rooms.get('staff').add('|c|~|' + text).update();
+		if (Rooms('staff')) {
+			Rooms('staff').add('|c|~|' + text).update();
 		}
 	},
 	adminlog: function (text) {
 		this.notice(text);
-		if (Rooms.get('upperstaff')) {
-			Rooms.get('upperstaff').add('|c|~|' + text).update();
+		if (Rooms('upperstaff')) {
+			Rooms('upperstaff').add('|c|~|' + text).update();
 		}
 	},
 	logHTML: function (text) {
 		this.notice(text);
-		if (Rooms.get('staff')) {
-			Rooms.get('staff').add('|html|' + text).update();
+		if (Rooms('staff')) {
+			Rooms('staff').add('|html|' + text).update();
 		}
 	},
 	debug: function (text) {
