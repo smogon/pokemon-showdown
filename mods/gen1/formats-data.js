@@ -678,6 +678,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":1,"level":5,"moves":["pound"]}
 		],
+		eventOnly: true,
 		tier: "Uber"
 	}
 };
