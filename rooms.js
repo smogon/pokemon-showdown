@@ -997,7 +997,7 @@ let BattleRoom = (function () {
 	BattleRoom.prototype.getLogForUser = function (user) {
 		if (this.game.ended) return this.getLog(3);
 		if (!(user in this.game.players)) return this.getLog(0);
-		return this.getLog(this.game.players[user].slotNum);
+		return this.getLog(this.game.players[user].slotNum + 1);
 	};
 	BattleRoom.prototype.update = function (excludeUser) {
 		if (this.log.length <= this.lastUpdate) return;
