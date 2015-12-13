@@ -112,7 +112,7 @@ exports.commands = {
 			buf += '<br />Private rooms: ' + privaterooms;
 		}
 
-		if (user.can('alts', targetUser) || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
+		if (user.can('alts', targetUser) || (room.isPrivate !== true && user.can('mute', targetUser, room) && room.users.has(targetUser.userid))) {
 			let bannedFrom = "";
 			for (let i = 0; i < Rooms.global.chatRooms.length; i++) {
 				let thisRoom = Rooms.global.chatRooms[i];

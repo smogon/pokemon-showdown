@@ -765,7 +765,7 @@ exports.commands = {
 
 		if (nextGroup in Config.groups && currentGroup in Config.groups && Config.groups[nextGroup].rank < Config.groups[currentGroup].rank) {
 			this.privateModCommand("(" + name + " was demoted to Room " + groupName + " by " + user.name + ".)");
-			if (targetUser && Rooms.rooms[room.id].users[targetUser.userid]) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
+			if (targetUser && Rooms.rooms[room.id].users.has(targetUser.userid)) targetUser.popup("You were demoted to Room " + groupName + " by " + user.name + ".");
 		} else if (nextGroup === '#') {
 			this.addModCommand("" + name + " was promoted to " + groupName + " by " + user.name + ".");
 		} else {
@@ -884,7 +884,7 @@ exports.commands = {
 			return this.errorReply("Room bans are not meant to be used in room " + room.id + ".");
 		}
 		if (room.bannedUsers[userid] && room.bannedIps[targetUser.latestIp]) return this.sendReply("User " + targetUser.name + " is already banned from room " + room.id + ".");
-		if (targetUser in room.users) {
+		if (room.users.has(targetUser.userid)) {
 			targetUser.popup(
 				"|html|<p>" + Tools.escapeHTML(user.name) + " has banned you from the room " + room.id + ".</p>" + (target ? "<p>Reason: " + Tools.escapeHTML(target) + "</p>" : "") +
 				"<p>To appeal the ban, PM the staff member that banned you" + (room.auth ? " or a room owner. </p><p><button name=\"send\" value=\"/roomauth " + room.id + "\">List Room Staff</button></p>" : ".</p>")
@@ -976,7 +976,7 @@ exports.commands = {
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.errorReply("User '" + this.targetUsername + "' does not exist.");
-		if (!(targetUser in room.users)) {
+		if (!room.users.has(targetUser.userid)) {
 			return this.errorReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
 		if (target.length > MAX_REASON_LENGTH) {
@@ -1011,10 +1011,10 @@ exports.commands = {
 		if (targetRoom.isPrivate || targetRoom.isPersonal) {
 			return this.parse('/msg ' + this.targetUsername + ', /invite ' + targetRoom.id);
 		}
-		if (Rooms.rooms[targetRoom.id].users[targetUser.userid]) {
+		if (Rooms.rooms[targetRoom.id].users.has(targetUser.userid)) {
 			return this.errorReply("User " + targetUser.name + " is already in the room " + targetRoom.title + "!");
 		}
-		if (!Rooms.rooms[room.id].users[targetUser.userid]) {
+		if (!Rooms.rooms[room.id].users.has(targetUser.userid)) {
 			return this.errorReply("User " + this.targetUsername + " is not in the room " + room.id + ".");
 		}
 		if (targetUser.joinRoom(targetRoom.id) === false) return this.errorReply("User " + targetUser.name + " could not be joined to room " + targetRoom.title + ". They could be banned from the room.");
@@ -1046,7 +1046,7 @@ exports.commands = {
 			return this.addModCommand("" + targetUser.name + " would be muted by " + user.name + problem + "." + (target ? " (" + target + ")" : ""));
 		}
 
-		if (targetUser in room.users) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + muteDuration.duration() + ". " + target);
+		if (room.users.has(targetUser.userid)) targetUser.popup("|modal|" + user.name + " has muted you in " + room.id + " for " + muteDuration.duration() + ". " + target);
 		this.addModCommand("" + targetUser.name + " was muted by " + user.name + " for " + muteDuration.duration() + "." + (target ? " (" + target + ")" : ""));
 		if (targetUser.autoconfirmed && targetUser.autoconfirmed !== targetUser.userid) this.privateModCommand("(" + targetUser.name + "'s ac account: " + targetUser.autoconfirmed + ")");
 		let userid = this.getLastIdOf(targetUser);
@@ -1284,7 +1284,7 @@ exports.commands = {
 		for (let userid in room.auth) {
 			if (room.auth[userid] === '+') {
 				delete room.auth[userid];
-				if (userid in room.users) room.users[userid].updateIdentity(room.id);
+				if (room.users.has(userid)) room.users.get(userid).updateIdentity(room.id);
 				count++;
 			}
 		}
