@@ -2650,9 +2650,9 @@ exports.commands = {
 
 		let image = targets[0].trim();
 		if (!image) return this.errorReply('No image URL was provided!');
-		if (!/^https?:\/\//.test(image)) image = '//' + image;
+		image = this.canEmbedURI(image);
 
-		if (Config.ssl && image.startsWith('http://')) return this.errorReply("Images must be served from a site with HTTPS.");
+		if (!image) return false;
 
 		let width = targets[1].trim();
 		if (!width) return this.errorReply('No width for the image was provided!');
@@ -2678,7 +2678,8 @@ exports.commands = {
 
 	htmlbox: function (target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help htmlbox');
-		if (!this.canHTML(target)) return;
+		target = this.canHTML(target);
+		if (!target) return;
 
 		if (user.userid === 'github') {
 			if (!this.can('announce', null, room)) return;
