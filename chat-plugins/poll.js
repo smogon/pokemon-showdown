@@ -106,7 +106,7 @@ class Poll {
 		}
 	}
 
-	display(user, broadcast) {
+	display() {
 		let votes = this.generateVotes();
 
 		let results = [];
@@ -115,16 +115,8 @@ class Poll {
 			results.push(this.generateResults(false, i));
 		}
 
-		let target = {};
-
-		if (broadcast) {
-			target = this.room.users;
-		} else {
-			target[0] = user;
-		}
-
-		for (let i in target) {
-			let thisUser = target[i];
+		for (let i in this.room.users) {
+			let thisUser = this.room.users[i];
 			if (thisUser.userid in this.voters) {
 				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + results[this.voters[thisUser.userid]]);
 			} else if (thisUser.latestIp in this.voterIps) {
@@ -133,6 +125,21 @@ class Poll {
 				thisUser.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + votes);
 			}
 		}
+	}
+
+	displayTo(user, connection) {
+		if (!connection) connection = user;
+		if (user.userid in this.voters) {
+			connection.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + this.generateResults(false, this.voters[user.userid]));
+		} else if (user.latestIp in this.voterIps) {
+			connection.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + this.generateResults(false, this.voterIps[user.latestIp]));
+		} else {
+			connection.sendTo(this.room, '|uhtml|poll' + this.room.pollNumber + '|' + this.generateVotes());
+		}
+	}
+
+	onConnect(user, connection) {
+		this.displayTo(user, connection);
 	}
 
 	end() {
@@ -167,7 +174,7 @@ exports.commands = {
 			}
 
 			room.poll = new Poll(room, params[0], options);
-			room.poll.display(user, true);
+			room.poll.display();
 
 			this.logEntry("" + user.name + " used " + message);
 			return this.privateModCommand("(A poll was started by " + user.name + ".)");
@@ -247,12 +254,16 @@ exports.commands = {
 		endhelp: ["/poll end - Ends a poll and displays the results. Requires: % @ # & ~"],
 
 		show: 'display',
-		display: function (target, room, user) {
+		display: function (target, room, user, connection) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 			if (!this.canBroadcast()) return;
 			room.update();
 
-			room.poll.display(user, this.broadcasting);
+			if (this.broadcasting) {
+				room.poll.display();
+			} else {
+				room.poll.displayTo(user, connection);
+			}
 		},
 		displayhelp: ["/poll display - Displays the poll"],
 
