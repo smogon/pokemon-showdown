@@ -790,7 +790,7 @@ exports.commands = {
 		let rankLists = {};
 		for (let u in targetRoom.auth) {
 			if (!rankLists[targetRoom.auth[u]]) rankLists[targetRoom.auth[u]] = [];
-			rankLists[targetRoom.auth[u]].push(u);
+			rankLists[targetRoom.auth[u]].push(u in targetRoom.users ? "**" + u + "**" : u);
 		}
 
 		let buffer = [];
