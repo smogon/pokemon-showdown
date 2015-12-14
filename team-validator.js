@@ -343,12 +343,12 @@ Validator = (function () {
 		setHas[check] = true;
 		if (banlistTable[check]) {
 			clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
-			problems.push(set.species + ' is banned' + clause + '.');
+			return [set.species + " is banned" + clause + "."];
 		} else if (!tools.data.FormatsData[check] || !tools.data.FormatsData[check].tier) {
 			check = toId(template.baseSpecies);
 			if (banlistTable[check]) {
 				clause = typeof banlistTable[check] === 'string' ? " by " + banlistTable[check] : '';
-				problems.push(template.baseSpecies + ' is banned' + clause + '.');
+				return [template.baseSpecies + " is banned" + clause + "."];
 			}
 		}
 
@@ -506,7 +506,7 @@ Validator = (function () {
 					legal = true;
 					if (eventData.gender) set.gender = eventData.gender;
 				}
-				if (!legal) problems.push(template.species + " is only obtainable via event - it needs to match one of its events.");
+				if (!legal) problems.push(template.species + (template.eventOnlyHidden ? "'s hidden ability" : "") + " is only obtainable via event - it needs to match one of its events.");
 			}
 			if (isHidden && lsetData.sourcesBefore) {
 				if (!lsetData.sources && lsetData.sourcesBefore < 5) {
