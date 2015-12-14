@@ -62,6 +62,7 @@ describe('Pressure', function () {
 	});
 
 	it('should deduct PP for each Pressure Pokemon targetted', function () {
+		this.timeout(3000);
 		battle = BattleEngine.Battle.construct('battle-pressure-multi', 'triplescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
@@ -81,6 +82,7 @@ describe('Pressure', function () {
 	});
 
 	it('should deduct PP for each opposing Pressure Pokemon when Snatch of Imprison are used', function () {
+		this.timeout(3000);
 		battle = BattleEngine.Battle.construct('battle-pressure-snatch', 'triplescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
