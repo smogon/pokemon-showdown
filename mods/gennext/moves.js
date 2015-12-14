@@ -168,7 +168,7 @@ exports.BattleMovedex = {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
 				if (move.recoil) {
-					this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+					this.damage(this.clampIntRange(Math.round(damage * move.recoil[0] / move.recoil[1]), 1), source, target, 'recoil');
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
