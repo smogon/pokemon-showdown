@@ -346,6 +346,7 @@ let Context = exports.Context = (function () {
 			'blogspot.com': 1,
 			'imageshack.us': 1,
 			'deviantart.net': 1,
+			'd.pr': 1,
 			'pokefans.net': 1
 		};
 		if (domain in approvedDomains) {
