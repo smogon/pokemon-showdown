@@ -1642,14 +1642,12 @@ exports.BattleScripts = {
 				rejectAbility = !counter['inaccurate'];
 			} else if (ability === 'Defiant' || ability === 'Moxie') {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
-			} else if (ability === 'Gluttony') {
+			} else if (ability === 'Gluttony' || ability === 'Moody') {
 				rejectAbility = true;
 			} else if (ability === 'Limber') {
 				rejectAbility = template.types.indexOf('Electric') >= 0;
 			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
-			} else if (ability === 'Moody') {
-				rejectAbility = template.id !== 'bidoof';
 			} else if (ability === 'Overgrow') {
 				rejectAbility = !counter['Grass'];
 			} else if (ability === 'Poison Heal') {
@@ -1866,10 +1864,10 @@ exports.BattleScripts = {
 			item = 'Air Balloon';
 		} else if (hasMove['outrage'] && (counter.setupType || ability === 'Multiscale')) {
 			item = 'Lum Berry';
-		} else if (ability === 'Moody' || hasMove['clearsmog'] || hasMove['detect'] || hasMove['protect'] || hasMove['sleeptalk']) {
+		} else if (ability === 'Slow Start' || hasMove['clearsmog'] || hasMove['detect'] || hasMove['protect'] || hasMove['sleeptalk']) {
 			item = 'Leftovers';
 		} else if (hasMove['substitute']) {
-			item = !counter['drain'] ? 'Leftovers' : 'Life Orb';
+			item = !counter['drain'] || counter.damagingMoves.length < 2 ? 'Leftovers' : 'Life Orb';
 		} else if (hasMove['lightscreen'] || hasMove['reflect']) {
 			item = 'Light Clay';
 		} else if (ability === 'Iron Barbs' || ability === 'Rough Skin') {
@@ -1974,6 +1972,12 @@ exports.BattleScripts = {
 					hp = Math.floor(Math.floor(2 * template.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 				}
 			}
+		}
+
+		// Minimize confusion damage
+		if (!counter['Physical'] && !hasMove['copycat'] && !hasMove['transform']) {
+			evs.atk = 0;
+			ivs.atk = hasMove['hiddenpower'] ? ivs.atk - 30 : 0;
 		}
 
 		return {
