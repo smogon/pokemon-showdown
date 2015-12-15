@@ -33,6 +33,7 @@ class Tournament {
 		this.isRated = isRated;
 		this.scouting = true;
 		this.modjoin = false;
+		this.autostartcap = false;
 		if (Config.tournamentDefaultPlayerCap && this.playerCap > Config.tournamentDefaultPlayerCap) {
 			Monitor.log('[TourMonitor] Room ' + room.id + ' starting a tour over default cap (' + this.playerCap + ')');
 		}
@@ -240,7 +241,13 @@ class Tournament {
 		user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
 		this.isBracketInvalidated = true;
 		this.update();
-		if (this.playerCap === (users.length + 1)) this.room.add("The tournament is now full.");
+		if (this.playerCap === (users.length + 1)) {
+			if (this.autostartcap === true) {
+				this.startTournament(output);
+			} else {
+				this.room.add("The tournament is now full.");
+			}
+		}
 	}
 	removeUser(user, output) {
 		let error = this.generator.removeUser(user);
@@ -870,12 +877,26 @@ let commands = {
 		autostart: 'setautostart',
 		setautostart: function (tournament, user, params, cmd) {
 			if (params.length < 1) {
-				return this.sendReply("Usage: " + cmd + " <minutes|off>");
+				return this.sendReply("Usage: " + cmd + " <on|minutes|off>");
 			}
-			if (params[0].toLowerCase() === 'infinity' || params[0] === '0') params[0] = 'off';
-			let timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0];
-			if (tournament.setAutoStartTimeout(timeout * 60 * 1000, this)) {
-				this.privateModCommand("(The tournament auto start timeout was set to " + params[0] + " by " + user.name + ")");
+			let option = params[0].toLowerCase();
+			if (option === 'on' || option === 'true' || option === 'start') {
+				if (tournament.isTournamentStarted) {
+					return this.sendReply("The tournament has already started.");
+				} else {
+					tournament.autostartcap = true;
+					this.room.add("The tournament will start when the player cap is reached.");
+					this.privateModCommand("(The tournament was set to autostart when the player cap is reached by " + user.name + ")");
+				}
+			} else {
+				if (option === '0' || option === 'infinity' || option === 'off' || option === 'false' || option === 'stop' || option === 'remove') {
+					params[0] = 'off';
+					tournament.autostartcap = false;
+				}
+				let timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0];
+				if (tournament.setAutoStartTimeout(timeout * 60 * 1000, this)) {
+					this.privateModCommand("(The tournament auto start timeout was set to " + params[0] + " by " + user.name + ")");
+				}
 			}
 		},
 		autodq: 'setautodq',
