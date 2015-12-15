@@ -2836,6 +2836,8 @@ exports.BattleMovedex = {
 					basePower: 140,
 					category: "Special",
 					flags: {},
+					effectType: 'Move',
+					isFutureMove: true,
 					type: 'Steel'
 				}
 			};
@@ -5018,6 +5020,8 @@ exports.BattleMovedex = {
 					category: "Special",
 					flags: {},
 					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
 					type: 'Psychic'
 				}
 			};
