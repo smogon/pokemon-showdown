@@ -15097,7 +15097,7 @@ exports.BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
-		desc: "Has a 10% chance to confuse the target.",
+		desc: "Has a 20% chance to confuse the target.",
 		shortDesc: "20% chance to confuse the target.",
 		id: "waterpulse",
 		name: "Water Pulse",
