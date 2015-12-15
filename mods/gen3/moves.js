@@ -223,6 +223,8 @@ exports.BattleMovedex = {
 					damage: damage,
 					category: "Physical",
 					flags: {},
+					effectType: 'Move',
+					isFutureMove: true,
 					type: '???'
 				}
 			};
@@ -400,6 +402,8 @@ exports.BattleMovedex = {
 					damage: damage,
 					category: "Special",
 					flags: {},
+					effectType: 'Move',
+					isFutureMove: true,
 					type: '???'
 				}
 			};
