@@ -2908,6 +2908,9 @@ exports.BattleFormatsData = {
 		randomBattleMoves: ["raindance","weatherball","thunder","hurricane"],
 		battleOnly: true
 	},
+	castformsnowy: {
+		battleOnly: true
+	},
 	kecleon: {
 		randomBattleMoves: ["fakeout","knockoff","drainpunch","suckerpunch","shadowsneak","stealthrock","recover"],
 		randomDoubleBattleMoves: ["knockoff","fakeout","trickroom","recover","drainpunch","suckerpunch","shadowsneak","protect"],
