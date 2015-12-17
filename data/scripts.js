@@ -1292,6 +1292,7 @@ exports.BattleScripts = {
 					break;
 				case 'voltswitch':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['batonpass'] || hasMove['magnetrise'] || hasMove['uturn']) rejected = true;
+					if (hasMove['nuzzle'] && hasMove['thunderbolt']) rejected = true;
 					break;
 
 				// Bit redundant to have both
@@ -1528,7 +1529,7 @@ exports.BattleScripts = {
 				}
 
 				// Pokemon should have moves that benefit their Ability/Type/Weather, as well as moves required by its forme
-				if (((hasAbility['Adaptability'] && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
+				if (((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
 					((hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) && !counter['Normal']) ||
 					(hasAbility['Bad Dreams'] && movePool.indexOf('darkvoid') >= 0) ||
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
@@ -1537,6 +1538,7 @@ exports.BattleScripts = {
 					(hasType['Dark'] && hasMove['suckerpunch'] && counter.stab < template.types.length) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Electric'] && !counter['Electric']) ||
+					(hasType['Fighting'] && !counter['Fighting'] && counter.setupType) ||
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Ground'] && !counter['Ground'] && (counter.setupType || counter['speedsetup'])) ||
 					(hasType['Ice'] && !counter['Ice']) ||
@@ -1644,10 +1646,10 @@ exports.BattleScripts = {
 				rejectAbility = !counter['Physical'] && !hasMove['batonpass'];
 			} else if (ability === 'Gluttony' || ability === 'Moody') {
 				rejectAbility = true;
-			} else if (ability === 'Limber') {
-				rejectAbility = template.types.indexOf('Electric') >= 0;
 			} else if (ability === 'Lightning Rod') {
 				rejectAbility = template.types.indexOf('Ground') >= 0;
+			} else if (ability === 'Limber') {
+				rejectAbility = template.types.indexOf('Electric') >= 0;
 			} else if (ability === 'Overgrow') {
 				rejectAbility = !counter['Grass'];
 			} else if (ability === 'Poison Heal') {
@@ -1718,9 +1720,6 @@ exports.BattleScripts = {
 				}
 			} else if (template.baseSpecies === 'Basculin') {
 				ability = 'Adaptability';
-			} else if (template.id === 'combee') {
-				// Combee always gets Hustle but its only physical move is Endeavor, which loses accuracy
-				ability = 'Honey Gather';
 			} else if (template.id === 'lilligant' && hasMove['petaldance']) {
 				ability = 'Own Tempo';
 			} else if (template.id === 'lopunny' && hasMove['switcheroo'] && this.random(3)) {
@@ -1819,8 +1818,6 @@ exports.BattleScripts = {
 			item = (hasMove['raindance'] && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
 		} else if (hasMove['raindance']) {
 			item = 'Damp Rock';
-		} else if (hasMove['sandstorm']) {
-			item = 'Smooth Rock';
 		} else if (hasMove['sunnyday']) {
 			item = 'Heat Rock';
 		} else if (hasMove['lightscreen'] && hasMove['reflect']) {
@@ -2112,7 +2109,7 @@ exports.BattleScripts = {
 
 			let set = this.randomSet(template, pokemon.length, teamDetails);
 
-			// Illusion shouldn't be on the last pokemon of the team
+			// Illusion shouldn't be the last Pokemon of the team
 			if (set.ability === 'Illusion' && pokemonLeft > 4) continue;
 
 			// Limit 1 of any type combination
