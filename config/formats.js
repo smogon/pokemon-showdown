@@ -820,6 +820,16 @@ exports.Formats = [
 		banlist: ['Dark Void', 'Sky Drop']
 	},
 	{
+		name: "[Gen 5] Random Battle",
+		section: "BW2 Singles",
+
+		mod: 'gen5',
+		searchShow: false,
+		challengeShow: false,
+		team: 'random',
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod']
+	},
+	{
 		name: "[Gen 5] Custom Game",
 		section: "BW2 Singles",
 
