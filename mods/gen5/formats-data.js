@@ -529,7 +529,7 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	slowpoke: {
-		randomBattleMoves: ["scald","aquatail","zenheadbutt","thunderwave","toxic","slackoff","trickroom","trick"],
+		randomBattleMoves: ["scald","aquatail","zenheadbutt","thunderwave","toxic","slackoff","trickroom"],
 		eventPokemon: [
 			{"generation":3,"level":31,"abilities":["oblivious"],"moves":["watergun","confusion","disable","headbutt"]},
 			{"generation":3,"level":10,"gender":"M","moves":["curse","yawn","tackle","growl"]},
@@ -618,7 +618,7 @@ exports.BattleFormatsData = {
 		tier: "OU"
 	},
 	gastly: {
-		randomBattleMoves: ["shadowball","sludgebomb","hiddenpowerfighting","thunderbolt","substitute","disable","painsplit","hypnosis","gigadrain","trick"],
+		randomBattleMoves: ["shadowball","sludgebomb","hiddenpowerfighting","thunderbolt","substitute","disable","painsplit","hypnosis","gigadrain"],
 		tier: "LC"
 	},
 	haunter: {
@@ -1037,14 +1037,14 @@ exports.BattleFormatsData = {
 		tier: "NU"
 	},
 	porygon: {
-		randomBattleMoves: ["triattack","icebeam","recover","toxic","thunderwave","discharge","trick"],
+		randomBattleMoves: ["triattack","icebeam","recover","toxic","thunderwave","discharge"],
 		eventPokemon: [
 			{"generation":5,"level":10,"isHidden":true,"moves":["tackle","conversion","sharpen","psybeam"]}
 		],
 		tier: "LC"
 	},
 	porygon2: {
-		randomBattleMoves: ["triattack","icebeam","recover","toxic","thunderwave","discharge","trick"],
+		randomBattleMoves: ["triattack","icebeam","recover","toxic","thunderwave","discharge"],
 		tier: "UU"
 	},
 	porygonz: {
@@ -2326,13 +2326,14 @@ exports.BattleFormatsData = {
 		tier: "UU"
 	},
 	castform: {
-		randomBattleMoves: ["sunnyday","raindance","fireblast","hydropump","thunder","icebeam","solarbeam"],
 		tier: "NU"
 	},
 	castformsunny: {
+		randomBattleMoves: ["sunnyday","weatherball","solarbeam","icebeam"],
 		battleOnly: true
 	},
 	castformrainy: {
+		randomBattleMoves: ["raindance","weatherball","thunder","hurricane"],
 		battleOnly: true
 	},
 	castformsnowy: {
@@ -4039,82 +4040,66 @@ exports.BattleFormatsData = {
 		tier: ""
 	},
 	tomohawk: {
-		randomBattleMoves: ["aurasphere","roost","stealthrock","rapidspin","hurricane","airslash","taunt","substitute","toxic"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	necturna: {
-		randomBattleMoves: ["powerwhip","hornleech","sacredfire","boltstrike","vcreate","extremespeed","closecombat","shellsmash","spore","recover","batonpass"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	mollux: {
-		randomBattleMoves: ["fireblast","thunderbolt","sludgebomb","thunderwave","willowisp","recover","rapidspin","trick","stealthrock","toxicspikes"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	aurumoth: {
-		randomBattleMoves: ["dragondance","quiverdance","closecombat","tailglow","wish","bugbuzz","hydropump","megahorn","psychic","overheat","blizzard","thunder","focusblast"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	malaconda: {
-		randomBattleMoves: ["powerwhip","glare","crunch","toxic","suckerpunch","rest","substitute","uturn","synthesis","rapidspin"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	syclant: {
-		randomBattleMoves: ["bugbuzz","icebeam","blizzard","earthpower","spikes","superpower","tailglow","uturn","focusblast"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	revenankh: {
-		randomBattleMoves: ["bulkup","shadowsneak","drainpunch","moonlight","powerwhip","icepunch"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	pyroak: {
-		randomBattleMoves: ["leechseed","lavaplume","substitute","protect"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	fidgit: {
-		randomBattleMoves: ["spikes","stealthrock","toxicspikes","wish","rapidspin","encore","uturn","sludgebomb"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	stratagem: {
-		randomBattleMoves: ["paleowave","earthpower","fireblast","gigadrain","calmmind"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	arghonaut: {
-		randomBattleMoves: ["recover","bulkup","waterfall","crosschop","stoneedge","thunderpunch"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	kitsunoh: {
-		randomBattleMoves: ["shadowstrike","superpower","meteormash","uturn","icepunch","thunderpunch","trick","willowisp"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	cyclohm: {
-		randomBattleMoves: ["slackoff","dracometeor","dragonpulse","fireblast","thunderbolt","hydropump"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	colossoil: {
-		randomBattleMoves: ["earthquake","crunch","suckerpunch","uturn","rapidspin","encore","pursuit"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	krilowatt: {
-		randomBattleMoves: ["surf","thunderbolt","icebeam","counter","mirrorcoat","earthquake"],
 		isNonstandard: true,
 		tier: "CAP"
 	},
 	voodoom: {
-		randomBattleMoves: ["aurasphere","darkpulse","taunt","painsplit"],
 		isNonstandard: true,
 		tier: "CAP"
 	}
