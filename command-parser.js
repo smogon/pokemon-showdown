@@ -386,7 +386,8 @@ let Context = exports.Context = (function () {
 			}
 		}
 		if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock') && html.match(/<button /)) {
-			this.errorReply('You do not have permission to use buttons in HTML.');
+			this.errorReply('You do not have permission to use scripted buttons in HTML.');
+			this.errorReply('If you just want to link to a room, you can do this: <a href="/roomid"><button>button contents</button></a>');
 			return false;
 		}
 		if (/>here.?</i.test(html) || /click here/i.test(html)) {
