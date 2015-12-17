@@ -620,7 +620,7 @@ exports.BattleScripts = {
 		let pokemonLeft = 0;
 		let pokemon = [];
 
-		let excludedTiers = {'LC':1, 'LC Uber':1, 'NFE':1};
+		let excludedTiers = {'LC':1, 'LC Uber':1, 'NFE':1, 'CAP':1};
 
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
