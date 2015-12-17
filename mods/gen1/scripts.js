@@ -1081,7 +1081,7 @@ exports.BattleScripts = {
 				if (uberCount >= 1 && !hasShitmon) continue;
 				break;
 			default:
-				if (uuTiers[tier] && (hasShitmon || (nuCount > 2 && this.random(2) >= 1))) continue;
+				if (uuTiers[tier] && pokemonPool.length > 1 && (hasShitmon || (nuCount > 2 && this.random(2) >= 1))) continue;
 			}
 
 			let skip = false;
@@ -1090,7 +1090,7 @@ exports.BattleScripts = {
 			// The second of a same type has halved chance of being added.
 			let types = template.types;
 			for (let t = 0; t < types.length; t++) {
-				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(2))) {
+				if (typeCount[types[t]] > 1 || (typeCount[types[t]] === 1 && this.random(2) && pokemonPool.length > 1)) {
 					skip = true;
 					break;
 				}
