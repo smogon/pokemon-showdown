@@ -121,7 +121,7 @@ function sliceCategory(category) {
 
 let trivia = {};
 
-let triviaRoom = Rooms.get('trivia');
+let triviaRoom = Rooms('trivia');
 if (triviaRoom) {
 	if (triviaRoom.plugin) {
 		triviaData = triviaRoom.plugin.data;
@@ -132,7 +132,7 @@ if (triviaRoom) {
 			write: writeTriviaData,
 			trivia: trivia
 		};
-		let questionWorkshop = Rooms.get('questionworkshop');
+		let questionWorkshop = Rooms('questionworkshop');
 		if (questionWorkshop) questionWorkshop.plugin = triviaRoom.plugin;
 	}
 }
@@ -162,7 +162,7 @@ let Trivia = (function () {
 
 		let latestIp = user.latestIp;
 		for (let participantid, participantsIterator = this.participants.keys(); !!(participantid = participantsIterator.next().value);) { // replace with for-of loop once available
-			let participant = Users.get(participantid);
+			let participant = Users(participantid);
 			if (participant && participant.ips[latestIp]) return output.sendReply("You have already signed up for this trivia game.");
 		}
 
@@ -186,7 +186,16 @@ let Trivia = (function () {
 		if (!userid) return output.sendReply("User '" + target + "' does not exist.");
 		if (!this.participants.has(userid)) return output.sendReply("User '" + target + "' is not a participant in this trivia game.");
 
-		this.participants.delete(userid);
+		let responderIndex = this.participants.delete(userid).responderIndex;
+		if (this.phase === 'question' && responderIndex >= 0) {
+			this.responderIndex--;
+			this.participants.forEach(function (scoreData) {
+				if (scoreData.responderIndex > responderIndex) {
+					scoreData.responderIndex--;
+				}
+			});
+		}
+
 		output.send("User '" + target + "' has been disqualified from the trivia game by " + user + ".");
 	};
 
@@ -265,7 +274,7 @@ let Trivia = (function () {
 			scoreData.correctAnswers++;
 			if (this.mode === 'timer') {
 				let points = 5 - ~~((Date.now() - this.askedAt) / (QUESTION_PERIOD / 5));
-				if ([1, 2, 3, 4, 5].indexOf(points) >= 0) {
+				if (points > 0 && points <= 5) {
 					scoreData.score += points;
 					scoreData.points = points;
 				}
@@ -358,16 +367,16 @@ let Trivia = (function () {
 			"<br />" +
 			"<table width=\"100%\" bgcolor=\"#9CBEDF\">" +
 			"<tr bgcolor=\"#6688AA\"><th width=\"100px\">Points gained</th><th>Correct</th></tr>";
-		let innerBuffer = {5:[], 4:[], 3:[], 2:[], 1:[]};
+		let innerBuffer = [[], [], [], [], []];
 
 		for (let data, participantsIterator = this.participants.entries(); !!(data = participantsIterator.next().value);) { // replace with for-of loop once available
 			let scoreData = data[1];
 			scoreData.answered = false;
 			if (scoreData.responderIndex < 0) continue;
 
-			let participant = Users.get(data[0]);
+			let participant = Users(data[0]);
 			participant = participant ? participant.name : data[0];
-			innerBuffer[scoreData.points].push(participant);
+			innerBuffer[scoreData.points - 1].push(participant);
 
 			if (scoreData.score >= score && scoreData.responderIndex < winnerIndex) {
 				winner = participant;
@@ -378,9 +387,9 @@ let Trivia = (function () {
 			scoreData.responderIndex = -1;
 		}
 
-		for (let i = 6; --i;) {
+		for (let i = innerBuffer.length; --i;) {
 			if (innerBuffer[i].length) {
-				buffer += "<tr bgcolor=\"#6688AA\"><td align=\"center\">" + i + "</td><td>" + Tools.escapeHTML(innerBuffer[i].join(", ")) + "</td></tr>";
+				buffer += "<tr bgcolor=\"#6688AA\"><td align=\"center\">" + (i + 1) + "</td><td>" + Tools.escapeHTML(innerBuffer[i].join(", ")) + "</td></tr>";
 			}
 		}
 
@@ -416,7 +425,7 @@ let Trivia = (function () {
 			scoreData.answered = false;
 			if (scoreData.responderIndex < 0) continue;
 
-			let participant = Users.get(data[0]);
+			let participant = Users(data[0]);
 			participant = participant ? participant.name : data[0];
 			innerBuffer.push(participant);
 
@@ -529,7 +538,7 @@ let Trivia = (function () {
 		let participants = [];
 		let buffer = "There " + (participantsLen > 1 ? "are <strong>" + participantsLen + "</strong> players" : "is <strong>1</strong> player") + " participating in this trivia game:<br />";
 		this.participants.forEach(function (scoreData, participantid) {
-			let participant = Users.get(participantid);
+			let participant = Users(participantid);
 			participants.push(participant ? participant.name : participantid);
 		});
 		buffer += Tools.escapeHTML(participants.join(", "));
@@ -827,7 +836,8 @@ let commands = {
 			let categories = Object.keys(CATEGORIES);
 			let lastCategoryIdx = 0;
 			buffer += "<tr><th>Category</th><th>Question Count</th></tr>";
-			for (let i = 0; i <= 11; i++) {
+			for (let i = 0; i < categories.length; i++) {
+				if (categories[i] === 'random') continue;
 				let tally = findEndOfCategory(categories[i], false) - lastCategoryIdx;
 				lastCategoryIdx += tally;
 				buffer += "<tr><td>" + CATEGORIES[categories[i]] + "</td><td>" + tally + " (" + ((tally * 100) / questionsLen).toFixed(2) + "%)</td></tr>";
