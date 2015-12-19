@@ -737,8 +737,8 @@ Validator = (function () {
 							// unless it's supposed to be self-breedable, can't inherit from self, prevos, etc
 							// only basic pokemon have egg moves, so by now all evolutions should be in alreadyChecked
 							if (!fromSelf && alreadyChecked[dexEntry.speciesid]) continue;
-							// father must be able to learn the move
-							if (!dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
+							// father must be able to learn the move, unless this is chainbreeding
+							if (!fromSelf && !dexEntry.learnset[move] && !dexEntry.learnset['sketch']) continue;
 
 							// must be able to breed with father
 							if (!dexEntry.eggGroups.intersect(eggGroups).length) continue;
