@@ -2250,6 +2250,9 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+	ruleshelp: ["/rules - Show links to room rules and global rules.",
+		"!rules - Show everyone links to room rules and global rules. Requires: + % @ # & ~",
+		"/rules [url] - Change the room rules URL. Requires: # & ~"],
 
 	faq: function (target, room, user) {
 		if (!this.canBroadcast()) return;
