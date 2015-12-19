@@ -103,6 +103,8 @@ exports.BattleScripts = {
 			// On gen 1 moves are stored when they are chosen and a PP is deducted.
 			pokemon.side.lastMove = move.id;
 			pokemon.lastMove = move.id;
+		} else {
+			if (lockedMove) sourceEffect = move;
 		}
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
