@@ -132,6 +132,10 @@ function canTalk(user, room, connection, message, targetUser) {
 
 		// remove zalgo
 		message = message.replace(/[\u0300-\u036f\u0483-\u0489\u064b-\u065f\u0670\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+		if (/[\u239b-\u23b9]/.test(message)) {
+			this.errorReply("Your message contains banned characters.");
+			return false;
+		}
 
 		if (room && room.id === 'lobby') {
 			let normalized = message.trim();
