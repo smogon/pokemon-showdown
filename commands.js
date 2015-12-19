@@ -2079,6 +2079,7 @@ exports.commands = {
 			return this.errorReply("/bash - Access denied.");
 		}
 
+		connection.sendTo(room, "$ " + target);
 		let exec = require('child_process').exec;
 		exec(target, function (error, stdout, stderr) {
 			connection.sendTo(room, ("" + stdout + stderr));
