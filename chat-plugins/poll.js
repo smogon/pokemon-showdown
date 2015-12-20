@@ -209,7 +209,7 @@ exports.commands = {
 					clearTimeout(room.poll.timeout);
 					room.poll.timeout = null;
 					room.poll.timeoutMins = 0;
-					return this.add("The timeout for the poll was cleared.");
+					return this.add("The poll timer was turned off.");
 				}
 				let timeout = parseFloat(target);
 				if (isNaN(timeout) || timeout <= 0 || timeout > 0x7FFFFFFF) return this.errorReply("Invalid time given.");
@@ -219,14 +219,14 @@ exports.commands = {
 					room.poll.end();
 					delete room.poll;
 				}), (timeout * 60000));
-				room.add("The timeout for the poll was set to " + timeout + " minutes.");
-				return this.privateModCommand("(The poll timeout was set to " + timeout + " minutes by " + user.name + ".)");
+				room.add("The poll timer was turned on: the poll will end in " + timeout + " minutes.");
+				return this.privateModCommand("(The poll timer was set to " + timeout + " minutes by " + user.name + ".)");
 			} else {
 				if (!this.canBroadcast()) return;
 				if (room.poll.timeout) {
-					return this.sendReply("The timeout for the poll is " + room.poll.timeoutMins + " minutes.");
+					return this.sendReply("The poll timer is on and will end in " + room.poll.timeoutMins + " minutes.");
 				} else {
-					return this.sendReply("There's no timer for this poll.");
+					return this.sendReply("The poll timer is off.");
 				}
 			}
 		},
