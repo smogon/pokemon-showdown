@@ -227,7 +227,7 @@ class Mafia extends Rooms.RoomGame {
 	// Simple window, used for announcements and the likes.
 	mafiaWindow(image, content) {
 		let output = '<div class="broadcast-blue">';
-		output += '<h3>Day ' + this.day + '</h3>';
+		output += '<h3>' + ((this.gamestate === 'day' || this.gamestate === 'lynch') ? 'Day ' : 'Night ') + this.day + '</h3>';
 		output += '<table><tr><td style="text-align:center;">' + image + '</td><td style="text-align:center;width:100%;">';
 		output += content;
 		output += '</td></tr></table></div>';
