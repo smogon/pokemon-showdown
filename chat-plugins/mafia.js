@@ -129,10 +129,10 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		}
 
 		if (target in this.validVotes) {
-			if (this.currentVote[target]) {
-				this.currentVote[target]++;
+			if (this.game.currentVote[target]) {
+				this.game.currentVote[target]++;
 			} else {
-				this.currentVote[target] = 1;
+				this.game.currentVote[target] = 1;
 			}
 
 			this.voting = false;
@@ -227,7 +227,7 @@ class Mafia extends Rooms.RoomGame {
 	// Simple window, used for announcements and the likes.
 	mafiaWindow(image, content) {
 		let output = '<div class="broadcast-blue">';
-		output += '<h3>Day ' + this.day + '</h3>';
+		output += '<h3>' + ((this.gamestate === 'day' || this.gamestate === 'lynch') ? 'Day ' : 'Night ') + this.day + '</h3>';
 		output += '<table><tr><td style="text-align:center;">' + image + '</td><td style="text-align:center;width:100%;">';
 		output += content;
 		output += '</td></tr></table></div>';
@@ -483,11 +483,15 @@ class Mafia extends Rooms.RoomGame {
 			}
 		}
 
-		this.executionOrder.sort(function (a, b) {
-			return (b.class[event].priority - a.class[event].priority);
-		});
+		if (this.executionOrder.length) {
+			this.executionOrder.sort(function (a, b) {
+				return (b.class[event].priority - a.class[event].priority);
+			});
 
-		this.setTimer(timer);
+			this.setTimer(timer);
+		} else {
+			this.setTimer(0.25);
+		}
 	}
 }
 
