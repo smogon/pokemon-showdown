@@ -1,10 +1,13 @@
 'use strict';
 
 const assert = require('assert');
-const stream = require('stream');
 const path = require('path');
 const net = require('net');
 const fs = require('fs');
+const Module = require('module');
+
+const mock = require('mock-fs');
+
 const noop = function () {};
 
 let testPort;
@@ -22,6 +25,15 @@ function getPort(callback) {
 		testPort++;
 		getPort(callback);
 	});
+}
+
+function getDirTypedContentsSync(dir, forceType) {
+	// Return value can be fed to mock-fs
+	if (forceType !== 'dir' && forceType !== 'file') throw new Error("Not implemented");
+	return fs.readdirSync(dir).reduce(function (dict, elem) {
+		dict[elem] = forceType === 'dir' ? {} : '';
+		return dict;
+	}, {});
 }
 
 function init(callback) {
@@ -77,9 +89,13 @@ before('initialization', function (done) {
 	} finally {
 		config = require('./../config/config.js');
 	}
+
 	try {
 		let chatRoomsPath = require.resolve('./../config/chatrooms.json');
-		require.cache[chatRoomsPath] = [];
+		let chatRoomsData = require.cache[chatRoomsPath] = new Module(chatRoomsPath, module);
+		chatRoomsData.filename = chatRoomsData.id;
+		chatRoomsData.exports = []; // empty chatrooms list
+		chatRoomsData.loaded = true;
 	} catch (e) {}
 
 	// Don't listen at SSL port
@@ -88,20 +104,62 @@ before('initialization', function (done) {
 	// Actually, don't listen at any port for now
 	config.workers = 0;
 
-	// Don't write to file system
+	// Don't try to write to file system
 	config.logladderip = false;
 	config.logchallenges = false;
 	config.logchat = false;
 
-	// TODO: Use a proper fs sandbox
-	let fsMethodsNullify = ['chmod', 'rename', 'rmdir', 'symlink', 'unlink', 'writeFile'];
-	for (let i = 0; i < fsMethodsNullify.length; i++) {
-		fs[fsMethodsNullify[i]] = noop;
-		fs[fsMethodsNullify[i] + 'Sync'] = noop;
-	}
-	fs.createWriteStream = function () {
-		return new stream.Writable();
+	// Sandbox file system: it's possible for a production server to be running in the same directory.
+	// And using a sandbox is safer anyway.
+	const fsSandbox = {
+		'config': {},
+		'chat-plugins': getDirTypedContentsSync('chat-plugins', 'file'),
+		'mods': getDirTypedContentsSync('mods', 'dir'),
+		'logs': {
+			'chat': {}, 'ladderip': {}, 'modlog': {}, 'repl': {},
+			'lastbattle.txt': '0'
+		}
 	};
+
+	// Node's module loading system should be backed up by the real file system.
+	Module.__resolveFilename__ = Module._resolveFilename;
+	Module._resolveFilename = function (request, parent) {
+		if (request === 'fs') return this.__resolveFilename__(request, parent);
+		mock.restore();
+		try {
+			return this.__resolveFilename__(request, parent);
+		} finally {
+			mock(fsSandbox);
+		}
+	};
+	for (let ext in Module._extensions) {
+		let defaultLoader = Module._extensions[ext];
+		Module._extensions[ext] = function (module, filename) {
+			mock.restore();
+			try {
+				return defaultLoader(module, filename);
+			} finally {
+				mock(fsSandbox);
+			}
+		};
+	}
+	Module.prototype.__compile__ = Module.prototype._compile;
+	Module.prototype._compile = function (content, filename) {
+		// Use the sandbox to evaluate the code in our modules.
+		mock(fsSandbox);
+		try {
+			return this.__compile__(content, filename);
+		} finally {
+			mock.restore();
+		}
+	};
+
+	// `watchFile` is unsupported and throws with mock-fs
+	Object.defineProperty(fs, 'watchFile', {
+		get: function () {return noop;},
+		set: noop
+	});
+	mock(fsSandbox);
 
 	// Make sure that there are no net conflicts with an active server
 	if (typeof config.testport !== 'undefined' || config.workers === 0) {
