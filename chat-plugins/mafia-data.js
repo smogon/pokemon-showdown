@@ -66,7 +66,7 @@ exports.MafiaClasses = {
 		onNight: {
 			target: {side: 'any', count: 'single'},
 			priority: 4,
-			callback: MafiaFunctions.protected
+			callback: MafiaFunctions.protect
 		}
 	},
 
