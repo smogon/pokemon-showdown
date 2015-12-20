@@ -129,10 +129,10 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		}
 
 		if (target in this.validVotes) {
-			if (this.currentVote[target]) {
-				this.currentVote[target]++;
+			if (this.game.currentVote[target]) {
+				this.game.currentVote[target]++;
 			} else {
-				this.currentVote[target] = 1;
+				this.game.currentVote[target] = 1;
 			}
 
 			this.voting = false;
