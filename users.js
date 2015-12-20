@@ -1066,7 +1066,7 @@ User = (function () {
 					connection.leaveRoom(room);
 					continue;
 				}
-				room.onJoin(this, connection, true);
+				room.onJoin(this, connection);
 				this.roomCount[i] = 0;
 			}
 			this.roomCount[i]++;
