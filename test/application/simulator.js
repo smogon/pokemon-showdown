@@ -27,7 +27,7 @@ describe('Simulator abstraction layer features', function () {
 				p1 = new User();
 				p2 = new User();
 				p1.forceRename("Missingno."); // Don't do this at home
-				room = Rooms.global.startBattle(p1, p2, 'customgame', packedTeam, packedTeam, {rated: true});
+				room = Rooms.global.startBattle(p1, p2, '', packedTeam, packedTeam, {rated: true});
 				if (!room.active) {
 					room.joinBattle(p1, packedTeam);
 					room.joinBattle(p2, packedTeam);
