@@ -483,11 +483,15 @@ class Mafia extends Rooms.RoomGame {
 			}
 		}
 
-		this.executionOrder.sort(function (a, b) {
-			return (b.class[event].priority - a.class[event].priority);
-		});
+		if (this.executionOrder.length) {
+			this.executionOrder.sort(function (a, b) {
+				return (b.class[event].priority - a.class[event].priority);
+			});
 
-		this.setTimer(timer);
+			this.setTimer(timer);
+		} else {
+			this.setTimer(0.25);
+		}
 	}
 }
 
