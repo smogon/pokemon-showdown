@@ -28,7 +28,7 @@ function wikiaSearch(subdomain, query, callback) {
 
 			return callback(null, result.items[0]);
 		});
-	});
+	}).on('error', callback);
 }
 
 exports.commands = {
@@ -56,6 +56,6 @@ exports.commands = {
 			let htmlReply = "<strong>Best result for " + Tools.escapeHTML(query) + ":</strong><br/><a href=\"" + Tools.escapeHTML(entryUrl) + "\">" + Tools.escapeHTML(entryTitle) + "</a>";
 			if (!broadcasting) return connection.sendTo(room, "|raw|<div class=\"infobox\">" + htmlReply + "</div>");
 			room.addRaw("<div class=\"infobox\">" + htmlReply + "</div>").update();
-		});
+		}.once());
 	}
 };
