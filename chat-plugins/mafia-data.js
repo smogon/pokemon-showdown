@@ -6,9 +6,9 @@
 // Target is a MafiaPlayer object.
 let MafiaFunctions = {
 	copReport: function (target) {
-		if (target.class.side === 'village') {
+		if (target.class.side === 'town') {
 			return 'After investigating ' + target.name + ' you find out they\'re sided with the village.';
-		} else if (target.class.side === 'village') {
+		} else if (target.class.side === 'mafia') {
 			return 'After investigating ' + target.name + ' you find out they\'re sided with the mafia.';
 		} else {
 			return 'After investigating ' + target.name + ' you find out they\'re not sided with the village or mafia.';
