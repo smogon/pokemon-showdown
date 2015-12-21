@@ -26,6 +26,7 @@ describe('Lightning Rod', function () {
 	});
 
 	it('should redirect single-target Electric-type attacks to the user if it is a valid target', function () {
+		this.timeout(3000);
 		battle = BattleEngine.Battle.construct('battle-triples-lightningrod', 'triplescustomgame');
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
