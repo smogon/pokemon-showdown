@@ -1442,7 +1442,10 @@ exports.BattleScripts = {
 					if (hasMove['sludgebomb'] || counter.Special < 2) rejected = true;
 					break;
 				case 'poisonjab':
-					if (hasMove['gunkshot'] || hasMove['sludgewave'] && counter.setupType !== 'Physical') rejected = true;
+					if (hasMove['gunkshot']) rejected = true;
+					break;
+				case 'sludgewave':
+					if (hasMove['poisonjab']) rejected = true;
 					break;
 				case 'psychic':
 					if (hasMove['psyshock'] || hasMove['storedpower']) rejected = true;
