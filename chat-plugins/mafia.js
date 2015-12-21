@@ -33,10 +33,16 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		this.game.executionOrder.push(this);
 	}
 
-	kill(message) {
+	kill(flavorText) {
 		if (this.invincible) return;
 
-		this.game.announcementWindow(deadImage, message + '<br/>' + Tools.escapeHTML(this.name + ', the ' + this.class.name) + ' lies dead on the ground.');
+		let message = flavorText + '<br/>' + Tools.escapeHTML(this.name + ', the ' + this.class.name) + ' lies dead on the ground.';
+
+		if (this.allowWills && this.will) {
+			message += '<br/>' + Tools.escapeHTML(this.name) + '\'s will: ' + Tools.escapeHTML(this.will);
+		}
+
+		this.game.announcementWindow(deadImage, message);
 		delete this.game.players[this.userid];
 		this.destroy();
 	}
@@ -153,7 +159,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 }
 
 class Mafia extends Rooms.RoomGame {
-	constructor(room, max, roles) {
+	constructor(room, max, roles, allowWills) {
 		super(room);
 
 		if (room.gameNumber) {
@@ -172,6 +178,7 @@ class Mafia extends Rooms.RoomGame {
 		this.day = 1;
 		this.gamestate = 'pregame';
 		this.timer = null;
+		this.allowWills = allowWills;
 
 		this.roleString = this.roles.reduce((function (prev, cur, index) {
 			if (index === this.roles.length - 1) {
@@ -185,7 +192,9 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	onRename(user, oldUserid, isJoining) {
-		if (oldUserid in this.players && oldUserid !== user.userid) {
+		if (!(oldUserid in this.players)) return;
+
+		if (oldUserid !== user.userid) {
 			if (this.gamestate === 'pregame') {
 				this.players[user.userid] = this.players[oldUserid];
 				this.players[user.userid].userid = user.userid;
@@ -224,6 +233,10 @@ class Mafia extends Rooms.RoomGame {
 		}
 
 		output += '<br/><strong>Roles:</strong> ' + this.roleString;
+
+		if (this.allowWills) {
+			output += '<br/>Wills are allowed.';
+		}
 
 		if (joined) {
 			output += '<br/><button value="/mafia leave" name="send">Leave</button>';
@@ -577,6 +590,52 @@ exports.commands = {
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 
 			room.game.displayPregame();
+		},
+
+		will: function (target, room, user) {
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply("There is no game of mafia running in this room.");
+			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+
+			if (target.toLowerCase() === 'on' || target.toLowerCase() === 'enable') {
+				if (!this.can(permission, null, room)) return false;
+				if (room.game.gamestate !== 'pregame') return this.errorReply("The game has started already.");
+
+				if (room.game.allowWills) {
+					this.errorReply("Wills are already enabled.");
+				} else {
+					room.game.allowWills = true;
+					room.game.updatePregame();
+				}
+			} else if (target.toLowerCase() === 'off' || target.toLowerCase() === 'disable') {
+				if (!this.can(permission, null, room)) return false;
+				if (room.game.gamestate !== 'pregame') return this.errorReply("The game has started already.");
+
+				if (!room.game.allowWills) {
+					this.errorReply("Wills are already disabled.");
+				} else {
+					room.game.allowWills = false;
+					room.game.updatePregame();
+				}
+			} else if (room.game.allowWills) {
+				if (!(user.userid in room.game.players)) return this.errorReply("You're not in the game.");
+				if (room.game.gamestate !== 'pregame') return this.errorReply("You can't do that before the game has started.");
+				if (target.length > 200) return this.errorReply("Will too long.");
+
+				let will = room.game.players[user.userid].will;
+
+				if (!target.length) {
+					if (will) {
+						return this.sendReply("Your will is: " + Tools.escapeHTML(will));
+					} else {
+						return this.sendReply("You don't have a will set.");
+					}
+				}
+
+				room.game.players[user.userid].will = target;
+				this.sendReply("Will set to: " + Tools.escapeHTML(target));
+			} else {
+				this.errorReply("Wills are not allowed in this game.");
+			}
 		},
 
 		target: function (target, room, user) {
