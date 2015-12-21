@@ -184,6 +184,19 @@ class Mafia extends Rooms.RoomGame {
 		this.room.send('|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(false));
 	}
 
+	onRename(user, oldUserid, isJoining) {
+		if (oldUserid in this.players && oldUserid !== user.userid) {
+			if (this.gamestate === 'pregame') {
+				this.players[user.userid] = this.players[oldUserid];
+				this.players[user.userid].userid = user.userid;
+				delete this.players[oldUserid];
+			} else {
+				this.player.eliminate(oldUserid);
+				user.sendTo(this.room, "Don't change your name during a mafia game.");
+			}
+		}
+	}
+
 	makePlayer(user) {
 		return new MafiaPlayer(user, this);
 	}
