@@ -22,7 +22,8 @@ describe('Ingrain', function () {
 			{species: 'Cradily', ability: 'stormdrain', moves: ['ingrain']},
 			{species: 'Pikachu', ability: 'static', moves: ['thunder']}
 		]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Arcanine', ability: 'flashfire', moves: ['roar']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Arcanine', ability: 'flashfire', moves: ['sleeptalk', 'roar']}]);
+		battle.choose('p2', 'move 2');
 		battle.commitDecisions();
 		assert.strictEqual(battle.p1.active[0].speciesid, 'cradily');
 		battle.choose('p1', 'switch 2');
