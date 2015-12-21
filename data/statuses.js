@@ -174,7 +174,7 @@ exports.BattleStatuses = {
 	},
 	trapped: {
 		noCopy: true,
-		onModifyPokemon: function (pokemon) {
+		onTrapPokemon: function (pokemon) {
 			pokemon.tryTrap();
 		},
 		onStart: function (target) {
@@ -208,7 +208,7 @@ exports.BattleStatuses = {
 		onEnd: function (pokemon) {
 			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
 		},
-		onModifyPokemon: function (pokemon) {
+		onTrapPokemon: function (pokemon) {
 			pokemon.tryTrap();
 		}
 	},

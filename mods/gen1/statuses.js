@@ -193,7 +193,7 @@ exports.BattleStatuses = {
 	},
 	trapped: {
 		noCopy: true,
-		onModifyPokemon: function (pokemon) {
+		onTrapPokemon: function (pokemon) {
 			if (!this.effectData.source || !this.effectData.source.isActive) {
 				delete pokemon.volatiles['trapped'];
 				return;
