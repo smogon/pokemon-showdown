@@ -8,7 +8,7 @@ let MafiaData = require('./mafia-data.js');
 const permission = 'ban';
 
 const deadImage = '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-dead.png" />';
-const meetingMsg = {town: 'The town has lynched a subject!', mafia: 'The mafia strikes again!'};
+const meetingMsg = {town: 'The town has lynched a suspect!', mafia: 'The mafia strikes again!'};
 
 class MafiaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
