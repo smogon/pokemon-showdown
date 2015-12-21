@@ -198,11 +198,14 @@ class Mafia extends Rooms.RoomGame {
 			if (this.gamestate === 'pregame') {
 				this.players[user.userid] = this.players[oldUserid];
 				this.players[user.userid].userid = user.userid;
+				this.players[user.userid].name = user.name;
 				delete this.players[oldUserid];
 			} else {
 				this.player.eliminate(oldUserid);
 				user.sendTo(this.room, "Don't change your name during a mafia game.");
 			}
+		} else {
+			this.players[user.userid].name = user.name;
 		}
 	}
 
