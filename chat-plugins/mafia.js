@@ -202,7 +202,7 @@ class Mafia extends Rooms.RoomGame {
 
 	pregameWindow(joined) {
 		let temp = Object.values(this.players);
-		let output = '<div class="broadcast-blue"><h2>A game of mafia has been made!</h2><p>Participants (' + (this.playerCap - temp.length) + ' needed): </p>';
+		let output = '<div class="broadcast-blue"><center><h2>A game of mafia has been made!</h2><p>Participants (' + (this.playerCap - temp.length) + ' needed): </p>';
 		for (let i = 0; i < temp.length; i++) {
 			output += Tools.escapeHTML(temp[i].name);
 			if (i < temp.length - 1) {
@@ -218,7 +218,7 @@ class Mafia extends Rooms.RoomGame {
 			output += '<br/><button value="/mafia join" name="send">Join</button>';
 		}
 
-		return output;
+		return output + '</center></div>';
 	}
 
 	updatePregame() {
