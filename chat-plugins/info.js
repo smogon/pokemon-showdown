@@ -406,7 +406,7 @@ exports.commands = {
 		for (let i = 0; i < andGroups.length; i++) {
 			let orGroup = {abilities: {}, tiers: {}, colors: {}, gens: {}, moves: {}, types: {}, stats: {}, skip: false};
 			let parameters = andGroups[i].split("|");
-			if (parameters.length > 4) return this.sendReply("No more than 3 alternatives for each parameter may be used.");
+			if (parameters.length > 3) return this.sendReply("No more than 3 alternatives for each parameter may be used.");
 			for (let j = 0; j < parameters.length; j++) {
 				let isNotSearch = false;
 				target = parameters[j].trim().toLowerCase();
