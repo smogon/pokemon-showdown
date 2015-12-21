@@ -12316,6 +12316,7 @@ exports.BattleMovedex = {
 			onAnyDragOut: function (pokemon) {
 				if (pokemon === this.effectData.target || pokemon === this.effectData.source) return false;
 			},
+			onFoeTrapPokemonPriority: -15,
 			onFoeTrapPokemon: function (defender) {
 				if (defender !== this.effectData.source) return;
 				defender.trapped = true;
