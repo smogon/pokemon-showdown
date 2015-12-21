@@ -8,7 +8,7 @@ let MafiaData = require('./mafia-data.js');
 const permission = 'ban';
 
 const deadImage = '<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-dead.png" />';
-const meetingMsg = {town: 'The town has lynched a subject!', mafia: 'The mafia strikes again!'};
+const meetingMsg = {town: 'The town has lynched a suspect!', mafia: 'The mafia strikes again!'};
 
 class MafiaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
@@ -173,7 +173,28 @@ class Mafia extends Rooms.RoomGame {
 		this.gamestate = 'pregame';
 		this.timer = null;
 
+		this.roleString = this.roles.reduce((function (prev, cur, index) {
+			if (index === this.roles.length - 1) {
+				return prev + MafiaData.MafiaClasses[cur];
+			} else {
+				return prev + MafiaData.MafiaClasses[cur] + ', ';
+			}
+		}), '');
+
 		this.room.send('|uhtml|mafia' + this.room.gameNumber + 'pregame|' + this.pregameWindow(false));
+	}
+
+	onRename(user, oldUserid, isJoining) {
+		if (oldUserid in this.players && oldUserid !== user.userid) {
+			if (this.gamestate === 'pregame') {
+				this.players[user.userid] = this.players[oldUserid];
+				this.players[user.userid].userid = user.userid;
+				delete this.players[oldUserid];
+			} else {
+				this.player.eliminate(oldUserid);
+				user.sendTo(this.room, "Don't change your name during a mafia game.");
+			}
+		}
 	}
 
 	makePlayer(user) {
@@ -193,21 +214,24 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	pregameWindow(joined) {
-		let output = '<div class="broadcast-blue"><h2>A game of mafia has been made!</h2><p>Participants: </p>';
 		let temp = Object.values(this.players);
+		let output = '<div class="broadcast-blue"><center><h2>A game of mafia has been made!</h2><p>Participants (' + (this.playerCap - temp.length) + ' needed): </p>';
 		for (let i = 0; i < temp.length; i++) {
 			output += Tools.escapeHTML(temp[i].name);
 			if (i < temp.length - 1) {
 				output += ', ';
 			}
 		}
+
+		output += '<br/><strong>Roles:</strong> ' + this.roleString;
+
 		if (joined) {
 			output += '<br/><button value="/mafia leave" name="send">Leave</button>';
 		} else {
 			output += '<br/><button value="/mafia join" name="send">Join</button>';
 		}
 
-		return output;
+		return output + '</center></div>';
 	}
 
 	updatePregame() {
