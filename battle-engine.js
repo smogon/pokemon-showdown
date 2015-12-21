@@ -352,7 +352,6 @@ BattlePokemon = (function () {
 		return this.details + '|' + this.getHealth(side);
 	};
 	BattlePokemon.prototype.update = function (init) {
-		this.trapped = this.maybeTrapped = false;
 		this.maybeDisabled = false;
 		for (let i in this.moveset) {
 			if (this.moveset[i]) this.moveset[i].disabled = false;
@@ -383,34 +382,6 @@ BattlePokemon = (function () {
 			}
 		}
 
-		if (this.runImmunity('trapped')) this.battle.runEvent('MaybeTrapPokemon', this);
-		// Disable the faculty to cancel switches if a foe may have a trapping ability
-		for (let i = 0; i < this.battle.sides.length; ++i) {
-			let side = this.battle.sides[i];
-			if (side === this.side) continue;
-			for (let j = 0; j < side.active.length; ++j) {
-				let pokemon = side.active[j];
-				if (!pokemon || pokemon.fainted) continue;
-				let template = (pokemon.illusion || pokemon).template;
-				if (!template.abilities) continue;
-				for (let k in template.abilities) {
-					let ability = template.abilities[k];
-					if (ability === pokemon.ability) {
-						// This event was already run above so we don't need
-						// to run it again.
-						continue;
-					}
-					if ((k === 'H') && template.unreleasedHidden) {
-						// unreleased hidden ability
-						continue;
-					}
-					if (this.runImmunity('trapped')) {
-						this.battle.singleEvent('FoeMaybeTrapPokemon',
-							this.battle.getAbility(ability), {}, this, pokemon);
-					}
-				}
-			}
-		}
 		this.battle.runEvent('ModifyPokemon', this);
 
 		this.speed = this.getDecisionSpeed();
@@ -2957,6 +2928,39 @@ Battle = (function () {
 						pokemon.lastAttackedBy.thisTurn = false;
 					} else {
 						pokemon.lastAttackedBy = null;
+					}
+				}
+
+				pokemon.trapped = pokemon.maybeTrapped = false;
+				this.runEvent('TrapPokemon', pokemon);
+				if (pokemon.runImmunity('trapped')) {
+					this.runEvent('MaybeTrapPokemon', pokemon);
+				}
+				// Disable the faculty to cancel switches if a foe may have a trapping ability
+				for (let i = 0; i < this.sides.length; ++i) {
+					let side = this.sides[i];
+					if (side === pokemon.side) continue;
+					for (let j = 0; j < side.active.length; ++j) {
+						let source = side.active[j];
+						if (!source || source.fainted) continue;
+						let template = (source.illusion || source).template;
+						if (!template.abilities) continue;
+						for (let k in template.abilities) {
+							let ability = template.abilities[k];
+							if (ability === source.ability) {
+								// pokemon event was already run above so we don't need
+								// to run it again.
+								continue;
+							}
+							if ((k === 'H') && template.unreleasedHidden) {
+								// unreleased hidden ability
+								continue;
+							}
+							if (pokemon.runImmunity('trapped')) {
+								this.singleEvent('FoeMaybeTrapPokemon',
+									this.getAbility(ability), {}, pokemon, source);
+							}
+						}
 					}
 				}
 

@@ -3998,8 +3998,8 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onModifyPokemonPriority: -10,
-		onModifyPokemon: function (pokemon) {
+		onTrapPokemonPriority: -10,
+		onTrapPokemon: function (pokemon) {
 			pokemon.trapped = pokemon.maybeTrapped = false;
 		},
 		num: 295,
