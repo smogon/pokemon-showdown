@@ -647,7 +647,7 @@ class Tournament {
 		this.room.add('|tournament|battlestart|' + challenge.from.name + '|' + user.name + '|' + room.id).update();
 
 		this.isBracketInvalidated = true;
-		this.runAutoDisqualify();
+		this.runAutoDisqualify(this.room);
 		this.update();
 	}
 	onConnect(user, connection) {
