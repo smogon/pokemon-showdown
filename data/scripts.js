@@ -1198,9 +1198,7 @@ exports.BattleScripts = {
 					if (!hasMove['protect']) rejected = true;
 					break;
 				case 'rest': {
-					let sleepTalk = movePool.indexOf('sleeptalk');
-					if (sleepTalk >= 0) {
-						movePool.splice(sleepTalk, 1);
+					if (movePool.indexOf('sleeptalk') >= 0) {
 						rejected = true;
 					}
 					break;
@@ -1550,7 +1548,19 @@ exports.BattleScripts = {
 					(movePool.indexOf('technoblast') >= 0 || template.requiredMove && movePool.indexOf(toId(template.requiredMove)) >= 0)) &&
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && (move.category === 'Status' || !hasType[move.type])) rejected = true;
+					if (!isSetup && !move.weather && moveid !== 'sleeptalk' && (move.category === 'Status' || !hasType[move.type])) rejected = true;
+				}
+
+				// Sleep Talk shouldn't be selected without Rest
+				if (moveid === 'rest' && rejected) {
+					let sleeptalk = movePool.indexOf('sleeptalk');
+					if (sleeptalk >= 0) {
+						if (movePool.length < 2) {
+							rejected = false;
+						} else {
+							movePool.splice(sleeptalk, 1);
+						}
+					}
 				}
 
 				// Remove rejected moves from the move list
