@@ -207,6 +207,15 @@ class Mafia extends Rooms.RoomGame {
 		} else {
 			this.players[user.userid].name = user.name;
 		}
+
+		this.updatePregame();
+	}
+
+	onLeave(user) {
+		if (this.gamestate === 'pregame' && user.userid in this.players) {
+			delete this.players[user.userid];
+			this.updatePregame();
+		}
 	}
 
 	makePlayer(user) {
