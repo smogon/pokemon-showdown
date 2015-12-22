@@ -43,6 +43,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		}
 
 		this.game.announcementWindow(deadImage, message);
+		this.game.playerCount--;
 		delete this.game.players[this.userid];
 		this.destroy();
 	}
@@ -55,6 +56,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		} else {
 			this.game.announcementWindow(deadImage, Tools.escapeHTML(this.name + ', the ' + this.class.name) + ' was eliminated from the game.');
 		}
+		this.game.playerCount--;
 		delete this.game.players[this.userid];
 		this.destroy();
 	}
