@@ -180,11 +180,11 @@ class Mafia extends Rooms.RoomGame {
 		this.timer = null;
 		this.allowWills = allowWills;
 
-		this.roleString = this.roles.reduce((function (prev, cur, index) {
-			if (index === this.roles.length - 1) {
-				return prev + MafiaData.MafiaClasses[cur];
+		this.roleString = this.roles.reduce((function (prev, cur, index, array) {
+			if (index === array.length - 1) {
+				return prev + MafiaData.MafiaClasses[cur].name;
 			} else {
-				return prev + MafiaData.MafiaClasses[cur] + ', ';
+				return prev + MafiaData.MafiaClasses[cur].name + ', ';
 			}
 		}), '');
 
