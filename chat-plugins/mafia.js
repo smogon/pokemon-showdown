@@ -502,7 +502,7 @@ class Mafia extends Rooms.RoomGame {
 	}
 
 	townMeeting() {
-		this.meeting = 'mafia';
+		this.meeting = 'town';
 		this.currentVote = {};
 
 		for (let i in this.players) {
