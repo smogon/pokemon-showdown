@@ -49,7 +49,7 @@ exports.Formats = [
 		banlist: []
 	},
 	{
-		name: "UU (suspect test)",
+		name: "UU",
 		desc: [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3557948/\">np: UU Stage 6</a>",
 			"&bullet; <a href=\"https://www.smogon.com/dex/xy/tags/uu/\">UU Banlist</a>",
@@ -69,7 +69,7 @@ exports.Formats = [
 		],
 		section: "ORAS Singles",
 
-		ruleset: ['UU (suspect test)'],
+		ruleset: ['UU'],
 		banlist: ['UU', 'BL2']
 	},
 	{
