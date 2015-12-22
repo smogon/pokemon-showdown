@@ -790,14 +790,18 @@ exports.commands = {
 		let rankLists = {};
 		for (let u in targetRoom.auth) {
 			if (!rankLists[targetRoom.auth[u]]) rankLists[targetRoom.auth[u]] = [];
-			rankLists[targetRoom.auth[u]].push(u in targetRoom.users ? "**" + u + "**" : u);
+			rankLists[targetRoom.auth[u]].push(u);
 		}
 
 		let buffer = [];
 		Object.keys(rankLists).sort(function (a, b) {
 			return (Config.groups[b] || {rank:0}).rank - (Config.groups[a] || {rank:0}).rank;
 		}).forEach(function (r) {
-			buffer.push((Config.groups[r] ? Config.groups[r] .name + "s (" + r + ")" : r) + ":\n" + rankLists[r].sort().join(", "));
+			let roomRankList = [];
+			rankLists[r].sort().forEach(function (s) {
+				roomRankList.push(s in targetRoom.users ? "**" + s + "**" : s);
+			});
+			buffer.push((Config.groups[r] ? Config.groups[r].name + "s (" + r + ")" : r) + ":\n" + roomRankList.join(", "));
 		});
 
 		if (!buffer.length) {
