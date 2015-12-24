@@ -107,7 +107,7 @@ exports.BattleFormats = {
 					if (move.gen > this.gen) {
 						problems.push(move.name + ' does not exist in gen ' + this.gen + '.');
 					} else if (!allowCAP && move.isNonstandard) {
-						problems.push(move.name + ' is not a real move.');
+						problems.push(move.name + ' does not exist.');
 					}
 				}
 			}
@@ -123,13 +123,17 @@ exports.BattleFormats = {
 
 			if (!allowCAP || template.tier !== 'CAP') {
 				if (template.isNonstandard) {
-					problems.push(set.species + ' is not a real Pokemon.');
+					problems.push(set.species + ' does not exist.');
 				}
 				if (ability.isNonstandard) {
-					problems.push(ability.name + ' is not a real ability.');
+					problems.push(ability.name + ' does not exist.');
 				}
 				if (item.isNonstandard) {
-					problems.push(item.name + ' is not a real item.');
+					if (item.isNonstandard === 'gen2') {
+						problems.push(item.name + ' does not exist outside of gen 2.');
+					} else {
+						problems.push(item.name + ' does not exist.');
+					}
 				}
 			}
 			for (let k in set.evs) {

@@ -4865,5 +4865,315 @@ exports.BattleItems = {
 		num: 276,
 		gen: 4,
 		desc: "The accuracy of attacks by the holder is 1.2x if it moves after its target."
+	},
+
+	// Gen 2 items
+
+	"berserkgene": {
+		id: "berserkgene",
+		name: "Berserk Gene",
+		onUpdate: function (pokemon) {
+			this.boost({atk: 2});
+			pokemon.addVolatile('confusion');
+			pokemon.setItem('');
+		},
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Raises attack by 2 when switched in. Confuses holder. Single use."
+	},
+	"berry": {
+		id: "berry",
+		name: "Berry",
+		spritenum: 319,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Poison"
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
+		},
+		onEat: function (pokemon) {
+			this.heal(10);
+		},
+		num: 155,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Restores 10 HP when at 1/2 max HP or less. Single use."
+	},
+	"bitterberry": {
+		id: "bitterberry",
+		name: "Bitter Berry",
+		spritenum: 334,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ground"
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.volatiles['confusion']) {
+				pokemon.eatItem();
+			}
+		},
+		onEat: function (pokemon) {
+			pokemon.removeVolatile('confusion');
+		},
+		num: 156,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Holder is cured if it is confused. Single use."
+	},
+	"burntberry": {
+		id: "burntberry",
+		name: "Burnt Berry",
+		spritenum: 13,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ice"
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.status === 'frz') {
+				pokemon.eatItem();
+			}
+		},
+		onEat: function (pokemon) {
+			if (pokemon.status === 'frz') {
+				pokemon.cureStatus();
+			}
+		},
+		num: 153,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Holder is cured if it is frozen. Single use."
+	},
+	"goldberry": {
+		id: "goldberry",
+		name: "Gold Berry",
+		spritenum: 448,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Psychic"
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
+		onEatItem: function (item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
+		},
+		onEat: function (pokemon) {
+			this.heal(30);
+		},
+		num: 158,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Restores 30 HP when at 1/2 max HP or less. Single use."
+	},
+	"iceberry": {
+		id: "iceberry",
+		name: "Ice Berry",
+		spritenum: 381,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Grass"
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.status === 'brn') {
+				pokemon.eatItem();
+			}
+		},
+		onEat: function (pokemon) {
+			if (pokemon.status === 'brn') {
+				pokemon.cureStatus();
+			}
+		},
+		num: 152,
+		gen: 2,
+		desc: "(Gen 2) Holder is cured if it is burned. Single use."
+	},
+	"mintberry": {
+		id: "mintberry",
+		name: "Mint Berry",
+		spritenum: 65,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Water"
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.status === 'slp') {
+				pokemon.eatItem();
+			}
+		},
+		onEat: function (pokemon) {
+			if (pokemon.status === 'slp') {
+				pokemon.cureStatus();
+			}
+		},
+		num: 150,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Holder wakes up if it is asleep. Single use."
+	},
+	"miracleberry": {
+		id: "miracleberry",
+		name: "Miracle Berry",
+		spritenum: 262,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Flying"
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.status || pokemon.volatiles['confusion']) {
+				pokemon.eatItem();
+			}
+		},
+		onEat: function (pokemon) {
+			pokemon.cureStatus();
+			pokemon.removeVolatile('confusion');
+		},
+		num: 157,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Holder cures itself if it is confused or has a status condition. Single use."
+	},
+	"mysteryberry": {
+		id: "mysteryberry",
+		name: "Mystery Berry",
+		spritenum: 244,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Fighting"
+		},
+		onUpdate: function (pokemon) {
+			var move = pokemon.getMoveData(pokemon.lastMove);
+			if (move && move.pp === 0) {
+				pokemon.addVolatile('leppaberry');
+				pokemon.volatiles['leppaberry'].move = move;
+				pokemon.eatItem();
+			}
+		},
+		onEat: function (pokemon) {
+			var move;
+			if (pokemon.volatiles['leppaberry']) {
+				move = pokemon.volatiles['leppaberry'].move;
+				pokemon.removeVolatile('leppaberry');
+			} else {
+				var pp = 99;
+				for (var moveid in pokemon.moveset) {
+					if (pokemon.moveset[moveid].pp < pp) {
+						move = pokemon.moveset[moveid];
+						pp = move.pp;
+					}
+				}
+			}
+			move.pp += 10;
+			if (move.pp > move.maxpp) move.pp = move.maxpp;
+			this.add('-activate', pokemon, 'item: Leppa Berry', move.move);
+			if (pokemon.item !== 'leppaberry') {
+				var foeActive = pokemon.side.foe.active;
+				var foeIsStale = false;
+				for (var i = 0; i < 1; i++) {
+					if (foeActive.isStale >= 2) {
+						foeIsStale = true;
+						break;
+					}
+				}
+				if (!foeIsStale) return;
+			}
+			pokemon.isStale = 2;
+			pokemon.isStaleSource = 'useleppa';
+		},
+		num: 154,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Restores 10 PP to the first move to reach 0 PP. Single use."
+	},
+	"pinkbow": {
+		id: "pinkbow",
+		name: "Pink Bow",
+		spritenum: 444,
+		onBasePower: function (basePower, user, target, move) {
+			if (move.type === 'Normal') {
+				return basePower * 1.1;
+			}
+		},
+		num: 251,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power."
+	},
+	"polkadotbow": {
+		id: "polkadotbow",
+		name: "Polkadot Bow",
+		spritenum: 444,
+		onBasePower: function (basePower, user, target, move) {
+			if (move.type === 'Normal') {
+				return basePower * 1.1;
+			}
+		},
+		num: 251,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power."
+	},
+	"przcureberry": {
+		id: "przcureberry",
+		name: "PRZ Cure Berry",
+		spritenum: 63,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Fire"
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.status === 'par') {
+				pokemon.eatItem();
+			}
+		},
+		onEat: function (pokemon) {
+			if (pokemon.status === 'par') {
+				pokemon.cureStatus();
+			}
+		},
+		num: 149,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Holder cures itself if it is paralyzed. Single use."
+	},
+	"psncureberry": {
+		id: "psncureberry",
+		name: "PSN Cure Berry",
+		spritenum: 333,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Electric"
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
+				pokemon.eatItem();
+			}
+		},
+		onEat: function (pokemon) {
+			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
+				pokemon.cureStatus();
+			}
+		},
+		num: 151,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Holder is cured if it is poisoned. Single use."
 	}
 };
