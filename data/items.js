@@ -4872,6 +4872,7 @@ exports.BattleItems = {
 	"berserkgene": {
 		id: "berserkgene",
 		name: "Berserk Gene",
+		spritenum: 388,
 		onUpdate: function (pokemon) {
 			this.boost({atk: 2});
 			pokemon.addVolatile('confusion');
