@@ -4953,6 +4953,20 @@ exports.BattleItems = {
 		isNonstandard: 'gen2',
 		desc: "(Gen 2) Holder is cured if it is frozen. Single use."
 	},
+	dragonscale: {
+		id: "dragonscale",
+		name: "Dragon Scale",
+		spritenum: 106,
+		onBasePower: function (basePower, user, target, move) {
+			if (move.type === 'Dragon') {
+				return basePower * 1.1;
+			}
+		},
+		num: 250,
+		gen: 2,
+		isNonstandard: 'gen2',
+		desc: "(Gen 2) Dragon-type attacks have 1.1x power. Evolves Seadra into Kingdra when traded."
+	},
 	"goldberry": {
 		id: "goldberry",
 		name: "Gold Berry",
