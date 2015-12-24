@@ -20,8 +20,7 @@ exports.BattleItems = {
 			pokemon.addVolatile('confusion');
 			pokemon.setItem('');
 		},
-		gen: 2,
-		desc: "Raises attack by 2 when holder is switched in. Confuses holder. Single use."
+		gen: 2
 	},
 	cheriberry: {
 		inherit: true,
@@ -45,8 +44,7 @@ exports.BattleItems = {
 				return basePower * 1.1;
 			}
 		},
-		gen: 2,
-		desc: "Evolves Seadra into Kingdra when traded. Dragon-type attacks have 1.1x power."
+		gen: 2
 	},
 	metalpowder: {
 		inherit: true,
@@ -74,8 +72,7 @@ exports.BattleItems = {
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', move.move);
 		},
-		gen: 2,
-		desc: "Restores 5PP to the first of the holder's moves to reach 0PP. Single use."
+		gen: 2
 	},
 	lightball: {
 		inherit: true,
@@ -115,8 +112,7 @@ exports.BattleItems = {
 				return basePower * 1.1;
 			}
 		},
-		gen: 2,
-		desc: "Holder's Normal-type attacks have 1.1x power."
+		gen: 2
 	},
 	polkadotbow: {
 		id: "polkadotbow",
@@ -126,8 +122,7 @@ exports.BattleItems = {
 				return basePower * 1.1;
 			}
 		},
-		gen: 2,
-		desc: "Holder's Normal-type attacks have 1.1x power."
+		gen: 2
 	},
 	rawstberry: {
 		inherit: true,
