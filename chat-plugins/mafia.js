@@ -125,7 +125,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 			if (target === 'nobody') {
 				this.toExecute = null;
 			} else {
-				this.target = room.game.players[target];
+				this.target = this.room.game.players[target];
 			}
 			delete this.validTargets;
 
@@ -318,7 +318,7 @@ class Mafia extends Rooms.RoomGame {
 		for (let i in this.players) {
 			let player = this.players[i];
 			if (this.voters.indexOf(player) > -1) {
-				player.sendRoom('|uhtmlchange|mafia' + this.room.gameNumber + 'vote' + this.gamestate + this.day + '|' + this.mafiaWindow('', text));
+				player.sendRoom('|uhtmlchange|mafia' + this.room.gameNumber + 'vote' + this.gamestate + this.day + '|' + this.mafiaWindow(player.class.image, text));
 			}
 		}
 	}
@@ -385,7 +385,7 @@ class Mafia extends Rooms.RoomGame {
 
 		for (let i = 0; i < this.executionOrder.length; i++) {
 			let player = this.executionOrder[i];
- 			if (player.toExecute) {
+			if (player.toExecute) {
 				if (player.roleBlocked) {
 					player.roleBlocked = false;
 					player.toExecute = null;
