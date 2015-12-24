@@ -437,6 +437,9 @@ class Mafia extends Rooms.RoomGame {
 		if (mafiaCount > this.playerCount - mafiaCount) {
 			this.end(MafiaData.MafiaClasses.mafia.image, 'The mafia is victorious, how awful!');
 			return;
+		} else if (!mafiaCount && (townCount === this.playerCount)) {
+			this.end(MafiaData.MafiaClasses.villager.image, 'The town has driven the mafia out succesfully!');
+			return;
 		} else if (this.playerCount === 1) {
 			for (let i in this.players) {
 				if (this.players[i].class.side === 'solo') {
@@ -444,9 +447,6 @@ class Mafia extends Rooms.RoomGame {
 					return;
 				}
 			}
-		} else if (!mafiaCount && (townCount === this.playerCount)) {
-			this.end(MafiaData.MafiaClasses.villager.image, 'The town has driven the mafia out succesfully!');
-			return;
 		}
 
 		if (this.timer) {
