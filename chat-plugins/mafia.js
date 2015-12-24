@@ -456,20 +456,20 @@ class Mafia extends Rooms.RoomGame {
 
 		switch (this.gamestate) {
 		case 'initial':
-			this.gameEvent('night', 'onNight', 2);
 			this.mafiaMeeting();
+			this.gameEvent('night', 'onNight', 2);
 			break;
 		case 'night':
 			this.gameEvent('day', 'onDay', 0.5);
 			break;
 		case 'day':
-			this.gameEvent('lynch', 'onLynch', 2);
 			this.townMeeting();
+			this.gameEvent('lynch', 'onLynch', 2);
 			break;
 		case 'lynch':
 			this.day++;
-			this.gameEvent('night', 'onNight', 2);
 			this.mafiaMeeting();
+			this.gameEvent('night', 'onNight', 2);
 		}
 	}
 
@@ -555,11 +555,11 @@ class Mafia extends Rooms.RoomGame {
 			}
 		}
 
-		if (this.executionOrder.length) {
-			this.executionOrder.sort(function (a, b) {
-				return (b.class[event].priority - a.class[event].priority);
-			});
+		this.executionOrder.sort(function (a, b) {
+			return (b.class[event].priority - a.class[event].priority);
+		});
 
+		if (this.executionOrder.length || this.currentVote) {
 			this.setTimer(timer);
 		} else {
 			this.setTimer(0.25);
