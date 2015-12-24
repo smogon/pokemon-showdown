@@ -119,27 +119,10 @@ if (require.main === module && process.argv[2]) {
  * Set up most of our globals
  *********************************************************/
 
-/**
- * Converts anything to an ID. An ID must have only lowercase alphanumeric
- * characters.
- * If a string is passed, it will be converted to lowercase and
- * non-alphanumeric characters will be stripped.
- * If an object with an ID is passed, its ID will be returned.
- * Otherwise, an empty string will be returned.
- */
-global.toId = function (text) {
-	if (text && text.id) {
-		text = text.id;
-	} else if (text && text.userid) {
-		text = text.userid;
-	}
-	if (typeof text !== 'string' && typeof text !== 'number') return '';
-	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-};
-
 global.Monitor = require('./monitor.js');
 
 global.Tools = require('./tools.js').includeFormats();
+global.toId = Tools.getId;
 
 global.LoginServer = require('./loginserver.js');
 
