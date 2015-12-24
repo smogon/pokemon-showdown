@@ -13,6 +13,7 @@
 
 'use strict';
 
+require('sugar');
 const fs = require('fs');
 const path = require('path');
 
@@ -190,6 +191,25 @@ module.exports = (function () {
 		if (name.length > 18) name = name.substr(0, 18).trim();
 		return name;
 	};
+
+	/**
+	 * Converts anything to an ID. An ID must have only lowercase alphanumeric
+	 * characters.
+	 * If a string is passed, it will be converted to lowercase and
+	 * non-alphanumeric characters will be stripped.
+	 * If an object with an ID is passed, its ID will be returned.
+	 * Otherwise, an empty string will be returned.
+	 */
+	Tools.prototype.getId = function (text) {
+		if (text && text.id) {
+			text = text.id;
+		} else if (text && text.userid) {
+			text = text.userid;
+		}
+		if (typeof text !== 'string' && typeof text !== 'number') return '';
+		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
+	};
+	let toId = Tools.prototype.getId;
 
 	Tools.prototype.getTemplate = function (template) {
 		if (!template || typeof template === 'string') {
