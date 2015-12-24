@@ -4880,7 +4880,7 @@ exports.BattleItems = {
 		},
 		gen: 2,
 		isNonstandard: 'gen2',
-		desc: "(Gen 2) Raises attack by 2 when switched in. Confuses holder. Single use."
+		desc: "(Gen 2) On switch-in, raises holder's Attack by 2 and confuses it. Single use."
 	},
 	"berry": {
 		id: "berry",
@@ -4953,10 +4953,10 @@ exports.BattleItems = {
 		isNonstandard: 'gen2',
 		desc: "(Gen 2) Holder is cured if it is frozen. Single use."
 	},
-	dragonscale: {
+	"dragonscale": {
 		id: "dragonscale",
 		name: "Dragon Scale",
-		spritenum: 106,
+		spritenum: 108,
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Dragon') {
 				return basePower * 1.1;
@@ -4965,7 +4965,7 @@ exports.BattleItems = {
 		num: 250,
 		gen: 2,
 		isNonstandard: 'gen2',
-		desc: "(Gen 2) Dragon-type attacks have 1.1x power. Evolves Seadra into Kingdra when traded."
+		desc: "(Gen 2) Holder's Dragon-type attacks have 1.1x power. Evolves Seadra (trade)."
 	},
 	"goldberry": {
 		id: "goldberry",
@@ -5093,7 +5093,7 @@ exports.BattleItems = {
 					}
 				}
 			}
-			move.pp += 10;
+			move.pp += 5;
 			if (move.pp > move.maxpp) move.pp = move.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', move.move);
 			if (pokemon.item !== 'leppaberry') {
@@ -5113,7 +5113,7 @@ exports.BattleItems = {
 		num: 154,
 		gen: 2,
 		isNonstandard: 'gen2',
-		desc: "(Gen 2) Restores 10 PP to the first move to reach 0 PP. Single use."
+		desc: "(Gen 2) Restores 5 PP to the first of the holder's moves to reach 0 PP. Single use."
 	},
 	"pinkbow": {
 		id: "pinkbow",
