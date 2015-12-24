@@ -1267,7 +1267,7 @@ exports.BattleItems = {
 	},
 	"energypowder": {
 		id: "energypowder",
-		name: "EnergyPowder",
+		name: "Energy Powder",
 		spritenum: 123,
 		fling: {
 			basePower: 30
