@@ -703,7 +703,7 @@ exports.Formats = [
 	},
 	{
 		name: "OU Theorymon",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3541537/\">OU Theorymon</a>"],
+		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3559611/\">OU Theorymon</a>"],
 		section: "Other Metagames",
 
 		mod: 'theorymon',
