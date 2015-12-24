@@ -75,12 +75,19 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		for (let i in this.validTargets) {
 			output += '<button value="/mafia target ' + this.validTargets[i].userid + '" name="send">' + Tools.escapeHTML(this.validTargets[i].name) + '</button>';
 		}
+		output += '<button value="/mafia target nobody" name="send">Nobody</button>';
 
 		this.sendRoom('|uhtml|mafia' + this.game.room.gameNumber + 'target' + this.game.gamestate + this.game.day + '|' + this.game.mafiaWindow(image, output));
 	}
 
 	updateTarget(image) {
-		this.sendRoom('|uhtmlchange|mafia' + this.game.room.gameNumber + 'target' + this.game.gamestate + this.game.day + '|' + this.game.mafiaWindow(image, 'Targeting ' + Tools.escapeHTML(this.target.name) + '!'));
+		let header = '|uhtmlchange|mafia' + this.game.room.gameNumber + 'target' + this.game.gamestate + this.game.day + '|';
+
+		if (this.target) {
+			this.sendRoom(header + this.game.mafiaWindow(image, 'Targeting ' + Tools.escapeHTML(this.target.name) + '!'));
+		} else {
+			this.sendRoom(header + this.game.mafiaWindow(image, 'You chose to not target anybody.'));
+		}
 	}
 
 	voteWindow(image, content) {
@@ -89,6 +96,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		for (let i in this.validVotes) {
 			output += '<button value="/mafia vote ' + this.validVotes[i].userid + '" name="send">' + Tools.escapeHTML(this.validVotes[i].name) + '</button>';
 		}
+		output += '<button value="/mafia vote abstain" name="send">Abstain</button>';
 
 		this.sendRoom('|uhtml|mafia' + this.game.room.gameNumber + 'vote' + this.game.gamestate + this.game.day + '|' + this.game.mafiaWindow(image, output));
 	}
@@ -112,9 +120,13 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 			return this.sendRoom("You're not selecting a target right now.");
 		}
 
-		if (target in this.validTargets) {
+		if (target in this.validTargets || target === 'nobody') {
 			this.targeting = false;
-			this.target = target;
+			if (target === 'nobody') {
+				this.toExecute = null;
+			} else {
+				this.target = room.game.players[target];
+			}
 			delete this.validTargets;
 
 			this.updateTarget(this.class.image);
@@ -136,11 +148,13 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 			return;
 		}
 
-		if (target in this.validVotes) {
-			if (this.game.currentVote[target]) {
-				this.game.currentVote[target]++;
-			} else {
-				this.game.currentVote[target] = 1;
+		if (target in this.validVotes || target === 'abstain') {
+			if (target !== 'abstain') {
+				if (this.game.currentVote[target]) {
+					this.game.currentVote[target]++;
+				} else {
+					this.game.currentVote[target] = 1;
+				}
 			}
 
 			this.voting = false;
@@ -657,8 +671,10 @@ exports.commands = {
 			if (room.game.gamestate === 'pregame') return this.errorReply("The game hasn't started yet.");
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 
-			if (user.userid in room.game.players && toId(target) in room.game.players) {
-				room.game.players[user.userid].onReceiveTarget(room.game.players[toId(target)]);
+			let sanitized = toId(target);
+
+			if (user.userid in room.game.players && (sanitized in room.game.players || sanitized === 'nobody')) {
+				room.game.players[user.userid].onReceiveTarget(sanitized);
 			}
 		},
 
@@ -667,8 +683,10 @@ exports.commands = {
 			if (!room.game.gamestate === 'pregame') return this.errorReply("The game hasn't started yet.");
 			if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 
-			if (user.userid in room.game.players && toId(target) in room.game.players) {
-				room.game.players[user.userid].onReceiveVote(room.game.players[toId(target)]);
+			let sanitized = toId(target);
+
+			if (user.userid in room.game.players && (sanitized in room.game.players || sanitized === 'abstain')) {
+				room.game.players[user.userid].onReceiveVote(sanitized);
 			}
 		},
 
