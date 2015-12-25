@@ -315,6 +315,9 @@ class Mafia extends Rooms.RoomGame {
 			}
 			text += '<br/>';
 		}
+
+		if (!text) text = 'No votes yet.';
+
 		for (let i in this.players) {
 			let player = this.players[i];
 			if (this.voters.indexOf(player) > -1) {
@@ -355,7 +358,8 @@ class Mafia extends Rooms.RoomGame {
 			}
 		}
 
-		this.gameEvent('initial', 'atStart', 1);
+		this.gamestate = 'initial';
+		this.gameEvent('atStart', 1);
 	}
 
 	end(image, content) {
@@ -456,20 +460,24 @@ class Mafia extends Rooms.RoomGame {
 
 		switch (this.gamestate) {
 		case 'initial':
+			this.gamestate = 'night';
 			this.mafiaMeeting();
-			this.gameEvent('night', 'onNight', 2);
+			this.gameEvent('onNight', 2);
 			break;
 		case 'night':
-			this.gameEvent('day', 'onDay', 0.5);
+			this.gamestate = 'day';
+			this.gameEvent('onDay', 0.5);
 			break;
 		case 'day':
+			this.gamestate = 'lynch';
 			this.townMeeting();
-			this.gameEvent('lynch', 'onLynch', 2);
+			this.gameEvent('onLynch', 2);
 			break;
 		case 'lynch':
 			this.day++;
+			this.gamestate = 'night';
 			this.mafiaMeeting();
-			this.gameEvent('night', 'onNight', 2);
+			this.gameEvent('onNight', 2);
 		}
 	}
 
@@ -543,9 +551,7 @@ class Mafia extends Rooms.RoomGame {
 		}
 	}
 
-	gameEvent(gamestate, event, timer) {
-		this.gamestate = gamestate;
-
+	gameEvent(event, timer) {
 		this.executionOrder = [];
 
 		for (let i in this.players) {
