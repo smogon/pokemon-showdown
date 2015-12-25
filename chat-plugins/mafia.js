@@ -125,7 +125,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 			if (target === 'nobody') {
 				this.toExecute = null;
 			} else {
-				this.target = this.room.game.players[target];
+				this.target = this.game.players[target];
 			}
 			delete this.validTargets;
 
