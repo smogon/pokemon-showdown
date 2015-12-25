@@ -1140,7 +1140,7 @@ exports.BattleScripts = {
 
 		// These moves can be used even if we aren't setting up to use them:
 		let SetupException = {
-			extremespeed:1, suckerpunch:1, superpower:1,
+			closecombat:1, extremespeed:1, suckerpunch:1, superpower:1,
 			dracometeor:1, leafstorm:1, overheat:1
 		};
 		let counterAbilities = {
@@ -1243,7 +1243,7 @@ exports.BattleScripts = {
 					if (!!counter['speedsetup'] || hasMove['encore'] || hasMove['raindance'] || hasMove['roar'] || hasMove['whirlwind']) rejected = true;
 					break;
 				case 'defog': case 'rapidspin':
-					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk']) || teamDetails.hazardClear >= 1) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk']) || teamDetails.hazardClear) rejected = true;
 					break;
 				case 'fakeout': case 'superfang':
 					if (counter.setupType || hasMove['substitute'] || hasMove['switcheroo'] || hasMove['trick']) rejected = true;
@@ -1271,14 +1271,14 @@ exports.BattleScripts = {
 					if (counter.setupType || hasMove['dragontail']) rejected = true;
 					break;
 				case 'stealthrock':
-					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock >= 1) rejected = true;
+					if (counter.setupType || !!counter['speedsetup'] || hasMove['rest'] || teamDetails.stealthRock) rejected = true;
 					break;
 				case 'switcheroo': case 'trick':
 					if (counter.Physical + counter.Special < 3) rejected = true;
 					if (hasMove['acrobatics'] || hasMove['lightscreen'] || hasMove['reflect'] || hasMove['trickroom']) rejected = true;
 					break;
 				case 'toxicspikes':
-					if (counter.setupType || teamDetails.toxicSpikes >= 1) rejected = true;
+					if (counter.setupType || teamDetails.toxicSpikes) rejected = true;
 					break;
 				case 'trickroom':
 					if (counter.setupType || !!counter['speedsetup'] || counter.damagingMoves.length < 2) rejected = true;
@@ -1322,7 +1322,7 @@ exports.BattleScripts = {
 					if (hasMove['thunderbolt'] && !hasMove['raindance']) rejected = true;
 					break;
 				case 'thunderbolt':
-					if (hasMove['discharge'] || (hasMove['thunder'] && hasMove['raindance']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
+					if (hasMove['discharge'] || (hasMove['raindance'] || hasMove['thunder']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
 					break;
 				case 'dazzlinggleam':
 					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
@@ -1330,19 +1330,17 @@ exports.BattleScripts = {
 				case 'drainingkiss':
 					if (hasMove['dazzlinggleam'] || counter.setupType !== 'Special') rejected = true;
 					break;
-				case 'aurasphere':
-					if (hasMove['closecombat'] && counter.setupType !== 'Special') rejected = true;
+				case 'aurasphere': case 'focusblast':
+					if ((hasMove['closecombat'] || hasMove['superpower']) && counter.setupType !== 'Special') rejected = true;
+					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'drainpunch':
 					if (!hasMove['bulkup'] && (hasMove['closecombat'] || hasMove['highjumpkick'])) rejected = true;
 					if (hasMove['focusblast'] || hasMove['superpower']) rejected = true;
 					break;
 				case 'closecombat': case 'highjumpkick':
+					if ((hasMove['aurasphere'] || hasMove['focusblast'] || movePool.indexOf('aurasphere') >= 0) && counter.setupType === 'Special') rejected = true;
 					if (hasMove['bulkup'] && hasMove['drainpunch']) rejected = true;
-					break;
-				case 'focusblast':
-					if (!counter.setupType && (hasMove['closecombat'] || hasMove['superpower'])) rejected = true;
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'machpunch':
 					if (hasType['Fighting'] && counter.stab < 2 && !hasAbility['Technician']) rejected = true;
@@ -1351,11 +1349,11 @@ exports.BattleScripts = {
 					if (hasMove['circlethrow'] && hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'superpower':
-					if (counter.setupType && (hasMove['drainpunch'] || hasMove['focusblast'])) rejected = true;
+					if (counter['Fighting'] > 1 && counter.setupType) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'vacuumwave':
-					if (counter.setupType !== 'Special' && (hasMove['closecombat'] || hasMove['machpunch'])) rejected = true;
+					if ((hasMove['closecombat'] || hasMove['machpunch']) && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'blazekick':
 					if (hasMove['flamethrower'] && counter.setupType !== 'Physical') rejected = true;
@@ -1385,8 +1383,8 @@ exports.BattleScripts = {
 					if (hasMove['phantomforce'] || (hasMove['shadowball'] && counter.setupType !== 'Physical') || hasMove['shadowsneak']) rejected = true;
 					break;
 				case 'shadowsneak':
+					if (hasType['Ghost'] && template.types.length > 1 && counter.stab < 2) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
-					if (hasType['Ghost'] && counter.stab < 2 && template.types.length > 1) rejected = true;
 					break;
 				case 'solarbeam':
 					if ((!hasAbility['Drought'] && !hasMove['sunnyday']) || hasMove['gigadrain'] || hasMove['leafstorm']) rejected = true;
@@ -1398,7 +1396,7 @@ exports.BattleScripts = {
 					if (hasMove['gigadrain'] && counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'leafstorm':
-					if (counter.setupType && hasMove['gigadrain']) rejected = true;
+					if (counter['Grass'] > 1 && counter.setupType) rejected = true;
 					break;
 				case 'bonemerang': case 'precipiceblades':
 					if (hasMove['earthquake']) rejected = true;
@@ -1757,11 +1755,6 @@ exports.BattleScripts = {
 			moves[moves.indexOf('rockclimb')] = 'doubleedge';
 		}
 
-		if (hasMove['gyroball'] || hasMove['trickroom']) {
-			ivs.spe = 0;
-			evs.spe = 0;
-		}
-
 		item = 'Leftovers';
 		if (template.requiredItem) {
 			item = template.requiredItem;
@@ -1932,14 +1925,14 @@ exports.BattleScripts = {
 			UU: 77,
 			BL: 76,
 			OU: 75,
-			CAP: 75,
 			Unreleased: 75,
+			CAP: 75,
 			Uber: 73,
 			AG: 71
 		};
 		let customScale = {
 			// Between OU and Uber
-			Aegislash: 74, Blaziken: 74, 'Blaziken-Mega': 74, Genesect: 74, 'Genesect-Burn': 74, 'Genesect-Chill': 74, 'Genesect-Douse': 74, 'Genesect-Shock': 74, Greninja: 74, 'Kangaskhan-Mega': 74, 'Lucario-Mega': 74, 'Mawile-Mega': 74,
+			Aegislash: 74, Blaziken: 74, 'Blaziken-Mega': 74, Genesect: 74, 'Genesect-Burn': 74, 'Genesect-Chill': 74, 'Genesect-Douse': 74, 'Genesect-Shock': 74, Greninja: 74, 'Lucario-Mega': 74, 'Mawile-Mega': 74,
 
 			// Banned Ability
 			Gothitelle: 74, Ninetales: 77, Politoed: 77, Wobbuffet: 74,
@@ -1990,6 +1983,11 @@ exports.BattleScripts = {
 			ivs.atk = hasMove['hiddenpower'] ? ivs.atk - 30 : 0;
 		}
 
+		if (hasMove['gyroball'] || hasMove['trickroom']) {
+			evs.spe = 0;
+			ivs.spe = 0;
+		}
+
 		return {
 			name: name,
 			moves: moves,
@@ -2027,7 +2025,7 @@ exports.BattleScripts = {
 		let baseFormes = {};
 		let uberCount = 0;
 		let puCount = 0;
-		let teamDetails = {megaCount: 0, stealthRock: 0, toxicSpikes: 0, hazardClear: 0};
+		let teamDetails = {};
 
 		while (pokemonPool.length && pokemonLeft < 6) {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
@@ -2035,9 +2033,6 @@ exports.BattleScripts = {
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
-
-			// Not available on ORAS
-			if (template.species === 'Pichu-Spiky-eared') continue;
 
 			// Useless in Random Battle without greatly lowering the levels of everything else
 			if (template.species === 'Unown') continue;
@@ -2133,15 +2128,11 @@ exports.BattleScripts = {
 			}
 			if (typeCombo in typeComboCount) continue;
 
-			// Limit the number of Megas to one
-			let forme = template.otherFormes && this.getTemplate(template.otherFormes[0]);
-			let isMegaSet = this.getItem(set.item).megaStone || (forme && forme.isMega && forme.requiredMove && set.moves.indexOf(toId(forme.requiredMove)) >= 0);
-			if (isMegaSet && teamDetails.megaCount > 0) continue;
-
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
+			baseFormes[template.baseSpecies] = 1;
 			pokemonLeft++;
 
 			// Increment type counters
@@ -2155,21 +2146,20 @@ exports.BattleScripts = {
 			typeComboCount[typeCombo] = 1;
 
 			// Increment Uber/NU counters
-			if (tier === 'Uber' || tier === 'AG') {
+			if (tier === 'Uber') {
 				uberCount++;
 			} else if (tier === 'PU') {
 				puCount++;
 			}
 
-			// Increment Mega, weather, hazards, and base species counters
-			if (isMegaSet) teamDetails.megaCount++;
+			// Team has Mega/weather/hazards
+			if (this.getItem(set.item).megaStone) teamDetails['megaCount'] = 1;
 			if (set.ability === 'Snow Warning') teamDetails['hail'] = 1;
 			if (set.ability === 'Drizzle' || set.moves.indexOf('raindance') >= 0) teamDetails['rain'] = 1;
 			if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
 			if (set.moves.indexOf('stealthrock') >= 0) teamDetails.stealthRock++;
 			if (set.moves.indexOf('toxicspikes') >= 0) teamDetails.toxicSpikes++;
 			if (set.moves.indexOf('defog') >= 0 || set.moves.indexOf('rapidspin') >= 0) teamDetails.hazardClear++;
-			baseFormes[template.baseSpecies] = 1;
 		}
 		return pokemon;
 	},
