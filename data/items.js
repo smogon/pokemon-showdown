@@ -5013,6 +5013,7 @@ exports.BattleItems = {
 		},
 		num: 152,
 		gen: 2,
+		isNonstandard: 'gen2',
 		desc: "(Gen 2) Holder is cured if it is burned. Single use."
 	},
 	"mintberry": {
