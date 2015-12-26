@@ -22,7 +22,9 @@ exports.BattleTypeChart = {
 			"Steel": 0,
 			"Water": 0
 		},
-		HPivs: {"atk":30, "def":30, "spd":30}
+		HPivs: {"atk":30, "def":30, "spd":30},
+		HPivsGB: {"atk":13, "def":13},
+		Category: "Physical"
 	},
 	"Dark": {
 		damageTaken: {
@@ -45,7 +47,8 @@ exports.BattleTypeChart = {
 			"Steel": 0,
 			"Water": 0
 		},
-		HPivs: {}
+		HPivs: {},
+		Category: "Special"
 	},
 	"Dragon": {
 		damageTaken: {
@@ -68,7 +71,9 @@ exports.BattleTypeChart = {
 			"Steel": 0,
 			"Water": 2
 		},
-		HPivs: {"atk":30}
+		HPivs: {"atk":30},
+		HPivsGB: {"def":14},
+		Category: "Special"
 	},
 	"Electric": {
 		damageTaken: {
@@ -92,7 +97,9 @@ exports.BattleTypeChart = {
 			"Steel": 2,
 			"Water": 0
 		},
-		HPivs: {"spa":30}
+		HPivs: {"spa":30},
+		HPivsGB: {"atk":14},
+		Category: "Special"
 	},
 	"Fairy": {
 		damageTaken: {
@@ -114,7 +121,8 @@ exports.BattleTypeChart = {
 			"Rock": 0,
 			"Steel": 1,
 			"Water": 0
-		}
+		},
+		Category: "Special"
 	},
 	"Fighting": {
 		damageTaken: {
@@ -137,7 +145,9 @@ exports.BattleTypeChart = {
 			"Steel": 0,
 			"Water": 0
 		},
-		HPivs: {"def":30, "spa":30, "spd":30, "spe":30}
+		HPivs: {"def":30, "spa":30, "spd":30, "spe":30},
+		HPivsGB: {"atk":12, "def":12},
+		Category: "Physical"
 	},
 	"Fire": {
 		damageTaken: {
@@ -161,7 +171,9 @@ exports.BattleTypeChart = {
 			"Steel": 2,
 			"Water": 1
 		},
-		HPivs: {"atk":30, "spa":30, "spe":30}
+		HPivs: {"atk":30, "spa":30, "spe":30},
+		HPivsGB: {"atk":14, "def":12},
+		Category: "Special"
 	},
 	"Flying": {
 		damageTaken: {
@@ -184,7 +196,9 @@ exports.BattleTypeChart = {
 			"Steel": 0,
 			"Water": 0
 		},
-		HPivs: {"hp":30, "atk":30, "def":30, "spa":30, "spd":30}
+		HPivs: {"hp":30, "atk":30, "def":30, "spa":30, "spd":30},
+		HPivsGB: {"atk":12},
+		Category: "Physical"
 	},
 	"Ghost": {
 		damageTaken: {
@@ -208,7 +222,9 @@ exports.BattleTypeChart = {
 			"Steel": 0,
 			"Water": 0
 		},
-		HPivs: {"def":30, "spd":30}
+		HPivs: {"def":30, "spd":30},
+		HPivsGB: {"atk":13, "def":14},
+		Category: "Physical"
 	},
 	"Grass": {
 		damageTaken: {
@@ -232,7 +248,9 @@ exports.BattleTypeChart = {
 			"Steel": 0,
 			"Water": 2
 		},
-		HPivs: {"atk":30, "spa":30}
+		HPivs: {"atk":30, "spa":30},
+		HPivsGB: {"atk":14, "def":14},
+		Category: "Special"
 	},
 	"Ground": {
 		damageTaken: {
@@ -256,7 +274,9 @@ exports.BattleTypeChart = {
 			"Steel": 0,
 			"Water": 1
 		},
-		HPivs: {"spa":30, "spd":30}
+		HPivs: {"spa":30, "spd":30},
+		HPivsGB: {"atk":12},
+		Category: "Physical"
 	},
 	"Ice": {
 		damageTaken: {
@@ -281,7 +301,9 @@ exports.BattleTypeChart = {
 			"Steel": 1,
 			"Water": 0
 		},
-		HPivs: {"atk":30, "def":30}
+		HPivs: {"atk":30, "def":30},
+		HPivsGB: {"def":13},
+		Category: "Special"
 	},
 	"Normal": {
 		damageTaken: {
@@ -303,7 +325,8 @@ exports.BattleTypeChart = {
 			"Rock": 0,
 			"Steel": 0,
 			"Water": 0
-		}
+		},
+		Category: "Physical"
 	},
 	"Poison": {
 		damageTaken: {
@@ -328,7 +351,9 @@ exports.BattleTypeChart = {
 			"Steel": 0,
 			"Water": 0
 		},
-		HPivs: {"def":30, "spa":30, "spd":30}
+		HPivs: {"def":30, "spa":30, "spd":30},
+		HPivsGB: {"atk":12, "def":14},
+		Category: "Physical"
 	},
 	"Psychic": {
 		damageTaken: {
@@ -351,7 +376,9 @@ exports.BattleTypeChart = {
 			"Steel": 0,
 			"Water": 0
 		},
-		HPivs: {"atk":30, "spe":30}
+		HPivs: {"atk":30, "spe":30},
+		HPivsGB: {"def":12},
+		Category: "Special"
 	},
 	"Rock": {
 		damageTaken: {
@@ -375,7 +402,9 @@ exports.BattleTypeChart = {
 			"Steel": 1,
 			"Water": 1
 		},
-		HPivs: {"def":30, "spd":30, "spe":30}
+		HPivs: {"def":30, "spd":30, "spe":30},
+		HPivsGB: {"atk":13, "def":12},
+		Category: "Physical"
 	},
 	"Steel": {
 		damageTaken: {
@@ -401,7 +430,9 @@ exports.BattleTypeChart = {
 			"Steel": 2,
 			"Water": 0
 		},
-		HPivs: {"spd":30}
+		HPivs: {"spd":30},
+		HPivsGB: {"atk":13},
+		Category: "Physical"
 	},
 	"Water": {
 		damageTaken: {
@@ -424,6 +455,8 @@ exports.BattleTypeChart = {
 			"Steel": 2,
 			"Water": 2
 		},
-		HPivs: {"atk":30, "def":30, "spa":30}
+		HPivs: {"atk":30, "def":30, "spa":30},
+		HPivsGB: {"atk":14, "def":13},
+		Category: "Special"
 	}
 };
