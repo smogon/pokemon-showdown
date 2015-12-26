@@ -631,7 +631,7 @@ exports.Formats = [
 		section: "Other Metagames",
 
 		ruleset: ['OU'],
-		banlist: ['Ignore STAB Moves', 'Metagrossite']
+		banlist: ['Ignore STAB Moves', 'Aerodactylite', "King's Rock", 'Metagrossite', 'Razor Fang']
 	},
 	{
 		name: "LC UU",
