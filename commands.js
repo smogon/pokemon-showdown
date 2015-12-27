@@ -1794,19 +1794,8 @@ exports.commands = {
 			} catch (e) {
 				return this.errorReply("Something failed while trying to hotpatch formats: \n" + e.stack);
 			}
-		} else if (target === 'learnsets') {
-			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
-			try {
-				let toolsLoaded = !!Tools.isLoaded;
-				// uncache the tools.js dependency tree
-				CommandParser.uncacheTree('./tools.js');
-				// reload tools.js
-				global.Tools = require('./tools.js')[toolsLoaded ? 'includeData' : 'includeFormats'](); // note: this will lock up the server for a few seconds
-
-				return this.sendReply("Learnsets have been hotpatched.");
-			} catch (e) {
-				return this.errorReply("Something failed while trying to hotpatch learnsets: \n" + e.stack);
-			}
+		} else if (target === 'learnsets' || target === 'validator') {
+			TeamValidator.ValidatorProcess.respawn();
 		} else if (target.startsWith('disable')) {
 			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch is already disabled.");
 			let reason = target.split(', ')[1];
