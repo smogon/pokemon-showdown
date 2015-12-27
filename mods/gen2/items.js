@@ -38,5 +38,61 @@ exports.BattleItems = {
 		inherit: true,
 		// On Gen 2 this happens in stat calculation directly.
 		onModifyAtk: function () {}
+	},
+	berserkgene: {
+		inherit: true,
+		isNonstandard: false
+	},
+	berry: {
+		inherit: true,
+		isNonstandard: false
+	},
+	bitterberry: {
+		inherit: true,
+		isNonstandard: false
+	},
+	burntberry: {
+		inherit: true,
+		isNonstandard: false
+	},
+	dragonscale: {
+		inherit: true,
+		isNonstandard: false
+	},
+	goldberry: {
+		inherit: true,
+		isNonstandard: false
+	},
+	iceberry: {
+		inherit: true,
+		isNonstandard: false
+	},
+	mintberry: {
+		inherit: true,
+		isNonstandard: false
+	},
+	miracleberry: {
+		inherit: true,
+		isNonstandard: false
+	},
+	mysteryberry: {
+		inherit: true,
+		isNonstandard: false
+	},
+	pinkbow: {
+		inherit: true,
+		isNonstandard: false
+	},
+	polkadotbow: {
+		inherit: true,
+		isNonstandard: false
+	},
+	przcureberry: {
+		inherit: true,
+		isNonstandard: false
+	},
+	psncureberry: {
+		inherit: true,
+		isNonstandard: false
 	}
 };
