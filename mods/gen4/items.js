@@ -112,6 +112,17 @@ exports.BattleItems = {
 		onEffectiveness: function () {},
 		desc: "Holder's Speed is halved and it becomes grounded."
 	},
+	"jabocaberry": {
+		inherit: true,
+		onAfterDamage: function () {},
+		onAfterMoveSecondary: function (target, source, move) {
+			if (source && source !== target && move && move.category === 'Physical') {
+				if (target.eatItem()) {
+					this.damage(source.maxhp / 8, source, target, null, true);
+				}
+			}
+		}
+	},
 	"lifeorb": {
 		id: "lifeorb",
 		name: "Life Orb",
@@ -197,6 +208,17 @@ exports.BattleItems = {
 					this.effectData.numConsecutive++;
 				}
 				return basePower * (1 + (this.effectData.numConsecutive / 10));
+			}
+		}
+	},
+	"rowapberry": {
+		inherit: true,
+		onAfterDamage: function () {},
+		onAfterMoveSecondary: function (target, source, move) {
+			if (source && source !== target && move && move.category === 'Special') {
+				if (target.eatItem()) {
+					this.damage(source.maxhp / 8, source, target, null, true);
+				}
 			}
 		}
 	},
