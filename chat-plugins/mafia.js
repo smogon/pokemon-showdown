@@ -188,7 +188,7 @@ class Mafia extends Rooms.RoomGame {
 
 		this.gameid = 'mafia';
 		this.title = 'Mafia';
-		this.allowRenames = false;
+		this.allowRenames = true;
 		this.playerCap = max;
 		this.PlayerClass = MafiaPlayer;
 
