@@ -3828,7 +3828,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				this.add('-activate', target, 'move: Fairy Lock');
 			},
-			onModifyPokemon: function (pokemon) {
+			onTrapPokemon: function (pokemon) {
 				pokemon.tryTrap();
 			}
 		},
@@ -7113,7 +7113,7 @@ exports.BattleMovedex = {
 			onResidual: function (pokemon) {
 				this.heal(pokemon.maxhp / 16);
 			},
-			onModifyPokemon: function (pokemon) {
+			onTrapPokemon: function (pokemon) {
 				pokemon.tryTrap();
 			},
 			onNegateImmunity: function (pokemon, type) {
@@ -12327,7 +12327,8 @@ exports.BattleMovedex = {
 			onAnyDragOut: function (pokemon) {
 				if (pokemon === this.effectData.target || pokemon === this.effectData.source) return false;
 			},
-			onFoeModifyPokemon: function (defender) {
+			onFoeTrapPokemonPriority: -15,
+			onFoeTrapPokemon: function (defender) {
 				if (defender !== this.effectData.source) return;
 				defender.trapped = true;
 			},

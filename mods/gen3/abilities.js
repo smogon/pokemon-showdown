@@ -106,7 +106,7 @@ exports.BattleAbilities = {
 	},
 	"shadowtag": {
 		inherit: true,
-		onFoeModifyPokemon: function (pokemon) {
+		onFoeTrapPokemon: function (pokemon) {
 			pokemon.trapped = true;
 		}
 	},
