@@ -2076,7 +2076,7 @@ exports.BattleItems = {
 			basePower: 100,
 			type: "Dragon"
 		},
-		onAfterMoveSecondary: function (target, source, move) {
+		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.category === 'Physical') {
 				if (target.eatItem()) {
 					this.damage(source.maxhp / 8, source, target, null, true);
@@ -3816,7 +3816,7 @@ exports.BattleItems = {
 			basePower: 100,
 			type: "Dark"
 		},
-		onAfterMoveSecondary: function (target, source, move) {
+		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.category === 'Special') {
 				if (target.eatItem()) {
 					this.damage(source.maxhp / 8, source, target, null, true);
