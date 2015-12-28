@@ -2934,7 +2934,7 @@ Battle = (function () {
 								// to run it again.
 								continue;
 							}
-							if ((k === 'H') && template.unreleasedHidden) {
+							if (k === 'H' && template.unreleasedHidden) {
 								// unreleased hidden ability
 								continue;
 							}
