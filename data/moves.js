@@ -6167,6 +6167,7 @@ exports.BattleMovedex = {
 		desc: "Power doubles if the target has a major status condition.",
 		shortDesc: "Power doubles if the target has a status ailment.",
 		id: "hex",
+		isViable: true,
 		name: "Hex",
 		pp: 10,
 		priority: 0,
