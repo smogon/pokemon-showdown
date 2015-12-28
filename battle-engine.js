@@ -3745,7 +3745,8 @@ Battle = (function () {
 					'beforeTurn': 100,
 					'beforeTurnMove': 99,
 					'switch': 7,
-					'runSwitch': 7.1,
+					'runSwitch': 7.2,
+					'runPrimal': 7.1,
 					'instaswitch': 101,
 					'megaEvo': 6.9,
 					'residual': -100,
@@ -3813,15 +3814,13 @@ Battle = (function () {
 		}
 
 		this.resolvePriority(decision);
-		for (let i = 0; i <= this.queue.length; i++) {
-			if (i === this.queue.length) {
-				this.queue.push(decision);
-				break;
-			} else if (Battle.comparePriority(decision, this.queue[i]) < 0) {
+		for (let i = 0; i < this.queue.length; i++) {
+			if (Battle.comparePriority(decision, this.queue[i]) < 0) {
 				this.queue.splice(i, 0, decision);
-				break;
+				return;
 			}
 		}
+		this.queue.push(decision);
 	};
 	Battle.prototype.prioritizeQueue = function (decision, source, sourceEffect) {
 		if (this.event) {
@@ -4019,6 +4018,9 @@ Battle = (function () {
 				this.singleEvent('Start', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
 			}
 			delete decision.pokemon.draggedIn;
+			break;
+		case 'runPrimal':
+			this.singleEvent('Primal', decision.pokemon.getItem(), decision.pokemon.itemData, decision.pokemon);
 			break;
 		case 'shift': {
 			if (!decision.pokemon.isActive) return false;

@@ -587,6 +587,10 @@ exports.BattleAbilities = {
 	"drizzle": {
 		shortDesc: "On switch-in, this Pokemon summons Rain Dance.",
 		onStart: function (source) {
+			for (var i = 0; i < this.queue.length; i++) {
+				if (this.queue[i].choice === 'runPrimal' && this.queue[i].pokemon === source) return;
+				if (this.queue[i].choice !== 'runSwitch' && this.queue[i].choice !== 'runPrimal') break;
+			}
 			this.setWeather('raindance');
 		},
 		id: "drizzle",
@@ -597,6 +601,10 @@ exports.BattleAbilities = {
 	"drought": {
 		shortDesc: "On switch-in, this Pokemon summons Sunny Day.",
 		onStart: function (source) {
+			for (var i = 0; i < this.queue.length; i++) {
+				if (this.queue[i].choice === 'runPrimal' && this.queue[i].pokemon === source) return;
+				if (this.queue[i].choice !== 'runSwitch' && this.queue[i].choice !== 'runPrimal') break;
+			}
 			this.setWeather('sunnyday');
 		},
 		id: "drought",
