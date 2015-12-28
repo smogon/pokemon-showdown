@@ -588,7 +588,7 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon summons Rain Dance.",
 		onStart: function (source) {
 			for (var i = 0; i < this.queue.length; i++) {
-				if (this.queue[i].choice === 'runPrimal' && this.queue[i].pokemon === source) return;
+				if (this.queue[i].choice === 'runPrimal' && this.queue[i].pokemon === source && source.template.speciesid === 'kyogre') return;
 				if (this.queue[i].choice !== 'runSwitch' && this.queue[i].choice !== 'runPrimal') break;
 			}
 			this.setWeather('raindance');
@@ -602,7 +602,7 @@ exports.BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon summons Sunny Day.",
 		onStart: function (source) {
 			for (var i = 0; i < this.queue.length; i++) {
-				if (this.queue[i].choice === 'runPrimal' && this.queue[i].pokemon === source) return;
+				if (this.queue[i].choice === 'runPrimal' && this.queue[i].pokemon === source && source.template.speciesid === 'groudon') return;
 				if (this.queue[i].choice !== 'runSwitch' && this.queue[i].choice !== 'runPrimal') break;
 			}
 			this.setWeather('sunnyday');
