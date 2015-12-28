@@ -564,7 +564,7 @@ exports.BattleAbilities = {
 		},
 		effect: {
 			duration: 2,
-			onFoeModifyPokemon: function (pokemon) {
+			onFoeTrapPokemon: function (pokemon) {
 				if (pokemon.ability !== 'shadowtag') {
 					pokemon.tryTrap(true);
 				}
