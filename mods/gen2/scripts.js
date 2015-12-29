@@ -631,7 +631,7 @@ exports.BattleScripts = {
 		let counter = {};
 		let setupType = '';
 		let item = 'leftovers';
-		let ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+		let dvs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
 
 		// Moves that boost Attack:
 		let PhysicalSetup = {
@@ -692,9 +692,9 @@ exports.BattleScripts = {
 				let rejected = false;
 				if (moveid.substr(0, 11) === 'hiddenpower') {
 					// Check for hidden power DVs
-					let HPivs = this.getType(move.type).HPivs;
-					for (let iv in HPivs) {
-						ivs[iv] = HPivs[iv];
+					let HPdvs = this.getType(move.type).HPdvs;
+					for (let dv in HPdvs) {
+						dvs[dv] = HPdvs[dv] * 2;
 					}
 					moveid = 'hiddenpower';
 				}
@@ -803,7 +803,7 @@ exports.BattleScripts = {
 		case 'Cubone':
 		case 'Marowak':
 			item = 'thickclub';
-			ivs.atk = 26;
+			dvs.atk = 26;
 			break;
 		case 'Pikachu':
 			item = 'lightball';
@@ -835,7 +835,7 @@ exports.BattleScripts = {
 			moves: moves,
 			ability: 'None',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
-			ivs: ivs,
+			ivs: dvs,
 			item: item,
 			level: level,
 			shiny: false,

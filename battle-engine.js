@@ -200,6 +200,9 @@ BattlePokemon = (function () {
 				if (move.id === 'hiddenpower') {
 					if (!this.set.ivs || Object.values(this.set.ivs).every(31)) {
 						this.set.ivs = this.battle.getType(move.type).HPivs;
+						if (this.battle.gen && this.battle.gen === 2) {
+							for (let i in this.set.ivs) this.set.ivs[i] *= 2;
+						}
 					}
 					move = this.battle.getMove('hiddenpower');
 				}
