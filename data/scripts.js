@@ -702,11 +702,14 @@ exports.BattleScripts = {
 			let poke = formes[i][this.random(formes[i].length)];
 			let template = this.getTemplate(poke);
 
-			// Random item
-			let item = items[this.random(items.length)];
+			// Random legal item
+			let item = '';
+			do {
+				item = items[this.random(items.length)];
+			} while (this.data.Items[item].isNonstandard);
 
 			// Make sure forme is legal
-			if (template.battleOnly || template.requiredItem && item !== template.requiredItem) {
+			if (template.battleOnly || template.requiredItem && item !== toId(template.requiredItem)) {
 				template = this.getTemplate(template.baseSpecies);
 				poke = template.name;
 			}
