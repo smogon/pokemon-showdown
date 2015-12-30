@@ -1210,7 +1210,7 @@ exports.BattleScripts = {
 					if (!hasMove['rest']) rejected = true;
 					if (movePool.length > 1) {
 						let rest = movePool.indexOf('rest');
-						if (rest) movePool.splice(rest, 1);
+						if (rest >= 0) movePool.splice(rest, 1);
 					}
 					break;
 				case 'storedpower':
