@@ -756,6 +756,21 @@ exports.BattleMovedex = {
 		secondary: null
 	},
 	/******************************************************************
+	Defend Order, Heal Order:
+	- now +1 priority
+
+	Justification:
+	- Vespiquen needs viability
+	******************************************************************/
+	defendorder: {
+		inherit: true,
+		priority: 1
+	},
+	healorder: {
+		inherit: true,
+		priority: 1
+	},
+	/******************************************************************
 	Stealth Rock:
 	- 1/4 damage to Flying-types, 1/8 damage to everything else
 
@@ -1529,6 +1544,10 @@ exports.BattleMovedex = {
 	- Rock Slide is included for being similar enough to Air Slash
 	- Charge Beam is included because its 30% chance of no boost is enough
 	******************************************************************/
+	jumpkick: {
+		inherit: true,
+		accuracy: 100
+	},
 	razorshell: {
 		inherit: true,
 		accuracy: 100
@@ -1813,6 +1832,23 @@ exports.BattleMovedex = {
 				boosts: {
 					spa: 1,
 					spd: 1
+				}
+			}
+		}
+	},
+	drainingkiss: {
+		inherit: true,
+		basePower: 40,
+		secondary: {
+			chance: 100,
+			boosts: {
+				spa: -1,
+				atk: -1
+			},
+			self: {
+				boosts: {
+					spa: 1,
+					atk: 1
 				}
 			}
 		}
