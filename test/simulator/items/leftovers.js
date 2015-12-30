@@ -18,12 +18,12 @@ describe('Leftovers [Gen 2]', function () {
 			{species: "Miltank", moves: ['seismictoss']}
 		]);
 		battle.commitDecisions();
-		assert.strictEqual(battle.p1.active[0].hp, 591);
+		assert.strictEqual(battle.p1.active[0].hp, 590);
 
 		battle.choose('p1', 'switch 2');
 		battle.commitDecisions();
 
 		battle.choose('p1', 'switch 2');
-		assert.strictEqual(battle.p1.active[0].hp, 631);
+		assert.strictEqual(battle.p1.active[0].hp, 630);
 	});
 });
