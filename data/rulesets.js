@@ -211,6 +211,16 @@ exports.BattleFormats = {
 				}
 			}
 
+			if (template.species === 'Pikachu-Cosplay') {
+				let cosplay = {meteormash:'Pikachu-Rock-Star', iciclecrash:'Pikachu-Belle', drainingkiss:'Pikachu-Pop-Star', electricterrain:'Pikachu-PhD', flyingpress:'Pikachu-Libre'};
+				for (let i = 0; i < set.moves.length; i++) {
+					if (set.moves[i] in cosplay) {
+						set.species = cosplay[set.moves[i]];
+						break;
+					}
+				}
+			}
+
 			if (set.species !== template.species) {
 				// Autofixed forme.
 				template = this.getTemplate(set.species);
