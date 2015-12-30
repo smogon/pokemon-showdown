@@ -1739,7 +1739,8 @@ exports.commands = {
 		if (!target) return this.parse('/help hotpatch');
 		if (!this.can('hotpatch')) return false;
 
-		this.logEntry(user.name + " used /hotpatch " + target);
+		let staff = Rooms('staff');
+		if (staff) staff.add("(" + user.name + " used /hotpatch " + target + ")");
 
 		if (target === 'chat' || target === 'commands') {
 			if (Monitor.hotpatchLock) return this.errorReply("Hotpatch has been disabled. (" + Monitor.hotpatchLock + ")");
