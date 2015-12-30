@@ -565,7 +565,7 @@ exports.BattleAbilities = {
 					return damage / 2;
 				}
 			}
-		},
+		}
 	},
 	"adaptability": {
 		inherit: true,
