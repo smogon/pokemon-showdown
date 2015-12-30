@@ -549,6 +549,24 @@ exports.BattleAbilities = {
 			}
 		}
 	},
+	"swarm": {
+		inherit: true,
+		onFoeBasePower: function (basePower, attacker, defender, move) {
+			if (defender.hasType('Flying')) {
+				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
+					this.add('-message', "The attack was weakened by Swarm!");
+					return basePower / 2;
+				}
+			}
+		},
+		onDamage: function (damage, defender, attacker, effect) {
+			if (defender.hasType('Flying')) {
+				if (effect && effect.id === 'stealthrock') {
+					return damage / 2;
+				}
+			}
+		},
+	},
 	"adaptability": {
 		inherit: true,
 		onModifyMove: function (move) {},
@@ -578,16 +596,6 @@ exports.BattleAbilities = {
 			if (!source) source = this.effectData.target;
 			if (pokemon.ability !== 'shadowtag' && !source.volatiles.shadowtag) {
 				pokemon.maybeTrapped = true;
-			}
-		}
-	},
-	"justified": {
-		inherit: true,
-		onBasePowerPriority: 100,
-		onBasePower: function (power, attacker, defender) {
-			if (power > 100 && !defender.hasType('Dark')) {
-				this.debug('capping base power at 100');
-				return 100;
 			}
 		}
 	}

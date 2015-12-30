@@ -113,6 +113,9 @@ Major changes:
   double SR damage, heals 1/16 after using a Status move, and makes Twister
   do 1.5x Damage.
 
+- Swarm also makes the user take half damage from Rock, Ice, Electric moves,
+  and Stealth Rock if they are Flying type.
+
 - Relic Song switches Meloetta's SpA and Atk EVs, boosts, and certain natures,
   specifically: Modest <-> Adamant, Jolly <-> Timid, other natures are left
   untouched. It's now 60 base power +1 priority, with no secondary.
@@ -139,7 +142,7 @@ Major changes:
 
 - Twister is now a 80 base power Flying move with a 30% confusion chance
 
-- - Floette-Eternal-Flower and Volcanion are released.
+- Floette-Eternal-Flower and Volcanion are released.
 
 New mechanic: Signature Pokémon:
 
@@ -255,6 +258,11 @@ Minor move changes:
 - Parabolic Charge now has 40 base power, but gives -1 SpA, -1 SpD to the
   target and +1 SpA, +1 SpD to the user
 
+- Draining Kiss now has 40 base power, but gives -1 SpA, -1 Atk to the
+  target and +1 SpA, +1 Atk to the user
+
+- Defend Order and Heal Order now have +1 priority
+
 - Rock Throw now removes Stealth Rock from the user's side of the field,
   and has 100% accuracy
 
@@ -264,7 +272,7 @@ Minor move changes:
   Helmet etc. And double in power if they remove hazards.
 
 - All moves' accuracy is rounded up to the nearest multiple of 10%
-  (except Jump Kick, which will be rebalanced later)
+  (including Jump Kick)
 
 - Charge Beam and Rock Slide are now 100% accurate
 
@@ -408,11 +416,6 @@ Minor learnset changes:
   nerf to Adaptability which is discussed below)
 
 Minor ability changes:
-
-- Justified now caps base power to 100 against non-Dark foes:
-  Musketeers are recommended to use Sacred Sword over Close Combat and
-  Surf over Hydro Pump, other Pokémon are recommended not to use
-  Justified
 
 - Static, Poison Point, and Cute Charm now always activate on
   contact.
