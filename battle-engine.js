@@ -243,6 +243,12 @@ BattlePokemon = (function () {
 		for (let i in this.set.ivs) {
 			this.set.ivs[i] = this.battle.clampIntRange(this.set.ivs[i], 0, 31);
 		}
+		if (this.battle.gen && this.battle.gen <= 2) {
+			// We represent DVs using even IVs. Ensure they are in fact even.
+			for (let i in this.set.ivs) {
+				this.set.ivs[i] &= 30;
+			}
+		}
 
 		let hpTypes = ['Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark'];
 		if (this.battle.gen && this.battle.gen === 2) {
