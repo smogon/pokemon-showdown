@@ -3815,6 +3815,7 @@ exports.BattleFormatsData = {
 		eventPokemon: [
 			{"generation":4,"level":5,"moves":["tailglow","bubble","watersport"]},
 			{"generation":4,"level":1,"moves":["tailglow","bubble","watersport"]},
+			{"generation":4,"level":1,"shiny":true,"moves":["tailglow","bubble","watersport"]},
 			{"generation":4,"level":50,"moves":["acidarmor","whirlpool","waterpulse","heartswap"],"pokeball":"cherishball"},
 			{"generation":4,"level":50,"moves":["heartswap","waterpulse","whirlpool","acidarmor"],"pokeball":"cherishball"},
 			{"generation":4,"level":50,"moves":["heartswap","whirlpool","waterpulse","acidarmor"],"pokeball":"cherishball"},
